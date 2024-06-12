@@ -482,7 +482,7 @@ Ndrg ↔ Nst
 			<spinner label="Kraft X" name="FlexForceX"/>
 			<spinner label="Kraft Y" name="FlexForceY"/>
 			<spinner label="Kraft Z" name="FlexForceZ"/>
-			<check_box label="Licht" name="Light Checkbox Ctrl" tool_tip="Verursacht, dass Objekt Licht emittiert"/>
+			<check_box label="Licht" name="Light Checkbox Ctrl" tool_tip="Verursacht, dass das Objekt Licht emittiert"/>
 			<color_swatch label="" name="colorswatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
 			<texture_picker label="" name="light texture control" tool_tip="Klicken, um eine Bild auszuwählen (dieser Effekt funktioniert nur, wenn zeitversetzte Wiedergabe aktiviert ist)"/>
 			<spinner label="Intensität" name="Light Intensity"/>
@@ -491,13 +491,20 @@ Ndrg ↔ Nst
 			<spinner label="Fokus" name="Light Focus"/>
 			<spinner label="Abnehmend" name="Light Falloff"/>
 			<spinner label="Ambiente" name="Light Ambiance"/>
-			
 			<check_box label="Reflexionstest" name="Reflection Probe" tool_tip="Passt an, wie Objekte in diesem Einflussraum Reflexionen erfahren, falls Physikalisch-basiertes Rendering aktiviert ist." />
 			<combo_box name="Probe Volume Type" tool_tip="Einflussraum für Test auswählen">
 				<combo_box.item label="Kugel" name="Sphere" />
 				<combo_box.item label="Quader" name="Box" />
 			</combo_box>
 			<check_box label="Dynamisch" name="Probe Dynamic" tool_tip="Falls aktiviert, sind Avatar in den Reflexionen innerhalb des Einflussraums enthalten." />
+			<text name="Probe Update Label">
+				Test-Update:
+			</text>
+			<combo_box name="Probe Update Type" tool_tip="Definiert, wie der Reflexionstest aktualisiert wird. Statisch wird am langsamsten und ohne Avatare aktualisiert. Dynamisch wird regelmäßiger aktualisiert und Avatare sind im Test enthalten. Spiegel verwandelt dieses Objekt in einen planar-projizierten Spiegel, der in Echtzeit aktualisiert wird - Umgebung wird jedoch nicht berechnet.">
+				<combo_box.item label="Statisch" name="Static" />
+				<combo_box.item label="Dynamisch" name="Dynamic" />
+				<combo_box.item label="Spiegel" name="Mirror" />
+			</combo_box>
 			<spinner label="Umgeb." name="Probe Ambiance" />
 			<spinner label="Nahber." name="Probe Near Clip"/>
 			<text name="label physicsshapetype">

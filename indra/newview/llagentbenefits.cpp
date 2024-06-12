@@ -25,6 +25,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llagentbenefits.h"
+#include "llviewertexture.h"
 
 // <FS:Ansariel> OpenSim legacy economy
 #include "llagent.h"
@@ -106,6 +107,26 @@ bool LLAgentBenefits::init(const LLSD& benefits_sd)
         return false;
     }
 
+    if (benefits_sd.has("large_texture_upload_cost"))
+    {
+        LLSD large_texture_cost = benefits_sd.get("large_texture_upload_cost");
+        if (large_texture_cost.isArray())
+        {
+            LLSD::array_const_iterator end = large_texture_cost.endArray();
+            LLSD::array_const_iterator it = large_texture_cost.beginArray();
+            for (; it != end; ++it)
+            {
+                m_2k_texture_upload_cost.push_back(it->asInteger());
+            }
+            std::sort(m_2k_texture_upload_cost.begin(), m_2k_texture_upload_cost.end());
+        }
+    }
+
+    if (m_2k_texture_upload_cost.empty())
+    {
+        m_2k_texture_upload_cost.push_back(m_texture_upload_cost);
+    }
+
     // FIXME PREMIUM - either use this field or get rid of it
     m_initalized = true;
     return true;
@@ -122,15 +143,15 @@ S32 LLAgentBenefits::getAnimatedObjectLimit() const
     else
     {
         S32 max_attach = 0;
-        if (gAgent.getRegion())
-        {
-            LLSD features;
-            gAgent.getRegion()->getSimulatorFeatures(features);
-            if (features.has("AnimatedObjects"))
+            if (gAgent.getRegion())
             {
-                max_attach = features["AnimatedObjects"]["MaxAgentAnimatedObjectAttachments"].asInteger();
+                LLSD features;
+                gAgent.getRegion()->getSimulatorFeatures(features);
+                if (features.has("AnimatedObjects"))
+                {
+                    max_attach = features["AnimatedObjects"]["MaxAgentAnimatedObjectAttachments"].asInteger();
+                }
             }
-        }
         return max_attach;
     }
     // </FS:Ansariel>
@@ -210,6 +231,49 @@ S32 LLAgentBenefits::getTextureUploadCost() const
     //return m_texture_upload_cost;
     return LLGridManager::instance().isInSecondLife() ? m_texture_upload_cost : LLGlobalEconomy::instance().getPriceUpload();
     // </FS:Ansariel>
+}
+
+S32 LLAgentBenefits::getTextureUploadCost(const LLViewerTexture* tex) const
+{
+    if (tex)
+    {
+        S32 area = tex->getFullHeight() * tex->getFullWidth();
+        if (area >= MIN_2K_TEXTURE_AREA)
+        {
+            return get2KTextureUploadCost(area);
+        }
+        else
+        {
+            return getTextureUploadCost();
+        }
+    }
+    return 0;
+}
+
+S32 LLAgentBenefits::getTextureUploadCost(const LLImageBase* tex) const
+{
+    if (tex)
+    {
+        S32 area = tex->getHeight() * tex->getWidth();
+        if (area >= MIN_2K_TEXTURE_AREA)
+        {
+            return get2KTextureUploadCost(area);
+        }
+        else
+        {
+            return getTextureUploadCost();
+        }
+    }
+    return getTextureUploadCost();
+}
+
+S32 LLAgentBenefits::get2KTextureUploadCost(S32 area) const
+{
+    if (m_2k_texture_upload_cost.empty())
+    {
+        return m_texture_upload_cost;
+    }
+    return m_2k_texture_upload_cost[0];
 }
 
 bool LLAgentBenefits::findUploadCost(LLAssetType::EType& asset_type, S32& cost) const

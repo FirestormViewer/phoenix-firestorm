@@ -289,7 +289,7 @@
 			<menu_item_call label="Установить разрешения по умолчанию..." name="Set default permissions"/>
 		</menu>
 		<menu label="Загрузить" name="Upload">
-			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Изображение..." name="Upload Image"/>
 			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
 			<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Меш модель..." name="Upload Model"/>

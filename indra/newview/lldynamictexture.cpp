@@ -118,6 +118,8 @@ BOOL LLViewerDynamicTexture::render()
 //-----------------------------------------------------------------------------
 void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
+
      //use the bottom left corner
     mOrigin.set(0, 0);
 
@@ -181,19 +183,26 @@ void LLViewerDynamicTexture::postRender(BOOL success)
 //-----------------------------------------------------------------------------
 BOOL LLViewerDynamicTexture::updateAllInstances()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
+
     sNumRenders = 0;
     if (gGLManager.mIsDisabled)
     {
         return TRUE;
     }
 
-    bool use_fbo = gPipeline.mBake.isComplete();
+    LLRenderTarget& bake_target = gPipeline.mAuxillaryRT.deferredScreen;
 
-    if (use_fbo)
+    if (!bake_target.isComplete())
     {
-        gPipeline.mBake.bindTarget();
-        gPipeline.mBake.clear();
+        llassert(false);
+        return FALSE;
     }
+    llassert(bake_target.getWidth() >= LLPipeline::MAX_BAKE_WIDTH);
+    llassert(bake_target.getHeight() >= LLPipeline::MAX_BAKE_WIDTH);
+
+    bake_target.bindTarget();
+    bake_target.clear();
 
     LLGLSLShader::unbind();
     LLVertexBuffer::unbind();
@@ -211,11 +220,13 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
             if (dynamicTexture->needsRender())
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("needsRender");
+                llassert(dynamicTexture->getFullWidth() <= LLPipeline::MAX_BAKE_WIDTH);
+                llassert(dynamicTexture->getFullHeight() <= LLPipeline::MAX_BAKE_WIDTH);
+
                 glClear(GL_DEPTH_BUFFER_BIT);
-                gDepthDirty = TRUE;
 
                 gGL.color4f(1,1,1,1);
-                dynamicTexture->setBoundTarget(use_fbo ? &gPipeline.mBake : nullptr);
+                dynamicTexture->setBoundTarget(&bake_target);
                 dynamicTexture->preRender();    // Must be called outside of startRender()
                 result = FALSE;
                 {
@@ -238,10 +249,7 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
         }
     }
 
-    if (use_fbo)
-    {
-        gPipeline.mBake.flush();
-    }
+    bake_target.flush();
 
     gGL.flush();
 

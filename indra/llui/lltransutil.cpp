@@ -50,7 +50,7 @@ bool LLTransUtil::parseStrings(const std::string& xml_filename, const std::set<s
             "contact https://www.firestormviewer.org/support if issue persists after reinstall.";
         LLError::LLUserWarningMsg::show(error_string);
         gDirUtilp->dumpCurrentDirectories(LLError::LEVEL_WARN);
-        LL_ERRS() << "Couldn't load string table " << xml_filename << " " << errno << LL_ENDL;
+        LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from https://www.firestormviewer.org/download and contact https://www.firestormviewer.org/support if issue persists after reinstall." << LL_ENDL;
         return false;
     }
 

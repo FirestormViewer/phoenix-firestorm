@@ -145,6 +145,7 @@
 #include <boost/algorithm/string.hpp>
 #include "llcleanup.h"
 #include "llviewershadermgr.h"
+#include "gltfscenemanager.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "fsavatarrenderpersistence.h"
 #include "rlvactions.h"
@@ -668,10 +669,8 @@ void init_menus()
     gViewerWindow->setMenuBackgroundColor(false,
         !LLGridManager::getInstance()->isInSLBeta());
     // *TODO:Also fix cost in llfolderview.cpp for Inventory menus
-    const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
     const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
     const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
-    gMenuHolder->childSetLabelArg("Upload Image", "[COST]", texture_upload_cost_str);
     gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", sound_upload_cost_str);
     gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", animation_upload_cost_str);
 
@@ -906,9 +905,29 @@ U32 render_type_from_string(std::string render_type)
     {
         return LLPipeline::RENDER_TYPE_SIMPLE;
     }
+    if ("materials" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_MATERIALS;
+    }
     else if ("alpha" == render_type)
     {
         return LLPipeline::RENDER_TYPE_ALPHA;
+    }
+    else if ("alpha_mask" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_ALPHA_MASK;
+    }
+    else if ("fullbright_alpha_mask" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_FULLBRIGHT_ALPHA_MASK;
+    }
+    else if ("fullbright" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_FULLBRIGHT;
+    }
+    else if ("glow" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_GLOW;
     }
     else if ("tree" == render_type)
     {
@@ -1165,6 +1184,10 @@ U64 info_display_from_string(std::string info_display)
     else if ("octree" == info_display)
     {
         return LLPipeline::RENDER_DEBUG_OCTREE;
+    }
+    else if ("nodes" == info_display)
+    {
+        return LLPipeline::RENDER_DEBUG_NODES;
     }
     else if ("shadow frusta" == info_display)
     {
@@ -2489,6 +2512,20 @@ class LLAdvancedPurgeShaderCache : public view_listener_t
     {
         LLViewerShaderMgr::instance()->clearShaderCache();
         LLViewerShaderMgr::instance()->setShaders();
+        return true;
+    }
+};
+
+/////////////////////
+// REBUILD TERRAIN //
+/////////////////////
+
+
+class LLAdvancedRebuildTerrain : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        gPipeline.rebuildTerrain();
         return true;
     }
 };
@@ -9103,21 +9140,21 @@ class LLAttachmentDetach : public view_listener_t
                 }
 
                 LLViewerObject* parent = (LLViewerObject*)objectp->getParent();
-                while (parent)
-                {
-                    if (parent->isAvatar())
-                    {
-                        break;
-                    }
+        while (parent)
+        {
+            if(parent->isAvatar())
+            {
+                break;
+            }
                     objectp = parent;
-                    parent = (LLViewerObject*)parent->getParent();
-                }
+            parent = (LLViewerObject*)parent->getParent();
+        }
 
 // [RLVa:KB] - Checked: 2010-03-15 (RLVa-1.2.0a) | Modified: RLVa-1.0.5
                 // NOTE: copy/paste of the code in enable_detach()
                 if ((rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) &&
                     gRlvAttachmentLocks.isLockedAttachment(objectp->getRootEdit()))
-                {
+        {
                     return false;
                 }
 // [/RLVa:KB]
@@ -9125,8 +9162,8 @@ class LLAttachmentDetach : public view_listener_t
                 // std::set to avoid dupplicate 'roots' from linksets
                 mRemoveSet.insert(objectp->getAttachmentItemID());
 
-                return true;
-            }
+            return true;
+        }
             bool mAvatarsInSelection;
             uuid_set_t mRemoveSet;
         } func;
@@ -9146,7 +9183,7 @@ class LLAttachmentDetach : public view_listener_t
         if (func.mRemoveSet.empty())
         {
             LL_WARNS() << "handle_detach() - no valid attachments in selection to detach" << LL_ENDL;
-            return true;
+                return true;
         }
 
         uuid_vec_t detach_list(func.mRemoveSet.begin(), func.mRemoveSet.end());
@@ -9954,6 +9991,30 @@ class LLAdvancedClickRenderBenchmark: public view_listener_t
     bool handleEvent(const LLSD& userdata)
     {
         gpu_benchmark();
+        return true;
+    }
+};
+
+void hdri_preview();
+
+class LLAdvancedClickHDRIPreview: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        // open personal lighting floater when previewing an HDRI (keeps HDRI from implicitly unloading when opening build tools)
+        LLFloaterReg::showInstance("env_adjust_snapshot");
+        hdri_preview();
+        return true;
+    }
+};
+
+
+class LLAdvancedClickGLTFScenePreview : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        // open personal lighting floater when previewing an HDRI (keeps HDRI from implicitly unloading when opening build tools)
+        LL::GLTFSceneManager::instance().load();
         return true;
     }
 };
@@ -11859,6 +11920,8 @@ void LLUploadCostCalculator::calculateCost(const std::string& asset_type_str)
 
     if (asset_type_str == "texture")
     {
+        // This use minimal texture cost to allow bulk and
+        // texture upload menu options to be visible
         upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
     }
     else if (asset_type_str == "animation")
@@ -12403,7 +12466,10 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedClickRenderShadowOption(), "Advanced.ClickRenderShadowOption");
     view_listener_t::addMenu(new LLAdvancedClickRenderProfile(), "Advanced.ClickRenderProfile");
     view_listener_t::addMenu(new LLAdvancedClickRenderBenchmark(), "Advanced.ClickRenderBenchmark");
+    view_listener_t::addMenu(new LLAdvancedClickHDRIPreview(), "Advanced.ClickHDRIPreview");
+    view_listener_t::addMenu(new LLAdvancedClickGLTFScenePreview(), "Advanced.ClickGLTFScenePreview");
     view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
+    view_listener_t::addMenu(new LLAdvancedRebuildTerrain(), "Advanced.RebuildTerrain");
     //[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
     view_listener_t::addMenu(new FSAdvancedToggleDoubleClickAction, "Advanced.SetDoubleClickAction");
     view_listener_t::addMenu(new FSAdvancedCheckEnabledDoubleClickAction, "Advanced.CheckEnabledDoubleClickAction");

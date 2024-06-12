@@ -60,6 +60,7 @@
 #include "llvotree.h"
 #include "llvovolume.h"
 #include "llworld.h"
+#include "llvlcomposition.h"
 #include "pipeline.h"
 #include "llviewerjoystick.h"
 #include "llviewerobjectlist.h"
@@ -197,12 +198,25 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
     return false;
 }
 
-static bool handleTerrainDetailChanged(const LLSD& newvalue)
+static bool handleTerrainScaleChanged(const LLSD& newvalue)
 {
-    LLDrawPoolTerrain::sDetailMode = newvalue.asInteger();
+    F64 scale = newvalue.asReal();
+    if (scale != 0.0)
+    {
+        LLDrawPoolTerrain::sDetailScale = F32(1.0 / scale);
+    }
     return true;
 }
 
+static bool handlePBRTerrainScaleChanged(const LLSD& newvalue)
+{
+    F64 scale = newvalue.asReal();
+    if (scale != 0.0)
+    {
+        LLDrawPoolTerrain::sPBRDetailScale = F32(1.0 / scale);
+    }
+    return true;
+}
 
 static bool handleDebugAvatarJointsChanged(const LLSD& newvalue)
 {
@@ -541,6 +555,19 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
         gPipeline.createGLBuffers();
         LLViewerShaderMgr::instance()->setShaders();
         gPipeline.mReflectionMapManager.reset();
+        gPipeline.mHeroProbeManager.reset();
+    }
+    return true;
+}
+
+static bool handleHeroProbeResolutionChanged(const LLSD &newvalue)
+{
+    if (gPipeline.isInit())
+    {
+        LLPipeline::refreshCachedSettings();
+        gPipeline.mHeroProbeManager.reset();
+        gPipeline.releaseGLBuffers();
+        gPipeline.createGLBuffers();
     }
     return true;
 }
@@ -1113,6 +1140,16 @@ void handleFPSTuningStrategyChanged(const LLSD& newValue)
     LLPerfStats::tunables.userFPSTuningStrategy = newval;
 }
 
+void handleLocalTerrainChanged(const LLSD& newValue)
+{
+    for (U32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
+    {
+        const auto setting = gSavedSettings.getString(std::string("LocalTerrainAsset") + std::to_string(i + 1));
+        const LLUUID materialID(setting);
+        gLocalTerrainMaterials.setDetailAssetID(i, materialID);
+    }
+}
+
 // <FS:Ansariel> FIRE-6809: Quickly moving the bandwidth slider has no effect
 void handleBandwidthChanged(const LLSD& newValue)
 {
@@ -1165,7 +1202,11 @@ void settings_setup_listeners()
 {
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderTerrainDetail", handleTerrainDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainScale", handleTerrainScaleChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRScale", handlePBRTerrainScaleChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRDetail", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRPlanarSampleCount", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRTriplanarBlendFactor", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "OctreeStaticObjectSizeFactor", handleRepartition);
     setting_setup_signal_listener(gSavedSettings, "OctreeDistanceFactor", handleRepartition);
     setting_setup_signal_listener(gSavedSettings, "OctreeMaxNodeCapacity", handleRepartition);
@@ -1209,6 +1250,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
     // setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionsEnabled); // <FS:Beq/> FIRE-33659 better way to enable/disable reflections
     setting_setup_signal_listener(gSavedSettings, "RenderScreenSpaceReflections", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderHeroProbeResolution", handleHeroProbeResolutionChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
@@ -1323,6 +1365,10 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorFarAwayDistance", handleUserImpostorDistanceChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "TuningFPSStrategy", handleFPSTuningStrategyChanged);
+    setting_setup_signal_listener(gSavedSettings, "LocalTerrainAsset1", handleLocalTerrainChanged);
+    setting_setup_signal_listener(gSavedSettings, "LocalTerrainAsset2", handleLocalTerrainChanged);
+    setting_setup_signal_listener(gSavedSettings, "LocalTerrainAsset3", handleLocalTerrainChanged);
+    setting_setup_signal_listener(gSavedSettings, "LocalTerrainAsset4", handleLocalTerrainChanged);
 
     setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 

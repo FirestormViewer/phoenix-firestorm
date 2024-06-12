@@ -430,7 +430,6 @@ public:
     BOOL        isCachedRawImageReady() const {return mCachedRawImageReady ;}
     BOOL        isRawImageValid()const { return mIsRawImageValid ; }
     void        forceToSaveRawImage(S32 desired_discard = 0, F32 kept_time = 0.f) ;
-    void        forceToRefetchTexture(S32 desired_discard = 0, F32 kept_time = 60.f);
     /*virtual*/ void setCachedRawImage(S32 discard_level, LLImageRaw* imageraw) override;
     void        destroySavedRawImage() ;
     LLImageRaw* getSavedRawImage() ;
@@ -456,6 +455,8 @@ public:
 protected:
     /*virtual*/ void switchToCachedImage() override;
     S32 getCurrentDiscardLevelForFetching() ;
+public: // <FS:Ansariel> Needed for texture refresh
+    void forceToRefetchTexture(S32 desired_discard = 0, F32 kept_time = 60.f);
 
 private:
     void init(bool firstinit) ;

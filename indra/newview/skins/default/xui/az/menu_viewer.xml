@@ -256,7 +256,7 @@
 			<menu_item_call label="Standart icazələri təyin etmək..." name="Set default permissions"/>
 		</menu>
 		<menu label="Yüklə" name="Upload">
-			<menu_item_call label="Şəkil (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Şəkil..." name="Upload Image"/>
 			<menu_item_call label="Səs (L$[COST])..." name="Upload Sound"/>
 			<menu_item_call label="Animasiya (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Meş modeli..." name="Upload Model"/>

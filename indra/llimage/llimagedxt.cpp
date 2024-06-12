@@ -438,7 +438,7 @@ bool LLImageDXT::convertToDXR()
     if (!newdata)
     {
         LLError::LLUserWarningMsg::showOutOfMemory();
-        LL_ERRS() << "Out of memory in LLImageDXT::convertToDXR()" << LL_ENDL;
+        LL_WARNS() << "Out of memory in LLImageDXT::convertToDXR()" << LL_ENDL;
         return false;
     }
     llassert(total_bytes > 0);
