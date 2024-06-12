@@ -728,7 +728,7 @@ void FSRadar::updateRadarList()
         U32 loop = 0;
         while (loop < num_entering)
         {
-            for (S32 i = 0; i < num_this_pass; i++)
+            for (U32 i = 0; i < num_this_pass; i++)
             {
                 msg = llformat("%s,%s", msg.c_str(), mRadarEnterAlerts[loop + i].asString().c_str());
             }
@@ -757,7 +757,7 @@ void FSRadar::updateRadarList()
         U32 loop = 0;
         while (loop < num_leaving)
         {
-            for (S32 i = 0; i < num_this_pass; i++)
+            for (U32 i = 0; i < num_this_pass; i++)
             {
                 msg = llformat("%s,%s", msg.c_str(), mRadarLeaveAlerts[loop + i].asString().c_str());
             }

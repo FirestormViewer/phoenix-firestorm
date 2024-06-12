@@ -2241,7 +2241,7 @@ void LLFloaterPreference::refreshEnabledState()
 void LLFloaterPreference::onCopySearch()
 {
     std::string searchQuery = "secondlife:///app/openfloater/preferences?search=" + LLURI::escape(mFilterEdit->getText());
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(searchQuery), 0, searchQuery.size());
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(searchQuery), 0, static_cast<S32>(searchQuery.size()));
 }
 // </FS:Zi>
 

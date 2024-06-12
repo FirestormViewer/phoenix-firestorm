@@ -389,7 +389,7 @@ private:
     LLUUID mPackageDest;
     std::string mFolderName;
     EDeRezDestination mDest;
-    U32 mPackSize;
+    size_t mPackSize;
     EZtakeState mState;
 };
 
@@ -519,9 +519,9 @@ private:
     std::vector<U32> mToTake;
     LLUUID mTarget;
     S32 mCountdown;
-    S32 zeroClearX;
-    S32 zeroClearY;
-    S32 zeroClearZ;
+    size_t zeroClearX;
+    size_t zeroClearY;
+    size_t zeroClearZ;
 };
 TMZtake* gMTake;
 
@@ -980,7 +980,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         S32 random_min = atoi(random_nums[1].first);
                         S32 random_max = atoi(random_nums[2].first);
                         std::string look_for = "RAND(" + llformat("%d", random_min) + "," + llformat("%d", random_max) + ")";
-                        S32 random_string_pos = expr.find(look_for);
+                        auto random_string_pos = expr.find(look_for);
                         if (random_string_pos != std::string::npos)
                         {
                             S32 random_number = 0;

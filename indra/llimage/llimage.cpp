@@ -1970,7 +1970,6 @@ void LLImageRaw::compositeRowScaled4onto3( const U8* in, U8* out, S32 in_pixel_l
     }
 }
 
-
 void LLImageRaw::addEmissive(LLImageRaw* src)
 {
     LLImageRaw* dst = this;  // Just for clarity.
@@ -2036,7 +2035,6 @@ void LLImageRaw::addEmissiveScaled(LLImageRaw* src)
     dst->addEmissiveUnscaled(&temp);
 }
 
-// static
 bool LLImageRaw::validateSrcAndDst(std::string func, const LLImageRaw* src, const LLImageRaw* dst)
 {
     LLImageDataSharedLock lockIn(src);

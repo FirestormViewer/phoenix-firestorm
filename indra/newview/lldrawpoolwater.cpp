@@ -262,7 +262,7 @@ void LLDrawPoolWater::renderPostDeferred(S32 pass)
 
         if (mShaderLevel == 1)
         {
-            fog_color.mV[VW] = log(fog_density) / log(2);
+            fog_color.mV[VALPHA] = log(fog_density) / log(2);
         }
 
         F32 water_height = environment.getWaterHeight();

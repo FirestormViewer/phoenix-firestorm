@@ -286,7 +286,7 @@ void ColladaExportFloater::addSelectedObjects()
             mObjectName = "";
         }
         mSaver.updateTextureInfo();
-        mNumTextures = mSaver.mTextures.size();
+        mNumTextures = static_cast<S32>(mSaver.mTextures.size());
         mNumExportableTextures = getNumExportableTextures();
     }
 }

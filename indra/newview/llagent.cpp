@@ -1513,7 +1513,7 @@ boost::signals2::connection LLAgent::whenPositionChanged(position_signal_t::slot
 //-----------------------------------------------------------------------------
 S32 LLAgent::getRegionsVisited() const
 {
-    return mRegionsVisited.size();
+    return static_cast<S32>(mRegionsVisited.size());
 }
 
 //-----------------------------------------------------------------------------
@@ -3726,8 +3726,8 @@ bool LLAgent::isInGroup(const LLUUID& group_id, bool ignore_god_mode /* false */
     if (!ignore_god_mode && isGodlike())
         return true;
 
-    U32 count = mGroups.size();
-    for(U32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {
@@ -3746,8 +3746,8 @@ bool LLAgent::hasPowerInGroup(const LLUUID& group_id, U64 power) const
     // GP_NO_POWERS can also mean no power is enough to grant an ability.
     if (GP_NO_POWERS == power) return false;
 
-    U32 count = mGroups.size();
-    for(U32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {
@@ -3767,8 +3767,8 @@ U64 LLAgent::getPowerInGroup(const LLUUID& group_id) const
     if (isGodlike())
         return GP_ALL_POWERS;
 
-    U32 count = mGroups.size();
-    for(U32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {
@@ -3781,8 +3781,8 @@ U64 LLAgent::getPowerInGroup(const LLUUID& group_id) const
 
 bool LLAgent::getGroupData(const LLUUID& group_id, LLGroupData& data) const
 {
-    S32 count = mGroups.size();
-    for(S32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {
@@ -3795,8 +3795,8 @@ bool LLAgent::getGroupData(const LLUUID& group_id, LLGroupData& data) const
 
 S32 LLAgent::getGroupContribution(const LLUUID& group_id) const
 {
-    S32 count = mGroups.size();
-    for(S32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {
@@ -3809,8 +3809,8 @@ S32 LLAgent::getGroupContribution(const LLUUID& group_id) const
 
 bool LLAgent::setGroupContribution(const LLUUID& group_id, S32 contribution)
 {
-    S32 count = mGroups.size();
-    for(S32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {
@@ -3832,8 +3832,8 @@ bool LLAgent::setGroupContribution(const LLUUID& group_id, S32 contribution)
 
 bool LLAgent::setUserGroupFlags(const LLUUID& group_id, bool accept_notices, bool list_in_profile)
 {
-    S32 count = mGroups.size();
-    for(S32 i = 0; i < count; ++i)
+    auto count = mGroups.size();
+    for(size_t i = 0; i < count; ++i)
     {
         if(mGroups[i].mID == group_id)
         {

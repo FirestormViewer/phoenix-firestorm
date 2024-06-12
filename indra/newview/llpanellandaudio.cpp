@@ -351,7 +351,7 @@ void LLPanelLandAudio::onBtnCopyToClipboard()
 
     if (!music_url.empty())
     {
-        LLClipboard::instance().copyToClipboard(utf8str_to_wstring(music_url), 0, music_url.size() );
+        LLClipboard::instance().copyToClipboard(utf8str_to_wstring(music_url), 0, static_cast<S32>(music_url.size()));
     }
 }
 // </FS:CR>

@@ -408,7 +408,7 @@ WorkQueue gMainloopWork("mainloop", 1024*1024);
 std::string SafeFileName(std::string filename)
 {
     std::string invalidChars = "\"\'\\/?*:.<>| ";
-    S32 position = filename.find_first_of(invalidChars);
+    auto position = filename.find_first_of(invalidChars);
     while (position != filename.npos)
     {
         filename[position] = '_';
@@ -1932,7 +1932,7 @@ bool LLAppViewer::doFrame()
 
 S32 LLAppViewer::updateTextureThreads(F32 max_time)
 {
-    S32 work_pending = 0;
+    size_t work_pending = 0;
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Texture Cache");
         work_pending += LLAppViewer::getTextureCache()->update(max_time); // unpauses the texture cache thread
@@ -1945,7 +1945,7 @@ S32 LLAppViewer::updateTextureThreads(F32 max_time)
         LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Image Fetch");
         work_pending += LLAppViewer::getTextureFetch()->update(max_time); // unpauses the texture fetch thread
     }
-    return work_pending;
+    return static_cast<S32>(work_pending);
 }
 
 void LLAppViewer::flushLFSIO()
@@ -2383,9 +2383,9 @@ bool LLAppViewer::cleanup()
     while(1)
     {
         S32 pending = 0;
-        pending += LLAppViewer::getTextureCache()->update(1); // unpauses the worker thread
-        pending += LLAppViewer::getImageDecodeThread()->update(1); // unpauses the image thread
-        pending += LLAppViewer::getTextureFetch()->update(1); // unpauses the texture fetch thread
+        pending += static_cast<S32>(LLAppViewer::getTextureCache()->update(1)); // unpauses the worker thread
+        pending += static_cast<S32>(LLAppViewer::getImageDecodeThread()->update(1)); // unpauses the image thread
+        pending += static_cast<S32>(LLAppViewer::getTextureFetch()->update(1)); // unpauses the texture fetch thread
         pending += LLLFSThread::updateClass(0);
         F64 idle_time = idleTimer.getElapsedTimeF64();
         if(!pending)
@@ -3930,12 +3930,12 @@ LLSD LLAppViewer::getViewerInfo() const
     info["CPU"] = gSysCPU.getCPUString();
     info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
     info["USED_RAM"] = LLSD::Real(LLMemory::getAllocatedMemKB().valueInUnits<LLUnits::Megabytes>());
-    info["CONCURRENCY"] = LLSD::Integer((S32)boost::thread::hardware_concurrency());    // <FS:Beq> Add hardware concurrency to info
+    info["CONCURRENCY"] = LLSD::Integer(std::thread::hardware_concurrency());    // <FS:Beq> Add hardware concurrency to info
     // Moved hack adjustment to Windows memory size into llsys.cpp
     info["OS_VERSION"] = LLOSInfo::instance().getOSString();
     info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
     info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
-    info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
+    info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(gGLManager.mVRAM);
 
 #if LL_WINDOWS
     std::string drvinfo;
@@ -4184,7 +4184,7 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
         else
         {
             // array value: build KEY_0, KEY_1 etc. entries
-            for (LLSD::Integer n(0), size(ii->second.size()); n < size; ++n)
+            for (LLSD::Integer n(0), size(static_cast<LLSD::Integer>(ii->second.size())); n < size; ++n)
             {
                 args[STRINGIZE(ii->first << '_' << n)] = ii->second[n].asString();
             }
@@ -4463,7 +4463,7 @@ void LLAppViewer::recordMarkerVersion(LLAPRFile& marker_file)
     }
 
     // record the viewer version in the marker file
-    marker_file.write(marker_version.data(), marker_version.length());
+    marker_file.write(marker_version.data(), static_cast<S32>(marker_version.length()));
 
     marker_file.flush(); // <FS:ND/> Make sure filesystem reflects what we wrote.
 }
@@ -6028,7 +6028,7 @@ void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * regionp)
     if (have_capability)
     {
         // we have support for display names, use it
-        U32 url_size = name_lookup_url.size();
+        auto url_size = name_lookup_url.size();
         // capabilities require URLs with slashes before query params:
         // https://<host>:<port>/cap/<uuid>/?ids=<blah>
         // but the caps are granted like:

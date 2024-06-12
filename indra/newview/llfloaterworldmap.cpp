@@ -1280,11 +1280,11 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
     mLandmarkItemIDList.reserve(mLandmarkItemIDList.size() + items.size());
 
     // <FS:Ansariel> Filter duplicate landmarks on world map
-    std::set<LLUUID> used_landmarks;
+    uuid_set_t used_landmarks;
     bool filterLandmarks = gSavedSettings.getBOOL("WorldmapFilterDuplicateLandmarks");
     // </FS:Ansariel>
-    S32 count = items.size();
-    for(S32 i = 0; i < count; ++i)
+    auto count = items.size();
+    for(size_t i = 0; i < count; ++i)
     {
         LLInventoryItem* item = items.at(i);
 
@@ -1914,7 +1914,7 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
     LLScrollListCtrl *list = getChild<LLScrollListCtrl>("search_results");
     list->operateOnAll(LLCtrlListInterface::OP_DELETE);
 
-    // S32 name_length = mCompletingRegionName.length(); // <FS:Beq/> FIRE-23591 support map search partial matches (Patch by Kevin Cozens)
+    // auto name_length = mCompletingRegionName.length(); // <FS:Beq/> FIRE-23591 support map search partial matches (Patch by Kevin Cozens)
 
     LLSD match;
 

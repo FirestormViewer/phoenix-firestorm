@@ -341,7 +341,7 @@ void LLVOCacheEntry::setState(U32 state)
 
     if(getState() == ACTIVE)
     {
-        const S32 MIN_INTERVAL = 64 + sMinFrameRange;
+        const U32 MIN_INTERVAL = 64U + sMinFrameRange;
         U32 last_visible = getVisible();
 
         setVisible();
@@ -575,7 +575,7 @@ bool LLVOCacheEntry::isAnyVisible(const LLVector4a& camera_origin, const LLVecto
     if(!vis)
     {
         S32 cur_vis = llmax(group->getAnyVisible(), (S32)getVisible());
-        vis = (cur_vis + sMinFrameRange > LLViewerOctreeEntryData::getCurrentFrame());
+        vis = (cur_vis + (S32)sMinFrameRange > LLViewerOctreeEntryData::getCurrentFrame());
     }
 
     //within the back sphere
@@ -1330,7 +1330,7 @@ void LLVOCache::removeEntry(HeaderEntryInfo* entry)
         removeFromCache(entry);
         delete entry;
 
-        mNumEntries = mHandleEntryMap.size() ;
+        mNumEntries = static_cast<U32>(mHandleEntryMap.size());
     }
 }
 
@@ -1517,7 +1517,7 @@ void LLVOCache::writeCacheHeader()
             success = check_write(&apr_file, (void*)*iter, sizeof(HeaderEntryInfo));
         }
 
-        mNumEntries = mHeaderEntryQueue.size() ;
+        mNumEntries = static_cast<U32>(mHeaderEntryQueue.size());
         if(success && mNumEntries < MAX_NUM_OBJECT_ENTRIES)
         {
             HeaderEntryInfo* entry = new HeaderEntryInfo() ;
@@ -1775,7 +1775,7 @@ void LLVOCache::purgeEntries(U32 size)
         removeFromCache(entry) ; // This now handles removing extras cache where appropriate.
         delete entry;
     }
-    mNumEntries = mHandleEntryMap.size() ;
+    mNumEntries = static_cast<U32>(mHandleEntryMap.size());
 }
 
 void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map, bool dirty_cache, bool removal_enabled)
@@ -1848,7 +1848,7 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
 
         if(success)
         {
-            S32 num_entries = cache_entry_map.size(); // if removal is enabled num_entries might be wrong
+            S32 num_entries = static_cast<S32>(cache_entry_map.size()); // if removal is enabled num_entries might be wrong
             success = check_write(&apr_file, &num_entries, sizeof(S32));
             if (success)
             {
@@ -1949,9 +1949,7 @@ void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LL
         return;
     }
 
-    // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
     std::string filename = getObjectCacheExtrasFilename(handle);
-    // </FS:Beq>
     llofstream out(filename, std::ios::out | std::ios::binary);
     if(!out.good())
     {
@@ -1986,7 +1984,7 @@ void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LL
     U32 num_entries = 0;
     U32 inmem_entries = 0;
     U32 skipped = 0;
-    inmem_entries = cache_extras_entry_map.size();
+    inmem_entries = (U32)cache_extras_entry_map.size();
     for (auto [local_id, entry] : cache_extras_entry_map)
     {
         // Only write out GLTFOverrides that we can actually apply again on import.

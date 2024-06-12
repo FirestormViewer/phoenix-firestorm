@@ -101,7 +101,7 @@ void LLHeroProbeManager::update()
         U32 count = log2((F32)res) + 0.5f;
 
         mMipChain.resize(count);
-        for (int i = 0; i < count; ++i)
+        for (U32 i = 0; i < count; ++i)
         {
             mMipChain[i].allocate(res, res, GL_RGBA16F);
             res /= 2;
@@ -198,7 +198,7 @@ void LLHeroProbeManager::update()
                 mFaceUpdateList[i] = ceilf(cube_facing * gPipeline.RenderHeroProbeConservativeUpdateMultiplier);
                 }
 
-            
+
             mProbes[0]->mOrigin = probe_pos;
         }
         else
@@ -359,7 +359,7 @@ void LLHeroProbeManager::updateProbeFace(LLReflectionMap* probe, U32 face, bool 
 
             res /= 2;
 
-            S32 mip = i - (mMipChain.size() - mips);
+            S32 mip = i - ((S32)mMipChain.size() - mips);
 
             if (mip >= 0)
             {
@@ -487,7 +487,7 @@ void LLHeroProbeManager::updateUniforms()
         mHeroData.heroSphere.mV[3] = mProbes[0]->mRadius;
     }
 
-    mHeroData.heroMipCount = mMipChain.size();
+    mHeroData.heroMipCount = (GLint)mMipChain.size();
 }
 
 void LLHeroProbeManager::renderDebug()

@@ -350,12 +350,12 @@ bool LLTextBase::truncate()
         if (value.type() == LLSD::TypeString)
         {
             // save a copy for strings.
-            utf8_byte_size = value.size();
+            utf8_byte_size = static_cast<S32>(value.size());
         }
         else
         {
             // non string LLSDs need explicit conversion to string
-            utf8_byte_size = value.asString().size();
+            utf8_byte_size = static_cast<S32>(value.asString().size());
         }
 
         if ( utf8_byte_size > mMaxTextByteLength )
@@ -365,7 +365,7 @@ bool LLTextBase::truncate()
             temp_utf8_text = utf8str_truncate( temp_utf8_text, mMaxTextByteLength );
             LLWString text = utf8str_to_wstring( temp_utf8_text );
             // remove extra bit of current string, to preserve formatting, etc.
-            removeStringNoUndo(text.size(), getWText().size() - text.size());
+            removeStringNoUndo(static_cast<S32>(text.size()), static_cast<S32>(getWText().size() - text.size()));
             did_truncate = true;
         }
     }
@@ -483,7 +483,7 @@ void LLTextBase::drawHighlightsBackground(const highlight_list_t& highlights, co
                             continue;
                         }
                     }
-                    selection_rects.push_back(selection_rect);
+                    selection_rects.emplace_back(selection_rect);
                 }
 
                 // Only advance if the highlight ends on the current line
@@ -499,12 +499,8 @@ void LLTextBase::drawHighlightsBackground(const highlight_list_t& highlights, co
         alpha *= getDrawContext().mAlpha;
         LLColor4 selection_color(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], alpha);
 
-        for (std::vector<LLRect>::iterator rect_it = selection_rects.begin();
-            rect_it != selection_rects.end();
-            ++rect_it)
+        for (auto& selection_rect : selection_rects)
         {
-            LLRect selection_rect = *rect_it;
-            selection_rect = *rect_it;
             selection_rect.translate(mVisibleTextRect.mLeft - content_display_rect.mLeft, mVisibleTextRect.mBottom - content_display_rect.mBottom);
             gl_rect_2d(selection_rect, selection_color);
         }
@@ -766,7 +762,7 @@ void LLTextBase::drawText()
     }
     else if (useLabel())
     {
-        text_len = mLabel.getWString().length();
+        text_len = static_cast<S32>(mLabel.getWString().length());
     }
 
     S32 selection_left = -1;
@@ -835,7 +831,7 @@ void LLTextBase::drawText()
 
                 // Find the start of the first word
                 U32 word_start = seg_start, word_end = -1;
-                U32 text_length = wstrText.length();
+                U32 text_length = static_cast<U32>(wstrText.length());
                 while ( (word_start < text_length) && (!LLStringOps::isAlpha(wstrText[word_start])) )
                 {
                     word_start++;
@@ -938,7 +934,7 @@ void LLTextBase::drawText()
             }
 
             // Draw squiggly lines under any visible misspelled words
-            while ( (mMisspellRanges.end() != misspell_it) && (misspell_it->first < seg_end) && (misspell_it->second > seg_start) )
+            while ( (mMisspellRanges.end() != misspell_it) && (misspell_it->first < (U32)seg_end) && (misspell_it->second > (U32)seg_start) )
             {
                 // Skip the current word if the user is still busy editing it
                 if ( (!mSpellCheckTimer.hasExpired()) && (misspell_it->first <= (U32)mCursorPos) && (misspell_it->second >= (U32)mCursorPos) )
@@ -947,7 +943,7 @@ void LLTextBase::drawText()
                     continue;
                 }
 
-                U32 misspell_start = llmax<U32>(misspell_it->first, seg_start), misspell_end = llmin<U32>(misspell_it->second, seg_end);
+                U32 misspell_start = llmax<U32>(misspell_it->first, (U32)seg_start), misspell_end = llmin<U32>(misspell_it->second, (U32)seg_end);
                 S32 squiggle_start = 0, squiggle_end = 0, pony = 0;
                 cur_segment->getDimensions(seg_start - cur_segment->getStart(), misspell_start - seg_start, squiggle_start, pony);
                 cur_segment->getDimensions(misspell_start - cur_segment->getStart(), misspell_end - misspell_start, squiggle_end, pony);
@@ -970,7 +966,7 @@ void LLTextBase::drawText()
                     squiggle_start += 4;
                 }
 
-                if (misspell_it->second > seg_end)
+                if (misspell_it->second > (U32)seg_end)
                 {
                     break;
                 }
@@ -994,7 +990,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
     beforeValueChange();
 
     S32 old_len = getLength();      // length() returns character length
-    S32 insert_len = wstr.length();
+    S32 insert_len = static_cast<S32>(wstr.length());
 
     pos = getEditableIndex(pos, true);
     if (pos > old_len)
@@ -1066,7 +1062,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
         static LLUICachedControl<bool> useBWEmojis("FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
         LLStyleSP emoji_style;
         LLEmojiDictionary* ed = LLEmojiDictionary::instanceExists() ? LLEmojiDictionary::getInstance() : NULL;
-        for (S32 text_kitty = 0, text_len = wstr.size(); text_kitty < text_len; text_kitty++)
+        for (S32 text_kitty = 0, text_len = static_cast<S32>(wstr.size()); text_kitty < text_len; text_kitty++)
         {
             llwchar code = wstr[text_kitty];
             bool isEmoji = ed ? ed->isEmoji(code) : LLStringOps::isEmoji(code);
@@ -1523,7 +1519,6 @@ void LLTextBase::draw()
                             : hasFocus()
                                 ? mFocusBgColor.get()
                                 : mWriteableBgColor.get();
-
         gl_rect_2d(text_rect, bg_color % alpha, true);
     }
 
@@ -1640,7 +1635,7 @@ const std::string& LLTextBase::getSuggestion(U32 index) const
 
 U32 LLTextBase::getSuggestionCount() const
 {
-    return mSuggestionList.size();
+    return static_cast<U32>(mSuggestionList.size());
 }
 
 void LLTextBase::replaceWithSuggestion(U32 index)
@@ -1653,7 +1648,7 @@ void LLTextBase::replaceWithSuggestion(U32 index)
             // Insert the suggestion in its place
             LLWString suggestion = utf8str_to_wstring(mSuggestionList[index]);
             LLStyleConstSP sp(new LLStyle(getStyleParams()));
-            LLTextSegmentPtr segmentp = new LLNormalTextSegment(sp, it->first, it->first + suggestion.size(), *this);
+            LLTextSegmentPtr segmentp = new LLNormalTextSegment(sp, it->first, it->first + static_cast<S32>(suggestion.size()), *this);
             segment_vec_t segments(1, segmentp);
             insertStringNoUndo(it->first, suggestion, &segments);
 
@@ -2216,7 +2211,6 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
     index_segment->setStart(index);
     index_segment->setEnd(index);
     segment_set_t::iterator it = mSegments.upper_bound(index_segment);
-
     return it;
 }
 
@@ -2612,7 +2606,7 @@ void LLTextBase::resetLabel()
         style->setColor(mTentativeFgColor);
         LLStyleConstSP sp(style);
 
-        LLTextSegmentPtr label = new LLLabelTextSegment(sp, 0, mLabel.getWString().length() + 1, *this);
+        LLTextSegmentPtr label = new LLLabelTextSegment(sp, 0, static_cast<S32>(mLabel.getWString().length()) + 1, *this);
         insertSegment(label);
     }
 }
@@ -2688,7 +2682,7 @@ void LLTextBase::appendWidget(const LLInlineViewSegment::Params& params, const s
 {
     segment_vec_t segments;
     LLWString widget_wide_text = utf8str_to_wstring(text);
-    segments.push_back(new LLInlineViewSegment(params, getLength(), getLength() + widget_wide_text.size()));
+    segments.push_back(new LLInlineViewSegment(params, getLength(), getLength() + static_cast<S32>(widget_wide_text.size())));
 
     insertStringNoUndo(getLength(), widget_wide_text, &segments);
 }
@@ -2738,11 +2732,11 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
                 highlight_params.font.style(normal_font_style);
                 // </FS:Ansariel>
                 LLStyleConstSP normal_sp(new LLStyle(highlight_params));
-                segmentp = new LLOnHoverChangeableTextSegment(sp, normal_sp, cur_length, cur_length + wide_text.size(), *this);
+                segmentp = new LLOnHoverChangeableTextSegment(sp, normal_sp, cur_length, cur_length + static_cast<S32>(wide_text.size()), *this);
             }
             else
             {
-                segmentp = new LLNormalTextSegment(sp, cur_length, cur_length + wide_text.size(), *this);
+                segmentp = new LLNormalTextSegment(sp, cur_length, cur_length + static_cast<S32>(wide_text.size()), *this);
             }
             segment_vec_t segments;
             segments.push_back(segmentp);
@@ -2756,7 +2750,7 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
 
         segment_vec_t segments;
         S32 segment_start = old_length;
-        S32 segment_end = old_length + wide_text.size();
+        S32 segment_end = old_length + static_cast<S32>(wide_text.size());
         LLStyleConstSP sp(new LLStyle(style_params));
         if (underline_on_hover_only || mSkipLinkUnderline)
         {
@@ -2847,7 +2841,7 @@ void LLTextBase::replaceUrl(const std::string &url,
             S32 start = seg->getStart();
             S32 end = seg->getEnd();
             text = text.substr(0, start) + wlabel + text.substr(end, text.size() - end + 1);
-            seg->setEnd(start + wlabel.size());
+            seg->setEnd(start + static_cast<S32>(wlabel.size()));
             modified = true;
         }
 
@@ -2878,8 +2872,8 @@ void LLTextBase::replaceUrl(const std::string &url,
         //deselect();
         // Make sure we're still within limits
         S32 text_length = getLength();
-        mSelectionStart = llmin(mSelectionStart, text_length);
-        mSelectionEnd = llmin(mSelectionEnd, text_length);
+        mSelectionStart = llmin(mSelectionStart, static_cast<S32>(text_length));
+        mSelectionEnd = llmin(mSelectionEnd, static_cast<S32>(text_length));
         // </FS:Ansariel>
         setCursorPos(mCursorPos);
         needsReflow();
@@ -3230,7 +3224,7 @@ void LLTextBase::refreshHighlights()
             for (std::list<boost::iterator_range<LLWString::const_iterator> >::const_iterator itRange = highlightRanges.begin(); itRange != highlightRanges.end(); ++itRange)
             {
                 S32 idxStart = itRange->begin() - wstrText.begin();
-                mHighlights.push_back(range_pair_t(idxStart, idxStart + itRange->size()));
+                mHighlights.emplace_back(range_pair_t(idxStart, idxStart + static_cast<S32>(itRange->size())));
             }
         }
         mHighlightsDirty = false;
@@ -3255,7 +3249,7 @@ bool LLTextBase::setCursor(S32 row, S32 column)
 {
     if (row < 0 || column < 0) return false;
 
-    S32 n_lines = mLineInfoList.size();
+    S32 n_lines = static_cast<S32>(mLineInfoList.size());
     for (S32 line = row; line < n_lines; ++line)
     {
         const line_info& li = mLineInfoList[line];
@@ -3903,8 +3897,8 @@ S32 LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 
     // <FS:Ansariel> Prevent unnecessary calculations
 
-    //S32 offsetLength = text.length() - (segment_offset + mStart);
-    S32 offsetLength = text.length() - start_offset;
+    //S32 offsetLength = static_cast<S32>(text.length()) - (segment_offset + mStart);
+    S32 offsetLength = static_cast<S32>(text.length()) - start_offset;
 
     //if(getLength() < segment_offset + mStart)
     if(getLength() < start_offset)
@@ -3951,9 +3945,9 @@ S32 LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 void LLNormalTextSegment::dump() const
 {
     LL_INFOS() << "Segment [" <<
-//          mColor.mV[VX] << ", " <<
-//          mColor.mV[VY] << ", " <<
-//          mColor.mV[VZ] << "]\t[" <<
+//          mColor.mV[VRED] << ", " <<
+//          mColor.mV[VGREEN] << ", " <<
+//          mColor.mV[VBLUE] << "]\t[" <<
         mStart << ", " <<
         getEnd() << "]" <<
         LL_ENDL;
@@ -3989,7 +3983,7 @@ const LLWString& LLLabelTextSegment::getWText() const
 /*virtual*/
 const S32 LLLabelTextSegment::getLength() const
 {
-    return mEditor.getWlabel().length();
+    return static_cast<S32>(mEditor.getWlabel().length());
 }
 
 //

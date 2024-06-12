@@ -164,7 +164,7 @@ void FSMoneyTrackerListMenu::onContextMenuItemClick(const LLSD& userdata)
 
             if (!copy_text.empty())
             {
-                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(copy_text), 0, copy_text.size() );
+                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(copy_text), 0, static_cast<S32>(copy_text.size()));
             }
         }
     }

@@ -4983,7 +4983,7 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
                 {
                     S32 new_val = (S32)stat_value;
                     S32 change_count = new_val - prev_total_scripts;
-                    if (llabs(change_count) >= fsReportTotalScriptCountChangesThreshold && prev_total_scripts > -1)
+                    if (llabs(change_count) >= (S32)fsReportTotalScriptCountChangesThreshold && prev_total_scripts > -1)
                     {
                         LLStringUtil::format_map_t args;
                         args["NEW_VALUE"] = llformat("%d", new_val);
@@ -7790,8 +7790,8 @@ void send_group_notice(const LLUUID& group_id,
         item_def["owner_id"] = item->getPermissions().getOwner();
         std::ostringstream ostr;
         LLSDSerialize::serialize(item_def, ostr, LLSDSerialize::LLSD_XML);
-        bin_bucket_size = ostr.str().copy(
-            (char*)bin_bucket, ostr.str().size());
+        bin_bucket_size = static_cast<S32>(ostr.str().copy(
+            (char*)bin_bucket, ostr.str().size()));
         bin_bucket[bin_bucket_size] = '\0';
     }
     else

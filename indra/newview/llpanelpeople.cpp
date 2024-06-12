@@ -1003,8 +1003,8 @@ void LLPanelPeople::updateButtons()
         groups_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull()); // a real group selected
 
         // <FS:CR> FIRE-12229
-        //U32 groups_count = gAgent.mGroups.size();
-        //S32 max_groups = LLAgentBenefitsMgr::current().getGroupMembershipLimit();
+        //U32 groups_count = static_cast<U32>(gAgent.mGroups.size());
+        //U32 max_groups = LLAgentBenefitsMgr::current().getGroupMembershipLimit();
         //U32 groups_remaining = max_groups > groups_count ? max_groups - groups_count : 0;
         //groups_panel->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", groups_count));
         //groups_panel->getChild<LLUICtrl>("groupcount")->setTextArg("[REMAINING]", llformat("%d", groups_remaining));
@@ -1940,7 +1940,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 
         LLSD payload, args;
         std::string set = mContactSetCombo->getValue().asString();
-        S32 selected_size = selected_uuids.size();
+        S32 selected_size = static_cast<S32>(selected_uuids.size());
         args["SET_NAME"] = set;
         args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", selected_uuids.front(), "about").getSLURLString());
         payload["contact_set"] = set;

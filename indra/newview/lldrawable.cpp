@@ -346,7 +346,7 @@ LLFace* LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep)
 
     face = new LLFace(this, mVObjp);
 
-    face->setTEOffset(mFaces.size());
+    face->setTEOffset(static_cast<S32>(mFaces.size()));
     face->setTexture(texturep);
     face->setPoolType(gPipeline.getPoolTypeFromTE(te, texturep));
 
@@ -368,7 +368,7 @@ LLFace* LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep,
     LLFace *face;
     face = new LLFace(this, mVObjp);
 
-    face->setTEOffset(mFaces.size());
+    face->setTEOffset(static_cast<S32>(mFaces.size()));
     face->setTexture(texturep);
     face->setNormalMap(normalp);
     face->setPoolType(gPipeline.getPoolTypeFromTE(te, texturep));
@@ -391,7 +391,7 @@ LLFace* LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep,
     LLFace *face;
     face = new LLFace(this, mVObjp);
 
-    face->setTEOffset(mFaces.size());
+    face->setTEOffset(static_cast<S32>(mFaces.size()));
     face->setTexture(texturep);
     face->setNormalMap(normalp);
     face->setSpecularMap(specularp);
@@ -424,7 +424,7 @@ void LLDrawable::setNumFaces(const S32 newFaces, LLFacePool *poolp, LLViewerText
     else // (newFaces > mFaces.size())
     {
         mFaces.reserve(newFaces);
-        for (int i = mFaces.size(); i<newFaces; i++)
+        for (auto i = mFaces.size(); i<newFaces; i++)
         {
             addFace(poolp, texturep);
         }
@@ -449,7 +449,7 @@ void LLDrawable::setNumFacesFast(const S32 newFaces, LLFacePool *poolp, LLViewer
     else // (newFaces > mFaces.size())
     {
         mFaces.reserve(newFaces);
-        for (int i = mFaces.size(); i<newFaces; i++)
+        for (auto i = mFaces.size(); i<newFaces; i++)
         {
             addFace(poolp, texturep);
         }
@@ -462,10 +462,10 @@ void LLDrawable::mergeFaces(LLDrawable* src)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
 
-    U32 face_count = mFaces.size() + src->mFaces.size();
+    auto face_count = mFaces.size() + src->mFaces.size();
 
     mFaces.reserve(face_count);
-    for (U32 i = 0; i < src->mFaces.size(); i++)
+    for (size_t i = 0; i < src->mFaces.size(); i++)
     {
         LLFace* facep = src->mFaces[i];
         facep->setDrawable(this);

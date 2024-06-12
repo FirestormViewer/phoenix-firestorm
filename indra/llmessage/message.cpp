@@ -2183,7 +2183,7 @@ S32 LLMessageSystem::sendError(
     if (LLMessageConfig::getMessageFlavor(ERROR_MESSAGE_NAME) ==
         LLMessageConfig::TEMPLATE_FLAVOR)
     {
-        S32 msg_size = temp.size() + mMessageBuilder->getMessageSize();
+        S32 msg_size = static_cast<S32>(temp.size()) + mMessageBuilder->getMessageSize();
         if(msg_size >= ETHERNET_MTU_BYTES)
         {
             pack_data = false;
@@ -2191,7 +2191,7 @@ S32 LLMessageSystem::sendError(
     }
     if(pack_data)
     {
-        addBinaryData("Data", (void*)temp.c_str(), temp.size());
+        addBinaryData("Data", (void*)temp.c_str(), static_cast<S32>(temp.size()));
     }
     else
     {

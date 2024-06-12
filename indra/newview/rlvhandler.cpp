@@ -1224,7 +1224,7 @@ void RlvHandler::onTeleportFinished(const LLVector3d& posArrival)
 size_t utf8str_strlen(const std::string& utf8)
 {
     const char* pUTF8 = utf8.c_str(); size_t length = 0;
-    for (int idx = 0, cnt = utf8.length(); idx < cnt ;idx++)
+    for (size_t idx = 0, cnt = utf8.length(); idx < cnt ;idx++)
     {
         // We're looking for characters that don't start with 10 as their high bits
         if ((pUTF8[idx] & 0xC0) != 0x80)
@@ -1271,7 +1271,7 @@ bool RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
             }
             else if (!hasBehaviour(RLV_BHVR_EMOTE))
             {
-                int idx = strUTF8Text.find('.');    // Truncate at 20 characters or at the dot (whichever is shorter)
+                auto idx = strUTF8Text.find('.');    // Truncate at 20 characters or at the dot (whichever is shorter)
                 strUTF8Text = utf8str_chtruncate(strUTF8Text, ( (idx > 0) && (idx < 20) ) ? idx + 1 : 20);
             }
         }
@@ -3228,7 +3228,7 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
     LLInventoryModel::cat_array_t folders;
     if (RlvInventory::instance().getPath(idItems, folders))
     {
-        for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
+        for (size_t idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
             onForceWear(folders.at(idxFolder), nFlags);
 
         // If we're not executing a command then we're a delayed callback and need to manually call done()
@@ -3578,7 +3578,7 @@ ERlvCmdRet RlvHandler::onFindFolder(const RlvCommand& rlvCmd, std::string& strRe
             // We need to return an "in depth" result so whoever has the most '/' is our lucky winner
             // (maxSlashes needs to be initialized to -1 since children of the #RLV folder won't have '/' in their shared path)
             int maxSlashes = -1, curSlashes; std::string strFolderName;
-            for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
+            for (size_t idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
             {
                 strFolderName = RlvInventory::instance().getSharedPath(folders.at(idxFolder));
 
@@ -3592,7 +3592,7 @@ ERlvCmdRet RlvHandler::onFindFolder(const RlvCommand& rlvCmd, std::string& strRe
         }
         else if (RLV_BHVR_FINDFOLDERS == rlvCmd.getBehaviourType())
         {
-            for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
+            for (size_t idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
             {
                 if (!strReply.empty())
                     strReply.push_back(',');
@@ -3813,7 +3813,7 @@ ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply)
     if (!pFolders)
         return RLV_RET_FAILED;
 
-    for (S32 idxFolder = 0, cntFolder = pFolders->size(); idxFolder < cntFolder; idxFolder++)
+    for (size_t idxFolder = 0, cntFolder = pFolders->size(); idxFolder < cntFolder; idxFolder++)
     {
         // Return all folders that:
         //   - aren't hidden
@@ -3856,12 +3856,12 @@ ERlvCmdRet RlvHandler::onGetInvWorn(const RlvCommand& rlvCmd, std::string& strRe
     // Add all the folders to a lookup map
     std::map<LLUUID, rlv_wear_info> mapFolders;
     mapFolders.insert(std::pair<LLUUID, rlv_wear_info>(pFolder->getUUID(), wi));
-    for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
+    for (size_t idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
         mapFolders.insert(std::pair<LLUUID, rlv_wear_info>(folders.at(idxFolder)->getUUID(), wi));
 
     // Iterate over all the found items
     LLViewerInventoryItem* pItem; std::map<LLUUID, rlv_wear_info>::iterator itFolder;
-    for (S32 idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
+    for (size_t idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
     {
         pItem = items.at(idxItem);
         if (!RlvForceWear::isWearableItem(pItem))
@@ -4004,7 +4004,7 @@ ERlvCmdRet RlvHandler::onGetPath(const RlvCommand& rlvCmd, std::string& strReply
         }
         else if (RLV_BHVR_GETPATHNEW == rlvCmd.getBehaviourType())
         {
-            for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
+            for (size_t idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
             {
                 if (!strReply.empty())
                     strReply.push_back(',');

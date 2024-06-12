@@ -147,7 +147,7 @@ void RlvUIEnabler::onToggleShowLoc()
             if (pTpHistoryStg->compareByTitleAndGlobalPos(tpItemStg, LLTeleportHistoryPersistentItem(tpItem.mTitle, tpItem.mGlobalPos)))
             {
                 // TODO-RLVa: [RLVa-1.2.2] Is there a reason why LLTeleportHistoryStorage::removeItem() doesn't trigger history changed?
-                pTpHistoryStg->removeItem(pTpHistoryStg->getItems().size() - 1);
+                pTpHistoryStg->removeItem(static_cast<S32>(pTpHistoryStg->getItems().size()) - 1);
                 pTpHistoryStg->mHistoryChangedSignal(-1);
             }
         }
@@ -425,8 +425,8 @@ bool RlvUIEnabler::canViewParcelProperties()
             const LLUUID& idOwner = pParcel->getOwnerID();
             if ( (idOwner != gAgent.getID()) )
             {
-                S32 count = gAgent.mGroups.size();
-                for (S32 i = 0; i < count; ++i)
+                auto count = gAgent.mGroups.size();
+                for (size_t i = 0; i < count; ++i)
                 {
                     if (gAgent.mGroups.at(i).mID == idOwner)
                     {

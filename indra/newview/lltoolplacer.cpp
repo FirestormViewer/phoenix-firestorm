@@ -92,7 +92,7 @@ U32 get_selected_plant(const std::map<U32, P*>& list, const std::string& type, S
         {
             for (size_t i = 0; i < list.size(); ++i)
             {
-                if (list.at(i) && list.at(i)->mName == last_selected)
+                if (list.at(static_cast<U32>(i)) && list.at(static_cast<U32>(i))->mName == last_selected)
                 {
                     return (U32)i;
                 }

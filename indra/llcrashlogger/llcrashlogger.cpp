@@ -146,7 +146,7 @@ std::string getStartupStateFromLog(std::string& sllog)
     std::string startup_state = "STATE_FIRST";
     std::string startup_token = "Startup state changing from ";
 
-    size_t index = sllog.rfind(startup_token);
+    auto index = sllog.rfind(startup_token);
     if (index != std::string::npos || index + startup_token.length() > sllog.length()) {
         return startup_state;
     }

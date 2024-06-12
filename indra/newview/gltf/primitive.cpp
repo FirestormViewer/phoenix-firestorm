@@ -619,8 +619,8 @@ const LLVolumeTriangle* Primitive::lineSegmentIntersect(const LLVector4a& start,
     face.mTangents = mTangents.data();
     face.mIndices = nullptr; // unreferenced
 
-    face.mNumIndices = mIndexArray.size();
-    face.mNumVertices = mPositions.size();
+    face.mNumIndices = (S32)mIndexArray.size();
+    face.mNumVertices = (S32)mPositions.size();
 
     LLOctreeTriangleRayIntersect intersect(start, dir, &face, &closest_t, intersection, tex_coord, normal, tangent_out);
     intersect.traverse(mOctree);

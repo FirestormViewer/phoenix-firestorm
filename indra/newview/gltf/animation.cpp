@@ -191,15 +191,15 @@ void Animation::Sampler::getFrameInfo(Asset& asset, F32 time, U32& frameIndex, F
     {
         if (time > mMaxTime)
         {
-            frameIndex = mFrameTimes.size() - 2;
+            frameIndex = (U32)mFrameTimes.size() - 2;
             t = 1.0f;
             return;
         }
 
-        frameIndex = mFrameTimes.size() - 2;
+        frameIndex = (U32)mFrameTimes.size() - 2;
         t = 1.f;
 
-        for (U32 i = 0; i < mFrameTimes.size() - 1; i++)
+        for (U32 i = 0; i < (U32)mFrameTimes.size() - 1; i++)
         {
             if (time >= mFrameTimes[i] && time < mFrameTimes[i + 1])
             {

@@ -756,7 +756,6 @@ LLMatrix4a inverse(const LLMatrix4a& mat)
 
 bool GLTFSceneManager::lineSegmentIntersect(LLVOVolume* obj, Asset* asset, const LLVector4a& start, const LLVector4a& end, S32 face, bool pick_transparent, bool pick_rigged, bool pick_unselectable, S32* node_hit, S32* primitive_hit,
     LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-
 {
     // line segment intersection test
     // start and end should be in agent space

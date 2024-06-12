@@ -180,11 +180,11 @@ void LLConsole::draw()
     {
         // This is done in update() if session support is enabled
     // </FS:Ansariel>
-    U32 num_lines=0;
+    size_t num_lines{ 0 };
 
     paragraph_t::reverse_iterator paragraph_it;
     paragraph_it = mParagraphs.rbegin();
-    U32 paragraph_num=mParagraphs.size();
+    auto paragraph_num=mParagraphs.size();
 
     while (!mParagraphs.empty() && paragraph_it != mParagraphs.rend())
     {
@@ -192,7 +192,7 @@ void LLConsole::draw()
         if(num_lines > mMaxLines
             || ( (mLinePersistTime > (F32)0.f) && ((*paragraph_it).mAddTime - skip_time)/(mLinePersistTime - mFadeTime) <= (F32)0.f))
         {                           //All lines above here are done.  Lose them.
-            for (U32 i=0;i<paragraph_num;i++)
+            for (size_t i = 0; i < paragraph_num; i++)
             {
                 if (!mParagraphs.empty())
                     mParagraphs.pop_front();
@@ -292,7 +292,7 @@ void LLConsole::draw()
         static const F32 padding_vert = 5;
         S32 total_width = 0;
         S32 total_height = 0;
-        S32 lines_drawn = 0;
+        size_t lines_drawn = 0;
 
         paragraph_t::reverse_iterator paragraphs_end = mParagraphs.rend();
         for (paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; ++paragraph_it)
@@ -383,7 +383,7 @@ void LLConsole::draw()
     }
     else
     {
-        S32 lines_drawn = 0;
+        size_t lines_drawn = 0;
 
         paragraph_t::reverse_iterator paragraphs_end = mParagraphs.rend();
         for(paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; paragraph_it++)
@@ -540,7 +540,7 @@ void LLConsole::Paragraph::makeParagraphColorSegments (const LLColor4 &color)
         ParagraphColorSegment color_segment;
 
         color_segment.mColor.setValue(color_llsd);
-        color_segment.mNumChars = color_str.length();
+        color_segment.mNumChars = static_cast<S32>(color_str.length());
 
         mParagraphColorSegments.push_back(color_segment);
     }
@@ -597,14 +597,14 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
         //  skip_chars = 0;
         //}
 
-        //U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, line_end - paragraph_offset, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
+        //U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, static_cast<S32>(line_end) - paragraph_offset, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
         if (line_end == LLWString::npos)
         {
             line_end = mParagraphText.size();
         }
 
         S32 skip_chars = 0; // skip '\n'
-        U32 line_length = line_end - paragraph_offset;
+        U32 line_length = static_cast<U32>(line_end) - paragraph_offset;
         U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, line_length, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
         // </FS>
 
@@ -812,11 +812,11 @@ void LLConsole::update()
         F32 skip_time = mTimer.getElapsedTimeF32() - mLinePersistTime;
 
         paragraph_t temp_para;
-        std::map<LLUUID, S32> session_map;
+        std::map<LLUUID, U32> session_map;
         for (paragraph_t::reverse_iterator it = mParagraphs.rbegin(); it != mParagraphs.rend(); ++it)
         {
             Paragraph& para = *it;
-            session_map[para.mSessionID] += (S32)para.mLines.size();
+            session_map[para.mSessionID] += (U32)para.mLines.size();
             if (session_map[para.mSessionID] <= mMaxLines && // max lines on a per session basis
                 !((mLinePersistTime > 0.f) && (para.mAddTime - skip_time) / (mLinePersistTime - mFadeTime) <= 0.f)) // not expired yet
             {

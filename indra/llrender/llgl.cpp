@@ -1184,7 +1184,7 @@ bool LLGLManager::initGL()
 
     // <FS:Beq> stop doing this and trust the hardware detection
     // if hardware detection has all failed the this will correct for that
-    // S32 old_vram = mVRAM;
+    // U32 old_vram = mVRAM;
     // mVRAM = 0;
 
 #if LL_WINDOWS
@@ -1229,7 +1229,7 @@ bool LLGLManager::initGL()
 //      // Function will check all GPUs WMI knows of and will pick up the one with most
 //      // memory. We need to check all GPUs because system can switch active GPU to
 //      // weaker one, to preserve power when not under load.
-//      S32 mem = LLDXHardware::getMBVideoMemoryViaWMI();
+//      U32 mem = LLDXHardware::getMBVideoMemoryViaWMI();
 //      if (mem != 0)
 //      {
 //          mVRAM = mem;
@@ -1386,7 +1386,7 @@ void LLGLManager::asLLSD(LLSD& info)
     info["gpu_version"] = mDriverVersionVendorString;
     info["opengl_version"] = mGLVersionString;
 
-    info["vram"] = mVRAM;
+    info["vram"] = LLSD::Integer(mVRAM);
 
     // OpenGL limits
     info["max_samples"] = mMaxSamples;

@@ -183,8 +183,8 @@ void LLScriptEditor::loadKeywords(const std::string& filename,
     LL_PROFILE_ZONE_SCOPED;
     if (mKeywords.loadFromLegacyFile(filename))
     {
-        S32 count = llmin(funcs.size(), tooltips.size());
-        for(S32 i = 0; i < count; i++)
+        auto count = llmin(funcs.size(), tooltips.size());
+        for (size_t i = 0; i < count; i++)
         {
             std::string name = utf8str_trim(funcs[i]);
             mKeywords.addToken(LLKeywordToken::TT_WORD, name, color, tooltips[i] );

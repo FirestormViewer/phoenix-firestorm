@@ -719,7 +719,7 @@ LL_COMMON_API S32 wstring_wstring_length_from_utf16_length(const LLWString & wst
 LL_COMMON_API std::string utf8str_truncate(const std::string& utf8str, const S32 max_len);
 
 // [RLVa:KB] - Checked: RLVa-2.1.0
-LL_COMMON_API std::string utf8str_substr(const std::string& utf8str, const S32 index, const S32 max_len);
+LL_COMMON_API std::string utf8str_substr(const std::string& utf8str, const size_t index, const size_t max_len);
 LL_COMMON_API void utf8str_split(std::list<std::string>& split_list, const std::string& utf8str, size_t maxlen, char split_token);
 // [/RLVa:KB]
 

@@ -3143,7 +3143,7 @@ void LLVOAvatarSelf::outputRezDiagnostics() const
     LL_DEBUGS("Avatar") << "\t Time points for each upload (start / finish)" << LL_ENDL;
     // <FS:Beq> Missed update for OpenSim BOM
     // for (U32 i = 0; i < LLAvatarAppearanceDefines::BAKED_NUM_INDICES; ++i)
-    for (U32 i = 0; i < getNumBakes(); ++i)
+    for (S32 i = 0; i < getNumBakes(); ++i)
     // </FS:Beq>
     {
         LL_DEBUGS("Avatar") << "\t\t (" << i << ") \t" << (S32)mDebugBakedTextureTimes[i][0] << " / " << (S32)mDebugBakedTextureTimes[i][1] << LL_ENDL;
@@ -3597,7 +3597,7 @@ bool LLVOAvatarSelf::hasPendingBakedUploads() const
 {
     // <FS:Beq> BOMOS constrain uploads for non-BOM.
     // for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
-    for (U32 i = 0; i < getNumBakes(); i++)
+    for (S32 i = 0; i < getNumBakes(); i++)
     {
         LLViewerTexLayerSet* layerset = getTexLayerSet(i);
         if (layerset && layerset->getViewerComposite() && layerset->getViewerComposite()->uploadPending())

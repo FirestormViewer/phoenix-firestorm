@@ -775,7 +775,7 @@ void LLToolBar::updateLayoutAsNeeded()
     {
         if (mButtons.size())
         {
-            equalized_width = (full_screen_width - mPadBetween * (mButtons.size() + 1)) / mButtons.size();
+            equalized_width = (full_screen_width - mPadBetween * (static_cast<S32>(mButtons.size()) + 1)) / static_cast<S32>(mButtons.size());
         }
     }
     else if (mLayoutStyle == LAYOUT_STYLE_EQUALIZE)
@@ -789,7 +789,7 @@ void LLToolBar::updateLayoutAsNeeded()
             }
         }
 
-        S32 total_button_width = mButtons.size() * equalized_width + (mButtons.size() + 1) * mPadBetween;
+        S32 total_button_width = static_cast<S32>(mButtons.size()) * equalized_width + (static_cast<S32>(mButtons.size()) + 1) * mPadBetween;
         if (mMaxRows > 0 && orientation == LLLayoutStack::HORIZONTAL && total_button_width > full_screen_width)
         {
             S32 buttons_per_row = llceil((F32)mButtons.size() / (F32)mMaxRows);

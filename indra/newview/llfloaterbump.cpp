@@ -391,7 +391,7 @@ void FSBumpListMenu::onContextMenuItemClick(const LLSD& userdata)
 
             if (!bumps_text.empty())
             {
-                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(bumps_text), 0, bumps_text.size() );
+                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(bumps_text), 0, static_cast<S32>(bumps_text.size()));
             }
         }
     }

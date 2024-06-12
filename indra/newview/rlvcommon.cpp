@@ -355,7 +355,7 @@ std::string RlvStrings::getAnonym(const std::string& strName)
     const char* pszName = strName.c_str(); U32 nHash = 0;
 
     // Test with 11,264 SL names showed a 3.33% - 3.82% occurance for each so we *should* get a very even spread
-    for (int idx = 0, cnt = strName.length(); idx < cnt; idx++)
+    for (size_t idx = 0, cnt = strName.length(); idx < cnt; idx++)
         nHash += pszName[idx];
 
     return m_Anonyms[nHash % m_Anonyms.size()];
@@ -505,7 +505,7 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy, bool fCl
 {
     uuid_vec_t idAgents;
     LLWorld::getInstance()->getAvatars(&idAgents, NULL);
-    for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
+    for (size_t idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
     {
         LLAvatarName avName;
         // NOTE: if we're agressively culling nearby names then ignore exceptions
@@ -576,7 +576,7 @@ bool RlvUtil::isNearbyAgent(const LLUUID& idAgent)
         std::vector<LLUUID> idAgents;
         LLWorld::getInstance()->getAvatars(&idAgents, NULL);
 
-        for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
+        for (size_t idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
             if (idAgents[idxAgent] == idAgent)
                 return true;
     }

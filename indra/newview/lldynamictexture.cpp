@@ -220,8 +220,8 @@ bool LLViewerDynamicTexture::updateAllInstances()
             if (dynamicTexture->needsRender())
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("needsRender");
-                llassert(dynamicTexture->getFullWidth() <= LLPipeline::MAX_BAKE_WIDTH);
-                llassert(dynamicTexture->getFullHeight() <= LLPipeline::MAX_BAKE_WIDTH);
+                llassert(dynamicTexture->getFullWidth() <= (S32)LLPipeline::MAX_BAKE_WIDTH);
+                llassert(dynamicTexture->getFullHeight() <= (S32)LLPipeline::MAX_BAKE_WIDTH);
 
                 glClear(GL_DEPTH_BUFFER_BIT);
 

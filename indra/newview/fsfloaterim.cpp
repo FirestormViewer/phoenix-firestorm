@@ -1892,7 +1892,7 @@ bool FSFloaterIM::dropCategory(LLInventoryCategory* category, bool drop)
                                         items,
                                         LLInventoryModel::EXCLUDE_TRASH,
                                         buddies);
-        S32 count = items.size();
+        auto count = items.size();
         if (count == 0)
         {
             rv = false;

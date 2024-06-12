@@ -531,8 +531,8 @@ void FSFloaterNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 bool FSFloaterNearbyChat::isWordsName(const std::string& name)
 {
     // checking to see if it's display name plus username in parentheses
-    S32 open_paren = name.find(" (", 0);
-    S32 close_paren = name.find(')', 0);
+    auto open_paren = name.find(" (", 0);
+    auto close_paren = name.find(')', 0);
 
     if (open_paren != std::string::npos &&
         close_paren == name.length() - 1)
@@ -542,7 +542,7 @@ bool FSFloaterNearbyChat::isWordsName(const std::string& name)
     else
     {
         //checking for a single space
-        S32 pos = name.find(' ', 0);
+        auto pos = name.find(' ', 0);
         return std::string::npos != pos && name.rfind(' ', name.length()) == pos && 0 != pos && name.length()-1 != pos;
     }
 }

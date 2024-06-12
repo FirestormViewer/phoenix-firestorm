@@ -91,7 +91,7 @@ LLFloater360Capture::~LLFloater360Capture()
     //     gAgent.set360CaptureActive(false); // <FS:Beq/> make FS Area search work again
     //     gAgent.changeInterestListMode(mStartILMode);
     // }
-    if ( !LLApp::isExiting() )
+    if (!LLApp::isExiting())
     {
         gAgent.set360CaptureActive(false); // <FS:Beq/> make FS Area search work again
         gAgent.changeInterestListMode(IL_MODE_DEFAULT);// The Change Interest Mode target mode is indicative only. If something else is holding the 360 mode open then this will be ignored.
@@ -430,9 +430,9 @@ void LLFloater360Capture::mockSnapShot(LLImageRaw* raw)
     unsigned int depth = raw->getComponents();
     unsigned char* pixels = raw->getData();
 
-    for (int y = 0; y < height; y++)
+    for (unsigned int y = 0; y < height; y++)
     {
-        for (int x = 0; x < width; x++)
+        for (unsigned int x = 0; x < width; x++)
         {
             unsigned long offset = y * width * depth + x * depth;
             unsigned char red = x * 256 / width;

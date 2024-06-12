@@ -269,7 +269,7 @@ void HttpOpRequest::visitNotifier(HttpRequest * request)
         if (mReplyOffset || mReplyLength)
         {
             // Got an explicit offset/length in response
-            response->setRange(mReplyOffset, mReplyLength, mReplyFullLength);
+            response->setRange(mReplyOffset, static_cast<unsigned int>(mReplyLength), static_cast<unsigned int>(mReplyFullLength));
         }
         response->setContentType(mReplyConType);
         response->setRetries(mPolicyRetries, mPolicy503Retries);
@@ -330,7 +330,7 @@ HttpStatus HttpOpRequest::setupGetByteRange(HttpRequest::policy_t policy_id,
     LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     setupCommon(policy_id, url, NULL, options, headers);
     mReqMethod = HOR_GET;
-    mReqOffset = offset;
+    mReqOffset = static_cast<off_t>(offset);
     mReqLength = len;
     if (offset || len)
     {
@@ -625,7 +625,7 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
             long data_size(0);
             if (mReqBody)
             {
-                data_size = mReqBody->size();
+                data_size = static_cast<long>(mReqBody->size());
             }
             check_curl_easy_setopt(mCurlHandle, CURLOPT_POSTFIELDS, static_cast<void *>(NULL));
             check_curl_easy_setopt(mCurlHandle, CURLOPT_POSTFIELDSIZE, data_size);
@@ -636,13 +636,14 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
     case HOR_PATCH:
         check_curl_easy_setopt(mCurlHandle, CURLOPT_CUSTOMREQUEST, "PATCH");
         // fall through.  The rest is the same as PUT
+        [[fallthrough]];
     case HOR_PUT:
         {
             check_curl_easy_setopt(mCurlHandle, CURLOPT_UPLOAD, 1);
             long data_size(0);
             if (mReqBody)
             {
-                data_size = mReqBody->size();
+                data_size = static_cast<long>(mReqBody->size());
             }
             check_curl_easy_setopt(mCurlHandle, CURLOPT_INFILESIZE, data_size);
             mCurlHeaders = curl_slist_append(mCurlHeaders, "Expect:");

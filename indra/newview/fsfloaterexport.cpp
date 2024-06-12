@@ -876,7 +876,7 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
     case LLAssetType::AT_BODYPART:
     {
         std::string asset(buffer.begin(), buffer.end());
-        S32 position = asset.rfind("textures");
+        auto position = asset.rfind("textures");
         boost::regex pattern("[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}");
         boost::sregex_iterator m1(asset.begin() + position, asset.end(), pattern);
         boost::sregex_iterator m2;
@@ -908,9 +908,8 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
         }
         std::string name;
         std::string description;
-        S32 i;
-        S32 count = gesture->mSteps.size();
-        for (i = 0; i < count; ++i)
+        auto count = gesture->mSteps.size();
+        for (size_t i = 0; i < count; ++i)
         {
             LLGestureStep* step = gesture->mSteps[i];
 
@@ -1180,7 +1179,7 @@ void FSFloaterObjectExport::addSelectedObjects()
             }
 
             updateTextureInfo();
-            mNumTextures = mTextures.size();
+            mNumTextures = static_cast<S32>(mTextures.size());
             mNumExportableTextures = getNumExportableTextures();
         }
         else

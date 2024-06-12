@@ -820,8 +820,8 @@ void LLAvatarActions::csr(const LLUUID& id, std::string name)
     std::string url = "http://csr.lindenlab.com/agent/";
 
     // slow and stupid, but it's late
-    S32 len = name.length();
-    for (S32 i = 0; i < len; i++)
+    auto len = name.length();
+    for (size_t i = 0; i < len; i++)
     {
         if (name[i] == ' ')
         {
@@ -1039,11 +1039,11 @@ namespace action_give_inventory
             return;
         }
 
-        S32 count = LLShareInfo::instance().mAvatarNames.size();
+        auto count = LLShareInfo::instance().mAvatarNames.size();
         bool shared = count && !inventory_selected_uuids.empty();
 
         // iterate through avatars
-        for(S32 i = 0; i < count; ++i)
+        for(size_t i = 0; i < count; ++i)
         {
             const LLUUID& avatar_uuid = LLShareInfo::instance().mAvatarUuids[i];
 
@@ -1127,7 +1127,7 @@ namespace action_give_inventory
 // [RLVa:KB] - @share
         if ( (RlvActions::isRlvEnabled()) && (RlvActions::hasBehaviour(RLV_BHVR_SHARE)) )
         {
-            for (int idxAvatar = avatar_uuids.size() - 1; idxAvatar >= 0; idxAvatar--)
+            for (int idxAvatar = static_cast<int>(avatar_uuids.size()) - 1; idxAvatar >= 0; idxAvatar--)
             {
                 if (!RlvActions::canGiveInventory(avatar_uuids[idxAvatar]))
                 {
@@ -1985,7 +1985,7 @@ bool getRegionAndPosGlobalFromAgentID(const LLUUID& idAgent, const LLViewerRegio
     for (; itRegion != endRegion; ++itRegion)
     {
         const LLViewerRegion* pRegion = *itRegion;
-        for (S32 idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.size(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
+        for (size_t idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.size(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
         {
             if (pRegion->mMapAvatarIDs.at(idxRegionAgent) == idAgent)
             {

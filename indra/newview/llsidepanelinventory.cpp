@@ -592,7 +592,7 @@ LLInventoryItem *LLSidepanelInventory::getSelectedItem()
 
 U32 LLSidepanelInventory::getSelectedCount()
 {
-    int count = 0;
+    size_t count = 0;
 
     std::set<LLFolderViewItem*> selection_list = mPanelMainInventory->getActivePanel()->getRootFolder()->getSelectionList();
     count += selection_list.size();
@@ -604,7 +604,7 @@ U32 LLSidepanelInventory::getSelectedCount()
         count += selection_list.size();
     }
 
-    return count;
+    return static_cast<U32>(count);
 }
 
 LLInventoryPanel *LLSidepanelInventory::getActivePanel()

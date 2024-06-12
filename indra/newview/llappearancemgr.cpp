@@ -728,7 +728,7 @@ public:
     bool isMostRecent();
     void handleLateArrivals();
     void resetTime(F32 timeout);
-    static S32 countActive() { return sActiveHoldingPatterns.size(); }
+    static S32 countActive() { return static_cast<S32>(sActiveHoldingPatterns.size()); }
     S32 index() { return mIndex; }
 
 private:
@@ -1383,7 +1383,7 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
     // encountered, so we actually keep the *last* of each duplicate
     // item.  This is needed to give the right priority when adding
     // duplicate items to an existing outfit.
-    for (S32 i=items.size()-1; i>=0; i--)
+    for (S32 i = static_cast<S32>(items.size()) - 1; i >= 0; i--)
     {
         LLViewerInventoryItem *item = items.at(i);
         LLUUID item_id = item->getLinkedUUID();
@@ -2207,14 +2207,14 @@ void LLAppearanceMgr::filterWearableItems(
         items.clear();
         for (S32 i=0; i<LLWearableType::WT_COUNT; i++)
         {
-            S32 size = items_by_type[i].size();
+            auto size = items_by_type[i].size();
             if (size <= 0)
                 continue;
-//            S32 start_index = llmax(0,size-max_per_type);
+//            for (size_t j = start_index; j<size; j++);
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.0)
-            S32 start_index = llmax(0, size - ((LLWearableType::getInstance()->getAllowMultiwear((LLWearableType::EType)i)) ? max_per_type : 1));
+            auto start_index = llmax(0, size - ((LLWearableType::getInstance()->getAllowMultiwear((LLWearableType::EType)i)) ? max_per_type : 1));
 // [/SL:KB[
-            for (S32 j = start_index; j<size; j++)
+            for (size_t j = start_index; j<size; j++)
             {
                 items.push_back(items_by_type[i][j]);
             }
@@ -2537,7 +2537,7 @@ void LLAppearanceMgr::updateAgentWearables(LLWearableHoldingPattern* holder)
             if (pWearable)
                 RlvBehaviourNotifyHandler::onTakeOff(pWearable->getType(), true);
         }
-        for (S32 idxItem = 0, cntItem = itemsNew.size(); idxItem < cntItem; idxItem++)
+        for (size_t idxItem = 0, cntItem = itemsNew.size(); idxItem < cntItem; idxItem++)
         {
             RlvBehaviourNotifyHandler::onWear(itemsNew.at(idxItem)->getWearableType(), true);
         }
@@ -3904,7 +3904,7 @@ struct WearablesOrderComparator
     LOG_CLASS(WearablesOrderComparator);
     WearablesOrderComparator(const LLWearableType::EType type)
     {
-        mControlSize = build_order_string(type, 0).size();
+        mControlSize = static_cast<U32>(build_order_string(type, 0).size());
     };
 
     bool operator()(const LLInventoryItem* item1, const LLInventoryItem* item2)
@@ -3939,7 +3939,7 @@ void LLAppearanceMgr::getWearableOrderingDescUpdates(LLInventoryModel::item_arra
 
     for (U32 type = LLWearableType::WT_SHIRT; type < LLWearableType::WT_COUNT; type++)
     {
-        U32 size = items_by_type[type].size();
+        U32 size = static_cast<U32>(items_by_type[type].size());
         if (!size) continue;
 
         //sinking down invalid items which need reordering
@@ -5042,7 +5042,7 @@ public:
         LLInventoryModel::item_array_t* items;
         gInventory.getDirectDescendentsOf(mComplete.front(), cats, items);
 
-        S32 count = items->size();
+        auto count = items->size();
         if(!count)
         {
             LL_WARNS() << "Nothing fetched in category " << mComplete.front()
@@ -5058,7 +5058,7 @@ public:
         S32 version = cat ? cat->getVersion() : -2;
         LL_INFOS() << "stage1, category " << mComplete.front() << " got " << count << " items, version " << version << " passing to stage2 " << LL_ENDL;
         uuid_vec_t ids;
-        for(S32 i = 0; i < count; ++i)
+        for(size_t i = 0; i < count; ++i)
         {
             ids.push_back(items->at(i)->getUUID());
         }

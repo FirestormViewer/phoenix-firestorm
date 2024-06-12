@@ -112,10 +112,10 @@ const LLSettingsDay::Seconds LLSettingsDay::DEFAULT_DAYOFFSET(57600);  // +16 ho
 const LLSettingsDay::Seconds LLSettingsDay::MAXIMUM_DAYOFFSET(86400);  // 24 hours
 const LLSettingsDay::Seconds LLSettingsDay::INVALID_DAYOFFSET(-1);     // KC
 
-const S32 LLSettingsDay::TRACK_WATER(0);   // water track is 0
-const S32 LLSettingsDay::TRACK_GROUND_LEVEL(1);
-const S32 LLSettingsDay::TRACK_MAX(5);     // 5 tracks, 4 skys, 1 water
-const S32 LLSettingsDay::FRAME_MAX(56);
+const U32 LLSettingsDay::TRACK_WATER(0);   // water track is 0
+const U32 LLSettingsDay::TRACK_GROUND_LEVEL(1);
+const U32 LLSettingsDay::TRACK_MAX(5);     // 5 tracks, 4 skys, 1 water
+const U32 LLSettingsDay::FRAME_MAX(56);
 
 const F32 LLSettingsDay::DEFAULT_FRAME_SLOP_FACTOR(0.02501f);
 
@@ -463,7 +463,7 @@ namespace
         // Trim extra tracks.
         while (value.size() > LLSettingsDay::TRACK_MAX)
         {
-            value.erase(value.size() - 1);
+            value.erase(static_cast<LLSD::Integer>(value.size()) - 1);
         }
 
         S32 framecount(0);
@@ -512,7 +512,7 @@ namespace
 
         }
 
-        int waterTracks = value[0].size();
+        int waterTracks = static_cast<int>(value[0].size());
         int skyTracks   = framecount - waterTracks;
 
         if (waterTracks < 1)

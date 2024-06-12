@@ -198,7 +198,7 @@ LLMenuItemGL::LLMenuItemGL(const LLMenuItemGL::Params& p)
     {
         mAcceleratorMask |= MASK_SHIFT;
     }
-    S32 pipe_pos = shortcut.rfind("|");
+    auto pipe_pos = shortcut.rfind("|");
     std::string key_str = shortcut.substr(pipe_pos+1);
 
     LLKeyboard::keyFromString(key_str, &mAcceleratorKey);
@@ -250,10 +250,10 @@ bool LLMenuItemGL::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     // <FS:ND> Holding CTRL & ALT while right clicking a menu entry will copy the menu
     // text and shortcut (accelerator) to the clipboard. The menu items action will not be called.
-    if( (MASK_CONTROL|MASK_ALT) == ((MASK_CONTROL|MASK_ALT) & mask) )
+    if ((MASK_CONTROL|MASK_ALT) == ((MASK_CONTROL|MASK_ALT) & mask))
     {
-        LLWString label = utf8string_to_wstring( getLabel() + ": " + mDrawAccelLabel.getString() );
-        LLClipboard::instance().copyToClipboard( label, 0, label.size() );
+        LLWString label = utf8string_to_wstring(getLabel() + ": " + mDrawAccelLabel.getString());
+        LLClipboard::instance().copyToClipboard(label, 0, static_cast<S32>(label.size()));
         return false;
     }
     // </FS:ND>
@@ -566,8 +566,8 @@ void LLMenuItemGL::draw( void )
         std::string::size_type offset = upper_case_label.find(mJumpKey);
         if (offset != std::string::npos)
         {
-            S32 x_begin = LEFT_PLAIN_PIXELS + mFont->getWidth(mLabel, 0, offset);
-            S32 x_end = LEFT_PLAIN_PIXELS + mFont->getWidth(mLabel, 0, offset + 1);
+            S32 x_begin = LEFT_PLAIN_PIXELS + mFont->getWidth(mLabel, 0, static_cast<S32>(offset));
+            S32 x_end = LEFT_PLAIN_PIXELS + mFont->getWidth(mLabel, 0, static_cast<S32>(offset) + 1);
             gl_line_2d(x_begin, (MENU_ITEM_PADDING / 2) + 1, x_end, (MENU_ITEM_PADDING / 2) + 1);
         }
     }
@@ -1672,8 +1672,8 @@ void LLMenuItemBranchDownGL::draw( void )
         if (offset != std::string::npos)
         {
             S32 x_offset = ll_round((F32)getRect().getWidth() / 2.f - getFont()->getWidthF32(mLabel.getString(), 0, S32_MAX) / 2.f);
-            S32 x_begin = x_offset + getFont()->getWidth(mLabel, 0, offset);
-            S32 x_end = x_offset + getFont()->getWidth(mLabel, 0, offset + 1);
+            S32 x_begin = x_offset + getFont()->getWidth(mLabel, 0, static_cast<S32>(offset));
+            S32 x_end = x_offset + getFont()->getWidth(mLabel, 0, static_cast<S32>(offset) + 1);
             gl_line_2d(x_begin, LABEL_BOTTOM_PAD_PIXELS, x_end, LABEL_BOTTOM_PAD_PIXELS);
         }
     }
@@ -2091,7 +2091,7 @@ bool LLMenuGL::scrollItems(EScrollingDirection direction)
         // Otherwise viewer will hang for a time needed to scroll U32_MAX
         // times in std::advance(). STORM-659.
         size_t nitems = mItems.size();
-        U32 scrollable_items = nitems < mMaxScrollableItems ? nitems : mMaxScrollableItems;
+        U32 scrollable_items = nitems < mMaxScrollableItems ? static_cast<U32>(nitems) : mMaxScrollableItems;
 
         // Advance by mMaxScrollableItems back from the end of the list
         // to make the last item visible.
@@ -2623,7 +2623,7 @@ void LLMenuGL::empty( void )
 // erase group of items from menu
 void LLMenuGL::erase( S32 begin, S32 end, bool arrange/* = true*/)
 {
-    S32 items = mItems.size();
+    auto items = mItems.size();
 
     if ( items == 0 || begin >= end || begin < 0 || end > items )
     {
@@ -2842,7 +2842,7 @@ void LLMenuGL::setTornOff(bool torn_off)
 
 U32 LLMenuGL::getItemCount()
 {
-    return mItems.size();
+    return static_cast<U32>(mItems.size());
 }
 
 LLMenuItemGL* LLMenuGL::getItem(S32 number)

@@ -334,8 +334,8 @@ void FSPanelLogin::addFavoritesToStartLocation()
     // Load favorites into the combo.
     std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
     std::string canonical_user_name = canonicalize_username(user_defined_name);
-    U32 resident_pos = canonical_user_name.find("Resident");
-    if (resident_pos > 0)
+    auto resident_pos = canonical_user_name.find("Resident");
+    if (resident_pos != std::string::npos)
     {
         canonical_user_name = canonical_user_name.substr(0, resident_pos - 1);
     }

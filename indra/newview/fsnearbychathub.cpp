@@ -653,7 +653,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 
                     // Select to end of line, starting from the character
                     // after the last one the user typed.
-                    chat_entry->selectByCursorPosition(utf8_out_str.size() - rest_of_match.size(), utf8_out_str.size());
+                    chat_entry->selectByCursorPosition(static_cast<S32>(utf8_out_str.size() - rest_of_match.size()), static_cast<S32>(utf8_out_str.size()));
                 }
                 else
                 {
@@ -662,7 +662,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
                     // Select to end of line, starting from the character
                     // after the last one the user typed.
                     S32 outlength = line_editor->getLength(); // in characters
-                    line_editor->setSelection(length, outlength);
+                    line_editor->setSelection(static_cast<S32>(length), outlength);
                     line_editor->setCursor(outlength);
                 }
             }
@@ -827,12 +827,12 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
                     if (chat_entry)
                     {
                         chat_entry->setText(prefix + replaced_text + suffix);
-                        chat_entry->selectByCursorPosition(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(match).size(), utf8string_to_wstring(prefix).size() + utf8string_to_wstring(replaced_text).size());
+                        chat_entry->selectByCursorPosition(static_cast<S32>(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(match).size()), static_cast<S32>(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(replaced_text).size()));
                     }
                     else
                     {
                         line_editor->setText(prefix + replaced_text + suffix);
-                        line_editor->setSelection(utf8str_to_wstring(prefix + replaced_text).length(), cur_pos);
+                        line_editor->setSelection(static_cast<S32>(utf8str_to_wstring(prefix + replaced_text).length()), cur_pos);
                     }
                 }
             }

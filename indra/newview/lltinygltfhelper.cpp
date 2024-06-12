@@ -91,14 +91,14 @@ void LLTinyGLTFHelper::initFetchedTextures(tinygltf::Material& material,
         {
             if (material.pbrMetallicRoughness.metallicRoughnessTexture.index != material.occlusionTexture.index)
             {
-                LLImageDataLock lockIn(occlusion_img);
-                LLImageDataLock lockOut(mr_img);
                 // occlusion is a distinct texture from pbrMetallicRoughness
                 // pack into mr red channel
                 int occlusion_idx = material.occlusionTexture.index;
                 int mr_idx = material.pbrMetallicRoughness.metallicRoughnessTexture.index;
                 if (occlusion_idx != mr_idx)
                 {
+                    LLImageDataLock lockIn(occlusion_img);
+                    LLImageDataLock lockOut(mr_img);
                     //scale occlusion image to match resolution of mr image
                     occlusion_img->scale(mr_img->getWidth(), mr_img->getHeight());
 
@@ -206,7 +206,7 @@ LLImageRaw * LLTinyGLTFHelper::getTexture(const std::string & folder, const tiny
 bool LLTinyGLTFHelper::loadModel(const std::string& filename, tinygltf::Model& model_in)
 {
     std::string exten = gDirUtilp->getExtension(filename);
-    
+
     if (exten == "gltf" || exten == "glb")
     {
         tinygltf::TinyGLTF loader;
@@ -243,7 +243,7 @@ bool LLTinyGLTFHelper::loadModel(const std::string& filename, tinygltf::Model& m
             LL_WARNS("GLTF") << "Cannot load. File has no materials " << filename << LL_ENDL;
             return false;
         }
-        
+
         return true;
     }
 

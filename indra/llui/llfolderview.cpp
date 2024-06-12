@@ -778,7 +778,7 @@ void LLFolderView::removeSelectedItems()
         // items, since the removal will futz with internal data
         // structures.
         std::vector<LLFolderViewItem*> items;
-        S32 count = mSelectedItems.size();
+        auto count = mSelectedItems.size();
         if(count <= 0) return;
         LLFolderViewItem* item = NULL;
         selected_items_t::iterator item_it;
@@ -823,7 +823,7 @@ void LLFolderView::removeSelectedItems()
             setSelection(item_to_select, item_to_select ? item_to_select->isOpen() : false, mParentPanel.get()->hasFocus());
 
             listeners.reserve(count);
-            for(S32 i = 0; i < count; ++i)
+            for(size_t i = 0; i < count; ++i)
             {
                 listener = items[i]->getViewModelItem();
                 if(listener && (std::find(listeners.begin(), listeners.end(), listener) == listeners.end()))
@@ -942,7 +942,7 @@ void LLFolderView::copy()
 {
     // *NOTE: total hack to clear the inventory clipboard
     LLClipboard::instance().reset();
-    S32 count = mSelectedItems.size();
+    auto count = mSelectedItems.size();
     if(getVisible() && getEnabled() && (count > 0))
     {
         LLFolderViewModelItem* listener = NULL;
@@ -1096,7 +1096,7 @@ void LLFolderView::startRenamingSelectedItem( void )
     // make sure selection is visible
     scrollToShowSelection();
 
-    S32 count = mSelectedItems.size();
+    auto count = mSelectedItems.size();
     LLFolderViewItem* item = NULL;
     if(count > 0)
     {
@@ -1353,7 +1353,7 @@ bool LLFolderView::handleKeyHere( KEY key, MASK mask )
 
     // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
     case KEY_CONTEXT_MENU:
-        S32 count = mSelectedItems.size();
+        auto count = mSelectedItems.size();
         LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandle.get();
         if (( count > 0 && (hasVisibleChildren()) ) // show menu only if selected items are visible
             && menu )
@@ -1508,7 +1508,7 @@ bool LLFolderView::search(LLFolderViewItem* first_item, const std::string &searc
 
         std::string current_item_label(search_item->getViewModelItem()->getSearchableName());
         LLStringUtil::toUpper(current_item_label);
-        S32 search_string_length = llmin(upper_case_string.size(), current_item_label.size());
+        auto search_string_length = llmin(upper_case_string.size(), current_item_label.size());
         if (!current_item_label.compare(0, search_string_length, upper_case_string))
         {
             found = true;
@@ -1548,7 +1548,7 @@ bool LLFolderView::handleRightMouseDown( S32 x, S32 y, MASK mask )
     mParentPanel.get()->setFocus(true);
 
     bool handled = childrenHandleRightMouseDown(x, y, mask) != NULL;
-    S32 count = mSelectedItems.size();
+    auto count = mSelectedItems.size();
 
     LLMenuGL* menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
     if (!menu)

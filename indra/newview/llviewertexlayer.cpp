@@ -640,9 +640,9 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
     LLPointer<LLImageRaw> baked_image = new LLImageRaw( mFullWidth, mFullHeight, baked_image_components );
     U8* baked_image_data = baked_image->getData();
     S32 i = 0;
-    for (S32 u=0; u < mFullWidth; u++)
+    for (U32 u=0; u < mFullWidth; u++)
     {
-        for (S32 v=0; v < mFullHeight; v++)
+        for (U32 v=0; v < mFullHeight; v++)
         {
             baked_image_data[5*i + 0] = baked_color_data[4*i + 0];
             baked_image_data[5*i + 1] = baked_color_data[4*i + 1];

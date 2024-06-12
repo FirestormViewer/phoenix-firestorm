@@ -733,7 +733,7 @@ const std::string& LLTaskCategoryBridge::getDisplayName() const
                 LLInventoryObject::object_list_t contents;
 
                 object->getInventoryContents(contents);
-                S32 numElements = contents.size();
+                S32 numElements = static_cast<S32>(contents.size());
 
                 std::string elementsString = "FSObjectInventoryNoElements";
                 if (numElements == 1)

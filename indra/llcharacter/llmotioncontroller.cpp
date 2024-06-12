@@ -157,11 +157,11 @@ LLMotionController::~LLMotionController()
 
 void LLMotionController::incMotionCounts(S32& num_motions, S32& num_loading_motions, S32& num_loaded_motions, S32& num_active_motions, S32& num_deprecated_motions)
 {
-    num_motions += mAllMotions.size();
-    num_loading_motions += mLoadingMotions.size();
-    num_loaded_motions += mLoadedMotions.size();
-    num_active_motions += mActiveMotions.size();
-    num_deprecated_motions += mDeprecatedMotions.size();
+    num_motions += static_cast<S32>(mAllMotions.size());
+    num_loading_motions += static_cast<S32>(mLoadingMotions.size());
+    num_loaded_motions += static_cast<S32>(mLoadedMotions.size());
+    num_active_motions += static_cast<S32>(mActiveMotions.size());
+    num_deprecated_motions += static_cast<S32>(mDeprecatedMotions.size());
 }
 
 //-----------------------------------------------------------------------------
@@ -223,7 +223,7 @@ void LLMotionController::purgeExcessMotions()
     }
 
     // clean up all inactive, loaded motions
-    for (LLUUID motion_id : motions_to_kill)
+    for (const LLUUID& motion_id : motions_to_kill)
     {
         // look up the motion again by ID to get canonical instance
         // and kill it only if that one is inactive
@@ -234,7 +234,7 @@ void LLMotionController::purgeExcessMotions()
         }
     }
 
-    U32 loaded_count = mLoadedMotions.size();
+    U32 loaded_count = static_cast<U32>(mLoadedMotions.size());
     // <FS:Ansariel> Can't do anything about it anyway - stop spamming the log
     //if (loaded_count > (2 * MAX_MOTION_INSTANCES) && loaded_count > mLastCountAfterPurge)
     //{

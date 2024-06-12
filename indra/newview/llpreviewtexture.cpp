@@ -1023,7 +1023,7 @@ void LLPreviewTexture::onButtonClickProfile()
 void LLPreviewTexture::onButtonClickUUID()
 {
     std::string uuid = mImageID.asString();
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(uuid), 0, uuid.size());
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(uuid), 0, static_cast<S32>(uuid.size()));
 }
 
 /* static */
@@ -1154,7 +1154,7 @@ void LLPreviewTexture::adjustAspectRatio()
                 std::string ratio = std::to_string(num)+":" + std::to_string(denom);
                 mRatiosList.push_back(ratio);
                 combo->add(ratio);
-                combo->setCurrentByIndex(mRatiosList.size()- 1);
+                combo->setCurrentByIndex(static_cast<S32>(mRatiosList.size()) - 1);
             }
             else
             {
