@@ -25019,13 +25019,24 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSRestrictMaxTextureSize</key>
     <map>
       <key>Comment</key>
-      <string>If enabled, the maximum resolution for fetched textures will be restricted and lowered by factor 2 (64bit versions only; requires restart)</string>
+      <string>If enabled, the maximum resolution for fetched textures will be restricted to FSRestrictMaxTexturePixels pixels (64bit versions only; requires restart)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSRestrictMaxTexturePixels</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum texture resolution when FSRestrictMaxTextureSize is enabled. Must be a power of 2 and at least 512 pixels.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>512</integer>
     </map>
     <key>FSScriptInfoExtended</key>
     <map>

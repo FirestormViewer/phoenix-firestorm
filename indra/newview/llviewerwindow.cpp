@@ -2093,11 +2093,30 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         gSavedSettings.setU32("RenderQualityPerformance", 0);
     }
 
-    // <FS:Ansariel> Max texture resolution
+    // <FS:Ansariel> Max texture resolution / Zi: changed this to accept pixel values so we are independent from maximum texture size
 #if ADDRESS_SIZE == 64
     if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
     {
-        DESIRED_NORMAL_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2;
+        // fallback value if no matching pixel size is found (i.e. someone fiddled with the debugs)
+        DESIRED_NORMAL_TEXTURE_SIZE = 512;
+
+        // clamp pixels between 512 and half the current maximum texture size
+        U32 pixels = llclamp(gSavedSettings.getU32("FSRestrictMaxTexturePixels"), 512, (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2);
+
+        // check pixel value against powers of 2 up to (not including) current maximum texture size
+        U32 pow_of_2 =  512;
+        while(pow_of_2 < (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT)
+        {
+            // power of 2 matches, save it
+            if (pixels == pow_of_2)
+            {
+                DESIRED_NORMAL_TEXTURE_SIZE = pixels;
+                break;
+            }
+
+            // next power of 2
+            pow_of_2 <<= 1;
+        }
     }
 #else
     gSavedSettings.setBOOL("FSRestrictMaxTextureSize", TRUE);
