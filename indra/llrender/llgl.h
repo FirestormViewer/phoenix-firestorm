@@ -172,11 +172,11 @@ void clear_glerror();
 # define llglassertok() assert_glerror()
 
 // stop_glerror is still needed on OS X but has performance implications
-// use macro below to conditionally add stop_glerror to non-release builds 
+// use macro below to conditionally add stop_glerror to non-release builds
 // on OS X
 #if LL_DARWIN && !LL_RELEASE_FOR_DOWNLOAD
 #define STOP_GLERROR stop_glerror()
-#else 
+#else
 #define STOP_GLERROR
 #endif
 

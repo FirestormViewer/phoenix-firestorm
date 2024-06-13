@@ -2398,7 +2398,7 @@ void LLIMProcessing::requestOfflineMessagesCoro(std::string url)
                     message_data["region_id"].asUUID(),
                     position,
                     local_bin_bucket.data(),
-                    local_bin_bucket.size(),
+                    S32(local_bin_bucket.size()),
                     local_sender,
                     message_data["asset_id"].asUUID());
             });

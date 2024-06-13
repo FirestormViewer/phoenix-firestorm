@@ -359,7 +359,8 @@ void LLHeroProbeManager::updateProbeFace(LLReflectionMap* probe, U32 face, bool 
 
             res /= 2;
 
-            S32 mip = i - ((S32)mMipChain.size() - mips);
+            llassert(mMipChain.size() <= size_t(S32_MAX));
+            GLint mip = i - (S32(mMipChain.size()) - mips);
 
             if (mip >= 0)
             {
@@ -487,7 +488,8 @@ void LLHeroProbeManager::updateUniforms()
         mHeroData.heroSphere.mV[3] = mProbes[0]->mRadius;
     }
 
-    mHeroData.heroMipCount = (GLint)mMipChain.size();
+    llassert(mMipChain.size() <= size_t(S32_MAX));
+    mHeroData.heroMipCount = S32(mMipChain.size());
 }
 
 void LLHeroProbeManager::renderDebug()

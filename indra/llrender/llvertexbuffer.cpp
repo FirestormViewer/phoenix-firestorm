@@ -317,7 +317,7 @@ public:
 
         { //allocate a new buffer
             LL_PROFILE_GPU_ZONE("vbo alloc");
-            // ON OS X, we don't allocate a VBO until the last possible moment 
+            // ON OS X, we don't allocate a VBO until the last possible moment
             // in unmapBuffer
             data = (U8*) ll_aligned_malloc_16(size);
             STOP_GLERROR;
@@ -329,12 +329,12 @@ public:
         LL_PROFILE_ZONE_SCOPED_CATEGORY_VERTEX;
         llassert(type == GL_ARRAY_BUFFER || type == GL_ELEMENT_ARRAY_BUFFER);
         llassert(size >= 2);
-        
+
         if (data)
         {
             ll_aligned_free_16(data);
         }
-        
+
         mAllocated -= size;
         STOP_GLERROR;
         if (name)
@@ -1517,7 +1517,7 @@ void LLVertexBuffer::setBuffer()
     // no data may be pending
     llassert(mMappedVertexRegions.empty());
     llassert(mMappedIndexRegions.empty());
-    
+
     // a shader must be bound
     llassert(LLGLSLShader::sCurBoundShaderPtr);
 
@@ -1661,12 +1661,20 @@ void LLVertexBuffer::setPositionData(const LLVector4a* data)
     flush_vbo(GL_ARRAY_BUFFER, 0, sizeof(LLVector4a) * getNumVerts()-1, (U8*) data, mMappedData);
 }
 
-void LLVertexBuffer::setTexCoordData(const LLVector2* data)
+void LLVertexBuffer::setTexCoord0Data(const LLVector2* data)
 {
 #if !LL_DARWIN
     llassert(sGLRenderBuffer == mGLBuffer);
 #endif
     flush_vbo(GL_ARRAY_BUFFER, mOffsets[TYPE_TEXCOORD0], mOffsets[TYPE_TEXCOORD0] + sTypeSize[TYPE_TEXCOORD0] * getNumVerts() - 1, (U8*)data, mMappedData);
+}
+
+void LLVertexBuffer::setTexCoord1Data(const LLVector2* data)
+{
+#if !LL_DARWIN
+    llassert(sGLRenderBuffer == mGLBuffer);
+#endif
+    flush_vbo(GL_ARRAY_BUFFER, mOffsets[TYPE_TEXCOORD1], mOffsets[TYPE_TEXCOORD1] + sTypeSize[TYPE_TEXCOORD1] * getNumVerts() - 1, (U8*)data, mMappedData);
 }
 
 void LLVertexBuffer::setColorData(const LLColor4U* data)

@@ -153,7 +153,7 @@ float terrain_mix(TerrainMix tm, vec4 tms4);
 vec3 mikktspace(vec3 vNt, vec3 vT)
 {
     vec3 vN = vary_normal;
-    
+
     vec3 vB = vary_sign * cross(vN, vT);
     vec3 tnorm = normalize( vNt.x * vT + vNt.y * vB + vNt.z * vN );
 
