@@ -2094,7 +2094,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     }
 
     // <FS:Ansariel> Max texture resolution / Zi: changed this to accept pixel values so we are independent from maximum texture size
-#if ADDRESS_SIZE == 64
     if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
     {
         // fallback value if no matching pixel size is found (i.e. someone fiddled with the debugs)
@@ -2118,9 +2117,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
             pow_of_2 <<= 1;
         }
     }
-#else
-    gSavedSettings.setBOOL("FSRestrictMaxTextureSize", TRUE);
-#endif
     LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_TEXTURE_SIZE << "px" << LL_ENDL;
     // </FS:Ansariel>
 

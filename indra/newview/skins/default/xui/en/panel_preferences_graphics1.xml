@@ -1074,13 +1074,13 @@ If you do not understand the distinction then leave this control alone."
         <check_box
          control_name="FSRestrictMaxTextureSize"
          height="16"
-         label="(64bit only, requires restart) Restrict maximum texture resolution to:"
+         label="Restrict maximum texture resolution to:"
          tool_tip="Set this restrict the maximum display resolution for inworld textures to 512px. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
          layout="topleft"
          left_delta="10"
          name="FSRestrictMaxTextureSize"
          top_pad="4"
-         width="400"/>
+         width="250"/>
 
         <combo_box
          control_name="FSRestrictMaxTexturePixels"
@@ -1106,11 +1106,24 @@ If you do not understand the distinction then leave this control alone."
           -->
         </combo_box>
 
+        <text
+         type="string"
+         text_color="White_50"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="10"
+         top_delta="5"
+         width="150">
+            (requires restart)
+        </text>
+
       <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
          type="string"
          length="1"
-         top_pad="8"
+         top_pad="18"
          follows="top|left"
          height="18"
          width="150"
