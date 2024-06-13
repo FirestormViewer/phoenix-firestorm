@@ -1107,6 +1107,7 @@ If you do not understand the distinction then leave this control alone."
         </combo_box>
 
         <text
+         name="FSRestrictMaxTextureSizeRestartText"
          type="string"
          text_color="White_50"
          length="1"
