@@ -3518,6 +3518,10 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
     capabilityNames.append("ViewerMetrics");
     capabilityNames.append("ViewerStartAuction");
     capabilityNames.append("ViewerStats");
+    // <FS:Beq> [FIRE-34104] Add special opensim Capability for signalling PBR Terrain support
+    constexpr const char* OpenSimPBRTerrain = "VETPBR";
+    capabilityNames.append(OpenSimPBRTerrain);
+    // </FS:Beq>
 
     // Please add new capabilities alphabetically to reduce
     // merge conflicts.
