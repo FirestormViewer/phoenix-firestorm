@@ -751,7 +751,7 @@ BOOL FSPanelFace::postBuild()
 
     // Blinn-Phong Diffuse texture swatch
     mTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_TEXTURE);
-    mTextureCtrl->setOnSelectCallback( boost::bind(&FSPanelFace::onSelectTexture, this));
+    mTextureCtrl->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectTexture, this));
     mTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexture, this));
     mTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelTexture, this));
     mTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
@@ -3604,14 +3604,12 @@ BOOL FSPanelFace::onDragTexture(LLInventoryItem* item)
 
 void FSPanelFace::onCommitTexture()
 {
-    LL_WARNS() << "onCommitTexture" << LL_ENDL;
     add(LLStatViewer::EDIT_TEXTURE, 1);
     sendTexture();
 }
 
 void FSPanelFace::onSelectTexture()
 {
-    LL_WARNS() << "onSelectTexture" << LL_ENDL;
     add(LLStatViewer::EDIT_TEXTURE, 1);
 
     // appying the texture relies on the tab control showing the correct channel
