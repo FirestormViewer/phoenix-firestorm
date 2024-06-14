@@ -197,17 +197,17 @@ protected:
     void onSelectColor();
 
     // Blinn-Phong Diffuse texture swatch
-    void onCommitTexture(const LLUICtrl* ctrl, const LLSD& data);
+    void onCommitTexture();
     void onCancelTexture();
     BOOL onDragTexture(LLInventoryItem* item);  // this function is to return TRUE if the drag should succeed.
-    void onCloseTexturePicker(const LLSD& data);
+    void onCloseTexturePicker();
 
     // Blinn-Phong Normal texture swatch
-    void onCommitNormalTexture(const LLUICtrl* ctrl, const LLSD& data);
+    void onCommitNormalTexture();
     void onCancelNormalTexture();
 
     // Blinn-Phong Specular texture swatch
-    void onCommitSpecularTexture(const LLUICtrl* ctrl, const LLSD& data);
+    void onCommitSpecularTexture();
     void onCancelSpecularTexture();
 
     // Blinn-Phong Specular tint color swatch
@@ -225,7 +225,7 @@ protected:
      * If agent selects texture which is not allowed to be applied for the currently selected object,
      * all controls of the floater texture picker which allow to apply the texture will be disabled.
      */
-    void onTextureSelectionChanged(const std::string& which_control);
+    void onTextureSelectionChanged(LLTextureCtrl* texture_ctrl);
 
     // Media
     void onClickBtnEditMedia();

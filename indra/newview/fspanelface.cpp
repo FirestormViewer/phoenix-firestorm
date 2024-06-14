@@ -751,29 +751,29 @@ BOOL FSPanelFace::postBuild()
 
     // Blinn-Phong Diffuse texture swatch
     mTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_TEXTURE);
-    mTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexture, this, _1, _2));
+    mTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexture, this));
     mTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelTexture, this));
     mTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
-    mTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this, _2));
+    mTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mTextureCtrl->setImmediateFilterPermMask(PERM_NONE);
     mTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
 
     // Blinn-Phong Normal texture swatch
     mBumpyTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_NORMAL);
     mBumpyTextureCtrl->setBlankImageAssetID(BLANK_OBJECT_NORMAL);
-    mBumpyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitNormalTexture, this, _1, _2));
+    mBumpyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitNormalTexture, this));
     mBumpyTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelNormalTexture, this));
     mBumpyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
-    mBumpyTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this, _2));
+    mBumpyTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mBumpyTextureCtrl->setImmediateFilterPermMask(PERM_NONE);
     mBumpyTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
 
     // Blinn-Phong Specular texture swatch
     mShinyTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_SPECULAR);
-    mShinyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitSpecularTexture, this, _1, _2));
+    mShinyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitSpecularTexture, this));
     mShinyTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelSpecularTexture, this));
     mShinyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
-    mShinyTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this, _2));
+    mShinyTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mShinyTextureCtrl->setImmediateFilterPermMask(PERM_NONE);
     mShinyTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
 
@@ -800,7 +800,7 @@ BOOL FSPanelFace::postBuild()
     mMaterialCtrlPBR->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectPbr, this));
     mMaterialCtrlPBR->setDragCallback(boost::bind(&FSPanelFace::onDragPbr, this, _2));
     mMaterialCtrlPBR->setOnTextureSelectedCallback(boost::bind(&FSPanelFace::onPbrSelectionChanged, this, _1));
-    mMaterialCtrlPBR->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this, _2));
+    mMaterialCtrlPBR->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mMaterialCtrlPBR->setImmediateFilterPermMask(PERM_NONE);
     mMaterialCtrlPBR->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
     mMaterialCtrlPBR->setBakeTextureEnabled(false);
@@ -3601,7 +3601,7 @@ BOOL FSPanelFace::onDragTexture(LLInventoryItem* item)
     return accept;
 }
 
-void FSPanelFace::onCommitTexture(const LLUICtrl* ctrl, const LLSD& data)
+void FSPanelFace::onCommitTexture()
 {
     LL_WARNS() << "onCommitTexture" << LL_ENDL;
     add(LLStatViewer::EDIT_TEXTURE, 1);
@@ -3635,29 +3635,24 @@ void FSPanelFace::onCommitTexture(const LLUICtrl* ctrl, const LLSD& data)
 
     LLSelectedTEMaterial::setDiffuseAlphaMode(this, getCurrentDiffuseAlphaMode());
 
-    // can't just pass "ctrl" on because it's const, and we also need to check
-    // the ctrl type so we make sure it's a texture swatch
-    onTextureSelectionChanged(ctrl->getName());
+    onTextureSelectionChanged(mTextureCtrl);
 }
 
-void FSPanelFace::onCommitNormalTexture(const LLUICtrl* ctrl, const LLSD& data)
+void FSPanelFace::onCommitNormalTexture()
 {
-    LL_DEBUGS("Materials") << data << LL_ENDL;
     LLUUID nmap_id = getCurrentNormalMap();
     sendBump(nmap_id.isNull() ? 0 : BUMPY_TEXTURE);
-    onTextureSelectionChanged(ctrl->getName());
+    onTextureSelectionChanged(mBumpyTextureCtrl);
 }
 
-void FSPanelFace::onCommitSpecularTexture(const LLUICtrl* ctrl, const LLSD& data)
+void FSPanelFace::onCommitSpecularTexture()
 {
-    LL_DEBUGS("Materials") << data << LL_ENDL;
     sendShiny(SHINY_TEXTURE);
-    onTextureSelectionChanged(ctrl->getName());
+    onTextureSelectionChanged(mShinyTextureCtrl);
 }
 
-void FSPanelFace::onCloseTexturePicker(const LLSD& data)
+void FSPanelFace::onCloseTexturePicker()
 {
-    LL_DEBUGS("Materials") << data << LL_ENDL;
     updateUI();
 }
 
@@ -5350,47 +5345,43 @@ void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_d
 }
 
 // selection inside the texture/material picker changed
-void FSPanelFace::onTextureSelectionChanged(const std::string& which_control)
+void FSPanelFace::onTextureSelectionChanged(LLTextureCtrl* texture_ctrl)
 {
-    LL_DEBUGS("Materials") << "control " << which_control << LL_ENDL;
+    LL_DEBUGS("Materials") << "control " << texture_ctrl->getName() << LL_ENDL;
 
-    LLTextureCtrl* texture_ctrl = findChild<LLTextureCtrl>(which_control);
-    if (texture_ctrl)
+    LLInventoryItem* itemp = gInventory.getItem(texture_ctrl->getImageItemID());
+    if (!itemp)
     {
-        LLInventoryItem* itemp = gInventory.getItem(texture_ctrl->getImageItemID());
-        if (!itemp)
-        {
-            // no inventory asset available, i.e. could be "Blank"
-            return;
-        }
+        // no inventory asset available, i.e. could be "Blank"
+        return;
+    }
 
-        LL_WARNS("Materials") << "item inventory id " << itemp->getUUID() << " - item asset " << itemp->getAssetUUID() << LL_ENDL;
+    LL_WARNS("Materials") << "item inventory id " << itemp->getUUID() << " - item asset " << itemp->getAssetUUID() << LL_ENDL;
 
-        LLUUID obj_owner_id;
-        std::string obj_owner_name;
-        LLSelectMgr::instance().selectGetOwner(obj_owner_id, obj_owner_name);
+    LLUUID obj_owner_id;
+    std::string obj_owner_name;
+    LLSelectMgr::instance().selectGetOwner(obj_owner_id, obj_owner_name);
 
-        LLSaleInfo sale_info;
-        LLSelectMgr::instance().selectGetSaleInfo(sale_info);
+    LLSaleInfo sale_info;
+    LLSelectMgr::instance().selectGetSaleInfo(sale_info);
 
-        bool can_copy = itemp->getPermissions().allowCopyBy(gAgentID); // do we have perm to copy this texture?
-        bool can_transfer = itemp->getPermissions().allowOperationBy(PERM_TRANSFER, gAgentID); // do we have perm to transfer this texture?
-        bool is_object_owner = gAgentID == obj_owner_id; // does object for which we are going to apply texture belong to the agent?
-        bool not_for_sale = !sale_info.isForSale(); // is object for which we are going to apply texture not for sale?
+    bool can_copy = itemp->getPermissions().allowCopyBy(gAgentID); // do we have perm to copy this texture?
+    bool can_transfer = itemp->getPermissions().allowOperationBy(PERM_TRANSFER, gAgentID); // do we have perm to transfer this texture?
+    bool is_object_owner = gAgentID == obj_owner_id; // does object for which we are going to apply texture belong to the agent?
+    bool not_for_sale = !sale_info.isForSale(); // is object for which we are going to apply texture not for sale?
 
-        if (can_copy && can_transfer)
-        {
-            texture_ctrl->setCanApply(true, true);
-            return;
-        }
+    if (can_copy && can_transfer)
+    {
+        texture_ctrl->setCanApply(true, true);
+        return;
+    }
 
-        // if texture has (no-transfer) attribute it can be applied only for object which we own and is not for sale
-        texture_ctrl->setCanApply(false, can_transfer ? true : is_object_owner && not_for_sale);
+    // if texture has (no-transfer) attribute it can be applied only for object which we own and is not for sale
+    texture_ctrl->setCanApply(false, can_transfer ? true : is_object_owner && not_for_sale);
 
-        if (gSavedSettings.getBOOL("TextureLivePreview"))
-        {
-            LLNotificationsUtil::add("LivePreviewUnavailable");
-        }
+    if (gSavedSettings.getBOOL("TextureLivePreview"))
+    {
+        LLNotificationsUtil::add("LivePreviewUnavailable");
     }
 }
 
