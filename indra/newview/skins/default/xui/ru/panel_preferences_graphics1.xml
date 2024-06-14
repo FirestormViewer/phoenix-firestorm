@@ -29,16 +29,13 @@
 			<text name="ShadersPrefText4">
 				Ультра
 			</text>
-			<check_box label="Полноэкранный режим" name="Fullscreen Mode" tool_tip="Запустить Firestorm в полноэкранном режиме. Для изменения этого параметра требуется перезапуск."/>
 			<text name="ShadersText">
 				Шейдеры:
 			</text>
 			<check_box label="Прозрачная вода" name="TransparentWater"/>
-			<check_box label="Рельеф и блеск" name="BumpShiny"/>
-			<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
-			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения." name="UseLightShaders"/>
 			<check_box label="Окклюзия окружения" name="UseSSAO"/>
 			<check_box label="Отражения на экране" name="ScreenSpaceReflections"/>
+			<check_box label="Зеркала" name="Mirrors"/>
 			<text name="shadows_label">
 				Тени:
 			</text>
@@ -60,20 +57,7 @@
 				<combo_box.item label="Вручную + местность" name="2"/>
 				<combo_box.item label="Полная сцена" name="3"/>
 			</combo_box>
-
-			<text name="reflection_label">
-				Отражения в воде:
-			</text>
-			<combo_box name="Reflections">
-				<combo_box.item label="Нет (непрозрачная)" name="-2"/>
-				<combo_box.item label="Нет (прозрачная)" name="-1"/>
-				<combo_box.item label="Минимальные" name="0"/>
-				<combo_box.item label="Земля и деревья" name="1"/>
-				<combo_box.item label="Все статические объекты" name="2"/>
-				<combo_box.item label="Все аватары и объекты" name="3"/>
-				<combo_box.item label="Отражать все" name="4"/>
-			</combo_box>
-			<text name="local lights_label" tool_tip="Влияет на количество предоставляемых источников света, когда расширенная модель освещения отключена. Требуется перезапуск">
+			<text name="local lights_label" tool_tip="Влияет на количество отрисованых источников света, когда расширенная модель освещения отключена. Требуется перезапуск">
 				Точечное освещение:
 			</text>
 			<combo_box name="LocalLightsDetail">
@@ -81,7 +65,28 @@
 				<combo_box.item label="Уменьшенное" name="2"/>
 				<combo_box.item label="Только Солнце / Луна" name="1"/>
 			</combo_box>
+			<!-- Mirror settings. -->
+			<text name="MirrorResolutionText" width="170">
+				Зеркальное разрешение:
+			</text>
+			<combo_box name="MirrorResolution">
+				<combo_box.item label="256" name="0"/>
+				<combo_box.item label="512" name="1"/>
+				<combo_box.item label="1024" name="2"/>
+				<combo_box.item label="2048" name="3"/>
+			</combo_box>
+			<text name="HeroProbeUpdateText" width="128">Скорость обновления зеркала:</text>
+			<combo_box name="HeroProbeUpdateRate" width="150">
+				<combo_box.item label="Каждый кадр" name="0"/>
+				<combo_box.item label="Каждый 2-й кадр" name="1"/>
+				<combo_box.item label="Каждый 3-й кадр" name="2"/>
+				<combo_box.item label="Каждый 4-й кадр" name="3"/>
+			</combo_box>
+			<!-- End of mirror settings -->
+			<!--Top of second column in General tab-->
+			<check_box label="Полноэкранный режим" name="Fullscreen Mode" tool_tip="Запустить Firestorm в полноэкранном режиме. Для изменения этого параметра требуется перезапуск."/>
 			<slider label="Расстояние прорисовки" name="DrawDistance"/>
+			<text name="DrawDistanceMeterText2">m</text>
 			<slider label="Максимум частиц" name="MaxParticleCount"/>
 			<slider label="Максимальная сложность" name="IndirectMaxComplexity" tool_tip="Контролирует, в какой момент визуально сложный аватар отобразится как силуэт"/>
 			<slider label="Максимум 3D аватаров" name="IndirectMaxNonImpostors"/>
@@ -92,31 +97,21 @@
 			<slider label="Физика аватаров" name="AvatarPhysicsDetail"/>
 			<slider label="Экспозиция:" name="RenderExposure"/>
 			<text name="MeshDetailText">
-				Уровень детализации (LOD):
+				Уровень детализации (LOD) Факторы расстояния:
 			</text>
 			<slider label="  Объекты и скульпты" name="ObjectMeshDetail" tool_tip="Управляет применением низкой детализации объектов для снижения нагрузки визуализации. Более высокие значения вызывают задержки, используйте с осторожностью."/>
-			<slider label="  Эластичные объекты" name="FlexibleMeshDetail"/>
+			<slider label="  Гибкие объекты" name="FlexibleMeshDetail"/>
 			<slider label="  Деревья" name="TreeMeshDetail"/>
 			<slider label="  Аватары" name="AvatarMeshDetail"/>
 			<slider label="  Земля" name="TerrainMeshDetail"/>
 			<slider label="  Небо" name="SkyMeshDetail"/>
-			<text name="AvatarRenderingText">
-				Прорисовка аватара:
-			</text>
-			<check_box label="Одежда аватара" name="AvatarCloth"/>
-			<!--<text name="TerrainDetailText">
-				Детализация земли:
-			</text>
-			<radio_group name="TerrainDetailRadio">
-				<radio_item label="Низкая" name="0"/>
-				<radio_item label="Высокая" name="2"/>
-			</radio_group>-->
 			<text name="Presets_Label" left="160">Предустановки:</text>
 			<button label="Сохранить" name="PrefSaveButton"/>
 			<button label="Загрузить" name="PrefLoadButton"/>
 			<button label="Удалить" name="PrefDeleteButton"/>
 			<button tool_tip="Восстановить настройки графики по умолчанию." name="Defaults"/>
 		</panel>
+
 		<panel label="Аппаратные установки" name="Hardware Settings">
 			<check_box label="Анизотропная фильтрация (медленнее, когда включено)" name="ani" tool_tip = "Этот флажок включает анизотропную фильтрацию, которая представляет собой метод повышения качества текстур, когда они просматриваются под относительно большими углами по отношению к положению вашей камеры. Обычно заставляет их выглядеть менее размытыми на больших расстояниях."/>
 			<check_box label="Включить VSync" name="vsync" tool_tip="Синхронизирует частоту кадров с частотой обновления монитора, что обеспечивает плавную работу."/>
@@ -142,9 +137,10 @@
 			<text name="Texture Rendering">
 				Прорисовка текстур:
 			</text>
-			<check_box label="Ограничить Макс.разрешение текстур до 512 пикс. (только 64 бит; нужен перезапуск)"
-			tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур до 512 пикселей. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры."
-			name="FSRestrictMaxTextureSize"/>
+			<check_box width="260" label="Ограничить Макс.разрешение текстур до:" tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры." name="FSRestrictMaxTextureSize"/>
+			<text name="FSRestrictMaxTextureSizeRestartText">
+				(требуется перезапуск)
+			</text>
 			<text name="TextureDetailLabel">
 				Уровень качества текстур:
 			</text>

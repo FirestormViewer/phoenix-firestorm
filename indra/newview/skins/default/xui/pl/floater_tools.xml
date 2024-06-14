@@ -457,6 +457,15 @@ Nis ↔ Najniż
 				<combo_box.item label="Pudełko" name="Box" />
 			</combo_box>
 			<check_box label="Dynamiczna" name="Probe Dynamic" tool_tip="Po włączeniu tej opcji, awatary będą pojawiać się w odbiciach wewnątrz obszaru wpływu tej sondy." />
+			<text name="Probe Update Label">
+				Odświeżanie sondy
+			</text>
+			<combo_box name="Probe Update Type" tool_tip="Określa sposób aktualizacji sondy. 'Statyczny' aktualizuje najwolniej i bez awatarów. 'Dynamiczny' aktualizuje częściej, a awatary są widoczne w sondach. 'Lustro (środowisko)' zamienia ten obiekt w planarną sondę rzutowaną w czasie rzeczywistym, która odzwierciedla jedynie środowisko, ale nie oblicza otoczenia. 'Lustro (wszystko)' jest podobne do 'Lustro (środowisko)', ale odzwierciedla dodatkowo cząstki i awatary.">
+				<combo_box.item label="Statyczny" name="Static" />
+				<combo_box.item label="Dynamiczny" name="Dynamic" />
+				<combo_box.item label="Lustro (środowisko)" name="Mirror" />
+				<combo_box.item label="Lustro (wszystko)" name="Dynamic Mirror" />
+			</combo_box>
 			<spinner label="Nastrój" name="Probe Ambiance" />
 			<spinner label="Zasięg" name="Probe Near Clip" />
 			<text name="label physicsshapetype">

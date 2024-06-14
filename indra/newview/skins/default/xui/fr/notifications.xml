@@ -1649,7 +1649,23 @@ Veuillez ne sélectionner qu&apos;un seul objet.
 		Impossible de definir les textures de la région :
 La texture du terrain [TEXTURE_NUM] a une profondeur invalide ([TEXTURE_BIT_DEPTH]).
 
-Remplacer la texture [TEXTURE_NUM] avec une image de 24 bits, [MAX_SIZE]x[MAX_SIZE], ou plus petite, puis cliquez à nouveau sur Appliquer.
+Remplacer la texture [TEXTURE_NUM] avec une image RVB, [MAX_SIZE]x[MAX_SIZE], ou plus petite, puis cliquez à nouveau sur Appliquer.
+	</notification>
+	<notification name="InvalidTerrainAlphaNotFullyLoaded">
+Impossible de definir les textures de la région :
+La texture de terrain [TEXTURE_NUM] n'est pas entièrement chargée, mais on suppose qu'elle contient de la transparence en raison d'une profondeur de bits de [TEXTURE_BIT_DEPTH]. La transparence n'est actuellement pas prise en charge pour les textures de terrain.
+
+Si la texture [TEXTURE_NUM] est opaque, attendez qu'elle soit complètement chargée, puis cliquez à nouveau sur "Appliquer".
+
+L'alpha n'est pris en charge que pour les matériaux de terrain (PBR Metallic Roughness), lorsque alphaMode="MASK" et doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainAlpha">
+Impossible de definir les textures de la région :
+La texture de terrain [TEXTURE_NUM] contient de la transparence. La transparence n'est pas prise en charge actuellement pour les textures de terrain.
+
+Remplacez la texture [TEXTURE_NUM] par une image RVB opaque, puis cliquez à nouveau sur "Appliquer".
+
+L'alpha n'est pris en charge que pour les matériaux de terrain (PBR Metallic Roughness), lorsque alphaMode="MASK" et doubleSided=false.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Impossible de definir les textures de la région :
@@ -2913,6 +2929,18 @@ Cela risque d&apos;impacter votre mot de passe.
 	<notification name="UnableToLoadNotecard">
 		Impossible de lire les données de la note actuellement.
 	</notification>
+	<notification name="UnableToLoadMaterial">
+		Impossible de charger le matériel.
+Veuillez réessayer.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="MissingMaterialCaps">
+		Non connecté à une région capable de gérer des matériaux.
+	</notification>
+	<notification name="CantSelectReflectionProbe">
+		Vous avez placé une sonde de réflexion, mais l'option "Sélectionner les sondes de réflexion" est désactivée. Pour pouvoir sélectionner les sondes de réflexion, cochez Construire &gt; Options &gt; Sélectionner les sondes de réflexion.
+		<usetemplate ignoretext="Warn if Reflection Probes selection is disabled." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="ScriptMissing">
 		Script absent de la base de données.
 	</notification>
@@ -3873,6 +3901,30 @@ Texture figée de [RESOLUTION] mise à jour localement pour [BODYREGION] au bout
 	<notification name="CannotUploadTexture">
 		Chargement de la texture impossible: &apos;[NAME]&apos;
 [REASON]
+	</notification>
+	<notification name="CannotLoad">
+		Impossible de charger [WHAT].
+[REASON]
+	</notification>
+	<notification name="CannotUploadMaterial">
+		Il y a eu un problème pour transférer le fichier
+	</notification>
+	<notification label="Save Material" name="SaveMaterialAs">
+		Nommez ce matériel :
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancel"/>
+		</form>
+	</notification>
+	<notification name="InvalidMaterialName">
+		Veuillez saisir un nom non vide
+	</notification>
+	<notification name="UsavedMaterialChanges">
+		Vous avez des modifications non sauvegardées.
+		<form name="form">
+			<button name="discard" text="Abandonner les modifications"/>
+			<button name="keep" text="Poursuivre l'édition"/>
+		</form>
 	</notification>
 	<notification name="LivePreviewUnavailable">
 		Impossible d&apos;afficher un aperçu de cette texture car il s&apos;agit d&apos;une texture sans copie et/ou transfert.
@@ -5496,6 +5548,10 @@ Voulez-vous continuer ?
 	<notification name="AutoAdjustHDRSky">
 		Vous modifiez un ciel non HDR qui a été automatiquement converti en HDR. Pour supprimer le HDR et le mappage des tons, réglez l'Ambiance de la sonde de réflexion sur zéro.
 		<usetemplate ignoretext="Avertissement concernant l'ajustement du ciel HDR" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="GLTFPreviewSelection">
+		Vous devez sélectionner un objet qui servira de référence à la ressource GLTF que vous prévisualisez.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Vous êtes sur le point d'activer l'AutoFPS. Tous les paramètres graphiques non sauvegardés seront perdus.

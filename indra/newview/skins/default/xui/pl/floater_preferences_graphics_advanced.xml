@@ -35,9 +35,6 @@
 	<combo_box label="Antyaliasing" name="fsaa">
 		<combo_box.item label="Wyłączony" name="FSAADisabled" />
 	</combo_box>
-	<text name="antialiasing restart">
-		(wymaga restartu)
-	</text>
 	<text name="MeshText">
 		Mesz
 	</text>
@@ -56,6 +53,9 @@
 	<slider label="Obiekty elastyczne:" name="FlexibleMeshDetail" />
 	<text name="FlexibleMeshDetailText">
 		Mało
+	</text>
+	<text name="antialiasing restart">
+		(wymaga restartu)
 	</text>
 	<text name="ShadersText">
 		Cieniowanie
@@ -94,6 +94,19 @@
 		<combo_box.item label="Pełna scena" name="3" />
 	</combo_box>
 	<slider label="Ekspozycja:" name="RenderExposure" />
+	<check_box label="Lustra" name="Mirrors" />
+	<text name="MirrorResolutionText">
+		Rozdzielczość luster:
+	</text>
+	<text name="HeroProbeUpdateText">
+		Odświeżanie luster:
+	</text>
+	<combo_box name="HeroProbeUpdateRate">
+		<combo_box.item label="W każdej klatce" name="0" />
+		<combo_box.item label="Co 2 klatkę" name="1" />
+		<combo_box.item label="Co 3 klatkę" name="2" />
+		<combo_box.item label="Co 4 klatkę" name="3" />
+	</combo_box>
 	<button label="Zresetuj wartości ustawień grafiki" name="Defaults" />
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel" />
 </floater>
