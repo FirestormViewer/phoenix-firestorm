@@ -3606,6 +3606,9 @@ void FSPanelFace::onCommitTexture()
     LL_WARNS() << "onCommitTexture" << LL_ENDL;
     add(LLStatViewer::EDIT_TEXTURE, 1);
 
+    // appying the texture relies on the tab control showing the correct channel
+    selectMatChannel(MATTYPE_DIFFUSE);
+
     LLSelectMgr::getInstance()->saveSelectedObjectTextures();
     sendTexture();
 
@@ -3641,12 +3644,19 @@ void FSPanelFace::onCommitTexture()
 void FSPanelFace::onCommitNormalTexture()
 {
     LLUUID nmap_id = getCurrentNormalMap();
+
+    // appying the texture relies on the tab control showing the correct channel
+    selectMatChannel(MATTYPE_NORMAL);
+
     sendBump(nmap_id.isNull() ? 0 : BUMPY_TEXTURE);
     onTextureSelectionChanged(mBumpyTextureCtrl);
 }
 
 void FSPanelFace::onCommitSpecularTexture()
 {
+    // appying the texture relies on the tab control showing the correct channel
+    selectMatChannel(MATTYPE_SPECULAR);
+
     sendShiny(SHINY_TEXTURE);
     onTextureSelectionChanged(mShinyTextureCtrl);
 }
