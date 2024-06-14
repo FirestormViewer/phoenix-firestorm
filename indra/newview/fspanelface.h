@@ -197,6 +197,7 @@ protected:
     void onSelectColor();
 
     // Blinn-Phong Diffuse texture swatch
+    void onSelectTexture();
     void onCommitTexture();
     void onCancelTexture();
     BOOL onDragTexture(LLInventoryItem* item);  // this function is to return TRUE if the drag should succeed.
