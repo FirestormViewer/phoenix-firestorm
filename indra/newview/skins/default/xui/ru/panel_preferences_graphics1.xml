@@ -138,6 +138,13 @@
 				Прорисовка текстур:
 			</text>
 			<check_box width="260" label="Ограничить Макс.разрешение текстур до:" tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры." name="FSRestrictMaxTextureSize"/>
+			<combo_box name="FSRestrictMaxTexturePixels">
+				<combo_box.item label="512 пикселя" name="512"/>
+				<combo_box.item label="1024 пикселя" name="1024"/>
+				<!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
+				<combo_box.item label="2048 пикселя" name="2048"/>
+				-->
+			</combo_box>
 			<text name="FSRestrictMaxTextureSizeRestartText">
 				(требуется перезапуск)
 			</text>
