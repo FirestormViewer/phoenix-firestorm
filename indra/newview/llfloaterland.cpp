@@ -2927,7 +2927,7 @@ void LLPanelLandAccess::refresh_ui()
         BOOL public_access = getChild<LLUICtrl>("public_access")->getValue().asBoolean();
         if (public_access)
         {
-            bool override = false;
+            // bool override = false; // <FS:Beq/> set but unused, clang appeasement
             if(parcel->getRegionDenyAnonymousOverride())
             {
                 override = true;
