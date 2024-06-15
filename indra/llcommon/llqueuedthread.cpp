@@ -426,6 +426,20 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
         // safe to access req.
         if (req)
         {
+            // <FS:Beq> Deferred retry requests
+            // Potentially when there is nothing else to do this will loop until the retry time.
+            // note that when there is nothing to do the thread still sleeps normally.
+            if( req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now() )
+            {
+                LL_PROFILE_ZONE_NAMED("qtpr - defer requeue");
+                lockData();
+                req->setStatus(STATUS_QUEUED);
+                mRequestQueue.post([this, req]() { processRequest(req); });
+                unlockData();
+                mIdleThread = true;
+                return;
+            }
+            // </FS:Beq>
             // process request
             bool complete = req->processRequest();
 
@@ -473,21 +487,26 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
                 llassert(ret);
 #else
                 using namespace std::chrono_literals;
-                auto retry_time = LL::WorkQueue::TimePoint::clock::now() + 16ms;
-                mRequestQueue.post([=]
-                    {
-                        LL_PROFILE_ZONE_NAMED("processRequest - retry");
-                        if (LL::WorkQueue::TimePoint::clock::now() < retry_time)
-                        {
-                            auto sleep_time = std::chrono::duration_cast<std::chrono::milliseconds>(retry_time - LL::WorkQueue::TimePoint::clock::now());
+                auto retry_time = LL::WorkQueue::TimePoint::clock::now() + 2ms; // <FS:Beq/> reduce delay on retry
+                // <FS:Beq> improve retry behaviour
+                // mRequestQueue.post([=]
+                //     {
+                //         LL_PROFILE_ZONE_NAMED("processRequest - retry");
+                //         if (LL::WorkQueue::TimePoint::clock::now() < retry_time)
+                //         {
+                //             auto sleep_time = std::chrono::duration_cast<std::chrono::milliseconds>(retry_time - LL::WorkQueue::TimePoint::clock::now());
 
-                            if (sleep_time.count() > 0)
-                            {
-                                ms_sleep(sleep_time.count());
-                            }
-                        }
-                        processRequest(req);
-                    });
+                //             if (sleep_time.count() > 0)
+                //             {
+                //                 ms_sleep(sleep_time.count());
+                //             }
+                //         }
+                //         processRequest(req);
+                //     });
+                req->defer_until(retry_time);
+                LL_PROFILE_ZONE_NAMED("processRequest - post deferred");
+                mRequestQueue.post([this, req]() { processRequest(req); });
+                // </FS:Beq>
 #endif
 
             }
@@ -565,6 +584,7 @@ LLQueuedThread::QueuedRequest::QueuedRequest(LLQueuedThread::handle_t handle, U3
     LLSimpleHashEntry<LLQueuedThread::handle_t>(handle),
     mStatus(STATUS_UNKNOWN),
     mFlags(flags)
+    ,mDeferUntil(LL::WorkQueue::TimePoint::clock::now()) // <FS:Beq/> handle deffered retries without an enforced sleep
 {
 }
 
