@@ -311,7 +311,7 @@ public:
     bool isReflectionProbe() const override;
     F32 getReflectionProbeAmbiance() const;
     F32 getReflectionProbeNearClip() const;
-    bool getReflectionProbeIsBox() const;
+    bool getReflectionProbeIsBox() const override;
     bool getReflectionProbeIsDynamic() const;
     bool getReflectionProbeIsMirror() const;
 
