@@ -754,7 +754,7 @@ BOOL FSPanelFace::postBuild()
     mTextureCtrl->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectTexture, this));
     mTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexture, this));
     mTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelTexture, this));
-    mTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
+    mTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _1, _2));
     mTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mTextureCtrl->setImmediateFilterPermMask(PERM_NONE);
     mTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
@@ -764,7 +764,7 @@ BOOL FSPanelFace::postBuild()
     mBumpyTextureCtrl->setBlankImageAssetID(BLANK_OBJECT_NORMAL);
     mBumpyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitNormalTexture, this));
     mBumpyTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelNormalTexture, this));
-    mBumpyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
+    mBumpyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _1, _2));
     mBumpyTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mBumpyTextureCtrl->setImmediateFilterPermMask(PERM_NONE);
     mBumpyTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
@@ -773,7 +773,7 @@ BOOL FSPanelFace::postBuild()
     mShinyTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_SPECULAR);
     mShinyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitSpecularTexture, this));
     mShinyTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelSpecularTexture, this));
-    mShinyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
+    mShinyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _1, _2));
     mShinyTextureCtrl->setOnCloseCallback(boost::bind(&FSPanelFace::onCloseTexturePicker, this));
     mShinyTextureCtrl->setImmediateFilterPermMask(PERM_NONE);
     mShinyTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
@@ -3585,12 +3585,26 @@ void FSPanelFace::onSelectPbr(const LLUICtrl* map_ctrl)
     onCommitPbr(map_ctrl);
 }
 
-BOOL FSPanelFace::onDragTexture(LLInventoryItem* item)
+BOOL FSPanelFace::onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item)
 {
     bool accept = true;
     for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
         iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
     {
+        // applying the texture relies on the tab control showing the correct channel
+        if (texture_ctrl == mTextureCtrl)
+        {
+            selectMatChannel(MATTYPE_DIFFUSE);
+        }
+        else if (texture_ctrl == mBumpyTextureCtrl)
+        {
+            selectMatChannel(MATTYPE_NORMAL);
+        }
+        else if (texture_ctrl == mShinyTextureCtrl)
+        {
+            selectMatChannel(MATTYPE_SPECULAR);
+        }
+
         LLSelectNode* node = *iter;
         LLViewerObject* obj = node->getObject();
         if (!LLToolDragAndDrop::isInventoryDropAcceptable(obj, item))
@@ -3605,6 +3619,10 @@ BOOL FSPanelFace::onDragTexture(LLInventoryItem* item)
 void FSPanelFace::onCommitTexture()
 {
     add(LLStatViewer::EDIT_TEXTURE, 1);
+
+    // applying the texture relies on the tab control showing the correct channel
+    selectMatChannel(MATTYPE_DIFFUSE);
+
     sendTexture();
 }
 
