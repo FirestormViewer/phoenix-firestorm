@@ -3139,7 +3139,7 @@ bool LLAppViewer::initConfiguration()
 
     loadSettingsFromDirectory("UserSession");
 
-    //AO: Re-read user settings again. This is a Firestorm hack to get user settings to override modes
+    // <FS:AO> Re-read user settings again. This is a Firestorm hack to get user settings to override modes
     //Todo, find a cleaner way of doing this via the various set_default arguments.
     loadSettingsFromDirectory("User");
 
@@ -3293,6 +3293,7 @@ bool LLAppViewer::initConfiguration()
                                  gSavedSettings.getString("SkinCurrentTheme"),
                                  gSavedSettings.getString("Language"));
         loadSettingsFromDirectory("CurrentSkin");
+        loadSettingsFromDirectory("User");
 // [/SL:KB]
 //      gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 //                               gSavedSettings.getString("Language"));

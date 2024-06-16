@@ -1086,7 +1086,7 @@ If you do not understand the distinction then leave this control alone."
          label="Freeze updates to World (pause everything)"
          tool_tip="Set this to freeze all updates from the server - stops all actions in-world but does not affect chat, IMs or voice"
          layout="topleft"
-         left_delta="5"
+         left_delta="10"
          name="WorldPause"
          top_pad="6"
          width="256"/>
@@ -1107,25 +1107,63 @@ If you do not understand the distinction then leave this control alone."
         <check_box
          control_name="FSRestrictMaxTextureSize"
          height="16"
-         label="Restrict maximum texture resolution to 512px (64bit only; requires Restart)"
-         tool_tip="Set this restrict the maximum display resolution for inworld textures to 512px. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
+         label="Restrict maximum texture resolution to:"
+         tool_tip="Set this restrict the maximum display resolution for inworld textures. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
          layout="topleft"
-         left_delta="0"
+         left_delta="10"
          name="FSRestrictMaxTextureSize"
-         top_pad="2"
-         width="400"/>
+         top_pad="4"
+         width="250"/>
+
+        <combo_box
+         control_name="FSRestrictMaxTexturePixels"
+         enabled_control="FSRestrictMaxTextureSize"
+         height="23"
+         layout="topleft"
+         left_pad="2"
+         name="FSRestrictMaxTexturePixels"
+         width="100">
+          <combo_box.item
+           label="512 pixels"
+           name="512"
+           value="512"/>
+          <combo_box.item
+           label="1024 pixels"
+           name="1024"
+           value="1024"/>
+          <!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
+          <combo_box.item
+           label="2048 pixels"
+           name="2048"
+           value="2048"/>
+          -->
+        </combo_box>
+
+        <text
+         name="FSRestrictMaxTextureSizeRestartText"
+         type="string"
+         text_color="White_50"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="10"
+         top_delta="5"
+         width="150">
+            (requires restart)
+        </text>
 
       <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
          type="string"
          length="1"
-         top_pad="8"
+         top_pad="18"
          follows="top|left"
          height="18"
          width="150"
          word_wrap="true"
          layout="topleft"
-         left_delta="0"
+         left="10"
          name="TextureDetailLabel">
             Max Texture Quality Level:
         </text>

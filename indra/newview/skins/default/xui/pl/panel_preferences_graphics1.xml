@@ -26,13 +26,13 @@
 			<text name="ShadersPrefText3">
 				Wysoka
 			</text>
-			<check_box label="Pełny ekran" name="Fullscreen Mode" tool_tip="Uruchamia Firestorma na pełnym ekranie. Aby zmienić tryb wymagany jest restart."/>
 			<text name="ShadersText">
 				Cieniowanie pikseli:
 			</text>
 			<check_box label="Przezroczysta woda" name="TransparentWater"/>
 			<check_box label="Okluzja otoczenia (SSAO)" name="UseSSAO"/>
 			<check_box label="Odbicia obszaru ekranu (SSR)" name="ScreenSpaceReflections"/>
+			<check_box label="Lustra" name="Mirrors" />
 			<text name="shadows_label">
 				Cienie:
 			</text>
@@ -66,6 +66,19 @@
 				<combo_box.item label="Częściowe" name="2"/>
 				<combo_box.item label="Tylko Słońce/Księżyc" name="1"/>
 			</combo_box>
+			<text name="MirrorResolutionText">
+				Rozdzielczość luster:
+			</text>
+			<text name="HeroProbeUpdateText">
+				Odświeżanie luster:
+			</text>
+			<combo_box name="HeroProbeUpdateRate">
+				<combo_box.item label="W każdej klatce" name="0" />
+				<combo_box.item label="Co 2 klatkę" name="1" />
+				<combo_box.item label="Co 3 klatkę" name="2" />
+				<combo_box.item label="Co 4 klatkę" name="3" />
+			</combo_box>
+			<check_box label="Pełny ekran" name="Fullscreen Mode" tool_tip="Uruchamia Firestorma na pełnym ekranie. Aby zmienić tryb wymagany jest restart."/>
 			<slider label="Pole widzenia" name="DrawDistance"/>
 			<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
 			<slider label="Maks. złożoność awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" />
@@ -119,9 +132,17 @@
 				Rendering tekstur:
 			</text>
 			<!-- Removed in FIRE-24256, leaving it here for non-SL viewer version --> <check_box label="Pobieraj tekstury przez HTTP" tool_tip="Zaznacz tę opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP" />
-			<check_box label="Ogranicz maksymalną rozdzielczość tekstur do 512px (tylko 64bit; wymaga restartu)" tool_tip="Zaznacz tą opcję, aby ograniczyć maksymalną rozdzielczość tekstur w świecie do 512 pikseli. Pozwala to na wyświetlanie większej ilości tekstur zanim dostępna na nie pamięć zostanie przekroczona i zaczną się one rozmywać." name="FSRestrictMaxTextureSize" />
+			<check_box width="270" label="Ogranicz maksymalną rozdzielczość tekstur do:" tool_tip="Zaznacz tą opcję, aby ograniczyć maksymalną rozdzielczość tekstur w świecie. Pozwala to na wyświetlanie większej ilości tekstur zanim dostępna na nie pamięć zostanie przekroczona i zaczną się one rozmywać." name="FSRestrictMaxTextureSize" />
+			<combo_box name="FSRestrictMaxTexturePixels">
+				<combo_box.item label="512 pikseli" name="512" />
+				<combo_box.item label="1024 pikseli" name="1024" />
+				<combo_box.item label="2048 pikseli" name="2048" />
+			</combo_box>
+			<text name="FSRestrictMaxTextureSizeRestartText">
+				(wymagany restart)
+			</text>
 			<text name="TextureDetailLabel">
-				Maksymalny poziom jakości tekstur:
+				Maks. jakość tekstur:
 			</text>
 			<combo_box name="TextureDetail" tool_tip="Jakość ładowanych tekstur, wpływa na ustawienie TextureDiscardLevel">
 				<combo_box.item label="Normalna jakość (0)" name="0"/>

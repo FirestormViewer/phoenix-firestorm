@@ -121,6 +121,7 @@ void LLHeroProbeManager::update()
         // Find our nearest hero candidate.
         float last_distance = 99999.f;
         float camera_center_distance = 99999.f;
+        mNearestHero = nullptr; // <FS:Beq/> LL-1719/1721 Mirrors do not disable properly (interim fix)
         for (auto vo : mHeroVOList)
         {
             if (vo && !vo->isDead() && vo->mDrawable.notNull() && vo->isReflectionProbe() && vo->getReflectionProbeIsBox())
@@ -139,10 +140,23 @@ void LLHeroProbeManager::update()
 
                 bool visible = LLViewerCamera::instance().AABBInFrustum(center, size);
 
+                // <FS:Beq> Check if the reflection normal (Z-Up axis) is facing towards the camera
+                auto reflection_normal = LLVector3(0, 0, 1);
+                if(visible)
+                {
+                    vo->mDrawable->getWorldRotation();
+                    reflection_normal *= vo->mDrawable->getWorldRotation();
+                    reflection_normal.normalize();
+                    LLVector3 offset = camera_pos - vo->getPositionAgent();
+                    visible  = (reflection_normal * offset >= 0.0);
+                }
+                // </FS:Beq>
+
                 if (distance < last_distance && center_distance < camera_center_distance && visible)
                 {
                     probe_present = true;
                     mNearestHero = vo;
+                    mMirrorNormal = reflection_normal;
                     last_distance = distance;
                     camera_center_distance = center_distance;
                 }
@@ -160,10 +174,13 @@ void LLHeroProbeManager::update()
         if (mNearestHero != nullptr && !mNearestHero->isDead() && mNearestHero->mDrawable.notNull())
         {
             LLVector3 hero_pos = mNearestHero->getPositionAgent();
-            LLVector3 face_normal = LLVector3(0, 0, 1);
+            // <FS:Beq> let's not redo work we already did
+            // LLVector3 face_normal = LLVector3(0, 0, 1);
 
-            face_normal *= mNearestHero->mDrawable->getWorldRotation();
-            face_normal.normalize();
+            // face_normal *= mNearestHero->mDrawable->getWorldRotation();
+            // face_normal.normalize();
+            const LLVector3 face_normal = mMirrorNormal; // this is redundant could use mMirrorNormal but as the code following is likely to change this might make merges simpler.
+            // </FS:Beq>
 
             LLVector3 offset = camera_pos - hero_pos;
             LLVector3 project = face_normal * (offset * face_normal);
@@ -172,7 +189,7 @@ void LLHeroProbeManager::update()
 
             mCurrentClipPlane.setVec(hero_pos, face_normal);
             mMirrorPosition = hero_pos;
-            mMirrorNormal   = face_normal;
+            // mMirrorNormal   = face_normal; // <FS:Beq/> no need to assign back
 
             probe_pos.load3(point.mV);
 
@@ -208,6 +225,12 @@ void LLHeroProbeManager::update()
 
         mHeroProbeStrength = 1;
     }
+    // <FS:Beq> LL-1719/1721 Mirrors do not disable properly (interim fix)
+    else
+    {
+        mNearestHero = nullptr;
+    }
+    // </FS:Beq>
 }
 
 void LLHeroProbeManager::renderProbes()

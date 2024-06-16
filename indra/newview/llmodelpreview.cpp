@@ -1698,11 +1698,11 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
     U32 instanced_triangle_count = 0;
 
     //get the triangle count for the whole scene
-    for (LLModelLoader::scene::iterator iter = mBaseScene.begin(), endIter = mBaseScene.end(); iter != endIter; ++iter)
+    for (auto& [pos, instance_list] : mBaseScene)
     {
-        for (LLModelLoader::model_instance_list::iterator instance = iter->second.begin(), end_instance = iter->second.end(); instance != end_instance; ++instance)
+        for (auto& instance : instance_list)
         {
-            LLModel* mdl = instance->mModel;
+            LLModel* mdl = instance.mModel;
             if (mdl)
             {
                 instanced_triangle_count += mdl->getNumTriangles();
@@ -1711,9 +1711,9 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
     }
 
     //get the triangle count for the non-instanced set of models
-    for (U32 i = 0; i < mBaseModel.size(); ++i)
+    for (auto& model : mBaseModel)
     {
-        triangle_count += mBaseModel[i]->getNumTriangles();
+        triangle_count += model->getNumTriangles();
     }
 
     //get ratio of uninstanced triangles to instanced triangles
@@ -1772,9 +1772,9 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
 
     if (object_dirty)
     {
-        for (LLModelLoader::model_list::iterator iter = mBaseModel.begin(); iter != mBaseModel.end(); ++iter)
+        bool first_model = true;
+        for (auto mdl : mBaseModel)
         { //build GLOD objects for each model in base model list
-            LLModel* mdl = *iter;
 
             if (mObject[mdl] != 0)
             {
@@ -1786,17 +1786,17 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             glodNewObject(mObject[mdl], mGroup, GLOD_DISCRETE);
             stop_gloderror();
 
-            if (iter == mBaseModel.begin() && !mdl->mSkinWeights.empty())
+            if (first_model && !mdl->mSkinWeights.empty())
             { //regenerate vertex buffer for skinned models to prevent animation feedback during LOD generation
                 mVertexBuffer[5].clear();
             }
+            first_model = false;
 
             if (mVertexBuffer[5].empty())
             {
                 genBuffers(5, false);
             }
 
-            U32 tri_count = 0;
             for (U32 i = 0; i < mVertexBuffer[5][mdl].size(); ++i)
             {
                 LLVertexBuffer* buff = mVertexBuffer[5][mdl][i];
@@ -1842,7 +1842,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                     glodInsertElements( mObject[ mdl ], i, GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, (U8*)index_strider.get(), 0, 0.f, &vbo );
                     // </FS:ND>
                 }
-                tri_count += num_indices / 3;
                 stop_gloderror();
             }
 
@@ -1890,8 +1889,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
         mModel[lod].resize(mBaseModel.size());
         mVertexBuffer[lod].clear();
 
-        U32 actual_tris = 0;
-        U32 actual_verts = 0;
         U32 submeshes = 0;
 
         mRequestedTriangleCount[lod] = (S32)((F32)triangle_count / triangle_ratio);
@@ -2037,8 +2034,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                 buff->getIndexStrider(index);
 
                 target_model->setVolumeFaceData(names[i], pos, norm, tc, index, buff->getNumVerts(), buff->getNumIndices());
-                actual_tris += buff->getNumIndices() / 3;
-                actual_verts += buff->getNumVerts();
                 ++submeshes;
 
                 if (!validate_face(target_model->getVolumeFace(names[i])))

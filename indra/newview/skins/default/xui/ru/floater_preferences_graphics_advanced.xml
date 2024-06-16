@@ -16,14 +16,8 @@
 	<text name="AvatarText">
 		Аватар
 	</text>
-	<slider label="Максимальная сложность:" name="IndirectMaxComplexity" tool_tip="Указывает расстояние, начиная с которого визуально сложный аватар рисуется как мармеладный мишка"/>
-	<text name="IndirectMaxComplexityText">
-		0
-	</text>
+	<slider label="Максимальная сложность:" name="IndirectMaxComplexity" tool_tip="Указывает расстояние, начиная с которого визуально сложный аватар рисуется как желейная фигура"/>
 	<slider label="Макс. кол-во объемных:" name="IndirectMaxNonImpostors"/>
-	<text name="IndirectMaxNonImpostorsText">
-		0
-	</text>
 	<slider label="Детализация:" name="AvatarMeshDetail"/>
 	<text name="AvatarMeshDetailText">
 		Низкая
@@ -35,12 +29,6 @@
 	<text name="HardwareText">
 		Аппаратное оборудование
 	</text>
-	<slider label="Память для текстур (МБ):" name="GraphicsCardTextureMemory" tool_tip="Объем памяти, отводимый для текстур. По умолчанию – объем памяти видеокарты. Уменьшение поможет увеличить производительность, но текстуры могут стать размытыми."/>
-	<slider label="Дистанция тумана:" name="fog"/>
-	<slider label="Гамма:" name="gamma"/>
-	<text name="(brightness, lower is brighter)">
-		(чем меньше, тем ярче, 0 – яркость по умолчанию)
-	</text>
 	<check_box label="Анизотропная фильтрация (медленнее, если включено)" name="ani"/>
 	<check_box label="Разрешить сжатие текстур (требует перезагрузки)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, что позволяет загружать текстуры большего размера за счет некоторого падения качества цвета."/>
 	<check_box label="Включить поддержку HiDPI дисплея (нужен перезапуск)" name="use HiDPI" tool_tip="Разрешить OpenGL отображение с высоким разрешением."/>
@@ -49,16 +37,9 @@
 	</text>
 	<combo_box label="Сглаживание" name="fsaa">
 		<combo_box.item label="Выключено" name="FSAADisabled"/>
-		<combo_box.item label="2x" name="2x"/>
-		<combo_box.item label="4x" name="4x"/>
-		<combo_box.item label="8x" name="8x"/>
-		<combo_box.item label="16x" name="16x"/>
 	</combo_box>
-	<text name="antialiasing restart">
-		(нужен перезапуск)
-	</text>
 	<text name="MeshText">
-		Сетка
+		Меш
 	</text>
 	<slider label="Детализация меша:" name="TerrainMeshDetail"/>
 	<text name="TerrainMeshDetailText">
@@ -76,40 +57,19 @@
 	<text name="FlexibleMeshDetailText">
 		Низкая
 	</text>
+	<text name="antialiasing restart">
+		(нужен рестарт)
+	</text>
 	<text name="ShadersText">
 		Шейдеры
 	</text>
 	<check_box label="Прозрачность воды" name="TransparentWater"/>
-	<check_box label="Рельефность и сияние" name="BumpShiny"/>
-	<check_box label="Локальный свет" name="LocalLights"/>
-	<!--<slider label="Ландшафт:" name="TerrainDetail"/>-->
-	<text name="TerrainDetailText">
-		Низкая
-	</text>
-	<check_box label="Одежда аватара" name="AvatarCloth"/>
-	<text name="ReflectionsText">
-		Вода отражает:
-	</text>
-	<combo_box name="Reflections">
-		<combo_box.item label="Нет; непрозрачно" name="-2"/>
-		<combo_box.item label="Нет; прозрачно" name="-1"/>
-		<combo_box.item label="Минимум" name="0"/>
-		<combo_box.item label="Ландшафт и деревья" name="1"/>
-		<combo_box.item label="Все статичные объекты" name="2"/>
-		<combo_box.item label="Все аватары и объекты" name="3"/>
-		<combo_box.item label="Все" name="4"/>
-	</combo_box>
-	<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
 	<slider label="Небо:" name="SkyMeshDetail"/>
 	<text name="SkyMeshDetailText">
 		Низкая
 	</text>
-	<check_box label="Расширенная модель освещения" name="UseLightShaders"/>
-	<check_box label="Объемный свет" name="UseSSAO"/>
+	<check_box label="Экранное пространство Окружающая окклюзия" name="UseSSAO"/>
 	<check_box label="Глубина резкости" name="UseDoF"/>
-	<!--
-	<check_box label="Улучшенная Атмосфера" name="UseAdvancedAtmo"/>
-	-->
 	<text name="RenderShadowDetailText">
 		Тени:
 	</text>
@@ -118,7 +78,7 @@
 		<combo_box.item label="Солнце/луна" name="1"/>
 		<combo_box.item label="Солнце/луна + осветители" name="2"/>
 	</combo_box>
-	<check_box label="Отражения в пространстве экрана" name="ScreenSpaceReflections"/>
+	<check_box label="Отражения на экране" name="ScreenSpaceReflections"/>
 	<text name="ReflectionDetailText">Детали отражения:</text>
 	<combo_box name="ReflectionDetail">
 		<combo_box.item label="Только статические" name="0"/>
@@ -133,9 +93,26 @@
 		<combo_box.item label="Полная сцена" name="3"/>
 	</combo_box>
 	<slider label="Экспозиция:" name="RenderExposure"/>
+	<!-- Mirror settings. -->
+	<check_box label="Зеркала" name="Mirrors"/>
+	<text width="178" name="MirrorResolutionText">Зеркальное разрешение:</text>
+	<combo_box left_delta="180" name="MirrorResolution">
+		<combo_box.item label="256" name="0"/>
+		<combo_box.item label="512" name="1"/>
+		<combo_box.item label="1024" name="2"/>
+		<combo_box.item label="2048" name="3"/>
+	</combo_box>
+	<text width="178" name="HeroProbeUpdateText">Скорость обновления зеркала:</text>
+	<combo_box left_delta="180" name="HeroProbeUpdateRate">
+		<combo_box.item label="Каждый кадр" name="0"/>
+		<combo_box.item label="Каждый 2-й кадр" name="1"/>
+		<combo_box.item label="Каждый 3-й кадр" name="2"/>
+		<combo_box.item label="Каждый 4-й кадр" name="3"/>
+	</combo_box>
+	<!-- End of mirror settings -->
 	<button label="Вернуть рекомендуемые настройки" name="Defaults"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
-	<check_box label="RenderAvatarMaxComplexity (Отрисовка аватара макс. сложности)" name="RenderAvatarMaxComplexity"/>
-	<check_box label="RenderAvatarMaxNonImpostors (Отрисовка макс. кол-ва 3-D аватаров)" name="RenderAvatarMaxNonImpostors"/>
+	<check_box label="Отрисовка аватара макс. сложности" name="RenderAvatarMaxComplexity"/>
+	<check_box label="Отрисовка макс. кол-ва 3-D аватаров" name="RenderAvatarMaxNonImpostors"/>
 </floater>

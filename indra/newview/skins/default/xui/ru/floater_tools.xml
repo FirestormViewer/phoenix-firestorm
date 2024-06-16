@@ -472,6 +472,13 @@
 				<combo_box.item label="Куб" name="Box"/>
 			</combo_box>
 			<check_box label="Динамика" name="Probe Dynamic" tool_tip="Если эта функция включена, аватары будут отображаться в отражениях в пределах объема влияния этого датчика." width="60" />
+			<text name="Probe Update Label" width="100">Обновление датчика</text>
+			<combo_box name="Probe Update Type" tool_tip="Определяет способ обновления датчика. Статические обновления самые медленные и без аватарок. Динамические обновления происходят чаще, аватары видны в датчиках. Зеркало (Окружающая среда) превращает этот датчик в планарный проецируемый датчик в реальном времени, который только отражает окружающую среду, но не рассчитывает атмосферу. Зеркало (Все) похоже на Зеркало (Окружающая среда), но отражает частицы и аватары..">
+				<combo_box.item label="Статика" name="Static"/>
+				<combo_box.item label="Динамика" name="Dynamic"/>
+				<combo_box.item label="Отражение (Окружение)" name="Mirror"/>
+				<combo_box.item label="Отражение (Все)" name="Dynamic Mirror"/>
+			</combo_box>
 			<spinner label="Окружение" label_width="65" name="Probe Ambiance" width="125" />
 			<spinner label="Клип Рядом" label_width="65" name="Probe Near Clip" width="125" />
 			<text name="label physicsshapetype" width="140">

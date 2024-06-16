@@ -182,6 +182,7 @@ bool AnimationExplorer::postBuild()
     else
     {
         LL_WARNS("AnimationExplorer") << "Could not find animation preview control to place animation texture" << LL_ENDL;
+        return false;
     }
 
     // request list of recent animations

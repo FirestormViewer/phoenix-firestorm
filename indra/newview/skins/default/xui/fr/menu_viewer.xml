@@ -218,15 +218,19 @@
 			<menu_item_check label="Sélectionner les objets déplaçables uniquement" name="Select Only Movable Objects"/>
 			<menu_item_check label="Ne sélectionner que les objets verrouillés" name="Select Only Locked Objects"/>
 			<menu_item_check label="Ne sélectionner que les objets copiables" name="Select Only Copyable Objects"/>
+			<menu_item_check label="Sélectionner les objets invisibles" name="Select Invisible Objects"/>
+			<menu_item_check label="Sélectionner les sondes de réflexion" name="Select Reflection Probes"/>
 			<menu_item_check label="Sélectionner en entourant" name="Select By Surrounding"/>
 			<menu_item_check label="Inclure les objets appartenant à un groupe" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Afficher la forme physique lors d'une modification" name="Show Physics Shape"/>
 			<menu_item_check label="Afficher les contours de la sélection" name="Show Selection Outlines"/>
 			<menu_item_check label="Afficher la sélection masquée" name="Show Hidden Selection"/>
 			<menu_item_check label="Afficher le rayon lumineux pour la sélection" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Afficher les volumes des sondes de réflexion" name="Show Reflection Probe Volumes"/>
 			<menu_item_check label="Afficher le faisceau de sélection lumineux" name="Show Selection Beam"/>
 			<menu_item_check label="Mettre la transparence en surbrillance" name="Highlight Transparent"/>
 			<menu_item_check label="- Inclure les transparents riggés" name="Include Transparent Rigged"/>
+			<menu_item_check label="Pas de post-traitement" name="No Post"/>
 			<menu_item_check label="Fixer sur la grille" name="Snap to Grid"/>
 			<menu_item_call label="Fixer les coordonnées XY de l&apos;objet sur la grille" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Utiliser la sélection pour la grille" name="Use Selection for Grid"/>
@@ -313,6 +317,11 @@
 		</menu>
 		<menu label="Types de rendu" name="Rendering Types">
 			<menu_item_check label="Simple" name="Rendering Type Simple"/>
+			<menu_item_check label="Matériaux" name="Rendering Type Materials"/>
+			<menu_item_check label="Masqua alpha" name="Rendering Type Alpha Mask"/>
+			<menu_item_check label="Masque alpha lumineux" name="Rendering Type Fullbright Alpha Mask"/>
+			<menu_item_check label="Lueur" name="Rendering Type Glow"/>
+			<menu_item_check label="Lumineux" name="Rendering Type Fullbright"/>
 			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Arbre" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatars" name="Rendering Type Character"/>
@@ -423,13 +432,16 @@
 			<menu_item_check label="Test cadre" name="Frame Test"/>
 			<menu_item_call label="Profil du cadre" name="Frame Profile"/>
 			<menu_item_call label="Référence" name="Benchmark"/>
+			<menu_item_call label="Aperçu HDRI" name="HDRI Preview"/>
+			<menu_item_call label="Aperçu de la scène GLTF" name="GLTF Scene Preview"/>
 		</menu>
 		<menu label="Métadonnées de rendu" name="Render Metadata">
 			<menu_item_check label="Cadres" name="Bounding Boxes"/>
 			<menu_item_check label="Boîtes de collision de l'avatar'" name="Avatar Hitboxes"/>
 			<menu_item_check label="Normales" name="Normals"/>
 			<menu_item_check label="Octree" name="Octree"/>
-			<menu_item_check label="Shadow Frusta" name="Shadow Frusta"/>
+			<menu_item_check label="Nœuds GLTF" name="GLTF Nodes"/>
+			<menu_item_check label="Occlusion améliorée (Shadow Frusta)" name="Shadow Frusta"/>
 			<menu_item_check label="Formes physiques" name="Physics Shapes"/>
 			<menu_item_check label="Occlusion" name="Occlusion"/>
 			<menu_item_check label="Lots de rendu" name="Render Batches"/>
@@ -481,6 +493,9 @@
 			<menu_item_check label="Textures pleine résolution" name="Rull Res Textures"/>
 			<menu_item_check label="Rendu des lumières jointes" name="Render Attached Lights"/>
 			<menu_item_check label="Rendu des particules jointes" name="Render Attached Particles"/>
+			<menu_item_check label="Activer le cache des shaders" name="Enable Shader Cache"/>
+			<menu_item_call label="Vider le cache des shaders" name="Shader Cache Clear"/>
+			<menu_item_call label="Reconstruire le terrain" name="Rebuild Terrain"/>
 			<menu_item_check label="Objets en surbrillance avec le pointeur" name="Hover Glow Objects"/>
 			<menu_item_call label="Vider le cache immédiatement" name="Cache Clear"/>
 		</menu>
