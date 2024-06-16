@@ -65,9 +65,9 @@ public:
                                 const LLVector3 &up_direction,
                                 const LLVector3 &point_of_interest);
 
-    static void updateFrustumPlanes(LLCamera& camera, bool ortho = false, bool zflip = false, bool no_hacks = false);
+    static void updateFrustumPlanes(LLCamera& camera, BOOL ortho = false, BOOL zflip = false, BOOL no_hacks = false);
     void updateCameraAngle(const LLSD& value);
-    void setPerspective(bool for_selection, S32 x, S32 y_from_bot, S32 width, S32 height, bool limit_select_distance, F32 z_near = 0, F32 z_far = 0);
+    void setPerspective(BOOL for_selection, S32 x, S32 y_from_bot, S32 width, S32 height, BOOL limit_select_distance, F32 z_near = 0, F32 z_far = 0);
 
     const LLMatrix4 &getProjection() const;
     const LLMatrix4 &getModelview() const;
