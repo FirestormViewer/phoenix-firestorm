@@ -257,13 +257,13 @@ public:
             // Override object's values with values from editor where appropriate
             if (mUnsavedChanges & MATERIAL_BASE_COLOR_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_BASE_COLOR_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_BASE_COLOR_DIRTY" << LL_ENDL;
                 material->setBaseColorFactor(mMaterialToApply->mBaseColor, true);
             }
 
             if (mUnsavedChanges & MATERIAL_BASE_COLOR_TEX_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_BASE_COLOR_TEX_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_BASE_COLOR_TEX_DIRTY" << LL_ENDL;
                 material->setBaseColorId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR], true);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_BASE_COLOR_TEX_DIRTY);
@@ -276,7 +276,7 @@ public:
 
             if (mUnsavedChanges & MATERIAL_NORMAL_TEX_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_NORMAL_TEX_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_NORMAL_TEX_DIRTY" << LL_ENDL;
                 material->setNormalId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL], true);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_NORMAL_TEX_DIRTY);
@@ -289,7 +289,7 @@ public:
 
             if (mUnsavedChanges & MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY" << LL_ENDL;
                 material->setOcclusionRoughnessMetallicId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS], true);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY);
@@ -302,25 +302,25 @@ public:
 
             if (mUnsavedChanges & MATERIAL_METALLIC_ROUGHTNESS_METALNESS_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_METALLIC_ROUGHTNESS_METALNESS_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_METALLIC_ROUGHTNESS_METALNESS_DIRTY" << LL_ENDL;
                 material->setMetallicFactor(mMaterialToApply->mMetallicFactor, true);
             }
 
             if (mUnsavedChanges & MATERIAL_METALLIC_ROUGHTNESS_ROUGHNESS_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_METALLIC_ROUGHTNESS_ROUGHNESS_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_METALLIC_ROUGHTNESS_ROUGHNESS_DIRTY" << LL_ENDL;
                 material->setRoughnessFactor(mMaterialToApply->mRoughnessFactor, true);
             }
 
             if (mUnsavedChanges & MATERIAL_EMISIVE_COLOR_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_EMISIVE_COLOR_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_EMISIVE_COLOR_DIRTY" << LL_ENDL;
                 material->setEmissiveColorFactor(LLColor3(mMaterialToApply->mEmissiveColor), true);
             }
 
             if (mUnsavedChanges & MATERIAL_EMISIVE_TEX_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_EMISIVE_TEX_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_EMISIVE_TEX_DIRTY" << LL_ENDL;
                 material->setEmissiveId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE], true);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_EMISIVE_TEX_DIRTY);
@@ -333,19 +333,19 @@ public:
 
             if (mUnsavedChanges & MATERIAL_DOUBLE_SIDED_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_DOUBLE_SIDED_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_DOUBLE_SIDED_DIRTY" << LL_ENDL;
                 material->setDoubleSided(mMaterialToApply->mDoubleSided, true);
             }
 
             if (mUnsavedChanges & MATERIAL_ALPHA_MODE_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_ALPHA_MODE_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_ALPHA_MODE_DIRTY" << LL_ENDL;
                 material->setAlphaMode(mMaterialToApply->mAlphaMode, true);
             }
 
             if (mUnsavedChanges & MATERIAL_ALPHA_CUTOFF_DIRTY)
             {
-                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applyling MATERIAL_ALPHA_CUTOFF_DIRTY" << LL_ENDL;
+                LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_ALPHA_CUTOFF_DIRTY" << LL_ENDL;
                 material->setAlphaCutoff(mMaterialToApply->mAlphaCutoff, true);
             }
 
