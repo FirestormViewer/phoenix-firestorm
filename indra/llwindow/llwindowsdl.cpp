@@ -440,7 +440,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
              bool enable_vsync, bool use_gl,
              // <FS:LO> Legacy cursor setting from main program
              //bool ignore_pixel_depth, U32 fsaa_samples,)
-             bool ignore_pixel_depth, U32 fsaa_samples, U32 max_vram, bool useLegacyCursors)
+             bool ignore_pixel_depth, U32 fsaa_samples, bool useLegacyCursors)
     : LLWindow(callbacks, fullscreen, flags),
       Lock_Display(NULL),
       //Unlock_Display(NULL), mGamma(1.0f)
