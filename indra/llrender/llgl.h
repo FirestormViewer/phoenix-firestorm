@@ -133,7 +133,7 @@ public:
     std::string mGLVersionString;
 
     S32 mVRAM; // VRAM in MB
-
+    S32 mVRAMDetected; // <FS:Beq/> The amount detected/reported by the OS/Drivers. If different to mVRAM there is an override in place.
     void getPixelFormat(); // Get the best pixel format
 
     std::string getGLInfoString();
