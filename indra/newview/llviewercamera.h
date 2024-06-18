@@ -129,6 +129,12 @@ protected:
     boost::signals2::connection mCameraAngleChangedSignal;
 
 public:
+    // <FS:Zi> Enable external classes to disconnect and connect the "CameraAngle" settings
+    //         changed signal, so classes can copy and overwrite the camera class and restore
+    //         the signal handler
+    void connectCameraAngleSignal();
+    void disconnectCameraAngleSignal();
+    // </FS:Zi>
 };
 
 
