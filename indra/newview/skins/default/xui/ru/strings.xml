@@ -67,6 +67,8 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]
 Видеокарта: [GRAPHICS_CARD]
 Память видеокарты: [GRAPHICS_CARD_MEMORY] МБ
+Память видеокарты (Обнаружено): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Память видеокарты (Бюджет): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
@@ -6850,4 +6852,5 @@ ID объекта: [INSPECTING_KEY]
 	<string name="FSObjectInventoryOneElement">1 элемент</string>
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] элементов</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">команда поддержки оператора вашей сетки</string>
+    <string name="Unlimited">Неограниченный</string>
 </strings>

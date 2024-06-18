@@ -47,6 +47,8 @@ System operacyjny (OS Version): [OS_VERSION]
 Dostawca karty graficznej (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Karta graficzna (Graphics Card): [GRAPHICS_CARD]
 Pamięć karty graficznej (Graphics Card Memory): [GRAPHICS_CARD_MEMORY] MB
+Wykryta pamięć karty graficznej (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Przydzielona pamięć karty graficznej (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Sterownik karty graficznej (Driver Version): [GRAPHICS_DRIVER_VERSION]
@@ -6599,5 +6601,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">
 		zespół pomocy operatora Twojej Siatki
+	</string>
+	<string name="Unlimited">
+		Bez ograniczeń
 	</string>
 </strings>
