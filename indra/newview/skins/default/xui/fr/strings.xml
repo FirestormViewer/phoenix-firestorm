@@ -73,13 +73,6 @@ Distance d'affichage : [DRAW_DISTANCE] m
 Bande passante : [BANDWIDTH] kbit/s
 Facteur LOD : [LOD]
 Qualité du rendu : [RENDERQUALITY]
-Modèle d'éclairage avancé : [ALMSTATUS]
-	</string>
-	<string name="AboutTextureMemory">
-		Mémoire des textures : [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-	</string>
-	<string name="AboutTextureMemoryDynamic">
-		Mémoire des textures : Dynamique ([TEXTUREMEMORYMIN] Mo min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
 	<string name="AboutCache">
 		Cache disque : [DISK_CACHE_INFO]

@@ -65,7 +65,6 @@ Pole widzenia (Draw Distance): [DRAW_DISTANCE] m
 Przepustowość (Bandwidth): [BANDWIDTH] kbit/s
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
-Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
 	</string>
 	<string name="AboutCache">
 		Pamięć podręczna dysku (disk cache): [DISK_CACHE_INFO]

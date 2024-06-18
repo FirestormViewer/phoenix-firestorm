@@ -65,10 +65,6 @@ Distanza disegno (Draw distance): [DRAW_DISTANCE] m
 Banda (Bandwidth): [BANDWIDTH] kbit/s
 Fattore LOD (LOD factor): [LOD]
 Qualità resa (Render quality): [RENDERQUALITY]
-Stato illuminazione (Advanced Lighting Model): [ALMSTATUS]
-	</string>
-	<string name="AboutTextureMemory">
-		Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 	</string>
 	<string name="AboutOSXHiDPI">
 		Modalità display HiDPI: [HIDPI]

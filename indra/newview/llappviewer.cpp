@@ -3958,6 +3958,7 @@ LLSD LLAppViewer::getViewerInfo() const
     info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
     info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
     info["GRAPHICS_CARD_MEMORY_DETECTED"] = gGLManager.mVRAMDetected; // <FS:Beq/> allow detected hardware to be overridden.
+
 #if LL_WINDOWS
     std::string drvinfo;
 
@@ -4158,18 +4159,18 @@ LLSD LLAppViewer::getViewerInfo() const
     }
     // </FS:PP>
 
-    // <FS:PP> ALM enabled or disabled
-    if (gSavedSettings.getBOOL("RenderDeferred"))
+    // <FS:Ansariel> Include VRAM budget
+    if (auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget"); budget > 0)
     {
-        info["ALMSTATUS"] = LLTrans::getString("PermYes");
-        info["ALMSTATUS_FSDATA_ENGLISH"] = "Yes";
+        info["VRAM_BUDGET"] = std::to_string(budget) + " MB";
+        info["VRAM_BUDGET_ENGLISH"] = std::to_string(budget) + " MB";
     }
     else
     {
-        info["ALMSTATUS"] = LLTrans::getString("PermNo");
-        info["ALMSTATUS_FSDATA_ENGLISH"] = "No";
+        info["VRAM_BUDGET"] = LLTrans::getString("Unlimited");
+        info["VRAM_BUDGET_ENGLISH"] = "Unlimited";
     }
-    // </FS:PP>
+    // </FS:Ansariel>
 
     return info;
 }
