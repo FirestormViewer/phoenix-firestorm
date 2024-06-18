@@ -58,6 +58,8 @@ OS versiyası: [OS_VERSION]
 Grafik kartının istehsalçısı: [GRAPHICS_CARD_VENDOR]
 Grafik kartı: [GRAPHICS_CARD]
 Grafik kartının yaddaşı: [GRAPHICS_CARD_MEMORY] MB
+Grafik kartının yaddaşı (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Grafik kartının yaddaşı (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windows grafik sürücüsü versiyası: [GRAPHICS_DRIVER_VERSION]

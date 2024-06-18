@@ -59,6 +59,8 @@ Concurrency: [CONCURRENCY]
 Grafik Kartı Üreticisi: [GRAPHICS_CARD_VENDOR]
 Grafik Kartı: [GRAPHICS_CARD]
 Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
+Graphics Card Memory (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Graphics Card Memory (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windows Grafik Sürücüsü Sürümü: [GRAPHICS_DRIVER_VERSION]

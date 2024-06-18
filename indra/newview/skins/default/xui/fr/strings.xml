@@ -55,6 +55,8 @@ Version OS : [OS_VERSION]
 Distributeur de cartes graphiques : [GRAPHICS_CARD_VENDOR]
 Carte graphique : [GRAPHICS_CARD]
 Mémoire de cartes graphiques : [GRAPHICS_CARD_MEMORY] MB
+Mémoire de cartes graphiques (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Mémoire de cartes graphiques (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Version Windows Graphics Driver : [GRAPHICS_DRIVER_VERSION]
