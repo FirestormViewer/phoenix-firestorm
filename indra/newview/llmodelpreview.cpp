@@ -467,7 +467,6 @@ void LLModelPreview::rebuildUploadData()
 {
     assert_main_thread();
 
-    mDefaultPhysicsShapeP = NULL;
     mUploadData.clear();
     mTextureSet.clear();
 
