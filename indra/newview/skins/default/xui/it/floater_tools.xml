@@ -76,7 +76,7 @@
 		<radio_item label="Seleziona faccia" name="radio select face"/>
 		<radio_item label="Allinea" name="radio align" />
 	</radio_group>
-	<check_box label="Modifica parti collegate" name="checkbox edit linked parts"/>
+	<check_box label="Modif. parti collegate" name="checkbox edit linked parts"/>
 	<button name="prev_part_btn" tool_tip="Seleziona faccia o parte collegata precedente"/>
 	<button name="next_part_btn" tool_tip="Seleziona faccia o parte collegata successiva"/>
 	<button label="Collega" name="link_btn"/>

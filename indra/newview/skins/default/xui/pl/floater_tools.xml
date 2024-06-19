@@ -76,7 +76,7 @@
 		<radio_item label="Zaznaczanie stron" name="radio select face"/>
 		<radio_item label="Wyrównywanie" name="radio align"/>
 	</radio_group>
-	<check_box label="Edytuj połączone części" name="checkbox edit linked parts"/>
+	<check_box label="Edytuj pojedyncze" name="checkbox edit linked parts"/>
 	<button name="prev_part_btn" tool_tip="Wybierz poprzednią połączoną część lub stronę"/>
 	<button name="next_part_btn" tool_tip="Wybierz następną połączoną część lub stronę"/>
 	<button label="Scalaj" name="link_btn"/>

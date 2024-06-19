@@ -76,7 +76,7 @@
 		<radio_item label="Выбрать грань" name="radio select face"/>
 		<radio_item label="Выровнять" name="radio align"/>
 	</radio_group>
-	<check_box label="Редактировать объединенные" name="checkbox edit linked parts"/>
+	<check_box label="Редактир. объедин." name="checkbox edit linked parts"/>
 	<button name="prev_part_btn" tool_tip="Выбрать предыдущую объединенную часть"/>
 	<button name="next_part_btn" tool_tip="Выбрать следующую объединенную часть"/>
 	<button label="Объединить" name="link_btn"/>
