@@ -409,7 +409,7 @@
      label="Select Reflection Probes"
      layout="topleft"
      top_pad="-2"
-     name="checkbox actual root"
+     name="checkbox select probes"
      width="134" />
     <button
      left_pad="0"
