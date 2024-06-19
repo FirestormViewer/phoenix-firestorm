@@ -1488,13 +1488,53 @@ Scegli solo un oggetto e riprova.
 		Impossibile impostare le texture della regione:
 La texture del terreno [TEXTURE_NUM] ha una profondità di bit pari a [TEXTURE_BIT_DEPTH] non corretta.
 
-Sostituisci la texture [TEXTURE_NUM] con una a 24-bit [MAX_SIZE]x[MAX_SIZE] o una immagine più piccola e quindi clicca nuovamente su &apos;Applica&apos;.
+Sostituisci la texture [TEXTURE_NUM] con una texture RGB di dimensioni [MAX_SIZE]x[MAX_SIZE] o inferiori, quindi clicca nuovamente su &apos;Applica&apos;.
+	</notification>
+	<notification name="InvalidTerrainAlphaNotFullyLoaded">
+		Impossibile impostare le texture della regione:
+La texture del terreno [TEXTURE_NUM] non è completamente caricata, ma sembra contenere trasparenza a causa della profondità pari a [TEXTURE_BIT_DEPTH]. La trasparenza attualmente non è supportata per le texture del terreno.
+
+Se la texture [TEXTURE_NUM] è opaca, attendi fino al completo caricamento, quindi fai clic su &quot;Applica&quot; di nuovo.
+
+L'alfa è supportata solo per i materiali del terreno (rugosità metallica PBR) quando alphaMode="MASK" e doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainAlpha">
+		Impossibile impostare le texture della regione:
+La texture del terreno [TEXTURE_NUM] contiene trasparenza. La trasparenza attualmente non è supportata per le texture del terreno.
+
+Sostituisci la texture [TEXTURE_NUM] con una RGB opaca, quindi fai clic su &quot;Applica&quot; di nuovo.
+
+L'alfa è supportata solo per i materiali del terreno (rugosità metallica PBR) quando alphaMode="MASK" e doubleSided=false.
 	</notification>
 	<notification name="InvalidTerrainSize">
-		Impossibile impostare le texture di regione:
+		Impossibile impostare le texture della regione:
 La texture del terreno [TEXTURE_NUM] è troppo grande se a [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Sostituisci la texture [TEXTURE_NUM] con una a 24-bit [MAX_SIZE]x[MAX_SIZE] oppure con una immagine più piccola e quindi clicca di nuovo &apos;Applica&apos;.
+Sostituisci la texture [TEXTURE_NUM] con una texture RGB di dimensioni [MAX_SIZE]x[MAX_SIZE] o inferiori, quindi clicca nuovamente su &apos;Applica&apos;.
+	</notification>
+	<notification name="InvalidTerrainMaterialNotLoaded">
+		Impossibile impostare le texture della regione:
+Il materiale del terreno [MATERIAL_NUM] non è stato caricato.
+
+Attendi il caricamento del materiale o sostituisci il materiale [MATERIAL_NUM] con un materiale corretto.
+	</notification>
+	<notification name="InvalidTerrainMaterialLoadFailed">
+		Impossibile impostare le texture della regione:
+Il materiale del terreno [MATERIAL_NUM] non è stato caricato.
+
+Sostituisci il materiale [MATERIAL_NUM] con un materiale corretto.
+	</notification>
+	<notification name="InvalidTerrainMaterialDoubleSided">
+		Impossibile impostare le texture della regione:
+Il materiale del terreno [MATERIAL_NUM] è a doppia faccia. I materiali a doppia faccia non sono attualmente supportati per il terreno PBR.
+
+Sostituisci il materiale [MATERIAL_NUM] con un materiale con doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainMaterialAlphaMode">
+		Impossibile impostare le texture della regione:
+Il materiale del terreno [MATERIAL_NUM] utilizza alphaMode="[MATERIAL_ALPHA_MODE]" che non è supportato.
+
+Sostituisci il materiale [MATERIAL_NUM] con un materiale con alphaMode="OPAQUE" o alphaMode="MASK".
 	</notification>
 	<notification name="RawUploadStarted">
 		Importazione iniziata. Può impiegare fino a due minuti, a seconda della velocità della tua connessione.
@@ -3611,6 +3651,10 @@ Hai aggiornato localmente una texture [RESOLUTION] completata per &apos;[BODYREG
 		Impossibile caricare la texture: &apos;[NAME]&apos;
 [REASON]
 	</notification>
+	<notification name="CannotLoad">
+		Impossibile caricare [WHAT].
+[REASON]
+	</notification>
 	<notification name="CannotUploadMaterial">
 		Si è verificato un problema durante il caricamento del file.
 	</notification>
@@ -5066,6 +5110,13 @@ Fattore LOD >3: Aumenta il lag. Consigliato solo per scattare foto.
 Fattore LOD >4: Usare in circostanze speciali. Si disattiva ad ogni login.
 Fattore LOD >8: Non ha effetti apprezzabili. Può causare errori.
 	</notification>
+	<notification name="OverrideVRAMWarning">
+		NOTA: la disattivazione del rilevamento automatico della VRAM potrebbe destabilizzare il computer.
+
+La maggior parte degli utenti dovrebbe lasciare il rilevamento abilitato e lasciare che il browser e il sistema operativo determinino il valore corretto.
+
+Questa impostazione è destinata ai casi in cui il rilevamento VRAM riporta valori errati. Utilizzare con cautela, in caso di dubbi chiedere consiglio al supporto.
+	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 		Questa regione ha attivato un gestore di denaro esterno.
 Gli acquisti di valuta fatti attraverso Firestorm sono transazioni tra voi (l&apos;utente) e il fornitore/i fornitori o rivenditore/i della valuta.
@@ -5191,6 +5242,9 @@ Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'a
 	<notification name="AutoAdjustHDRSky">
 		Stai modificando un cielo non HDR che è stato automaticamente convertito in HDR. Per rimuovere l'HDR e la mappatura dei toni, imposta l'ambiente della sonda di riflessione su zero.
 		<usetemplate ignoretext="Avvisi sulla regolazione del cielo HDR" name="okignore" yestext="Ok"/>
+	</notification>
+	<notification name="GLTFPreviewSelection">
+		Devi selezionare un oggetto che fungerà da handle per la risorsa GLTF che stai visualizzando.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Stai per abilitare AutoFPS. Tutte le impostazioni grafiche non salvate andranno perse.
