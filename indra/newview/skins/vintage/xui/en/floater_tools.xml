@@ -355,18 +355,18 @@
     </combo_box>
     <check_box
      control_name="ScaleUniform"
-     height="19"
+     height="17"
      label="Stretch Both Sides"
      layout="topleft"
      left="143"
      name="checkbox uniform"
-     top="48"
+     top="52"
      label_text.wrap="true"
      label_text.width="120"
      width="134" />
     <check_box
      control_name="ScaleStretchTextures"
-     height="19"
+     height="17"
      initial_value="true"
      label="Stretch Textures"
      layout="topleft"
@@ -377,7 +377,7 @@
      width="134" />
    <check_box
      control_name="SnapEnabled"
-     height="18"
+     height="17"
      initial_value="true"
      label="Snap"
      layout="topleft"
@@ -386,7 +386,7 @@
      width="134" />
   <check_box
      control_name="FSBuildPrefs_ActualRoot"
-     height="18"
+     height="17"
      initial_value="false"
      label="Edit axis at root"
      layout="topleft"
@@ -394,7 +394,7 @@
      name="checkbox actual root"
      width="134" />
   <check_box
-     height="18"
+     height="17"
      initial_value="true"
      label="Show Highlight"
      layout="topleft"
@@ -404,6 +404,14 @@
      <check_box.commit_callback
          function="BuildTool.commitShowHighlight"/>
     </check_box>
+  <check_box
+     control_name="SelectReflectionProbes"
+     height="17"
+     label="Select Reflection Probes"
+     layout="topleft"
+     top_pad="-2"
+     name="checkbox show highlight"
+     width="134" />
     <button
      left_pad="0"
      layout="topleft"
@@ -411,7 +419,7 @@
      name="Options..."
      label="Options..."
      tool_tip="See more grid options"
-     top="84"
+     top="81"
      right="-10"
      width="65"
      height="16" >
