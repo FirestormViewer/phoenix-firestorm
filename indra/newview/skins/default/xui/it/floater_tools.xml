@@ -91,6 +91,7 @@
 	<check_box label="Griglia" name="checkbox snap to grid"/>
 	<check_box label="Metti assi al centro" name="checkbox actual root"/>
 	<check_box label="Evidenzia" name="checkbox show highlight" />
+	<check_box label="Sel. sonde di riflessione" name="checkbox select probes" />
 	<button label="" label_selected="Opzioni..." name="Options..." tool_tip="Vedi più opzioni della griglia"/>
 	<button name="ToolCube" tool_tip="Cubo"/>
 	<button name="ToolPrism" tool_tip="Prisma"/>

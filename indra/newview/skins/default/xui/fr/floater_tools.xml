@@ -78,6 +78,7 @@
 	<check_box initial_value="true" label="Fixer" name="checkbox snap to grid"/>
 	<check_box label="Axe d'édition à la racine" name="checkbox actual root"/>
 	<check_box label="Afficher le surlignage" name="checkbox show highlight"/>
+	<check_box label="Sél. les sondes de réfl." name="checkbox select probes" />
 	<combo_box name="combobox grid mode" tool_tip="Choisir le type d&apos;axe de grille pour le positionnement de l&apos;objet.">
 		<combo_box.item label="Monde" name="World"/>
 		<combo_box.item label="Local" name="Local"/>

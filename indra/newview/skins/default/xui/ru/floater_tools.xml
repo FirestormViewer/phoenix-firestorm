@@ -91,6 +91,7 @@
 	<check_box label="Привязать" name="checkbox snap to grid"/>
 	<check_box label="Ось правки от корня" name="checkbox actual root"/>
 	<check_box label="Показать выделение" name="checkbox show highlight"/>
+	<check_box label="Выб. датчики отраж." name="checkbox select probes" />
 	<button name="Options..." tool_tip="Показать настройки сетки"/>
 	<button name="ToolCube" tool_tip="Куб"/>
 	<button name="ToolPrism" tool_tip="Призма"/>
