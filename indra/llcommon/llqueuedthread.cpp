@@ -427,11 +427,20 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
         if (req)
         {
             // <FS:Beq> Deferred retry requests
-            // Potentially when there is nothing else to do this will loop until the retry time.
+            // Avoid loop when idle by restoring a sleep
             // note that when there is nothing to do the thread still sleeps normally.
-            if( req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now() )
+            using namespace std::chrono_literals;
+
+            const auto throttle_time = 2ms;
+            if( req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now())
+            {
+                ms_sleep(throttle_time.count());
+            }
+            // if we're still not ready to retry then requeue
+            if( req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now())
             {
                 LL_PROFILE_ZONE_NAMED("qtpr - defer requeue");
+
                 lockData();
                 req->setStatus(STATUS_QUEUED);
                 mRequestQueue.post([this, req]() { processRequest(req); });
@@ -487,7 +496,6 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
                 llassert(ret);
 #else
                 using namespace std::chrono_literals;
-                auto retry_time = LL::WorkQueue::TimePoint::clock::now() + 2ms; // <FS:Beq/> reduce delay on retry
                 // <FS:Beq> improve retry behaviour
                 // mRequestQueue.post([=]
                 //     {
@@ -503,6 +511,8 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
                 //         }
                 //         processRequest(req);
                 //     });
+                const auto retry_backoff = 16ms;
+                auto retry_time = LL::WorkQueue::TimePoint::clock::now() + retry_backoff; 
                 req->defer_until(retry_time);
                 LL_PROFILE_ZONE_NAMED("processRequest - post deferred");
                 mRequestQueue.post([this, req]() { processRequest(req); });
