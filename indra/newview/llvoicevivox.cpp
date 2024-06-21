@@ -282,6 +282,8 @@ bool LLVivoxVoiceClient::sConnected = false;
 LLPumpIO *LLVivoxVoiceClient::sPump = nullptr;
 
 LLVivoxVoiceClient::LLVivoxVoiceClient() :
+    mWriteOffset(0),
+    mHidden(true),
     mSessionTerminateRequested(false),
     mRelogRequested(false),
     mTerminateDaemon(false),
@@ -2024,7 +2026,7 @@ bool LLVivoxVoiceClient::terminateAudioSession(bool wait)
                        << " VoiceEnabled " << mVoiceEnabled
                        << " IsInitialized " << mIsInitialized
                        << " RelogRequested " << mRelogRequested
-                       << " ShuttingDown " << (sShuttingDown ? "true" : "false")
+                       << " ShuttingDown " << (sShuttingDown ? "True" : "False")
                        << " returning " << status
                        << LL_ENDL;
     return status;
@@ -5326,7 +5328,7 @@ std::string LLVivoxVoiceClient::nameFromID(const LLUUID &uuid)
     LLStringUtil::replaceChar(result, '+', '-');
     LLStringUtil::replaceChar(result, '/', '_');
 
-    // If you need to transform a GUID to this form on the macOS command line, this will do so:
+    // If you need to transform a GUID to this form on the Mac OS X command line, this will do so:
     // echo -n x && (echo e669132a-6c43-4ee1-a78d-6c82fff59f32 |xxd -r -p |openssl base64|tr '/+' '_-')
 
     // The reverse transform can be done with:
@@ -5716,7 +5718,7 @@ bool LLVivoxVoiceClient::getIsModeratorMuted(const LLUUID& id)
     bool result = false;
     if (!mProcessChannels)
     {
-        return FALSE;
+        return false;
     }
     participantStatePtr_t participant(findParticipantByID(id));
     if(participant)
@@ -6407,40 +6409,34 @@ void LLVivoxVoiceClient::notifyStatusObservers(LLVoiceClientStatusObserver::ESta
         // so nobody wants to hear from us.
         return;
     }
+    for (status_observer_set_t::iterator it = mStatusObservers.begin();
+        it != mStatusObservers.end();
+        )
+    {
+        LLVoiceClientStatusObserver* observer = *it;
+        observer->onChange(status, getAudioSessionChannelInfo(), inSpatialChannel());
+        // In case onError() deleted an entry.
+        it = mStatusObservers.upper_bound(observer);
+    }
 
-    // this function is called from a coroutine, shuttle application hook back to main loop
-    auto work = [=]()
+    // skipped to avoid speak button blinking
+    if (status != LLVoiceClientStatusObserver::STATUS_JOINING
+        && status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL
+        && status != LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED)
+    {
+        // <FS:Ansariel> Bypass LLCachedControls for voice status update
+        //bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+        bool voice_status = LLVoiceClient::getInstance()->voiceEnabled(true) && LLVoiceClient::getInstance()->isVoiceWorking();
+        // </FS:Ansariel>
+
+        LL_WARNS("Voice") << "Setting voice connected " << (voice_status ? "True" : "False") << LL_ENDL;
+        gAgent.setVoiceConnected(voice_status);
+
+        if (voice_status)
         {
-            for (status_observer_set_t::iterator it = mStatusObservers.begin();
-                it != mStatusObservers.end();
-                )
-            {
-                LLVoiceClientStatusObserver* observer = *it;
-                observer->onChange(status, getAudioSessionChannelInfo(), inSpatialChannel());
-                // In case onError() deleted an entry.
-                it = mStatusObservers.upper_bound(observer);
-            }
-
-            // skipped to avoid speak button blinking
-            if (status != LLVoiceClientStatusObserver::STATUS_JOINING
-                && status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL
-                && status != LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED)
-            {
-                // <FS:Ansariel> Bypass LLCachedControls for voice status update
-                //bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
-                bool voice_status = LLVoiceClient::getInstance()->voiceEnabled(true) && LLVoiceClient::getInstance()->isVoiceWorking();
-                // </FS:Ansariel>
-
-                gAgent.setVoiceConnected(voice_status);
-
-                if (voice_status)
-                {
-                    LLFirstUse::speak(true);
-                }
-            }
-        };
-
-    LLAppViewer::instance()->postToMainCoro(work);
+            LLAppViewer::instance()->postToMainCoro([=]() { LLFirstUse::speak(true); });
+        }
+    }
 }
 
 void LLVivoxVoiceClient::addObserver(LLFriendObserver* observer)
@@ -7068,7 +7064,7 @@ void LLVivoxVoiceClient::updateVoiceMorphingMenu()
             const voice_effect_list_t& effect_list = effect_interfacep->getVoiceEffectList();
             if (!effect_list.empty())
             {
-                LLMenuGL * voice_morphing_menup = gMenuBarView->findChildMenuByName("VoiceMorphing", true);
+                LLMenuGL * voice_morphing_menup = gMenuBarView->findChildMenuByName("VoiceMorphing", TRUE);
 
                 if (NULL != voice_morphing_menup)
                 {
@@ -7372,6 +7368,7 @@ LLIOPipe::EStatus LLVivoxProtocolParser::process_impl(
         XML_SetCharacterDataHandler(parser, ExpatCharHandler);
         XML_SetUserData(parser, this);
         XML_Parse(parser, mInput.data() + start, static_cast<int>(delim - start), false);
+
 
         LL_DEBUGS("VivoxProtocolParser") << "parsing: " << mInput.substr(start, delim - start) << LL_ENDL;
         start = delim + 3;

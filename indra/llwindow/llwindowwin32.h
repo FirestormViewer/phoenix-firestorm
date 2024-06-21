@@ -108,8 +108,6 @@ public:
     /*virtual*/ F32 getPixelAspectRatio();
     /*virtual*/ void setNativeAspectRatio(F32 ratio) { mOverrideAspectRatio = ratio; }
 
-    /*virtual*/ void setMaxVRAMMegabytes(U32 max_vram) override;
-
     /*virtual*/ bool dialogColorPicker(F32 *r, F32 *g, F32 *b );
 
     /*virtual*/ void *getPlatformWindow();
@@ -143,13 +141,12 @@ protected:
     LLWindowWin32(LLWindowCallbacks* callbacks,
         const std::string& title, const std::string& name, int x, int y, int width, int height, U32 flags,
         bool fullscreen, bool clearBg, bool enable_vsync, bool use_gl,
-        //bool ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, U32 max_vram, F32 max_gl_version);
-        bool ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, U32 max_vram, F32 max_gl_version, bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+        //bool ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, F32 max_gl_version);
+        bool ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, F32 max_gl_version, bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
     ~LLWindowWin32();
 
     //void  initCursors();
     void    initCursors(bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
-    void    initInputDevices();
     HCURSOR loadColorCursor(LPCTSTR name);
     bool    isValid();
     void    moveWindow(const LLCoordScreen& position,const LLCoordScreen& size);
@@ -166,7 +163,6 @@ protected:
 
     bool    shouldPostQuit() { return mPostQuit; }
 
-    void    fillCompositionForm(const LLRect& bounds, COMPOSITIONFORM *form);
     void    fillCandidateForm(const LLCoordGL& caret, const LLRect& bounds, CANDIDATEFORM *form);
     void    fillCharPosition(const LLCoordGL& caret, const LLRect& bounds, const LLRect& control, IMECHARPOSITION *char_position);
     void    fillCompositionLogfont(LOGFONT *logfont);
@@ -181,10 +177,8 @@ protected:
     //
 
     bool    getClientRectInScreenSpace(RECT* rectp);
-    void    updateJoystick( );
 
     static LRESULT CALLBACK mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_param, LPARAM l_param);
-    static bool CALLBACK enumChildWindows(HWND h_wnd, LPARAM l_param);
 
 
     //
@@ -294,8 +288,6 @@ private:
 
 extern LLW32MsgCallback gAsyncMsgCallback;
 extern LPWSTR gIconResource;
-
-static void handleMessage( const MSG& msg );
 
 S32 OSMessageBoxWin32(const std::string& text, const std::string& caption, U32 type);
 

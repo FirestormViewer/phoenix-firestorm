@@ -128,7 +128,6 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
                                bool enable_vsync, bool use_gl,
                                bool ignore_pixel_depth,
                                U32 fsaa_samples,
-                               U32 max_vram,
                                bool useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
     : LLWindow(NULL, fullscreen, flags)
     , mUseLegacyCursors(useLegacyCursors) // <FS:LO> Legacy cursor setting from main program

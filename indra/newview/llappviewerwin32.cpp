@@ -78,6 +78,7 @@
 #include "BugSplat.h"
 #include "boost/json.hpp"                 // Boost.Json
 #include "llagent.h"                // for agent location
+#include "llstartup.h"
 #include "llviewerregion.h"
 #include "llvoavatarself.h"         // for agent name
 #pragma optimize( "", off )
@@ -155,8 +156,7 @@ namespace
             // We don't have an email address for any user. Hijack this
             // metadata field for the platform identifier.
             // sBugSplatSender->setDefaultUserEmail(
-            //    WCSTR(STRINGIZE(LLOSInfo::instance().getOSStringSimple() << " ("
-            //                    << ADDRESS_SIZE << "-bit)")));
+            //     WCSTR(LLOSInfo::instance().getOSStringSimple()));
 
             // <FS:ND> Add which flavor of FS generated an error
             std::string flavor = "hvk";
@@ -195,6 +195,8 @@ namespace
 
             // LL_ERRS message, when there is one
             sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            // App state
+            sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
 
             if (gAgent.getRegion())
             {

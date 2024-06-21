@@ -384,7 +384,7 @@ public:
     static F32      sLODFactor; // user-settable LOD factor
     static F32      sPhysicsLODFactor; // user-settable physics LOD factor
     static bool     sJointDebug; // output total number of joints being touched for each avatar
-    static BOOL     sLipSyncEnabled;
+    static bool     sLipSyncEnabled;
 
     static LLPartSysData sCloud;
 

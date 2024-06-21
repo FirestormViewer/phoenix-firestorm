@@ -66,6 +66,7 @@ public:
     // Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
     // when voice is available
     void onChange(EStatusType status, const LLSD& channelInfo, bool proximal) override;
+
     // <FS:Ansariel> CTRL-F focusses local search editor
     bool handleKeyHere(KEY key, MASK mask) override;
     bool hasAccelerators() const override { return true; }

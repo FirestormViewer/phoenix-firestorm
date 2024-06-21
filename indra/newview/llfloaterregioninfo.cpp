@@ -375,7 +375,7 @@ void LLFloaterRegionInfo::requestRegionInfo()
     {
         tab->getChild<LLPanel>("General")->setCtrlsEnabled(false);
         tab->getChild<LLPanel>("Debug")->setCtrlsEnabled(false);
-        tab->getChild<LLPanel>("Terrain")->setCtrlsEnabled(false);
+        tab->getChild<LLPanel>("Terrain")->setAllChildrenEnabled(false, true);
         tab->getChild<LLPanel>("Estate")->setCtrlsEnabled(false);
         tab->getChild<LLPanel>("Access")->setCtrlsEnabled(false);
     }
@@ -601,7 +601,7 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
     panel->getChild<LLUICtrl>("terrain_raise_spin")->setValue(region_info.mTerrainRaiseLimit);
     panel->getChild<LLUICtrl>("terrain_lower_spin")->setValue(region_info.mTerrainLowerLimit);
 
-    panel->setCtrlsEnabled(allow_modify);
+    panel->setAllChildrenEnabled(allow_modify, true);
 
     if (floater->getVisible())
     {
@@ -716,7 +716,7 @@ void LLFloaterRegionInfo::disableTabCtrls()
 
     tab->getChild<LLPanel>("General")->setCtrlsEnabled(false);
     tab->getChild<LLPanel>("Debug")->setCtrlsEnabled(false);
-    tab->getChild<LLPanel>("Terrain")->setCtrlsEnabled(false);
+    tab->getChild<LLPanel>("Terrain")->setAllChildrenEnabled(false, true);
     tab->getChild<LLPanel>("panel_env_info")->setCtrlsEnabled(false);
     tab->getChild<LLPanel>("Estate")->setCtrlsEnabled(false);
     tab->getChild<LLPanel>("Access")->setCtrlsEnabled(false);
@@ -1843,7 +1843,7 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
                         || (region && (region->getOwner() == gAgent.getID()));
     bool owner_or_god_or_manager = owner_or_god
                         || (region && region->isEstateManager());
-    setCtrlsEnabled(owner_or_god_or_manager);
+    setAllChildrenEnabled(owner_or_god_or_manager, true);
 
     getChildView("apply_btn")->setEnabled(false);
 
@@ -1855,8 +1855,8 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
 
         static LLCachedControl<bool> feature_pbr_terrain_enabled(gSavedSettings, "RenderTerrainPBREnabled", false);
 
-        const bool textures_ready = compp->texturesReady(false, false);
-        const bool materials_ready = feature_pbr_terrain_enabled && compp->materialsReady(false, false);
+        const bool textures_ready = compp->makeTexturesReady(false, false);
+        const bool materials_ready = feature_pbr_terrain_enabled && compp->makeMaterialsReady(false, false);
 
         bool set_texture_swatches;
         bool set_material_swatches;

@@ -71,7 +71,7 @@ class LLVivoxVoiceClient :  public LLSingleton<LLVivoxVoiceClient>,
                             virtual public LLVoiceEffectInterface,
                             virtual public LLVoiceP2POutgoingCallInterface
 {
-    LLSINGLETON_C11(LLVivoxVoiceClient);
+    LLSINGLETON(LLVivoxVoiceClient);
     LOG_CLASS(LLVivoxVoiceClient);
     virtual ~LLVivoxVoiceClient();
 

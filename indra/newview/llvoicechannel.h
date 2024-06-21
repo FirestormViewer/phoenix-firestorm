@@ -120,7 +120,7 @@ public:
     LLSD        mChannelInfo;
     // true if call was ended by agent
     bool mCallEndedByAgent;
-    bool mIgnoreNextSessionLeave;
+    bool        mIgnoreNextSessionLeave;
     LLHandle<LLPanel> mLoginNotificationHandle;
 
     typedef std::map<LLUUID, LLVoiceChannel*> voice_channel_map_t;
@@ -164,7 +164,7 @@ private:
 
 class LLVoiceChannelProximal : public LLVoiceChannel, public LLSingleton<LLVoiceChannelProximal>
 {
-    LLSINGLETON_C11(LLVoiceChannelProximal);
+    LLSINGLETON(LLVoiceChannelProximal);
   public:
 
     void onChange(EStatusType status, const LLSD &channelInfo, bool proximal) override;

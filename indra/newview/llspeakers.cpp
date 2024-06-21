@@ -294,6 +294,10 @@ LLSpeakerMgr::~LLSpeakerMgr()
 
 LLPointer<LLSpeaker> LLSpeakerMgr::setSpeaker(const LLUUID& id, const std::string& name, LLSpeaker::ESpeakerStatus status, LLSpeaker::ESpeakerType type)
 {
+    if (!mVoiceChannel)
+    {
+        return NULL;
+    }
     LLUUID session_id = getSessionID();
     if (id.isNull() || (id == session_id))
     {
@@ -496,7 +500,7 @@ void LLSpeakerMgr::updateSpeakerList()
                            (LLVoiceClient::getInstance()->isParticipantAvatar(*participant_it)?LLSpeaker::SPEAKER_AGENT:LLSpeaker::SPEAKER_EXTERNAL));
         }
     }
-    else
+    else if (mVoiceChannel)
     {
         // If not, check if the list is empty, except if it's Nearby Chat (session_id NULL).
         LLUUID session_id = getSessionID();
@@ -827,7 +831,7 @@ void LLIMSpeakerMgr::allowTextChat(const LLUUID& speaker_id, bool allow)
     //         is unreliable and this leads to situations where people can't be
     //         chat muted at all anymore
     // LLPointer<LLSpeaker> speakerp = findSpeaker(speaker_id);
-    // if (!speakerp) return;
+    // if (!speakerp || !mVoiceChannel) return;
 
     std::string url = gAgent.getRegionCapability("ChatSessionRequest");
     LLSD data;
@@ -848,7 +852,7 @@ void LLIMSpeakerMgr::allowTextChat(const LLUUID& speaker_id, bool allow)
 void LLIMSpeakerMgr::moderateVoiceParticipant(const LLUUID& avatar_id, bool unmute)
 {
     LLPointer<LLSpeaker> speakerp = findSpeaker(avatar_id);
-    if (!speakerp) return;
+    if (!speakerp || !mVoiceChannel) return;
 
     // *NOTE: mantipov: probably this condition will be incorrect when avatar will be blocked for
     // text chat via moderation (LLSpeaker::mModeratorMutedText == true)

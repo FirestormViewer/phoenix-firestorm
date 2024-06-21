@@ -71,8 +71,8 @@
 						     <string>Avatar</string>
 						     <string>Inventory</string>
 						     <string>SceneLoadTiming</string>
-							 <string>Voice</string>
-							 <string>Avatar</string>							
+						     <string>Avatar</string>
+						     <string>Voice</string>
 						-->
 						     <string>import</string>
 						     <string>export</string>
