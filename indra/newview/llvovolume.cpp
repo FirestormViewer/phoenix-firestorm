@@ -4689,6 +4689,7 @@ void LLVOVolume::updateReflectionProbePtr()
         if (getReflectionProbeIsMirror())
         {
             gPipeline.mHeroProbeManager.unregisterViewerObject(this);
+            mIsHeroProbe = false; // <FS:Beq> LL-1719/1721 Mirrors do not disable properly (interim fix)
         }
     }
 }

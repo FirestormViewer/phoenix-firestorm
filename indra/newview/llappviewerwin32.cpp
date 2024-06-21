@@ -1030,22 +1030,10 @@ bool LLAppViewerWin32::initHardwareTest()
 
     if (gGLManager.mVRAM == 0)
     {
-        // <FS:Beq> Allow the user to override the VRAM detection
-        if ( gSavedSettings.getBOOL("FSOverrideVRAMDetection") )
-        {
-            S32 forced_video_memory = gSavedSettings.getS32("FSForcedVideoMemory");
-            if ( forced_video_memory > 0 )
-            {
-                LL_INFOS("AppInit") << "Forcing VRAM to " << forced_video_memory*1024 << " MB" << LL_ENDL;
-                gGLManager.mVRAM = forced_video_memory*1024;
-            }
-        }
-        else
-        // </FS:Beq>
         gGLManager.mVRAM = gDXHardware.getVRAM();
     }
 
-    LL_INFOS("AppInit") << "Detected VRAM: " << gGLManager.mVRAM << LL_ENDL;
+    // LL_INFOS("AppInit") << "Detected VRAM: " << gGLManager.mVRAM << LL_ENDL; // <FS:Beq/> move this into common code
 
     return true;
 }

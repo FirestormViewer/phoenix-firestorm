@@ -58,6 +58,8 @@ OS versiyası: [OS_VERSION]
 Grafik kartının istehsalçısı: [GRAPHICS_CARD_VENDOR]
 Grafik kartı: [GRAPHICS_CARD]
 Grafik kartının yaddaşı: [GRAPHICS_CARD_MEMORY] MB
+Grafik kartının yaddaşı (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Grafik kartının yaddaşı (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windows grafik sürücüsü versiyası: [GRAPHICS_DRIVER_VERSION]
@@ -76,13 +78,6 @@ UI məstabı: [UI_SCALE_FACTOR]
 Bandwidth: [BANDWIDTH]
 Detallaşdırma səviyyəsi: [LOD]
 Grafika keyfiyyəti: [RENDERQUALITY]
-Yüksəldilmiş işıqlandırma modeli: [ALMSTATUS]
-	</string>
-	<string name="AboutTextureMemory">
-		Tekstur yaddaşı: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-	</string>
-	<string name="AboutTextureMemoryDynamic">
-		Tekstur yaddaşı: dinamik ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
 	<string name="AboutCache">
 		Disk keşi: [DISK_CACHE_INFO]

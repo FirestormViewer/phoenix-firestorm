@@ -2927,10 +2927,10 @@ void LLPanelLandAccess::refresh_ui()
         bool public_access = getChild<LLUICtrl>("public_access")->getValue().asBoolean();
         if (public_access)
         {
-            bool override = false;
+            // bool override = false; // <FS:Beq/> set but never used clang appeasement
             if(parcel->getRegionDenyAnonymousOverride())
             {
-                override = true;
+                // override = true; // <FS:Beq/> set but never used clang appeasement
                 getChildView("limit_payment")->setEnabled(false);
             }
             else
@@ -2939,7 +2939,7 @@ void LLPanelLandAccess::refresh_ui()
             }
             if(parcel->getRegionDenyAgeUnverifiedOverride())
             {
-                override = true;
+                // override = true; // <FS:Beq/> set but never used clang appeasement
                 getChildView("limit_age_verified")->setEnabled(false);
             }
             else

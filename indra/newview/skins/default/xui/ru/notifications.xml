@@ -1602,14 +1602,62 @@
 		Не удалось задать текстуры региона:
 у текстуры [TEXTURE_NUM] неправильная битовая глубина [TEXTURE_BIT_DEPTH].
 
-Замените текстуру [TEXTURE_NUM] на 24-битное изображение размером [MAX_SIZE]x[MAX_SIZE] или меньше и снова нажмите кнопку &quot;Применить&quot;.
+Замените текстуру [TEXTURE_NUM] на RGB изображение размером [MAX_SIZE]x[MAX_SIZE] или меньше и снова нажмите кнопку &quot;Применить&quot;.
 	</notification>
+
+	<notification name="InvalidTerrainAlphaNotFullyLoaded">
+Не удалось установить текстуры региона:
+Текстура местности [TEXTURE_NUM] загружена не полностью, но предполагается, что она содержит прозрачность из-за битовой глубины [TEXTURE_BIT_DEPTH]. Прозрачность в настоящее время не поддерживается для текстур местности.
+
+Если текстура [TEXTURE_NUM] непрозрачна, подождите, пока текстура полностью загрузится, а затем нажмите &quot;Применить&quot; снова.
+
+Альфа поддерживается только для материалов рельефа (PBR Metallic Roughness), когда alphaMode="MASK" и doubleSided=false.
+	</notification>
+
+	<notification name="InvalidTerrainAlpha">
+Не удалось установить текстуры региона:
+Текстура местности [TEXTURE_NUM] содержит прозрачность. Прозрачность в настоящее время не поддерживается для текстур местности.
+
+Замените текстуру [TEXTURE_NUM] непрозрачным изображением RGB, затем нажмите &quot;Применить&quot; снова.
+
+Альфа поддерживается только для материалов рельефа (PBR Metallic Roughness), когда alphaMode="MASK" и doubleSided=false.
+	</notification>
+
 	<notification name="InvalidTerrainSize">
-		Не удалось задать текстуры региона:
+		Не удалось установить текстуры региона:
 у текстуры [TEXTURE_NUM] слишком большой размер [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Замените текстуру [TEXTURE_NUM] на 24-битное изображение размером [MAX_SIZE]x[MAX_SIZE] или меньше и снова нажмите кнопку &quot;Применить&quot;.
+Замените текстуру [TEXTURE_NUM] на RGB [MAX_SIZE]x[MAX_SIZE] или меньше и снова нажмите кнопку &quot;Применить&quot;.
 	</notification>
+
+	<notification name="InvalidTerrainMaterialNotLoaded">
+Не удалось установить материалы региона:
+Материал местности [MATERIAL_NUM] не загружен.
+
+Подождите, пока материал загрузится, или замените материал [MATERIAL_NUM] допустимым материалом.
+	</notification>
+
+	<notification name="InvalidTerrainMaterialLoadFailed">
+Не удалось установить материалы региона:
+Материал местности [MATERIAL_NUM] не загружен.
+
+Замените материал [MATERIAL_NUM] допустимым материалом.
+	</notification>
+
+	<notification name="InvalidTerrainMaterialDoubleSided">
+Не удалось установить материалы региона:
+Материал местности [MATERIAL_NUM] является двусторонним. Двусторонние материалы в настоящее время не поддерживаются для ландшафта PBR.
+
+Замените материал [MATERIAL_NUM] материалом с параметром doubleSided=false.
+	</notification>
+
+	<notification name="InvalidTerrainMaterialAlphaMode">
+Не удалось установить материалы региона:
+Материал местности [MATERIAL_NUM] использует неподдерживаемый alphaMode="[MATERIAL_ALPHA_MODE]".
+
+Замените материал  [MATERIAL_NUM] материалом с параметром alphaMode="OPAQUE" или alphaMode="MASK".
+	</notification>
+
 	<notification name="RawUploadStarted">
 		Началась передача. Она может занять до двух минут, в зависимости от скорости соединения.
 	</notification>
@@ -3837,6 +3885,12 @@ https://wiki.firestormviewer.org/fs_voice
 		Невозможно загрузить текстуру: &apos;[NAME]&apos;
 [REASON]
 	</notification>
+
+	<notification name="CannotLoad">
+		Не в состоянии загрузить [WHAT].
+[REASON]
+	</notification>
+
 	<notification name="LivePreviewUnavailable">
 		Просмотр этой текстуры невозможен, так как запрещено ее копирование и/или передача.
 		<usetemplate ignoretext="Предупреждать, если режим просмотра вживую недоступен для текстур с запрещенным копированием и/или передачей" name="okignore" yestext="Да"/>
@@ -5478,6 +5532,11 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="AutoAdjustHDRSky">
 		Вы редактируете изображение неба без разрешения HDR, которое было автоматически преобразовано в HDR. Чтобы удалить HDR и тональное отображение, установите значение Reflection Probe Ambiance равным нулю.
 		<usetemplate ignoretext="Предупреждение о настройке неба в режиме HDR" name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification name="GLTFPreviewSelection">
+		Вы должны выбрать объект, который будет действовать как дескриптор просматриваемого вами ресурса GLTF.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
 	<notification name="EnableAutoFPSWarning">

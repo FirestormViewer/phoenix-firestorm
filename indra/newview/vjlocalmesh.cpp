@@ -310,7 +310,6 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
 
     // generate face data
     std::vector<LLVolumeFace> new_faces;
-    bool weight_attributes_found = false;
 
     for (auto& current_submesh : mFaces[lod])
     {
@@ -342,7 +341,6 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
         // weight attribute
         if (!current_submesh->getSkin().empty())
         {
-            weight_attributes_found = true;
             new_face.allocateWeights(static_cast<S32>(current_submesh->getSkin().size()));
             for (size_t weight_iter = 0; weight_iter < current_submesh->getSkin().size(); ++weight_iter)
             {

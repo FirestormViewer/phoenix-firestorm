@@ -350,7 +350,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_all_scale"
@@ -472,7 +472,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -610,7 +610,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_base_color_scale"
@@ -732,7 +732,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -869,7 +869,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_normal_scale"
@@ -991,7 +991,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -1128,7 +1128,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_orm_scale"
@@ -1250,7 +1250,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -1387,7 +1387,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_emissive_scale"
@@ -1509,7 +1509,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2162,7 +2162,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    width="90"
    height="70"
@@ -2276,7 +2276,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2402,7 +2402,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    width="90"
    height="70"
@@ -2516,7 +2516,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2642,7 +2642,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    width="90"
    height="70"
@@ -2756,7 +2756,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"

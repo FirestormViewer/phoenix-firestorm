@@ -138,7 +138,7 @@
             <color_swatch label="Colore" name="colorswatch" tool_tip="Clic per scegliere il colore"/>
             <spinner label="Alfa" name="alpha"/>
             <spinner label="Bagliore" name="glow"/>
-            <check_box label="Luce max" name="EmFBToggle"/>
+            <check_box label="Max luminosità" name="EmFBToggle"/>
             <combo_box name="combobox shininess" tool_tip="Imposta la lucentezza dell&apos;oggetto">
                 <combo_item name="None" label="Nessuna"/>
                 <combo_item name="Low" label="Bassa"/>

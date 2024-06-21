@@ -219,7 +219,9 @@ S32 LLPipeline::RenderHeroProbeUpdateRate;
 S32 LLPipeline::RenderHeroProbeConservativeUpdateMultiplier;
 LLTrace::EventStatHandle<S64> LLPipeline::sStatBatchSize("renderbatchsize");
 
-const U32 LLPipeline::MAX_BAKE_WIDTH = 512;
+// <FS:Ansariel> 1024px previews
+//const U32 LLPipeline::MAX_BAKE_WIDTH = 512;
+const U32 LLPipeline::MAX_BAKE_WIDTH = 1024;
 
 const F32 BACKLIGHT_DAY_MAGNITUDE_OBJECT = 0.1f;
 const F32 BACKLIGHT_NIGHT_MAGNITUDE_OBJECT = 0.08f;
@@ -860,6 +862,12 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
             allocateScreenBuffer(res, res, samples);
         }
 
+        // <FS:Ansariel> Auxillary render target pack for 1024px LLDynamicTexture
+        mRT = &mDynamicTextureRT;
+        res = MAX_BAKE_WIDTH;
+        allocateScreenBuffer(res, res, samples);
+        // </FS:Ansariel>
+
         mRT = &mMainRT;
         gCubeSnapshot = false;
     }
@@ -1257,6 +1265,14 @@ void LLPipeline::releaseScreenBuffers()
     mHeroProbeRT.fxaaBuffer.release();
     mHeroProbeRT.deferredScreen.release();
     mHeroProbeRT.deferredLight.release();
+
+    // <FS:Ansariel> Auxillary render target pack for 1024px LLDynamicTexture
+    mDynamicTextureRT.uiScreen.release();
+    mDynamicTextureRT.screen.release();
+    mDynamicTextureRT.fxaaBuffer.release();
+    mDynamicTextureRT.deferredScreen.release();
+    mDynamicTextureRT.deferredLight.release();
+    // </FS:Ansariel>
 }
 
 void LLPipeline::releaseSunShadowTarget(U32 index)

@@ -56,6 +56,8 @@ OS Version: [OS_VERSION]
 Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
 Graphics Card: [GRAPHICS_CARD]
 Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
+Graphics Card Memory (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Graphics Card Memory (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">Windows Graphics Driver Version: [GRAPHICS_DRIVER_VERSION]</string>
 	<string name="AboutOGL">OpenGL Version: [OPENGL_VERSION]</string>
@@ -70,7 +72,6 @@ Draw distance: [DRAW_DISTANCE] m
 Bandwidth: [BANDWIDTH] kbit/s
 LOD factor: [LOD]
 Render quality: [RENDERQUALITY]
-Advanced Lighting Model: [ALMSTATUS]
 	</string>
 	<string name="AboutCache">
 Disk cache: [DISK_CACHE_INFO]
@@ -3299,4 +3300,5 @@ Your current position: [AVATAR_POS]
   <string name="FSObjectInventoryOneElement">1 Element</string>
   <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
   <string name="OpenSimInventoryValidationErrorGenericHelp">your Grid Operator's support team</string>
+  <string name="Unlimited">Unlimited</string>
 </strings>

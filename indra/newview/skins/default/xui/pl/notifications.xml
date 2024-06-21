@@ -1562,13 +1562,53 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 		Nie można ustawić tekstur regionu:
 Tekstura terenu [TEXTURE_NUM] ma niewłaściwą głębię koloru - [TEXTURE_BIT_DEPTH].
 
-Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze [MAX_SIZE]x[MAX_SIZE] lub mniejszą i ponownie kliknij na &quot;Zastosuj&quot;.
+Zamień teksturę [TEXTURE_NUM] na teksturę RGB o wymiarach [MAX_SIZE]x[MAX_SIZE] lub mniejszą i ponownie kliknij na &quot;Zastosuj&quot;.
+	</notification>
+	<notification name="InvalidTerrainAlphaNotFullyLoaded">
+		Nie można ustawić tekstur regionu:
+Tekstura terenu [TEXTURE_NUM] nie jest w pełni załadowana, ale wydaje się, że zawiera przezroczystość ze względu na głębię wynoszącą [TEXTURE_BIT_DEPTH]. Przezroczystość nie jest obecnie obsługiwana w przypadku tekstur terenu.
+
+Jeśli tekstura [TEXTURE_NUM] jest nieprzezroczysta, poczekaj, aż się w pełni załaduje, a następnie kliknij na &quot;Zastosuj&quot; ponownie.
+
+Alpha jest obsługiwana tylko w przypadku materiałów terenu (chropowatość metaliczna PBR), gdy alphaMode="MASK" i doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainAlpha">
+		Nie można ustawić tekstur regionu:
+Tekstura terenu [TEXTURE_NUM] zawiera przezroczystość. Przezroczystość nie jest obecnie obsługiwana w przypadku tekstur terenu.
+
+Zamień teksturę [TEXTURE_NUM] na nieprzezroczysty obraz RGB, a następnie kliknij na &quot;Zastosuj&quot; ponownie.
+
+Alpha jest obsługiwana tylko w przypadku materiałów terenu (chropowatość metaliczna PBR), gdy alphaMode="MASK" i doubleSided=false.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Nie można ustawić tekstur regionu:
 Tekstura terenu [TEXTURE_NUM] jest za duża - [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze [MAX_SIZE]x[MAX_SIZE] lub mniejszą i ponownie kliknij na &quot;Zastosuj&quot;.
+Zamień teksturę [TEXTURE_NUM] na teksturę RGB o wymiarach [MAX_SIZE]x[MAX_SIZE] lub mniejszą i ponownie kliknij na &quot;Zastosuj&quot;.
+	</notification>
+	<notification name="InvalidTerrainMaterialNotLoaded">
+		Nie można ustawić tekstur regionu:
+Materiał terenu [MATERIAL_NUM] nie został załadowany.
+
+Poczekaj na załadowanie materiału lub zastąp materiał [MATERIAL_NUM] prawidłowym materiałem.
+	</notification>
+	<notification name="InvalidTerrainMaterialLoadFailed">
+		Nie można ustawić tekstur regionu:
+Materiał terenu [MATERIAL_NUM] nie został załadowany.
+
+Zastąp materiał [MATERIAL_NUM] prawidłowym materiałem.
+	</notification>
+	<notification name="InvalidTerrainMaterialDoubleSided">
+		Nie można ustawić tekstur regionu:
+Materiał terenu [MATERIAL_NUM] jest dwustronny. Materiały dwustronne nie są obecnie obsługiwane w terenie PBR.
+
+Zamień materiał [MATERIAL_NUM] na materiał z doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainMaterialAlphaMode">
+		Nie można ustawić tekstur regionu:
+Materiał terenu [MATERIAL_NUM] używa nieobsługiwanego trybu alphaMode="[MATERIAL_ALPHA_MODE]".
+
+Zamień materiał [MATERIAL_NUM] na materiał z alphaMode="OPAQUE" lub alphaMode="MASK".
 	</notification>
 	<notification name="RawUploadStarted">
 		Przesyłanie rozpoczęte. Może potrwać do dwóch minut zależnie od prędkości Twojego połączenia.
@@ -3718,6 +3758,10 @@ Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dl
 		Nie można przesłać tekstury: &apos;[NAME]&apos;
 [REASON]
 	</notification>
+	<notification name="CannotLoad">
+	Nie można załadować [WHAT].
+[REASON]
+	</notification>
 	<notification name="CannotUploadMaterial">
 		Wystąpił problem podczas przesyłania pliku
 	</notification>
@@ -5340,6 +5384,9 @@ Czy chcesz kontynuować?
 	<notification name="AutoAdjustHDRSky">
 		Edytujesz niebo inne niż HDR, które zostało automatycznie przekonwertowane na HDR. Aby usunąć HDR i mapowanie tonów, ustaw Nastrój Sondy Refleksyjnej na zero.
 		<usetemplate ignoretext="Ostrzeżenie dotyczące regulacji HDR nieba" name="okignore" />
+	</notification>
+	<notification name="GLTFPreviewSelection">
+		Musisz wybrać obiekt, który będzie działał jako uchwyt dla podglądanego zasobu GLTF.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.

@@ -116,11 +116,7 @@ LLViewerTexture::EDebugTexels LLViewerTexture::sDebugTexelsMode = LLViewerTextur
 
 const F64 log_2 = log(2.0);
 
-#if ADDRESS_SIZE == 32
-/*const*/ U32 DESIRED_NORMAL_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2; // <FS:Ansariel> Max texture resolution
-#else
 /*const*/ U32 DESIRED_NORMAL_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT; // <FS:Ansariel> Max texture resolution
-#endif
 
 LLUUID LLViewerTexture::sInvisiprimTexture1 = LLUUID::null;
 LLUUID LLViewerTexture::sInvisiprimTexture2 = LLUUID::null;

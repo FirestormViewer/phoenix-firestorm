@@ -47,6 +47,8 @@ Versão OS: [OS_VERSION]
 Placa de vídeo: [GRAPHICS_CARD_VENDOR]
 Placa gráfica: [GRAPHICS_CARD]
 Memória de Placa gráfica: [GRAPHICS_CARD_MEMORY] MB
+Memória de Placa gráfica (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Memória de Placa gráfica (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Versão do driver de vídeo Windows: [GRAPHICS_DRIVER_VERSION]
