@@ -46,8 +46,8 @@
 // Globals
 //
 LLSplashScreen *gSplashScreenp = NULL;
-BOOL gDebugClicks = FALSE;
-BOOL gDebugWindowProc = FALSE;
+bool gDebugClicks = false;
+bool gDebugWindowProc = false;
 
 // <FS:Zi> Allow file: links to open folders, chat history etc. on Linux systems
 //const S32 gURLProtocolWhitelistCount = 5;
@@ -72,10 +72,10 @@ const std::string gURLProtocolWhitelist[] = { "secondlife:", "http:", "https:", 
 S32 OSMessageBox(const std::string& text, const std::string& caption, U32 type)
 {
     // Properly hide the splash screen when displaying the message box
-    BOOL was_visible = FALSE;
+    bool was_visible = false;
     if (LLSplashScreen::isVisible())
     {
-        was_visible = TRUE;
+        was_visible = true;
         LLSplashScreen::hide();
     }
 
@@ -106,9 +106,9 @@ S32 OSMessageBox(const std::string& text, const std::string& caption, U32 type)
 // LLWindow
 //
 
-LLWindow::LLWindow(LLWindowCallbacks* callbacks, BOOL fullscreen, U32 flags)
+LLWindow::LLWindow(LLWindowCallbacks* callbacks, bool fullscreen, U32 flags)
     : mCallbacks(callbacks),
-      mPostQuit(TRUE),
+      mPostQuit(true),
       mFullscreen(fullscreen),
       mFullscreenWidth(0),
       mFullscreenHeight(0),
@@ -118,13 +118,13 @@ LLWindow::LLWindow(LLWindowCallbacks* callbacks, BOOL fullscreen, U32 flags)
       mNumSupportedResolutions(0),
       mCurrentCursor(UI_CURSOR_ARROW),
       mNextCursor(UI_CURSOR_ARROW),
-      mCursorHidden(FALSE),
+      mCursorHidden(false),
       mBusyCount(0),
-      mIsMouseClipping(FALSE),
+      mIsMouseClipping(false),
       mMinWindowWidth(0),
       mMinWindowHeight(0),
       mSwapMethod(SWAP_METHOD_UNDEFINED),
-      mHideCursorPermanent(FALSE),
+      mHideCursorPermanent(false),
       mFlags(flags),
       mHighSurrogate(0),
       mRefreshRate(0)
@@ -136,15 +136,15 @@ LLWindow::~LLWindow()
 }
 
 //virtual
-BOOL LLWindow::isValid()
+bool LLWindow::isValid()
 {
-    return TRUE;
+    return true;
 }
 
 //virtual
-BOOL LLWindow::canDelete()
+bool LLWindow::canDelete()
 {
-    return TRUE;
+    return true;
 }
 
 //virtual
@@ -187,9 +187,9 @@ ECursorType LLWindow::getCursor() const
 }
 
 //virtual
-BOOL LLWindow::dialogColorPicker(F32 *r, F32 *g, F32 *b)
+bool LLWindow::dialogColorPicker(F32 *r, F32 *g, F32 *b)
 {
-    return FALSE;
+    return false;
 }
 
 void *LLWindow::getMediaWindow()
@@ -198,7 +198,7 @@ void *LLWindow::getMediaWindow()
     return getPlatformWindow();
 }
 
-BOOL LLWindow::setSize(LLCoordScreen size)
+bool LLWindow::setSize(LLCoordScreen size)
 {
     if (!getMaximized())
     {
@@ -208,7 +208,7 @@ BOOL LLWindow::setSize(LLCoordScreen size)
     return setSizeImpl(size);
 }
 
-BOOL LLWindow::setSize(LLCoordWindow size)
+bool LLWindow::setSize(LLCoordWindow size)
 {
     //HACK: we are inconsistently using minimum window dimensions
     // in this case, we are constraining the inner "client" rect and other times
@@ -250,19 +250,19 @@ void LLWindow::processMiscNativeEvents()
 }
 
 //virtual
-BOOL LLWindow::isPrimaryTextAvailable()
+bool LLWindow::isPrimaryTextAvailable()
 {
-    return FALSE; // no
+    return false; // no
 }
 //virtual
-BOOL LLWindow::pasteTextFromPrimary(LLWString &dst)
+bool LLWindow::pasteTextFromPrimary(LLWString &dst)
 {
-    return FALSE; // fail
+    return false; // fail
 }
 // virtual
-BOOL LLWindow::copyTextToPrimary(const LLWString &src)
+bool LLWindow::copyTextToPrimary(const LLWString &src)
 {
-    return FALSE; // fail
+    return false; // fail
 }
 
 // static
@@ -345,7 +345,7 @@ void LLWindow::handleUnicodeUTF16(U16 utf16, MASK mask)
 // static
 bool LLSplashScreen::isVisible()
 {
-    return gSplashScreenp ? true: false;
+    return gSplashScreenp;
 }
 
 // static
@@ -411,16 +411,16 @@ static std::set<LLWindow*> sWindowList;
 LLWindow* LLWindowManager::createWindow(
     LLWindowCallbacks* callbacks,
     const std::string& title, const std::string& name, S32 x, S32 y, S32 width, S32 height, U32 flags,
-    BOOL fullscreen,
-    BOOL clearBg,
-    BOOL enable_vsync,
-    BOOL use_gl,
-    BOOL ignore_pixel_depth,
+    bool fullscreen,
+    bool clearBg,
+    bool enable_vsync,
+    bool use_gl,
+    bool ignore_pixel_depth,
     U32 fsaa_samples,
     U32 max_cores,
     U32 max_vram,
     F32 max_gl_version,
-    BOOL useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
+    bool useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 {
     LLWindow* new_window;
 
@@ -433,8 +433,8 @@ LLWindow* LLWindowManager::createWindow(
 #elif LL_SDL
         new_window = new LLWindowSDL(callbacks,
             title, x, y, width, height, flags,
-            //fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
-            fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+            //fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_vram);
+            fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_vram, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #elif LL_WINDOWS
         new_window = new LLWindowWin32(callbacks,
             title, name, x, y, width, height, flags,
@@ -443,8 +443,8 @@ LLWindow* LLWindowManager::createWindow(
 #elif LL_DARWIN
         new_window = new LLWindowMacOSX(callbacks,
             title, name, x, y, width, height, flags,
-            //fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
-            fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+            //fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_vram);
+            fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_vram, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #endif
     }
     else
@@ -454,7 +454,7 @@ LLWindow* LLWindowManager::createWindow(
             fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth);
     }
 
-    if (FALSE == new_window->isValid())
+    if (false == new_window->isValid())
     {
         delete new_window;
         LL_WARNS() << "LLWindowManager::create() : Error creating window." << LL_ENDL;
@@ -464,13 +464,13 @@ LLWindow* LLWindowManager::createWindow(
     return new_window;
 }
 
-BOOL LLWindowManager::destroyWindow(LLWindow* window)
+bool LLWindowManager::destroyWindow(LLWindow* window)
 {
     if (sWindowList.find(window) == sWindowList.end())
     {
         LL_ERRS() << "LLWindowManager::destroyWindow() : Window pointer not valid, this window doesn't exist!"
             << LL_ENDL;
-        return FALSE;
+        return false;
     }
 
     window->close();
@@ -479,10 +479,10 @@ BOOL LLWindowManager::destroyWindow(LLWindow* window)
 
     delete window;
 
-    return TRUE;
+    return true;
 }
 
-BOOL LLWindowManager::isWindowValid(LLWindow *window)
+bool LLWindowManager::isWindowValid(LLWindow *window)
 {
     return sWindowList.find(window) != sWindowList.end();
 }

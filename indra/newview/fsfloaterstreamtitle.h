@@ -80,7 +80,7 @@ public:
     FSFloaterStreamTitleHistory(const LLSD& key);
     virtual ~FSFloaterStreamTitleHistory();
 
-    BOOL postBuild() override;
+    bool postBuild() override;
     void draw() override;
     void setOwnerOrigin(LLView* owner) noexcept;
 
@@ -101,11 +101,11 @@ public:
     FSFloaterStreamTitle(const LLSD& key);
     virtual ~FSFloaterStreamTitle();
 
-    BOOL postBuild() override;
-    void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE) override;
+    bool postBuild() override;
+    void reshape(S32 width, S32 height, bool called_from_parent = true) override;
 
 private:
-    BOOL tick() override;
+    bool tick() override;
 
     void updateStreamTitle(std::string_view streamtitle) noexcept;
     void toggleHistory() noexcept;

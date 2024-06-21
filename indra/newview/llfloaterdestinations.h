@@ -36,11 +36,11 @@ class LLFloaterDestinations:
     friend class LLFloaterReg;
 private:
     LLFloaterDestinations(const LLSD& key);
-    /*virtual*/ ~LLFloaterDestinations();
-    /*virtual*/ BOOL postBuild();
+    ~LLFloaterDestinations();
+    bool postBuild() override;
 
     // <FS:Ansariel> FIRE-16833: Destination guide does not change between OpenSim grids
-    /*virtual*/ void onOpen(const LLSD& key);
+    void onOpen(const LLSD& key) override;
     void handleUrlChanged(const std::string& url);
 
     boost::signals2::connection mDestinationGuideUrlChangedSignal;

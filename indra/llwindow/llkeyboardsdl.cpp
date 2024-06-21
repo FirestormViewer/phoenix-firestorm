@@ -161,17 +161,17 @@ void LLKeyboardSDL::resetMaskKeys()
 
     if(mask & KMOD_SHIFT)
     {
-        mKeyLevel[KEY_SHIFT] = TRUE;
+        mKeyLevel[KEY_SHIFT] = true;
     }
 
     if(mask & KMOD_CTRL)
     {
-        mKeyLevel[KEY_CONTROL] = TRUE;
+        mKeyLevel[KEY_CONTROL] = true;
     }
 
     if(mask & KMOD_ALT)
     {
-        mKeyLevel[KEY_ALT] = TRUE;
+        mKeyLevel[KEY_ALT] = true;
     }
 }
 
@@ -225,12 +225,12 @@ static U16 adjustNativekeyFromUnhandledMask(const U16 key, const U32 mask)
 }
 
 
-BOOL LLKeyboardSDL::handleKeyDown(const U16 key, const U32 mask)
+bool LLKeyboardSDL::handleKeyDown(const U16 key, const U32 mask)
 {
     U16     adjusted_nativekey;
     KEY translated_key = 0;
     U32 translated_mask = MASK_NONE;
-    BOOL    handled = FALSE;
+    bool    handled = false;
 
     adjusted_nativekey = adjustNativekeyFromUnhandledMask(key, mask);
 
@@ -245,12 +245,12 @@ BOOL LLKeyboardSDL::handleKeyDown(const U16 key, const U32 mask)
 }
 
 
-BOOL LLKeyboardSDL::handleKeyUp(const U16 key, const U32 mask)
+bool LLKeyboardSDL::handleKeyUp(const U16 key, const U32 mask)
 {
     U16     adjusted_nativekey;
     KEY translated_key = 0;
     U32 translated_mask = MASK_NONE;
-    BOOL    handled = FALSE;
+    bool    handled = false;
 
     adjusted_nativekey = adjustNativekeyFromUnhandledMask(key, mask);
 
@@ -264,7 +264,7 @@ BOOL LLKeyboardSDL::handleKeyUp(const U16 key, const U32 mask)
     return handled;
 }
 
-MASK LLKeyboardSDL::currentMask(BOOL for_mouse_event)
+MASK LLKeyboardSDL::currentMask(bool for_mouse_event)
 {
     MASK result = MASK_NONE;
     SDLMod mask = SDL_GetModState();
@@ -299,8 +299,8 @@ void LLKeyboardSDL::scanKeyboard()
     // Reset edges for next frame
     for (S32 key = 0; key < KEY_COUNT; key++)
     {
-        mKeyUp[key] = FALSE;
-        mKeyDown[key] = FALSE;
+        mKeyUp[key] = false;
+        mKeyDown[key] = false;
         if (mKeyLevel[key])
         {
             mKeyLevelFrameCount[key]++;
@@ -309,7 +309,7 @@ void LLKeyboardSDL::scanKeyboard()
 }
 
 
-BOOL LLKeyboardSDL::translateNumpadKey( const U16 os_key, KEY *translated_key)
+bool LLKeyboardSDL::translateNumpadKey( const U16 os_key, KEY *translated_key)
 {
     return translateKey(os_key, translated_key);
 }

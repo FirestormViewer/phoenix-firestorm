@@ -2024,7 +2024,7 @@ bool LLVivoxVoiceClient::terminateAudioSession(bool wait)
                        << " VoiceEnabled " << mVoiceEnabled
                        << " IsInitialized " << mIsInitialized
                        << " RelogRequested " << mRelogRequested
-                       << " ShuttingDown " << (sShuttingDown ? "TRUE" : "FALSE")
+                       << " ShuttingDown " << (sShuttingDown ? "true" : "false")
                        << " returning " << status
                        << LL_ENDL;
     return status;
@@ -5165,16 +5165,16 @@ bool LLVivoxVoiceClient::isVoiceWorking() const
 
 // Returns true if the indicated participant in the current audio session is really an SL avatar.
 // Currently this will be false only for PSTN callers into group chats, and PSTN p2p calls.
-BOOL LLVivoxVoiceClient::isParticipantAvatar(const LLUUID &id)
+bool LLVivoxVoiceClient::isParticipantAvatar(const LLUUID &id)
 {
-    BOOL result = TRUE;
+    bool result = true;
     sessionStatePtr_t session(findSession(id));
 
     if(session)
     {
         // this is a p2p session with the indicated caller, or the session with the specified UUID.
         if(session->mSynthesizedCallerID)
-            result = FALSE;
+            result = false;
     }
     else
     {
@@ -5194,9 +5194,9 @@ BOOL LLVivoxVoiceClient::isParticipantAvatar(const LLUUID &id)
 
 // Returns true if calling back the session URI after the session has closed is possible.
 // Currently this will be false only for PSTN P2P calls.
-BOOL LLVivoxVoiceClient::isSessionCallBackPossible(const LLUUID &session_id)
+bool LLVivoxVoiceClient::isSessionCallBackPossible(const LLUUID &session_id)
 {
-    BOOL result = TRUE;
+    bool result = true;
     sessionStatePtr_t session(findSession(session_id));
 
     if(session != NULL)
@@ -5209,9 +5209,9 @@ BOOL LLVivoxVoiceClient::isSessionCallBackPossible(const LLUUID &session_id)
 
 // Returns true if the session can accept text IM's.
 // Currently this will be false only for PSTN P2P calls.
-BOOL LLVivoxVoiceClient::isSessionTextIMPossible(const LLUUID &session_id)
+bool LLVivoxVoiceClient::isSessionTextIMPossible(const LLUUID &session_id)
 {
-    bool result = TRUE;
+    bool result = true;
     sessionStatePtr_t session(findSession(session_id));
 
     if(session != NULL)
@@ -5326,7 +5326,7 @@ std::string LLVivoxVoiceClient::nameFromID(const LLUUID &uuid)
     LLStringUtil::replaceChar(result, '+', '-');
     LLStringUtil::replaceChar(result, '/', '_');
 
-    // If you need to transform a GUID to this form on the Mac OS X command line, this will do so:
+    // If you need to transform a GUID to this form on the macOS command line, this will do so:
     // echo -n x && (echo e669132a-6c43-4ee1-a78d-6c82fff59f32 |xxd -r -p |openssl base64|tr '/+' '_-')
 
     // The reverse transform can be done with:
@@ -5692,9 +5692,9 @@ std::string LLVivoxVoiceClient::getDisplayName(const LLUUID& id)
 
 
 
-BOOL LLVivoxVoiceClient::getIsSpeaking(const LLUUID& id)
+bool LLVivoxVoiceClient::getIsSpeaking(const LLUUID& id)
 {
-    BOOL result = FALSE;
+    bool result = false;
     if (mProcessChannels)
     {
         participantStatePtr_t participant(findParticipantByID(id));
@@ -5702,7 +5702,7 @@ BOOL LLVivoxVoiceClient::getIsSpeaking(const LLUUID& id)
         {
             if (participant->mSpeakingTimeout.getElapsedTimeF32() > SPEAKING_TIMEOUT)
             {
-                participant->mIsSpeaking = FALSE;
+                participant->mIsSpeaking = false;
             }
             result = participant->mIsSpeaking;
         }
@@ -5711,9 +5711,9 @@ BOOL LLVivoxVoiceClient::getIsSpeaking(const LLUUID& id)
     return result;
 }
 
-BOOL LLVivoxVoiceClient::getIsModeratorMuted(const LLUUID& id)
+bool LLVivoxVoiceClient::getIsModeratorMuted(const LLUUID& id)
 {
-    BOOL result = FALSE;
+    bool result = false;
     if (!mProcessChannels)
     {
         return FALSE;
@@ -5741,9 +5741,9 @@ F32 LLVivoxVoiceClient::getCurrentPower(const LLUUID& id)
 
 
 
-BOOL LLVivoxVoiceClient::getUsingPTT(const LLUUID& id)
+bool LLVivoxVoiceClient::getUsingPTT(const LLUUID& id)
 {
-    BOOL result = FALSE;
+    bool result = false;
 
     participantStatePtr_t participant(findParticipantByID(id));
     if(participant)
@@ -6407,34 +6407,40 @@ void LLVivoxVoiceClient::notifyStatusObservers(LLVoiceClientStatusObserver::ESta
         // so nobody wants to hear from us.
         return;
     }
-    for (status_observer_set_t::iterator it = mStatusObservers.begin();
-        it != mStatusObservers.end();
-        )
-    {
-        LLVoiceClientStatusObserver* observer = *it;
-        observer->onChange(status, getAudioSessionChannelInfo(), inSpatialChannel());
-        // In case onError() deleted an entry.
-        it = mStatusObservers.upper_bound(observer);
-    }
 
-    // skipped to avoid speak button blinking
-    if (   status != LLVoiceClientStatusObserver::STATUS_JOINING
-        && status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL
-        && status != LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED)
-    {
-        // <FS:Ansariel> Bypass LLCachedControls for voice status update
-        //bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
-        bool voice_status = LLVoiceClient::getInstance()->voiceEnabled(true) && LLVoiceClient::getInstance()->isVoiceWorking();
-        // </FS:Ansariel>
-
-        LL_WARNS("Voice") << "Setting voice connected " << (voice_status ? "True" : "False") << LL_ENDL;
-        gAgent.setVoiceConnected(voice_status);
-
-        if (voice_status)
+    // this function is called from a coroutine, shuttle application hook back to main loop
+    auto work = [=]()
         {
-            LLFirstUse::speak(true);
-        }
-    }
+            for (status_observer_set_t::iterator it = mStatusObservers.begin();
+                it != mStatusObservers.end();
+                )
+            {
+                LLVoiceClientStatusObserver* observer = *it;
+                observer->onChange(status, getAudioSessionChannelInfo(), inSpatialChannel());
+                // In case onError() deleted an entry.
+                it = mStatusObservers.upper_bound(observer);
+            }
+
+            // skipped to avoid speak button blinking
+            if (status != LLVoiceClientStatusObserver::STATUS_JOINING
+                && status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL
+                && status != LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED)
+            {
+                // <FS:Ansariel> Bypass LLCachedControls for voice status update
+                //bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+                bool voice_status = LLVoiceClient::getInstance()->voiceEnabled(true) && LLVoiceClient::getInstance()->isVoiceWorking();
+                // </FS:Ansariel>
+
+                gAgent.setVoiceConnected(voice_status);
+
+                if (voice_status)
+                {
+                    LLFirstUse::speak(true);
+                }
+            }
+        };
+
+    LLAppViewer::instance()->postToMainCoro(work);
 }
 
 void LLVivoxVoiceClient::addObserver(LLFriendObserver* observer)
@@ -7062,7 +7068,7 @@ void LLVivoxVoiceClient::updateVoiceMorphingMenu()
             const voice_effect_list_t& effect_list = effect_interfacep->getVoiceEffectList();
             if (!effect_list.empty())
             {
-                LLMenuGL * voice_morphing_menup = gMenuBarView->findChildMenuByName("VoiceMorphing", TRUE);
+                LLMenuGL * voice_morphing_menup = gMenuBarView->findChildMenuByName("VoiceMorphing", true);
 
                 if (NULL != voice_morphing_menup)
                 {
@@ -7353,8 +7359,8 @@ LLIOPipe::EStatus LLVivoxProtocolParser::process_impl(
     }
 
     // Look for input delimiter(s) in the input buffer.  If one is found, send the message to the xml parser.
-    int start = 0;
-    int delim;
+    size_t start = 0;
+    size_t delim;
     while((delim = mInput.find("\n\n\n", start)) != std::string::npos)
     {
 
@@ -7365,7 +7371,7 @@ LLIOPipe::EStatus LLVivoxProtocolParser::process_impl(
         XML_SetElementHandler(parser, ExpatStartTag, ExpatEndTag);
         XML_SetCharacterDataHandler(parser, ExpatCharHandler);
         XML_SetUserData(parser, this);
-        XML_Parse(parser, mInput.data() + start, delim - start, false);
+        XML_Parse(parser, mInput.data() + start, static_cast<int>(delim - start), false);
 
         LL_DEBUGS("VivoxProtocolParser") << "parsing: " << mInput.substr(start, delim - start) << LL_ENDL;
         start = delim + 3;

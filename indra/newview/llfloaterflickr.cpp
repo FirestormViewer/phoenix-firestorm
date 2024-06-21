@@ -105,14 +105,14 @@ LLFlickrPhotoPanel::~LLFlickrPhotoPanel()
     // </FS:Ansariel>
 }
 
-BOOL LLFlickrPhotoPanel::postBuild()
+bool LLFlickrPhotoPanel::postBuild()
 {
     setVisibleCallback(boost::bind(&LLFlickrPhotoPanel::onVisibilityChange, this, _2));
 
     mResolutionComboBox = getChild<LLUICtrl>("resolution_combobox");
-    mResolutionComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
+    mResolutionComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
     mFilterComboBox = getChild<LLUICtrl>("filters_combobox");
-    mFilterComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
+    mFilterComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
     mRefreshBtn = getChild<LLUICtrl>("new_snapshot_btn");
     mBtnPreview = getChild<LLButton>("big_preview_btn");
     mWorkingLabel = getChild<LLUICtrl>("working_lbl");
@@ -131,9 +131,9 @@ BOOL LLFlickrPhotoPanel::postBuild()
     mBigPreviewFloater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
 
     // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-    getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
-    getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
-    getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
+    getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
 
     getChild<LLComboBox>("resolution_combobox")->setCurrentByIndex(gSavedSettings.getS32("FSLastSnapshotToFlickrResolution"));
     getChild<LLSpinCtrl>("custom_snapshot_width")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrWidth"));
@@ -250,7 +250,7 @@ LLSnapshotLivePreview* LLFlickrPhotoPanel::getPreviewView()
     return previewp;
 }
 
-void LLFlickrPhotoPanel::onVisibilityChange(BOOL visible)
+void LLFlickrPhotoPanel::onVisibilityChange(bool visible)
 {
     if (visible)
     {
@@ -260,7 +260,7 @@ void LLFlickrPhotoPanel::onVisibilityChange(BOOL visible)
             if(preview)
             {
                 LL_DEBUGS() << "opened, updating snapshot" << LL_ENDL;
-                preview->updateSnapshot(TRUE);
+                preview->updateSnapshot(true);
             }
         }
         else
@@ -274,9 +274,9 @@ void LLFlickrPhotoPanel::onVisibilityChange(BOOL visible)
             previewp->setContainer(this);
             previewp->setSnapshotType(LLSnapshotModel::SNAPSHOT_WEB);
             previewp->setSnapshotFormat(LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
-            previewp->setThumbnailSubsampled(TRUE);     // We want the preview to reflect the *saved* image
-            previewp->setAllowRenderUI(FALSE);          // We do not want the rendered UI in our snapshots
-            previewp->setAllowFullScreenPreview(FALSE);  // No full screen preview in SL Share mode
+            previewp->setThumbnailSubsampled(true);     // We want the preview to reflect the *saved* image
+            previewp->setAllowRenderUI(false);          // We do not want the rendered UI in our snapshots
+            previewp->setAllowFullScreenPreview(false);  // No full screen preview in SL Share mode
             previewp->setThumbnailPlaceholderRect(mThumbnailPlaceholder->getRect());
 
             updateControls();
@@ -289,7 +289,7 @@ void LLFlickrPhotoPanel::onClickNewSnapshot()
     LLSnapshotLivePreview* previewp = getPreviewView();
     if (previewp)
     {
-        previewp->updateSnapshot(TRUE);
+        previewp->updateSnapshot(true);
     }
 }
 
@@ -469,15 +469,15 @@ void LLFlickrPhotoPanel::clearAndClose()
 void LLFlickrPhotoPanel::updateControls()
 {
     LLSnapshotLivePreview* previewp = getPreviewView();
-    BOOL got_snap = previewp && previewp->getSnapshotUpToDate();
+    bool got_snap = previewp && previewp->getSnapshotUpToDate();
 
     // *TODO: Separate maximum size for Web images from postcards
     LL_DEBUGS() << "Is snapshot up-to-date? " << got_snap << LL_ENDL;
 
-    updateResolution(FALSE);
+    updateResolution(false);
 }
 
-void LLFlickrPhotoPanel::updateResolution(BOOL do_update)
+void LLFlickrPhotoPanel::updateResolution(bool do_update)
 {
     LLComboBox* combobox  = static_cast<LLComboBox *>(mResolutionComboBox);
     LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
@@ -516,7 +516,7 @@ void LLFlickrPhotoPanel::updateResolution(BOOL do_update)
             LLSpinCtrl* height_spinner = getChild<LLSpinCtrl>("custom_snapshot_height");
             S32 custom_width = width_spinner->getValue().asInteger();
             S32 custom_height = height_spinner->getValue().asInteger();
-            if (checkImageSize(previewp, custom_width, custom_height, TRUE, previewp->getMaxImageSize()))
+            if (checkImageSize(previewp, custom_width, custom_height, true, previewp->getMaxImageSize()))
             {
                 width_spinner->set(custom_width);
                 height_spinner->set(custom_height);
@@ -541,8 +541,8 @@ void LLFlickrPhotoPanel::updateResolution(BOOL do_update)
             previewp->setSize(width, height);
             if (do_update)
             {
-                //previewp->updateSnapshot(TRUE);
-                previewp->updateSnapshot(TRUE, TRUE);
+                //previewp->updateSnapshot(true);
+                previewp->updateSnapshot(true, true);
                 updateControls();
             }
         }
@@ -553,14 +553,14 @@ void LLFlickrPhotoPanel::updateResolution(BOOL do_update)
             previewp->setFilter(filter_name);
             if (do_update)
             {
-                previewp->updateSnapshot(FALSE, TRUE);
+                previewp->updateSnapshot(false, true);
                 updateControls();
             }
         }
     }
 
     // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-    BOOL custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
+    bool custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
     getChild<LLSpinCtrl>("custom_snapshot_width")->setEnabled(custom_resolution);
     getChild<LLSpinCtrl>("custom_snapshot_height")->setEnabled(custom_resolution);
     getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setEnabled(custom_resolution);
@@ -571,11 +571,11 @@ void LLFlickrPhotoPanel::checkAspectRatio(S32 index)
 {
     LLSnapshotLivePreview *previewp = getPreviewView() ;
 
-    BOOL keep_aspect = FALSE;
+    bool keep_aspect = false;
 
     if (0 == index) // current window size
     {
-        keep_aspect = TRUE;
+        keep_aspect = true;
     }
     // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
     else if (-1 == index)
@@ -585,7 +585,7 @@ void LLFlickrPhotoPanel::checkAspectRatio(S32 index)
     // </FS:Ansariel>
     else // predefined resolution
     {
-        keep_aspect = FALSE;
+        keep_aspect = false;
     }
 
     if (previewp)
@@ -638,7 +638,7 @@ void LLFlickrPhotoPanel::flickrAuthResponse(bool success, const LLSD& response)
 // </FS:Ansariel>
 
 // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-BOOL LLFlickrPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, BOOL isWidthChanged, S32 max_value)
+bool LLFlickrPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value)
 {
     S32 w = width ;
     S32 h = height ;
@@ -647,7 +647,7 @@ BOOL LLFlickrPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& wi
     {
         if(gViewerWindow->getWindowWidthRaw() < 1 || gViewerWindow->getWindowHeightRaw() < 1)
         {
-            return FALSE ;
+            return false;
         }
 
         //aspect ratio of the current window
@@ -700,7 +700,7 @@ mDisconnectButton(NULL)
     setVisibleCallback(boost::bind(&LLFlickrAccountPanel::onVisibilityChange, this, _2));
 }
 
-BOOL LLFlickrAccountPanel::postBuild()
+bool LLFlickrAccountPanel::postBuild()
 {
     mAccountCaptionLabel = getChild<LLTextBox>("account_caption_label");
     mAccountNameLabel = getChild<LLTextBox>("account_name_label");
@@ -726,7 +726,7 @@ void LLFlickrAccountPanel::draw()
     LLPanel::draw();
 }
 
-void LLFlickrAccountPanel::onVisibilityChange(BOOL visible)
+void LLFlickrAccountPanel::onVisibilityChange(bool visible)
 {
     if(visible)
     {
@@ -797,8 +797,8 @@ void LLFlickrAccountPanel::showConnectButton()
 {
     if(!mConnectButton->getVisible())
     {
-        mConnectButton->setVisible(TRUE);
-        mDisconnectButton->setVisible(FALSE);
+        mConnectButton->setVisible(true);
+        mDisconnectButton->setVisible(false);
     }
 }
 
@@ -806,8 +806,8 @@ void LLFlickrAccountPanel::hideConnectButton()
 {
     if(mConnectButton->getVisible())
     {
-        mConnectButton->setVisible(FALSE);
-        mDisconnectButton->setVisible(TRUE);
+        mConnectButton->setVisible(false);
+        mDisconnectButton->setVisible(true);
     }
 }
 
@@ -869,7 +869,7 @@ void LLFloaterFlickr::onCancel()
     closeFloater();
 }
 
-BOOL LLFloaterFlickr::postBuild()
+bool LLFloaterFlickr::postBuild()
 {
     // Keep tab of the Photo Panel
     mFlickrPhotoPanel = static_cast<LLFlickrPhotoPanel*>(getChild<LLUICtrl>("panel_flickr_photo"));

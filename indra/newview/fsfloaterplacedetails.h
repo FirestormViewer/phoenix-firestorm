@@ -53,8 +53,8 @@ public:
     FSFloaterPlaceDetails(const LLSD& seed);
     virtual ~FSFloaterPlaceDetails();
 
-    /*virtual*/ BOOL postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
     void showAddedLandmarkInfo(const uuid_set_t& items);
     void changedGlobalPos(const LLVector3d& global_pos);

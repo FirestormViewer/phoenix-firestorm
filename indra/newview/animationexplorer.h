@@ -82,14 +82,14 @@ class AnimationExplorer
         ~AnimationExplorer();
 
     public:
-        /*virtual*/ BOOL postBuild();
+        /*virtual*/ bool postBuild();
         void addAnimation(const LLUUID& id, const LLUUID& playedBy, F64 time);  // called from RecentAnimationList
 
         // copied from llfloaterbvhpreview.h
-        BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-        BOOL handleMouseUp(S32 x, S32 y, MASK mask);
-        BOOL handleHover(S32 x, S32 y, MASK mask);
-        BOOL handleScrollWheel(S32 x, S32 y, S32 clicks);
+        bool handleMouseDown(S32 x, S32 y, MASK mask);
+        bool handleMouseUp(S32 x, S32 y, MASK mask);
+        bool handleHover(S32 x, S32 y, MASK mask);
+        bool handleScrollWheel(S32 x, S32 y, S32 clicks);
         void onMouseCaptureLost();
 
         void requestNameCallback(LLMessageSystem* msg);     // object name query callback

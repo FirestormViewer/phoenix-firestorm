@@ -38,16 +38,16 @@ FSFloaterRadar::~FSFloaterRadar()
 {
 }
 
-BOOL FSFloaterRadar::postBuild()
+bool FSFloaterRadar::postBuild()
 {
     mRadarPanel = findChild<FSPanelRadar>("panel_radar");
     if (!mRadarPanel)
     {
-        return FALSE;
+        return false;
     }
     mRadarPanel->setVisibleCheckFunction(boost::bind(&FSFloaterRadar::getVisible, this));
 
-    return TRUE;
+    return true;
 }
 
 // virtual

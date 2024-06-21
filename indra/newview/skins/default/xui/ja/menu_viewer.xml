@@ -180,7 +180,6 @@
 		<menu_item_call label="アニメーションエクスプローラ" name="Animation Explorer" />
 		<menu_item_call label="非表示アイテムリスト" name="asset_blacklist"/>
 		<menu_item_call label="アバターの表示設定" name="Avatar Render Settings" />
-		<menu_item_check label="フレンドは常に通常表示" name="Always show Friends normally" />
 		<menu_item_check label="フレンドのみ表示" name="Render Friends Only" />
 	</menu>
 	

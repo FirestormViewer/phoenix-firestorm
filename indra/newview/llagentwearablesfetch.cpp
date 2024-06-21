@@ -307,7 +307,7 @@ void LLLibraryOutfitsFetch::doneIdle()
             break;
         default:
             LL_WARNS() << "Got invalid state for outfit fetch: " << mCurrFetchStep << LL_ENDL;
-            mOutfitsPopulated = TRUE;
+            mOutfitsPopulated = true;
             break;
     }
 

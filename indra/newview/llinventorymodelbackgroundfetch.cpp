@@ -253,7 +253,7 @@ bool LLInventoryModelBackgroundFetch::isEverythingFetched() const
     return mAllRecursiveFoldersFetched;
 }
 
-BOOL LLInventoryModelBackgroundFetch::folderFetchActive() const
+bool LLInventoryModelBackgroundFetch::folderFetchActive() const
 {
     return mFolderFetchActive;
 }
@@ -565,7 +565,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
             mMaxTimeBetweenFetches = llmin(mMaxTimeBetweenFetches * 2.f, 120.f);
             LL_DEBUGS(LOG_INV) << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
             // fetch is no longer considered "timely" although we will wait for full time-out.
-            mTimelyFetchPending = FALSE;
+            mTimelyFetchPending = false;
         }
 
         while(1)
@@ -603,7 +603,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
                     if (cat->fetch())
                     {
                         mFetchTimer.reset();
-                        mTimelyFetchPending = TRUE;
+                        mTimelyFetchPending = true;
                     }
                     else
                     {
@@ -639,7 +639,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
                         LL_DEBUGS(LOG_INV) << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
                     }
 
-                    mTimelyFetchPending = FALSE;
+                    mTimelyFetchPending = false;
                     continue;
                 }
                 else if (mFetchTimer.getElapsedTimeF32() > mMaxTimeBetweenFetches)
@@ -653,7 +653,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
                         // push on back of queue
                         mFetchFolderQueue.push_back(info);
                     }
-                    mTimelyFetchPending = FALSE;
+                    mTimelyFetchPending = false;
                     mFetchTimer.reset();
                     break;
                 }
@@ -675,17 +675,17 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
                 {
                     itemp->fetchFromServer();
                     mFetchTimer.reset();
-                    mTimelyFetchPending = TRUE;
+                    mTimelyFetchPending = true;
                 }
                 else if (itemp->mIsComplete)
                 {
-                    mTimelyFetchPending = FALSE;
+                    mTimelyFetchPending = false;
                 }
                 else if (mFetchTimer.getElapsedTimeF32() > mMaxTimeBetweenFetches)
                 {
                     mFetchFolderQueue.push_back(info);
                     mFetchTimer.reset();
-                    mTimelyFetchPending = FALSE;
+                    mTimelyFetchPending = false;
                 }
                 // Not enough time has elapsed to do a new fetch
                 break;
@@ -899,7 +899,7 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis()
     // Reserve one request for actions outside of fetch (like renames)
     const U32 max_concurrent_fetches = llclamp(ais_pool - 1, 1, 50);
 
-    if (mFetchCount >= max_concurrent_fetches)
+    if ((U32)mFetchCount >= max_concurrent_fetches)
     {
         return;
     }
@@ -912,7 +912,7 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis()
     const F64 end_time = curent_time + max_time;
     S32 last_fetch_count = mFetchCount;
 
-    while (!mFetchFolderQueue.empty() && mFetchCount < max_concurrent_fetches && curent_time < end_time)
+    while (!mFetchFolderQueue.empty() && (U32)mFetchCount < max_concurrent_fetches && curent_time < end_time)
     {
         const FetchQueueInfo & fetch_info(mFetchFolderQueue.front());
         bulkFetchViaAis(fetch_info);
@@ -923,7 +923,7 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis()
     // Ideally we shouldn't fetch items if recursive fetch isn't done,
     // but there is a chance some request will start timeouting and recursive
     // fetch will get stuck on a signle folder, don't block item fetch in such case
-    while (!mFetchItemQueue.empty() && mFetchCount < max_concurrent_fetches && curent_time < end_time)
+    while (!mFetchItemQueue.empty() && (U32)mFetchCount < max_concurrent_fetches && curent_time < end_time)
     {
         const FetchQueueInfo& fetch_info(mFetchItemQueue.front());
         bulkFetchViaAis(fetch_info);
@@ -1280,8 +1280,8 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
                             folder_sd["folder_id"] = cat->getUUID();
                             folder_sd["owner_id"] = cat->getOwnerID();
                             folder_sd["sort_order"] = LLSD::Integer(sort_order);
-                            folder_sd["fetch_folders"] = LLSD::Boolean(TRUE); //(LLSD::Boolean)sFullFetchStarted;
-                            folder_sd["fetch_items"] = LLSD::Boolean(TRUE);
+                            folder_sd["fetch_folders"] = LLSD::Boolean(true); //(LLSD::Boolean)sFullFetchStarted;
+                            folder_sd["fetch_items"] = LLSD::Boolean(true);
 
                             // <FS:Beq> correct library owner for OpenSim (Rye)
                             //if (ALEXANDRIA_LINDEN_ID == cat->getOwnerID())
@@ -1566,7 +1566,7 @@ void BGFolderHttpHandler::processData(LLSD & content, LLCore::HttpResponse * res
                         gInventory.accountForUpdate(update);
 
                         titem->setParent(lost_uuid);
-                        titem->updateParentOnServer(FALSE);
+                        titem->updateParentOnServer(false);
                         gInventory.updateItem(titem);
                         // <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
                         if (!LLGridManager::getInstance()->isInSecondLife())
@@ -1683,7 +1683,7 @@ void BGFolderHttpHandler::processFailure(LLCore::HttpStatus status, LLCore::Http
             return;
         }
 
-        S32 size = mRequestSD["folders"].size();
+        auto size = mRequestSD["folders"].size();
 
         if (size > 1)
         {
@@ -1700,7 +1700,7 @@ void BGFolderHttpHandler::processFailure(LLCore::HttpStatus status, LLCore::Http
                 {
                     recursive_cats.push_back(folder_id);
                 }
-                if (folders.size() == (S32)(size / 2))
+                if (folders.size() == (size / 2))
                 {
                     LLSD request_body;
                     request_body["folders"] = folders;
@@ -1741,7 +1741,7 @@ void BGFolderHttpHandler::processFailure(LLCore::HttpStatus status, LLCore::Http
         {
             LLSD folder_sd(*folder_it);
             LLUUID folder_id(folder_sd["folder_id"].asUUID());
-            const BOOL recursive = getIsRecursive(folder_id);
+            const bool recursive = getIsRecursive(folder_id);
             fetcher->addRequestAtFront(folder_id, recursive, true);
         }
     }
@@ -1785,7 +1785,7 @@ void BGFolderHttpHandler::processFailure(const char * const reason, LLCore::Http
         {
             LLSD folder_sd(*folder_it);
             LLUUID folder_id(folder_sd["folder_id"].asUUID());
-            const BOOL recursive = getIsRecursive(folder_id);
+            const bool recursive = getIsRecursive(folder_id);
             fetcher->addRequestAtFront(folder_id, recursive, true);
         }
     }

@@ -258,10 +258,10 @@ void GrowlManager::performNotification(const std::string& title, const std::stri
     }
 }
 
-BOOL GrowlManager::tick()
+bool GrowlManager::tick()
 {
     mTitleTimers.clear();
-    return FALSE;
+    return false;
 }
 
 bool GrowlManager::onLLNotification(const LLSD& notice)

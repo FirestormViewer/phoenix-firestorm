@@ -68,7 +68,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # files during the build (see copy_w_viewer_manifest
         # and copy_l_viewer_manifest targets)
         return 'package' in self.args['actions']
-    
+
     def construct(self):
         super(ViewerManifest, self).construct()
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
@@ -116,7 +116,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
                 # ... and the entire image filters directory
                 self.path("filters")
-            
+
                 # ... and the included spell checking dictionaries
                 # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
@@ -369,7 +369,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def extract_names(self,src):
         """Extract contributor names from source file, returns string"""
         try:
-            with open(src, 'r') as contrib_file: 
+            with open(src, 'r') as contrib_file:
                 lines = contrib_file.readlines()
         except IOError:
             print("Failed to open '%s'" % src)
@@ -594,7 +594,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
                 raise Exception("Directories are not supported by test_CRT_and_copy_action()")
         else:
             print("Doesn't exist:", src)
-        
+
     def construct(self):
         super().construct()
 
@@ -651,7 +651,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
                            "slplugin.exe")
-        
+
         # Get shared libs from the shared libs staging directory
         with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                           'sharedlibs', self.args['buildtype'])):
@@ -702,7 +702,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             # Vivox libraries
             self.path("vivoxsdk_x64.dll")
             self.path("ortp_x64.dll")
-            
+
             # OpenSSL
             self.path("libcrypto-1_1-x64.dll")
             self.path("libssl-1_1-x64.dll")
@@ -844,7 +844,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
                 self.path("plugins/")
 
         if not self.is_packaging_viewer():
-            self.package_file = "copied_deps"    
+            self.package_file = "copied_deps"
 
         self.fs_copy_windows_manifest( )
 
@@ -967,7 +967,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         !define VERSION_REGISTRY "%(version_registry)s"
         !define VIEWER_EXE "%(final_exe)s"
         """ % substitution_strings
-        
+
         if self.channel_type() == 'release':
             substitution_strings['caption'] = CHANNEL_VENDOR_BASE
         else:
@@ -1263,6 +1263,14 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                                     # "libfmod.dylib",
                                     # ):
                             # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
+                # # OpenAL dylibs
+                # if self.args['openal'] == 'ON':
+                    # for libfile in (
+                                # "libopenal.dylib",
+                                # "libalut.dylib",
+                                # ):
+                        # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # # our apps
                 # executable_path = {}
@@ -1582,9 +1590,20 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         for libfile in (
                                     "libfmod.dylib",
                                     ):
-                            
                             print("debug: adding {} to dylibs for fmodstudio".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
+                # OpenAL dylibs
+                useopenal = self.args['openal'].lower()
+                print(f"debug: openal={useopenal}")
+                if useopenal == 'on':
+                    for libfile in (
+                                "libopenal.dylib",
+                                "libalut.dylib",
+                                ):
+                        print("debug: adding {} to dylibs for openal".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
+                        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 print(f"debug: dylibs = {dylibs}")
 
                 # our apps

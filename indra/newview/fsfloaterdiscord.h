@@ -39,12 +39,12 @@ class FSFloaterDiscord : public LLFloater
 {
 public:
     FSFloaterDiscord(const LLSD& key);
-    BOOL postBuild();
+    bool postBuild();
     void draw();
     void onClose(bool app_quitting);
 
 private:
-    void onVisibilityChange(BOOL visible);
+    void onVisibilityChange(bool visible);
     bool onDiscordConnectStateChange(const LLSD& data);
     bool onDiscordConnectInfoChange();
     void onConnect();

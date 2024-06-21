@@ -49,7 +49,7 @@ public:
 
     virtual ~FSWearableFavoritesItemsList() {}
 
-    /* virtual */ BOOL  handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+    /* virtual */ bool  handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                                    EDragAndDropType cargo_type,
                                    void* cargo_data,
                                    EAcceptance* accept,
@@ -79,10 +79,10 @@ public:
     FSFloaterWearableFavorites(const LLSD& key);
     virtual ~FSFloaterWearableFavorites();
 
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& info);
     /*virtual*/ void draw();
-    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
     /*virtual*/ bool hasAccelerators() const { return true; }
 
     static void initCategory(inventory_func_type callback = no_op_inventory_func);

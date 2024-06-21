@@ -300,12 +300,12 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
     gAgent.stopTyping();
 }
 
-void FSNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate)
+void FSNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, bool animate)
 {
     sendChatFromViewer(utf8str_to_wstring(utf8text), type, animate);
 }
 
-void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate)
+void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, bool animate)
 {
     // Look for "/20 foo" channel chats.
     S32 channel = 0;
@@ -324,7 +324,7 @@ void FSNearbyChat::registerChatBar(FSNearbyChatControl* chatBar)
 }
 
 // unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void FSNearbyChat::showDefaultChatBar(BOOL visible, const char* text) const
+void FSNearbyChat::showDefaultChatBar(bool visible, const char* text) const
 {
     if (!mDefaultChatBar)
     {
@@ -362,7 +362,7 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible, const char* text) const
 }
 
 // We want to know which nearby chat editor (if any) currently has focus
-void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus)
+void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, bool focus)
 {
     if (focus)
     {
@@ -378,7 +378,7 @@ void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL 
 
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
 // and the hide chat bar feature in mouselook in llagent.cpp
-BOOL FSNearbyChat::defaultChatBarIsIdle() const
+bool FSNearbyChat::defaultChatBarIsIdle() const
 {
     if (mFocusedInputEditor && mFocusedInputEditor->isDefault())
     {
@@ -386,18 +386,18 @@ BOOL FSNearbyChat::defaultChatBarIsIdle() const
     }
 
     // if any other chat bar has focus, report "idle", because they're not the default
-    return TRUE;
+    return true;
 }
 
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
-BOOL FSNearbyChat::defaultChatBarHasFocus() const
+bool FSNearbyChat::defaultChatBarHasFocus() const
 {
     if (mFocusedInputEditor && mFocusedInputEditor->isDefault())
     {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void FSNearbyChat::onDefaultChatBarButtonClicked()
@@ -409,7 +409,7 @@ void FSNearbyChat::onDefaultChatBarButtonClicked()
 //////////////////////////////////////////////////////////////////////////////
 // General chat handling methods
 
-void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, BOOL animate, S32 channel)
+void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, bool animate, S32 channel)
 {
     std::string utf8_out_text = wstring_to_utf8str(out_text);
     std::string utf8_text = wstring_to_utf8str(wtext);
@@ -629,7 +629,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
     }
 
     KEY key = gKeyboard->currentKey();
-    MASK mask = gKeyboard->currentMask(FALSE);
+    MASK mask = gKeyboard->currentMask(false);
 
     // Ignore "special" keys, like backspace, arrows, etc.
     if (length > 1
@@ -653,7 +653,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 
                     // Select to end of line, starting from the character
                     // after the last one the user typed.
-                    chat_entry->selectByCursorPosition(utf8_out_str.size() - rest_of_match.size(), utf8_out_str.size());
+                    chat_entry->selectByCursorPosition(static_cast<S32>(utf8_out_str.size() - rest_of_match.size()), static_cast<S32>(utf8_out_str.size()));
                 }
                 else
                 {
@@ -662,7 +662,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
                     // Select to end of line, starting from the character
                     // after the last one the user typed.
                     S32 outlength = line_editor->getLength(); // in characters
-                    line_editor->setSelection(length, outlength);
+                    line_editor->setSelection(static_cast<S32>(length), outlength);
                     line_editor->setCursor(outlength);
                 }
             }
@@ -827,12 +827,12 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
                     if (chat_entry)
                     {
                         chat_entry->setText(prefix + replaced_text + suffix);
-                        chat_entry->selectByCursorPosition(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(match).size(), utf8string_to_wstring(prefix).size() + utf8string_to_wstring(replaced_text).size());
+                        chat_entry->selectByCursorPosition(static_cast<S32>(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(match).size()), static_cast<S32>(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(replaced_text).size()));
                     }
                     else
                     {
                         line_editor->setText(prefix + replaced_text + suffix);
-                        line_editor->setSelection(utf8str_to_wstring(prefix + replaced_text).length(), cur_pos);
+                        line_editor->setSelection(static_cast<S32>(utf8str_to_wstring(prefix + replaced_text).length()), cur_pos);
                     }
                 }
             }

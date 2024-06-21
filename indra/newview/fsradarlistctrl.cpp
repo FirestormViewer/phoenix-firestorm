@@ -38,9 +38,9 @@ FSRadarListCtrl::FSRadarListCtrl(const Params& p)
 {
 }
 
-BOOL FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-    BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
+    bool handled = LLUICtrl::handleRightMouseDown(x, y, mask);
     if ( (mContextMenu) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
     {
         if (std::vector<LLScrollListItem*> selected_items = getAllSelected(); selected_items.size() > 1)

@@ -75,7 +75,7 @@ std::optional<LLUUID> FSLSLPreprocessor::findInventoryByName(std::string_view na
     LLInventoryModel::cat_array_t cats;
     LLInventoryModel::item_array_t items;
     ScriptMatches namematches(name);
-    gInventory.collectDescendentsIf(gInventory.getRootFolderID(), cats, items, FALSE, namematches);
+    gInventory.collectDescendentsIf(gInventory.getRootFolderID(), cats, items, false, namematches);
 
     if (!items.empty())
     {
@@ -171,7 +171,7 @@ std::string FSLSLPreprocessor::encode(const std::string& script)
 
 std::string FSLSLPreprocessor::decode(const std::string& script)
 {
-    static const S32 startpoint = encode_start.length();
+    static const auto startpoint = encode_start.length();
 
     std::string tip = script.substr(0, startpoint);
 
@@ -182,9 +182,9 @@ std::string FSLSLPreprocessor::decode(const std::string& script)
         return script;
     }
 
-    S32 end = script.find(encode_end);
+    auto end = script.find(encode_end);
 
-    if (end == -1)
+    if (end == std::string::npos)
     {
         LL_DEBUGS("FSLSLPreprocessor") << "No end" << LL_ENDL;
         return script;
@@ -362,7 +362,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 
             while (boost::regex_search(std::string::const_iterator(top.begin()), std::string::const_iterator(top.end()), result, finddecls))
             {
-                S32 len;
+                size_t len;
 
                 if (result[1].matched)
                 {
@@ -600,7 +600,7 @@ public:
                                                         item->getType(),
                                                         &FSLSLPreprocessor::FSProcCacheCallback,
                                                         info,
-                                                        TRUE);
+                                                        true);
                         return true;
                     }
                 }
@@ -697,7 +697,7 @@ void cache_script(std::string name, std::string content)
     LLAPRFile infile(path.c_str(), LL_APR_WB);
     if (infile.getFileHandle())
     {
-        infile.write(content.c_str(), content.length());
+        infile.write(content.c_str(), static_cast<S32>(content.length()));
     }
 
     infile.close();
@@ -773,7 +773,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(const LLUUID& iuuid, LLAssetType::ET
     }
 }
 
-void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
+void FSLSLPreprocessor::preprocess_script(bool close, bool sync, bool defcache)
 {
     mClose = close;
     mSync = sync;
@@ -988,14 +988,14 @@ static std::string reformat_switch_statements(std::string script, bool &lackDefa
                         break;
                     }
                     LL_DEBUGS("FSLSLPreprocessor") << "arg=[" << arg << "]" << LL_ENDL;;
-                    std::string rstate = scopeript2(buffer, res + slen + arg.length());
-                    S32 cutlen = slen + arg.length() + rstate.length();
+                    std::string rstate = scopeript2(buffer, res + slen + static_cast<S32>(arg.length()));
+                    S32 cutlen = slen + static_cast<S32>(arg.length() + rstate.length());
 
                     // Call recursively to process nested switch statements (FIRE-10517)
                     rstate = reformat_switch_statements(rstate, lackDefault);
 
                     //rip off the scope edges
-                    S32 slicestart = rstate.find("{") + 1;
+                    auto slicestart = rstate.find("{") + 1;
                     rstate = rstate.substr(slicestart, (rstate.rfind("}") - slicestart) - 1);
                     LL_DEBUGS("FSLSLPreprocessor") << "rstate=[" << rstate << "]" << LL_ENDL;
 
@@ -1012,12 +1012,12 @@ static std::string reformat_switch_statements(std::string script, bool &lackDefa
                         if (statematches[1].matched)
                         {
                             S32 case_start = const_iterator_to_pos(rstate.begin(), statematches[1].first);
-                            S32 next_curl = rstate.find("{", case_start + 1);
-                            S32 next_semi = rstate.find(":", case_start + 1);
-                            S32 case_end = (next_semi == -1) ? next_curl :
-                                (next_curl < next_semi && next_curl != -1) ? next_curl : next_semi;
+                            auto next_curl = rstate.find("{", case_start + 1);
+                            auto next_semi = rstate.find(":", case_start + 1);
+                            auto case_end = (next_semi == std::string::npos) ? next_curl :
+                                (next_curl < next_semi && next_curl != std::string::npos) ? next_curl : next_semi;
                             S32 caselen = const_iterator_to_pos(statematches[1].first, statematches[1].second);
-                            if (case_end != -1)
+                            if (case_end != std::string::npos)
                             {
                                 std::string casearg = rstate.substr(case_start + caselen, case_end - (case_start + caselen));
                                 LL_DEBUGS("FSLSLPreprocessor") << "casearg=[" << casearg << "]" << LL_ENDL;
@@ -1568,7 +1568,7 @@ void FSLSLPreprocessor::start_process()
                 outfield->setText(LLStringExplicit(output));
             }
             mCore->mPostScript = output;
-            mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
+            mCore->enableSave(true); // The preprocessor run forces a change. (For FIRE-10173) -Sei
             mCore->doSaveComplete((void*)mCore, mClose, mSync);
         }
     }

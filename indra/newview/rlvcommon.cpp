@@ -70,7 +70,7 @@ void RlvNotifications::warnGiveToRLV()
 /*
 void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const LLSD& response)
 {
-    gSavedSettings.setWarning(RLV_SETTING_FIRSTUSE_GIVETORLV, FALSE);
+    gSavedSettings.setWarning(RLV_SETTING_FIRSTUSE_GIVETORLV, false);
 
     S32 idxOption = LLNotification::getSelectedOption(notification, response);
     if ( (0 == idxOption) || (1 == idxOption) )
@@ -144,7 +144,7 @@ void RlvSettings::updateLoginLastLocation()
         if (gSavedPerAccountSettings.get<bool>(RlvSettingNames::LoginLastLocation) != fValue)
         {
             gSavedPerAccountSettings.set<bool>(RlvSettingNames::LoginLastLocation, fValue);
-            gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
+            gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), true);
         }
     }
 }
@@ -355,7 +355,7 @@ std::string RlvStrings::getAnonym(const std::string& strName)
     const char* pszName = strName.c_str(); U32 nHash = 0;
 
     // Test with 11,264 SL names showed a 3.33% - 3.82% occurance for each so we *should* get a very even spread
-    for (int idx = 0, cnt = strName.length(); idx < cnt; idx++)
+    for (size_t idx = 0, cnt = strName.length(); idx < cnt; idx++)
         nHash += pszName[idx];
 
     return m_Anonyms[nHash % m_Anonyms.size()];
@@ -505,7 +505,7 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy, bool fCl
 {
     uuid_vec_t idAgents;
     LLWorld::getInstance()->getAvatars(&idAgents, NULL);
-    for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
+    for (size_t idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
     {
         LLAvatarName avName;
         // NOTE: if we're agressively culling nearby names then ignore exceptions
@@ -576,7 +576,7 @@ bool RlvUtil::isNearbyAgent(const LLUUID& idAgent)
         std::vector<LLUUID> idAgents;
         LLWorld::getInstance()->getAvatars(&idAgents, NULL);
 
-        for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
+        for (size_t idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
             if (idAgents[idxAgent] == idAgent)
                 return true;
     }
@@ -638,7 +638,7 @@ void RlvUtil::sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, con
     std::string strFullName;
     LLAgentUI::buildFullname(strFullName);
 
-    pack_instant_message(gMessageSystem, gAgent.getID(), FALSE, gAgent.getSessionID(), idTo, strFullName,
+    pack_instant_message(gMessageSystem, gAgent.getID(), false, gAgent.getSessionID(), idTo, strFullName,
         strMsg, IM_ONLINE, IM_DO_NOT_DISTURB_AUTO_RESPONSE, idSession);
     gAgent.sendReliableMessage();
 }
@@ -729,9 +729,9 @@ void rlvMenuToggleVisible()
     bool fTopLevel = rlvGetSetting(RlvSettingNames::TopLevelMenu, true);
     bool fRlvEnabled = rlv_handler_t::isEnabled();
 
-    LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);
-    LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", FALSE);
-    LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", FALSE);
+    LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", false);
+    LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", false);
+    LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", false);
 
     gMenuBarView->setItemVisible("RLVa Main", (fRlvEnabled) && (fTopLevel));
     pAdvancedMenu->setItemVisible("RLVa Embedded", (fRlvEnabled) && (!fTopLevel));
@@ -924,7 +924,7 @@ bool RlvPredIsEqualOrLinkedItem::operator()(const LLViewerInventoryItem* pItem) 
 
 // Checked: 2009-11-15 (RLVa-1.1.0c) | Added: RLVa-1.1.0c
 /*
-BOOL rlvEnableSharedWearEnabler(void* pParam)
+bool rlvEnableSharedWearEnabler(void* pParam)
 {
     return false;
     // Visually disable the "Enable Shared Wear" option when at least one attachment is non-detachable

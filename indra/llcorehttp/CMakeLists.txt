@@ -3,11 +3,6 @@
 project(llcorehttp)
 
 include(00-Common)
-
-# <FS:ND> Google Mock/Test is not used
-#include(GoogleMock)
-# </FS:ND>
-
 include(CURL)
 include(OpenSSL)
 include(NGHTTP2)

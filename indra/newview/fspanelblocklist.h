@@ -46,9 +46,9 @@ public:
     FSPanelBlockList();
     ~FSPanelBlockList();
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
     virtual void onOpen(const LLSD& key);
-    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
     /*virtual*/ bool hasAccelerators() const { return true; }
 
     void selectBlocked(const LLUUID& id);

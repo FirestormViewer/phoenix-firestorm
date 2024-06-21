@@ -44,7 +44,7 @@ class FSFloaterImport : public LLFloater
 public:
     FSFloaterImport(const LLSD &filename);
     virtual ~FSFloaterImport();
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
     static void onIdle(void *user_data);
 
@@ -125,7 +125,7 @@ private:
     uuid_vec_t mAssetQueue;
     U32 mAssetsTotal;
     std::map<LLUUID,LLUUID> mAssetMap;
-    BOOL mSavedSettingShowNewInventory;
+    bool mSavedSettingShowNewInventory;
     boost::signals2::connection mObjectCreatedCallback;
 
     struct FSInventoryQueue

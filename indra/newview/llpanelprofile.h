@@ -93,6 +93,12 @@ public:
 
     void onOpen(const LLSD& key) override;
 
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
+                                   EDragAndDropType cargo_type,
+                                   void* cargo_data,
+                                   EAcceptance* accept,
+                                   std::string& tooltip_msg) override;
+
     /**
      * LLFriendObserver trigger
      */
@@ -104,7 +110,7 @@ public:
 
     void setAvatarId(const LLUUID& avatar_id) override;
 
-    BOOL postBuild() override;
+    bool postBuild() override;
 
     void resetData() override;
 
@@ -165,13 +171,13 @@ protected:
      */
     void fillAgeData(const LLAvatarData* avatar_data);
 
-    void onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep);
-    static void onImageLoaded(BOOL success,
+    void onImageLoaded(bool success, LLViewerFetchedTexture *imagep);
+    static void onImageLoaded(bool success,
                               LLViewerFetchedTexture *src_vi,
                               LLImageRaw* src,
                               LLImageRaw* aux_src,
                               S32 discard_level,
-                              BOOL final,
+                              bool final,
                               void* userdata);
 
     /**
@@ -293,7 +299,7 @@ public:
 
     void onOpen(const LLSD& key) override;
 
-    BOOL postBuild() override;
+    bool postBuild() override;
 
     void resetData() override;
 
@@ -333,7 +339,7 @@ public:
 
     void onOpen(const LLSD& key) override;
 
-    BOOL postBuild() override;
+    bool postBuild() override;
 
     void processProperties(void * data, EAvatarProcessorType type) override;
     void processProperties(const LLAvatarData* avatar_data);
@@ -389,7 +395,7 @@ public:
 
     void onOpen(const LLSD& key) override;
 
-    BOOL postBuild() override;
+    bool postBuild() override;
 
     void processProperties(void * data, EAvatarProcessorType type) override;
     void processProperties(const LLAvatarData* avatar_data);
@@ -426,7 +432,7 @@ public:
     LLPanelProfile();
     /*virtual*/ ~LLPanelProfile();
 
-    BOOL postBuild() override;
+    bool postBuild() override;
 
     void updateData() override;
     void refreshName();

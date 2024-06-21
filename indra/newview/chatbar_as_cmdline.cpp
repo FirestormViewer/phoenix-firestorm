@@ -77,7 +77,7 @@ LLViewerInventoryItem::item_array_t findInventoryInFolder(std::string_view ifold
     LLUUID folder = gInventory.findCategoryByName(static_cast<std::string>(ifolder));
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
-    gInventory.collectDescendents(folder, cats, items, FALSE);
+    gInventory.collectDescendents(folder, cats, items, false);
 
     return items;
 }
@@ -86,11 +86,11 @@ void doZdCleanup();
 class JCZdrop : public LLEventTimer
 {
 public:
-    BOOL mRunning;
+    bool mRunning;
 
     JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string_view sFolder, std::string_view sUUID, bool package = false)
         : LLEventTimer(1.f),
-        mRunning(FALSE),
+        mRunning(false),
         mPackage(package),
         mStack(stack),
         mDestination(dest),
@@ -123,7 +123,7 @@ public:
         }
     }
 
-    BOOL tick()
+    bool tick()
     {
         LLViewerInventoryItem* subj = mStack.top();
         mStack.pop();
@@ -144,7 +144,7 @@ public:
         else
         {
             mErrorCode = 1;
-            return TRUE;
+            return true;
         }
     }
 
@@ -167,10 +167,10 @@ public:
 
     ~ZdCleanup() {}
 
-    BOOL tick()
+    bool tick()
     {
         gZDrop = nullptr;
-        return TRUE;
+        return true;
     }
 };
 
@@ -192,12 +192,12 @@ void doZtCleanup();
 class JCZtake : public LLEventTimer
 {
 public:
-    BOOL mRunning;
+    bool mRunning;
 
     JCZtake(const LLUUID& target, bool package = false, const LLUUID& destination = LLUUID::null, std::string_view dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY, bool use_selection = true, std::vector<U32> to_take = std::vector<U32>()) :
         LLEventTimer(0.66f),
         mTarget(target),
-        mRunning(FALSE),
+        mRunning(false),
         mCountdown(5),
         mPackage(package),
         mPackageDest(destination),
@@ -234,7 +234,7 @@ public:
         }
     }
 
-    BOOL tick()
+    bool tick()
     {
         switch (mState)
         {
@@ -389,7 +389,7 @@ private:
     LLUUID mPackageDest;
     std::string mFolderName;
     EDeRezDestination mDest;
-    U32 mPackSize;
+    size_t mPackSize;
     EZtakeState mState;
 };
 
@@ -403,12 +403,12 @@ public:
 
     ~LOZtCleanup() {}
 
-    BOOL tick()
+    bool tick()
     {
-        gZTake->mRunning = TRUE;
+        gZTake->mRunning = true;
         delete gZTake;
         gZTake = nullptr;
-        return TRUE;
+        return true;
     }
 };
 
@@ -420,9 +420,12 @@ void doZtCleanup()
 class TMZtake : public LLEventTimer
 {
 public:
-    BOOL mRunning;
+    bool mRunning;
 
-    TMZtake(const LLUUID& target) : LLEventTimer(0.33f), mTarget(target), mRunning(FALSE), mCountdown(5)
+    TMZtake(const LLUUID& target) : LLEventTimer(0.33f),
+        mTarget(target),
+        mRunning(false),
+        mCountdown(5)
     {
         report_to_nearby_chat("Mtake activated. Taking selected in-world objects into inventory in: ");
     }
@@ -432,7 +435,7 @@ public:
         report_to_nearby_chat("Mtake deactivated.");
     }
 
-    BOOL tick()
+    bool tick()
     {
         LLMessageSystem* msg = gMessageSystem;
         for (LLObjectSelection::iterator itr = LLSelectMgr::getInstance()->getSelection()->begin();
@@ -516,20 +519,20 @@ private:
     std::vector<U32> mToTake;
     LLUUID mTarget;
     S32 mCountdown;
-    S32 zeroClearX;
-    S32 zeroClearY;
-    S32 zeroClearZ;
+    size_t zeroClearX;
+    size_t zeroClearY;
+    size_t zeroClearZ;
 };
 TMZtake* gMTake;
 
-void invrepair()
+static void invrepair()
 {
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
-    gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, FALSE);
+    gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, false);
 }
 
-void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
+static void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
 {
     std::string name = av_name.getCompleteName();
     if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, id))
@@ -595,7 +598,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 if (from_gesture)
                 {
                     report_to_nearby_chat(LLTrans::getString("DrawDistanceSteppingGestureObsolete"));
-                    gSavedSettings.setBOOL("FSRenderFarClipStepping", TRUE);
+                    gSavedSettings.setBOOL("FSRenderFarClipStepping", true);
                     return false;
                 }
                 F32 drawDist;
@@ -680,7 +683,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                     if (status == "on")
                     {
-                        gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+                        gSavedPerAccountSettings.setBOOL("UseAO", true);
 
                         // <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
                         if (!aoWasEnabled)
@@ -690,7 +693,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     }
                     else if (status == "off")
                     {
-                        gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+                        gSavedPerAccountSettings.setBOOL("UseAO", false);
 
                         // <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
                         if (aoWasEnabled)
@@ -706,11 +709,11 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         {
                             if (status == "off")
                             {
-                                AOEngine::instance().setOverrideSits(tmp, TRUE);
+                                AOEngine::instance().setOverrideSits(tmp, true);
                             }
                             else if (status == "on")
                             {
-                                AOEngine::instance().setOverrideSits(tmp, FALSE);
+                                AOEngine::instance().setOverrideSits(tmp, false);
                             }
                         }
                         else
@@ -977,7 +980,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         S32 random_min = atoi(random_nums[1].first);
                         S32 random_max = atoi(random_nums[2].first);
                         std::string look_for = "RAND(" + llformat("%d", random_min) + "," + llformat("%d", random_max) + ")";
-                        S32 random_string_pos = expr.find(look_for);
+                        auto random_string_pos = expr.find(look_for);
                         if (random_string_pos != std::string::npos)
                         {
                             S32 random_number = 0;
@@ -1128,7 +1131,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         }
                         else
                         {
-                            gZDrop->mRunning = TRUE;
+                            gZDrop->mRunning = true;
                             delete gZDrop;
                             gZDrop = nullptr;
                         }
@@ -1195,7 +1198,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         }
                         else
                         {
-                            gZTake->mRunning = TRUE;
+                            gZTake->mRunning = true;
                             delete gZTake;
                             gZTake = nullptr;
                         }
@@ -1518,7 +1521,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         }
                         else
                         {
-                            gMTake->mRunning = TRUE;
+                            gMTake->mRunning = true;
                             delete gMTake;
                             gMTake = nullptr;
                         }
@@ -1812,7 +1815,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
     msg->addVector3Fast(_PREHASH_RayStart, rezpos);
     msg->addVector3Fast(_PREHASH_RayEnd, rezpos);
     msg->addU8Fast(_PREHASH_BypassRaycast, (U8)1);
-    msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE);
+    msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)0);
     msg->addU8Fast(_PREHASH_State, 0);
     msg->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
     msg->sendReliable(gAgent.getRegionHost());

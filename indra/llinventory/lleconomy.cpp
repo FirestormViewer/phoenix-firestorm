@@ -173,7 +173,7 @@ LLRegionEconomy::LLRegionEconomy()
 LLRegionEconomy::~LLRegionEconomy()
 { }
 
-BOOL LLRegionEconomy::hasData() const
+bool LLRegionEconomy::hasData() const
 {
     return (mBasePriceParcelRent != -1);
 }

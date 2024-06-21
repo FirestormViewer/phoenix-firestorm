@@ -33,13 +33,13 @@ FSFloaterPoseStand::~FSFloaterPoseStand()
 {
 }
 
-BOOL FSFloaterPoseStand::postBuild()
+bool FSFloaterPoseStand::postBuild()
 {
     mComboPose = getChild<LLComboBox>("pose_combo");
     mComboPose->setCommitCallback(boost::bind(&FSFloaterPoseStand::onCommitCombo, this));
     loadPoses();
 
-    return TRUE;
+    return true;
 }
 
 // virtual
@@ -52,7 +52,7 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 
     if (gSavedPerAccountSettings.getBOOL("UseAO"))
     {
-        gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+        gSavedPerAccountSettings.setBOOL("UseAO", false);
         mAOPaused = true;
     }
 
@@ -63,13 +63,13 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
         setLock(true);
     }
     gAgent.stopCurrentAnimations(true);
-    gAgent.setCustomAnim(TRUE);
-    gFocusMgr.setKeyboardFocus(NULL);
-    gFocusMgr.setMouseCapture(NULL);
+    gAgent.setCustomAnim(true);
+    gFocusMgr.setKeyboardFocus(nullptr);
+    gFocusMgr.setMouseCapture(nullptr);
     std::string last_pose = gSavedSettings.getString("FSPoseStandLastSelectedPose");
     if (!last_pose.empty())
     {
-        mComboPose->setSelectedByValue(last_pose, TRUE);
+        mComboPose->setSelectedByValue(last_pose, true);
     }
     onCommitCombo();
 }
@@ -87,12 +87,12 @@ void FSFloaterPoseStand::onClose(bool app_quitting)
         setLock(false);
         gAgent.standUp();
     }
-    gAgent.setCustomAnim(FALSE);
+    gAgent.setCustomAnim(false);
     FSPose::getInstance()->stopPose();
     gAgent.stopCurrentAnimations(true);
     if (mAOPaused && !gSavedPerAccountSettings.getBOOL("UseAO"))
     {
-        gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+        gSavedPerAccountSettings.setBOOL("UseAO", true);
         mAOPaused = false;
     }
 }

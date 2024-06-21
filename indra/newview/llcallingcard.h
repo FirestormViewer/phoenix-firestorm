@@ -217,7 +217,7 @@ private:
     LLAvatarTracker(const LLAvatarTracker&);
     bool operator==(const LLAvatarTracker&);
 
-    BOOL mIsNotifyObservers;
+    bool mIsNotifyObservers;
 
 public:
     // don't you dare create or delete this object

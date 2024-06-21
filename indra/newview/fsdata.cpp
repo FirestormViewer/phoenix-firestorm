@@ -236,7 +236,8 @@ void downloadComplete(LLSD const &aData, std::string const &aURL, bool success)
     FSData::getInstance()->processResponder(data, aURL, success, lastModified);
 }
 
-void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::string const &aFilename)
+#ifdef OPENSIM
+static void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::string const &aFilename)
 {
     LL_DEBUGS("fsdata") << aURL << ": " << aData << LL_ENDL;
     LLSD header = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS][LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
@@ -278,7 +279,7 @@ void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::str
     }
 }
 
-void downloadError(LLSD const &aData, std::string const &aURL)
+static void downloadError(LLSD const &aData, std::string const &aURL)
 {
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData);
 
@@ -291,6 +292,7 @@ void downloadError(LLSD const &aData, std::string const &aURL)
         LL_WARNS("fsdata") << "Failed to download " << aURL << ": " << aData << LL_ENDL;
     }
 }
+#endif
 
 // call this just before the login screen and after the LLProxy has been setup.
 void FSData::startDownload()
@@ -330,7 +332,7 @@ void FSData::startDownload()
         FSCoreHttpUtil::callbackHttpGetRaw(mFSdataDefaultsUrl, boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, true), boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
     }
 
-#if OPENSIM
+#ifdef OPENSIM
     std::string filenames[] = { "scriptlibrary_ossl.xml", "scriptlibrary_aa.xml" };
     for (auto const& script_name : filenames)
     {
@@ -680,7 +682,7 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
     {
         if (client_tag_visibility >= 3)
         {
-            U32 tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
+            auto tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
             std::string clienttagname = std::string((const char*)&id.mData[0], tag_len);
             LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
             curtag["name"] = clienttagname;
@@ -943,7 +945,7 @@ void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const 
     pack_instant_message(
         gMessageSystem,
         gAgentID,
-        FALSE,
+        false,
         gAgentSessionID,
         destination,
         my_name,
@@ -956,7 +958,7 @@ void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const 
     pack_instant_message(
         gMessageSystem,
         gAgentID,
-        FALSE,
+        false,
         gAgentSessionID,
         destination,
         my_name,
@@ -992,7 +994,7 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
         pack_instant_message(
             gMessageSystem,
             gAgentID,
-            FALSE,
+            false,
             gAgentSessionID,
             from_id,
             my_name,

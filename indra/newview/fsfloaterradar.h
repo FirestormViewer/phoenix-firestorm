@@ -43,8 +43,8 @@ public:
     FSFloaterRadar(const LLSD &);
     virtual ~FSFloaterRadar();
 
-    /*virtual*/ BOOL    postBuild();
-    /*virtual*/ void    onOpen(const LLSD& key);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
 private:
     FSPanelRadar*           mRadarPanel;

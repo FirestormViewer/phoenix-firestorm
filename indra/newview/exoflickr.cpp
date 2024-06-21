@@ -28,15 +28,9 @@
 #include "llviewercontrol.h"
 #include "llbase64.h"
 #include "llcorehttputil.h"
+#include "llsdjson.h"
 #include "llsdutil.h"
 #include "llflickrconnect.h"
-
-// third-party
-#if LL_USESYSTEMLIBS
-#include "jsoncpp/reader.h" // JSON
-#else
-#include "json/reader.h" // JSON
-#endif
 
 #include <openssl/hmac.h>
 #include <openssl/evp.h>
@@ -122,53 +116,6 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
     }
 }
 
-static void JsonToLLSD(const Json::Value &root, LLSD &output)
-{
-    if (root.isObject())
-    {
-        Json::Value::Members keys = root.getMemberNames();
-        for(Json::Value::Members::const_iterator itr = keys.begin(); itr != keys.end(); ++itr)
-        {
-            LLSD elem;
-            JsonToLLSD(root[*itr], elem);
-            output[*itr] = elem;
-        }
-    }
-    else if (root.isArray())
-    {
-        for(Json::Value::const_iterator itr = root.begin(); itr != root.end(); ++itr)
-        {
-            LLSD elem;
-            JsonToLLSD(*itr, elem);
-            output.append(elem);
-        }
-    }
-    else
-    {
-        switch (root.type())
-        {
-            case Json::intValue:
-                output = root.asInt();
-                break;
-            case Json::realValue:
-            case Json::uintValue:
-                output = root.asDouble();
-                break;
-            case Json::stringValue:
-                output = root.asString();
-                break;
-            case Json::booleanValue:
-                output = root.asBool();
-                break;
-            case Json::nullValue:
-                output = LLSD();
-                break;
-            default:
-                break;
-        }
-    }
-}
-
 void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallback )
 {
     LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
@@ -178,11 +125,9 @@ void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallb
     std::string result;
     result.assign( rawData.begin(), rawData.end() );
 
-    Json::Value root;
-    Json::Reader reader;
-
-    bool success = reader.parse(result, root);
-    if(!success)
+    boost::json::error_code ec;
+    boost::json::value root = boost::json::parse(result, ec);
+    if (ec.failed())
     {
         if (aCallback)
         {
@@ -193,8 +138,7 @@ void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallb
     else
     {
         LL_INFOS("FlickrAPI") << "Got response string: " << result << LL_ENDL;
-        LLSD response;
-        JsonToLLSD(root, response);
+        LLSD response = LlsdFromJson(root);
         if (aCallback)
         {
             aCallback((status.getType() >= 200 && status.getType() < 300), response);
@@ -325,7 +269,7 @@ std::string exoFlickr::getSignatureForCall(const LLSD& parameters, std::string u
     std::string key = std::string(EXO_FLICKR_API_SECRET) + "&" + gSavedPerAccountSettings.getString("ExodusFlickrTokenSecret");
 
     std::string to_hash = q.str();
-    HMAC(EVP_sha1(), (void*)key.c_str(), key.length(), (unsigned char*)to_hash.c_str(), to_hash.length(), data, &length);
+    HMAC(EVP_sha1(), (void*)key.c_str(), static_cast<int>(key.length()), (unsigned char*)to_hash.c_str(), to_hash.length(), data, &length);
     std::string signature = LLBase64::encode((U8*)data, length);
     return signature;
 }

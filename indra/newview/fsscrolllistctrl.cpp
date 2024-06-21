@@ -54,9 +54,9 @@ void FSScrollListCtrl::refreshLineHeight()
     updateLayout();
 }
 
-BOOL FSScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool FSScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-    BOOL handled = FALSE;
+    bool handled = false;
 
     // If we set our own context menu handler (mContextMenu != NULL), skip the
     // event handler in LLScrollListCtrl and perform our own context menu action.
@@ -96,7 +96,7 @@ BOOL FSScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
     return handled;
 }
 
-BOOL FSScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
+bool FSScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     if (mContentType == FSScrollListCtrl::AGENTS)
     {
@@ -111,7 +111,7 @@ BOOL FSScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
     return LLScrollListCtrl::handleMouseDown(x, y, mask);
 }
 
-BOOL FSScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
+bool FSScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     if (mContentType == FSScrollListCtrl::AGENTS)
     {
@@ -124,7 +124,7 @@ BOOL FSScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
     return LLScrollListCtrl::handleMouseUp(x, y, mask);
 }
 
-BOOL FSScrollListCtrl::handleHover(S32 x, S32 y, MASK mask)
+bool FSScrollListCtrl::handleHover(S32 x, S32 y, MASK mask)
 {
     if (mContentType == FSScrollListCtrl::AGENTS)
     {
@@ -166,7 +166,7 @@ BOOL FSScrollListCtrl::handleHover(S32 x, S32 y, MASK mask)
 
 //virtual
 
-BOOL FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                                             EDragAndDropType cargo_type,
                                             void* cargo_data,
                                             EAcceptance* accept,
@@ -177,7 +177,7 @@ BOOL FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
         return mHandleDaDCallback(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
     }
 
-    return FALSE;
+    return false;
 
 }
 

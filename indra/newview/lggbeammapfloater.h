@@ -35,11 +35,11 @@ public:
     lggBeamMapFloater(const LLSD& seed);
     virtual ~lggBeamMapFloater();
 
-    BOOL postBuild(void);
-    BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-    BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    bool postBuild(void) override;
+    bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
 
-    void draw();
+    void draw() override;
 
     void setData(FSPanelPrefs* data);
 

@@ -83,7 +83,7 @@ public:
     LLParcel* getCurrentSelectedParcel();
 
     virtual void onOpen(const LLSD& key);
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
 private:
     // Does its own instance management, so clients not allowed
@@ -131,7 +131,7 @@ public:
     // we send an update to the simulator, it usually replies with the
     // parcel information, causing the land to be reselected.  This allows
     // us to suppress that behavior.
-    static BOOL sRequestReplyOnUpdate;
+    static bool sRequestReplyOnUpdate;
 };
 
 
@@ -155,7 +155,7 @@ public:
     static void onClickRelease(void*);
     static void onClickReclaim(void*);
     static void onClickBuyPass(void* deselect_when_done);
-    static BOOL enableBuyPass(void*);
+    static bool enableBuyPass(void*);
     static void onCommitAny(LLUICtrl* ctrl, void *userdata);
     static void finalizeCommit(void * userdata);
     static void onForSaleChange(LLUICtrl *ctrl, void * userdata);
@@ -177,10 +177,10 @@ public:
     static void confirmSaleChange(S32 landSize, S32 salePrice, std::string authorizedName, void(*callback)(void*), void* userdata);
     static void callbackConfirmSaleChange(S32 option, void* userdata);
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
 protected:
-    BOOL            mUncheckedSell; // True only when verifying land information when land is for sale on sale info change
+    bool            mUncheckedSell; // True only when verifying land information when land is for sale on sale info change
 
     LLTextBox*      mLabelName;
     LLLineEditor*   mEditName;
@@ -285,7 +285,7 @@ public:
     static void onCommitClean(LLUICtrl* caller, void* user_data);
     static void processParcelObjectOwnersReply(LLMessageSystem *msg, void **);
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
 protected:
 
@@ -313,12 +313,12 @@ protected:
     LLPointer<LLUIImage>    mIconAvatarOffline;
     LLPointer<LLUIImage>    mIconGroup;
 
-    BOOL            mFirstReply;
+    bool            mFirstReply;
 
     uuid_list_t     mSelectedOwners;
     std::string     mSelectedName;
     S32             mSelectedCount;
-    BOOL            mSelectedIsGroup;
+    bool            mSelectedIsGroup;
 
     LLSafeHandle<LLParcelSelection>&    mParcel;
 };
@@ -330,7 +330,7 @@ class LLPanelLandOptions
 public:
     LLPanelLandOptions(LLSafeHandle<LLParcelSelection>& parcelp);
     virtual ~LLPanelLandOptions();
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void draw();
     /*virtual*/ void refresh();
 
@@ -396,7 +396,7 @@ public:
     static void onClickRemoveAccess(void*);
     static void onClickRemoveBanned(void*);
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
     void onClickAddAccess();
     void onClickAddBanned();
@@ -418,7 +418,7 @@ class LLPanelLandCovenant
 public:
     LLPanelLandCovenant(LLSafeHandle<LLParcelSelection>& parcelp);
     virtual ~LLPanelLandCovenant();
-    virtual BOOL postBuild();
+    virtual bool postBuild();
     void refresh();
     static void updateCovenantText(const std::string& string);
     static void updateEstateName(const std::string& name);

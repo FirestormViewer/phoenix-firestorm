@@ -67,7 +67,7 @@ public:
         mY(0),
         mZ(0),
         mArea (0),
-        mForSale(FALSE),
+        mForSale(false),
         mOwner("Unknown"),
         mTraffic(0),
         mBalance(0),
@@ -81,7 +81,7 @@ public:
     S32     mY;
     S32     mZ;
     S32     mArea;
-    BOOL    mForSale;
+    bool    mForSale;
     std::string mOwner;
     F32     mTraffic;
     S32     mBalance;
@@ -105,8 +105,8 @@ public:
 
     /*virtual*/ void draw();
 
-    /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool postBuild();
 
     // MANIPULATORS
     void        setBalance(S32 balance);
@@ -134,14 +134,14 @@ public:
     S32         getBalance() const;
     S32         getHealth() const;
 
-    BOOL isUserTiered() const;
+    bool isUserTiered() const;
     S32 getSquareMetersCredit() const;
     S32 getSquareMetersCommitted() const;
     S32 getSquareMetersLeft() const;
     LLRegionDetails mRegionDetails;
 
     LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
-    BOOL getAudioStreamEnabled() const;
+    bool getAudioStreamEnabled() const;
 
     void setBackgroundColor( const LLColor4& color );
 
@@ -346,8 +346,8 @@ private:
     S32             mHealth;
     S32             mSquareMetersCredit;
     S32             mSquareMetersCommitted;
-    BOOL            mAudioStreamEnabled;
-    BOOL            mShowParcelIcons;
+    bool            mAudioStreamEnabled;
+    bool            mShowParcelIcons;
     LLFrameTimer*   mBalanceTimer;
     LLFrameTimer*   mHealthTimer;
     LLPanelPresetsCameraPulldown* mPanelPresetsCameraPulldown;
@@ -377,14 +377,14 @@ private:
     // </FS:Ansariel>
 
     // <FS:Zi> Pathfinding rebake functions
-    BOOL            rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+    bool            rebakeRegionCallback(const LLSD& notification,const LLSD& response);
 
     LLFrameTimer    mRebakingTimer;
-    BOOL            mPathfindingFlashOn;
+    bool            mPathfindingFlashOn;
     // </FS:Zi>
 
     // <FS:Ansariel> Script debug
-    BOOL            mNearbyIcons;
+    bool            mNearbyIcons;
 
     bool    mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
@@ -404,7 +404,7 @@ private:
 };
 
 // *HACK: Status bar owns your cached money balance. JC
-BOOL can_afford_transaction(S32 cost);
+bool can_afford_transaction(S32 cost);
 
 extern LLStatusBar *gStatusBar;
 

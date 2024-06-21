@@ -289,7 +289,7 @@ LLModel::EModelStatus load_face_from_dom_triangles(
                                 n[idx[i+norm_offset]*3+2]));
         }
 
-        BOOL found = FALSE;
+        bool found = false;
 
         LLVolumeFace::VertexMapData::PointMap::iterator point_iter;
         point_iter = point_map.find(LLVector3(cv.getPosition().getF32ptr()));
@@ -306,7 +306,7 @@ LLModel::EModelStatus load_face_from_dom_triangles(
 
                     // Don't share verts within the same tri, degenerate
                     //
-                    U32 indx_size = indices.size();
+                    U32 indx_size = static_cast<U32>(indices.size());
                     U32 verts_new_tri = indx_size % 3;
                     if ((verts_new_tri < 1 || indices[indx_size - 1] != shared_index)
                         && (verts_new_tri < 2 || indices[indx_size - 2] != shared_index))
@@ -544,7 +544,7 @@ LLModel::EModelStatus load_face_from_dom_polylist(
 
             cur_idx += idx_stride;
 
-            BOOL found = FALSE;
+            bool found = false;
 
             LLVolumeFace::VertexMapData::PointMap::iterator point_iter;
             LLVector3 pos3(cv.getPosition().getF32ptr());
@@ -556,7 +556,7 @@ LLModel::EModelStatus load_face_from_dom_polylist(
                 {
                     if ((point_iter->second)[k] == cv)
                     {
-                        found = TRUE;
+                        found = true;
                         U32 index = (point_iter->second)[k].mIndex;
                         if (j == 0)
                         {
@@ -780,7 +780,7 @@ LLModel::EModelStatus load_face_from_dom_polygons(std::vector<LLVolumeFace>& fac
         { //for each vertex
             if (j > 2)
             {
-                U32 size = verts.size();
+                auto size = verts.size();
                 LLVolumeFace::VertexData v0 = verts[size-3];
                 LLVolumeFace::VertexData v1 = verts[size-1];
 
@@ -1064,9 +1064,9 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 
     //Verify some basic properties of the dae
     //1. Basic validity check on controller
-    U32 controllerCount = (int) db->getElementCount( NULL, "controller" );
+    U32 controllerCount = db->getElementCount(NULL, "controller");
     bool result = false;
-    for ( int i=0; i<controllerCount; ++i )
+    for (U32 i = 0; i < controllerCount; ++i)
     {
         domController* pController = NULL;
         db->getElement( (daeElement**) &pController, i , NULL, "controller" );
@@ -1162,7 +1162,7 @@ bool LLDAELoader::OpenFile(const std::string& filename)
     while (model_iter != mModelList.end())
     {
         LLModel* mdl = *model_iter;
-        U32 material_count = mdl->mMaterialList.size();
+        U32 material_count = static_cast<U32>(mdl->mMaterialList.size());
         LL_INFOS() << "Importing " << mdl->mLabel << " model with " << material_count << " material references" << LL_ENDL;
         std::vector<std::string>::iterator mat_iter = mdl->mMaterialList.begin();
         std::vector<std::string>::iterator end_iter = material_count > LIMIT_MATERIALS_OUTPUT
@@ -1319,7 +1319,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
         //Some collada setup for accessing the skeleton
         U32 skeleton_count = dae->getDatabase()->getElementCount( NULL, "skeleton" );
         std::vector<domInstance_controller::domSkeleton*> skeletons;
-        for (S32 i=0; i<skeleton_count; i++)
+        for (U32 i = 0; i < skeleton_count; i++)
         {
             daeElement* pElement = 0;
             dae->getDatabase()->getElement( &pElement, i, 0, "skeleton" );
@@ -1351,11 +1351,11 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
             {
                 //Get the children at this level
                 daeTArray< daeSmartRef<daeElement> > children = pScene->getChildren();
-                S32 childCount = children.getCount();
+                auto childCount = children.getCount();
 
                 //Process any children that are joints
                 //Not all children are joints, some could be ambient lights, cameras, geometry etc..
-                for (S32 i = 0; i < childCount; ++i)
+                for (size_t i = 0; i < childCount; ++i)
                 {
                     domNode* pNode = daeSafeCast<domNode>(children[i]);
                     if (pNode)
@@ -1376,7 +1376,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                 if ( pSkeletonRootNode )
                 {
                     //Once we have the root node - start acccessing it's joint components
-                    const int jointCnt = mJointMap.size();
+                    const int jointCnt = static_cast<int>(mJointMap.size());
                     JointMap :: const_iterator jointIt = mJointMap.begin();
 
                     //Loop over all the possible joints within the .dae - using the allowed joint list in the ctor.
@@ -1523,9 +1523,9 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                     if (t)
                     {
                         domListOfFloats& transform = t->getValue();
-                        S32 count = transform.getCount()/16;
+                        auto count = transform.getCount()/16;
 
-                        for (S32 k = 0; k < count; ++k)
+                        for (size_t k = 0; k < count; ++k)
                         {
                             LLMatrix4 mat;
 
@@ -1611,7 +1611,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
         std::vector<std::string> ::const_iterator jointIt = jointNames.begin();
 // </FS:ND>
 
-        const int jointCnt = model->mSkinInfo.mJointNames.size();
+        const int jointCnt = static_cast<int>(model->mSkinInfo.mJointNames.size());
         for ( int i=0; i<jointCnt; ++i, ++jointIt )
         {
             std::string lookingForJoint = (*jointIt).c_str();
@@ -1630,7 +1630,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
             }
         }
 
-        U32 bind_count = model->mSkinInfo.mAlternateBindMatrix.size();
+        auto bind_count = model->mSkinInfo.mAlternateBindMatrix.size();
         if (bind_count > 0 && bind_count != jointCnt)
         {
             LL_WARNS("Mesh") << "Model " << model->mLabel << " has invalid joint bind matrix list." << LL_ENDL;
@@ -1779,8 +1779,8 @@ void LLDAELoader::buildJointToNodeMappingFromScene( daeElement* pRoot )
     if ( pScene )
     {
         daeTArray< daeSmartRef<daeElement> > children = pScene->getChildren();
-        S32 childCount = children.getCount();
-        for (S32 i = 0; i < childCount; ++i)
+        auto childCount = children.getCount();
+        for (size_t i = 0; i < childCount; ++i)
         {
             domNode* pNode = daeSafeCast<domNode>(children[i]);
             processJointToNodeMapping( pNode );
@@ -1825,8 +1825,8 @@ void LLDAELoader::processJointToNodeMapping( domNode* pNode )
 void LLDAELoader::processChildJoints( domNode* pParentNode )
 {
     daeTArray< daeSmartRef<daeElement> > childOfChild = pParentNode->getChildren();
-    S32 childOfChildCount = childOfChild.getCount();
-    for (S32 i = 0; i < childOfChildCount; ++i)
+    auto childOfChildCount = childOfChild.getCount();
+    for (size_t i = 0; i < childOfChildCount; ++i)
     {
         domNode* pChildNode = daeSafeCast<domNode>( childOfChild[i] );
         if ( pChildNode )
@@ -1927,7 +1927,7 @@ bool LLDAELoader::verifyController( domController* pController )
             {
                 sum += pVertexWeights->getVcount()->getValue()[i];
             }
-            result = verifyCount( sum * inputs.getCount(), (domInt) pVertexWeights->getV()->getValue().getCount() );
+            result = verifyCount( sum * static_cast<U32>(inputs.getCount()), (domInt) static_cast<int>(pVertexWeights->getV()->getValue().getCount()) );
         }
     }
 
@@ -2060,9 +2060,9 @@ void LLDAELoader::processJointNode( domNode* pNode, JointTransformMap& jointTran
 
     //Gather and handle the incoming nodes children
     daeTArray< daeSmartRef<daeElement> > childOfChild = pNode->getChildren();
-    S32 childOfChildCount = childOfChild.getCount();
+    auto childOfChildCount = childOfChild.getCount();
 
-    for (S32 i = 0; i < childOfChildCount; ++i)
+    for (size_t i = 0; i < childOfChildCount; ++i)
     {
         domNode* pChildNode = daeSafeCast<domNode>( childOfChild[i] );
         if ( pChildNode )
@@ -2281,8 +2281,8 @@ void LLDAELoader::processElement( daeElement* element, bool& badElement, DAE* da
 
     //process children
     daeTArray< daeSmartRef<daeElement> > children = element->getChildren();
-    int childCount = children.getCount();
-    for (S32 i = 0; i < childCount; i++)
+    auto childCount = children.getCount();
+    for (size_t i = 0; i < childCount; i++)
     {
         processElement(children[i],badElement, dae);
     }
@@ -2353,7 +2353,7 @@ std::map<std::string, LLImportMaterial> LLDAELoader::getMaterials(LLModel* model
 LLImportMaterial LLDAELoader::profileToMaterial(domProfile_COMMON* material, DAE* dae)
 {
     LLImportMaterial mat;
-    mat.mFullbright = FALSE;
+    mat.mFullbright = false;
 
     daeElement* diffuse = material->getDescendant("diffuse");
     if (diffuse)
@@ -2438,7 +2438,7 @@ LLImportMaterial LLDAELoader::profileToMaterial(domProfile_COMMON* material, DAE
         LLColor4 emission_color = getDaeColor(emission);
         if (((emission_color[0] + emission_color[1] + emission_color[2]) / 3.0) > 0.25)
         {
-            mat.mFullbright = TRUE;
+            mat.mFullbright = true;
         }
     }
 
@@ -2713,7 +2713,7 @@ bool LLDAELoader::loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& mo
             ret->remapVolumeFaces();
         }
 
-        volume_faces = remainder.size();
+        volume_faces = static_cast<U32>(remainder.size());
 
         models_out.push_back(ret);
 

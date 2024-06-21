@@ -56,7 +56,7 @@ public:
     LLFloaterGesture(const LLSD& key);
     virtual ~LLFloaterGesture();
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
     virtual void done ();
     void refreshAll();
     void refreshForActiveSort(); // <FS:PP> FIRE-5646: Option to show only active gestures

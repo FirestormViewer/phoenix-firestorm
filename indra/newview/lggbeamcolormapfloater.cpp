@@ -50,7 +50,7 @@ lggBeamColorMapFloater::~lggBeamColorMapFloater()
 {
 }
 
-BOOL lggBeamColorMapFloater::postBuild()
+bool lggBeamColorMapFloater::postBuild()
 {
     getChild<LLUICtrl>("BeamColor_Save")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickSave, this));
     getChild<LLUICtrl>("BeamColor_Load")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickLoad, this));
@@ -63,7 +63,7 @@ BOOL lggBeamColorMapFloater::postBuild()
 
     fixOrder();
 
-    return TRUE;
+    return true;
 }
 
 void lggBeamColorMapFloater::draw()
@@ -73,7 +73,7 @@ void lggBeamColorMapFloater::draw()
 
     //set the color of the preview thing
     LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(mData));
-    mBeamColorPreview->set(bColor, TRUE);
+    mBeamColorPreview->set(bColor, true);
 
     static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
     drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("BeamColor_new"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
@@ -151,7 +151,7 @@ void lggBeamColorMapFloater::draw()
     gGL.popMatrix();
 }
 
-BOOL lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
+bool lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     F32 hue = getHueFromLocation(x, y);
     if (hue != -1.f)
@@ -159,13 +159,13 @@ BOOL lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
         mData.mStartHue = hue;
         fixOrder();
 
-        return TRUE;
+        return true;
     }
 
     return LLFloater::handleMouseDown(x, y, mask);
 }
 
-BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     F32 hue = getHueFromLocation(x, y);
     if (hue != -1.f)
@@ -173,7 +173,7 @@ BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
         mData.mEndHue = hue;
         fixOrder();
 
-        return TRUE;
+        return true;
     }
 
     return LLFloater::handleRightMouseDown(x, y, mask);

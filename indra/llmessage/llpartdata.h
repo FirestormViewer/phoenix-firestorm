@@ -88,16 +88,15 @@ public:
         mParameter(0.f)
     {
     }
-    BOOL unpackLegacy(LLDataPacker &dp);
-
     // <FS:ND> Need virtual dtor so derived classed are properly destroyed.
     virtual ~LLPartData()
     { }
     // </FS:ND>
 
-    BOOL unpack(LLDataPacker &dp);
+    bool unpackLegacy(LLDataPacker &dp);
+    bool unpack(LLDataPacker &dp);
 
-    BOOL pack(LLDataPacker &dp);
+    bool pack(LLDataPacker &dp);
 
     bool hasGlow() const;
     bool hasBlendFunc() const;
@@ -189,14 +188,14 @@ class LLPartSysData
 public:
     LLPartSysData();
 
-    BOOL unpack(LLDataPacker &dp);
-    BOOL unpackLegacy(LLDataPacker &dp);
-    BOOL unpackBlock(const S32 block_num);
+    bool unpack(LLDataPacker &dp);
+    bool unpackLegacy(LLDataPacker &dp);
+    bool unpackBlock(const S32 block_num);
 
     LLSD asLLSD() const;
     bool fromLLSD(LLSD& sd);
 
-    static BOOL isNullPS(const S32 block_num); // Returns FALSE if this is a "NULL" particle system (i.e. no system)
+    static bool isNullPS(const S32 block_num); // Returns false if this is a "NULL" particle system (i.e. no system)
 
     bool isLegacyCompatible() const;
 
@@ -236,7 +235,7 @@ public:
     S32 getdataBlockSize() const;
 
 private:
-    BOOL unpackSystem(LLDataPacker &dp);
+    bool unpackSystem(LLDataPacker &dp);
 
 public:
     // Public because I'm lazy....

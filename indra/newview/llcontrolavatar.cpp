@@ -51,7 +51,7 @@ LLControlAvatar::LLControlAvatar(const LLUUID& id, const LLPCode pcode, LLViewer
     mScaleConstraintFixup(1.0),
     mRegionChanged(false)
 {
-    mIsDummy = TRUE;
+    mIsDummy = true;
     mIsControlAvatar = true;
     mEnableDefaultMotions = false;
 }
@@ -280,7 +280,7 @@ void LLControlAvatar::updateVolumeGeom()
         return;
     if (mRootVolp->mDrawable->isActive())
     {
-        mRootVolp->mDrawable->makeStatic(FALSE);
+        mRootVolp->mDrawable->makeStatic(false);
     }
     mRootVolp->mDrawable->makeActive();
     gPipeline.markMoved(mRootVolp->mDrawable);
@@ -413,11 +413,11 @@ void LLControlAvatar::updateDebugText()
         S32 total_linkset_count = 0;
         if (mRootVolp)
         {
-            total_linkset_count = 1 + mRootVolp->getChildren().size();
+            total_linkset_count = 1 + static_cast<S32>(mRootVolp->getChildren().size());
         }
         std::vector<LLVOVolume*> volumes;
         getAnimatedVolumes(volumes);
-        S32 animated_volume_count = volumes.size();
+        S32 animated_volume_count = static_cast<S32>(volumes.size());
         std::string active_string;
         std::string type_string;
         std::string lod_string;
@@ -605,9 +605,9 @@ void LLControlAvatar::updateAnimations()
 // virtual
 LLViewerObject* LLControlAvatar::lineSegmentIntersectRiggedAttachments(const LLVector4a& start, const LLVector4a& end,
                                       S32 face,
-                                      BOOL pick_transparent,
-                                      BOOL pick_rigged,
-                                      BOOL pick_unselectable,
+                                      bool pick_transparent,
+                                      bool pick_rigged,
+                                      bool pick_unselectable,
                                       S32* face_hit,
                                       LLVector4a* intersection,
                                       LLVector2* tex_coord,
@@ -684,7 +684,7 @@ bool LLControlAvatar::shouldRenderRigged() const
 }
 
 // virtual
-BOOL LLControlAvatar::isImpostor()
+bool LLControlAvatar::isImpostor()
 {
     // Attached animated objects should match state of their attached av.
     LLVOAvatar *attached_av = getAttachedAvatar();

@@ -126,7 +126,7 @@ void FSLSLBridge::onIdle(void* userdata)
                     LLViewerInventoryItem* inv_object = gInventory.getItem(instance->mReattachBridgeUUID);
                     if (inv_object && instance->getBridge() && instance->getBridge()->getUUID() == inv_object->getUUID())
                     {
-                        LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+                        LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, true, true);
                     }
                     instance->mReattachBridgeUUID.setNull();
                     instance->setTimerResult(NO_TIMER);
@@ -328,29 +328,28 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
         if (valuepos != std::string::npos)
         {
             // <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
-            // use BOOL to satisfy windows compiler
-            BOOL aoWasPaused = gSavedPerAccountSettings.getBOOL("PauseAO");
-            BOOL aoStandsWasEnabled = gSavedPerAccountSettings.getBOOL("UseAOStands");
+            bool aoWasPaused = gSavedPerAccountSettings.getBOOL("PauseAO");
+            bool aoStandsWasEnabled = gSavedPerAccountSettings.getBOOL("UseAOStands");
             // </FS:Zi>
 
             if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 2) == "on")
             {
                 // <FS:Zi> Pause AO via bridge instead of switch AO on or off - FIRE-9305
-                gSavedPerAccountSettings.setBOOL("PauseAO", FALSE);
-                gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
+                gSavedPerAccountSettings.setBOOL("PauseAO", false);
+                gSavedPerAccountSettings.setBOOL("UseAOStands", true);
             }
             else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 3) == "off")
             {
                 // <FS:Zi> Pause AO via bridge instead of switch AO on or off - FIRE-9305
-                gSavedPerAccountSettings.setBOOL("PauseAO", TRUE);
+                gSavedPerAccountSettings.setBOOL("PauseAO", true);
             }
             else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 7) == "standon")
             {
-                gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
+                gSavedPerAccountSettings.setBOOL("UseAOStands", true);
             }
             else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 8) == "standoff")
             {
-                gSavedPerAccountSettings.setBOOL("UseAOStands", FALSE);
+                gSavedPerAccountSettings.setBOOL("UseAOStands", false);
             }
             else
             {
@@ -665,7 +664,7 @@ void FSLSLBridge::cleanUpPreCreation()
     LLInventoryModel::cat_array_t cats;
     LLInventoryModel::item_array_t items;
     NameCollectFunctor namefunctor(mCurrentFullName);
-    gInventory.collectDescendentsIf(getBridgeFolder(), cats, items, FALSE, namefunctor);
+    gInventory.collectDescendentsIf(getBridgeFolder(), cats, items, false, namefunctor);
 
     mAllowedDetachables.clear();
     for (const auto& item : items)
@@ -701,7 +700,7 @@ void FSLSLBridge::finishCleanUpPreCreation()
     LLInventoryModel::cat_array_t cats;
     LLInventoryModel::item_array_t items;
     NameCollectFunctor namefunctor(mCurrentFullName);
-    gInventory.collectDescendentsIf(getBridgeFolder(), cats, items, FALSE, namefunctor);
+    gInventory.collectDescendentsIf(getBridgeFolder(), cats, items, false, namefunctor);
 
     for (const auto& item : items)
     {
@@ -825,7 +824,7 @@ void FSLSLBridge::startCreation()
                         LL_INFOS("FSLSLBridge") << "Bridge not attached but found in inventory, reattaching..." << LL_ENDL;
 
                         //Is this a valid bridge - wear it.
-                        LLAttachmentsMgr::instance().addAttachmentRequest(mpBridge->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+                        LLAttachmentsMgr::instance().addAttachmentRequest(mpBridge->getUUID(), FS_BRIDGE_POINT, true, true);
                         //from here, the attach should report to ProcessAttach and make sure bridge is valid.
                     }
                     else
@@ -1081,7 +1080,7 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
         LLViewerInventoryItem* inv_object = gInventory.getItem(object->getAttachmentItemID());
         if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
         {
-            LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+            LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, true, true);
         }
 
         return;
@@ -1248,8 +1247,8 @@ void FSLSLBridgeRezCallback::fire(const LLUUID& inv_item)
     LLViewerInventoryItem* item = gInventory.getItem(inv_item);
 
     item->setDescription(item->getName());
-    item->setComplete(TRUE);
-    item->updateServer(FALSE);
+    item->setComplete(true);
+    item->updateServer(false);
 
     gInventory.updateItem(item);
     gInventory.notifyObservers();
@@ -1258,7 +1257,7 @@ void FSLSLBridgeRezCallback::fire(const LLUUID& inv_item)
     FSLSLBridge::instance().setBridge(item);
 
     LL_INFOS("FSLSLBridge") << "Attaching bridge to the 'bridge' attachment point..." << LL_ENDL;
-    LLAttachmentsMgr::instance().addAttachmentRequest(inv_item, FS_BRIDGE_POINT, TRUE, TRUE);
+    LLAttachmentsMgr::instance().addAttachmentRequest(inv_item, FS_BRIDGE_POINT, true, true);
 }
 
 
@@ -1433,7 +1432,7 @@ void FSLSLBridge::checkBridgeScriptName()
     }
 
     LL_INFOS("FSLSLBridge") << "Saving script " << mScriptItemID.asString() << " in object" << LL_ENDL;
-    obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, true);
+    obj->saveScript(gInventory.getItem(mScriptItemID), true, true);
     new FSLSLBridgeCleanupTimer();
 }
 
@@ -1618,7 +1617,7 @@ LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, c
     LLUUID itemID;
     NameCollectFunctor namefunctor(obj_name);
 
-    gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
+    gInventory.collectDescendentsIf(catID, cats, items, false, namefunctor);
 
     for (const auto& item : items)
     {
@@ -1654,7 +1653,7 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
     //find all bridge and script duplicates and delete them
     //NameCollectFunctor namefunctor(mCurrentFullName);
     NameCollectFunctor namefunctor(nameToCleanUp);
-    gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
+    gInventory.collectDescendentsIf(catID, cats, items, false, namefunctor);
 
     for (const auto& item : items)
     {
@@ -1706,7 +1705,7 @@ void FSLSLBridge::detachOtherBridges()
     LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 
     //detach everything except current valid bridge - if any
-    gInventory.collectDescendents(catID, cats, items, FALSE);
+    gInventory.collectDescendents(catID, cats, items, false);
 
     for (const auto& item : items)
     {
@@ -1718,21 +1717,21 @@ void FSLSLBridge::detachOtherBridges()
     }
 }
 
-BOOL FSLSLBridgeCleanupTimer::tick()
+bool FSLSLBridgeCleanupTimer::tick()
 {
     FSLSLBridge::instance().setTimerResult(FSLSLBridge::CLEANUP_FINISHED);
-    return TRUE;
+    return true;
 }
 
-BOOL FSLSLBridgeReAttachTimer::tick()
+bool FSLSLBridgeReAttachTimer::tick()
 {
     LL_INFOS("FSLSLBridge") << "Re-attaching bridge after creation..." << LL_ENDL;
     FSLSLBridge::instance().setTimerResult(FSLSLBridge::REATTACH_FINISHED);
-    return TRUE;
+    return true;
 }
 
-BOOL FSLSLBridgeStartCreationTimer::tick()
+bool FSLSLBridgeStartCreationTimer::tick()
 {
     FSLSLBridge::instance().setTimerResult(FSLSLBridge::START_CREATION_FINISHED);
-    return TRUE;
+    return true;
 }

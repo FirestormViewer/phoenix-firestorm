@@ -127,7 +127,7 @@ public:
     {
     }
 
-    /*virtual*/ BOOL tick()
+    bool tick() override
     {
         LLViewerObject* objectp = gObjectList.findObject(mObjectID);
         if (objectp)
@@ -135,7 +135,7 @@ public:
             FSPanelAreaSearchList::touchObject(objectp);
         }
 
-        return TRUE;
+        return true;
     }
 
 private:
@@ -174,7 +174,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
     mRlvBehaviorCallbackConnection()
 {
     gAgent.setFSAreaSearchActive(true);
-    gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
+    gAgent.changeInterestListMode(IL_MODE_360);
     mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
     mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
     mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -197,7 +197,7 @@ FSAreaSearch::~FSAreaSearch()
     // list updates.
     if( !LLApp::isExiting() )
     {
-        gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);
+        gAgent.changeInterestListMode(IL_MODE_DEFAULT);
     }
 
     if (!gIdleCallbacks.deleteFunction(idle, this))
@@ -226,7 +226,7 @@ FSAreaSearch::~FSAreaSearch()
     }
 }
 
-BOOL FSAreaSearch::postBuild()
+bool FSAreaSearch::postBuild()
 {
     mTab = getChild<LLTabContainer>("area_searchtab");
 
@@ -773,7 +773,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
             details.permissions.init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
             details.permissions.initMasks(details.base_mask, details.owner_mask, details.everyone_mask, details.group_mask, details.next_owner_mask);
 
-            // Sets the group owned BOOL and real owner id, group or owner depending if object is group owned.
+            // Sets the group owned bool and real owner id, group or owner depending if object is group owned.
             details.permissions.getOwnership(details.ownership_id, details.group_owned);
 
             LL_DEBUGS("FSAreaSearch_spammy") << "Got properties for object: " << object_id << LL_ENDL;
@@ -1124,7 +1124,7 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, std::string& name, bool gro
 
     if (group)
     {
-        BOOL is_group;
+        bool is_group;
         if (!gCacheName->getIfThere(id, name, is_group))
         {
             name = unknown_name;
@@ -1385,11 +1385,11 @@ FSPanelAreaSearchList::FSPanelAreaSearchList(FSAreaSearch* pointer)
     mColumnBits["last_owner"] = 512;
 }
 
-BOOL FSPanelAreaSearchList::postBuild()
+bool FSPanelAreaSearchList::postBuild()
 {
     mResultList = getChild<FSScrollListCtrl>("result_list");
     mResultList->setDoubleClickCallback(boost::bind(&FSPanelAreaSearchList::onDoubleClick, this));
-    mResultList->sortByColumn("name", TRUE);
+    mResultList->sortByColumn("name", true);
     mResultList->setContextMenu(&gFSAreaSearchMenu);
 
     mCounterText = getChild<LLTextBox>("counter");
@@ -1520,7 +1520,7 @@ void FSPanelAreaSearchList::updateResultListColumns()
     U32 column_config = gSavedSettings.getU32("FSAreaSearchColumnConfig");
     std::vector<LLScrollListColumn::Params> column_params = mResultList->getColumnInitParams();
     std::string current_sort_col = mResultList->getSortColumnName();
-    BOOL current_sort_asc = mResultList->getSortAscending();
+    bool current_sort_asc = mResultList->getSortAscending();
 
     mResultList->clearColumns();
     mResultList->updateLayout();
@@ -1667,13 +1667,13 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
     if (action == "select_all")
     {
         std::vector<LLScrollListItem*> result_items = mResultList->getAllData();
-        std::for_each(result_items.begin(), result_items.end(), [](LLScrollListItem* item) { item->setSelected(TRUE); });
+        std::for_each(result_items.begin(), result_items.end(), [](LLScrollListItem* item) { item->setSelected(true); });
         return true;
     }
     if (action == "clear_selection")
     {
         std::vector<LLScrollListItem*> selected_items = mResultList->getAllSelected();
-        std::for_each(selected_items.begin(), selected_items.end(), [](LLScrollListItem* item) { item->setSelected(FALSE); });
+        std::for_each(selected_items.begin(), selected_items.end(), [](LLScrollListItem* item) { item->setSelected(false); });
         return true;
     }
     if (action == "filter_my_objects")
@@ -1785,7 +1785,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 
                     LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true); // Fixes an edge case where if the user has JUST disabled flycam themselves, the camera gets stuck waiting for input.
 
-                    gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+                    gAgentCamera.setFocusOnAvatar(false, ANIMATE);
 
                     gAgentCamera.setLookAt(LOOKAT_TARGET_SELECT, objectp);
 
@@ -1921,7 +1921,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
                     }
 
                     FSObjectProperties& details = mFSAreaSearch->mObjectDetails[object_id];
-                    node->mValid = TRUE;
+                    node->mValid = true;
                     node->mPermissions->init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
                     node->mPermissions->initMasks(details.base_mask, details.owner_mask, details.everyone_mask, details.group_mask, details.next_owner_mask);
                     node->mAggregatePerm = details.ag_perms;
@@ -1977,7 +1977,7 @@ void FSPanelAreaSearchList::buyObject(FSObjectProperties& details, LLViewerObjec
 
     if (node)
     {
-        node->mValid = TRUE;
+        node->mValid = true;
         node->mPermissions->init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
         node->mPermissions->initMasks(details.base_mask, details.owner_mask, details.everyone_mask, details.group_mask, details.next_owner_mask);
         node->mSaleInfo = details.sale_info;
@@ -2029,7 +2029,7 @@ FSPanelAreaSearchFind::FSPanelAreaSearchFind(FSAreaSearch* pointer)
 {
 }
 
-BOOL FSPanelAreaSearchFind::postBuild()
+bool FSPanelAreaSearchFind::postBuild()
 {
     mNameLineEditor = getChild<LLLineEditor>("name_search");
     mNameLineEditor->setCommitCallback(boost::bind(&FSAreaSearch::onCommitLine, mFSAreaSearch));
@@ -2073,12 +2073,12 @@ void FSPanelAreaSearchFind::onButtonClickedClear()
 }
 
 // handle the "enter" key
-BOOL FSPanelAreaSearchFind::handleKeyHere(KEY key, MASK mask)
+bool FSPanelAreaSearchFind::handleKeyHere(KEY key, MASK mask)
 {
     if (KEY_RETURN == key)
     {
         mFSAreaSearch->onButtonClickedSearch();
-        return TRUE;
+        return true;
     }
 
     return LLPanel::handleKeyHere(key, mask);
@@ -2095,17 +2095,17 @@ FSPanelAreaSearchFilter::FSPanelAreaSearchFilter(FSAreaSearch* pointer)
 {
 }
 
-BOOL FSPanelAreaSearchFilter::postBuild()
+bool FSPanelAreaSearchFilter::postBuild()
 {
     mCheckboxLocked = getChild<LLCheckBoxCtrl>("filter_locked");
     mCheckboxLocked->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxPhysical = getChild<LLCheckBoxCtrl>("filter_physical");
-    mCheckboxPhysical->setEnabled(FALSE);
+    mCheckboxPhysical->setEnabled(false);
     mCheckboxPhysical->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxTemporary = getChild<LLCheckBoxCtrl>("filter_temporary");
-    mCheckboxTemporary->setEnabled(FALSE);
+    mCheckboxTemporary->setEnabled(false);
     mCheckboxTemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxPhantom = getChild<LLCheckBoxCtrl>("filter_phantom");
@@ -2115,7 +2115,7 @@ BOOL FSPanelAreaSearchFilter::postBuild()
     mCheckboxForSale->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxAttachment = getChild<LLCheckBoxCtrl>("filter_attachment");
-    mCheckboxAttachment->setEnabled(FALSE);
+    mCheckboxAttachment->setEnabled(false);
     mCheckboxAttachment->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mSpinForSaleMinValue= getChild<LLSpinCtrl>("min_price");
@@ -2128,23 +2128,23 @@ BOOL FSPanelAreaSearchFilter::postBuild()
     mComboClickAction->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCombo, this));
 
     mCheckboxExcludeAttachment = getChild<LLCheckBoxCtrl>("exclude_attachment");
-    mCheckboxExcludeAttachment->set(TRUE);
+    mCheckboxExcludeAttachment->set(true);
     mCheckboxExcludeAttachment->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxExcludePhysics = getChild<LLCheckBoxCtrl>("exclude_physical");
-    mCheckboxExcludePhysics->set(TRUE);
+    mCheckboxExcludePhysics->set(true);
     mCheckboxExcludePhysics->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxExcludetemporary = getChild<LLCheckBoxCtrl>("exclude_temporary");
-    mCheckboxExcludetemporary->set(TRUE);
+    mCheckboxExcludetemporary->set(true);
     mCheckboxExcludetemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxExcludeChildPrim = getChild<LLCheckBoxCtrl>("exclude_childprim");
-    mCheckboxExcludeChildPrim->set(TRUE);
+    mCheckboxExcludeChildPrim->set(true);
     mCheckboxExcludeChildPrim->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mCheckboxExcludeNeighborRegions = getChild<LLCheckBoxCtrl>("exclude_neighbor_region");
-    mCheckboxExcludeNeighborRegions->set(TRUE);
+    mCheckboxExcludeNeighborRegions->set(true);
     mCheckboxExcludeNeighborRegions->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mButtonApply = getChild<LLButton>("apply");
@@ -2188,13 +2188,13 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
     if (mCheckboxExcludePhysics->get())
     {
         mFSAreaSearch->setFilterPhysical(false);
-        mCheckboxPhysical->set(FALSE);
-        mCheckboxPhysical->setEnabled(FALSE);
+        mCheckboxPhysical->set(false);
+        mCheckboxPhysical->setEnabled(false);
         mFSAreaSearch->setExcludePhysics(true);
     }
     else
     {
-        mCheckboxPhysical->setEnabled(TRUE);
+        mCheckboxPhysical->setEnabled(true);
         mFSAreaSearch->setExcludePhysics(false);
     }
     mFSAreaSearch->setFilterPhysical(mCheckboxPhysical->get());
@@ -2202,13 +2202,13 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
     if (mCheckboxExcludetemporary->get())
     {
         mFSAreaSearch->setFilterTemporary(false);
-        mCheckboxTemporary->set(FALSE);
-        mCheckboxTemporary->setEnabled(FALSE);
+        mCheckboxTemporary->set(false);
+        mCheckboxTemporary->setEnabled(false);
         mFSAreaSearch->setExcludetemporary(true);
     }
     else
     {
-        mCheckboxTemporary->setEnabled(TRUE);
+        mCheckboxTemporary->setEnabled(true);
         mFSAreaSearch->setExcludetemporary(false);
     }
     mFSAreaSearch->setFilterTemporary(mCheckboxTemporary->get());
@@ -2216,13 +2216,13 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
     if (mCheckboxExcludeAttachment->get())
     {
         mFSAreaSearch->setFilterAttachment(false);
-        mCheckboxAttachment->set(FALSE);
-        mCheckboxAttachment->setEnabled(FALSE);
+        mCheckboxAttachment->set(false);
+        mCheckboxAttachment->setEnabled(false);
         mFSAreaSearch->setExcludeAttachment(true);
     }
     else
     {
-        mCheckboxAttachment->setEnabled(TRUE);
+        mCheckboxAttachment->setEnabled(true);
         mFSAreaSearch->setExcludeAttachment(false);
     }
     mFSAreaSearch->setFilterAttachment(mCheckboxAttachment->get());
@@ -2295,7 +2295,7 @@ bool FSPanelAreaSearchOptions::onEnableColumnVisibilityChecked(const LLSD& userd
 // Advanced tab
 //---------------------------------------------------------------------------
 
-BOOL FSPanelAreaSearchAdvanced::postBuild()
+bool FSPanelAreaSearchAdvanced::postBuild()
 {
     mCheckboxClickTouch = getChild<LLCheckBoxCtrl>("double_click_touch");
     mCheckboxClickBuy = getChild<LLCheckBoxCtrl>("double_click_buy");

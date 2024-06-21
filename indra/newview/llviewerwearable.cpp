@@ -81,7 +81,7 @@ static std::string asset_id_to_filename(const LLUUID &asset_id, const ELLPath di
 
 LLViewerWearable::LLViewerWearable(const LLTransactionID& transaction_id) :
     LLWearable(),
-    mVolatile(FALSE)
+    mVolatile(false)
 {
     mTransactionID = transaction_id;
     mAssetID = mTransactionID.makeAssetID(gAgent.getSecureSessionID());
@@ -89,7 +89,7 @@ LLViewerWearable::LLViewerWearable(const LLTransactionID& transaction_id) :
 
 LLViewerWearable::LLViewerWearable(const LLAssetID& asset_id) :
     LLWearable(),
-    mVolatile(FALSE)
+    mVolatile(false)
 {
     mAssetID = asset_id;
     mTransactionID.setNull();
@@ -135,7 +135,7 @@ LLWearable::EImportResult LLViewerWearable::importStream( std::istream& input_st
         LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture( textureid );
         if(gSavedSettings.getBOOL("DebugAvatarLocalTexLoadedTime"))
         {
-            image->setLoadedCallback(LLVOAvatarSelf::debugOnTimingLocalTexLoaded,0,TRUE,FALSE, new LLVOAvatarSelf::LLAvatarTexData(textureid, (LLAvatarAppearanceDefines::ETextureIndex)te), NULL);
+            image->setLoadedCallback(LLVOAvatarSelf::debugOnTimingLocalTexLoaded,0,true,false, new LLVOAvatarSelf::LLAvatarTexData(textureid, (LLAvatarAppearanceDefines::ETextureIndex)te), NULL);
         }
     }
 
@@ -146,9 +146,9 @@ LLWearable::EImportResult LLViewerWearable::importStream( std::istream& input_st
 // Avatar parameter and texture definitions can change over time.
 // This function returns true if parameters or textures have been added or removed
 // since this wearable was created.
-BOOL LLViewerWearable::isOldVersion() const
+bool LLViewerWearable::isOldVersion() const
 {
-    if (!isAgentAvatarValid()) return FALSE;
+    if (!isAgentAvatarValid()) return false;
 
     if( LLWearable::sCurrentDefinitionVersion < mDefinitionVersion )
     {
@@ -158,7 +158,7 @@ BOOL LLViewerWearable::isOldVersion() const
 
     if( LLWearable::sCurrentDefinitionVersion != mDefinitionVersion )
     {
-        return TRUE;
+        return true;
     }
 
     S32 param_count = 0;
@@ -171,13 +171,13 @@ BOOL LLViewerWearable::isOldVersion() const
             param_count++;
             if( !is_in_map(mVisualParamIndexMap, param->getID() ) )
             {
-                return TRUE;
+                return true;
             }
         }
     }
     if( param_count != mVisualParamIndexMap.size() )
     {
-        return TRUE;
+        return true;
     }
 
 
@@ -189,16 +189,16 @@ BOOL LLViewerWearable::isOldVersion() const
             te_count++;
             if( !is_in_map(mTEMap, te ) )
             {
-                return TRUE;
+                return true;
             }
         }
     }
     if( te_count != mTEMap.size() )
     {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // Avatar parameter and texture definitions can change over time.
@@ -208,9 +208,9 @@ BOOL LLViewerWearable::isOldVersion() const
 // * If parameters or textures have been ADDED since the wearable was created,
 // they are taken to have default values, so we consider the wearable clean
 // only if those values are the same as the defaults.
-BOOL LLViewerWearable::isDirty() const
+bool LLViewerWearable::isDirty() const
 {
-    if (!isAgentAvatarValid()) return FALSE;
+    if (!isAgentAvatarValid()) return false;
 
     for( LLViewerVisualParam* param = (LLViewerVisualParam*) gAgentAvatarp->getFirstVisualParam();
         param;
@@ -229,7 +229,7 @@ BOOL LLViewerWearable::isDirty() const
             U8 b = F32_to_U8( current_weight, param->getMinWeight(), param->getMaxWeight() );
             if( a != b  )
             {
-                return TRUE;
+                return true;
             }
         }
     }
@@ -249,19 +249,19 @@ BOOL LLViewerWearable::isDirty() const
                     if (saved_image_id != current_image_id)
                     {
                         // saved vs current images are different, wearable is dirty
-                        return TRUE;
+                        return true;
                     }
                 }
                 else
                 {
                     // image found in current image list but not saved image list
-                    return TRUE;
+                    return true;
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -275,7 +275,7 @@ void LLViewerWearable::setParamsToDefaults()
         {
             // <FS:Ansariel> [Legacy Bake]
             //setVisualParamWeight(param->getID(),param->getDefaultWeight());
-            setVisualParamWeight(param->getID(),param->getDefaultWeight(), FALSE);
+            setVisualParamWeight(param->getID(),param->getDefaultWeight(), false);
         }
     }
 }
@@ -351,7 +351,7 @@ void LLViewerWearable::writeToAvatar(LLAvatarAppearance *avatarp)
             {
                 image_id = getDefaultTextureImageID((ETextureIndex) te);
             }
-            LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture( image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE );
+            LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture( image_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE );
             // MULTI-WEARABLE: assume index 0 will be used when writing to avatar. TODO: eliminate the need for this.
             viewer_avatar->setLocalTextureTE(te, image, 0);
         }
@@ -362,7 +362,7 @@ void LLViewerWearable::writeToAvatar(LLAvatarAppearance *avatarp)
     {
         // <FS:Ansariel> [Legacy Bake]
         //viewer_avatar->updateSexDependentLayerSets();
-        viewer_avatar->updateSexDependentLayerSets(FALSE);
+        viewer_avatar->updateSexDependentLayerSets(false);
     }
 }
 
@@ -371,7 +371,7 @@ void LLViewerWearable::writeToAvatar(LLAvatarAppearance *avatarp)
 // static
 // <FS:Ansariel> [Legacy Bake]
 //void LLViewerWearable::removeFromAvatar( LLWearableType::EType type)
-void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, BOOL upload_bake)
+void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, bool upload_bake)
 {
     if (!isAgentAvatarValid()) return;
 
@@ -404,7 +404,7 @@ void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, BOOL upload
     gAgentAvatarp->updateVisualParams();
     // <FS:Ansariel> [Legacy Bake]
     //gAgentAvatarp->wearableUpdated(type);
-    gAgentAvatarp->wearableUpdated(type, FALSE);
+    gAgentAvatarp->wearableUpdated(type, false);
 }
 
 // Does not copy mAssetID.

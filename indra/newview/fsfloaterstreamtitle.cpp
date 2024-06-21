@@ -114,7 +114,7 @@ FSFloaterStreamTitleHistory::~FSFloaterStreamTitleHistory()
     }
 }
 
-BOOL FSFloaterStreamTitleHistory::postBuild()
+bool FSFloaterStreamTitleHistory::postBuild()
 {
     mHistoryCtrl = findChild<FSScrollListCtrl>("history");
 
@@ -122,7 +122,7 @@ BOOL FSFloaterStreamTitleHistory::postBuild()
     mUpdateConnection = instance.setHistoryUpdateCallback([this](const FSStreamTitleManager::history_vec_t& history) { updateHistory(history); });
     updateHistory(instance.getStreamTitleHistory());
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterStreamTitleHistory::updateHistory(const FSStreamTitleManager::history_vec_t& history)
@@ -174,7 +174,7 @@ FSFloaterStreamTitle::~FSFloaterStreamTitle()
     }
 }
 
-BOOL FSFloaterStreamTitle::postBuild()
+bool FSFloaterStreamTitle::postBuild()
 {
     mTitletext = findChild<LLTextBox>("streamtitle");
     mHistoryBtn = findChild<LLButton>("btn_history");
@@ -189,7 +189,7 @@ BOOL FSFloaterStreamTitle::postBuild()
 
     setVisibleCallback(boost::bind(&FSFloaterStreamTitle::closeHistory, this));
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterStreamTitle::toggleHistory() noexcept
@@ -241,7 +241,7 @@ void FSFloaterStreamTitle::updateStreamTitle(std::string_view streamtitle) noexc
     checkTitleWidth();
 }
 
-void FSFloaterStreamTitle::reshape(S32 width, S32 height, BOOL called_from_parent)
+void FSFloaterStreamTitle::reshape(S32 width, S32 height, bool called_from_parent)
 {
     LLFloater::reshape(width, height, called_from_parent);
     checkTitleWidth();
@@ -270,7 +270,7 @@ void FSFloaterStreamTitle::checkTitleWidth() noexcept
     }
 }
 
-BOOL FSFloaterStreamTitle::tick()
+bool FSFloaterStreamTitle::tick()
 {
     if (mResetTitle)
     {
@@ -298,5 +298,5 @@ BOOL FSFloaterStreamTitle::tick()
         mResetTitle = true;
     }
 
-    return FALSE;
+    return false;
 }

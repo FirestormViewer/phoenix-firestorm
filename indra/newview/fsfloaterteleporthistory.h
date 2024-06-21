@@ -40,9 +40,9 @@ public:
     FSFloaterTeleportHistory(const LLSD& seed);
     virtual ~FSFloaterTeleportHistory();
 
-    BOOL postBuild();
-    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
 
     void resetFilter();
 

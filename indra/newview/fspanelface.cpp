@@ -611,7 +611,7 @@ void FSPanelFace::onMatTabChange()
     }
 }
 
-BOOL FSPanelFace::postBuild()
+bool FSPanelFace::postBuild()
 {
     //
     // grab pointers to all relevant UI elements here and verify they are good
@@ -781,7 +781,7 @@ BOOL FSPanelFace::postBuild()
     mShinyColorSwatch->setCommitCallback(boost::bind(&FSPanelFace::onCommitShinyColor, this));
     mShinyColorSwatch->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelShinyColor, this));
     mShinyColorSwatch->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectShinyColor, this));
-    mShinyColorSwatch->setCanApplyImmediately(TRUE);
+    mShinyColorSwatch->setCanApplyImmediately(true);
 
     // Texture alignment and maps synchronization
     mBtnAlignMedia->setCommitCallback(boost::bind(&FSPanelFace::onClickAutoFix, this));
@@ -872,7 +872,7 @@ BOOL FSPanelFace::postBuild()
     selectMatChannel(MATTYPE_DIFFUSE);              // TODO: add tab switching signal
     selectPBRChannel(PBRTYPE_RENDER_MATERIAL_ID);   // TODO: add tab switching signal
 
-    return TRUE;
+    return true;
 }
 
 //
@@ -966,7 +966,7 @@ LLMaterialPtr FSPanelFace::createDefaultMaterial(LLMaterialPtr current_material)
     return new_material;
 }
 
-void FSPanelFace::onVisibilityChange(BOOL new_visibility)
+void FSPanelFace::onVisibilityChange(bool new_visibility)
 {
     if (new_visibility)
     {
@@ -1123,7 +1123,7 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
     virtual bool apply(LLViewerObject* object, S32 te)
     {
-        BOOL valid;
+        bool valid{ false };
         F32 value;
         std::string prefix;
 
@@ -2588,7 +2588,7 @@ void FSPanelFace::refreshMedia()
             }
         }
 
-        mBtnDeleteMedia->setEnabled(TRUE);
+        mBtnDeleteMedia->setEnabled(true);
     }
 
     S32 materials_media = getCurrentMaterialType();
@@ -2831,7 +2831,7 @@ void FSPanelFace::updateMediaSettings()
 
     // Auto play
     //value_bool = default_media_data.getAutoPlay();
-    // set default to auto play TRUE -- angela EXT-5172
+    // set default to auto play true -- angela EXT-5172
     value_bool = true;
     struct functor_getter_auto_play : public LLSelectedTEGetFunctor<bool>
     {
@@ -2843,7 +2843,7 @@ void FSPanelFace::updateMediaSettings()
             {
                 return object->getTE(face)->getMediaData()->getAutoPlay();
             }
-            //return mMediaEntry.getAutoPlay(); set default to auto play TRUE -- angela  EXT-5172
+            //return mMediaEntry.getAutoPlay(); set default to auto play true -- angela  EXT-5172
             return true;
         };
 
@@ -2858,7 +2858,7 @@ void FSPanelFace::updateMediaSettings()
 
 
     // Auto scale
-    // set default to auto scale TRUE -- angela EXT-5172
+    // set default to auto scale true -- angela EXT-5172
     //value_bool = default_media_data.getAutoScale();
     value_bool = true;
     struct functor_getter_auto_scale : public LLSelectedTEGetFunctor<bool>
@@ -2871,7 +2871,7 @@ void FSPanelFace::updateMediaSettings()
             {
                 return object->getTE(face)->getMediaData()->getAutoScale();
             }
-            // return mMediaEntry.getAutoScale(); set default to auto scale TRUE -- angela EXT-5172
+            // return mMediaEntry.getAutoScale(); set default to auto scale true -- angela EXT-5172
             return true;
         };
 
@@ -3400,7 +3400,7 @@ void FSPanelFace::getGLTFMaterial(LLGLTFMaterial* mat)
     mat->mAlphaCutoff = mMaskCutoffPBR->getValue().asReal();
 }
 
-BOOL FSPanelFace::onDragPbr(LLInventoryItem* item)
+bool FSPanelFace::onDragPbr(LLInventoryItem* item)
 {
     bool accept = true;
     for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
@@ -3584,7 +3584,7 @@ void FSPanelFace::onSelectPbr(const LLUICtrl* map_ctrl)
     onCommitPbr(map_ctrl);
 }
 
-BOOL FSPanelFace::onDragTexture(LLInventoryItem* item)
+bool FSPanelFace::onDragTexture(LLInventoryItem* item)
 {
     bool accept = true;
     for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
@@ -4896,7 +4896,7 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
                 else if (full_perm)
                 {
                     // Either library, local or existed as fullperm when user made a copy
-                    LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture(imageid, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+                    LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture(imageid, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
                     objectp->setTEImage(U8(te), image);
                 }
             }

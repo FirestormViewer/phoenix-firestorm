@@ -134,7 +134,7 @@ void LLUIColorTable::insertFromParams(const Params& p, string_color_map_t& table
 
                 // string_color_map_t::iterator color_value = mLoadedColors.find(previous->second);
 
-                ColorName oName;
+                ColorName oName{};
                 oName.nLen = previous->second.size();
                 oName.pName = const_cast<char*>(previous->second.c_str()); // That's ok, I won't hurt you.
 
@@ -191,14 +191,12 @@ LLUIColor LLUIColorTable::getColor(const std::string& name, const LLColor4& defa
 LLUIColor LLUIColorTable::getColor( char const *name, const LLColor4& default_color) const  // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
 {
     // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-
     // string_color_map_t::const_iterator iter = mUserSetColors.find(name);
 
-    ColorName oName;
-    oName.nLen = strlen( name );
+    ColorName oName{};
+    oName.nLen = strlen(name);
     oName.pName = const_cast<char*>(name);
     string_color_map_t::const_iterator iter = mUserSetColors.find(oName);
-
     // </FS:ND>
 
     if(iter != mUserSetColors.end())
@@ -207,10 +205,8 @@ LLUIColor LLUIColorTable::getColor( char const *name, const LLColor4& default_co
     }
 
     // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-
     // iter = mLoadedColors.find(name);
     iter = mLoadedColors.find(oName);
-
     // </FS:ND>
 
     if(iter != mLoadedColors.end())
@@ -331,16 +327,14 @@ void LLUIColorTable::saveUserSettingsPaletteOnly() const
 bool LLUIColorTable::colorExists( char const *name ) const
 {
     // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-
     // return ((mLoadedColors.find(color_name) != mLoadedColors.end())
     //   || (mUserSetColors.find(color_name) != mUserSetColors.end()));
 
-    ColorName oName;
-    oName.nLen = strlen( name );
+    ColorName oName{};
+    oName.nLen = strlen(name);
     oName.pName = const_cast<char*>(name);
     return ((mLoadedColors.find(oName) != mLoadedColors.end())
       || (mUserSetColors.find(oName) != mUserSetColors.end()));
-
     // </FS:ND>
 }
 
@@ -360,24 +354,22 @@ void LLUIColorTable::setColor(const std::string& name, const LLColor4& color, st
 {
 
     // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-
     // string_color_map_t::iterator it = table.lower_bound(name);
 
-    ColorName oName;
+    ColorName oName{};
     oName.nLen = name.size();
-    oName.pName = const_cast<char*>( name.c_str() );
+    oName.pName = const_cast<char*>(name.c_str());
     string_color_map_t::iterator it = table.find(oName);
 
     // if(it != table.end() && !(table.key_comp()(name, it->first)))
-    if(it != table.end() )
-
+    if (it != table.end())
     // </FS:ND>
     {
         it->second = color;
     }
     else
     {
-        oName.pName = strdup( oName.pName );
+        oName.pName = strdup(oName.pName);
         table.insert(string_color_map_t::value_type(oName, color));
     }
 }

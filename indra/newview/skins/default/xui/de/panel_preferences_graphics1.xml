@@ -102,6 +102,14 @@
 			m
 		</text>
 		<slider label="Max. Partikelanzahl:" name="MaxParticleCount"/>
+		<text  width="125" name="AvatarComplexityModeLabel">
+			Avatar-Darstellung:
+		</text>
+		<combo_box name="AvatarComplexityMode" width="175">
+			<combo_box.item label="Komplexitätsbegrenzung" name="0"/>
+			<combo_box.item label="Freunde immer anzeigen" name="1"/>
+			<combo_box.item label="Nur Freunde anzeigen" name="2"/>
+		</combo_box>
 		<slider label="Max. Komplexität:" name="IndirectMaxComplexity" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als JellyDoll dargestellt wird."/>
 		<slider label="Max. voll dargestellte Avatare:" name="IndirectMaxNonImpostors"/>
 		<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>

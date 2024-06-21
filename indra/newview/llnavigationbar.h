@@ -63,9 +63,9 @@ public:
         }
     };
 
-    /*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask);
 
-    /*virtual*/ BOOL handleMouseUp(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask);
 
     /*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
 
@@ -100,10 +100,10 @@ public:
 
     // <FS:Zi> Make navigation bar part of the UI
     // /*virtual*/ void draw() override;
-    // /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask) override;
-    // /*virtual*/ BOOL postBuild() override;
+    // /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
+    // /*virtual*/ bool postBuild() override;
     // </FS:Zi>
-//  /*virtual*/ void    setVisible(BOOL visible) override; // <FS:Zi> Is done inside XUI now, using visibility_control
+//  /*virtual*/ void    setVisible(bool visible) override; // <FS:Zi> Is done inside XUI now, using visibility_control
 
     void handleLoginComplete();
     void clearHistoryCache();
@@ -166,7 +166,7 @@ private:
     // {
     //  if (LLNavigationBar::instanceExists())
     //  {
-    //      LLNavigationBar::getInstance()->setEnabled(FALSE);
+    //      LLNavigationBar::getInstance()->setEnabled(false);
     //  }
     // }
     // </FS:Zi>

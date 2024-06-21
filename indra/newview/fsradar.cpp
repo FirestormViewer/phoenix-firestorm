@@ -80,10 +80,10 @@ public:
         mEventTimer.start();
     }
 
-    /*virtual*/ BOOL tick()
+    /*virtual*/ bool tick()
     {
         update();
-        return FALSE;
+        return false;
     }
 };
 
@@ -152,7 +152,7 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
         args["MESSAGE"] = static_cast<std::string>(postMsg);
         LLNotificationsUtil::add("RadarAlert",
                                     args,
-                                    payload.with("respond_on_mousedown", TRUE),
+                                    payload.with("respond_on_mousedown", true),
                                     boost::bind(&LLAvatarActions::zoomIn, agent_id));
     }
     else
@@ -277,7 +277,7 @@ void FSRadar::updateRadarList()
         mEntryList.emplace(avid, std::make_shared<FSRadarEntry>(avid));
     }
 
-    speakermgr->update(TRUE);
+    speakermgr->update(true);
 
     //STEP 2: Transform detected model list data into more flexible multimap data structure;
     //TS: Count avatars in chat range and in the same region
@@ -728,7 +728,7 @@ void FSRadar::updateRadarList()
         U32 loop = 0;
         while (loop < num_entering)
         {
-            for (S32 i = 0; i < num_this_pass; i++)
+            for (U32 i = 0; i < num_this_pass; i++)
             {
                 msg = llformat("%s,%s", msg.c_str(), mRadarEnterAlerts[loop + i].asString().c_str());
             }
@@ -757,7 +757,7 @@ void FSRadar::updateRadarList()
         U32 loop = 0;
         while (loop < num_leaving)
         {
-            for (S32 i = 0; i < num_this_pass; i++)
+            for (U32 i = 0; i < num_this_pass; i++)
             {
                 msg = llformat("%s,%s", msg.c_str(), mRadarLeaveAlerts[loop + i].asString().c_str());
             }
@@ -950,11 +950,11 @@ void FSRadar::onRadarReportToClicked(const LLSD& userdata)
     const std::string chosen_item = userdata.asString();
     if (chosen_item == "radar_toasts")
     {
-        gSavedSettings.setBOOL("FSMilkshakeRadarToasts", TRUE);
+        gSavedSettings.setBOOL("FSMilkshakeRadarToasts", true);
     }
     else if (chosen_item == "radar_nearby_chat")
     {
-        gSavedSettings.setBOOL("FSMilkshakeRadarToasts", FALSE);
+        gSavedSettings.setBOOL("FSMilkshakeRadarToasts", false);
     }
 }
 

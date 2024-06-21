@@ -80,7 +80,7 @@ typedef long long unsigned int      U64;
 typedef float               F32;
 typedef double              F64;
 
-typedef S32             BOOL;
+//typedef S32               BOOL; // <FS:Ansariel> We should not need this anymore
 typedef U8              KEY;
 typedef U32             MASK;
 typedef U32             TPACKETID;
@@ -105,13 +105,15 @@ typedef U32             TPACKETID;
 #define F64_MIN     (DBL_MIN)
 
 
-#ifndef TRUE
-#define TRUE            (1)
-#endif
-
-#ifndef FALSE
-#define FALSE           (0)
-#endif
+// <FS:Ansariel> We should not need this anymore
+//#ifndef TRUE
+//#define TRUE          (1)
+//#endif
+//
+//#ifndef FALSE
+//#define FALSE         (0)
+//#endif
+// </FS:Ansariel>
 
 #ifndef NULL
 #define NULL            (0)

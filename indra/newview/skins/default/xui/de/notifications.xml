@@ -2595,6 +2595,10 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		Es sind nur quadratische Bilder zwischen 64 und 256 Pixel pro Seite erlaubt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="ThumbnailSelectionTooLarge">
+		Sie können nur bis zu 50 Abbildungen gleichzeitig ändern.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
@@ -5080,8 +5084,20 @@ Möchten Sie fortfahren?
 		Sie bearbeiten einen Himmel, der automatisch zu HDR konvertiert wurde. Um HDR und Tone Mapping zu entfernen, setzen Sie „Umgebung Reflexionstest (HDR)“ auf 0.
 		<usetemplate ignoretext="Warnung für HDR-Himmel-Anpassung" name="okignore" yestext="OK"/>
 	</notification>
-	<notification name="GLTFPreviewSelection">
+	<notification name="GLTFOpenSelection">
 		Sie müssen ein Objekt auswählen, das als Ankerpunkt für den GLTF-Gegenstand fungiert, den Sie vorschauen möchten.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFSaveSelection">
+		Sie müssen ein Objekt auswählen, das mit einem GLTF-Gegenstand verknüpft ist.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFUploadSelection">
+		Sie müssen ein Objekt auswählen, das nur mit einem lokalen GLTF-Gegenstand verknüpft ist.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFUploadInProgress">
+		Upload wird gerade durchgeführt. Bitte versuchen Sie es später erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 

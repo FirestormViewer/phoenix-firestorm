@@ -74,8 +74,8 @@ public:
     virtual void activate();
     virtual void setChannelInfo(const LLSD &channelInfo);
     virtual void requestChannelInfo();
-    virtual BOOL isActive();
-    virtual BOOL callStarted();
+    virtual bool isActive();
+    virtual bool callStarted();
 
     // Session name is a UI label used for feedback about which person,
     // group, or phone number you are talking to
@@ -129,7 +129,7 @@ public:
     static LLVoiceChannel* sProximalVoiceChannel;
     static LLVoiceChannel* sCurrentVoiceChannel;
     static LLVoiceChannel* sSuspendedVoiceChannel;
-    static BOOL sSuspended;
+    static bool sSuspended;
 
 private:
     state_changed_signal_t mStateChangedCallback;
@@ -158,7 +158,7 @@ private:
     void voiceCallCapCoro(std::string url);
 
     U32 mRetries;
-    BOOL mIsRetrying;
+    bool mIsRetrying;
     bool mIsP2P;
 };
 
@@ -170,7 +170,7 @@ class LLVoiceChannelProximal : public LLVoiceChannel, public LLSingleton<LLVoice
     void onChange(EStatusType status, const LLSD &channelInfo, bool proximal) override;
     void handleStatusChange(EStatusType status) override;
     void handleError(EStatusType status) override;
-    BOOL isActive() override;
+    bool isActive() override;
     void activate() override;
     void deactivate() override;
 };
@@ -201,7 +201,7 @@ private:
     **/
     void addToTheRecentPeopleList();
     LLUUID      mOtherUserID;
-    BOOL        mReceivedCall;
+    bool        mReceivedCall;
     LLVoiceP2POutgoingCallInterface *mOutgoingCallInterface;
     LLVoiceP2PIncomingCallInterfacePtr mIncomingCallInterface;
 };

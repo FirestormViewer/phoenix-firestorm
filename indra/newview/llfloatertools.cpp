@@ -235,7 +235,7 @@ LLPCode toolData[]={
     LL_PCODE_LEGACY_TREE,
     LL_PCODE_LEGACY_GRASS};
 
-BOOL    LLFloaterTools::postBuild()
+bool    LLFloaterTools::postBuild()
 {
     // <FS:Zi> switchable edit texture/materials panel
     LLPanel* panel;
@@ -259,7 +259,7 @@ BOOL    LLFloaterTools::postBuild()
     // </FS:Zi>
 
     // Hide until tool selected
-    setVisible(FALSE);
+    setVisible(false);
 
     // Since we constantly show and hide this during drags, don't
     // make sounds on visibility changes.
@@ -287,13 +287,13 @@ BOOL    LLFloaterTools::postBuild()
     // </FS:PP>
 
     mCheckSelectIndividual  = getChild<LLCheckBoxCtrl>("checkbox edit linked parts");
-    getChild<LLUICtrl>("checkbox edit linked parts")->setValue((BOOL)gSavedSettings.getBOOL("EditLinkedParts"));
+    getChild<LLUICtrl>("checkbox edit linked parts")->setValue((bool)gSavedSettings.getBOOL("EditLinkedParts"));
     mCheckSnapToGrid        = getChild<LLCheckBoxCtrl>("checkbox snap to grid");
-    getChild<LLUICtrl>("checkbox snap to grid")->setValue((BOOL)gSavedSettings.getBOOL("SnapEnabled"));
+    getChild<LLUICtrl>("checkbox snap to grid")->setValue((bool)gSavedSettings.getBOOL("SnapEnabled"));
     mCheckStretchUniform    = getChild<LLCheckBoxCtrl>("checkbox uniform");
-    getChild<LLUICtrl>("checkbox uniform")->setValue((BOOL)gSavedSettings.getBOOL("ScaleUniform"));
+    getChild<LLUICtrl>("checkbox uniform")->setValue((bool)gSavedSettings.getBOOL("ScaleUniform"));
     mCheckStretchTexture    = getChild<LLCheckBoxCtrl>("checkbox stretch textures");
-    getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
+    getChild<LLUICtrl>("checkbox stretch textures")->setValue((bool)gSavedSettings.getBOOL("ScaleStretchTextures"));
     mComboGridMode          = getChild<LLComboBox>("combobox grid mode");
 
     // <FS:KC> show highlight
@@ -321,13 +321,13 @@ BOOL    LLFloaterTools::postBuild()
         }
     }
     mCheckCopySelection = getChild<LLCheckBoxCtrl>("checkbox copy selection");
-    getChild<LLUICtrl>("checkbox copy selection")->setValue((BOOL)gSavedSettings.getBOOL("CreateToolCopySelection"));
+    getChild<LLUICtrl>("checkbox copy selection")->setValue((bool)gSavedSettings.getBOOL("CreateToolCopySelection"));
     mCheckSticky = getChild<LLCheckBoxCtrl>("checkbox sticky");
-    getChild<LLUICtrl>("checkbox sticky")->setValue((BOOL)gSavedSettings.getBOOL("CreateToolKeepSelected"));
+    getChild<LLUICtrl>("checkbox sticky")->setValue((bool)gSavedSettings.getBOOL("CreateToolKeepSelected"));
     mCheckCopyCenters = getChild<LLCheckBoxCtrl>("checkbox copy centers");
-    getChild<LLUICtrl>("checkbox copy centers")->setValue((BOOL)gSavedSettings.getBOOL("CreateToolCopyCenters"));
+    getChild<LLUICtrl>("checkbox copy centers")->setValue((bool)gSavedSettings.getBOOL("CreateToolCopyCenters"));
     mCheckCopyRotates = getChild<LLCheckBoxCtrl>("checkbox copy rotates");
-    getChild<LLUICtrl>("checkbox copy rotates")->setValue((BOOL)gSavedSettings.getBOOL("CreateToolCopyRotates"));
+    getChild<LLUICtrl>("checkbox copy rotates")->setValue((bool)gSavedSettings.getBOOL("CreateToolCopyRotates"));
 
     mRadioGroupLand         = getChild<LLRadioGroup>("land_radio_group");
     mBtnApplyToSelection    = getChild<LLButton>("button apply to selection");
@@ -345,7 +345,7 @@ BOOL    LLFloaterTools::postBuild()
     if(mTab)
     {
         //mTab->setFollows(FOLLOWS_TOP | FOLLOWS_LEFT);
-        //mTab->setBorderVisible(FALSE);
+        //mTab->setBorderVisible(false);
         mTab->selectFirstTab();
     }
 
@@ -368,24 +368,24 @@ BOOL    LLFloaterTools::postBuild()
         mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
         if (!gSavedSettings.getBOOL("FSToolboxExpanded"))
         {
-            mTab->setVisible(FALSE);
+            mTab->setVisible(false);
             reshape(getRect().getWidth(), mCollapsedHeight);
             btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
         }
     }
     else
     {
-        gSavedSettings.setBOOL("FSToolboxExpanded", TRUE);
+        gSavedSettings.setBOOL("FSToolboxExpanded", true);
     }
     // </FS:KC>
 
-    return TRUE;
+    return true;
 }
 
 // <FS:CR> Aurora Sim
 void LLFloaterTools::updateToolsSizeLimits()
 {
-    mPanelObject->updateLimits(FALSE);
+    mPanelObject->updateLimits(false);
 }
 // </FS:CR> Aurora Sim
 
@@ -472,12 +472,12 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 
     mLandImpactsObserver(NULL),
 
-    mDirty(TRUE),
-    mHasSelection(TRUE)
+    mDirty(true),
+    mHasSelection(true)
 {
     gFloaterTools = this;
 
-    setAutoFocus(FALSE);
+    setAutoFocus(false);
     mFactoryMap["General"] = LLCallbackMap(createPanelPermissions, this);//LLPanelPermissions
     mFactoryMap["Object"] = LLCallbackMap(createPanelObject, this);//LLPanelObject
     mFactoryMap["Features"] = LLCallbackMap(createPanelVolume, this);//LLPanelVolume
@@ -548,7 +548,7 @@ void LLFloaterTools::refresh()
     const S32 INFO_WIDTH = getRect().getWidth();
     const S32 INFO_HEIGHT = 384;
     LLRect object_info_rect(0, 0, INFO_WIDTH, -INFO_HEIGHT);
-    BOOL all_volume = LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME );
+    bool all_volume = LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME );
 
     S32 idx_features = mTab->getPanelIndexByTitle(PANEL_NAMES[PANEL_FEATURES]);
     S32 idx_face = mTab->getPanelIndexByTitle(PANEL_NAMES[PANEL_FACE]);
@@ -808,17 +808,17 @@ void LLFloaterTools::refresh()
 
 void LLFloaterTools::draw()
 {
-    BOOL has_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
+    bool has_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
     if(!has_selection && (mHasSelection != has_selection))
     {
-        mDirty = TRUE;
+        mDirty = true;
     }
     mHasSelection = has_selection;
 
     if (mDirty)
     {
         refresh();
-        mDirty = FALSE;
+        mDirty = false;
     }
 
     //  mCheckSelectIndividual->set(gSavedSettings.getBOOL("EditLinkedParts"));
@@ -827,7 +827,7 @@ void LLFloaterTools::draw()
 
 void LLFloaterTools::dirty()
 {
-    mDirty = TRUE;
+    mDirty = true;
     LLFloaterOpenObject* instance = LLFloaterReg::findTypedInstance<LLFloaterOpenObject>("openobject");
     if (instance) instance->dirty();
 }
@@ -836,12 +836,12 @@ void LLFloaterTools::dirty()
 // floater is closed.
 void LLFloaterTools::resetToolState()
 {
-    gCameraBtnZoom = TRUE;
-    gCameraBtnOrbit = FALSE;
-    gCameraBtnPan = FALSE;
+    gCameraBtnZoom = true;
+    gCameraBtnOrbit = false;
+    gCameraBtnPan = false;
 
-    gGrabBtnSpin = FALSE;
-    gGrabBtnVertical = FALSE;
+    gGrabBtnSpin = false;
+    gGrabBtnVertical = false;
 }
 
 void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
@@ -861,7 +861,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     }
 
     // Focus buttons
-    BOOL focus_visible = (  tool == LLToolCamera::getInstance() );
+    bool focus_visible = (  tool == LLToolCamera::getInstance() );
 
     mBtnFocus   ->setToggleState( focus_visible );
 
@@ -895,7 +895,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     getChild<LLUICtrl>("slider zoom")->setValue(gAgentCamera.getCameraZoomFraction() * 0.5f);
 
     // Move buttons
-    BOOL move_visible = (tool == LLToolGrab::getInstance());
+    bool move_visible = (tool == LLToolGrab::getInstance());
 
     if (mBtnMove) mBtnMove  ->setToggleState( move_visible );
 
@@ -920,7 +920,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     }
 
     // Edit buttons
-    BOOL edit_visible = tool == LLToolCompTranslate::getInstance() ||
+    bool edit_visible = tool == LLToolCompTranslate::getInstance() ||
                         tool == LLToolCompRotate::getInstance() ||
                         tool == LLToolCompScale::getInstance() ||
                         tool == LLToolFace::getInstance() ||
@@ -1017,7 +1017,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     // </FS:KC>
 
     // Create buttons
-    BOOL create_visible = (tool == LLToolCompCreate::getInstance());
+    bool create_visible = (tool == LLToolCompCreate::getInstance());
 
     // <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
     if (mTreeGrassCombo) mTreeGrassCombo->setVisible(create_visible);
@@ -1031,7 +1031,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
         // don't highlight any placer button
         for (std::vector<LLButton*>::size_type i = 0; i < mButtons.size(); i++)
         {
-            mButtons[i]->setToggleState(FALSE);
+            mButtons[i]->setToggleState(false);
             mButtons[i]->setVisible( create_visible );
         }
     }
@@ -1042,7 +1042,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
         {
             LLPCode pcode = LLToolPlacer::getObjectType();
             LLPCode button_pcode = toolData[t];
-            BOOL state = (pcode == button_pcode);
+            bool state = (pcode == button_pcode);
             mButtons[t]->setToggleState( state );
             mButtons[t]->setVisible( create_visible );
         }
@@ -1057,7 +1057,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     if (mCheckCopyRotates && mCheckCopySelection) mCheckCopyRotates->setEnabled( mCheckCopySelection->get() );
 
     // Land buttons
-    BOOL land_visible = (tool == LLToolBrushLand::getInstance() || tool == LLToolSelectLand::getInstance() );
+    bool land_visible = (tool == LLToolBrushLand::getInstance() || tool == LLToolSelectLand::getInstance() );
 
     mCostTextBorder->setVisible(!land_visible);
 
@@ -1115,7 +1115,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     }
 
     // <FS>
-    static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", TRUE);
+    static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", true);
     mTab->setVisible(!land_visible && sFSToolboxExpanded);
     mPanelLandInfo->setVisible(land_visible && sFSToolboxExpanded);
     // </FS>
@@ -1137,7 +1137,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 
 // virtual
-BOOL LLFloaterTools::canClose()
+bool LLFloaterTools::canClose()
 {
     // don't close when quitting, so camera will stay put
     return !LLApp::isExiting();
@@ -1153,7 +1153,7 @@ void LLFloaterTools::onOpen(const LLSD& key)
     // this function runs on selection change
     if (!mOpen)
     {
-        mOpen = TRUE;
+        mOpen = true;
         mCheckShowHighlight->setValue(gSavedSettings.getBOOL("RenderHighlightSelections"));
     }
     // </FS:KC>
@@ -1172,17 +1172,17 @@ void LLFloaterTools::onOpen(const LLSD& key)
         // so it won't be getting any layout or visibility updates, update once
         // further updates will come from updateLayout()
         LLCoordGL select_center_screen;
-        MASK    mask = gKeyboard->currentMask(TRUE);
+        MASK    mask = gKeyboard->currentMask(true);
         updatePopup(select_center_screen, mask);
     }
 
-    //gMenuBarView->setItemVisible("BuildTools", TRUE);
+    //gMenuBarView->setItemVisible("BuildTools", true);
 }
 
 // virtual
 void LLFloaterTools::onClose(bool app_quitting)
 {
-    mTab->setVisible(FALSE);
+    mTab->setVisible(false);
 
     LLViewerJoystick::getInstance()->moveAvatar(false);
 
@@ -1199,12 +1199,12 @@ void LLFloaterTools::onClose(bool app_quitting)
 
     // exit component selection mode
     LLSelectMgr::getInstance()->promoteSelectionToRoot();
-    gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+    gSavedSettings.setBOOL("EditLinkedParts", false);
 
     // <FS:KC>
     LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
 
-    mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
+    mOpen = false; //hack cause onOpen runs on every selection change but onClose doesnt.
     // </FS:KC>
 
     gViewerWindow->showCursor();
@@ -1234,7 +1234,7 @@ void LLFloaterTools::onClose(bool app_quitting)
     }
     // </FS:Ansariel>
 
-    //gMenuBarView->setItemVisible("BuildTools", FALSE);
+    //gMenuBarView->setItemVisible("BuildTools", false);
     LLFloaterReg::hideInstance("media_settings");
 
     // hide the advanced object weights floater
@@ -1249,7 +1249,7 @@ void LLFloaterTools::onClose(bool app_quitting)
     if(sPreviousFocusOnAvatar)
     {
         sPreviousFocusOnAvatar = false;
-        gAgentCamera.setAllowChangeToFollow(TRUE);
+        gAgentCamera.setAllowChangeToFollow(true);
     }
 }
 
@@ -1268,18 +1268,18 @@ void commit_radio_group_move(LLUICtrl* ctrl)
     std::string selected = group->getValue().asString();
     if (selected == "radio move")
     {
-        gGrabBtnVertical = FALSE;
-        gGrabBtnSpin = FALSE;
+        gGrabBtnVertical = false;
+        gGrabBtnSpin = false;
     }
     else if (selected == "radio lift")
     {
-        gGrabBtnVertical = TRUE;
-        gGrabBtnSpin = FALSE;
+        gGrabBtnVertical = true;
+        gGrabBtnSpin = false;
     }
     else if (selected == "radio spin")
     {
-        gGrabBtnVertical = FALSE;
-        gGrabBtnSpin = TRUE;
+        gGrabBtnVertical = false;
+        gGrabBtnSpin = true;
     }
 }
 
@@ -1289,21 +1289,21 @@ void commit_radio_group_focus(LLUICtrl* ctrl)
     std::string selected = group->getValue().asString();
     if (selected == "radio zoom")
     {
-        gCameraBtnZoom = TRUE;
-        gCameraBtnOrbit = FALSE;
-        gCameraBtnPan = FALSE;
+        gCameraBtnZoom = true;
+        gCameraBtnOrbit = false;
+        gCameraBtnPan = false;
     }
     else if (selected == "radio orbit")
     {
-        gCameraBtnZoom = FALSE;
-        gCameraBtnOrbit = TRUE;
-        gCameraBtnPan = FALSE;
+        gCameraBtnZoom = false;
+        gCameraBtnOrbit = true;
+        gCameraBtnPan = false;
     }
     else if (selected == "radio pan")
     {
-        gCameraBtnZoom = FALSE;
-        gCameraBtnOrbit = FALSE;
-        gCameraBtnPan = TRUE;
+        gCameraBtnZoom = false;
+        gCameraBtnOrbit = false;
+        gCameraBtnPan = true;
     }
 }
 
@@ -1392,7 +1392,7 @@ void commit_select_component(void *data)
         gFocusMgr.setKeyboardFocus(NULL);
     }
 
-    BOOL select_individuals = floaterp->mCheckSelectIndividual->get();
+    bool select_individuals = floaterp->mCheckSelectIndividual->get();
     gSavedSettings.setBOOL("EditLinkedParts", select_individuals);
     floaterp->dirty();
 
@@ -1410,7 +1410,7 @@ void commit_select_component(void *data)
 void commit_show_highlight(void *data)
 {
     LLFloaterTools* floaterp = (LLFloaterTools*)data;
-    BOOL show_highlight = floaterp->mCheckShowHighlight->get();
+    bool show_highlight = floaterp->mCheckShowHighlight->get();
     if (show_highlight)
     {
         LLSelectMgr::getInstance()->setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_SHOW);
@@ -1427,7 +1427,7 @@ void commit_show_highlight(void *data)
 void LLFloaterTools::setObjectType( LLPCode pcode )
 {
     LLToolPlacer::setObjectType( pcode );
-    gSavedSettings.setBOOL("CreateToolCopySelection", FALSE);
+    gSavedSettings.setBOOL("CreateToolCopySelection", false);
     // <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
     gFloaterTools->buildTreeGrassCombo();
     // </FS:Ansariel>
@@ -1548,7 +1548,7 @@ void LLFloaterTools::onClickBtnCopyKeys()
 {
     std::string separator = gSavedSettings.getString("FSCopyObjKeySeparator");
     std::string stringKeys;
-    MASK mask = gKeyboard->currentMask(FALSE);
+    MASK mask = gKeyboard->currentMask(false);
     LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
     bool copied = false;
     if (mask == MASK_SHIFT)
@@ -1566,20 +1566,20 @@ void LLFloaterTools::onClickBtnCopyKeys()
 
 void LLFloaterTools::onClickExpand()
 {
-    BOOL show_more = !gSavedSettings.getBOOL("FSToolboxExpanded");
+    bool show_more = !gSavedSettings.getBOOL("FSToolboxExpanded");
     gSavedSettings.setBOOL("FSToolboxExpanded", show_more);
 
     LLButton* btnExpand = getChild<LLButton>("btnExpand");
     if (show_more)
     {
-        mTab->setVisible(TRUE);
+        mTab->setVisible(true);
         reshape(getRect().getWidth(), mExpandedHeight);
         translate(0, mCollapsedHeight - mExpandedHeight);
         btnExpand->setImageOverlay("Arrow_Up", btnExpand->getImageOverlayHAlign());
     }
     else
     {
-        mTab->setVisible(FALSE);
+        mTab->setVisible(false);
         reshape(getRect().getWidth(), mCollapsedHeight);
         translate(0, mExpandedHeight - mCollapsedHeight);
         btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());

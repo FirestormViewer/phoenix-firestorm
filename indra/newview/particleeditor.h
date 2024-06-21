@@ -45,9 +45,9 @@ class ParticleEditor : public LLFloater
 
     public:
         ParticleEditor(const LLSD& key);
-        /* virtual */ ~ParticleEditor();
+        ~ParticleEditor();
 
-        /* virtual */ BOOL postBuild();
+        bool postBuild() override;
 
         void setObject(LLViewerObject* objectp);
         void scriptInjectReturned( );

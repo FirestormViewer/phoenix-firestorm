@@ -652,6 +652,5 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("local_mesh_floater", "floater_vj_local_mesh.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalMesh>); // local mesh
     LLFloaterReg::add("fs_whitelist_floater", "floater_whitelist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWhiteListHelper>); // white list advisor
 
-
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

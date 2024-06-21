@@ -68,8 +68,8 @@ static LLPanelInjector<LLPanelGroup> t_panel_group("panel_group_info_sidetray");
 
 LLPanelGroupTab::LLPanelGroupTab()
     : LLPanel(),
-      mAllowEdit(TRUE),
-      mHasModal(FALSE)
+      mAllowEdit(true),
+      mHasModal(false)
 {
     mGroupID = LLUUID::null;
 }
@@ -78,21 +78,21 @@ LLPanelGroupTab::~LLPanelGroupTab()
 {
 }
 
-BOOL LLPanelGroupTab::isVisibleByAgent(LLAgent* agentp)
+bool LLPanelGroupTab::isVisibleByAgent(LLAgent* agentp)
 {
     //default to being visible
-    return TRUE;
+    return true;
 }
 
-BOOL LLPanelGroupTab::postBuild()
+bool LLPanelGroupTab::postBuild()
 {
-    return TRUE;
+    return true;
 }
 
 LLPanelGroup::LLPanelGroup()
 :   LLPanel(),
     LLGroupMgrObserver( LLUUID() ),
-    mSkipRefresh(FALSE),
+    mSkipRefresh(false),
     mButtonJoin(NULL),
     mIsUsingTabContainer(false) // <FS:Ansariel> TabContainer switch
 {
@@ -160,7 +160,7 @@ void LLPanelGroup::onOpen(const LLSD& key)
                 if (target_tab)
                 {
                     target_tab->changeOpenClose(false);
-                    target_tab->setFocus(TRUE);
+                    target_tab->setFocus(true);
                     target_tab->notifyParent(LLSD().with("action", "select_current"));
                 }
             }
@@ -211,7 +211,7 @@ void LLPanelGroup::onOpen(const LLSD& key)
 
 }
 
-BOOL LLPanelGroup::postBuild()
+bool LLPanelGroup::postBuild()
 {
     mDefaultNeedsApplyMesg = getString("default_needs_apply_text");
     mWantApplyMesg = getString("want_apply_text");
@@ -269,7 +269,7 @@ BOOL LLPanelGroup::postBuild()
     // <FS:Ansariel> TabContainer switch
     mIsUsingTabContainer = (findChild<LLTabContainer>("groups_accordion") != NULL);
 
-    return TRUE;
+    return true;
 }
 
 void LLPanelGroup::reposButton(const std::string& name)
@@ -304,7 +304,7 @@ void LLPanelGroup::reposButtons()
     reposButton("btn_activate"); // <FS:PP> FIRE-33939: Activate button
 }
 
-void LLPanelGroup::reshape(S32 width, S32 height, BOOL called_from_parent )
+void LLPanelGroup::reshape(S32 width, S32 height, bool called_from_parent )
 {
     LLPanel::reshape(width, height, called_from_parent );
 
@@ -701,7 +701,7 @@ bool LLPanelGroup::apply(LLPanelGroupTab* tab)
             }
         }
 
-        mSkipRefresh = TRUE;
+        mSkipRefresh = true;
         return true;
     }
 
@@ -769,7 +769,7 @@ void LLPanelGroup::refreshData()
 {
     if(mSkipRefresh)
     {
-        mSkipRefresh = FALSE;
+        mSkipRefresh = false;
         return;
     }
     LLGroupMgr::getInstance()->clearGroupData(getID());
@@ -864,7 +864,7 @@ void LLPanelGroup::showNotice(const std::string& subject,
 }
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
+bool LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 {
     if (FSCommon::isFilterEditorKeyCombo(key, mask))
     {
@@ -873,8 +873,8 @@ BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
             LLPanelGroupRoles* panel = dynamic_cast<LLPanelGroupRoles*>(getChild<LLTabContainer>("groups_accordion")->getCurrentPanel());
             if (panel)
             {
-                panel->getCurrentTab()->setSearchFilterFocus(TRUE);
-                return TRUE;
+                panel->getCurrentTab()->setSearchFilterFocus(true);
+                return true;
             }
         }
         else
@@ -882,8 +882,8 @@ BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
             LLAccordionCtrlTab* tab = getChild<LLAccordionCtrl>("groups_accordion")->getSelectedTab();
             if (tab && tab->getName() == "group_roles_tab")
             {
-                tab->findChild<LLPanelGroupRoles>("group_roles_tab_panel")->getCurrentTab()->setSearchFilterFocus(TRUE);
-                return TRUE;
+                tab->findChild<LLPanelGroupRoles>("group_roles_tab_panel")->getCurrentTab()->setSearchFilterFocus(true);
+                return true;
             }
         }
     }

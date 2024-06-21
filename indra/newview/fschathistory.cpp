@@ -104,7 +104,7 @@ public:
         }
 
         LLUUID object_id;
-        if (!object_id.set(params[0], FALSE))
+        if (!object_id.set(params[0], false))
         {
             return false;
         }
@@ -180,7 +180,7 @@ public:
         }
     }
 
-    BOOL handleMouseUp(S32 x, S32 y, MASK mask)
+    bool handleMouseUp(S32 x, S32 y, MASK mask)
     {
         return LLPanel::handleMouseUp(x,y,mask);
     }
@@ -636,7 +636,7 @@ public:
         return false;
     }
 
-    BOOL postBuild()
+    bool postBuild()
     {
         setDoubleClickCallback(boost::bind(&FSChatHistoryHeader::showInspector, this));
 
@@ -651,7 +651,7 @@ public:
         if (mInfoCtrl)
         {
             mInfoCtrl->setCommitCallback(boost::bind(&FSChatHistoryHeader::onClickInfoCtrl, mInfoCtrl));
-            mInfoCtrl->setVisible(FALSE);
+            mInfoCtrl->setVisible(false);
         }
         else
         {
@@ -679,12 +679,12 @@ public:
         return  child->pointInView(local_x, local_y);
     }
 
-    BOOL handleRightMouseDown(S32 x, S32 y, MASK mask)
+    bool handleRightMouseDown(S32 x, S32 y, MASK mask)
     {
         if(pointInChild("avatar_icon",x,y) || pointInChild("user_name",x,y))
         {
             showContextMenu(x,y);
-            return TRUE;
+            return true;
         }
 
         return LLPanel::handleRightMouseDown(x,y,mask);
@@ -777,7 +777,7 @@ public:
             updateMinUserNameWidth();
             LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
             setTransparentColor(sep_color);
-            mTimeBoxTextBox->setVisible(FALSE);
+            mTimeBoxTextBox->setVisible(false);
         }
         else  if (chat.mFromName.empty()
             //|| mSourceType == CHAT_SOURCE_SYSTEM
@@ -836,8 +836,8 @@ public:
                  (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)))
         {
             //if it's an avatar name with a username add formatting
-            S32 username_start = chat.mFromName.rfind(" (");
-            S32 username_end = chat.mFromName.rfind(')');
+            auto username_start = chat.mFromName.rfind(" (");
+            auto username_end = chat.mFromName.rfind(')');
 
             if (username_start != std::string::npos &&
                 username_end == (chat.mFromName.length() - 1))
@@ -960,7 +960,7 @@ public:
             mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
             mUserNameTextBox->setRect(user_name_rect);
 
-            mTimeBoxTextBox->setVisible(TRUE);
+            mTimeBoxTextBox->setVisible(true);
         }
 
         LLPanel::draw();
@@ -1142,7 +1142,7 @@ protected:
 
     void hideInfoCtrl()
     {
-        mInfoCtrl->setVisible(FALSE);
+        mInfoCtrl->setVisible(false);
     }
 
 private:
@@ -1292,7 +1292,7 @@ void FSChatHistory::updateChatInputLine()
 }
 
 #if LL_SDL2
-void FSChatHistory::setFocus(BOOL b)
+void FSChatHistory::setFocus(bool b)
 {
     LLTextEditor::setFocus(b);
 
@@ -1907,7 +1907,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 }
 
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
-BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
+bool FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 {
     // do not change focus when the CTRL key is used to make copy/select all etc. possible
     if(gKeyboard->currentMask(false) & MASK_CONTROL)
