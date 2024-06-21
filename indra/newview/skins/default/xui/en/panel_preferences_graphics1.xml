@@ -56,12 +56,13 @@
        type="string"
        length="1"
        follows="left|top"
-       height="12"
+       height="25"
        layout="topleft"
-       left="30"
+       left="5"
        name="QualitySpeed"
        top="25"
-       width="400">
+       width="105"
+       wrap="true">
         Quality and speed:
       </text>
       <text
@@ -71,9 +72,9 @@
        halign="right"
        height="12"
        layout="topleft"
-       left="35"
+       left_pad="5"
        name="FasterText"
-       top_pad="4"
+       top_delta="0"
        width="80">
         Performance
       </text>
@@ -83,20 +84,36 @@
        follows="left|top"
        height="12"
        layout="topleft"
-       left_delta="360"
+       left="465"
        name="BetterText"
        top_delta="0"
        width="100">
         Quality
       </text>
+
+      <!--Reset Button-->
+      <button
+       follows="left|top"
+       height="23"
+       image_overlay="Refresh_Off"
+       tool_tip="Reload default graphics settings."
+       layout="topleft"
+       left="510"
+       name="Defaults"
+       top_delta="-5"
+       width="23">
+        <button.commit_callback
+         function="Pref.HardwareDefaults" />
+      </button>
+
       <icon
        color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
-       left="128"
+       left="200"
        name="LowGraphicsDivet"
-       top_delta="-2"
+       top_delta="3"
        width="2" />
       <icon
        color="Slidermark"
@@ -160,7 +177,7 @@
        increment="1"
        initial_value="0"
        layout="topleft"
-       left="120"
+       left="193"
        max_val="6"
        name="QualityPerformanceSelection"
        show_text="false"
@@ -176,7 +193,7 @@
        halign="center"
        height="12"
        layout="topleft"
-       left="88"
+       left="161"
        name="ShadersPrefText"
        top_delta="20"
        width="80">
@@ -229,7 +246,7 @@
          layout="topleft"
          left="4"
          name="ShadersText"
-         top="70"
+         top="60"
          width="128">
           Shaders:
         </text>
@@ -520,7 +537,7 @@
          left="196"
          name="Fullscreen Mode"
          tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
-         top="80"
+         top="60"
          width="280" />
 
         <slider
@@ -537,15 +554,15 @@
          max_val="1024"
          min_val="32"
          name="DrawDistance"
-         top_pad="6"
-         width="301" />
+         top_pad="5"
+         width="321" />
         <text
          type="string"
          length="1"
          follows="left|top"
          height="12"
          layout="topleft"
-         left_delta="296"
+         left_delta="316"
          name="DrawDistanceMeterText2"
          top_delta="0"
          width="128">
@@ -565,7 +582,7 @@
          max_val="8192"
          name="MaxParticleCount"
          top_pad="6"
-         width="301" />
+         width="321" />
         <text
           type="string"
           length="1"
@@ -582,7 +599,7 @@
          control_name="RenderAvatarComplexityMode"
          height="23"
          layout="topleft"
-         left_pad="2"
+         left_pad="22"
          top_delta="-4"
          name="AvatarComplexityMode"
          width="150">
@@ -616,7 +633,7 @@
          show_text="false"
          name="IndirectMaxComplexity"
          top_pad="3"
-         width="261">
+         width="281">
          <slider.commit_callback
           function="Pref.UpdateIndirectMaxComplexity"
           parameter="IndirectMaxComlexityText" />
@@ -627,7 +644,7 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left="465"
+         left="485"
          name="IndirectMaxComplexityText"
          text_readonly_color="LabelDisabledColor"
          top_delta="0"
@@ -650,7 +667,7 @@
          show_text="false"
          name="IndirectMaxNonImpostors"
          top_pad="5"
-         width="261">
+         width="281">
          <slider.commit_callback
           function="Pref.UpdateIndirectMaxNonImpostors"
           parameter="IndirectNonImpostorsText" />
@@ -661,7 +678,7 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left="465"
+         left="485"
          name="IndirectMaxNonImpostorsText"
          text_readonly_color="LabelDisabledColor"
          top_delta="0"
@@ -684,7 +701,7 @@
          name="RenderPostProcess"
          show_text="false"
          top_pad="5"
-         width="261">
+         width="281">
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="PostProcessText" />
@@ -695,12 +712,29 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left="465"
+         left="485"
          name="PostProcessText"
          top_delta="0"
          width="128">
           Low
         </text>
+
+        <slider
+         control_name="RenderLocalLightCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="256"
+         label="Max. nearby lights"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         min_val="0"
+         max_val="8192"
+         name="MaxLights"
+         top_pad="5"
+         width="317" />
 
         <slider
          control_name="RenderAvatarPhysicsLODFactor"
@@ -715,14 +749,14 @@
          left="200"
          name="AvatarPhysicsDetail"
          show_text="true"
-         top_pad="5"
-         width="297"/>
+         top_pad="2"
+         width="317"/>
 
         <slider
          control_name="RenderExposure"
          decimal_digits="1"
          follows="left|top"
-         height="16"
+         height="15"
          increment="0.1"
          initial_value="1"
          label="Exposure"
@@ -734,7 +768,7 @@
          name="RenderExposure"
          show_text="true"
          top_pad="2"
-         width="297"/>
+         width="317"/>
 
         <text
          type="string"
@@ -744,7 +778,7 @@
          layout="topleft"
          left="200"
          name="MeshDetailText"
-         top_pad="10"
+         top_pad="8"
          width="400">
           Level of Detail (LOD) Distance Factors:
         </text>
@@ -765,7 +799,7 @@
          name="ObjectMeshDetail"
          show_text="true"
          top_pad="6"
-         width="304"/>
+         width="324"/>
         <slider
         control_name="RenderFlexTimeFactor"
         follows="left|top"
@@ -778,7 +812,7 @@
         name="FlexibleMeshDetail"
         show_text="true"
         top_pad="3"
-        width="304"/>
+        width="324"/>
         <slider
          control_name="RenderTreeLODFactor"
          follows="left|top"
@@ -793,7 +827,7 @@
          name="TreeMeshDetail"
          show_text="true"
          top_pad="3"
-         width="304"/>
+         width="324"/>
         <slider
          control_name="RenderAvatarLODFactor"
          follows="left|top"
@@ -807,7 +841,7 @@
          name="AvatarMeshDetail"
          show_text="true"
          top_pad="3"
-         width="304"/>
+         width="324"/>
         <slider
          control_name="RenderTerrainLODFactor"
          follows="left|top"
@@ -823,7 +857,7 @@
          name="TerrainMeshDetail"
          show_text="true"
          top_pad="3"
-         width="304"/>
+         width="324"/>
         <slider
          control_name="WLSkyDetail"
          enabled_control="WindLightUseAtmosShaders"
@@ -841,7 +875,7 @@
          name="SkyMeshDetail"
          show_text="true"
          top_pad="3"
-         width="315"/>
+         width="335"/>
         <text
          type="string"
          length="1"
@@ -863,7 +897,7 @@
          layout="topleft"
          left="200"
          name="Presets_Label"
-         top_pad="20"
+         top_pad="18"
          width="155">
           Presets:
         </text>
@@ -906,21 +940,6 @@
           function="Pref.PrefDelete"
           parameter="graphic" />
         </button>
-
-      <!--Reset Button-->
-      <button
-       follows="left|top"
-       height="23"
-       image_overlay="Refresh_Off"
-       tool_tip="Reload default graphics settings."
-       layout="topleft"
-       left="460"
-       name="Defaults"
-       top="35"
-       width="23">
-        <button.commit_callback
-         function="Pref.HardwareDefaults" />
-      </button>
     </panel>
 
 <!--Hardware Settings-->
@@ -1086,7 +1105,7 @@ If you do not understand the distinction then leave this control alone."
          label="Freeze updates to World (pause everything)"
          tool_tip="Set this to freeze all updates from the server - stops all actions in-world but does not affect chat, IMs or voice"
          layout="topleft"
-         left_delta="10"
+         left_delta="5"
          name="WorldPause"
          top_pad="6"
          width="256"/>
@@ -1107,63 +1126,25 @@ If you do not understand the distinction then leave this control alone."
         <check_box
          control_name="FSRestrictMaxTextureSize"
          height="16"
-         label="Restrict maximum texture resolution to:"
-         tool_tip="Set this restrict the maximum display resolution for inworld textures. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
+         label="Restrict maximum texture resolution to 512px (64bit only; requires Restart)"
+         tool_tip="Set this restrict the maximum display resolution for inworld textures to 512px. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
          layout="topleft"
-         left_delta="10"
+         left_delta="0"
          name="FSRestrictMaxTextureSize"
-         top_pad="4"
-         width="250"/>
-
-        <combo_box
-         control_name="FSRestrictMaxTexturePixels"
-         enabled_control="FSRestrictMaxTextureSize"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         name="FSRestrictMaxTexturePixels"
-         width="100">
-          <combo_box.item
-           label="512 pixels"
-           name="512"
-           value="512"/>
-          <combo_box.item
-           label="1024 pixels"
-           name="1024"
-           value="1024"/>
-          <!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
-          <combo_box.item
-           label="2048 pixels"
-           name="2048"
-           value="2048"/>
-          -->
-        </combo_box>
-
-        <text
-         name="FSRestrictMaxTextureSizeRestartText"
-         type="string"
-         text_color="White_50"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_pad="10"
-         top_delta="5"
-         width="150">
-            (requires restart)
-        </text>
+         top_pad="2"
+         width="400"/>
 
       <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
          type="string"
          length="1"
-         top_pad="18"
+         top_pad="8"
          follows="top|left"
          height="18"
          width="150"
          word_wrap="true"
          layout="topleft"
-         left="10"
+         left_delta="0"
          name="TextureDetailLabel">
             Max Texture Quality Level:
         </text>

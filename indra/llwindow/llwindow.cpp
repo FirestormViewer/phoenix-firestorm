@@ -432,8 +432,8 @@ LLWindow* LLWindowManager::createWindow(
 #elif LL_SDL
         new_window = new LLWindowSDL(callbacks,
             title, x, y, width, height, flags,
-            //fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_vram);
-            fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_vram, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+            //fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
+            fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #elif LL_WINDOWS
         new_window = new LLWindowWin32(callbacks,
             title, name, x, y, width, height, flags,

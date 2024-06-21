@@ -120,8 +120,6 @@ public:
     /*virtual*/ F32 getPixelAspectRatio();
     /*virtual*/ void setNativeAspectRatio(F32 ratio) { mOverrideAspectRatio = ratio; }
 
-    /*virtual*/ void setMaxVRAMMegabytes(U32 max_vram) {}
-
     /*virtual*/ void beforeDialog();
     /*virtual*/ void afterDialog();
 
@@ -166,7 +164,7 @@ protected:
         const std::string& title, int x, int y, int width, int height, U32 flags,
         bool fullscreen, bool clearBg, bool enable_vsync, bool use_gl,
         //bool ignore_pixel_depth, U32 fsaa_samples);
-        bool ignore_pixel_depth, U32 fsaa_samples, U32 max_vram, bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+        bool ignore_pixel_depth, U32 fsaa_samples, bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
     ~LLWindowSDL();
 
     /*virtual*/ bool    isValid();

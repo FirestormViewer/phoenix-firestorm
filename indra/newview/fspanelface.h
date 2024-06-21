@@ -200,7 +200,7 @@ protected:
     void onSelectTexture();
     void onCommitTexture();
     void onCancelTexture();
-    bool onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item);  // this function is to return TRUE if the drag should succeed.
+    bool onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item);  // this function is to return true if the drag should succeed.
     void onCloseTexturePicker();
 
     // Blinn-Phong Normal texture swatch
