@@ -91,10 +91,10 @@
 			Aktualisierung Spiegelung:
 		</text>
 		<combo_box name="HeroProbeUpdateRate">
-			<combo_box.item label="Jeden Frame" name="0"/>
-			<combo_box.item label="Jeden 2. Frame" name="1"/>
-			<combo_box.item label="Jeden 3. Frame" name="2"/>
-			<combo_box.item label="Jeden 4. Frame" name="3"/>
+			<combo_box.item label="Niedrig" name="6"/>
+			<combo_box.item label="Mittel" name="3"/>
+			<combo_box.item label="Hoch" name="1"/>
+			<combo_box.item label="Ultra" name="0"/>
 		</combo_box>
 		<check_box label="Vollbildmodus" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen. (Erfordert Neustart)"/>
 		<slider label="Sichtweite:" name="DrawDistance"/>

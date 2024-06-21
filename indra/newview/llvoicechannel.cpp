@@ -906,7 +906,7 @@ void LLVoiceChannelP2P::setChannelInfo(const LLSD& channel_info)
         }
     }
 
-    mReceivedCall = TRUE;
+    mReceivedCall = true;
     if (!channel_info.isUndefined())
     {
         mIncomingCallInterface = LLVoiceClient::getInstance()->getIncomingCallInterface(channel_info);
