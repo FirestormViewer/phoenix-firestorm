@@ -189,7 +189,7 @@
 		</menu>
 		<menu_item_call label="Scal" name="Link"/>
 		<menu_item_call label="Rozłącz" name="Unlink"/>
-		<menu_item_check label="Edytuj połączone części" name="Edit Linked Parts"/>
+		<menu_item_check label="Edytuj części pojedynczo" name="Edit Linked Parts"/>
 		<menu label="Wybierz elementy" name="Select Elements">
 			<menu_item_call label="Wybierz następną część lub stronę" name="Select Next Part or Face"/>
 			<menu_item_call label="Zaznacz poprzednią część lub stronę" name="Select Previous Part or Face"/>

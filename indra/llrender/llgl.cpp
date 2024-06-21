@@ -1014,6 +1014,7 @@ LLGLManager::LLGLManager() :
     mGLSLVersionMajor(0),
     mGLSLVersionMinor(0),
     mVRAM(0),
+    mVRAMDetected(0), // <FS:Beq/> add override support
     mGLMaxVertexRange(0),
     mGLMaxIndexRange(0)
 {

@@ -67,6 +67,8 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]
 Видеокарта: [GRAPHICS_CARD]
 Память видеокарты: [GRAPHICS_CARD_MEMORY] МБ
+Память видеокарты (Обнаружено): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Память видеокарты (Бюджет): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
@@ -85,13 +87,6 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Пропускная способность: [BANDWIDTH]
 Уровень детализации: [LOD]
 Качество графики: [RENDERQUALITY]
-Модель улучшенного освещения: [ALMSTATUS]
-	</string>
-	<string name="AboutTextureMemory">
-		Память текстур: [TEXTUREMEMORY] МБ ([TEXTUREMEMORYMULTIPLIER])
-	</string>
-	<string name="AboutTextureMemoryDynamic">
-		Память текстур: динамическая ([TEXTUREMEMORYMIN] МБ мин. / [TEXTUREMEMORYCACHERESERVE]% Кэш / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
 	<string name="AboutCache">
 		Кэш диска: [DISK_CACHE_INFO]
@@ -6857,4 +6852,5 @@ ID объекта: [INSPECTING_KEY]
 	<string name="FSObjectInventoryOneElement">1 элемент</string>
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] элементов</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">команда поддержки оператора вашей сетки</string>
+    <string name="Unlimited">Неограниченный</string>
 </strings>

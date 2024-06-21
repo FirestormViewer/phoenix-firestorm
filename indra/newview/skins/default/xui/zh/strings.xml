@@ -59,6 +59,8 @@ Concurrency: [CONCURRENCY]
 顯示卡供應商：[GRAPHICS_CARD_VENDOR]
 顯示卡：[GRAPHICS_CARD]
 Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
+Graphics Card Memory (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Graphics Card Memory (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windows 顯示驅動程式版本：[GRAPHICS_DRIVER_VERSION]

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Texture" name="Texture">
+	<panel.string name="paste_error_face_selection_mismatch">
+		Quando vengono copiate più facce, l'oggetto di destinazione deve avere lo stesso numero di facce selezionate.
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		Quando vengono copiate tutte le facce di un oggetto, l'oggetto di destinazione deve avere lo stesso numero di facce.
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		Una o più texture non sono state trovate nell'inventario.
+	</panel.string>
+	<panel.string name="paste_options">
+		Copia i parametri della texture negli appunti
+	</panel.string>
+	<tab_container name="tabs_material_type">
+		<panel name="panel_material_type_pbr">
+			<panel name="panel_material_maps">
+				<texture_picker name="pbr_control" label="Materiale" tool_tip="Clicca per scegliere un materiale PBR" />
+				<texture_picker name="base_color_picker" label="Colore base" tool_tip="Clicca per scegliere la mappa dei colori di base (Albedo)" />
+				<color_swatch name="base_color_tint_picker" label="Tinta" tool_tip="Clicca per scegliere la tinta del colore di base" />
+				<button name="btn_select_same_gltf" tool_tip="Seleziona tutte le facce con questo materiale GLTF" />
+				<texture_picker name="normal_map_picker" label="Normale" tool_tip="Clicca per scegliere la mappa normale" />
+				<texture_picker name="emissive_map_picker" label="Emissiva" tool_tip="Clicca per scegliere la mappa emissiva" />
+				<color_swatch name="emissive_color_tint_picker" label="Tinta" tool_tip="Clicca per scegliere la tonalità di colore di emissività" />
+				<texture_picker name="metallic_map_picker" tool_tip="Clicca per scegliere la mappa di rugosità metallica, che può contenere un canale di occlusione opzionale" />
+			</panel>
+			<panel name="panel_material_parameters">
+				<check_box label="Doppia faccia" name="double sided" />
+				<spinner label="Alfa" name="transparency" />
+				<text name="blend mode label">
+					Modal.
+				</text>
+				<combo_box name="alpha mode">
+					<combo_box.item label="Opaco" name="None" />
+					<combo_box.item label="Miscela" name="Alpha blending" />
+					<combo_box.item label="Maschera" name="Alpha masking" />
+				</combo_box>
+				<spinner label="Ritaglio" name="alpha cutoff" />
+				<spinner label="Metallità" name="metalness factor" />
+				<spinner label="Rugosità" name="roughness factor" />
+				<button name="save_selected_pbr" label="Salva" />
+			</panel>
+			<tab_container name="tabs_pbr_transforms">
+				<panel label="Tutti" name="panel_pbr_transforms_all">
+					<panel name="pbr_transforms_all_scale">
+						<text name="pbr_transforms_all_scale_label">
+							Scala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Inverti" />
+						<button name="flipTextureScaleMV" tool_tip="Inverti" />
+					</panel>
+					<panel name="pbr_transforms_all_offset">
+						<text name="pbr_transforms_all_offset_label">
+							Spostamento
+						</text>
+					</panel>
+					<panel name="pbr_transforms_all_rotation">
+						<text name="pbr_transforms_all_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+				<panel label="Colore base" name="panel_pbr_transforms_base_color">
+					<panel name="pbr_transforms_base_color_scale">
+						<text name="pbr_transforms_base_color_scale_label">
+							Scala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Inverti" />
+						<button name="flipTextureScaleMV" tool_tip="Inverti" />
+					</panel>
+					<panel name="pbr_transforms_base_color_offset">
+						<text name="pbr_transforms_base_color_offset_label">
+							Spostamento
+						</text>
+					</panel>
+					<panel name="pbr_transforms_base_color_rotation">
+						<text name="pbr_transforms_base_color_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+				<panel label="Normale" name="panel_pbr_transforms_normal">
+					<panel name="pbr_transforms_normal_scale">
+						<text name="pbr_transforms_normal_scale_label">
+							Scala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Inverti" />
+						<button name="flipTextureScaleMV" tool_tip="Inverti" />
+					</panel>
+					<panel name="pbr_transforms_normal_offset">
+						<text name="pbr_transforms_normal_offset_label">
+							Spostamento
+						</text>
+					</panel>
+					<panel name="pbr_transforms_normal_rotation">
+						<text name="pbr_transforms_normal_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+				<panel name="panel_pbr_transforms_metallic">
+					<panel name="pbr_transforms_orm_scale">
+						<text name="pbr_transforms_orm_scale_label">
+							Scala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Inverti" />
+						<button name="flipTextureScaleMV" tool_tip="Inverti" />
+					</panel>
+					<panel name="pbr_transforms_orm_offset">
+						<text name="pbr_transforms_orm_offset_label">
+							Spostamento
+						</text>
+					</panel>
+					<panel name="pbr_transforms_orm_rotation">
+						<text name="pbr_transforms_orm_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+				<panel label="Emissiva" name="panel_pbr_transforms_emissive">
+					<panel name="pbr_transforms_emissive_scale">
+						<text name="pbr_transforms_emissive_scale_label">
+							Scala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Inverti" />
+						<button name="flipTextureScaleMV" tool_tip="Inverti" />
+					</panel>
+					<panel name="pbr_transforms_emissive_offset">
+						<text name="pbr_transforms_emissive_offset_label">
+							Spostamento
+						</text>
+					</panel>
+					<panel name="pbr_transforms_emissive_rotation">
+						<text name="pbr_transforms_emissive_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel name="panel_material_type_blinn_phong">
+			<layout_stack name="panel_material_type_blinn_phong_layout_stack">
+				<layout_panel name="panel_blinn_phong_maps">
+					<texture_picker name="texture control" label="Diffusa" tool_tip="Clicca qui per scegliere un'immagine" />
+					<color_swatch name="colorswatch" label="Tinta" tool_tip="Clicca qui per scegliere il colore" />
+					<button name="btn_select_same_diff" tool_tip="Seleziona tutte le facce con la stessa texture diffusa di questa" />
+					<texture_picker label="Normale" name="bumpytexture control" tool_tip="Clicca qui per scegliere un'immagine" />
+					<button name="btn_select_same_norm" tool_tip="Seleziona tutte le facce con la stessa mappa normale di questa" />
+					<texture_picker label="Speculare" name="shinytexture control" tool_tip="Clicca qui per scegliere un'immagine" />
+					<color_swatch label="Tinta" name="shinycolorswatch" tool_tip="Clicca qui per scegliere il colore" />
+					<button name="btn_select_same_spec" tool_tip="Seleziona tutte le facce con la stessa mappa speculare di questa" />
+				</layout_panel>
+				<layout_panel name="panel_blinn_phong_options">
+					<check_box label="Max luminos." name="checkbox fullbright" width="90" />
+					<spinner name="ColorTrans" label="Trasparenza" />
+					<text name="label alphamode">
+						Modalità alfa
+					</text>
+					<combo_box name="combobox alphamode">
+						<combo_box.item label="Nessuna" name="None" />
+						<combo_box.item label="Miscela alfa" name="Alpha blending" />
+						<combo_box.item label="Maschera alfa" name="Alpha masking" />
+						<combo_box.item label="Maschera emissiva" name="Emissive mask" />
+					</combo_box>
+					<spinner label="Ritaglio maschera" name="maskcutoff" label_width="90" />
+					<text name="label bumpiness">
+						Superficie
+					</text>
+					<combo_box name="combobox bumpiness">
+						<combo_box.item label="Nessuna" name="None"/>
+						<combo_box.item label="luminosità" name="Brightness"/>
+						<combo_box.item label="oscurità" name="Darkness"/>
+						<combo_box.item label="venatura" name="woodgrain"/>
+						<combo_box.item label="corteccia" name="bark"/>
+						<combo_box.item label="mattoni" name="bricks"/>
+						<combo_box.item label="scacchiera" name="checker"/>
+						<combo_box.item label="cemento" name="concrete"/>
+						<combo_box.item label="incrostatura" name="crustytile"/>
+						<combo_box.item label="gemma" name="cutstone"/>
+						<combo_box.item label="dischi" name="discs"/>
+						<combo_box.item label="ciottoli" name="gravel"/>
+						<combo_box.item label="batteri" name="petridish"/>
+						<combo_box.item label="rivestimento" name="siding"/>
+						<combo_box.item label="lastricato" name="stonetile"/>
+						<combo_box.item label="stucco" name="stucco"/>
+						<combo_box.item label="suzione" name="suction"/>
+						<combo_box.item label="trama" name="weave"/>
+					</combo_box>
+					<text name="label shininess">
+						Lucentezza
+					</text>
+					<combo_box name="combobox shininess">
+						<combo_box.item label="Nessuna" name="None" />
+						<combo_box.item label="Bassa" name="Low" />
+						<combo_box.item label="Media" name="Medium" />
+						<combo_box.item label="Alta" name="High" />
+					</combo_box>
+					<spinner name="glossiness" label="Patinatura" />
+					<spinner name="environment" label="Ambiente" />
+				</layout_panel>
+			</layout_stack>
+			<tab_container name="tabs_blinn_phong_uvs">
+				<panel label="Diffusa" name="panel_blinn_phong_diffuse">
+					<panel name="transforms_diffuse_scale">
+						<text name="transforms_diffuse_scale_label">
+							Scala
+						</text>
+						<text name="labelTexScaleU">
+							O
+						</text>
+						<button name="flipTextureScaleU" tool_tip="Inverti" />
+						<button name="flipTextureScaleV" tool_tip="Inverti" />
+					</panel>
+					<panel name="transforms_diffuse_offset">
+						<text name="transforms_diffuse_offset_label">
+							Spostamento
+						</text>
+						<text name="labelTexOffsetU">
+							O
+						</text>
+					</panel>
+					<panel name="transforms_diffuse_rotation">
+						<text name="transforms_diffuse_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+				<panel label="Normale" name="panel_blinn_phong_normal">
+					<panel name="transforms_normal_scale">
+						<text name="transforms_normal_scale_label">
+							Scala
+						</text>
+						<text name="labelBumpyScaleU">
+							O
+						</text>
+						<button name="flipTextureScaleNU" tool_tip="Inverti" />
+						<button name="flipTextureScaleNV" tool_tip="Inverti" />
+					</panel>
+					<panel name="transforms_normal_offset">
+						<text name="transforms_normal_offset_label">
+							Spostamento
+						</text>
+						<text name="labelBumpyOffsetU">
+							O
+						</text>
+					</panel>
+					<panel name="transforms_normal_rotation">
+						<text name="transforms_normal_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+				<panel label="Speculare" name="panel_blinn_phong_specular">
+					<panel name="transforms_specular_scale">
+						<text name="transforms_specular_scale_label">
+							Scala
+						</text>
+						<text name="labelShinyScaleU">
+							O
+						</text>
+						<button name="flipTextureScaleSU" tool_tip="Inverti" />
+						<button name="flipTextureScaleSV" tool_tip="Inverti" />
+					</panel>
+					<panel name="transforms_specular_offset">
+						<text name="transforms_specular_offset_label">
+							Spostamento
+						</text>
+						<text name="labelShinyOffsetU">
+							O
+						</text>
+					</panel>
+					<panel name="transforms_specular_rotation">
+						<text name="transforms_specular_rotation_label">
+							Rotazione
+						</text>
+					</panel>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel name="panel_material_type_media">
+			<text name="media_info">
+				Se selezionato, l'URL multimediale va qui
+			</text>
+			<button name="add_media" label="Scegli..." tool_tip="Aggiungi media" />
+			<button name="delete_media" label="Rimuovi" tool_tip="Cancella questa texture multimediale" />
+			<button name="button align" label="Allinea" label_selected="Allinea Media" tool_tip="Allinea la texture multimediale (deve essere prima caricata)" />
+		</panel>
+	</tab_container>
+	<panel name="panel_face_params">
+		<spinner label_width="115" name="rptctrl" label="Ripetizioni per metro" />
+		<check_box label="Sincronizza materiali" name="checkbox_sync_settings" tool_tip="Sincronizza i parametri delle texture" />
+		<check_box label="Allinea facce planari" name="checkbox planar align" tool_tip="Allinea le texture su tutte le facce selezionate con l&apos;ultima faccia selezionata (è richiesta la mappatura planare delle texture)" />
+		<text name="tex gen">
+			Mappatura
+		</text>
+		<combo_box name="combobox texgen">
+			<combo_box.item label="Predefinita" name="Default" />
+			<combo_box.item label="Planare" name="Planar" />
+		</combo_box>
+		<button label="Allinea" name="button align textures" tool_tip="Allinea i livelli della texture corrente" />
+	</panel>
+	<button name="copy_face_btn" tool_tip="Copia i parametri della texture negli appunti" />
+	<button name="paste_face_btn" tool_tip="Incolla i parametri della texture dagli appunti" />
+	<spinner label="Bagliore" name="glow" label_width="43" />
+</panel>

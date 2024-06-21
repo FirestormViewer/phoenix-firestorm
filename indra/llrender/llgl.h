@@ -133,7 +133,7 @@ public:
     std::string mGLVersionString;
 
     U32 mVRAM; // VRAM in MB
-
+    S32 mVRAMDetected; // <FS:Beq/> The amount detected/reported by the OS/Drivers. If different to mVRAM there is an override in place.
     std::string getGLInfoString();
     void printGLInfoString();
     void getGLInfo(LLSD& info);

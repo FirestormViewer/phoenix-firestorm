@@ -10,8 +10,12 @@
 	<spinner label="Limite altezza" name="terrain_raise_spin"/>
 	<spinner bottom_delta="-34" label="Limite profondità" name="terrain_lower_spin"/>
 	<text name="detail_texture_text">
-    Texture terreno
-  </text>
+		Texture terreno
+	</text>
+	<text name="detail_material_text">
+		Materiali terreno
+	</text>
+	<check_box label="Rugosità metallica PBR" name="terrain_material_type" tool_tip="Se selezionato, utilizza materiali di rugosità metallica PBR per il terreno. Altrimenti, usa le texture." />
 	<text name="height_text_lbl">
 		1 (basso)
 	</text>
@@ -21,11 +25,20 @@
 	<text name="height_text_lbl5">
 		Intervalli altitudine texture
 	</text>
+	<text name="height_text_lbl5_material">
+		Intervalli altitudine materiali
+	</text>
 	<text name="height_text_lbl10">
-		Questi valori indicano la gamma di miscele per le texture di cui sopra.
+		Questi valori indicano l'intervallo di miscelazione per le texture sopra.
+	</text>
+	<text name="height_text_lbl10_material">
+		Questi valori indicano l'intervallo di miscelazione per i materiali sopra.
 	</text>
 	<text name="height_text_lbl11">
 		Misurato in metri, il valore BASSO è la MASSIMA altezza della texture 1 e il valore ALTO è l&apos;altezza MINIMA della texture 4.
+	</text>
+	<text name="height_text_lbl11_material">
+		Misurato in metri, il valore BASSO è la MASSIMA altezza del materiale 1 e il valore ALTO è l&apos;altezza MINIMA del materiale 4.
 	</text>
 	<text name="height_text_lbl6">
 		Nordovest

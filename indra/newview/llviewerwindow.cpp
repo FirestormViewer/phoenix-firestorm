@@ -6566,6 +6566,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     glh::matrix4f saved_proj = get_current_projection();
     glh::matrix4f saved_mod = get_current_modelview();
 
+    camera->disconnectCameraAngleSignal();  // <FS:Zi> disconnect the "CameraAngle" changed signal
+
     // camera constants for the square, cube map capture image
     camera->setAspect(1.0); // must set aspect ratio first to avoid undesirable clamping of vertical FoV
     camera->setViewNoBroadcast(F_PI_BY_TWO);
@@ -6699,6 +6701,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     set_current_projection(saved_proj);
     setup3DViewport();
     LLPipeline::sUseOcclusion = old_occlusion;
+
+    camera->connectCameraAngleSignal();    // <FS:Zi> reconnect the "CameraAngle" changed signal so mouselook zoom keeps working
 
     // ====================================================
     return true;

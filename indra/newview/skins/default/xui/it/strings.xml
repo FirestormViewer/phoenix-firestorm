@@ -47,6 +47,8 @@ Versione SO (OS Version): [OS_VERSION]
 Produttore scheda grafica (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Scheda grafica (Graphics Card): [GRAPHICS_CARD]
 Memoria scheda grafica (Graphics Card Memory): [GRAPHICS_CARD_MEMORY] MB
+Memoria rilevata della scheda grafica (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Memoria assegnata alla scheda grafica (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Versione driver grafico Windows (Windows Graphics Driver Version): [GRAPHICS_DRIVER_VERSION]
@@ -65,10 +67,6 @@ Distanza disegno (Draw distance): [DRAW_DISTANCE] m
 Banda (Bandwidth): [BANDWIDTH] kbit/s
 Fattore LOD (LOD factor): [LOD]
 Qualità resa (Render quality): [RENDERQUALITY]
-Stato illuminazione (Advanced Lighting Model): [ALMSTATUS]
-	</string>
-	<string name="AboutTextureMemory">
-		Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 	</string>
 	<string name="AboutOSXHiDPI">
 		Modalità display HiDPI: [HIDPI]
@@ -101,7 +99,7 @@ Voice Server Version: [VOICE_VERSION]
 		Modifica della risoluzione...
 	</string>
 	<string name="Fullbright">
-		Luminosità massima (vers. precedente)
+		Luminosità massima (legacy)
 	</string>
 	<string name="LoginInProgress">
 		In connessione. [APP_NAME] può sembrare rallentata. Attendere.
@@ -3088,6 +3086,19 @@ Se il messaggio persiste, contattare [SUPPORT_SITE].
 		[APP_NAME] Non riesce ad avviarsi perchè i driver della scheda video non sono stati installati correttamente, non sono aggiornati, o sono per un hardware non supportato. Assicurati di avere i driver della scheda video più recenti e anche se li hai installati, prova a installarli di nuovo.
 
 Se il messaggio persiste, contattare [SUPPORT_SITE].
+	</string>
+	<string name="MBOutOfMemoryTitle">
+		Fuori memoria
+	</string>
+	<string name="MBOutOfMemoryErr">
+		La richiesta [APP_NAME] di allocare memoria non è riuscita. L'applicazione non può continuare e verrà chiusa.
+
+Se il tuo computer ha poca RAM, chiudi tutte le applicazioni pesanti prima di eseguire [APP_NAME], imposta il file di scambio o riduci le impostazioni grafiche come la distanza di disegno.
+	</string>
+	<string name="MBMissingFile">
+		[APP_NAME] non è riuscita ad accedere ad alcuni file necessari e verrà pertanto chiusa.
+
+Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il problema persiste dopo la reinstallazione.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Barba leggera
@@ -6606,5 +6617,8 @@ Assistenza nel sito SecondLife.com e segnala il problema.
 	</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">
 		il team di supporto del tuo Grid Operator
+	</string>
+	<string name="Unlimited">
+		Senza limiti
 	</string>
 </strings>

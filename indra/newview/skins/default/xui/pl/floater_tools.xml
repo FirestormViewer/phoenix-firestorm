@@ -76,7 +76,7 @@
 		<radio_item label="Zaznaczanie stron" name="radio select face"/>
 		<radio_item label="Wyrównywanie" name="radio align"/>
 	</radio_group>
-	<check_box label="Edytuj połączone części" name="checkbox edit linked parts"/>
+	<check_box label="Edytuj pojedynczo" name="checkbox edit linked parts"/>
 	<button name="prev_part_btn" tool_tip="Wybierz poprzednią połączoną część lub stronę"/>
 	<button name="next_part_btn" tool_tip="Wybierz następną połączoną część lub stronę"/>
 	<button label="Scalaj" name="link_btn"/>
@@ -91,6 +91,7 @@
 	<check_box label="Przyciągaj do siatki" name="checkbox snap to grid"/>
 	<check_box label="Edytuj oś jak gł. obiekt" name="checkbox actual root"/>
 	<check_box label="Pokaż podświetlenie" name="checkbox show highlight"/>
+	<check_box label="Zazn. sondy refleksyjne" name="checkbox select probes" />
 	<button name="Options..." label="Opcje..." tool_tip="Więcej opcji siatki"/>
 	<button name="ToolCube" tool_tip="Sześcian"/>
 	<button name="ToolPrism" tool_tip="Graniastosłup"/>

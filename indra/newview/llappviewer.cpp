@@ -1130,6 +1130,12 @@ bool LLAppViewer::init()
     gGLActive = true;
     initWindow();
     LL_INFOS("InitInfo") << "Window is initialized." << LL_ENDL ;
+    // <FS:Beq> allow detected hardware to be overridden.
+    gGLManager.mVRAMDetected = gGLManager.mVRAM;
+    LL_INFOS("AppInit") << "VRAM detected: " << gGLManager.mVRAMDetected << LL_ENDL;
+    overrideDetectedHardware(); 
+    // </FS:Beq> 
+
 
     // writeSystemInfo can be called after window is initialized (gViewerWindow non-null)
     writeSystemInfo();
@@ -1489,6 +1495,20 @@ bool LLAppViewer::init()
 
     return true;
 }
+
+// <FS:Beq> allow detected hardware to be overridden.
+void LLAppViewer::overrideDetectedHardware()
+{
+    // Override the VRAM Detection if FSOverrideVRAMDetection is set.
+    if ( gSavedSettings.getBOOL("FSOverrideVRAMDetection") )
+    {
+        S32 forced_video_memory = gSavedSettings.getS32("FSForcedVideoMemory");
+        // Note: 0 is allowed here, some systems detect VRAM as zero so override should support emulating them.
+        LL_INFOS("AppInit") << "Overriding VRAM to " << forced_video_memory*1024 << " MB" << LL_ENDL;
+        gGLManager.mVRAM = forced_video_memory*1024;
+    }
+}
+// </FS:Beq>
 
 void LLAppViewer::initMaxHeapSize()
 {
@@ -3937,6 +3957,7 @@ LLSD LLAppViewer::getViewerInfo() const
     info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
     info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
     info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(gGLManager.mVRAM);
+    info["GRAPHICS_CARD_MEMORY_DETECTED"] = gGLManager.mVRAMDetected; // <FS:Beq/> allow detected hardware to be overridden.
 
 #if LL_WINDOWS
     std::string drvinfo;
@@ -4138,18 +4159,18 @@ LLSD LLAppViewer::getViewerInfo() const
     }
     // </FS:PP>
 
-    // <FS:PP> ALM enabled or disabled
-    if (gSavedSettings.getBOOL("RenderDeferred"))
+    // <FS:Ansariel> Include VRAM budget
+    if (auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget"); budget > 0)
     {
-        info["ALMSTATUS"] = LLTrans::getString("PermYes");
-        info["ALMSTATUS_FSDATA_ENGLISH"] = "Yes";
+        info["VRAM_BUDGET"] = std::to_string(budget) + " MB";
+        info["VRAM_BUDGET_ENGLISH"] = std::to_string(budget) + " MB";
     }
     else
     {
-        info["ALMSTATUS"] = LLTrans::getString("PermNo");
-        info["ALMSTATUS_FSDATA_ENGLISH"] = "No";
+        info["VRAM_BUDGET"] = LLTrans::getString("Unlimited");
+        info["VRAM_BUDGET_ENGLISH"] = "Unlimited";
     }
-    // </FS:PP>
+    // </FS:Ansariel>
 
     return info;
 }
