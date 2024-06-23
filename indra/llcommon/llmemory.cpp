@@ -39,7 +39,7 @@
 #elif LL_LINUX
 # include <unistd.h>
 # include <sys/resource.h>
-# inlcude <sys/sysinfo.h>
+# include <sys/sysinfo.h>
 #endif
 
 #include "llmemory.h"
