@@ -97,7 +97,7 @@ void LLMemory::updateMemoryInfo()
     }
 
     sAllocatedMemInKB = U32Kilobytes::convert(U64Bytes(counters.WorkingSetSize));
-    sample(sAllocatedMem, sAllocatedMemInKB);
+    // sample(sAllocatedMem, sAllocatedMemInKB); // <FS:Beq/> align MemInfo across platforms
     sAllocatedPageSizeInKB = U32Kilobytes::convert(U64Bytes(counters.PagefileUsage));
     sample(sVirtualMem, sAllocatedPageSizeInKB);
     // <FS:Beq> align MemInfo across platforms
@@ -167,9 +167,9 @@ void LLMemory::updateMemoryInfo()
     // Use sysinfo() to get the total physical memory.
     struct sysinfo info;
     sysinfo(&info);
-    sMaxHeapSizeInKB = U32Kilobytes::convert(info.totalram); // Total RAM in system
-    avail_phys = U32Kilobytes::convert(info.freeram); // Total Free RAM in system
-    sAllocatedMemInKB = U64Bytes(LLMemory::getCurrentRSS()); // represents the RAM allocated by this process only (inline with the windows implementation)
+    sMaxHeapSizeInKB = U32Kilobytes::convert((U64Bytes)info.totalram); // Total RAM in system
+    avail_phys = U32Kilobytes::convert((U64Bytes)info.freeram); // Total Free RAM in system
+    sAllocatedMemInKB = U32Kilobytes::convert(U64Bytes(LLMemory::getCurrentRSS())); // represents the RAM allocated by this process only (inline with the windows implementation)
     // </FS:Beq>
 #else
     //not valid for other systems for now.
