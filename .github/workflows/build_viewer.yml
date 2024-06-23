@@ -1,6 +1,11 @@
 name: Build viewer
 on:
   workflow_dispatch:
+    inputs:
+      include_tracy:
+        description: 'Include tracy profiling builds'
+        required: false
+        default: 'false'
   push:
     branches:
       - "Firestorm*.*.*"
@@ -116,7 +121,11 @@ jobs:
           elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_TYPE=Nightly
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            FS_RELEASE_TYPE=Manual
+            if [[ "${{ github.event.inputs.include_tracy }}" == "false" ]]; then
+              FS_RELEASE_TYPE=Manual
+            elif [[ "${{ github.event.inputs.include_tracy }}" == "true" ]]; then
+              FS_RELEASE_TYPE=Profiling
+            fi
           fi
           if [[ "${{ matrix.addrsize }}" == "64" ]]; then
             FS_RELEASE_CHAN="${FS_RELEASE_TYPE}x64"
@@ -243,7 +252,7 @@ jobs:
       - name: Set expiration days based on FS_RELEASE_TYPE
         run: |
           case "${{ env.FS_RELEASE_TYPE }}" in
-            "Nightly" | "Manual")
+            "Nightly" | "Manual" | "Profiling")
               EXPIRE_DAYS=14
               ;;
             "Alpha")
@@ -264,6 +273,10 @@ jobs:
             echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}}" >> $GITHUB_ENV
           fi
         shell: bash
+      - name: Add tracy builds for dev use if selected (manual builds only).
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.include_tracy == 'true' }}
+        shell: bash
+        run: echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} --tracy" >> $GITHUB_ENV
 
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
