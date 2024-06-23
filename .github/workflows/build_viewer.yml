@@ -344,11 +344,14 @@ jobs:
       FS_RELEASE_FOLDER:
     if: always()
     steps:
-      - name: Checkout files
-        uses: Bhacaz/checkout-files@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          files: fsutils/download_list.py
-          branch: ${{ github.head_ref || github.ref_name || 'master' }}
+          sparse-checkout: |
+            fsutils/download_list.py
+          sparse-checkout-cone-mode: false
+          ref: ${{ github.head_ref || github.ref_name || 'master' }}
+          fetch-depth: 1
       - name: Install discord-webhook library
         run: pip install discord-webhook
 
