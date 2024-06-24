@@ -104,6 +104,11 @@ Motivo: &apos;[ERROR_REASON]&apos; - [ERROR_DESCRIPTION]
 
 &apos;[ERROR_CODE]&apos;
 	</notification>
+	<notification name="InvalidKeystroke">
+		È stato premuto un tasto non valido.
+[REASON].
+Per favore inserisci il testo corretto.
+	</notification>
 	<notification name="MerchantForceValidateListing">
 		Per creare l&apos;annuncio, abbiamo corretto la gerarchia dei contenuti dell&apos;annuncio.
 		<usetemplate ignoretext="Avvisami se la gerarchia del contenuto viene corretta per creare un annuncio" name="okignore" />
@@ -1513,25 +1518,25 @@ La texture del terreno [TEXTURE_NUM] è troppo grande se a [TEXTURE_SIZE_X]x[TEX
 Sostituisci la texture [TEXTURE_NUM] con una texture RGB di dimensioni [MAX_SIZE]x[MAX_SIZE] o inferiori, quindi clicca nuovamente su &apos;Applica&apos;.
 	</notification>
 	<notification name="InvalidTerrainMaterialNotLoaded">
-		Impossibile impostare le texture della regione:
+		Impossibile impostare i materiali della regione:
 Il materiale del terreno [MATERIAL_NUM] non è stato caricato.
 
 Attendi il caricamento del materiale o sostituisci il materiale [MATERIAL_NUM] con un materiale corretto.
 	</notification>
 	<notification name="InvalidTerrainMaterialLoadFailed">
-		Impossibile impostare le texture della regione:
+		Impossibile impostare i materiali della regione:
 Il materiale del terreno [MATERIAL_NUM] non è stato caricato.
 
 Sostituisci il materiale [MATERIAL_NUM] con un materiale corretto.
 	</notification>
 	<notification name="InvalidTerrainMaterialDoubleSided">
-		Impossibile impostare le texture della regione:
+		Impossibile impostare i materiali della regione:
 Il materiale del terreno [MATERIAL_NUM] è a doppia faccia. I materiali a doppia faccia non sono attualmente supportati per il terreno PBR.
 
 Sostituisci il materiale [MATERIAL_NUM] con un materiale con doubleSided=false.
 	</notification>
 	<notification name="InvalidTerrainMaterialAlphaMode">
-		Impossibile impostare le texture della regione:
+		Impossibile impostare i materiali della regione:
 Il materiale del terreno [MATERIAL_NUM] utilizza alphaMode="[MATERIAL_ALPHA_MODE]" che non è supportato.
 
 Sostituisci il materiale [MATERIAL_NUM] con un materiale con alphaMode="OPAQUE" o alphaMode="MASK".
@@ -1678,17 +1683,14 @@ Se il messaggio si ripresenta, controllare su [SUPPORT_SITE].
 		<usetemplate ignoretext="Conferma prima di restituire gli oggetti ai relativi proprietari" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-		Attualmente sei un membro del gruppo &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Lasciare il gruppo?
-		<usetemplate name="okcancelbuttons" notext="Annulla" />
+		Abbandona il gruppo &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+La tariffa attuale per rientrare in questo gruppo è [COST]L$.
+		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Abbandona" />
 	</notification>
-	<notification name="GroupDepart">
-		Hai lasciato il gruppo &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos;.
-	</notification>
-	<notification name="GroupLeaveConfirmMemberWithFee">
-		Attualmente sei membro del gruppo &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Aderire nuovamente costa L$[AMOUNT].
-Lasciare il gruppo?
-		<usetemplate name="okcancelbuttons" notext="Annulla" />
+	<notification name="GroupLeaveConfirmMemberNoFee">
+		Abbandona il gruppo &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+Al momento non è previsto alcun costo per rientrare in questo gruppo.
+		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Abbandona" />
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Impossibile abbandonare il gruppo. Non puoi abbandonare il gruppo perché sei l&apos;ultimo proprietario del gruppo. Devi prima assegnare a un altro membro il ruolo di proprietario.
@@ -2360,6 +2362,15 @@ Questa azione non può essere annullata.
 
 Confermare la cancellazione?
 		<usetemplate ignoretext="Conferma prima di eliminare gli elementi filtrati" name="okcancelignore" notext="Annulla" />
+	</notification>
+	<notification name="DeleteWornItems">
+		Alcuni elementi che desideri eliminare sono indossati sul tuo avatar.
+Rimuovere questi elementi dal tuo avatar?
+		<usetemplate name="okcancelbuttons" notext="Anulla" yestext="Rimuovi ed elimina elementi" />
+	</notification>
+	<notification name="CantDeleteRequiredClothing">
+		Alcuni degli elementi che desideri eliminare sono obbligatori (pelle, corpo, capelli, occhi).
+È necessario sostituire tali elementi prima di eliminarli.
 	</notification>
 	<notification name="DeleteThumbnail">
 		Eliminare l'immagine di questo elemento? Non sarà possibile annullare.
@@ -5234,6 +5245,22 @@ Gli oggetti mesh riggati sono progettati per essere attaccati all'avatar. Né tu
 
 Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'avatar.
 		<usetemplate ignoretext="Avvisami quando una mesh riggata viene indossata su un punto di attacco HUD." name="okignore" />
+	</notification>
+	<notification name="ConfirmOverwriteOutfit">
+		Sostituisci gli elementi nell'abito selezionato con gli elementi che indossi ora.
+		<usetemplate ignoretext="Conferma prima di sovrascrivere l'abito" name="okcancelignore" notext="Annulla" yestext="Salva" />
+	</notification>
+	<notification name="ClearInventoryThumbnailsWarning">
+		Stai per rimuovere le immagini dagli elementi dell'inventario nell'elenco. Questo cambiamento non può essere annullato.
+
+ Vuoi continuare?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sì" />
+	</notification>
+	<notification name="WriteInventoryThumbnailsWarning">
+		Stai per sovrascrivere le immagini per alcuni o tutti gli elementi dell'inventario nell'elenco. Questo cambiamento non può essere annullato.
+
+ Vuoi continuare?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sì" />
 	</notification>
 	<notification name="ReflectionProbeApplied">
 		ATTENZIONE: hai reso il tuo oggetto una sonda di riflessione. Ciò implicitamente cambia l'oggetto per imitare il suo volume di influenza. Questi cambiamenti sono irreversibili. Vuoi continuare?

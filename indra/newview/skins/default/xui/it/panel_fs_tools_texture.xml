@@ -60,7 +60,7 @@
 						</text>
 					</panel>
 				</panel>
-				<panel label="Colore base" name="panel_pbr_transforms_base_color">
+				<panel label="Col. base" name="panel_pbr_transforms_base_color">
 					<panel name="pbr_transforms_base_color_scale">
 						<text name="pbr_transforms_base_color_scale_label">
 							Scala

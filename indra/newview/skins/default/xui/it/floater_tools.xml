@@ -142,7 +142,7 @@
 		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Maggiori informazioni]
 	</text>
 	<tab_container name="Object Info Tabs">
-		<panel label="Generale" name="General">
+		<panel label="Gener." name="General">
 			<panel.string name="text deed continued">
 				Cedi
 			</panel.string>

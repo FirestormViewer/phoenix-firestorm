@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
+	<string name="ServerComboTooltip">
+		Una griglia esistente o l'URI di una griglia
+	</string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
 			<text name="log_in_text">
@@ -9,7 +12,7 @@
 				Nome utente:
 			</text>
 			<button tool_tip="Rimuovi questo nome" label="" name="remove_user_btn"/>
-			<combo_box tool_tip="Nome utente scelto per la registrazione, come carlorossi12 o Stella Marina" name="username_combo"/> 
+			<combo_box tool_tip="Nome utente scelto per la registrazione, come CarloRossi12 o Stella Sunshine" name="username_combo"/> 
 			<text name="password_text">
 				Password:
 			</text>
@@ -25,8 +28,11 @@
 			</combo_box>
 		</layout_panel>
 		<layout_panel name="grid_panel">
+			<text name="grid_builder_text">
+				+ Clicca per aggiungere altre griglie
+			</text>
 			<text name="grid_login_text">
-				Entra nella grid:
+				Entra nella griglia:
 			</text>
 		</layout_panel>
 		<layout_panel name="links_login_panel">
@@ -42,10 +48,10 @@
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">
-				Interfaccia:
+				MODALITÀ
 			</text>
-			<combo_box tool_tip="Scegliere la modalità di vista preferita per impostare le opzioni predefinite." name="mode_combo">
-				<combo_box.item label="Ibrido" name="Hybrid"/>
+			<combo_box tool_tip="Seleziona la tua modalità preferita, verranno applicate le impostazioni predefinite." name="mode_combo">
+				<combo_box.item label="Ibrida" name="Hybrid"/>
 				<combo_box.item label="Testo" name="Text"/>
 			</combo_box>
 		</layout_panel>
