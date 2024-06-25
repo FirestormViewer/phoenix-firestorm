@@ -381,11 +381,6 @@ static void update_tp_display(bool minimized)
                 gViewerWindow->setProgressPercent(75.f);
             }
 
-            if (!gSavedSettings.getBOOL("FSDisableTeleportScreens"))
-            {
-                gAgentCamera.resetView(TRUE, TRUE);
-            }
-
             // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
             gPostTeleportFinishKillObjectDelayTimer.reset();
             break;
