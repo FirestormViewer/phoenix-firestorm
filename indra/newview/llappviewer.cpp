@@ -3313,7 +3313,6 @@ bool LLAppViewer::initConfiguration()
                                  gSavedSettings.getString("SkinCurrentTheme"),
                                  gSavedSettings.getString("Language"));
         loadSettingsFromDirectory("CurrentSkin");
-        loadSettingsFromDirectory("User");
 // [/SL:KB]
 //      gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 //                               gSavedSettings.getString("Language"));
