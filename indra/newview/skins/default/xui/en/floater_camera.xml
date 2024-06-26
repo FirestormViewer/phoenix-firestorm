@@ -12,8 +12,8 @@
     can_close="false"
     chrome="true"
     follows="bottom"
-    height="135"
-    min_height="120"
+    height="141"
+    min_height="141"
     layout="topleft"
     name="camera_floater"
     title="Camera Controls"
@@ -22,8 +22,8 @@
     save_visibility="true"
     show_title="false"
     single_instance="true"
-    width="174"
-    min_width="159">
+    width="194"
+    min_width="179">
   <floater.string name="rotate_tooltip">
         Rotate Camera Around Focus
   </floater.string>
@@ -43,78 +43,102 @@
       layout="topleft"
       left="2"
       name="buttons_panel"
-      width="120"
-      top_pad="-5">
+      width="156"
+      top_pad="0">
     <panel_camera_item
         name="front_view"
         tool_tip="Front View"
-        width="18"
+        width="24"
+        height="24"
+        layout="topleft"
         left="2">
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="Front View" />
-      <panel_camera_item.picture image_name="Cam_Preset_Front_Off" />
-      <panel_camera_item.selected_picture image_name="Cam_Preset_Front_On" />
+      <panel_camera_item.picture image_name="Cam_Preset_Front_Off" height="24" width="24" />
+      <panel_camera_item.selected_picture image_name="Cam_Preset_Front_On" height="24" width="24" />
+      <panel_camera_item.icon_over height="24" width="24" />
+      <panel_camera_item.icon_selected height="24" width="24" />
     </panel_camera_item>
     <panel_camera_item
         name="group_view"
         tool_tip="Side View"
-        width="18"
+        width="24"
+        height="24"
+        layout="topleft"
         left_pad="2">
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="Side View" />
-      <panel_camera_item.picture image_name="Cam_Preset_Side_Off" />
-      <panel_camera_item.selected_picture image_name="Cam_Preset_Side_On" />
+      <panel_camera_item.picture image_name="Cam_Preset_Side_Off" height="24" width="24" />
+      <panel_camera_item.selected_picture image_name="Cam_Preset_Side_On" height="24" width="24" />
+      <panel_camera_item.icon_over height="24" width="24" />
+      <panel_camera_item.icon_selected height="24" width="24" />
     </panel_camera_item>
     <panel_camera_item
         name="rear_view"
         tool_tip="Rear View"
-        width="18"
+        width="24"
+        height="24"
+        layout="topleft"
         left_pad="2">
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="Rear View" />
-      <panel_camera_item.picture image_name="Cam_Preset_Back_Off" />
-      <panel_camera_item.selected_picture image_name="Cam_Preset_Back_On" />
+      <panel_camera_item.picture image_name="Cam_Preset_Back_Off" height="24" width="24" />
+      <panel_camera_item.selected_picture image_name="Cam_Preset_Back_On" height="24" width="24" />
+      <panel_camera_item.icon_over height="24" width="24" />
+      <panel_camera_item.icon_selected height="24" width="24" />
     </panel_camera_item>
     <panel_camera_item
         name="object_view"
         tool_tip="Object View"
-        width="18"
+        width="24"
+        height="24"
+        layout="topleft"
         left_pad="2">
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="object_view" />
-      <panel_camera_item.picture image_name="Object_View_Off" />
-      <panel_camera_item.selected_picture image_name="Object_View_On" />
+      <panel_camera_item.picture image_name="Object_View_Off" height="24" width="24" />
+      <panel_camera_item.selected_picture image_name="Object_View_On" height="24" width="24" />
+      <panel_camera_item.icon_over height="24" width="24" />
+      <panel_camera_item.icon_selected height="24" width="24" />
     </panel_camera_item>
     <panel_camera_item
         name="mouselook_view"
         tool_tip="Mouselook View"
-        width="18"
+        width="24"
+        height="24"
+        layout="topleft"
         left_pad="2">
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="mouselook_view" />
-      <panel_camera_item.picture image_name="MouseLook_View_Off" />
-      <panel_camera_item.selected_picture image_name="MouseLook_View_On" />
+      <panel_camera_item.picture image_name="MouseLook_View_Off" height="24" width="24" />
+      <panel_camera_item.selected_picture image_name="MouseLook_View_On" height="24" width="24" />
+      <panel_camera_item.icon_over height="24" width="24" />
+      <panel_camera_item.icon_selected height="24" width="24" />
     </panel_camera_item>
     <panel_camera_item
         name="reset_view"
         tool_tip="Reset view"
-        width="18"
+        width="24"
+        height="24"
+        layout="topleft"
         left_pad="2">
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="reset_view" />
-      <panel_camera_item.picture image_name="Refresh_Off" />
-      <panel_camera_item.selected_picture image_name="Refresh_Over" />
+      <panel_camera_item.picture image_name="Refresh_Off" height="24" width="24" />
+      <panel_camera_item.selected_picture image_name="Refresh_Over" height="24" width="24" />
+      <panel_camera_item.icon_over height="24" width="24" />
+      <panel_camera_item.icon_selected height="24" width="24" />
     </panel_camera_item>
   </panel>
   <panel
       border="false"
-      width="164"
+      width="184"
       class="camera_zoom_panel"
       height="60"
       layout="topleft"
@@ -288,7 +312,7 @@
         layout="topleft"
         left_delta="5"
         name="camera_position_btn"
-        width="137">
+        width="157">
         <button.commit_callback
           function="Floater.Show"
           parameter="prefs_view_advanced" />
@@ -312,7 +336,7 @@
         mouse_opaque="true"
         name="preset_combo"
         top_pad="0"
-        width="137">
+        width="157">
       <combo_list mouse_wheel_opaque="true" />
       <combo_box.item
           label="Use preset"
