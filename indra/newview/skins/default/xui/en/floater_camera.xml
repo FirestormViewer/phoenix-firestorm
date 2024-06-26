@@ -22,8 +22,8 @@
     save_visibility="true"
     show_title="false"
     single_instance="true"
-    width="150"
-    min_width="135">
+    width="174"
+    min_width="159">
   <floater.string name="rotate_tooltip">
         Rotate Camera Around Focus
   </floater.string>
@@ -114,7 +114,7 @@
   </panel>
   <panel
       border="false"
-      width="140"
+      width="164"
       class="camera_zoom_panel"
       height="60"
       layout="topleft"
@@ -155,6 +155,46 @@
             tool_tip="Orbit camera around focus"
             held_down_delay.seconds="0.0"
             top="0" />
+      </layout_panel>
+
+      <layout_panel
+          name="camera_roll_layout_panel"
+          auto_resize="false"
+          user_resize="false"
+          height="80"
+          width="24">
+          <button
+              follows="top|left"
+              height="24"
+              image_selected="VirtualTrackball_Rotate_Left_Active"
+              image_unselected="VirtualTrackball_Rotate_Left"
+              layout="topleft"
+              left_delta="0"
+              name="roll_left"
+              tool_tip="Roll camera Left"
+              width="24"
+              top="0">
+             <commit_callback
+                function="Camera.roll_left" />
+             <mouse_held_callback
+                function="Camera.roll_left" />
+          </button>
+          <button
+              follows="bottom|left"
+              height="24"
+              image_selected="VirtualTrackball_Rotate_Right_Active"
+              image_unselected="VirtualTrackball_Rotate_Right"
+              layout="topleft"
+              top_delta="56"
+              left_delta="0"
+              name="roll_right"
+              tool_tip="Roll camera Right"
+              width="24">
+             <commit_callback
+                function="Camera.roll_right" />
+             <mouse_held_callback
+                function="Camera.roll_right" />
+          </button>
       </layout_panel>
 
       <layout_panel
@@ -248,7 +288,7 @@
         layout="topleft"
         left_delta="5"
         name="camera_position_btn"
-        width="113">
+        width="137">
         <button.commit_callback
           function="Floater.Show"
           parameter="prefs_view_advanced" />
@@ -272,7 +312,7 @@
         mouse_opaque="true"
         name="preset_combo"
         top_pad="0"
-        width="113">
+        width="137">
       <combo_list mouse_wheel_opaque="true" />
       <combo_box.item
           label="Use preset"
