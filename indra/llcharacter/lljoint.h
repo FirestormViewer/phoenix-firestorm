@@ -169,6 +169,15 @@ public:
 
     S32             mJointNum;
 
+    //BD - Poser
+    LLQuaternion    mNextRotation;
+    LLQuaternion    mTargetRotation;
+    LLQuaternion    mLastRotation;
+    LLVector3       mNextPosition;
+    LLVector3       mTargetPosition;
+    LLVector3       mLastPosition;
+    bool            mHasPosition;
+
     // child joints
     typedef std::vector<LLJoint*> joints_t;
     joints_t mChildren;
@@ -270,6 +279,28 @@ public:
     LLVector3 getWorldPosition();
     LLVector3 getLastWorldPosition();
     void setWorldPosition( const LLVector3& pos );
+
+    //BD - Poser
+    void setTargetPosition(const LLVector3& pos) { mTargetPosition = pos; }
+    LLVector3 getTargetPosition() const { return mTargetPosition; }
+
+    void setTargetRotation(const LLQuaternion& rot) { mTargetRotation = rot; }
+    LLQuaternion getTargetRotation() const { return mTargetRotation; }
+
+    void setLastPosition(const LLVector3& pos) { mLastPosition = pos; }
+    LLVector3 getLastPosition() const { return mLastPosition; }
+
+    void setLastRotation(const LLQuaternion& rot) { mLastRotation = rot; }
+    LLQuaternion getLastRotation() const { return mLastRotation; }
+
+    void setCanReposition(const bool can_reposition) { mHasPosition = can_reposition; }
+    bool canReposition() const { return mHasPosition; }
+
+    void setNextPosition(const LLVector3& pos) { mNextPosition = pos; }
+    LLVector3 getNextPosition() const { return mNextPosition; }
+
+    void setNextRotation(const LLQuaternion& rot) { mNextRotation = rot; }
+    LLQuaternion getNextRotation() const { return mNextRotation; }
 
     // get/set local rotation
     const LLQuaternion& getRotation();

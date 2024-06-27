@@ -2719,6 +2719,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Performance_Label">Graphics speed</string>
   <string name="Command_Picks_Label">Picks</string>
   <string name="Command_Places_Label">Places</string>
+  <string name="Command_Poser_Label">Poser</string>
   <string name="Command_Preferences_Label">Preferences</string>
   <string name="Command_Profile_Label">Profile</string>
   <string name="Command_Report_Abuse_Label">Report Abuse</string>

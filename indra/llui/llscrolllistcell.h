@@ -35,6 +35,13 @@
 #include "llui.h"
 #include "llgltexture.h"
 
+#include "lllineeditor.h"
+
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+#include "lluictrl.h"
+// [/SL:KB]
+
+class LLMultiSlider;
 class LLCheckBoxCtrl;
 class LLSD;
 class LLUIImage;
@@ -50,6 +57,10 @@ class LLUIImage;
 class LLScrollListCell
 {
 public:
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+    typedef boost::function<void(LLScrollListCell* cell)> commit_callback_t;
+    typedef boost::signals2::signal<void(LLScrollListCell* cell)> commit_signal_t;
+// [/SL:KB]
     struct Params : public LLInitParam::Block<Params>
     {
         Optional<std::string>       type,
@@ -59,6 +70,9 @@ public:
         Optional<bool>              enabled,
                                     visible;
 
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+        Optional<commit_callback_t> commit_callback;
+// [/SL:KB]
         Optional<void*>             userdata;
         Optional<LLSD>              value; // state of checkbox, icon id/name, date
         Optional<LLSD>              alt_value;
@@ -71,12 +85,21 @@ public:
 
         Optional<LLColor4>          color;
 
+        //BD
+        Optional<S32>               max_sliders;
+        Optional<F32>               min_val;
+        Optional<F32>               max_val;
+        Optional<F32>               increment;
+
         Params()
         :   type("type", "text"),
             column("column"),
             width("width"),
             enabled("enabled", true),
             visible("visible", true),
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+            commit_callback("commit_callback"),
+// [/SL:KB]
             value("value"),
             alt_value("alt_value", ""),
             label("label"),
@@ -84,7 +107,12 @@ public:
             font("font", LLFontGL::getFontEmojiSmall()),
             font_color("font_color", LLColor4::black),
             color("color", LLColor4::white),
-            font_halign("halign", LLFontGL::LEFT)
+            font_halign("halign", LLFontGL::LEFT),
+            //BD
+            max_sliders("max_sliders", 60),
+            min_val("min_value", 0),
+            max_val("max_value", 1),
+            increment("increment", 1)
         {
             addSynonym(column, "name");
             addSynonym(font_color, "font-color");
@@ -104,6 +132,9 @@ public:
     virtual const LLSD      getAltValue() const;
     virtual void            setValue(const LLSD& value) { }
     virtual void            setAltValue(const LLSD& value) { }
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+    virtual const std::string &getColumnName() const { return mColumnName; }
+// [/SL:KB]
     virtual const std::string &getToolTip() const { return mToolTip; }
     virtual void            setToolTip(const std::string &str) { mToolTip = str; }
     virtual BOOL            getVisible() const { return TRUE; }
@@ -119,6 +150,9 @@ public:
 
 private:
     S32 mWidth;
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+    std::string mColumnName;
+// [/SL:KB]
     std::string mToolTip;
 };
 
@@ -194,11 +228,15 @@ public:
     /*virtual*/ const LLSD      getValue() const;
     /*virtual*/ void    setColor(const LLColor4&);
     /*virtual*/ void    setValue(const LLSD& value);
+    void setClickCallback(BOOL (*callback)(void*), void* user_data);
+    BOOL handleClick() override;
 
 private:
     LLPointer<LLUIImage>    mIcon;
     LLColor4                mColor;
     LLFontGL::HAlign        mAlignment;
+    BOOL (*mCallback)(void*);
+    void* mUserData;
 };
 
 
@@ -242,6 +280,9 @@ public:
 
 private:
     LLCheckBoxCtrl* mCheckBox;
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+    commit_signal_t* mCommitSignal = nullptr;
+// [/SL:KB]
 };
 
 class LLScrollListDate : public LLScrollListText
@@ -266,6 +307,7 @@ public:
     /*virtual*/ ~LLScrollListIconText();
     /*virtual*/ void    draw(const LLColor4& color, const LLColor4& highlight_color) const;
     /*virtual*/ const LLSD      getValue() const;
+    /*virtual*/ const LLSD      getAltValue() const;
     /*virtual*/ void    setValue(const LLSD& value);
 
 
@@ -275,6 +317,56 @@ public:
 private:
     LLPointer<LLUIImage>    mIcon;
     S32                     mPad;
+};
+
+class LLScrollListLineEditor : public LLScrollListCell
+{
+public:
+    LLScrollListLineEditor( const LLScrollListCell::Params&);
+    /*virtual*/ ~LLScrollListLineEditor();
+    void    draw(const LLColor4& color, const LLColor4& highlight_color) const override;
+    S32     getHeight() const override { return 0; }
+    const LLSD  getValue() const override { return mLineEditor->getValue(); }
+    void    setValue(const LLSD& value) override { mLineEditor->setValue(value); }
+    void    onCommit() override { mLineEditor->onCommit(); }
+    BOOL    handleClick() override;
+    virtual BOOL    handleUnicodeChar(llwchar uni_char, BOOL called_from_parent);
+    virtual BOOL    handleUnicodeCharHere(llwchar uni_char );
+    void    setEnabled(BOOL enable) override { mLineEditor->setEnabled(enable); }
+
+    LLLineEditor*   getLineEditor()             { return mLineEditor; }
+    BOOL    isText() const override { return FALSE; }
+
+private:
+    LLLineEditor* mLineEditor;
+};
+
+/*
+* BD - Cell displaying a keyframe multislider.
+*/
+
+class LLScrollListMultiSlider : public LLScrollListCell
+{
+public:
+    LLScrollListMultiSlider(const LLScrollListCell::Params& p);
+    /*virtual*/ ~LLScrollListMultiSlider();
+    /*virtual*/ void    draw(const LLColor4& color, const LLColor4& highlight_color) const;
+    /*virtual*/ const LLSD      getValue() const;
+    /*virtual*/ void    setValue(const LLSD& value);
+
+
+    /*virtual*/ void    setWidth(S32 width);/* { LLScrollListCell::setWidth(width); mTextWidth = width - ; }*/
+
+    F32                 getMinValue() const { return mMinValue; }
+    F32                 getMaxValue() const { return mMaxValue; }
+
+    void                addKeyframe(F32 time, std::string name);
+    void                deleteKeyframe(std::string name);
+
+private:
+    LLMultiSlider*      mMultiSlider;
+    F32                 mMinValue;
+    F32                 mMaxValue;
 };
 
 #endif

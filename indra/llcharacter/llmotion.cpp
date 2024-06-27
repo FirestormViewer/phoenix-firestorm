@@ -52,7 +52,10 @@ LLMotion::LLMotion( const LLUUID &id ) :
     mResidualWeight(0.f),
     mFadeWeight(1.f),
     mDeactivateCallback(NULL),
-    mDeactivateCallbackUserData(NULL)
+    mDeactivateCallbackUserData(NULL),
+
+    //BD - Eternal
+    mEternal(false)
 {
     for (S32 i=0; i<3; ++i)
         memset(&mJointSignature[i][0], 0, sizeof(U8) * LL_CHARACTER_MAX_ANIMATED_JOINTS);
@@ -120,6 +123,31 @@ void LLMotion::addJointState(const LLPointer<LLJointState>& jointState)
     mJointSignature[0][joint_num] = (usage & LLJointState::POS) ? (0xff >> (7 - priority)) : 0;
     mJointSignature[1][joint_num] = (usage & LLJointState::ROT) ? (0xff >> (7 - priority)) : 0;
     mJointSignature[2][joint_num] = (usage & LLJointState::SCALE) ? (0xff >> (7 - priority)) : 0;
+}
+
+//BD
+//-----------------------------------------------------------------------------
+// removeJointState()
+//-----------------------------------------------------------------------------
+void LLMotion::removeJointState(const LLPointer<LLJointState>& jointState)
+{
+    mPose.removeJointState(jointState);
+}
+
+//BD
+//-----------------------------------------------------------------------------
+// findJointState()
+//-----------------------------------------------------------------------------
+const LLPointer<LLJointState> LLMotion::findJointState(const std::string jointName)
+{
+    const LLPointer<LLJointState> joint_state = mPose.findJointState(jointName);
+    return joint_state;
+}
+
+const LLPointer<LLJointState> LLMotion::findJointState(LLJoint *joint)
+{
+    const LLPointer<LLJointState> joint_state = mPose.findJointState(joint);
+    return joint_state;
 }
 
 void LLMotion::setDeactivateCallback( void (*cb)(void *), void* userdata )

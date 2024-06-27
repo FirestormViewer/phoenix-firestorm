@@ -58,6 +58,8 @@ typedef enum ELLPath
     // <FS:Ansariel> Sound cache
     LL_PATH_FS_SOUND_CACHE = 22,
     // </FS:Ansariel>
+    LL_PATH_POSES = 23,
+    LL_PATH_ANIMATIONS = 24,
     LL_PATH_LAST
 } ELLPath;
 
@@ -279,6 +281,8 @@ class LLDir
         append(destpath, names...);
         return destpath;
     }
+
+    static std::string escapePathString(std::string_view str);
 
 protected:
     // Does an add() or append() call need a directory delimiter?

@@ -435,6 +435,10 @@ protected:
 
 public:
     void setCharacter(LLCharacter* character) { mCharacter = character; }
+
+    //BD - Poser
+    JointMotionList* getJointMotionList() const { return mJointMotionList; }
+    void setJointMotionList(JointMotionList* list) { mJointMotionList = list; }
 };
 
 class LLKeyframeDataCache
