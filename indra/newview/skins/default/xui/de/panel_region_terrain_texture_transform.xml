@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Terrain" name="Terrain">
+	<text name="region_text_lbl">
+		Region:
+	</text>
+	<text name="region_text">
+		unbekannt
+	</text>
+	<text name="detail_texture_text">
+		Terrain-Texturen
+	</text>
+	<text name="detail_material_text">
+		Terrain-Materialien
+	</text>
+	<check_box label="PBR metallische Unebenheit" name="terrain_material_type" tool_tip="Falls aktiviert, wird PBR metallische Unebenheit Materialien für Terrain verwendet. Ansonsten werden Texturen verwendet."/>
+	<text name="height_text_lbl">
+		1 (Niedrig)
+	</text>
+	<text name="height_text_lbl2">
+		2
+	</text>
+	<text name="height_text_lbl3">
+		3
+	</text>
+	<text name="height_text_lbl4">
+		4 (Hoch)
+	</text>
+	<layout_stack name="terrain_features_stack">
+		<layout_panel name="frame_settings_terrain">
+			<tab_container name="terrain_tabs">
+				<panel label="Erhebung" name="terrain_elevation_panel" />
+				<panel label="Transformationen" name="terrain_transform_panel" />
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+	<button label="Anwenden" name="apply_btn"/>
+</panel>
