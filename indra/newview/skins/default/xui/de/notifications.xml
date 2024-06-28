@@ -5088,6 +5088,14 @@ Möchten Sie fortfahren?
 		Sie müssen ein Objekt auswählen, das als Ankerpunkt für den GLTF-Gegenstand fungiert, den Sie vorschauen möchten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="GLTFLoadFailed">
+		GLTF-Datei konnte nicht geladen werden. Bitte prüfen Sie die Log-Datei für Details.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFSaveFailed">
+		GLTF-Datei konnte nicht gespeichert werden. Bitte prüfen Sie die Log-Datei für Details.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="GLTFSaveSelection">
 		Sie müssen ein Objekt auswählen, das mit einem GLTF-Gegenstand verknüpft ist.
 		<usetemplate name="okbutton" yestext="OK"/>
