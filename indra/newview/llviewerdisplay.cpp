@@ -389,7 +389,7 @@ static void update_tp_display(bool minimized)
         // Make the user wait while content "pre-caches"
         {
             F32 arrival_fraction = (gTeleportArrivalTimer.getElapsedTimeF32() / teleport_arrival_delay());
-            if (arrival_fraction > 1.f || gSavedSettings.getBOOL("FSDisableTeleportScreens"))
+            if (arrival_fraction > 1.f)
             {
                 arrival_fraction = 1.f;
                 //LLFirstUse::useTeleport();
