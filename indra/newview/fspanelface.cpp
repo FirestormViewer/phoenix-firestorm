@@ -5985,22 +5985,22 @@ void FSPanelFace::selectPBRChannel(S32 pbr_channel)
 {
     if (pbr_channel == PBRTYPE_NORMAL)
     {
-        mTabsMatChannel->selectTabByName("panel_pbr_transforms_base_color");
+        mTabsPBRChannel->selectTabByName("panel_pbr_transforms_normal");
     }
     else if (pbr_channel == PBRTYPE_BASE_COLOR)
     {
-        mTabsMatChannel->selectTabByName("panel_pbr_transforms_normal");
+        mTabsPBRChannel->selectTabByName("panel_pbr_transforms_base_color");
     }
     else if (pbr_channel == PBRTYPE_METALLIC_ROUGHNESS)
     {
-        mTabsMatChannel->selectTabByName("panel_pbr_transforms_metallic");
+        mTabsPBRChannel->selectTabByName("panel_pbr_transforms_metallic");
     }
     else if (pbr_channel == PBRTYPE_EMISSIVE)
     {
-        mTabsMatChannel->selectTabByName("panel_pbr_transforms_emissive");
+        mTabsPBRChannel->selectTabByName("panel_pbr_transforms_emissive");
     }
     else
     {
-        mTabsMatChannel->selectTabByName("panel_pbr_transforms_all");
+        mTabsPBRChannel->selectTabByName("panel_pbr_transforms_all");
     }
 }
