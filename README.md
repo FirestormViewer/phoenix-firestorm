@@ -1,5 +1,40 @@
 ![Firestorm Viewer Logo](doc/firestorm_256.png)
 
+# AyaneStorm
+
+Quick build instructions (for Windows):
+
+First, make sure you installed all the prerequisites software. See [Windows](doc/building_windows.md)
+
+Build without FMOD (the simplest):
+```
+git clone https://github.com/AyaneStorm/phoenix-firestorm.git
+cd phoenix-firestorm
+prepare_no_fmod.bat (only the first time)
+build_no_fmod.bat
+```
+
+Build with FMOD (more complicated):
+First, follow Alchemy Viewer instructions (you'll need Cygwin64).
+Then update the set_fmod_vars.bat file with correct values.
+
+- FMOD_HASH is the MD5 hash of the FMOD file
+- FMOD_URL is the locaiton of the FMOD file (starts with file:///)
+
+Then type:
+
+```
+git clone https://github.com/AyaneStorm/phoenix-firestorm.git
+cd phoenix-firestorm
+prepare_with_fmod.bat  (only the first time)
+build_with_fmod.bat
+```
+
+If you already prepared the build and want to rebuild later:
+- Open a CMD prompt
+- Depending on you want to build with FMOD or without, type `rebuild_with_fmod.bat` or `rebuild_no_fmod.bat`
+- Then type `build_with_fmod.bat` or `build_without_fmod.bat`
+
 **[Firestorm](https://www.firestormviewer.org/) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.** This repository contains the official source code for the Firestorm viewer.
 
 ## Open Source
