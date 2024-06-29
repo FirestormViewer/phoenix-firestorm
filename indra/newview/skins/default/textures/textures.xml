@@ -809,6 +809,11 @@ with the same filename but different name
   <texture name="TextField_Active" file_name="widgets/TextField_Active.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
   <texture name="TextField_Search_Highlight" file_name="widgets/TextField_Search_Highlight.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
 
+  <texture name="Caution_Widget" file_name="icons/Caution_Widget.png" preload="true"/>
+  <texture name="Default_Widget" file_name="icons/Default_Widget.png" preload="true"/>
+  <texture name="Caution_Widget_Mini" file_name="icons/Caution_Widget_Mini.png" preload="true"/>
+  <texture name="Default_Widget_Mini" file_name="icons/Default_Widget_Mini.png" preload="true"/>
+
   <texture name="Thumbnail_Fallback" file_name="icons/thumbnail_fallback_icon.png" preload="true" />
 
   <texture name="Toast_CloseBtn" file_name="windows/Toast_CloseBtn.png" preload="true" />
