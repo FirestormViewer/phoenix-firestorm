@@ -19,7 +19,6 @@
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
-		<string>RenderCloudShadowAmbianceFactor</string>
 		<string>RenderCompressTextures</string>
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
