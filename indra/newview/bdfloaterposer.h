@@ -94,7 +94,7 @@ private:
     void onJointPastePosition();
     void onJointPasteScale();
     void onJointMirror();
-    void onJointSymmetrize();
+    void onJointSymmetrize(bool from = true);
     void onJointCopyTransforms();
 
     //BD - Misc

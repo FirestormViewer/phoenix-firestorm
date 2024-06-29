@@ -80,6 +80,8 @@ BDFloaterPoseCreator::BDFloaterPoseCreator(const LLSD& key)
     mCommitCallbackRegistrar.add("Keyframe.Time", boost::bind(&BDFloaterPoseCreator::onKeyframeTime, this));
     //BD - Refresh the keyframe scroll list and fill it with all relevant keys.
     mCommitCallbackRegistrar.add("Keyframe.Refresh", boost::bind(&BDFloaterPoseCreator::onKeyframeRefresh, this));
+	//BD - Refresh the keyframe scroll list and fill it with all relevant keys.
+	mCommitCallbackRegistrar.add("Keyframe.ResetAll", boost::bind(&BDFloaterPoseCreator::onKeyframeResetAll, this));
 
     //BD - Change a bone's rotation.
     mCommitCallbackRegistrar.add("Joint.Set", boost::bind(&BDFloaterPoseCreator::onJointSet, this, _1, _2));
@@ -178,11 +180,11 @@ BOOL BDFloaterPoseCreator::postBuild()
         gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
     mJointScrolls[JOINTS]->setContextMenu(FSScrollListCtrl::MENU_EXTERNAL, joint_menu);
 
-    mJointScrolls[JOINTS]->refreshLineHeight();
-    mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
-    mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
-    mKeyframeScroll->refreshLineHeight();
-    mTimelineScroll->refreshLineHeight();
+    //mJointScrolls[JOINTS]->refreshLineHeight();
+    //mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
+    //mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
+    //mKeyframeScroll->refreshLineHeight();
+    //mTimelineScroll->refreshLineHeight();
 
     return TRUE;
 }
@@ -298,6 +300,51 @@ void BDFloaterPoseCreator::onKeyframesRebuild()
     }
 }
 
+void BDFloaterPoseCreator::onKeyframeResetAll()
+{
+    if (!gDragonAnimator.mPoseCreatorMotion)
+        return;
+
+    S32 usage = 0;
+    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
+    if (!joint_list)
+        return;
+
+    for (S32 joint_idx = 0; joint_idx < joint_list->getNumJointMotions(); joint_idx++)
+    {
+        LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint_idx);
+        if (!joint_motion)
+            continue;
+
+        LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(joint_motion->mJointName));
+        if (!joint)
+            continue;
+
+        //BD - Kill all rotation, position and scale keyframes.
+        LLKeyframeMotion::RotationCurve rot_curve;
+        joint_motion->mRotationCurve = rot_curve;
+
+        LLKeyframeMotion::PositionCurve pos_curve;
+        joint_motion->mPositionCurve = pos_curve;
+
+        LLKeyframeMotion::ScaleCurve scale_curve;
+        joint_motion->mScaleCurve = scale_curve;
+
+        //BD - Reset the usage.
+        LLJointState* joint_state = gDragonAnimator.mPoseCreatorMotion->findJointState(joint);
+        joint_state->setUsage(usage);
+    }
+
+    //BD - Reset the pose.
+    onJointRotPosScaleReset();
+
+    //BD - Refresh the keyframes.
+    onKeyframeRefresh();
+    onKeyframesRebuild();
+
+    //BD - Check if our animation duration needs changing.
+    onAnimationDurationCheck();
+}
 void BDFloaterPoseCreator::onKeyframeRefresh()
 {
     S32 idx = mJointTabs->getCurrentPanelIndex();
@@ -471,8 +518,8 @@ void BDFloaterPoseCreator::onKeyframeSelect()
         return;
 
     LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //if (!joint_list)
+    //    return;
 
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     S32 si = item->getColumn(1)->getValue().asInteger();
@@ -527,12 +574,12 @@ void BDFloaterPoseCreator::onKeyframeSelect()
 
 void BDFloaterPoseCreator::onKeyframeAdd(F32 time, LLJoint* joint)
 {
-    if (!gDragonAnimator.mPoseCreatorMotion)
-        return;
+    //if (!gDragonAnimator.mPoseCreatorMotion)
+    //    return;
 
     LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //if (!joint_list)
+    //    return;
 
     S32 modifier_idx = mModifierTabs->getCurrentPanelIndex();
 
@@ -596,14 +643,15 @@ void BDFloaterPoseCreator::onKeyframeAdd(F32 time, LLJoint* joint)
 
 void BDFloaterPoseCreator::onKeyframeAdd()
 {
-    if (!gDragonAnimator.mPoseCreatorMotion)
-        return;
+    //if (!gDragonAnimator.mPoseCreatorMotion)
+    //    return;
 
-    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
+    //if (!joint_list)
+    //    return;
 
     std::vector<LLScrollListItem*> items = mJointScrolls[JOINTS]->getAllSelected();
+	LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
     LLScrollListItem* item = mKeyframeScroll->getFirstSelected();
     MASK mask = gKeyboard->currentMask(TRUE);
     bool multiple = (items.size() > 1);
@@ -899,8 +947,8 @@ void BDFloaterPoseCreator::onKeyframeRemove()
         return;
 
     LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //if (!joint_list)
+    //    return;
 
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     LLJointState* joint_state = gDragonAnimator.mPoseCreatorMotion->findJointState(joint);
@@ -1015,8 +1063,8 @@ void BDFloaterPoseCreator::onKeyframeTime()
         return;
 
     LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //if (!joint_list)
+    //    return;
 
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     S32 si = mKeyframeScroll->getFirstSelectedIndex() + 1;
@@ -1070,8 +1118,8 @@ void BDFloaterPoseCreator::onEditAnimationInfo(const LLSD& param)
         return;
 
     LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //if (!joint_list)
+    //    return;
 
     std::string msg = param.asString();
     if (msg == "ease_in")
@@ -1127,8 +1175,8 @@ void BDFloaterPoseCreator::onInterpolationChange(LLUICtrl* ctrl)
         return;
 
     LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //if (!joint_list)
+    //    return;
 
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     S32 interp_idx = ctrl->getValue().asInteger();
@@ -1156,9 +1204,9 @@ void BDFloaterPoseCreator::onAnimationDurationCheck()
     if (!gDragonAnimator.mPoseCreatorMotion)
         return;
 
-    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
+    //if (!joint_list)
+    //    return;
 
     LLScrollListItem* joint_item = mJointScrolls[JOINTS]->getFirstSelected();
     if (!joint_item)
@@ -1168,6 +1216,7 @@ void BDFloaterPoseCreator::onAnimationDurationCheck()
     if (!joint)
         return;
 
+    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
     F32 new_time = 0.0f;
 
     //BD - Go through all motions and all keys and determine the largest keyframe time.
@@ -1731,9 +1780,9 @@ void BDFloaterPoseCreator::onJointControlsRefresh()
     getChild<LLUICtrl>("key_time")->setEnabled(is_posing && !is_previewing);
     mStartPosingBtn->setEnabled(!is_previewing);
 
-    mJointScrolls[JOINTS]->refreshLineHeight();
-    mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
-    mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
+    //mJointScrolls[JOINTS]->refreshLineHeight();
+    //mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
+    //mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
 }
 
 void BDFloaterPoseCreator::onJointSet(LLUICtrl* ctrl, const LLSD& param)
@@ -1751,9 +1800,9 @@ void BDFloaterPoseCreator::onJointSet(LLUICtrl* ctrl, const LLSD& param)
     if (!gDragonAnimator.mPoseCreatorMotion)
         return;
 
-    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
+    //if (!joint_list)
+    //    return;
 
     LLScrollListItem* key_item = mKeyframeScroll->getFirstSelected();
 
@@ -1790,6 +1839,7 @@ void BDFloaterPoseCreator::onJointSet(LLUICtrl* ctrl, const LLSD& param)
     }
 
     //BD - After a lot of different approaches this seemed to be the most feasible and functional.
+	LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     LLKeyframeMotion::RotationCurve rot_curve = joint_motion->mRotationCurve;
 
@@ -1951,9 +2001,9 @@ void BDFloaterPoseCreator::onJointPosSet(LLUICtrl* ctrl, const LLSD& param)
     if (!gDragonAnimator.mPoseCreatorMotion)
         return;
 
-    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
+    //if (!joint_list)
+    //    return;
 
     LLScrollListItem* key_item = mKeyframeScroll->getFirstSelected();
 
@@ -1975,6 +2025,7 @@ void BDFloaterPoseCreator::onJointPosSet(LLUICtrl* ctrl, const LLSD& param)
     cell[dir]->setValue(ll_round(vec3.mV[dir], 0.001f));
     joint->setTargetPosition(vec3);
 
+	LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     LLKeyframeMotion::RotationCurve rot_curve = joint_motion->mRotationCurve;
 
@@ -2039,9 +2090,9 @@ void BDFloaterPoseCreator::onJointScaleSet(LLUICtrl* ctrl, const LLSD& param)
     if (!gDragonAnimator.mPoseCreatorMotion)
         return;
 
-    LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
-    if (!joint_list)
-        return;
+    //LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
+    //if (!joint_list)
+    //    return;
 
     LLScrollListItem* key_item = mKeyframeScroll->getFirstSelected();
     if (!key_item)
@@ -2058,6 +2109,7 @@ void BDFloaterPoseCreator::onJointScaleSet(LLUICtrl* ctrl, const LLSD& param)
     cell[dir]->setValue(ll_round(vec3.mV[dir], 0.001f));
     joint->setScale(vec3);
 
+	LLKeyframeMotion::JointMotionList* joint_list = gDragonAnimator.mPoseCreatorMotion->getJointMotionList();
     LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint->getJointNum());
     LLKeyframeMotion::RotationCurve rot_curve = joint_motion->mRotationCurve;
 

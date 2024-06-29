@@ -16,8 +16,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "bdanimator.h"
-
 #include "lluictrlfactory.h"
 #include "llagent.h"
 #include "lldiriterator.h"
@@ -30,6 +28,7 @@
 #include "llviewercontrol.h"
 
 #include "bdfloaterposer.h"
+#include "bdanimator.h"
 #include "bdposingmotion.h"
 
 #include "llagentcamera.h"
@@ -48,6 +47,30 @@ BDAnimator::~BDAnimator()
 
 void BDAnimator::update()
 {
+    //BD - Don't scale our head when we are posing. We should probably implement a more
+    //     precise solution such as saving the vectors and reapplying them on leave.
+    if (gAgentAvatarp && !gAgentAvatarp->mIsPosing)
+    {
+        static LLCachedControl<bool> exp_scaling(gSavedSettings, "MouselookExperimentalHeadScaling");
+        if (exp_scaling && gAgentCamera.cameraMouselook())
+        {
+            LLJoint* joint;
+            for (S32 i = 0; (joint = gAgentAvatarp->getCharacterJoint(i)); ++i)
+            {
+                if (!joint)	continue;
+
+                if (joint->mJointNum > 7 &&	//mHead
+                    joint->mJointNum < 58)	//mCollarLeft
+                {
+                    joint->setScale(LLVector3::zero);
+                }
+            }
+
+            joint = gAgentAvatarp->getJoint(JointKey::construct("HEAD"));
+            if (joint)
+                joint->setScale(LLVector3::zero);
+        }
+    }
     //BD - Don't do anything if the animator is not activated.
     if (!mPlaying) return;
 

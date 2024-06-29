@@ -88,7 +88,9 @@ BDFloaterPoser::BDFloaterPoser(const LLSD& key)
     //BD - Mirror the current bone's rotation to match what the other body side's rotation should be.
     mCommitCallbackRegistrar.add("Joint.Mirror", boost::bind(&BDFloaterPoser::onJointMirror, this));
     //BD - Copy and mirror the other body side's bone rotation.
-    mCommitCallbackRegistrar.add("Joint.Symmetrize", boost::bind(&BDFloaterPoser::onJointSymmetrize, this));
+    mCommitCallbackRegistrar.add("Joint.SymmetrizeFrom", boost::bind(&BDFloaterPoser::onJointSymmetrize, this, true));
+    //BD - Copy and mirror the other body side's bone rotation.
+    mCommitCallbackRegistrar.add("Joint.SymmetrizeTo", boost::bind(&BDFloaterPoser::onJointSymmetrize, this, false));
 
     //BD - Toggle Mirror Mode on/off.
     mCommitCallbackRegistrar.add("Joint.ToggleMirror", boost::bind(&BDFloaterPoser::toggleMirrorMode, this, _1));
@@ -117,23 +119,23 @@ BOOL BDFloaterPoser::postBuild()
     mJointScrolls[JOINTS]->setCommitOnSelectionChange(TRUE);
     mJointScrolls[JOINTS]->setCommitCallback(boost::bind(&BDFloaterPoser::onJointControlsRefresh, this));
     mJointScrolls[JOINTS]->setDoubleClickCallback(boost::bind(&BDFloaterPoser::onJointChangeState, this));
-    mJointScrolls[JOINTS]->refreshLineHeight();
+    //mJointScrolls[JOINTS]->refreshLineHeight();
 
     //BD - Collision Volumes
     mJointScrolls[COLLISION_VOLUMES]->setCommitOnSelectionChange(TRUE);
     mJointScrolls[COLLISION_VOLUMES]->setCommitCallback(boost::bind(&BDFloaterPoser::onJointControlsRefresh, this));
-    mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
+    //mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
 
     //BD - Attachment Bones
     mJointScrolls[ATTACHMENT_BONES]->setCommitOnSelectionChange(TRUE);
     mJointScrolls[ATTACHMENT_BONES]->setCommitCallback(boost::bind(&BDFloaterPoser::onJointControlsRefresh, this));
-    mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
+    //mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
 
     mPoseScroll = this->getChild<FSScrollListCtrl>("poses_scroll", true);
     mPoseScroll->setCommitOnSelectionChange(TRUE);
     mPoseScroll->setCommitCallback(boost::bind(&BDFloaterPoser::onPoseControlsRefresh, this));
     mPoseScroll->setDoubleClickCallback(boost::bind(&BDFloaterPoser::onPoseLoad, this));
-    mPoseScroll->refreshLineHeight();
+    //mPoseScroll->refreshLineHeight();
 
     mRotationSliders = { { getChild<LLUICtrl>("Rotation_X"), getChild<LLUICtrl>("Rotation_Y"), getChild<LLUICtrl>("Rotation_Z") } };
     mPositionSliders = { { getChild<LLSliderCtrl>("Position_X"), getChild<LLSliderCtrl>("Position_Y"), getChild<LLSliderCtrl>("Position_Z") } };
@@ -147,7 +149,7 @@ BOOL BDFloaterPoser::postBuild()
     //BD - Animesh
     mAvatarScroll = this->getChild<FSScrollListCtrl>("avatar_scroll", true);
     mAvatarScroll->setCommitCallback(boost::bind(&BDFloaterPoser::onAvatarsSelect, this));
-    mAvatarScroll->refreshLineHeight();
+    //mAvatarScroll->refreshLineHeight();
 
     //BD - Misc
     mDelayRefresh = false;
@@ -193,11 +195,11 @@ BOOL BDFloaterPoser::postBuild()
     getChild<LLButton>("add_key")->setClickedCallback(boost::bind(&BDFloaterPoser::onAddKey, this));
     getChild<LLButton>("delete_key")->setClickedCallback(boost::bind(&BDFloaterPoser::onDeleteKey, this));*/
 
-    mJointScrolls[JOINTS]->refreshLineHeight();
-    mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
-    mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
-    mPoseScroll->refreshLineHeight();
-    mAvatarScroll->refreshLineHeight();
+    //mJointScrolls[JOINTS]->refreshLineHeight();
+    //mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
+    //mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
+    //mPoseScroll->refreshLineHeight();
+    //mAvatarScroll->refreshLineHeight();
 
     return TRUE;
 }
@@ -444,6 +446,7 @@ void BDFloaterPoser::onPoseStart()
         //BD - Clear posing when we're done now that we've safely endangered getting spaghetified.
         avatar->clearPosing();
         avatar->stopMotion(ANIM_BD_POSING_MOTION);
+
     }
     //BD - Wipe the joint list.
     onJointRefresh();
@@ -468,10 +471,10 @@ void BDFloaterPoser::onPoseDelete()
 
 void BDFloaterPoser::onPoseControlsRefresh()
 {
-    bool is_playing = gDragonAnimator.getIsPlaying();
+    //bool is_playing = gDragonAnimator.getIsPlaying();
     LLScrollListItem* item = mPoseScroll->getFirstSelected();
     getChild<LLUICtrl>("delete_poses")->setEnabled(bool(item));
-    getChild<LLUICtrl>("add_entry")->setEnabled(!is_playing && item);
+    //getChild<LLUICtrl>("add_entry")->setEnabled(!is_playing && item);
     mLoadPosesBtn->setEnabled(bool(item));
 }
 
@@ -810,11 +813,11 @@ void BDFloaterPoser::onJointControlsRefresh()
     //BD - Change our animator's target, make sure it is always up-to-date.
     gDragonAnimator.mTargetAvatar = avatar;
 
-    mJointScrolls[JOINTS]->refreshLineHeight();
-    mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
-    mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
-    mPoseScroll->refreshLineHeight();
-    mAvatarScroll->refreshLineHeight();
+    //mJointScrolls[JOINTS]->refreshLineHeight();
+    //mJointScrolls[COLLISION_VOLUMES]->refreshLineHeight();
+    //mJointScrolls[ATTACHMENT_BONES]->refreshLineHeight();
+    //mPoseScroll->refreshLineHeight();
+    //mAvatarScroll->refreshLineHeight();
 }
 
 void BDFloaterPoser::onJointSet(LLUICtrl* ctrl, const LLSD& param)
@@ -903,7 +906,7 @@ void BDFloaterPoser::onJointSet(LLUICtrl* ctrl, const LLSD& param)
                 S32 i = 0;
                 while (i < 3)
                 {
-                    cell2[i]->setValue(ll_round((F32)item->getColumn(i + 2)->getValue().asReal(), 0.001f));
+                    cell2[i]->setValue(ll_round(item->getColumn(i + 2)->getValue(), 0.001f));
                     ++i;
                 }
             }
@@ -1694,7 +1697,7 @@ void BDFloaterPoser::onJointMirror()
     }
 }
 
-void BDFloaterPoser::onJointSymmetrize()
+void BDFloaterPoser::onJointSymmetrize(bool from)
 {
     for (auto item : mJointScrolls[JOINTS]->getAllSelected())
     {
@@ -1718,22 +1721,43 @@ void BDFloaterPoser::onJointSymmetrize()
 
             //BD - Get the rotation of the mirror bone (if available).
             //     Flip the mirror bone's rotation (if available) and apply it to our current bone.
+            //     ELSE
+            //     Flip the our bone's rotation and apply it to the mirror bone (if available).
             if (mirror_joint)
             {
                 LLVector3 mirror_rot;
                 LLQuaternion mirror_rot_quat;
-                mirror_rot_quat = mirror_joint->getTargetRotation();
-                LLQuaternion inv_mirror_rot_quat = LLQuaternion(-mirror_rot_quat.mQ[VX], mirror_rot_quat.mQ[VY], -mirror_rot_quat.mQ[VZ], mirror_rot_quat.mQ[VW]);
-                inv_mirror_rot_quat.getEulerAngles(&mirror_rot[VX], &mirror_rot[VY], &mirror_rot[VZ]);
-                joint->setTargetRotation(inv_mirror_rot_quat);
+                LLScrollListItem* item2 = mJointScrolls[JOINTS]->getItemByLabel(mirror_joint_name, FALSE, COL_NAME);
+                if (from)
+                {
+                    mirror_rot_quat = mirror_joint->getTargetRotation();
+                    LLQuaternion inv_mirror_rot_quat = LLQuaternion(-mirror_rot_quat.mQ[VX], mirror_rot_quat.mQ[VY], -mirror_rot_quat.mQ[VZ], mirror_rot_quat.mQ[VW]);
+                    inv_mirror_rot_quat.getEulerAngles(&mirror_rot[VX], &mirror_rot[VY], &mirror_rot[VZ]);
+                    joint->setTargetRotation(inv_mirror_rot_quat);
+    
+                    LLScrollListCell* col_rot_x = item->getColumn(COL_ROT_X);
+                    LLScrollListCell* col_rot_y = item->getColumn(COL_ROT_Y);
+                    LLScrollListCell* col_rot_z = item->getColumn(COL_ROT_Z);
+    
+                    col_rot_x->setValue(ll_round(mirror_rot.mV[VX], 0.001f));
+                    col_rot_y->setValue(ll_round(mirror_rot.mV[VY], 0.001f));
+                    col_rot_z->setValue(ll_round(mirror_rot.mV[VZ], 0.001f));
+                }
+                else
+                {
+                    mirror_rot_quat = joint->getTargetRotation();
+                    LLQuaternion inv_mirror_rot_quat = LLQuaternion(-mirror_rot_quat.mQ[VX], mirror_rot_quat.mQ[VY], -mirror_rot_quat.mQ[VZ], mirror_rot_quat.mQ[VW]);
+                    inv_mirror_rot_quat.getEulerAngles(&mirror_rot[VX], &mirror_rot[VY], &mirror_rot[VZ]);
+                    mirror_joint->setTargetRotation(inv_mirror_rot_quat);
 
-                LLScrollListCell* col_rot_x = item->getColumn(COL_ROT_X);
-                LLScrollListCell* col_rot_y = item->getColumn(COL_ROT_Y);
-                LLScrollListCell* col_rot_z = item->getColumn(COL_ROT_Z);
+                    LLScrollListCell* col_rot_x = item2->getColumn(COL_ROT_X);
+                    LLScrollListCell* col_rot_y = item2->getColumn(COL_ROT_Y);
+                    LLScrollListCell* col_rot_z = item2->getColumn(COL_ROT_Z);
 
-                col_rot_x->setValue(ll_round(mirror_rot.mV[VX], 0.001f));
-                col_rot_y->setValue(ll_round(mirror_rot.mV[VY], 0.001f));
-                col_rot_z->setValue(ll_round(mirror_rot.mV[VZ], 0.001f));
+                    col_rot_x->setValue(ll_round(mirror_rot.mV[VX], 0.001f));
+                    col_rot_y->setValue(ll_round(mirror_rot.mV[VY], 0.001f));
+                    col_rot_z->setValue(ll_round(mirror_rot.mV[VZ], 0.001f));
+                }
             }
         }
     }
@@ -1832,9 +1856,13 @@ void BDFloaterPoser::onJointContextMenuAction(const LLSD& param)
         onJointPastePosition();
         onJointPasteScale();
     }
-    else if (action == "symmetrize")
+    else if (action == "symmetrize_from")
     {
-        onJointSymmetrize();
+        onJointSymmetrize(true);
+    }
+    else if (action == "symmetrize_to")
+    {
+        onJointSymmetrize(false);
     }
     else if (action == "mirror")
     {
@@ -2254,5 +2282,5 @@ void BDFloaterPoser::onAvatarsRefresh()
 
     //BD - Make sure we don't have a scrollbar unless we need it.
     mAvatarScroll->updateLayout();
-    mAvatarScroll->refreshLineHeight();
+    //mAvatarScroll->refreshLineHeight();
 }
