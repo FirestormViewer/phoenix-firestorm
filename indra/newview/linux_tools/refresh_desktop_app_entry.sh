@@ -15,7 +15,7 @@ function install_desktop_entry()
 Name=Firestorm Viewer\n\
 Comment=Client for accessing 3D virtual worlds\n\
 Exec=${installation_prefix}/firestorm\n\
-Icon=${installation_prefix}/firestorm_icon.png\n\
+Icon=${installation_prefix}/ayanestorm_icon.png\n\
 Terminal=false\n\
 Type=Application\n\
 Categories=Application;Internet;Network;\n\

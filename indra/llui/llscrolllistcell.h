@@ -37,10 +37,6 @@
 
 #include "lllineeditor.h"
 
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-#include "lluictrl.h"
-// [/SL:KB]
-
 class LLMultiSlider;
 class LLCheckBoxCtrl;
 class LLSD;
@@ -57,10 +53,6 @@ class LLUIImage;
 class LLScrollListCell
 {
 public:
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    typedef boost::function<void(LLScrollListCell* cell)> commit_callback_t;
-    typedef boost::signals2::signal<void(LLScrollListCell* cell)> commit_signal_t;
-// [/SL:KB]
     struct Params : public LLInitParam::Block<Params>
     {
         Optional<std::string>       type,
@@ -70,9 +62,6 @@ public:
         Optional<bool>              enabled,
                                     visible;
 
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-        Optional<commit_callback_t> commit_callback;
-// [/SL:KB]
         Optional<void*>             userdata;
         Optional<LLSD>              value; // state of checkbox, icon id/name, date
         Optional<LLSD>              alt_value;
@@ -97,9 +86,6 @@ public:
             width("width"),
             enabled("enabled", true),
             visible("visible", true),
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-            commit_callback("commit_callback"),
-// [/SL:KB]
             value("value"),
             alt_value("alt_value", ""),
             label("label"),
@@ -132,9 +118,6 @@ public:
     virtual const LLSD      getAltValue() const;
     virtual void            setValue(const LLSD& value) { }
     virtual void            setAltValue(const LLSD& value) { }
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    virtual const std::string &getColumnName() const { return mColumnName; }
-// [/SL:KB]
     virtual const std::string &getToolTip() const { return mToolTip; }
     virtual void            setToolTip(const std::string &str) { mToolTip = str; }
     virtual BOOL            getVisible() const { return TRUE; }
@@ -150,9 +133,6 @@ public:
 
 private:
     S32 mWidth;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    std::string mColumnName;
-// [/SL:KB]
     std::string mToolTip;
 };
 
@@ -228,15 +208,11 @@ public:
     /*virtual*/ const LLSD      getValue() const;
     /*virtual*/ void    setColor(const LLColor4&);
     /*virtual*/ void    setValue(const LLSD& value);
-    void setClickCallback(BOOL (*callback)(void*), void* user_data);
-    BOOL handleClick() override;
 
 private:
     LLPointer<LLUIImage>    mIcon;
     LLColor4                mColor;
     LLFontGL::HAlign        mAlignment;
-    BOOL (*mCallback)(void*);
-    void* mUserData;
 };
 
 
@@ -280,9 +256,6 @@ public:
 
 private:
     LLCheckBoxCtrl* mCheckBox;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    commit_signal_t* mCommitSignal = nullptr;
-// [/SL:KB]
 };
 
 class LLScrollListDate : public LLScrollListText
@@ -307,9 +280,7 @@ public:
     /*virtual*/ ~LLScrollListIconText();
     /*virtual*/ void    draw(const LLColor4& color, const LLColor4& highlight_color) const;
     /*virtual*/ const LLSD      getValue() const;
-    /*virtual*/ const LLSD      getAltValue() const;
     /*virtual*/ void    setValue(const LLSD& value);
-
 
     S32                 getIconWidth() const;
     /*virtual*/ void    setWidth(S32 width);/* { LLScrollListCell::setWidth(width); mTextWidth = width - ; }*/

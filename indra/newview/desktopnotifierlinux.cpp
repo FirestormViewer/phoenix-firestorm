@@ -213,8 +213,8 @@ const gint NOTIFICATION_TIMEOUT_MS = 5000;
 
 std::string Find_BMP_Resource( bool a_bSmallIcon )
 {
-    const std::string ICON_128( "firestorm_icon128.png" );
-    const std::string ICON_512( "firestorm_icon.png" );
+    const std::string ICON_128( "ayanestorm_icon128.png" );
+    const std::string ICON_512( "ayanestorm_icon.png" );
 
     std::string strRet( gDirUtilp->getAppRODataDir() );
     strRet += gDirUtilp->getDirDelimiter();

@@ -50,10 +50,6 @@ class LLScrollListItem
 {
     friend class LLScrollListCtrl;
 public:
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    typedef boost::function<void(const LLSD& value, LLScrollListCell* cell)> commit_callback_t;
-    typedef boost::signals2::signal<void(const LLSD& value, LLScrollListCell* cell)> commit_signal_t;
-// [/SL:KB]
 
     //BD - Cells ~ Thanks to Liru
     struct Contents : public LLInitParam::Block<Contents>
@@ -70,9 +66,6 @@ public:
     struct Params : public LLInitParam::Block<Params>
     {
         Optional<bool>      enabled;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-        Optional<commit_callback_t> commit_callback;
-// [/SL:KB]
         Optional<void*>     userdata;
         Optional<LLSD>      value;
         Optional<LLSD>      alt_value;

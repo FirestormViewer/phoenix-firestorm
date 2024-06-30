@@ -91,9 +91,6 @@ public:
     {
         Optional<std::string>               name,
                                             tool_tip;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-        Optional<bool>                      can_sort;
-// [/SL:KB]
         Optional<std::string>               sort_column;
         Optional<ESortDirection, SortNames> sort_direction;
         Optional<bool>                      sort_ascending;
@@ -132,9 +129,6 @@ public:
         Params()
         :   name("name"),
             tool_tip("tool_tip"),
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-            can_sort("can_sort", true),
-// [/SL:KB]
             sort_column("sort_column"),
             sort_direction("sort_direction"),
             sort_ascending("sort_ascending", true),
@@ -160,9 +154,6 @@ public:
     // If it ever gets any smarter than that, these should all become private
     // with protected or public accessor methods added as needed. -MG
     std::string             mName;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    bool                    mCanSort;
-// [/SL:KB]
     std::string             mSortingColumn;
     ESortDirection          mSortDirection;
     LLUIString              mLabel;
