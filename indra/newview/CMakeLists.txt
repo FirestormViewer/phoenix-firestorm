@@ -1834,8 +1834,8 @@ if (LINUX)
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.bmp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_256.bmp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/ayanestorm_icon.BMP"
       )
 endif (LINUX)
 
@@ -1888,18 +1888,18 @@ if (WINDOWS)
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_icon.ico"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/ayanestorm_icon.ico"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/ayanestorm_icon.BMP"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/ayanestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/ayanestorm_icon.BMP"
       )
 
     # Add resource files to the project.
@@ -1935,9 +1935,9 @@ if (WINDOWS)
         res/lltooltranslate.cur
         res/lltoolzoomin.cur
         res/lltoolzoomout.cur
-        res/firestorm_icon.BMP
-        res/firestorm_icon.ico
-        res-sdl/firestorm_icon.BMP
+        res/ayanestorm_icon.BMP
+        res/ayanestorm_icon.ico
+        res-sdl/ayanestorm_icon.BMP
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur

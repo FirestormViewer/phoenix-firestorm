@@ -1,4 +1,4 @@
-![Firestorm Viewer Logo](doc/firestorm_256.png)
+![Firestorm Viewer Logo](doc/ayanestorm_256.png)
 
 # AyaneStorm
 

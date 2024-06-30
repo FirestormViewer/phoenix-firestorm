@@ -64,6 +64,8 @@ indra/newview/res-sdl/ll_icon.*
 indra/newview/res/ll_icon.*
 indra/newview/res-sdl/firestorm_icon.*
 indra/newview/res/firestorm_icon.*
+indra/newview/res-sdl/ayanestorm_icon.*
+indra/newview/res/ayanestorm_icon.*
 indra/newview/search_history.txt
 indra/newview/teleport_history.txt
 indra/newview/typed_locations.txt

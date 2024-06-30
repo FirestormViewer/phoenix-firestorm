@@ -726,7 +726,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
     // Set the application icon.
     SDL_Surface *bmpsurface;
-    bmpsurface = Load_BMP_Resource("firestorm_icon.BMP");
+    bmpsurface = Load_BMP_Resource("ayanestorm_icon.BMP");
     if (bmpsurface)
     {
         // This attempts to give a black-keyed mask to the icon.
