@@ -221,6 +221,7 @@ void LLHeroProbeManager::update()
         else
         {
             mNearestHero = nullptr;
+            mDefaultProbe->mViewerObject = nullptr;
         }
 
         mHeroProbeStrength = 1;
@@ -229,6 +230,7 @@ void LLHeroProbeManager::update()
     else
     {
         mNearestHero = nullptr;
+        mDefaultProbe->mViewerObject = nullptr;
     }
     // </FS:Beq>
 }
