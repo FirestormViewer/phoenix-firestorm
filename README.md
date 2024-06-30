@@ -15,11 +15,11 @@ build_no_fmod.bat
 ```
 
 Build with FMOD (more complicated):
-First, follow Alchemy Viewer instructions (you'll need Cygwin64).
+First, follow Alchemy Viewer instructions to generate the FMOD library file (you'll need Cygwin64).
 Then update the set_fmod_vars.bat file with correct values.
 
 - FMOD_HASH is the MD5 hash of the FMOD file
-- FMOD_URL is the locaiton of the FMOD file (starts with file:///)
+- FMOD_URL is the location of the FMOD file (it must start with file:///)
 
 Then type:
 
@@ -30,10 +30,12 @@ prepare_with_fmod.bat  (only the first time)
 build_with_fmod.bat
 ```
 
-If you already prepared the build and want to rebuild later:
-- Open a CMD prompt
-- Depending on you want to build with FMOD or without, type `rebuild_with_fmod.bat` or `rebuild_no_fmod.bat`
-- Then type `build_with_fmod.bat` or `build_without_fmod.bat`
+If you already prepared the build and want to rebuild later with another CMD window:
+- Open a new CMD window
+- Depending on whether you want to build with FMOD or without, type `rebuild_with_fmod.bat` or `rebuild_no_fmod.bat` so that the required variables are set again
+- Then type `build_with_fmod.bat` or `build_without_fmod.bat` for each subsequent build
+
+# Forked from Firestorm
 
 **[Firestorm](https://www.firestormviewer.org/) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.** This repository contains the official source code for the Firestorm viewer.
 
