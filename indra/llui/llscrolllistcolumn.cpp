@@ -112,10 +112,7 @@ BOOL LLScrollColumnHeader::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 void LLScrollColumnHeader::onClick(const LLSD& data)
 {
-//  if (mColumn)
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    if ( (mColumn) && (mColumn->mCanSort) )
-// [/SL:KB]
+    if (mColumn)
     {
         LLScrollListCtrl::onClickColumn(mColumn);
     }
@@ -319,9 +316,6 @@ LLScrollListColumn::LLScrollListColumn(const Params& p, LLScrollListCtrl* parent
     mDynamicWidth(p.width.dynamic_width),
     mRelWidth(p.width.relative_width),
     mFontAlignment(p.halign),
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    mCanSort(p.can_sort),
-// [/SL:KB]
     mSortingColumn(p.sort_column)
 {
     if (p.sort_ascending.isProvided())

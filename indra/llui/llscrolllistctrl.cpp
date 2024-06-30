@@ -156,9 +156,6 @@ LLScrollListCtrl::Params::Params()
     mouse_wheel_opaque("mouse_wheel_opaque", false),
     commit_on_keyboard_movement("commit_on_keyboard_movement", true),
     commit_on_selection_change("commit_on_selection_change", false),
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    select_on_focus("select_on_focus", true),
-// [/SL:KB]
     heading_height("heading_height"),
     page_lines("page_lines", 0),
     background_visible("background_visible"),
@@ -190,12 +187,6 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
     mAllowKeyboardMovement(true),
     mCommitOnKeyboardMovement(p.commit_on_keyboard_movement),
     mCommitOnSelectionChange(p.commit_on_selection_change),
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.3
-    mCommitOnDelete(false),
-// [/SL:KB]
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-    mSelectOnFocus(p.select_on_focus),
-// [/SL:KB]
     mSelectionChanged(false),
     mSelectionType(p.selection_type),
     mNeedsScroll(false),
@@ -498,12 +489,6 @@ void LLScrollListCtrl::clearRows()
     mLastSelected = NULL;
     updateLayout();
     mDirty = false;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.3
-    if (mCommitOnDelete)
-    {
-        onCommit();
-    }
-// [/SL:KB]
 }
 
 
@@ -1120,37 +1105,7 @@ void LLScrollListCtrl::deleteSingleItem(S32 target_index)
     delete itemp;
     mItemList.erase(mItemList.begin() + target_index);
     dirtyColumns();
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.3
-    if (mCommitOnDelete)
-    {
-        onCommit();
-    }
-// [/SL:KB]
 }
-
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.5
-void LLScrollListCtrl::deleteSingleItem(LLScrollListItem* itemp)
-{
-    item_list::iterator itItem = std::find(mItemList.begin(), mItemList.end(), itemp);
-    if (mItemList.end() == itItem)
-    {
-        return;
-    }
-
-    if (mLastSelected == itemp)
-    {
-        mLastSelected = nullptr;
-    }
-    delete itemp;
-    mItemList.erase(itItem);
-    dirtyColumns();
-
-    if (mCommitOnDelete)
-    {
-        onCommit();
-    }
-}
-// [/SL:KB]
 
 //FIXME: refactor item deletion
 void LLScrollListCtrl::deleteItems(const LLSD& sd)
@@ -1175,12 +1130,6 @@ void LLScrollListCtrl::deleteItems(const LLSD& sd)
     }
 
     dirtyColumns();
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.3
-    if (mCommitOnDelete)
-    {
-        onCommit();
-    }
-// [/SL:KB]
 }
 
 void LLScrollListCtrl::deleteSelectedItems()
@@ -1201,12 +1150,6 @@ void LLScrollListCtrl::deleteSelectedItems()
     }
     mLastSelected = NULL;
     dirtyColumns();
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.3
-    if (mCommitOnDelete)
-    {
-        onCommit();
-    }
-// [/SL:KB]
 }
 
 //BD
@@ -2462,11 +2405,6 @@ void LLScrollListCtrl::copySLURLToClipboard(std::string id, bool is_group)
     LLUrlAction::copyURLToClipboard(slurl);
 }
 
-void LLScrollListCtrl::copyUUIDToClipboard(std::string id)
-{
-    // copy a UUID for the avatar or group to the clipboard
-    LLUrlAction::copyURLToClipboard(id);
-}
 BOOL LLScrollListCtrl::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
     //BOOL handled = FALSE;
@@ -3550,9 +3488,6 @@ void LLScrollListCtrl::addColumn(const LLScrollListColumn::Params& column_params
             params.tool_tip = column_params.tool_tip;
             params.tab_stop = false;
             params.visible = mDisplayColumnHeaders;
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-            params.font_halign = column_params.halign;
-// [/SL:KB]
 
             if(column_params.header.image.isProvided())
             {
@@ -3665,12 +3600,6 @@ std::string LLScrollListCtrl::getSortColumnName()
     if (column) return column->mName;
     else return "";
 }
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-3.5
-S32 LLScrollListCtrl::getSortColumnIndex() const
-{
-    return (!mSortColumns.empty()) ? mSortColumns.back().first : -1;
-}
-// [/SL:KB]
 
 BOOL LLScrollListCtrl::hasSortOrder() const
 {
@@ -3748,16 +3677,6 @@ LLScrollListItem* LLScrollListCtrl::addElement(const LLSD& element, EAddPosition
     return addRow(item_params, pos);
 }
 
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-LLScrollListItem* LLScrollListCtrl::addElement(const LLSD& element, const LLScrollListItem::commit_signal_t::slot_type& cb, EAddPosition pos)
-{
-    LLScrollListItem::Params item_params;
-    LLParamSDParser parser;
-    parser.readSD(element, item_params);
-    item_params.commit_callback = cb;
-    return addRow(item_params, pos);
-}
-// [/SL:KB]
 LLScrollListItem* LLScrollListCtrl::addRow(const LLScrollListItem::Params& item_p, EAddPosition pos)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
@@ -3813,12 +3732,6 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
             cell_p.width = columnp->getWidth();
         }
 
-// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
-        if (item_p.commit_callback.isProvided())
-        {
-            cell_p.commit_callback = boost::bind(item_p.commit_callback(), item_p.value(), _1);
-        }
-// [/SL:KB]
         LLScrollListCell* cell = LLScrollListCell::create(cell_p);
 
         if (cell)
@@ -4046,18 +3959,6 @@ bool LLScrollListCtrl::highlightMatchingItems(const std::string& filter_str)
     return res;
 }
 
-// <FS:Ansariel> Fix for FS-specific people list (radar)
-void LLScrollListIcon::setClickCallback(BOOL (*callback)(void*), void* user_data)
-{
-    mCallback = callback;
-    mUserData = user_data;
-}
-
-BOOL LLScrollListIcon::handleClick()
-{
-    if(mCallback) return mCallback(mUserData);
-    return FALSE;
-}
 void LLScrollListCtrl::setFilterString(const std::string& str)
 {
     mFilterString = str;
