@@ -21,104 +21,104 @@ Don&apos;t show me this again
 
   <template name="okbutton">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="OK_okbutton"
-       text="$yestext"/>
+         <button
+            default="true"
+            index="0"
+            name="OK_okbutton"
+            text="$yestext" />
     </form>
   </template>
 
   <template name="okignore">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="OK_okignore"
-       text="$yestext"/>
-      <ignore text="$ignoretext"/>
+         <button
+            default="true"
+            index="0"
+            name="OK_okignore"
+            text="$yestext" />
+         <ignore text="$ignoretext" />
     </form>
   </template>
 
   <template name="notifyignore">
     <form>
-      <ignore text="$ignoretext"/>
+         <ignore text="$ignoretext" />
     </form>
   </template>
 
   <template name="okcancelbuttons">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="OK_okcancelbuttons"
-       text="$yestext"/>
-      <button
-       index="1"
-       name="Cancel_okcancelbuttons"
-       text="$notext"/>
+         <button
+            default="true"
+            index="0"
+            name="OK_okcancelbuttons"
+            text="$yestext" />
+         <button
+            index="1"
+            name="Cancel_okcancelbuttons"
+            text="$notext" />
     </form>
   </template>
 
   <template name="okcancelignore">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="OK_okcancelignore"
-       text="$yestext"/>
-      <button
-       index="1"
-       name="Cancel_okcancelignore"
-       text="$notext"/>
-      <ignore text="$ignoretext"/>
+         <button
+            default="true"
+            index="0"
+            name="OK_okcancelignore"
+            text="$yestext" />
+         <button
+            index="1"
+            name="Cancel_okcancelignore"
+            text="$notext" />
+         <ignore text="$ignoretext" />
     </form>
   </template>
 
   <template name="okhelpbuttons">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="OK_okhelpbuttons"
-       text="$yestext"/>
-      <button
-       index="1"
-       name="Help"
-       text="$helptext"/>
+         <button
+            default="true"
+            index="0"
+            name="OK_okhelpbuttons"
+            text="$yestext" />
+         <button
+            index="1"
+            name="Help"
+            text="$helptext" />
     </form>
   </template>
 
   <template name="okhelpignore">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="OK_okhelpignore"
-       text="$yestext"/>
-      <button
-       index="1"
-       name="Help_okhelpignore"
-       text="$helptext"/>
-      <ignore text="$ignoretext"/>
+         <button
+            default="true"
+            index="0"
+            name="OK_okhelpignore"
+            text="$yestext" />
+         <button
+            index="1"
+            name="Help_okhelpignore"
+            text="$helptext" />
+         <ignore text="$ignoretext" />
     </form>
   </template>
 
   <template name="yesnocancelbuttons">
     <form>
-      <button
-       default="true"
-       index="0"
-       name="Yes"
-       text="$yestext"/>
-      <button
-       index="1"
-       name="No"
-       text="$notext"/>
-      <button
-       index="2"
-       name="Cancel_yesnocancelbuttons"
-       text="$canceltext"/>
+         <button
+            default="true"
+            index="0"
+            name="Yes"
+            text="$yestext" />
+         <button
+            index="1"
+            name="No"
+            text="$notext" />
+         <button
+            index="2"
+            name="Cancel_yesnocancelbuttons"
+            text="$canceltext" />
     </form>
   </template>
 
@@ -133,8 +133,8 @@ Your version of [APP_NAME] does not know how to display the notification it just
 Error details: The notification called &apos;[_NAME]&apos; was not found in notifications.xml.
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -146,8 +146,8 @@ Floater error: Could not find the following controls:
 [CONTROLS]
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -157,8 +157,8 @@ Floater error: Could not find the following controls:
 No tutorial is currently available.
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -174,9 +174,9 @@ No tutorial is currently available.
    type="alertmodal">
 [MESSAGE]
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -185,8 +185,8 @@ No tutorial is currently available.
    type="alertmodal">
 [MESSAGE]
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -196,8 +196,8 @@ No tutorial is currently available.
  Installation of [APP_NAME] is defective. Please [https://www.firestormviewer.org/downloads download a new copy] of the Viewer and reinstall.
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -209,8 +209,8 @@ No tutorial is currently available.
     &apos;[DIAGNOSTIC]&apos;
 Make sure your Internet connection is working properly.
 	<usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -222,8 +222,8 @@ Viewer received malformed response from server. Please, make sure your Internet 
 
 If you feel this is in error, please contact Support.
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -233,8 +233,8 @@ If you feel this is in error, please contact Support.
 Message Template [PATH] not found.
    <tag>fail</tag>
 	<usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -243,10 +243,10 @@ Message Template [PATH] not found.
    type="alertmodal">
 Save changes to current clothing/body part?
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Don&apos;t Save"
-     yestext="Save"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Don&apos;t Save"
+         yestext="Save" />
   </notification>
 
   <notification
@@ -255,22 +255,22 @@ Save changes to current clothing/body part?
      type="alertmodal">
 You don't have permission to copy one or more of these items to the Merchant Outbox.  You can move them or leave them behind.
     <usetemplate
-     name="okcancelbuttons"
-     notext="Don't move item(s)"
-     yestext="Move item(s)"/>
+         name="okcancelbuttons"
+         notext="Don't move item(s)"
+         yestext="Move item(s)" />
   </notification>
 
   <notification
    icon="OutboxStatus_Success"
    name="OutboxFolderCreated"
    type="alertmodal">
-    <unique/>
+      <unique />
 A new folder has been created for each item you have transferred into the top level of your Merchant Outbox.
 
     <usetemplate
-     ignoretext="A new folder was created in the Merchant Outbox"
-     name="okignore"
-     yestext="OK"/>
+         ignoretext="A new folder was created in the Merchant Outbox"
+         name="okignore"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -284,7 +284,7 @@ All folders were successfully sent to the Marketplace.
         <usetemplate
          ignoretext="All folders sent to the Marketplace"
          name="okignore"
-         yestext="OK"/>
+         yestext="OK" />
   </notification>
 
   <notification
@@ -299,7 +299,7 @@ See the [[MARKETPLACE_IMPORTS_URL] error log] for more information.
 
         <usetemplate
          name="okbutton"
-         yestext="OK"/>
+         yestext="OK" />
   </notification>
 
   <notification
@@ -312,7 +312,7 @@ No folders were sent to the Marketplace because of a system or network error.  T
 
         <usetemplate
          name="okbutton"
-         yestext="OK"/>
+         yestext="OK" />
   </notification>
 
   <notification
@@ -325,7 +325,7 @@ Initialization with the Marketplace failed because of a system or network error.
 
         <usetemplate
          name="okbutton"
-         yestext="OK"/>
+         yestext="OK" />
   </notification>
 
     <notification
@@ -337,8 +337,8 @@ Initialization with the Marketplace failed because of a system or network error.
         &apos;[ERROR_CODE]&apos;
         
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
   
     <notification
@@ -347,8 +347,8 @@ Initialization with the Marketplace failed because of a system or network error.
         type="alertmodal">
        One or more items can't be used inside "Outfits"
       <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -360,8 +360,8 @@ Initialization with the Marketplace failed because of a system or network error.
         &apos;[ERROR_CODE]&apos;
         
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -373,8 +373,8 @@ Initialization with the Marketplace failed because of a system or network error.
         [ERROR_REASON][ERROR_DESCRIPTION]
         
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -384,8 +384,8 @@ Initialization with the Marketplace failed because of a system or network error.
         We are unable to list this product or activate the version folder. Usually this is caused by missing information in the listing description form, but it may be due to errors in the folder structure. Either edit the listing or check the listing folder for errors.
         
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -397,8 +397,8 @@ Initialization with the Marketplace failed because of a system or network error.
         &apos;[ERROR_CODE]&apos;
         
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -410,8 +410,8 @@ Initialization with the Marketplace failed because of a system or network error.
         &apos;[ERROR_CODE]&apos;
 
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -430,9 +430,9 @@ Please input a valid text.
         In order to create your listing, we fixed the hierarchy of your listing contents.
         <tag>confirm</tag>
         <usetemplate
-            ignoretext="Warn me that creating a listing fixes the hierarchy of the content"
-            name="okignore" 
-            yestext="OK"/>
+         ignoretext="Warn me that creating a listing fixes the hierarchy of the content"
+         name="okignore"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -442,10 +442,10 @@ Please input a valid text.
         This action will change the active content of this listing. Do you want to continue?
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I change an active listing on the marketplace"
-        name="okcancelignore"
-        notext="Cancel"
-        yestext="OK"/>
+         ignoretext="Confirm before I change an active listing on the marketplace"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -455,10 +455,10 @@ Please input a valid text.
         Items dragged to the Marketplace Listings window are moved from their original locations, not copied. Do you want to continue?
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I move an item from the inventory to the marketplace"
-        name="okcancelignore"
-        notext="Cancel"
-        yestext="OK"/>
+         ignoretext="Confirm before I move an item from the inventory to the marketplace"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -468,10 +468,10 @@ Please input a valid text.
         Moving or deleting a listing folder will delete your Marketplace listing. If you would like to keep the Marketplace listing, move or delete the contents of the version folder you would like to modify. Do you want to continue?
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I move or delete a listing from the marketplace"
-        name="okcancelignore"
-        notext="Cancel"
-        yestext="OK"/>
+         ignoretext="Confirm before I move or delete a listing from the marketplace"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -481,11 +481,11 @@ Please input a valid text.
         You don't have permission to copy one or more of these items to the Marketplace. You can move them or leave them behind.
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I try to copy a selection containing no copy items to the marketplace"
-        name="yesnocancelbuttons"
-        yestext="Move item(s)"
-        notext="Don't move item(s)"
-        canceltext="Cancel"/>
+         ignoretext="Confirm before I try to copy a selection containing no copy items to the marketplace"
+         name="yesnocancelbuttons"
+         yestext="Move item(s)"
+         notext="Don't move item(s)"
+         canceltext="Cancel" />
     </notification>
     
     <notification
@@ -495,10 +495,10 @@ Please input a valid text.
         This action will unlist this listing. Do you want to continue?
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I unlist an active listing on the marketplace"
-        name="okcancelignore"
-        notext="Cancel"
-        yestext="OK"/>
+         ignoretext="Confirm before I unlist an active listing on the marketplace"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -508,10 +508,10 @@ Please input a valid text.
         This action will deactivate the version folder of the current listing. Do you want to continue?
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I deactivate the version folder of a listing on the marketplace"
-        name="okcancelignore"
-        notext="Cancel"
-        yestext="OK"/>
+         ignoretext="Confirm before I deactivate the version folder of a listing on the marketplace"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -521,8 +521,8 @@ Please input a valid text.
 This listing could not be updated.
 [[URL] Click here] to edit it on the Marketplace.
         <usetemplate
-        name="okbutton"
-        yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -548,9 +548,9 @@ This listing could not be updated.
         There are several or no version folders in this listing. You will need to select and activate one independently later.
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Alert about version folder activation when I create a listing with several version folders"
-        name="okignore"
-        yestext="OK"/>
+         ignoretext="Alert about version folder activation when I create a listing with several version folders"
+         name="okignore"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -560,9 +560,9 @@ This listing could not be updated.
         We have separated stock items of different types into separate stock folders, so your folder is arranged in a way that we can list it.
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Alert when stock folder is being split before being listed"
-        name="okignore"
-        yestext="OK"/>
+         ignoretext="Alert when stock folder is being split before being listed"
+         name="okignore"
+         yestext="OK" />
     </notification>
     
     <notification
@@ -572,9 +572,9 @@ This listing could not be updated.
         We have unlisted your listing because the stock is empty. You need to add more units to the stock folder to list the listing again.
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Alert when a listing is unlisted because stock folder is empty"
-        name="okignore"
-        yestext="OK"/>
+         ignoretext="Alert when a listing is unlisted because stock folder is empty"
+         name="okignore"
+         yestext="OK" />
     </notification>
 
     <notification
@@ -584,9 +584,9 @@ This listing could not be updated.
         We have unlisted your listing because the version folder is empty. You need to add items to the version folder to list the listing again.
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Alert when a listing is unlisted because version folder is empty"
-        name="okignore"
-        yestext="OK"/>
+         ignoretext="Alert when a listing is unlisted because version folder is empty"
+         name="okignore"
+         yestext="OK" />
     </notification>
 
   <notification
@@ -621,10 +621,10 @@ Please select only one object and try again.
 Save all changes to clothing/body parts?
 <tag>confirm</tag>
 <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Don&apos;t Save"
-     yestext="Save All"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Don&apos;t Save"
+         yestext="Save All" />
   </notification>
 
   <notification
@@ -633,8 +633,8 @@ Save all changes to clothing/body parts?
    type="alertmodal">
     Non-friends won't know that you've chosen to ignore their calls and instant messages.
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -643,8 +643,8 @@ Save all changes to clothing/body parts?
    type="alertmodal">    
     Note: When you turn on this option, anyone who uses this computer can see your list of favorite locations.
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -653,8 +653,8 @@ Save all changes to clothing/body parts?
    type="alertmodal">
     Running multiple [APP_NAME] viewers is not supported. It can lead to texture cache collisions, corruption and degraded visuals and performance.
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -665,9 +665,9 @@ Granting modify rights to another resident allows them to change, delete or take
 Do you want to grant modify rights for [NAME]?
 <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -678,9 +678,9 @@ Granting modify rights to another Resident allows them to change ANY objects you
 Do you want to grant modify rights for the selected Residents?
 <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -690,9 +690,9 @@ Do you want to grant modify rights for the selected Residents?
 Do you want to revoke modify rights for [NAME]?
 <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -702,9 +702,9 @@ Do you want to revoke modify rights for [NAME]?
 Do you want to revoke modify rights for the selected Residents?
 <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -715,8 +715,8 @@ A group name must be between [MIN_LEN] and [MAX_LEN] characters.
     <tag>group</tag>
     <tag>fail</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
   
   <notification
@@ -728,8 +728,8 @@ Unable to create group.
     <tag>group</tag>
     <tag>fail</tag>
   <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -741,10 +741,10 @@ Unable to create group.
     <tag>confirm</tag>
     <tag>group</tag>
   <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Ignore Changes"
-     yestext="Apply Changes"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Ignore Changes"
+         yestext="Apply Changes" />
   </notification>
 
   <notification
@@ -755,8 +755,8 @@ You must specify a subject to send a group notice.
   <tag>group</tag>
   <tag>fail</tag>
   <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -770,10 +770,10 @@ Are you sure you want to continue?
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm before I add a new group Owner"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
+         ignoretext="Confirm before I add a new group Owner"
+         name="okcancelignore"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -787,9 +787,9 @@ You are about to add the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[RO
 
 Add this ability to &apos;[ROLE_NAME]&apos;?
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -803,9 +803,9 @@ You are about to add the ability &apos;[ACTION_NAME]&apos; to the role &apos;[RO
 
 Add this ability to &apos;[ROLE_NAME]&apos;?
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -817,8 +817,8 @@ You are about to add the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[RO
  *WARNING*
 Any Member in a Role with this Ability will also be granted the Abilities &apos;[ACTION_NAME_2]&apos; and &apos;[ACTION_NAME_3]&apos;
     <usetemplate
-      name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -832,8 +832,8 @@ Removing this ability will NOT remove the Abilities &apos;[ACTION_NAME_2]&apos; 
  
 If you no longer wish to have these abilities granted to this role, disable them immediately!
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -844,10 +844,10 @@ If you no longer wish to have these abilities granted to this role, disable them
      <tag>group</tag>
      <tag>confirm</tag>
      <usetemplate
-      ignoretext="Confirm ejecting a participant from group"
-      name="okcancelignore"
-      notext="Cancel"
-      yestext="Eject"/>
+         ignoretext="Confirm ejecting a participant from group"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Eject" />
   </notification>
   <notification
     icon="alertmodal.tga"
@@ -857,10 +857,10 @@ If you no longer wish to have these abilities granted to this role, disable them
      <tag>group</tag>
      <tag>confirm</tag>
      <usetemplate
-      ignoretext="Confirm ejecting multiple members from group"
-      name="okcancelignore"
-      notext="Cancel"
-      yestext="Eject"/>
+         ignoretext="Confirm ejecting multiple members from group"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Eject" />
   </notification>
   
   <notification
@@ -871,10 +871,10 @@ If you no longer wish to have these abilities granted to this role, disable them
      <tag>group</tag>
      <tag>confirm</tag>
      <usetemplate
-      ignoretext="Confirm banning a participant from group"
-      name="okcancelignore"
-      notext="Cancel"
-      yestext="Ban"/>
+         ignoretext="Confirm banning a participant from group"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Ban" />
   </notification>
   <notification
     icon="alertmodal.tga"
@@ -884,10 +884,10 @@ If you no longer wish to have these abilities granted to this role, disable them
      <tag>group</tag>
      <tag>confirm</tag>
      <usetemplate
-      ignoretext="Confirm banning multiple members from group"
-      name="okcancelignore"
-      notext="Cancel"
-      yestext="Ban"/>
+         ignoretext="Confirm banning multiple members from group"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Ban" />
   </notification>
 
   <notification
@@ -905,10 +905,10 @@ Some residents have not been sent an invite due to being banned from the group.
     Are you sure you want to continue?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm before dropping attachments"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
+         ignoretext="Confirm before dropping attachments"
+         name="okcancelignore"
+         notext="No"
+         yestext="Yes" />
   </notification>
   <notification
    icon="alertmodal.tga"
@@ -920,9 +920,9 @@ Do you wish to proceed?
     <tag>funds</tag>
     <tag>group</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Join"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Join" />
   </notification>
 
   <notification
@@ -934,9 +934,9 @@ Do you wish to proceed?
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Join"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Join" />
   </notification>
 
 
@@ -961,10 +961,10 @@ Please invite members within 48 hours.
     <tag>group</tag>
     <tag>funds</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Create group for L$[COST]"/>
+         canceltext="Cancel"
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Create group for L$[COST]" />
   </notification>
 
   <notification
@@ -975,8 +975,8 @@ This group is not accessible to you.
     <tag>group_id</tag>
     <tag>success</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -987,8 +987,8 @@ Error processing your group membership request.
     <tag>group_id</tag>
     <tag>success</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1000,8 +1000,8 @@ Unable to join group: [reason]
     <tag>success</tag>
     <tag>reason</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1012,8 +1012,8 @@ Sorry, trial users can't join groups.
     <tag>group_id</tag>
     <tag>success</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1028,8 +1028,8 @@ You are already a member of [group_count] groups, the maximum number allowed is 
     <tag>group_count</tag>
     <tag>max_groups</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1041,8 +1041,8 @@ The group no longer has open enrollment.
     <tag>group_id</tag>
     <tag>success</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1053,8 +1053,8 @@ Unable to transfer the required L$ [membership_fee] membership fee.
     <tag>group_id</tag>
     <tag>success</tag>
     <usetemplate
-       name="okbutton"
-       yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
   
   <notification
@@ -1066,9 +1066,9 @@ For L$[COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] hour
     <tag>funds</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1089,9 +1089,9 @@ The selected [LAND_SIZE] m² land is being set for sale.
 Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1104,9 +1104,9 @@ The selected [LAND_SIZE] m² land is being set for sale.
 Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1121,9 +1121,9 @@ Objects: [N]
     <tag>confirm</tag>
     <tag>group</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1135,9 +1135,9 @@ Are you sure you want to return all objects owned by the resident &apos;[NAME]&a
 Objects: [N]
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1149,9 +1149,9 @@ Are you sure you want to return all objects owned by you on this parcel of land 
 Objects: [N]
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1166,9 +1166,9 @@ Transferable objects deeded to a group will be returned to their previous owners
 Objects: [N]
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1183,9 +1183,9 @@ Transferable objects deeded to a group will be returned to their previous owners
 Objects: [N]
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1195,9 +1195,9 @@ Objects: [N]
 Are you sure you want to return all listed objects back to their owner&apos;s inventory? This will return ALL scripted objects in the region!
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1207,9 +1207,9 @@ Are you sure you want to return all listed objects back to their owner&apos;s in
 Are you sure you want to disable all objects in this region?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1222,9 +1222,9 @@ Objects: [N]
     <tag>confirm</tag>
     <tag>group</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1246,10 +1246,10 @@ If you continue this action, separate instances of media will be set on multiple
 To place the media on only one face, choose Select Face and click on the desired face of that object then click &apos;Add&apos;.
     <tag>confirm</tag>
     <usetemplate
-      ignoretext="Media will be set on multiple selected faces"
-      name="okcancelignore"
-      notext="Cancel"
-      yestext="OK"/>
+         ignoretext="Media will be set on multiple selected faces"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1283,9 +1283,9 @@ Please enter your email address.
 Email snapshot with the default subject or message?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1360,8 +1360,8 @@ You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service
 [MESSAGE]
    <tag>fail</tag>
    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1378,9 +1378,9 @@ You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service
 		[LINK]
     </url>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="OK" />
   </notification>
   
   <notification
@@ -1440,9 +1440,9 @@ You need an account to enter [CURRENT_GRID]. Would you like to create one now?
 		[create_account_url]
     </url>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Try again"
-     yestext="Create a new account"/>
+         name="okcancelbuttons"
+         notext="Try again"
+         yestext="Create a new account" />
   </notification>
 
   <notification
@@ -1477,9 +1477,9 @@ Delete classified &apos;[NAME]&apos;?
 There is no reimbursement for fees paid.
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
 
@@ -1491,10 +1491,10 @@ You have selected to delete the media associated with this face.
 Are you sure you want to continue?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm before I delete media from an object"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
+         ignoretext="Confirm before I delete media from an object"
+         name="okcancelignore"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -1504,10 +1504,10 @@ Are you sure you want to continue?
 Save changes to classified [NAME]?
     <tag>confirm</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Don&apos;t Save"
-     yestext="Save"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Don&apos;t Save"
+         yestext="Save" />
   </notification>
 
   <notification
@@ -1517,8 +1517,8 @@ Save changes to classified [NAME]?
 Insufficient funds to create classified.
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1528,9 +1528,9 @@ Insufficient funds to create classified.
 Delete classified &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt;?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1540,9 +1540,9 @@ Delete classified &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt;?
 Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1552,9 +1552,9 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
     You have unpublished classifieds. They will be lost if you close the window.
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1565,10 +1565,10 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
     <tag>confirm</tag>
     <tag>save</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Discard"
-     yestext="Save"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Discard"
+         yestext="Save" />
   </notification>
 
   <notification
@@ -1578,9 +1578,9 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
     Delete the selected outfit?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1590,9 +1590,9 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
     Delete outfit &quot;[NAME]&quot;?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1606,9 +1606,9 @@ Go to the [CURRENT_GRID] events web page?
 			https://secondlife.com/my/community/events
     </url>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1701,9 +1701,9 @@ This debug setting change will take effect after you restart [APP_NAME].
 The new skin will appear after restarting [APP_NAME].
 Would you like to shutdown the viewer and launch it manually again in order to apply this change?
     <usetemplate
-     name="okcancelbuttons"
-     notext="Later"
-     yestext="Shutdown now"/>
+         name="okcancelbuttons"
+         notext="Later"
+         yestext="Shutdown now" />
   </notification>
 
   <notification
@@ -1723,9 +1723,9 @@ The selected language will be applied after restarting [APP_NAME].
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
     </url>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1735,37 +1735,37 @@ The selected language will be applied after restarting [APP_NAME].
 Save Changes?
     <tag>confirm</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Don&apos;t Save"
-     yestext="Save"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Don&apos;t Save"
+         yestext="Save" />
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="DeleteNotecard"
    type="alertmodal">
-   <unique/>
+      <unique />
 Are you sure you want to delete this notecard?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm notecard deletion"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Confirm notecard deletion"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
   
   <notification
    icon="alertmodal.tga"
    name="LoadPreviousReportScreenshot"
    type="alertmodal">
-   <unique/>
+      <unique />
 Do you want to use previous screenshot for your report?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
   
   <notification
@@ -1829,9 +1829,9 @@ Would you like to load the server&apos;s last saved version?
 (**Warning** This operation cannot be undone.)
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1851,8 +1851,8 @@ Your Start Region is not defined.
 Please type the Region name in Start Location box or choose My Last Location or My Home as your Start Location.
 <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -1876,13 +1876,13 @@ The object may be out of range or may have been deleted.
   name="MediaFileDownloadUnsupported"
   label=""
   type="alert">
-    <unique/>
+      <unique />
     <tag>confirm</tag>
     You have requested a file download, which is not supported within [APP_NAME].
     <usetemplate
-     ignoretext="Warn about unsupported file downloads"
-     name="okignore"
-     yestext="OK"/>
+         ignoretext="Warn about unsupported file downloads"
+         name="okignore"
+         yestext="OK" />
   </notification>
   
   <notification
@@ -1908,10 +1908,10 @@ Visit [_URL] for more information?
 			https://wiki.firestormviewer.org/fs_system_requirements
     </url>
     <usetemplate
-     ignoretext="My computer hardware is not supported"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
+         ignoretext="My computer hardware is not supported"
+         name="okcancelignore"
+         notext="No"
+         yestext="Yes" />
   <tag>fail</tag>
   </notification>
 
@@ -1927,10 +1927,10 @@ Visit [_URL] for more information?
     [URL]
     </url>
     <usetemplate
-     ignoretext="My graphics driver is out of date"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
+         ignoretext="My graphics driver is out of date"
+         name="okcancelignore"
+         notext="No"
+         yestext="Yes" />
     <tag>fail</tag>
   </notification>
 
@@ -1942,8 +1942,8 @@ Your system contains a graphics card that [APP_NAME] doesn't recognize.
 This is often the case with new hardware that has not been tested yet with [APP_NAME].  It will probably be ok, but you may need to adjust your graphics settings.
 (Avatar &gt; Preferences &gt; Graphics).
     <form name="form">
-      <ignore name="ignore"
-       text="My graphics card could not be identified"/>
+         <ignore name="ignore"
+            text="My graphics card could not be identified" />
     </form>
   <tag>fail</tag>
   </notification>
@@ -1967,9 +1967,9 @@ Changing this setting will disable automatic adjustment and turn off 'Automatic 
 Are you sure you want to continue?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Continue"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Continue" />
   </notification>
   <notification
    icon="alertmodal.tga"
@@ -1978,9 +1978,9 @@ Are you sure you want to continue?
 To turn on advanced lighting, we need to increase quality to level 4.
     <tag>confirm</tag>
   <usetemplate
-   name="okcancelbuttons"
-   notext="Cancel"
-   yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
   <notification
  icon="alertmodal.tga"
@@ -1989,9 +1989,9 @@ To turn on advanced lighting, we need to increase quality to level 4.
 To enable shadows, we need to increase quality to level 4.
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -2019,9 +2019,9 @@ You do not have permission to copy the following items:
 and will lose it from your inventory if you give it away. Do you really want to offer these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   <tag>fail</tag>
   </notification>
 
@@ -2065,9 +2065,9 @@ Do you really want to give these items?
     <tag>confirm</tag>
   <tag>fail</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
+         name="okcancelbuttons"
+         notext="No"
+         yestext="Yes" />
   </notification>
 
   <notification
@@ -2086,10 +2086,10 @@ Freeze this avatar?
 He or she will temporarily be unable to move, chat, or interact with the world.
     <tag>confirm</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Unfreeze"
-     yestext="Freeze"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Unfreeze"
+         yestext="Freeze" />
   </notification>
 
   <notification
@@ -2100,10 +2100,10 @@ Freeze [AVATAR_NAME]?
 He or she will temporarily be unable to move, chat, or interact with the world.
     <tag>confirm</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Unfreeze"
-     yestext="Freeze"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Unfreeze"
+         yestext="Freeze" />
   </notification>
   
   <notification
@@ -2116,10 +2116,10 @@ He or she will temporarily be unable to move, chat, or interact with the world.
  
  They will temporarily be unable to move, chat, or interact with the world.
      <usetemplate
-      canceltext="Cancel"
-      name="yesnocancelbuttons"
-      notext="Unfreeze"
-      yestext="Freeze"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Unfreeze"
+         yestext="Freeze" />
   </notification>  
 
   <notification
@@ -2129,10 +2129,10 @@ He or she will temporarily be unable to move, chat, or interact with the world.
 Eject [AVATAR_NAME] from your land?
     <tag>confirm</tag>
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Eject and Ban"
-     yestext="Eject"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Eject and Ban"
+         yestext="Eject" />
   </notification>
 
   <notification
@@ -2142,9 +2142,9 @@ Eject [AVATAR_NAME] from your land?
 Eject this avatar from your land?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Eject"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Eject" />
   </notification>
 
   <notification
@@ -2154,9 +2154,9 @@ Eject this avatar from your land?
 Eject [AVATAR_NAME] from your land?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Eject"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Eject" />
   </notification>
 
   <notification
@@ -2167,10 +2167,10 @@ Eject the following avatars from your land?
 
 [RESIDENTS]
     <usetemplate
-     canceltext="Cancel"
-     name="yesnocancelbuttons"
-     notext="Eject and Ban"
-     yestext="Eject"/>
+         canceltext="Cancel"
+         name="yesnocancelbuttons"
+         notext="Eject and Ban"
+         yestext="Eject" />
   </notification>
 
   <notification
@@ -2181,9 +2181,9 @@ Eject the following avatars from your land?
 
 [RESIDENTS]
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Eject"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Eject" />
   </notification>
 
   <notification
@@ -2225,9 +2225,9 @@ Go to [_URL] for information on purchasing L$?
 			http://secondlife.com/app/currency/
     </url>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
   
   <notification
@@ -2309,8 +2309,8 @@ Please make sure the file has a correct file extension.
 Invalid file extension [EXTENSION].
 Expected [VALIDS].
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   <tag>fail</tag>
   </notification>
 
@@ -2438,8 +2438,8 @@ Unable to encode file: [FILE]
     
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
     
   <notification
@@ -2470,7 +2470,7 @@ Unable to create output file: [FILE]
    icon="alertmodal.tga"
    name="DoNotSupportBulkAnimationUpload"
    type="alertmodal">
-    <unique/>
+      <unique />
 [APP_NAME] does not currently support bulk upload of BVH format animation files.
   <tag>fail</tag>
   </notification>
@@ -2498,8 +2498,8 @@ You have added "[LANDMARK_NAME]" to your [FOLDER_NAME] folder.
    type="alert">
 You already have a landmark for this location.
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   <tag>fail</tag>
   </notification>
 
@@ -2516,21 +2516,21 @@ You cannot create a landmark here because the owner of the land does not allow i
  label="Create folder"
  name="CreateLandmarkFolder"
  type="alertmodal">
-    <unique/>
+      <unique />
     Choose a name for the folder:
     <tag>confirm</tag>
     <form name="form">
       <input name="message" type="text">
       </input>
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -2642,7 +2642,7 @@ Your search terms were too short so no search was performed.
    icon="alertmodal.tga"
    name="CouldNotTeleportReason"
    type="alertmodal">
-    <unique/>
+      <unique />
 Teleport failed.
 [REASON]
   <tag>fail</tag>
@@ -2770,9 +2770,9 @@ This parcel is up for auction. Forcing ownership will cancel the auction and pot
 Force ownership?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -2885,18 +2885,18 @@ This location provides streaming media, which may require more of your network b
 Play streaming media when available?
 (You can change this option later under Preferences &gt; Sound &amp; Media.)
    <form name="form">
-    <button
-         index="0"
-         name="Play Media Now"
-         text="Play Media Now"/>
-        <button
-         index="1"
-         name="Always Play Media"  
-         text="Always Play Media"/>
-        <button
-         index="2"   
-         name="Do Not Pley Media"
-         text="Do Not Play Media"/>
+         <button
+            index="0"
+            name="Play Media Now"
+            text="Play Media Now" />
+         <button
+            index="1"
+            name="Always Play Media"
+            text="Always Play Media" />
+         <button
+            index="2"
+            name="Do Not Pley Media"
+            text="Do Not Play Media" />
    </form>
   </notification>
 
@@ -2992,9 +2992,9 @@ Releasing this parcel will remove it from your land holdings, but will not grant
 Release this land?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3027,9 +3027,9 @@ Dividing this land will split this parcel into two and each parcel can have its 
 Divide land?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3091,9 +3091,9 @@ You will need to reset the name and options of the new parcel.
 Join land?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3103,9 +3103,9 @@ Join land?
 This notecard needs to be saved before the item can be copied or viewed. Save notecard?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3115,9 +3115,9 @@ This notecard needs to be saved before the item can be copied or viewed. Save no
 Copy this item to your inventory?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Copy"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Copy" />
   </notification>
 
   <notification
@@ -3169,9 +3169,9 @@ You have been logged out of [CURRENT_GRID].
 
 [MESSAGE]
     <usetemplate
-     name="okcancelbuttons"
-     notext="Quit"
-     yestext="View IM &amp; Chat"/>
+         name="okcancelbuttons"
+         notext="Quit"
+         yestext="View IM &amp; Chat" />
   </notification>
 
   <notification
@@ -3206,15 +3206,15 @@ Offer friendship to [NAME]?
       <input name="message" type="text" default="true">
 Would you be my friend?
       </input>
-      <button
-       default="true"
-       index="0"
-       name="Offer"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="Offer"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3227,16 +3227,16 @@ Would you be my friend?
     Name for the new list:
     <tag>confirm</tag>
     <form name="form">
-      <input name="listname" type="text"/>
-      <button
-       default="true"
-       index="0"
-       name="SetName"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <input name="listname" type="text" />
+         <button
+            default="true"
+            index="0"
+            name="SetName"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3249,17 +3249,17 @@ Would you be my friend?
     Enter a new unique name:
     <tag>confirm</tag>
     <form name="form">
-      <input name="listname" type="text"/>
-      <button
-       default="false"
-       index="0"
-       name="ReplaceList"
-       text="Replace Current List"/>
-      <button
-       default="true"
-       index="1"
-       name="SetName"
-       text="Use New Name"/>
+         <input name="listname" type="text" />
+         <button
+            default="false"
+            index="0"
+            name="ReplaceList"
+            text="Replace Current List" />
+         <button
+            default="true"
+            index="1"
+            name="SetName"
+            text="Use New Name" />
     </form>
   </notification>
 
@@ -3314,22 +3314,22 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
  label="Save Outfit"
  name="SaveOutfitAs"
  type="alertmodal">
-    <unique/>
+      <unique />
     Save what I'm wearing as a new Outfit:
     <tag>confirm</tag>
     <form name="form">
       <input name="message" type="text" default="true">
         [DESC] (new)
       </input>
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3344,15 +3344,15 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
       <input name="message" type="text" default="true">
         [DESC] (new)
       </input>
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3368,15 +3368,15 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
       <input name="new_name" type="text" width="300" default="true">
         [NAME]
       </input>
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3391,15 +3391,15 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
       <input name="new_name" type="text" width="300">
         [NAME]
       </input>
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3414,15 +3414,15 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
       <input name="new_name" type="text" width="300">
         [NAME]
       </input>
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
     </form>
   </notification>
 
@@ -3438,15 +3438,15 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
     <input name="new_name" type="text" width="300">
       [NAME]
     </input>
-    <button
-     default="true"
-     index="0"
-     name="OK"
-     text="OK"/>
-    <button
-     index="1"
-     name="Cancel"
-     text="Cancel"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Cancel"
+            text="Cancel" />
    </form>
   </notification>
 
@@ -3458,9 +3458,9 @@ Are you sure you want to remove [NAME] from your Friends List?
     <tag>friendship</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3471,9 +3471,9 @@ Are you sure you want to remove multiple friends from your Friends list?
     <tag>friendship</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3485,9 +3485,9 @@ Are you sure you want to delete all scripted objects owned by
 on all others land in this region?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3499,9 +3499,9 @@ Are you sure you want to DELETE ALL scripted objects owned by
 on ALL LAND in this region?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3513,9 +3513,9 @@ Are you sure you want to DELETE ALL objects (scripted or not) owned by
 on ALL LAND in this region?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3545,9 +3545,9 @@ At least one of the items you have selected has link items that point to it.  If
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3559,9 +3559,9 @@ At least one of the items you have selected is locked.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3573,9 +3573,9 @@ At least one of the items you have selected is not copyable.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3587,9 +3587,9 @@ You do not own at least one of the items you have selected.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3602,9 +3602,9 @@ At least one object is not copyable.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3617,9 +3617,9 @@ You do not own at least one object.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3632,9 +3632,9 @@ You do not own at least one object.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3648,9 +3648,9 @@ You do not own at least one object.
 Are you sure you want to delete these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3662,9 +3662,9 @@ At least one object is locked.
 Are you sure you want to take these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3677,9 +3677,9 @@ If you continue, next owner permissions will be applied and possibly restrict yo
 Are you sure you want to take these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3694,9 +3694,9 @@ However, you can take the current selection.
 Are you sure you want to take these items?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3720,9 +3720,9 @@ Deed this [AREA] m² of land to the group &apos;&lt;nolink&gt;[GROUP_NAME]&lt;/n
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3737,9 +3737,9 @@ Deed this [AREA] m² of land to the group &apos;&lt;nolink&gt;[GROUP_NAME]&lt;/n
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3775,8 +3775,8 @@ Display settings have been set to recommended levels because of a change to the 
 [ERROR_MESSAGE]
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -3815,8 +3815,8 @@ You may want to set a new home location.
 Your clothing is still downloading.
 You can use [APP_NAME] normally and other people will see you correctly.
     <form name="form">
-      <ignore name="ignore"
-       text="Clothing is taking a long time to download"/>
+         <ignore name="ignore"
+            text="Clothing is taking a long time to download" />
     </form>
   </notification>
 
@@ -3831,8 +3831,8 @@ You can use [APP_NAME] normally and other people will see you correctly.
 Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
    <usetemplate
-    ignoretext="Warn me if my avatar complexity may be too high"
-    name="notifyignore"/>
+         ignoretext="Warn me if my avatar complexity may be too high"
+         name="notifyignore" />
   </notification>
 
   <notification
@@ -3845,8 +3845,8 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
    </unique>
 Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
     <usetemplate
-     ignoretext="Warn me about my avatar complexity changes"
-     name="notifyignore"/>
+         ignoretext="Warn me about my avatar complexity changes"
+         name="notifyignore" />
   </notification>
 
   <notification
@@ -3859,8 +3859,8 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
     </unique>
     [HUD_REASON]. It is likely to negatively affect your performance.
     <usetemplate
-     ignoretext="Warn me when my HUD complexity is too high"
-     name="notifyignore"/>
+         ignoretext="Warn me when my HUD complexity is too high"
+         name="notifyignore" />
   </notification>
 
   <notification
@@ -3873,9 +3873,9 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
 If this is your first time using [CURRENT_GRID], you will need to create an account before you can log in.
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Continue"
-     yestext="Create Account..."/>
+         name="okcancelbuttons"
+         notext="Continue"
+         yestext="Create Account..." />
   </notification>
 
   <notification
@@ -3893,9 +3893,9 @@ Already remembered user can be forgotten from Me &gt; Preferences &gt; Advanced 
     <tag>confirm</tag>
 Forgetting the logged-in user requires you to log out.
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Confirm and log out"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Confirm and log out" />
   </notification>
 
   <notification
@@ -3911,19 +3911,19 @@ You can either check your Internet connection and try again in a few minutes, cl
 			https://www.firestormviewer.org/support/
     </url>
     <form name="form">
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Help"
-       text="Help"/>
-      <button
-       index="2"
-       name="Teleport"
-       text="Teleport"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Help"
+            text="Help" />
+         <button
+            index="2"
+            name="Teleport"
+            text="Teleport" />
     </form>
   </notification>
 
@@ -3939,15 +3939,15 @@ You can either check your Internet connection and try again in a few minutes or 
 			https://www.firestormviewer.org/support/
     </url>
     <form name="form">
-      <button
-       default="true"
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Help"
-       text="Help"/>
+         <button
+            default="true"
+            index="0"
+            name="OK"
+            text="OK" />
+         <button
+            index="1"
+            name="Help"
+            text="Help" />
     </form>
   </notification>
 
@@ -3958,9 +3958,9 @@ You can either check your Internet connection and try again in a few minutes or 
     <tag>confirm</tag>
 Local Data you are deleting is shared between multiple grids, are you sure you want to delete it?
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Confirm"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Confirm" />
   </notification>
 
   <notification
@@ -3973,9 +3973,9 @@ Use arrow keys to walk.
 Press the F1 key at any time for help or to learn more about [CURRENT_GRID].
 Please choose the male or female avatar. You can change your mind later.
     <usetemplate
-     name="okcancelbuttons"
-     notext="Female"
-     yestext="Male"/>
+         name="okcancelbuttons"
+         notext="Female"
+         yestext="Male" />
   </notification>
   <notification icon="alertmodal.tga"
 		name="CantTeleportToGrid"
@@ -3983,8 +3983,8 @@ Please choose the male or female avatar. You can change your mind later.
 Could not teleport to [SLURL] as it's on a different grid ([GRID]) than the current grid ([CURRENT_GRID]).  Please close your viewer and try again.
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification icon="alertmodal.tga"
@@ -3994,8 +3994,8 @@ Could not connect to the server.
 [REASON]
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification icon="alertmodal.tga"
@@ -4015,8 +4015,8 @@ Extended Key Usage: [EXTENDEDKEYUSAGE]
 Subject Key Identifier: [SUBJECTKEYIDENTIFIER]
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
    </notification>
 
   <notification icon="alertmodal.tga"
@@ -4038,9 +4038,9 @@ Subject Key Identifier: [SUBJECTKEYIDENTIFIER]
 Would you like to trust this authority?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Trust"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Trust" />
   </notification>
 
   <notification
@@ -4078,9 +4078,9 @@ This will flush the map caches on this region.
 This is really only useful for debugging.
 (In production, wait 5 minutes, then everyone&apos;s map will update after they relog.)
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4099,9 +4099,9 @@ Unable to copy the contents of more than one item at a time.
 Please select only one object and try again.
   <tag>fail</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4111,9 +4111,9 @@ Please select only one object and try again.
 Teleport all residents in this region home?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4123,10 +4123,10 @@ Teleport all residents in this region home?
     Lowering the object bonus after builds have been established in a region may cause objects to be returned or deleted. Are you sure you want to change object bonus?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm changing object bonus factor"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Confirm changing object bonus factor"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4136,16 +4136,16 @@ Teleport all residents in this region home?
 Are you sure you want to return objects owned by [USER_NAME]?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="InvalidTerrainBitDepth"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region textures:
 Terrain texture [TEXTURE_NUM] has an invalid bit depth of [TEXTURE_BIT_DEPTH].
 
@@ -4157,7 +4157,7 @@ Replace texture [TEXTURE_NUM] with an RGB [MAX_SIZE]x[MAX_SIZE] or smaller image
    icon="alertmodal.tga"
    name="InvalidTerrainAlphaNotFullyLoaded"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region textures:
 Terrain texture [TEXTURE_NUM] is not fully loaded, but is assumed to contain transparency due to a bit depth of [TEXTURE_BIT_DEPTH]. Transparency is not currently supported for terrain textures.
 
@@ -4171,7 +4171,7 @@ Alpha is only supported for terrain materials (PBR Metallic Roughness), when alp
    icon="alertmodal.tga"
    name="InvalidTerrainAlpha"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region textures:
 Terrain texture [TEXTURE_NUM] contains transparency. Transparency is not currently supported for terrain textures.
 
@@ -4185,7 +4185,7 @@ Alpha is only supported for terrain materials (PBR Metallic Roughness), when alp
    icon="alertmodal.tga"
    name="InvalidTerrainSize"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region textures:
 Terrain texture [TEXTURE_NUM] is too large at [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
@@ -4196,7 +4196,7 @@ Replace texture [TEXTURE_NUM] with an RGB [MAX_SIZE]x[MAX_SIZE] or smaller image
    icon="alertmodal.tga"
    name="InvalidTerrainMaterialNotLoaded"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region materials:
 Terrain material [MATERIAL_NUM] is not loaded.
 
@@ -4207,7 +4207,7 @@ Wait for the material to load, or replace material [MATERIAL_NUM] with a valid m
    icon="alertmodal.tga"
    name="InvalidTerrainMaterialLoadFailed"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region materials:
 Terrain material [MATERIAL_NUM] failed to load.
 
@@ -4218,7 +4218,7 @@ Replace material [MATERIAL_NUM] with a valid material.
    icon="alertmodal.tga"
    name="InvalidTerrainMaterialDoubleSided"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region materials:
 Terrain material [MATERIAL_NUM] is double-sided. Double-sided materials are not currently supported for PBR terrain.
 
@@ -4229,7 +4229,7 @@ Replace material [MATERIAL_NUM] with a material with doubleSided=false.
    icon="alertmodal.tga"
    name="InvalidTerrainMaterialAlphaMode"
    type="alertmodal">
-    <unique combine="cancel_old" />
+      <unique combine="cancel_old" />
 Couldn&apos;t set region materials:
 Terrain material [MATERIAL_NUM] is using the unsupported alphaMode="[MATERIAL_ALPHA_MODE]".
 
@@ -4250,9 +4250,9 @@ Upload started. It may take up to two minutes, depending on your connection spee
 Do you really want to bake the current terrain, make it the center for terrain raise/lower limits, and the default for the &apos;Revert&apos; tool?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4262,10 +4262,10 @@ Do you really want to bake the current terrain, make it the center for terrain r
 You're about to use low values greater than high ones for Elevation Ranges. Proceed?
    <tag>confirm</tag>
    <usetemplate
-    name="yesnocancelbuttons"
-    yestext="Ok"
-    notext="Cancel"
-    canceltext="Don't ask"/>
+         name="yesnocancelbuttons"
+         yestext="Ok"
+         notext="Cancel"
+         canceltext="Don't ask" />
   </notification>
 
   <notification
@@ -4297,9 +4297,9 @@ Exceeds the [MAX_AGENTS] [LIST_TYPE] limit by [NUM_EXCESS].
 You can only have [MAX_GROUPS] groups.
     <tag>group</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Bake"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Bake" />
   </notification>
 
   <notification
@@ -4419,8 +4419,8 @@ Version [VERSION] is required for login.
 Please download from https://secondlife.com/support/downloads/
     <tag>confirm</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4433,8 +4433,8 @@ Release notes: [URL]
 Click OK to download and install.
     <tag>confirm</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4447,8 +4447,8 @@ Release notes: [URL]
 Click OK to install.
     <tag>confirm</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4461,10 +4461,10 @@ Release notes: [URL]
 Proceed?
     <tag>confirm</tag>
     <usetemplate
-     canceltext="Not Now"
-     name="yesnocancelbuttons"
-     notext="Skip"
-     yestext="Install"/>
+         canceltext="Not Now"
+         name="yesnocancelbuttons"
+         notext="Skip"
+         yestext="Install" />
   </notification>
 
   <notification
@@ -4475,8 +4475,8 @@ Sorry, login failed for an unrecognized reason.
 If you continue to get this message, please check the [SUPPORT_SITE].
     <tag>confirm</tag>
     <usetemplate
-     name="okbutton"
-     yestext="Quit"/>
+         name="okbutton"
+         yestext="Quit" />
   </notification>
 
   <notification
@@ -4488,10 +4488,10 @@ Deeding this object will cause the group to:
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm before I deed an object to a group"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="Deed"/>
+         ignoretext="Confirm before I deed an object to a group"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Deed" />
   </notification>
 
   <notification
@@ -4502,10 +4502,10 @@ Do you want to open your Web browser to view this content?
 Opening webpages from an unknown source may place your computer at risk.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to view a web page"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Launch my browser to view a web page"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4515,10 +4515,10 @@ Opening webpages from an unknown source may place your computer at risk.
 Go to your [http://secondlife.com/account/ Dashboard] to manage your account?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to manage my account"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Launch my browser to manage my account"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4528,10 +4528,10 @@ Go to your [http://secondlife.com/account/ Dashboard] to manage your account?
 Visit the [CURRENT_GRID] Wiki for details of how to report a security issue.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to learn how to report a Security Issue"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Launch my browser to learn how to report a Security Issue"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4541,10 +4541,10 @@ Visit the [CURRENT_GRID] Wiki for details of how to report a security issue.
 Visit the [CURRENT_GRID] QA Wiki.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to view the QA Wiki"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Launch my browser to view the QA Wiki"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4554,10 +4554,10 @@ Visit the [CURRENT_GRID] QA Wiki.
 Visit the [CURRENT_GRID] Public Issue Tracker, where you can report bugs and other issues.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to use the Public Issue Tracker"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="Go to page"/>
+         ignoretext="Launch my browser to use the Public Issue Tracker"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Go to page" />
   </notification>
 
   <notification
@@ -4567,10 +4567,10 @@ Visit the [CURRENT_GRID] Public Issue Tracker, where you can report bugs and oth
 Go to the Official Linden Blog, for the latest news and information.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to view the blog"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Launch my browser to view the blog"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4580,10 +4580,10 @@ Go to the Official Linden Blog, for the latest news and information.
 Do you want to open the Scripting Guide for help with scripting?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to view the Scripting Guide"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Launch my browser to view the Scripting Guide"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4593,10 +4593,10 @@ Do you want to open the Scripting Guide for help with scripting?
 Do you want to visit the LSL Portal for help with scripting?
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Launch my browser to view the LSL Portal"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="Go to page"/>
+         ignoretext="Launch my browser to view the LSL Portal"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="Go to page" />
   </notification>
 
   <notification
@@ -4608,10 +4608,10 @@ Are you sure you want to return the selected objects to their owners? Transferab
 *WARNING* No-transfer deeded objects will be deleted!
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm before I return objects to their owners"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
+         ignoretext="Confirm before I return objects to their owners"
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4623,9 +4623,9 @@ Currently, the fee to join this group again is L$[COST].
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Leave"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Leave" />
   </notification>
 
   <notification
@@ -4637,9 +4637,9 @@ There is currently no fee to join this group again.
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Leave"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Leave" />
   </notification>
 
   <notification
@@ -4649,8 +4649,8 @@ There is currently no fee to join this group again.
     Unable to leave group. You cannot leave the group because you are the last owner of the group. Please assign another member to the owner role first.
     <tag>group</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4660,8 +4660,8 @@ There is currently no fee to join this group again.
     Unable to leave group.
     <tag>group</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4671,9 +4671,9 @@ There is currently no fee to join this group again.
 Do you REALLY want to kick all residents off the grid?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Kick All Residents"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="Kick All Residents" />
   </notification>
 
   <notification
@@ -4683,8 +4683,8 @@ Do you REALLY want to kick all residents off the grid?
 Sorry, you cannot block a Linden.
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4703,8 +4703,8 @@ Sorry, you cannot block a Linden.
 You already have blocked/muted this name.
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4714,9 +4714,9 @@ You already have blocked/muted this name.
 Though permitted, deleting contents may damage the object. Do you want to delete that item?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+         name="okcancelbuttons"
+         notext="Cancel"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4726,8 +4726,8 @@ Though permitted, deleting contents may damage the object. Do you want to delete
 Cannot offer a calling card at this time. Please try again in a moment.
     <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4738,8 +4738,8 @@ Cannot offer a calling card at this time. Please try again in a moment.
     <tag>fail</tag>
 Cannot offer friendship at this time. Please try again in a moment.
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+         name="okbutton"
+         yestext="OK" />
   </notification>
 
   <notification
@@ -4751,9 +4751,9 @@ Unavailable mode is on.  You will not be notified of incoming communications.
 - Other residents will receive your Unavailable mode response (set in Preferences &gt; Privacy &gt; Autoresponse).
 - Voice calls will be rejected.
     <usetemplate
-     ignoretext="I change my status to unavailable"
-     name="okignore"
-     yestext="OK"/>
+         ignoretext="I change my status to unavailable"
+         name="okignore"
+         yestext="OK" />
   </notification>
   
     <notification
@@ -4763,9 +4763,9 @@ Unavailable mode is on.  You will not be notified of incoming communications.
 Autorespond mode is on.
 Incoming instant messages will now be answered with your configured autoresponse.
     <usetemplate
-     ignoretext="I change my status to autorespond mode"
-     name="okignore"
-     yestext="OK"/>
+         ignoretext="I change my status to autorespond mode"
+         name="okignore"
+         yestext="OK" />
   </notification>
 
     <notification
@@ -4775,10 +4775,32 @@ Incoming instant messages will now be answered with your configured autoresponse
 Autorespond mode for non-friends is on.
 Incoming instant messages from anyone who is not your friend will now be answered with your configured autoresponse.
     <usetemplate
-     ignoretext="I change my status to autorespond mode for non-friends"
-     name="okignore"
-     yestext="OK"/>
+         ignoretext="I change my status to autorespond mode for non-friends"
+         name="okignore"
+         yestext="OK" />
   </notification>
+
+   <notification
+      icon="notify.tga"
+      name="PoserExportXMLSuccess"
+      type="notify">
+      The pose has been exported successfully as an XML file.
+
+      The pose can be loaded from the expanded pose list.
+
+      The file can be found in:
+      C:\Users\USERNAME\AppData\Roaming\Firestorm_x64\user_settings\poses
+   </notification>
+
+   <notification
+      icon="notify.tga"
+      name="PoserExportANIMSuccess"
+      type="notify">
+      The pose has been exported successfully as an ANIM file.
+
+      The file can be found in:
+      C:\Users\USERNAME\AppData\Roaming\Firestorm_x64\user_settings\animations
+   </notification>
 
     <notification
    icon="alert.tga"
@@ -5013,7 +5035,7 @@ Please try a shorter name.
     <tag>fail</tag>
   </notification>
 
-  <!-- *NOTE: This should never happen -->
+   <!-- *NOTE: This should never happen -->
   <notification
    icon="alertmodal.tga"
    name="AgentDisplayNameUpdateThresholdExceeded"
@@ -7114,7 +7136,7 @@ Unable to start a new chat session with [RECIPIENT].
    name="ChatterBoxSessionEventError"
    type="notifytip">
 [EVENT]
-<!--[REASON]-->
+      <!--[REASON]-->
   <tag>fail</tag>
     <usetemplate
      name="okbutton"
@@ -8422,7 +8444,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
     </form>
   </notification>
 
-  <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
+   <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
   <notification
    icon="notify.tga"
    name="UserGiveItem"
@@ -9155,7 +9177,7 @@ Before allowing this access, make sure you know what the object is and why it is
     </form>
   </notification>
 
-<!--
+   <!--
   <notification
    icon="notify.tga"
    name="FirstBalanceIncrease"
@@ -10821,7 +10843,7 @@ Do you want to check the Intel driver website?
 Failed to launch updater service [UPDATER_APP]. Please verify the viewer is installed correctly and has the necessary permissions to run. If you continue to experience issues, please visit the [SUPPORT_SITE].
   </global>
 
-<!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
+   <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
 	whenever the server string changes -->
    <global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 If you own a piece of land, you can make it your home location.
@@ -10830,7 +10852,7 @@ Otherwise, you can look at the Map and find places marked &quot;Infohub&quot;.
   <global name="You died and have been teleported to your home location">
 You died and have been teleported to your home location.
   </global>
-<!-- <FS:AW>  opensim search support-->
+   <!-- <FS:AW>  opensim search support-->
   <notification
    icon="alertmodal.tga"
    name="ConfirmClearDebugSearchURL"
@@ -10855,8 +10877,8 @@ Are you sure you want to pick the current search url as debug search url?
      notext="Cancel"
      yestext="OK"/>
   </notification>
-<!-- </FS:AW>  opensim search support-->
-<!-- <FS:AW  grid management-->
+   <!-- </FS:AW>  opensim search support-->
+   <!-- <FS:AW  grid management-->
   <notification
    icon="alertmodal.tga"
    name="ConfirmRemoveGrid"
@@ -10881,9 +10903,9 @@ You can not remove [REMOVE_GRID] while being connected to it.
      notext="Cancel"
      yestext="OK"/>
   </notification>
-<!-- </FS:AW  grid management-->
+   <!-- </FS:AW  grid management-->
 
-<!-- ## Zi: Animation Overrider -->
+   <!-- ## Zi: Animation Overrider -->
   <notification
    icon="alertmodal.tga"
    name="NewAOSet"
@@ -11051,7 +11073,7 @@ Could not create import folder for animation set [NAME]. Giving up.
 Creating animation link for animation "[NAME]" failed!
   </notification>
 
-<!-- ## Zi: Animation Overrider -->
+   <!-- ## Zi: Animation Overrider -->
 
 <notification
    icon="alertmodal.tga"
@@ -11066,7 +11088,7 @@ This will send the following information to the current IM session:
      notext="Cancel" />
   </notification>
 
-<!-- fsdata -->
+   <!-- fsdata -->
   <notification
    icon="alertmodal.tga"
    name="BlockLoginInfo"
@@ -11107,7 +11129,7 @@ Would you like to send them this information?
     </form>
   </notification>
 
-<!-- Firestorm Phantom -->
+   <!-- Firestorm Phantom -->
 
   <notification
    icon="notifytip.tga"
@@ -11158,9 +11180,9 @@ Disabling movelock...
 Flight Assist is enabled
   </notification>
 
-<!-- Firestorm Phantom -->
+   <!-- Firestorm Phantom -->
 
-<!-- Firestorm Reset Settings -->
+   <!-- Firestorm Reset Settings -->
   <notification
     icon="alertmodal.tga"
     label="Reset all settings"
@@ -11181,9 +11203,9 @@ Flight Assist is enabled
     type="alertmodal">
     Settings will be cleared after restarting [APP_NAME].
   </notification>
-<!-- Firestorm Reset Settings -->
+   <!-- Firestorm Reset Settings -->
 
-<!-- AW: opensim -->
+   <!-- AW: opensim -->
   <notification icon="alertmodal.tga"
 		name="CantAddGrid"
 		type="alertmodal">
@@ -11193,9 +11215,9 @@ Could not add [GRID] to the grid list.
      name="okbutton"
      yestext="OK"/>
   </notification>
-<!-- AW: opensim -->
+   <!-- AW: opensim -->
 
-  <!-- ## Zi: Particle Editor -->
+   <!-- ## Zi: Particle Editor -->
   <notification
    icon="alertmodal.tga"
    name="ParticleScriptFindFolderFailed"
@@ -11252,9 +11274,9 @@ The LSL script to create this particle system has been copied to your clipboard.
        text="A particle script was copied to my clipboard"/>
     </form>
   </notification>
-  <!-- ## Zi: Particle Editor -->
+   <!-- ## Zi: Particle Editor -->
 
-  <!-- ## Zi: Debug Settings Editor -->
+   <!-- ## Zi: Debug Settings Editor -->
   <notification
    icon="notify.tga"
    name="DebugSettingsWarning"
@@ -11301,9 +11323,9 @@ Current setting: [CURRENT_VALUE]
        text="A settings control has failed the sanity check."/>
     </form>
   </notification>
-  <!-- ## Zi: Debug Settings Editor -->
+   <!-- ## Zi: Debug Settings Editor -->
 
-  <!-- <FS:Sei> LSL Default label missing FIRE-17710 -->
+   <!-- <FS:Sei> LSL Default label missing FIRE-17710 -->
   <notification
    icon="alertmodal.tga"
    name="DefaultLabelMissing"
@@ -11314,7 +11336,7 @@ Current setting: [CURRENT_VALUE]
 The behavior for switch() statements without a default case was previously incorrect and has been fixed. 
 See FIRE-17710 for details.
   </notification>
-  <!-- </FS:Sei> -->
+   <!-- </FS:Sei> -->
 
   <notification
    icon="alertmodal.tga"
@@ -11347,7 +11369,7 @@ Cannot track this avatar, because it is beyond radar range.
 Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads.
   </notification>
 
-  <!-- <FS:Zi> Viewer version popup -->
+   <!-- <FS:Zi> Viewer version popup -->
   <notification
    icon="alertmodal.tga"
    name="FirstJoinSupportGroup2"
@@ -11377,7 +11399,7 @@ Do you want to enable the automatic viewer version display?
     </form>
 
   </notification>
-  <!-- <FS:Zi> Viewer version popup -->
+   <!-- <FS:Zi> Viewer version popup -->
   <notification
      icon="alertmodal.tga"
      name="ConfirmScriptModify"
@@ -13384,8 +13406,8 @@ able to add a payment method at checkout.
        text="Cancel"/>
     </form>
   </notification>
-  
-<!-- <FS:Zi> Add float LSL color entry widgets -->
+
+   <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"
    name="LSLColorCopiedToClipboard"
@@ -13396,10 +13418,10 @@ The LSL color string has been copied to your clipboard. You can now paste it int
        text="An LSL color string was copied to my clipboard"/>
     </form>
   </notification>
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
+   <!-- <FS:Zi> Add float LSL color entry widgets -->
 
-  <!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
-  <!-- <FS:TS> FIRE-6795: Remove warning at every login -->
+   <!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
+   <!-- <FS:TS> FIRE-6795: Remove warning at every login -->
   <notification
    icon="alertmodal.tga"
    name="FSBWTooHigh"
@@ -13409,8 +13431,8 @@ We strongly recommend that you not set the bandwidth above 1500 KBPS. This is un
      name="okbutton"
      yestext="OK"/>
   </notification>
-  <!-- </FS:TS> FIRE-6795 -->
-  <!-- </FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
+   <!-- </FS:TS> FIRE-6795 -->
+   <!-- </FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
 
   <notification
    icon="alertmodal.tga"
@@ -13494,7 +13516,7 @@ Error in the regular expression:
 		[NAME] [MESSAGE]
 	</notification>
 
-	
+
    <!-- <FS:Zi> Backup Settings -->
   <notification
    icon="alertmodal.tga"
@@ -13559,7 +13581,7 @@ Restore complete! Please restart your viewer now.
      name="okbutton"
      yestext="Quit"/>
   </notification>
-  <!-- </FS:Zi> -->
+   <!-- </FS:Zi> -->
 
   <notification
    icon="alertmodal.tga"
@@ -13659,8 +13681,8 @@ AntiSpam: Blocked [SOURCE] for sending an instant message with more than [COUNT]
 AntiSpam: Blocked [SOURCE] for sending a chat message with more than [COUNT] lines.
     </notification>
 
-  <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
-  <!--         The actual texts for the messages are in strings.xml -->
+   <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
+   <!--         The actual texts for the messages are in strings.xml -->
   <notification
    icon="notify.tga"
    name="SkinDefaultsChangeSettings"
@@ -13671,7 +13693,7 @@ AntiSpam: Blocked [SOURCE] for sending a chat message with more than [COUNT] lin
        text="A preferences setting was changed to the skin's default value."/>
     </form>
   </notification>
-  <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
+   <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
 
   <notification
    icon="alertmodal.tga"
@@ -13825,7 +13847,7 @@ Enter a domain name to be added to the [LIST]:
    type="alertmodal">
 Restore to Last Position is not allowed for no copy items to prevent possible content loss.
   </notification>
-  <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
+   <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
 
   <notification
    icon="alertmodal.tga"
@@ -13846,7 +13868,7 @@ Delete saved login for &lt;nolink&gt;[NAME]&lt;/nolink&gt;?
     </form>
   </notification>
 
-  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+   <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
   <notification
    icon="alertmodal.tga"
    name="ExodusFlickrVerificationExplanation"
@@ -13897,7 +13919,7 @@ Flickr verification failed. Please try again, and be sure to double check the ve
    type="notifytip">
 Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[ID] here].
   </notification>
-  <!-- </FS:TS> FIRE-5453 -->
+   <!-- </FS:TS> FIRE-5453 -->
 
   <notification
    icon="alert.tga"
@@ -14484,7 +14506,7 @@ Camera reset might be inhibited by the following objects:
      yestext="Okay"/>
   </notification>
 
-  <!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
+   <!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
   <notification
    icon="alertmodal.tga"
    label="Image Contains Empty Alpha Channel"
@@ -14504,6 +14526,6 @@ Camera reset might be inhibited by the following objects:
        text="Use As Is"/>
     </form>
   </notification>
-  <!-- </FS:Zi> -->
+   <!-- </FS:Zi> -->
 
 </notifications>

@@ -436,6 +436,22 @@
          name="invert_mouse"
          top_delta="0"
          width="128" />
+
+         <check_box
+         control_name="MouselookExperimentalHeadScaling"
+         follows="left|top"
+         height="16"
+         enabled_control="EnableMouselook"
+         label="[caution] Allow experimental head bone scaling in Mouselook"
+         tool_tip="This option toggles whether the Viewer should scale down all head bones while in Mouselook, this should prevent attachments rigged to the head from showing up while in Mouselook.
+         Note that under very specific circumstances with certain avatars this can cause the head to deform and will require a relog to fix, turn this off if that happens."
+         layout="topleft"
+         left="10"
+         top_pad="0"
+         name="MouselookExperimentalHeadScaling"
+         width="256">
+         </check_box>
+
 	</panel>
 
     <!--Movement-->

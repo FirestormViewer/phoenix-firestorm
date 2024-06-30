@@ -177,6 +177,8 @@
 #include "llpreviewtexture.h"
 #include "llscriptfloater.h"
 #include "llsyswellwindow.h"
+#include "bdfloaterposer.h"
+#include "bdfloaterposecreator.h"
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
 // [RLVa:KB] - Checked: 2010-03-11
@@ -639,6 +641,8 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("media_lists", "floater_media_lists.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterMediaLists>);
     LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);
     LLFloaterReg::add("particle_editor","floater_particle_editor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ParticleEditor>);
+    LLFloaterReg::add("poser", "floater_poser.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<BDFloaterPoser>);
+    LLFloaterReg::add("poser_creator", "floater_poser_creator.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<BDFloaterPoseCreator>);
     LLFloaterReg::add("performance", "floater_fs_performance.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPerformance>);
     LLFloaterReg::add(PHOTOTOOLS_FLOATER, "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
     LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);

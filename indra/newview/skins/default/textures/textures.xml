@@ -170,6 +170,7 @@ with the same filename but different name
   <texture name="Command_Search_Icon"       file_name="toolbar_icons/search.png"       preload="true" />
   <texture name="Command_Snapshot_Icon"     file_name="toolbar_icons/snapshot.png"     preload="true" />
   <texture name="Command_Speak_Icon"        file_name="toolbar_icons/speak.png"        preload="true" />
+  <texture name="Command_Poser_Icon"        file_name="toolbar_icons/poser.png"        preload="true" />
   <!-- FS:Beq FIRE-20977 -->
   <texture name="Command_RFO_Icon"        file_name="toolbar_icons/RFO_ON.png"        preload="true" />
   <!-- /RFO Changes -->
@@ -285,7 +286,8 @@ with the same filename but different name
 
   <texture name="Icon_Dock_Foreground" file_name="windows/Icon_Dock_Foreground.png" preload="true" />
   <texture name="Icon_Dock_Press" file_name="windows/Icon_Dock_Press.png" preload="true" />
-
+  <texture name="Icon_Undock_Foreground" file_name="windows/Icon_Undock_Foreground.png" preload="true" />
+  
   <texture name="Icon_File_Upload" file_name="icons/file_upload.png" preload="true" />
   
   <texture name="Icon_For_Sale" file_name="icons/Icon_For_Sale.png" preload="false" />
@@ -353,6 +355,7 @@ with the same filename but different name
   <texture name="Inv_Pants" file_name="icons/Inv_Pants.png" preload="false" />
   <texture name="Inv_Script" file_name="icons/Inv_Script.png" preload="false" />
   <texture name="Inv_Shirt" file_name="icons/Inv_Shirt.png" preload="false" />
+  <texture name="Inv_Shape" file_name="icons/Inv_Shape.png"  preload="false" />
   <texture name="Inv_Shoe" file_name="icons/Inv_Shoe.png" preload="false" />
   <texture name="Inv_Skin" file_name="icons/Inv_Skin.png" preload="false" />
   <texture name="Inv_Skirt" file_name="icons/Inv_Skirt.png" preload="false" />
@@ -806,6 +809,11 @@ with the same filename but different name
   <texture name="TextField_Active" file_name="widgets/TextField_Active.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
   <texture name="TextField_Search_Highlight" file_name="widgets/TextField_Search_Highlight.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
 
+  <texture name="Caution_Widget" file_name="icons/Caution_Widget.png" preload="true"/>
+  <texture name="Default_Widget" file_name="icons/Default_Widget.png" preload="true"/>
+  <texture name="Caution_Widget_Mini" file_name="icons/Caution_Widget_Mini.png" preload="true"/>
+  <texture name="Default_Widget_Mini" file_name="icons/Default_Widget_Mini.png" preload="true"/>
+
   <texture name="Thumbnail_Fallback" file_name="icons/thumbnail_fallback_icon.png" preload="true" />
 
   <texture name="Toast_CloseBtn" file_name="windows/Toast_CloseBtn.png" preload="true" />
@@ -971,6 +979,9 @@ with the same filename but different name
   <texture name="foot_shadow.j2c" use_mips="true" />
   <texture name="cloud-particle.j2c" use_mips="true" />
   <texture name="transparent.j2c" use_mips="true" />
+
+  <texture name="Transparent" file_name="transparent.tga" preload="true" />
+  <texture name="Ticker_Grid" file_name="ticker_visualizer_grid.tga" preload="false" />
 
   <!--WARNING OLD ART BELOW *do not use*-->
   <texture name="icn_media_web.tga" preload="true" />

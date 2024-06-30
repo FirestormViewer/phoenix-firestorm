@@ -291,5 +291,17 @@
 	<integer>0</integer>
   </map>
 
+  <key>MouselookExperimentalHeadScaling</key>
+  <map>
+    <key>Comment</key>
+    <string>(EXPERIMENTAL) Scale down head bones on entering mouselook to prevent rigged head attachments being visible and clipping into the camera.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
 </map>
 </llsd>

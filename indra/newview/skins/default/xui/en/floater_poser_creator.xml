@@ -1,0 +1,1307 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+positioning="centered"
+height="431"
+layout="topleft"
+name="floater_poser"
+title="Pose Creator"
+width="654">
+	<string
+	name="icon_category" translate="false">
+	Inv_Shape
+	</string>
+	<string
+	name="icon_bone" translate="false">
+	Transparent
+	</string>
+	<string
+	name="icon_object" translate="false">
+	Inv_Object
+	</string>
+	<string
+	name="title_mPelvis" translate="false">
+	Main Body
+	</string>
+	<string
+	name="title_mHead" translate="false">
+	Head
+	</string>
+	<string
+	name="title_mCollarLeft" translate="false">
+	Left Arm
+	</string>
+	<string
+	name="title_mCollarRight" translate="false">
+	Right Arm
+	</string>
+	<string
+	name="title_mWingsRoot" translate="false">
+	Back
+	</string>
+	<string
+	name="title_mHipLeft" translate="false">
+	Left Leg
+	</string>
+	<string
+	name="title_mHipRight" translate="false">
+	Right Leg
+	</string>
+	<string
+	name="title_mTail1" translate="false">
+	Tail
+	</string>
+	<string
+	name="title_mGroin" translate="false">
+	Misc
+	</string>
+	
+	<tab_container
+	follows="all"
+	halign="center"
+	height="426"
+	layout="topleft"
+	left="5"
+	name="animation_tabs"
+	tab_height="20"
+	tab_group="1"
+	tab_position="top"
+	top="0"
+	width="643">
+	<panel
+		follows="all"
+		background_visible="false"
+		height="426"
+		layout="topleft"
+		left="0"
+		title="General"
+		name="general_panel"
+		top="0"
+		width="644">
+				<text
+				follows="top|left|right"
+				height="25"
+				layout="topleft"
+				left="5"
+				name="linden_intro"
+				top="1"
+				width="435"
+				wrap="true">
+				Pose Filename
+- This is the name the animation will have on upload.
+				</text>
+				<line_editor
+				commit_on_focus_lost="false"
+				follows="left|top"
+				height="20"
+				label=""
+				left="2"
+				top_pad="7"
+				name="export_name"
+				width="151"/>
+				<text
+				follows="top|left|right"
+				height="25"
+				layout="topleft"
+				left="5"
+				name="linden_intro"
+				top_pad="5"
+				width="635"
+				wrap="true">
+				Ease In / Ease Out Time
+- This is the time in seconds it takes for the animation to "fade" in and out when started or stopped.
+				</text>
+				<line_editor
+				commit_on_focus_lost="true"
+				follows="left|top"
+				height="20"
+				label=""
+				value="1.0"
+				left="2"
+				top_pad="7"
+				name="ease_in"
+				width="75">
+				<line_editor.commit_callback
+				function="Pose.EditInfo"
+				parameter="ease_in"/>
+				</line_editor>
+				<line_editor
+				commit_on_focus_lost="true"
+				follows="left|top"
+				height="20"
+				label=""
+				value="1.0"
+				left_pad="1"
+				top_delta="0"
+				name="ease_out"
+				width="75">
+				<line_editor.commit_callback
+				function="Pose.EditInfo"
+				parameter="ease_out"/>
+				</line_editor>
+				<text
+				follows="top|left|right"
+				height="25"
+				layout="topleft"
+				left="5"
+				name="linden_intro"
+				top_pad="5"
+				width="635"
+				wrap="true">
+				Animation Duration
+- How long in seconds the animation should last. It is recommended to keep "Automatic Duration" enabled.
+				</text>
+				<check_box
+				height="16"
+				initial_value="true"
+				label="Automatic Duration"
+				tool_tip="Automatically calculate the duration of the animation according to last keyframe."
+				layout="topleft"
+				left="5"
+				name="AutoDuration"
+				top_pad="6"
+				width="115">
+				<check_box.commit_callback
+				function="Pose.EditInfo"
+				parameter="duration_auto"/>
+				</check_box>
+				<slider
+				decimal_digits="1"
+				can_edit_text="true"
+				follows="left|top"
+				height="14"
+				increment="0.0166666666666667"
+				initial_value="1.0"
+				label=""
+				layout="topleft"
+				left_pad="50"
+				max_val="60.0"
+				min_val="0.0166666666666667"
+				name="keyframe_duration"
+				top_delta="3"
+				width="150" >
+				<slider.commit_callback
+				function="Pose.EditInfo"
+				parameter="duration"/>
+				</slider>
+				<text
+				follows="top|left|right"
+				height="25"
+				layout="topleft"
+				left="5"
+				name="linden_intro"
+				top_pad="5"
+				width="635"
+				wrap="true">
+				Loop Animation
+- Toggle whether the animation should be looped at the defined start and end time in seconds.
+				</text>
+				<check_box
+				height="16"
+				initial_value="true"
+				label="Loop animation between"
+				tool_tip="Toggle whether the animation should be looped at set timeframes in the animation."
+				layout="topleft"
+				left="5"
+				name="LoopAnimation"
+				top_pad="6"
+				width="115">
+				<check_box.commit_callback
+				function="Pose.EditInfo"
+				parameter="loop"/>
+				</check_box>
+				<line_editor
+				commit_on_focus_lost="true"
+				follows="left|top"
+				height="20"
+				label=""
+				value="0.0"
+				left_pad="55"
+				top_delta="0"
+				name="loop_in"
+				width="50">
+				<line_editor.commit_callback
+				function="Pose.EditInfo"
+				parameter="loop_in"/>
+				</line_editor>
+				<text
+				follows="top|left|right"
+				height="25"
+				layout="topleft"
+				left_pad="10"
+				name="linden_intro"
+				top_delta="5"
+				width="30"
+				wrap="true">
+				and
+				</text>
+				<line_editor
+				commit_on_focus_lost="true"
+				follows="left|top"
+				height="20"
+				label=""
+				value="1.0"
+				left_pad="1"
+				top_delta="-5"
+				name="loop_out"
+				width="50">
+				<line_editor.commit_callback
+				function="Pose.EditInfo"
+				parameter="loop_out"/>
+				</line_editor>
+				<text
+				follows="top|left|right"
+				height="50"
+				layout="topleft"
+				left="5"
+				name="linden_intro"
+				top_pad="5"
+				width="435"
+				wrap="true">
+				Base Priority
+- Set the minimum priority of this animation.
+- This affects whether this animation overrides others or is overridden by them.
+- Individual bones can potentially increase this.
+				</text>
+				<combo_box
+				follows="left|top"
+				height="21"
+				layout="topleft"
+				left="2"
+				top_pad="7"
+				max_chars="135"
+				name="base_priority"
+				width="151">
+				<combo_box.item
+				label="Low Priority (0)"
+				name="0"
+				value="0" />
+				<combo_box.item
+				label="Medium Priority (1)"
+				name="1"
+				value="1" />
+				<combo_box.item
+				label="High Priority (2)"
+				name="2"
+				value="2" />
+				<combo_box.item
+				label="Higher Priority (3)"
+				name="3"
+				value="3" />
+				<combo_box.item
+				label="Highest Priority (4)"
+				name="4"
+				value="4" />
+				<combo_box.item
+				label="Additive Priority (7)"
+				name="7"
+				value="7" />
+				<combo_box.commit_callback
+				function="Pose.EditInfo"
+				parameter="priority"/>
+				</combo_box>
+				<text
+				follows="top|left|right"
+				height="25"
+				layout="topleft"
+				left="5"
+				name="linden_intro"
+				top_pad="5"
+				width="435"
+				wrap="true">
+				Hand Pose
+- (OPTIONAL) Sets the default hand pose when using the default Linden body.
+				</text>
+				<combo_box
+				follows="left|top"
+				height="21"
+				layout="topleft"
+				left="2"
+				top_pad="7"
+				max_chars="135"
+				name="hand_poses"
+				width="151">
+				<combo_box.item
+				label="Spread"
+				name="0"
+				value="0" />
+				<combo_box.item
+				label="Relaxed"
+				name="1"
+				value="1" />
+				<combo_box.item
+				label="Point"
+				name="2"
+				value="2" />
+				<combo_box.item
+				label="Fist"
+				name="3"
+				value="3" />
+				<combo_box.commit_callback
+				function="Pose.EditInfo"
+				parameter="hand"/>
+				</combo_box>
+				
+				<button
+				height="21"
+				follows="bottom|left"
+				layout="topleft"
+				label="Import"
+				image_overlay="Icon_Undock_Foreground"
+				image_overlay_alignment="right"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				tool_tip="Import pose from disk."
+				name="import_poses"
+				width="75"
+				top="-24"
+				left="3">
+					<button.commit_callback
+					function="Pose.Import"/>
+				</button>
+				<button
+				height="21"
+				follows="bottom|left"
+				layout="topleft"
+				label="Export"
+				image_overlay="Icon_Dock_Foreground"
+				image_overlay_alignment="right"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				tool_tip="Export the current pose."
+				name="export_poses"
+				width="75"
+				top_delta="0"
+				left_pad="1">
+					<button.commit_callback
+					function="Pose.Save"
+					parameter="anim"/>
+				</button>
+		</panel>
+		<panel
+		follows="all"
+		background_visible="false"
+		height="299"
+		layout="topleft"
+		left="0"
+		title="Skeleton"
+		name="joints_panel"
+		top="0"
+		width="481">
+							<tab_container
+							follows="top|left"
+							halign="center"
+							height="279"
+							layout="topleft"
+							left="0"
+							enabled="false"
+							name="joints_tabs"
+							tab_height="20"
+							tab_group="1"
+							tab_position="top"
+							top="0"
+							width="220">
+								<panel
+								follows="all"
+								background_visible="false"
+								height="299"
+								layout="topleft"
+								left="0"
+								title="Bones"
+								name="joints_panel"
+								top="0"
+								width="481">
+									<fs_scroll_list
+									column_padding="2"
+									draw_heading="true"
+									height="302"
+									follows="top|left|bottom"
+									can_sort="false"
+									layout="topleft"
+									left="2"
+									width="169"
+									multi_select="true"
+									name="joints_scroll"
+									desired_line_height="16"
+									top="0">
+									<fs_scroll_list.columns
+									label=""
+									name="icon"
+									width="18"  />
+									<fs_scroll_list.columns
+									label="Bone Name"
+									name="joint"
+									width="108"  />
+									<fs_scroll_list.columns
+									label="Rot X"
+									name="x"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Rot Y"
+									name="y"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Rot Z"
+									name="z"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Pos X"
+									name="pos_x"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Pos Y"
+									name="pos_y"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Pos Z"
+									name="pos_z"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Size X"
+									name="scale_x"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Size Y"
+									name="scale_y"
+									width="0"  />
+									<fs_scroll_list.columns
+									label="Size Z"
+									name="scale_z"
+									width="0"  />
+									</fs_scroll_list>
+									<fs_scroll_list
+									column_padding="2"
+									draw_heading="true"
+									height="302"
+									follows="top|left|bottom"
+									can_sort="false"
+									layout="topleft"
+									left_pad="1"
+									width="45"
+									multi_select="true"
+									name="keyframe_scroll"
+									desired_line_height="16"
+									top_delta="0">
+									<fs_scroll_list.columns
+									label="Time"
+									name="time"
+									width="38"  />
+									<fs_scroll_list.columns
+									label="Value"
+									name="value"
+									width="20"  />
+									<fs_scroll_list.columns
+									label="X"
+									name="x"
+									width="48"  />
+									<fs_scroll_list.columns
+									label="Y"
+									name="y"
+									width="48"  />
+									<fs_scroll_list.columns
+									label="Z"
+									name="z"
+									width="48"  />
+									</fs_scroll_list>
+								</panel>
+								<panel
+								follows="all"
+								background_visible="false"
+								height="299"
+								layout="topleft"
+								left="0"
+								title="Collision"
+								name="cv_panel"
+								top="0"
+								width="481">
+									<fs_scroll_list
+									column_padding="2"
+									draw_heading="true"
+									height="300"
+									follows="left|top|right"
+									layout="topleft"
+									can_sort="false"
+									left="2"
+									width="479"
+									multi_select="true"
+									name="cv_scroll"
+									desired_line_height="16"
+									top="0">
+									<fs_scroll_list.columns
+									label=""
+									name="icon"
+									relative_width="0.04"  />
+									<fs_scroll_list.columns
+									label="Collision Volume Name"
+									name="joint"
+									relative_width="0.33"  />
+									<fs_scroll_list.columns
+									label="Rot X"
+									name="x"
+									relative_width="0.0"  />
+									<fs_scroll_list.columns
+									label="Rot Y"
+									name="y"
+									relative_width="0.0"  />
+									<fs_scroll_list.columns
+									label="Rot Z"
+									name="z"
+									relative_width="0.0"  />
+									<fs_scroll_list.columns
+									label="Pos X"
+									name="pos_x"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Pos Y"
+									name="pos_y"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Pos Z"
+									name="pos_z"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Size X"
+									name="scale_x"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Size Y"
+									name="scale_y"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Size Z"
+									name="scale_z"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="#"
+									name="number"
+									relative_width="0.00"  />
+									</fs_scroll_list>
+								</panel>
+								<panel
+								follows="all"
+								background_visible="false"
+								height="299"
+								layout="topleft"
+								left="0"
+								title="Attachment"
+								name="attach_panel"
+								top="0"
+								width="481">
+									<fs_scroll_list
+									column_padding="2"
+									draw_heading="true"
+									height="300"
+									follows="left|top|right"
+									layout="topleft"
+									can_sort="false"
+									left="2"
+									width="479"
+									multi_select="true"
+									name="attach_scroll"
+									desired_line_height="16"
+									top="0">
+									<fs_scroll_list.columns
+									label=""
+									name="icon"
+									relative_width="0.04"  />
+									<fs_scroll_list.columns
+									label="Attachment Bone Name"
+									name="joint"
+									relative_width="0.33"  />
+									<fs_scroll_list.columns
+									label="Rot X"
+									name="x"
+									relative_width="0.0"  />
+									<fs_scroll_list.columns
+									label="Rot Y"
+									name="y"
+									relative_width="0.0"  />
+									<fs_scroll_list.columns
+									label="Rot Z"
+									name="z"
+									relative_width="0.0"  />
+									<fs_scroll_list.columns
+									label="Pos X"
+									name="pos_x"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Pos Y"
+									name="pos_y"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Pos Z"
+									name="pos_z"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Size X"
+									name="scale_x"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Size Y"
+									name="scale_y"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="Size Z"
+									name="scale_z"
+									relative_width="0.10"  />
+									<fs_scroll_list.columns
+									label="#"
+									name="number"
+									relative_width="0.00"  />
+									</fs_scroll_list>
+								</panel>
+							</tab_container>
+						
+									<fs_scroll_list
+									column_padding="2"
+									draw_heading="true"
+									height="280"
+									follows="top|left"
+									can_sort="false"
+									layout="topleft"
+									left_pad="3"
+									width="417"
+									multi_select="true"
+									name="timeframe_scroll"
+									desired_line_height="16"
+									top_delta="-1">
+									<fs_scroll_list.columns
+									label="Bone Name"
+									name="joint"
+									width="108" />
+									<fs_scroll_list.columns
+									label="Timeline"
+									name="multislider"
+									width="200" >
+										<column
+										name="multislider"
+										type="multislider"
+										min_value="0"
+										max_value="60"
+										increment="1"
+										max_sliders="600"/>
+									</fs_scroll_list.columns>
+									</fs_scroll_list>
+						
+						<panel
+						follows="left|top"
+						height="21"
+						background_visible="false"
+						layout="topleft"
+						mouse_opaque="false"
+						left="0"
+						name="title"
+						top_pad="1"
+						width="681">
+							<button
+							height="21"
+							follows="top|left"
+							is_toggle="true"
+							layout="topleft"
+							label="Start Posing"
+							label_selected="Stop Posing"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							button_flash_enable="true"
+							flash_color="0.7 0.7 1 1"
+							button_flash_count="64"
+							button_flash_rate="0.5"
+							name="activate"
+							width="114"
+							top_pad="0"
+							left="3">
+							<button.commit_callback
+							function="Pose.Start"/>
+							</button>
+							<button
+							height="21"
+							follows="top|left"
+							is_toggle="true"
+							layout="topleft"
+							label="Preview"
+							label_selected="Stop"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							button_flash_enable="true"
+							flash_color="0.7 0.7 1 1"
+							button_flash_count="64"
+							button_flash_rate="0.5"
+							name="preview"
+							width="100"
+							top_delta="0"
+							left_pad="1">
+							<button.commit_callback
+							function="Pose.StartStop"/>
+							</button>
+							<combo_box
+							follows="left|top"
+							height="21"
+							layout="topleft"
+							left_pad="6"
+							top_delta="0"
+							max_chars="135"
+							name="interpolation"
+							width="139">
+							<combo_box.item
+							label="Step"
+							name="0"
+							value="0" />
+							<combo_box.item
+							label="Linear"
+							name="1"
+							value="1" />
+							<combo_box.item
+							label="Spline"
+							name="2"
+							value="2" />
+							<combo_box.commit_callback
+							function="Pose.Interpolation"/>
+							</combo_box>
+							<line_editor
+							commit_on_focus_lost="false"
+							follows="left|top"
+							height="20"
+							label=""
+							left_pad="1"
+							top_delta="0"
+							name="key_time"
+							width="43">
+							<line_editor.commit_callback
+							function="Keyframe.Time"/>
+							</line_editor>
+							<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							label="Add Key"
+							image_overlay="AddItem_Off"
+							image_overlay_alignment="right"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							tool_tip="Add a keyframe after the currently selected keyframe. Hold SHIFT to add it at the end. Hold CTRL to add it to the beginning."
+							name="add_keyframe"
+							width="105"
+							top_delta="0"
+							left_pad="1">
+								<button.commit_callback
+								function="Keyframe.Add"/>
+							</button>
+							<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							label="Remove Key"
+							image_overlay="TrashItem_Off"
+							image_overlay_alignment="right"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							tool_tip="Remove the currently selected keyframe."
+							name="remove_keyframe"
+							width="125"
+							top_delta="0"
+							left_pad="1">
+								<button.commit_callback
+								function="Keyframe.Remove"/>
+							</button>
+						</panel>
+				
+				<check_box
+				height="16"
+				initial_value="false"
+				label="Mirror Changes"
+				tool_tip="This option toggles whether all changes to rotations should be mirrored to the opposide side's bone as well. Left Arm will mirror to Right Arm and so on."
+				layout="topleft"
+				left="5"
+				name="Mirror"
+				top_pad="4"
+				width="115">
+				<check_box.commit_callback
+                    function="Joint.ToggleMirror"/>
+				</check_box>
+				<check_box
+				height="16"
+				initial_value="true"
+				label="Easy Rotations"
+				tool_tip="This option toggles whether the poser should display and use simplified rotation axis. This essentially means that when moving any axis, all other axis stay untouched, this can bring the rotations out of place so that 0 0 0 no longer is the default resting position depending on in which order bones were moved. Disabling this option will allow the other axis to be dynamically changed to represent the actual rotations which means sliders you are not touching will change with the slider you are currently moving. This is disabled by default as it may look confusing to the user. It is highly recommended that if you use this you start zeroing out Z then Y and lastly X in this order, otherwise you will not be able to zero out all axis unless you reset the bone rotation."
+				layout="topleft"
+				left="5"
+				name="EasyRotations"
+				top_pad="1"
+				width="115">
+				<check_box.commit_callback
+                    function="Joint.EasyRotations"/>
+				</check_box>
+				<button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				enabled="true"
+				label="Mirror Pose"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="flip_pose"
+				width="151"
+				top_pad="40"
+				left="3">
+				<button.commit_callback
+				function="Joint.FlipPose"/>
+				</button>
+
+				<tab_container
+				follows="top|left|bottom"
+				halign="center"
+				height="95"
+				layout="topleft"
+				left="161"
+				name="modifier_tabs"
+				enabled="false"
+				tab_height="20"
+				tab_group="1"
+				tab_position="top"
+				top_delta="-76"
+				width="481">
+					<panel
+					follows="all"
+					background_visible="false"
+					height="95"
+					layout="topleft"
+					left="0"
+					title="Rotation"
+					name="rotation_panel"
+					top="0"
+					width="622">
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Rotation X:"
+						label_width="70"
+						layout="topleft"
+						left="10"
+						max_val="3.142"
+						min_val="-3.142"
+						name="Rotation_X"
+						top_pad="6"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.Set"
+						parameter="0"/>
+						</slider>
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Rotation Y:"
+						label_width="70"
+						layout="topleft"
+						left="10"
+						max_val="3.142"
+						min_val="-3.142"
+						name="Rotation_Y"
+						top_pad="1"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.Set"
+						parameter="1"/>
+						</slider>
+						<slider
+						decimal_digits="3"
+						visible="true"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Rotation Z:"
+						label_width="70"
+						layout="topleft"
+						left="10"
+						max_val="3.142"
+						min_val="-3.142"
+						name="Rotation_Z"
+						top_pad="1"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.Set"
+						parameter="2"/>
+						</slider>
+						<panel
+						follows="top|left|right"
+						height="21"
+						background_visible="false"
+						layout="topleft"
+						mouse_opaque="false"
+						left="0"
+						name="title"
+						top_pad="6"
+						width="480">
+							<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							enabled="true"
+							label="Reset Selected Rotation(s)"
+							label_selected="Disable Selected Bone(s)"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							name="reset_bone_rot"
+							width="159"
+							top="0"
+							left_delta="2">
+							<button.commit_callback
+							function="Joint.ResetJointRotation"/>
+							</button>
+							<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							enabled="true"
+							label="Revert Selected Rotation(s)"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							name="revert_pose"
+							width="158"
+							top_delta="0"
+							left_pad="1">
+							<button.commit_callback
+							function="Joint.RevertJointRotation"/>
+							</button>
+						</panel>
+					</panel>
+					<panel
+					follows="all"
+					background_visible="false"
+					height="95"
+					layout="topleft"
+					left="0"
+					title="Position"
+					name="position_panel"
+					top="0"
+					width="622">
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Position X:"
+						label_width="70"
+						layout="topleft"
+						left="10"
+						max_val="0.5"
+						min_val="-0.5"
+						name="Position_X"
+						top_pad="6"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.PosSet"
+						parameter="0"/>
+						</slider>
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Position Y:"
+						label_width="70"
+						layout="topleft"
+						left_delta="0"
+						max_val="0.5"
+						min_val="-0.5"
+						name="Position_Y"
+						top_pad="1"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.PosSet"
+						parameter="1"/>
+						</slider>
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Position Z:"
+						label_width="70"
+						layout="topleft"
+						left_delta="0"
+						max_val="0.5"
+						min_val="-0.5"
+						name="Position_Z"
+						top_pad="1"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.PosSet"
+						parameter="2"/>
+						</slider>
+						<panel
+						follows="top|left|right"
+						height="21"
+						background_visible="false"
+						layout="topleft"
+						mouse_opaque="false"
+						left="0"
+						name="title"
+						top_pad="6"
+						width="480">
+							<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							enabled="true"
+							label="Reset Selected Position(s)"
+							label_selected="Disable Selected Bone(s)"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							name="reset_bone_pos"
+							width="318"
+							top="0"
+							left_delta="2">
+							<button.commit_callback
+							function="Joint.ResetJointPosition"/>
+							</button>
+						</panel>
+					</panel>
+					<panel
+					follows="all"
+					background_visible="false"
+					height="95"
+					layout="topleft"
+					left="0"
+					title="Scale"
+					name="scale_panel"
+					top="0"
+					width="622">
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Scale X:"
+						label_width="70"
+						layout="topleft"
+						left="10"
+						max_val="2"
+						min_val="0"
+						name="Scale_X"
+						top_pad="6"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.SetScale"
+						parameter="0"/>
+						</slider>
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Scale Y:"
+						label_width="70"
+						layout="topleft"
+						left_delta="0"
+						max_val="2"
+						min_val="0"
+						name="Scale_Y"
+						top_pad="1"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.SetScale"
+						parameter="1"/>
+						</slider>
+						<slider
+						decimal_digits="3"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.001"
+						initial_value="0"
+						label="Scale Z:"
+						label_width="70"
+						layout="topleft"
+						left_delta="0"
+						max_val="2"
+						min_val="0"
+						name="Scale_Z"
+						top_pad="1"
+						width="459" >
+						<slider.commit_callback
+						function="Joint.SetScale"
+						parameter="2"/>
+						</slider>
+						<panel
+						follows="top|left|right"
+						height="21"
+						background_visible="false"
+						layout="topleft"
+						mouse_opaque="false"
+						left="0"
+						name="title"
+						top_pad="6"
+						width="480">
+							<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							enabled="true"
+							label="Reset Selected Scale(s)"
+							label_selected="Disable Selected Bone(s)"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							name="reset_bone_scale"
+							width="318"
+							top="0"
+							left_delta="2">
+							<button.commit_callback
+							function="Joint.ResetJointScale"/>
+							</button>
+						</panel>
+					</panel>
+				</tab_container>
+				<button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				is_toggle="true"
+				enabled="false"
+				label="Activate Selected Bone(s)"
+				label_selected="Disable Selected Bone(s)"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="toggle_bone"
+				width="157"
+				top_pad="-19"
+				left_delta="322">
+				<button.commit_callback
+				function="Joint.ChangeState"/>
+				</button>
+			</panel>
+	</tab_container>
+	<!--<multi_slider
+	can_edit_text="false"
+	decimal_digits="0"
+	follows="bottom"
+	height="10"
+	increment="0.1"
+	initial_value="0"
+	layout="topleft"
+	left_delta="0"
+	max_sliders="120"
+	max_val="30"
+	min_val="25"
+	name="key_slider"
+	show_text="false"
+	top_pad="3"
+	width="475" />
+	<line_editor
+	commit_on_focus_lost="true"
+	follows="left|top"
+	height="20"
+	label=""
+	enabled="true"
+	left_pad="1"
+	top_delta="0"
+	name="time"
+	width="62">
+	<line_editor.commit_callback
+	function="Anim.Edit"/>
+	</line_editor>-->
+	
+	
+	<!--<multi_slider
+	can_edit_text="true"
+	decimal_digits="0"
+	draw_track="false"
+	follows="bottom"
+	height="10"
+	increment="0.1"
+	initial_value="0"
+	layout="topleft"
+	left="10"
+	max_sliders="60"
+	max_val="60"
+	name="time_slider"
+	show_text="false"
+	top_pad="5"
+	use_triangle="true"
+	width="475" >
+	<multi_slider.commit_callback
+	function="Anim.SetValue"/>
+	</multi_slider>
+	<multi_slider
+	can_edit_text="true"
+	decimal_digits="0"
+	follows="bottom"
+	height="10"
+	increment="0.1"
+	initial_value="0"
+	layout="topleft"
+	left_delta="0"
+	max_sliders="60"
+	max_val="60"
+	name="key_slider"
+	show_text="true"
+	top_pad="0"
+	width="475" />
+	<button
+	height="23"
+	label=" + "
+	label_selected="Add Key"
+	image_hover_unselected="Toolbar_Middle_Over"
+	image_selected="Toolbar_Middle_Selected"
+	image_unselected="Toolbar_Middle_Off"
+	layout="topleft"
+	left_pad="0"
+	name="add_key"
+	top_delta="-20"
+	width="26" />
+	<button
+	height="23"
+	label=" - "
+	label_selected="Delete Key"
+	image_hover_unselected="Toolbar_Middle_Over"
+	image_selected="Toolbar_Middle_Selected"
+	image_unselected="Toolbar_Middle_Off"
+	layout="topleft"
+	name="delete_key"
+	top_pad="0"
+	width="26" />
+	<line_editor
+	commit_on_focus_lost="true"
+	follows="left|top"
+	height="20"
+	label="Wait time"
+	tool_tip="Change the time for the wait event."
+	enabled="true"
+	left_pad="1"
+	top_delta="0"
+	name="time"
+	width="62">
+	<line_editor.commit_callback
+	function="Anim.SetValue"/>
+	</line_editor>-->
+</floater>

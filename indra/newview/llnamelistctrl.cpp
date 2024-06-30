@@ -350,6 +350,16 @@ LLScrollListItem* LLNameListCtrl::addElement(const LLSD& element, EAddPosition p
     return addNameItemRow(item_params, pos);
 }
 
+// [SL:KB] - Patch: Control-ScrollList | Checked: Catznip-5.2
+LLScrollListItem* LLNameListCtrl::addElement(const LLSD& element, const LLScrollListItem::commit_signal_t::slot_type& cb, EAddPosition pos)
+{
+    LLNameListCtrl::NameItem item_params;
+    LLParamSDParser parser;
+    parser.readSD(element, item_params);
+    item_params.commit_callback = cb;
+    return addNameItemRow(item_params, pos);
+}
+// [/SL:KB]
 
 LLScrollListItem* LLNameListCtrl::addNameItemRow(
     const LLNameListCtrl::NameItem& name_item,

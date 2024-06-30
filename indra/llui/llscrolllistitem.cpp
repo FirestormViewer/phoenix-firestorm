@@ -45,8 +45,14 @@ LLScrollListItem::LLScrollListItem( const Params& p )
     mEnabled(p.enabled),
     mUserdata(p.userdata),
     mItemValue(p.value),
-    mItemAltValue(p.alt_value)
+    mItemAltValue(p.alt_value),
+    mToolTip(p.tool_tip)
 {
+    //BD - Cells ~ Thanks to Liru
+    for (const auto& cell : p.contents.columns)
+    {
+        addColumn(cell);
+    }
 }
 
 
