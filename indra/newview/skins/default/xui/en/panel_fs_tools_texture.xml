@@ -111,7 +111,6 @@
    name="base_color_tint_picker"
    label="Tint"
    can_apply_immediately="true"
-   allow_no_texture="true"
    tool_tip="Click to choose the base color tint"
 />
 
@@ -2110,7 +2109,6 @@
    max_val="255"
    increment="1"
    decimal_digits="0"
-   text_readonly_color="LabelDisabledColor"
    enabled_control="FSInternalFaceHasBPSpecularMap"
 />
 
@@ -2958,7 +2956,6 @@
    top_pad="5"
    right="-4"
    height="2"
-   visibility_control="FSInternalCanEditObjectFaces"
 />
 
 <panel

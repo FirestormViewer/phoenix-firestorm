@@ -141,7 +141,9 @@ void LLUICtrlFactory::createChildren(LLView* viewp, LLXMLNodePtr node, const wid
                 //LL_WARNS() << child_name << " is not a valid child of " << node->getName()->mString << LL_ENDL;
                 std::string name;
                 node->getAttributeString("name", name);
-                LL_WARNS() << child_name << " is not a valid child of " << node->getName()->mString << " for " << name << " (line no. " << node->getLineNumber() << ")" << LL_ENDL;
+                std::string child_name_attribute;
+                child_node->getAttributeString("name", child_name_attribute);
+                LL_WARNS() << child_name << " with name " << child_name_attribute << " is not a valid child of " << node->getName()->mString << " for " << name << " (line no. " << node->getLineNumber() << ")" << LL_ENDL;
                 // </FS:Ansariel>
             }
             else
@@ -150,7 +152,9 @@ void LLUICtrlFactory::createChildren(LLView* viewp, LLXMLNodePtr node, const wid
                 //LL_WARNS() << "Could not create widget named " << child_node->getName()->mString << LL_ENDL;
                 std::string name;
                 node->getAttributeString("name", name);
-                LL_WARNS() << "Could not create widget named " << child_node->getName()->mString << " for " << name << " (line no. " << node->getLineNumber() << ")" << LL_ENDL;
+                std::string child_name_attribute;
+                child_node->getAttributeString("name", child_name_attribute);
+                LL_WARNS() << "Could not create widget " << child_node->getName()->mString << " with name " << child_name_attribute << " for " << name << " (line no. " << node->getLineNumber() << ")" << LL_ENDL;
                 // </FS:Ansariel>
             }
         }
