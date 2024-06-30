@@ -162,7 +162,6 @@ public:
     /*virtual*/ LLScrollListItem* addElement(const LLSD& element, EAddPosition pos = ADD_BOTTOM, void* userdata = NULL);
     LLScrollListItem* addNameItemRow(const NameItem& value, EAddPosition pos = ADD_BOTTOM, const std::string& suffix = LLStringUtil::null,
                                                                                             const std::string& prefix = LLStringUtil::null);
-    LLScrollListItem* addElement(const LLSD& element, const LLScrollListItem::commit_signal_t::slot_type& cb, EAddPosition pos = ADD_BOTTOM) override;
 
     // Add a user to the list by name.  It will be added, the name
     // requested from the cache, and updated as necessary.
