@@ -2822,11 +2822,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c832be16f58382734bc420df20901547</string>
+              <string>ae3ac835e50d75e1c1691534bfddbf71</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/tracy-v0.10.241831553-windows-241831553.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/tracy-v0.10.241831928-windows-241831928.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2836,11 +2836,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ca8b9d9bcb2b299239828da83f328ecc</string>
+              <string>9ab29796dc144431a9db46fddfbd88b0</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/tracy-v0.10.241831553-linux-241831553.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/tracy-v0.10.241831929-linux-241831929.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2850,11 +2850,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d05ff8346ba59ac0e0e0d5e6b5095870</string>
+              <string>f87f9db3a3c69464b46cd59490bca842</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/tracy-v0.10.241831552-darwin-241831552.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/tracy-v0.10.241831925-darwin-241831925.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
