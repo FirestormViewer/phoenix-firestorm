@@ -119,7 +119,7 @@
 			<check_box label="Mostra indicatore voce sugli avatar" tool_tip="Mostra indicatore (pallino bianco) sopra agli avatar" name="FSShowVoiceVisualizer"/>
 			<check_box label="Mostra indicatore voce sul mio avatar" name="FSShowMyOwnVoiceVisualizer" />
 			<check_box label="Mostra il pallino negli indicatori voce" tool_tip="Se questa opzione è abilitata, viene visualizzato un pallino in mezzo agli indicatori voce. Se è disattivata, vengono visualizzate solo le onde vocali." name="FSShowVoiceVisualizerWithDot" />
-			<check_box label="mostra indicatori voce nelle chiamate private e di gruppo" tool_tip="Mostra l&apos;indicatore vocale e il movimento delle labbra anche quando si è in una chiamata privata" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Mostra indicatori voce nelle chiamate private e di gruppo" tool_tip="Mostra l&apos;indicatore vocale e il movimento delle labbra anche quando si è in una chiamata privata" name="Show_Voice_Visualizers_In_Calls"/>
 			<check_box label="Mostra stato voce sulle schede delle conversazioni" tool_tip="Mostra lo stato del canale voce nella finestra conversazioni (IM e gruppi)" name="FSShowConversationVoiceStateIndicator"/>
 			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale di gruppo" name="VoiceCallsRejectGroup"/>
 			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale in conferenza (ad-hoc)" name="VoiceCallsRejectAdHoc"/>

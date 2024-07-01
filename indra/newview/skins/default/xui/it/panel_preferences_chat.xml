@@ -141,10 +141,12 @@
 			<check_box name="FSChatbarNamePrediction" label="Abilita predizione nomi in chat locale"/>
 			<check_box name="AllowMUpose" label="&quot;:&quot; come sinonimo di &quot;/me&quot;"/>
 			<check_box name="AutoCloseOOC" label="Auto-chiudi parentesi ((OOC))"/>
-			<check_box name="FSShowIMSendButton" label="Mostra bottone Invia nella barra chat per le sessioni IM"/>
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Mostra automaticamente la finestra delle emoji durante la digitazione nelle barre della chat"/>
+			<check_box name="FSShowEmojiButton" label="Mostra pulsante Emoji nella barra della chat delle sessioni IM e della chat locale"/>
+			<check_box name="FSShowIMSendButton" label="Mostra pulsante Invia nella barra chat delle sessioni IM"/>
 			<check_box name="FSNearbyChatbar" label="Barra chat nella finestra chat locale"/>
 			<check_box name="FSShowChatChannel" label="Selezione canale nella barra chat"/>
-			<check_box name="FSShowChatType" label="Tipo di chat / bottone Invia nella barra chat"/>
+			<check_box name="FSShowChatType" label="Tipo di chat / pulsante Invia nella barra chat"/>
 			<check_box label="Nascondi automaticamente barra chat" name="AutohideChatBar" tool_tip="Nasconde la barra chat dalla barra in basso e la mostra come sovrapposta soltanto quando necessario." />
 			<check_box label="Deseleziona barra chat dopo Invio" name="CloseChatOnReturn" />
 			<check_box label="Deseleziona anche finestra chat" name="FSUnfocusChatHistoryOnReturn"/>

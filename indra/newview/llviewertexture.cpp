@@ -507,6 +507,30 @@ void LLViewerTexture::initClass()
 F32 texmem_lower_bound_scale = 0.85f;
 F32 texmem_middle_bound_scale = 0.925f;
 
+bool LLViewerTexture::isMemoryForTextureLow()
+// <FS:Ansariel> Restrict texture memory by available physical system memory
+static bool isSystemMemoryForTextureLow()
+{
+    static LLFrameTimer timer;
+    static S32Megabytes physical_res = S32Megabytes(S32_MAX);
+
+    static LLCachedControl<S32> fs_min_free_main_memory(gSavedSettings, "FSMinFreeMainMemoryTextureDiscardThreshold");
+    const S32Megabytes MIN_FREE_MAIN_MEMORY(fs_min_free_main_memory);
+
+    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
+    {
+        return physical_res < MIN_FREE_MAIN_MEMORY;
+    }
+
+    timer.reset();
+
+    //check main memory, only works for windows.
+    LLMemory::updateMemoryInfo();
+    physical_res = LLMemory::getAvailableMemKB();
+    return physical_res < MIN_FREE_MAIN_MEMORY;
+}
+// </FS:Ansariel>
+
 //static
 void LLViewerTexture::updateClass()
 {
@@ -538,12 +562,33 @@ void LLViewerTexture::updateClass()
     sFreeVRAMMegabytes = target - used;
 
     F32 over_pct = llmax((used-target) / target, 0.f);
-    sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
+    // <FS:Ansariel> Restrict texture memory by available physical system memory
+    //sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
 
-    if (sDesiredDiscardBias > 1.f)
+    //if (sDesiredDiscardBias > 1.f)
+    //{
+    //    sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
+    //}
+
+    if (isSystemMemoryForTextureLow())
     {
-        sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
+        // System RAM is low -> ramp up discard bias over time to free memory
+        if (sEvaluationTimer.getElapsedTimeF32() > GPU_MEMORY_CHECK_WAIT_TIME)
+        {
+            sDesiredDiscardBias += llmax(.1f, over_pct); // add at least 10% over-percentage
+            sEvaluationTimer.reset();
+        }
     }
+    else
+    {
+        sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
+
+        if (sDesiredDiscardBias > 1.f)
+        {
+            sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
+        }
+    }
+    // </FS:Ansariel>
 
     LLViewerTexture::sFreezeImageUpdates = false; // sDesiredDiscardBias > (desired_discard_bias_max - 1.0f);
 }

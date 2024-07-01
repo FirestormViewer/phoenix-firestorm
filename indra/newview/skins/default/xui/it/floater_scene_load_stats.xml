@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Scene Load Statistics" title="Statistiche Caricamento Scena">
-	<button label="In pausa" name="playpause"/>
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
-			<stat_view label="Di base" name="basic">
+			<stat_view label="Basic" name="basic">
 				<stat_bar label="Differenza pixel tra fotogrammi" name="frame difference"/>
 				<stat_bar label="Dati UDP ricevuti" name="bandwidth"/>
 				<stat_bar label="Perdita pacchetti" name="packet_loss"/>
 			</stat_view>
-			<stat_view label="Avanzata" name="advanced">
+			<stat_view label="Avanzate" name="advanced">
 				<stat_view label="Render" name="render">
 					<stat_bar label="Totale oggetti" name="objs"/>
 					<stat_bar label="Nuovi oggetti" name="newobjs"/>
@@ -17,6 +16,10 @@
 				<stat_view label="Texture" name="texture">
 					<stat_bar label="Hit rate della cache" name="texture_cache_hits"/>
 					<stat_bar label="Latenza di lettura della cache" name="texture_cache_read_latency"/>
+					<stat_bar label="Latenza di decodifica della cache" name="texture_decode_latency"/>
+					<stat_bar label="Latenza di scrittura della cache"  name="texture_write_latency"/>
+					<stat_bar label="Latenza di recupero della cache" name="texture_fetch_latency"/>
+					<stat_bar label="Tempo di recupero della cache" name="texture_fetch_time"/>
 					<stat_bar label="Conteggio" name="numimagesstat"/>
 					<stat_bar label="Conteggio grezzo" name="numrawimagesstat"/>
 				</stat_view>
@@ -41,7 +44,7 @@
 				<stat_bar label="Caricamenti in attesa" name="simpendinguploads"/>
 				<stat_bar label="Numero totale byte non confermati (Unacked)" name="simtotalunackedbytes"/>
 				<stat_view label="Tempo (ms)" name="simperf">
-					<stat_bar label="Tempo totale Frame" name="simframemsec"/>
+					<stat_bar label="Tempo totale frame" name="simframemsec"/>
 					<stat_bar label="Tempo netto" name="simnetmsec"/>
 					<stat_bar label="Tempo motore fisico" name="simsimphysicsmsec"/>
 					<stat_bar label="Tempo simulazione" name="simsimothermsec"/>
@@ -50,13 +53,20 @@
 					<stat_bar label="Tempo script" name="simscriptmsec"/>
 					<stat_bar label="Tempo libero" name="simsparemsec"/>
 					<stat_view label="Dettagli tempo (ms)" name="timedetails">
-						<stat_bar label="Passaggio fisica" name="simsimphysicsstepmsec"/>
-						<stat_bar label="Aggiorna forme fisica" name="simsimphysicsshapeupdatemsec"/>
-						<stat_bar label="Altro fisica" name="simsimphysicsothermsec"/>
-						<stat_bar label="Tempo pausa" name="simsleepmsec"/>
-						<stat_bar label="IO pompa" name="simpumpiomsec"/>
+						<stat_bar label="  Step della fisica" name="simsimphysicsstepmsec"/>
+						<stat_bar label="  Update forme fisiche" name="simsimphysicsshapeupdatemsec"/>
+						<stat_bar label="  Fisica altro" name="simsimphysicsothermsec"/>
+						<stat_bar label="  Tempo di pausa" name="simsleepmsec"/>
+						<stat_bar label="  Pump IO" name="simpumpiomsec"/>
 					</stat_view>
 				</stat_view>
+			</stat_view>
+			<stat_view name="frame_stats" label="Frame breakdown">
+				<stat_bar name="scenery_frame_pct" label="Scena" />
+				<stat_bar name="avatar_frame_pct" label="Avatar" />
+				<stat_bar name="ui_frame_pct" label="Interfaccia" />
+				<stat_bar name="huds_frame_pct" label="HUD" />
+				<stat_bar name="idle_frame_pct" label="Task" />
 			</stat_view>
 		</container_view>
 	</scroll_container>

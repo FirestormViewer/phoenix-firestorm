@@ -12,9 +12,6 @@
 	<floater.string name="step_wait">
 		Attendi:
 	</floater.string>
-	<floater.string name="stop_txt">
-		Stop
-	</floater.string>
 	<floater.string name="preview_txt">
 		Anteprima
 	</floater.string>
@@ -58,13 +55,9 @@
 	<text name="options_text">
 		(opzioni)
 	</text>
-	<radio_group name="animation_trigger_type">
-		<radio_item label="Avvia" name="start"/>
-		<radio_item label="Ferma" name="stop"/>
-	</radio_group>
-	<check_box label="finché le animazioni sono eseguite" name="wait_anim_check"/>
+	<check_box label="fino al rilascio del pulsante" name="wait_key_release_check" />
+	<check_box label="fino alla fine dell'animazione" name="wait_anim_check"/>
 	<check_box label="durata in secondi:" name="wait_time_check"/>
-	<line_editor name="wait_time_editor"/>
 	<text name="help_label">
 		Tutte le fasi avvengono contemporaneamente, a meno che non aggiungi fasi di attesa.
 	</text>

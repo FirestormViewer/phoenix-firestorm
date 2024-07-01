@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="contents" title="Assistente Miniature Inventario">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="Incolla elementi dal tuo inventario">
+		<scroll_list.columns label="Elemento" name="item_name" />
+		<scroll_list.columns label="Immagine Attuale" name="existing_texture" />
+		<scroll_list.columns label="Nuova Immagine" name="new_texture" />
+	</scroll_list>
+	<button label="Incolla elementi dal tuo inventario" name="paste_items_btn" />
+	<button label="Incolla immagini dal tuo inventario" name="paste_textures_btn" />
+	<button label="Salva miniature" name="write_thumbnails_btn" />
+	<button label="Registra elementi senza miniatura" name="log_missing_thumbnails_btn" />
+	<button label="Rimuovi miniature dagli elementi incollati" name="clear_thumbnails_btn" />
+</floater>

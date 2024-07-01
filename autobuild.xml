@@ -2752,14 +2752,42 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fc67514183e7dbbb96bebb9970e1431c</string>
+              <string>ae3ac835e50d75e1c1691534bfddbf71</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/tracy-v0.10.241491433-windows-241491433.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/tracy-v0.10.241831928-windows-241831928.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>9ab29796dc144431a9db46fddfbd88b0</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>https://3p.firestormviewer.org/tracy-v0.10.241831929-linux-241831929.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f87f9db3a3c69464b46cd59490bca842</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>https://3p.firestormviewer.org/tracy-v0.10.241831925-darwin-241831925.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
           </map>
         </map>
         <key>license</key>
