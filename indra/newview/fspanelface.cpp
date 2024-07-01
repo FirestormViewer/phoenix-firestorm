@@ -1980,10 +1980,6 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             mCheckFullbright->setValue((S32)(fullbright_flag != 0));
             mCheckFullbright->setEnabled(editable );
             mCheckFullbright->setTentative(!identical_fullbright);
-
-            // TODO: find a better way to do this without relying on the name -Zi
-            childSetEnabled("panel_material_type_media", !has_pbr_material);
-            LL_DEBUGS("ENABLEDISABLETOOLS") << "panel_material_type_media " << !has_pbr_material << LL_ENDL;
         }
 
         // Repeats per meter
