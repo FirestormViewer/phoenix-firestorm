@@ -368,7 +368,7 @@ private:
 };
 
 // consts from viewer.h
-const S32 AGENT_UPDATES_PER_SECOND  = 10;
+const S32 AGENT_UPDATES_PER_SECOND  = 125; // <FS:Beq/> FIRE-34171 - Directional Input Delays with latest PBR-Capable Viewers
 const S32 AGENT_FORCE_UPDATES_PER_SECOND  = 1;
 
 // Globals with external linkage. From viewer.h
