@@ -42,27 +42,7 @@ class LLUIColorTable : public LLSingleton<LLUIColorTable>
     LOG_CLASS(LLUIColorTable);
 
     // consider using sorted vector, can be much faster
-
-    // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-
-    // typedef std::map<std::string, LLUIColor>  string_color_map_t;
-
-    struct ColorName
-    {
-        char* pName;
-        size_t nLen;
-
-        bool operator<(ColorName const &aRHS) const
-        {
-            if (nLen == aRHS.nLen)
-                return strcmp(pName, aRHS.pName) < 0;
-
-            return nLen < aRHS.nLen;
-        }
-    };
-
-    typedef std::map<ColorName, LLUIColor>  string_color_map_t;
-    // </FS:ND>
+    typedef std::map<std::string, LLUIColor, std::less<>>  string_color_map_t;
 
 public:
     struct ColorParams : LLInitParam::ChoiceBlock<ColorParams>
@@ -95,24 +75,13 @@ public:
     void clear();
 
     // color lookup
-
-    LLUIColor getColor(const std::string& name, const LLColor4& default_color = LLColor4::magenta) const;
-
-    // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-    LLUIColor getColor(char const *name, const LLColor4& default_color = LLColor4::magenta) const;
-    // </FS:ND>
+    LLUIColor getColor(std::string_view name, const LLColor4& default_color = LLColor4::magenta) const;
 
     // if the color is in the table, it's value is changed, otherwise it is added
-    void setColor(const std::string& name, const LLColor4& color);
+    void setColor(std::string_view name, const LLColor4& color);
 
     // returns true if color_name exists in the table
-
-    // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-
-    // bool colorExists(const std::string& color_name) const;
-    bool colorExists(char const *name) const;
-
-    // </FS:ND>
+    bool colorExists(std::string_view color_name) const;
 
     // loads colors from settings files
     bool loadFromSettings();
@@ -127,7 +96,7 @@ private:
     void insertFromParams(const Params& p, string_color_map_t& table);
 
     void clearTable(string_color_map_t& table);
-    void setColor(const std::string& name, const LLColor4& color, string_color_map_t& table);
+    void setColor(std::string_view name, const LLColor4& color, string_color_map_t& table);
 
     string_color_map_t mLoadedColors;
     string_color_map_t mUserSetColors;

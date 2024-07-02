@@ -3720,10 +3720,6 @@ URL: [AUDIOURL]
 		К сожалению, в этой сессии мы не смогли получить информацию о преимуществах аккаунта. Такое не должно происходить в нормально работающей среде. Пожалуйста, свяжитесь со службой поддержки. Эта сессия работает некорректно, поэтому мы рекомендуем вам перезапустить программу.
 		<usetemplate name="okbutton" yestext="Да"/>
 	</notification>
-		<notification name="BulkUploadCostConfirmation">
-		Этим действием загружается [COUNT] предметов на общую стоимость L$[COST]. Вы хотите продолжить загрузку?
-		<usetemplate ignoretext="Подтвердите массовую загрузку" name="okcancelignore" notext="Отмена" yestext="Загрузить"/>
-	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
 		Текущий баланс [BALANCE] L$ недостаточен для загрузки [COUNT] элементов общей стоимостью [COST] L$.
 	</notification>

@@ -3596,10 +3596,6 @@ to ustawienie lub wybrać inną nazwę.
 	<notification name="FailedToGetBenefits">
 		Niestety nie udało nam się uzyskać informacji o korzyściach dla tej sesji. Nie powinno się to zdarzyć w normalnym środowisku produkcyjnym. Skontaktuj się z pomocą techniczną. Ta sesja nie będzie działać normalnie i zalecamy restart.
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Spowoduje to przesłanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
-		<usetemplate name="okcancelignore" ignoretext="Potwierdź przesyłanie zbioru wielu plików" notext="Anuluj" yestext="Prześlij"/>
-	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
 		Twój obecny stan konta ([BALANCE]L$) nie wystarczy do przesłania [COUNT] elementów - łączny koszt to [COST]L$.
 	</notification>

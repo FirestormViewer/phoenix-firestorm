@@ -226,7 +226,7 @@ class LLControlGroup : public LLInstanceTracker<LLControlGroup, std::string>
     LOG_CLASS(LLControlGroup);
 
 protected:
-    typedef std::map<std::string, LLControlVariablePtr > ctrl_name_table_t;
+    typedef std::map<std::string, LLControlVariablePtr, std::less<> > ctrl_name_table_t;
     ctrl_name_table_t mNameTable;
     static const std::string mTypeString[TYPE_COUNT];
     static const std::string mSanityTypeString[SANITY_TYPE_COUNT];
@@ -339,7 +339,7 @@ public:
         }
     }
 
-    bool    controlExists(const std::string& name);
+    bool    controlExists(std::string_view name);
 
     // Returns number of controls loaded, 0 if failed
     // If require_declaration is false, will auto-declare controls it finds

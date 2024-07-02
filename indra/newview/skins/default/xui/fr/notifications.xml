@@ -3739,10 +3739,6 @@ ce préréglage ou choisir un autre nom.
 		Malheureusement, nous n'avons pas pu obtenir d'informations sur les avantages pour cette session. Cela ne devrait pas se produire dans un environnement de production normal. Veuillez contacter le service d'assistance. Cette session ne fonctionnera pas normalement et nous vous recommandons de recommencer.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Ceci permettra de charger [COUNT] éléments pour un coût total de L$[COST]. Souhaitez-vous poursuivre le téléchargement ?
-		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Charger"/>
-	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
 		Votre solde actuel de [BALANCE]L$ n'est pas suffisant pour télécharger [COUNT] articles pour un coût total de L$[COST].
 		<usetemplate name="okbutton" yestext="OK"/>

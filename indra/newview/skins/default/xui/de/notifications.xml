@@ -3708,12 +3708,8 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		Leider konnten wir für diese Sitzung keine Informationen zu den Leistungen erhalten. Dies sollte in einer normalen Produktionsumgebung nicht passieren. Kontaktiere bitte den Support. Diese Sitzung wird nicht normal laufen, und wir empfehlen, die Sitzung neu zu starten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Dadurch werden [COUNT] Artikel zu einem Gesamtpreis von [COST] $ hochgeladen. Möchtest du mit dem Hochladen fortfahren?
-		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Hochladen" ignoretext="Mehrfach-Uploads bestätigen"/>
-	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
-Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstände für insgesamt [COST] L$ hochzuladen.
+		Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstände für insgesamt [COST] L$ hochzuladen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">

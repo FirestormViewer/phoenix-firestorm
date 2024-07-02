@@ -3748,11 +3748,6 @@ M キーを押して変更します。
 		申し訳ありませんが、このセッションで利益情報を取得することができませんでした。通常の本番環境では起こるはずのない事象ですので、サポートに連絡してみて下さい。このセッションは通常通りに機能していないと思われ、再起動することをお勧めします。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		[COUNT] 個のアイテムをアップロードすることにより、合計 L$[COST] のコストがかかります。アップロードを続けますか？
-		<usetemplate ignoretext="一括アップロードを確認" name="okcancelignore" notext="取り消し" yestext="アップロード"/>
-	</notification>
-	
 	<notification name="NotEnoughMoneyForBulkUpload">
 現在の残高 L$[BALANCE] では [COUNT] 個のアイテムをアップロードするのに必要な合計 L$[COST] に足りません。
 		<usetemplate name="okbutton" yestext="OK"/>

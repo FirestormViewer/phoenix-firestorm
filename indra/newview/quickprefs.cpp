@@ -744,7 +744,7 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
                 if (xml_entry.translation_id.isProvided())
                 {
                     // replace label with translated version, if available
-                    LLTrans::findString(label, xml_entry.translation_id);
+                    LLTrans::findString(label, xml_entry.translation_id());
                 }
 
                 // Convert old RenderAvatarMaxVisible setting to IndirectMaxNonImpostors
