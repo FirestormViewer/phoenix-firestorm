@@ -69,11 +69,6 @@
 		<menu_item_check label="Gente" name="People"/>
 		<menu_item_check label="Conversaciones" name="Conversations"/>
 		<menu_item_check label="Gestos" name="Gestures"/>
-		<menu label="Filtro de voz" name="VoiceMorphing">
-			<menu_item_check label="Sin filtro de voz" name="NoVoiceMorphing"/>
-			<menu_item_check label="Probar..." name="Preview"/>
-			<menu_item_call label="Suscribir..." name="Subscribe"/>
-		</menu>
 		<menu_item_check name="Conversation Log..." label="Registro de conversaciones..."/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
 		<menu_item_call label="Lista de bloqueados" name="Block List"/>

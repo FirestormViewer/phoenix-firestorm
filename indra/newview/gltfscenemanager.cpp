@@ -42,6 +42,7 @@
 #include "llviewertexturelist.h"
 #include "llimagej2c.h"
 #include "llfloaterperms.h"
+#include "llfloaterreg.h"
 #include "llagentbenefits.h"
 #include "llfilesystem.h"
 #include "boost/json.hpp"
@@ -144,7 +145,7 @@ void GLTFSceneManager::uploadSelection()
                 }
                 else
                 {
-                    raw = image.mTexture->getCachedRawImage();
+                    raw = image.mTexture->getRawImage();
                 }
 
                 if (raw.notNull())
@@ -314,6 +315,7 @@ void GLTFSceneManager::load(const std::string& filename)
             {
                 mObjects.push_back(obj);
             }
+            LLFloaterReg::showInstance("gltf_asset_editor");
         }
     }
     else
@@ -339,6 +341,7 @@ void GLTFSceneManager::renderAlpha()
 
 void GLTFSceneManager::addGLTFObject(LLViewerObject* obj, LLUUID gltf_id)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_GLTF;
     llassert(obj->getVolume()->getParams().getSculptID() == gltf_id);
     llassert(obj->getVolume()->getParams().getSculptType() == LL_SCULPT_TYPE_GLTF);
 

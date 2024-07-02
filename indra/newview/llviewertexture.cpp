@@ -109,6 +109,7 @@ U32 LLViewerTexture::sMaxSmallImageSize = MAX_CACHED_RAW_IMAGE_AREA;
 bool LLViewerTexture::sFreezeImageUpdates = false;
 F32 LLViewerTexture::sCurrentTime = 0.0f;
 
+constexpr F32 MEMORY_CHECK_WAIT_TIME = 1.0f;
 constexpr F32 MIN_VRAM_BUDGET = 768.f;
 F32 LLViewerTexture::sFreeVRAMMegabytes = MIN_VRAM_BUDGET;
 
@@ -423,8 +424,6 @@ void LLViewerTextureManager::init()
         }
     }
     imagep->createGLTexture(0, image_raw);
-    //cache the raw image
-    imagep->setCachedRawImage(0, image_raw);
     image_raw = NULL;
 #else
     LLViewerFetchedTexture::sDefaultImagep = LLViewerTextureManager::getFetchedTexture(IMG_DEFAULT, true, LLGLTexture::BOOST_UI);
@@ -503,34 +502,6 @@ void LLViewerTexture::initClass()
     }
 }
 
-// non-const (used externally
-F32 texmem_lower_bound_scale = 0.85f;
-F32 texmem_middle_bound_scale = 0.925f;
-
-bool LLViewerTexture::isMemoryForTextureLow()
-// <FS:Ansariel> Restrict texture memory by available physical system memory
-static bool isSystemMemoryForTextureLow()
-{
-    static LLFrameTimer timer;
-    static S32Megabytes physical_res = S32Megabytes(S32_MAX);
-
-    static LLCachedControl<S32> fs_min_free_main_memory(gSavedSettings, "FSMinFreeMainMemoryTextureDiscardThreshold");
-    const S32Megabytes MIN_FREE_MAIN_MEMORY(fs_min_free_main_memory);
-
-    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
-    {
-        return physical_res < MIN_FREE_MAIN_MEMORY;
-    }
-
-    timer.reset();
-
-    //check main memory, only works for windows.
-    LLMemory::updateMemoryInfo();
-    physical_res = LLMemory::getAvailableMemKB();
-    return physical_res < MIN_FREE_MAIN_MEMORY;
-}
-// </FS:Ansariel>
-
 //static
 void LLViewerTexture::updateClass()
 {
@@ -562,20 +533,14 @@ void LLViewerTexture::updateClass()
     sFreeVRAMMegabytes = target - used;
 
     F32 over_pct = llmax((used-target) / target, 0.f);
-    // <FS:Ansariel> Restrict texture memory by available physical system memory
-    //sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
 
-    //if (sDesiredDiscardBias > 1.f)
-    //{
-    //    sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
-    //}
-
-    if (isSystemMemoryForTextureLow())
+    if (isSystemMemoryLow())
     {
         // System RAM is low -> ramp up discard bias over time to free memory
-        if (sEvaluationTimer.getElapsedTimeF32() > GPU_MEMORY_CHECK_WAIT_TIME)
+        if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
         {
-            sDesiredDiscardBias += llmax(.1f, over_pct); // add at least 10% over-percentage
+            static LLCachedControl<F32> low_mem_min_discard_increment(gSavedSettings, "RenderLowMemMinDiscardIncrement", .1f);
+            sDesiredDiscardBias += llmax(low_mem_min_discard_increment, over_pct);
             sEvaluationTimer.reset();
         }
     }
@@ -588,9 +553,29 @@ void LLViewerTexture::updateClass()
             sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
         }
     }
-    // </FS:Ansariel>
 
-    LLViewerTexture::sFreezeImageUpdates = false; // sDesiredDiscardBias > (desired_discard_bias_max - 1.0f);
+    LLViewerTexture::sFreezeImageUpdates = false;
+}
+
+//static
+bool LLViewerTexture::isSystemMemoryLow()
+{
+    static LLFrameTimer timer;
+    static U32Megabytes physical_res = U32Megabytes(U32_MAX);
+
+    static LLCachedControl<U32> min_free_main_memory(gSavedSettings, "RenderMinFreeMainMemoryThreshold", 512);
+    const U32Megabytes MIN_FREE_MAIN_MEMORY(min_free_main_memory);
+
+    if (timer.getElapsedTimeF32() < MEMORY_CHECK_WAIT_TIME) //call this once per second.
+    {
+        return physical_res < MIN_FREE_MAIN_MEMORY;
+    }
+
+    timer.reset();
+
+    LLMemory::updateMemoryInfo();
+    physical_res = LLMemory::getAvailableMemKB();
+    return physical_res < MIN_FREE_MAIN_MEMORY;
 }
 
 //end of static functions
@@ -759,9 +744,6 @@ bool LLViewerTexture::bindDefaultImage(S32 stage)
         LL_WARNS() << "LLViewerTexture::bindDefaultImage failed." << LL_ENDL;
     }
     stop_glerror();
-
-    //check if there is cached raw image and switch to it if possible
-    switchToCachedImage();
 
     LLTexturePipelineTester* tester = (LLTexturePipelineTester*)LLMetricPerformanceTesterBasic::getTester(sTesterName);
     if (tester)
@@ -963,18 +945,6 @@ void LLViewerTexture::reorganizeVolumeList()
     }
 }
 
-//virtual
-void LLViewerTexture::switchToCachedImage()
-{
-    //nothing here.
-}
-
-//virtual
-void LLViewerTexture::setCachedRawImage(S32 discard_level, LLImageRaw* imageraw)
-{
-    //nothing here.
-}
-
 bool LLViewerTexture::isLargeImage()
 {
     return  (S32)mTexelsPerImage > LLViewerTexture::sMinLargeImageSize;
@@ -1123,10 +1093,6 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mIsFetched = false;
     mInFastCacheList = false;
 
-    mCachedRawImage = NULL;
-    mCachedRawDiscardLevel = -1;
-    mCachedRawImageReady = false;
-
     mSavedRawImage = NULL;
     mForceToSaveRawImage  = false;
     mSaveRawImage = false;
@@ -1184,9 +1150,6 @@ void LLViewerFetchedTexture::cleanup()
 
     // Clean up image data
     destroyRawImage();
-    mCachedRawImage = NULL;
-    mCachedRawDiscardLevel = -1;
-    mCachedRawImageReady = false;
     mSavedRawImage = NULL;
     mSavedRawDiscardLevel = -1;
 }
@@ -1266,13 +1229,17 @@ void LLViewerFetchedTexture::setForSculpt()
 {
     static const S32 MAX_INTERVAL = 8; //frames
 
+    forceToSaveRawImage(0, F32_MAX);
+
+    setBoostLevel(llmax((S32)getBoostLevel(),
+        (S32)LLGLTexture::BOOST_SCULPTED));
+
     mForSculpt = true;
     if(isForSculptOnly() && hasGLTexture() && !getBoundRecently())
     {
         destroyGLTexture(); //sculpt image does not need gl texture.
         mTextureState = ACTIVE;
     }
-    checkCachedRawSculptImage();
     setMaxVirtualSizeResetInterval(MAX_INTERVAL);
 }
 
@@ -1385,10 +1352,6 @@ void LLViewerFetchedTexture::addToCreateTexture()
             }
         }
 
-        //discard the cached raw image and the saved raw image
-        mCachedRawImageReady = false;
-        mCachedRawDiscardLevel = -1;
-        mCachedRawImage = NULL;
         mSavedRawDiscardLevel = -1;
         mSavedRawImage = NULL;
     }
@@ -2131,13 +2094,6 @@ bool LLViewerFetchedTexture::updateFetch()
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - current < min");
         make_request = false;
     }
-    else if(mCachedRawImage.notNull() // can be empty
-            && mCachedRawImageReady
-            && (current_discard < 0 || current_discard > mCachedRawDiscardLevel))
-    {
-        make_request = false;
-        switchToCachedImage(); //use the cached raw data first
-    }
 
     if (make_request)
     {
@@ -2638,20 +2594,6 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
     }
 
     //
-    // Do a readback if required, OR start off a texture decode
-    //
-    if (need_readback && (getMaxDiscardLevel() > gl_discard))
-    {
-        // Do a readback to get the GL data into the raw image
-        // We have GL data.
-
-        destroyRawImage();
-        reloadRawImage(mLoadedCallbackDesiredDiscardLevel);
-        llassert(mRawImage.notNull());
-        llassert(!mNeedsAux || mAuxRawImage.notNull());
-    }
-
-    //
     // Run raw/auxiliary data callbacks
     //
     if (run_raw_callbacks && mIsRawImageValid && (mRawDiscardLevel <= getMaxDiscardLevel()))
@@ -2758,61 +2700,6 @@ void LLViewerFetchedTexture::forceImmediateUpdate()
     return;
 }
 
-LLImageRaw* LLViewerFetchedTexture::reloadRawImage(S8 discard_level)
-{
-    llassert(mGLTexturep.notNull());
-    llassert(discard_level >= 0);
-    llassert(mComponents > 0);
-
-    if (mRawImage.notNull())
-    {
-        //mRawImage is in use by somebody else, do not delete it.
-        return NULL;
-    }
-
-    if(mSavedRawDiscardLevel >= 0 && mSavedRawDiscardLevel <= discard_level)
-    {
-        if (mSavedRawDiscardLevel != discard_level
-            && mBoostLevel != BOOST_ICON
-            && mBoostLevel != BOOST_THUMBNAIL)
-        {
-            mRawImage = new LLImageRaw(getWidth(discard_level), getHeight(discard_level), getComponents());
-            mRawImage->copy(getSavedRawImage());
-        }
-        else
-        {
-            mRawImage = getSavedRawImage();
-        }
-        mRawDiscardLevel = discard_level;
-    }
-    else
-    {
-        //force to fetch raw image again if cached raw image is not good enough.
-        if(mCachedRawDiscardLevel > discard_level)
-        {
-            mRawImage = mCachedRawImage;
-            mRawDiscardLevel = mCachedRawDiscardLevel;
-        }
-        else //cached raw image is good enough, copy it.
-        {
-            if(mCachedRawDiscardLevel != discard_level)
-            {
-                mRawImage = new LLImageRaw(getWidth(discard_level), getHeight(discard_level), getComponents());
-                mRawImage->copy(mCachedRawImage);
-            }
-            else
-            {
-                mRawImage = mCachedRawImage;
-            }
-            mRawDiscardLevel = discard_level;
-        }
-    }
-    mIsRawImageValid = true;
-    sRawCount++;
-
-    return mRawImage;
-}
-
 bool LLViewerFetchedTexture::needsToSaveRawImage()
 {
     return mForceToSaveRawImage || mSaveRawImage;
@@ -2837,158 +2724,12 @@ void LLViewerFetchedTexture::destroyRawImage()
             {
                 saveRawImage();
             }
-            setCachedRawImage();
         }
 
         mRawImage = NULL;
 
         mIsRawImageValid = false;
         mRawDiscardLevel = INVALID_DISCARD_LEVEL;
-    }
-}
-
-//use the mCachedRawImage to (re)generate the gl texture.
-//virtual
-void LLViewerFetchedTexture::switchToCachedImage()
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    if(mCachedRawImage.notNull() &&
-        !mNeedsCreateTexture) // <--- texture creation is pending, don't step on it
-    {
-        mRawImage = mCachedRawImage;
-
-        if (getComponents() != mRawImage->getComponents())
-        {
-            // We've changed the number of components, so we need to move any
-            // objects using this pool to a different pool.
-            mComponents = mRawImage->getComponents();
-            mGLTexturep->setComponents(mComponents);
-            gTextureList.dirtyImage(this);
-        }
-
-        mIsRawImageValid = true;
-        mRawDiscardLevel = mCachedRawDiscardLevel;
-
-        scheduleCreateTexture();
-    }
-}
-
-//cache the imageraw forcefully.
-//virtual
-void LLViewerFetchedTexture::setCachedRawImage(S32 discard_level, LLImageRaw* imageraw)
-{
-    if(imageraw != mRawImage.get())
-    {
-        if (mBoostLevel == LLGLTexture::BOOST_ICON)
-        {
-            S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_ICON_DIMENSIONS;
-            S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_ICON_DIMENSIONS;
-            if (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height)
-            {
-                mCachedRawImage = new LLImageRaw(expected_width, expected_height, imageraw->getComponents());
-                mCachedRawImage->copyScaled(imageraw);
-            }
-            else
-            {
-                mCachedRawImage = imageraw;
-            }
-        }
-        else if (mBoostLevel == LLGLTexture::BOOST_THUMBNAIL)
-        {
-            S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_THUMBNAIL_DIMENSIONS;
-            S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_THUMBNAIL_DIMENSIONS;
-            if (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height)
-            {
-                mCachedRawImage = new LLImageRaw(expected_width, expected_height, imageraw->getComponents());
-                mCachedRawImage->copyScaled(imageraw);
-            }
-            else
-            {
-                mCachedRawImage = imageraw;
-            }
-        }
-        else
-        {
-            mCachedRawImage = imageraw;
-        }
-        mCachedRawDiscardLevel = discard_level;
-        mCachedRawImageReady = true;
-    }
-}
-
-void LLViewerFetchedTexture::setCachedRawImage()
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    if(mRawImage == mCachedRawImage)
-    {
-        return;
-    }
-    if(!mIsRawImageValid)
-    {
-        return;
-    }
-
-    if(mCachedRawImageReady)
-    {
-        return;
-    }
-
-    if(mCachedRawDiscardLevel < 0 || mCachedRawDiscardLevel > mRawDiscardLevel)
-    {
-        S32 i = 0;
-        S32 w = mRawImage->getWidth();
-        S32 h = mRawImage->getHeight();
-
-        S32 max_size = MAX_CACHED_RAW_IMAGE_AREA;
-        if(LLGLTexture::BOOST_TERRAIN == mBoostLevel)
-        {
-            max_size = MAX_CACHED_RAW_TERRAIN_IMAGE_AREA;
-        }
-        if(mForSculpt)
-        {
-            max_size = MAX_CACHED_RAW_SCULPT_IMAGE_AREA;
-            mCachedRawImageReady = !mRawDiscardLevel;
-        }
-        else
-        {
-            mCachedRawImageReady = (!mRawDiscardLevel || ((w * h) >= max_size));
-        }
-
-        while(((w >> i) * (h >> i)) > max_size)
-        {
-            ++i;
-        }
-
-        if(i)
-        {
-            if(!(w >> i) || !(h >> i))
-            {
-                --i;
-            }
-
-            {
-                //make a duplicate in case somebody else is using this raw image
-                mRawImage = mRawImage->scaled(w >> i, h >> i);
-            }
-        }
-        mCachedRawImage = mRawImage;
-        mRawDiscardLevel += i;
-        mCachedRawDiscardLevel = mRawDiscardLevel;
-    }
-}
-
-void LLViewerFetchedTexture::checkCachedRawSculptImage()
-{
-    if(mCachedRawImageReady && mCachedRawDiscardLevel > 0)
-    {
-        if(getDiscardLevel() != 0)
-        {
-            mCachedRawImageReady = false;
-        }
-        else if(isForSculptOnly())
-        {
-            resetTextureStats(); //do not update this image any more.
-        }
     }
 }
 
@@ -3021,6 +2762,20 @@ void LLViewerFetchedTexture::saveRawImage()
     {
         S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_THUMBNAIL_DIMENSIONS;
         S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_THUMBNAIL_DIMENSIONS;
+        if (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height)
+        {
+            mSavedRawImage = new LLImageRaw(expected_width, expected_height, mRawImage->getComponents());
+            mSavedRawImage->copyScaled(mRawImage);
+        }
+        else
+        {
+            mSavedRawImage = new LLImageRaw(mRawImage->getData(), mRawImage->getWidth(), mRawImage->getHeight(), mRawImage->getComponents());
+        }
+    }
+    else if (mBoostLevel == LLGLTexture::BOOST_SCULPTED)
+    {
+        S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : sMaxSculptRez;
+        S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : sMaxSculptRez;
         if (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height)
         {
             mSavedRawImage = new LLImageRaw(expected_width, expected_height, mRawImage->getComponents());
@@ -3076,20 +2831,23 @@ void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard, F32 kept_t
     {
         mForceToSaveRawImage = true;
         mDesiredSavedRawDiscardLevel = desired_discard;
+    }
+}
 
-        //copy from the cached raw image if exists.
-        if(mCachedRawImage.notNull() && mRawImage.isNull() )
+void LLViewerFetchedTexture::readbackRawImage()
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+
+    if (mGLTexturep.notNull() && mGLTexturep->getTexName() != 0 && mRawImage.isNull())
+    {
+        mRawImage = new LLImageRaw();
+        if (!mGLTexturep->readBackRaw(-1, mRawImage, false))
         {
-            mRawImage = mCachedRawImage;
-            mRawDiscardLevel = mCachedRawDiscardLevel;
-
-            saveRawImage();
-
-            mRawImage = NULL;
-            mRawDiscardLevel = INVALID_DISCARD_LEVEL;
+            mRawImage = nullptr;
         }
     }
 }
+
 void LLViewerFetchedTexture::destroySavedRawImage()
 {
     if(mLastReferencedSavedRawImageTime < mKeptSavedRawImageTime)
@@ -3121,6 +2879,11 @@ LLImageRaw* LLViewerFetchedTexture::getSavedRawImage()
 {
     mLastReferencedSavedRawImageTime = sCurrentTime;
 
+    return mSavedRawImage;
+}
+
+const LLImageRaw* LLViewerFetchedTexture::getSavedRawImage() const
+{
     return mSavedRawImage;
 }
 
@@ -3300,20 +3063,14 @@ void LLViewerLODTexture::processTextureStats()
 
 bool LLViewerLODTexture::scaleDown()
 {
-    if(hasGLTexture() && mCachedRawDiscardLevel > getDiscardLevel())
+    if (mGLTexturep.isNull())
     {
-        switchToCachedImage();
-
-        LLTexturePipelineTester* tester = (LLTexturePipelineTester*)LLMetricPerformanceTesterBasic::getTester(sTesterName);
-        if (tester)
-        {
-            tester->setStablizingTime();
-        }
-
-        return true;
+        return false;
     }
-    return false;
+
+    return mGLTexturep->scaleDown(mDesiredDiscardLevel);
 }
+
 //----------------------------------------------------------------------------------------------
 //end of LLViewerLODTexture
 //----------------------------------------------------------------------------------------------

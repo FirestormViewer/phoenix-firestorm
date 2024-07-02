@@ -121,7 +121,7 @@ void LLHeroProbeManager::update()
         // Find our nearest hero candidate.
         float last_distance = 99999.f;
         float camera_center_distance = 99999.f;
-        mNearestHero = nullptr; // <FS:Beq/> LL-1719/1721 Mirrors do not disable properly (interim fix)
+        mNearestHero = nullptr;
         for (auto vo : mHeroVOList)
         {
             if (vo && !vo->isDead() && vo->mDrawable.notNull() && vo->isReflectionProbe() && vo->getReflectionProbeIsBox())
@@ -211,18 +211,16 @@ void LLHeroProbeManager::update()
         else
         {
             mNearestHero = nullptr;
-            mDefaultProbe->mViewerObject = nullptr; // <FS:Beq/> FIRE-34201 TP crash
+            mDefaultProbe->mViewerObject = nullptr;
         }
 
         mHeroProbeStrength = 1;
     }
-    // <FS:Beq> LL-1719/1721 Mirrors do not disable properly (interim fix)
     else
     {
         mNearestHero = nullptr;
-        mDefaultProbe->mViewerObject = nullptr; // <FS:Beq/> FIRE-34201 TP crash
+        mDefaultProbe->mViewerObject = nullptr;
     }
-    // </FS:Beq>
 }
 
 void LLHeroProbeManager::renderProbes()

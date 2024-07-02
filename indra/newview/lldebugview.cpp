@@ -105,12 +105,9 @@ void LLDebugView::init()
     addChild(gSceneMonitorView);
     gSceneMonitorView->setRect(rect);
 
-    r.setLeftTopAndSize(25, rect.getHeight() - 50, (S32) (gViewerWindow->getWindowRectScaled().getWidth() * 0.75f),
-                                     (S32) (gViewerWindow->getWindowRectScaled().getHeight() * 0.75f));
-
     // <FS:Ansariel> Fix texture console width
     //r.set(150, rect.getHeight() - 50, 820, 100);
-    r.set(150, rect.getHeight() - 50, 965, 100);
+    r.set(150, rect.getHeight() - 60, 965, 100);
     // </FS:Ansariel>
     LLTextureView::Params tvp;
     tvp.name("gTextureView");
@@ -119,7 +116,6 @@ void LLDebugView::init()
     tvp.visible(false);
     gTextureView = LLUICtrlFactory::create<LLTextureView>(tvp);
     addChild(gTextureView);
-    //gTextureView->reshape(r.getWidth(), r.getHeight(), true);
 }
 
 void LLDebugView::draw()

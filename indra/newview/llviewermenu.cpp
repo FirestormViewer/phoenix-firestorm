@@ -10125,6 +10125,15 @@ class LLAdvancedClickGLTFUpload: public view_listener_t
     }
 };
 
+class LLAdvancedClickGLTFEdit : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLFloaterReg::showInstance("gltf_asset_editor");
+        return true;
+    }
+};
+
 class LLAdvancedClickResizeWindow : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12021,15 +12030,6 @@ class LLUpdateMembershipLabel : public view_listener_t
     }
 };
 
-void handle_voice_morphing_subscribe()
-{
-    LLWeb::loadURL(LLTrans::getString("voice_morphing_url"));
-}
-
-void handle_premium_voice_morphing_subscribe()
-{
-    LLWeb::loadURL(LLTrans::getString("premium_voice_morphing_url"));
-}
 
 class LLToggleUIHints : public view_listener_t
 {
@@ -12452,16 +12452,6 @@ void initialize_menus()
     // <FS:Ansariel> [FS Communication UI]
     //view_listener_t::addMenu(new LLCommunicateNearbyChat(), "Communicate.NearbyChat");
 
-    // Communicate > Voice morphing > Subscribe...
-    commit.add("Communicate.VoiceMorphing.Subscribe", boost::bind(&handle_voice_morphing_subscribe));
-    // Communicate > Voice morphing > Premium perk...
-    commit.add("Communicate.VoiceMorphing.PremiumPerk", boost::bind(&handle_premium_voice_morphing_subscribe));
-    LLVivoxVoiceClient * voice_clientp = LLVivoxVoiceClient::getInstance();
-    enable.add("Communicate.VoiceMorphing.NoVoiceMorphing.Check"
-        , boost::bind(&LLVivoxVoiceClient::onCheckVoiceEffect, voice_clientp, "NoVoiceMorphing"));
-    commit.add("Communicate.VoiceMorphing.NoVoiceMorphing.Click"
-        , boost::bind(&LLVivoxVoiceClient::onClickVoiceEffect, voice_clientp, "NoVoiceMorphing"));
-
     // World menu
     view_listener_t::addMenu(new LLWorldAlwaysRun(), "World.AlwaysRun");
     view_listener_t::addMenu(new LLWorldCreateLandmark(), "World.CreateLandmark");
@@ -12600,6 +12590,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedClickGLTFOpen(), "Advanced.ClickGLTFOpen");
     view_listener_t::addMenu(new LLAdvancedClickGLTFSaveAs(), "Advanced.ClickGLTFSaveAs");
     view_listener_t::addMenu(new LLAdvancedClickGLTFUpload(), "Advanced.ClickGLTFUpload");
+    view_listener_t::addMenu(new LLAdvancedClickGLTFEdit(), "Advanced.ClickGLTFEdit");
     view_listener_t::addMenu(new LLAdvancedClickResizeWindow(), "Advanced.ClickResizeWindow");
     view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
     view_listener_t::addMenu(new LLAdvancedRebuildTerrain(), "Advanced.RebuildTerrain");

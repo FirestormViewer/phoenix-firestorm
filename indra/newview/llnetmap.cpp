@@ -89,6 +89,7 @@
 #include "fsradar.h"
 #include "lggcontactsets.h"
 #include "fscommon.h"
+#include "llstartup.h"
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
@@ -547,45 +548,6 @@ void LLNetMap::draw()
                 }
                 gGL.end();
                 // </FS:Ansariel>
-
-                // Draw water
-                gGL.flush();
-                {
-                    if (regionp->getLand().getWaterTexture())
-                    {
-                        gGL.getTexUnit(0)->bind(regionp->getLand().getWaterTexture());
-                        // <FS:Ansariel> Remove QUADS rendering mode
-                        //gGL.begin(LLRender::QUADS);
-                        //  gGL.texCoord2f(0.f, 1.f);
-                        //  gGL.vertex2f(left, top);
-                        //  gGL.texCoord2f(0.f, 0.f);
-                        //  gGL.vertex2f(left, bottom);
-                        //  gGL.texCoord2f(1.f, 0.f);
-                        //  gGL.vertex2f(right, bottom);
-                        //  gGL.texCoord2f(1.f, 1.f);
-                        //  gGL.vertex2f(right, top);
-                        //gGL.end();
-                        gGL.begin(LLRender::TRIANGLES);
-                        {
-                            gGL.texCoord2f(0.f, 1.f);
-                            gGL.vertex2f(left, top);
-                            gGL.texCoord2f(0.f, 0.f);
-                            gGL.vertex2f(left, bottom);
-                            gGL.texCoord2f(1.f, 0.f);
-                            gGL.vertex2f(right, bottom);
-
-                            gGL.texCoord2f(0.f, 1.f);
-                            gGL.vertex2f(left, top);
-                            gGL.texCoord2f(1.f, 0.f);
-                            gGL.vertex2f(right, bottom);
-                            gGL.texCoord2f(1.f, 1.f);
-                            gGL.vertex2f(right, top);
-                        }
-                        gGL.end();
-                        // </FS:Ansariel>
-                    }
-                }
-                gGL.flush();
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
             }
             gGL.flush();

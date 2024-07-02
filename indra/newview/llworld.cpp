@@ -1416,7 +1416,6 @@ void LLWorld::updateWaterObjects()
             if (!getRegionFromHandle(region_handle))
             {   // No region at that area, so make water
                 LLVOWater* waterp = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER, gAgent.getRegion());
-                waterp->setUseTexture(false);
 // <FS:CR> Fix water height on regions larger than 2048x2048
                 //waterp->setPositionGlobal(LLVector3d(x + rwidth/2,
                 //                                   y + rwidth/2,
@@ -1484,7 +1483,6 @@ void LLWorld::updateWaterObjects()
             mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_VOID_WATER,
                                                                                  gAgent.getRegion());
             waterp = mEdgeWaterObjects[dir];
-            waterp->setUseTexture(false);
             waterp->setIsEdgePatch(true);
             gPipeline.createObject(waterp);
         }

@@ -33,7 +33,6 @@
 #include "llpanellogin.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
-#include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
 #include "llstartup.h"
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
@@ -630,7 +629,7 @@ std::string LLSLURL::getLoginString() const
         LL_WARNS("AppInit") << "Unexpected SLURL type for login string" << (int)mType << LL_ENDL;
         break;
     }
-    return  xml_escape_string(unescaped_start.str());
+    return  LLStringFn::xml_encode(unescaped_start.str(), true);
 }
 
 bool LLSLURL::operator==(const LLSLURL& rhs)
