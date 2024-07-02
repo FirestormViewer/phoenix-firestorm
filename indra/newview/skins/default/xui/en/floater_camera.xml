@@ -179,46 +179,36 @@
             tool_tip="Orbit camera around focus"
             held_down_delay.seconds="0.0"
             top="0" />
-      </layout_panel>
-
-      <layout_panel
-          name="camera_roll_layout_panel"
-          auto_resize="false"
-          user_resize="false"
-          height="80"
-          width="24">
-          <button
-              follows="top|left"
-              height="24"
-              image_selected="VirtualTrackball_Rotate_Left_Active"
-              image_unselected="VirtualTrackball_Rotate_Left"
-              layout="topleft"
-              left_delta="0"
-              name="roll_left"
-              tool_tip="Roll camera Left"
-              width="24"
-              top="0">
-             <commit_callback
-                function="Camera.roll_left" />
-             <mouse_held_callback
-                function="Camera.roll_left" />
-          </button>
-          <button
-              follows="bottom|left"
-              height="24"
-              image_selected="VirtualTrackball_Rotate_Right_Active"
-              image_unselected="VirtualTrackball_Rotate_Right"
-              layout="topleft"
-              top_delta="56"
-              left_delta="0"
-              name="roll_right"
-              tool_tip="Roll camera Right"
-              width="24">
-             <commit_callback
-                function="Camera.roll_right" />
-             <mouse_held_callback
-                function="Camera.roll_right" />
-          </button>
+<!-- <FS:Chanayane> Camera roll (from Alchemy) -->
+        <button
+            follows="bottom|left"
+            width="18"
+            height="18"
+            image_selected="VirtualTrackball_Rotate_Left_Active"
+            image_unselected="VirtualTrackball_Rotate_Left"
+            layout="topleft"
+            top_delta="62"
+            left_delta="0"
+            name="roll_left"
+            tool_tip="Roll camera Left">
+            <commit_callback function="Camera.roll_left" />
+            <mouse_held_callback function="Camera.roll_left" />
+        </button>
+        <button
+            follows="bottom|right"
+            width="18"
+            height="18"
+            image_selected="VirtualTrackball_Rotate_Right_Active"
+            image_unselected="VirtualTrackball_Rotate_Right"
+            layout="topleft"
+            top_delta="0"
+            left_delta="62"
+            name="roll_right"
+            tool_tip="Roll camera Right">
+            <commit_callback function="Camera.roll_right" />
+            <mouse_held_callback function="Camera.roll_right" />
+        </button>
+<!-- </FS:Chanayane> -->
       </layout_panel>
 
       <layout_panel
