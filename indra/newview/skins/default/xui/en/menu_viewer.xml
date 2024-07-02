@@ -986,6 +986,49 @@
             <menu_item_call.on_click
              function="Tools.ResyncAnimations" />
         </menu_item_call>
+
+         <menu
+         create_jump_keys="true"
+         label="Animation Speed"
+         name="Animation Speed"
+         tear_off="true">
+         <menu_item_call
+            label="All Animations Slowed Down"
+            name="All Animations Slowed Down"
+            shortcut="control|N">
+            <menu_item_call.on_click
+               function="Advanced.AnimSlowedDown" />
+         </menu_item_call>
+         <menu_item_call
+            label="All Animations 10% Faster"
+            name="All Animations 10 Faster">
+            <menu_item_call.on_click
+               function="Advanced.AnimTenFaster" />
+         </menu_item_call>
+         <menu_item_call
+            label="All Animations 10% Slower"
+            name="All Animations 10 Slower">
+            <menu_item_call.on_click
+               function="Advanced.AnimTenSlower" />
+         </menu_item_call>
+         <menu_item_call
+            label="Reset All Animation Speed"
+            name="Reset All Animation Speed"
+            shortcut="control|J">
+            <menu_item_call.on_click
+               function="Advanced.AnimResetAll" />
+         </menu_item_call>
+         <menu_item_check
+            label="Slow Motion Animations"
+            name="Slow Motion Animations">
+            <menu_item_check.on_check
+               function="CheckControl"
+               parameter="SlowMotionAnimation" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="SlowMotionAnimation" />
+         </menu_item_check>
+         </menu>
         
         <menu_item_separator/>
      
@@ -5310,7 +5353,7 @@
                      parameter="AllowSelectAvatar" />
                 </menu_item_check>
             </menu>
-            <menu
+            <!--<menu
              create_jump_keys="true"
              label="Animation Speed"
              name="Animation Speed"
@@ -5323,13 +5366,15 @@
                 </menu_item_call>
                 <menu_item_call
                  label="All Animations 10% Slower"
-                 name="All Animations 10 Slower">
+                 name="All Animations 10 Slower"
+                 shortcut="control|N">
                     <menu_item_call.on_click
                      function="Advanced.AnimTenSlower" />
                 </menu_item_call>
                 <menu_item_call
                  label="Reset All Animation Speed"
-                 name="Reset All Animation Speed">
+                 name="Reset All Animation Speed"
+                 shortcut="control|J">
                     <menu_item_call.on_click
                      function="Advanced.AnimResetAll" />
                 </menu_item_call>
@@ -5343,7 +5388,7 @@
 					 function="ToggleControl"
 					 parameter="SlowMotionAnimation" />
 				</menu_item_check>
-            </menu>
+            </menu>-->
             <menu_item_call
              label="Force Params to Default"
              name="Force Params to Default">
