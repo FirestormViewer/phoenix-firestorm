@@ -57,7 +57,7 @@
 // U32
 LLSD ll_sd_from_U32(const U32 val)
 {
-    std::vector<U8> v;
+    LLSD::Binary v;
     U32 net_order = htonl(val);
 
     v.resize(4);
@@ -69,7 +69,7 @@ LLSD ll_sd_from_U32(const U32 val)
 U32 ll_U32_from_sd(const LLSD& sd)
 {
     U32 ret;
-    std::vector<U8> v = sd.asBinary();
+    const LLSD::Binary& v = sd.asBinary();
     if (v.size() < 4)
     {
         return 0;
@@ -82,7 +82,7 @@ U32 ll_U32_from_sd(const LLSD& sd)
 //U64
 LLSD ll_sd_from_U64(const U64 val)
 {
-    std::vector<U8> v;
+    LLSD::Binary v;
     U32 high, low;
 
     high = (U32)(val >> 32);
@@ -100,7 +100,7 @@ LLSD ll_sd_from_U64(const U64 val)
 U64 ll_U64_from_sd(const LLSD& sd)
 {
     U32 high, low;
-    std::vector<U8> v = sd.asBinary();
+    const LLSD::Binary& v = sd.asBinary();
 
     if (v.size() < 8)
     {
@@ -118,7 +118,7 @@ U64 ll_U64_from_sd(const LLSD& sd)
 // IP Address (stored in net order in a U32, so don't need swizzling)
 LLSD ll_sd_from_ipaddr(const U32 val)
 {
-    std::vector<U8> v;
+    LLSD::Binary v;
 
     v.resize(4);
     memcpy(&(v[0]), &val, 4);       /* Flawfinder: ignore */
@@ -129,7 +129,7 @@ LLSD ll_sd_from_ipaddr(const U32 val)
 U32 ll_ipaddr_from_sd(const LLSD& sd)
 {
     U32 ret;
-    std::vector<U8> v = sd.asBinary();
+    const LLSD::Binary& v = sd.asBinary();
     if (v.size() < 4)
     {
         return 0;
@@ -141,17 +141,17 @@ U32 ll_ipaddr_from_sd(const LLSD& sd)
 // Converts an LLSD binary to an LLSD string
 LLSD ll_string_from_binary(const LLSD& sd)
 {
-    std::vector<U8> value = sd.asBinary();
+    const LLSD::Binary& value = sd.asBinary();
     std::string str;
     str.resize(value.size());
-    memcpy(&str[0], &value[0], value.size());
+    memcpy(&str[0], value.data(), value.size());
     return str;
 }
 
 // Converts an LLSD string to an LLSD binary
 LLSD ll_binary_from_string(const LLSD& sd)
 {
-    std::vector<U8> binary_value;
+    LLSD::Binary binary_value;
 
     std::string string_value = sd.asString();
     for (const U8 c : string_value)
@@ -996,8 +996,7 @@ LLSD llsd_clone(LLSD value, LLSD filter)
 
     case LLSD::TypeBinary:
     {
-        LLSD::Binary bin(value.asBinary().begin(), value.asBinary().end());
-        clone = LLSD::Binary(bin);
+        clone = LLSD::Binary(value.asBinary().begin(), value.asBinary().end());
         break;
     }
     default:

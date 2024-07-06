@@ -370,24 +370,24 @@ F32 gLogoutMaxTime = LOGOUT_REQUEST_TIME;
 S32 gPendingMetricsUploads = 0;
 
 
-bool                gDisconnected = false;
+bool gDisconnected = false;
 
-// used to restore texture state after a mode switch
-LLFrameTimer    gRestoreGLTimer;
-bool            gRestoreGL = false;
-bool            gUseWireframe = false;
+// Used to restore texture state after a mode switch
+LLFrameTimer gRestoreGLTimer;
+bool gRestoreGL = false;
+bool gUseWireframe = false;
 
 LLMemoryInfo gSysMemory;
 U64Bytes gMemoryAllocated(0); // updated in display_stats() in llviewerdisplay.cpp
 
 std::string gLastVersionChannel;
 
-LLVector3           gWindVec(3.0, 3.0, 0.0);
-LLVector3           gRelativeWindVec(0.0, 0.0, 0.0);
+LLVector3 gWindVec(3.0, 3.0, 0.0);
+LLVector3 gRelativeWindVec(0.0, 0.0, 0.0);
 
-U32     gPacketsIn = 0;
+U32 gPacketsIn = 0;
 
-bool                gPrintMessagesThisFrame = false;
+bool gPrintMessagesThisFrame = false;
 
 bool gRandomizeFramerate = false;
 bool gPeriodicSlowFrame = false;
@@ -806,6 +806,19 @@ public:
 
 bool LLAppViewer::init()
 {
+    struct ResultHandler
+    {
+        bool success = false; // Should be set in case of successful result
+        ~ResultHandler()
+        {
+            if (!success)
+            {
+                // Mark critical flags in case of unsuccessful initialization
+                LLRenderTarget::sInitFailed = true;
+            }
+        }
+    } result_handler;
+
     setupErrorHandling(mSecondInstance);
 
     nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
@@ -924,7 +937,10 @@ bool LLAppViewer::init()
 
     // inits from settings.xml and from strings.xml
     if (!initConfiguration())
+    {
+        LL_WARNS("InitInfo") << "initConfiguration() failed." << LL_ENDL;
         return false;
+    }
 
     LL_INFOS("InitInfo") << "Configuration initialized." << LL_ENDL ;
     //set the max heap size.
@@ -954,14 +970,12 @@ bool LLAppViewer::init()
 
     LLMachineID::init();
 
+    if (gSavedSettings.getBOOL("QAModeMetrics"))
     {
-        if (gSavedSettings.getBOOL("QAModeMetrics"))
-        {
-            app_metrics_qa_mode = true;
-            app_metrics_interval = METRICS_INTERVAL_QA;
-        }
-        LLViewerAssetStatsFF::init();
+        app_metrics_qa_mode = true;
+        app_metrics_interval = METRICS_INTERVAL_QA;
     }
+    LLViewerAssetStatsFF::init();
 
     initThreads();
     LL_INFOS("InitInfo") << "Threads initialized." << LL_ENDL ;
@@ -1096,8 +1110,9 @@ bool LLAppViewer::init()
     // do any necessary set-up for accepting incoming SLURLs from apps
     initSLURLHandler();
 
-    if(false == initHardwareTest())
+    if (!initHardwareTest())
     {
+        LL_WARNS("InitInfo") << "initHardwareTest() failed." << LL_ENDL;
         // Early out from user choice.
         return false;
     }
@@ -1117,7 +1132,7 @@ bool LLAppViewer::init()
         std::ostringstream msg;
         msg << LLTrans::getString("MBUnableToAccessFile");
         OSMessageBox(msg.str(),LLStringUtil::null,OSMB_OK);
-        return 0;
+        return false;
     }
     LL_INFOS("InitInfo") << "Cache initialization is done." << LL_ENDL ;
 
@@ -1154,8 +1169,9 @@ bool LLAppViewer::init()
     // If we don't have the right GL requirements, exit.
     if (!gGLManager.mHasRequirements)
     {
+        LL_WARNS("InitInfo") << "gGLManager.mHasRequirements is false." << LL_ENDL;
         // already handled with a MBVideoDrvErr
-        return 0;
+        return false;
     }
 
     // Without SSE2 support we will crash almost immediately, warn here.
@@ -1167,11 +1183,11 @@ bool LLAppViewer::init()
             LLNotifications::instance().getGlobalString("UnsupportedCPUSSE2"),
             LLStringUtil::null,
             OSMB_OK);
-        return 0;
+        return false;
     }
 
     // alert the user if they are using unsupported hardware
-    if(gSavedSettings.getBOOL("FSUseLegacyUnsupportedHardwareChecks") && !gSavedSettings.getBOOL("AlertedUnsupportedHardware"))
+    if (gSavedSettings.getBOOL("FSUseLegacyUnsupportedHardwareChecks") && !gSavedSettings.getBOOL("AlertedUnsupportedHardware"))
     {
         bool unsupported = false;
         LLSD args;
@@ -1187,19 +1203,19 @@ bool LLAppViewer::init()
         U64Bytes minRAM;
         minRAMString >> minRAM;
 
-        if(!LLFeatureManager::getInstance()->isGPUSupported() && LLFeatureManager::getInstance()->getGPUClass() != GPU_CLASS_UNKNOWN)
+        if (!LLFeatureManager::getInstance()->isGPUSupported() && LLFeatureManager::getInstance()->getGPUClass() != GPU_CLASS_UNKNOWN)
         {
             minSpecs += LLNotifications::instance().getGlobalString("UnsupportedGPU");
             minSpecs += "\n";
             unsupported = true;
         }
-        if(gSysCPU.getMHz() < minCPU)
+        if (gSysCPU.getMHz() < minCPU)
         {
             minSpecs += LLNotifications::instance().getGlobalString("UnsupportedCPU");
             minSpecs += "\n";
             unsupported = true;
         }
-        if(gSysMemory.getPhysicalMemoryKB() < minRAM)
+        if (gSysMemory.getPhysicalMemoryKB() < minRAM)
         {
             minSpecs += LLNotifications::instance().getGlobalString("UnsupportedRAM");
             minSpecs += "\n";
@@ -1211,15 +1227,14 @@ bool LLAppViewer::init()
             LLNotificationsUtil::add("UnknownGPU");
         }
 
-        if(unsupported)
+        if (unsupported)
         {
-            if(!gSavedSettings.controlExists("WarnUnsupportedHardware")
+            if (!gSavedSettings.controlExists("WarnUnsupportedHardware")
                 || gSavedSettings.getBOOL("WarnUnsupportedHardware"))
             {
                 args["MINSPECS"] = minSpecs;
                 LLNotificationsUtil::add("UnsupportedHardware", args );
             }
-
         }
     }
 
@@ -1311,14 +1326,15 @@ bool LLAppViewer::init()
         LLViewerJoystick::getInstance()->init(false);
     }
 
-    try {
+    try
+    {
         initializeSecHandler();
     }
     catch (LLProtectedDataException& ex)
     {
         // <FS:Ansariel> Write exception message to log
-      LL_WARNS() << "Error initializing SecHandlers: " << ex.what() << LL_ENDL;
-      LLNotificationsUtil::add("CorruptedProtectedDataStore");
+        LL_WARNS() << "Error initializing SecHandlers: " << ex.what() << LL_ENDL;
+        LLNotificationsUtil::add("CorruptedProtectedDataStore");
     }
 
     gGLActive = false;
@@ -1427,7 +1443,7 @@ bool LLAppViewer::init()
     //datetime formatting functions didn't support some parameters such as "weekday".
     //Names for days and months localized in xml are also useful for Polish locale(STORM-107).
     std::string language = gSavedSettings.getString("Language");
-    if(language == "ja" || language == "pl")
+    if (language == "ja" || language == "pl")
     {
         LLStringOps::setupWeekDaysNames(LLTrans::getString("dateTimeWeekdaysNames"));
         LLStringOps::setupWeekDaysShortNames(LLTrans::getString("dateTimeWeekdaysShortNames"));
@@ -1492,6 +1508,8 @@ bool LLAppViewer::init()
         gDirUtilp->deleteDirAndContents(gDirUtilp->getDumpLogsDirPath());
     }
 #endif
+
+    result_handler.success = true;
 
     return true;
 }
@@ -2938,7 +2956,7 @@ bool tempSetControl(const std::string& name, const std::string& value)
 
 bool LLAppViewer::initConfiguration()
 {
-    //Load settings files list
+    // Load settings files list
     std::string settings_file_list = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "settings_files.xml");
     LLXMLNodePtr root;
     bool success = LLXMLNode::parseFile(settings_file_list, root, NULL);
@@ -2985,7 +3003,7 @@ bool LLAppViewer::initConfiguration()
 
     // - load defaults
     bool set_defaults = true;
-    if(!loadSettingsFromDirectory("Default", set_defaults))
+    if (!loadSettingsFromDirectory("Default", set_defaults))
     {
         OSMessageBox(
             "Unable to load default settings file. The installation may be corrupted.",
@@ -3014,13 +3032,12 @@ bool LLAppViewer::initConfiguration()
 #ifndef LL_RELEASE_FOR_DOWNLOAD
     // provide developer build only overrides for these control variables that are not
     // persisted to settings.xml
-    LLControlVariable* c = gSavedSettings.getControl("AllowMultipleViewers");
-    if (c)
+    if (LLControlVariable* c = gSavedSettings.getControl("AllowMultipleViewers"))
     {
         c->setValue(true, false);
     }
 
-    gSavedSettings.setBOOL("QAMode", true );
+    gSavedSettings.setBOOL("QAMode", true);
     gSavedSettings.setS32("WatchdogEnabled", 0);
 #endif
 
@@ -3053,7 +3070,7 @@ bool LLAppViewer::initConfiguration()
 
     clp.configure(cmd_line_config, &gSavedSettings);
 
-    if(!initParseCommandLine(clp))
+    if (!initParseCommandLine(clp))
     {
         handleCommandLineError(clp);
         return false;
@@ -3063,7 +3080,7 @@ bool LLAppViewer::initConfiguration()
 
     // If the user has specified a alternate settings file name.
     // Load it now before loading the user_settings/settings.xml
-    if(clp.hasOption("settings"))
+    if (clp.hasOption("settings"))
     {
         std::string user_settings_filename =
             gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
@@ -3167,7 +3184,7 @@ bool LLAppViewer::initConfiguration()
     nd::logging::setThrottleEnabled(gSavedSettings.getBOOL("FSEnableLogThrottle"));
 
     // - apply command line settings
-    if (! clp.notify())
+    if (!clp.notify())
     {
         handleCommandLineError(clp);
         return false;
@@ -3176,7 +3193,7 @@ bool LLAppViewer::initConfiguration()
     // Register the core crash option as soon as we can
     // if we want gdb post-mortem on cores we need to be up and running
     // ASAP or we might miss init issue etc.
-    if(gSavedSettings.getBOOL("DisableCrashLogger"))
+    if (gSavedSettings.getBOOL("DisableCrashLogger"))
     {
         LL_WARNS() << "Crashes will be handled by system, stack trace logs and crash logger are both disabled" << LL_ENDL;
         disableCrashlogger();
@@ -3190,7 +3207,7 @@ bool LLAppViewer::initConfiguration()
         initConsole();
     }
 
-    if(clp.hasOption("help"))
+    if (clp.hasOption("help"))
     {
         std::ostringstream msg;
         msg << LLTrans::getString("MBCmdLineUsg") << "\n" << clp;
@@ -3204,17 +3221,17 @@ bool LLAppViewer::initConfiguration()
         return false;
     }
 
-    if(clp.hasOption("set"))
+    if (clp.hasOption("set"))
     {
         const LLCommandLineParser::token_vector_t& set_values = clp.getOption("set");
-        if(0x1 & set_values.size())
+        if (0x1 & set_values.size())
         {
             LL_WARNS() << "Invalid '--set' parameter count." << LL_ENDL;
         }
         else
         {
             LLCommandLineParser::token_vector_t::const_iterator itr = set_values.begin();
-            for(; itr != set_values.end(); ++itr)
+            for (; itr != set_values.end(); ++itr)
             {
                 const std::string& name = *itr;
                 const std::string& value = *(++itr);
@@ -3226,12 +3243,13 @@ bool LLAppViewer::initConfiguration()
         }
     }
 
-    if  (clp.hasOption("logevents")) {
+    if (clp.hasOption("logevents"))
+    {
         LLViewerEventRecorder::instance().setEventLoggingOn();
     }
 
     std::string CmdLineChannel(gSavedSettings.getString("CmdLineChannel"));
-    if(! CmdLineChannel.empty())
+    if (!CmdLineChannel.empty())
     {
         LLVersionInfo::instance().resetChannel(CmdLineChannel);
     }
@@ -3246,7 +3264,7 @@ bool LLAppViewer::initConfiguration()
     }
 
     std::string test_name(gSavedSettings.getString("LogMetrics"));
-    if (! test_name.empty())
+    if (!test_name.empty())
     {
         LLTrace::BlockTimer::sMetricLog = true;
         // '--logmetrics' is specified with a named test metric argument so the data gathering is done only on that test
@@ -3303,7 +3321,7 @@ bool LLAppViewer::initConfiguration()
     // </FS:TT>
 
     const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
-    if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
+    if (skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
     {
         // Examining "Language" may not suffice -- see LLUI::getLanguage()
         // logic. Unfortunately LLUI::getLanguage() doesn't yet do us much
@@ -3343,7 +3361,6 @@ bool LLAppViewer::initConfiguration()
         llassert_always(!gSavedSettings.getBOOL("SLURLPassToOtherInstance"));
     }
 
-
     // Handle slurl use. NOTE: Don't let SL-55321 reappear.
     // This initial-SLURL logic, up through the call to
     // sendURLToOtherInstance(), must precede LLSplashScreen::show() --
@@ -3369,14 +3386,14 @@ bool LLAppViewer::initConfiguration()
     std::string starting_location;
 
     std::string cmd_line_login_location(gSavedSettings.getString("CmdLineLoginLocation"));
-    if(! cmd_line_login_location.empty())
+    if (!cmd_line_login_location.empty())
     {
         starting_location = cmd_line_login_location;
     }
     else
     {
         std::string default_login_location(gSavedSettings.getString("DefaultLoginLocation"));
-        if (! default_login_location.empty())
+        if (!default_login_location.empty())
         {
             starting_location = default_login_location;
         }
@@ -3387,7 +3404,7 @@ bool LLAppViewer::initConfiguration()
     // (currently at the top of startup STATE_AUDIO_INIT,
     // but rather it belongs into the gridmanager)
     LLSLURL start_slurl;
-    if (! starting_location.empty())
+    if (!starting_location.empty())
     {
         start_slurl = starting_location;
         // <FS:Ansariel> FIRE-11586: Restore grid manager workaround (grid is still empty here!)
@@ -3403,12 +3420,12 @@ bool LLAppViewer::initConfiguration()
 
     // NextLoginLocation is set as a side effect of LLStartUp::setStartSLURL()
     std::string nextLoginLocation = gSavedSettings.getString( "NextLoginLocation" );
-    if ( !nextLoginLocation.empty() )
+    if (!nextLoginLocation.empty())
     {
         LL_DEBUGS("AppInit")<<"set start from NextLoginLocation: "<<nextLoginLocation<<LL_ENDL;
         LLStartUp::setStartSLURL(LLSLURL(nextLoginLocation));
     }
-    else if (   (   clp.hasOption("login") || clp.hasOption("autologin"))
+    else if ((clp.hasOption("login") || clp.hasOption("autologin"))
              && gSavedSettings.getString("CmdLineLoginLocation").empty())
     {
         // If automatic login from command line with --login switch
@@ -3481,7 +3498,7 @@ bool LLAppViewer::initConfiguration()
 #endif
     if (!gArgs.empty())
     {
-    gWindowTitle += std::string(" ") + gArgs;
+        gWindowTitle += std::string(" ") + gArgs;
     }
     LLStringUtil::truncate(gWindowTitle, 255);
 
@@ -3505,7 +3522,7 @@ bool LLAppViewer::initConfiguration()
     //  // This is the second instance of SL. Mute voice,
     //  // but make sure the setting is *not* persisted.
     //  LLControlVariable* enable_voice = gSavedSettings.getControl("EnableVoiceChat");
-    //  if(enable_voice)
+    //  if (enable_voice)
     //  {
     //      const bool DO_NOT_PERSIST = false;
     //      enable_voice->setValue(LLSD(false), DO_NOT_PERSIST);
@@ -3744,8 +3761,8 @@ bool LLAppViewer::initWindow()
     gSavedSettings.setBOOL("RenderInitError", false);
     gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), true );
 
-    //If we have a startup crash, it's usually near GL initialization, so simulate that.
-    if(gCrashOnStartup)
+    // If we have a startup crash, it's usually near GL initialization, so simulate that.
+    if (gCrashOnStartup)
     {
         LLAppViewer::instance()->forceErrorLLError();
     }
@@ -4754,11 +4771,11 @@ void LLAppViewer::requestQuit()
 
     LLViewerRegion* region = gAgent.getRegion();
 
-    if( (LLStartUp::getStartupState() < STATE_STARTED) || !region )
+    if ((LLStartUp::getStartupState() < STATE_STARTED) || !region)
     {
         // If we have a region, make some attempt to send a logout request first.
         // This prevents the halfway-logged-in avatar from hanging around inworld for a couple minutes.
-        if(region)
+        if (region)
         {
             sendLogoutRequest();
         }
@@ -5922,9 +5939,6 @@ void LLAppViewer::idleShutdown()
         return;
     }
 
-
-
-
     // ProductEngine: Try moving this code to where we shut down sTextureCache in cleanup()
     // *TODO: ugly
     static bool saved_teleport_history = false;
@@ -5973,7 +5987,7 @@ void LLAppViewer::idleShutdown()
     }
 
     // All floaters are closed.  Tell server we want to quit.
-    if( !logoutRequestSent() )
+    if (!logoutRequestSent())
     {
         sendLogoutRequest();
 
@@ -5985,8 +5999,8 @@ void LLAppViewer::idleShutdown()
     }
 
     // Make sure that we quit if we haven't received a reply from the server.
-    if( logoutRequestSent()
-        && gLogoutTimer.getElapsedTimeF32() > gLogoutMaxTime )
+    if (logoutRequestSent()
+        && gLogoutTimer.getElapsedTimeF32() > gLogoutMaxTime)
     {
         forceQuit();
         return;
