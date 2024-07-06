@@ -37,6 +37,7 @@
 #include "llmetricperformancetester.h"
 #include "httpcommon.h"
 #include "workqueue.h"
+#include "gltf/common.h"
 
 #include <map>
 #include <list>
@@ -108,7 +109,6 @@ public:
         DYNAMIC_TEXTURE,
         FETCHED_TEXTURE,
         LOD_TEXTURE,
-        ATLAS_TEXTURE,
         INVALID_TEXTURE_TYPE
     };
 
@@ -181,6 +181,15 @@ public:
     LLViewerMediaTexture* getParcelMedia() const { return mParcelMedia;}
 
     /*virtual*/ void updateBindStatsForTester() ;
+
+    struct MaterialEntry
+    {
+        S32 mIndex = LL::GLTF::INVALID_INDEX;
+        std::shared_ptr<LL::GLTF::Asset> mAsset;
+    };
+    typedef std::vector<MaterialEntry> material_list_t;
+    material_list_t   mMaterialList;  // reverse pointer pointing to LL::GLTF::Materials using this image as texture
+
 protected:
     void cleanup() ;
     void init(bool firstinit) ;
@@ -222,7 +231,6 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
-    static F32 sDesiredDiscardScale;
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;
@@ -445,6 +453,9 @@ public:
 
     /*virtual*/bool  isActiveFetching() override; //is actively in fetching by the fetching pipeline.
 
+    bool mCreatePending = false;    // if true, this is in gTextureList.mCreateTextureList
+    mutable bool mDownScalePending = false; // if true, this is in gTextureList.mDownScaleQueue
+
     // <FS:Techwolf Lupindo> texture comment decoder
     std::map<std::string,std::string> mComment;
     // </FS:Techwolf Lupindo>
@@ -459,11 +470,6 @@ private:
     void cleanup() ;
 
     void saveRawImage() ;
-
-    //for atlas
-    void resetFaceAtlas() ;
-    void invalidateAtlas(bool rebuild_geom) ;
-    bool insertToAtlas() ;
 
 private:
     bool  mFullyLoaded;
@@ -579,9 +585,10 @@ public:
     /*virtual*/ void processTextureStats();
     bool isUpdateFrozen() ;
 
+    bool scaleDown();
+
 private:
     void init(bool firstinit) ;
-    bool scaleDown() ;
 
 private:
     F32 mDiscardVirtualSize;        // Virtual size used to calculate desired discard

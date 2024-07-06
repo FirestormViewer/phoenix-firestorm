@@ -2593,8 +2593,8 @@ bool LLAppViewer::initThreads()
     // The viewer typically starts around 8 threads not including image decode,
     // so try to leave at least one core free
     // <FS:Ansariel> Override image decode thread config
-    //S32 image_decode_count = llclamp(cores - 9, 1, 8);
-    S32 image_decode_count = llclamp(cores - 4, 1, 8);
+    //S32 image_decode_count = llclamp(cores - 6, 2, 16);
+    S32 image_decode_count = llclamp(cores - 4, 2, 8);
     if (auto max_decodes = gSavedSettings.getU32("FSImageDecodeThreads"); max_decodes > 0)
     {
         image_decode_count = llclamp((S32)max_decodes, 1, 32);
@@ -5462,6 +5462,10 @@ void LLAppViewer::idle()
     F32 dt_raw = idle_timer.getElapsedTimeAndResetF32();
 
     LLGLTFMaterialList::flushUpdates();
+
+    static LLCachedControl<U32> downscale_method(gSavedSettings, "RenderDownScaleMethod");
+    gGLManager.mDownScaleMethod = downscale_method;
+    LLImageGL::updateClass();
 
     // Service the WorkQueue we use for replies from worker threads.
     // Use function statics for the timeslice setting so we only have to fetch

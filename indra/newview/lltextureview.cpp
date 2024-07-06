@@ -554,6 +554,9 @@ void LLGLTexMemBar::draw()
    F64 raw_image_bytes_MB = raw_image_bytes / (1024.0 * 1024.0);
    F64 saved_raw_image_bytes_MB = saved_raw_image_bytes / (1024.0 * 1024.0);
    F64 aux_raw_image_bytes_MB = aux_raw_image_bytes / (1024.0 * 1024.0);
+   F64 texture_bytes_alloc = LLImageGL::getTextureBytesAllocated() / 1024.0 / 1024.0 * 1.3333f; // add 33% for mipmaps
+   F64 vertex_bytes_alloc = LLVertexBuffer::getBytesAllocated() / 1024.0 / 1024.0;
+   F64 render_bytes_alloc = LLRenderTarget::sBytesAllocated / 1024.0 / 1024.0;
 
     //----------------------------------------------------------------------------
     LLGLSUIDefault gls_ui;
@@ -583,7 +586,7 @@ void LLGLTexMemBar::draw()
 
     // draw a background above first line.... no idea where the rest of the background comes from for the below text
     gGL.color4f(0.f, 0.f, 0.f, 0.25f);
-    gl_rect_2d(-10, getRect().getHeight() + line_height + 1, getRect().getWidth()+2, getRect().getHeight()+2);
+    gl_rect_2d(-10, getRect().getHeight() + line_height*2 + 1, getRect().getWidth()+2, getRect().getHeight()+2);
 
     text = llformat("Est. Free: %d MB Sys Free: %d MB GL Tex: %d MB FBO: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
                     (S32)LLViewerTexture::sFreeVRAMMegabytes,
@@ -594,8 +597,8 @@ void LLGLTexMemBar::draw()
                     cache_usage,
                     cache_max_usage);
     // <FS:Ansariel> Texture memory bars
-    //LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*6,
-    LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*8,
+    //LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*7,
+    LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*9,
     // </FS:Ansariel>
                                              text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
@@ -603,7 +606,7 @@ void LLGLTexMemBar::draw()
     S32 bar_left = 0;
     constexpr S32 bar_width = 200;
     constexpr S32 bar_space = 10;
-    S32 top = line_height*7 - 2 + v_offset;
+    S32 top = line_height*8 - 2 + v_offset;
     S32 bottom = top - 6;
     S32 left = bar_left;
     S32 right = left + bar_width;
@@ -613,7 +616,7 @@ void LLGLTexMemBar::draw()
 
     // VRAM Mem Bar
     text = "VRAM";
-    LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*7,
+    LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*8,
                                      text_color, LLFontGL::LEFT, LLFontGL::TOP);
     left += 35;
     right = left + bar_width;
@@ -636,7 +639,7 @@ void LLGLTexMemBar::draw()
     left = bar_left;
     // VRAM Mem Bar
     text = "CACHE";
-    LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*7,
+    LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*8,
                                      text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
     left += 35;
@@ -658,6 +661,14 @@ void LLGLTexMemBar::draw()
     text = llformat("Images: %d   Raw: %d (%.2f MB)  Saved: %d (%.2f MB) Aux: %d (%.2f MB)", image_count, raw_image_count, raw_image_bytes_MB,
         saved_raw_image_count, saved_raw_image_bytes_MB,
         aux_raw_image_count, aux_raw_image_bytes_MB);
+    LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height * 7,
+        text_color, LLFontGL::LEFT, LLFontGL::TOP);
+
+    text = llformat("Textures: %.2f MB  Vertex: %.2f MB  Render: %.2f MB  Total: %.2f MB",
+                    texture_bytes_alloc,
+                    vertex_bytes_alloc,
+                    render_bytes_alloc,
+        texture_bytes_alloc+vertex_bytes_alloc+render_bytes_alloc);
     LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height * 6,
         text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
