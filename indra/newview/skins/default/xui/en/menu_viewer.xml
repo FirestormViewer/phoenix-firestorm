@@ -993,6 +993,13 @@
          name="Animation Speed"
          tear_off="true">
          <menu_item_call
+            label="Freeze Animations"
+            name="Freeze Animations"
+            shortcut="control|alt|N">
+            <menu_item_call.on_click
+               function="Advanced.AnimFreeze" />
+         </menu_item_call>
+         <menu_item_call
             label="All Animations Slowed Down"
             name="All Animations Slowed Down"
             shortcut="control|N">

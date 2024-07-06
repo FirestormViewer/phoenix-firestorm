@@ -2080,6 +2080,18 @@ static void set_all_animation_time_factors(F32  time_factor)
     }
 }
 
+class LLAdvancedAnimFreeze : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        //LL_INFOS() << "LLAdvancedAnimSlowedDown" << LL_ENDL;
+        F32 time_factor = LLMotionController::getCurrentTimeFactor();
+        time_factor = 0.0f;  // 0% of normal speed, effectively freezing all animations
+        set_all_animation_time_factors(time_factor);
+        return true;
+    }
+};
+
 class LLAdvancedAnimSlowedDown : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12552,6 +12564,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedTestFemale(), "Advanced.TestFemale");
 
     // Advanced > Character > Animation Speed
+    view_listener_t::addMenu(new LLAdvancedAnimFreeze(), "Advanced.AnimFreeze");
     view_listener_t::addMenu(new LLAdvancedAnimSlowedDown(), "Advanced.AnimSlowedDown");
     view_listener_t::addMenu(new LLAdvancedAnimTenFaster(), "Advanced.AnimTenFaster");
     view_listener_t::addMenu(new LLAdvancedAnimTenSlower(), "Advanced.AnimTenSlower");
