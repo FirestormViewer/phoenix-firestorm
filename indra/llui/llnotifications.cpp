@@ -1014,7 +1014,6 @@ LLBoundListener LLNotificationChannelBase::connectChangedImpl(const LLEventListe
 
 LLBoundListener LLNotificationChannelBase::connectAtFrontChangedImpl(const LLEventListener& slot)
 {
-    LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against against unlocked access to mItems
     for (LLNotificationSet::iterator it = mItems.begin(); it != mItems.end(); ++it)
     {
         slot(LLSD().with("sigtype", "load").with("id", (*it)->id()));
@@ -1053,17 +1052,10 @@ bool LLNotificationChannelBase::updateItem(const LLSD& payload)
 bool LLNotificationChannelBase::updateItem(const LLSD& payload, LLNotificationPtr pNotification)
 {
     std::string cmd = payload["sigtype"];
-    // <FS:Beq> Guard against unlocked access to mItems
-    // LLNotificationSet::iterator foundItem = mItems.find(pNotification);
-    // bool wasFound = (foundItem != mItems.end());
-    bool wasFound = false;
-    {
-        LLMutexLock lock(&mItemsMutex);
-        LLNotificationSet::iterator foundItem = mItems.find(pNotification);
-        wasFound = (foundItem != mItems.end());
-    } 
-    // </FS:Beq>
+    LLNotificationSet::iterator foundItem = mItems.find(pNotification);
+    bool wasFound = (foundItem != mItems.end());
     bool passesFilter = mFilter ? mFilter(pNotification) : true;
+
     // first, we offer the result of the filter test to the simple
     // signals for pass/fail. One of these is guaranteed to be called.
     // If either signal returns true, the change processing is NOT performed
@@ -1092,7 +1084,6 @@ bool LLNotificationChannelBase::updateItem(const LLSD& payload, LLNotificationPt
         assert(!wasFound);
         if (passesFilter)
         {
-          LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against unlocked access to mItems
             // not in our list, add it and say so
             mItems.insert(pNotification);
             onLoad(pNotification);
@@ -1116,7 +1107,6 @@ bool LLNotificationChannelBase::updateItem(const LLSD& payload, LLNotificationPt
             }
             else
             {
-                LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against unlocked access to mItems
                 // not in our list, add it and say so
                 mItems.insert(pNotification);
                 onChange(pNotification);
@@ -1130,7 +1120,6 @@ bool LLNotificationChannelBase::updateItem(const LLSD& payload, LLNotificationPt
         {
             if (wasFound)
             {
-                LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against unlocked access to mItems
                 // it already existed, so this is a delete
                 mItems.erase(pNotification);
                 onChange(pNotification);
@@ -1149,7 +1138,6 @@ bool LLNotificationChannelBase::updateItem(const LLSD& payload, LLNotificationPt
         assert(!wasFound);
         if (passesFilter)
         {
-            LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against unlocked access to mItems
             // not in our list, add it and say so
             mItems.insert(pNotification);
             onAdd(pNotification);
@@ -1161,7 +1149,6 @@ bool LLNotificationChannelBase::updateItem(const LLSD& payload, LLNotificationPt
         // if we have it in our list, pass on the delete, then delete it, else do nothing
         if (wasFound)
         {
-            LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against unlocked access to mItems
             onDelete(pNotification);
             abortProcessing = mChanged(payload);
             mItems.erase(pNotification);
@@ -1727,7 +1714,6 @@ void LLNotifications::add(const LLNotificationPtr pNotif)
     if (pNotif == NULL) return;
 
     // first see if we already have it -- if so, that's a problem
-    LLMutexLock lock(&mItemsMutex); // <FS:Beq/> Guard against unlocked acceess to mItems
     LLNotificationSet::iterator it=mItems.find(pNotif);
     if (it != mItems.end())
     {
