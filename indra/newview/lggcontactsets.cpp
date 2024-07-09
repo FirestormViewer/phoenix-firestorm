@@ -320,6 +320,8 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ContactSet
                 color = LLUIColorTable::instance().getColor("MapAvatarSelfColor", LLColor4::white).get();
                 break;
             case ContactSetType::RADAR:
+                // Do nothing
+                break;
             default:
                 LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
                 break;
@@ -378,6 +380,8 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ContactSet
                 color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3).get();
                 break;
             case ContactSetType::RADAR:
+                // Do nothing
+                break;
             default:
                 LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
                 break;
@@ -398,6 +402,8 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ContactSet
                 color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red).get();
                 break;
             case ContactSetType::RADAR:
+                // Do nothing
+                break;
             default:
                 LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
                 break;
