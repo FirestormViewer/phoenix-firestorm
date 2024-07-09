@@ -230,7 +230,11 @@ LLPathfindingPathTool::EPathStatus LLPathfindingPathTool::getPathStatus() const
 
 F32 LLPathfindingPathTool::getCharacterWidth() const
 {
+#ifdef HAVOK_TPV
     return mFinalPathData.mCharacterWidth;
+#else
+    return (F32)mFinalPathData.mCharacterWidth;
+#endif
 }
 
 void LLPathfindingPathTool::setCharacterWidth(F32 pCharacterWidth)
