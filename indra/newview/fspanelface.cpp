@@ -888,23 +888,23 @@ U8      FSPanelFace::getCurrentDiffuseAlphaMode()    { return (U8)mComboAlphaMod
 U8      FSPanelFace::getCurrentAlphaMaskCutoff()     { return (U8)mCtrlMaskCutoff->getValue().asInteger(); }
 U8      FSPanelFace::getCurrentEnvIntensity()        { return (U8)mCtrlEnvironment->getValue().asInteger(); }
 U8      FSPanelFace::getCurrentGlossiness()          { return (U8)mCtrlGlossiness->getValue().asInteger(); }
-F32     FSPanelFace::getCurrentBumpyRot()            { return mCtrlBumpyRot->getValue().asReal(); }
-F32     FSPanelFace::getCurrentBumpyScaleU()         { return mCtrlBumpyScaleU->getValue().asReal(); }
-F32     FSPanelFace::getCurrentBumpyScaleV()         { return mCtrlBumpyScaleV->getValue().asReal(); }
-F32     FSPanelFace::getCurrentBumpyOffsetU()        { return mCtrlBumpyOffsetU->getValue().asReal(); }
-F32     FSPanelFace::getCurrentBumpyOffsetV()        { return mCtrlBumpyOffsetV->getValue().asReal(); }
-F32     FSPanelFace::getCurrentShinyRot()            { return mCtrlShinyRot->getValue().asReal(); }
-F32     FSPanelFace::getCurrentShinyScaleU()         { return mCtrlShinyScaleU->getValue().asReal(); }
-F32     FSPanelFace::getCurrentShinyScaleV()         { return mCtrlShinyScaleV->getValue().asReal(); }
-F32     FSPanelFace::getCurrentShinyOffsetU()        { return mCtrlShinyOffsetU->getValue().asReal(); }
-F32     FSPanelFace::getCurrentShinyOffsetV()        { return mCtrlShinyOffsetV->getValue().asReal(); }
+F32     FSPanelFace::getCurrentBumpyRot()            { return (F32)mCtrlBumpyRot->getValue().asReal(); }
+F32     FSPanelFace::getCurrentBumpyScaleU()         { return (F32)mCtrlBumpyScaleU->getValue().asReal(); }
+F32     FSPanelFace::getCurrentBumpyScaleV()         { return (F32)mCtrlBumpyScaleV->getValue().asReal(); }
+F32     FSPanelFace::getCurrentBumpyOffsetU()        { return (F32)mCtrlBumpyOffsetU->getValue().asReal(); }
+F32     FSPanelFace::getCurrentBumpyOffsetV()        { return (F32)mCtrlBumpyOffsetV->getValue().asReal(); }
+F32     FSPanelFace::getCurrentShinyRot()            { return (F32)mCtrlShinyRot->getValue().asReal(); }
+F32     FSPanelFace::getCurrentShinyScaleU()         { return (F32)mCtrlShinyScaleU->getValue().asReal(); }
+F32     FSPanelFace::getCurrentShinyScaleV()         { return (F32)mCtrlShinyScaleV->getValue().asReal(); }
+F32     FSPanelFace::getCurrentShinyOffsetU()        { return (F32)mCtrlShinyOffsetU->getValue().asReal(); }
+F32     FSPanelFace::getCurrentShinyOffsetV()        { return (F32)mCtrlShinyOffsetV->getValue().asReal(); }
 
 // <FS:CR> UI provided diffuse parameters
-F32     FSPanelFace::getCurrentTextureRot()          { return mCtrlTexRot->getValue().asReal(); }
-F32     FSPanelFace::getCurrentTextureScaleU()       { return mCtrlTexScaleU->getValue().asReal(); }
-F32     FSPanelFace::getCurrentTextureScaleV()       { return mCtrlTexScaleV->getValue().asReal(); }
-F32     FSPanelFace::getCurrentTextureOffsetU()      { return mCtrlTexOffsetU->getValue().asReal(); }
-F32     FSPanelFace::getCurrentTextureOffsetV()      { return mCtrlTexOffsetV->getValue().asReal(); }
+F32     FSPanelFace::getCurrentTextureRot()          { return (F32)mCtrlTexRot->getValue().asReal(); }
+F32     FSPanelFace::getCurrentTextureScaleU()       { return (F32)mCtrlTexScaleU->getValue().asReal(); }
+F32     FSPanelFace::getCurrentTextureScaleV()       { return (F32)mCtrlTexScaleV->getValue().asReal(); }
+F32     FSPanelFace::getCurrentTextureOffsetU()      { return (F32)mCtrlTexOffsetU->getValue().asReal(); }
+F32     FSPanelFace::getCurrentTextureOffsetV()      { return (F32)mCtrlTexOffsetV->getValue().asReal(); }
 // </FS:CR>
 
 LLRender::eTexIndex FSPanelFace::getTextureChannelToEdit()
@@ -2182,8 +2182,8 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
         calcp->setVar(LLCalc::TEX_U_OFFSET, getCurrentTextureOffsetU());
         calcp->setVar(LLCalc::TEX_V_OFFSET, getCurrentTextureOffsetV());
         calcp->setVar(LLCalc::TEX_ROTATION, getCurrentTextureRot());
-        calcp->setVar(LLCalc::TEX_TRANSPARENCY, mCtrlColorTransp->getValue().asReal());
-        calcp->setVar(LLCalc::TEX_GLOW, mCtrlGlow->getValue().asReal());
+        calcp->setVar(LLCalc::TEX_TRANSPARENCY, (F32)mCtrlColorTransp->getValue().asReal());
+        calcp->setVar(LLCalc::TEX_GLOW, (F32)mCtrlGlow->getValue().asReal());
 
         // Find all faces with same texture
         // TODO: these were not yet added to the new texture panel -Zi
@@ -3394,7 +3394,7 @@ void FSPanelFace::getGLTFMaterial(LLGLTFMaterial* mat)
 
     mat->mDoubleSided = mCheckDoubleSidedPBR->get();
     mat->setAlphaMode(mAlphaModePBR->getValue().asString());
-    mat->mAlphaCutoff = mMaskCutoffPBR->getValue().asReal();
+    mat->mAlphaCutoff = (F32)mMaskCutoffPBR->getValue().asReal();
 }
 
 bool FSPanelFace::onDragPbr(LLInventoryItem* item)
@@ -4015,7 +4015,7 @@ void FSPanelFace::onCommitTextureScaleX()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        F32 bumpy_scale_u = mCtrlTexScaleU->getValue().asReal();
+        F32 bumpy_scale_u = (F32)mCtrlTexScaleU->getValue().asReal();
         if (isIdenticalPlanarTexgen())
         {
             bumpy_scale_u *= 0.5f;
@@ -4033,7 +4033,7 @@ void FSPanelFace::onCommitTextureScaleY()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        F32 bumpy_scale_v = mCtrlTexScaleV->getValue().asReal();
+        F32 bumpy_scale_v = (F32)mCtrlTexScaleV->getValue().asReal();
         if (isIdenticalPlanarTexgen())
         {
             bumpy_scale_v *= 0.5f;
@@ -4051,7 +4051,7 @@ void FSPanelFace::onCommitTextureRot()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        syncMaterialRot(this, mCtrlTexRot->getValue().asReal());
+        syncMaterialRot(this, (F32)mCtrlTexRot->getValue().asReal());
     }
     else
     {
@@ -4065,7 +4065,7 @@ void FSPanelFace::onCommitTextureOffsetX()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        syncOffsetX(this, mCtrlTexOffsetU->getValue().asReal());
+        syncOffsetX(this, (F32)mCtrlTexOffsetU->getValue().asReal());
     }
     else
     {
@@ -4078,7 +4078,7 @@ void FSPanelFace::onCommitTextureOffsetY()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        syncOffsetY(this, mCtrlTexOffsetV->getValue().asReal());
+        syncOffsetY(this, (F32)mCtrlTexOffsetV->getValue().asReal());
     }
     else
     {
@@ -4103,7 +4103,7 @@ void FSPanelFace::onCommitRepeatsPerMeter()
         material_type = getCurrentMatChannel();
     }
 
-    F32 repeats_per_meter = mCtrlRpt->getValue().asReal();
+    F32 repeats_per_meter = (F32)mCtrlRpt->getValue().asReal();
 
     F32 obj_scale_s = 1.0f;
     F32 obj_scale_t = 1.0f;
@@ -5335,7 +5335,7 @@ void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_d
     const S32 pbr_channel = types[user_data.asString()];
 
     const std::string& spinner_name = ctrl->getName();
-    const float value = ctrl->getValue().asReal();
+    const float value = (float)ctrl->getValue().asReal();
 
     if (LLStringUtil::startsWith(spinner_name, "gltfTextureScaleU"))
     {
@@ -5706,13 +5706,13 @@ void FSPanelFace::alignMaterialsProperties()
     //<FS:TS> FIRE-12275: Material offset not working correctly
     //  Since the server cannot store negative offsets for materials
     //  textures, we normalize them to equivalent positive values here.
-    tex_offset_u = (tex_offset_u < 0.0) ? 1.0 + tex_offset_u : tex_offset_u;
-    tex_offset_v = (tex_offset_v < 0.0) ? 1.0 + tex_offset_v : tex_offset_v;
+    tex_offset_u = (tex_offset_u < 0.0f) ? 1.0f + tex_offset_u : tex_offset_u;
+    tex_offset_v = (tex_offset_v < 0.0f) ? 1.0f + tex_offset_v : tex_offset_v;
     //</FS:TS> FIRE-12275
 
     //<FS:TS> FIRE-12831: Negative rotations revert to zero
     //  The same goes for rotations as for offsets.
-    tex_rot = (tex_rot < 0.0) ? 360.0 + tex_rot : tex_rot;
+    tex_rot = (tex_rot < 0.0f) ? 360.0f + tex_rot : tex_rot;
     //</FS:TS> FIRE-12831
 
     mCtrlShinyScaleU->setValue(tex_scale_u);
@@ -5758,7 +5758,7 @@ void FSPanelFace::onCommitFlip(const LLSD& user_data)
     if (spinner)
     {
         // TODO: compensate for normal/specular map doubling of values in planar mapping mode -Zi
-        F32 value = -(spinner->getValue().asReal());
+        F32 value = -(F32)(spinner->getValue().asReal());
         spinner->setValue(value);
         spinner->forceEditorCommit();
     }

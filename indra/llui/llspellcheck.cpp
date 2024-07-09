@@ -467,7 +467,7 @@ void LLSpellChecker::removeDictionary(const std::string& dict_language)
             {
                 LLFile::remove(dict_aff);
             }
-            dict_map.erase(it - dict_map.beginArray());
+            dict_map.erase((LLSD::Integer)(it - dict_map.beginArray()));
             break;
         }
     }

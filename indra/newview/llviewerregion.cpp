@@ -833,7 +833,7 @@ void LLViewerRegion::setRegionID(const LLUUID& region_id)
 
 void LLViewerRegion::loadObjectCache()
 {
-	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if (mCacheLoaded)
     {
         return;
@@ -1369,7 +1369,7 @@ void LLViewerRegion::updateReflectionProbes(bool full_update)
 
     F32 start = probe_spacing * 0.5f;
 
-    U32 grid_width = REGION_WIDTH_METERS / probe_spacing;
+    U32 grid_width = (U32)(REGION_WIDTH_METERS / probe_spacing);
 
     mReflectionMaps.resize(grid_width * grid_width);
 
@@ -2321,7 +2321,7 @@ const LLViewerRegion::tex_matrix_t& LLViewerRegion::getWorldMapTiles() const
     {
         U32 gridX, gridY;
         grid_from_region_handle(mHandle, &gridX, &gridY);
-        U32 totalX(getWidth() / REGION_WIDTH_U32);
+        U32 totalX = (U32)(getWidth() / REGION_WIDTH_U32);
         if (!totalX) ++totalX; // If this region is too small, still get an image.
         /* TODO: Nonsquare regions?
         U32 totalY(getLength()/REGION_WIDTH_U32);
@@ -2712,7 +2712,7 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
         mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_LEFT_ARM;
         mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_HEAD_UNIVERSAL_TATTOO;
     }
-    mMinSimHeight = mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("MinSimHeight") ? mSimulatorFeatures["OpenSimExtras"]["MinSimHeight"].asReal() : 0.0f;
+    mMinSimHeight = mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("MinSimHeight") ? (F32)mSimulatorFeatures["OpenSimExtras"]["MinSimHeight"].asReal() : 0.0f;
 // </FS>
 }
 
@@ -3221,7 +3221,7 @@ void LLViewerRegion::clearVOCacheFromMemory()
 
 void LLViewerRegion::unpackRegionHandshake()
 {
-	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLMessageSystem *msg = gMessageSystem;
 
     U64 region_flags = 0;
@@ -4004,7 +4004,7 @@ void LLViewerRegion::resetMaterialsCapThrottle()
     if (   mSimulatorFeatures.has("RenderMaterialsCapability")
         && mSimulatorFeatures["RenderMaterialsCapability"].isReal() )
     {
-        requests_per_sec = mSimulatorFeatures["RenderMaterialsCapability"].asReal();
+        requests_per_sec = (F32)mSimulatorFeatures["RenderMaterialsCapability"].asReal();
         if ( requests_per_sec == 0.0f )
         {
             requests_per_sec = 1.0f;

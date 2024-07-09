@@ -1469,7 +1469,7 @@ bool LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
                 // Display the PE weight for an object if mesh is enabled
                 if (gMeshRepo.meshRezEnabled())
                 {
-                    S32 link_cost = LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
+                    S32 link_cost = (S32)LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
                     if (link_cost > 0)
                     {
                         args.clear();

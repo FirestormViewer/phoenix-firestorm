@@ -161,9 +161,9 @@ void LLAgentListener::requestTeleport(LLSD const & event_data) const
     else
     {
         std::string url = LLSLURL(event_data["regionname"],
-                                  LLVector3(event_data["x"].asReal(),
-                                            event_data["y"].asReal(),
-                                            event_data["z"].asReal())).getSLURLString();
+                                  LLVector3((F32)event_data["x"].asReal(),
+                                            (F32)event_data["y"].asReal(),
+                                            (F32)event_data["z"].asReal())).getSLURLString();
         LLURLDispatcher::dispatch(url, LLCommandHandler::NAV_TYPE_CLICKED, NULL, false);
     }
 }
@@ -377,7 +377,7 @@ void LLAgentListener::startAutoPilot(LLSD const & event_data)
     F32 rotation_threshold = 0.03f;
     if (event_data.has("rotation_threshold"))
     {
-        rotation_threshold = event_data["rotation_threshold"].asReal();
+        rotation_threshold = (F32)event_data["rotation_threshold"].asReal();
     }
 
     bool allow_flying = true;
@@ -390,7 +390,7 @@ void LLAgentListener::startAutoPilot(LLSD const & event_data)
     F32 stop_distance = 0.f;
     if (event_data.has("stop_distance"))
     {
-        stop_distance = event_data["stop_distance"].asReal();
+        stop_distance = (F32)event_data["stop_distance"].asReal();
     }
 
     // Clear follow target, this is doing a path
@@ -479,7 +479,7 @@ void LLAgentListener::startFollowPilot(LLSD const & event_data)
     F32 stop_distance = 0.f;
     if (event_data.has("stop_distance"))
     {
-        stop_distance = event_data["stop_distance"].asReal();
+        stop_distance = (F32)event_data["stop_distance"].asReal();
     }
 
     if (target_id.notNull())

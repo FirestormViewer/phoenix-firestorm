@@ -201,7 +201,7 @@ LLButton::LLButton(const LLButton::Params& p)
         // Likewise, missing "p.button_flash_rate" is replaced by gSavedSettings.getF32("FlashPeriod").
         // Note: flashing should be allowed in settings.xml (boolean key "EnableButtonFlashing").
         S32 flash_count = p.button_flash_count.isProvided()? p.button_flash_count : 0;
-        F32 flash_rate = p.button_flash_rate.isProvided()? p.button_flash_rate : 0.0;
+        F32 flash_rate = p.button_flash_rate.isProvided()? p.button_flash_rate : 0.0f;
         mFlashingTimer = new LLFlashTimer ((LLFlashTimer::callback_t)NULL, flash_count, flash_rate);
     }
     else
@@ -874,8 +874,8 @@ void LLButton::draw()
     {
         mCurGlowStrength = lerp(mCurGlowStrength,
                     // <FS:Ansariel> Crash fix; Calling setFlashing can cause mFlashing being true while is mFlashingTimer is NULL
-                    //mFlashing ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight? 1.0 : 0.0) : mHoverGlowStrength,
-                    (mFlashing && mFlashingTimer) ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight? 1.0 : 0.0) : mHoverGlowStrength,
+                    //mFlashing ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight? 1.0f : 0.0f) : mHoverGlowStrength,
+                    (mFlashing && mFlashingTimer) ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight ? 1.0f : 0.0f) : mHoverGlowStrength,
                     LLSmoothInterpolation::getInterpolant(0.05f));
     }
     else

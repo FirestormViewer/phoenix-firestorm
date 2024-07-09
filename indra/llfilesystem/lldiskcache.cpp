@@ -275,7 +275,7 @@ void LLDiskCache::purge()
 
         // Log afterward so it doesn't affect the time measurement
         // Logging thousands of file results can take hundreds of milliseconds
-        auto deleted_so_far = 0; // <FS:Beq/> update the debug logging to be more useful
+        uintmax_t deleted_so_far{ 0 }; // <FS:Beq/> update the debug logging to be more useful
         for (size_t i = 0; i < file_info.size(); ++i)
         {
             const file_info_t& entry = file_info[i];
@@ -289,7 +289,8 @@ void LLDiskCache::purge()
             auto& filename{ entry.second.second };
             if (file_removed.find(filename) != file_removed.end()) {
             // File found in the map, retrieve the corresponding enum value
-            switch (file_removed[filename]) {
+            switch (file_removed[filename])
+            {
                 case purge_action::delete_file:
                     action = "DELETE";
                     del++;
@@ -485,8 +486,8 @@ const std::string LLDiskCache::getCacheInfo()
 {
     std::ostringstream cache_info;
 
-    F32 max_in_mb = (F32)mMaxSizeBytes / (1024.0 * 1024.0);
-    F32 percent_used = ((F32)dirFileSize(mCacheDir) / (F32)mMaxSizeBytes) * 100.0;
+    F32 max_in_mb = (F32)mMaxSizeBytes / (1024.0f * 1024.0f);
+    F32 percent_used = ((F32)dirFileSize(mCacheDir) / (F32)mMaxSizeBytes) * 100.0f;
 
     cache_info << std::fixed;
     cache_info << std::setprecision(1);

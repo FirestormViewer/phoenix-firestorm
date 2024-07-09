@@ -77,7 +77,7 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 , mIsRlvShowNearbyRestricted(false)
 {
     static LLUICachedControl<S32> voice_left_remove_delay ("VoiceParticipantLeftRemoveDelay", 10);
-    mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), voice_left_remove_delay);
+    mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), (F32)voice_left_remove_delay);
 
     LLVoiceClient::instance().addObserver(this);
     LLTransientFloaterMgr::getInstance()->addControlView(this);

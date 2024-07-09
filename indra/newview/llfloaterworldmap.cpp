@@ -715,8 +715,8 @@ void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const
     std::string sim_name = sim_info->getName();
     U32 locX, locY;
     from_region_handle(sim_info->getHandle(), &locX, &locY);
-    F32 region_x = pos_global.mdV[VX] - locX;
-    F32 region_y = pos_global.mdV[VY] - locY;
+    F32 region_x = (F32)(pos_global.mdV[VX] - locX);
+    F32 region_y = (F32)(pos_global.mdV[VY] - locY);
     std::string full_name = llformat("%s (%d, %d, %d)",
                                      sim_name.c_str(),
                                      ll_round(region_x),
@@ -898,8 +898,8 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
     //F32 region_y = (F32)fmod( pos_global.mdV[VY], (F64)REGION_WIDTH_METERS );
     U32 locX, locY;
     from_region_handle(sim_info->getHandle(), &locX, &locY);
-    F32 region_x = pos_global.mdV[VX] - locX;
-    F32 region_y = pos_global.mdV[VY] - locY;
+    F32 region_x = (F32)(pos_global.mdV[VX] - locX);
+    F32 region_y = (F32)(pos_global.mdV[VY] - locY);
 // </FS:CR>
     std::string full_name = llformat("%s (%d, %d, %d)",
                                      sim_name.c_str(),
@@ -975,8 +975,8 @@ void LLFloaterWorldMap::updateTeleportCoordsDisplay( const LLVector3d& pos )
 
         U32 locX, locY;
         from_region_handle(sim_info->getHandle(), &locX, &locY);
-        F32 region_local_x = pos.mdV[VX] - locX;
-        F32 region_local_y = pos.mdV[VY] - locY;
+        F32 region_local_x = (F32)(pos.mdV[VX] - locX);
+        F32 region_local_y = (F32)(pos.mdV[VY] - locY);
         //F32 region_local_z = (F32)fmod( pos.mdV[VZ], (F64)REGION_WIDTH_METERS );
         F32 region_local_z = (F32)pos.mdV[VZ];
 

@@ -311,8 +311,8 @@ bool    LLFloaterIMNearbyChatScreenChannel::createPoolToast()
 
     LLToast::Params p;
     p.panel = panel;
-    p.lifetime_secs = gSavedSettings.getS32("NearbyToastLifeTime");
-    p.fading_time_secs = gSavedSettings.getS32("NearbyToastFadingTime");
+    p.lifetime_secs = (F32)gSavedSettings.getS32("NearbyToastLifeTime");
+    p.fading_time_secs = (F32)gSavedSettings.getS32("NearbyToastFadingTime");
 
     LLToast* toast = new LLFloaterIMNearbyChatToast(p, this);
 
@@ -787,9 +787,19 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         }
         // </FS:Ansariel> [FS communication UI]
 
-        //Will show toast when chat preference is set
         // <FS:Ansariel> [FS communication UI] [CHUI Merge] Maybe need this later...
-        //if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+        //std::string user_preferences;
+        //if (chat_msg.mSourceType == CHAT_SOURCE_OBJECT)
+        //{
+        //    user_preferences = gSavedSettings.getString("NotificationObjectIMOptions");
+        //}
+        //else
+        //{
+        //    user_preferences = gSavedSettings.getString("NotificationNearbyChatOptions");
+        //}
+
+        ////Will show toast when chat preference is set
+        //if((user_preferences == "toast") || !nearby_chat->isMessagePaneExpanded())
         if (gSavedSettings.getS32("NearbyToastLifeTime") > 0 || gSavedSettings.getS32("NearbyToastFadingTime")) // Ansa: only create toast if it should be visible at all
         // </FS:Ansariel> [FS communication UI]
         {

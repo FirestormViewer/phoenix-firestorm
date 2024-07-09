@@ -1038,7 +1038,7 @@ void LLLocalSpeakerMgr::updateSpeakerList()
     std::vector<LLVector3d> positions;
 // <FS:CR> Opensim
     //LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), CHAT_NORMAL_RADIUS);
-    LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), LFSimFeatureHandler::getInstance()->sayRange());
+    LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), (F32)LFSimFeatureHandler::getInstance()->sayRange());
 // </FS:CR> Opensim
     for(U32 i=0; i<avatar_ids.size(); i++)
     {
@@ -1054,7 +1054,7 @@ void LLLocalSpeakerMgr::updateSpeakerList()
         {
             LLVOAvatar* avatarp = (LLVOAvatar*)gObjectList.findObject(speaker_id);
 // <FS:CR> Opensim
-            F32 say_distance_squared = (LFSimFeatureHandler::getInstance()->sayRange() * LFSimFeatureHandler::getInstance()->sayRange());
+            F32 say_distance_squared = (F32)(LFSimFeatureHandler::getInstance()->sayRange() * LFSimFeatureHandler::getInstance()->sayRange());
             if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > say_distance_squared)
             //if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > CHAT_NORMAL_RADIUS * CHAT_NORMAL_RADIUS)
 // </FS:CR> Opensim

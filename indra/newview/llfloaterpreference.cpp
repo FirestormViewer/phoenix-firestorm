@@ -1724,7 +1724,7 @@ void LLFloaterPreference::onNameTagOpacityChange(const LLSD& newvalue)
     if (color_swatch)
     {
         LLColor4 new_color = color_swatch->get();
-        color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
+        color_swatch->set(new_color.setAlpha((F32)newvalue.asReal()));
     }
 }
 
@@ -1735,7 +1735,7 @@ void LLFloaterPreference::onConsoleOpacityChange(const LLSD& newvalue)
     if (color_swatch)
     {
         LLColor4 new_color = color_swatch->get();
-        color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
+        color_swatch->set(new_color.setAlpha((F32)newvalue.asReal()));
     }
 }
 // </FS:CR>
@@ -3599,7 +3599,7 @@ void LLPanelPreference::updateMapPickRadiusTransparency(const LLSD& value)
 
     LLUIColorTable& color_table = LLUIColorTable::instance();
     LLColor4 color = color_table.getColor("MapPickRadiusColor").get();
-    color.mV[VW] = value.asReal();
+    color.mV[VW] = (F32)value.asReal();
     color_table.setColor("MapPickRadiusColor", color);
     color_swatch->set(color);
 }

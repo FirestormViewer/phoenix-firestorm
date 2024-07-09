@@ -141,7 +141,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
                 if (avatar_data->hide_age)
                     mAge = -2;
                 else
-                    mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+                    mAge = (S32)((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
                 checkAge();
                 setNotes(avatar_data->notes);
             }
@@ -155,7 +155,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
                 if (avatar_data->hide_age)
                     mAge = -2;
                 else
-                    mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+                    mAge = (S32)((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
                 checkAge();
             }
         }

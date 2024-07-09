@@ -153,7 +153,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
 // <FS:CR> Opensim
             //F32 dist_near_chat = gAgent.getNearChatRadius();
             //if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > say_distance_squared)
-            F32 dist_near_chat = LFSimFeatureHandler::getInstance()->sayRange();
+            F32 dist_near_chat = (F32)LFSimFeatureHandler::getInstance()->sayRange();
 // </FS:CR> Opensim
             if (distance_squared > dist_near_chat * dist_near_chat)
             {
@@ -234,7 +234,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, std::string& r_color_name, F
             F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
 // <FS:CR> Opensim
             //F32 dist_near_chat = gAgent.getNearChatRadius();
-            F32 dist_near_chat = LFSimFeatureHandler::getInstance()->sayRange();
+            F32 dist_near_chat = (F32)LFSimFeatureHandler::getInstance()->sayRange();
 // </FS:CR> Opensim
             if (distance_squared > dist_near_chat * dist_near_chat)
             {

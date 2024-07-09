@@ -755,7 +755,7 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
     }
     file.close();
 
-    const std::time_t new_time = last_modified.secondsSinceEpoch();
+    const std::time_t new_time = (std::time_t)last_modified.secondsSinceEpoch();
 
 #ifdef LL_WINDOWS
     boost::filesystem::last_write_time(boost::filesystem::path(utf8str_to_utf16str(filename)), new_time);

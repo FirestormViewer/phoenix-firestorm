@@ -3636,9 +3636,9 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
     if (!firstname || !lastname) return;
 
     // <FS:Ansariel> OpenSim chat distance compatibility
-    static const F32 chat_range_whisper_squared = LFSimFeatureHandler::getInstance()->whisperRange() * LFSimFeatureHandler::getInstance()->whisperRange();
-    static const F32 chat_range_say_squared = LFSimFeatureHandler::getInstance()->sayRange() * LFSimFeatureHandler::getInstance()->sayRange();
-    static const F32 chat_range_shout_squared = LFSimFeatureHandler::getInstance()->shoutRange() * LFSimFeatureHandler::getInstance()->shoutRange();
+    static const F32 chat_range_whisper_squared = (F32)(LFSimFeatureHandler::getInstance()->whisperRange() * LFSimFeatureHandler::getInstance()->whisperRange());
+    static const F32 chat_range_say_squared = (F32)(LFSimFeatureHandler::getInstance()->sayRange() * LFSimFeatureHandler::getInstance()->sayRange());
+    static const F32 chat_range_shout_squared = (F32)(LFSimFeatureHandler::getInstance()->shoutRange() * LFSimFeatureHandler::getInstance()->shoutRange());
     // </FS:Ansariel>
 
 // [RLVa:KB] - Checked: RLVa-2.0.1
@@ -3996,7 +3996,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
             static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
             if (max_attachment_area > 0.f && mAttachmentSurfaceArea > max_attachment_area)
             {
-                LLResMgr::getInstance()->getIntegerString(complexity_string, mAttachmentSurfaceArea);
+                LLResMgr::getInstance()->getIntegerString(complexity_string, (S32)mAttachmentSurfaceArea);
                 label_args["TEXTURE_AREA"] = complexity_string;
 
                 addNameTagLine(format_string(texture_area_label, label_args), LLColor4::red, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
@@ -4972,7 +4972,7 @@ void LLVOAvatar::updateOrientation(LLAgent& agent, F32 speed, F32 delta_time)
             // const F32 AVATAR_PELVIS_ROTATE_THRESHOLD_SLOW = 60.0f;
             // const F32 AVATAR_PELVIS_ROTATE_THRESHOLD_FAST = 2.0f;
             static LLCachedControl<F32> AVATAR_PELVIS_ROTATE_THRESHOLD_SLOW(gSavedSettings, "AvatarRotateThresholdSlow", 60.0);
-			static LLCachedControl<F32> AVATAR_PELVIS_ROTATE_THRESHOLD_FAST(gSavedSettings, "AvatarRotateThresholdFast", 2.0);
+            static LLCachedControl<F32> AVATAR_PELVIS_ROTATE_THRESHOLD_FAST(gSavedSettings, "AvatarRotateThresholdFast", 2.0);
             // </FS:Beq>
 
             F32 pelvis_rot_threshold = clamp_rescale(speed, 0.1f, 1.0f, AVATAR_PELVIS_ROTATE_THRESHOLD_SLOW, AVATAR_PELVIS_ROTATE_THRESHOLD_FAST);
@@ -5196,7 +5196,7 @@ void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool w
             root_pos += LLVector3d(getHoverOffset());
             if (getOverallAppearance() == AOA_JELLYDOLL)
             {
-                F32 offz = -0.5 * (getScale()[VZ] - mBodySize.mV[VZ]);
+                F32 offz = -0.5f * (getScale()[VZ] - mBodySize.mV[VZ]);
                 root_pos[2] += offz;
                 // if (!isSelf() && !isControlAvatar())
                 // {
@@ -5443,8 +5443,8 @@ bool LLVOAvatar::updateCharacter(LLAgent &agent)
     if (!getParent() && (isSitting() || was_sit_ground_constrained))
     {
 
-        F32 off_z = LLVector3d(getHoverOffset()).mdV[VZ];
-        if (off_z != 0.0)
+        F32 off_z = (F32)LLVector3d(getHoverOffset()).mdV[VZ];
+        if (off_z != 0.0f)
         {
             LLVector3 pos = mRoot->getWorldPosition();
             pos.mV[VZ] += off_z;
@@ -9467,7 +9467,7 @@ void LLVOAvatar::updateTooSlow()
         auto it = std::find(sAVsIgnoringARTLimit.begin(), sAVsIgnoringARTLimit.end(), mID);
         if (it != sAVsIgnoringARTLimit.end())
         {
-            S32 index = it - sAVsIgnoringARTLimit.begin();
+            S32 index = (S32)(it - sAVsIgnoringARTLimit.begin());
             ignore_tune = (index < (MIN_NONTUNED_AVS - sAvatarsNearby + 1 + LLPerfStats::tunedAvatars));
         }
     }
@@ -10493,7 +10493,7 @@ void LLVOAvatar::parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMe
         std::vector<LLVisualParam*>::iterator it = std::find(contents.mParams.begin(), contents.mParams.end(),appearance_version_param);
         if (it != contents.mParams.end())
         {
-            S32 index = it - contents.mParams.begin();
+            S32 index = (S32)(it - contents.mParams.begin());
             contents.mParamAppearanceVersion = ll_round(contents.mParamWeights[index]);
             //LL_DEBUGS("Avatar") << "appversion req by appearance_version param: " << contents.mParamAppearanceVersion << LL_ENDL;
         }
@@ -12210,7 +12210,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
                     LLObjectComplexity object_complexity;
                     object_complexity.objectName = attached_object->getAttachmentItemName();
                     object_complexity.objectId = attached_object->getAttachmentItemID();
-                    object_complexity.objectCost = attachment_total_cost;
+                    object_complexity.objectCost = (U32)attachment_total_cost;
                     object_complexity_list.push_back(object_complexity);
                 }
 

@@ -2104,7 +2104,7 @@ namespace Rlv
             return 0;
         else if (pRootObj == pObj)
             return 1;
-        return 2 + std::distance(pRootObj->getChildren().begin(), std::find(pRootObj->getChildren().begin(), pRootObj->getChildren().end(), pObj));
+        return 2 + (int)std::distance(pRootObj->getChildren().begin(), std::find(pRootObj->getChildren().begin(), pRootObj->getChildren().end(), pObj));
     }
 
     const LLUUID& getObjectRootId(const LLUUID& idObj)

@@ -37,7 +37,8 @@
 #include "llmainthreadtask.h"
 
 #ifdef LL_WINDOWS
-#pragma warning( disable : 4506 )   // no definition for inline function
+#pragma warning(push)
+#pragma warning(disable : 4506)   // no definition for inline function
 #endif
 
 class LLSingletonBase: private boost::noncopyable
@@ -901,5 +902,9 @@ private:
 
 template <class T>
 T* LLSimpleton<T>::sInstance{ nullptr };
+
+#ifdef LL_WINDOWS
+#pragma warning(pop)
+#endif
 
 #endif

@@ -2193,7 +2193,7 @@ void LLLineEditor::draw()
         if (0 == mText.length() && (mReadOnly || mShowLabelFocused))
         {
             mGLFont->render(mLabel.getWString(), 0,
-                            mTextLeftEdge, (F32)text_bottom,
+                            (F32)mTextLeftEdge, (F32)text_bottom,
                             label_color,
                             LLFontGL::LEFT,
                             LLFontGL::BOTTOM,
@@ -2218,7 +2218,7 @@ void LLLineEditor::draw()
         if (0 == mText.length())
         {
             mGLFont->render(mLabel.getWString(), 0,
-                            mTextLeftEdge, (F32)text_bottom,
+                            (F32)mTextLeftEdge, (F32)text_bottom,
                             label_color,
                             LLFontGL::LEFT,
                             LLFontGL::BOTTOM,

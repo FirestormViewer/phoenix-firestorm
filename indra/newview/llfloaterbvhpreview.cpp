@@ -283,7 +283,7 @@ bool LLFloaterBvhPreview::postBuild()
     S32 max_value = gSavedSettings.getS32("FSMaxAnimationPriority");
     if (max_value > 6) max_value = 6;
     if (max_value < 0) max_value = 0;
-    spinner->setMaxValue(max_value);
+    spinner->setMaxValue((F32)max_value);
 // </FS:CR>
 
 // <FS> Reload animation from disk
@@ -1544,7 +1544,7 @@ bool    LLPreviewAnimation::render()
     gGL.matrixMode(LLRender::MM_PROJECTION);
     gGL.pushMatrix();
     gGL.loadIdentity();
-    gGL.ortho(0.0f, mFullWidth, 0.0f, mFullHeight, -1.0f, 1.0f);
+    gGL.ortho(0.0f, (F32)mFullWidth, 0.0f, (F32)mFullHeight, -1.0f, 1.0f);
 
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     gGL.pushMatrix();

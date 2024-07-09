@@ -1584,7 +1584,7 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
         return;
 
     // Get data needed for filter display
-    U32 filter_types = mFilter->getFilterObjectTypes();
+    U32 filter_types = (U32)mFilter->getFilterObjectTypes();
     LLInventoryFilter::EFolderShow show_folders = mFilter->getShowFolderState();
     U32 hours = mFilter->getHoursAgo();
     U32 date_search_direction = mFilter->getDateSearchDirection();
@@ -2811,17 +2811,17 @@ void LLPanelMainInventory::onFilterPermissionsChecked(const LLSD &userdata)
     const std::string command_name = userdata.asString();
     if (command_name == "only_modify")
     {
-        getActivePanel()->setFilterPermissions(permissions ^ PERM_MODIFY);
+        getActivePanel()->setFilterPermissions((PermissionMask)(permissions ^ PERM_MODIFY));
     }
 
     if (command_name == "only_copy")
     {
-        getActivePanel()->setFilterPermissions(permissions ^ PERM_COPY);
+        getActivePanel()->setFilterPermissions((PermissionMask)(permissions ^ PERM_COPY));
     }
 
     if (command_name == "only_transfer")
     {
-        getActivePanel()->setFilterPermissions(permissions ^ PERM_TRANSFER);
+        getActivePanel()->setFilterPermissions((PermissionMask)(permissions ^ PERM_TRANSFER));
     }
 
     if (getFinder())

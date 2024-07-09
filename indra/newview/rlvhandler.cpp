@@ -3582,7 +3582,7 @@ ERlvCmdRet RlvHandler::onFindFolder(const RlvCommand& rlvCmd, std::string& strRe
             {
                 strFolderName = RlvInventory::instance().getSharedPath(folders.at(idxFolder));
 
-                curSlashes = std::count(strFolderName.begin(), strFolderName.end(), '/');
+                curSlashes = (int)std::count(strFolderName.begin(), strFolderName.end(), '/');
                 if (curSlashes > maxSlashes)
                 {
                     maxSlashes = curSlashes;

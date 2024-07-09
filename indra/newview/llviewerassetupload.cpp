@@ -232,7 +232,7 @@ LLUUID LLResourceUploadInfo::finishUpload(LLSD &result)
             LL_INFOS() << "inventory_item_flags " << flagsInventoryItem << LL_ENDL;
         }
     }
-    S32 creationDate = time_corrected();
+    S32 creationDate = (S32)time_corrected();
 
     LLUUID serverInventoryItem = result["new_inventory_item"].asUUID();
     LLUUID serverAssetId = result["new_asset"].asUUID();

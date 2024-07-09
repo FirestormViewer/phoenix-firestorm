@@ -2400,7 +2400,7 @@ void LLTabContainer::commitHoveredButton(S32 x, S32 y)
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.5)
                     if ((mAllowRearrange) && (mCurrentTabIdx >= 0) && (mTabList[mCurrentTabIdx]->mButton->hasFocus()))
                     {
-                        S32 idxHover = iter - mTabList.begin();
+                        S32 idxHover = (S32)(iter - mTabList.begin());
                         if ((mCurrentTabIdx >= mLockedTabCount) && (idxHover >= mLockedTabCount) && (mCurrentTabIdx != idxHover))
                         {
                             LLRect rctCurTab = mTabList[mCurrentTabIdx]->mButton->getRect();
@@ -2467,7 +2467,7 @@ void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )
         LLTabTuple const *pTT = *itr;
         if( pTT->mVisible )
         {
-            this->selectTab( itr - mTabList.begin() );
+            this->selectTab((S32)(itr - mTabList.begin()));
             foundTab = true;
             break;
         }

@@ -585,7 +585,7 @@ bool LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
             static LLCachedControl<F32> s_Radius(gSavedSettings, "FSLookAtTargetMaxDistance");
 
             LLVector3d headPosition = gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition());
-            float distance = dist_vec(mTargetOffsetGlobal, headPosition);
+            float distance = (float)dist_vec(mTargetOffsetGlobal, headPosition);
 
             if (distance > s_Radius)
             {

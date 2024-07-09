@@ -390,7 +390,7 @@ void FSFloaterPerformance::draw()
                 // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
                 if (target_frame_time_ns <= tot_frame_time_ns)
                 {
-                    U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
+                    U32 non_avatar_time_ns = (U32)(tot_frame_time_ns - tot_avatar_time_ns);
                     // If the target frame time < non avatar frame time then we can pototentially reach it.
                     if (non_avatar_time_ns < (U32)target_frame_time_ns)
                     {
@@ -1126,15 +1126,15 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         if (camera_aspect < 1.0f || invert)
         {
             angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect());
-            distance = width * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+            distance = width * 0.5f * 1.1f / tanf(angle_of_view * 0.5f);
         }
         else
         {
             angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView());
-            distance = height * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+            distance = height * 0.5f * 1.1f / tanf(angle_of_view * 0.5f);
         }
 
-        distance += depth * 0.5;
+        distance += depth * 0.5f;
 
         // Verify that the bounding box isn't inside the near clip.  Using OBB-plane intersection to check if the
         // near-clip plane intersects with the bounding box, and if it does, adjust the distance such that the
@@ -1144,7 +1144,7 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         LLVector3d axis_y = LLVector3d(0, 1, 0) * bbox.getRotation();
         LLVector3d axis_z = LLVector3d(0, 0, 1) * bbox.getRotation();
         //Normal of nearclip plane is camera_dir.
-        F32 min_near_clip_dist = bbox_extents.mdV[VX] * (camera_dir * axis_x) + bbox_extents.mdV[VY] * (camera_dir * axis_y) + bbox_extents.mdV[VZ] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
+        F32 min_near_clip_dist = (F32)(bbox_extents.mdV[VX] * (camera_dir * axis_x) + bbox_extents.mdV[VY] * (camera_dir * axis_y) + bbox_extents.mdV[VZ] * (camera_dir * axis_z)); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
         F32 camera_to_near_clip_dist(LLViewerCamera::getInstance()->getNear());
         F32 min_camera_dist(min_near_clip_dist + camera_to_near_clip_dist);
         if (distance < min_camera_dist)

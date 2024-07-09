@@ -121,7 +121,7 @@ bool PieMenu::handleHover(S32 x, S32 y, MASK mask)
     mCurrentSegment = -1;
 
     // move mouse coordinates to be relative to the pie center
-    LLVector2 mouseVector(x - PIE_OUTER_SIZE, y - PIE_OUTER_SIZE);
+    LLVector2 mouseVector((F32)(x - PIE_OUTER_SIZE), (F32)(y - PIE_OUTER_SIZE));
 
     // get the distance from the center point
     F32 distance = mouseVector.length();

@@ -209,7 +209,7 @@ void LLFloaterTopObjects::handleReply(LLMessageSystem *msg, void** data)
             {
                 parcel_buf = parcel_name;
                 script_memory = script_size;
-                total_memory += script_size;
+                total_memory += (U64)script_size;
             }
         }
 
@@ -247,7 +247,7 @@ void LLFloaterTopObjects::handleReply(LLMessageSystem *msg, void** data)
 
         columns[column_num]["column"] = "time";
         columns[column_num]["type"] = "date";
-        columns[column_num]["value"] = LLDate((time_t)time_stamp);
+        columns[column_num]["value"] = LLDate((double)time_stamp);
         columns[column_num++]["font"] = "SANSSERIF";
 
         if (mCurrentMode == STAT_REPORT_TOP_SCRIPTS

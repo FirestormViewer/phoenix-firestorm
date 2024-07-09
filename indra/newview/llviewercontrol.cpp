@@ -151,7 +151,7 @@ public:
 
     void update(const LLSD& new_value)
     {
-        mNewValue = new_value.asReal();
+        mNewValue = (F32)new_value.asReal();
         mEventTimer.start();
     }
 
@@ -1059,13 +1059,13 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 // <FS:Beq> Better asset cache purge control
 void handleDiskCacheHighWaterPctChanged(const LLSD& newValue)
 {
-    const auto new_high = newValue.asReal();
+    const auto new_high = (F32)newValue.asReal();
     LLDiskCache::getInstance()->setHighWaterPercentage(new_high);
 }
 
 void handleDiskCacheLowWaterPctChanged(const LLSD& newValue)
 {
-    const auto new_low = newValue.asReal();
+    const auto new_low = (F32)newValue.asReal();
     LLDiskCache::getInstance()->setLowWaterPercentage(new_low);
 }
 // </FS:Beq>
@@ -1099,7 +1099,7 @@ void handleAutoTuneFPSChanged(const LLSD& newValue)
     LLPerfStats::tunables.userAutoTuneEnabled = newval;
     if(newval && LLPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
     {
-        gSavedSettings.setF32("RenderAvatarMaxART",log10(LLPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
+        gSavedSettings.setF32("RenderAvatarMaxART", (F32)log10(LLPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
     }
 }
 

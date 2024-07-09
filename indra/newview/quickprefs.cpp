@@ -1224,11 +1224,11 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
     // if it's an integer entry, round the numbers
     if (entry.integer)
     {
-        entry.min_value = ll_round(entry.min_value);
-        entry.max_value = ll_round(entry.max_value);
+        entry.min_value = (F32)ll_round(entry.min_value);
+        entry.max_value = (F32)ll_round(entry.max_value);
 
         // recalculate increment
-        entry.increment = ll_round(entry.increment);
+        entry.increment = (F32)ll_round(entry.increment);
         if (entry.increment == 0.f)
         {
             entry.increment = 1.f;
@@ -1647,7 +1647,7 @@ void FloaterQuickPrefs::onValuesChanged()
             // start with these
             F32 min_value = 0.0f;
             F32 max_value = 1.0f;
-            F32 value = var->getValue().asReal();
+            F32 value = (F32)var->getValue().asReal();
 
             // if the value was negative and smaller than the current minimum
             if (value < 0.0f)
@@ -1741,9 +1741,9 @@ void FloaterQuickPrefs::onValuesChanged()
         mControlsList[mSelectedControl].label = mControlLabelEdit->getValue().asString();
         mControlsList[mSelectedControl].type = (ControlType)mControlTypeCombo->getValue().asInteger();
         mControlsList[mSelectedControl].integer = mControlIntegerCheckbox->getValue().asBoolean();
-        mControlsList[mSelectedControl].min_value = mControlMinSpinner->getValue().asReal();
-        mControlsList[mSelectedControl].max_value = mControlMaxSpinner->getValue().asReal();
-        mControlsList[mSelectedControl].increment = mControlIncrementSpinner->getValue().asReal();
+        mControlsList[mSelectedControl].min_value = (F32)mControlMinSpinner->getValue().asReal();
+        mControlsList[mSelectedControl].max_value = (F32)mControlMaxSpinner->getValue().asReal();
+        mControlsList[mSelectedControl].increment = (F32)mControlIncrementSpinner->getValue().asReal();
         // and update the user interface
         updateControl(mSelectedControl, mControlsList[mSelectedControl]);
     }
@@ -1782,7 +1782,7 @@ void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl, LLColorSwatchCtrl* color_
     // get the current color
     LLColor4 color = color_swatch->get();
     // replace the alpha value of the color with the value in the alpha spinner
-    color.setAlpha(ctrl->getValue().asReal());
+    color.setAlpha((F32)ctrl->getValue().asReal());
     // save the color back into the color swatch
     color_swatch->getControlVariable()->setValue(color.getValue());
 }

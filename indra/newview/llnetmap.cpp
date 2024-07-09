@@ -465,16 +465,16 @@ void LLNetMap::draw()
             if (s_fUseWorldMapTextures)
             {
                 const LLViewerRegion::tex_matrix_t& tiles(regionp->getWorldMapTiles());
-                for (S32 i(0), scaled_width(real_width / region_width), square_width(scaled_width * scaled_width);
+                for (S32 i(0), scaled_width((S32)(real_width / region_width)), square_width(scaled_width * scaled_width);
                     i < square_width; ++i)
                 {
-                    const F32 y(i / scaled_width);
-                    const F32 x(i - y * scaled_width);
+                    const F32 y = (F32)(i / scaled_width);
+                    const F32 x = (F32)(i - y * scaled_width);
                     const F32 local_left(left + x * mScale);
                     const F32 local_right(local_left + mScale);
                     const F32 local_bottom(bottom + y * mScale);
                     const F32 local_top(local_bottom + mScale);
-                    LLViewerTexture* pRegionImage = tiles[x * scaled_width + y];
+                    LLViewerTexture* pRegionImage = tiles[(U64)(x * scaled_width + y)];
                     if (pRegionImage)
                     {
                         // Ansariel: Map texture ends up without GLTexture after a teleport.
@@ -811,7 +811,7 @@ void LLNetMap::draw()
             {
 // [/SL:KB]
                 F32 dist_to_cursor_squared = dist_vec_squared(LLVector2(pos_map.mV[VX], pos_map.mV[VY]),
-                                                LLVector2(local_mouse_x,local_mouse_y));
+                                                LLVector2((F32)local_mouse_x, (F32)local_mouse_y));
                 if (dist_to_cursor_squared < min_pick_dist_squared)
                 {
                     if (dist_to_cursor_squared < closest_dist_squared)
@@ -868,7 +868,7 @@ void LLNetMap::draw()
                       self_tag_color);  // <FS:CR> FIRE-1061
 
             F32 dist_to_cursor_squared = dist_vec_squared(LLVector2(pos_map.mV[VX], pos_map.mV[VY]),
-                                          LLVector2(local_mouse_x,local_mouse_y));
+                                          LLVector2((F32)local_mouse_x, (F32)local_mouse_y));
             if(dist_to_cursor_squared < min_pick_dist_squared && dist_to_cursor_squared < closest_dist_squared)
             {
                 mClosestAgentToCursor = gAgent.getID();
@@ -887,9 +887,9 @@ void LLNetMap::draw()
 // <FS:CR> Opensim
                 //drawRing(20.0, pos_map, map_chat_ring_color);
                 //drawRing(100.0, pos_map, map_shout_ring_color);
-                if (fs_whisper_ring) drawRing(LFSimFeatureHandler::getInstance()->whisperRange(), pos_map, map_whisper_ring_color);
-                if (fs_chat_ring) drawRing(LFSimFeatureHandler::getInstance()->sayRange(), pos_map, map_chat_ring_color);
-                if (fs_shout_ring) drawRing(LFSimFeatureHandler::getInstance()->shoutRange(), pos_map, map_shout_ring_color);
+                if (fs_whisper_ring) drawRing((F32)LFSimFeatureHandler::getInstance()->whisperRange(), pos_map, map_whisper_ring_color);
+                if (fs_chat_ring) drawRing((F32)LFSimFeatureHandler::getInstance()->sayRange(), pos_map, map_chat_ring_color);
+                if (fs_shout_ring) drawRing((F32)LFSimFeatureHandler::getInstance()->shoutRange(), pos_map, map_shout_ring_color);
 // </FS:CR> Opensim
             }
         }
@@ -918,7 +918,7 @@ void LLNetMap::draw()
         // <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
         static LLUIColor pick_radius_color = LLUIColorTable::instance().getColor("MapPickRadiusColor", map_frustum_color());
         gGL.color4fv((pick_radius_color()).mV);
-        gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
+        gl_circle_2d((F32)local_mouse_x, (F32)local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
         // </FS:Ansariel>
 
         if( rotate_map )
@@ -1117,7 +1117,7 @@ LLVector3d LLNetMap::viewPosToGlobal( S32 x, S32 y )
 bool LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
     // note that clicks are reversed from what you'd think: i.e. > 0  means zoom out, < 0 means zoom in
-    F32 new_scale = mScale * pow(MAP_SCALE_ZOOM_FACTOR, -clicks);
+    F32 new_scale = mScale * (F32)pow(MAP_SCALE_ZOOM_FACTOR, -clicks);
     F32 old_scale = mScale;
 
     setScale(new_scale);
@@ -1127,8 +1127,8 @@ bool LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
     {
         // Adjust pan to center the zoom on the mouse pointer
         LLVector2 zoom_offset;
-        zoom_offset.mV[VX] = x - getRect().getWidth() / 2;
-        zoom_offset.mV[VY] = y - getRect().getHeight() / 2;
+        zoom_offset.mV[VX] = (F32)(x - getRect().getWidth() / 2);
+        zoom_offset.mV[VY] = (F32)(y - getRect().getHeight() / 2);
         mCurPan -= zoom_offset * mScale / old_scale - zoom_offset;
     }
 
@@ -1337,7 +1337,7 @@ bool LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
             }
             else
             {
-                distance = dist_vec(gAgent.getPositionGlobal(), mClosestAgentPosition);
+                distance = (F32)dist_vec(gAgent.getPositionGlobal(), mClosestAgentPosition);
             }
 
             LLStringUtil::format_map_t args;
@@ -1530,7 +1530,7 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
     // Render parcel lines
     //
     const F32 GRID_STEP = PARCEL_GRID_STEP_METERS;
-    const S32 GRIDS_PER_EDGE = real_width / GRID_STEP;
+    const S32 GRIDS_PER_EDGE = (S32)(real_width / GRID_STEP);
 
     const U8* pOwnership = pRegion->getParcelOverlay()->getOwnership();
     const U8* pCollision = (pRegion->getHandle() == LLViewerParcelMgr::instance().getCollisionRegionHandle()) ? LLViewerParcelMgr::instance().getCollisionBitmap() : NULL;

@@ -250,23 +250,23 @@ U8          LLPanelFace::getCurrentDiffuseAlphaMode()   { return (U8)getChild<LL
 U8          LLPanelFace::getCurrentAlphaMaskCutoff()    { return (U8)getChild<LLUICtrl>("maskcutoff")->getValue().asInteger();          }
 U8          LLPanelFace::getCurrentEnvIntensity()       { return (U8)getChild<LLUICtrl>("environment")->getValue().asInteger();         }
 U8          LLPanelFace::getCurrentGlossiness()         { return (U8)getChild<LLUICtrl>("glossiness")->getValue().asInteger();          }
-F32     LLPanelFace::getCurrentBumpyRot()           { return mCtrlBumpyRot->getValue().asReal();                        }
-F32     LLPanelFace::getCurrentBumpyScaleU()        { return mCtrlBumpyScaleU->getValue().asReal();                 }
-F32     LLPanelFace::getCurrentBumpyScaleV()        { return mCtrlBumpyScaleV->getValue().asReal();                 }
-F32     LLPanelFace::getCurrentBumpyOffsetU()       { return mCtrlBumpyOffsetU->getValue().asReal();                    }
-F32     LLPanelFace::getCurrentBumpyOffsetV()       { return mCtrlBumpyOffsetV->getValue().asReal();                    }
-F32     LLPanelFace::getCurrentShinyRot()           { return mCtrlShinyRot->getValue().asReal();                        }
-F32     LLPanelFace::getCurrentShinyScaleU()        { return mCtrlShinyScaleU->getValue().asReal();                 }
-F32     LLPanelFace::getCurrentShinyScaleV()        { return mCtrlShinyScaleV->getValue().asReal();                 }
-F32     LLPanelFace::getCurrentShinyOffsetU()       { return mCtrlShinyOffsetU->getValue().asReal();                    }
-F32     LLPanelFace::getCurrentShinyOffsetV()       { return mCtrlShinyOffsetV->getValue().asReal();                    }
+F32     LLPanelFace::getCurrentBumpyRot()           { return (F32)mCtrlBumpyRot->getValue().asReal();                        }
+F32     LLPanelFace::getCurrentBumpyScaleU()        { return (F32)mCtrlBumpyScaleU->getValue().asReal();                 }
+F32     LLPanelFace::getCurrentBumpyScaleV()        { return (F32)mCtrlBumpyScaleV->getValue().asReal();                 }
+F32     LLPanelFace::getCurrentBumpyOffsetU()       { return (F32)mCtrlBumpyOffsetU->getValue().asReal();                    }
+F32     LLPanelFace::getCurrentBumpyOffsetV()       { return (F32)mCtrlBumpyOffsetV->getValue().asReal();                    }
+F32     LLPanelFace::getCurrentShinyRot()           { return (F32)mCtrlShinyRot->getValue().asReal();                        }
+F32     LLPanelFace::getCurrentShinyScaleU()        { return (F32)mCtrlShinyScaleU->getValue().asReal();                 }
+F32     LLPanelFace::getCurrentShinyScaleV()        { return (F32)mCtrlShinyScaleV->getValue().asReal();                 }
+F32     LLPanelFace::getCurrentShinyOffsetU()       { return (F32)mCtrlShinyOffsetU->getValue().asReal();                    }
+F32     LLPanelFace::getCurrentShinyOffsetV()       { return (F32)mCtrlShinyOffsetV->getValue().asReal();                    }
 
 // <FS:CR> UI provided diffuse parameters
-F32     LLPanelFace::getCurrentTextureRot()         { return mCtrlTexRot->getValue().asReal();                      }
-F32     LLPanelFace::getCurrentTextureScaleU()      { return mCtrlTexScaleU->getValue().asReal();                   }
-F32     LLPanelFace::getCurrentTextureScaleV()      { return mCtrlTexScaleV->getValue().asReal();                   }
-F32     LLPanelFace::getCurrentTextureOffsetU()     { return mCtrlTexOffsetU->getValue().asReal();                  }
-F32     LLPanelFace::getCurrentTextureOffsetV()     { return mCtrlTexOffsetV->getValue().asReal();                  }
+F32     LLPanelFace::getCurrentTextureRot()         { return (F32)mCtrlTexRot->getValue().asReal();                      }
+F32     LLPanelFace::getCurrentTextureScaleU()      { return (F32)mCtrlTexScaleU->getValue().asReal();                   }
+F32     LLPanelFace::getCurrentTextureScaleV()      { return (F32)mCtrlTexScaleV->getValue().asReal();                   }
+F32     LLPanelFace::getCurrentTextureOffsetU()     { return (F32)mCtrlTexOffsetU->getValue().asReal();                  }
+F32     LLPanelFace::getCurrentTextureOffsetV()     { return (F32)mCtrlTexOffsetV->getValue().asReal();                  }
 // </FS:CR>
 
 //
@@ -2014,8 +2014,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         calcp->setVar(LLCalc::TEX_U_OFFSET, getCurrentTextureOffsetU());
         calcp->setVar(LLCalc::TEX_V_OFFSET, getCurrentTextureOffsetV());
         calcp->setVar(LLCalc::TEX_ROTATION, getCurrentTextureRot());
-        calcp->setVar(LLCalc::TEX_TRANSPARENCY, childGetValue("ColorTrans").asReal());
-        calcp->setVar(LLCalc::TEX_GLOW, childGetValue("glow").asReal());
+        calcp->setVar(LLCalc::TEX_TRANSPARENCY, (F32)childGetValue("ColorTrans").asReal());
+        calcp->setVar(LLCalc::TEX_GLOW, (F32)childGetValue("glow").asReal());
 
         // <FS:Zi> Find all faces with same texture
         getChild<LLUICtrl>("btn_select_same_diff")->setEnabled(LLSelectMgr::getInstance()->getTEMode() && mTextureCtrl->getEnabled());
@@ -3963,7 +3963,7 @@ void LLPanelFace::onCommitTextureScaleX( LLUICtrl* ctrl, void* userdata )
     LLPanelFace* self = (LLPanelFace*) userdata;
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        F32 bumpy_scale_u = self->getChild<LLUICtrl>("TexScaleU")->getValue().asReal();
+        F32 bumpy_scale_u = (F32)self->getChild<LLUICtrl>("TexScaleU")->getValue().asReal();
         if (self->isIdenticalPlanarTexgen())
         {
             bumpy_scale_u *= 0.5f;
@@ -3983,7 +3983,7 @@ void LLPanelFace::onCommitTextureScaleY( LLUICtrl* ctrl, void* userdata )
     LLPanelFace* self = (LLPanelFace*) userdata;
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        F32 bumpy_scale_v = self->getChild<LLUICtrl>("TexScaleV")->getValue().asReal();
+        F32 bumpy_scale_v = (F32)self->getChild<LLUICtrl>("TexScaleV")->getValue().asReal();
         if (self->isIdenticalPlanarTexgen())
         {
             bumpy_scale_v *= 0.5f;
@@ -4004,7 +4004,7 @@ void LLPanelFace::onCommitTextureRot( LLUICtrl* ctrl, void* userdata )
 
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        syncMaterialRot(self, self->getChild<LLUICtrl>("TexRot")->getValue().asReal());
+        syncMaterialRot(self, (F32)self->getChild<LLUICtrl>("TexRot")->getValue().asReal());
     }
     else
     {
@@ -4019,7 +4019,7 @@ void LLPanelFace::onCommitTextureOffsetX( LLUICtrl* ctrl, void* userdata )
     LLPanelFace* self = (LLPanelFace*) userdata;
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        syncOffsetX(self, self->getChild<LLUICtrl>("TexOffsetU")->getValue().asReal());
+        syncOffsetX(self, (F32)self->getChild<LLUICtrl>("TexOffsetU")->getValue().asReal());
     }
     else
     {
@@ -4034,7 +4034,7 @@ void LLPanelFace::onCommitTextureOffsetY( LLUICtrl* ctrl, void* userdata )
     LLPanelFace* self = (LLPanelFace*) userdata;
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        syncOffsetY(self, self->getChild<LLUICtrl>("TexOffsetV")->getValue().asReal());
+        syncOffsetY(self, (F32)self->getChild<LLUICtrl>("TexOffsetV")->getValue().asReal());
     }
     else
     {
@@ -4047,24 +4047,24 @@ void LLPanelFace::onCommitTextureOffsetY( LLUICtrl* ctrl, void* userdata )
 // static
 void LLPanelFace::onCommitRepeatsPerMeter(LLUICtrl* ctrl, void* userdata)
 {
-    LLPanelFace* self = (LLPanelFace*) userdata;
+    LLPanelFace *self = (LLPanelFace *) userdata;
 
-    LLUICtrl*   repeats_ctrl    = self->getChild<LLUICtrl>("rptctrl");
+    LLUICtrl *repeats_ctrl = self->getChild<LLUICtrl>("rptctrl");
 
     U32 materials_media = self->mComboMatMedia->getCurrentIndex();
-    U32 material_type = 0;
+    U32 material_type   = 0;
     if (materials_media == MATMEDIA_PBR)
     {
-        LLRadioGroup* radio_mat_type = self->getChild<LLRadioGroup>("radio_pbr_type");
-        material_type = radio_mat_type->getSelectedIndex();
+        LLRadioGroup *radio_mat_type = self->getChild<LLRadioGroup>("radio_pbr_type");
+        material_type                = radio_mat_type->getSelectedIndex();
     }
     if (materials_media == MATMEDIA_MATERIAL)
     {
-        LLRadioGroup* radio_mat_type = self->getChild<LLRadioGroup>("radio_material_type");
-        material_type = radio_mat_type->getSelectedIndex();
+        LLRadioGroup *radio_mat_type = self->getChild<LLRadioGroup>("radio_material_type");
+        material_type                = radio_mat_type->getSelectedIndex();
     }
 
-    F32 repeats_per_meter   = repeats_ctrl->getValue().asReal();
+    F32 repeats_per_meter = (F32) repeats_ctrl->getValue().asReal();
 
     F32 obj_scale_s = 1.0f;
     F32 obj_scale_t = 1.0f;
@@ -4075,10 +4075,10 @@ void LLPanelFace::onCommitRepeatsPerMeter(LLUICtrl* ctrl, void* userdata)
     LLSelectedTE::getObjectScaleS(obj_scale_s, identical_scale_s);
     LLSelectedTE::getObjectScaleS(obj_scale_t, identical_scale_t);
 
-    LLUICtrl* bumpy_scale_u = self->getChild<LLUICtrl>("bumpyScaleU");
-    LLUICtrl* bumpy_scale_v = self->getChild<LLUICtrl>("bumpyScaleV");
-    LLUICtrl* shiny_scale_u = self->getChild<LLUICtrl>("shinyScaleU");
-    LLUICtrl* shiny_scale_v = self->getChild<LLUICtrl>("shinyScaleV");
+    LLUICtrl *bumpy_scale_u = self->getChild<LLUICtrl>("bumpyScaleU");
+    LLUICtrl *bumpy_scale_v = self->getChild<LLUICtrl>("bumpyScaleV");
+    LLUICtrl *shiny_scale_u = self->getChild<LLUICtrl>("shinyScaleU");
+    LLUICtrl *shiny_scale_v = self->getChild<LLUICtrl>("shinyScaleV");
 
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
@@ -5295,7 +5295,7 @@ bool LLPanelFace::Selection::compareSelection()
 
 void LLPanelFace::onCommitGLTFTextureScaleU(LLUICtrl* ctrl)
 {
-    const float value = ctrl->getValue().asReal();
+    const float value = (F32)ctrl->getValue().asReal();
     const U32 pbr_type = findChild<LLRadioGroup>("radio_pbr_type")->getSelectedIndex();
     updateGLTFTextureTransform(value, pbr_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
     {
@@ -5305,7 +5305,7 @@ void LLPanelFace::onCommitGLTFTextureScaleU(LLUICtrl* ctrl)
 
 void LLPanelFace::onCommitGLTFTextureScaleV(LLUICtrl* ctrl)
 {
-    const float value = ctrl->getValue().asReal();
+    const float value = (F32)ctrl->getValue().asReal();
     const U32 pbr_type = findChild<LLRadioGroup>("radio_pbr_type")->getSelectedIndex();
     updateGLTFTextureTransform(value, pbr_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
     {
@@ -5315,7 +5315,7 @@ void LLPanelFace::onCommitGLTFTextureScaleV(LLUICtrl* ctrl)
 
 void LLPanelFace::onCommitGLTFRotation(LLUICtrl* ctrl)
 {
-    const float value = ctrl->getValue().asReal() * DEG_TO_RAD;
+    const float value = (F32)ctrl->getValue().asReal() * DEG_TO_RAD;
     const U32 pbr_type = findChild<LLRadioGroup>("radio_pbr_type")->getSelectedIndex();
     updateGLTFTextureTransform(value, pbr_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
     {
@@ -5325,7 +5325,7 @@ void LLPanelFace::onCommitGLTFRotation(LLUICtrl* ctrl)
 
 void LLPanelFace::onCommitGLTFTextureOffsetU(LLUICtrl* ctrl)
 {
-    const float value = ctrl->getValue().asReal();
+    const float value = (F32)ctrl->getValue().asReal();
     const U32 pbr_type = findChild<LLRadioGroup>("radio_pbr_type")->getSelectedIndex();
     updateGLTFTextureTransform(value, pbr_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
     {
@@ -5335,7 +5335,7 @@ void LLPanelFace::onCommitGLTFTextureOffsetU(LLUICtrl* ctrl)
 
 void LLPanelFace::onCommitGLTFTextureOffsetV(LLUICtrl* ctrl)
 {
-    const float value = ctrl->getValue().asReal();
+    const float value = (F32)ctrl->getValue().asReal();
     const U32 pbr_type = findChild<LLRadioGroup>("radio_pbr_type")->getSelectedIndex();
     updateGLTFTextureTransform(value, pbr_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
     {
@@ -5788,13 +5788,13 @@ void LLPanelFace::alignMaterialsProperties(LLPanelFace* self)
     //<FS:TS> FIRE-12275: Material offset not working correctly
     //  Since the server cannot store negative offsets for materials
     //  textures, we normalize them to equivalent positive values here.
-    tex_offset_u = (tex_offset_u < 0.0) ? 1.0+tex_offset_u : tex_offset_u;
-    tex_offset_v = (tex_offset_v < 0.0) ? 1.0+tex_offset_v : tex_offset_v;
+    tex_offset_u = (tex_offset_u < 0.0f) ? 1.0f+tex_offset_u : tex_offset_u;
+    tex_offset_v = (tex_offset_v < 0.0f) ? 1.0f+tex_offset_v : tex_offset_v;
     //</FS:TS> FIRE-12275
 
     //<FS:TS> FIRE-12831: Negative rotations revert to zero
     //  The same goes for rotations as for offsets.
-    tex_rot = (tex_rot < 0.0) ? 360.0+tex_rot : tex_rot;
+    tex_rot = (tex_rot < 0.0f) ? 360.0f+tex_rot : tex_rot;
     //</FS:TS> FIRE-12831
 
     self->childSetValue("shinyScaleU",  tex_scale_u);
@@ -5855,7 +5855,7 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
     LLUICtrl* spinner = self->findChild<LLUICtrl>(control_name);
     if (spinner)
     {
-        F32 value = -(spinner->getValue().asReal());
+        F32 value = -(F32)(spinner->getValue().asReal());
         spinner->setValue(value);
 
         switch (radio_mattype->getSelectedIndex())

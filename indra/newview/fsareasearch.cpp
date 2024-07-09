@@ -81,12 +81,12 @@ constexpr F32 MIN_DISTANCE_MOVED = 1.0f;
 // timeout to resend object properties request again
 constexpr F32 REQUEST_TIMEOUT = 30.0f;
 
-std::string RLVa_hideNameIfRestricted(std::string const &name)
+static std::string RLVa_hideNameIfRestricted(std::string_view name)
 {
     if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-        return name;
+        return std::string(name);
     else
-        return RlvStrings::getAnonym(name);
+        return RlvStrings::getAnonym(std::string(name));
 }
 
 F32 calculateObjectDistance(LLVector3d agent_pos, LLViewerObject* object)
@@ -97,7 +97,7 @@ F32 calculateObjectDistance(LLVector3d agent_pos, LLViewerObject* object)
     }
     else
     {
-        return dist_vec(agent_pos, object->getPositionGlobal());
+        return (F32)dist_vec(agent_pos, object->getPositionGlobal());
     }
 }
 
@@ -1841,7 +1841,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
                     LLVector3d axis_y = LLVector3d(0, 1, 0) * bbox.getRotation();
                     LLVector3d axis_z = LLVector3d(0, 0, 1) * bbox.getRotation();
                     //Normal of nearclip plane is camera_dir.
-                    F32 min_near_clip_dist = bbox_extents.mdV[0] * (camera_dir * axis_x) + bbox_extents.mdV[1] * (camera_dir * axis_y) + bbox_extents.mdV[2] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
+                    F32 min_near_clip_dist = (F32)(bbox_extents.mdV[0] * (camera_dir * axis_x) + bbox_extents.mdV[1] * (camera_dir * axis_y) + bbox_extents.mdV[2] * (camera_dir * axis_z)); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
                     F32 camera_to_near_clip_dist(LLViewerCamera::getInstance()->getNear());
                     F32 min_camera_dist(min_near_clip_dist + camera_to_near_clip_dist);
                     if (distance < min_camera_dist)

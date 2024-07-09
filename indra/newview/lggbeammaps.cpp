@@ -174,7 +174,7 @@ void lggBeamMaps::fireCurrentBeams(LLPointer<LLHUDEffectSpiral> mBeam, const LLC
             myColor = (*it).c;
         }
 
-        F32 distanceAdjust = dist_vec(mBeam->getPositionGlobal(), gAgent.getPositionGlobal());
+        F32 distanceAdjust = (F32)dist_vec(mBeam->getPositionGlobal(), gAgent.getPositionGlobal());
         F32 pulse = 0.75f + sinf(gFrameTimeSeconds * 1.0f) * 0.25f;
         LLVector3d offset = (*it).p;
         offset.mdV[VY] *= -1.f;

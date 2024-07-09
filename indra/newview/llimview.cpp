@@ -5035,7 +5035,7 @@ public:
                 message_params["region_id"].asUUID(),
                 ll_vector3_from_sd(message_params["position"]),
                 false,      // is_region_message
-                timestamp);
+                (U32)timestamp);
 
 // <FS:CR> FIRE-9762 - OK, return here if we must!
 #ifdef OPENSIM
