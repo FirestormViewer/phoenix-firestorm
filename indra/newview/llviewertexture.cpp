@@ -109,6 +109,7 @@ U32 LLViewerTexture::sMaxSmallImageSize = MAX_CACHED_RAW_IMAGE_AREA;
 bool LLViewerTexture::sFreezeImageUpdates = false;
 F32 LLViewerTexture::sCurrentTime = 0.0f;
 
+constexpr F32 MEMORY_CHECK_WAIT_TIME = 1.0f;
 constexpr F32 MIN_VRAM_BUDGET = 768.f;
 F32 LLViewerTexture::sFreeVRAMMegabytes = MIN_VRAM_BUDGET;
 
@@ -507,58 +508,6 @@ void LLViewerTexture::initClass()
 F32 texmem_lower_bound_scale = 0.85f;
 F32 texmem_middle_bound_scale = 0.925f;
 
-//static
-bool LLViewerTexture::isMemoryForTextureLow()
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    // <FS:ND> Disable memory checking on request
-    static LLCachedControl<bool> FSDisableMemCheck(gSavedSettings, "FSDisableAMDTextureMemoryCheck");
-    if (FSDisableMemCheck)
-        return false;
-    // </FS:ND>
-
-    // Note: we need to figure out a better source for 'min' values,
-    // what is free for low end at minimal settings is 'nothing left'
-    // for higher end gpus at high settings.
-    const S32Megabytes MIN_FREE_TEXTURE_MEMORY(20);
-    const S32Megabytes MIN_FREE_MAIN_MEMORY(100);
-
-    S32Megabytes gpu;
-    S32Megabytes physical;
-    getGPUMemoryForTextures(gpu, physical);
-
-    return (gpu < MIN_FREE_TEXTURE_MEMORY); // || (physical < MIN_FREE_MAIN_MEMORY);
-}
-
-//static
-void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &physical)
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    static LLFrameTimer timer;
-
-    static S32Megabytes gpu_res = S32Megabytes(S32_MAX);
-    static S32Megabytes physical_res = S32Megabytes(S32_MAX);
-
-    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
-    {
-        gpu = gpu_res;
-        physical = physical_res;
-        return;
-    }
-    timer.reset();
-
-    {
-        gpu_res = (S32Megabytes)gViewerWindow->getWindow()->getAvailableVRAMMegabytes();
-
-        //check main memory, only works for windows and macos.
-        LLMemory::updateMemoryInfo();
-        physical_res = LLMemory::getAvailableMemKB();
-
-        gpu = gpu_res;
-        physical = physical_res;
-    }
-}
-
 // <FS:Ansariel> Restrict texture memory by available physical system memory
 static bool isSystemMemoryForTextureLow()
 {
@@ -568,7 +517,7 @@ static bool isSystemMemoryForTextureLow()
     static LLCachedControl<S32> fs_min_free_main_memory(gSavedSettings, "FSMinFreeMainMemoryTextureDiscardThreshold");
     const S32Megabytes MIN_FREE_MAIN_MEMORY(fs_min_free_main_memory);
 
-    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
+    if (timer.getElapsedTimeF32() < MEMORY_CHECK_WAIT_TIME) //call this once per second.
     {
         return physical_res < MIN_FREE_MAIN_MEMORY;
     }
@@ -624,7 +573,7 @@ void LLViewerTexture::updateClass()
     if (isSystemMemoryForTextureLow())
     {
         // System RAM is low -> ramp up discard bias over time to free memory
-        if (sEvaluationTimer.getElapsedTimeF32() > GPU_MEMORY_CHECK_WAIT_TIME)
+        if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
         {
             sDesiredDiscardBias += llmax(.1f, over_pct); // add at least 10% over-percentage
             sEvaluationTimer.reset();
