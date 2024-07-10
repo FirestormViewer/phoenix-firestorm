@@ -1936,20 +1936,6 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6f4509dca9e32e3b4f9c4b13d875ce0e24340efc</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://github.com/secondlife/3p-meshoptimizer/releases/download/v160-4f905dd/meshoptimizer-160-linux64-4f905dd.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows64</key>
           <map>
             <key>archive</key>
