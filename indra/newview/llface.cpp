@@ -244,7 +244,7 @@ void LLFace::setPool(LLFacePool* pool)
 
 void LLFace::setPool(LLFacePool* new_pool, LLViewerTexture *texturep)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
     if (!new_pool)
     {
@@ -334,7 +334,7 @@ void LLFace::setSpecularMap(LLViewerTexture* tex)
 
 void LLFace::dirtyTexture()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
     LLDrawable* drawablep = getDrawable();
 
@@ -530,7 +530,7 @@ void LLFace::updateCenterAgent()
 
 void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
     if (mDrawablep == NULL || mDrawablep->getSpatialGroup() == NULL)
     {
@@ -607,7 +607,7 @@ void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
 
 void renderFace(LLDrawable* drawable, LLFace *face)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
     LLVOVolume* vobj = drawable->getVOVolume();
     if (vobj)
@@ -834,7 +834,7 @@ bool less_than_max_mag(const LLVector4a& vec)
 bool LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
                              const LLMatrix4& mat_vert_in, bool global_volume)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
     //get bounding box
     if (mDrawablep->isState(LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION | LLDrawable::REBUILD_RIGGED))

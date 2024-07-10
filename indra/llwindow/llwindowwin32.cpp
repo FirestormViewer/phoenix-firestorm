@@ -2150,7 +2150,7 @@ void LLWindowWin32::initCursors(bool useLegacyCursors) // <FS:LO> Legacy cursor 
 void LLWindowWin32::updateCursor()
 {
     ASSERT_MAIN_THREAD();
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
     if (mNextCursor == UI_CURSOR_ARROW
         && mBusyCount > 0)
     {
@@ -2194,7 +2194,7 @@ void LLWindowWin32::delayInputProcessing()
 void LLWindowWin32::gatherInput()
 {
     ASSERT_MAIN_THREAD();
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
     MSG msg;
 
     {

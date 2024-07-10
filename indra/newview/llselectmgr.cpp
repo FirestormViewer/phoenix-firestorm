@@ -3204,7 +3204,7 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
 
         for (U8 te_num = 0; te_num < object->getNumTEs(); te_num++)
         {
-            const LLTextureEntry* tep = object->getTE(te_num);
+            LLTextureEntry* tep = object->getTE(te_num);
 
             // ND: Down the code there is a check if getTE did return a valid pointer (actually the pointer is fetched again there, can it change mid loop?)
             if( !tep )
@@ -3241,8 +3241,6 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
                     F32 specular_scale_t = specular_scale_ratio.mV[t_axis]/object_scale.mV[t_axis];
 
                     object->setTEScale(te_num, diffuse_scale_s, diffuse_scale_t);
-
-                    LLTextureEntry* tep = object->getTE(te_num);
 
                     if (tep && !tep->getMaterialParams().isNull())
                     {
@@ -3283,6 +3281,47 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
                         p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
                         LLMaterialMgr::getInstance()->put(object->getID(), te_num, *p);
+                    }
+                }
+
+                if (tep->getGLTFMaterial())
+                {
+                    LLPointer<LLGLTFMaterial> material = tep->getGLTFMaterialOverride();
+                    if (!material)
+                    {
+                        material = new LLGLTFMaterial();
+                        tep->setGLTFMaterialOverride(material);
+                    }
+
+                    F32 scale_x = 1;
+                    F32 scale_y = 1;
+
+                    for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+                    {
+                        LLVector3 scale_ratio = selectNode->mGLTFScaleRatios[te_num][i];
+
+                        if (planar)
+                        {
+                            scale_x = scale_ratio.mV[s_axis] / object_scale.mV[s_axis];
+                            scale_y = scale_ratio.mV[t_axis] / object_scale.mV[t_axis];
+                        }
+                        else
+                        {
+                            scale_x = scale_ratio.mV[s_axis] * object_scale.mV[s_axis];
+                            scale_y = scale_ratio.mV[t_axis] * object_scale.mV[t_axis];
+                        }
+                        material->mTextureTransform[i].mScale.set(scale_x, scale_y);
+                    }
+
+                    LLFetchedGLTFMaterial* render_mat = (LLFetchedGLTFMaterial*)tep->getGLTFRenderMaterial();
+                    if (render_mat)
+                    {
+                        render_mat->applyOverride(*material);
+                    }
+
+                    if (send_to_sim)
+                    {
+                        LLGLTFMaterialList::queueModify(object, te_num, material);
                     }
                 }
                 send = send_to_sim;
@@ -7123,6 +7162,7 @@ void LLSelectNode::saveGLTFMaterials(const uuid_vec_t& materials, const gltf_mat
 void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
 {
     mTextureScaleRatios.clear();
+    mGLTFScaleRatios.clear();
 
     if (mObject.notNull())
     {
@@ -7157,6 +7197,40 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
                 v.mV[t_axis] = diffuse_t/scale.mV[t_axis];
                 mTextureScaleRatios.push_back(v);
             }
+
+            LLGLTFMaterial* material = tep->getGLTFMaterialOverride();
+            LLVector3 material_v;
+            F32 scale_x = 1;
+            F32 scale_y = 1;
+            std::vector<LLVector3> material_v_vec;
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+            {
+                if (material)
+                {
+                    LLGLTFMaterial::TextureTransform& transform = material->mTextureTransform[i];
+                    scale_x = transform.mScale[VX];
+                    scale_y = transform.mScale[VY];
+                }
+                else
+                {
+                    // Not having an override doesn't mean that there is no material
+                    scale_x = 1;
+                    scale_y = 1;
+                }
+
+                if (tep->getTexGen() == LLTextureEntry::TEX_GEN_PLANAR)
+                {
+                    material_v.mV[s_axis] = scale_x * scale.mV[s_axis];
+                    material_v.mV[t_axis] = scale_y * scale.mV[t_axis];
+                }
+                else
+                {
+                    material_v.mV[s_axis] = scale_x / scale.mV[s_axis];
+                    material_v.mV[t_axis] = scale_y / scale.mV[t_axis];
+                }
+                material_v_vec.push_back(material_v);
+            }
+            mGLTFScaleRatios.push_back(material_v_vec);
         }
     }
 }

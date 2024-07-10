@@ -349,7 +349,7 @@ bool LLThread::runCondition(void)
 // Stop thread execution if requested until unpaused.
 void LLThread::checkPause()
 {
-    LL_PROFILER_THREAD_BEGIN(mName.c_str())
+    LL_PROFILER_THREAD_BEGIN(mName.c_str());
 
     mDataLock->lock();
 
@@ -364,7 +364,7 @@ void LLThread::checkPause()
 
     mDataLock->unlock();
 
-    LL_PROFILER_THREAD_END(mName.c_str())
+    LL_PROFILER_THREAD_END(mName.c_str());
 }
 
 //============================================================================
@@ -385,20 +385,20 @@ void LLThread::setQuitting()
 // <FS:Beq> give this a better chance to inline
 // LLThread::id_t LLThread::currentID()
 // {
-//     LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
+//     LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
 //     return std::this_thread::get_id();
 // }
 
 // static
 void LLThread::yield()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
     std::this_thread::yield();
 }
 
 void LLThread::wake()
 {
-    LL_PROFILER_THREAD_BEGIN(mName.c_str())
+    LL_PROFILER_THREAD_BEGIN(mName.c_str());
 
     mDataLock->lock();
     if(!shouldSleep())
@@ -407,12 +407,12 @@ void LLThread::wake()
     }
     mDataLock->unlock();
 
-    LL_PROFILER_THREAD_END(mName.c_str())
+    LL_PROFILER_THREAD_END(mName.c_str());
 }
 
 void LLThread::wakeLocked()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
     if(!shouldSleep())
     {
         mRunCondition->signal();
@@ -421,13 +421,13 @@ void LLThread::wakeLocked()
 
 void LLThread::lockData()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
     mDataLock->lock();
 }
 
 void LLThread::unlockData()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
     mDataLock->unlock();
 }
 
