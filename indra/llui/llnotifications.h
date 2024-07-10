@@ -98,8 +98,7 @@
 #include "llrefcount.h"
 #include "llsdparam.h"
 
-// <FS:Ansariel> Disable test API
-//#include "llnotificationslistener.h"
+#include "llnotificationslistener.h"
 
 class LLAvatarName;
 typedef enum e_notification_priority
@@ -999,8 +998,7 @@ private:
 
     bool mIgnoreAllNotifications;
 
-    // <FS:Ansariel> Disable test API
-    //std::unique_ptr<LLNotificationsListener> mListener;
+    std::unique_ptr<LLNotificationsListener> mListener;
 
     std::vector<LLNotificationChannelPtr> mDefaultChannels;
 };

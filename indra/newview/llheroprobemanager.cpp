@@ -211,6 +211,7 @@ void LLHeroProbeManager::update()
         else
         {
             mNearestHero = nullptr;
+            mDefaultProbe->mViewerObject = nullptr; // <FS:Beq/> FIRE-34201 TP crash
         }
 
         mHeroProbeStrength = 1;
@@ -219,6 +220,7 @@ void LLHeroProbeManager::update()
     else
     {
         mNearestHero = nullptr;
+        mDefaultProbe->mViewerObject = nullptr; // <FS:Beq/> FIRE-34201 TP crash
     }
     // </FS:Beq>
 }

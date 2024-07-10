@@ -3280,14 +3280,13 @@ Low ↔ Lwst
              top_pad="8"
              width="132" />
         </panel>
+<!--	<FS:Zi> switchable edit texture/materials panel
         <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
-         name="Texture">
-<!--	<FS:Zi> switchable edit texture/materials panel
          filename="panel_tools_texture.xml">
--->
 	   </panel>
+-->
        <panel
          border="false"
          follows="all"

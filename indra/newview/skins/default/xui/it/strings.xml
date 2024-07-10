@@ -68,6 +68,9 @@ Banda (Bandwidth): [BANDWIDTH] kbit/s
 Fattore LOD (LOD factor): [LOD]
 Qualità resa (Render quality): [RENDERQUALITY]
 	</string>
+	<string name="AboutCache">
+		Cache del disco (disk cache): [DISK_CACHE_INFO]
+	</string>
 	<string name="AboutOSXHiDPI">
 		Modalità display HiDPI: [HIDPI]
 	</string>
@@ -1369,6 +1372,51 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="recompile_script_verb">
 		Ricompila
+	</string>
+	<string name="jpeg_image_files">
+		Immagini JPEG
+	</string>
+	<string name="executable_files">
+		File eseguibili
+	</string>
+	<string name="Validator_InvalidNumericString">
+		Sequenza numerica non valida: '[STR]'
+	</string>
+	<string name="Validator_ShouldNotBeMinus">
+		Carattere iniziale non valido: '[CH]' (non può essere un segno meno)
+	</string>
+	<string name="Validator_ShouldNotBeMinusOrZero">
+		Carattere iniziale non valido: '[CH]' (non può essere né meno né zero)
+	</string>
+	<string name="Validator_ShouldBeDigit">
+		Carattere [NR] non valido: '[CH]' (può essere solo una cifra)
+	</string>
+	<string name="Validator_ShouldBeDigitOrDot">
+		Carattere [NR] non valido: '[CH]' (può essere solo una cifra o un punto decimale)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlpha">
+		Carattere [NR] non valido: '[CH]' (può essere solo un carattere ASCII numerico o alfanumerico)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">
+		Carattere [NR] non valido: '[CH]' (può essere solo una cifra, un carattere ASCII alfanumerico o uno spazio)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">
+		Carattere [NR] non valido: '[CH]' (può essere solo una cifra, un carattere ASCII alfanumerico o un segno di punteggiatura)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">
+		Carattere [NR] non valido: '[CH]' (può essere solo una cifra, un carattere ASCII alfanumerico o un segno di punteggiatura senza spazi)
+	</string>
+	<string name="Validator_ShouldBeDigitNotSpace">
+		Carattere [NR] non valido: '[CH]' (può essere solo una cifra senza spazi)
+	</string>
+	<string name="Validator_ShouldBeASCII">
+		Carattere [NR] non valido: '[CH]' (può essere solo un carattere ASCII)
+	</string>
+	<string name="Validator_ShouldBeNewLineOrASCII">
+		Carattere [NR] non valido: '[CH]' (può essere solo un carattere ASCII o una nuova riga)
+	</string>
+	<string name="LSLTipSleepTime">
+		Script in sospensione per [SLEEP_TIME] secondi.
 	</string>
 	<string name="shape">
 		Corpo
@@ -5159,8 +5207,11 @@ Segnala abuso
 	<string name="New Settings">
 		Nuovo ambiente
 	</string>
-	<string name="AvatarBirthDateFormat">
+	<string name="AvatarBirthDateFormatFull">
 		[day,datetime,utc]/[mthnum,datetime,utc]/[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormatShort">
+		[day,datetime,utc]/[mthnum,datetime,utc]
 	</string>
 	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt]
@@ -5271,7 +5322,8 @@ Segnala abuso
 		Questo abito non contiene alcun elemento
 	</string>
 	<string name="ExternalEditorNotSet">
-		Seleziona un editor usando l&apos;impostazione ExternalEditor.	
+		Seleziona un editor impostando l'ambiente LL_SCRIPT_EDITOR o impostando ExternalEditor
+Vedi https://wiki.secondlife.com/wiki/LSL_Alternate_Editors
 	</string>
 	<string name="ExternalEditorNotFound">
 		L&apos;editor esterno specificato non è stato trovato.
@@ -6348,6 +6400,9 @@ Assistenza nel sito SecondLife.com e segnala il problema.
 	</string>
 	<string name="avatar_age_alert">
 		ha attivato l&apos;allarme età. Età: [AGE] giorno/i
+	</string>
+	<string name="avatar_age_not_available">
+		n.d.
 	</string>
 	<string name="TotalScriptCountChangeIncrease">
 		Il totale degli script nella regione è salito da [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).

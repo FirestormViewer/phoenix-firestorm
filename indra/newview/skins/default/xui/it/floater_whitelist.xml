@@ -1,0 +1,17 @@
+<floater name="whitelist_floater" title="Whitelist File e Cartelle">
+	<text name="whitelist_intro">
+		Antivirus e antimalware sono una parte essenziale dell'utilizzo sicuro di internet, ma possono causare una serie di problemi al viewer.
+Per ridurre le interferenze e migliorare la stabilità e le prestazioni, consigliamo vivamente a tutti gli utenti di assicurarsi che siano previste esclusioni (note come Whitelist) per cartelle e programmi importanti utilizzati dal viewer.
+
+Per informazioni più dettagliate, visita:
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</text>
+	<text name="whitelist_folder_instruction">
+		Per semplificare l'attività, qui sotto sono elencate tutte le cartelle utilizzate dal viewer.
+Aggiungile alle esclusioni del tuo antivirus come spiegato nella pagina del Wiki linkata sopra.
+	</text>
+	<text name="whitelist_exe_instruction">
+		Qui sotto sono elencati i nomi e il loro percorso completo dei file eseguibili del viewer.
+Aggiungili alle esclusioni del tuo antivirus come spiegato nella pagina del Wiki linkata sopra.
+	</text>
+</floater>

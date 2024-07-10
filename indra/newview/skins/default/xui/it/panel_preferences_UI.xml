@@ -87,6 +87,9 @@
 		</text>
 		<slider label="Lampeggia linguette IM:" tool_tip="Quante volte deve lampeggiare la linguetta della scheda IM quando ricevi un messaggio" name="ButtonsFlashCount"/>
 		<slider label="Velocità di lampeggiamento:" tool_tip="Indica la durata in secondi di un singolo flash. Viene usato per le notifiche degli IM" name="ButtonFlashRate"/>
+		<text name="ButtonFlashRateText">
+			sec
+		</text>
 	</panel>
 	<panel name="UI-interface-top-bars" label="Barra Superiore">
 		<text name="statusbar_textbox">
@@ -228,29 +231,27 @@
 			Tipo carattere:
 		</text>
 		<text name="tooltip_textbox2">
-			(richiesto riavvio)
+			(richiede riavvio)
 		</text>
 		<text name="tooltip_textbox5">
 		   Grandezza carattere:
 		</text>
 		<text name="tooltip_textbox6" >
-			pt (Richiesto riavvio)
+			pt (richiede riavvio)
 Predefinito 0. Valori più grandi non funzionano bene
 		</text>
 		<text name="tooltip_textbox3">
-			Distanza massima
-linee della chat:
+			Spaziatura chat:
 		</text>
 		<text name="tooltip_textbox4">
-			pixel (richiesto riavvio)
+			pixel (richiede riavvio)
 [VIEWER_GENERATION]-Default 0. V1 Default 2.
 		</text>
 		<text name="Label_FolderItemViewHeight">
-			Distanza massima 
-cartelle inventario:
+			Altezza cartella:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
-			pixel (richiesto riavvio)
+			pixel (richiede riavvio)
 [VIEWER_GENERATION]-Default 20. V1 Default 18.
 		</text>
 		<text name="text_box_notecard_font" width="135">
@@ -262,6 +263,11 @@ cartelle inventario:
 			<combo_item name="Medium" label="Medio" />
 			<combo_item name="Large" label="Grande" />
 		</combo_box>
+		<text name="emoji_font_settings_label">
+			Impostazioni caratteri emoji (richiede riavvio):
+		</text>
+		<check_box label="Visualizza emoji monocromatiche" name="FSUseBWEmojis" />
+		<check_box label="Usa pulsante emoji colorato" name="FSUsePrettyEmojiButton" />
 	</panel>
 </tab_container>
 </panel>

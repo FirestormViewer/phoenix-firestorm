@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="Texture">
+<panel name="Texture" label="Textur">
 	<panel.string name="paste_error_face_selection_mismatch">
 		Falls mehrere Flächen kopiert werden, müssen auf dem Zielobjekt dieselbe Anzahl an Flächen selektiert sein.
 	</panel.string>
