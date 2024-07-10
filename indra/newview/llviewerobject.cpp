@@ -3827,7 +3827,7 @@ bool LLViewerObject::updateLOD()
 
 bool LLViewerObject::updateGeometry(LLDrawable *drawable)
 {
-    return false;
+    return true;
 }
 
 void LLViewerObject::updateGL()
