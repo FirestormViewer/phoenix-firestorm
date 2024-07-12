@@ -418,7 +418,11 @@ public:
     //---------------
 
     void setForSculpt();
+    void setForHUD() { mForHUD = true; }
+    void setForParticle() { mForParticle = true; }
     BOOL forSculpt() const {return mForSculpt;}
+    BOOL forHUD() const { return mForHUD; }
+    BOOL forParticle() const { return mForParticle; }
     BOOL isForSculptOnly() const;
 
     //raw image management
@@ -445,6 +449,9 @@ public:
     void        loadFromFastCache();
     void        setInFastCacheList(bool in_list) { mInFastCacheList = in_list; }
     bool        isInFastCacheList() { return mInFastCacheList; }
+
+    void        setMaxFaceImportance(F32 priority) { mMaxFaceImportance = priority; }
+    F32         getMaxFaceImportance() { return mMaxFaceImportance; }
 
     /*virtual*/bool  isActiveFetching() override; //is actively in fetching by the fetching pipeline.
 
@@ -502,6 +509,8 @@ protected:
     S8  mDesiredDiscardLevel;           // The discard level we'd LIKE to have - if we have it and there's space
     S8  mMinDesiredDiscardLevel;    // The minimum discard level we'd like to have
 
+    F32 mMaxFaceImportance; // Keep track of highest importance from faces for textures.
+
     S8  mNeedsAux;                  // We need to decode the auxiliary channels
     S8  mHasAux;                    // We have aux channels
     S8  mDecodingAux;               // Are we decoding high components
@@ -555,6 +564,8 @@ protected:
 
     BOOL   mForSculpt ; //a flag if the texture is used as sculpt data.
     BOOL   mIsFetched ; //is loaded from remote or from cache, not generated locally.
+    BOOL   mForHUD ;     // a flag if the texture is used on a HUD
+    BOOL   mForParticle ;  // a flag if the texture is used as a particle
 
 public:
     static F32 sMaxVirtualSize; //maximum possible value of mMaxVirtualSize
