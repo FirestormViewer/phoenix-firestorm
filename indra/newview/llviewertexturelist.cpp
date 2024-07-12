@@ -888,6 +888,7 @@ static void touch_texture(LLViewerFetchedTexture* tex, F32 vsize)
     if (tex)
     {
         tex->addTextureStats(vsize);
+        tex->getLastReferencedTimer()->reset();
     }
 }
 
@@ -905,17 +906,22 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
     static LLCachedControl<F32> bias_distance_scale(gSavedSettings, "TextureBiasDistanceScale", 1.f);
 
+    F32 assignSize = -1;
+
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE
     {
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
         {
+            std::vector<class LLFetchedGLTFMaterial*> materialList;
+            U32 materialCount = 0;
             for (U32 fi = 0; fi < imagep->getNumFaces(i); ++fi)
             {
+                F32 vsize = 0;
                 LLFace* face = (*(imagep->getFaceList(i)))[fi];
 
                 if (face && face->getViewerObject() && face->getTextureEntry())
                 {
-                    F32 vsize = face->getPixelArea();
+                    vsize = face->getPixelArea();
 
                     // scale desired texture resolution higher or lower depending on texture scale
                     const LLTextureEntry* te = face->getTextureEntry();
@@ -939,25 +945,41 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                         vsize /= LLViewerTexture::sDesiredDiscardBias;
                     }
 // #endif // <FS:Beq/>
-                    // if a GLTF material is present, ignore that face
-                    // as far as this texture stats go, but update the GLTF material
-                    // stats
-                    LLFetchedGLTFMaterial* mat = te ? (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial() : nullptr;
-                    llassert(mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(te->getGLTFRenderMaterial()) != nullptr);
-                    if (mat)
+                    if (i == 0)
                     {
-                        touch_texture(mat->mBaseColorTexture, vsize);
-                        touch_texture(mat->mNormalTexture, vsize);
-                        touch_texture(mat->mMetallicRoughnessTexture, vsize);
-                        touch_texture(mat->mEmissiveTexture, vsize);
-                    }
-                    else
-                    {
-                        imagep->addTextureStats(vsize);
+                        // TommyTheTerrible - Grab Material for processing later.
+                        LLFetchedGLTFMaterial *mat = te ? (LLFetchedGLTFMaterial *) te->getGLTFRenderMaterial() : nullptr;
+                        llassert(mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial *>(te->getGLTFRenderMaterial()) != nullptr);
+                        if (mat)
+                        {
+                            materialList.resize(2 * materialCount + 1);
+                            materialList[materialCount] = mat;
+                            materialCount++;
+                        }
                     }
                 }
+                assignSize = llmax(vsize, assignSize);
             }
-        }
+            if (assignSize >= 0)
+            {
+                if (materialCount > 0)
+                {
+                    for (U32 fi = 0; fi < materialCount; ++fi)
+                    {
+                        if (materialList[fi])
+                        {
+                            touch_texture(materialList[fi]->mBaseColorTexture, assignSize);
+                            touch_texture(materialList[fi]->mNormalTexture, assignSize);
+                            touch_texture(materialList[fi]->mMetallicRoughnessTexture, assignSize);
+                            touch_texture(materialList[fi]->mEmissiveTexture, assignSize);
+                        }
+                    }
+                }
+                else {
+                    imagep->addTextureStats(assignSize);
+                }                
+            }
+        }        
     }
 
     //imagep->setDebugText(llformat("%.3f - %d", sqrtf(imagep->getMaxVirtualSize()), imagep->getBoostLevel()));
@@ -1012,7 +1034,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             imagep->getLastReferencedTimer()->reset();
 
             //reset texture state.
-            imagep->setInactive();
+            if (assignSize < 0)
+                imagep->setInactive();
         }
     }
 
