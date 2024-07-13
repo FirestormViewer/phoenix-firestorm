@@ -1103,6 +1103,11 @@ void LLSnapshotLivePreview::saveTexture(BOOL outfit_snapshot, std::string name)
     LLAssetID new_asset_id = tid.makeAssetID(gAgent.getSecureSessionID());
 
     LLPointer<LLImageJ2C> formatted = new LLImageJ2C;
+
+    // <AS:Chanayane> Lossless OpenJPEG uploads
+    formatted->setReversible(true);
+    // </AS:Chanayane>
+
     LLPointer<LLImageRaw> scaled = new LLImageRaw(mPreviewImage->getData(),
         mPreviewImage->getWidth(),
         mPreviewImage->getHeight(),
