@@ -2180,7 +2180,7 @@ bool LLViewerFetchedTexture::updateFetch()
         // </FS:Ansariel>
         if (override_tex_discard_level != 0)
         {
-            desired_discard = override_tex_discard_level;
+            desired_discard += override_tex_discard_level;
         }
 
         // bypass texturefetch directly by pulling from LLTextureCache
