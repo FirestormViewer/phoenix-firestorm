@@ -3312,7 +3312,7 @@ void LLViewerLODTexture::processTextureStats()
     }
 
     // TommyTheTerrible - Decrease mMaxVirtualSize over time by fractions of discard bias to slow texture corrections.
-    mMaxVirtualSize *= (LLViewerTexture::sDesiredDiscardBias / mMinDesiredDiscardLevel);
+    //mMaxVirtualSize *= (LLViewerTexture::sDesiredDiscardBias / mMinDesiredDiscardLevel);
 
     // selection manager will immediately reset BOOST_SELECTED but never unsets it
     // unset it immediately after we consume it

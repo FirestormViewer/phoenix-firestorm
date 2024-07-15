@@ -951,11 +951,14 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                             static LLCachedControl<F32> bias_unimportant_threshold(gSavedSettings, "TextureBiasUnimportantFactor", 0.25f);
                             importance = face->getImportanceToCamera();
 
-                            // scale desired texture resolution higher or lower depending on texture scale
-                            F32 min_scale = te ? llmin(fabsf(te->getScaleS()), fabsf(te->getScaleT())) : 1.f;
-                            min_scale     = llmax(min_scale * min_scale, 0.1f);
+                            if (!(face->isState(LLFace::TEXTURE_ANIM)))
+                            {
+                                // scale desired texture resolution higher or lower depending on texture scale
+                                F32 min_scale = te ? llmin(fabsf(te->getScaleS()), fabsf(te->getScaleT())) : 1.f;
+                                min_scale     = llmax(min_scale * min_scale, 0.1f);
 
-                            vsize /= min_scale;
+                                vsize /= min_scale;
+                            }
                             vsize /= powf(4, LLViewerTexture::sDesiredDiscardBias - 0.99f);
 
                             F32  radius;
@@ -968,6 +971,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                             }
                             // If rigged, wait for all mesh to load to avoid stealing bandwidth.
                             vsize *= ((face->isState(LLFace::RIGGED)) ? llmin(face->mAvatar->getRezzedStatus(), 2) : 1);
+
                             if (i == 0)
                             {
                                 // TommyTheTerrible - Grab Material for processing later.
@@ -987,9 +991,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                         vsize = (1024 * 1024);
                         importance = 1.f;
                         imagep->setForHUD();
-                    }
-                    if (face->isState(LLFace::TEXTURE_ANIM)) {
-                        //face->
                     }
                 }
 
