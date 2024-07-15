@@ -907,63 +907,108 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     static LLCachedControl<F32> bias_distance_scale(gSavedSettings, "TextureBiasDistanceScale", 1.f);
 
     F32 assignSize = -1;
+    F32 assignImportance = -1;
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE
     {
+        F32 drawDistance = gSavedSettings.getF32("RenderFarClip");
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
         {
             std::vector<class LLFetchedGLTFMaterial*> materialList;
             U32 materialCount = 0;
             for (U32 fi = 0; fi < imagep->getNumFaces(i); ++fi)
             {
-                F32 vsize = 0;
+                F32 vsize = -1;
+                F32 importance = 0;
                 LLFace* face = (*(imagep->getFaceList(i)))[fi];
 
                 if (face && face->getViewerObject() && face->getTextureEntry())
                 {
-                    vsize = face->getPixelArea();
-
-                    // scale desired texture resolution higher or lower depending on texture scale
-                    const LLTextureEntry* te = face->getTextureEntry();
-                    F32 min_scale = te ? llmin(fabsf(te->getScaleS()), fabsf(te->getScaleT())) : 1.f;
-                    min_scale = llmax(min_scale*min_scale, 0.1f);
-
-                    vsize /= min_scale;
-// <FS:Beq> Fix Blurry texture on Mac
-// #if LL_DARWIN
-//                     vsize /= 1.f + LLViewerTexture::sDesiredDiscardBias*(1.f+face->getDrawable()->mDistanceWRTCamera*bias_distance_scale);
-// #else
-// </FS:Beq>
-                    vsize /= LLViewerTexture::sDesiredDiscardBias;
-                    vsize /= llmax(1.f, (LLViewerTexture::sDesiredDiscardBias-1.f) * (1.f + face->getDrawable()->mDistanceWRTCamera * bias_distance_scale));
-
-                    F32 radius;
-                    F32 cos_angle_to_view_dir;
-                    BOOL in_frustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
-                    if (!in_frustum || !face->getDrawable()->isVisible())
-                    { // further reduce by discard bias when off screen or occluded
-                        vsize /= LLViewerTexture::sDesiredDiscardBias;
+                    F32 distance = face->getDrawable()->mDistanceWRTCamera;
+                    if (face->isState(LLFace::RIGGED)) {
+                        if (face->mAvatar->mDrawable)
+                            distance = face->mAvatar->mDrawable->mDistanceWRTCamera;
                     }
-// #endif // <FS:Beq/>
-                    if (i == 0)
+                    if (distance <= drawDistance)
                     {
-                        // TommyTheTerrible - Grab Material for processing later.
-                        LLFetchedGLTFMaterial *mat = te ? (LLFetchedGLTFMaterial *) te->getGLTFRenderMaterial() : nullptr;
-                        llassert(mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial *>(te->getGLTFRenderMaterial()) != nullptr);
-                        if (mat)
-                        {
-                            materialList.resize(2 * materialCount + 1);
-                            materialList[materialCount] = mat;
-                            materialCount++;
-                        }
+                        // TommyTheTerrible - Do not update textures outside of draw distance and let avatar mesh load before detailed
+                        // texturing.
+                        //if ((face->mAvatar && face->mAvatar->getRezzedStatus() < 1))
+                        //{
+                        //    vsize = 1024;
+                        //}
+                        //else
+                        //{
+                            const LLTextureEntry *te = face->getTextureEntry();
+                            vsize = face->getPixelArea();
+                            // TommyTheTerrible - User's avatar always rendered at discard 0.
+                            if (face->isState(LLFace::PARTICLE))
+                            {
+                                vsize = 128 * 128;
+                                imagep->setForParticle();
+                                continue;
+                            }
+                            static LLCachedControl<F32> bias_unimportant_threshold(gSavedSettings, "TextureBiasUnimportantFactor", 0.25f);
+                            importance = face->getImportanceToCamera();
+
+                            if (!(face->isState(LLFace::TEXTURE_ANIM)))
+                            {
+                                // scale desired texture resolution higher or lower depending on texture scale
+                                F32 min_scale = te ? llmin(fabsf(te->getScaleS()), fabsf(te->getScaleT())) : 1.f;
+                                min_scale     = llmax(min_scale * min_scale, 0.1f);
+
+                                vsize /= min_scale;
+                            }
+                            vsize /= powf(4, LLViewerTexture::sDesiredDiscardBias - 0.99f);
+
+                            F32  radius;
+                            F32  cos_angle_to_view_dir;
+                            bool in_frustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
+                            if (!in_frustum || !face->getDrawable()->isVisible() ||
+                                face->getImportanceToCamera() < bias_unimportant_threshold)
+                            {  // further reduce by discard bias when off screen or occluded
+                                vsize /= 2;
+                            }
+                            // If rigged, wait for all mesh to load to avoid stealing bandwidth.
+                            vsize *= ((face->isState(LLFace::RIGGED)) ? llmin(face->mAvatar->getRezzedStatus(), 2) : 1);
+
+                            if (i == 0)
+                            {
+                                // TommyTheTerrible - Grab Material for processing later.
+                                LLFetchedGLTFMaterial *mat = te ? (LLFetchedGLTFMaterial *) te->getGLTFRenderMaterial() : nullptr;
+                                llassert(mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial *>(te->getGLTFRenderMaterial()) != nullptr);
+                                if (mat)
+                                {
+                                    materialList.resize(2 * materialCount + 1);
+                                    materialList[materialCount] = mat;
+                                    materialCount++;
+                                }
+                            }
+                        //}
+                    }
+                    if (face->isState(LLFace::HUD_RENDER) || (face->isState(LLFace::RIGGED) && face->mAvatar->isSelf()))
+                    {
+                        vsize = (1024 * 1024);
+                        importance = 1.f;
+                        imagep->setForHUD();
                     }
                 }
+
+                //vsize = llmin(vsize, (2048 * 2048));
+                //if (vsize > 0)
+                //    vsize = llmax(vsize, 600);
                 assignSize = llmax(vsize, assignSize);
+                assignImportance = llmax(importance, assignImportance);
+                // TommyTheTerrible - Limit face processing to one particle to avoid unnecessary work or griefer attacks.
+                //      This might make other faces using same texture be blurry, but that's the cost of efficiency.
+                //if (imagep->forParticle())
+                //    break;
             }
             if (assignSize >= 0)
             {
                 if (materialCount > 0)
                 {
+                    // TommyTheTerrible - Process found materials.
                     for (U32 fi = 0; fi < materialCount; ++fi)
                     {
                         if (materialList[fi])
@@ -979,10 +1024,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     imagep->addTextureStats(assignSize);
                 }                
             }
-        }        
+        }
     }
 
-    //imagep->setDebugText(llformat("%.3f - %d", sqrtf(imagep->getMaxVirtualSize()), imagep->getBoostLevel()));
+    if (assignImportance > 0)
+        imagep->setMaxFaceImportance(assignImportance);
 
     F32 lazy_flush_timeout = 30.f; // stop decoding
     F32 max_inactive_time = 20.f; // actually delete
