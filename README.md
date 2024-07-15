@@ -2,7 +2,23 @@
 
 # AyaneStorm
 
-Quick build instructions (for Windows):
+## Features (so far)
+- Added poser from BlackDragon
+- Added experimental mouse look head scaling
+- Added camera roll/tilt buttons from Blackdragon
+- Snapshots up to 11500x11500 resolution
+- AVX2 optimized build
+- Made the Animation Speed menu easily accessible: it is no longer in Developer > Avatar > Animation Speed, it is now directly accessible in World
+- Added a "All Animations Slowed Down" menu that directly sets animations speed to the minimum (10%)
+- Added a "Freeze Animations" menu in World > Animation Speed, effectively freezing all animations.
+- No longer shows the stupid ":non-potable_water:" and "fleur-de-lys" emojis when typing ":-P" or ":-D"
+- Increased resolution limit to 2048x2048 for snapshot uploaded to inventory
+- Updated OpenJPEG to 2.5.2
+- Fixed texture and snapshots poor upload quality with OpenJPEG
+- Enabled "lossless" texture uploads
+- New icons
+
+## Quick build instructions (for Windows):
 
 First, make sure you installed all the prerequisites software. See [Windows](doc/building_windows.md)
 
