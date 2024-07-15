@@ -1031,11 +1031,11 @@ public:
                 }
             }
         }
-
+        // TommyTheTerrible - Moving this to debug log to stop scaring people.
         // <FS:ND> Report amount of failed texture buffer allocations if any.
         if (LLImageBase::getAllocationErrors())
         {
-            addText(xpos, ypos, llformat("# textures discarded due to insufficient memory %ld", LLImageBase::getAllocationErrors()));
+            LL_DEBUGS() << "# textures discarded due to insufficient memory: " << LLImageBase::getAllocationErrors() << LL_ENDL;
         }
         // </FS:ND>
     }
