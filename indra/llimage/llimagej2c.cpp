@@ -264,12 +264,18 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
     S32 nb_layers = 1;
     S32 surface = w*h;
     S32 s = 64*64;
+    S8  precision = 8; // assumed bitrate per component channel
+    S32 totalbytes = 0; // total assumed bits in pyramid
     while (surface > s)
     {
+        totalbytes += (s * comp * (S32) precision) * rate;
         nb_layers++;
         s *= 4;
     }
     F32 layer_factor =  3.0f * (7 - llclamp(nb_layers,1,6));
+
+    totalbytes /= 8; // to bytes
+    totalbytes += calcHeaderSizeJ2C();  // header
 
     // Compute w/pow(2,discard_level) and h/pow(2,discard_level)
     w >>= discard_level;
@@ -283,7 +289,9 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
     S32 new_bytes = (S32) (sqrt((F32)(w*h))*(F32)(comp)*rate*1000.f/layer_factor);
     S32 old_bytes = (S32)((F32)(w*h*comp)*rate);
     bytes = (LLImage::useNewByteRange() && (new_bytes < old_bytes) ? new_bytes : old_bytes);
-    bytes = llmax(bytes, calcHeaderSizeJ2C());
+    bytes = llmax(totalbytes, calcHeaderSizeJ2C());
+    //LL_WARNS() << "Calculate w-h-c-d-p " << w << "-" << h << "-" << comp << "-" << original_discard << "-" << (S32)precision
+    //           << " Test : " << totalbytes << " new : " << new_bytes << " old : " << old_bytes << LL_ENDL;
     return bytes;
 }
 
