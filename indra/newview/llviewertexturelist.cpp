@@ -888,6 +888,7 @@ static void touch_texture(LLViewerFetchedTexture* tex, F32 vsize)
     if (tex)
     {
         tex->addTextureStats(vsize);
+        tex->getLastReferencedTimer()->reset();
     }
 }
 
@@ -902,7 +903,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     }
 
     llassert(!gCubeSnapshot);
-
+    bool onFace = false;
     static LLCachedControl<F32> bias_distance_scale(gSavedSettings, "TextureBiasDistanceScale", 1.f);
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE
@@ -915,6 +916,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
                 if (face && face->getViewerObject() && face->getTextureEntry())
                 {
+                    onFace = true;
 // <FS:Beq> Fix Blurry textures and use importance weight
                     F32 radius;
                     F32 cos_angle_to_view_dir;
@@ -1020,6 +1022,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             imagep->getLastReferencedTimer()->reset();
 
             //reset texture state.
+            if (!onFace)
             imagep->setInactive();
         }
     }
