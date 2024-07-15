@@ -570,8 +570,8 @@ void LLViewerTexture::updateClass()
 
     F32 budget = max_vram_budget == 0 ? gGLManager.mVRAM : max_vram_budget;
 
-    // TommyTheTerrible - Start Bias creep upwards at 3/5ths VRAM used.
-    F32 whatRemains = budget * 0.60f;
+    // TommyTheTerrible - Start Bias creep upwards at 4/5ths VRAM used.
+    F32 whatRemains = budget * 0.80f;
     F32 target      = llmax(budget - whatRemains, 768.f);
 
     F32 over_pct        = llmax((used - target) / target, 0.f);
