@@ -530,6 +530,7 @@ void LLViewerTexture::updateClass()
     {
         is_low = true;
         // System RAM is low -> ramp up discard bias over time to free memory
+        LL_DEBUGS("TextureMemory") << "System memory is low, use more aggressive discard bias." << LL_ENDL;
         if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
         {
             static LLCachedControl<F32> low_mem_min_discard_increment(gSavedSettings, "RenderLowMemMinDiscardIncrement", .1f);
@@ -539,6 +540,7 @@ void LLViewerTexture::updateClass()
     }
     else
     {
+        LL_DEBUGS("TextureMemory") << "System memory is plentiful, act normally." << LL_ENDL;
         sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
 
         if (sDesiredDiscardBias > 1.f && over_pct < 0.f)
