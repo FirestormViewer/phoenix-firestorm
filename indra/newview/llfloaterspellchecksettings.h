@@ -46,6 +46,8 @@ protected:
     void onSpellCheckSettingsChange();
     void refreshDictionaries(bool from_settings);
 
+    bool mMainSelectionChanged{ false };
+
 private:
     void commitChanges();
 };

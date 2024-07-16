@@ -1385,7 +1385,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
 
     gGLManager.initWGL();
 
-    if (wglChoosePixelFormatARB)
+    if (wglChoosePixelFormatARB && wglGetPixelFormatAttribivARB)
     {
         // OK, at this point, use the ARB wglChoosePixelFormatsARB function to see if we
         // can get exactly what we want.

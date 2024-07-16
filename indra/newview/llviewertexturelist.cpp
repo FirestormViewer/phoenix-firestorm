@@ -939,6 +939,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     }
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+    bool onFace = false;
     for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
     {
         for (S32 fi = 0; fi < imagep->getNumFaces(i); ++fi)
@@ -947,6 +948,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
             if (face && face->getViewerObject())
             {
+                onFace = true;
                 F32 radius;
                 F32 cos_angle_to_view_dir;
                 bool in_frustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
@@ -1044,7 +1046,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             imagep->getLastReferencedTimer()->reset();
 
             //reset texture state.
-            imagep->setInactive();
+            if(!onFace)
+                imagep->setInactive();
         }
     }
 

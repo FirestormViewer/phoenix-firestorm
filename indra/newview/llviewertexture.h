@@ -42,12 +42,6 @@
 #include <map>
 #include <list>
 
-extern const S32Megabytes gMinVideoRam;
-// <FS:Ansariel> Texture memory management
-//extern const S32Megabytes gMaxVideoRam;
-extern S32Megabytes gMaxVideoRam;
-// </FS:Ansariel>
-
 // <FS:Ansariel> Max texture resolution
 extern U32 DESIRED_NORMAL_TEXTURE_SIZE;
 

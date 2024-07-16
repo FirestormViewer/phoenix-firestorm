@@ -1683,6 +1683,11 @@ void render_ui_3d()
         gObjectList.resetObjectBeacons();
         gSky.addSunMoonBeacons();
     }
+    else
+    {
+        // Make sure particle effects disappear
+        LLHUDObject::renderAllForTimer();
+    }
 
     stop_glerror();
 }
