@@ -191,6 +191,13 @@ void LLMemory::updateMemoryInfo()
     {
         sAvailPhysicalMemInKB = U32Kilobytes(0);
     }
+    // debug log the memory info
+    LL_DEBUGS("MemoryInfo")  << "Memory Info:" 
+                << "Heap: " << sMaxHeapSizeInKB << "; "  // Heap
+                << "Free: " << sAvailPhysicalMemInKB << "; "  // Free
+                << "FS Use: " << sAllocatedMemInKB << "; " // In use by this instance right now
+                << "FS Max poss: " << sMaxPhysicalMemInKB << "; " // How much we could have (In use now + free)
+                << LL_ENDL;
     // </FS:Beq>
     return ;
 }
