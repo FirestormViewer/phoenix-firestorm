@@ -573,6 +573,7 @@ void LLViewerTexture::updateClass()
     if (isSystemMemoryForTextureLow())
     {
         // System RAM is low -> ramp up discard bias over time to free memory
+        LL_DEBUGS("TextureMemory") << "System memory is low, use more aggressive discard bias." << LL_ENDL;
         if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
         {
             sDesiredDiscardBias += llmax(.1f, over_pct); // add at least 10% over-percentage
@@ -581,6 +582,7 @@ void LLViewerTexture::updateClass()
     }
     else
     {
+        LL_DEBUGS("TextureMemory") << "System memory is plentiful, act normally." << LL_ENDL;
         sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
 
         if (sDesiredDiscardBias > 1.f)
