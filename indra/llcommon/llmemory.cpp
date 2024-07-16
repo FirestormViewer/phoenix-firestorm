@@ -154,7 +154,7 @@ void LLMemory::updateMemoryInfo()
         // <FS:Beq> align MemInfo across platforms
         // sAvailPhysicalMemInKB = U32Bytes(vmstat.free_count * page_size);
         // sMaxPhysicalMemInKB = LLMemoryInfo::getHardwareMemSize();
-        avail_phys = U32Bytes(vmstat.free_count * page_size);
+        avail_phys = U32Bytes( (vmstat.free_count + vmstat.inactive_count) * page_size);
         sMaxHeapSizeInKB = LLMemoryInfo::getHardwareMemSize();
         // </FS:Beq>
     }
