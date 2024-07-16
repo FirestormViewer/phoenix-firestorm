@@ -263,13 +263,13 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
     // Estimate the number of layers. This is consistent with what's done for j2c encoding in LLImageJ2CKDU::encodeImpl().
     S32 nb_layers = 1;
     S32 surface = w*h;
-    S32 s = 64*64;
+    S32 s = 64*64;    
     S8  precision = 8; // assumed bitrate per component channel
-    S32 totalbytes = 0; // total assumed bits in pyramid
+    S32 totalbytes = (s * comp * (S32) precision) * rate; // total assumed bits in pyramid, first level computed before loop
     while (surface > s)
     {
-        if (nb_layers <= (6 - discard_level))
-        totalbytes += (s * comp * (S32) precision) * rate;
+        if (nb_layers <= (5 - discard_level))
+            totalbytes += (s * comp * (S32) precision) * rate;
         nb_layers++;
         s *= 4;
     }
@@ -290,9 +290,9 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
     S32 new_bytes = (S32) (sqrt((F32)(w*h))*(F32)(comp)*rate*1000.f/layer_factor);
     S32 old_bytes = (S32)((F32)(w*h*comp)*rate);
     bytes = (LLImage::useNewByteRange() && (new_bytes < old_bytes) ? new_bytes : old_bytes);
-    bytes = llmax(totalbytes, calcHeaderSizeJ2C());
-    //LL_WARNS() << "Calculate w-h-c-d-p " << w << "-" << h << "-" << comp << "-" << discard_level << "-" << (S32)precision
-    //           << " Test : " << totalbytes << " new : " << new_bytes << " old : " << old_bytes << LL_ENDL;
+    bytes = llmax((S32)totalbytes, calcHeaderSizeJ2C());
+    LL_WARNS() << "Calculate w-h-c-d-p " << w << "-" << h << "-" << comp << "-" << discard_level << "-" << (S32)precision
+               << " Pyramid: " << (S32)totalbytes << " LayerFactored: " << new_bytes << " WJCR: " << old_bytes << LL_ENDL;
     return bytes;
 }
 
