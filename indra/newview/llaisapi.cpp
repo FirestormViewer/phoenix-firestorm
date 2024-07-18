@@ -1009,6 +1009,18 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
                 }
             }
             break;
+        // <FS:Zi> FIRE-34169 - Fix #RLV ~Subfolder creation
+        case UPDATECATEGORY:
+            if (result.has("_updated_categories"))
+            {
+                id = result["_updated_categories"][0];
+            }
+            else if (result.has("category_id"))
+            {
+                id = result["category_id"];
+            }
+            break;
+        // </FS:Zi>
         default:
             break;
         }
