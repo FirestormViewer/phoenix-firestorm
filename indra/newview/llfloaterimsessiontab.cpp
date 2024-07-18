@@ -690,7 +690,7 @@ void LLFloaterIMSessionTab::removeConversationViewParticipant(const LLUUID& part
         {
             // This is the last pointer, remove participant from session
             // before participant gets deleted on destroyView.
-            // 
+            //
             // Floater (widget) and participant's view can simultaneously
             // co-own the model, in which case view is responsible for
             // the deletion and floater is free to clear and recreate
@@ -699,7 +699,7 @@ void LLFloaterIMSessionTab::removeConversationViewParticipant(const LLUUID& part
             // See "add_participant".
             //
             // Todo: If it keeps causing issues turn participants
-            // into LLPointers in the session 
+            // into LLPointers in the session
             LLParticipantList* session = getParticipantList();
             if (session)
             {
