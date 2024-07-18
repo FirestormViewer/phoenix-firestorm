@@ -19,6 +19,8 @@
 	<panel name="controls">
 		<panel name="zoom">
 			<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>
+			<button name="roll_left" tool_tip="Kamera nach links rollen" />
+			<button name="roll_right" tool_tip="Kamera nach rechts rollen" />
 			<slider_bar name="zoom_slider" tool_tip="Kamera auf Fokus zoomen"/>
 			<joystick_track name="cam_track_stick" tool_tip="Kamera nach oben, unten, links und rechts bewegen"/>
 		</panel>
