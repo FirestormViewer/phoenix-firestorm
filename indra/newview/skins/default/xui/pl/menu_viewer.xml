@@ -92,12 +92,6 @@
 		<menu_item_check label="Ludzie" name="People"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>
-		<menu label="Przekształcanie głosu" name="VoiceMorphing">
-			<menu_item_check label="Bez przekształcania" name="NoVoiceMorphing"/>
-			<menu_item_check label="Podgląd..." name="Preview"/>
-			<menu_item_call label="Subskrybuj..." name="Subscribe"/>
-			<menu_item_call label="Korzyści premium..." name="PremiumPerk" />
-		</menu>
 		<menu_item_check name="Conversation Log..." label="Dziennik rozmów..."/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
 		<menu_item_call label="Lista zablokowanych" name="Block List"/>

@@ -880,12 +880,6 @@
         <string>https://github.com/secondlife/3p-emoji-shortcodes</string>
         <key>description</key>
         <string>Emoji shortcodes</string>
-        <key>name</key>
-        <string>emoji_shortcodes</string>
-        <key>canonical_repo</key>
-        <string>https://github.com/secondlife/3p-emoji-shortcodes</string>
-        <key>description</key>
-        <string>Emoji shortcodes</string>
       </map>
       <key>expat</key>
       <map>
@@ -2844,7 +2838,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>9ab29796dc144431a9db46fddfbd88b0</string>
               <key>hash_algorithm</key>
-              <string>md5</string>
+              <string>sha1</string>
               <key>url</key>
               <string>https://3p.firestormviewer.org/tracy-v0.10.241831929-linux-241831929.tar.bz2</string>
             </map>
@@ -3242,11 +3236,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>21e31d2c2fffdb59d8f50b80db079f86f2df2483</string>
+              <string>0a0a972036f2b2c9c97dead40c91f7443b8ab339</string>
               <key>hash_algorithm</key>
-              <string>md5</string>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m114.5735.08.58/webrtc-m114.5735.08.58.8716173807-darwin64-8716173807.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m114.5735.08.61-debug/webrtc-m114.5735.08.61-debug.9571929057-darwin64-9571929057.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3256,11 +3250,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>600cabb49a889db3a29f2910f5bda08f28dd04c8</string>
+              <string>8725ad23f33d946bd5a4e5f28e8c8324925c71a7</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m114.5735.08.58/webrtc-m114.5735.08.58.8716173807-linux64-8716173807.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m114.5735.08.61-debug/webrtc-m114.5735.08.61-debug.9571929057-linux64-9571929057.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3270,11 +3264,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>915c9face95efcc6da240aa2c4f8e6c4aa803af8</string>
+              <string>db560661807db276a3c7d1e7d9531198c9268f68</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m114.5735.08.58/webrtc-m114.5735.08.58.8716173807-windows64-8716173807.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m114.5735.08.61-debug/webrtc-m114.5735.08.61-debug.9571929057-windows64-9571929057.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3287,7 +3281,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
         <key>version</key>
-        <string>m114.5735.08.59-debug.8823062977</string>
+        <string>m114.5735.08.61-debug.9571929057</string>
         <key>name</key>
         <string>webrtc</string>
         <key>vcs_branch</key>
