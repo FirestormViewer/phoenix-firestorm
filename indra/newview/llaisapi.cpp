@@ -984,6 +984,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
                 id = result["linked_id"];
             }
             break;
+        case COPYINVENTORY: // <FS:Ansariel> Bring this back from Kitty's patch
         case CREATEINVENTORY:
             // CREATEINVENTORY can have multiple callbacks
             if (result.has("_created_categories"))
@@ -1013,7 +1014,14 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
         case UPDATECATEGORY:
             if (result.has("_updated_categories"))
             {
-                id = result["_updated_categories"][0];
+                LLSD& items = result["_updated_categories"];
+                LLSD::array_const_iterator item_iter;
+                for (item_iter = items.beginArray(); item_iter != items.endArray(); ++item_iter)
+                {
+                    LLUUID item_id = *item_iter;
+                    callback(item_id);
+                    needs_callback = false;
+                }
             }
             else if (result.has("category_id"))
             {
