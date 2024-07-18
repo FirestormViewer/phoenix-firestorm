@@ -5444,7 +5444,7 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     assertInitialized();
 
-    if (LLPipeline::sReflectionRender || gCubeSnapshot || LLPipeline::sRenderingHUDs)
+    if (LLPipeline::sReflectionRender || gCubeSnapshot || LLPipeline::sRenderingHUDs || LLApp::isExiting())
     {
         return;
     }

@@ -2647,7 +2647,6 @@ void LLVivoxVoiceClient::sessionCreateSendMessage(const sessionStatePtr_t &sessi
     stream
         << "<ConnectAudio>" << (startAudio?"true":"false") << "</ConnectAudio>"
         << "<ConnectText>" << (startText?"true":"false") << "</ConnectText>"
-        << "<VoiceFontID>" << font_index << "</VoiceFontID>"
         << "<Name>" << mChannelName << "</Name>"
     << "</Request>\n\n\n";
     LL_WARNS("Voice") << "Session.Create: " << stream.str() << LL_ENDL;
@@ -2686,7 +2685,6 @@ void LLVivoxVoiceClient::sessionGroupAddSessionSendMessage(const sessionStatePtr
         << "<Name>" << mChannelName << "</Name>"
         << "<ConnectAudio>" << (startAudio?"true":"false") << "</ConnectAudio>"
         << "<ConnectText>" << (startText?"true":"false") << "</ConnectText>"
-        << "<VoiceFontID>" << font_index << "</VoiceFontID>"
         << "<Password>" << password << "</Password>"
         << "<PasswordHashAlgorithm>SHA1UserName</PasswordHashAlgorithm>"
     << "</Request>\n\n\n"
@@ -2710,7 +2708,6 @@ void LLVivoxVoiceClient::sessionMediaConnectSendMessage(const sessionStatePtr_t 
     << "<Request requestId=\"" << session->mHandle << "\" action=\"Session.MediaConnect.1\">"
         << "<SessionGroupHandle>" << session->mGroupHandle << "</SessionGroupHandle>"
         << "<SessionHandle>" << session->mHandle << "</SessionHandle>"
-        << "<VoiceFontID>" << font_index << "</VoiceFontID>"
         << "<Media>Audio</Media>"
     << "</Request>\n\n\n";
 
