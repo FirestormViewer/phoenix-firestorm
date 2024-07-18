@@ -1814,6 +1814,7 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
     mFallbackImage(p.fallback_image),
     mTextEnabledColor(p.text_enabled_color),      // <FS:Zi> Add label/caption colors
     mTextDisabledColor(p.text_disabled_color),    // <FS:Zi> Add label/caption colors
+    mLabel(p.label),                              // <FS:Zi> FIRE-34300 - Fix label not showing in texture picker floater title
     // <FS:Ansariel> Mask texture if desired
     mIsMasked(false)
 {

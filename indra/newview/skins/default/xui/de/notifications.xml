@@ -3624,6 +3624,10 @@ Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice
 	<notification name="VoiceEffectsNew">
 		Neue Voice-Morph-Effekte sind erhältlich!
 	</notification>
+	<notification name="VoiceEffectsNotSupported">
+		Voice-Morph-Effekte werden von diesem Viewer nicht unterstützt.
+		<usetemplate notext="Abbrechen" name="okcancelbuttons" yestext="Voice-Morph deaktivieren"/>
+	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Nur Mitglieder einer bestimmten Gruppe dürfen diesen Bereich betreten.
 	</notification>

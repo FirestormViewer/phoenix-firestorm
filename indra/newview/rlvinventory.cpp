@@ -575,42 +575,24 @@ void RlvGiveToRLVOffer::moveAndRename(const LLUUID& idFolder, const LLUUID& idDe
     const LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
     if ( (idDestination.notNull()) && (pFolder) )
     {
-        bool needsRename = (pFolder->getName() != strName);
+        gInventory.changeCategoryParent(gInventory.getCategory(idFolder), idDestination, false);
+        gInventory.addChangedMask(LLInventoryObserver::STRUCTURE, idFolder);
+        gInventory.notifyObservers();
+        gInventory.fetchDescendentsOf(idDestination);
 
-        LLPointer<LLInventoryCallback> cbMove;
-        if (idDestination != pFolder->getParentUUID())
+        // rename and restart this function if the folder doesn't have the correct name.
+        // This will also trigger another move above, but that should have no ill effects
+        // and might even help when the folder didn't move correctly the first time. -Zi
+        if (pFolder->getName() != strName)
         {
-            // We have to move *after* the rename operation completes or AIS will drop it
-            if (!needsRename)
-            {
-                LLInventoryModel::update_list_t update;
-                LLInventoryModel::LLCategoryUpdate updOldParent(pFolder->getParentUUID(), -1);
-                update.push_back(updOldParent);
-                LLInventoryModel::LLCategoryUpdate updNewParent(idDestination, 1);
-                update.push_back(updNewParent);
-                gInventory.accountForUpdate(update);
-
-                LLPointer<LLViewerInventoryCategory> pNewFolder = new LLViewerInventoryCategory(pFolder);
-                pNewFolder->setParent(idDestination);
-                pNewFolder->updateParentOnServer(false);
-
-                gInventory.updateCategory(pNewFolder);
-                gInventory.notifyObservers();
-
-                if (cbFinal)
-                {
-                    cbFinal.get()->fire(idFolder);
-                }
-            }
-            else
-            {
-                cbMove = new LLBoostFuncInventoryCallback(boost::bind(RlvGiveToRLVOffer::moveAndRename, _1, idDestination, strName, cbFinal));
-            }
+            LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(RlvGiveToRLVOffer::moveAndRename, _1, idDestination, strName, cbFinal));
+            rename_category(&gInventory, idFolder, strName, cb);
+            return;
         }
 
-        if (needsRename)
+        if (cbFinal)
         {
-            rename_category(&gInventory, idFolder, strName, (cbMove) ? cbMove : cbFinal);
+            cbFinal.get()->fire(idFolder);
         }
     }
     else if (cbFinal)

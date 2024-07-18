@@ -41,7 +41,10 @@
 
 #include "llagentbenefits.h"
 
-constexpr S32 MAX_TEXTURE_SIZE = 512 ; //max upload texture size 512 * 512
+// <FS:Chanayane> 2048x2048 snapshots upload to inventory
+//const S32 MAX_TEXTURE_SIZE = 512 ; //max upload texture size 512 * 512
+const S32 MAX_TEXTURE_SIZE = 2048 ; //max upload texture size 2048 * 2048
+// </FS:Chanayane>
 
 S32 power_of_two(S32 sz, S32 upper)
 {
@@ -66,7 +69,12 @@ bool LLPanelSnapshot::postBuild()
     LLUICtrl* save_btn = findChild<LLUICtrl>("save_btn");
     if (save_btn)
     {
-        save_btn->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost()));
+        // <FS:Chanayane> 2048x2048 snapshots upload to inventory
+        //save_btn->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost()));
+        S32 w = getTypedPreviewWidth();
+        S32 h = getTypedPreviewHeight();
+        save_btn->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost(w, h)));
+        // </FS:Chanayane>
     }
     // </FS:Ansariel>
     getChild<LLUICtrl>(getImageSizeComboName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onResolutionComboCommit, this, _1));
