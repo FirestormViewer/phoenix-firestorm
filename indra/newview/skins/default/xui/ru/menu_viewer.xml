@@ -397,6 +397,11 @@
 		</menu>
 		<menu label="Типы визуализации" name="Rendering Types">
 			<menu_item_check label="Простой" name="Rendering Type Simple"/>
+			<menu_item_check label="Материалы" name="Rendering Type Materials"/>
+			<menu_item_check label="Альфа маска" name="Rendering Type Alpha Mask"/>
+			<menu_item_check label="Полный яркий Альфа маска" name="Rendering Type Fullbright Alpha Mask"/>
+			<menu_item_check label="Свечение" name="Rendering Type Glow"/>
+			<menu_item_check label="Полный яркий" name="Rendering Type Fullbright"/>
 			<menu_item_check label="Альфа" name="Rendering Type Alpha"/>
 			<menu_item_check label="Дерево" name="Rendering Type Tree"/>
 			<menu_item_check label="Аватары" name="Rendering Type Character"/>
@@ -506,12 +511,15 @@
 			<menu_item_check label="Тест кадров" name="Frame Test"/>
 			<menu_item_call label="Профиль кадра" name="Frame Profile"/>
 			<menu_item_call label="Стандарт (benchmark)" name="Benchmark"/>
+			<menu_item_call label="HDRI Предпросмотр" name="HDRI Preview"/>
+			<menu_item_call label="GLTF Предпросмотр сцены" name="GLTF Scene Preview"/>
 		</menu>
 		<menu label="Метаданные прорисовки" name="Render Metadata">
 			<menu_item_check label="Ограничительные рамки (Bounding Boxes)" name="Bounding Boxes"/>
 			<menu_item_check label="Хитбоксы аватара (Hitboxy)" name="Avatar Hitboxes"/>
 			<menu_item_check label="Нормали" name="Normals"/>
 			<menu_item_check label="Октадерево" name="Octree"/>
+			<menu_item_check label="GLTF Узлы" name="GLTF Nodes"/>
 			<menu_item_check label="Тень усеченного конуса (Shadow Frusta)" name="Shadow Frusta"/>
 			<menu_item_check label="Физические формы" name="Physics Shapes"/>
 			<menu_item_check label="Окклюзия" name="Occlusion"/>
@@ -564,7 +572,9 @@
 			<menu_item_check label="Текстуры в полном разрешении (ОПАСНО)" name="Full Res Textures"/>
 			<menu_item_check label="Прорисовка присоединенных источников света" name="Render Attached Lights"/>
 			<menu_item_check label="Прорисовка присоединенных частиц" name="Render Attached Particles"/>
-			<menu_item_check label="Парящие светящиеся объекты" name="Hover Glow Objects"/>
+			<menu_item_check label="Включить кэш шейдеров" name="Enable Shader Cache"/>
+			<menu_item_call label="Очистить кэш шейдеров" name="Shader Cache Clear"/>
+			<menu_item_call label="Восстановить местность" name="Rebuild Terrain"/>
 		</menu>
 		<menu label="Сеть" name="Network">
 			<menu_item_check label="Приостановить аватара" name="AgentPause"/>

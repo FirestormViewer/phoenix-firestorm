@@ -1269,11 +1269,13 @@ bool idle_startup()
         gLoginMenuBarView->setVisible( TRUE );
         gLoginMenuBarView->setEnabled( TRUE );
 
-        LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID);
-        if(chat_channel)
+        // <FS> Fixing chat toasts to not show on the login page when login progress screens are disabled.
+        LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NEARBY_CHAT_CHANNEL_UUID);
+        if (chat_channel)
         {
             chat_channel->removeToastsFromChannel();
         }
+        // </FS>
 
         show_debug_menus();
 
@@ -3976,11 +3978,13 @@ void reset_login()
     }
 
     // Hide any other stuff
-    LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID);
-    if(chat_channel)
+    // <FS> Fixing chat toasts to not show on the login page when login progress screens are disabled.
+    LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NEARBY_CHAT_CHANNEL_UUID);
+    if (chat_channel)
     {
         chat_channel->removeToastsFromChannel();
     }
+    // </FS>
     LLFloaterReg::hideVisibleInstances();
     LLStartUp::setStartupState( STATE_BROWSER_INIT );
 

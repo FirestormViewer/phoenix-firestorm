@@ -2186,6 +2186,28 @@
       <key>Value</key>
       <string>http://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/avatars.html</string>
     </map>
+    <key>AvatarRotateThresholdSlow</key>
+    <map>
+      <key>Comment</key>
+      <string>Angle between avatar facing and camera facing at which avatar turns to face same direction as camera, when moving slowly (degrees)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>60</integer>
+    </map>
+    <key>AvatarRotateThresholdFast</key>
+    <map>
+      <key>Comment</key>
+      <string>Angle between avatar facing and camera facing at which avatar turns to face same direction as camera, when moving fast (degrees)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
     <key>AvatarBakedTextureUploadTimeout</key>
     <map>
       <key>Comment</key>
@@ -14959,6 +14981,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>TextureBiasUnimportantFactor</key>
+    <map>
+      <key>Comment</key>
+      <string>When biasing textures to lower resolution due to lack of vram, the importance threshold below which is considered unimportant and getting an extra bias.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.25</real>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>TextureDecodeDisabled</key>
     <map>
       <key>Comment</key>
@@ -15141,7 +15176,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>500.0</real>
+      <real>3000.0</real>
     </map>
     <key>ToolTipDelay</key>
     <map>
@@ -25052,13 +25087,24 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSRestrictMaxTextureSize</key>
     <map>
       <key>Comment</key>
-      <string>If enabled, the maximum resolution for fetched textures will be restricted and lowered by factor 2 (64bit versions only; requires restart)</string>
+      <string>If enabled, the maximum resolution for fetched textures will be restricted to FSRestrictMaxTexturePixels pixels (64bit versions only; requires restart)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSRestrictMaxTexturePixels</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum texture resolution when FSRestrictMaxTextureSize is enabled. Must be a power of 2 and at least 512 pixels.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>512</integer>
     </map>
     <key>FSScriptInfoExtended</key>
     <map>
@@ -25441,6 +25487,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSMinFreeMainMemoryTextureDiscardThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>Minimum of available physical memory in MB before textures get scaled down</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>512</integer>
     </map>
   </map>
 </llsd>

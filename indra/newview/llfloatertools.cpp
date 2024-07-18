@@ -302,6 +302,7 @@ BOOL    LLFloaterTools::postBuild()
     LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
 
     mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
+    mCheckSelectProbes = getChild<LLCheckBoxCtrl>("checkbox select probes");
     // </FS:KC>
 
 
@@ -428,6 +429,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
     // <FS:KC>
     mCheckShowHighlight(NULL),
     mCheckActualRoot(NULL),
+    mCheckSelectProbes(NULL),
     // </FS:KC>
 
     mBtnRotateLeft(NULL),
@@ -1014,6 +1016,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     // <FS:KC>
     if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible );
     if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible );
+    if (mCheckSelectProbes) mCheckSelectProbes->setVisible( edit_visible );
     // </FS:KC>
 
     // Create buttons

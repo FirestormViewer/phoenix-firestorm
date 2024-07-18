@@ -2093,15 +2093,30 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         gSavedSettings.setU32("RenderQualityPerformance", 0);
     }
 
-    // <FS:Ansariel> Max texture resolution
-#if ADDRESS_SIZE == 64
+    // <FS:Ansariel> Max texture resolution / Zi: changed this to accept pixel values so we are independent from maximum texture size
     if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
     {
-        DESIRED_NORMAL_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2;
+        // fallback value if no matching pixel size is found (i.e. someone fiddled with the debugs)
+        DESIRED_NORMAL_TEXTURE_SIZE = 512;
+
+        // clamp pixels between 512 and half the current maximum texture size
+        U32 pixels = llclamp(gSavedSettings.getU32("FSRestrictMaxTexturePixels"), 512, (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2);
+
+        // check pixel value against powers of 2 up to (not including) current maximum texture size
+        U32 pow_of_2 =  512;
+        while(pow_of_2 < (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT)
+        {
+            // power of 2 matches, save it
+            if (pixels == pow_of_2)
+            {
+                DESIRED_NORMAL_TEXTURE_SIZE = pixels;
+                break;
+            }
+
+            // next power of 2
+            pow_of_2 <<= 1;
+        }
     }
-#else
-    gSavedSettings.setBOOL("FSRestrictMaxTextureSize", TRUE);
-#endif
     LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_TEXTURE_SIZE << "px" << LL_ENDL;
     // </FS:Ansariel>
 
@@ -6534,6 +6549,8 @@ BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     glh::matrix4f saved_proj = get_current_projection();
     glh::matrix4f saved_mod = get_current_modelview();
 
+    camera->disconnectCameraAngleSignal();  // <FS:Zi> disconnect the "CameraAngle" changed signal
+
     // camera constants for the square, cube map capture image
     camera->setAspect(1.0); // must set aspect ratio first to avoid undesirable clamping of vertical FoV
     camera->setViewNoBroadcast(F_PI_BY_TWO);
@@ -6667,6 +6684,8 @@ BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     set_current_projection(saved_proj);
     setup3DViewport();
     LLPipeline::sUseOcclusion = old_occlusion;
+
+    camera->connectCameraAngleSignal();    // <FS:Zi> reconnect the "CameraAngle" changed signal so mouselook zoom keeps working
 
     // ====================================================
     return true;

@@ -2751,6 +2751,17 @@ void LLAgent::endAnimationUpdateUI()
     // clean up UI from mode we're leaving
     if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK )
     {
+        // <FS:Zi> FIRE-33958: clear out any visible toasts/group notices before leaving mouselook
+        LLNotificationsUI::LLScreenChannel* channel = dynamic_cast<LLNotificationsUI::LLScreenChannel*>(
+            LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID)
+        );
+
+        if(channel)
+        {
+            channel->removeAndStoreAllStorableToasts();
+        }
+        // </FS:Zi>
+
         // <FS:Zi> Unhide chat bar, unless autohide is enabled
         gSavedSettings.setBOOL("MouseLookEnabled",FALSE);
         if(!gSavedSettings.getBOOL("AutohideChatBar"))
@@ -2914,6 +2925,16 @@ void LLAgent::endAnimationUpdateUI()
     //---------------------------------------------------------------------
     if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
     {
+        // <FS:Zi> FIRE-33958: clear out any visible toasts/group notices before entering mouselook
+        LLNotificationsUI::LLScreenChannel* channel = dynamic_cast<LLNotificationsUI::LLScreenChannel*>(
+            LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID)
+        );
+
+        if(channel)
+        {
+            channel->removeAndStoreAllStorableToasts();
+        }
+        // </FS:Zi>
 
         // <FS:PP> FIRE-8868: Show UI in mouselook
         if(!gSavedSettings.getBOOL("FSShowInterfaceInMouselook"))

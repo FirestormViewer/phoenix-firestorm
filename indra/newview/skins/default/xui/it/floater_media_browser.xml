@@ -25,7 +25,6 @@ https://wiki.firestormviewer.org/fs_media
 per cercare di risolvere il problema.
 			</text>
 			<button label="Apri nel web browser" name="open_browser"/>
-			<check_box label="Apri sempre nel web browser" name="open_always"/>
 			<button label="Chiudi" name="close"/>
 		</layout_panel>
 	</layout_stack>

@@ -1021,7 +1021,7 @@ LLSD FSData::getSystemInfo()
                                                                     info["SIMD"].asString().c_str(),
                                                                     info["BUILD_TYPE"].asString().c_str());
     sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
-    sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
+    sysinfo1 += llformat("Location: %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
     sysinfo1 += llformat("%s\n\n", info["SERVER_VERSION"].asString().c_str());
 
     sysinfo1 += llformat("CPU: %s\n", info["CPU"].asString().c_str());
@@ -1029,7 +1029,9 @@ LLSD FSData::getSystemInfo()
     sysinfo1 += llformat("OS: %s\n", info["OS_VERSION"].asString().c_str());
     sysinfo1 += llformat("Graphics Card Vendor: %s\n", info["GRAPHICS_CARD_VENDOR"].asString().c_str());
     sysinfo1 += llformat("Graphics Card: %s\n", info["GRAPHICS_CARD"].asString().c_str());
-    sysinfo1 += llformat("Graphics Card Memory: %d MB\n", info["GRAPHICS_CARD_MEMORY"].asInteger());
+    sysinfo1 += llformat("VRAM: %d MB\n", info["GRAPHICS_CARD_MEMORY"].asInteger());
+    sysinfo1 += llformat("VRAM (Detected): %d MB\n", info["GRAPHICS_CARD_MEMORY_DETECTED"].asInteger());
+    sysinfo1 += llformat("VRAM (Budget): %s\n", info["VRAM_BUDGET_ENGLISH"].asString().c_str());
 
     if (info.has("GRAPHICS_DRIVER_VERSION"))
     {
@@ -1062,15 +1064,6 @@ LLSD FSData::getSystemInfo()
     sysinfo2 += llformat("Bandwidth: %d kbit/s\n", info["BANDWIDTH"].asInteger());
     sysinfo2 += llformat("LOD Factor: %.3f\n", info["LOD"].asReal());
     sysinfo2 += llformat("Render quality: %s\n", info["RENDERQUALITY_FSDATA_ENGLISH"].asString().c_str());
-    sysinfo2 += llformat("ALM enabled: %s\n", info["ALMSTATUS_FSDATA_ENGLISH"].asString().c_str());
-    if (info["TEXTUREMEMORYDYNAMIC"].asBoolean())
-    {
-        sysinfo2 += llformat("Texture memory: Dynamic (%d MB min / %d%% Cache / %d%% VRAM)\n", info["TEXTUREMEMORYMIN"].asInteger(), info["TEXTUREMEMORYCACHERESERVE"].asInteger(), info["TEXTUREMEMORYGPURESERVE"].asInteger());
-    }
-    else
-    {
-        sysinfo2 += llformat("Texture memory: %d MB (%.2f)\n", info["TEXTUREMEMORY"].asInteger(), info["TEXTUREMEMORYMULTIPLIER"].asReal());
-    }
     sysinfo2 += "Disk cache: " + info["DISK_CACHE_INFO"].asString();
 
     LLSD sysinfos;

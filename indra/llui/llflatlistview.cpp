@@ -251,8 +251,14 @@ bool LLFlatListView::removeItemByValue(const LLSD& value, bool rearrange)
     if (value.isUndefined()) return false;
 
     item_pair_t* item_pair = getItemPair(value);
-    if (!item_pair) return false;
-
+    // <FS:Beq> try to find where the notifications get stuck
+    // if (!item_pair) return false;
+    if (!item_pair)
+    {
+        LL_WARNS() << "LLFlatListView::removeItemByValue: item_pair not found" << LL_ENDL;
+        return false;
+    }
+    // </FS:Beq>
     return removeItemPair(item_pair, rearrange);
 }
 
@@ -1105,7 +1111,13 @@ bool LLFlatListView::removeItemPair(item_pair_t* item_pair, bool rearrange)
         }
     }
 
-    if (!deleted) return false;
+    // <FS:Beq> try to find where the notifications get stuck
+    // if (!deleted) return false;
+    if (!deleted)
+    {
+        LL_WARNS() << "LLFlatListView::removeItemPair: item not found" << LL_ENDL;
+        return false;
+    }
 
     for (pairs_iterator_t it = mSelectedItemPairs.begin(); it != mSelectedItemPairs.end(); ++it)
     {

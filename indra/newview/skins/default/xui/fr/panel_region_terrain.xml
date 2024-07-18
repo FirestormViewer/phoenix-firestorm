@@ -1,26 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Terrain" name="Terrain">
-	<text name="region_text_lbl">Région :</text>
-	<text name="region_text">inconnue</text>
+	<text name="region_text_lbl">
+		Région :
+	</text>
+	<text name="region_text">
+		inconnue
+	</text>
 	<spinner label="Niveau de la mer" name="water_height_spin"/>
 	<spinner label="Altitude maximale" name="terrain_raise_spin"/>
 	<spinner label="Altitude minimale" name="terrain_lower_spin"/>
-	<text name="detail_texture_text">Textures du terrain (Requis : fichiers .tga de taille 1024x1024, 24 bits)</text>
-	<text name="height_text_lbl" width="95">1 (Basse altitude)</text>
-	<text name="height_text_lbl2" left_pad="60">2</text>
-	<text name="height_text_lbl3" width="70">3</text>
-	<text name="height_text_lbl4" left_pad="0">4 (Haute altitude)</text>
-	<text name="height_text_lbl5">Variation des textures</text>
-	<text name="height_text_lbl10">Ces valeurs représentent l'altitude de changement des textures ci-dessus.</text>
-	<text name="height_text_lbl11">Mesurées en mètres, la valeur Basse est l'altitude maximum de la première texture, et la valeur Haute est l'altitude minimum de la dernière texture.</text>
-	<text name="height_text_lbl6">Nord-Ouest</text>
-	<text name="height_text_lbl7">Nord-Est</text>
+	<text name="detail_texture_text">
+		Textures du terrain
+	</text>
+	<text name="detail_material_text">
+		Matériaux du terrain
+	</text>
+	<check_box label="PBR Metallic Roughness" name="terrain_material_type" tool_tip="Si cette case est cochée, utilisez des matériaux PBR Metallic Roughness (rugosité métal) pour le terrain. Sinon, utilisez des textures."/>
+	<text name="height_text_lbl">
+		1 (Basse altitude)
+	</text>
+	<text name="height_text_lbl2">
+		2
+	</text>
+	<text name="height_text_lbl3">
+		3
+	</text>
+	<text name="height_text_lbl4">
+		4 (Haute altitude)
+	</text>
+	<text name="height_text_lbl5">
+		Variation des textures
+	</text>
+	<text name="height_text_lbl5_material">
+		Variation des matériaux
+	</text>
+	<text name="height_text_lbl10">
+		Ces valeurs représentent l'altitude de changement des textures ci-dessus.
+	</text>
+	<text name="height_text_lbl10_material">
+		Ces valeurs représentent la zone de mélange pour les matériaux ci-dessus.
+	</text>
+	<text name="height_text_lbl11">
+		Mesurées en mètres, la valeur Basse est l'altitude maximum de la première texture, et la valeur Haute est l'altitude minimum de la dernière texture.
+	</text>
+	<text name="height_text_lbl11_material">
+		Mesurée en mètres, la valeur BASSE est la hauteur MAXIMALE du matériau n°1, et la valeur HAUTE est la hauteur MINIMALE du matériau n°4.
+	</text>
+	<text name="height_text_lbl6">
+		Nord-Ouest
+	</text>
+	<text name="height_text_lbl7">
+		Nord-Est
+	</text>
 	<spinner label="Bas" name="height_start_spin_1"/>
 	<spinner label="Bas" name="height_start_spin_3"/>
 	<spinner label="Haut" name="height_range_spin_1"/>
 	<spinner label="Haut" name="height_range_spin_3"/>
-	<text name="height_text_lbl8">Sud-Ouest</text>
-	<text name="height_text_lbl9">Sud-Est</text>
+	<text name="height_text_lbl8">
+		Sud-Ouest
+	</text>
+	<text name="height_text_lbl9">
+		Sud-Est
+	</text>
 	<spinner label="Bas" name="height_start_spin_0"/>
 	<spinner label="Bas" name="height_start_spin_2"/>
 	<spinner label="Haut" name="height_range_spin_0"/>

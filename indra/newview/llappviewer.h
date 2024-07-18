@@ -245,6 +245,7 @@ protected:
     virtual void initLoggingAndGetLastDuration(); // Initialize log files, logging system
     virtual void initConsole() {}; // Initialize OS level debugging console.
     virtual bool initHardwareTest() { return true; } // A false result indicates the app should quit.
+    virtual void overrideDetectedHardware(); // <FS:Beq/> Override VRAM (and others in future?) consistently.
     virtual bool initSLURLHandler();
     virtual bool sendURLToOtherInstance(const std::string& url);
 
@@ -368,7 +369,7 @@ private:
 };
 
 // consts from viewer.h
-const S32 AGENT_UPDATES_PER_SECOND  = 10;
+const S32 AGENT_UPDATES_PER_SECOND  = 125; // <FS:Beq/> FIRE-34171 - Directional Input Delays with latest PBR-Capable Viewers
 const S32 AGENT_FORCE_UPDATES_PER_SECOND  = 1;
 
 // Globals with external linkage. From viewer.h

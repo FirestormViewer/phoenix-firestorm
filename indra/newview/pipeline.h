@@ -719,6 +719,9 @@ public:
     // Auxillary render target pack scaled to the hero probe's per-face size.
     RenderTargetPack mHeroProbeRT;
 
+    // <FS:Ansariel> Auxillary render target pack for 1024px LLDynamicTexture
+    RenderTargetPack mDynamicTextureRT;
+
     // currently used render target pack
     RenderTargetPack* mRT;
 

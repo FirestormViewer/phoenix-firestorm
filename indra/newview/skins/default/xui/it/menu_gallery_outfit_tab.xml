@@ -4,6 +4,10 @@
 	<menu_item_call label="Aggiungi all&apos;abito attuale" name="wear_add"/>
 	<menu_item_call label="Rimuovi dall&apos;abito attuale" name="take_off"/>
 	<menu_item_call label="Immagine..." name="thumbnail" />
+	<menu_item_call label="Modifica abito" name="edit"/>
+	<menu_item_call label="Rinomina abito" name="rename"/>
+	<menu_item_call label="Salva su questo abito" name="save" />
+	<menu_item_call label="Elimina abito" name="delete"/>
 	<menu name="New Clothes" label="Nuovo indumento">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>
@@ -25,7 +29,4 @@
 		<menu_item_call label="Nuovi capelli" name="New Hair"/>
 		<menu_item_call label="Nuovi occhi" name="New Eyes"/>
 	</menu>
-	<menu_item_call label="Modifica abito" name="edit"/>
-	<menu_item_call label="Rinomina abito" name="rename"/>
-	<menu_item_call label="Elimina abito" name="delete"/>
 </context_menu>

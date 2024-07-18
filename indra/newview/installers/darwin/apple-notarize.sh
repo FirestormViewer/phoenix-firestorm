@@ -23,13 +23,23 @@ if [[ -f "$CONFIG_FILE" ]]; then
         echo "Notarytool submit:"
         echo $res
         
-        [[ "$res" =~ 'id: '([^[:space:]]+) ]]
-        match=$?
-        echo "Notarized with id: [$match]"
+        if [[ "$res" =~ id:\ ([^[:space:]]+) ]]; then
+            match="${BASH_REMATCH[1]}"
+            echo "Notarized with id: [$match]"
+        else
+            echo "No match found"
+        fi
 
         # if [[ ! $match -eq 0 ]]; then
         echo "Running Stapler"
         xcrun stapler staple "$app_file"
+        # Delete the zip file to stop it being packed in the dmg
+        rm -f "$zip_file"
+        if [[ $? -eq 0 ]]; then
+            echo "$zip_file deleted successfully."
+        else
+            echo "Failed to delete $zip_file"
+        fi
         exit 0
         # else
             # echo "Notarization error"
@@ -39,4 +49,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
         echo "Notarization error: ditto failed"
         exit 1
     fi
+else
+    echo "No config file found - check notarize_creds is present in the secrets"
+    exit 1
 fi

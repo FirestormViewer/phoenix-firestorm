@@ -49,14 +49,11 @@
 	</text>
 	<combo_box label="Anti-aliasing" name="fsaa">
 		<combo_box.item label="Désactivé" name="FSAADisabled"/>
-		<combo_box.item label="2x" name="2x"/>
+		<combo_box.item label="FXAA" name="FXAA"/>
 		<combo_box.item label="4x" name="4x"/>
 		<combo_box.item label="8x" name="8x"/>
 		<combo_box.item label="16x" name="16x"/>
 	</combo_box>
-	<text name="antialiasing restart">
-		(redémarrage requis)
-	</text>
 	<text name="MeshText">
 		Maillage
 	</text>
@@ -75,6 +72,9 @@
 	<slider label="Flexiprims :" name="FlexibleMeshDetail"/>
 	<text name="FlexibleMeshDetailText">
 		Faible
+	</text>
+	<text name="antialiasing restart">
+		(redémarrage requis)
 	</text>
 	<text name="ShadersText">
 		Effets
@@ -112,6 +112,44 @@
 		<combo_box.item label="Aucun(e)" name="0"/>
 		<combo_box.item label="Soleil/Lune" name="1"/>
 		<combo_box.item label="Soleil/Lune + Projecteurs" name="2"/>
+	</combo_box>
+	<check_box label="Reflets de la zone de l'écran (SSR)" name="ScreenSpaceReflections"/>
+	<text name="ReflectionDetailText">
+		Détail des réflexions :
+	</text>
+	<combo_box name="ReflectionDetail">
+		<combo_box.item label="Statiques seulement" name="0"/>
+		<combo_box.item label="Statiques + dynamiques" name="1"/>
+		<combo_box.item label="Temps réel" name="2"/>
+	</combo_box>
+	<text name="ReflectionProbeText">
+		Couverture de réflexion :
+	</text>
+	<combo_box name="ReflectionLevel">
+		<combo_box.item label="Aucune" name="0"/>
+		<combo_box.item label="Manuelles slt" name="1"/>
+		<combo_box.item label="Manuelles + terrain" name="2"/>
+		<combo_box.item label="Scène complète" name="3"/>
+	</combo_box>
+	<slider label="Exposition :" name="RenderExposure"/>
+	<check_box label="Miroirs" name="Mirrors"/>
+	<text name="MirrorResolutionText">
+		Résolution des miroirs :
+	</text>
+	<combo_box name="MirrorResolution">
+		<combo_box.item label="256" name="0"/>
+		<combo_box.item label="512" name="1"/>
+		<combo_box.item label="1024" name="2"/>
+		<combo_box.item label="2048" name="3"/>
+	</combo_box>
+	<text name="HeroProbeUpdateText">
+		Rafraîchissement :
+	</text>
+	<combo_box name="HeroProbeUpdateRate">
+		<combo_box.item label="Toutes les images" name="0"/>
+		<combo_box.item label="Toutes les 2 images" name="1"/>
+		<combo_box.item label="Toutes les 3 images" name="2"/>
+		<combo_box.item label="Toutes les 4 images" name="3"/>
 	</combo_box>
 	<button label="Réinitialiser les paramètres recommandés" name="Defaults"/>
 	<button label="OK" label_selected="OK" name="OK"/>

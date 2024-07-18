@@ -405,7 +405,7 @@ void FSFloaterNearbyChat::openFloater(const LLSD& key)
 
 void FSFloaterNearbyChat::removeScreenChat()
 {
-    LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID);
+    LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NEARBY_CHAT_CHANNEL_UUID);
     if (chat_channel)
     {
         chat_channel->removeToastsFromChannel();

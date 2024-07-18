@@ -4,6 +4,12 @@
 	<menu_item_call label="Aggiungi all&apos;abito attuale" name="wear_add"/>
 	<menu_item_call label="Rimuovi dall&apos;abito attuale" name="take_off"/>
 	<menu_item_call label="Immagine..." name="thumbnail" />
+	<menu_item_call label="Rinomina abito" name="rename"/>
+	<menu_item_call label="Salva su questo abito" name="save" />
+	<menu_item_call label="Elimina abito" name="delete_outfit"/>
+	<menu_item_check label="Ordina sempre le cartelle in base al nome" name="sort_folders_by_name" />
+	<menu_item_call label="Apri tutte le cartelle" name="expand"/>
+	<menu_item_call label="Chiudi tutte le cartelle" name="collapse"/>
 	<context_menu label="Nuovo indumento" name="New Clothes">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>
@@ -25,9 +31,4 @@
 		<menu_item_call label="Nuovi capelli" name="New Hair"/>
 		<menu_item_call label="Nuovi occhi" name="New Eyes"/>
 	</context_menu>
-	<menu_item_call label="Apri tutte le cartelle" name="expand"/>
-	<menu_item_call label="Chiudi tutte le cartelle" name="collapse"/>
-	<menu_item_call label="Rinomina abito" name="rename"/>
-	<menu_item_call label="Elimina abito" name="delete_outfit"/>
-	<menu_item_check label="Ordina sempre le cartelle in base al nome" name="sort_folders_by_name" />
 </toggleable_menu>

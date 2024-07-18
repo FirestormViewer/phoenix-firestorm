@@ -97,7 +97,19 @@ LLViewerCamera::LLViewerCamera() : LLCamera()
     mZoomSubregion = 1;
     mAverageSpeed = 0.f;
     mAverageAngularSpeed = 0.f;
-    gSavedSettings.getControl("CameraAngle")->getCommitSignal()->connect(boost::bind(&LLViewerCamera::updateCameraAngle, this, _2));
+
+    // <FS:Zi> add a way to disconnect/reconnect the "CameraAngle" changed signal
+    // mCameraAngleChangedSignal = gSavedSettings.getControl("CameraAngle")->getCommitSignal()->connect(boost::bind(&LLViewerCamera::updateCameraAngle, this, _2));
+    connectCameraAngleSignal();
+    // </FS:Zi>
+}
+
+LLViewerCamera::~LLViewerCamera()
+{
+    // <FS:Zi> add a way to disconnect/reconnect the "CameraAngle" changed signal
+    // mCameraAngleChangedSignal.disconnect();
+    disconnectCameraAngleSignal();
+    // </FS:Zi>
 }
 
 void LLViewerCamera::updateCameraLocation(const LLVector3 &center, const LLVector3 &up_direction, const LLVector3 &point_of_interest)
@@ -909,10 +921,24 @@ BOOL LLViewerCamera::isDefaultFOVChanged()
     return FALSE;
 }
 
-// static
-void LLViewerCamera::updateCameraAngle( void* user_data, const LLSD& value)
+void LLViewerCamera::updateCameraAngle(const LLSD& value)
 {
-    LLViewerCamera* self=(LLViewerCamera*)user_data;
-    self->setDefaultFOV(value.asReal());
+    setDefaultFOV(value.asReal());
 }
 
+// <FS:Zi> add a way to disconnect/reconnect the "CameraAngle" changed signal
+void LLViewerCamera::connectCameraAngleSignal()
+{
+    if (mCameraAngleChangedSignal.connected())
+    {
+        mCameraAngleChangedSignal.disconnect();
+    }
+
+    mCameraAngleChangedSignal = gSavedSettings.getControl("CameraAngle")->getCommitSignal()->connect(boost::bind(&LLViewerCamera::updateCameraAngle, this, _2));
+}
+
+void LLViewerCamera::disconnectCameraAngleSignal()
+{
+    mCameraAngleChangedSignal.disconnect();
+}
+// </FS:Zi>

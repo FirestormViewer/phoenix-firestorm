@@ -78,6 +78,7 @@
 	<check_box initial_value="true" label="Fixer" name="checkbox snap to grid"/>
 	<check_box label="Axe d'édition à la racine" name="checkbox actual root"/>
 	<check_box label="Afficher le surlignage" name="checkbox show highlight"/>
+	<check_box label="Sél. les sondes de réfl." name="checkbox select probes" />
 	<combo_box name="combobox grid mode" tool_tip="Choisir le type d&apos;axe de grille pour le positionnement de l&apos;objet.">
 		<combo_box.item label="Monde" name="World"/>
 		<combo_box.item label="Local" name="Local"/>
@@ -464,6 +465,23 @@ Bas ↔ + bas
 			<spinner label="Point central" name="Light Focus"/>
 			<spinner label="Atténuation" name="Light Falloff"/>
 			<spinner label="Ambiance" name="Light Ambiance"/>
+			<check_box label="Sonde de réflexion" name="Reflection Probe" tool_tip="Règle la façon dont les objets de ce volume reçoivent des reflets lorsque la fonction PBR est activée."/>
+			<combo_box name="Probe Volume Type" tool_tip="Choisir le volume d'influence de la sonde">
+				<combo_box.item label="Sphère"/>
+				<combo_box.item label="Boîte" name="Box"/>
+			</combo_box>
+			<check_box label="Dynamique" name="Probe Dynamic" tool_tip="Lorsque cette option est activée, les avatars apparaissent dans les réflexions à l'intérieur du volume d'influence de cette sonde."/>
+			<text name="Probe Update Label">
+				Mise à jour
+			</text>
+			<combo_box name="Probe Update Type" tool_tip="Détermine le mode de mise à jour de la sonde.  La mise à jour statique est la plus lente et ne comporte pas d'avatars.  Les mises à jour dynamiques sont plus fréquentes et les avatars sont visibles dans les sondes.  Miroir (Environnement) transforme cette sonde en une sonde planaire projetée en temps réel qui ne fait que refléter l'environnement, mais ne calcule pas l'ambiance.  Miroir (Tout) est similaire à Miroir (Environnement), mais il reflète les particules et les avatars.">
+				<combo_box.item label="Statique" name="Static"/>
+				<combo_box.item label="Dynamique" name="Dynamic"/>
+				<combo_box.item label="Miroir (Environnement)" name="Mirror"/>
+				<combo_box.item label="Miroir (tout)" name="Dynamic Mirror"/>
+			</combo_box>
+			<spinner  label="Ambiance" name="Probe Ambiance"/>
+			<spinner  label="Couverture" name="Probe Near Clip"/>
 			<text name="label physicsshapetype">
 				Type de forme physique :
 			</text>
@@ -483,7 +501,6 @@ Bas ↔ + bas
 			<spinner label="Densité en 100 kg/m^3" name="Physics Density"/>
 			<spinner label="Restitution" name="Physics Restitution"/>
 		</panel>
-		<panel label="Texture" name="Texture"/>
 		<panel label="Contenu" name="Contents">
 			<button label="Nouveau script" label_selected="Nouveau script" name="button new script"/>
 			<button label="Droits" name="button permissions"/>

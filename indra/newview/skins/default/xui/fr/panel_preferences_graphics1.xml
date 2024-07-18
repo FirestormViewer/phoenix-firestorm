@@ -13,11 +13,11 @@
 			<text name="ShadersPrefText2">Moyen</text>
 			<text name="ShadersPrefText3">Élevé</text>
 			<text name="ShadersPrefText4">Ultra</text>
-			<check_box label="Mode plein écran" name="Fullscreen Mode" tool_tip="Exécuter Firestorm en mode plein écran. Un redémarrage est nécessaire pour changer de mode."/>
 			<text name="ShadersText">Shaders :</text>
 			<check_box label="Transparence de l'eau" name="TransparentWater"/>
 			<check_box label="Occlusion ambiante" name="UseSSAO"/>
 			<check_box label="Reflets affichés à l'écran (SSR)" name="ScreenSpaceReflections"/>
+			<check_box label="Miroirs" name="Mirrors"/>
 			<text name="shadows_label">Ombres :</text>
 			<combo_box name="ShadowDetail">
 				<combo_box.item label="Aucunes" name="0"/>
@@ -49,6 +49,25 @@
 				<combo_box.item label="Réduites" name="2"/>
 				<combo_box.item label="Soleil / Lune uniquement" name="1"/>
 			</combo_box>
+			<text name="MirrorResolutionText">
+				Résolution du miroir :
+			</text>
+			<combo_box name="MirrorResolution">
+				<combo_box.item label="256" name="0"/>
+				<combo_box.item label="512" name="1"/>
+				<combo_box.item label="1024" name="2"/>
+				<combo_box.item label="2048" name="3"/>
+			</combo_box>
+			<text name="HeroProbeUpdateText">
+				Rythme de mise à jour du miroir :
+			</text>
+			<combo_box name="HeroProbeUpdateRate">
+				<combo_box.item label="Toutes les images" name="0"/>
+				<combo_box.item label="Toutes les 2 images" name="1"/>
+				<combo_box.item label="Toutes les 3 images" name="2"/>
+				<combo_box.item label="Toutes les 4 images" name="3"/>
+			</combo_box>
+			<check_box label="Mode plein écran" name="Fullscreen Mode" tool_tip="Exécuter Firestorm en mode plein écran. Un redémarrage est nécessaire pour changer de mode."/>
 			<slider label="Distance d'affichage" name="DrawDistance"/>
 			<text name="DrawDistanceMeterText2">m</text>
 			<slider label="Nombre max. de particules" name="MaxParticleCount"/>
@@ -84,10 +103,7 @@
 			</text>
 			<combo_box label="Anticrénelage" name="fsaa">
 				<combo_box.item label="Désactivé" name="FSAADisabled"/>
-				<combo_box.item label="2x" name="2x"/>
-				<combo_box.item label="4x" name="4x"/>
-				<combo_box.item label="8x" name="8x"/>
-				<combo_box.item label="16x" name="16x"/>
+				<combo_box.item label="FXAA" name="FXAA"/>
 			</combo_box>
 			<text name="advanced_settings">
 				Paramètres avancés (redémarrage requis) :
@@ -102,7 +118,10 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			<text name="World Updating">Actualisation de l'univers :</text>
 			<check_box label="Figer les mises à jour de l'univers (Met tout en pause)" tool_tip="Cochez cette option pour figer toutes les mises à jour provenant de l'univers - Ceci interrompra toutes les actions visuelles mais n'affectera pas les conversations écrites  ou vocales" name="WorldPause"/>
 			<text name="Texture Rendering">Rendu des textures :</text>
-			<check_box label="Limiter le résolution maximale des textures à 512px (64bit seulement; redémarrage requis)" tool_tip="Activée, cette option limite la résomution maximale d'affichage des textures dans Second Life à 512px. Cela permet d'afficher plus de textures avant de dépasser la limite de mémoire disponible et évite de voir des textures floues." name="FSRestrictMaxTextureSize"/>
+			<check_box width="270" label="Limiter le résolution maximale des textures à :" tool_tip="Activée, cette option limite la résomution maximale d'affichage des textures dans Second Life. Cela permet d'afficher plus de textures avant de dépasser la limite de mémoire disponible et évite de voir des textures floues." name="FSRestrictMaxTextureSize"/>
+			<text name="FSRestrictMaxTextureSizeRestartText">
+				(Redémarrage requis)
+			</text>
 			<text name="TextureDetailLabel">
 				Qualité max. des textures :
 			</text>

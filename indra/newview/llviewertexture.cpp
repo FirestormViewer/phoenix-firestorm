@@ -112,11 +112,7 @@ LLViewerTexture::EDebugTexels LLViewerTexture::sDebugTexelsMode = LLViewerTextur
 
 const F64 log_2 = log(2.0);
 
-#if ADDRESS_SIZE == 32
-/*const*/ U32 DESIRED_NORMAL_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2; // <FS:Ansariel> Max texture resolution
-#else
 /*const*/ U32 DESIRED_NORMAL_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT; // <FS:Ansariel> Max texture resolution
-#endif
 
 LLUUID LLViewerTexture::sInvisiprimTexture1 = LLUUID::null;
 LLUUID LLViewerTexture::sInvisiprimTexture2 = LLUUID::null;
@@ -548,6 +544,29 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
     }
 }
 
+// <FS:Ansariel> Restrict texture memory by available physical system memory
+static bool isSystemMemoryForTextureLow()
+{
+    static LLFrameTimer timer;
+    static S32Megabytes physical_res = S32Megabytes(S32_MAX);
+
+    static LLCachedControl<S32> fs_min_free_main_memory(gSavedSettings, "FSMinFreeMainMemoryTextureDiscardThreshold");
+    const S32Megabytes MIN_FREE_MAIN_MEMORY(fs_min_free_main_memory);
+
+    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
+    {
+        return physical_res < MIN_FREE_MAIN_MEMORY;
+    }
+
+    timer.reset();
+
+    //check main memory, only works for windows.
+    LLMemory::updateMemoryInfo();
+    physical_res = LLMemory::getAvailableMemKB();
+    return physical_res < MIN_FREE_MAIN_MEMORY;
+}
+// </FS:Ansariel>
+
 //static
 void LLViewerTexture::updateClass()
 {
@@ -577,12 +596,35 @@ void LLViewerTexture::updateClass()
     F32 target = llmax(budget - 512.f, 768.f);
 
     F32 over_pct = llmax((used-target) / target, 0.f);
-    sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
+    // <FS:Ansariel> Restrict texture memory by available physical system memory
+    //sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
 
-    if (sDesiredDiscardBias > 1.f)
+    //if (sDesiredDiscardBias > 1.f)
+    //{
+    //    sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
+    //}
+
+    if (isSystemMemoryForTextureLow())
     {
-        sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
+        // System RAM is low -> ramp up discard bias over time to free memory
+        LL_DEBUGS("TextureMemory") << "System memory is low, use more aggressive discard bias." << LL_ENDL;
+        if (sEvaluationTimer.getElapsedTimeF32() > GPU_MEMORY_CHECK_WAIT_TIME)
+        {
+            sDesiredDiscardBias += llmax(.1f, over_pct); // add at least 10% over-percentage
+            sEvaluationTimer.reset();
+        }
     }
+    else
+    {
+        LL_DEBUGS("TextureMemory") << "System memory is plentiful, act normally." << LL_ENDL;
+        sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.f + over_pct);
+
+        if (sDesiredDiscardBias > 1.f)
+        {
+            sDesiredDiscardBias -= gFrameIntervalSeconds * 0.01;
+        }
+    }
+    // </FS:Ansariel>
 
     LLViewerTexture::sFreezeImageUpdates = false; // sDesiredDiscardBias > (desired_discard_bias_max - 1.0f);
 }

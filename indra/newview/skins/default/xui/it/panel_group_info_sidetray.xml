@@ -10,7 +10,16 @@
 		Aderisci ([AMOUNT] L$)
 	</panel.string>
 	<panel.string name="group_join_free">
-		Gratis
+		Gratuito
+	</panel.string>
+	<panel.string name="group_member">
+		Membro
+	</panel.string>
+	<panel.string name="join_txt">
+		Aderisci
+	</panel.string>
+	<panel.string name="leave_txt">
+		Abbandona
 	</panel.string>
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
@@ -32,11 +41,14 @@
 					</layout_panel>
 			</layout_stack>
 			<layout_stack name="button_row_ls">
+				<layout_panel name="btn_activate_lp">
+					<button label="Attiva" name="btn_activate" />
+				</layout_panel>
 				<layout_panel name="btn_chat_lp">
 					<button label="Chat" name="btn_chat"/>
 				</layout_panel>
 				<layout_panel name="call_btn_lp">
-					<button label="Chiamata" name="btn_call" tool_tip="Avvia una conferenza vocale in questo gruppo"/>
+					<button label="Chiama" name="btn_call" tool_tip="Avvia una conferenza vocale in questo gruppo"/>
 				</layout_panel>
 				<layout_panel name="btn_apply_lp">
 					<button label="Salva" label_selected="Salva" name="btn_apply"/>

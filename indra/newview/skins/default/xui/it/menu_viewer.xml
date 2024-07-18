@@ -32,6 +32,7 @@
 			<menu label="Stacca" name="Avatar Detach" />
 			<menu_item_call label="Stacca tutti" name="Detach All" />
 		</menu>
+		<menu_item_call label="Rimuovi elementi selezionati" name="Remove Selected Attachments" />
 		<menu_item_call label="Seleziona un avatar" name="Avatar Picker"/>
 		<menu_item_call label="Altezza da terra" name="HoverHeight" />
 		<menu label="Movimento" name="Movement">
@@ -289,6 +290,7 @@
 		<menu_item_check label="Guida in linea" name="How To"/>
 		<menu_item_call label="Aiuto su [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Informazioni su [CURRENT_GRID]" name="current_grid_about"/>
+		<menu_item_call label="Whitelist File e Cartelle" name="whitelist_folders"/>
 		<menu_item_check label="Controlla stato della grid" name="Grid Status"/>
 		<menu_item_call label="Segnala un abuso" name="Report Abuse"/>
 		<menu_item_call label="Segnala un bug" name="Report Bug"/>
@@ -347,8 +349,13 @@
 				<menu_item_check label="Mostra su tutti gli oggetti" name="Tips On All Objects"/>
 			</menu>
 		</menu>
-		<menu label="Tipi resa" name="Rendering Types">
+		<menu label="Tipi di rendering" name="Rendering Types">
 			<menu_item_check label="Semplice" name="Rendering Type Simple"/>
+			<menu_item_check label="Materiali" name="Rendering Type Materials" />
+			<menu_item_check label="Maschera alfa" name="Rendering Type Alpha Mask" />
+			<menu_item_check label="Maschera alfa max luminosità" name="Rendering Type Fullbright Alpha Mask" />
+			<menu_item_check label="Bagliore" name="Rendering Type Glow" />
+			<menu_item_check label="Max luminosità" name="Rendering Type Fullbright" />
 			<menu_item_check label="Trasparenza" name="Rendering Type Alpha"/>
 			<menu_item_check label="Alberi" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatar" name="Rendering Type Character"/>
@@ -363,7 +370,7 @@
 			<menu_item_check label="Particelle" name="Rendering Type Particles"/>
 			<menu_item_check label="Irregolarità" name="Rendering Type Bump"/>
 		</menu>
-		<menu label="Caratteristiche resa" name="Rendering Features">
+		<menu label="Caratteristiche rendering" name="Rendering Features">
 			<menu_item_check label="Interfaccia" name="ToggleUI"/>
 			<menu_item_check label="Selezione" name="Selected"/>
 			<menu_item_check label="Evidenziato" name="Highlighted"/>
@@ -457,7 +464,7 @@
 			<menu_item_call label="Forza Disconnetti viewer" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Simula Memory Leak" name="Memory Leaking Simulation"/>
 		</menu>
-		<menu label="Test resa" name="Render Tests">
+		<menu label="Test rendering" name="Render Tests">
 			<menu_item_check label="Camera Offset" name="Camera Offset"/>
 			<menu_item_check label="Randomize Framerate" name="Randomize Framerate"/>
 			<menu_item_check label="Periodic Slow Frame" name="Periodic Slow Frame"/>
@@ -465,7 +472,7 @@
 			<menu_item_call label="Frame Profile" name="Frame Profile"/>
 			<menu_item_call label="Benchmark" name="Benchmark"/>
 		</menu>
-		<menu label="Metadati resa" name="Render Metadata">
+		<menu label="Metadati rendering" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
 			<menu_item_check label="Avatar Hitboxes" name="Avatar Hitboxes"/>
 			<menu_item_check label="Normals" name="Normals"/>
@@ -480,7 +487,7 @@
 			<menu_item_check label="Texture Area" name="Texture Area"/>
 			<menu_item_check label="Face Area" name="Face Area"/>
 			<menu_item_check label="LOD Info" name="LOD Info"/>
-			<menu_item_check label="Conteggio triangolo" name="Triangle Count"/>
+			<menu_item_check label="Triangle Count" name="Triangle Count"/>
 			<menu_item_check label="Build Queue" name="Build Queue"/>
 			<menu_item_check label="Lights" name="Lights"/>
 			<menu_item_check label="Particles" name="Particles"/>
@@ -489,21 +496,21 @@
 			<menu_item_check label="Raycast" name="Raycast"/>
 			<menu_item_check label="Wind Vectors" name="Wind Vectors"/>
 			<menu_item_check label="Sculpt" name="Sculpt"/>
-			<menu_item_check label="Dimens texture" name="Texture Size"/>
-			<menu label="Densità texture" name="Texture Density">
-				<menu_item_check label="Nessuna" name="None"/>
-				<menu_item_check label="Attuale" name="Current"/>
-				<menu_item_check label="Desiderata" name="Desired"/>
-				<menu_item_check label="Piena" name="Full"/>
+			<menu_item_check label="Texture Size" name="Texture Size"/>
+			<menu label="Texture Density" name="Texture Density">
+				<menu_item_check label="None" name="None"/>
+				<menu_item_check label="Current" name="Current"/>
+				<menu_item_check label="Desired" name="Desired"/>
+				<menu_item_check label="Full" name="Full"/>
 			</menu>
 		</menu>
-		<menu label="Resa" name="Rendering">
-			<menu_item_check label="Assi" name="Axes"/>
+		<menu label="Rendering" name="Rendering">
+			<menu_item_check label="Axes" name="Axes"/>
 			<menu_item_check label="Tangent Basis" name="Tangent Basis"/>
 			<menu_item_call label="Selected Texture Info Basis" name="Selected Texture Info Basis"/>
 			<menu_item_call label="Info materiale selezionato" name="Selected Material Info"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
-			<menu_item_check label="Occlusione oggetto-oggetto" name="Object-Object Occlusion"/>
+			<menu_item_check label="Object-Object Occlusion" name="Object-Object Occlusion"/>
 			<menu_item_check label="Advanced Lighting Model" name="Advanced Lighting Model"/>
 			<menu_item_check label="   Shadows from Sun/Moon/Projectors" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="   SSAO and Shadow Smoothing" name="SSAO and Shadow Smoothing"/>
@@ -512,7 +519,7 @@
 			<menu_item_check label="Automatic Alpha Masks (deferred)" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Automatic Alpha Masks (non-deferred)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Animation Textures" name="Animation Textures"/>
-			<menu_item_check label="Disabilita texture" name="Disable Textures"/>
+			<menu_item_check label="Disable Textures" name="Disable Textures"/>
 			<menu_item_check label="Full Res Textures (dangerous)" name="Full Res Textures"/>
 			<menu_item_check label="Render Attached Lights" name="Render Attached Lights"/>
 			<menu_item_check label="Render Attached Particles" name="Render Attached Particles"/>
@@ -547,6 +554,7 @@
 			<menu_item_call label="Test browser multimediale" name="Web Browser Test"/>
 			<menu_item_check label="Test riavvio regione" name="Region Restart Test"/>
 			<menu_item_call label="Browser contenuti web" name="Web Content Browser"/>
+			<menu_item_call label="Assistente Miniature Inventario" name="Inventory Thumbnails Helper" />
 			<menu_item_call label="Scarica caratteri" name="Dump Fonts" />
 			<menu_item_call label="Scarica texture dei caratteri" name="Dump Font Textures" />
 			<menu_item_call label="Test connessione FB" name="FB Connect Test"/>
@@ -562,6 +570,7 @@
 			<menu_item_check label="Debug clic" name="Debug Clicks"/>
 			<menu_item_check label="Debug visualizzazione" name="Debug Views"/>
 			<menu_item_check label="Debug Unicode" name="Debug Unicode" />
+			<menu_item_check label="Debug Controlli Camera" name="Debug Camera Controls" />
 			<menu_item_check label="Debug suggerimenti sul nome" name="Debug Name Tooltips"/>
 			<menu_item_check label="Debug eventi mouse" name="Debug Mouse Events"/>
 			<menu_item_check label="Debug tasti" name="Debug Keys"/>

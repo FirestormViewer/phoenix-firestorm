@@ -97,6 +97,10 @@ public:
             // NOTE: flags are |'d
             mFlags |= flags;
         }
+        void defer_until(std::chrono::steady_clock::time_point time)
+        {
+            mDeferUntil = time;
+        }
 
         virtual bool processRequest() = 0; // Return true when request has completed
         virtual void finishRequest(bool completed); // Always called from thread after request has completed or aborted
@@ -105,6 +109,7 @@ public:
     protected:
         LLAtomicBase<status_t> mStatus;
         U32 mFlags;
+        std::chrono::steady_clock::time_point mDeferUntil;
     };
 
     //------------------------------------------------------------------------

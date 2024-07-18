@@ -9,6 +9,10 @@
 	<text name="detail_texture_text">
 		Tekstury terenu
 	</text>
+	<text name="detail_material_text">
+		Materiały terenu
+	</text>
+	<check_box label="Chropowatość metaliczna PBR" name="terrain_material_type" tool_tip="Jeśli ta opcja jest zaznaczona, to użyj materiałów chropowatości metalicznej PBR dla terenu. W przeciwnym razie użyj tekstur." />
 	<text name="height_text_lbl">
 		1 (Nisko)
 	</text>
@@ -18,11 +22,20 @@
 	<text name="height_text_lbl5">
 		Zakresy elewacyjne tekstur
 	</text>
+	<text name="height_text_lbl5_material">
+		Zakresy elewacyjne materiałów
+	</text>
 	<text name="height_text_lbl10">
 		Te wartości reprezentują zakres przenikania tekstur wyżej.
 	</text>
+	<text name="height_text_lbl10_material">
+		Te wartości reprezentują zakres przenikania materiałów wyżej.
+	</text>
 	<text name="height_text_lbl11">
 		Mierzone w metrach, wartość Nisko jest maksymalną wys. tekstury #1, a wartość Wysoko jest minimalną wys. tekstury #4.
+	</text>
+	<text name="height_text_lbl11_material">
+		Mierzone w metrach, wartość Nisko jest maksymalną wys. materiału #1, a wartość Wysoko jest minimalną wys. materiału #4.
 	</text>
 	<text name="height_text_lbl6">
 		Północny zach.

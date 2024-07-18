@@ -5278,7 +5278,7 @@ static void copy_prefs_file(const std::string& from, const std::string& to)
     LL_INFOS() << "Copying " << from << " to " << to << LL_ENDL;
 
     std::error_code ec;
-    if (!std::filesystem::copy_file(from, to, ec) || ec)
+    if (!std::filesystem::copy_file(from, to, std::filesystem::copy_options::overwrite_existing, ec) || ec)
         LL_WARNS() << "Couldn't copy file: " << ec.message() << LL_ENDL;
 }
 

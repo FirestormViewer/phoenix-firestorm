@@ -353,18 +353,18 @@
     </combo_box>
     <check_box
      control_name="ScaleUniform"
-     height="19"
+     height="17"
      label="Stretch Both Sides"
      layout="topleft"
      left="143"
      name="checkbox uniform"
-     top="48"
+     top="52"
      label_text.wrap="true"
      label_text.width="120"
      width="134" />
     <check_box
      control_name="ScaleStretchTextures"
-     height="19"
+     height="17"
      initial_value="true"
      label="Stretch Textures"
      layout="topleft"
@@ -375,7 +375,7 @@
      width="134" />
    <check_box
      control_name="SnapEnabled"
-     height="18"
+     height="17"
      initial_value="true"
      label="Snap"
      layout="topleft"
@@ -384,7 +384,7 @@
      width="134" />
   <check_box
      control_name="FSBuildPrefs_ActualRoot"
-     height="18"
+     height="17"
      initial_value="false"
      label="Edit axis at root"
      layout="topleft"
@@ -392,7 +392,7 @@
      name="checkbox actual root"
      width="134" />
   <check_box
-     height="18"
+     height="17"
      initial_value="true"
      label="Show Highlight"
      layout="topleft"
@@ -402,6 +402,15 @@
 		  <check_box.commit_callback
 			function="BuildTool.commitShowHighlight"/>
 	</check_box>
+  <check_box
+     control_name="SelectReflectionProbes"
+     height="17"
+     initial_value="false"
+     label="Select Reflection Probes"
+     layout="topleft"
+     top_pad="-2"
+     name="checkbox select probes"
+     width="134" />
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"
@@ -410,7 +419,7 @@
      follows="top|left"
      name="Options..."
      tool_tip="See more grid options"
-     top="80"
+     top="78"
      right="-10"
      width="18"
      height="23" >
@@ -3271,14 +3280,13 @@ Low ↔ Lwst
              top_pad="8"
              width="132" />
         </panel>
+<!--	<FS:Zi> switchable edit texture/materials panel
         <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
-         name="Texture">
-<!--	<FS:Zi> switchable edit texture/materials panel
          filename="panel_tools_texture.xml">
--->
 	   </panel>
+-->
        <panel
          border="false"
          follows="all"

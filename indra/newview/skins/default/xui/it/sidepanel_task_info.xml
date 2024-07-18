@@ -45,72 +45,72 @@
 	<text name="title" value="Profilo Oggetto"/>
 	<text name="where" value="(nel mondo)"/>
 	<scroll_container name="item_profile_scroll">
-	<panel label="" name="properties_panel">
-		<text name="Name:">
-			Nome:
-		</text>
-		<line_editor name="Object Name" tool_tip="Il nome è limitato a 63 caratteri. Prim con nomi più lunghi verranno accorciati. I nomi possono avere solamente caratteri stampabili facenti parte del codice ASCII-7 (non esteso), con l&apos;eccezione della barra verticale &apos;|&apos;."/>
-		<text name="Description:">
-			Descrizione:
-		</text>
-		<line_editor name="Object Description" tool_tip="Quando la dicitura &quot;Vedi suggerimenti su tutti gli oggetti&quot; è selezionata nelle impostazioni del Viewer, passando il mouse sopra un oggetto si vedrà la sua descrizione. La descrizione dei Prim è limitata a 127 bytes. Se più lunga, verrá troncata."/>
-		<text name="CreatorNameLabel">
-			Creatore:
-		</text>
-		<text name="Owner:">
-			Proprietario:
-		</text>
-		<text name="Group_label">
-			Gruppo:
-		</text>
-		<button name="button set group" tool_tip="Scegli un gruppo con cui condividere i diritti relativi all&apos;oggetto"/>
-		<name_box initial_value="Caricamento in corso..." name="Group Name Proxy"/>
-		<button label="Cessione" label_selected="Cessione" name="button deed" tool_tip="Con una cessione si trasferisce l'oggetto con i diritti assegnati al proprietario successivo. Gli oggetti in proprietà condivisa di gruppo possono essere ceduti soltanto da un funzionario del gruppo."/>
-		<text name="label click action">
-			Azione del clic:
-		</text>
-		<combo_box name="clickaction" tool_tip="Con l&apos;azione &quot;clic singolo&quot; puoi interagire con un oggetto semplicemente cliccandolo una volta. Ogni azione &quot;clic singolo&quot; ha un cursore speciale che indica il suo effetto. Alcune azioni &quot;clic singolo&quot; hanno dei requisiti per funzionare. Ad esempio per i comandi Tocca e Paga sono necessari degli script.">
-			<combo_box.item label="Tocca (predefinito)" name="Touch/grab(default)"/>
-			<combo_box.item label="Siedi sull&apos;oggetto" name="Sitonobject"/>
-			<combo_box.item label="Acquista oggetto" name="Buyobject"/>
-			<combo_box.item label="Paga oggetto" name="Payobject"/>
-			<combo_box.item label="Apri" name="Open"/>
-			<combo_box.item label="Inquadra" name="Zoom"/>
-			<combo_box.item label="Ignora oggetto" name="Ignoreobject" />
-			<combo_box.item label="Nessuno" name="None"/>
-		</combo_box>
-		<panel name="perms_inv">
-			<text name="perm_modify">
-				Tu puoi modificare questo oggetto
+		<panel label="" name="properties_panel">
+			<text name="Name:">
+				Nome:
 			</text>
-			<text name="Anyone can:">
-				Chiunque può:
+			<line_editor name="Object Name" tool_tip="Il nome è limitato a 63 caratteri. Prim con nomi più lunghi verranno accorciati. I nomi possono avere solamente caratteri stampabili facenti parte del codice ASCII-7 (non esteso), con l&apos;eccezione della barra verticale &apos;|&apos;."/>
+			<text name="Description:">
+				Descrizione:
 			</text>
-			<check_box label="Copiare" name="checkbox allow everyone copy" tool_tip="Chiunque può prendere una copia di questo oggetto. L&apos;oggetto e tutti i suoi contenuti devono avere il permesso di copia e trasferimento."/>
-			<check_box label="Spostare" name="checkbox allow everyone move" tool_tip="Chiunque può muovere l&apos;oggetto."/>
-			<text name="GroupLabel">
+			<line_editor name="Object Description" tool_tip="Quando la dicitura &quot;Vedi suggerimenti su tutti gli oggetti&quot; è selezionata nelle impostazioni del Viewer, passando il mouse sopra un oggetto si vedrà la sua descrizione. La descrizione dei Prim è limitata a 127 bytes. Se più lunga, verrá troncata."/>
+			<text name="CreatorNameLabel">
+				Creatore:
+			</text>
+			<text name="Owner:">
+				Proprietario:
+			</text>
+			<text name="Group_label">
 				Gruppo:
 			</text>
-			<check_box label="Condividere" name="checkbox share with group" tool_tip="Consenti a tutti i membri del gruppo selezionato di condividere i tuoi diritti di modifica di questo oggetto. Per attivare le restrizioni per ruolo devi prima effettuare la cessione."/>
-			<text name="NextOwnerLabel">
-				Proprietario successivo:
+			<button name="button set group" tool_tip="Scegli un gruppo con cui condividere i diritti relativi all&apos;oggetto"/>
+			<name_box initial_value="Caricamento in corso..." name="Group Name Proxy"/>
+			<button label="Cessione" label_selected="Cessione" name="button deed" tool_tip="Con una cessione si trasferisce l'oggetto con i diritti assegnati al proprietario successivo. Gli oggetti in proprietà condivisa di gruppo possono essere ceduti soltanto da un funzionario del gruppo."/>
+			<text name="label click action">
+				Azione del clic:
 			</text>
-			<check_box label="Modificare" name="checkbox next owner can modify" tool_tip="Il prossimo proprietario può modificare le proprietà dell&apos;oggetto come il nome o la scala."/>
-			<check_box label="Copiare" name="checkbox next owner can copy" tool_tip="Il prossimo proprietario può prendere infinite copie di questo oggetto. Le copie mantengono le informazioni sul creatore e non possono avere permessi maggiori di quelli posseduti dall&apos;oggetto copiato."/>
-			<check_box label="Trasferire" name="checkbox next owner can transfer" tool_tip="Il prossimo proprietario può regalare o rivendere questo oggetto"/>
+			<combo_box name="clickaction" tool_tip="Con l&apos;azione &quot;clic singolo&quot; puoi interagire con un oggetto semplicemente cliccandolo una volta. Ogni azione &quot;clic singolo&quot; ha un cursore speciale che indica il suo effetto. Alcune azioni &quot;clic singolo&quot; hanno dei requisiti per funzionare. Ad esempio per i comandi Tocca e Paga sono necessari degli script.">
+				<combo_box.item label="Tocca (predefinito)" name="Touch/grab(default)"/>
+				<combo_box.item label="Siedi sull&apos;oggetto" name="Sitonobject"/>
+				<combo_box.item label="Acquista oggetto" name="Buyobject"/>
+				<combo_box.item label="Paga oggetto" name="Payobject"/>
+				<combo_box.item label="Apri" name="Open"/>
+				<combo_box.item label="Inquadra" name="Zoom"/>
+				<combo_box.item label="Nessuno" name="None"/>
+				<combo_box.item label="Ignora oggetto" name="Ignoreobject" />
+			</combo_box>
+			<panel name="perms_inv">
+				<text name="perm_modify">
+					Tu puoi modificare questo oggetto
+				</text>
+				<text name="Anyone can:">
+					Chiunque può:
+				</text>
+				<check_box label="Copiare" name="checkbox allow everyone copy" tool_tip="Chiunque può prendere una copia di questo oggetto. L&apos;oggetto e tutti i suoi contenuti devono avere il permesso di copia e trasferimento."/>
+				<check_box label="Spostare" name="checkbox allow everyone move" tool_tip="Chiunque può muovere l&apos;oggetto."/>
+				<text name="GroupLabel">
+					Gruppo:
+				</text>
+				<check_box label="Condividere" name="checkbox share with group" tool_tip="Consenti a tutti i membri del gruppo selezionato di condividere i tuoi diritti di modifica di questo oggetto. Per attivare le restrizioni per ruolo devi prima effettuare la cessione."/>
+				<text name="NextOwnerLabel">
+					Proprietario successivo:
+				</text>
+				<check_box label="Modificare" name="checkbox next owner can modify" tool_tip="Il prossimo proprietario può modificare le proprietà dell&apos;oggetto come il nome o la scala."/>
+				<check_box label="Copiare" name="checkbox next owner can copy" tool_tip="Il prossimo proprietario può prendere infinite copie di questo oggetto. Le copie mantengono le informazioni sul creatore e non possono avere permessi maggiori di quelli posseduti dall&apos;oggetto copiato."/>
+				<check_box label="Trasferire" name="checkbox next owner can transfer" tool_tip="Il prossimo proprietario può regalare o rivendere questo oggetto"/>
+			</panel>
+			<check_box label="In vendita" name="checkbox for sale" tool_tip="Permette alla gente di comprare questo oggetto, i suoi contenuti o la sua copia virtuale ad un prezzo stabilito."/>
+			<combo_box name="sale type" tool_tip="Decidi se vuoi che il compratore riceva una copia, una copia dei contenuti o l&apos;oggetto stesso.">
+				<combo_box.item label="Copia" name="Copy"/>
+				<combo_box.item label="Contenuti" name="Contents"/>
+				<combo_box.item label="Originale" name="Original"/>
+			</combo_box>
+			<spinner label="Prezzo: L$" name="Edit Cost" tool_tip="Costo oggetto."/>
+			<check_box label="Mostra nella ricerca" name="search_check" tool_tip="Permetti alle persone di vedere questo oggetto nei risultati della ricerca"/>
+			<text name="pathfinding_attributes_label">
+				Attributi pathfinding:
+			</text>
 		</panel>
-		<check_box label="In vendita" name="checkbox for sale" tool_tip="Permette alla gente di comprare questo oggetto, i suoi contenuti o la sua copia virtuale ad un prezzo stabilito."/>
-		<combo_box name="sale type" tool_tip="Decidi se vuoi che il compratore riceva una copia, una copia dei contenuti o l&apos;oggetto stesso.">
-			<combo_box.item label="Copia" name="Copy"/>
-			<combo_box.item label="Contenuti" name="Contents"/>
-			<combo_box.item label="Originale" name="Original"/>
-		</combo_box>
-		<spinner label="Prezzo: L$" name="Edit Cost" tool_tip="Costo oggetto."/>
-		<check_box label="Mostra nella ricerca" name="search_check" tool_tip="Permetti alle persone di vedere questo oggetto nei risultati della ricerca"/>
-		<text name="pathfinding_attributes_label">
-			Attributi pathfinding:
-		</text>
-	</panel>
 	</scroll_container>
 	<layout_stack name="buttons_ls">
 		<layout_panel name="open_btn_panel">

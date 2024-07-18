@@ -190,7 +190,7 @@
 		</menu>
 		<menu_item_call label="Scal" name="Link"/>
 		<menu_item_call label="Rozłącz" name="Unlink"/>
-		<menu_item_check label="Edytuj połączone części" name="Edit Linked Parts"/>
+		<menu_item_check label="Edytuj części pojedynczo" name="Edit Linked Parts"/>
 		<menu label="Wybierz elementy" name="Select Elements">
 			<menu_item_call label="Wybierz następną część lub stronę" name="Select Next Part or Face"/>
 			<menu_item_call label="Zaznacz poprzednią część lub stronę" name="Select Previous Part or Face"/>
@@ -359,6 +359,11 @@
 		</menu>
 		<menu label="Rodzaje renderowania" name="Rendering Types">
 			<menu_item_check label="Podstawowe" name="Rendering Type Simple"/>
+			<menu_item_check label="Materiały" name="Rendering Type Materials" />
+			<menu_item_check label="Maska alpha" name="Rendering Type Alpha Mask" />
+			<menu_item_check label="Superjasna maska alpha" name="Rendering Type Fullbright Alpha Mask" />
+			<menu_item_check label="Blask" name="Rendering Type Glow" />
+			<menu_item_check label="Superjasność" name="Rendering Type Fullbright" />
 			<menu_item_check label="Maska alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Drzewa" name="Rendering Type Tree"/>
 			<menu_item_check label="Awatary" name="Rendering Type Character"/>
@@ -468,12 +473,15 @@
 			<menu_item_check label="Okresowe spowolnienie" name="Periodic Slow Frame"/>
 			<menu_item_call label="Profil klatek obrazu" name="Frame Profile"/>
 			<menu_item_call label="Testowanie (benchmark)" name="Benchmark"/>
+			<menu_item_call label="Podgląd HDRI" name="HDRI Preview" />
+			<menu_item_call label="Podgląd sceny GLTF" name="GLTF Scene Preview" />
 		</menu>
 		<menu label="Renderowanie metadanych" name="Render Metadata">
 			<menu_item_check label="Bryły brzegowe (Bounding Boxes)" name="Bounding Boxes"/>
 			<menu_item_check label="Przestrzeń kolizji awatarów (Hitboxy)" name="Avatar Hitboxes"/>
 			<menu_item_check label="Wektory normalne" name="Normals"/>
 			<menu_item_check label="Drzewo okluzji" name="Octree"/>
+			<menu_item_check label="Węzły GLTF" name="GLTF Nodes" />
 			<menu_item_check label="Wzmocniona okluzja (Shadow Frusta)" name="Shadow Frusta"/>
 			<menu_item_check label="Kształty fizyczne" name="Physics Shapes"/>
 			<menu_item_check label="Okluzja" name="Occlusion"/>
@@ -522,6 +530,7 @@
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />
 			<menu_item_call label="Wyczyść pamięć podręczną modułu cieniującego" name="Shader Cache Clear" />
+			<menu_item_call label="Odbuduj teren" name="Rebuild Terrain" />
 		</menu>
 		<menu label="Sieć" name="Network">
 			<menu_item_check label="Zatrzymaj awatara" name="AgentPause"/>

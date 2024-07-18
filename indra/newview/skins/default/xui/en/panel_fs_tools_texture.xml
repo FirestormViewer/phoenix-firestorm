@@ -111,7 +111,6 @@
    name="base_color_tint_picker"
    label="Tint"
    can_apply_immediately="true"
-   allow_no_texture="true"
    tool_tip="Click to choose the base color tint"
 />
 
@@ -350,7 +349,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_all_scale"
@@ -472,7 +471,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -610,7 +609,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_base_color_scale"
@@ -732,7 +731,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -869,7 +868,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_normal_scale"
@@ -991,7 +990,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -1128,7 +1127,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_orm_scale"
@@ -1250,7 +1249,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -1387,7 +1386,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    mouse_opaque="false"
    name="pbr_transforms_emissive_scale"
@@ -1509,7 +1508,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2110,7 +2109,6 @@
    max_val="255"
    increment="1"
    decimal_digits="0"
-   text_readonly_color="LabelDisabledColor"
    enabled_control="FSInternalFaceHasBPSpecularMap"
 />
 
@@ -2162,7 +2160,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    width="90"
    height="70"
@@ -2276,7 +2274,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2402,7 +2400,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    width="90"
    height="70"
@@ -2516,7 +2514,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2642,7 +2640,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="0"
+   left="4"
    top="0"
    width="90"
    height="70"
@@ -2756,7 +2754,7 @@
 <panel
    follows="left|top"
    layout="topleft"
-   left="98"
+   left="100"
    top="0"
    width="90"
    height="70"
@@ -2958,7 +2956,6 @@
    top_pad="5"
    right="-4"
    height="2"
-   visibility_control="FSInternalCanEditObjectFaces"
 />
 
 <panel

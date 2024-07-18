@@ -30,7 +30,12 @@
 			<menu_item_call label="Zrzuć czcionki" name="Dump Fonts" />
 			<menu_item_call label="Zrzuć tekstury czcionek" name="Dump Font Textures" />
 		</menu>
-		<menu label="Testy interfejsu" name="UI Tests"/>
+		<menu label="Testy interfejsu" name="UI Tests">
+			<menu_item_call label="Pola tekstowe" name="Textbox" />
+			<menu_item_call label="Edytor tekstu" name="Text Editor" />
+			<menu_item_call label="Widżety" name="Widgets" />
+			<menu_item_call label="Inspekcje" name="Inspectors" />
+		</menu>
 		<menu_item_call label="Ustaw rozmiar okna..." name="Set Window Size..."/>
 		<menu_item_call label="Pokaż warunki użytkowania" name="TOS"/>
 		<menu_item_call label="Pokaż wiadomość krytyczną" name="Critical"/>
