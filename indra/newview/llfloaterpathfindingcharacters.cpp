@@ -283,10 +283,10 @@ void LLFloaterPathfindingCharacters::showCapsule() const
             llassert(mSelectedCharacterId == character->getUUID());
             if (LLPathingLib::getInstance() != NULL)
             {
-                // <FS:Ansariel> Interface in Nicky's physics stub package expects bool while Havok package still expects BOOL
+                // <FS:Ansariel> Interface in Nicky's physics stub package expects bool while Havok package still expects BOOL aka S32
 #ifdef HAVOK_TPV
                 LLPathingLib::getInstance()->createPhysicsCapsuleRep(character->getLength(), character->getRadius(),
-                    (BOOL)character->isHorizontal(), character->getUUID());
+                    static_cast<S32>(character->isHorizontal()), character->getUUID());
 #else
                 LLPathingLib::getInstance()->createPhysicsCapsuleRep(character->getLength(), character->getRadius(),
                     character->isHorizontal(), character->getUUID());
