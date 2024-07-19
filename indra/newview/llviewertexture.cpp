@@ -1339,11 +1339,19 @@ void LLViewerFetchedTexture::setDeletionCandidate()
 }
 
 //set the texture inactive
-void LLViewerFetchedTexture::setInactive()
+void LLViewerFetchedTexture::setInactive(bool found_on_face)
 {
-    if(mTextureState == ACTIVE && mGLTexturep.notNull() && mGLTexturep->getTexName() && !mGLTexturep->getBoundRecently())
+    if (mTextureState > DELETION_CANDIDATE && mTextureState != NO_DELETE
+        && mGLTexturep.notNull() && mGLTexturep->getTexName() && !mGLTexturep->getBoundRecently())
     {
-        mTextureState = INACTIVE;
+        if (found_on_face)
+        {
+            mTextureState = ACTIVE;
+        }
+        else
+        {
+            mTextureState = INACTIVE;
+        }
     }
 }
 

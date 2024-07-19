@@ -976,6 +976,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     F32 max_inactive_time = 20.f; // actually delete
     S32 min_refs = 3; // 1 for mImageList, 1 for mUUIDMap, 1 for local reference
 
+    // reset texture state.
+    imagep->setInactive(onFace);
+
     //
     // Flush formatted images using a lazy flush
     //
@@ -1020,10 +1023,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         else
         {
             imagep->getLastReferencedTimer()->reset();
-
-            //reset texture state.
-            if (!onFace)
-            imagep->setInactive();
         }
     }
 

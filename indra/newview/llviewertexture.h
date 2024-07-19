@@ -413,7 +413,7 @@ public:
     BOOL isInactive() ;
     BOOL isDeletionCandidate();
     void setDeletionCandidate() ;
-    void setInactive() ;
+    void setInactive(bool found_on_face);
     BOOL getUseDiscard() const { return mUseMipMaps && !mDontDiscard; }
     //---------------
 
