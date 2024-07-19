@@ -1656,7 +1656,7 @@ ECursorType LLWindowMacOSX::getCursor() const
 
 // <FS:LO> Legacy cursor setting from main program
 //void LLWindowMacOSX::initCursors()
-void LLWindowMacOSX::initCursors(BOOL useLegacyCursors)
+void LLWindowMacOSX::initCursors(bool useLegacyCursors)
 {
     initPixmapCursor(UI_CURSOR_NO, 8, 8);
     initPixmapCursor(UI_CURSOR_WORKING, 1, 1);
