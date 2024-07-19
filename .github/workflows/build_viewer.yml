@@ -93,11 +93,11 @@ jobs:
         with: 
           swap-storage: false
 
-      - name: Set gcc version on Linux
-        if: runner.os == 'Linux'
-        run: |
-          echo "CC=gcc-10" >> $GITHUB_ENV
-          echo "CXX=g++-10" >> $GITHUB_ENV
+      # - name: Set gcc version on Linux
+      #   if: runner.os == 'Linux'
+      #   run: |
+      #     echo "CC=gcc-10" >> $GITHUB_ENV
+      #     echo "CXX=g++-10" >> $GITHUB_ENV
 
 
       - name: Setup rclone and download the folder
