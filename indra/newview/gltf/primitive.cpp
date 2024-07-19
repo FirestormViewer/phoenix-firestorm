@@ -134,6 +134,13 @@ struct MikktMesh
                 idx[1] = tri_idx + 1;
                 idx[2] = tri_idx + 2;
             }
+            // <FS:Beq> unknown mode leaves idx uninitialised
+            else
+            {
+                LL_WARNS("GLTF") << "Unsupported primitive mode for conversion to triangles: " << (S32) prim->mMode << LL_ENDL;
+                return false;
+            }
+            // </FS:Beq>
 
             if (indexed)
             {
