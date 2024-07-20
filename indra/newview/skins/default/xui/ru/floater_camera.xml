@@ -25,6 +25,8 @@
 		<layout_stack name="camera_view_layout_stack">
 			<layout_panel name="camera_rotate_layout_panel">
 				<joystick_rotate name="cam_rotate_stick" tool_tip="Вращение камеры вокруг точки фокусировки"/>
+				<button name="roll_left" tool_tip="Вращать камеру влево"/>
+				<button name="roll_right" tool_tip="Вращать камеру вправо"/>
 			</layout_panel>
 			<layout_panel name="camera_zoom_layout_panel">
 				<slider_bar name="zoom_slider" tool_tip="Приблизить/отдалить камеру к/от точки фокусировки"/>
