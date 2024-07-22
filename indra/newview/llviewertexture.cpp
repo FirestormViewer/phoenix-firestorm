@@ -1330,14 +1330,6 @@ void LLViewerFetchedTexture::destroyTexture()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 
-    // <FS:Ansariel> Only actually destroy if VRAM is getting tight
-    static LLCachedControl<F32> fsMinVRAMTextureDestroyThreshold(gSavedSettings, "FSMinVRAMTextureDestroyThreshold");
-    if (sFreeVRAMMegabytes >= fsMinVRAMTextureDestroyThreshold)
-    {
-        return;
-    }
-    // </FS:Ansariel>
-
     if (mNeedsCreateTexture)//return if in the process of generating a new texture.
     {
         return;
