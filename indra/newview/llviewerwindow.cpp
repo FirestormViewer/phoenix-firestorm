@@ -2980,9 +2980,7 @@ void LLViewerWindow::draw()
 
     //S32 screen_x, screen_y;
 
-    //if (!gSavedSettings.getBOOL("RenderUIBuffer"))
-    static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
-    if (!renderUIBuffer)
+    if (!LLPipeline::RenderUIBuffer)
     {
         LLView::sDirtyRect = getWindowRectScaled();
     }

@@ -117,11 +117,8 @@ U32 LLDrawPoolTerrain::getVertexDataMask()
 
 void LLDrawPoolTerrain::prerender()
 {
-    // <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
-    //sPBRDetailMode = gSavedSettings.getS32("RenderTerrainPBRDetail");
-    static LLCachedControl<S32> renderTerrainPBRDetail(gSavedSettings, "RenderTerrainPBRDetail");
-    sPBRDetailMode = renderTerrainPBRDetail();
-    // </FS:Ansariel>
+    static LLCachedControl<S32> render_terrain_pbr_detail(gSavedSettings, "RenderTerrainPBRDetail");
+    sPBRDetailMode = render_terrain_pbr_detail;
 }
 
 void LLDrawPoolTerrain::boostTerrainDetailTextures()

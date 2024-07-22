@@ -520,7 +520,7 @@ void LLViewerTexture::updateClass()
 
     // try to leave half a GB for everyone else, but keep at least 768MB for ourselves
     F32 target = llmax(budget - 512.f, MIN_VRAM_BUDGET);
-    sFreeVRAMMegabytes = target - used;
+    sFreeVRAMMegabytes = llmax(target - used, 0.f);
 
     F32 over_pct = (used - target) / target;
 
@@ -1329,6 +1329,14 @@ void LLViewerFetchedTexture::dump()
 void LLViewerFetchedTexture::destroyTexture()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+
+    // <FS:Ansariel> Only actually destroy if VRAM is getting tight
+    static LLCachedControl<F32> fsMinVRAMTextureDestroyThreshold(gSavedSettings, "FSMinVRAMTextureDestroyThreshold");
+    if (sFreeVRAMMegabytes >= fsMinVRAMTextureDestroyThreshold)
+    {
+        return;
+    }
+    // </FS:Ansariel>
 
     if (mNeedsCreateTexture)//return if in the process of generating a new texture.
     {

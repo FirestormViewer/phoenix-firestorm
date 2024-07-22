@@ -408,7 +408,8 @@ bool LLControlAvatar::updateCharacter(LLAgent &agent)
 //virtual
 void LLControlAvatar::updateDebugText()
 {
-    if (gSavedSettings.getBOOL("DebugAnimatedObjects"))
+    static LLCachedControl<bool> debug_animated_objects(gSavedSettings, "DebugAnimatedObjects");
+    if (debug_animated_objects)
     {
         S32 total_linkset_count = 0;
         if (mRootVolp)

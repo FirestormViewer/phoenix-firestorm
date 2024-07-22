@@ -4722,7 +4722,8 @@ void LLPipeline::renderDebug()
         mReflectionMapManager.renderDebug();
     }
 
-    if (gSavedSettings.getBOOL("RenderReflectionProbeVolumes") && !hud_only)
+    static LLCachedControl<bool> render_ref_probe_volumes(gSavedSettings, "RenderReflectionProbeVolumes");
+    if (render_ref_probe_volumes && !hud_only)
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("probe debug display");
 
@@ -9196,7 +9197,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
 
         gGL.diffuseColor4f(1, 1, 1, 1);
 
-        S32 shadow_detail = gSavedSettings.getS32("RenderShadowDetail");
+        S32 shadow_detail = RenderShadowDetail;
 
         // if not using VSM, disable color writes
         if (shadow_detail <= 2)

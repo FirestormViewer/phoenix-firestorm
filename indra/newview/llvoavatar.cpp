@@ -4694,20 +4694,14 @@ void LLVOAvatar::updateDebugText()
 {
     // Leave mDebugText uncleared here, in case a derived class has added some state first
 
-    // <FS:Ansariel> Use cached controls
-    //if (gSavedSettings.getBOOL("DebugAvatarAppearanceMessage"))
-    static LLCachedControl<bool> debug_avatar_appearance_message(gSavedSettings, "DebugAvatarAppearanceMessage");
-    if (debug_avatar_appearance_message)
-    // </FS:Ansariel>
+    static LLCachedControl<bool> debug_av_appearance_message(gSavedSettings, "DebugAvatarAppearanceMessage");
+    if (debug_av_appearance_message)
     {
         updateAppearanceMessageDebugText();
     }
 
-    // <FS:Ansariel> Use cached controls
-    //if (gSavedSettings.getBOOL("DebugAvatarCompositeBaked"))
-    static LLCachedControl<bool> debug_avatar_composite_baked(gSavedSettings, "DebugAvatarCompositeBaked");
-    if (debug_avatar_composite_baked)
-    // </FS:Ansariel>
+    static LLCachedControl<bool> debug_av_composite_baked(gSavedSettings, "DebugAvatarCompositeBaked");
+    if (debug_av_composite_baked)
     {
         if (!mBakedTextureDebugText.empty())
             addDebugText(mBakedTextureDebugText);
@@ -9548,7 +9542,8 @@ LLMotion* LLVOAvatar::findMotion(const LLUUID& id) const
 // colorized if using deferred rendering.
 void LLVOAvatar::debugColorizeSubMeshes(U32 i, const LLColor4& color)
 {
-    if (gSavedSettings.getBOOL("DebugAvatarCompositeBaked"))
+    static LLCachedControl<bool> debug_av_composite_baked(gSavedSettings, "DebugAvatarCompositeBaked");
+    if (debug_av_composite_baked)
     {
         avatar_joint_mesh_list_t::iterator iter = mBakedTextureDatas[i].mJointMeshes.begin();
         avatar_joint_mesh_list_t::iterator end  = mBakedTextureDatas[i].mJointMeshes.end();
