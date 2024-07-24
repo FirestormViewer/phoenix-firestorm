@@ -14744,7 +14744,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>SnapshotFormat</key>
     <map>
       <key>Comment</key>
-      <string>Save snapshots in this format (0 = PNG, 1 = JPEG, 2 = BMP)</string>
+      <string>Save snapshots in this format (0 = PNG, 1 = JPEG, 2 = BMP, 3 = WEBP)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

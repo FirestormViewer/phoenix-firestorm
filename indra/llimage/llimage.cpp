@@ -38,6 +38,7 @@
 #include "llimagej2c.h"
 #include "llimagejpeg.h"
 #include "llimagepng.h"
+#include "llimagewebp.h"
 #include "llimagedxt.h"
 #include "llmemory.h"
 
@@ -2016,7 +2017,8 @@ file_extensions[] =
     { "jpeg", IMG_CODEC_JPEG },
     { "mip", IMG_CODEC_DXT },
     { "dxt", IMG_CODEC_DXT },
-    { "png", IMG_CODEC_PNG }
+    { "png", IMG_CODEC_PNG },
+    { "webp", IMG_CODEC_WEBP }
 };
 #define NUM_FILE_EXTENSIONS LL_ARRAY_SIZE(file_extensions)
 #if 0
@@ -2198,6 +2200,9 @@ LLImageFormatted* LLImageFormatted::createFromType(S8 codec)
         break;
       case IMG_CODEC_PNG:
         image = new LLImagePNG();
+        break;
+      case IMG_CODEC_WEBP:
+        image = new LLImageWebP();
         break;
       case IMG_CODEC_J2C:
         image = new LLImageJ2C();

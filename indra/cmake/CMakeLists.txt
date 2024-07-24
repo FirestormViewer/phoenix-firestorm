@@ -68,6 +68,7 @@ set(cmake_SOURCE_FILES
         VisualLeakDetector.cmake
         LibVLCPlugin.cmake
         XmlRpcEpi.cmake
+        WebP.cmake
         xxHash.cmake
         ZLIBNG.cmake
         )

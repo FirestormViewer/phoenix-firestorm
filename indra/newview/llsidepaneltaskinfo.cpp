@@ -99,8 +99,8 @@ static std::string click_action_to_string_value(U8 click_action)
             return "None";
         case CLICK_ACTION_IGNORE:
             return "Ignore";
-        default:
-            return "Touch";
+        // default:
+        //     return "Touch";
     }
     return "Touch";
 }

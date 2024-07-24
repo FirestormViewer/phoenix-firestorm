@@ -118,7 +118,8 @@ public:
         FFSAVE_PNG = 13,
         FFSAVE_JPEG = 14,
         FFSAVE_SCRIPT = 15,
-        FFSAVE_TGAPNG = 16,
+        FFSAVE_TGAPNGWEBP = 16,
+        FFSAVE_WEBP = 17,
 
         // Firestorm additions
         FFSAVE_BEAM = 50,

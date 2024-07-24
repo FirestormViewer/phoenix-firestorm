@@ -7,6 +7,7 @@ include(LLCommon)
 include(LLImage)
 include(JPEG)
 include(LLKDU)
+include(WebP)
 include(ZLIBNG)
 include(LLAddBuildTest)
 include(bugsplat)
@@ -22,6 +23,7 @@ set(llimage_SOURCE_FILES
     llimagejpeg.cpp
     llimagepng.cpp
     llimagetga.cpp
+    llimagewebp.cpp
     llimageworker.cpp
     llpngwrapper.cpp
     )
@@ -38,6 +40,7 @@ set(llimage_HEADER_FILES
     llimagejpeg.h
     llimagepng.h
     llimagetga.h
+    llimagewebp.h
     llimageworker.h
     llmapimagetype.h
     llpngwrapper.h
@@ -59,6 +62,7 @@ target_link_libraries(llimage
         llfilesystem
         llmath
         llcommon
+        ll::libwebp
         ll::libpng
         ll::libjpeg
     )

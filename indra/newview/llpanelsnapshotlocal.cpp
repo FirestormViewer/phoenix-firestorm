@@ -132,6 +132,10 @@ LLSnapshotModel::ESnapshotFormat LLPanelSnapshotLocal::getImageFormat() const
     {
         fmt = LLSnapshotModel::SNAPSHOT_FORMAT_BMP;
     }
+    else if (id == "WEBP")
+    {
+        fmt = LLSnapshotModel::SNAPSHOT_FORMAT_WEBP;
+    }
 
     return fmt;
 }

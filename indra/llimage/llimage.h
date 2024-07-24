@@ -83,7 +83,8 @@ typedef enum e_image_codec
     IMG_CODEC_JPEG = 5,
     IMG_CODEC_DXT  = 6,
     IMG_CODEC_PNG  = 7,
-    IMG_CODEC_EOF  = 8
+    IMG_CODEC_WEBP = 8,
+    IMG_CODEC_EOF  = 9
 } EImageCodec;
 
 //============================================================================

@@ -647,6 +647,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="targa_image_files">Targa Images</string>
 	<string name="bitmap_image_files">Bitmap Images</string>
 	<string name="png_image_files">PNG Images</string>
+	<string name="webp_image_files">WebP Images</string>
 	<string name="save_texture_image_files">Targa or PNG Images</string>
 	<string name="avi_movie_file">AVI Movie File</string>
 	<string name="xaf_animation_file">XAF Anim File</string>

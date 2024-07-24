@@ -5830,6 +5830,8 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, BOOL force_picke
             pick_type = LLFilePicker::FFSAVE_PNG;
         else if (extension == ".tga")
             pick_type = LLFilePicker::FFSAVE_TGA;
+        else if (extension == ".webp")
+            pick_type = LLFilePicker::FFSAVE_WEBP;
         else
             pick_type = LLFilePicker::FFSAVE_ALL;
 
@@ -5992,6 +5994,9 @@ BOOL LLViewerWindow::saveSnapshot(const std::string& filepath, S32 image_width, 
             break;
         case LLSnapshotModel::SNAPSHOT_FORMAT_JPEG:
             image_codec = IMG_CODEC_JPEG;
+            break;
+        case LLSnapshotModel::SNAPSHOT_FORMAT_WEBP:
+            image_codec = IMG_CODEC_WEBP;
             break;
         default:
             image_codec = IMG_CODEC_BMP;

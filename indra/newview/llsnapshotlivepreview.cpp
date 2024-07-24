@@ -42,6 +42,7 @@
 #include "llimagej2c.h"
 #include "llimagejpeg.h"
 #include "llimagepng.h"
+#include "llimagewebp.h"
 #include "lllandmarkactions.h"
 #include "lllocalcliprect.h"
 #include "llresmgr.h"
@@ -1023,6 +1024,9 @@ void LLSnapshotLivePreview::estimateDataSize()
             case LLSnapshotModel::SNAPSHOT_FORMAT_BMP:
                 ratio = 1.0;    // No compression with BMP
                 break;
+            case LLSnapshotModel::SNAPSHOT_FORMAT_WEBP:
+                ratio = 4.0;    // Average observed WebP compression ratio
+                break;
         }
     }
     mDataSize = (S32)((F32)mPreviewImage->getDataSize() / ratio);
@@ -1061,6 +1065,9 @@ LLPointer<LLImageFormatted> LLSnapshotLivePreview::getFormattedImage()
                 break;
             case LLSnapshotModel::SNAPSHOT_FORMAT_BMP:
                 mFormattedImage = new LLImageBMP();
+                break;
+            case LLSnapshotModel::SNAPSHOT_FORMAT_WEBP:
+                mFormattedImage = new LLImageWebP();
                 break;
         }
         if (mFormattedImage->encode(mPreviewImage, 0))

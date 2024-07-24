@@ -150,6 +150,10 @@
          label="BMP (Lossless)"
          name="BMP"
          value="BMP" />
+         <combo_box.item
+         label="WebP (Lossless)"
+         name="WEBP"
+         value="WEBP" />
     </combo_box>
     <slider
      decimal_digits="0"
