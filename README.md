@@ -13,10 +13,12 @@
 - Added a "Freeze Animations" menu in World > Animation Speed, effectively freezing all animations.
 - No longer shows the stupid ":non-potable_water:" and "fleur-de-lys" emojis when typing ":-P" or ":-D"
 - Increased resolution limit to 2048x2048 for snapshot uploaded to inventory
-- Updated OpenJPEG to 2.5.2
+- Updated OpenJPEG to 2.5.2 (for Jpeg2000 format)
 - Fixed texture and snapshots poor upload quality with OpenJPEG
 - Enabled "lossless" texture uploads
 - New icons
+- Uses libjpeg-turbo instead of libjpeg, like in Alchemy
+- Added support for WebP format, like in Alchemy
 
 ## Quick build instructions (for Windows):
 
