@@ -1535,7 +1535,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path(libfile)
 
                         oldpath = os.path.join("@rpath", libfile)
-                        executable = self.dst_path_of("Firestorm.app")
+                        executable = self.dst_path_of(libfile)
                         self.run_command(
                             ['install_name_tool', '-change', 
                              oldpath,
