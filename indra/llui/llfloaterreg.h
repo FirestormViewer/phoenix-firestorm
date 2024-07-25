@@ -118,7 +118,18 @@ public:
     static bool destroyInstance(std::string_view name, const LLSD& key = LLSD());
 
     // Iterators
+    // <FS> ignore dangling reference false positives in gcc13
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
+    // </FS>
     static const_instance_list_t& getFloaterList(std::string_view name);
+    // <FS> ignore dangling reference false positives in gcc13
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic pop
+#endif
+    // </FS>
 
     // Visibility Management
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5

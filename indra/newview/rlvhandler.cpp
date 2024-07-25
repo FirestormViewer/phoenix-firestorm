@@ -374,7 +374,14 @@ void RlvHandler::getAttachmentResourcesCoro(const std::string& strUrl)
             for (LLSD::array_const_iterator itAttachObj = sdAttachObjects.beginArray(), endAttachObj = sdAttachObjects.endArray(); itAttachObj != endAttachObj; ++itAttachObj)
             {
                 const LLUUID idObj = itAttachObj->get("id").asUUID();
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
                 const std::string& strObjName = itAttachObj->get("name").asStringRef();
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic pop
+#endif
 
                 // If it's an attachment, it should be a temporary one (NOTE: we might catch it before it's had a chance to attach)
                 const LLViewerObject* pObj = gObjectList.findObject(idObj);
