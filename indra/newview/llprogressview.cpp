@@ -135,6 +135,11 @@ bool LLProgressView::postBuild()
 {
     mProgressBar = getChild<LLProgressBar>("login_progress_bar");
 
+    mLogosLabel = getChild<LLTextBox>("logos_lbl");
+
+    mProgressText = getChild<LLTextBox>("progress_text");
+    mMessageText = getChild<LLTextBox>("message_text");
+
     // media control that is used to play intro video
     mMediaCtrl = getChild<LLMediaCtrl>("login_media_panel");
     mMediaCtrl->setVisible( false );        // hidden initially
@@ -144,10 +149,6 @@ bool LLProgressView::postBuild()
 
     mCancelBtn = getChild<LLButton>("cancel_btn");
     mCancelBtn->setClickedCallback(  LLProgressView::onCancelButtonClicked, NULL );
-
-    mProgressText=getChild<LLTextBox>("progress_text");
-    mMessageText=getChild<LLTextBox>("message_text");
-
 
     getChild<LLTextBox>("title_text")->setText(LLStringExplicit(LLAppViewer::instance()->getSecondLifeTitle()));
 
@@ -317,9 +318,8 @@ void LLProgressView::drawLogos(F32 alpha)
 
     // logos are tied to label,
     // due to potential resizes we have to figure offsets out on draw or resize
-    LLTextBox *logos_label = getChild<LLTextBox>("logos_lbl");
     S32 offset_x, offset_y;
-    logos_label->localPointToScreen(0, 0, &offset_x, &offset_y);
+    mLogosLabel->localPointToScreen(0, 0, &offset_x, &offset_y);
     std::vector<TextureData>::const_iterator iter = mLogosList.begin();
     std::vector<TextureData>::const_iterator end = mLogosList.end();
     for (; iter != end; iter++)
@@ -469,8 +469,7 @@ void LLProgressView::initLogos()
 //#endif // defined(LL_FMODSTUDIO) || defined(LL_HAVOK) // <FS> FIRE-30937: Always needed
 
     // We don't know final screen rect yet, so we can't precalculate position fully
-    LLTextBox *logos_label = getChild<LLTextBox>("logos_lbl");
-    S32 texture_start_x = (S32)logos_label->getFont()->getWidthF32(logos_label->getText()) + default_pad;
+    S32 texture_start_x = (S32)mLogosLabel->getFont()->getWidthF32(mLogosLabel->getText()) + default_pad;
     S32 texture_start_y = -7;
 
     // Normally we would just preload these textures from textures.xml,

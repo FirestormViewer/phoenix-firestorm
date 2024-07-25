@@ -38,6 +38,7 @@ const F32 UPDATE_MEMBERS_SECONDS_PER_FRAME = 0.005f; // 5ms
 // Forward declares
 class LLPanelGroupTab;
 class LLTabContainer;
+class LLAccordionCtrl;
 class LLAgent;
 
 
@@ -105,7 +106,7 @@ protected:
     static void onBtnGroupChatClicked(void*);
     static void onBtnActivateClicked(void*); // <FS:PP> FIRE-33939: Activate button
 
-    void reposButton(const std::string& name);
+    void reposButton(LLButton* button);
     void reposButtons();
 
 
@@ -121,7 +122,16 @@ protected:
 
     std::vector<LLPanelGroupTab* > mTabs;
 
-    LLButton*       mButtonJoin;
+    LLAccordionCtrl* mGroupsAccordion = nullptr;
+
+    LLUICtrl*       mGroupNameCtrl = nullptr;
+    LLButton*       mButtonJoin = nullptr;
+    LLButton*       mButtonApply = nullptr;
+    LLButton*       mButtonCall = nullptr;
+    LLButton*       mButtonChat = nullptr;
+    LLButton*       mButtonRefresh = nullptr;
+    LLButton*       mButtonCancel = nullptr;
+    LLButton*       mButtonActivate = nullptr; // <FS:PP> FIRE-33939: Activate button
     LLUICtrl*       mJoinText;
 
     // <FS:Ansariel> TabContainer switch

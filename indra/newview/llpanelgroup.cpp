@@ -166,7 +166,7 @@ void LLPanelGroup::onOpen(const LLSD& key)
             }
             else
             {
-                getChild<LLAccordionCtrl>("groups_accordion")->expandDefaultTab();
+                mGroupsAccordion->expandDefaultTab();
             }
         }
         // </FS:Ansariel>
@@ -213,28 +213,32 @@ void LLPanelGroup::onOpen(const LLSD& key)
 
 bool LLPanelGroup::postBuild()
 {
+    mGroupsAccordion = findChild<LLAccordionCtrl>("groups_accordion");
+
     mDefaultNeedsApplyMesg = getString("default_needs_apply_text");
     mWantApplyMesg = getString("want_apply_text");
 
-    LLButton* button;
+    mButtonApply = getChild<LLButton>("btn_apply");
+    mButtonApply->setClickedCallback(onBtnApply, this);
+    mButtonApply->setVisible(true);
+    mButtonApply->setEnabled(false);
 
-    button = getChild<LLButton>("btn_apply");
-    button->setClickedCallback(onBtnApply, this);
-    button->setVisible(true);
-    button->setEnabled(false);
+    mButtonCall = getChild<LLButton>("btn_call");
+    mButtonCall->setClickedCallback(onBtnGroupCallClicked, this);
 
-    button = getChild<LLButton>("btn_call");
-    button->setClickedCallback(onBtnGroupCallClicked, this);
+    mButtonChat = getChild<LLButton>("btn_chat");
+    mButtonChat->setClickedCallback(onBtnGroupChatClicked, this);
 
-    button = getChild<LLButton>("btn_chat");
-    button->setClickedCallback(onBtnGroupChatClicked, this);
+    mButtonRefresh = getChild<LLButton>("btn_refresh");
+    mButtonRefresh->setClickedCallback(onBtnRefresh, this);
 
-    button = getChild<LLButton>("btn_refresh");
-    button->setClickedCallback(onBtnRefresh, this);
+    mButtonCancel = getChild<LLButton>("btn_cancel");
+
+    mGroupNameCtrl = getChild<LLUICtrl>("group_name");
 
     // <FS:PP> FIRE-33939: Activate button
-    button = getChild<LLButton>("btn_activate");
-    button->setClickedCallback(onBtnActivateClicked, this);
+    mButtonActivate = getChild<LLButton>("btn_activate");
+    mButtonActivate->setClickedCallback(onBtnActivateClicked, this);
     // <FS:PP>
 
     childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
@@ -254,7 +258,7 @@ bool LLPanelGroup::postBuild()
     if(panel_general)
     {
         panel_general->setupCtrls(this);
-        button = panel_general->getChild<LLButton>("btn_join");
+        LLButton* button = panel_general->getChild<LLButton>("btn_join");
         button->setVisible(false);
         button->setEnabled(true);
 
@@ -267,14 +271,13 @@ bool LLPanelGroup::postBuild()
     LLVoiceClient::getInstance()->addObserver(this);
 
     // <FS:Ansariel> TabContainer switch
-    mIsUsingTabContainer = (findChild<LLTabContainer>("groups_accordion") != NULL);
+    mIsUsingTabContainer = (findChild<LLTabContainer>("groups_accordion") != nullptr);
 
     return true;
 }
 
-void LLPanelGroup::reposButton(const std::string& name)
+void LLPanelGroup::reposButton(LLButton* button)
 {
-    LLButton* button = findChild<LLButton>(name);
     if(!button)
         return;
     LLRect btn_rect = button->getRect();
@@ -284,24 +287,21 @@ void LLPanelGroup::reposButton(const std::string& name)
 
 void LLPanelGroup::reposButtons()
 {
-    LLButton* button_refresh = findChild<LLButton>("btn_refresh");
-    LLButton* button_cancel = findChild<LLButton>("btn_cancel");
-
-    if(button_refresh && button_cancel && button_refresh->getVisible() && button_cancel->getVisible())
+    if(mButtonRefresh && mButtonCancel && mButtonRefresh->getVisible() && mButtonCancel->getVisible())
     {
-        LLRect btn_refresh_rect = button_refresh->getRect();
-        LLRect btn_cancel_rect = button_cancel->getRect();
+        LLRect btn_refresh_rect = mButtonRefresh->getRect();
+        LLRect btn_cancel_rect = mButtonCancel->getRect();
         btn_refresh_rect.setLeftTopAndSize( btn_cancel_rect.mLeft + btn_cancel_rect.getWidth() + 2,
             btn_refresh_rect.getHeight() + 2, btn_refresh_rect.getWidth(), btn_refresh_rect.getHeight());
-        button_refresh->setRect(btn_refresh_rect);
+        mButtonRefresh->setRect(btn_refresh_rect);
     }
 
-    reposButton("btn_apply");
-    reposButton("btn_refresh");
-    reposButton("btn_cancel");
-    reposButton("btn_chat");
-    reposButton("btn_call");
-    reposButton("btn_activate"); // <FS:PP> FIRE-33939: Activate button
+    reposButton(mButtonApply);
+    reposButton(mButtonRefresh);
+    reposButton(mButtonCancel);
+    reposButton(mButtonChat);
+    reposButton(mButtonCall);
+    reposButton(mButtonActivate); // <FS:PP> FIRE-33939: Activate button
 }
 
 void LLPanelGroup::reshape(S32 width, S32 height, bool called_from_parent )
@@ -370,9 +370,9 @@ void LLPanelGroup::onBtnJoin()
     }
     else
     {
-    LL_DEBUGS() << "joining group: " << mID << LL_ENDL;
-    LLGroupActions::join(mID);
-}
+        LL_DEBUGS() << "joining group: " << mID << LL_ENDL;
+        LLGroupActions::join(mID);
+    }
 }
 
 void LLPanelGroup::changed(LLGroupChange gc)
@@ -390,7 +390,7 @@ void LLPanelGroup::onChange(EStatusType status, const LLSD& channelInfo, bool pr
         return;
     }
 
-    childSetEnabled("btn_call", LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
+    mButtonCall->setEnabled(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
 }
 
 void LLPanelGroup::notifyObservers()
@@ -405,8 +405,8 @@ void LLPanelGroup::update(LLGroupChange gc)
     {
         // <FS:Ansariel> Standalone group floaters
         //std::string group_name =  gdatap->mName.empty() ? LLTrans::getString("LoadingData") : gdatap->mName;
-        //childSetValue("group_name", group_name);
-        //childSetToolTip("group_name",group_name);
+        //mGroupNameCtrl->setValue(group_name);
+        //mGroupNameCtrl->setValue(group_name);
         if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
         {
             FSFloaterGroup* parent = dynamic_cast<FSFloaterGroup*>(getParent());
@@ -418,9 +418,8 @@ void LLPanelGroup::update(LLGroupChange gc)
         else
         {
             std::string group_name =  gdatap->mName.empty() ? LLTrans::getString("LoadingData") : gdatap->mName;
-            LLUICtrl* group_name_ctrl = getChild<LLUICtrl>("group_name");
-            group_name_ctrl->setValue(group_name);
-            group_name_ctrl->setToolTip(group_name);
+            mGroupNameCtrl->setValue(group_name);
+            mGroupNameCtrl->setValue(group_name);
         }
         // </FS:Ansariel>
 
@@ -474,60 +473,48 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
     if(gdatap)
     {
         std::string group_name =  gdatap->mName.empty() ? LLTrans::getString("LoadingData") : gdatap->mName;
-        LLUICtrl* group_name_ctrl = getChild<LLUICtrl>("group_name");
-        group_name_ctrl->setValue(group_name);
-        group_name_ctrl->setToolTip(group_name);
+        mGroupNameCtrl->setValue(group_name);
+        mGroupNameCtrl->setToolTip(group_name);
     }
 
-    LLButton* button_apply = findChild<LLButton>("btn_apply");
-    LLButton* button_refresh = findChild<LLButton>("btn_refresh");
-
-    LLButton* button_cancel = findChild<LLButton>("btn_cancel");
-    LLButton* button_call = findChild<LLButton>("btn_call");
-    LLButton* button_chat = findChild<LLButton>("btn_chat");
-
-
     bool is_null_group_id = group_id == LLUUID::null;
-    if(button_apply)
-        button_apply->setVisible(!is_null_group_id);
-    if(button_refresh)
-        button_refresh->setVisible(!is_null_group_id);
+    if(mButtonApply)
+        mButtonApply->setVisible(!is_null_group_id);
+    if(mButtonRefresh)
+        mButtonRefresh->setVisible(!is_null_group_id);
 
-    if(button_cancel)
-        button_cancel->setVisible(!is_null_group_id);
+    if(mButtonCancel)
+        mButtonCancel->setVisible(!is_null_group_id);
 
-    if(button_call)
-            button_call->setVisible(!is_null_group_id);
-    if(button_chat)
-            button_chat->setVisible(!is_null_group_id);
+    if(mButtonCall)
+            mButtonCall->setVisible(!is_null_group_id);
+    if(mButtonChat)
+            mButtonChat->setVisible(!is_null_group_id);
 
     // <FS:PP> FIRE-33939: Activate button
-    LLButton* button_activate = findChild<LLButton>("btn_activate");
-    if (button_activate)
+    if (mButtonActivate)
     {
-        button_activate->setVisible(!is_null_group_id);
-        button_activate->setEnabled(group_id != gAgent.getGroupID());
+        mButtonActivate->setVisible(!is_null_group_id);
+        mButtonActivate->setEnabled(group_id != gAgent.getGroupID());
     }
     // </FS:PP>
 
     getChild<LLUICtrl>("prepend_founded_by")->setVisible(!is_null_group_id);
 
     // <FS:Ansariel> TabContainer switch
-    //LLAccordionCtrl* tab_ctrl = getChild<LLAccordionCtrl>("groups_accordion");
-    //tab_ctrl->reset();
+    //mGroupsAccordion->reset();
 
     //LLAccordionCtrlTab* tab_general = getChild<LLAccordionCtrlTab>("group_general_tab");
     //LLAccordionCtrlTab* tab_roles = getChild<LLAccordionCtrlTab>("group_roles_tab");
     //LLAccordionCtrlTab* tab_notices = getChild<LLAccordionCtrlTab>("group_notices_tab");
     //LLAccordionCtrlTab* tab_land = getChild<LLAccordionCtrlTab>("group_land_tab");
     //LLAccordionCtrlTab* tab_experiences = getChild<LLAccordionCtrlTab>("group_experiences_tab");
-    LLAccordionCtrl* tab_ctrl = NULL;
-    LLAccordionCtrlTab* tab_general = NULL;
-    LLAccordionCtrlTab* tab_roles = NULL;
-    LLAccordionCtrlTab* tab_notices = NULL;
-    LLAccordionCtrlTab* tab_land = NULL;
-    LLAccordionCtrlTab* tab_experiences = NULL;
-    LLTabContainer* tabcont_ctrl = NULL;
+    LLAccordionCtrlTab* tab_general = nullptr;
+    LLAccordionCtrlTab* tab_roles = nullptr;
+    LLAccordionCtrlTab* tab_notices = nullptr;
+    LLAccordionCtrlTab* tab_land = nullptr;
+    LLAccordionCtrlTab* tab_experiences = nullptr;
+    LLTabContainer* tabcont_ctrl = nullptr;
 
     if (mIsUsingTabContainer)
     {
@@ -535,8 +522,7 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
     }
     else
     {
-        tab_ctrl = getChild<LLAccordionCtrl>("groups_accordion");
-        tab_ctrl->reset();
+        mGroupsAccordion->reset();
 
         tab_general = getChild<LLAccordionCtrlTab>("group_general_tab");
         tab_roles = getChild<LLAccordionCtrlTab>("group_roles_tab");
@@ -583,16 +569,16 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
         }
         // </FS:Ansariel>
 
-        getChild<LLUICtrl>("group_name")->setVisible(false);
+        mGroupNameCtrl->setVisible(false);
         getChild<LLUICtrl>("group_name_editor")->setVisible(true);
 
-        if(button_call)
-            button_call->setVisible(false);
-        if(button_chat)
-            button_chat->setVisible(false);
+        if(mButtonCall)
+            mButtonCall->setVisible(false);
+        if(mButtonChat)
+            mButtonChat->setVisible(false);
         // <FS:PP> FIRE-33939: Activate button
-        if(button_activate)
-            button_activate->setVisible(false);
+        if(mButtonActivate)
+            mButtonActivate->setVisible(false);
         // </FS:PP>
     }
     else
@@ -644,26 +630,25 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
         }
         // </FS:Ansariel>
 
-        getChild<LLUICtrl>("group_name")->setVisible(true);
+        mGroupNameCtrl->setVisible(true);
         getChild<LLUICtrl>("group_name_editor")->setVisible(false);
 
-        if(button_apply)
-            button_apply->setVisible(is_member);
-        if(button_call)
-            button_call->setVisible(is_member);
-        if(button_chat)
-            button_chat->setVisible(is_member);
+        if(mButtonApply)
+            mButtonApply->setVisible(is_member);
+        if(mButtonCall)
+            mButtonCall->setVisible(is_member);
+        if(mButtonChat)
+            mButtonChat->setVisible(is_member);
         // <FS:PP> FIRE-33939: Activate button
-        if(button_activate)
-            button_activate->setVisible(is_member);
+        if(mButtonActivate)
+            mButtonActivate->setVisible(is_member);
         // </FS:PP>
     }
 
     // <FS:Ansariel> TabContainer switch
-    //tab_ctrl->arrange();
     if (!mIsUsingTabContainer)
     {
-        tab_ctrl->arrange();
+        mGroupsAccordion->arrange();
     }
     // </FS:Ansariel>
 
@@ -740,28 +725,24 @@ void LLPanelGroup::draw()
     if (mRefreshTimer.hasExpired())
     {
         mRefreshTimer.stop();
-        childEnable("btn_refresh");
-        childEnable("groups_accordion");
+        if(mButtonRefresh) mButtonRefresh->setEnabled(true);
+        if(mGroupsAccordion) mGroupsAccordion->setEnabled(true);
         // <FS:PP> FIRE-33939: Activate button
-        if (gAgent.getGroupID() != getID())
+        if (gAgent.getGroupID() != getID() && mButtonActivate)
         {
-            childEnable("btn_activate");
+            mButtonActivate->setEnabled(true);
         }
         // </FS:PP>
     }
 
-    LLButton* button_apply = findChild<LLButton>("btn_apply");
-
-    if(button_apply && button_apply->getVisible())
+    if(mButtonApply && mButtonApply->getVisible())
     {
         bool enable = false;
         std::string mesg;
         for(std::vector<LLPanelGroupTab* >::iterator it = mTabs.begin();it!=mTabs.end();++it)
             enable = enable || (*it)->needsApply(mesg);
 
-        // <FS:Ansariel> Don't parse the XML... again...
-        //childSetEnabled("btn_apply", enable);
-        button_apply->setEnabled(enable);
+        mButtonApply->setEnabled(enable);
     }
 }
 
@@ -777,9 +758,9 @@ void LLPanelGroup::refreshData()
     setGroupID(getID());
 
     // 5 second timeout
-    childDisable("btn_refresh");
-    childDisable("groups_accordion");
-    childDisable("btn_activate"); // <FS:PP> FIRE-33939: Activate button
+    if(mButtonRefresh) mButtonRefresh->setEnabled(false);
+    if(mGroupsAccordion) mGroupsAccordion->setEnabled(false);
+    if(mButtonActivate) mButtonActivate->setEnabled(false); // <FS:PP> FIRE-33939: Activate button
 
     mRefreshTimer.start();
     mRefreshTimer.setTimerExpirySec(5);

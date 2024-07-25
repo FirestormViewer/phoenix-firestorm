@@ -615,6 +615,7 @@ bool LLFloaterTexturePicker::postBuild()
     mResolutionLabel = getChild<LLTextBox>("size_lbl");
     mResolutionWarning = getChild<LLTextBox>("over_limit_lbl");
 
+    mPreviewWidget = getChild<LLView>("preview_widget");
 
     mDefaultBtn = getChild<LLButton>("Default");
     mNoneBtn = getChild<LLButton>("None");
@@ -796,7 +797,7 @@ void LLFloaterTexturePicker::draw()
         }
 
         // Border
-        LLRect border = getChildView("preview_widget")->getRect();
+        LLRect border = mPreviewWidget->getRect();
         gl_rect_2d( border, LLColor4::black, false );
 
 
