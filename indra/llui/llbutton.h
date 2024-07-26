@@ -249,7 +249,7 @@ public:
     void            setImageOverlaySelectedColor(const LLColor4& color) { mImageOverlaySelectedColor = color; }
 
     void            autoResize();   // resize with label of current btn state
-    void            resize(LLUIString label); // resize with label input
+    void            resize(const LLUIString& label); // resize with label input
     void            setLabel(const std::string& label);
     void            setLabel(const LLUIString& label);
     void            setLabel( const LLStringExplicit& label);

@@ -43,7 +43,6 @@ class LLColorSwatchCtrl;
 class LLComboBox;
 class LLInventoryItem;
 class LLLineEditor;
-class LLRadioGroup;
 class LLSpinCtrl;
 class LLTextBox;
 class LLTextureCtrl;
@@ -53,6 +52,7 @@ class LLFloater;
 class LLMaterialID;
 class LLMediaCtrl;
 class LLMenuButton;
+class LLRadioGroup;
 
 class PBRPickerAgentListener;
 class PBRPickerObjectListener;
@@ -149,7 +149,7 @@ protected:
     void            sendFullbright();       // applies and sends full bright
 
     void            sendGlow();
-    void            alignTestureLayer();
+    void            alignTextureLayer();
 
     void            updateCopyTexButton();
 
@@ -333,28 +333,30 @@ private:
     F32     getCurrentTextureOffsetV();
 
     // Build tool controls
-    LLTextureCtrl*  mTextureCtrl;
-    LLTextureCtrl*  mShinyTextureCtrl;
-    LLTextureCtrl*  mBumpyTextureCtrl;
-    LLColorSwatchCtrl*  mColorSwatch;
-    LLColorSwatchCtrl*  mShinyColorSwatch;
-
-    LLComboBox*     mComboTexGen;
-    LLRadioGroup*   mRadioMatType;
-    LLRadioGroup*   mRadioPbrType;
-
-    LLCheckBoxCtrl  *mCheckFullbright;
-
-    LLTextBox*      mLabelColorTransp;
-    LLSpinCtrl*     mCtrlColorTransp;       // transparency = 1 - alpha
-
-    LLSpinCtrl*     mCtrlGlow;
     LLSpinCtrl*     mCtrlRpt;
     // </FS:CR>
 
-    LLComboBox *mComboMatMedia;
-    LLMediaCtrl *mTitleMedia;
-    LLTextBox *mTitleMediaText;
+    LLTextureCtrl* mPBRTextureCtrl = nullptr;
+    LLTextureCtrl* mTextureCtrl = nullptr;
+    LLTextureCtrl* mShinyTextureCtrl = nullptr;
+    LLTextureCtrl* mBumpyTextureCtrl = nullptr;
+    LLColorSwatchCtrl* mColorSwatch = nullptr;
+    LLColorSwatchCtrl* mShinyColorSwatch = nullptr;
+
+    LLComboBox* mComboTexGen = nullptr;
+
+    LLRadioGroup* mRadioMaterialType = nullptr;
+    LLRadioGroup* mRadioPbrType = nullptr;
+
+    LLCheckBoxCtrl* mCheckFullbright = nullptr;
+
+    LLTextBox* mLabelColorTransp = nullptr;
+    LLSpinCtrl* mCtrlColorTransp = nullptr;       // transparency = 1 - alpha
+
+    LLSpinCtrl* mCtrlGlow = nullptr;
+    LLComboBox *mComboMatMedia = nullptr;
+    LLMediaCtrl *mTitleMedia = nullptr;
+    LLTextBox *mTitleMediaText = nullptr;
 
     // Update visibility of controls to match current UI mode
     // (e.g. materials vs media editing)

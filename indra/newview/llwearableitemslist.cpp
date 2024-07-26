@@ -108,21 +108,27 @@ LLPanelWearableOutfitItem::Params::Params()
 
 bool LLPanelWearableOutfitItem::postBuild()
 {
+    if (mShowWidgets)
+    {
+        mAddWearableBtn = getChild<LLButton>("add_wearable");
+        mRemoveWearableBtn = getChild<LLButton>("remove_wearable");
+    }
+
     LLPanelWearableListItem::postBuild();
 
     //if(mShowWidgets) // <FS:Ansariel> Make Add/Remove buttons work
     {
         // <FS:Ansariel> Make Add/Remove buttons work
-        //addWidgetToRightSide("add_wearable");
-        //addWidgetToRightSide("remove_wearable");
+        //addWidgetToRightSide(mAddWearableBtn);
+        //addWidgetToRightSide(mAddWearableBtn);
         LLViewerInventoryItem* inv_item = getItem();
         mShowWidgets &= (inv_item->getType() != LLAssetType::AT_BODYPART);
-        addWidgetToRightSide("add_wearable", mShowWidgets);
-        addWidgetToRightSide("remove_wearable", mShowWidgets);
+        addWidgetToRightSide(mAddWearableBtn, mShowWidgets);
+        addWidgetToRightSide(mAddWearableBtn, mShowWidgets);
         // </FS:Ansariel>
 
-        childSetAction("add_wearable", boost::bind(&LLPanelWearableOutfitItem::onAddWearable, this));
-        childSetAction("remove_wearable", boost::bind(&LLPanelWearableOutfitItem::onRemoveWearable, this));
+        mAddWearableBtn->setClickedCallback(boost::bind(&LLPanelWearableOutfitItem::onAddWearable, this));
+        mRemoveWearableBtn->setClickedCallback(boost::bind(&LLPanelWearableOutfitItem::onRemoveWearable, this));
 
         setWidgetsVisible(false);
         reshapeWidgets();
@@ -253,14 +259,14 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 
     if(mShowWidgets)
     {
-        setShowWidget("add_wearable", !is_worn);
+        setShowWidget(mAddWearableBtn, !is_worn);
 
         // <FS:Ansariel> Make Add/Remove buttons work
         //// Body parts can't be removed, only replaced
         //LLViewerInventoryItem* inv_item = getItem();
         //bool show_remove = is_worn && inv_item && (inv_item->getType() != LLAssetType::AT_BODYPART);
         //setShowWidget("remove_wearable", show_remove);
-        setShowWidget("remove_wearable", is_worn);
+        setShowWidget(mRemoveWearableBtn, is_worn);
         // </FS:Ansariel>
 
         if(mHovered)
