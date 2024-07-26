@@ -603,8 +603,6 @@ LLPanelFace::LLPanelFace()
     mTitleMediaText(NULL),
     mNeedMediaTitle(true)
 {
-    buildFromFile("panel_tools_texture.xml");    // <FS:Zi> switchable edit texture/materials
-
     USE_TEXTURE = LLTrans::getString("use_texture");
     // <FS> Extended copy & paste buttons
     //mCommitCallbackRegistrar.add("PanelFace.menuDoToSelected", boost::bind(&LLPanelFace::menuDoToSelected, this, _2));
@@ -612,8 +610,11 @@ LLPanelFace::LLPanelFace()
     // </FS>
 
     // <FS:Zi> Find all faces with same texture
+    mCommitCallbackRegistrar.add("BuildTool.Flip", boost::bind(&LLPanelFace::onCommitFlip, _1, _2));
     mCommitCallbackRegistrar.add("BuildTool.SelectSameTexture", boost::bind(&LLPanelFace::onClickBtnSelectSameTexture, this, _1, _2));
     // </FS:Zi>
+
+    buildFromFile("panel_tools_texture.xml");    // <FS:Zi> switchable edit texture/materials
 }
 
 LLPanelFace::~LLPanelFace()
