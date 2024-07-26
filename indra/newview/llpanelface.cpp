@@ -396,7 +396,7 @@ bool    LLPanelFace::postBuild()
 
     childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
     childSetAction("button align textures", &LLPanelFace::onAlignTexture, this);
-    childSetAction("pbr_from_inventory", &LLPanelFace::onClickBtnLoadInvPBR, this);
+    //childSetAction("pbr_from_inventory", &LLPanelFace::onClickBtnLoadInvPBR, this); // <FS> Done via texture picker
     childSetAction("edit_selected_pbr", &LLPanelFace::onClickBtnEditPBR, this);
     childSetAction("save_selected_pbr", &LLPanelFace::onClickBtnSavePBR, this);
 
@@ -583,8 +583,6 @@ LLPanelFace::LLPanelFace()
     mTitleMediaText(NULL),
     mNeedMediaTitle(true)
 {
-    buildFromFile("panel_tools_texture.xml");    // <FS:Zi> switchable edit texture/materials
-
     USE_TEXTURE = LLTrans::getString("use_texture");
     // <FS> Extended copy & paste buttons
     //mCommitCallbackRegistrar.add("PanelFace.menuDoToSelected", boost::bind(&LLPanelFace::menuDoToSelected, this, _2));
@@ -592,8 +590,11 @@ LLPanelFace::LLPanelFace()
     // </FS>
 
     // <FS:Zi> Find all faces with same texture
+    mCommitCallbackRegistrar.add("BuildTool.Flip", boost::bind(&LLPanelFace::onCommitFlip, _1, _2));
     mCommitCallbackRegistrar.add("BuildTool.SelectSameTexture", boost::bind(&LLPanelFace::onClickBtnSelectSameTexture, this, _1, _2));
     // </FS:Zi>
+
+    buildFromFile("panel_tools_texture.xml");    // <FS:Zi> switchable edit texture/materials
 }
 
 LLPanelFace::~LLPanelFace()
@@ -1999,7 +2000,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         getChildView("label shininess")->setEnabled(false);
         getChildView("label bumpiness")->setEnabled(false);
         getChildView("button align")->setEnabled(false);
-        getChildView("pbr_from_inventory")->setEnabled(false);
+        //getChildView("pbr_from_inventory")->setEnabled(false); // <FS> Done via texture picker
         getChildView("edit_selected_pbr")->setEnabled(false);
         getChildView("save_selected_pbr")->setEnabled(false);
 
@@ -2129,7 +2130,7 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
         }
     }
 
-    getChildView("pbr_from_inventory")->setEnabled(settable);
+    //getChildView("pbr_from_inventory")->setEnabled(settable); // <FS> Done via texture picker
     getChildView("edit_selected_pbr")->setEnabled(editable && !has_faces_without_pbr);
     getChildView("save_selected_pbr")->setEnabled(saveable && identical_pbr);
     if (objectp->isInventoryPending())
@@ -2191,7 +2192,7 @@ void LLPanelFace::updateVisibilityGLTF(LLViewerObject* objectp /*= nullptr */)
 
     mPBRTextureCtrl->setVisible(show_pbr_render_material_id);
 
-    getChildView("pbr_from_inventory")->setVisible(show_pbr_render_material_id);
+    //getChildView("pbr_from_inventory")->setVisible(show_pbr_render_material_id); // <FS> Done via texture picker
     getChildView("edit_selected_pbr")->setVisible(show_pbr_render_material_id && !inventory_pending);
     getChildView("save_selected_pbr")->setVisible(show_pbr_render_material_id && !inventory_pending);
     getChildView("material_permissions_loading_label")->setVisible(show_pbr_render_material_id && inventory_pending);

@@ -239,7 +239,7 @@ private:
 
     LLCheckBoxCtrl*         mPeopleCheck = nullptr;
     LLCheckBoxCtrl*         mInfohubCheck = nullptr;
-    LLCheckBoxCtrl*         mTelehubCheck = nullptr;
+    //LLCheckBoxCtrl*         mTelehubCheck = nullptr; // <FS:Ansariel> Does not exist as of 12-02-2014!
     LLCheckBoxCtrl*         mLandSaleCheck = nullptr;
     LLCheckBoxCtrl*         mEventsCheck = nullptr;
     LLCheckBoxCtrl*         mEventsMatureCheck = nullptr;
