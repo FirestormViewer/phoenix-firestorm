@@ -471,13 +471,42 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                     if (FSData::getInstance()->isTestingGroup(mSessionID))
                     {
                         if(chat_prefix_testing)
-                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getBuildVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                        {
+                            auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
+                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(Release) ");
+                            }
+                            else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(Unofficial) ");
+                            }
+                            else // In testing groups we'll allow all non-release recognised channels.
+                            {
+                                utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getBuildVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                            }
+                        }
+
                     }
                     //For release support groups, only display the short version(Major.Minor.Patch) since chat can speed by. This makes it easier on Support's eyes.
                     else if(FSData::getInstance()->isSupportGroup(mSessionID))
                     {
                         if(chat_prefix_support)
-                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getShortVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                        {
+                            auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
+                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(Unofficial) ");
+                            }
+                            else if( viewer_maturity != LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(pre-Release) ");
+                            }
+                            else
+                            {
+                                utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getShortVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                            }
+                        }
                     }
                 }
 
