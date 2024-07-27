@@ -1426,7 +1426,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
             with self.prefix(dst="MacOS"):
-                executable = self.dst_path_of("Firestorm.app") # locate the executable within the bundle.
+                executable = self.dst_path_of("Firestorm") # locate the executable within the bundle.
 
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
