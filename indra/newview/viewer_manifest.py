@@ -1425,6 +1425,9 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
+            with self.prefix(dst="MacOS"):
+                executable = self.dst_path_of("Firestorm.app") # locate the executable within the bundle.
+
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
             if bugsplat_db:
@@ -1535,7 +1538,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path(libfile)
 
                         oldpath = os.path.join("@rpath", libfile)
-                        executable = self.dst_path_of("Firestorm.app")
                         print(f"debug: oldpath={oldpath} executable={executable} libfile={libfile}")
                         self.run_command(
                             ['install_name_tool', '-change', 
