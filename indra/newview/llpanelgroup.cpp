@@ -232,8 +232,6 @@ bool LLPanelGroup::postBuild()
     mButtonRefresh = getChild<LLButton>("btn_refresh");
     mButtonRefresh->setClickedCallback(onBtnRefresh, this);
 
-    //mButtonCancel = getChild<LLButton>("btn_cancel"); // <FS:Ansariel> Doesn't exist as of 2024-07-26
-
     mGroupNameCtrl = getChild<LLUICtrl>("group_name");
 
     // <FS:PP> FIRE-33939: Activate button
@@ -287,20 +285,8 @@ void LLPanelGroup::reposButton(LLButton* button)
 
 void LLPanelGroup::reposButtons()
 {
-    // <FS:Ansariel> Doesn't exist as of 2024-07-26
-    //if(mButtonRefresh && mButtonCancel && mButtonRefresh->getVisible() && mButtonCancel->getVisible())
-    //{
-    //    LLRect btn_refresh_rect = mButtonRefresh->getRect();
-    //    LLRect btn_cancel_rect = mButtonCancel->getRect();
-    //    btn_refresh_rect.setLeftTopAndSize( btn_cancel_rect.mLeft + btn_cancel_rect.getWidth() + 2,
-    //        btn_refresh_rect.getHeight() + 2, btn_refresh_rect.getWidth(), btn_refresh_rect.getHeight());
-    //    mButtonRefresh->setRect(btn_refresh_rect);
-    //}
-    // </FS:Ansariel>
-
     reposButton(mButtonApply);
     reposButton(mButtonRefresh);
-    //reposButton(mButtonCancel); // <FS:Ansariel> Doesn't exist as of 2024-07-26
     reposButton(mButtonChat);
     reposButton(mButtonCall);
     reposButton(mButtonActivate); // <FS:PP> FIRE-33939: Activate button
@@ -484,9 +470,6 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
         mButtonApply->setVisible(!is_null_group_id);
     if(mButtonRefresh)
         mButtonRefresh->setVisible(!is_null_group_id);
-
-    if(mButtonCancel)
-        mButtonCancel->setVisible(!is_null_group_id);
 
     if(mButtonCall)
             mButtonCall->setVisible(!is_null_group_id);

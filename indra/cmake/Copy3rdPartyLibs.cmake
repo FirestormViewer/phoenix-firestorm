@@ -60,7 +60,6 @@ if(WINDOWS)
         nghttp2.dll
         glod.dll # <FS:Beq> restore GLOD
         libhunspell.dll
-        uriparser.dll
         )
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
@@ -206,9 +205,6 @@ elseif(DARWIN)
         libndofdev.dylib
         libnghttp2.dylib
         libnghttp2.14.dylib
-        liburiparser.dylib
-        liburiparser.1.dylib
-        liburiparser.1.0.27.dylib
         libgrowl.dylib
         libgrowl++.dylib
        )

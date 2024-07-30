@@ -550,8 +550,6 @@ void LLGestureMgr::playGesture(LLMultiGesture* gesture, bool fromKeyPress)
 // [/RLVa:KB]
 
     // Reset gesture to first step
-    // <FS:Ansariel> Do a proper reset or we might end up reading random data from wrong memory locations due to invalid gesture state
-    //gesture->mCurrentStep = 0;
     gesture->reset();
     gesture->mTriggeredByKey = fromKeyPress;
 

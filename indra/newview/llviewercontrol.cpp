@@ -962,10 +962,9 @@ void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
-        for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
-            iter != LLCharacter::sInstances.end(); ++iter)
+        for (auto character : LLCharacter::sInstances)
         {
-            LLVOAvatar* avatar = (LLVOAvatar*)*iter;
+            LLVOAvatar* avatar = static_cast<LLVOAvatar*>(character);
 
             if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()) && !avatar->isControlAvatar())
             {

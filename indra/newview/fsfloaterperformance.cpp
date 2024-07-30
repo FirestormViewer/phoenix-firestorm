@@ -707,10 +707,10 @@ void FSFloaterPerformance::populateNearbyList()
     mNearbyList->clearRows();
     mNearbyList->updateColumns(true);
 
-    std::vector<LLCharacter*> valid_nearby_avs;
+    std::vector<LLVOAvatar*> valid_nearby_avs;
     mNearbyMaxGPUTime = LLWorld::getInstance()->getNearbyAvatarsAndMaxGPUTime(valid_nearby_avs);
 
-    std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
+    auto char_iter = valid_nearby_avs.begin();
 
     LLPerfStats::bufferToggleLock.lock();
     auto av_render_tot_raw = LLPerfStats::StatsRecorder::getSum(AvType, LLPerfStats::StatType_t::RENDER_COMBINED);
@@ -718,7 +718,7 @@ void FSFloaterPerformance::populateNearbyList()
 
     while (char_iter != valid_nearby_avs.end())
     {
-        LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
+        LLVOAvatar* avatar = *char_iter;
         if (avatar)
         {
             auto overall_appearance = avatar->getOverallAppearance();

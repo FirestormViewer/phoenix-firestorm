@@ -10,7 +10,6 @@ include(Boost)
 include(LLSharedLibs)
 include(Copy3rdPartyLibs)
 include(ZLIBNG)
-include(URIPARSER)
 include(Tracy)
 
 
@@ -320,7 +319,6 @@ target_link_libraries(
         ll::expat
         ll::zlib-ng
         ll::boost
-        ll::uriparser
         ll::oslibraries
         ll::tracy
     )

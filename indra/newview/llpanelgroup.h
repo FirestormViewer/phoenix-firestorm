@@ -130,7 +130,6 @@ protected:
     LLButton*       mButtonCall = nullptr;
     LLButton*       mButtonChat = nullptr;
     LLButton*       mButtonRefresh = nullptr;
-    LLButton*       mButtonCancel = nullptr;
     LLButton*       mButtonActivate = nullptr; // <FS:PP> FIRE-33939: Activate button
     LLUICtrl*       mJoinText;
 

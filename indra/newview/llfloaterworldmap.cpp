@@ -387,7 +387,6 @@ bool LLFloaterWorldMap::postBuild()
 
     mPeopleCheck = getChild<LLCheckBoxCtrl>("people_chk");
     mInfohubCheck = getChild<LLCheckBoxCtrl>("infohub_chk");
-    //mTelehubCheck = getChild<LLCheckBoxCtrl>("telehub_chk"); // <FS:Ansariel> Does not exist as of 12-02-2014!
     mLandSaleCheck = getChild<LLCheckBoxCtrl>("land_for_sale_chk");
     mEventsCheck = getChild<LLCheckBoxCtrl>("event_chk");
     mEventsMatureCheck = getChild<LLCheckBoxCtrl>("events_mature_chk");
@@ -659,7 +658,6 @@ void LLFloaterWorldMap::draw()
     bool enable = mMapView->showRegionInfo();
     mPeopleCheck->setEnabled(enable);
     mInfohubCheck->setEnabled(enable);
-    //mTelehubCheck->setEnabled(enable); // <FS:Ansariel> Does not exist as of 12-02-2014!
     mLandSaleCheck->setEnabled(enable);
     mEventsCheck->setEnabled(enable);
     mEventsMatureCheck->setEnabled(enable);
