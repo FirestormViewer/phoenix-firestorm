@@ -38,16 +38,10 @@
 #include <boost/signals2.hpp>
 
 #include "llagent.h"
-// <FS:Beq> hacky BOOL workaround
-#ifndef BOOL
-#define BOOL bool
-#endif
-// </FS:Beq>
 #include "llpathfindingmanager.h"
 #include "llpathfindingnavmesh.h"
 #include "llpathfindingnavmeshstatus.h"
 #include "llpathinglib.h"
-#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "llsd.h"
 #include "lluuid.h"
 #include "llviewercontrol.h"

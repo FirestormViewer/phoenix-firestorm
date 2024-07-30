@@ -41,11 +41,6 @@
 #include "llagent.h"
 #include "llhttpnode.h"
 #include "llnotificationsutil.h"
-// <FS:Beq> hacky BOOL workaround
-#ifndef BOOL
-#define BOOL bool
-#endif
-// </FS:Beq>
 #include "llpathfindingcharacterlist.h"
 #include "llpathfindinglinkset.h"
 #include "llpathfindinglinksetlist.h"
@@ -53,7 +48,6 @@
 #include "llpathfindingnavmeshstatus.h"
 #include "llpathfindingobject.h"
 #include "llpathinglib.h"
-#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "llsingleton.h"
 #include "llsd.h"
 #include "lltrans.h"
