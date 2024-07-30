@@ -139,7 +139,18 @@ void LLPathfindingNavMesh::handleNavMeshResult(const LLSD &pContent, U32 pNavMes
         ENavMeshRequestStatus status;
         if ( pContent.has(NAVMESH_DATA_FIELD) )
         {
+            // <FS> ignore dangling reference false positives in gcc13
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
+            // </FS>
             const LLSD::Binary &value = pContent.get(NAVMESH_DATA_FIELD).asBinary();
+            // <FS> ignore dangling reference false positives in gcc13
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic pop
+#endif
+            // </FS>
             auto binSize = value.size();
             std::string newStr(reinterpret_cast<const char *>(&value[0]), binSize);
             std::istringstream streamdecomp( newStr );

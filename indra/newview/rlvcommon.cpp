@@ -490,7 +490,14 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
     // Filter any mention of the surrounding region names
     LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
     const std::string& strHiddenRegion = RlvStrings::getString(RlvStringKeys::Hidden::Region);
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic pop
+#endif
     for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
         boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex((*itRegion)->getName()) + "\\b", boost::regex::icase), strHiddenRegion);
 

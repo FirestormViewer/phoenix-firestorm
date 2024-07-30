@@ -33,9 +33,15 @@
 
 #include "llfloater.h"
 #include "llhandle.h"
+// <FS:Beq> hacky BOOL workaround
+#ifndef BOOL
+#define BOOL bool
+#endif
+// </FS:Beq>
 #include "llpathfindingnavmeshzone.h"
 #include "llpathfindingpathtool.h"
 #include "llpathinglib.h"
+#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "v4color.h"
 
 class LLButton;

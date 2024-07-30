@@ -159,7 +159,7 @@ protected:
         ~LLWindowMacOSX();
 
     //void  initCursors();
-    void    initCursors(BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+    void    initCursors(bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
     bool    isValid() override;
     void    moveWindow(const LLCoordScreen& position,const LLCoordScreen& size);
 
