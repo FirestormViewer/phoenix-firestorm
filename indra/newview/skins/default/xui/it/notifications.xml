@@ -1501,7 +1501,7 @@ La texture del terreno [TEXTURE_NUM] non è completamente caricata, ma sembra co
 
 Se la texture [TEXTURE_NUM] è opaca, attendi fino al completo caricamento, quindi fai clic su &quot;Applica&quot; di nuovo.
 
-L'alfa è supportata solo per i materiali del terreno (rugosità metallica PBR) quando alphaMode="MASK" e doubleSided=false.
+L'alfa è supportata solo per i materiali del terreno (rugosità/metallicità PBR) quando alphaMode="MASK" e doubleSided=false.
 	</notification>
 	<notification name="InvalidTerrainAlpha">
 		Impossibile impostare le texture della regione:
@@ -1509,7 +1509,7 @@ La texture del terreno [TEXTURE_NUM] contiene trasparenza. La trasparenza attual
 
 Sostituisci la texture [TEXTURE_NUM] con una RGB opaca, quindi fai clic su &quot;Applica&quot; di nuovo.
 
-L'alfa è supportata solo per i materiali del terreno (rugosità metallica PBR) quando alphaMode="MASK" e doubleSided=false.
+L'alfa è supportata solo per i materiali del terreno (rugosità/metallicità PBR) quando alphaMode="MASK" e doubleSided=false.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Impossibile impostare le texture della regione:

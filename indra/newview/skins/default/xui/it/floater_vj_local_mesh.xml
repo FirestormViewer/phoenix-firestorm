@@ -48,6 +48,6 @@
 	<button name="btn_add" label="Aggiungi" />
 	<button name="btn_remove" label="Rimuovi" />
 	<button name="btn_reload" label="Ricarica" />
-	<button name="btn_clear" label="Cancella Param." />
+	<button name="btn_clear" label="Cancella" />
 	<button name="btn_rez" label="Rez Selezion." tool_tip="Crea una mesh vuota nel mondo e applica ad essa la mesh locale scelta. Questo crea un oggetto vuoto nel mondo." />
 </floater>

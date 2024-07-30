@@ -19,7 +19,7 @@
 		Le impostazioni ambientali non sono disponibili in questa regione.
 	</string>
 	<string name="str_disallowed">
-		Il gestore della proprietà immobiliare non permette di cambiare l'ambiente del lotto in questa regione.
+		Il gestore della regione non permette di cambiare l'ambiente del lotto.
 	</string>
 	<string name="str_too_small">
 		Il lotto deve essere di almeno 128 metri quadri per supportare le funzionalità per l'ambiente.

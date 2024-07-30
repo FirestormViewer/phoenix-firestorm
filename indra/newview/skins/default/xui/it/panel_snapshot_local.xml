@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_local">
 	<text name="title">
-		Disco
+		Disco fisso
 	</text>
 	<combo_box label="Risoluzione" name="local_size_combo">
 		<combo_box.item label="Finestra attuale" name="CurrentWindow"/>
 		<combo_box.item label="Personalizza" name="Custom"/>
 	</combo_box>
-	<spinner label="L x A" name="local_snapshot_width"/>
+	<spinner label="Base x Altezza" name="local_snapshot_width"/>
 	<check_box label="Mantieni le proporzioni" name="local_keep_aspect_check"/>
+	<text name="local_format_label"> <!-- width="50" -->
+		Formato:
+	</text>
 	<combo_box label="Formato" name="local_format_combo">
 		<combo_box.item label="PNG (senza perdite)" name="PNG"/>
 		<combo_box.item label="BMP (senza perdite)" name="BMP"/>
