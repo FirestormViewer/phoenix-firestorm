@@ -70,7 +70,7 @@
 			<combo_box.item label="Alle Avatare und Objekte" name="3"/>
 			<combo_box.item label="Alles" name="4"/>
 		</combo_box>
-		<text name="local lights_label" tool_tip="Beeinflusst die Anzahl an dargestellten Lichtquellen, wenn Erweitertes Beleuchtungsmodell aktiviert ist (Neustart erforderlich).">
+		<text name="local lights_label" tool_tip="Beeinflusst die Anzahl an dargestellten Lichtquellen (Neustart erforderlich).">
 			Punkt. Beleucht. (Neustart erf.):
 		</text>
 		<combo_box name="LocalLightsDetail">

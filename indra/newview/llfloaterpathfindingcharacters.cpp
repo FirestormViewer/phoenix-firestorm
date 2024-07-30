@@ -36,12 +36,18 @@
 #include "llfloaterreg.h"
 #include "llfloaterpathfindingobjects.h"
 #include "llhandle.h"
+// <FS:Beq> hacky BOOL workaround
+#ifndef BOOL
+#define BOOL bool
+#endif
+// </FS:Beq>
 #include "llpathfindingcharacter.h"
 #include "llpathfindingcharacterlist.h"
 #include "llpathfindingmanager.h"
 #include "llpathfindingobject.h"
 #include "llpathfindingobjectlist.h"
 #include "llpathinglib.h"
+#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "llquaternion.h"
 #include "llsd.h"
 #include "lluicolortable.h"

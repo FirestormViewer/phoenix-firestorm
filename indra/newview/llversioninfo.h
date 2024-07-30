@@ -109,6 +109,20 @@ public:
     } ViewerMaturity;
     ViewerMaturity getViewerMaturity() const;
 
+// <FS:Beq> Add an FS specific viewer maturity enum
+    using FSViewerMaturity = 
+    enum class FSViewerMaturityEnum
+    {
+        UNOFFICIAL_VIEWER=0,
+        ALPHA_VIEWER,
+        MANUAL_VIEWER,
+        BETA_VIEWER,
+        NIGHTLY_VIEWER,
+        RELEASE_VIEWER,
+    };
+    FSViewerMaturity getFSViewerMaturity() const;
+// </FS:Beq>
+
     /// get the release-notes URL, once it becomes available -- until then,
     /// return empty string
     std::string getReleaseNotes() const;

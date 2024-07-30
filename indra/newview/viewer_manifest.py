@@ -1430,6 +1430,9 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
+            with self.prefix(dst="MacOS"):
+                executable = self.dst_path_of("Firestorm") # locate the executable within the bundle.
+
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
             if bugsplat_db:
@@ -1540,10 +1543,11 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path(libfile)
 
                         oldpath = os.path.join("@rpath", libfile)
+                        print(f"debug: oldpath={oldpath} executable={executable} libfile={libfile}")
                         self.run_command(
-                            ['install_name_tool', '-change', oldpath,
-                             '@executable_path/../Resources/%s' % libfile,
-                             executable])
+                            ['install_name_tool', '-change', 
+                             oldpath,
+                             '@executable_path/../Resources/%s' % libfile, executable])
 
                 # dylibs is a list of all the .dylib files we expect to need
                 # in our bundled sub-apps. For each of these we'll create a
@@ -1957,6 +1961,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             for tries in range(10):
                 try:
                     self.run_command(['hdiutil', 'detach', '-force', devfile])
+                    break # Exit loop if detach worked
                 except ManifestError as err:
                     print(f"detach failed on attempt {tries}")
                     time.sleep(1)
