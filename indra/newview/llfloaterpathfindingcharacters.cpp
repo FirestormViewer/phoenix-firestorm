@@ -36,18 +36,12 @@
 #include "llfloaterreg.h"
 #include "llfloaterpathfindingobjects.h"
 #include "llhandle.h"
-// <FS:Beq> hacky BOOL workaround
-#ifndef BOOL
-#define BOOL bool
-#endif
-// </FS:Beq>
 #include "llpathfindingcharacter.h"
 #include "llpathfindingcharacterlist.h"
 #include "llpathfindingmanager.h"
 #include "llpathfindingobject.h"
 #include "llpathfindingobjectlist.h"
 #include "llpathinglib.h"
-#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "llquaternion.h"
 #include "llsd.h"
 #include "lluicolortable.h"
@@ -292,7 +286,7 @@ void LLFloaterPathfindingCharacters::showCapsule() const
                 // <FS:Ansariel> Interface in Nicky's physics stub package expects bool while Havok package still expects BOOL aka S32
 #ifdef HAVOK_TPV
                 LLPathingLib::getInstance()->createPhysicsCapsuleRep(character->getLength(), character->getRadius(),
-                    static_cast<S32>(character->isHorizontal()), character->getUUID());
+                    static_cast<BOOL>(character->isHorizontal()), character->getUUID());
 #else
                 LLPathingLib::getInstance()->createPhysicsCapsuleRep(character->getLength(), character->getRadius(),
                     character->isHorizontal(), character->getUUID());

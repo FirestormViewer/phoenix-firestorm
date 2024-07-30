@@ -29,13 +29,8 @@
 
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>
-// <FS:Beq> hacky BOOL workaround
-#ifndef BOOL
-#define BOOL bool
-#endif
-// </FS:Beq>
+
 #include "llpathinglib.h"
-#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "llsingleton.h"
 #include "lltool.h"
 
