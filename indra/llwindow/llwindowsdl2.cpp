@@ -2691,7 +2691,8 @@ U32 LLWindowSDL::getAvailableVRAMMegabytes()
     return gGLManager.mVRAM - (LLImageGL::getTextureBytesAllocated() * total_factor/mb);
 */
     LL_PROFILE_ZONE_SCOPED;
-    if (gGLManager.mHasNVXMemInfo)
+    // Only use the accurate feedback if we are not using an override
+    if (gGLManager.mHasNVXMemInfo && gGLManager.mVRAM == gGLManager.mVRAMDetected)
     {
         S32 available_memory;
         glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &available_memory);

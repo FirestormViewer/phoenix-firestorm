@@ -88,8 +88,10 @@ protected:
     void    onCameraTrack();
     void    onCameraRotate();
     F32     getOrbitRate(F32 time);
+// <FS:Chanayane> Camera roll (from Alchemy)
     void    onRollLeftHeldDown();
     void    onRollRightHeldDown();
+// </FS:Chanayane>
 
 private:
     LLButton*   mPlusBtn { nullptr };
@@ -181,8 +183,10 @@ void LLPanelCameraZoom::onCreate()
     mCommitCallbackRegistrar.add("Slider.value_changed", boost::bind(&LLPanelCameraZoom::onSliderValueChanged, this));
     mCommitCallbackRegistrar.add("Camera.track", boost::bind(&LLPanelCameraZoom::onCameraTrack, this));
     mCommitCallbackRegistrar.add("Camera.rotate", boost::bind(&LLPanelCameraZoom::onCameraRotate, this));
+// <FS:Chanayane> Camera roll (from Alchemy)
     mCommitCallbackRegistrar.add("Camera.roll_left", boost::bind(&LLPanelCameraZoom::onRollLeftHeldDown, this));
     mCommitCallbackRegistrar.add("Camera.roll_right", boost::bind(&LLPanelCameraZoom::onRollRightHeldDown, this));
+// </FS:Chanayane>
 }
 
 BOOL LLPanelCameraZoom::postBuild()
@@ -190,8 +194,10 @@ BOOL LLPanelCameraZoom::postBuild()
     mPlusBtn  = getChild<LLButton>("zoom_plus_btn");
     mMinusBtn = getChild<LLButton>("zoom_minus_btn");
     mSlider   = getChild<LLSlider>("zoom_slider");
+// <FS:Chanayane> Camera roll (from Alchemy)
     mRollLeft   = getChild<LLButton>("roll_left");
     mRollRight  = getChild<LLButton>("roll_right");
+// </FS:Chanayane>
     return LLPanel::postBuild();
 }
 
@@ -221,6 +227,7 @@ void LLPanelCameraZoom::onZoomMinusHeldDown()
     gAgentCamera.setOrbitOutKey(getOrbitRate(time));
 }
 
+// <FS:Chanayane> Camera roll (from Alchemy)
 void LLPanelCameraZoom::onRollLeftHeldDown()
 {
     F32 time = mRollLeft->getHeldDownTime();
@@ -234,6 +241,7 @@ void LLPanelCameraZoom::onRollRightHeldDown()
     gAgentCamera.unlockView();
     gAgentCamera.setRollRightKey(getOrbitRate(time));
 }
+// </FS:Chanayane>
 
 void LLPanelCameraZoom::onCameraTrack()
 {

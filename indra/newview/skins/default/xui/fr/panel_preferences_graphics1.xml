@@ -41,7 +41,7 @@
 				<combo_box.item label="Manuels &amp; terrain" name="2"/>
 				<combo_box.item label="Scène complète" name="3"/>
 			</combo_box>
-			<text width="185" name="local lights_label" tool_tip="Affecte le nombre de sources de lumière lorsque l'éclairage avancé est désactivé. Un redémarrage est requis pour changer de mode.">
+			<text width="185" name="local lights_label" tool_tip="Affecte le nombre de sources de lumière. Un redémarrage est requis pour changer de mode.">
 				Éclairage ponctuel (redémarrage) :
 			</text>
 			<combo_box name="LocalLightsDetail">

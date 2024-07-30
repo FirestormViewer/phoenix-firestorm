@@ -917,13 +917,13 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                 if (face && face->getViewerObject() && face->getTextureEntry())
                 {
                     onFace = true;
+                    F32 vsize = face->getPixelArea();
 // <FS:Beq> Fix Blurry textures and use importance weight
                     F32 radius;
                     F32 cos_angle_to_view_dir;
                     BOOL in_frustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
                     static LLCachedControl<F32> bias_unimportant_threshold(gSavedSettings, "TextureBiasUnimportantFactor", 0.25f);
 // </FS:Beq>
-                    F32 vsize = face->getPixelArea();
 
                     // scale desired texture resolution higher or lower depending on texture scale
                     const LLTextureEntry* te = face->getTextureEntry();

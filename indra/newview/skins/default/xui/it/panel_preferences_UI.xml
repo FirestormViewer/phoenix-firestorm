@@ -46,12 +46,12 @@
 			<combo_box.item label="Senza limiti per gli HUD" name="ScriptDialogOption_4"/>
 			<combo_box.item label="Senza limiti" name="ScriptDialogOption_5" />
 		</combo_box>
-		<check_box label="Togli bottone &quot;Blocca&quot;" name="FSRemoveScriptBlockButton"/>
+		<check_box label="Togli pulsante &quot;Blocca&quot;" name="FSRemoveScriptBlockButton"/>
 		<text name="ScriptDialogsPositionLabel">
 			Posizione dialogo script:
 		</text>
 		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Dove compaiono le finestre di dialogo (menu) degli script sullo schermo.">
-			<combo_box.item label="Attacca a messaggi" name="ScriptDialogPositionOption_1" />
+			<combo_box.item label="Ancorato al chiclet" name="ScriptDialogPositionOption_1" />
 			<combo_box.item label="Alto sinistra" name="ScriptDialogPositionOption_2"/>
 			<combo_box.item label="Alto destra" name="ScriptDialogPositionOption_3"/>
 			<combo_box.item label="Basso sinistra" name="ScriptDialogPositionOption_4" />
