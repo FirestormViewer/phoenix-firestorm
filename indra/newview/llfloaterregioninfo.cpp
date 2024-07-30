@@ -912,8 +912,6 @@ void LLPanelRegionInfo::initCtrl(const std::string& name)
 template<typename CTRL>
 void LLPanelRegionInfo::initAndSetCtrl(CTRL*& ctrl, const std::string& name)
 {
-    // <FS:Ansariel> Fix broken initialization
-    //initCtrl(name);
     ctrl = findChild<CTRL>(name);
     if (ctrl)
         ctrl->setCommitCallback(boost::bind(&LLPanelRegionInfo::onChangeAnything, this));
