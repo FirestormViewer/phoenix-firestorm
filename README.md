@@ -3,7 +3,7 @@
 # AyaneStorm - A viewer for photographers
 
 ## Features (so far)
-- Added poser from BlackDragon **(works for all avatars, not only oneself)**
+- Added poser from BlackDragon
 - Added experimental mouse look head scaling
 - Added camera roll/tilt buttons from Blackdragon
 - Snapshots up to 11500x11500 resolution
