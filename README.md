@@ -1,6 +1,6 @@
 ![Firestorm Viewer Logo](doc/ayanestorm_256.png)
 
-# AyaneStorm
+# AyaneStorm - A viewer for photographers
 
 ## Features (so far)
 - Added poser from BlackDragon **(works for all avatars, not only oneself)**
