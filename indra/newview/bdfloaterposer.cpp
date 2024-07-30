@@ -427,14 +427,16 @@ void BDFloaterPoser::onPoseStart()
     if (!motion || motion->isStopped())
     {
         avatar->setPosing();
-        if (avatar->isSelf())
-        {
+        //<AS:chayanane> Allow posing other avatars
+        //if (avatar->isSelf())
+        //{
             //BD - Grab our current defaults to revert to them when stopping the Poser.
             if(gAgentAvatarp->isFullyLoaded())
                 onCollectDefaults();
 
             gAgent.stopFidget();
-        }
+        //}
+        //</AS:chayanane> Allow posing other avatars
         avatar->startDefaultMotions();
         avatar->startMotion(ANIM_BD_POSING_MOTION);
     }
@@ -1002,7 +1004,10 @@ void BDFloaterPoser::onJointRotPosScaleReset()
 
     //BD - We don't support resetting bones for anyone else yet.
     LLVOAvatar* avatar = (LLVOAvatar*)av_item->getUserdata();
-    if (!avatar || avatar->isDead() || !avatar->isSelf()) return;
+    //<AS:chayanane> Allow posing other avatars
+    //if (!avatar || avatar->isDead() || !avatar->isSelf()) return;
+    if (!avatar || avatar->isDead()) return;
+    //</AS:chayanane> Allow posing other avatars
 
     //BD - While editing rotations, make sure we use a bit of spherical linear interpolation
     //     to make movements smoother.
@@ -1166,7 +1171,10 @@ void BDFloaterPoser::onJointPositionReset()
 
     //BD - We don't support resetting bones positions for anyone else yet.
     LLVOAvatar* avatar = (LLVOAvatar*)item->getUserdata();
-    if (!avatar || avatar->isDead() || !avatar->isSelf()) return;
+    //<AS:chayanane> Allow posing other avatars
+    //if (!avatar || avatar->isDead() || !avatar->isSelf()) return;
+    if (!avatar || avatar->isDead()) return;
+    //</AS:chayanane> Allow posing other avatars
 
     S32 index = mJointTabs->getCurrentPanelIndex();
 
@@ -1220,7 +1228,10 @@ void BDFloaterPoser::onJointScaleReset()
 
     //BD - We don't support resetting bones scales for anyone else yet.
     LLVOAvatar* avatar = (LLVOAvatar*)item->getUserdata();
-    if (!avatar || avatar->isDead() || !avatar->isSelf()) return;
+    //<AS:chayanane> Allow posing other avatars
+    //if (!avatar || avatar->isDead() || !avatar->isSelf()) return;
+    if (!avatar || avatar->isDead()) return;
+    //</AS:chayanane> Allow posing other avatars
 
     S32 index = mJointTabs->getCurrentPanelIndex();
 
@@ -2162,7 +2173,10 @@ void BDFloaterPoser::onAvatarsSelect()
     if (item)
     {
         LLVOAvatar* avatar = (LLVOAvatar*)item->getUserdata();
-        if (avatar && avatar->isSelf())
+        //<AS:chayanane> Allow posing other avatars
+        //if (avatar) && avatar->isSelf())
+        if (avatar)
+        //</AS:chayanane> Allow posing other avatars
             mStartPosingBtn->setEnabled(gAgentAvatarp->isFullyLoaded());
     }
 
@@ -2185,8 +2199,10 @@ void BDFloaterPoser::onAvatarsRefresh()
     {
         create_new = true;
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
-        if (avatar && !avatar->isControlAvatar()
-            && avatar->isSelf())
+        if (avatar && !avatar->isControlAvatar())
+            //<AS:chayanane> Allow posing other avatars
+            //&& avatar->isSelf())
+            //</AS:chayanane> Allow posing other avatars
         {
             LLUUID uuid = avatar->getID();
             for (LLScrollListItem* item : mAvatarScroll->getAllData())
