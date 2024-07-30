@@ -124,7 +124,7 @@ void LLMemory::updateMemoryInfo()
     {
         // Our Windows definition of PagefileUsage is documented by Microsoft as "the total amount of
         // memory that the memory manager has committed for a running process", which is rss.
-        sAllocatedPageSizeInKB = U32Bytes(info.resident_size);
+        sAllocatedPageSizeInKB = U64Bytes(info.resident_size);
 
         // Activity Monitor => Inspect Process => Real Memory Size appears to report resident_size
         // Activity monitor => main window memory column appears to report phys_footprint, which spot checks as at least 30% less.
@@ -134,7 +134,7 @@ void LLMemory::updateMemoryInfo()
         // reported for the app by the Memory Monitor in Instruments.' It is still about 8% bigger than phys_footprint.
         //
         // (On Windows, we use WorkingSetSize.)
-        sAllocatedMemInKB = U32Bytes(info.resident_size - info.reusable);
+        sAllocatedMemInKB = U64Bytes(info.resident_size - info.reusable);
      }
     else
     {
@@ -154,7 +154,7 @@ void LLMemory::updateMemoryInfo()
         // <FS:Beq> align MemInfo across platforms
         // sAvailPhysicalMemInKB = U32Bytes(vmstat.free_count * page_size);
         // sMaxPhysicalMemInKB = LLMemoryInfo::getHardwareMemSize();
-        avail_phys = U32Bytes(vmstat.free_count * page_size);
+        avail_phys = U64Bytes( (vmstat.free_count + vmstat.inactive_count) * page_size);
         sMaxHeapSizeInKB = LLMemoryInfo::getHardwareMemSize();
         // </FS:Beq>
     }
@@ -191,6 +191,13 @@ void LLMemory::updateMemoryInfo()
     {
         sAvailPhysicalMemInKB = U32Kilobytes(0);
     }
+    // debug log the memory info
+    LL_DEBUGS("MemoryInfo")  << "Memory Info:" 
+                << "Heap: " << sMaxHeapSizeInKB << "; "  // Heap
+                << "Free: " << sAvailPhysicalMemInKB << "; "  // Free
+                << "FS Use: " << sAllocatedMemInKB << "; " // In use by this instance right now
+                << "FS Max poss: " << sMaxPhysicalMemInKB << "; " // How much we could have (In use now + free)
+                << LL_ENDL;
     // </FS:Beq>
     return ;
 }

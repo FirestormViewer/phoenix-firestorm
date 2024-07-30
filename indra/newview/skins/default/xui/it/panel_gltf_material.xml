@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_gltf_material">
-	<check_box label="Doppio lato" name="double sided"/>
+	<check_box label="Doppia faccia" name="double sided"/>
 	<panel name="base_color_texture_pnl">
 		<text name="base_color_lbl">
 			Colore di base:
 		</text>
 		<texture_picker name="base_color_texture" tool_tip="Mappa del colore di base. Il canale alfa è facoltativo e viene utilizzato per la trasparenza."/>
 		<text name="base_color_upload_fee">
-			Nessun costo upload
+			No costi di upload
 		</text>
 		<text name="base_color_tint_lbl">
 			Tinta
@@ -29,14 +29,14 @@
 	</panel>
 	<panel name="metallic_texture_pnl">
 		<text name="metallic_roughness_lbl">
-			Metallità-Rugosità:
+			Metallicità-Rugosità:
 		</text>
-		<texture_picker name="metallic_roughness_texture" tool_tip="Mappa di metallità-rugosità GLTF con occlusione opzionale. Il canale rosso è l'occlusione, il canale verde è la rugosità, il canale blu è la metallità."/>
+		<texture_picker name="metallic_roughness_texture" tool_tip="Mappa di metallicità-rugosità GLTF con occlusione opzionale. Il canale rosso è l'occlusione, il canale verde è la rugosità, il canale blu è la metallicità."/>
 		<text name="metallic_upload_fee">
-			Nessun costo upload
+			No costi di upload
 		</text>
 		<text name="metallic_factor_lbl">
-			Fattore metallità
+			Fattore metallicità
 		</text>
 		<text name="roughness_factor_lbl">
 			Fattore rugosità
@@ -47,7 +47,7 @@
 			Emissiva:
 		</text>
 		<text name="emissive_upload_fee">
-			Nessun costo upload
+			No costi di upload
 		</text>
 		<text name="emissive_tint_lbl">
 			Tinta
@@ -58,7 +58,7 @@
 			Normale:
 		</text>
 		<text name="normal_upload_fee">
-			Nessun costo upload
+			No costi di upload
 		</text>
 	</panel>
 </panel>

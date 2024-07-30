@@ -58,7 +58,7 @@
 				<combo_box.item label="Bütün avatarlar və obyektlər" name="3"/>
 				<combo_box.item label="Hər şeyi əksləndir" name="4"/>
 			</combo_box>
-			<text name="local lights_label" tool_tip="Əlavə işıqlandırma modeli söndürüldüyü zaman təqdim edilən işıqlandırma mənbələrinin sayına təsir edir. Yenidən başlatma tələb olunur">
+			<text name="local lights_label" tool_tip="Göstərilən işıq mənbələrinin sayına təsir göstərir. Yenidən başlatma tələb olunur">
 				Nöqtəvi işıqlandırma:
 			</text>
 			<combo_box name="LocalLightsDetail">

@@ -52,8 +52,10 @@
 			</combo_box>
 			<check_box label="Interfaccia" name="ui_check"/>
 			<check_box label="Credito L$" name="currency_check" />
-			<check_box label="Cattura schermo (tutto schermo)" name="freeze_frame_check"/>
+			<check_box label="HUD" name="hud_check" />
+			<check_box label="Fermo immagine (tutto schermo)" name="freeze_frame_check"/>
 			<check_box label="Aggiornamento automatico" name="auto_snapshot_check"/>
+			<check_box label="Nessuna post-elaborazione" name="no_post_check" />
 			<text name="filter_list_label">
 				Filtro:
 			</text>
@@ -79,7 +81,7 @@
 		</text>
 	</view>
 	<text name="image_res_text">
-		[WIDTH] px (larghezza) x [HEIGHT] px (altezza)
+		[WIDTH] x [HEIGHT] pixel (base x altezza)
 	</text>
 	<button label="Foto a 360°" name="360_label" />
 </floater>

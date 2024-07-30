@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+	<text name="title">
+		Inventario
+	</text>
+	<text name="hint_lbl">
+		Il caricamento di un'immagine costa [UPLOAD_COST]L$.
+
+La tariffa dipende dal livello di abbonamento. Ai livelli più alti le tariffe sono inferiori.
+	</text>
+	<button label="Annulla" name="cancel_btn" />
+	<button label="Salva" name="save_btn" />
+</panel>

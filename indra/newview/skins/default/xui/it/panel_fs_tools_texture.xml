@@ -22,7 +22,7 @@
 				<texture_picker name="normal_map_picker" label="Normale" tool_tip="Clicca per scegliere la mappa normale" />
 				<texture_picker name="emissive_map_picker" label="Emissiva" tool_tip="Clicca per scegliere la mappa emissiva" />
 				<color_swatch name="emissive_color_tint_picker" label="Tinta" tool_tip="Clicca per scegliere la tonalità di colore di emissività" />
-				<texture_picker name="metallic_map_picker" tool_tip="Clicca per scegliere la mappa di rugosità metallica, che può contenere un canale di occlusione opzionale" />
+				<texture_picker name="metallic_map_picker" tool_tip="Clicca per scegliere la mappa di rugosità/metallicità, che può contenere un canale di occlusione opzionale" />
 			</panel>
 			<panel name="panel_material_parameters">
 				<check_box label="Doppia faccia" name="double sided" />
@@ -36,7 +36,7 @@
 					<combo_box.item label="Maschera" name="Alpha masking" />
 				</combo_box>
 				<spinner label="Ritaglio" name="alpha cutoff" />
-				<spinner label="Metallità" name="metalness factor" />
+				<spinner label="Metallicità" name="metalness factor" />
 				<spinner label="Rugosità" name="roughness factor" />
 				<button name="save_selected_pbr" label="Salva" />
 			</panel>
@@ -151,10 +151,10 @@
 					<button name="btn_select_same_spec" tool_tip="Seleziona tutte le facce con la stessa mappa speculare di questa" />
 				</layout_panel>
 				<layout_panel name="panel_blinn_phong_options">
-					<check_box label="Max luminos." name="checkbox fullbright" width="90" />
+					<check_box label="Max lumin." name="checkbox fullbright" width="90" />
 					<spinner name="ColorTrans" label="Trasparenza" />
 					<text name="label alphamode">
-						Modalità alfa
+						Modal. alfa
 					</text>
 					<combo_box name="combobox alphamode">
 						<combo_box.item label="Nessuna" name="None" />
@@ -162,7 +162,7 @@
 						<combo_box.item label="Maschera alfa" name="Alpha masking" />
 						<combo_box.item label="Maschera emissiva" name="Emissive mask" />
 					</combo_box>
-					<spinner label="Ritaglio maschera" name="maskcutoff" label_width="90" />
+					<spinner label="Ritaglio maschera" name="maskcutoff" label_width="100" />
 					<text name="label bumpiness">
 						Superficie
 					</text>
@@ -301,5 +301,5 @@
 	</panel>
 	<button name="copy_face_btn" tool_tip="Copia i parametri della texture negli appunti" />
 	<button name="paste_face_btn" tool_tip="Incolla i parametri della texture dagli appunti" />
-	<spinner label="Bagliore" name="glow" label_width="43" />
+	<spinner label="Bagliore" name="glow" label_width="44" />
 </panel>

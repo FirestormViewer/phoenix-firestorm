@@ -70,7 +70,7 @@
 				<combo_box.item label="Tutti gli avatar e gli oggetti" name="3"/>
 				<combo_box.item label="Tutto" name="4"/>
 			</combo_box> -->
-			<text name="local lights_label" tool_tip="Imposta il numero di punti luce resi quando  &apos;Ombre ambiente&apos; non è attivo. Richiede riavvio per cambiare modalità">
+			<text name="local lights_label" tool_tip="Imposta il numero di punti luce resi. Richiede riavvio per cambiare modalità">
 				Punti Luce (richiede riavvio):
 			</text>
 			<combo_box name="LocalLightsDetail">
