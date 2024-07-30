@@ -449,12 +449,6 @@ private:
     F32             mRollAngle = 0.f;
 // </FS:Chanayane>
 
-// <FS:Chanayane> Camera roll (from Alchemy)
-    F32             mRollLeftKey;
-    F32             mRollRightKey;
-    F32             mRollAngle = 0.f;
-// </FS:Chanayane>
-
     //--------------------------------------------------------------------
     // Pan
     //--------------------------------------------------------------------
