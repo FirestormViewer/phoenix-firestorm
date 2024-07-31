@@ -1097,15 +1097,15 @@
          layout="topleft"
          name="voice_automatic_gain_control"
          left="25"
-         top_pad="3"
+         top_pad="6"
          width="237"/>
         <text
          follows="top|left"
          layout="topleft"
          height="15"
-         left="25"
-         top_pad="5"
-         width="100"
+         left_pad="25"
+         top_delta="-3"
+         width="120"
          name="noise_suppression_label">
           Noise Suppression
         </text>
@@ -1142,9 +1142,15 @@
         <button
          control_name="ShowDeviceSettings"
          follows="left|top"
-         height="23"
+         height="16"
          is_toggle="true"
          label="Audio Device Settings"
+         halign="left"
+         pad_left="16"
+         pad_bottom="2"
+         image_unselected="Accordion_ArrowClosed_Off"
+         image_selected="Accordion_ArrowOpened_Off"
+         scale_image="false"
          layout="topleft"
          left="20"
          top_pad="6"
