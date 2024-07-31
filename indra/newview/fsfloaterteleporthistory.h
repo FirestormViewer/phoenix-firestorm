@@ -38,7 +38,7 @@ class FSFloaterTeleportHistory : public LLFloater
 {
 public:
     FSFloaterTeleportHistory(const LLSD& seed);
-    virtual ~FSFloaterTeleportHistory();
+    ~FSFloaterTeleportHistory() override;
 
     BOOL postBuild();
     /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
