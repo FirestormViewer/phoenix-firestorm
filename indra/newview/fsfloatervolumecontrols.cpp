@@ -40,9 +40,7 @@ FSFloaterVolumeControls::FSFloaterVolumeControls(const LLSD& key)
 {
 }
 
-FSFloaterVolumeControls::~FSFloaterVolumeControls()
-{
-}
+FSFloaterVolumeControls::~FSFloaterVolumeControls() = default;
 
 bool FSFloaterVolumeControls::postBuild()
 {
