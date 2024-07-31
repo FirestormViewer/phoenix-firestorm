@@ -37,9 +37,7 @@ FSFloaterPartialInventory::FSFloaterPartialInventory(const LLSD& key) : LLFloate
     mRootFolderId = key["start_folder_id"].asUUID();
 }
 
-FSFloaterPartialInventory::~FSFloaterPartialInventory()
-{
-}
+FSFloaterPartialInventory::~FSFloaterPartialInventory() = default;
 
 BOOL FSFloaterPartialInventory::postBuild()
 {
