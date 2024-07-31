@@ -125,7 +125,7 @@ void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallb
     std::string result;
     result.assign( rawData.begin(), rawData.end() );
 
-    boost::json::error_code ec;
+    boost::system::error_code ec;
     boost::json::value root = boost::json::parse(result, ec);
     if (ec.failed())
     {
