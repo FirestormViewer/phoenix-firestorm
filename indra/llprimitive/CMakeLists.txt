@@ -74,6 +74,11 @@ target_link_libraries(llprimitive
         ll::glh_linear
         )
 
+if(LINUX)
+    # GLIB uses pcre, so we need to keep it for Linux
+    target_link_libraries(ll::pcre)
+endif(LINUX)
+
 #add unit tests
 if (LL_TESTS)
     INCLUDE(LLAddBuildTest)

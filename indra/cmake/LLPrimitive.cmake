@@ -44,5 +44,10 @@ if (WINDOWS)
 elseif (DARWIN)
     target_link_libraries(ll::colladadom INTERFACE collada14dom ll::libxml ll::minizip-ng)
 elseif (LINUX)
+    # GLIB uses pcre, so we need to keep it for Linux
+    add_library( ll::pcre INTERFACE IMPORTED )
+    use_prebuilt_binary(pcre)
+    target_link_libraries( ll::pcre INTERFACE pcrecpp pcre )
+
     target_link_libraries(ll::colladadom INTERFACE collada14dom ll::libxml ll::minizip-ng)
 endif()
