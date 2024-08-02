@@ -1933,6 +1933,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             for tries in range(10):
                 try:
                     self.run_command(['hdiutil', 'detach', '-force', devfile])
+                    break # Exit loop if detach worked
                 except ManifestError as err:
                     print(f"detach failed on attempt {tries}")
                     time.sleep(1)

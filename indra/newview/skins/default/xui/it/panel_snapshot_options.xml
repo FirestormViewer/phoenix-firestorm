@@ -2,19 +2,13 @@
 <panel name="panel_snapshot_options">
 	<layout_stack name="option_buttons">
 		<layout_panel name="lp_download">
-			<button label="Salva su disco" name="save_to_computer_btn"/>
+			<button label="Salva sul disco fisso" name="save_to_computer_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_inventory">	
-			<button label="Salva in inventario (L$[AMOUNT])" name="save_to_inventory_btn"/>
+			<button label="Salva in inventario ([AMOUNT]L$)" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">	
-			<button label="Carica su profilo web" name="save_to_profile_btn"/>
-		</layout_panel>
-		<layout_panel name="lp_facebook">	
-			<button label="Carica su Facebook" name="send_to_facebook_btn"/>
-		</layout_panel>	
-		<layout_panel name="lp_twitter">	
-			<button label="Carica su Twitter" name="send_to_twitter_btn"/>
+			<button label="Condividi sul feed" name="save_to_profile_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_flickr">	
 			<button label="Carica su Flickr" name="send_to_flickr_btn"/>
@@ -23,4 +17,7 @@
 			<button label="Invia per e-mail" name="save_to_email_btn"/>
 		</layout_panel>
 	</layout_stack>
+	<text name="fee_hint_lbl">
+		La tariffa dipende dal livello di abbonamento. Ai livelli più alti le tariffe sono inferiori.
+	</text>
 </panel>
