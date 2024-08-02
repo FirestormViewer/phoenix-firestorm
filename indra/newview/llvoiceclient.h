@@ -284,7 +284,8 @@ public:
     virtual void removeObserver(LLVoiceClientParticipantObserver* observer)=0;
     //@}
 
-    virtual std::string sipURIFromID(const LLUUID &id)=0;
+    virtual std::string sipURIFromID(const LLUUID &id) const=0;
+    virtual LLSD getP2PChannelInfoTemplate(const LLUUID& id) const=0;
     //@}
 
 };
@@ -519,7 +520,8 @@ public:
     void addObserver(LLVoiceClientParticipantObserver* observer);
     void removeObserver(LLVoiceClientParticipantObserver* observer);
 
-    std::string sipURIFromID(const LLUUID &id);
+    std::string sipURIFromID(const LLUUID &id) const;
+    LLSD getP2PChannelInfoTemplate(const LLUUID& id) const;
 
     //////////////////////////
     /// @name Voice effects
