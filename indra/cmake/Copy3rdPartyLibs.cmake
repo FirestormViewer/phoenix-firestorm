@@ -247,7 +247,6 @@ elseif(LINUX)
       set(release_files
         #libdb-5.1.so
         ${EXPAT_COPY}
-        libhunspell-1.3.so.0.0.0
         libopenal.so
         #libopenjp2.so
         libuuid.so.16
