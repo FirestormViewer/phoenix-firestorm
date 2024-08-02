@@ -15,7 +15,7 @@
 	<text name="detail_material_text">
 		Materiali terreno
 	</text>
-	<check_box label="Rugosità metallica PBR" name="terrain_material_type" tool_tip="Se selezionato, utilizza materiali di rugosità metallica PBR per il terreno. Altrimenti, usa le texture." />
+	<check_box label="Rugosità/Metallicità PBR" name="terrain_material_type" tool_tip="Se selezionato, utilizza i materiali PBR per il terreno, altrimenti utilizza le texture." />
 	<text name="height_text_lbl">
 		1 (basso)
 	</text>

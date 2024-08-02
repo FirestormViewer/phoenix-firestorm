@@ -53,7 +53,7 @@
 				<combo_box.item label="Todos los avatares y objetos" name="3"/>
 				<combo_box.item label="Todo" name="4"/>
 			</combo_box>
-			<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas cuando 'Modelo avanzado de iluminación' está desactivado. Se requiere reiniciar para efectuar los cambios.">
+			<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas. Se requiere reiniciar para efectuar los cambios.">
 				Puntos de luz (requiere reiniciar):
 			</text>
 			<combo_box name="LocalLightsDetail" width="165">

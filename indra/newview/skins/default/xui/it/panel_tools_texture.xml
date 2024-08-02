@@ -41,7 +41,7 @@
 	<radio_group name="radio_pbr_type">
 		<radio_item label="Materiale completo" name="Complete material"/>
 		<radio_item label="Colore di base" name="Base color"/>
-		<radio_item label="Metallità/rugosità" name="Metallic/roughness"/>
+		<radio_item label="Metallicità/rugosità" name="Metallic/roughness"/>
 		<radio_item label="Emissiva" name="Emissive"/>
 		<radio_item label="Normale" name="Normal"/>
 	</radio_group>

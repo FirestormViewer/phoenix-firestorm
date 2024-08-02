@@ -58,7 +58,7 @@
 				<combo_box.item label="Ręczne + podłoże" name="2" />
 				<combo_box.item label="Pełna scena" name="3" />
 			</combo_box>
-			<text name="local lights_label" tool_tip="Wpływa na liczbę renderowanych źródeł światła, gdy 'zaawansowane oświetlenie' jest wyłączone. Aby zmienić tryb wymagany jest restart.">
+			<text name="local lights_label" tool_tip="Wpływa na liczbę renderowanych źródeł światła. Aby zmienić tryb wymagany jest restart.">
 				Oświetlenie punktowe:
 			</text>
 			<combo_box name="LocalLightsDetail">
