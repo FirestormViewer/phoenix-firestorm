@@ -57,7 +57,7 @@
 				<combo_box.item label="Вручную + местность" name="2"/>
 				<combo_box.item label="Полная сцена" name="3"/>
 			</combo_box>
-			<text name="local lights_label" tool_tip="Влияет на количество отрисованых источников света, когда расширенная модель освещения отключена. Требуется перезапуск">
+			<text name="local lights_label" tool_tip="Влияет на количество отрисованых источников света. Требуется перезапуск">
 				Точечное освещение:
 			</text>
 			<combo_box name="LocalLightsDetail">

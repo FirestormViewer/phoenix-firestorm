@@ -46,10 +46,10 @@
 			<button name="chat_search_btn" tool_tip="Cerca nella chat" />
 		</layout_panel>
 		<layout_panel name="support_panel">
-			<check_box label="Specifica versione" name="FSSupportGroupChatPrefix_toggle" tool_tip="Aggiunge la versione del viewer e le info sulla modalità in testa ai messaggi inviati a questo gruppo; questo può aiutare il gruppo di supporto a diagnosticare i problemi e può migliorare l&apos;accuratezza delle risposte"/>
+			<check_box label="Specifica versione" name="FSSupportGroupChatPrefix_toggle" tool_tip="Aggiungi la versione, la skin del viewer, il sistema operativo e lo stato RLVa davanti ai tuoi messaggi in questa chat di gruppo. Questo aiuterà il team di supporto a diagnosticare correttamente i tuoi problemi e a migliorare la precisione delle risposte alle tue domande."/>
 		</layout_panel>
 		<layout_panel name="testing_panel">
-			<check_box label="Specifica versione" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Aggiungi la versione e la skin del viewer, il sistema operativo e lo stato RLVa davanti ai messaggi inviati da te a questo gruppo, il che aiuterà il team di supporto a diagnosticare correttamente i tuoi problemi e a migliorare la precisione nel rispondere alle tue domande. (questo è separato dai gruppi di supporto)" />
+			<check_box label="Specifica build" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Aggiungi il numero di build, la skin del viewer, il sistema operativo e lo stato RLVa davanti ai tuoi messaggi in questa chat di gruppo. Questo aiuterà il team di supporto a diagnosticare correttamente i tuoi problemi e a migliorare la precisione delle risposte alle tue domande. Questa opzione non ha effetto nel gruppo di supporto." />
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="chat_stack">
