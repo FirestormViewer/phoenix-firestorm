@@ -2207,14 +2207,14 @@ void LLAppearanceMgr::filterWearableItems(
         items.clear();
         for (S32 i=0; i<LLWearableType::WT_COUNT; i++)
         {
-            auto size = items_by_type[i].size();
+            S32 size = (S32)items_by_type[i].size();
             if (size <= 0)
                 continue;
-//            for (size_t j = start_index; j<size; j++);
+//            S32 start_index = llmax(0,size-max_per_type);
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.0)
-            auto start_index = llmax(0, size - ((LLWearableType::getInstance()->getAllowMultiwear((LLWearableType::EType)i)) ? max_per_type : 1));
+            S32 start_index = llmax(0, size - ((LLWearableType::getInstance()->getAllowMultiwear((LLWearableType::EType)i)) ? max_per_type : 1));
 // [/SL:KB[
-            for (size_t j = start_index; j<size; j++)
+            for (S32 j = start_index; j<size; j++)
             {
                 items.push_back(items_by_type[i][j]);
             }
