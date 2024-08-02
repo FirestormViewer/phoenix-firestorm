@@ -59,7 +59,6 @@ if(WINDOWS)
         libaprutil-1.dll
         nghttp2.dll
         glod.dll # <FS:Beq> restore GLOD
-        libhunspell.dll
         )
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
@@ -201,7 +200,6 @@ elseif(DARWIN)
         libaprutil-1.dylib
         ${EXPAT_COPY}
         libGLOD.dylib # <FS:Beq> restore GLOD
-        libhunspell-1.3.0.dylib
         libndofdev.dylib
         libnghttp2.dylib
         libnghttp2.14.dylib
@@ -271,7 +269,6 @@ elseif(LINUX)
                  libaprutil-1.so.0
 
 
-                 libhunspell-1.3.so.0.0.0
                  #libopenjp2.so
                  libuuid.so.16
                  libuuid.so.16.0.22

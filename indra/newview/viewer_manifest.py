@@ -712,9 +712,6 @@ class Windows_x86_64_Manifest(ViewerManifest):
             # HTTP/2
             self.path("nghttp2.dll")
 
-            # Hunspell
-            self.path("libhunspell.dll")
-
             # BugSplat
             if self.args.get('bugsplat'):
                 self.path("BsSndRpt64.exe")
@@ -1163,7 +1160,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
                 # with self.prefix(src=relpkgdir, dst=""):
                     # self.path("libndofdev.dylib")
-                    # self.path("libhunspell-1.3.a")   
 
                 # with self.prefix(src_dst="cursors_mac"):
                     # self.path("*.tif")
@@ -1450,7 +1446,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
-            self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
             # CEF framework goes inside Contents/Frameworks.
             # Remember where we parked this car.
@@ -2152,7 +2147,6 @@ class LinuxManifest(ViewerManifest):
             self.path_optional("libfusion*.so*")
             self.path_optional("libdirect*.so*")
             self.path_optional("libopenjpeg.so*")
-            self.path("libhunspell-1.3.so*")
             self.path("libalut.so*")
             #self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
             #self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
@@ -2287,7 +2281,6 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libdirectfb-1.4.so.5")
             self.path("libfusion-1.4.so.5")
             self.path("libdirect-1.4.so.5*")
-            self.path("libhunspell-1.3.so*")
             self.path("libalut.so*")
             self.path("libopenal.so*")
 

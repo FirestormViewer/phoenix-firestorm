@@ -71,7 +71,6 @@ target_link_libraries(llprimitive
         llrender
         llphysicsextensions_impl
         ll::colladadom
-        ll::pcre
         ll::glh_linear
         )
 
