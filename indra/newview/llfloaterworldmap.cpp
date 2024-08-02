@@ -276,14 +276,13 @@ void LLMapFriendObserver::changed(U32 mask)
     }
 }
 
-// <FS:Ansariel> Parcel details on map
-FSWorldMapParcelInfoObserver::FSWorldMapParcelInfoObserver(const LLVector3d& pos_global)
+LLWorldMapParcelInfoObserver::LLWorldMapParcelInfoObserver(const LLVector3d& pos_global)
     : LLRemoteParcelInfoObserver(),
     mPosGlobal(pos_global),
     mParcelID(LLUUID::null)
 { }
 
-FSWorldMapParcelInfoObserver::~FSWorldMapParcelInfoObserver()
+LLWorldMapParcelInfoObserver::~LLWorldMapParcelInfoObserver()
 {
     if (mParcelID.notNull())
     {
@@ -291,7 +290,7 @@ FSWorldMapParcelInfoObserver::~FSWorldMapParcelInfoObserver()
     }
 }
 
-void FSWorldMapParcelInfoObserver::processParcelInfo(const LLParcelData& parcel_data)
+void LLWorldMapParcelInfoObserver::processParcelInfo(const LLParcelData& parcel_data)
 {
     if (parcel_data.parcel_id == mParcelID)
     {
@@ -305,19 +304,19 @@ void FSWorldMapParcelInfoObserver::processParcelInfo(const LLParcelData& parcel_
 }
 
 // virtual
-void FSWorldMapParcelInfoObserver::setParcelID(const LLUUID& parcel_id)
+void LLWorldMapParcelInfoObserver::setParcelID(const LLUUID& parcel_id)
 {
     mParcelID = parcel_id;
-    LLRemoteParcelInfoProcessor::getInstance()->addObserver(mParcelID, this);
-    LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(mParcelID);
+    auto instance = LLRemoteParcelInfoProcessor::getInstance();
+    instance->addObserver(mParcelID, this);
+    instance->sendParcelInfoRequest(mParcelID);
 }
 
 // virtual
-void FSWorldMapParcelInfoObserver::setErrorStatus(S32 status, const std::string& reason)
+void LLWorldMapParcelInfoObserver::setErrorStatus(S32 status, const std::string& reason)
 {
-    LL_WARNS("FSWorldMapParcelInfoObserver") << "Can't handle remote parcel request." << " Http Status: " << status << ". Reason : " << reason << LL_ENDL;
+    LL_WARNS("LLWorldMapParcelInfoObserver") << "Can't handle remote parcel request." << " Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 }
-// </FS:Ansariel> Parcel details on map
 
 //---------------------------------------------------------------------------
 // Statics
@@ -333,24 +332,25 @@ const LLUUID LLFloaterWorldMap::sHomeID( "10000000-0000-0000-0000-000000000001" 
 
 LLFloaterWorldMap::LLFloaterWorldMap(const LLSD& key)
 :   LLFloater(key),
-    mInventory(NULL),
-    mInventoryObserver(NULL),
-    mFriendObserver(NULL),
+    mInventory(nullptr),
+    mInventoryObserver(nullptr),
+    mFriendObserver(nullptr),
     mCompletingRegionName(),
     mCompletingRegionPos(),
     mWaitingForTracker(false),
     mIsClosing(false),
     mSetToUserPosition(true),
-    mTrackedLocation(0,0,0),
+    mTrackedLocation(0.0,0.0,0.0),
     mTrackedStatus(LLTracker::TRACKING_NOTHING),
-    mListFriendCombo(NULL),
-    mListLandmarkCombo(NULL),
-    mListSearchResults(NULL),
-    mParcelInfoObserver(NULL) // <FS:Ansariel> Parcel details on map
+    mListFriendCombo(nullptr),
+    mListLandmarkCombo(nullptr),
+    mListSearchResults(nullptr),
+    mParcelInfoObserver(nullptr),
+    mShowParcelInfo(false)
 {
     gFloaterWorldMap = this;
 
-    mFactoryMap["objects_mapview"] = LLCallbackMap(createWorldMapView, NULL);
+    mFactoryMap["objects_mapview"] = LLCallbackMap(createWorldMapView, nullptr);
 
     mCommitCallbackRegistrar.add("WMap.Coordinates",    boost::bind(&LLFloaterWorldMap::onCoordinatesCommit, this));
     mCommitCallbackRegistrar.add("WMap.Location",       boost::bind(&LLFloaterWorldMap::onLocationCommit, this));
@@ -436,12 +436,10 @@ bool LLFloaterWorldMap::postBuild()
 // virtual
 LLFloaterWorldMap::~LLFloaterWorldMap()
 {
-    // <FS:Ansariel> Parcel details on map
     if (mParcelInfoObserver)
     {
         delete mParcelInfoObserver;
     }
-    // </FS:Ansariel> Parcel details on map
 
     // All cleaned up by LLView destructor
     mMapView = NULL;
@@ -671,8 +669,7 @@ void LLFloaterWorldMap::draw()
 // Internal utility functions
 //-------------------------------------------------------------------------
 
-// <FS:Ansariel> Parcel details on map
-void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const LLVector3d& pos_global)
+void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const LLVector3d& pos_global) const
 {
     LLVector3d tracker_pos = LLTracker::getTrackedPositionGlobal();
     if (!mShowParcelInfo ||
@@ -695,10 +692,10 @@ void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const
     F32 region_x = (F32)(pos_global.mdV[VX] - locX);
     F32 region_y = (F32)(pos_global.mdV[VY] - locY);
     std::string full_name = llformat("%s (%d, %d, %d)",
-                                     sim_name.c_str(),
-                                     ll_round(region_x),
-                                     ll_round(region_y),
-                                     ll_round((F32)pos_global.mdV[VZ]));
+        sim_name.c_str(),
+        ll_round(region_x),
+        ll_round(region_y),
+        ll_round((F32)pos_global.mdV[VZ]));
 
     LLTracker::trackLocation(pos_global, parcel_data.name.empty() ? getString("UnnamedParcel") : parcel_data.name, full_name);
 }
@@ -716,35 +713,29 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global, const LL
         return;
     }
 
-    auto pos_region = LLVector3(pos_global - region_origin);
-
-    LLSD body;
-    std::string url = region->getCapability("RemoteParcelRequest");
-    if (!url.empty())
+    if (std::string url = region->getCapability("RemoteParcelRequest"); !url.empty())
     {
         mRequestedGlobalPos = pos_global;
         if (mParcelInfoObserver)
         {
             delete mParcelInfoObserver;
         }
-        mParcelInfoObserver = new FSWorldMapParcelInfoObserver(pos_global);
+        mParcelInfoObserver = new LLWorldMapParcelInfoObserver(pos_global);
 
+        auto pos_region = LLVector3(pos_global - region_origin);
         LLRemoteParcelInfoProcessor::instance().requestRegionParcelInfo(url,
-                                                                        region->getRegionID(), pos_region, pos_global,
-                                                                        mParcelInfoObserver->getObserverHandle() );
-
+            region->getRegionID(), pos_region, pos_global,
+            mParcelInfoObserver->getObserverHandle());
     }
     else
     {
         LL_WARNS() << "Cannot request parcel details: Cap not found" << LL_ENDL;
     }
 }
-// </FS:Ansariel> Parcel details on map
-
 
 void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string& name )
 {
-    mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
+    mShowParcelInfo = false;
     LLCtrlSelectionInterface *iface = childGetSelectionInterface("friend combo");
     if (!iface) return;
 
@@ -776,7 +767,7 @@ void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string&
 
 void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 {
-    mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
+    mShowParcelInfo = false;
     LLCtrlSelectionInterface *iface = childGetSelectionInterface("landmark combo");
     if (!iface) return;
 
@@ -822,7 +813,7 @@ void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 
 void LLFloaterWorldMap::trackEvent(const LLItemInfo &event_info)
 {
-    mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
+    mShowParcelInfo = false;
     mTrackedStatus = LLTracker::TRACKING_LOCATION;
     LLTracker::trackLocation(event_info.getGlobalPosition(), event_info.getName(), event_info.getToolTip(), LLTracker::LOCATION_EVENT);
     setDefaultBtn("Teleport");
@@ -830,7 +821,7 @@ void LLFloaterWorldMap::trackEvent(const LLItemInfo &event_info)
 
 void LLFloaterWorldMap::trackGenericItem(const LLItemInfo &item)
 {
-    mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
+    mShowParcelInfo = false;
     mTrackedStatus = LLTracker::TRACKING_LOCATION;
     LLTracker::trackLocation(item.getGlobalPosition(), item.getName(), item.getToolTip(), LLTracker::LOCATION_ITEM);
     setDefaultBtn("Teleport");
@@ -892,7 +883,9 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 //  LLTracker::trackLocation(pos_global, full_name, tooltip);
     LLWorldMap::getInstance()->cancelTracking();        // The floater is taking over the tracking
 
-    // <FS:Ansariel> Parcel details on map
+    // <FS:Ansariel> RLVa support
+    //mShowParcelInfo = true;
+    //requestParcelInfo(pos_global, sim_info->getGlobalOrigin());
     if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
     {
         mShowParcelInfo = true;
@@ -902,7 +895,7 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
     {
         mShowParcelInfo = false;
     }
-    // </FS:Ansariel> Parcel details on map
+    // </FS:Ansariel> RLVa support
 
     LLVector3d coord_pos = LLTracker::getTrackedPositionGlobal();
     updateTeleportCoordsDisplay( coord_pos );
