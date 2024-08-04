@@ -64,9 +64,6 @@
 #include "v3math.h"
 #include "v4color.h"
 
-#include "rlvactions.h"    // <FS:Zi> Respect RLVa restrictions
-#include "rlvcommon.h"     // <FS:Zi> Respect RLVa restrictions
-
 #define DEFAULT_BEACON_WIDTH 6
 
 //---------------------------------------------------------------------------
@@ -821,29 +818,6 @@ void LLFloaterPathfindingObjects::updateStateOnActionControls()
 {
     int numSelectedItems = mObjectsScrollList->getNumSelected();
     bool isEditEnabled = (numSelectedItems > 0);
-
-    // <FS:Zi> Respect RLVa restrictions
-    if (RlvActions::isRlvEnabled())
-    {
-        if (
-            !rlvCanDeleteOrReturn()
-            || RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH)
-            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHALL)
-            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHWORLD)
-            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHME)
-            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHTHIS)
-            || RlvActions::hasBehaviour(RLV_BHVR_INTERACT)
-        )
-        {
-            isEditEnabled = false;
-        }
-
-        if (RlvActions::hasBehaviour(RLV_BHVR_TPLOCAL))
-        {
-            numSelectedItems = 0;
-        }
-    }
-    // </FS:Zi>
 
     mShowBeaconCheckBox->setEnabled(isEditEnabled);
     mTakeButton->setEnabled(isEditEnabled && visible_take_object());

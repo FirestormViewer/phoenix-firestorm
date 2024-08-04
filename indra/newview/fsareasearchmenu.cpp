@@ -41,7 +41,6 @@ LLContextMenu* FSAreaSearchMenu::createMenu()
 
     registrar.add("AreaSearch.Action", boost::bind(&FSAreaSearchMenu::onContextMenuItemClick, this, _2));
     enable_registrar.add("AreaSearch.Enable", boost::bind(&FSAreaSearchMenu::onContextMenuItemEnable, this, _2));
-    enable_registrar.add("AreaSearch.RLV", boost::bind(&FSAreaSearchMenu::onContextMenuItemEnableRLV, this, _2));
 
     return createFromFile("menu_fs_area_search.xml");
 }
@@ -61,16 +60,6 @@ bool FSAreaSearchMenu::onContextMenuItemEnable(const LLSD& userdata)
     if (search && search->getPanelList())
     {
         return search->getPanelList()->onContextMenuItemEnable(userdata);
-    }
-    return false;
-}
-
-bool FSAreaSearchMenu::onContextMenuItemEnableRLV(const LLSD& userdata)
-{
-    FSAreaSearch* search = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
-    if (search && search->getPanelList())
-    {
-        return search->getPanelList()->onContextMenuItemEnableRLV(userdata);
     }
     return false;
 }

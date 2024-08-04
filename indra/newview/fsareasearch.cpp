@@ -1626,59 +1626,6 @@ void FSPanelAreaSearchList::updateName(const LLUUID& id, const std::string& name
     }
 }
 
-bool FSPanelAreaSearchList::onContextMenuItemEnableRLV(const LLSD& userdata)
-{
-    if (!RlvActions::isRlvEnabled())
-    {
-        return true;
-    }
-
-    if (RlvActions::hasBehaviour(RLV_BHVR_INTERACT))
-    {
-        return false;
-    }
-
-    const std::string& parameter = userdata.asStringRef();
-
-    std::vector<LLScrollListItem*> selected = mResultList->getAllSelected();
-
-    for (const auto item : selected)
-    {
-        const LLUUID& object_id = item->getUUID();
-        LLViewerObject* objectp = gObjectList.findObject(object_id);
-        if (!objectp)
-        {
-            return false;
-        }
-
-        if (parameter == "delete")
-        {
-            if (!rlvCanDeleteOrReturn(objectp))
-            {
-                return false;
-            }
-        }
-        else if (parameter == "touch")
-        {
-            if (!RlvActions::canTouch(objectp)) return false;
-        }
-        else if (parameter == "edit")
-        {
-            if (!RlvActions::canEdit(objectp)) return false;
-        }
-        else if (parameter == "sit")
-        {
-            if (!RlvActions::canSit(objectp)) return false;
-        }
-        else if (parameter == "teleport")
-        {
-            if (!RlvActions::canTeleportToLocal(objectp->getPositionGlobal())) return false;
-        }
-    }
-
-    return true;
-}
-
 bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
 {
     const std::string& parameter = userdata.asStringRef();

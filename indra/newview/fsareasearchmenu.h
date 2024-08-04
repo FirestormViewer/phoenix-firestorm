@@ -37,7 +37,6 @@ public:
 private:
     void onContextMenuItemClick(const LLSD& userdata);
     bool onContextMenuItemEnable(const LLSD& userdata);
-    bool onContextMenuItemEnableRLV(const LLSD& userdata);
 };
 
 extern FSAreaSearchMenu gFSAreaSearchMenu;
