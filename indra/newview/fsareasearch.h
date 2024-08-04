@@ -305,6 +305,7 @@ private:
 
     bool onContextMenuItemClick(const LLSD& userdata);
     bool onContextMenuItemEnable(const LLSD& userdata);
+    bool onContextMenuItemEnableRLV(const LLSD& userdata);
 
     void onColumnVisibilityChecked(const LLSD& userdata);
     bool onEnableColumnVisibilityChecked(const LLSD& userdata);
