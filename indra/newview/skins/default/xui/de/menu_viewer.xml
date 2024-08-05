@@ -602,6 +602,7 @@
 			<menu_item_check label="WindowProc debuggen" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI" name="XUI">
+			<menu_item_call label="Farbeinstellungen anzeigen" name="Color Settings"/>
 			<menu_item_call label="Farbeinstellungen neu laden" name="Reload Color Settings"/>
 			<menu_item_call label="Schriftarttest anzeigen" name="Show Font Test"/>
 			<menu_item_call label="Aus XML-Datei laden" name="Load from XML"/>
