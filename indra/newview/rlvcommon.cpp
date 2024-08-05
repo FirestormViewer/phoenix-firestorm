@@ -787,16 +787,16 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Checked: 2011-05-28 (RLVa-1.4.6) | Modified: RLVa-1.4.0
 bool rlvCanDeleteOrReturn(const LLViewerObject* pObj)
 {
-    // Block if: @rez=n restricted and owned by us or a group *or* @unsit=n restricted and being sat on by us
+    // Block if: @rez=n or @edit=n restricted and owned/editable by us or a group *or* @unsit=n restricted and being sat on by us
     return
-        ( (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || ((!pObj->permYouOwner()) && (!pObj->permGroupOwner())) ) &&
+        ( (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT) && !gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || ((!pObj->permYouOwner()) && (!pObj->permModify()) && (!pObj->permGroupOwner())) ) &&
         ( (!gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (!isAgentAvatarValid()) || (!pObj->getRootEdit()->isChild(gAgentAvatarp)) );
 }
 
 // Checked: 2011-05-28 (RLVa-1.4.6) | Modified: RLVa-1.4.0
 bool rlvCanDeleteOrReturn()
 {
-    if ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) )
+    if ( (gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) )
     {
         struct RlvCanDeleteOrReturn : public LLSelectedObjectFunctor
         {
