@@ -3352,7 +3352,7 @@ void LLVOAvatar::idleUpdateLipSync(bool voice_enabled)
 void LLVOAvatar::idleUpdateLoadingEffect()
 {
     // update visibility when avatar is partially loaded
-    if (updateIsFullyLoaded()) // changed?
+    if (!mFullyLoaded && updateIsFullyLoaded()) // Avoid repeat calculations by checking if mFullyLoaded is true first.
     {
         if (isFullyLoaded())
         {
@@ -4045,7 +4045,11 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
         std::deque<LLChat>::iterator chat_iter = mChats.begin();
         mNameText->clearString();
 
-        LLColor4 new_chat = LLUIColorTable::instance().getColor( isSelf() ? "UserChatColor" : "AgentChatColor" );
+        static const LLUIColor user_chat_color = LLUIColorTable::instance().getColor("UserChatColor");
+        static const LLUIColor agent_chat_color = LLUIColorTable::instance().getColor("AgentChatColor");
+        // <FS:CR> Colorize tags
+        //const LLColor4& new_chat = isSelf() ? user_chat_color : agent_chat_color;
+        LLColor4 new_chat = isSelf() ? user_chat_color : agent_chat_color;
 
         // <FS:CR> Colorize tags
         new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, ContactSetType::CHAT);

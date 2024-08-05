@@ -661,11 +661,9 @@ void init_menus()
     ///
     /// set up the colors
     ///
-    LLColor4 color;
-
     // do not set colors in code, let the skin decide. -Zi
     /*
-    LLColor4 context_menu_color = LLUIColorTable::instance().getColor("MenuPopupBgColor");
+    LLUIColor context_menu_color = LLUIColorTable::instance().getColor("MenuPopupBgColor");
 
     gMenuAvatarSelf->setBackgroundColor( context_menu_color );
     gMenuAvatarOther->setBackgroundColor( context_menu_color );
@@ -675,7 +673,7 @@ void init_menus()
 
     gMenuLand->setBackgroundColor( context_menu_color );
 
-    color = LLUIColorTable::instance().getColor( "MenuPopupBgColor" );
+    LLUIColor color = LLUIColorTable::instance().getColor( "MenuPopupBgColor" );
     gPopupMenuView->setBackgroundColor( color );
     */
 
@@ -700,7 +698,7 @@ void init_menus()
     // ONLY change the color IF we are in beta. Otherwise leave it alone so it can use the skinned color. -Zi
     if(LLGridManager::getInstance()->isInSLBeta())
     {
-        color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
+        LLUIColor color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
         gMenuBarView->setBackgroundColor( color );
     }
 

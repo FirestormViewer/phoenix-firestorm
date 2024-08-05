@@ -1959,26 +1959,23 @@ void LLViewerObjectList::clearAllMapObjectsInRegion(LLViewerRegion* regionp)
 
 void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 {
-    // <FS:Ansariel> Factor out calls to getInstance
-    LLUIColorTable& colortable = LLUIColorTable::instance();
-
-    LLColor4 above_water_color = colortable.getColor( "NetMapOtherOwnAboveWater" );
-    LLColor4 below_water_color = colortable.getColor( "NetMapOtherOwnBelowWater" );
-    LLColor4 you_own_above_water_color =
-                        colortable.getColor( "NetMapYouOwnAboveWater" );
-    LLColor4 you_own_below_water_color =
-                        colortable.getColor( "NetMapYouOwnBelowWater" );
-    LLColor4 group_own_above_water_color =
-                        colortable.getColor( "NetMapGroupOwnAboveWater" );
-    LLColor4 group_own_below_water_color =
-                        colortable.getColor( "NetMapGroupOwnBelowWater" );
+    static const LLUIColor above_water_color = LLUIColorTable::instance().getColor( "NetMapOtherOwnAboveWater" );
+    static const LLUIColor below_water_color = LLUIColorTable::instance().getColor( "NetMapOtherOwnBelowWater" );
+    static const LLUIColor you_own_above_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapYouOwnAboveWater" );
+    static const LLUIColor you_own_below_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapYouOwnBelowWater" );
+    static const LLUIColor group_own_above_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapGroupOwnAboveWater" );
+    static const LLUIColor group_own_below_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapGroupOwnBelowWater" );
 
 // <FS:CR> FIRE-1846: Firestorm netmap enhancements
-    LLColor4 you_own_physical_color = colortable.getColor ( "NetMapYouPhysical", LLColor4::red );
-    LLColor4 group_own_physical_color = colortable.getColor ( "NetMapGroupPhysical", LLColor4::green );
-    LLColor4 other_own_physical_color = colortable.getColor ( "NetMapOtherPhysical", LLColor4::green );
-    LLColor4 scripted_object_color = colortable.getColor ( "NetMapScripted", LLColor4::orange );
-    LLColor4 temp_on_rez_object_color = colortable.getColor ( "NetMapTempOnRez", LLColor4::orange );
+    static const LLUIColor you_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapYouPhysical", LLColor4::red );
+    static const LLUIColor group_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapGroupPhysical", LLColor4::green );
+    static const LLUIColor other_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapOtherPhysical", LLColor4::green );
+    static const LLUIColor scripted_object_color = LLUIColorTable::instance().getColor ( "NetMapScripted", LLColor4::orange );
+    static const LLUIColor temp_on_rez_object_color = LLUIColorTable::instance().getColor ( "NetMapTempOnRez", LLColor4::orange );
     static LLCachedControl<bool> fs_netmap_physical(gSavedSettings, "FSNetMapPhysical", false);
     static LLCachedControl<bool> fs_netmap_scripted(gSavedSettings, "FSNetMapScripted", false);
     static LLCachedControl<bool> fs_netmap_temp_on_rez(gSavedSettings, "FSNetMapTempOnRez", false);
@@ -2022,7 +2019,7 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
         // See DEV-17370 and DEV-29869/SNOW-79 for details.
         approx_radius = llmin(approx_radius, (F32)max_radius);
 
-        LLColor4U color = above_water_color;
+        LLColor4U color = above_water_color.get();
         if( objectp->permYouOwner() )
         {
             const F32 MIN_RADIUS_FOR_OWNED_OBJECTS = 2.f;
@@ -2035,35 +2032,35 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
             {
                 if ( objectp->permGroupOwner() )
                 {
-                    color = group_own_above_water_color;
+                    color = group_own_above_water_color.get();
                 }
                 else
                 {
-                color = you_own_above_water_color;
+                color = you_own_above_water_color.get();
             }
             }
             else
             {
                 if ( objectp->permGroupOwner() )
                 {
-                    color = group_own_below_water_color;
+                    color = group_own_below_water_color.get();
                 }
             else
             {
-                color = you_own_below_water_color;
+                color = you_own_below_water_color.get();
             }
         }
         }
         else
         if( pos.mdV[VZ] < water_height )
         {
-            color = below_water_color;
+            color = below_water_color.get();
         }
 
 // <FS:CR> FIRE-1846: Firestorm netmap enhancements
         if (fs_netmap_scripted && objectp->flagScripted())
         {
-            color = scripted_object_color;
+            color = scripted_object_color.get();
             if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
             {
                 approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
@@ -2074,15 +2071,15 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
         {
             if (objectp->permYouOwner())
             {
-                color = you_own_physical_color;
+                color = you_own_physical_color.get();
             }
             else if (objectp->permGroupOwner())
             {
-                color = group_own_physical_color;
+                color = group_own_physical_color.get();
             }
             else
             {
-                color = other_own_physical_color;
+                color = other_own_physical_color.get();
             }
             if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
             {
@@ -2092,7 +2089,7 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 
         if (fs_netmap_temp_on_rez && objectp->flagTemporaryOnRez())
         {
-            color = temp_on_rez_object_color;
+            color = temp_on_rez_object_color.get();
             if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
             {
                 approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;

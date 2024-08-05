@@ -775,7 +775,7 @@ public:
             mNeedsTimeBox = false;
             mUserNameTextBox->setValue(mFrom);
             updateMinUserNameWidth();
-            LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
+            LLUIColor sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
             setTransparentColor(sep_color);
             mTimeBoxTextBox->setVisible(false);
         }
@@ -1195,7 +1195,7 @@ private:
             !av_name.isDisplayNameDefault())
         {
             LLStyle::Params style_params_name;
-            LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
+            LLUIColor userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
             style_params_name.color(userNameColor);
             style_params_name.font.name("SansSerifSmall");
             style_params_name.font.style(mNameStyleParams.font.style);
@@ -1435,9 +1435,10 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
         }
     }
 
-    LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
-    LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
-    LLViewerChat::getChatColor(chat, txt_color, LLSD().with("is_local", is_local));
+    F32 alpha = 1.f;
+    LLUIColor txt_color = LLUIColorTable::instance().getColor("White");
+    LLUIColor name_color = LLUIColorTable::instance().getColor("ChatNameColor");
+    LLViewerChat::getChatColor(chat, txt_color, alpha, LLSD().with("is_local", is_local));
     LLFontGL* fontp = LLViewerChat::getChatFont();
     std::string font_name = LLFontGL::nameFromFont(fontp);
     std::string font_size = LLFontGL::sizeFromFont(fontp);
@@ -1445,6 +1446,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
     LLStyle::Params body_message_params;
     body_message_params.color(txt_color);
     body_message_params.readonly_color(txt_color);
+    body_message_params.alpha(alpha);
     body_message_params.font.name(font_name);
     body_message_params.font.size(font_size);
     body_message_params.font.style(input_append_params.font.style);
@@ -1585,7 +1587,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
         // out of the timestamp
         if (args["show_time"].asBoolean() && !teleport_separator)
         {
-            LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
+            LLUIColor timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
             timestamp_style.color(timestamp_color);
             timestamp_style.readonly_color(timestamp_color);
             if (message_from_log && !is_conversation_log)
@@ -1634,7 +1636,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
                 // (don't let object names with hyperlinks override our objectim Url)
                 LLStyle::Params link_params(body_message_params);
                 link_params.color.control = "ChatNameObjectColor";
-                LLColor4 link_color = LLUIColorTable::instance().getColor("ChatNameObjectColor");
+                LLUIColor link_color = LLUIColorTable::instance().getColor("ChatNameObjectColor");
                 link_params.color = link_color;
                 link_params.readonly_color = link_color;
                 if (message_from_log && !is_conversation_log)

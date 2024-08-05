@@ -53,6 +53,14 @@
 static const U8  OVERLAY_IMG_COMPONENTS = 4;
 static const F32 LINE_WIDTH = 0.0625f;
 
+bool LLViewerParcelOverlay::sColorSetInitialized = false;
+LLUIColor LLViewerParcelOverlay::sAvailColor;
+LLUIColor LLViewerParcelOverlay::sOwnedColor;
+LLUIColor LLViewerParcelOverlay::sGroupColor;
+LLUIColor LLViewerParcelOverlay::sSelfColor;
+LLUIColor LLViewerParcelOverlay::sForSaleColor;
+LLUIColor LLViewerParcelOverlay::sAuctionColor;
+
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 LLViewerParcelOverlay::update_signal_t* LLViewerParcelOverlay::mUpdateSignal = NULL;
 // [/SL:KB]
@@ -67,6 +75,17 @@ LLViewerParcelOverlay::LLViewerParcelOverlay(LLViewerRegion* region, F32 region_
     mTimeSinceLastUpdate(),
     mOverlayTextureIdx(-1)
 {
+    if (!sColorSetInitialized)
+    {
+        sColorSetInitialized = true;
+        sAvailColor = LLUIColorTable::instance().getColor("PropertyColorAvail").get();
+        sOwnedColor = LLUIColorTable::instance().getColor("PropertyColorOther").get();
+        sGroupColor = LLUIColorTable::instance().getColor("PropertyColorGroup").get();
+        sSelfColor = LLUIColorTable::instance().getColor("PropertyColorSelf").get();
+        sForSaleColor = LLUIColorTable::instance().getColor("PropertyColorForSale").get();
+        sAuctionColor = LLUIColorTable::instance().getColor("PropertyColorAuction").get();
+    }
+
     // Create a texture to hold color information.
     // 4 components
     // Use mipmaps = false, clamped, NEAREST filter, for sharp edges
@@ -328,12 +347,12 @@ void LLViewerParcelOverlay::updateOverlayTexture()
         mOverlayTextureIdx = 0;
     }
 
-    const LLColor4U avail = LLUIColorTable::instance().getColor("PropertyColorAvail").get();
-    const LLColor4U owned = LLUIColorTable::instance().getColor("PropertyColorOther").get();
-    const LLColor4U group = LLUIColorTable::instance().getColor("PropertyColorGroup").get();
-    const LLColor4U self  = LLUIColorTable::instance().getColor("PropertyColorSelf").get();
-    const LLColor4U for_sale  = LLUIColorTable::instance().getColor("PropertyColorForSale").get();
-    const LLColor4U auction  = LLUIColorTable::instance().getColor("PropertyColorAuction").get();
+    const LLColor4U avail = sAvailColor.get();
+    const LLColor4U owned = sOwnedColor.get();
+    const LLColor4U group = sGroupColor.get();
+    const LLColor4U self  = sSelfColor.get();
+    const LLColor4U for_sale = sForSaleColor.get();
+    const LLColor4U auction = sAuctionColor.get();
 
     // Create the base texture.
     U8 *raw = mImageRaw->getData();
@@ -346,7 +365,7 @@ void LLViewerParcelOverlay::updateOverlayTexture()
     {
         U8 ownership = mOwnership[i];
 
-        F32 r,g,b,a;
+        U8 r,g,b,a;
 
         // Color stored in low three bits
         switch( ownership & 0x7 )
@@ -445,11 +464,11 @@ void LLViewerParcelOverlay::updatePropertyLines()
         return;
 
     LLColor4U colors[PARCEL_COLOR_MASK + 1];
-    colors[PARCEL_SELF] = LLUIColorTable::instance().getColor("PropertyColorSelf").get();
-    colors[PARCEL_OWNED] = LLUIColorTable::instance().getColor("PropertyColorOther").get();
-    colors[PARCEL_GROUP] = LLUIColorTable::instance().getColor("PropertyColorGroup").get();
-    colors[PARCEL_FOR_SALE] = LLUIColorTable::instance().getColor("PropertyColorForSale").get();
-    colors[PARCEL_AUCTION] = LLUIColorTable::instance().getColor("PropertyColorAuction").get();
+    colors[PARCEL_SELF] = sSelfColor.get();
+    colors[PARCEL_OWNED] = sOwnedColor.get();
+    colors[PARCEL_GROUP] = sGroupColor.get();
+    colors[PARCEL_FOR_SALE] = sForSaleColor.get();
+    colors[PARCEL_AUCTION] = sAuctionColor.get();
 
     mEdges.clear();
 

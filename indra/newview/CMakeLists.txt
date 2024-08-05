@@ -402,6 +402,7 @@ set(viewer_SOURCE_FILES
     llfloatersearch.cpp
     llfloatersearchreplace.cpp
     llfloatersellland.cpp
+    llfloatersettingscolor.cpp
     llfloatersettingsdebug.cpp
     llfloatersidepanelcontainer.cpp
     llfloatersnapshot.cpp
@@ -1212,6 +1213,7 @@ set(viewer_HEADER_FILES
     llfloatersearch.h
     llfloatersearchreplace.h
     llfloatersellland.h
+    llfloatersettingscolor.h
     llfloatersettingsdebug.h
     llfloatersidepanelcontainer.h
     llfloatersnapshot.h

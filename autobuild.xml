@@ -2232,11 +2232,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad0dd0f608b868cc44c225ee48e114239fca2807</string>
+              <string>1e694e5562b8d844bc44d5f7ae4dce243ee70d23</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.3-1.3.6.e4101b6/ogg_vorbis-1.3.3-1.3.6.e4101b6-darwin64-e4101b6.tar.zst</string>
+              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.5-1.3.7/ogg_vorbis-1.3.5-1.3.7.10218872737-darwin64-10218872737.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2246,11 +2246,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>90052be851c4fcecc35d8424b4f31352de14ab2f</string>
+              <string>ce0c6adb6d684eb2f4b2ad8838c67186c59e151a</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.3-1.3.6-881f65e/ogg_vorbis-1.3.3-1.3.6.881f65e-linux64-881f65e.tar.zst</string>
+              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.5-1.3.7/ogg_vorbis-1.3.5-1.3.7.10218872737-linux64-10218872737.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2260,11 +2260,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2e73a0a5659c9a09eba2f94619aa5c23c7cc3937</string>
+              <string>9434b592c5d748c5deb64ad548fd1484638e3172</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.3-1.3.6.e4101b6/ogg_vorbis-1.3.3-1.3.6.e4101b6-windows64-e4101b6.tar.zst</string>
+              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.5-1.3.7/ogg_vorbis-1.3.5-1.3.7.10218872737-windows64-10218872737.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2277,7 +2277,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Copyright (c) 2002, Xiph.org Foundation</string>
         <key>version</key>
-        <string>1.3.3-1.3.6.e4101b6</string>
+        <string>1.3.5-1.3.7.10218872737</string>
         <key>name</key>
         <string>ogg_vorbis</string>
         <key>description</key>

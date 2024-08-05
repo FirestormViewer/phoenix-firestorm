@@ -642,15 +642,14 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         // <FS:Ansariel> Script debug icon
         //if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1)// show error in window //("ScriptErrorsAsChat"))
         {
-
             // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
-            // LLColor4 txt_color;
-
-            // LLViewerChat::getChatColor(chat_msg,txt_color);
+            //LLUIColor txt_color;
+            //F32 alpha = 1.f;
+            //LLViewerChat::getChatColor(chat_msg, txt_color, alpha);
 
             // LLFloaterScriptDebug::addScriptLine(chat_msg.mText,
                                                 // chat_msg.mFromName,
-                                                // txt_color,
+                                                // txt_color % alpha,
                                                 // chat_msg.mFromID);
             LLFloaterScriptDebug::addScriptLine(chat_msg);
             // <FS:Ansariel> Script debug icon

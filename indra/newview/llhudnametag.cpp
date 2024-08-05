@@ -279,15 +279,11 @@ void LLHUDNameTag::renderText(bool for_select)
     mOffsetY = lltrunc(mHeight * ((mVertAlignment == ALIGN_VERT_CENTER) ? 0.5f : 1.f));
 
     // *TODO: make this a per-text setting
-    //LLColor4 bg_color = LLUIColorTable::instance().getColor("NameTagBackground");
-    //bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
-
-    static LLUIColor s_bg_color = LLUIColorTable::instance().getColor("NameTagBackground");
-    static LLCachedControl<F32> chatBubbleOpacity(gSavedSettings, "ChatBubbleOpacity");
-    LLColor4 bg_color = s_bg_color.get();
-    F32 color_alpha = chatBubbleOpacity * alpha_factor;
+    static LLCachedControl<F32> bubble_opacity(gSavedSettings, "ChatBubbleOpacity");
+    static LLUIColor nametag_bg_color = LLUIColorTable::instance().getColor("NameTagBackground");
+    F32 color_alpha = bubble_opacity * alpha_factor;
+    LLColor4 bg_color = nametag_bg_color;
     bg_color.setAlpha(color_alpha);
-    // </FS:Ansariel>
 
     // scale screen size of borders down
     //RN: for now, text on hud objects is never occluded
@@ -350,8 +346,7 @@ void LLHUDNameTag::renderText(bool for_select)
                 x_offset = -0.5f * mWidth + (HORIZONTAL_PADDING / 2.f);
             }
 
-            LLColor4 label_color(0.f, 0.f, 0.f, 1.f);
-            label_color.mV[VALPHA] = alpha_factor;
+            LLColor4 label_color(0.f, 0.f, 0.f, alpha_factor);
             hud_render_text(segment_iter->getText(), render_position, *fontp, segment_iter->mStyle, LLFontGL::NO_SHADOW, x_offset, y_offset, label_color, false);
         }
     }

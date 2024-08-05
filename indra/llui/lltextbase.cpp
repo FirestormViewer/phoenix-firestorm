@@ -723,9 +723,8 @@ void LLTextBase::drawCursor()
 
             if (LL_KIM_OVERWRITE == gKeyboard->getInsertMode() && !hasSelection() && text[mCursorPos] != '\n')
             {
-                LLColor4 text_color;
                 const LLFontGL* fontp;
-                text_color = segmentp->getColor();
+                const LLColor4& text_color = segmentp->getColor();
                 fontp = segmentp->getStyle()->getFont();
                 fontp->render(text, mCursorPos, cursor_rect,
                     LLColor4(1.f - text_color.mV[VRED], 1.f - text_color.mV[VGREEN], 1.f - text_color.mV[VBLUE], alpha),
@@ -1514,7 +1513,7 @@ void LLTextBase::draw()
         {
             bg_rect.intersectWith(text_rect);
         }
-        LLColor4 bg_color = mReadOnly
+        const LLColor4& bg_color = mReadOnly
                             ? mReadOnlyBgColor.get()
                             : hasFocus()
                                 ? mFocusBgColor.get()
@@ -1525,7 +1524,7 @@ void LLTextBase::draw()
     // Draw highlighted if needed
     if( ll::ui::SearchableControl::getHighlighted() )
     {
-        LLColor4 bg_color = ll::ui::SearchableControl::getHighlightColor();
+        const LLColor4& bg_color = ll::ui::SearchableControl::getHighlightColor();
         LLRect bg_rect = mVisibleTextRect;
         if( mScroller )
             bg_rect.intersectWith( text_rect );
@@ -1578,14 +1577,14 @@ void LLTextBase::draw()
 
 
 //virtual
-void LLTextBase::setColor( const LLColor4& c )
+void LLTextBase::setColor( const LLUIColor& c )
 {
     mFgColor = c;
     mStyleDirty = true;
 }
 
 //virtual
-void LLTextBase::setReadOnlyColor(const LLColor4 &c)
+void LLTextBase::setReadOnlyColor(const LLUIColor &c)
 {
     mReadOnlyFgColor = c;
     mStyleDirty = true;
@@ -2441,8 +2440,8 @@ static LLUIImagePtr image_from_icon_name(const std::string& icon_name)
 void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Params& input_params)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
-    LLStyle::Params style_params(input_params);
-    style_params.fillFrom(getStyleParams());
+    LLStyle::Params style_params(getStyleParams());
+    style_params.overwriteFrom(input_params);
 
     S32 part = (S32)LLTextParser::WHOLE;
     if (mParseHTML && !style_params.is_link) // Don't search for URLs inside a link segment (STORM-358).
@@ -2705,16 +2704,14 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
     {
         LLStyle::Params highlight_params(style_params);
 
-        LLSD pieces = LLTextParser::instance().parsePartialLineHighlights(new_text, highlight_params.color(), (LLTextParser::EHighlightPosition)highlight_part);
+        auto pieces = LLTextParser::instance().parsePartialLineHighlights(new_text, highlight_params.color, (LLTextParser::EHighlightPosition)highlight_part);
         for (S32 i = 0; i < pieces.size(); i++)
         {
-            LLSD color_llsd = pieces[i]["color"];
-            LLColor4 lcolor;
-            lcolor.setValue(color_llsd);
-            highlight_params.color = lcolor;
+            const auto& piece_pair = pieces[i];
+            highlight_params.color = piece_pair.second;
 
             LLWString wide_text;
-            wide_text = utf8str_to_wstring(pieces[i]["text"].asString());
+            wide_text = utf8str_to_wstring(piece_pair.first);
 
             S32 cur_length = getLength();
             LLStyleConstSP sp(new LLStyle(highlight_params));
@@ -3600,8 +3597,8 @@ F32 LLTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 selection_e
 bool LLTextSegment::canEdit() const { return false; }
 void LLTextSegment::unlinkFromDocument(LLTextBase*) {}
 void LLTextSegment::linkToDocument(LLTextBase*) {}
-const LLColor4& LLTextSegment::getColor() const { return LLColor4::white; }
-//void LLTextSegment::setColor(const LLColor4 &color) {}
+const LLUIColor& LLTextSegment::getColor() const { static const LLUIColor white = LLUIColorTable::instance().getColor("White", LLColor4::white); return white; }
+//void LLTextSegment::setColor(const LLUIColor &color) {}
 LLStyleConstSP LLTextSegment::getStyle() const {static LLStyleConstSP sp(new LLStyle()); return sp; }
 void LLTextSegment::setStyle(LLStyleConstSP style) {}
 void LLTextSegment::setToken( LLKeywordToken* token ) {}
@@ -3647,7 +3644,7 @@ LLNormalTextSegment::LLNormalTextSegment( LLStyleConstSP style, S32 start, S32 e
     }
 }
 
-LLNormalTextSegment::LLNormalTextSegment( const LLColor4& color, S32 start, S32 end, LLTextBase& editor, bool is_visible)
+LLNormalTextSegment::LLNormalTextSegment( const LLUIColor& color, S32 start, S32 end, LLTextBase& editor, bool is_visible)
 :   LLTextSegment(start, end),
     mToken(NULL),
     mEditor(editor)
@@ -3687,7 +3684,7 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 
     const LLFontGL* font = mStyle->getFont();
 
-    LLColor4 color = (mEditor.getReadOnly() ? mStyle->getReadOnlyColor() : mStyle->getColor())  % alpha;
+    LLColor4 color = (mEditor.getReadOnly() ? mStyle->getReadOnlyColor() : mStyle->getColor())  % (alpha * mStyle->getAlpha());
 
     if( selection_start > seg_start )
     {
@@ -3970,7 +3967,7 @@ LLLabelTextSegment::LLLabelTextSegment( LLStyleConstSP style, S32 start, S32 end
 {
 }
 
-LLLabelTextSegment::LLLabelTextSegment( const LLColor4& color, S32 start, S32 end, LLTextBase& editor, bool is_visible)
+LLLabelTextSegment::LLLabelTextSegment( const LLUIColor& color, S32 start, S32 end, LLTextBase& editor, bool is_visible)
 :   LLNormalTextSegment(color, start, end, editor, is_visible)
 {
 }
@@ -3994,7 +3991,7 @@ LLEmojiTextSegment::LLEmojiTextSegment(LLStyleConstSP style, S32 start, S32 end,
 {
 }
 
-LLEmojiTextSegment::LLEmojiTextSegment(const LLColor4& color, S32 start, S32 end, LLTextBase& editor, bool is_visible)
+LLEmojiTextSegment::LLEmojiTextSegment(const LLUIColor& color, S32 start, S32 end, LLTextBase& editor, bool is_visible)
     : LLNormalTextSegment(color, start, end, editor, is_visible)
 {
 }
