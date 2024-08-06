@@ -384,7 +384,7 @@ jobs:
             FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
             elif [[ "${{github.event_name }}" == "workflow_dispatch" ]]; then
             FS_RELEASE_FOLDER=test
-            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
+            FS_BUILD_WEBHOOK_URL=${{ secrets.MANUAL_WEBHOOK_URL }}
           else
             FS_RELEASE_TYPE=Unknown
           fi

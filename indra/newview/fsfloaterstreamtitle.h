@@ -43,7 +43,7 @@ class FSStreamTitleManager : public LLSingleton<FSStreamTitleManager>
     LLSINGLETON_EMPTY_CTOR(FSStreamTitleManager);
 
 public:
-    ~FSStreamTitleManager();
+    ~FSStreamTitleManager() override;
 
     using history_vec_t = std::vector<std::string>;
 
@@ -78,7 +78,7 @@ class FSFloaterStreamTitleHistory : public LLFloater
 {
 public:
     FSFloaterStreamTitleHistory(const LLSD& key);
-    virtual ~FSFloaterStreamTitleHistory();
+    ~FSFloaterStreamTitleHistory() override;
 
     bool postBuild() override;
     void draw() override;
@@ -99,7 +99,7 @@ class FSFloaterStreamTitle : public LLFloater, LLEventTimer
 {
 public:
     FSFloaterStreamTitle(const LLSD& key);
-    virtual ~FSFloaterStreamTitle();
+    ~FSFloaterStreamTitle() override;
 
     bool postBuild() override;
     void reshape(S32 width, S32 height, bool called_from_parent = true) override;
