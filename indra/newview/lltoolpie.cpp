@@ -283,6 +283,17 @@ BOOL LLToolPie::handleLeftClickPick()
 
     // didn't click in any UI object, so must have clicked in the world
     LLViewerObject *object = mPick.getObject();
+
+    static LLCachedControl<bool> sShiftClickAvoidsAvatarAttachments(
+        gSavedSettings, "FSShiftClickAvoidsAvatarAttachments"
+    );
+
+    bool fsAvoidAvatarAttachments = sShiftClickAvoidsAvatarAttachments && mask & MASK_SHIFT;
+    if (fsAvoidAvatarAttachments)
+    {
+        object = NULL;
+    }
+
     LLViewerObject *parent = NULL;
 
     if (mPick.mPickType != LLPickInfo::PICK_LAND)
@@ -491,8 +502,17 @@ BOOL LLToolPie::handleLeftClickPick()
     {
         return true;
     }
+    
+    if (fsAvoidAvatarAttachments)
+    {
+        // now we assign the object and get to its root
+        object = mPick.getObject();
+    }
 
-    while (object && object->isAttachment() && !object->flagHandleTouch())
+    while (
+        object && object->isAttachment() &&
+        (fsAvoidAvatarAttachments || !object->flagHandleTouch())
+    )
     {
         // don't pick avatar through hud attachment
         if (object->isHUDAttachment())
@@ -501,6 +521,7 @@ BOOL LLToolPie::handleLeftClickPick()
         }
         object = (LLViewerObject*)object->getParent();
     }
+    
     if (object && object == gAgentAvatarp)
     {
         // we left clicked on avatar, switch to focus mode
