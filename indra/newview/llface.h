@@ -162,7 +162,8 @@ public:
                             const LLMatrix3& mat_normal,
                             U16 index_offset,
                             bool force_rebuild = false,
-                            bool no_debug_assert = false);
+                            bool no_debug_assert = false,
+                            bool rebuild_for_gltf = false);
 
     // For avatar
     U16          getGeometryAvatar(
@@ -274,6 +275,8 @@ public:
 
 private:
     LLPointer<LLVertexBuffer> mVertexBuffer;
+    LLPointer<LLVertexBuffer> mVertexBufferGLTF;
+
     U32         mState;
     LLFacePool* mDrawPoolp;
     U32         mPoolType;

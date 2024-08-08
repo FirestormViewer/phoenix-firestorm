@@ -977,7 +977,7 @@ bool LLAppViewer::init()
     // <FS:Ansariel> Optional legacy notification well
     gSavedSettings.setBOOL("FSInternalLegacyNotificationWell", gSavedSettings.getBOOL("FSLegacyNotificationWell"));
 
-    LLUI::initParamSingleton(settings_map,
+    LLUI::createInstance(settings_map,
         LLUIImageList::getInstance(),
         ui_audio_callback,
         deferred_ui_audio_callback);
@@ -2536,6 +2536,7 @@ bool LLAppViewer::cleanup()
     LLViewerEventRecorder::deleteSingleton();
     LLWorld::deleteSingleton();
     LLVoiceClient::deleteSingleton();
+    LLUI::deleteSingleton();
 
     // It's not at first obvious where, in this long sequence, a generic cleanup
     // call OUGHT to go. So let's say this: as we migrate cleanup from

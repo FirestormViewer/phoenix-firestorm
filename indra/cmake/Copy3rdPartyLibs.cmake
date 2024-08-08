@@ -55,11 +55,14 @@ if(WINDOWS)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
         #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
-        libapr-1.dll
-        libaprutil-1.dll
         nghttp2.dll
         glod.dll # <FS:Beq> restore GLOD
         )
+
+    if(LLCOMMON_LINK_SHARED)
+        set(release_files ${release_files} libapr-1.dll)
+        set(release_files ${release_files} libaprutil-1.dll)
+    endif()
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
@@ -194,11 +197,6 @@ elseif(DARWIN)
        )
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
-        libapr-1.0.dylib
-        libapr-1.dylib
-        libaprutil-1.0.dylib
-        libaprutil-1.dylib
-        ${EXPAT_COPY}
         libGLOD.dylib # <FS:Beq> restore GLOD
         libndofdev.dylib
         libnghttp2.dylib
@@ -206,6 +204,15 @@ elseif(DARWIN)
         libgrowl.dylib
         libgrowl++.dylib
        )
+
+    if(LLCOMMON_LINK_SHARED)
+        set(release_files ${release_files}
+            libapr-1.0.dylib
+            libapr-1.dylib
+            libaprutil-1.0.dylib
+            libaprutil-1.dylib
+            )
+    endif()
 
     if (TARGET ll::fmodstudio)
       set(debug_files ${debug_files} libfmodL.dylib)
@@ -264,8 +271,6 @@ elseif(LINUX)
 
      if( USE_AUTOBUILD_3P )
          list( APPEND release_files
-                 libapr-1.so.0
-                 libaprutil-1.so.0
 
 
                  #libopenjp2.so
@@ -276,6 +281,13 @@ elseif(LINUX)
                  libgmodule-2.0.a
                  libgobject-2.0.a
                  )
+
+        if(LLCOMMON_LINK_SHARED)
+            set(release_files ${release_files}
+                libapr-1.so.0
+                libaprutil-1.so.0
+                )
+        endif()
      endif()
 
     if (TARGET ll::fmodstudio)

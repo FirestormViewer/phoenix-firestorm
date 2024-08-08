@@ -1549,9 +1549,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                 libfile = "libllcommon.dylib"
                 dylibs = []
                 for libfile in (
-                                "libapr-1.0.dylib",
-                                "libaprutil-1.0.dylib",
-                                "libexpat.1.dylib",
                                 "libGLOD.dylib",
                                 # libnghttp2.dylib is a symlink to
                                 # libnghttp2.major.dylib, which is a symlink
@@ -2263,14 +2260,7 @@ class Linux_i686_Manifest(LinuxManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         with self.prefix(src=relpkgdir, dst="lib"):
-            self.path("libapr-1.so")
-            self.path("libapr-1.so.0")
-            self.path("libapr-1.so.0.4.5")
-            self.path("libaprutil-1.so")
-            self.path("libaprutil-1.so.0")
-            self.path("libaprutil-1.so.0.4.1")
             self.path("libdb*.so")
-            self.path("libexpat.so.*")
             self.path("libGLOD.so")
             self.path("libuuid.so*")
             self.path("libSDL-1.2.so.*")

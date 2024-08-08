@@ -101,6 +101,8 @@ private:
     LLComboBox      *mJoysticksCombo;
 
     bool mHasDeviceList;
+    bool mJoystickInitialized;
+    LLUUID mCurrentDeviceId;
 
     // stats view
     // <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes

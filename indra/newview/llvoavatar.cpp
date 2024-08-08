@@ -2787,7 +2787,6 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
     }
 
     // Update should be happening max once per frame.
-    // <FS:Beq> enable dynamic spreading of the BB calculations
     static LLCachedControl<S32> refreshPeriod(gSavedSettings, "AvatarExtentRefreshPeriodBatch");
     static LLCachedControl<S32> refreshMaxPerPeriod(gSavedSettings, "AvatarExtentRefreshMaxPerBatch");
     static S32 upd_freq = refreshPeriod; // initialise to a reasonable default of 1 batch
@@ -2797,10 +2796,20 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
     if (thisFrame - lastRecalibrationFrame >= upd_freq)
     {
         // Only update at the start of a cycle. .
+        // update frequency = ((Num_Avatars -1 / NumberPerPeriod) + 1 ) * Periodicity
+        // Given NumberPerPeriod = 5 and Periodicity = 4
+        // | NumAvatars  | frequency |
+        // +-------------+-----------+
+        // |      1      |     4     |
+        // |      2      |     4     |
+        // |      5      |     4     |
+        // |     10      |     8     |
+        // |     25      |     20    |
+
         upd_freq = (((gObjectList.getAvatarCount() - 1) / refreshMaxPerPeriod) + 1)*refreshPeriod;
         lastRecalibrationFrame = thisFrame;
     }
-    //</FS:Beq>
+
     if ((mLastAnimExtents[0]==LLVector3())||
         (mLastAnimExtents[1])==LLVector3())
     {
@@ -2808,11 +2817,9 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
     }
     else
     {
-        //<FS:Beq> enable dynamic spreading of the BB calculations
-        //const S32 upd_freq = 4; // force update every upd_freq frames.
-        //mNeedsExtentUpdate = ((LLDrawable::getCurrentFrame()+mID.mData[0]) % upd_freq == 0);
+        // Update extent if necessary.
+        // if the frame counnter + the first byte of the UUID % upd_freq = 0 then update the extent.
         mNeedsExtentUpdate = ((thisFrame + mID.mData[0]) % upd_freq == 0);
-        //</FS:Beq>
     }
 
     // LLScopedContextString str("avatar_idle_update " + getFullname()); // <FS:Beq> remove unused scoped string
@@ -11806,12 +11813,11 @@ void LLVOAvatar::updateRiggingInfo()
     }
 
     //LL_INFOS() << "done update rig count is " << countRigInfoTab(mJointRiggingInfoTab) << LL_ENDL;
-    //LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL; // <FS:Ansariel> Performance tweak
-    //<FS:Beq> remove debug only stuff on hot path
-    //S32 joint_count, box_count;
-    //showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
-    //</FS:Beq>
-    //LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL; // <FS:Ansariel> Performance tweak
+    // Remove debug only stuff on hot path
+    // LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL;
+    // S32 joint_count, box_count;
+    // showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
+    // LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL;
 }
 
 // virtual

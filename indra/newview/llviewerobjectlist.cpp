@@ -998,9 +998,8 @@ void LLViewerObjectList::update(LLAgent &agent)
     static std::vector<LLViewerObject*> idle_list;
 
     U32 idle_count = 0;
-    //<FS:Beq> need avatar count for dynamic BB load balancing
     mNumAvatars = 0;
-    //</FS:Beq>
+
     {
         for (std::vector<LLPointer<LLViewerObject> >::iterator active_iter = mActiveObjects.begin();
             active_iter != mActiveObjects.end(); active_iter++)
@@ -1017,10 +1016,10 @@ void LLViewerObjectList::update(LLAgent &agent)
                     idle_list[idle_count] = objectp;
                 }
                 ++idle_count;
-//<FS:Beq> need avatar count for dynamic BB load balancing
                 if (objectp->isAvatar())
+                {
                     mNumAvatars++;
-//</FS:Beq>
+                }
             }
             else
             {   // There shouldn't be any NULL pointers in the list, but they have caused
