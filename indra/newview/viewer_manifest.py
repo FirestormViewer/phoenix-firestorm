@@ -2134,7 +2134,7 @@ class LinuxManifest(ViewerManifest):
             #self.path("libcollada14dom.so*")
             #self.path("libdb*.so*")
             #self.path("libcrypto.so*")
-            self.path("libexpat.so*")
+            #self.path("libexpat.so*")
             #self.path("libssl.so*")
             #self.path("libGLOD.so")
             #self.fs_path("libminizip.so")
