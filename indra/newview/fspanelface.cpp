@@ -869,9 +869,9 @@ bool FSPanelFace::postBuild()
 
     changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 
-    selectMaterialType(MATMEDIA_PBR);               // TODO: add tab switching signal
-    selectMatChannel(MATTYPE_DIFFUSE);              // TODO: add tab switching signal
-    selectPBRChannel(PBRTYPE_RENDER_MATERIAL_ID);   // TODO: add tab switching signal
+    selectMaterialType(MATMEDIA_PBR);                 // TODO: add tab switching signal
+    selectMatChannel(LLRender::DIFFUSE_MAP);          // TODO: add tab switching signal
+    selectPBRChannel(LLRender::NUM_TEXTURE_CHANNELS); // TODO: add tab switching signal
 
     return true;
 }
@@ -880,8 +880,8 @@ bool FSPanelFace::postBuild()
 // Things the UI provides...
 //
 
-LLUUID  FSPanelFace::getCurrentNormalMap()           { return mBumpyTextureCtrl->getImageAssetID(); }
-LLUUID  FSPanelFace::getCurrentSpecularMap()         { return mShinyTextureCtrl->getImageAssetID(); }
+LLUUID  FSPanelFace::getCurrentNormalMap() const     { return mBumpyTextureCtrl->getImageAssetID(); }
+LLUUID  FSPanelFace::getCurrentSpecularMap() const   { return mShinyTextureCtrl->getImageAssetID(); }
 U32     FSPanelFace::getCurrentShininess()           { return mComboShininess->getCurrentIndex(); }
 U32     FSPanelFace::getCurrentBumpiness()           { return mComboBumpiness->getCurrentIndex(); }
 U8      FSPanelFace::getCurrentDiffuseAlphaMode()    { return (U8)mComboAlphaMode->getCurrentIndex(); }
@@ -909,51 +909,42 @@ F32     FSPanelFace::getCurrentTextureOffsetV()      { return (F32)mCtrlTexOffse
 
 LLRender::eTexIndex FSPanelFace::getTextureChannelToEdit()
 {
-    LLRender::eTexIndex channel_to_edit = LLRender::DIFFUSE_MAP;
-
     S32 matmedia_selection = getCurrentMaterialType();
-
-    if (matmedia_selection == MATMEDIA_MATERIAL)
+    switch (matmedia_selection)
     {
-        channel_to_edit = (LLRender::eTexIndex) getCurrentMatChannel();
-
-        if (channel_to_edit == LLRender::NORMAL_MAP && getCurrentNormalMap().isNull()) return LLRender::DIFFUSE_MAP;
-        if (channel_to_edit == LLRender::SPECULAR_MAP && getCurrentSpecularMap().isNull()) return LLRender::DIFFUSE_MAP;
+        case MATMEDIA_MATERIAL:
+        {
+            return getCurrentMatChannel();
+        }
+        case MATMEDIA_PBR:
+        {
+            return getCurrentPBRChannel();
+        }
     }
-
-    // this is technically not correct, the return type is not the same, which forces us to cast -Zi
-    else if (matmedia_selection == MATMEDIA_PBR)
-    {
-        channel_to_edit = (LLRender::eTexIndex) getCurrentPBRChannel();
-
-        if (channel_to_edit == PBRTYPE_NORMAL && mNormalTexturePBR->getImageAssetID().isNull()) return (LLRender::eTexIndex) PBRTYPE_BASE_COLOR;
-        if (channel_to_edit == PBRTYPE_METALLIC_ROUGHNESS && mORMTexturePBR->getImageAssetID().isNull()) return (LLRender::eTexIndex) PBRTYPE_BASE_COLOR;
-        if (channel_to_edit == PBRTYPE_EMISSIVE && mEmissiveTexturePBR->getImageAssetID().isNull()) return (LLRender::eTexIndex) PBRTYPE_BASE_COLOR;
-    }
-
-    return channel_to_edit;
+    return (LLRender::eTexIndex)0;
 }
 
 LLRender::eTexIndex FSPanelFace::getTextureDropChannel()
 {
     if (getCurrentMaterialType() == MATMEDIA_MATERIAL)
     {
-        return getTextureChannelToEdit();
+        return getCurrentMatChannel();
     }
 
-    return LLRender::eTexIndex(MATTYPE_DIFFUSE);
+    return (LLRender::eTexIndex)0;
 }
 
 LLGLTFMaterial::TextureInfo FSPanelFace::getPBRDropChannel()
 {
     if (getCurrentMaterialType() == MATMEDIA_PBR)
     {
-        S32 current_pbr_channel = getCurrentPBRChannel();
-        if (current_pbr_channel == PBRTYPE_NORMAL) return LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL;
-        if (current_pbr_channel == PBRTYPE_METALLIC_ROUGHNESS) return LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS;
-        if (current_pbr_channel == PBRTYPE_EMISSIVE) return LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE;
+        LLRender::eTexIndex current_pbr_channel = getCurrentPBRChannel();
+        if (current_pbr_channel == LLRender::BASECOLOR_MAP) return LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
+        if (current_pbr_channel == LLRender::GLTF_NORMAL_MAP) return LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL;
+        if (current_pbr_channel == LLRender::METALLIC_ROUGHNESS_MAP) return LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS;
+        if (current_pbr_channel == LLRender::EMISSIVE_MAP) return LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE;
     }
-    return LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
+    return (LLGLTFMaterial::TextureInfo)0;
 }
 
 LLMaterialPtr FSPanelFace::createDefaultMaterial(LLMaterialPtr current_material)
@@ -1124,8 +1115,6 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
     virtual bool apply(LLViewerObject* object, S32 te)
     {
-        bool valid{ false };
-        F32 value;
         std::string prefix;
 
         // Effectively the same as MATMEDIA_PBR - separate for the sake of clarity
@@ -1154,10 +1143,10 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
         if (ctrlTexScaleS)
         {
-            valid = !ctrlTexScaleS->getTentative();
+            bool valid = !ctrlTexScaleS->getTentative();
             if (valid || align_planar)
             {
-                value = ctrlTexScaleS->get();
+                F32 value = ctrlTexScaleS->get();
                 if (mPanel->mComboTexGen->getCurrentIndex() == 1)
                 {
                     value *= 0.5f;
@@ -1174,10 +1163,10 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
         if (ctrlTexScaleT)
         {
-            valid = !ctrlTexScaleT->getTentative();
+            bool valid = !ctrlTexScaleT->getTentative();
             if (valid || align_planar)
             {
-                value = ctrlTexScaleT->get();
+                F32 value = ctrlTexScaleT->get();
                 if (mPanel->mComboTexGen->getCurrentIndex() == 1)
                 {
                     value *= 0.5f;
@@ -1194,10 +1183,10 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
         if (ctrlTexOffsetS)
         {
-            valid = !ctrlTexOffsetS->getTentative();
+            bool valid = !ctrlTexOffsetS->getTentative();
             if (valid || align_planar)
             {
-                value = ctrlTexOffsetS->get();
+                F32 value = ctrlTexOffsetS->get();
                 object->setTEOffsetS(te, value);
 
                 if (align_planar)
@@ -1210,10 +1199,10 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
         if (ctrlTexOffsetT)
         {
-            valid = !ctrlTexOffsetT->getTentative();
+            bool valid = !ctrlTexOffsetT->getTentative();
             if (valid || align_planar)
             {
-                value = ctrlTexOffsetT->get();
+                F32 value = ctrlTexOffsetT->get();
                 object->setTEOffsetT(te, value);
 
                 if (align_planar)
@@ -1226,10 +1215,10 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
         if (ctrlTexRotation)
         {
-            valid = !ctrlTexRotation->getTentative();
+            bool valid = !ctrlTexRotation->getTentative();
             if (valid || align_planar)
             {
-                value = ctrlTexRotation->get() * DEG_TO_RAD;
+                F32 value = ctrlTexRotation->get() * DEG_TO_RAD;
                 object->setTERotation(te, value);
 
                 if (align_planar)
@@ -1560,8 +1549,8 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
         mCtrlColorTransp->setEnabled(editable );
         mColorTransPercent->setMouseOpaque(editable );
 
-        U8 shiny = 0;
         // Shiny
+        U8 shiny = 0;
         {
             bool identical_shiny = false;
 
@@ -1577,8 +1566,8 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             mLabelShininess->setEnabled(editable);
         }
 
-        U8 bumpy = 0;
         // Bumpy
+        U8 bumpy = 0;
         {
             bool identical_bumpy = false;
             LLSelectedTE::getBumpmap(bumpy, identical_bumpy);
@@ -1595,27 +1584,35 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 
         // Texture
         {
-            mIsAlpha = false;
-
             LLGLenum image_format = GL_RGB;
             bool identical_image_format = false;
-            LLSelectedTE::getImageFormat(image_format, identical_image_format);
+            bool missing_asset = false;
+            LLSelectedTE::getImageFormat(image_format, identical_image_format, missing_asset);
 
-            switch (image_format)
+            if (!missing_asset)
             {
-                case GL_RGBA:
-                case GL_ALPHA:
+                mIsAlpha = false;
+                switch (image_format)
                 {
-                    mIsAlpha = true;
-                }
-                break;
+                    case GL_RGBA:
+                    case GL_ALPHA:
+                    {
+                        mIsAlpha = true;
+                    }
+                    break;
 
-                case GL_RGB: break;
-                default:
-                {
-                    LL_WARNS() << "Unexpected tex format in FSPanelFace...resorting to no alpha" << LL_ENDL;
+                    case GL_RGB: break;
+                    default:
+                    {
+                        LL_WARNS() << "Unexpected tex format in FSPanelFace, resorting to no alpha" << LL_ENDL;
+                    }
+                    break;
                 }
-                break;
+            }
+            else
+            {
+                // Don't know image's properties, use material's mode value
+                mIsAlpha = true;
             }
 
             if (LLViewerMedia::getInstance()->textureHasMedia(id))
@@ -1628,8 +1625,10 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
                 mTextureCtrl->setTentative(false);
                 mTextureCtrl->setEnabled(editable);
                 mTextureCtrl->setImageAssetID(id);
-                mComboAlphaMode->setEnabled(editable && mIsAlpha && transparency <= 0.f );
-                mCtrlMaskCutoff->setEnabled(editable && mIsAlpha );
+
+                bool can_change_alpha = editable && mIsAlpha && !missing_asset;
+                mComboAlphaMode->setEnabled(can_change_alpha && transparency <= 0.f );
+                mCtrlMaskCutoff->setEnabled(can_change_alpha);
 
                 mTextureCtrl->setBakeTextureEnabled(true);
             }
@@ -1650,8 +1649,10 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
                 mTextureCtrl->setTentative(true);
                 mTextureCtrl->setEnabled(editable );
                 mTextureCtrl->setImageAssetID(id);
-                mComboAlphaMode->setEnabled(editable && mIsAlpha && transparency <= 0.f );
-                mCtrlMaskCutoff->setEnabled(editable && mIsAlpha );
+
+                bool can_change_alpha = editable && mIsAlpha && !missing_asset;
+                mComboAlphaMode->setEnabled(can_change_alpha && transparency <= 0.f );
+                mCtrlMaskCutoff->setEnabled(can_change_alpha);
 
                 mTextureCtrl->setBakeTextureEnabled(true);
             }
@@ -1710,7 +1711,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
         bool align_planar = mCheckPlanarAlign->get();
         bool identical_planar_aligned = false;
         {
-            const bool texture_info_selected = (getCurrentMaterialType() == MATMEDIA_PBR && getCurrentPBRChannel() != PBRTYPE_RENDER_MATERIAL_ID);
+            const bool texture_info_selected = (getCurrentMaterialType() == MATMEDIA_PBR && getCurrentPBRChannel() != LLRender::NUM_TEXTURE_CHANNELS);
             const bool enabled = (editable && isIdenticalPlanarTexgen() && !texture_info_selected);
 
             mCheckPlanarAlign->setValue(align_planar && enabled);
@@ -1943,7 +1944,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             mCtrlBumpyRot->setEnabled(editable && has_material && normmap_id.notNull() && enable_material_controls);
             */
 
-            mCtrlTexRot->setTentative(diff_rot_tentative);
+            mCtrlTexRot->setTentative(LLSD(diff_rot_tentative));
             mCtrlBumpyRot->setTentative(LLSD(norm_rot_tentative));
             mCtrlShinyRot->setTentative(LLSD(spec_rot_tentative));
 
@@ -2003,22 +2004,22 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             S32 material_selection = getCurrentMaterialType();
             F32 repeats = 1.0f;
 
-            U32 material_type = MATTYPE_DIFFUSE;
+            LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
             if (material_selection == MATMEDIA_MATERIAL)
             {
-                material_type = getCurrentMatChannel();
+                material_channel = getCurrentMatChannel();
             }
             // TODO: check if repeats per meter even apply to PBR materials -Zi
             else if (material_selection == MATMEDIA_PBR)
             {
                 enabled = editable;
-                material_type = getCurrentPBRChannel();
+                material_channel = getCurrentPBRChannel();
             }
 
-            switch (material_type)
+            switch (material_channel)
             {
                 default:
-                case MATTYPE_DIFFUSE:
+                case LLRender::DIFFUSE_MAP:
                 {
                     if (material_selection != MATMEDIA_PBR)
                     {
@@ -2029,7 +2030,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
                 }
                 break;
 
-                case MATTYPE_SPECULAR:
+                case LLRender::SPECULAR_MAP:
                 {
                     if (material_selection != MATMEDIA_PBR)
                     {
@@ -2041,7 +2042,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
                 }
                 break;
 
-                case MATTYPE_NORMAL:
+                case LLRender::NORMAL_MAP:
                 {
                     if (material_selection != MATMEDIA_PBR)
                     {
@@ -3590,15 +3591,15 @@ bool FSPanelFace::onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* i
         // applying the texture relies on the tab control showing the correct channel
         if (texture_ctrl == mTextureCtrl)
         {
-            selectMatChannel(MATTYPE_DIFFUSE);
+            selectMatChannel(LLRender::DIFFUSE_MAP);
         }
         else if (texture_ctrl == mBumpyTextureCtrl)
         {
-            selectMatChannel(MATTYPE_NORMAL);
+            selectMatChannel(LLRender::NORMAL_MAP);
         }
         else if (texture_ctrl == mShinyTextureCtrl)
         {
-            selectMatChannel(MATTYPE_SPECULAR);
+            selectMatChannel(LLRender::SPECULAR_MAP);
         }
 
         LLSelectNode* node = *iter;
@@ -3617,7 +3618,7 @@ void FSPanelFace::onCommitTexture()
     add(LLStatViewer::EDIT_TEXTURE, 1);
 
     // applying the texture relies on the tab control showing the correct channel
-    selectMatChannel(MATTYPE_DIFFUSE);
+    selectMatChannel(LLRender::DIFFUSE_MAP);
 
     sendTexture();
 }
@@ -3627,34 +3628,38 @@ void FSPanelFace::onSelectTexture()
     add(LLStatViewer::EDIT_TEXTURE, 1);
 
     // applying the texture relies on the tab control showing the correct channel
-    selectMatChannel(MATTYPE_DIFFUSE);
+    selectMatChannel(LLRender::DIFFUSE_MAP);
 
     LLSelectMgr::getInstance()->saveSelectedObjectTextures();
     sendTexture();
 
     LLGLenum image_format;
     bool identical_image_format = false;
-    LLSelectedTE::getImageFormat(image_format, identical_image_format);
+    bool missing_asset = false;
+    LLSelectedTE::getImageFormat(image_format, identical_image_format, missing_asset);
 
-    U32 alpha_mode = LLMaterial::DIFFUSE_ALPHA_MODE_NONE;
-    switch (image_format)
+    if (!missing_asset)
     {
-        case GL_RGBA:
-        case GL_ALPHA:
+        U32 alpha_mode = LLMaterial::DIFFUSE_ALPHA_MODE_NONE;
+        switch (image_format)
         {
-            alpha_mode = LLMaterial::DIFFUSE_ALPHA_MODE_BLEND;
-        }
-        break;
+            case GL_RGBA:
+            case GL_ALPHA:
+            {
+                alpha_mode = LLMaterial::DIFFUSE_ALPHA_MODE_BLEND;
+            }
+            break;
 
-        case GL_RGB: break;
-        default:
-        {
-            LL_WARNS() << "Unexpected tex format in FSPanelFace...resorting to no alpha" << LL_ENDL;
+            case GL_RGB: break;
+            default:
+            {
+                LL_WARNS() << "Unexpected tex format in FSPanelFace, resorting to no alpha" << LL_ENDL;
+            }
+            break;
         }
-        break;
+
+        mComboAlphaMode->selectNthItem(alpha_mode);
     }
-
-    mComboAlphaMode->selectNthItem(alpha_mode);
 
     LLSelectedTEMaterial::setDiffuseAlphaMode(this, getCurrentDiffuseAlphaMode());
 
@@ -3666,7 +3671,7 @@ void FSPanelFace::onCommitNormalTexture()
     LLUUID nmap_id = getCurrentNormalMap();
 
     // applying the texture relies on the tab control showing the correct channel
-    selectMatChannel(MATTYPE_NORMAL);
+    selectMatChannel(LLRender::NORMAL_MAP);
 
     sendBump(nmap_id.isNull() ? 0 : BUMPY_TEXTURE);
     onTextureSelectionChanged(mBumpyTextureCtrl);
@@ -3675,7 +3680,7 @@ void FSPanelFace::onCommitNormalTexture()
 void FSPanelFace::onCommitSpecularTexture()
 {
     // applying the texture relies on the tab control showing the correct channel
-    selectMatChannel(MATTYPE_SPECULAR);
+    selectMatChannel(LLRender::SPECULAR_MAP);
 
     sendShiny(SHINY_TEXTURE);
     onTextureSelectionChanged(mShinyTextureCtrl);
@@ -3874,7 +3879,7 @@ void FSPanelFace::onCommitMaterialBumpyScaleX()
 
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        mCtrlTexScaleU->forceSetValue(getCurrentBumpyScaleU());
+        mCtrlTexScaleU->forceSetValue(LLSD(getCurrentBumpyScaleU()));
         syncRepeatX(this, bumpy_scale_u);
     }
     else
@@ -3893,7 +3898,7 @@ void FSPanelFace::onCommitMaterialBumpyScaleY()
 
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        mCtrlTexScaleV->forceSetValue(getCurrentBumpyScaleV());
+        mCtrlTexScaleV->forceSetValue(LLSD(getCurrentBumpyScaleV()));
         syncRepeatY(this, bumpy_scale_v);
     }
     else
@@ -3912,7 +3917,7 @@ void FSPanelFace::onCommitMaterialShinyScaleX()
 
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        mCtrlTexScaleU->forceSetValue(getCurrentShinyScaleU());
+        mCtrlTexScaleU->forceSetValue(LLSD(getCurrentShinyScaleU()));
         syncRepeatX(this, shiny_scale_u);
     }
     else
@@ -3931,7 +3936,7 @@ void FSPanelFace::onCommitMaterialShinyScaleY()
 
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        mCtrlTexScaleV->forceSetValue(getCurrentShinyScaleV());
+        mCtrlTexScaleV->forceSetValue(LLSD(getCurrentShinyScaleV()));
         syncRepeatY(this, shiny_scale_v);
     }
     else
@@ -3952,7 +3957,7 @@ void FSPanelFace::onCommitMaterialBumpyRot()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        mCtrlTexRot->forceSetValue(getCurrentBumpyRot());
+        mCtrlTexRot->forceSetValue(LLSD(getCurrentBumpyRot()));
         syncMaterialRot(this, getCurrentBumpyRot());
     }
     else
@@ -3976,7 +3981,7 @@ void FSPanelFace::onCommitMaterialShinyRot()
 {
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
-        mCtrlTexRot->forceSetValue(getCurrentShinyRot());
+        mCtrlTexRot->forceSetValue(LLSD(getCurrentShinyRot()));
         syncMaterialRot(this, getCurrentShinyRot());
     }
     else
@@ -4091,16 +4096,16 @@ void FSPanelFace::onCommitTextureOffsetY()
 void FSPanelFace::onCommitRepeatsPerMeter()
 {
     S32 materials_media = getCurrentMaterialType();
-    S32 material_type = 0;
+    LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
     // TODO: check if repeats per meter is even used for PBR -Zi
     if (materials_media == MATMEDIA_PBR)
     {
-        material_type = getCurrentPBRChannel();
+        material_channel = getCurrentPBRChannel();
     }
 
     if (materials_media == MATMEDIA_MATERIAL)
     {
-        material_type = getCurrentMatChannel();
+        material_channel = getCurrentMatChannel();
     }
 
     F32 repeats_per_meter = (F32)mCtrlRpt->getValue().asReal();
@@ -4132,15 +4137,15 @@ void FSPanelFace::onCommitRepeatsPerMeter()
     }
     else
     {
-        switch (material_type)
+        switch (material_channel)
         {
-            case MATTYPE_DIFFUSE:
+            case LLRender::DIFFUSE_MAP:
             {
                 LLSelectMgr::getInstance()->selectionTexScaleAutofit(repeats_per_meter);
             }
             break;
 
-            case MATTYPE_NORMAL:
+            case LLRender::NORMAL_MAP:
             {
                 mCtrlBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
                 mCtrlBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
@@ -4150,7 +4155,7 @@ void FSPanelFace::onCommitRepeatsPerMeter()
             }
             break;
 
-            case MATTYPE_SPECULAR:
+            case LLRender::SPECULAR_MAP:
             {
                 mCtrlShinyScaleU->setValue(obj_scale_s * repeats_per_meter);
                 mCtrlShinyScaleV->setValue(obj_scale_t * repeats_per_meter);
@@ -5099,38 +5104,33 @@ void FSPanelFace::onCommitPlanarAlign()
     sendTextureInfo();
 }
 
-void FSPanelFace::updateGLTFTextureTransform(float value, U32 pbr_channel, std::function<void(LLGLTFMaterial::TextureTransform*)> edit)
+void FSPanelFace::updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*)> edit)
 {
-    U32 texture_info_start;
-    U32 texture_info_end;
-
-    const LLGLTFMaterial::TextureInfo texture_info = mPBRChannelToTextureInfo[pbr_channel];
     if (texture_info == LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT)
     {
-        texture_info_start = 0;
-        texture_info_end = LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT;
+        updateSelectedGLTFMaterials([&](LLGLTFMaterial* new_override)
+        {
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+            {
+                LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[(LLGLTFMaterial::TextureInfo)i];
+                edit(&new_transform);
+            }
+        });
     }
     else
     {
-        texture_info_start = mPBRChannelToTextureInfo[pbr_channel];
-        texture_info_end = texture_info_start + 1;
-    }
-
-    updateSelectedGLTFMaterials([&](LLGLTFMaterial* new_override)
-    {
-        for (U32 ti = texture_info_start; ti < texture_info_end; ++ti)
+        updateSelectedGLTFMaterials([&](LLGLTFMaterial* new_override)
         {
-            LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[(LLGLTFMaterial::TextureInfo)ti];
+            LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[texture_info];
             edit(&new_transform);
-        }
-    });
+        });
+    }
 }
 
 void FSPanelFace::setMaterialOverridesFromSelection()
 {
     // TODO: move to .h -Zi
-    std::map<LLGLTFMaterial::TextureInfo, std::string> spinner_suffixes =
-    {
+    std::map<LLGLTFMaterial::TextureInfo, std::string> spinner_suffixes{
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR, "_Base" },
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_NORMAL, "_Normal" },
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS, "_Metallic" },
@@ -5145,10 +5145,10 @@ void FSPanelFace::setMaterialOverridesFromSelection()
     bool offset_u_same = true;
     bool offset_v_same = true;
 
-    // <FS:Zi> Always iterate over the whole set of texture channels
+    // Always iterate over the whole set of texture channels -Zi
     for (U32 i = 0; i < LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_COUNT; ++i)
     {
-        std::string spinner_suffix = spinner_suffixes[(LLGLTFMaterial::TextureInfo) i];
+        const std::string& spinner_suffix = spinner_suffixes[(LLGLTFMaterial::TextureInfo) i];
 
         LLGLTFMaterial::TextureTransform this_transform;
 
@@ -5315,13 +5315,13 @@ bool FSPanelFace::Selection::compareSelection()
 void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data)
 {
     // TODO: put into .h -Zi
-    std::map<std::string, S32> types =
+    std::map<std::string, LLGLTFMaterial::TextureInfo> types =
     {
-        { "all",        PBRTYPE_RENDER_MATERIAL_ID },
-        { "base",       PBRTYPE_BASE_COLOR },
-        { "normal",     PBRTYPE_NORMAL },
-        { "metallic",   PBRTYPE_METALLIC_ROUGHNESS },
-        { "emissive",   PBRTYPE_EMISSIVE }
+        { "all",        LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT },
+        { "base",       LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR },
+        { "normal",     LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL },
+        { "metallic",   LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS },
+        { "emissive",   LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE }
     };
 
     std::string user_data_string = user_data.asString();
@@ -5332,42 +5332,42 @@ void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_d
         return;
     }
 
-    const S32 pbr_channel = types[user_data.asString()];
+    const LLGLTFMaterial::TextureInfo pbr_channel = types[user_data.asString()];
 
     const std::string& spinner_name = ctrl->getName();
-    const float value = (float)ctrl->getValue().asReal();
+    const float value = (F32)ctrl->getValue().asReal();
 
     if (LLStringUtil::startsWith(spinner_name, "gltfTextureScaleU"))
     {
-        updateGLTFTextureTransform(value, pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
+        updateGLTFTextureTransform(pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
         {
             new_transform->mScale.mV[VX] = value;
         });
     }
     else if (LLStringUtil::startsWith(spinner_name, "gltfTextureScaleV"))
     {
-        updateGLTFTextureTransform(value, pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
+        updateGLTFTextureTransform(pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
         {
             new_transform->mScale.mV[VY] = value;
         });
     }
     else if (LLStringUtil::startsWith(spinner_name, "gltfTextureRotation"))
     {
-        updateGLTFTextureTransform(value, pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
+        updateGLTFTextureTransform(pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
         {
             new_transform->mRotation = value * DEG_TO_RAD;
         });
     }
     else if (LLStringUtil::startsWith(spinner_name, "gltfTextureOffsetU"))
     {
-        updateGLTFTextureTransform(value, pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
+        updateGLTFTextureTransform(pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
         {
             new_transform->mOffset.mV[VX] = value;
         });
     }
     else if (LLStringUtil::startsWith(spinner_name, "gltfTextureOffsetV"))
     {
-        updateGLTFTextureTransform(value, pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
+        updateGLTFTextureTransform(pbr_channel, [&](LLGLTFMaterial::TextureTransform* new_transform)
         {
             new_transform->mOffset.mV[VY] = value;
         });
@@ -5467,20 +5467,51 @@ void FSPanelFace::LLSelectedTE::getFace(LLFace*& face_to_return, bool& identical
     identical_face = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&get_te_face_func, face_to_return, false, (LLFace*)nullptr);
 }
 
-void FSPanelFace::LLSelectedTE::getImageFormat(LLGLenum& image_format_to_return, bool& identical_face)
+void FSPanelFace::LLSelectedTE::getImageFormat(LLGLenum& image_format_to_return, bool& identical_face, bool& missing_asset)
 {
-    LLGLenum image_format{ GL_RGB };
-    struct LLSelectedTEGetImageFormat : public LLSelectedTEGetFunctor<LLGLenum>
+    struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
     {
-        LLGLenum get(LLViewerObject* object, S32 te_index)
+        LLSelectedTEGetmatId()
+            : mImageFormat(GL_RGB)
+            , mIdentical(true)
+            , mMissingAsset(false)
+            , mFirstRun(true)
         {
-            LLViewerTexture* image = object->getTEImage(te_index);
-            return image ? image->getPrimaryFormat() : GL_RGB;
         }
-    } get_glenum;
+        bool apply(LLViewerObject* object, S32 te_index) override
+        {
+            LLViewerTexture* image = object ? object->getTEImage(te_index) : nullptr;
+            LLGLenum format = GL_RGB;
+            bool missing = false;
+            if (image)
+            {
+                format = image->getPrimaryFormat();
+                missing = image->isMissingAsset();
+            }
 
-    identical_face = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&get_glenum, image_format);
-    image_format_to_return = image_format;
+            if (mFirstRun)
+            {
+                mFirstRun = false;
+                mImageFormat = format;
+                mMissingAsset = missing;
+            }
+            else
+            {
+                mIdentical &= (mImageFormat == format);
+                mIdentical &= (mMissingAsset == missing);
+            }
+            return true;
+        }
+        LLGLenum mImageFormat;
+        bool mIdentical;
+        bool mMissingAsset;
+        bool mFirstRun;
+    } func;
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&func);
+
+    image_format_to_return = func.mImageFormat;
+    identical_face = func.mIdentical;
+    missing_asset = func.mMissingAsset;
 }
 
 void FSPanelFace::LLSelectedTE::getTexId(LLUUID& id, bool& identical)
@@ -5899,49 +5930,60 @@ S32 FSPanelFace::getCurrentMaterialType() const
     {
         return MATMEDIA_PBR;
     }
-    else if (tab_name == "panel_material_type_media")
+    if (tab_name == "panel_material_type_media")
     {
         return MATMEDIA_MEDIA;
     }
     return MATMEDIA_MATERIAL;
 }
 
-S32 FSPanelFace::getCurrentMatChannel() const
+LLRender::eTexIndex FSPanelFace::getCurrentMatChannel() const
 {
     const std::string& tab_name = mTabsMatChannel->getCurrentPanel()->getName();
 
+    if (tab_name == "panel_blinn_phong_diffuse")
+    {
+        return LLRender::DIFFUSE_MAP;
+    }
+
     if (tab_name == "panel_blinn_phong_normal")
     {
-        return MATTYPE_NORMAL;
+        if (getCurrentNormalMap().notNull())
+        {
+            return LLRender::NORMAL_MAP;
+        }
     }
-    if (tab_name == "panel_blinn_phong_specular")
+    else if (tab_name == "panel_blinn_phong_specular")
     {
-        return MATTYPE_SPECULAR;
+        if (getCurrentSpecularMap().notNull())
+        {
+            return LLRender::SPECULAR_MAP;
+        }
     }
-    return MATTYPE_DIFFUSE;
+    return (LLRender::eTexIndex)0;
 }
 
-S32 FSPanelFace::getCurrentPBRChannel() const
+LLRender::eTexIndex FSPanelFace::getCurrentPBRChannel() const
 {
     const std::string& tab_name = mTabsPBRChannel->getCurrentPanel()->getName();
 
     if (tab_name == "panel_pbr_transforms_base_color")
     {
-        return PBRTYPE_BASE_COLOR;
+        return LLRender::BASECOLOR_MAP;
     }
     if (tab_name == "panel_pbr_transforms_normal")
     {
-        return PBRTYPE_NORMAL;
+        return LLRender::GLTF_NORMAL_MAP;
     }
     if (tab_name == "panel_pbr_transforms_metallic")
     {
-        return PBRTYPE_METALLIC_ROUGHNESS;    // TODO: we use specular editor color for now -Zi
+        return LLRender::METALLIC_ROUGHNESS_MAP;
     }
     if (tab_name == "panel_pbr_transforms_emissive")
     {
-        return PBRTYPE_EMISSIVE;    // TODO: "emissive" has no defined editor color yet -Zi
+        return LLRender::EMISSIVE_MAP;
     }
-    return PBRTYPE_RENDER_MATERIAL_ID;
+    return LLRender::NUM_TEXTURE_CHANNELS;
 }
 
 void FSPanelFace::selectMaterialType(S32 material_type)
@@ -5961,13 +6003,13 @@ void FSPanelFace::selectMaterialType(S32 material_type)
     onMatTabChange(); // set up relative to active tab
 }
 
-void FSPanelFace::selectMatChannel(S32 mat_channel)
+void FSPanelFace::selectMatChannel(LLRender::eTexIndex mat_channel)
 {
-    if (mat_channel == MATTYPE_NORMAL)
+    if (mat_channel == LLRender::NORMAL_MAP)
     {
         mTabsMatChannel->selectTabByName("panel_blinn_phong_normal");
     }
-    else if (mat_channel == MATTYPE_SPECULAR)
+    else if (mat_channel == LLRender::SPECULAR_MAP)
     {
         mTabsMatChannel->selectTabByName("panel_blinn_phong_specular");
     }
@@ -5977,21 +6019,21 @@ void FSPanelFace::selectMatChannel(S32 mat_channel)
     }
 }
 
-void FSPanelFace::selectPBRChannel(S32 pbr_channel)
+void FSPanelFace::selectPBRChannel(LLRender::eTexIndex pbr_channel)
 {
-    if (pbr_channel == PBRTYPE_NORMAL)
+    if (pbr_channel == LLRender::GLTF_NORMAL_MAP)
     {
         mTabsPBRChannel->selectTabByName("panel_pbr_transforms_normal");
     }
-    else if (pbr_channel == PBRTYPE_BASE_COLOR)
+    else if (pbr_channel == LLRender::BASECOLOR_MAP)
     {
         mTabsPBRChannel->selectTabByName("panel_pbr_transforms_base_color");
     }
-    else if (pbr_channel == PBRTYPE_METALLIC_ROUGHNESS)
+    else if (pbr_channel == LLRender::METALLIC_ROUGHNESS_MAP)
     {
         mTabsPBRChannel->selectTabByName("panel_pbr_transforms_metallic");
     }
-    else if (pbr_channel == PBRTYPE_EMISSIVE)
+    else if (pbr_channel == LLRender::EMISSIVE_MAP)
     {
         mTabsPBRChannel->selectTabByName("panel_pbr_transforms_emissive");
     }
