@@ -1632,7 +1632,11 @@ const std::string LLScrollListCtrl::getSelectedItemLabel(S32 column) const
     item = getFirstSelected();
     if (item)
     {
-        return item->getColumn(column)->getValue().asString();
+        auto col = item->getColumn(column);
+        if(col)
+        {
+            return col->getValue().asString();
+        }
     }
 
     return LLStringUtil::null;
