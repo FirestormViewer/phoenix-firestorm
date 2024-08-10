@@ -3627,7 +3627,7 @@ Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice
 	<notification name="VoiceEffectsNotSupported">
 		Voice-Morph-Effekte werden von diesem Viewer nicht unterstützt.
 Für weitere Informationen zu anderen Voice-Morphing-Tools, lesen Sie bitte [[FAQ_URL] diesen Artikel].
-		<usetemplate name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Warnen, falls Voice-Morphing nicht unterstützt wird" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Nur Mitglieder einer bestimmten Gruppe dürfen diesen Bereich betreten.

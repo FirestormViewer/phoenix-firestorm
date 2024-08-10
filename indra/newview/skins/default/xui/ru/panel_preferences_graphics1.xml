@@ -88,12 +88,19 @@
 			<slider label="Расстояние прорисовки" name="DrawDistance"/>
 			<text name="DrawDistanceMeterText2">m</text>
 			<slider label="Максимум частиц" name="MaxParticleCount"/>
+			<text name="AvatarComplexityModeLabel">Отображение аватара</text>
+			<combo_box name="AvatarComplexityMode">
+				<combo_box.item label="Огранич. по сложности" name="0"/>
+				<combo_box.item label="Всегда показ. друзей" name="1"/>
+				<combo_box.item label="Показ. только друзей" name="2"/>
+			</combo_box>
 			<slider label="Максимальная сложность" name="IndirectMaxComplexity" tool_tip="Контролирует, в какой момент визуально сложный аватар отобразится как силуэт"/>
 			<slider label="Максимум 3D аватаров" name="IndirectMaxNonImpostors"/>
 			<slider label="Послеоперационне качество" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				Низкое
 			</text>
+			<slider label="Макс. кол-во источников света" name="MaxLights"/>
 			<slider label="Физика аватаров" name="AvatarPhysicsDetail"/>
 			<slider label="Экспозиция:" name="RenderExposure"/>
 			<text name="MeshDetailText">
