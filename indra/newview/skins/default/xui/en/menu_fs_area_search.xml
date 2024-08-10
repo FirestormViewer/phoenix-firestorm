@@ -12,6 +12,9 @@
 		<menu_item_call.on_enable
 		 function="AreaSearch.Enable"
 		 parameter="script"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="edit"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Touch"
@@ -19,6 +22,9 @@
 	 name="touch_object">
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
+		 parameter="touch"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
 		 parameter="touch"/>
 	</menu_item_call>
 	<menu_item_call
@@ -28,6 +34,12 @@
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
 		 parameter="u_sit_on_object"/>
+		<menu_item_call.on_enable
+		 function="AreaSearch.Enable"
+		 parameter="one"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="sit"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Teleport to"
@@ -39,6 +51,9 @@
 		<menu_item_call.on_enable
 		 function="AreaSearch.Enable"
 		 parameter="one"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="teleport"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Zoom"
@@ -61,6 +76,9 @@
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
 		 parameter="inspect"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="edit"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Edit"
@@ -68,6 +86,9 @@
 	 name="edit_object">
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
+		 parameter="edit"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
 		 parameter="edit"/>
 	</menu_item_call>
 	<menu_item_call
@@ -77,6 +98,9 @@
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
 		 parameter="return"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="delete|touch"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Delete"
@@ -85,6 +109,9 @@
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
 		 parameter="delete"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="delete|touch"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Blacklist"
@@ -93,6 +120,9 @@
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
 		 parameter="l_blacklist"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="delete"/>
 	</menu_item_call>
 <!-- <menu_item_separator
 	 layout="topleft"/>  -->
@@ -106,6 +136,9 @@
 		<menu_item_call.on_enable
 		 function="AreaSearch.Enable"
 		 parameter="one"/>
+		<menu_item_call.on_visible
+		 function="AreaSearch.RLV"
+		 parameter="edit|buy|touch"/>
 	</menu_item_call>
 	<menu_item_separator
 	 layout="topleft"/>

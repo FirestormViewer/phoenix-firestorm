@@ -50,8 +50,8 @@ class FSPlaceDetailsPlacesParcelObserver;
 class FSFloaterPlaceDetails : public LLFloater
 {
 public:
-    FSFloaterPlaceDetails(const LLSD& seed);
-    virtual ~FSFloaterPlaceDetails();
+    explicit FSFloaterPlaceDetails(const LLSD& seed);
+    ~FSFloaterPlaceDetails() override;
 
     /*virtual*/ BOOL postBuild();
     /*virtual*/ void onOpen(const LLSD& key);

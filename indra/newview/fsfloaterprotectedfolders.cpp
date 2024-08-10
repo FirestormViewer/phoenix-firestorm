@@ -40,19 +40,32 @@
 
 FSFloaterProtectedFolders::FSFloaterProtectedFolders(const LLSD& key)
     : LLFloater(key),
-    mFolderList(NULL),
+    mInitialized(false),
     mFilterSubString(LLStringUtil::null),
     mFilterSubStringOrig(LLStringUtil::null),
     mProtectedCategoriesChangedCallbackConnection(),
-    mInitialized(false)
+    mFolderList(nullptr)
 {
 }
 
 FSFloaterProtectedFolders::~FSFloaterProtectedFolders()
 {
-    if (mProtectedCategoriesChangedCallbackConnection.connected())
+    try
     {
-        mProtectedCategoriesChangedCallbackConnection.disconnect();
+        if (mProtectedCategoriesChangedCallbackConnection.connected())
+        {
+            mProtectedCategoriesChangedCallbackConnection.disconnect();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Log the exception or handle it as needed
+        LL_WARNS() << "Exception caught in FSFloaterProtectedFolders destructor: " << e.what() << LL_ENDL;
+    }
+    catch (...)
+    {
+        // Catch any other types of exceptions
+        LL_WARNS() << "Unknown exception caught in FSFloaterProtectedFolders destructor" << LL_ENDL;
     }
 }
 

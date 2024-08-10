@@ -1659,6 +1659,80 @@ bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
     }
 }
 
+bool FSPanelAreaSearchList::onContextMenuItemVisibleRLV(const LLSD& userdata)
+{
+    if (!RlvActions::isRlvEnabled())
+    {
+        return true;
+    }
+
+    if (RlvActions::hasBehaviour(RLV_BHVR_INTERACT))
+    {
+        return false;
+    }
+
+    const std::string& parameter = userdata.asStringRef();
+    std::vector<std::string> behavs;
+    LLStringUtil::getTokens(parameter, behavs, "|");
+
+    if (std::find(behavs.begin(), behavs.end(), "delete") != behavs.end())
+    {
+        if (!rlvCanDeleteOrReturn())
+        {
+            return false;
+        }
+    }
+
+    std::vector<LLScrollListItem*> selected = mResultList->getAllSelected();
+    for (const auto item : selected)
+    {
+        const LLUUID& object_id = item->getUUID();
+        LLViewerObject* objectp = gObjectList.findObject(object_id);
+        if (!objectp)
+        {
+            return false;
+        }
+
+        if (
+            std::find(behavs.begin(), behavs.end(), "touch") != behavs.end()
+            && !RlvActions::canTouch(objectp)
+        )
+        {
+            return false;
+        }
+        else if (
+            std::find(behavs.begin(), behavs.end(), "edit") != behavs.end()
+            && !RlvActions::canEdit(objectp)
+        )
+        {
+            return false;
+        }
+        else if (
+            std::find(behavs.begin(), behavs.end(), "sit") != behavs.end()
+            && !RlvActions::canSit(objectp)
+        )
+        {
+            return false;
+        }
+        else if (
+            std::find(behavs.begin(), behavs.end(), "buy") != behavs.end()
+            && !RlvActions::canBuyObject(object_id)
+        )
+        {
+            return false;
+        }
+        else if (
+            std::find(behavs.begin(), behavs.end(), "teleport") != behavs.end()
+            && !RlvActions::canTeleportToLocal(objectp->getPositionGlobal())
+        )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 {
     const std::string& action = userdata.asStringRef();
@@ -1942,6 +2016,10 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
             handle_object_delete();
             break;
         case 'r': // return
+            if (RlvActions::isRlvEnabled() && !rlvCanDeleteOrReturn())
+            {
+                break;
+            }
             handle_object_return();
             break;
         default:
