@@ -2667,37 +2667,29 @@ if (INSTALL)
   include(${CMAKE_CURRENT_SOURCE_DIR}/ViewerInstall.cmake)
 endif (INSTALL)
 
-# Note that the conventional VIEWER_SYMBOL_FILE is set by ../../build.sh
 if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIEWER_SYMBOL_FILE)
   if (USE_BUGSPLAT)
     # BugSplat symbol-file generation
     if (WINDOWS)
-	#<FS:ND> Comment this out, we do our own symbol package which also includes the exe and build_data.json 
-      # Just pack up a tarball containing only the .pdb file for the
-      # executable. Because we intend to use cygwin tar, we must render
-      # VIEWER_SYMBOL_FILE in cygwin path syntax.
-      # execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
-        # OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
-        # OUTPUT_STRIP_TRAILING_WHITESPACE)
-      # execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
-        # OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
-        # OUTPUT_STRIP_TRAILING_WHITESPACE)
-      # add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
-        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.xz;
-        # # testing a string suffix is painful enough in CMake language that
-        # # we'll continue assuming it until forced to generalize.
+      #<FS:ND> Comment this out, we do our own symbol package which also includes the exe and build_data.json 
+      # set(VIEWER_APP_SYMBOLS_ARCHIVE "${SYMBOLS_STAGING_DIR}.sym.tar.xz")
+      # set_target_properties( ${VIEWER_BINARY_NAME} PROPERTIES PDB_OUTPUT_DIRECTORY "${SYMBOLS_STAGING_DIR}")
+
+      # # Just pack up a tarball containing only the .pdb files for the
+      # # executables.
+      # add_custom_command(OUTPUT "${VIEWER_APP_SYMBOLS_ARCHIVE}"
         # COMMAND "tar"
         # ARGS
-          # "cjf"
-          # "${VIEWER_SYMBOL_FILE_CYGWIN}"
-          # "-C"
-          # "${PARENT_DIRECTORY_CYGWIN}"
-          # "firestorm-bin.pdb"
-        # DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
-        # COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
+          # "cJf"
+          # "${VIEWER_CHANNEL}.sym.tar.xz"
+          # "${VIEWER_CHANNEL}"
+        # DEPENDS "${VIEWER_BINARY_NAME}" llwebrtc
+        # WORKING_DIRECTORY "${SYMBOLS_STAGING_DIR}/.."
+        # COMMENT "Packing viewer PDBs into ${VIEWER_APP_SYMBOLS_ARCHIVE}"
         # )
-      # add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
-      # add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
+      # add_custom_target(generate_symbols DEPENDS "${VIEWER_APP_SYMBOLS_ARCHIVE}")
+      # add_dependencies(generate_symbols ${VIEWER_BINARY_NAME} llwebrtc)
+
     endif (WINDOWS)
     if (DARWIN)
       # Have to run dsymutil first, then pack up the resulting .dSYM directory

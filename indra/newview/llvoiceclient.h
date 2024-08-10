@@ -136,7 +136,7 @@ class LLVoiceP2PIncomingCallInterface
     virtual void declineInvite() = 0;
 };
 
-typedef boost::shared_ptr<LLVoiceP2PIncomingCallInterface> LLVoiceP2PIncomingCallInterfacePtr;
+typedef std::shared_ptr<LLVoiceP2PIncomingCallInterface> LLVoiceP2PIncomingCallInterfacePtr;
 
 //////////////////////////////////
 /// @class LLVoiceModuleInterface
@@ -479,8 +479,8 @@ public:
 
     /////////////////////////////
     // Accessors for data related to nearby speakers
-    BOOL getVoiceEnabled(const LLUUID& id);     // true if we've received data for this avatar
-    std::string getDisplayName(const LLUUID& id);
+    bool getVoiceEnabled(const LLUUID& id) const;     // true if we've received data for this avatar
+    std::string getDisplayName(const LLUUID& id) const;
     BOOL isOnlineSIP(const LLUUID &id);
     BOOL isParticipantAvatar(const LLUUID &id);
     BOOL getIsSpeaking(const LLUUID& id);
@@ -494,8 +494,8 @@ public:
     // </FS:Ansariel> Centralized voice power level
 
     /////////////////////////////
-    void getParticipantList(std::set<LLUUID> &participants);
-    bool isParticipant(const LLUUID& speaker_id);
+    void getParticipantList(std::set<LLUUID> &participants) const;
+    bool isParticipant(const LLUUID& speaker_id) const;
 
     //////////////////////////
     /// @name text chat
