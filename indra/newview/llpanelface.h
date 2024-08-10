@@ -134,7 +134,7 @@ public:
     LLGLTFMaterial::TextureInfo getPBRDropChannel();
 
 protected:
-    void navigateToTitleMedia(const std::string url);
+    void navigateToTitleMedia(const std::string& url);
     bool selectedMediaEditable();
     void clearMediaSettings();
     void updateMediaSettings();
@@ -227,7 +227,6 @@ protected:
     void onCommitMaterialGloss();
     void onCommitMaterialEnv();
     void onCommitMaterialMaskCutoff();
-    void onCommitMaterialID();
 
     void onCommitMaterialsMedia();
     void onCommitMaterialType();
@@ -288,7 +287,7 @@ public:
     // </FS>
 
 private:
-    bool isAlpha() { return mIsAlpha; }
+    bool isAlpha() const { return mIsAlpha; }
 
     // Convenience funcs to keep the visual flack to a minimum
     //

@@ -442,7 +442,7 @@ protected:
     bool            updateIsFullyLoaded();
     bool            processFullyLoadedChange(bool loading);
     void            updateRuthTimer(bool loading);
-    F32             calcMorphAmount();
+    F32             calcMorphAmount() const;
 
 private:
     bool            mFirstFullyVisible;

@@ -2276,7 +2276,7 @@ void LLPanelFace::onMaterialOverrideReceived(const LLUUID& object_id, S32 side)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-void LLPanelFace::navigateToTitleMedia( const std::string url )
+void LLPanelFace::navigateToTitleMedia(const std::string& url)
 {
     std::string multi_media_info_str = LLTrans::getString("Multiple Media");
     if (url.empty() || multi_media_info_str == url)
@@ -2288,9 +2288,9 @@ void LLPanelFace::navigateToTitleMedia( const std::string url )
     {
         LLPluginClassMedia* media_plugin = mTitleMedia->getMediaPlugin();
         // check if url changed or if we need a new media source
-        if (mTitleMedia->getCurrentNavUrl() != url || media_plugin == NULL)
+        if (mTitleMedia->getCurrentNavUrl() != url || media_plugin == nullptr)
         {
-            mTitleMedia->navigateTo( url );
+            mTitleMedia->navigateTo(url);
 
             LLViewerMediaImpl* impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mTitleMedia->getTextureID());
             if (impl)

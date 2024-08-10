@@ -256,6 +256,28 @@ public:
     S32             getVisualParamCount() const { return (S32)mVisualParamIndexMap.size(); }
     LLVisualParam*  getVisualParam(const char *name);
 
+    // <FS:Ansariel> [Legacy Bake]
+    //void animateTweakableVisualParams(F32 delta)
+    void animateTweakableVisualParams(F32 delta, bool upload_bake)
+    {
+        for (auto& it : mVisualParamIndexMap)
+        {
+            if (it.second->isTweakable())
+            {
+                // <FS:Ansariel> [Legacy Bake]
+                //it.second->animate(delta);
+                it.second->animate(delta, upload_bake);
+            }
+        }
+    }
+
+    void applyAllVisualParams(ESex avatar_sex)
+    {
+        for (auto& it : mVisualParamIndexMap)
+        {
+            it.second->apply(avatar_sex);
+        }
+    }
 
     ESex getSex() const         { return mSex; }
     void setSex( ESex sex )     { mSex = sex; }
