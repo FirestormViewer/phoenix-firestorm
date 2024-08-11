@@ -54,6 +54,7 @@
 #include "llvovolume.h"
 #include "llavatarrendernotifier.h"
 #include "llmodel.h"
+#include "bdanimator.h" // <FS> [FIRE-30873]: Poser
 
 extern const LLUUID ANIM_AGENT_BODY_NOISE;
 extern const LLUUID ANIM_AGENT_BREATHE_ROT;
@@ -66,6 +67,7 @@ extern const LLUUID ANIM_AGENT_HEAD_ROT;
 extern const LLUUID ANIM_AGENT_PELVIS_FIX;
 extern const LLUUID ANIM_AGENT_TARGET;
 extern const LLUUID ANIM_AGENT_WALK_ADJUST;
+extern const LLUUID ANIM_BD_POSING_MOTION; // <FS> [FIRE-30873]: Poser
 
 class LLViewerWearable;
 class LLVoiceVisualizer;
@@ -1278,6 +1280,29 @@ public:
 /**                    Diagnostics
  **                                                                            **
  *******************************************************************************/
+
+/********************************************************************************
+ **                                                                            **
+ **                    POSER
+ **/
+
+    //--------------------------------------------------------------------
+    // <FS> [FIRE-30873]: Poser: Custom Posing
+    //--------------------------------------------------------------------
+public:
+    void            setPosing()             { mIsPosing = true; }
+    void            clearPosing()           { mIsPosing = false; }
+    bool            getPosing()             { return mIsPosing; }
+    void            clearAnimList()         { mAnimatorActions.clear(); }
+
+    bool            mIsPosing;
+    S32             getCurrentActionIndex() { return mCurrentAction; }
+
+    std::vector<Action>             mAnimatorActions;
+    LLFrameTimer                    mAnimPlayTimer;
+    F32                             mExpiryTime;
+    S32                             mCurrentAction;
+   // <FS/>[FIRE - 30873] : Poser
 
 /********************************************************************************
  **                                                                            **

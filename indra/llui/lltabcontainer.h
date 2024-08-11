@@ -220,6 +220,7 @@ public:
     BOOL        selectTab(S32 which);
     BOOL        selectTabByName(const std::string& title);
     void        setCurrentPanelIndex(S32 index) { mCurrentTabIdx = index; }
+    BOOL        getTabButtonEnabled(S32 which); // <FS> [FIRE-30873]
 
     BOOL        getTabPanelFlashing(LLPanel* child);
     void        setTabPanelFlashing(LLPanel* child, BOOL state);

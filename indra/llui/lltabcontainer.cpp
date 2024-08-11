@@ -1502,6 +1502,17 @@ void LLTabContainer::deleteAllTabs()
     mCurrentTabIdx = -1;
 }
 
+// <FS> [FIRE-30873]
+BOOL LLTabContainer::getTabButtonEnabled(S32 which)
+{
+    if (which >= 0 && which < (S32) mTabList.size())
+    {
+        return mTabList[which]->mButton->getEnabled();
+    }
+    return false;
+}
+// </FS> [FIRE-30873]
+
 LLPanel* LLTabContainer::getCurrentPanel()
 {
     if (mCurrentTabIdx >= 0 && mCurrentTabIdx < (S32) mTabList.size())

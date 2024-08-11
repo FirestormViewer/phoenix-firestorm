@@ -52,7 +52,8 @@ LLMotion::LLMotion( const LLUUID &id ) :
     mResidualWeight(0.f),
     mFadeWeight(1.f),
     mDeactivateCallback(NULL),
-    mDeactivateCallbackUserData(NULL)
+    mDeactivateCallbackUserData(NULL),
+    mEternal(false) // <FS> [FIRE-30873]: Poser
 {
     for (S32 i=0; i<3; ++i)
         memset(&mJointSignature[i][0], 0, sizeof(U8) * LL_CHARACTER_MAX_ANIMATED_JOINTS);
@@ -121,6 +122,22 @@ void LLMotion::addJointState(const LLPointer<LLJointState>& jointState)
     mJointSignature[1][joint_num] = (usage & LLJointState::ROT) ? (0xff >> (7 - priority)) : 0;
     mJointSignature[2][joint_num] = (usage & LLJointState::SCALE) ? (0xff >> (7 - priority)) : 0;
 }
+
+// <FS> [FIRE-30873]: Poser
+void LLMotion::removeJointState(const LLPointer<LLJointState> &jointState) { mPose.removeJointState(jointState); }
+
+const LLPointer<LLJointState> LLMotion::findJointState(const std::string jointName)
+{
+    const LLPointer<LLJointState> joint_state = mPose.findJointState(jointName);
+    return joint_state;
+}
+
+const LLPointer<LLJointState> LLMotion::findJointState(LLJoint *joint)
+{
+    const LLPointer<LLJointState> joint_state = mPose.findJointState(joint);
+    return joint_state;
+}
+// </FS> [FIRE-30873]: Poser
 
 void LLMotion::setDeactivateCallback( void (*cb)(void *), void* userdata )
 {

@@ -94,6 +94,11 @@ public:
     void    setHoverCell( S32 cell );
     S32     getHoverCell() const            { return mHoverIndex; }
 
+    // <FS> [FIRE-30873]: Poser
+    void    setFlagged(bool b)              { mFlaggedDead = b; }
+    bool    getFlagged() const              { return mFlaggedDead; }
+    // </FS>
+
     void    setUserdata( void* userdata )   { mUserdata = userdata; }
     void*   getUserdata() const             { return mUserdata; }
 
@@ -132,6 +137,7 @@ private:
     S32     mHoverIndex;
     S32     mSelectedIndex;
     BOOL    mEnabled;
+    bool    mFlaggedDead = false; // <FS/> [FIRE-30873]: Poser
     void*   mUserdata;
     LLSD    mItemValue;
     LLSD    mItemAltValue;

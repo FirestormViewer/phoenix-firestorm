@@ -231,6 +231,10 @@
 #include "vjfloaterlocalmesh.h" // local mesh
 #include "fsfloaterwhitelisthelper.h" // fs whitelist helper
 
+// <FS> [FIRE-30873]: Poser
+#include "bdfloaterposer.h"
+#include "bdfloaterposecreator.h" 
+// </FS>
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 const std::string FLOATER_PROFILE("profile");
@@ -652,6 +656,10 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("local_mesh_floater", "floater_vj_local_mesh.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalMesh>); // local mesh
     LLFloaterReg::add("fs_whitelist_floater", "floater_whitelist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWhiteListHelper>); // white list advisor
 
+    // <FS> [FIRE-30873]: Poser
+    LLFloaterReg::add("poser", "floater_poser.xml", (LLFloaterBuildFunc) &LLFloaterReg::build<BDFloaterPoser>);
+    LLFloaterReg::add("poser_creator", "floater_poser_creator.xml", (LLFloaterBuildFunc) &LLFloaterReg::build<BDFloaterPoseCreator>);
+    // </FS>
 
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

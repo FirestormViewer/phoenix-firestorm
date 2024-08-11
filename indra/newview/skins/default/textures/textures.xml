@@ -164,6 +164,7 @@ with the same filename but different name
   <texture name="Command_Performance_Icon"  file_name="toolbar_icons/performance.png"  preload="true" />
   <texture name="Command_Picks_Icon"        file_name="toolbar_icons/picks.png"        preload="true" />
   <texture name="Command_Places_Icon"       file_name="toolbar_icons/places.png"       preload="true" />
+  <texture name="Command_Poser_Icon"       	file_name="toolbar_icons/poser.png"        preload="true" />
   <texture name="Command_Preferences_Icon"  file_name="toolbar_icons/preferences.png"  preload="true" />
   <texture name="Command_Profile_Icon"      file_name="toolbar_icons/profile.png"      preload="true" />
   <texture name="Command_Report_Abuse_Icon" file_name="toolbar_icons/report_abuse.png" preload="true" />
@@ -284,6 +285,7 @@ with the same filename but different name
   <texture name="Icon_Delete" file_name="icons/delete_icon.png" preload="true" />
 
   <texture name="Icon_Dock_Foreground" file_name="windows/Icon_Dock_Foreground.png" preload="true" />
+  <texture name="Icon_Undock_Foreground" file_name="windows/Icon_Undock_Foreground.png" preload="true" />
   <texture name="Icon_Dock_Press" file_name="windows/Icon_Dock_Press.png" preload="true" />
 
   <texture name="Icon_File_Upload" file_name="icons/file_upload.png" preload="true" />

@@ -35,6 +35,7 @@
 #include "llui.h"
 #include "llgltexture.h"
 
+class LLMultiSlider; // <FS/> [FIRE-30873]: Poser
 class LLCheckBoxCtrl;
 class LLSD;
 class LLUIImage;
@@ -70,6 +71,13 @@ public:
         Optional<LLFontGL::HAlign>  font_halign;
 
         Optional<LLColor4>          color;
+
+        // <FS> [FIRE-30873]: Poser
+        Optional<S32>               max_sliders;
+        Optional<F32>               min_val;
+        Optional<F32>               max_val;
+        Optional<F32>               increment;
+        // </FS>
 
         Params()
         :   type("type", "text"),
@@ -276,5 +284,30 @@ private:
     LLPointer<LLUIImage>    mIcon;
     S32                     mPad;
 };
+
+// <FS> [FIRE-30873]: Poser - Cell displaying a keyframe multislider.
+class LLScrollListMultiSlider : public LLScrollListCell
+{
+  public:
+    LLScrollListMultiSlider(const LLScrollListCell::Params &p);
+    /*virtual*/ ~LLScrollListMultiSlider();
+    /*virtual*/ void       draw(const LLColor4 &color, const LLColor4 &highlight_color) const;
+    /*virtual*/ const LLSD getValue() const;
+    /*virtual*/ void       setValue(const LLSD &value);
+
+    /*virtual*/ void setWidth(S32 width); /* { LLScrollListCell::setWidth(width); mTextWidth = width - ; }*/
+
+    F32 getMinValue() const { return mMinValue; }
+    F32 getMaxValue() const { return mMaxValue; }
+
+    void addKeyframe(F32 time, std::string name);
+    void deleteKeyframe(std::string name);
+
+  private:
+    LLMultiSlider *mMultiSlider;
+    F32            mMinValue;
+    F32            mMaxValue;
+};
+// </FS>
 
 #endif

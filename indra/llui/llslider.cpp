@@ -230,7 +230,7 @@ BOOL LLSlider::handleMouseDown(S32 x, S32 y, MASK mask)
 
     if (MASK_CONTROL & mask) // if CTRL is modifying
     {
-        setValueAndCommit(mInitialValue);
+        setValueAndCommit(mOriginalValue);  // <FS>[FIRE - 30873]: revert to most recent value
     }
     else
     {
@@ -245,6 +245,8 @@ BOOL LLSlider::handleMouseDown(S32 x, S32 y, MASK mask)
         {
             mMouseOffset = 0;
         }
+
+        mOriginalValue = getValueF32(); // <FS>[FIRE - 30873]:
 
         // Start dragging the thumb
         // No handler needed for focus lost since this class has no state that depends on it.
@@ -279,11 +281,30 @@ BOOL LLSlider::handleKeyHere(KEY key, MASK mask)
 
 BOOL LLSlider::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-    if ( mOrientation == VERTICAL )
+    // <FS> [FIRE-30873]:  BD - UI Improvements: wheel works on both axes with ctrl, ctrl+shift+wheel moves at 10% sensitivity
+    SHORT shiftKeyState = GetAsyncKeyState(VK_SHIFT);
+    SHORT ctrlKeyState = GetAsyncKeyState(VK_CONTROL);
+
+    if ((1 << 15) & ctrlKeyState)
     {
-        F32 new_val = getValueF32() - clicks * getIncrement();
+        F32 increment = getIncrement();
+        if ((1 << 15) & shiftKeyState)
+            increment *= 10;
+
+        F32 new_val = getValueF32() - clicks * increment;
         setValueAndCommit(new_val);
         return TRUE;
+    }
+    else
+    {
+        // </FS> [FIRE-30873]: The following IF block is the original, the encapsulating IF/ELSE is [FIRE-30873]
+        if (mOrientation == VERTICAL)
+        {
+            F32 new_val = getValueF32() - clicks * getIncrement();
+
+            setValueAndCommit(new_val);
+            return TRUE;
+        }
     }
     return LLF32UICtrl::handleScrollWheel(x,y,clicks);
 }

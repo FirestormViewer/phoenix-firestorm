@@ -87,6 +87,11 @@ private:
     S32             mMouseOffset;
     LLRect          mDragStartThumbRect;
 
+    // <FS> [FIRE-30873]
+    F32             mOriginalValue;
+    LLVector2       mInitPos;
+    // </FS>
+
     LLPointer<LLUIImage>    mThumbImage;
     LLPointer<LLUIImage>    mThumbImagePressed;
     LLPointer<LLUIImage>    mThumbImageDisabled;

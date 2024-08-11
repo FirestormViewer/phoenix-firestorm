@@ -1152,6 +1152,31 @@ void LLScrollListCtrl::deleteSelectedItems()
     dirtyColumns();
 }
 
+// <FS> [FIRE-30873]: Poser
+void LLScrollListCtrl::deleteFlaggedItems()
+{
+    item_list::iterator iter;
+    for (iter = mItemList.begin(); iter < mItemList.end();)
+    {
+        LLScrollListItem *itemp = *iter;
+        if (itemp && itemp->getFlagged())
+        {
+            if (itemp == mLastSelected)
+            {
+                mLastSelected = NULL;
+            }
+            delete itemp;
+            iter = mItemList.erase(iter);
+        }
+        else
+        {
+            iter++;
+        }
+    }
+    dirtyColumns();
+}
+// </FS>
+
 void LLScrollListCtrl::clearHighlightedItems()
 {
     for (item_list::iterator iter = mItemList.begin(); iter != mItemList.end(); ++iter)
@@ -3977,3 +4002,21 @@ void LLScrollListCtrl::loadPersistedSortOrder()
     }
 }
 // </FS:Ansariel>
+
+// <FS> [FIRE-30873]: Poser
+void LLScrollListCtrl::setContextMenu(const ContextMenuType &menu, LLContextMenu *new_menup /* = nullptr*/)
+{
+    mContextMenuType     = menu;
+    LLContextMenu *menup = static_cast<LLContextMenu *>(mPopupMenuHandle.get());
+    if (menup)
+    {
+        menup->die();
+        mPopupMenuHandle.markDead();
+    }
+
+    if (new_menup)
+    {
+        mPopupMenuHandle = new_menup->getHandle();
+    }
+}
+// </FS>

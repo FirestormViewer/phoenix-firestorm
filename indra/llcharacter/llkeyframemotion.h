@@ -435,6 +435,11 @@ protected:
 
 public:
     void setCharacter(LLCharacter* character) { mCharacter = character; }
+
+    // <FS> [FIRE-30873]: Poser
+    JointMotionList *getJointMotionList() const { return mJointMotionList; }
+    void             setJointMotionList(JointMotionList *list) { mJointMotionList = list; }
+    // </FS>
 };
 
 class LLKeyframeDataCache

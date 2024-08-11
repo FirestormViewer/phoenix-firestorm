@@ -13845,6 +13845,18 @@ Delete saved login for &lt;nolink&gt;[NAME]&lt;/nolink&gt;?
        text="Cancel"/>
     </form>
   </notification>
+	
+<notification
+   icon="notify.tga"
+   name="PoserExportXMLSuccess"
+   type="notify">
+The pose has been exported successfully as an XML file.
+
+The pose can be loaded from the expanded pose list.
+
+The file can be found in:
+C:\Users\USERNAME\AppData\Roaming\Firestorm_x64\user_settings\poses
+  </notification>
 
   <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
   <notification

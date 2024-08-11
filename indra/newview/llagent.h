@@ -426,6 +426,17 @@ private:
     LLFrameTimer    mTypingTimer;
 
     //--------------------------------------------------------------------
+    // <FS> [FIRE-30873]: Poser
+    //--------------------------------------------------------------------
+public:
+    void            setPosing()             { mIsPosing = true; }
+    void            clearPosing()           { mIsPosing = false; }
+    bool            getPosing() const       { return mIsPosing; }
+
+    bool            mIsPosing;
+    // </FS>
+
+    //--------------------------------------------------------------------
     // AFK
     //--------------------------------------------------------------------
 public:
