@@ -38,11 +38,10 @@ width="654">
 	</string>
 	<string
 	name="icon_category" translate="false">
-	Inv_Shape
+	Inv_BodyShape
 	</string>
 	<string
 	name="icon_bone" translate="false">
-	Transparent
 	</string>
 	<string
 	name="icon_object" translate="false">
