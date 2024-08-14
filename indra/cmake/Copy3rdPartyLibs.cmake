@@ -55,7 +55,6 @@ if(WINDOWS)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
         #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
-        nghttp2.dll
         glod.dll # <FS:Beq> restore GLOD
         )
 
@@ -69,15 +68,6 @@ if(WINDOWS)
         set(release_files ${release_files} openjp2.dll)
     endif (NOT USE_KDU)
     # </FS:Ansariel>
-
-    # OpenSSL
-    if(ADDRESS_SIZE EQUAL 64)
-        set(release_files ${release_files} libcrypto-1_1-x64.dll)
-        set(release_files ${release_files} libssl-1_1-x64.dll)
-    else(ADDRESS_SIZE EQUAL 64)
-        set(release_files ${release_files} libcrypto-1_1.dll)
-        set(release_files ${release_files} libssl-1_1.dll)
-    endif(ADDRESS_SIZE EQUAL 64)
 
     # Filenames are different for 32/64 bit BugSplat file and we don't
     # have any control over them so need to branch.
@@ -199,8 +189,6 @@ elseif(DARWIN)
     set(release_files
         libGLOD.dylib # <FS:Beq> restore GLOD
         libndofdev.dylib
-        libnghttp2.dylib
-        libnghttp2.14.dylib
         libgrowl.dylib
         libgrowl++.dylib
        )
@@ -253,7 +241,6 @@ elseif(LINUX)
     if (NOT USESYSTEMLIBS)
       set(release_files
         #libdb-5.1.so
-        ${EXPAT_COPY}
         libopenal.so
         #libopenjp2.so
         libuuid.so.16

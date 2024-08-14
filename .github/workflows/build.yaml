@@ -120,10 +120,6 @@ jobs:
             ${{ runner.os }}-64-${{ matrix.configuration }}-
             ${{ runner.os }}-64-
 
-      - name: Install windows dependencies
-        if: runner.os == 'Windows'
-        run: choco install nsis-unicode
-
       - name: Determine source branch
         id: which-branch
         uses: secondlife/viewer-build-util/which-branch@v2
@@ -257,7 +253,7 @@ jobs:
           echo "artifact=$RUNNER_OS$cfg_suffix" >> $GITHUB_OUTPUT
 
       - name: Upload executable
-        if: matrix.configuration == 'Release' && steps.build.outputs.viewer_app
+        if: steps.build.outputs.viewer_app
         uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.build.outputs.artifact }}-app"
@@ -268,7 +264,6 @@ jobs:
       # artifact for that too.
       - name: Upload symbol file
         uses: actions/upload-artifact@v4
-        if: matrix.configuration == 'Release'
         with:
           name: "${{ steps.build.outputs.artifact }}-symbols"
           path: ${{ steps.build.outputs.symbolfile }}
@@ -358,6 +353,7 @@ jobs:
       BUGSPLAT_USER: ${{ secrets.BUGSPLAT_USER }}
       BUGSPLAT_PASS: ${{ secrets.BUGSPLAT_PASS }}
     needs: build
+    if: needs.build.outputs.configuration == 'Release'
     runs-on: ubuntu-latest
     steps:
       - name: Download viewer exe

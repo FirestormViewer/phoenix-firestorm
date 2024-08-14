@@ -1,10 +1,9 @@
 /**
- * @file llwindebug.h
- * @brief LLWinDebug class header file
+ * @file pbrTerrainBakeV.glsl
  *
- * $LicenseInfo:firstyear=2004&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2024, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,24 +23,20 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLWINDEBUG_H
-#define LL_LLWINDEBUG_H
+uniform mat4 modelview_projection_matrix;
 
-#include "stdtypes.h"
-#include "llwin32headerslean.h"
+in vec3 position;
+in vec2 texcoord1;
 
-#include <dbghelp.h>
+out vec4 vary_texcoord0;
+out vec4 vary_texcoord1;
 
-class LLWinDebug:
-    public LLSingleton<LLWinDebug>
+void main()
 {
-    LLSINGLETON_EMPTY_CTOR(LLWinDebug);
-public:
-    void initSingleton() override;
-    static void generateMinidump(struct _EXCEPTION_POINTERS *pExceptionInfo = NULL);
-    void cleanupSingleton() override;
-private:
-    static void writeDumpToFile(MINIDUMP_TYPE type, MINIDUMP_EXCEPTION_INFORMATION *ExInfop, const std::string& filename);
-};
+    gl_Position = modelview_projection_matrix * vec4(position.xyz, 1.0);
+    vec2 tc = texcoord1.xy;
+    vary_texcoord0.zw = tc.xy;
+    vary_texcoord1.xy = tc.xy-vec2(2.0, 0.0);
+    vary_texcoord1.zw = tc.xy-vec2(1.0, 0.0);
+}
 
-#endif // LL_LLWINDEBUG_H

@@ -266,16 +266,8 @@ if (DARWIN)
   list(APPEND llcommon_HEADER_FILES llsys_objc.h)
   list(APPEND llcommon_SOURCE_FILES llsys_objc.mm)
 endif (DARWIN)
-    
-# <FS:Beq> Tracy Profiler support
-list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
-if (USE_TRACY)
-list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
-endif()
-# </FS:Beq>
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
-
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp
 	 nd/ndlogthrottle.cpp
@@ -298,6 +290,10 @@ list(APPEND llcommon_HEADER_FILES ${llcommon_ND_HEADER_FILES} )
 list(APPEND llcommon_SOURCE_FILES  "tea.cpp" )
 list(APPEND llcommon_HEADER_FILES "tea.h" )
 # </FS:ND>
+
+if (USE_TRACY)
+  list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
+endif ()
 
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 

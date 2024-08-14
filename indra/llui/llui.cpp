@@ -54,6 +54,7 @@
 #include "llmenubutton.h"
 #include "llloadingindicator.h"
 #include "llwindow.h"
+#include "llspellcheck.h"
 
 // for registration
 #include "llfiltereditor.h"
@@ -181,6 +182,7 @@ mRootView(NULL),
 mHelpImpl(NULL)
 {
     LLRender2D::createInstance(image_provider);
+    LLSpellChecker::createInstance();
 
     if ((get_ptr_in_map(mSettingGroups, std::string("config")) == NULL) ||
         (get_ptr_in_map(mSettingGroups, std::string("floater")) == NULL) ||
@@ -225,6 +227,7 @@ mHelpImpl(NULL)
 
 LLUI::~LLUI()
 {
+    LLSpellChecker::deleteSingleton();
     LLRender2D::deleteSingleton();
 }
 

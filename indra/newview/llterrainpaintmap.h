@@ -1,10 +1,10 @@
 /**
- * @file llwindebug.h
- * @brief LLWinDebug class header file
+ * @file llterrainpaintmap.h
+ * @brief Utilities for managing terrain paint maps
  *
- * $LicenseInfo:firstyear=2004&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2024, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,24 +24,19 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLWINDEBUG_H
-#define LL_LLWINDEBUG_H
+#pragma once
 
-#include "stdtypes.h"
-#include "llwin32headerslean.h"
+class LLViewerRegion;
+class LLViewerTexture;
 
-#include <dbghelp.h>
-
-class LLWinDebug:
-    public LLSingleton<LLWinDebug>
+class LLTerrainPaintMap
 {
-    LLSINGLETON_EMPTY_CTOR(LLWinDebug);
 public:
-    void initSingleton() override;
-    static void generateMinidump(struct _EXCEPTION_POINTERS *pExceptionInfo = NULL);
-    void cleanupSingleton() override;
-private:
-    static void writeDumpToFile(MINIDUMP_TYPE type, MINIDUMP_EXCEPTION_INFORMATION *ExInfop, const std::string& filename);
-};
 
-#endif // LL_LLWINDEBUG_H
+    // Convert a region's heightmap and composition into a paint map texture which
+    // approximates how the terrain would be rendered with the heightmap.
+    // In effect, this allows converting terrain of type TERRAIN_PAINT_TYPE_HEIGHTMAP_WITH_NOISE
+    // to type TERRAIN_PAINT_TYPE_PBR_PAINTMAP.
+    // Returns true if successful
+    static bool bakeHeightNoiseIntoPBRPaintMapRGB(const LLViewerRegion& region, LLViewerTexture& tex);
+};

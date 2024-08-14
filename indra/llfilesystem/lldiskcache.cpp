@@ -39,6 +39,18 @@
 
 #include "lldiskcache.h"
 
+ /**
+  * The prefix inserted at the start of a cache file filename to
+  * help identify it as a cache file. It's probably not required
+  * (just the presence in the cache folder is enough) but I am
+  * paranoid about the cache folder being set to something bad
+  * like the users' OS system dir by mistake or maliciously and
+  * this will help to offset any damage if that happens.
+  */
+static const std::string CACHE_FILENAME_PREFIX("sl_cache");
+
+std::string LLDiskCache::sCacheDir;
+
 // <FS:Ansariel> Optimize asset simple disk cache
 static const char* subdirs = "0123456789abcdef";
 
@@ -50,12 +62,10 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
                          ,const F32 lowwater_mark_percent
 // </FS:Beq>
                          ) :
-    mCacheDir(cache_dir),
     mMaxSizeBytes(max_size_bytes),
     mEnableCacheDebugInfo(enable_cache_debug_info)
 {
-    mCacheFilenamePrefix = "sl_cache";
-
+    sCacheDir = cache_dir;
     LLFile::mkdir(cache_dir);
 
     // <FS:Ansariel> Optimize asset simple disk cache
@@ -104,7 +114,7 @@ void LLDiskCache::purge()
 {
     if (mEnableCacheDebugInfo)
     {
-        LL_INFOS() << "Total dir size before purge is " << dirFileSize(mCacheDir) << LL_ENDL;
+        LL_INFOS() << "Total dir size before purge is " << dirFileSize(sCacheDir) << LL_ENDL;
     }
 
     boost::system::error_code ec;
@@ -114,9 +124,9 @@ void LLDiskCache::purge()
     std::vector<file_info_t> file_info;
 
 #if LL_WINDOWS
-    std::wstring cache_path(utf8str_to_utf16str(mCacheDir));
+    std::wstring cache_path(utf8str_to_utf16str(sCacheDir));
 #else
-    std::string cache_path(mCacheDir);
+    std::string cache_path(sCacheDir);
 #endif
     uintmax_t file_size_total = 0; // <FS:Beq/> try to make simple cache less naive.
     
@@ -131,7 +141,7 @@ void LLDiskCache::purge()
         {
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {
-                if ((*iter).path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if ((*iter).path().string().find(CACHE_FILENAME_PREFIX) != std::string::npos)
                 {
                     uintmax_t file_size = boost::filesystem::file_size(*iter, ec);
                     if (ec.failed())
@@ -194,30 +204,12 @@ void LLDiskCache::purge()
     //     file_size_total += entry.second.first;
 
     //     bool should_remove = file_size_total > mMaxSizeBytes;
-    //     // <FS> Make sure static assets are not eliminated
-    //     S32 action{ should_remove ? 0 : 1 };
-    //     if (should_remove)
-    //     {
-    //         auto uuid_as_string = gDirUtilp->getBaseFileName(entry.second.second, true);
-    //         uuid_as_string = uuid_as_string.substr(mCacheFilenamePrefix.size() + 1, 36);// skip "sl_cache_" and trailing "_N"
-    //         // LL_INFOS() << "checking UUID=" <<uuid_as_string<< LL_ENDL;
-    //         if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) != mSkipList.end())
-    //         {
-    //             // this is one of our protected items so no purging
-    //             should_remove = false;
-    //             action = 2;
-    //             updateFileAccessTime(entry.second.second); // force these to the front of the list next time so that purge size works 
-    //         }
-    //     }
-    //     // </FS>
     //     if (mEnableCacheDebugInfo)
     //     {
-    //         // <FS> Static asset stuff
-    //         //file_removed.push_back(should_remove);
-    //         file_removed.push_back(action);
+    //         file_removed.push_back(should_remove);
     //     }
     uintmax_t deleted_size_total = 0;
-    for (file_info_t& entry : file_info)
+    for (const file_info_t& entry : file_info)
     {
         // first check if we still need to delete more files
         bool should_remove = (file_size_total - deleted_size_total) > target_size;
@@ -232,14 +224,14 @@ void LLDiskCache::purge()
         auto this_file_size = entry.second.first;
         deleted_size_total += this_file_size;
         auto uuid_as_string = gDirUtilp->getBaseFileName(entry.second.second, true);
-        uuid_as_string = uuid_as_string.substr(mCacheFilenamePrefix.size() + 1, 36);// skip "sl_cache_" and trailing "_N"
+        uuid_as_string      = uuid_as_string.substr(CACHE_FILENAME_PREFIX.size() + 1, 36);  // skip "sl_cache_" and trailing "_N"
         // LL_INFOS() << "checking UUID=" <<uuid_as_string<< LL_ENDL;
         if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) != mSkipList.end())
         {
             // this is one of our protected items so no purging
             should_remove = false;
             action = purge_action::skip_file;
-            updateFileAccessTime(entry.second.second); // force these to the front of the list next time so that purge size works 
+            boost::filesystem::last_write_time(entry.second.second, ec);  // force these to the front of the list next time so that purge size works 
             skip++;
         }
         else{
@@ -248,11 +240,9 @@ void LLDiskCache::purge()
         keep--;
         if (mEnableCacheDebugInfo)
         {
-        // <FS> Static asset stuff
-        //file_removed.push_back(should_remove);
             file_removed.emplace(entry.second.second, action);
         }
-        // </FS>
+    // </FS>
         if (should_remove)
         {
             boost::filesystem::remove(entry.second.second, ec);
@@ -324,7 +314,7 @@ void LLDiskCache::purge()
 // <FS:Beq> make the summary stats more easily enabled.
     }
     // <FS:Beq> update the debug logging to be more useful
-        // LL_INFOS() << "Total dir size after purge is " << dirFileSize(mCacheDir) << LL_ENDL;
+        // LL_INFOS() << "Total dir size after purge is " << dirFileSize(sCacheDir) << LL_ENDL;
         // LL_INFOS() << "Cache purge took " << execute_time << " ms to execute for " << file_info.size() << " files" << LL_ENDL;
 
     auto newCacheSize = updateCacheSize(file_size_total - deleted_size_total); 
@@ -386,100 +376,9 @@ const std::string LLDiskCache::assetTypeToString(LLAssetType::EType at)
     return std::string("UNKNOWN");
 }
 
-// <FS:Ansariel> Optimize asset simple disk cache
-//const std::string LLDiskCache::metaDataToFilepath(const std::string id,
-//        LLAssetType::EType at,
-//        const std::string extra_info)
-//{
-//    std::ostringstream file_path;
-//
-//    file_path << mCacheDir;
-//    file_path << gDirUtilp->getDirDelimiter();
-//    file_path << mCacheFilenamePrefix;
-//    file_path << "_";
-//    file_path << id;
-//    file_path << "_";
-//    file_path << (extra_info.empty() ? "0" : extra_info);
-//    //file_path << "_";
-//    //file_path << assetTypeToString(at); // see  SL-14210 Prune descriptive tag from new cache filenames
-//                                          // for details of why it was removed. Note that if you put it
-//                                          // back or change the format of the filename, the cache files
-//                                          // files will be invalidated (and perhaps, more importantly,
-//                                          // never deleted unless you delete them manually).
-//    file_path << ".asset";
-//
-//    return file_path.str();
-//}
-const std::string LLDiskCache::metaDataToFilepath(const std::string& id,
-    LLAssetType::EType at,
-    const std::string& extra_info)
+const std::string LLDiskCache::metaDataToFilepath(const std::string& id, LLAssetType::EType at)
 {
-    return llformat("%s%s%c%s%s_%s_%s.asset", mCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), id[0], gDirUtilp->getDirDelimiter().c_str(), mCacheFilenamePrefix.c_str(), id.c_str(), (extra_info.empty() ? "0" : extra_info).c_str());
-}
-// </FS:Ansariel>
-
-// <FS:Ansariel> Optimize asset simple disk cache
-//void LLDiskCache::updateFileAccessTime(const std::string file_path)
-void LLDiskCache::updateFileAccessTime(const std::string& file_path)
-// </FS:Ansariel>
-{
-    /**
-     * Threshold in time_t units that is used to decide if the last access time
-     * time of the file is updated or not. Added as a precaution for the concern
-     * outlined in SL-14582  about frequent writes on older SSDs reducing their
-     * lifespan. I think this is the right place for the threshold value - rather
-     * than it being a pref - do comment on that Jira if you disagree...
-     *
-     * Let's start with 1 hour in time_t units and see how that unfolds
-     */
-    const std::time_t time_threshold = 1 * 60 * 60;
-
-    // current time
-    const std::time_t cur_time = std::time(nullptr);
-
-    boost::system::error_code ec;
-#if LL_WINDOWS
-    // file last write time
-    const std::time_t last_write_time = boost::filesystem::last_write_time(utf8str_to_utf16str(file_path), ec);
-    if (ec.failed())
-    {
-        LL_WARNS() << "Failed to read last write time for cache file " << file_path << ": " << ec.message() << LL_ENDL;
-        return;
-    }
-
-    // delta between cur time and last time the file was written
-    const std::time_t delta_time = cur_time - last_write_time;
-
-    // we only write the new value if the time in time_threshold has elapsed
-    // before the last one
-    if (delta_time > time_threshold)
-    {
-        boost::filesystem::last_write_time(utf8str_to_utf16str(file_path), cur_time, ec);
-    }
-#else
-    // file last write time
-    const std::time_t last_write_time = boost::filesystem::last_write_time(file_path, ec);
-    if (ec.failed())
-    {
-        LL_WARNS() << "Failed to read last write time for cache file " << file_path << ": " << ec.message() << LL_ENDL;
-        return;
-    }
-
-    // delta between cur time and last time the file was written
-    const std::time_t delta_time = cur_time - last_write_time;
-
-    // we only write the new value if the time in time_threshold has elapsed
-    // before the last one
-    if (delta_time > time_threshold)
-    {
-        boost::filesystem::last_write_time(file_path, cur_time, ec);
-    }
-#endif
-
-    if (ec.failed())
-    {
-        LL_WARNS() << "Failed to update last write time for cache file " << file_path << ": " << ec.message() << LL_ENDL;
-    }
+    return llformat("%s%s%s_%s_0.asset", sCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), CACHE_FILENAME_PREFIX.c_str(), id.c_str());
 }
 
 const std::string LLDiskCache::getCacheInfo()
@@ -487,7 +386,7 @@ const std::string LLDiskCache::getCacheInfo()
     std::ostringstream cache_info;
 
     F32 max_in_mb = (F32)mMaxSizeBytes / (1024.0f * 1024.0f);
-    F32 percent_used = ((F32)dirFileSize(mCacheDir) / (F32)mMaxSizeBytes) * 100.0f;
+    F32 percent_used = ((F32)dirFileSize(sCacheDir) / (F32)mMaxSizeBytes) * 100.0f;
 
     cache_info << std::fixed;
     cache_info << std::setprecision(1);
@@ -519,7 +418,7 @@ void LLDiskCache::prepopulateCacheWithStatic()
                 from_asset_file = from_folder + gDirUtilp->getDirDelimiter() + from_asset_file;
                 // we store static assets as UUID.asset_type the asset_type is not used in the current simple cache format
                 auto uuid_as_string{ gDirUtilp->getBaseFileName(from_asset_file, true) };
-                auto to_asset_file = metaDataToFilepath(uuid_as_string, LLAssetType::AT_UNKNOWN, std::string());
+                auto to_asset_file = metaDataToFilepath(uuid_as_string, LLAssetType::AT_UNKNOWN);
                 if (!gDirUtilp->fileExists(to_asset_file))
                 {
                     if (mEnableCacheDebugInfo)
@@ -547,7 +446,7 @@ void LLDiskCache::prepopulateCacheWithStatic()
 
 void LLDiskCache::clearCache()
 {
-    LL_INFOS() << "clearing cache " << mCacheDir << LL_ENDL;
+    LL_INFOS() << "clearing cache " << sCacheDir << LL_ENDL;
     /**
      * See notes on performance in dirFileSize(..) - there may be
      * a quicker way to do this by operating on the parent dir vs
@@ -556,9 +455,9 @@ void LLDiskCache::clearCache()
      */
     boost::system::error_code ec;
 #if LL_WINDOWS
-    std::wstring cache_path(utf8str_to_utf16str(mCacheDir));
+    std::wstring cache_path(utf8str_to_utf16str(sCacheDir));
 #else
-    std::string cache_path(mCacheDir);
+    std::string cache_path(sCacheDir);
 #endif
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
@@ -571,7 +470,7 @@ void LLDiskCache::clearCache()
         {
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {
-                if ((*iter).path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if ((*iter).path().string().find(CACHE_FILENAME_PREFIX) != std::string::npos)
                 {
                     boost::filesystem::remove(*iter, ec);
                     if (ec.failed())
@@ -586,7 +485,7 @@ void LLDiskCache::clearCache()
     LL_INFOS() << "prepopulating new cache " << LL_ENDL;
         prepopulateCacheWithStatic();
     }
-    LL_INFOS() << "Cleared cache " << mCacheDir << LL_ENDL;
+    LL_INFOS() << "Cleared cache " << sCacheDir << LL_ENDL;
 }
 
 void LLDiskCache::removeOldVFSFiles()
@@ -677,7 +576,7 @@ uintmax_t LLDiskCache::dirFileSize(const std::string& dir, bool force )
         {
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {
-                if ((*iter).path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if ((*iter).path().string().find(CACHE_FILENAME_PREFIX) != std::string::npos)
                 {
                     uintmax_t file_size = boost::filesystem::file_size(*iter, ec);
                     if (!ec.failed())

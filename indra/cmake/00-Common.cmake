@@ -80,9 +80,7 @@ if (WINDOWS)
   # http://www.cmake.org/pipermail/cmake/2009-September/032143.html
   string(REPLACE "/Zm1000" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
-  # zlib has assembly-language object files incompatible with SAFESEH
   add_link_options(/LARGEADDRESSAWARE
-          /SAFESEH:NO
           /NODEFAULTLIB:LIBCMT
           /IGNORE:4099)
 
@@ -103,6 +101,7 @@ if (WINDOWS)
           /Ot
           /fp:fast
           /MP
+          /permissive-
       )
 
   # <FS:Ansariel> AVX/AVX2 support

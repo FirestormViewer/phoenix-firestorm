@@ -949,12 +949,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             if (face && face->getViewerObject())
             {
                 onFace = true;
-                F32 vsize = face->getPixelArea(); // <FS> Particles do not rez properly
                 F32 radius;
                 F32 cos_angle_to_view_dir;
-                bool in_frustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
                 static LLCachedControl<F32> bias_unimportant_threshold(gSavedSettings, "TextureBiasUnimportantFactor", 0.25f);
-                //F32 vsize = face->getPixelArea(); // <FS> Particles do not rez properly
+                F32 vsize = face->getPixelArea(); // <FS> Particles do not rez properly
+                bool in_frustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
 
                 // Scale desired texture resolution higher or lower depending on texture scale
                 //

@@ -1177,6 +1177,8 @@ void handleLocalTerrainChanged(const LLSD& newValue)
         {
             gLocalTerrainMaterials.setMaterialOverride(i, mat_override);
         }
+        const bool paint_enabled = gSavedSettings.getBOOL("LocalTerrainPaintEnabled");
+        gLocalTerrainMaterials.setPaintType(paint_enabled ? TERRAIN_PAINT_TYPE_PBR_PAINTMAP : TERRAIN_PAINT_TYPE_HEIGHTMAP_WITH_NOISE);
     }
 }
 
@@ -1398,6 +1400,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "TuningFPSStrategy", handleFPSTuningStrategyChanged);
     {
+        setting_setup_signal_listener(gSavedSettings, "LocalTerrainPaintEnabled", handleLocalTerrainChanged);
         const char* transform_suffixes[] = {
             "ScaleU",
             "ScaleV",
@@ -1416,6 +1419,7 @@ void settings_setup_listeners()
             }
         }
     }
+    setting_setup_signal_listener(gSavedSettings, "TerrainPaintBitDepth", handleSetShaderChanged);
 
     setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 

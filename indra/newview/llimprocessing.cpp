@@ -82,11 +82,6 @@
 #include "sound_ids.h"
 #include "NACLantispam.h"
 
-#if LL_MSVC
-// disable boost::lexical_cast warning
-#pragma warning (disable:4702)
-#endif
-
 extern void on_new_message(const LLSD& msg);
 
 // Strip out "Resident" for display, but only if the message came from a user

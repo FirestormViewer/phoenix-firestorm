@@ -297,11 +297,6 @@ using namespace LL;
 #include "glib.h"
 #endif // (LL_LINUX) && LL_GTK
 
-#if LL_MSVC
-// disable boost::lexical_cast warning
-#pragma warning (disable:4702)
-#endif
-
 const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml"; // <FS:ND/> We need this filename defined here.
 
 static LLAppViewerListener sAppViewerListener(LLAppViewer::instance);
@@ -981,6 +976,20 @@ bool LLAppViewer::init()
         LLUIImageList::getInstance(),
         ui_audio_callback,
         deferred_ui_audio_callback);
+
+    if (gSavedSettings.getBOOL("SpellCheck"))
+    {
+        std::list<std::string> dict_list;
+        std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
+        boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
+        if (!dict_list.empty())
+        {
+            LLSpellChecker::setUseSpellCheck(dict_list.front());
+            dict_list.pop_front();
+            LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
+        }
+    }
+
     LL_INFOS("InitInfo") << "UI initialized." << LL_ENDL ;
 
     // NOW LLUI::getLanguage() should work. gDirUtilp must know the language
@@ -1480,6 +1489,7 @@ bool LLAppViewer::init()
     //LLSimpleton creations
     LLEnvironment::createInstance();
     LLWorld::createInstance();
+    LLViewerStatsRecorder::createInstance();
     LLSelectMgr::createInstance();
     LLViewerCamera::createInstance();
     LL::GLTFSceneManager::createInstance();
@@ -2533,6 +2543,7 @@ bool LLAppViewer::cleanup()
     LL::GLTFSceneManager::deleteSingleton();
     LLEnvironment::deleteSingleton();
     LLSelectMgr::deleteSingleton();
+    LLViewerStatsRecorder::deleteSingleton();
     LLViewerEventRecorder::deleteSingleton();
     LLWorld::deleteSingleton();
     LLVoiceClient::deleteSingleton();
@@ -3317,19 +3328,6 @@ bool LLAppViewer::initConfiguration()
 // [/SL:KB]
 //      gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 //                               gSavedSettings.getString("Language"));
-    }
-
-    if (gSavedSettings.getBOOL("SpellCheck"))
-    {
-        std::list<std::string> dict_list;
-        std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
-        boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
-        if (!dict_list.empty())
-        {
-            LLSpellChecker::setUseSpellCheck(dict_list.front());
-            dict_list.pop_front();
-            LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
-        }
     }
 
     if (gNonInteractive)

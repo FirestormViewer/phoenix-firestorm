@@ -705,18 +705,15 @@ class Windows_x86_64_Manifest(ViewerManifest):
             self.path("vivoxsdk_x64.dll")
             self.path("ortp_x64.dll")
 
-            # OpenSSL
-            self.path("libcrypto-1_1-x64.dll")
-            self.path("libssl-1_1-x64.dll")
-
-            # HTTP/2
-            self.path("nghttp2.dll")
-
             # BugSplat
             if self.args.get('bugsplat'):
                 self.path("BsSndRpt64.exe")
                 self.path("BugSplat64.dll")
                 self.path("BugSplatRc64.dll")
+
+            if self.args['tracy'] == 'ON':
+                with self.prefix(src=os.path.join(pkgdir, 'bin')):
+                    self.path("tracy-profiler.exe")
 
             # Growl
             self.path("growl.dll")
@@ -1550,10 +1547,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                 dylibs = []
                 for libfile in (
                                 "libGLOD.dylib",
-                                # libnghttp2.dylib is a symlink to
-                                # libnghttp2.major.dylib, which is a symlink
-                                # to libnghttp2.version.dylib. Get all of them.
-                                "libnghttp2.*dylib",
                                 "libgrowl.dylib",
                                 "libgrowl++.dylib",
                                 ):
@@ -2419,7 +2412,8 @@ if __name__ == "__main__":
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
         dict(name='fmodstudio', description="""Indication if fmod studio libraries are needed""", default='OFF'),
-        dict(name='openal', description="""Indication openal libraries are needed""", default='OFF')
+        dict(name='openal', description="""Indication openal libraries are needed""", default='OFF'),
+        dict(name='tracy', description="""Indication tracy profiler is enabled""", default='OFF'),
         ]
     try:
         main(extra=extra_arguments)
