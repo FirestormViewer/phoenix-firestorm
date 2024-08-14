@@ -543,7 +543,6 @@
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
-			<menu_item_call label="Terrain neu erstellen" name="Rebuild Terrain"/>
 		</menu>
 		<menu label="Netzwerk" name="Network">
 			<menu_item_check label="Agent pausieren" name="AgentPause"/>
@@ -575,6 +574,11 @@
 			<menu_item_check label="Interest-Liste 360 Modus" name="Interest List: 360 Mode"/>
 			<menu_item_call label="Interest-Liste zurücksetzen" name="Reset Interest Lists"/>
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
+		</menu>
+		<menu label="Terrain" name="DevelopTerrain">
+			<menu_item_call label="Terrain neu erstellen" name="Rebuild Terrain"/>
+			<menu_item_call label="Lokale Paintmap erstellen" name="Create Local Paintmap"/>
+			<menu_item_call label="Lokale Paintmap löschen" name="Delete Local Paintmap"/>
 		</menu>
 		<menu label="UI" name="UI">
 			<menu_item_call label="Medienbrowser-Test" name="Web Browser Test"/>
