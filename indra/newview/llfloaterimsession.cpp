@@ -345,10 +345,8 @@ void LLFloaterIMSession::sendMsg(const std::string& msg)
 LLFloaterIMSession::~LLFloaterIMSession()
 {
     mVoiceChannelStateChangeConnection.disconnect();
-    if(LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver(this);
-    }
+
+    LLVoiceClient::removeObserver(this);
 
     LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
 
@@ -424,7 +422,7 @@ BOOL LLFloaterIMSession::postBuild()
 
     childSetAction("voice_call_btn", boost::bind(&LLFloaterIMSession::onCallButtonClicked, this));
 
-    LLVoiceClient::getInstance()->addObserver(this);
+    LLVoiceClient::addObserver(this);
 
     //*TODO if session is not initialized yet, add some sort of a warning message like "starting session...blablabla"
     //see LLFloaterIMPanel for how it is done (IB)
@@ -595,6 +593,7 @@ void LLFloaterIMSession::boundVoiceChannel()
     LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
     if(voice_channel)
     {
+        mVoiceChannelStateChangeConnection.disconnect();
         mVoiceChannelStateChangeConnection = voice_channel->setStateChangedCallback(
                 boost::bind(&LLFloaterIMSession::onVoiceChannelStateChanged, this, _1, _2));
 

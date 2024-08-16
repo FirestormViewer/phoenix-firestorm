@@ -84,13 +84,13 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 {
     LLAvatarTracker::instance().addObserver(this);
     // For notification when SIP online status changes.
-    LLVoiceClient::getInstance()->addObserver(this);
+    LLVoiceClient::addObserver(this);
 }
 
 FSFloaterContacts::~FSFloaterContacts()
 {
     // For notification when SIP online status changes.
-    LLVoiceClient::getInstance()->removeObserver(this);
+    LLVoiceClient::removeObserver(this);
     LLAvatarTracker::instance().removeObserver(this);
 
     if (mRlvBehaviorCallbackConnection.connected())

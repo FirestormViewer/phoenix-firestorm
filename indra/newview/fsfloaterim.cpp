@@ -235,10 +235,7 @@ void FSFloaterIM::onClose(bool app_quitting)
 
     // AO: Make sure observers are removed on close
     mVoiceChannelStateChangeConnection.disconnect();
-    if(LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-    }
+    LLVoiceClient::removeObserver((LLVoiceClientStatusObserver*)this);
 
     //<FS:ND> FIRE-6077 et al: Always clean up observers when the floater dies
     LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
@@ -587,10 +584,7 @@ FSFloaterIM::~FSFloaterIM()
 
     LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, (LLView*)this);
     mVoiceChannelStateChangeConnection.disconnect();
-    if (LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-    }
+    LLVoiceClient::removeObserver((LLVoiceClientStatusObserver*)this);
 
     LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
     if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
@@ -932,7 +926,7 @@ BOOL FSFloaterIM::postBuild()
         updateButtons(mVoiceChannel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
         LL_DEBUGS("FSFloaterIM") << "voice_channel end" << LL_ENDL;
     }
-    LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
+    LLVoiceClient::addObserver((LLVoiceClientStatusObserver*)this);
 
     // </AO>
 
