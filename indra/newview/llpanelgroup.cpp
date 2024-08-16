@@ -105,10 +105,7 @@ LLPanelGroup::LLPanelGroup()
 LLPanelGroup::~LLPanelGroup()
 {
     LLGroupMgr::getInstance()->removeObserver(this);
-    if(LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver(this);
-    }
+    LLVoiceClient::removeObserver(this);
 }
 
 void LLPanelGroup::onOpen(const LLSD& key)
@@ -264,7 +261,7 @@ bool LLPanelGroup::postBuild()
         mJoinText = panel_general->getChild<LLUICtrl>("join_cost_text");
     }
 
-    LLVoiceClient::getInstance()->addObserver(this);
+    LLVoiceClient::addObserver(this);
 
     // <FS:Ansariel> TabContainer switch
     mIsUsingTabContainer = (findChild<LLTabContainer>("groups_accordion") != NULL);

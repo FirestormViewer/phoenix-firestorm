@@ -358,7 +358,7 @@ public:
         LLAvatarTracker::instance().addObserver(this);
 
         // For notification when SIP online status changes.
-        LLVoiceClient::getInstance()->addObserver(this);
+        LLVoiceClient::addObserver(this);
         // <FS:Ansariel> Disconnect LLFriendCardsManager
         if (gSavedSettings.getBOOL("FSCreateCallingCards"))
             mInvObserver = new LLInventoryFriendCardObserver(this);
@@ -368,10 +368,7 @@ public:
     {
         // will be deleted by ~LLInventoryModel
         //delete mInvObserver;
-        if (LLVoiceClient::instanceExists())
-        {
-            LLVoiceClient::getInstance()->removeObserver(this);
-        }
+        LLVoiceClient::removeObserver(this);
         LLAvatarTracker::instance().removeObserver(this);
     }
 
@@ -630,10 +627,7 @@ LLPanelPeople::~LLPanelPeople()
     mGroupsFilterCommitConnection.disconnect();
     mRecentFilterCommitConnection.disconnect();
 
-    if(LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver(this);
-    }
+    LLVoiceClient::getInstance()->removeObserver(this);
 
     // [FS:CR] Contact sets
     if (mContactSetChangedConnection.connected())
@@ -830,7 +824,7 @@ bool LLPanelPeople::postBuild()
     // Must go after setting commit callback and initializing all pointers to children.
     mTabContainer->selectTabByName(NEARBY_TAB_NAME);
 
-    LLVoiceClient::getInstance()->addObserver(this);
+    LLVoiceClient::addObserver(this);
 
     // call this method in case some list is empty and buttons can be in inconsistent state
     updateButtons();
