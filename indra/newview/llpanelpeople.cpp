@@ -622,12 +622,12 @@ LLPanelPeople::~LLPanelPeople()
     delete mFriendListUpdater;
     delete mRecentListUpdater;
 
+    LLVoiceClient::removeObserver(this);
+
     mNearbyFilterCommitConnection.disconnect();
     mFriedsFilterCommitConnection.disconnect();
     mGroupsFilterCommitConnection.disconnect();
     mRecentFilterCommitConnection.disconnect();
-
-    LLVoiceClient::getInstance()->removeObserver(this);
 
     // [FS:CR] Contact sets
     if (mContactSetChangedConnection.connected())
