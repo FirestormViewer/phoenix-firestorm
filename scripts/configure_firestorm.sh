@@ -36,6 +36,7 @@ WANTS_FMODSTUDIO=$FALSE
 WANTS_OPENAL=$FALSE
 WANTS_OPENSIM=$TRUE
 WANTS_SINGLEGRID=$FALSE
+WANTS_HAVOK=$FALSE
 WANTS_AVX=$FALSE
 WANTS_AVX2=$FALSE
 WANTS_TESTBUILD=$FALSE
@@ -78,6 +79,7 @@ showUsage()
     echo "  --opensim                : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim             : Build without OpenSim support (Overrides --opensim)"
     echo "  --singlegrid <login_uri> : Build for single grid usage (Requires --opensim)"
+    echo "  --havok                  : Build with Havok support (Disables OpenSim support)"
     echo "  --avx                    : Build with Advanced Vector Extensions"
     echo "  --avx2                   : Build with Advanced Vector Extensions 2"
     echo "  --tracy                  : Build with Tracy Profiler support"
@@ -98,7 +100,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache vstools jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache vstools jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -122,6 +124,9 @@ getArgs()
           no-opensim)     WANTS_OPENSIM=$FALSE;;
           singlegrid)     WANTS_SINGLEGRID=$TRUE
                           SINGLEGRID_URI="$OPTARG"
+                          ;;
+          havok)          WANTS_HAVOK=$TRUE
+                          WANTS_OPENSIM=$FALSE
                           ;;
           avx)            WANTS_AVX=$TRUE;;
           avx2)           WANTS_AVX2=$TRUE;;
@@ -324,6 +329,7 @@ if [ $WANTS_SINGLEGRID -eq $TRUE ] ; then
 else
     echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID`"                         | tee -a $LOG
 fi
+echo -e "          HAVOK: `b2a $WANTS_HAVOK`"                                  | tee -a $LOG
 echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a $LOG
 echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a $LOG
 echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a $LOG
@@ -478,6 +484,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         SINGLEGRID="-DSINGLEGRID:BOOL=OFF"
     fi
+    if [ $WANTS_HAVOK -eq $TRUE ] ; then
+        HAVOK="-DHAVOK_TPV:BOOL=ON"
+    else
+        HAVOK="-DHAVOK_TPV:BOOL=OFF"
+    fi
     if [ $WANTS_AVX -eq $TRUE ] ; then
         AVX_OPTIMIZATION="-DUSE_AVX_OPTIMIZATION:BOOL=ON"
     else
@@ -586,7 +597,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
-    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
+    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 
