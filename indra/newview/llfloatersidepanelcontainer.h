@@ -49,6 +49,8 @@ public:
     LLFloaterSidePanelContainer(const LLSD& key, const Params& params = getDefaultParams());
     ~LLFloaterSidePanelContainer();
 
+    bool postBuild() override;
+
     void onOpen(const LLSD& key) override;
 
     void closeFloater(bool app_quitting = false) override;
@@ -82,6 +84,11 @@ public:
      * @returns a pointer to the panel of given type T.
      */
     template <typename T>
+    static T* findPanel(std::string_view floater_name, std::string_view panel_name = sMainPanelName)
+    {
+        return dynamic_cast<T*>(findPanel(floater_name, panel_name));
+    }
+    template <typename T>
     static T* getPanel(std::string_view floater_name, std::string_view panel_name = sMainPanelName)
     {
         T* panel = dynamic_cast<T*>(getPanel(floater_name, panel_name));
@@ -91,24 +98,6 @@ public:
         }
         return panel;
     }
-
-    template <typename T>
-    static T* findPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName)
-    {
-        LLPanel* panel = findPanel(floater_name, panel_name);
-        if (!panel)
-        {
-            return NULL;
-        }
-
-        T* res = dynamic_cast<T*>(panel);
-        if (!res)
-        {
-            LL_WARNS() << "Child named \"" << panel_name << "\" is not of type " << typeid(T*).name() << LL_ENDL;
-        }
-        return res;
-    }
-    // </FS:Ansariel>
 
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
     // Used to determine whether a sidepanel can be shown
@@ -121,6 +110,8 @@ private:
 
 protected:
     void onCloseMsgCallback(const LLSD& notification, const LLSD& response);
+
+    LLPanel* mMainPanel = nullptr;
 };
 
 #endif // LL_LLFLOATERSIDEPANELCONTAINER_H

@@ -84,7 +84,7 @@ class LLDiskCache :
                      * a child of the main Viewer cache directory. Defined
                      * by the setting at 'DiskCacheDirName'
                      */
-                    const std::string cache_dir,
+                    const std::string& cache_dir,
                     /**
                      * The maximum size of the cache in bytes - Based on the
                      * setting at 'CacheSize' and 'DiskCachePercentOfTotal'
@@ -118,9 +118,7 @@ class LLDiskCache :
          * so many things had to be pushed back there to accomodate it, that I
          * decided to move it here.  Still not sure that's completely right.
          */
-        static const std::string metaDataToFilepath(const std::string& id,
-                                             LLAssetType::EType at);
-
+        static const std::string metaDataToFilepath(const LLUUID& id, LLAssetType::EType at);
 
         /**
          * Purge the oldest items in the cache so that the combined size of all files
@@ -168,13 +166,7 @@ class LLDiskCache :
          * before and after the cache purge
          */
         uintmax_t updateCacheSize(const uintmax_t newsize); // <FS:Beq/> enable time based caching of dirfilesize except when force is true.
-        uintmax_t dirFileSize(const std::string& dir, bool force=false); // <FS:Beq/> enable time based caching of dirfilesize except when force is true.
-
-        /**
-         * Utility function to convert an LLAssetType enum into a
-         * string that we use as part of the cache file filename
-         */
-        const std::string assetTypeToString(LLAssetType::EType at);
+        uintmax_t dirFileSize(const std::string& dir, bool force = false); // <FS:Beq/> enable time based caching of dirfilesize except when force is true.
 
         /**
          * cache the directory size cos it takes forever to calculate it

@@ -54,7 +54,7 @@ std::string LLDiskCache::sCacheDir;
 // <FS:Ansariel> Optimize asset simple disk cache
 static const char* subdirs = "0123456789abcdef";
 
-LLDiskCache::LLDiskCache(const std::string cache_dir,
+LLDiskCache::LLDiskCache(const std::string& cache_dir,
                          const uintmax_t max_size_bytes,
                          const bool enable_cache_debug_info
 // <FS:Beq> Add High/Low water mark support
@@ -326,59 +326,9 @@ void LLDiskCache::purge()
     // } <FS:Beq/> this bracket was moved up a few lines.
 }
 
-const std::string LLDiskCache::assetTypeToString(LLAssetType::EType at)
+const std::string LLDiskCache::metaDataToFilepath(const LLUUID& id, LLAssetType::EType at)
 {
-    /**
-     * Make use of the handy C++17  feature that allows
-     * for inline initialization of an std::map<>
-     */
-    typedef std::map<LLAssetType::EType, std::string> asset_type_to_name_t;
-    asset_type_to_name_t asset_type_to_name =
-    {
-        { LLAssetType::AT_TEXTURE, "TEXTURE" },
-        { LLAssetType::AT_SOUND, "SOUND" },
-        { LLAssetType::AT_CALLINGCARD, "CALLINGCARD" },
-        { LLAssetType::AT_LANDMARK, "LANDMARK" },
-        { LLAssetType::AT_SCRIPT, "SCRIPT" },
-        { LLAssetType::AT_CLOTHING, "CLOTHING" },
-        { LLAssetType::AT_OBJECT, "OBJECT" },
-        { LLAssetType::AT_NOTECARD, "NOTECARD" },
-        { LLAssetType::AT_CATEGORY, "CATEGORY" },
-        { LLAssetType::AT_LSL_TEXT, "LSL_TEXT" },
-        { LLAssetType::AT_LSL_BYTECODE, "LSL_BYTECODE" },
-        { LLAssetType::AT_TEXTURE_TGA, "TEXTURE_TGA" },
-        { LLAssetType::AT_BODYPART, "BODYPART" },
-        { LLAssetType::AT_SOUND_WAV, "SOUND_WAV" },
-        { LLAssetType::AT_IMAGE_TGA, "IMAGE_TGA" },
-        { LLAssetType::AT_IMAGE_JPEG, "IMAGE_JPEG" },
-        { LLAssetType::AT_ANIMATION, "ANIMATION" },
-        { LLAssetType::AT_GESTURE, "GESTURE" },
-        { LLAssetType::AT_SIMSTATE, "SIMSTATE" },
-        { LLAssetType::AT_LINK, "LINK" },
-        { LLAssetType::AT_LINK_FOLDER, "LINK_FOLDER" },
-        { LLAssetType::AT_MARKETPLACE_FOLDER, "MARKETPLACE_FOLDER" },
-        { LLAssetType::AT_WIDGET, "WIDGET" },
-        { LLAssetType::AT_PERSON, "PERSON" },
-        { LLAssetType::AT_MESH, "MESH" },
-        { LLAssetType::AT_SETTINGS, "SETTINGS" },
-        { LLAssetType::AT_MATERIAL, "MATERIAL" },
-        { LLAssetType::AT_GLTF, "GLTF" },
-        { LLAssetType::AT_GLTF_BIN, "GLTF_BIN" },
-        { LLAssetType::AT_UNKNOWN, "UNKNOWN" }
-    };
-
-    asset_type_to_name_t::iterator iter = asset_type_to_name.find(at);
-    if (iter != asset_type_to_name.end())
-    {
-        return iter->second;
-    }
-
-    return std::string("UNKNOWN");
-}
-
-const std::string LLDiskCache::metaDataToFilepath(const std::string& id, LLAssetType::EType at)
-{
-    return llformat("%s%s%s_%s_0.asset", sCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), CACHE_FILENAME_PREFIX.c_str(), id.c_str());
+    return llformat("%s%s%s_%s_0.asset", sCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), CACHE_FILENAME_PREFIX.c_str(), id.asString().c_str());
 }
 
 const std::string LLDiskCache::getCacheInfo()
@@ -418,7 +368,8 @@ void LLDiskCache::prepopulateCacheWithStatic()
                 from_asset_file = from_folder + gDirUtilp->getDirDelimiter() + from_asset_file;
                 // we store static assets as UUID.asset_type the asset_type is not used in the current simple cache format
                 auto uuid_as_string{ gDirUtilp->getBaseFileName(from_asset_file, true) };
-                auto to_asset_file = metaDataToFilepath(uuid_as_string, LLAssetType::AT_UNKNOWN);
+                LLUUID uuid{ uuid_as_string };
+                auto to_asset_file = metaDataToFilepath(uuid, LLAssetType::AT_UNKNOWN);
                 if (!gDirUtilp->fileExists(to_asset_file))
                 {
                     if (mEnableCacheDebugInfo)
@@ -532,7 +483,7 @@ uintmax_t LLDiskCache::updateCacheSize(const uintmax_t newsize)
     return mStoredCacheSize;
 }
 
-uintmax_t LLDiskCache::dirFileSize(const std::string& dir, bool force )
+uintmax_t LLDiskCache::dirFileSize(const std::string& dir, bool force)
 {
     using namespace std::chrono;
     const seconds cache_duration{ 120 };// A rather arbitrary number. it takes 5 seconds+ on a fast drive to scan 80K+ items. purge runs every minute and will update. so 120 should mean we never need a superfluous cache scan.

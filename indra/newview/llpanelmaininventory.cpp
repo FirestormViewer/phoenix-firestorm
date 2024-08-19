@@ -353,6 +353,13 @@ bool LLPanelMainInventory::postBuild()
         }
 
     }
+    // <FS:Ansariel> Doesn't work
+    //mParentSidepanel = getParentSidepanelInventory();
+    //if (mParentSidepanel)
+    //{
+    //    mInboxPanel = mParentSidepanel->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+    //}
+    // </FS:Ansariel>
 
     mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
     if (mFilterEditor)
@@ -423,31 +430,29 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
     // for example, LLParamSDParser doesn't know about U64,
     // so some FilterOps params should be revised.
     LLSD filterRoot;
-    LLInventoryPanel* all_items_panel = getChild<LLInventoryPanel>(ALL_ITEMS);
-    if (all_items_panel)
+    if (mAllItemsPanel)
     {
         LLSD filterState;
         LLInventoryPanel::InventoryState p;
-        all_items_panel->getFilter().toParams(p.filter);
-        all_items_panel->getRootViewModel().getSorter().toParams(p.sort);
+        mAllItemsPanel->getFilter().toParams(p.filter);
+        mAllItemsPanel->getRootViewModel().getSorter().toParams(p.sort);
         if (p.validateBlock(false))
         {
             LLParamSDParser().writeSD(filterState, p);
-            filterRoot[all_items_panel->getName()] = filterState;
+            filterRoot[mAllItemsPanel->getName()] = filterState;
         }
     }
 
-    LLInventoryPanel* panel = findChild<LLInventoryPanel>(RECENT_ITEMS);
-    if (panel)
+    if (mRecentPanel)
     {
         LLSD filterState;
         LLInventoryPanel::InventoryState p;
-        panel->getFilter().toParams(p.filter);
-        panel->getRootViewModel().getSorter().toParams(p.sort);
+        mRecentPanel->getFilter().toParams(p.filter);
+        mRecentPanel->getRootViewModel().getSorter().toParams(p.sort);
         if (p.validateBlock(false))
         {
             LLParamSDParser().writeSD(filterState, p);
-            filterRoot[panel->getName()] = filterState;
+            filterRoot[mRecentPanel->getName()] = filterState;
         }
     }
 
@@ -954,14 +959,9 @@ void LLPanelMainInventory::onClearSearch()
     mFilterSubString = "";
 
     // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
-    //LLSidepanelInventory * sidepanel_inventory = getParentSidepanelInventory();
-    //if (sidepanel_inventory)
+    //if (mInboxPanel)
     //{
-    //  LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
-    //  if (inbox_panel)
-    //  {
-    //      inbox_panel->onClearSearch();
-    //  }
+    //    mInboxPanel->onClearSearch();
     //}
     LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
     if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
@@ -1044,14 +1044,9 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
     // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 
     // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
-    //LLSidepanelInventory * sidepanel_inventory = getParentSidepanelInventory();
-    //if (sidepanel_inventory)
+    //if (mInboxPanel)
     //{
-    //  LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
-    //  if (inbox_panel)
-    //  {
-    //      inbox_panel->onFilterEdit(search_string);
-    //  }
+    //    mInboxPanel->onFilterEdit(search_string);
     //}
     LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
     if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
@@ -2008,17 +2003,13 @@ void LLPanelMainInventory::onAddButtonClick()
 void LLPanelMainInventory::setActivePanel()
 {
     // Todo: should cover gallery mode in some way
-    if(mSingleFolderMode && isListViewMode())
+    if(mSingleFolderMode && (isListViewMode() || isCombinationViewMode()))
     {
-        mActivePanel = getChild<LLInventoryPanel>("comb_single_folder_inv");
-    }
-    else if(mSingleFolderMode && isCombinationViewMode())
-    {
-        mActivePanel = getChild<LLInventoryPanel>("comb_single_folder_inv");
+        mActivePanel = mCombinationInventoryPanel;
     }
     else
     {
-        mActivePanel = (LLInventoryPanel*)getChild<LLTabContainer>("inventory filter tabs")->getCurrentPanel();
+        mActivePanel = (LLInventoryPanel*)mFilterTabs->getCurrentPanel();
     }
     mViewModeBtn->setEnabled(mSingleFolderMode || (getAllItemsPanel() == getActivePanel()));
 }
@@ -2059,6 +2050,18 @@ void LLPanelMainInventory::toggleViewMode()
     updateTitle();
     onFilterSelected();
 
+    // <FS:Ansariel> Doesn't work
+    //if (mParentSidepanel)
+    //{
+    //    if(mSingleFolderMode)
+    //    {
+    //        mParentSidepanel->hideInbox();
+    //    }
+    //    else
+    //    {
+    //        mParentSidepanel->toggleInbox();
+    //    }
+    //}
     LLSidepanelInventory* sidepanel_inventory = getParentSidepanelInventory();
     if (sidepanel_inventory)
     {
@@ -2071,6 +2074,7 @@ void LLPanelMainInventory::toggleViewMode()
             sidepanel_inventory->toggleInbox();
         }
     }
+    // </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onViewModeClick()

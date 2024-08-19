@@ -184,8 +184,8 @@ public:
     bool            getUIVisibility();
     void            handlePieMenu(S32 x, S32 y, MASK mask);
 
-    void            reshapeStatusBarContainer();
     // <FS:Ansariel> Improved menu and navigation bar
+    //void            reshapeStatusBarContainer();
     //void            resetStatusBarContainer(); // undo changes done by resetStatusBarContainer on initWorldUI()
 
     bool handleAnyMouseClick(LLWindow *window, LLCoordGL pos, MASK mask, EMouseClickType clicktype, bool down, bool &is_toolmgr_action);
@@ -468,6 +468,9 @@ public:
 
     static std::string getLastSnapshotDir();
 
+    LLView* getFloaterSnapRegion() { return mFloaterSnapRegion; }
+    LLPanel* getChicletContainer() { return mChicletContainer; }
+
 private:
     bool                    shouldShowToolTipFor(LLMouseHandler *mh);
 
@@ -496,6 +499,11 @@ private:
     LLRect          mWorldViewRectRaw;          // area of screen for 3D world
     LLRect          mWorldViewRectScaled;       // area of screen for 3D world scaled by UI size
     LLRootView*     mRootView;                  // a view of size mWindowRectRaw, containing all child views
+    LLView*         mFloaterSnapRegion = nullptr;
+    LLView*         mNavBarContainer = nullptr;
+    LLPanel*        mStatusBarContainer = nullptr;
+    LLPanel*        mChicletContainer = nullptr;
+    LLPanel*        mTopInfoContainer = nullptr;
     LLVector2       mDisplayScale;
 
     LLCoordGL       mCurrentMousePoint;         // last mouse position in GL coords

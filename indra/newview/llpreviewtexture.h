@@ -37,6 +37,8 @@
 
 class LLComboBox;
 class LLImageRaw;
+class LLLayoutPanel;
+class LLPanel;
 
 class LLPreviewTexture : public LLPreview
 {
@@ -151,10 +153,14 @@ private:
     LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
     LLUIString mUploaderDateTime;
 
-    // <FS:Ansariel> Performance improvement
-    LLUICtrl*   mDimensionsCtrl;
-
     LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ;
     std::vector<std::string>        mRatiosList;
+
+    LLLayoutPanel* mButtonsPanel = nullptr;
+    LLUICtrl* mDimensionsText = nullptr;
+    LLUICtrl* mAspectRatioText = nullptr;
+
+    // <FS:Ansariel> Texture preview mode
+    LLPanel* mDimensionsPanel = nullptr;
 };
 #endif  // LL_LLPREVIEWTEXTURE_H

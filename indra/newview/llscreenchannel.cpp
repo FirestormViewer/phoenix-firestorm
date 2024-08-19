@@ -57,26 +57,12 @@ LLRect LLScreenChannelBase::getChannelRect()
 
     if (mFloaterSnapRegion == NULL)
     {
-        mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+        mFloaterSnapRegion = gViewerWindow->getFloaterSnapRegion();
     }
 
     if (mChicletRegion == NULL)
     {
-        // <FS:Ansariel> Group notices, IMs and chiclets position:
-        //               Move the chiclet container to the bottom of its parent
-        //               and follow bottom instead of top
-        //mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
-        if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
-        {
-            mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
-            gViewerWindow->getRootView()->getChildView("chiclet_container_bottom")->setVisible(false);
-        }
-        else
-        {
-            gViewerWindow->getRootView()->getChildView("chiclet_container")->setVisible(false);
-            mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container_bottom");
-        }
-        // </FS:Ansariel> Group notices, IMs and chiclets position
+        mChicletRegion = gViewerWindow->getChicletContainer();
     }
 
     LLRect channel_rect;
@@ -130,26 +116,12 @@ bool LLScreenChannelBase::postBuild()
 {
     if (mFloaterSnapRegion == NULL)
     {
-        mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+        mFloaterSnapRegion = gViewerWindow->getFloaterSnapRegion();
     }
 
     if (mChicletRegion == NULL)
     {
-        // <FS:Ansariel> Group notices, IMs and chiclets position - Apparently
-        //               this never gets called, instead see
-        //               LLScreenChannelBase::getChannelRect()
-        //mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
-        if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
-        {
-            mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
-            gViewerWindow->getRootView()->getChildView("chiclet_container_bottom")->setVisible(false);
-        }
-        else
-        {
-            mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container_bottom");
-            gViewerWindow->getRootView()->getChildView("chiclet_container")->setVisible(false);
-        }
-        // </FS:Ansariel>
+        mChicletRegion = gViewerWindow->getChicletContainer();
     }
 
     return true;

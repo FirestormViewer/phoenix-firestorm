@@ -1044,6 +1044,7 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
         label = result["label"].asString();
     }
 
+    LLFloaterSnapshot* floater_snapshot = LLFloaterSnapshot::findInstance();
     if (result.has("message"))
     {
         reason = result["message"].asString();
@@ -1054,6 +1055,12 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
         {
         case 404:
             reason = LLTrans::getString("AssetUploadServerUnreacheble");
+            if (floater_snapshot
+                && floater_snapshot->isWaitingState()
+                && uploadInfo->getAssetType() == LLAssetType::AT_IMAGE_JPEG)
+            {
+                label = "CannotUploadSnapshotEmailTooBig";
+            }
             break;
         case 499:
             reason = LLTrans::getString("AssetUploadServerDifficulties");
@@ -1090,7 +1097,6 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
     // Todo: move these floater specific actions into proper callbacks
 
     // Let the Snapshot floater know we have failed uploading.
-    LLFloaterSnapshot* floater_snapshot = LLFloaterSnapshot::findInstance();
     if (floater_snapshot && floater_snapshot->isWaitingState())
     {
         if (uploadInfo->getAssetType() == LLAssetType::AT_IMAGE_JPEG)

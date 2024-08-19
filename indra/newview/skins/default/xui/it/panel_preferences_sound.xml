@@ -126,36 +126,6 @@
 			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale P2P (avatar con avatar)" name="VoiceCallsRejectP2P"/>
 			<check_box label="Accendi/spegni il microfono quando premo il pulsante sulla barra degli strumenti" name="push_to_talk_toggle_check" tool_tip="Se questa funzione è attiva, premere e rilasciare UNA VOLTA il pulsante per accendere o spegnere il microfono. Se questa funzione è disattivata, il microfono trasmette la tua voce solo mentre il pulsante viene tenuto premuto."/>
 			<button label="Impostazioni periferiche audio" name="device_settings_btn"/>
-			<panel label="Impostazione periferiche" name="device_settings_panel">
-				<panel.string name="default_text">
-					Predefinita
-				</panel.string>
-				<panel.string name="default system device">
-					Periferica audio di sistema
-				</panel.string>
-				<panel.string name="name_default_system_device">
-					Periferica audio di sistema
-				</panel.string>
-				<panel.string name="no device">
-					Nessuna periferica
-				</panel.string>
-				<panel.string name="name_no_device">
-					Nessuna periferica
-				</panel.string>
-				<text name="Input">
-					Ingresso
-				</text>
-				<text name="Output">
-					Uscita
-				</text>
-				<text name="Volume label">
-					Il mio volume:
-				</text>
-				<slider_bar name="mic_volume_slider" tool_tip="Cambia il volume utilizzando questo cursore"/>
-				<text name="wait_text">
-					Attendere
-				</text>
-			</panel>
 		</panel>
 		<panel label="Suoni UI 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">

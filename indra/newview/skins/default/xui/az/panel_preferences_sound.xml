@@ -114,36 +114,6 @@ Avtomatik oxutma
 			<check_box label="Bütün P2P (avatarla avatar arasında) səs zənglərini avtomatik olaraq rədd et" name="VoiceCallsRejectP2P"/>
 			<check_box label="Panel alət çubuğundakı düyməyə basıldığında mikrofonu aç / bağla" name="push_to_talk_toggle_check" tool_tip="Mikrofon açıq / bağlı rejimində, düyməni bir dəfə basaraq mikrofonu açıb bağlaya bilərsiniz. Başqa halda, mikrofon yalnız düymə basıldıqda açılır."/>
 			<button label="Səs cihazı seçimləri" name="device_settings_btn"/>
-			<panel label="Cihaz seçimləri" name="device_settings_panel">
-				<panel.string name="default_text">
-					Susmaya görə
-				</panel.string>
-				<panel.string name="default system device">
-					Susmaya görə sistem cihazı
-				</panel.string>
-				<panel.string name="name_default_system_device">
-					Susmaya görə sistem cihazı
-				</panel.string>
-				<panel.string name="no device">
-					Cihaz yoxdur
-				</panel.string>
-				<panel.string name="name_no_device">
-					Cihaz yoxdur
-				</panel.string>
-				<text name="Input">
-					Giriş
-				</text>
-				<text name="Output">
-					Çıxış
-				</text>
-				<text name="Volume label" width="110">
-					Səsin dərəcəsini:
-				</text>
-				<slider_bar name="mic_volume_slider" tool_tip="Səsin dərəcəsini slider ilə dəyişin"/>
-				<text name="wait_text" width="150">
-					Xahiş edirik gözləyin
-				</text>
-			</panel>
 		</panel>
 		<panel label="İnterfeys 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">

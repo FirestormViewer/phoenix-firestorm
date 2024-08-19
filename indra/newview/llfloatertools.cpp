@@ -340,6 +340,16 @@ bool    LLFloaterTools::postBuild()
     // <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
     mTreeGrassCombo         = getChild<LLComboBox>("tree_grass_combo");
 
+    mTextBulldozer = getChild<LLTextBox>("Bulldozer:");
+    mTextDozerSize = getChild<LLTextBox>("Dozer Size:");
+    mTextDozerStrength = getChild<LLTextBox>("Strength:");
+    mSliderZoom = getChild<LLSlider>("slider zoom");
+
+    mTextSelectionCount = getChild<LLTextBox>("selection_count");
+    mTextSelectionEmpty = getChild<LLTextBox>("selection_empty");
+    // <FS:Ansariel> Improved build tools
+    //mTextSelectionFaces = getChild<LLTextBox>("selection_faces");
+
     mCostTextBorder = getChild<LLViewBorder>("cost_text_border");
 
     mTab = getChild<LLTabContainer>("Object Info Tabs");
@@ -379,6 +389,11 @@ bool    LLFloaterTools::postBuild()
         gSavedSettings.setBOOL("FSToolboxExpanded", true);
     }
     // </FS:KC>
+
+    // <FS:Ansariel> Performance improvements
+    mTextLinkNumObjCount = getChild<LLTextBox>("link_num_obj_count");
+    mBtnCopyKeys         = getChild<LLButton>("btnCopyKeys");
+    mTextMoreInfoLabel   = getChild<LLTextBox>("more info label");
 
     return true;
 }
@@ -635,18 +650,18 @@ void LLFloaterTools::refresh()
     {
         enable_link_count = false;
     }
-    getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
-    getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
+    mTextLinkNumObjCount->setTextArg("[DESC]", desc_string);
+    mTextLinkNumObjCount->setTextArg("[NUM]", num_string);
     // </FS:KC>
 #if 0
     if (!gMeshRepo.meshRezEnabled())
     {
         std::string obj_count_string;
         LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
-        getChild<LLUICtrl>("selection_count")->setTextArg("[OBJ_COUNT]", obj_count_string);
+        mTextSelectionCount->setTextArg("[OBJ_COUNT]", obj_count_string);
         std::string prim_count_string;
         LLResMgr::getInstance()->getIntegerString(prim_count_string, LLSelectMgr::getInstance()->getSelection()->getObjectCount());
-        getChild<LLUICtrl>("selection_count")->setTextArg("[PRIM_COUNT]", prim_count_string);
+        mTextSelectionCount->setTextArg("[PRIM_COUNT]", prim_count_string);
 
         // calculate selection rendering cost
         if (sShowObjectCost)
@@ -660,7 +675,7 @@ void LLFloaterTools::refresh()
 
         // disable the object and prim counts if nothing selected
         bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
-        getChildView("link_num_obj_count")->setEnabled(have_selection);
+        mTextLinkNumObjCount->setEnabled(have_selection);
         //getChildView("obj_count")->setEnabled(have_selection);
         // <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
         //getChildView("prim_count")->setEnabled(have_selection);
@@ -696,7 +711,7 @@ void LLFloaterTools::refresh()
                 else
                 {
                     const LLStringExplicit empty_str("");
-                    childSetTextArg("more info label", "[CAPACITY_STRING]", empty_str);
+                    mTextMoreInfoLabel->setTextArg("[CAPACITY_STRING]", empty_str);
                 }
                 // </FS:Ansariel>
             }
@@ -711,7 +726,7 @@ void LLFloaterTools::refresh()
             // Selection crosses parcel bounds.
             // We don't display remaining land capacity in this case.
             const LLStringExplicit empty_str("");
-            childSetTextArg("more info label", "[CAPACITY_STRING]", empty_str);
+            mTextMoreInfoLabel->setTextArg("[CAPACITY_STRING]", empty_str);
         }
         // </FS:Ansariel>
 
@@ -744,12 +759,12 @@ void LLFloaterTools::refresh()
         //        }
         //    }
 
-        //    childSetTextArg("selection_faces", "[FACES_STRING]", faces_str);
+        //    mTextSelectionFaces->setTextArg("[FACES_STRING]", faces_str);
         //}
 
         //bool show_faces = (object_count == 1)
         //                  && LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool();
-        //getChildView("selection_faces")->setVisible(show_faces);
+        //mTextSelectionFaces->setVisible(show_faces);
         // </FS:Ansariel>
 
         LLStringUtil::format_map_t selection_args;
@@ -763,16 +778,12 @@ void LLFloaterTools::refresh()
 // </FS:CR>
         selection_args["LAND_IMPACT"] = llformat("%.1d", (S32)link_cost);
 
-        std::ostringstream selection_info;
-
-        selection_info << getString("status_selectcount", selection_args);
-
-        getChild<LLTextBox>("selection_count")->setText(selection_info.str());
+        mTextSelectionCount->setText(getString("status_selectcount", selection_args));
     }
 
     // <FS> disable the object and prim counts if nothing selected
     bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
-    getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
+    mTextLinkNumObjCount->setEnabled(have_selection && enable_link_count);
     // </FS>
 
     // Refresh child tabs
@@ -804,7 +815,7 @@ void LLFloaterTools::refresh()
     }
 
     // <FS:CR> Only enable Copy Keys when we have something selected
-    getChild<LLButton>("btnCopyKeys")->setEnabled(have_selection);
+    mBtnCopyKeys->setEnabled(have_selection);
     // </FS:CR>
 }
 
@@ -868,8 +879,9 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     mBtnFocus   ->setToggleState( focus_visible );
 
     mRadioGroupFocus->setVisible( focus_visible );
-    getChildView("slider zoom")->setVisible( focus_visible);
-    getChildView("slider zoom")->setEnabled(gCameraBtnZoom);
+
+    mSliderZoom->setVisible( focus_visible);
+    mSliderZoom->setEnabled(gCameraBtnZoom);
 
     if (!gCameraBtnOrbit &&
         !gCameraBtnPan &&
@@ -894,7 +906,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     }
 
     // multiply by correction factor because volume sliders go [0, 0.5]
-    getChild<LLUICtrl>("slider zoom")->setValue(gAgentCamera.getCameraZoomFraction() * 0.5f);
+    mSliderZoom->setValue(gAgentCamera.getCameraZoomFraction() * 0.5f);
 
     // Move buttons
     bool move_visible = (tool == LLToolGrab::getInstance());
@@ -1107,14 +1119,14 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
     }
     if (mSliderDozerSize)
     {
-        mSliderDozerSize    ->setVisible( land_visible );
-        getChildView("Bulldozer:")->setVisible( land_visible);
-        getChildView("Dozer Size:")->setVisible( land_visible);
+        mSliderDozerSize->setVisible( land_visible );
+        mTextBulldozer->setVisible( land_visible);
+        mTextDozerSize->setVisible( land_visible);
     }
     if (mSliderDozerForce)
     {
-        mSliderDozerForce   ->setVisible( land_visible );
-        getChildView("Strength:")->setVisible( land_visible);
+        mSliderDozerForce->setVisible( land_visible );
+        mTextDozerStrength->setVisible( land_visible);
     }
 
     // <FS>
@@ -1127,11 +1139,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
     // <FS>
     getChildView("more info label")->setVisible(!land_visible && have_selection);
-    getChildView("selection_count")->setVisible(!land_visible && have_selection);
+    mTextSelectionCount->setVisible(!land_visible && have_selection);
     // <FS:Ansariel> We got this already
-    //getChildView("selection_faces")->setVisible(LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool()
+    //mTextSelectionFaces->setVisible(LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool()
     //                                            && LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1);
-    getChildView("selection_empty")->setVisible(!land_visible && !have_selection);
+    mTextSelectionEmpty->setVisible(!land_visible && !have_selection);
 
     //mTab->setVisible(!land_visible);
     //mPanelLandInfo->setVisible(land_visible);

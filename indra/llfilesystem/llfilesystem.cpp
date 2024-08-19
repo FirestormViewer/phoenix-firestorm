@@ -36,10 +36,10 @@
 
 #include "boost/filesystem.hpp"
 
-const S32 LLFileSystem::READ        = 0x00000001;
-const S32 LLFileSystem::WRITE       = 0x00000002;
-const S32 LLFileSystem::READ_WRITE  = 0x00000003;  // LLFileSystem::READ & LLFileSystem::WRITE
-const S32 LLFileSystem::APPEND      = 0x00000006;  // 0x00000004 & LLFileSystem::WRITE
+constexpr S32 LLFileSystem::READ        = 0x00000001;
+constexpr S32 LLFileSystem::WRITE       = 0x00000002;
+constexpr S32 LLFileSystem::READ_WRITE  = 0x00000003;  // LLFileSystem::READ & LLFileSystem::WRITE
+constexpr S32 LLFileSystem::APPEND      = 0x00000006;  // 0x00000004 & LLFileSystem::WRITE
 
 static LLTrace::BlockTimerStatHandle FTM_VFILE_WAIT("VFile Wait");
 
@@ -57,9 +57,7 @@ LLFileSystem::LLFileSystem(const LLUUID& file_id, const LLAssetType::EType file_
     if (mode == LLFileSystem::READ)
     {
         // build the filename (TODO: we do this in a few places - perhaps we should factor into a single function)
-        std::string id;
-        mFileID.asString();
-        const std::string filename = LLDiskCache::metaDataToFilepath(id, mFileType);
+        const std::string filename = LLDiskCache::metaDataToFilepath(mFileID, mFileType);
 
         // update the last access time for the file if it exists - this is required
         // even though we are reading and not writing because this is the
@@ -73,17 +71,11 @@ LLFileSystem::LLFileSystem(const LLUUID& file_id, const LLAssetType::EType file_
     }
 }
 
-LLFileSystem::~LLFileSystem()
-{
-}
-
 // static
 bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
     LL_PROFILE_ZONE_SCOPED;
-    std::string id_str;
-    file_id.toString(id_str);
-    const std::string filename = LLDiskCache::metaDataToFilepath(id_str, file_type);
+    const std::string filename = LLDiskCache::metaDataToFilepath(file_id, file_type);
 
     // <FS:Ansariel> IO-streams replacement
     //llifstream file(filename, std::ios::binary);
@@ -106,9 +98,7 @@ bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType fil
 bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type, int suppress_error /*= 0*/)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
-    std::string id_str;
-    file_id.toString(id_str);
-    const std::string filename =  LLDiskCache::metaDataToFilepath(id_str, file_type);
+    const std::string filename = LLDiskCache::metaDataToFilepath(file_id, file_type);
 
     LLFile::remove(filename.c_str(), suppress_error);
 
@@ -120,13 +110,8 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
                               const LLUUID& new_file_id, const LLAssetType::EType new_file_type)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
-    std::string old_id_str;
-    old_file_id.toString(old_id_str);
-    const std::string old_filename =  LLDiskCache::metaDataToFilepath(old_id_str, old_file_type);
-
-    std::string new_id_str;
-    new_file_id.toString(new_id_str);
-    const std::string new_filename =  LLDiskCache::metaDataToFilepath(new_id_str, new_file_type);
+    const std::string old_filename = LLDiskCache::metaDataToFilepath(old_file_id, old_file_type);
+    const std::string new_filename = LLDiskCache::metaDataToFilepath(new_file_id, new_file_type);
 
     // Rename needs the new file to not exist.
     LLFileSystem::removeFile(new_file_id, new_file_type, ENOENT);
@@ -137,7 +122,7 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
         // failed but the original code does not and doing so seems to
         // break a lot of things so we go with the flow...
         //return false;
-        LL_WARNS() << "Failed to rename " << old_file_id << " to " << new_id_str << " reason: "  << strerror(errno) << LL_ENDL;
+        LL_WARNS() << "Failed to rename " << old_file_id << " to " << new_file_id << " reason: " << strerror(errno) << LL_ENDL;
     }
 
     return true;
@@ -147,9 +132,7 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
 S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
-    std::string id_str;
-    file_id.toString(id_str);
-    const std::string filename =  LLDiskCache::metaDataToFilepath(id_str, file_type);
+    const std::string filename = LLDiskCache::metaDataToFilepath(file_id, file_type);
 
     S32 file_size = 0;
     // <FS:Ansariel> IO-streams replacement
@@ -174,9 +157,7 @@ bool LLFileSystem::read(U8* buffer, S32 bytes)
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     bool success = false;
 
-    std::string id;
-    mFileID.toString(id);
-    const std::string filename =  LLDiskCache::metaDataToFilepath(id, mFileType);
+    const std::string filename = LLDiskCache::metaDataToFilepath(mFileID, mFileType);
 
     // <FS:Ansariel> IO-streams replacement
     //llifstream file(filename, std::ios::binary);
@@ -225,13 +206,13 @@ bool LLFileSystem::read(U8* buffer, S32 bytes)
     return success;
 }
 
-S32 LLFileSystem::getLastBytesRead()
+S32 LLFileSystem::getLastBytesRead() const
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mBytesRead;
 }
 
-bool LLFileSystem::eof()
+bool LLFileSystem::eof() const
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mPosition >= getSize();
@@ -240,9 +221,7 @@ bool LLFileSystem::eof()
 bool LLFileSystem::write(const U8* buffer, S32 bytes)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
-    std::string id_str;
-    mFileID.toString(id_str);
-    const std::string filename =  LLDiskCache::metaDataToFilepath(id_str, mFileType);
+    const std::string filename = LLDiskCache::metaDataToFilepath(mFileID, mFileType);
 
     bool success = false;
 
@@ -254,12 +233,11 @@ bool LLFileSystem::write(const U8* buffer, S32 bytes)
     //    {
     //        ofs.write((const char*)buffer, bytes);
 
-    //        mPosition = (S32)ofs.tellp(); // <FS:Ansariel> Fix asset caching
+    //        mPosition = (S32)ofs.tellp();
 
     //        success = true;
     //    }
     //}
-    //// <FS:Ansariel> Fix asset caching
     //else if (mMode == READ_WRITE)
     //{
     //    // Don't truncate if file already exists
@@ -283,7 +261,6 @@ bool LLFileSystem::write(const U8* buffer, S32 bytes)
     //        }
     //    }
     //}
-    //// </FS:Ansariel>
     //else
     //{
     //    llofstream ofs(filename, std::ios::binary);
@@ -385,13 +362,13 @@ S32 LLFileSystem::tell() const
     return mPosition;
 }
 
-S32 LLFileSystem::getSize()
+S32 LLFileSystem::getSize() const
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return LLFileSystem::getFileSize(mFileID, mFileType);
 }
 
-S32 LLFileSystem::getMaxSize()
+S32 LLFileSystem::getMaxSize() const
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     // offer up a huge size since we don't care what the max is
@@ -409,11 +386,10 @@ bool LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_typ
     return true;
 }
 
-bool LLFileSystem::remove()
+bool LLFileSystem::remove() const
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::removeFile(mFileID, mFileType);
-
     return true;
 }
 
@@ -428,7 +404,7 @@ void LLFileSystem::updateFileAccessTime(const std::string& file_path)
      *
      * Let's start with 1 hour in time_t units and see how that unfolds
      */
-    const std::time_t time_threshold = 1 * 60 * 60;
+    constexpr std::time_t time_threshold = 1 * 60 * 60;
 
     // current time
     const std::time_t cur_time = std::time(nullptr);

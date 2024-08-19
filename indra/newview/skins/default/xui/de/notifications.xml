@@ -944,6 +944,16 @@ Erwartet wurde [VALIDS]
 		Datei [FILE] kann aus folgendem Grund nicht hochgeladen werden: [REASON]
 Bitte versuchen Sie es erneut.
 	</notification>
+	<notification name="CannotUploadSnapshotEmailTooBig">
+		Schnappschuss [FILE] kann aus folgendem Grund nicht hochgeladen werden: [REASON]
+
+Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung oder Qualität zu verringern, oder versuchen Sie es erneut.
+	</notification>
+	<notification name="CannotUploadSnapshotWebTooBig">
+		Schnappschuss nicht hochgeladen werden.
+
+Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung zu verringern oder versuchen Sie es erneut.
+	</notification>
 	<notification name="LandmarkCreated">
 		„[LANDMARK_NAME]“ wurde zum Ordner „[FOLDER_NAME]“ hinzugefügt.
 	</notification>

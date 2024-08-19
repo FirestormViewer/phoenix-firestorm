@@ -83,36 +83,6 @@
 			<button label="Configurar tecla" name="set_voice_hotkey_button"/>
 			<button tool_tip="Restablecer a botón central del ratón" name="set_voice_middlemouse_button"/>
 			<button label="Dispositivos de audio" name="device_settings_btn"/>
-			<panel label="Configuración de dispositivos" name="device_settings_panel">
-				<panel.string name="default_text">
-					Por defecto
-				</panel.string>
-				<panel.string name="default system device">
-					Dispositivo por defecto del sistema
-				</panel.string>
-				<panel.string name="name_default_system_device">
-					Dispositivo por defecto del sistema
-				</panel.string>
-				<panel.string name="no device">
-					Ninguna
-				</panel.string>
-				<panel.string name="name_no_device">
-					Ninguna
-				</panel.string>
-				<text name="Input">
-					Entrada
-				</text>
-				<text name="Output">
-					Salida
-				</text>
-				<text name="Volume label" width="118">
-					Volumen de entrada:
-				</text>
-				<slider_bar name="mic_volume_slider" tool_tip="Modifica el volumen usando este control deslizante"/>
-				<text name="wait_text">
-					Por favor, espera...
-				</text>
-        		</panel>
 		</panel>
 		<panel label="Sonidos de IU 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">

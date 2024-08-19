@@ -131,36 +131,6 @@
 				<item label="Максимум" name="noise_suppression_max"/>
 			</combo_box>
 			<button label="Настройки звукового устройства" name="device_settings_btn"/>
-			<panel label="Настройки устройства" name="device_settings_panel">
-				<panel.string name="default_text">
-					По умолчанию
-				</panel.string>
-				<panel.string name="default system device">
-					Системное устройство по умолчанию
-				</panel.string>
-				<panel.string name="name_default_system_device">
-					Системное устройство по умолчанию
-				</panel.string>
-				<panel.string name="no device">
-					Нет устройства
-				</panel.string>
-				<panel.string name="name_no_device">
-					Нет устройства
-				</panel.string>
-				<text name="Input">
-					Ввод
-				</text>
-				<text name="Output">
-					Вывод
-				</text>
-				<text name="Volume label" width="110">
-					Моя громкость:
-				</text>
-				<slider_bar name="mic_volume_slider" tool_tip="Измените громкость используя ползунок"/>
-				<text name="wait_text" width="150">
-					Пожалуйста, подождите
-				</text>
-			</panel>
 		</panel>
 		<panel label="Интерфейс 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">

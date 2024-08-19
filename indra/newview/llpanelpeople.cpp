@@ -829,12 +829,14 @@ bool LLPanelPeople::postBuild()
     // [/FS:CR]
 
     // <FS:Ansariel> Friend list accordion replacement
-    //LLAccordionCtrlTab* accordion_tab = getChild<LLAccordionCtrlTab>("tab_all");
-    //accordion_tab->setDropDownStateChangedCallback(
+    //mFriendsAccordion = friends_tab->getChild<LLAccordionCtrl>("friends_accordion");
+
+    //mFriendsAllTab = mFriendsAccordion->getChild<LLAccordionCtrlTab>("tab_all");
+    //mFriendsAllTab->setDropDownStateChangedCallback(
     //  boost::bind(&LLPanelPeople::onFriendsAccordionExpandedCollapsed, this, _1, _2, mAllFriendList));
 
-    //accordion_tab = getChild<LLAccordionCtrlTab>("tab_online");
-    //accordion_tab->setDropDownStateChangedCallback(
+    //mFriendsOnlineTab = mFriendsAccordion->getChild<LLAccordionCtrlTab>("tab_online");
+    //mFriendsOnlineTab->setDropDownStateChangedCallback(
     //  boost::bind(&LLPanelPeople::onFriendsAccordionExpandedCollapsed, this, _1, _2, mOnlineFriendList));
     // </FS:Ansariel> Friend list accordion replacement
 
@@ -1216,10 +1218,10 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
         mOnlineFriendList->setNameFilter(filter);
         mAllFriendList->setNameFilter(filter);
 
-    // <FS:Ansariel> Friend list accordion replacement
-    //setAccordionCollapsedByUser("tab_online", false);
-    //setAccordionCollapsedByUser("tab_all", false);
-    // </FS:Ansariel> Friend list accordion replacement
+        // <FS:Ansariel> Friend list accordion replacement
+        //setAccordionCollapsedByUser(mFriendsOnlineTab, false);
+        //setAccordionCollapsedByUser(mFriendsAllTab, false);
+        // </FS:Ansariel> Friend list accordion replacement
         showFriendsAccordionsIfNeeded();
 
         // restore accordion tabs state _after_ all manipulations
@@ -1262,15 +1264,14 @@ void LLPanelPeople::onGroupLimitInfo()
 
 void LLPanelPeople::onTabSelected(const LLSD& param)
 {
-    std::string tab_name = getChild<LLPanel>(param.asString())->getName();
     updateButtons();
 
     showFriendsAccordionsIfNeeded();
 
     // <FS:AO> Layout panels will not initialize at a constant size, force it here.
-    if (tab_name == NEARBY_TAB_NAME)
+    if (mTabContainer->getCurrentPanel()->getName() == NEARBY_TAB_NAME)
     {
-        LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout", true);
+        LLLayoutPanel* minilayout = (LLLayoutPanel*)mTabContainer->getCurrentPanel()->getChildView("minimaplayout", true);
         if (minilayout->getVisible())
         {
             LLRect rec = minilayout->getRect();
@@ -1320,9 +1321,9 @@ void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
         uuid_vec_t selected_uuids;
         getCurrentItemIDs(selected_uuids);
         mMiniMap->setSelected(selected_uuids);
-    } else
+    }
     // Make sure only one of the friends lists (online/all) has selection.
-    if (getActiveTabName() == FRIENDS_TAB_NAME)
+    else if (getActiveTabName() == FRIENDS_TAB_NAME)
     {
         if (list == mOnlineFriendList)
             mAllFriendList->resetSelection(true);
@@ -1347,12 +1348,9 @@ void LLPanelPeople::onAddFriendButtonClicked()
 bool LLPanelPeople::isItemsFreeOfFriends(const uuid_vec_t& uuids)
 {
     const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
-    for ( uuid_vec_t::const_iterator
-              id = uuids.begin(),
-              id_end = uuids.end();
-          id != id_end; ++id )
+    for (const LLUUID& uuid : uuids)
     {
-        if (av_tracker.isBuddy (*id))
+        if (av_tracker.isBuddy(uuid))
         {
             return false;
         }
@@ -1676,15 +1674,8 @@ bool LLPanelPeople::notifyChildren(const LLSD& info)
     return LLPanel::notifyChildren(info);
 }
 
-void LLPanelPeople::showAccordion(const std::string name, bool show)
+void LLPanelPeople::showAccordion(LLAccordionCtrlTab* tab, bool show)
 {
-    if(name.empty())
-    {
-        LL_WARNS() << "No name provided" << LL_ENDL;
-        return;
-    }
-
-    LLAccordionCtrlTab* tab = getChild<LLAccordionCtrlTab>(name);
     tab->setVisible(show);
     if(show)
     {
@@ -1703,14 +1694,13 @@ void LLPanelPeople::showFriendsAccordionsIfNeeded()
     {
         // <FS:Ansariel> Friend list accordion replacement
         // Expand and show accordions if needed, else - hide them
-        //showAccordion("tab_online", mOnlineFriendList->filterHasMatches());
-        //showAccordion("tab_all", mAllFriendList->filterHasMatches());
+        //showAccordion(mFriendsOnlineTab, mOnlineFriendList->filterHasMatches());
+        //showAccordion(mFriendsAllTab, mAllFriendList->filterHasMatches());
 
         //// Rearrange accordions
-        //LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("friends_accordion");
-        //accordion->arrange();
+        //mFriendsAccordion->arrange();
 
-        childSetVisible("friends_accordion", mAllFriendList->filterHasMatches());
+        mFriendsTabContainer->setVisible(mAllFriendList->filterHasMatches());
         // </FS:Ansariel> Friend list accordion replacement
 
         // *TODO: new no_matched_tabs_text attribute was implemented in accordion (EXT-7368).
@@ -1724,11 +1714,11 @@ void LLPanelPeople::onFriendListRefreshComplete(LLUICtrl*ctrl, const LLSD& param
 {
     if(ctrl == mOnlineFriendList)
     {
-        showAccordion("tab_online", param.asInteger());
+        showAccordion(mFriendsOnlineTab, param.asInteger());
     }
     else if(ctrl == mAllFriendList)
     {
-        showAccordion("tab_all", param.asInteger());
+        showAccordion(mFriendsAllTab, param.asInteger());
     }
 }
 

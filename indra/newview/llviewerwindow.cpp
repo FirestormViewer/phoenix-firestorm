@@ -2230,6 +2230,10 @@ void LLViewerWindow::initBase()
     mPopupView = main_view->getChild<LLPopupView>("popup_holder");
     mHintHolder = main_view->getChild<LLView>("hint_holder")->getHandle();
     mLoginPanelHolder = main_view->getChild<LLView>("login_panel_holder")->getHandle();
+    mStatusBarContainer = main_view->getChild<LLPanel>("status_bar_container");
+    // <FS:Ansariel> Improved menu and navigation bar
+    //mNavBarContainer = mStatusBarContainer->getChild<LLView>("nav_bar_container");
+    //mTopInfoContainer = main_view->getChild<LLPanel>("topinfo_bar_container");
 
     // Create the toolbar view
     // Get a pointer to the toolbar view holder
@@ -2245,6 +2249,20 @@ void LLViewerWindow::initBase()
     // Hide the toolbars for the moment: we'll make them visible after logging in world (see LLViewerWindow::initWorldUI())
     gToolBarView->setVisible(false);
 
+    mFloaterSnapRegion = gToolBarView->getChild<LLView>("floater_snap_region");
+    // <FS:Ansariel> Group notices, IMs and chiclets position
+    //mChicletContainer = gToolBarView->getChild<LLPanel>("chiclet_container");
+    if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+    {
+        mChicletContainer = gToolBarView->getChild<LLPanel>("chiclet_container");
+        gToolBarView->getChildView("chiclet_container_bottom")->setVisible(false);
+    }
+    else
+    {
+        gToolBarView->getChildView("chiclet_container")->setVisible(false);
+        mChicletContainer = gToolBarView->getChild<LLPanel>("chiclet_container_bottom");
+    }
+    // </FS:Ansariel>
     // <FS:Zi> initialize the utility bar (classic V1 style buttons next to the chat bar)
     UtilityBar::instance().init();
 
@@ -2258,7 +2276,7 @@ void LLViewerWindow::initBase()
             toolbarp->getCenterLayoutPanel()->setReshapeCallback(boost::bind(&LLFloaterView::setToolbarRect, gFloaterView, _1, _2));
         }
     }
-    gFloaterView->setFloaterSnapView(main_view->getChild<LLView>("floater_snap_region")->getHandle());
+    gFloaterView->setFloaterSnapView(mFloaterSnapRegion->getHandle());
     gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
 
     // <FS:Ansariel> Prevent floaters being dragged under main chat bar
@@ -2334,25 +2352,11 @@ void LLViewerWindow::initWorldUI()
 
     if (!gNonInteractive)
     {
-        // <FS:Ansariel> Group notices, IMs and chiclets position
-        //LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
-        LLPanel* chiclet_container;
-        if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
-        {
-            chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
-            getRootView()->getChildView("chiclet_container_bottom")->setVisible(false);
-        }
-        else
-        {
-            getRootView()->getChildView("chiclet_container")->setVisible(false);
-            chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
-        }
-        // </FS:Ansariel> Group notices, IMs and chiclets position
         LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
-        chiclet_bar->setShape(chiclet_container->getLocalRect());
+        chiclet_bar->setShape(mChicletContainer->getLocalRect());
         chiclet_bar->setFollowsAll();
-        chiclet_container->addChild(chiclet_bar);
-        chiclet_container->setVisible(true);
+        mChicletContainer->addChild(chiclet_bar);
+        mChicletContainer->setVisible(true);
     }
 
     LLRect morph_view_rect = full_window;
@@ -2378,30 +2382,27 @@ void LLViewerWindow::initWorldUI()
     //if (!gStatusBar)
     //{
     //    // Status bar
-    //    LLPanel* status_bar_container = getRootView()->getChild<LLPanel>("status_bar_container");
     //    gStatusBar = new LLStatusBar(status_bar_container->getLocalRect());
     //    gStatusBar->setFollows(FOLLOWS_LEFT | FOLLOWS_TOP | FOLLOWS_RIGHT);
     //    gStatusBar->setShape(status_bar_container->getLocalRect());
     //    // sync bg color with menu bar
     //    gStatusBar->setBackgroundColor(gMenuBarView->getBackgroundColor());
     //    // add InBack so that gStatusBar won't be drawn over menu
-    //    status_bar_container->addChildInBack(gStatusBar, 2/*tab order, after menu*/);
-    //    status_bar_container->setVisible(true);
+    //    mStatusBarContainer->addChildInBack(gStatusBar, 2/*tab order, after menu*/);
+    //    mStatusBarContainer->setVisible(true);
 
     //    // Navigation bar
     //    LLView* nav_bar_container = getRootView()->getChild<LLView>("nav_bar_container");
 
     //    navbar->setShape(nav_bar_container->getLocalRect());
     //    navbar->setBackgroundColor(gMenuBarView->getBackgroundColor());
-    //    nav_bar_container->addChild(navbar);
-    //    nav_bar_container->setVisible(true);
+    //    mNavBarContainer->addChild(navbar);
+    //    mNavBarContainer->setVisible(true);
     //}
     //else
     //{
-    //    LLPanel* status_bar_container = getRootView()->getChild<LLPanel>("status_bar_container");
-    //    LLView* nav_bar_container = getRootView()->getChild<LLView>("nav_bar_container");
-    //    status_bar_container->setVisible(true);
-    //    nav_bar_container->setVisible(true);
+    //    mStatusBarContainerr_container->setVisible(true);
+    //    mNavBarContainer->setVisible(true);
     //}
 
     //if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
@@ -2435,13 +2436,12 @@ void LLViewerWindow::initWorldUI()
 
     // <FS:Zi> We don't have the mini location bar, so no topinfo_bar required
     // // Top Info bar
-    // LLPanel* topinfo_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
     // LLPanelTopInfoBar* topinfo_bar = LLPanelTopInfoBar::getInstance();
 
-    // topinfo_bar->setShape(topinfo_bar_container->getLocalRect());
+    // topinfo_bar->setShape(mTopInfoContainer->getLocalRect());
 
-    // topinfo_bar_container->addChild(topinfo_bar);
-    // topinfo_bar_container->setVisible(true);
+    // mTopInfoContainer->addChild(topinfo_bar);
+    // mTopInfoContainer->setVisible(true);
 
     // if (!gSavedSettings.getBOOL("ShowMiniLocationPanel"))
     // {
@@ -2462,7 +2462,7 @@ void LLViewerWindow::initWorldUI()
         getRootView()->sendChildToBack(gHUDView);
     }
 
-    LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("state_management_buttons_container");
+    LLPanel* panel_ssf_container = gToolBarView->getChild<LLPanel>("state_management_buttons_container");
 
     LLPanelStandStopFlying* panel_stand_stop_flying = LLPanelStandStopFlying::getInstance();
     panel_ssf_container->addChild(panel_stand_stop_flying);
@@ -2865,12 +2865,11 @@ void LLViewerWindow::setNormalControlsVisible( bool visible )
     }
 
     // <FS:Zi> Is done inside XUI now, using visibility_control
-    //LLNavigationBar* navbarp = LLUI::getInstance()->getRootView()->findChild<LLNavigationBar>("navigation_bar");
-    //if (navbarp)
+    //if (mNavBarContainer)
     //{
     //  // when it's time to show navigation bar we need to ensure that the user wants to see it
     //  // i.e. ShowNavbarNavigationPanel option is true
-    //  navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
+    //  mNavBarContainer->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
     //}
     // </FS:Zi>
 }
@@ -7259,40 +7258,35 @@ LLRect LLViewerWindow::getChatConsoleRect()
     return console_rect;
 }
 
-void LLViewerWindow::reshapeStatusBarContainer()
-{
-    LLPanel* status_bar_container = getRootView()->getChild<LLPanel>("status_bar_container");
-    LLView* nav_bar_container = getRootView()->getChild<LLView>("nav_bar_container");
-
-    S32 new_height = status_bar_container->getRect().getHeight();
-    S32 new_width = status_bar_container->getRect().getWidth();
-
-    if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-    {
-        // Navigation bar is outside visible area, expand status_bar_container to show it
-        new_height += nav_bar_container->getRect().getHeight();
-    }
-    else
-    {
-        // collapse status_bar_container
-        new_height -= nav_bar_container->getRect().getHeight();
-    }
-    status_bar_container->reshape(new_width, new_height, true);
-}
-
 // <FS:Ansariel> Improved menu and navigation bar
+//void LLViewerWindow::reshapeStatusBarContainer()
+//{
+//    S32 new_height = mStatusBarContainer->getRect().getHeight();
+//    S32 new_width = mStatusBarContainer->getRect().getWidth();
+//
+//    if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+//    {
+//        // Navigation bar is outside visible area, expand status_bar_container to show it
+//        new_height += mNavBarContainer->getRect().getHeight();
+//    }
+//    else
+//    {
+//        // collapse status_bar_container
+//        new_height -= mNavBarContainer->getRect().getHeight();
+//    }
+//    mStatusBarContainer->reshape(new_width, new_height, true);
+//}
+
 //void LLViewerWindow::resetStatusBarContainer()
 //{
 //    LLNavigationBar* navbar = LLNavigationBar::getInstance();
 //    if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel") || navbar->getVisible())
 //    {
 //        // was previously showing navigation bar
-//        LLView* nav_bar_container = getRootView()->getChild<LLView>("nav_bar_container");
-//        LLPanel* status_bar_container = getRootView()->getChild<LLPanel>("status_bar_container");
-//        S32 new_height = status_bar_container->getRect().getHeight();
-//        S32 new_width = status_bar_container->getRect().getWidth();
-//        new_height -= nav_bar_container->getRect().getHeight();
-//        status_bar_container->reshape(new_width, new_height, true);
+//        S32 new_height = mStatusBarContainer->getRect().getHeight();
+//        S32 new_width = mStatusBarContainer->getRect().getWidth();
+//        new_height -= mNavBarContainer->getRect().getHeight();
+//        mStatusBarContainer->reshape(new_width, new_height, true);
 //    }
 //}
 // </FS:Ansariel>
@@ -7330,7 +7324,7 @@ void LLViewerWindow::setUIVisibility(bool visible)
     //LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : false);
     // <FS:Zi> We don't use the mini location panel in Firestorm
     // LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : false);
-    mRootView->getChildView("status_bar_container")->setVisible(visible);
+    mStatusBarContainer->setVisible(visible);
 
     // <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage
     LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");

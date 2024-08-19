@@ -46,6 +46,8 @@ class LLGroupList;
 class LLMenuButton;
 class LLTabContainer;
 class LLNetMap;
+class LLAccordionCtrl;
+class LLAccordionCtrlTab;
 
 // Firestorm declarations
 class LLMenuGL;
@@ -142,7 +144,7 @@ private:
 
     void                    onFriendsAccordionExpandedCollapsed(LLUICtrl* ctrl, const LLSD& param, LLAvatarList* avatar_list);
 
-    void                    showAccordion(const std::string name, bool show);
+    void                    showAccordion(LLAccordionCtrlTab* tab, bool show);
 
     void                    showFriendsAccordionsIfNeeded();
 
@@ -166,6 +168,10 @@ private:
     LLNetMap*               mMiniMap;
     // <FS:Ansariel> FIRE-4740: Friend counter in people panel
     LLTabContainer*         mFriendsTabContainer;
+
+    LLAccordionCtrl* mFriendsAccordion = nullptr;
+    LLAccordionCtrlTab*     mFriendsAllTab = nullptr;
+    LLAccordionCtrlTab*     mFriendsOnlineTab = nullptr;
 
     LLButton*               mNearbyGearBtn = nullptr;
     LLButton*               mFriendsGearBtn = nullptr;
