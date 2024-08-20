@@ -79,7 +79,7 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
     static LLUICachedControl<S32> voice_left_remove_delay ("VoiceParticipantLeftRemoveDelay", 10);
     mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), (F32)voice_left_remove_delay);
 
-    LLVoiceClient::instance().addObserver(this);
+    LLVoiceClient::addObserver(this);
     LLTransientFloaterMgr::getInstance()->addControlView(this);
 
     // update the agent's name if display name setting change
@@ -99,10 +99,7 @@ FSFloaterVoiceControls::~FSFloaterVoiceControls()
     mAvatarListRefreshConnection.disconnect();
     mVoiceChannelStateChangeConnection.disconnect();
 
-    if(LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver(this);
-    }
+    LLVoiceClient::removeObserver(this);
     LLTransientFloaterMgr::getInstance()->removeControlView(this);
 }
 
@@ -513,13 +510,12 @@ void FSFloaterVoiceControls::updateAgentModeratorState()
 static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids)
 {
     // Get a list of participants from VoiceClient
-       std::set<LLUUID> participants;
-       LLVoiceClient::getInstance()->getParticipantList(participants);
+    std::set<LLUUID> participants;
+    LLVoiceClient::getInstance()->getParticipantList(participants);
 
-    for (std::set<LLUUID>::const_iterator iter = participants.begin();
-         iter != participants.end(); ++iter)
+    for (const auto& speaker_uuid : participants)
     {
-        speakers_uuids.push_back(*iter);
+        speakers_uuids.emplace_back(speaker_uuid);
     }
 
 }

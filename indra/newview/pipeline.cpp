@@ -103,13 +103,7 @@
 #include "llmutelist.h"
 #include "lltoolpie.h"
 #include "llnotifications.h"
-// <FS:Beq> hacky BOOL workaround
-#ifndef BOOL
-#define BOOL bool
-#endif
-// </FS:Beq>
 #include "llpathinglib.h"
-#undef BOOL // <FS:Beq/> hacky BOOL workaround
 #include "llfloaterpathfindingconsole.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloatertools.h"

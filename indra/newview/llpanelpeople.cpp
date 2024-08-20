@@ -627,7 +627,6 @@ LLPanelPeople::~LLPanelPeople()
     mGroupsFilterCommitConnection.disconnect();
     mRecentFilterCommitConnection.disconnect();
 
-
     // [FS:CR] Contact sets
     if (mContactSetChangedConnection.connected())
         mContactSetChangedConnection.disconnect();
