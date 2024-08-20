@@ -372,11 +372,6 @@ void LLFace::switchTexture(U32 ch, LLViewerTexture* new_texture)
         return;
     }
 
-    if (mTexture[ch].notNull())
-    {
-        new_texture->addTextureStats(mTexture[ch]->getMaxVirtualSize()) ;
-    }
-
     if (ch == LLRender::DIFFUSE_MAP)
     {
         if (getViewerObject())
