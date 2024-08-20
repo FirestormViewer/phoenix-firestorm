@@ -2078,6 +2078,14 @@ void LLFloater::onClickClose( LLFloater* self )
     self->onClickCloseBtn();
 }
 
+// static
+void LLFloater::onClickClose(LLFloater* self, bool app_quitting)
+{
+    if (!self)
+        return;
+    self->onClickCloseBtn(app_quitting);
+}
+
 void LLFloater::onClickCloseBtn(bool app_quitting)
 {
     // <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group

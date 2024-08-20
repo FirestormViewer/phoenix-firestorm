@@ -119,7 +119,7 @@ public:
     void assignResizeLimits();
     virtual bool handleKeyHere(KEY key, MASK mask );
     /*virtual*/ void closeFloater(bool app_quitting = false);
-    void closeAllConversations();
+    void closeAllConversations(bool app_quitting);
     void closeSelectedConversations(const uuid_vec_t& ids);
     /*virtual*/ bool isFrontmost();
 
