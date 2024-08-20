@@ -602,7 +602,6 @@ void LLHeroProbeManager::cleanup()
 {
     mVertexBuffer = nullptr;
     mRenderTarget.release();
-    mHeroRenderTarget.release();
 
     mMipChain.clear();
 
@@ -610,10 +609,7 @@ void LLHeroProbeManager::cleanup()
 
     mProbes.clear();
 
-    mReflectionMaps.clear();
-
     mDefaultProbe = nullptr;
-    mUpdatingProbe = nullptr;
 }
 
 void LLHeroProbeManager::doOcclusion()

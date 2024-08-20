@@ -2208,6 +2208,7 @@
       <key>Value</key>
       <integer>2</integer>
     </map>
+    <!--AvatarBakedTextureUploadTimeout is in use by QA-->
     <key>AvatarBakedTextureUploadTimeout</key>
     <map>
       <key>Comment</key>

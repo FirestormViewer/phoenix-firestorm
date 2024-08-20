@@ -146,6 +146,9 @@ public:
 
     LLInventoryFilter& getCurrentFilter();
 
+    void setParentSidepanel(LLSidepanelInventory* parent_sidepanel) { mParentSidepanel = parent_sidepanel; }
+    void setInboxPanel(LLPanelMarketplaceInbox* inbox_panel) { mInboxPanel = inbox_panel; }
+
     // <FS:Zi> Filter dropdown
     void onFilterTypeSelected(const std::string& filter_type_name);
     void updateFilterDropdown(const LLInventoryFilter* filter);

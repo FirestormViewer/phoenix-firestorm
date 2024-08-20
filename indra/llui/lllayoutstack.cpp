@@ -86,10 +86,6 @@ void LLLayoutPanel::initFromParams(const Params& p)
 
 LLLayoutPanel::~LLLayoutPanel()
 {
-    // probably not necessary, but...
-    delete mResizeBar;
-    mResizeBar = NULL;
-
     gFocusMgr.removeKeyboardFocusWithoutCallback(this);
 }
 
@@ -279,12 +275,9 @@ LLLayoutStack::~LLLayoutStack()
         LLUI::getInstance()->mSettingGroups["account"]->setLLSD(mSizeControlName, mSavedSizes);
     }
     // </FS:Zi>
-
-    e_panel_list_t panels = mPanels; // copy list of panel pointers
-    mPanels.clear(); // clear so that removeChild() calls don't cause trouble
-    std::for_each(panels.begin(), panels.end(), DeletePointer());
 }
 
+// virtual
 void LLLayoutStack::draw()
 {
     updateLayout();
@@ -322,8 +315,14 @@ void LLLayoutStack::draw()
     }
 }
 
+// virtual
 void LLLayoutStack::deleteAllChildren()
 {
+    for (LLLayoutPanel* p : mPanels)
+    {
+        p->mResizeBar = nullptr;
+    }
+
     mPanels.clear();
     LLView::deleteAllChildren();
 
@@ -333,29 +332,47 @@ void LLLayoutStack::deleteAllChildren()
     mNeedsLayout = true;
 }
 
+// virtual
 void LLLayoutStack::removeChild(LLView* view)
 {
-    LLLayoutPanel* embedded_panelp = findEmbeddedPanel(dynamic_cast<LLPanel*>(view));
+    if (LLLayoutPanel* embedded_panelp = dynamic_cast<LLLayoutPanel*>(view))
+    {
+        auto it = std::find(mPanels.begin(), mPanels.end(), embedded_panelp);
+        if (it != mPanels.end())
+        {
+            mPanels.erase(it);
+        }
+        if (embedded_panelp->mResizeBar)
+        {
+            LLView::removeChild(embedded_panelp->mResizeBar);
+            embedded_panelp->mResizeBar = nullptr;
+        }
+    }
+    else if (LLResizeBar* resize_bar = dynamic_cast<LLResizeBar*>(view))
+    {
+        for (LLLayoutPanel* p : mPanels)
+        {
+            if (p->mResizeBar == resize_bar)
+            {
+                p->mResizeBar = nullptr;
+            }
+        }
+    }
 
-    if (embedded_panelp)
-    {
-        mPanels.erase(std::find(mPanels.begin(), mPanels.end(), embedded_panelp));
-        LLView::removeChild(view);
-        updateFractionalSizes();
-        mNeedsLayout = true;
-    }
-    else
-    {
-        LLView::removeChild(view);
-    }
+    LLView::removeChild(view);
+
+    updateFractionalSizes();
+    mNeedsLayout = true;
 }
 
+// virtual
 bool LLLayoutStack::postBuild()
 {
     updateLayout();
     return true;
 }
 
+// virtual
 bool LLLayoutStack::addChild(LLView* child, S32 tab_group)
 {
     LLLayoutPanel* panelp = dynamic_cast<LLLayoutPanel*>(child);
@@ -1051,6 +1068,7 @@ void LLLayoutStack::updatePanelRect( LLLayoutPanel* resized_panel, const LLRect&
     //normalizeFractionalSizes();
 }
 
+// virtual
 void LLLayoutStack::reshape(S32 width, S32 height, bool called_from_parent)
 {
     mNeedsLayout = true;

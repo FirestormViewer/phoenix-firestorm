@@ -178,6 +178,8 @@ bool LLSidepanelInventory::postBuild()
 
         mPanelMainInventory = mInventoryPanel->getChild<LLPanelMainInventory>("panel_main_inventory");
         mPanelMainInventory->setSelectCallback(boost::bind(&LLSidepanelInventory::onSelectionChange, this, _1, _2));
+        mPanelMainInventory->setParentSidepanel(this);
+        //mPanelMainInventory->setInboxPanel(getChild<LLPanelMarketplaceInbox>("marketplace_inbox")); // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
         //LLTabContainer* tabs = mPanelMainInventory->getChild<LLTabContainer>("inventory filter tabs");
         //tabs->setCommitCallback(boost::bind(&LLSidepanelInventory::updateVerbs, this));
 
@@ -361,6 +363,9 @@ void LLSidepanelInventory::observeInboxModifications(const LLUUID& inboxID)
     LLPanelMarketplaceInbox * inbox = getChild<LLPanelMarketplaceInbox>(MARKETPLACE_INBOX_PANEL);
     LLInventoryPanel* inventory_panel = inbox->setupInventoryPanel();
     mInventoryPanelInbox = inventory_panel->getInventoryPanelHandle();
+
+    // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
+    mPanelMainInventory->setInboxPanel(inbox);
 }
 
 void LLSidepanelInventory::enableInbox(bool enabled)

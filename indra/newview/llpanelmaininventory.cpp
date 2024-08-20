@@ -353,13 +353,6 @@ bool LLPanelMainInventory::postBuild()
         }
 
     }
-    // <FS:Ansariel> Doesn't work
-    //mParentSidepanel = getParentSidepanelInventory();
-    //if (mParentSidepanel)
-    //{
-    //    mInboxPanel = mParentSidepanel->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
-    //}
-    // </FS:Ansariel>
 
     mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
     if (mFilterEditor)
@@ -958,21 +951,10 @@ void LLPanelMainInventory::onClearSearch()
     }
     mFilterSubString = "";
 
-    // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
-    //if (mInboxPanel)
-    //{
-    //    mInboxPanel->onClearSearch();
-    //}
-    LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
-    if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
+    if (mInboxPanel)
     {
-        LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
-        if (inbox_panel)
-        {
-            inbox_panel->onClearSearch();
-        }
+        mInboxPanel->onClearSearch();
     }
-    // </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
@@ -1043,21 +1025,10 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
     }
     // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 
-    // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
-    //if (mInboxPanel)
-    //{
-    //    mInboxPanel->onFilterEdit(search_string);
-    //}
-    LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
-    if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
+    if (mInboxPanel)
     {
-        LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
-        if (inbox_panel)
-        {
-            inbox_panel->onFilterEdit(search_string);
-        }
+        mInboxPanel->onFilterEdit(search_string);
     }
-    // </FS:Ansariel>
 }
 
 // <FS:Zi> Filter dropdown
@@ -2050,31 +2021,17 @@ void LLPanelMainInventory::toggleViewMode()
     updateTitle();
     onFilterSelected();
 
-    // <FS:Ansariel> Doesn't work
-    //if (mParentSidepanel)
-    //{
-    //    if(mSingleFolderMode)
-    //    {
-    //        mParentSidepanel->hideInbox();
-    //    }
-    //    else
-    //    {
-    //        mParentSidepanel->toggleInbox();
-    //    }
-    //}
-    LLSidepanelInventory* sidepanel_inventory = getParentSidepanelInventory();
-    if (sidepanel_inventory)
+    if (mParentSidepanel)
     {
         if(mSingleFolderMode)
         {
-            sidepanel_inventory->hideInbox();
+            mParentSidepanel->hideInbox();
         }
         else
         {
-            sidepanel_inventory->toggleInbox();
+            mParentSidepanel->toggleInbox();
         }
     }
-    // </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onViewModeClick()
