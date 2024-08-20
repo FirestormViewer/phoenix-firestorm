@@ -5376,9 +5376,6 @@ void LLFolderBridge::createWearable(LLFolderBridge* bridge, LLWearableType::ETyp
 //<FS:AR> FIRE-31508: refactored from void LLFolderBridge::modifyOutfit(BOOL append)
 bool LLFolderBridge::modifyOutfitExceedsWearFolderLimit()
 {
-    LLInventoryModel *model = getInventoryModel();
-    if (!model)
-        return false;
     LLViewerInventoryCategory *cat = getCategory();
     if (!cat)
         return false;
@@ -5404,10 +5401,12 @@ bool LLFolderBridge::modifyOutfitExceedsWearFolderLimit()
 
 void LLFolderBridge::modifyOutfit(BOOL append)
 {
-    LLInventoryModel* model = getInventoryModel();
-    if(!model) return;
-    LLViewerInventoryCategory* cat = getCategory();
-    if(!cat) return;
+    // <FS:AR> FIRE-31508: Commented out for slight efficiency.
+    // LLInventoryModel* model = getInventoryModel();
+    // if(!model) return;
+    // LLViewerInventoryCategory* cat = getCategory();
+    // if(!cat) return;
+    // <FS:AR/> FIRE-31508
 
     //<FS:AR> FIRE-31508: refactored to bool modifyOutfitExceedsWearFolderLimit(), rather than duplicating code
     //// checking amount of items to wear
@@ -5429,6 +5428,10 @@ void LLFolderBridge::modifyOutfit(BOOL append)
     //    return;
     //}
     if (modifyOutfitExceedsWearFolderLimit())
+        return;
+
+    LLViewerInventoryCategory *cat = getCategory();
+    if (!cat)
         return;
     //</FS:AR> FIRE-31508
 
