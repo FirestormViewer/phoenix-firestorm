@@ -70,8 +70,6 @@ S32     LLDrawPoolAvatar::sShadowPass = -1;
 S32 LLDrawPoolAvatar::sDiffuseChannel = 0;
 F32 LLDrawPoolAvatar::sMinimumAlpha = 0.2f;
 
-LLUUID gBlackSquareID;
-
 static bool is_deferred_render = false;
 static bool is_post_deferred_render = false;
 

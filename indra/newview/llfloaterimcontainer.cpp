@@ -2456,7 +2456,7 @@ void LLFloaterIMContainer::closeHostedFloater()
     onClickCloseBtn();
 }
 
-void LLFloaterIMContainer::closeAllConversations()
+void LLFloaterIMContainer::closeAllConversations(bool app_quitting)
 {
     std::vector<LLUUID> ids;
     for (conversations_items_map::iterator it_session = mConversationsItems.begin(); it_session != mConversationsItems.end(); it_session++)
@@ -2471,7 +2471,7 @@ void LLFloaterIMContainer::closeAllConversations()
     for (std::vector<LLUUID>::const_iterator it = ids.begin(); it != ids.end();     ++it)
     {
         LLFloaterIMSession *conversationFloater = LLFloaterIMSession::findInstance(*it);
-        LLFloater::onClickClose(conversationFloater);
+        LLFloater::onClickClose(conversationFloater, app_quitting);
     }
 }
 
@@ -2494,7 +2494,7 @@ void LLFloaterIMContainer::closeFloater(bool app_quitting/* = false*/)
 {
     if(app_quitting)
     {
-        closeAllConversations();
+        closeAllConversations(app_quitting);
         onClickCloseBtn(app_quitting);
     }
     else
