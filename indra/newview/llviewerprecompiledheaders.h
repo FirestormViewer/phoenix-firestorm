@@ -114,10 +114,7 @@
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/regex.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/signals2.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
@@ -126,6 +123,5 @@
 #include <boost/function/function1.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
-#include <vector>
 
 #endif
