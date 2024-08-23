@@ -3672,6 +3672,11 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 // <FS:TT> Patch: ReplaceWornItemsOnly
     else if ("replaceitems" == action)
     {
+        //<FS:AR> FIRE-31508: check folder limit
+        if (modifyOutfitExceedsWearFolderLimit())
+            return;
+        //</FS:AR> FIRE-31508
+
         LLInventoryModel* model = getInventoryModel();
         if(!model) return;
         LLViewerInventoryCategory* cat = getCategory();
@@ -5363,31 +5368,67 @@ void LLFolderBridge::createWearable(LLFolderBridge* bridge, LLWearableType::ETyp
     LLAgentWearables::createWearable(type, false, parent_id);
 }
 
-void LLFolderBridge::modifyOutfit(bool append)
+//<FS:AR> FIRE-31508: refactored from void LLFolderBridge::modifyOutfit(bool append)
+bool LLFolderBridge::modifyOutfitExceedsWearFolderLimit()
 {
-    LLInventoryModel* model = getInventoryModel();
-    if(!model) return;
-    LLViewerInventoryCategory* cat = getCategory();
-    if(!cat) return;
+    LLViewerInventoryCategory *cat = getCategory();
+    if (!cat)
+        return false;
 
     // checking amount of items to wear
-    U32 max_items = gSavedSettings.getU32("WearFolderLimit");
-    LLInventoryModel::cat_array_t cats;
+    U32                            max_items = gSavedSettings.getU32("WearFolderLimit");
+    LLInventoryModel::cat_array_t  cats;
     LLInventoryModel::item_array_t items;
-    LLFindWearablesEx not_worn(/*is_worn=*/ false, /*include_body_parts=*/ false);
-    gInventory.collectDescendentsIf(cat->getUUID(),
-        cats,
-        items,
-        LLInventoryModel::EXCLUDE_TRASH,
-        not_worn);
+    LLFindWearablesEx              not_worn(/*is_worn=*/false, /*include_body_parts=*/false);
+    gInventory.collectDescendentsIf(cat->getUUID(), cats, items, LLInventoryModel::EXCLUDE_TRASH, not_worn);
 
     if (items.size() > max_items)
     {
         LLSD args;
         args["AMOUNT"] = llformat("%d", max_items);
         LLNotificationsUtil::add("TooManyWearables", args);
-        return;
+        return true;
     }
+
+    return false;
+}
+//</FS:AR> FIRE-31508
+
+void LLFolderBridge::modifyOutfit(bool append)
+{
+    // <FS:AR> FIRE-31508: Commented out for slight efficiency.
+    // LLInventoryModel* model = getInventoryModel();
+    // if(!model) return;
+    // LLViewerInventoryCategory* cat = getCategory();
+    // if(!cat) return;
+    // <FS:AR/> FIRE-31508
+
+    //<FS:AR> FIRE-31508: refactored to bool modifyOutfitExceedsWearFolderLimit(), rather than duplicating code
+    //// checking amount of items to wear
+    //U32 max_items = gSavedSettings.getU32("WearFolderLimit");
+    //LLInventoryModel::cat_array_t cats;
+    //LLInventoryModel::item_array_t items;
+    //LLFindWearablesEx not_worn(/*is_worn=*/ false, /*include_body_parts=*/ false);
+    //gInventory.collectDescendentsIf(cat->getUUID(),
+    //    cats,
+    //    items,
+    //    LLInventoryModel::EXCLUDE_TRASH,
+    //    not_worn);
+
+    //if (items.size() > max_items)
+    //{
+    //    LLSD args;
+    //    args["AMOUNT"] = llformat("%d", max_items);
+    //    LLNotificationsUtil::add("TooManyWearables", args);
+    //    return;
+    //}
+    if (modifyOutfitExceedsWearFolderLimit())
+        return;
+
+    LLViewerInventoryCategory *cat = getCategory();
+    if (!cat)
+        return;
+    //</FS:AR> FIRE-31508
 
     if (isAgentInventory())
     {

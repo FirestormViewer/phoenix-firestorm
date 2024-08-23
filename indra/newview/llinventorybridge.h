@@ -389,6 +389,7 @@ protected:
 
     bool checkFolderForContentsOfType(LLInventoryModel* model, LLInventoryCollectFunctor& typeToCheck);
 
+    bool modifyOutfitExceedsWearFolderLimit(); //<FS:AR> FIRE-31508
     void modifyOutfit(bool append);
     void copyOutfitToClipboard();
     void determineFolderType();
