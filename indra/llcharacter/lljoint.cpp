@@ -32,7 +32,6 @@
 #include "lljoint.h"
 
 #include "llmath.h"
-#include "llcallstack.h"
 #include <boost/algorithm/string.hpp>
 
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
@@ -363,7 +362,6 @@ void LLJoint::setPosition( const LLVector3& requested_pos, bool apply_attachment
     {
         if (pos != active_override && do_debug_joint(getName()))
         {
-            LLScopedContextString str("setPosition");
             LL_DEBUGS("Avatar") << " joint " << getName() << " requested_pos " << requested_pos
                                 << " overriden by attachment " << active_override << LL_ENDL;
         }
@@ -371,12 +369,7 @@ void LLJoint::setPosition( const LLVector3& requested_pos, bool apply_attachment
     }
     if ((pos != getPosition()) && do_debug_joint(getName()))
     {
-        LLScopedContextString str("setPosition");
-        LLCallStack cs;
-        LLContextStatus con_status;
         LL_DEBUGS("Avatar") << " joint " << getName() << " set pos " << pos << LL_ENDL;
-        LL_DEBUGS("Avatar") << "CONTEXT:\n" << "====================\n" << con_status << "====================" << LL_ENDL;
-        LL_DEBUGS("Avatar") << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL;
     }
     if (pos != getPosition())
     {
@@ -900,7 +893,6 @@ void LLJoint::setScale( const LLVector3& requested_scale, bool apply_attachment_
     {
         if (scale != active_override && do_debug_joint(getName()))
         {
-            LLScopedContextString str("setScale");
             LL_DEBUGS("Avatar") << " joint " << getName() << " requested_scale " << requested_scale
                                 << " overriden by attachment " << active_override << LL_ENDL;
         }
@@ -908,12 +900,7 @@ void LLJoint::setScale( const LLVector3& requested_scale, bool apply_attachment_
     }
     if ((mXform.getScale() != scale) && do_debug_joint(getName()))
     {
-        LLScopedContextString str("setScale");
-        LLCallStack cs;
-        LLContextStatus con_status;
         LL_DEBUGS("Avatar") << " joint " << getName() << " set scale " << scale << LL_ENDL;
-        LL_DEBUGS("Avatar") << "CONTEXT:\n" << "====================\n" << con_status << LL_ENDL;
-        LL_DEBUGS("Avatar") << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL;
     }
     mXform.setScale(scale);
     touch();

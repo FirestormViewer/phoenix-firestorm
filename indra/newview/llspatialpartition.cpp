@@ -29,7 +29,6 @@
 #include "llspatialpartition.h"
 
 #include "llappviewer.h"
-#include "llcallstack.h"
 #include "lltexturecache.h"
 #include "lltexturefetch.h"
 #include "llimageworker.h"
@@ -763,14 +762,6 @@ bool LLSpatialGroup::changeLOD()
 
         if (fabsf(ratio) >= getSpatialPartition()->mSlopRatio)
         {
-            LL_DEBUGS("RiggedBox") << "changeLOD true because of ratio compare "
-                                   << fabsf(ratio) << " " << getSpatialPartition()->mSlopRatio << LL_ENDL;
-            LL_DEBUGS("RiggedBox") << "sg " << this << "\nmDistance " << mDistance
-                                   << " mLastUpdateDistance " << mLastUpdateDistance
-                                   << " mRadius " << mRadius
-                                   << " fab ratio " << fabsf(ratio)
-                                   << " slop " << getSpatialPartition()->mSlopRatio << LL_ENDL;
-
             return true;
         }
     }
@@ -1699,8 +1690,9 @@ void renderOctree(LLSpatialGroup* group)
             gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
             gGL.flush();
 
-            LLVOAvatar* lastAvatar = nullptr;
+            const LLVOAvatar* lastAvatar = nullptr;
             U64 lastMeshId = 0;
+            bool skipLastSkin = false;
 
             for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
             {
@@ -1729,15 +1721,9 @@ void renderOctree(LLSpatialGroup* group)
                 {
                     gGL.pushMatrix();
                     gGL.loadMatrix(gGLModelView);
-                    if (lastAvatar != face->mAvatar ||
-                        lastMeshId != face->mSkinInfo->mHash)
+                    if (!LLRenderPass::uploadMatrixPalette(face->mAvatar, face->mSkinInfo, lastAvatar, lastMeshId, skipLastSkin))
                     {
-                        if (!LLRenderPass::uploadMatrixPalette(face->mAvatar, face->mSkinInfo))
-                        {
-                            continue;
-                        }
-                        lastAvatar = face->mAvatar;
-                        lastMeshId = face->mSkinInfo->mHash;
+                        continue;
                     }
                 }
                 for (S32 j = 0; j < drawable->getNumFaces(); j++)
