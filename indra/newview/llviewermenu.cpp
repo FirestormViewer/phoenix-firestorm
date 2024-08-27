@@ -12330,6 +12330,52 @@ class FSCheckCameraFloater : public view_listener_t
 };
 // <FS:Ansariel>
 
+// <FS:Ansariel> Add avater complexity sttings to menu
+class FSRenderAvatarComplexityMode : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        std::string param = userdata.asString();
+        if (param == "everyone")
+        {
+            gSavedSettings.setS32("RenderAvatarComplexityMode", 0);
+        }
+        else if (param == "always_friends")
+        {
+            gSavedSettings.setS32("RenderAvatarComplexityMode", 1);
+        }
+        else if (param == "only_friends")
+        {
+            gSavedSettings.setS32("RenderAvatarComplexityMode", 2);
+        }
+
+        return true;
+    }
+};
+
+class FSCheckRenderAvatarComplexityMode : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        std::string param = userdata.asString();
+        if (param == "everyone")
+        {
+            return gSavedSettings.getS32("RenderAvatarComplexityMode") == 0;
+        }
+        else if (param == "always_friends")
+        {
+            return gSavedSettings.getS32("RenderAvatarComplexityMode") == 1;
+        }
+        else if (param == "only_friends")
+        {
+            return gSavedSettings.getS32("RenderAvatarComplexityMode") == 2;
+        }
+
+        return true;
+    }
+};
+// <FS:Ansariel>
+
 void initialize_menus()
 {
     // A parameterized event handler used as ctrl-8/9/0 zoom controls below.
@@ -12988,4 +13034,8 @@ void initialize_menus()
     view_listener_t::addMenu(new FSObjectExportCollada(), "Object.ExportCollada");
     enable.add("Object.EnableExport", boost::bind(&enable_export_object));
     // </FS:Techwolf Lupindo>
+
+    // <FS:Ansariel> Add avater complexity sttings to menu
+    view_listener_t::addMenu(new FSRenderAvatarComplexityMode(), "World.RenderAvatarComplexityMode");
+    view_listener_t::addMenu(new FSCheckRenderAvatarComplexityMode(), "World.CheckRenderAvatarComplexityMode");
 }

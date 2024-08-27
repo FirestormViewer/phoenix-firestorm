@@ -32,7 +32,14 @@
 	<text name="av_nearby_desc3">
 		Hinweis: Für den Einfluss des eigenen Avatars den Reiter "Eigene Avatar-Komplexität" öffnen.
 	</text>
-	<check_box label="Freunde immer komplett darstellen" name="display_friends" />
+	<text name="AvatarComplexityMode_Label">
+		Avatar-Anzeige:
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="Komplexitätsbegrenzung" name="complexity_limit_everone"/>
+		<combo_box.item label="Freunde immer anzeigen" name="complexity_always_show_friends"/>
+		<combo_box.item label="Nur Freunde anzeigen" name="complexity_only_show_friends"/>
+	</combo_box>
 	<button label="Ausnahmen..." name="exceptions_btn" />
 	<check_box label="Alle Avatare verstecken (Gut für Landschaftsaufnahmen) " name="hide_avatars" />
 	<text name="name_tags_textbox">

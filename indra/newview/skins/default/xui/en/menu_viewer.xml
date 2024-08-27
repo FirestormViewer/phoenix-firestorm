@@ -1587,6 +1587,40 @@
           function="Floater.Toggle"
           parameter="fs_avatar_render_settings" />
       </menu_item_call>
+      <menu
+        label="Avatar Display"
+        name="AvatarComplexityMode">
+        <menu_item_check
+          label="Limit by Complexity"
+          name="complexity_limit_everone">
+          <menu_item_check.on_click
+            function="World.RenderAvatarComplexityMode"
+            parameter="everyone"/>
+          <menu_item_check.on_check
+            function="World.CheckRenderAvatarComplexityMode"
+            parameter="everyone"/>
+        </menu_item_check>
+        <menu_item_check
+          label="Always show Friends"
+          name="complexity_always_show_friends">
+          <menu_item_check.on_click
+            function="World.RenderAvatarComplexityMode"
+            parameter="always_friends"/>
+          <menu_item_check.on_check
+            function="World.CheckRenderAvatarComplexityMode"
+            parameter="always_friends"/>
+        </menu_item_check>
+        <menu_item_check
+          label="Only show Friends"
+          name="complexity_only_show_friends">
+          <menu_item_check.on_click
+            function="World.RenderAvatarComplexityMode"
+            parameter="only_friends"/>
+          <menu_item_check.on_check
+            function="World.CheckRenderAvatarComplexityMode"
+            parameter="only_friends"/>
+        </menu_item_check>
+     </menu>
       <menu_item_check
         label="Show Friends only"
         name="Render Friends Only">

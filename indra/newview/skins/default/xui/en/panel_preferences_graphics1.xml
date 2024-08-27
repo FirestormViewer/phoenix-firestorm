@@ -604,15 +604,15 @@
          name="AvatarComplexityMode"
          width="150">
             <combo_box.item
-             label="Limit by complexity"
+             label="Limit by Complexity"
              name="0"
              value="0"/>
             <combo_box.item
-             label="Always show friends"
+             label="Always show Friends"
              name="1"
              value="1"/>
             <combo_box.item
-             label="Only show friends"
+             label="Only show Friends"
              name="2"
              value="2"/>
         </combo_box>
