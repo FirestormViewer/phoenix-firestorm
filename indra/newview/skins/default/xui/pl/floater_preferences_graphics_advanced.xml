@@ -9,10 +9,19 @@
 	<text name="PostProcessText">
 		Niska
 	</text>
+	<slider label="Maks. świateł:" name="MaxLights" />
 	<check_box label="Włącz VSync" name="vsync" tool_tip="Synchronizuje liczbę klatek na sekundę z częstotliwością odświeżania monitora, może skutkować zmniejszeniem widocznej płynności i opóźnieniami." />
 	<text name="AvatarText">
 		Awatar
 	</text>
+	<text name="AvatarComplexityModeLabel">
+		Render awatarów:
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="Ogranicz po złożonośći" name="0" />
+		<combo_box.item label="Zawsze pokazuj znajomych" name="1" />
+		<combo_box.item label="Pokazuj tylko znajomych" name="2" />
+	</combo_box>
 	<slider tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" label="Maks. szczegółowość awatarów:" name="IndirectMaxComplexity" />
 	<slider label="Maks. il. wyświetlanych awatarów:" name="IndirectMaxNonImpostors" />
 	<slider label="Detale:" name="AvatarMeshDetail" />
@@ -102,10 +111,9 @@
 		Odświeżanie luster:
 	</text>
 	<combo_box name="HeroProbeUpdateRate">
-		<combo_box.item label="W każdej klatce" name="0" />
-		<combo_box.item label="Co 2 klatkę" name="1" />
-		<combo_box.item label="Co 3 klatkę" name="2" />
-		<combo_box.item label="Co 4 klatkę" name="3" />
+		<combo_box.item label="Powoli" name="6"/>
+		<combo_box.item label="Średnio" name="3" />
+		<combo_box.item label="Szybko" name="1" />
 	</combo_box>
 	<button label="Zresetuj wartości ustawień grafiki" name="Defaults" />
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel" />
