@@ -84,9 +84,6 @@
 			<slider label="  Avatarlar" name="AvatarMeshDetail"/>
 			<slider label="  Torpaq" name="TerrainMeshDetail"/>
 			<slider label="  Səma" name="SkyMeshDetail"/>
-			<text name="AvatarRenderingText">
-				Avatar çəkilişi:
-			</text>
 			<check_box label="Avatar paltarı" name="AvatarCloth"/>
 			<!--<text name="TerrainDetailText">
 				Torpaq detallaşması:

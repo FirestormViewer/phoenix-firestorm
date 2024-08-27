@@ -204,18 +204,37 @@ top="0">
    width="580">
      Note: Your own avatar includes viewer overheads. Use the attachment tab to see how you affect others.
   </text>
-  <check_box
-    control_name="AlwaysRenderFriends"
+  <text
     height="16"
-    initial_value="true"
-    label="Always display friends in full detail"
-    label_text.text_color="White"
     layout="topleft"
-    name="display_friends"
-    top_pad="2"
+    name="AvatarComplexityMode_Label"
+    top_delta="25"
     left="18"
-    width="256">
-  </check_box>
+    width="100">
+     Avatar Display:
+   </text>
+    <combo_box
+     control_name="RenderAvatarComplexityMode"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     top_delta="-4"
+     name="AvatarComplexityMode"
+     width="200">
+        <combo_box.item
+         label="Limit by Complexity"
+         name="complexity_limit_everone"
+         value="0" />
+        <combo_box.item
+         label="Always show Friends"
+         name="complexity_always_show_friends"
+         value="1" />
+        <combo_box.item
+         label="Only show Friends"
+         name="complexity_only_show_friends"
+         value="2" />
+    </combo_box>
   <button
     height="23"
     label="Exceptions..."

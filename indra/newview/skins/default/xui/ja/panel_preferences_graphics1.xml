@@ -105,9 +105,6 @@
 		<slider label="  空：" name="SkyMeshDetail"/>
 		-->
 		<slider label="　アバターの物理作用：" name="AvatarPhysicsDetail"/>
-		<text name="AvatarRenderingText">
-			アバターレンダリング：
-		</text>
 		<check_box label="アバターの布" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			地形詳細：
