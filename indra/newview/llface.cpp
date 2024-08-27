@@ -854,11 +854,6 @@ bool LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 
         const LLVolumeFace &face = volume.getVolumeFace(f);
 
-        LL_DEBUGS("RiggedBox") << "updating extents for face " << f
-                               << " starting extents " << mExtents[0] << ", " << mExtents[1]
-                               << " starting vf extents " << face.mExtents[0] << ", " << face.mExtents[1]
-                               << " num verts " << face.mNumVertices << LL_ENDL;
-
         // MAINT-8264 - stray vertices, especially in low LODs, cause bounding box errors.
         if (face.mNumVertices < 3)
         {
@@ -877,21 +872,14 @@ bool LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 
         matMulBoundBox(mat_vert, face.mExtents, mExtents);
 
-        LL_DEBUGS("RiggedBox") << "updated extents for face " << f
-                               << " bbox gave extents " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
-
         if (!mDrawablep->isActive())
         {   // Shift position for region
             LLVector4a offset;
             offset.load3(mDrawablep->getRegion()->getOriginAgent().mV);
             mExtents[0].add(offset);
             mExtents[1].add(offset);
-            LL_DEBUGS("RiggedBox") << "updating extents for face " << f
-                                   << " not active, added offset " << offset << LL_ENDL;
         }
 
-        LL_DEBUGS("RiggedBox") << "updated extents for face " << f
-                               << " to " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
         LLVector4a t;
         t.setAdd(mExtents[0],mExtents[1]);
         t.mul(0.5f);
@@ -2343,13 +2331,6 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
 
     F32 dist = lookAt.getLength3().getF32();
     dist = llmax(dist-size.getLength3().getF32(), 0.001f);
-    //ramp down distance for nearby objects
-    if (dist < 16.f)
-    {
-        dist /= 16.f;
-        dist *= dist;
-        dist *= 16.f;
-    }
 
     lookAt.normalize3fast() ;
 
