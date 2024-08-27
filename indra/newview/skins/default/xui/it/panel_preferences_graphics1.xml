@@ -110,9 +110,6 @@
 			<slider label="  Avatar" name="AvatarMeshDetail"/>
 			<slider label="  Terreno" name="TerrainMeshDetail"/>
 			<slider label="  Cielo" name="SkyMeshDetail"/>
-			<text name="AvatarRenderingText">
-				Resa avatar:
-			</text>
 			<check_box label="Vestiti in tessuto flessibile" name="AvatarCloth"/>
 			<!-- <text name="TerrainDetailText">
 				Dettagli del terreno:

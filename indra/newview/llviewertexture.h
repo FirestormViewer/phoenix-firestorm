@@ -149,6 +149,8 @@ public:
 
     virtual F32  getMaxVirtualSize() ;
 
+    LLFrameTimer* getLastReferencedTimer() { return &mLastReferencedTimer; }
+
     S32 getFullWidth() const { return mFullWidth; }
     S32 getFullHeight() const { return mFullHeight; }
     /*virtual*/ void setKnownDrawSize(S32 width, S32 height);
@@ -200,6 +202,7 @@ protected:
     mutable F32 mMaxVirtualSize = 0.f;  // The largest virtual size of the image, in pixels - how much data to we need?
     mutable S32  mMaxVirtualSizeResetCounter;
     mutable S32  mMaxVirtualSizeResetInterval;
+    LLFrameTimer mLastReferencedTimer;
 
     ll_face_list_t    mFaceList[LLRender::NUM_TEXTURE_CHANNELS]; //reverse pointer pointing to the faces using this image as texture
     U32               mNumFaces[LLRender::NUM_TEXTURE_CHANNELS];
@@ -608,10 +611,7 @@ public:
     /*virtual*/ void addFace(U32 ch, LLFace* facep) ;
     /*virtual*/ void removeFace(U32 ch, LLFace* facep) ;
 
-    /*virtual*/ F32  getMaxVirtualSize() ;
-
-    // get the timer that tracks the last time reinit was called
-    LLFrameTimer* getLastReferencedTimer() { return &mLastReferencedTimer; }
+    /*virtual*/ F32  getMaxVirtualSize();
 
 private:
     void switchTexture(U32 ch, LLFace* facep) ;
@@ -632,9 +632,6 @@ private:
     LLViewerMediaImpl* mMediaImplp ;
     bool mIsPlaying ;
     U32  mUpdateVirtualSizeTime ;
-
-    // tracks last time reinit was called
-    LLFrameTimer mLastReferencedTimer;
 
 public:
     static void updateClass() ;
