@@ -1425,6 +1425,26 @@ If you do not understand the distinction then leave this control alone."
          tool_tip="Determines scale of terrain textures - lower is more compressed (requires viewer restart)"
          top_pad="3"
          width="405" />
+        <!-- Sharpening Settings -->
+        <slider
+         control_name="RenderCASSharpness"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="Sharpening:"
+         label_width="300"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="RenderSharpness"
+         show_text="true"
+         top_pad="3"
+         width="405">
+        </slider>
+        <!-- End of Sharpening Settings-->
+
     </panel>
 
 <!--Depth of Field-->

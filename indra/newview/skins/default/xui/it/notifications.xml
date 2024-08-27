@@ -3422,12 +3422,6 @@ Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta d
 
 Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta di manipolazioni vocali.
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Almeno una delle tue manipolazioni vocali scadrà tra meno di [INTERVAL] giorni. 
-[[URL] Fai clic qui] per rinnovare l&apos;abbonamento. 
-
-Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta di manipolazioni vocali.
-	</notification>
 	<notification name="VoiceEffectsNew">
 		Sono disponibili nuove manipolazioni vocali.
 	</notification>

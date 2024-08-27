@@ -3487,12 +3487,6 @@ Abunəliyi yeniləmək üçün [[URL] buraya basın].
 
 Əgər siz premium hesab sahibisinizsə, zəhmət olmasa animasiyalı səs dəyişikliyinin hüququnu almaq üçün [[PREMIUM_URL] bura basın].
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Animasiyalı səs dəyişdiricisinin bir və ya daha çox növlərinin müddəti [INTERVAL] gün və ya daha az müddətdə başa çatacaq.
-Abunəliyi yeniləmək üçün [[URL] buraya basın].
-
-Əgər siz premium hesab sahibisinizsə, zəhmət olmasa animasiyalı səs dəyişikliyinin hüququnu almaq üçün [[PREMIUM_URL] bura basın].
-	</notification>
 	<notification name="VoiceEffectsNew">
 		Səs dəyişikliklərinin yeni növləri var!
 	</notification>
