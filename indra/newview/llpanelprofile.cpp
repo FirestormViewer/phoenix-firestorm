@@ -1459,6 +1459,12 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //childSetVisible("partner_spacer_layout", false);
         setBadge("Profile_Badge_Linden", "BadgeLinden");
     }
+    // <FS:Ansariel> Add Firestorm team badge
+    else if (FSData::getInstance()->getAgentFlags(avatar_data->avatar_id) != -1)
+    {
+        setBadge("Profile_Badge_Team", "BadgeTeam");
+    }
+    // </FS:Ansariel>
     else if (avatar_data->born_on < sl_release)
     {
         // <FS:Ansariel> Fix LL UI/UX design accident
@@ -1504,12 +1510,6 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //childSetVisible("partner_spacer_layout", false);
         setBadge("Profile_Badge_Pplus_Lifetime", "BadgePremiumPlusLifetime");
     }
-    // <FS:Ansariel> Add Firestorm team badge
-    else if (FSData::getInstance()->getAgentFlags(avatar_data->avatar_id) != -1)
-    {
-        setBadge("Profile_Badge_Team", "BadgeTeam");
-    }
-    // </FS:Ansariel>
     else
     {
         childSetVisible("badge_layout", false);
