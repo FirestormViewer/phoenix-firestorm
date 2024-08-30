@@ -116,7 +116,6 @@
 				<radio_item label="Odtwarzaj głos z pełną głośnością (tylko OpenSim)" name="2" />
 			</radio_group>
 			<check_box label="Poruszaj ustami awatara podczas mówienia" name="enable_lip_sync"/>
-			<check_box tool_tip="Zaznacz, aby włączyć usuwanie echa głosu" label="Usuwanie echa" name="enable_echo_cancellation" />
 			<check_box label="Pokazuj wskaźniki dźwięku ponad awatarami" tool_tip="Pokazuj wskaźniki dźwięku (białe kropki) ponad awatarami" name="FSShowVoiceVisualizer"/>
 			<check_box label="Pokazuj wskaźnik dźwięku ponad moim własnym awatarem" name="FSShowMyOwnVoiceVisualizer" />
 			<check_box label="Pokazuj wskaźniki dźwięku wraz z kropką" tool_tip="Jeśli ta opcja jest włączona, to kropka jest wyświetlana jako część wskaźników dźwięku. Jeśli jest wyłączona, to pokazują się tylko fale głosowe." name="FSShowVoiceVisualizerWithDot" />
@@ -126,9 +125,10 @@
 			<check_box label="Automatycznie odrzucaj zaproszenia AdHoc (konferencyjne) rozmów głosowych" name="VoiceCallsRejectAdHoc"/>
 			<check_box label="Automatycznie odrzucaj zaproszenia P2P (awatar z awatarem) rozmów głosowych" name="VoiceCallsRejectP2P"/>
 			<check_box label="Włącz/wyłącz mikrofon przyciskiem na pasku" name="push_to_talk_toggle_check" tool_tip="Kiedy aktywny jest tryb przełączania wciśnij i zwolnij przełącznik RAZ, aby włączyć lub wyłączyć mikrofon. Kiedy tryb przełączania nie jest aktywny mikrofon nadaje głos tylko wtedy, gdy przełącznik jest wciśnięty."/>
+			<check_box tool_tip="Zaznacz, aby włączyć usuwanie echa głosu" label="Usuwanie echa" name="enable_echo_cancellation" />
 			<check_box tool_tip="Zaznacz, aby włączyć automatyczną regulację wzmocnienia" label="Automatyczna regulacja wzmocnienia" name="voice_automatic_gain_control" />
-			<text name="noise_suppression_label">
-				Tłumienie hałasu
+			<text name="noise_suppression_label" width="95">
+				Tłumienie hałasu:
 			</text>
 			<combo_box name="noise_suppression_combo">
 				<item label="Wyłączone" name="noise_suppression_none" />
