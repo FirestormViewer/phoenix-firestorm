@@ -1297,7 +1297,11 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
                             folder_count++;
                         }
                     }
+#ifdef OPENSIM
+                    if (LLViewerInventoryCategory::VERSION_UNKNOWN != cat->getVersion() || !LLGridManager::getInstance()->isInSecondLife())
+#else
                     else
+#endif
                     {
                         // May already have this folder, but append child folders to list.
                         if (fetch_info.mFetchType >= FT_CONTENT_RECURSIVE)
