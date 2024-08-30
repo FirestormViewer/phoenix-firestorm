@@ -147,6 +147,7 @@
 		<menu label="Окружающая среда" name="Environment">
 			<menu_item_check label="Восход" name="Sunrise"/>
 			<menu_item_check label="Полдень" name="Noon"/>
+			<menu_item_check label="Полдень (устаревшее)" name="legacy noon"/>
 			<menu_item_check label="Закат" name="Sunset"/>
 			<menu_item_check label="Полночь" name="Midnight"/>
 			<menu_item_check label="Использовать Совместную Окружающую среду" name="Use Shared Environment"/>
@@ -196,6 +197,11 @@
 		<menu_item_call label="Проводник анимаций" name="Animation Explorer"/>
 		<menu_item_call label="Черный список активов" name="asset_blacklist"/>
 		<menu_item_call label="Настройки отображения аватаров" name="Avatar Render Settings"/>
+		<menu label="Отображение аватара" name="AvatarComplexityMode">
+			<menu_item_check label="Ограничение по сложности" name="complexity_limit_everone"/>
+			<menu_item_check label="Всегда показывать друзей" name="complexity_always_show_friends"/>
+			<menu_item_check label="Показывать только друзей" name="complexity_only_show_friends"/>
+		</menu>
 		<menu_item_check label="Показывать только друзей" name="Render Friends Only"/>
 	</menu>
 
