@@ -309,15 +309,6 @@ if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
 
-if [ $TARGET_PLATFORM == "darwin" ]
-then
-	if [ $WANTS_CRASHREPORTING -eq $TRUE ]
-	then
-		echo "--crashreporting is not supported on this platform"
-		WANTS_CRASHREPORTING=$FALSE
-	fi
-fi
-
 echo -e "configure_firestorm.sh" > $LOG
 echo -e "       PLATFORM: $TARGET_PLATFORM"                                    | tee -a $LOG
 echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a $LOG
