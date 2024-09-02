@@ -304,44 +304,18 @@ jobs:
           echo "viewer_build=$viewer_build" >> "$GITHUB_OUTPUT"
           echo "viewer_channel=${{ env.FS_RELEASE_CHAN }}" >> "$GITHUB_OUTPUT"
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
-      - name: Post Release Symbols (windows)
-        if: runner.os == 'Windows'
+      - name: Post Bugsplat Symbols
         uses: BugSplat-Git/symbol-upload@main
         with:
-          clientId: "${{ secrets.BUGSPLAT_CLIENT_ID }}"
-          clientSecret: "${{ secrets.BUGSPLAT_CLIENT_SECRET }}"
+          clientId: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || secrets.BUGSPLAT_PREVIEW_ID }}
+          clientSecret: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_SECRET || secrets.BUGSPLAT_PREVIEW_SECRET }}
           database: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_DB || secrets.BUGSPLAT_PREVIEW_DB }}
           application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
-          version: ${{ steps.version.outputs.viewer_version }}
-          files: "**/*.{pdb,exe,dll}"
+          version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
+          files: ${{ runner.os == 'Windows' && '**/*.{pdb,exe,dll}' || '**/*' }}
           directory: "build-*"
           node-version: "20"
-
-      - name: Post Release Symbols (macOS)
-        if: runner.os == 'macOS'
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_CLIENT_ID }}"
-          clientSecret: "${{ secrets.BUGSPLAT_CLIENT_SECRET }}"
-          database: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_DB || secrets.BUGSPLAT_PREVIEW_DB }}
-          application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
-          version: ${{ steps.version.outputs.viewer_version }}
-          files: "**/*"
-          directory: "build-*"
-          node-version: "20"
-      - name: Post Release Symbols (linux)
-        if: runner.os == 'Linux'
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_CLIENT_ID }}"
-          clientSecret: "${{ secrets.BUGSPLAT_CLIENT_SECRET }}"
-          database: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_DB || secrets.BUGSPLAT_PREVIEW_DB }}
-          application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
-          version: ${{ steps.version.outputs.viewer_version }}
-          files: "**/*"
-          directory: "build-*"
-          dumpSyms: true
-          node-version: "20"
+          dumpSyms: ${{ runner.os == 'Linux' && 'true' || 'false' }}
   
       - name: Publish artifacts
         if: runner.os == 'Windows'
