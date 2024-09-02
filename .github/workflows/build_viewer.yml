@@ -306,20 +306,37 @@ jobs:
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
       - name: Install node-dump-syms
         if: runner.os == 'Linux'
-        run: npm install -g @bugsplat/node-dump-syms          
+        run: npm install -g node-dump-syms          
       - name: Post Bugsplat Symbols
         uses: beqjanus/symbol-upload@main
         with:
-          clientId: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || secrets.BUGSPLAT_PREVIEW_ID }}
-          clientSecret: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_SECRET || secrets.BUGSPLAT_PREVIEW_SECRET }}
-          database: ${{ steps.version.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_DB || secrets.BUGSPLAT_PREVIEW_DB }}
+          clientId: ${{ 
+            steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || 
+            steps.version.outputs.viewer_release_type == 'Nightly' && secrets.BUGSPLAT_NIGHTLY_ID || 
+            steps.version.outputs.viewer_release_type == 'Manual' && secrets.BUGSPLAT_MANUAL_ID || 
+            steps.version.outputs.viewer_release_type == 'Beta' && secrets.BUGSPLAT_PREVIEW_ID || 
+            steps.version.outputs.viewer_release_type == 'Alpha' && secrets.BUGSPLAT_ALPHA_ID || 
+            secrets.BUGSPLAT_DEFAULT_ID }}
+          clientSecret: ${{ 
+            steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Nightly' && secrets.BUGSPLAT_NIGHTLY_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Manual' && secrets.BUGSPLAT_MANUAL_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Beta' && secrets.BUGSPLAT_PREVIEW_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Alpha' && secrets.BUGSPLAT_ALPHA_SECRET || 
+            secrets.BUGSPLAT_DEFAULT_SECRET }}
+          database: ${{ 
+            steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_DB || 
+            steps.version.outputs.viewer_release_type == 'Nightly' && secrets.BUGSPLAT_NIGHTLY_DB || 
+            steps.version.outputs.viewer_release_type == 'Manual' && secrets.BUGSPLAT_MANUAL_DB || 
+            steps.version.outputs.viewer_release_type == 'Beta' && secrets.BUGSPLAT_PREVIEW_DB || 
+            steps.version.outputs.viewer_release_type == 'Alpha' && secrets.BUGSPLAT_ALPHA_DB || 
+            secrets.BUGSPLAT_DEFAULT_DB }}
           application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
           version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
           files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/*.xcarchive.zip' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
           node-version: "20"
           dumpSyms: ${{ runner.os == 'Linux' && 'true' || 'false' }}
-  
       - name: Publish artifacts
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
