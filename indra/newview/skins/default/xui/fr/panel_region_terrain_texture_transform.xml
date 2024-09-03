@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Terrain" name="Terrain">
+	<text name="region_text_lbl">
+		Région :
+	</text>
+	<text name="region_text">
+		inconnue
+	</text>
+	<text name="detail_texture_text">
+		Textures du terrain
+	</text>
+	<text name="detail_material_text">
+		Matériaux du terrain
+	</text>
+	<check_box label="PBR métal rugosité" name="terrain_material_type" tool_tip="Si cette option est cochée, les matériaux PBR métal rugosité sont utilisés pour le terrain. Sinon, utiliser les textures."/>
+	<text name="height_text_lbl">
+		1 (Bas)
+	</text>
+	<text name="height_text_lbl4">
+		4 (Élevé)
+	</text>
+	<layout_stack name="terrain_features_stack">
+		<layout_panel name="frame_settings_terrain">
+			<tab_container name="terrain_tabs">
+				<panel label="Élévation" name="terrain_elevation_panel"/>
+				<panel label="Transformations" name="terrain_transform_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+	<button label="Appliquer" name="apply_btn"/>
+</panel>

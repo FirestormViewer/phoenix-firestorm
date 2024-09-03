@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_settings_terrain_elevation">
+	<spinner label="Niveau de l'eau" name="water_height_spin"/>
+	<spinner label="Limite haute du terrain" name="terrain_raise_spin"/>
+	<spinner label="Limite basse du terrain" name="terrain_lower_spin"/>
+	<text name="height_text_lbl5">
+		Plages d'élévation de la texture
+	</text>
+	<text name="height_text_lbl5_material">
+		Plages d'élévation des matériaux
+	</text>
+	<text name="height_text_lbl10">
+		Ces valeurs représentent la plage de mélange pour les textures ci-dessus.
+	</text>
+	<text name="height_text_lbl10_material">
+		Ces valeurs représentent la plage de mélange pour les matériaux ci-dessus.
+	</text>
+	<text name="height_text_lbl11">
+		Mesurée en mètres, la valeur BASSE est la hauteur MAXIMALE de la texture #1, et la valeur HAUTE est la hauteur MINIMALE de la texture #4.
+	</text>
+	<text name="height_text_lbl11_material">
+		Mesurée en mètres, la valeur BASSE est la hauteur MAXIMALE du matériau n°1, et la valeur HAUTE est la hauteur MINIMALE du matériau n°4.
+	</text>
+	<text name="height_text_lbl6">
+		Nord-Ouest
+	</text>
+	<text name="height_text_lbl7">
+		Nord-Est
+	</text>
+<!--  northwest low-->
+	<spinner label="Bas" name="height_start_spin_1"/>
+<!--    northeast low-->
+	<spinner label="Bas" name="height_start_spin_3"/>
+<!--  northwest high-->
+	<spinner label="Haut" name="height_range_spin_1"/>
+<!--  northeast high-->
+	<spinner label="Haut" name="height_range_spin_3"/>
+	<text name="height_text_lbl8">
+		Sud-ouest
+	</text>
+	<text name="height_text_lbl9">
+		Sud-Est
+	</text>
+<!--  southwest low-->
+	<spinner label="Bas" name="height_start_spin_0"/>
+<!--  southeast low-->
+	<spinner label="Bas" name="height_start_spin_2"/>
+<!--southwest high-->
+	<spinner label="Haut" name="height_range_spin_0"/>
+<!--  southeast high-->
+	<spinner label="Haut" name="height_range_spin_2"/>
+<!-- Terrain Download/Upload/Bake buttons -->
+	<button label="Télécharger un terrain RAW..." name="download_raw_btn" tool_tip="Disponible uniquement pour les propriétaires, pas pour les gestionnaires"/>
+	<button label="Téléverser un terrain RAW..." name="upload_raw_btn" tool_tip="Disponible uniquement pour les propriétaires, pas pour les gestionnaires"/>
+	<button label="Figer le terrain" name="bake_terrain_btn" tool_tip="Définir le terrain actuel comme point médian pour les limites supérieures/inférieures"/>
+</panel>
