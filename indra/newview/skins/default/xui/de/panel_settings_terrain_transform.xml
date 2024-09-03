@@ -34,7 +34,7 @@
 	<spinner label="Skalierung u" name="terrain2Rotation"/>
 	<spinner label="Skalierung u" name="terrain3Rotation"/>
 	<text name="terrain0OffsetU_label">
-		Versatz y
+		Versatz u
 	</text>
 	<spinner label="Versatz u" name="terrain0OffsetU"/>
 	<spinner label="Skalierung u" name="terrain1OffsetU"/>
