@@ -306,7 +306,9 @@ jobs:
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
       - name: Install node-dump-syms
         if: runner.os == 'Linux'
-        run: npm install -g node-dump-syms          
+        run: |
+          npm install -g node-pre-gyp          
+          npm install -g node-dump-syms          
       - name: Post Bugsplat Symbols
         uses: beqjanus/symbol-upload@main
         with:
