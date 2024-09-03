@@ -203,8 +203,19 @@ jobs:
           dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
+          sudo apt-get install -y wget apt-transport-https software-properties-common
           sudo apt-get autoremove --purge 
           sudo apt-get clean
+        
+      - name: Install Microsoft repository GPG keys
+        if: runner.os == 'Linux'
+        run: |
+          wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y powershell
+          pwsh -c '$PSVersionTable'
 
       - name: test macOS bundles are present
         if: runner.os == 'MacOS'
@@ -304,11 +315,12 @@ jobs:
           echo "viewer_build=$viewer_build" >> "$GITHUB_OUTPUT"
           echo "viewer_channel=${{ env.FS_RELEASE_CHAN }}" >> "$GITHUB_OUTPUT"
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
-      - name: Install node-dump-syms
-        if: runner.os == 'Linux'
-        run: |
-          npm install -g node-pre-gyp          
-          npm install -g node-dump-syms          
+      # - name: Install node-dump-syms
+      #   if: runner.os == 'Linux'
+      #   run: |
+      #     npm install -g node-pre-gyp          
+      #     npm install -g node-dump-syms          
+
       - name: Post Bugsplat Symbols
         uses: beqjanus/symbol-upload@main
         with:
@@ -338,7 +350,7 @@ jobs:
           files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/*.xcarchive.zip' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
           node-version: "20"
-          dumpSyms: ${{ runner.os == 'Linux' && 'true' || 'false' }}
+          dumpSyms: false
       - name: Publish artifacts
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
