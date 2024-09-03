@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Trasforma" name="panel_settings_terrain_transform">
+	<text name="terrain0ScaleU_label">
+		Scala u
+	</text>
+	<text name="terrain0ScaleV_label">
+		Scala v
+	</text>
+	<text name="terrain0Rotation_label">
+		Rotazione
+	</text>
+	<text name="terrain0OffsetU_label">
+		Spostamento u
+	</text>
+	<text name="terrain0OffsetV_label">
+		Spostamento v
+	</text>
+</panel>
