@@ -203,8 +203,19 @@ jobs:
           dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
+          sudo apt-get install -y wget apt-transport-https software-properties-common
           sudo apt-get autoremove --purge 
           sudo apt-get clean
+        
+      - name: Install Microsoft repository GPG keys
+        if: runner.os == 'Linux'
+        run: |
+          wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y powershell
+          pwsh -c '$PSVersionTable'
 
       - name: test macOS bundles are present
         if: runner.os == 'MacOS'
@@ -309,6 +320,7 @@ jobs:
         run: |
           npm install -g node-pre-gyp          
           npm install -g node-dump-syms          
+
       - name: Post Bugsplat Symbols
         uses: beqjanus/symbol-upload@main
         with:
