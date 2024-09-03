@@ -1001,17 +1001,29 @@
          height="12"
          layout="topleft"
          left="10"
-         name="Antialiasing:"
+         name="antialiasing label"
          top_pad="10"
          width="220"
-          tool_tip="Changes to this setting may require a restart on some hardware.">
+         tool_tip="Changes to this setting may require a restart on some hardware.">
           Antialiasing (restart recommended):
+        </text>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="300"
+         name="antialiasing quality label"
+         top_delta="0"
+         width="220"
+         tool_tip="Changes to this setting may require a restart on some hardware.">
+          Antialiasing Quality:
         </text>
         <combo_box
          control_name="RenderFSAASamples"
          height="22"
          initial_value="false"
-         label="Antialiasing"
          follows="left|top"
          layout="topleft"
          left="10"
@@ -1025,6 +1037,37 @@
             <combo_box.item
              label="FXAA"
              name="FXAA"
+             value="1" />
+            <combo_box.item
+             label="SMAA"
+             name="SMAA"
+             value="2" />
+        </combo_box>
+        <combo_box
+         control_name="RenderFSAASamples"
+         height="22"
+         initial_value="false"
+         follows="left|top"
+         layout="topleft"
+         left="300"
+         name="fsaa quality"
+         top_delta="5"
+         width="130">
+            <combo_box.item
+             label="Low"
+             name="Low"
+             value="0" />
+            <combo_box.item
+             label="Medium"
+             name="Medium"
+             value="1" />
+            <combo_box.item
+             label="High"
+             name="High"
+             value="2" />
+            <combo_box.item
+             label="Ultra"
+             name="Ultra"
              value="2" />
         </combo_box>
 

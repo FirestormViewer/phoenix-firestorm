@@ -2793,7 +2793,7 @@ LLGLDepthTest::LLGLDepthTest(GLboolean depth_enabled, GLboolean write_enabled, G
 : mPrevDepthEnabled(sDepthEnabled), mPrevDepthFunc(sDepthFunc), mPrevWriteEnabled(sWriteEnabled)
 {
     stop_glerror();
-
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
     checkState();
 
     if (!depth_enabled)
@@ -2826,6 +2826,7 @@ LLGLDepthTest::LLGLDepthTest(GLboolean depth_enabled, GLboolean write_enabled, G
 
 LLGLDepthTest::~LLGLDepthTest()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
     checkState();
     if (sDepthEnabled != mPrevDepthEnabled )
     {

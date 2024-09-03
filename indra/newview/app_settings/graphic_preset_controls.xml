@@ -20,6 +20,7 @@
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
+		<string>RenderCASSharpness</string>
 		<string>RenderCompressTextures</string>
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
@@ -34,6 +35,7 @@
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
 		<string>RenderFSAASamples</string>
+		<string>RenderFSAAType</string>
 		<string>RenderGlow</string>
 		<string>RenderGlowHDR</string>
 		<string>RenderGlowIterations</string>
