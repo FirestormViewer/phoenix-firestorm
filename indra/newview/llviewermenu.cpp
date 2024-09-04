@@ -4137,6 +4137,12 @@ bool enable_gltf_upload()
     return enable_gltf_save_as();
 }
 
+bool enable_terrain_local_paintmap()
+{
+    static LLCachedControl<bool> can_use_shaders(gSavedSettings, "RenderCanUseTerrainBakeShaders", true);
+    return can_use_shaders;
+}
+
 class LLSelfRemoveAllAttachments : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -13115,6 +13121,7 @@ void initialize_menus()
     enable.add("EnableGLTF", boost::bind(&enable_gltf));
     enable.add("EnableGLTFSaveAs", boost::bind(&enable_gltf_save_as));
     enable.add("EnableGLTFUpload", boost::bind(&enable_gltf_upload));
+    enable.add("EnableTerrainLocalPaintMap", std::bind(&enable_terrain_local_paintmap));
     enable.add("EnableBridgeFunction", boost::bind(&enable_bridge_function));   // <FS:CR>
 
     view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");
