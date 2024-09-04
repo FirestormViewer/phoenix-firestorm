@@ -9,10 +9,19 @@
 	<text name="PostProcessText">
 		Basso
 	</text>
+	<slider label="Max luci vicine:" name="MaxLights" />
 	<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili." />
 	<text name="AvatarText">
 		Avatar
 	</text>
+	<text name="AvatarComplexityModeLabel">
+		Rendering avatar:
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="Limita per complessità" name="0" />
+		<combo_box.item label="Mostra sempre amici" name="1" />
+		<combo_box.item label="Mostra solo amici" name="2" />
+	</combo_box>
 	<slider label="Complessità massima:" name="IndirectMaxComplexity" tool_tip="Definisce il punto in cui un avatar dall&apos;aspetto complesso viene visualizzato come JellyDoll"/>
 	<slider label="N. max di non impostori:" name="IndirectMaxNonImpostors"/>
 	<slider label="Dettagli:" name="AvatarMeshDetail"/>
@@ -102,10 +111,9 @@
 		Update specchi:
 	</text>
 	<combo_box name="HeroProbeUpdateRate">
-		<combo_box.item label="Ogni frame" name="0" />
-		<combo_box.item label="Ogni 2 frame" name="1" />
-		<combo_box.item label="Ogni 3 frame" name="2" />
-		<combo_box.item label="Ogni 4 frame" name="3" />
+		<combo_box.item label="Lento" name="6"/>
+		<combo_box.item label="Medio" name="3" />
+		<combo_box.item label="Veloce" name="1" />
 	</combo_box>
 	<button label="Ripristina impostazioni predefinite" name="Defaults"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>

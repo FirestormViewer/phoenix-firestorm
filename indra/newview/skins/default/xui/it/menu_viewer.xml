@@ -170,6 +170,11 @@
 		<menu_item_call label="Esplora Animazioni" name="Animation Explorer"/>
 		<menu_item_call label="Lista Nera" name="asset_blacklist"/>
 		<menu_item_call label="Impostazioni Rendering Avatar" name="Avatar Render Settings"/>
+		<menu label="Rendering avatar" name="AvatarComplexityMode">
+			<menu_item_check label="Limita per complessità" name="complexity_limit_everone" />
+			<menu_item_check label="Mostra sempre amici" name="complexity_always_show_friends" />
+			<menu_item_check label="Mostra solo amici" name="complexity_only_show_friends" />
+		</menu>
 		<menu_item_check label="Mostra solo amici" name="Render Friends Only"/>
 	</menu>
 	<menu label="Costruisci" name="BuildTools">
@@ -457,6 +462,11 @@
 			<menu_item_call label="Forza Disconnetti viewer" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Simula Memory Leak" name="Memory Leaking Simulation"/>
 		</menu>
+		<menu name="GLTF">
+			<menu_item_call label="Apri..." name="Open..." />
+			<menu_item_call label="Salva come..." name="Save As..." />
+			<menu_item_call label="Carica..." name="Upload..." />
+		</menu>
 		<menu label="Test rendering" name="Render Tests">
 			<menu_item_check label="Camera Offset" name="Camera Offset"/>
 			<menu_item_check label="Randomize Framerate" name="Randomize Framerate"/>
@@ -594,6 +604,7 @@
 				<menu_item_call label="Test maschio" name="Test Male"/>
 				<menu_item_call label="Test femmina" name="Test Female"/>
 				<menu_item_check label="Permetti di selezionare gli avatar" name="Allow Select Avatar"/>
+				<menu_item_check label="Renderizza solo gli amici" name="Render Only Friends" />
 			</menu>
 			<menu label="Velocità animazioni" name="Animation Speed">
 				<menu_item_call label="Tutte 10% più veloci" name="All Animations 10 Faster"/>
@@ -601,21 +612,22 @@
 				<menu_item_call label="Reset velocità" name="Reset All Animation Speed"/>
 				<menu_item_check label="Animazioni slow motion" name="Slow Motion Animations"/>
 			</menu>
-			<menu_item_call label="Forza param all'originale" name="Force Params to Default"/>
+			<menu_item_call label="Forza parametri all'originale" name="Force Params to Default"/>
 			<menu_item_check label="Info animazione" name="Animation Info"/>
 			<menu_item_check label="Mostra sguardo" name="Show Look At"/>
 			<menu_item_check label="Mostra selezione" name="Show Point At"/>
-			<menu_item_check label="Debug Joint Updates" name="Debug Joint Updates"/>
+			<menu_item_check label="Debug aggiornamenti joint" name="Debug Joint Updates"/>
 			<menu_item_check label="Disabilita LOD" name="Disable LOD"/>
-			<menu_item_check label="Debug Character Vis" name="Debug Character Vis"/>
-			<menu_item_check label="Mostra Collision Skeleton" name="Show Collision Skeleton"/>
-			<menu_item_check label="Mostra scheletro" name="Show Bones"/>
-			<menu_item_check label="Mostra Agent Target" name="Display Agent Target"/>
-			<menu_item_check label="Mostra Impostor Extents" name="Show Impostor Extents"/>
-			<menu_item_call label="Scarica Attachments" name="Dump Attachments"/>
-			<menu_item_call label="Debug Texture avatar" name="Debug Avatar Textures"/>
-			<menu_item_call label="Scarica Texture locali" name="Dump Local Textures"/>
-			<menu_item_call label="Ricarica Avatar Cloud Particle" name="Reload Avatar Cloud Particle"/>
+			<menu_item_check label="Debug Vis personaggi" name="Debug Character Vis"/>
+			<menu_item_check label="Debug stato caricamento personaggi" name="Debug Character Rez State" />
+			<menu_item_check label="Mostra scheletro collisione" name="Show Collision Skeleton"/>
+			<menu_item_check label="Mostra ossa" name="Show Bones"/>
+			<menu_item_check label="Mostra target agente" name="Display Agent Target"/>
+			<menu_item_check label="Mostra intervalli avatar impostor" name="Show Impostor Extents"/>
+			<menu_item_call label="Dump attachment" name="Dump Attachments"/>
+			<menu_item_call label="Debug texture avatar" name="Debug Avatar Textures"/>
+			<menu_item_call label="Dump texture locali" name="Dump Local Textures"/>
+			<menu_item_call label="Ricarica nuvola particelle dell'avatar" name="Reload Avatar Cloud Particle"/>
 		</menu>
 		<menu_item_check label="Texture HTTP" name="HTTP Textures"/>
 		<menu_item_check label="Inventario HTTP" name="HTTP Inventory"/>

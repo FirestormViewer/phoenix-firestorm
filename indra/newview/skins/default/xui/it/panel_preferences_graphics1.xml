@@ -5,6 +5,9 @@
 			<text name="preset_label">
 				Preset in uso:
 			</text>
+			<text name="preset_text">
+				(Nessuno)
+			</text>
 			<text name="QualitySpeed">
 				Qualità e velocità:
 			</text>
@@ -14,6 +17,7 @@
 			<text name="BetterText">
 				Qualità
 			</text>
+			<button tool_tip="Ripristina le impostazioni grafiche predefinite." name="Defaults" />
 			<text name="ShadersPrefText">
 				Bassa
 			</text>
@@ -22,9 +26,6 @@
 			</text>
 			<text name="ShadersPrefText3">
 				Alta
-			</text>
-			<text name="ShadersPrefText4">
-				Ultra
 			</text>
 			<text name="ShadersText">
 				Effetti grafici:
@@ -58,18 +59,6 @@
 				<combo_box.item label="Manuale e terreno" name="2"/>
 				<combo_box.item label="Scena completa" name="3"/>
 			</combo_box>
-			<!-- <text name="reflection_label">
-				Riflesso sull’Acqua:
-			</text>
-			combo_box name="Reflections">
-				<combo_box.item label="Nessuno (opaco)" name="-2"/>
-				<combo_box.item label="Nessuno (trasparente)" name="-1"/>
-				<combo_box.item label="Minimo" name="0"/>
-				<combo_box.item label="Terreno e alberi" name="1"/>
-				<combo_box.item label="Tutti gli oggetti statici" name="2"/>
-				<combo_box.item label="Tutti gli avatar e gli oggetti" name="3"/>
-				<combo_box.item label="Tutto" name="4"/>
-			</combo_box> -->
 			<text name="local lights_label" tool_tip="Imposta il numero di punti luce resi. Richiede riavvio per cambiare modalità">
 				Punti Luce (richiede riavvio):
 			</text>
@@ -85,20 +74,28 @@
 				Update specchi:
 			</text>
 			<combo_box name="HeroProbeUpdateRate">
-				<combo_box.item label="Ogni frame" name="0" />
-				<combo_box.item label="Ogni 2 frame" name="1" />
-				<combo_box.item label="Ogni 3 frame" name="2" />
-				<combo_box.item label="Ogni 4 frame" name="3" />
+				<combo_box.item label="Lento" name="6"/>
+				<combo_box.item label="Medio" name="3" />
+				<combo_box.item label="Veloce" name="1" />
 			</combo_box>
 			<check_box label="Schermo intero (richiede riavvio)" name="Fullscreen Mode" tool_tip="Avvia Firestorm in modalità Schermo Intero (richiede riavvio)"/>
 			<slider label="Distanza di disegno" name="DrawDistance"/>
 			<slider label="Numero max particelle" name="MaxParticleCount"/>
+			<text name="AvatarComplexityModeLabel">
+				Rendering avatar
+			</text>
+			<combo_box name="AvatarComplexityMode">
+				<combo_box.item label="Limita per complessità" name="0" />
+				<combo_box.item label="Mostra sempre amici" name="1" />
+				<combo_box.item label="Mostra solo amici" name="2" />
+			</combo_box>
 			<slider label="Massima complessità" name="IndirectMaxComplexity" tool_tip="Controlla il livello a cui un avatar complesso viene visto come pupazzo colorato (JellyDoll)"/>
 			<slider label="Numero max avatar completi" name="IndirectMaxNonImpostors"/>
 			<slider label="Qualità post-produzione" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				Bassa
 			</text>
+			<slider label="Max luci vicine" name="MaxLights" />
 			<slider label="Fisica Avatar" name="AvatarPhysicsDetail"/>
 			<slider label="Esposizione" name="RenderExposure"/>
 			<text name="MeshDetailText">
@@ -110,21 +107,12 @@
 			<slider label="  Avatar" name="AvatarMeshDetail"/>
 			<slider label="  Terreno" name="TerrainMeshDetail"/>
 			<slider label="  Cielo" name="SkyMeshDetail"/>
-			<check_box label="Vestiti in tessuto flessibile" name="AvatarCloth"/>
-			<!-- <text name="TerrainDetailText">
-				Dettagli del terreno:
-			</text>
-			<radio_group name="TerrainDetailRadio">
-				<radio_item label="Basso" name="0"/>
-				<radio_item label="Alto" name="2"/>
-			</radio_group> -->
 			<text name="Presets_Label">
 				Preset:
 			</text>
 			<button label="Salva" name="PrefSaveButton"/>
 			<button label="Carica" name="PrefLoadButton"/>
 			<button label="Elimina" name="PrefDeleteButton"/>
-			<button label="Reset" name="Defaults" tool_tip="Ricarica impostazioni predefinite"/>
 		</panel>
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani" tool_tip="Il filtro anisotropico è un metodo per migliorare la qualità delle texture quando vengono visualizzate ad angoli relativamente ampi rispetto alla posizione della fotocamera. Di solito le rende meno sfocate a distanze maggiori."/>
@@ -152,15 +140,7 @@
 				Rendering texture:
 			</text>
 			<!-- Removed in FIRE-24256, leaving it here for non-SL viewer version --> <check_box label="Usa texture HTTP" tool_tip="Caricare le texture utilizzando il protocollo HTTP - non impostare se si hanno problemi di resa e/o si desidera caricare col vecchio protocollo UDP" name="TexturesHTTP"/>
-			<check_box width="260" label="Limita la risoluzione massima delle texture a:" tool_tip="Questa impostazione limita la risoluzione massima delle texture. Ciò consente di visualizzare più texture prima di superare la memoria disponibile per le texture e di non vederle sfocate." name="FSRestrictMaxTextureSize" />
-			<combo_box name="FSRestrictMaxTexturePixels">
-				<combo_box.item label="512 pixel" name="512" />
-				<combo_box.item label="1024 pixel" name="1024" />
-				<combo_box.item label="2048 pixel" name="2048" />
-			</combo_box>
-			<text name="FSRestrictMaxTextureSizeRestartText">
-				(richiede riavvio)
-			</text>
+			<check_box label="Limita la risoluzione massima delle texture a 512px (solo 64 bit; richiede riavvio)" tool_tip="Questa impostazione limita la risoluzione massima delle texture. Ciò consente di visualizzare più texture prima di superare la memoria disponibile per le texture e di non vederle sfocate." name="FSRestrictMaxTextureSize" />
 			<text name="TextureDetailLabel">
 				Max livello qualità texture:
 			</text>
@@ -194,7 +174,6 @@
 		<panel label="Profondità di Campo" name="DOF panel">
 			<check_box label="Abilita Profondità di Campo (PdC: sfoca la vista tranne che nella direzione della camera)" name="UseDoF"/>
 			<check_box label="Abilita in modalità Costruzione" name="RenderDepthOfFieldInEditMode"/>
-			<check_box label="Abilita sott'acqua" name="FSRenderDoFUnderwater"/>
 			<check_box label="La messa a fuoco della PdC segue il cursore" name="FSFocusPointFollowsPointer" tool_tip="La messa a fuoco della profondità di campo (PdC) seguirà il tuo mouse, questo comportamento corrisponde a quello visto quando si utilizza flycam. Utilizzare in combinazione con il blocco della messa a fuoco PdC." />
 			<slider label="F-Number Camera" name="CameraFNum" tool_tip="Il valore F è un valore della profondità di campo."/>
 			<slider label="Lunghezza focale (mm):" name="CameraFocal" tool_tip="A che distanza avviene la messa a fuoco (in millimetri)."/>

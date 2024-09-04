@@ -2450,6 +2450,9 @@ Przed usunięciem tych elementów należy je najpierw czymś zastąpić.
 	<notification name="ThumbnailOutfitPhoto">
 		Aby dodać obraz do stroju, użyj okna galerii strojów lub kliknij prawym przyciskiem myszy na folderze stroju i wybierz "zdjęcie..."
 	</notification>
+	<notification name="ThumbnailSelectionTooLarge">
+		Możesz modyfikować maksymalnie 50 miniatur na raz.
+	</notification>
 	<notification name="ConfirmUnlink">
 		Na pewno chcesz rozłączyć zaznaczony obiekt?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Rozłącz"/>
@@ -3511,6 +3514,11 @@ Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrz
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Nowe Przekształcenia Głosu są dostępne!
+	</notification>
+	<notification name="VoiceEffectsNotSupported">
+		Ta przeglądarka nie obsługuje funkcji Przekształcania Głosu.
+Aby uzyskać więcej informacji na temat innych narzędzi do przekształcania głosu, zapoznaj się z [[FAQ_URL] tym artykułem].
+		<usetemplate ignoretext="Ostrzegaj mnie, że Przekształcanie Głosu nie jest obsługiwane" name="okignore" />
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Nie masz dostępu do działki, nie należysz do właściwej grupy.
@@ -5376,8 +5384,23 @@ Czy chcesz kontynuować?
 		Edytujesz niebo inne niż HDR, które zostało automatycznie przekonwertowane na HDR. Aby usunąć HDR i mapowanie tonów, ustaw Nastrój Sondy Refleksyjnej na zero.
 		<usetemplate ignoretext="Ostrzeżenie dotyczące regulacji HDR nieba" name="okignore" />
 	</notification>
-	<notification name="GLTFPreviewSelection">
+	<notification name="GLTFOpenSelection">
 		Musisz wybrać obiekt, który będzie działał jako uchwyt dla podglądanego zasobu GLTF.
+	</notification>
+	<notification name="GLTFLoadFailed">
+		Nie udało się załadować pliku GLTF. Szczegóły znajdziesz w logu.
+	</notification>
+	<notification name="GLTFSaveFailed">
+		Nie udało się zapisać pliku GLTF. Szczegóły znajdziesz w logu.
+	</notification>
+	<notification name="GLTFSaveSelection">
+		Musisz wybrać obiekt, który ma dowiązany zasób GLTF.
+	</notification>
+	<notification name="GLTFUploadSelection">
+		Musisz wybrać obiekt, który ma dowiązany (wyłącznie lokalny) zasób GLTF.
+	</notification>
+	<notification name="GLTFUploadInProgress">
+		Przesyłanie jest obecnie w toku. Spróbuj ponownie później.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.

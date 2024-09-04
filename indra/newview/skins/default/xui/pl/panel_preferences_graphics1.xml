@@ -17,6 +17,7 @@
 			<text name="BetterText">
 				Jakość
 			</text>
+			<button tool_tip="Zresetuj wartości ustawień graficznych." name="Defaults" />
 			<text name="ShadersPrefText">
 				Niska
 			</text>
@@ -73,20 +74,28 @@
 				Odświeżanie luster:
 			</text>
 			<combo_box name="HeroProbeUpdateRate">
-				<combo_box.item label="W każdej klatce" name="0" />
-				<combo_box.item label="Co 2 klatkę" name="1" />
-				<combo_box.item label="Co 3 klatkę" name="2" />
-				<combo_box.item label="Co 4 klatkę" name="3" />
+				<combo_box.item label="Powoli" name="6"/>
+				<combo_box.item label="Średnio" name="3" />
+				<combo_box.item label="Szybko" name="1" />
 			</combo_box>
 			<check_box label="Pełny ekran" name="Fullscreen Mode" tool_tip="Uruchamia Firestorma na pełnym ekranie. Aby zmienić tryb wymagany jest restart."/>
 			<slider label="Pole widzenia" name="DrawDistance"/>
 			<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
+			<text name="AvatarComplexityModeLabel">
+				Render awatarów
+			</text>
+			<combo_box name="AvatarComplexityMode">
+				<combo_box.item label="Ogranicz po złożonośći" name="0" />
+				<combo_box.item label="Zawsze pokazuj znajomych" name="1" />
+				<combo_box.item label="Pokazuj tylko znajomych" name="2" />
+			</combo_box>
 			<slider label="Maks. złożoność awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" />
 			<slider label="Maks. il. wyświetlanych awatarów" name="IndirectMaxNonImpostors"/>
 			<slider label="Jakość post-procesu" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				Niska
 			</text>
+			<slider label="Maks. świateł" name="MaxLights" />
 			<slider label="Fizyka awatarów" name="AvatarPhysicsDetail"/>
 			<slider label="Ekspozycja" name="RenderExposure" />
 			<text name="MeshDetailText">
@@ -104,7 +113,6 @@
 			<button label="Zapisz" name="PrefSaveButton" left="270" />
 			<button label="Wczytaj" name="PrefLoadButton" />
 			<button label="Usuń" name="PrefDeleteButton" />
-			<button tool_tip="Zresetuj wartości ustawień graficznych." name="Defaults"/>
 		</panel>
 		<panel label="Ustawienia sprzętowe" name="Hardware Settings">
 			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani" tool_tip="To pole wyboru włącza filtrowanie anizotropowe, które jest metodą polepszania jakości tekstur, gdy są one oglądane pod względnie dużymi kątami w stosunku do położenia kamery. Zazwyczaj sprawia, że wydają się mniej rozmyte przy większych odległościach." />
@@ -132,15 +140,7 @@
 				Rendering tekstur:
 			</text>
 			<!-- Removed in FIRE-24256, leaving it here for non-SL viewer version --> <check_box label="Pobieraj tekstury przez HTTP" tool_tip="Zaznacz tę opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP" />
-			<check_box width="270" label="Ogranicz maksymalną rozdzielczość tekstur do:" tool_tip="Zaznacz tą opcję, aby ograniczyć maksymalną rozdzielczość tekstur w świecie. Pozwala to na wyświetlanie większej ilości tekstur zanim dostępna na nie pamięć zostanie przekroczona i zaczną się one rozmywać." name="FSRestrictMaxTextureSize" />
-			<combo_box name="FSRestrictMaxTexturePixels">
-				<combo_box.item label="512 pikseli" name="512" />
-				<combo_box.item label="1024 pikseli" name="1024" />
-				<combo_box.item label="2048 pikseli" name="2048" />
-			</combo_box>
-			<text name="FSRestrictMaxTextureSizeRestartText">
-				(wymagany restart)
-			</text>
+			<check_box label="Ogranicz maksymalną rozdzielczość tekstur do 512px (tylko 64bit; wymagany restart)" tool_tip="Zaznacz tą opcję, aby ograniczyć maksymalną rozdzielczość tekstur w świecie. Pozwala to na wyświetlanie większej ilości tekstur zanim dostępna na nie pamięć zostanie przekroczona i zaczną się one rozmywać." name="FSRestrictMaxTextureSize" />
 			<text name="TextureDetailLabel">
 				Maks. jakość tekstur:
 			</text>

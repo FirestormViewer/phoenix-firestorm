@@ -37,6 +37,8 @@ jobs:
     outputs:
       viewer_channel: ${{ steps.channel.outputs.viewer_channel }}
       viewer_version: ${{ steps.version.outputs.viewer_version }}
+      viewer_build: ${{ steps.version.outputs.viewer_build }}
+      viewer_release_type: ${{ steps.version.outputs.viewer_release_type }}
     steps:
       - name: Install Bash 4 and GNU sed on Mac
         if: runner.os == 'macOS'
@@ -201,8 +203,19 @@ jobs:
           dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
+          sudo apt-get install -y wget apt-transport-https software-properties-common
           sudo apt-get autoremove --purge 
           sudo apt-get clean
+        
+      - name: Install Microsoft repository GPG keys
+        if: runner.os == 'Linux'
+        run: |
+          wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y powershell
+          pwsh -c '$PSVersionTable'
 
       - name: test macOS bundles are present
         if: runner.os == 'MacOS'
@@ -289,15 +302,55 @@ jobs:
         id: build
         run: autobuild build -c ReleaseFS -A${{matrix.addrsize}} --no-configure
         shell: bash
-      # - name: Extract version number
-      #   id: version
-      #   shell: bash
+      - name: Extract version number
+        id: version
+        shell: bash
+        run: |
+          if [ -r "indra/newview/VIEWER_VERSION.txt" ]
+          then
+              viewer_version="$(<"indra/newview/VIEWER_VERSION.txt")"
+              echo "viewer_version=$viewer_version" >> "$GITHUB_OUTPUT"
+          fi
+          viewer_build=$(git rev-list --count HEAD)
+          echo "viewer_build=$viewer_build" >> "$GITHUB_OUTPUT"
+          echo "viewer_channel=${{ env.FS_RELEASE_CHAN }}" >> "$GITHUB_OUTPUT"
+          echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
+      # - name: Install node-dump-syms
+      #   if: runner.os == 'Linux'
       #   run: |
-      #     if [ -r "indra/newview/viewer_version.txt" ]
-      #     then
-      #         viewer_version="$(<"$build_dir/newview/viewer_version.txt")"
-      #         echo "viewer_version=$viewer_version" >> "$GITHUB_OUTPUT"
-      #     fi
+      #     npm install -g node-pre-gyp          
+      #     npm install -g node-dump-syms          
+
+      - name: Post Bugsplat Symbols
+        uses: beqjanus/symbol-upload@main
+        with:
+          clientId: ${{ 
+            steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || 
+            steps.version.outputs.viewer_release_type == 'Nightly' && secrets.BUGSPLAT_NIGHTLY_ID || 
+            steps.version.outputs.viewer_release_type == 'Manual' && secrets.BUGSPLAT_MANUAL_ID || 
+            steps.version.outputs.viewer_release_type == 'Beta' && secrets.BUGSPLAT_PREVIEW_ID || 
+            steps.version.outputs.viewer_release_type == 'Alpha' && secrets.BUGSPLAT_ALPHA_ID || 
+            secrets.BUGSPLAT_DEFAULT_ID }}
+          clientSecret: ${{ 
+            steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Nightly' && secrets.BUGSPLAT_NIGHTLY_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Manual' && secrets.BUGSPLAT_MANUAL_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Beta' && secrets.BUGSPLAT_PREVIEW_SECRET || 
+            steps.version.outputs.viewer_release_type == 'Alpha' && secrets.BUGSPLAT_ALPHA_SECRET || 
+            secrets.BUGSPLAT_DEFAULT_SECRET }}
+          database: ${{ 
+            steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_DB || 
+            steps.version.outputs.viewer_release_type == 'Nightly' && secrets.BUGSPLAT_NIGHTLY_DB || 
+            steps.version.outputs.viewer_release_type == 'Manual' && secrets.BUGSPLAT_MANUAL_DB || 
+            steps.version.outputs.viewer_release_type == 'Beta' && secrets.BUGSPLAT_PREVIEW_DB || 
+            steps.version.outputs.viewer_release_type == 'Alpha' && secrets.BUGSPLAT_ALPHA_DB || 
+            secrets.BUGSPLAT_DEFAULT_DB }}
+          application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
+          version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
+          files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/*.xcarchive.zip' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
+          directory: "build-*"
+          node-version: "20"
+          dumpSyms: false
       - name: Publish artifacts
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
@@ -324,31 +377,6 @@ jobs:
           path: |
             build-darwin-*/newview/*.dmg
             build-darwin-*/newview/*.bz2
-  # post-windows-symbols:
-  #   needs: build_matrix
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Post Windows symbols
-  #       uses: secondlife/viewer-build-util/post-bugsplat-windows@v1
-  #       with:
-  #         username: ${{ secrets.BUGSPLAT_USER }}
-  #         password: ${{ secrets.BUGSPLAT_PASS }}
-  #         database: "firestorm_release"
-  #         channel: ${{ needs.build_matrix.outputs.viewer_channel }}
-  #         version: ${{ needs.build_matrix.outputs.viewer_version }}
-          
-  # post-mac-symbols:
-  #   needs: build_matrix
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Post Mac symbols
-  #       uses: secondlife/viewer-build-util/post-bugsplat-mac@v1
-  #       with:
-  #         username: ${{ secrets.BUGSPLAT_USER }}
-  #         password: ${{ secrets.BUGSPLAT_PASS }}
-  #         database: "firestorm_release"
-  #         channel: ${{ needs.build_matrix.outputs.viewer_channel }}
-  #         version: ${{ needs.build_matrix.outputs.viewer_version }}
   deploy:
     runs-on: ubuntu-latest
     needs: build_matrix

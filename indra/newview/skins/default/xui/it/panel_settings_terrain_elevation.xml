@@ -1,27 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Terreno" name="Terrain">
-	<text name="region_text_lbl">
-		Regione:
-	</text>
-	<text name="region_text" left_delta="60">
-		sconosciuta
-	</text>
-	<spinner label="Altezza dell'acqua" name="water_height_spin"/>
+<panel label="Altitudine" name="panel_settings_terrain_elevation">
+	<spinner label="Altezza dell'acqua" name="water_height_spin" />
 	<spinner label="Limite innalzamento" name="terrain_raise_spin"/>
 	<spinner label="Limite abbassamento" name="terrain_lower_spin"/>
-	<text name="detail_texture_text">
-		Texture terreno
-	</text>
-	<text name="detail_material_text">
-		Materiali terreno
-	</text>
-	<check_box label="Rugosità Metallicità PBR" name="terrain_material_type" tool_tip="Se selezionato, utilizza i materiali PBR per il terreno, altrimenti utilizza le texture." />
-	<text name="height_text_lbl">
-		1 (Basso)
-	</text>
-	<text name="height_text_lbl4">
-		4 (Alto)
-	</text>
 	<text name="height_text_lbl5">
 		Intervalli altitudine texture
 	</text>
@@ -63,5 +44,4 @@
 	<button label="Scarica RAW terreno..." name="download_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
 	<button label="Carica RAW terreno..." name="upload_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
 	<button label="Bake terreno" name="bake_terrain_btn" tool_tip="Imposta il terreno corrente come punto medio per i limiti di innalzamento/abbassamento"/>
-	<button label="Applica" name="apply_btn"/>
 </panel>
