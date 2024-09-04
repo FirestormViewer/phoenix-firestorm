@@ -1356,7 +1356,14 @@ bool LLViewerShaderMgr::loadShadersDeferred()
 
         success = make_gltf_variants(gGLTFPBRMetallicRoughnessProgram, use_sun_shadow);
 
-        llassert(success);
+        //llassert(success);
+        if (!success)
+        {
+            LL_WARNS() << "Failed to create GLTF PBR Metallic Roughness Shader, disabling!" << LL_ENDL;
+            gSavedSettings.setBOOL("RenderCanUseGLTFPBROpaqueShaders", false);
+            // continue as if this shader never happened
+            success = true;
+        }
     }
 
     if (success)
@@ -3020,7 +3027,14 @@ bool LLViewerShaderMgr::loadShadersInterface()
         const U32 value_range = (1 << bit_depth) - 1;
         shader->addPermutation("TERRAIN_PAINT_PRECISION", llformat("%d", value_range));
         success = success && shader->createShader();
-        llassert(success);
+        //llassert(success);
+        if (!success)
+        {
+            LL_WARNS() << "Failed to create shader '" << shader->mName << "', disabling!" << LL_ENDL;
+            gSavedSettings.setBOOL("RenderCanUseTerrainBakeShaders", false);
+            // continue as if this shader never happened
+            success = true;
+        }
     }
 
     if (success)

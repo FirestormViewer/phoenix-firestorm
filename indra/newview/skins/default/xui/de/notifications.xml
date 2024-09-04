@@ -5126,6 +5126,10 @@ Möchten Sie fortfahren?
 		Upload wird gerade durchgeführt. Bitte versuchen Sie es später erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="NoSupportGLTFShader">
+		GLTF-Szenen werden auf Ihrer Hardware momentan noch nicht unterstützt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
