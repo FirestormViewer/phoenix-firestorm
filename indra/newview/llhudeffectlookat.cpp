@@ -706,7 +706,7 @@ void LLHUDEffectLookAt::render()
             }
 
             gGL.pushMatrix();
-            hud_render_utf8text(name, position, *fontp, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW, -0.5f * fontp->getWidthF32(name), 3.0f, lookAtColor, false);
+            hud_render_utf8text(name, position, nullptr, *fontp, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW, -0.5f * fontp->getWidthF32(name), 3.0f, lookAtColor, false);
             gGL.popMatrix();
         }
 

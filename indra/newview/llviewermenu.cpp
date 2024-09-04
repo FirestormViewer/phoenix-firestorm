@@ -8284,20 +8284,11 @@ class LLAvatarToggleSearch : public view_listener_t
     }
 };
 
-class LLAvatarResetSkeleton: public view_listener_t
+class LLAvatarResetSkeleton : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        // <FS:Ansariel> Fix reset skeleton not working
-        //LLVOAvatar* avatar = NULL;
-        //LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-        //if (obj)
-        //{
-        //    avatar = obj->getAvatar();
-        //}
-        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-        // </FS:Ansariel>
-        if(avatar)
+        if (LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()))
         {
             avatar->resetSkeleton(false);
         }
@@ -8305,12 +8296,11 @@ class LLAvatarResetSkeleton: public view_listener_t
     }
 };
 
-class LLAvatarEnableResetSkeleton: public view_listener_t
+class LLAvatarEnableResetSkeleton : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-        if (obj && obj->getAvatar())
+        if (LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()))
         {
             return true;
         }
@@ -8318,15 +8308,29 @@ class LLAvatarEnableResetSkeleton: public view_listener_t
     }
 };
 
-
 class LLAvatarResetSkeletonAndAnimations : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-        if (avatar)
+        if (LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()))
         {
             avatar->resetSkeleton(true);
+        }
+        return true;
+    }
+};
+
+class LLAvatarResetSelfSkeleton : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        if (LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()))
+        {
+            avatar->resetSkeleton(false);
+        }
+        else
+        {
+            gAgentAvatarp->resetSkeleton(false);
         }
         return true;
     }
@@ -8336,8 +8340,7 @@ class LLAvatarResetSelfSkeletonAndAnimations : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-        if (avatar)
+        if (LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()))
         {
             avatar->resetSkeleton(true);
         }
@@ -8348,7 +8351,6 @@ class LLAvatarResetSelfSkeletonAndAnimations : public view_listener_t
         return true;
     }
 };
-
 
 class LLAvatarAddContact : public view_listener_t
 {
@@ -12983,6 +12985,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAvatarResetSkeleton(), "Avatar.ResetSkeleton");
     view_listener_t::addMenu(new LLAvatarEnableResetSkeleton(), "Avatar.EnableResetSkeleton");
     view_listener_t::addMenu(new LLAvatarResetSkeletonAndAnimations(), "Avatar.ResetSkeletonAndAnimations");
+    view_listener_t::addMenu(new LLAvatarResetSelfSkeleton(), "Avatar.ResetSelfSkeleton");
     view_listener_t::addMenu(new LLAvatarResetSelfSkeletonAndAnimations(), "Avatar.ResetSelfSkeletonAndAnimations");
     enable.add("Avatar.IsMyProfileOpen", boost::bind(&my_profile_visible));
     enable.add("Avatar.IsPicksTabOpen", boost::bind(&picks_tab_visible));

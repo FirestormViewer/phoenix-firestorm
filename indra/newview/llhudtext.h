@@ -35,6 +35,7 @@
 #include "v2math.h"
 #include "llrect.h"
 #include "llfontgl.h"
+#include "llfontvertexbuffer.h"
 #include <set>
 #include <vector>
 
@@ -172,6 +173,7 @@ private:
     ETextAlignment  mTextAlignment;
     EVertAlignment  mVertAlignment;
     bool            mHidden;
+    LLFontVertexBuffer   mFontBuffer;
 // [RLVa:KB] - Checked: RLVa-1.0.0
     std::string     mObjText;
 // [/RLVa:KB]

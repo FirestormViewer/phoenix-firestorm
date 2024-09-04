@@ -51,6 +51,7 @@
 		<string>RenderHeroProbeConservativeUpdateMultiplier</string>
 		<string>RenderLocalLightCount</string>
 		<string>RenderMaxPartCount</string>
+		<string>RenderMaxTextureResolution</string>
 		<string>RenderMaxVRAMBudget</string>
 		<string>RenderMirrors</string>
 		<string>RenderQualityPerformance</string>
@@ -91,7 +92,8 @@
 		<string>RenderTerrainPBRPlanarSampleCount</string>
 		<string>RenderTerrainPBRTriplanarBlendFactor</string>
 		<string>RenderTerrainScale</string>
-		<string>RenderMaxTextureResolution</string>
+		<string>RenderTonemapMix</string>
+		<string>RenderTonemapType</string>
 		<string>RenderTreeLODFactor</string>
 		<string>RenderTransparentWater</string>
 		<string>RenderUnloadedAvatar</string>

@@ -78,6 +78,8 @@ private:
     LLButton *          mInboxButton;
     LLInventoryPanel *  mInventoryPanel;
     LLSaveFolderState*          mSavedFolderState;
+    S32                 mLastItemCount;
+    S32                 mLastFreshItemCount;
 };
 
 
