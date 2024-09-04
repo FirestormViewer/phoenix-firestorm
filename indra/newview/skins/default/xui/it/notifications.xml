@@ -2385,6 +2385,9 @@ Rimuovere questi elementi dal tuo avatar?
 	<notification name="ThumbnailOutfitPhoto">
 		Per aggiungere l'immagine ad un abito, utilizza la finestra Aspetto - Galleria oppure clicca con il pulsante destro del mouse sulla cartella dell'abito e seleziona "Immagine..."
 	</notification>
+	<notification name="ThumbnailSelectionTooLarge">
+		Puoi modificare un massimo di 50 miniature alla volta.
+	</notification>
 	<notification name="ConfirmUnlink">
 		Scollegare l&apos;oggetto selezionato?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Scollega"/>
@@ -3430,6 +3433,11 @@ Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta d
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Sono disponibili nuove manipolazioni vocali.
+	</notification>
+	<notification name="VoiceEffectsNotSupported">
+		La trasformazione vocale non è supportata da questo viewer. 
+Per maggiori informazioni su altri strumenti di trasformazione vocale, consulta [[FAQ_URL] questo articolo].
+		<usetemplate ignoretext="Avvisami se la trasformazione vocale non è supportata" name="okignore" />
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Soltanto i membri di un determinato gruppo possono visitare questa zona.
@@ -5266,8 +5274,23 @@ Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'a
 		Stai modificando un cielo non HDR che è stato automaticamente convertito in HDR. Per rimuovere l'HDR e la mappatura dei toni, imposta l'ambiente della sonda di riflessione su zero.
 		<usetemplate ignoretext="Avvisi sulla regolazione del cielo HDR" name="okignore" yestext="Ok"/>
 	</notification>
-	<notification name="GLTFPreviewSelection">
+	<notification name="GLTFOpenSelection">
 		Devi selezionare un oggetto che fungerà da handle per la risorsa GLTF che stai visualizzando.
+	</notification>
+	<notification name="GLTFLoadFailed">
+		Impossibile caricare il file GLTF. Vedi il registro per i dettagli.
+	</notification>
+	<notification name="GLTFSaveFailed">
+		Impossibile salvare il file GLTF. Vedi il registro per i dettagli.
+	</notification>
+	<notification name="GLTFSaveSelection">
+		È necessario selezionare un oggetto a cui è associata una risorsa GLTF.
+	</notification>
+	<notification name="GLTFUploadSelection">
+		È necessario selezionare un oggetto a cui è associata una risorsa GLTF locale.
+	</notification>
+	<notification name="GLTFUploadInProgress">
+		Il caricamento è attualmente in corso. Riprova più tardi.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Stai per abilitare AutoFPS. Tutte le impostazioni grafiche non salvate andranno perse.

@@ -124,7 +124,19 @@
 			<check_box label="Automatycznie odrzucaj zaproszenia grupowych rozmów głosowych" name="VoiceCallsRejectGroup"/>
 			<check_box label="Automatycznie odrzucaj zaproszenia AdHoc (konferencyjne) rozmów głosowych" name="VoiceCallsRejectAdHoc"/>
 			<check_box label="Automatycznie odrzucaj zaproszenia P2P (awatar z awatarem) rozmów głosowych" name="VoiceCallsRejectP2P"/>
-			<check_box label="Włącz/wyłącz mikrofon kiedy naciskam przycisk na pasku" name="push_to_talk_toggle_check" tool_tip="Kiedy aktywny jest tryb przełączania wciśnij i zwolnij przełącznik RAZ, aby włączyć lub wyłączyć mikrofon. Kiedy tryb przełączania nie jest aktywny mikrofon nadaje głos tylko wtedy, gdy przełącznik jest wciśnięty."/>
+			<check_box label="Włącz/wyłącz mikrofon przyciskiem na pasku" name="push_to_talk_toggle_check" tool_tip="Kiedy aktywny jest tryb przełączania wciśnij i zwolnij przełącznik RAZ, aby włączyć lub wyłączyć mikrofon. Kiedy tryb przełączania nie jest aktywny mikrofon nadaje głos tylko wtedy, gdy przełącznik jest wciśnięty."/>
+			<check_box tool_tip="Zaznacz, aby włączyć usuwanie echa głosu" label="Usuwanie echa" name="enable_echo_cancellation" />
+			<check_box tool_tip="Zaznacz, aby włączyć automatyczną regulację wzmocnienia" label="Automatyczna regulacja wzmocnienia" name="voice_automatic_gain_control" />
+			<text name="noise_suppression_label" width="95">
+				Tłumienie hałasu:
+			</text>
+			<combo_box name="noise_suppression_combo">
+				<item label="Wyłączone" name="noise_suppression_none" />
+				<item label="Niskie" name="noise_suppression_low" />
+				<item label="Umiarkowane" name="noise_suppression_moderate" />
+				<item label="Wysokie" name="noise_suppression_high" />
+				<item label="Maksymalne" name="noise_suppression_max" />
+			</combo_box>
 			<button label="Ustawienia sprzętowe audio" name="device_settings_btn"/>
 		</panel>
 		<panel label="Interfejs 1" name="UI Sounds tab 1">

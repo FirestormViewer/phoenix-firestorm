@@ -13001,6 +13001,9 @@ void initialize_menus()
     view_listener_t::addMenu(new LLEnableEditParticleSource(), "Object.EnableEditParticles");
 
     enable.add("Object.VisibleTake", boost::bind(&visible_take_object));
+    enable.add("Object.VisibleTakeMultiple", boost::bind(&is_multiple_selection));
+    enable.add("Object.VisibleTakeSingle", boost::bind(&is_single_selection));
+    enable.add("Object.EnableTakeMultiple", boost::bind(&enable_take_objects));
     enable.add("Object.VisibleBuy", boost::bind(&visible_buy_object));
 
     commit.add("Object.Buy", boost::bind(&handle_buy));

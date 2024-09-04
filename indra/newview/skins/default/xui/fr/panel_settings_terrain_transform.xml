@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Étalonnage" name="panel_settings_terrain_transform">
+	<text name="terrain0ScaleU_label">
+		Échelle u
+	</text>
+	<spinner label="Échelle u" name="terrain0ScaleU"/>
+	<text name="terrain0ScaleV_label">
+		Échelle v
+	</text>
+	<spinner label="Échelle v" name="terrain0ScaleV"/>
+	<text name="terrain0Rotation_label">
+		Rotation
+	</text>
+	<spinner label="Rotation" name="terrain0Rotation"/>
+	<text name="terrain0OffsetU_label">
+		Décalage u
+	</text>
+	<spinner label="Décalage u" name="terrain0OffsetU"/>
+	<text name="terrain0OffsetV_label">
+		Décalage v
+	</text>
+	<spinner label="Décalage v" name="terrain0OffsetV"/>
+</panel>

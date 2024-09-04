@@ -389,14 +389,14 @@ void LLInventoryModelBackgroundFetch::scheduleFolderFetch(const LLUUID& cat_id, 
             if (mForceFetchSet.find(cat_id) == mForceFetchSet.end())
             {
                 mForceFetchSet.insert(cat_id);
-                mFetchItemQueue.push_front(FetchQueueInfo(cat_id, FT_FORCED));
+                mFetchFolderQueue.emplace_front(FetchQueueInfo(cat_id, FT_FORCED));
             }
         }
         else
         {
             // Specific folder requests go to front of queue.
             // version presence acts as dupplicate prevention for normal fetches
-            mFetchItemQueue.push_front(FetchQueueInfo(cat_id, FT_DEFAULT));
+            mFetchFolderQueue.emplace_front(FetchQueueInfo(cat_id, FT_DEFAULT));
         }
 
         gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
@@ -414,13 +414,13 @@ void LLInventoryModelBackgroundFetch::scheduleItemFetch(const LLUUID& item_id, b
             if (mForceFetchSet.find(item_id) == mForceFetchSet.end())
             {
                 mForceFetchSet.insert(item_id);
-                mFetchItemQueue.push_front(FetchQueueInfo(item_id, FT_FORCED, false));
+                mFetchItemQueue.emplace_front(FetchQueueInfo(item_id, FT_FORCED, false));
             }
         }
         else
         {
             // 'isFinished' being set acts as dupplicate prevention for normal fetches
-            mFetchItemQueue.push_front(FetchQueueInfo(item_id, FT_DEFAULT, false));
+            mFetchItemQueue.emplace_front(FetchQueueInfo(item_id, FT_DEFAULT, false));
         }
 
         gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
@@ -1297,7 +1297,11 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
                             folder_count++;
                         }
                     }
+#ifdef OPENSIM
+                    if (LLViewerInventoryCategory::VERSION_UNKNOWN != cat->getVersion() || !LLGridManager::getInstance()->isInSecondLife())
+#else
                     else
+#endif
                     {
                         // May already have this folder, but append child folders to list.
                         if (fetch_info.mFetchType >= FT_CONTENT_RECURSIVE)

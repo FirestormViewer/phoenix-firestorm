@@ -124,7 +124,19 @@
 			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale di gruppo" name="VoiceCallsRejectGroup"/>
 			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale in conferenza (ad-hoc)" name="VoiceCallsRejectAdHoc"/>
 			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale P2P (avatar con avatar)" name="VoiceCallsRejectP2P"/>
-			<check_box label="Accendi/spegni il microfono quando premo il pulsante sulla barra degli strumenti" name="push_to_talk_toggle_check" tool_tip="Se questa funzione è attiva, premere e rilasciare UNA VOLTA il pulsante per accendere o spegnere il microfono. Se questa funzione è disattivata, il microfono trasmette la tua voce solo mentre il pulsante viene tenuto premuto."/>
+			<check_box label="Accendi/spegni il microfono utilizzando il pulsante sulla barra" name="push_to_talk_toggle_check" tool_tip="Se questa funzione è attiva, premere e rilasciare UNA VOLTA il pulsante per accendere o spegnere il microfono. Se questa funzione è disattivata, il microfono trasmette la tua voce solo mentre il pulsante viene tenuto premuto."/>
+			<check_box tool_tip="Seleziona per abilitare la cancellazione dell'eco vocale" label="Cancellazione dell'eco" name="enable_echo_cancellation" />
+			<check_box tool_tip="Seleziona per abilitare il controllo automatico del guadagno" label="Controllo automatico del guadagno" name="voice_automatic_gain_control" />
+			<text left_pad="10" name="noise_suppression_label" width="138">
+				Soppressione del rumore:
+			</text>
+			<combo_box name="noise_suppression_combo">
+				<item label="Disabilitata" name="noise_suppression_none" />
+				<item label="Bassa" name="noise_suppression_low" />
+				<item label="Moderata" name="noise_suppression_moderate" />
+				<item label="Alta" name="noise_suppression_high" />
+				<item label="Massima" name="noise_suppression_max" />
+			</combo_box>
 			<button label="Impostazioni periferiche audio" name="device_settings_btn"/>
 		</panel>
 		<panel label="Suoni UI 1" name="UI Sounds tab 1">

@@ -7735,7 +7735,9 @@ void LLPipeline::renderFinalize()
     // </FS:Beq>
     if (RenderBufferVisualization > -1)
     {
-        finalBuffer = &mPostMap;
+        // <FS:Ansariel> Vignette / Vision sphere: Need to write to the previous source buffer agai
+        //finalBuffer = &mPostMap;
+        finalBuffer = activeBuffer;
         switch (RenderBufferVisualization)
         {
         case 0:

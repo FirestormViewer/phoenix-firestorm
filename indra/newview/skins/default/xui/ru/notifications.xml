@@ -3640,6 +3640,11 @@ URL: [AUDIOURL]
 	<notification name="VoiceEffectsNew">
 		Появились новые типы изменения голоса!
 	</notification>
+	<notification name="VoiceEffectsNotSupported">
+Функция изменения голоса не поддерживается данным средством просмотра.
+Более подробную информацию о других инструментах для изменения голоса см. в [[FAQ_URL]этой статье].
+		<usetemplate name="okignore" ignoretext="Предупредить меня о том, что голосовая трансформация не поддерживается" yestext="OK"/>
+	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Эту область могут посещать только участники определенной группы.
 	</notification>

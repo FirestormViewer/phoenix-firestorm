@@ -125,7 +125,6 @@
 			<radio_item label="Voice-Chat in der Nähe in gleicher Lautstärke hören (nur OpenSim)" name="2"/>
 		</radio_group>
 		<check_box label="Avatarlippen beim Sprechen bewegen" name="enable_lip_sync"/>
-		<check_box label="Echo-Unterdrückung" name="enable_echo_cancellation"/>
 		<check_box label="Zeige Voice-Indikator über Avataren" name="FSShowVoiceVisualizer" tool_tip="Wenn diese Option aktiviert ist, wird der Voice-Indikator (weißer Punkt) über Avataren angezeigt."/>
 		<check_box label="Zeige Voice-Indikator über eigenen Avatar" name="FSShowMyOwnVoiceVisualizer"/>
 		<check_box label="Zeige Voice-Indikator mit Punkt" name="FSShowVoiceVisualizerWithDot" tool_tip="Wenn diese Option aktiviert ist, wird der weiße Punkt im Voice-Indikator mit angezeigt. Falls deaktiviert, werden nur die Wellen-Symbole beim Sprechen angezeigt."/>
@@ -136,8 +135,9 @@
 		<check_box label="Automatisch alle eingehenden Privatanrufe abweisen" name="VoiceCallsRejectP2P"/>
 		<check_box label="Sprachfunktion beim Drücken des Buttons in der Symbolleiste ein-/ausschalten" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
 		<check_box label="Automatische Verstärkungsregelung" name="voice_automatic_gain_control"/>
-		<text name="noise_suppression_label">
-			Rauschunterdrückung
+		<check_box label="Echo-Unterdrückung" name="enable_echo_cancellation"/>
+		<text name="noise_suppression_label" width="123">
+			Rauschunterdrückung:
 		</text>
 		<combo_box name="noise_suppression_combo">
 			<item label="Aus" name="noise_suppression_none"/>

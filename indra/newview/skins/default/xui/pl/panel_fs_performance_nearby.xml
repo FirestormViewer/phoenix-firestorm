@@ -29,7 +29,14 @@
 	<text name="av_nearby_desc3">
 		Twój własny awatar zawiera narzut przeglądarki. Na karcie dodatków zobaczysz jak wpływasz na innych.
 	</text>
-	<check_box label="Znajomi zawsze z pełnymi detalami" name="display_friends" />
+	<text name="AvatarComplexityMode_Label">
+		Render awatarów:
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="Ogranicz po złożonośći" name="complexity_limit_everone" />
+		<combo_box.item label="Zawsze pokazuj znajomych" name="complexity_always_show_friends" />
+		<combo_box.item label="Pokazuj tylko znajomych" name="complexity_only_show_friends" />
+	</combo_box>
 	<button label="Wyjątki..." name="exceptions_btn" />
 	<check_box label="Całkowicie ukryj awatary" name="hide_avatars" />
 	<text name="name_tags_textbox">

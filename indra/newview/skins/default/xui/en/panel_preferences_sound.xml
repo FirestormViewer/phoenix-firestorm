@@ -969,17 +969,6 @@
          layout="topleft"
          left="25"
          name="enable_lip_sync"
-         top_pad="5"
-         width="237"/>
-        <check_box
-         follows="top|left"
-         control_name="VoiceEchoCancellation"
-         height="15"
-         tool_tip="Check to enable voice echo cancellation"
-         label="Echo Cancellation"
-         layout="topleft"
-         left="25"
-         name="enable_echo_cancellation"
          top_pad="3"
          width="237"/>
         <check_box
@@ -992,7 +981,7 @@
          layout="topleft"
          left="25"
          name="FSShowVoiceVisualizer"
-         top_pad="3"
+         top_pad="2"
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"
@@ -1003,7 +992,7 @@
          layout="topleft"
          left="35"
          name="FSShowMyOwnVoiceVisualizer"
-         top_pad="3"
+         top_pad="2"
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"
@@ -1015,7 +1004,7 @@
          layout="topleft"
          left="35"
          name="FSShowVoiceVisualizerWithDot"
-         top_pad="3"
+         top_pad="2"
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"
@@ -1039,7 +1028,7 @@
          layout="topleft"
          left="25"
          name="FSShowConversationVoiceStateIndicator"
-         top_pad="3"
+         top_pad="2"
          width="237"/>
 
         <check_box
@@ -1052,7 +1041,7 @@
          left="25"
          name="VoiceCallsRejectGroup"
          width="237"
-         top_pad="10"/>
+         top_pad="7"/>
         <check_box
          enabled_control="EnableVoiceChat"
          follows="left|top"
@@ -1063,7 +1052,7 @@
          left="25"
          name="VoiceCallsRejectAdHoc"
          width="237"
-         top_pad="3"/>
+         top_pad="2"/>
         <check_box
          enabled_control="EnableVoiceChat"
          follows="left|top"
@@ -1074,7 +1063,7 @@
          left="25"
          name="VoiceCallsRejectP2P"
          width="237"
-         top_pad="3"/>
+         top_pad="2"/>
 
         <check_box
          follows="top|left"
@@ -1087,7 +1076,7 @@
          name="push_to_talk_toggle_check"
          width="237"
          tool_tip="When in toggle mode, press and release the trigger key ONCE to switch your microphone on or off. When not in toggle mode, the microphone broadcasts your voice only while the trigger is being held down."
-         top_pad="10"/>
+         top_pad="7"/>
         <check_box
          follows="top|left"
          control_name="VoiceAutomaticGainControl"
@@ -1097,26 +1086,36 @@
          layout="topleft"
          name="voice_automatic_gain_control"
          left="25"
-         top_pad="6"
+         top_pad="2"
+         width="237"/>
+        <check_box
+         follows="top|left"
+         control_name="VoiceEchoCancellation"
+         height="15"
+         tool_tip="Check to enable voice echo cancellation"
+         label="Echo Cancellation"
+         layout="topleft"
+         left="25"
+         name="enable_echo_cancellation"
+         top_pad="2"
          width="237"/>
         <text
          follows="top|left"
          layout="topleft"
          height="15"
-         left_pad="25"
-         top_delta="-3"
-         width="120"
+         left="25"
+         top_pad="2"
+         width="105"
          name="noise_suppression_label">
-          Noise Suppression
+          Noise Suppression:
         </text>
         <combo_box
          control_name="VoiceNoiseSuppressionLevel"
          layout="topleft"
-         height="23"
-         left_pad="10"
-         top_pad="-18"
+         height="15"
+         left_pad="0"
          name="noise_suppression_combo"
-         width="100">
+         width="90">
           <item
            label="Off"
            name="noise_suppression_none"
