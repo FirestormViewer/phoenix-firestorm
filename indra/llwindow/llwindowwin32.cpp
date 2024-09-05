@@ -1662,9 +1662,6 @@ const   S32   max_format  = (S32)num_formats - 1;
         close();
         return false;
     }
-	//LL_PROFILER_GPU_CONTEXT; <FS:Beq/> TODO(Beq) review this 
-
-    LL_PROFILER_GPU_CONTEXT
 
     // Disable vertical sync for swap
     toggleVSync(enable_vsync);
