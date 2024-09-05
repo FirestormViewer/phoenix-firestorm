@@ -5411,6 +5411,9 @@ Czy chcesz kontynuować?
 	<notification name="GLTFUploadInProgress">
 		Przesyłanie jest obecnie w toku. Spróbuj ponownie później.
 	</notification>
+	<notification name="NoSupportGLTFShader">
+		Sceny GLTF nie są jeszcze obsługiwane przez Twoją kartę graficzną.
+	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.
 
