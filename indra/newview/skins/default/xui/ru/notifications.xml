@@ -5539,8 +5539,38 @@ https://wiki.firestormviewer.org/fs_voice
 		<usetemplate ignoretext="Предупреждение о настройке неба в режиме HDR" name="okignore" yestext="OK"/>
 	</notification>
 
-	<notification name="GLTFPreviewSelection">
-		Вы должны выбрать объект, который будет действовать как дескриптор просматриваемого вами ресурса GLTF.
+	<notification name="GLTFOpenSelection">
+		Необходимо выбрать объект, который будет использоваться в качестве дескриптора для просматриваемого вами актива GLTF.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="GLTFLoadFailed">
+		Не удалось загрузить файл GLTF. Подробности см. в журнале.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="GLTFSaveFailed">
+		Не удалось сохранить файл GLTF. Подробности см. в журнале.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="GLTFSaveSelection">
+		Необходимо выбрать объект, с которым связан актив GLTF.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="GLTFUploadSelection">
+		Необходимо выбрать объект, с которым связан только локальный актив GLTF.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="GLTFUploadInProgress">
+		Загрузка в данный момент выполняется. Повторите попытку позже.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="NoSupportGLTFShader">
+		Сцены GLTF пока не поддерживаются на вашем графическом оборудовании.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
