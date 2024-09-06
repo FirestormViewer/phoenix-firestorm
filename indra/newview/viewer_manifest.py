@@ -1460,7 +1460,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     self.path2basename(relpkgdir, "BugsplatMac.framework")
 
             with self.prefix(dst="MacOS"):
-                executable = self.dst_path_of(self.channel())
+                executable = self.dst_path_of("Firestorm")
                 if self.args.get('bugsplat'):
                     # According to Apple Technical Note TN2206:
                     # https://developer.apple.com/library/archive/technotes/tn2206/_index.html#//apple_ref/doc/uid/DTS40007919-CH1-TNTAG207
