@@ -443,7 +443,7 @@ void inventory_offer_handler(LLOfferInfo* info)
                 message_type = "InvOfferAutoAcceptUser";
             }
 
-            report_to_nearby_chat(LLTrans::getString(message_type, chat_args));
+            FSCommon::report_to_nearby_chat(LLTrans::getString(message_type, chat_args));
             make_ui_sound("UISndInventoryOffer");
         }
         // </FS:Ansariel>
@@ -1626,7 +1626,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 // <FS:Ansariel> Consolidate IRC /me prefix checks
                 //std::string prefix = message.substr(0, 4);
                 //if (prefix == "/me " || prefix == "/me'")
-                if (is_irc_me_prefix(message))
+                if (FSCommon::is_irc_me_prefix(message))
                 // </FS:Ansariel>
                 {
                     chat.mChatStyle = CHAT_STYLE_IRC;

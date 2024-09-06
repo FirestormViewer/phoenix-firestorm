@@ -418,7 +418,7 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 
     if (rawData.size() == 0)
     {
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
         LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
         return;
     }
@@ -490,17 +490,17 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
             LLStringUtil::trim(newsTitle);
             LLStringUtil::trim(newsDesc);
             LLStringUtil::trim(newsLink);
-            report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
+            FSCommon::report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
         }
         else
         {
-            report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
             LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
         }
     }
     else
     {
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
         LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
     }
 }
@@ -512,13 +512,13 @@ void downloadGridstatusError(LLSD const &aData, std::string const &aURL)
 
     if (status.getType() == HTTP_INTERNAL_ERROR)
     {
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
     }
     else
     {
         LLStringUtil::format_map_t args;
         args["STATUS"] = llformat("%d", status.getType());
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
     }
 }
 // </FS:PP>
@@ -3299,7 +3299,7 @@ bool idle_startup()
         // <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
         if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
         {
-            report_to_nearby_chat(gAgent.mMOTD);
+            FSCommon::report_to_nearby_chat(gAgent.mMOTD);
         }
         // </FS:Techwolf Lupindo>
         // <FS:PP>

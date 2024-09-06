@@ -5946,7 +5946,7 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         {
             LLStringUtil::format_map_t args;
             args["FILENAME"] = filepath;
-            report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", args));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", args));
         }
         success_cb();
     }

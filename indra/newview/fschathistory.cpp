@@ -1467,7 +1467,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
     // FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
     //IRC styled /me messages.
-    bool irc_me = is_irc_me_prefix(chat.mText);
+    bool irc_me = FSCommon::is_irc_me_prefix(chat.mText);
 
     // Delimiter after a name in header copy/past and in plain text mode
     std::string delimiter = ": ";
