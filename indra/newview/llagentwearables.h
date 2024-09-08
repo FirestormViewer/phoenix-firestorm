@@ -75,12 +75,12 @@ protected:
     // Queries
     //--------------------------------------------------------------------
 public:
-    BOOL            isWearingItem(const LLUUID& item_id) const;
-    BOOL            isWearableModifiable(LLWearableType::EType type, U32 index /*= 0*/) const;
-    BOOL            isWearableModifiable(const LLUUID& item_id) const;
+    bool            isWearingItem(const LLUUID& item_id) const;
+    bool            isWearableModifiable(LLWearableType::EType type, U32 index /*= 0*/) const;
+    bool            isWearableModifiable(const LLUUID& item_id) const;
 
-    BOOL            isWearableCopyable(LLWearableType::EType type, U32 index /*= 0*/) const;
-    BOOL            areWearablesLoaded() const;
+    bool            isWearableCopyable(LLWearableType::EType type, U32 index /*= 0*/) const;
+    bool            areWearablesLoaded() const;
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
     bool            areInitalWearablesLoaded() const { return mInitialWearablesLoaded; }
 // [/SL:KB]
@@ -89,8 +89,8 @@ public:
 // [/RLVa:KB]
     bool            isCOFChangeInProgress() const { return mCOFChangeInProgress; }
     F32             getCOFChangeTime() const { return mCOFChangeTimer.getElapsedTimeF32(); }
+    // <FS:Ansariel> [Legacy Bake]
     void            updateWearablesLoaded();
-    void            checkWearablesLoaded() const;
     bool            canMoveWearable(const LLUUID& item_id, bool closer_to_body) const;
 
     // Note: False for shape, skin, eyes, and hair, unless you have MORE than 1.
@@ -98,7 +98,7 @@ public:
 
     // <FS:Ansariel> [Legacy Bake]
     //void          animateAllWearableParams(F32 delta);
-    void            animateAllWearableParams(F32 delta, BOOL upload_bake);
+    void            animateAllWearableParams(F32 delta, bool upload_bake);
 
     //--------------------------------------------------------------------
     // Accessors
@@ -116,13 +116,13 @@ public:
     LLViewerWearable*       getViewerWearable(const LLWearableType::EType type, U32 index /*= 0*/);
     const LLViewerWearable* getViewerWearable(const LLWearableType::EType type, U32 index /*= 0*/) const;
     LLInventoryItem*    getWearableInventoryItem(LLWearableType::EType type, U32 index /*= 0*/);
-    static BOOL         selfHasWearable(LLWearableType::EType type);
+    static bool         selfHasWearable(LLWearableType::EType type);
 
     //--------------------------------------------------------------------
     // Setters
     //--------------------------------------------------------------------
 private:
-    /*virtual*/void wearableUpdated(LLWearable *wearable, BOOL removed);
+    /*virtual*/void wearableUpdated(LLWearable *wearable, bool removed);
 public:
 //  void            setWearableItem(LLInventoryItem* new_item, LLViewerWearable* wearable, bool do_append = false);
     void            setWearableOutfit(const LLInventoryItem::item_array_t& items, const std::vector< LLViewerWearable* >& wearables);
@@ -137,20 +137,22 @@ protected:
     void            addWearableToAgentInventory(LLPointer<LLInventoryCallback> cb,
                                                 LLViewerWearable* wearable,
                                                 const LLUUID& category_id = LLUUID::null,
-                                                BOOL notify = TRUE);
+                                                bool notify = true);
     void            addWearabletoAgentInventoryDone(const LLWearableType::EType type,
                                                     const U32 index,
                                                     const LLUUID& item_id,
                                                     LLViewerWearable* wearable);
+    // <FS:Ansariel> [Legacy Bake]
     void            recoverMissingWearable(const LLWearableType::EType type, U32 index /*= 0*/);
     void            recoverMissingWearableDone();
+    // </FS:Ansariel> [Legacy Bake]
 
     //--------------------------------------------------------------------
     // Editing/moving wearables
     //--------------------------------------------------------------------
 
 public:
-    static void     createWearable(LLWearableType::EType type, bool wear = false, const LLUUID& parent_id = LLUUID::null, std::function<void(const LLUUID&)> created_cb = NULL);
+    static void     createWearable(LLWearableType::EType type, bool wear = false, const LLUUID& parent_id = LLUUID::null, std::function<void(const LLUUID&)> created_cb = nullptr);
     static void     editWearable(const LLUUID& item_id);
     bool            moveWearable(const LLViewerInventoryItem* item, bool closer_to_body);
 
@@ -187,7 +189,6 @@ protected:
     void            sendAgentWearablesRequest();
     void            queryWearableCache();
     void            updateServer();
-    static void     onInitialWearableAssetArrived(LLViewerWearable* wearable, void* userdata);
 // </FS:Ansariel> [Legacy Bake]
 
     //--------------------------------------------------------------------
@@ -200,10 +201,10 @@ private:
     // Save Wearables
     //--------------------------------------------------------------------
 public:
-    void            saveWearableAs(const LLWearableType::EType type, const U32 index, const std::string& new_name, const std::string& description, BOOL save_in_lost_and_found);
+    void            saveWearableAs(const LLWearableType::EType type, const U32 index, const std::string& new_name, const std::string& description, bool save_in_lost_and_found);
     // </FS:Ansariel> [Legacy Bake]
     //void          saveWearable(const LLWearableType::EType type, const U32 index,
-    void            saveWearable(const LLWearableType::EType type, const U32 index, BOOL send_update = TRUE,
+    void            saveWearable(const LLWearableType::EType type, const U32 index, bool send_update = true,
     // <FS:Ansariel> [Legacy Bake]
                                  const std::string new_name = "");
     void            saveAllWearables();
@@ -233,7 +234,7 @@ public:
     static llvo_vec_t getTempAttachments();
 
     // <FS:Ansariel> [Legacy Bake]
-    BOOL            itemUpdatePending(const LLUUID& item_id) const;
+    bool            itemUpdatePending(const LLUUID& item_id) const;
     U32             itemUpdatePendingCount() const;
     // </FS:Ansariel> [Legacy Bake]
 
@@ -267,21 +268,21 @@ private:
     // Member variables
     //--------------------------------------------------------------------
 private:
-    static BOOL     mInitialWearablesUpdateReceived;
+    static bool     mInitialWearablesUpdateReceived;
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.2)
     static bool     mInitialWearablesLoaded;
 // [/SL:KB]
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
     static bool     mInitialAttachmentsRequested;
 // [/RLVa:KB]
-    BOOL            mWearablesLoaded;
+    bool            mWearablesLoaded;
     // <FS:Ansariel> [Legacy Bake]
     std::set<LLUUID>    mItemsAwaitingWearableUpdate;
 
     /**
      * True if agent's outfit is being changed now.
      */
-    BOOL            mCOFChangeInProgress;
+    bool            mCOFChangeInProgress;
     LLTimer         mCOFChangeTimer;
 
     //--------------------------------------------------------------------------------

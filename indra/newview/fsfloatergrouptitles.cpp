@@ -83,7 +83,7 @@ FSFloaterGroupTitles::~FSFloaterGroupTitles()
     clearObservers();
 }
 
-BOOL FSFloaterGroupTitles::postBuild()
+bool FSFloaterGroupTitles::postBuild()
 {
     mActivateButton = getChild<LLButton>("btnActivate");
     mRefreshButton = getChild<LLButton>("btnRefresh");
@@ -98,26 +98,26 @@ BOOL FSFloaterGroupTitles::postBuild()
     mTitleList->setCommitCallback(boost::bind(&FSFloaterGroupTitles::selectedTitleChanged, this));
     mFilterEditor->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onFilterEdit, this, _2));
 
-    mTitleList->sortByColumn("title_sort_column", TRUE);
+    mTitleList->sortByColumn("title_sort_column", true);
     mTitleList->setFilterColumn(0);
 
     refreshGroupTitles();
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterGroupTitles::onOpen(const LLSD& key)
 {
     LLFloater::onOpen(key);
 
-    mTitleList->setFocus(TRUE);
+    mTitleList->setFocus(true);
 }
 
-BOOL FSFloaterGroupTitles::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterGroupTitles::handleKeyHere(KEY key, MASK mask)
 {
     if (FSCommon::isFilterEditorKeyCombo(key, mask))
     {
-        mFilterEditor->setFocus(TRUE);
+        mFilterEditor->setFocus(true);
         return true;
     }
 

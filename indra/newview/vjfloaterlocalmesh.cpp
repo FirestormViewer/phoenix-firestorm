@@ -118,7 +118,7 @@ void LLFloaterLocalMesh::onSelectionChangedCallback()
     showLog();
 }
 
-BOOL LLFloaterLocalMesh::postBuild()
+bool LLFloaterLocalMesh::postBuild()
 {
     childSetAction("btn_add", LLFloaterLocalMesh::onBtnAdd, this);
     childSetAction("btn_reload", LLFloaterLocalMesh::onBtnReload, this);
@@ -139,7 +139,7 @@ BOOL LLFloaterLocalMesh::postBuild()
     getChild<LLComboBox>("lod_suffix_combo")->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onSuffixStandardSelected, this, (LLUICtrl*)this));
 
     reloadLowerUI();
-    return TRUE;
+    return true;
 }
 
 void LLFloaterLocalMesh::update_selected_target(LLUUID selected_id)
@@ -366,7 +366,7 @@ bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
     }
 
     // Select the new object
-    LLSelectMgr::getInstance()->selectObjectAndFamily(object, TRUE);
+    LLSelectMgr::getInstance()->selectObjectAndFamily(object, true);
 
 
     // LLUUID local_id{"aee92334-90e9-110b-7c03-0ff3bc19de63"};
@@ -378,7 +378,7 @@ bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
     }
     auto volume_params{volp->getParams()};
 
-    object->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, TRUE, TRUE);
+    object->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, true, true);
     auto *sculpt_params = (LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 
     if (sculpt_params)
@@ -701,7 +701,7 @@ void LLFloaterLocalMesh::toggleSelectTool(bool toggle)
 
     if (toggle)
     {
-        LLSelectMgr::getInstance()->setForceSelection(TRUE);
+        LLSelectMgr::getInstance()->setForceSelection(true);
         LLToolMgr::getInstance()->setTransientTool(LLToolCompInspect::getInstance());
 
         // this one's necessary for the tool to actually be active, go figure.

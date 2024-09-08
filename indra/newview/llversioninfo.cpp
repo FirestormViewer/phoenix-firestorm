@@ -180,7 +180,7 @@ LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
     std::string channel = getChannel();
 
     static const boost::regex is_test_channel("\\bTest\\b");
-    static const boost::regex is_beta_channel("\\bBeta\\b");
+    static const boost::regex is_beta_channel("\\b(Beta|Develop)\\b");  // Develop is an alias for Beta
     static const boost::regex is_project_channel("\\bProject\\b");
     static const boost::regex is_release_channel("\\bRelease\\b");
 
@@ -211,7 +211,47 @@ LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
     }
     return maturity;
 }
+// <FS:Beq> Add FS specific maturity grading
+LLVersionInfo::FSViewerMaturity LLVersionInfo::getFSViewerMaturity()
+{
+    FSViewerMaturity maturity;
 
+    std::string channel = getChannel();
+
+
+    static const boost::regex is_manual_channel("\\bManualx64\\b");
+    static const boost::regex is_beta_channel("\\bBetax64\\b");
+    static const boost::regex is_alpha_channel("\\bAlphax64\\b");
+    static const boost::regex is_release_channel("\\bReleasex64\\b");
+    static const boost::regex is_nightly_channel("\\bNightlyx64\\b");
+
+    if (ll_regex_search(channel, is_release_channel))
+    {
+        maturity = FSViewerMaturity::RELEASE_VIEWER;
+    }
+    else if (ll_regex_search(channel, is_beta_channel))
+    {
+        maturity = FSViewerMaturity::BETA_VIEWER;
+    }
+    else if (ll_regex_search(channel, is_alpha_channel))
+    {
+        maturity = FSViewerMaturity::ALPHA_VIEWER;
+    }
+    else if (ll_regex_search(channel, is_manual_channel))
+    {
+        maturity = FSViewerMaturity::MANUAL_VIEWER;
+    }
+    else if (ll_regex_search(channel, is_nightly_channel))
+    {
+        maturity = FSViewerMaturity::NIGHTLY_VIEWER;
+    }
+    else
+    {
+        maturity = FSViewerMaturity::UNOFFICIAL_VIEWER;
+    }
+    return maturity;
+}
+// </FS:Beq>
 std::string LLVersionInfo::getReleaseNotes()
 {
     return mReleaseNotes;

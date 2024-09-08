@@ -77,7 +77,7 @@ static LLGLSLShader* shader = NULL;
 static S32 cube_channel = -1;
 static S32 diffuse_channel = -1;
 static S32 bump_channel = -1;
-static BOOL shiny = FALSE;
+static bool shiny = false;
 
 // Enabled after changing LLViewerTexture::mNeedsCreateTexture to an
 // LLAtomicBool; this should work just fine, now. HB
@@ -168,7 +168,7 @@ void LLStandardBumpmap::addstandard()
         gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage =
             LLViewerTextureManager::getFetchedTexture(LLUUID(bump_image_id));
         gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setBoostLevel(LLGLTexture::LOCAL) ;
-        gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setLoadedCallback(LLBumpImageList::onSourceStandardLoaded, 0, TRUE, FALSE, NULL, NULL );
+        gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setLoadedCallback(LLBumpImageList::onSourceStandardLoaded, 0, true, false, NULL, NULL );
         gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->forceToSaveRawImage(0, 30.f) ;
         LLStandardBumpmap::sStandardBumpmapCount++;
     }
@@ -201,7 +201,7 @@ void LLStandardBumpmap::destroyGL()
 LLDrawPoolBump::LLDrawPoolBump()
 :  LLRenderPass(LLDrawPool::POOL_BUMP)
 {
-    shiny = FALSE;
+    shiny = false;
 }
 
 
@@ -357,7 +357,7 @@ void LLDrawPoolBump::beginFullbrightShiny()
         diffuse_channel = 0;
     }
 
-    shiny = TRUE;
+    shiny = true;
 }
 
 void LLDrawPoolBump::renderFullbrightShiny()
@@ -409,7 +409,7 @@ void LLDrawPoolBump::endFullbrightShiny()
 
     diffuse_channel = -1;
     cube_channel = 0;
-    shiny = FALSE;
+    shiny = false;
 }
 
 void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, bool texture = true)
@@ -429,7 +429,7 @@ void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, bool texture =
 
 
 // static
-BOOL LLDrawPoolBump::bindBumpMap(LLDrawInfo& params, S32 channel)
+bool LLDrawPoolBump::bindBumpMap(LLDrawInfo& params, S32 channel)
 {
     U8 bump_code = params.mBump;
 
@@ -437,7 +437,7 @@ BOOL LLDrawPoolBump::bindBumpMap(LLDrawInfo& params, S32 channel)
 }
 
 //static
-BOOL LLDrawPoolBump::bindBumpMap(LLFace* face, S32 channel)
+bool LLDrawPoolBump::bindBumpMap(LLFace* face, S32 channel)
 {
     const LLTextureEntry* te = face->getTextureEntry();
     if (te)
@@ -446,11 +446,11 @@ BOOL LLDrawPoolBump::bindBumpMap(LLFace* face, S32 channel)
         return bindBumpMap(bump_code, face->getTexture(), channel);
     }
 
-    return FALSE;
+    return false;
 }
 
 //static
-BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, S32 channel)
+bool LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, S32 channel)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     //Note: texture atlas does not support bump texture now.
@@ -458,7 +458,7 @@ BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, S32 cha
     if(!tex)
     {
         //if the texture is not a fetched texture
-        return FALSE;
+        return false;
     }
 
     LLViewerTexture* bump = NULL;
@@ -494,10 +494,10 @@ BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, S32 cha
             gGL.getTexUnit(channel)->bind(bump);
         }
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 //static
@@ -552,7 +552,7 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL; //LL_RECORD_BLOCK_TIME(FTM_RENDER_BUMP);
 
-    shiny = TRUE;
+    shiny = true;
     for (int i = 0; i < 2; ++i)
     {
         bool rigged = i == 1;
@@ -600,7 +600,7 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
         gGL.getTexUnit(0)->activate();
     }
 
-    shiny = FALSE;
+    shiny = false;
 }
 
 
@@ -702,17 +702,19 @@ void LLBumpImageList::addTextureStats(U8 bump, const LLUUID& base_image_id, F32 
 
 void LLBumpImageList::updateImages()
 {
+    llassert(LLCoros::on_main_thread_main_coro()); // This code is not thread safe
+
     for (bump_image_map_t::iterator iter = mBrightnessEntries.begin(); iter != mBrightnessEntries.end(); )
     {
         LLViewerTexture* image = iter->second;
         if( image )
         {
-            BOOL destroy = TRUE;
+            bool destroy = true;
             if( image->hasGLTexture())
             {
                 if( image->getBoundRecently() )
                 {
-                    destroy = FALSE;
+                    destroy = false;
                 }
                 else
                 {
@@ -736,12 +738,12 @@ void LLBumpImageList::updateImages()
         LLViewerTexture* image = curiter->second;
         if( image )
         {
-            BOOL destroy = TRUE;
+            bool destroy = true;
             if( image->hasGLTexture())
             {
                 if( image->getBoundRecently() )
                 {
-                    destroy = FALSE;
+                    destroy = false;
                 }
                 else
                 {
@@ -768,7 +770,7 @@ LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedText
     LLViewerTexture* bump = NULL;
 
     bump_image_map_t* entries_list = NULL;
-    void (*callback_func)( BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata ) = NULL;
+    void (*callback_func)( bool success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, bool final, void* userdata ) = NULL;
 
     switch( bump_code )
     {
@@ -792,7 +794,7 @@ LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedText
     }
     else
     {
-        (*entries_list)[src_image->getID()] = LLViewerTextureManager::getLocalTexture( TRUE );
+        (*entries_list)[src_image->getID()] = LLViewerTextureManager::getLocalTexture( true );
         bump = (*entries_list)[src_image->getID()]; // In case callback was called immediately and replaced the image
     }
 
@@ -803,7 +805,7 @@ LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedText
             //(LLPipeline::sRenderDeferred && bump->getComponents() != 4))
         {
             src_image->setBoostLevel(LLGLTexture::BOOST_BUMP) ;
-            src_image->setLoadedCallback( callback_func, 0, TRUE, FALSE, new LLUUID(src_image->getID()), NULL );
+            src_image->setLoadedCallback( callback_func, 0, true, false, new LLUUID(src_image->getID()), NULL );
             src_image->forceToSaveRawImage(0) ;
         }
     }
@@ -813,7 +815,7 @@ LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedText
 
 
 // static
-void LLBumpImageList::onSourceBrightnessLoaded( BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata )
+void LLBumpImageList::onSourceBrightnessLoaded( bool success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, bool final, void* userdata )
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     LLUUID* source_asset_id = (LLUUID*)userdata;
@@ -825,7 +827,7 @@ void LLBumpImageList::onSourceBrightnessLoaded( BOOL success, LLViewerFetchedTex
 }
 
 // static
-void LLBumpImageList::onSourceDarknessLoaded( BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata )
+void LLBumpImageList::onSourceDarknessLoaded( bool success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, bool final, void* userdata )
 {
     LLUUID* source_asset_id = (LLUUID*)userdata;
     LLBumpImageList::onSourceLoaded( success, src_vi, src, *source_asset_id, BE_DARKNESS );
@@ -835,7 +837,7 @@ void LLBumpImageList::onSourceDarknessLoaded( BOOL success, LLViewerFetchedTextu
     }
 }
 
-void LLBumpImageList::onSourceStandardLoaded( BOOL success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata)
+void LLBumpImageList::onSourceStandardLoaded( bool success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, bool final, void* userdata)
 {
     if (success && LLPipeline::sRenderDeferred)
     {
@@ -853,11 +855,14 @@ void LLBumpImageList::onSourceStandardLoaded( BOOL success, LLViewerFetchedTextu
 
 void LLBumpImageList::generateNormalMapFromAlpha(LLImageRaw* src, LLImageRaw* nrm_image)
 {
+    LLImageDataSharedLock lockIn(src);
+    LLImageDataLock lockOut(nrm_image);
+
     U8* nrm_data = nrm_image->getData();
     S32 resX = src->getWidth();
     S32 resY = src->getHeight();
 
-    U8* src_data = src->getData();
+    const U8* src_data = src->getData();
 
     S32 src_cmp = src->getComponents();
 
@@ -911,7 +916,7 @@ void LLBumpImageList::generateNormalMapFromAlpha(LLImageRaw* src, LLImageRaw* nr
 }
 
 // static
-void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLImageRaw* src, LLUUID& source_asset_id, EBumpEffect bump_code )
+void LLBumpImageList::onSourceLoaded( bool success, LLViewerTexture *src_vi, LLImageRaw* src, LLUUID& source_asset_id, EBumpEffect bump_code )
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 
@@ -919,6 +924,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 
+        LLImageDataSharedLock lock(src);
 
         bump_image_map_t& entries_list(bump_code == BE_BRIGHTNESS ? gBumpImageList.mBrightnessEntries : gBumpImageList.mDarknessEntries );
         bump_image_map_t::iterator iter = entries_list.find(source_asset_id);
@@ -929,7 +935,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                             iter->second->getWidth() != src->getWidth() ||
                             iter->second->getHeight() != src->getHeight()) // bump not cached yet or has changed resolution
             { //make sure an entry exists for this image
-                entries_list[src_vi->getID()] = LLViewerTextureManager::getLocalTexture(TRUE);
+                entries_list[src_vi->getID()] = LLViewerTextureManager::getLocalTexture(true);
                 iter = entries_list.find(src_vi->getID());
             }
         }
@@ -941,7 +947,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
             U8* dst_data = dst_image->getData();
             S32 dst_data_size = dst_image->getDataSize();
 
-            U8* src_data = src->getData();
+            const U8* src_data = src->getData();
             S32 src_data_size = src->getDataSize();
 
             S32 src_components = src->getComponents();
@@ -1094,7 +1100,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                 bump_ptr->ref();
                 auto create_func = [=]()
                 {
-                    img->setUseMipMaps(TRUE);
+                    img->setUseMipMaps(true);
                     // upload dst_image to GPU (greyscale in red channel)
                     img->setExplicitFormat(GL_RED, GL_RED);
 
@@ -1108,7 +1114,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                     //  Note: bump will still point at GPU copy of dst_image
                     bump_ptr->setExplicitFormat(GL_RGBA, GL_RGBA);
                     LLGLuint tex_name;
-                    img->createGLTexture(0, nullptr, 0, 0, true, &tex_name);
+                    img->createGLTexture(0, nullptr, false, 0, true, &tex_name);
 
                     // point render target at empty buffer
                     sRenderTarget.setColorAttachment(img, tex_name);
@@ -1120,7 +1126,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                         LLGLDepthTest depth(GL_FALSE);
                         LLGLDisable cull(GL_CULL_FACE);
                         LLGLDisable blend(GL_BLEND);
-                        gGL.setColorMask(TRUE, TRUE);
+                        gGL.setColorMask(true, true);
 
                         gNormalMapGenProgram.bind();
 

@@ -122,7 +122,7 @@ LLWorld::LLWorld() :
     *(default_texture++) = MAX_WATER_COLOR.mV[2];
     *(default_texture++) = MAX_WATER_COLOR.mV[3];
 
-    mDefaultWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+    mDefaultWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
     gGL.getTexUnit(0)->bind(mDefaultWaterTexturep);
     mDefaultWaterTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
     LLViewerRegion::sVOCacheCullingEnabled = gSavedSettings.getBOOL("RequestFullRegionCache") && gSavedSettings.getBOOL("ObjectCacheEnabled");
@@ -178,9 +178,9 @@ void LLWorld::refreshLimits()
         mMaxPhysLinkedPrims = 10000;
         mMaxInventoryItemsTransfer = 42;
         mAllowRenderName = 2;
-        mAllowMinimap = TRUE;
-        mAllowPhysicalPrims = TRUE;
-        mAllowRenderWater = TRUE;
+        mAllowMinimap = true;
+        mAllowPhysicalPrims = true;
+        mAllowRenderWater = true;
 
         mMaxPrimXPos = F32_MAX;
         mMaxPrimYPos = F32_MAX;
@@ -189,10 +189,10 @@ void LLWorld::refreshLimits()
         mMinPrimYPos = 0.f;
         mMinPrimZPos = OS_MIN_OBJECT_Z;
         mMaxDragDistance = 10000.f;
-        mAllowParcelWindLight = TRUE;
-        mEnableTeenMode = FALSE; //get saved settings?
-        mEnforceMaxBuild = FALSE;
-        mLockedDrawDistance = FALSE;
+        mAllowParcelWindLight = true;
+        mEnableTeenMode = false; //get saved settings?
+        mEnforceMaxBuild = false;
+        mLockedDrawDistance = false;
 
         mDrawDistance = -1.f;
         mTerrainDetailScale = -1.f;
@@ -217,9 +217,9 @@ void LLWorld::refreshLimits()
         mMaxPhysLinkedPrims = MAX_CHILDREN_PER_PHYSICAL_TASK;
         mMaxInventoryItemsTransfer = 42;
         mAllowRenderName = 2;
-        mAllowMinimap = TRUE;
-        mAllowPhysicalPrims = TRUE;
-        mAllowRenderWater = TRUE;
+        mAllowMinimap = true;
+        mAllowPhysicalPrims = true;
+        mAllowRenderWater = true;
 
         mMaxPrimXPos = 256.f;
         mMaxPrimYPos = 256.f;
@@ -228,10 +228,10 @@ void LLWorld::refreshLimits()
         mMinPrimYPos = 0.f;
         mMinPrimZPos = SL_MIN_OBJECT_Z;
         mMaxDragDistance = 10000.f;
-        mAllowParcelWindLight = FALSE;
-        mEnableTeenMode = FALSE; //get saved settings?
-        mEnforceMaxBuild = FALSE;
-        mLockedDrawDistance = FALSE;
+        mAllowParcelWindLight = false;
+        mEnableTeenMode = false; //get saved settings?
+        mEnforceMaxBuild = false;
+        mLockedDrawDistance = false;
 
         mDrawDistance = -1.f;
         mTerrainDetailScale = -1.f;
@@ -411,13 +411,13 @@ void LLWorld::setTerrainDetailScale(F32 val)
         mTerrainDetailScale = val;
 }
 
-void LLWorld::setAllowMinimap(BOOL val)         { mAllowMinimap = val; }
-void LLWorld::setAllowPhysicalPrims(BOOL val)   { mAllowPhysicalPrims = val; }
-void LLWorld::setAllowRenderWater(BOOL val)     { mAllowRenderWater = val; }
-void LLWorld::setAllowParcelWindLight(BOOL val) { mAllowParcelWindLight = val; }
-void LLWorld::setEnableTeenMode(BOOL val)       { mEnableTeenMode = val; }
-void LLWorld::setEnforceMaxBuild(BOOL val)      { mEnforceMaxBuild = val; }
-void LLWorld::setLockedDrawDistance(BOOL val)   { mLockedDrawDistance = val; }
+void LLWorld::setAllowMinimap(bool val)         { mAllowMinimap = val; }
+void LLWorld::setAllowPhysicalPrims(bool val)   { mAllowPhysicalPrims = val; }
+void LLWorld::setAllowRenderWater(bool val)     { mAllowRenderWater = val; }
+void LLWorld::setAllowParcelWindLight(bool val) { mAllowParcelWindLight = val; }
+void LLWorld::setEnableTeenMode(bool val)       { mEnableTeenMode = val; }
+void LLWorld::setEnforceMaxBuild(bool val)      { mEnforceMaxBuild = val; }
+void LLWorld::setLockedDrawDistance(bool val)   { mLockedDrawDistance = val; }
 void LLWorld::setAllowRenderName(S32 val)       { mAllowRenderName = val; }
 
 void LLWorld::updateLimits()
@@ -889,7 +889,7 @@ void LLWorld::updateAgentOffset(const LLVector3d &offset_global)
 }
 
 
-BOOL LLWorld::positionRegionValidGlobal(const LLVector3d &pos_global)
+bool LLWorld::positionRegionValidGlobal(const LLVector3d &pos_global)
 {
     for (region_list_t::iterator iter = mRegionList.begin();
          iter != mRegionList.end(); ++iter)
@@ -897,10 +897,10 @@ BOOL LLWorld::positionRegionValidGlobal(const LLVector3d &pos_global)
         LLViewerRegion* regionp = *iter;
         if (regionp->pointInRegionGlobal(pos_global))
         {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -1416,7 +1416,7 @@ void LLWorld::updateWaterObjects()
             if (!getRegionFromHandle(region_handle))
             {   // No region at that area, so make water
                 LLVOWater* waterp = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER, gAgent.getRegion());
-                waterp->setUseTexture(FALSE);
+                waterp->setUseTexture(false);
 // <FS:CR> Fix water height on regions larger than 2048x2048
                 //waterp->setPositionGlobal(LLVector3d(x + rwidth/2,
                 //                                   y + rwidth/2,
@@ -1484,8 +1484,8 @@ void LLWorld::updateWaterObjects()
             mEdgeWaterObjects[dir] = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_VOID_WATER,
                                                                                  gAgent.getRegion());
             waterp = mEdgeWaterObjects[dir];
-            waterp->setUseTexture(FALSE);
-            waterp->setIsEdgePatch(TRUE);
+            waterp->setUseTexture(false);
+            waterp->setIsEdgePatch(true);
             gPipeline.createObject(waterp);
         }
 
@@ -1616,7 +1616,7 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
 #endif
 // </FS:CR> Aurora Sim
     // Viewer trusts the simulator.
-    msg->enableCircuit(sim, TRUE);
+    msg->enableCircuit(sim, true);
 // <FS:CR> Aurora Sim
     //LLWorld::getInstance()->addRegion(handle, sim);
     LLWorld::getInstance()->addRegion(handle, sim, region_size_x, region_size_y);
@@ -1749,7 +1749,7 @@ void send_agent_pause()
         gMessageSystem->sendReliable(regionp->getHost());
     }
 
-    gObjectList.mWasPaused = TRUE;
+    gObjectList.mWasPaused = true;
     LLViewerStats::instance().getRecording().stop();
 }
 
@@ -1850,8 +1850,8 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
     {
         LLViewerRegion* regionp = *iter;
         const LLVector3d& origin_global = regionp->getOriginGlobal();
-        S32 count = regionp->mMapAvatars.size();
-        for (S32 i = 0; i < count; i++)
+        auto count = regionp->mMapAvatars.size();
+        for (size_t i = 0; i < count; i++)
         {
             // <FS:Ansariel>
             //LLVector3d pos_global = unpackLocalToGlobalPosition(regionp->mMapAvatars.at(i), origin_global);
@@ -1932,7 +1932,7 @@ bool LLWorld::getAvatar(const LLUUID& idAvatar, LLVector3d& posAvatar) const
 
     for (const LLViewerRegion* pRegion : LLWorld::getInstance()->getRegionList())
     {
-        for (S32 idxAgent = 0, cntAgent = pRegion->mMapAvatarIDs.size(); idxAgent < cntAgent; ++idxAgent)
+        for (size_t idxAgent = 0, cntAgent = pRegion->mMapAvatarIDs.size(); idxAgent < cntAgent; ++idxAgent)
         {
             if (idAvatar == pRegion->mMapAvatarIDs[idxAgent])
             {

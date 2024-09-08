@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="change_item_thumbnail" title="Abbildung ändern">
+	<floater.string name="multiple_item_names">
+		Mehrere Gegenstände ausgewählt
+	</floater.string>
 	<floater.string name="title_item_thumbnail">
 		Abbildung für Gegenstand ändern
 	</floater.string>
@@ -24,4 +27,7 @@
 	<floater.string name="tooltip_remove_image">
 		Abbildung entfernen
 	</floater.string>
+	<text name="multiple_lbl">
+		Mehrere Abbildungen
+	</text>
 </floater>

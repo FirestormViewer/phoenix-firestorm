@@ -320,7 +320,7 @@ static void on_avatar_name_cache_start_call(const LLUUID& agent_id,
                                             const LLAvatarName& av_name)
 {
     std::string name = av_name.getDisplayName();
-    LLUUID session_id = gIMMgr->addSession(name, IM_NOTHING_SPECIAL, agent_id, true);
+    LLUUID session_id = gIMMgr->addSession(name, IM_NOTHING_SPECIAL, agent_id, LLSD());
     if (session_id != LLUUID::null)
     {
         gIMMgr->startCall(session_id);
@@ -382,8 +382,7 @@ const LLUUID LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID
 
     // create the new ad hoc voice session
     const std::string title = LLTrans::getString("conference-title");
-    LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START,
-                                           ids[0], id_array, true, floater_id);
+    LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array, LLSD(), floater_id);
     if (session_id == LLUUID::null)
     {
         // <FS:Ansariel> [FS Communication UI]
@@ -446,7 +445,7 @@ const LLUUID LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUI
 //      id_array.push_back(*it);
     }
     const std::string title = LLTrans::getString("conference-title");
-    LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array, false, floater_id);
+    LLUUID  session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array, LLSD(), floater_id);
 
     if (session_id == LLUUID::null)
     {
@@ -680,7 +679,7 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
         msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 
         msg->nextBlockFast(_PREHASH_MessageBlock);
-        msg->addBOOLFast(_PREHASH_FromGroup, FALSE);
+        msg->addBOOLFast(_PREHASH_FromGroup, false);
         msg->addUUIDFast(_PREHASH_ToAgentID, notification["substitutions"]["uuid"] );
         msg->addU8Fast(_PREHASH_Offline, IM_ONLINE);
         msg->addU8Fast(_PREHASH_Dialog, IM_TELEPORT_REQUEST);
@@ -820,8 +819,8 @@ void LLAvatarActions::csr(const LLUUID& id, std::string name)
     std::string url = "http://csr.lindenlab.com/agent/";
 
     // slow and stupid, but it's late
-    S32 len = name.length();
-    for (S32 i = 0; i < len; i++)
+    auto len = name.length();
+    for (size_t i = 0; i < len; i++)
     {
         if (name[i] == ' ')
         {
@@ -927,7 +926,7 @@ namespace action_give_inventory
      */
     static LLInventoryPanel* get_active_inventory_panel()
     {
-        LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+        LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(false);
         LLFloater* floater_appearance = LLFloaterReg::findInstance("appearance");
         if (!active_panel || (floater_appearance && floater_appearance->hasFocus()))
         {
@@ -1039,11 +1038,11 @@ namespace action_give_inventory
             return;
         }
 
-        S32 count = LLShareInfo::instance().mAvatarNames.size();
+        auto count = LLShareInfo::instance().mAvatarNames.size();
         bool shared = count && !inventory_selected_uuids.empty();
 
         // iterate through avatars
-        for(S32 i = 0; i < count; ++i)
+        for(size_t i = 0; i < count; ++i)
         {
             const LLUUID& avatar_uuid = LLShareInfo::instance().mAvatarUuids[i];
 
@@ -1127,7 +1126,7 @@ namespace action_give_inventory
 // [RLVa:KB] - @share
         if ( (RlvActions::isRlvEnabled()) && (RlvActions::hasBehaviour(RLV_BHVR_SHARE)) )
         {
-            for (int idxAvatar = avatar_uuids.size() - 1; idxAvatar >= 0; idxAvatar--)
+            for (int idxAvatar = static_cast<int>(avatar_uuids.size()) - 1; idxAvatar >= 0; idxAvatar--)
             {
                 if (!RlvActions::canGiveInventory(avatar_uuids[idxAvatar]))
                 {
@@ -1302,8 +1301,8 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
     LLInventoryPanel* inv_panel = dynamic_cast<LLInventoryPanel*>(panel);
     LLFloaterAvatarPicker* picker =
         // <FS:Ansariel> FIRE-32377: Don't include own avatar when sharing items
-        //LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, FALSE, root_floater->getName());
-        LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, TRUE, root_floater->getName());
+        //LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), true, false, false, root_floater->getName());
+        LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), true, false, true, root_floater->getName());
     if (!picker)
     {
         return;
@@ -1325,7 +1324,7 @@ void LLAvatarActions::shareWithAvatars(const uuid_set_t inventory_selected_uuids
     using namespace action_give_inventory;
 
     LLFloaterAvatarPicker* picker =
-        LLFloaterAvatarPicker::show(boost::bind(give_inventory_ids, _1, _2, inventory_selected_uuids), TRUE, FALSE, FALSE, root_floater->getName());
+        LLFloaterAvatarPicker::show(boost::bind(give_inventory_ids, _1, _2, inventory_selected_uuids), true, false, false, root_floater->getName());
     if (!picker)
     {
         return;
@@ -1548,7 +1547,7 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
             //LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
             if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
             {
-                LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), TRUE);
+                LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
             }
             else
             {
@@ -1581,7 +1580,7 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 
         if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
         {
-            LLFloaterReg::showInstance("preview_conversation", extended_id, TRUE);
+            LLFloaterReg::showInstance("preview_conversation", extended_id, true);
         }
         else
         {
@@ -1621,7 +1620,7 @@ void LLAvatarActions::viewChatHistoryExternally(const LLUUID& id)
 //static
 void LLAvatarActions::addToContactSet(const LLUUID& agent_id)
 {
-    LLFloaterReg::showInstance("fs_add_contact", agent_id, TRUE);
+    LLFloaterReg::showInstance("fs_add_contact", agent_id, true);
 }
 
 void LLAvatarActions::addToContactSet(const uuid_vec_t& agent_ids)
@@ -1637,7 +1636,7 @@ void LLAvatarActions::addToContactSet(const uuid_vec_t& agent_ids)
         {
             data.append(*it);
         }
-        LLFloaterReg::showInstance("fs_add_contact", data, TRUE);
+        LLFloaterReg::showInstance("fs_add_contact", data, true);
     }
 }
 // [/FS:CR] Add to contact set
@@ -1661,7 +1660,7 @@ bool LLAvatarActions::handleRemove(const LLSD& notification, const LLSD& respons
             case 0: // YES
                 if( ip->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
                 {
-                    LLAvatarTracker::instance().empower(id, FALSE);
+                    LLAvatarTracker::instance().empower(id, false);
                     LLAvatarTracker::instance().notifyObservers();
                 }
                 LLAvatarTracker::instance().terminateBuddy(id);
@@ -1985,7 +1984,7 @@ bool getRegionAndPosGlobalFromAgentID(const LLUUID& idAgent, const LLViewerRegio
     for (; itRegion != endRegion; ++itRegion)
     {
         const LLViewerRegion* pRegion = *itRegion;
-        for (S32 idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.size(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
+        for (size_t idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.size(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
         {
             if (pRegion->mMapAvatarIDs.at(idxRegionAgent) == idAgent)
             {

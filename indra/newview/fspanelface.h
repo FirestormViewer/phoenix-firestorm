@@ -111,7 +111,7 @@ public:
     FSPanelFace();
     virtual ~FSPanelFace();
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
     void refresh();
     void refreshMedia();
@@ -120,7 +120,7 @@ public:
 
     static void onMaterialOverrideReceived(const LLUUID& object_id, S32 side);
 
-    /*virtual*/ void onVisibilityChange(BOOL new_visibility);
+    /*virtual*/ void onVisibilityChange(bool new_visibility);
     /*virtual*/ void draw();
 
     LLMaterialPtr createDefaultMaterial(LLMaterialPtr current_material);
@@ -200,7 +200,7 @@ protected:
     void onSelectTexture();
     void onCommitTexture();
     void onCancelTexture();
-    BOOL onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item);  // this function is to return TRUE if the drag should succeed.
+    bool onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item);  // this function is to return true if the drag should succeed.
     void onCloseTexturePicker();
 
     // Blinn-Phong Normal texture swatch
@@ -243,7 +243,7 @@ protected:
     void onCommitPbr();
     void onCancelPbr();
     void onSelectPbr();
-    BOOL onDragPbr(LLInventoryItem* item);  // this function is to return TRUE if the drag should succeed.
+    bool onDragPbr(LLInventoryItem* item);  // this function is to return true if the drag should succeed.
 
     void onPbrSelectionChanged(LLInventoryItem* itemp);
     void onClickBtnSavePBR();

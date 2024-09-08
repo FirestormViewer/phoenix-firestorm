@@ -363,7 +363,7 @@ public:
         mUserData = user_data;
     }
 
-    BOOL callHandlerFunc(LLMessageSystem *msgsystem) const
+    bool callHandlerFunc(LLMessageSystem *msgsystem) const
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
         if (mHandlerFunc)
@@ -384,9 +384,9 @@ public:
 
             // </FS:ND>
 
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     bool isUdpBanned() const

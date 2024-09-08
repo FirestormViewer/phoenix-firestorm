@@ -59,7 +59,7 @@ public:
     void                onAddAction(LLVOAvatar* avatar, Action action, S32 location);
     void                onDeleteAction(LLVOAvatar* avatar, S32 i);
 
-    BOOL                loadPose(const LLSD& name, S32 load_type = 3);
+    bool                loadPose(const LLSD& name, S32 load_type = 3);
     LLSD                returnPose(const LLSD& name);
 
     void                update();

@@ -22,8 +22,9 @@
  * $/LicenseInfo$
  */
 
-#include "../llmath.h"
-#include "ndoctreelog.h"
+#include "llpreprocessor.h"
+#include "llmath.h"
+#include "nd/ndoctreelog.h"
 #include "llfile.h"
 
 namespace nd

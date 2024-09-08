@@ -69,7 +69,7 @@ extern S32 gMaxAgentGroups;
 
 S32 FSCommon::sObjectAddMsg = 0;
 
-void report_to_nearby_chat(std::string_view message)
+void FSCommon::report_to_nearby_chat(std::string_view message)
 {
     LLChat chat;
     chat.mText = message;
@@ -77,22 +77,22 @@ void report_to_nearby_chat(std::string_view message)
     LLNotificationsUI::LLNotificationManager::instance().onChat(chat, LLSD());
 }
 
-std::string format_string(std::string text, const LLStringUtil::format_map_t& args)
+std::string FSCommon::format_string(std::string text, const LLStringUtil::format_map_t& args)
 {
     LLStringUtil::format(text, args);
     return text;
 }
 
-bool is_irc_me_prefix(std::string_view text)
+bool FSCommon::is_irc_me_prefix(std::string_view text)
 {
     const std::string_view prefix = text.substr(0, 4);
     return (prefix == "/me " || prefix == "/me'");
 }
 
-std::string unescape_name(std::string_view name)
+std::string FSCommon::unescape_name(std::string_view name)
 {
     // bugfix for SL-46920: preventing filenames that break stuff.
-    char * curl_str = curl_unescape(name.data(), name.size()); // Calling data() should be ok here because we also pass the length
+    char * curl_str = curl_unescape(name.data(), static_cast<int>(name.size())); // Calling data() should be ok here because we also pass the length
     std::string unescaped_name(curl_str);
     curl_free(curl_str);
     curl_str = NULL;
@@ -226,7 +226,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
             {
                 if (item->getType() == LLAssetType::AT_LSL_TEXT)
                 {
-                    LLToolDragAndDrop::dropScript(object, item, TRUE,
+                    LLToolDragAndDrop::dropScript(object, item, true,
                                       LLToolDragAndDrop::SOURCE_AGENT,
                                       gAgentID);
                 }
@@ -253,7 +253,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
         gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
         gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
         gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
-        gMessageSystem->addBOOLFast(_PREHASH_Override, FALSE);
+        gMessageSystem->addBOOLFast(_PREHASH_Override, false);
         gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
         gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
         gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
@@ -280,7 +280,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
     gMessageSystem->addBOOLFast(_PREHASH_UsePhysics, gSavedSettings.getBOOL("FSBuildPrefs_Physical"));
     gMessageSystem->addBOOL(_PREHASH_IsTemporary, gSavedSettings.getBOOL("FSBuildPrefs_Temporary"));
     gMessageSystem->addBOOL(_PREHASH_IsPhantom, gSavedSettings.getBOOL("FSBuildPrefs_Phantom"));
-    gMessageSystem->addBOOL("CastsShadows", FALSE);
+    gMessageSystem->addBOOL("CastsShadows", false);
     gMessageSystem->sendReliable(object->getRegion()->getHost());
 }
 
@@ -440,7 +440,7 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 LLSD FSCommon::populateGroupCount()
 {
     LLStringUtil::format_map_t args;
-    S32 groupcount = gAgent.mGroups.size();
+    S32 groupcount = static_cast<S32>(gAgent.mGroups.size());
     S32 maxgroup = LLAgentBenefitsMgr::current().getGroupMembershipLimit();
     args["[COUNT]"] = llformat("%d", groupcount);
     args["[REMAINING]"] = llformat("%d", maxgroup > groupcount ? maxgroup - groupcount : 0);

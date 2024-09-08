@@ -57,7 +57,7 @@ class LLPanelSnapshotPostcard
 public:
     LLPanelSnapshotPostcard();
     /*virtual*/ ~LLPanelSnapshotPostcard(); // <FS:Ansariel> Store settings at logout
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& key);
     /*virtual*/ S32 notify(const LLSD& info); // <FS:Ansariel> For OpenSim compatibility
 
@@ -95,12 +95,12 @@ LLPanelSnapshotPostcard::LLPanelSnapshotPostcard()
 }
 
 // virtual
-BOOL LLPanelSnapshotPostcard::postBuild()
+bool LLPanelSnapshotPostcard::postBuild()
 {
     // For the first time a user focuses to .the msg box, all text will be selected.
     getChild<LLUICtrl>("msg_form")->setFocusChangedCallback(boost::bind(&LLPanelSnapshotPostcard::onMsgFormFocusRecieved, this));
 
-    getChild<LLUICtrl>("to_form")->setFocus(TRUE);
+    getChild<LLUICtrl>("to_form")->setFocus(true);
 
     getChild<LLUICtrl>("image_quality_slider")->setCommitCallback(boost::bind(&LLPanelSnapshotPostcard::onQualitySliderCommit, this, _1));
 

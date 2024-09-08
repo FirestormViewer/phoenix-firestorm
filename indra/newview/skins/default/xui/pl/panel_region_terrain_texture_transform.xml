@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Teren" name="Terrain">
+	<text name="region_text">
+		brak danych
+	</text>
+	<text name="detail_texture_text">
+		Tekstury terenu
+	</text>
+	<text name="detail_material_text">
+		Materiały terenu
+	</text>
+	<check_box label="Chropowatość metaliczna PBR" name="terrain_material_type" tool_tip="Jeśli ta opcja jest zaznaczona, to użyj materiałów chropowatości metalicznej PBR dla terenu. W przeciwnym razie użyj tekstur." />
+	<text name="height_text_lbl">
+		1 (Nisko)
+	</text>
+	<text name="height_text_lbl4">
+		4 (Wysoko)
+	</text>
+	<layout_stack name="terrain_features_stack">
+		<layout_panel name="frame_settings_terrain">
+			<tab_container name="terrain_tabs">
+				<panel label="Wysokości" name="terrain_elevation_panel" />
+				<panel label="Przekształcenia" name="terrain_transform_panel" />
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+	<button label="Zastosuj" name="apply_btn" />
+</panel>

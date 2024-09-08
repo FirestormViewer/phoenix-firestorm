@@ -68,18 +68,18 @@ static LLPanelInjector<LLProgressViewMini> r_mini("progress_view_mini");
 
 LLProgressViewMini::LLProgressViewMini()
 {
-    sInstance=this;
+    sInstance = this;
 }
 
-BOOL LLProgressViewMini::postBuild()
+bool LLProgressViewMini::postBuild()
 {
     mCancelBtn=getChild<LLButton>("cancel_btn");
-    mCancelBtn->setClickedCallback(LLProgressViewMini::onCancelButtonClicked,NULL);
+    mCancelBtn->setClickedCallback(LLProgressViewMini::onCancelButtonClicked, nullptr);
 
     mProgressBar=getChild<LLProgressBar>("progress_bar_mini");
     mProgressText=getChild<LLTextBox>("progress_text");
 
-    return TRUE;
+    return true;
 }
 
 void LLProgressViewMini::setPercent(const F32 percent)
@@ -88,8 +88,8 @@ void LLProgressViewMini::setPercent(const F32 percent)
 
     // hide ourselves when 100% is reached. This is necessary because the login code
     // expects the fullscreen panel to hide itself when login is completed
-    if(percent==100.0f)
-        setVisible(FALSE);
+    if (percent == 100.0f)
+        setVisible(false);
 }
 
 void LLProgressViewMini::setText(const std::string& text)
@@ -97,7 +97,7 @@ void LLProgressViewMini::setText(const std::string& text)
     mProgressText->setValue(text);
 }
 
-void LLProgressViewMini::setCancelButtonVisible(BOOL b, const std::string& label)
+void LLProgressViewMini::setCancelButtonVisible(bool b, const std::string& label)
 {
     mCancelBtn->setVisible(b);
     mCancelBtn->setEnabled(b);
@@ -109,10 +109,10 @@ void LLProgressViewMini::setCancelButtonVisible(BOOL b, const std::string& label
 void LLProgressViewMini::onCancelButtonClicked(void* dummy)
 {
     // code reuse is good, even if we have an unnecessary hiding of the full screen tp window there
-    // we might have to reconsider this in case we change setVisible(FALSE) to fade(FALSE) in there. -Zi
+    // we might have to reconsider this in case we change setVisible(false) to fade(false) in there. -Zi
     LLProgressView::onCancelButtonClicked(dummy);
-    sInstance->mCancelBtn->setEnabled(FALSE);
-    sInstance->setVisible(FALSE);
+    sInstance->mCancelBtn->setEnabled(false);
+    sInstance->setVisible(false);
 }
 
 // XUI: Translate
@@ -131,7 +131,7 @@ LLProgressView::LLProgressView()
     mFadeFromLoginTimer.stop();
 }
 
-BOOL LLProgressView::postBuild()
+bool LLProgressView::postBuild()
 {
     mProgressBar = getChild<LLProgressBar>("login_progress_bar");
 
@@ -154,12 +154,12 @@ BOOL LLProgressView::postBuild()
     getChild<LLTextBox>("message_text")->setClickedCallback(onClickMessage, this);
 
     // hidden initially, until we need it
-    setVisible(FALSE);
+    setVisible(false);
 
     LLNotifications::instance().getChannel("AlertModal")->connectChanged(boost::bind(&LLProgressView::onAlertModal, this, _1));
 
     sInstance = this;
-    return TRUE;
+    return true;
 }
 
 
@@ -173,24 +173,24 @@ LLProgressView::~LLProgressView()
     sInstance = NULL;
 }
 
-BOOL LLProgressView::handleHover(S32 x, S32 y, MASK mask)
+bool LLProgressView::handleHover(S32 x, S32 y, MASK mask)
 {
     if( childrenHandleHover( x, y, mask ) == NULL )
     {
         gViewerWindow->setCursor(UI_CURSOR_WAIT);
     }
-    return TRUE;
+    return true;
 }
 
 
-BOOL LLProgressView::handleKeyHere(KEY key, MASK mask)
+bool LLProgressView::handleKeyHere(KEY key, MASK mask)
 {
     // Suck up all keystokes except CTRL-Q.
     if( ('Q' == key) && (MASK_CONTROL == mask) )
     {
         LLAppViewer::instance()->userQuit();
     }
-    return TRUE;
+    return true;
 }
 
 void LLProgressView::revealIntroPanel()
@@ -199,20 +199,20 @@ void LLProgressView::revealIntroPanel()
     std::string intro_url = gSavedSettings.getString("PostFirstLoginIntroURL");
     if ( intro_url.length() > 0 &&
             gSavedSettings.getBOOL("BrowserJavascriptEnabled") &&
-            gSavedSettings.getBOOL("PostFirstLoginIntroViewed" ) == FALSE )
+            !gSavedSettings.getBOOL("PostFirstLoginIntroViewed"))
     {
         // hide the progress bar
         getChild<LLView>("stack1")->setVisible(false);
 
         // navigate to intro URL and reveal widget
         mMediaCtrl->navigateTo( intro_url );
-        mMediaCtrl->setVisible( TRUE );
+        mMediaCtrl->setVisible( true );
 
 
         // flag as having seen the new user post login intro
-        gSavedSettings.setBOOL("PostFirstLoginIntroViewed", TRUE );
+        gSavedSettings.setBOOL("PostFirstLoginIntroViewed", true );
 
-        mMediaCtrl->setFocus(TRUE);
+        mMediaCtrl->setFocus(true);
     }
 
     mFadeFromLoginTimer.start();
@@ -235,7 +235,7 @@ void LLProgressView::setStartupComplete()
     LLViewerMedia::getInstance()->setOnlyAudibleMediaTextureID(LLUUID::null);
 }
 
-void LLProgressView::setVisible(BOOL visible)
+void LLProgressView::setVisible(bool visible)
 {
     if (!visible && mFadeFromLoginTimer.getStarted())
     {
@@ -244,25 +244,25 @@ void LLProgressView::setVisible(BOOL visible)
     // hiding progress view
     if (getVisible() && !visible)
     {
-        LLPanel::setVisible(FALSE);
+        LLPanel::setVisible(false);
     }
     // showing progress view
     else if (visible && (!getVisible() || mFadeToWorldTimer.getStarted()))
     {
-        setFocus(TRUE);
+        setFocus(true);
         mFadeToWorldTimer.stop();
-        LLPanel::setVisible(TRUE);
+        LLPanel::setVisible(true);
     }
 }
 
 // <FS:Zi> Fade teleport screens
-void LLProgressView::fade(BOOL in)
+void LLProgressView::fade(bool in)
 {
     if(in)
     {
         mFadeFromLoginTimer.start();
         mFadeToWorldTimer.stop();
-        setVisible(TRUE);
+        setVisible(true);
     }
     else
     {
@@ -330,7 +330,7 @@ void LLProgressView::drawLogos(F32 alpha)
                              iter->mDrawRect.getHeight(),
                              iter->mTexturep.get(),
                              UI_VERTEX_COLOR % alpha,
-                             FALSE,
+                             false,
                              iter->mClipRect,
                              iter->mOffsetRect);
     }
@@ -377,7 +377,7 @@ void LLProgressView::draw()
             gFocusMgr.releaseFocusIfNeeded( this );
 
             // turn off panel that hosts intro so we see the world
-            setVisible(FALSE);
+            setVisible(false);
 
             // stop observing events since we no longer care
             mMediaCtrl->remObserver( this );
@@ -447,7 +447,7 @@ void LLProgressView::loadLogo(const std::string &path,
     raw->expandToPowerOfTwo();
 
     TextureData data;
-    data.mTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+    data.mTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
     data.mDrawRect = pos_rect;
     data.mClipRect = clip_rect;
     data.mOffsetRect = offset_rect;
@@ -584,7 +584,7 @@ void LLProgressView::initStartTexture(S32 location_id, bool is_in_production)
         {
             // HACK: getLocalTexture allows only power of two dimentions
             raw->expandToPowerOfTwo();
-            gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+            gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), false);
         }
     }
 
@@ -601,8 +601,8 @@ void LLProgressView::initTextures(S32 location_id, bool is_in_production)
     initStartTexture(location_id, is_in_production);
     initLogos();
 
-    childSetVisible("panel_icons", mLogosList.empty() ? FALSE : TRUE);
-    childSetVisible("panel_top_spacer", mLogosList.empty() ? TRUE : FALSE);
+    childSetVisible("panel_icons", !mLogosList.empty());
+    childSetVisible("panel_top_spacer", mLogosList.empty());
 }
 
 void LLProgressView::releaseTextures()
@@ -610,14 +610,14 @@ void LLProgressView::releaseTextures()
     gStartTexture = NULL;
     mLogosList.clear();
 
-    childSetVisible("panel_top_spacer", TRUE);
-    childSetVisible("panel_icons", FALSE);
+    childSetVisible("panel_top_spacer", true);
+    childSetVisible("panel_icons", false);
 }
 
-void LLProgressView::setCancelButtonVisible(BOOL b, const std::string& label)
+void LLProgressView::setCancelButtonVisible(bool b, const std::string& label)
 {
-    mCancelBtn->setVisible( b );
-    mCancelBtn->setEnabled( b );
+    mCancelBtn->setVisible(b);
+    mCancelBtn->setEnabled(b);
     mCancelBtn->setLabelSelected(label);
     mCancelBtn->setLabelUnselected(label);
 }
@@ -636,8 +636,8 @@ void LLProgressView::onCancelButtonClicked(void*)
     else
     {
         gAgent.teleportCancel();
-        sInstance->mCancelBtn->setEnabled(FALSE);
-        sInstance->setVisible(FALSE);
+        sInstance->mCancelBtn->setEnabled(false);
+        sInstance->setVisible(false);
     }
 }
 

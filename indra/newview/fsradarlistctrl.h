@@ -42,7 +42,7 @@ public:
     };
 
     virtual ~FSRadarListCtrl() {}
-    /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
 
 protected:
     friend class LLUICtrlFactory;

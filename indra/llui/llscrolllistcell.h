@@ -120,16 +120,16 @@ public:
     virtual void            setAltValue(const LLSD& value) { }
     virtual const std::string &getToolTip() const { return mToolTip; }
     virtual void            setToolTip(const std::string &str) { mToolTip = str; }
-    virtual BOOL            getVisible() const { return TRUE; }
+    virtual bool            getVisible() const { return true; }
     virtual void            setWidth(S32 width) { mWidth = width; }
     virtual void            highlightText(S32 offset, S32 num_chars) {}
-    virtual BOOL            isText() const { return FALSE; }
-    virtual BOOL            needsToolTip() const { return ! mToolTip.empty(); }
+    virtual bool            isText() const { return false; }
+    virtual bool            needsToolTip() const { return ! mToolTip.empty(); }
     virtual void            setColor(const LLColor4&) {}
     virtual void            onCommit() {};
 
-    virtual BOOL            handleClick() { return FALSE; }
-    virtual void            setEnabled(BOOL enable) { }
+    virtual bool            handleClick() { return false; }
+    virtual void            setEnabled(bool enable) { }
 
 private:
     S32 mWidth;
@@ -160,13 +160,13 @@ public:
     /*virtual*/ void    setAltValue(const LLSD& value);
     /*virtual*/ const LLSD getValue() const;
     /*virtual*/ const LLSD getAltValue() const;
-    /*virtual*/ BOOL    getVisible() const;
+    /*virtual*/ bool    getVisible() const;
     /*virtual*/ void    highlightText(S32 offset, S32 num_chars);
 
     /*virtual*/ void    setColor(const LLColor4&);
-    /*virtual*/ BOOL    isText() const;
+    /*virtual*/ bool    isText() const;
     /*virtual*/ const std::string & getToolTip() const;
-    /*virtual*/ BOOL    needsToolTip() const;
+    /*virtual*/ bool    needsToolTip() const;
 
     S32             getTextWidth() const { return mTextWidth;}
     void            setTextWidth(S32 value) { mTextWidth = value;}
@@ -185,7 +185,7 @@ protected:
     LLColor4        mHighlightColor;
     U8              mUseColor;
     LLFontGL::HAlign mFontAlignment;
-    BOOL            mVisible;
+    bool            mVisible;
     S32             mHighlightCount;
     S32             mHighlightOffset;
 
@@ -249,8 +249,8 @@ public:
     /*virtual*/ void    setValue(const LLSD& value);
     /*virtual*/ void    onCommit();
 
-    /*virtual*/ BOOL    handleClick();
-    /*virtual*/ void    setEnabled(BOOL enable);
+    /*virtual*/ bool    handleClick();
+    /*virtual*/ void    setEnabled(bool enable);
 
     LLCheckBoxCtrl* getCheckBox()               { return mCheckBox; }
 
@@ -300,13 +300,13 @@ public:
     const LLSD  getValue() const override { return mLineEditor->getValue(); }
     void    setValue(const LLSD& value) override { mLineEditor->setValue(value); }
     void    onCommit() override { mLineEditor->onCommit(); }
-    BOOL    handleClick() override;
-    virtual BOOL    handleUnicodeChar(llwchar uni_char, BOOL called_from_parent);
-    virtual BOOL    handleUnicodeCharHere(llwchar uni_char );
-    void    setEnabled(BOOL enable) override { mLineEditor->setEnabled(enable); }
+    bool    handleClick() override;
+    virtual bool    handleUnicodeChar(llwchar uni_char, bool called_from_parent);
+    virtual bool    handleUnicodeCharHere(llwchar uni_char );
+    void    setEnabled(bool enable) override { mLineEditor->setEnabled(enable); }
 
     LLLineEditor*   getLineEditor()             { return mLineEditor; }
-    BOOL    isText() const override { return FALSE; }
+    bool    isText() const override { return FALSE; }
 
 private:
     LLLineEditor* mLineEditor;

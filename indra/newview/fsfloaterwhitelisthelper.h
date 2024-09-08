@@ -36,7 +36,7 @@ public:
     explicit FSFloaterWhiteListHelper(const LLSD& key);
     ~FSFloaterWhiteListHelper() final = default;
 
-    BOOL postBuild() override final;
+    bool postBuild() override final;
 
 private:
     void populateWhitelistInfo();

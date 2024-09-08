@@ -85,7 +85,7 @@ class LLDir
 
     /// Walk the files in a directory, with file pattern matching
     // <AO> Used by LGG Selection beams, do not remove
-    virtual BOOL getNextFileInDir(const std::string& dirname, ///< directory path - must end in trailing slash!
+    virtual bool getNextFileInDir(const std::string& dirname, ///< directory path - must end in trailing slash!
                                   const std::string& mask,    ///< file pattern string (use "*" for all)
                                   std::string& fname          ///< output: found file name
                                   ) = 0;
@@ -224,7 +224,7 @@ class LLDir
     static std::string getDumpLogsDirPath(const std::string &file_name = "");
 
     // For producing safe download file names from potentially unsafe ones
-    static std::string getScrubbedFileName(const std::string uncleanFileName);
+    static std::string getScrubbedFileName(std::string_view uncleanFileName);
     static std::string getForbiddenFileChars();
     void setDumpDir( const std::string& path );
 

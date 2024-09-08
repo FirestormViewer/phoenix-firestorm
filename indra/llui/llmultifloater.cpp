@@ -41,7 +41,7 @@ LLMultiFloater::LLMultiFloater(const LLSD& key, const LLFloater::Params& params)
     : LLFloater(key),
       mTabContainer(NULL),
       mTabPos(LLTabContainer::TOP),
-      mAutoResize(TRUE),
+      mAutoResize(true),
       mOrigMinWidth(params.min_width),
       mOrigMinHeight(params.min_height)
 {
@@ -72,7 +72,7 @@ void LLMultiFloater::onClose(bool app_quitting)
 {
     if(isMinimized())
     {
-        setMinimized(FALSE);
+        setMinimized(false);
     }
     LLFloater::onClose(app_quitting);
 }
@@ -90,7 +90,7 @@ void LLMultiFloater::draw()
     }
 }
 
-BOOL LLMultiFloater::closeAllFloaters()
+bool LLMultiFloater::closeAllFloaters()
 {
     S32 tabToClose = 0;
     S32 lastTabCount = mTabContainer->getTabCount();
@@ -111,8 +111,8 @@ BOOL LLMultiFloater::closeAllFloaters()
         }
     }
     if( mTabContainer->getTabCount() != 0 )
-        return FALSE; // Couldn't close all the tabs (pending save dialog?) so return FALSE.
-    return TRUE; //else all tabs were successfully closed...
+        return false; // Couldn't close all the tabs (pending save dialog?) so return false.
+    return true; //else all tabs were successfully closed...
 }
 
 void LLMultiFloater::growToFit(S32 content_width, S32 content_height)
@@ -140,7 +140,7 @@ void LLMultiFloater::growToFit(S32 content_width, S32 content_height)
 }
 
 /**
-  void addFloater(LLFloater* floaterp, BOOL select_added_floater)
+  void addFloater(LLFloater* floaterp, bool select_added_floater)
 
   Adds the LLFloater pointed to by floaterp to this.
   If floaterp is already hosted by this, then it is re-added to get
@@ -150,7 +150,7 @@ void LLMultiFloater::growToFit(S32 content_width, S32 content_height)
 
   Affects: mTabContainer, floaterp
 **/
-void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, LLTabContainer::eInsertionPoint insertion_point)
+void LLMultiFloater::addFloater(LLFloater* floaterp, bool select_added_floater, LLTabContainer::eInsertionPoint insertion_point)
 {
     if (!floaterp)
     {
@@ -191,18 +191,18 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
     floater_data.mSaveRect = floaterp->mSaveRect;
 
     // remove minimize and close buttons
-    floaterp->setCanMinimize(FALSE);
-    floaterp->setCanResize(FALSE);
-    floaterp->setCanDrag(FALSE);
-    floaterp->mSaveRect = FALSE;
+    floaterp->setCanMinimize(false);
+    floaterp->setCanResize(false);
+    floaterp->setCanDrag(false);
+    floaterp->mSaveRect = false;
     floaterp->storeRectControl();
     // avoid double rendering of floater background (makes it more opaque)
-    floaterp->setBackgroundVisible(FALSE);
+    floaterp->setBackgroundVisible(false);
 
     // <FS> Update torn off status and add title bar; Do this AFTER we stored the original rect!
     if (!mHostedFloaterShowtitlebar)
     {
-        floaterp->getDragHandle()->setTitleVisible(FALSE);
+        floaterp->getDragHandle()->setTitleVisible(false);
         LLRect rect = floaterp->getRect();
         rect.mTop -= floaterp->getHeaderHeight();
         floaterp->setRect(rect);
@@ -237,7 +237,7 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
     floaterp->setHost(this);
     if (isMinimized())
     {
-        floaterp->setVisible(FALSE);
+        floaterp->setVisible(false);
     }
 
     // Tabs sometimes overlap resize handle
@@ -263,14 +263,14 @@ void LLMultiFloater::updateFloaterTitle(LLFloater* floaterp)
 
 
 /**
-    BOOL selectFloater(LLFloater* floaterp)
+    bool selectFloater(LLFloater* floaterp)
 
     If the LLFloater pointed to by floaterp is hosted by this,
     then its tab is selected and returns true.  Otherwise returns false.
 
     Affects: mTabContainer
 **/
-BOOL LLMultiFloater::selectFloater(LLFloater* floaterp)
+bool LLMultiFloater::selectFloater(LLFloater* floaterp)
 {
     return mTabContainer->selectTabPanel(floaterp);
 }
@@ -297,7 +297,7 @@ void LLMultiFloater::showFloater(LLFloater* floaterp, LLTabContainer::eInsertion
     if (floaterp != mTabContainer->getCurrentPanel() &&
         !mTabContainer->selectTabPanel(floaterp))
     {
-        addFloater(floaterp, TRUE, insertion_point);
+        addFloater(floaterp, true, insertion_point);
     }
 }
 
@@ -309,7 +309,7 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
     // <FS> Update torn off status and add title bar
     if (!mHostedFloaterShowtitlebar)
     {
-        floaterp->getDragHandle()->setTitleVisible(TRUE);
+        floaterp->getDragHandle()->setTitleVisible(true);
         LLRect rect = floaterp->getRect();
         rect.mTop += floaterp->getHeaderHeight();
         floaterp->setRect(rect);
@@ -331,8 +331,8 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
         mFloaterDataMap.erase(found_data_it);
     }
     mTabContainer->removeTabPanel(floaterp);
-    floaterp->setBackgroundVisible(TRUE);
-    floaterp->setCanDrag(TRUE);
+    floaterp->setBackgroundVisible(true);
+    floaterp->setCanDrag(true);
     floaterp->setHost(NULL);
     floaterp->applyRectControl();
 
@@ -365,7 +365,7 @@ void LLMultiFloater::tabClose()
     }
 }
 
-void LLMultiFloater::setVisible(BOOL visible)
+void LLMultiFloater::setVisible(bool visible)
 {
     // *FIX: shouldn't have to do this, fix adding to minimized multifloater
     LLFloater::setVisible(visible);
@@ -388,7 +388,7 @@ void LLMultiFloater::setVisible(BOOL visible)
     }
 }
 
-BOOL LLMultiFloater::handleKeyHere(KEY key, MASK mask)
+bool LLMultiFloater::handleKeyHere(KEY key, MASK mask)
 {
     // <FS:Ansariel> This won't work - CTRL-W is intercepted by LLFileCloseWindow!
     if (key == 'W' && mask == MASK_CONTROL)
@@ -403,10 +403,10 @@ BOOL LLMultiFloater::handleKeyHere(KEY key, MASK mask)
             // bring back focus on tab container if there are any tab left
             if(mTabContainer->getTabCount() > 0)
             {
-                mTabContainer->setFocus(TRUE);
+                mTabContainer->setFocus(true);
             }
         }
-        return TRUE;
+        return true;
     }
 
     return LLFloater::handleKeyHere(key, mask);
@@ -436,7 +436,7 @@ S32 LLMultiFloater::getFloaterCount()
 }
 
 /**
-    BOOL isFloaterFlashing(LLFloater* floaterp)
+    bool isFloaterFlashing(LLFloater* floaterp)
 
     Returns true if the LLFloater pointed to by floaterp
     is currently in a flashing state and is hosted by this.
@@ -444,24 +444,24 @@ S32 LLMultiFloater::getFloaterCount()
 
     Requires: floaterp != NULL
 **/
-BOOL LLMultiFloater::isFloaterFlashing(LLFloater* floaterp)
+bool LLMultiFloater::isFloaterFlashing(LLFloater* floaterp)
 {
     if ( floaterp && floaterp->getHost() == this )
         return mTabContainer->getTabPanelFlashing(floaterp);
 
-    return FALSE;
+    return false;
 }
 
 /**
-    BOOL setFloaterFlashing(LLFloater* floaterp, BOOL flashing)
+    bool setFloaterFlashing(LLFloater* floaterp, bool flashing)
 
     Sets the current flashing state of the LLFloater pointed
-    to by floaterp to be the BOOL flashing if the LLFloater pointed
+    to by floaterp to be the bool flashing if the LLFloater pointed
     to by floaterp is hosted by this.
 
     Requires: floaterp != NULL
 **/
-void LLMultiFloater::setFloaterFlashing(LLFloater* floaterp, BOOL flashing)
+void LLMultiFloater::setFloaterFlashing(LLFloater* floaterp, bool flashing)
 {
     if ( floaterp && floaterp->getHost() == this )
         mTabContainer->setTabPanelFlashing(floaterp, flashing);
@@ -493,7 +493,7 @@ void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
 }
 // </FS>
 
-void LLMultiFloater::setCanResize(BOOL can_resize)
+void LLMultiFloater::setCanResize(bool can_resize)
 {
     LLFloater::setCanResize(can_resize);
     if (!mTabContainer) return;
@@ -507,7 +507,7 @@ void LLMultiFloater::setCanResize(BOOL can_resize)
     }
 }
 
-BOOL LLMultiFloater::postBuild()
+bool LLMultiFloater::postBuild()
 {
     mCloseSignal.connect(boost::bind(&LLMultiFloater::closeAllFloaters, this));
 
@@ -516,7 +516,7 @@ BOOL LLMultiFloater::postBuild()
 
     if (mTabContainer)
     {
-        return TRUE;
+        return true;
     }
 
     // <FS> Update torn off status and add title bar
@@ -525,7 +525,7 @@ BOOL LLMultiFloater::postBuild()
     // </FS>
 
     setCanResize(mResizable);
-    return TRUE;
+    return true;
 }
 
 void LLMultiFloater::updateResizeLimits()
@@ -558,7 +558,7 @@ void LLMultiFloater::updateResizeLimits()
 
         // make sure this window is visible on screen when it has been modified
         // (tab added, etc)
-        gFloaterView->adjustToFitScreen(this, TRUE);
+        gFloaterView->adjustToFitScreen(this, true);
     }
 }
 
@@ -594,7 +594,7 @@ void LLMultiFloater::closeDockedFloater()
         // bring back focus on tab container if there are any tab left
         if(mTabContainer->getTabCount() > 0)
         {
-            mTabContainer->setFocus(TRUE);
+            mTabContainer->setFocus(true);
         }
         else
         {

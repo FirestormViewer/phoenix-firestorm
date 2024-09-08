@@ -41,10 +41,10 @@ class FSFloaterRadar
     LOG_CLASS(FSFloaterRadar);
 public:
     FSFloaterRadar(const LLSD &);
-    virtual ~FSFloaterRadar();
+    ~FSFloaterRadar() override;
 
-    /*virtual*/ BOOL    postBuild();
-    /*virtual*/ void    onOpen(const LLSD& key);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
 private:
     FSPanelRadar*           mRadarPanel;

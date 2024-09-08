@@ -1,6 +1,6 @@
 /**
  * @file lldir_mac.h
- * @brief Definition of directory utilities class for Mac OS X
+ * @brief Definition of directory utilities class for macOS
  *
  * $LicenseInfo:firstyear=2000&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -46,8 +46,7 @@ public:
 
     virtual std::string getCurPath();
     virtual U32 countFilesInDir(const std::string &dirname, const std::string &mask);
-    virtual BOOL getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname);
-    //virtual BOOL fileExists(const std::string &filename) const;
+    virtual bool getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname);
     virtual bool fileExists(const std::string &filename) const;
 
     /*virtual*/ std::string getLLPluginLauncher();

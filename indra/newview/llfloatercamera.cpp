@@ -75,7 +75,7 @@ public:
 
     LLPanelCameraZoom() { onCreate(); }
 
-    /* virtual */ BOOL  postBuild();
+    /* virtual */ bool  postBuild();
     /* virtual */ void  draw();
 
 protected:
@@ -147,13 +147,13 @@ void set_view_visible(LLView* parent, const std::string& name, bool visible)
     parent->getChildView(name)->setVisible(visible);
 }
 
-BOOL LLPanelCameraItem::postBuild()
+bool LLPanelCameraItem::postBuild()
 {
     setMouseEnterCallback(boost::bind(set_view_visible, this, "hovered_icon", true));
     setMouseLeaveCallback(boost::bind(set_view_visible, this, "hovered_icon", false));
     setMouseDownCallback(boost::bind(&LLPanelCameraItem::onAnyMouseClick, this));
     setRightMouseDownCallback(boost::bind(&LLPanelCameraItem::onAnyMouseClick, this));
-    return TRUE;
+    return true;
 }
 
 void LLPanelCameraItem::onAnyMouseClick()
@@ -189,7 +189,7 @@ void LLPanelCameraZoom::onCreate()
 // </FS:Chanayane>
 }
 
-BOOL LLPanelCameraZoom::postBuild()
+bool LLPanelCameraZoom::postBuild()
 {
     mPlusBtn  = getChild<LLButton>("zoom_plus_btn");
     mMinusBtn = getChild<LLButton>("zoom_minus_btn");
@@ -536,7 +536,7 @@ void LLFloaterCamera::onOpen(const LLSD& key)
         updateState();
     else
         toPrevMode();
-    mClosed = FALSE;
+    mClosed = false;
 
     // <FS:Ansariel> Optional small camera floater
     if (mPresetCombo)
@@ -561,14 +561,14 @@ void LLFloaterCamera::onClose(bool app_quitting)
         mPrevMode = CAMERA_CTRL_MODE_PAN;
 
     switchMode(CAMERA_CTRL_MODE_PAN);
-    mClosed = TRUE;
+    mClosed = true;
 
-    gAgent.setMovementLocked(FALSE);
+    gAgent.setMovementLocked(false);
 }
 
 LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 :   LLFloater(val),
-    mClosed(FALSE),
+    mClosed(false),
     mCurrMode(CAMERA_CTRL_MODE_PAN),
     mPrevMode(CAMERA_CTRL_MODE_PAN),
     mPresetCombo(nullptr) // <FS:Ansariel> Optional small camera floater
@@ -576,11 +576,11 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
     LLHints::getInstance()->registerHintTarget("view_popup", getHandle());
     mCommitCallbackRegistrar.add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
     mCommitCallbackRegistrar.add("CameraPresets.Save", boost::bind(&LLFloaterCamera::onSavePreset, this));
-    mCommitCallbackRegistrar.add("CameraPresets.ShowPresetsList", boost::bind(&LLFloaterReg::showInstance, "camera_presets", LLSD(), FALSE));
+    mCommitCallbackRegistrar.add("CameraPresets.ShowPresetsList", boost::bind(&LLFloaterReg::showInstance, "camera_presets", LLSD(), false));
 }
 
 // virtual
-BOOL LLFloaterCamera::postBuild()
+bool LLFloaterCamera::postBuild()
 {
     mControls = getChild<LLPanel>("controls");
     mAgentCameraInfo = getChild<LLPanel>("agent_camera_info");
@@ -594,7 +594,7 @@ BOOL LLFloaterCamera::postBuild()
 
     //mPreciseCtrls->setShowCursorHand(false);
     //mPreciseCtrls->setSoundFlags(LLView::MOUSE_UP);
-    //mPreciseCtrls->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), FALSE));
+    //mPreciseCtrls->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), false));
     // </FS:Ansariel>
 
     // <FS:Ansariel> Phototools support
@@ -723,7 +723,7 @@ void LLFloaterCamera::switchMode(ECameraControlMode mode)
 
     default:
         //normally we won't occur here
-        llassert_always(FALSE);
+        llassert_always(false);
     }
 }
 
@@ -982,28 +982,28 @@ void LLFloaterCamera::switchViews(ECameraControlMode mode)
     switch (mode)
     {
         case CAMERA_CTRL_MODE_PRESETS:
-            getChildView("preset_views_list")->setVisible(TRUE);
-            getChildView("camera_modes_list")->setVisible(FALSE);
-            getChildView("zoom")->setVisible(FALSE);
-            getChild<LLButton>("presets_btn")->setToggleState(TRUE);
-            getChild<LLButton>("avatarview_btn")->setToggleState(FALSE);
-            getChild<LLButton>("pan_btn")->setToggleState(FALSE);
+            getChildView("preset_views_list")->setVisible(true);
+            getChildView("camera_modes_list")->setVisible(false);
+            getChildView("zoom")->setVisible(false);
+            getChild<LLButton>("presets_btn")->setToggleState(true);
+            getChild<LLButton>("avatarview_btn")->setToggleState(false);
+            getChild<LLButton>("pan_btn")->setToggleState(false);
             break;
         case CAMERA_CTRL_MODE_MODES:
-            getChildView("preset_views_list")->setVisible(FALSE);
-            getChildView("camera_modes_list")->setVisible(TRUE);
-            getChildView("zoom")->setVisible(FALSE);
-            getChild<LLButton>("presets_btn")->setToggleState(FALSE);
-            getChild<LLButton>("avatarview_btn")->setToggleState(TRUE);
-            getChild<LLButton>("pan_btn")->setToggleState(FALSE);
+            getChildView("preset_views_list")->setVisible(false);
+            getChildView("camera_modes_list")->setVisible(true);
+            getChildView("zoom")->setVisible(false);
+            getChild<LLButton>("presets_btn")->setToggleState(false);
+            getChild<LLButton>("avatarview_btn")->setToggleState(true);
+            getChild<LLButton>("pan_btn")->setToggleState(false);
             break;
         case CAMERA_CTRL_MODE_PAN:
-            getChildView("preset_views_list")->setVisible(FALSE);
-            getChildView("camera_modes_list")->setVisible(FALSE);
-            getChildView("zoom")->setVisible(TRUE);
-            getChild<LLButton>("presets_btn")->setToggleState(FALSE);
-            getChild<LLButton>("avatarview_btn")->setToggleState(FALSE);
-            getChild<LLButton>("pan_btn")->setToggleState(TRUE);
+            getChildView("preset_views_list")->setVisible(false);
+            getChildView("camera_modes_list")->setVisible(false);
+            getChildView("zoom")->setVisible(true);
+            getChild<LLButton>("presets_btn")->setToggleState(false);
+            getChild<LLButton>("avatarview_btn")->setToggleState(false);
+            getChild<LLButton>("pan_btn")->setToggleState(true);
             break;
         default:
             LL_WARNS() << "Tried to switch to unsupported mode: " << mode << LL_ENDL;

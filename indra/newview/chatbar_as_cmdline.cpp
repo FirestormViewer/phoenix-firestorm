@@ -77,7 +77,7 @@ LLViewerInventoryItem::item_array_t findInventoryInFolder(std::string_view ifold
     LLUUID folder = gInventory.findCategoryByName(static_cast<std::string>(ifolder));
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
-    gInventory.collectDescendents(folder, cats, items, FALSE);
+    gInventory.collectDescendents(folder, cats, items, false);
 
     return items;
 }
@@ -86,11 +86,11 @@ void doZdCleanup();
 class JCZdrop : public LLEventTimer
 {
 public:
-    BOOL mRunning;
+    bool mRunning;
 
     JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string_view sFolder, std::string_view sUUID, bool package = false)
         : LLEventTimer(1.f),
-        mRunning(FALSE),
+        mRunning(false),
         mPackage(package),
         mStack(stack),
         mDestination(dest),
@@ -103,34 +103,34 @@ public:
         doZdCleanup();
         if (mErrorCode == 1)
         {
-            report_to_nearby_chat(llformat("The object with the UUID of \"%s\" can no longer be found in-world.", mDropUUID.c_str()));
-            report_to_nearby_chat("This can occur if the object was returned or deleted, or if your client is no longer rendering it.");
-            report_to_nearby_chat(llformat("Transfer from \"%s\" to \"%s\" aborted.", mFolderName.c_str(), mDropUUID.c_str()));
+            FSCommon::report_to_nearby_chat(llformat("The object with the UUID of \"%s\" can no longer be found in-world.", mDropUUID.c_str()));
+            FSCommon::report_to_nearby_chat("This can occur if the object was returned or deleted, or if your client is no longer rendering it.");
+            FSCommon::report_to_nearby_chat(llformat("Transfer from \"%s\" to \"%s\" aborted.", mFolderName.c_str(), mDropUUID.c_str()));
         }
         else
         {
             if (mPackage)
             {
-                report_to_nearby_chat("Packager finished, you may now pick up the prim that contains the objects.");
-                report_to_nearby_chat(llformat("Packaged what you had selected in world into the folder \"%s\" in your inventory and into the prim with the UUID of \"%s\"", mFolderName.c_str(), mDropUUID.c_str()));
-                report_to_nearby_chat("Don't worry if you look at the contents of package right now, it may show as empty, it isn't, it's just a bug with Second Life itself.");
-                report_to_nearby_chat("If you take it into your inventory then rez it back out, all the contents will be there.");
+                FSCommon::report_to_nearby_chat("Packager finished, you may now pick up the prim that contains the objects.");
+                FSCommon::report_to_nearby_chat(llformat("Packaged what you had selected in world into the folder \"%s\" in your inventory and into the prim with the UUID of \"%s\"", mFolderName.c_str(), mDropUUID.c_str()));
+                FSCommon::report_to_nearby_chat("Don't worry if you look at the contents of package right now, it may show as empty, it isn't, it's just a bug with Second Life itself.");
+                FSCommon::report_to_nearby_chat("If you take it into your inventory then rez it back out, all the contents will be there.");
             }
             else
             {
-                report_to_nearby_chat(llformat("Completed transfer from \"%s\" to \"%s\".", mFolderName.c_str(), mDropUUID.c_str()));
+                FSCommon::report_to_nearby_chat(llformat("Completed transfer from \"%s\" to \"%s\".", mFolderName.c_str(), mDropUUID.c_str()));
             }
         }
     }
 
-    BOOL tick()
+    bool tick()
     {
         LLViewerInventoryItem* subj = mStack.top();
         mStack.pop();
         LLViewerObject* objectp = gObjectList.findObject(mDestination);
         if (objectp)
         {
-            report_to_nearby_chat(std::string("Transferring ") + subj->getName());
+            FSCommon::report_to_nearby_chat(std::string("Transferring ") + subj->getName());
             LLToolDragAndDrop::dropInventory(objectp, subj, LLToolDragAndDrop::SOURCE_AGENT, gAgentID);
             if (mStack.size() > 0)
             {
@@ -144,7 +144,7 @@ public:
         else
         {
             mErrorCode = 1;
-            return TRUE;
+            return true;
         }
     }
 
@@ -167,10 +167,10 @@ public:
 
     ~ZdCleanup() {}
 
-    BOOL tick()
+    bool tick()
     {
         gZDrop = nullptr;
-        return TRUE;
+        return true;
     }
 };
 
@@ -192,12 +192,12 @@ void doZtCleanup();
 class JCZtake : public LLEventTimer
 {
 public:
-    BOOL mRunning;
+    bool mRunning;
 
     JCZtake(const LLUUID& target, bool package = false, const LLUUID& destination = LLUUID::null, std::string_view dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY, bool use_selection = true, std::vector<U32> to_take = std::vector<U32>()) :
         LLEventTimer(0.66f),
         mTarget(target),
-        mRunning(FALSE),
+        mRunning(false),
         mCountdown(5),
         mPackage(package),
         mPackageDest(destination),
@@ -218,11 +218,11 @@ public:
 
         if (mPackage)
         {
-            report_to_nearby_chat("Packager started. Phase 1 (taking in-world objects into inventory) starting in: ");
+            FSCommon::report_to_nearby_chat("Packager started. Phase 1 (taking in-world objects into inventory) starting in: ");
         }
         else
         {
-            report_to_nearby_chat("Ztake activated. Taking selected in-world objects into inventory in: ");
+            FSCommon::report_to_nearby_chat("Ztake activated. Taking selected in-world objects into inventory in: ");
         }
     }
 
@@ -230,16 +230,16 @@ public:
     {
         if (!mPackage)
         {
-            report_to_nearby_chat("Ztake deactivated.");
+            FSCommon::report_to_nearby_chat("Ztake deactivated.");
         }
     }
 
-    BOOL tick()
+    bool tick()
     {
         switch (mState)
         {
             case ZTS_COUNTDOWN:
-                report_to_nearby_chat(llformat("%i...", mCountdown--));
+                FSCommon::report_to_nearby_chat(llformat("%i...", mCountdown--));
                 if (mCountdown == 0) mState = ZTS_SELECTION;
                 break;
 
@@ -301,25 +301,25 @@ public:
                                 }
                                 else
                                 {
-                                    report_to_nearby_chat("Ktake has taken all selected objects.");
+                                    FSCommon::report_to_nearby_chat("Ktake has taken all selected objects.");
                                     doZtCleanup();
                                     mState = ZTS_DONE;
                                 }
                             }
                             else
                             {
-                                report_to_nearby_chat("Ztake has taken all selected objects. Say \"ztake off\" to deactivate ztake or select more objects to continue.");
+                                FSCommon::report_to_nearby_chat("Ztake has taken all selected objects. Say \"ztake off\" to deactivate ztake or select more objects to continue.");
                             }
                         }
                         else
                         {
                             if (mPackage)
                             {
-                                report_to_nearby_chat(llformat("Packager: %i objects left to take.", mToTake.size()));
+                                FSCommon::report_to_nearby_chat(llformat("Packager: %i objects left to take.", mToTake.size()));
                             }
                             else
                             {
-                                report_to_nearby_chat(llformat("Ztake: %i objects left to take.", mToTake.size()));
+                                FSCommon::report_to_nearby_chat(llformat("Ztake: %i objects left to take.", mToTake.size()));
                             }
                         }
                     }
@@ -328,12 +328,12 @@ public:
                 {
                     if (mPackage)
                     {
-                        report_to_nearby_chat(llformat("Packager: no objects to take."));
+                        FSCommon::report_to_nearby_chat(llformat("Packager: no objects to take."));
                         doZtCleanup();
                     }
                     else
                     {
-                        report_to_nearby_chat(llformat("Ztake: no objects to take."));
+                        FSCommon::report_to_nearby_chat(llformat("Ztake: no objects to take."));
                     }
                 }
                 break;
@@ -354,14 +354,14 @@ public:
                     {
                         if (itemstack.size() < mPackSize)
                         {
-                            report_to_nearby_chat("Phase 1 of the packager finished, but some items mave have been missed.");
+                            FSCommon::report_to_nearby_chat("Phase 1 of the packager finished, but some items mave have been missed.");
                         }
                         else
                         {
-                            report_to_nearby_chat("Phase 1 of the packager finished.");
+                            FSCommon::report_to_nearby_chat("Phase 1 of the packager finished.");
                         }
 
-                        report_to_nearby_chat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
+                        FSCommon::report_to_nearby_chat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
 
                         LLUUID sdest{ mPackageDest };
                         gZDrop = new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
@@ -389,7 +389,7 @@ private:
     LLUUID mPackageDest;
     std::string mFolderName;
     EDeRezDestination mDest;
-    U32 mPackSize;
+    size_t mPackSize;
     EZtakeState mState;
 };
 
@@ -403,12 +403,12 @@ public:
 
     ~LOZtCleanup() {}
 
-    BOOL tick()
+    bool tick()
     {
-        gZTake->mRunning = TRUE;
+        gZTake->mRunning = true;
         delete gZTake;
         gZTake = nullptr;
-        return TRUE;
+        return true;
     }
 };
 
@@ -420,19 +420,22 @@ void doZtCleanup()
 class TMZtake : public LLEventTimer
 {
 public:
-    BOOL mRunning;
+    bool mRunning;
 
-    TMZtake(const LLUUID& target) : LLEventTimer(0.33f), mTarget(target), mRunning(FALSE), mCountdown(5)
+    TMZtake(const LLUUID& target) : LLEventTimer(0.33f),
+        mTarget(target),
+        mRunning(false),
+        mCountdown(5)
     {
-        report_to_nearby_chat("Mtake activated. Taking selected in-world objects into inventory in: ");
+        FSCommon::report_to_nearby_chat("Mtake activated. Taking selected in-world objects into inventory in: ");
     }
 
     ~TMZtake()
     {
-        report_to_nearby_chat("Mtake deactivated.");
+        FSCommon::report_to_nearby_chat("Mtake deactivated.");
     }
 
-    BOOL tick()
+    bool tick()
     {
         LLMessageSystem* msg = gMessageSystem;
         for (LLObjectSelection::iterator itr = LLSelectMgr::getInstance()->getSelection()->begin();
@@ -473,7 +476,7 @@ public:
         }
         if (mCountdown > 0)
         {
-            report_to_nearby_chat(llformat("%i...", mCountdown--));
+            FSCommon::report_to_nearby_chat(llformat("%i...", mCountdown--));
         }
         else if (!mToTake.empty())
         {
@@ -499,11 +502,11 @@ public:
             {
                 if (mToTake.empty())
                 {
-                    report_to_nearby_chat("Mtake has taken all selected objects. Say \"mtake off\" to deactivate Mtake or select more objects to continue.");
+                    FSCommon::report_to_nearby_chat("Mtake has taken all selected objects. Say \"mtake off\" to deactivate Mtake or select more objects to continue.");
                 }
                 else
                 {
-                    report_to_nearby_chat(llformat("Mtake: %i objects left to take.", mToTake.size()));
+                    FSCommon::report_to_nearby_chat(llformat("Mtake: %i objects left to take.", mToTake.size()));
                 }
             }
         }
@@ -516,27 +519,27 @@ private:
     std::vector<U32> mToTake;
     LLUUID mTarget;
     S32 mCountdown;
-    S32 zeroClearX;
-    S32 zeroClearY;
-    S32 zeroClearZ;
+    size_t zeroClearX;
+    size_t zeroClearY;
+    size_t zeroClearZ;
 };
 TMZtake* gMTake;
 
-void invrepair()
+static void invrepair()
 {
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
-    gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, FALSE);
+    gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, false);
 }
 
-void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
+static void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
 {
     std::string name = av_name.getCompleteName();
     if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, id))
     {
         name = RlvStrings::getAnonym(av_name);
     }
-    report_to_nearby_chat(llformat("%s: (%s)", id.asString().c_str(), name.c_str()));
+    FSCommon::report_to_nearby_chat(llformat("%s: (%s)", id.asString().c_str(), name.c_str()));
 }
 
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
@@ -594,8 +597,8 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
             {
                 if (from_gesture)
                 {
-                    report_to_nearby_chat(LLTrans::getString("DrawDistanceSteppingGestureObsolete"));
-                    gSavedSettings.setBOOL("FSRenderFarClipStepping", TRUE);
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("DrawDistanceSteppingGestureObsolete"));
+                    gSavedSettings.setBOOL("FSRenderFarClipStepping", true);
                     return false;
                 }
                 F32 drawDist;
@@ -605,7 +608,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     gAgentCamera.mDrawDistance = drawDist;
                     LLStringUtil::format_map_t args;
                     args["DISTANCE"] = llformat("%.0f", drawDist);
-                    report_to_nearby_chat(LLTrans::getString("FSCmdLineDrawDistanceSet", args));
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineDrawDistanceSet", args));
                     return false;
                 }
             }
@@ -666,7 +669,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     std::string bw_cmd_respond;
                     args["[VALUE]"] = llformat ("%d", band_width);
                     bw_cmd_respond = LLTrans::getString("FSCmdLineRSP", args);
-                    report_to_nearby_chat(bw_cmd_respond);
+                    FSCommon::report_to_nearby_chat(bw_cmd_respond);
                     return false;
                 }
             }
@@ -680,22 +683,22 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                     if (status == "on")
                     {
-                        gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+                        gSavedPerAccountSettings.setBOOL("UseAO", true);
 
                         // <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
                         if (!aoWasEnabled)
                         {
-                            report_to_nearby_chat(LLTrans::getString("FSAOEnabled"));
+                            FSCommon::report_to_nearby_chat(LLTrans::getString("FSAOEnabled"));
                         }
                     }
                     else if (status == "off")
                     {
-                        gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+                        gSavedPerAccountSettings.setBOOL("UseAO", false);
 
                         // <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
                         if (aoWasEnabled)
                         {
-                            report_to_nearby_chat(LLTrans::getString("FSAODisabled"));
+                            FSCommon::report_to_nearby_chat(LLTrans::getString("FSAODisabled"));
                         }
                     }
                     else if (status == "sit")
@@ -706,11 +709,11 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         {
                             if (status == "off")
                             {
-                                AOEngine::instance().setOverrideSits(tmp, TRUE);
+                                AOEngine::instance().setOverrideSits(tmp, true);
                             }
                             else if (status == "on")
                             {
-                                AOEngine::instance().setOverrideSits(tmp, FALSE);
+                                AOEngine::instance().setOverrideSits(tmp, false);
                             }
                         }
                         else
@@ -739,7 +742,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                     if (!myObject)
                     {
-                        report_to_nearby_chat(llformat("Object with key %s not found!", target_key.asString().c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Object with key %s not found!", target_key.asString().c_str()));
                         return false;
                     }
 
@@ -779,7 +782,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         msg->addVector3("Normal", LLVector3::zero);
                         msg->addVector3("Binormal", LLVector3::zero);
                         msg->sendMessage(myObject->getRegion()->getHost());
-                        report_to_nearby_chat(llformat("Touched object with key %s", target_key.asString().c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Touched object with key %s", target_key.asString().c_str()));
                     }
                 }
                 return false;
@@ -793,7 +796,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                     if (!myObject)
                     {
-                        report_to_nearby_chat(llformat("Object with key %s not found!", target_key.asString().c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Object with key %s not found!", target_key.asString().c_str()));
                         return false;
                     }
                     if ((!RlvActions::isRlvEnabled()) || (RlvActions::canSit(myObject, LLVector3::zero)))
@@ -808,7 +811,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         msg->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
                         gAgent.getRegion()->sendReliableMessage();
 
-                        report_to_nearby_chat(llformat("Sat on object with key %s", target_key.asString().c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Sat on object with key %s", target_key.asString().c_str()));
                     }
                 }
                 return false;
@@ -818,7 +821,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canStand()) )
                 {
                     gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
-                    report_to_nearby_chat(std::string("Standing up"));
+                    FSCommon::report_to_nearby_chat(std::string("Standing up"));
                 }
                 return false;
             }
@@ -856,7 +859,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     gAgent.sendReliableMessage();
                     LLStringUtil::format_map_t args;
                     args["NAME"] = LLSLURL("agent", target_key, "inspect").getSLURLString();
-                    report_to_nearby_chat(LLTrans::getString("FSCmdLineTpOffered", args));
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineTpOffered", args));
                 }
                 return false;
             }
@@ -977,7 +980,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         S32 random_min = atoi(random_nums[1].first);
                         S32 random_max = atoi(random_nums[2].first);
                         std::string look_for = "RAND(" + llformat("%d", random_min) + "," + llformat("%d", random_max) + ")";
-                        S32 random_string_pos = expr.find(look_for);
+                        auto random_string_pos = expr.find(look_for);
                         if (random_string_pos != std::string::npos)
                         {
                             S32 random_number = 0;
@@ -993,7 +996,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             {
                                 LLStringUtil::format_map_t args;
                                 args["RAND"] = llformat("%s", look_for.c_str());
-                                report_to_nearby_chat(LLTrans::getString("FSCmdLineCalcRandError", args));
+                                FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineCalcRandError", args));
                             }
                             std::string random_number_text = llformat("%d", random_number);
                             expr.replace(random_string_pos, look_for.length(), random_number_text);
@@ -1018,7 +1021,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         result_str << result;
                         out = result_str.str();
                     }
-                    report_to_nearby_chat(out);
+                    FSCommon::report_to_nearby_chat(out);
                     return false;
                 }
             }
@@ -1051,22 +1054,22 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     {
                         if (gZDrop)
                         {
-                            report_to_nearby_chat("Zdrop is already active.");
+                            FSCommon::report_to_nearby_chat("Zdrop is already active.");
                         }
                         else
                         {
                             std::string destination;
                             if (i >> destination)
                             {
-                                report_to_nearby_chat("Beginning Zdrop.");
-                                report_to_nearby_chat("Verifying destination prim is present inworld...");
+                                FSCommon::report_to_nearby_chat("Beginning Zdrop.");
+                                FSCommon::report_to_nearby_chat("Verifying destination prim is present inworld...");
                                 if (!LLUUID::validate(destination))
                                 {
-                                    report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+                                    FSCommon::report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
                                 }
                                 else if (!gObjectList.findObject(LLUUID(destination)))
                                 {
-                                    report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed and in view, and that the UUID is correct.");
+                                    FSCommon::report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed and in view, and that the UUID is correct.");
                                 }
                                 else
                                 {
@@ -1082,7 +1085,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                         LLUUID folder_id = gInventory.findCategoryByName(folder);
                                         if (folder_id.notNull())
                                         {
-                                            report_to_nearby_chat("Verifying folder location...");
+                                            FSCommon::report_to_nearby_chat("Verifying folder location...");
                                             std::stack<LLViewerInventoryItem*> inventorystack;
                                             std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(folder);
                                             for (const auto& item : inventory)
@@ -1091,32 +1094,32 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                             }
                                             if (!inventorystack.empty())
                                             {
-                                                report_to_nearby_chat(llformat("Found folder \"%s\".", folder.c_str()));
-                                                report_to_nearby_chat(llformat("Found prim \"%s\".", destination.c_str()));
-                                                report_to_nearby_chat(llformat("Transferring inventory items from \"%s\" to prim \"%s\".", folder.c_str(), destination.c_str()));
-                                                report_to_nearby_chat("WARNING: No-copy items will be moved to the destination prim!");
-                                                report_to_nearby_chat("Do not have the prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
-                                                report_to_nearby_chat("Use \"zdrop off\" to stop the transfer");
+                                                FSCommon::report_to_nearby_chat(llformat("Found folder \"%s\".", folder.c_str()));
+                                                FSCommon::report_to_nearby_chat(llformat("Found prim \"%s\".", destination.c_str()));
+                                                FSCommon::report_to_nearby_chat(llformat("Transferring inventory items from \"%s\" to prim \"%s\".", folder.c_str(), destination.c_str()));
+                                                FSCommon::report_to_nearby_chat("WARNING: No-copy items will be moved to the destination prim!");
+                                                FSCommon::report_to_nearby_chat("Do not have the prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
+                                                FSCommon::report_to_nearby_chat("Use \"zdrop off\" to stop the transfer");
                                                 LLUUID sdest = LLUUID(destination);
                                                 gZDrop = new JCZdrop(inventorystack, sdest, folder.c_str(), destination.c_str());
                                             }
                                         }
                                         else
                                         {
-                                            report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder.c_str()));
-                                            report_to_nearby_chat("Zdrop cannot work if the folder is inside another folder.");
+                                            FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder.c_str()));
+                                            FSCommon::report_to_nearby_chat("Zdrop cannot work if the folder is inside another folder.");
                                         }
                                     }
                                     catch (std::out_of_range&)
                                     {
-                                        report_to_nearby_chat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
-                                        report_to_nearby_chat("Valid command: Zdrop (rezzed prim UUID) (source inventory folder name)");
+                                        FSCommon::report_to_nearby_chat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
+                                        FSCommon::report_to_nearby_chat("Valid command: Zdrop (rezzed prim UUID) (source inventory folder name)");
                                     }
                                 }
                             }
                             else
                             {
-                                report_to_nearby_chat("Please specify an object UUID to copy the items in this folder to.");
+                                FSCommon::report_to_nearby_chat("Please specify an object UUID to copy the items in this folder to.");
                             }
                         }
                     }
@@ -1124,24 +1127,24 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     {
                         if (!gZDrop)
                         {
-                            report_to_nearby_chat("Zdrop is already deactivated.");
+                            FSCommon::report_to_nearby_chat("Zdrop is already deactivated.");
                         }
                         else
                         {
-                            gZDrop->mRunning = TRUE;
+                            gZDrop->mRunning = true;
                             delete gZDrop;
                             gZDrop = nullptr;
                         }
                     }
                     else
                     {
-                        report_to_nearby_chat(llformat("Invalid command: \"%s\". Valid commands: zdrop on (source inventory folder) (rezzed prim UUID); zdrop off", setting.c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Invalid command: \"%s\". Valid commands: zdrop on (source inventory folder) (rezzed prim UUID); zdrop off", setting.c_str()));
                     }
                 }
                 else
                 {
-                    report_to_nearby_chat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
-                    report_to_nearby_chat("Valid commands: zdrop on (rezzed prim UUID) (source inventory folder name); zdrop off");
+                    FSCommon::report_to_nearby_chat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
+                    FSCommon::report_to_nearby_chat("Valid commands: zdrop on (rezzed prim UUID) (source inventory folder name); zdrop off");
                 }
                 return false;
             }
@@ -1154,12 +1157,12 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     {
                         if (gZTake)
                         {
-                            report_to_nearby_chat("Ztake is already active.");
+                            FSCommon::report_to_nearby_chat("Ztake is already active.");
                         }
                         else
                         {
-                            report_to_nearby_chat("Beginning Ztake.");
-                            report_to_nearby_chat("Verifying folder location...");
+                            FSCommon::report_to_nearby_chat("Beginning Ztake.");
+                            FSCommon::report_to_nearby_chat("Verifying folder location...");
                             std::string folder_name;
                             std::string tmp;
                             while (i >> tmp)
@@ -1172,18 +1175,18 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 LLUUID folder = gInventory.findCategoryByName(folder_name);
                                 if (folder.notNull())
                                 {
-                                    report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+                                    FSCommon::report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
                                     gZTake = new JCZtake(folder);
                                 }
                                 else
                                 {
-                                    report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-                                    report_to_nearby_chat("Ztake cannot work if the folder is inside another folder.");
+                                    FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+                                    FSCommon::report_to_nearby_chat("Ztake cannot work if the folder is inside another folder.");
                                 }
                             }
                             catch (std::out_of_range&)
                             {
-                                report_to_nearby_chat("Please specify a destination folder in your inventory.");
+                                FSCommon::report_to_nearby_chat("Please specify a destination folder in your inventory.");
                             }
                         }
                     }
@@ -1191,25 +1194,25 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     {
                         if (!gZTake)
                         {
-                            report_to_nearby_chat("Ztake is already deactivated.");
+                            FSCommon::report_to_nearby_chat("Ztake is already deactivated.");
                         }
                         else
                         {
-                            gZTake->mRunning = TRUE;
+                            gZTake->mRunning = true;
                             delete gZTake;
                             gZTake = nullptr;
                         }
                     }
                     else
                     {
-                        report_to_nearby_chat(llformat("Invalid command: \"%s\". Valid commands: ztake on (destination inventory folder); ztake off", setting.c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Invalid command: \"%s\". Valid commands: ztake on (destination inventory folder); ztake off", setting.c_str()));
                     }
                     return false;
                 }
                 else
                 {
-                    report_to_nearby_chat("The Ztake command copies selected rezzed objects into the folder you specify in your inventory.");
-                    report_to_nearby_chat("Valid commands: ztake on (destination inventory folder name); ztake off");
+                    FSCommon::report_to_nearby_chat("The Ztake command copies selected rezzed objects into the folder you specify in your inventory.");
+                    FSCommon::report_to_nearby_chat("Valid commands: ztake on (destination inventory folder name); ztake off");
                 }
                 return false;
             }
@@ -1218,14 +1221,14 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 std::string destination;
                 if (i >> destination)
                 {
-                    report_to_nearby_chat("Verifying destination prim is present inworld...");
+                    FSCommon::report_to_nearby_chat("Verifying destination prim is present inworld...");
                     if (!LLUUID::validate(destination))
                     {
-                        report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+                        FSCommon::report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
                     }
                     else if (!gObjectList.findObject(LLUUID(destination)))
                     {
-                        report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+                        FSCommon::report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
                     }
                     else
                     {
@@ -1241,24 +1244,24 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             LLUUID folder = gInventory.findCategoryByName(folder_name);
                             if (folder.notNull())
                             {
-                                report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+                                FSCommon::report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
                                 gZTake = new JCZtake(folder, true, LLUUID(destination), folder_name, (command == "cpackage") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY);
                             }
                             else
                             {
-                                report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-                                report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
+                                FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+                                FSCommon::report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
                             }
                         }
                         catch (std::out_of_range&)
                         {
-                            report_to_nearby_chat("Please specify a destination folder in your inventory.");
+                            FSCommon::report_to_nearby_chat("Please specify a destination folder in your inventory.");
                         }
                     }
                 }
                 else
                 {
-                    report_to_nearby_chat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
+                    FSCommon::report_to_nearby_chat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
                 }
                 return false;
             }
@@ -1267,14 +1270,14 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 std::string destination;
                 if (i >> destination)
                 {
-                    report_to_nearby_chat("Verifying destination prim is present inworld...");
+                    FSCommon::report_to_nearby_chat("Verifying destination prim is present inworld...");
                     if (!LLUUID::validate(destination))
                     {
-                        report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+                        FSCommon::report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
                     }
                     else if (!gObjectList.findObject(LLUUID(destination)))
                     {
-                        report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+                        FSCommon::report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
                     }
                     else
                     {
@@ -1292,7 +1295,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                     {
                                         if (!LLUUID::validate(take))
                                         {
-                                            report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+                                            FSCommon::report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
                                             return false;
                                         }
                                         else
@@ -1300,7 +1303,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                             LLViewerObject* objectp = gObjectList.findObject(LLUUID(take));
                                             if(!objectp)
                                             {
-                                                report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+                                                FSCommon::report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
                                                 return false;
                                             }
                                             else
@@ -1316,30 +1319,30 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                                     if (to_take.empty())
                                     {
-                                        report_to_nearby_chat("No objects to take.");
+                                        FSCommon::report_to_nearby_chat("No objects to take.");
                                     }
                                     else
                                     {
-                                        report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+                                        FSCommon::report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
                                         gZTake = new JCZtake(folder, true, LLUUID(destination), folder_name, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, to_take);
                                     }
                                 }
                                 else
                                 {
-                                    report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-                                    report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
+                                    FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+                                    FSCommon::report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
                                 }
                             }
                             catch (std::out_of_range&)
                             {
-                                report_to_nearby_chat("Please specify a destination folder in your inventory.");
+                                FSCommon::report_to_nearby_chat("Please specify a destination folder in your inventory.");
                             }
                         }
                     }
                 }
                 else
                 {
-                    report_to_nearby_chat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
+                    FSCommon::report_to_nearby_chat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
                 }
                 return false;
             }
@@ -1349,14 +1352,14 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 std::string destination;
                 if (i >> destination)
                 {
-                    report_to_nearby_chat("Verifying destination prim is present inworld...");
+                    FSCommon::report_to_nearby_chat("Verifying destination prim is present inworld...");
                     if (!LLUUID::validate(destination))
                     {
-                        report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+                        FSCommon::report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
                     }
                     else if (!gObjectList.findObject(LLUUID(destination)))
                     {
-                        report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+                        FSCommon::report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
                     }
                     else
                     {
@@ -1368,7 +1371,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 LLUUID folder = gInventory.findCategoryByName(folder_name);
                                 if (folder.notNull())
                                 {
-                                    report_to_nearby_chat(llformat("kpackager started. Destination folder: \"%s\" Listening to object: \"%s\"", folder_name.c_str(), destination.c_str()));
+                                    FSCommon::report_to_nearby_chat(llformat("kpackager started. Destination folder: \"%s\" Listening to object: \"%s\"", folder_name.c_str(), destination.c_str()));
 
                                     cmd_line_mPackagerToTake.clear();
                                     cmd_line_mPackagerTargetFolderName = folder_name;
@@ -1377,20 +1380,20 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 }
                                 else
                                 {
-                                    report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-                                    report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
+                                    FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+                                    FSCommon::report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
                                 }
                             }
                             catch (std::out_of_range&)
                             {
-                                report_to_nearby_chat("Please specify a destination folder in your inventory.");
+                                FSCommon::report_to_nearby_chat("Please specify a destination folder in your inventory.");
                             }
                         }
                     }
                 }
                 else
                 {
-                    report_to_nearby_chat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
+                    FSCommon::report_to_nearby_chat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
                 }
                 return false;
             }
@@ -1402,7 +1405,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     cmd_line_mPackagerTargetFolderName = "";
                     cmd_line_mPackagerTargetFolder.setNull();
                     cmd_line_mPackagerDest.setNull();
-                    report_to_nearby_chat("Packager: Stopped and cleared.");
+                    FSCommon::report_to_nearby_chat("Packager: Stopped and cleared.");
                     return false;
                 }
             }
@@ -1423,7 +1426,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             {
                                 if (!LLUUID::validate(take))
                                 {
-                                    report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+                                    FSCommon::report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
                                     return false;
                                 }
                                 else
@@ -1431,7 +1434,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                     LLViewerObject* objectp = gObjectList.findObject(LLUUID(take));
                                     if(!objectp)
                                     {
-                                        report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+                                        FSCommon::report_to_nearby_chat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
                                         return false;
                                     }
                                     else
@@ -1447,23 +1450,23 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                             if (to_take.empty())
                             {
-                                report_to_nearby_chat("No objects to take.");
+                                FSCommon::report_to_nearby_chat("No objects to take.");
                             }
                             else
                             {
-                                report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+                                FSCommon::report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
                                 gZTake = new JCZtake(folder, true, LLUUID::null, folder_name, (command == "kcopy") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY, false, to_take);
                             }
                         }
                         else
                         {
-                            report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-                            report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
+                            FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+                            FSCommon::report_to_nearby_chat("The packager cannot work if the folder is inside another folder.");
                         }
                     }
                     catch (std::out_of_range&)
                     {
-                        report_to_nearby_chat("Please specify a destination folder in your inventory.");
+                        FSCommon::report_to_nearby_chat("Please specify a destination folder in your inventory.");
                     }
                 }
                 return false;
@@ -1477,12 +1480,12 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     {
                         if (gMTake)
                         {
-                            report_to_nearby_chat("Mtake is already active.");
+                            FSCommon::report_to_nearby_chat("Mtake is already active.");
                         }
                         else
                         {
-                            report_to_nearby_chat("Beginning Mtake.");
-                            report_to_nearby_chat("Verifying folder location...");
+                            FSCommon::report_to_nearby_chat("Beginning Mtake.");
+                            FSCommon::report_to_nearby_chat("Verifying folder location...");
                             std::string folder_name;
                             std::string tmp;
                             while (i >> tmp)
@@ -1495,18 +1498,18 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 LLUUID folder = gInventory.findCategoryByName(folder_name);
                                 if (folder.notNull())
                                 {
-                                    report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+                                    FSCommon::report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
                                     gMTake = new TMZtake(folder);
                                 }
                                 else
                                 {
-                                    report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-                                    report_to_nearby_chat("Mtake cannot work if the folder is inside another folder.");
+                                    FSCommon::report_to_nearby_chat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+                                    FSCommon::report_to_nearby_chat("Mtake cannot work if the folder is inside another folder.");
                                 }
                             }
                             catch (std::out_of_range&)
                             {
-                                report_to_nearby_chat("Please specify a destination folder in your inventory.");
+                                FSCommon::report_to_nearby_chat("Please specify a destination folder in your inventory.");
                             }
                         }
                     }
@@ -1514,25 +1517,25 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     {
                         if (!gMTake)
                         {
-                            report_to_nearby_chat("Mtake is already deactivated.");
+                            FSCommon::report_to_nearby_chat("Mtake is already deactivated.");
                         }
                         else
                         {
-                            gMTake->mRunning = TRUE;
+                            gMTake->mRunning = true;
                             delete gMTake;
                             gMTake = nullptr;
                         }
                     }
                     else
                     {
-                        report_to_nearby_chat(llformat("Invalid command: \"%s\". Valid commands: mtake on (destination inventory folder); mtake off", setting.c_str()));
+                        FSCommon::report_to_nearby_chat(llformat("Invalid command: \"%s\". Valid commands: mtake on (destination inventory folder); mtake off", setting.c_str()));
                     }
                     return false;
                 }
                 else
                 {
-                    report_to_nearby_chat("The Mtake command renames selected rezzed objects to the dimensions of the prim, then copies them into the folder you specify in your inventory.");
-                    report_to_nearby_chat("Valid commands: mtake on (destination inventory folder name); mtake off");
+                    FSCommon::report_to_nearby_chat("The Mtake command renames selected rezzed objects to the dimensions of the prim, then copies them into the folder you specify in your inventory.");
+                    FSCommon::report_to_nearby_chat("Valid commands: mtake on (destination inventory folder name); mtake off");
                 }
                 return false;
             }
@@ -1552,11 +1555,11 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
                     LLStringUtil::format_map_t args;
                     args["[POS]"] = cameraPositionString;
-                    report_to_nearby_chat(LLTrans::getString("FSCameraPositionCopied", args));
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("FSCameraPositionCopied", args));
                 }
                 else
                 {
-                    report_to_nearby_chat("Could not get a valid region pointer.");
+                    FSCommon::report_to_nearby_chat("Could not get a valid region pointer.");
                 }
                 return false;
             }
@@ -1594,7 +1597,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                         {
                             LLStringUtil::format_map_t args;
                             args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice).c_str());
-                            report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
+                            FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
                             return false;
                         }
 
@@ -1610,11 +1613,11 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             {
                                 result_per_die -= 1;
                                 die_penetrated = 0;
-                                report_to_nearby_chat(llformat("#%d 1d%d-1: %d.", die_iter, faces, result_per_die));
+                                FSCommon::report_to_nearby_chat(llformat("#%d 1d%d-1: %d.", die_iter, faces, result_per_die));
                             }
                             else
                             {
-                                report_to_nearby_chat(llformat("#%d 1d%d: %d.", die_iter, faces, result_per_die));
+                                FSCommon::report_to_nearby_chat(llformat("#%d 1d%d: %d.", die_iter, faces, result_per_die));
                             }
                             result += result_per_die;
                             ++die_iter;
@@ -1624,7 +1627,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 // Modifier: Successes lower than a value
                                 if (result_per_die <= modifier)
                                 {
-                                    report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceSuccess"));
+                                    FSCommon::report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceSuccess"));
                                     ++successes;
                                 }
                                 else
@@ -1637,7 +1640,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 // Modifier: Successes greater than a value
                                 if (result_per_die >= modifier)
                                 {
-                                    report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceSuccess"));
+                                    FSCommon::report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceSuccess"));
                                     ++successes;
                                 }
                                 else
@@ -1648,13 +1651,13 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             else if ((modifier_type == "!" && result_per_die == modifier) || (modifier_type == "!>" && result_per_die >= modifier) || (modifier_type == "!<" && result_per_die <= modifier))
                             {
                                 // Modifier: Exploding dice
-                                report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceExploded"));
+                                FSCommon::report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceExploded"));
                                 --die_iter;
                             }
                             else if ((modifier_type == "!p" && result_per_die == modifier) || (modifier_type == "!p>" && result_per_die >= modifier) || (modifier_type == "!p<" && result_per_die <= modifier))
                             {
                                 // Modifier: Penetrating dice (special style of exploding dice)
-                                report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDicePenetrated"));
+                                FSCommon::report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDicePenetrated"));
                                 die_penetrated = 1;
                                 --die_iter;
                             }
@@ -1662,7 +1665,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             {
                                 // Modifier: Reroll
                                 result -= result_per_die;
-                                report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceReroll"));
+                                FSCommon::report_to_nearby_chat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceReroll"));
                                 --die_iter;
                             }
 
@@ -1672,7 +1675,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                                 // More than 1000 iterations already? We probably have an infinite loop - kill all further rolls
                                 // Explosions can trigger this easily, "rolld 1 6 !> 0" for example
                                 die_iter = 102;
-                                report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceFreezeGuard"));
+                                FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceFreezeGuard"));
                                 return false;
                             }
                         }
@@ -1692,14 +1695,14 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                             else if (modifier_type == ">" || modifier_type == "<")
                             {
                                 // Modifier: Successes
-                                report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceSuccess") + ": " + llformat("%d", successes));
+                                FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceSuccess") + ": " + llformat("%d", successes));
                             }
                             modifier_type = modifier_type + llformat("%d", modifier);
                         }
                     }
                     else
                     {
-                        report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceLimits"));
+                        FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceLimits"));
                         return false;
                     }
                 }
@@ -1715,7 +1718,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 args["FACES"] = llformat("%d", faces);
                 args["RESULT"] = llformat("%d", result);
                 args["MODIFIER"] = llformat("%s", modifier_type.c_str());
-                report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceTotal", args));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineRollDiceTotal", args));
                 return false;
             }
         }
@@ -1812,7 +1815,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
     msg->addVector3Fast(_PREHASH_RayStart, rezpos);
     msg->addVector3Fast(_PREHASH_RayEnd, rezpos);
     msg->addU8Fast(_PREHASH_BypassRaycast, (U8)1);
-    msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE);
+    msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)0);
     msg->addU8Fast(_PREHASH_State, 0);
     msg->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
     msg->sendReliable(gAgent.getRegionHost());
@@ -1841,9 +1844,9 @@ bool cmdline_packager(std::string_view message, const LLUUID& fromID, const LLUU
             std::string item(csv, start, comma-start);
             LLStringUtil::trim(item);
             LLViewerObject* objectp = gObjectList.findObject(LLUUID(item));
-            if(!objectp)
+            if (!objectp)
             {
-                report_to_nearby_chat(llformat("Packager: Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct: \"%s\"", item.c_str()));
+                FSCommon::report_to_nearby_chat(llformat("Packager: Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct: \"%s\"", item.c_str()));
                 return false;
             }
             else
@@ -1857,14 +1860,14 @@ bool cmdline_packager(std::string_view message, const LLUUID& fromID, const LLUU
             start = comma + 1;
 
         }
-        while(comma < csv.length());
+        while (comma < csv.length());
 
-        report_to_nearby_chat(llformat("Packager: adding objects: \"%s\"", static_cast<std::string>(csv).c_str()));
+        FSCommon::report_to_nearby_chat(llformat("Packager: adding objects: \"%s\"", static_cast<std::string>(csv).c_str()));
         return true;
     }
     else if (cmd == "kpackagerend") {
 
-        report_to_nearby_chat("Packager: finalizing.");
+        FSCommon::report_to_nearby_chat("Packager: finalizing.");
         gZTake = new JCZtake(cmd_line_mPackagerTargetFolder, true, cmd_line_mPackagerDest, cmd_line_mPackagerTargetFolderName, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, cmd_line_mPackagerToTake);
         cmd_line_mPackagerToTake.clear();
         cmd_line_mPackagerTargetFolderName = "";

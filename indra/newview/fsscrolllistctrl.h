@@ -66,11 +66,11 @@ public:
     };
 
     virtual ~FSScrollListCtrl() {};
-    /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
-    /*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-    /*virtual*/ BOOL handleMouseUp(S32 x, S32 y, MASK mask);
-    /*virtual*/ BOOL handleHover(S32 x, S32 y, MASK mask);
-    /*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+    /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleHover(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                                       EDragAndDropType cargo_type,
                                       void* cargo_data,
                                       EAcceptance* accept,
@@ -80,7 +80,7 @@ public:
     void    refreshLineHeight();
 
 
-    typedef boost::function<BOOL(S32, S32, MASK, BOOL, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;
+    typedef boost::function<bool(S32, S32, MASK, bool, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;
     void setHandleDaDCallback(const handle_dad_callback_signal_t& func)
     {
         mHandleDaDCallback = func;

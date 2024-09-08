@@ -41,7 +41,7 @@ class FSFloaterContactSetConfiguration : public LLFloater
 {
 public:
     FSFloaterContactSetConfiguration(const LLSD& target_set);
-    BOOL postBuild();
+    bool postBuild();
     void onOpen(const LLSD& target_set);
     void draw();
     void setFrustumOrigin(LLView* frustumOrigin);

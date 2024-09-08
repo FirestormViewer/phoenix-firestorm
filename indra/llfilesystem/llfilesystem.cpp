@@ -135,14 +135,14 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
 
     if (LLFile::rename(old_filename, new_filename) != 0)
     {
-        // We would like to return FALSE here indicating the operation
+        // We would like to return false here indicating the operation
         // failed but the original code does not and doing so seems to
         // break a lot of things so we go with the flow...
-        //return FALSE;
+        //return false;
         LL_WARNS() << "Failed to rename " << old_file_id << " to " << new_id_str << " reason: "  << strerror(errno) << LL_ENDL;
     }
 
-    return TRUE;
+    return true;
 }
 
 // static
@@ -172,10 +172,10 @@ S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType fi
     return file_size;
 }
 
-BOOL LLFileSystem::read(U8* buffer, S32 bytes)
+bool LLFileSystem::read(U8* buffer, S32 bytes)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
-    BOOL success = FALSE;
+    bool success = false;
 
     std::string id;
     mFileID.toString(id);
@@ -204,7 +204,7 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
     //    mPosition += mBytesRead;
     //    if (mBytesRead)
     //    {
-    //        success = TRUE;
+    //        success = true;
     //    }
     //}
     LLFILE* file = LLFile::fopen(filename, "rb");
@@ -212,7 +212,7 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
     {
         if (fseek(file, mPosition, SEEK_SET) == 0)
         {
-            mBytesRead = fread(buffer, 1, bytes, file);
+            mBytesRead = static_cast<S32>(fread(buffer, 1, bytes, file));
             fclose(file);
 
             mPosition += mBytesRead;
@@ -220,7 +220,7 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
             // but that will break avatar rezzing...
             if (mBytesRead)
             {
-                success = TRUE;
+                success = true;
             }
         }
     }
@@ -235,13 +235,13 @@ S32 LLFileSystem::getLastBytesRead()
     return mBytesRead;
 }
 
-BOOL LLFileSystem::eof()
+bool LLFileSystem::eof()
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mPosition >= getSize();
 }
 
-BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
+bool LLFileSystem::write(const U8* buffer, S32 bytes)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
@@ -249,7 +249,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
     const std::string extra_info = "";
     const std::string filename =  LLDiskCache::getInstance()->metaDataToFilepath(id_str, mFileType, extra_info);
 
-    BOOL success = FALSE;
+    bool success = false;
 
     // <FS:Ansariel> IO-streams replacement
     //if (mMode == APPEND)
@@ -261,7 +261,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 
     //        mPosition = ofs.tellp(); // <FS:Ansariel> Fix asset caching
 
-    //        success = TRUE;
+    //        success = true;
     //    }
     //}
     //// <FS:Ansariel> Fix asset caching
@@ -274,7 +274,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
     //        ofs.seekp(mPosition, std::ios::beg);
     //        ofs.write((const char*)buffer, bytes);
     //        mPosition += bytes;
-    //        success = TRUE;
+    //        success = true;
     //    }
     //    else
     //    {
@@ -284,7 +284,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
     //        {
     //            ofs.write((const char*)buffer, bytes);
     //            mPosition += bytes;
-    //            success = TRUE;
+    //            success = true;
     //        }
     //    }
     //}
@@ -298,7 +298,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 
     //        mPosition += bytes;
 
-    //        success = TRUE;
+    //        success = true;
     //    }
     //}
     if (mMode == APPEND)
@@ -306,7 +306,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "a+b");
         if (ofs)
         {
-            S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+            S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
             mPosition = ftell(ofs);
             fclose(ofs);
             success = (bytes_written == bytes);
@@ -319,7 +319,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
         {
             if (fseek(ofs, mPosition, SEEK_SET) == 0)
             {
-                S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+                S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
                 mPosition = ftell(ofs);
                 fclose(ofs);
                 success = (bytes_written == bytes);
@@ -330,7 +330,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
             ofs = LLFile::fopen(filename, "wb");
             if (ofs)
             {
-                S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+                S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
                 mPosition = ftell(ofs);
                 fclose(ofs);
                 success = (bytes_written == bytes);
@@ -342,7 +342,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "wb");
         if (ofs)
         {
-            S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+            S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
             mPosition = ftell(ofs);
             fclose(ofs);
             success = (bytes_written == bytes);
@@ -353,7 +353,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
     return success;
 }
 
-BOOL LLFileSystem::seek(S32 offset, S32 origin)
+bool LLFileSystem::seek(S32 offset, S32 origin)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     if (-1 == origin)
@@ -370,18 +370,18 @@ BOOL LLFileSystem::seek(S32 offset, S32 origin)
         LL_WARNS() << "Attempt to seek past end of file" << LL_ENDL;
 
         mPosition = size;
-        return FALSE;
+        return false;
     }
     else if (new_pos < 0)
     {
         LL_WARNS() << "Attempt to seek past beginning of file" << LL_ENDL;
 
         mPosition = 0;
-        return FALSE;
+        return false;
     }
 
     mPosition = new_pos;
-    return TRUE;
+    return true;
 }
 
 S32 LLFileSystem::tell() const
@@ -403,7 +403,7 @@ S32 LLFileSystem::getMaxSize()
     return INT_MAX;
 }
 
-BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_type)
+bool LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_type)
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::renameFile(mFileID, mFileType, new_id, new_type);
@@ -411,13 +411,13 @@ BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_typ
     mFileID = new_id;
     mFileType = new_type;
 
-    return TRUE;
+    return true;
 }
 
-BOOL LLFileSystem::remove()
+bool LLFileSystem::remove()
 {
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::removeFile(mFileID, mFileType);
 
-    return TRUE;
+    return true;
 }

@@ -68,7 +68,7 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
         {
             case EXPORT_ALLOWED:
             {
-                exportable = node->mPermissions->allowExportBy(gAgent.getID());
+                exportable = node->mPermissions->allowOpenSimExportBy(gAgentID);
                 break;
             }
             /// TODO: Once enough grids adopt a version supporting exports, get consensus

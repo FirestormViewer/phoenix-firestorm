@@ -320,7 +320,7 @@
                             left="5"
                             top_pad="12"
                             width="105"
-                            tool_tip="Irradiance control.  When not zero, enables HDR lighting model."
+                            tool_tip="Irradiance control. When not zero, enables HDR lighting model."
                             wrap="true">
                     Reflection Probe Ambiance (HDR):
                   </text>

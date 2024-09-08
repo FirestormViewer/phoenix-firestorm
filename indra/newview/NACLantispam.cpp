@@ -337,7 +337,7 @@ void NACLAntiSpamRegistry::blockGlobalEntry(const LLUUID& source)
 }
 
 bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source, EAntispamSource sourcetype, U32 multiplier)
-// returns TRUE if blocked, FALSE otherwise
+// returns true if blocked, false otherwise
 {
     // skip all checks if we're we've been administratively turned off
     static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");

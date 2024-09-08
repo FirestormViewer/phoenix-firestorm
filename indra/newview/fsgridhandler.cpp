@@ -121,7 +121,7 @@ void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* 
 
         std::string stringData;
         stringData.assign( rawData.begin(), rawData.end() ); // LLXMLNode::parseBuffer wants a U8*, not a const U8*, so need to copy here just to be safe
-        if(LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), stringData.size(), mData->info_root, NULL))
+        if(LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), (U32)stringData.size(), mData->info_root, NULL))
         {
             mOwner->gridInfoResponderCB(mData);
         }
@@ -884,7 +884,7 @@ void LLGridManager::addSystemGrid(const std::string& label,
     if (name == std::string(MAINGRID))
     {
         grid_entry->grid[GRID_SLURL_BASE] = MAIN_GRID_SLURL_BASE;
-        grid_entry->grid[GRID_IS_FAVORITE_VALUE] = TRUE;
+        grid_entry->grid[GRID_IS_FAVORITE_VALUE] = true;
     }
     else
     {

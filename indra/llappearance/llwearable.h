@@ -96,9 +96,9 @@ public:
         SUCCESS,
         BAD_HEADER
     };
-    BOOL                exportFile(const std::string& filename) const;
+    bool                exportFile(const std::string& filename) const;
     EImportResult       importFile(const std::string& filename, LLAvatarAppearance* avatarp );
-    virtual BOOL                exportStream( std::ostream& output_stream ) const;
+    virtual bool                exportStream( std::ostream& output_stream ) const;
     virtual EImportResult       importStream( std::istream& input_stream, LLAvatarAppearance* avatarp );
 
     static void         setCurrentDefinitionVersion( S32 version ) { LLWearable::sCurrentDefinitionVersion = version; }
@@ -112,18 +112,18 @@ public:
     void                addVisualParam(LLVisualParam *param);
     // <FS:Ansariel> [Legacy Bake]
     //void              setVisualParamWeight(S32 index, F32 value);
-    void                setVisualParamWeight(S32 index, F32 value, BOOL upload_bake);
+    void                setVisualParamWeight(S32 index, F32 value, bool upload_bake);
     F32                 getVisualParamWeight(S32 index) const;
     LLVisualParam*      getVisualParam(S32 index) const;
     void                getVisualParams(visual_param_vec_t &list);
     // <FS:Ansariel> [Legacy Bake]
     //void              animateParams(F32 delta);
-    void                animateParams(F32 delta, BOOL upload_bake);
+    void                animateParams(F32 delta, bool upload_bake);
 
     LLColor4            getClothesColor(S32 te) const;
     // <FS:Ansariel> [Legacy Bake]
     //void              setClothesColor( S32 te, const LLColor4& new_color);
-    void                setClothesColor( S32 te, const LLColor4& new_color, BOOL upload_bake);
+    void                setClothesColor( S32 te, const LLColor4& new_color, bool upload_bake);
 
     virtual void        revertValues();
     virtual void        saveValues();
@@ -144,7 +144,7 @@ protected:
     void                destroyTextures();
     void                createVisualParams(LLAvatarAppearance *avatarp);
     void                createLayers(S32 te, LLAvatarAppearance *avatarp);
-    BOOL                getNextPopulatedLine(std::istream& input_stream, char* buffer, U32 buffer_size);
+    bool                getNextPopulatedLine(std::istream& input_stream, char* buffer, U32 buffer_size);
 
     static S32          sCurrentDefinitionVersion;  // Depends on the current state of the avatar_lad.xml.
     S32                 mDefinitionVersion;         // Depends on the state of the avatar_lad.xml when this asset was created.

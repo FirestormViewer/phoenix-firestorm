@@ -49,7 +49,7 @@ public:
     LLPanelPermissions();
     virtual ~LLPanelPermissions();
 
-    /*virtual*/ BOOL    postBuild();
+    /*virtual*/ bool    postBuild();
 
     //void updateOwnerName(const LLUUID& owner_id, const LLAvatarName& owner_name, const LLStyle::Params& style_params);
     //void updateCreatorName(const LLUUID& creator_id, const LLAvatarName& creator_name, const LLStyle::Params& style_params);
@@ -80,7 +80,7 @@ protected:
     void onCommitForSale();
     void onCommitSaleInfo();
     void setAllSaleInfo();
-    void showMarkForSale(BOOL show);
+    void showMarkForSale(bool show);
 
     static void onCommitClickAction(LLUICtrl* ctrl, void*);
     static void onCommitIncludeInSearch(LLUICtrl* ctrl, void*);

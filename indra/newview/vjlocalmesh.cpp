@@ -64,7 +64,7 @@ void LLLocalMeshFace::setFaceBoundingBox(LLVector4 data_in, bool initial_values)
         return;
     }
 
-    for (size_t array_iter = 0; array_iter < 4; ++array_iter)
+    for (S32 array_iter = 0; array_iter < 4; ++array_iter)
     {
         mFaceBoundingBox.first[array_iter] = std::min(mFaceBoundingBox.first[array_iter], data_in[array_iter]);
         mFaceBoundingBox.second[array_iter] = std::max(mFaceBoundingBox.second[array_iter], data_in[array_iter]);
@@ -314,8 +314,8 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
     for (auto& current_submesh : mFaces[lod])
     {
         LLVolumeFace new_face;
-        new_face.resizeVertices(current_submesh->getPositions().size());
-        new_face.resizeIndices(current_submesh->getIndices().size());
+        new_face.resizeVertices(static_cast<S32>(current_submesh->getPositions().size()));
+        new_face.resizeIndices(static_cast<S32>(current_submesh->getIndices().size()));
 
         // NOTE: uv extents
         // doesn't actually seem necessary, UDIM support "just works".
@@ -341,7 +341,7 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
         // weight attribute
         if (!current_submesh->getSkin().empty())
         {
-            new_face.allocateWeights(current_submesh->getSkin().size());
+            new_face.allocateWeights(static_cast<S32>(current_submesh->getSkin().size()));
             for (size_t weight_iter = 0; weight_iter < current_submesh->getSkin().size(); ++weight_iter)
             {
                 const auto& current_local_weight = current_submesh->getSkin()[weight_iter];
@@ -379,7 +379,7 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
     if (current_volume)
     {
         current_volume->copyFacesFrom(new_faces);
-        current_volume->setMeshAssetLoaded(TRUE);
+        current_volume->setMeshAssetLoaded(true);
         LLPrimitive::getVolumeManager()->unrefVolume(current_volume);
     }
 }
@@ -799,7 +799,7 @@ void LLLocalMeshFile::updateVObjects()
             }
 
             bool using_scale = target_object_ptr->mIsLocalMeshUsingScale;
-            applyToVObject(current_vobject_id, object_iter, using_scale);
+            applyToVObject(current_vobject_id, static_cast<int>(object_iter), using_scale);
         }
 
         // also, remove old skin from

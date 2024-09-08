@@ -85,10 +85,10 @@ FSPanelBlockList::~FSPanelBlockList()
     LLMuteList::getInstance()->removeObserver(this);
 }
 
-BOOL FSPanelBlockList::postBuild()
+bool FSPanelBlockList::postBuild()
 {
     mBlockedList = getChild<FSScrollListCtrl>("block_list");
-    mBlockedList->setCommitOnSelectionChange(TRUE);
+    mBlockedList->setCommitOnSelectionChange(true);
     mBlockedList->setCommitCallback(boost::bind(&FSPanelBlockList::onSelectionChanged, this));
     mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));
     mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
@@ -118,12 +118,12 @@ void FSPanelBlockList::onOpen(const LLSD& key)
     }
 }
 
-BOOL FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
+bool FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
 {
     if (FSCommon::isFilterEditorKeyCombo(key, mask))
     {
-        getChild<LLFilterEditor>("blocked_filter_input")->setFocus(TRUE);
-        return TRUE;
+        getChild<LLFilterEditor>("blocked_filter_input")->setFocus(true);
+        return true;
     }
 
     return LLPanel::handleKeyHere(key, mask);
@@ -136,7 +136,7 @@ void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
     {
         if (item->getColumn(3)->getValue().asUUID() == mute_id)
         {
-            item->setSelected(TRUE);
+            item->setSelected(true);
             break;
         }
     }
@@ -244,22 +244,22 @@ void FSPanelBlockList::onCustomAction(const LLSD& userdata)
     }
     else if ("sort_by_name" == command_name)
     {
-        mBlockedList->sortByColumn("item_name", TRUE);
+        mBlockedList->sortByColumn("item_name", true);
         gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_ASC);
     }
     else if ("sort_by_type" == command_name)
     {
-        mBlockedList->sortByColumn("item_type", TRUE);
+        mBlockedList->sortByColumn("item_type", true);
         gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_ASC);
     }
     else if ("sort_by_name_desc" == command_name)
     {
-        mBlockedList->sortByColumn("item_name", FALSE);
+        mBlockedList->sortByColumn("item_name", false);
         gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_DESC);
     }
     else if ("sort_by_type_desc" == command_name)
     {
-        mBlockedList->sortByColumn("item_type", FALSE);
+        mBlockedList->sortByColumn("item_type", false);
         gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_DESC);
     }
     else if ("unblock_item" == command_name)
@@ -396,8 +396,8 @@ void FSPanelBlockList::toggleMute(U32 flags)
 
 void FSPanelBlockList::blockResidentByName()
 {
-    const BOOL allow_multiple = FALSE;
-    const BOOL close_on_select = TRUE;
+    const bool allow_multiple = false;
+    const bool close_on_select = true;
 
     LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelBlockList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
     LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
@@ -446,7 +446,7 @@ void FSPanelBlockList::callbackBlockByName(const std::string& text)
     if (text.empty()) return;
 
     LLMute mute(LLUUID::null, text, LLMute::BY_NAME);
-    BOOL success = LLMuteList::getInstance()->add(mute);
+    bool success = LLMuteList::getInstance()->add(mute);
     if (!success)
     {
         LLNotificationsUtil::add("MuteByNameFailed");
@@ -479,7 +479,7 @@ void FSPanelBlockList::onFilterEdit(std::string search_string)
 
 void FSPanelBlockList::onSortChanged()
 {
-    BOOL ascending = mBlockedList->getSortAscending();
+    bool ascending = mBlockedList->getSortAscending();
     std::string column = mBlockedList->getSortColumnName();
 
     if (column == "item_name")

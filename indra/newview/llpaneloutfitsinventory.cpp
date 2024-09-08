@@ -89,7 +89,7 @@ LLPanelOutfitsInventory::~LLPanelOutfitsInventory()
 }
 
 // virtual
-BOOL LLPanelOutfitsInventory::postBuild()
+bool LLPanelOutfitsInventory::postBuild()
 {
     initTabPanels();
     initListCommandsHandlers();
@@ -107,7 +107,7 @@ BOOL LLPanelOutfitsInventory::postBuild()
     getChild<LLButton>(SAVE_BTN)->setCommitCallback(boost::bind(&LLPanelOutfitsInventory::saveOutfit, this, false));
     getChild<LLButton>(SAVE_AS_BTN)->setCommitCallback(boost::bind(&LLPanelOutfitsInventory::saveOutfit, this, true));
 
-    return TRUE;
+    return true;
 }
 
 // virtual
@@ -154,7 +154,7 @@ void LLPanelOutfitsInventory::onOpen(const LLSD& key)
                 LLFolderViewFolder* first_outfit = dynamic_cast<LLFolderViewFolder*>(my_outfits_folder->getFirstChild());
                 if (first_outfit)
                 {
-                    first_outfit->setOpen(TRUE);
+                    first_outfit->setOpen(true);
                 }
             }
         }
@@ -264,7 +264,7 @@ void LLPanelOutfitsInventory::onCOFChanged()
     LLInventoryModel::cat_array_t cats;
     LLIsType is_of_type(LLAssetType::AT_OBJECT);
     gInventory.collectDescendentsIf(cof, cats, obj_items, LLInventoryModel::EXCLUDE_TRASH, is_of_type);
-    U32 attachments = obj_items.size();
+    U32 attachments = static_cast<U32>(obj_items.size());
 
     LLStringUtil::format_map_t args;
     args["COUNT"] = llformat("%d", attachments);

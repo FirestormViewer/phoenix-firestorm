@@ -50,12 +50,12 @@ public:
     LLPanelObject();
     virtual ~LLPanelObject();
 
-    virtual BOOL    postBuild();
+    virtual bool    postBuild();
     virtual void    draw();
     virtual void    clearCtrls();
 
     void            changePrecision(S32 decimal_precision); // <FS:CR> Adjustable decimal precision
-    void            updateLimits(BOOL attachment);// <AW: opensim-limits>
+    void            updateLimits(bool attachment);// <AW: opensim-limits>
     void            refresh();
 
     static bool     precommitValidate(const LLSD& data);
@@ -91,7 +91,7 @@ public:
     void            onCommitSculpt(const LLSD& data);
     void            onCancelSculpt(const LLSD& data);
     void            onSelectSculpt(const LLSD& data);
-    BOOL            onDropSculpt(LLInventoryItem* item);
+    bool            onDropSculpt(LLInventoryItem* item);
     static void     onCommitSculptType(    LLUICtrl *ctrl, void* userdata);
 
     // <FS> Extended copy & paste buttons
@@ -107,9 +107,9 @@ protected:
     void            setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 dlow, F32 dlowest);
     void            deactivateMeshFields();
     //</FS:Beq>
-    void            sendRotation(BOOL btn_down);
-    void            sendScale(BOOL btn_down);
-    void            sendPosition(BOOL btn_down);
+    void            sendRotation(bool btn_down);
+    void            sendScale(bool btn_down);
+    void            sendPosition(bool btn_down);
     void            sendIsPhysical();
     void            sendIsTemporary();
     void            sendIsPhantom();
@@ -187,7 +187,7 @@ protected:
     LLSpinCtrl*     mCtrlScaleX;
     LLSpinCtrl*     mCtrlScaleY;
     LLSpinCtrl*     mCtrlScaleZ;
-    BOOL            mSizeChanged;
+    bool            mSizeChanged;
 
     //LLMenuButton*   mMenuClipboardRot; // <FS> Extended copy & paste buttons
     LLTextBox*      mLabelRotation;
@@ -222,9 +222,9 @@ protected:
     LLCheckBoxCtrl  *mCtrlSculptInvert;
 
     LLVector3       mCurEulerDegrees;       // to avoid sending rotation when not changed
-    BOOL            mIsPhysical;            // to avoid sending "physical" when not changed
-    BOOL            mIsTemporary;           // to avoid sending "temporary" when not changed
-    BOOL            mIsPhantom;             // to avoid sending "phantom" when not changed
+    bool            mIsPhysical;            // to avoid sending "physical" when not changed
+    bool            mIsTemporary;           // to avoid sending "temporary" when not changed
+    bool            mIsPhantom;             // to avoid sending "phantom" when not changed
     S32             mSelectedType;          // So we know what selected type we last were
 
     LLUUID          mSculptTextureRevert;   // so we can revert the sculpt texture on cancel

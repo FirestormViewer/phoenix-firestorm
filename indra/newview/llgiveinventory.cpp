@@ -87,7 +87,7 @@ bool LLGiveable::operator()(LLInventoryCategory* cat, LLInventoryItem* item)
            !item->getPermissions().allowOperationBy(PERM_TRANSFER,
                                 gAgent.getID()))
         {
-            allowed = FALSE;
+            allowed = false;
         }
         if (allowed &&
            !item->getPermissions().allowCopyBy(gAgent.getID()))
@@ -253,9 +253,9 @@ bool LLGiveInventory::doGiveInventoryCategory(const LLUUID& to_agent,
         items,
         LLInventoryModel::EXCLUDE_TRASH,
         giveable);
-    S32 count = cats.size();
+    auto count = cats.size();
     bool complete = true;
-    for(S32 i = 0; i < count; ++i)
+    for(size_t i = 0; i < count; ++i)
     {
         if (!gInventory.isCategoryComplete(cats.at(i)->getUUID()))
         {
@@ -451,7 +451,7 @@ bool LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
     pack_instant_message(
         gMessageSystem,
         gAgentID,
-        FALSE,
+        false,
         gAgentSessionID,
         to_agent,
         name,
@@ -471,7 +471,7 @@ bool LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
     // <FS:Ansariel> Make the particle effect optional
     if (gSavedSettings.getBOOL("FSCreateGiveInventoryParticleEffect"))
     {
-        LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+        LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, true);
         effectp->setSourceObject(gAgentAvatarp);
         effectp->setTargetObject(gObjectList.findObject(to_agent));
         effectp->setDuration(LL_HUD_DUR_SHORT);
@@ -526,8 +526,8 @@ bool LLGiveInventory::handleCopyProtectedCategory(const LLSD& notification, cons
                 items,
                 LLInventoryModel::EXCLUDE_TRASH,
                 remove);
-            S32 count = items.size();
-            for(S32 i = 0; i < count; ++i)
+            auto count = items.size();
+            for(size_t i = 0; i < count; ++i)
             {
                 gInventory.deleteObject(items.at(i)->getUUID());
             }
@@ -598,7 +598,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
     // MAX ITEMS is based on (sizeof(uuid)+2) * count must be <
     // MTUBYTES or 18 * count < 1200 => count < 1200/18 =>
     // 66. I've cut it down a bit from there to give some pad.
-    S32 count = items.size() + cats.size();
+    auto count = items.size() + cats.size();
 // <FS:CR> Aurora Sim>
     //if (count > MAX_ITEMS)
     if (count > LLWorld::getInstance()->getMaxInventoryItemsTransfer())
@@ -618,7 +618,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
         LLAgentUI::buildFullname(name);
         LLUUID transaction_id;
         transaction_id.generate();
-        S32 bucket_size = (sizeof(U8) + UUID_BYTES) * (count + 1);
+        S32 bucket_size = (sizeof(U8) + UUID_BYTES) * (static_cast<S32>(count) + 1);
         U8* bucket = new U8[bucket_size];
         U8* pos = bucket;
         U8 type = (U8)cat->getType();
@@ -647,7 +647,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),
-            FALSE,
+            false,
             gAgent.getSessionID(),
             to_agent,
             name,
@@ -668,7 +668,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
         // <FS:Ansariel> Make the particle effect optional
         if (gSavedSettings.getBOOL("FSCreateGiveInventoryParticleEffect"))
         {
-            LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+            LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, true);
             effectp->setSourceObject(gAgentAvatarp);
             effectp->setTargetObject(gObjectList.findObject(to_agent));
             effectp->setDuration(LL_HUD_DUR_SHORT);

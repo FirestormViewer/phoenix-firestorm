@@ -264,7 +264,7 @@ void BDAnimator::stopPlayback()
 //     by giving the load an integer which determines what to load.
 //     1 is default and loads rotations only, 2 = positions only,
 //     4 = scales only, thus 3 = rotations and positions and so on.
-BOOL BDAnimator::loadPose(const LLSD& name, S32 load_type)
+bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
 {
     if (!mTargetAvatar || mTargetAvatar->isDead())
     {

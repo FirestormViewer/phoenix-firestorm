@@ -38,11 +38,11 @@ class FSFloaterTeleportHistory : public LLFloater
 {
 public:
     FSFloaterTeleportHistory(const LLSD& seed);
-    virtual ~FSFloaterTeleportHistory();
+    ~FSFloaterTeleportHistory() override;
 
-    BOOL postBuild();
-    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
 
     void resetFilter();
 

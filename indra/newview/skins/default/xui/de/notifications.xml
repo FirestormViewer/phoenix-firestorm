@@ -2595,6 +2595,10 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		Es sind nur quadratische Bilder zwischen 64 und 256 Pixel pro Seite erlaubt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="ThumbnailSelectionTooLarge">
+		Sie können nur bis zu 50 Abbildungen gleichzeitig ändern.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
@@ -3619,6 +3623,11 @@ Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Neue Voice-Morph-Effekte sind erhältlich!
+	</notification>
+	<notification name="VoiceEffectsNotSupported">
+		Voice-Morph-Effekte werden von diesem Viewer nicht unterstützt.
+Für weitere Informationen zu anderen Voice-Morphing-Tools, lesen Sie bitte [[FAQ_URL] diesen Artikel].
+		<usetemplate ignoretext="Warnen, falls Voice-Morphing nicht unterstützt wird" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Nur Mitglieder einer bestimmten Gruppe dürfen diesen Bereich betreten.
@@ -5080,8 +5089,32 @@ Möchten Sie fortfahren?
 		Sie bearbeiten einen Himmel, der automatisch zu HDR konvertiert wurde. Um HDR und Tone Mapping zu entfernen, setzen Sie „Umgebung Reflexionstest (HDR)“ auf 0.
 		<usetemplate ignoretext="Warnung für HDR-Himmel-Anpassung" name="okignore" yestext="OK"/>
 	</notification>
-	<notification name="GLTFPreviewSelection">
+	<notification name="GLTFOpenSelection">
 		Sie müssen ein Objekt auswählen, das als Ankerpunkt für den GLTF-Gegenstand fungiert, den Sie vorschauen möchten.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFLoadFailed">
+		GLTF-Datei konnte nicht geladen werden. Bitte prüfen Sie die Log-Datei für Details.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFSaveFailed">
+		GLTF-Datei konnte nicht gespeichert werden. Bitte prüfen Sie die Log-Datei für Details.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFSaveSelection">
+		Sie müssen ein Objekt auswählen, das mit einem GLTF-Gegenstand verknüpft ist.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFUploadSelection">
+		Sie müssen ein Objekt auswählen, das nur mit einem lokalen GLTF-Gegenstand verknüpft ist.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFUploadInProgress">
+		Upload wird gerade durchgeführt. Bitte versuchen Sie es später erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NoSupportGLTFShader">
+		GLTF-Szenen werden auf Ihrer Hardware momentan noch nicht unterstützt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 

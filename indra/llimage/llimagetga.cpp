@@ -108,6 +108,8 @@ bool LLImageTGA::updateData()
 {
     resetLastError();
 
+    LLImageDataLock lock(this);
+
     // Check to make sure that this instance has been initialized with data
     if (!getData() || (0 == getDataSize()))
     {
@@ -328,6 +330,9 @@ bool LLImageTGA::decode(LLImageRaw* raw_image, F32 decode_time)
 {
     llassert_always(raw_image);
 
+    LLImageDataSharedLock lockIn(this);
+    LLImageDataLock lockOut(raw_image);
+
     // Check to make sure that this instance has been initialized with data
     if (!getData() || (0 == getDataSize()))
     {
@@ -345,7 +350,7 @@ bool LLImageTGA::decode(LLImageRaw* raw_image, F32 decode_time)
 
     // <FS:ND> Handle out of memory situations a bit more graceful than a crash
     if( raw_image->isBufferInvalid() )
-        return FALSE;
+        return false;
     // </FS:ND>
 
     if( (getComponents() != 1) &&
@@ -472,7 +477,7 @@ bool LLImageTGA::decodeTruecolorNonRle( LLImageRaw* raw_image, bool &alpha_opaqu
 
     S32 pixels = getWidth() * getHeight();
 
-    if (pixels * (mIs15Bit ? 2 : getComponents()) > getDataSize() - mDataOffset)
+    if (pixels * (mIs15Bit ? 2 : getComponents()) > getDataSize() - (S32)mDataOffset)
     { //here we have situation when data size in src less than actually needed
         return false;
     }
@@ -559,7 +564,7 @@ bool LLImageTGA::decodeColorMap( LLImageRaw* raw_image, bool rle, bool flipped )
 {
     // <FS:ND> Handle out of memory situations a bit more graceful than a crash
     if( !raw_image || raw_image->isBufferInvalid() )
-        return FALSE;
+        return false;
     // </FS:ND>
 
     // If flipped, origin is the top left.  Need to reverse the order of the rows.
@@ -658,6 +663,9 @@ bool LLImageTGA::decodeColorMap( LLImageRaw* raw_image, bool rle, bool flipped )
 bool LLImageTGA::encode(const LLImageRaw* raw_image, F32 encode_time)
 {
     llassert_always(raw_image);
+
+    LLImageDataSharedLock lockIn(raw_image);
+    LLImageDataLock lockOut(this);
 
     deleteData();
 
@@ -1077,6 +1085,9 @@ bool LLImageTGA::decodeAndProcess( LLImageRaw* raw_image, F32 domain, F32 weight
     // --+---Input--------------------------------
     //   |
 
+    LLImageDataSharedLock lockIn(this);
+    LLImageDataLock lockOut(raw_image);
+
     if (!getData() || (0 == getDataSize()))
     {
         setLastError("LLImageTGA trying to decode an image with no data!");
@@ -1184,7 +1195,7 @@ bool LLImageTGA::decodeAndProcess( LLImageRaw* raw_image, F32 domain, F32 weight
 // Reads a .tga file and creates an LLImageTGA with its data.
 bool LLImageTGA::loadFile( const std::string& path )
 {
-    S32 len = path.size();
+    auto len = path.size();
     if( len < 5 )
     {
         return false;
@@ -1227,7 +1238,7 @@ bool LLImageTGA::loadFile( const std::string& path )
         return false;
     }
 
-    S32 bytes_read = fread(buffer, 1, file_size, file);
+    S32 bytes_read = static_cast<S32>(fread(buffer, 1, file_size, file));
     if( bytes_read != file_size )
     {
         deleteData();

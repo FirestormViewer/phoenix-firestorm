@@ -39,6 +39,9 @@ if (USE_OPENAL)
             alut
             )
   else()
-    message(FATAL_ERROR "OpenAL is not available for this platform")
+    target_link_libraries( ll::openal INTERFACE
+            openal
+            alut
+            )
   endif()
 endif ()

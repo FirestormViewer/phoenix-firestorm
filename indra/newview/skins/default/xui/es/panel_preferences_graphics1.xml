@@ -81,9 +81,6 @@
 			<slider label="  Avatares" name="AvatarMeshDetail"/>
 			<slider label="  Terreno" name="TerrainMeshDetail"/>
 			<slider label="  Física del avatar" name="AvatarPhysicsDetail"/>
-			<text name="AvatarRenderingText">
-				Dibujo del avatar:
-			</text>
 			<check_box label="Impostores de avatar" name="AvatarImpostors"/>
 			<check_box label="Ropas del avatar" name="AvatarCloth"/>
 			<text name="TerrainDetailText">

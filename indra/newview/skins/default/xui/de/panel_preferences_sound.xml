@@ -134,6 +134,18 @@
 		<check_box label="Automatisch alle eingehenden Konferenzanrufe abweisen" name="VoiceCallsRejectAdHoc"/>
 		<check_box label="Automatisch alle eingehenden Privatanrufe abweisen" name="VoiceCallsRejectP2P"/>
 		<check_box label="Sprachfunktion beim Drücken des Buttons in der Symbolleiste ein-/ausschalten" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
+		<check_box label="Automatische Verstärkungsregelung" name="voice_automatic_gain_control"/>
+		<check_box label="Echo-Unterdrückung" name="enable_echo_cancellation"/>
+		<text name="noise_suppression_label" width="123">
+			Rauschunterdrückung:
+		</text>
+		<combo_box name="noise_suppression_combo">
+			<item label="Aus" name="noise_suppression_none"/>
+			<item label="Niedrig" name="noise_suppression_low"/>
+			<item label="Mittel" name="noise_suppression_moderate"/>
+			<item label="Hoch" name="noise_suppression_high"/>
+			<item label="Maximum" name="noise_suppression_max"/>
+		</combo_box>
 		<button label="Geräte-Einstellungen" name="device_settings_btn"/>
 		<panel name="device_settings_panel">
 			<panel.string name="default_text">

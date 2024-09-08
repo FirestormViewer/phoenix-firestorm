@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Przekształcenia" name="panel_settings_terrain_transform">
+	<text name="terrain0ScaleU_label">
+		Skala u
+	</text>
+	<text name="terrain0ScaleV_label">
+		Skala v
+	</text>
+	<text name="terrain0Rotation_label">
+		Obrót
+	</text>
+	<text name="terrain0OffsetU_label">
+		Przesun. u
+	</text>
+	<text name="terrain0OffsetV_label">
+		Przesun. v
+	</text>
+</panel>

@@ -79,7 +79,7 @@ LLJoystick::LLJoystick(const LLJoystick::Params& p)
     mVertSlopFar(0),
     mHorizSlopNear(0),
     mHorizSlopFar(0),
-    mHeldDown(FALSE),
+    mHeldDown(false),
     mHeldDownTimer(),
     mInitialQuadrant(p.quadrant)
 {
@@ -175,7 +175,7 @@ bool LLJoystick::pointInCenterDot(S32 x, S32 y) const
 }
 // </FS:Beq>
 
-BOOL LLJoystick::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLJoystick::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     //LL_INFOS() << "joystick mouse down " << x << ", " << y << LL_ENDL;
     bool handles = false;
@@ -192,14 +192,14 @@ BOOL LLJoystick::handleMouseDown(S32 x, S32 y, MASK mask)
 }
 
 
-BOOL LLJoystick::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLJoystick::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     // LL_INFOS() << "joystick mouse up " << x << ", " << y << LL_ENDL;
 
     if( hasMouseCapture() )
     {
         mLastMouse.set(x, y);
-        mHeldDown = FALSE;
+        mHeldDown = false;
         onMouseUp();
     }
 
@@ -207,7 +207,7 @@ BOOL LLJoystick::handleMouseUp(S32 x, S32 y, MASK mask)
 }
 
 
-BOOL LLJoystick::handleHover(S32 x, S32 y, MASK mask)
+bool LLJoystick::handleHover(S32 x, S32 y, MASK mask)
 {
     if( hasMouseCapture() )
     {
@@ -235,7 +235,7 @@ void LLJoystick::onBtnHeldDown(void *userdata)
     LLJoystick *self = (LLJoystick *)userdata;
     if (self)
     {
-        self->mHeldDown = TRUE;
+        self->mHeldDown = true;
         self->onHeldDown();
     }
 }
@@ -434,11 +434,11 @@ void LLJoystickAgentSlide::onHeldDown()
 
 LLJoystickCameraRotate::LLJoystickCameraRotate(const LLJoystickCameraRotate::Params& p)
 :   LLJoystick(p),
-    mInLeft( FALSE ),
-    mInTop( FALSE ),
-    mInRight( FALSE ),
-    mInBottom( FALSE ),
-    mInCenter( FALSE )
+    mInLeft( false ),
+    mInTop( false ),
+    mInRight( false ),
+    mInBottom( false ),
+    mInCenter( false )
 {
     mCenterImageName = "Cam_Rotate_Center";
 }
@@ -459,9 +459,9 @@ void LLJoystickCameraRotate::updateSlop()
 }
 
 
-BOOL LLJoystickCameraRotate::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLJoystickCameraRotate::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-    gAgent.setMovementLocked(TRUE);
+    gAgent.setMovementLocked(true);
     updateSlop();
 
     // Set initial offset based on initial click location
@@ -478,7 +478,7 @@ BOOL LLJoystickCameraRotate::handleMouseDown(S32 x, S32 y, MASK mask)
         mInitialOffset.mX = 0;
         mInitialOffset.mY = 0;
         mInitialQuadrant = JQ_ORIGIN;
-        mInCenter = TRUE;
+        mInCenter = true;
 
         resetJoystickCamera();
     }
@@ -514,21 +514,21 @@ BOOL LLJoystickCameraRotate::handleMouseDown(S32 x, S32 y, MASK mask)
     return LLJoystick::handleMouseDown(x, y, mask);
 }
 
-BOOL LLJoystickCameraRotate::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLJoystickCameraRotate::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-    gAgent.setMovementLocked(FALSE);
-    mInCenter = FALSE;
+    gAgent.setMovementLocked(false);
+    mInCenter = false;
     return LLJoystick::handleMouseUp(x, y, mask);
 }
 
-BOOL LLJoystickCameraRotate::handleHover(S32 x, S32 y, MASK mask)
+bool LLJoystickCameraRotate::handleHover(S32 x, S32 y, MASK mask)
 {
     // <FS:Beq> FIRE-30414
     // if (!pointInCenterDot(x, y, CENTER_DOT_RADIUS))
     if (!pointInCenterDot(x, y))
     // </FS:Beq>
     {
-        mInCenter = FALSE;
+        mInCenter = false;
     }
 
     return LLJoystick::handleHover(x, y, mask);
@@ -588,7 +588,7 @@ F32 LLJoystickCameraRotate::getOrbitRate()
 
 
 // Only used for drawing
-void LLJoystickCameraRotate::setToggleState( BOOL left, BOOL top, BOOL right, BOOL bottom )
+void LLJoystickCameraRotate::setToggleState( bool left, bool top, bool right, bool bottom )
 {
     mInLeft = left;
     mInTop = top;
@@ -787,7 +787,7 @@ LLJoystickQuaternion::LLJoystickQuaternion(const LLJoystickQuaternion::Params &p
     }
 }
 
-void LLJoystickQuaternion::setToggleState(BOOL left, BOOL top, BOOL right, BOOL bottom)
+void LLJoystickQuaternion::setToggleState(bool left, bool top, bool right, bool bottom)
 {
     mInLeft = left;
     mInTop = top;
@@ -795,7 +795,7 @@ void LLJoystickQuaternion::setToggleState(BOOL left, BOOL top, BOOL right, BOOL 
     mInBottom = bottom;
 }
 
-BOOL LLJoystickQuaternion::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLJoystickQuaternion::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     updateSlop();
 
@@ -838,7 +838,7 @@ BOOL LLJoystickQuaternion::handleMouseDown(S32 x, S32 y, MASK mask)
     return LLJoystick::handleMouseDown(x, y, mask);
 }
 
-BOOL LLJoystickQuaternion::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLJoystickQuaternion::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     return LLJoystick::handleMouseUp(x, y, mask);
 }

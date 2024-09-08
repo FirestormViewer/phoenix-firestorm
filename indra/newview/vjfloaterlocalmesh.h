@@ -41,7 +41,7 @@ class LLFloaterLocalMesh : public LLFloater
         void onOpen(const LLSD& key) final;
         void onClose(bool app_quitting) final;
         void onSelectionChangedCallback();
-        BOOL postBuild() final;
+        bool postBuild() final;
         void draw() final;
 
         /* add    - loads a new file, adds it to the list and reads it.

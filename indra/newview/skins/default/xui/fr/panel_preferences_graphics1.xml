@@ -90,7 +90,6 @@
 			<button left="270" label="Enregistrer" name="PrefSaveButton"/>
 			<button left_pad="5" label="Charger" name="PrefLoadButton"/>
 			<button left_pad="5" label="Supprimer" name="PrefDeleteButton"/>
-			<text name="AvatarRenderingText">Rendu des avatars :</text>
 			<button tool_tip="Rétablit les valeurs par défaut." name="Defaults"/>
 		</panel>
 		<panel label="Paramètres matériels" name="Hardware Settings">

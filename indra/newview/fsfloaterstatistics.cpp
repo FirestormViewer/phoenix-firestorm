@@ -41,20 +41,20 @@ FSFloaterStatistics::~FSFloaterStatistics()
 {
 }
 
-BOOL FSFloaterStatistics::postBuild()
+bool FSFloaterStatistics::postBuild()
 {
     if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
     {
-        setIsChrome(TRUE);
+        setIsChrome(true);
     }
-    return TRUE;
+    return true;
 }
 
 void FSFloaterStatistics::onOpen(const LLSD& key)
 {
     if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
     {
-        setIsChrome(TRUE);
-        setFocus(FALSE);
+        setIsChrome(true);
+        setFocus(false);
     }
 }

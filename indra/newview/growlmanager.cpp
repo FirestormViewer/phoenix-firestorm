@@ -258,10 +258,10 @@ void GrowlManager::performNotification(const std::string& title, const std::stri
     }
 }
 
-BOOL GrowlManager::tick()
+bool GrowlManager::tick()
 {
     mTitleTimers.clear();
-    return FALSE;
+    return false;
 }
 
 bool GrowlManager::onLLNotification(const LLSD& notice)
@@ -340,7 +340,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
         }
 
         std::string message = im["message"].asString();
-        if (is_irc_me_prefix(message))
+        if (FSCommon::is_irc_me_prefix(message))
         {
             message = message.substr(3);
         }
@@ -390,7 +390,7 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
     if ((EChatType)chat["chat_type"].asInteger() == CHAT_TYPE_IM)
     {
         std::string message = chat["message"].asString();
-        if (is_irc_me_prefix(message))
+        if (FSCommon::is_irc_me_prefix(message))
         {
             message = message.substr(3);
         }

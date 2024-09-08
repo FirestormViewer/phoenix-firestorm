@@ -175,7 +175,7 @@ static OPJ_OFF_T opj_skip(OPJ_OFF_T bytes, void* user_data)
     JPEG2KBase* jpeg_codec = static_cast<JPEG2KBase*>(user_data);
     jpeg_codec->offset += bytes;
 
-    if (jpeg_codec->offset > jpeg_codec->size)
+    if (jpeg_codec->offset > (OPJ_OFF_T)jpeg_codec->size)
     {
         jpeg_codec->offset = jpeg_codec->size;
         // Indicate end of stream
@@ -510,6 +510,9 @@ public:
 
     bool encode(const LLImageRaw& rawImageIn, LLImageJ2C &compressedImageOut)
     {
+        LLImageDataSharedLock lockIn(&rawImageIn);
+        LLImageDataLock lockOut(&compressedImageOut);
+
         setImage(rawImageIn);
 
         encoder = opj_create_compress(OPJ_CODEC_J2K);
@@ -559,7 +562,7 @@ public:
             }
 
             //ensure that we have at least a minimal size
-            max_cs_size = llmax(max_cs_size, FIRST_PACKET_SIZE);
+            max_cs_size = llmax(max_cs_size, (U32)FIRST_PACKET_SIZE);
            
             parameters.max_cs_size = max_cs_size;
         }
@@ -799,6 +802,9 @@ bool LLImageJ2COJ::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int block
 
 bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
+    LLImageDataLock lockIn(&base);
+    LLImageDataLock lockOut(&raw_image);
+
     JPEG2KDecode decoder(0);
 
     // <FS:Techwolf Lupindo> texture comment metadata reader
@@ -906,7 +912,7 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
             S32 offset = dest;
             for (S32 y = (height - 1); y >= 0; y--)
             {
-                for (S32 x = 0; x < width; x++)
+                for (U32 x = 0; x < width; x++)
                 {
                     rawp[offset] = image->comps[comp].data[y*comp_width + x];
                     offset += channels;
@@ -942,6 +948,8 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 
 bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 {
+    LLImageDataLock lock(&base);
+
     JPEG2KDecode decode(0);
 
     S32 width = 0;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Altitudine" name="panel_settings_terrain_elevation">
+	<spinner label="Altezza dell'acqua" name="water_height_spin" />
+	<spinner label="Limite innalzamento" name="terrain_raise_spin"/>
+	<spinner label="Limite abbassamento" name="terrain_lower_spin"/>
+	<text name="height_text_lbl5">
+		Intervalli altitudine texture
+	</text>
+	<text name="height_text_lbl5_material">
+		Intervalli altitudine materiali
+	</text>
+	<text name="height_text_lbl10">
+		Questi valori indicano l'intervallo di miscelazione per le texture sopra.
+	</text>
+	<text name="height_text_lbl10_material">
+		Questi valori indicano l'intervallo di miscelazione per i materiali sopra.
+	</text>
+	<text name="height_text_lbl11">
+		Misurato in metri, il valore BASSO è la MASSIMA altezza della texture 1 e il valore ALTO è l&apos;altezza MINIMA della texture 4.
+	</text>
+	<text name="height_text_lbl11_material">
+		Misurato in metri, il valore BASSO è la MASSIMA altezza del materiale 1 e il valore ALTO è l&apos;altezza MINIMA del materiale 4.
+	</text>
+	<text name="height_text_lbl6">
+		Nord-ovest
+	</text>
+	<text name="height_text_lbl7">
+		Nord-est
+	</text>
+	<spinner label="Basso" name="height_start_spin_1"/>
+	<spinner label="Basso" name="height_start_spin_3"/>
+	<spinner label="Alto" name="height_range_spin_1"/>
+	<spinner label="Alto" name="height_range_spin_3"/>
+	<text name="height_text_lbl8">
+		Sud-ovest
+	</text>
+	<text name="height_text_lbl9">
+		Sud-est
+	</text>
+	<spinner label="Basso" name="height_start_spin_0"/>
+	<spinner label="Basso" name="height_start_spin_2"/>
+	<spinner label="Alto" name="height_range_spin_0"/>
+	<spinner label="Alto" name="height_range_spin_2"/>
+	<button label="Scarica RAW terreno..." name="download_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
+	<button label="Carica RAW terreno..." name="upload_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
+	<button label="Bake terreno" name="bake_terrain_btn" tool_tip="Imposta il terreno corrente come punto medio per i limiti di innalzamento/abbassamento"/>
+</panel>

@@ -58,7 +58,7 @@ FSPanelContactSets::~FSPanelContactSets()
     }
 }
 
-BOOL FSPanelContactSets::postBuild()
+bool FSPanelContactSets::postBuild()
 {
     childSetAction("add_set_btn",           boost::bind(&FSPanelContactSets::onClickAddSet,             this));
     childSetAction("remove_set_btn",        boost::bind(&FSPanelContactSets::onClickRemoveSet,          this));
@@ -83,7 +83,7 @@ BOOL FSPanelContactSets::postBuild()
     mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
     generateAvatarList(mContactSetCombo->getValue().asString());
 
-    return TRUE;
+    return true;
 }
 
 void FSPanelContactSets::onSelectAvatar()
@@ -222,7 +222,7 @@ void FSPanelContactSets::onClickAddAvatar(LLUICtrl* ctrl)
 {
     LLFloater* root_floater = gFloaterView->getParentFloater(this);
     LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelContactSets::handlePickerCallback, this, _1, mContactSetCombo->getValue().asString()),
-                                                           TRUE, TRUE, TRUE, root_floater->getName(), ctrl);
+                                                           true, true, true, root_floater->getName(), ctrl);
     if (root_floater && avatar_picker)
     {
         root_floater->addDependentFloater(avatar_picker);
@@ -248,7 +248,7 @@ void FSPanelContactSets::onClickRemoveAvatar()
 
     LLSD payload, args;
     std::string set = mContactSetCombo->getValue().asString();
-    S32 selected_size = mAvatarSelections.size();
+    auto selected_size = mAvatarSelections.size();
     args["SET_NAME"] = set;
     args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString());
     payload["contact_set"] = set;

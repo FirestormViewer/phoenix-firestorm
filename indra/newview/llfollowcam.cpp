@@ -445,9 +445,9 @@ void LLFollowCam::update()
 
 
 //-------------------------------------------------------------------------------------
-BOOL LLFollowCam::updateBehindnessConstraint(LLVector3 focus, LLVector3& cam_position)
+bool LLFollowCam::updateBehindnessConstraint(LLVector3 focus, LLVector3& cam_position)
 {
-    BOOL constraint_active = FALSE;
+    bool constraint_active = false;
     // only apply this stuff if the behindness angle is something other than opened up all the way
     if ( mBehindnessMaxAngle < FOLLOW_CAM_MAX_BEHINDNESS_ANGLE - FOLLOW_CAM_BEHINDNESS_EPSILON )
     {
@@ -488,7 +488,7 @@ BOOL LLFollowCam::updateBehindnessConstraint(LLVector3 focus, LLVector3& cam_pos
             F32 fraction = ((cameraOffsetAngle - mBehindnessMaxAngle) / cameraOffsetAngle) * LLSmoothInterpolation::getInterpolant(mBehindnessLag);
             cam_position = focus + horizontalSubjectBack * (slerp(fraction, camera_offset_rotation, LLQuaternion::DEFAULT));
             cam_position.mV[VZ] = cameraZ; // clamp z value back to what it was before we started messing with it
-            constraint_active = TRUE;
+            constraint_active = true;
         }
     }
     return constraint_active;
@@ -843,7 +843,7 @@ void LLFollowCamMgr::setCameraActive( const LLUUID& source, bool active )
 
 void LLFollowCamMgr::removeFollowCamParams(const LLUUID& source)
 {
-    setCameraActive(source, FALSE);
+    setCameraActive(source, false);
     LLFollowCamParams* params = getParamsForID(source);
     mParamMap.erase(source);
     delete params;

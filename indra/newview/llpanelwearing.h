@@ -56,7 +56,7 @@ public:
     LLPanelWearing();
     virtual ~LLPanelWearing();
 
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
 
     /*virtual*/ void draw();
 
