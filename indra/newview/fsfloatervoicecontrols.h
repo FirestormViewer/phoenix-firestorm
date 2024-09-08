@@ -64,10 +64,10 @@ public:
     FSFloaterVoiceControls(const LLSD& key);
     ~FSFloaterVoiceControls();
 
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& key);
     /*virtual*/ void draw();
-    /*virtual*/ void setFocus( BOOL b );
+    /*virtual*/ void setFocus( bool b );
 
     /**
      * Is called by LLVoiceClient::notifyParticipantObservers when voice participant list is changed.

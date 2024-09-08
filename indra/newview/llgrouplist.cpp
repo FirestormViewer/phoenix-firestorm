@@ -168,9 +168,9 @@ void LLGroupList::draw()
 }
 
 // virtual
-BOOL LLGroupList::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLGroupList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-    BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
+    bool handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 
     if (mForAgent)
     {
@@ -187,9 +187,9 @@ BOOL LLGroupList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLGroupList::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLGroupList::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-    BOOL handled = LLView::handleDoubleClick(x, y, mask);
+    bool handled = LLView::handleDoubleClick(x, y, mask);
     // Handle double click only for the selected item in the list, skip clicks on empty space.
     if (handled)
     {
@@ -228,7 +228,7 @@ void LLGroupList::refresh()
     if (mForAgent)
     {
         const LLUUID&       highlight_id    = gAgent.getGroupID();
-        S32                 count           = gAgent.mGroups.size();
+        S32                 count           = static_cast<S32>(gAgent.mGroups.size());
         LLUUID              id;
         bool                have_filter     = !mNameFilter.empty();
 
@@ -447,7 +447,7 @@ LLGroupListItem::~LLGroupListItem()
 }
 
 //virtual
-BOOL  LLGroupListItem::postBuild()
+bool  LLGroupListItem::postBuild()
 {
     mGroupIcon = getChild<LLGroupIconCtrl>("group_icon");
     mGroupNameBox = getChild<LLTextBox>("group_name");
@@ -478,7 +478,7 @@ BOOL  LLGroupListItem::postBuild()
     // have icons of different sizes so we need to figure it per file.
     mIconWidth = mGroupNameBox->getRect().mLeft - mGroupIcon->getRect().mLeft;
 
-    return TRUE;
+    return true;
 }
 
 //virtual
@@ -503,9 +503,9 @@ void LLGroupListItem::onMouseEnter(S32 x, S32 y, MASK mask)
             {
                 if (mVisibilityHideBtn)
                 {
-                    mVisibilityHideBtn->setVisible(agent_gdatap.mListInProfile);
-                    mVisibilityShowBtn->setVisible(!agent_gdatap.mListInProfile);
-                }
+                mVisibilityHideBtn->setVisible(agent_gdatap.mListInProfile);
+                mVisibilityShowBtn->setVisible(!agent_gdatap.mListInProfile);
+            }
                 mNoticesBtn->setVisible(true);
             }
         }
@@ -565,7 +565,7 @@ void LLGroupListItem::setGroupIconID(const LLUUID& group_icon_id)
 void LLGroupListItem::setGroupIconVisible(bool visible)
 {
     // Already done? Then do nothing.
-    if (mGroupIcon->getVisible() == (BOOL)visible)
+    if (mGroupIcon->getVisible() == (bool)visible)
         return;
 
     // Show/hide the group icon.

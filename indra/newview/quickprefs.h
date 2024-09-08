@@ -94,10 +94,10 @@ private:
     void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
     void enableWindlightButtons(bool enable);
 
-    void setDefaultPresetsEnabled(BOOL enabled);
+    void setDefaultPresetsEnabled(bool enabled);
 
 public:
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     virtual void onOpen(const LLSD& key);
 
     void setSelectedSky(const std::string& preset_name);
@@ -217,7 +217,7 @@ protected:
         LLTextBox* label_textbox;
         std::string label;
         ControlType type;
-        BOOL integer;
+        bool integer;
         F32 min_value;
         F32 max_value;
         F32 increment;
@@ -231,7 +231,7 @@ protected:
         Mandatory<std::string>  label;
         Optional<std::string>   translation_id;
         Mandatory<U32>          control_type;
-        Mandatory<BOOL>         integer;
+        Mandatory<bool>         integer;
         Mandatory<F32>          min_value;  // "min" is frowned upon by a braindead windows include
         Mandatory<F32>          max_value;  // "max" see "min"
         Mandatory<F32>          increment;
@@ -277,7 +277,7 @@ protected:
     std::string getSettingsPath(bool save_mode);
 
     // adds a new control and returns a pointer to the chosen widget
-    LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = NULL, ControlType type = ControlTypeRadio, BOOL integer = FALSE, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
+    LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = NULL, ControlType type = ControlTypeRadio, bool integer = false, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
     // removes a control
     void removeControl(const std::string& controlName, bool remove_slot = true);
     // updates a single control

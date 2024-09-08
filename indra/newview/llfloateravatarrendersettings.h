@@ -42,10 +42,10 @@ public:
     LLFloaterAvatarRenderSettings(const LLSD& key);
     virtual ~LLFloaterAvatarRenderSettings();
 
-    /*virtual*/ BOOL postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void draw();
-    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask );
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void draw() override;
+    bool handleKeyHere(KEY key, MASK mask) override;
 
     void onAvatarListRightClick(LLUICtrl* ctrl, S32 x, S32 y);
 
@@ -61,7 +61,6 @@ public:
 
 private:
     void callbackAvatarPicked(const uuid_vec_t& ids, S32 visual_setting);
-    void removePicker();
 
     bool mNeedsUpdate;
     LLListContextMenu* mContextMenu;

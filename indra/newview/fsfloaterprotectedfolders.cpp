@@ -40,24 +40,37 @@
 
 FSFloaterProtectedFolders::FSFloaterProtectedFolders(const LLSD& key)
     : LLFloater(key),
-    mFolderList(NULL),
+    mInitialized(false),
     mFilterSubString(LLStringUtil::null),
     mFilterSubStringOrig(LLStringUtil::null),
     mProtectedCategoriesChangedCallbackConnection(),
-    mInitialized(false)
+    mFolderList(nullptr)
 {
 }
 
 FSFloaterProtectedFolders::~FSFloaterProtectedFolders()
 {
-    if (mProtectedCategoriesChangedCallbackConnection.connected())
+    try
     {
-        mProtectedCategoriesChangedCallbackConnection.disconnect();
+        if (mProtectedCategoriesChangedCallbackConnection.connected())
+        {
+            mProtectedCategoriesChangedCallbackConnection.disconnect();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Log the exception or handle it as needed
+        LL_WARNS() << "Exception caught in FSFloaterProtectedFolders destructor: " << e.what() << LL_ENDL;
+    }
+    catch (...)
+    {
+        // Catch any other types of exceptions
+        LL_WARNS() << "Unknown exception caught in FSFloaterProtectedFolders destructor" << LL_ENDL;
     }
 }
 
 //virtual
-BOOL FSFloaterProtectedFolders::postBuild()
+bool FSFloaterProtectedFolders::postBuild()
 {
     mFolderList = getChild<LLScrollListCtrl>("folder_list");
     mFolderList->setFilterColumn(0);
@@ -69,7 +82,7 @@ BOOL FSFloaterProtectedFolders::postBuild()
     mFilterEditor = getChild<LLFilterEditor>("filter_input");
     mFilterEditor->setCommitCallback(boost::bind(&FSFloaterProtectedFolders::onFilterEdit, this, _2));
 
-    return TRUE;
+    return true;
 }
 
 //virtual
@@ -99,12 +112,12 @@ void FSFloaterProtectedFolders::draw()
 }
 
 //virtual
-BOOL FSFloaterProtectedFolders::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterProtectedFolders::handleKeyHere(KEY key, MASK mask)
 {
     if (FSCommon::isFilterEditorKeyCombo(key, mask))
     {
-        mFilterEditor->setFocus(TRUE);
-        return TRUE;
+        mFilterEditor->setFocus(true);
+        return true;
     }
 
     return LLFloater::handleKeyHere(key, mask);

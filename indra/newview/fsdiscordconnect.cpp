@@ -245,7 +245,7 @@ void FSDiscordConnect::updateRichPresence() const
 
     std::string regionId = gAgent.getRegion()->getRegionID().asString();
     discordPresence.partyId = regionId.c_str();
-    discordPresence.partySize = gAgent.getRegion()->mMapAvatars.size();
+    discordPresence.partySize = static_cast<int>(gAgent.getRegion()->mMapAvatars.size());
     discordPresence.partyMax = LLRegionInfoModel::instance().mAgentLimit;
     Discord_UpdatePresence(&discordPresence);
 }

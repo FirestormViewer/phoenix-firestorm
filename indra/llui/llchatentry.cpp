@@ -92,7 +92,7 @@ void LLChatEntry::expandText()
 
     // <FS:Ansariel> Store result of getVisibleLines - it calls reflow
     //int visible_lines_count = llabs(getVisibleLines(true).first - getVisibleLines(true).second);
-    std::pair<BOOL, BOOL> visible_lines = getVisibleLines(true);
+    std::pair<S32, S32> visible_lines = getVisibleLines(true);
     int visible_lines_count = llabs(visible_lines.first - visible_lines.second);
     // </FS:Ansariel>
     bool can_changed = getLineCount() <= line_count || line_count < mPrevExpandedLineCount ;
@@ -182,9 +182,9 @@ void LLChatEntry::onFocusLost()
     LLUICtrl::onFocusLost();
 }
 
-BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
+bool LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
 {
-    BOOL handled = FALSE;
+    bool handled = false;
 
     LLTextEditor::handleSpecialKey(key, mask);
 
@@ -219,7 +219,7 @@ BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
             {
                 LLUI::getInstance()->reportBadKeystroke();
             }
-            handled = TRUE;
+            handled = true;
         }
         break;
 
@@ -246,7 +246,7 @@ BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
             {
                 LLUI::getInstance()->reportBadKeystroke();
             }
-            handled = TRUE;
+            handled = true;
         }
         break;
 

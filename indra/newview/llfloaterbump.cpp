@@ -91,7 +91,7 @@ LLFloaterBump::~LLFloaterBump()
     // </FS:Ansariel>
 }
 
-BOOL LLFloaterBump::postBuild()
+bool LLFloaterBump::postBuild()
 {
     // <FS:Ansariel> FIRE-13888: Add copy function to bumps list
     //mList = getChild<LLScrollListCtrl>("bump_list");
@@ -108,7 +108,7 @@ BOOL LLFloaterBump::postBuild()
     //  menu->setItemVisible(std::string("Impostor seperator"), false);
     //}
 
-    //return TRUE;
+    //return true;
     mList = getChild<FSScrollListCtrl>("bump_list");
     mList->setContextMenu(&gFSBumpListMenu);
 
@@ -391,7 +391,7 @@ void FSBumpListMenu::onContextMenuItemClick(const LLSD& userdata)
 
             if (!bumps_text.empty())
             {
-                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(bumps_text), 0, bumps_text.size() );
+                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(bumps_text), 0, static_cast<S32>(bumps_text.size()));
             }
         }
     }

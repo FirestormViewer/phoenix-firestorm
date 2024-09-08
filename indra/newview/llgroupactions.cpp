@@ -146,7 +146,7 @@ public:
         }
 
         LLUUID group_id;
-        if (!group_id.set(tokens[0], FALSE))
+        if (!group_id.set(tokens[0], false))
         {
             return false;
         }
@@ -214,7 +214,7 @@ public:
             }
             else if (!gdatap->isMemberDataComplete())
             {
-                LL_WARNS() << "LLGroupMgr::getInstance()->getGroupData()->isMemberDataComplete() was FALSE" << LL_ENDL;
+                LL_WARNS() << "LLGroupMgr::getInstance()->getGroupData()->isMemberDataComplete() was false" << LL_ENDL;
                 processGroupData();
                 mRequestProcessed = true;
             }
@@ -288,7 +288,7 @@ void LLGroupActions::startCall(const LLUUID& group_id)
     }
 // [/RLVa:KB]
 
-    LLUUID session_id = gIMMgr->addSession(gdata.mName, IM_SESSION_GROUP_START, group_id, true);
+    LLUUID session_id = gIMMgr->addSession(gdata.mName, IM_SESSION_GROUP_START, group_id, LLSD());
     if (session_id == LLUUID::null)
     {
         LL_WARNS() << "Error adding session" << LL_ENDL;
@@ -420,8 +420,8 @@ void LLGroupActions::processLeaveGroupDataResponse(const LLUUID group_id)
     if (gdatap->mMembershipFee > 0)
     {
         args["COST"] = gdatap->mMembershipFee;
-        LLNotificationsUtil::add("GroupLeaveConfirmMember", args, payload, onLeaveGroup);
-    }
+    LLNotificationsUtil::add("GroupLeaveConfirmMember", args, payload, onLeaveGroup);
+}
     else
     {
         LLNotificationsUtil::add("GroupLeaveConfirmMemberNoFee", args, payload, onLeaveGroup);
@@ -483,7 +483,7 @@ void LLGroupActions::show(const LLUUID &group_id, bool expand_notices_tab)
     //LLFloater *floater = LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("people");
     //if (!floater->isFrontmost())
     //{
-    //    floater->setVisibleAndFrontmost(TRUE, params);
+    //    floater->setVisibleAndFrontmost(true, params);
     //}
     LLFloater* floater = nullptr;
     if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
@@ -491,7 +491,7 @@ void LLGroupActions::show(const LLUUID &group_id, bool expand_notices_tab)
         if (expand_notices_tab)
             floater = FSFloaterGroup::openGroupFloater(params);
         else
-            floater = FSFloaterGroup::openGroupFloater(group_id);
+        floater = FSFloaterGroup::openGroupFloater(group_id);
     }
     else
     {
@@ -511,11 +511,11 @@ void LLGroupActions::show(const LLUUID &group_id, bool expand_notices_tab)
     {
         if (floater->isMinimized())
         {
-            floater->setMinimized(FALSE);
+            floater->setMinimized(false);
         }
         if (!floater->hasFocus())
         {
-            floater->setFocus(TRUE);
+            floater->setFocus(true);
         }
     }
     // </FS:Ansariel>

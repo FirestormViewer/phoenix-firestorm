@@ -37,11 +37,9 @@ FSFloaterPartialInventory::FSFloaterPartialInventory(const LLSD& key) : LLFloate
     mRootFolderId = key["start_folder_id"].asUUID();
 }
 
-FSFloaterPartialInventory::~FSFloaterPartialInventory()
-{
-}
+FSFloaterPartialInventory::~FSFloaterPartialInventory() = default;
 
-BOOL FSFloaterPartialInventory::postBuild()
+bool FSFloaterPartialInventory::postBuild()
 {
     LLInventoryPanel::Params params;
     params.start_folder.id(mRootFolderId);
@@ -58,7 +56,7 @@ BOOL FSFloaterPartialInventory::postBuild()
     mFilterEdit = getChild<LLFilterEditor>("flt_search");
     mFilterEdit->setCommitCallback([this](LLUICtrl*, const LLSD& param){ mInventoryList->setFilterSubString(param.asString()); });
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterPartialInventory::onOpen(const LLSD& key)

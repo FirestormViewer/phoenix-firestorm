@@ -106,7 +106,7 @@ void LLWind::decompress(LLBitPack &bitpack, LLGroupHeader *group_headerp)
     // X component
 // <FS:CR> Aurora Sim
     //decode_patch_header(bitpack, &patch_header);
-    decode_patch_header(bitpack, &patch_header, FALSE);
+    decode_patch_header(bitpack, &patch_header, false);
 // </FS:CR> Aurora Sim
     decode_patch(bitpack, buffer);
     decompress_patch(mVelX, buffer, &patch_header);
@@ -114,7 +114,7 @@ void LLWind::decompress(LLBitPack &bitpack, LLGroupHeader *group_headerp)
     // Y component
 // <FS:CR> Aurora Sim
     //decode_patch_header(bitpack, &patch_header);
-    decode_patch_header(bitpack, &patch_header, FALSE);
+    decode_patch_header(bitpack, &patch_header, false);
 // </FS:CR> Aurora Sim
     decode_patch(bitpack, buffer);
     decompress_patch(mVelY, buffer, &patch_header);

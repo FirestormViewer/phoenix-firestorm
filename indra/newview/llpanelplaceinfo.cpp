@@ -74,7 +74,7 @@ LLPanelPlaceInfo::~LLPanelPlaceInfo()
 }
 
 //virtual
-BOOL LLPanelPlaceInfo::postBuild()
+bool LLPanelPlaceInfo::postBuild()
 {
     mTitle = getChild<LLTextBox>("title");
     mCurrentTitle = mTitle->getText();
@@ -106,7 +106,7 @@ BOOL LLPanelPlaceInfo::postBuild()
     }
     // </FS:Ansariel>
 
-    return TRUE;
+    return true;
 }
 
 //virtual
@@ -249,7 +249,7 @@ void LLPanelPlaceInfo::setErrorStatus(S32 status, const std::string& reason)
     mRegionTitle.clear();
 
     // Enable "Back" button that was disabled when parcel request was sent.
-    getChild<LLButton>("back_btn")->setEnabled(TRUE);
+    getChild<LLButton>("back_btn")->setEnabled(true);
 }
 
 // virtual
@@ -331,11 +331,11 @@ void LLPanelPlaceInfo::processParcelInfo(const LLParcelData& parcel_data)
 }
 
 // virtual
-void LLPanelPlaceInfo::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLPanelPlaceInfo::reshape(S32 width, S32 height, bool called_from_parent)
 {
 
     // This if was added to force collapsing description textbox on Windows at the beginning of reshape
-    // (the only case when reshape is skipped here is when it's caused by this textbox, so called_from_parent is FALSE)
+    // (the only case when reshape is skipped here is when it's caused by this textbox, so called_from_parent is false)
     // This way it is consistent with Linux where topLost collapses textbox at the beginning of reshape.
     // On windows it collapsed only after reshape which caused EXT-8342.
     if(called_from_parent)
@@ -394,7 +394,7 @@ void LLPanelPlaceInfo::onAvatarNameCache(const LLUUID& agent_id,
 
 
 // <FS:Ansariel> FIRE-817: Separate place details floater
-void LLPanelPlaceInfo::setHeaderVisible(BOOL visible)
+void LLPanelPlaceInfo::setHeaderVisible(bool visible)
 {
     getChildView("header_container")->setVisible(visible);
 }

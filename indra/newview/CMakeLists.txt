@@ -20,7 +20,6 @@ include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
 include(JPEGEncoderBasic)
-include(JsonCpp)
 include(LLAppearance)
 include(LLAudio)
 include(LLCA)
@@ -225,7 +224,6 @@ set(viewer_SOURCE_FILES
     llblockedlistitem.cpp
     llblocklist.cpp
     llbox.cpp
-    #llbreadcrumbview.cpp #<FS:Ansariel> Unused
     llbrowsernotification.cpp
     llbuycurrencyhtml.cpp
     llcallingcard.cpp
@@ -485,7 +483,6 @@ set(viewer_SOURCE_FILES
     lllandmarkactions.cpp
     lllandmarklist.cpp
     lllegacyatmospherics.cpp
-    #lllistbrowser.cpp #<FS:Ansariel> Unused
     lllistcontextmenu.cpp
     lllistview.cpp
     lllocalbitmaps.cpp
@@ -625,6 +622,7 @@ set(viewer_SOURCE_FILES
     llpathfindingobject.cpp
     llpathfindingobjectlist.cpp
     llpathfindingpathtool.cpp
+    llpbrterrainfeatures.cpp
     llpersistentnotificationstorage.cpp
     llphysicsmotion.cpp
     llphysicsshapebuilderutil.cpp
@@ -651,7 +649,7 @@ set(viewer_SOURCE_FILES
     llregioninfomodel.cpp
     llregionposition.cpp
     llremoteparcelrequest.cpp
-    #llsavedsettingsglue.cpp #<FS:Ansariel> Unused
+    llsaveoutfitcombobtn.cpp
     #llsaveoutfitcombobtn.cpp #<FS:Ansariel> Unused
     llscenemonitor.cpp
     llsceneview.cpp
@@ -748,7 +746,6 @@ set(viewer_SOURCE_FILES
     llurlhistory.cpp
     llurllineeditorctrl.cpp
     llurlwhitelist.cpp
-    #llvectorperfoptions.cpp #<FS:Ansariel> Unused
     llversioninfo.cpp
     llviewchildren.cpp
     llviewerassetstats.cpp
@@ -819,6 +816,7 @@ set(viewer_SOURCE_FILES
     llvoiceclient.cpp
     llvoicevisualizer.cpp
     llvoicevivox.cpp
+    llvoicewebrtc.cpp
     llvoinventorylistener.cpp
     llvopartgroup.cpp
     llvosky.cpp
@@ -1032,7 +1030,6 @@ set(viewer_HEADER_FILES
     llblockedlistitem.h
     llblocklist.h
     llbox.h
-    #llbreadcrumbview.h #<FS:Ansariel> Unused
     llbuycurrencyhtml.h
     llcallingcard.h
     llcapabilityprovider.h
@@ -1293,7 +1290,6 @@ set(viewer_HEADER_FILES
     lllandmarkactions.h
     lllandmarklist.h
     lllightconstants.h
-    #lllistbrowser.h #<FS:Ansariel> Unused
     lllistcontextmenu.h
     lllistview.h
     lllocalbitmaps.h
@@ -1420,6 +1416,7 @@ set(viewer_HEADER_FILES
     llpathfindingobject.h
     llpathfindingobjectlist.h
     llpathfindingpathtool.h
+    llpbrterrainfeatures.h
     llpersistentnotificationstorage.h
     llphysicsmotion.h
     llphysicsshapebuilderutil.h
@@ -1449,7 +1446,6 @@ set(viewer_HEADER_FILES
     llresourcedata.h
     llrootview.h
     #llsavedsettingsglue.h #<FS:Ansariel> Unused
-    #llsaveoutfitcombobtn.h #<FS:Ansariel> Unused
     llscenemonitor.h
     llsceneview.h
     llscreenchannel.h
@@ -1549,7 +1545,6 @@ set(viewer_HEADER_FILES
     llurlhistory.h
     llurllineeditorctrl.h
     llurlwhitelist.h
-    #llvectorperfoptions.h #<FS:Ansariel> Unused
     llversioninfo.h
     llviewchildren.h
     llviewerassetstats.h
@@ -1619,6 +1614,7 @@ set(viewer_HEADER_FILES
     llvoiceclient.h
     llvoicevisualizer.h
     llvoicevivox.h
+    llvoicewebrtc.h
     llvoinventorylistener.h
     llvopartgroup.h
     llvosky.h
@@ -1642,7 +1638,6 @@ set(viewer_HEADER_FILES
     llworldmapview.h
     llxmlrpclistener.h
     llxmlrpctransaction.h
-    macmain.h
     noise.h
     particleeditor.h
     permissionstracker.h
@@ -1765,7 +1760,6 @@ if (DARWIN)
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
     firestorm_icon.icns
-    macview.r
     Info-Firestorm.plist
     Firestorm.xib/
     # CMake doesn't seem to support Xcode language variants well just yet
@@ -1840,6 +1834,7 @@ if (LINUX)
 endif (LINUX)
 
 if (WINDOWS)
+
     list(APPEND viewer_SOURCE_FILES
          growlmanager.cpp
          growlnotifierwin.cpp
@@ -2102,6 +2097,12 @@ source_group("Firestorm Resources" FILES ${viewer_FS_RESOURCES})
 set_source_files_properties(${viewer_FS_RESOURCES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 list(APPEND viewer_SOURCE_FILES ${viewer_FS_RESOURCES})
+
+file(GLOB viewer_PY_SCRIPTS *.py)
+source_group("Python Scripts" FILES ${viewer_PY_SCRIPTS})
+set_source_files_properties(${viewer_PY_SCRIPTS}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_PY_SCRIPTS})
 # </FS:Ansariel>
 
 if (WINDOWS)
@@ -2184,6 +2185,7 @@ if (WINDOWS)
       #${SHARED_LIB_STAGING_DIR}/openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
       ${SHARED_LIB_STAGING_DIR}/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/uriparser.dll
+      ${SHARED_LIB_STAGING_DIR}/llwebrtc.dll
       #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/SLVoice.exe
       #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/libsndfile-1.dll
       #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/vivoxoal.dll
@@ -2261,13 +2263,14 @@ if (WINDOWS)
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         stage_third_party_libs
+        llwebrtc
         ${COPY_INPUT_DEPENDENCIES}
       COMMENT "Performing viewer_manifest copy"
       )
 
     add_custom_target(copy_w_viewer_manifest ALL DEPENDS ${CMAKE_CFG_INTDIR}/copy_touched.bat)
 
-    add_dependencies(${VIEWER_BINARY_NAME} stage_third_party_libs llcommon copy_w_viewer_manifest)
+    add_dependencies(${VIEWER_BINARY_NAME} stage_third_party_libs llcommon llwebrtc copy_w_viewer_manifest)
 
     if (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
@@ -2396,6 +2399,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         llcorehttp
         llcommon
         llmeshoptimizer
+        llwebrtc
         ll::ndof
         lllogin
         llprimitive
@@ -2669,37 +2673,29 @@ if (INSTALL)
   include(${CMAKE_CURRENT_SOURCE_DIR}/ViewerInstall.cmake)
 endif (INSTALL)
 
-# Note that the conventional VIEWER_SYMBOL_FILE is set by ../../build.sh
 if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIEWER_SYMBOL_FILE)
   if (USE_BUGSPLAT)
     # BugSplat symbol-file generation
     if (WINDOWS)
-	#<FS:ND> Comment this out, we do our own symbol package which also includes the exe and build_data.json 
-      # Just pack up a tarball containing only the .pdb file for the
-      # executable. Because we intend to use cygwin tar, we must render
-      # VIEWER_SYMBOL_FILE in cygwin path syntax.
-      # execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
-        # OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
-        # OUTPUT_STRIP_TRAILING_WHITESPACE)
-      # execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
-        # OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
-        # OUTPUT_STRIP_TRAILING_WHITESPACE)
-      # add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
-        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.xz;
-        # # testing a string suffix is painful enough in CMake language that
-        # # we'll continue assuming it until forced to generalize.
+      #<FS:ND> Comment this out, we do our own symbol package which also includes the exe and build_data.json 
+      # set(VIEWER_APP_SYMBOLS_ARCHIVE "${SYMBOLS_STAGING_DIR}.sym.tar.xz")
+      # set_target_properties( ${VIEWER_BINARY_NAME} PROPERTIES PDB_OUTPUT_DIRECTORY "${SYMBOLS_STAGING_DIR}")
+
+      # # Just pack up a tarball containing only the .pdb files for the
+      # # executables.
+      # add_custom_command(OUTPUT "${VIEWER_APP_SYMBOLS_ARCHIVE}"
         # COMMAND "tar"
         # ARGS
-          # "cjf"
-          # "${VIEWER_SYMBOL_FILE_CYGWIN}"
-          # "-C"
-          # "${PARENT_DIRECTORY_CYGWIN}"
-          # "firestorm-bin.pdb"
-        # DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
-        # COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
+          # "cJf"
+          # "${VIEWER_CHANNEL}.sym.tar.xz"
+          # "${VIEWER_CHANNEL}"
+        # DEPENDS "${VIEWER_BINARY_NAME}" llwebrtc
+        # WORKING_DIRECTORY "${SYMBOLS_STAGING_DIR}/.."
+        # COMMENT "Packing viewer PDBs into ${VIEWER_APP_SYMBOLS_ARCHIVE}"
         # )
-      # add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
-      # add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
+      # add_custom_target(generate_symbols DEPENDS "${VIEWER_APP_SYMBOLS_ARCHIVE}")
+      # add_dependencies(generate_symbols ${VIEWER_BINARY_NAME} llwebrtc)
+
     endif (WINDOWS)
     if (DARWIN)
       # Have to run dsymutil first, then pack up the resulting .dSYM directory

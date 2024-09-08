@@ -98,7 +98,7 @@ void RlvUIEnabler::onRefreshHoverText()
 void RlvUIEnabler::onToggleMovement()
 {
     if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) && (gAgent.getFlying()) )
-        gAgent.setFlying(FALSE);
+        gAgent.setFlying(false);
     if ( (gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN)) && (gAgent.getAlwaysRun()) )
         gAgent.clearAlwaysRun();
     if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN)) && (gAgent.getTempRun()) )
@@ -147,7 +147,7 @@ void RlvUIEnabler::onToggleShowLoc()
             if (pTpHistoryStg->compareByTitleAndGlobalPos(tpItemStg, LLTeleportHistoryPersistentItem(tpItem.mTitle, tpItem.mGlobalPos)))
             {
                 // TODO-RLVa: [RLVa-1.2.2] Is there a reason why LLTeleportHistoryStorage::removeItem() doesn't trigger history changed?
-                pTpHistoryStg->removeItem(pTpHistoryStg->getItems().size() - 1);
+                pTpHistoryStg->removeItem(static_cast<S32>(pTpHistoryStg->getItems().size()) - 1);
                 pTpHistoryStg->mHistoryChangedSignal(-1);
             }
         }
@@ -201,7 +201,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 
     // Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
     LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-    LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+    LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", true) : NULL;  //AO: firestorm specific
     RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
     if (pNetMapPanel)
     {
@@ -213,7 +213,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 
     // Break/reestablish the visibility connection for the radar panel embedded minimap instance
     LLFloater* pRadarFloater = LLFloaterReg::getInstance("fs_radar");
-    LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+    LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", true) : NULL;  //AO: firestorm specific
     RLV_ASSERT( (pRadarFloater) && (pRadarNetMapPanel) );
     if (pRadarNetMapPanel)
     {
@@ -425,8 +425,8 @@ bool RlvUIEnabler::canViewParcelProperties()
             const LLUUID& idOwner = pParcel->getOwnerID();
             if ( (idOwner != gAgent.getID()) )
             {
-                S32 count = gAgent.mGroups.size();
-                for (S32 i = 0; i < count; ++i)
+                auto count = gAgent.mGroups.size();
+                for (size_t i = 0; i < count; ++i)
                 {
                     if (gAgent.mGroups.at(i).mID == idOwner)
                     {

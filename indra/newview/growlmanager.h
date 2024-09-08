@@ -47,11 +47,11 @@ struct GrowlNotification
     bool useDefaultTextForBody;
 };
 
-const U64 GROWL_THROTTLE_TIME = 1000000u; // Maximum spam rate (in microseconds).
-const F32 GROWL_THROTTLE_CLEANUP_PERIOD = 300.f; // How often we clean up the list (in seconds).
-const int GROWL_MAX_BODY_LENGTH = 255; // Arbitrary.
-const std::string GROWL_IM_MESSAGE_TYPE = "Instant Message received";
-const std::string GROWL_KEYWORD_ALERT_TYPE = "Keyword Alert";
+constexpr U64 GROWL_THROTTLE_TIME = 1000000u; // Maximum spam rate (in microseconds).
+constexpr F32 GROWL_THROTTLE_CLEANUP_PERIOD = 300.f; // How often we clean up the list (in seconds).
+constexpr int GROWL_MAX_BODY_LENGTH = 255; // Arbitrary.
+constexpr char GROWL_IM_MESSAGE_TYPE[] = "Instant Message received";
+constexpr char GROWL_KEYWORD_ALERT_TYPE[] = "Keyword Alert";
 
 class GrowlManager : public LLEventTimer
 {
@@ -60,7 +60,7 @@ class GrowlManager : public LLEventTimer
 public:
     GrowlManager();
     ~GrowlManager();
-    BOOL tick();
+    bool tick() override;
 
     static void initiateManager();
     static void destroyManager();

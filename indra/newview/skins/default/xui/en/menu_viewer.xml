@@ -847,42 +847,6 @@
           parameter="fs_discord"/>
       </menu_item_call>
         <menu_item_separator/>
-        <menu
-         label="Voice morphing"
-         name="VoiceMorphing"
-         visibility_control="VoiceMorphingEnabled">
-            <menu_item_check
-             label="No voice morphing"
-             name="NoVoiceMorphing">
-                <menu_item_check.on_check
-                 function="Communicate.VoiceMorphing.NoVoiceMorphing.Check" />
-                <menu_item_check.on_click
-                 function="Communicate.VoiceMorphing.NoVoiceMorphing.Click" />
-            </menu_item_check>
-            <menu_item_separator/>
-            <menu_item_check
-             label="Preview..."
-             name="Preview">
-                <menu_item_check.on_check
-                 function="Floater.Visible"
-                 parameter="voice_effect" />
-                <menu_item_check.on_click
-                 function="Floater.Toggle"
-                 parameter="voice_effect" />
-            </menu_item_check>
-            <menu_item_call
-             label="Subscribe..."
-             name="Subscribe">
-                <menu_item_call.on_click
-                 function="Communicate.VoiceMorphing.Subscribe" />
-            </menu_item_call>
-            <menu_item_call
-             label="Premium perk..."
-             name="PremiumPerk">
-                <menu_item_call.on_click
-                 function="Communicate.VoiceMorphing.PremiumPerk" />
-            </menu_item_call>
-        </menu>
         <menu_item_check
          name="Conversation Log..."
          label="Conversation Log...">
@@ -1694,16 +1658,40 @@
           function="Floater.Toggle"
           parameter="fs_avatar_render_settings" />
       </menu_item_call>
-      <menu_item_check
-        label="Always show Friends fully"
-        name="Always show Friends normally">
-        <menu_item_check.on_click
-          function="ToggleControl"
-          parameter="AlwaysRenderFriends"/>
-        <menu_item_check.on_check
-          function="CheckControl"
-          parameter="AlwaysRenderFriends"/>
-      </menu_item_check>
+      <menu
+        label="Avatar Display"
+        name="AvatarComplexityMode">
+        <menu_item_check
+          label="Limit by Complexity"
+          name="complexity_limit_everone">
+          <menu_item_check.on_click
+            function="World.RenderAvatarComplexityMode"
+            parameter="everyone"/>
+          <menu_item_check.on_check
+            function="World.CheckRenderAvatarComplexityMode"
+            parameter="everyone"/>
+        </menu_item_check>
+        <menu_item_check
+          label="Always show Friends"
+          name="complexity_always_show_friends">
+          <menu_item_check.on_click
+            function="World.RenderAvatarComplexityMode"
+            parameter="always_friends"/>
+          <menu_item_check.on_check
+            function="World.CheckRenderAvatarComplexityMode"
+            parameter="always_friends"/>
+        </menu_item_check>
+        <menu_item_check
+          label="Only show Friends"
+          name="complexity_only_show_friends">
+          <menu_item_check.on_click
+            function="World.RenderAvatarComplexityMode"
+            parameter="only_friends"/>
+          <menu_item_check.on_check
+            function="World.CheckRenderAvatarComplexityMode"
+            parameter="only_friends"/>
+        </menu_item_check>
+     </menu>
       <menu_item_check
         label="Show Friends only"
         name="Render Friends Only">
@@ -4209,6 +4197,70 @@
                 parameter="mem_leaking" />
                </menu_item_call>
         </menu>
+      <menu
+         create_jump_keys="true"
+         label="GLTF"
+         name="GLTF"
+         tear_off="true">
+        <menu_item_call
+         label="Open..."
+         name="Open...">
+            <!--<menu_item_call.on_enable
+             function="EnableGLTF"/>-->
+          <menu_item_call.on_click
+           function="Advanced.ClickGLTFOpen" />
+        </menu_item_call>
+        <menu_item_call
+         label="Save As..."
+         name="Save As...">
+          <menu_item_call.on_enable
+             function="EnableGLTFSaveAs"/>
+          <menu_item_call.on_click
+           function="Advanced.ClickGLTFSaveAs" />
+        </menu_item_call>
+        <menu_item_call
+         label="Upload..."
+         name="Upload...">
+          <menu_item_call.on_enable
+             function="EnableGLTFUpload"/>
+          <menu_item_call.on_click
+           function="Advanced.ClickGLTFUpload" />
+        </menu_item_call>
+      </menu>
+      <menu
+         create_jump_keys="true"
+         label="Video"
+         name="Video"
+         tear_off="true">
+        <menu_item_call
+         label="1080x1920"
+         name="1080x1920">
+          <menu_item_call.on_click
+           function="Advanced.ClickResizeWindow"
+            parameter="1080x1920"/>
+        </menu_item_call>
+        <menu_item_call
+         label="1920x1080"
+         name="1920x1080">
+          <menu_item_call.on_click
+           function="Advanced.ClickResizeWindow"
+            parameter="1920x1080"/>
+        </menu_item_call>
+        <menu_item_call
+         label="1280x720"
+         name="1280x720">
+          <menu_item_call.on_click
+           function="Advanced.ClickResizeWindow"
+            parameter="1280x720"/>
+          </menu_item_call>
+        <menu_item_call
+          label="720x1280"
+         name="720x1280">
+          <menu_item_call.on_click
+           function="Advanced.ClickResizeWindow"
+            parameter="720x1280"/>
+          </menu_item_call>
+      </menu>
         <menu
          create_jump_keys="true"
          label="Render Tests"
@@ -4260,12 +4312,6 @@
            name="HDRI Preview">
             <menu_item_call.on_click
              function="Advanced.ClickHDRIPreview" />
-          </menu_item_call>
-          <menu_item_call
-           label="GLTF Scene Preview"
-           name="GLTF Scene Preview">
-            <menu_item_call.on_click
-             function="Advanced.ClickGLTFScenePreview" />
           </menu_item_call>
         </menu>
       <menu
@@ -5359,6 +5405,16 @@
                      function="ToggleControl"
                      parameter="AllowSelectAvatar" />
                 </menu_item_check>
+                <menu_item_check
+                 label="Render Only Friends"
+                 name="Render Only Friends">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="RenderAvatarFriendsOnly" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="RenderAvatarFriendsOnly" />
+                </menu_item_check>
             </menu>
             <!--<menu
              create_jump_keys="true"
@@ -5456,6 +5512,16 @@
                  parameter="DebugCharacterVis" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleDebugCharacterVis" />
+            </menu_item_check>
+            <menu_item_check
+             label="Debug Character Rez State"
+             name="Debug Character Rez State">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="NameTagDebugAVRezState" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="NameTagDebugAVRezState" />
             </menu_item_check>
             <menu_item_check
              label="Show Collision Skeleton"

@@ -68,7 +68,7 @@ static LLDefaultChildRegistry::Register<LLScrollListCtrl> r("scroll_list");
 // local structures & classes.
 struct SortScrollListItem
 {
-    SortScrollListItem(const std::vector<std::pair<S32, BOOL> >& sort_orders,const LLScrollListCtrl::sort_signal_t* sort_signal, bool alternate_sort)
+    SortScrollListItem(const std::vector<std::pair<S32, bool> >& sort_orders,const LLScrollListCtrl::sort_signal_t* sort_signal, bool alternate_sort)
     :   mSortOrders(sort_orders)
     ,   mSortSignal(sort_signal)
     ,   mAltSort(alternate_sort)
@@ -82,7 +82,7 @@ struct SortScrollListItem
              it != mSortOrders.rend(); ++it)
         {
             S32 col_idx = it->first;
-            BOOL sort_ascending = it->second;
+            bool sort_ascending = it->second;
 
             S32 order = sort_ascending ? 1 : -1; // ascending or descending sort for this column?
 
@@ -116,7 +116,7 @@ struct SortScrollListItem
     }
 
 
-    typedef std::vector<std::pair<S32, BOOL> > sort_order_t;
+    typedef std::vector<std::pair<S32, bool> > sort_order_t;
     const LLScrollListCtrl::sort_signal_t* mSortSignal;
     const sort_order_t& mSortOrders;
     const bool mAltSort;
@@ -421,7 +421,7 @@ LLScrollListCtrl::~LLScrollListCtrl()
 }
 
 
-BOOL LLScrollListCtrl::setMaxItemCount(S32 max_count)
+bool LLScrollListCtrl::setMaxItemCount(S32 max_count)
 {
     if (max_count >= getItemCount())
     {
@@ -457,10 +457,10 @@ S32 LLScrollListCtrl::getItemCount() const
     }
     // </FS:Ansariel> Fix for FS-specific people list (radar)
 
-    return mItemList.size();
+    return static_cast<S32>(mItemList.size());
 }
 
-BOOL LLScrollListCtrl::hasSelectedItem() const
+bool LLScrollListCtrl::hasSelectedItem() const
 {
     item_list::iterator iter;
     for (iter = mItemList.begin(); iter < mItemList.end(); )
@@ -468,11 +468,11 @@ BOOL LLScrollListCtrl::hasSelectedItem() const
         LLScrollListItem* itemp = *iter;
         if (itemp && itemp->getSelected())
         {
-            return TRUE;
+            return true;
         }
         iter++;
     }
-    return FALSE;
+    return false;
 }
 
 // virtual LLScrolListInterface function (was deleteAllItems)
@@ -613,7 +613,7 @@ LLScrollListItem* LLScrollListCtrl::getItem(const LLSD& sd) const
 }
 
 
-void LLScrollListCtrl::reshape( S32 width, S32 height, BOOL called_from_parent )
+void LLScrollListCtrl::reshape( S32 width, S32 height, bool called_from_parent )
 {
     LLUICtrl::reshape( width, height, called_from_parent );
 
@@ -641,7 +641,7 @@ void LLScrollListCtrl::updateLayout()
     // how many lines of content in a single "page"
     S32 page_lines =  getLinesPerPage();
 
-    BOOL scrollbar_visible = mLineHeight * getItemCount() > mItemListRect.getHeight();
+    bool scrollbar_visible = mLineHeight * getItemCount() > mItemListRect.getHeight();
     if (scrollbar_visible)
     {
         // provide space on the right for scrollbar
@@ -683,9 +683,9 @@ LLRect LLScrollListCtrl::getRequiredRect()
 }
 
 
-BOOL LLScrollListCtrl::addItem( LLScrollListItem* item, EAddPosition pos, BOOL requires_column )
+bool LLScrollListCtrl::addItem( LLScrollListItem* item, EAddPosition pos, bool requires_column )
 {
-    BOOL not_too_big = getItemCount() < mMaxItemCount;
+    bool not_too_big = getItemCount() < mMaxItemCount;
     if (not_too_big)
     {
         switch( pos )
@@ -943,12 +943,12 @@ void LLScrollListCtrl::setPageLines(S32 new_page_lines)
     updateLayout();
 }
 
-BOOL LLScrollListCtrl::selectFirstItem()
+bool LLScrollListCtrl::selectFirstItem()
 {
-    BOOL success = FALSE;
+    bool success = false;
 
     // our $%&@#$()^%#$()*^ iterators don't let us check against the first item inside out iteration
-    BOOL first_item = TRUE;
+    bool first_item = true;
 
     item_list::iterator iter;
     for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
@@ -968,7 +968,7 @@ BOOL LLScrollListCtrl::selectFirstItem()
                     selectItem(itemp, -1);
                 }
             }
-            success = TRUE;
+            success = true;
             mOriginalSelection = 0;
         }
         else
@@ -986,7 +986,7 @@ BOOL LLScrollListCtrl::selectFirstItem()
 
 // Deselects all other items
 // virtual
-BOOL LLScrollListCtrl::selectNthItem( S32 target_index )
+bool LLScrollListCtrl::selectNthItem( S32 target_index )
 {
     // <FS:Ansariel> FIRE-30571: Comboboxes select all items then pressing Page-Up
     target_index = llclamp(target_index, 0, (S32)mItemList.size() - 1);
@@ -994,11 +994,11 @@ BOOL LLScrollListCtrl::selectNthItem( S32 target_index )
 }
 
 // virtual
-BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
+bool LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
 {
     if (mItemList.empty())
     {
-        return FALSE;
+        return false;
     }
 
     // make sure sort is up to date
@@ -1012,7 +1012,7 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
     else
         last_index = llclamp(last_index, first_index, listlen-1);
 
-    BOOL success = FALSE;
+    bool success = false;
     S32 index = 0;
     for (item_list::iterator iter = mItemList.begin(); iter != mItemList.end(); )
     {
@@ -1036,8 +1036,8 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
             if( itemp->getEnabled() )
             {
                 // TODO: support range selection for cells
-                selectItem(itemp, -1, FALSE);
-                success = TRUE;
+                selectItem(itemp, -1, false);
+                success = true;
             }
         }
         else
@@ -1209,7 +1209,7 @@ S32 LLScrollListCtrl::selectMultiple( uuid_vec_t ids )
             if (item->getEnabled() && (item->getUUID() == (*iditr)))
             {
                 // TODO: support multiple selection for cells
-                selectItem(item, -1, FALSE);
+                selectItem(item, -1, false);
                 ++count;
                 break;
             }
@@ -1266,7 +1266,7 @@ S32 LLScrollListCtrl::getItemIndex( const LLUUID& target_id ) const
     return -1;
 }
 
-void LLScrollListCtrl::selectPrevItem( BOOL extend_selection)
+void LLScrollListCtrl::selectPrevItem( bool extend_selection)
 {
     LLScrollListItem* prev_item = NULL;
 
@@ -1311,7 +1311,7 @@ void LLScrollListCtrl::selectPrevItem( BOOL extend_selection)
 }
 
 
-void LLScrollListCtrl::selectNextItem( BOOL extend_selection)
+void LLScrollListCtrl::selectNextItem( bool extend_selection)
 {
     LLScrollListItem* next_item = NULL;
 
@@ -1356,7 +1356,7 @@ void LLScrollListCtrl::selectNextItem( BOOL extend_selection)
 
 
 
-void LLScrollListCtrl::deselectAllItems(BOOL no_commit_on_change)
+void LLScrollListCtrl::deselectAllItems(bool no_commit_on_change)
 {
     item_list::iterator iter;
     for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
@@ -1403,9 +1403,9 @@ LLScrollListItem* LLScrollListCtrl::addSeparator(EAddPosition pos)
 // Selects first enabled item of the given name.
 // Returns false if item not found.
 // Calls getItemByLabel in order to combine functionality
-BOOL LLScrollListCtrl::selectItemByLabel(const std::string& label, BOOL case_sensitive, S32 column/* = 0*/)
+bool LLScrollListCtrl::selectItemByLabel(const std::string& label, bool case_sensitive, S32 column/* = 0*/)
 {
-    deselectAllItems(TRUE);     // ensure that no stale items are selected, even if we don't find a match
+    deselectAllItems(true);     // ensure that no stale items are selected, even if we don't find a match
     LLScrollListItem* item = getItemByLabel(label, case_sensitive, column);
 
     bool found = NULL != item;
@@ -1422,7 +1422,7 @@ BOOL LLScrollListCtrl::selectItemByLabel(const std::string& label, BOOL case_sen
     return found;
 }
 
-LLScrollListItem* LLScrollListCtrl::getItemByLabel(const std::string& label, BOOL case_sensitive, S32 column)
+LLScrollListItem* LLScrollListCtrl::getItemByLabel(const std::string& label, bool case_sensitive, S32 column)
 {
     if (label.empty())  //RN: assume no empty items
     {
@@ -1453,26 +1453,26 @@ LLScrollListItem* LLScrollListCtrl::getItemByLabel(const std::string& label, BOO
 }
 
 
-BOOL LLScrollListCtrl::selectItemByPrefix(const std::string& target, BOOL case_sensitive, S32 column)
+bool LLScrollListCtrl::selectItemByPrefix(const std::string& target, bool case_sensitive, S32 column)
 {
     return selectItemByPrefix(utf8str_to_wstring(target), case_sensitive, column);
 }
 
 // Selects first enabled item that has a name where the name's first part matched the target string.
 // Returns false if item not found.
-BOOL LLScrollListCtrl::selectItemByPrefix(const LLWString& target, BOOL case_sensitive, S32 column)
+bool LLScrollListCtrl::selectItemByPrefix(const LLWString& target, bool case_sensitive, S32 column)
 // <FS:Ansariel> Allow selection by substring match
 {
     return selectItemByStringMatch(target, true, case_sensitive);
 }
 
-BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool prefix_match, BOOL case_sensitive, S32 column)
+bool LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool prefix_match, bool case_sensitive, S32 column)
 // </FS:Ansariel>
 {
-    BOOL found = FALSE;
+    bool found = false;
 
     LLWString target_trimmed( target );
-    S32 target_len = target_trimmed.size();
+    auto target_len = target_trimmed.size();
 
     if( 0 == target_len )
     {
@@ -1483,11 +1483,11 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
             LLScrollListItem* item = *iter;
             // Only select enabled items with matching names
             LLScrollListCell* cellp = item->getColumn(column == -1 ? getSearchColumn() : column);
-            BOOL select = cellp ? item->getEnabled() && ('\0' == cellp->getValue().asString()[0]) : FALSE;
+            bool select = cellp ? item->getEnabled() && ('\0' == cellp->getValue().asString()[0]) : false;
             if (select)
             {
                 selectItem(item, -1);
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -1520,8 +1520,8 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
             LLWStringUtil::trim(trimmed_label);
 
             // <FS:Ansariel> Allow selection by substring match
-            //BOOL select = item->getEnabled() && trimmed_label.compare(0, target_trimmed.size(), target_trimmed) == 0;
-            BOOL select;
+            //bool select = item->getEnabled() && trimmed_label.compare(0, target_trimmed.size(), target_trimmed) == 0;
+            bool select;
             if (prefix_match)
             {
                 select = item->getEnabled() && trimmed_label.compare(0, target_trimmed.size(), target_trimmed) == 0;
@@ -1535,10 +1535,10 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
             if (select)
             {
                 // find offset of matching text (might have leading whitespace)
-                S32 offset = item_label.find(target_trimmed);
-                cellp->highlightText(offset, target_trimmed.size());
+                auto offset = item_label.find(target_trimmed);
+                cellp->highlightText(static_cast<S32>(offset), static_cast<S32>(target_trimmed.size()));
                 selectItem(item, -1);
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -1562,7 +1562,7 @@ U32 LLScrollListCtrl::searchItems(const LLWString& substring, bool case_sensitiv
     U32 found = 0;
 
     LLWString substring_trimmed(substring);
-    S32 len = substring_trimmed.size();
+    auto len = substring_trimmed.size();
 
     if (0 == len)
     {
@@ -1571,7 +1571,7 @@ U32 LLScrollListCtrl::searchItems(const LLWString& substring, bool case_sensitiv
     }
     else
     {
-        deselectAllItems(TRUE);
+        deselectAllItems(true);
         if (!case_sensitive)
         {
             // do comparisons in lower case
@@ -1610,8 +1610,8 @@ U32 LLScrollListCtrl::searchItems(const LLWString& substring, bool case_sensitiv
             if (found_iter != std::string::npos)
             {
                 // find offset of matching text
-                cellp->highlightText(found_iter, substring_trimmed.size());
-                selectItem(item, -1, FALSE);
+                cellp->highlightText(static_cast<S32>(found_iter), static_cast<S32>(substring_trimmed.size()));
+                selectItem(item, -1, false);
 
                 found++;
 
@@ -1637,13 +1637,13 @@ U32 LLScrollListCtrl::searchItems(const LLWString& substring, bool case_sensitiv
 }
 
 // <FS:Ansariel> Allow selection by substring match
-BOOL LLScrollListCtrl::selectItemBySubstring(const std::string& target, BOOL case_sensitive)
+bool LLScrollListCtrl::selectItemBySubstring(const std::string& target, bool case_sensitive)
 {
     return selectItemBySubstring(utf8str_to_wstring(target), case_sensitive);
 }
 
 // Returns false if item not found.
-BOOL LLScrollListCtrl::selectItemBySubstring(const LLWString& target, BOOL case_sensitive)
+bool LLScrollListCtrl::selectItemBySubstring(const LLWString& target, bool case_sensitive)
 {
     return selectItemByStringMatch(target, false, case_sensitive);
 }
@@ -1656,7 +1656,11 @@ const std::string LLScrollListCtrl::getSelectedItemLabel(S32 column) const
     item = getFirstSelected();
     if (item)
     {
-        return item->getColumn(column)->getValue().asString();
+        auto col = item->getColumn(column);
+        if(col)
+        {
+            return col->getValue().asString();
+        }
     }
 
     return LLStringUtil::null;
@@ -1666,7 +1670,7 @@ const std::string LLScrollListCtrl::getSelectedItemLabel(S32 column) const
 // "StringUUID" interface: use this when you're creating a list that contains non-unique strings each of which
 // has an associated, unique UUID, and only one of which can be selected at a time.
 
-LLScrollListItem* LLScrollListCtrl::addStringUUIDItem(const std::string& item_text, const LLUUID& id, EAddPosition pos, BOOL enabled)
+LLScrollListItem* LLScrollListCtrl::addStringUUIDItem(const std::string& item_text, const LLUUID& id, EAddPosition pos, bool enabled)
 {
     if (getItemCount() < mMaxItemCount)
     {
@@ -1681,16 +1685,16 @@ LLScrollListItem* LLScrollListCtrl::addStringUUIDItem(const std::string& item_te
 }
 
 // Select the line or lines that match this UUID
-BOOL LLScrollListCtrl::selectByID( const LLUUID& id )
+bool LLScrollListCtrl::selectByID( const LLUUID& id )
 {
     return selectByValue( LLSD(id) );
 }
 
-BOOL LLScrollListCtrl::setSelectedByValue(const LLSD& value, BOOL selected)
+bool LLScrollListCtrl::setSelectedByValue(const LLSD& value, bool selected)
 {
-    BOOL found = FALSE;
+    bool found = false;
 
-    if (selected && !mAllowMultipleSelection) deselectAllItems(TRUE);
+    if (selected && !mAllowMultipleSelection) deselectAllItems(true);
 
     item_list::iterator iter;
     for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
@@ -1704,12 +1708,12 @@ BOOL LLScrollListCtrl::setSelectedByValue(const LLSD& value, BOOL selected)
                 {
                     LLSD::Binary data1 = value.asBinary();
                     LLSD::Binary data2 = item->getValue().asBinary();
-                    found = std::equal(data1.begin(), data1.end(), data2.begin()) ? TRUE : FALSE;
+                    found = std::equal(data1.begin(), data1.end(), data2.begin());
                 }
             }
             else
             {
-                found = item->getValue().asString() == value.asString() ? TRUE : FALSE;
+                found = item->getValue().asString() == value.asString();
             }
 
             if (found)
@@ -1735,7 +1739,7 @@ BOOL LLScrollListCtrl::setSelectedByValue(const LLSD& value, BOOL selected)
     return found;
 }
 
-BOOL LLScrollListCtrl::isSelected(const LLSD& value) const
+bool LLScrollListCtrl::isSelected(const LLSD& value) const
 {
     item_list::const_iterator iter;
     for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
@@ -1746,7 +1750,7 @@ BOOL LLScrollListCtrl::isSelected(const LLSD& value) const
             return item->getSelected();
         }
     }
-    return FALSE;
+    return false;
 }
 
 LLUUID LLScrollListCtrl::getStringUUIDSelectedItem() const
@@ -1959,14 +1963,14 @@ void LLScrollListCtrl::draw()
     LLUICtrl::draw();
 }
 
-void LLScrollListCtrl::setEnabled(BOOL enabled)
+void LLScrollListCtrl::setEnabled(bool enabled)
 {
     mCanSelect = enabled;
     setTabStop(enabled);
     mScrollbar->setTabStop(!enabled && mScrollbar->getPageSize() < mScrollbar->getDocSize());
 }
 
-BOOL LLScrollListCtrl::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLScrollListCtrl::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
     // <FS> FIRE-10172: Let the LLTextbox handle the mouse scroll if it's visible
     if (mCommentTextView && mCommentTextView->getVisible())
@@ -1975,27 +1979,27 @@ BOOL LLScrollListCtrl::handleScrollWheel(S32 x, S32 y, S32 clicks)
     }
     // </FS>
 
-    BOOL handled = FALSE;
+    bool handled = false;
     // Pretend the mouse is over the scrollbar
     handled = mScrollbar->handleScrollWheel( 0, 0, clicks );
 
     if (mMouseWheelOpaque)
     {
-        return TRUE;
+        return true;
     }
 
     return handled;
 }
 
-BOOL LLScrollListCtrl::handleScrollHWheel(S32 x, S32 y, S32 clicks)
+bool LLScrollListCtrl::handleScrollHWheel(S32 x, S32 y, S32 clicks)
 {
-    BOOL handled = FALSE;
+    bool handled = false;
     // Pretend the mouse is over the scrollbar
     handled = mScrollbar->handleScrollHWheel( 0, 0, clicks );
 
     if (mMouseWheelOpaque)
     {
-        return TRUE;
+        return true;
     }
 
     return handled;
@@ -2013,20 +2017,20 @@ LLRect LLScrollListCtrl::getCellRect(S32 row_index, S32 column_index)
     return cell_rect;
 }
 
-BOOL LLScrollListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 {
     S32 column_index = getColumnIndexFromOffset(x);
     LLScrollListColumn* columnp = getColumn(column_index);
 
-    if (columnp == NULL) return FALSE;
+    if (columnp == NULL) return false;
 
-    BOOL handled = FALSE;
+    bool handled = false;
     // show tooltip for full name of hovered item if it has been truncated
     LLScrollListItem* hit_item = hitItem(x, y);
     if (hit_item)
     {
         LLScrollListCell* hit_cell = hit_item->getColumn(column_index);
-        if (!hit_cell) return FALSE;
+        if (!hit_cell) return false;
         if (hit_cell
             // <FS:Zi> Why would we restrict tool tips to text fields only?
             //         Having them on non-text fields seems really useful
@@ -2047,7 +2051,7 @@ BOOL LLScrollListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
                                         .delay_time(0.2f)
                                         .sticky_rect(sticky_rect));
         }
-        handled = TRUE;
+        handled = true;
     }
 
     // otherwise, look for a tooltip associated with this column
@@ -2060,11 +2064,11 @@ BOOL LLScrollListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
     return handled;
 }
 
-BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 {
-    if (!mCanSelect) return FALSE;
+    if (!mCanSelect) return false;
 
-    BOOL selection_changed = FALSE;
+    bool selection_changed = false;
 
     LLScrollListItem* hit_item = hitItem(x, y);
 
@@ -2106,17 +2110,17 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
                         // </FS:Ansariel> Fix for FS-specific people list (radar)
                         if (item == hit_item || item == lastSelected)
                         {
-                            selectItem(item, getColumnIndexFromOffset(x), FALSE);
+                            selectItem(item, getColumnIndexFromOffset(x), false);
                             selecting = !selecting;
                             if (hit_item == lastSelected)
                             {
                                 // stop selecting now, since we just clicked on our last selected item
-                                selecting = FALSE;
+                                selecting = false;
                             }
                         }
                         if (selecting)
                         {
-                            selectItem(item, getColumnIndexFromOffset(x), FALSE);
+                            selectItem(item, getColumnIndexFromOffset(x), false);
                         }
                     }
                 }
@@ -2131,7 +2135,7 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
                 {
                     if(!(mMaxSelectable > 0 && getAllSelected().size() >= mMaxSelectable))
                     {
-                        selectItem(hit_item, getColumnIndexFromOffset(x), FALSE);
+                        selectItem(hit_item, getColumnIndexFromOffset(x), false);
                     }
                     else
                     {
@@ -2144,7 +2148,7 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
             }
             else
             {
-                deselectAllItems(TRUE);
+                deselectAllItems(true);
                 selectItem(hit_item, getColumnIndexFromOffset(x));
             }
         }
@@ -2165,21 +2169,21 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
     else
     {
         //mLastSelected = NULL;
-        //deselectAllItems(TRUE);
+        //deselectAllItems(true);
     }
 
     return selection_changed;
 }
 
 
-BOOL LLScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-    BOOL handled = childrenHandleMouseDown(x, y, mask) != NULL;
+    bool handled = childrenHandleMouseDown(x, y, mask) != NULL;
 
     if( !handled )
     {
         // set keyboard focus first, in case click action wants to move focus elsewhere
-        setFocus(TRUE);
+        setFocus(true);
 
         // clear selection changed flag because user is starting a selection operation
         mSelectionChanged = false;
@@ -2187,10 +2191,10 @@ BOOL LLScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
         handleClick(x, y, mask);
     }
 
-    return TRUE;
+    return true;
 }
 
-BOOL LLScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     if (hasMouseCapture())
     {
@@ -2216,7 +2220,7 @@ BOOL LLScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     LLScrollListItem *item = hitItem(x, y);
     if (item)
@@ -2309,7 +2313,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
                 menu->show(x, y);
                 LLMenuGL::showPopup(this, menu, x, y);
-                return TRUE;
+                return true;
             }
         }
         //BD - Right Click Context Menu
@@ -2332,7 +2336,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
         }
         return LLUICtrl::handleRightMouseDown(x, y, mask);
     }
-    return FALSE;
+    return false;
 }
 
 void LLScrollListCtrl::showProfile(std::string id, bool is_group)
@@ -2405,10 +2409,10 @@ void LLScrollListCtrl::copySLURLToClipboard(std::string id, bool is_group)
     LLUrlAction::copyURLToClipboard(slurl);
 }
 
-BOOL LLScrollListCtrl::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-    //BOOL handled = FALSE;
-    BOOL handled = handleClick(x, y, mask);
+    //bool handled = false;
+    bool handled = handleClick(x, y, mask);
 
     if (!handled)
     {
@@ -2424,19 +2428,19 @@ BOOL LLScrollListCtrl::handleDoubleClick(S32 x, S32 y, MASK mask)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
-BOOL LLScrollListCtrl::handleClick(S32 x, S32 y, MASK mask)
+bool LLScrollListCtrl::handleClick(S32 x, S32 y, MASK mask)
 {
     // which row was clicked on?
     LLScrollListItem* hit_item = hitItem(x, y);
-    if (!hit_item) return FALSE;
+    if (!hit_item) return false;
 
     // get appropriate cell from that row
     S32 column_index = getColumnIndexFromOffset(x);
     LLScrollListCell* hit_cell = hit_item->getColumn(column_index);
-    if (!hit_cell) return FALSE;
+    if (!hit_cell) return false;
 
     // if cell handled click directly (i.e. clicked on an embedded checkbox)
     if (hit_cell->handleClick())
@@ -2475,7 +2479,7 @@ BOOL LLScrollListCtrl::handleClick(S32 x, S32 y, MASK mask)
             onCommit();
         }
         // eat click (e.g. do not trigger double click callback)
-        return TRUE;
+        return true;
     }
     else
     {
@@ -2484,7 +2488,7 @@ BOOL LLScrollListCtrl::handleClick(S32 x, S32 y, MASK mask)
         gFocusMgr.setMouseCapture(this);
         mNeedsScroll = true;
         // do not eat click (allow double click callback)
-        return FALSE;
+        return false;
     }
 }
 
@@ -2588,9 +2592,9 @@ S32 LLScrollListCtrl::getRowOffsetFromIndex(S32 index)
 }
 
 
-BOOL LLScrollListCtrl::handleHover(S32 x,S32 y,MASK mask)
+bool LLScrollListCtrl::handleHover(S32 x,S32 y,MASK mask)
 {
-    BOOL    handled = FALSE;
+    bool    handled = false;
 
     if (hasMouseCapture())
     {
@@ -2646,9 +2650,9 @@ void LLScrollListCtrl::onMouseLeave(S32 x, S32 y, MASK mask)
     mouseOverHighlightNthItem(-1);
 }
 
-BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
+bool LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 {
-    BOOL handled = FALSE;
+    bool handled = false;
 
     // not called from parent means we have keyboard focus or a child does
     if (mCanSelect)
@@ -2661,18 +2665,18 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                 if (mAllowKeyboardMovement || hasFocus())
                 {
                     // commit implicit in call
-                    selectPrevItem(FALSE);
+                    selectPrevItem(false);
                     mNeedsScroll = true;
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_DOWN:
                 if (mAllowKeyboardMovement || hasFocus())
                 {
                     // commit implicit in call
-                    selectNextItem(FALSE);
+                    selectNextItem(false);
                     mNeedsScroll = true;
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_LEFT:
@@ -2697,7 +2701,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                             break;
                         }
                         item->setSelectedCell(cell);
-                        handled = TRUE;
+                        handled = true;
                     }
                 }
                 break;
@@ -2723,7 +2727,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                             break;
                         }
                         item->setSelectedCell(cell);
-                        handled = TRUE;
+                        handled = true;
                     }
                 }
                 break;
@@ -2737,7 +2741,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     {
                         onCommit();
                     }
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_PAGE_DOWN:
@@ -2750,7 +2754,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     {
                         onCommit();
                     }
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_HOME:
@@ -2763,7 +2767,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     {
                         onCommit();
                     }
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_END:
@@ -2776,7 +2780,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     {
                         onCommit();
                     }
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_RETURN:
@@ -2787,7 +2791,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                 {
                     onCommit();
                     mSearchString.clear();
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_BACKSPACE:
@@ -2807,7 +2811,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                         }
                     }
                 }
-                else if (selectItemByPrefix(wstring_to_utf8str(mSearchString), FALSE))
+                else if (selectItemByPrefix(wstring_to_utf8str(mSearchString), false))
                 {
                     mNeedsScroll = true;
                     // update search string only on successful match
@@ -2827,7 +2831,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     if (selected_item)
                     {
                         handleRightMouseDown(selected_item->getRect().getCenterX(), selected_item->getRect().getCenterY(), MASK_NONE);
-                        handled = TRUE;
+                        handled = true;
                     }
                     break;
                 }
@@ -2846,7 +2850,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                 if (canSelectAll())
                 {
                     selectAll();
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             default:
@@ -2871,11 +2875,11 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                         auto first = std::find(items.begin(), items.end(), selected_items.front());
                         if (first != items.end() && first > items.begin())
                         {
-                            selectItem(*(--first), FALSE);
+                            selectItem(*(--first), false);
                         }
                     }
 
-                    handled = TRUE;
+                    handled = true;
                 }
 
                 break;
@@ -2893,11 +2897,11 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                         auto last = std::find(items.begin(), items.end(), selected_items.back());
                         if (last != items.end() && last < items.end() - 1)
                         {
-                            selectItem(*(++last), FALSE);
+                            selectItem(*(++last), false);
                         }
                     }
 
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_HOME:
@@ -2909,7 +2913,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     {
                         if (it <= first)
                         {
-                            selectItem(*it, FALSE);
+                            selectItem(*it, false);
                         }
                         else
                         {
@@ -2917,7 +2921,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                         }
                     }
 
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             case KEY_END:
@@ -2929,7 +2933,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                     {
                         if (it >= last)
                         {
-                            selectItem(*it, FALSE);
+                            selectItem(*it, false);
                         }
                         else
                         {
@@ -2937,7 +2941,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                         }
                     }
 
-                    handled = TRUE;
+                    handled = true;
                 }
                 break;
             default:
@@ -2964,11 +2968,11 @@ void LLScrollListCtrl::setLastSelectedItem(const LLUUID& id)
 }
 // </FS:Ansariel>
 
-BOOL LLScrollListCtrl::handleUnicodeCharHere(llwchar uni_char)
+bool LLScrollListCtrl::handleUnicodeCharHere(llwchar uni_char)
 {
     if ((uni_char < 0x20) || (uni_char == 0x7F)) // Control character or DEL
     {
-        return FALSE;
+        return false;
     }
 
     // perform incremental search based on keyboard input
@@ -2981,7 +2985,7 @@ BOOL LLScrollListCtrl::handleUnicodeCharHere(llwchar uni_char)
     // type ahead search is case insensitive
     uni_char = LLStringOps::toLower((llwchar)uni_char);
 
-    if (selectItemByPrefix(wstring_to_utf8str(mSearchString + (llwchar)uni_char), FALSE))
+    if (selectItemByPrefix(wstring_to_utf8str(mSearchString + (llwchar)uni_char), false))
     {
         // update search string only on successful match
         mNeedsScroll = true;
@@ -3052,7 +3056,7 @@ BOOL LLScrollListCtrl::handleUnicodeCharHere(llwchar uni_char)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -3061,11 +3065,11 @@ void LLScrollListCtrl::reportInvalidInput()
     make_ui_sound("UISndBadKeystroke");
 }
 
-BOOL LLScrollListCtrl::isRepeatedChars(const LLWString& string) const
+bool LLScrollListCtrl::isRepeatedChars(const LLWString& string) const
 {
     if (string.empty())
     {
-        return FALSE;
+        return false;
     }
 
     llwchar first_char = string[0];
@@ -3074,14 +3078,14 @@ BOOL LLScrollListCtrl::isRepeatedChars(const LLWString& string) const
     {
         if (string[i] != first_char)
         {
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
-void LLScrollListCtrl::selectItem(LLScrollListItem* itemp, S32 cell, BOOL select_single_item)
+void LLScrollListCtrl::selectItem(LLScrollListItem* itemp, S32 cell, bool select_single_item)
 {
     if (!itemp) return;
 
@@ -3097,9 +3101,9 @@ void LLScrollListCtrl::selectItem(LLScrollListItem* itemp, S32 cell, BOOL select
         }
         if (select_single_item)
         {
-            deselectAllItems(TRUE);
+            deselectAllItems(true);
         }
-        itemp->setSelected(TRUE);
+        itemp->setSelected(true);
         switch (mSelectionType)
         {
         case CELL:
@@ -3128,7 +3132,7 @@ void LLScrollListCtrl::deselectItem(LLScrollListItem* itemp)
             mLastSelected = NULL;
         }
 
-        itemp->setSelected(FALSE);
+        itemp->setSelected(false);
         LLScrollListCell* cellp = itemp->getColumn(getSearchColumn());
         if (cellp)
         {
@@ -3143,7 +3147,7 @@ void LLScrollListCtrl::commitIfChanged()
     if (mSelectionChanged)
     {
         mDirty = true;
-        mSelectionChanged = FALSE;
+        mSelectionChanged = false;
         onCommit();
     }
 }
@@ -3153,13 +3157,13 @@ struct SameSortColumn
     SameSortColumn(S32 column) : mColumn(column) {}
     S32 mColumn;
 
-    bool operator()(std::pair<S32, BOOL> sort_column) { return sort_column.first == mColumn; }
+    bool operator()(std::pair<S32, bool> sort_column) { return sort_column.first == mColumn; }
 };
 
-BOOL LLScrollListCtrl::setSort(S32 column_idx, BOOL ascending)
+bool LLScrollListCtrl::setSort(S32 column_idx, bool ascending)
 {
     LLScrollListColumn* sort_column = getColumn(column_idx);
-    if (!sort_column) return FALSE;
+    if (!sort_column) return false;
 
     sort_column->mSortDirection = ascending ? LLScrollListColumn::ASCENDING : LLScrollListColumn::DESCENDING;
 
@@ -3177,7 +3181,7 @@ BOOL LLScrollListCtrl::setSort(S32 column_idx, BOOL ascending)
     if (mSortColumns.empty())
     {
         mSortColumns.push_back(new_sort_column);
-        return TRUE;
+        return true;
     }
     else
     {
@@ -3215,7 +3219,7 @@ void LLScrollListCtrl::onScrollChange( S32 new_pos, LLScrollbar* scrollbar )
 }
 
 
-void LLScrollListCtrl::sortByColumn(const std::string& name, BOOL ascending)
+void LLScrollListCtrl::sortByColumn(const std::string& name, bool ascending)
 {
     column_map_t::iterator itor = mColumns.find(name);
     if (itor != mColumns.end())
@@ -3225,7 +3229,7 @@ void LLScrollListCtrl::sortByColumn(const std::string& name, BOOL ascending)
 }
 
 // First column is column 0
-void  LLScrollListCtrl::sortByColumnIndex(U32 column, BOOL ascending)
+void  LLScrollListCtrl::sortByColumnIndex(U32 column, bool ascending)
 {
     setSort(column, ascending);
     updateSort();
@@ -3256,9 +3260,9 @@ void LLScrollListCtrl::updateSort() const
 }
 
 // for one-shot sorts, does not save sort column/order
-void LLScrollListCtrl::sortOnce(S32 column, BOOL ascending)
+void LLScrollListCtrl::sortOnce(S32 column, bool ascending)
 {
-    std::vector<std::pair<S32, BOOL> > sort_column;
+    std::vector<std::pair<S32, bool> > sort_column;
     sort_column.push_back(std::make_pair(column, ascending));
 
     // do stable sort to preserve any previous sorts
@@ -3357,11 +3361,11 @@ void    LLScrollListCtrl::copy()
     {
         buffer += (*itor)->getContentsCSV() + "\n";
     }
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(buffer), 0, buffer.length());
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(buffer), 0, static_cast<S32>(buffer.length()));
 }
 
 // virtual
-BOOL    LLScrollListCtrl::canCopy() const
+bool    LLScrollListCtrl::canCopy() const
 {
     return (getFirstSelected() != NULL);
 }
@@ -3374,7 +3378,7 @@ void    LLScrollListCtrl::cut()
 }
 
 // virtual
-BOOL    LLScrollListCtrl::canCut() const
+bool    LLScrollListCtrl::canCut() const
 {
     return canCopy() && canDoDelete();
 }
@@ -3389,7 +3393,7 @@ void    LLScrollListCtrl::selectAll()
         LLScrollListItem *itemp = *iter;
         if( itemp->getEnabled() )
         {
-            selectItem(itemp, -1, FALSE);
+            selectItem(itemp, -1, false);
         }
     }
 
@@ -3400,7 +3404,7 @@ void    LLScrollListCtrl::selectAll()
 }
 
 // virtual
-BOOL    LLScrollListCtrl::canSelectAll() const
+bool    LLScrollListCtrl::canSelectAll() const
 {
     return getCanSelect() && mAllowMultipleSelection && !(mMaxSelectable > 0 && mItemList.size() > mMaxSelectable);
 }
@@ -3412,7 +3416,7 @@ void    LLScrollListCtrl::deselect()
 }
 
 // virtual
-BOOL    LLScrollListCtrl::canDeselect() const
+bool    LLScrollListCtrl::canDeselect() const
 {
     return getCanSelect();
 }
@@ -3441,7 +3445,7 @@ void LLScrollListCtrl::addColumn(const LLScrollListColumn::Params& column_params
         // Add column
         mColumns[name] = new LLScrollListColumn(column_params, this);
         LLScrollListColumn* new_column = mColumns[name];
-        new_column->mIndex = mColumns.size()-1;
+        new_column->mIndex = static_cast<S32>(mColumns.size()) - 1;
 
         // Add button
         if (new_column->getWidth() > 0 || new_column->mRelWidth > 0 || new_column->mDynamicWidth)
@@ -3601,7 +3605,7 @@ std::string LLScrollListCtrl::getSortColumnName()
     else return "";
 }
 
-BOOL LLScrollListCtrl::hasSortOrder() const
+bool LLScrollListCtrl::hasSortOrder() const
 {
     return !mSortColumns.empty();
 }
@@ -3688,7 +3692,7 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
     if (!item_p.validateBlock() || !new_item) return NULL;
-    new_item->setNumColumns(mColumns.size());
+    new_item->setNumColumns(static_cast<S32>(mColumns.size()));
 
     // Add any columns we don't already have
     S32 col_index = 0;
@@ -3723,7 +3727,7 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
             }
             addColumn(new_column);
             columnp = mColumns[column];
-            new_item->setNumColumns(mColumns.size());
+            new_item->setNumColumns(static_cast<S32>(mColumns.size()));
         }
 
         S32 index = columnp->mIndex;
@@ -3741,7 +3745,7 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
                 && cell->isText()
                 && !cell->getValue().asString().empty())
             {
-                columnp->mHeader->setHasResizableElement(TRUE);
+                columnp->mHeader->setHasResizableElement(true);
             }
         }
 
@@ -3756,7 +3760,7 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
             new_column.name = "0";
 
             addColumn(new_column);
-            new_item->setNumColumns(mColumns.size());
+            new_item->setNumColumns(static_cast<S32>(mColumns.size()));
         }
 
         LLScrollListCell* cell = LLScrollListCell::create(LLScrollListCell::Params().value(item_p.value));
@@ -3769,7 +3773,7 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
                 && cell->isText()
                 && !cell->getValue().asString().empty())
             {
-                columnp->mHeader->setHasResizableElement(TRUE);
+                columnp->mHeader->setHasResizableElement(true);
             }
         }
     }
@@ -3826,26 +3830,26 @@ LLSD LLScrollListCtrl::getValue() const
     return item->getValue();
 }
 
-BOOL LLScrollListCtrl::operateOnSelection(EOperation op)
+bool LLScrollListCtrl::operateOnSelection(EOperation op)
 {
     if (op == OP_DELETE)
     {
         deleteSelectedItems();
-        return TRUE;
+        return true;
     }
     else if (op == OP_DESELECT)
     {
         deselectAllItems();
     }
-    return FALSE;
+    return false;
 }
 
-BOOL LLScrollListCtrl::operateOnAll(EOperation op)
+bool LLScrollListCtrl::operateOnAll(EOperation op)
 {
     if (op == OP_DELETE)
     {
         clearRows();
-        return TRUE;
+        return true;
     }
     else if (op == OP_DESELECT)
     {
@@ -3855,10 +3859,10 @@ BOOL LLScrollListCtrl::operateOnAll(EOperation op)
     {
         selectAll();
     }
-    return FALSE;
+    return false;
 }
 //virtual
-void LLScrollListCtrl::setFocus(BOOL b)
+void LLScrollListCtrl::setFocus(bool b)
 {
     // for tabbing into pristine scroll lists (Finder)
     //if (!getFirstSelected())
@@ -3872,9 +3876,9 @@ void LLScrollListCtrl::setFocus(BOOL b)
 
 
 // virtual
-BOOL    LLScrollListCtrl::isDirty() const
+bool    LLScrollListCtrl::isDirty() const
 {
-    BOOL grubby = mDirty;
+    bool grubby = mDirty;
     if ( !mAllowMultipleSelection )
     {
         grubby = (mOriginalSelection != getFirstSelectedIndex());
@@ -3885,7 +3889,7 @@ BOOL    LLScrollListCtrl::isDirty() const
 // Clear dirty state
 void LLScrollListCtrl::resetDirty()
 {
-    mDirty = FALSE;
+    mDirty = false;
     mOriginalSelection = getFirstSelectedIndex();
 }
 
@@ -4009,7 +4013,7 @@ void LLScrollListCtrl::loadPersistedSortOrder()
             for (LLSD::array_iterator it = sort_order.beginArray(); it != sort_order.endArray(); ++it)
             {
                 S32 sort_val = (*it).asInteger();
-                BOOL ascending = sort_val > 0;
+                bool ascending = sort_val > 0;
                 sort_val = llabs(sort_val) - 1;
 
                 setSort(sort_val, ascending);

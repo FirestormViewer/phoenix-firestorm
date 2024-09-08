@@ -67,8 +67,8 @@ bool RlvExtGetSet::onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)
 bool RlvExtGetSet::processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet)
 {
     std::string strBehaviour = rlvCmd.getBehaviour(), strGetSet, strSetting;
-    int idxSetting = strBehaviour.find('_');
-    if ( (strBehaviour.length() >= 6) && (-1 != idxSetting) && ((int)strBehaviour.length() > idxSetting + 1) )
+    size_t idxSetting = strBehaviour.find('_');
+    if ( (strBehaviour.length() >= 6) && (std::string::npos != idxSetting) && (strBehaviour.length() > idxSetting + 1) )
     {
         strSetting = strBehaviour.substr(idxSetting + 1);
         strBehaviour.erase(idxSetting); // Get rid of "_<setting>"
@@ -217,7 +217,7 @@ ERlvCmdRet RlvExtGetSet::onSetDebug(std::string strSetting, const std::string& s
             LLControlVariable* pSetting = gSavedSettings.getControl(strSetting);
             if (pSetting)
             {
-                U32 u32Value; S32 s32Value; BOOL fValue;
+                U32 u32Value; S32 s32Value; bool fValue;
                 switch (pSetting->type())
                 {
                     case TYPE_U32:
@@ -265,7 +265,7 @@ ERlvCmdRet RlvExtGetSet::onSetPseudoDebug(const std::string& strSetting, const s
     ERlvCmdRet eRet = RLV_RET_FAILED_OPTION;
     if ("AvatarSex" == strSetting)
     {
-        BOOL fValue;
+        bool fValue;
         if (LLStringUtil::convertToBOOL(strValue, fValue))
         {
             m_PseudoDebug[strSetting] = strValue;

@@ -45,11 +45,11 @@ protected:
     void onScrollListRightClicked(LLUICtrl* ctrl, S32 x, S32 y);
 
 public:
-    /*virtual*/ BOOL postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
     // <FS:Ansariel> Instant bump list floater update
-    /*virtual*/ void draw();
+    /*virtual*/ void draw() override;
     void setDirty() { mDirty = true; }
 
     static LLFloaterBump* getInstance();

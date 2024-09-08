@@ -45,7 +45,7 @@ class LLFloaterDisplayName : public LLFloater
 public:
     LLFloaterDisplayName(const LLSD& key);
     virtual ~LLFloaterDisplayName() { }
-    /*virtual*/ BOOL    postBuild();
+    /*virtual*/ bool    postBuild();
     void onSave();
     void onReset();
     void onCancel();
@@ -91,7 +91,7 @@ void LLFloaterDisplayName::onOpen(const LLSD& key)
         getChild<LLUICtrl>("save_btn")->setEnabled(false);
         getChild<LLUICtrl>("display_name_editor")->setEnabled(false);
         getChild<LLUICtrl>("display_name_confirm")->setEnabled(false);
-        getChild<LLUICtrl>("cancel_btn")->setFocus(TRUE);
+        getChild<LLUICtrl>("cancel_btn")->setFocus(true);
 
     }
     else
@@ -104,7 +104,7 @@ void LLFloaterDisplayName::onOpen(const LLSD& key)
     }
 }
 
-BOOL LLFloaterDisplayName::postBuild()
+bool LLFloaterDisplayName::postBuild()
 {
     getChild<LLUICtrl>("reset_btn")->setCommitCallback(boost::bind(&LLFloaterDisplayName::onReset, this));
     getChild<LLUICtrl>("cancel_btn")->setCommitCallback(boost::bind(&LLFloaterDisplayName::onCancel, this));
@@ -112,7 +112,7 @@ BOOL LLFloaterDisplayName::postBuild()
 
     center();
 
-    return TRUE;
+    return true;
 }
 
 void LLFloaterDisplayName::onCacheSetName(bool success,
@@ -176,7 +176,7 @@ void LLFloaterDisplayName::onReset()
     //{
     //    // UI is enabled, fill the first field
     //    getChild<LLUICtrl>("display_name_confirm")->clear();
-    //    getChild<LLUICtrl>("display_name_confirm")->setFocus(TRUE);
+    //    getChild<LLUICtrl>("display_name_confirm")->setFocus(true);
     //}
     //else
     //{

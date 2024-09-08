@@ -94,7 +94,7 @@
 #include "llavataractions.h"
 
 extern F32 gMinObjectDistance;
-extern BOOL gAnimateTextures;
+extern bool gAnimateTextures;
 
 #define MAX_CONCURRENT_PHYSICS_REQUESTS 256
 
@@ -107,8 +107,6 @@ extern LLPipeline   gPipeline;
 
 // Statics for object lookup tables.
 U32                     LLViewerObjectList::sSimulatorMachineIndex = 1; // Not zero deliberately, to speed up index check.
-std::map<U64, U32>      LLViewerObjectList::sIPAndPortToIndex;
-std::map<U64, LLUUID>   LLViewerObjectList::sIndexAndLocalIDToUUID;
 
 LLViewerObjectList::LLViewerObjectList()
     : mNewObjectSignal() // <FS:Ansariel> FIRE-16647: Default object properties randomly aren't applied
@@ -118,7 +116,7 @@ LLViewerObjectList::LLViewerObjectList()
     mNumDeadObjects = 0;
     mNumOrphans = 0;
     mNumNewObjects = 0;
-    mWasPaused = FALSE;
+    mWasPaused = false;
     mNumDeadObjectUpdates = 0;
     mNumUnknownUpdates = 0;
 }
@@ -147,17 +145,17 @@ void LLViewerObjectList::getUUIDFromLocal(LLUUID &id,
 {
     U64 ipport = (((U64)ip) << 32) | (U64)port;
 
-    U32 index = sIPAndPortToIndex[ipport];
+    U32 index = mIPAndPortToIndex[ipport];
 
     if (!index)
     {
         index = sSimulatorMachineIndex++;
-        sIPAndPortToIndex[ipport] = index;
+        mIPAndPortToIndex[ipport] = index;
     }
 
     U64 indexid = (((U64)index) << 32) | (U64)local_id;
 
-    id = get_if_there(sIndexAndLocalIDToUUID, indexid, LLUUID::null);
+    id = get_if_there(mIndexAndLocalIDToUUID, indexid, LLUUID::null);
 }
 
 U64 LLViewerObjectList::getIndex(const U32 local_id,
@@ -166,7 +164,7 @@ U64 LLViewerObjectList::getIndex(const U32 local_id,
 {
     U64 ipport = (((U64)ip) << 32) | (U64)port;
 
-    U32 index = sIPAndPortToIndex[ipport];
+    U32 index = mIPAndPortToIndex[ipport];
 
     if (!index)
     {
@@ -176,7 +174,7 @@ U64 LLViewerObjectList::getIndex(const U32 local_id,
     return (((U64)index) << 32) | (U64)local_id;
 }
 
-BOOL LLViewerObjectList::removeFromLocalIDTable(const LLViewerObject* objectp)
+bool LLViewerObjectList::removeFromLocalIDTable(const LLViewerObject* objectp)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 
@@ -186,30 +184,30 @@ BOOL LLViewerObjectList::removeFromLocalIDTable(const LLViewerObject* objectp)
         U32 ip = objectp->getRegion()->getHost().getAddress();
         U32 port = objectp->getRegion()->getHost().getPort();
         U64 ipport = (((U64)ip) << 32) | (U64)port;
-        U32 index = sIPAndPortToIndex[ipport];
+        U32 index = mIPAndPortToIndex[ipport];
 
         // LL_INFOS() << "Removing object from table, local ID " << local_id << ", ip " << ip << ":" << port << LL_ENDL;
 
         U64 indexid = (((U64)index) << 32) | (U64)local_id;
 
-        std::map<U64, LLUUID>::iterator iter = sIndexAndLocalIDToUUID.find(indexid);
-        if (iter == sIndexAndLocalIDToUUID.end())
+        std::map<U64, LLUUID>::iterator iter = mIndexAndLocalIDToUUID.find(indexid);
+        if (iter == mIndexAndLocalIDToUUID.end())
         {
-            return FALSE;
+            return false;
         }
 
         // Found existing entry
         if (iter->second == objectp->getID())
         {   // Full UUIDs match, so remove the entry
-            sIndexAndLocalIDToUUID.erase(iter);
-            return TRUE;
+            mIndexAndLocalIDToUUID.erase(iter);
+            return true;
         }
         // UUIDs did not match - this would zap a valid entry, so don't erase it
         //LL_INFOS() << "Tried to erase entry where id in table ("
         //      << iter->second << ") did not match object " << object.getID() << LL_ENDL;
     }
 
-    return FALSE ;
+    return false ;
 }
 
 void LLViewerObjectList::setUUIDAndLocal(const LLUUID &id,
@@ -219,17 +217,17 @@ void LLViewerObjectList::setUUIDAndLocal(const LLUUID &id,
 {
     U64 ipport = (((U64)ip) << 32) | (U64)port;
 
-    U32 index = sIPAndPortToIndex[ipport];
+    U32 index = mIPAndPortToIndex[ipport];
 
     if (!index)
     {
         index = sSimulatorMachineIndex++;
-        sIPAndPortToIndex[ipport] = index;
+        mIPAndPortToIndex[ipport] = index;
     }
 
     U64 indexid = (((U64)index) << 32) | (U64)local_id;
 
-    sIndexAndLocalIDToUUID[indexid] = id;
+    mIndexAndLocalIDToUUID[indexid] = id;
 
     //LL_INFOS() << "Adding object to table, full ID " << id
     //  << ", local ID " << local_id << ", ip " << ip << ":" << port << LL_ENDL;
@@ -439,7 +437,7 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
     else
     {
         objectp->setLastUpdateType(OUT_FULL_COMPRESSED); //newly cached
-        objectp->setLastUpdateCached(TRUE);
+        objectp->setLastUpdateCached(true);
     }
     LLVOAvatar::cullAvatarsByPixelArea();
 
@@ -519,7 +517,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 
     for (i = 0; i < num_objects; i++)
     {
-        BOOL justCreated = FALSE;
+        bool justCreated = false;
         bool update_cache = false; //update object cache if it is a full-update or terse update
 
         if (compressed)
@@ -708,7 +706,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
                 continue;
             }
 
-            justCreated = TRUE;
+            justCreated = true;
             mNumNewObjects++;
         }
 
@@ -1501,7 +1499,7 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
     if (objectp->onActiveList())
     {
         //LL_INFOS() << "Removing " << objectp->mID << " " << objectp->getPCodeString() << " from active list in cleanupReferences." << LL_ENDL;
-        objectp->setOnActiveList(FALSE);
+        objectp->setOnActiveList(false);
         removeFromActiveList(objectp);
     }
 
@@ -1519,7 +1517,7 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
     // }
 }
 
-BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
+bool LLViewerObjectList::killObject(LLViewerObject *objectp)
 {
     LL_PROFILE_ZONE_SCOPED;
     // Don't ever kill gAgentAvatarp, just force it to the agent's region
@@ -1527,7 +1525,7 @@ BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
     if ((objectp == gAgentAvatarp) && gAgent.getRegion())
     {
         objectp->setRegion(gAgent.getRegion());
-        return FALSE;
+        return false;
     }
 
     // When we're killing objects, all we do is mark them as dead.
@@ -1540,10 +1538,10 @@ BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
         // so create a pointer to make sure object will stay alive untill markDead() finishes
         LLPointer<LLViewerObject> sp(objectp);
         sp->markDead(); // does the right thing if object already dead
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // <FS:Beq> Animated Objects kill switch
@@ -1565,7 +1563,7 @@ void LLViewerObjectList::killAnimatedObjects()
         }
     }
 
-    cleanDeadObjects(FALSE);
+    cleanDeadObjects(false);
 }
 // </FS:Beq>
 
@@ -1586,7 +1584,7 @@ void LLViewerObjectList::killObjects(LLViewerRegion *regionp)
     }
 
     // Have to clean right away because the region is becoming invalid.
-    cleanDeadObjects(FALSE);
+    cleanDeadObjects(false);
 }
 
 void LLViewerObjectList::killAllObjects()
@@ -1602,7 +1600,7 @@ void LLViewerObjectList::killAllObjects()
         llassert((objectp == gAgentAvatarp) || objectp->isDead());
     }
 
-    cleanDeadObjects(FALSE);
+    cleanDeadObjects(false);
 
     if(!mObjects.empty())
     {
@@ -1623,7 +1621,7 @@ void LLViewerObjectList::killAllObjects()
     }
 }
 
-void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
+void LLViewerObjectList::cleanDeadObjects(bool use_timer)
 {
     // <FS:Beq/> FIRE-30694 DeadObject Spam
     llassert( mNumDeadObjects == mDeadObjects.size() );
@@ -1723,7 +1721,7 @@ void LLViewerObjectList::removeFromActiveList(LLViewerObject* objectp)
 
         objectp->setListIndex(-1);
 
-        S32 last_index = mActiveObjects.size()-1;
+        S32 last_index = static_cast<S32>(mActiveObjects.size()) - 1;
 
         if (idx != last_index)
         {
@@ -1744,7 +1742,7 @@ void LLViewerObjectList::updateActive(LLViewerObject *objectp)
         return; // We don't update dead objects!
     }
 
-    BOOL active = objectp->isActive();
+    bool active = objectp->isActive();
     if (active != objectp->onActiveList())
     {
         if (active)
@@ -1754,8 +1752,8 @@ void LLViewerObjectList::updateActive(LLViewerObject *objectp)
             if (idx <= -1)
             {
                 mActiveObjects.push_back(objectp);
-                objectp->setListIndex(mActiveObjects.size()-1);
-            objectp->setOnActiveList(TRUE);
+                objectp->setListIndex(static_cast<S32>(mActiveObjects.size()) - 1);
+            objectp->setOnActiveList(true);
             }
             else
             {
@@ -1773,7 +1771,7 @@ void LLViewerObjectList::updateActive(LLViewerObject *objectp)
         {
             //LL_INFOS() << "Removing " << objectp->mID << " " << objectp->getPCodeString() << " from active list." << LL_ENDL;
             removeFromActiveList(objectp);
-            objectp->setOnActiveList(FALSE);
+            objectp->setOnActiveList(false);
         }
     }
 
@@ -2119,7 +2117,7 @@ void LLViewerObjectList::renderObjectBounds(const LLVector3 &center)
 {
 }
 
-extern BOOL gCubeSnapshot;
+extern bool gCubeSnapshot;
 
 void LLViewerObjectList::addDebugBeacon(const LLVector3 &pos_agent,
                                         const std::string &string,
@@ -2300,7 +2298,7 @@ void LLViewerObjectList::orphanize(LLViewerObject *childp, U32 parent_id, U32 ip
     LL_DEBUGS("ORPHANS") << "Orphaning object " << childp->getID() << " with parent " << parent_id << LL_ENDL;
 
     // We're an orphan, flag things appropriately.
-    childp->mOrphaned = TRUE;
+    childp->mOrphaned = true;
     if (childp->mDrawable.notNull())
     {
         bool make_invisible = true;
@@ -2373,7 +2371,7 @@ void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
     }
 
     U64 parent_info = getIndex(objectp->mLocalID, ip, port);
-    BOOL orphans_found = FALSE;
+    bool orphans_found = false;
     // Iterate through the orphan list, and set parents of matching children.
 
     for (std::vector<OrphanInfo>::iterator iter = mOrphanChildren.begin(); iter != mOrphanChildren.end(); )
@@ -2405,7 +2403,7 @@ void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
             objectp->setChanged(LLXform::MOVED | LLXform::SILHOUETTE);
 
             // Flag the object as no longer orphaned
-            childp->mOrphaned = FALSE;
+            childp->mOrphaned = false;
             if (childp->mDrawable.notNull())
             {
                 // Make the drawable visible again and set the drawable parent
@@ -2415,10 +2413,10 @@ void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
             }
 
             // Make certain particles, icon and HUD aren't hidden
-            childp->hideExtraDisplayItems( FALSE );
+            childp->hideExtraDisplayItems( false );
 
             objectp->addChild(childp);
-            orphans_found = TRUE;
+            orphans_found = true;
             ++iter;
         }
         else

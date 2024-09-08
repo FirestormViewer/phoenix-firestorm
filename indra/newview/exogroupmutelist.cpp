@@ -174,7 +174,7 @@ bool exoGroupMuteList::restoreDeferredGroupChat(const LLUUID& group)
                 gIMMgr->addSession(groupData.mName, IM_SESSION_INVITE, group);
 
                 uuid_vec_t ids;
-                LLIMModel::sendStartSession(group, group, ids, IM_SESSION_GROUP_START);
+                LLIMModel::sendStartSession(group, group, ids, IM_SESSION_GROUP_START, true);
 
                 if (!gAgent.isDoNotDisturb() && gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0)
                 {

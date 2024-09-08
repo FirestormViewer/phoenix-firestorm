@@ -88,7 +88,7 @@ void HttpLibcurl::shutdown()
 
     if (mMultiHandles)
     {
-        for (int policy_class(0); policy_class < mPolicyCount; ++policy_class)
+        for (unsigned int policy_class(0); policy_class < mPolicyCount; ++policy_class)
         {
             if (mMultiHandles[policy_class])
             {
@@ -122,7 +122,7 @@ void HttpLibcurl::start(int policy_count)
     mActiveHandles = new int [mPolicyCount];
     mDirtyPolicy = new bool [mPolicyCount];
 
-    for (int policy_class(0); policy_class < mPolicyCount; ++policy_class)
+    for (unsigned int policy_class(0); policy_class < mPolicyCount; ++policy_class)
     {
         if (NULL == (mMultiHandles[policy_class] = curl_multi_init()))
         {
@@ -148,7 +148,7 @@ HttpService::ELoopSpeed HttpLibcurl::processTransport()
     HttpService::ELoopSpeed ret(HttpService::REQUEST_SLEEP);
 
     // Give libcurl some cycles to do I/O & callbacks
-    for (int policy_class(0); policy_class < mPolicyCount; ++policy_class)
+    for (unsigned int policy_class(0); policy_class < mPolicyCount; ++policy_class)
     {
         if (! mMultiHandles[policy_class])
         {
@@ -413,30 +413,30 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
     // If not, we assume http pipelining havng gone out of sync. If yes, yield a 503 status and switch
     // pipelining off.
     bool bFailed = false;
-    if( op->mXLLURL.size() )
+    if (op->mXLLURL.size())
     {
         std::string strURI = op->mReqURL;
-        int i = strURI.find( "://" );
-        if( i > 0 )
-            i = strURI.find( "/", i+3 );
+        size_t i = strURI.find("://");
+        if (i != std::string::npos)
+            i = strURI.find("/", i + 3);
 
-        if( i > 0 )
-            strURI = strURI.substr( i );
+        if (i != std::string::npos)
+            strURI = strURI.substr(i);
 
-        if( strURI != op->mXLLURL )
+        if (strURI != op->mXLLURL)
         {
             LL_WARNS() << "HTTP pipelining out of sync! Asked for: " << strURI << " got " << op->mXLLURL << LL_ENDL;
             op->mStatus = HttpStatus(HTTP_SERVICE_UNAVAILABLE);
             bFailed = true;
         }
     }
-    if ( !bFailed && (op->mReqOffset || op->mReqLength) )
+    if (!bFailed && (op->mReqOffset || op->mReqLength))
     {
-        if( op->mReqOffset != op->mReplyOffset || ( op->mReqLength && op->mReqLength < op->mReplyLength ) )
+        if (op->mReqOffset != op->mReplyOffset || (op->mReqLength && op->mReqLength < op->mReplyLength))
         {
             std::stringstream strm;
             strm << "HTTP pipelining possibly out of sync, request wanted: " << op->mReqOffset << "-";
-            if( op->mReqLength )
+            if (op->mReqLength)
                 strm << op->mReqLength + op->mReqLength -1;
             strm << " got: " << op->mReplyOffset << "-" << op->mReplyOffset+op->mReplyLength-1;
             strm << " url: " << op->mReqURL;
@@ -445,19 +445,19 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
             bFailed = true;
         }
     }
-    if( bFailed )
+    if (bFailed)
     {
         HttpPolicy & policy(mService->getPolicy());
-        for( int i = 0; i < mPolicyCount; ++ i )
+        for (unsigned int i = 0; i < mPolicyCount; ++ i)
         {
             HttpPolicyClass & options(policy.getClassOptions(i));
             long lVal;
 
-            if( options.get(  LLCore::HttpRequest::PO_PIPELINING_DEPTH, &lVal ) && lVal )
+            if (options.get(LLCore::HttpRequest::PO_PIPELINING_DEPTH, &lVal) && lVal)
             {
-                options.set( LLCore::HttpRequest::PO_PIPELINING_DEPTH, 0 );
-                mDirtyPolicy[ i ] = true;
-                policyUpdated( i );
+                options.set(LLCore::HttpRequest::PO_PIPELINING_DEPTH, 0);
+                mDirtyPolicy[i] = true;
+                policyUpdated(i);
             }
         }
     }
@@ -496,18 +496,18 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
 
 int HttpLibcurl::getActiveCount() const
 {
-    return mActiveOps.size();
+    return static_cast<int>(mActiveOps.size());
 }
 
 
-int HttpLibcurl::getActiveCountInClass(int policy_class) const
+int HttpLibcurl::getActiveCountInClass(unsigned int policy_class) const
 {
     llassert_always(policy_class < mPolicyCount);
 
     return mActiveHandles ? mActiveHandles[policy_class] : 0;
 }
 
-void HttpLibcurl::policyUpdated(int policy_class)
+void HttpLibcurl::policyUpdated(unsigned int policy_class)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if (policy_class < 0 || policy_class >= mPolicyCount || ! mMultiHandles)

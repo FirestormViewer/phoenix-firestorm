@@ -71,7 +71,7 @@ public:
     // </FS:Ansariel>
     virtual ~LLTeleportHistoryFlatItem();
 
-    virtual BOOL postBuild();
+    virtual bool postBuild();
 
     /*virtual*/ S32 notify(const LLSD& info);
 
@@ -92,7 +92,7 @@ public:
 
     void onMouseEnter(S32 x, S32 y, MASK mask);
     void onMouseLeave(S32 x, S32 y, MASK mask);
-    virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    virtual bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
     static void showPlaceInfoPanel(S32 index);
 
@@ -174,7 +174,7 @@ LLTeleportHistoryFlatItem::~LLTeleportHistoryFlatItem()
 }
 
 //virtual
-BOOL LLTeleportHistoryFlatItem::postBuild()
+bool LLTeleportHistoryFlatItem::postBuild()
 {
     mTitle = getChild<LLTextBox>("region");
 
@@ -322,11 +322,11 @@ void LLTeleportHistoryFlatItem::onMouseLeave(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLTeleportHistoryFlatItem::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLTeleportHistoryFlatItem::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     LLPanel::handleRightMouseDown(x, y, mask);
     showMenu(x, y);
-    return TRUE;
+    return true;
 }
 
 void LLTeleportHistoryFlatItem::showPlaceInfoPanel(S32 index)
@@ -386,7 +386,7 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
             item->setLocalPos(local_pos);
             // </FS:Ansariel>
             item->setHighlightedText(hl);
-            item->setVisible(TRUE);
+            item->setVisible(true);
             item->updateTitle();
             item->updateTimestamp();
         }
@@ -479,14 +479,14 @@ LLTeleportHistoryPanel::~LLTeleportHistoryPanel()
     mTeleportHistoryChangedConnection.disconnect();
 }
 
-BOOL LLTeleportHistoryPanel::postBuild()
+bool LLTeleportHistoryPanel::postBuild()
 {
     mCommitCallbackRegistrar.add("TeleportHistory.GearMenu.Action", boost::bind(&LLTeleportHistoryPanel::onGearMenuAction, this, _2));
     mEnableCallbackRegistrar.add("TeleportHistory.GearMenu.Enable", boost::bind(&LLTeleportHistoryPanel::isActionEnabled, this, _2));
 
     // init menus before list, since menus are passed to list
     mGearItemMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_item.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-    mGearItemMenu->setAlwaysShowMenu(TRUE); // all items can be disabled if nothing is selected, show anyway
+    mGearItemMenu->setAlwaysShowMenu(true); // all items can be disabled if nothing is selected, show anyway
     mSortingMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
     mTeleportHistory = LLTeleportHistoryStorage::getInstance();
@@ -540,7 +540,7 @@ BOOL LLTeleportHistoryPanel::postBuild()
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 // virtual
@@ -705,7 +705,7 @@ void LLTeleportHistoryPanel::getNextTab(const LLDate& item_date, S32& tab_idx, L
     //<FS:Beq [timezone support for teleport history]>
     static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
     //</FS:Beq>
-    S32 tabs_cnt = mItemContainers.size();
+    S32 tabs_cnt = static_cast<S32>(mItemContainers.size());
     S32 curr_year = 0, curr_month = 0, curr_day = 0;
 
     tab_date = LLDate::now();
@@ -843,7 +843,7 @@ void LLTeleportHistoryPanel::refresh()
             // tab_boundary_date would be earliest possible date for this tab
             S32 tab_idx = 0;
             getNextTab(date, tab_idx, tab_boundary_date);
-            tab_idx = mItemContainers.size() - 1 - tab_idx;
+            tab_idx = static_cast<S32>(mItemContainers.size()) - 1 - tab_idx;
             if (tab_idx >= 0)
             {
                 LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
@@ -899,7 +899,7 @@ void LLTeleportHistoryPanel::refresh()
             break;
     }
 
-    for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
+    for (S32 n = static_cast<S32>(mItemContainers.size()) - 1; n >= 0; --n)
     {
         LLAccordionCtrlTab* tab = mItemContainers.at(n);
         LLFlatListView* fv = getFlatListViewFromTab(tab);
@@ -964,7 +964,7 @@ void LLTeleportHistoryPanel::replaceItem(S32 removed_index)
     LLTeleportHistoryFlatItem* item = LLTeleportHistoryFlatItemStorage::instance()
         .getFlatItemForPersistentItem(mGearItemMenu,
                                       history_items[history_items.size() - 1], // Most recent item, it was added instead of removed
-                                      history_items.size(), // index will be decremented inside loop below
+                                      static_cast<S32>(history_items.size()), // index will be decremented inside loop below
                                       // <FS:Ansariel> Separate search filter for standalone TP history
                                       //sFilterSubString);
                                       (mIsStandAlone ? mFilterString : sFilterSubString));
@@ -974,7 +974,7 @@ void LLTeleportHistoryPanel::replaceItem(S32 removed_index)
 
     // Index of each item, from last to removed item should be decremented
     // to point to the right item in LLTeleportHistoryStorage
-    for (S32 tab_idx = mItemContainers.size() - 1; tab_idx >= 0; --tab_idx)
+    for (S32 tab_idx = static_cast<S32>(mItemContainers.size()) - 1; tab_idx >= 0; --tab_idx)
     {
         LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
         if (!tab->getVisible())
@@ -990,8 +990,8 @@ void LLTeleportHistoryPanel::replaceItem(S32 removed_index)
         std::vector<LLPanel*> items;
         fv->getItems(items);
 
-        S32 items_cnt = items.size();
-        for (S32 n = 0; n < items_cnt; ++n)
+        auto items_cnt = items.size();
+        for (size_t n = 0; n < items_cnt; ++n)
         {
             LLTeleportHistoryFlatItem *item = (LLTeleportHistoryFlatItem*) items[n];
 
@@ -1026,9 +1026,9 @@ void LLTeleportHistoryPanel::showTeleportHistory()
         mTeleportHistory = LLTeleportHistoryStorage::getInstance();
     }
 
-    mCurrentItem = mTeleportHistory->getItems().size() - 1;
+    mCurrentItem = static_cast<S32>(mTeleportHistory->getItems().size()) - 1;
 
-    for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
+    for (S32 n = static_cast<S32>(mItemContainers.size()) - 1; n >= 0; --n)
     {
         LLAccordionCtrlTab* tab = mItemContainers.at(n);
         if (tab)
@@ -1053,9 +1053,9 @@ void LLTeleportHistoryPanel::handleItemSelect(LLFlatListView* selected)
     if (item)
         mLastSelectedItemIndex = item->getIndex();
 
-    S32 tabs_cnt = mItemContainers.size();
+    auto tabs_cnt = mItemContainers.size();
 
-    for (S32 n = 0; n < tabs_cnt; n++)
+    for (size_t n = 0; n < tabs_cnt; n++)
     {
         LLAccordionCtrlTab* tab = mItemContainers.at(n);
 
@@ -1118,8 +1118,8 @@ void LLTeleportHistoryPanel::onAccordionTabRightClick(LLView *view, S32 x, S32 y
     mAccordionTabMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
         "menu_teleport_history_tab.xml", LLMenuGL::sMenuContainer, LLViewerMenuHolderGL::child_registry_t::instance());
 
-    mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded() ? true : false);
-    mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded() ? true : false);
+    mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded());
+    mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded());
 
 
     mAccordionTabMenu->show(x, y);
@@ -1187,7 +1187,7 @@ LLFlatListView* LLTeleportHistoryPanel::getFlatListViewFromTab(LLAccordionCtrlTa
 
 void LLTeleportHistoryPanel::gotSLURLCallback(const std::string& slurl)
 {
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(slurl), 0, slurl.size());
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(slurl), 0, static_cast<S32>(slurl.size()));
 
     LLSD args;
     args["SLURL"] = slurl;
@@ -1201,9 +1201,9 @@ void LLTeleportHistoryPanel::onGearMenuAction(const LLSD& userdata)
 
     if ("expand_all" == command_name)
     {
-        S32 tabs_cnt = mItemContainers.size();
+        auto tabs_cnt = mItemContainers.size();
 
-        for (S32 n = 0; n < tabs_cnt; n++)
+        for (size_t n = 0; n < tabs_cnt; n++)
         {
             mItemContainers.at(n)->setDisplayChildren(true);
         }
@@ -1211,9 +1211,9 @@ void LLTeleportHistoryPanel::onGearMenuAction(const LLSD& userdata)
     }
     else if ("collapse_all" == command_name)
     {
-        S32 tabs_cnt = mItemContainers.size();
+        auto tabs_cnt = mItemContainers.size();
 
-        for (S32 n = 0; n < tabs_cnt; n++)
+        for (size_t n = 0; n < tabs_cnt; n++)
         {
             mItemContainers.at(n)->setDisplayChildren(false);
         }
@@ -1274,12 +1274,12 @@ bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const
     if (command_name == "collapse_all"
         || command_name == "expand_all")
     {
-        S32 tabs_cnt = mItemContainers.size();
+        auto tabs_cnt = mItemContainers.size();
 
         bool has_expanded_tabs = false;
         bool has_collapsed_tabs = false;
 
-        for (S32 n = 0; n < tabs_cnt; n++)
+        for (size_t n = 0; n < tabs_cnt; n++)
         {
             LLAccordionCtrlTab* tab = mItemContainers.at(n);
             if (!tab->getVisible())

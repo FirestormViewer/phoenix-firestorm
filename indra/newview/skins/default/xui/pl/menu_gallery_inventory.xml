@@ -49,6 +49,39 @@
 	<menu_item_call label="Zdejmij" name="Take Off" />
 	<menu_item_call name="Settings Apply Local" label="Stosuj tylko dla mnie" />
 	<menu_item_call name="Settings Apply Parcel" label="Stosuj dla działki" />
+	<menu label="Utwórz nowe" name="create_new">
+		<menu_item_call label="Nowy folder" name="New Folder" />
+		<menu_item_call label="Nowy skrypt" name="New Script" />
+		<menu_item_call label="Nowa nota" name="New Note" />
+		<menu_item_call label="Nowy gest" name="New Gesture" />
+		<menu_item_call label="Nowy materiał" name="New Material" />
+		<menu label="Nowe ubranie" name="New Clothes">
+			<menu_item_call label="Nowa koszula" name="New Shirt" />
+			<menu_item_call label="Nowe spodnie" name="New Pants" />
+			<menu_item_call label="Nowe buty" name="New Shoes" />
+			<menu_item_call label="Nowe skarpety" name="New Socks" />
+			<menu_item_call label="Nowa kurtka" name="New Jacket" />
+			<menu_item_call label="Nowa spódnica" name="New Skirt" />
+			<menu_item_call label="Nowe rękawiczki" name="New Gloves" />
+			<menu_item_call label="Nowy podkoszulek" name="New Undershirt" />
+			<menu_item_call label="Nowa bielizna" name="New Underpants" />
+			<menu_item_call label="Nowa warstwa alpha" name="New Alpha Mask" />
+			<menu_item_call label="Nowy tatuaż" name="New Tattoo" />
+			<menu_item_call label="Nowa warstwa uniwersalna" name="New Universal" />
+			<menu_item_call label="Nowa fizyka" name="New Physics" />
+		</menu>
+		<menu label="Nowa część ciała" name="New Body Parts">
+			<menu_item_call label="Nowy kształt" name="New Shape" />
+			<menu_item_call label="Nowa skórka" name="New Skin" />
+			<menu_item_call label="Nowe włosy" name="New Hair" />
+			<menu_item_call label="Nowe oczy" name="New Eyes" />
+		</menu>
+		<menu label="Nowe otoczenie" name="New Settings">
+			<menu_item_call label="Nowe niebo" name="New Sky" />
+			<menu_item_call label="Nowa woda" name="New Water" />
+			<menu_item_call label="Nowy cykl dnia" name="New Day Cycle" />
+		</menu>
+	</menu>
 	<menu_item_call label="Utwórz folder z wybranych" name="New folder from selected" />
 	<menu_item_call label="Rozgrupuj elementy folderu" name="Ungroup folder items" />
 	<menu label="Ustaw jako domyślne" name="upload_def">

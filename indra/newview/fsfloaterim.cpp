@@ -93,14 +93,14 @@ FSFloaterIMTimer::FSFloaterIMTimer(FSFloaterIMTimer::callback_t callback) :
     mCallback(callback)
 { }
 
-BOOL FSFloaterIMTimer::tick()
+bool FSFloaterIMTimer::tick()
 {
     if (!mCallback.empty())
     {
         mCallback();
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -147,13 +147,13 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
             mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelAdHocControl, this);
             break;
         case IM_SESSION_GROUP_START:
-            setCanSnooze(TRUE);
+            setCanSnooze(true);
             mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelGroupControl, this);
             break;
         case IM_SESSION_INVITE:
             if (gAgent.isInGroup(mSessionID))
             {
-                setCanSnooze(TRUE);
+                setCanSnooze(true);
                 mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelGroupControl, this);
             }
             else
@@ -189,15 +189,15 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 }
 
 // virtual
-BOOL FSFloaterIM::focusFirstItem(BOOL prefer_text_fields, BOOL focus_flash)
+bool FSFloaterIM::focusFirstItem(bool prefer_text_fields, bool focus_flash)
 {
-    mInputEditor->setFocus(TRUE);
+    mInputEditor->setFocus(true);
     onTabInto();
     if (focus_flash)
     {
         gFocusMgr.triggerFocusFlash();
     }
-    return TRUE;
+    return true;
 }
 
 void FSFloaterIM::onFocusLost()
@@ -235,10 +235,7 @@ void FSFloaterIM::onClose(bool app_quitting)
 
     // AO: Make sure observers are removed on close
     mVoiceChannelStateChangeConnection.disconnect();
-    if(LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-    }
+    LLVoiceClient::removeObserver((LLVoiceClientStatusObserver*)this);
 
     //<FS:ND> FIRE-6077 et al: Always clean up observers when the floater dies
     LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
@@ -342,7 +339,7 @@ void FSFloaterIM::newIMCallback(const LLSD& data){
     }
 }
 
-void FSFloaterIM::onVisibilityChange(BOOL new_visibility)
+void FSFloaterIM::onVisibilityChange(bool new_visibility)
 {
     LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
 
@@ -465,19 +462,48 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                         str_viewer_mode = "T";
 
                     //Build it up
-                    size_t insert_pos = is_irc_me_prefix(utf8_text) ? 4 : 0;
+                    size_t insert_pos = FSCommon::is_irc_me_prefix(utf8_text) ? 4 : 0;
 
                     //For testing/beta groups, we display the build version since it doesn't speed by and this might change often
                     if (FSData::getInstance()->isTestingGroup(mSessionID))
                     {
                         if(chat_prefix_testing)
-                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getBuildVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                        {
+                            auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
+                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(Release) ");
+                            }
+                            else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(Unofficial) ");
+                            }
+                            else // In testing groups we'll allow all non-release recognised channels.
+                            {
+                                utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getBuildVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                            }
+                        }
+
                     }
                     //For release support groups, only display the short version(Major.Minor.Patch) since chat can speed by. This makes it easier on Support's eyes.
                     else if(FSData::getInstance()->isSupportGroup(mSessionID))
                     {
                         if(chat_prefix_support)
-                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getShortVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                        {
+                            auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
+                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(Unofficial) ");
+                            }
+                            else if( viewer_maturity != LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
+                            {
+                                utf8_text.insert(insert_pos, "(pre-Release) ");
+                            }
+                            else
+                            {
+                                utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getShortVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                            }
+                        }
                     }
                 }
 
@@ -542,7 +568,7 @@ void FSFloaterIM::sendMsg(const std::string& msg)
                     }
 
                     LLSpeakerMgr::speaker_list_t speakers;
-                    pIMSession->mSpeakers->getSpeakerList(&speakers, TRUE);
+                    pIMSession->mSpeakers->getSpeakerList(&speakers, true);
                     for (const auto& pSpeaker : speakers)
                     {
                         if ( (gAgent.getID() != pSpeaker->mID) && (!RlvActions::canSendIM(pSpeaker->mID)) )
@@ -587,10 +613,7 @@ FSFloaterIM::~FSFloaterIM()
 
     LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, (LLView*)this);
     mVoiceChannelStateChangeConnection.disconnect();
-    if (LLVoiceClient::instanceExists())
-    {
-        LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
-    }
+    LLVoiceClient::removeObserver((LLVoiceClientStatusObserver*)this);
 
     LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
     if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
@@ -668,7 +691,7 @@ void FSFloaterIM::doToSelected(const LLSD& userdata)
     {
         if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
         {
-            LLFloaterReg::showInstance("preview_conversation", mSessionID, TRUE);
+            LLFloaterReg::showInstance("preview_conversation", mSessionID, true);
         }
         else
         {
@@ -723,7 +746,7 @@ void FSFloaterIM::onSysinfoButtonClicked()
     LLNotificationsUtil::add("SendSysinfoToIM",args,LLSD(),boost::bind(&FSFloaterIM::onSendSysinfo,this,_1,_2));
 }
 
-BOOL FSFloaterIM::onSendSysinfo(const LLSD& notification, const LLSD& response)
+bool FSFloaterIM::onSendSysinfo(const LLSD& notification, const LLSD& response)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification,response);
 
@@ -742,9 +765,9 @@ BOOL FSFloaterIM::onSendSysinfo(const LLSD& notification, const LLSD& response)
             mQueuedMsgsForInit.append(part1);
             mQueuedMsgsForInit.append(part2);
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 void FSFloaterIM::onSysinfoButtonVisibilityChanged(const LLSD& yes)
@@ -753,7 +776,7 @@ void FSFloaterIM::onSysinfoButtonVisibilityChanged(const LLSD& yes)
 }
 // support sysinfo button -Zi
 
-void FSFloaterIM::onChange(EStatusType status, const std::string &channelURI, bool proximal)
+void FSFloaterIM::onChange(EStatusType status, const LLSD& channelInfo, bool proximal)
 {
     if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
     {
@@ -771,14 +794,14 @@ void FSFloaterIM::updateCallButton()
 
     if (!session)
     {
-        getChild<LLButton>("call_btn")->setEnabled(FALSE);
+        getChild<LLButton>("call_btn")->setEnabled(false);
         return;
     }
 
     bool session_initialized = session->mSessionInitialized;
     bool callback_enabled = session->mCallBackEnabled;
 
-    BOOL enable_connect = session_initialized
+    bool enable_connect = session_initialized
     && voice_enabled
     && callback_enabled;
 
@@ -803,22 +826,22 @@ void FSFloaterIM::changed(U32 mask)
         bool is_online = LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID);
         getChild<LLButton>("teleport_btn")->setEnabled(is_online);
         getChild<LLButton>("call_btn")->setEnabled(is_online);
-        getChild<LLButton>("add_friend_btn")->setEnabled(FALSE);
+        getChild<LLButton>("add_friend_btn")->setEnabled(false);
     }
     else
     {
         // If friendship dissolved, enable buttons by default because we don't
         // know about their online status anymore
-        getChild<LLButton>("teleport_btn")->setEnabled(TRUE);
-        getChild<LLButton>("call_btn")->setEnabled(TRUE);
-        getChild<LLButton>("add_friend_btn")->setEnabled(TRUE);
+        getChild<LLButton>("teleport_btn")->setEnabled(true);
+        getChild<LLButton>("call_btn")->setEnabled(true);
+        getChild<LLButton>("add_friend_btn")->setEnabled(true);
     }
 }
 
 // </AO> Callbacks for llimcontrol panel, merged into this floater
 
 //virtual
-BOOL FSFloaterIM::postBuild()
+bool FSFloaterIM::postBuild()
 {
     const LLUUID& other_party_id = LLIMModel::getInstance()->getOtherParticipantID(mSessionID);
     if (other_party_id.notNull())
@@ -830,7 +853,7 @@ BOOL FSFloaterIM::postBuild()
 
     // AO: always hide the control panel to start.
     LL_DEBUGS("FSFloaterIM") << "mControlPanel->getParent()" << mControlPanel->getParent() << LL_ENDL;
-    mControlPanel->getParent()->setVisible(FALSE);
+    mControlPanel->getParent()->setVisible(false);
 
     LL_DEBUGS("FSFloaterIM") << "buttons setup in IM start" << LL_ENDL;
 
@@ -844,7 +867,7 @@ BOOL FSFloaterIM::postBuild()
 
     // support sysinfo button -Zi
     mSysinfoButton = getChild<LLButton>("send_sysinfo_btn");
-    onSysinfoButtonVisibilityChanged(FALSE);
+    onSysinfoButtonVisibilityChanged(false);
 
     // type-specfic controls
     LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
@@ -855,10 +878,10 @@ BOOL FSFloaterIM::postBuild()
             case LLIMModel::LLIMSession::P2P_SESSION:   // One-on-one IM
             {
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::P2P_SESSION" << LL_ENDL;
-                getChild<LLLayoutPanel>("slide_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("gprofile_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
+                getChild<LLLayoutPanel>("slide_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
 
                 LL_DEBUGS("FSFloaterIM") << "adding FSFloaterIM removing/adding particularfriendobserver" << LL_ENDL;
                 LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
@@ -888,14 +911,14 @@ BOOL FSFloaterIM::postBuild()
             case LLIMModel::LLIMSession::GROUP_SESSION: // Group chat
             {
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::GROUP_SESSION start" << LL_ENDL;
-                getChild<LLLayoutPanel>("profile_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("friend_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("tp_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("share_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("pay_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("add_participant_panel")->setVisible(FALSE);
+                getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("share_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("add_participant_panel")->setVisible(false);
 
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::GROUP_SESSION end" << LL_ENDL;
                 break;
@@ -903,21 +926,21 @@ BOOL FSFloaterIM::postBuild()
             case LLIMModel::LLIMSession::ADHOC_SESSION: // Conference chat
             {
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION  start" << LL_ENDL;
-                getChild<LLLayoutPanel>("profile_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("gprofile_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("friend_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("tp_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("share_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("pay_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
+                getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("share_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION end" << LL_ENDL;
                 break;
             }
             default:
                 LL_DEBUGS("FSFloaterIM") << "default buttons start" << LL_ENDL;
-                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
-                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
+                getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
+                getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
                 LL_DEBUGS("FSFloaterIM") << "default buttons end" << LL_ENDL;
                 break;
         }
@@ -932,7 +955,7 @@ BOOL FSFloaterIM::postBuild()
         updateButtons(mVoiceChannel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
         LL_DEBUGS("FSFloaterIM") << "voice_channel end" << LL_ENDL;
     }
-    LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
+    LLVoiceClient::addObserver((LLVoiceClientStatusObserver*)this);
 
     // </AO>
 
@@ -952,8 +975,8 @@ BOOL FSFloaterIM::postBuild()
     mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterIM::onInputEditorFocusLost, this));
     mInputEditor->setKeystrokeCallback(boost::bind(&FSFloaterIM::onInputEditorKeystroke, this));
     mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterIM::reshapeChatLayoutPanel, this));
-    mInputEditor->setCommitOnFocusLost(FALSE);
-    mInputEditor->setPassDelete(TRUE);
+    mInputEditor->setCommitOnFocusLost(false);
+    mInputEditor->setPassDelete(true);
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
     mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
@@ -1028,7 +1051,7 @@ BOOL FSFloaterIM::postBuild()
         LLIMModel::instance().findIMSession(mSessionID);
     if (im_session && !im_session->mTextIMPossible)
     {
-        mInputEditor->setEnabled(FALSE);
+        mInputEditor->setEnabled(false);
         mInputEditor->setLabel(LLTrans::getString("IM_unavailable_text_label"));
     }
 
@@ -1138,7 +1161,7 @@ void FSFloaterIM::timedUpdate()
         if (mMeTypingTimer.getElapsedTimeF32() > ME_TYPING_TIMEOUT && false == mShouldSendTypingState && mDialog == IM_NOTHING_SPECIAL)
         {
             LL_DEBUGS("TypingMsgs") << "Send additional Start Typing packet" << LL_ENDL;
-            LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, TRUE);
+            LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, true);
             mMeTypingTimer.reset();
         }
 
@@ -1250,14 +1273,14 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 
             if (floater_container)
             {
-                floater_container->addFloater(floater, TRUE, i_pt);
+                floater_container->addFloater(floater, true, i_pt);
             }
         }
 
         floater->mApplyRect = false;
         floater->openFloater(floater->getKey());
         floater->mApplyRect = true;
-        floater->setFocus(TRUE);
+        floater->setFocus(true);
     }
     else
     {
@@ -1297,7 +1320,7 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
         }
 
         // window is positioned, now we can show it.
-        floater->setVisible(TRUE);
+        floater->setVisible(true);
     }
 
     return floater;
@@ -1309,20 +1332,20 @@ void FSFloaterIM::setDocked(bool docked, bool pop_on_undock)
     LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
         (LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID));
 
-    if (!isChatMultiTab())
+    if(!isChatMultiTab())
     {
         LLTransientDockableFloater::setDocked(docked, pop_on_undock);
     }
 
     // update notification channel state
-    if (channel)
+    if(channel)
     {
         channel->updateShowToastsState();
         channel->redrawToasts();
     }
 }
 
-void FSFloaterIM::setVisible(BOOL visible)
+void FSFloaterIM::setVisible(bool visible)
 {
     LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
         (LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID));
@@ -1335,7 +1358,7 @@ void FSFloaterIM::setVisible(BOOL visible)
         channel->redrawToasts();
     }
 
-    BOOL is_minimized = visible && isChatMultiTab()
+    bool is_minimized = visible && isChatMultiTab()
         ? FSFloaterIMContainer::getInstance()->isMinimized()
         : !visible;
 
@@ -1350,7 +1373,7 @@ void FSFloaterIM::setVisible(BOOL visible)
         bool is_active = im_container->getActiveFloater() == this && im_container->hasFocus();
         if (!isChatMultiTab() || is_active || hasFocus())
         {
-            mInputEditor->setFocus(TRUE);
+            mInputEditor->setFocus(true);
         }
     }
 
@@ -1373,14 +1396,14 @@ void FSFloaterIM::setVisible(BOOL visible)
     }
 }
 
-void FSFloaterIM::setMinimized(BOOL b)
+void FSFloaterIM::setMinimized(bool b)
 {
     handleMinimized(b);
 
     LLTransientDockableFloater::setMinimized(b);
 }
 
-BOOL FSFloaterIM::getVisible()
+bool FSFloaterIM::getVisible()
 {
     if (isChatMultiTab())
     {
@@ -1395,7 +1418,7 @@ BOOL FSFloaterIM::getVisible()
             return LLTransientDockableFloater::getVisible();
         }
 
-        // getVisible() returns TRUE when Tabbed IM window is minimized.
+        // getVisible() returns true when Tabbed IM window is minimized.
         return is_active && !im_container->isMinimized() && im_container->getVisible();
     }
     else
@@ -1419,8 +1442,8 @@ bool FSFloaterIM::toggle(const LLUUID& session_id)
         }
         else if (floater && (!floater->isDocked() || (floater->getVisible() && !floater->hasFocus())))
         {
-            floater->setVisible(TRUE);
-            floater->setFocus(TRUE);
+            floater->setVisible(true);
+            floater->setFocus(true);
             return true;
         }
     }
@@ -1668,7 +1691,7 @@ void FSFloaterIM::setTyping(bool typing)
             if ( mTypingTimer.getElapsedTimeF32() > 1.f )
             {
                 // Still typing, send 'start typing' notification
-                LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, TRUE);
+                LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, true);
                 mShouldSendTypingState = false;
                 mMeTypingTimer.reset();
             }
@@ -1676,17 +1699,17 @@ void FSFloaterIM::setTyping(bool typing)
         else
         {
             // Send 'stop typing' notification immediately
-            LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, FALSE);
+            LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, false);
             mShouldSendTypingState = false;
         }
     }
 
     LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
     if (speaker_mgr)
-        speaker_mgr->setSpeakerTyping(gAgent.getID(), FALSE);
+        speaker_mgr->setSpeakerTyping(gAgent.getID(), false);
 }
 
-void FSFloaterIM::processIMTyping(const LLUUID& from_id, BOOL typing)
+void FSFloaterIM::processIMTyping(const LLUUID& from_id, bool typing)
 {
     if (typing)
     {
@@ -1728,7 +1751,7 @@ void FSFloaterIM::processAgentListUpdates(const LLSD& body)
                 // process the moderator mutes
                 if (agent_id == gAgentID && agent_data.has("info") && agent_data["info"].has("mutes"))
                 {
-                    BOOL moderator_muted_text = agent_data["info"]["mutes"]["text"].asBoolean();
+                    bool moderator_muted_text = agent_data["info"]["mutes"]["text"].asBoolean();
                     mInputEditor->setEnabled(!moderator_muted_text);
                     std::string label;
                     if (moderator_muted_text)
@@ -1805,8 +1828,8 @@ void FSFloaterIM::processChatHistoryStyleUpdate(const LLSD& newvalue)
     }
 }
 
-BOOL FSFloaterIM::handleDragAndDrop(S32 x, S32 y, MASK mask,
-                           BOOL drop, EDragAndDropType cargo_type,
+bool FSFloaterIM::handleDragAndDrop(S32 x, S32 y, MASK mask,
+                           bool drop, EDragAndDropType cargo_type,
                            void *cargo_data, EAcceptance *accept,
                            std::string& tooltip_msg)
 {
@@ -1848,7 +1871,7 @@ BOOL FSFloaterIM::handleDragAndDrop(S32 x, S32 y, MASK mask,
             }
         }
     }
-    return TRUE;
+    return true;
 }
 
 bool FSFloaterIM::dropCallingCard(LLInventoryItem* item, bool drop)
@@ -1892,7 +1915,7 @@ bool FSFloaterIM::dropCategory(LLInventoryCategory* category, bool drop)
                                         items,
                                         LLInventoryModel::EXCLUDE_TRASH,
                                         buddies);
-        S32 count = items.size();
+        auto count = items.size();
         if (count == 0)
         {
             rv = false;
@@ -1945,7 +1968,7 @@ bool FSFloaterIM::dropPerson(LLUUID* person_id, bool drop)
 }
 
 //virtual
-BOOL FSFloaterIM::tick()
+bool FSFloaterIM::tick()
 {
     // add people who were added via dropPerson()
     if (!mPendingParticipants.empty())
@@ -1956,13 +1979,13 @@ BOOL FSFloaterIM::tick()
 
     mEventTimer.stop();
 
-    return FALSE;
+    return false;
 }
 
 // virtual
-BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
+bool FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 {
-    BOOL handled = FALSE;
+    bool handled = false;
 
     if (key == KEY_RETURN)
     {
@@ -1970,7 +1993,7 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
         {
             mInputEditor->updateHistory();
             sendMsgFromInputEditor(CHAT_TYPE_OOC);
-            handled = TRUE;
+            handled = true;
         }
         else if (mask == (MASK_SHIFT | MASK_CONTROL))
         {
@@ -1997,21 +2020,21 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
                     mInputEditor->insertText(line_break);
                 }
             }
-            handled = TRUE;
+            handled = true;
         }
     }
 
     return handled;
 }
 
-BOOL FSFloaterIM::isInviteAllowed() const
+bool FSFloaterIM::isInviteAllowed() const
 {
     return ( (IM_SESSION_CONFERENCE_START == mDialog)
              || (IM_SESSION_INVITE == mDialog && !gAgent.isInGroup(mSessionID))
              || mIsP2PChat);
 }
 
-BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
+bool FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 {
     LLViewerRegion* region = gAgent.getRegion();
     bool is_region_exist = region != NULL;
@@ -2065,7 +2088,7 @@ void FSFloaterIM::addTypingIndicator(const LLUUID& from_id)
         LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
         if ( speaker_mgr )
         {
-            speaker_mgr->setSpeakerTyping(from_id, TRUE);
+            speaker_mgr->setSpeakerTyping(from_id, true);
         }
     }
 }
@@ -2085,7 +2108,7 @@ void FSFloaterIM::removeTypingIndicator(const LLUUID& from_id)
             LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
             if ( speaker_mgr )
             {
-                speaker_mgr->setSpeakerTyping(from_id, FALSE);
+                speaker_mgr->setSpeakerTyping(from_id, false);
             }
         }
         // Ansariel: Transplant of STORM-1975; Typing notifications are only sent in P2P sessions,
@@ -2097,7 +2120,7 @@ void FSFloaterIM::removeTypingIndicator(const LLUUID& from_id)
             LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
             if ( speaker_mgr )
             {
-                speaker_mgr->setSpeakerTyping(mOtherParticipantUUID, FALSE);
+                speaker_mgr->setSpeakerTyping(mOtherParticipantUUID, false);
             }
         }
     }
@@ -2232,14 +2255,14 @@ void FSFloaterIM::onClickCloseBtn(bool app_quitting)
 }
 
 // <FS:Zi> Viewer version popup
-BOOL FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLSD& response)
+bool FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLSD& response)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification,response);
 
-    BOOL result = FALSE;
+    bool result = false;
     if (option == 0)        // "yes"
     {
-        result = TRUE;
+        result = true;
     }
 
     gSavedSettings.setBOOL("FSSupportGroupChatPrefix3", result);
@@ -2288,7 +2311,7 @@ void FSFloaterIM::initIMSession(const LLUUID& session_id)
 
 void FSFloaterIM::reshapeChatLayoutPanel()
 {
-    mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, FALSE);
+    mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, false);
 }
 
 boost::signals2::connection FSFloaterIM::setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb)
@@ -2300,12 +2323,12 @@ void FSFloaterIM::updateUnreadMessageNotification(S32 unread_messages)
 {
     if (unread_messages == 0 || !gSavedSettings.getBOOL("FSNotifyUnreadIMMessages"))
     {
-        mUnreadMessagesNotificationPanel->setVisible(FALSE);
+        mUnreadMessagesNotificationPanel->setVisible(false);
     }
     else
     {
         mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
-        mUnreadMessagesNotificationPanel->setVisible(TRUE);
+        mUnreadMessagesNotificationPanel->setVisible(true);
     }
 }
 
@@ -2313,7 +2336,7 @@ void FSFloaterIM::onAddButtonClicked()
 {
     LLView* button = findChild<LLButton>("add_participant_btn");
     LLFloater* root_floater = this;
-    LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterIM::addSessionParticipants, this, _1), TRUE, TRUE, FALSE, root_floater->getName(), button);
+    LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterIM::addSessionParticipants, this, _1), true, true, false, root_floater->getName(), button);
     if (!picker)
     {
         return;
@@ -2484,14 +2507,14 @@ bool FSFloaterIM::applyRectControl()
 
 void FSFloaterIM::onEmojiRecentPanelToggleBtnClicked()
 {
-    BOOL show = mEmojiRecentPanel->getVisible() ? FALSE : TRUE;
+    bool show = mEmojiRecentPanel->getVisible() ? false : true;
     if (show)
     {
         initEmojiRecentPanel();
     }
 
     mEmojiRecentPanel->setVisible(show);
-    mInputEditor->setFocus(TRUE);
+    mInputEditor->setFocus(true);
 }
 
 void FSFloaterIM::initEmojiRecentPanel()
@@ -2499,8 +2522,8 @@ void FSFloaterIM::initEmojiRecentPanel()
     std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
     if (recentlyUsed.empty())
     {
-        mEmojiRecentEmptyText->setVisible(TRUE);
-        mEmojiRecentIconsCtrl->setVisible(FALSE);
+        mEmojiRecentEmptyText->setVisible(true);
+        mEmojiRecentIconsCtrl->setVisible(false);
     }
     else
     {
@@ -2510,8 +2533,8 @@ void FSFloaterIM::initEmojiRecentPanel()
             emojis += emoji;
         }
         mEmojiRecentIconsCtrl->setEmojis(emojis);
-        mEmojiRecentEmptyText->setVisible(FALSE);
-        mEmojiRecentIconsCtrl->setVisible(TRUE);
+        mEmojiRecentEmptyText->setVisible(false);
+        mEmojiRecentIconsCtrl->setVisible(true);
     }
 }
 
@@ -2531,6 +2554,6 @@ void FSFloaterIM::onRecentEmojiPicked(const LLSD& value)
 
 void FSFloaterIM::onEmojiPickerToggleBtnClicked()
 {
-    mInputEditor->setFocus(TRUE);
+    mInputEditor->setFocus(true);
     mInputEditor->showEmojiHelper();
 }

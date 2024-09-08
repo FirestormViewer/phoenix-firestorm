@@ -3,11 +3,6 @@
 project(llmessage)
 
 include(00-Common)
-
-# <FS:ND> Google Mock/Test is not used
-#include(GoogleMock)
-# </FS:ND>
-
 include(LLAddBuildTest)
 include(LLCommon)
 include(LLCoreHttp)
@@ -15,7 +10,6 @@ include(LLAddBuildTest)
 include(Python)
 include(Tut)
 include(Python)
-include(JsonCpp)
 
 set(llmessage_SOURCE_FILES
     fscorehttputil.cpp

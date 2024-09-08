@@ -70,13 +70,13 @@ public:
 
     // If available, copies name ("bobsmith123" or "James Linden") into string
     // If not available, copies the string "waiting".
-    // Returns TRUE iff available.
-    BOOL getFullName(const LLUUID& id, std::string& full_name);
-    BOOL getFirstLastName(const LLUUID& id, std::string& first, std::string& last); // <FS:CR> returns first name, last name
+    // Returns true if available.
+    bool getFullName(const LLUUID& id, std::string& full_name);
+    bool getFirstLastName(const LLUUID& id, std::string& first, std::string& last); // <FS:CR> returns first name, last name
 
     // Reverse lookup of UUID from name
-    BOOL getUUID(const std::string& first, const std::string& last, LLUUID& id);
-    BOOL getUUID(const std::string& fullname, LLUUID& id);
+    bool getUUID(const std::string& first, const std::string& last, LLUUID& id);
+    bool getUUID(const std::string& fullname, LLUUID& id);
 
     // IDEVO Temporary code
     // Clean up new-style "bobsmith123 Resident" names to "bobsmith123" for display
@@ -100,8 +100,8 @@ public:
     // If available, this method copies the group name into the string
     // provided. The caller must allocate at least
     // DB_GROUP_NAME_BUF_SIZE characters. If not available, this
-    // method copies the string "waiting". Returns TRUE iff available.
-    BOOL getGroupName(const LLUUID& id, std::string& group);
+    // method copies the string "waiting". Returns true if available.
+    bool getGroupName(const LLUUID& id, std::string& group);
 
     // Call the callback with the group or avatar name.
     // If the data is currently available, may call the callback immediatly
@@ -110,7 +110,7 @@ public:
     boost::signals2::connection get(const LLUUID& id, bool is_group, const LLCacheNameCallback& callback);
 
     // NaCl - Sound explorer
-    BOOL getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_group);
+    bool getIfThere(const LLUUID& id, std::string& fullname, bool& is_group);
     // NaCl end
 
     // Convenience method for looking up a group name, so you can
@@ -132,15 +132,16 @@ public:
     void dumpStats();   // Dumps the sizes of the cache and associated queues.
     void clear();       // Deletes all entries from the cache
 
-    static std::string getDefaultName();
+    std::string getDefaultName();
 
     // Returns "Resident", the default last name for SLID-based accounts
     // that have no last name.
     static std::string getDefaultLastName();
 
-    static void localizeCacheName(std::string key, std::string value);
-    static std::map<std::string, std::string> sCacheName;
+    void localizeCacheName(std::string key, std::string value);
+
 private:
+    std::map<std::string, std::string> mCacheName;
 
     class Impl;
     Impl& impl;

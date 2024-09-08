@@ -68,7 +68,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # files during the build (see copy_w_viewer_manifest
         # and copy_l_viewer_manifest targets)
         return 'package' in self.args['actions']
-    
+
     def construct(self):
         super(ViewerManifest, self).construct()
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
@@ -116,7 +116,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
                 # ... and the entire image filters directory
                 self.path("filters")
-            
+
                 # ... and the included spell checking dictionaries
                 # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
@@ -369,7 +369,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def extract_names(self,src):
         """Extract contributor names from source file, returns string"""
         try:
-            with open(src, 'r') as contrib_file: 
+            with open(src, 'r') as contrib_file:
                 lines = contrib_file.readlines()
         except IOError:
             print("Failed to open '%s'" % src)
@@ -594,7 +594,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
                 raise Exception("Directories are not supported by test_CRT_and_copy_action()")
         else:
             print("Doesn't exist:", src)
-        
+
     def construct(self):
         super().construct()
 
@@ -651,10 +651,16 @@ class Windows_x86_64_Manifest(ViewerManifest):
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
                            "slplugin.exe")
-        
+
         # Get shared libs from the shared libs staging directory
         with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                           'sharedlibs', self.args['buildtype'])):
+            # WebRTC libraries
+            for libfile in (
+                    'llwebrtc.dll',
+            ):
+                self.path(libfile)
+
 
             # Mesh 3rd party libs needed for auto LOD and collada reading
             try:
@@ -696,7 +702,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             # Vivox libraries
             self.path("vivoxsdk_x64.dll")
             self.path("ortp_x64.dll")
-            
+
             # OpenSSL
             self.path("libcrypto-1_1-x64.dll")
             self.path("libssl-1_1-x64.dll")
@@ -838,7 +844,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
                 self.path("plugins/")
 
         if not self.is_packaging_viewer():
-            self.package_file = "copied_deps"    
+            self.package_file = "copied_deps"
 
         self.fs_copy_windows_manifest( )
 
@@ -961,7 +967,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         !define VERSION_REGISTRY "%(version_registry)s"
         !define VIEWER_EXE "%(final_exe)s"
         """ % substitution_strings
-        
+
         if self.channel_type() == 'release':
             substitution_strings['caption'] = CHANNEL_VENDOR_BASE
         else:
@@ -1258,6 +1264,14 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                                     # ):
                             # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
+                # # OpenAL dylibs
+                # if self.args['openal'] == 'ON':
+                    # for libfile in (
+                                # "libopenal.dylib",
+                                # "libalut.dylib",
+                                # ):
+                        # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 # # our apps
                 # executable_path = {}
                 # embedded_apps = [ (os.path.join("llplugin", "slplugin"), "SLPlugin.app") ]
@@ -1411,6 +1425,9 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
+            with self.prefix(dst="MacOS"):
+                executable = self.dst_path_of("Firestorm") # locate the executable within the bundle.
+
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
             if bugsplat_db:
@@ -1442,6 +1459,46 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                 if self.args.get('bugsplat'):
                     self.path2basename(relpkgdir, "BugsplatMac.framework")
 
+            with self.prefix(dst="MacOS"):
+                executable = self.dst_path_of("Firestorm")
+                if self.args.get('bugsplat'):
+                    # According to Apple Technical Note TN2206:
+                    # https://developer.apple.com/library/archive/technotes/tn2206/_index.html#//apple_ref/doc/uid/DTS40007919-CH1-TNTAG207
+                    # "If an app uses @rpath or an absolute path to link to a
+                    # dynamic library outside of the app, the app will be
+                    # rejected by Gatekeeper. ... Neither the codesign nor the
+                    # spctl tool will show the error."
+                    # (Thanks, Apple. Maybe fix spctl to warn?)
+                    # The BugsplatMac framework embeds @rpath, which is
+                    # causing scary Gatekeeper popups at viewer start. Work
+                    # around this by changing the reference baked into our
+                    # viewer. The install_name_tool -change option needs the
+                    # previous value. Instead of guessing -- which might
+                    # silently be defeated by a BugSplat SDK update that
+                    # changes their baked-in @rpath -- ask for the path
+                    # stamped into the framework.
+                    # Let exception, if any, propagate -- if this doesn't
+                    # work, we need the build to noisily fail!
+                    oldpath = subprocess.check_output(
+                        ['objdump', '--macho', '--dylib-id', '--non-verbose',
+                         os.path.join(relpkgdir, "BugsplatMac.framework", "BugsplatMac")],
+                        text=True
+                        ).splitlines()[-1]  # take the last line of output
+                    self.run_command(
+                        ['install_name_tool', '-change', oldpath,
+                         '@executable_path/../Frameworks/BugsplatMac.framework/BugsplatMac',
+                         executable])
+
+                # NOTE: the -S argument to strip causes it to keep
+                # enough info for annotated backtraces (i.e. function
+                # names in the crash log). 'strip' with no arguments
+                # yields a slightly smaller binary but makes crash
+                # logs mostly useless. This may be desirable for the
+                # final release. Or not.
+                if ("package" in self.args['actions'] or
+                    "unpacked" in self.args['actions']):
+                    self.run_command(
+                        ['strip', '-S', executable])
 
             # most everything goes in the Resources directory
             with self.prefix(dst="Resources"):
@@ -1512,6 +1569,21 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         print("Skipping %s" % dst)
                     return added
 
+                # WebRTC libraries
+                with self.prefix(src=os.path.join(self.args['build'], os.pardir,
+                                          'sharedlibs', self.args['buildtype'], 'Resources')):
+                    for libfile in (
+                            'libllwebrtc.dylib',
+                    ):
+                        self.path(libfile)
+
+                        oldpath = os.path.join("@rpath", libfile)
+                        print(f"debug: oldpath={oldpath} executable={executable} libfile={libfile}")
+                        self.run_command(
+                            ['install_name_tool', '-change', 
+                             oldpath,
+                             '@executable_path/../Resources/%s' % libfile, executable])
+
                 # dylibs is a list of all the .dylib files we expect to need
                 # in our bundled sub-apps. For each of these we'll create a
                 # symlink from sub-app/Contents/Resources to the real .dylib.
@@ -1562,9 +1634,20 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         for libfile in (
                                     "libfmod.dylib",
                                     ):
-                            
                             print("debug: adding {} to dylibs for fmodstudio".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
+                # OpenAL dylibs
+                useopenal = self.args['openal'].lower()
+                print(f"debug: openal={useopenal}")
+                if useopenal == 'on':
+                    for libfile in (
+                                "libopenal.dylib",
+                                "libalut.dylib",
+                                ):
+                        print("debug: adding {} to dylibs for openal".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
+                        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 print(f"debug: dylibs = {dylibs}")
 
                 # our apps
@@ -2137,6 +2220,16 @@ class LinuxManifest(ViewerManifest):
             #self.path("libfontconfig.so.*.*")
 
             self.path_optional("libjemalloc.so*")
+
+            # WebRTC libraries
+            with self.prefix(src=os.path.join(self.args['build'], os.pardir,
+                        'sharedlibs', 'lib')):
+
+             for libfile in (
+                   'libllwebrtc.so',
+             ):
+
+                    self.path(libfile)
 
             # Vivox runtimes
             # Currentelly, the 32-bit ones will work with a 64-bit client.

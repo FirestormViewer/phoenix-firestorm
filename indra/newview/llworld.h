@@ -86,7 +86,7 @@ public:
     LLViewerRegion*         getRegionFromPosAgent(const LLVector3 &pos);
     LLViewerRegion*         getRegionFromHandle(const U64 &handle);
     LLViewerRegion*         getRegionFromID(const LLUUID& region_id);
-    BOOL                    positionRegionValidGlobal(const LLVector3d& pos);           // true if position is in valid region
+    bool                    positionRegionValidGlobal(const LLVector3d& pos);           // true if position is in valid region
     LLVector3d              clipToVisibleRegions(const LLVector3d &start_pos, const LLVector3d &end_pos);
 
     void                    updateAgentOffset(const LLVector3d &offset);
@@ -148,10 +148,10 @@ public:
     F32 getMinPrimZPos() const          { return mMinPrimZPos; }
     F32 getMaxDragDistance() const      { return mMaxDragDistance; }
     F32 getMaxPhysPrimScale() const     { return mMaxPhysPrimScale; }
-    BOOL getAllowParcelWindLight() const{ return mAllowParcelWindLight; }
-    BOOL getEnableTeenMode() const      { return mEnableTeenMode; }
-    BOOL getEnforceMaxBuild() const     { return mEnforceMaxBuild; }
-    BOOL getLockedDrawDistance() const  { return mLockedDrawDistance; }
+    bool getAllowParcelWindLight() const{ return mAllowParcelWindLight; }
+    bool getEnableTeenMode() const      { return mEnableTeenMode; }
+    bool getEnforceMaxBuild() const     { return mEnforceMaxBuild; }
+    bool getLockedDrawDistance() const  { return mLockedDrawDistance; }
 
     F32 getDrawDistance() const         { return mDrawDistance; }
     F32 getTerrainDetailScale() const   { return mTerrainDetailScale; }
@@ -168,9 +168,9 @@ public:
     void setMaxPhysLinkedPrims(S32 val);
     void setMaxInventoryItemsTransfer(S32 val);
     void setAllowRenderName(S32 val);
-    void setAllowMinimap(BOOL val);
-    void setAllowPhysicalPrims(BOOL val);
-    void setAllowRenderWater(BOOL val);
+    void setAllowMinimap(bool val);
+    void setAllowPhysicalPrims(bool val);
+    void setAllowRenderWater(bool val);
 
     void setMaxPrimXPos(F32 val);
     void setMaxPrimYPos(F32 val);
@@ -180,10 +180,10 @@ public:
     void setMinPrimZPos(F32 val);
     void setMaxDragDistance(F32 val);
     void setMaxPhysPrimScale(F32 val);
-    void setAllowParcelWindLight(BOOL val);
-    void setEnableTeenMode(BOOL val);
-    void setEnforceMaxBuild(BOOL val);
-    void setLockedDrawDistance(BOOL val);
+    void setAllowParcelWindLight(bool val);
+    void setEnableTeenMode(bool val);
+    void setEnforceMaxBuild(bool val);
+    void setLockedDrawDistance(bool val);
 
     void setDrawDistance(F32 val);
     void setTerrainDetailScale(F32 val);
@@ -282,9 +282,9 @@ private:
     S32 mMaxPhysLinkedPrims;
     S32 mMaxInventoryItemsTransfer;
     S32 mAllowRenderName;
-    BOOL mAllowMinimap;
-    BOOL mAllowPhysicalPrims;
-    BOOL mAllowRenderWater;
+    bool mAllowMinimap;
+    bool mAllowPhysicalPrims;
+    bool mAllowRenderWater;
 
     F32     mMaxPrimXPos;
     F32     mMaxPrimYPos;
@@ -294,10 +294,10 @@ private:
     F32     mMinPrimZPos;
     F32     mMaxDragDistance;
     F32     mMaxPhysPrimScale;
-    BOOL    mAllowParcelWindLight;
-    BOOL    mEnableTeenMode;
-    BOOL    mEnforceMaxBuild;
-    BOOL    mLockedDrawDistance;
+    bool    mAllowParcelWindLight;
+    bool    mEnableTeenMode;
+    bool    mEnforceMaxBuild;
+    bool    mLockedDrawDistance;
 
     F32 mDrawDistance;
     F32 mTerrainDetailScale;

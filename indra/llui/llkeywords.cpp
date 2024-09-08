@@ -39,7 +39,7 @@ inline bool LLKeywordToken::isHead(const llwchar* s) const
     // strncmp is much faster than string compare
     bool res = true;
     const llwchar* t = mToken.c_str();
-    S32 len = mToken.size();
+    auto len = mToken.size();
     for (S32 i=0; i<len; i++)
     {
         if (s[i] != t[i])
@@ -55,7 +55,7 @@ inline bool LLKeywordToken::isTail(const llwchar* s) const
 {
     bool res = true;
     const llwchar* t = mDelimiter.c_str();
-    S32 len = mDelimiter.size();
+    auto len = mDelimiter.size();
     for (S32 i=0; i<len; i++)
     {
         if (s[i] != t[i])
@@ -134,7 +134,7 @@ std::string LLKeywords::getArguments(LLSD& arguments)
 
     if (arguments.isArray())
     {
-        U32 argsCount = arguments.size();
+        auto argsCount = arguments.size();
         LLSD::array_iterator arrayIt = arguments.beginArray();
         for ( ; arrayIt != arguments.endArray(); ++arrayIt)
         {
@@ -512,7 +512,7 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
         return;
     }
 
-    S32 text_len = wtext.size() + 1;
+    S32 text_len = static_cast<S32>(wtext.size()) + 1;
 
     // <FS:Ansariel> Script editor ignoring font selection
     //seg_list->push_back( new LLNormalTextSegment( style, 0, text_len, editor ) );
@@ -556,7 +556,7 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
 
             // Line start tokens
             {
-                BOOL line_done = FALSE;
+                bool line_done = false;
                 for (token_list_t::iterator iter = mLineTokenList.begin();
                      iter != mLineTokenList.end(); ++iter)
                 {
@@ -573,7 +573,7 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
 
                         //create segments from seg_start to seg_end
                         insertSegments(wtext, *seg_list,cur_token, text_len, seg_start, seg_end, style, editor);
-                        line_done = TRUE; // to break out of second loop.
+                        line_done = true; // to break out of second loop.
                         break;
                     }
                 }
@@ -750,23 +750,23 @@ void LLKeywords::insertSegments(const LLWString& wtext, std::vector<LLTextSegmen
         if (pos!=seg_start)
         {
             // <FS:Ansariel> Script editor ignoring font selection
-            //LLTextSegmentPtr text_segment = new LLNormalTextSegment( cur_token->getColor(), seg_start, pos, editor );
+            //LLTextSegmentPtr text_segment = new LLNormalTextSegment( cur_token->getColor(), seg_start, static_cast<S32>(pos), editor );
             LLStyleSP style = getDefaultStyle(editor);
             style->setColor(cur_token->getColor());
-            LLTextSegmentPtr text_segment = new LLNormalTextSegment( style, seg_start, pos, editor );
+            LLTextSegmentPtr text_segment = new LLNormalTextSegment( style, seg_start, static_cast<S32>(pos), editor );
             // </FS:Ansariel>
             text_segment->setToken( cur_token );
             insertSegment( seg_list, text_segment, text_len, style, editor);
         }
 
         // <FS:Ansariel> Script editor ignoring font selection
-        //LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(style, pos);
-        LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(getDefaultStyle(editor), pos);
+        //LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(style, static_cast<S32>(pos));
+        LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(getDefaultStyle(editor), static_cast<S32>(pos));
         // </FS:Ansariel>
         text_segment->setToken( cur_token );
         insertSegment( seg_list, text_segment, text_len, style, editor);
 
-        seg_start = pos+1;
+        seg_start = static_cast<S32>(pos) + 1;
         pos = wtext.find('\n',seg_start);
     }
 
@@ -844,7 +844,7 @@ bool LLKeywords::loadFromLegacyFile(const std::string& filename)
     if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
     {
         LL_WARNS() << "Could not read the script library (" << filename << ")" << LL_ENDL;
-        return FALSE;
+        return false;
     }
     for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
     {
@@ -1026,9 +1026,9 @@ void LLKeywords::dump()
 void LLKeywordToken::dump()
 {
     LL_INFOS() << "[" <<
-        mColor.mV[VX] << ", " <<
-        mColor.mV[VY] << ", " <<
-        mColor.mV[VZ] << "] [" <<
+        mColor.mV[VRED] << ", " <<
+        mColor.mV[VGREEN] << ", " <<
+        mColor.mV[VBLUE] << "] [" <<
         wstring_to_utf8str(mToken) << "]" <<
         LL_ENDL;
 }

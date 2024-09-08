@@ -418,7 +418,7 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 
     if (rawData.size() == 0)
     {
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
         LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
         return;
     }
@@ -490,17 +490,17 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
             LLStringUtil::trim(newsTitle);
             LLStringUtil::trim(newsDesc);
             LLStringUtil::trim(newsLink);
-            report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
+            FSCommon::report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
         }
         else
         {
-            report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
             LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
         }
     }
     else
     {
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
         LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
     }
 }
@@ -512,13 +512,13 @@ void downloadGridstatusError(LLSD const &aData, std::string const &aURL)
 
     if (status.getType() == HTTP_INTERNAL_ERROR)
     {
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
     }
     else
     {
         LLStringUtil::format_map_t args;
         args["STATUS"] = llformat("%d", status.getType());
-        report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
     }
 }
 // </FS:PP>
@@ -583,10 +583,18 @@ void update_texture_fetch()
 
 void set_flags_and_update_appearance()
 {
-    LLAppearanceMgr::instance().setAttachmentInvLinkEnable(true);
-    LLAppearanceMgr::instance().updateAppearanceFromCOF(true, true, no_op);
+    // this may be called from a coroutine but has many side effects
+    // in non-thread-safe classes, post to main loop
+    auto work = []()
+        {
+            LLAppearanceMgr::instance().setAttachmentInvLinkEnable(true);
+            LLAppearanceMgr::instance().updateAppearanceFromCOF(true, true, no_op);
 
-    LLInventoryModelBackgroundFetch::instance().start();
+            LLInventoryModelBackgroundFetch::instance().start();
+        };
+
+    LLAppViewer::instance()->postToMainCoro(work);
+
 }
 
 // Returns false to skip other idle processing. Should only return
@@ -635,7 +643,7 @@ bool idle_startup()
 
     const std::string delims (" ");
     std::string system;
-    int begIdx, endIdx;
+    size_t begIdx, endIdx;
     std::string osString = LLOSInfo::instance().getOSStringSimple();
 
     begIdx = osString.find_first_not_of (delims);
@@ -813,7 +821,7 @@ bool idle_startup()
                    LLVersionInfo::instance().getMajor(),
                    LLVersionInfo::instance().getMinor(),
                    LLVersionInfo::instance().getPatch(),
-                   FALSE,
+                   false,
                    std::string(),
                    responder,
                    failure_is_fatal,
@@ -884,7 +892,7 @@ bool idle_startup()
             F32 xfer_throttle_bps = gSavedSettings.getF32("XferThrottle");
             if (xfer_throttle_bps > 1.f)
             {
-                gXferManager->setUseAckThrottling(TRUE);
+                gXferManager->setUseAckThrottling(true);
                 gXferManager->setAckThrottleBPS(xfer_throttle_bps);
             }
             gAssetStorage = new LLViewerAssetStorage(msg, gXferManager);
@@ -898,13 +906,13 @@ bool idle_startup()
             if (inBandwidth != 0.f)
             {
                 LL_DEBUGS("AppInit") << "Setting packetring incoming bandwidth to " << inBandwidth << LL_ENDL;
-                msg->mPacketRing.setUseInThrottle(TRUE);
+                msg->mPacketRing.setUseInThrottle(true);
                 msg->mPacketRing.setInBandwidth(inBandwidth);
             }
             if (outBandwidth != 0.f)
             {
                 LL_DEBUGS("AppInit") << "Setting packetring outgoing bandwidth to " << outBandwidth << LL_ENDL;
-                msg->mPacketRing.setUseOutThrottle(TRUE);
+                msg->mPacketRing.setUseOutThrottle(true);
                 msg->mPacketRing.setOutBandwidth(outBandwidth);
             }
         }
@@ -977,7 +985,7 @@ bool idle_startup()
         else
         {
             ms_sleep(1);
-            return FALSE;
+            return false;
         }
 // <FS:AW optional opensim support>
     }
@@ -1001,7 +1009,7 @@ bool idle_startup()
         // or audio cues in connection UI.
         //-------------------------------------------------
 
-        if (FALSE == gSavedSettings.getBOOL("NoAudio"))
+        if (false == gSavedSettings.getBOOL("NoAudio"))
         {
             delete gAudiop;
             gAudiop = NULL;
@@ -1036,7 +1044,7 @@ bool idle_startup()
 #endif
                 if (gAudiop->init(window_handle, LLAppViewer::instance()->getSecondLifeTitle()))
                 {
-                    if (FALSE == gSavedSettings.getBOOL("UseMediaPluginsForStreamingAudio"))
+                    if (false == gSavedSettings.getBOOL("UseMediaPluginsForStreamingAudio"))
                     {
                         LL_INFOS("AppInit") << "Using default impl to render streaming audio" << LL_ENDL;
                         gAudiop->setStreamingAudioImpl(gAudiop->createDefaultStreamingAudioImpl());
@@ -1053,7 +1061,7 @@ bool idle_startup()
                     // <FS:Ansariel> Output device selection
                     gAudiop->setDevice(LLUUID(gSavedSettings.getString("FSOutputDeviceUUID")));
 
-                    gAudiop->setMuted(TRUE);
+                    gAudiop->setMuted(true);
                 }
                 else
                 {
@@ -1081,17 +1089,17 @@ bool idle_startup()
         // Previous initializeLoginInfo may have generated user credentials.  Re-check them.
         if (gUserCredential.isNull())
         {
-            show_connect_box = TRUE;
+            show_connect_box = true;
         }
         else if (gSavedSettings.getBOOL("AutoLogin"))
         {
             // Log into last account
             // <FS:Ansariel> Option to not save password if using login cmdline switch;
-            //               gLoginHandler.initializeLoginInfo() sets AutoLogin to TRUE,
+            //               gLoginHandler.initializeLoginInfo() sets AutoLogin to true,
             //               so we end up here!
             //gRememberPassword = true;
             //gRememberUser = true;
-            //gSavedSettings.setBOOL("RememberPassword", TRUE);
+            //gSavedSettings.setBOOL("RememberPassword", true);
             //gRememberUser = gSavedSettings.getBOOL("RememberUser");
             if (gSavedSettings.getBOOL("FSLoginDontSavePassword"))
             {
@@ -1100,7 +1108,7 @@ bool idle_startup()
             else
             {
                 gRememberPassword = true;
-                gSavedSettings.setBOOL("RememberPassword", TRUE);
+                gSavedSettings.setBOOL("RememberPassword", true);
             }
             // </FS:Ansariel>
 
@@ -1119,13 +1127,13 @@ bool idle_startup()
         {
             gRememberPassword = gSavedSettings.getBOOL("RememberPassword");
             gRememberUser = gSavedSettings.getBOOL("RememberUser");
-            show_connect_box = TRUE;
+            show_connect_box = true;
         }
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
         if (gSavedSettings.get<bool>(RlvSettingNames::Main))
         {
-            show_connect_box = TRUE;
+            show_connect_box = true;
         }
 // [/RVA:KB]
 
@@ -1169,7 +1177,7 @@ bool idle_startup()
 
         // Go to the next startup state
         LLStartUp::setStartupState( STATE_BROWSER_INIT );
-        return FALSE;
+        return false;
     }
 
 
@@ -1181,7 +1189,7 @@ bool idle_startup()
         display_startup();
         // LLViewerMedia::initBrowser();
         LLStartUp::setStartupState( STATE_LOGIN_SHOW );
-        return FALSE;
+        return false;
     }
 
 
@@ -1225,7 +1233,7 @@ bool idle_startup()
                 gUserCredential = gLoginHandler.initializeLoginInfo();
             }
             // Make sure the process dialog doesn't hide things
-            gViewerWindow->setShowProgress(FALSE,FALSE);
+            gViewerWindow->setShowProgress(false,false);
             // Show the login dialog
             login_show();
             // connect dialog is already shown, so fill in the names
@@ -1265,9 +1273,9 @@ bool idle_startup()
             LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
         }
 
-        gViewerWindow->setNormalControlsVisible( FALSE );
-        gLoginMenuBarView->setVisible( TRUE );
-        gLoginMenuBarView->setEnabled( TRUE );
+        gViewerWindow->setNormalControlsVisible( false );
+        gLoginMenuBarView->setVisible( true );
+        gLoginMenuBarView->setEnabled( true );
 
         // <FS> Fixing chat toasts to not show on the login page when login progress screens are disabled.
         LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NEARBY_CHAT_CHANNEL_UUID);
@@ -1297,7 +1305,7 @@ bool idle_startup()
 #endif
         display_startup();
         timeout.reset();
-        return FALSE;
+        return false;
     }
 
     if (STATE_LOGIN_WAIT == LLStartUp::getStartupState())
@@ -1313,7 +1321,7 @@ bool idle_startup()
         // display() function will be the one to run display_startup()
         // Sleep so we don't spin the CPU
         ms_sleep(1);
-        return FALSE;
+        return false;
     }
 
     if (STATE_LOGIN_CLEANUP == LLStartUp::getStartupState())
@@ -1325,7 +1333,7 @@ bool idle_startup()
             LLNotificationsUtil::add("TestversionExpired", LLSD(), LLSD(), login_alert_done);
             LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
             show_connect_box = true;
-            return FALSE;
+            return false;
         }
         // </FS:Ansariel>
 
@@ -1336,7 +1344,7 @@ bool idle_startup()
             LLNotificationsUtil::add("BlockLoginInfo", blocked, LLSD(), login_alert_done);
             LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
             show_connect_box = true;
-            return FALSE;
+            return false;
         }
         // </FS:Ansariel>
 
@@ -1351,7 +1359,7 @@ bool idle_startup()
             // could then change the preferences to fix the issue.
 
             LLStartUp::setStartupState(STATE_LOGIN_SHOW);
-            return FALSE;
+            return false;
         }
 
 // [RLVa:KB] - Checked: RLVa-0.2.1
@@ -1598,8 +1606,8 @@ bool idle_startup()
 
         // Display the startup progress bar.
         gViewerWindow->initTextures(agent_location_id);
-        gViewerWindow->setShowProgress(TRUE,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
-        gViewerWindow->setProgressCancelButtonVisible(TRUE, LLTrans::getString("Quit"));
+        gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
+        gViewerWindow->setProgressCancelButtonVisible(true, LLTrans::getString("Quit"));
 
         gViewerWindow->revealIntroPanel();
 
@@ -1614,7 +1622,7 @@ bool idle_startup()
         LLStartUp::setStartupState(STATE_AGENTS_WAIT);
         // </FS:Techwolf Lupindo>
 
-        return FALSE;
+        return false;
     }
 
     // <FS:Techwolf Lupindo> fsdata support
@@ -1631,7 +1639,7 @@ bool idle_startup()
         else
         {
             ms_sleep(1);
-            return FALSE;
+            return false;
         }
     }
     // </FS:Techwolf Lupindo>
@@ -1680,7 +1688,7 @@ bool idle_startup()
 // </AW: opensim>
 #endif // OPENSIM // <FS:AW optional opensim support>
         LLStartUp::setStartupState( STATE_LOGIN_CURL_UNSTUCK );
-        return FALSE;
+        return false;
     }
 
     if(STATE_LOGIN_CURL_UNSTUCK == LLStartUp::getStartupState())
@@ -1691,7 +1699,7 @@ bool idle_startup()
         set_startup_status(progress, auth_desc, auth_message);
 
         LLStartUp::setStartupState( STATE_LOGIN_PROCESS_RESPONSE );
-        return FALSE;
+        return false;
     }
 
     if(STATE_LOGIN_PROCESS_RESPONSE == LLStartUp::getStartupState())
@@ -1809,7 +1817,7 @@ bool idle_startup()
                                 general_cert_done);
 
                             reset_login();
-                            gSavedSettings.setBOOL("AutoLogin", FALSE);
+                            gSavedSettings.setBOOL("AutoLogin", false);
                             show_connect_box = true;
                         }
                         if(certificate)
@@ -1838,7 +1846,7 @@ bool idle_startup()
 
                                 // <FS:Ansariel> Not needed here - done below & in transition_back_to_login_panel()
                                 //reset_login();
-                                //gSavedSettings.setBOOL("AutoLogin", FALSE);
+                                //gSavedSettings.setBOOL("AutoLogin", false);
                                 //show_connect_box = true;
                                 // </FS:Ansariel>
 
@@ -1903,20 +1911,20 @@ bool idle_startup()
                 LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
                 // </FS:Ansariel>
                 show_connect_box = true;
-                return FALSE;
+                return false;
             }
         }
-        return FALSE;
+        return false;
     }
 
     // <FS:Ansariel> Wait for notification confirmation
     if (STATE_LOGIN_CONFIRM_NOTIFICATON == LLStartUp::getStartupState())
     {
         display_startup();
-        gViewerWindow->getProgressView()->setVisible(FALSE);
+        gViewerWindow->getProgressView()->setVisible(false);
         display_startup();
         ms_sleep(1);
-        return FALSE;
+        return false;
     }
     // </FS:Ansariel>
 
@@ -1935,8 +1943,8 @@ bool idle_startup()
         if (LLGridManager::getInstance()->isInSecondLife())
 #endif
         {
-            gMenuBarView->getChild<LLMenuItemGL>("HTTP Textures")->setVisible(FALSE);
-            gMenuBarView->getChild<LLMenuItemGL>("HTTP Inventory")->setVisible(FALSE);
+            gMenuBarView->getChild<LLMenuItemGL>("HTTP Textures")->setVisible(false);
+            gMenuBarView->getChild<LLMenuItemGL>("HTTP Inventory")->setVisible(false);
         }
         // </FS:Ansariel>
 
@@ -1957,7 +1965,7 @@ bool idle_startup()
 
         // Since we connected, save off the settings so the user doesn't have to
         // type the name/password again if we crash.
-        gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
+        gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), true);
         LLUIColorTable::instance().saveUserSettings();
 
         display_startup();
@@ -2041,7 +2049,7 @@ bool idle_startup()
 
         LLStartUp::setStartupState( STATE_MULTIMEDIA_INIT );
 
-        return FALSE;
+        return false;
     }
 
 
@@ -2054,7 +2062,7 @@ bool idle_startup()
         LLStartUp::multimediaInit();
         LLStartUp::setStartupState( STATE_FONT_INIT );
         display_startup();
-        return FALSE;
+        return false;
     }
 
     // Loading fonts takes several seconds
@@ -2063,7 +2071,7 @@ bool idle_startup()
         LLStartUp::fontInit();
         LLStartUp::setStartupState( STATE_SEED_GRANTED_WAIT );
         display_startup();
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -2117,7 +2125,7 @@ bool idle_startup()
             }
         }
         display_startup();
-        return FALSE;
+        return false;
     }
 
 
@@ -2142,10 +2150,10 @@ bool idle_startup()
 
         if ( gViewerWindow != NULL)
         {   // This isn't the first logon attempt, so show the UI
-            gViewerWindow->setNormalControlsVisible( TRUE );
+            gViewerWindow->setNormalControlsVisible( true );
         }
-        gLoginMenuBarView->setVisible( FALSE );
-        gLoginMenuBarView->setEnabled( FALSE );
+        gLoginMenuBarView->setVisible( false );
+        gLoginMenuBarView->setEnabled( false );
         display_startup();
 
         // direct logging to the debug console's line buffer
@@ -2170,7 +2178,7 @@ bool idle_startup()
         display_startup();
 
         #ifndef LL_RELEASE_FOR_DOWNLOAD
-            gMessageSystem->setTimeDecodes( TRUE );             // Time the decode of each msg
+            gMessageSystem->setTimeDecodes( true );             // Time the decode of each msg
             gMessageSystem->setTimeDecodesSpamThreshold( 0.05f );  // Spam if a single msg takes over 50ms to decode
         #endif
         display_startup();
@@ -2206,7 +2214,7 @@ bool idle_startup()
 
         // <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
         // Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
-        // Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is FALSE
+        // Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is false
         LLFloater *pContacts(FSFloaterContacts::getInstance());
 
         // <FS:Ansariel> Load persisted avatar render settings
@@ -2341,7 +2349,7 @@ bool idle_startup()
 
         gUseCircuitCallbackCalled = false;
 
-        msg->enableCircuit(gFirstSim, TRUE);
+        msg->enableCircuit(gFirstSim, true);
         // now, use the circuit info to tell simulator about us!
         LL_INFOS("AppInit") << "viewer: UserLoginLocationReply() Enabling " << gFirstSim << " with code " << msg->mOurCircuitCode << LL_ENDL;
         msg->newMessageFast(_PREHASH_UseCircuitCode);
@@ -2352,7 +2360,7 @@ bool idle_startup()
         msg->sendReliable(
             gFirstSim,
             gSavedSettings.getS32("UseCircuitCodeMaxRetries"),
-            FALSE,
+            false,
             (F32Seconds)gSavedSettings.getF32("UseCircuitCodeTimeout"),
             use_circuit_callback,
             NULL);
@@ -2360,7 +2368,7 @@ bool idle_startup()
         timeout.reset();
         display_startup();
 
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -2375,7 +2383,7 @@ bool idle_startup()
             LLStartUp::setStartupState( STATE_AGENT_SEND );
         }
         pump_idle_startup_network();
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -2414,7 +2422,7 @@ bool idle_startup()
         // But not on first login, because you can't see your avatar then
         if (!gAgent.isFirstLogin())
         {
-            LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
+            LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, true);
             effectp->setPositionGlobal(gAgent.getPositionGlobal());
             effectp->setColor(LLColor4U(gAgent.getEffectColor()));
             LLHUDManager::getInstance()->sendEffects();
@@ -2424,7 +2432,7 @@ bool idle_startup()
 
         timeout.reset();
         display_startup();
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -2475,7 +2483,7 @@ bool idle_startup()
             }
             reset_login();
         }
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -2534,7 +2542,7 @@ bool idle_startup()
         display_startup();
         LLStartUp::setStartupState(STATE_INVENTORY_SKEL);
         display_startup();
-        return FALSE;
+        return false;
     }
 
     if (STATE_INVENTORY_SKEL == LLStartUp::getStartupState())
@@ -2566,7 +2574,7 @@ bool idle_startup()
         display_startup();
         LLStartUp::setStartupState(STATE_INVENTORY_SEND2);
         display_startup();
-        return FALSE;
+        return false;
     }
 
     if (STATE_INVENTORY_SEND2 == LLStartUp::getStartupState())
@@ -2661,7 +2669,7 @@ bool idle_startup()
         // visible.  JC
         if (show_hud || gSavedSettings.getBOOL("ShowTutorial"))
         {
-            LLFloaterReg::showInstance("hud", LLSD(), FALSE);
+            LLFloaterReg::showInstance("hud", LLSD(), false);
         }
         display_startup();
 
@@ -2698,7 +2706,7 @@ bool idle_startup()
         LLStartUp::setStartupState(STATE_INVENTORY_CALLBACKS );
         display_startup();
 
-        return FALSE;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -2709,7 +2717,7 @@ bool idle_startup()
         if (!LLInventoryModel::isSysFoldersReady())
         {
             display_startup();
-            return FALSE;
+            return false;
         }
 
         LLInventoryModelBackgroundFetch::instance().start();
@@ -2768,7 +2776,7 @@ bool idle_startup()
         LLStartUp::setStartupState( STATE_MISC );
         display_startup();
 
-        return FALSE;
+        return false;
     }
 
 
@@ -2808,12 +2816,12 @@ bool idle_startup()
 
             if (gSavedSettings.getBOOL("ShowHelpOnFirstLogin"))
             {
-                gSavedSettings.setBOOL("HelpFloaterOpen", TRUE);
+                gSavedSettings.setBOOL("HelpFloaterOpen", true);
             }
 
             // Set the show start location to true, now that the user has logged
             // on with this install.
-            gSavedSettings.setBOOL("ShowStartLocation", TRUE);
+            gSavedSettings.setBOOL("ShowStartLocation", true);
 
             // <FS:Ansariel> [FS Communication UI]
             LLFloaterReg::toggleInstanceOrBringToFront("fs_im_container");
@@ -2843,7 +2851,7 @@ bool idle_startup()
                 gSavedPerAccountSettings.setS32("KeepConversationLogTranscript", 0);
 
             //ok, we're done, set it back to false.
-            gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", FALSE);
+            gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", false);
         }
         display_startup();
         // </FS:CR>
@@ -2857,7 +2865,7 @@ bool idle_startup()
         display_startup();
 
         // We're successfully logged in.
-        gSavedSettings.setBOOL("FirstLoginThisInstall", FALSE);
+        gSavedSettings.setBOOL("FirstLoginThisInstall", false);
 
         LLFloaterReg::showInitialVisibleInstances();
 
@@ -2875,7 +2883,7 @@ bool idle_startup()
             gSavedSettings.setString( "NextLoginLocation", "" );
 
             // and make sure it's saved
-            gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile") , TRUE );
+            gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile") , true );
             LLUIColorTable::instance().saveUserSettings();
         };
         // </FS:Ansariel> [FS Login Panel]
@@ -2906,8 +2914,8 @@ bool idle_startup()
                 if (item_id.notNull() && asset_id.notNull())
                 {
                     // Could schedule and delay these for later.
-                    const BOOL no_inform_server = FALSE;
-                    const BOOL no_deactivate_similar = FALSE;
+                    const bool no_inform_server = false;
+                    const bool no_deactivate_similar = false;
                     LLGestureMgr::instance().activateGestureWithAsset(item_id, asset_id,
                                          no_inform_server,
                                          no_deactivate_similar);
@@ -2920,7 +2928,7 @@ bool idle_startup()
             LLGestureMgr::instance().setFetchIDs(item_ids);
             LLGestureMgr::instance().startFetch();
         }
-        gDisplaySwapBuffers = TRUE;
+        gDisplaySwapBuffers = true;
         display_startup();
 
         LLMessageSystem* msg = gMessageSystem;
@@ -2963,13 +2971,13 @@ bool idle_startup()
                     && gSavedSettings.getBOOL("RestoreCameraPosOnLogin"))
                 {
                     // restore old camera pos
-                    gAgentCamera.setFocusOnAvatar(FALSE, FALSE);
+                    gAgentCamera.setFocusOnAvatar(false, false);
                     gAgentCamera.setCameraPosAndFocusGlobal(gSavedSettings.getVector3d("CameraPosOnLogout"), gSavedSettings.getVector3d("FocusPosOnLogout"), LLUUID::null);
-                    BOOL limit_hit = FALSE;
+                    bool limit_hit = false;
                     gAgentCamera.calcCameraPositionTargetGlobal(&limit_hit);
                     if (limit_hit)
                     {
-                        gAgentCamera.setFocusOnAvatar(TRUE, FALSE);
+                        gAgentCamera.setFocusOnAvatar(true, false);
                     }
                     gAgentCamera.stopCameraAnimation();
                 }
@@ -3026,7 +3034,7 @@ bool idle_startup()
 
         LLStartUp::setStartupState( STATE_PRECACHE );
         timeout.reset();
-        return FALSE;
+        return false;
     }
 
     if (STATE_PRECACHE == LLStartUp::getStartupState())
@@ -3052,7 +3060,7 @@ bool idle_startup()
         if (isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
         {
             gAgentWearables.notifyLoadingStarted();
-            gAgent.setOutfitChosen(TRUE);
+            gAgent.setOutfitChosen(true);
 // <FS:Ansariel> [Legacy Bake]
             //gAgentWearables.sendDummyAgentWearablesUpdate();
             if (LLGridManager::getInstance()->isInSecondLife())
@@ -3091,7 +3099,7 @@ bool idle_startup()
             display_startup();
         }
 
-        return TRUE;
+        return true;
     }
 
     if (STATE_WEARABLES_WAIT == LLStartUp::getStartupState())
@@ -3137,7 +3145,7 @@ bool idle_startup()
             {
                 LL_DEBUGS("Avatar") << "avatar fully loaded" << LL_ENDL;
                 LLStartUp::setStartupState( STATE_CLEANUP );
-                return TRUE;
+                return true;
             }
         }
         else
@@ -3148,11 +3156,11 @@ bool idle_startup()
                 // We have our clothing, proceed.
                 LL_DEBUGS("Avatar") << "wearables loaded" << LL_ENDL;
                 LLStartUp::setStartupState( STATE_CLEANUP );
-                return TRUE;
+                return true;
             }
 
             // <FS:Ansariel> Can't fall through here, so return
-            return TRUE;
+            return true;
         }
         //fall through this frame to STATE_CLEANUP
     }
@@ -3203,7 +3211,7 @@ bool idle_startup()
         LL_DEBUGS("AppInit") << "Done releasing bitmap" << LL_ENDL;
         //gViewerWindow->revealIntroPanel();
         gViewerWindow->setStartupComplete();
-        gViewerWindow->setProgressCancelButtonVisible(FALSE);
+        gViewerWindow->setProgressCancelButtonVisible(false);
         display_startup();
 
         // We're not away from keyboard, even though login might have taken
@@ -3291,7 +3299,7 @@ bool idle_startup()
         // <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
         if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
         {
-            report_to_nearby_chat(gAgent.mMOTD);
+            FSCommon::report_to_nearby_chat(gAgent.mMOTD);
         }
         // </FS:Techwolf Lupindo>
         // <FS:PP>
@@ -3302,10 +3310,10 @@ bool idle_startup()
         }
         // </FS:PP>
 
-        return TRUE;
+        return true;
     }
 
-    return TRUE;
+    return true;
 }
 
 //
@@ -3319,7 +3327,7 @@ void login_show()
     // Hide the toolbars: may happen to come back here if login fails after login agent but before login in region
     if (gToolBarView)
     {
-        gToolBarView->setVisible(FALSE);
+        gToolBarView->setVisible(false);
     }
 
     // <FS:Ansariel> [FS Login Panel]
@@ -3344,7 +3352,7 @@ void login_callback(S32 option, void *userdata)
         if (!gSavedSettings.getBOOL("RememberPassword"))
         {
             // turn off the setting and write out to disk
-            gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile") , TRUE );
+            gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile") , true );
             LLUIColorTable::instance().saveUserSettings();
         }
 
@@ -3863,7 +3871,7 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
         LL_DEBUGS() << "initial outfit category id: " << cat_id << LL_ENDL;
     }
 
-    gAgent.setOutfitChosen(TRUE);
+    gAgent.setOutfitChosen(true);
 // <FS:Ansariel> [Legacy Bake]
 #ifdef OPENSIM
     if (LLGridManager::getInstance()->isInSecondLife())
@@ -3917,7 +3925,7 @@ std::string LLStartUp::startupStateToString(EStartupState state)
         RTNENUM( STATE_AGENT_SEND );
         RTNENUM( STATE_AGENT_WAIT );
         RTNENUM( STATE_INVENTORY_SEND );
-        RTNENUM( STATE_INVENTORY_CALLBACKS );
+        RTNENUM(STATE_INVENTORY_CALLBACKS );
         RTNENUM( STATE_INVENTORY_SKEL );
         RTNENUM( STATE_INVENTORY_SEND2 );
         RTNENUM( STATE_MISC );
@@ -3972,9 +3980,9 @@ void reset_login()
 
     if ( gViewerWindow )
     {   // Hide menus and normal buttons
-        gViewerWindow->setNormalControlsVisible( FALSE );
-        gLoginMenuBarView->setVisible( TRUE );
-        gLoginMenuBarView->setEnabled( TRUE );
+        gViewerWindow->setNormalControlsVisible( false );
+        gLoginMenuBarView->setVisible( true );
+        gLoginMenuBarView->setEnabled( true );
     }
 
     // Hide any other stuff
@@ -3986,6 +3994,13 @@ void reset_login()
     }
     // </FS>
     LLFloaterReg::hideVisibleInstances();
+
+    // <FS:Ansariel> Improved menu and navigation bar
+    //if (LLStartUp::getStartupState() > STATE_WORLD_INIT)
+    //{
+    //    gViewerWindow->resetStatusBarContainer();
+    //}
+    // </FS:Ansariel>
     LLStartUp::setStartupState( STATE_BROWSER_INIT );
 
     if (LLVoiceClient::instanceExists())
@@ -4393,7 +4408,7 @@ void trust_cert_done(const LLSD& notification, const LLSD& response)
         case OPT_CANCEL_TRUST:
             // <FS:Ansariel> That's what transition_back_to_login_panel is for and does!
             //reset_login();
-            //gSavedSettings.setBOOL("AutoLogin", FALSE);
+            //gSavedSettings.setBOOL("AutoLogin", false);
             //LLStartUp::setStartupState( STATE_LOGIN_SHOW );
             transition_back_to_login_panel(std::string());
             // </FS:Ansariel>
@@ -4641,7 +4656,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
         gFirstSim.set(sim_ip_str, sim_port);
         if (gFirstSim.isOk())
         {
-            gMessageSystem->enableCircuit(gFirstSim, TRUE);
+            gMessageSystem->enableCircuit(gFirstSim, true);
         }
     }
     std::string region_x_str = response["region_x"];
@@ -4668,7 +4683,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
     if (!look_at_str.empty())
     {
         size_t len = look_at_str.size();
-        LLMemoryStream mstr((U8*)look_at_str.c_str(), len);
+        LLMemoryStream mstr((U8*)look_at_str.c_str(), static_cast<S32>(len));
         LLSD sd = LLSDSerialize::fromNotation(mstr, len);
         gAgentStartLookAt = ll_vector3_from_sd(sd);
     }
@@ -4706,7 +4721,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
     if(!home_location.empty())
     {
         size_t len = home_location.size();
-        LLMemoryStream mstr((U8*)home_location.c_str(), len);
+        LLMemoryStream mstr((U8*)home_location.c_str(), static_cast<S32>(len));
         LLSD sd = LLSDSerialize::fromNotation(mstr, len);
         S32 region_x = sd["region_handle"][0].asInteger();
         S32 region_y = sd["region_handle"][1].asInteger();
@@ -4766,7 +4781,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
             // outfit is chosen on COF contents, initial outfit
             // requested and available, etc.
 
-            //gAgent.setGenderChosen(TRUE);
+            //gAgent.setGenderChosen(true);
         }
 
         bool pacific_daylight_time = false;
@@ -5045,7 +5060,7 @@ void transition_back_to_login_panel(const std::string& emsg)
 {
     // Bounce back to the login screen.
     reset_login(); // calls LLStartUp::setStartupState( STATE_LOGIN_SHOW );
-    gSavedSettings.setBOOL("AutoLogin", FALSE);
+    gSavedSettings.setBOOL("AutoLogin", false);
 }
 
 // <FS:KC> FIRE-18250: Option to disable default eye movement

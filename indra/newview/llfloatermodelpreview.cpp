@@ -76,15 +76,15 @@ LLFloaterModelPreview* LLFloaterModelPreview::sInstance = NULL;
 // should be represented by Retain spinner with values from 1 to 100 by 1.
 // To achieve this, RETAIN_COEFFICIENT is used while creating spinner
 // and when value is requested from spinner.
-const double RETAIN_COEFFICIENT = 100;
+constexpr double RETAIN_COEFFICIENT = 100;
 
 // "Cosine%" decomp parameter has values from 0.9 to 1 by 0.001
 // But according to the UI spec for upload model floater, this parameter
 // should be represented by Smooth combobox with only 10 values.
 // So this const is used as a size of Smooth combobox list.
-const S32 SMOOTH_VALUES_NUMBER = 10;
-// const S32 PREVIEW_RENDER_SIZE = 1024; // <FS:Beq> Fix up regressions from LL uploader merge
-const F32 PREVIEW_CAMERA_DISTANCE = 16.f;
+constexpr S32 SMOOTH_VALUES_NUMBER = 10;
+// constexpr S32 PREVIEW_RENDER_SIZE = 1024; // <FS:Beq> Fix up regressions from LL uploader merge
+constexpr F32 PREVIEW_CAMERA_DISTANCE = 16.f;
 
 class LLMeshFilePicker : public LLFilePickerThread
 {
@@ -174,11 +174,11 @@ void LLFloaterModelPreview::onSelectUDPhysics(LLUICtrl* ctrl, void* userdata)
 //-----------------------------------------------------------------------------
 // postBuild()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterModelPreview::postBuild()
+bool LLFloaterModelPreview::postBuild()
 {
     if (!LLFloater::postBuild())
     {
-        return FALSE;
+        return false;
     }
 
     childSetCommitCallback("cancel_btn", onCancel, this);
@@ -356,14 +356,14 @@ BOOL LLFloaterModelPreview::postBuild()
         mCalculateBtn->setEnabled(false);
     }
 
-    return TRUE;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
 // reshape()
 //-----------------------------------------------------------------------------
 
-void LLFloaterModelPreview::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLFloaterModelPreview::reshape(S32 width, S32 height, bool called_from_parent)
 {
     LLFloaterModelUploadBase::reshape(width, height, called_from_parent);
 
@@ -969,7 +969,7 @@ void LLFloaterModelPreview::draw()
 //-----------------------------------------------------------------------------
 // handleMouseDown()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterModelPreview::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLFloaterModelPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     if (mPreviewRect.pointInRect(x, y))
     {
@@ -978,7 +978,7 @@ BOOL LLFloaterModelPreview::handleMouseDown(S32 x, S32 y, MASK mask)
         gViewerWindow->hideCursor();
         mLastMouseX = x;
         mLastMouseY = y;
-        return TRUE;
+        return true;
     }
 
     return LLFloater::handleMouseDown(x, y, mask);
@@ -987,9 +987,9 @@ BOOL LLFloaterModelPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 //-----------------------------------------------------------------------------
 // handleMouseUp()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterModelPreview::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLFloaterModelPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-    gFocusMgr.setMouseCapture(FALSE);
+    gFocusMgr.setMouseCapture(nullptr);
     gViewerWindow->showCursor();
     return LLFloater::handleMouseUp(x, y, mask);
 }
@@ -997,7 +997,7 @@ BOOL LLFloaterModelPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 //-----------------------------------------------------------------------------
 // handleHover()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterModelPreview::handleHover (S32 x, S32 y, MASK mask)
+bool LLFloaterModelPreview::handleHover (S32 x, S32 y, MASK mask)
 {
     MASK local_mask = mask & ~MASK_ALT;
 
@@ -1048,13 +1048,13 @@ BOOL LLFloaterModelPreview::handleHover (S32 x, S32 y, MASK mask)
         gViewerWindow->setCursor(UI_CURSOR_TOOLZOOMIN);
     }
 
-    return TRUE;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
 // handleScrollWheel()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterModelPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLFloaterModelPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
     if (mPreviewRect.pointInRect(x, y) && mModelPreview)
     {
@@ -1065,7 +1065,7 @@ BOOL LLFloaterModelPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
     {
         LLFloaterModelUploadBase::handleScrollWheel(x, y, clicks);
     }
-    return TRUE;
+    return true;
 }
 
 /*virtual*/
@@ -1622,7 +1622,7 @@ void LLFloaterModelPreview::updateAvatarTab(bool highlight_overrides)
                 LLModel* model = instance.mModel;
                 const LLMeshSkinInfo *skin = &model->mSkinInfo;
                 U32 joint_count = LLSkinningUtil::getMeshJointCount(skin);
-                U32 bind_count = highlight_overrides ? skin->mAlternateBindMatrix.size() : 0; // simply do not include overrides if data is not needed
+                U32 bind_count = highlight_overrides ? static_cast<U32>(skin->mAlternateBindMatrix.size()) : 0; // simply do not include overrides if data is not needed
                 if (bind_count > 0 && bind_count != joint_count)
                 {
                     std::ostringstream out;
@@ -1753,7 +1753,7 @@ void LLFloaterModelPreview::addStringToLogTab(const std::string& str, bool flash
     }
 
     LLWString text = utf8str_to_wstring(str);
-    S32 add_text_len = text.length() + 1; // newline
+    S32 add_text_len = static_cast<S32>(text.length()) + 1; // newline
     S32 editor_max_len = mUploadLogText->getMaxTextLength();
     if (add_text_len > editor_max_len)
         {

@@ -62,7 +62,7 @@ LLUploadDialog::LLUploadDialog( const std::string& msg)
   : LLPanel()
 {
     setTransparentColor(LLUIColorTable::instance().getColor("UploadDialogBackground").get()); // <FS:Ansariel> Default-Panel independent background
-    setBackgroundVisible( TRUE );
+    setBackgroundVisible( true );
 
     if( LLUploadDialog::sDialog )
     {
@@ -103,7 +103,7 @@ void LLUploadDialog::setMessage( const std::string& msg)
     S32 max_msg_width = 0;
     std::list<std::string> msg_lines;
 
-    S32 size = msg.size() + 1;
+    auto size = msg.size() + 1;
     std::vector<char> temp_msg(size); // non-const copy to make strtok happy
     strcpy( &temp_msg[0], msg.c_str());
     char* token = strtok( &temp_msg[0], "\n" );
@@ -118,9 +118,9 @@ void LLUploadDialog::setMessage( const std::string& msg)
 
     S32 line_height = font->getLineHeight();
     S32 dialog_width = max_msg_width + 2 * HPAD;
-    S32 dialog_height = line_height * msg_lines.size() + 2 * VPAD;
+    S32 dialog_height = line_height * static_cast<S32>(msg_lines.size()) + 2 * VPAD;
 
-    reshape( dialog_width, dialog_height, FALSE );
+    reshape( dialog_width, dialog_height, false );
 
     // Message
     S32 msg_x = (getRect().getWidth() - max_msg_width) / 2;
@@ -128,7 +128,7 @@ void LLUploadDialog::setMessage( const std::string& msg)
     int line_num;
     for (line_num=0; line_num<16; ++line_num)
     {
-        mLabelBox[line_num]->setVisible(FALSE);
+        mLabelBox[line_num]->setVisible(false);
     }
     line_num = 0;
     for (std::list<std::string>::iterator iter = msg_lines.begin();
@@ -140,7 +140,7 @@ void LLUploadDialog::setMessage( const std::string& msg)
         mLabelBox[line_num]->setRect(msg_rect);
         mLabelBox[line_num]->setText(cur_line);
         mLabelBox[line_num]->setColor( LLUIColorTable::instance().getColor( "LabelTextColor" ) );
-        mLabelBox[line_num]->setVisible(TRUE);
+        mLabelBox[line_num]->setVisible(true);
         msg_y -= line_height;
         ++line_num;
     }

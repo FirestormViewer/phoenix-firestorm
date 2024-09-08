@@ -56,9 +56,9 @@ LLFloaterScriptDebug::LLFloaterScriptDebug(const LLSD& key)
 {
     // avoid resizing of the window to match
     // the initial size of the tabbed-childs, whenever a tab is opened or closed
-    mAutoResize = FALSE;
+    mAutoResize = false;
     // enabled autocous blocks controling focus via  LLFloaterReg::showInstance
-    setAutoFocus(FALSE);
+    setAutoFocus(false);
 }
 
 LLFloaterScriptDebug::~LLFloaterScriptDebug()
@@ -73,7 +73,7 @@ void LLFloaterScriptDebug::show(const LLUUID& object_id)
     // </FS:Ansariel> Script debug icon
 }
 
-BOOL LLFloaterScriptDebug::postBuild()
+bool LLFloaterScriptDebug::postBuild()
 {
     LLMultiFloater::postBuild();
 
@@ -84,21 +84,21 @@ BOOL LLFloaterScriptDebug::postBuild()
 
     if (mTabContainer)
     {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // <FS:Ansariel> Improved script debug floater
-//void LLFloaterScriptDebug::setVisible(BOOL visible)
+//void LLFloaterScriptDebug::setVisible(bool visible)
 //{
 //  if(visible)
 //  {
 //      LLFloaterScriptDebugOutput* floater_output = LLFloaterReg::findTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", LLUUID::null);
 //      if (floater_output == NULL)
 //      {
-//          floater_output = dynamic_cast<LLFloaterScriptDebugOutput*>(LLFloaterReg::showInstance("script_debug_output", LLUUID::null, FALSE));
+//          floater_output = dynamic_cast<LLFloaterScriptDebugOutput*>(LLFloaterReg::showInstance("script_debug_output", LLUUID::null, false));
 //          if (floater_output)
 //          {
 //              addFloater(floater_output, false);
@@ -133,7 +133,7 @@ LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID& object_id, bool s
 
     LLFloater::setFloaterHost(host);
     // prevent stealing focus, see EXT-8040
-    LLFloater* floaterp = LLFloaterReg::showInstance("script_debug_output", object_id, FALSE);
+    LLFloater* floaterp = LLFloaterReg::showInstance("script_debug_output", object_id, false);
     LLFloater::setFloaterHost(NULL);
 
     // <FS:Ansariel> Script debug icon
@@ -169,14 +169,14 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
             {
                 if (isAgentAvatarValid())
                 {
-                    ((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+                    ((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI));
                     // <FS:Ansariel> Mark script error icons
                     ((LLViewerObject*)gAgentAvatarp)->getIcon()->setScriptError();
                 }
             }
             else
             {
-                objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+                objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI));
                 // <FS:Ansariel> Mark script error icons
                 objectp->getIcon()->setScriptError();
             }
@@ -266,14 +266,14 @@ LLFloaterScriptDebugOutput::LLFloaterScriptDebugOutput(const LLSD& object_id)
     mObjectID(object_id.asUUID())
 {
     // enabled autocous blocks controling focus via  LLFloaterReg::showInstance
-    setAutoFocus(FALSE);
+    setAutoFocus(false);
 }
 
-BOOL LLFloaterScriptDebugOutput::postBuild()
+bool LLFloaterScriptDebugOutput::postBuild()
 {
     LLFloater::postBuild();
     mHistoryEditor = getChild<LLViewerTextEditor>("Chat History Editor");
-    return TRUE;
+    return true;
 }
 
 LLFloaterScriptDebugOutput::~LLFloaterScriptDebugOutput()
@@ -287,8 +287,8 @@ void LLFloaterScriptDebugOutput::addLine(const std::string &utf8mesg, const std:
 {
     if (mObjectID.isNull())
     {
-        setCanTearOff(FALSE);
-        setCanClose(FALSE);
+        setCanTearOff(false);
+        setCanClose(false);
     }
     else
     {
@@ -312,8 +312,8 @@ void LLFloaterScriptDebugOutput::addLine(const LLChat& chat, const std::string &
 
     if (mObjectID.isNull())
     {
-        setCanTearOff(FALSE);
-        setCanClose(FALSE);
+        setCanTearOff(false);
+        setCanClose(false);
     }
     else
     {

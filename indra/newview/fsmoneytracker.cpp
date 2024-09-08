@@ -43,7 +43,7 @@ FSMoneyTracker::FSMoneyTracker(const LLSD& key)
 {
 }
 
-BOOL FSMoneyTracker::postBuild()
+bool FSMoneyTracker::postBuild()
 {
     mSummary = getChild<LLTextBox>("summary");
     mTransactionHistory = getChild<LLNameListCtrl>("payment_list");
@@ -53,7 +53,7 @@ BOOL FSMoneyTracker::postBuild()
     // Button Actions
     childSetAction("Clear", boost::bind(&FSMoneyTracker::clear, this));
 
-    return TRUE;
+    return true;
 }
 
 void FSMoneyTracker::onClose(bool app_quitting)
@@ -164,7 +164,7 @@ void FSMoneyTrackerListMenu::onContextMenuItemClick(const LLSD& userdata)
 
             if (!copy_text.empty())
             {
-                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(copy_text), 0, copy_text.size() );
+                LLClipboard::instance().copyToClipboard(utf8str_to_wstring(copy_text), 0, static_cast<S32>(copy_text.size()));
             }
         }
     }

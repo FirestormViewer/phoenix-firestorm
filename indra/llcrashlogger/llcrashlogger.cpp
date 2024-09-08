@@ -50,16 +50,14 @@
 #include <curl/curl.h>
 #include <openssl/crypto.h>
 
-
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 #ifdef LL_WINDOWS
     #include <shellapi.h>
 #endif // LL_WINDOWS
 // [/SL:KB]
 
-
-BOOL gBreak = false;
-BOOL gSent = false;
+bool gBreak = false;
+bool gSent = false;
 
 // <FS:CR> Various missing prototypes
 void trimSLLog(std::string& sllog);
@@ -148,7 +146,7 @@ std::string getStartupStateFromLog(std::string& sllog)
     std::string startup_state = "STATE_FIRST";
     std::string startup_token = "Startup state changing from ";
 
-    size_t index = sllog.rfind(startup_token);
+    auto index = sllog.rfind(startup_token);
     if (index != std::string::npos || index + startup_token.length() > sllog.length()) {
         return startup_state;
     }
@@ -204,7 +202,7 @@ bool LLCrashLogger::readMinidump(std::string minidump_path)
     size_t length=0;
 
     llifstream minidump_stream(minidump_path.c_str(), std::ios_base::in | std::ios_base::binary);
-    if(minidump_stream.is_open())
+    if (minidump_stream.is_open())
     {
         minidump_stream.seekg(0, std::ios::end);
         length = (size_t)minidump_stream.tellg();
@@ -224,7 +222,7 @@ bool LLCrashLogger::readMinidump(std::string minidump_path)
         LL_WARNS("CRASHREPORT") << "failed to open minidump "<<minidump_path<<LL_ENDL;
     }
 
-    return (length>0?true:false);
+    return length > 0;
 }
 
 void LLCrashLogger::gatherFiles()
@@ -473,7 +471,7 @@ bool LLCrashLogger::saveCrashBehaviorSetting(S32 crash_behavior)
 
     mCrashSettings.setS32("CrashSubmitBehavior", crash_behavior);
     std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
-    mCrashSettings.saveToFile(filename, FALSE);
+    mCrashSettings.saveToFile(filename, false);
 
     return true;
 }

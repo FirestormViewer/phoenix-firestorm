@@ -92,12 +92,6 @@
 		<menu_item_check label="Ludzie" name="People"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>
-		<menu label="Przekształcanie głosu" name="VoiceMorphing">
-			<menu_item_check label="Bez przekształcania" name="NoVoiceMorphing"/>
-			<menu_item_check label="Podgląd..." name="Preview"/>
-			<menu_item_call label="Subskrybuj..." name="Subscribe"/>
-			<menu_item_call label="Korzyści premium..." name="PremiumPerk" />
-		</menu>
 		<menu_item_check name="Conversation Log..." label="Dziennik rozmów..."/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
 		<menu_item_call label="Lista zablokowanych" name="Block List"/>
@@ -176,7 +170,11 @@
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
-		<menu_item_check label="Zawsze renderuj znajomych w pełni" name="Always show Friends normally"/>
+		<menu label="Render awatarów" name="AvatarComplexityMode">
+			<menu_item_check label="Ogranicz po złożonośći" name="complexity_limit_everone" />
+			<menu_item_check label="Zawsze pokazuj znajomych" name="complexity_always_show_friends" />
+			<menu_item_check label="Pokazuj tylko znajomych" name="complexity_only_show_friends" />
+		</menu>
 		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
@@ -467,6 +465,12 @@
 			<menu_item_call label="Wymuś rozłączenie Przeglądarki" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Symulacja wycieku pamięci" name="Memory Leaking Simulation"/>
 		</menu>
+		<menu name="GLTF">
+			<menu_item_call label="Otwórz..." name="Open..." />
+			<menu_item_call label="Zapisz jako..." name="Save As..." />
+			<menu_item_call label="Prześlij..." name="Upload..." />
+		</menu>
+		<menu label="Wideo" name="Video" />
 		<menu label="Testy renderowania" name="Render Tests">
 			<menu_item_check label="Kamera poza zasiegiem" name="Camera Offset"/>
 			<menu_item_check label="Losowa ilość klatek" name="Randomize Framerate"/>
@@ -474,7 +478,6 @@
 			<menu_item_call label="Profil klatek obrazu" name="Frame Profile"/>
 			<menu_item_call label="Testowanie (benchmark)" name="Benchmark"/>
 			<menu_item_call label="Podgląd HDRI" name="HDRI Preview" />
-			<menu_item_call label="Podgląd sceny GLTF" name="GLTF Scene Preview" />
 		</menu>
 		<menu label="Renderowanie metadanych" name="Render Metadata">
 			<menu_item_check label="Bryły brzegowe (Bounding Boxes)" name="Bounding Boxes"/>
@@ -613,6 +616,7 @@
 				<menu_item_call label="Testowy mężczyzna" name="Test Male"/>
 				<menu_item_call label="Testowa kobieta" name="Test Female"/>
 				<menu_item_check label="Pozwól na zaznaczanie awatarów" name="Allow Select Avatar"/>
+				<menu_item_check label="Renderuj tylko znajomych" name="Render Only Friends" />
 			</menu>
 			<menu label="Szybkość animacji" name="Animation Speed">
 				<menu_item_call label="Wszystkie animacje 10% szybciej" name="All Animations 10 Faster"/>
@@ -627,6 +631,7 @@
 			<menu_item_check label="Debuguj aktualizacje stawów" name="Debug Joint Updates"/>
 			<menu_item_check label="Wyłącz poziomy detali (LOD)" name="Disable LOD"/>
 			<menu_item_check label="Debuguj VIs postaci" name="Debug Character Vis"/>
+			<menu_item_check label="Debuguj stan załadowania postaci" name="Debug Character Rez State" />
 			<menu_item_check label="Pokaż szkielet kolizji" name="Show Collision Skeleton"/>
 			<menu_item_check label="Pokaż kości" name="Show Bones"/>
 			<menu_item_check label="Wyświetl cel Agenta" name="Display Agent Target"/>

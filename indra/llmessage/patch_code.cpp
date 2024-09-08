@@ -130,7 +130,7 @@ void code_patch(LLBitPack &bitpack, S32 *patch, S32 postquant)
 {
     S32     i, j, patch_size = gPatchSize, wbits = gWordBits;
     S32     temp;
-    BOOL    b_eob;
+    bool    b_eob;
 
     if (  (postquant > patch_size*patch_size)
         ||(postquant < 0))
@@ -143,16 +143,16 @@ void code_patch(LLBitPack &bitpack, S32 *patch, S32 postquant)
 
     for (i = 0; i < patch_size*patch_size; i++)
     {
-        b_eob = FALSE;
+        b_eob = false;
         temp = patch[i];
         if (!temp)
         {
-            b_eob = TRUE;
+            b_eob = true;
             for (j = i; j < patch_size*patch_size - postquant; j++)
             {
                 if (patch[j])
                 {
-                    b_eob = FALSE;
+                    b_eob = false;
                     break;
                 }
             }
@@ -231,7 +231,7 @@ void    decode_patch_group_header(LLBitPack &bitpack, LLGroupHeader *gopp)
 
 // <FS:CR> Aurora Sim
 //void  decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph)
-void    decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph, BOOL b_large_patch)
+void    decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph, bool b_large_patch)
 // </FS:CR> Aurora Sim
 {
     U8 retvalu8;

@@ -49,21 +49,19 @@ class LLUIColorTable : public LLSingleton<LLUIColorTable>
 
     struct ColorName
     {
-        char *pName;
-        int nLen;
+        char* pName;
+        size_t nLen;
 
-        bool operator<( ColorName const &aRHS ) const
+        bool operator<(ColorName const &aRHS) const
         {
-            if( nLen == aRHS.nLen )
-                return strcmp( pName, aRHS.pName ) < 0;
+            if (nLen == aRHS.nLen)
+                return strcmp(pName, aRHS.pName) < 0;
 
             return nLen < aRHS.nLen;
         }
     };
 
     typedef std::map<ColorName, LLUIColor>  string_color_map_t;
-
-
     // </FS:ND>
 
 public:

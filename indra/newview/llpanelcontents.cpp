@@ -81,9 +81,9 @@ const char* LLPanelContents::PERMS_GROUP_CONTROL_KEY = "perms_group_control";
 const char* LLPanelContents::PERMS_ANYONE_INTERACT_KEY = "perms_anyone_interact";
 const char* LLPanelContents::PERMS_ANYONE_CONTROL_KEY = "perms_anyone_control";
 
-BOOL LLPanelContents::postBuild()
+bool LLPanelContents::postBuild()
 {
-    setMouseOpaque(FALSE);
+    setMouseOpaque(false);
 
     childSetAction("button new script",&LLPanelContents::onClickNewScript, this);
     childSetAction("button permissions",&LLPanelContents::onClickPermissions, this);
@@ -92,7 +92,7 @@ BOOL LLPanelContents::postBuild()
 
     mPanelInventoryObject = getChild<LLPanelObjectInventory>("contents_inventory");
 
-    return TRUE;
+    return true;
 }
 
 LLPanelContents::LLPanelContents()
@@ -112,8 +112,8 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 {
     if( !objectp )
     {
-        getChildView("button new script")->setEnabled(FALSE);
-        getChildView("btn_reset_scripts")->setEnabled(FALSE); // <FS> Script reset in edit floater
+        getChildView("button new script")->setEnabled(false);
+        getChildView("btn_reset_scripts")->setEnabled(false); // <FS> Script reset in edit floater
         return;
     }
 
@@ -124,7 +124,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
     bool editable = gAgent.isGodlike()
                     || (objectp->permModify() && !objectp->isPermanentEnforced()
                            && ( objectp->permYouOwner() || ( !group_id.isNull() && gAgent.isInGroup(group_id) )));  // solves SL-23488
-    BOOL all_volume = LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME );
+    bool all_volume = LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME );
 
 // [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-1.0.5a
     if ( (rlv_handler_t::isEnabled()) && (editable) )
@@ -137,7 +137,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
         if ( (editable) && ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))) )
         {
             // Only check the first (non-)root object because nothing else would result in enabling the button (see below)
-            LLViewerObject* pObj = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(TRUE);
+            LLViewerObject* pObj = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(true);
 
             editable =
                 (pObj) && (isAgentAvatarValid()) && ((!gAgentAvatarp->isSitting()) || (gAgentAvatarp->getRoot() != pObj->getRootEdit()));
@@ -153,10 +153,10 @@ void LLPanelContents::getState(LLViewerObject *objectp )
     //      ((LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1)
     //          || (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)));
 
-    BOOL objectIsOK = FALSE;
+    bool objectIsOK = false;
     if( editable && all_volume && ( (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1) || (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1) ) )
     {
-        objectIsOK = TRUE;
+        objectIsOK = true;
     }
 
     getChildView("button new script")->setEnabled(objectIsOK);
@@ -169,7 +169,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 
 void LLPanelContents::refresh()
 {
-    const BOOL children_ok = TRUE;
+    const bool children_ok = true;
     LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(children_ok);
 
     getState(object);
@@ -195,7 +195,7 @@ void LLPanelContents::clearContents()
 // static
 void LLPanelContents::onClickNewScript(void *userdata)
 {
-    const BOOL children_ok = TRUE;
+    const bool children_ok = true;
     LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(children_ok);
     if(object)
     {
@@ -239,7 +239,7 @@ void LLPanelContents::onClickNewScript(void *userdata)
                 LLSaleInfo::DEFAULT,
                 LLInventoryItemFlags::II_FLAGS_NONE,
                 time_corrected());
-        object->saveScript(new_item, TRUE, true);
+        object->saveScript(new_item, true, true);
 
         std::string name = new_item->getName();
 

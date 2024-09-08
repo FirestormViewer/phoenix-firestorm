@@ -48,7 +48,7 @@ class LLPanelSnapshotOptions
 public:
     LLPanelSnapshotOptions();
     ~LLPanelSnapshotOptions();
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& key);
 
 private:
@@ -79,7 +79,7 @@ LLPanelSnapshotOptions::~LLPanelSnapshotOptions()
 }
 
 // virtual
-BOOL LLPanelSnapshotOptions::postBuild()
+bool LLPanelSnapshotOptions::postBuild()
 {
     mSnapshotFloater = getParentByType<LLFloaterSnapshotBase>();
     return LLPanel::postBuild();

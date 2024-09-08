@@ -37,7 +37,7 @@
 
 FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 :   LLFloater(target),
-    mContactSetsCombo(NULL)
+    mContactSetsCombo(nullptr)
 {
     if (target.isArray())
     {
@@ -64,7 +64,7 @@ FSFloaterAddToContactSet::~FSFloaterAddToContactSet()
     }
 }
 
-BOOL FSFloaterAddToContactSet::postBuild()
+bool FSFloaterAddToContactSet::postBuild()
 {
     if (mHasMultipleAgents)
     {
@@ -86,7 +86,7 @@ BOOL FSFloaterAddToContactSet::postBuild()
     childSetAction("cancel_btn", boost::bind(&FSFloaterAddToContactSet::onClickCancel, this));
     childSetAction("add_set_btn", boost::bind(&FSFloaterAddToContactSet::onClickAddSet, this));
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterAddToContactSet::onClickAdd()

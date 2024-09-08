@@ -37,7 +37,7 @@ class FloaterMediaLists : public LLFloater
 {
 public:
     FloaterMediaLists(const LLSD& key);
-    BOOL postBuild();
+    bool postBuild() override;
     static bool handleAddDomainCallback(const LLSD& notification, const LLSD& response);
 
 private:

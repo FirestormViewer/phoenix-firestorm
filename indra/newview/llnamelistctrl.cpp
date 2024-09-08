@@ -47,7 +47,7 @@
 
 static LLDefaultChildRegistry::Register<LLNameListCtrl> r("name_list");
 
-static const S32 info_icon_size = 16;
+static constexpr S32 info_icon_size = 16;
 
 void LLNameListCtrl::NameTypeNames::declareValues()
 {
@@ -80,7 +80,7 @@ LLNameListCtrl::LLNameListCtrl(const LLNameListCtrl::Params& p)
 
 // public
 LLScrollListItem* LLNameListCtrl::addNameItem(const LLUUID& agent_id, EAddPosition pos,
-                                 BOOL enabled, const std::string& suffix, const std::string& prefix)
+                                 bool enabled, const std::string& suffix, const std::string& prefix)
 {
     //LL_INFOS() << "LLNameListCtrl::addNameItem " << agent_id << LL_ENDL;
 
@@ -93,19 +93,19 @@ LLScrollListItem* LLNameListCtrl::addNameItem(const LLUUID& agent_id, EAddPositi
 }
 
 // virtual, public
-BOOL LLNameListCtrl::handleDragAndDrop(
+bool LLNameListCtrl::handleDragAndDrop(
         S32 x, S32 y, MASK mask,
-        BOOL drop,
+        bool drop,
         EDragAndDropType cargo_type, void *cargo_data,
         EAcceptance *accept,
         std::string& tooltip_msg)
 {
     if (!mAllowCallingCardDrop)
     {
-        return FALSE;
+        return false;
     }
 
-    BOOL handled = FALSE;
+    bool handled = false;
 
     if (cargo_type == DAD_CALLINGCARD)
     {
@@ -134,7 +134,7 @@ BOOL LLNameListCtrl::handleDragAndDrop(
         }
     }
 
-    handled = TRUE;
+    handled = true;
     LL_DEBUGS("UserInput") << "dragAndDrop handled by LLNameListCtrl " << getName() << LL_ENDL;
 
     return handled;
@@ -225,9 +225,9 @@ void    LLNameListCtrl::mouseOverHighlightNthItem( S32 target_index )
 }
 
 //virtual
-BOOL LLNameListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLNameListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 {
-    BOOL handled = FALSE;
+    bool handled = false;
     S32 column_index = getColumnIndexFromOffset(x);
     LLNameListItem* hit_item = dynamic_cast<LLNameListItem*>(hitItem(x, y));
     LLFloater* floater = gFloaterView->getParentFloater(this);
@@ -283,7 +283,7 @@ BOOL LLNameListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
                     // </FS:Ansariel>
 
                     LLToolTipMgr::getInstance()->show(params);
-                    handled = TRUE;
+                    handled = true;
                 }
             }
         }
@@ -296,7 +296,7 @@ BOOL LLNameListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLNameListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLNameListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     LLNameListItem* hit_item = dynamic_cast<LLNameListItem*>(hitItem(x, y));
     LLFloater* floater = gFloaterView->getParentFloater(this);
@@ -306,7 +306,7 @@ BOOL LLNameListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
         {
             ContextMenuType prev_menu = getContextMenuType();
             setContextMenu(MENU_GROUP);
-            BOOL handled = LLScrollListCtrl::handleRightMouseDown(x, y, mask);
+            bool handled = LLScrollListCtrl::handleRightMouseDown(x, y, mask);
             setContextMenu(prev_menu);
             return handled;
         }
@@ -318,7 +318,7 @@ BOOL LLNameListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 // public
 void LLNameListCtrl::addGroupNameItem(const LLUUID& group_id, EAddPosition pos,
-                                      BOOL enabled)
+                                      bool enabled)
 {
     NameItem item;
     item.value = group_id;
@@ -456,7 +456,7 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
     LLScrollListColumn* columnp = getColumn(mNameColumnIndex);
     if (columnp && columnp->mHeader)
     {
-        columnp->mHeader->setHasResizableElement(TRUE);
+        columnp->mHeader->setHasResizableElement(true);
     }
 
     return item;
@@ -515,7 +515,7 @@ void LLNameListCtrl::selectItemBySpecialId(const LLUUID& special_id)
         LLNameListItem* item = dynamic_cast<LLNameListItem*>(*it);
         if (item && item->getSpecialID() == special_id)
         {
-            item->setSelected(TRUE);
+            item->setSelected(true);
             break;
         }
     }
@@ -637,7 +637,7 @@ void LLNameListCtrl::updateColumns(bool force_update)
     }
 }
 
-void LLNameListCtrl::sortByName(BOOL ascending)
+void LLNameListCtrl::sortByName(bool ascending)
 {
     sortByColumnIndex(mNameColumnIndex,ascending);
 }

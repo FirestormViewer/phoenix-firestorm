@@ -114,7 +114,7 @@ public:
     ~LLSceneMonitorView();
     virtual void draw();
 
-    virtual void onVisibilityChange(BOOL visible);
+    virtual void onVisibilityChange(bool visible);
 
 protected:
     // <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X

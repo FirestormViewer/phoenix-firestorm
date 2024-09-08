@@ -54,6 +54,9 @@
 #include "v3math.h"
 #include "v4color.h"
 
+#include "rlvactions.h"    // <FS:Zi> Respect RLVa restrictions
+#include "rlvcommon.h"     // <FS:Zi> Respect RLVa restrictions
+
 #define XUI_LINKSET_USE_NONE             0
 #define XUI_LINKSET_USE_WALKABLE         1
 #define XUI_LINKSET_USE_STATIC_OBSTACLE  2
@@ -111,7 +114,7 @@ LLFloaterPathfindingLinksets::~LLFloaterPathfindingLinksets()
 {
 }
 
-BOOL LLFloaterPathfindingLinksets::postBuild()
+bool LLFloaterPathfindingLinksets::postBuild()
 {
     mBeaconColor = LLUIColorTable::getInstance()->getColor("PathfindingLinksetBeaconColor");
 
@@ -556,6 +559,29 @@ void LLFloaterPathfindingLinksets::updateStateOnEditFields()
     int numSelectedItems = getNumSelectedObjects();
     bool isEditEnabled = (numSelectedItems > 0);
 
+    // <FS:Zi> Respect RLVa restrictions
+    if (RlvActions::isRlvEnabled())
+    {
+        if (
+            !rlvCanDeleteOrReturn()
+            || RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH)
+            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHALL)
+            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHWORLD)
+            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHME)
+            || RlvActions::hasBehaviour(RLV_BHVR_TOUCHTHIS)
+            || RlvActions::hasBehaviour(RLV_BHVR_INTERACT)
+        )
+        {
+            isEditEnabled = false;
+        }
+
+        if (RlvActions::hasBehaviour(RLV_BHVR_TPLOCAL))
+        {
+            numSelectedItems = 0;
+        }
+    }
+    // </FS:Zi>
+
     mEditLinksetUse->setEnabled(isEditEnabled);
 
     mLabelWalkabilityCoefficients->setEnabled(isEditEnabled);
@@ -577,12 +603,12 @@ void LLFloaterPathfindingLinksets::updateStateOnEditFields()
 
 void LLFloaterPathfindingLinksets::updateStateOnEditLinksetUse()
 {
-    BOOL useWalkable = FALSE;
-    BOOL useStaticObstacle = FALSE;
-    BOOL useDynamicObstacle = FALSE;
-    BOOL useMaterialVolume = FALSE;
-    BOOL useExclusionVolume = FALSE;
-    BOOL useDynamicPhantom = FALSE;
+    bool useWalkable = false;
+    bool useStaticObstacle = false;
+    bool useDynamicObstacle = false;
+    bool useMaterialVolume = false;
+    bool useExclusionVolume = false;
+    bool useDynamicPhantom = false;
 
     LLPathfindingObjectListPtr selectedObjects = getSelectedObjects();
     if ((selectedObjects != NULL) && !selectedObjects->isEmpty())

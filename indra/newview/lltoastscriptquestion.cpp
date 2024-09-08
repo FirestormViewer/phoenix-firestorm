@@ -41,7 +41,7 @@ LLToastPanel(notification)
     buildFromFile("panel_script_question_toast.xml");
 }
 
-BOOL LLToastScriptQuestion::postBuild()
+bool LLToastScriptQuestion::postBuild()
 {
     createButtons();
 
@@ -53,11 +53,11 @@ BOOL LLToastScriptQuestion::postBuild()
 
     snapToMessageHeight();
 
-    return TRUE;
+    return true;
 }
 
 // virtual
-void LLToastScriptQuestion::setFocus(BOOL b)
+void LLToastScriptQuestion::setFocus(bool b)
 {
     LLToastPanel::setFocus(b);
     // toast can fade out and disappear with focus ON, so reset to default anyway
@@ -138,7 +138,7 @@ void LLToastScriptQuestion::createButtons()
             if (form_element.has("default") && form_element["default"].asBoolean() && (mNotification->getName() != "ScriptQuestionCaution" || gSavedSettings.getBOOL("FSPermissionDebitDefaultDeny")))
             // </FS:Ansariel>
             {
-                button->setFocus(TRUE);
+                button->setFocus(true);
                 setDefaultBtn(button);
             }
         }

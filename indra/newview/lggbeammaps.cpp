@@ -275,7 +275,7 @@ string_vec_t lggBeamMaps::getFileNames()
         if (found)
         {
             name = name.erase(name.length() - 4);
-            names.push_back(unescape_name(name));
+            names.push_back(FSCommon::unescape_name(name));
         }
     }
 
@@ -288,7 +288,7 @@ string_vec_t lggBeamMaps::getFileNames()
         if (found)
         {
             name = name.erase(name.length() - 4);
-            names.push_back(unescape_name(name));
+            names.push_back(FSCommon::unescape_name(name));
         }
     }
     return names;
@@ -307,7 +307,7 @@ string_vec_t lggBeamMaps::getColorsFileNames()
         if (found)
         {
             name = name.erase(name.length() - 4);
-            names.push_back(unescape_name(name));
+            names.push_back(FSCommon::unescape_name(name));
         }
     }
 
@@ -321,7 +321,7 @@ string_vec_t lggBeamMaps::getColorsFileNames()
         if (found)
         {
             name = name.erase(name.length() - 4);
-            names.push_back(unescape_name(name));
+            names.push_back(FSCommon::unescape_name(name));
         }
     }
     return names;

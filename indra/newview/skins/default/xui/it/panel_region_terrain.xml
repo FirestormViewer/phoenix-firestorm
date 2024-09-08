@@ -6,21 +6,21 @@
 	<text name="region_text" left_delta="60">
 		sconosciuta
 	</text>
-	<spinner label="Altezza dell&apos;acqua" name="water_height_spin"/>
-	<spinner label="Limite altezza" name="terrain_raise_spin"/>
-	<spinner bottom_delta="-34" label="Limite profondità" name="terrain_lower_spin"/>
+	<spinner label="Altezza dell'acqua" name="water_height_spin"/>
+	<spinner label="Limite innalzamento" name="terrain_raise_spin"/>
+	<spinner label="Limite abbassamento" name="terrain_lower_spin"/>
 	<text name="detail_texture_text">
 		Texture terreno
 	</text>
 	<text name="detail_material_text">
 		Materiali terreno
 	</text>
-	<check_box label="Rugosità/Metallicità PBR" name="terrain_material_type" tool_tip="Se selezionato, utilizza i materiali PBR per il terreno, altrimenti utilizza le texture." />
+	<check_box label="Rugosità Metallicità PBR" name="terrain_material_type" tool_tip="Se selezionato, utilizza i materiali PBR per il terreno, altrimenti utilizza le texture." />
 	<text name="height_text_lbl">
-		1 (basso)
+		1 (Basso)
 	</text>
 	<text name="height_text_lbl4">
-		4 (alto)
+		4 (Alto)
 	</text>
 	<text name="height_text_lbl5">
 		Intervalli altitudine texture
@@ -41,27 +41,27 @@
 		Misurato in metri, il valore BASSO è la MASSIMA altezza del materiale 1 e il valore ALTO è l&apos;altezza MINIMA del materiale 4.
 	</text>
 	<text name="height_text_lbl6">
-		Nordovest
+		Nord-ovest
 	</text>
 	<text name="height_text_lbl7">
-		Nordest
+		Nord-est
 	</text>
-	<spinner label="basso" name="height_start_spin_1"/>
-	<spinner label="basso" name="height_start_spin_3"/>
-	<spinner label="alto" name="height_range_spin_1"/>
-	<spinner label="alto" name="height_range_spin_3"/>
+	<spinner label="Basso" name="height_start_spin_1"/>
+	<spinner label="Basso" name="height_start_spin_3"/>
+	<spinner label="Alto" name="height_range_spin_1"/>
+	<spinner label="Alto" name="height_range_spin_3"/>
 	<text name="height_text_lbl8">
-		Sudovest
+		Sud-ovest
 	</text>
 	<text name="height_text_lbl9">
-		Sudest
+		Sud-est
 	</text>
-	<spinner label="basso" name="height_start_spin_0"/>
-	<spinner label="basso" name="height_start_spin_2"/>
-	<spinner label="alto" name="height_range_spin_0"/>
-	<spinner label="alto" name="height_range_spin_2"/>
-	<button label="Scarica RAW terreno ..." name="download_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
+	<spinner label="Basso" name="height_start_spin_0"/>
+	<spinner label="Basso" name="height_start_spin_2"/>
+	<spinner label="Alto" name="height_range_spin_0"/>
+	<spinner label="Alto" name="height_range_spin_2"/>
+	<button label="Scarica RAW terreno..." name="download_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
 	<button label="Carica RAW terreno..." name="upload_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
-	<button label="Trasforma" name="bake_terrain_btn" tool_tip="Imposta il terreno corrente come punto medio per i limiti di innalzamento/abbassamento"/>
+	<button label="Bake terreno" name="bake_terrain_btn" tool_tip="Imposta il terreno corrente come punto medio per i limiti di innalzamento/abbassamento"/>
 	<button label="Applica" name="apply_btn"/>
 </panel>

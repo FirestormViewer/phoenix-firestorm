@@ -90,9 +90,6 @@
 		<text name="SkyMeshDetailText">
 			Düşük
 		</text>
-		<text name="AvatarRenderingText">
-			Avatar İşleme:
-		</text>
 		<check_box label="Düşük grafik özellikli avatarlar" name="AvatarImpostors"/>
 		<check_box label="Avatar giysisi" name="AvatarCloth"/>
 		<text name="TerrainDetailText">

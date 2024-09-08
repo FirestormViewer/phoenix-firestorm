@@ -37,7 +37,7 @@
 
 FSFloaterTeleportHistory::FSFloaterTeleportHistory(const LLSD& seed)
     : LLFloater(seed),
-    mHistoryPanel(NULL)
+    mHistoryPanel(nullptr)
 {
 }
 
@@ -46,7 +46,7 @@ FSFloaterTeleportHistory::~FSFloaterTeleportHistory()
     delete mHistoryPanel;
 }
 
-BOOL FSFloaterTeleportHistory::postBuild()
+bool FSFloaterTeleportHistory::postBuild()
 {
     mHistoryPanel = new LLTeleportHistoryPanel;
 
@@ -85,10 +85,10 @@ BOOL FSFloaterTeleportHistory::postBuild()
     }
     else
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterTeleportHistory::onFilterEdit(const std::string& search_string, bool force_filter)
@@ -115,12 +115,12 @@ void FSFloaterTeleportHistory::resetFilter()
     onFilterEdit("", true);
 }
 
-BOOL FSFloaterTeleportHistory::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterTeleportHistory::handleKeyHere(KEY key, MASK mask)
 {
     if (FSCommon::isFilterEditorKeyCombo(key, mask))
     {
-        mFilterEditor->setFocus(TRUE);
-        return TRUE;
+        mFilterEditor->setFocus(true);
+        return true;
     }
 
     return LLFloater::handleKeyHere(key, mask);

@@ -60,7 +60,7 @@ public:
     // AIS3 only
     void fetchCOF(nullary_func_t callback);
 
-    BOOL folderFetchActive() const;
+    bool folderFetchActive() const;
     bool isEverythingFetched() const; // completing the fetch once per session should be sufficient
 
     bool libraryFetchStarted() const;
@@ -140,7 +140,7 @@ private:
     uuid_set_t mForceFetchSet;
     std::list<LLUUID> mExpectedFolderIds; // for debug, should this track time?
     // <FS:ND> For legacy inventory
-    BOOL mTimelyFetchPending;
+    bool mTimelyFetchPending;
     S32 mNumFetchRetries;
     F32 mMaxTimeBetweenFetches;
     // </FS:ND>

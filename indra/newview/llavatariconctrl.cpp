@@ -329,7 +329,7 @@ void LLAvatarIconCtrl::processProperties(void* data, EAvatarProcessorType type)
                 return;
             }
 
-            LLAvatarIconIDCache::getInstance()->add(mAvatarId, avatar_data->image_id);
+            LLAvatarIconIDCache::getInstance()->add(mAvatarId,avatar_data->image_id);
             updateFromCache();
         }
     }
@@ -357,11 +357,11 @@ void LLAvatarIconCtrl::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarN
 }
 
 // [SL:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-BOOL LLAvatarIconCtrl::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLAvatarIconCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 {
     // Don't show our tooltip if we were asked not to
     if (!mDrawTooltip)
-        return FALSE;
+        return false;
     return LLIconCtrl::handleToolTip(x, y, mask);
 }
 // [/SL:KB]

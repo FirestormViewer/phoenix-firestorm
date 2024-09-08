@@ -37,10 +37,10 @@ public:
     FSPanelPrefs();
     virtual ~FSPanelPrefs() {}
 
-    /*virtual*/ BOOL postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void apply();
-    /*virtual*/ void cancel();
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void apply() override;
+    void cancel(const std::vector<std::string> settings_to_skip = {}) override;
 
     void refreshBeamLists();
 

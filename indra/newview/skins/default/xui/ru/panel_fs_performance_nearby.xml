@@ -20,7 +20,14 @@
 	<text name="av_nearby_desc3">
 		Примечание. Используйте вкладку Сложность аватара, чтобы видеть как вы влияете на других.
 	</text>
-	<check_box label="Всегда отображать друзей во всех подробностях" name="display_friends"/>
+	<text name="AvatarComplexityMode_Label" width="130">
+		Отображение аватара:
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="Ограничение по сложности" name="complexity_limit_everone"/>
+		<combo_box.item label="Всегда показывать друзей" name="complexity_always_show_friends"/>
+		<combo_box.item label="Показывать только друзей" name="complexity_only_show_friends"/>
+	</combo_box>
 	<button label="Исключения..." name="exceptions_btn"/>
 	<check_box label="Полностью скрыть аватары" name="hide_avatars"/>
 	<text name="name_tags_textbox">Бейджи:</text>

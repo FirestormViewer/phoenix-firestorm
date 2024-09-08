@@ -89,7 +89,7 @@ private:
     std::string getFlickrConnectURL(const std::string& route = "", bool include_read_from_master = false);
 
     EConnectionState mConnectionState;
-    BOOL mConnected;
+    bool mConnected;
     LLSD mInfo;
     bool mRefreshInfo;
     bool mReadFromMaster;

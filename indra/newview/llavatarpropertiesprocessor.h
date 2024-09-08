@@ -112,7 +112,7 @@ struct LLAvatarData
     typedef std::pair<LLUUID, std::string> pick_data_t;
     typedef std::list< pick_data_t> picks_list_t;
     picks_list_t picks_list;
-    BOOL        allow_publish; // <FS:Ansariel> UDP profiles
+    bool        allow_publish; // <FS:Ansariel> UDP profiles
 
     // <FS:Ansariel> Convenient initialization
     LLAvatarData() = default;
@@ -139,7 +139,7 @@ struct LLAvatarData
 struct LLAvatarData::LLGroupData
 {
     U64 group_powers;
-    BOOL accept_notices;
+    bool accept_notices;
     std::string group_title;
     LLUUID group_id;
     std::string group_name;
@@ -151,14 +151,14 @@ struct LLPickData
     LLUUID agent_id;
     LLUUID pick_id;
     LLUUID creator_id;
-    BOOL top_pick;
+    bool top_pick;
     LLUUID parcel_id;
     std::string name;
     std::string desc;
     LLUUID snapshot_id;
     LLVector3d pos_global;
     S32 sort_order;
-    BOOL enabled;
+    bool enabled;
 
     //used only in read requests
     std::string user_name;
@@ -191,7 +191,7 @@ struct LLAvatarGroups
 {
     LLUUID agent_id;
     LLUUID avatar_id; //target id
-    BOOL list_in_profile;
+    bool list_in_profile;
 
     struct LLGroupData;
     typedef std::list<LLGroupData> group_list_t;
@@ -201,7 +201,7 @@ struct LLAvatarGroups
     struct LLGroupData
     {
         U64 group_powers;
-        BOOL accept_notices;
+        bool accept_notices;
         std::string group_title;
         LLUUID group_id;
         std::string group_name;

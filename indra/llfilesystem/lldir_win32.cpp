@@ -47,14 +47,16 @@ DWORD GetDllVersion(LPCTSTR lpszDllName);
 
 namespace
 { // anonymous
-    enum class prst { INIT, OPEN, SKIP } state = prst::INIT;
+    enum class prst { INIT, OPEN, SKIP };
+    prst state{ prst::INIT };
+
     // This is called so early that we can't count on static objects being
     // properly constructed yet, so declare a pointer instead of an instance.
     std::ofstream* prelogf = nullptr;
 
     void prelog(const std::string& message)
     {
-        boost::optional<std::string> prelog_name;
+        std::optional<std::string> prelog_name;
 
         switch (state)
         {
@@ -75,6 +77,7 @@ namespace
             (*prelogf) << "========================================================================"
                        << std::endl;
             // fall through, don't break
+            [[fallthrough]];
 
         case prst::OPEN:
             (*prelogf) << message << std::endl;
@@ -229,7 +232,7 @@ LLDir_Win32::LLDir_Win32()
     {
         w_str[size] = '\0';
         mExecutablePathAndName = utf16str_to_utf8str(llutf16string(w_str));
-        S32 path_end = mExecutablePathAndName.find_last_of('\\');
+        auto path_end = mExecutablePathAndName.find_last_of('\\');
         if (path_end != std::string::npos)
         {
             mExecutableDir = mExecutablePathAndName.substr(0, path_end);
@@ -368,9 +371,9 @@ U32 LLDir_Win32::countFilesInDir(const std::string &dirname, const std::string &
 
 // get the next file in the directory
 // AO: Used by LGG selection beams
-BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
+bool LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
 {
-    BOOL fileFound = FALSE;
+    bool fileFound = false;
     fname = "";
 
     WIN32_FIND_DATAW FileData;
@@ -389,7 +392,7 @@ BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string
         // Check error opening Directory structure
         if ((mDirSearch_h = FindFirstFile(pathname.c_str(), &FileData)) != INVALID_HANDLE_VALUE)
         {
-           fileFound = TRUE;
+           fileFound = true;
         }
     }
 
@@ -403,7 +406,7 @@ BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string
                )
            )
        {
-          fileFound = FALSE;
+          fileFound = false;
        }
     } while (   mDirSearch_h != INVALID_HANDLE_VALUE
              && !fileFound
@@ -444,11 +447,11 @@ bool LLDir_Win32::fileExists(const std::string &filename) const
     int res = LLFile::stat(filename, &stat_data);
     if (!res)
     {
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 

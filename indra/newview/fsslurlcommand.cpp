@@ -54,7 +54,7 @@ public:
         }
 
         LLUUID target_id;
-        if (!target_id.set(params[0], FALSE))
+        if (!target_id.set(params[0], false))
         {
             return false;
         }

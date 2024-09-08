@@ -38,9 +38,9 @@ class FSFloaterGroup : public LLFloater
 public:
     FSFloaterGroup(const LLSD& seed);
     /*virtual*/ ~FSFloaterGroup();
-    /*virtual*/ void onOpen(const LLSD& key);
+    void onOpen(const LLSD& key) override;
 
-    BOOL postBuild();
+    bool postBuild() override;
 
     void setGroup(const LLUUID& group_id);
 

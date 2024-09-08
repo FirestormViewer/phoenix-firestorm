@@ -512,8 +512,8 @@ void LLViewerParcelMedia::processParcelMediaUpdate( LLMessageSystem *msg)
     std::string media_type;
     S32 media_width = 0;
     S32 media_height = 0;
-    U8 media_auto_scale = FALSE;
-    U8 media_loop = FALSE;
+    U8 media_auto_scale = 0;
+    U8 media_loop = 0;
 
     msg->getUUID( "DataBlock", "MediaID", media_id );
     char media_url_buffer[257];
@@ -532,16 +532,15 @@ void LLViewerParcelMedia::processParcelMediaUpdate( LLMessageSystem *msg)
     }
 
     LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-    BOOL same = FALSE;
     if (parcel)
     {
-        same = ((parcel->getMediaURL() == media_url) &&
-                (parcel->getMediaType() == media_type) &&
-                (parcel->getMediaID() == media_id) &&
-                (parcel->getMediaWidth() == media_width) &&
-                (parcel->getMediaHeight() == media_height) &&
-                (parcel->getMediaAutoScale() == media_auto_scale) &&
-                (parcel->getMediaLoop() == media_loop));
+        bool same = ((parcel->getMediaURL() == media_url) &&
+                     (parcel->getMediaType() == media_type) &&
+                     (parcel->getMediaID() == media_id) &&
+                     (parcel->getMediaWidth() == media_width) &&
+                     (parcel->getMediaHeight() == media_height) &&
+                     (parcel->getMediaAutoScale() == media_auto_scale) &&
+                     (parcel->getMediaLoop() == media_loop));
 
         if (!same)
         {
@@ -741,7 +740,7 @@ bool callback_play_media(const LLSD& notification, const LLSD& response, LLParce
     {
         if (option == 1)
         {
-            gSavedSettings.setBOOL("AudioStreamingVideo", TRUE);
+            gSavedSettings.setBOOL("AudioStreamingVideo", true);
         }
         if (gSavedSettings.getBOOL("MediaEnableFilter"))
         {
@@ -754,23 +753,23 @@ bool callback_play_media(const LLSD& notification, const LLSD& response, LLParce
     }
     else // option == 2
     {
-        gSavedSettings.setBOOL("AudioStreamingVideo", FALSE);
+        gSavedSettings.setBOOL("AudioStreamingVideo", false);
     }
-    gWarningSettings.setBOOL("FirstStreamingVideo", FALSE);
+    gWarningSettings.setBOOL("FirstStreamingVideo", false);
     return false;
 }
 
 bool callback_enable_media_filter(const LLSD& notification, const LLSD& response, LLParcel* parcel)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    gWarningSettings.setBOOL("FirstMediaFilter", FALSE);
+    gWarningSettings.setBOOL("FirstMediaFilter", false);
     if (option == 0)
     {
         LLViewerParcelMedia::getInstance()->filterMediaUrl(parcel);
     }
     else // option == 1
     {
-        gSavedSettings.setBOOL("MediaEnableFilter", FALSE);
+        gSavedSettings.setBOOL("MediaEnableFilter", false);
         LLViewerParcelMedia::getInstance()->play(parcel);
     }
     return false;
@@ -911,7 +910,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
     {
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentBlocked", format_args));
         mMediaLastActionPlay = false;
     }
     else
@@ -993,7 +992,7 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysAllowed", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysAllowed", format_args));
         inst->mCurrentMedia = *parcel;
         if (parcel->getName() == currentparcel->getName())
         {
@@ -1010,7 +1009,7 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysBlocked", format_args));
     }
     else if ((option == 2) && allow) // Whitelist URL
     {
@@ -1021,7 +1020,7 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[MEDIAURL]"] = media_url;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentUrlAlwaysAllowed", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentUrlAlwaysAllowed", format_args));
         inst->mCurrentMedia = *parcel;
         if (parcel->getName() == currentparcel->getName())
         {
@@ -1038,7 +1037,7 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[MEDIAURL]"] = media_url;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentUrlAlwaysBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentUrlAlwaysBlocked", format_args));
     }
 
     // We've dealt with the alert, so mark it as inactive.
@@ -1111,7 +1110,7 @@ void callback_media_alert_single(const LLSD &notification, const LLSD &response,
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysBlocked", format_args));
     }
     else if (option == 3) // Whitelist domain
     {
@@ -1122,7 +1121,7 @@ void callback_media_alert_single(const LLSD &notification, const LLSD &response,
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysAllowed", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterMediaContentDomainAlwaysAllowed", format_args));
         inst->mCurrentMedia = *parcel;
         if (parcel->getName() == currentparcel->getName())
         {
@@ -1176,14 +1175,14 @@ void callback_media_alert_single(const LLSD &notification, const LLSD &response,
 bool callback_enable_audio_filter(const LLSD& notification, const LLSD& response, std::string media_url)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    gWarningSettings.setBOOL("FirstMediaFilter", FALSE);
+    gWarningSettings.setBOOL("FirstMediaFilter", false);
     if (option == 0)
     {
         LLViewerParcelMedia::getInstance()->filterAudioUrl(media_url);
     }
     else // option == 1
     {
-        gSavedSettings.setBOOL("MediaEnableFilter", FALSE);
+        gSavedSettings.setBOOL("MediaEnableFilter", false);
         if (gAudiop)
         {
             LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1317,7 +1316,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
     {
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentBlocked", format_args));
         LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
         mAudioLastActionPlay = false;
     }
@@ -1402,7 +1401,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args));
         if (gAudiop)
         {
             inst->mCurrentMusic = media_url;
@@ -1419,7 +1418,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args));
         if (gAudiop)
         {
             inst->mCurrentMusic = "";
@@ -1436,7 +1435,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[MEDIAURL]"] = media_url;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentUrlAlwaysAllowed", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentUrlAlwaysAllowed", format_args));
         if (gAudiop)
         {
             inst->mCurrentMusic = media_url;
@@ -1453,7 +1452,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[MEDIAURL]"] = media_url;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentUrlAlwaysBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentUrlAlwaysBlocked", format_args));
         if (gAudiop)
         {
             inst->mCurrentMusic = "";
@@ -1535,7 +1534,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args));
         if (gAudiop)
         {
             inst->mCurrentMusic = media_url;
@@ -1552,7 +1551,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
         inst->saveDomainFilterList();
         LLStringUtil::format_map_t format_args;
         format_args["[DOMAIN]"] = domain;
-        report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args));
         if (gAudiop)
         {
             inst->mCurrentMusic = "";

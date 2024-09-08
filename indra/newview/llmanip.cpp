@@ -101,7 +101,7 @@ void LLManip::rebuild(LLViewerObject* vobj)
 LLManip::LLManip( const std::string& name, LLToolComposite* composite )
     :
     LLTool( name, composite ),
-    mInSnapRegime(FALSE),
+    mInSnapRegime(false),
     mHighlightedPart(LL_NO_PART),
     mManipPart(LL_NO_PART)
 {
@@ -149,7 +149,7 @@ void LLManip::getManipNormal(LLViewerObject* object, EManipPart manip, LLVector3
 }
 
 
-BOOL LLManip::getManipAxis(LLViewerObject* object, EManipPart manip, LLVector3 &axis)
+bool LLManip::getManipAxis(LLViewerObject* object, EManipPart manip, LLVector3 &axis)
 {
     LLVector3 grid_origin;
     LLVector3 grid_scale;
@@ -171,11 +171,11 @@ BOOL LLManip::getManipAxis(LLViewerObject* object, EManipPart manip, LLVector3 &
     }
     else
     {
-        return FALSE;
+        return false;
     }
 
     axis.rotVec( grid_rotation );
-    return TRUE;
+    return true;
 }
 
 F32 LLManip::getSubdivisionLevel(const LLVector3 &reference_point, const LLVector3 &translate_axis, F32 grid_scale, S32 min_pixel_spacing, F32 min_subdivisions, F32 max_subdivisions)
@@ -217,7 +217,7 @@ LLObjectSelectionHandle LLManip::getSelection()
     return mObjectSelection;
 }
 
-BOOL LLManip::handleHover(S32 x, S32 y, MASK mask)
+bool LLManip::handleHover(S32 x, S32 y, MASK mask)
 {
     // We only handle the event if mousedown started with us
     if( hasMouseCapture() )
@@ -226,7 +226,7 @@ BOOL LLManip::handleHover(S32 x, S32 y, MASK mask)
         {
             // Somehow the object got deselected while we were dragging it.
             // Release the mouse
-            setMouseCapture( FALSE );
+            setMouseCapture( false );
         }
 
         LL_DEBUGS("UserInput") << "hover handled by LLManip (active)" << LL_ENDL;
@@ -236,17 +236,17 @@ BOOL LLManip::handleHover(S32 x, S32 y, MASK mask)
         LL_DEBUGS("UserInput") << "hover handled by LLManip (inactive)" << LL_ENDL;
     }
     gViewerWindow->setCursor(UI_CURSOR_ARROW);
-    return TRUE;
+    return true;
 }
 
 
-BOOL LLManip::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLManip::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-    BOOL    handled = FALSE;
+    bool    handled = false;
     if( hasMouseCapture() )
     {
-        handled = TRUE;
-        setMouseCapture( FALSE );
+        handled = true;
+        setMouseCapture( false );
     }
     return handled;
 }
@@ -256,20 +256,20 @@ void LLManip::updateGridSettings()
     sGridMaxSubdivisionLevel = gSavedSettings.getBOOL("GridSubUnit") ? (F32)gSavedSettings.getS32("GridSubdivision") : 1.f;
 }
 
-BOOL LLManip::getMousePointOnPlaneAgent(LLVector3& point, S32 x, S32 y, LLVector3 origin, LLVector3 normal)
+bool LLManip::getMousePointOnPlaneAgent(LLVector3& point, S32 x, S32 y, LLVector3 origin, LLVector3 normal)
 {
     LLVector3d origin_double = gAgent.getPosGlobalFromAgent(origin);
     LLVector3d global_point;
-    BOOL result = getMousePointOnPlaneGlobal(global_point, x, y, origin_double, normal);
+    bool result = getMousePointOnPlaneGlobal(global_point, x, y, origin_double, normal);
     point = gAgent.getPosAgentFromGlobal(global_point);
     return result;
 }
 
-BOOL LLManip::getMousePointOnPlaneGlobal(LLVector3d& point, S32 x, S32 y, LLVector3d origin, LLVector3 normal) const
+bool LLManip::getMousePointOnPlaneGlobal(LLVector3d& point, S32 x, S32 y, LLVector3d origin, LLVector3 normal) const
 {
     if (mObjectSelection->getSelectType() == SELECT_TYPE_HUD)
     {
-        BOOL result = FALSE;
+        bool result = false;
         F32 mouse_x = ((F32)x / gViewerWindow->getWorldViewWidthScaled() - 0.5f) * LLViewerCamera::getInstance()->getAspect() / gAgentCamera.mHUDCurZoom;
         F32 mouse_y = ((F32)y / gViewerWindow->getWorldViewHeightScaled() - 0.5f) / gAgentCamera.mHUDCurZoom;
 
@@ -284,7 +284,7 @@ BOOL LLManip::getMousePointOnPlaneGlobal(LLVector3d& point, S32 x, S32 y, LLVect
         {
             mouse_pos.mV[VX] = (normal * (origin_agent - mouse_pos))
                                 / (normal.mV[VX]);
-            result = TRUE;
+            result = true;
         }
 
         point = gAgent.getPosGlobalFromAgent(mouse_pos);
@@ -296,13 +296,13 @@ BOOL LLManip::getMousePointOnPlaneGlobal(LLVector3d& point, S32 x, S32 y, LLVect
                                         point, x, y, origin, normal );
     }
 
-    //return FALSE;
+    //return false;
 }
 
 // Given the line defined by mouse cursor (a1 + a_param*(a2-a1)) and the line defined by b1 + b_param*(b2-b1),
 // returns a_param and b_param for the points where lines are closest to each other.
 // Returns false if the two lines are parallel.
-BOOL LLManip::nearestPointOnLineFromMouse( S32 x, S32 y, const LLVector3& b1, const LLVector3& b2, F32 &a_param, F32 &b_param )
+bool LLManip::nearestPointOnLineFromMouse( S32 x, S32 y, const LLVector3& b1, const LLVector3& b2, F32 &a_param, F32 &b_param )
 {
     LLVector3 a1;
     LLVector3 a2;
@@ -320,7 +320,7 @@ BOOL LLManip::nearestPointOnLineFromMouse( S32 x, S32 y, const LLVector3& b1, co
         a2 = gAgentCamera.getCameraPositionAgent() + LLVector3(gViewerWindow->mouseDirectionGlobal(x, y));
     }
 
-    BOOL parallel = TRUE;
+    bool parallel = true;
     LLVector3 a = a2 - a1;
     LLVector3 b = b2 - b1;
 
@@ -334,7 +334,7 @@ BOOL LLManip::nearestPointOnLineFromMouse( S32 x, S32 y, const LLVector3& b1, co
     if( (denom < -F_APPROXIMATELY_ZERO) || (F_APPROXIMATELY_ZERO < denom) )
     {
         a_param = (dist - normal * a1) / denom;
-        parallel = FALSE;
+        parallel = false;
     }
 
     normal = (a % b) % a;   // normal to plane (P) through a and (shortest line between a and b)
@@ -344,7 +344,7 @@ BOOL LLManip::nearestPointOnLineFromMouse( S32 x, S32 y, const LLVector3& b1, co
     if( (denom < -F_APPROXIMATELY_ZERO) || (F_APPROXIMATELY_ZERO < denom) )
     {
         b_param = (dist - normal * b1) / denom;
-        parallel = FALSE;
+        parallel = false;
     }
 
     return parallel;
@@ -380,7 +380,7 @@ LLVector3 LLManip::getPivotPoint()
     static LLCachedControl<F32> sPivotY(gSavedSettings, "FSBuildPrefs_PivotY");
     static LLCachedControl<F32> sPivotZ(gSavedSettings, "FSBuildPrefs_PivotZ");
 
-    const BOOL children_ok = TRUE;
+    const bool children_ok = true;
     LLViewerObject* root_object = mObjectSelection->getFirstRootObject(children_ok);
     if (root_object && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
     {
@@ -423,14 +423,14 @@ LLVector3 LLManip::getPivotPoint()
 }
 
 
-void LLManip::renderGuidelines(BOOL draw_x, BOOL draw_y, BOOL draw_z)
+void LLManip::renderGuidelines(bool draw_x, bool draw_y, bool draw_z)
 {
     LLVector3 grid_origin;
     LLQuaternion grid_rot;
     LLVector3 grid_scale;
     LLSelectMgr::getInstance()->getGrid(grid_origin, grid_rot, grid_scale);
 
-    const BOOL children_ok = TRUE;
+    const bool children_ok = true;
     LLViewerObject* object = mObjectSelection->getFirstRootObject(children_ok);
     if (!object)
     {
@@ -558,7 +558,7 @@ void LLManip::renderTickText(const LLVector3& pos, const std::string& text, cons
 {
     const LLFontGL* big_fontp = LLFontGL::getFontSansSerif();
 
-    BOOL hud_selection = mObjectSelection->getSelectType() == SELECT_TYPE_HUD;
+    bool hud_selection = mObjectSelection->getSelectType() == SELECT_TYPE_HUD;
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     gGL.pushMatrix();
     LLVector3 render_pos = pos;
@@ -616,7 +616,7 @@ void LLManip::renderTickValue(const LLVector3& pos, F32 value, const std::string
         }
     }
 
-    BOOL hud_selection = mObjectSelection->getSelectType() == SELECT_TYPE_HUD;
+    bool hud_selection = mObjectSelection->getSelectType() == SELECT_TYPE_HUD;
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     gGL.pushMatrix();
     {

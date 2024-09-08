@@ -147,5 +147,5 @@ void LLAgentPicksInfo::onServerRespond(LLAvatarData* picks)
         return;
     }
 
-    setNumberOfPicks(picks->picks_list.size());
+    setNumberOfPicks(static_cast<S32>(picks->picks_list.size()));
 }

@@ -68,9 +68,9 @@
 
 #include <boost/algorithm/string_regex.hpp>
 
-const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
-const F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
-const F32 MAX_ASSET_WAIT_TIME = 60.0f;
+constexpr F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
+constexpr F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
+constexpr F32 MAX_ASSET_WAIT_TIME = 60.0f;
 
 // static
 void FSFloaterObjectExport::onIdle(void* user_data)
@@ -187,7 +187,7 @@ void FSFloaterObjectExport::onIdle()
                 LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture(texture_id, FTT_DEFAULT, MIPMAP_TRUE);
                 image->setBoostLevel(LLViewerTexture::BOOST_MAX_LEVEL);
                 image->forceToSaveRawImage(0);
-                image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
+                image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, true, false, this, &mCallbackTextureList);
 
                 LL_DEBUGS("export") << "re-requested texture " << texture_id.asString() << LL_ENDL;
             }
@@ -222,7 +222,7 @@ FSFloaterObjectExport::~FSFloaterObjectExport()
     }
 }
 
-BOOL FSFloaterObjectExport::postBuild()
+bool FSFloaterObjectExport::postBuild()
 {
     mObjectList = getChild<LLScrollListCtrl>("selected_objects");
     mTexturePanel = getChild<LLPanel>("textures_panel");
@@ -230,7 +230,7 @@ BOOL FSFloaterObjectExport::postBuild()
 
     LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&FSFloaterObjectExport::updateSelection, this));
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterObjectExport::draw()
@@ -669,13 +669,13 @@ bool FSFloaterObjectExport::exportTexture(const LLUUID& texture_id)
     LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture(texture_id, FTT_DEFAULT, MIPMAP_TRUE);
     image->setBoostLevel(LLViewerTexture::BOOST_MAX_LEVEL);
     image->forceToSaveRawImage(0);
-    image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
+    image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, true, false, this, &mCallbackTextureList);
 
     return true;
 }
 
 // static
-void FSFloaterObjectExport::onImageLoaded(BOOL success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata)
+void FSFloaterObjectExport::onImageLoaded(bool success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, bool final, void* userdata)
 {
     if(final && success)
     {
@@ -822,7 +822,7 @@ void FSFloaterObjectExport::inventoryChanged(LLViewerObject* object, LLInventory
                                   item->getType(),
                                   onLoadComplete,
                                   data,
-                                  TRUE);
+                                  true);
             }
             else
             {
@@ -830,7 +830,7 @@ void FSFloaterObjectExport::inventoryChanged(LLViewerObject* object, LLInventory
                                 item->getType(),
                                 onLoadComplete,
                                 data,
-                                TRUE);
+                                true);
             }
         }
     }
@@ -876,7 +876,7 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
     case LLAssetType::AT_BODYPART:
     {
         std::string asset(buffer.begin(), buffer.end());
-        S32 position = asset.rfind("textures");
+        auto position = asset.rfind("textures");
         boost::regex pattern("[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}");
         boost::sregex_iterator m1(asset.begin() + position, asset.end(), pattern);
         boost::sregex_iterator m2;
@@ -908,9 +908,8 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
         }
         std::string name;
         std::string description;
-        S32 i;
-        S32 count = gesture->mSteps.size();
-        for (i = 0; i < count; ++i)
+        auto count = gesture->mSteps.size();
+        for (size_t i = 0; i < count; ++i)
         {
             LLGestureStep* step = gesture->mSteps[i];
 
@@ -936,7 +935,7 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
                                 LLAssetType::AT_ANIMATION,
                                 onLoadComplete,
                                 anim_data,
-                                TRUE);
+                                true);
             }
                 break;
             case STEP_SOUND:
@@ -959,7 +958,7 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
                                 LLAssetType::AT_SOUND,
                                 onLoadComplete,
                                 sound_data,
-                                TRUE);
+                                true);
             }
                 break;
             default:
@@ -1180,7 +1179,7 @@ void FSFloaterObjectExport::addSelectedObjects()
             }
 
             updateTextureInfo();
-            mNumTextures = mTextures.size();
+            mNumTextures = static_cast<S32>(mTextures.size());
             mNumExportableTextures = getNumExportableTextures();
         }
         else
@@ -1245,7 +1244,7 @@ mParent(parent)
     setImage(image);
 }
 
-void FSFloaterObjectExport::FSExportCacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, BOOL imagelocal)
+void FSFloaterObjectExport::FSExportCacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal)
 {
     if (imageformat != IMG_CODEC_J2C)
     {

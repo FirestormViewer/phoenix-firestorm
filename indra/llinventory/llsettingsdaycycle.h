@@ -60,10 +60,10 @@ public:
     static const Seconds MAXIMUM_DAYOFFSET;
     static const Seconds INVALID_DAYOFFSET; // KC
 
-    static const S32     TRACK_WATER;
-    static const S32     TRACK_GROUND_LEVEL;
-    static const S32     TRACK_MAX;
-    static const S32     FRAME_MAX;
+    static const U32     TRACK_WATER;
+    static const U32     TRACK_GROUND_LEVEL;
+    static const U32     TRACK_MAX;
+    static const U32     FRAME_MAX;
 
     static const F32     DEFAULT_FRAME_SLOP_FACTOR;
 

@@ -51,14 +51,14 @@ class FloaterAO
         ~FloaterAO();
 
     public:
-        /*virtual*/ BOOL postBuild();
+        /*virtual*/ bool postBuild();
         virtual void onOpen(const LLSD& key);
         virtual void onClose(bool app_quitting);
         void updateList();
         void updateSetParameters();
         void updateAnimationList();
 
-        BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void* cargo_data,
+        bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data,
                                   EAcceptance* accept, std::string& tooltip_msg);
 
     protected:
@@ -97,13 +97,13 @@ class FloaterAO
         void updateSmart();
         void updateCycleParameters();
 
-        void enableSetControls(BOOL enable);
-        void enableStateControls(BOOL enable);
+        void enableSetControls(bool enable);
+        void enableStateControls(bool enable);
 
         bool newSetCallback(const LLSD& notification, const LLSD& response);
         bool removeSetCallback(const LLSD& notification, const LLSD& response);
 
-        virtual BOOL tick();
+        virtual bool tick();
 
         std::vector<AOSet*> mSetList;
         AOSet* mSelectedSet;

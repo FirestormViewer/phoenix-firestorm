@@ -251,19 +251,19 @@ void LLViewerJoystick::updateEnabled(bool autoenable)
 {
     if (mDriverState == JDS_UNINITIALIZED)
     {
-        gSavedSettings.setBOOL("JoystickEnabled", FALSE );
+        gSavedSettings.setBOOL("JoystickEnabled", false);
     }
     else
     {
         // autoenable if user specifically chose this device
         if (autoenable && (isLikeSpaceNavigator() || isDeviceUUIDSet()))
         {
-            gSavedSettings.setBOOL("JoystickEnabled", TRUE );
+            gSavedSettings.setBOOL("JoystickEnabled", true );
         }
     }
     if (!gSavedSettings.getBOOL("JoystickEnabled"))
     {
-        mOverrideCamera = FALSE;
+        mOverrideCamera = false;
     }
 }
 
@@ -271,7 +271,7 @@ void LLViewerJoystick::setOverrideCamera(bool val)
 {
     if (!gSavedSettings.getBOOL("JoystickEnabled"))
     {
-        mOverrideCamera = FALSE;
+        mOverrideCamera = false;
     }
     else
     {
@@ -371,7 +371,7 @@ void LLViewerJoystick::init(bool autoenable)
 
     loadDeviceIdFromSettings();
 
-    if (libinit == false)
+    if (!libinit)
     {
         // Note: The HotPlug callbacks are not actually getting called on Windows
         if (ndof_libinit(HotPlugAddCallback,
@@ -429,13 +429,13 @@ void LLViewerJoystick::init(bool autoenable)
             if (mDriverState != JDS_INITIALIZED)
             {
                 if (!gViewerWindow->getWindow()->getInputDevices(device_type, osx_callback, win_callback, NULL))
-                {
+            {
                     LL_INFOS("Joystick") << "Failed to gather input devices. Falling back to ndof's init" << LL_ENDL;
                     // Failed to gather devices, init first suitable one
-                    mLastDeviceUUID = LLSD();
-                    void *preffered_device = NULL;
-                    initDevice(preffered_device);
-                }
+                mLastDeviceUUID = LLSD();
+                void *preffered_device = NULL;
+                initDevice(preffered_device);
+            }
             }
 
             if (mDriverState == JDS_INITIALIZING)
@@ -453,7 +453,7 @@ void LLViewerJoystick::init(bool autoenable)
     // Autoenable the joystick for recognized devices if nothing was connected previously
     if (!autoenable)
     {
-        autoenable = gSavedSettings.getString("JoystickInitialized").empty() ? true : false;
+        autoenable = gSavedSettings.getString("JoystickInitialized").empty();
     }
     updateEnabled(autoenable);
 
@@ -511,13 +511,13 @@ void LLViewerJoystick::initDevice(LLSD &guid)
 
         if (ndof_init_first(mNdofDev, nullptr))
         {
-            mDriverState = JDS_INITIALIZING;
+    mDriverState = JDS_INITIALIZING;
             // Saved device no longer exist
             // Np other device present
             LL_WARNS() << "ndof_init_first FAILED" << LL_ENDL;
         }
         else
-        {
+    {
             mDriverState = JDS_INITIALIZED;
         }
     }
@@ -529,10 +529,10 @@ void LLViewerJoystick::initDevice(LLSD &guid)
         {
             LL_INFOS("Joystick") << "Failed to gather input devices. Falling back to ndof's init" << LL_ENDL;
             // Failed to gather devices from window, init first suitable one
-            void *preffered_device = NULL;
-            mLastDeviceUUID = LLSD();
-            initDevice(preffered_device);
-        }
+        void *preffered_device = NULL;
+        mLastDeviceUUID = LLSD();
+        initDevice(preffered_device);
+    }
     }
 
     if (mDriverState == JDS_INITIALIZING)
@@ -1010,7 +1010,7 @@ void LLViewerJoystick::moveAvatar(bool reset)
             else if (!button_held)
             {
                 button_held = true;
-                gAgent.setFlying(FALSE);
+                gAgent.setFlying(false);
             }
         }
         else if (!button_held)
@@ -1592,7 +1592,7 @@ void LLViewerJoystick::setSNDefaults()
 #if LL_DARWIN || LL_LINUX
     const float platformScale = 20.f;
     const float platformScaleAvXZ = 1.f;
-    // The SpaceNavigator doesn't act as a 3D cursor on OS X / Linux.
+    // The SpaceNavigator doesn't act as a 3D cursor on macOS / Linux.
     const bool is_3d_cursor = false;
 #else
     const float platformScale = 1.f;

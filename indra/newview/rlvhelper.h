@@ -422,7 +422,7 @@ struct RlvCommandOptionGetPath : public RlvCommandOption
     static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems);
 
 protected:
-    bool       m_fCallback; // TRUE if a callback is schedueled
+    bool       m_fCallback; // true if a callback is schedueled
     uuid_vec_t m_idItems;
 };
 
@@ -482,7 +482,7 @@ protected:
     S32                m_idxAttachPt;       // The object's attachment point (or 0 if it's not an attachment)
     LLUUID             m_idObj;             // The object's UUID
     LLUUID             m_idRoot;            // The UUID of the object's root (may or may not be different from m_idObj)
-    bool               m_fLookup;           // TRUE if the object existed in gObjectList at one point in time
+    bool               m_fLookup;           // true if the object existed in gObjectList at one point in time
     S16                m_nLookupMisses;     // Count of unsuccessful lookups in gObjectList by the GC
     rlv_command_list_t m_Commands;          // List of behaviours held by this object (in the order they were received)
     typedef std::map<ERlvLocalBhvrModifier, RlvBehaviourModifierValue> bhvr_modifier_map_t;
@@ -655,7 +655,7 @@ class RlvGCTimer : public LLEventTimer
 {
 public:
     RlvGCTimer() : LLEventTimer(30.0) {}
-    virtual BOOL tick();
+    virtual bool tick();
 };
 
 // NOTE: Unused as of SL-3.7.2
@@ -665,10 +665,10 @@ public:
     typedef boost::function<void ()> nullary_func_t;
 public:
     RlvCallbackTimerOnce(F32 nPeriod, nullary_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
-    /*virtual*/ BOOL tick()
+    /*virtual*/ bool tick()
     {
         m_Callback();
-        return TRUE;
+        return true;
     }
 protected:
     nullary_func_t m_Callback;

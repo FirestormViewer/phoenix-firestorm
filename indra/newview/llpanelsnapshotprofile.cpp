@@ -51,7 +51,7 @@ public:
     LLPanelSnapshotProfile();
     /*virtual*/ ~LLPanelSnapshotProfile(); // <FS:Ansariel> Store settings at logout
 
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& key);
 
 private:
@@ -75,7 +75,7 @@ LLPanelSnapshotProfile::LLPanelSnapshotProfile()
 }
 
 // virtual
-BOOL LLPanelSnapshotProfile::postBuild()
+bool LLPanelSnapshotProfile::postBuild()
 {
     // <FS:Ansariel> Store settings at logout
     getImageSizeComboBox()->setCurrentByIndex(gSavedSettings.getS32("LastSnapshotToProfileResolution"));

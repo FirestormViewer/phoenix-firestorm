@@ -104,12 +104,7 @@
 		<menu_item_call label="Twitter..." name="Twitter"/>
 		<menu_item_call label="Flickr..." name="Flickr"/>
 		<menu_item_call label="Discord..." name="Discord"/>
-		<menu label="Voice-Morphing" name="VoiceMorphing">
-			<menu_item_check label="Kein Voice-Morphing" name="NoVoiceMorphing"/>
-			<menu_item_check label="Vorschau..." name="Preview"/>
-			<menu_item_call label="Abonnieren..." name="Subscribe"/>
-			<menu_item_call label="Premium-Vorteil..." name="PremiumPerk"/>
-		</menu>
+		<menu_item_check label="Gesten..." name="Gestures"/>
 		<menu_item_check label="Unterhaltungsprotokoll..." name="Conversation Log..."/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
 		<menu_item_call label="Blockierliste" name="Block List"/>
@@ -173,7 +168,11 @@
 		<menu_item_call label="Animation-Explorer" name="Animation Explorer"/>
 		<menu_item_call label="Asset-Blacklist" name="asset_blacklist"/>
 		<menu_item_call label="Avatar-Anzeigeeinstellungen" name="Avatar Render Settings"/>
-		<menu_item_check label="Freunde immer komplett anzeigen" name="Always show Friends normally"/>
+		<menu label="Avatar-Anzeige" name="AvatarComplexityMode">
+			<menu_item_check label="Komplexitätsbegrenzung" name="complexity_limit_everone"/>
+			<menu_item_check label="Freunde immer anzeigen" name="complexity_always_show_friends"/>
+			<menu_item_check label="Nur Freunde anzeigen" name="complexity_only_show_friends"/>
+		</menu>
 		<menu_item_check label="Nur Freunde anzeigen" name="Render Friends Only"/>
 	</menu>
 	<menu label="Bauen" name="BuildTools">
@@ -473,6 +472,17 @@
 			<menu_item_call label="Verbindungsabbruch erzwingen" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Speicherverlust simulieren" name="Memory Leaking Simulation"/>
 		</menu>
+		<menu label="GLTF" name="GLTF">
+			<menu_item_call label="Öffnen..." name="Open..."/>
+			<menu_item_call label="Speichern unter..." name="Save As..."/>
+			<menu_item_call label="Hochladen..." name="Upload..."/>
+		</menu>
+		<menu label="Auflösung" name="Video">
+			<menu_item_call label="1080x1920" name="1080x1920"/>
+			<menu_item_call label="1920x1080" name="1920x1080"/>
+			<menu_item_call label="1280x720" name="1280x720"/>
+			<menu_item_call label="720x1280" name="720x1280"/>
+		</menu>
 		<menu label="Render-Tests" name="Render Tests">
 			<menu_item_check label="Kamera-Versatz" name="Camera Offset"/>
 			<menu_item_check label="Framerate randomisieren" name="Randomize Framerate"/>
@@ -621,6 +631,7 @@
 				<menu_item_call label="Männlich testen" name="Test Male"/>
 				<menu_item_call label="Weiblich testen" name="Test Female"/>
 				<menu_item_check label="Avatarauswahl zulassen" name="Allow Select Avatar"/>
+				<menu_item_check label="Nur Freunde anzeigen" name="Render Only Friends"/>
 			</menu>
 			<menu label="Animationsgeschwindigkeit" name="Animation Speed">
 				<menu_item_call label="Alle Animationen 10 % schneller" name="All Animations 10 Faster"/>
@@ -635,6 +646,7 @@
 			<menu_item_check label="Landaktualisierung debuggen" name="Debug Joint Updates"/>
 			<menu_item_check label="LOD deaktivieren" name="Disable LOD"/>
 			<menu_item_check label="Sichtbare Agenten debuggen" name="Debug Character Vis"/>
+			<menu_item_check label="Charakter-Rez-Status debuggen" name="Debug Character Rez State"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
 			<menu_item_check label="Knochen anzeigen" name="Show Bones"/>
 			<menu_item_check label="Agent-Ziel anzeigen" name="Display Agent Target"/>
