@@ -562,7 +562,7 @@ public:
             }
 
             //ensure that we have at least a minimal size
-            max_cs_size = llmax(max_cs_size, FIRST_PACKET_SIZE);
+            max_cs_size = llmax(max_cs_size, (U32)FIRST_PACKET_SIZE);
            
             parameters.max_cs_size = max_cs_size;
         }

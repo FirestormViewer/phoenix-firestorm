@@ -118,7 +118,7 @@ BDFloaterPoseCreator::~BDFloaterPoseCreator()
 {
 }
 
-BOOL BDFloaterPoseCreator::postBuild()
+bool BDFloaterPoseCreator::postBuild()
 {
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "animations");
     if (!gDirUtilp->fileExists(pathname))
@@ -231,7 +231,7 @@ void BDFloaterPoseCreator::onKeyframesRebuild()
     mKeyframeScroll->clearRows();
     mTimelineScroll->clearRows();
 
-    for(S32 joint_idx = 0; joint_idx < joint_list->getNumJointMotions(); joint_idx++)
+    for(U32 joint_idx = 0; joint_idx < joint_list->getNumJointMotions(); joint_idx++)
     {
         LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint_idx);
         if (!joint_motion)
@@ -310,7 +310,7 @@ void BDFloaterPoseCreator::onKeyframeResetAll()
     if (!joint_list)
         return;
 
-    for (S32 joint_idx = 0; joint_idx < joint_list->getNumJointMotions(); joint_idx++)
+    for (U32 joint_idx = 0; joint_idx < joint_list->getNumJointMotions(); joint_idx++)
     {
         LLKeyframeMotion::JointMotion* joint_motion = joint_list->getJointMotion(joint_idx);
         if (!joint_motion)
@@ -1903,7 +1903,7 @@ void BDFloaterPoseCreator::onJointSet(LLUICtrl* ctrl, const LLSD& param)
     {
         LLJoint* mirror_joint = nullptr;
         std::string mirror_joint_name = joint->getName();
-        S32 idx = joint->getName().find("Left");
+        size_t idx = joint->getName().find("Left");
         if (idx != -1)
             mirror_joint_name.replace(idx, mirror_joint_name.length(), "Right");
 
@@ -2218,7 +2218,7 @@ void BDFloaterPoseCreator::onJointRotPosScaleReset()
                         {
                             LLJoint* mirror_joint = nullptr;
                             std::string mirror_joint_name = joint->getName();
-                            S32 idx = joint->getName().find("Left");
+                            size_t idx = joint->getName().find("Left");
                             if (idx != -1)
                                 mirror_joint_name.replace(idx, mirror_joint_name.length(), "Right");
 
@@ -2322,7 +2322,7 @@ void BDFloaterPoseCreator::onJointRotationReset()
                 {
                     LLJoint* mirror_joint = nullptr;
                     std::string mirror_joint_name = joint->getName();
-                    S32 idx = joint->getName().find("Left");
+                    size_t idx = joint->getName().find("Left");
                     if (idx != -1)
                         mirror_joint_name.replace(idx, mirror_joint_name.length(), "Right");
 
@@ -2473,7 +2473,7 @@ void BDFloaterPoseCreator::onJointRotationRevert()
                 {
                     LLJoint* mirror_joint = nullptr;
                     std::string mirror_joint_name = joint->getName();
-                    S32 idx = joint->getName().find("Left");
+                    size_t idx = joint->getName().find("Left");
                     if (idx != -1)
                         mirror_joint_name.replace(idx, mirror_joint_name.length(), "Right");
 
@@ -2537,7 +2537,7 @@ void BDFloaterPoseCreator::onFlipPose()
         std::string mirror_joint_name = joint->getName();
         //BD - Attempt to find the "right" version of this bone first, we assume we always
         //     end up with the "left" version of a bone first.
-        S32 idx = joint->getName().find("Left");
+        size_t idx = joint->getName().find("Left");
         if (idx != -1)
             mirror_joint_name.replace(idx, mirror_joint_name.length(), "Right");
         //BD - Attempt to find the "right" version of this bone first, this is necessary
@@ -2711,7 +2711,7 @@ void BDFloaterPoseCreator::onJointSymmetrize()
             std::string mirror_joint_name = joint->getName();
             //BD - Attempt to find the "right" version of this bone, if we can't find it try
             //     the left version.
-            S32 idx = joint->getName().find("Left");
+            size_t idx = joint->getName().find("Left");
             if (idx != -1)
                 mirror_joint_name.replace(idx, mirror_joint_name.length(), "Right");
             idx = joint->getName().find("Right");
@@ -2875,7 +2875,7 @@ LLKeyframeMotion* BDFloaterPoseCreator::onReadyTempMotion(std::string filename, 
 {
     std::string outfilename = gDirUtilp->getExpandedFilename(LL_PATH_ANIMATIONS, filename);
     S32 file_size;
-    BOOL success = FALSE;
+    bool success = FALSE;
     LLAPRFile infile;
     LLKeyframeMotion* mTempMotion = NULL;
     LLAssetID mMotionID;

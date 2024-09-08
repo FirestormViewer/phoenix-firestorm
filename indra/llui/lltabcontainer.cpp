@@ -1479,7 +1479,7 @@ void LLTabContainer::enableTabButton(S32 which, bool enable)
 }
 
 //BD
-BOOL LLTabContainer::getTabButtonEnabled(S32 which)
+bool LLTabContainer::getTabButtonEnabled(S32 which)
 {
     if (which >= 0 && which < (S32)mTabList.size())
     {

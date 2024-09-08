@@ -717,7 +717,7 @@ void LLScrollListLineEditor::draw(const LLColor4& color, const LLColor4& highlig
     mLineEditor->draw();
 }
 
-BOOL LLScrollListLineEditor::handleClick()
+bool LLScrollListLineEditor::handleClick()
 {
     if (mLineEditor->getEnabled())
     {
@@ -728,12 +728,12 @@ BOOL LLScrollListLineEditor::handleClick()
     return FALSE; //TRUE;
 }
 
-BOOL LLScrollListLineEditor::handleUnicodeChar(llwchar uni_char, BOOL called_from_parent)
+bool LLScrollListLineEditor::handleUnicodeChar(llwchar uni_char, bool called_from_parent)
 {
     return TRUE;
 }
 
-BOOL LLScrollListLineEditor::handleUnicodeCharHere(llwchar uni_char )
+bool LLScrollListLineEditor::handleUnicodeCharHere(llwchar uni_char )
 {
     return TRUE;
 }

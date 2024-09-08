@@ -85,7 +85,7 @@ private:
     typedef std::vector<LLAvatarBoneInfo*> bones_t;
     bones_t mChildren;
     //BD - Poser
-    BOOL mHasPosition;
+    bool mHasPosition;
 };
 
 //------------------------------------------------------------------------

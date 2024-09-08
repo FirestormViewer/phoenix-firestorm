@@ -300,13 +300,13 @@ public:
     const LLSD  getValue() const override { return mLineEditor->getValue(); }
     void    setValue(const LLSD& value) override { mLineEditor->setValue(value); }
     void    onCommit() override { mLineEditor->onCommit(); }
-    BOOL    handleClick() override;
-    virtual BOOL    handleUnicodeChar(llwchar uni_char, BOOL called_from_parent);
-    virtual BOOL    handleUnicodeCharHere(llwchar uni_char );
-    void    setEnabled(BOOL enable) override { mLineEditor->setEnabled(enable); }
+    bool    handleClick() override;
+    virtual bool    handleUnicodeChar(llwchar uni_char, bool called_from_parent);
+    virtual bool    handleUnicodeCharHere(llwchar uni_char );
+    void    setEnabled(bool enable) override { mLineEditor->setEnabled(enable); }
 
     LLLineEditor*   getLineEditor()             { return mLineEditor; }
-    BOOL    isText() const override { return FALSE; }
+    bool    isText() const override { return FALSE; }
 
 private:
     LLLineEditor* mLineEditor;

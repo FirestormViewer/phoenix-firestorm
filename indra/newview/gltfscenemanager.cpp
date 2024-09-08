@@ -459,7 +459,8 @@ void GLTFSceneManager::update()
         {
             boost::json::object obj;
             mUploadingAsset->serialize(obj);
-            std::string buffer = boost::json::serialize(obj, {});
+            //std::string buffer = boost::json::serialize(obj, {});
+            std::string buffer = boost::json::serialize(obj);
 
             LLNewBufferedResourceUploadInfo::uploadFailure_f failure = [this](LLUUID assetId, LLSD response, std::string reason)
                 {

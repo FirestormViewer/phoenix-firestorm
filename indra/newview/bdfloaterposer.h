@@ -57,7 +57,7 @@ class BDFloaterPoser :
 private:
     BDFloaterPoser(const LLSD& key);
     /*virtual*/ ~BDFloaterPoser();
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void draw();
     /*virtual*/ void onOpen(const LLSD& key);
     /*virtual*/ void onClose(bool app_quitting);

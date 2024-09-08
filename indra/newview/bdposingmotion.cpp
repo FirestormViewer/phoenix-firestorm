@@ -76,7 +76,7 @@ LLMotion::LLMotionInitStatus BDPosingMotion::onInitialize(LLCharacter *character
 //-----------------------------------------------------------------------------
 // BDPosingMotion::onActivate()
 //-----------------------------------------------------------------------------
-BOOL BDPosingMotion::onActivate()
+bool BDPosingMotion::onActivate()
 {
     for (auto joint_state : mJointState)
     {
@@ -94,7 +94,7 @@ BOOL BDPosingMotion::onActivate()
 //-----------------------------------------------------------------------------
 // BDPosingMotion::onUpdate()
 //-----------------------------------------------------------------------------
-BOOL BDPosingMotion::onUpdate(F32 time, U8* joint_mask)
+bool BDPosingMotion::onUpdate(F32 time, U8* joint_mask)
 {
     LLQuaternion target_quat;
     LLQuaternion joint_quat;

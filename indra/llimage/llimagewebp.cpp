@@ -178,11 +178,11 @@ bool LLImageWebP::encode(const LLImageRaw* raw_image, F32 encode_time)
     size_t encodedSize = 0;
     if (components == 4)
     {
-        encodedSize = WebPEncodeLosslessRGBA(tmp_buff.get(), width, height, stride, &encodedData);
+        encodedSize = WebPEncodeLosslessRGBA(tmp_buff.get(), width, height, (int)stride, &encodedData);
     }
     else
     {
-        encodedSize = WebPEncodeLosslessRGB(tmp_buff.get(), width, height, stride, &encodedData);
+        encodedSize = WebPEncodeLosslessRGB(tmp_buff.get(), width, height, (int)stride, &encodedData);
     }
 
     if (encodedData == nullptr || encodedSize == 0)
@@ -191,7 +191,7 @@ bool LLImageWebP::encode(const LLImageRaw* raw_image, F32 encode_time)
         return false;
     }
 
-    if (!allocateData(encodedSize))
+    if (!allocateData((S32)encodedSize))
     {
         setLastError("LLImageWebP::Failed to allocate final buffer for image");
         WebPFree(encodedData);

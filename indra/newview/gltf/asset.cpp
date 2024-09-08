@@ -903,7 +903,8 @@ bool Asset::save(const std::string& filename)
     // save .gltf
     object obj;
     serialize(obj);
-    std::string buffer = boost::json::serialize(obj, {});
+    //std::string buffer = boost::json::serialize(obj, {});
+    std::string buffer = boost::json::serialize(obj);
     std::ofstream file(filename, std::ios::binary);
     file.write(buffer.c_str(), buffer.size());
 

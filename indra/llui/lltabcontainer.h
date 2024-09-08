@@ -213,7 +213,7 @@ public:
     void        setCurrentTabName(const std::string& name);
 
     //BD
-    BOOL        getTabButtonEnabled(S32 which);
+    bool        getTabButtonEnabled(S32 which);
 
     void        selectFirstTab();
     void        selectLastTab();
