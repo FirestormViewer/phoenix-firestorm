@@ -52,6 +52,8 @@
 		</menu>
 		<menu_item_check label="Steuerung" name="Movement Controls"/>
 		<menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
+		<menu_item_check label="Medien und Klänge von Avatar-Position hören" name="Hear Media and Sound from Avatar"/>
+		<menu_item_check label="Voice-Chat von Avatar-Position hören" name="Hear Voice from Avatar"/>
 		<menu label="Avatar-Befinden" name="avhealth">
 			<menu_item_call label="Avatar-Animationen stoppen" name="Stop Animating My Avatar"/>
 			<menu_item_call label="Avatar-Animationen stoppen &amp; Skripten Rechte entziehen" name="Stop Animating My Avatar With Revoke"/>
