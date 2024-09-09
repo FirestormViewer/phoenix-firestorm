@@ -886,8 +886,8 @@ void LLEnvironment::loadLegacyPresets()
             if (found)
             {
                 name = name.erase(name.length() - 4);
-                mLegacySkies.push_back(unescape_name(name));
-                LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+                mLegacySkies.push_back(FSCommon::unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << FSCommon::unescape_name(name) << LL_ENDL;
             }
         }
 
@@ -901,8 +901,8 @@ void LLEnvironment::loadLegacyPresets()
             if (found)
             {
                 name = name.erase(name.length() - 4);
-                mLegacyWater.push_back(unescape_name(name));
-                LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+                mLegacyWater.push_back(FSCommon::unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << FSCommon::unescape_name(name) << LL_ENDL;
             }
         }
 
@@ -916,8 +916,8 @@ void LLEnvironment::loadLegacyPresets()
             if (found)
             {
                 name = name.erase(name.length() - 4);
-                mLegacyDayCycles.push_back(unescape_name(name));
-                LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+                mLegacyDayCycles.push_back(FSCommon::unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << FSCommon::unescape_name(name) << LL_ENDL;
             }
         }
     }

@@ -94,7 +94,7 @@ void StreamTitleDisplay::checkMetadata(const LLSD& metadata)
             if (ShowStreamMetadata > 1)
             {
                 chat = LLTrans::getString("StreamtitleNowPlaying") + " " + chat;
-                report_to_nearby_chat(chat);
+                FSCommon::report_to_nearby_chat(chat);
             }
             else if (ShowStreamMetadata == 1 && (metadata.has("TITLE") || metadata.has("ARTIST")))
             {

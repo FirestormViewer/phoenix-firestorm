@@ -1261,6 +1261,7 @@ bool LLGLManager::initGL()
         LL_INFOS("RenderInit") << "VRAM Detected (NVXMemInfo):" << mVRAM << LL_ENDL;
     }
 
+#ifdef LL_WINDOWS
     if (mHasAMDAssociations && mVRAM == 0)
     {
         GLuint gl_gpus_count = wglGetGPUIDsAMD(0, 0);
@@ -1286,6 +1287,7 @@ bool LLGLManager::initGL()
         }
         LL_INFOS("RenderInit") << "VRAM Detected (AMDAssociations):" << mVRAM << LL_ENDL;
     }
+#endif
 
     if (mHasATIMemInfo && mVRAM == 0)
     { //ask the gl how much vram is free at startup and attempt to use no more than half of that

@@ -203,7 +203,7 @@ public:
     {
         if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
         {
-            report_to_nearby_chat("Refreshing attachments...");
+            FSCommon::report_to_nearby_chat("Refreshing attachments...");
         }
         mEventTimer.stop();
         LLAttachmentsMgr::instance().refreshAttachments();
@@ -3050,7 +3050,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
         // <FS:Ansariel> Consolidate IRC /me prefix checks
         //std::string prefix = mesg.substr(0, 4);
         //if (prefix == "/me " || prefix == "/me'")
-        if (is_irc_me_prefix(mesg))
+        if (FSCommon::is_irc_me_prefix(mesg))
         // </FS:Ansariel>
         {
             ircstyle = true;
@@ -4571,7 +4571,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 
                 if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
                 {
-                    report_to_nearby_chat(message);
+                    FSCommon::report_to_nearby_chat(message);
                 }
 
                 continue;
@@ -4992,11 +4992,11 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 
                         if (change_count > 0)
                         {
-                            report_to_nearby_chat(format_string(increase_message, args));
+                            FSCommon::report_to_nearby_chat(FSCommon::format_string(increase_message, args));
                         }
                         else if (change_count < 0)
                         {
-                            report_to_nearby_chat(format_string(decrease_message, args));
+                            FSCommon::report_to_nearby_chat(FSCommon::format_string(decrease_message, args));
                         }
                     }
                 }
@@ -6401,7 +6401,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
             // </FS:Ansariel>
 
             make_ui_sound("UISndRestart");
-            report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+            FSCommon::report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
             fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
         }
 
@@ -6663,7 +6663,7 @@ void process_alert_core(const std::string& message, bool modal)
             }
 
             make_ui_sound("UISndRestartOpenSim");
-            report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+            FSCommon::report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
             fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
             return;
         }
@@ -6836,7 +6836,7 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
                     action = LLTrans::getString("Collision_UnknownType", args);
                     return;
             }
-            report_to_nearby_chat(action);
+            FSCommon::report_to_nearby_chat(action);
         }
         // </FS:Ansariel> Nearby Chat Collision Messages
         // <FS:Ansariel> Report Collision Messages to scripts

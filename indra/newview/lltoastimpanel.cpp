@@ -75,7 +75,7 @@ LLToastIMPanel::LLToastIMPanel(LLToastIMPanel::Params &p) : LLToastPanel(p.notif
     // <FS:Ansariel> Consolidate IRC /me prefix checks
     //std::string prefix = p.message.substr(0, 4);
     //if (prefix == "/me " || prefix == "/me'")
-    if (is_irc_me_prefix(p.message))
+    if (FSCommon::is_irc_me_prefix(p.message))
     // </FS:Ansariel>
     {
         //style_params.font.style = "UNDERLINE";

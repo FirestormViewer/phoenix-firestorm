@@ -445,13 +445,13 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
                 {
                     LLStringUtil::format_map_t args2;
                     args2["OBJECT_CHARACTER_TIME"] = scriptInfoArray[5].asString();
-                    args["PATHFINDING_TEXT"] = " " + format_string(LLTrans::getString("fsbridge_script_info_pf"), args2);
+                    args["PATHFINDING_TEXT"] = " " + FSCommon::format_string(LLTrans::getString("fsbridge_script_info_pf"), args2);
                 }
                 else
                 {
                     args["PATHFINDING_TEXT"] = "";
                 }
-                report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info"), args));
+                FSCommon::report_to_nearby_chat(FSCommon::format_string(LLTrans::getString("fsbridge_script_info"), args));
                 if (scriptInfoArrayCount == 27)
                 {
                     LLStringUtil::format_map_t args3;
@@ -476,19 +476,19 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
                     args3["OBJECT_TEMP_ATTACHED"] = scriptInfoArray[24].asInteger() == 1 ? LLTrans::getString("Yes") : LLTrans::getString("No");
                     args3["AVATAR_POS"] = scriptInfoArray[25].asString();
                     args3["INSPECTING_KEY"] = scriptInfoArray[26].asString();
-                    report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info_ext"), args3));
+                    FSCommon::report_to_nearby_chat(FSCommon::format_string(LLTrans::getString("fsbridge_script_info_ext"), args3));
                 }
             }
             else
             {
-                report_to_nearby_chat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
                 LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by viewer, data somehow passed bridge script check)" << LL_ENDL;
             }
 
         }
         else
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_error_scriptinfomalformed"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_error_scriptinfomalformed"));
             LL_WARNS("FSLSLBridge") << "ScriptInfo - Received malformed response from bridge (missing ending tag)" << LL_ENDL;
         }
     }
@@ -526,17 +526,17 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
         {
             if (message.substr(valuepos + FS_ERROR_ATTRIBUTE.size(), 9) == "injection")
             {
-                report_to_nearby_chat(LLTrans::getString("fsbridge_error_injection"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_error_injection"));
                 LL_WARNS("FSLSLBridge") << "Script injection detected" << LL_ENDL;
             }
             else if (message.substr(valuepos + FS_ERROR_ATTRIBUTE.size(), 18) == "scriptinfonotfound")
             {
-                report_to_nearby_chat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
                 LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by bridge)" << LL_ENDL;
             }
             else if (message.substr(valuepos + FS_ERROR_ATTRIBUTE.size(), 7) == "wrongvm")
             {
-                report_to_nearby_chat(LLTrans::getString("fsbridge_error_wrongvm"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_error_wrongvm"));
                 LL_WARNS("FSLSLBridge") << "Script is using old LSO (16 KB memory limit) instead of new Mono (64 KB memory limit) virtual machine, which creates high probability of stack-heap collision and bridge failure by running out of memory" << LL_ENDL;
             }
             else
@@ -618,7 +618,7 @@ void FSLSLBridge::recreateBridge()
     {
         //<FS:TS> FIRE-11746: Recreate should throw error if disabled
         LL_WARNS("FSLSLBridge") << "Asked to create bridge, but bridge is disabled. Aborting." << LL_ENDL;
-        report_to_nearby_chat(LLTrans::getString("fsbridge_cant_create_disabled"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_cant_create_disabled"));
         setBridgeCreating(false);
         //</FS:TS> FIRE-11746
         return;
@@ -627,7 +627,7 @@ void FSLSLBridge::recreateBridge()
     if (gSavedSettings.getBOOL("NoInventoryLibrary"))
     {
         LL_WARNS("FSLSLBridge") << "Asked to create bridge, but we don't have a library. Aborting." << LL_ENDL;
-        report_to_nearby_chat(LLTrans::getString("fsbridge_no_library"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_no_library"));
         setBridgeCreating(false);
         return;
     }
@@ -635,12 +635,12 @@ void FSLSLBridge::recreateBridge()
     if (mBridgeCreating)
     {
         LL_WARNS("FSLSLBridge") << "Bridge creation already in progress, aborting new attempt." << LL_ENDL;
-        report_to_nearby_chat(LLTrans::getString("fsbridge_already_creating"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_already_creating"));
         return;
     }
 
     //announce yourself
-    report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
+    FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
 
     setupFSCategory([](const LLUUID& bridge_folder_id)
         {
@@ -739,7 +739,7 @@ void FSLSLBridge::initBridge()
     if (gSavedSettings.getBOOL("NoInventoryLibrary"))
     {
         LL_WARNS("FSLSLBridge") << "Asked to create bridge, but we don't have a library. Aborting." << LL_ENDL;
-        report_to_nearby_chat(LLTrans::getString("fsbridge_no_library"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_no_library"));
         setBridgeCreating(false);
         return;
     }
@@ -809,7 +809,7 @@ void FSLSLBridge::startCreation()
                 setBridgeCreating(true);
                 mFinishCreation = false;
                 //announce yourself
-                report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
 
                 createNewBridge();
             }
@@ -871,7 +871,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
         LL_WARNS("FSLSLBridge") << "Bridge not created. Our bridge container attachment isn't named correctly." << LL_ENDL;
         if (mBridgeCreating)
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_failure_creation_bad_name"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_creation_bad_name"));
             setBridgeCreating(false); //in case we interrupted the creation
         }
         return;
@@ -883,7 +883,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
         LL_WARNS("FSLSLBridge") << "Bridge container is still NULL in inventory. Aborting." << LL_ENDL;
         if (mBridgeCreating)
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_failure_creation_null"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_creation_null"));
             setBridgeCreating(false); //in case we interrupted the creation
         }
         return;
@@ -899,7 +899,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
             mAllowDetach = true;
             LLVOAvatarSelf::detachAttachmentIntoInventory(fsObject->getUUID());
             LL_WARNS("FSLSLBridge") << "Attempt to attach to bridge point an object other than current bridge" << LL_ENDL;
-            report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_wrong_object"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_wrong_object"));
             if (mBridgeCreating)
             {
                 setBridgeCreating(false); //in case we interrupted the creation
@@ -917,7 +917,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
             LL_WARNS("FSLSLBridge") << "Bridge container isn't in the correct inventory location. Detaching it and aborting." << LL_ENDL;
             if (mBridgeCreating)
             {
-                report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_wrong_location"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_wrong_location"));
                 setBridgeCreating(false); //in case we interrupted the creation
             }
             return;
@@ -933,7 +933,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
         LL_WARNS("FSLSLBridge") << "Something unknown just got attached to bridge point, detaching and aborting." << LL_ENDL;
         if (mBridgeCreating)
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_point_in_use"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_point_in_use"));
             setBridgeCreating(false); //in case we interrupted the creation
         }
         LLVOAvatarSelf::detachAttachmentIntoInventory(mpBridge->getUUID());
@@ -1009,7 +1009,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
         }
         else
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_warning_unexpected_items"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_warning_unexpected_items"));
             LL_WARNS("FSLSLBridge") << "The bridge inventory contains items other than bridge script." << LL_ENDL;
             if (!isOurScript)   //some junk but no valid script? Unlikely to happen, but lets add script anyway.
             {
@@ -1033,7 +1033,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
         LL_INFOS("FSLSLBridge") << "Bridge created." << LL_ENDL;
         mFinishCreation = false;
         mAllowedDetachables.clear();
-        report_to_nearby_chat(LLTrans::getString("fsbridge_created"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_created"));
     }
 }
 
@@ -1119,11 +1119,11 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
     if (mpBridge && mpBridge->getUUID() == fsObject->getUUID())
     {
         mpBridge = nullptr;
-        report_to_nearby_chat(LLTrans::getString("fsbridge_detached"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_detached"));
         mIsFirstCallDone = false;
         if (mBridgeCreating)
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_warning_not_finished"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_warning_not_finished"));
             setBridgeCreating(false); //in case we interrupted the creation
             mAllowedDetachables.clear();
         }
@@ -1320,7 +1320,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
         }
         else
         {
-            report_to_nearby_chat(LLTrans::getString("fsbridge_failure_creation_create_script"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_creation_create_script"));
             cleanup = true;
         }
     }
@@ -1440,7 +1440,7 @@ void FSLSLBridge::cleanUpBridge()
 {
     //something unexpected went wrong. Try to clean up and not crash.
     LL_WARNS("FSLSLBridge") << "Bridge object not found. Can't proceed with creation, exiting." << LL_ENDL;
-    report_to_nearby_chat(LLTrans::getString("fsbridge_failure_not_found"));
+    FSCommon::report_to_nearby_chat(LLTrans::getString("fsbridge_failure_not_found"));
 
     if (isBridgeValid())
     {

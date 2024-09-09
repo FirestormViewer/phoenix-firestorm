@@ -295,9 +295,10 @@ jobs:
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
       - name: Configure
-        run: autobuild configure -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
+        run: |
+          autobuild configure -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
+          echo "BUGSPLAT_DB=$BUGSPLAT_DB" >> $GITHUB_ENV
         shell: bash
-      
       - name: build
         id: build
         run: autobuild build -c ReleaseFS -A${{matrix.addrsize}} --no-configure

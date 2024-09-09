@@ -157,7 +157,7 @@ void FSKeywords::notify(const LLChat& chat)
         if (FSEnableGrowl)
         {
             std::string msg = chat.mFromName;
-            if (is_irc_me_prefix(chat.mText))
+            if (FSCommon::is_irc_me_prefix(chat.mText))
             {
                 msg = msg + chat.mText.substr(3);
             }

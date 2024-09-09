@@ -3980,7 +3980,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
             LLStringUtil::format_map_t label_args;
             label_args["COMPLEXITY"] = complexity_string;
 
-            addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+            addNameTagLine(FSCommon::format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 
             // only show texture area if this is the reason for jelly baby rendering
             static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
@@ -3989,7 +3989,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
                 LLResMgr::getInstance()->getIntegerString(complexity_string, (S32)mAttachmentSurfaceArea);
                 label_args["TEXTURE_AREA"] = complexity_string;
 
-                addNameTagLine(format_string(texture_area_label, label_args), LLColor4::red, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+                addNameTagLine(FSCommon::format_string(texture_area_label, label_args), LLColor4::red, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
             }
         }
         // </FS:Ansariel>

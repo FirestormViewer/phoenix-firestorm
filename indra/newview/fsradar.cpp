@@ -392,7 +392,7 @@ void FSRadar::updateRadarList()
             {
                 LLStringUtil::format_map_t args;
                 args["DISTANCE"] = llformat("%3.2f", avRange);
-                std::string message = format_string(str_chat_entering, args);
+                std::string message = FSCommon::format_string(str_chat_entering, args);
                 make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
                 LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
             }
@@ -400,7 +400,7 @@ void FSRadar::updateRadarList()
             {
                 LLStringUtil::format_map_t args;
                 args["DISTANCE"] = llformat("%3.2f", avRange);
-                std::string message = format_string(str_draw_distance_entering, args);
+                std::string message = FSCommon::format_string(str_draw_distance_entering, args);
                 make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
                 LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
             }
@@ -411,7 +411,7 @@ void FSRadar::updateRadarList()
                 {
                     LLStringUtil::format_map_t args;
                     args["DISTANCE"] = llformat("%3.2f", avRange);
-                    std::string message = format_string(str_region_entering_distance, args);
+                    std::string message = FSCommon::format_string(str_region_entering_distance, args);
                     LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
                 }
                 else
@@ -449,7 +449,7 @@ void FSRadar::updateRadarList()
                 {
                     LLStringUtil::format_map_t args;
                     args["DISTANCE"] = llformat("%3.2f", avRange);
-                    std::string message = format_string(str_chat_entering, args);
+                    std::string message = FSCommon::format_string(str_chat_entering, args);
                     make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
                     LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
                 }
@@ -465,7 +465,7 @@ void FSRadar::updateRadarList()
                 {
                     LLStringUtil::format_map_t args;
                     args["DISTANCE"] = llformat("%3.2f", avRange);
-                    std::string message = format_string(str_draw_distance_entering, args);
+                    std::string message = FSCommon::format_string(str_draw_distance_entering, args);
                     make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
                     LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
                 }
@@ -484,7 +484,7 @@ void FSRadar::updateRadarList()
                     {
                         LLStringUtil::format_map_t args;
                         args["DISTANCE"] = llformat("%3.2f", avRange);
-                        std::string message = format_string(str_region_entering_distance, args);
+                        std::string message = FSCommon::format_string(str_region_entering_distance, args);
                         LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
                     }
                     else
@@ -544,7 +544,7 @@ void FSRadar::updateRadarList()
                     make_ui_sound("UISndRadarAgeAlert");
                     LLStringUtil::format_map_t args;
                     args["AGE"] = llformat("%d", avAge);
-                    std::string message = format_string(str_avatar_age_alert, args);
+                    std::string message = FSCommon::format_string(str_avatar_age_alert, args);
                     LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
                 }
                 ent->mAgeAlertPerformed = true;
@@ -1020,7 +1020,7 @@ void FSRadar::zoomAvatar(const LLUUID& avatar_id, std::string_view name)
     {
         LLStringUtil::format_map_t args;
         args["AVATARNAME"] = static_cast<std::string>(name);
-        report_to_nearby_chat(LLTrans::getString("camera_no_focus", args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("camera_no_focus", args));
     }
 }
 
