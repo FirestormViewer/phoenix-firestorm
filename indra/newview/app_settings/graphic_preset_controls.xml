@@ -28,7 +28,6 @@
 		<string>RenderDesaturateIrradiance</string>
 		<string>RenderDiffuseLuminanceScale</string>
 		<string>RenderDisablePostProcessing</string>
-		<string>RenderPostProcessingHDR</string>
 		<string>RenderDefaultProbeUpdatePeriod</string>
 		<string>RenderDynamicExposureCoefficient</string>
 		<string>RenderExposure</string>
