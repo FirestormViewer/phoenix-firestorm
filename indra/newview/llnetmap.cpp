@@ -2094,7 +2094,7 @@ void LLNetMap::handleCam()
     }
     else
     {
-        report_to_nearby_chat(LLTrans::getString("minimap_no_focus"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("minimap_no_focus"));
     }
 }
 

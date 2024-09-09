@@ -2102,6 +2102,12 @@ source_group("Firestorm Resources" FILES ${viewer_FS_RESOURCES})
 set_source_files_properties(${viewer_FS_RESOURCES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 list(APPEND viewer_SOURCE_FILES ${viewer_FS_RESOURCES})
+
+file(GLOB viewer_PY_SCRIPTS *.py)
+source_group("Python Scripts" FILES ${viewer_PY_SCRIPTS})
+set_source_files_properties(${viewer_PY_SCRIPTS}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_PY_SCRIPTS})
 # </FS:Ansariel>
 
 if (WINDOWS)

@@ -2,7 +2,7 @@
 <fonts>
 
   <font name="default" comment="default font files (global fallbacks)">
-    <file>NotoSans.ttf</file>
+    <file>NotoSansCombined-Regular.ttf</file>
     <file functor="is_emoji_use_color">TwemojiSVG.ttf</file>
     <file functor="is_emoji_use_bw">NotoEmoji-Regular.ttf</file>
     <os name="Windows">

@@ -34,16 +34,16 @@ class LLAvatarName;
 class LLViewerObject;
 class LLViewerParcelMgr;
 
-const F64 AVATAR_UNKNOWN_Z_OFFSET = -1.0; // Const value for avatars at unknown height
-const F32 AVATAR_UNKNOWN_RANGE = -1.f;
-
-void report_to_nearby_chat(std::string_view message);
-std::string format_string(std::string text, const LLStringUtil::format_map_t& args);
-bool is_irc_me_prefix(std::string_view text);
-std::string unescape_name(std::string_view name);
+constexpr F64 AVATAR_UNKNOWN_Z_OFFSET = -1.0; // Const value for avatars at unknown height
+constexpr F32 AVATAR_UNKNOWN_RANGE = -1.f;
 
 namespace FSCommon
 {
+    void report_to_nearby_chat(std::string_view message);
+    std::string format_string(std::string text, const LLStringUtil::format_map_t& args);
+    bool is_irc_me_prefix(std::string_view text);
+    std::string unescape_name(std::string_view name);
+
     std::string applyAutoCloseOoc(std::string message);
     std::string applyMuPose(std::string message);
 

@@ -5545,9 +5545,26 @@ Voulez-vous continuer ?
 		Vous modifiez un ciel non HDR qui a été automatiquement converti en HDR. Pour supprimer le HDR et le mappage des tons, réglez l'Ambiance de la sonde de réflexion sur zéro.
 		<usetemplate ignoretext="Avertissement concernant l'ajustement du ciel HDR" name="okignore" yestext="OK"/>
 	</notification>
-	<notification name="GLTFPreviewSelection">
-		Vous devez sélectionner un objet qui servira de référence à la ressource GLTF que vous prévisualisez.
-		<usetemplate name="okbutton" yestext="OK"/>
+	<notification name="GLTFOpenSelection">
+		Vous devez sélectionner un objet qui servira de point d'accès à la ressource GLTF que vous prévisualisez.
+	</notification>
+	<notification name="GLTFLoadFailed">
+		Échec du chargement du fichier GLTF.  Voir le journal pour plus de détails.
+	</notification>
+	<notification name="GLTFSaveFailed">
+		Échec de l'enregistrement du fichier GLTF.  Voir le journal pour plus de détails.
+	</notification>
+	<notification name="GLTFSaveSelection">
+		Vous devez sélectionner un objet auquel est associée une ressource GLTF.
+	</notification>
+	<notification name="GLTFUploadSelection">
+		Vous devez sélectionner un objet auquel est associé une ressource GLTF locale.
+	</notification>
+	<notification name="GLTFUploadInProgress">
+		Un chargement est en cours.  Veuillez réessayer plus tard.
+	</notification>
+	<notification name="NoSupportGLTFShader">
+		Les scènes GLTF ne sont pas encore prises en charge par votre matériel graphique.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Vous êtes sur le point d'activer l'AutoFPS. Tous les paramètres graphiques non sauvegardés seront perdus.

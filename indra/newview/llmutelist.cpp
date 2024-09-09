@@ -400,7 +400,7 @@ void LLMuteList::updateAdd(const LLMute& mute, bool show_message /* = true */)
     {
         LLStringUtil::format_map_t args;
         args["NAME"] = mute.mName;
-        report_to_nearby_chat(LLTrans::getString("Mute_Add", args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("Mute_Add", args));
     }
     // </FS:Ansariel>
 }
@@ -512,7 +512,7 @@ void LLMuteList::updateRemove(const LLMute& mute)
     {
         LLStringUtil::format_map_t args;
         args["NAME"] = mute.mName;
-        report_to_nearby_chat(LLTrans::getString("Mute_Remove", args));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("Mute_Remove", args));
     }
     // </FS:Ansariel>
 }

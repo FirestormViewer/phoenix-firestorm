@@ -462,7 +462,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                         str_viewer_mode = "T";
 
                     //Build it up
-                    size_t insert_pos = is_irc_me_prefix(utf8_text) ? 4 : 0;
+                    size_t insert_pos = FSCommon::is_irc_me_prefix(utf8_text) ? 4 : 0;
 
                     //For testing/beta groups, we display the build version since it doesn't speed by and this might change often
                     if (FSData::getInstance()->isTestingGroup(mSessionID))

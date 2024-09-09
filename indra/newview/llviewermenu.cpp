@@ -873,16 +873,16 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
         }
         else if ("badge" == info_type)
         {
-            report_to_nearby_chat("Hippos!");
+            FSCommon::report_to_nearby_chat("Hippos!");
         }
         else if ("cookies" == info_type)
         {
-            report_to_nearby_chat("Cookies!");
+            FSCommon::report_to_nearby_chat("Cookies!");
         }
         // <FS:PP>
         else if ("motd" == info_type)
         {
-            report_to_nearby_chat(gAgent.mMOTD);
+            FSCommon::report_to_nearby_chat(gAgent.mMOTD);
         }
         // </FS:PP>
         return true;
@@ -7812,13 +7812,13 @@ class LLWorldAlwaysRun : public view_listener_t
         {
             gAgent.clearAlwaysRun();
 //          gAgent.clearRunning();
-            report_to_nearby_chat(LLTrans::getString("AlwaysRunDisabled"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("AlwaysRunDisabled"));
         }
         else
         {
             gAgent.setAlwaysRun();
 //          gAgent.setRunning();
-            report_to_nearby_chat(LLTrans::getString("AlwaysRunEnabled"));
+            FSCommon::report_to_nearby_chat(LLTrans::getString("AlwaysRunEnabled"));
         }
 
         // tell the simulator.
@@ -9896,7 +9896,7 @@ void handle_selected_texture_info(void*)
         //LLSD args;
         //args["MESSAGE"] = msg;
         //LLNotificationsUtil::add("SystemMessage", args);
-        report_to_nearby_chat(msg);
+        FSCommon::report_to_nearby_chat(msg);
         // </FS:Ansariel>
     }
 }
@@ -10309,7 +10309,7 @@ void setDoubleClickAction(const std::string& control)
 
         bool ignore_mask = true;
         conflictHandler.registerControl(control, index, click, key, mask, ignore_mask);
-        report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportEnabled"));
+        FSCommon::report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportEnabled"));
     }
     else
     {
@@ -10320,7 +10320,7 @@ void setDoubleClickAction(const std::string& control)
             if (data.mMouse == click && data.mKey == key && data.mMask == mask)
             {
                 conflictHandler.clearControl(control, i);
-                report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportDisabled"));
+                FSCommon::report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportDisabled"));
             }
         }
     }
@@ -10793,7 +10793,7 @@ class FSDumpSimulatorFeaturesToChat : public view_listener_t
             std::stringstream out_str;
             region->getSimulatorFeatures(sim_features);
             LLSDSerialize::toPrettyXML(sim_features, out_str);
-            report_to_nearby_chat(out_str.str());
+            FSCommon::report_to_nearby_chat(out_str.str());
         }
         return true;
     }

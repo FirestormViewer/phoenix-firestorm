@@ -340,7 +340,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
         }
 
         std::string message = im["message"].asString();
-        if (is_irc_me_prefix(message))
+        if (FSCommon::is_irc_me_prefix(message))
         {
             message = message.substr(3);
         }
@@ -390,7 +390,7 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
     if ((EChatType)chat["chat_type"].asInteger() == CHAT_TYPE_IM)
     {
         std::string message = chat["message"].asString();
-        if (is_irc_me_prefix(message))
+        if (FSCommon::is_irc_me_prefix(message))
         {
             message = message.substr(3);
         }

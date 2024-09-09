@@ -69,7 +69,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
         std::string sender_name(chat_msg.mFromName);
 
         //IRC styled /me messages.
-        bool irc_me = is_irc_me_prefix(chat_msg.mText);
+        bool irc_me = FSCommon::is_irc_me_prefix(chat_msg.mText);
 
         // Delimiter after a name in header copy/past and in plain text mode
         std::string delimiter = ": ";
@@ -130,7 +130,7 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
     std::string sender_name(chat_msg.mFromName);
 
     //IRC styled /me messages.
-    bool irc_me = is_irc_me_prefix(chat_msg.mText);
+    bool irc_me = FSCommon::is_irc_me_prefix(chat_msg.mText);
 
     // Delimiter after a name in header copy/past and in plain text mode
     std::string delimiter = ": ";
@@ -221,7 +221,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
     std::string delimiter = ": ";
 
     // irc styled messages
-    if (is_irc_me_prefix(message))
+    if (FSCommon::is_irc_me_prefix(message))
     {
         delimiter = LLStringUtil::null;
         message = message.substr(3);

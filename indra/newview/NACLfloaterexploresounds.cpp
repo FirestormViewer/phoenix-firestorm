@@ -252,7 +252,7 @@ bool NACLFloaterExploreSounds::tick()
         {
             LLStringUtil::format_map_t format_args;
             format_args["TIME"] = llformat("%.1f", static_cast<F32>((LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.0));
-            playing_column["value"] = format_string(str_not_playing, format_args);
+            playing_column["value"] = FSCommon::format_string(str_not_playing, format_args);
         }
 
         LLSD& type_column = element["columns"][1];

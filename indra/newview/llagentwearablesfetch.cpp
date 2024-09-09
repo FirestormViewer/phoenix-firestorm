@@ -131,7 +131,15 @@ void LLInitialWearablesFetch::processContents()
     LLInventoryModel::cat_array_t cat_array;
     LLInventoryModel::item_array_t wearable_array;
     LLFindWearables is_wearable;
-    llassert_always(mComplete.size() != 0);
+    // <FS:Beq> FIRE-34403 - Still Occasional crashes on large inventories (or slow grid asset servers?) . 
+    // Let's downgrade this assertion. This entire codepath is only accessed by OpenSim until they get AISV3 then we can remove it.
+    // llassert_always(mComplete.size() != 0);
+    if (mComplete.size() == 0)
+    {
+        LL_WARNS() << "LLInitialWearablesFetch::processContents() called with no items in complete." << LL_ENDL;
+        return;
+    }
+    // </FS:Beq>
     gInventory.collectDescendentsIf(mComplete.front(), cat_array, wearable_array,
                                     LLInventoryModel::EXCLUDE_TRASH, is_wearable);
 
