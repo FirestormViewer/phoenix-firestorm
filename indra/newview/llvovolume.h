@@ -463,6 +463,7 @@ public:
 private:
     friend class LLDrawable;
     friend class LLFace;
+    friend class LLViewerFetchedTexture;
 
     bool        mFaceMappingChanged;
     LLFrameTimer mTextureUpdateTimer;
