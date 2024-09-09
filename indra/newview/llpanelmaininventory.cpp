@@ -1232,11 +1232,11 @@ bool LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                                          EAcceptance* accept,
                                          std::string& tooltip_msg)
 {
-    // Check to see if we are auto scrolling from the last frame
-//  LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
-//  bool needsToScroll = panel->getScrollableContainer()->canAutoScroll(x, y);
-//  if(mFilterTabs)
+//  if (mFilterTabs)
 //  {
+//      // Check to see if we are auto scrolling from the last frame
+//      LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
+//      bool needsToScroll = panel->getScrollableContainer()->canAutoScroll(x, y);
 //      if(needsToScroll)
 //      {
 //          mFilterTabs->startDragAndDropDelayTimer();
@@ -1261,9 +1261,9 @@ void LLPanelMainInventory::changed(U32)
     updateItemcountText();
 }
 
-void LLPanelMainInventory::setFocusFilterEditor()
+void LLPanelMainInventory::setFocusOnFilterEditor()
 {
-    if(mFilterEditor)
+    if (mFilterEditor)
     {
         mFilterEditor->setFocus(true);
     }
@@ -1339,6 +1339,22 @@ void LLPanelMainInventory::updateItemcountText()
             mCategoryCount = gInventory.getCategoryCount();
             update = true;
         }
+
+        EFetchState currentFetchState{ EFetchState::Unknown };
+        if (LLInventoryModelBackgroundFetch::instance().folderFetchActive())
+        {
+            currentFetchState = EFetchState::Fetching;
+        }
+        else if (LLInventoryModelBackgroundFetch::instance().isEverythingFetched())
+        {
+            currentFetchState = EFetchState::Complete;
+        }
+
+        if (mLastFetchState != currentFetchState)
+        {
+            mLastFetchState = currentFetchState;
+            update = true;
+        }
     }
 
     if (mLastFilterText != getFilterText())
@@ -1374,17 +1390,17 @@ void LLPanelMainInventory::updateItemcountText()
         }
         else
         {
-            if (LLInventoryModelBackgroundFetch::instance().folderFetchActive())
+            switch (mLastFetchState)
             {
+            case EFetchState::Fetching:
                 text = getString("ItemcountFetching", string_args);
-            }
-            else if (LLInventoryModelBackgroundFetch::instance().isEverythingFetched())
-            {
+                break;
+            case EFetchState::Complete:
                 text = getString("ItemcountCompleted", string_args);
-            }
-            else
-            {
+                break;
+            default:
                 text = getString("ItemcountUnknown", string_args);
+                break;
             }
         }
 
@@ -1632,7 +1648,6 @@ void LLFloaterInventoryFinder::draw()
         filtered_by_all_types = false;
     }
 
-
     if (!getChild<LLUICtrl>("check_calling_card")->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_CALLINGCARD);
@@ -1652,8 +1667,6 @@ void LLFloaterInventoryFinder::draw()
     }
 
     if (!getChild<LLUICtrl>("check_landmark")->getValue())
-
-
     {
         filter &= ~(0x1 << LLInventoryType::IT_LANDMARK);
         filtered_by_all_types = false;
@@ -1714,9 +1727,8 @@ void LLFloaterInventoryFinder::draw()
         filter &= ~(0x1 << LLInventoryType::IT_CATEGORY);
     }
 
-
     bool is_sf_mode = mPanelMainInventory->isSingleFolderMode();
-    if(is_sf_mode && mPanelMainInventory->isGalleryViewMode())
+    if (is_sf_mode && mPanelMainInventory->isGalleryViewMode())
     {
         mPanelMainInventory->mCombinationGalleryPanel->getFilter().setShowFolderState(getCheckShowEmpty() ?
             LLInventoryFilter::SHOW_ALL_FOLDERS : LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
@@ -1724,7 +1736,7 @@ void LLFloaterInventoryFinder::draw()
     }
     else
     {
-        if(is_sf_mode && mPanelMainInventory->isCombinationViewMode())
+        if (is_sf_mode && mPanelMainInventory->isCombinationViewMode())
         {
             mPanelMainInventory->mCombinationGalleryPanel->getFilter().setShowFolderState(getCheckShowEmpty() ?
                 LLInventoryFilter::SHOW_ALL_FOLDERS : LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
@@ -1756,9 +1768,8 @@ void LLFloaterInventoryFinder::draw()
     }
     hours += days * 24;
 
-
     mPanelMainInventory->setFilterTextFromFilter();
-    if(is_sf_mode && mPanelMainInventory->isGalleryViewMode())
+    if (is_sf_mode && mPanelMainInventory->isGalleryViewMode())
     {
         mPanelMainInventory->mCombinationGalleryPanel->getFilter().setHoursAgo(hours);
         mPanelMainInventory->mCombinationGalleryPanel->getFilter().setDateRangeLastLogoff(getCheckSinceLogoff());
@@ -1766,7 +1777,7 @@ void LLFloaterInventoryFinder::draw()
     }
     else
     {
-        if(is_sf_mode && mPanelMainInventory->isCombinationViewMode())
+        if (is_sf_mode && mPanelMainInventory->isCombinationViewMode())
         {
             mPanelMainInventory->mCombinationGalleryPanel->getFilter().setHoursAgo(hours);
             mPanelMainInventory->mCombinationGalleryPanel->getFilter().setDateRangeLastLogoff(getCheckSinceLogoff());

@@ -352,12 +352,10 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
 
         impl = regionp->getRegionImplNC();
 
-        // <FS:Ansariel> Fix seed cap retry count
-        //++(impl->mSeedCapAttempts);
-
         if (!result.isMap() || result.has("error"))
         {
             LL_WARNS("AppInit", "Capabilities") << "Malformed response" << LL_ENDL;
+            ++(impl->mSeedCapAttempts);
             // setup for retry.
             continue;
         }
@@ -367,6 +365,7 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
         if (!status)
         {
             LL_WARNS("AppInit", "Capabilities") << "HttpStatus error " << LL_ENDL;
+            ++(impl->mSeedCapAttempts);
             // setup for retry.
             continue;
         }
@@ -377,8 +376,8 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
         if (id != impl->mHttpResponderID) // region is no longer referring to this request
         {
             LL_WARNS("AppInit", "Capabilities") << "Received results for a stale capabilities request!" << LL_ENDL;
+            ++(impl->mSeedCapAttempts);
             // setup for retry.
-            ++(impl->mSeedCapAttempts); // <FS:Ansariel> Fix seed cap retry count
             continue;
         }
 
