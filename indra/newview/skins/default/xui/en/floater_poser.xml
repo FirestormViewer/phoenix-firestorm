@@ -86,7 +86,7 @@ width="565">
     <string	name="title_mHandIndex3Left" translate="false">Index Finger Tip</string>
     <string	name="title_mHandRing1Left" translate="false">Ring Finger Base</string>
     <string	name="title_mHandRing2Left" translate="false">Ring Finger Mid</string>
-    <string	name="title_mHandRing3Left" translate="false">Index Finger Tip</string>
+    <string	name="title_mHandRing3Left" translate="false">Ring Finger Tip</string>
     <string	name="title_mHandPinky1Left" translate="false">Pinky Finger Base</string>
     <string	name="title_mHandPinky2Left" translate="false">Pinky Finger Mid</string>
     <string	name="title_mHandPinky3Left" translate="false">Pinky Finger Tip</string>
