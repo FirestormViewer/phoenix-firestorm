@@ -40,11 +40,11 @@
 /// </summary>
 typedef enum E_BoneTypes
 {
-    WHOLEAVATAR             = 0, // possibly a single instance of, but this one manipulates everything
-    BODY                    = 1,
-    FACE                    = 2,
-    HANDS                   = 3,
-    MISC                    = 4
+    WHOLEAVATAR = 0,  // possibly a single instance of, but this one manipulates everything
+    BODY        = 1,
+    FACE        = 2,
+    HANDS       = 3,
+    MISC        = 4
 } E_BoneTypes;
 
 /// <summary>
@@ -53,9 +53,9 @@ typedef enum E_BoneTypes
 /// </summary>
 typedef enum E_BoneDeflectionStyles
 {
-    NONE                               = 0, // do nothing additional
-    MIRROR                             = 1, // change the other joint, like in a mirror, eg: one left one right
-    SYMPATHETIC                        = 2, // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
+    NONE        = 0,  // do nothing additional
+    MIRROR      = 1,  // change the other joint, like in a mirror, eg: one left one right
+    SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
 } E_BoneDeflectionStyles;
 
 class FSPoserAnimator
@@ -170,12 +170,11 @@ public:
     
 public:
     /// <summary>
-    /// Determines whether the supplied PoserJoint for the supplied avatar is being posed.
+    /// Get a PoserJoint case-insensitive-matching the supplied name.
     /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint being queried for.</param>
-    /// <returns></returns>
-    bool isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint);
+    /// <param name="jointName">The name of the joint to match.</param>
+    /// <returns>The matching joint if found, otherwise nullptr</returns>
+    const FSPoserJoint* getPoserJointByName(std::string jointName);
 
     /// <summary>
     /// Tries to being posing the supplied avatar.
@@ -198,6 +197,25 @@ public:
     bool isPosingAvatar(LLVOAvatar *avatar);
 
     /// <summary>
+    /// Determines whether the supplied PoserJoint for the supplied avatar is being posed.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint being queried for.</param>
+    /// <returns></returns>
+    bool isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint);
+
+    /// <summary>
+    /// Sets whether the supplied PoserJoint for the supplied avatar shoubd be posed.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint being queried for.</param>
+    /// <param name="posing">Whether the joint should be posed.</param>
+    /// <remarks>
+    /// If this is not posing the joint, then it is free to be posed by other things.
+    /// </remarks>
+    void setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose);
+
+    /// <summary>
     /// Gets the position of a joint for the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is being queried.</param>
@@ -212,7 +230,7 @@ public:
     /// <param name="joint">The joint to set.</param>
     /// <param name="position">The position to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointPosition(LLVOAvatar *avatar, FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style);
+    void setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Gets the rotation of a joint for the supplied avatar.
@@ -229,7 +247,7 @@ public:
     /// <param name="joint">The joint to set.</param>
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointRotation(LLVOAvatar *avatar, FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style);
+    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Gets the scale of a joint for the supplied avatar.
@@ -246,7 +264,7 @@ public:
     /// <param name="joint">The joint to set.</param>
     /// <param name="scale">The scale to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointScale(LLVOAvatar *avatar, FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style);
+    void setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style);
 
   private:
     bool _currentlyPosingSelf = false;

@@ -44,6 +44,14 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
     return _currentlyPosingSelf;
 }
 
+void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose)
+{
+    if (!avatar || avatar->isDead())
+        return;
+
+    // TODO: Bust a move. Or don't.
+}
+
 LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint)
 {
     LLVector3 pos;
@@ -59,7 +67,7 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joi
     return pos;
 }
 
-void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style)
 {
     if (!avatar || avatar->isDead())
         return;
@@ -96,7 +104,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
     return vec3;
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style)
 {
     if (!avatar || avatar->isDead())
         return;
@@ -119,12 +127,23 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
     return vec3;
 }
 
-void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style)
 {
     if (!avatar || avatar->isDead())
         return;
     if (!joint)
         return;
+}
+
+const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(std::string jointName)
+{
+    for (size_t index = 0; index != PoserJoints.size(); ++index)
+    {
+        if (boost::iequals(PoserJoints[index].jointName(), jointName))
+            return &PoserJoints[index];
+    }
+
+    return nullptr;
 }
 
 bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)

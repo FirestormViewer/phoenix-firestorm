@@ -37,14 +37,13 @@
 #include "fsposeranimator.h"
 
 /// <summary>
-/// Describes how we will cluster the joints/bones/thingos.
-/// Each joint/bone/thingo should have one of these, <see:"FSPoserAnimator.PoserJoints"/>.
+/// Describes how to load a pose file.
 /// </summary>
 typedef enum E_LoadPoseMethods
 {
-    ROTATIONS               = 0,
-    POSITIONS               = 1,
-    SCALES                  = 2,
+    ROTATIONS               = 1,
+    POSITIONS               = 2,
+    SCALES                  = 4,
     ROTATIONS_AND_POSITIONS = 3,
     ROTATIONS_AND_SCALES    = 4,
     POSITIONS_AND_SCALES    = 5,

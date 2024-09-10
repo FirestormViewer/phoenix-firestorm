@@ -385,7 +385,7 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
 
     std::string poseName = item->getColumn(0)->getValue().asString();
 
-    E_LoadPoseMethods loadType = ROT_POS_AND_SCALES;
+    E_LoadPoseMethods loadType = ROT_POS_AND_SCALES; // the default is to load everything
     if (boost::iequals(loadStyle, "rotation"))
         loadType = ROTATIONS;
     else if (boost::iequals(loadStyle, "position"))
@@ -407,8 +407,79 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
 
 void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods loadMethod)
 {
+    LLVOAvatar *avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
 
-    // TODO: add load
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+    if (!gDirUtilp->fileExists(pathname))
+        return;
+
+    std::string fullPath =
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
+
+    bool loadRotations = loadMethod == ROTATIONS || loadMethod == ROTATIONS_AND_POSITIONS || loadMethod == ROTATIONS_AND_SCALES ||
+                         loadMethod == ROT_POS_AND_SCALES;
+    bool loadPositions = loadMethod == POSITIONS || loadMethod == ROTATIONS_AND_POSITIONS || loadMethod == POSITIONS_AND_SCALES ||
+                         loadMethod == ROT_POS_AND_SCALES;
+    bool loadScales = loadMethod == SCALES || loadMethod == POSITIONS_AND_SCALES || loadMethod == ROTATIONS_AND_SCALES ||
+                      loadMethod == ROT_POS_AND_SCALES;
+
+    try
+    {
+        LLSD       pose;
+        llifstream infile;
+        LLVector3  vec3;
+
+        infile.open(fullPath);
+        if (!infile.is_open())
+            return;
+
+        while (!infile.eof())
+        {
+            S32 lineCount = LLSDSerialize::fromXML(pose, infile);
+            if (lineCount == LLSDParser::PARSE_FAILURE)
+            {
+                LL_WARNS("Posing") << "Failed to parse file: " << poseFileName << LL_ENDL;
+                return;
+            }
+
+            for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
+            {
+                std::string const &name        = itr->first;
+                LLSD const        &control_map = itr->second;
+
+                const FSPoserAnimator::FSPoserJoint *poserJoint = _poserAnimator.getPoserJointByName(name);
+                if (!poserJoint)
+                    continue;
+
+                if (loadRotations && control_map.has("rotation"))
+                {
+                    vec3.setValue(control_map["rotation"]);
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE);
+                }
+
+                if (loadPositions && control_map.has("position"))
+                {
+                    vec3.setValue(control_map["position"]);
+                    _poserAnimator.setJointPosition(avatar, poserJoint, vec3, NONE);
+                }
+
+                if (loadScales && control_map.has("scale"))
+                {
+                    vec3.setValue(control_map["scale"]);
+                    _poserAnimator.setJointScale(avatar, poserJoint, vec3, NONE);
+                }
+            }
+        }
+    }
+    catch (...)
+    {
+        LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << LL_ENDL;
+    }
 }
 
 void FSFloaterPoser::onPoseStartStop()
