@@ -40,6 +40,7 @@
 #include "llwindow.h"
 
 static const std::string POSE_INTERNAL_FORMAT_FILE_MASK     = "*.xml";
+static const std::string POSE_INTERNAL_FORMAT_FILE_EXT      = ".xml";
 static const std::string POSE_SAVE_SUBDIRECTORY             = "poses";
 static const std::string XML_LIST_HEADER_STRING_PREFIX      = "header_";
 static const std::string XML_LIST_TITLE_STRING_PREFIX       = "title_";
@@ -115,10 +116,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.Advanced.ScaleSet", boost::bind(&FSFloaterPoser::onAdvancedScaleSet, this));
 
     mCommitCallbackRegistrar.add("Pose.Save", boost::bind(&FSFloaterPoser::onClickPoseSave, this));
-    mCommitCallbackRegistrar.add("Pose.Load", boost::bind(&FSFloaterPoser::onPoseLoad, this));
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
-    mCommitCallbackRegistrar.add("Pose.Delete", boost::bind(&FSFloaterPoser::onPoseDelete, this));
-    mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowseCache, this));
+    mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowsePoseCache, this));
 }
 
 FSFloaterPoser::~FSFloaterPoser()
@@ -319,7 +318,7 @@ bool FSFloaterPoser::savePoseToXml(std::string poseFileName)
         }
 
         std::string fullSavePath =
-            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_MASK);
+            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
         LLSD record;
         S32 version = 3;
@@ -361,23 +360,7 @@ bool FSFloaterPoser::savePoseToXml(std::string poseFileName)
     return true;
 }
 
-void FSFloaterPoser::onPoseLoad()
-{
-    LLScrollListCtrl *posesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
-    if (!posesScrollList)
-        return;
-
-    LLScrollListItem *item = posesScrollList->getFirstSelected();
-    if (!item)
-        return;
-
-    std::string pose_name = item->getColumn(0)->getValue().asString();
-
-    // TODO: gDragonAnimator.loadPose(pose_name);
-    refreshJointScrollListMembers();
-}
-
-void FSFloaterPoser::onClickBrowseCache()
+void FSFloaterPoser::onClickBrowsePoseCache()
 {
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     if (!gDirUtilp->fileExists(pathname))
@@ -386,58 +369,46 @@ void FSFloaterPoser::onClickBrowseCache()
     gViewerWindow->getWindow()->openFile(pathname);
 }
 
-// TODO: implement
-// Needs UI button.
-// Even better, forget this and pop open an OS file handler window so the user can better manage files than our buttons ever could.
-// No delete button means no accidental deletion.
-// If one has to go to the OS, actions are out of our context.
-// OS probably offers undo-delete/move/etc.
-// In which case we might want a refresh button to cue user to re-scrape the poses dir.
-void FSFloaterPoser::onPoseDelete()
+void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
 {
-    /*for (auto item : mPoseScroll->getAllSelected())
-    {
-        std::string filename = item->getColumn(0)->getValue().asString();
-        std::string dirname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "poses");
+    std::string loadStyle = param.asString();
+    if (loadStyle.empty())
+        return;
 
-        if (gDirUtilp->deleteFilesInDir(dirname, filename + ".xml") < 1)
-        {
-            LL_WARNS("Posing") << "Cannot remove file: " << filename << LL_ENDL;
-        }
-    }
-    onPoseRefresh();*/
+    LLScrollListCtrl *posesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
+    if (!posesScrollList)
+        return;
+
+    LLScrollListItem *item = posesScrollList->getFirstSelected();
+    if (!item)
+        return;
+
+    std::string poseName = item->getColumn(0)->getValue().asString();
+
+    E_LoadPoseMethods loadType = ROT_POS_AND_SCALES;
+    if (boost::iequals(loadStyle, "rotation"))
+        loadType = ROTATIONS;
+    else if (boost::iequals(loadStyle, "position"))
+        loadType = POSITIONS;
+    else if (boost::iequals(loadStyle, "scale"))
+        loadType = SCALES;
+    else if (boost::iequals(loadStyle, "rot_pos"))
+        loadType = ROTATIONS_AND_POSITIONS;
+    else if (boost::iequals(loadStyle, "rot_scale"))
+        loadType = ROTATIONS_AND_SCALES;
+    else if (boost::iequals(loadStyle, "pos_scale"))
+        loadType = POSITIONS_AND_SCALES;
+    else if (boost::iequals(loadStyle, "all"))
+        loadType = ROT_POS_AND_SCALES;
+
+    loadPoseFromXml(poseName, loadType);
+    refreshJointScrollListMembers();
 }
 
-void FSFloaterPoser::onPoseMenuAction(const LLSD &param) { onPoseLoadSelective(param); }
-
-// TODO: detangle
-// This is useful when posing others with a pose we made on our avatar.
-// This is so we don't wreck their shape with scale/position changes from our avatar, but give them rotations.
-void FSFloaterPoser::onPoseLoadSelective(const LLSD& param)
+void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods loadMethod)
 {
-    //LLScrollListItem* item = mPoseScroll->getFirstSelected();
-    //if (!item) return;
 
-    //std::string pose_name = item->getColumn(0)->getValue().asString();
-
-    //S32 load_type = 0;
-    //if (param.asString() == "rotation")
-    //    load_type |= ROTATIONS;
-    //else if (param.asString() == "position")
-    //    load_type |= POSITIONS;
-    //else if (param.asString() == "scale")
-    //    load_type |= SCALES;
-    //else if (param.asString() == "rot_pos")
-    //    load_type |= ROTATIONS | POSITIONS;
-    //else if (param.asString() == "rot_scale")
-    //    load_type |= ROTATIONS | SCALES;
-    //else if (param.asString() == "pos_scale")
-    //    load_type |= POSITIONS | SCALES;
-    //else if (param.asString() == "all")
-    //    load_type |= ROTATIONS | POSITIONS | SCALES;
-
-    //gDragonAnimator.loadPose(pose_name, load_type);
-    //onJointRefresh();
+    // TODO: add load
 }
 
 void FSFloaterPoser::onPoseStartStop()

@@ -36,19 +36,25 @@
 #include "llmenubutton.h"
 #include "fsposeranimator.h"
 
+/// <summary>
+/// Describes how we will cluster the joints/bones/thingos.
+/// Each joint/bone/thingo should have one of these, <see:"FSPoserAnimator.PoserJoints"/>.
+/// </summary>
+typedef enum E_LoadPoseMethods
+{
+    ROTATIONS               = 0,
+    POSITIONS               = 1,
+    SCALES                  = 2,
+    ROTATIONS_AND_POSITIONS = 3,
+    ROTATIONS_AND_SCALES    = 4,
+    POSITIONS_AND_SCALES    = 5,
+    ROT_POS_AND_SCALES      = 6
+} E_LoadPoseMethods;
+
 typedef enum E_Columns
 {
     COL_ICON = 0,
     COL_NAME = 1,
-    COL_ROT_X = 2,
-    COL_ROT_Y = 3,
-    COL_ROT_Z = 4,
-    COL_POS_X = 5,
-    COL_POS_Y = 6,
-    COL_POS_Z = 7,
-    COL_SCALE_X = 8,
-    COL_SCALE_Y = 9,
-    COL_SCALE_Z = 10
 } E_Columns;
 
 class FSFloaterPoser : public LLFloater
@@ -83,10 +89,9 @@ class FSFloaterPoser : public LLFloater
     void onClickPoseSave();
     void onPoseFileSelect();
     bool savePoseToXml(std::string posePath);
-    void onClickBrowseCache();
-    void onPoseLoad();
-    void onPoseLoadSelective(const LLSD& param);
+    void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
+    void loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods loadMethod);
 
     // UI Event Handlers:
     void onAvatarsRefresh();
@@ -97,7 +102,6 @@ class FSFloaterPoser : public LLFloater
     void onToggleSympatheticChange();
     void onUndoLastRotation();
     void onPoseStartStop();
-    void onPoseDelete();
     void onLimbTrackballChanged();
     void onLimbAziEleRollChanged();
     void onAvatarPositionSet();

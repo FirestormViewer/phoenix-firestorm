@@ -44,8 +44,7 @@ typedef enum E_BoneTypes
     BODY                    = 1,
     FACE                    = 2,
     HANDS                   = 3,
-    MISC                    = 4,
-    FINAL_E_BoneTypes_ENTRY = 5  // for better or worse, the number of members of this enum, facilitating for-int loops
+    MISC                    = 4
 } E_BoneTypes;
 
 /// <summary>
