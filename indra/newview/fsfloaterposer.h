@@ -83,6 +83,7 @@ class FSFloaterPoser : public LLFloater
     void onClickPoseSave();
     void onPoseFileSelect();
     bool savePoseToXml(std::string posePath);
+    void onClickBrowseCache();
     void onPoseLoad();
     void onPoseLoadSelective(const LLSD& param);
     void onPoseMenuAction(const LLSD& param);

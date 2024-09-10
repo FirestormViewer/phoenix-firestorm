@@ -674,7 +674,7 @@ width="565">
 				top_pad="-2"
 				commit_on_focus_lost="false"
 				label="Enter Pose Name To Save..."
-				enabled="false"
+				enabled="true"
 				name="pose_save_name"
 				width="225"/>
             </panel>
@@ -785,12 +785,32 @@ width="565">
                     <button.commit_callback
                     function="Poser.ToggleLoadSavePanel"/>
                 </button>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				enabled="true"
+				visible="false"
+				tool_tip="Open pose directory."
+				image_overlay="Inv_FolderOpen"
+				image_overlay_alignment="center"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="open_poseDir_button"
+				width="30"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.BrowseCache"/>
+                </button>
                 <menu_button
 				height="21"
 				follows="top|left"
 				layout="topleft"
 				label="Load Pose"
-				enabled="false"
+				enabled="true"
 				visible="false"
 				tool_tip="Load the currently selected pose and apply all bone rotations saved in it."
 				image_overlay="Icon_Undock_Foreground"
@@ -803,13 +823,13 @@ width="565">
 				name="load_poses_button"
 				left_pad="1"
 				top_delta="0"
-				width="112"/>
+				width="97"/>
                 <button
 				height="21"
 				follows="top|left"
 				layout="topleft"
 				label="Save Pose"
-				enabled="false"
+				enabled="true"
 				visible="false"
 				tool_tip="Save the current pose."
 				image_overlay="Icon_Dock_Foreground"
@@ -818,7 +838,7 @@ width="565">
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
 				name="save_poses_button"
-				width="112"
+				width="97"
 				top_delta="0"
 				left_pad="1">
                     <button.commit_callback

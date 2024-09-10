@@ -36,6 +36,8 @@
 #include "llviewercontrol.h"
 #include "llcontrolavatar.h"
 #include "llstring.h"
+#include "llviewerwindow.h"
+#include "llwindow.h"
 
 static const std::string POSE_INTERNAL_FORMAT_FILE_MASK     = "*.xml";
 static const std::string POSE_SAVE_SUBDIRECTORY             = "poses";
@@ -83,6 +85,7 @@ static const std::string POSER_AVATAR_PANEL_ADVANCED_NAME          = "poses_Adva
 static const std::string POSER_AVATAR_TOGGLEBUTTON_LOADSAVE        = "toggleLoadSavePanel";
 static const std::string POSER_AVATAR_PANEL_LOADSAVE_NAME          = "poses_loadSave";
 static const std::string POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME     = "poses_scroll";
+static const std::string POSER_AVATAR_BUTTON_BROWSEFOLDER_NAME     = "open_poseDir_button";
 static const std::string POSER_AVATAR_BUTTON_LOAD_NAME             = "load_poses_button";
 static const std::string POSER_AVATAR_BUTTON_SAVE_NAME             = "save_poses_button";
 static const std::string POSER_AVATAR_LINEEDIT_FILESAVENAME        = "pose_save_name";
@@ -115,6 +118,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Pose.Load", boost::bind(&FSFloaterPoser::onPoseLoad, this));
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
     mCommitCallbackRegistrar.add("Pose.Delete", boost::bind(&FSFloaterPoser::onPoseDelete, this));
+    mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowseCache, this));
 }
 
 FSFloaterPoser::~FSFloaterPoser()
@@ -373,6 +377,15 @@ void FSFloaterPoser::onPoseLoad()
     refreshJointScrollListMembers();
 }
 
+void FSFloaterPoser::onClickBrowseCache()
+{
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+    if (!gDirUtilp->fileExists(pathname))
+        LLFile::mkdir(pathname);
+
+    gViewerWindow->getWindow()->openFile(pathname);
+}
+
 // TODO: implement
 // Needs UI button.
 // Even better, forget this and pop open an OS file handler window so the user can better manage files than our buttons ever could.
@@ -626,6 +639,10 @@ void FSFloaterPoser::onToggleLoadSavePanel()
     LLButton *savePosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
     if (savePosesButton)
         savePosesButton->setVisible(loadSavePanelExpanded);
+
+    LLButton *exploreFolderButton = getChild<LLButton>(POSER_AVATAR_BUTTON_BROWSEFOLDER_NAME);
+    if (exploreFolderButton)
+        exploreFolderButton->setVisible(loadSavePanelExpanded);
 
     // change the width of the Poser panel for the (dis)appearance of the load/save panel
     S32 currentWidth = this->getRect().getWidth();
