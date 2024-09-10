@@ -127,6 +127,7 @@ set(viewer_SOURCE_FILES
     fsfloaternearbychat.cpp
     fsfloaterpartialinventory.cpp
     fsfloaterplacedetails.cpp
+	fsfloaterposer.cpp
     fsfloaterposestand.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
@@ -159,6 +160,7 @@ set(viewer_SOURCE_FILES
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
+	fsposeranimator.cpp
     fsradar.cpp
     fsradarentry.cpp
     fsradarlistctrl.cpp
