@@ -245,7 +245,6 @@ const F32 DEFERRED_LIGHT_FALLOFF = 0.5f;
 const U32 DEFERRED_VB_MASK = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1;
 
 extern S32 gBoxFrame;
-//extern bool gHideSelectedObjects;
 extern bool gDisplaySwapBuffers;
 extern bool gDebugGL;
 extern bool gCubeSnapshot;
@@ -2227,9 +2226,9 @@ F32 LLPipeline::calcPixelArea(const LLVector4a& center, const LLVector4a& size, 
     }
 
     //get area of circle around node
-    F32 app_angle = atanf(size.getLength3().getF32()/dist);
-    F32 radius = app_angle*LLDrawable::sCurPixelAngle;
-    return radius*radius * F_PI;
+    F32 app_angle = atanf(size.getLength3().getF32() / dist);
+    F32 radius = app_angle * LLDrawable::sCurPixelAngle;
+    return radius * radius * F_PI;
 }
 
 void LLPipeline::grabReferences(LLCullResult& result)

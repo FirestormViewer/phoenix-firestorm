@@ -118,23 +118,14 @@ LLViewerObject* getSelectedParentObject(LLViewerObject *object) ;
 // Consts
 //
 
-const F32 SILHOUETTE_UPDATE_THRESHOLD_SQUARED = 0.02f;
-const S32 MAX_SILS_PER_FRAME = 50;
-const S32 MAX_OBJECTS_PER_PACKET = 254;
+constexpr F32 SILHOUETTE_UPDATE_THRESHOLD_SQUARED = 0.02f;
+constexpr S32 MAX_SILS_PER_FRAME = 50;
+constexpr S32 MAX_OBJECTS_PER_PACKET = 254;
 // For linked sets
 // <FS:Ansariel> Moved to header to make them publically accessible
-//const S32 MAX_CHILDREN_PER_TASK = 255;
-//const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
+//constexpr S32 MAX_CHILDREN_PER_TASK = 255;
 // </FS:Ansariel>
 
-//
-// Globals
-//
-
-//bool gDebugSelectMgr = false;
-
-//bool gHideSelectedObjects = false;
-//bool gAllowSelectAvatar = false;
 
 bool LLSelectMgr::sRectSelectInclusive = true;
 bool LLSelectMgr::sRenderHiddenSelections = true;
