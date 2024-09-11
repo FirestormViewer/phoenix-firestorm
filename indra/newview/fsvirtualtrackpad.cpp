@@ -101,7 +101,7 @@ bool FSVirtualTrackpad::isPointInTouchArea(S32 x, S32 y) const
 
 void FSVirtualTrackpad::draw()
 {
-    mImgSphere->draw(mTouchArea->getRect(), UI_VERTEX_COLOR);
+    mImgSphere->draw(mTouchArea->getRect(), mTouchArea->isInEnabledChain() ? UI_VERTEX_COLOR : UI_VERTEX_COLOR % 0.5f);
 
     if (mAllowPinchMode)
         drawThumb(mPinchValue, true);
