@@ -57,9 +57,9 @@ static const std::string POSER_AVATAR_TAB_MISC = "misc_joints_panel";
 
 // standard controls
 static const std::string POSER_AVATAR_TRACKBALL_NAME   = "limb_rotation";
-static const std::string POSER_AVATAR_SLIDER_AZI_NAME  = "limb_azimuth";
-static const std::string POSER_AVATAR_SLIDER_ELE_NAME  = "limb_elevation";
-static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll";
+static const std::string POSER_AVATAR_SLIDER_YAW_NAME  = "limb_yaw"; // turning your nose left or right
+static const std::string POSER_AVATAR_SLIDER_PITCH_NAME  = "limb_pitch"; // pointing your nose up or down
+static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ear touches your shoulder
 static const std::string POSER_AVATAR_TOGGLEBUTTON_MIRROR = "button_toggleMirrorRotation";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_SYMPATH = "button_toggleSympatheticRotation";
 static const std::string POSER_AVATAR_SLIDER_POSX_NAME = "av_position_inout";
@@ -97,6 +97,8 @@ static const std::string POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME     = "face_joi
 static const std::string POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME     = "hand_joints_scroll";
 static const std::string POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME     = "misc_joints_scroll";
 
+const LLVector3          VectorZero(1.0f, 0.0f, 0.0f);
+
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
     // bind requests, other controls are find-and-binds, see postBuild()
@@ -118,6 +120,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Pose.Save", boost::bind(&FSFloaterPoser::onClickPoseSave, this));
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
     mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowsePoseCache, this));
+
+    mCommitCallbackRegistrar.add("Poser.TrackBallMove", boost::bind(&FSFloaterPoser::onLimbTrackballChanged, this)); // so I can debug
 }
 
 FSFloaterPoser::~FSFloaterPoser()
@@ -129,9 +133,9 @@ bool FSFloaterPoser::postBuild()
 {
     // find-and-binds
     getChild<LLUICtrl>(POSER_AVATAR_TRACKBALL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbTrackballChanged(); });
-    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_AZI_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbAziEleRollChanged(); });
-    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_ELE_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbAziEleRollChanged(); });
-    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_ROLL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbAziEleRollChanged(); });
+    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_YAW_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
+    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_PITCH_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
+    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_ROLL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
 
     LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
     if (scrollList)
@@ -753,9 +757,9 @@ void FSFloaterPoser::clearRecentlySetRotations()
         _lastSetRotations.pop();
 }
 
-void FSFloaterPoser::addRotationToRecentlySet(F32 aziInRadians, F32 eleInRadians, F32 rollInRadians)
+void FSFloaterPoser::addRotationToRecentlySet(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians)
 {
-    _lastSetRotations.push(LLVector3(aziInRadians, eleInRadians, rollInRadians));
+    _lastSetRotations.push(LLVector3(yawInRadians, pitchInRadians, rollInRadians));
 }
 
 void FSFloaterPoser::onToggleAdvancedPanel()
@@ -883,11 +887,11 @@ void FSFloaterPoser::onAdvancedRotationSet()
     if (!xRotAdvSlider || !yRotAdvSlider || !zRotAdvSlider)
         return;
 
-    F32 azimuth   = xRotAdvSlider->getValue().asReal();
-    F32 elevation = yRotAdvSlider->getValue().asReal();
+    F32 yaw   = xRotAdvSlider->getValue().asReal();
+    F32 pitch = yRotAdvSlider->getValue().asReal();
     F32 roll      = zRotAdvSlider->getValue().asReal();
 
-    setSelectedJointsRotation(azimuth, elevation, roll);
+    setSelectedJointsRotation(yaw, pitch, roll);
 }
 
 void FSFloaterPoser::onAdvancedScaleSet()
@@ -920,60 +924,89 @@ void FSFloaterPoser::onAvatarPositionSet()
     setSelectedJointsPosition(posX, posY, posZ);
 }
 
+/// <summary>
+/// The trackball controller is not friendly to photographers (or normal people).
+/// This method could be streamlined but at the high cost of picking apart what it does.
+/// The simplest thing to do would be to reimplement the code behind the slider!
+/// TLDR: we just want the trackball to behave like a 2-axis slider.
+///
+/// BEWARE! Changes to behaviour here require their inverse to be applied on the slider-callback. 
+/// </summary>
 void FSFloaterPoser::onLimbTrackballChanged()
 {
     LLVirtualTrackball *trackBall = getChild<LLVirtualTrackball>(POSER_AVATAR_TRACKBALL_NAME);
     if (!trackBall)
         return;
 
-    LLSliderCtrl *aziSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_AZI_NAME);
-    LLSliderCtrl *eleSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ELE_NAME);
+    LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME); // up/down
+    LLSliderCtrl *yawSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME); // left right
     LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!aziSlider || !eleSlider || !rollSlider)
+    if (!yawSlider || !pitchSlider || !rollSlider)
         return;
 
-    LLQuaternion quat = trackBall->getRotation();
+    LLQuaternion trackBallQuat = trackBall->getRotation();
 
-    F32 azimuth, elevation;
-    LLVirtualTrackball::getAzimuthAndElevationDeg(quat, azimuth, elevation);
+    // Convert the quaternion to a cartesian (x,y,z) point on a unit-sphere
+    LLVector3 cartesionPoint = VectorZero * trackBallQuat; // VX is +up/-down screen; VY is +right/-left screen; VZ is +in/-out; all are ranged 1..-1
 
-    aziSlider->setValue(azimuth);
-    eleSlider->setValue(elevation);
+    F32 yaw, pitch, roll;
+    if (cartesionPoint.mV[VZ] >= 0)  // the sun is in front of the trackball, easy math
+    {
+        yaw   = cartesionPoint.mV[VX] * F_PI_BY_TWO;
+        pitch = cartesionPoint.mV[VY] * F_PI_BY_TWO;
+    }
+    else // when the sun is behind the trackball (VZ < 0), we want to keep increasing the angle
+    {
+        // this is a first pass, and does not consider sensitivity changes around the edges.
+        // it could be worth disallowing VZ < 0, or only allowing as an advanced feature.
 
-    F32 roll = rollSlider->getValue().asReal();
-    azimuth *= DEG_TO_RAD;
-    elevation *= DEG_TO_RAD;
+        if (cartesionPoint.mV[VX] >= 0) // sun is in top hemisphere
+            yaw = F_PI_BY_TWO * (2 - cartesionPoint.mV[VX]);
+        else
+            yaw = -1 * F_PI_BY_TWO - F_PI_BY_TWO * (1 + cartesionPoint.mV[VX]);
+
+        if (cartesionPoint.mV[VY] >= 0)  // sun is in screen-right hemisphere
+            pitch = F_PI_BY_TWO * (2 - cartesionPoint.mV[VY]);
+        else
+            pitch = -1 * F_PI_BY_TWO - F_PI_BY_TWO * (1 + cartesionPoint.mV[VY]);
+    }
+
+    roll = rollSlider->getValue().asReal(); // roll comes from the slider
     roll *= DEG_TO_RAD;
 
-    setSelectedJointsRotation(azimuth, elevation, roll);
+    setSelectedJointsRotation(yaw, pitch, roll);
+
+    yaw *= RAD_TO_DEG;
+    pitch *= RAD_TO_DEG;
+    yawSlider->setValue(yaw);
+    pitchSlider->setValue(pitch);
 }
 
-void FSFloaterPoser::onLimbAziEleRollChanged()
+void FSFloaterPoser::onLimbYawPitchRollChanged()
 {
-    LLSliderCtrl *aziSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_AZI_NAME);
-    LLSliderCtrl *eleSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ELE_NAME);
+    LLSliderCtrl *yawSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
+    LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
     LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!aziSlider || !eleSlider || !rollSlider)
+    if (!yawSlider || !pitchSlider || !rollSlider)
         return;
 
-    F32 azimuth   = aziSlider->getValue().asReal();
-    F32 elevation = eleSlider->getValue().asReal();
-    F32 roll      = rollSlider->getValue().asReal();
+    F32 yaw   = yawSlider->getValue().asReal();
+    F32 pitch = pitchSlider->getValue().asReal();
+    F32 roll  = rollSlider->getValue().asReal();
 
-    azimuth *= DEG_TO_RAD;
-    elevation *= DEG_TO_RAD;
+    yaw *= DEG_TO_RAD;
+    pitch *= DEG_TO_RAD;
     roll *= DEG_TO_RAD;
-
-    if (is_approx_zero(elevation))
-        elevation = F_APPROXIMATELY_ZERO;
     
-    setSelectedJointsRotation(azimuth, elevation, roll);
+    setSelectedJointsRotation(yaw, pitch, roll);
 
+    yaw *= F_PI;
+    pitch *= F_PI;
+    roll *= F_PI; // roll needs to be recalculated from unit sphere based on ranges of yaw and roll
+    LLVector3    vec3 = LLVector3(yaw, pitch, roll);
     LLQuaternion quat;
-    quat.setAngleAxis(-elevation, 0, 1, 0);
-    LLQuaternion az_quat;
-    az_quat.setAngleAxis(F_TWO_PI - azimuth, 0, 0, 1);
-    quat *= az_quat;
+    quat.unpackFromVector3(vec3);
+    quat.setAngleAxis(pitch, 0, 1, 0);
 
     LLVirtualTrackball *trackBall = getChild<LLVirtualTrackball>(POSER_AVATAR_TRACKBALL_NAME);
     if (!trackBall)
@@ -998,7 +1031,7 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
         _poserAnimator.setJointPosition(avatar, item, vec3, defl);
 }
 
-void FSFloaterPoser::setSelectedJointsRotation(F32 aziInRadians, F32 eleInRadians, F32 rollInRadians)
+void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians)
 {
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)
@@ -1007,10 +1040,10 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 aziInRadians, F32 eleInRadian
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
-    addRotationToRecentlySet(aziInRadians, eleInRadians, rollInRadians);
+    addRotationToRecentlySet(yawInRadians, pitchInRadians, rollInRadians);
 
     E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
-    LLVector3              vec3 = LLVector3(aziInRadians, eleInRadians, rollInRadians);
+    LLVector3              vec3 = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
 
     for (auto item : getUiSelectedPoserJoints())
         _poserAnimator.setJointRotation(avatar, item, vec3, defl);
@@ -1047,17 +1080,17 @@ void FSFloaterPoser::onJointSelect()
 
     clearRecentlySetRotations();
     LLVector3 rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front());
-    F32       azimuth   = rotation.mV[VX];
-    F32       elevation = rotation.mV[VY];
+    F32       yaw   = rotation.mV[VX];
+    F32       pitch = rotation.mV[VY];
     F32       roll      = rotation.mV[VZ];
 
-    if (is_approx_zero(elevation))
-        elevation = F_APPROXIMATELY_ZERO;
+    if (is_approx_zero(pitch))
+        pitch = F_APPROXIMATELY_ZERO;
 
     LLQuaternion quat;
-    quat.setAngleAxis(-elevation, 0, 1, 0);
+    quat.setAngleAxis(-pitch, 0, 1, 0);
     LLQuaternion az_quat;
-    az_quat.setAngleAxis(F_TWO_PI - azimuth, 0, 0, 1);
+    az_quat.setAngleAxis(F_TWO_PI - yaw, 0, 0, 1);
     quat *= az_quat;
 
     LLVirtualTrackball *trackBall = getChild<LLVirtualTrackball>(POSER_AVATAR_TRACKBALL_NAME);
@@ -1066,14 +1099,14 @@ void FSFloaterPoser::onJointSelect()
 
     trackBall->setRotation(quat);
 
-    LLSliderCtrl *aziSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_AZI_NAME);
-    LLSliderCtrl *eleSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ELE_NAME);
+    LLSliderCtrl *yawSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
+    LLSliderCtrl *pitchSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
     LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!aziSlider || !eleSlider || !rollSlider)
+    if (!yawSlider || !pitchSlider || !rollSlider)
         return;
 
-    aziSlider->setValue(azimuth *= RAD_TO_DEG);
-    eleSlider->setValue(elevation *= RAD_TO_DEG);
+    yawSlider->setValue(yaw *= RAD_TO_DEG);
+    pitchSlider->setValue(pitch *= RAD_TO_DEG);
     rollSlider->setValue(roll *= RAD_TO_DEG);
 }
 
