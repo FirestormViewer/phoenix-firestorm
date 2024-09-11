@@ -77,8 +77,7 @@ class FSFloaterPoser : public LLFloater
     std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints();
     LLVOAvatar                                  *getUiSelectedAvatar();
     E_BoneDeflectionStyles                       getUiSelectedBoneDeflectionStyle();
-    void                                         addRotationToRecentlySet(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians);
-    void                                         clearRecentlySetRotations();
+
     void setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians);
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
@@ -124,7 +123,6 @@ class FSFloaterPoser : public LLFloater
 
 private:
     FSPoserAnimator       _poserAnimator;
-    std::stack<LLVector3> _lastSetRotations;
 };
 
 #endif

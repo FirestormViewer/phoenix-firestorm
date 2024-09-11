@@ -31,7 +31,7 @@
 #include "llavatarnamecache.h"
 #include "lldiriterator.h"
 #include "llsdserialize.h"
-#include "llvirtualtrackball.h"
+#include "fsvirtualtrackpad.h"
 #include "llfloater.h"
 #include "llviewercontrol.h"
 #include "llcontrolavatar.h"
@@ -124,10 +124,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.TrackBallMove", boost::bind(&FSFloaterPoser::onLimbTrackballChanged, this)); // so I can debug
 }
 
-FSFloaterPoser::~FSFloaterPoser()
-{
-    clearRecentlySetRotations();
-}
+FSFloaterPoser::~FSFloaterPoser() {}
 
 bool FSFloaterPoser::postBuild()
 {
@@ -741,25 +738,12 @@ void FSFloaterPoser::onToggleSympatheticChange()
 
 void FSFloaterPoser::onUndoLastRotation()
 {
-    auto size = _lastSetRotations.size();
-    if (size < 2)
+    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
+    if (!trackBall)
         return;
 
-    _lastSetRotations.pop();
-    LLVector3 lastRotation = _lastSetRotations.top();
-
-    setSelectedJointsRotation(lastRotation.mV[VX], lastRotation.mV[VY], lastRotation.mV[VZ]);
-}
-
-void FSFloaterPoser::clearRecentlySetRotations()
-{
-    while (!_lastSetRotations.empty())
-        _lastSetRotations.pop();
-}
-
-void FSFloaterPoser::addRotationToRecentlySet(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians)
-{
-    _lastSetRotations.push(LLVector3(yawInRadians, pitchInRadians, rollInRadians));
+    trackBall->undoLastValue();
+    onLimbTrackballChanged();
 }
 
 void FSFloaterPoser::onToggleAdvancedPanel()
@@ -934,8 +918,15 @@ void FSFloaterPoser::onAvatarPositionSet()
 /// </summary>
 void FSFloaterPoser::onLimbTrackballChanged()
 {
-    LLVirtualTrackball *trackBall = getChild<LLVirtualTrackball>(POSER_AVATAR_TRACKBALL_NAME);
+    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
     if (!trackBall)
+        return;
+
+    LLVector2 trackPadPos;
+    LLSD position = trackBall->getValue();
+    if (position.isArray() && position.size() == 2)
+        trackPadPos.setValue(position);
+    else
         return;
 
     LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME); // up/down
@@ -944,34 +935,14 @@ void FSFloaterPoser::onLimbTrackballChanged()
     if (!yawSlider || !pitchSlider || !rollSlider)
         return;
 
-    LLQuaternion trackBallQuat = trackBall->getRotation();
-
-    // Convert the quaternion to a cartesian (x,y,z) point on a unit-sphere
-    LLVector3 cartesionPoint = VectorZero * trackBallQuat; // VX is +up/-down screen; VY is +right/-left screen; VZ is +in/-out; all are ranged 1..-1
-
     F32 yaw, pitch, roll;
-    if (cartesionPoint.mV[VZ] >= 0)  // the sun is in front of the trackball, easy math
-    {
-        yaw   = cartesionPoint.mV[VX] * F_PI_BY_TWO;
-        pitch = cartesionPoint.mV[VY] * F_PI_BY_TWO;
-    }
-    else // when the sun is behind the trackball (VZ < 0), we want to keep increasing the angle
-    {
-        // this is a first pass, and does not consider sensitivity changes around the edges.
-        // it could be worth disallowing VZ < 0, or only allowing as an advanced feature.
 
-        if (cartesionPoint.mV[VX] >= 0) // sun is in top hemisphere
-            yaw = F_PI_BY_TWO * (2 - cartesionPoint.mV[VX]);
-        else
-            yaw = -1 * F_PI_BY_TWO - F_PI_BY_TWO * (1 + cartesionPoint.mV[VX]);
+    yaw  = trackPadPos.mV[VX];
+    pitch = trackPadPos.mV[VY];
 
-        if (cartesionPoint.mV[VY] >= 0)  // sun is in screen-right hemisphere
-            pitch = F_PI_BY_TWO * (2 - cartesionPoint.mV[VY]);
-        else
-            pitch = -1 * F_PI_BY_TWO - F_PI_BY_TWO * (1 + cartesionPoint.mV[VY]);
-    }
-
-    roll = rollSlider->getValue().asReal(); // roll comes from the slider
+    yaw *= F_PI;
+    pitch *= F_PI;
+    roll = rollSlider->getValue().asReal();  // roll comes from its own slider
     roll *= DEG_TO_RAD;
 
     setSelectedJointsRotation(yaw, pitch, roll);
@@ -997,22 +968,16 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     yaw *= DEG_TO_RAD;
     pitch *= DEG_TO_RAD;
     roll *= DEG_TO_RAD;
-    
+
     setSelectedJointsRotation(yaw, pitch, roll);
 
-    yaw *= F_PI;
-    pitch *= F_PI;
-    roll *= F_PI; // roll needs to be recalculated from unit sphere based on ranges of yaw and roll
-    LLVector3    vec3 = LLVector3(yaw, pitch, roll);
-    LLQuaternion quat;
-    quat.unpackFromVector3(vec3);
-    quat.setAngleAxis(pitch, 0, 1, 0);
-
-    LLVirtualTrackball *trackBall = getChild<LLVirtualTrackball>(POSER_AVATAR_TRACKBALL_NAME);
+    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
     if (!trackBall)
         return;
 
-    trackBall->setRotation(quat);
+    yaw /= F_PI;
+    pitch /= F_PI;
+    trackBall->setValue(yaw, pitch);
 }
 
 void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
@@ -1039,8 +1004,6 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
 
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
-
-    addRotationToRecentlySet(yawInRadians, pitchInRadians, rollInRadians);
 
     E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
     LLVector3              vec3 = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
@@ -1078,26 +1041,10 @@ void FSFloaterPoser::onJointSelect()
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
-    clearRecentlySetRotations();
     LLVector3 rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front());
-    F32       yaw   = rotation.mV[VX];
-    F32       pitch = rotation.mV[VY];
-    F32       roll      = rotation.mV[VZ];
-
-    if (is_approx_zero(pitch))
-        pitch = F_APPROXIMATELY_ZERO;
-
-    LLQuaternion quat;
-    quat.setAngleAxis(-pitch, 0, 1, 0);
-    LLQuaternion az_quat;
-    az_quat.setAngleAxis(F_TWO_PI - yaw, 0, 0, 1);
-    quat *= az_quat;
-
-    LLVirtualTrackball *trackBall = getChild<LLVirtualTrackball>(POSER_AVATAR_TRACKBALL_NAME);
-    if (!trackBall)
-        return;
-
-    trackBall->setRotation(quat);
+    F32       yaw      = rotation.mV[VX];
+    F32       pitch    = rotation.mV[VY];
+    F32       roll     = rotation.mV[VZ];
 
     LLSliderCtrl *yawSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
     LLSliderCtrl *pitchSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
@@ -1108,6 +1055,10 @@ void FSFloaterPoser::onJointSelect()
     yawSlider->setValue(yaw *= RAD_TO_DEG);
     pitchSlider->setValue(pitch *= RAD_TO_DEG);
     rollSlider->setValue(roll *= RAD_TO_DEG);
+
+    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
+    if (trackBall)
+        trackBall->setValue(yaw /= 180, pitch /= 180);
 }
 
 /// <summary>

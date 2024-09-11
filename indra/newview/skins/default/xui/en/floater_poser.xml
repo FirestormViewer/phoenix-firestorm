@@ -510,13 +510,13 @@ width="565">
 					left="5"
 					top="2"
 					width="105">Rotation:</text>
-                <sun_moon_trackball name="limb_rotation"
+                <fs_virtual_trackpad name="limb_rotation"
 									follows="left|top"
 									left_delta="0"
 									top_delta="15"
 									height="153"
 									width="153"
-									tool_tip="Change the rotation of the currently selected joint(s). Hold CTRL/CMD while changing for easy-rolling"
+									tool_tip="Change the rotation of the currently selected joint(s). Hold CTRL/CMD while changing for slow-motion"
 									thumb_mode="sun"/>
                 <panel
 				follows="left|top|bottom"

@@ -169,6 +169,7 @@ set(viewer_SOURCE_FILES
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
+	fsvirtualtrackpad.cpp
     fsworldmapmessage.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
