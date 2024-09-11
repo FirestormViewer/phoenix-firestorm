@@ -2956,8 +2956,8 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled, const LLVector3 &
     }
 
     // <FS:Ansariel> FIRE-1916: Hide voice dots over avatars
-    static LLCachedControl<bool> fsShowVoiceVisualizer(gSavedSettings, "FSShowVoiceVisualizer");
-    if (!fsShowVoiceVisualizer)
+    static LLCachedControl<bool> voiceVisualizerEnabled(gSavedSettings, "VoiceVisualizerEnabled");
+    if (!voiceVisualizerEnabled)
     {
         render_visualizer = false;
     }
