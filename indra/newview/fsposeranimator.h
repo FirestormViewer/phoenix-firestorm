@@ -58,6 +58,20 @@ typedef enum E_BoneDeflectionStyles
     SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
 } E_BoneDeflectionStyles;
 
+/// <summary>
+/// When we're going from bone-rotation to the UI sliders, some of the axes need swapping so they make sense in UI-terms.
+/// eg: for one bone, the X-axis may mean up and down, but for another bone, the x-axis might be left-right.
+/// These are translations of bone-TO-UI; an inverse translation needs to happen the other way.
+/// It would be nice if these were defined in XML; but then they're not const, and I want const.
+/// </summary>
+typedef enum E_BoneAxisTranslation
+{
+    SWAP_NOTHING        = 0,
+    SWAP_YAW_AND_ROLL   = 1,
+    SWAP_YAW_AND_PITCH  = 2,
+    SWAP_ROLL_AND_PITCH = 3,
+} E_BoneAxisTranslation;
+
 class FSPoserAnimator
 {
 public:
@@ -73,6 +87,7 @@ public:
         std::string _jointName; // expected to be a match to LLJoint.getName() for a joint implementation.
         std::string _mirrorJointName;
         E_BoneTypes _boneList;
+        E_BoneAxisTranslation _boneTranslation;
       public:
         /// <summary>
         /// Gets the name of the joint.
@@ -90,6 +105,11 @@ public:
         E_BoneTypes boneType() const { return _boneList; }
 
         /// <summary>
+        /// Gets the E_BoneAxisTranslation of the joint.
+        /// </summary>
+        E_BoneAxisTranslation boneTranslation() const { return _boneTranslation; }
+
+        /// <summary>
         /// Creates a new instance of a PoserJoint.
         /// </summary>
         /// <param name="a">
@@ -99,11 +119,12 @@ public:
         /// </param>
         /// <param name="b">The opposite joint name, if any. Also expected to be a well-known name.</param>
         /// <param name="c">The </param>
-        FSPoserJoint(std::string a, std::string b, E_BoneTypes c)
+        FSPoserJoint(std::string a, std::string b, E_BoneTypes c, E_BoneAxisTranslation d = SWAP_NOTHING)
         {
             _jointName       = a;
             _mirrorJointName = b;
             _boneList        = c;
+            _boneTranslation = d;
         }
     };
 
@@ -122,7 +143,7 @@ public:
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints {
         // head, torso, legs
-        {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
+        {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY, SWAP_YAW_AND_ROLL}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
         {"mCollarLeft", "mCollarRight", BODY}, {"mShoulderLeft", "mShoulderRight", BODY}, {"mElbowLeft", "mElbowRight", BODY}, {"mWristLeft", "mWristRight", BODY},
         {"mCollarRight", "mCollarLeft", BODY}, {"mShoulderRight", "mShoulderLeft", BODY},  {"mElbowRight", "mElbowLeft", BODY},  {"mWristRight", "mWristLeft", BODY},
         {"mHipLeft", "", BODY}, {"mKneeLeft", "", BODY},  {"mAnkleLeft", "", BODY},
@@ -268,6 +289,23 @@ public:
 
   private:
     bool _currentlyPosingSelf = false;
+
+    /// <summary>
+    /// Translates a rotation vector from the UI to a Quaternion for the bone.
+    /// This also performs the axis-swapping the UI needs for up/down/left/right to make sense.
+    /// </summary>
+    /// <param name="translation">The axis translation to perform.</param>
+    /// <param name="rotation">The rotation to transform to quaternion.</param>
+    /// <returns>The rotation quaternion.</returns>
+    LLQuaternion translateRotationToQuaternion(E_BoneAxisTranslation translation, LLVector3 rotation);
+
+    /// <summary>
+    /// Translates a bone-rotation quaternion to a vector usable easily on the UI.
+    /// </summary>
+    /// <param name="translation">The axis translation to perform.</param>
+    /// <param name="rotation">The rotation to transform to matrix.</param>
+    /// <returns>The rotation vector.</returns>
+    LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, LLQuaternion rotation);
 
     //  public:
 //    static LLMotion *create(const LLUUID &id) { return new FSPoserAnimator(id); }

@@ -99,7 +99,34 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
         return vec3;
 
     LLQuaternion rot = avJoint->getRotation();
-    rot.getEulerAngles(&vec3.mV[VX], &vec3.mV[VZ], &vec3.mV[VY]);
+    
+    return translateRotationFromQuaternion(joint.boneTranslation(), rot);
+}
+
+// from the bone to the UI; this is the 'forwards' use of the enum
+LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, LLQuaternion rotation)
+{
+    LLVector3 vec3;
+
+    switch (translation)
+    {
+        case SWAP_YAW_AND_ROLL:
+            rotation.getEulerAngles(&vec3.mV[VY], &vec3.mV[VZ], &vec3.mV[VX]);
+            break;
+
+        case SWAP_YAW_AND_PITCH:
+            rotation.getEulerAngles(&vec3.mV[VZ], &vec3.mV[VX], &vec3.mV[VY]);
+            break;
+
+        case SWAP_ROLL_AND_PITCH:
+            rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VY], &vec3.mV[VZ]);
+            break;
+
+        case SWAP_NOTHING:
+        default:
+            rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VZ], &vec3.mV[VY]);
+            break;
+    }
 
     return vec3;
 }
@@ -115,10 +142,38 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!avJoint)
         return;
 
-    LLMatrix3    rot_mat = LLMatrix3(rotation.mV[VX], rotation.mV[VY], rotation.mV[VZ]);
+    LLQuaternion rot_quat = translateRotationToQuaternion(joint->boneTranslation(), rotation);
+    avJoint->setRotation(rot_quat);
+}
+
+// from the UI to the bone, the inverse translation, the un-swap, the backwards
+LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslation translation, LLVector3 rotation)
+{
+    LLMatrix3    rot_mat;
+    switch (translation)
+    {
+        case SWAP_YAW_AND_ROLL:
+            rot_mat = LLMatrix3(rotation.mV[VZ], rotation.mV[VY], -1 * rotation.mV[VX]);
+            break;
+
+        case SWAP_YAW_AND_PITCH:
+            rot_mat = LLMatrix3(rotation.mV[VY], rotation.mV[VX], rotation.mV[VZ]);
+            break;
+
+        case SWAP_ROLL_AND_PITCH:
+            rot_mat = LLMatrix3(rotation.mV[VX], rotation.mV[VZ], rotation.mV[VY]);
+            break;
+
+        case SWAP_NOTHING:
+        default:
+            rot_mat = LLMatrix3(rotation.mV[VX], rotation.mV[VY], rotation.mV[VZ]);
+            break;
+    }
+
     LLQuaternion rot_quat;
     rot_quat = LLQuaternion(rot_mat) * rot_quat;
-    avJoint->setRotation(rot_quat);
+
+    return rot_quat;
 }
 
 LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)

@@ -908,14 +908,6 @@ void FSFloaterPoser::onAvatarPositionSet()
     setSelectedJointsPosition(posX, posY, posZ);
 }
 
-/// <summary>
-/// The trackball controller is not friendly to photographers (or normal people).
-/// This method could be streamlined but at the high cost of picking apart what it does.
-/// The simplest thing to do would be to reimplement the code behind the slider!
-/// TLDR: we just want the trackball to behave like a 2-axis slider.
-///
-/// BEWARE! Changes to behaviour here require their inverse to be applied on the slider-callback. 
-/// </summary>
 void FSFloaterPoser::onLimbTrackballChanged()
 {
     FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);

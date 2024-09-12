@@ -43,7 +43,6 @@ public:
         Optional<LLViewBorder::Params> border;
         Optional<LLUIImage *>          image_moon_back, image_moon_front, image_sphere, image_sun_back, image_sun_front;
         Optional<bool> pinch_mode;
-        Optional<bool> allow_drag_outside;
 
         Params();
     };
