@@ -87,7 +87,6 @@ public:
         std::string _jointName; // expected to be a match to LLJoint.getName() for a joint implementation.
         std::string _mirrorJointName;
         E_BoneTypes _boneList;
-        E_BoneAxisTranslation _boneTranslation;
       public:
         /// <summary>
         /// Gets the name of the joint.
@@ -105,11 +104,6 @@ public:
         E_BoneTypes boneType() const { return _boneList; }
 
         /// <summary>
-        /// Gets the E_BoneAxisTranslation of the joint.
-        /// </summary>
-        E_BoneAxisTranslation boneTranslation() const { return _boneTranslation; }
-
-        /// <summary>
         /// Creates a new instance of a PoserJoint.
         /// </summary>
         /// <param name="a">
@@ -119,12 +113,11 @@ public:
         /// </param>
         /// <param name="b">The opposite joint name, if any. Also expected to be a well-known name.</param>
         /// <param name="c">The </param>
-        FSPoserJoint(std::string a, std::string b, E_BoneTypes c, E_BoneAxisTranslation d = SWAP_NOTHING)
+        FSPoserJoint(std::string a, std::string b, E_BoneTypes c)
         {
             _jointName       = a;
             _mirrorJointName = b;
             _boneList        = c;
-            _boneTranslation = d;
         }
     };
 
@@ -143,7 +136,7 @@ public:
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints {
         // head, torso, legs
-        {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY, SWAP_YAW_AND_ROLL}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
+        {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
         {"mCollarLeft", "mCollarRight", BODY}, {"mShoulderLeft", "mShoulderRight", BODY}, {"mElbowLeft", "mElbowRight", BODY}, {"mWristLeft", "mWristRight", BODY},
         {"mCollarRight", "mCollarLeft", BODY}, {"mShoulderRight", "mShoulderLeft", BODY},  {"mElbowRight", "mElbowLeft", BODY},  {"mWristRight", "mWristLeft", BODY},
         {"mHipLeft", "", BODY}, {"mKneeLeft", "", BODY},  {"mAnkleLeft", "", BODY},
@@ -250,7 +243,7 @@ public:
     /// <param name="avatar">The avatar whose joint is to be set.</param>
     /// <param name="joint">The joint to set.</param>
     /// <param name="position">The position to set the joint to.</param>
-    /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
+    /// <param name="style">The axial translation form the supplied joint.</param>
     void setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style);
 
     /// <summary>
@@ -258,8 +251,9 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the rotation for.</param>
+    /// <param name="translation">The joint to determine the rotation for.</param>
     /// <returns>The rotation of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint);
+    LLVector3 getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation);
 
     /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
@@ -268,7 +262,8 @@ public:
     /// <param name="joint">The joint to set.</param>
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style);
+    /// <param name="translation">The axial translation form the supplied joint.</param>
+    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style, E_BoneAxisTranslation translation);
 
     /// <summary>
     /// Gets the scale of a joint for the supplied avatar.

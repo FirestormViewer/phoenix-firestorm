@@ -84,7 +84,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
         return;
 }
 
-LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint)
+LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation)
 {
     // this needs to do this, to be compatible in some part with BD poses
     // LLQuaternion rot = _poserAnimator.getJointRotation(avatar, pj);
@@ -100,7 +100,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
 
     LLQuaternion rot = avJoint->getRotation();
     
-    return translateRotationFromQuaternion(joint.boneTranslation(), rot);
+    return translateRotationFromQuaternion(translation, rot);
 }
 
 // from the bone to the UI; this is the 'forwards' use of the enum
@@ -131,7 +131,7 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
     return vec3;
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style, E_BoneAxisTranslation translation)
 {
     if (!avatar || avatar->isDead())
         return;
@@ -142,7 +142,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!avJoint)
         return;
 
-    LLQuaternion rot_quat = translateRotationToQuaternion(joint->boneTranslation(), rotation);
+    LLQuaternion rot_quat = translateRotationToQuaternion(translation, rotation);
     avJoint->setRotation(rot_quat);
 }
 

@@ -44,6 +44,7 @@ static const std::string POSE_INTERNAL_FORMAT_FILE_EXT      = ".xml";
 static const std::string POSE_SAVE_SUBDIRECTORY             = "poses";
 static const std::string XML_LIST_HEADER_STRING_PREFIX      = "header_";
 static const std::string XML_LIST_TITLE_STRING_PREFIX       = "title_";
+static const std::string XML_JOINT_TRANSFORM_STRING_PREFIX  = "joint_transform_";
 static const std::string POSER_ADVANCEDWINDOWSTATE_SAVE_KEY = "FSPoserAdvancedWindowState";
 
 static const std::string POSER_AVATAR_PANEL_JOINTSPARENT = "joints_parent_panel";
@@ -330,7 +331,7 @@ bool FSFloaterPoser::savePoseToXml(std::string poseFileName)
         {
             std::string  bone_name = pj.jointName();
 
-            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj);
+            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, getJointTranslation(bone_name));
 
             record[bone_name]     = pj.jointName();   
             record[bone_name]["rotation"] = vec3.getValue();
@@ -461,7 +462,7 @@ void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE);
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, getJointTranslation(name));
                 }
 
                 if (loadPositions && control_map.has("position"))
@@ -1043,7 +1044,7 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     LLVector3              vec3 = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
 
     for (auto item : getUiSelectedPoserJoints())
-        _poserAnimator.setJointRotation(avatar, item, vec3, defl);
+        _poserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()));
 }
 
 void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
@@ -1075,7 +1076,7 @@ void FSFloaterPoser::onJointSelect()
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
-    LLVector3 rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front());
+    LLVector3 rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(selectedJoints.front()->jointName()));
     F32       yaw      = rotation.mV[VX];
     F32       pitch    = rotation.mV[VY];
     F32       roll     = rotation.mV[VZ];
@@ -1093,6 +1094,29 @@ void FSFloaterPoser::onJointSelect()
     FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
     if (trackBall)
         trackBall->setValue(yaw /= 180, pitch /= 180);
+}
+
+E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)
+{
+    if (jointName.empty())
+        return SWAP_NOTHING;
+
+    bool hasTransformParameter = hasString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+    if (!hasTransformParameter)
+        return SWAP_NOTHING;
+
+    std::string paramValue = getString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+
+    if (boost::iequals(paramValue, "SWAP_NOTHING"))
+        return SWAP_NOTHING;
+    else if (boost::iequals(paramValue, "SWAP_YAW_AND_ROLL"))
+        return SWAP_YAW_AND_ROLL;
+    else if (boost::iequals(paramValue, "SWAP_YAW_AND_PITCH"))
+        return SWAP_YAW_AND_PITCH;
+    else if (boost::iequals(paramValue, "SWAP_ROLL_AND_PITCH"))
+        return SWAP_ROLL_AND_PITCH;
+    else
+        return SWAP_NOTHING;
 }
 
 /// <summary>

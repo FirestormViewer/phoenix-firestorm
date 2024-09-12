@@ -123,6 +123,7 @@ class FSFloaterPoser : public LLFloater
 
 private:
     FSPoserAnimator       _poserAnimator;
+    E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName);
 };
 
 #endif
