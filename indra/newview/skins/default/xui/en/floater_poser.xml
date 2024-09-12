@@ -516,7 +516,7 @@ width="565">
 									top_delta="15"
 									height="153"
 									width="153"
-									tool_tip="Change the rotation of the currently selected joint(s). Hold CTRL/CMD while changing for slow-motion"
+									tool_tip="Change the rotation of the currently selected joint(s). Roll the wheel while holding to adjust the 3rd axis"
 									thumb_mode="sun"/>
                 <panel
 				follows="left|top|bottom"

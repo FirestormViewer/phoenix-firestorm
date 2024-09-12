@@ -915,9 +915,9 @@ void FSFloaterPoser::onLimbTrackballChanged()
     if (!trackBall)
         return;
 
-    LLVector2 trackPadPos;
+    LLVector3 trackPadPos;
     LLSD position = trackBall->getValue();
-    if (position.isArray() && position.size() == 2)
+    if (position.isArray() && position.size() == 3)
         trackPadPos.setValue(position);
     else
         return;
@@ -928,10 +928,11 @@ void FSFloaterPoser::onLimbTrackballChanged()
     if (!yawSlider || !pitchSlider || !rollSlider)
         return;
 
-    F32 yaw, pitch, roll;
+    F32 yaw, pitch, roll, rollClicks;
 
     yaw  = trackPadPos.mV[VX];
     pitch = trackPadPos.mV[VY];
+    rollClicks = trackPadPos.mV[VZ];
 
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
     if (!toggleSensitivityButton)
@@ -954,7 +955,8 @@ void FSFloaterPoser::onLimbTrackballChanged()
         }
     }
     
-    roll = rollSlider->getValue().asReal();  // roll comes from its own slider
+    roll = rollSlider->getValue().asReal();  // roll starts from its own slider
+    roll += rollClicks; // one click means 1 degree of change
     roll *= DEG_TO_RAD;
 
     setSelectedJointsRotation(yaw, pitch, roll);
@@ -963,6 +965,7 @@ void FSFloaterPoser::onLimbTrackballChanged()
     pitch *= RAD_TO_DEG;
     yawSlider->setValue(yaw);
     pitchSlider->setValue(pitch);
+    rollSlider->setValue(roll);
 }
 
 void FSFloaterPoser::onLimbYawPitchRollChanged()

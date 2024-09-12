@@ -58,10 +58,10 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     S32 centerX = border_rect.getCenterX();
     S32 centerY = border_rect.getCenterY();
 
-    mValue.set(centerX, centerY);
-    mPinchValue.set(centerX, centerY);
-    mLastValue.set(centerX, centerY);
-    mLastPinchValue.set(centerX, centerY);
+    mValue.set(centerX, centerY, 0);
+    mPinchValue.set(centerX, centerY, 0);
+    mLastValue.set(centerX, centerY, 0);
+    mLastPinchValue.set(centerX, centerY, 0);
 
     LLViewBorder::Params border = p.border;
     border.rect(border_rect);
@@ -81,7 +81,7 @@ bool FSVirtualTrackpad::postBuild()
     return true;
 }
 
-void FSVirtualTrackpad::drawThumb(const LLVector2 vec, bool isPinchThumb)
+void FSVirtualTrackpad::drawThumb(const LLVector3 vec, bool isPinchThumb)
 {
     LLUIImage *thumb = isPinchThumb ? mImgSunFront : mImgMoonFront;
 
@@ -125,13 +125,13 @@ void FSVirtualTrackpad::undoLastValue() { setValueAndCommit(mLastValue); }
 
 void FSVirtualTrackpad::undoLastSetPinchValue() { setPinchValueAndCommit(mLastValue); }
 
-void FSVirtualTrackpad::setValueAndCommit(const LLVector2 vec)
+void FSVirtualTrackpad::setValueAndCommit(const LLVector3 vec)
 {
     mValue.set(vec);
     onCommit();
 }
 
-void FSVirtualTrackpad::setPinchValueAndCommit(const LLVector2 vec)
+void FSVirtualTrackpad::setPinchValueAndCommit(const LLVector3 vec)
 {
     mPinchValue.set(vec);
     onCommit();
@@ -146,24 +146,28 @@ bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
     if (!hasMouseCapture())
         return true;
 
-    bool slowMode = mask == MASK_CONTROL;
-
     LLRect rect = mTouchArea->getRect();
     rect.clampPointToRect(x, y);
 
     if (doingPinchMode)
-        mPinchValue.set(x, y);
+    {
+        mPinchValue.mV[VX] = x;
+        mPinchValue.mV[VY] = y;
+    }
     else
-        mValue.set(x, y);
+    {
+        mValue.mV[VX] = x;
+        mValue.mV[VY] = y;
+    }
 
     onCommit();
 
     return true;
 }
 
-LLVector2 FSVirtualTrackpad::normalizePixelPosToCenter(LLVector2 pixelPos) const
+LLVector3 FSVirtualTrackpad::normalizePixelPosToCenter(LLVector3 pixelPos) const
 {
-    LLVector2 result;
+    LLVector3 result;
     if (!mTouchArea)
         return result;
 
@@ -175,13 +179,14 @@ LLVector2 FSVirtualTrackpad::normalizePixelPosToCenter(LLVector2 pixelPos) const
 
     result.mV[VX] = (pixelPos.mV[VX] - centerX) / width * 2;
     result.mV[VY] = (pixelPos.mV[VY] - centerY) / height * 2;
+    result.mV[VZ] = pixelPos.mV[VZ];
 
     return result;
 }
 
-LLVector2 FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y)
+LLVector3 FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y)
 {
-    LLVector2 result;
+    LLVector3 result;
     if (!mTouchArea)
         return result;
 
@@ -191,8 +196,8 @@ LLVector2 FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y)
     S32    width   = rect.getWidth();
     S32    height  = rect.getHeight();
 
-    result.mV[VX] = (centerX + x * width / 2);
-    result.mV[VY] = (centerY + y * height / 2);
+    result.mV[VX] = (centerX + llclamp(x, -1, 1) * width / 2);
+    result.mV[VY] = (centerY + llclamp(y, -1, 1) * height / 2);
 
     return result;
 }
@@ -215,6 +220,7 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
     if (isPointInTouchArea(x, y))
     {
         mLastValue.set(mValue);
+        mLastValue.mV[VZ] = 0;
         gFocusMgr.setMouseCapture(this);
 
         make_ui_sound("UISndClick");
@@ -232,6 +238,7 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
     if (isPointInTouchArea(x, y))
     {
         mLastPinchValue.set(mPinchValue);
+        mLastPinchValue.mV[VZ] = 0;
         doingPinchMode = true;
         gFocusMgr.setMouseCapture(this);
 
@@ -241,3 +248,18 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
     return LLView::handleRightMouseDown(x, y, mask);
 }
 
+// pass wheel-clicks to third axis
+bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
+{
+    if (hasMouseCapture())
+    {
+        if (doingPinchMode)
+            mPinchValue.mV[VZ] += clicks;
+        else
+            mValue.mV[VZ] += clicks;
+
+        return true;
+    }
+    else
+        return LLUICtrl::handleScrollWheel(x, y, clicks);
+}

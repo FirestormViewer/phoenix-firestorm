@@ -55,6 +55,7 @@ public:
     virtual bool    handleMouseUp(S32 x, S32 y, MASK mask);
     virtual bool    handleMouseDown(S32 x, S32 y, MASK mask);
     virtual bool    handleRightMouseDown(S32 x, S32 y, MASK mask);
+    virtual bool    handleScrollWheel(S32 x, S32 y, S32 clicks);
 
     virtual void    draw();
 
@@ -89,12 +90,12 @@ protected:
     LLViewBorder*       mBorder;
 
 private:
-    void setValueAndCommit(const LLVector2 vec);
-    void setPinchValueAndCommit(const LLVector2 vec);
-    void drawThumb(LLVector2 vec, bool isPinchThumb);
+    void setValueAndCommit(const LLVector3 vec);
+    void setPinchValueAndCommit(const LLVector3 vec);
+    void drawThumb(LLVector3 vec, bool isPinchThumb);
     bool isPointInTouchArea(S32 x, S32 y) const;
-    LLVector2 normalizePixelPosToCenter(LLVector2 vec) const;
-    LLVector2 convertNormalizedToPixelPos(F32 x, F32 y);
+    LLVector3 normalizePixelPosToCenter(LLVector3 vec) const;
+    LLVector3 convertNormalizedToPixelPos(F32 x, F32 y);
 
     LLUIImage*     mImgMoonBack;
     LLUIImage*     mImgMoonFront;
@@ -112,10 +113,10 @@ private:
     /// </summary>
     bool doingPinchMode = false;
 
-    LLVector2      mValue;
-    LLVector2      mPinchValue;
-    LLVector2      mLastValue;
-    LLVector2      mLastPinchValue;
+    LLVector3      mValue;
+    LLVector3      mPinchValue;
+    LLVector3      mLastValue;
+    LLVector3      mLastPinchValue;
 };
 
 #endif
