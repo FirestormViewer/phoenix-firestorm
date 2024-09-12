@@ -60,6 +60,7 @@ static const std::string POSER_AVATAR_TRACKBALL_NAME   = "limb_rotation";
 static const std::string POSER_AVATAR_SLIDER_YAW_NAME  = "limb_yaw"; // turning your nose left or right
 static const std::string POSER_AVATAR_SLIDER_PITCH_NAME  = "limb_pitch"; // pointing your nose up or down
 static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ear touches your shoulder
+static const std::string POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY = "button_toggleTrackPadSensitivity";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_MIRROR = "button_toggleMirrorRotation";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_SYMPATH = "button_toggleSympatheticRotation";
 static const std::string POSER_AVATAR_SLIDER_POSX_NAME = "av_position_inout";
@@ -932,8 +933,27 @@ void FSFloaterPoser::onLimbTrackballChanged()
     yaw  = trackPadPos.mV[VX];
     pitch = trackPadPos.mV[VY];
 
-    yaw *= F_PI;
-    pitch *= F_PI;
+    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
+    if (!toggleSensitivityButton)
+    {
+        yaw *= F_PI;
+        pitch *= F_PI;
+    }
+    else
+    {
+        bool moreSensitive = toggleSensitivityButton->getValue();
+        if (moreSensitive)
+        {
+            yaw *= F_PI_BY_TWO;
+            pitch *= F_PI_BY_TWO;
+        }
+        else
+        {
+            yaw *= F_PI;
+            pitch *= F_PI;
+        }
+    }
+    
     roll = rollSlider->getValue().asReal();  // roll comes from its own slider
     roll *= DEG_TO_RAD;
 
@@ -967,8 +987,27 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     if (!trackBall)
         return;
 
-    yaw /= F_PI;
-    pitch /= F_PI;
+    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
+    if (!toggleSensitivityButton)
+    {
+        yaw /= F_PI;
+        pitch /= F_PI;
+    }
+    else
+    {
+        bool moreSensitive = toggleSensitivityButton->getValue();
+        if (moreSensitive)
+        {
+            yaw /= F_PI_BY_TWO;
+            pitch /= F_PI_BY_TWO;
+        }
+        else
+        {
+            yaw /= F_PI;
+            pitch /= F_PI;
+        }
+    }
+
     trackBall->setValue(yaw, pitch);
 }
 
