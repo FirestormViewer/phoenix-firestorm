@@ -957,6 +957,7 @@ void FSFloaterPoser::onLimbTrackballChanged()
     
     roll = rollSlider->getValue().asReal();  // roll starts from its own slider
     roll += rollClicks; // one click means 1 degree of change
+    rollSlider->setValue(roll);
     roll *= DEG_TO_RAD;
 
     setSelectedJointsRotation(yaw, pitch, roll);
@@ -965,7 +966,6 @@ void FSFloaterPoser::onLimbTrackballChanged()
     pitch *= RAD_TO_DEG;
     yawSlider->setValue(yaw);
     pitchSlider->setValue(pitch);
-    rollSlider->setValue(roll);
 }
 
 void FSFloaterPoser::onLimbYawPitchRollChanged()

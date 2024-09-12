@@ -78,8 +78,8 @@ public:
     /// <param name="y">The normalized y-axis value (ordinarily screen up-down), expected top-to-bottom range 1..-1</param>
     void            setPinchValue(F32 x, F32 y);
 
-    virtual LLSD    getValue() const;
-    virtual LLSD    getPinchValue() const;
+    virtual LLSD    getValue();
+    virtual LLSD    getPinchValue();
 
 protected:
     friend class LLUICtrlFactory;

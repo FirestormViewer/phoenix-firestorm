@@ -137,9 +137,21 @@ void FSVirtualTrackpad::setPinchValueAndCommit(const LLVector3 vec)
     onCommit();
 }
 
-LLSD FSVirtualTrackpad::getValue() const { return normalizePixelPosToCenter(mValue).getValue(); }
+LLSD FSVirtualTrackpad::getValue()
+{
+    LLSD result   = normalizePixelPosToCenter(mValue).getValue();
+    mValue.mV[VZ] = 0;
 
-LLSD FSVirtualTrackpad::getPinchValue() const { return normalizePixelPosToCenter(mPinchValue).getValue(); }
+    return result;
+}
+
+LLSD FSVirtualTrackpad::getPinchValue()
+{
+    LLSD result = normalizePixelPosToCenter(mPinchValue).getValue();
+    mPinchValue.mV[VZ] = 0;
+
+    return result;
+}
 
 bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
 {
@@ -219,8 +231,8 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     if (isPointInTouchArea(x, y))
     {
+        mValue.mV[VZ] = 0;
         mLastValue.set(mValue);
-        mLastValue.mV[VZ] = 0;
         gFocusMgr.setMouseCapture(this);
 
         make_ui_sound("UISndClick");
@@ -237,8 +249,8 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
     if (isPointInTouchArea(x, y))
     {
+        mPinchValue.mV[VZ] = 0;
         mLastPinchValue.set(mPinchValue);
-        mLastPinchValue.mV[VZ] = 0;
         doingPinchMode = true;
         gFocusMgr.setMouseCapture(this);
 
@@ -254,9 +266,9 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
     if (hasMouseCapture())
     {
         if (doingPinchMode)
-            mPinchValue.mV[VZ] += clicks;
+            mPinchValue.mV[VZ] = clicks;
         else
-            mValue.mV[VZ] += clicks;
+            mValue.mV[VZ] = clicks;
 
         return true;
     }
