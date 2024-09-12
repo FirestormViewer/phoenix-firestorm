@@ -5296,6 +5296,9 @@ Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'a
 	<notification name="GLTFUploadInProgress">
 		Il caricamento è attualmente in corso. Riprova più tardi.
 	</notification>
+	<notification name="NoSupportGLTFShader">
+		Le scene GLTF non sono ancora supportate dalla tua scheda grafica.
+	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Stai per abilitare AutoFPS. Tutte le impostazioni grafiche non salvate andranno perse.
 
