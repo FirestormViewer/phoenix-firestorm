@@ -693,7 +693,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
     // <FS:Zi> Add avatar hitbox debug
     static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
-    if (render_hitbox && pass == 2 && mAvatar && !mAvatar->isControlAvatar())
+    if (render_hitbox && pass == 2 && (single_avatar || mAvatar) && !mAvatar->isControlAvatar())
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("render_hitbox");
 
@@ -784,14 +784,14 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("Find avatarp"); // <FS:Beq/> Tracy markup
         const LLFace *facep = mDrawFace[0];
-        if (!facep->getDrawable())
+        if (!facep || !facep->getDrawable()) // <FS:Beq/> trap possible null dereference
         {
             return;
         }
         avatarp = (LLVOAvatar *)facep->getDrawable()->getVObj().get();
     }
 
-    if (avatarp->isDead() || avatarp->mDrawable.isNull())
+    if (!avatarp || avatarp->isDead() || avatarp->mDrawable.isNull()) // <FS:Beq/> trap possible null dereference
     {
         return;
     }
