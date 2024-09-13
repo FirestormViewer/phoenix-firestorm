@@ -538,9 +538,9 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
     mesh_scale *= normalized_transformation;
     normalized_transformation = mesh_scale;
 
-    glh::matrix4f inv_mat((F32*)normalized_transformation.mMatrix);
-    inv_mat = inv_mat.inverse();
-    LLMatrix4 inverse_normalized_transformation(inv_mat.m);
+    glm::mat4 inv_mat = glm::make_mat4((F32*)normalized_transformation.mMatrix);
+    inv_mat = glm::inverse(inv_mat);
+    LLMatrix4 inverse_normalized_transformation(glm::value_ptr(inv_mat));
 
     // bind shape matrix
     domSkin::domBind_shape_matrix* skin_current_bind_matrix = current_skin->getBind_shape_matrix();

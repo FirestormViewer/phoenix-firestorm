@@ -2,6 +2,7 @@
 <strings>
 	<string name="MicrosoftLocale">french</string>
 	<string name="MacLocale">fr_FR.UTF-8</string>
+	<string name="macOSLocale">fr_FR.UTF-8</string>
 	<string name="DarwinLocale">fr_FR.UTF-8</string>
 	<string name="LinuxLocale">fr_FR.UTF-8</string>
 	<string name="TimeHour">hour,datetime,slt</string>

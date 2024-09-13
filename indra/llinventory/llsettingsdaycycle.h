@@ -82,9 +82,10 @@ public:
 
     bool                        initialize(bool validate_frames = false);
 
-    virtual ptr_t               buildClone() const = 0;
-    virtual ptr_t               buildDeepCloneAndUncompress() const = 0;
-    virtual LLSD                getSettings() const SETTINGS_OVERRIDE;
+    virtual ptr_t               buildClone() = 0;
+    virtual ptr_t               buildDeepCloneAndUncompress() = 0;
+    virtual LLSD&               getSettings() SETTINGS_OVERRIDE;
+    virtual void                setLLSDDirty() override;
     virtual LLSettingsType::type_e  getSettingsTypeValue() const SETTINGS_OVERRIDE { return LLSettingsType::ST_DAYCYCLE; }
 
 
@@ -92,7 +93,7 @@ public:
     virtual std::string         getSettingsType() const SETTINGS_OVERRIDE { return std::string("daycycle"); }
 
     // Settings status
-    virtual void                blend(const LLSettingsBase::ptr_t &other, F64 mix) SETTINGS_OVERRIDE;
+    virtual void                blend(LLSettingsBase::ptr_t &other, F64 mix) SETTINGS_OVERRIDE;
 
     static LLSD                 defaults();
 
@@ -128,7 +129,7 @@ public:
     virtual validation_list_t   getValidationList() const SETTINGS_OVERRIDE;
     static validation_list_t    validationList();
 
-    virtual LLSettingsBase::ptr_t buildDerivedClone() const SETTINGS_OVERRIDE { return buildClone(); }
+    virtual LLSettingsBase::ptr_t buildDerivedClone() SETTINGS_OVERRIDE { return buildClone(); }
 
     LLSettingsBase::TrackPosition getUpperBoundFrame(S32 track, const LLSettingsBase::TrackPosition& keyframe);
     LLSettingsBase::TrackPosition getLowerBoundFrame(S32 track, const LLSettingsBase::TrackPosition& keyframe);
@@ -144,6 +145,7 @@ protected:
 
 private:
     CycleList_t                 mDayTracks;
+    LLSD                        mDaySettings;
 
     LLSettingsBase::Seconds     mLastUpdateTime;
 
