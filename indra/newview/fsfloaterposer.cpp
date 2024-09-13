@@ -1185,6 +1185,7 @@ void FSFloaterPoser::onAvatarsSelect()
     bool arePosingSelected = _poserAnimator.isPosingAvatar(avatar);
     startStopButton->setValue(arePosingSelected);
     poseControlsEnable(arePosingSelected);
+    refreshTextEmbiggeningOnAllScrollLists();
 }
 
 void FSFloaterPoser::onAvatarsRefresh()
@@ -1223,9 +1224,6 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][3]["value"]  = false;
         LLScrollListItem *item      = avatarScrollList->addElement(row);
         item->setUserdata(avatar);
-
-        if (_poserAnimator.isPosingAvatar(avatar))
-            ((LLScrollListText *) item->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
     }
 
     // Add Animesh avatars
@@ -1247,11 +1245,50 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][3]["value"]  = true;
         LLScrollListItem *item      = avatarScrollList->addElement(row);
         item->setUserdata(avatar);
-
-        if (_poserAnimator.isPosingAvatar(avatar))
-            ((LLScrollListText *) item->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
     }
 
     avatarScrollList->selectByValue(selectedName);
     avatarScrollList->updateLayout();
+    refreshTextEmbiggeningOnAllScrollLists();
+}
+
+void FSFloaterPoser::refreshTextEmbiggeningOnAllScrollLists()
+{
+    LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
+    if (scrollList)
+    {
+        // the avatars
+        for (auto listItem : scrollList->getAllData())
+        {
+            LLVOAvatar *listAvatar = (LLVOAvatar *) listItem->getUserdata();
+            if (_poserAnimator.isPosingAvatar(listAvatar))
+                ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
+        }
+    }
+    
+    LLVOAvatar *avatar = getUiSelectedAvatar();
+    addBoldToScrollList(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME, avatar);
+    addBoldToScrollList(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME, avatar);
+    addBoldToScrollList(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME, avatar);
+    addBoldToScrollList(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME, avatar);
+}
+
+void FSFloaterPoser::addBoldToScrollList(std::string listName, LLVOAvatar *avatar)
+{
+    if (!avatar)
+        return;
+
+    LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(listName);
+    if (!scrollList)
+        return;
+
+    for (auto listItem : scrollList->getAllData())
+    {
+        FSPoserAnimator::FSPoserJoint *userData = (FSPoserAnimator::FSPoserJoint *) listItem->getUserdata();
+        if (userData)
+        {
+            if (_poserAnimator.isPosingAvatarJoint(avatar, *userData))
+                ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
+        }
+    }
 }

@@ -203,6 +203,12 @@ class FSFloaterPoser : public LLFloater
     /// <param name="jointName"></param>
     /// <returns></returns>
     S32                   FSFloaterPoser::getJointNegation(std::string jointName);
+
+    /// <summary>
+    /// The smallest text embiggens the noble selection.
+    /// </summary>
+    void refreshTextEmbiggeningOnAllScrollLists();
+    void addBoldToScrollList(std::string listName, LLVOAvatar *avatar);
 };
 
 #endif
