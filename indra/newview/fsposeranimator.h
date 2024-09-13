@@ -32,8 +32,6 @@
 #include "v3dmath.h"
 #include "llcontrolavatar.h"
 
-#define MIN_REQUIRED_PIXEL_AREA_POSING 500.f;
-
 /// <summary>
 /// Describes how we will cluster the joints/bones/thingos.
 /// Each joint/bone/thingo should have one of these, <see:"FSPoserAnimator.PoserJoints"/>.
@@ -71,6 +69,15 @@ typedef enum E_BoneAxisTranslation
     SWAP_YAW_AND_PITCH  = 2,
     SWAP_ROLL_AND_PITCH = 3,
 } E_BoneAxisTranslation;
+
+typedef enum E_BoneAxisNegation
+{
+    NEGATE_NOTHING = 0,
+    NEGATE_YAW     = 1,
+    NEGATE_PITCH   = 2,
+    NEGATE_ROLL    = 4,
+    NEGATE_ALL     = 8,
+} E_BoneAxisNegation;
 
 class FSPoserAnimator
 {
@@ -120,11 +127,6 @@ public:
             _boneList        = c;
         }
     };
-
-    /// <summary>
-    /// Unsure if needed or why it is special. Perhaps its a low-priority animation?
-    /// </summary>
-    const LLUUID ANIM_BD_POSING_MOTION = LLUUID("fd29b117-9429-09c4-10cb-933d0b2ab653");
 
     /// <summary>
     /// An ordered list of poser joints, clustered by body-area.
@@ -253,7 +255,7 @@ public:
     /// <param name="joint">The joint to determine the rotation for.</param>
     /// <param name="translation">The joint to determine the rotation for.</param>
     /// <returns>The rotation of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation);
+    LLVector3 getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
@@ -263,7 +265,8 @@ public:
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
-    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style, E_BoneAxisTranslation translation);
+    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
+                          E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
     /// Gets the scale of a joint for the supplied avatar.
@@ -292,7 +295,7 @@ public:
     /// <param name="translation">The axis translation to perform.</param>
     /// <param name="rotation">The rotation to transform to quaternion.</param>
     /// <returns>The rotation quaternion.</returns>
-    LLQuaternion translateRotationToQuaternion(E_BoneAxisTranslation translation, LLVector3 rotation);
+    LLQuaternion translateRotationToQuaternion(E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation);
 
     /// <summary>
     /// Translates a bone-rotation quaternion to a vector usable easily on the UI.
@@ -300,64 +303,7 @@ public:
     /// <param name="translation">The axis translation to perform.</param>
     /// <param name="rotation">The rotation to transform to matrix.</param>
     /// <returns>The rotation vector.</returns>
-    LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, LLQuaternion rotation);
-
-    //  public:
-//    static LLMotion *create(const LLUUID &id) { return new FSPoserAnimator(id); }
-
-//public:
-//    // motions must specify whether or not they loop
-//    virtual bool getLoop() { return TRUE; }
-//
-//    // motions must report their total duration
-//    virtual F32 getDuration() { return 0.0; }
-//
-//    // motions must report their "ease in" duration
-//    virtual F32 getEaseInDuration() { return 0.0f; }
-//
-//    // motions must report their "ease out" duration.
-//    virtual F32 getEaseOutDuration() { return 0.5f; }
-//
-//    // motions must report their priority
-//    virtual LLJoint::JointPriority getPriority() { return LLJoint::ADDITIVE_PRIORITY; }
-//
-//    virtual LLMotionBlendType getBlendType() { return NORMAL_BLEND; }
-//
-//    // called to determine when a motion should be activated/deactivated based on avatar pixel coverage
-//    virtual F32 getMinPixelArea() { return MIN_REQUIRED_PIXEL_AREA_POSING; }
-//
-//    // run-time (post constructor) initialization,
-//    // called after parameters have been set
-//    // must return true to indicate success and be available for activation
-//    virtual LLMotionInitStatus onInitialize(LLCharacter *character);
-//
-//    // called when a motion is activated
-//    // must return TRUE to indicate success, or else
-//    // it will be deactivated
-//    virtual bool onActivate();
-//
-//    // called per time step
-//    // must return TRUE while it is active, and
-//    // must return FALSE when the motion is completed.
-//    virtual bool onUpdate(F32 time, U8 *joint_mask);
-//
-//    // called when a motion is deactivated
-//    virtual void onDeactivate();
-//
-//    void addJointToState(LLJoint *joint);
-//
-//public:
-//    //-------------------------------------------------------------------------
-//    // Joint States
-//    //-------------------------------------------------------------------------
-//    LLCharacter         *mCharacter;
-//
-//    LLPointer<LLJointState> mJointState[134];
-//
-//    //-------------------------------------------------------------------------
-//    // Joints
-//    //-------------------------------------------------------------------------
-//    LLJoint*            mTargetJoint;
+    LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation);
 };
 
 #endif // LL_FSPoserAnimator_H

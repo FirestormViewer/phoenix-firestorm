@@ -12,8 +12,18 @@ width="565">
 
     <!-- Provides for axis-swapping per joint for slider/trackpad control -->
     <!-- Begins with joint_transform_ then has an internal joint name, the a swap choice of: SWAP_NOTHING, SWAP_YAW_AND_ROLL, SWAP_YAW_AND_PITCH or SWAP_ROLL_AND_PITCH -->
-    <string	name="joint_transform_mTorso" translate="false">SWAP_YAW_AND_ROLL</string>
-    <string	name="joint_transform_mChest" translate="false">SWAP_YAW_AND_ROLL</string>
+    <!-- You may also add NEGATE_YAW NEGATE_PITCH NEGATE_ROLL and/or NEGATE_ALL to 'flip' the behaviour of the axes (so the trackpad up is down etc.)-->
+    <!-- These values are all CaSe SeNsiTiVe!! (use all caps) -->
+    <string	name="joint_transform_mPelvis" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTorso" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mChest" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mNeck" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mHead" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mElbowLeft" translate="false">SWAP_ROLL_AND_PITCH</string>
+    <string	name="joint_transform_mElbowRight" translate="false">SWAP_YAW_AND_ROLL</string>
+    <string	name="joint_transform_mFaceJaw" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mEyeRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mEyeLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	
     <!-- A matching bone name with the 'header_' prefix produces a sub-heading -->
     <string	name="header_mTorso" translate="false">Body</string>

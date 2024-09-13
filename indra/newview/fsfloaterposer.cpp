@@ -331,7 +331,7 @@ bool FSFloaterPoser::savePoseToXml(std::string poseFileName)
         {
             std::string  bone_name = pj.jointName();
 
-            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, getJointTranslation(bone_name));
+            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, getJointTranslation(bone_name), getJointNegation(bone_name));
 
             record[bone_name]     = pj.jointName();   
             record[bone_name]["rotation"] = vec3.getValue();
@@ -462,7 +462,7 @@ void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, getJointTranslation(name));
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, getJointTranslation(name), getJointNegation(name)); // I think if we keep defaults it will load BD poses
                 }
 
                 if (loadPositions && control_map.has("position"))
@@ -1044,7 +1044,8 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     LLVector3              vec3 = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
 
     for (auto item : getUiSelectedPoserJoints())
-        _poserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()));
+        _poserAnimator
+            .setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()), getJointNegation(item->jointName()));
 }
 
 void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
@@ -1076,7 +1077,7 @@ void FSFloaterPoser::onJointSelect()
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
-    LLVector3 rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(selectedJoints.front()->jointName()));
+    LLVector3 rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(selectedJoints.front()->jointName()), getJointNegation(selectedJoints.front()->jointName()));
     F32       yaw      = rotation.mV[VX];
     F32       pitch    = rotation.mV[VY];
     F32       roll     = rotation.mV[VZ];
@@ -1107,16 +1108,39 @@ E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)
 
     std::string paramValue = getString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
 
-    if (boost::iequals(paramValue, "SWAP_NOTHING"))
-        return SWAP_NOTHING;
-    else if (boost::iequals(paramValue, "SWAP_YAW_AND_ROLL"))
+    if (strstr(paramValue.c_str(), "SWAP_YAW_AND_ROLL"))
         return SWAP_YAW_AND_ROLL;
-    else if (boost::iequals(paramValue, "SWAP_YAW_AND_PITCH"))
+    else if (strstr(paramValue.c_str(), "SWAP_YAW_AND_PITCH"))
         return SWAP_YAW_AND_PITCH;
-    else if (boost::iequals(paramValue, "SWAP_ROLL_AND_PITCH"))
+    else if (strstr(paramValue.c_str(), "SWAP_ROLL_AND_PITCH"))
         return SWAP_ROLL_AND_PITCH;
     else
         return SWAP_NOTHING;
+}
+
+S32 FSFloaterPoser::getJointNegation(std::string jointName)
+{
+    S32 result = NEGATE_NOTHING;
+
+    if (jointName.empty())
+        return result;
+
+    bool hasTransformParameter = hasString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+    if (!hasTransformParameter)
+        return result;
+
+    std::string paramValue = getString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+
+    if (strstr(paramValue.c_str(), "NEGATE_YAW"))
+        result |= NEGATE_YAW;
+    if (strstr(paramValue.c_str(), "NEGATE_PITCH"))
+        result |= NEGATE_PITCH;
+    if (strstr(paramValue.c_str(), "NEGATE_ROLL"))
+        result |= NEGATE_ROLL;
+    if (strstr(paramValue.c_str(), "NEGATE_ALL"))
+        return NEGATE_ALL;
+
+    return result;
 }
 
 /// <summary>

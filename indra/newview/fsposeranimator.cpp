@@ -84,7 +84,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
         return;
 }
 
-LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation)
+LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation)
 {
     // this needs to do this, to be compatible in some part with BD poses
     // LLQuaternion rot = _poserAnimator.getJointRotation(avatar, pj);
@@ -100,11 +100,12 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
 
     LLQuaternion rot = avJoint->getRotation();
     
-    return translateRotationFromQuaternion(translation, rot);
+    return translateRotationFromQuaternion(translation, negation, rot);
 }
 
 // from the bone to the UI; this is the 'forwards' use of the enum
-LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, LLQuaternion rotation)
+LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation,
+                                                           LLQuaternion rotation)
 {
     LLVector3 vec3;
 
@@ -128,10 +129,27 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
             break;
     }
 
+    if (negation & NEGATE_ALL)
+    {
+        vec3.mV[VX] *= -1;
+        vec3.mV[VY] *= -1;
+        vec3.mV[VZ] *= -1;
+    }
+    else
+    {
+        if (negation & NEGATE_YAW)
+            vec3.mV[VX] *= -1;
+        if (negation & NEGATE_PITCH)
+            vec3.mV[VY] *= -1;
+        if (negation & NEGATE_ROLL)
+            vec3.mV[VZ] *= -1;
+    }
+
     return vec3;
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style, E_BoneAxisTranslation translation)
+void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
+                                       E_BoneAxisTranslation translation, S32 negation)
 {
     if (!avatar || avatar->isDead())
         return;
@@ -147,13 +165,30 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
 }
 
 // from the UI to the bone, the inverse translation, the un-swap, the backwards
-LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslation translation, LLVector3 rotation)
+LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslation translation, S32 negation,
+                                                            LLVector3 rotation)
 {
+    if (negation & NEGATE_ALL)
+    {
+        rotation.mV[VX] *= -1;
+        rotation.mV[VY] *= -1;
+        rotation.mV[VZ] *= -1;
+    }
+    else
+    {
+        if (negation & NEGATE_YAW)
+            rotation.mV[VX] *= -1;
+        if (negation & NEGATE_PITCH)
+            rotation.mV[VY] *= -1;
+        if (negation & NEGATE_ROLL)
+            rotation.mV[VZ] *= -1;
+    }
+
     LLMatrix3    rot_mat;
     switch (translation)
     {
         case SWAP_YAW_AND_ROLL:
-            rot_mat = LLMatrix3(rotation.mV[VZ], rotation.mV[VY], -1 * rotation.mV[VX]);
+            rot_mat = LLMatrix3(rotation.mV[VZ], rotation.mV[VY], rotation.mV[VX]);
             break;
 
         case SWAP_YAW_AND_PITCH:
