@@ -115,7 +115,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!avJoint)
         return;
 
-    LLQuaternion rot_quat = translateRotationToQuaternion(translation, rotation);
+    LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
     avJoint->setRotation(rot_quat);
 }
 
