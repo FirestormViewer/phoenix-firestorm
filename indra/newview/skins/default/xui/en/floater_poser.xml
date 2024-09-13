@@ -11,19 +11,36 @@ width="565">
     <string	name="icon_object" translate="false">Inv_Object</string>
 
     <!-- Provides for axis-swapping per joint for slider/trackpad control -->
-    <!-- Begins with joint_transform_ then has an internal joint name, the a swap choice of: SWAP_NOTHING, SWAP_YAW_AND_ROLL, SWAP_YAW_AND_PITCH or SWAP_ROLL_AND_PITCH -->
-    <!-- You may also add NEGATE_YAW NEGATE_PITCH NEGATE_ROLL and/or NEGATE_ALL to 'flip' the behaviour of the axes (so the trackpad up is down etc.)-->
-    <!-- These values are all CaSe SeNsiTiVe!! (use all caps) -->
+    <!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
+			SWAP_NOTHING, SWAP_YAW_AND_ROLL, SWAP_YAW_AND_PITCH , SWAP_ROLL_AND_PITCH, SWAP_X2Y_Y2Z_Z2X, SWAP_X2Z_Y2X_Z2Y -->
+    <!-- You may also add any number of NEGATE_YAW NEGATE_PITCH NEGATE_ROLL and/or NEGATE_ALL to 'flip' the behaviour of the axes (so the trackpad up is down left is right etc.)-->
+    <!-- These values are all CaSe SeNsiTiVe!! (use all caps plz or you get default behaviour) -->
     <string	name="joint_transform_mPelvis" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mTorso" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mChest" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mNeck" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mHead" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
-    <string	name="joint_transform_mElbowLeft" translate="false">SWAP_ROLL_AND_PITCH</string>
-    <string	name="joint_transform_mElbowRight" translate="false">SWAP_YAW_AND_ROLL</string>
+    <string	name="joint_transform_mCollarLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mShoulderLeft" translate="false">SWAP_ROLL_AND_PITCH NEGATE_ROLL</string>
+    <string	name="joint_transform_mShoulderRight" translate="false">SWAP_ROLL_AND_PITCH NEGATE_ROLL</string>
+    <string	name="joint_transform_mElbowLeft" translate="false">SWAP_X2Y_Y2Z_Z2X NEGATE_PITCH NEGATE_YAW</string>
+    <string	name="joint_transform_mWristLeft" translate="false">SWAP_NOTHING</string>
+    <string	name="joint_transform_mElbowRight" translate="false">SWAP_X2Y_Y2Z_Z2X</string>
     <string	name="joint_transform_mFaceJaw" translate="false">NEGATE_PITCH</string>
     <string	name="joint_transform_mEyeRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mEyeLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mHipLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mKneeLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mHipRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mKneeRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipCornerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipUpperCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipLowerCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidUpperLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidUpperRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidLowerLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidLowerRight" translate="false">NEGATE_PITCH</string>
 	
     <!-- A matching bone name with the 'header_' prefix produces a sub-heading -->
     <string	name="header_mTorso" translate="false">Body</string>
@@ -90,8 +107,8 @@ width="565">
     <string	name="title_mFaceEyecornerInnerRight" translate="false">Eye corner Inner Right</string>
     <string	name="title_mFaceNoseBridge" translate="false">Nose Bridge</string>
     <string	name="title_mCollarLeft" translate="false">Collar</string>
-    <string	name="title_mShoulderLeft" translate="false">Shoulder</string>
-    <string	name="title_mElbowLeft" translate="false">Elbow</string>
+    <string	name="title_mShoulderLeft" translate="false">Whole Arm</string>
+    <string	name="title_mElbowLeft" translate="false">Forearm</string>
     <string	name="title_mWristLeft" translate="false">Wrist</string>
     <string	name="title_mHandMiddle1Left" translate="false">Middle Finger Base</string>
     <string	name="title_mHandMiddle2Left" translate="false">Middle Finger Mid</string>
@@ -109,8 +126,8 @@ width="565">
     <string	name="title_mHandThumb2Left" translate="false">Thumb Mid</string>
     <string	name="title_mHandThumb3Left" translate="false">Thumb Tip</string>
     <string	name="title_mCollarRight" translate="false">Collar Bone</string>
-    <string	name="title_mShoulderRight" translate="false">Shoulder</string>
-    <string	name="title_mElbowRight" translate="false">Elbow</string>
+    <string	name="title_mShoulderRight" translate="false">Whole Arm</string>
+    <string	name="title_mElbowRight" translate="false">Forearm</string>
     <string	name="title_mWristRight" translate="false">Wrist</string>
     <string	name="title_mHandMiddle1Right" translate="false">Middle Finger Base</string>
     <string	name="title_mHandMiddle2Right" translate="false">Middle Finger Mid</string>

@@ -68,6 +68,8 @@ typedef enum E_BoneAxisTranslation
     SWAP_YAW_AND_ROLL   = 1,
     SWAP_YAW_AND_PITCH  = 2,
     SWAP_ROLL_AND_PITCH = 3,
+    SWAP_X2Y_Y2Z_Z2X    = 4,
+    SWAP_X2Z_Y2X_Z2Y    = 5,
 } E_BoneAxisTranslation;
 
 typedef enum E_BoneAxisNegation

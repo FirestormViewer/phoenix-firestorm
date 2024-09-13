@@ -154,6 +154,14 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslatio
             rot_mat = LLMatrix3(rotation.mV[VX], rotation.mV[VZ], rotation.mV[VY]);
             break;
 
+        case SWAP_X2Y_Y2Z_Z2X:
+            rot_mat = LLMatrix3(rotation.mV[VZ], rotation.mV[VX], rotation.mV[VY]);
+            break;
+
+        case SWAP_X2Z_Y2X_Z2Y:
+            rot_mat = LLMatrix3(rotation.mV[VY], rotation.mV[VZ], rotation.mV[VX]);
+            break;
+
         case SWAP_NOTHING:
         default:
             rot_mat = LLMatrix3(rotation.mV[VX], rotation.mV[VY], rotation.mV[VZ]);
@@ -183,6 +191,14 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
 
         case SWAP_ROLL_AND_PITCH:
             rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VZ], &vec3.mV[VY]);
+            break;
+
+        case SWAP_X2Y_Y2Z_Z2X:
+            rotation.getEulerAngles(&vec3.mV[VZ], &vec3.mV[VX], &vec3.mV[VY]);
+            break;
+
+        case SWAP_X2Z_Y2X_Z2Y:
+            rotation.getEulerAngles(&vec3.mV[VY], &vec3.mV[VZ], &vec3.mV[VX]);
             break;
 
         case SWAP_NOTHING:

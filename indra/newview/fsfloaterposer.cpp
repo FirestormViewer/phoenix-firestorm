@@ -1133,6 +1133,10 @@ E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)
         return SWAP_YAW_AND_PITCH;
     else if (strstr(paramValue.c_str(), "SWAP_ROLL_AND_PITCH"))
         return SWAP_ROLL_AND_PITCH;
+    else if (strstr(paramValue.c_str(), "SWAP_X2Y_Y2Z_Z2X"))
+        return SWAP_X2Y_Y2Z_Z2X;
+    else if (strstr(paramValue.c_str(), "SWAP_X2Z_Y2X_Z2Y"))
+        return SWAP_X2Z_Y2X_Z2Y;
     else
         return SWAP_NOTHING;
 }
