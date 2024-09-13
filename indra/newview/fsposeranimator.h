@@ -148,8 +148,8 @@ public:
 
         // face
         {"mFaceForeheadLeft", "mFaceForeheadRight", FACE}, {"mFaceForeheadCenter", "", FACE},  {"mFaceForeheadRight", "mFaceForeheadLeft", FACE},
-        {"mFaceEyeBrowOuterLeft", "mFaceEyeBrowOuterRight", FACE}, {"mFaceEyeBrowCenterLeft", "mFaceEyeBrowCenterRight", FACE},  {"mFaceEyeBrowInnerLeft", "mFaceEyeBrowInnerRight", FACE},
-        {"mFaceEyeBrowOuterRight", "mFaceEyeBrowOuterLeft", FACE}, {"mFaceEyeBrowCenterRight", "mFaceEyeBrowCenterLeft", FACE},  {"mFaceEyeBrowInnerRight", "mFaceEyeBrowInnerLeft", FACE},
+        {"mFaceEyebrowOuterLeft", "mFaceEyebrowOuterRight", FACE}, {"mFaceEyebrowCenterLeft", "mFaceEyebrowCenterRight", FACE},  {"mFaceEyebrowInnerLeft", "mFaceEyebrowInnerRight", FACE},
+        {"mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE}, {"mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE},  {"mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE},
 
         {"mEyeLeft", "mEyeRight", FACE}, {"mEyeRight", "mEyeLeft", FACE},
         {"mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE}, {"mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE}, {"mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE}, {"mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE},
