@@ -83,7 +83,11 @@ bool FSVirtualTrackpad::postBuild()
 
 void FSVirtualTrackpad::drawThumb(const LLVector3 vec, bool isPinchThumb)
 {
-    LLUIImage *thumb = isPinchThumb ? mImgSunFront : mImgMoonFront;
+    LLUIImage *thumb;
+    if (mTouchArea->isInEnabledChain())
+        thumb = isPinchThumb ? mImgSunFront : mImgMoonFront;
+    else
+        thumb = isPinchThumb ? mImgSunBack : mImgMoonBack;
 
     thumb->draw(LLRect(vec.mV[VX] - thumb->getWidth() / 2,
                        vec.mV[VY] + thumb->getHeight() / 2,
