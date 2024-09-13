@@ -1093,8 +1093,27 @@ void FSFloaterPoser::onJointSelect()
     rollSlider->setValue(roll *= RAD_TO_DEG);
 
     FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
-    if (trackBall)
-        trackBall->setValue(yaw /= 180, pitch /= 180);
+    if (!trackBall)
+        return;
+
+    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
+    if (!toggleSensitivityButton)
+    {
+        if (trackBall)
+            trackBall->setValue(yaw /= 180, pitch /= 180);
+    }
+    else
+    {
+        bool moreSensitive = toggleSensitivityButton->getValue();
+        if (moreSensitive)
+        {
+            trackBall->setValue(yaw /= 90, pitch /= 90);
+        }
+        else
+        {
+            trackBall->setValue(yaw /= 180, pitch /= 180);
+        }
+    }
 }
 
 E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)

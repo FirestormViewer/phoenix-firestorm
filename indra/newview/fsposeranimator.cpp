@@ -74,7 +74,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!joint)
         return;
 
-    std::string jn      = joint->jointName();
+    std::string jn = joint->jointName();
     if (jn.empty())
         return;
 
@@ -101,51 +101,6 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
     LLQuaternion rot = avJoint->getRotation();
     
     return translateRotationFromQuaternion(translation, negation, rot);
-}
-
-// from the bone to the UI; this is the 'forwards' use of the enum
-LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation,
-                                                           LLQuaternion rotation)
-{
-    LLVector3 vec3;
-
-    switch (translation)
-    {
-        case SWAP_YAW_AND_ROLL:
-            rotation.getEulerAngles(&vec3.mV[VY], &vec3.mV[VZ], &vec3.mV[VX]);
-            break;
-
-        case SWAP_YAW_AND_PITCH:
-            rotation.getEulerAngles(&vec3.mV[VZ], &vec3.mV[VX], &vec3.mV[VY]);
-            break;
-
-        case SWAP_ROLL_AND_PITCH:
-            rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VY], &vec3.mV[VZ]);
-            break;
-
-        case SWAP_NOTHING:
-        default:
-            rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VZ], &vec3.mV[VY]);
-            break;
-    }
-
-    if (negation & NEGATE_ALL)
-    {
-        vec3.mV[VX] *= -1;
-        vec3.mV[VY] *= -1;
-        vec3.mV[VZ] *= -1;
-    }
-    else
-    {
-        if (negation & NEGATE_YAW)
-            vec3.mV[VX] *= -1;
-        if (negation & NEGATE_PITCH)
-            vec3.mV[VY] *= -1;
-        if (negation & NEGATE_ROLL)
-            vec3.mV[VZ] *= -1;
-    }
-
-    return vec3;
 }
 
 void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
@@ -209,6 +164,50 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslatio
     rot_quat = LLQuaternion(rot_mat) * rot_quat;
 
     return rot_quat;
+}
+
+// from the bone to the UI; this is the 'forwards' use of the enum
+LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation)
+{
+    LLVector3 vec3;
+
+    switch (translation)
+    {
+        case SWAP_YAW_AND_ROLL:
+            rotation.getEulerAngles(&vec3.mV[VZ], &vec3.mV[VY], &vec3.mV[VX]);
+            break;
+
+        case SWAP_YAW_AND_PITCH:
+            rotation.getEulerAngles(&vec3.mV[VY], &vec3.mV[VX], &vec3.mV[VZ]);
+            break;
+
+        case SWAP_ROLL_AND_PITCH:
+            rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VZ], &vec3.mV[VY]);
+            break;
+
+        case SWAP_NOTHING:
+        default:
+            rotation.getEulerAngles(&vec3.mV[VX], &vec3.mV[VY], &vec3.mV[VZ]);
+            break;
+    }
+
+    if (negation & NEGATE_ALL)
+    {
+        vec3.mV[VX] *= -1;
+        vec3.mV[VY] *= -1;
+        vec3.mV[VZ] *= -1;
+    }
+    else
+    {
+        if (negation & NEGATE_YAW)
+            vec3.mV[VX] *= -1;
+        if (negation & NEGATE_PITCH)
+            vec3.mV[VY] *= -1;
+        if (negation & NEGATE_ROLL)
+            vec3.mV[VZ] *= -1;
+    }
+
+    return vec3;
 }
 
 LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
