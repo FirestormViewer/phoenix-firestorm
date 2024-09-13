@@ -33,29 +33,19 @@
 
 /* linden headers */
 #include "llviewercontrol.h" // for gSavedSettings
-#include "llmodelloader.h"
+#include <llmodelloader.h>
 #include "llvoavatarself.h"
-#include "lldaeloader.h" // for preProcessDAE
-#include "llerror.h"
+#include <lldaeloader.h> // for preProcessDAE
+#include <llerror.h>
 
 /* dae headers*/
-#if LL_MSVC
-#pragma warning (disable : 4263)
-#pragma warning (disable : 4264)
-#endif
-
-#include "dae.h"
-#include "dom/domConstants.h"
-#include "dom/domMesh.h"
-#include "dom/domSkin.h"
-#include "dom/domGeometry.h"
-#include "dom/domInstance_controller.h"
-#include "dom/domNode.h"
-
-#if LL_MSVC
-#pragma warning (default : 4263)
-#pragma warning (default : 4264)
-#endif
+#include <dae.h>
+#include <dom/domConstants.h>
+#include <dom/domMesh.h>
+#include <dom/domSkin.h>
+#include <dom/domGeometry.h>
+#include <dom/domInstance_controller.h>
+#include <dom/domNode.h>
 
 LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod)
 {
