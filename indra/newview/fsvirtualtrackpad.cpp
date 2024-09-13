@@ -99,6 +99,25 @@ bool FSVirtualTrackpad::isPointInTouchArea(S32 x, S32 y) const
     return mTouchArea->getRect().localPointInRect(x, y);
 }
 
+LLVector3 FSVirtualTrackpad::getThumbClickError(S32 x, S32 y, bool isPinchThumb) const
+{
+    LLVector3 zeroVector; 
+    if (!mTouchArea)
+        return zeroVector;
+
+    LLVector3 currentSpot = isPinchThumb ? mPinchValue : mValue;
+    LLVector3 errorVec    = LLVector3(currentSpot.mV[VX] - x, currentSpot.mV[VY] - y, 0);
+
+    LLUIImage *thumb = isPinchThumb ? mImgSunFront : mImgMoonFront;
+
+    if (fabs(errorVec.mV[VX]) > thumb->getWidth() / 2.0)
+        return zeroVector;
+    if (fabs(errorVec.mV[VX]) > thumb->getHeight() / 2.0)
+        return zeroVector;
+
+    return errorVec;
+}
+
 void FSVirtualTrackpad::draw()
 {
     mImgSphere->draw(mTouchArea->getRect(), mTouchArea->isInEnabledChain() ? UI_VERTEX_COLOR : UI_VERTEX_COLOR % 0.5f);
@@ -163,13 +182,13 @@ bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
 
     if (doingPinchMode)
     {
-        mPinchValue.mV[VX] = x;
-        mPinchValue.mV[VY] = y;
+        mPinchValue.mV[VX] = x + mPinchThumbClickOffset.mV[VX];
+        mPinchValue.mV[VY] = y + mPinchThumbClickOffset.mV[VY];
     }
     else
     {
-        mValue.mV[VX] = x;
-        mValue.mV[VY] = y;
+        mValue.mV[VX] = x + mThumbClickOffset.mV[VX];
+        mValue.mV[VY] = y + mThumbClickOffset.mV[VY];
     }
 
     onCommit();
@@ -231,6 +250,7 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     if (isPointInTouchArea(x, y))
     {
+        mThumbClickOffset = getThumbClickError(x, y, false);
         mValue.mV[VZ] = 0;
         mLastValue.set(mValue);
         gFocusMgr.setMouseCapture(this);
@@ -249,6 +269,7 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
     if (isPointInTouchArea(x, y))
     {
+        mPinchThumbClickOffset = getThumbClickError(x, y, true);
         mPinchValue.mV[VZ] = 0;
         mLastPinchValue.set(mPinchValue);
         doingPinchMode = true;

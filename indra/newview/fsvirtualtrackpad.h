@@ -94,6 +94,8 @@ private:
     void setPinchValueAndCommit(const LLVector3 vec);
     void drawThumb(LLVector3 vec, bool isPinchThumb);
     bool isPointInTouchArea(S32 x, S32 y) const;
+
+    LLVector3 getThumbClickError(S32 x, S32 y, bool isPinchThumb) const;
     LLVector3 normalizePixelPosToCenter(LLVector3 vec) const;
     LLVector3 convertNormalizedToPixelPos(F32 x, F32 y);
 
@@ -117,6 +119,10 @@ private:
     LLVector3      mPinchValue;
     LLVector3      mLastValue;
     LLVector3      mLastPinchValue;
+
+    // if one clicks on the thumb, don't move it, track the offset and factor the error out
+    LLVector3      mThumbClickOffset; 
+    LLVector3      mPinchThumbClickOffset;
 };
 
 #endif
