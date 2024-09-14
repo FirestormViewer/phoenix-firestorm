@@ -112,6 +112,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.UndoLastRotation", boost::bind(&FSFloaterPoser::onUndoLastRotation, this));
     mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", boost::bind(&FSFloaterPoser::onToggleMirrorChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", boost::bind(&FSFloaterPoser::onToggleSympatheticChange, this));
+    mCommitCallbackRegistrar.add("Poser.ToggleTrackPadSensitivity", boost::bind(&FSFloaterPoser::refreshTrackpadCursor, this));
 
     mCommitCallbackRegistrar.add("Poser.PositionSet", boost::bind(&FSFloaterPoser::onAvatarPositionSet, this));
 
