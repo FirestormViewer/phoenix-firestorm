@@ -211,7 +211,7 @@ void FSFloaterPoser::onClose(bool app_quitting)
 {
     LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
     if (advancedButton)
-        gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, advancedButton->getValue());
+        gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, advancedButton->getValue().asBoolean());
 }
 
 void FSFloaterPoser::refreshPosesScroll()
@@ -770,7 +770,7 @@ void FSFloaterPoser::onToggleLoadSavePanel()
     if (!yourPosesButton)
         return;
 
-    bool loadSavePanelExpanded = yourPosesButton->getValue();
+    bool      loadSavePanelExpanded = yourPosesButton->getValue().asBoolean();
     LLUICtrl *loadSavePanel         = getChild<LLUICtrl>(POSER_AVATAR_PANEL_LOADSAVE_NAME);
     if (!loadSavePanel)
         return;
@@ -814,8 +814,8 @@ void FSFloaterPoser::onToggleMirrorChange()
     if (!toggleSympatheticButton)
         return;
 
-    bool useMirror = toggleMirrorButton->getValue();
-    bool useSympathetic = toggleSympatheticButton->getValue();
+    bool useMirror      = toggleMirrorButton->getValue().asBoolean();
+    bool useSympathetic = toggleSympatheticButton->getValue().asBoolean();
 
     if (useMirror && useSympathetic)
         toggleSympatheticButton->setValue(false);
@@ -830,8 +830,8 @@ void FSFloaterPoser::onToggleSympatheticChange()
     if (!toggleSympatheticButton)
         return;
 
-    bool useMirror      = toggleMirrorButton->getValue();
-    bool useSympathetic = toggleSympatheticButton->getValue();
+    bool useMirror      = toggleMirrorButton->getValue().asBoolean();
+    bool useSympathetic = toggleSympatheticButton->getValue().asBoolean();
 
     if (useMirror && useSympathetic)
         toggleMirrorButton->setValue(false);
@@ -857,7 +857,7 @@ void FSFloaterPoser::onToggleAdvancedPanel()
     if (!advancedButton)
         return;
 
-    bool      advancedPanelExpanded = advancedButton->getValue();
+    bool      advancedPanelExpanded = advancedButton->getValue().asBoolean();
     LLUICtrl *advancedPanel         = getChild<LLUICtrl>(POSER_AVATAR_PANEL_ADVANCED_NAME);
     if (!advancedPanel)
         return;
@@ -930,9 +930,9 @@ E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle()
     if (!toggleSympatheticButton)
         return NONE;
 
-    if (toggleMirrorButton->getValue())
+    if (toggleMirrorButton->getValue().asBoolean())
         return MIRROR;
-    if (toggleSympatheticButton->getValue())
+    if (toggleSympatheticButton->getValue().asBoolean())
         return SYMPATHETIC;
 
     return NONE;
@@ -1024,10 +1024,9 @@ void FSFloaterPoser::onLimbTrackballChanged()
     else
         return;
 
-    F32 yaw, pitch, roll, rollClicks;
+    F32 yaw, pitch, roll;
     yaw  = trackPadPos.mV[VX];
     pitch = trackPadPos.mV[VY];
-    rollClicks = trackPadPos.mV[VZ];
 
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
     if (!toggleSensitivityButton)
@@ -1037,7 +1036,7 @@ void FSFloaterPoser::onLimbTrackballChanged()
     }
     else
     {
-        bool moreSensitive = toggleSensitivityButton->getValue();
+        bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
         if (moreSensitive)
         {
             yaw *= zoomedTrackballRangeInRads;
@@ -1051,13 +1050,28 @@ void FSFloaterPoser::onLimbTrackballChanged()
     }
 
     LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    roll = rollSlider ? rollSlider->getValue().asReal() : 0;  // roll starts from its own slider
+    if (rollSlider)
+        roll = rollSlider->getValue().asReal(); // roll starts from its own slider
 
-    roll += rollClicks;  // one click means 1 degree of change
+    roll += trackPadPos.mV[VZ];
+    if (rollSlider)
+        rollSlider->setValue(roll);
+
     roll *= DEG_TO_RAD;
 
     setSelectedJointsRotation(yaw, pitch, roll);
-    refreshRotationSliders();
+
+    // WARNING!
+    // as tempting as it is to refactor the following to refreshRotationSliders(), don't.
+    // getRotationOfFirstSelectedJoint/setSelectedJointsRotation are
+    // not necessarily symmetric functions (see their remarks).
+    LLSliderCtrl *yawSlider   = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
+    LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
+    if (!yawSlider || !pitchSlider)
+        return;
+
+    yawSlider->setValue(yaw *= RAD_TO_DEG);
+    pitchSlider->setValue(pitch *= RAD_TO_DEG);
 }
 
 void FSFloaterPoser::onLimbYawPitchRollChanged()
@@ -1077,7 +1091,37 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     roll *= DEG_TO_RAD;
 
     setSelectedJointsRotation(yaw, pitch, roll);
-    refreshTrackpadCursor();
+
+    // WARNING!
+    // as tempting as it is to refactor the following to refreshTrackpadCursor(), don't.
+    // getRotationOfFirstSelectedJoint/setSelectedJointsRotation are
+    // not necessarily symmetric functions (see their remarks).
+    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
+    if (!trackBall)
+        return;
+
+    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
+    if (!toggleSensitivityButton)
+    {
+        yaw /= normalTrackballRangeInRads;
+        pitch /= normalTrackballRangeInRads;
+    }
+    else
+    {
+        bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
+        if (moreSensitive)
+        {
+            yaw /= zoomedTrackballRangeInRads;
+            pitch /= zoomedTrackballRangeInRads;
+        }
+        else
+        {
+            yaw /= normalTrackballRangeInRads;
+            pitch /= normalTrackballRangeInRads;
+        }
+    }
+
+    trackBall->setValue(yaw, pitch);
 }
 
 void FSFloaterPoser::refreshTrackpadCursor()
@@ -1087,29 +1131,32 @@ void FSFloaterPoser::refreshTrackpadCursor()
         return;
 
     LLVector3 rotation = getRotationOfFirstSelectedJoint();
+    F32       axis1, axis2;
+    axis1 = rotation.mV[VX];
+    axis2 = rotation.mV[VY];
 
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
     if (!toggleSensitivityButton)
     {
-        rotation.mV[VX] /= normalTrackballRangeInRads;
-        rotation.mV[VY] /= normalTrackballRangeInRads;
+        axis1 /= normalTrackballRangeInRads;
+        axis2 /= normalTrackballRangeInRads;
     }
     else
     {
-        bool moreSensitive = toggleSensitivityButton->getValue();
+        bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
         if (moreSensitive)
         {
-            rotation.mV[VX] /= zoomedTrackballRangeInRads;
-            rotation.mV[VY] /= zoomedTrackballRangeInRads;
+            axis1 /= zoomedTrackballRangeInRads;
+            axis2 /= zoomedTrackballRangeInRads;
         }
         else
         {
-            rotation.mV[VX] /= normalTrackballRangeInRads;
-            rotation.mV[VY] /= normalTrackballRangeInRads;
+            axis1 /= normalTrackballRangeInRads;
+            axis2 /= normalTrackballRangeInRads;
         }
     }
 
-    trackBall->setValue(rotation.mV[VX], rotation.mV[VY]);
+    trackBall->setValue(axis1, axis2);
 }
 
 /// <summary>
@@ -1300,7 +1347,7 @@ void FSFloaterPoser::onJointSelect()
     if (!advancedButton)
         return;
 
-    if (advancedButton->getValue())
+    if (advancedButton->getValue().asBoolean())
     {
         refreshAdvancedPositionSliders();
         refreshAdvancedScaleSliders();

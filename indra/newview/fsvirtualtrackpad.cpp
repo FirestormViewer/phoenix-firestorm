@@ -116,7 +116,7 @@ LLVector3 FSVirtualTrackpad::getThumbClickError(S32 x, S32 y, bool isPinchThumb)
 
     if (fabs(errorVec.mV[VX]) > thumb->getWidth() / 2.0)
         return zeroVector;
-    if (fabs(errorVec.mV[VX]) > thumb->getHeight() / 2.0)
+    if (fabs(errorVec.mV[VY]) > thumb->getHeight() / 2.0)
         return zeroVector;
 
     return errorVec;
@@ -183,18 +183,30 @@ bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
     if (!hasMouseCapture())
         return true;
 
-    LLRect rect = mTouchArea->getRect();
-    rect.clampPointToRect(x, y);
-
+    S32 correctedX, correctedY;
     if (doingPinchMode)
     {
-        mPinchValue.mV[VX] = x + mPinchThumbClickOffset.mV[VX];
-        mPinchValue.mV[VY] = y + mPinchThumbClickOffset.mV[VY];
+        correctedX = x + mPinchThumbClickOffset.mV[VX];
+        correctedY = y + mPinchThumbClickOffset.mV[VY];
     }
     else
     {
-        mValue.mV[VX] = x + mThumbClickOffset.mV[VX];
-        mValue.mV[VY] = y + mThumbClickOffset.mV[VY];
+        correctedX = x + mThumbClickOffset.mV[VX];
+        correctedY = y + mThumbClickOffset.mV[VY];
+    }
+
+    LLRect rect = mTouchArea->getRect();
+    rect.clampPointToRect(correctedX, correctedY);
+
+    if (doingPinchMode)
+    {
+        mPinchValue.mV[VX] = correctedX;
+        mPinchValue.mV[VY] = correctedY;
+    }
+    else
+    {
+        mValue.mV[VX] = correctedX;
+        mValue.mV[VY] = correctedY;
     }
 
     onCommit();

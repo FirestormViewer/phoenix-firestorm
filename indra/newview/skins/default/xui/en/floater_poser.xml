@@ -678,7 +678,7 @@ width="565">
 					button_flash_count="64"
 					button_flash_rate="0.5"
 					name="button_toggleSympatheticRotation"
-					tool_tip="Change the opposite joint too, not in a mirror."
+					tool_tip="Change the opposite joint, but in the same way."
 					left_pad="1"
 					top_delta="0"
 					width="55" >
@@ -858,17 +858,6 @@ width="565">
                     <button.commit_callback
                     function="Poser.ToggleAdvancedPanel"/>
                 </button>
-                <panel
-				follows="left|top|bottom"
-				height="22"
-				background_visible="false"
-				layout="topleft"
-				visible="true"
-				mouse_opaque="false"
-				left_pad="0"
-				top_delta="0"
-				name="button_spacer_panel"
-				width="10"/>
                 <button
 				follows="left|top"
 				height="21"
@@ -903,6 +892,17 @@ width="565">
                     <button.commit_callback
                     function="Poser.TogglePosingSelectedBones"/>
                 </button>
+                <panel
+				follows="left|top|bottom"
+				height="22"
+				background_visible="false"
+				layout="topleft"
+				visible="true"
+				mouse_opaque="false"
+				left_pad="0"
+				top_delta="0"
+				name="button_spacer_panel"
+				width="10"/>
                 <menu_button
 				height="21"
 				follows="top|left"
