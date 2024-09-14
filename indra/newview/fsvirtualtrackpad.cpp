@@ -151,6 +151,8 @@ void FSVirtualTrackpad::undoLastSetPinchValue() { setPinchValueAndCommit(mLastVa
 void FSVirtualTrackpad::setValueAndCommit(const LLVector3 vec)
 {
     mValue.set(vec);
+    mValue.mV[VZ] = -1 * _wheelClicksSinceMouseDown;
+    _wheelClicksSinceMouseDown = 0;
     onCommit();
 }
 
@@ -257,6 +259,7 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
         mThumbClickOffset = getThumbClickError(x, y, false);
         mValue.mV[VZ] = 0;
         mLastValue.set(mValue);
+        _wheelClicksSinceMouseDown = 0;
         gFocusMgr.setMouseCapture(this);
 
         make_ui_sound("UISndClick");
@@ -276,6 +279,7 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
         mPinchThumbClickOffset = getThumbClickError(x, y, true);
         mPinchValue.mV[VZ] = 0;
         mLastPinchValue.set(mPinchValue);
+        _wheelClicksSinceMouseDown = 0;
         doingPinchMode = true;
         gFocusMgr.setMouseCapture(this);
 
@@ -294,6 +298,8 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
             mPinchValue.mV[VZ] = clicks;
         else
             mValue.mV[VZ] = clicks;
+
+        _wheelClicksSinceMouseDown += clicks;
 
         return true;
     }

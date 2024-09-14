@@ -120,6 +120,14 @@ private:
     LLVector3      mLastValue;
     LLVector3      mLastPinchValue;
 
+    /// <summary>
+    /// Rolling the wheel is pioneering a 'delta' mode: where changes are handled by the control-owner in a relative way.
+    /// One could make all the axes behave this way, making the getValue just a delta (and requiring no set); the
+    /// cursor would snap-back to centre on mouse-up...
+    /// The control would then be used like a real trackball, which only tracks relative movement.
+    /// </summary>
+    U32 _wheelClicksSinceMouseDown = 0;
+
     // if one clicks on the thumb, don't move it, track the offset and factor the error out
     LLVector3      mThumbClickOffset; 
     LLVector3      mPinchThumbClickOffset;

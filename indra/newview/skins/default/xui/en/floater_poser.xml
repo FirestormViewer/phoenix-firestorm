@@ -32,8 +32,10 @@ width="565">
     <string	name="joint_transform_mEyeLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mHipLeft" translate="false">NEGATE_PITCH</string>
     <string	name="joint_transform_mKneeLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mAnkleLeft" translate="false">NEGATE_PITCH</string>
     <string	name="joint_transform_mHipRight" translate="false">NEGATE_PITCH</string>
     <string	name="joint_transform_mKneeRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mAnkleRight" translate="false">NEGATE_PITCH</string>
     <string	name="joint_transform_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mFaceLipCornerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_mFaceLipUpperCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -430,7 +432,7 @@ width="565">
 								name="icon"
 								relative_width="0.1"  />
 								<scroll_list.columns
-								label="Bone Name"
+								label="Body Part"
 								name="joint"
 								relative_width="0.9"  />
 							</scroll_list>
@@ -463,7 +465,7 @@ width="565">
                             name="icon"
                             relative_width="0.1"  />
                             <scroll_list.columns
-                            label="Bone Name"
+                            label="Body Part"
                             name="joint"
                             relative_width="0.9"  />
                         </scroll_list>
@@ -495,7 +497,7 @@ width="565">
 							name="icon"
 							relative_width="0.1"  />
                             <scroll_list.columns
-							label="Bone Name"
+							label="Body Part"
 							name="joint"
 							relative_width="0.9"  />
                         </scroll_list>
@@ -527,7 +529,7 @@ width="565">
 							name="icon"
 							relative_width="0.1"  />
                             <scroll_list.columns
-							label="Bone Name"
+							label="Body Part"
 							name="joint"
 							relative_width="0.9"  />
                         </scroll_list>
@@ -559,7 +561,7 @@ width="565">
 							name="icon"
 							relative_width="0.1"  />
                             <scroll_list.columns
-							label="Bone Name"
+							label="Body Part"
 							name="joint"
 							relative_width="0.9"  />
                         </scroll_list>
