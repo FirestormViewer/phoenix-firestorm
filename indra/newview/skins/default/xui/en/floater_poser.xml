@@ -870,8 +870,8 @@ width="565">
 				name="button_RecaptureParts"
 				left_pad="1"
 				top_delta="0"
-				tool_tip="If the selected part is OFF (so it animates like normal), re-capture the selected body part(s) in their current state."
-				width="70" >
+				tool_tip="If the selected part is OFF, this Recaptures what that body part is doing right now"
+				width="65" >
                     <button.commit_callback
                     function="Poser.RecaptureSelectedBones"/>
                 </button>
@@ -880,15 +880,15 @@ width="565">
 				height="21"
 				layout="topleft"
 				enabled="true"
-				label="Part On/Off"
+				label="Part(s) On/Off"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
 				name="toggle_PosingSelectedBones"
 				left_pad="1"
 				top_delta="0"
-				tool_tip="Start or stop posing the selected body part(s)"
-				width="80" >
+				tool_tip="Turn the Poser on or off for the selected body part(s). When off, that body part animates like normal (with your AO or a pose-ball/etc.)"
+				width="85" >
                     <button.commit_callback
                     function="Poser.TogglePosingSelectedBones"/>
                 </button>
