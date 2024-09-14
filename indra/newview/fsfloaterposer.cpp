@@ -137,6 +137,7 @@ bool FSFloaterPoser::postBuild()
     getChild<LLUICtrl>(POSER_AVATAR_SLIDER_YAW_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
     getChild<LLUICtrl>(POSER_AVATAR_SLIDER_PITCH_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
     getChild<LLUICtrl>(POSER_AVATAR_SLIDER_ROLL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
+    getChild<LLTabContainer>(POSER_AVATAR_TABGROUP_JOINTS)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
 
     LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
     if (scrollList)
@@ -1342,6 +1343,7 @@ void FSFloaterPoser::onJointSelect()
 {
     refreshAvatarPositionSliders();
     refreshRotationSliders();
+    refreshTrackpadCursor();
 
     LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
     if (!advancedButton)
