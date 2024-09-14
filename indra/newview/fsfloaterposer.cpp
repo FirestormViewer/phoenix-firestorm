@@ -122,8 +122,6 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Pose.Save", boost::bind(&FSFloaterPoser::onClickPoseSave, this));
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
     mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowsePoseCache, this));
-
-    mCommitCallbackRegistrar.add("Poser.TrackBallMove", boost::bind(&FSFloaterPoser::onLimbTrackballChanged, this)); // so I can debug
 }
 
 FSFloaterPoser::~FSFloaterPoser() {}

@@ -75,7 +75,15 @@ class FSFloaterPoser : public LLFloater
     /*virtual*/ void onOpen(const LLSD& key);
     /*virtual*/ void onClose(bool app_quitting);
 
+    /// <summary>
+    /// The amount of deflection 'one unit' on the trackpad translates to in radians.
+    /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
+    /// </summary>
     const F32 normalTrackballRangeInRads = F_PI;
+
+    /// <summary>
+    /// The counterpart to above, when using the trackpad in zoom-mode, its maximum deflection on either axis is plus/minus this.
+    /// </summary>
     const F32 zoomedTrackballRangeInRads = F_PI_BY_TWO;
     
     /// <summary>
