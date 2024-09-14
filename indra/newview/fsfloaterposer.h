@@ -148,6 +148,13 @@ class FSFloaterPoser : public LLFloater
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
 
+    /// <summary>
+    /// Yeilds the rotation of the first selected joint (one may multi-select).
+    /// </summary>
+    LLVector3 getRotationOfFirstSelectedJoint();
+    LLVector3 getPositionOfFirstSelectedJoint();
+    LLVector3 getScaleOfFirstSelectedJoint();
+
     // Pose load/save
     void onToggleLoadSavePanel();
     void onClickPoseSave();
@@ -172,6 +179,13 @@ class FSFloaterPoser : public LLFloater
     void onAdvancedPositionSet();
     void onAdvancedRotationSet();
     void onAdvancedScaleSet();
+
+    // UI Refreshments
+    void refreshRotationSliders();
+    void refreshAvatarPositionSliders();
+    void refreshTrackpadCursor();
+    void refreshAdvancedPositionSliders();
+    void refreshAdvancedScaleSliders();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.

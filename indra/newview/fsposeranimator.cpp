@@ -84,7 +84,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
         return;
 }
 
-LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation)
+LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture)
 {
     // this needs to do this, to be compatible in some part with BD poses
     // LLQuaternion rot = _poserAnimator.getJointRotation(avatar, pj);

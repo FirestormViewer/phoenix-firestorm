@@ -234,6 +234,13 @@ public:
     void setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose);
 
     /// <summary>
+    /// Resets the supplied PoserJoint to its position/rotation/scale it was when poser was started.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint being reset for.</param>
+    void resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint);
+
+    /// <summary>
     /// Gets the position of a joint for the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is being queried.</param>
@@ -256,8 +263,11 @@ public:
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the rotation for.</param>
     /// <param name="translation">The joint to determine the rotation for.</param>
+    /// <param name="negation">The style of negation to apply to the set.</param>
+    /// <param name="forRecapture">Get the current non-poser rotation, for recapture opportunity.</param>
     /// <returns>The rotation of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation);
+    LLVector3 getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation,
+                               bool forRecapture = false);
 
     /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.

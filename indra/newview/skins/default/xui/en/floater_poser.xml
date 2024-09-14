@@ -227,7 +227,7 @@ width="565">
     <string	name="title_mHindLimb3Right" translate="false">Right 3</string>
     <string	name="title_mHindLimb4Right" translate="false">Right 4</string>
 
-<!-- The layout is a vertical stack of 3 columns, and each column a horizontal stack of panels -->
+<!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
     <layout_stack
 	follows="top|left|right"
 	height="425"
@@ -311,7 +311,7 @@ width="565">
                 <tab_container
 					follows="all"
 					halign="center"
-					height="290"
+					height="285"
 					layout="topleft"
 					left="0"
 					enabled="true"
@@ -860,7 +860,7 @@ width="565">
                 </button>
                 <panel
 				follows="left|top|bottom"
-				height="100"
+				height="22"
 				background_visible="false"
 				layout="topleft"
 				visible="true"
@@ -868,7 +868,59 @@ width="565">
 				left_pad="0"
 				top_delta="0"
 				name="button_spacer_panel"
-				width="210"/>
+				width="10"/>
+                <button
+				follows="left|top"
+				height="21"
+				layout="topleft"
+				enabled="true"
+				label="Recapture"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="button_RecaptureParts"
+				left_pad="1"
+				top_delta="0"
+				tool_tip="If the selected part is OFF (so it animates like normal), re-capture the selected body part(s) in their current state."
+				width="70" >
+                    <button.commit_callback
+                    function="Poser.RecaptureSelectedBones"/>
+                </button>
+                <button
+				follows="left|top"
+				height="21"
+				layout="topleft"
+				enabled="true"
+				label="Part On/Off"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="toggle_PosingSelectedBones"
+				left_pad="1"
+				top_delta="0"
+				tool_tip="Start or stop posing the selected body part(s)"
+				width="80" >
+                    <button.commit_callback
+                    function="Poser.TogglePosingSelectedBones"/>
+                </button>
+                <menu_button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Reset..."
+				enabled="true"
+				visible="false"
+				tool_tip="Reset your choice of joints back to when you started."
+				image_overlay_alignment="left"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				menu_filename="menu_poser_reset_btn.xml"
+                menu_position="topright"
+				name="reset_joints_button"
+				left_pad="1"
+				top_delta="0"
+				width="50"/>
                 <button
 				follows="left|top"
 				height="21"
