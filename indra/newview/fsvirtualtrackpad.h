@@ -126,7 +126,7 @@ private:
     /// cursor would snap-back to centre on mouse-up...
     /// The control would then be used like a real trackball, which only tracks relative movement.
     /// </summary>
-    U32 _wheelClicksSinceMouseDown = 0;
+    S32 _wheelClicksSinceMouseDown = 0;
 
     // if one clicks on the thumb, don't move it, track the offset and factor the error out
     LLVector3      mThumbClickOffset; 
