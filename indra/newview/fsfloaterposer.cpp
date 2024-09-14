@@ -334,7 +334,7 @@ bool FSFloaterPoser::savePoseToXml(std::string poseFileName)
         {
             std::string  bone_name = pj.jointName();
 
-            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, getJointTranslation(bone_name), getJointNegation(bone_name));
+            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, SWAP_NOTHING, NEGATE_NOTHING); // no swap, it might load into BD; though BD likes interpolation numbers
 
             record[bone_name]     = pj.jointName();   
             record[bone_name]["rotation"] = vec3.getValue();
@@ -556,7 +556,7 @@ void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, getJointTranslation(name), getJointNegation(name)); // I think if we keep defaults it will load BD poses
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults it will load BD poses
                 }
 
                 if (loadPositions && control_map.has("position"))

@@ -143,8 +143,8 @@ public:
         {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
         {"mCollarLeft", "mCollarRight", BODY}, {"mShoulderLeft", "mShoulderRight", BODY}, {"mElbowLeft", "mElbowRight", BODY}, {"mWristLeft", "mWristRight", BODY},
         {"mCollarRight", "mCollarLeft", BODY}, {"mShoulderRight", "mShoulderLeft", BODY},  {"mElbowRight", "mElbowLeft", BODY},  {"mWristRight", "mWristLeft", BODY},
-        {"mHipLeft", "", BODY}, {"mKneeLeft", "", BODY},  {"mAnkleLeft", "", BODY},
-        {"mHipRight", "", BODY}, {"mKneeRight", "", BODY},  {"mAnkleRight", "", BODY},
+        {"mHipLeft", "mHipRight", BODY}, {"mKneeLeft", "mKneeRight", BODY},  {"mAnkleLeft", "mAnkleRight", BODY},
+        {"mHipRight", "mHipLeft", BODY}, {"mKneeRight", "mKneeLeft", BODY},  {"mAnkleRight", "mAnkleLeft", BODY},
 
         // face
         {"mFaceForeheadLeft", "mFaceForeheadRight", FACE}, {"mFaceForeheadCenter", "", FACE},  {"mFaceForeheadRight", "mFaceForeheadLeft", FACE},
@@ -298,8 +298,6 @@ public:
     void setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style);
 
   private:
-    bool _currentlyPosingSelf = false;
-
     /// <summary>
     /// Translates a rotation vector from the UI to a Quaternion for the bone.
     /// This also performs the axis-swapping the UI needs for up/down/left/right to make sense.

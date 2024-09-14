@@ -33,6 +33,11 @@
 #include "llvoavatarself.h"
 #include <llanimationstates.h>
 
+#include "bdposingmotion.h" // BD - Use Black Dragon posing piece
+
+/// <summary>
+/// This has turned into a shim-class rather than the business of posing. *shrug*
+/// </summary>
 FSPoserAnimator::FSPoserAnimator() {}
 FSPoserAnimator::~FSPoserAnimator() {}
 
@@ -41,7 +46,15 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
     if (!avatar || avatar->isDead())
         return false;
 
-    return _currentlyPosingSelf;
+    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
+    if (!motion || motion->isStopped())
+        return false;
+
+    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    if (!avJoint)
+        return false;
+
+    return motion->currentlyPosingJoint(avJoint);
 }
 
 void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose)
@@ -49,7 +62,38 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
     if (!avatar || avatar->isDead())
         return;
 
-    // TODO: Bust a move. Or don't.
+    bool arePosing = isPosingAvatarJoint(avatar, joint);
+    if (arePosing && shouldPose || !arePosing && !shouldPose) // could !XOR, but this is readable
+        return;
+
+    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
+    if (!motion || motion->isStopped())
+        return;
+
+    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    if (!avJoint)
+        return;
+
+    if (shouldPose)
+        motion->addJointToState(avJoint);
+    else
+        motion->removeJointFromState(avJoint);
+}
+
+void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
+{
+    if (!avatar || avatar->isDead())
+        return;
+
+    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
+    if (!motion || motion->isStopped())
+        return;
+
+    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    if (!avJoint)
+        return;
+
+    // this or something? motion->resetJointState(avJoint);
 }
 
 LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint)
@@ -62,7 +106,7 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joi
     if (!avJoint)
         return pos;
 
-    pos = avJoint->getPosition();
+    pos = avJoint->getTargetPosition();
 
     return pos;
 }
@@ -82,14 +126,12 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
     LLJoint *avJoint = avatar->getJoint(key);
     if (!avJoint)
         return;
+
+    avJoint->setTargetPosition(position);
 }
 
 LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture)
 {
-    // this needs to do this, to be compatible in some part with BD poses
-    // LLQuaternion rot = _poserAnimator.getJointRotation(avatar, pj);
-    // rot.getEulerAngles(&vec3.mV[VX], &vec3.mV[VZ], &vec3.mV[VY]);
-
     LLVector3 vec3;
     if (!avatar || avatar->isDead())
         return vec3;
@@ -98,7 +140,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
     if (!avJoint)
         return vec3;
 
-    LLQuaternion rot = avJoint->getRotation();
+    LLQuaternion rot = forRecapture ? avJoint->getRotation() : avJoint->getTargetRotation();
     
     return translateRotationFromQuaternion(translation, negation, rot);
 }
@@ -116,7 +158,30 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
         return;
 
     LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
-    avJoint->setRotation(rot_quat);
+    avJoint->setTargetRotation(rot_quat);
+
+    if (style == NONE)
+        return;
+
+    LLJoint *oppositeJoint = avatar->getJoint(JointKey::construct(joint->mirrorJointName()));
+    if (!oppositeJoint)
+        return;
+
+    LLQuaternion inv_quat;
+    switch (style)
+    {
+        case SYMPATHETIC:
+            oppositeJoint->setTargetRotation(rot_quat);
+            break;
+
+        case MIRROR:
+            inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
+            oppositeJoint->setTargetRotation(inv_quat);
+            break;
+
+        default:
+            break;
+    }
 }
 
 // from the UI to the bone, the inverse translation, the un-swap, the backwards
@@ -229,6 +294,13 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
 LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
 {
     LLVector3 vec3;
+
+    LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
+    if (!avJoint)
+        return vec3;
+
+    vec3 = avJoint->getScale();
+
     return vec3;
 }
 
@@ -238,6 +310,12 @@ void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *join
         return;
     if (!joint)
         return;
+
+    LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint->jointName()));
+    if (!avJoint)
+        return;
+
+    avJoint->setScale(scale);
 }
 
 const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(std::string jointName)
@@ -256,24 +334,35 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
     if (!avatar || avatar->isDead())
         return false;
 
-    LLMotion *motion = avatar->findMotion(ANIM_AGENT_TARGET);
-    gAgent.stopFidget();
-    avatar->startDefaultMotions();
-    _currentlyPosingSelf = avatar->startMotion(ANIM_AGENT_TARGET);
+    if (avatar->getPosing())
+        return false;
 
-    return _currentlyPosingSelf;
+    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
+    if (!motion || motion->isStopped())
+    {
+        avatar->setPosing();
+
+        if (avatar->isSelf())
+            gAgent.stopFidget();
+
+        avatar->startDefaultMotions();
+        avatar->startMotion(ANIM_BD_POSING_MOTION);
+
+        // TODO: scrape motion state prior to edit, facilitating reset
+
+        return true;
+    }
+
+    return false;
 }
 
 void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)
 {
-    if (!_currentlyPosingSelf)
-        return;
     if (!avatar || avatar->isDead())
         return;
 
-    bool result = avatar->stopMotion(ANIM_AGENT_TARGET);
-
-    _currentlyPosingSelf = false;
+    avatar->clearPosing();
+    avatar->stopMotion(ANIM_BD_POSING_MOTION);
 }
 
 bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
@@ -281,9 +370,13 @@ bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
     if (!avatar || avatar->isDead())
         return false;
 
-    if (avatar->isSelf())
-        return _currentlyPosingSelf;
+    if (!avatar->getPosing())
+        return false;
 
-    return false;
+    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
+    if (!motion)
+        return false;
+
+    return !motion->isStopped();
 }
 

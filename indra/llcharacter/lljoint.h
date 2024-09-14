@@ -169,6 +169,16 @@ public:
 
     S32             mJointNum;
 
+    // <FS> [FIRE-30873]: Poser
+    LLQuaternion mNextRotation;
+    LLQuaternion mTargetRotation;
+    LLQuaternion mLastRotation;
+    LLVector3    mNextPosition;
+    LLVector3    mTargetPosition;
+    LLVector3    mLastPosition;
+    bool         mHasPosition;
+    // </FS>
+
     // child joints
     typedef std::vector<LLJoint*> joints_t;
     joints_t mChildren;
@@ -283,6 +293,29 @@ public:
     // get/set local scale
     const LLVector3& getScale();
     void setScale( const LLVector3& scale, bool apply_attachment_overrides = false );
+
+    // <FS> [FIRE-30873]: Poser
+    void      setTargetPosition(const LLVector3 &pos) { mTargetPosition = pos; }
+    LLVector3 getTargetPosition() const { return mTargetPosition; }
+
+    void         setTargetRotation(const LLQuaternion &rot) { mTargetRotation = rot; }
+    LLQuaternion getTargetRotation() const { return mTargetRotation; }
+
+    void      setLastPosition(const LLVector3 &pos) { mLastPosition = pos; }
+    LLVector3 getLastPosition() const { return mLastPosition; }
+
+    void         setLastRotation(const LLQuaternion &rot) { mLastRotation = rot; }
+    LLQuaternion getLastRotation() const { return mLastRotation; }
+
+    void setCanReposition(const bool can_reposition) { mHasPosition = can_reposition; }
+    bool canReposition() const { return mHasPosition; }
+
+    void      setNextPosition(const LLVector3 &pos) { mNextPosition = pos; }
+    LLVector3 getNextPosition() const { return mNextPosition; }
+
+    void         setNextRotation(const LLQuaternion &rot) { mNextRotation = rot; }
+    LLQuaternion getNextRotation() const { return mNextRotation; }
+    // </FS>
 
     // get/set world matrix
     const LLMatrix4 &getWorldMatrix();

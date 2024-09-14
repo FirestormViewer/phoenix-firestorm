@@ -67,6 +67,8 @@ extern const LLUUID ANIM_AGENT_PELVIS_FIX;
 extern const LLUUID ANIM_AGENT_TARGET;
 extern const LLUUID ANIM_AGENT_WALK_ADJUST;
 
+extern const LLUUID ANIM_BD_POSING_MOTION;  // <FS> [FIRE-30873]: Poser
+
 class LLViewerWearable;
 class LLVoiceVisualizer;
 class LLHUDNameTag;
@@ -1270,6 +1272,7 @@ private:
     std::string         mDebugText;
     std::string         mBakedTextureDebugText;
 
+    bool mIsPosing = false; // <FS> [FIRE-30873]: Poser: Custom Posing
 
     //--------------------------------------------------------------------
     // Avatar Rez Metrics
@@ -1297,6 +1300,13 @@ public:
 /**                    Diagnostics
  **                                                                            **
  *******************************************************************************/
+
+// <FS> [FIRE-30873]: Poser: Custom Posing
+  public:
+    void setPosing() { mIsPosing = true; }
+    void clearPosing() { mIsPosing = false; }
+    bool getPosing() const { return mIsPosing; }
+// <FS/>[FIRE - 30873] : Poser
 
 /********************************************************************************
  **                                                                            **

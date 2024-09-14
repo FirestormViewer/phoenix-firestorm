@@ -91,6 +91,7 @@ set(viewer_SOURCE_FILES
     ao.cpp
     aoengine.cpp
     aoset.cpp
+	bdposingmotion.cpp
     chatbar_as_cmdline.cpp
     daeexport.cpp
     dialogstack.cpp

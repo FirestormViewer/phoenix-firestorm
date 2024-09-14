@@ -144,6 +144,11 @@ class FSFloaterPoser : public LLFloater
     /// There are several control-callbacks manipulating rotations etc, they all devolve to these.
     /// In these are the appeals to the posing business layer.
     /// </summary>
+    /// <remarks>
+    /// Using a set, then a get does not guarantee the value you just set.
+    /// There may be +/- PI difference two axes, because harmonics.
+    /// Thus keep your UI synced with less gets.
+    /// </remarks>
     void setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians);
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
@@ -151,6 +156,11 @@ class FSFloaterPoser : public LLFloater
     /// <summary>
     /// Yeilds the rotation of the first selected joint (one may multi-select).
     /// </summary>
+    /// <remarks>
+    /// Using a set, then a get does not guarantee the value you just set.
+    /// There may be +/- PI difference two axes, because harmonics.
+    /// Thus keep your UI synced with less gets.
+    /// </remarks>
     LLVector3 getRotationOfFirstSelectedJoint();
     LLVector3 getPositionOfFirstSelectedJoint();
     LLVector3 getScaleOfFirstSelectedJoint();
@@ -179,6 +189,9 @@ class FSFloaterPoser : public LLFloater
     void onAdvancedPositionSet();
     void onAdvancedRotationSet();
     void onAdvancedScaleSet();
+    void onClickToggleSelectedBoneEnabled();
+    void onClickRecaptureSelectedBones();
+    void onPoseResetMenuAction(const LLSD &param);
 
     // UI Refreshments
     void refreshRotationSliders();

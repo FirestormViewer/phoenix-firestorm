@@ -138,6 +138,10 @@
 
 #include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
 
+// <FS> [FIRE-30873]: Poser
+#include "bdposingmotion.h"
+// </FS>
+
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
@@ -173,6 +177,7 @@ const LLUUID ANIM_AGENT_TARGET = LLUUID("0e4896cb-fba4-926c-f355-8720189d5b55");
 const LLUUID ANIM_AGENT_WALK_ADJUST = LLUUID("829bc85b-02fc-ec41-be2e-74cc6dd7215d");  //"walk_adjust"
 const LLUUID ANIM_AGENT_PHYSICS_MOTION = LLUUID("7360e029-3cb8-ebc4-863e-212df440d987");  //"physics_motion"
 
+const LLUUID ANIM_BD_POSING_MOTION = LLUUID("fd29b117-9429-09c4-10cb-933d0b2ab653");  // <FS> [FIRE-30873]: Poser: "custom_motion"
 
 //-----------------------------------------------------------------------------
 // Constants
@@ -1254,6 +1259,7 @@ void LLVOAvatar::initClass()
     gAnimLibrary.animStateSetString(ANIM_AGENT_PELVIS_FIX,"pelvis_fix");
     gAnimLibrary.animStateSetString(ANIM_AGENT_TARGET,"target");
     gAnimLibrary.animStateSetString(ANIM_AGENT_WALK_ADJUST,"walk_adjust");
+    gAnimLibrary.animStateSetString(ANIM_BD_POSING_MOTION, "custom_pose");  // <FS> [FIRE-30873]: Poser
 
     // Where should this be set initially?
     LLJoint::setDebugJointNames(gSavedSettings.getString("DebugAvatarJoints"));
@@ -1376,6 +1382,8 @@ void LLVOAvatar::initInstance()
         registerMotion( ANIM_AGENT_SIT_FEMALE,              LLKeyframeMotion::create );
         registerMotion( ANIM_AGENT_TARGET,                  LLTargetingMotion::create );
         registerMotion( ANIM_AGENT_WALK_ADJUST,             LLWalkAdjustMotion::create );
+
+        registerMotion(ANIM_BD_POSING_MOTION, BDPosingMotion::create);  // <FS/> [FIRE-30873]: Poser
     }
 
     LLAvatarAppearance::initInstance();
@@ -2288,6 +2296,15 @@ void LLVOAvatar::resetSkeleton(bool reset_animations)
         LL_WARNS() << "Can't reset avatar " << getID() << "; no appearance message has been received yet." << LL_ENDL;
         return;
     }
+
+    // <FS> [FIRE-30873]: Poser: BD - We need to clear posing here otherwise we'll crash.
+    LLMotion *pose_motion = findMotion(ANIM_BD_POSING_MOTION);
+    if (pose_motion)
+    {
+        gAgent.clearPosing();
+        removeMotion(ANIM_BD_POSING_MOTION);
+    }
+    // </FS>
 
     // Save mPelvis state
     //LLVector3 pelvis_pos = getJoint("mPelvis")->getPosition();
