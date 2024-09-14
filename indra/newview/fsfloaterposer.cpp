@@ -938,21 +938,21 @@ void FSFloaterPoser::onLimbTrackballChanged()
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
     if (!toggleSensitivityButton)
     {
-        yaw *= F_PI;
-        pitch *= F_PI;
+        yaw *= normalTrackballRangeInRads;
+        pitch *= normalTrackballRangeInRads;
     }
     else
     {
         bool moreSensitive = toggleSensitivityButton->getValue();
         if (moreSensitive)
         {
-            yaw *= F_PI_BY_TWO;
-            pitch *= F_PI_BY_TWO;
+            yaw *= zoomedTrackballRangeInRads;
+            pitch *= zoomedTrackballRangeInRads;
         }
         else
         {
-            yaw *= F_PI;
-            pitch *= F_PI;
+            yaw *= normalTrackballRangeInRads;
+            pitch *= normalTrackballRangeInRads;
         }
     }
     
@@ -994,21 +994,21 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
     if (!toggleSensitivityButton)
     {
-        yaw /= F_PI;
-        pitch /= F_PI;
+        yaw /= normalTrackballRangeInRads;
+        pitch /= normalTrackballRangeInRads;
     }
     else
     {
         bool moreSensitive = toggleSensitivityButton->getValue();
         if (moreSensitive)
         {
-            yaw /= F_PI_BY_TWO;
-            pitch /= F_PI_BY_TWO;
+            yaw /= zoomedTrackballRangeInRads;
+            pitch /= zoomedTrackballRangeInRads;
         }
         else
         {
-            yaw /= F_PI;
-            pitch /= F_PI;
+            yaw /= normalTrackballRangeInRads;
+            pitch /= normalTrackballRangeInRads;
         }
     }
 
@@ -1096,24 +1096,23 @@ void FSFloaterPoser::onJointSelect()
     if (!trackBall)
         return;
 
+    yaw /= normalTrackballRangeInRads;
+    yaw /= RAD_TO_DEG;
+    pitch /= normalTrackballRangeInRads;
+    pitch /= RAD_TO_DEG;
+
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (!toggleSensitivityButton)
-    {
-        if (trackBall)
-            trackBall->setValue(yaw /= 180, pitch /= 180);
-    }
-    else
+    if (toggleSensitivityButton)
     {
         bool moreSensitive = toggleSensitivityButton->getValue();
         if (moreSensitive)
         {
-            trackBall->setValue(yaw /= 90, pitch /= 90);
-        }
-        else
-        {
-            trackBall->setValue(yaw /= 180, pitch /= 180);
+            yaw *= (normalTrackballRangeInRads / zoomedTrackballRangeInRads);
+            pitch *= (normalTrackballRangeInRads / zoomedTrackballRangeInRads);
         }
     }
+
+    trackBall->setValue(yaw, pitch);
 }
 
 E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)

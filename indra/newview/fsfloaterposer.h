@@ -75,8 +75,9 @@ class FSFloaterPoser : public LLFloater
     /*virtual*/ void onOpen(const LLSD& key);
     /*virtual*/ void onClose(bool app_quitting);
 
-    // UI Service functions
-
+    const F32 normalTrackballRangeInRads = F_PI;
+    const F32 zoomedTrackballRangeInRads = F_PI_BY_TWO;
+    
     /// <summary>
     /// Refreshes the pose load/save list.
     /// </summary>
