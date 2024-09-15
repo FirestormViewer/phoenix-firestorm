@@ -153,6 +153,12 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!joint)
         return;
 
+    if (style == REFLECT_JOINT)
+    {
+        reflectJoint(avatar, joint, translation, negation);
+        return;
+    }
+
     LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint->jointName()));
     if (!avJoint)
         return;
@@ -182,6 +188,30 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
         default:
             break;
     }
+}
+
+void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint, E_BoneAxisTranslation translation, S32 negation)
+{
+    LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint->jointName()));
+    if (!avJoint)
+        return;
+
+    LLJoint *oppositeJoint = avatar->getJoint(JointKey::construct(joint->mirrorJointName()));
+    if (!oppositeJoint)
+    {
+        LLQuaternion rot_quat = avJoint->getTargetRotation();
+        LLQuaternion inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
+
+        avJoint->setTargetRotation(inv_quat);
+        return;
+    }
+
+    LLQuaternion first_quat = avJoint->getTargetRotation();
+    LLQuaternion first_inv   = LLQuaternion(-first_quat.mQ[VX], first_quat.mQ[VY], -first_quat.mQ[VZ], first_quat.mQ[VW]);
+    LLQuaternion second_quat = oppositeJoint->getTargetRotation();
+    LLQuaternion second_inv  = LLQuaternion(-second_quat.mQ[VX], second_quat.mQ[VY], -second_quat.mQ[VZ], second_quat.mQ[VW]);
+    avJoint->setTargetRotation(second_inv);
+    oppositeJoint->setTargetRotation(first_inv);
 }
 
 // from the UI to the bone, the inverse translation, the un-swap, the backwards

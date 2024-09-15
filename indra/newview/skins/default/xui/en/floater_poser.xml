@@ -848,15 +848,30 @@ width="565">
 				enabled="true"
 				visible="false"
 				is_toggle="true"
-				label="Advanced"
+				label="Adv..."
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
 				name="toggleAdvancedPanel"
-				width="80"
+				width="52"
 				left_pad="2">
                     <button.commit_callback
                     function="Poser.ToggleAdvancedPanel"/>
+                </button>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				image_overlay="Inv_Physics"
+				image_unselected="Toolbar_Middle_Off"
+				name="FlipPose_avatar"
+				tool_tip="Flip the current pose left/right"
+				width="28"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.FlipPose"/>
                 </button>
                 <button
 				follows="left|top"

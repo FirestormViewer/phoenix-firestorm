@@ -54,6 +54,7 @@ typedef enum E_BoneDeflectionStyles
     NONE        = 0,  // do nothing additional
     MIRROR      = 1,  // change the other joint, like in a mirror, eg: one left one right
     SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
+    REFLECT_JOINT = 3,  // change each joint, mirroring to its opposite and mirror each joint without an opposite
 } E_BoneDeflectionStyles;
 
 /// <summary>
@@ -314,6 +315,15 @@ public:
     /// <param name="rotation">The rotation to transform to matrix.</param>
     /// <returns>The rotation vector.</returns>
     LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation);
+
+    /// <summary>
+    /// Reflects the joint with its opposite if it has one, or just mirror itself.
+    /// </summary>
+    /// <param name="avatar"></param>
+    /// <param name="joint"></param>
+    /// <param name="translation"></param>
+    /// <param name="negation"></param>
+    void reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint, E_BoneAxisTranslation translation, S32 negation);
 };
 
 #endif // LL_FSPoserAnimator_H

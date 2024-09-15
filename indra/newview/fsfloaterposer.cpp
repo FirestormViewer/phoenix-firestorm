@@ -84,6 +84,9 @@ static const std::string POSER_AVATAR_SCROLLLIST_AVATARSELECTION   = "avatarSele
 static const std::string POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME = "start_stop_posing_button";
 static const std::string POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME   = "toggleAdvancedPanel";
 static const std::string POSER_AVATAR_PANEL_ADVANCED_NAME          = "poses_AdvancedControls";
+static const std::string POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME   = "FlipPose_avatar";
+static const std::string POSER_AVATAR_PANEL_BUTTON_RECAPTURE_NAME  = "button_RecaptureParts";
+static const std::string POSER_AVATAR_PANEL_BUTTON_TOGGLEPOSING_NAME  = "toggle_PosingSelectedBones";
 
 static const std::string POSER_AVATAR_TOGGLEBUTTON_LOADSAVE        = "toggleLoadSavePanel";
 static const std::string POSER_AVATAR_PANEL_LOADSAVE_NAME          = "poses_loadSave";
@@ -124,6 +127,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
     mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowsePoseCache, this));
 
+    mCommitCallbackRegistrar.add("Poser.FlipPose", boost::bind(&FSFloaterPoser::onClickFlipPose, this));
     mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", boost::bind(&FSFloaterPoser::onClickRecaptureSelectedBones, this));
     mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", boost::bind(&FSFloaterPoser::onClickToggleSelectedBoneEnabled, this));
     mCommitCallbackRegistrar.add("Pose.PoseResetMenu", boost::bind(&FSFloaterPoser::onPoseResetMenuAction, this, _2));
@@ -390,6 +394,35 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
     refreshTextEmbiggeningOnAllScrollLists();
 }
 
+void FSFloaterPoser::onClickFlipPose()
+{
+    LLVOAvatar *avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    LLVector3 unNeededPosition;
+    std::vector<FSPoserAnimator::FSPoserJoint>::const_iterator poserJoint_iter;
+    for (poserJoint_iter = _poserAnimator.PoserJoints.begin(); poserJoint_iter != _poserAnimator.PoserJoints.end(); ++poserJoint_iter)
+    {
+        if (strstr(poserJoint_iter->jointName().c_str(), "Left")) // don't do left, just do one side of body; TODO refactor
+            continue;
+
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *poserJoint_iter); // TODO check opposite is off?
+        if (!currentlyPosing)
+            continue;
+
+        _poserAnimator.setJointRotation(avatar, &*poserJoint_iter, unNeededPosition, REFLECT_JOINT,
+                                            getJointTranslation(poserJoint_iter->jointName()),
+                                            getJointNegation(poserJoint_iter->jointName()));
+    }
+
+    refreshRotationSliders();
+    refreshTrackpadCursor();
+}
+
 void FSFloaterPoser::onClickRecaptureSelectedBones()
 {
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -646,9 +679,21 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
     if (trackballPanel)
         trackballPanel->setEnabled(enable);
 
-    LLButton *yourPosesButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_LOADSAVE);
-    if (yourPosesButton)
-        yourPosesButton->setEnabled(enable);
+    LLButton *someButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_LOADSAVE);
+    if (someButton)
+        someButton->setEnabled(enable);
+
+    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME);
+    if (someButton)
+        someButton->setEnabled(enable);
+
+    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_RECAPTURE_NAME);
+    if (someButton)
+        someButton->setEnabled(enable);
+
+    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_TOGGLEPOSING_NAME);
+    if (someButton)
+        someButton->setEnabled(enable);
 }
 
 void FSFloaterPoser::refreshJointScrollListMembers()
