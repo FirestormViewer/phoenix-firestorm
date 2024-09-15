@@ -140,8 +140,15 @@
 				Rendering texture:
 			</text>
 			<!-- Removed in FIRE-24256, leaving it here for non-SL viewer version --> <check_box label="Usa texture HTTP" tool_tip="Caricare le texture utilizzando il protocollo HTTP - non impostare se si hanno problemi di resa e/o si desidera caricare col vecchio protocollo UDP" name="TexturesHTTP"/>
-			<check_box label="Limita la risoluzione massima delle texture a 512px (solo 64 bit; richiede riavvio)" tool_tip="Questa impostazione limita la risoluzione massima delle texture. Ciò consente di visualizzare più texture prima di superare la memoria disponibile per le texture e di non vederle sfocate." name="FSRestrictMaxTextureSize" />
-			<text name="TextureDetailLabel">
+			<check_box width="260" label="Limita la risoluzione massima delle texture a:" tool_tip="Questa impostazione limita la risoluzione massima delle texture. Ciò consente di visualizzare più texture prima di superare la memoria disponibile per le texture e di non vederle sfocate." name="FSRestrictMaxTextureSize" />
+			<combo_box name="FSRestrictMaxTexturePixels">
+				<combo_box.item label="512 pixel" name="512" />
+				<combo_box.item label="1024 pixel" name="1024" />
+				<combo_box.item label="2048 pixel" name="2048" />
+			</combo_box>
+			<text name="FSRestrictMaxTextureSizeRestartText">
+				(richiede riavvio)
+			</text>			<text name="TextureDetailLabel">
 				Max livello qualità texture:
 			</text>
 			<combo_box name="TextureDetail">
