@@ -323,7 +323,7 @@ jobs:
       #     npm install -g node-dump-syms          
 
       - name: Post Bugsplat Symbols
-        uses: beqjanus/symbol-upload@main
+        uses: BugSplat-Git/symbol-upload@main
         with:
           clientId: ${{ 
             steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || 
