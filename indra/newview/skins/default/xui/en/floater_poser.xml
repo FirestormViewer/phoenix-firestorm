@@ -866,19 +866,34 @@ width="565">
 				image_overlay="Inv_Physics"
 				image_unselected="Toolbar_Middle_Off"
 				name="FlipPose_avatar"
-				tool_tip="Flip the current pose left/right"
-				width="28"
+				tool_tip="Flip the whole pose left/right"
+				width="23"
 				top_delta="0"
 				left_pad="1">
                     <button.commit_callback
                     function="Poser.FlipPose"/>
                 </button>
                 <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				image_overlay="Sync_Progress_1"
+				image_unselected="Toolbar_Middle_Off"
+				name="FlipJoint_avatar"
+				tool_tip="Mirror the selected joint(s) left/right"
+				width="23"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.FlipJoint"/>
+                </button>
+                <button
 				follows="left|top"
 				height="21"
 				layout="topleft"
 				enabled="true"
-				label="Recapture"
+				label="Recap"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
@@ -886,7 +901,7 @@ width="565">
 				left_pad="1"
 				top_delta="0"
 				tool_tip="If the selected part is OFF, this Recaptures what that body part is doing right now"
-				width="65" >
+				width="45" >
                     <button.commit_callback
                     function="Poser.RecaptureSelectedBones"/>
                 </button>

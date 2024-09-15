@@ -85,6 +85,7 @@ static const std::string POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME = "start_stop
 static const std::string POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME   = "toggleAdvancedPanel";
 static const std::string POSER_AVATAR_PANEL_ADVANCED_NAME          = "poses_AdvancedControls";
 static const std::string POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME   = "FlipPose_avatar";
+static const std::string POSER_AVATAR_PANEL_BUTTON_FLIPJOINT_NAME  = "FlipJoint_avatar";
 static const std::string POSER_AVATAR_PANEL_BUTTON_RECAPTURE_NAME  = "button_RecaptureParts";
 static const std::string POSER_AVATAR_PANEL_BUTTON_TOGGLEPOSING_NAME  = "toggle_PosingSelectedBones";
 
@@ -128,6 +129,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowsePoseCache, this));
 
     mCommitCallbackRegistrar.add("Poser.FlipPose", boost::bind(&FSFloaterPoser::onClickFlipPose, this));
+    mCommitCallbackRegistrar.add("Poser.FlipJoint", boost::bind(&FSFloaterPoser::onClickFlipSelectedJoints, this));
     mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", boost::bind(&FSFloaterPoser::onClickRecaptureSelectedBones, this));
     mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", boost::bind(&FSFloaterPoser::onClickToggleSelectedBoneEnabled, this));
     mCommitCallbackRegistrar.add("Pose.PoseResetMenu", boost::bind(&FSFloaterPoser::onPoseResetMenuAction, this, _2));
@@ -394,6 +396,49 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
     refreshTextEmbiggeningOnAllScrollLists();
 }
 
+void FSFloaterPoser::onClickFlipSelectedJoints()
+{
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    LLVOAvatar *avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    for (auto item : selectedJoints)
+    {
+        // need to be posing the joint to flippit
+        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (!currentlyPosingJoint)
+            continue;
+
+        // need to be posing opposite joint to flipthat
+        auto oppositeJoint = _poserAnimator.getPoserJointByName(item->mirrorJointName());
+        if (oppositeJoint)
+        {
+            bool currentlyPosingOppositeJoint = _poserAnimator.isPosingAvatarJoint(avatar, *oppositeJoint);
+            if (!currentlyPosingOppositeJoint)
+                continue;
+        }
+
+        // if you selected a joint and its opposite, we would flip both of them to yeild no net result (other than a confused user).
+        if (std::find(selectedJoints.begin(), selectedJoints.end(), oppositeJoint) != selectedJoints.end())
+        {
+            if (!item->dontFlipOnMirror())
+                continue;
+        }
+
+        _poserAnimator.reflectJoint(avatar, item); // flippit good!
+    }
+
+    refreshRotationSliders();
+    refreshTrackpadCursor();
+}
+
 void FSFloaterPoser::onClickFlipPose()
 {
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -403,21 +448,7 @@ void FSFloaterPoser::onClickFlipPose()
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
-    LLVector3 unNeededPosition;
-    std::vector<FSPoserAnimator::FSPoserJoint>::const_iterator poserJoint_iter;
-    for (poserJoint_iter = _poserAnimator.PoserJoints.begin(); poserJoint_iter != _poserAnimator.PoserJoints.end(); ++poserJoint_iter)
-    {
-        if (strstr(poserJoint_iter->jointName().c_str(), "Left")) // don't do left, just do one side of body; TODO refactor
-            continue;
-
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *poserJoint_iter); // TODO check opposite is off?
-        if (!currentlyPosing)
-            continue;
-
-        _poserAnimator.setJointRotation(avatar, &*poserJoint_iter, unNeededPosition, REFLECT_JOINT,
-                                            getJointTranslation(poserJoint_iter->jointName()),
-                                            getJointNegation(poserJoint_iter->jointName()));
-    }
+    _poserAnimator.flipEntirePose(avatar);
 
     refreshRotationSliders();
     refreshTrackpadCursor();
@@ -684,6 +715,10 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
         someButton->setEnabled(enable);
 
     someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME);
+    if (someButton)
+        someButton->setEnabled(enable);
+
+    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPJOINT_NAME);
     if (someButton)
         someButton->setEnabled(enable);
 

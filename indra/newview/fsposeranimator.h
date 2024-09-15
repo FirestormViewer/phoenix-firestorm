@@ -54,7 +54,6 @@ typedef enum E_BoneDeflectionStyles
     NONE        = 0,  // do nothing additional
     MIRROR      = 1,  // change the other joint, like in a mirror, eg: one left one right
     SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
-    REFLECT_JOINT = 3,  // change each joint, mirroring to its opposite and mirror each joint without an opposite
 } E_BoneDeflectionStyles;
 
 /// <summary>
@@ -91,12 +90,14 @@ public:
 
     /// <summary>
     /// A class encapsulating 'metadata' for a joint, such as its catagory and its opposite joint name.
+    /// You'll note it's privates and methods: this is just emulating { get; private set; } from C#
     /// </summary>
     class FSPoserJoint
     {
         std::string _jointName; // expected to be a match to LLJoint.getName() for a joint implementation.
         std::string _mirrorJointName;
         E_BoneTypes _boneList;
+        bool _dontFlipOnMirror = false;
       public:
         /// <summary>
         /// Gets the name of the joint.
@@ -114,6 +115,11 @@ public:
         E_BoneTypes boneType() const { return _boneList; }
 
         /// <summary>
+        /// Gets whether when mirroring the entire body, should this joint flip its counterpart.
+        /// </summary>
+        bool dontFlipOnMirror() const { return _dontFlipOnMirror; }
+
+        /// <summary>
         /// Creates a new instance of a PoserJoint.
         /// </summary>
         /// <param name="a">
@@ -123,11 +129,12 @@ public:
         /// </param>
         /// <param name="b">The opposite joint name, if any. Also expected to be a well-known name.</param>
         /// <param name="c">The </param>
-        FSPoserJoint(std::string a, std::string b, E_BoneTypes c)
+        FSPoserJoint(std::string a, std::string b, E_BoneTypes c, bool d = false)
         {
-            _jointName       = a;
-            _mirrorJointName = b;
-            _boneList        = c;
+            _jointName        = a;
+            _mirrorJointName  = b;
+            _boneList         = c;
+            _dontFlipOnMirror = d;
         }
     };
 
@@ -143,22 +150,22 @@ public:
         // head, torso, legs
         {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
         {"mCollarLeft", "mCollarRight", BODY}, {"mShoulderLeft", "mShoulderRight", BODY}, {"mElbowLeft", "mElbowRight", BODY}, {"mWristLeft", "mWristRight", BODY},
-        {"mCollarRight", "mCollarLeft", BODY}, {"mShoulderRight", "mShoulderLeft", BODY},  {"mElbowRight", "mElbowLeft", BODY},  {"mWristRight", "mWristLeft", BODY},
+        {"mCollarRight", "mCollarLeft", BODY, true}, {"mShoulderRight", "mShoulderLeft", BODY, true},  {"mElbowRight", "mElbowLeft", BODY, true},  {"mWristRight", "mWristLeft", BODY, true},
         {"mHipLeft", "mHipRight", BODY}, {"mKneeLeft", "mKneeRight", BODY},  {"mAnkleLeft", "mAnkleRight", BODY},
-        {"mHipRight", "mHipLeft", BODY}, {"mKneeRight", "mKneeLeft", BODY},  {"mAnkleRight", "mAnkleLeft", BODY},
+        {"mHipRight", "mHipLeft", BODY, true}, {"mKneeRight", "mKneeLeft", BODY, true},  {"mAnkleRight", "mAnkleLeft", BODY, true},
 
         // face
-        {"mFaceForeheadLeft", "mFaceForeheadRight", FACE}, {"mFaceForeheadCenter", "", FACE},  {"mFaceForeheadRight", "mFaceForeheadLeft", FACE},
+        {"mFaceForeheadLeft", "mFaceForeheadRight", FACE}, {"mFaceForeheadCenter", "", FACE},  {"mFaceForeheadRight", "mFaceForeheadLeft", FACE, true},
         {"mFaceEyebrowOuterLeft", "mFaceEyebrowOuterRight", FACE}, {"mFaceEyebrowCenterLeft", "mFaceEyebrowCenterRight", FACE},  {"mFaceEyebrowInnerLeft", "mFaceEyebrowInnerRight", FACE},
-        {"mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE}, {"mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE},  {"mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE},
+        {"mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE, true}, {"mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE, true},  {"mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE, true},
 
-        {"mEyeLeft", "mEyeRight", FACE}, {"mEyeRight", "mEyeLeft", FACE},
-        {"mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE}, {"mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE}, {"mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE}, {"mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE},
+        {"mEyeLeft", "mEyeRight", FACE}, {"mEyeRight", "mEyeLeft", FACE, true},
+        {"mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE}, {"mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE}, {"mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, true}, {"mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, true},
 
-        {"mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE}, {"mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE}, {"mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE}, {"mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE},
-        {"mFaceLipUpperLeft", "mFaceLipUpperRight", FACE}, {"mFaceLipUpperCenter", "", FACE}, {"mFaceLipUpperRight", "mFaceLipUpperLeft", FACE},
-        {"mFaceLipCornerLeft", "mFaceLipCornerRight", FACE}, {"mFaceLipCornerRight", "mFaceLipCornerLeft", FACE},
-        {"mFaceLipLowerLeft", "mFaceLipLowerRight", FACE}, {"mFaceLipLowerCenter", "", FACE}, {"mFaceLipLowerRight", "mFaceLipLowerLeft", FACE},
+        {"mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE}, {"mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE}, {"mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, true}, {"mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE, true},
+        {"mFaceLipUpperLeft", "mFaceLipUpperRight", FACE}, {"mFaceLipUpperCenter", "", FACE}, {"mFaceLipUpperRight", "mFaceLipUpperLeft", FACE, true},
+        {"mFaceLipCornerLeft", "mFaceLipCornerRight", FACE}, {"mFaceLipCornerRight", "mFaceLipCornerLeft", FACE, true},
+        {"mFaceLipLowerLeft", "mFaceLipLowerRight", FACE}, {"mFaceLipLowerCenter", "", FACE}, {"mFaceLipLowerRight", "mFaceLipLowerLeft", FACE, true},
         {"mFaceJaw", "", FACE},
 
         //left hand
@@ -169,22 +176,22 @@ public:
         {"mHandPinky1Left", "mHandPinky1Right", HANDS}, {"mHandPinky2Left", "mHandPinky2Right", HANDS}, {"mHandPinky3Left", "mHandPinky3Right", HANDS},
 
         // right hand
-        {"mHandThumb1Right", "mHandThumb1Left", HANDS}, {"mHandThumb2Right", "mHandThumb2Left", HANDS}, {"mHandThumb3Right", "mHandThumb3Left", HANDS},
-        {"mHandIndex1Right", "mHandIndex1Left", HANDS}, {"mHandIndex2Right", "mHandIndex2Left", HANDS}, {"mHandIndex3Right", "mHandIndex3Left", HANDS},
-        {"mHandMiddle1Right", "mHandMiddle1Left", HANDS}, {"mHandMiddle2Right", "mHandMiddle2Left", HANDS}, {"mHandMiddle3Right", "mHandMiddle3Left", HANDS},
-        {"mHandRing1Right", "mHandRing1Left", HANDS}, {"mHandRing2Right", "mHandRing2Left", HANDS}, {"mHandRing3Right", "mHandRing3Left", HANDS},
-        {"mHandPinky1Right", "mHandPinky1Left", HANDS}, {"mHandPinky2Right", "mHandPinky2Left", HANDS}, {"mHandPinky3Right", "mHandPinky3Left", HANDS},
+        {"mHandThumb1Right", "mHandThumb1Left", HANDS, true}, {"mHandThumb2Right", "mHandThumb2Left", HANDS, true}, {"mHandThumb3Right", "mHandThumb3Left", HANDS, true},
+        {"mHandIndex1Right", "mHandIndex1Left", HANDS, true}, {"mHandIndex2Right", "mHandIndex2Left", HANDS, true}, {"mHandIndex3Right", "mHandIndex3Left", HANDS, true},
+        {"mHandMiddle1Right", "mHandMiddle1Left", HANDS, true}, {"mHandMiddle2Right", "mHandMiddle2Left", HANDS, true}, {"mHandMiddle3Right", "mHandMiddle3Left", HANDS, true},
+        {"mHandRing1Right", "mHandRing1Left", HANDS, true}, {"mHandRing2Right", "mHandRing2Left", HANDS, true}, {"mHandRing3Right", "mHandRing3Left", HANDS, true},
+        {"mHandPinky1Right", "mHandPinky1Left", HANDS, true}, {"mHandPinky2Right", "mHandPinky2Left", HANDS, true}, {"mHandPinky3Right", "mHandPinky3Left", HANDS, true},
 
         // tail and hind limbs
         {"mTail1", "", MISC}, {"mTail2", "", MISC}, {"mTail3", "", MISC}, {"mTail4", "", MISC}, {"mTail5", "", MISC}, {"mTail6", "", MISC}, {"mGroin", "", MISC},
         {"mHindLimbsRoot", "", MISC},
         {"mHindLimb1Left", "mHindLimb1Right", MISC}, {"mHindLimb2Left", "mHindLimb2Right", MISC}, {"mHindLimb3Left", "mHindLimb3Right", MISC}, {"mHindLimb4Left", "mHindLimb4Right", MISC},
-        {"mHindLimb1Right", "mHindLimb1Left", MISC}, {"mHindLimb2Right", "mHindLimb2Left", MISC}, {"mHindLimb3Right", "mHindLimb3Left", MISC}, {"mHindLimb4Right", "mHindLimb4Left", MISC},
+        {"mHindLimb1Right", "mHindLimb1Left", MISC, true}, {"mHindLimb2Right", "mHindLimb2Left", MISC, true}, {"mHindLimb3Right", "mHindLimb3Left", MISC, true}, {"mHindLimb4Right", "mHindLimb4Left", MISC, true},
 
         // wings
         {"mWingsRoot", "", MISC},
         {"mWing1Left", "mWing1Right", MISC}, {"mWing2Left", "mWing2Right", MISC}, {"mWing3Left", "mWing3Right", MISC}, {"mWing4Left", "mWing4Right", MISC}, {"mWing4FanLeft", "mWing4FanRight", MISC},
-        {"mWing1Right", "mWing1Left", MISC}, {"mWing2Right", "mWing2Left", MISC}, {"mWing3Right", "mWing3Left", MISC}, {"mWing4Right", "mWing4Left", MISC}, {"mWing4FanRight", "mWing4FanLeft", MISC},
+        {"mWing1Right", "mWing1Left", MISC, true}, {"mWing2Right", "mWing2Left", MISC, true}, {"mWing3Right", "mWing3Left", MISC, true}, {"mWing4Right", "mWing4Left", MISC, true}, {"mWing4FanRight", "mWing4FanLeft", MISC, true},
     };
     
 public:
@@ -298,6 +305,19 @@ public:
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     void setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style);
 
+    /// <summary>
+    /// Reflects the joint with its opposite if it has one, or just mirror the rotation of itself.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint should flip left-right.</param>
+    /// <param name="joint">The joint to mirror rotation for.</param>
+    void reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint);
+
+    /// <summary>
+    /// Reflects every joint of the supplied avatar with its opposite if it has one, or mirrors the rotation of the joint if it does not have an opposite.
+    /// </summary>
+    /// <param name="avatar">The avatar whose pose should flip left-right.</param>
+    void flipEntirePose(LLVOAvatar *avatar);
+
   private:
     /// <summary>
     /// Translates a rotation vector from the UI to a Quaternion for the bone.
@@ -315,15 +335,6 @@ public:
     /// <param name="rotation">The rotation to transform to matrix.</param>
     /// <returns>The rotation vector.</returns>
     LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation);
-
-    /// <summary>
-    /// Reflects the joint with its opposite if it has one, or just mirror itself.
-    /// </summary>
-    /// <param name="avatar"></param>
-    /// <param name="joint"></param>
-    /// <param name="translation"></param>
-    /// <param name="negation"></param>
-    void reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint, E_BoneAxisTranslation translation, S32 negation);
 };
 
 #endif // LL_FSPoserAnimator_H

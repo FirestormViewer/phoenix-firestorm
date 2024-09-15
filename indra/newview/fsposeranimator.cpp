@@ -153,12 +153,6 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!joint)
         return;
 
-    if (style == REFLECT_JOINT)
-    {
-        reflectJoint(avatar, joint, translation, negation);
-        return;
-    }
-
     LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint->jointName()));
     if (!avJoint)
         return;
@@ -190,8 +184,14 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     }
 }
 
-void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint, E_BoneAxisTranslation translation, S32 negation)
+void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint)
 {
+    if (!avatar || avatar->isDead())
+        return;
+
+    if (!joint)
+        return;
+
     LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint->jointName()));
     if (!avJoint)
         return;
@@ -212,6 +212,32 @@ void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint
     LLQuaternion second_inv  = LLQuaternion(-second_quat.mQ[VX], second_quat.mQ[VY], -second_quat.mQ[VZ], second_quat.mQ[VW]);
     avJoint->setTargetRotation(second_inv);
     oppositeJoint->setTargetRotation(first_inv);
+}
+
+void FSPoserAnimator::flipEntirePose(LLVOAvatar *avatar)
+{
+    if (!avatar || avatar->isDead())
+        return;
+
+    for (size_t index = 0; index != PoserJoints.size(); ++index)
+    {
+        if (PoserJoints[index].dontFlipOnMirror()) // we only flip one side.
+            continue;
+
+        bool currentlyPosing = isPosingAvatarJoint(avatar, PoserJoints[index]);
+        if (!currentlyPosing)
+            continue;
+
+        auto oppositeJoint = getPoserJointByName(PoserJoints[index].mirrorJointName());
+        if (oppositeJoint)
+        {
+            bool currentlyPosingOppositeJoint = isPosingAvatarJoint(avatar, *oppositeJoint);
+            if (!currentlyPosingOppositeJoint)
+                continue;
+        }
+
+        reflectJoint(avatar, &PoserJoints[index]);
+    }
 }
 
 // from the UI to the bone, the inverse translation, the un-swap, the backwards

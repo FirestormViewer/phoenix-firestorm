@@ -192,6 +192,7 @@ class FSFloaterPoser : public LLFloater
     void onClickToggleSelectedBoneEnabled();
     void onClickRecaptureSelectedBones();
     void onClickFlipPose();
+    void onClickFlipSelectedJoints();
     void onPoseResetMenuAction(const LLSD &param);
 
     // UI Refreshments
