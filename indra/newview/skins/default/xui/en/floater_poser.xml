@@ -900,7 +900,7 @@ width="565">
 				name="button_RecaptureParts"
 				left_pad="1"
 				top_delta="0"
-				tool_tip="If the selected part is OFF, this Recaptures what that body part is doing right now"
+				tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now"
 				width="45" >
                     <button.commit_callback
                     function="Poser.RecaptureSelectedBones"/>
@@ -971,6 +971,7 @@ width="565">
 				name="toggleLoadSavePanel"
 				left_pad="1"
 				top_delta="0"
+				tool_tip="Load, save and manage the poses you make"
 				width="105" >
                     <button.commit_callback
                     function="Poser.ToggleLoadSavePanel"/>
