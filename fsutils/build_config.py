@@ -3,7 +3,7 @@
 import json
 
 class BuildConfig:
-    def __init__(self, config_file='config.json'):
+    def __init__(self, config_file='build_config.json'):
         with open(config_file, 'r') as f:
             config_data = json.load(f)
 
