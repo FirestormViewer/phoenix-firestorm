@@ -220,14 +220,15 @@ def unpack_artifacts(path_to_artifacts_directory, config):
             shutil.copytree(file, unpack_folder, dirs_exist_ok=True)
         print(f"Finished unpacking {filename} to {unpack_folder}")
         if build_type not in build_types_found:
+            print(f"Creating build_type {build_type} entry in build_types_found")
             build_types_found[build_type] = { 
                 "build_type": build_type,
                 "build_type_folder": build_folder,
                 "build_type_fullpath": build_type_dir,
                 "os_folders": [], 
             }
-        build_types_found[build_type]["os_folders"].append(os_folder)
         print(f"Appended {os_folder} to build_type {build_type}")
+        build_types_found[build_type]["os_folders"].append(os_folder)
     print(f"Finished processing artifacts for build_type {build_type}")
     return build_types_found
 
@@ -411,7 +412,7 @@ def main():
         # get the .zip files in args.path_to_directory using glob 
         print(f"Processing artifacts in {args.path_to_directory}")
         build_types_created = unpack_artifacts(args.path_to_directory, config)
-
+        print(f"buuild types created: {build_types_created}")
         for build_type in build_types_created:
             print(f"Processing {build_type['build_type']}")
             restructure_folders(build_type, config)
