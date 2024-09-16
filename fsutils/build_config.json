@@ -35,10 +35,6 @@
         "Alpha": "alpha",
         "Nightly": "nightly"
     },
-    "grid_type_mapping": {
-        "SecondLife": "sl",
-        "OpenSim": "os"
-    },
     "build_type_mapping": {
         "regular": "regular",
         "avx": "avx",
