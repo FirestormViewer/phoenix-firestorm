@@ -188,18 +188,19 @@ def unpack_artifacts(path_to_artifacts_directory, config):
 
         build_folder = get_hosted_folder_for_build_type(build_type, config)
         print(f"build_folder {build_folder}")
-        build_type_dir = os.path.join(path_to_artifacts_directory, build_folder)
-
         try:
-            os_folder = get_hosted_folder_for_os_type(platform, config)
-        except KeyError:
-            print(f"Invalid OS platform {platform} specified by file {file} - skipping")
-            continue
+            build_type_dir = os.path.join(path_to_artifacts_directory, build_folder)
         except Exception as e:
-            print(f"An error occurred while getting OS folder: {e}")
+            print(f"An error occurred while creating build_type_dir folder from {path_to_artifacts_directory} and {build_folder}: {e}")
             continue
-        
-        unpack_folder = os.path.join(build_type_dir, os_folder)
+        print(f"build_type_dir {build_type_dir}")
+        os_folder = get_hosted_folder_for_os_type(platform, config)
+        print(f"os_folder {os_folder}")
+        try:
+            unpack_folder = os.path.join(build_type_dir, os_folder)
+        except Exception as e:
+            print(f"An error occurred while creating unpack_folder folder from {build_type_dir} and {os_folder}: {e}")
+            continue
         print(f"unpacking {filename} to {unpack_folder}")
         try:
             unzip_file(file, unpack_folder)

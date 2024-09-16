@@ -16,7 +16,7 @@
     },
     "os_hosted_folder": {
         "windows": "windows",
-        "darwin": "mac",
+        "macos": "mac",
         "linux": "linux"
     },
     "platforms_printable": {
