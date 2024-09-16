@@ -391,27 +391,30 @@ jobs:
         with:
           sparse-checkout: |
             fsutils/download_list.py
+            fsutils/build_config.json
+            fsutils/build_config.py
           sparse-checkout-cone-mode: false
           ref: ${{ github.head_ref || github.ref_name || 'master' }}
           fetch-depth: 1
       - name: Install discord-webhook library
         run: pip install discord-webhook
 
-      - name: find channel and webhook from Branch name
+      - name: find channel and webhook from build_matrix outputs
         run: | 
-          if [[ "${{ github.ref_name }}" == Firestorm* ]]; then
+          viewer_release_type=${{ needs.build_matrix.outputs.viewer_release_type }}
+          if [[ "$viewer_release_type" == "Release" ]]; then
             FS_RELEASE_FOLDER=release
             FS_BUILD_WEBHOOK_URL=${{ secrets.RELEASE_WEBHOOK_URL }}
-          elif [[ "${{ github.ref_name }}" == *review* ]]; then
+          elif [[ "$viewer_release_type" == "Beta" ]]; then
             FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-          elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
+          elif [[ "$viewer_release_type" == "Alpha" ]]; then
             FS_RELEASE_FOLDER=test
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-            elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
+            elif [[ "$viewer_release_type" == "Nightly" ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly
             FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
-            elif [[ "${{github.event_name }}" == "workflow_dispatch" ]]; then
+            elif [[ "$viewer_release_type" == "Manual" ]]; then
             FS_RELEASE_FOLDER=test
             FS_BUILD_WEBHOOK_URL=${{ secrets.MANUAL_WEBHOOK_URL }}
           else
@@ -430,7 +433,12 @@ jobs:
         working-directory: ${{steps.download.outputs.download-path}}
 
       - name: Reorganise artifacts ready for server upload.
-        run: python ./fsutils/download_list.py -u ${{steps.download.outputs.download-path}} -w ${{ env.FS_BUILD_WEBHOOK_URL }}
+        env:
+          FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
+          FS_VIEWER_VERSION: ${{ needs.build_matrix.outputs.viewer_version }}
+          FS_VIEWER_BUILD: ${{ needs.build_matrix.outputs.viewer_build }}
+          FS_VIEWER_RELEASE_TYPE: ${{ needs.build_matrix.outputs.viewer_release_type }}          
+        run: python ./fsutils/download_list.py ${{steps.download.outputs.download-path}} -w ${{ env.FS_BUILD_WEBHOOK_URL }}
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main

@@ -1,0 +1,47 @@
+{
+    "os_download_dirs": [
+        "windows", "mac", "linux"
+    ],
+    "fs_version_mgr_platform": {
+        "windows": "win",
+        "mac": "mac",
+        "linux": "lin"
+    },
+    "build_type_hosted_folder": {
+        "Release": "release",
+        "Beta": "preview",
+        "Alpha": "test",
+        "Nightly": "nightly"
+    },
+    "os_hosted_folder": {
+        "windows": "windows",
+        "darwin": "mac",
+        "linux": "linux"
+    },
+    "platforms_printable": {
+        "windows": "MS Windows",
+        "mac": "MacOS",
+        "linux": "Linux"
+    },
+    "grids_printable": {
+        "SL": "Second Life",
+        "OS": "OpenSim"
+    },
+    "download_root": "https://downloads.firestormviewer.org",
+    "viewer_channel_mapping": {
+        "Release": "release",
+        "Beta": "beta",
+        "Alpha": "alpha",
+        "Nightly": "nightly"
+    },
+    "grid_type_mapping": {
+        "SecondLife": "sl",
+        "OpenSim": "os"
+    },
+    "build_type_mapping": {
+        "regular": "regular",
+        "avx": "avx",
+        "tracy": "tracy",
+        "arm": "arm"
+    }
+}
