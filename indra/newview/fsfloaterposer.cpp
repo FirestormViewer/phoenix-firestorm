@@ -426,6 +426,7 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
         }
 
         // if you selected a joint and its opposite, we would flip both of them to yeild no net result (other than a confused user).
+        // One doesn't need to select both joints to flip both (selecting one is enough), but if one does select both, handle that.
         if (std::find(selectedJoints.begin(), selectedJoints.end(), oppositeJoint) != selectedJoints.end())
         {
             if (!item->dontFlipOnMirror())
@@ -1518,6 +1519,10 @@ void FSFloaterPoser::onAvatarsRefresh()
     LLSD selectedName = avatarScrollList->getSelectedValue();
     avatarScrollList->clearRows();
 
+    std::string iconCatagoryName = "Inv_BodyShape";
+    if (hasString("icon_category"))
+        iconCatagoryName = getString("icon_category");
+
     // Add non-Animesh avatars
     for (LLCharacter *character : LLCharacter::sInstances)
     {
@@ -1536,7 +1541,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         LLSD row;
         row["columns"][0]["column"] = "icon";
         row["columns"][0]["type"]   = "icon";
-        row["columns"][0]["value"]  = getString("icon_category");
+        row["columns"][0]["value"]  = iconCatagoryName;
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"]  = av_name.getDisplayName();
         row["columns"][2]["column"] = "uuid";
@@ -1546,6 +1551,10 @@ void FSFloaterPoser::onAvatarsRefresh()
         LLScrollListItem *item      = avatarScrollList->addElement(row);
         item->setUserdata(avatar);
     }
+
+    std::string iconObjectName = "Inv_Object";
+    if (hasString("icon_object"))
+        iconObjectName = getString("icon_object");
 
     // Add Animesh avatars
     for (auto character : LLControlAvatar::sInstances)
@@ -1557,7 +1566,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         LLSD row;
         row["columns"][0]["column"] = "icon";
         row["columns"][0]["type"]   = "icon";
-        row["columns"][0]["value"]  = getString("icon_object");
+        row["columns"][0]["value"]  = iconObjectName;
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"]  = avatar->getFullname();
         row["columns"][2]["column"] = "uuid";
