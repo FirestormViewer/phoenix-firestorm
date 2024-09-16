@@ -218,7 +218,7 @@ def unpack_artifacts(path_to_artifacts_directory, config):
             #     os.makedirs(unpack_folder)
             # Copy the contents of the source folder to the destination folder recursively
             shutil.copytree(file, unpack_folder, dirs_exist_ok=True)
-        
+        print(f"Finished unpacking {filename} to {unpack_folder}")
         if build_type not in build_types_found:
             build_types_found[build_type] = { 
                 "build_type": build_type,
@@ -227,9 +227,12 @@ def unpack_artifacts(path_to_artifacts_directory, config):
                 "os_folders": [], 
             }
         build_types_found[build_type]["os_folders"].append(os_folder)
+        print(f"Appended {os_folder} to build_type {build_type}")
+    print(f"Finished processing artifacts for build_type {build_type}")
     return build_types_found
 
 def restructure_folders(build_type, config):
+    print(f"Restructuring folders for build_type {build_type}")
     build_type_dir = build_type["build_type_fullpath"]
     if not os.path.exists(build_type_dir):
         print(f"Unexpected error: path {build_type_dir} does not exist, even though it was in the set.")
@@ -254,6 +257,7 @@ def restructure_folders(build_type, config):
             shutil.move(sym_file, symbols_folder)
 
 def gather_build_info(build_type, config):
+    print(f"Gathering build info for build_type {build_type}")
     # While we're at it, let's print the md5 listing 
     download_root = f"{config.download_root}/{build_type['build_type_folder']}"
     # for each os that we have built for 
@@ -327,6 +331,7 @@ DOWNLOADS - {build_info["build_type"]}
     return text_summary
 
 def update_fs_version_mgr(build_info, config):
+    print(f"Updating Firestorm Version Manager for build_type {build_info['build_type']}")
     # Read the secret key from environment variables
     secret_key = os.environ.get('FS_VERSION_MGR_KEY')
     if not secret_key:
@@ -408,6 +413,7 @@ def main():
         build_types_created = unpack_artifacts(args.path_to_directory, config)
 
         for build_type in build_types_created:
+            print(f"Processing {build_type['build_type']}")
             restructure_folders(build_type, config)
             build_info = gather_build_info(build_type, config)
             update_fs_version_mgr(build_info, config)
