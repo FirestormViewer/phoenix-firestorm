@@ -11,7 +11,8 @@
         "Release": "release",
         "Beta": "preview",
         "Alpha": "test",
-        "Nightly": "nightly"
+        "Nightly": "nightly",
+        "Unknown": "test"
     },
     "os_hosted_folder": {
         "windows": "windows",
