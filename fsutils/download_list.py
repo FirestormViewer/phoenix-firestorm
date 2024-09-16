@@ -148,13 +148,13 @@ def get_hosted_folder_for_build_type(build_type, config):
         config.build_type_hosted_folder.get("Unknown")
         )
 
-def get_supported_build_type(build_type, config):
+def is_supported_build_type(build_type, config):
     if build_type in config.build_type_hosted_folder:
-        return build_type
+        return True
     else:
-        return None
+        return False
 def get_hosted_folder_for_os_type(os_type, config):
-    return config.build_type_hosted_folder.get(
+    return config.os_hosted_folder.get(
         os_type
         )
 
@@ -177,13 +177,17 @@ def unpack_artifacts(path_to_artifacts_directory, config):
     build_types_found = {}
     zips = glob.glob(f"{path_to_artifacts_directory}/*.zip")
     for file in zips:
+        print(f"Processing zip file {file}")
         filename, build_type, platform = extract_vars_from_zipfile_name(file)
-
-        build_type = get_supported_build_type( build_type, config)
-        if build_type == None:
-            print(f"Invalid build_type {build_type} from file {file} using 'Unknown'")
+        print(f"Identified filename {filename}, build_type {build_type} and platform {platform} from file {file}")
+        if is_supported_build_type( build_type, config) == False:
+            print(f"Invalid build_type {build_type} from file {file} using 'Unknown' instead")
             build_type = "Unknown"
+        else:
+            print(f"Using build_type {build_type} from file {file}")
+
         build_folder = get_hosted_folder_for_build_type(build_type, config)
+        print(f"build_folder {build_folder}")
         build_type_dir = os.path.join(path_to_artifacts_directory, build_folder)
 
         try:
