@@ -293,12 +293,14 @@ def gather_build_info(build_type, config):
                     "fs_ver_mgr_platform": config.fs_version_mgr_platform.get(platform_folder),
                     "md5": md5,
                 }}
+
         except TypeError:
             print(f"Error processing files for {platform_folder} in {build_type_dir}")
             continue
         except Exception as e:
             print(f"An error occurred while processing files for {platform_folder} in {build_type_dir}: {e}")
             continue
+        print(f"Created build info: {build_type}")
     return build_type
 
 def create_discord_message(build_info, config):
@@ -358,7 +360,6 @@ def update_fs_version_mgr(build_info, config):
             continue
 
         payload = {
-            "secret": secret_for_api,
             "viewer_channel": channel,
             "grid_type": grid,
             "operating_system": os_name,
@@ -368,6 +369,8 @@ def update_fs_version_mgr(build_info, config):
             "download_link": download_link,
             "md5_checksum": md5_checksum
         }
+        print(f"Payload (without secret): {payload}")
+        payload["secret"] = secret_for_api
 
         # Make the API call
         url = "https://www.firestormviewer.org/set-fs-vrsns-jsn/"
