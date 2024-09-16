@@ -202,14 +202,22 @@ def unpack_artifacts(path_to_artifacts_directory, config):
             print(f"An error occurred while creating unpack_folder folder from {build_type_dir} and {os_folder}: {e}")
             continue
         print(f"unpacking {filename} to {unpack_folder}")
-        try:
-            unzip_file(file, unpack_folder)
-        except zipfile.BadZipFile:
-            print(f"Skipping {file} as it is not a valid zip file")
-            continue
-        except Exception as e:
-            print(f"An error occurred while unpacking {file}: {e} , skipping file {filename}")
-            continue
+        if os.path.isfile(file):
+            # this is an actual zip file
+            try:
+                unzip_file(file, unpack_folder)
+            except zipfile.BadZipFile:
+                print(f"Skipping {file} as it is not a valid zip file")
+                continue
+            except Exception as e:
+                print(f"An error occurred while unpacking {file}: {e} , skipping file {filename}")
+                continue
+        else:
+            # Create the destination folder if it doesn't exist
+            # if not os.path.exists(unpack_folder):
+            #     os.makedirs(unpack_folder)
+            # Copy the contents of the source folder to the destination folder recursively
+            shutil.copytree(file, unpack_folder, dirs_exist_ok=True)
         
         if build_type not in build_types_found:
             build_types_found[build_type] = { 
