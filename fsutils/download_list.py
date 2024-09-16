@@ -413,8 +413,8 @@ def main():
         print(f"Processing artifacts in {args.path_to_directory}")
         build_types_created = unpack_artifacts(args.path_to_directory, config)
         print(f"buuild types created: {build_types_created}")
-        for build_type in build_types_created:
-            print(f"Processing {build_type['build_type']}")
+        for build_type_key, build_type in build_types_created.items():            
+            print(f"Processing {build_type_key}")
             restructure_folders(build_type, config)
             build_info = gather_build_info(build_type, config)
             update_fs_version_mgr(build_info, config)
