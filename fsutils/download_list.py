@@ -27,17 +27,6 @@ def generate_secret(secret_key):
     secret_for_api = hashlib.sha1(data.encode()).hexdigest()
     return secret_for_api
 
-def map_build_type(build_variant):
-    # Map your build_variant to the API's build_type values
-    build_type_mapping = {
-        'Release': 'regular',
-        'Beta': 'beta',
-        'Alpha': 'alpha',
-        'Nightly': 'nightly',
-        # Add other mappings if necessary
-    }
-    return build_type_mapping.get(build_variant, 'regular')
-
 # run a command line subshell and return the output
 
 # We want to get the following output by looping over the files
