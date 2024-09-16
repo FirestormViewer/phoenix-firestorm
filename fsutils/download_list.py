@@ -376,18 +376,30 @@ def update_fs_version_mgr(build_info, config):
         url = "https://www.firestormviewer.org/set-fs-vrsns-jsn/"
         headers = {"Content-Type": "application/json"}
 
+        response = None  # Initialize response to None
+
         try:
             response = requests.post(url, json=payload, headers=headers)
             response.raise_for_status()
+            
+            # Parse the response data
             response_data = response.json()
             result = response_data.get('result')
             message = response_data.get('message')
+            
             if result == 'success':
                 print(f"Version manager updated successfully for {os_name} {build_variant}")
             else:
                 print(f"Error updating version manager: {message}")
+
         except requests.exceptions.RequestException as e:
             print(f"API request failed: {e}")
+            
+            # Check if response is available and check for status code 403
+            if response and response.status_code == 403:
+                print("Status Code:", response.status_code)
+                print("Response Headers:", response.headers)
+                print("Response Body:", response.text)
         except ValueError:
             print("API response is not valid JSON")
 
