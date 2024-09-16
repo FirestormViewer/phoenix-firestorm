@@ -437,7 +437,8 @@ jobs:
           FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
           FS_VIEWER_VERSION: ${{ needs.build_matrix.outputs.viewer_version }}
           FS_VIEWER_BUILD: ${{ needs.build_matrix.outputs.viewer_build }}
-          FS_VIEWER_RELEASE_TYPE: ${{ needs.build_matrix.outputs.viewer_release_type }}          
+          FS_VIEWER_RELEASE_TYPE: ${{ needs.build_matrix.outputs.viewer_release_type }}
+          FS_VERSION_MGR_KEY: ${{ secrets.FS_VERSION_MGR_KEY }}
         run: python ./fsutils/download_list.py ${{steps.download.outputs.download-path}} -w ${{ env.FS_BUILD_WEBHOOK_URL }}
 
       - name: Setup rclone and download the folder

@@ -88,7 +88,8 @@ jobs:
           FS_VIEWER_CHANNEL: ${{ github.event.inputs.viewer_channel }}
           FS_VIEWER_VERSION: ${{ github.event.inputs.viewer_version }}
           FS_VIEWER_BUILD: ${{ github.event.inputs.viewer_build }}
-          FS_VIEWER_RELEASE_TYPE: ${{ github.event.inputs.viewer_release_type }}          
+          FS_VIEWER_RELEASE_TYPE: ${{ github.event.inputs.viewer_release_type }}
+          FS_VERSION_MGR_KEY: ${{ secrets.FS_VERSION_MGR_KEY }}
         run: python ./fsutils/download_list.py ./to_deploy -w ${{ env.FS_BUILD_WEBHOOK_URL }}
 
       - name: Setup rclone and download the folder
