@@ -253,7 +253,7 @@ def restructure_folders(build_type, config):
 
 def gather_build_info(build_type, config):
     # While we're at it, let's print the md5 listing 
-    download_root = f"{config.download_root}/{build_type["build_type_folder"]}"
+    download_root = f"{config.download_root}/{build_type['build_type_folder']}"
     # for each os that we have built for 
     build_type_dir = build_type["build_type_fullpath"]
     for platform_folder in build_type["os_folders"]:
@@ -312,9 +312,9 @@ DOWNLOADS - {build_info["build_type"]}
             try:
                 file_key = f"{grid}-{platform_folder}"
                 text_summary += f"{platform_printable} for {grid_printable}\n"
-                text_summary += f"{build_info["downloadable_artifacts"][file_key]["file_download_URI"]}\n"
+                text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
                 text_summary += "\n"
-                text_summary += f"MD5: {build_info["downloadable_artifacts"][file_key]["md5"]}\n"
+                text_summary += f"MD5: {build_info['downloadable_artifacts'][file_key]['md5']}\n"
                 text_summary += "\n"
             except KeyError:
                 text_summary += f"{platform_printable} for {grid_printable} - NOT AVAILABLE\n"
