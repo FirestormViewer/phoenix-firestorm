@@ -48,9 +48,9 @@ jobs:
       - name: Download Build Artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
-          workflow: ${{ github.event.inputs.build_run_id  }}
-          name: build_artifact
-          path: build_artifacts
+          workflow: build_viewer.yml
+          run_number: ${{ github.event.inputs.build_run_id  }}
+          path: to_deploy
       - name: Install discord-webhook library
         run: pip install discord-webhook
 
@@ -78,11 +78,6 @@ jobs:
           echo "FS_RELEASE_FOLDER=${FS_RELEASE_FOLDER}" >> $GITHUB_ENV
           echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        id: download
-        with:
-          path: to_deploy
       - name: List artifacts download
         run: ls -R
         working-directory: ${{steps.download.outputs.download-path}}
