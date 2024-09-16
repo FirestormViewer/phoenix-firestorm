@@ -286,13 +286,13 @@ def gather_build_info(build_type, config):
                 if "downloadable_artifacts" not in build_type:
                     build_type["downloadable_artifacts"] = {}
 
-                build_type["downloadable_artifacts"] = { f"{file_key}":{
+                build_type["downloadable_artifacts"][f"{file_key}"] = {
                     "file_path": full_file,         
                     "file_download_URI": file_URI,
                     "grid": grid,
                     "fs_ver_mgr_platform": config.fs_version_mgr_platform.get(platform_folder),
                     "md5": md5,
-                }}
+                }
 
         except TypeError:
             print(f"Error processing files for {platform_folder} in {build_type_dir}")
