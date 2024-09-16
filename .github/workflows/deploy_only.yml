@@ -47,6 +47,7 @@ jobs:
           fetch-depth: 1        
       - name: Download Build Artifacts
         uses: dawidd6/action-download-artifact@v6
+        id: download
         with:
           workflow: build_viewer.yml
           run_number: ${{ github.event.inputs.build_run_id  }}
@@ -88,7 +89,7 @@ jobs:
           FS_VIEWER_VERSION: ${{ github.event.inputs.viewer_version }}
           FS_VIEWER_BUILD: ${{ github.event.inputs.viewer_build }}
           FS_VIEWER_RELEASE_TYPE: ${{ github.event.inputs.viewer_release_type }}          
-        run: python ./fsutils/download_list.py ${{steps.download.outputs.download-path}} -w ${{ env.FS_BUILD_WEBHOOK_URL }}
+        run: python ./fsutils/download_list.py ./to_deploy -w ${{ env.FS_BUILD_WEBHOOK_URL }}
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
