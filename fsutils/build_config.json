@@ -17,7 +17,7 @@
     "os_hosted_folder": {
         "windows": "windows",
         "macos": "mac",
-        "linux": "linux"
+        "ubuntu": "linux"
     },
     "platforms_printable": {
         "windows": "MS Windows",

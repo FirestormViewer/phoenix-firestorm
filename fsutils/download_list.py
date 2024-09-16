@@ -227,8 +227,9 @@ def unpack_artifacts(path_to_artifacts_directory, config):
                 "build_type_fullpath": build_type_dir,
                 "os_folders": [], 
             }
-        print(f"Appended {os_folder} to build_type {build_type}")
-        build_types_found[build_type]["os_folders"].append(os_folder)
+        if os_folder not in build_types_found[build_type]["os_folders"]:
+            build_types_found[build_type]["os_folders"].append(os_folder)
+            print(f"Appended {os_folder} to build_type {build_type}")
     print(f"Finished processing artifacts for build_type {build_type}")
     return build_types_found
 
