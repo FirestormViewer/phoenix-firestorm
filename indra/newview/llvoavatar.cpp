@@ -8028,7 +8028,6 @@ LLDrawable *LLVOAvatar::createDrawable(LLPipeline *pipeline)
     mNumInitFaces = mDrawable->getNumFaces() ;
 
     dirtyMesh(2);
-    poolp->mAvatar = this;   // <FS:Zi> Add avatar hitbox debug - remember avatar pointer in case avatar draw face breaks
     return mDrawable;
 }
 
