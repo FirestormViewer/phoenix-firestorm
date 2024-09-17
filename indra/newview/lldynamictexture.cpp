@@ -191,9 +191,7 @@ bool LLViewerDynamicTexture::updateAllInstances()
         return true;
     }
 
-    // <FS:Ansariel> Auxillary render target pack for 1024px LLDynamicTexture
-    //LLRenderTarget& bake_target = gPipeline.mAuxillaryRT.deferredScreen;
-    LLRenderTarget& bake_target = gPipeline.mDynamicTextureRT.deferredScreen;
+    LLRenderTarget& bake_target = gPipeline.mAuxillaryRT.deferredScreen;
 
     if (!bake_target.isComplete())
     {
