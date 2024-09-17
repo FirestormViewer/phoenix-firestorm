@@ -157,18 +157,8 @@ LLPluginProcessParent::ptr_t LLPluginProcessParent::create(LLPluginProcessParent
 /*static*/
 void LLPluginProcessParent::shutdown()
 {
-    // <FS:Beq> FIRE-34497 - lock maybe be null during shutdown due to fiber shutdown race condition
-    // LLCoros::LockType lock(*sInstancesMutex);
-    std::unique_ptr<LLCoros::LockType> lock;
-    if (sInstancesMutex)
-    {
-        lock = std::make_unique<LLCoros::LockType>(*sInstancesMutex);
-    }
-    else
-    {
-        LL_WARNS("Plugin") << "shutdown called but no instances mutex available" << LL_ENDL;
-    }
-    // </FS:Beq>
+    LLCoros::LockType lock(*sInstancesMutex);
+
     mapInstances_t::iterator it;
     for (it = sInstances.begin(); it != sInstances.end(); ++it)
     {
