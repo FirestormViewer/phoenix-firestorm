@@ -1,0 +1,102 @@
+name: Deploy Viewer
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: 'Workflow Run ID of the build to deploy'
+        required: true
+        default: ''
+      viewer_channel:
+        description: 'viewer_channel'
+        required: true
+        default: 'Releasex64'
+      viewer_version:
+        description: 'viewer version not including build'
+        required: true
+        default: '7.1.10'
+      viewer_build:
+        description: 'build id'
+        required: true
+        default: '799999'
+      viewer_release_type:
+        description: 'release type'
+        required: true
+        default: 'Release'
+      branch:
+        description: 'Branch to deploy from'
+        required: false
+        default: 'master'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            fsutils/download_list.py
+            fsutils/build_config.json
+            fsutils/build_config.py
+          sparse-checkout-cone-mode: false
+          ref: ${{ github.head_ref || github.ref_name || 'master' }}
+          fetch-depth: 1        
+      - name: Download Build Artifacts
+        uses: dawidd6/action-download-artifact@v6
+        id: download
+        with:
+          workflow: build_viewer.yml
+          run_number: ${{ github.event.inputs.build_run_id  }}
+          path: to_deploy
+      - name: Install discord-webhook library
+        run: pip install discord-webhook
+
+      - name: find channel and webhook from build_matrix outputs
+        run: | 
+          viewer_release_type=${{ github.event.inputs.viewer_release_type }}
+          if [[ "$viewer_release_type" == "Release" ]]; then
+            FS_RELEASE_FOLDER=release
+            FS_BUILD_WEBHOOK_URL=${{ secrets.RELEASE_WEBHOOK_URL }}
+          elif [[ "$viewer_release_type" == "Beta" ]]; then
+            FS_RELEASE_FOLDER=preview
+            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
+          elif [[ "$viewer_release_type" == "Alpha" ]]; then
+            FS_RELEASE_FOLDER=test
+            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
+            elif [[ "$viewer_release_type" == "Nightly" ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
+            FS_RELEASE_FOLDER=nightly
+            FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
+            elif [[ "$viewer_release_type" == "Manual" ]]; then
+            FS_RELEASE_FOLDER=test
+            FS_BUILD_WEBHOOK_URL=${{ secrets.MANUAL_WEBHOOK_URL }}
+          else
+            FS_RELEASE_TYPE=Unknown
+          fi
+          echo "FS_RELEASE_FOLDER=${FS_RELEASE_FOLDER}" >> $GITHUB_ENV
+          echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV
+
+      - name: List artifacts download
+        run: ls -R
+        working-directory: ${{steps.download.outputs.download-path}}
+
+      - name: Reorganise artifacts ready for server upload.
+        env:
+          FS_VIEWER_CHANNEL: ${{ github.event.inputs.viewer_channel }}
+          FS_VIEWER_VERSION: ${{ github.event.inputs.viewer_version }}
+          FS_VIEWER_BUILD: ${{ github.event.inputs.viewer_build }}
+          FS_VIEWER_RELEASE_TYPE: ${{ github.event.inputs.viewer_release_type }}
+          FS_VERSION_MGR_KEY: ${{ secrets.FS_VERSION_MGR_KEY }}
+        run: python ./fsutils/download_list.py ./to_deploy -w ${{ env.FS_BUILD_WEBHOOK_URL }}
+
+      - name: Setup rclone and download the folder
+        uses: beqjanus/setup-rclone@main
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG }}
+
+      - name: Copy files to remote host
+        run: rclone copy ./to_deploy/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:viewerdownloads/${{ env.FS_RELEASE_FOLDER }}
+

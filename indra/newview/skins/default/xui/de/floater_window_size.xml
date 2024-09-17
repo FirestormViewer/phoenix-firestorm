@@ -20,6 +20,7 @@
 		<combo_box.item label="1920 x 1080 (16:9 FHD)" name="item12"/>
 		<combo_box.item label="1920 x 1200 (16:10 WUXGA)" name="item13"/>
 		<combo_box.item label="2560 x 1440 (16:9 QHD)" name="item14"/>
+		<combo_box.item label="3840 x 2160 (16:9 4K UHD)" name="item15"/>
 	</combo_box>
 	<button label="Festlegen" name="set_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>
