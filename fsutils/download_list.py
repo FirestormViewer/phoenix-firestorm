@@ -360,10 +360,10 @@ def update_fs_version_mgr(build_info, config):
             continue
 
         payload = {
-            "viewer_channel": channel,
+            "viewer_channel": build_type,
             "grid_type": grid,
             "operating_system": os_name,
-            "build_type": build_type.lower(),
+            "build_type": build_variant,
             "viewer_version": version,
             "build_number": int(build_number),
             "download_link": download_link,
