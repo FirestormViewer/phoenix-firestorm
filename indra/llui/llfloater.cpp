@@ -2463,39 +2463,6 @@ void LLFloater::drawConeToOwner(F32 &context_cone_opacity,
 
         gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
         LLGLEnable(GL_CULL_FACE);
-        // <FS:Ansariel> Remove QUADS rendering mode
-        //gGL.begin(LLRender::QUADS);
-        //{
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_in_alpha * context_cone_opacity);
-        //    gGL.vertex2i(owner_rect.mLeft, owner_rect.mTop);
-        //    gGL.vertex2i(owner_rect.mRight, owner_rect.mTop);
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_out_alpha * context_cone_opacity);
-        //    gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-        //    gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_out_alpha * context_cone_opacity);
-        //    gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-        //    gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_in_alpha * context_cone_opacity);
-        //    gGL.vertex2i(owner_rect.mLeft, owner_rect.mBottom);
-        //    gGL.vertex2i(owner_rect.mLeft, owner_rect.mTop);
-
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_out_alpha * context_cone_opacity);
-        //    gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-        //    gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_in_alpha * context_cone_opacity);
-        //    gGL.vertex2i(owner_rect.mRight, owner_rect.mTop);
-        //    gGL.vertex2i(owner_rect.mRight, owner_rect.mBottom);
-
-
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_out_alpha * context_cone_opacity);
-        //    gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-        //    gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-        //    gGL.color4f(0.f, 0.f, 0.f, contex_cone_in_alpha * context_cone_opacity);
-        //    gGL.vertex2i(owner_rect.mRight, owner_rect.mBottom);
-        //    gGL.vertex2i(owner_rect.mLeft, owner_rect.mBottom);
-        //}
-        //gGL.end();
         gGL.begin(LLRender::TRIANGLE_STRIP);
         {
             gGL.color4f(0.f, 0.f, 0.f, contex_cone_in_alpha * context_cone_opacity);
@@ -2520,7 +2487,6 @@ void LLFloater::drawConeToOwner(F32 &context_cone_opacity,
             gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
         }
         gGL.end();
-        // </FS:Ansariel>
     }
 
     if (gFocusMgr.childHasMouseCapture(getDragHandle()))

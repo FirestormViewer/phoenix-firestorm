@@ -319,8 +319,6 @@ public:
         POINTS,
         LINES,
         LINE_STRIP,
-        // <FS:Ansariel> Remove QUADS rendering mode
-        //QUADS,
         LINE_LOOP,
         NUM_MODES
     };
@@ -511,8 +509,6 @@ private:
     LLColor4 mAmbientLightColor;
 
     bool            mDirty;
-    // <FS:Ansariel> Remove QUADS rendering mode
-    //U32               mQuadCycle;
     U32             mCount;
     U32             mMode;
     U32             mCurrTextureUnitIndex;

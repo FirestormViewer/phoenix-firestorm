@@ -634,17 +634,7 @@ void LLVertexBufferData::draw()
     gGL.loadMatrix(glm::value_ptr(mTexture0));
 
     mVB->setBuffer();
-
-    // <FS:Ansariel> Remove QUADS rendering mode
-    //if (mMode == LLRender::QUADS && LLRender::sGLCoreProfile)
-    //{
-    //    mVB->drawArrays(LLRender::TRIANGLES, 0, mCount);
-    //}
-    //else
-    // </FS:Ansariel>
-    {
-        mVB->drawArrays(mMode, 0, mCount);
-    }
+    mVB->drawArrays(mMode, 0, mCount);
 
     gGL.popMatrix();
     gGL.matrixMode(LLRender::MM_PROJECTION);
@@ -717,7 +707,6 @@ const U32 LLVertexBuffer::sGLMode[LLRender::NUM_MODES] =
     GL_POINTS,
     GL_LINES,
     GL_LINE_STRIP,
-    //GL_QUADS, // <FS:Ansariel> Remove QUADS rendering mode
     GL_LINE_LOOP,
 };
 

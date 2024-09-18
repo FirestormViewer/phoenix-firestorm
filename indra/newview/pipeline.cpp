@@ -11126,13 +11126,6 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
             gGL.diffuseColor4fv(LLColor4::pink.mV );
         }
 
-        // <FS:Ansariel> Remove QUADS rendering mode
-        //gGL.begin(LLRender::QUADS);
-        //gGL.vertex3f(-1, -1, clip_plane);
-        //gGL.vertex3f(1, -1, clip_plane);
-        //gGL.vertex3f(1, 1, clip_plane);
-        //gGL.vertex3f(-1, 1, clip_plane);
-        //gGL.end();
         gGL.begin(LLRender::TRIANGLES);
         {
             gGL.vertex3f(-1.f, -1.f, clip_plane);
@@ -11144,7 +11137,6 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
             gGL.vertex3f(-1.f, 1.f, clip_plane);
         }
         gGL.end();
-        // </FS:Ansariel>
         gGL.flush();
 
         gDebugProgram.unbind();
