@@ -51,6 +51,12 @@
 	<rows name="spin_around_cw">
 		<columns name="lst_action" tool_tip="Kamera im Uhrzeigersinn drehen" value="Drehen (Uhrzeigersinn)" />
 	</rows>
+	<rows name="roll_left">
+		<columns name="lst_action" value="Kamera nach links rollen" />
+	</rows>
+	<rows name="roll_right">
+		<columns name="lst_action" value="Kamera nach rechts rollen" />
+	</rows>
 	<rows name="move_forward_sitting">
 		<columns name="lst_action" value="Kamera vorwärts sitzend" />
 	</rows>

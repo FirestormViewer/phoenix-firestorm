@@ -35,6 +35,10 @@
     <binding key="E" mask="NONE" command="jump"/>
     <binding key="C" mask="NONE" command="push_down"/>
 
+<!-- <FS:Chanayane> Camera roll key bindings -->
+    <binding key="R" mask="NONE" command="roll_left"/>
+    <binding key="T" mask="NONE" command="roll_right"/>
+<!-- </FS:Chanayane> -->
     <binding key="F" mask="NONE" command="toggle_fly"/>
 
     <binding key="SPACE" mask="NONE" command="stop_moving"/>
@@ -120,6 +124,11 @@
     <binding key="S" mask="NONE" command="move_backward_sitting"/>
     <binding key="E" mask="NONE" command="spin_over_sitting"/>
     <binding key="C" mask="NONE" command="spin_under_sitting"/>
+
+<!-- <FS:Chanayane> Camera roll key bindings -->
+    <binding key="R" mask="NONE" command="roll_left" />
+    <binding key="T" mask="NONE" command="roll_right" />
+<!-- </FS:Chanayane> -->
 
     <binding key="LEFT" mask="NONE" command="spin_around_cw_sitting"/>
     <binding key="RIGHT" mask="NONE" command="spin_around_ccw_sitting"/>

@@ -134,8 +134,6 @@ cd \firestorm
 git clone https://github.com/FirestormViewer/phoenix-firestorm.git
 ```
 
-This can take a bit, it's a rather large download.
-
 ## Prepare third party libraries
 
 Most third party libraries needed to build the viewer will be automatically downloaded for you and installed into the build directory within your source tree during compilation. Some need to be manually prepared and are not normally required when using an open source configuration (ReleaseFS_open).
