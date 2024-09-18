@@ -1180,6 +1180,11 @@ bool LLGLManager::initGL()
         mGLVendorShort = "INTEL";
         mIsIntel = true;
     }
+    else if (mGLVendor.find("APPLE") != std::string::npos)
+    {
+        mGLVendorShort = "APPLE";
+        mIsApple = true;
+    }
     else
     {
         mGLVendorShort = "MISC";

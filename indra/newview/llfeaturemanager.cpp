@@ -666,6 +666,14 @@ void LLFeatureManager::applyBaseMasks()
     {
         maskFeatures("Intel");
     }
+    if (gGLManager.mIsApple)
+    {
+        maskFeatures("AppleGPU");
+    }
+    else
+    {
+        maskFeatures("NonAppleGPU");
+    }
     if (gGLManager.mGLVersion < 3.f)
     {
         maskFeatures("OpenGLPre30");

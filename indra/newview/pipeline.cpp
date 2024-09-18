@@ -3873,6 +3873,7 @@ void LLPipeline::postSort(LLCamera &camera)
         }
     }
 
+    LLVertexBuffer::flushBuffers();
     // LLSpatialGroup::sNoDelete = false;
     LL_PUSH_CALLSTACKS();
 }
