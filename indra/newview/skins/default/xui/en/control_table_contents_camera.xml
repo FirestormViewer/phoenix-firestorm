@@ -175,6 +175,30 @@
          tool_tip="Camera spin around clockwise"
          value="Clockwise" />
     </rows>
+<!-- <FS:Chanayane> Camera roll key bindings -->
+    <rows
+     name="roll_left"
+     value="roll_left">
+        <columns
+         column="lst_action"
+         font="SansSerif"
+         halign="left"
+         name="lst_action"
+         tool_tip="Camera roll left"
+         value="Roll left" />
+    </rows>
+    <rows
+     name="roll_right"
+     value="roll_right">
+        <columns
+         column="lst_action"
+         font="SansSerif"
+         halign="left"
+         name="lst_action"
+         tool_tip="Camera roll right"
+         value="Roll right" />
+    </rows>
+<!-- </FS:Chanayane> -->
     <rows
      name="move_forward_sitting"
      value="move_forward_sitting">
