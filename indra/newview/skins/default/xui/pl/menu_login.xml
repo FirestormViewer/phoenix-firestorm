@@ -24,6 +24,7 @@
 	<menu_item_check label="Pokaż menu debugowania" name="Show Debug Menu"/>
 	<menu label="Debugowanie" name="Debug">
 		<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings"/>
+		<menu_item_call label="Pokaż ustawienia kolorów" name="Color Settings" />
 		<menu_item_call label="Narzędzie podglądu XUI" name="UI Preview Tool"/>
 		<menu label="Czcionki" name="Fonts">
 			<menu_item_call label="Pokaż test czcionek" name="Show Font Test" />

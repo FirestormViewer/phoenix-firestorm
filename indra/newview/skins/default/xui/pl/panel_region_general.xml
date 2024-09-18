@@ -40,4 +40,5 @@
 	<button label="Teleportuj do Startu wszystkich Rezydentów" name="kick_all_btn"/>
 	<button label="Wyślij wiadomość do Regionu" name="im_btn"/>
 	<button label="Obsługa teleportera" name="manage_telehub_btn"/>
+	<button label="Planowanie restartów..." name="manage_restart_btn" />
 </panel>

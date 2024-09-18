@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="bulk_upload">
+	<layout_stack name="maint_layout">
+		<layout_panel name="count_panel">
+			<text name="number_of_items">
+				Elementy do przesłania: [COUNT]
+			</text>
+		</layout_panel>
+		<layout_panel name="warning_panel">
+			<text name="textures_2k_warning">
+				Domyślnie jedna lub więcej tekstur zostanie przeskalowanych do 2048px.
+			</text>
+		</layout_panel>
+		<layout_panel name="checkbox_panel">
+			<check_box label="Skaluj tekstury do maksymalnie 1024px" name="upload_2k" />
+		</layout_panel>
+		<layout_panel name="cost_panel">
+			<text name="upload_cost">
+				Koszt: [COST]L$
+			</text>
+		</layout_panel>
+		<layout_panel name="buttoms_panel">
+			<button label="Prześlij" name="upload_btn" />
+			<button label="Anuluj" name="cancel_btn" />
+		</layout_panel>
+		<layout_panel name="link_panel">
+			<text name="new_folder_textbox">
+Jak skalowane są przesyłane tekstury:
+https://wiki.secondlife.com/wiki/Limits#All_Viewers
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

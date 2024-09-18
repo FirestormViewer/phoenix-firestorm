@@ -872,6 +872,16 @@ To może się zdarzyć, kiedy zmieniasz ustawienia sieci. Zrestartowanie Przegl�
 		Przesyłanie pliku [FILE] nie powiodło się z powodu: [REASON]
 Spróbuj jeszcze raz później.
 	</notification>
+	<notification name="CannotUploadSnapshotEmailTooBig">
+		Przesyłanie zdjęcia [FILE] nie powiodło się z powodu: [REASON]
+
+Plik może być za duży. Spróbuj zmniejszyć rozdzielczość, jakość lub spróbować ponownie później.
+	</notification>
+	<notification name="CannotUploadSnapshotWebTooBig">
+		Przesyłanie zdjęcia nie powiodło się.
+
+Plik może być za duży. Spróbuj zmniejszyć rozdzielczość, jakość lub spróbować ponownie później.
+	</notification>
 	<notification name="LandmarkCreated">
 		Dodano "[LANDMARK_NAME]" do folderu [FOLDER_NAME].
 	</notification>
@@ -1168,6 +1178,9 @@ Połączyć działki?
 	<notification name="CannotSaveToAssetStore">
 		Nie można zapisać [NAME] w centralnym zbiorze danych.
 Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisać strój ponownie za kilka minut.
+	</notification>
+	<notification name="OutOfDiskSpace">
+		Zabrakło miejsca na dysku. Musisz zwolnić trochę miejsca na komputerze lub wyczyścić pamięć podręczną.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
 		Nastąpiło wylogowanie z [CURRENT_GRID]
@@ -1670,6 +1683,10 @@ Zamień materiał [MATERIAL_NUM] na materiał z alphaMode="OPAQUE" lub alphaMode
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Nie możesz zmienić wyglądu podczas ładowania ubrań i kształtu.
+	</notification>
+	<notification name="UsavedWearableChanges">
+		Masz niezapisane zmiany.
+		<usetemplate ignoretext="Potwierdź przed odrzuceniem niezapisanych zmian w ubraniach" name="okcancelignore" notext="Kontynuuj edycję" yestext="Odrzuć" />
 	</notification>
 	<notification name="ClassifiedMustBeAlphanumeric">
 		Tytuł Twojej reklamy musi zaczynać się od litery (A-Z) albo cyfry. Znaki przestankowe są niedozwolone.
