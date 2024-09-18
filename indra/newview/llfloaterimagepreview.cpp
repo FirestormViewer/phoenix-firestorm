@@ -78,9 +78,10 @@
 // </FS:Zi>
 
 // <FS:Zi> detect and strip empty alpha layers from images on upload
-const U8 ALPHA_EMPTY_THRESHOLD = 253;
-const F32 ALPHA_EMPTY_THRESHOLD_RATIO = 0.999f;
+constexpr U8 ALPHA_EMPTY_THRESHOLD = 253;
+constexpr F32 ALPHA_EMPTY_THRESHOLD_RATIO = 0.999f;
 // </FS:Zi>
+
 //-----------------------------------------------------------------------------
 // LLFloaterImagePreview()
 //-----------------------------------------------------------------------------
@@ -435,6 +436,21 @@ void LLFloaterImagePreview::draw()
             gGL.color3f(1.f, 1.f, 1.f);
             gGL.begin(LLRender::TRIANGLES);
             {
+                // <FS:Zi> Make preview area position to be not hard-coded
+                //gGL.texCoord2f(mPreviewImageRect.mLeft, mPreviewImageRect.mTop);
+                //gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+                //gGL.texCoord2f(mPreviewImageRect.mLeft, mPreviewImageRect.mBottom);
+                //gGL.vertex2i(PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
+                //gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mBottom);
+                //gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
+
+                //gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mBottom);
+                //gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
+                //gGL.texCoord2f(mPreviewImageRect.mLeft, mPreviewImageRect.mTop);
+                //gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+                //gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mTop);
+                //gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+
                 gGL.texCoord2f(mPreviewImageRect.mLeft, mPreviewImageRect.mTop);
                 gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop);
                 gGL.texCoord2f(mPreviewImageRect.mLeft, mPreviewImageRect.mBottom);
@@ -448,6 +464,7 @@ void LLFloaterImagePreview::draw()
                 gGL.vertex2i(mPreviewRect.mRight, mPreviewRect.mBottom);
                 gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mTop);
                 gGL.vertex2i(mPreviewRect.mRight, mPreviewRect.mTop);
+                // </FS:Zi>
             }
             gGL.end();
 
@@ -472,6 +489,21 @@ void LLFloaterImagePreview::draw()
 
                 gGL.begin(LLRender::TRIANGLES);
                 {
+                    // <FS:Zi> Make preview area position to be not hard-coded
+                    //gGL.texCoord2f(0.f, 1.f);
+                    //gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+                    //gGL.texCoord2f(0.f, 0.f);
+                    //gGL.vertex2i(PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
+                    //gGL.texCoord2f(1.f, 0.f);
+                    //gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
+
+                    //gGL.texCoord2f(1.f, 0.f);
+                    //gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
+                    //gGL.texCoord2f(0.f, 1.f);
+                    //gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+                    //gGL.texCoord2f(1.f, 1.f);
+                    //gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+
                     gGL.texCoord2f(0.f, 1.f);
                     gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop);
                     gGL.texCoord2f(0.f, 0.f);
@@ -485,6 +517,7 @@ void LLFloaterImagePreview::draw()
                     gGL.vertex2i(mPreviewRect.mRight, mPreviewRect.mBottom);
                     gGL.texCoord2f(1.f, 1.f);
                     gGL.vertex2i(mPreviewRect.mRight, mPreviewRect.mTop);
+                    // </FS:Zi>
                 }
                 gGL.end();
 
