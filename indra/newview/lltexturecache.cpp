@@ -1265,7 +1265,7 @@ void LLTextureCache::updateEntryTimeStamp(S32 idx, Entry& entry)
     {
         if (!mReadOnly)
         {
-            entry.mTime = time(NULL);
+            entry.mTime = (U32)time(NULL);
             mUpdatedEntryMap[idx] = entry ;
         }
     }
@@ -1304,7 +1304,7 @@ bool LLTextureCache::updateEntry(S32& idx, Entry& entry, S32 new_image_size, S32
             mTexturesSizeTotal -= entry.mBodySize ;
             mTexturesSizeTotal += new_body_size ;
         }
-        entry.mTime = time(NULL);
+        entry.mTime = (U32)time(NULL);
         entry.mImageSize = new_image_size ;
         entry.mBodySize = new_body_size ;
 

@@ -116,7 +116,7 @@ AOSet::AOSet(const LLUUID inventoryID)
         mStates[index].mCurrentAnimationID = LLUUID::null;
         mStates[index].mCycle = false;
         mStates[index].mRandom = false;
-        mStates[index].mCycleTime = 0.0f;
+        mStates[index].mCycleTime = 0;
         mStates[index].mDirty = false;
         mStateNames.emplace_back(stateNameList[0]);
     }
@@ -178,7 +178,7 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
             {
                 if (state->mRandom)
                 {
-                    state->mCurrentAnimation = ll_frand() * numOfAnimations;
+                    state->mCurrentAnimation = (U32)(ll_frand() * numOfAnimations);
                     LL_DEBUGS("AOEngine") << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
                 }
                 else

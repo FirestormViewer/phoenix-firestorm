@@ -86,7 +86,7 @@ void LLConsole::setLinePersistTime(F32 seconds)
 void LLConsole::reshape(S32 width, S32 height, bool called_from_parent)
 {
     S32 new_width = llmax(50, llmin(getRect().getWidth(), width));
-    S32 new_height = llmax(llfloor(mFont->getLineHeight()) + 15, llmin(getRect().getHeight(), height));
+    S32 new_height = llmax(mFont->getLineHeight() + 15, llmin(getRect().getHeight(), height));
 
     if (   mConsoleWidth == new_width
         && mConsoleHeight == new_height )
@@ -222,10 +222,10 @@ void LLConsole::draw()
     //static LLCachedControl<F32> console_bg_opacity(*LLUI::getInstance()->mSettingGroups["config"], "ConsoleBackgroundOpacity", 0.7f);
     //F32 console_opacity = llclamp(console_bg_opacity(), 0.f, 1.f);
 
-    //LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
+    //static LLUIColor color = LLUIColorTable::instance().getColor("ConsoleBackground");
     //color.mV[VALPHA] *= console_opacity;
 
-    //F32 line_height = mFont->getLineHeight();
+    //F32 line_height = (F32)mFont->getLineHeight();
 
     //for(paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
     //{
@@ -284,12 +284,12 @@ void LLConsole::draw()
     LLColor4 color = cbcolor.get();
     color.mV[VALPHA] *= llclamp(consoleBackgroundOpacity(), 0.f, 1.f);
 
-    F32 line_height = mFont->getLineHeight();
+    F32 line_height = (F32)mFont->getLineHeight();
     static LLCachedControl<bool> classic_draw_mode(*LLUI::getInstance()->mSettingGroups["config"], "FSConsoleClassicDrawMode");
 
     if (classic_draw_mode)
     {
-        static const F32 padding_vert = 5;
+        constexpr F32 padding_vert = 5.f;
         S32 total_width = 0;
         S32 total_height = 0;
         size_t lines_drawn = 0;
@@ -315,7 +315,7 @@ void LLConsole::draw()
             total_height += llfloor( (*paragraph_it).mLines.size() * line_height + padding_vert);
             total_width = llmax(total_width, llfloor( (*paragraph_it).mMaxWidth + padding_horizontal));
         }
-        mBackgroundImage->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (line_height - padding_vert) / 2, color);
+        mBackgroundImage->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (S32)((line_height - padding_vert) / 2.f), color);
 
         lines_drawn = 0;
         for (paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; ++paragraph_it)

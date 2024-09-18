@@ -55,28 +55,19 @@ if(WINDOWS)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
         #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
-        libapr-1.dll
-        libaprutil-1.dll
-        nghttp2.dll
         glod.dll # <FS:Beq> restore GLOD
-        libhunspell.dll
-        uriparser.dll
         )
+
+    if(LLCOMMON_LINK_SHARED)
+        set(release_files ${release_files} libapr-1.dll)
+        set(release_files ${release_files} libaprutil-1.dll)
+    endif()
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
         set(release_files ${release_files} openjp2.dll)
     endif (NOT USE_KDU)
     # </FS:Ansariel>
-
-    # OpenSSL
-    if(ADDRESS_SIZE EQUAL 64)
-        set(release_files ${release_files} libcrypto-1_1-x64.dll)
-        set(release_files ${release_files} libssl-1_1-x64.dll)
-    else(ADDRESS_SIZE EQUAL 64)
-        set(release_files ${release_files} libcrypto-1_1.dll)
-        set(release_files ${release_files} libssl-1_1.dll)
-    endif(ADDRESS_SIZE EQUAL 64)
 
     # Filenames are different for 32/64 bit BugSplat file and we don't
     # have any control over them so need to branch.
@@ -152,9 +143,14 @@ if(WINDOWS)
     # Check each of them.
     foreach(release_msvc_file
             msvcp${MSVC_VER}.dll
+            msvcp${MSVC_VER}_1.dll
+            msvcp${MSVC_VER}_2.dll
+            msvcp${MSVC_VER}_atomic_wait.dll
+            msvcp${MSVC_VER}_codecvt_ids.dll
             #msvcr${MSVC_VER}.dll # <FS:Ansariel> Can't build with older VS versions anyway - no need trying to copy this file
             vcruntime${MSVC_VER}.dll
             vcruntime${MSVC_VER}_1.dll
+            vcruntime${MSVC_VER}_threads.dll
             )
         if(redist_path AND EXISTS "${redist_path}/${release_msvc_file}")
             MESSAGE(STATUS "Copying redist file from ${redist_path}/${release_msvc_file}")
@@ -174,10 +170,6 @@ if(WINDOWS)
             MESSAGE(STATUS "Redist lib ${release_msvc_file} not found")
         endif()
     endforeach()
-    MESSAGE(STATUS "Will copy redist files for MSVC ${MSVC_VER}:")
-    foreach(target ${third_party_targets})
-        MESSAGE(STATUS "${target}")
-    endforeach()
 
 elseif(DARWIN)
     set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
@@ -191,22 +183,20 @@ elseif(DARWIN)
        )
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
-        libapr-1.0.dylib
-        libapr-1.dylib
-        libaprutil-1.0.dylib
-        libaprutil-1.dylib
-        ${EXPAT_COPY}
         libGLOD.dylib # <FS:Beq> restore GLOD
-        libhunspell-1.3.0.dylib
         libndofdev.dylib
-        libnghttp2.dylib
-        libnghttp2.14.dylib
-        liburiparser.dylib
-        liburiparser.1.dylib
-        liburiparser.1.0.27.dylib
         libgrowl.dylib
         libgrowl++.dylib
        )
+
+    if(LLCOMMON_LINK_SHARED)
+        set(release_files ${release_files}
+            libapr-1.0.dylib
+            libapr-1.dylib
+            libaprutil-1.0.dylib
+            libaprutil-1.dylib
+            )
+    endif()
 
     if (TARGET ll::fmodstudio)
       set(debug_files ${debug_files} libfmodL.dylib)
@@ -247,8 +237,6 @@ elseif(LINUX)
     if (NOT USESYSTEMLIBS)
       set(release_files
         #libdb-5.1.so
-        ${EXPAT_COPY}
-        libhunspell-1.3.so.0.0.0
         libopenal.so
         #libopenjp2.so
         libuuid.so.16
@@ -266,11 +254,8 @@ elseif(LINUX)
 
      if( USE_AUTOBUILD_3P )
          list( APPEND release_files
-                 libapr-1.so.0
-                 libaprutil-1.so.0
 
 
-                 libhunspell-1.3.so.0.0.0
                  #libopenjp2.so
                  libuuid.so.16
                  libuuid.so.16.0.22
@@ -279,6 +264,13 @@ elseif(LINUX)
                  libgmodule-2.0.a
                  libgobject-2.0.a
                  )
+
+        if(LLCOMMON_LINK_SHARED)
+            set(release_files ${release_files}
+                libapr-1.so.0
+                libaprutil-1.so.0
+                )
+        endif()
      endif()
 
     if (TARGET ll::fmodstudio)

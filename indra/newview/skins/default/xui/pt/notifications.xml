@@ -3265,10 +3265,6 @@ Para sua segurança, os SLurls serão bloqueados por alguns instantes.
 		Infelizmente, não conseguimos obter as informações de benefícios para esta sessão. Isto não deveria ocorrer em um ambiente de produção normal. Por favor, contate o suporte. Esta sessão não funcionará normalmente e recomendamos que você reinicie.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Será feito o upload de [COUNT] itens, com um custo total de L$[COST]. Você deseja prosseguir com o upload?
-		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Carregar"/>
-	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Não é possível fazer o upload dos arquivos selecionados de uma vez só.
 		<usetemplate name="okbutton" yestext="OK"/>

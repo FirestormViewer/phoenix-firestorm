@@ -50,6 +50,8 @@ class LLSidepanelInventory;
 class LLToggleableMenu;
 class LLFloater;
 class LLFloaterSidePanelContainer;
+class LLSidepanelInventory;
+class LLPanelMarketplaceInbox;
 class LLComboBox;   // <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,6 +146,9 @@ public:
 
     LLInventoryFilter& getCurrentFilter();
 
+    void setParentSidepanel(LLSidepanelInventory* parent_sidepanel) { mParentSidepanel = parent_sidepanel; }
+    void setInboxPanel(LLPanelMarketplaceInbox* inbox_panel) { mInboxPanel = inbox_panel; }
+
     // <FS:Zi> Filter dropdown
     void onFilterTypeSelected(const std::string& filter_type_name);
     void updateFilterDropdown(const LLInventoryFilter* filter);
@@ -210,7 +215,9 @@ private:
     LLUICtrl*                   mCounterCtrl;
     LLHandle<LLFloater>         mFinderHandle;
     LLInventoryPanel*           mActivePanel;
-    LLInventoryPanel*           mWornItemsPanel;
+    LLInventoryPanel*           mAllItemsPanel = nullptr;
+    LLInventoryPanel*           mRecentPanel = nullptr;
+    LLInventoryPanel*           mWornItemsPanel = nullptr;
     bool                        mResortActivePanel;
     LLSaveFolderState*          mSavedFolderState;
     std::string                 mFilterText;
@@ -298,6 +305,9 @@ protected:
     void setUploadCostIfNeeded();
     void disableAddIfNeeded();
 private:
+    LLSidepanelInventory*       mParentSidepanel = nullptr;
+    LLPanelMarketplaceInbox*    mInboxPanel = nullptr;
+
     LLDragAndDropButton*        mTrashButton; // <FS:Ansariel> Keep better inventory layout
     LLToggleableMenu*           mMenuGearDefault;
     LLToggleableMenu*           mMenuViewDefault;

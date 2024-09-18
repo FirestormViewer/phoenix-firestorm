@@ -89,7 +89,6 @@ endif (USE_AVX_OPTIMIZATION)
 add_subdirectory(cmake)
 
 # <FS:Beq> Tracy Profiler support
-option(USE_TRACY "Tracy Profiler support" OFF)
 if (USE_TRACY)
   message(STATUS "Compiling with Tracy profiler")
 else (USE_TRACY)

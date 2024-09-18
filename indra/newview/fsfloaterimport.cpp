@@ -2047,7 +2047,7 @@ void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter
                         LL_INFOS() << "inventory_item_flags " << inventory_item_flags << LL_ENDL;
                     }
                 }
-                S32 creation_date_now = time_corrected();
+                S32 creation_date_now = (S32)time_corrected();
 
                 LLPointer<LLViewerInventoryItem> item = new LLViewerInventoryItem( postContentResult[ "new_inventory_item" ].asUUID(), item_folder_id, new_perms, postContentResult[ "new_asset" ].asUUID(),
                                                                                     asset_type, inventory_type, item_name, item_description, LLSaleInfo::DEFAULT, inventory_item_flags, creation_date_now );

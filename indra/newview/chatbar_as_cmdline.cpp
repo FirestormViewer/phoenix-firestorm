@@ -580,7 +580,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 {
                     if (!(i >> z))
                     {
-                        z = gAgent.getPositionGlobal().mdV[VZ];
+                        z = (F32)gAgent.getPositionGlobal().mdV[VZ];
                     }
                     LLViewerRegion* agentRegionp = gAgent.getRegion();
                     if (agentRegionp)
@@ -664,7 +664,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 if (i >> band_width)
                 {
                     band_width = llclamp(band_width, 50, 3000);
-                    gSavedSettings.setF32("ThrottleBandwidthKBPS", band_width);
+                    gSavedSettings.setF32("ThrottleBandwidthKBPS", (F32)band_width);
                     LLStringUtil::format_map_t args;
                     std::string bw_cmd_respond;
                     args["[VALUE]"] = llformat ("%d", band_width);

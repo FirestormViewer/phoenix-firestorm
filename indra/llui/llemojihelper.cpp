@@ -84,7 +84,9 @@ bool LLEmojiHelper::isCursorInEmojiCode(const LLWString& wtext, S32 cursorPos, S
         shortCodePos--;
     }
 
-    bool isShortCode = (cursorPos - shortCodePos >= 2) && (L':' == wtext[shortCodePos - 1]); // <FS:Beq/> FIRE-33773 - fix logic to avoid OOB access to wtext
+    bool isShortCode = (cursorPos - shortCodePos >= 2) && (L':' == wtext[shortCodePos - 1]);
+    if(isShortCode && (shortCodePos >= 2) && isdigit(wtext[shortCodePos - 2])) // <TS:3T> Add qualifier to avoid emoji pop-up when typing times.
+        isShortCode = false;
     if (pShortCodePos)
         *pShortCodePos = (isShortCode) ? shortCodePos - 1 : -1;
     return isShortCode;

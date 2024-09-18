@@ -15,8 +15,8 @@
 	<text name="Output">
 		Ausgabe
 	</text>
-	<text name="My volume label">
-		Mikrofonlautstärke:
+	<text name="My volume label" width="100">
+		Meine Lautstärke:
 	</text>
 	<slider_bar name="mic_volume_slider" tool_tip="Mit diesem Schieberegler können Sie den Mikrofonpegel ändern"/>
 	<text name="wait_text">

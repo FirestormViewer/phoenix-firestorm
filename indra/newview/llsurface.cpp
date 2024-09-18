@@ -54,6 +54,7 @@
 #include "llglheaders.h"
 #include "lldrawpoolterrain.h"
 #include "lldrawable.h"
+#include "llworldmipmap.h"
 
 extern LLPipeline gPipeline;
 extern bool gShiftFrame;
@@ -74,7 +75,6 @@ LLSurface::LLSurface(U32 type, LLViewerRegion *regionp) :
     mDetailTextureScale(0.f),
     mOriginGlobal(0.0, 0.0, 0.0),
     mSTexturep(NULL),
-    mWaterTexturep(NULL),
     mGridsPerPatchEdge(0),
     mMetersPerGrid(1.0f),
     mMetersPerEdge(1.0f),
@@ -129,14 +129,7 @@ LLSurface::~LLSurface()
     {
         gPipeline.removePool(poolp);
         // Don't enable this until we blitz the draw pool for it as well.  -- djs
-        if (mSTexturep)
-        {
-            mSTexturep = NULL;
-        }
-        if (mWaterTexturep)
-        {
-            mWaterTexturep = NULL;
-        }
+        mSTexturep = NULL;
     }
     else
     {
@@ -170,7 +163,7 @@ void LLSurface::create(const S32 grids_per_edge,
     mMetersPerGrid = width / ((F32)(mGridsPerEdge - 1));
     mMetersPerEdge = mMetersPerGrid * (mGridsPerEdge - 1);
 // <FS:CR> Aurora Sim
-    sTextureSize = width;
+    sTextureSize = (S32)width;
 
     // Trap non-power of 2 widths to avoid GLtexture issues.
     if ((sTextureSize & (sTextureSize - 1)) != 0)
@@ -229,62 +222,17 @@ LLViewerTexture* LLSurface::getSTexture()
     return mSTexturep;
 }
 
-LLViewerTexture* LLSurface::getWaterTexture()
-{
-    if (mWaterTexturep.notNull() && !mWaterTexturep->hasGLTexture())
-    {
-        createWaterTexture();
-    }
-    return mWaterTexturep;
-}
-
 void LLSurface::createSTexture()
 {
     if (!mSTexturep)
     {
-        // Fill with dummy gray data.
-        // GL NOT ACTIVE HERE
-        LLPointer<LLImageRaw> raw = new LLImageRaw(sTextureSize, sTextureSize, 3);
-        U8 *default_texture = raw->getData();
-        for (S32 i = 0; i < sTextureSize; i++)
-        {
-            for (S32 j = 0; j < sTextureSize; j++)
-            {
-                *(default_texture + (i*sTextureSize + j)*3) = 128;
-                *(default_texture + (i*sTextureSize + j)*3 + 1) = 128;
-                *(default_texture + (i*sTextureSize + j)*3 + 2) = 128;
-            }
-        }
+        U64 handle = mRegionp->getHandle();
 
-        mSTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
-        mSTexturep->dontDiscard();
-        gGL.getTexUnit(0)->bind(mSTexturep);
-        mSTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
-    }
-}
+        U32 grid_x, grid_y;
 
-void LLSurface::createWaterTexture()
-{
-    if (!mWaterTexturep)
-    {
-        // Create the water texture
-        LLPointer<LLImageRaw> raw = new LLImageRaw(sTextureSize/2, sTextureSize/2, 4);
-        U8 *default_texture = raw->getData();
-        for (S32 i = 0; i < sTextureSize/2; i++)
-        {
-            for (S32 j = 0; j < sTextureSize/2; j++)
-            {
-                *(default_texture + (i*sTextureSize/2 + j)*4) = MAX_WATER_COLOR.mV[0];
-                *(default_texture + (i*sTextureSize/2 + j)*4 + 1) = MAX_WATER_COLOR.mV[1];
-                *(default_texture + (i*sTextureSize/2 + j)*4 + 2) = MAX_WATER_COLOR.mV[2];
-                *(default_texture + (i*sTextureSize/2 + j)*4 + 3) = MAX_WATER_COLOR.mV[3];
-            }
-        }
+        grid_from_region_handle(handle, &grid_x, &grid_y);
 
-        mWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
-        mWaterTexturep->dontDiscard();
-        gGL.getTexUnit(0)->bind(mWaterTexturep);
-        mWaterTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
+        mSTexturep = LLWorldMipmap::loadObjectsTile(grid_x, grid_y, 1);
     }
 }
 
@@ -298,14 +246,13 @@ void LLSurface::initTextures()
 
     ///////////////////////
     //
-    // Water texture
+    // Water object
     //
 // <FS:CR> Aurora Sim
     //if (gSavedSettings.getBOOL("RenderWater") )
     if (gSavedSettings.getBOOL("RenderWater") && LLWorld::getInstance()->getAllowRenderWater())
 // </FS:CR> Aurora Sim
     {
-        createWaterTexture();
         mWaterObjp = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER, mRegionp);
         gPipeline.createObject(mWaterObjp);
         LLVector3d water_pos_global = from_region_handle(mRegionp->getHandle());
@@ -328,7 +275,6 @@ void LLSurface::rebuildWater()
 
     if (!prev_renderwater && renderwater)
     {
-        createWaterTexture();
         mWaterObjp = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER, mRegionp);
         gPipeline.createObject(mWaterObjp);
         LLVector3d water_pos_global = from_region_handle(mRegionp->getHandle());
@@ -867,11 +813,8 @@ bool LLSurface::idleUpdate(F32 max_update_time)
         }
     }
 
-    if (did_update)
-    {
-        // some patches changed, update region reflection probes
-        mRegionp->updateReflectionProbes();
-    }
+    // some patches changed, update region reflection probes
+    mRegionp->updateReflectionProbes(did_update);
 
     return did_update;
 }
@@ -1420,101 +1363,3 @@ F32 LLSurface::getWaterHeight() const
     }
 }
 
-
-bool LLSurface::generateWaterTexture(const F32 x, const F32 y,
-                                     const F32 width, const F32 height)
-{
-    LL_PROFILE_ZONE_SCOPED
-    if (!getWaterTexture())
-    {
-        return false;
-    }
-
-    S32 tex_width = mWaterTexturep->getWidth();
-    S32 tex_height = mWaterTexturep->getHeight();
-    S32 tex_comps = mWaterTexturep->getComponents();
-    S32 tex_stride = tex_width * tex_comps;
-    LLPointer<LLImageRaw> raw = new LLImageRaw(tex_width, tex_height, tex_comps);
-    U8 *rawp = raw->getData();
-
-// <FS:CR> Aurora Sim
-    //F32 scale = 256.f * getMetersPerGrid() / (F32)tex_width;
-    F32 scale = getRegion()->getWidth() * getMetersPerGrid() / (F32)tex_width;
-// <FS:CR> Aurora Sim
-    F32 scale_inv = 1.f / scale;
-
-    S32 x_begin, y_begin, x_end, y_end;
-
-    x_begin = ll_round(x * scale_inv);
-    y_begin = ll_round(y * scale_inv);
-    x_end = ll_round((x + width) * scale_inv);
-    y_end = ll_round((y + width) * scale_inv);
-
-    if (x_end > tex_width)
-    {
-        x_end = tex_width;
-    }
-    if (y_end > tex_width)
-    {
-        y_end = tex_width;
-    }
-
-    // OK, for now, just have the composition value equal the height at the point.
-    LLVector3 location;
-    LLColor4U coloru;
-
-    const F32 WATER_HEIGHT = getWaterHeight();
-
-    S32 i, j, offset;
-    for (j = y_begin; j < y_end; j++)
-    {
-        for (i = x_begin; i < x_end; i++)
-        {
-            //F32 nv[2];
-            //nv[0] = i/256.f;
-            //nv[1] = j/256.f;
-            // const S32 modulation = noise2(nv)*40;
-            offset = j*tex_stride + i*tex_comps;
-            location.mV[VX] = i*scale;
-            location.mV[VY] = j*scale;
-
-            // Sample multiple points
-            const F32 height = resolveHeightRegion(location);
-
-            if (height > WATER_HEIGHT)
-            {
-                // Above water...
-                coloru = MAX_WATER_COLOR;
-                coloru.mV[3] = ABOVE_WATERLINE_ALPHA;
-                *(rawp + offset++) = coloru.mV[0];
-                *(rawp + offset++) = coloru.mV[1];
-                *(rawp + offset++) = coloru.mV[2];
-                *(rawp + offset++) = coloru.mV[3];
-            }
-            else
-            {
-                // Want non-linear curve for transparency gradient
-                coloru = MAX_WATER_COLOR;
-                const F32 frac = 1.f - 2.f/(2.f - (height - WATER_HEIGHT));
-                S32 alpha = 64 + ll_round((255-64)*frac);
-
-                alpha = llmin(ll_round((F32)MAX_WATER_COLOR.mV[3]), alpha);
-                alpha = llmax(64, alpha);
-
-                coloru.mV[3] = alpha;
-                *(rawp + offset++) = coloru.mV[0];
-                *(rawp + offset++) = coloru.mV[1];
-                *(rawp + offset++) = coloru.mV[2];
-                *(rawp + offset++) = coloru.mV[3];
-            }
-        }
-    }
-
-    if (!mWaterTexturep->hasGLTexture())
-    {
-        mWaterTexturep->createGLTexture(0, raw);
-    }
-
-    mWaterTexturep->setSubImage(raw, x_begin, y_begin, x_end - x_begin, y_end - y_begin);
-    return true;
-}

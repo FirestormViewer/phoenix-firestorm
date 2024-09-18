@@ -48,7 +48,7 @@ void NACLAntiSpamQueueEntry::updateEntryAmount()
 
 void NACLAntiSpamQueueEntry::updateEntryTime()
 {
-    mEntryTime = time(NULL);
+    mEntryTime = (U32)time(NULL);
 }
 
 void NACLAntiSpamQueueEntry::setBlocked()
@@ -149,7 +149,7 @@ EAntispamCheckResult NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multi
             return EAntispamCheckResult::ExistingBlock;
         }
         U32 eTime = it->second->getEntryTime();
-        U32 currentTime = time(0);
+        U32 currentTime = (U32)time(0);
         if ((currentTime - eTime) <= mQueueTime)
         {
             it->second->updateEntryAmount();
@@ -581,7 +581,7 @@ EAntispamCheckResult NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source
         }
 
         U32 eTime = it->second->getEntryTime();
-        U32 currentTime = time(NULL);
+        U32 currentTime = (U32)time(NULL);
         if ((currentTime - eTime) <= mGlobalTime)
         {
             it->second->updateEntryAmount();

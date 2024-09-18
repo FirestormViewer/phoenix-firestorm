@@ -247,11 +247,10 @@ private:
     bool            mScriptRemoved;
     bool            mSaveDialogShown;
     LLUUID          mAssetID;
+    LLTextBox*      mLineCol = nullptr;
+    LLButton*       mSaveBtn = nullptr;
 
-    LLTextBox*      mLineCol;
 // <FS:CR> Advanced Script Editor
-    //LLView*           mSaveBtn;
-    LLButton*       mSaveBtn;
     LLButton*       mSaveBtn2;  //  // <FS:Zi> support extra save button
     LLButton*       mCutBtn;
     LLButton*       mCopyBtn;

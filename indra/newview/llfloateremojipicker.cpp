@@ -104,7 +104,7 @@ public:
         LLScrollingPanel::draw();
 
         F32 x = 4; // padding-left
-        F32 y = getRect().getHeight() / 2;
+        F32 y = (F32)(getRect().getHeight() / 2);
         LLFontGL::getFontSansSerif()->render(
             mText,                           // wstr
             0,                               // begin_offset
@@ -141,8 +141,8 @@ public:
         static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
         LLScrollingPanel::draw();
 
-        F32 x = getRect().getWidth() / 2;
-        F32 y = getRect().getHeight() / 2;
+        F32 x = (F32)(getRect().getWidth() / 2);
+        F32 y = (F32)(getRect().getHeight() / 2);
         // <FS:Beq> Add B&W emoji font support
         // LLFontGL::getFontEmojiLarge()->render( 
         LLFontGL::getFontEmojiLarge(useBWEmojis)->render( 
@@ -193,7 +193,7 @@ public:
     {
         mWStr = LLWString(1, emoji);
         mEmoji = emoji;
-        mTitle = title;
+        mTitle = utf8str_to_wstring(title);
         mBegin = begin;
         mEnd = end;
     }
@@ -210,10 +210,9 @@ public:
         F32 centerY = 0.5f * clientHeight;
         drawIcon(centerX, centerY - 1, iconWidth);
 
-        static LLColor4 defaultColor(0.75f, 0.75f, 0.75f, 1.0f);
-        LLColor4 textColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", defaultColor);
+        static LLUIColor textColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4(0.75f, 0.75f, 0.75f, 1.0f));
         S32 max_pixels = clientWidth - iconWidth;
-        drawName(iconWidth, centerY, max_pixels, textColor);
+        drawName((F32)iconWidth, centerY, max_pixels, textColor.get());
     }
 
 protected:
@@ -237,18 +236,18 @@ protected:
             max_pixels);                // max_pixels
     }
 
-    void drawName(F32 x, F32 y, S32 max_pixels, LLColor4& color)
+    void drawName(F32 x, F32 y, S32 max_pixels, const LLColor4& color)
     {
         static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
 
         F32 x0 = x;
-        F32 x1 = max_pixels;
+        F32 x1 = (F32)max_pixels;
         LLFontGL* font = LLFontGL::getFontEmojiLarge(useBWEmojis); // <FS:Beq/> Add B&W emoji font support
         if (mBegin)
         {
-            std::string text = mTitle.substr(0, mBegin);
-            font->renderUTF8(
-                text,                          // text
+            LLWString text = mTitle.substr(0, mBegin);
+            font->render(
+                text.c_str(),                          // text
                 0,                             // begin_offset
                 x0,                            // x
                 y,                             // y
@@ -258,15 +257,15 @@ protected:
                 LLFontGL::NORMAL,              // style
                 LLFontGL::DROP_SHADOW_SOFT,    // shadow
                 static_cast<S32>(text.size()), // max_chars
-                x1);                           // max_pixels
-            F32 dx = font->getWidthF32(text);
+                (S32)x1);                      // max_pixels
+            F32 dx = font->getWidthF32(text.c_str());
             x0 += dx;
             x1 -= dx;
         }
         if (x1 > 0 && mEnd > mBegin)
         {
-            std::string text = mTitle.substr(mBegin, mEnd - mBegin);
-            font->renderUTF8(
+            LLWString text = mTitle.substr(mBegin, mEnd - mBegin);
+            font->render(
                 text,                          // text
                 0,                             // begin_offset
                 x0,                            // x
@@ -277,15 +276,15 @@ protected:
                 LLFontGL::NORMAL,              // style
                 LLFontGL::DROP_SHADOW_SOFT,    // shadow
                 static_cast<S32>(text.size()), // max_chars
-                x1);                           // max_pixels
-            F32 dx = font->getWidthF32(text);
+                (S32)x1);                      // max_pixels
+            F32 dx = font->getWidthF32(text.c_str());
             x0 += dx;
             x1 -= dx;
         }
         if (x1 > 0 && mEnd < mTitle.size())
         {
-            std::string text = mEnd ? mTitle.substr(mEnd) : mTitle;
-            font->renderUTF8(
+            LLWString text = mEnd ? mTitle.substr(mEnd) : mTitle;
+            font->render(
                 text,                          // text
                 0,                             // begin_offset
                 x0,                            // x
@@ -296,14 +295,14 @@ protected:
                 LLFontGL::NORMAL,              // style
                 LLFontGL::DROP_SHADOW_SOFT,    // shadow
                 static_cast<S32>(text.size()), // max_chars
-                x1);                           // max_pixels
+                (S32)x1);                      // max_pixels
         }
     }
 
 private:
     llwchar mEmoji;
     LLWString mWStr;
-    std::string mTitle;
+    LLWString mTitle;
     size_t mBegin;
     size_t mEnd;
 };
@@ -443,6 +442,7 @@ void LLFloaterEmojiPicker::fillGroups()
     for (LLButton* button : mGroupButtons)
     {
         mGroups->removeChild(button);
+        button->die();
     }
     mFilteredEmojiGroups.clear();
     mFilteredEmojis.clear();
@@ -456,7 +456,7 @@ void LLFloaterEmojiPicker::fillGroups()
     rect.mBottom = mBadge->getRect().getHeight();
 
     // Create button for "All categories"
-    params.name = "emojigroup_all_cagetories"; // <FS:Ansariel> Fix mandatory name missing (XUI parser warning)
+    params.name = "all_categories";
     createGroupButton(params, rect, ALL_EMOJIS_IMAGE_INDEX);
 
     // Create group and button for "Recently used" and/or "Frequently used"
@@ -470,7 +470,7 @@ void LLFloaterEmojiPicker::fillGroups()
         {
             mFilteredEmojiGroups.push_back(USED_EMOJIS_GROUP_INDEX);
             mFilteredEmojis.emplace_back(cats);
-            params.name = "emojigroup_recently_frequently"; // <FS:Ansariel> Fix mandatory name missing (XUI parser warning)
+            params.name = "used_categories";
             createGroupButton(params, rect, USED_EMOJIS_IMAGE_INDEX);
         }
     }
@@ -488,7 +488,7 @@ void LLFloaterEmojiPicker::fillGroups()
         {
             mFilteredEmojiGroups.push_back(i);
             mFilteredEmojis.emplace_back(cats);
-            params.name = "emojigroup_" + std::to_string(i); // <FS:Ansariel> Fix mandatory name missing (XUI parser warning)
+            params.name = "group_" + std::to_string(i);
             createGroupButton(params, rect, groups[i].Character);
         }
     }
@@ -717,8 +717,7 @@ void LLFloaterEmojiPicker::fillEmojis(bool fromResize)
     LLPanel::Params icon_params;
     LLRect icon_rect(0, icon_size, icon_size, 0);
 
-    static LLColor4 default_color(0.75f, 0.75f, 0.75f, 1.0f);
-    LLColor4 bg_color = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", default_color);
+    static LLUIColor bg_color = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", LLColor4(0.75f, 0.75f, 0.75f, 1.0f));
 
     if (!mSelectedGroupIndex)
     {
@@ -866,8 +865,7 @@ void LLFloaterEmojiPicker::createEmojiIcon(const LLEmojiSearchResult& emoji,
 
 void LLFloaterEmojiPicker::showPreview(bool show)
 {
-    //mPreview->setIcon(nullptr);
-    mDummy->setVisible(show);
+    mDummy->setVisible(!show);
     mPreview->setVisible(show);
 }
 
@@ -882,7 +880,7 @@ void LLFloaterEmojiPicker::onGroupButtonClick(LLUICtrl* ctrl)
         if (it == mGroupButtons.end())
             return;
 
-        selectEmojiGroup(it - mGroupButtons.begin());
+        selectEmojiGroup((U32)(it - mGroupButtons.begin()));
     }
 }
 

@@ -1043,7 +1043,7 @@ void LLSky::renderSunMoonBeacons(const LLVector3& pos_agent, const LLVector3& di
     {
         pos_end.mV[i] = pos_agent.mV[i] + (50 * direction.mV[i]);
     }
-    gGL.setLineWidth(LLPipeline::DebugBeaconLineWidth); // <FS> Line width OGL core profile fix by Rye Mutt
+    gGL.setLineWidth((F32)LLPipeline::DebugBeaconLineWidth); // <FS> Line width OGL core profile fix by Rye Mutt
     gGL.begin(LLRender::LINES);
     color.mV[3] *= 0.5f;
     gGL.color4fv(color.mV);
@@ -1225,6 +1225,9 @@ F32 gpu_benchmark()
             return -1.f;
         }
         LLImageGL::setManualImage(GL_TEXTURE_2D, 0, GL_RGBA, res,res,GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        // disable mipmaps and use point filtering to cause cache misses
+        gGL.getTexUnit(0)->setHasMipMaps(false);
+        gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
 
         if (alloc_timer.getElapsedTimeF32() > time_limit)
         {
@@ -1268,57 +1271,6 @@ F32 gpu_benchmark()
 
     LLGLSLShader::unbind();
 
-    F32 time_passed = 0.f; // seconds
-
-    { //run CPU timer benchmark
-        glFinish();
-        gBenchmarkProgram.bind();
-        for (S32 c = -1; c < samples && time_passed < time_limit; ++c)
-        {
-            LLTimer timer;
-            timer.start();
-
-            for (U32 i = 0; i < count; ++i)
-            {
-                dest[i].bindTarget();
-                texHolder.bind(i);
-                buff->setBuffer();
-                buff->drawArrays(LLRender::TRIANGLES, 0, 3);
-                dest[i].flush();
-            }
-
-            //wait for current batch of copies to finish
-            glFinish();
-
-            F32 time = timer.getElapsedTimeF32();
-            time_passed += time;
-
-            if (c >= 0) // <-- ignore the first sample as it tends to be artificially slow
-            {
-                //store result in gigabytes per second
-                F32 gb = (F32)((F64)(res * res * 8 * count)) / (1000000000);
-                F32 gbps = gb / time;
-                results.push_back(gbps);
-            }
-        }
-        gBenchmarkProgram.unbind();
-    }
-
-    std::sort(results.begin(), results.end());
-
-    F32 gbps = results[results.size()/2];
-
-    LL_INFOS("Benchmark") << "Memory bandwidth is " << llformat("%.3f", gbps) << " GB/sec according to CPU timers, " << (F32)results.size() << " tests took " << time_passed << " seconds" << LL_ENDL;
-
-#if LL_DARWIN
-    if (gbps > 512.f)
-    {
-        LL_WARNS("Benchmark") << "Memory bandwidth is improbably high and likely incorrect; discarding result." << LL_ENDL;
-        //OSX is probably lying, discard result
-        return -1.f;
-    }
-#endif
-
     // run GPU timer benchmark
     {
         ShaderProfileHelper initProfile;
@@ -1340,9 +1292,10 @@ F32 gpu_benchmark()
     F32 ms = gBenchmarkProgram.mTimeElapsed/1000000.f;
     F32 seconds = ms/1000.f;
 
-    F64 samples_drawn = gBenchmarkProgram.mSamplesDrawn;
-    F32 samples_sec = (samples_drawn/1000000000.0)/seconds;
-    gbps = samples_sec*4;  // 4 bytes per sample
+    F64 samples_drawn = (F64)gBenchmarkProgram.mSamplesDrawn;
+    F64 gpixels_drawn = samples_drawn / 1000000000.0;
+    F32 samples_sec = (F32)(gpixels_drawn/seconds);
+    F32 gbps = samples_sec*4;  // 4 bytes per sample
 
     LL_INFOS("Benchmark") << "Memory bandwidth is " << llformat("%.3f", gbps) << " GB/sec according to ARB_timer_query, total time " << seconds << " seconds" << LL_ENDL;
 

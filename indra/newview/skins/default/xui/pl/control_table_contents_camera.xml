@@ -51,6 +51,12 @@
 	<rows name="spin_around_cw">
 		<columns name="lst_action" tool_tip="Obrót kamery zgodnie z ruchem wskazówek zegara." value="Obrót kamery w lewo" />
 	</rows>
+	<rows name="roll_left">
+		<columns name="lst_action" tool_tip="Przechyl kamerę w lewo" value="Przechyl w lewo" />
+	</rows>
+	<rows name="roll_right">
+		<columns name="lst_action" tool_tip="Przechyl kamerę w prawo" value="Przechyl w prawo" />
+	</rows>
 	<rows name="move_forward_sitting">
 		<columns name="lst_action" value="Kamera w przód siedząc" />
 	</rows>

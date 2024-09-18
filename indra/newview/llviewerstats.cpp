@@ -290,13 +290,13 @@ void LLViewerStats::updateFrameStats(const F64Seconds time_diff)
         add(LLStatViewer::LOSS_5_PERCENT_TIME, time_diff);
     }
 
-    F32 sim_fps = getRecording().getLastValue(LLStatViewer::SIM_FPS);
+    F32 sim_fps = (F32)getRecording().getLastValue(LLStatViewer::SIM_FPS);
     if (0.f < sim_fps && sim_fps < 20.f)
     {
         add(LLStatViewer::SIM_20_FPS_TIME, time_diff);
     }
 
-    F32 sim_physics_fps = getRecording().getLastValue(LLStatViewer::SIM_PHYSICS_FPS);
+    F32 sim_physics_fps = (F32)getRecording().getLastValue(LLStatViewer::SIM_PHYSICS_FPS);
 
     if (0.f < sim_physics_fps && sim_physics_fps < 20.f)
     {
@@ -602,6 +602,9 @@ void send_viewer_stats(bool include_preferences)
     {
         agent["run_time"] = run_time;
     }
+
+    // report time the viewer has spent in the foreground
+    agent["foreground_time"] = gForegroundTime.getElapsedTimeF32();
 
     // send fps only for time app spends in foreground
     agent["fps"] = (F32)gForegroundFrameCount / gForegroundTime.getElapsedTimeF32();

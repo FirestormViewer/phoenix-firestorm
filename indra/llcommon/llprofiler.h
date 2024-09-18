@@ -85,12 +85,6 @@ namespace LLProfiler
 
 #if defined(LL_PROFILER_CONFIGURATION) && (LL_PROFILER_CONFIGURATION > LL_PROFILER_CONFIG_NONE)
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY || LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
-        #define TRACY_ENABLE         1
-// Normally these would be enabled but we want to be able to build any viewer with Tracy enabled and run the Tracy server on another machine
-// They must be undefined in order to work across multiple machines
-//      #define TRACY_NO_BROADCAST   1
-//      #define TRACY_ONLY_LOCALHOST 1
-        #define TRACY_ONLY_IPV4      1
         #include "tracy/Tracy.hpp"
 // <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
         //// GPU Mutually exclusive with detailed memory tracing
@@ -131,6 +125,12 @@ namespace LLProfiler
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
 
+        #define LL_PROFILE_MUTEX(type, varname)                     TracyLockable(type, varname)
+        #define LL_PROFILE_MUTEX_NAMED(type, varname, desc)         TracyLockableN(type, varname, desc)
+        #define LL_PROFILE_MUTEX_SHARED(type, varname)              TracySharedLockable(type, varname)
+        #define LL_PROFILE_MUTEX_SHARED_NAMED(type, varname, desc)  TracySharedLockableN(type, varname, desc)
+        #define LL_PROFILE_MUTEX_LOCK(varname) { auto& mutex = varname; LockMark(mutex); }
+
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active );
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value);
@@ -155,6 +155,13 @@ namespace LLProfiler
         #define LL_PROFILE_ZONE_ERR(name)               (void)(name); // Not supported
         #define LL_PROFILE_ZONE_INFO(name)              (void)(name); // Not supported
         #define LL_PROFILE_ZONE_WARN(name)              (void)(name); // Not supported
+
+        #define LL_PROFILE_MUTEX(type, varname) type varname
+        #define LL_PROFILE_MUTEX_NAMED(type, varname, desc) type varname
+        #define LL_PROFILE_MUTEX_SHARED(type, varname) type varname
+        #define LL_PROFILE_MUTEX_SHARED_NAMED(type, varname, desc) type varname
+        #define LL_PROFILE_MUTEX_LOCK(varname) // LL_PROFILE_MUTEX_LOCK is a no-op when Tracy is disabled
+
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)
         #define LL_PROFILE_PLOT( name, value )
@@ -187,6 +194,13 @@ namespace LLProfiler
         #define LL_PROFILE_ZONE_ERR(name)               LL_PROFILE_ZONE_NAMED_COLOR( name, 0XFF0000  )  // RGB yellow
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
+
+        #define LL_PROFILE_MUTEX(type, varname)                     TracyLockable(type, varname)
+        #define LL_PROFILE_MUTEX_NAMED(type, varname, desc)         TracyLockableN(type, varname, desc)
+        #define LL_PROFILE_MUTEX_SHARED(type, varname)              TracySharedLockable(type, varname)
+        #define LL_PROFILE_MUTEX_SHARED_NAMED(type, varname, desc)  TracySharedLockableN(type, varname, desc)
+        #define LL_PROFILE_MUTEX_LOCK(varname) { auto& mutex = varname; LockMark(mutex); } // see https://github.com/wolfpld/tracy/issues/575
+
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active );
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value);

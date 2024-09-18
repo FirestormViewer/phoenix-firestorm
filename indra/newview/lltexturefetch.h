@@ -314,8 +314,10 @@ public:
     LLUUID mDebugID;
     S32 mDebugCount;
     bool mDebugPause;
+    // <FS:Ansariel> OpenSim compatibility
     S32 mPacketCount;
     S32 mBadPacketCount;
+    // </FS:Ansariel>
 
     static LLTrace::CountStatHandle<F64>        sCacheHit;
     static LLTrace::CountStatHandle<F64>        sCacheAttempt;

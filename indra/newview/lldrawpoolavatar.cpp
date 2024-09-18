@@ -70,8 +70,6 @@ S32     LLDrawPoolAvatar::sShadowPass = -1;
 S32 LLDrawPoolAvatar::sDiffuseChannel = 0;
 F32 LLDrawPoolAvatar::sMinimumAlpha = 0.2f;
 
-LLUUID gBlackSquareID;
-
 static bool is_deferred_render = false;
 static bool is_post_deferred_render = false;
 
@@ -125,7 +123,7 @@ LLDrawPoolAvatar::~LLDrawPoolAvatar()
 // virtual
 bool LLDrawPoolAvatar::isDead()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     if (!LLFacePool::isDead())
     {
@@ -137,14 +135,14 @@ bool LLDrawPoolAvatar::isDead()
 
 S32 LLDrawPoolAvatar::getShaderLevel() const
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     return (S32) LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
 }
 
 void LLDrawPoolAvatar::prerender()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     mShaderLevel = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
 
@@ -153,7 +151,7 @@ void LLDrawPoolAvatar::prerender()
 
 LLMatrix4& LLDrawPoolAvatar::getModelView()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     static LLMatrix4 ret;
 
@@ -225,7 +223,7 @@ void LLDrawPoolAvatar::endDeferredPass(S32 pass)
 
 void LLDrawPoolAvatar::renderDeferred(S32 pass)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     render(pass);
 }
@@ -237,7 +235,7 @@ S32 LLDrawPoolAvatar::getNumPostDeferredPasses()
 
 void LLDrawPoolAvatar::beginPostDeferredPass(S32 pass)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     sSkipOpaque = true;
     sShaderLevel = mShaderLevel;
@@ -253,7 +251,7 @@ void LLDrawPoolAvatar::beginPostDeferredPass(S32 pass)
 
 void LLDrawPoolAvatar::endPostDeferredPass(S32 pass)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
     // if we're in software-blending, remember to set the fence _after_ we draw so we wait till this rendering is done
     sRenderingSkinned = false;
     sSkipOpaque = false;
@@ -265,7 +263,7 @@ void LLDrawPoolAvatar::endPostDeferredPass(S32 pass)
 
 void LLDrawPoolAvatar::renderPostDeferred(S32 pass)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     is_post_deferred_render = true;
     if (LLPipeline::sImpostorRender)
@@ -497,7 +495,7 @@ void LLDrawPoolAvatar::endRenderPass(S32 pass)
 
 void LLDrawPoolAvatar::beginImpostor()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     if (!LLPipeline::sReflectionRender)
     {
@@ -514,7 +512,7 @@ void LLDrawPoolAvatar::beginImpostor()
 
 void LLDrawPoolAvatar::endImpostor()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
         gImpostorProgram.unbind();
     gPipeline.enableLightsDynamic();
@@ -522,7 +520,7 @@ void LLDrawPoolAvatar::endImpostor()
 
 void LLDrawPoolAvatar::beginRigid()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     if (gPipeline.shadersLoaded())
     {
@@ -542,7 +540,7 @@ void LLDrawPoolAvatar::beginRigid()
 
 void LLDrawPoolAvatar::endRigid()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     sShaderLevel = mShaderLevel;
     if (sVertexProgram != NULL)
@@ -553,7 +551,7 @@ void LLDrawPoolAvatar::endRigid()
 
 void LLDrawPoolAvatar::beginDeferredImpostor()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     if (!LLPipeline::sReflectionRender)
     {
@@ -571,7 +569,7 @@ void LLDrawPoolAvatar::beginDeferredImpostor()
 
 void LLDrawPoolAvatar::endDeferredImpostor()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     sShaderLevel = mShaderLevel;
     sVertexProgram->disableTexture(LLViewerShaderMgr::NORMAL_MAP);
@@ -584,7 +582,7 @@ void LLDrawPoolAvatar::endDeferredImpostor()
 
 void LLDrawPoolAvatar::beginDeferredRigid()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     sVertexProgram = &gDeferredNonIndexedDiffuseAlphaMaskNoColorProgram;
     sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
@@ -594,7 +592,7 @@ void LLDrawPoolAvatar::beginDeferredRigid()
 
 void LLDrawPoolAvatar::endDeferredRigid()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     sShaderLevel = mShaderLevel;
     sVertexProgram->disableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
@@ -605,7 +603,7 @@ void LLDrawPoolAvatar::endDeferredRigid()
 
 void LLDrawPoolAvatar::beginSkinned()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     // used for preview only
 
@@ -619,7 +617,7 @@ void LLDrawPoolAvatar::beginSkinned()
 
 void LLDrawPoolAvatar::endSkinned()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     // if we're in software-blending, remember to set the fence _after_ we draw so we wait till this rendering is done
     if (sShaderLevel > 0)
@@ -645,7 +643,7 @@ void LLDrawPoolAvatar::endSkinned()
 
 void LLDrawPoolAvatar::beginDeferredSkinned()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     sShaderLevel = mShaderLevel;
     sVertexProgram = &gDeferredAvatarProgram;
@@ -659,7 +657,7 @@ void LLDrawPoolAvatar::beginDeferredSkinned()
 
 void LLDrawPoolAvatar::endDeferredSkinned()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     // if we're in software-blending, remember to set the fence _after_ we draw so we wait till this rendering is done
     sRenderingSkinned = false;
@@ -947,7 +945,7 @@ static LLTrace::BlockTimerStatHandle FTM_RIGGED_VBO("Rigged VBO");
 //-----------------------------------------------------------------------------
 LLViewerTexture *LLDrawPoolAvatar::getDebugTexture()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 
     if (mReferences.empty())
     {
