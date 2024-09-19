@@ -19,13 +19,12 @@
     <pie_slice
         label="購入"
         name="Buy..."/>
-    <pie_menu label="取る &gt;" name="Take Submenu">
-        <pie_slice label="取る" name="Take" />
-        <pie_slice label="コピーを取る" name="Take Copy" />
-    </pie_menu>
+    <pie_slice
+        label="取る"
+        name="Pie Object Take"/>
     <pie_slice
         label="支払い" 
-        name="Pay..."/>
+		name="Pay..."/>
     <pie_menu
         label="詳細 &gt;"
         name="Object Pie More 1">
@@ -35,6 +34,9 @@
     <pie_slice
         label="装着"
         name="Wear"/>
+    <pie_slice
+        label="コピーを取る"
+        name="Take Copy"/>
     <pie_menu
         label="HUD装着先 &gt;"
         name="Pie Object Attach HUD" />
@@ -43,7 +45,7 @@
         name="Pie Object Attach" />
     <pie_slice
         label="返却" 
-        name="Return..."/>
+		name="Return..."/>
     <pie_menu
         label="詳細 &gt;"
         name="Object Pie More 2">
