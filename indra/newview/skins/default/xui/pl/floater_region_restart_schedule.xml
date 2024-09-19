@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_region_restart_schedule" title="Planowanie restartów regionu">
+	<text name="days_general">
+		Restartuj region w tych dniach:
+	</text>
+	<check_box name="s_chk" tool_tip="Niedziela" />
+	<check_box name="m_chk" tool_tip="Poniedziałek" />
+	<check_box name="t_chk" tool_tip="Wtorek" />
+	<check_box name="w_chk" tool_tip="Środa" />
+	<check_box name="r_chk" tool_tip="Czwartek" />
+	<check_box name="f_chk" tool_tip="Piątek" />
+	<check_box name="a_chk" tool_tip="Sobota" />
+	<text name="su_label">
+		Nd
+	</text>
+	<text name="mo_label">
+		Pn
+	</text>
+	<text name="tu_label">
+		Wt
+	</text>
+	<text name="we_label">
+		Śr
+	</text>
+	<text name="th_label">
+		Cz
+	</text>
+	<text name="fr_label">
+		Pt
+	</text>
+	<text name="sa_label">
+		So
+	</text>
+	<text name="at_label">
+		o
+	</text>
+	<button name="save_btn" label="Zapisz" />
+	<button name="cancel_btn" label="Anuluj" />
+</floater>

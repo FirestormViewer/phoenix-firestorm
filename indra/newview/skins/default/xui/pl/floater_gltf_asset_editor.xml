@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gltf asset editor">
+	<floater.string name="floater_title" value="Edytor scen GLTF" />
+	<floater.string name="scene_tittle" value="Scena" />
+	<floater.string name="node_tittle" value="Węzeł" />
+	<floater.string name="mesh_tittle" value="Mesz" />
+	<floater.string name="skin_tittle" value="Skórka" />
+	<layout_stack name="main_layout">
+		<layout_panel name="transforms_panel">
+			<menu_button name="clipboard_pos_btn" tool_tip="Opcje wklejania" />
+			<text name="label position" tool_tip="Pozycja (metry)">
+				Pozycja (m)
+			</text>
+			<menu_button name="clipboard_size_btn" tool_tip="Opcje wklejania" />
+			<text name="label size" tool_tip="Rozmiar (metry)">
+				Rozmiar (m)
+			</text>
+			<menu_button name="clipboard_rot_btn" tool_tip="Opcje wklejania" />
+			<text name="label rotation" tool_tip="Obrót (stopnie)">
+				Obrót (°)
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

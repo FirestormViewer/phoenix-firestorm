@@ -813,6 +813,10 @@ void LLKeyConflictHandler::generatePlaceholders(ESourceMode load_mode)
         registerTemporaryControl("pan_out");
         registerTemporaryControl("spin_around_ccw");
         registerTemporaryControl("spin_around_cw");
+// <FS:Chanayane> Camera roll key bindings
+        registerTemporaryControl("roll_left");
+        registerTemporaryControl("roll_right");
+// </FS:Chanayane>
 
         // control_table_contents_editing.xml
         registerTemporaryControl("edit_avatar_spin_ccw");

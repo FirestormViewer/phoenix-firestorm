@@ -148,7 +148,8 @@
 			</combo_box>
 			<text name="FSRestrictMaxTextureSizeRestartText">
 				(richiede riavvio)
-			</text>			<text name="TextureDetailLabel">
+			</text>
+			<text name="TextureDetailLabel">
 				Max livello qualità texture:
 			</text>
 			<combo_box name="TextureDetail">

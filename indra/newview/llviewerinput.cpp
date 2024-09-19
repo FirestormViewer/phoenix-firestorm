@@ -586,6 +586,24 @@ bool camera_pan_out( EKeystate s )
     return true;
 }
 
+// <FS:Chanayane> Camera roll key bindings
+bool camera_roll_left( EKeystate s )
+{
+    if( KEYSTATE_UP == s  ) return true;
+    gAgentCamera.unlockView();
+    gAgentCamera.setRollLeftKey(get_orbit_rate());
+    return true;
+}
+
+bool camera_roll_right( EKeystate s )
+{
+    if( KEYSTATE_UP == s  ) return true;
+    gAgentCamera.unlockView();
+    gAgentCamera.setRollRightKey(get_orbit_rate());
+    return true;
+}
+// </FS:Chanayane>
+
 bool camera_move_forward_fast( EKeystate s )
 {
     if( KEYSTATE_UP == s  ) return true;
@@ -1040,6 +1058,10 @@ REGISTER_KEYBOARD_ACTION("pan_left", camera_pan_left);
 REGISTER_KEYBOARD_ACTION("pan_right", camera_pan_right);
 REGISTER_KEYBOARD_ACTION("pan_in", camera_pan_in);
 REGISTER_KEYBOARD_ACTION("pan_out", camera_pan_out);
+// <FS:Chanayane> Camera roll key bindings
+REGISTER_KEYBOARD_ACTION("roll_left", camera_roll_left);
+REGISTER_KEYBOARD_ACTION("roll_right", camera_roll_right);
+// </FS:Chanayane>
 REGISTER_KEYBOARD_ACTION("move_forward_fast", camera_move_forward_fast);
 REGISTER_KEYBOARD_ACTION("move_backward_fast", camera_move_backward_fast);
 REGISTER_KEYBOARD_ACTION("edit_avatar_spin_ccw", edit_avatar_spin_ccw);

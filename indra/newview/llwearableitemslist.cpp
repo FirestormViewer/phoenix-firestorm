@@ -116,16 +116,10 @@ bool LLPanelWearableOutfitItem::postBuild()
 
     LLPanelWearableListItem::postBuild();
 
-    //if(mShowWidgets) // <FS:Ansariel> Make Add/Remove buttons work
+    if(mShowWidgets)
     {
-        // <FS:Ansariel> Make Add/Remove buttons work
-        //addWidgetToRightSide(mAddWearableBtn);
-        //addWidgetToRightSide(mAddWearableBtn);
-        LLViewerInventoryItem* inv_item = getItem();
-        mShowWidgets &= (inv_item->getType() != LLAssetType::AT_BODYPART);
-        addWidgetToRightSide(mAddWearableBtn, mShowWidgets);
-        addWidgetToRightSide(mAddWearableBtn, mShowWidgets);
-        // </FS:Ansariel>
+        addWidgetToRightSide(mAddWearableBtn);
+        addWidgetToRightSide(mRemoveWearableBtn);
 
         mAddWearableBtn->setClickedCallback(boost::bind(&LLPanelWearableOutfitItem::onAddWearable, this));
         mRemoveWearableBtn->setClickedCallback(boost::bind(&LLPanelWearableOutfitItem::onRemoveWearable, this));
@@ -192,7 +186,6 @@ LLPanelWearableOutfitItem::LLPanelWearableOutfitItem(LLViewerInventoryItem* item
 : LLPanelWearableListItem(item, params)
 , mWornIndicationEnabled(worn_indication_enabled)
 , mShowWidgets(show_widgets)
-, mIsWorn(false) // <FS:Ansariel> Make Add/Remove buttons work
 {
     if(mShowWidgets)
     {
@@ -217,8 +210,6 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
     // an inventory observer upon link in COF beind added or removed so actual
     // worn status of a linked item may still remain unchanged.
     bool is_worn = LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID);
-    // <FS:Ansariel> Make Add/Remove buttons work
-    mIsWorn = is_worn;
     // <FS:Ansariel> Better attachment list
     //if (mWornIndicationEnabled && is_worn)
     //{
@@ -261,13 +252,10 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
     {
         setShowWidget(mAddWearableBtn, !is_worn);
 
-        // <FS:Ansariel> Make Add/Remove buttons work
-        //// Body parts can't be removed, only replaced
-        //LLViewerInventoryItem* inv_item = getItem();
-        //bool show_remove = is_worn && inv_item && (inv_item->getType() != LLAssetType::AT_BODYPART);
-        //setShowWidget("remove_wearable", show_remove);
-        setShowWidget(mRemoveWearableBtn, is_worn);
-        // </FS:Ansariel>
+        // Body parts can't be removed, only replaced
+        LLViewerInventoryItem* inv_item = getItem();
+        bool show_remove = is_worn && inv_item && (inv_item->getType() != LLAssetType::AT_BODYPART);
+        setShowWidget(mRemoveWearableBtn, show_remove);
 
         if(mHovered)
         {
@@ -555,7 +543,7 @@ FSPanelCOFWearableOutfitListItem::FSPanelCOFWearableOutfitListItem(LLViewerInven
                                                      bool show_widgets,
                                                      const FSPanelCOFWearableOutfitListItem::Params& params)
 : LLPanelWearableOutfitItem(item, worn_indication_enabled, params, show_widgets)
-, mWeightCtrl(NULL)
+, mWeightCtrl(nullptr)
 {
     LLTextBox::Params weight_params = params.item_weight;
     applyXUILayout(weight_params, this);
@@ -576,7 +564,8 @@ bool FSPanelCOFWearableOutfitListItem::postBuild()
     // Reserve space for 'delete' button event if it is invisible.
     setRightWidgetsWidth(mWeightCtrl->getRect().getWidth() + 5);
 
-    setWidgetsVisible(true);
+    mWeightCtrl->setVisible(true);
+
     reshapeWidgets();
 
     return true;
@@ -597,19 +586,7 @@ void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
 void FSPanelCOFWearableOutfitListItem::updateItem(const std::string& name, EItemState item_state)
 {
     LLPanelWearableOutfitItem::updateItem(name, item_state);
-
-    setShowWidget("add_wearable", false);
-    setShowWidget("remove_wearable", mShowWidgets && mIsWorn && mHovered);
-    setWidgetsVisible(true);
-    reshapeWidgets();
-}
-
-//virtual
-void FSPanelCOFWearableOutfitListItem::onMouseEnter(S32 x, S32 y, MASK mask)
-{
-    LLPanelInventoryListItemBase::onMouseEnter(x, y, mask);
-    setShowWidget("remove_wearable", mShowWidgets && mIsWorn);
-    setWidgetsVisible(true);
+    mWeightCtrl->setVisible(true);
     reshapeWidgets();
 }
 
@@ -617,8 +594,8 @@ void FSPanelCOFWearableOutfitListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 void FSPanelCOFWearableOutfitListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
     LLPanelInventoryListItemBase::onMouseLeave(x, y, mask);
-    setShowWidget("remove_wearable", false);
-    setWidgetsVisible(true);
+    setWidgetsVisible(false);
+    mWeightCtrl->setVisible(true); // setWidgetsVisible sets this invisible - make it visible again
     reshapeWidgets();
 }
 
