@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings_color" title="Paramètres de couleur">
+	<filter_editor label="Texte à chercher" name="filter_input" />
+	<scroll_list name="setting_list">
+		<scroll_list.columns label="Couleur" name="color" />
+	</scroll_list>
+	<text name="color_name_txt">
+		Nom de la couleur
+	</text>
+	<spinner label="Alpha" name="alpha_spinner" />
+	<button label="Rétablir les valeurs par défaut" name="default_btn" />
+	<check_box label="Afficher uniquement les modifications" name="hide_default" />
+</floater>
