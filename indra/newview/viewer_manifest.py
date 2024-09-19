@@ -2151,7 +2151,7 @@ class LinuxManifest(ViewerManifest):
             self.path("ca-bundle.crt")
 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            self.path("libfreetype.so*")
+            # self.path("libfreetype.so*")
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
             #self.path("libboost_context-mt.so*")
