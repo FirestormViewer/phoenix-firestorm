@@ -941,7 +941,7 @@ struct ShaderProfileHelper
     }
     ~ShaderProfileHelper()
     {
-        LLGLSLShader::finishProfile(false);
+        LLGLSLShader::finishProfile();
     }
 };
 
