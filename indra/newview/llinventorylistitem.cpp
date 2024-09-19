@@ -144,6 +144,7 @@ void LLPanelInventoryListItemBase::addWidgetToRightSide(const std::string& name,
 
 void LLPanelInventoryListItemBase::addWidgetToRightSide(LLUICtrl* ctrl, bool show_widget/* = true*/)
 {
+    if (ctrl == nullptr)return; // <FS:Beq/> avoid crash if ctrl is null
     mRightSideWidgets.push_back(ctrl);
     setShowWidget(ctrl, show_widget);
 }
