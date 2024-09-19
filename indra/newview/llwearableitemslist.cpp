@@ -116,16 +116,10 @@ bool LLPanelWearableOutfitItem::postBuild()
 
     LLPanelWearableListItem::postBuild();
 
-    //if(mShowWidgets) // <FS:Ansariel> Make Add/Remove buttons work
+    if(mShowWidgets)
     {
-        // <FS:Ansariel> Make Add/Remove buttons work
-        //addWidgetToRightSide(mAddWearableBtn);
-        //addWidgetToRightSide(mAddWearableBtn);
-        LLViewerInventoryItem* inv_item = getItem();
-        mShowWidgets &= (inv_item->getType() != LLAssetType::AT_BODYPART);
-        addWidgetToRightSide(mAddWearableBtn, mShowWidgets);
-        addWidgetToRightSide(mAddWearableBtn, mShowWidgets);
-        // </FS:Ansariel>
+        addWidgetToRightSide(mAddWearableBtn);
+        addWidgetToRightSide(mRemoveWearableBtn);
 
         mAddWearableBtn->setClickedCallback(boost::bind(&LLPanelWearableOutfitItem::onAddWearable, this));
         mRemoveWearableBtn->setClickedCallback(boost::bind(&LLPanelWearableOutfitItem::onRemoveWearable, this));
