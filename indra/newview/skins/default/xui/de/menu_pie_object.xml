@@ -7,12 +7,12 @@
 	<pie_slice label="Aufstehen" name="Object Stand Up"/>
 	<pie_slice label="Kaufen" name="Buy..."/>
 	<pie_menu label="Nehmen &gt;" name="Take Submenu">
+		<pie_slice label="Kopien sep. Obj." name="Take Copy Separate" />
 		<pie_slice label="Nehmen" name="Take" />
 		<pie_slice label="Kopie nehmen" name="Take Copy" />
-		<pie_slice label="Als kombiniertes Objekt" name="Take combined" />
-		<pie_slice label="Kopie als kombiniertes Objekt" name="Take Copy combined" />
-		<pie_slice label="Als separate Objekte" name="Take Separate" />
-		<pie_slice label="Kopien als separate Objekte" name="Take Copy Separate" />
+		<pie_slice label="Kombin. Obj." name="Take combined" />
+		<pie_slice label="Kopie kombin. Obj." name="Take Copy combined" />
+		<pie_slice label="Separate Obj." name="Take Separate" />
 	</pie_menu>
 	<pie_slice label="Zahlen" name="Pay..."/>
 	<pie_menu label="Mehr &gt;" name="Object Pie More 1">
