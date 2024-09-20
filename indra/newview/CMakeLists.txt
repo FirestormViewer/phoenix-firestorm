@@ -845,6 +845,7 @@ set(viewer_SOURCE_FILES
     noise.cpp
     particleeditor.cpp
     permissionstracker.cpp
+    pieautohide.cpp
     piemenu.cpp
     pieseparator.cpp
     pieslice.cpp
@@ -1646,6 +1647,7 @@ set(viewer_HEADER_FILES
     noise.h
     particleeditor.h
     permissionstracker.h
+    pieautohide.h
     piemenu.h
     pieseparator.h
     pieslice.h

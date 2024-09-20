@@ -43,9 +43,8 @@ PieSlice::Params::Params() :
 // create a new slice and memorize the XUI parameters
 PieSlice::PieSlice(const PieSlice::Params& p) :
     LLUICtrl(p),
+    PieAutohide(p.autohide, p.start_autohide),
     mLabel(p.label),
-    mStartAutohide(p.start_autohide),
-    mAutohide(p.autohide),
     mCheckEnableOnce(p.check_enable_once),
     mDoUpdateEnabled(true)
 {
@@ -138,18 +137,6 @@ std::string PieSlice::getLabel() const
 void PieSlice::setLabel(std::string_view newLabel)
 {
     mLabel = newLabel;
-}
-
-// accessor
-bool PieSlice::getStartAutohide() const
-{
-    return mStartAutohide;
-}
-
-// accessor
-bool PieSlice::getAutohide() const
-{
-    return mStartAutohide || mAutohide;
 }
 
 void PieSlice::resetUpdateEnabledCheck()
