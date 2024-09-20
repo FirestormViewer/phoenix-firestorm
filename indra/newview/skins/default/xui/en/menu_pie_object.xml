@@ -60,19 +60,22 @@
     </pie_slice>
 
     <pie_menu
+        autohide="true"
         label="Take &gt;"
         name="Take Submenu">
         <pie_slice
          enabled="false"
-         label="Take"
-         name="Take">
+         label="Copies as separate items"
+         name="Take Copy Separate">
             <pie_slice.on_click
-             function="Object.Take"/>
+             function="Object.TakeSeparateCopy"/>
             <pie_slice.on_enable
-             function="Object.VisibleTake"/>
+             function="Tools.EnableCopySeparate"/>
             <pie_slice.on_visible
-             function="Object.VisibleTakeSingle"/>
+             function="Object.VisibleTakeMultiple"/>
         </pie_slice>
+        <pie_separator/>
+        <pie_separator/>
         <pie_slice
          enabled="false"
          label="Take copy"
@@ -81,6 +84,17 @@
              function="Tools.TakeCopy"/>
             <pie_slice.on_enable
              function="Tools.EnableTakeCopy"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeSingle"/>
+        </pie_slice>
+        <pie_slice
+         enabled="false"
+         label="Take"
+         name="Take">
+            <pie_slice.on_click
+             function="Object.Take"/>
+            <pie_slice.on_enable
+             function="Object.VisibleTake"/>
             <pie_slice.on_visible
              function="Object.VisibleTakeSingle"/>
         </pie_slice>
@@ -114,17 +128,6 @@
              function="Object.TakeSeparate"/>
             <pie_slice.on_enable
              function="Object.EnableTakeMultiple"/>
-            <pie_slice.on_visible
-             function="Object.VisibleTakeMultiple"/>
-        </pie_slice>
-        <pie_slice
-         enabled="false"
-         label="Copies as separate items"
-         name="Take Copy Separate">
-            <pie_slice.on_click
-             function="Object.TakeSeparateCopy"/>
-            <pie_slice.on_enable
-             function="Tools.EnableCopySeparate"/>
             <pie_slice.on_visible
              function="Object.VisibleTakeMultiple"/>
         </pie_slice>
