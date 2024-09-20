@@ -85,7 +85,7 @@ bool RlvActions::getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax)
         static RlvCachedBehaviourModifier<float> sCamDistMax(RLV_MODIFIER_SETCAM_AVDISTMAX);
 
         nDistMax = (fDistMax) ? sCamDistMax : F32_MAX;
-        nDistMin = (fDistMin) ? sCamDistMin : 0.0;
+        nDistMin = (fDistMin) ? sCamDistMin : 0.0f;
         return true;
     }
     return false;
@@ -100,7 +100,7 @@ bool RlvActions::getCameraOriginDistanceLimits(float& nDistMin, float& nDistMax)
         static RlvCachedBehaviourModifier<float> sCamDistMax(RLV_MODIFIER_SETCAM_ORIGINDISTMAX);
 
         nDistMax = (fDistMax) ? sCamDistMax : F32_MAX;
-        nDistMin = (fDistMin) ? sCamDistMin : 0.0;
+        nDistMin = (fDistMin) ? sCamDistMin : 0.0f;
         return true;
     }
     return false;
@@ -163,7 +163,7 @@ static bool rlvCheckAvatarIMDistance(const LLUUID& idAvatar, ERlvBehaviourModifi
     {
         LLVector3d posAgent; bool fHasMax = pBhvrModDistMax->hasValue();
         float nMinDist = pBhvrModDistMin->getValue<float>(), nMaxDist = (fHasMax) ? pBhvrModDistMax->getValue<float>() : std::numeric_limits<float>::max();
-        float nDist = (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) ? llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent)) : std::numeric_limits<float>::max();
+        float nDist = (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) ? (float)llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent)) : std::numeric_limits<float>::max();
         return (nMinDist < nMaxDist) && (nMinDist <= nDist) && (nDist <= nMaxDist);
     }
     return false;
@@ -363,13 +363,13 @@ bool RlvActions::canTeleportToLocal(const LLVector3d& posGlobal)
     bool fCanTeleport = RlvActions::canStand(idRlvObjExcept);
     if ( (fCanTeleport) && (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, idRlvObjExcept)) )
     {
-        const F32 nDistSq = (posGlobal - gAgent.getPositionGlobal()).lengthSquared();
+        const F32 nDistSq = (float)(posGlobal - gAgent.getPositionGlobal()).lengthSquared();
         const F32 nSitTpDist = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SITTPDIST)->getValue<F32>();
         fCanTeleport = nDistSq < nSitTpDist * nSitTpDist;
     }
     if ( (fCanTeleport) && (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, idRlvObjExcept)) )
     {
-        const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
+        const F32 nDistSq = (LLVector2((F32)posGlobal.mdV[VX], (F32)posGlobal.mdV[VY]) - LLVector2((F32)gAgent.getPositionGlobal().mdV[VX], (F32)gAgent.getPositionGlobal().mdV[VY])).lengthSquared();
         const F32 nTpLocalDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_DEFAULT);
         fCanTeleport = nDistSq < nTpLocalDist * nTpLocalDist;
     }
@@ -385,7 +385,7 @@ bool RlvActions::canTeleportToLocation()
 
 bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 {
-    const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
+    const F32 nDistSq = (LLVector2((F32)posGlobal.mdV[VX], (F32)posGlobal.mdV[VY]) - LLVector2((F32)gAgent.getPositionGlobal().mdV[VX], (F32)gAgent.getPositionGlobal().mdV[VY])).lengthSquared();
     return nDistSq < RLV_MODIFIER_TPLOCAL_DEFAULT * RLV_MODIFIER_TPLOCAL_DEFAULT;
 }
 

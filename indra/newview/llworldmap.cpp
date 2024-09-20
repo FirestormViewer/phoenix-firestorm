@@ -477,7 +477,7 @@ bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, 
         }
         siminfo->setName(name);
         siminfo->setAccess(accesscode);
-        siminfo->setRegionFlags(region_flags);
+        siminfo->setRegionFlags((U32)region_flags);
     //  siminfo->setWaterHeight((F32) water_height);
         siminfo->setLandForSaleImage(image_id);
 // <FS:CR> Aurora Sim

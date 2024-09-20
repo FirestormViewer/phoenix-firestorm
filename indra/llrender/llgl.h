@@ -109,12 +109,15 @@ public:
 
     // Vendor-specific extensions
     bool mHasAMDAssociations = false;
-    bool mHasNVXMemInfo = false;
+    bool mHasNVXGpuMemoryInfo = false;
     bool mHasATIMemInfo = false;
 
     bool mIsAMD;
     bool mIsNVIDIA;
     bool mIsIntel;
+
+    // hints to the render pipe
+    U32 mDownScaleMethod = 0; // see settings.xml RenderDownScaleMethod
 
 #if LL_DARWIN
     // Needed to distinguish problem cards on older Macs that break with Materials

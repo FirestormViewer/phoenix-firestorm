@@ -28,7 +28,6 @@
 
 #include "llappviewer.h"
 #include "llstartup.h"
-#include "llcallstack.h"
 
 #if LL_WINDOWS
 #   include <process.h>     // _spawnl()
@@ -1497,7 +1496,7 @@ bool idle_startup()
         // and startup time is close enough if we don't have a real value.
         if (gSavedPerAccountSettings.getU32("LastLogoff") == 0)
         {
-            gSavedPerAccountSettings.setU32("LastLogoff", time_corrected());
+            gSavedPerAccountSettings.setU32("LastLogoff", (U32)time_corrected());
         }
 
         //Default the path if one isn't set.
@@ -1973,7 +1972,6 @@ bool idle_startup()
         //
         // Initialize classes w/graphics stuff.
         //
-        LLViewerStatsRecorder::instance(); // Since textures work in threads
         LLSurface::initClasses();
         display_startup();
 
@@ -2203,7 +2201,11 @@ bool idle_startup()
         // create a container's instance for start a controlling conversation windows
         // by the voice's events
         // <FS:Ansariel> [FS communication UI]
-        //LLFloaterIMContainer::getInstance();
+        //LLFloaterIMContainer *im_inst = LLFloaterIMContainer::getInstance();
+        //if(gAgent.isFirstLogin())
+        //{
+        //    im_inst->openFloater(im_inst->getKey());
+        //}
         FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
         floater_imcontainer->initTabs();
 
@@ -4670,9 +4672,10 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 
 // <FS:CR> Aurora Sim
     text = response["region_size_x"].asString();
-    if(!text.empty()) {
+    if (!text.empty())
+    {
         first_sim_size_x = strtoul(text.c_str(), NULL, 10);
-        LLViewerParcelMgr::getInstance()->init(first_sim_size_x);
+        LLViewerParcelMgr::getInstance()->init((F32)first_sim_size_x);
     }
 
     //region Y size is currently unused, major refactoring required. - Patrick Sapinski (2/10/2011)
@@ -4698,7 +4701,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
         if(server_utc_time)
         {
             time_t now = time(NULL);
-            gUTCOffset = (server_utc_time - now);
+            gUTCOffset = (S32)(server_utc_time - now);
 
             // Print server timestamp
             LLSD substitution;

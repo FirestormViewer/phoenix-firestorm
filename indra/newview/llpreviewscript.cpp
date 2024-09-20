@@ -522,7 +522,7 @@ void LLLiveLSLEditor::experienceChanged()
     if(mScriptEd->getAssociatedExperience() != mExperiences->getSelectedValue().asUUID())
     {
         mScriptEd->enableSave(getIsModifiable());
-        //getChildView("Save_btn")->setEnabled(true);
+        //mSaveBtn->setEnabled(true);
         mScriptEd->setAssociatedExperience(mExperiences->getSelectedValue().asUUID());
         updateExperiencePanel();
     }
@@ -568,9 +568,8 @@ void LLLiveLSLEditor::onToggleExperience( LLUICtrl *ui, void* userdata )
 
 bool LLScriptEdCore::postBuild()
 {
-    mLineCol=getChild<LLTextBox>("line_col");
+    mLineCol = getChild<LLTextBox>("line_col");
 // <FS:CR> Advanced Script Editor
-    //mSaveBtn=getChildView("Save_btn");
     mSaveBtn =  getChild<LLButton>("save_btn");
     mSaveBtn2 = getChild<LLButton>("save_btn_2");   // <FS:Zi> support extra save button
     mCutBtn =   getChild<LLButton>("cut_btn");
@@ -614,7 +613,8 @@ bool LLScriptEdCore::postBuild()
 
     childSetCommitCallback("lsl errors", &LLScriptEdCore::onErrorList, this);
 // <FS:CR> Advanced Script Editor
-    //childSetAction("Save_btn", boost::bind(&LLScriptEdCore::doSave,this,false));
+    //mSaveBtn = getChild<LLButton>("Save_btn");
+    //mSaveBtn->setCommitCallback(boost::bind(&LLScriptEdCore::doSave, this, false));
     childSetAction("prefs_btn", boost::bind(&LLScriptEdCore::onBtnPrefs, this));
 // </FS:CR>
     childSetAction("Edit_btn", boost::bind(&LLScriptEdCore::openInExternalEditor, this));

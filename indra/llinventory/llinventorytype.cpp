@@ -53,7 +53,7 @@ struct InventoryEntry : public LLDictionaryEntry
             LLAssetType::EType t = (LLAssetType::EType)va_arg(argp,int);
             mAssetTypes.push_back(t);
         }
-        va_end( argp ); // <FS:ND/> Needs to be freed when done.
+        va_end(argp);
     }
 
     const std::string mHumanName;

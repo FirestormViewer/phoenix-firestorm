@@ -48,9 +48,9 @@ LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
 
 //static
 // <FS:Ansariel> Add additional options
-//void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
+//void LLViewerChat::getChatColor(const LLChat& chat, LLUIColor& r_color, F32& r_color_alpha)
 //{
-void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args)
+void LLViewerChat::getChatColor(const LLChat& chat, LLUIColor& r_color, F32& r_color_alpha, LLSD args)
 {
     const bool is_local = args.has("is_local") ? args["is_local"].asBoolean() : true;
     const bool for_console = args.has("for_console") && args["for_console"].asBoolean();
@@ -108,7 +108,10 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
                     // </FS:CR>
 
                     //color based on contact sets prefs
-                    LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, ContactSetType::CHAT, r_color);
+                    if (LLColor4 cscolor; LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, ContactSetType::CHAT, cscolor))
+                    {
+                        r_color = cscolor;
+                    }
                 }
                 break;
             case CHAT_SOURCE_OBJECT:
@@ -134,7 +137,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
                 }
                 break;
             default:
-                r_color.setToWhite();
+                r_color = LLUIColorTable::instance().getColor("White");
         }
 
         // <FS:KC> Keyword alerts
@@ -142,7 +145,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
         static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
         if (sFSKeywordChangeColor && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
         {
-            r_color = sFSKeywordColor;
+            r_color = sFSKeywordColor();
         }
         // </FS:KC>
 
@@ -153,16 +156,20 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
 // <FS:CR> Opensim
             //F32 dist_near_chat = gAgent.getNearChatRadius();
             //if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > say_distance_squared)
-            F32 dist_near_chat = LFSimFeatureHandler::getInstance()->sayRange();
+            F32 dist_near_chat = (F32)LFSimFeatureHandler::getInstance()->sayRange();
 // </FS:CR> Opensim
             if (distance_squared > dist_near_chat * dist_near_chat)
             {
                 // diminish far-off chat
                 // <FS:Ansariel> FIRE-3572: Customize local chat color brightness change based on distance
-                //r_color.mV[VALPHA] = 0.8f;
+                //r_color_alpha = 0.8f;
                 static LLCachedControl<F32> fsBeyondNearbyChatColorDiminishFactor(gSavedSettings, "FSBeyondNearbyChatColorDiminishFactor", 0.8f);
-                r_color.mV[VALPHA] = fsBeyondNearbyChatColorDiminishFactor();
+                r_color_alpha = fsBeyondNearbyChatColorDiminishFactor();
                 // </FS:Ansariel>
+            }
+            else
+            {
+                r_color_alpha = 1.0f;
             }
         }
     }
@@ -234,7 +241,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, std::string& r_color_name, F
             F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
 // <FS:CR> Opensim
             //F32 dist_near_chat = gAgent.getNearChatRadius();
-            F32 dist_near_chat = LFSimFeatureHandler::getInstance()->sayRange();
+            F32 dist_near_chat = (F32)LFSimFeatureHandler::getInstance()->sayRange();
 // </FS:CR> Opensim
             if (distance_squared > dist_near_chat * dist_near_chat)
             {

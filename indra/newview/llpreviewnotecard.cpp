@@ -73,8 +73,7 @@
 
 // Default constructor
 LLPreviewNotecard::LLPreviewNotecard(const LLSD& key) //const LLUUID& item_id,
-    : LLPreview( key ),
-    mLiveFile(NULL)
+    : LLPreview( key )
     // <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
     ,mCursorPos(0)
     ,mScrollPos(0)
@@ -113,27 +112,34 @@ bool LLPreviewNotecard::postBuild()
     mEditor->setNotecardInfo(mItemUUID, mObjectID, getKey());
     mEditor->makePristine();
 
-    childSetAction("Save", onClickSave, this);
-    getChildView("lock")->setVisible( false);
+    mSaveBtn = getChild<LLButton>("Save");
+    mSaveBtn->setCommitCallback(boost::bind(&LLPreviewNotecard::saveIfNeeded, this, nullptr, true));
 
-    childSetAction("Delete", onClickDelete, this);
-    getChildView("Delete")->setEnabled(false);
+    mLockBtn = findChild<LLUICtrl>("lock");
+    if (mLockBtn)
+        mLockBtn->setVisible(false);
 
-    childSetAction("Edit", onClickEdit, this);
+    mDeleteBtn = getChild<LLButton>("Delete");
+    mDeleteBtn->setCommitCallback(boost::bind(&LLPreviewNotecard::deleteNotecard, this));
+    mDeleteBtn->setEnabled(false);
+
+    mEditBtn = getChild<LLButton>("Edit");
+    mEditBtn->setCommitCallback(boost::bind(&LLPreviewNotecard::openInExternalEditor, this));
 
     // <FS:Ansariel> FIRE-13969: Search button
     getChild<LLButton>("Search")->setClickedCallback(boost::bind(&LLPreviewNotecard::onSearchButtonClicked, this));
 
     const LLInventoryItem* item = getItem();
 
-    childSetCommitCallback("desc", LLPreview::onText, this);
+    mDescEditor = getChild<LLLineEditor>("desc");
+    mDescEditor->setCommitCallback(boost::bind(&LLPreview::onText, mDescEditor, this));
     if (item)
     {
-        getChild<LLUICtrl>("desc")->setValue(item->getDescription());
+        mDescEditor->setValue(item->getDescription());
         bool source_library = mObjectUUID.isNull() && gInventory.isObjectDescendentOf(item->getUUID(), gInventory.getLibraryRootFolderID());
-        getChildView("Delete")->setEnabled(!source_library);
+        mDeleteBtn->setEnabled(!source_library);
     }
-    getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
+    mDescEditor->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 
     // <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
     mFontNameChangedCallbackConnection = gSavedSettings.getControl("FSNotecardFontName")->getSignal()->connect(boost::bind(&LLPreviewNotecard::onFontChanged, this));
@@ -152,24 +158,30 @@ bool LLPreviewNotecard::saveItem()
 
 void LLPreviewNotecard::setEnabled(bool enabled)
 {
-    LLViewerTextEditor* editor = findChild<LLViewerTextEditor>("Notecard Editor");
-    // editor is part of xml, if it doesn't exists, nothing else does
-    if (editor)
+    if (mEditor)
     {
-        editor->setEnabled(enabled);
-        getChildView("lock")->setVisible( !enabled);
-        getChildView("desc")->setEnabled(enabled);
-        getChildView("Save")->setEnabled(enabled && (!editor->isPristine()));
+        mEditor->setEnabled(enabled);
+    }
+    if (mLockBtn)
+    {
+        mLockBtn->setVisible(!enabled);
+    }
+    if (mDescEditor)
+    {
+        mDescEditor->setEnabled(enabled);
+    }
+    if (mSaveBtn)
+    {
+        mSaveBtn->setEnabled(enabled && mEditor && (!mEditor->isPristine()));
     }
 }
 
 
 void LLPreviewNotecard::draw()
 {
-    LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-    bool changed = !editor->isPristine();
+    bool changed = !mEditor->isPristine();
 
-    getChildView("Save")->setEnabled(changed && getEnabled());
+    mSaveBtn->setEnabled(changed && getEnabled());
 
     LLPreview::draw();
 }
@@ -204,9 +216,7 @@ bool LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
 // virtual
 bool LLPreviewNotecard::canClose()
 {
-    LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-
-    if(mForceClose || editor->isPristine())
+    if(mForceClose || mEditor->isPristine())
     {
         return true;
     }
@@ -227,20 +237,13 @@ void LLPreviewNotecard::setObjectID(const LLUUID& object_id)
 {
     LLPreview::setObjectID(object_id);
 
-    LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-    editor->setNotecardObjectID(mObjectUUID);
-    editor->makePristine();
+    mEditor->setNotecardObjectID(mObjectUUID);
+    mEditor->makePristine();
 }
 
 const LLInventoryItem* LLPreviewNotecard::getDragItem()
 {
-    LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-
-    if(editor)
-    {
-        return editor->getDragItem();
-    }
-    return NULL;
+    return mEditor->getDragItem();
 }
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
@@ -252,10 +255,7 @@ LLTextEditor* LLPreviewNotecard::getEditor()
 
 bool LLPreviewNotecard::hasEmbeddedInventory()
 {
-    LLViewerTextEditor* editor = NULL;
-    editor = getChild<LLViewerTextEditor>("Notecard Editor");
-    if (!editor) return false;
-    return editor->hasEmbeddedInventory();
+    return mEditor->hasEmbeddedInventory();
 }
 
 void LLPreviewNotecard::refreshFromInventory(const LLUUID& new_item_id)
@@ -273,14 +273,9 @@ void LLPreviewNotecard::updateTitleButtons()
 {
     LLPreview::updateTitleButtons();
 
-    // <FS:Ansariel> Fix XUI parser warning
-    //LLUICtrl* lock_btn = getChild<LLUICtrl>("lock");
-    //if (lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
-    LLUICtrl* lock_btn = findChild<LLUICtrl>("lock");
-    if(lock_btn && lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
-    // </FS:Ansariel>
+    if(mLockBtn && mLockBtn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
     {
-        LLRect lock_rc = lock_btn->getRect();
+        LLRect lock_rc = mLockBtn->getRect();
         LLRect buttons_rect = getDragHandle()->getButtonsRect();
         buttons_rect.mLeft = lock_rc.mLeft;
         getDragHandle()->setButtonsRect(buttons_rect);
@@ -291,11 +286,6 @@ void LLPreviewNotecard::loadAsset()
 {
     // request the asset.
     const LLInventoryItem* item = getItem();
-    LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-
-    if (!editor)
-        return;
-
     bool fail = false;
 
     if(item)
@@ -311,9 +301,9 @@ void LLPreviewNotecard::loadAsset()
             mAssetID = item->getAssetUUID();
             if(mAssetID.isNull())
             {
-                editor->setText(LLStringUtil::null);
-                editor->makePristine();
-                editor->setEnabled(true);
+                mEditor->setText(LLStringUtil::null);
+                mEditor->makePristine();
+                mEditor->setEnabled(true);
                 mAssetStatus = PREVIEW_ASSET_LOADED;
             }
             else
@@ -332,9 +322,9 @@ void LLPreviewNotecard::loadAsset()
                         // The object that we're trying to look at disappeared, bail.
                         LL_WARNS() << "Can't find object " << mObjectUUID << " associated with notecard." << LL_ENDL;
                         mAssetID.setNull();
-                        editor->setText(getString("no_object"));
-                        editor->makePristine();
-                        editor->setEnabled(false);
+                        mEditor->setText(getString("no_object"));
+                        mEditor->makePristine();
+                        mEditor->setEnabled(false);
                         mAssetStatus = PREVIEW_ASSET_LOADED;
                         return;
                     }
@@ -363,22 +353,22 @@ void LLPreviewNotecard::loadAsset()
         else
         {
             mAssetID.setNull();
-            editor->setText(getString("not_allowed"));
-            editor->makePristine();
-            editor->setEnabled(false);
+            mEditor->setText(getString("not_allowed"));
+            mEditor->makePristine();
+            mEditor->setEnabled(false);
             mAssetStatus = PREVIEW_ASSET_LOADED;
         }
 
         if(!allow_modify)
         {
-            editor->setEnabled(false);
-            getChildView("lock")->setVisible( true);
-            getChildView("Edit")->setEnabled(false);
+            mEditor->setEnabled(false);
+            mLockBtn->setVisible( true);
+            mEditBtn->setEnabled(false);
         }
 
         if((allow_modify || is_owner) && !source_library)
         {
-            getChildView("Delete")->setEnabled(true);
+            mDeleteBtn->setEnabled(true);
         }
     }
     else if (mObjectUUID.notNull() && mItemUUID.notNull())
@@ -407,9 +397,9 @@ void LLPreviewNotecard::loadAsset()
 
     if (fail)
     {
-        editor->setText(LLStringUtil::null);
-        editor->makePristine();
-        editor->setEnabled(true);
+        mEditor->setText(LLStringUtil::null);
+        mEditor->makePristine();
+        mEditor->setEnabled(true);
         // Don't set asset status here; we may not have set the item id yet
         // (e.g. when this gets called initially)
         //mAssetStatus = PREVIEW_ASSET_LOADED;
@@ -439,7 +429,7 @@ void LLPreviewNotecard::onLoadComplete(const LLUUID& asset_uuid,
             buffer[file_length] = 0;
 
 
-            LLViewerTextEditor* previewEditor = preview->getChild<LLViewerTextEditor>("Notecard Editor");
+            LLViewerTextEditor* previewEditor = preview->mEditor;
 
             if( (file_length > 19) && !strncmp( &buffer[0], "Linden text version", 19 ) )
             {
@@ -489,38 +479,6 @@ void LLPreviewNotecard::onLoadComplete(const LLUUID& asset_uuid,
         }
     }
     delete floater_key;
-}
-
-// static
-void LLPreviewNotecard::onClickSave(void* user_data)
-{
-    //LL_INFOS() << "LLPreviewNotecard::onBtnSave()" << LL_ENDL;
-    LLPreviewNotecard* preview = (LLPreviewNotecard*)user_data;
-    if(preview)
-    {
-        preview->saveIfNeeded();
-    }
-}
-
-
-// static
-void LLPreviewNotecard::onClickDelete(void* user_data)
-{
-    LLPreviewNotecard* preview = (LLPreviewNotecard*)user_data;
-    if(preview)
-    {
-        preview->deleteNotecard();
-    }
-}
-
-// static
-void LLPreviewNotecard::onClickEdit(void* user_data)
-{
-    LLPreviewNotecard* preview = (LLPreviewNotecard*)user_data;
-    if (preview)
-    {
-        preview->openInExternalEditor();
-    }
 }
 
 struct LLSaveNotecardInfo
@@ -589,27 +547,19 @@ void LLPreviewNotecard::finishTaskUpload(LLUUID itemId, LLUUID newAssetId, LLUUI
 
 bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem, bool sync)
 {
-    LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-
-    if(!editor)
-    {
-        LL_WARNS() << "Cannot get handle to the notecard editor." << LL_ENDL;
-        return false;
-    }
-
-    if(!editor->isPristine())
+    if(!mEditor->isPristine())
     {
         std::string buffer;
-        if (!editor->exportBuffer(buffer))
+        if (!mEditor->exportBuffer(buffer))
         {
             return false;
         }
 
         // <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
-        mCursorPos = editor->getCursorPos();
-        mScrollPos = editor->getScrollContainer()->getScrollbar(LLScrollContainer::VERTICAL)->getDocPos();
+        mCursorPos = mEditor->getCursorPos();
+        mScrollPos = mEditor->getScrollContainer()->getScrollbar(LLScrollContainer::VERTICAL)->getDocPos();
 
-        editor->makePristine();
+        mEditor->makePristine();
         const LLInventoryItem* item = getItem();
         // save it out to database
         if (item)
@@ -773,11 +723,7 @@ void LLPreviewNotecard::onSaveComplete(const LLUUID& asset_uuid, void* user_data
         // Perform item copy to inventory
         if (info->mCopyItem.notNull())
         {
-            LLViewerTextEditor* editor = info->mSelf->getChild<LLViewerTextEditor>("Notecard Editor");
-            if (editor)
-            {
-                editor->copyInventory(info->mCopyItem);
-            }
+            info->mSelf->mEditor->copyInventory(info->mCopyItem);
         }
 
         // Find our window and close it if requested.
@@ -812,7 +758,7 @@ bool LLPreviewNotecard::handleSaveChangesDialog(const LLSD& notification, const 
     {
     case 0:  // "Yes"
         mCloseAfterSave = true;
-        LLPreviewNotecard::onClickSave((void*)this);
+        saveIfNeeded();
         break;
 
     case 1:  // "No"

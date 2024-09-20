@@ -681,7 +681,7 @@ public:
 
         Optional<bool>  show_speaker;
 
-        Optional<LLColor4>  avatar_icon_color;
+        Optional<LLUIColor>  avatar_icon_color;
 
         Params();
     };

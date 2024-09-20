@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings_color">
+	<filter_editor label="Suchbegriff eingeben" name="filter_input"/>
+	<scroll_list name="setting_list">
+		<scroll_list.columns label="Farbe" name="color"/>
+	</scroll_list>
+	<text name="color_name_txt">
+		Farbname
+	</text>
+	<spinner label="Alpha" name="alpha_spinner"/>
+	<button label="Auf Standard zurücksetzen" name="default_btn"/>
+	<check_box label="Nur geänderte Farben anzeigen" name="hide_default"/>
+</floater>

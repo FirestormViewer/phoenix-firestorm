@@ -1048,6 +1048,7 @@ void LLGLManager::initWGL()
         GLH_EXT_NAME(wglGetGPUIDsAMD) = (PFNWGLGETGPUIDSAMDPROC)GLH_EXT_GET_PROC_ADDRESS("wglGetGPUIDsAMD");
         GLH_EXT_NAME(wglGetGPUInfoAMD) = (PFNWGLGETGPUINFOAMDPROC)GLH_EXT_GET_PROC_ADDRESS("wglGetGPUInfoAMD");
     }
+    mHasNVXGpuMemoryInfo = ExtensionExists("GL_NVX_gpu_memory_info", gGLHExts.mSysExts);
 
     if (ExtensionExists("WGL_EXT_swap_control", gGLHExts.mSysExts))
     {
@@ -1217,6 +1218,17 @@ bool LLGLManager::initGL()
             LL_WARNS("RenderInit") << "VRAM Detected (AMDAssociations):" << mVRAM << LL_ENDL;
         }
     }
+    else if (mHasNVXGpuMemoryInfo)
+    {
+        GLint mem_kb = 0;
+        glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &mem_kb);
+        mVRAM = mem_kb / 1024;
+
+        if (mVRAM != 0)
+        {
+            LL_WARNS("RenderInit") << "VRAM Detected (NVXGpuMemoryInfo):" << mVRAM << LL_ENDL;
+        }
+    }
 #endif
 
 // <FS:Beq> remove this so that we can attempt to use driver specifics
@@ -1241,7 +1253,7 @@ bool LLGLManager::initGL()
 // </FS:Beq>
 
     // Ultimate fallbacks for linux and mesa
-    if (mHasNVXMemInfo && mVRAM == 0)
+    if (mHasNVXGpuMemoryInfo && mVRAM == 0)
     {
         S32 dedicated_memory;
         glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &dedicated_memory);
@@ -1490,7 +1502,6 @@ void LLGLManager::initExtensions()
 // <FS:Zi> Linux support
 //#if (LL_WINDOWS || LL_LINUX) && !LL_MESA_HEADLESS
     mHasATIMemInfo = ExtensionExists("GL_ATI_meminfo", gGLHExts.mSysExts); //Basic AMD method, also see mHasAMDAssociations
-    mHasNVXMemInfo = ExtensionExists("GL_NVX_gpu_memory_info", gGLHExts.mSysExts);
 
     LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
 

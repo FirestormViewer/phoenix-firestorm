@@ -232,7 +232,7 @@ LLUUID LLResourceUploadInfo::finishUpload(LLSD &result)
             LL_INFOS() << "inventory_item_flags " << flagsInventoryItem << LL_ENDL;
         }
     }
-    S32 creationDate = time_corrected();
+    S32 creationDate = (S32)time_corrected();
 
     LLUUID serverInventoryItem = result["new_inventory_item"].asUUID();
     LLUUID serverAssetId = result["new_asset"].asUUID();
@@ -385,7 +385,8 @@ LLNewFileResourceUploadInfo::LLNewFileResourceUploadInfo(
     LLResourceUploadInfo(name, description, compressionInfo,
     destinationType, inventoryType,
     nextOWnerPerms, groupPerms, everyonePerms, expectedCost, show_inventory),
-    mFileName(fileName)
+    mFileName(fileName),
+    mMaxImageSize(LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT)
 {
 }
 
@@ -439,7 +440,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
     else if (assetType == LLAssetType::AT_TEXTURE)
     {
         // It's an image file, the upload procedure is the same for all
-        if (!LLViewerTextureList::createUploadFile(getFileName(), filename, codec))
+        if (!LLViewerTextureList::createUploadFile(getFileName(), filename, codec, mMaxImageSize))
         {
             // <FS:Ansariel> Duplicate error message output
             //errorMessage = llformat("Problem with file %s:\n\n%s\n",
@@ -501,7 +502,12 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         else
         {
             S32 size = LLAPRFile::size(getFileName());
-            U8* buffer = new U8[size];
+            U8* buffer = new(std::nothrow) U8[size];
+            if (!buffer)
+            {
+                LLError::LLUserWarningMsg::showOutOfMemory();
+                LL_ERRS() << "Bad memory allocation for buffer, size: " << size << LL_ENDL;
+            }
             S32 size_read = infile.read(buffer,size);
             if (size_read != size)
             {
@@ -1038,6 +1044,7 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
         label = result["label"].asString();
     }
 
+    LLFloaterSnapshot* floater_snapshot = LLFloaterSnapshot::findInstance();
     if (result.has("message"))
     {
         reason = result["message"].asString();
@@ -1048,6 +1055,12 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
         {
         case 404:
             reason = LLTrans::getString("AssetUploadServerUnreacheble");
+            if (floater_snapshot
+                && floater_snapshot->isWaitingState()
+                && uploadInfo->getAssetType() == LLAssetType::AT_IMAGE_JPEG)
+            {
+                label = "CannotUploadSnapshotEmailTooBig";
+            }
             break;
         case 499:
             reason = LLTrans::getString("AssetUploadServerDifficulties");
@@ -1084,7 +1097,6 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
     // Todo: move these floater specific actions into proper callbacks
 
     // Let the Snapshot floater know we have failed uploading.
-    LLFloaterSnapshot* floater_snapshot = LLFloaterSnapshot::findInstance();
     if (floater_snapshot && floater_snapshot->isWaitingState())
     {
         if (uploadInfo->getAssetType() == LLAssetType::AT_IMAGE_JPEG)

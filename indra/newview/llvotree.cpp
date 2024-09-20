@@ -472,9 +472,7 @@ void LLVOTree::updateTextures()
         {
             setDebugText(llformat("%4.0f", (F32) sqrt(mPixelArea)));
         }
-        mTreeImagep->addTextureStats(mPixelArea);
     }
-
 }
 
 
@@ -490,7 +488,7 @@ LLDrawable* LLVOTree::createDrawable(LLPipeline *pipeline)
     // Just a placeholder for an actual object...
     LLFace *facep = mDrawable->addFace(poolp, mTreeImagep);
     facep->setSize(1, 3);
-
+    facep->setTexture(LLRender::DIFFUSE_MAP, mTreeImagep);
     updateRadius();
 
     return mDrawable;
@@ -1180,6 +1178,10 @@ void LLVOTree::updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
     LLVector4a pos;
     pos.load3(center.mV);
     mDrawable->setPositionGroup(pos);
+
+    LLFace* facep = mDrawable->getFace(0);
+    facep->mExtents[0] = newMin;
+    facep->mExtents[1] = newMax;
 }
 
 bool LLVOTree::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, bool pick_transparent, bool pick_rigged, bool pick_unselectable, S32 *face_hitp,

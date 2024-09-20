@@ -630,10 +630,15 @@ void LLRenderPass::pushBatch(LLDrawInfo& params, bool texture, bool batch_textur
             }
         }
     }
-
+    // <FS:Beq> FIRE-34518 bugsplat access violation - place guard on unchecked mVertexBuffer access
+    if (params.mVertexBuffer == nullptr)
+    {
+        LL_WARNS() << "LLRenderPass::pushBatch: params.mVertexBuffer is nullptr. drawRange skipped." << LL_ENDL;
+        return;
+    }
+    // </FS:Beq>
     params.mVertexBuffer->setBuffer();
     params.mVertexBuffer->drawRange(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
-
     if (tex_setup)
     {
         gGL.matrixMode(LLRender::MM_TEXTURE0);

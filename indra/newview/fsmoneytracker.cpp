@@ -114,7 +114,7 @@ std::string FSMoneyTracker::getTime(time_t utc_time)
 
 std::string FSMoneyTracker::getDate(time_t utc_time)
 {
-    LLDate curdate = LLDate(utc_time);
+    LLDate curdate = LLDate((double)utc_time);
     return curdate.asString();
 }
 

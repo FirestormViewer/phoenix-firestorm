@@ -82,11 +82,6 @@
 #include "sound_ids.h"
 #include "NACLantispam.h"
 
-#if LL_MSVC
-// disable boost::lexical_cast warning
-#pragma warning (disable:4702)
-#endif
-
 extern void on_new_message(const LLSD& msg);
 
 // Strip out "Resident" for display, but only if the message came from a user
@@ -2349,7 +2344,7 @@ void LLIMProcessing::requestOfflineMessagesCoro(std::string url)
         }
         else
         {
-            position.set(message_data["local_x"].asReal(), message_data["local_y"].asReal(), message_data["local_z"].asReal());
+            position.set((F32)message_data["local_x"].asReal(), (F32)message_data["local_y"].asReal(), (F32)message_data["local_z"].asReal());
         }
 
         std::vector<U8> bin_bucket;

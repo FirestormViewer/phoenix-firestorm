@@ -190,8 +190,8 @@ void FSRadar::updateRadarList()
     FSLSLBridge& bridge = FSLSLBridge::instance();
 
     LFSimFeatureHandler& simfeaturehandler = LFSimFeatureHandler::instance();
-    const F32 chat_range_say = simfeaturehandler.sayRange();
-    const F32 chat_range_shout = simfeaturehandler.shoutRange();
+    const F32 chat_range_say = (F32)simfeaturehandler.sayRange();
+    const F32 chat_range_shout = (F32)simfeaturehandler.shoutRange();
 
     static const std::string str_chat_entering =            LLTrans::getString("entering_chat_range");
     static const std::string str_chat_leaving =             LLTrans::getString("leaving_chat_range");
@@ -351,7 +351,7 @@ void FSRadar::updateRadarList()
         }
         S32 avAge = ent->mAge;
         std::string avName = ent->mName;
-        U32 lastZOffsetTime  = ent->mLastZOffsetTime;
+        U32 lastZOffsetTime = (U32)ent->mLastZOffsetTime;
         F32 avZOffset = ent->mZOffset;
         if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
         {
@@ -368,7 +368,7 @@ void FSRadar::updateRadarList()
                 ent->mLastZOffsetTime = now;
             }
         }
-        F32 avRange = (avPos[VZ] != AVATAR_UNKNOWN_Z_OFFSET ? dist_vec(avPos, posSelf) : AVATAR_UNKNOWN_RANGE);
+        F32 avRange = (F32)(avPos[VZ] != AVATAR_UNKNOWN_Z_OFFSET ? dist_vec(avPos, posSelf) : AVATAR_UNKNOWN_RANGE);
         ent->mRange = avRange;
         ent->mGlobalPos = avPos;
         ent->mRegion = avRegion;
@@ -682,7 +682,7 @@ void FSRadar::updateRadarList()
 
         // clear out the dispatch queue
         mRadarOffsetRequests.clear();
-        mRadarLastBulkOffsetRequestTime = now;
+        mRadarLastBulkOffsetRequestTime = (U32)now;
     }
 
     //

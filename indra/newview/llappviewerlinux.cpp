@@ -171,7 +171,7 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
     return succeeded;
 }
 
-void setupBreadpad()
+void setupBreakpad()
 {
     std::string build_data_fname(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "build_data.json"));
     gCrashLogger =  gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "linux-crash-logger.bin");
@@ -183,7 +183,7 @@ void setupBreadpad()
         return;
     }
 
-    boost::json::error_code ec;
+    boost::system::error_code ec;
     boost::json::value build_data = boost::json::parse(inf, ec);
     if(ec.failed())
     {
@@ -232,7 +232,7 @@ bool LLAppViewerLinux::init()
             gCrashBehavior = "ask";
         else
             gCrashBehavior = "send";
-        setupBreadpad();
+        setupBreakpad();
     }
 #endif
 

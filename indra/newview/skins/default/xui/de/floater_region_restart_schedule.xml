@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_region_restart_schedule" title="Zeitplan Regionsneustart">
+
+<!-- This block shows Advanced Settings -->
+	<floater.string name="am_string">am</floater.string>
+	<floater.string name="pm_string">pm</floater.string>
+
+	<text name="days_general">
+		Region an den folgenden Tagen neu starten:
+	</text>
+
+	<check_box name="s_chk" tool_tip="Sonntag"/>
+	<check_box name="m_chk" tool_tip="Montag"/>
+	<check_box name="t_chk" tool_tip="Dienstag"/>
+	<check_box name="w_chk" tool_tip="Mittwoch"/>
+	<check_box name="r_chk" tool_tip="Donnerstag"/>
+	<check_box name="f_chk" tool_tip="Freitag"/>
+	<check_box name="a_chk" tool_tip="Samstag"/>
+	<text name="su_label">
+		So
+	</text>
+	<text name="mo_label">
+		Mo
+	</text>
+	<text name="tu_label">
+		Di
+	</text>
+	<text name="we_label">
+		Mi
+	</text>
+	<text name="th_label">
+		Do
+	</text>
+	<text name="fr_label">
+		Fr
+	</text>
+	<text name="sa_label">
+		Sa
+	</text>
+	<text name="at_label">
+		um
+	</text>
+	<button name="am_pm_btn" label="am"/>
+	<text name="utc_label">
+		UTC
+	</text>
+	<button name="save_btn" label="Speichern"/>
+	<button name="cancel_btn" label="Abbrechen"/>
+</floater>

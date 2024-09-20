@@ -29,6 +29,7 @@
 #include "llfloater.h"
 
 class LLConversationLogList;
+class LLMenuButton;
 
 class LLFloaterConversationLog : public LLFloater
 {
@@ -55,6 +56,7 @@ private:
     bool isActionChecked(const LLSD& userdata);
 
     LLConversationLogList* mConversationLogList;
+    LLMenuButton*          mConversationsGearBtn = nullptr;
 };
 
 

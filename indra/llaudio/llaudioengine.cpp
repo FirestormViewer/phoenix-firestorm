@@ -1367,13 +1367,13 @@ void LLAudioSource::pruneSoundLog()
         {
             std::map<LLUUID, LLSoundHistoryItem>::iterator iter = gSoundHistory.begin();
             std::map<LLUUID, LLSoundHistoryItem>::iterator end = gSoundHistory.end();
-            U64 lowest_time = (*iter).second.mTimeStopped;
+            U64 lowest_time = (U64)(*iter).second.mTimeStopped;
             LLUUID lowest_id = (*iter).first;
             for ( ; iter != end; ++iter)
             {
                 if ((*iter).second.mTimeStopped < lowest_time)
                 {
-                    lowest_time = (*iter).second.mTimeStopped;
+                    lowest_time = (U64)(*iter).second.mTimeStopped;
                     lowest_id = (*iter).first;
                 }
             }
@@ -1972,7 +1972,17 @@ bool LLAudioData::load()
     {
         // Hrm.  Right now, let's unset the buffer, since it's empty.
         gAudiop->cleanupBuffer(mBufferp);
-        mBufferp = NULL;
+        mBufferp = nullptr;
+
+        if (!gDirUtilp->fileExists(wav_path))
+        {
+            mHasLocalData = false;
+            mHasDecodedData = false;
+            mHasCompletedDecode = false;
+            mHasDecodeFailed = false;
+            mHasWAVLoadFailed = false;
+            gAudiop->preloadSound(mID);
+        }
 
         // <FS:Ansariel> FIRE-480: Opening multiple instances causes sound failures
         if (!gDirUtilp->fileExists(wav_path))

@@ -24,12 +24,6 @@
  * $/LicenseInfo$
  */
 
-#if LL_MSVC
-// disable warning about boost::lexical_cast returning uninitialized data
-// when it fails to parse the string
-#pragma warning (disable:4701)
-#endif
-
 #include "llviewerprecompiledheaders.h"
 
 #include "llvoavatarself.h"
@@ -65,7 +59,6 @@
 #include "llsdutil.h"
 #include "llstartup.h"
 #include "llsdserialize.h"
-#include "llcallstack.h"
 #include "llcorehttputil.h"
 #include "lluiusage.h"
 
@@ -85,11 +78,6 @@
 // <FS:Ansariel> [Legacy Bake]
 #include "llviewernetwork.h"
 // </FS:Ansariel> [Legacy Bake]
-
-#if LL_MSVC
-// disable boost::lexical_cast warning
-#pragma warning (disable:4702)
-#endif
 
 #include <boost/lexical_cast.hpp>
 
@@ -1024,7 +1012,7 @@ bool LLVOAvatarSelf::isValid() const
 // virtual
 void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 {
-    if (isValid())
+    if (isAgentAvatarValid())
     {
         LLVOAvatar::idleUpdate(agent, time);
         idleUpdateTractorBeam();
@@ -1771,7 +1759,7 @@ bool LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
         // Make sure the inventory is in sync with the avatar.
 
         // Update COF contents, don't trigger appearance update.
-        if (!isValid())
+        if (!isAgentAvatarValid())
         {
             LL_INFOS() << "removeItemLinks skipped, avatar is under destruction" << LL_ENDL;
         }
@@ -2914,7 +2902,7 @@ LLSD summarize_by_buckets(std::vector<LLSD> in_records,
             key[field] = record[field];
         }
         LLViewerStats::StatsAccumulator& stats = accum[key];
-        F32 value = record[val_field].asReal();
+        F32 value = (F32)record[val_field].asReal();
         stats.push(value);
     }
     for (std::map<LLSD,LLViewerStats::StatsAccumulator>::iterator accum_it = accum.begin();

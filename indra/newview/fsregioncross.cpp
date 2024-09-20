@@ -99,8 +99,8 @@ void RegionCrossExtrapolateImpl::update()
     const LLQuaternion& inverserot = rot.conjugate();             // transform global to local
     LLVector3 vel = mOwner.getVelocity() * inverserot;            // velocity in object coords
     LLVector3 angvel = mOwner.getAngularVelocity() * inverserot;  // angular velocity in object coords
-    mFilteredVel.update(vel, dt);                                 // accum into filter in object coords
-    mFilteredAngVel.update(angvel, dt);                           // accum into filter in object coords
+    mFilteredVel.update(vel, (F32)dt);                            // accum into filter in object coords
+    mFilteredAngVel.update(angvel, (F32)dt);                      // accum into filter in object coords
 }
 
 //  dividesafe -- floating divide with divide by zero check

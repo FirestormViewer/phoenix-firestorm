@@ -418,9 +418,9 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
     mPosRegion.setVec(LLVector3(pos_global - region_origin));
     LL_DEBUGS("SLURL") << "LM INFO: global " << pos_global << " region_orig " << region_origin << " pos_region " << mPosRegion << LL_ENDL;
     // </FS:Beq>
-    parcel_data.global_x = pos_global.mdV[VX];
-    parcel_data.global_y = pos_global.mdV[VY];
-    parcel_data.global_z = pos_global.mdV[VZ];
+    parcel_data.global_x = (F32)pos_global.mdV[VX];
+    parcel_data.global_y = (F32)pos_global.mdV[VY];
+    parcel_data.global_z = (F32)pos_global.mdV[VZ];
     parcel_data.owner_id = parcel->getOwnerID();
 
     std::string on = getString("on");

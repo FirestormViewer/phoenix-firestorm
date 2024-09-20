@@ -166,7 +166,6 @@ protected:
     toast_list_t m_toast_pool;
 
     bool    mStopProcessing;
-    bool    mChannelRect;
 
     // <FS:Ansariel> Zi Ree's customizable nearby chat toast width
     void            reshapePanel(LLFloaterIMNearbyChatToastPanel* panel);
@@ -311,8 +310,8 @@ bool    LLFloaterIMNearbyChatScreenChannel::createPoolToast()
 
     LLToast::Params p;
     p.panel = panel;
-    p.lifetime_secs = gSavedSettings.getS32("NearbyToastLifeTime");
-    p.fading_time_secs = gSavedSettings.getS32("NearbyToastFadingTime");
+    p.lifetime_secs = (F32)gSavedSettings.getS32("NearbyToastLifeTime");
+    p.fading_time_secs = (F32)gSavedSettings.getS32("NearbyToastFadingTime");
 
     LLToast* toast = new LLFloaterIMNearbyChatToast(p, this);
 
@@ -337,7 +336,7 @@ void LLFloaterIMNearbyChatScreenChannel::addChat(LLSD& chat)
 
     if (mFloaterSnapRegion == NULL)
     {
-        mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+        mFloaterSnapRegion = gViewerWindow->getFloaterSnapRegion();
     }
     LLRect channel_rect;
     mFloaterSnapRegion->localRectToOtherView(mFloaterSnapRegion->getLocalRect(), &channel_rect, gFloaterView);
@@ -433,7 +432,7 @@ void LLFloaterIMNearbyChatScreenChannel::arrangeToasts()
 
     if (mFloaterSnapRegion == NULL)
     {
-        mFloaterSnapRegion = gViewerWindow->getRootView()->getChildView("floater_snap_region");
+        mFloaterSnapRegion = gViewerWindow->getFloaterSnapRegion();
     }
 
     if (!getParent())
@@ -642,15 +641,14 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         // <FS:Ansariel> Script debug icon
         //if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1)// show error in window //("ScriptErrorsAsChat"))
         {
-
             // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
-            // LLColor4 txt_color;
-
-            // LLViewerChat::getChatColor(chat_msg,txt_color);
+            //LLUIColor txt_color;
+            //F32 alpha = 1.f;
+            //LLViewerChat::getChatColor(chat_msg, txt_color, alpha);
 
             // LLFloaterScriptDebug::addScriptLine(chat_msg.mText,
                                                 // chat_msg.mFromName,
-                                                // txt_color,
+                                                // txt_color % alpha,
                                                 // chat_msg.mFromID);
             LLFloaterScriptDebug::addScriptLine(chat_msg);
             // <FS:Ansariel> Script debug icon
@@ -787,9 +785,19 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         }
         // </FS:Ansariel> [FS communication UI]
 
-        //Will show toast when chat preference is set
         // <FS:Ansariel> [FS communication UI] [CHUI Merge] Maybe need this later...
-        //if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+        //std::string user_preferences;
+        //if (chat_msg.mSourceType == CHAT_SOURCE_OBJECT)
+        //{
+        //    user_preferences = gSavedSettings.getString("NotificationObjectIMOptions");
+        //}
+        //else
+        //{
+        //    user_preferences = gSavedSettings.getString("NotificationNearbyChatOptions");
+        //}
+
+        ////Will show toast when chat preference is set
+        //if((user_preferences == "toast") || !nearby_chat->isMessagePaneExpanded())
         if (gSavedSettings.getS32("NearbyToastLifeTime") > 0 || gSavedSettings.getS32("NearbyToastFadingTime")) // Ansa: only create toast if it should be visible at all
         // </FS:Ansariel> [FS communication UI]
         {

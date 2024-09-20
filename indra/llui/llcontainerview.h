@@ -97,7 +97,7 @@ public:
 
 protected:
     bool mDisplayChildren;
-    std::string mLabel;
+    LLWString mLabel;
     // <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
     bool mBackgroundVisible;
     LLUIColor mBackgroundColor;

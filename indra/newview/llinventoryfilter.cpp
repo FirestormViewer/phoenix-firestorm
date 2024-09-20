@@ -1677,7 +1677,7 @@ LLInventoryFilter& LLInventoryFilter::operator=( const  LLInventoryFilter&  othe
 
 void LLInventoryFilter::toParams(Params& params) const
 {
-    params.filter_ops.types = getFilterObjectTypes();
+    params.filter_ops.types = (U32)getFilterObjectTypes();
     params.filter_ops.category_types = getFilterCategoryTypes();
     if (getFilterObjectTypes() & FILTERTYPE_WEARABLE)
     {
@@ -1690,7 +1690,7 @@ void LLInventoryFilter::toParams(Params& params) const
     params.filter_ops.show_folder_state = getShowFolderState();
     params.filter_ops.creator_type = getFilterCreatorType();
     params.filter_ops.permissions = getFilterPermissions();
-    params.filter_ops.search_visibility = getSearchVisibilityTypes();
+    params.filter_ops.search_visibility = (U32)getSearchVisibilityTypes();
     params.substring = getFilterSubString();
     params.since_logoff = isSinceLogoff();
     // <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
@@ -1861,7 +1861,7 @@ bool LLInventoryFilter::isTimedOut()
 void LLInventoryFilter::resetTime(S32 timeout)
 {
     mFilterTime.reset();
-    F32 time_in_sec = (F32)(timeout)/1000.0;
+    F32 time_in_sec = (F32)(timeout)/1000.0f;
     mFilterTime.setTimerExpirySec(time_in_sec);
 }
 

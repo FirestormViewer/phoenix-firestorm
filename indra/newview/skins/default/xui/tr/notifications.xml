@@ -3371,10 +3371,6 @@ Güvenliğiniz için birkaç saniye engellenecek.
 		Maalesef, bu oturumun avantajlarıyla ilgili bilgilere ulaşamıyoruz. Normal prodüksiyon ortamında yaşanmaması gereken bir durumdur. Lütfen destek ekibiyle iletişime geçin. Bu oturum normal bir şekilde çalışmayacaktır, yeniden başlatmanızı öneririz.
 		<usetemplate name="okbutton" yestext="Tamam"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Bu, toplam tutarı L$[COST] olan [COUNT] nesne yükleyecektir. Bu yüklemeye devam etmek istiyor musunuz?
-		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Karşıya Yükle"/>
-	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Seçili dosyalar aynı anda yüklenemez.
 		<usetemplate name="okbutton" yestext="Tamam"/>

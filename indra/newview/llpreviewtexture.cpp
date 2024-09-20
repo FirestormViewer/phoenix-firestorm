@@ -175,6 +175,11 @@ void LLPreviewTexture::populateRatioList()
 // virtual
 bool LLPreviewTexture::postBuild()
 {
+    mButtonsPanel = getChild<LLLayoutPanel>("buttons_panel");
+    mDimensionsText = getChild<LLUICtrl>("dimensions");
+    mAspectRatioText = getChild<LLUICtrl>("aspect_ratio");
+    mDimensionsPanel = findChild<LLPanel>("dimensions_panel"); // <FS:Ansariel> Texture preview mode
+
     if (mCopyToInv)
     {
         getChild<LLButton>("Keep")->setLabel(getString("Copy"));
@@ -236,9 +241,6 @@ bool LLPreviewTexture::postBuild()
         getChild<LLLineEditor>("uuid")->setEnabled(false);
     }
     // </FS:Ansariel>
-
-    // <FS:Ansariel> Performance improvement
-    mDimensionsCtrl = getChild<LLUICtrl>("dimensions");
 
     // <FS:Ansariel> FIRE-20150: Add refresh button to texture preview
     getChild<LLButton>("btn_refresh")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonRefresh, this));
@@ -530,23 +532,26 @@ void LLPreviewTexture::reshape(S32 width, S32 height, bool called_from_parent)
 {
     LLPreview::reshape(width, height, called_from_parent);
 
-    LLRect dim_rect;
-    // Ansariel: Need the rect of the dimensions_panel
-    //LLView *pView = findChildView( "dimensions" );
-    LLView *pView = findChildView( "dimensions_panel" );
-
-    if( pView )
-        dim_rect = pView->getRect();
-
     S32 horiz_pad = 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;
 
     // add space for dimensions and aspect ratio
-    S32 info_height = dim_rect.mTop + CLIENT_RECT_VPAD;
+    S32 info_height = CLIENT_RECT_VPAD;
     // <FS:Ansariel> Texture preview mode
-    //if (getChild<LLLayoutPanel>("buttons_panel")->getVisible())
+    //if (mDimensionsText)
     //{
-    //  info_height += getChild<LLLayoutPanel>("buttons_panel")->getRect().getHeight();
+    //    LLRect dim_rect(mDimensionsText->getRect());
+    //    info_height += dim_rect.mTop;
     //}
+
+    //if (mButtonsPanel->getVisible())
+    //{
+    //  info_height += mButtonsPanel->getRect().getHeight();
+    //}
+    if (mDimensionsPanel)
+    {
+        LLRect dim_rect(mDimensionsPanel->getRect());
+        info_height += dim_rect.mTop;
+    }
     // </FS:Ansariel>
     LLRect client_rect(horiz_pad, getRect().getHeight(), getRect().getWidth() - horiz_pad, 0);
     client_rect.mTop -= (PREVIEW_HEADER_SIZE + CLIENT_RECT_VPAD);
@@ -616,7 +621,7 @@ void LLPreviewTexture::openToSave()
 //  getChildView("desc txt")->setVisible(false);
 //  getChildView("desc")->setVisible(false);
 //  getChild<LLLayoutStack>("preview_stack")->collapsePanel(getChild<LLLayoutPanel>("buttons_panel"), true);
-//  getChild<LLLayoutPanel>("buttons_panel")->setVisible(false);
+//  mButtonsPanel->setVisible(false);
 //  getChild<LLComboBox>("combo_aspect_ratio")->setCurrentByIndex(0); //unconstrained
 //  reshape(getRect().getWidth(), getRect().getHeight());
 //}
@@ -779,15 +784,15 @@ void LLPreviewTexture::updateDimensions()
 
     // Update the width/height display every time
     // <FS:Ansariel> Performance improvement
-    //getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]",  llformat("%d", img_width));
-    //getChild<LLUICtrl>("dimensions")->setTextArg("[HEIGHT]", llformat("%d", img_height));
+    //mDimensionsText->setTextArg("[WIDTH]",  llformat("%d", img_width));
+    //mDimensionsText->setTextArg("[HEIGHT]", llformat("%d", img_height));
     if (img_width != mLastWidth)
     {
-        mDimensionsCtrl->setTextArg("[WIDTH]", llformat("%d", img_width));
+        mDimensionsText->setTextArg("[WIDTH]", llformat("%d", img_width));
     }
     if (img_height != mLastHeight)
     {
-        mDimensionsCtrl->setTextArg("[HEIGHT]", llformat("%d", img_height));
+        mDimensionsText->setTextArg("[HEIGHT]", llformat("%d", img_height));
     }
     // </FS:Ansariel> Performance improvement
 
@@ -974,9 +979,9 @@ void LLPreviewTexture::updateDimensions()
         gFloaterView->adjustToFitScreen(this, false);
         // </FS:Ansariel>: Show image at full resolution if possible
 
-        LLRect dim_rect(getChildView("dimensions")->getRect());
-        LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
-        getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
+        LLRect dim_rect(mDimensionsText->getRect());
+        LLRect aspect_label_rect(mAspectRatioText->getRect());
+        mAspectRatioText->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
 
         // <FS:Ansariel> Asset UUID
         if (mIsFullPerm)
@@ -1138,7 +1143,7 @@ void LLPreviewTexture::adjustAspectRatio()
     S32 num = mImage->getFullWidth() / divisor;
     S32 denom = mImage->getFullHeight() / divisor;
 
-    if (setAspectRatio(num, denom))
+    if (setAspectRatio((F32)num, (F32)denom))
     {
         // Select corresponding ratio entry in the combo list
         LLComboBox* combo = getChild<LLComboBox>("combo_aspect_ratio");
@@ -1158,7 +1163,7 @@ void LLPreviewTexture::adjustAspectRatio()
             }
             else
             {
-                combo->setCurrentByIndex(found - mRatiosList.begin());
+                combo->setCurrentByIndex((S32)(found - mRatiosList.begin()));
             }
         }
     }

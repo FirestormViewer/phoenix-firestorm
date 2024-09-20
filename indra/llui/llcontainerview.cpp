@@ -46,7 +46,7 @@ static ContainerViewRegistry::Register<LLPanel> r3("panel", &LLPanel::fromXML);
 LLContainerView::LLContainerView(const LLContainerView::Params& p)
 :   LLView(p),
     mShowLabel(p.show_label),
-    mLabel(p.label),
+    mLabel(utf8str_to_wstring(p.label)),
     // <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
     mBackgroundVisible(p.background_visible),
     mBackgroundColor(p.bg_color),
@@ -128,8 +128,8 @@ void LLContainerView::draw()
     // Draw the label
     if (mShowLabel)
     {
-        LLFontGL::getFontMonospace()->renderUTF8(
-            mLabel, 0, 2, getRect().getHeight() - 2, LLColor4(1,1,1,1), LLFontGL::LEFT, LLFontGL::TOP);
+        LLFontGL::getFontMonospace()->render(
+            mLabel, 0, 2.f, (F32)(getRect().getHeight() - 2), LLColor4(1,1,1,1), LLFontGL::LEFT, LLFontGL::TOP);
     }
 
     LLView::draw();
@@ -293,7 +293,7 @@ LLRect LLContainerView::getRequiredRect()
 
 void LLContainerView::setLabel(const std::string& label)
 {
-    mLabel = label;
+    mLabel = utf8str_to_wstring(label);
 }
 
 void LLContainerView::setDisplayChildren(bool displayChildren)

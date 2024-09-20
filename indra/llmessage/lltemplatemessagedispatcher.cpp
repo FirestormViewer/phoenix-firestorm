@@ -44,7 +44,7 @@ void LLTemplateMessageDispatcher::dispatch(const std::string& msg_name,
                                            const LLSD& message,
                                            LLHTTPNode::ResponsePtr responsep)
 {
-    std::vector<U8> data = message["body"]["binary-template-data"].asBinary();
+    const LLSD::Binary& data = message["body"]["binary-template-data"].asBinary();
     auto size = data.size();
     if(size == 0)
     {
@@ -54,16 +54,20 @@ void LLTemplateMessageDispatcher::dispatch(const std::string& msg_name,
     LLHost host;
     host = gMessageSystem->getSender();
 
-    bool validate_message = mTemplateMessageReader.validateMessage(&(data[0]), static_cast<S32>(size), host, true);
+    bool validate_message = mTemplateMessageReader.validateMessage(data.data(), static_cast<S32>(size), host, true);
 
     if (validate_message)
     {
         // <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
-
-        //      mTemplateMessageReader.readMessage(&(data[0]),host);
-
-        try{ mTemplateMessageReader.readMessage(&(data[0]),host); }
-        catch( nd::exceptions::xran &ex ) { LL_WARNS() << ex.what() << LL_ENDL; }
+        //      mTemplateMessageReader.readMessage(data.data(),host);
+        try
+        {
+            mTemplateMessageReader.readMessage(data.data(),host);
+        }
+        catch (nd::exceptions::xran& ex)
+        {
+            LL_WARNS() << ex.what() << LL_ENDL;
+        }
         // </FS:ND>
     }
     else

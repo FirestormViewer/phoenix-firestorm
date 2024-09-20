@@ -6,10 +6,26 @@ import time
 import zipfile
 import glob
 import shutil
+import hashlib
+import pytz
+from datetime import datetime
+import requests
 from discord_webhook import DiscordWebhook
 
+from build_config import BuildConfig
 
+def get_current_date_str():
+    now = datetime.now(pytz.timezone('UTC'))
+    day = now.day
+    month = now.month
+    year = now.year
+    return f"{day}{month}{year}"
 
+def generate_secret(secret_key):
+    current_date = get_current_date_str()
+    data = secret_key + current_date
+    secret_for_api = hashlib.sha1(data.encode()).hexdigest()
+    return secret_for_api
 
 # run a command line subshell and return the output
 
@@ -103,171 +119,340 @@ def flatten_tree(tree_root):
             # Delete the subdirectory and its contents
             shutil.rmtree(subdir_path)
 
+def get_build_variables():
+    """
+    Extracts initial build variables from environment variables.
+    In practice these are set from the outputs of the earlier matrix commands.
+    Returns:
+        dict: A dictionary containing 'version' and 'build_number'.
+    """
+    import os
 
-# parse args first arg optional -r (release) second arg mandatory string path_to_directory
+    version = os.environ.get('FS_VIEWER_VERSION')
+    build_number = os.environ.get('FS_VIEWER_BUILD')
+    release_type = os.environ.get('FS_VIEWER_RELEASE_TYPE')
 
-parser = argparse.ArgumentParser(
-    prog="print_download_list",
-    description="Prints the list of files for download and their md5 checksums"
-    )
-parser.add_argument("-r", "--release", required=False, default=False, action="store_true", help="use the release folder in the target URL")
-parser.add_argument("-u", "--unzip", required=False, default=False, action="store_true", help="unzip the github artifact first")
-parser.add_argument("-w", "--webhook", help="post details to the webhook")
+    if not version or not build_number or not release_type:
+        raise ValueError("Environment variables 'FS_VIEWER_VERSION' and 'FS_VIEWER_BUILD' must be set.")
 
-# add path_to_directory required parameter to parser
-parser.add_argument("path_to_directory", help="path to the directory in which we'll look for the files")
+    return {
+        'version': version,
+        'build_number': build_number,
+        'version_full': f"{version}.{build_number}",
+        'release_type': release_type,
+    }
 
-args = parser.parse_args()
-path_to_directory = args.path_to_directory
-release = args.release
+def get_hosted_folder_for_build_type(build_type, config):
+    return config.build_type_hosted_folder.get(
+        build_type, 
+        config.build_type_hosted_folder.get("Unknown")
+        )
 
-# Create a webhook object with the webhook URL
-if args.webhook:
-    webhook = DiscordWebhook(url=args.webhook)
+def is_supported_build_type(build_type, config):
+    if build_type in config.build_type_hosted_folder:
+        return True
+    else:
+        return False
+def get_hosted_folder_for_os_type(os_type, config):
+    return config.os_hosted_folder.get(
+        os_type
+        )
 
-dirs = ["windows", "mac", "linux"]
+def get_supported_os(os_name, config):
+    # throws for unexpected os_name
+    return config.os_hosted_folder.get(os_name)
 
-# build_types is a map from Beta, Release and Nightly to folder names preview release and nightly
-build_types = {
-    "Alpha": "test",
-    "Beta": "preview",
-    "Release": "release",
-    "Nightly": "nightly",
-    "Unknown": "test"
-}
-
-target_folder = {
-    "ubuntu":"linux",
-    "windows":"windows",
-    "macos":"mac"
-}
-
-# unzip the github artifact for this OS (`dir`) into the folder `dir`
-# get the .zip files in args.path_to_directory using glob 
-print(f"Processing artifacts in {args.path_to_directory}")
-build_types_created = set()
-zips = glob.glob(f"{args.path_to_directory}/*.zip")
-for file in zips:
+def extract_vars_from_zipfile_name(file):
+    # File is an artifact file sometihng like Nightly-windows-2022-64-sl-artifacts.zip
     # print(f"unzipping {file}")
     #extract first word (delimited by '-' from the file name)
     # build_type is a fullpath but we only want the last folder, remove the leading part of the path leaving just the foldername using basename
     filename = os.path.basename(file)
     build_type = filename.split("-")[0]
     platform = filename.split("-")[1].lower()
+    return filename,build_type, platform
 
-    # print(f"build_type is {build_type}")
-    if build_type not in build_types:
-        print(f"Invalid build_type {build_type} from file {file} using 'Unknown'")
-        build_type = "Unknown"
 
-    build_folder = build_types[build_type]
-    
-    build_types_created.add(build_type)
+def unpack_artifacts(path_to_artifacts_directory, config):
+    build_types_found = {}
+    zips = glob.glob(f"{path_to_artifacts_directory}/*.zip")
+    for file in zips:
+        print(f"Processing zip file {file}")
+        filename, build_type, platform = extract_vars_from_zipfile_name(file)
+        print(f"Identified filename {filename}, build_type {build_type} and platform {platform} from file {file}")
+        if is_supported_build_type( build_type, config) == False:
+            print(f"Invalid build_type {build_type} from file {file} using 'Unknown' instead")
+            build_type = "Unknown"
+        else:
+            print(f"Using build_type {build_type} from file {file}")
 
-    build_type_dir = os.path.join(args.path_to_directory, build_folder)
+        build_folder = get_hosted_folder_for_build_type(build_type, config)
+        print(f"build_folder {build_folder}")
+        try:
+            build_type_dir = os.path.join(path_to_artifacts_directory, build_folder)
+        except Exception as e:
+            print(f"An error occurred while creating build_type_dir folder from {path_to_artifacts_directory} and {build_folder}: {e}")
+            continue
+        print(f"build_type_dir {build_type_dir}")
+        os_folder = get_hosted_folder_for_os_type(platform, config)
+        print(f"os_folder {os_folder}")
+        try:
+            unpack_folder = os.path.join(build_type_dir, os_folder)
+        except Exception as e:
+            print(f"An error occurred while creating unpack_folder folder from {build_type_dir} and {os_folder}: {e}")
+            continue
+        print(f"unpacking {filename} to {unpack_folder}")
+        if os.path.isfile(file):
+            # this is an actual zip file
+            try:
+                unzip_file(file, unpack_folder)
+            except zipfile.BadZipFile:
+                print(f"Skipping {file} as it is not a valid zip file")
+                continue
+            except Exception as e:
+                print(f"An error occurred while unpacking {file}: {e} , skipping file {filename}")
+                continue
+        else:
+            # Create the destination folder if it doesn't exist
+            # if not os.path.exists(unpack_folder):
+            #     os.makedirs(unpack_folder)
+            # Copy the contents of the source folder to the destination folder recursively
+            shutil.copytree(file, unpack_folder, dirs_exist_ok=True)
+        print(f"Finished unpacking {filename} to {unpack_folder}")
+        if build_type not in build_types_found:
+            print(f"Creating build_type {build_type} entry in build_types_found")
+            build_types_found[build_type] = { 
+                "build_type": build_type,
+                "build_type_folder": build_folder,
+                "build_type_fullpath": build_type_dir,
+                "os_folders": [], 
+            }
+        if os_folder not in build_types_found[build_type]["os_folders"]:
+            build_types_found[build_type]["os_folders"].append(os_folder)
+            print(f"Appended {os_folder} to build_type {build_type}")
+    print(f"Finished processing artifacts for build_type {build_type}")
+    return build_types_found
 
-    if platform not in target_folder:
-        print(f"Invalid platform {platform} using file {file}")
-        continue
-    
-    unpack_folder = os.path.join(build_type_dir, target_folder[platform])
-    print(f"unpacking {filename} to {unpack_folder}")
-
-    if os.path.isfile(file):
-        # this is an actual zip file
-        unzip_file(file, unpack_folder)
-    else:
-        # Create the destination folder if it doesn't exist
-        # if not os.path.exists(unpack_folder):
-        #     os.makedirs(unpack_folder)
-        # Copy the contents of the source folder to the destination folder recursively
-        shutil.copytree(file, unpack_folder, dirs_exist_ok=True)
-
-output = ""
-for build_type in build_types_created:
-    build_type_dir = os.path.join(args.path_to_directory, build_types[build_type])
+def restructure_folders(build_type, config):
+    print(f"Restructuring folders for build_type {build_type}")
+    build_type_dir = build_type["build_type_fullpath"]
     if not os.path.exists(build_type_dir):
-        print(f"Unexpected error: {build_type_dir} does not exist, even though it was in the set.")
-        continue
+        print(f"Unexpected error: path {build_type_dir} does not exist, even though it was in the set.")
+        raise FileNotFoundError
     # loop over the folder in the build_type_dir
-    for dir in dirs:
-        print(f"Cleaning up {dir}")
+    for platform_folder in build_type["os_folders"]:
+        print(f"Cleaning up {platform_folder}")
         # Traverse the directory tree and move all of the files to the root directory
-        flatten_tree(os.path.join(build_type_dir, dir))
+        flatten_tree(os.path.join(build_type_dir, platform_folder))
     # Now move the symbols files to the symbols folder
-    # prep the symbols folder
+    # Define the folder for symbols
     symbols_folder = os.path.join(build_type_dir, "symbols")
     os.mkdir(symbols_folder)
-    symbol_archives = glob.glob(f"{build_type_dir}/**/*_hvk*", recursive=True)
-    for sym_file in symbol_archives:
-        print(f"Moving {sym_file} to {symbols_folder}")
-        shutil.move(sym_file, symbols_folder)
-    symbol_archives = glob.glob(f"{build_type_dir}/**/*_oss*", recursive=True)
-    for sym_file in symbol_archives:
-        print(f"Moving {sym_file} to {symbols_folder}")
-        shutil.move(sym_file, symbols_folder)
+    # prep the symbols folder
+    symbol_patterns = ["*_hvk*", "*_oss*"]
 
+    # Loop through each pattern, find matching files, and move them
+    for pattern in symbol_patterns:
+        symbol_archives = glob.glob(f"{build_type_dir}/**/{pattern}", recursive=True)
+        for sym_file in symbol_archives:
+            print(f"Moving {sym_file} to {symbols_folder}")
+            shutil.move(sym_file, symbols_folder)
+
+def gather_build_info(build_type, config):
+    print(f"Gathering build info for build_type {build_type}")
     # While we're at it, let's print the md5 listing 
-    file_dict = {}
-    md5_dict = {}
-    platforms_printable = {"windows":"MS Windows", "mac":"MacOS", "linux":"Linux"}
-    grids_printable = {"SL":"Second Life", "OS":"OpenSim"}
-
-    download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}"
-    output += f'''
-DOWNLOADS - {build_type}
--------------------------------------------------------------------------------------------------------
-'''
-    for dir in dirs:
-        print(f"Getting files for {dir} in {build_type_dir}")
-        files = get_files(os.path.join(build_type_dir, dir))
+    download_root = f"{config.download_root}/{build_type['build_type_folder']}"
+    # for each os that we have built for 
+    build_type_dir = build_type["build_type_fullpath"]
+    for platform_folder in build_type["os_folders"]:
+        print(f"Getting files for {platform_folder} in {build_type_dir}")
+        build_type_platform_folder = os.path.join(build_type_dir, platform_folder)
+        files = get_files(build_type_platform_folder)
         try:
             for file in files:
-                full_file = os.path.join(build_type_dir, dir, file)
-                md5 = get_md5(full_file)
+                full_file = os.path.join(build_type_platform_folder, file)
                 base_name = os.path.basename(file)
-                wordsize = "64"
+                file_URI = f"{download_root}/{platform_folder}/{base_name}"
+                md5 = get_md5(full_file)
                 
                 if "FirestormOS-" in base_name:
                     grid = "OS"
                 else:
                     grid = "SL"
 
-                if dir in dirs:
-                    file_dict[f"{grid}{dir}{wordsize}"] = full_file
-                    md5_dict[f"{grid}{dir}{wordsize}"] = md5
+                file_key = f"{grid}-{platform_folder}"
+
+                # if platform_folder in config.os_download_dirs:
+                if "downloadable_artifacts" not in build_type:
+                    build_type["downloadable_artifacts"] = {}
+
+                build_type["downloadable_artifacts"][f"{file_key}"] = {
+                    "file_path": full_file,         
+                    "file_download_URI": file_URI,
+                    "grid": grid,
+                    "fs_ver_mgr_platform": config.fs_version_mgr_platform.get(platform_folder),
+                    "md5": md5,
+                }
+
         except TypeError:
-            print(f"No files found for {dir} in {build_type_dir}")
+            print(f"Error processing files for {platform_folder} in {build_type_dir}")
+            continue
+        except Exception as e:
+            print(f"An error occurred while processing files for {platform_folder} in {build_type_dir}: {e}")
+            continue
+        print(f"Created build info: {build_type}")
+    return build_type
 
-
-
-        output += f'''
-{platforms_printable[dir]}
+def create_discord_message(build_info, config):
+# Start with a header line            
+    text_summary = f'''
+DOWNLOADS - {build_info["build_type"]}
+-------------------------------------------------------------------------------------------------------
 '''
-        dir = dir.lower()
-        wordsize = "64"
-        platform = f"{platforms_printable[dir]}"
+# for each platform we potentailly build for 
+# Append platform label in printable form
+    for platform_folder in config.supported_os_dirs:
+        platform_printable = config.platforms_printable[platform_folder]
+        text_summary += f'''
+{platform_printable}
+'''
+        platform_folder = platform_folder.lower()
         for grid in ["SL", "OS"]:
-            grid_printable = f"{grids_printable[grid]}"
+            grid_printable = f"{config.grids_printable[grid]}"
             try:
-                output += f"{platform} for {grid_printable} ({wordsize}-bit)\n"
-                output += f"{download_root}/{dir}/{os.path.basename(file_dict[f'{grid}{dir}{wordsize}'])}\n"
-                output += "\n"
-                output += f"MD5: {md5_dict[f'{grid}{dir}{wordsize}']}\n"
-                output += "\n"
+                file_key = f"{grid}-{platform_folder}"
+                text_summary += f"{platform_printable} for {grid_printable}\n"
+                text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
+                text_summary += "\n"
+                text_summary += f"MD5: {build_info['downloadable_artifacts'][file_key]['md5']}\n"
+                text_summary += "\n"
             except KeyError:
-                output += f"{platform} for {grid_printable} ({wordsize}-bit) - NOT AVAILABLE\n"
-                output += "\n"
-        output += '''-------------------------------------------------------------------------------------------------------
+                text_summary += f"{platform_printable} for {grid_printable} - NOT AVAILABLE\n"
+                text_summary += "\n"
+        text_summary += '''
+-------------------------------------------------------------------------------------------------------
 '''
+    return text_summary
 
-    if args.webhook:
-        # Add the message to the webhook
-        webhook.set_content(content=output)
-        # Send the webhook
-        response = webhook.execute()
-        # Print the response
-        if not response.ok:
-            print(f"Webhook Error {response.status_code}: {response.text}")        
-    print(output)
+def update_fs_version_mgr(build_info, config):
+    print(f"Updating Firestorm Version Manager for build_type {build_info['build_type']}")
+    # Read the secret key from environment variables
+    secret_key = os.environ.get('FS_VERSION_MGR_KEY')
+    if not secret_key:
+        print("Error: FS_VERSION_MGR_KEY not set")
+        sys.exit(1)
 
+    secret_for_api = generate_secret(secret_key)  
+    build_type = build_info["build_type"]
+    version = os.environ.get('FS_VIEWER_VERSION')
+    channel = os.environ.get('FS_VIEWER_CHANNEL')
+    build_number = os.environ.get('FS_VIEWER_BUILD')
+
+    build_variant = "regular"
+    for file_key in build_info["downloadable_artifacts"]:
+        try:
+            download_link = build_info["downloadable_artifacts"][file_key]["file_download_URI"]
+            md5_checksum = build_info["downloadable_artifacts"][file_key]["md5"]
+            grid = build_info["downloadable_artifacts"][file_key]["grid"].lower()
+            os_name = build_info["downloadable_artifacts"][file_key]["fs_ver_mgr_platform"]
+        except KeyError:
+            print(f"Error: Could not find downloadable artifacts for {file_key}")
+            continue
+
+        payload = {
+            "viewer_channel": build_type,
+            "grid_type": grid,
+            "operating_system": os_name,
+            "build_type": build_variant,
+            "viewer_version": version,
+            "build_number": int(build_number),
+            "download_link": download_link,
+            "md5_checksum": md5_checksum
+        }
+        print(f"Payload (without secret): {payload}")
+        payload["secret"] = secret_for_api
+
+        # Make the API call
+        url = "https://www.firestormviewer.org/set-fs-vrsns-jsn/"
+        headers = {"Content-Type": "application/json"}
+
+        response = None  # Initialize response to None
+
+        try:
+            response = requests.post(url, json=payload, headers=headers)
+            
+            # Manually check for status code instead of raising an exception
+            if response.status_code == 200:
+                response_data = response.json()
+                result = response_data.get('result')
+                message = response_data.get('message')
+
+                if result == 'success':
+                    print(f"Version manager updated successfully for {os_name} {build_variant}")
+                else:
+                    print(f"Error updating version manager: {message}")
+            else:
+                print(f"Unexpected status code received: {response.status_code}")
+                print(f"Response body: {response.text}")
+
+        except requests.exceptions.RequestException as e:
+            print(f"API request failed: {e}")
+            
+            # Additional error handling
+            if response and response.status_code == 403:
+                print("Status Code:", response.status_code)
+                print("Response Headers:", response.headers)
+                print("Response Body:", response.text)
+
+        except ValueError:
+            print("API response is not valid JSON")
+
+# parse args first arg optional -r (release) second arg mandatory string path_to_directory
+def main():
+    try:
+        # Initialise the build configuration
+        config = BuildConfig()
+
+        parser = argparse.ArgumentParser(
+            prog="print_download_list",
+            description="Prints the list of files for download and their md5 checksums"
+            )
+        parser.add_argument("-w", "--webhook", help="post details to the webhook")
+
+        # add path_to_directory required parameter to parser
+        parser.add_argument("path_to_directory", help="path to the directory in which we'll look for the files")
+
+        args = parser.parse_args()
+
+        # Create a webhook object with the webhook URL
+        if args.webhook:
+            webhook = DiscordWebhook(url=args.webhook)
+
+        # unzip the github artifact for this OS (`dir`) into the folder `dir`
+        # get the .zip files in args.path_to_directory using glob 
+        print(f"Processing artifacts in {args.path_to_directory}")
+        build_types_created = unpack_artifacts(args.path_to_directory, config)
+        print(f"buuild types created: {build_types_created}")
+        for build_type_key, build_type in build_types_created.items():            
+            print(f"Processing {build_type_key}")
+            restructure_folders(build_type, config)
+            build_info = gather_build_info(build_type, config)
+            update_fs_version_mgr(build_info, config)
+
+            discord_text = create_discord_message(build_info, config)
+            if args.webhook:
+                # Add the message to the webhook
+                webhook.set_content(content=discord_text)
+                # Send the webhook
+                response = webhook.execute()
+                # Print the response
+                if not response.ok:
+                    print(f"Webhook Error {response.status_code}: {response.text}")        
+            print(discord_text)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)        
+
+if __name__ == '__main__':
+    import sys
+    main()

@@ -58,15 +58,81 @@
         <pie_slice.on_enable
             function="Object.EnableBuy" />
     </pie_slice>
-    <pie_slice
+
+    <pie_menu
         autohide="true"
-        label="Take"
-        name="Pie Object Take">
-        <pie_slice.on_click
-            function="Object.Take"/>
-        <pie_slice.on_enable
-            function="Object.VisibleTake"/>
-    </pie_slice>
+        label="Take &gt;"
+        name="Take Submenu">
+        <pie_slice
+         enabled="false"
+         label="Copies as separate items"
+         name="Take Copy Separate">
+            <pie_slice.on_click
+             function="Object.TakeSeparateCopy"/>
+            <pie_slice.on_enable
+             function="Tools.EnableCopySeparate"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeMultiple"/>
+        </pie_slice>
+        <pie_separator/>
+        <pie_separator/>
+        <pie_slice
+         enabled="false"
+         label="Take copy"
+         name="Take Copy">
+            <pie_slice.on_click
+             function="Tools.TakeCopy"/>
+            <pie_slice.on_enable
+             function="Tools.EnableTakeCopy"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeSingle"/>
+        </pie_slice>
+        <pie_slice
+         enabled="false"
+         label="Take"
+         name="Take">
+            <pie_slice.on_click
+             function="Object.Take"/>
+            <pie_slice.on_enable
+             function="Object.VisibleTake"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeSingle"/>
+        </pie_slice>
+        <pie_slice
+         enabled="false"
+         label="As combined item"
+         name="Take combined">
+            <pie_slice.on_click
+             function="Object.Take"/>
+            <pie_slice.on_enable
+             function="Object.VisibleTake"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeMultiple"/>
+        </pie_slice>
+        <pie_slice
+         enabled="false"
+         label="Copy as combined item"
+         name="Take Copy combined">
+            <pie_slice.on_click
+             function="Tools.TakeCopy"/>
+            <pie_slice.on_enable
+             function="Tools.EnableTakeCopy"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeMultiple"/>
+        </pie_slice>
+        <pie_slice
+         enabled="false"
+         label="As separate items"
+         name="Take Separate">
+            <pie_slice.on_click
+             function="Object.TakeSeparate"/>
+            <pie_slice.on_enable
+             function="Object.EnableTakeMultiple"/>
+            <pie_slice.on_visible
+             function="Object.VisibleTakeMultiple"/>
+        </pie_slice>
+    </pie_menu>
+
     <pie_slice
         enabled="false"
         label="Pay"
@@ -98,15 +164,6 @@
             function="Object.AttachToAvatar" />
         <pie_slice.on_enable
             function="Object.EnableWear" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Take Copy"
-        name="Take Copy">
-        <pie_slice.on_click
-            function="Tools.TakeCopy" />
-        <pie_slice.on_enable
-            function="Tools.EnableTakeCopy" />
     </pie_slice>
     <pie_menu
         label="Attach HUD &gt;"

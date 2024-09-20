@@ -1382,7 +1382,7 @@ bool LLVivoxVoiceClient::establishVoiceConnection()
             {
                 if (result.has("retry") && ++retries <= CONNECT_RETRY_MAX && !sShuttingDown)
                 {
-                    F32 timeout = LLSD::Real(result["retry"]);
+                    F32 timeout = (F32)LLSD::Real(result["retry"]);
                     timeout *= retries;
                     LL_INFOS("Voice") << "Retry connection to voice service in " << timeout << " seconds" << LL_ENDL;
                     llcoro::suspendUntilTimeout(timeout);
@@ -5152,8 +5152,7 @@ bool LLVivoxVoiceClient::isVoiceWorking() const
     //Added stateSessionTerminated state to avoid problems with call in parcels with disabled voice (EXT-4758)
     // Condition with joining spatial num was added to take into account possible problems with connection to voice
     // server(EXT-4313). See bug descriptions and comments for MAX_NORMAL_JOINING_SPATIAL_NUM for more info.
-    return (mSpatialJoiningNum < MAX_NORMAL_JOINING_SPATIAL_NUM) && mIsProcessingChannels;
-//  return (mSpatialJoiningNum < MAX_NORMAL_JOINING_SPATIAL_NUM) && (stateLoggedIn <= mState) && (mState <= stateSessionTerminated);
+    return (mSpatialJoiningNum < MAX_NORMAL_JOINING_SPATIAL_NUM) && mIsLoggedIn;
 }
 
 // Returns true if the indicated participant in the current audio session is really an SL avatar.

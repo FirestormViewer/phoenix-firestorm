@@ -518,8 +518,8 @@ void LLFlickrPhotoPanel::updateResolution(bool do_update)
             S32 custom_height = height_spinner->getValue().asInteger();
             if (checkImageSize(previewp, custom_width, custom_height, true, previewp->getMaxImageSize()))
             {
-                width_spinner->set(custom_width);
-                height_spinner->set(custom_height);
+                width_spinner->set((F32)custom_width);
+                height_spinner->set((F32)custom_height);
             }
             LL_DEBUGS() << "Setting preview res from custom: " << custom_width << "x" << custom_height << LL_ENDL;
             previewp->setSize(custom_width, custom_height);

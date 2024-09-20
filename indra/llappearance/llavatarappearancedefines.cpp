@@ -252,8 +252,7 @@ LLAvatarAppearanceDictionary::BakedEntry::BakedEntry(ETextureIndex tex_index,
         LLWearableType::EType t = (LLWearableType::EType)va_arg(argp,int);
         mWearables.push_back(t);
     }
-
-    va_end( argp ); // <FS:ND/> Needs to be freed when done.
+    va_end(argp);
 }
 
 ETextureIndex LLAvatarAppearanceDictionary::bakedToLocalTextureIndex(EBakedTextureIndex index) const

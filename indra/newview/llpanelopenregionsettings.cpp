@@ -79,13 +79,13 @@ class OpenRegionInfoUpdate : public LLHTTPNode
         {
             if ( body.has("DrawDistance") )
             {
-                F32 draw_distance = body["DrawDistance"].asReal();
+                F32 draw_distance = (F32)body["DrawDistance"].asReal();
                 if (draw_distance > 0)
                 {
                     gAgentCamera.mDrawDistance = draw_distance;
                     LLWorld::getInstance()->setLandFarClip(draw_distance);
                 }
-                regionlimits->setDrawDistance(body["DrawDistance"].asReal());
+                regionlimits->setDrawDistance((F32)body["DrawDistance"].asReal());
             }
             if ( body.has("ForceDrawDistance") )
             {
@@ -100,25 +100,25 @@ class OpenRegionInfoUpdate : public LLHTTPNode
         {
             //gAgent.getRegion()->getComposition()->setScaleParams(body["TerrainDetailScale"].asReal(), body["TerrainDetailScale"].asReal());
 
-            regionlimits->setTerrainDetailScale(body["TerrainDetailScale"].asReal());
-            gSavedSettings.setF32("RenderTerrainScale", body["TerrainDetailScale"].asReal());
-            LLDrawPoolTerrain::sDetailScale = 1.f/body["TerrainDetailScale"].asReal();
+            regionlimits->setTerrainDetailScale((F32)body["TerrainDetailScale"].asReal());
+            gSavedSettings.setF32("RenderTerrainScale", (F32)body["TerrainDetailScale"].asReal());
+            LLDrawPoolTerrain::sDetailScale = 1.f/ (F32)body["TerrainDetailScale"].asReal();
         }
         if ( body.has("MaxDragDistance") )
         {
-            regionlimits->setMaxDragDistance(body["MaxDragDistance"].asReal());
+            regionlimits->setMaxDragDistance((F32)body["MaxDragDistance"].asReal());
         }
         if ( body.has("MinHoleSize") )
         {
-            regionlimits->setRegionMinHoleSize(body["MinHoleSize"].asReal());
+            regionlimits->setRegionMinHoleSize((F32)body["MinHoleSize"].asReal());
         }
         if ( body.has("MaxHollowSize") )
         {
-            regionlimits->setRegionMaxHollowSize(body["MaxHollowSize"].asReal());
+            regionlimits->setRegionMaxHollowSize((F32)body["MaxHollowSize"].asReal());
         }
         if ( body.has("MaxInventoryItemsTransfer") )
         {
-            regionlimits->setMaxInventoryItemsTransfer(body["MaxInventoryItemsTransfer"].asReal());
+            regionlimits->setMaxInventoryItemsTransfer(body["MaxInventoryItemsTransfer"].asInteger());
         }
         if ( body.has("MaxLinkCount") )
         {
@@ -130,28 +130,28 @@ class OpenRegionInfoUpdate : public LLHTTPNode
         }
         if ( body.has("MaxPos") )
         {
-            regionlimits->setMaxPrimXPos(body["MaxPosX"].asReal());
-            regionlimits->setMaxPrimYPos(body["MaxPosY"].asReal());
-            regionlimits->setMaxPrimZPos(body["MaxPosZ"].asReal());
+            regionlimits->setMaxPrimXPos((F32)body["MaxPosX"].asReal());
+            regionlimits->setMaxPrimYPos((F32)body["MaxPosY"].asReal());
+            regionlimits->setMaxPrimZPos((F32)body["MaxPosZ"].asReal());
         }
         if ( body.has("MinPos") )
         {
-            regionlimits->setMinPrimXPos(body["MinPosX"].asReal());
-            regionlimits->setMinPrimYPos(body["MinPosY"].asReal());
-            regionlimits->setMinPrimZPos(body["MinPosZ"].asReal());
+            regionlimits->setMinPrimXPos((F32)body["MinPosX"].asReal());
+            regionlimits->setMinPrimYPos((F32)body["MinPosY"].asReal());
+            regionlimits->setMinPrimZPos((F32)body["MinPosZ"].asReal());
         }
         if ( body.has("MaxPrimScale") )
         {
-            regionlimits->setRegionMaxPrimScale(body["MaxPrimScale"].asReal());
-            regionlimits->setRegionMaxPrimScaleNoMesh(body["MaxPrimScale"].asReal());
+            regionlimits->setRegionMaxPrimScale((F32)body["MaxPrimScale"].asReal());
+            regionlimits->setRegionMaxPrimScaleNoMesh((F32)body["MaxPrimScale"].asReal());
         }
         if ( body.has("MaxPhysPrimScale") )
         {
-            regionlimits->setMaxPhysPrimScale(body["MaxPhysPrimScale"].asReal());
+            regionlimits->setMaxPhysPrimScale((F32)body["MaxPhysPrimScale"].asReal());
         }
         if ( body.has("MinPrimScale") )
         {
-            regionlimits->setRegionMinPrimScale(body["MinPrimScale"].asReal());
+            regionlimits->setRegionMinPrimScale((F32)body["MinPrimScale"].asReal());
         }
         if ( body.has("OffsetOfUTCDST") )
         {
@@ -186,7 +186,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
         }
         if ( body.has("ShowTags") )
         {
-            regionlimits->setAllowRenderName(body["ShowTags"].asReal());
+            regionlimits->setAllowRenderName(body["ShowTags"].asInteger());
         }
         if ( body.has("EnforceMaxBuild") )
         {

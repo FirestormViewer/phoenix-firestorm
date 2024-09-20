@@ -32,7 +32,6 @@
 #include "llpanel.h"
 #include "llpointer.h"          // LLPointer<>
 #include "llmediactrl.h"    // LLMediaCtrlObserver
-#include <boost/scoped_ptr.hpp>
 
 class LLLineEditor;
 class LLUIImage;

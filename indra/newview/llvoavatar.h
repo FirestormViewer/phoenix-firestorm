@@ -444,7 +444,7 @@ protected:
     bool            updateIsFullyLoaded();
     bool            processFullyLoadedChange(bool loading);
     void            updateRuthTimer(bool loading);
-    F32             calcMorphAmount();
+    F32             calcMorphAmount() const;
 
 private:
     bool            mFirstFullyVisible;
@@ -611,6 +611,8 @@ private:
 
     mutable bool        mCachedInMuteList;
     mutable F64         mCachedMuteListUpdateTime;
+    mutable bool        mCachedInBuddyList = false;
+    mutable F64         mCachedBuddyListUpdateTime = 0.0;
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
     mutable bool        mCachedIsRlvSilhouette = false;
     mutable F64         mCachedRlvSilhouetteUpdateTime = 0.f;

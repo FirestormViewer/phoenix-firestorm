@@ -344,7 +344,7 @@ RlvEnvironment::RlvEnvironment()
                                             [](LLSettingsSky::ptr_t pSky, const LLUUID& idTexture) { pSky->setMoonTextureId(idTexture); });
 
     // SETTING_GLOW
-    registerSkyFn<float>("sunglowsize",     [](LLSettingsSky::ptr_t pSky) { return 2.0 - (pSky->getGlow().mV[VRED] / SLIDER_SCALE_GLOW_R); },
+    registerSkyFn<float>("sunglowsize",     [](LLSettingsSky::ptr_t pSky) { return 2.0f - (pSky->getGlow().mV[VRED] / SLIDER_SCALE_GLOW_R); },
                                             [](LLSettingsSky::ptr_t pSky, const F32& nValue) { pSky->setGlow(LLColor3((2.0f - nValue) * SLIDER_SCALE_GLOW_R, .0f, pSky->getGlow().mV[VBLUE])); });
     registerSkyFn<float>("sunglowfocus",    [](LLSettingsSky::ptr_t pSky) { return pSky->getGlow().mV[VBLUE] / SLIDER_SCALE_GLOW_B; },
                                             [](LLSettingsSky::ptr_t pSky, const F32& nValue) { pSky->setGlow(LLColor3(pSky->getGlow().mV[VRED], .0f, nValue * SLIDER_SCALE_GLOW_B)); });

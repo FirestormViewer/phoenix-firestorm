@@ -380,7 +380,7 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
 
             //convert BSTR to std::string
             std::wstring ws(caption, SysStringLen(caption));
-            std::string caption_str(ws.begin(), ws.end());
+            std::string caption_str = ll_convert_wide_to_string(ws);
             LLStringUtil::toLower(caption_str);
 
             bool found = false;
@@ -432,7 +432,7 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
 
         //convert BSTR to std::string
         std::wstring ws(driverVersion, SysStringLen(driverVersion));
-        std::string str(ws.begin(), ws.end());
+        std::string str = ll_convert_wide_to_string(ws);
         LL_INFOS("AppInit") << " DriverVersion : " << str << LL_ENDL;
 
         if (mDriverVersion.empty())
@@ -478,7 +478,7 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
     return mDriverVersion;
 }
 
-void get_wstring(IDxDiagContainer* containerp, WCHAR* wszPropName, WCHAR* wszPropValue, int outputSize)
+void get_wstring(IDxDiagContainer* containerp, const WCHAR* wszPropName, WCHAR* wszPropValue, int outputSize)
 {
     HRESULT hr;
     VARIANT var;
@@ -509,7 +509,7 @@ void get_wstring(IDxDiagContainer* containerp, WCHAR* wszPropName, WCHAR* wszPro
     VariantClear( &var );
 }
 
-std::string get_string(IDxDiagContainer *containerp, WCHAR *wszPropName)
+std::string get_string(IDxDiagContainer *containerp, const WCHAR *wszPropName)
 {
     WCHAR wszPropValue[256];
     get_wstring(containerp, wszPropName, wszPropValue, 256);
@@ -841,7 +841,7 @@ bool LLDXHardware::getInfo(bool vram_only, bool disable_wmi)
             }
         }
         // <FS:Beq> Deprecate WMI use DXGI in preference.
-        mVRAM = GetVideoMemoryViaDXGI()/1024/1024;
+        mVRAM = (S32)(GetVideoMemoryViaDXGI()/1024/1024);
         LL_INFOS("AppInit") << "VRAM Detected via DXGI: " << mVRAM << "MB" << LL_ENDL;
         // </FS:Beq>
 
@@ -1110,7 +1110,7 @@ LLSD LLDXHardware::getDisplayInfo()
 
         // Dump the string as an int into the structure
         char *stopstring;
-        ret["VRAM"] = strtol(ram_str.c_str(), &stopstring, 10);
+        ret["VRAM"] = LLSD::Integer(strtol(ram_str.c_str(), &stopstring, 10));
         std::string device_name = get_string(device_containerp, L"szDescription");
         ret["DeviceName"] = device_name;
         std::string device_driver=  get_string(device_containerp, L"szDriverVersion");

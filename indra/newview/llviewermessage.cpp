@@ -4663,12 +4663,12 @@ void process_time_synch(LLMessageSystem *mesgsys, void **user_data)
 
     LLWorld::getInstance()->setSpaceTimeUSec(space_time_usec);
 
-    LL_DEBUGS("ENVIRONMENT") << "Sun phase: " << phase << " rad = " << fmodf(phase / F_TWO_PI + 0.25, 1.f) * 24.f << " h" << LL_ENDL;
+    LL_DEBUGS("ENVIRONMENT") << "Sun phase: " << phase << " rad = " << fmodf(phase / F_TWO_PI + 0.25f, 1.f) * 24.f << " h" << LL_ENDL;
 
     F32 region_phase = LLEnvironment::instance().getRegionProgress();
-    if (region_phase >= 0.0)
+    if (region_phase >= 0.0f)
     {
-        F32 adjusted_phase = fmodf(phase / F_TWO_PI + 0.25, 1.f);
+        F32 adjusted_phase = fmodf(phase / F_TWO_PI + 0.25f, 1.f);
         F32 delta_phase = adjusted_phase - region_phase;
 
         LL_DEBUGS("ENVIRONMENT") << "adjusted phase = " << adjusted_phase << " local phase = " << region_phase << " delta = " << delta_phase << LL_ENDL;
@@ -4696,7 +4696,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
     }
 
     U64     region_handle = 0;
-    F32     gain = 0;
+    F32     gain = 0.f;
     LLUUID  sound_id;
     LLUUID  owner_id;
     LLUUID  object_id;

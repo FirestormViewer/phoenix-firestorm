@@ -50,4 +50,5 @@
 	<button label="Alle Einwohner nach Hause teleportieren..." name="kick_all_btn"/>
 	<button label="Nachricht an Region senden..." name="im_btn"/>
 	<button label="Telehub verwalten..." name="manage_telehub_btn"/>
+	<button label="Neustart-Zeitplan verwalten..." name="manage_restart_btn"/>
 </panel>

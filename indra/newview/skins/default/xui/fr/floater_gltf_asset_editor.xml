@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gltf asset editor">
+	<floater.string name="floater_title" value="Éditeur de scènes GLTF" />
+	<floater.string name="scene_tittle" value="Scène" />
+	<floater.string name="node_tittle" value="Nœud" />
+	<floater.string name="mesh_tittle" value="Mesh" />
+	<floater.string name="skin_tittle" value="Peau" />
+	<layout_stack name="main_layout">
+		<layout_panel name="transforms_panel">
+			<menu_button name="clipboard_pos_btn" tool_tip="Options de collage" />
+			<text name="label position" tool_tip="Position (mètres)">
+				Position (m)
+			</text>
+			<menu_button name="clipboard_size_btn" tool_tip="Options de collage" />
+			<text name="label size" tool_tip="Taille (mètres)">
+				Taille (m)
+			</text>
+			<menu_button name="clipboard_rot_btn" tool_tip="Options de collage" />
+			<text name="label rotation" tool_tip="Rotation (degrés)">
+				Rotation (°)
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>
