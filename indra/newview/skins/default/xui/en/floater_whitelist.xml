@@ -56,8 +56,8 @@ Please add these to your AV folder exclusions as shown on the above wiki page.
           top_pad="5"
           width="689"
           wrap="true">
-The following box is the name and full path of the viewer executables. 
-Add these to you AV executable exclusions as shown in the above wiki.
+The following box shows the names and full paths of the viewer executables.
+Add the full paths to your AV executable exclusions as shown in the above wiki.
      </text>
      <text_editor
           parse_urls="true"
