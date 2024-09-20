@@ -269,6 +269,7 @@ bool LLFeatureManager::loadFeatureTables()
     mSkippedFeatures.insert("RenderGamma");
     mSkippedFeatures.insert("RenderVBOEnable");
     mSkippedFeatures.insert("RenderFogRatio");
+    mSkippedFeatures.insert("RenderTerrainPBRDetail"); // <FS:Beq/> FIRE-34515 crash in restore settings on Mac
 
     // first table is install with app
     std::string app_path = gDirUtilp->getAppRODataDir();
