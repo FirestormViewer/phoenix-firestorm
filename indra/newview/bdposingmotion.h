@@ -97,13 +97,16 @@ public:
     /// <param name="joint">The joint to stop animating.</param>
     void removeJointFromState(LLJoint *joint);
 
-    void setJointState(LLJoint *joint, U32 state);
-
     /// <summary>
     /// Queries whether the supplied joint is being animated.
     /// </summary>
     /// <param name="joint">The joint to query.</param>
     bool currentlyPosingJoint(LLJoint *joint);
+
+    /// <summary>
+    /// Removes the current joint state, and adds a new one.
+    /// </summary>
+    void setJointState(LLJoint* joint, U32 state);
 
 private:
     static const S32 _numberOfBonesApropoOfNothing = 134;

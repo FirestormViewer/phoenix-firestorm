@@ -183,9 +183,6 @@ bool BDPosingMotion::onUpdate(F32 time, U8* joint_mask)
 
 void BDPosingMotion::onDeactivate() {}
 
-/// <summary>
-/// Adds the supplied joint to the current animation.
-/// </summary>
 void BDPosingMotion::addJointToState(LLJoint *joint) { setJointState(joint, LLJointState::POS | LLJointState::ROT); }
 
 void BDPosingMotion::removeJointFromState(LLJoint *joint) { setJointState(joint, 0); }
@@ -195,19 +192,31 @@ void BDPosingMotion::setJointState(LLJoint *joint, U32 state)
     if (!joint)
         return;
 
+    LLPose* pose = this->getPose();
+    if (!pose)
+        return;
+
+    LLPointer<LLJointState> jointState = pose->findJointState(joint);
+    if (jointState.isNull())
+        return;
+
+    pose->removeJointState(jointState);
+
     S32 jointNumber = joint->getJointNum();
     if (jointNumber < 0 || jointNumber >= _numberOfBonesApropoOfNothing)
         return;
 
-    mJointState[jointNumber]->setJoint(joint);
     mJointState[jointNumber]->setUsage(state);
-
     addJointState(mJointState[jointNumber]);
 }
 
 bool BDPosingMotion::currentlyPosingJoint(LLJoint* joint)
 {
     if (!joint)
+        return false;
+
+    LLJointState* jointState = mPose.findJointState(joint);
+    if (!jointState)
         return false;
 
     S32 jointNumber = joint->getJointNum();
