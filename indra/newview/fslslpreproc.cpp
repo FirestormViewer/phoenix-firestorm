@@ -253,7 +253,7 @@ static std::string scopeript2(std::string& top, S32 fstart, char left = '{', cha
 
 static inline S32 const_iterator_to_pos(std::string::const_iterator begin, std::string::const_iterator cursor)
 {
-    return std::distance(begin, cursor);
+    return (S32)std::distance(begin, cursor);
 }
 
 static void shredder(std::string& text)

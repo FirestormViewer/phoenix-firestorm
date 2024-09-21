@@ -169,7 +169,7 @@ void LLChannelManager::onLoginCompleted()
             // </FS:Ansariel>
 
             mStartUpChannel->setCommitCallback(boost::bind(&LLChannelManager::onStartUpToastClose, this));
-            mStartUpChannel->createStartUpToast(away_notifications, gSavedSettings.getS32("StartUpToastLifeTime"));
+            mStartUpChannel->createStartUpToast(away_notifications, (F32)gSavedSettings.getS32("StartUpToastLifeTime"));
         }
     }
 

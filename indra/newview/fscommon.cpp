@@ -174,7 +174,7 @@ S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::
     ss >> time_t_date;
     ptime time_t_epoch(date(1970,1,1));
     time_duration diff = time_t_date - time_t_epoch;
-    return diff.total_seconds();
+    return (S32)diff.total_seconds();
 }
 
 void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)

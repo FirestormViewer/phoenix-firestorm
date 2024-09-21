@@ -822,10 +822,7 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             items.push_back(std::string("Copy Asset UUID"));
             items.push_back(std::string("Copy Separator"));
 
-            // <FS:Zi> Fix typo that causes gcc12 to error out
-            // bool is_asset_knowable = is_asset_knowable = LLAssetType::lookupIsAssetIDKnowable(obj->getType());
             bool is_asset_knowable = LLAssetType::lookupIsAssetIDKnowable(obj->getType());
-            // </FS:Zi>
             if ( !is_asset_knowable // disable menu item for Inventory items with unknown asset. EXT-5308
                  || (! ( is_full_perm_item || gAgent.isGodlike())))
             {

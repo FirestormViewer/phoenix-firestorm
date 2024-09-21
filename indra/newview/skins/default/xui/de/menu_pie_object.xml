@@ -6,12 +6,18 @@
 	<pie_slice label="Hier sitzen" name="Pie Object Sit"/>
 	<pie_slice label="Aufstehen" name="Object Stand Up"/>
 	<pie_slice label="Kaufen" name="Buy..."/>
-	<pie_slice label="Nehmen" name="Pie Object Take"/>
+	<pie_menu label="Nehmen &gt;" name="Take Submenu">
+		<pie_slice label="Kopien sep. Obj." name="Take Copy Separate" />
+		<pie_slice label="Kopie nehmen" name="Take Copy" />
+		<pie_slice label="Nehmen" name="Take" />
+		<pie_slice label="Kombin. Obj." name="Take combined" />
+		<pie_slice label="Kopie kombin. Obj." name="Take Copy combined" />
+		<pie_slice label="Separate Obj." name="Take Separate" />
+	</pie_menu>
 	<pie_slice label="Zahlen" name="Pay..."/>
 	<pie_menu label="Mehr &gt;" name="Object Pie More 1">
 		<pie_slice label="Löschen" name="Delete"/>
 		<pie_slice label="Anziehen" name="Wear"/>
-		<pie_slice label="Kopie nehmen" name="Take Copy"/>
 		<pie_menu label="HUD anhängen &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Anhängen &gt;" name="Pie Object Attach">
 			<pie_menu label="Erw. Skelett &gt;" name="Enhanced Skeleton">

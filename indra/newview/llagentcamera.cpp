@@ -2092,7 +2092,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
                     }
                     else
                     {
-                        LLCachedControl<F32> dynamic_camera_strength(gSavedSettings, "DynamicCameraStrength");
+                        static LLCachedControl<F32> dynamic_camera_strength(gSavedSettings, "DynamicCameraStrength");
                         target_lag = vel * dynamic_camera_strength / 30.f;
                     }
 
@@ -2238,8 +2238,8 @@ bool LLAgentCamera::allowFocusOffsetChange(const LLVector3d& offsetFocus)
         {
             const LLVector3d posFocusGlobal = calcFocusPositionTargetGlobal();
             // Don't allow moving the focus offset if at minimum and moving closer (or if at maximum and moving further) to prevent camera warping
-            F32 nCurDist = llabs((posFocusGlobal + mCameraFocusOffsetTarget - m_posRlvRefGlobal).magVec());
-            F32 nNewDist = llabs((posFocusGlobal + offsetFocus - m_posRlvRefGlobal).magVec());
+            F32 nCurDist = (F32)llabs((posFocusGlobal + mCameraFocusOffsetTarget - m_posRlvRefGlobal).magVec());
+            F32 nNewDist = (F32)llabs((posFocusGlobal + offsetFocus - m_posRlvRefGlobal).magVec());
             if ( ((m_fRlvMaxDist) && (nNewDist > nCurDist)) || ((m_fRlvMinDist) && (nNewDist < nCurDist)) )
                 return false;
         }
@@ -2251,7 +2251,7 @@ bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector
 {
     const LLVector3d offsetCamera = posCamGlobal - posCamRefGlobal;
 
-    F32 nCamAvDist = llabs(offsetCamera.magVec()), nDistMult = NAN;
+    F32 nCamAvDist = (F32)llabs(offsetCamera.magVec()), nDistMult = NAN;
     if (nCamAvDist > nDistMax)
     {
         nDistMult = nDistMax / nCamAvDist;
@@ -2425,7 +2425,7 @@ void LLAgentCamera::handleScrollWheel(S32 clicks)
 // [RLVa:KB] - @setcam_eyeoffsetscale
             F32 current_zoom_fraction = mTargetCameraDistance / (camera_offset_initial_mag * getCameraOffsetScale());
 // [/RLVa:KB]
-            current_zoom_fraction *= 1.f - pow(ROOT_ROOT_TWO, clicks);
+            current_zoom_fraction *= 1.f - (F32)pow(ROOT_ROOT_TWO, clicks);
 
 // [RLVa:KB] - @setcam_eyeoffsetscale
             cameraOrbitIn(current_zoom_fraction * camera_offset_initial_mag * getCameraOffsetScale());
@@ -2435,7 +2435,7 @@ void LLAgentCamera::handleScrollWheel(S32 clicks)
         else
         {
             F32 current_zoom_fraction = (F32)mCameraFocusOffsetTarget.magVec();
-            cameraOrbitIn(current_zoom_fraction * (1.f - pow(ROOT_ROOT_TWO, clicks)));
+            cameraOrbitIn(current_zoom_fraction * (1.f - (F32)pow(ROOT_ROOT_TWO, clicks)));
         }
     }
 }

@@ -104,12 +104,10 @@ protected:
                               bool worn_indication_enabled, const Params& params, bool show_widgets = false);
 
 private:
+    LLButton* mAddWearableBtn = nullptr;
+    LLButton* mRemoveWearableBtn = nullptr;
     bool    mWornIndicationEnabled;
-    // <FS:Ansariel> Make Add/Remove buttons work
-protected:
     bool mShowWidgets;
-    bool mIsWorn;
-    // </FS:Ansariel>
 };
 
 class LLPanelDeletableWearableListItem : public LLPanelWearableListItem
@@ -257,7 +255,6 @@ public:
 
     /*virtual*/ void updateItem(const std::string& name, EItemState item_state = IS_DEFAULT);
 
-    /*virtual*/ void onMouseEnter(S32 x, S32 y, MASK mask);
     /*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
 
 protected:

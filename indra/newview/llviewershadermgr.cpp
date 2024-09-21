@@ -100,6 +100,7 @@ LLGLSLShader    gBenchmarkProgram;
 LLGLSLShader    gReflectionProbeDisplayProgram;
 LLGLSLShader    gCopyProgram;
 LLGLSLShader    gCopyDepthProgram;
+LLGLSLShader    gPBRTerrainBakeProgram;
 
 //object shaders
 LLGLSLShader        gObjectPreviewProgram;
@@ -230,7 +231,7 @@ LLGLSLShader            gDeferredSkinnedPBROpaqueProgram;
 LLGLSLShader            gHUDPBRAlphaProgram;
 LLGLSLShader            gDeferredPBRAlphaProgram;
 LLGLSLShader            gDeferredSkinnedPBRAlphaProgram;
-LLGLSLShader            gDeferredPBRTerrainProgram;
+LLGLSLShader            gDeferredPBRTerrainProgram[TERRAIN_PAINT_TYPE_COUNT];
 
 LLGLSLShader            gGLTFPBRMetallicRoughnessProgram;
 
@@ -433,10 +434,20 @@ void LLViewerShaderMgr::finalizeShaderList()
     mShaderList.push_back(&gDeferredDiffuseProgram);
     mShaderList.push_back(&gDeferredBumpProgram);
     mShaderList.push_back(&gDeferredPBROpaqueProgram);
-    mShaderList.push_back(&gGLTFPBRMetallicRoughnessProgram);
+
+    if (gSavedSettings.getBOOL("GLTFEnabled"))
+    {
+        mShaderList.push_back(&gGLTFPBRMetallicRoughnessProgram);
+    }
+
     mShaderList.push_back(&gDeferredAvatarProgram);
     mShaderList.push_back(&gDeferredTerrainProgram);
-    mShaderList.push_back(&gDeferredPBRTerrainProgram);
+
+    for (U32 paint_type = 0; paint_type < TERRAIN_PAINT_TYPE_COUNT; ++paint_type)
+    {
+        mShaderList.push_back(&gDeferredPBRTerrainProgram[paint_type]);
+    }
+
     mShaderList.push_back(&gDeferredDiffuseAlphaMaskProgram);
     mShaderList.push_back(&gDeferredNonIndexedDiffuseAlphaMaskProgram);
     mShaderList.push_back(&gDeferredTreeProgram);
@@ -498,8 +509,6 @@ void LLViewerShaderMgr::setShaders()
     }
 
     mShaderList.clear();
-
-    LLShaderMgr::sMirrorsEnabled = LLPipeline::RenderMirrors;
 
     if (!gGLManager.mHasRequirements)
     {
@@ -759,6 +768,8 @@ std::string LLViewerShaderMgr::loadBasicShaders()
 
     bool ssr = gSavedSettings.getBOOL("RenderScreenSpaceReflections");
 
+    bool mirrors = gSavedSettings.getBOOL("RenderMirrors");
+
     bool has_reflection_probes = gSavedSettings.getBOOL("RenderReflectionsEnabled") && gGLManager.mGLVersion > 3.99f;
 
     S32 probe_level = llclamp(gSavedSettings.getS32("RenderReflectionProbeLevel"), 0, 3);
@@ -784,6 +795,11 @@ std::string LLViewerShaderMgr::loadBasicShaders()
     {
         attribs["REFMAP_LEVEL"] = std::to_string(probe_level);
         attribs["REF_SAMPLE_COUNT"] = "32";
+    }
+
+    if (mirrors)
+    {
+        attribs["HERO_PROBES"] = "1";
     }
 
     { // PBR terrain
@@ -1141,7 +1157,10 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         gDeferredSkinnedPBROpaqueProgram.unload();
         gDeferredPBRAlphaProgram.unload();
         gDeferredSkinnedPBRAlphaProgram.unload();
-        gDeferredPBRTerrainProgram.unload();
+        for (U32 paint_type = 0; paint_type < TERRAIN_PAINT_TYPE_COUNT; ++paint_type)
+        {
+            gDeferredPBRTerrainProgram[paint_type].unload();
+        }
 
         // [RLVa:KB] - @setsphere
         gRlvSphereProgram.unload();
@@ -1331,26 +1350,29 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         llassert(success);
     }
 
-    if (success)
+    if (gSavedSettings.getBOOL("GLTFEnabled"))
     {
-        gGLTFPBRMetallicRoughnessProgram.mName = "GLTF PBR Metallic Roughness Shader";
-        gGLTFPBRMetallicRoughnessProgram.mFeatures.hasSrgb = true;
-
-        gGLTFPBRMetallicRoughnessProgram.mShaderFiles.clear();
-        gGLTFPBRMetallicRoughnessProgram.mShaderFiles.push_back(make_pair("gltf/pbrmetallicroughnessV.glsl", GL_VERTEX_SHADER));
-        gGLTFPBRMetallicRoughnessProgram.mShaderFiles.push_back(make_pair("gltf/pbrmetallicroughnessF.glsl", GL_FRAGMENT_SHADER));
-        gGLTFPBRMetallicRoughnessProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-        gGLTFPBRMetallicRoughnessProgram.clearPermutations();
-
-        success = make_gltf_variants(gGLTFPBRMetallicRoughnessProgram, use_sun_shadow);
-
-        //llassert(success);
-        if (!success)
+        if (success)
         {
-            LL_WARNS() << "Failed to create GLTF PBR Metallic Roughness Shader, disabling!" << LL_ENDL;
-            gSavedSettings.setBOOL("RenderCanUseGLTFPBROpaqueShaders", false);
-            // continue as if this shader never happened
-            success = true;
+            gGLTFPBRMetallicRoughnessProgram.mName = "GLTF PBR Metallic Roughness Shader";
+            gGLTFPBRMetallicRoughnessProgram.mFeatures.hasSrgb = true;
+
+            gGLTFPBRMetallicRoughnessProgram.mShaderFiles.clear();
+            gGLTFPBRMetallicRoughnessProgram.mShaderFiles.push_back(make_pair("gltf/pbrmetallicroughnessV.glsl", GL_VERTEX_SHADER));
+            gGLTFPBRMetallicRoughnessProgram.mShaderFiles.push_back(make_pair("gltf/pbrmetallicroughnessF.glsl", GL_FRAGMENT_SHADER));
+            gGLTFPBRMetallicRoughnessProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+            gGLTFPBRMetallicRoughnessProgram.clearPermutations();
+
+            success = make_gltf_variants(gGLTFPBRMetallicRoughnessProgram, use_sun_shadow);
+
+            //llassert(success);
+            if (!success)
+            {
+                LL_WARNS() << "Failed to create GLTF PBR Metallic Roughness Shader, disabling!" << LL_ENDL;
+                gSavedSettings.setBOOL("RenderCanUseGLTFPBROpaqueShaders", false);
+                // continue as if this shader never happened
+                success = true;
+            }
         }
     }
 
@@ -1465,25 +1487,31 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         S32 detail = gSavedSettings.getS32("RenderTerrainPBRDetail");
         detail = llclamp(detail, TERRAIN_PBR_DETAIL_MIN, TERRAIN_PBR_DETAIL_MAX);
         const S32 mapping = clamp_terrain_mapping(gSavedSettings.getS32("RenderTerrainPBRPlanarSampleCount"));
-        gDeferredPBRTerrainProgram.mName = llformat("Deferred PBR Terrain Shader %d %s",
-                detail,
-                (mapping == 1 ? "flat" : "triplanar"));
-        gDeferredPBRTerrainProgram.mFeatures.hasSrgb = true;
-        gDeferredPBRTerrainProgram.mFeatures.isAlphaLighting = true;
-        gDeferredPBRTerrainProgram.mFeatures.calculatesAtmospherics = true;
-        gDeferredPBRTerrainProgram.mFeatures.hasAtmospherics = true;
-        gDeferredPBRTerrainProgram.mFeatures.hasGamma = true;
-        gDeferredPBRTerrainProgram.mFeatures.hasTransport = true;
-        gDeferredPBRTerrainProgram.mFeatures.isPBRTerrain = true;
+        for (U32 paint_type = 0; paint_type < TERRAIN_PAINT_TYPE_COUNT; ++paint_type)
+        {
+            LLGLSLShader* shader = &gDeferredPBRTerrainProgram[paint_type];
+            shader->mName = llformat("Deferred PBR Terrain Shader %d %s %s",
+                    detail,
+                    (paint_type == TERRAIN_PAINT_TYPE_PBR_PAINTMAP ? "paintmap" : "heightmap-with-noise"),
+                    (mapping == 1 ? "flat" : "triplanar"));
+            shader->mFeatures.hasSrgb = true;
+            shader->mFeatures.isAlphaLighting = true;
+            shader->mFeatures.calculatesAtmospherics = true;
+            shader->mFeatures.hasAtmospherics = true;
+            shader->mFeatures.hasGamma = true;
+            shader->mFeatures.hasTransport = true;
+            shader->mFeatures.isPBRTerrain = true;
 
-        gDeferredPBRTerrainProgram.mShaderFiles.clear();
-        gDeferredPBRTerrainProgram.mShaderFiles.push_back(make_pair("deferred/pbrterrainV.glsl", GL_VERTEX_SHADER));
-        gDeferredPBRTerrainProgram.mShaderFiles.push_back(make_pair("deferred/pbrterrainF.glsl", GL_FRAGMENT_SHADER));
-        gDeferredPBRTerrainProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-        gDeferredPBRTerrainProgram.addPermutation("TERRAIN_PBR_DETAIL", llformat("%d", detail));
-        gDeferredPBRTerrainProgram.addPermutation("TERRAIN_PLANAR_TEXTURE_SAMPLE_COUNT", llformat("%d", mapping));
-        success = gDeferredPBRTerrainProgram.createShader();
-        llassert(success);
+            shader->mShaderFiles.clear();
+            shader->mShaderFiles.push_back(make_pair("deferred/pbrterrainV.glsl", GL_VERTEX_SHADER));
+            shader->mShaderFiles.push_back(make_pair("deferred/pbrterrainF.glsl", GL_FRAGMENT_SHADER));
+            shader->mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+            shader->addPermutation("TERRAIN_PBR_DETAIL", llformat("%d", detail));
+            shader->addPermutation("TERRAIN_PAINT_TYPE", llformat("%d", paint_type));
+            shader->addPermutation("TERRAIN_PLANAR_TEXTURE_SAMPLE_COUNT", llformat("%d", mapping));
+            success = success && shader->createShader();
+            llassert(success);
+        }
     }
 
     if (success)
@@ -2991,6 +3019,35 @@ bool LLViewerShaderMgr::loadShadersInterface()
         gCopyDepthProgram.addPermutation("COPY_DEPTH", "1");
         gCopyDepthProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];
         success = gCopyDepthProgram.createShader();
+    }
+
+    if (gSavedSettings.getBOOL("LocalTerrainPaintEnabled"))
+    {
+        if (success)
+        {
+            LLGLSLShader* shader = &gPBRTerrainBakeProgram;
+            U32 bit_depth = gSavedSettings.getU32("TerrainPaintBitDepth");
+            // LLTerrainPaintMap currently uses an RGB8 texture internally
+            bit_depth = llclamp(bit_depth, 1, 8);
+            shader->mName = llformat("Terrain Bake Shader RGB%o", bit_depth);
+            shader->mFeatures.isPBRTerrain = true;
+
+            shader->mShaderFiles.clear();
+            shader->mShaderFiles.push_back(make_pair("interface/pbrTerrainBakeV.glsl", GL_VERTEX_SHADER));
+            shader->mShaderFiles.push_back(make_pair("interface/pbrTerrainBakeF.glsl", GL_FRAGMENT_SHADER));
+            shader->mShaderLevel = mShaderLevel[SHADER_INTERFACE];
+            const U32 value_range = (1 << bit_depth) - 1;
+            shader->addPermutation("TERRAIN_PAINT_PRECISION", llformat("%d", value_range));
+            success = success && shader->createShader();
+            //llassert(success);
+            if (!success)
+            {
+                LL_WARNS() << "Failed to create shader '" << shader->mName << "', disabling!" << LL_ENDL;
+                gSavedSettings.setBOOL("RenderCanUseTerrainBakeShaders", false);
+                // continue as if this shader never happened
+                success = true;
+            }
+        }
     }
 
     if (success)

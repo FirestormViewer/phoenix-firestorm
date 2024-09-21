@@ -8,7 +8,7 @@ include(LLCommon)
 include(LLWindow)
 include(Linking)
 include(PluginAPI)
-include(MediaPluginBase)   # <FS:Zi> Linux volume catcher
+# include(MediaPluginBase)   # disable Linux volume catcher for the time being
 
 include(CEFPlugin)
 
@@ -37,6 +37,11 @@ add_compile_definitions(LL_VOLUME_CATCHER)
 if (LINUX)
 #  message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
 #    "  Please create a volume_catcher implementation for this platform.")
+  if(NOT LINUX_VOLUME_CATCHER)
+    set(LINUX_VOLUME_CATCHER dummy_volume_catcher.cpp)
+    message( "Building with dummy volume catcher" )
+  endif(NOT LINUX_VOLUME_CATCHER)
+
   list(APPEND media_plugin_cef_SOURCE_FILES ${LINUX_VOLUME_CATCHER})
   set(CMAKE_SHARED_LINKER_FLAGS  "-Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../../lib'")
   list(APPEND media_plugin_cef_LINK_LIBRARIES llwindow ${MEDIA_PLUGIN_BASE_LIBRARIES})
@@ -73,7 +78,7 @@ if (WINDOWS)
   set_target_properties(
     media_plugin_cef
     PROPERTIES
-    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMT /IGNORE:4099"
+    LINK_FLAGS "/MANIFEST:NO /NODEFAULTLIB:LIBCMT /IGNORE:4099"
     )
 endif (WINDOWS)
 

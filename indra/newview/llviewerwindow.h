@@ -50,7 +50,6 @@
 
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class LLView;
 class LLViewerObject;
@@ -185,8 +184,8 @@ public:
     bool            getUIVisibility();
     void            handlePieMenu(S32 x, S32 y, MASK mask);
 
-    void            reshapeStatusBarContainer();
     // <FS:Ansariel> Improved menu and navigation bar
+    //void            reshapeStatusBarContainer();
     //void            resetStatusBarContainer(); // undo changes done by resetStatusBarContainer on initWorldUI()
 
     bool handleAnyMouseClick(LLWindow *window, LLCoordGL pos, MASK mask, EMouseClickType clicktype, bool down, bool &is_toolmgr_action);
@@ -458,9 +457,7 @@ public:
     // handle shutting down GL and bringing it back up
     void            requestResolutionUpdate();
     void            checkSettings();
-    void            restartDisplay(bool show_progress_bar);
-    bool            changeDisplaySettings(LLCoordScreen size, bool enable_vsync, bool show_progress_bar);
-    bool            getIgnoreDestroyWindow() { return mIgnoreActivate; }
+
     F32             getWorldViewAspectRatio() const;
     const LLVector2& getDisplayScale() const { return mDisplayScale; }
     void            calcDisplayScale();
@@ -471,13 +468,16 @@ public:
 
     static std::string getLastSnapshotDir();
 
+    LLView* getFloaterSnapRegion() { return mFloaterSnapRegion; }
+    LLPanel* getChicletContainer() { return mChicletContainer; }
+
 private:
     bool                    shouldShowToolTipFor(LLMouseHandler *mh);
 
     void            switchToolByMask(MASK mask);
     void            destroyWindow();
     void            drawMouselookInstructions();
-    void            stopGL(bool save_state = true);
+    void            stopGL();
     void            restoreGL(const std::string& progress_message = LLStringUtil::null);
     void            initFonts(F32 zoom_factor = 1.f);
     void            schedulePick(LLPickInfo& pick_info);
@@ -499,6 +499,11 @@ private:
     LLRect          mWorldViewRectRaw;          // area of screen for 3D world
     LLRect          mWorldViewRectScaled;       // area of screen for 3D world scaled by UI size
     LLRootView*     mRootView;                  // a view of size mWindowRectRaw, containing all child views
+    LLView*         mFloaterSnapRegion = nullptr;
+    LLView*         mNavBarContainer = nullptr;
+    LLPanel*        mStatusBarContainer = nullptr;
+    LLPanel*        mChicletContainer = nullptr;
+    LLPanel*        mTopInfoContainer = nullptr;
     LLVector2       mDisplayScale;
 
     LLCoordGL       mCurrentMousePoint;         // last mouse position in GL coords
@@ -535,8 +540,6 @@ private:
 
     std::string     mOverlayTitle;      // Used for special titles such as "Second Life - Special E3 2003 Beta"
 
-    bool            mIgnoreActivate;
-
     std::string     mInitAlert;         // Window / GL initialization requires an alert
 
     LLHandle<LLView> mWorldViewPlaceholder; // widget that spans the portion of screen dedicated to rendering the 3d world
@@ -549,7 +552,6 @@ private:
 
     bool            mResDirty;
     bool            mStatesDirty;
-    U32         mCurrResolutionIndex;
 
     std::unique_ptr<LLWindowListener> mWindowListener;
     std::unique_ptr<LLViewerWindowListener> mViewerWindowListener;

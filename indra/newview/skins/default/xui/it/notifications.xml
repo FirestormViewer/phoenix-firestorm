@@ -3515,10 +3515,6 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 		Purtroppo non siamo stati in grado di ottenere informazioni utili per questa sessione. Questo non dovrebbe accadere in un normale ambiente di produzione. Si prega di contattare il supporto. Questa sessione non funzionerà correttamente, si consiglia di riavviare.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Questo caricherà [COUNT] oggetti ad un costo totale di [COST]L$. Vuoi continuare con il caricamento?
-		<usetemplate name="okcancelignore" ignoretext="Conferma i caricamenti in blocco" notext="Annulla" yestext="Carica"/>
-	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		I file selezionati non possono essere caricati.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -5295,6 +5291,9 @@ Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'a
 	</notification>
 	<notification name="GLTFUploadInProgress">
 		Il caricamento è attualmente in corso. Riprova più tardi.
+	</notification>
+	<notification name="NoSupportGLTFShader">
+		Le scene GLTF non sono ancora supportate dalla tua scheda grafica.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Stai per abilitare AutoFPS. Tutte le impostazioni grafiche non salvate andranno perse.

@@ -33,7 +33,7 @@
 #include "llviewertexture.h"
 #include "llui.h"
 #include <list>
-#include <set>
+#include <unordered_set>
 #include "lluiimage.h"
 
 const U32 LL_IMAGE_REZ_LOSSLESS_CUTOFF = 128;
@@ -119,15 +119,12 @@ public:
     void init();
     void shutdown();
     void dump();
-    void destroyGL(bool save_state = true);
-    void restoreGL();
+    void destroyGL();
     bool isInitialized() const {return mInitialized;}
 
     void findTexturesByID(const LLUUID &image_id, std::vector<LLViewerFetchedTexture*> &output);
     LLViewerFetchedTexture *findImage(const LLUUID &image_id, ETexListType tex_type);
     LLViewerFetchedTexture *findImage(const LLTextureKey &search_key);
-
-    void dirtyImage(LLViewerFetchedTexture *image);
 
     // Using image stats, determine what images are necessary, and perform image updates.
     void updateImages(F32 max_time);
@@ -147,14 +144,14 @@ public:
     void doPrefetchImages();
 
     void clearFetchingRequests();
-    void setDebugFetching(LLViewerFetchedTexture* tex, S32 debug_level);
 
-private:
     // do some book keeping on the specified texture
     // - updates decode priority
     // - updates desired discard level
     // - cleans up textures that haven't been referenced in awhile
-    void updateImageDecodePriority(LLViewerFetchedTexture* imagep);
+    void updateImageDecodePriority(LLViewerFetchedTexture* imagep, bool flush_images = true);
+
+private:
     F32  updateImagesCreateTextures(F32 max_time);
     F32  updateImagesFetchTextures(F32 max_time);
     void updateImagesUpdateStats();
@@ -194,7 +191,7 @@ private:    // PoundLife - Improved Object Inspect
                                      LLViewerTexture::EBoostLevel boost_priority = LLGLTexture::BOOST_NONE,     // Get the requested level immediately upon creation.
                                      S8 texture_type = LLViewerTexture::FETCHED_TEXTURE,
                                      LLGLint internal_format = 0,
-                                     LLGLenum primary_format = 0,
+                                      LLGLenum primary_format = 0,
                                      const LLUUID& force_id = LLUUID::null
                                      );
 
@@ -217,16 +214,23 @@ private:    // PoundLife - Improved Object Inspect
     { return getImage(image_id, f_type, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host); }
 
 public:
-    typedef std::set<LLPointer<LLViewerFetchedTexture> > image_list_t;
-    image_list_t mLoadingStreamList;
-    image_list_t mCreateTextureList;
+    typedef std::unordered_set<LLPointer<LLViewerFetchedTexture> > image_list_t;
+    typedef std::queue<LLPointer<LLViewerFetchedTexture> > image_queue_t;
+
+    // images that have been loaded but are waiting to be uploaded to GL
+    image_queue_t mCreateTextureList;
+
+    // images that must be downscaled quickly so we don't run out of memory
+    image_queue_t mDownScaleQueue;
+
     image_list_t mCallbackList;
     image_list_t mFastCacheList;
 
-    // Note: just raw pointers because they are never referenced, just compared against
-    std::set<LLViewerFetchedTexture*> mDirtyTextureList;
-
     bool mForceResetTextureStats;
+
+    // to make "for (auto& imagep : gTextureList)" work
+    const image_list_t::const_iterator begin() const { return mImageList.cbegin(); }
+    const image_list_t::const_iterator end() const { return mImageList.cend(); }
 
     // <FS:Ansariel> Fast cache stats
     static U32 sNumFastCacheReads;
@@ -236,11 +240,10 @@ private:
     uuid_map_t mUUIDMap;
     LLTextureKey mLastUpdateKey;
 
-    typedef std::set < LLPointer<LLViewerFetchedTexture> > image_priority_list_t;
-    image_priority_list_t mImageList;
+    image_list_t mImageList;
 
     // simply holds on to LLViewerFetchedTexture references to stop them from being purged too soon
-    std::set<LLPointer<LLViewerFetchedTexture> > mImagePreloads;
+    std::unordered_set<LLPointer<LLViewerFetchedTexture> > mImagePreloads;
 
     bool mInitialized ;
     LLFrameTimer mForceDecodeTimer;

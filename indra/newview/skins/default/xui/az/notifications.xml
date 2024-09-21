@@ -3576,10 +3576,6 @@ Təhlükəsizliyiniz üçün onlar bir neçə saniyə bloklanacaqlar.
 		Təəssüf ki, bu sessiya üçün hesab faydaları haqqında məlumat əldə edə bilmədik. Bu normal iş mühitində baş verməməlidir. Zəhmət olmasa dəstək ilə əlaqə saxlayın. Bu seans normal işləməyəcək və biz sizə proqramın yenidən başlamağınızı tövsiyə edirik.
 		<usetemplate name="okbutton" yestext="Bəli"/>
 	</notification>
-		<notification name="BulkUploadCostConfirmation">
-		Bu, ümumi dəyəri L$[COST] olan [COUNT] elementi yükləyəcək. Yükləməyə davam etmək istədiyinizə əminsiniz?
-		<usetemplate ignoretext="Toplu yükləməni təsdiqləyin" name="okcancelignore" notext="Ləğv et" yestext="Yüklə"/>
-	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
 		Cari L$[BALANCE] balansınız ümumi dəyəri L$[COST] olan [COUNT] element yükləmək üçün kifayət deyil.
 	</notification>

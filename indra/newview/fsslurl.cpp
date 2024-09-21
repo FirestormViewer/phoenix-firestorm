@@ -33,7 +33,6 @@
 #include "llpanellogin.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
-#include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
 #include "llstartup.h"
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
@@ -459,14 +458,14 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 // </FS:CR>
     mType = LOCATION;
 // <FS:CR> FIRE-8063 - Aurora sim var region teleports
-    //mPosition = LLVector3(x, y, z);
+    //mPosition = LLVector3((F32)x, (F32)y, (F32)z);
 
     if(!LLGridManager::getInstance()->isInOpenSim())
     {
         S32 x = ll_round( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
         S32 y = ll_round( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
         S32 z = ll_round( (F32)position[VZ] );
-        mPosition = LLVector3(x, y, z);
+        mPosition = LLVector3((F32)x, (F32)y, (F32)z);
     }
 // </FS:CR>
 }
@@ -492,7 +491,7 @@ LLSLURL::LLSLURL(const std::string& region, const LLVector3& position, bool hype
 //  S32 y = ll_round( (F32)fmod( (F32)global_position.mdV[VY], (F32)REGION_WIDTH_METERS ) );
 //  S32 z = ll_round( (F32)global_position.mdV[VZ] );
 
-//  *this = LLSLURL(grid, region, LLVector3(x, y, z));
+//  *this = LLSLURL(grid, region, LLVector3((F32)x, (F32)y, (F32)z));
 // </FS:CR>
 //}
 //
@@ -630,7 +629,7 @@ std::string LLSLURL::getLoginString() const
         LL_WARNS("AppInit") << "Unexpected SLURL type for login string" << (int)mType << LL_ENDL;
         break;
     }
-    return  xml_escape_string(unescaped_start.str());
+    return  LLStringFn::xml_encode(unescaped_start.str(), true);
 }
 
 bool LLSLURL::operator==(const LLSLURL& rhs)

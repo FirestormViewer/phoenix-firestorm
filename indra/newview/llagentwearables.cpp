@@ -57,8 +57,6 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
-#include <boost/scoped_ptr.hpp>
-
 // <FS:Ansariel> [Legacy Bake]
 #include "llagentwearablesfetch.h"
 #ifdef OPENSIM

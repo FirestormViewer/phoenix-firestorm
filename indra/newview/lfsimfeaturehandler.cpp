@@ -155,10 +155,10 @@ void LFSimFeatureHandler::setSupportedFeatures()
             if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
                 extras.has("SimulatorFPSWarnPercent") && extras.has("SimulatorFPSCritPercent"))
             {
-                mSimulatorFPS = extras["SimulatorFPS"].asReal();
-                mSimulatorFPSFactor = extras["SimulatorFPSFactor"].asReal();
-                mSimulatorFPSWarn = (mSimulatorFPS * mSimulatorFPSFactor) * (extras["SimulatorFPSWarnPercent"].asReal() / 100.f);
-                mSimulatorFPSCrit = (mSimulatorFPS * mSimulatorFPSFactor) * (extras["SimulatorFPSCritPercent"].asReal() / 100.f);
+                mSimulatorFPS = (F32)extras["SimulatorFPS"].asReal();
+                mSimulatorFPSFactor = (F32)extras["SimulatorFPSFactor"].asReal();
+                mSimulatorFPSWarn = (mSimulatorFPS * mSimulatorFPSFactor) * ((F32)extras["SimulatorFPSWarnPercent"].asReal() / 100.f);
+                mSimulatorFPSCrit = (mSimulatorFPS * mSimulatorFPSFactor) * ((F32)extras["SimulatorFPSCritPercent"].asReal() / 100.f);
             }
             else
             {
@@ -242,16 +242,16 @@ void LFSimFeatureHandler::setSupportedFeatures()
             auto regionSettings=LLWorld::getInstance();
             if(extras.has("MinPrimScale"))
             {
-                regionSettings->setRegionMinPrimScale(extras["MinPrimScale"].asReal());
+                regionSettings->setRegionMinPrimScale((F32)extras["MinPrimScale"].asReal());
             }
             if(extras.has("MaxPrimScale"))
             {
-                regionSettings->setRegionMaxPrimScale(extras["MaxPrimScale"].asReal());
-                regionSettings->setRegionMaxPrimScaleNoMesh(extras["MaxPrimScale"].asReal());
+                regionSettings->setRegionMaxPrimScale((F32)extras["MaxPrimScale"].asReal());
+                regionSettings->setRegionMaxPrimScaleNoMesh((F32)extras["MaxPrimScale"].asReal());
             }
             if(extras.has("MaxPhysPrimScale"))
             {
-                regionSettings->setMaxPhysPrimScale(extras["MaxPhysPrimScale"].asReal());
+                regionSettings->setMaxPhysPrimScale((F32)extras["MaxPhysPrimScale"].asReal());
             }
         }
         else // OpenSim specifics are unsupported reset all to default

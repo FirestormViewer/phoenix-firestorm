@@ -944,6 +944,16 @@ Erwartet wurde [VALIDS]
 		Datei [FILE] kann aus folgendem Grund nicht hochgeladen werden: [REASON]
 Bitte versuchen Sie es erneut.
 	</notification>
+	<notification name="CannotUploadSnapshotEmailTooBig">
+		Schnappschuss [FILE] kann aus folgendem Grund nicht hochgeladen werden: [REASON]
+
+Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung oder Qualität zu verringern, oder versuchen Sie es erneut.
+	</notification>
+	<notification name="CannotUploadSnapshotWebTooBig">
+		Schnappschuss nicht hochgeladen werden.
+
+Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung zu verringern oder versuchen Sie es erneut.
+	</notification>
 	<notification name="LandmarkCreated">
 		„[LANDMARK_NAME]“ wurde zum Ordner „[FOLDER_NAME]“ hinzugefügt.
 	</notification>
@@ -1235,6 +1245,9 @@ Land zusammenlegen?
 	<notification name="CannotSaveToAssetStore">
 		[NAME] kann nicht in Zentral-Asset-Speicher geladen werden.
 Dies ist ein temporärer Fehler. Bitte passen Sie das Kleidungsstück in einigen Minuten noch einmal an und speichern Sie es erneut.
+	</notification>
+	<notification name="OutOfDiskSpace">
+		Kein Festplattenspeicher mehr verfügbar. Bitte bereinigen Sie die Festplatte von nicht mehr benötigten Dateien oder löschen Sie den Cache.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
 		Es tut uns leid! Sie wurden von [CURRENT_GRID] abgemeldet.
@@ -1762,6 +1775,10 @@ Ersetzen Sie Material [MATERIAL_NUM] mit einem Material mit alphaMode="OPAQUE" o
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Das Aussehen lässt sich erst ändern, wenn Kleider und Form/Gestalt geladen sind.
+	</notification>
+	<notification name="UsavedWearableChanges">
+		Es gibt noch ungespeicherte Änderungen.
+		<usetemplate ignoretext="Bestätigen bevor ungespeicherte Änderungen am Aussehen verworfen werden." name="okcancelignore" notext="Weiter bearbeiten" yestext="Verwerfen"/>
 	</notification>
 	<notification name="ClassifiedMustBeAlphanumeric">
 		Der Name der Anzeige muss mit einem Buchstaben von A bis Z oder einer Ziffer beginnen.  Satzzeichen sind nicht erlaubt.
@@ -3713,12 +3730,8 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		Leider konnten wir für diese Sitzung keine Informationen zu den Leistungen erhalten. Dies sollte in einer normalen Produktionsumgebung nicht passieren. Kontaktiere bitte den Support. Diese Sitzung wird nicht normal laufen, und wir empfehlen, die Sitzung neu zu starten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Dadurch werden [COUNT] Artikel zu einem Gesamtpreis von [COST] $ hochgeladen. Möchtest du mit dem Hochladen fortfahren?
-		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Hochladen" ignoretext="Mehrfach-Uploads bestätigen"/>
-	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
-Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstände für insgesamt [COST] L$ hochzuladen.
+		Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstände für insgesamt [COST] L$ hochzuladen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">

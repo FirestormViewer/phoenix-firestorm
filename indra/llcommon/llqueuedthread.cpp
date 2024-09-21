@@ -432,12 +432,12 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
             using namespace std::chrono_literals;
 
             const auto throttle_time = 2ms;
-            if( req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now())
+            if (req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now())
             {
-                ms_sleep(throttle_time.count());
+                ms_sleep((U32)throttle_time.count());
             }
             // if we're still not ready to retry then requeue
-            if( req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now())
+            if (req->mDeferUntil > LL::WorkQueue::TimePoint::clock::now())
             {
                 LL_PROFILE_ZONE_NAMED("qtpr - defer requeue");
 
@@ -506,7 +506,7 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
 
                 //             if (sleep_time.count() > 0)
                 //             {
-                //                 ms_sleep(sleep_time.count());
+                //                 ms_sleep((U32)sleep_time.count());
                 //             }
                 //         }
                 //         processRequest(req);

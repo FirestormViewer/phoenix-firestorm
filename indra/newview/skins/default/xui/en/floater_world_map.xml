@@ -14,7 +14,9 @@
  single_instance="true"
  title="World Map"
  width="650">
- <floater.string name="UnnamedParcel">(Unnamed Parcel)</floater.string>
+  <string name="UnnamedParcel">
+    (Unnamed Parcel)
+  </string>
  <layout_stack
   follows="all"
   layout="topleft"

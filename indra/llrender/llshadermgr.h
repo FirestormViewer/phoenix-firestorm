@@ -280,6 +280,7 @@ public:
         TERRAIN_DETAIL3,                    //  "detail_3"
 
         TERRAIN_ALPHARAMP,                  //  "alpha_ramp"
+        TERRAIN_PAINTMAP,                   //  "paint_map"
 
         TERRAIN_DETAIL0_BASE_COLOR,                //  "detail_0_base_color" (GLTF)
         TERRAIN_DETAIL1_BASE_COLOR,                //  "detail_1_base_color" (GLTF)
@@ -303,6 +304,8 @@ public:
         TERRAIN_ROUGHNESS_FACTORS,                 //  "roughnessFactors" (GLTF)
         TERRAIN_EMISSIVE_COLORS,                   //  "emissiveColors" (GLTF)
         TERRAIN_MINIMUM_ALPHAS,                    //  "minimum_alphas" (GLTF)
+
+        REGION_SCALE,                              //  "region_scale" (GLTF)
 
         SHINY_ORIGIN,                       //  "origin"
         DISPLAY_GAMMA,                      //  "display_gamma"
@@ -391,7 +394,6 @@ public:
     bool mShaderCacheInitialized = false;
     bool mShaderCacheEnabled = false;
     std::string mShaderCacheDir;
-    static bool sMirrorsEnabled;
 
 protected:
 

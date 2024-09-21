@@ -57,6 +57,7 @@
 #include "llaudioengine.h" // <FS:PP> For object deletion sound
 #include "llviewerwindow.h"
 #include "lldrawable.h"
+#include "llfloatergltfasseteditor.h"
 #include "llfloaterinspect.h"
 #include "llfloaterproperties.h" // <FS:Ansariel> Keep legacy properties floater
 #include "llfloaterreporter.h"
@@ -145,12 +146,12 @@ F32 LLSelectMgr::sHighlightAlpha = 0.f;
 F32 LLSelectMgr::sHighlightAlphaTest = 0.f;
 F32 LLSelectMgr::sHighlightUAnim = 0.f;
 F32 LLSelectMgr::sHighlightVAnim = 0.f;
-LLColor4 LLSelectMgr::sSilhouetteParentColor;
-LLColor4 LLSelectMgr::sSilhouetteChildColor;
-LLColor4 LLSelectMgr::sHighlightInspectColor;
-LLColor4 LLSelectMgr::sHighlightParentColor;
-LLColor4 LLSelectMgr::sHighlightChildColor;
-LLColor4 LLSelectMgr::sContextSilhouetteColor;
+LLUIColor LLSelectMgr::sSilhouetteParentColor;
+LLUIColor LLSelectMgr::sSilhouetteChildColor;
+LLUIColor LLSelectMgr::sHighlightInspectColor;
+LLUIColor LLSelectMgr::sHighlightParentColor;
+LLUIColor LLSelectMgr::sHighlightChildColor;
+LLUIColor LLSelectMgr::sContextSilhouetteColor;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // struct LLDeRezInfo
@@ -490,6 +491,11 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectOnly(LLViewerObject* object, S3
     if (object->isSelected() ) {
         // make sure point at position is updated
         updatePointAt();
+        LLSelectNode* nodep = mSelectedObjects->findNode(object);
+        if (nodep)
+        {
+            nodep->selectGLTFNode(gltf_node, gltf_primitive, true);
+        }
         gEditMenuHandler = this;
         return NULL;
     }
@@ -3198,7 +3204,7 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
 
         for (U8 te_num = 0; te_num < object->getNumTEs(); te_num++)
         {
-            const LLTextureEntry* tep = object->getTE(te_num);
+            LLTextureEntry* tep = object->getTE(te_num);
 
             // ND: Down the code there is a check if getTE did return a valid pointer (actually the pointer is fetched again there, can it change mid loop?)
             if( !tep )
@@ -3235,8 +3241,6 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
                     F32 specular_scale_t = specular_scale_ratio.mV[t_axis]/object_scale.mV[t_axis];
 
                     object->setTEScale(te_num, diffuse_scale_s, diffuse_scale_t);
-
-                    LLTextureEntry* tep = object->getTE(te_num);
 
                     if (tep && !tep->getMaterialParams().isNull())
                     {
@@ -3277,6 +3281,47 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
                         p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
                         LLMaterialMgr::getInstance()->put(object->getID(), te_num, *p);
+                    }
+                }
+
+                if (tep->getGLTFMaterial())
+                {
+                    LLPointer<LLGLTFMaterial> material = tep->getGLTFMaterialOverride();
+                    if (!material)
+                    {
+                        material = new LLGLTFMaterial();
+                        tep->setGLTFMaterialOverride(material);
+                    }
+
+                    F32 scale_x = 1;
+                    F32 scale_y = 1;
+
+                    for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+                    {
+                        LLVector3 scale_ratio = selectNode->mGLTFScaleRatios[te_num][i];
+
+                        if (planar)
+                        {
+                            scale_x = scale_ratio.mV[s_axis] / object_scale.mV[s_axis];
+                            scale_y = scale_ratio.mV[t_axis] / object_scale.mV[t_axis];
+                        }
+                        else
+                        {
+                            scale_x = scale_ratio.mV[s_axis] * object_scale.mV[s_axis];
+                            scale_y = scale_ratio.mV[t_axis] * object_scale.mV[t_axis];
+                        }
+                        material->mTextureTransform[i].mScale.set(scale_x, scale_y);
+                    }
+
+                    LLFetchedGLTFMaterial* render_mat = (LLFetchedGLTFMaterial*)tep->getGLTFRenderMaterial();
+                    if (render_mat)
+                    {
+                        render_mat->applyOverride(*material);
+                    }
+
+                    if (send_to_sim)
+                    {
+                        LLGLTFMaterialList::queueModify(object, te_num, material);
                     }
                 }
                 send = send_to_sim;
@@ -6660,8 +6705,10 @@ void LLSelectMgr::renderSilhouettes(bool for_hud)
     bool wireframe_selection = (gFloaterTools && gFloaterTools->getVisible()) || LLSelectMgr::sRenderHiddenSelections;
     F32 fogCfx = (F32)llclamp((getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);  // <FS:Ansariel> Performance improvement
 
-    static LLColor4 sParentColor = LLColor4(sSilhouetteParentColor[VRED], sSilhouetteParentColor[VGREEN], sSilhouetteParentColor[VBLUE], LLSelectMgr::sHighlightAlpha);
-    static LLColor4 sChildColor = LLColor4(sSilhouetteChildColor[VRED], sSilhouetteChildColor[VGREEN], sSilhouetteChildColor[VBLUE], LLSelectMgr::sHighlightAlpha);
+    LLColor4 sParentColor = sSilhouetteParentColor;
+    sParentColor.mV[VALPHA] = LLSelectMgr::sHighlightAlpha;
+    LLColor4 sChildColor = sSilhouetteChildColor;
+    sChildColor.mV[VALPHA] = LLSelectMgr::sHighlightAlpha;
 
     auto renderMeshSelection_f = [fogCfx, wireframe_selection](LLSelectNode* node, LLViewerObject* objectp, LLColor4 hlColor)
     {
@@ -7117,6 +7164,7 @@ void LLSelectNode::saveGLTFMaterials(const uuid_vec_t& materials, const gltf_mat
 void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
 {
     mTextureScaleRatios.clear();
+    mGLTFScaleRatios.clear();
 
     if (mObject.notNull())
     {
@@ -7151,6 +7199,40 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
                 v.mV[t_axis] = diffuse_t/scale.mV[t_axis];
                 mTextureScaleRatios.push_back(v);
             }
+
+            LLGLTFMaterial* material = tep->getGLTFMaterialOverride();
+            LLVector3 material_v;
+            F32 scale_x = 1;
+            F32 scale_y = 1;
+            std::vector<LLVector3> material_v_vec;
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+            {
+                if (material)
+                {
+                    LLGLTFMaterial::TextureTransform& transform = material->mTextureTransform[i];
+                    scale_x = transform.mScale[VX];
+                    scale_y = transform.mScale[VY];
+                }
+                else
+                {
+                    // Not having an override doesn't mean that there is no material
+                    scale_x = 1;
+                    scale_y = 1;
+                }
+
+                if (tep->getTexGen() == LLTextureEntry::TEX_GEN_PLANAR)
+                {
+                    material_v.mV[s_axis] = scale_x * scale.mV[s_axis];
+                    material_v.mV[t_axis] = scale_y * scale.mV[t_axis];
+                }
+                else
+                {
+                    material_v.mV[s_axis] = scale_x / scale.mV[s_axis];
+                    material_v.mV[t_axis] = scale_y / scale.mV[t_axis];
+                }
+                material_v_vec.push_back(material_v);
+            }
+            mGLTFScaleRatios.push_back(material_v_vec);
         }
     }
 }
@@ -7460,6 +7542,12 @@ void dialog_refresh_all()
     if (panel_task_info)
     {
         panel_task_info->dirty();
+    }
+
+    LLFloaterGLTFAssetEditor * gltf_editor = LLFloaterReg::findTypedInstance<LLFloaterGLTFAssetEditor>("gltf_asset_editor");
+    if (gltf_editor)
+    {
+        gltf_editor->dirty();
     }
 }
 
@@ -8264,12 +8352,9 @@ S32 LLObjectSelection::getSelectedObjectRenderCost()
                    cost += object->getRenderCost(textures);
                    computed_objects.insert(object->getID());
 
-                   const_child_list_t children = object->getChildren();
-                   for (const_child_list_t::const_iterator child_iter = children.begin();
-                         child_iter != children.end();
-                         ++child_iter)
+                   const const_child_list_t& children = object->getChildren();
+                   for (LLViewerObject* child_obj : children)
                    {
-                       LLViewerObject* child_obj = *child_iter;
                        LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
                        if (child)
                        {

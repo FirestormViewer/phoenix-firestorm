@@ -548,7 +548,6 @@
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
-			<menu_item_call label="Terrain neu erstellen" name="Rebuild Terrain"/>
 		</menu>
 		<menu label="Netzwerk" name="Network">
 			<menu_item_check label="Agent pausieren" name="AgentPause"/>
@@ -581,6 +580,11 @@
 			<menu_item_call label="Interest-Liste zurücksetzen" name="Reset Interest Lists"/>
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
+		<menu label="Terrain" name="DevelopTerrain">
+			<menu_item_call label="Terrain neu erstellen" name="Rebuild Terrain"/>
+			<menu_item_call label="Lokale Paintmap erstellen" name="Create Local Paintmap"/>
+			<menu_item_call label="Lokale Paintmap löschen" name="Delete Local Paintmap"/>
+		</menu>
 		<menu label="UI" name="UI">
 			<menu_item_call label="Medienbrowser-Test" name="Web Browser Test"/>
 			<menu_item_call label="Test Regionsneustart" name="Region Restart Test"/>
@@ -607,6 +611,7 @@
 			<menu_item_check label="WindowProc debuggen" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI" name="XUI">
+			<menu_item_call label="Farbeinstellungen anzeigen" name="Color Settings"/>
 			<menu_item_call label="Farbeinstellungen neu laden" name="Reload Color Settings"/>
 			<menu_item_call label="Schriftarttest anzeigen" name="Show Font Test"/>
 			<menu_item_call label="Aus XML-Datei laden" name="Load from XML"/>
@@ -631,6 +636,7 @@
 				<menu_item_call label="Männlich testen" name="Test Male"/>
 				<menu_item_call label="Weiblich testen" name="Test Female"/>
 				<menu_item_check label="Avatarauswahl zulassen" name="Allow Select Avatar"/>
+				<menu_item_check label="Animation für Kamerafokus deaktieren" name="Disable Look At Animation"/>
 				<menu_item_check label="Nur Freunde anzeigen" name="Render Only Friends"/>
 			</menu>
 			<menu label="Animationsgeschwindigkeit" name="Animation Speed">

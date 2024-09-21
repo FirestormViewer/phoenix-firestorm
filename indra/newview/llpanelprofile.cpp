@@ -2236,12 +2236,12 @@ void LLPanelProfileSecondLife::onShowInSearchCallback()
     if (mAllowPublish == value)
         return;
 
-        mAllowPublish = value;
+    mAllowPublish = value;
     saveAgentUserInfoCoro("allow_publish", value);
-    }
+}
 
 void LLPanelProfileSecondLife::onHideAgeCallback()
-    {
+{
     // <FS:Ansariel> Fix LL UI/UX design accident
     //bool value = mHideAgeCombo->getValue().asInteger();
     bool value = !mHideAgeCheckbox->getValue().asBoolean();

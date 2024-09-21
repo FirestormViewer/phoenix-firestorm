@@ -97,7 +97,7 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
         return;
     }
 
-    LLDate curdate = LLDate(time_corrected());
+    LLDate curdate = LLDate((double)time_corrected());
     std::string input_date = curdate.asString();
     input_date.replace(input_date.find("T"), 1, " ");
     input_date.resize(input_date.size() - 1);

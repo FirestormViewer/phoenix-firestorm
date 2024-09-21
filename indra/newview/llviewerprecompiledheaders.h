@@ -37,25 +37,16 @@
 
 #include "linden_common.h"
 
-// Work around stupid Microsoft STL warning
-#ifdef LL_WINDOWS
-#pragma warning (disable : 4702) // warning C4702: unreachable code
-#endif
-
 #include <algorithm>
 #include <deque>
 #include <functional>
 #include <map>
 #include <set>
-
-#ifdef LL_WINDOWS
-#pragma warning (3 : 4702) // we like level 3, not 4
-#endif
+#include <vector>
 
 // Library headers from llcommon project:
 #include "indra_constants.h"
 #include "llinitparam.h"
-#include "llallocator.h"
 #include "llapp.h"
 #include "llcriticaldamp.h"
 #include "lldefs.h"
@@ -123,10 +114,7 @@
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/regex.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/signals2.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
@@ -135,6 +123,5 @@
 #include <boost/function/function1.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
-#include <vector>
 
 #endif

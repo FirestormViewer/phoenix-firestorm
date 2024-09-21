@@ -147,30 +147,6 @@
 			<item label="Maximum" name="noise_suppression_max"/>
 		</combo_box>
 		<button label="Geräte-Einstellungen" name="device_settings_btn"/>
-		<panel name="device_settings_panel">
-			<panel.string name="default_text">
-				Standard
-			</panel.string>
-			<string name="name_no_device">
-				Kein Gerät
-			</string>
-			<string name="name_default_system_device">
-				Standardsystemgerät
-			</string>
-			<text name="Input">
-				Eingabe
-			</text>
-			<text name="Output">
-				Ausgabe
-			</text>
-			<text name="Volume label" width="100">
-				Meine Lautstärke:
-			</text>
-			<slider_bar name="mic_volume_slider" tool_tip="Lautstärke mit diesem Regler ändern"/>
-			<text name="wait_text">
-				Bitte warten
-			</text>
-		</panel>
 	</panel>
 
 	<!-- UI Sounds 1 -->

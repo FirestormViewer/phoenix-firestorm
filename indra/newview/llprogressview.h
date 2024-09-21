@@ -87,9 +87,10 @@ public:
 
 protected:
     LLProgressBar* mProgressBar;
-    LLTextBox* mProgressText;
-    LLTextBox* mMessageText;
     LLMediaCtrl* mMediaCtrl;
+    LLTextBox* mLogosLabel = nullptr;
+    LLTextBox* mProgressText = nullptr;
+    LLTextBox* mMessageText = nullptr;
     F32 mPercentDone;
     std::string mMessage;
     LLButton*   mCancelBtn;

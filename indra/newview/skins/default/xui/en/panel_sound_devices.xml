@@ -28,10 +28,10 @@
      follows="left|top"
      height="18"
      image_name="Microphone_On"
-     left_delta="-5"
+     left_delta="4"
      name="microphone_icon"
      mouse_opaque="false"
-     top="7"
+     top="4"
      layout="topleft"
      visible="true"
      width="18" />
@@ -101,7 +101,7 @@
      layout="topleft"
      left_delta="-300"
      name="My volume label"
-     top_pad="14"
+     top_pad="8"
      width="200">
         Mic volume:
     </text>

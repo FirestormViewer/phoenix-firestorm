@@ -615,6 +615,7 @@ bool LLFloaterTexturePicker::postBuild()
     mResolutionLabel = getChild<LLTextBox>("size_lbl");
     mResolutionWarning = getChild<LLTextBox>("over_limit_lbl");
 
+    mPreviewWidget = getChild<LLView>("preview_widget");
 
     mDefaultBtn = getChild<LLButton>("Default");
     mNoneBtn = getChild<LLButton>("None");
@@ -796,7 +797,7 @@ void LLFloaterTexturePicker::draw()
         }
 
         // Border
-        LLRect border = getChildView("preview_widget")->getRect();
+        LLRect border = mPreviewWidget->getRect();
         gl_rect_2d( border, LLColor4::black, false );
 
 
@@ -2509,8 +2510,8 @@ void LLTextureCtrl::draw()
             font->renderUTF8(
                 mLoadingPlaceholderString,
                 0,
-                llfloor(interior.mLeft+3),
-                llfloor(interior.mTop-v_offset),
+                (interior.mLeft+3),
+                (interior.mTop-v_offset),
                 LLColor4::white,
                 LLFontGL::LEFT,
                 LLFontGL::BASELINE,
@@ -2526,17 +2527,17 @@ void LLTextureCtrl::draw()
 
             v_offset += 12;
             tdesc = llformat("  PK  : %d%%", U32(mTexturep->getDownloadProgress()*100.0));
-            font->renderUTF8(tdesc, 0, llfloor(interior.mLeft+3), llfloor(interior.mTop-v_offset),
+            font->renderUTF8(tdesc, 0, interior.mLeft+3, interior.mTop-v_offset,
                              LLColor4::white, LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
 
             v_offset += 12;
             tdesc = llformat("  LVL: %d", mTexturep->getDiscardLevel());
-            font->renderUTF8(tdesc, 0, llfloor(interior.mLeft+3), llfloor(interior.mTop-v_offset),
+            font->renderUTF8(tdesc, 0, interior.mLeft+3, interior.mTop-v_offset,
                              LLColor4::white, LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
 
             v_offset += 12;
             tdesc = llformat("  ID  : %s...", (mImageAssetID.asString().substr(0,7)).c_str());
-            font->renderUTF8(tdesc, 0, llfloor(interior.mLeft+3), llfloor(interior.mTop-v_offset),
+            font->renderUTF8(tdesc, 0, interior.mLeft+3, interior.mTop-v_offset,
                              LLColor4::white, LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
         }
     }

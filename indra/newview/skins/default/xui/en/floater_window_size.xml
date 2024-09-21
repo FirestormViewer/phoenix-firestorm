@@ -80,6 +80,10 @@
        label="2560 x 1440 (16:9 QHD)"
        name="item14"
        value="2560 x 1440" />
+      <combo_box.item
+       label="3840 x 2160 (16:9 4K UHD)"
+       name="item15"
+       value="3840 x 2160" />
     </combo_box>
     <button
      follows="right|bottom"

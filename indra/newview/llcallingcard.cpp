@@ -462,7 +462,7 @@ void LLAvatarTracker::findAgent()
     msg->nextBlockFast(_PREHASH_AgentBlock);
     msg->addUUIDFast(_PREHASH_Hunter, gAgentID);
     msg->addUUIDFast(_PREHASH_Prey, mTrackingData->mAvatarID);
-    msg->addU32Fast(_PREHASH_SpaceIP, 0); // will get filled in by simulator
+    msg->addIPAddrFast(_PREHASH_SpaceIP, 0); // will get filled in by simulator
     msg->nextBlockFast(_PREHASH_LocationBlock);
     const F64 NO_LOCATION = 0.0;
     msg->addF64Fast(_PREHASH_GlobalX, NO_LOCATION);
@@ -502,7 +502,7 @@ void LLAvatarTracker::notifyObservers()
         // new masks and ids will be processed later from idle.
         return;
     }
-    LL_PROFILE_ZONE_SCOPED
+    LL_PROFILE_ZONE_SCOPED;
     mIsNotifyObservers = true;
 
     observer_list_t observers(mObservers);
@@ -757,7 +757,7 @@ void LLAvatarTracker::processChangeUserRights(LLMessageSystem* msg, void**)
 
 void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 {
-    LL_PROFILE_ZONE_SCOPED
+    LL_PROFILE_ZONE_SCOPED;
     S32 count = msg->getNumberOfBlocksFast(_PREHASH_AgentBlock);
 
     // <FS:PP> Attempt to speed up things a little

@@ -307,19 +307,8 @@ protected:
     static constexpr S32 MATMEDIA_PBR = 1;                  // PBR
     static constexpr S32 MATMEDIA_MEDIA = 2;                // Media
 
-    static constexpr S32 MATTYPE_DIFFUSE = 0;               // Diffuse material texture
-    static constexpr S32 MATTYPE_NORMAL = 1;                // Normal map
-    static constexpr S32 MATTYPE_SPECULAR = 2;              // Specular map
-
     static constexpr S32 BUMPY_TEXTURE = 18;                // use supplied normal map   (index of "Use Texture" in combo box)
     static constexpr S32 SHINY_TEXTURE = 4;                 // use supplied specular map (index of "Use Texture" in combo box)
-
-    static constexpr S32 PBRTYPE_RENDER_MATERIAL_ID = 0;    // Render Material ID
-    static constexpr S32 PBRTYPE_BASE_COLOR = 1;            // PBR Base Color
-    static constexpr S32 PBRTYPE_METALLIC_ROUGHNESS = 2;    // PBR Metallic
-    static constexpr S32 PBRTYPE_EMISSIVE = 3;              // PBR Emissive
-    static constexpr S32 PBRTYPE_NORMAL = 4;                // PBR Normal
-    static constexpr S32 PBRTYPE_COUNT = 5;                 // number of PBR map types
 
 public:
     // public because ... functors? -Zi
@@ -365,8 +354,8 @@ private:
 
     // Convenience funcs to keep the visual flack to a minimum
     //
-    LLUUID  getCurrentNormalMap();
-    LLUUID  getCurrentSpecularMap();
+    LLUUID  getCurrentNormalMap() const;
+    LLUUID  getCurrentSpecularMap() const;
     U32     getCurrentShininess();
     U32     getCurrentBumpiness();
     U8      getCurrentDiffuseAlphaMode();
@@ -387,11 +376,12 @@ private:
     // <FS:Zi> map tab states to various values
     // TODO: should be done with tab-change signals and flags, really
     S32     getCurrentMaterialType() const;
-    S32     getCurrentMatChannel() const;
-    S32     getCurrentPBRChannel() const;
+    LLRender::eTexIndex getCurrentMatChannel() const;
+    LLRender::eTexIndex getCurrentPBRChannel() const;
+
     void    selectMaterialType(S32 material_type);
-    void    selectMatChannel(S32 mat_channel);
-    void    selectPBRChannel(S32 pbr_channel);
+    void    selectMatChannel(LLRender::eTexIndex mat_channel);
+    void    selectPBRChannel(LLRender::eTexIndex pbr_channel);
 
     F32     getCurrentTextureRot();
     F32     getCurrentTextureScaleU();
@@ -485,16 +475,6 @@ private:
         F32 mAlphaCutoff;
         bool mDoubleSided;
     } mPBRBaseMaterialParams;
-
-    // map PBR material map types to glTF material types
-    LLGLTFMaterial::TextureInfo mPBRChannelToTextureInfo[PBRTYPE_COUNT] =
-    {
-        LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT,                // PBRTYPE_RENDER_MATERIAL_ID
-        LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR,           // PBRTYPE_BASE_COLOR
-        LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS,   // PBRTYPE_METALLIC_ROUGHNESS
-        LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE,             // PBRTYPE_EMISSIVE
-        LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL                // PBRTYPE_NORMAL
-    };
 
     // Dirty flags - taken from llmaterialeditor.cpp ... LL please put this in a .h! -Zi
     U32 mUnsavedChanges; // flags to indicate individual changed parameters
@@ -651,7 +631,7 @@ private:
     void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool& has_faces_without_pbr, bool force_set_values);
 
     void updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*)> func);
-    void updateGLTFTextureTransform(float value, U32 pbr_type, std::function<void(LLGLTFMaterial::TextureTransform*)> edit);
+    void updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*)> edit);
 
     void setMaterialOverridesFromSelection();
 
@@ -743,19 +723,19 @@ public:
         static void getMaxNormalRepeats(F32& repeats, bool& identical);
         static void getCurrentDiffuseAlphaMode(U8& diffuse_alpha_mode, bool& identical, bool diffuse_texture_has_alpha);
 
-        FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getNormalID,LLUUID::null, false, LLUUID::null)
-        FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getSpecularID,LLUUID::null, false, LLUUID::null)
-        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatX,1.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatY,1.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetX,0.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetY,0.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularRotation,0.0f, true, 0.001f)
+        FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getNormalID,LLUUID::null, false, LLUUID::null);
+        FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getSpecularID,LLUUID::null, false, LLUUID::null);
+        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatX,1.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatY,1.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetX,0.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetY,0.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getSpecularRotation,0.0f, true, 0.001f);
 
-        FS_DEF_GET_MAT_STATE(F32,F32,getNormalRepeatX,1.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getNormalRepeatY,1.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getNormalOffsetX,0.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getNormalOffsetY,0.0f, true, 0.001f)
-        FS_DEF_GET_MAT_STATE(F32,F32,getNormalRotation,0.0f, true, 0.001f)
+        FS_DEF_GET_MAT_STATE(F32,F32,getNormalRepeatX,1.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getNormalRepeatY,1.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getNormalOffsetX,0.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getNormalOffsetY,0.0f, true, 0.001f);
+        FS_DEF_GET_MAT_STATE(F32,F32,getNormalRotation,0.0f, true, 0.001f);
 
         FS_DEF_EDIT_MAT_STATE(U8,U8,setDiffuseAlphaMode);
         FS_DEF_EDIT_MAT_STATE(U8,U8,setAlphaMaskCutoff);
@@ -784,7 +764,7 @@ public:
     {
     public:
         static void getFace(class LLFace*& face_to_return, bool& identical_face);
-        static void getImageFormat(LLGLenum& image_format_to_return, bool& identical_face);
+        static void getImageFormat(LLGLenum& image_format_to_return, bool& identical_face, bool& missing_asset);
         static void getTexId(LLUUID& id, bool& identical);
         static void getObjectScaleS(F32& scale_s, bool& identical);
         static void getObjectScaleT(F32& scale_t, bool& identical);

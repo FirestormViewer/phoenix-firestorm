@@ -38,6 +38,7 @@ class LLCurrentlyWornFetchObserver;
 class LLPanelEditWearable;
 class LLViewerWearable;
 class LLPanelOutfitsInventory;
+class LLLoadingIndicator;
 
 class LLSidepanelAppearance : public LLPanel
 {
@@ -101,7 +102,10 @@ private:
 
     LLButton*                   mOpenOutfitBtn;
     LLButton*                   mEditAppearanceBtn;
+    LLButton*                   mEditOutfitBtn = nullptr;
     LLPanel*                    mCurrOutfitPanel;
+
+    LLLoadingIndicator*         mWearableLoadingIndicator = nullptr;
 
     LLTextBox*                  mCurrentLookName;
     LLTextBox*                  mOutfitStatus;
