@@ -90,14 +90,17 @@ protected:
     LLViewBorder*       mBorder;
 
 private:
-    void setValueAndCommit(const LLVector3 vec);
-    void setPinchValueAndCommit(const LLVector3 vec);
-    void drawThumb(LLVector3 vec, bool isPinchThumb);
+    void setValueAndCommit(const S32 x, const S32 y);
+    void setPinchValueAndCommit(const S32 x, const S32 y);
+    void drawThumb(bool isPinchThumb);
     bool isPointInTouchArea(S32 x, S32 y) const;
 
-    LLVector3 getThumbClickError(S32 x, S32 y, bool isPinchThumb) const;
-    LLVector3 normalizePixelPosToCenter(LLVector3 vec) const;
-    LLVector3 convertNormalizedToPixelPos(F32 x, F32 y);
+    void determineThumbClickError(S32 x, S32 y);
+    void determineThumbClickErrorForPinch(S32 x, S32 y);
+
+
+    LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;
+    void      convertNormalizedToPixelPos(F32 x, F32 y, S32* valX, S32* valY);
 
     LLUIImage*     mImgMoonBack;
     LLUIImage*     mImgMoonFront;
@@ -115,10 +118,17 @@ private:
     /// </summary>
     bool doingPinchMode = false;
 
-    LLVector3      mValue;
-    LLVector3      mPinchValue;
-    LLVector3      mLastValue;
-    LLVector3      mLastPinchValue;
+    S32       _valueX;
+    S32       _valueY;
+    S32       _valueWheelClicks;
+    S32       _lastValueX;
+    S32       _lastValueY;
+
+    S32       _pinchValueX;
+    S32       _pinchValueY;
+    S32       _pinchValueWheelClicks;
+    S32       _lastPinchValueX;
+    S32       _lastPinchValueY;
 
     /// <summary>
     /// Rolling the wheel is pioneering a 'delta' mode: where changes are handled by the control-owner in a relative way.
@@ -129,8 +139,10 @@ private:
     S32 _wheelClicksSinceMouseDown = 0;
 
     // if one clicks on the thumb, don't move it, track the offset and factor the error out
-    LLVector3      mThumbClickOffset; 
-    LLVector3      mPinchThumbClickOffset;
+    S32 _thumbClickOffsetX;
+    S32 _thumbClickOffsetY;
+    S32 _pinchThumbClickOffsetX;
+    S32 _pinchThumbClickOffsetY;
 };
 
 #endif
