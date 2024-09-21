@@ -57,6 +57,7 @@ typedef enum E_Columns
 {
     COL_ICON = 0,
     COL_NAME = 1,
+    COL_UUID = 2,
 } E_Columns;
 
 /// <summary>
@@ -128,6 +129,13 @@ class FSFloaterPoser : public LLFloater
     std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints();
 
     /// <summary>
+    /// Gets a detectable avatar by its UUID.
+    /// </summary>
+    /// <param name="avatarToFind">The ID of the avatar to find.</param>
+    /// <returns>The avatar, if found, otherwise nullptr.</returns>
+    LLVOAvatar* getAvatarByUuid(LLUUID avatarToFind);
+
+    /// <summary>
     /// Gets the currently selected avatar or animesh.
     /// </summary>
     /// <returns>The currently selected avatar or animesh.</returns>
@@ -139,6 +147,10 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <returns>A E_BoneDeflectionStyles member.</returns>
     E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle();
+
+    uuid_vec_t getNearbyAvatarsAndAnimeshes();
+    uuid_vec_t getCurrentlyListedAvatarsAndAnimeshes();
+    S32        getAvatarListIndexForUuid(LLUUID toFind);
 
     /// <summary>
     /// There are several control-callbacks manipulating rotations etc, they all devolve to these.

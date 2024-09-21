@@ -38,6 +38,7 @@
 #include "llstring.h"
 #include "llviewerwindow.h"
 #include "llwindow.h"
+#include "llcommonutils.h"
 
 static const std::string POSE_INTERNAL_FORMAT_FILE_MASK     = "*.xml";
 static const std::string POSE_INTERNAL_FORMAT_FILE_EXT      = ".xml";
@@ -650,15 +651,9 @@ void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods
 
 void FSFloaterPoser::onPoseStartStop()
 {
-    LLScrollListCtrl *avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
         return;
-
-    LLScrollListItem *item = avatarScrollList->getFirstSelected();
-    if (!item)
-        return;
-
-    LLVOAvatar* avatar = (LLVOAvatar*)item->getUserdata();
 
     bool arePosingSelected = _poserAnimator.isPosingAvatar(avatar);
     if (arePosingSelected)
@@ -1031,7 +1026,27 @@ LLVOAvatar* FSFloaterPoser::getUiSelectedAvatar()
     if (!item)
         return nullptr;
 
-    return (LLVOAvatar *) item->getUserdata();
+    LLScrollListCell* cell = item->getColumn(COL_UUID);
+    if (!cell)
+        return nullptr;
+
+    LLUUID selectedAvatarId = cell->getValue().asUUID();
+
+    return getAvatarByUuid(selectedAvatarId);
+}
+
+LLVOAvatar* FSFloaterPoser::getAvatarByUuid(LLUUID avatarToFind)
+{
+    for (LLCharacter* character : LLCharacter::sInstances)
+    {
+        if (avatarToFind != character->getID())
+            continue;
+
+        LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
+        return avatar;
+    }
+
+    return nullptr;
 }
 
 void FSFloaterPoser::onAdvancedPositionSet()
@@ -1511,22 +1526,100 @@ void FSFloaterPoser::onAvatarsSelect()
     onJointSelect();
 }
 
+uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes()
+{
+    uuid_vec_t avatar_ids;
+
+    for (LLCharacter* character : LLCharacter::sInstances)
+    {
+        LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
+        if (!couldAnimateAvatar(avatar))
+            continue;
+
+        avatar_ids.emplace_back(character->getID());
+    }
+
+    return avatar_ids;
+}
+
+uuid_vec_t FSFloaterPoser::getCurrentlyListedAvatarsAndAnimeshes()
+{
+    uuid_vec_t avatar_ids;
+
+    LLScrollListCtrl* avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
+    if (!avatarScrollList)
+        return avatar_ids;
+
+    for (auto listItem : avatarScrollList->getAllData())
+    {
+        LLScrollListCell* cell = listItem->getColumn(COL_UUID);
+        if (!cell)
+            continue;
+
+        LLUUID avatarId = cell->getValue().asUUID();
+        avatar_ids.emplace_back(avatarId);
+    }
+
+    return avatar_ids;
+}
+
+S32 FSFloaterPoser::getAvatarListIndexForUuid(LLUUID toFind)
+{
+
+    LLScrollListCtrl* avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
+    if (!avatarScrollList)
+        return -1;
+
+    S32 result = -1;
+    for (auto listItem : avatarScrollList->getAllData())
+    {
+        result++;
+
+        LLScrollListCell* cell = listItem->getColumn(COL_UUID);
+        if (!cell)
+            continue;
+
+        LLUUID avatarId = cell->getValue().asUUID();
+        if (avatarId == toFind)
+            return result;
+    }
+
+    return -1;
+}
+
 void FSFloaterPoser::onAvatarsRefresh()
 {
     LLScrollListCtrl *avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
     if (!avatarScrollList)
         return;
 
-    LLSD selectedName = avatarScrollList->getSelectedValue();
-    avatarScrollList->clearRows();
+    uuid_vec_t avatarsToAddToList, avatarsToRemoveFromList;
+    uuid_vec_t nearbyAvatarIds = getNearbyAvatarsAndAnimeshes();
+    uuid_vec_t currentlyListedAvatars = getCurrentlyListedAvatarsAndAnimeshes();
+    LLCommonUtils::computeDifference(nearbyAvatarIds, currentlyListedAvatars, avatarsToAddToList, avatarsToRemoveFromList);
+
+    for (LLUUID toRemove : avatarsToRemoveFromList)
+    {
+        S32 indexToRemove = getAvatarListIndexForUuid(toRemove);
+        if (indexToRemove >= 0)
+            avatarScrollList->deleteSingleItem(indexToRemove);
+    }
 
     std::string iconCatagoryName = "Inv_BodyShape";
     if (hasString("icon_category"))
         iconCatagoryName = getString("icon_category");
 
+    std::string iconObjectName = "Inv_Object";
+    if (hasString("icon_object"))
+        iconObjectName = getString("icon_object");
+
     // Add non-Animesh avatars
     for (LLCharacter *character : LLCharacter::sInstances)
     {
+        LLUUID uuid = character->getID();
+        if (std::find(avatarsToAddToList.begin(), avatarsToAddToList.end(), uuid) == avatarsToAddToList.end())
+            continue;
+
         LLVOAvatar *avatar = dynamic_cast<LLVOAvatar *>(character);
         if (!couldAnimateAvatar(avatar))
             continue;
@@ -1534,51 +1627,43 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (avatar->isControlAvatar())
             continue;
 
-        LLUUID       uuid = avatar->getID();
         LLAvatarName av_name;
         if (!LLAvatarNameCache::get(uuid, &av_name))
             continue;
 
         LLSD row;
-        row["columns"][0]["column"] = "icon";
-        row["columns"][0]["type"]   = "icon";
-        row["columns"][0]["value"]  = iconCatagoryName;
-        row["columns"][1]["column"] = "name";
-        row["columns"][1]["value"]  = av_name.getDisplayName();
-        row["columns"][2]["column"] = "uuid";
-        row["columns"][2]["value"]  = uuid;
-        row["columns"][3]["column"] = "control_avatar";
-        row["columns"][3]["value"]  = false;
+        row["columns"][COL_ICON]["column"] = "icon";
+        row["columns"][COL_ICON]["type"]   = "icon";
+        row["columns"][COL_ICON]["value"]  = iconCatagoryName;
+        row["columns"][COL_NAME]["column"] = "name";
+        row["columns"][COL_NAME]["value"]  = av_name.getDisplayName();
+        row["columns"][COL_UUID]["column"] = "uuid";
+        row["columns"][COL_UUID]["value"]  = uuid;
         LLScrollListItem *item      = avatarScrollList->addElement(row);
-        item->setUserdata(avatar);
     }
-
-    std::string iconObjectName = "Inv_Object";
-    if (hasString("icon_object"))
-        iconObjectName = getString("icon_object");
 
     // Add Animesh avatars
     for (auto character : LLControlAvatar::sInstances)
     {
+        LLUUID uuid = character->getID();
+        if (std::find(avatarsToAddToList.begin(), avatarsToAddToList.end(), uuid) == avatarsToAddToList.end())
+            continue;
+
         LLControlAvatar *avatar = dynamic_cast<LLControlAvatar *>(character);
         if (!couldAnimateAvatar(avatar))
             continue;
 
         LLSD row;
-        row["columns"][0]["column"] = "icon";
-        row["columns"][0]["type"]   = "icon";
-        row["columns"][0]["value"]  = iconObjectName;
-        row["columns"][1]["column"] = "name";
-        row["columns"][1]["value"]  = avatar->getFullname();
-        row["columns"][2]["column"] = "uuid";
-        row["columns"][2]["value"]  = avatar->getID();
-        row["columns"][3]["column"] = "control_avatar";
-        row["columns"][3]["value"]  = true;
-        LLScrollListItem *item      = avatarScrollList->addElement(row);
-        item->setUserdata(avatar);
+        row["columns"][COL_ICON]["column"] = "icon";
+        row["columns"][COL_ICON]["type"]   = "icon";
+        row["columns"][COL_ICON]["value"]  = iconObjectName;
+        row["columns"][COL_NAME]["column"] = "name";
+        row["columns"][COL_NAME]["value"]  = avatar->getFullname();
+        row["columns"][COL_UUID]["column"] = "uuid";
+        row["columns"][COL_UUID]["value"]  = avatar->getID();
+        avatarScrollList->addElement(row);
     }
 
-    avatarScrollList->selectByValue(selectedName);
     avatarScrollList->updateLayout();
     refreshTextEmbiggeningOnAllScrollLists();
 }
@@ -1591,7 +1676,13 @@ void FSFloaterPoser::refreshTextEmbiggeningOnAllScrollLists()
         // the avatars
         for (auto listItem : scrollList->getAllData())
         {
-            LLVOAvatar *listAvatar = (LLVOAvatar *) listItem->getUserdata();
+            LLScrollListCell* cell = listItem->getColumn(COL_UUID);
+            if (!cell)
+                continue;
+
+            LLUUID selectedAvatarId = cell->getValue().asUUID();
+            LLVOAvatar* listAvatar = getAvatarByUuid(selectedAvatarId);
+
             if (_poserAnimator.isPosingAvatar(listAvatar))
                 ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
             else
