@@ -343,10 +343,9 @@ public:
 
     /// <summary>
     /// Determines if the avatar can be used.
-    /// try catch needs work.
     /// </summary>
-    /// <param name="avatar"></param>
-    /// <returns></returns>
+    /// <param name="avatar">The avatar to test if it is safe to animate.</param>
+    /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar *avatar);
 };
 

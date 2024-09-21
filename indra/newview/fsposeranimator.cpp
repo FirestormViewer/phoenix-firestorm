@@ -438,19 +438,12 @@ bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
 
 bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar *avatar)
 {
-    try // I can't figure this out
-    {
-        if (!avatar)
-            return false;
-        if (avatar->isDead())
-            return false;
-        if (avatar->getRegion() != gAgent.getRegion())
-            return false;
-    }
-    catch (...)
-    {
+    if (!avatar)
         return false;
-    }
+    if (avatar->isDead())
+        return false;
+    if (avatar->getRegion() != gAgent.getRegion())
+        return false;
 
     return true;
 }

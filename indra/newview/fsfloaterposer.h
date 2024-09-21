@@ -51,7 +51,7 @@ typedef enum E_LoadPoseMethods
 } E_LoadPoseMethods;
 
 /// <summary>
-/// Describes the columns of a scroll-list.
+/// Describes the columns of the avatars scroll-list.
 /// </summary>
 typedef enum E_Columns
 {
@@ -148,9 +148,24 @@ class FSFloaterPoser : public LLFloater
     /// <returns>A E_BoneDeflectionStyles member.</returns>
     E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle();
 
+    /// <summary>
+    /// Gets the collection of UUIDs for nearby avatars.
+    /// </summary>
+    /// <returns>A the collection of UUIDs for nearby avatars.</returns>
     uuid_vec_t getNearbyAvatarsAndAnimeshes();
+
+    /// <summary>
+    /// Gets a collection of UUIDs for avatars currently being presented on the UI.
+    /// </summary>
+    /// <returns>A the collection of UUIDs.</returns>
     uuid_vec_t getCurrentlyListedAvatarsAndAnimeshes();
-    S32        getAvatarListIndexForUuid(LLUUID toFind);
+
+    /// <summary>
+    /// Gets the scroll-list index of the supplied avatar.
+    /// </summary>
+    /// <param name="toFind">The avatar UUID to find on the avatars scroll list.</param>
+    /// <returns>The scroll-list index for the supplied avatar, if found, otherwise -1.</returns>
+    S32 getAvatarListIndexForUuid(LLUUID toFind);
 
     /// <summary>
     /// There are several control-callbacks manipulating rotations etc, they all devolve to these.
