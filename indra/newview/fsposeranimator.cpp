@@ -43,7 +43,7 @@ FSPoserAnimator::~FSPoserAnimator() {}
 
 bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return false;
 
     BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
@@ -59,7 +59,7 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
 
 void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
 
     bool arePosing = isPosingAvatarJoint(avatar, joint);
@@ -82,7 +82,7 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
 
 void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
 
     BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
@@ -99,7 +99,7 @@ void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
 LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint)
 {
     LLVector3 pos;
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return pos;
 
     LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
@@ -113,7 +113,7 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joi
 
 void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
     if (!joint)
         return;
@@ -133,7 +133,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
 LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture)
 {
     LLVector3 vec3;
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return vec3;
 
     LLJoint  *avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
@@ -148,7 +148,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
 void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
                                        E_BoneAxisTranslation translation, S32 negation)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
     if (!joint)
         return;
@@ -186,7 +186,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
 
 void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
 
     if (!joint)
@@ -216,7 +216,7 @@ void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint
 
 void FSPoserAnimator::flipEntirePose(LLVOAvatar *avatar)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
 
     for (size_t index = 0; index != PoserJoints.size(); ++index)
@@ -362,7 +362,7 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
 
 void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return;
     if (!joint)
         return;
@@ -387,7 +387,7 @@ const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(std::s
 
 bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return false;
 
     if (avatar->getPosing())
@@ -423,7 +423,7 @@ void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)
 
 bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
 {
-    if (!avatar || avatar->isDead())
+    if (!isAvatarSafeToUse(avatar))
         return false;
 
     if (!avatar->getPosing())
@@ -434,5 +434,24 @@ bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
         return false;
 
     return !motion->isStopped();
+}
+
+bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar *avatar)
+{
+    try // I can't figure this out
+    {
+        if (!avatar)
+            return false;
+        if (avatar->isDead())
+            return false;
+        if (avatar->getRegion() != gAgent.getRegion())
+            return false;
+    }
+    catch (...)
+    {
+        return false;
+    }
+
+    return true;
 }
 

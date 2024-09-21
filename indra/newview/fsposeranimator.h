@@ -72,6 +72,11 @@ typedef enum E_BoneAxisTranslation
     SWAP_X2Z_Y2X_Z2Y    = 5,
 } E_BoneAxisTranslation;
 
+/// <summary>
+/// Similar to translating axes from LLJoint rotations to UI sliders for up/down/left/right, these
+/// negate (multiply by -1) axial changes.
+/// This makes using the trackpad more 'natural' when manipulating a joint.
+/// </summary>
 typedef enum E_BoneAxisNegation
 {
     NEGATE_NOTHING = 0,
@@ -335,6 +340,14 @@ public:
     /// <param name="rotation">The rotation to transform to matrix.</param>
     /// <returns>The rotation vector.</returns>
     LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation);
+
+    /// <summary>
+    /// Determines if the avatar can be used.
+    /// try catch needs work.
+    /// </summary>
+    /// <param name="avatar"></param>
+    /// <returns></returns>
+    bool isAvatarSafeToUse(LLVOAvatar *avatar);
 };
 
 #endif // LL_FSPoserAnimator_H
