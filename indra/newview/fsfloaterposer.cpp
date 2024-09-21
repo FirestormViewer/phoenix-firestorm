@@ -1042,9 +1042,9 @@ void FSFloaterPoser::onAdvancedPositionSet()
     if (!xposAdvSlider || !yposAdvSlider || !zposAdvSlider)
         return;
 
-    F32 posX = xposAdvSlider->getValue().asReal();
-    F32 posY = yposAdvSlider->getValue().asReal();
-    F32 posZ = zposAdvSlider->getValue().asReal();
+    F32 posX = (F32) xposAdvSlider->getValue().asReal();
+    F32 posY = (F32) yposAdvSlider->getValue().asReal();
+    F32 posZ = (F32) zposAdvSlider->getValue().asReal();
 
     setSelectedJointsPosition(posX, posY, posZ);
 }
@@ -1057,9 +1057,9 @@ void FSFloaterPoser::onAdvancedRotationSet()
     if (!xRotAdvSlider || !yRotAdvSlider || !zRotAdvSlider)
         return;
 
-    F32 yaw   = xRotAdvSlider->getValue().asReal();
-    F32 pitch = yRotAdvSlider->getValue().asReal();
-    F32 roll      = zRotAdvSlider->getValue().asReal();
+    F32 yaw   = (F32) xRotAdvSlider->getValue().asReal();
+    F32 pitch = (F32) yRotAdvSlider->getValue().asReal();
+    F32 roll  = (F32) zRotAdvSlider->getValue().asReal();
 
     setSelectedJointsRotation(yaw, pitch, roll);
 }
@@ -1072,9 +1072,9 @@ void FSFloaterPoser::onAdvancedScaleSet()
     if (!scalex || !scaley || !scalez)
         return;
 
-    F32 scX = scalex->getValue().asReal();
-    F32 scY = scaley->getValue().asReal();
-    F32 scZ = scalez->getValue().asReal();
+    F32 scX = (F32) scalex->getValue().asReal();
+    F32 scY = (F32) scaley->getValue().asReal();
+    F32 scZ = (F32) scalez->getValue().asReal();
 
     setSelectedJointsScale(scX, scY, scZ);
 }
@@ -1087,9 +1087,9 @@ void FSFloaterPoser::onAvatarPositionSet()
     if (!xposSlider || !yposSlider || !zposSlider)
         return;
 
-    F32 posX = xposSlider->getValue().asReal();
-    F32 posY = yposSlider->getValue().asReal();
-    F32 posZ = zposSlider->getValue().asReal();
+    F32 posX = (F32) xposSlider->getValue().asReal();
+    F32 posY = (F32) yposSlider->getValue().asReal();
+    F32 posZ = (F32) zposSlider->getValue().asReal();
 
     setSelectedJointsPosition(posX, posY, posZ);
 }
@@ -1107,7 +1107,7 @@ void FSFloaterPoser::onLimbTrackballChanged()
     else
         return;
 
-    F32 yaw, pitch, roll;
+    F32 yaw, pitch, roll = 0.0;
     yaw  = trackPadPos.mV[VX];
     pitch = trackPadPos.mV[VY];
 
@@ -1134,7 +1134,7 @@ void FSFloaterPoser::onLimbTrackballChanged()
 
     LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
     if (rollSlider)
-        roll = rollSlider->getValue().asReal(); // roll starts from its own slider
+        roll = (F32) rollSlider->getValue().asReal();  // roll starts from its own slider
 
     roll += trackPadPos.mV[VZ];
     if (rollSlider)
@@ -1165,9 +1165,9 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     if (!yawSlider || !pitchSlider || !rollSlider)
         return;
 
-    F32 yaw   = yawSlider->getValue().asReal();
-    F32 pitch = pitchSlider->getValue().asReal();
-    F32 roll  = rollSlider->getValue().asReal();
+    F32 yaw   = (F32) yawSlider->getValue().asReal();
+    F32 pitch = (F32) pitchSlider->getValue().asReal();
+    F32 roll  = (F32) rollSlider->getValue().asReal();
 
     yaw *= DEG_TO_RAD;
     pitch *= DEG_TO_RAD;
@@ -1508,6 +1508,7 @@ void FSFloaterPoser::onAvatarsSelect()
     startStopButton->setValue(arePosingSelected);
     poseControlsEnable(arePosingSelected);
     refreshTextEmbiggeningOnAllScrollLists();
+    onJointSelect();
 }
 
 void FSFloaterPoser::onAvatarsRefresh()
@@ -1545,7 +1546,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"]  = av_name.getDisplayName();
         row["columns"][2]["column"] = "uuid";
-        row["columns"][2]["value"]  = avatar->getID();
+        row["columns"][2]["value"]  = uuid;
         row["columns"][3]["column"] = "control_avatar";
         row["columns"][3]["value"]  = false;
         LLScrollListItem *item      = avatarScrollList->addElement(row);

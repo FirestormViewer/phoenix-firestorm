@@ -233,14 +233,14 @@ class FSFloaterPoser : public LLFloater
     /// No the translation isn't untangling all of that, it's not needed until it is.
     /// We're not landing on Mars with this code, just offering a user reasonable thumb-twiddlings.
     /// </remarks>
-    E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName);
+    E_BoneAxisTranslation getJointTranslation(std::string jointName);
 
     /// <summary>
     /// Gets the collection of E_BoneAxisNegation values for the supplied joint.
     /// </summary>
-    /// <param name="jointName"></param>
-    /// <returns></returns>
-    S32                   FSFloaterPoser::getJointNegation(std::string jointName);
+    /// <param name="jointName">The name of the joind to get the axis transformation for.</param>
+    /// <returns>The kind of axis transformation to perform.</returns>
+    S32 getJointNegation(std::string jointName);
 
     /// <summary>
     /// The smallest text embiggens the noble selection.
