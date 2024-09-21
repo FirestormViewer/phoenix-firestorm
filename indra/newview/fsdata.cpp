@@ -259,7 +259,7 @@ static void downloadCompleteScript(LLSD const &aData, std::string const &aURL, s
     LLXMLNodePtr xml_root;
     std::string stringData;
     stringData.assign( rawData.begin(), rawData.end() ); // LLXMLNode::parseBuffer wants a U8*, not a const U8*, so need to copy here just to be safe
-    if ( (!LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), (U32)stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+    if ( (!LLXMLNode::parseBuffer( reinterpret_cast<char*> ( &stringData[0] ), (U64)stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
     {
         LL_WARNS("fsdata") << "Could not read the script library data from "<< aURL << LL_ENDL;
         return;
@@ -755,7 +755,7 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
     }
     file.close();
 
-    const std::time_t new_time = last_modified.secondsSinceEpoch();
+    const std::time_t new_time = (std::time_t)last_modified.secondsSinceEpoch();
 
 #ifdef LL_WINDOWS
     boost::filesystem::last_write_time(boost::filesystem::path(utf8str_to_utf16str(filename)), new_time);

@@ -30,8 +30,8 @@ float LLTweenableValueLerp<float>::get()
 {
     if (!m_CurValue)
     {
-        float curFactor = (LLTimer::getElapsedSeconds() - m_StartTime) / m_Duration;
-        if (curFactor < 1.0)
+        float curFactor = (F32)((LLTimer::getElapsedSeconds() - m_StartTime) / m_Duration);
+        if (curFactor < 1.0f)
             return lerp(m_StartValue, m_EndValue, curFactor);
         m_CurValue = m_EndValue;
     }
@@ -43,8 +43,8 @@ LLColor3 LLTweenableValueLerp<LLColor3>::get()
 {
     if (!m_CurValue)
     {
-        float curFactor = (LLTimer::getElapsedSeconds() - m_StartTime) / m_Duration;
-        if (curFactor < 1.0)
+        float curFactor = (F32)((LLTimer::getElapsedSeconds() - m_StartTime) / m_Duration);
+        if (curFactor < 1.0f)
             return lerp(m_StartValue, m_EndValue, curFactor);
         m_CurValue = m_EndValue;
     }
@@ -56,8 +56,8 @@ LLVector4 LLTweenableValueLerp<LLVector4>::get()
 {
     if (!m_CurValue)
     {
-        float curFactor = (LLTimer::getElapsedSeconds() - m_StartTime) / m_Duration;
-        if (curFactor < 1.0)
+        float curFactor = (F32)((LLTimer::getElapsedSeconds() - m_StartTime) / m_Duration);
+        if (curFactor < 1.0f)
             return lerp(m_StartValue, m_EndValue, curFactor);
         m_CurValue = m_EndValue;
     }

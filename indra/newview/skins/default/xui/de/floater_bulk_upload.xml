@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="bulk_upload">
+	<layout_stack name="maint_layout">
+		<layout_panel name="count_panel">
+			<text name="number_of_items">
+				Anzahl an hochzuladenden Objekten: [COUNT]
+			</text>
+		</layout_panel>
+		<layout_panel name="warning_panel">
+			<text name="textures_2k_warning">
+				Standardmäßig werden eine oder mehrere ausgewählte Texturen auf 2048px skaliert.
+			</text>
+		</layout_panel>
+		<layout_panel name="checkbox_panel">
+			<check_box label="Texturen maximal bis 1024px skalieren" name="upload_2k" />
+		</layout_panel>
+		<layout_panel name="cost_panel">
+			<text name="upload_cost">
+				Kosten fürs Hochladen: L$[COST]
+			</text>
+		</layout_panel>
+		<layout_panel name="buttoms_panel">
+			<button label="Hochladen" name="upload_btn"/>
+			<button label="Abbrechen" name="cancel_btn"/>
+		</layout_panel>
+		<layout_panel name="link_panel">
+			<text name="new_folder_textbox">
+				Wie Texturen beim Hochladen skaliert werden:
+https://wiki.secondlife.com/wiki/Limits#All_Viewers
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

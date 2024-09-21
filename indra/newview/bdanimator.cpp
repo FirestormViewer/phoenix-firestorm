@@ -150,7 +150,7 @@ void BDAnimator::onAddAction(LLVOAvatar* avatar, LLScrollListItem* item, S32 loc
             action.mType = POSE;
         }
         action.mPoseName = item->getColumn(0)->getValue().asString();
-        action.mTime = item->getColumn(1)->getValue().asReal();
+        action.mTime = (F32)(item->getColumn(1)->getValue().asReal());
         avatar->mAnimatorActions.push_back(action);
 
         //BD - Lookup whether we already added this avatar, do it if we didn't this is
@@ -312,7 +312,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
                     F32 time = 0.f;
                     S32 type = 0;
                     if (control_map.has("time"))
-                        time = control_map["time"].asReal();
+                        time = (F32)(control_map["time"].asReal());
                     if (control_map.has("type"))
                         type = control_map["type"].asInteger();
                     motion->setInterpolationType(type);

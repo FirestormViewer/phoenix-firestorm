@@ -1,8 +1,9 @@
 /**
- * @file llallocator.cpp
- * @brief Implementation of the LLAllocator class.
+ * @file dummy_volume_catcher.cpp
+ * @brief A null implementation of the "VolumeCatcher" class for platforms where it's not implemented yet.
  *
- * $LicenseInfo:firstyear=2009&license=viewerlgpl$
+ * @cond
+ * $LicenseInfo:firstyear=2010&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  *
@@ -22,37 +23,35 @@
  *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
+ * @endcond
  */
 
-#include "linden_common.h"
-#include "llallocator.h"
+#include "volume_catcher.h"
 
-//
-// stub implementations for when tcmalloc is disabled
-//
 
-void LLAllocator::setProfilingEnabled(bool should_enable)
+class VolumeCatcherImpl
+{
+};
+
+/////////////////////////////////////////////////////
+
+VolumeCatcher::VolumeCatcher()
+{
+    pimpl = NULL;
+}
+
+VolumeCatcher::~VolumeCatcher()
 {
 }
 
-// static
-bool LLAllocator::isProfiling()
+void VolumeCatcher::setVolume(F32 volume)
 {
-    return false;
 }
 
-std::string LLAllocator::getRawProfile()
+void VolumeCatcher::setPan(F32 pan)
 {
-    return std::string();
 }
 
-LLAllocatorHeapProfile const & LLAllocator::getProfile()
+void VolumeCatcher::pump()
 {
-    mProf.mLines.clear();
-
-    // *TODO - avoid making all these extra copies of things...
-    std::string prof_text = getRawProfile();
-    //std::cout << prof_text << std::endl;
-    mProf.parse(prof_text);
-    return mProf;
 }

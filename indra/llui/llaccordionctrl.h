@@ -57,8 +57,8 @@ public:
     class LLTabComparator
     {
     public:
-        LLTabComparator() {};
-        virtual ~LLTabComparator() {};
+        LLTabComparator() = default;
+        virtual ~LLTabComparator() = default;
 
         /** Returns true if tab1 < tab2, false otherwise */
         virtual bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const = 0;
@@ -105,11 +105,10 @@ public:
 
     // <FS:ND> If adding a lot of controls rapidly, calling arrange will cost a lot of times, as it's running through n! controls.
     // In that case we can avvoid calling arrange over and over and just call it once when finished.
-    // void addCollapsibleCtrl(LLView* view);
-    void addCollapsibleCtrl(LLView* view, bool aArrange = true /*Standard is true as to not mess with old code all over the place*/ );
+    // void addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab);
+    void addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab, bool aArrange = true /*Standard is true as to not mess with old code all over the place*/ );
     // </FS:ND>
-
-    void removeCollapsibleCtrl(LLView* view);
+    void removeCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab);
     void arrange();
 
 
@@ -185,20 +184,20 @@ private:
 
 private:
     LLRect          mInnerRect;
-    LLScrollbar*    mScrollbar;
-    bool            mSingleExpansion;
-    bool            mFitParent;
-    bool            mAutoScrolling;
-    F32             mAutoScrollRate;
-    LLTextBox*      mNoVisibleTabsHelpText;
+    LLScrollbar*    mScrollbar = nullptr;
+    bool            mSingleExpansion = false;
+    bool            mFitParent = false;
+    bool            mAutoScrolling = false;
+    F32             mAutoScrollRate = 0.f;
+    LLTextBox*      mNoVisibleTabsHelpText = nullptr;
 
-    bool            mSkipScrollToChild;
+    bool            mSkipScrollToChild = false;
 
     std::string     mNoMatchedTabsOrigString;
     std::string     mNoVisibleTabsOrigString;
 
-    LLAccordionCtrlTab*     mSelectedTab;
-    const LLTabComparator*  mTabComparator;
+    LLAccordionCtrlTab*     mSelectedTab = nullptr;
+    const LLTabComparator*  mTabComparator = nullptr;
 };
 
 

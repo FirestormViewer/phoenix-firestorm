@@ -53,15 +53,12 @@
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
-LLSnapshotFloaterView* gSnapshotFloaterView = NULL;
+LLSnapshotFloaterView* gSnapshotFloaterView = nullptr;
 
-const F32 AUTO_SNAPSHOT_TIME_DELAY = 1.f;
+constexpr F32 AUTO_SNAPSHOT_TIME_DELAY = 1.f;
 
-const S32 MAX_POSTCARD_DATASIZE = 1572864; // 1.5 megabyte, similar to simulator limit
-// <FS:Chanayane> 2048x2048 snapshots upload to inventory
-//const S32 MAX_TEXTURE_SIZE = 512 ; //max upload texture size 512 * 512
-const S32 MAX_TEXTURE_SIZE = 2048 ; //max upload texture size 2048 * 2048
-// <FS:Chanayane> 2048x2048 snapshots upload to inventory
+constexpr S32 MAX_POSTCARD_DATASIZE = 1572864; // 1.5 megabyte, similar to simulator limit
+constexpr S32 MAX_TEXTURE_SIZE = 2048 ; //max upload texture size 2048 * 2048
 
 static LLDefaultChildRegistry::Register<LLSnapshotFloaterView> r("snapshot_floater_view");
 
@@ -184,10 +181,10 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
         panel_width = 700;
     }
 
-    S32 floater_width = 224;
+    S32 floater_width{ 224 };
     if(mAdvanced)
     {
-        floater_width = floater_width + panel_width;
+        floater_width = floater_width + (S32)panel_width;
     }
 
     // <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
@@ -261,7 +258,7 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
     }
     // </FS:Ansariel>
 
-    bool use_freeze_frame = floaterp->getChild<LLUICtrl>("freeze_frame_check")->getValue().asBoolean();
+    bool use_freeze_frame = floaterp->mFreezeFrameCheck && floaterp->mFreezeFrameCheck->getValue().asBoolean();
 
     if (use_freeze_frame)
     {
@@ -279,13 +276,10 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
             previewp->setEnabled(true);
         }
 
-        //RN: freeze all avatars
-        LLCharacter* avatarp;
-        for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
-            iter != LLCharacter::sInstances.end(); ++iter)
+        // RN: freeze all avatars
+        for (LLCharacter* character : LLCharacter::sInstances)
         {
-            avatarp = *iter;
-            floaterp->impl->mAvatarPauseHandles.push_back(avatarp->requestPause());
+            floaterp->impl->mAvatarPauseHandles.push_back(character->requestPause());
         }
 
         // freeze everything else
@@ -356,7 +350,7 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshotBase* floater)
         //  width_ctrl->setValue(w);
         //  if(getActiveSnapshotType(floater) == LLSnapshotModel::SNAPSHOT_TEXTURE)
         //  {
-        //      width_ctrl->setIncrement(w >> 1);
+        //      width_ctrl->setIncrement((F32)(w >> 1));
         //  }
         //}
         //if (height_ctrl->getValue().asInteger() == 0)
@@ -366,7 +360,7 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshotBase* floater)
         //  height_ctrl->setValue(h);
         //  if(getActiveSnapshotType(floater) == LLSnapshotModel::SNAPSHOT_TEXTURE)
         //  {
-        //      height_ctrl->setIncrement(h >> 1);
+        //      height_ctrl->setIncrement((F32)(h >> 1));
         //  }
         //}
         // </FS:Ansariel>
@@ -385,9 +379,9 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshotBase* floater)
             S32 width = gViewerWindow->getWindowWidthRaw();
             S32 height = gViewerWindow->getWindowHeightRaw();
 
-            width_ctrl->setMaxValue(width);
+            width_ctrl->setMaxValue((F32)width);
 
-            height_ctrl->setMaxValue(height);
+            height_ctrl->setMaxValue((F32)height);
 
             if (width_ctrl->getValue().asInteger() > width)
             {
@@ -432,10 +426,22 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshotBase* floater)
     }
 
     floater->getChild<LLUICtrl>("file_size_label")->setTextArg("[SIZE]", got_snap ? bytes_string : floater->getString("unknown"));
-    floater->getChild<LLUICtrl>("file_size_label")->setColor(
-            shot_type == LLSnapshotModel::SNAPSHOT_POSTCARD
-            && got_bytes
-            && previewp->getDataSize() > MAX_POSTCARD_DATASIZE ? LLUIColor(LLColor4::red) : LLUIColorTable::instance().getColor( "LabelTextColor" ));
+
+    LLUIColor color = LLUIColorTable::instance().getColor( "LabelTextColor" );
+    if (shot_type == LLSnapshotModel::SNAPSHOT_POSTCARD
+        && got_bytes
+        && previewp->getDataSize() > MAX_POSTCARD_DATASIZE)
+    {
+        color = LLUIColor(LLColor4::red);
+    }
+    if (shot_type == LLSnapshotModel::SNAPSHOT_WEB
+        && got_bytes
+        && previewp->getDataSize() > LLWebProfile::MAX_WEB_DATASIZE)
+    {
+        color = LLUIColor(LLColor4::red);
+    }
+
+    floater->getChild<LLUICtrl>("file_size_label")->setColor(color);
 
     // Update the width and height spinners based on the corresponding resolution combos. (?)
     switch(shot_type)
@@ -844,7 +850,7 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, bool 
                 new_width = spanel->getTypedPreviewWidth();
                 new_height = spanel->getTypedPreviewHeight();
 
-                // Limit custom size for inventory snapshots to 512x512 px.
+                // Limit custom size for inventory snapshots to 2048x2048 px.
                 if (getActiveSnapshotType(view) == LLSnapshotModel::SNAPSHOT_TEXTURE)
                 {
                     new_width = llmin(new_width, MAX_TEXTURE_SIZE);
@@ -889,8 +895,8 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, bool 
             getHeightSpinner(view)->setValue(height);
             if (getActiveSnapshotType(view) == LLSnapshotModel::SNAPSHOT_TEXTURE)
             {
-                getWidthSpinner(view)->setIncrement(width >> 1);
-                getHeightSpinner(view)->setIncrement(height >> 1);
+                getWidthSpinner(view)->setIncrement((F32)(width >> 1));
+                getHeightSpinner(view)->setIncrement((F32)(height >> 1));
             }
         }
         // <FS:Ansariel> Store settings at logout; Only update spinners when using custom resolution
@@ -1016,8 +1022,8 @@ void LLFloaterSnapshot::Impl::setImageSizeSpinnersValues(LLFloaterSnapshotBase* 
     getHeightSpinner(view)->forceSetValue(height);
     if (getActiveSnapshotType(view) == LLSnapshotModel::SNAPSHOT_TEXTURE)
     {
-        getWidthSpinner(view)->setIncrement(width >> 1);
-        getHeightSpinner(view)->setIncrement(height >> 1);
+        getWidthSpinner(view)->setIncrement((F32)(width >> 1));
+        getHeightSpinner(view)->setIncrement((F32)(height >> 1));
     }
 }
 
@@ -1142,8 +1148,9 @@ bool LLFloaterSnapshot::postBuild()
     getChild<LLUICtrl>("layer_types")->setValue("colors");
     getChildView("layer_types")->setEnabled(false);
 
-    getChild<LLUICtrl>("freeze_frame_check")->setValue(gSavedSettings.getBOOL("UseFreezeFrame"));
-    childSetCommitCallback("freeze_frame_check", ImplBase::onCommitFreezeFrame, this);
+    mFreezeFrameCheck = getChild<LLUICtrl>("freeze_frame_check");
+    mFreezeFrameCheck->setValue(gSavedSettings.getBOOL("UseFreezeFrame"));
+    mFreezeFrameCheck->setCommitCallback(&ImplBase::onCommitFreezeFrame, this);
 
     getChild<LLUICtrl>("auto_snapshot_check")->setValue(gSavedSettings.getBOOL("AutoSnapshot"));
     childSetCommitCallback("auto_snapshot_check", ImplBase::onClickAutoSnap, this);

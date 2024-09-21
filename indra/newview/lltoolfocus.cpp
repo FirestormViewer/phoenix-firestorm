@@ -455,7 +455,7 @@ bool LLToolCamera::handleHover(S32 x, S32 y, MASK mask)
                     }
                     else
                     {
-                        gAgentCamera.cameraZoomIn( pow( IN_FACTOR, dy ) );
+                        gAgentCamera.cameraZoomIn((F32)pow( IN_FACTOR, dy ) );
                     }
                 }
 

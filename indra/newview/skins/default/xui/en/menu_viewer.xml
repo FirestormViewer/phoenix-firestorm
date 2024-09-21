@@ -4226,6 +4226,14 @@
           <menu_item_call.on_click
            function="Advanced.ClickGLTFUpload" />
         </menu_item_call>
+        <menu_item_call
+         label="Edit..."
+         name="Edit...">
+          <menu_item_call.on_enable
+             function="EnableGLTFUpload"/>
+          <menu_item_call.on_click
+           function="Advanced.ClickGLTFEdit" />
+        </menu_item_call>
       </menu>
       <menu
          create_jump_keys="true"
@@ -4818,13 +4826,6 @@
             <menu_item_call.on_click
              function="Advanced.ClearShaderCache" />
           </menu_item_call>
-          <menu_item_call
-            enabled="true"
-            label="Rebuild Terrain"
-            name="Rebuild Terrain">
-            <menu_item_call.on_click
-             function="Advanced.RebuildTerrain" />
-          </menu_item_call>
         </menu>
 
         <menu
@@ -5042,6 +5043,38 @@
                  function="Develop.DumpSimFeaturesToChat" />
             </menu_item_call>
         </menu>
+        <!-- terrain -->
+        <menu
+         create_jump_keys="true"
+         label="Terrain"
+         name="DevelopTerrain"
+         tear_off="true">
+            <menu_item_call
+              enabled="true"
+              label="Rebuild Terrain"
+              name="Rebuild Terrain">
+              <menu_item_call.on_click
+               function="Advanced.RebuildTerrain" />
+            </menu_item_call>
+
+            <menu_item_separator/>
+
+            <menu_item_call
+              label="Create Local Paintmap"
+              name="Create Local Paintmap">
+              <menu_item_call.on_enable
+               function="EnableTerrainLocalPaintMap"/>
+              <menu_item_call.on_click
+               function="Advanced.TerrainCreateLocalPaintMap" />
+            </menu_item_call>
+            <menu_item_call
+              enabled="true"
+              label="Delete Local Paintmap"
+              name="Delete Local Paintmap">
+              <menu_item_call.on_click
+               function="Advanced.TerrainDeleteLocalPaintMap" />
+            </menu_item_call>
+		</menu>
         <menu
          create_jump_keys="true"
          label="UI"
@@ -5240,6 +5273,13 @@
          name="XUI"
          tear_off="true">
             <menu_item_call
+             label="Show Color settings"
+             name="Color Settings">
+                <menu_item_call.on_click
+                 function="Floater.Toggle"
+                 parameter="settings_color" />
+            </menu_item_call>
+            <menu_item_call
                label="Reload Color Settings"
                name="Reload Color Settings">
               <menu_item_call.on_click
@@ -5404,6 +5444,16 @@
                     <menu_item_check.on_click
                      function="ToggleControl"
                      parameter="AllowSelectAvatar" />
+                </menu_item_check>
+                <menu_item_check
+                 label="Disable Look At Animation"
+                 name="Disable Look At Animation">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="DisableLookAtAnimation" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="DisableLookAtAnimation" />
                 </menu_item_check>
                 <menu_item_check
                  label="Render Only Friends"

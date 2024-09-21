@@ -71,9 +71,13 @@ target_link_libraries(llprimitive
         llrender
         llphysicsextensions_impl
         ll::colladadom
-        ll::pcre
         ll::glh_linear
         )
+
+if(LINUX)
+    # GLIB uses pcre, so we need to keep it for Linux
+    target_link_libraries(ll::pcre)
+endif(LINUX)
 
 #add unit tests
 if (LL_TESTS)

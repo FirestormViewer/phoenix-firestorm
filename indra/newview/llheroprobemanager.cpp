@@ -98,7 +98,7 @@ void LLHeroProbeManager::update()
     if (mMipChain.empty())
     {
         U32 res = mProbeResolution;
-        U32 count = log2((F32)res) + 0.5f;
+        U32 count = (U32)(log2((F32)res) + 0.5f);
 
         mMipChain.resize(count);
         for (U32 i = 0; i < count; ++i)
@@ -121,7 +121,7 @@ void LLHeroProbeManager::update()
         // Find our nearest hero candidate.
         float last_distance = 99999.f;
         float camera_center_distance = 99999.f;
-        mNearestHero = nullptr; // <FS:Beq/> LL-1719/1721 Mirrors do not disable properly (interim fix)
+        mNearestHero = nullptr;
         for (auto vo : mHeroVOList)
         {
             if (vo && !vo->isDead() && vo->mDrawable.notNull() && vo->isReflectionProbe() && vo->getReflectionProbeIsBox())
@@ -211,18 +211,16 @@ void LLHeroProbeManager::update()
         else
         {
             mNearestHero = nullptr;
-            mDefaultProbe->mViewerObject = nullptr; // <FS:Beq/> FIRE-34201 TP crash
+            mDefaultProbe->mViewerObject = nullptr;
         }
 
         mHeroProbeStrength = 1;
     }
-    // <FS:Beq> LL-1719/1721 Mirrors do not disable properly (interim fix)
     else
     {
         mNearestHero = nullptr;
-        mDefaultProbe->mViewerObject = nullptr; // <FS:Beq/> FIRE-34201 TP crash
+        mDefaultProbe->mViewerObject = nullptr;
     }
-    // </FS:Beq>
 }
 
 void LLHeroProbeManager::renderProbes()
@@ -359,7 +357,7 @@ void LLHeroProbeManager::updateProbeFace(LLReflectionMap* probe, U32 face, bool 
             gGaussianProgram.unbind();
         }
 
-        S32 mips = log2((F32)mProbeResolution) + 0.5f;
+        S32 mips = (S32)(log2((F32)mProbeResolution) + 0.5f);
 
         gReflectionMipProgram.bind();
         S32 diffuseChannel = gReflectionMipProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, LLTexUnit::TT_TEXTURE);
@@ -449,7 +447,7 @@ void LLHeroProbeManager::generateRadiance(LLReflectionMap* probe)
                 static LLStaticHashedString sStrength("probe_strength");
 
                 gHeroRadianceGenProgram.uniform1f(sRoughness, (F32) i / (F32) (mMipChain.size() - 1));
-                gHeroRadianceGenProgram.uniform1f(sMipLevel, i);
+                gHeroRadianceGenProgram.uniform1f(sMipLevel, (GLfloat)i);
                 gHeroRadianceGenProgram.uniform1i(sWidth, mProbeResolution);
                 gHeroRadianceGenProgram.uniform1f(sStrength, 1);
 
@@ -551,7 +549,7 @@ void LLHeroProbeManager::initReflectionMaps()
         mReset = false;
         mReflectionProbeCount = count;
         mProbeResolution      = gSavedSettings.getS32("RenderHeroProbeResolution");
-        mMaxProbeLOD = log2f(mProbeResolution) - 1.f; // number of mips - 1
+        mMaxProbeLOD = log2f((F32)mProbeResolution) - 1.f; // number of mips - 1
 
         mTexture = new LLCubeMapArray();
 
@@ -604,7 +602,6 @@ void LLHeroProbeManager::cleanup()
 {
     mVertexBuffer = nullptr;
     mRenderTarget.release();
-    mHeroRenderTarget.release();
 
     mMipChain.clear();
 
@@ -612,10 +609,7 @@ void LLHeroProbeManager::cleanup()
 
     mProbes.clear();
 
-    mReflectionMaps.clear();
-
     mDefaultProbe = nullptr;
-    mUpdatingProbe = nullptr;
 }
 
 void LLHeroProbeManager::doOcclusion()

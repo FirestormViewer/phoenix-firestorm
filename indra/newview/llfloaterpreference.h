@@ -323,7 +323,12 @@ private:
     std::string mSavedGraphicsPreset;
     LOG_CLASS(LLFloaterPreference);
 
-    LLSearchEditor *mFilterEdit;
+    LLSearchEditor* mFilterEdit = nullptr;
+    LLScrollListCtrl* mEnabledPopups = nullptr;
+    LLScrollListCtrl* mDisabledPopups = nullptr;
+    LLButton*       mDeleteTranscriptsBtn = nullptr;
+    LLButton*       mEnablePopupBtn = nullptr;
+    LLButton*       mDisablePopupBtn = nullptr;
     std::unique_ptr< ll::prefs::SearchData > mSearchData;
     bool mSearchDataDirty;
 
@@ -331,7 +336,7 @@ private:
 
     void onUpdateFilterTerm( bool force = false );
     void collectSearchableItems();
-    void filterIgnorableNotifications();
+    //void filterIgnorableNotifications(); // <FS:Ansariel> Using different solution
 
     std::map<std::string, bool> mIgnorableNotifs;
 

@@ -130,9 +130,6 @@
 			<text name="Texture Rendering">
 				Teksturların çəkilişi:
 			</text>
-			<check_box label="Maks.tekstura ölçüsünü 512 piks. məhdudlaşdırın. (yalnız 64 bit; yenidən başlatma lazımdır)"
-			tool_tip="Tekstur üçün maksimum piksel həcmi məhdudlaşdırılmasını 512 piksələ qədər təyin edir. Bu, məhdudlaşdırılmış tekstur yaddaşını aşmadan öncə daha çox tekstur göstərməyə imkan verir və bulanıq teksturlar müşahidə edir."
-			name="FSRestrictMaxTextureSize"/>
 			<text name="TextureDetailLabel">
 				Tekstur keyfiyyət səviyyəsi:
 			</text>

@@ -100,18 +100,6 @@
 				<item label="Max" name="noise_suppression_max"/>
 			</combo_box>
 			<button label="Paramètres Matériel audio" name="device_settings_btn"/>
-			<panel label="Paramètres des appareils" name="device_settings_panel">
-				<panel.string name="default_text">Par défaut</panel.string>
-				<panel.string name="default system device">Valeur par défaut du système</panel.string>
-				<panel.string name="name_default_system_device">Valeur par défaut du système</panel.string>
-				<panel.string name="no device">Aucun appareil</panel.string>
-				<panel.string name="name_no_device">Aucun appareil</panel.string>
-				<text name="Input" width="45">Entrée</text>
-				<text name="Output">Sortie</text>
-				<text name="Volume label" width="105">Volume de la voix :</text>
-				<slider_bar name="mic_volume_slider" tool_tip="Modifiez le volume de la voix en utilisant ce réglage"/>
-				<text name="wait_text">Veuillez patienter</text>
-			</panel>
 		</panel>
 		<panel label="Sons 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer ou non

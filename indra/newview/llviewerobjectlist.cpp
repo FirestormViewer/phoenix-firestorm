@@ -68,7 +68,6 @@
 #include "u64.h"
 #include "llviewertexturelist.h"
 #include "lldatapacker.h"
-#include "llcallstack.h"
 #ifdef LL_USESYSTEMLIBS
 #include <zlib.h>
 #else
@@ -261,7 +260,6 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
     // ignore returned flags
     LL_DEBUGS("ObjectUpdate") << "uuid " << objectp->mID << " calling processUpdateMessage "
                               << objectp << " just_created " << just_created << " from_cache " << from_cache << " msg " << msg << LL_ENDL;
-    dumpStack("ObjectUpdateStack");
 
     objectp->processUpdateMessage(msg, user_data, i, update_type, dpp);
 
@@ -410,7 +408,6 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
         objectp = createObjectFromCache(pcode, regionp, fullid, entry->getLocalID());
 
         LL_DEBUGS("ObjectUpdate") << "uuid " << fullid << " created objectp " << objectp << LL_ENDL;
-        dumpStack("ObjectUpdateStack");
 
         if (!objectp)
         {
@@ -605,7 +602,6 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
         LL_DEBUGS("ObjectUpdate") << "uuid " << fullid << " objectp " << objectp
                                      << " update_cache " << (S32) update_cache << " compressed " << compressed
                                      << " update_type "  << update_type << LL_ENDL;
-        dumpStack("ObjectUpdateStack");
 
         if(update_cache)
         {
@@ -697,7 +693,6 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
             objectp = createObject(pcode, regionp, fullid, local_id, gMessageSystem->getSender());
 
             LL_DEBUGS("ObjectUpdate") << "creating object " << fullid << " result " << objectp << LL_ENDL;
-            dumpStack("ObjectUpdateStack");
 
             if (!objectp)
             {
@@ -795,7 +790,6 @@ void LLViewerObjectList::processCachedObjectUpdate(LLMessageSystem *mesgsys,
         mesgsys->getU32Fast(_PREHASH_ObjectData, _PREHASH_UpdateFlags, flags, i);
 
         LL_DEBUGS("ObjectUpdate") << "got probe for id " << id << " crc " << crc << LL_ENDL;
-        dumpStack("ObjectUpdateStack");
 
         // Lookup data packer and add this id to cache miss lists if necessary.
         U8 cache_miss_type = LLViewerRegion::CACHE_MISS_TYPE_NONE;
@@ -998,9 +992,8 @@ void LLViewerObjectList::update(LLAgent &agent)
     static std::vector<LLViewerObject*> idle_list;
 
     U32 idle_count = 0;
-    //<FS:Beq> need avatar count for dynamic BB load balancing
     mNumAvatars = 0;
-    //</FS:Beq>
+
     {
         for (std::vector<LLPointer<LLViewerObject> >::iterator active_iter = mActiveObjects.begin();
             active_iter != mActiveObjects.end(); active_iter++)
@@ -1017,10 +1010,10 @@ void LLViewerObjectList::update(LLAgent &agent)
                     idle_list[idle_count] = objectp;
                 }
                 ++idle_count;
-//<FS:Beq> need avatar count for dynamic BB load balancing
                 if (objectp->isAvatar())
+                {
                     mNumAvatars++;
-//</FS:Beq>
+                }
             }
             else
             {   // There shouldn't be any NULL pointers in the list, but they have caused
@@ -1292,10 +1285,10 @@ void LLViewerObjectList::fetchObjectCostsCoro(std::string url, uuid_set_t staleO
         {
             LLSD objectData = result[it->asString()];
 
-            F32 linkCost = objectData["linked_set_resource_cost"].asReal();
-            F32 objectCost = objectData["resource_cost"].asReal();
-            F32 physicsCost = objectData["physics_cost"].asReal();
-            F32 linkPhysicsCost = objectData["linked_set_physics_cost"].asReal();
+            F32 linkCost = (F32)objectData["linked_set_resource_cost"].asReal();
+            F32 objectCost = (F32)objectData["resource_cost"].asReal();
+            F32 physicsCost = (F32)objectData["physics_cost"].asReal();
+            F32 linkPhysicsCost = (F32)objectData["linked_set_physics_cost"].asReal();
 
             gObjectList.updateObjectCost(objectId, objectCost, linkCost, physicsCost, linkPhysicsCost);
 
@@ -1429,10 +1422,10 @@ void LLViewerObjectList::fetchPhisicsFlagsCoro(std::string url)
 
             if (data.has("Density"))
             {
-                F32 density = data["Density"].asReal();
-                F32 friction = data["Friction"].asReal();
-                F32 restitution = data["Restitution"].asReal();
-                F32 gravityMult = data["GravityMultiplier"].asReal();
+                F32 density = (F32)data["Density"].asReal();
+                F32 friction = (F32)data["Friction"].asReal();
+                F32 restitution = (F32)data["Restitution"].asReal();
+                F32 gravityMult = (F32)data["GravityMultiplier"].asReal();
 
                 gObjectList.updatePhysicsProperties(objectId, density,
                     friction, restitution, gravityMult);
@@ -1483,7 +1476,6 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
     // Remove from object map so noone can look it up.
 
     LL_DEBUGS("ObjectUpdate") << " dereferencing id " << objectp->mID << LL_ENDL;
-    dumpStack("ObjectUpdateStack");
 
     mUUIDObjectMap.erase(objectp->mID);
 
@@ -1959,26 +1951,23 @@ void LLViewerObjectList::clearAllMapObjectsInRegion(LLViewerRegion* regionp)
 
 void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 {
-    // <FS:Ansariel> Factor out calls to getInstance
-    LLUIColorTable& colortable = LLUIColorTable::instance();
-
-    LLColor4 above_water_color = colortable.getColor( "NetMapOtherOwnAboveWater" );
-    LLColor4 below_water_color = colortable.getColor( "NetMapOtherOwnBelowWater" );
-    LLColor4 you_own_above_water_color =
-                        colortable.getColor( "NetMapYouOwnAboveWater" );
-    LLColor4 you_own_below_water_color =
-                        colortable.getColor( "NetMapYouOwnBelowWater" );
-    LLColor4 group_own_above_water_color =
-                        colortable.getColor( "NetMapGroupOwnAboveWater" );
-    LLColor4 group_own_below_water_color =
-                        colortable.getColor( "NetMapGroupOwnBelowWater" );
+    static const LLUIColor above_water_color = LLUIColorTable::instance().getColor( "NetMapOtherOwnAboveWater" );
+    static const LLUIColor below_water_color = LLUIColorTable::instance().getColor( "NetMapOtherOwnBelowWater" );
+    static const LLUIColor you_own_above_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapYouOwnAboveWater" );
+    static const LLUIColor you_own_below_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapYouOwnBelowWater" );
+    static const LLUIColor group_own_above_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapGroupOwnAboveWater" );
+    static const LLUIColor group_own_below_water_color =
+                        LLUIColorTable::instance().getColor( "NetMapGroupOwnBelowWater" );
 
 // <FS:CR> FIRE-1846: Firestorm netmap enhancements
-    LLColor4 you_own_physical_color = colortable.getColor ( "NetMapYouPhysical", LLColor4::red );
-    LLColor4 group_own_physical_color = colortable.getColor ( "NetMapGroupPhysical", LLColor4::green );
-    LLColor4 other_own_physical_color = colortable.getColor ( "NetMapOtherPhysical", LLColor4::green );
-    LLColor4 scripted_object_color = colortable.getColor ( "NetMapScripted", LLColor4::orange );
-    LLColor4 temp_on_rez_object_color = colortable.getColor ( "NetMapTempOnRez", LLColor4::orange );
+    static const LLUIColor you_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapYouPhysical", LLColor4::red );
+    static const LLUIColor group_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapGroupPhysical", LLColor4::green );
+    static const LLUIColor other_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapOtherPhysical", LLColor4::green );
+    static const LLUIColor scripted_object_color = LLUIColorTable::instance().getColor ( "NetMapScripted", LLColor4::orange );
+    static const LLUIColor temp_on_rez_object_color = LLUIColorTable::instance().getColor ( "NetMapTempOnRez", LLColor4::orange );
     static LLCachedControl<bool> fs_netmap_physical(gSavedSettings, "FSNetMapPhysical", false);
     static LLCachedControl<bool> fs_netmap_scripted(gSavedSettings, "FSNetMapScripted", false);
     static LLCachedControl<bool> fs_netmap_temp_on_rez(gSavedSettings, "FSNetMapTempOnRez", false);
@@ -2022,7 +2011,7 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
         // See DEV-17370 and DEV-29869/SNOW-79 for details.
         approx_radius = llmin(approx_radius, (F32)max_radius);
 
-        LLColor4U color = above_water_color;
+        LLColor4U color = above_water_color.get();
         if( objectp->permYouOwner() )
         {
             const F32 MIN_RADIUS_FOR_OWNED_OBJECTS = 2.f;
@@ -2035,35 +2024,35 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
             {
                 if ( objectp->permGroupOwner() )
                 {
-                    color = group_own_above_water_color;
+                    color = group_own_above_water_color.get();
                 }
                 else
                 {
-                color = you_own_above_water_color;
+                color = you_own_above_water_color.get();
             }
             }
             else
             {
                 if ( objectp->permGroupOwner() )
                 {
-                    color = group_own_below_water_color;
+                    color = group_own_below_water_color.get();
                 }
             else
             {
-                color = you_own_below_water_color;
+                color = you_own_below_water_color.get();
             }
         }
         }
         else
         if( pos.mdV[VZ] < water_height )
         {
-            color = below_water_color;
+            color = below_water_color.get();
         }
 
 // <FS:CR> FIRE-1846: Firestorm netmap enhancements
         if (fs_netmap_scripted && objectp->flagScripted())
         {
-            color = scripted_object_color;
+            color = scripted_object_color.get();
             if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
             {
                 approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
@@ -2074,15 +2063,15 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
         {
             if (objectp->permYouOwner())
             {
-                color = you_own_physical_color;
+                color = you_own_physical_color.get();
             }
             else if (objectp->permGroupOwner())
             {
-                color = group_own_physical_color;
+                color = group_own_physical_color.get();
             }
             else
             {
-                color = other_own_physical_color;
+                color = other_own_physical_color.get();
             }
             if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
             {
@@ -2092,7 +2081,7 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 
         if (fs_netmap_temp_on_rez && objectp->flagTemporaryOnRez())
         {
-            color = temp_on_rez_object_color;
+            color = temp_on_rez_object_color.get();
             if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
             {
                 approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
@@ -2167,7 +2156,6 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
     llassert_always(uuid.notNull());
 
     LL_DEBUGS("ObjectUpdate") << "creating " << uuid << " local_id " << local_id << LL_ENDL;
-    dumpStack("ObjectUpdateStack");
 
     LLViewerObject *objectp = LLViewerObject::createObject(uuid, pcode, regionp);
     if (!objectp)
@@ -2217,7 +2205,6 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
     }
 
     LL_DEBUGS("ObjectUpdate") << "createObject creating " << fullid << LL_ENDL;
-    dumpStack("ObjectUpdateStack");
 
     LLViewerObject *objectp = LLViewerObject::createObject(fullid, pcode, regionp);
     if (!objectp)

@@ -43,6 +43,7 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llviewereventrecorder.h"
+#include "v4coloru.h"
 
 // newview includes
 #include "llagent.h"
@@ -109,6 +110,7 @@
 #include "llsidepanelappearance.h"
 #include "llspellcheckmenuhandler.h"
 #include "llstatusbar.h"
+#include "llterrainpaintmap.h"
 #include "lltextureview.h"
 #include "lltoolbarview.h"
 #include "lltoolcomp.h"
@@ -126,6 +128,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
 #include "llviewerstatsrecorder.h"
+#include "llvlcomposition.h"
 #include "llvoavatarself.h"
 #include "llvoicevivox.h"
 #include "llworld.h"
@@ -415,7 +418,10 @@ class LLMenuParcelObserver : public LLParcelObserver
 public:
     LLMenuParcelObserver();
     ~LLMenuParcelObserver();
-    virtual void changed();
+    void changed() override;
+private:
+    LLHandle<LLUICtrl> mLandBuyHandle;
+    LLHandle<LLUICtrl> mLandBuyPassHandle;
 };
 
 static LLMenuParcelObserver* gMenuParcelObserver = NULL;
@@ -424,6 +430,8 @@ static LLUIListener sUIListener;
 
 LLMenuParcelObserver::LLMenuParcelObserver()
 {
+    mLandBuyHandle = gMenuLand->getChild<LLMenuItemCallGL>("Land Buy")->getHandle();
+    mLandBuyPassHandle = gMenuLand->getChild<LLMenuItemCallGL>("Land Buy Pass")->getHandle();
     LLViewerParcelMgr::getInstance()->addObserver(this);
 }
 
@@ -438,17 +446,16 @@ void LLMenuParcelObserver::changed()
     if (gMenuLand && parcel)
     {
         // <FS:Ansariel> FIRE-4454: Cache controls because of performance reasons
-        //LLView* child = gMenuLand->findChild<LLView>("Land Buy Pass");
-        //if (child)
+        //if (!mLandBuyPassHandle.isDead())
         //{
-        //    child->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID() == gAgent.getID()));
+        //    LLParcel *parcel = LLViewerParcelMgr::getInstance()->getParcelSelection()->getParcel();
+        //    static_cast<LLMenuItemCallGL*>(mLandBuyPassHandle.get())->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID() == gAgent.getID()));
         //}
         //
-        //child = gMenuLand->findChild<LLView>("Land Buy");
-        //if (child)
+        //if (!mLandBuyHandle.isDead())
         //{
         //    bool buyable = enable_buy_land(NULL);
-        //    child->setEnabled(buyable);
+        //    static_cast<LLMenuItemCallGL*>(mLandBuyHandle.get())->setEnabled(buyable);
         //}
 
         static LLView* land_buy_pass = gMenuHolder->getChildView("Land Buy Pass");
@@ -482,10 +489,34 @@ void initialize_menus();
 // Break up groups of more than 6 items with separators
 //-----------------------------------------------------------------------------
 
-void set_merchant_SLM_menu()
+void set_merchant_SLM_menu();
+
+class LLSLMMenuUpdater
+{
+public:
+    LLSLMMenuUpdater();
+    ~LLSLMMenuUpdater() = default;
+
+    void setMerchantMenu();
+    void checkMerchantStatus(bool force);
+
+private:
+    LLHandle<LLView> mMarketplaceListingsItem;
+};
+
+static LLSLMMenuUpdater* gSLMMenuUpdater = NULL;
+
+LLSLMMenuUpdater::LLSLMMenuUpdater()
+{
+    mMarketplaceListingsItem = gMenuHolder->getChild<LLView>("MarketplaceListings")->getHandle();
+}
+void LLSLMMenuUpdater::setMerchantMenu()
 {
     // All other cases (new merchant, not merchant, migrated merchant): show the new Marketplace Listings menu and enable the tool
-    gMenuHolder->getChild<LLView>("MarketplaceListings")->setVisible(true);
+    if(!mMarketplaceListingsItem.isDead())
+    {
+        mMarketplaceListingsItem.get()->setVisible(true);
+    }
     LLCommand* command = LLCommandManager::instance().getCommand("marketplacelistings");
     gToolBarView->enableCommand(command->id(), true);
 
@@ -502,7 +533,7 @@ void set_merchant_SLM_menu()
     }
 }
 
-void check_merchant_status(bool force)
+void LLSLMMenuUpdater::checkMerchantStatus(bool force)
 {
     // <FS:Ansariel> Don't show merchant outbox or SL Marketplace stuff outside SL
     if (!LLGridManager::getInstance()->isInSecondLife())
@@ -518,7 +549,10 @@ void check_merchant_status(bool force)
         LLMarketplaceData::instance().setSLMStatus(MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED);
     }
     // Hide SLM related menu item
-    gMenuHolder->getChild<LLView>("MarketplaceListings")->setVisible(false);
+    if(!mMarketplaceListingsItem.isDead())
+    {
+        mMarketplaceListingsItem.get()->setVisible(false);
+    }
 
     // Also disable the toolbar button for Marketplace Listings
     LLCommand* command = LLCommandManager::instance().getCommand("marketplacelistings");
@@ -526,6 +560,16 @@ void check_merchant_status(bool force)
 
     // Launch an SLM test connection to get the merchant status
     LLMarketplaceData::instance().initializeSLM(boost::bind(&set_merchant_SLM_menu));
+}
+
+void set_merchant_SLM_menu()
+{
+   if(gSLMMenuUpdater) gSLMMenuUpdater->setMerchantMenu();
+}
+
+void check_merchant_status(bool force)
+{
+   if(gSLMMenuUpdater) gSLMMenuUpdater->checkMerchantStatus(force);
 }
 
 void init_menus()
@@ -620,11 +664,9 @@ void init_menus()
     ///
     /// set up the colors
     ///
-    LLColor4 color;
-
     // do not set colors in code, let the skin decide. -Zi
     /*
-    LLColor4 context_menu_color = LLUIColorTable::instance().getColor("MenuPopupBgColor");
+    LLUIColor context_menu_color = LLUIColorTable::instance().getColor("MenuPopupBgColor");
 
     gMenuAvatarSelf->setBackgroundColor( context_menu_color );
     gMenuAvatarOther->setBackgroundColor( context_menu_color );
@@ -634,7 +676,7 @@ void init_menus()
 
     gMenuLand->setBackgroundColor( context_menu_color );
 
-    color = LLUIColorTable::instance().getColor( "MenuPopupBgColor" );
+    LLUIColor color = LLUIColorTable::instance().getColor( "MenuPopupBgColor" );
     gPopupMenuView->setBackgroundColor( color );
     */
 
@@ -659,7 +701,7 @@ void init_menus()
     // ONLY change the color IF we are in beta. Otherwise leave it alone so it can use the skinned color. -Zi
     if(LLGridManager::getInstance()->isInSLBeta())
     {
-        color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
+        LLUIColor color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
         gMenuBarView->setBackgroundColor( color );
     }
 
@@ -696,6 +738,8 @@ void init_menus()
 
     // Let land based option enable when parcel changes
     gMenuParcelObserver = new LLMenuParcelObserver();
+
+    gSLMMenuUpdater = new LLSLMMenuUpdater();
 
     gLoginMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_login.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
     gLoginMenuBarView->arrangeAndClear();
@@ -1540,6 +1584,65 @@ class LLAdvancedResetInterestLists : public view_listener_t
 };
 
 
+/////////////
+// TERRAIN //
+/////////////
+
+class LLAdvancedRebuildTerrain : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        gPipeline.rebuildTerrain();
+        return true;
+    }
+};
+
+class LLAdvancedTerrainCreateLocalPaintMap : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLViewerRegion* region = gAgent.getRegion();
+        if (!region)
+        {
+            LL_WARNS() << "Agent not in a region" << LL_ENDL;
+            return false;
+        }
+
+        U16 dim = (U16)gSavedSettings.getU32("TerrainPaintResolution");
+        // Ensure a reasonable image size of power two
+        const U32 max_resolution = gSavedSettings.getU32("RenderMaxTextureResolution");
+        dim = llclamp(dim, 16, max_resolution);
+        dim = 1 << U32(std::ceil(std::log2(dim)));
+        LLPointer<LLImageRaw> image_raw = new LLImageRaw(dim,dim,3);
+        LLPointer<LLViewerTexture> tex = LLViewerTextureManager::getLocalTexture(image_raw.get(), true);
+        const bool success = LLTerrainPaintMap::bakeHeightNoiseIntoPBRPaintMapRGB(*region, *tex);
+        // This calls gLocalTerrainMaterials.setPaintType
+        gSavedSettings.setBOOL("LocalTerrainPaintEnabled", true);
+        // If baking the paintmap failed, set the paintmap to nullptr. This
+        // causes LLDrawPoolTerrain to use a blank paintmap instead.
+        if (!success) { tex = nullptr; }
+        gLocalTerrainMaterials.setPaintMap(tex);
+
+        return true;
+    }
+};
+
+class LLAdvancedTerrainDeleteLocalPaintMap : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        // This calls gLocalTerrainMaterials.setPaintType
+        gSavedSettings.setBOOL("LocalTerrainPaintEnabled", false);
+        gLocalTerrainMaterials.setPaintMap(nullptr);
+
+        return true;
+    }
+};
+
+
+/////////////
+
+
 class LLAdvancedBuyCurrencyTest : public view_listener_t
     {
     bool handleEvent(const LLSD& userdata)
@@ -2076,10 +2179,9 @@ class LLAdvancedForceParamsToDefault : public view_listener_t
 static void set_all_animation_time_factors(F32  time_factor)
 {
     LLMotionController::setCurrentTimeFactor(time_factor);
-    for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
-        iter != LLCharacter::sInstances.end(); ++iter)
+    for (LLCharacter* character : LLCharacter::sInstances)
     {
-        (*iter)->setAnimTimeFactor(time_factor);
+        character->setAnimTimeFactor(time_factor);
     }
 }
 
@@ -2539,20 +2641,6 @@ class LLAdvancedPurgeShaderCache : public view_listener_t
     {
         LLViewerShaderMgr::instance()->clearShaderCache();
         LLViewerShaderMgr::instance()->setShaders();
-        return true;
-    }
-};
-
-/////////////////////
-// REBUILD TERRAIN //
-/////////////////////
-
-
-class LLAdvancedRebuildTerrain : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        gPipeline.rebuildTerrain();
         return true;
     }
 };
@@ -3097,6 +3185,9 @@ class LLAdminOnSaveState: public view_listener_t
 //-----------------------------------------------------------------------------
 void cleanup_menus()
 {
+    delete gSLMMenuUpdater;
+    gSLMMenuUpdater = nullptr;
+
     delete gMenuParcelObserver;
     gMenuParcelObserver = NULL;
 
@@ -3113,7 +3204,7 @@ void cleanup_menus()
     gMenuAttachmentSelf = NULL;
 
     delete gMenuAttachmentOther;
-    gMenuAttachmentSelf = NULL;
+    gMenuAttachmentOther = NULL;
 
     delete gMenuLand;
     gMenuLand = NULL;
@@ -4068,6 +4159,12 @@ bool enable_gltf_save_as()
 bool enable_gltf_upload()
 {
     return enable_gltf_save_as();
+}
+
+bool enable_terrain_local_paintmap()
+{
+    static LLCachedControl<bool> can_use_shaders(gSavedSettings, "RenderCanUseTerrainBakeShaders", true);
+    return can_use_shaders;
 }
 
 class LLSelfRemoveAllAttachments : public view_listener_t
@@ -6507,7 +6604,17 @@ void handle_take(bool take_separate)
     // MAINT-290
     // Reason: Showing the confirmation dialog resets object selection, thus there is nothing to derez.
     // Fix: pass selection to the confirm_take, so that selection doesn't "die" after confirmation dialog is opened
-    params.functor.function(boost::bind(confirm_take, _1, _2, LLSelectMgr::instance().getSelection()));
+    params.functor.function([take_separate](const LLSD &notification, const LLSD &response)
+    { 
+        if (take_separate) 
+        {
+            confirm_take_separate(notification, response, LLSelectMgr::instance().getSelection());
+        }
+        else 
+        {
+            confirm_take(notification, response, LLSelectMgr::instance().getSelection());
+        }
+    });
 
     if(locked_but_takeable_object ||
        !you_own_everything)
@@ -10160,6 +10267,15 @@ class LLAdvancedClickGLTFUpload: public view_listener_t
     }
 };
 
+class LLAdvancedClickGLTFEdit : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLFloaterReg::showInstance("gltf_asset_editor");
+        return true;
+    }
+};
+
 class LLAdvancedClickResizeWindow : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -10283,9 +10399,11 @@ class FSProfilerToggle : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        bool checked = gSavedSettings.getBOOL( "ProfilingActive" );
-        gSavedSettings.setBOOL( "ProfilingActive", !checked );
+#ifdef TRACY_ENABLE
+        bool checked = gSavedSettings.getBOOL("ProfilingActive");
+        gSavedSettings.setBOOL("ProfilingActive", !checked);
         LLProfiler::active = !checked;
+#endif
         return true;
     }
 };
@@ -12662,9 +12780,9 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedClickGLTFOpen(), "Advanced.ClickGLTFOpen");
     view_listener_t::addMenu(new LLAdvancedClickGLTFSaveAs(), "Advanced.ClickGLTFSaveAs");
     view_listener_t::addMenu(new LLAdvancedClickGLTFUpload(), "Advanced.ClickGLTFUpload");
+    view_listener_t::addMenu(new LLAdvancedClickGLTFEdit(), "Advanced.ClickGLTFEdit");
     view_listener_t::addMenu(new LLAdvancedClickResizeWindow(), "Advanced.ClickResizeWindow");
     view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
-    view_listener_t::addMenu(new LLAdvancedRebuildTerrain(), "Advanced.RebuildTerrain");
     //[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
     view_listener_t::addMenu(new FSAdvancedToggleDoubleClickAction, "Advanced.SetDoubleClickAction");
     view_listener_t::addMenu(new FSAdvancedCheckEnabledDoubleClickAction, "Advanced.CheckEnabledDoubleClickAction");
@@ -12683,6 +12801,11 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedToggleInterestList360Mode(), "Advanced.ToggleInterestList360Mode");
     view_listener_t::addMenu(new LLAdvancedCheckInterestList360Mode(), "Advanced.CheckInterestList360Mode");
     view_listener_t::addMenu(new LLAdvancedResetInterestLists(), "Advanced.ResetInterestLists");
+
+    // Develop > Terrain
+    view_listener_t::addMenu(new LLAdvancedRebuildTerrain(), "Advanced.RebuildTerrain");
+    view_listener_t::addMenu(new LLAdvancedTerrainCreateLocalPaintMap(), "Advanced.TerrainCreateLocalPaintMap");
+    view_listener_t::addMenu(new LLAdvancedTerrainDeleteLocalPaintMap(), "Advanced.TerrainDeleteLocalPaintMap");
 
     // Advanced > UI
     commit.add("Advanced.WebBrowserTest", boost::bind(&handle_web_browser_test, _2));   // sigh! this one opens the MEDIA browser
@@ -12938,7 +13061,6 @@ void initialize_menus()
 
     commit.add("Object.Buy", boost::bind(&handle_buy));
     commit.add("Object.Edit", boost::bind(&handle_object_edit));
-    commit.add("Object.Edit", boost::bind(&handle_object_edit));
     commit.add("Object.EditGLTFMaterial", boost::bind(&handle_object_edit_gltf_material));
     commit.add("Object.Inspect", boost::bind(&handle_object_inspect));
     commit.add("Object.Open", boost::bind(&handle_object_open));
@@ -13032,6 +13154,7 @@ void initialize_menus()
     enable.add("EnableGLTF", boost::bind(&enable_gltf));
     enable.add("EnableGLTFSaveAs", boost::bind(&enable_gltf_save_as));
     enable.add("EnableGLTFUpload", boost::bind(&enable_gltf_upload));
+    enable.add("EnableTerrainLocalPaintMap", std::bind(&enable_terrain_local_paintmap));
     enable.add("EnableBridgeFunction", boost::bind(&enable_bridge_function));   // <FS:CR>
 
     view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");

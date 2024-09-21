@@ -3474,10 +3474,6 @@ Por tu seguridad, serán bloqueadas durante unos segundos.
 		Desafortunadamente no fuimos capaces de obtener información sobre los beneficios para esta sesión. Esto no debería suceder en un espacio de producción normal. Por favor contacte con soporte. Esta sesión no funcionara normalmente y recomendamos reiniciar.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Esto subirá [COUNT] objetos por un costo total de L$[COST]. ¿Deseas continuar con la subida?
-		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Subir"/>
-	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Los archivos seleccionados no pueden ser subidos en grupo.
 		<usetemplate name="okbutton" yestext="OK"/>

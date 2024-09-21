@@ -5,7 +5,7 @@
 ## Features (so far)
 - Added poser from BlackDragon
 - Added experimental mouse look head scaling
-- Added camera roll/tilt buttons from Blackdragon
+- Added camera roll/tilt buttons from Blackdragon (+ key bindings)
 - Snapshots up to 11500x11500 resolution
 - AVX2 optimized build
 - Made the Animation Speed menu easily accessible: it is no longer in Developer > Avatar > Animation Speed, it is now directly accessible in World
@@ -17,7 +17,6 @@
 - Fixed texture and snapshots poor upload quality with OpenJPEG
 - Enabled "lossless" texture uploads
 - New icons
-- Uses libjpeg-turbo instead of libjpeg, like in Alchemy
 - Added support for WebP format, like in Alchemy
 
 ## Quick build instructions (for Windows):

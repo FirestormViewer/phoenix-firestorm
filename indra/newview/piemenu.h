@@ -30,6 +30,7 @@
 
 #include "llmenugl.h"
 #include "llframetimer.h"
+#include "pieautohide.h"
 
 constexpr S32 PIE_MAX_SLICES = 8;
 
@@ -39,15 +40,21 @@ struct PieChildRegistry : public LLChildRegistry<PieChildRegistry>
     LLSINGLETON_EMPTY_CTOR(PieChildRegistry);
 };
 
-class PieMenu : public LLMenuGL
+class PieMenu : public LLMenuGL, public PieAutohide
 {
 public:
     // parameter block for the XUI factory
     struct Params : public LLInitParam::Block<Params, LLMenuGL::Params>
     {
         Optional<std::string> name;
+        // autohide feature to hide a disabled pie slice
+        Optional<bool> start_autohide;
+        // next item in an autohide chain
+        Optional<bool> autohide;
 
-        Params()
+        Params() :
+            start_autohide("start_autohide", false),
+            autohide("autohide", false)
         {
             visible = false;
         }
@@ -56,7 +63,7 @@ public:
     // PieChildRegistry contains a list of allowed child types for the XUI definition
     typedef PieChildRegistry child_registry_t;
 
-    PieMenu(const LLMenuGL::Params& p);
+    PieMenu(const Params& p);
 
     /*virtual*/ void setVisible(bool visible);
 

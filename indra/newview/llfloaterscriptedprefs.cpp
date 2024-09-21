@@ -64,8 +64,6 @@ bool LLFloaterScriptEdPrefs::postBuild()
 void LLFloaterScriptEdPrefs::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
 {
     LLUIColorTable::instance().setColor(param.asString(), LLColor4(ctrl->getValue()));
-    mEditor->initKeywords();
-    mEditor->loadKeywords();
 
     // <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
     // This will return both LLPreviewLSL as well as LLLiveLSLEditor instances because they are grouped into "preview_script"!

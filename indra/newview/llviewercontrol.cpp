@@ -151,7 +151,7 @@ public:
 
     void update(const LLSD& new_value)
     {
-        mNewValue = new_value.asReal();
+        mNewValue = (F32)new_value.asReal();
         mEventTimer.start();
     }
 
@@ -962,10 +962,9 @@ void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
-        for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
-            iter != LLCharacter::sInstances.end(); ++iter)
+        for (auto character : LLCharacter::sInstances)
         {
-            LLVOAvatar* avatar = (LLVOAvatar*)*iter;
+            LLVOAvatar* avatar = static_cast<LLVOAvatar*>(character);
 
             if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()) && !avatar->isControlAvatar())
             {
@@ -1062,13 +1061,13 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 // <FS:Beq> Better asset cache purge control
 void handleDiskCacheHighWaterPctChanged(const LLSD& newValue)
 {
-    const auto new_high = newValue.asReal();
+    const auto new_high = (F32)newValue.asReal();
     LLDiskCache::getInstance()->setHighWaterPercentage(new_high);
 }
 
 void handleDiskCacheLowWaterPctChanged(const LLSD& newValue)
 {
-    const auto new_low = newValue.asReal();
+    const auto new_low = (F32)newValue.asReal();
     LLDiskCache::getInstance()->setLowWaterPercentage(new_low);
 }
 // </FS:Beq>
@@ -1102,7 +1101,7 @@ void handleAutoTuneFPSChanged(const LLSD& newValue)
     LLPerfStats::tunables.userAutoTuneEnabled = newval;
     if(newval && LLPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
     {
-        gSavedSettings.setF32("RenderAvatarMaxART",log10(LLPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
+        gSavedSettings.setF32("RenderAvatarMaxART", (F32)log10(LLPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
     }
 }
 
@@ -1178,6 +1177,8 @@ void handleLocalTerrainChanged(const LLSD& newValue)
         {
             gLocalTerrainMaterials.setMaterialOverride(i, mat_override);
         }
+        const bool paint_enabled = gSavedSettings.getBOOL("LocalTerrainPaintEnabled");
+        gLocalTerrainMaterials.setPaintType(paint_enabled ? TERRAIN_PAINT_TYPE_PBR_PAINTMAP : TERRAIN_PAINT_TYPE_HEIGHTMAP_WITH_NOISE);
     }
 }
 
@@ -1282,6 +1283,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
     // setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionsEnabled); // <FS:Beq/> FIRE-33659 better way to enable/disable reflections
     setting_setup_signal_listener(gSavedSettings, "RenderScreenSpaceReflections", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderMirrors", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderHeroProbeResolution", handleHeroProbeResolutionChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
@@ -1398,6 +1400,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "TuningFPSStrategy", handleFPSTuningStrategyChanged);
     {
+        setting_setup_signal_listener(gSavedSettings, "LocalTerrainPaintEnabled", handleLocalTerrainChanged);
         const char* transform_suffixes[] = {
             "ScaleU",
             "ScaleV",
@@ -1416,6 +1419,7 @@ void settings_setup_listeners()
             }
         }
     }
+    setting_setup_signal_listener(gSavedSettings, "TerrainPaintBitDepth", handleSetShaderChanged);
 
     setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 

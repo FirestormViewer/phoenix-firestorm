@@ -175,7 +175,6 @@
 
       <!-- HTTP textures -->
         <check_box label="HTTPテクスチャを使用" tool_tip="HTTPプロトコルを使用してテクスチャを読み込む場合にオンにして下さい。もしレンダリングに問題があって、2010年7月以前及び１系のビューワで行っていた方法でテクスチャを読み込みたい場合はオフにして下さい。" name="TexturesHTTP" />
-        <check_box label="テクスチャの最高解像度を 512 px に制限 (64ビット版のみ対応、再起動が必要)" tool_tip="ここにチェックを入れると、インワールドのテクスチャの最大表示解像度を 512 px に制限します。これにより、利用可能なテクスチャメモリの量を越える前に、より多くのテクスチャを表示することを可能にし、またその結果、テクスチャがぼやけた状態で表示されることになります。" name="FSRestrictMaxTextureSize" />
 
 <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text name="TextureDetailLabel">

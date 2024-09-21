@@ -2483,6 +2483,26 @@ Unable to upload [FILE] due to the following reason: [REASON]
 Please try again later.
   <tag>fail</tag>
   </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="CannotUploadSnapshotEmailTooBig"
+   type="alertmodal">
+Unable to upload snapshot [FILE] due to the following reason: [REASON]
+
+File might be too big, try reducing resolution, quality or try again later.
+  <tag>fail</tag>
+  </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="CannotUploadSnapshotWebTooBig"
+   type="alertmodal">
+Unable to upload snapshot.
+
+File might be too big, try reducing resolution or try again later.
+  <tag>fail</tag>
+  </notification>
 
   <notification
    icon="notifytip.tga"
@@ -3159,6 +3179,15 @@ Unable to save &apos;[NAME]&apos; to wearable file.  You will need to free up so
 Unable to save [NAME] to central asset store.
 This is usually a temporary failure. Please customize and save the wearable again in a few minutes.
   <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="OutOfDiskSpace"
+   type="notifytip">
+The system is out of disk space. You will need to free up some space on your computer or clear the cache.
+<tag>fail</tag>
+    <unique/>
   </notification>
 
   <notification
@@ -4384,6 +4413,20 @@ Unable to add estate manager [AGENT] to banned list.
    name="CanNotChangeAppearanceUntilLoaded"
    type="alertmodal">
 Cannot change appearance until clothing and shape are loaded.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="UsavedWearableChanges"
+   type="alertmodal">
+You have unsaved changes.
+      <tag>group</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before I discard unsaved wearable changes"
+     name="okcancelignore"
+     notext="Keep Editing"
+     yestext="Discard"/>
   </notification>
 
   <notification
@@ -9743,18 +9786,6 @@ Your voice has been muted by a moderator.
 
    <notification
     icon="alertmodal.tga"
-    name="BulkUploadCostConfirmation"
-    type="alertmodal">
-This will upload [COUNT] items at a total cost of L$[COST]. Do you wish to continue with the upload?
-    <usetemplate
-     ignoretext="Confirm bulk uploads"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="Upload"/>
-   </notification>
-
-   <notification
-    icon="alertmodal.tga"
     name="NotEnoughMoneyForBulkUpload"
     type="alertmodal">
 Your current balance of L$[BALANCE] is not enough to upload [COUNT] items at a total cost of L$[COST].
@@ -14506,6 +14537,7 @@ This will replace the items in the selected outfit with the items you are wearin
        name="okbutton"
        yestext="OK"/>
   </notification>
+
 
   <notification
    icon="alertmodal.tga"

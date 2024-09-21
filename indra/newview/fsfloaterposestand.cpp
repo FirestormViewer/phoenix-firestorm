@@ -111,7 +111,7 @@ void FSFloaterPoseStand::loadPoses()
                 LLUUID anim_id(p_itr->first);
                 if (anim_id.notNull())
                 {
-                    mComboPose->add(LLTrans::getString(p_itr->second["name"]), anim_id);
+                    mComboPose->add(LLTrans::getString(p_itr->second["name"].asStringRef()), anim_id);
                 }
             }
         }

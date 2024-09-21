@@ -469,6 +469,7 @@ protected:
     LLButton*           mPipetteBtn;
     LLButton*           mSelectBtn;
     LLButton*           mCancelBtn;
+    LLView*             mPreviewWidget = nullptr;
     // <FS> Special additions
     LLLineEditor*       mUUIDEditor{ nullptr };
     LLButton*           mUUIDBtn{ nullptr };

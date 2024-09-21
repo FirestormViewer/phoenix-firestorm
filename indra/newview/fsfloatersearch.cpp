@@ -2980,7 +2980,7 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
     if (!LLGridManager::getInstance()->isInSecondLife())
     {
         // work out the subdir to use based on the requested category
-        LLSD subs = LLSD().with("CATEGORY", (mCategoryPaths.has(p.category) ? mCategoryPaths[p.category].asString() : mCategoryPaths["all"].asString()));
+        LLSD subs = LLSD().with("CATEGORY", (mCategoryPaths.has(p.category()) ? mCategoryPaths[p.category()].asString() : mCategoryPaths["all"].asString()));
     }
 
     // add the search query string
@@ -3045,7 +3045,7 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
     // add the maturity and category variables to the new Second Life search URL
     if (LLGridManager::getInstance()->isInSecondLife())
     {
-        url = LFSimFeatureHandler::instance().searchURL() + "&maturity=" + maturity + "&" + mCategoryPaths[p.category].asString();
+        url = LFSimFeatureHandler::instance().searchURL() + "&maturity=" + maturity + "&" + mCategoryPaths[p.category()].asString();
     }
     // for OpenSim, do the same as in earlier versions
     else

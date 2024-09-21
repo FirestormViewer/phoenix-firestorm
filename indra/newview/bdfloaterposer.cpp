@@ -834,7 +834,7 @@ void BDFloaterPoser::onJointSet(LLUICtrl* ctrl, const LLSD& param)
 
     //BD - Neat yet quick and direct way of rotating our bones.
     //     No more need to include bone rotation orders.
-    F32 val = ctrl->getValue().asReal();
+    F32 val = (F32)(ctrl->getValue().asReal());
     S32 axis = param.asInteger();
     LLScrollListCell* cell[3] = { item->getColumn(COL_ROT_X), item->getColumn(COL_ROT_Y), item->getColumn(COL_ROT_Z) };
     LLQuaternion rot_quat = joint->getTargetRotation();
@@ -843,7 +843,7 @@ void BDFloaterPoser::onJointSet(LLUICtrl* ctrl, const LLSD& param)
     F32 new_value;
     LLVector3 vec3;
 
-    old_value = cell[axis]->getValue().asReal();
+    old_value = (F32)(cell[axis]->getValue().asReal());
     cell[axis]->setValue(ll_round(val, 0.001f));
     new_value = val - old_value;
     vec3.mV[axis] = new_value;
@@ -925,7 +925,7 @@ void BDFloaterPoser::onJointPosSet(LLUICtrl* ctrl, const LLSD& param)
         if (joint)
         {
             //BD - All bones support positions now.
-            F32 val = ctrl->getValue().asReal();
+            F32 val = (F32)(ctrl->getValue().asReal());
             LLScrollListCell* cell[3] = { item->getColumn(COL_POS_X), item->getColumn(COL_POS_Y), item->getColumn(COL_POS_Z) };
             LLVector3 vec3 = { F32(cell[VX]->getValue().asReal()),
                                 F32(cell[VY]->getValue().asReal()),
@@ -949,7 +949,7 @@ void BDFloaterPoser::onJointScaleSet(LLUICtrl* ctrl, const LLSD& param)
         LLJoint* joint = (LLJoint*)item->getUserdata();
         if (joint)
         {
-            F32 val = ctrl->getValue().asReal();
+            F32 val = (F32)(ctrl->getValue().asReal());
             LLScrollListCell* cell[3] = { item->getColumn(COL_SCALE_X), item->getColumn(COL_SCALE_Y), item->getColumn(COL_SCALE_Z) };
             LLVector3 vec3 = { F32(cell[VX]->getValue().asReal()),
                                F32(cell[VY]->getValue().asReal()),

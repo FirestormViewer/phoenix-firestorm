@@ -62,7 +62,6 @@ LLVOWater::LLVOWater(const LLUUID &id,
     setScale(LLVector3(mRegionp->getWidth(), mRegionp->getWidth(), 0.f));
 // </FS:CR> Aurora Sim
 
-    mUseTexture = true;
     mIsEdgePatch = false;
 }
 
@@ -104,14 +103,7 @@ LLDrawable *LLVOWater::createDrawable(LLPipeline *pipeline)
 
     LLDrawPoolWater *pool = (LLDrawPoolWater*) gPipeline.getPool(LLDrawPool::POOL_WATER);
 
-    if (mUseTexture)
-    {
-        mDrawable->setNumFaces(1, pool, mRegionp->getLand().getWaterTexture());
-    }
-    else
-    {
-        mDrawable->setNumFaces(1, pool, LLWorld::getInstance()->getDefaultWaterTexture());
-    }
+    mDrawable->setNumFaces(1, pool, LLWorld::getInstance()->getDefaultWaterTexture());
 
     return mDrawable;
 }
@@ -149,8 +141,8 @@ bool LLVOWater::updateGeometry(LLDrawable *drawable)
     S32 size_y = LLPipeline::sRenderTransparentWater ? 8 : 1;
 
     const LLVector3& scale = getScale();
-    size_x *= llmin(llround(scale.mV[0] / 256.f), 8);
-    size_y *= llmin(llround(scale.mV[1] / 256.f), 8);
+    size_x *= (S32)llmin(llround(scale.mV[0] / 256.f), 8);
+    size_y *= (S32)llmin(llround(scale.mV[1] / 256.f), 8);
 
     const S32 num_quads = size_x * size_y;
     face->setSize(vertices_per_quad * num_quads,
@@ -202,8 +194,8 @@ bool LLVOWater::updateGeometry(LLDrawable *drawable)
             position_agent.mV[VX] += (x + 0.5f) * step_x;
             position_agent.mV[VY] += (y + 0.5f) * step_y;
 
-            position_agent.mV[VX] = llround(position_agent.mV[VX]);
-            position_agent.mV[VY] = llround(position_agent.mV[VY]);
+            position_agent.mV[VX] = (F32)llround(position_agent.mV[VX]);
+            position_agent.mV[VY] = (F32)llround(position_agent.mV[VY]);
 
             *verticesp++  = position_agent - right + up;
             *verticesp++  = position_agent - right - up;
@@ -250,11 +242,6 @@ void setVecZ(LLVector3& v)
     v.mV[VX] = 0;
     v.mV[VY] = 0;
     v.mV[VZ] = 1;
-}
-
-void LLVOWater::setUseTexture(const bool use_texture)
-{
-    mUseTexture = use_texture;
 }
 
 void LLVOWater::setIsEdgePatch(const bool edge_patch)

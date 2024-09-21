@@ -469,6 +469,7 @@
 			<menu_item_call label="Otwórz..." name="Open..." />
 			<menu_item_call label="Zapisz jako..." name="Save As..." />
 			<menu_item_call label="Prześlij..." name="Upload..." />
+			<menu_item_call label="Edytuj..." name="Edit..." />
 		</menu>
 		<menu label="Wideo" name="Video" />
 		<menu label="Testy renderowania" name="Render Tests">
@@ -533,7 +534,6 @@
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />
 			<menu_item_call label="Wyczyść pamięć podręczną modułu cieniującego" name="Shader Cache Clear" />
-			<menu_item_call label="Odbuduj teren" name="Rebuild Terrain" />
 		</menu>
 		<menu label="Sieć" name="Network">
 			<menu_item_check label="Zatrzymaj awatara" name="AgentPause"/>
@@ -566,6 +566,11 @@
 			<menu_item_call label="Interest List: Resetowanie" name="Reset Interest Lists" />
 			<menu_item_call label="Zrzut właściwości symulatora do czatu w pobliżu" name="DumpSimFeaturesToChat"/>
 		</menu>
+		<menu label="Teren" name="DevelopTerrain">
+			<menu_item_call label="Odbuduj teren" name="Rebuild Terrain" />
+			<menu_item_call label="Utwórz lokalną mapę malowania (paintmapę)" name="Create Local Paintmap" />
+			<menu_item_call label="Usuń lokalną mapę malowania (paintmapę)" name="Delete Local Paintmap" />
+		</menu>
 		<menu label="Interfejs" name="UI">
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>
 			<menu_item_check label="Test restartu regionu" name="Region Restart Test"/>
@@ -592,6 +597,7 @@
 			<menu_item_check label="Debuguj procesy okien" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI/XML" name="XUI">
+			<menu_item_call label="Pokaż ustawienia kolorów" name="Color Settings" />
 			<menu_item_call label="Przeładuj ustawienia koloru" name="Reload Color Settings"/>
 			<menu_item_call label="Pokaż test czcionki" name="Show Font Test"/>
 			<menu_item_call label="Wczytaj z XML" name="Load from XML"/>
@@ -616,6 +622,7 @@
 				<menu_item_call label="Testowy mężczyzna" name="Test Male"/>
 				<menu_item_call label="Testowa kobieta" name="Test Female"/>
 				<menu_item_check label="Pozwól na zaznaczanie awatarów" name="Allow Select Avatar"/>
+				<menu_item_check label="Wyłącz animację celów spojrzeń" name="Disable Look At Animation" />
 				<menu_item_check label="Renderuj tylko znajomych" name="Render Only Friends" />
 			</menu>
 			<menu label="Szybkość animacji" name="Animation Speed">

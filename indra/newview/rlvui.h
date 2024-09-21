@@ -66,14 +66,14 @@ public:
     bool removeGenericFloaterFilter(const std::string& strFloaterName);
 
 protected:
-    bool filterFloaterGeneric(const std::string&, const LLSD&);
+    bool filterFloaterGeneric(std::string_view, const LLSD&);
     boost::signals2::connection m_ConnFloaterGeneric;
-    bool filterFloaterShowLoc(const std::string&, const LLSD& );
+    bool filterFloaterShowLoc(std::string_view, const LLSD& );
     boost::signals2::connection m_ConnFloaterShowLoc;                   // showloc
-    bool filterFloaterViewXXX(const std::string&, const LLSD&);
+    bool filterFloaterViewXXX(std::string_view, const LLSD&);
     boost::signals2::connection m_ConnFloaterViewXXX;                   // viewnote, viewscript, viewtexture
 
-    bool filterPanelShowLoc(const std::string&, const std::string&, const LLSD& );
+    bool filterPanelShowLoc(std::string_view, std::string_view, const LLSD& );
     boost::signals2::connection m_ConnPanelShowLoc;                     // showloc
 
     /*
@@ -93,7 +93,7 @@ protected:
     typedef std::multimap<ERlvBehaviour, behaviour_handler_t> behaviour_handler_map_t;
     behaviour_handler_map_t m_Handlers;
 
-    std::map<std::string, std::function<void()>> m_FilteredFloaterMap;
+    std::map<std::string, std::function<void()>, std::less<>> m_FilteredFloaterMap;
 };
 
 // ============================================================================
