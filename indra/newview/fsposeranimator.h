@@ -170,6 +170,7 @@ public:
         {"mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE}, {"mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE}, {"mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, true}, {"mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE, true},
         {"mFaceLipUpperLeft", "mFaceLipUpperRight", FACE}, {"mFaceLipUpperCenter", "", FACE}, {"mFaceLipUpperRight", "mFaceLipUpperLeft", FACE, true},
         {"mFaceLipCornerLeft", "mFaceLipCornerRight", FACE}, {"mFaceLipCornerRight", "mFaceLipCornerLeft", FACE, true},
+        {"mFaceTongueBase", "", FACE}, {"mFaceTongueTip", "", FACE, true},
         {"mFaceLipLowerLeft", "mFaceLipLowerRight", FACE}, {"mFaceLipLowerCenter", "", FACE}, {"mFaceLipLowerRight", "mFaceLipLowerLeft", FACE, true},
         {"mFaceJaw", "", FACE},
 

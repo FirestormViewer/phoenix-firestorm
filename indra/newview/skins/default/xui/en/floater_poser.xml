@@ -170,7 +170,7 @@ width="565">
     <string	name="title_mHandThumb1Left" translate="false">Thumb Base</string>
     <string	name="title_mHandThumb2Left" translate="false">Thumb Mid</string>
     <string	name="title_mHandThumb3Left" translate="false">Thumb Tip</string>
-    <string	name="title_mCollarRight" translate="false">Collar Bone</string>
+    <string	name="title_mCollarRight" translate="false">Collar</string>
     <string	name="title_mShoulderRight" translate="false">Whole Arm</string>
     <string	name="title_mElbowRight" translate="false">Forearm</string>
     <string	name="title_mWristRight" translate="false">Wrist</string>
@@ -862,6 +862,7 @@ width="565">
 				height="21"
 				follows="top|left"
 				layout="topleft"
+				enabled="false"
 				label=""
 				image_overlay="Inv_Physics"
 				image_unselected="Toolbar_Middle_Off"
@@ -877,6 +878,7 @@ width="565">
 				height="21"
 				follows="top|left"
 				layout="topleft"
+				enabled="false"
 				label=""
 				image_overlay="Sync_Progress_1"
 				image_unselected="Toolbar_Middle_Off"
@@ -892,7 +894,7 @@ width="565">
 				follows="left|top"
 				height="21"
 				layout="topleft"
-				enabled="true"
+				enabled="false"
 				label="Recap"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
@@ -909,7 +911,7 @@ width="565">
 				follows="left|top"
 				height="21"
 				layout="topleft"
-				enabled="true"
+				enabled="false"
 				label="Part(s) On/Off"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
