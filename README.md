@@ -11,7 +11,7 @@
 - Made the Animation Speed menu easily accessible: it is no longer in Developer > Avatar > Animation Speed, it is now directly accessible in World
 - Added a "All Animations Slowed Down" menu that directly sets animations speed to the minimum (10%)
 - Added a "Freeze Animations" menu in World > Animation Speed, effectively freezing all animations.
-- No longer shows the stupid ":non-potable_water:" and "fleur-de-lys" emojis when typing ":-P" or ":-D"
+- No longer shows the stupid ":non-potable_water:" and "fleur-de-lys" emojis when typing ":-P" or ":-D" (use package located in https://github.com/AyaneStorm/3p-emoji-shortcodes)
 - Increased resolution limit to 2048x2048 for snapshot uploaded to inventory
 - Updated OpenJPEG to 2.5.2 (for Jpeg2000 format)
 - Fixed texture and snapshots poor upload quality with OpenJPEG
