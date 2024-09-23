@@ -1000,13 +1000,13 @@ bool LLViewerTexture::isLargeImage()
     return  (S32)mTexelsPerImage > LLViewerTexture::sMinLargeImageSize;
 }
 
-bool LLViewerTexture::isInvisiprim()
+bool LLViewerTexture::isInvisiprim() const
 {
     return isInvisiprim(mID);
 }
 
 //static
-bool LLViewerTexture::isInvisiprim(LLUUID id)
+bool LLViewerTexture::isInvisiprim(const LLUUID& id)
 {
     return (id == sInvisiprimTexture1) || (id == sInvisiprimTexture2);
 }
