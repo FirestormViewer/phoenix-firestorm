@@ -7,8 +7,8 @@
 	<pie_slice label="Dur" name="Object Stand Up"/>
 	<pie_slice label="Al" name="Buy..."/>
 	<pie_menu label="Götür &gt;" name="Take Submenu">
-		<pie_slice label="Götür" name="Take" />
 		<pie_slice label="Köçürtməsin götür" name="Take Copy" />
+		<pie_slice label="Götür" name="Take" />
 	</pie_menu>
 	<pie_slice label="Ödə" name="Pay..."/>
 	<pie_menu label="İrəli &gt;" name="Object Pie More 1">

@@ -7,8 +7,12 @@
 	<pie_slice label="Se lever" name="Object Stand Up"/>
 	<pie_slice label="Acheter" name="Buy..."/>
 	<pie_menu label="Prendre &gt;" name="Take Submenu">
+		<pie_slice label="Copies séparées" name="Take Copy Separate"/>
+		<pie_slice label="Copier" name="Take Copy" />
 		<pie_slice label="Prendre" name="Take" />
-		<pie_slice label="Prendre une copie" name="Take Copy" />
+		<pie_slice label="Le groupe" name="Take combined"/>
+		<pie_slice label="Copie du groupe" name="Take Copy combined"/>
+		<pie_slice label="Objets séparés" name="Take Separate"/>
 	</pie_menu>
 	<pie_slice label="Payer" name="Pay..."/>
 	<pie_menu label="Plus &gt;" name="Object Pie More 1">

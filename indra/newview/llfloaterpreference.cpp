@@ -5680,6 +5680,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
         // start clean
         LL_INFOS("SettingsBackup") << "clearing global settings" << LL_ENDL;
         gSavedSettings.resetToDefaults();
+        LLFeatureManager::getInstance()->applyRecommendedSettings();  
 
         // run restore on global controls
         LL_INFOS("SettingsBackup") << "restoring global settings from backup" << LL_ENDL;
