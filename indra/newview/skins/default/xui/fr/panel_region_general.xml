@@ -34,4 +34,5 @@
 	<button label="Téléporter chez eux tous les résidents..." name="kick_all_btn"/>
 	<button label="Envoyer un message à la région..." name="im_btn"/>
 	<button label="Gérer le Téléhub..." name="manage_telehub_btn"/>
+	<button label="Planifier les redémarrages..." name="manage_restart_btn" />
 </panel>
