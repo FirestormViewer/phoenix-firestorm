@@ -99,7 +99,9 @@ private:
     void wrapOrClipCursorPosition(S32* x, S32* y);
 
     void determineThumbClickError(S32 x, S32 y);
+    void updateClickErrorIfInfiniteScrolling();
     void determineThumbClickErrorForPinch(S32 x, S32 y);
+    void updateClickErrorIfInfiniteScrollingForPinch();
 
 
     LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;

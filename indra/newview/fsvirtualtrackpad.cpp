@@ -120,8 +120,12 @@ void FSVirtualTrackpad::determineThumbClickError(S32 x, S32 y)
     _thumbClickOffsetX = 0;
     _thumbClickOffsetY = 0;
 
-    S32 errorX = _valueX - x;
-    S32 errorY = _valueY - y;
+    S32 errorX = _valueX;
+    S32 errorY = _valueY;
+    wrapOrClipCursorPosition(&errorX, &errorY);
+    errorX -= x;
+    errorY -= y;
+
     if (fabs(errorX) > mImgSunFront->getWidth() / 2.0)
         return;
     if (fabs(errorY) > mImgSunFront->getHeight() / 2.0)
@@ -129,6 +133,36 @@ void FSVirtualTrackpad::determineThumbClickError(S32 x, S32 y)
 
     _thumbClickOffsetX = errorX;
     _thumbClickOffsetY = errorY;
+}
+
+void FSVirtualTrackpad::updateClickErrorIfInfiniteScrolling()
+{
+    if (!mInfiniteScrollMode)
+        return;
+    S32 errorX = _valueX;
+    S32 errorY = _valueY;
+
+    LLRect rect = mTouchArea->getRect();
+    while (errorX > rect.mRight)
+    {
+        errorX -= rect.getWidth();
+        _thumbClickOffsetX += rect.getWidth();
+    }
+    while (errorX < rect.mLeft)
+    {
+        errorX += rect.getWidth();
+        _thumbClickOffsetX -= rect.getWidth();
+    }
+    while (errorY > rect.mTop)
+    {
+        errorY -= rect.getHeight();
+        _thumbClickOffsetY += rect.getHeight();
+    }
+    while (errorY < rect.mBottom)
+    {
+        errorY += rect.getHeight();
+        _thumbClickOffsetY -= rect.getHeight();
+    }
 }
 
 void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
@@ -141,8 +175,12 @@ void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
     _pinchThumbClickOffsetX = 0;
     _pinchThumbClickOffsetY = 0;
 
-    S32 errorX = _pinchValueX - x;
-    S32 errorY = _pinchValueY - y;
+    S32 errorX = _pinchValueX;
+    S32 errorY = _pinchValueY;
+    wrapOrClipCursorPosition(&errorX, &errorY);
+    errorX -= x;
+    errorY -= y;
+
     if (fabs(errorX) > mImgMoonFront->getWidth() / 2.0)
         return;
     if (fabs(errorY) > mImgMoonFront->getHeight() / 2.0)
@@ -150,6 +188,36 @@ void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
 
     _pinchThumbClickOffsetX = errorX;
     _pinchThumbClickOffsetY = errorY;
+}
+
+void FSVirtualTrackpad::updateClickErrorIfInfiniteScrollingForPinch()
+{
+    if (!mInfiniteScrollMode)
+        return;
+    S32 errorX = _valueX;
+    S32 errorY = _valueY;
+
+    LLRect rect = mTouchArea->getRect();
+    while (errorX > rect.mRight)
+    {
+        errorX -= rect.getWidth();
+        _pinchThumbClickOffsetX += rect.getWidth();
+    }
+    while (errorX < rect.mLeft)
+    {
+        errorX += rect.getWidth();
+        _pinchThumbClickOffsetX -= rect.getWidth();
+    }
+    while (errorY > rect.mTop)
+    {
+        errorY -= rect.getHeight();
+        _pinchThumbClickOffsetY += rect.getHeight();
+    }
+    while (errorY < rect.mBottom)
+    {
+        errorY += rect.getHeight();
+        _pinchThumbClickOffsetY -= rect.getHeight();
+    }
 }
 
 void FSVirtualTrackpad::draw()
@@ -335,6 +403,7 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
     if (isPointInTouchArea(x, y))
     {
         determineThumbClickError(x, y);
+        updateClickErrorIfInfiniteScrolling();
         _valueWheelClicks          = 0;
         _lastValueX                = _valueX;
         _lastValueY                = _valueY;
@@ -369,6 +438,7 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
     if (isPointInTouchArea(x, y))
     {
         determineThumbClickErrorForPinch(x, y);
+        updateClickErrorIfInfiniteScrollingForPinch();
         _pinchValueWheelClicks     = 0;
         _lastPinchValueX           = _pinchValueX;
         _lastPinchValueY           = _pinchValueY;
