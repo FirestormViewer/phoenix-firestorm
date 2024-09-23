@@ -706,11 +706,7 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
     if (trackballPanel)
         trackballPanel->setEnabled(enable);
 
-    LLButton *someButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_LOADSAVE);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME);
+    LLButton *someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME);
     if (someButton)
         someButton->setEnabled(enable);
 
@@ -723,6 +719,14 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
         someButton->setEnabled(enable);
 
     someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_TOGGLEPOSING_NAME);
+    if (someButton)
+        someButton->setEnabled(enable);
+
+    someButton = getChild<LLButton>(POSER_AVATAR_BUTTON_LOAD_NAME);
+    if (someButton)
+        someButton->setEnabled(enable);
+
+    someButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
     if (someButton)
         someButton->setEnabled(enable);
 }
