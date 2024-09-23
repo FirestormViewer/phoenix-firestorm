@@ -42,7 +42,8 @@ public:
     {
         Optional<LLViewBorder::Params> border;
         Optional<LLUIImage *>          image_moon_back, image_moon_front, image_sphere, image_sun_back, image_sun_front;
-        Optional<bool> pinch_mode;
+        Optional<bool>                 pinch_mode;
+        Optional<bool>                 infinite_scroll_mode;
 
         Params();
     };
@@ -54,6 +55,7 @@ public:
     virtual bool    handleHover(S32 x, S32 y, MASK mask);
     virtual bool    handleMouseUp(S32 x, S32 y, MASK mask);
     virtual bool    handleMouseDown(S32 x, S32 y, MASK mask);
+    virtual bool    handleRightMouseUp(S32 x, S32 y, MASK mask);
     virtual bool    handleRightMouseDown(S32 x, S32 y, MASK mask);
     virtual bool    handleScrollWheel(S32 x, S32 y, S32 clicks);
 
@@ -94,6 +96,7 @@ private:
     void setPinchValueAndCommit(const S32 x, const S32 y);
     void drawThumb(bool isPinchThumb);
     bool isPointInTouchArea(S32 x, S32 y) const;
+    void wrapOrClipCursorPosition(S32* x, S32* y);
 
     void determineThumbClickError(S32 x, S32 y);
     void determineThumbClickErrorForPinch(S32 x, S32 y);
@@ -111,13 +114,27 @@ private:
     /// <summary>
     /// Whether we allow the second cursor to appear.
     /// </summary>
-    bool           mAllowPinchMode = false;
+    bool mAllowPinchMode     = false;
+
+    /// <summary>
+    /// Whether to allow the cursor(s) to 'wrap'.
+    /// </summary>
+    /// <example>
+    /// When false, the cursor is constrained to the control-area.
+    /// When true, the cursor 'disappears' out the top, and starts from the bottom,
+    /// effectively allowing infinite scrolling.
+    /// </example>
+    bool mInfiniteScrollMode = false;
 
     /// <summary>
     /// Whether we should be moving the pinch cursor now
     /// </summary>
     bool doingPinchMode = false;
 
+    /// <summary>
+    /// The various values placing the cursors and documenting behaviours.
+    /// Where relevant, all are scaled in pixels.
+    /// </summary>
     S32       _valueX;
     S32       _valueY;
     S32       _valueWheelClicks;

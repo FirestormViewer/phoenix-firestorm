@@ -80,12 +80,17 @@ class FSFloaterPoser : public LLFloater
     /// The amount of deflection 'one unit' on the trackpad translates to in radians.
     /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
     /// </summary>
-    const F32 normalTrackballRangeInRads = F_PI;
+    const F32 normalTrackpadRangeInRads = F_PI;
 
     /// <summary>
-    /// The counterpart to above, when using the trackpad in zoom-mode, its maximum deflection on either axis is plus/minus this.
+    /// The trackpad is the size it is, mousing on it has arbitrary 'sensitivity': how much angular change do we want per pixels moved.
     /// </summary>
-    const F32 zoomedTrackballRangeInRads = F_PI_BY_TWO;
+    const F32 trackPadDefaultSensitivity = 0.8;
+
+    /// <summary>
+    /// These are defaults, subjective and should be overridden by optional values in XML.
+    /// </summary>
+    const F32 trackPadHighSensitivity = 0.3;
     
     /// <summary>
     /// Refreshes the pose load/save list.

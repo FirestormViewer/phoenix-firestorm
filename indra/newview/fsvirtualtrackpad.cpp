@@ -41,7 +41,8 @@ FSVirtualTrackpad::Params::Params()
     image_sphere("image_sphere"),
     image_sun_back("image_sun_back"),
     image_sun_front("image_sun_front"),
-    pinch_mode("pinch_mode")
+    pinch_mode("pinch_mode"),
+    infinite_scroll_mode("infinite_scroll_mode")
 {
 }
 
@@ -52,7 +53,8 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     mImgSunBack(p.image_sun_back),
     mImgSunFront(p.image_sun_front),
     mImgSphere(p.image_sphere),
-    mAllowPinchMode(p.pinch_mode)
+    mAllowPinchMode(p.pinch_mode),
+    mInfiniteScrollMode(p.infinite_scroll_mode)
 {
     LLRect border_rect = getLocalRect();
     _valueX = _lastValueX = _pinchValueX = _lastPinchValueX = border_rect.getCenterX();
@@ -88,6 +90,8 @@ void FSVirtualTrackpad::drawThumb(bool isPinchThumb)
 
     S32 x = isPinchThumb ? _pinchValueX : _valueX;
     S32 y = isPinchThumb ? _pinchValueY : _valueY;
+
+    wrapOrClipCursorPosition(&x, &y);
 
     S32 halfThumbWidth  = thumb->getWidth() / 2;
     S32 halfThumbHeight = thumb->getHeight() / 2;
@@ -212,6 +216,29 @@ LLSD FSVirtualTrackpad::getPinchValue()
     return result;
 }
 
+void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y)
+{
+    if (!x || !y)
+        return;
+
+    LLRect rect = mTouchArea->getRect();
+    if (mInfiniteScrollMode)
+    {
+        while (*x > rect.mRight)
+            *x -= rect.getWidth();
+        while (*x < rect.mLeft)
+            *x += rect.getWidth();
+        while (*y > rect.mTop)
+            *y -= rect.getHeight();
+        while (*y < rect.mBottom)
+            *y += rect.getHeight();
+    }
+    else
+    {
+        rect.clampPointToRect(*x, *y);
+    }
+}
+
 bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
 {
     if (!hasMouseCapture())
@@ -229,13 +256,13 @@ bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
         correctedY = y + _thumbClickOffsetY;
     }
 
-    LLRect rect = mTouchArea->getRect();
-    rect.clampPointToRect(correctedX, correctedY);
+    if (!mInfiniteScrollMode)
+        wrapOrClipCursorPosition(&correctedX, &correctedY);
 
     if (doingPinchMode)
     {
         _pinchValueX = correctedX;
-        _pinchValueX = correctedY;
+        _pinchValueY = correctedY;
     }
     else
     {
@@ -278,8 +305,16 @@ void FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y, S32 *valX, S32
     S32    width   = rect.getWidth();
     S32    height  = rect.getHeight();
 
-    *valX = centerX + ll_round(llclamp(x, -1, 1) * width / 2);
-    *valY = centerY + ll_round(llclamp(y, -1, 1) * height / 2);
+    if (mInfiniteScrollMode)
+    {
+        *valX = centerX + ll_round(x * width / 2);
+        *valY = centerY + ll_round(y * height / 2);
+    }
+    else
+    {
+        *valX = centerX + ll_round(llclamp(x, -1, 1) * width / 2);
+        *valY = centerY + ll_round(llclamp(y, -1, 1) * height / 2);
+    }
 }
 
 bool FSVirtualTrackpad::handleMouseUp(S32 x, S32 y, MASK mask)
@@ -310,6 +345,19 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
     }
 
     return LLView::handleMouseDown(x, y, mask);
+}
+
+bool FSVirtualTrackpad::handleRightMouseUp(S32 x, S32 y, MASK mask)
+{
+    if (hasMouseCapture())
+    {
+        doingPinchMode = false;
+        gFocusMgr.setMouseCapture(NULL);
+
+        make_ui_sound("UISndClickRelease");
+    }
+
+    return LLView::handleRightMouseUp(x, y, mask);
 }
 
 // move pinch cursor

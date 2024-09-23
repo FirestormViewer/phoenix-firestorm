@@ -1127,25 +1127,33 @@ void FSFloaterPoser::onLimbTrackballChanged()
     pitch = trackPadPos.mV[VY];
 
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (!toggleSensitivityButton)
-    {
-        yaw *= normalTrackballRangeInRads;
-        pitch *= normalTrackballRangeInRads;
-    }
-    else
+    if (toggleSensitivityButton)
     {
         bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
         if (moreSensitive)
         {
-            yaw *= zoomedTrackballRangeInRads;
-            pitch *= zoomedTrackballRangeInRads;
+            yaw *= trackPadHighSensitivity;
+            pitch *= trackPadHighSensitivity;
         }
         else
         {
-            yaw *= normalTrackballRangeInRads;
-            pitch *= normalTrackballRangeInRads;
+            yaw *= trackPadDefaultSensitivity;
+            pitch *= trackPadDefaultSensitivity;
         }
     }
+
+    // if the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the sliders; this wraps them to by the slider full-scale
+    while (yaw > 1)
+        yaw -= 2;
+    while (yaw < -1)
+        yaw += 2;
+    while (pitch > 1)
+        pitch -= 2;
+    while (pitch < -1)
+        pitch += 2;
+    
+    yaw *= normalTrackpadRangeInRads;
+    pitch *= normalTrackpadRangeInRads;
 
     LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
     if (rollSlider)
@@ -1198,24 +1206,21 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     if (!trackBall)
         return;
 
+    yaw /= normalTrackpadRangeInRads;
+    pitch /= normalTrackpadRangeInRads;
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (!toggleSensitivityButton)
-    {
-        yaw /= normalTrackballRangeInRads;
-        pitch /= normalTrackballRangeInRads;
-    }
-    else
+    if (toggleSensitivityButton)
     {
         bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
         if (moreSensitive)
         {
-            yaw /= zoomedTrackballRangeInRads;
-            pitch /= zoomedTrackballRangeInRads;
+            yaw /= trackPadHighSensitivity;
+            pitch /= trackPadHighSensitivity;
         }
         else
         {
-            yaw /= normalTrackballRangeInRads;
-            pitch /= normalTrackballRangeInRads;
+            yaw /= trackPadDefaultSensitivity;
+            pitch /= trackPadDefaultSensitivity;
         }
     }
 
@@ -1233,24 +1238,21 @@ void FSFloaterPoser::refreshTrackpadCursor()
     axis1 = rotation.mV[VX];
     axis2 = rotation.mV[VY];
 
+    axis1 /= normalTrackpadRangeInRads;
+    axis2 /= normalTrackpadRangeInRads;
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (!toggleSensitivityButton)
-    {
-        axis1 /= normalTrackballRangeInRads;
-        axis2 /= normalTrackballRangeInRads;
-    }
-    else
+    if (toggleSensitivityButton)
     {
         bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
         if (moreSensitive)
         {
-            axis1 /= zoomedTrackballRangeInRads;
-            axis2 /= zoomedTrackballRangeInRads;
+            axis1 /= trackPadHighSensitivity;
+            axis2 /= trackPadHighSensitivity;
         }
         else
         {
-            axis1 /= normalTrackballRangeInRads;
-            axis2 /= normalTrackballRangeInRads;
+            axis1 /= trackPadDefaultSensitivity;
+            axis2 /= trackPadDefaultSensitivity;
         }
     }
 
@@ -1273,9 +1275,9 @@ void FSFloaterPoser::refreshAvatarPositionSliders()
     if (!boost::iequals(activeTabName, POSER_AVATAR_TAB_POSITION))
         return; // if the active tab isn't the av position one, don't set anything.
 
-    LLSliderCtrl *xSlider   = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSX_NAME);
+    LLSliderCtrl *xSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSX_NAME);
     LLSliderCtrl *ySlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSY_NAME);
-    LLSliderCtrl *zSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSZ_NAME);
+    LLSliderCtrl *zSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSZ_NAME);
     if (!xSlider || !ySlider || !zSlider)
         return;
 

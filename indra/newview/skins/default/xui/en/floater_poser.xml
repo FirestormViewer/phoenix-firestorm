@@ -594,7 +594,8 @@ width="565">
 									height="153"
 									width="153"
 									tool_tip="Change the rotation of the currently selected joint(s). Roll the wheel while holding to adjust the 3rd axis"
-									thumb_mode="sun"/>
+									pinch_mode="false"
+									infinite_scroll_mode="true"/>
                 <panel
 				follows="left|top|bottom"
 				height="22"
