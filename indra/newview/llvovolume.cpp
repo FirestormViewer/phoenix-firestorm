@@ -7052,7 +7052,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             }
             else
             { //not alpha and not shiny
-                if (!is_alpha && tex->getPrimaryFormat() == GL_ALPHA)
+                if (!is_alpha && tex && tex->getPrimaryFormat() == GL_ALPHA) // <FS:Beq/> FIRE-34540 bugsplat crash caused by tex==nullptr. This stops the crash, but should we continue and leave the face unregistered instead of falling through?
                 { //invisiprim
                     registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
                 }
