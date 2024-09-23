@@ -1237,10 +1237,16 @@ void FSFloaterPoser::refreshTrackpadCursor()
     if (!trackBall)
         return;
 
-    LLVector3 rotation = getRotationOfFirstSelectedJoint();
-    F32       axis1, axis2;
-    axis1 = rotation.mV[VX];
-    axis2 = rotation.mV[VY];
+    LLSliderCtrl* yawSlider   = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
+    LLSliderCtrl* pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
+    if (!yawSlider || !pitchSlider)
+        return;
+
+    F32 axis1 = (F32) yawSlider->getValue().asReal();
+    F32 axis2 = (F32) pitchSlider->getValue().asReal();
+
+    axis1 *= DEG_TO_RAD;
+    axis2 *= DEG_TO_RAD;
 
     axis1 /= normalTrackpadRangeInRads;
     axis2 /= normalTrackpadRangeInRads;
