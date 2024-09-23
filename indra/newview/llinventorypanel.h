@@ -258,8 +258,10 @@ public:
 
     // Find whichever inventory panel is active / on top.
     // "Auto_open" determines if we open an inventory panel if none are open.
-    static LLInventoryPanel *getActiveInventoryPanel(bool auto_open = true);
-
+    // <FS:Beq> FIRE-34532: don't try top open snapshots in the secondary windows.
+    // static LLInventoryPanel *getActiveInventoryPanel(bool auto_open = true);
+    static LLInventoryPanel* getActiveInventoryPanel(bool auto_open = true, bool ignore_secondary = false);
+    // </FS:Beq>
     static void openInventoryPanelAndSetSelection(bool auto_open,
                                                     const LLUUID& obj_id,
                                                     bool use_main_panel = false,
