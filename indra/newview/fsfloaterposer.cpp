@@ -151,7 +151,7 @@ bool FSFloaterPoser::postBuild()
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(TRUE);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onAvatarsSelect, this));
+        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onAvatarSelect, this));
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME);
@@ -672,8 +672,7 @@ void FSFloaterPoser::onPoseStartStop()
     }
 
     onAvatarsRefresh();
-    onAvatarsSelect();
-    onJointSelect();
+    onAvatarSelect();
 }
 
 bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar *avatar)
@@ -1519,7 +1518,7 @@ S32 FSFloaterPoser::getJointNegation(std::string jointName)
 /// An event handler for selecting an avatar or animesh on the POSES_AVATAR_SCROLL_LIST_NAME.
 /// In general this will refresh the views for joints or their proxies, and (dis/en)able elements of the view.
 /// </summary>
-void FSFloaterPoser::onAvatarsSelect()
+void FSFloaterPoser::onAvatarSelect()
 {
     LLButton *startStopButton = getChild<LLButton>(POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME);
     if (!startStopButton)

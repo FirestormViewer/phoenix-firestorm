@@ -208,7 +208,7 @@ class FSFloaterPoser : public LLFloater
 
     // UI Event Handlers:
     void onAvatarsRefresh();
-    void onAvatarsSelect();
+    void onAvatarSelect();
     void onJointSelect();
     void onToggleAdvancedPanel();
     void onToggleMirrorChange();
