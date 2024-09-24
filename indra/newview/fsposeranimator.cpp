@@ -50,7 +50,7 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
     if (!motion || motion->isStopped())
         return false;
 
-    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
     if (!avJoint)
         return false;
 
@@ -70,7 +70,7 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
     if (!motion || motion->isStopped())
         return;
 
-    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
     if (!avJoint)
         return;
 
@@ -89,7 +89,7 @@ void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
     if (!motion || motion->isStopped())
         return;
 
-    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
     if (!avJoint)
         return;
 
@@ -102,7 +102,7 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joi
     if (!isAvatarSafeToUse(avatar))
         return pos;
 
-    LLJoint *avJoint = gAgentAvatarp->getJoint(JointKey::construct(joint.jointName()));
+    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
     if (!avJoint)
         return pos;
 
