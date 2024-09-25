@@ -38,7 +38,7 @@ jobs:
     steps:
       # Step 1: Checkout the Repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Necessary to fetch all history for tagging
 
@@ -50,6 +50,8 @@ jobs:
       - name: Get run info
         id: get_run_info
         uses: octokit/request-action@v2.x
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
         with:
           route: GET /repos/{owner}/{repo}/actions/runs/{run_id}
           owner: ${{ github.repository_owner }}
