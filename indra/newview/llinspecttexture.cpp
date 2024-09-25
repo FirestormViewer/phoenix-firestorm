@@ -167,10 +167,12 @@ void LLTexturePreviewView::setImageFromAssetId(const LLUUID& idAsset)
         m_Image->forceToSaveRawImage(0);
         if ( (!m_Image->isFullyLoaded()) && (!m_Image->hasFetcher()) )
         {
-            if (m_Image->isInFastCacheList())
-            {
-                m_Image->loadFromFastCache();
-            }
+// <AS:chanayane> Disable fast cache (tommytheterrible idea)
+            // if (m_Image->isInFastCacheList())
+            // {
+            //     m_Image->loadFromFastCache();
+            // }
+// </AS:chanayane>
             gTextureList.forceImmediateUpdate(m_Image);
         }
     }

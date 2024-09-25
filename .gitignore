@@ -114,7 +114,7 @@ indra/newview/pilot.xml
 # Firestorm additions
 indra/newview/exoflickrkeys.h
 indra/newview/fsdiscordkey.h
-my_autobuild.xml
+my_autobuild*.xml
 .vscode
 *.srctrlbm
 *.srctrldb
@@ -129,3 +129,5 @@ firestorm.code-workspace
 *-compiled.glsl
 
 .github/release.yaml
+
+*_special.bat

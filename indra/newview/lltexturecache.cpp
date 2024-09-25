@@ -575,12 +575,14 @@ bool LLTextureCacheRemoteWorker::doWrite()
                 // mRawImage is not entirely safe here since it is a pointer to one owned by cache worker,
                 // it could have been retrieved via getRequestFinished() and then modified.
                 // If writeToFastCache crashes, something is wrong around fetch worker.
-                if(!mCache->writeToFastCache(mID, idx, mRawImage, mRawDiscardLevel))
-                {
-                    LL_WARNS() << "writeToFastCache failed" << LL_ENDL;
-                    mDataSize = -1; // failed
-                    done = true;
-                }
+// <AS:chanayane> Disable fast cache (tommytheterrible idea)
+                // if(!mCache->writeToFastCache(mID, idx, mRawImage, mRawDiscardLevel))
+                // {
+                //     LL_WARNS() << "writeToFastCache failed" << LL_ENDL;
+                //     mDataSize = -1; // failed
+                //     done = true;
+                // }
+// </AS:chanayane>
             }
         }
         else
