@@ -316,11 +316,12 @@ jobs:
           echo "viewer_build=$viewer_build" >> "$GITHUB_OUTPUT"
           echo "viewer_channel=${{ env.FS_RELEASE_CHAN }}" >> "$GITHUB_OUTPUT"
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
-      # - name: Install node-dump-syms
-      #   if: runner.os == 'Linux'
-      #   run: |
-      #     npm install -g node-pre-gyp          
-      #     npm install -g node-dump-syms          
+      
+      - name: Unzip xcarchive.zip files
+        if: runner.os == 'macOS'
+        run: |
+          find . -name '*.xcarchive.zip' -exec sh -c 'unzip -o "{}" -d "$(dirname "{}")"' \;
+      
 
       - name: Post Bugsplat Symbols
         uses: BugSplat-Git/symbol-upload@main
@@ -348,7 +349,7 @@ jobs:
             secrets.BUGSPLAT_DEFAULT_DB }}
           application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
           version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
-          files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/*.xcarchive.zip' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
+          files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/*.xcarchive/**/*.dSYM' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
           node-version: "20"
           dumpSyms: false
