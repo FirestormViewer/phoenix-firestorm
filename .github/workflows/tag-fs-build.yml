@@ -1,0 +1,117 @@
+name: Tag FS Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: 'GitHub Run ID'
+        required: true
+      release_type:
+        description: "type of build"
+        required: true
+        type: choice
+        default: "Manual"
+        options:
+        - "Manual"
+        - "Nightly"
+        - "Beta"
+        - "Alpha"
+        - "Release"
+      viewer_version:
+        description: 'Viewer version'
+        required: true
+      viewer_build:
+        description: 'Viewer build number'
+        required: true
+      dry_run:
+        description: 'Execute as dry run (no tag will be created)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write  # Grants write access to repository contents
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the Repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Necessary to fetch all history for tagging
+
+      # Step 2: Install jq for JSON Parsing
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      # Step 3: Retrieve Run Information
+      - name: Get run info
+        id: get_run_info
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{owner}/{repo}/actions/runs/{run_id}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          run_id: ${{ github.event.inputs.build_run_id }}
+
+      # Step 4: Extract Commit SHA and Branch from Run Info
+      - name: Extract commit SHA and branch
+        id: extract_info
+        run: |
+          commit_sha=$(echo '${{ steps.get_run_info.outputs.data }}' | jq -r '.head_sha')
+          branch=$(echo '${{ steps.get_run_info.outputs.data }}' | jq -r '.head_branch')
+          echo "commit_sha=$commit_sha" >> $GITHUB_OUTPUT
+          echo "branch=$branch" >> $GITHUB_OUTPUT
+        shell: bash
+
+      # Step 4.1: (Optional) Check if Tag Already Exists
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG_NAME="Firestorm_${{ github.event.inputs.release_type }}_${{ github.event.inputs.viewer_version }}.${{ github.event.inputs.viewer_build }}"
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Tag $TAG_NAME already exists."
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag $TAG_NAME does not exist. Proceeding to create."
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      # Step 5: Checkout the Specific Commit
+      - name: Checkout the specific commit
+        run: git checkout ${{ steps.extract_info.outputs.commit_sha }}
+
+      # Step 6: Create the Tag (Conditional)
+      - name: Create tag
+        id: create_tag
+        if: ${{ inputs.dry_run != 'true' && steps.check_tag.outputs.tag_exists == 'false' }}
+        run: |
+          TAG_NAME="Firestorm_${{ github.event.inputs.release_type }}_${{ github.event.inputs.viewer_version }}.${{ github.event.inputs.viewer_build }}"
+          echo "Proposed Tag: $TAG_NAME"  # **Echo the proposed tag to logs**
+          git tag "$TAG_NAME"
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
+        shell: bash
+
+      # Step 7: Push the Tag to the Repository (Conditional)
+      - name: Push tag
+        if: ${{ inputs.dry_run != 'true' && steps.check_tag.outputs.tag_exists == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin ${{ steps.create_tag.outputs.TAG_NAME }}
+
+      # Step 8: Output Dry Run or Tag Creation Message
+      - name: Tagging Confirmation
+        run: |
+          TAG_NAME="Firestorm_${{ github.event.inputs.release_type }}_${{ github.event.inputs.viewer_version }}.${{ github.event.inputs.viewer_build }}"
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            echo "Dry run mode enabled. Tag '$TAG_NAME' was not created or pushed."
+          elif [ "${{ steps.check_tag.outputs.tag_exists }}" == "true" ]; then
+            echo "Tag '$TAG_NAME' already exists. No new tag was created."
+          else
+            echo "Tag '$TAG_NAME' has been created and pushed successfully."
+          fi
+  
