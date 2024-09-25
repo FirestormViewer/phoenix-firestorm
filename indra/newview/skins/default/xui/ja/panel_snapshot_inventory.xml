@@ -5,13 +5,10 @@
 	</text>
 	<view_border  name="hr" />
 	<combo_box label="解像度" name="texture_size_combo">
-		<!--
-		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>
-		-->
 		<combo_box.item label="小（128x128）" name="Small(128x128)"/>
 		<combo_box.item label="中（256x256）" name="Medium(256x256)"/>
 		<combo_box.item label="大（512x512）" name="Large(512x512)"/>
-		<combo_box.item label="現在のウィンドウ (512x512)" name="CurrentWindow" />
+		<combo_box.item label="現在のウィンドウ" name="CurrentWindow" />
 		<combo_box.item label="カスタム" name="Custom"/>
 	</combo_box>
 	<spinner label="幅 x 高さ" name="inventory_snapshot_width"/>
