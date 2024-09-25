@@ -10,31 +10,31 @@
 		ID Proprietà: 
 	</text>
 	<line_editor name="estate_id" initial_value="sconosciuto" width="85" />
-	<text name="version_channel_text_lbl">
-		Versione:
-	</text>
-	<text name="version_channel_text" left_delta="60">
-		sconosciuta
-	</text>
-	<text name="grid_position_lbl" right="-75">
-		Pos. grid:
-	</text>
-	<line_editor name="grid_position_x" default_text="scon"/>
-	<line_editor name="grid_position_y" default_text="scon"/>
 	<text name="region_type_lbl">
 		Tipo:
 	</text>
 	<text name="region_type" left_delta="60">
 		sconosciuto
 	</text>
-	<check_box label="Proibisci modifica del terreno" name="block_terraform_check"/>
-	<check_box label="Impedisci volo" name="block_fly_check"/>
-	<check_box label="Blocca sorvolo" name="block_fly_over_check" tool_tip="Espandi il controllo dell&apos;accesso in alto per impedire il volo sopra un lotto"/>
-	<check_box label="Abilita danni" name="allow_damage_check"/>
-	<check_box label="Limita urti" name="restrict_pushobject"/>
+	<text name="grid_position_lbl" right="-75">
+		Pos. grid:
+	</text>
+	<text name="version_channel_text_lbl">
+		Versione:
+	</text>
+	<text name="version_channel_text" left_delta="60">
+		sconosciuta
+	</text>
+	<line_editor name="grid_position_x" default_text="scon"/>
+	<line_editor name="grid_position_y" default_text="scon"/>
+	<check_box label="Disabilita modifica del terreno" name="block_terraform_check"/>
+	<check_box label="Disabilita il volo" name="block_fly_check"/>
+	<check_box label="Disabilita il sorvolo sul terreno" name="block_fly_over_check" tool_tip="Espandi il controllo dell&apos;accesso in alto per impedire il volo sopra un lotto"/>
+	<check_box label="Abilita il danno" name="allow_damage_check"/>
+	<check_box label="Disabilita la spinta" name="restrict_pushobject"/>
 	<check_box label="Abilita rivendita del terreno" name="allow_land_resell_check"/>
 	<check_box label="Abilita unione/suddivisione del terreno" name="allow_parcel_changes_check"/>
-	<check_box label="Proibisci che il terreno appaia nelle ricerche" name="block_parcel_search_check" tool_tip="Permetti che le persone vedano questa regione e le sue suddivisioni nei risultati delle ricerche"/>
+	<check_box label="Non permettere che il terreno appaia nelle ricerche" name="block_parcel_search_check" tool_tip="Permetti che le persone vedano questa regione e le sue suddivisioni nei risultati delle ricerche"/>
 	<spinner label="Limite massimo di avatar" label_width="150" name="agent_limit_spin" width="223"/>
 	<spinner label="Bonus di oggetti" label_width="150" name="object_bonus_spin" width="223"/>
 	<text label="Maturità" name="access_text" width="160">
@@ -50,4 +50,5 @@
 	<button label="Teleport a casa tutti i residenti..." name="kick_all_btn"/>
 	<button label="Invia messaggio alla regione..." name="im_btn"/>
 	<button label="Gestisci snodo di teleport..." name="manage_telehub_btn" width="210"/>
+	<button label="Pianifica riavvio regione..." name="manage_restart_btn" />
 </panel>

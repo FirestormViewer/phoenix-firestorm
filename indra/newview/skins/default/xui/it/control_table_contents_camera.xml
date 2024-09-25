@@ -51,6 +51,12 @@
 	<rows name="spin_around_cw">
 		<columns name="lst_action" tool_tip="Ruota la camera attorno al punto di focus in senso orario." value="Ruota camera verso sinistra" />
 	</rows>
+	<rows name="roll_left">
+		<columns name="lst_action" tool_tip="Inclina camera a sinistra" value="Inclina a sinistra" />
+	</rows>
+	<rows name="roll_right">
+		<columns name="lst_action" tool_tip="Inclina camera a destra" value="Inclina a destra" />
+	</rows>
 	<rows name="move_forward_sitting">
 		<columns name="lst_action" value="Camera in avanti (s)" />
 	</rows>
