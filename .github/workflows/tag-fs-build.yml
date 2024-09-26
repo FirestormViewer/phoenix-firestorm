@@ -69,7 +69,7 @@ jobs:
             echo "Triggered by workflow_dispatch event."
             echo "Using run number of manual dispatch"
             echo "build_run_number=${{ github.event.inputs.build_run_number  }}"  >> "$GITHUB_OUTPUT"
-
+          fi
       - name: Download Build Artifacts
         uses: dawidd6/action-download-artifact@v6
         id: download_build_info
