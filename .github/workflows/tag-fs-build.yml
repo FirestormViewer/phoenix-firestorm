@@ -112,17 +112,21 @@ jobs:
         shell: bash
 
       # Check if Tag Already Exists
-      - name: Check if tag exists
-        id: check_tag
+      - name: Determine tag
+        id: get_tag
         run: |
           TAG_NAME="Firestorm_${{ steps.get_inputs.outputs.release_type }}_${{ steps.get_inputs.outputs.viewer_version }}.${{ steps.get_inputs.outputs.viewer_build }}"
           echo "Proposed Tag: $TAG_NAME"
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
-          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-            echo "Tag $TAG_NAME already exists."
+      - name: Check if tag exists
+        id: check_tag
+        run: |          
+          if git rev-parse "${{ steps.get_tag.outputs.tag_name }}" >/dev/null 2>&1; then
+            echo "Tag ${{ steps.get_tag.outputs.tag_name }} already exists."
             echo "tag_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "Tag $TAG_NAME does not exist."
+            echo "Tag ${{ steps.get_tag.outputs.tag_name }} does not exist."
             echo "tag_exists=false" >> $GITHUB_OUTPUT
           fi
         shell: bash
@@ -133,10 +137,8 @@ jobs:
           ${{ steps.get_inputs.outputs.dry_run != 'true' &&
              steps.check_tag.outputs.tag_exists == 'false' }}
         run: |
-          TAG_NAME="Firestorm_${{ steps.get_inputs.outputs.release_type }}_${{ steps.get_inputs.outputs.viewer_version }}.${{ steps.get_inputs.outputs.viewer_build }}"
-          echo "Creating tag: $TAG_NAME"
-          git tag "$TAG_NAME"
-          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "Creating tag: ${{ steps.get_tag.outputs.tag_name }}"
+          git tag ${{ steps.get_tag.outputs.tag_name }}
         shell: bash
 
       # Push the Tag to the Repository (Conditional)
@@ -147,18 +149,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG_NAME="${{ steps.create_tag.outputs.TAG_NAME }}"
-          git push origin "$TAG_NAME"
+          git push origin "${{ steps.get_tag.outputs.tag_name }}"
 
       # Tagging Confirmation
       - name: Tagging Confirmation
         run: |
-          TAG_NAME="Firestorm_${{ steps.get_inputs.outputs.release_type }}_${{ steps.get_inputs.outputs.viewer_version }}.${{ steps.get_inputs.outputs.viewer_build }}"
           if [ "${{ steps.get_inputs.outputs.dry_run }}" == "true" ]; then
             echo "Dry run mode enabled. Tag '$TAG_NAME' was not created or pushed."
           elif [ "${{ steps.check_tag.outputs.tag_exists }}" == "true" ]; then
-            echo "Tag '$TAG_NAME' already exists. No new tag was created."
+            echo "Tag '${{ steps.get_tag.outputs.tag_name }}' already exists. No new tag was created."
           else
-            echo "Tag '$TAG_NAME' has been created and pushed successfully."
+            echo "Tag '${{ steps.get_tag.outputs.tag_name }}' has been created and pushed successfully."
           fi
         shell: bash
