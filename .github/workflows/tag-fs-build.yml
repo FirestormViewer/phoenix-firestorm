@@ -76,15 +76,14 @@ jobs:
         with:
           workflow: build_viewer.yml
           run_number: ${{ steps.get_run_number.outputs.build_run_number }}
+          name: build_info
+          skip_unpack: false
           path: build_info
 
       # workout the inputs based on the trigger type
-      - name: Unpack the json and get inputs
+      - name: Query the json and get input overrides if applicable
         id: get_inputs
-        run: |
-            # Unzip the artifact
-            unzip -o build_info/build_info.zip -d build_info
-        
+        run: |        
             # Parse the JSON file
             RELEASE_TYPE=$(jq -r '.release_type' build_info/build_info.json)
             VIEWER_VERSION=$(jq -r '.viewer_version' build_info/build_info.json)
