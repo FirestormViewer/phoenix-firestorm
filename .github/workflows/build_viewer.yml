@@ -433,6 +433,31 @@ jobs:
         run: ls -R
         working-directory: ${{steps.download.outputs.download-path}}
 
+      - name: Create Build Info artifact
+        env:
+          FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
+          FS_VIEWER_VERSION: 
+          FS_VIEWER_BUILD: 
+          FS_VIEWER_RELEASE_TYPE: 
+        id: create_build_info
+        run: |
+          cat <<EOF > build_info.json
+          {
+            "build_run_number": "${{ github.run_number }}",
+            "release_type": "${{ needs.build_matrix.outputs.viewer_release_type }}",
+            "viewer_version": "${{ needs.build_matrix.outputs.viewer_version }}",
+            "viewer_build": "${{ needs.build_matrix.outputs.viewer_build }}"
+          }
+          EOF
+          echo "Build info created: $(cat build_info.json)"
+
+      # Upload Build Info Artifact
+      - name: Upload Tag Info
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_info
+          path: build_info.json
+
       - name: Reorganise artifacts ready for server upload.
         env:
           FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
