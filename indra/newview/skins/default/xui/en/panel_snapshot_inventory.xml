@@ -128,6 +128,8 @@
      type="string"
      word_wrap="true">
         To save your image as a texture select one of the square formats.
+
+Upload cost: L$ [UPLOAD_COST]
     </text>
     <button
      follows="right|bottom"

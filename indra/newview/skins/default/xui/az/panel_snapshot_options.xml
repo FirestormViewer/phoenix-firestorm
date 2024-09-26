@@ -5,7 +5,7 @@
 			<button label="Diskə yadda saxla" name="save_to_computer_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_inventory">
-			<button label="Avadanlıq siyahısı (L$[AMOUNT])" name="save_to_inventory_btn"/>
+			<button label="Avadanlıq siyahısı" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">
 			<button label="Profilə yüklə" name="save_to_profile_btn"/>
