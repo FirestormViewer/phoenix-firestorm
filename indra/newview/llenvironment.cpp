@@ -2228,6 +2228,7 @@ void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, UpdateInf
             body[KEY_ENVIRONMENT][KEY_DAYLENGTH] = updates->mDayLength;
         }
 
+        // server only allows positive values
         if (updates->mDayOffset > 0)
         {
             body[KEY_ENVIRONMENT][KEY_DAYOFFSET] = updates->mDayOffset;

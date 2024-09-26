@@ -3646,6 +3646,10 @@ Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votr
 
 Si vous êtes un membre Premium, [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
 	</notification>
+	<notification name="VoiceEffectsWillExpire">Au moins l'un de vos effets de voix expirera dans moins de [INTERVAL] jours.  
+[[URL] Cliquez ici] pour renouveler votre abonnement. 
+
+Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.</notification>
 	<notification name="VoiceEffectsNew">
 		De nouveaux effets de voix sont disponibles !
 	</notification>

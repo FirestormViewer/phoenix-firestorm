@@ -3659,6 +3659,11 @@ M キーを押して変更します。
 
 プレミアム会員の方は、 [[PREMIUM_URL] click here] をクリックしてボイスモーフィング特典をお受け取りください。
 	</notification>
+	<notification name="VoiceEffectsWillExpire">ボイスモーフィング効果の１つ、または複数の有効期限が[INTERVAL]日以内に終了します。
+期限を延長・更新するには[[URL] ここ]をクリックしてください。
+
+プレミアム会員の方は、[[PREMIUM_URL] ここ]をクリックしてボイスモーフィング特典をお受け取りください。
+	</notification>
 	<notification name="VoiceEffectsNew">
 		新しいボイスモーフィング効果が登場！
 	</notification>

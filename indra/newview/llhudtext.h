@@ -67,6 +67,7 @@ protected:
         LLColor4                mColor;
         LLFontGL::StyleFlags    mStyle;
         const LLFontGL*         mFont;
+        LLFontVertexBuffer      mFontBuffer;
     private:
         LLWString               mText;
         std::map<const LLFontGL*, F32> mFontWidthMap;
@@ -173,7 +174,6 @@ private:
     ETextAlignment  mTextAlignment;
     EVertAlignment  mVertAlignment;
     bool            mHidden;
-    LLFontVertexBuffer   mFontBuffer;
 // [RLVa:KB] - Checked: RLVa-1.0.0
     std::string     mObjText;
 // [/RLVa:KB]

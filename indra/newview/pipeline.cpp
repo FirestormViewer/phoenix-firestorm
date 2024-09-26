@@ -35,6 +35,7 @@
 #include "llviewercontrol.h"
 #include "llfasttimer.h"
 #include "llfontgl.h"
+#include "llfontvertexbuffer.h"
 #include "llnamevalue.h"
 #include "llpointer.h"
 #include "llprimitive.h"
@@ -628,6 +629,15 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("FSFocusPointFollowsPointer");
     connectRefreshCachedSettingsSafe("FSFocusPointLocked");
     // </FS:Beq>
+
+    LLPointer<LLControlVariable> cntrl_ptr = gSavedSettings.getControl("CollectFontVertexBuffers");
+    if (cntrl_ptr.notNull())
+    {
+        cntrl_ptr->getCommitSignal()->connect([](LLControlVariable* control, const LLSD& value, const LLSD& previous)
+        {
+            LLFontVertexBuffer::enableBufferCollection(control->getValue().asBoolean());
+        });
+    }
 }
 
 LLPipeline::~LLPipeline()
@@ -1198,6 +1208,8 @@ void LLPipeline::refreshCachedSettings()
         LLVOAvatar::sMaxNonImpostors = 1;
         LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
     }
+
+    LLFontVertexBuffer::enableBufferCollection(gSavedSettings.getBOOL("CollectFontVertexBuffers"));
 }
 
 void LLPipeline::releaseGLBuffers()
@@ -7212,7 +7224,7 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst)
 
         LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
-        bool no_post = gSnapshotNoPost || (buildNoPost && gFloaterTools->isAvailable());
+        bool no_post = gSnapshotNoPost || psky->getReflectionProbeAmbiance(should_auto_adjust) == 0.f || (buildNoPost && gFloaterTools->isAvailable());
         LLGLSLShader& shader = no_post ? gNoPostTonemapProgram : gDeferredPostTonemapProgram;
 
         shader.bind();

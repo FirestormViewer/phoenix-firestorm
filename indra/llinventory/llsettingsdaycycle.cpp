@@ -144,7 +144,7 @@ LLSettingsDay::LLSettingsDay() :
 //=========================================================================
 LLSD& LLSettingsDay::getSettings()
 {
-    if (!mDaySettings.emptyMap())
+    if (mDaySettings.size() > 0)
     {
         return mDaySettings;
     }
