@@ -316,11 +316,12 @@ jobs:
           echo "viewer_build=$viewer_build" >> "$GITHUB_OUTPUT"
           echo "viewer_channel=${{ env.FS_RELEASE_CHAN }}" >> "$GITHUB_OUTPUT"
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
-      # - name: Install node-dump-syms
-      #   if: runner.os == 'Linux'
-      #   run: |
-      #     npm install -g node-pre-gyp          
-      #     npm install -g node-dump-syms          
+      
+      - name: Unzip xcarchive.zip files
+        if: runner.os == 'macOS'
+        run: |
+          find . -name '*.xcarchive.zip' -exec sh -c 'unzip -o "{}" -d "$(dirname "{}")"' \;
+      
 
       - name: Post Bugsplat Symbols
         uses: BugSplat-Git/symbol-upload@main
@@ -348,7 +349,7 @@ jobs:
             secrets.BUGSPLAT_DEFAULT_DB }}
           application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
           version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
-          files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/*.xcarchive.zip' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
+          files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/Release/{Firestorm,*.dSYM}' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
           node-version: "20"
           dumpSyms: false
@@ -431,6 +432,31 @@ jobs:
       - name: List artifacts download
         run: ls -R
         working-directory: ${{steps.download.outputs.download-path}}
+
+      - name: Create Build Info artifact
+        env:
+          FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
+          FS_VIEWER_VERSION: 
+          FS_VIEWER_BUILD: 
+          FS_VIEWER_RELEASE_TYPE: 
+        id: create_build_info
+        run: |
+          cat <<EOF > build_info.json
+          {
+            "build_run_number": "${{ github.run_number }}",
+            "release_type": "${{ needs.build_matrix.outputs.viewer_release_type }}",
+            "viewer_version": "${{ needs.build_matrix.outputs.viewer_version }}",
+            "viewer_build": "${{ needs.build_matrix.outputs.viewer_build }}"
+          }
+          EOF
+          echo "Build info created: $(cat build_info.json)"
+
+      # Upload Build Info Artifact
+      - name: Upload Tag Info
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_info
+          path: build_info.json
 
       - name: Reorganise artifacts ready for server upload.
         env:

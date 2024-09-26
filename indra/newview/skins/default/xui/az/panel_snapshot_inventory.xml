@@ -7,7 +7,7 @@
 		Tekstur kimi saxlamaq üçün kvadrat formatlarından birini seçin.
 	</text>
 	<combo_box label="Ölçü" name="texture_size_combo">
-		<combo_box.item label="Cari pəncərə (512x512)" name="CurrentWindow"/>
+		<combo_box.item label="Cari pəncərə" name="CurrentWindow"/>
 		<combo_box.item label="Kiçik (128x128)" name="Small(128x128)"/>
 		<combo_box.item label="Orta (256x256)" name="Medium(256x256)"/>
 		<combo_box.item label="Böyük (512x512)" name="Large(512x512)"/>

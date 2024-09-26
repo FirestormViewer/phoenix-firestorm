@@ -30,12 +30,8 @@
 #include "llsidetraypanelcontainer.h"
 
 #include "llfloatersnapshot.h" // FIXME: create a snapshot model
-#include "llsnapshotlivepreview.h"
 #include "llfloaterreg.h"
 #include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
-
-#include "llagentbenefits.h"
-
 
 /**
  * Provides several ways to save a snapshot.
@@ -47,9 +43,7 @@ class LLPanelSnapshotOptions
 
 public:
     LLPanelSnapshotOptions();
-    ~LLPanelSnapshotOptions();
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
+    bool postBuild() override;
 
 private:
     void updateUploadCost();
@@ -74,39 +68,11 @@ LLPanelSnapshotOptions::LLPanelSnapshotOptions()
     mCommitCallbackRegistrar.add("Snapshot.SendToFlickr",       boost::bind(&LLPanelSnapshotOptions::onSendToFlickr, this)); // <FS:Ansariel> Share to Flickr
 }
 
-LLPanelSnapshotOptions::~LLPanelSnapshotOptions()
-{
-}
-
 // virtual
 bool LLPanelSnapshotOptions::postBuild()
 {
     mSnapshotFloater = getParentByType<LLFloaterSnapshotBase>();
     return LLPanel::postBuild();
-}
-
-// virtual
-void LLPanelSnapshotOptions::onOpen(const LLSD& key)
-{
-    updateUploadCost();
-}
-
-void LLPanelSnapshotOptions::updateUploadCost()
-{
-    S32 w = 0;
-    S32 h = 0;
-
-    if( mSnapshotFloater )
-    {
-        LLSnapshotLivePreview* preview = mSnapshotFloater->getPreviewView();
-        if( preview )
-        {
-            preview->getSize(w, h);
-        }
-    }
-
-    S32 upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost(w, h);
-    getChild<LLUICtrl>("save_to_inventory_btn")->setLabelArg("[AMOUNT]", llformat("%d", upload_cost));
 }
 
 void LLPanelSnapshotOptions::openPanel(const std::string& panel_name)

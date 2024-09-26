@@ -466,6 +466,7 @@
 			<menu_item_call label="Apri..." name="Open..." />
 			<menu_item_call label="Salva come..." name="Save As..." />
 			<menu_item_call label="Carica..." name="Upload..." />
+			<menu_item_call label="Modifica..." name="Edit..." />
 		</menu>
 		<menu label="Test rendering" name="Render Tests">
 			<menu_item_check label="Camera Offset" name="Camera Offset"/>
@@ -508,25 +509,25 @@
 			</menu>
 		</menu>
 		<menu label="Rendering" name="Rendering">
-			<menu_item_check label="Axes" name="Axes"/>
-			<menu_item_check label="Tangent Basis" name="Tangent Basis"/>
-			<menu_item_call label="Selected Texture Info Basis" name="Selected Texture Info Basis"/>
-			<menu_item_call label="Info materiale selezionato" name="Selected Material Info"/>
-			<menu_item_check label="Wireframe" name="Wireframe"/>
-			<menu_item_check label="Object-Object Occlusion" name="Object-Object Occlusion"/>
-			<menu_item_check label="Advanced Lighting Model" name="Advanced Lighting Model"/>
-			<menu_item_check label="   Shadows from Sun/Moon/Projectors" name="Shadows from Sun/Moon/Projectors"/>
-			<menu_item_check label="   SSAO and Shadow Smoothing" name="SSAO and Shadow Smoothing"/>
-			<menu_item_check label="Debug GL" name="Debug GL"/>
-			<menu_item_check label="Debug Pipeline" name="Debug Pipeline"/>
-			<menu_item_check label="Automatic Alpha Masks (deferred)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatic Alpha Masks (non-deferred)" name="Automatic Alpha Masks (non-deferred)"/>
-			<menu_item_check label="Animation Textures" name="Animation Textures"/>
-			<menu_item_check label="Disable Textures" name="Disable Textures"/>
-			<menu_item_check label="Full Res Textures (dangerous)" name="Full Res Textures"/>
-			<menu_item_check label="Render Attached Lights" name="Render Attached Lights"/>
-			<menu_item_check label="Render Attached Particles" name="Render Attached Particles"/>
-			<menu_item_check label="Hover Glow Objects" name="Hover Glow Objects"/>
+			<menu_item_check label="Assi" name="Axes"/>
+			<menu_item_check label="Info di base sulle tangenti" name="Tangent Basis"/>
+			<menu_item_call label="Info di base sulla texture selezionata" name="Selected Texture Info Basis"/>
+			<menu_item_call label="Info sul materiale selezionato" name="Selected Material Info"/>
+			<menu_item_check label="Modalità immagine wireframe" name="Wireframe"/>
+			<menu_item_check label="Occlusione da oggetto a oggetto" name="Object-Object Occlusion"/>
+			<menu_item_check label="Ombre sole/luna/proiettori" name="Shadows from Sun/Moon/Projectors"/>
+			<menu_item_check label="SSAO e attenuazione delle ombre" name="SSAO and Shadow Smoothing"/>
+			<menu_item_check label="Debug GL al prossimo avvio" name="Debug GL"/>
+			<menu_item_check label="Debug delle pipeline" name="Debug Pipeline"/>
+			<menu_item_check label="Mascherature alfa automatiche" name="Automatic Alpha Masks (deferred)"/>
+			<menu_item_check label="Texture animate" name="Animation Textures"/>
+			<menu_item_check label="Disabilita texture" name="Disable Textures"/>
+			<menu_item_call label="Derenderizza tutte le animesh" name="Derender Animesh"/>
+			<menu_item_check label="Risoluzione massima della texture (pericoloso)" name="Full Res Textures"/>
+			<menu_item_check label="Renderizza luci indossate" name="Render Attached Lights"/>
+			<menu_item_check label="Renderizza particelle indossate" name="Render Attached Particles"/>
+			<menu_item_check label="Abilita cache degli shader" name="Enable Shader Cache" />
+			<menu_item_call label="Cancella cache degli shader" name="Shader Cache Clear" />
 		</menu>
 		<menu label="Rete" name="Network">
 			<menu_item_check label="Pausa agente" name="AgentPause"/>
@@ -552,6 +553,11 @@
 			<menu_item_check label="Fixed Weather" name="Fixed Weather"/>
 			<menu_item_call label="Scarica Region Object Cache" name="Dump Region Object Cache"/>
 			<menu_item_call label="Scarica Simulator Features to Nearby Chat" name="DumpSimFeaturesToChat"/>
+		</menu>
+		<menu label="Terreno" name="DevelopTerrain">
+			<menu_item_call label="Ricostruisci terreno" name="Rebuild Terrain" />
+			<menu_item_call label="Crea paintmap locale" name="Create Local Paintmap" />
+			<menu_item_call label="Elimina paintmap locale" name="Delete Local Paintmap" />
 		</menu>
 		<menu label="UI" name="UI">
 			<menu_item_call label="Test browser multimediale" name="Web Browser Test"/>
@@ -580,15 +586,16 @@
 			<menu_item_check label="Debug processi finestra" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI" name="XUI">
+			<menu_item_call label="Mostra Impostazioni Colore" name="Color Settings" />
 			<menu_item_call label="Ricarica impostazioni colori" name="Reload Color Settings"/>
-			<menu_item_call label="Mostra Font Test" name="Show Font Test"/>
+			<menu_item_call label="Mostra Test Carattere" name="Show Font Test"/>
 			<menu_item_call label="Carica da XML" name="Load from XML"/>
 			<menu_item_call label="Salva su XML" name="Save to XML"/>
 			<menu_item_check label="Mostra nomi XUI" name="Show XUI Names"/>
-			<menu_item_check label="Mostra debugging info for views" name="DebugViews"/>
-			<menu_item_call label="XUI Preview Tool" name="UI Preview Tool"/>
-			<menu_item_call label="Manda IM test" name="Send Test IMs"/>
-			<menu_item_call label="Vuota cache nomi" name="Flush Names Caches"/>
+			<menu_item_check label="Mostra informazioni di debug per le visualizzazioni" name="DebugViews"/>
+			<menu_item_call label="Strumento di anteprima XUI" name="UI Preview Tool"/>
+			<menu_item_call label="Invia IM di prova" name="Send Test IMs"/>
+			<menu_item_call label="Svuota le cache dei nomi" name="Flush Names Caches"/>
 		</menu>
 		<menu label="Avatar" name="Character">
 			<menu label="Cattura texture combinate" name="Grab Baked Texture">
@@ -600,10 +607,11 @@
 			</menu>
 			<menu label="Test avatar" name="Character Tests">
 				<menu_item_call label="Aspetto a XML" name="Appearance To XML"/>
-				<menu_item_call label="Commuta Character Geometry" name="Toggle Character Geometry"/>
+				<menu_item_call label="Commuta geometria personaggio" name="Toggle Character Geometry"/>
 				<menu_item_call label="Test maschio" name="Test Male"/>
 				<menu_item_call label="Test femmina" name="Test Female"/>
 				<menu_item_check label="Permetti di selezionare gli avatar" name="Allow Select Avatar"/>
+				<menu_item_check label="Disabilita l'animazione dello sguardo" name="Disable Look At Animation" />
 				<menu_item_check label="Renderizza solo gli amici" name="Render Only Friends" />
 			</menu>
 			<menu label="Velocità animazioni" name="Animation Speed">
