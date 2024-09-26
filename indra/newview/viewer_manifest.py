@@ -1454,7 +1454,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     self.path2basename(relpkgdir, "BugsplatMac.framework")
 
             with self.prefix(dst="MacOS"):
-                executable = self.dst_path_of("Firestorm")
+                executable = self.dst_path_of(CHANNEL_VENDOR_BASE)
                 if self.args.get('bugsplat'):
                     # According to Apple Technical Note TN2206:
                     # https://developer.apple.com/library/archive/technotes/tn2206/_index.html#//apple_ref/doc/uid/DTS40007919-CH1-TNTAG207
@@ -2151,7 +2151,7 @@ class LinuxManifest(ViewerManifest):
             self.path("ca-bundle.crt")
 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            self.path("libfreetype.so*")
+            # self.path("libfreetype.so*")
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
             #self.path("libboost_context-mt.so*")

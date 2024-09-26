@@ -6,12 +6,18 @@
 	<pie_slice label="Сесть" name="Pie Object Sit"/>
 	<pie_slice label="Встать" name="Object Stand Up"/>
 	<pie_slice label="Купить" name="Buy..."/>
-	<pie_slice label="Взять" name="Pie Object Take"/>
+	<pie_menu label="Взять &gt;" name="Take Submenu">
+		<pie_slice label="Копии как отдельные предметы" name="Take Copy Separate" />
+		<pie_slice label="Взять Копию" name="Take Copy" />
+		<pie_slice label="Взять" name="Take" />
+		<pie_slice label="Как комбинированный предмет" name="Take combined" />
+		<pie_slice label="Копию как комбинированный предмет" name="Take Copy combined" />
+		<pie_slice label="Как отдельные предметы" name="Take Separate" />
+	</pie_menu>
 	<pie_slice label="Заплатить" name="Pay..."/>
 	<pie_menu label="Далее &gt;" name="Object Pie More 1">
 		<pie_slice label="Удалить" name="Delete"/>
 		<pie_slice label="Надеть" name="Wear"/>
-		<pie_slice label="Взять Копию" name="Take Copy"/>
 		<pie_menu label="Добавить HUD &gt;" name="Pie Object Attach HUD" />
 		<pie_menu label="Прикрепить &gt;" name="Pie Object Attach">
 			<pie_menu label="Доп.Скелет &gt;" name="Enhanced Skeleton">

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gltf asset editor">
+	<floater.string name="floater_title" value="Editor Scena GLTF" />
+	<floater.string name="scene_tittle" value="Scena" />
+	<floater.string name="node_tittle" value="Nodo" />
+	<floater.string name="mesh_tittle" value="Mesh" />
+	<floater.string name="skin_tittle" value="Skin" />
+	<layout_stack name="main_layout">
+		<layout_panel name="transforms_panel">
+			<menu_button name="clipboard_pos_btn" tool_tip="Opzioni incolla" />
+			<text name="label position" tool_tip="Posizione (metri)">
+				Posizione (m)
+			</text>
+			<menu_button name="clipboard_size_btn" tool_tip="Opzioni incolla" />
+			<text name="label size" tool_tip="Dimensioni (metri)">
+				Dimensioni (m)
+			</text>
+			<menu_button name="clipboard_rot_btn" tool_tip="Opzioni incolla" />
+			<text name="label rotation" tool_tip="Rotazione (gradi)">
+				Rotazione (°)
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

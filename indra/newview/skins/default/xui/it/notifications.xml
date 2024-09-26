@@ -853,6 +853,16 @@ Se si riavvia il viewer con le impostazioni precedenti potrebbe essere possibile
 		Impossibile importare il file [FILE] a causa del seguente motivo: [REASON]
 Riprova più tardi.
 	</notification>
+	<notification name="CannotUploadSnapshotEmailTooBig">
+		Il caricamento della foto [FILE] non è riuscito a causa di: [REASON]
+
+Il file potrebbe essere troppo grande. Prova ad abbassare la risoluzione, la qualità o riprova più tardi.
+	</notification>
+	<notification name="CannotUploadSnapshotWebTooBig">
+		Caricamento foto non riuscito.
+
+Il file potrebbe essere troppo grande. Prova ad abbassare la risoluzione, la qualità o riprova più tardi.
+	</notification>
 	<notification name="LandmarkCreated">
 		Hai aggiunto &quot;[LANDMARK_NAME]&quot; alla tua cartella [FOLDER_NAME].
 	</notification>
@@ -1145,6 +1155,9 @@ Unire il terreno?
 	<notification name="CannotSaveToAssetStore">
 		Non è possibile salvare [NAME] nel database centrale degli asset.
 In genere si tratta di un problema temporaneo. Attendere alcuni minuti per modificare e salvare nuovamente gli elementi indossabili.
+	</notification>
+	<notification name="OutOfDiskSpace">
+		Spazio sul disco esaurito. È necessario liberare spazio sul computer o svuotare la cache.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
 		Sei stato scollegato da [CURRENT_GRID].
@@ -1601,6 +1614,10 @@ Eccede il [MAX_AGENTS] [LIST_TYPE] limite di [NUM_EXCESS].
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Impossibile cambiare l&apos;aspetto fisico finchè i vestiti non sono caricati.
+	</notification>
+	<notification name="UsavedWearableChanges">
+		Sono presenti modifiche non salvate.
+		<usetemplate ignoretext="Conferma prima di eliminare le modifiche all'abbigliamento non salvate" name="okcancelignore" notext="Continua a modificare" yestext="Scarta" />
 	</notification>
 	<notification name="ClassifiedMustBeAlphanumeric">
 		Il nome del tuo annuncio deve iniziare con una lettera da A a Z oppure con un numero. Non sono consentiti caratteri di punteggiatura.

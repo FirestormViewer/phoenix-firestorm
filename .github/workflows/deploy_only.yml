@@ -3,10 +3,9 @@ name: Deploy Viewer
 on:
   workflow_dispatch:
     inputs:
-      build_run_id:
-        description: 'Workflow Run ID of the build to deploy'
+      build_run_number:
+        description: 'GitHub Run Number (per build_viewer.yml workflow)'
         required: true
-        default: ''
       viewer_channel:
         description: 'viewer_channel'
         required: true
@@ -50,7 +49,7 @@ jobs:
         id: download
         with:
           workflow: build_viewer.yml
-          run_number: ${{ github.event.inputs.build_run_id  }}
+          run_number: ${{ github.event.inputs.build_run_number  }}
           path: to_deploy
       - name: Install discord-webhook library
         run: pip install discord-webhook

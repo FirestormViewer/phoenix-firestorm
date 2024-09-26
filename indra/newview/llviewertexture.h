@@ -167,8 +167,8 @@ public:
     const ll_volume_list_t* getVolumeList(U32 channel) const { return &mVolumeList[channel]; }
 
     bool isLargeImage() ;
-    bool isInvisiprim() ;
-    static bool isInvisiprim(LLUUID id) ;
+    bool isInvisiprim() const;
+    static bool isInvisiprim(const LLUUID& id);
 
     void setParcelMedia(LLViewerMediaTexture* media) {mParcelMedia = media;}
     bool hasParcelMedia() const { return mParcelMedia != NULL;}

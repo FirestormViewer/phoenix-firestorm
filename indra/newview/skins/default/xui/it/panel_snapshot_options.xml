@@ -5,7 +5,7 @@
 			<button label="Salva sul disco fisso" name="save_to_computer_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_inventory">	
-			<button label="Salva in inventario ([AMOUNT]L$)" name="save_to_inventory_btn"/>
+			<button label="Salva in inventario" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">	
 			<button label="Condividi sul feed" name="save_to_profile_btn"/>

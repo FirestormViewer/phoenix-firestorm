@@ -343,7 +343,7 @@ def update_fs_version_mgr(build_info, config):
         sys.exit(1)
 
     secret_for_api = generate_secret(secret_key)  
-    build_type = build_info["build_type"]
+    build_type = build_info["build_type"].lower()
     version = os.environ.get('FS_VIEWER_VERSION')
     channel = os.environ.get('FS_VIEWER_CHANNEL')
     build_number = os.environ.get('FS_VIEWER_BUILD')

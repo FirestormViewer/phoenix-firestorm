@@ -2075,7 +2075,10 @@ bool is_inventorysp_active()
 }
 
 // static
-LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(bool auto_open)
+// <FS:Beq> [FIRE-34532] Bugsplat Crash when uploading assets with non-tabbed inventory window active.
+// LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(bool auto_open)
+LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(bool auto_open, bool ignore_secondary)
+// </FS:Beq>
 {
     S32 z_min = S32_MAX;
     LLInventoryPanel* res = NULL;
@@ -2236,7 +2239,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(bool auto_open, const L
     }
     // </FS:Ansariel>
 
-    LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
+    LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open, true);// <FS:Beq/> [FIRE-34532] ignore secondary folder views that are probably single folder
     if (active_panel)
     {
         LL_DEBUGS("Messaging", "Inventory") << "Highlighting" << obj_id  << LL_ENDL;
@@ -2261,15 +2264,18 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(bool auto_open, const L
         }
         else if (auto_open)
         {
-            // <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
-            //LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+            LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+            // <FS:Beq> [FIRE-34532] make sure the active panel has a tabbed view and avoid crash
             if (use_main_panel)
             {
-                active_panel->getParentByType<LLTabContainer>()->selectFirstTab();
-                active_panel = getActiveInventoryPanel(false);
+                if (auto* tab_container = active_panel->getParentByType<LLTabContainer>())
+                {
+                    tab_container->selectFirstTab();
+                    active_panel = getActiveInventoryPanel(false, true);
+                    floater_inventory = active_panel->getParentByType<LLFloater>();
+                }
             }
-            LLFloater* floater_inventory = active_panel->getParentByType<LLFloater>();
-            // </FS:Ansariel>
+            // </FS:Beq>
             if (floater_inventory)
             {
                 floater_inventory->setFocus(true);

@@ -6,12 +6,18 @@
 	<pie_slice label="Usiądź tutaj" name="Pie Object Sit"/>
 	<pie_slice label="Wstań" name="Object Stand Up"/>
 	<pie_slice label="Kup" name="Buy..."/>
-	<pie_slice label="Weź" name="Pie Object Take"/>
+	<pie_menu label="Weź &gt;" name="Take Submenu">
+		<pie_slice label="Kopie jako: oddzielne obiekty" name="Take Copy Separate" />
+		<pie_slice label="Weź kopię" name="Take Copy" />
+		<pie_slice label="Weź" name="Take" />
+		<pie_slice label="Jako: podniesione razem" name="Take combined" />
+		<pie_slice label="Kopię jako: podniesione razem" name="Take Copy combined" />
+		<pie_slice label="Jako: oddzielne obiekty" name="Take Separate" />
+	</pie_menu>
 	<pie_slice label="Zapłać" name="Pay..."/>
 	<pie_menu label="Więcej &gt;" name="Object Pie More 1">
 		<pie_slice label="Usuń" name="Delete"/>
 		<pie_slice label="Załóż" name="Wear"/>
-		<pie_slice label="Weź kopię" name="Take Copy"/>
 		<pie_menu label="Dołącz HUD &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Dołącz &gt;" name="Pie Object Attach">
 			<pie_menu label="Roz. szkielet &gt;" name="Enhanced Skeleton">

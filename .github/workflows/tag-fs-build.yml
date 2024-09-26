@@ -1,0 +1,164 @@
+name: Tag FS Build
+
+on:
+  workflow_run:
+    workflows: ["Build Viewer"]  # Exact name of the build workflow
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      build_run_number:
+        description: 'GitHub Run Number (per build_viewer.yml workflow)'
+        required: true
+      release_type:
+        description: "Type of build"
+        required: false
+        type: choice
+        default: "undefined"
+        options:
+          - "undefined"
+          - "Manual"
+          - "Nightly"
+          - "Beta"
+          - "Alpha"
+          - "Release"
+      viewer_version:
+        description: 'Viewer version'
+        required: false
+        default: "undefined"
+      viewer_build:
+        description: 'Viewer build number'
+        required: false
+        default: "undefined"
+      dry_run:
+        description: 'Execute as dry run (no tag will be created)'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write  # Grants write access to repository contents
+
+jobs:
+  tag-build:
+    # Run the job only if:
+    # - The event is workflow_run **and** the conclusion is success
+    # OR
+    # - The event is workflow_dispatch (manual trigger)
+    if: ${{ ( github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' ) || ( github.event_name == 'workflow_dispatch' ) }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the Repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Necessary to fetch all history for tagging
+
+      # Install jq for JSON Parsing
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Get Run Number
+        id: get_run_number
+        run: |
+          if [ ${{ github.event_name == 'workflow_run' }} ]; then
+            echo "Triggered by workflow_run event."
+            echo "Using run number of triggering workflow"
+            echo "build_run_number=${{ github.event.inputs.build_run_number  }}"  >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Triggered by workflow_dispatch event."
+            echo "Using run number of manual dispatch"
+            echo "build_run_number=${{ github.event.inputs.build_run_number  }}"  >> "$GITHUB_OUTPUT"
+          fi
+      - name: Download Build Artifacts
+        uses: dawidd6/action-download-artifact@v6
+        id: download_build_info
+        with:
+          workflow: build_viewer.yml
+          run_number: ${{ steps.get_run_number.outputs.build_run_number }}
+          name: build_info
+          skip_unpack: false
+          path: build_info
+
+      # workout the inputs based on the trigger type
+      - name: Query the json and get input overrides if applicable
+        id: get_inputs
+        run: |        
+            # Parse the JSON file
+            RELEASE_TYPE=$(jq -r '.release_type' build_info/build_info.json)
+            VIEWER_VERSION=$(jq -r '.viewer_version' build_info/build_info.json)
+            VIEWER_BUILD=$(jq -r '.viewer_build' build_info/build_info.json)
+            DRY_RUN=false
+            if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+                echo "Triggered by workflow_dispatch event."
+                echo "Allowing manual inputs to override."
+                if [ "${{ github.event.inputs.release_type }}" != "undefined" ]; then
+                    RELEASE_TYPE=${{ github.event.inputs.release_type }}
+                fi
+                if [ "${{ github.event.inputs.viewer_version }}" != "undefined" ]; then
+                    VIEWER_VERSION=${{ github.event.inputs.viewer_version }}
+                fi
+                if [ "${{ github.event.inputs.viewer_build }}" != "undefined" ]; then
+                    VIEWER_BUILD=${{ github.event.inputs.viewer_build }}
+                fi
+                DRY_RUN=${{ github.event.inputs.dry_run }}
+            fi
+            # Set outputs
+            echo "build_run_number=$BUILD_RUN_NUMBER" >> $GITHUB_OUTPUT
+            echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+            echo "viewer_version=$VIEWER_VERSION" >> $GITHUB_OUTPUT
+            echo "viewer_build=$VIEWER_BUILD" >> $GITHUB_OUTPUT
+            echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
+        shell: bash
+
+      # Check if Tag Already Exists
+      - name: Determine tag
+        id: get_tag
+        run: |
+          TAG_NAME="Firestorm_${{ steps.get_inputs.outputs.release_type }}_${{ steps.get_inputs.outputs.viewer_version }}.${{ steps.get_inputs.outputs.viewer_build }}"
+          echo "Proposed Tag: $TAG_NAME"
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |          
+          if git rev-parse "${{ steps.get_tag.outputs.tag_name }}" >/dev/null 2>&1; then
+            echo "Tag ${{ steps.get_tag.outputs.tag_name }} already exists."
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag ${{ steps.get_tag.outputs.tag_name }} does not exist."
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      # Create the Tag (Conditional)
+      - name: Create tag
+        if: >
+          ${{ steps.get_inputs.outputs.dry_run != 'true' &&
+             steps.check_tag.outputs.tag_exists == 'false' }}
+        run: |
+          echo "Creating tag: ${{ steps.get_tag.outputs.tag_name }}"
+          git tag ${{ steps.get_tag.outputs.tag_name }}
+        shell: bash
+
+      # Push the Tag to the Repository (Conditional)
+      - name: Push tag
+        if: >
+          ${{ steps.get_inputs.outputs.dry_run != 'true' &&
+             steps.check_tag.outputs.tag_exists == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin "${{ steps.get_tag.outputs.tag_name }}"
+
+      # Tagging Confirmation
+      - name: Tagging Confirmation
+        run: |
+          if [ "${{ steps.get_inputs.outputs.dry_run }}" == "true" ]; then
+            echo "Dry run mode enabled. Tag '$TAG_NAME' was not created or pushed."
+          elif [ "${{ steps.check_tag.outputs.tag_exists }}" == "true" ]; then
+            echo "Tag '${{ steps.get_tag.outputs.tag_name }}' already exists. No new tag was created."
+          else
+            echo "Tag '${{ steps.get_tag.outputs.tag_name }}' has been created and pushed successfully."
+          fi
+        shell: bash

@@ -1179,6 +1179,7 @@ void LLVOTree::updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
     mDrawable->setPositionGroup(pos);
 
     LLFace* facep = mDrawable->getFace(0);
+    if (!facep) return; // <FS:Beq/> FIRE-34565 Repeatable Bugsplat crash while driving on mainland.
     facep->mExtents[0] = newMin;
     facep->mExtents[1] = newMax;
 }
