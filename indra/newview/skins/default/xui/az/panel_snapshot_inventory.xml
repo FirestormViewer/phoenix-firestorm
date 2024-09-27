@@ -5,6 +5,8 @@
 	</text>
 	<text name="hint_lbl">
 		Tekstur kimi saxlamaq üçün kvadrat formatlarından birini seçin.
+
+Upload cost: L$ [UPLOAD_COST]
 	</text>
 	<combo_box label="Ölçü" name="texture_size_combo">
 		<combo_box.item label="Cari pəncərə" name="CurrentWindow"/>
