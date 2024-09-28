@@ -159,7 +159,7 @@ jobs:
           os_map=( ["Windows"]="windows" ["Linux"]="linux" ["macOS"]="darwin" )
           platform="${os_map[${{ runner.os}}]}"
           echo "fallback_platform=${platform}" >> $GITHUB_ENV
-          platform+=${ addrsize }
+          platform+=${addrsize}
           echo "platform=${platform}" >> $GITHUB_ENV
         shell: bash
 
@@ -299,12 +299,12 @@ jobs:
         shell: bash
       - name: Configure
         run: |
-          autobuild configure -c ReleaseFS -A${ addrsize } -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
+          autobuild configure -c ReleaseFS -A${addrsize} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
           echo "BUGSPLAT_DB=$BUGSPLAT_DB" >> $GITHUB_ENV
         shell: bash
       - name: build
         id: build
-        run: autobuild build -c ReleaseFS -A${ addrsize } --no-configure
+        run: autobuild build -c ReleaseFS -A${addrsize} --no-configure
         shell: bash
       - name: Extract version number
         id: version
