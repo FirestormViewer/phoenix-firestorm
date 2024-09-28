@@ -145,7 +145,13 @@ bool FSFloaterPoser::postBuild()
     getChild<LLUICtrl>(POSER_AVATAR_SLIDER_YAW_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
     getChild<LLUICtrl>(POSER_AVATAR_SLIDER_PITCH_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
     getChild<LLUICtrl>(POSER_AVATAR_SLIDER_ROLL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
-    getChild<LLTabContainer>(POSER_AVATAR_TABGROUP_JOINTS)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+    getChild<LLTabContainer>(POSER_AVATAR_TABGROUP_JOINTS)
+        ->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&)
+            {
+                onJointSelect();
+                setRotationChangeButtons(false, false);
+            });
 
     LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
     if (scrollList)
@@ -892,24 +898,11 @@ void FSFloaterPoser::onToggleLoadSavePanel()
         refreshPosesScroll();
 }
 
-void FSFloaterPoser::onToggleMirrorChange()
-{
-    LLButton *toggleMirrorButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_MIRROR);
-    if (!toggleMirrorButton)
-        return;
+void FSFloaterPoser::onToggleMirrorChange() { setRotationChangeButtons(true, false); }
 
-    LLButton *toggleSympatheticButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_SYMPATH);
-    if (!toggleSympatheticButton)
-        return;
+void FSFloaterPoser::onToggleSympatheticChange() { setRotationChangeButtons(false, true); }
 
-    bool useMirror      = toggleMirrorButton->getValue().asBoolean();
-    bool useSympathetic = toggleSympatheticButton->getValue().asBoolean();
-
-    if (useMirror && useSympathetic)
-        toggleSympatheticButton->setValue(false);
-}
-
-void FSFloaterPoser::onToggleSympatheticChange()
+void FSFloaterPoser::setRotationChangeButtons(bool togglingMirror, bool togglingSympathetic)
 {
     LLButton *toggleMirrorButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_MIRROR);
     if (!toggleMirrorButton)
@@ -918,11 +911,23 @@ void FSFloaterPoser::onToggleSympatheticChange()
     if (!toggleSympatheticButton)
         return;
 
-    bool useMirror      = toggleMirrorButton->getValue().asBoolean();
-    bool useSympathetic = toggleSympatheticButton->getValue().asBoolean();
-
-    if (useMirror && useSympathetic)
+    if (!togglingMirror && !togglingSympathetic) // turn off both buttons
+    {
         toggleMirrorButton->setValue(false);
+        toggleSympatheticButton->setValue(false);
+        return;
+    }
+
+    bool useMirror      = toggleMirrorButton->getValue().asBoolean();
+    bool useSympathetic = toggleSympatheticButton->getValue().asBoolean();
+    if (useMirror && useSympathetic) // if both buttons are down, turn one of them off
+    {
+        if (togglingSympathetic)
+            toggleMirrorButton->setValue(false);
+
+        if (togglingMirror)
+            toggleSympatheticButton->setValue(false);
+    }
 }
 
 void FSFloaterPoser::onUndoLastRotation()

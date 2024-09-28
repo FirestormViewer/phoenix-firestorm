@@ -213,6 +213,7 @@ class FSFloaterPoser : public LLFloater
     void onToggleAdvancedPanel();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
+    void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastRotation();
     void onPoseStartStop();
     void onLimbTrackballChanged();
