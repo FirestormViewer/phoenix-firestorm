@@ -253,7 +253,7 @@ class FSFloaterPoser : public LLFloater
     /// Our instance of the class which lets us do the business of manipulating the avatar.
     /// This separates that business from the code-behind the UI.
     /// </summary>
-    FSPoserAnimator       _poserAnimator;
+    FSPoserAnimator _poserAnimator;
 
     /// <summary>
     /// The supplied llJoint has a quaternion (and alternatively oily angles) describing its rotation.

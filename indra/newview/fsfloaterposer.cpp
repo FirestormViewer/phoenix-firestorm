@@ -156,42 +156,42 @@ bool FSFloaterPoser::postBuild()
     LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
     if (scrollList)
     {
-        scrollList->setCommitOnSelectionChange(TRUE);
+        scrollList->setCommitOnSelectionChange(true);
         scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onAvatarSelect, this));
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME);
     if (scrollList)
     {
-        scrollList->setCommitOnSelectionChange(TRUE);
+        scrollList->setCommitOnSelectionChange(true);
         scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME);
     if (scrollList)
     {
-        scrollList->setCommitOnSelectionChange(TRUE);
+        scrollList->setCommitOnSelectionChange(true);
         scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME);
     if (scrollList)
     {
-        scrollList->setCommitOnSelectionChange(TRUE);
+        scrollList->setCommitOnSelectionChange(true);
         scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME);
     if (scrollList)
     {
-        scrollList->setCommitOnSelectionChange(TRUE);
+        scrollList->setCommitOnSelectionChange(true);
         scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
     if (scrollList)
     {
-        scrollList->setCommitOnSelectionChange(TRUE);
+        scrollList->setCommitOnSelectionChange(true);
         scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onPoseFileSelect, this));
     }
 
@@ -207,7 +207,7 @@ bool FSFloaterPoser::postBuild()
     if (poseSaveName)
         poseSaveName->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterPoser::draw()
@@ -313,7 +313,6 @@ void FSFloaterPoser::onClickPoseSave()
     if (!avatar)
         return;
 
-    // bool successfulSave = _poserAnimator.trySavePose(avatar, filename); //savePoseToXml(avatar, filename);
     bool successfulSave = savePoseToXml(avatar, filename);
     if (successfulSave)
     {
@@ -350,7 +349,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
         {
             std::string  bone_name = pj.jointName();
 
-            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, SWAP_NOTHING, NEGATE_NOTHING); // no swap, it might load into BD; though BD likes interpolation numbers
+            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, SWAP_NOTHING, NEGATE_NOTHING);
 
             record[bone_name]     = pj.jointName();   
             record[bone_name]["rotation"] = vec3.getValue();
@@ -419,12 +418,12 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
 
     for (auto item : selectedJoints)
     {
-        // need to be posing the joint to flippit
+        // need to be posing the joint to flip
         bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
         if (!currentlyPosingJoint)
             continue;
 
-        // need to be posing opposite joint to flipthat
+        // need to be posing opposite joint too, or don't flip
         auto oppositeJoint = _poserAnimator.getPoserJointByName(item->mirrorJointName());
         if (oppositeJoint)
         {
@@ -433,15 +432,15 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
                 continue;
         }
 
-        // if you selected a joint and its opposite, we would flip both of them to yeild no net result (other than a confused user).
-        // One doesn't need to select both joints to flip both (selecting one is enough), but if one does select both, handle that.
+        // If one selects a joint and its opposite, this would otherwise flip each of them sequentially to yeild no net result.
+        // This allows the user to select a joint and its opposite, or only select one joint, and get the same result.
         if (std::find(selectedJoints.begin(), selectedJoints.end(), oppositeJoint) != selectedJoints.end())
         {
             if (!item->dontFlipOnMirror())
                 continue;
         }
 
-        _poserAnimator.reflectJoint(avatar, item); // flippit good!
+        _poserAnimator.reflectJoint(avatar, item);
     }
 
     refreshRotationSliders();
@@ -703,9 +702,8 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
     if (!avatar || avatar->isDead())
         return false;
 
-    // TODO: isSelf? or permission request? maybe through Bridge? 
-
-    return true;
+    // TODO: permission request? maybe through Bridge? 
+    return avatar->isSelf();
 }
 
 void FSFloaterPoser::poseControlsEnable(bool enable)
