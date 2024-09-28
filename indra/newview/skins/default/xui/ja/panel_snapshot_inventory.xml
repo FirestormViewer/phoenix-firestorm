@@ -17,6 +17,8 @@
 	<check_box label="仮アップロード" name="inventory_temp_upload" />
 	<text name="hint_lbl">
 		画像をテクスチャとして保存するには正方形の形式から 1 つを選択してください。
+
+Upload cost: L$ [UPLOAD_COST]
 	</text>
 	<button label="取り消し" name="cancel_btn"/>
 	<button label="保存" name="save_btn"/>
