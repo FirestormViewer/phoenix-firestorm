@@ -295,7 +295,7 @@ void FSFloaterPoser::onPoseFileSelect()
 
 void FSFloaterPoser::onClickPoseSave()
 {
-    LLUICtrl   *poseSaveName = getChild<LLUICtrl>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
+    LLUICtrl *poseSaveName = getChild<LLUICtrl>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
     if (!poseSaveName)
         return;
 
@@ -303,7 +303,12 @@ void FSFloaterPoser::onClickPoseSave()
     if (filename.empty())
         return;
 
-    bool successfulSave = savePoseToXml(filename);
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    // bool successfulSave = _poserAnimator.trySavePose(avatar, filename); //savePoseToXml(avatar, filename);
+    bool successfulSave = savePoseToXml(avatar, filename);
     if (successfulSave)
     {
         refreshPosesScroll();
@@ -311,13 +316,9 @@ void FSFloaterPoser::onClickPoseSave()
     }
 }
 
-bool FSFloaterPoser::savePoseToXml(std::string poseFileName)
+bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
 {
     if (poseFileName.empty())
-        return false;
-
-    LLVOAvatar *avatar = getUiSelectedAvatar();
-    if (!avatar)
         return false;
 
     if (!_poserAnimator.isPosingAvatar(avatar))
@@ -475,11 +476,17 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
         if (currentlyPosing)
             continue;
 
-        LLVector3 newPosition = _poserAnimator.getJointRotation(avatar, *item, getJointTranslation(item->jointName()),
+        LLVector3 newRotation = _poserAnimator.getJointRotation(avatar, *item, getJointTranslation(item->jointName()),
                                                                 getJointNegation(item->jointName()), true);
+        LLVector3 newPosition = _poserAnimator.getJointPosition(avatar, *item);
+        LLVector3 newScale = _poserAnimator.getJointScale(avatar, *item);
+
         _poserAnimator.setPosingAvatarJoint(avatar, *item, true);
-        _poserAnimator.setJointRotation(avatar, item, newPosition, NONE, getJointTranslation(item->jointName()),
+
+        _poserAnimator.setJointRotation(avatar, item, newRotation, NONE, getJointTranslation(item->jointName()),
                                         getJointNegation(item->jointName()));
+        _poserAnimator.setJointPosition(avatar, item, newPosition, NONE);
+        _poserAnimator.setJointScale(avatar, item, newScale, NONE);
     }
 
     refreshRotationSliders();
@@ -566,21 +573,21 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
     else if (boost::iequals(loadStyle, "all"))
         loadType = ROT_POS_AND_SCALES;
 
-    loadPoseFromXml(poseName, loadType);
-    refreshJointScrollListMembers();
-}
-
-void FSFloaterPoser::loadPoseFromXml(std::string poseFileName, E_LoadPoseMethods loadMethod)
-{
-    LLVOAvatar *avatar = getUiSelectedAvatar();
+    LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
-        return;
+    loadPoseFromXml(avatar, poseName, loadType);
+    refreshJointScrollListMembers();
+}
 
+void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileName, E_LoadPoseMethods loadMethod)
+{
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     if (!gDirUtilp->fileExists(pathname))
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
     std::string fullPath =
