@@ -23,8 +23,8 @@
 	<text name="options_text_lbl">
 		Opzioni:
 	</text>
-	<check_box label="Con script" name="return_scripts" tool_tip="Restituisci solo oggetti che hanno script"/>
-	<check_box label="Sul terreno di un altro residente" name="return_other_land" tool_tip="Restituisci solo gli oggetti che sono in terreni appartenenti a qualcun altro"/>
+	<check_box label="Con script" name="return_scripts" tool_tip="Restituisci solo gli oggetti scriptati"/>
+	<check_box label="Sui terreni di altri residenti" name="return_other_land" tool_tip="Restituisci solo gli oggetti che si trovano sui terreni che non sono di proprietà dell'utente selezionato"/>
 	<check_box label="In tutte le regioni di questa proprietà" name="return_estate_wide" tool_tip="Restituisci tutti gli oggetti nelle varie regioni che costituiscono l&apos;insieme dei possedimenti terrieri"/>
 	<button label="Restituisci" name="return_btn"/>
 	<button label="Vedi elenco maggiori collidenti..." name="top_colliders_btn" tool_tip="Elenco degli oggetti che stanno potenzialmente subendo le maggiori collisioni" width="200"/>

@@ -6584,7 +6584,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             {
                 U8 cur_tex = 0;
                 facep->setTextureIndex(cur_tex);
-                if (texture_count < MAX_TEXTURE_COUNT)
+                if (texture_count < MAX_TEXTURE_COUNT && tex) // <FS:Beq/> [FIRE-34534] guard additional cases of tex == null
                 {
                     texture_list[texture_count++] = tex;
                 }
@@ -6638,7 +6638,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
                             // <FS:Beq> Quick hack test of proper batching logic
                             // if (texture_count < MAX_TEXTURE_COUNT)
                             // only add to the batch if this is a new texture
-                            if (cur_tex == texture_count && texture_count < MAX_TEXTURE_COUNT)
+                            if (cur_tex == texture_count && texture_count < MAX_TEXTURE_COUNT && tex) // <FS:Beq/> [FIRE-34534] guard additional cases of tex == null
                             // </FS:Beq>
                             {
                                 texture_list[texture_count++] = tex;
@@ -7015,7 +7015,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
                 && te->getShiny()
                 && can_be_shiny)
             { //shiny
-                if (tex->getPrimaryFormat() == GL_ALPHA)
+                if (tex && tex->getPrimaryFormat() == GL_ALPHA) // <FS:Beq/> [FIRE-34534] guard additional cases of tex == null
                 { //invisiprim+shiny
                     registerFace(group, facep, LLRenderPass::PASS_INVISI_SHINY);
                     registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
