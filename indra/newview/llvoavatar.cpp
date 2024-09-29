@@ -2297,10 +2297,7 @@ void LLVOAvatar::resetSkeleton(bool reset_animations)
     // <FS> [FIRE-30873]: Poser: BD - We need to clear posing here otherwise we'll crash.
     LLMotion *pose_motion = findMotion(ANIM_BD_POSING_MOTION);
     if (pose_motion)
-    {
-        gAgent.clearPosing();
         removeMotion(ANIM_BD_POSING_MOTION);
-    }
     // </FS>
 
     // Save mPelvis state

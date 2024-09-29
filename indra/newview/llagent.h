@@ -411,7 +411,6 @@ private:
     LLUUID          mLastChatterID;
     F32             mNearChatRadius;
 
-    bool mIsPosing; // <FS/> [FIRE-30873]: Poser
 
     //--------------------------------------------------------------------
     // Typing
@@ -426,12 +425,6 @@ public:
 private:
     LLFrameTimer    mTypingTimer;
 
-// <FS> [FIRE-30873]: Poser
-public:
-    void setPosing() { mIsPosing = true; }
-    void clearPosing() { mIsPosing = false; }
-    bool getPosing() const { return mIsPosing; }
-// </FS> [FIRE-30873]: Poser
 
     //--------------------------------------------------------------------
     // AFK
