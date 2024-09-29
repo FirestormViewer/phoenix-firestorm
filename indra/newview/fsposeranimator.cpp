@@ -390,14 +390,9 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
     if (!isAvatarSafeToUse(avatar))
         return false;
 
-    if (avatar->getPosing())
-        return false;
-
     BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
     if (!motion || motion->isStopped())
     {
-        avatar->setPosing();
-
         if (avatar->isSelf())
             gAgent.stopFidget();
 
@@ -417,16 +412,12 @@ void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)
     if (!avatar || avatar->isDead())
         return;
 
-    avatar->clearPosing();
     avatar->stopMotion(ANIM_BD_POSING_MOTION);
 }
 
 bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
 {
     if (!isAvatarSafeToUse(avatar))
-        return false;
-
-    if (!avatar->getPosing())
         return false;
 
     BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);

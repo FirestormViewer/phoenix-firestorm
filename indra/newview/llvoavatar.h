@@ -1274,7 +1274,6 @@ private:
     std::string         mDebugText;
     std::string         mBakedTextureDebugText;
 
-    bool mIsPosing = false; // <FS> [FIRE-30873]: Poser: Custom Posing
 
     //--------------------------------------------------------------------
     // Avatar Rez Metrics
@@ -1302,13 +1301,6 @@ public:
 /**                    Diagnostics
  **                                                                            **
  *******************************************************************************/
-
-// <FS> [FIRE-30873]: Poser: Custom Posing
-  public:
-    void setPosing() { mIsPosing = true; }
-    void clearPosing() { mIsPosing = false; }
-    bool getPosing() const { return mIsPosing; }
-// <FS/>[FIRE - 30873] : Poser
 
 /********************************************************************************
  **                                                                            **
