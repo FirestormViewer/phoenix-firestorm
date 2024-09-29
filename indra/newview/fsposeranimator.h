@@ -59,8 +59,7 @@ typedef enum E_BoneDeflectionStyles
 /// <summary>
 /// When we're going from bone-rotation to the UI sliders, some of the axes need swapping so they make sense in UI-terms.
 /// eg: for one bone, the X-axis may mean up and down, but for another bone, the x-axis might be left-right.
-/// These are translations of bone-TO-UI; an inverse translation needs to happen the other way.
-/// It would be nice if these were defined in XML; but then they're not const, and I want const.
+/// This is an ease-of-use option making the trackpad more 'natural' when manipulating a joint.
 /// </summary>
 typedef enum E_BoneAxisTranslation
 {
@@ -133,7 +132,8 @@ public:
         /// Very likely case-sensitive.
         /// </param>
         /// <param name="b">The opposite joint name, if any. Also expected to be a well-known name.</param>
-        /// <param name="c">The </param>
+        /// <param name="c">The type of bone, often determining with which other bones the new instance would appear with.</param>
+        /// <param name="d">The option for whether this joint should rotation-flip it counterpart when mirroring the pose of the entire body.</param>
         FSPoserJoint(std::string a, std::string b, E_BoneTypes c, bool d = false)
         {
             _jointName        = a;
@@ -209,7 +209,7 @@ public:
     const FSPoserJoint* getPoserJointByName(std::string jointName);
 
     /// <summary>
-    /// Tries to being posing the supplied avatar.
+    /// Tries to start posing the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar to begin posing.</param>
     /// <returns>True if the avatar was able to begin posing, otherwise false.</returns>
@@ -233,15 +233,15 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint being queried for.</param>
-    /// <returns></returns>
+    /// <returns>True if this is joint is being posed for the supplied avatar, otherwise false.</returns>
     bool isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint);
 
     /// <summary>
-    /// Sets whether the supplied PoserJoint for the supplied avatar shoubd be posed.
+    /// Sets whether the supplied PoserJoint for the supplied avatar should be posed.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint being queried for.</param>
-    /// <param name="posing">Whether the joint should be posed.</param>
+    /// <param name="posing">Whether the joint should be posed, or not.</param>
     /// <remarks>
     /// If this is not posing the joint, then it is free to be posed by other things.
     /// </remarks>
@@ -251,7 +251,7 @@ public:
     /// Resets the supplied PoserJoint to its position/rotation/scale it was when poser was started.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint being reset for.</param>
+    /// <param name="joint">The joint to be reset.</param>
     void resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint);
 
     /// <summary>
@@ -268,7 +268,7 @@ public:
     /// <param name="avatar">The avatar whose joint is to be set.</param>
     /// <param name="joint">The joint to set.</param>
     /// <param name="position">The position to set the joint to.</param>
-    /// <param name="style">The axial translation form the supplied joint.</param>
+    /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     void setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style);
 
     /// <summary>
