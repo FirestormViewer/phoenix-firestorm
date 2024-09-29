@@ -379,7 +379,7 @@ DOWNLOADS - {build_info["build_type"]}
         for grid in ["SL", "OS"]:
             grid_printable = f"{config.grids_printable[grid]}"
             for variant in ["avx", "regular"]:
-                variant_printable = f"{config.variants_printable[variant]}"
+                variant_printable = f"{config.variant_printable[variant]}"
                 text_summary += f"{variant_printable}\n"
                 try:
                     file_key = f"{grid}-{platform_folder}"
