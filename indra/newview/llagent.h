@@ -411,7 +411,6 @@ private:
     LLUUID          mLastChatterID;
     F32             mNearChatRadius;
 
-
     //--------------------------------------------------------------------
     // Typing
     //--------------------------------------------------------------------
@@ -424,7 +423,6 @@ public:
     static const F32 TYPING_TIMEOUT_SECS;
 private:
     LLFrameTimer    mTypingTimer;
-
 
     //--------------------------------------------------------------------
     // AFK
