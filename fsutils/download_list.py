@@ -286,14 +286,14 @@ def unpack_artifacts(path_to_artifacts_directory, config):
     print(f"Finished processing artifacts for build_type {build_type}")
     return build_types_found
 
-def restructure_folders(build_type, config):
-    print(f"Restructuring folders for build_type {build_type}")
-    build_type_dir = build_type["build_type_fullpath"]
+def restructure_folders(build_type_info, config):
+    print(f"Restructuring folders for build_type {build_type_info['build_type']}")
+    build_type_dir = build_type_info["build_type_fullpath"]
     if not os.path.exists(build_type_dir):
         print(f"Unexpected error: path {build_type_dir} does not exist, even though it was in the set.")
         raise FileNotFoundError
     # loop over the folder in the build_type_dir
-    for platform_folder in build_type["os_folders"]:
+    for platform_folder in build_type_info["os_folders"]:
         print(f"Cleaning up {platform_folder}")
         # Traverse the directory tree and move all of the files to the root directory
         flatten_tree(os.path.join(build_type_dir, platform_folder))
@@ -311,13 +311,13 @@ def restructure_folders(build_type, config):
             print(f"Moving {sym_file} to {symbols_folder}")
             shutil.move(sym_file, symbols_folder)
 
-def gather_build_info(build_type, config):
-    print(f"Gathering build info for build_type {build_type}")
+def gather_build_info(build_type_info, config):
+    print(f"Gathering build info for build_type {build_type_info}")
     # While we're at it, let's print the md5 listing 
-    download_root = f"{config.download_root}/{build_type['build_type_folder']}"
+    download_root = f"{config.download_root}/{build_type_info['build_type_folder']}"
     # for each os that we have built for 
-    build_type_dir = build_type["build_type_fullpath"]
-    for platform_folder in build_type["os_folders"]:
+    build_type_dir = build_type_info["build_type_fullpath"]
+    for platform_folder in build_type_info["os_folders"]:
         print(f"Getting files for {platform_folder} in {build_type_dir}")
         build_type_platform_folder = os.path.join(build_type_dir, platform_folder)
         files = get_files(build_type_platform_folder)
@@ -341,10 +341,10 @@ def gather_build_info(build_type, config):
                 file_key = f"{grid}-{platform_folder}"
 
                 # if platform_folder in config.os_download_dirs:
-                if "downloadable_artifacts" not in build_type:
-                    build_type["downloadable_artifacts"] = {}
+                if "downloadable_artifacts" not in build_type_info:
+                    build_type_info["downloadable_artifacts"] = {}
 
-                build_type["downloadable_artifacts"][f"{file_key}"] = {
+                build_type_info["downloadable_artifacts"][f"{file_key}"] = {
                     "file_path": full_file,         
                     "file_download_URI": file_URI,
                     "grid": grid,
@@ -359,8 +359,8 @@ def gather_build_info(build_type, config):
         except Exception as e:
             print(f"An error occurred while processing files for {platform_folder} in {build_type_dir}: {e}")
             continue
-        print(f"Created build info: {build_type}")
-    return build_type
+        print(f"Created build info: {build_type_info}")
+    return build_type_info
 
 def create_discord_message(build_info, config):
 # Start with a header line            
@@ -378,16 +378,19 @@ DOWNLOADS - {build_info["build_type"]}
         platform_folder = platform_folder.lower()
         for grid in ["SL", "OS"]:
             grid_printable = f"{config.grids_printable[grid]}"
-            try:
-                file_key = f"{grid}-{platform_folder}"
-                text_summary += f"{platform_printable} for {grid_printable}\n"
-                text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
-                text_summary += "\n"
-                text_summary += f"MD5: {build_info['downloadable_artifacts'][file_key]['md5']}\n"
-                text_summary += "\n"
-            except KeyError:
-                text_summary += f"{platform_printable} for {grid_printable} - NOT AVAILABLE\n"
-                text_summary += "\n"
+            for variant in ["avx", "regular"]:
+                variant_printable = f"{config.variants_printable[variant]}"
+                text_summary += f"{variant_printable}\n"
+                try:
+                    file_key = f"{grid}-{platform_folder}"
+                    text_summary += f"{platform_printable} for {grid_printable}\n"
+                    text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
+                    text_summary += "\n"
+                    text_summary += f"MD5: {build_info['downloadable_artifacts'][file_key]['md5']}\n"
+                    text_summary += "\n"
+                except KeyError:
+                    text_summary += f"{platform_printable} for {grid_printable} - NOT AVAILABLE\n"
+                    text_summary += "\n"
         text_summary += '''
 -------------------------------------------------------------------------------------------------------
 '''
@@ -404,7 +407,6 @@ def update_fs_version_mgr(build_info, config):
     secret_for_api = generate_secret(secret_key)  
     build_type = build_info["build_type"].lower()
     version = os.environ.get('FS_VIEWER_VERSION')
-    channel = os.environ.get('FS_VIEWER_CHANNEL')
     build_number = os.environ.get('FS_VIEWER_BUILD')
 
     for file_key in build_info["downloadable_artifacts"]:
@@ -422,7 +424,7 @@ def update_fs_version_mgr(build_info, config):
             "viewer_channel": build_type,
             "grid_type": grid,
             "operating_system": os_name,
-            "build_type": build_variant,
+            "build_type": build_variant, # on the webservice variant is known as build_type.
             "viewer_version": version,
             "build_number": int(build_number),
             "download_link": download_link,
@@ -492,10 +494,10 @@ def main():
         print(f"Processing artifacts in {args.path_to_directory}")
         build_types_created = unpack_artifacts(args.path_to_directory, config)
         print(f"buuild types created: {build_types_created}")
-        for build_type_key, build_type in build_types_created.items():            
+        for build_type_key, build_type_info in build_types_created.items():            
             print(f"Processing {build_type_key}")
-            restructure_folders(build_type, config)
-            build_info = gather_build_info(build_type, config)
+            restructure_folders(build_type_info, config)
+            build_info = gather_build_info(build_type_info, config)
             update_fs_version_mgr(build_info, config)
 
             discord_text = create_discord_message(build_info, config)
