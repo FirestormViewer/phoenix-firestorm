@@ -407,12 +407,12 @@ def update_fs_version_mgr(build_info, config):
     channel = os.environ.get('FS_VIEWER_CHANNEL')
     build_number = os.environ.get('FS_VIEWER_BUILD')
 
-    build_variant = build_info["variant"]
     for file_key in build_info["downloadable_artifacts"]:
         try:
             download_link = build_info["downloadable_artifacts"][file_key]["file_download_URI"]
             md5_checksum = build_info["downloadable_artifacts"][file_key]["md5"]
             grid = build_info["downloadable_artifacts"][file_key]["grid"].lower()
+            build_variant = build_info["downloadable_artifacts"][file_key]["variant"].lower()
             os_name = build_info["downloadable_artifacts"][file_key]["fs_ver_mgr_platform"]
         except KeyError:
             print(f"Error: Could not find downloadable artifacts for {file_key}")
