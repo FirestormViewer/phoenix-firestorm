@@ -11,6 +11,8 @@ import pytz
 from datetime import datetime
 import requests
 from discord_webhook import DiscordWebhook
+from pathlib import Path
+from typing import Tuple
 
 from build_config import BuildConfig
 
@@ -162,24 +164,75 @@ def get_supported_os(os_name, config):
     # throws for unexpected os_name
     return config.os_hosted_folder.get(os_name)
 
-def extract_vars_from_zipfile_name(file):
-    # File is an artifact file sometihng like Nightly-windows-2022-64-sl-artifacts.zip
-    # print(f"unzipping {file}")
-    #extract first word (delimited by '-' from the file name)
-    # build_type is a fullpath but we only want the last folder, remove the leading part of the path leaving just the foldername using basename
-    filename = os.path.basename(file)
-    build_type = filename.split("-")[0]
-    platform = filename.split("-")[1].lower()
-    return filename,build_type, platform
+def extract_vars_from_zipfile_name(file_path: str) -> Tuple[str, str, str, str, str, str]:
+    """
+    Extract variables from an artifact zip file name.
 
+    The expected filename format is:
+        {build_Type}-{platform}-{platform_ver}-{variant}-{grid}-artifacts.zip
+
+    Args:
+        file_path (str): The full path to the zip file.
+
+    Returns:
+        Tuple containing:
+            filename (str): The basename of the file.
+            build_type (str)
+            platform (str)
+            platform_ver (str)
+            variant (str)
+            grid (str)
+
+    Raises:
+        ValueError: If the filename does not conform to the expected format.
+    """
+    # Use pathlib for path manipulations
+    path = Path(file_path)
+    filename = path.name
+
+    # Remove the .zip extension
+    name_without_ext = path.stem
+
+    # Expected suffix after the main parts
+    expected_suffix = "artifacts"
+    parts = name_without_ext.split('-')
+
+    if len(parts) < 6:
+        raise ValueError(f"Filename '{filename}' does not have enough parts separated by '-'.")
+
+    # Unpack the parts
+    build_type, platform, platform_ver, variant, grid, suffix = parts[:6]
+
+    if suffix.lower() != expected_suffix:
+        raise ValueError(f"Filename '{filename}' does not end with '-{expected_suffix}'.")
+
+    # Return the extracted variables, applying lower() where needed
+    return (
+        filename,
+        build_type,
+        platform.lower(),
+        platform_ver.lower(),
+        variant.lower(),
+        grid.lower()
+    )
 
 def unpack_artifacts(path_to_artifacts_directory, config):
     build_types_found = {}
     zips = glob.glob(f"{path_to_artifacts_directory}/*.zip")
     for file in zips:
         print(f"Processing zip file {file}")
-        filename, build_type, platform = extract_vars_from_zipfile_name(file)
-        print(f"Identified filename {filename}, build_type {build_type} and platform {platform} from file {file}")
+        try:
+            filename, build_type, platform, platform_ver, variant, grid = extract_vars_from_zipfile_name(file)
+            # print(f"Filename: {filename}")
+            # print(f"Build Type: {build_type}")
+            # print(f"Platform: {platform}")
+            # print(f"Platform Version: {platform_ver}")
+            # print(f"Variant: {variant}")
+            # print(f"Grid: {grid}")
+        except ValueError as e:
+            print(f"Error extracting vars from zipfile name: {e}")
+            continue
+        print(f"Identified filename {filename} with  build_type {build_type} and platform {platform}({platform_ver}) grid {grid} and variant {variant} from file {file}")
         if is_supported_build_type( build_type, config) == False:
             print(f"Invalid build_type {build_type} from file {file} using 'Unknown' instead")
             build_type = "Unknown"
@@ -280,6 +333,11 @@ def gather_build_info(build_type, config):
                 else:
                     grid = "SL"
 
+                if "x64" in base_name:
+                    variant = "avx"
+                else:
+                    variant = "regular"
+
                 file_key = f"{grid}-{platform_folder}"
 
                 # if platform_folder in config.os_download_dirs:
@@ -290,6 +348,7 @@ def gather_build_info(build_type, config):
                     "file_path": full_file,         
                     "file_download_URI": file_URI,
                     "grid": grid,
+                    "variant": variant,
                     "fs_ver_mgr_platform": config.fs_version_mgr_platform.get(platform_folder),
                     "md5": md5,
                 }
@@ -348,7 +407,7 @@ def update_fs_version_mgr(build_info, config):
     channel = os.environ.get('FS_VIEWER_CHANNEL')
     build_number = os.environ.get('FS_VIEWER_BUILD')
 
-    build_variant = "regular"
+    build_variant = build_info["variant"]
     for file_key in build_info["downloadable_artifacts"]:
         try:
             download_link = build_info["downloadable_artifacts"][file_key]["file_download_URI"]

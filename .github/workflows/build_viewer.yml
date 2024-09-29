@@ -21,6 +21,7 @@ env:
   XZ_DEFAULTS: -T0
   FS_RELEASE_TYPE: Unknown
   platform: Unknown
+  addrsize: 64
   fallback_platform: ${platform}
   FS_RELEASE_CHAN: ${FS_RELEASE_TYPE}x64
   FS_GRID: "GRID FLAGS NOT SET"
@@ -32,11 +33,12 @@ jobs:
       matrix:
         os: [macos-12,ubuntu-22.04,windows-2022]
         grid: [sl,os]
-        addrsize: [64]
+        variant: [regular, avx]
     runs-on: ${{ matrix.os }}
     outputs:
       viewer_channel: ${{ steps.channel.outputs.viewer_channel }}
       viewer_version: ${{ steps.version.outputs.viewer_version }}
+      viewer_variant: ${{ matrix.variant }}
       viewer_build: ${{ steps.version.outputs.viewer_build }}
       viewer_release_type: ${{ steps.version.outputs.viewer_release_type }}
     steps:
@@ -129,7 +131,7 @@ jobs:
               FS_RELEASE_TYPE=Profiling
             fi
           fi
-          if [[ "${{ matrix.addrsize }}" == "64" ]]; then
+          if [[ "${{ matrix.variant }}" == "avx" ]]; then
             FS_RELEASE_CHAN="${FS_RELEASE_TYPE}x64"
           else
             FS_RELEASE_CHAN=${FS_RELEASE_TYPE}
@@ -157,10 +159,7 @@ jobs:
           os_map=( ["Windows"]="windows" ["Linux"]="linux" ["macOS"]="darwin" )
           platform="${os_map[${{ runner.os}}]}"
           echo "fallback_platform=${platform}" >> $GITHUB_ENV
-          if [ ${{ matrix.addrsize }} -ne 32 ];
-          then
-            platform+=${{ matrix.addrsize }}
-          fi
+          platform+=${addrsize}
           echo "platform=${platform}" >> $GITHUB_ENV
         shell: bash
 
@@ -290,18 +289,22 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.include_tracy == 'true' }}
         shell: bash
         run: echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} --tracy" >> $GITHUB_ENV
+      - name: Add flags for AVX2 builds
+        if: ${{ matrix.variant == 'avx' }}
+        shell: bash
+        run: echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} --avx2" >> $GITHUB_ENV
 
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
       - name: Configure
         run: |
-          autobuild configure -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
+          autobuild configure -c ReleaseFS -A${addrsize} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
           echo "BUGSPLAT_DB=$BUGSPLAT_DB" >> $GITHUB_ENV
         shell: bash
       - name: build
         id: build
-        run: autobuild build -c ReleaseFS -A${{matrix.addrsize}} --no-configure
+        run: autobuild build -c ReleaseFS -A${addrsize} --no-configure
         shell: bash
       - name: Extract version number
         id: version
@@ -357,7 +360,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.addrsize }}-${{ matrix.grid }}-artifacts.zip
+          name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{ matrix.grid }}-artifacts.zip
           path: |
             build-*/newview/Release/*Setup.exe
             build-*/newview/Release/*.xz
@@ -366,7 +369,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
+          name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: | 
             build-linux-*/newview/*.xz
             build-linux-*/newview/*.bz2
@@ -375,7 +378,7 @@ jobs:
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
+          name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: |
             build-darwin-*/newview/*.dmg
             build-darwin-*/newview/*.bz2
@@ -451,7 +454,7 @@ jobs:
           EOF
           echo "Build info created: $(cat build_info.json)"
 
-      # Upload Build Info Artifact
+      # Upload Build Info Artifact (note that this file is expected to be identical for each matrix run, so items like OS and VARIANT cannot be in this file.)
       - name: Upload Tag Info
         uses: actions/upload-artifact@v4
         with:
