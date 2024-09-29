@@ -595,7 +595,7 @@
 			<menu_item_check label="Mostra informazioni di debug per le visualizzazioni" name="DebugViews"/>
 			<menu_item_call label="Strumento di anteprima XUI" name="UI Preview Tool"/>
 			<menu_item_call label="Invia IM di prova" name="Send Test IMs"/>
-			<menu_item_call label="Svuota le cache dei nomi" name="Flush Names Caches"/>
+			<menu_item_call label="Svuota cache dei nomi" name="Flush Names Caches"/>
 		</menu>
 		<menu label="Avatar" name="Character">
 			<menu label="Cattura texture combinate" name="Grab Baked Texture">

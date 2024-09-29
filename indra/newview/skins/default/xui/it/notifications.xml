@@ -3530,15 +3530,15 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 	</notification>
 	<notification name="FailedToGetBenefits">
 		Purtroppo non siamo stati in grado di ottenere informazioni utili per questa sessione. Questo non dovrebbe accadere in un normale ambiente di produzione. Si prega di contattare il supporto. Questa sessione non funzionerà correttamente, si consiglia di riavviare.
-		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NotEnoughMoneyForBulkUpload">
+		Il tuo saldo attuale ([BALANCE]L$) non è sufficiente per caricare [COUNT] elementi al costo totale di [COST]L$.
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		I file selezionati non possono essere caricati.
-		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadIncompatibleFiles">
 		Alcuni dei file selezionati non possono essere caricati.
-		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
 		Questo caricamento costerà L$[PRICE]. Continuare con il caricamento?
