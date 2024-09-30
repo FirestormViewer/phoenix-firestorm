@@ -11,6 +11,8 @@ import pytz
 from datetime import datetime
 import requests
 from discord_webhook import DiscordWebhook
+from pathlib import Path
+from typing import Tuple
 
 from build_config import BuildConfig
 
@@ -162,24 +164,75 @@ def get_supported_os(os_name, config):
     # throws for unexpected os_name
     return config.os_hosted_folder.get(os_name)
 
-def extract_vars_from_zipfile_name(file):
-    # File is an artifact file sometihng like Nightly-windows-2022-64-sl-artifacts.zip
-    # print(f"unzipping {file}")
-    #extract first word (delimited by '-' from the file name)
-    # build_type is a fullpath but we only want the last folder, remove the leading part of the path leaving just the foldername using basename
-    filename = os.path.basename(file)
-    build_type = filename.split("-")[0]
-    platform = filename.split("-")[1].lower()
-    return filename,build_type, platform
+def extract_vars_from_zipfile_name(file_path: str) -> Tuple[str, str, str, str, str, str]:
+    """
+    Extract variables from an artifact zip file name.
 
+    The expected filename format is:
+        {build_Type}-{platform}-{platform_ver}-{variant}-{grid}-artifacts.zip
+
+    Args:
+        file_path (str): The full path to the zip file.
+
+    Returns:
+        Tuple containing:
+            filename (str): The basename of the file.
+            build_type (str)
+            platform (str)
+            platform_ver (str)
+            variant (str)
+            grid (str)
+
+    Raises:
+        ValueError: If the filename does not conform to the expected format.
+    """
+    # Use pathlib for path manipulations
+    path = Path(file_path)
+    filename = path.name
+
+    # Remove the .zip extension
+    name_without_ext = path.stem
+
+    # Expected suffix after the main parts
+    expected_suffix = "artifacts"
+    parts = name_without_ext.split('-')
+
+    if len(parts) < 6:
+        raise ValueError(f"Filename '{filename}' does not have enough parts separated by '-'.")
+
+    # Unpack the parts
+    build_type, platform, platform_ver, variant, grid, suffix = parts[:6]
+
+    if suffix.lower() != expected_suffix:
+        raise ValueError(f"Filename '{filename}' does not end with '-{expected_suffix}'.")
+
+    # Return the extracted variables, applying lower() where needed
+    return (
+        filename,
+        build_type,
+        platform.lower(),
+        platform_ver.lower(),
+        variant.lower(),
+        grid.lower()
+    )
 
 def unpack_artifacts(path_to_artifacts_directory, config):
     build_types_found = {}
     zips = glob.glob(f"{path_to_artifacts_directory}/*.zip")
     for file in zips:
         print(f"Processing zip file {file}")
-        filename, build_type, platform = extract_vars_from_zipfile_name(file)
-        print(f"Identified filename {filename}, build_type {build_type} and platform {platform} from file {file}")
+        try:
+            filename, build_type, platform, platform_ver, variant, grid = extract_vars_from_zipfile_name(file)
+            # print(f"Filename: {filename}")
+            # print(f"Build Type: {build_type}")
+            # print(f"Platform: {platform}")
+            # print(f"Platform Version: {platform_ver}")
+            # print(f"Variant: {variant}")
+            # print(f"Grid: {grid}")
+        except ValueError as e:
+            print(f"Error extracting vars from zipfile name: {e}")
+            continue
+        print(f"Identified filename {filename} with  build_type {build_type} and platform {platform}({platform_ver}) grid {grid} and variant {variant} from file {file}")
         if is_supported_build_type( build_type, config) == False:
             print(f"Invalid build_type {build_type} from file {file} using 'Unknown' instead")
             build_type = "Unknown"
@@ -233,14 +286,14 @@ def unpack_artifacts(path_to_artifacts_directory, config):
     print(f"Finished processing artifacts for build_type {build_type}")
     return build_types_found
 
-def restructure_folders(build_type, config):
-    print(f"Restructuring folders for build_type {build_type}")
-    build_type_dir = build_type["build_type_fullpath"]
+def restructure_folders(build_type_info, config):
+    print(f"Restructuring folders for build_type {build_type_info['build_type']}")
+    build_type_dir = build_type_info["build_type_fullpath"]
     if not os.path.exists(build_type_dir):
         print(f"Unexpected error: path {build_type_dir} does not exist, even though it was in the set.")
         raise FileNotFoundError
     # loop over the folder in the build_type_dir
-    for platform_folder in build_type["os_folders"]:
+    for platform_folder in build_type_info["os_folders"]:
         print(f"Cleaning up {platform_folder}")
         # Traverse the directory tree and move all of the files to the root directory
         flatten_tree(os.path.join(build_type_dir, platform_folder))
@@ -258,13 +311,13 @@ def restructure_folders(build_type, config):
             print(f"Moving {sym_file} to {symbols_folder}")
             shutil.move(sym_file, symbols_folder)
 
-def gather_build_info(build_type, config):
-    print(f"Gathering build info for build_type {build_type}")
+def gather_build_info(build_type_info, config):
+    print(f"Gathering build info for build_type {build_type_info}")
     # While we're at it, let's print the md5 listing 
-    download_root = f"{config.download_root}/{build_type['build_type_folder']}"
+    download_root = f"{config.download_root}/{build_type_info['build_type_folder']}"
     # for each os that we have built for 
-    build_type_dir = build_type["build_type_fullpath"]
-    for platform_folder in build_type["os_folders"]:
+    build_type_dir = build_type_info["build_type_fullpath"]
+    for platform_folder in build_type_info["os_folders"]:
         print(f"Getting files for {platform_folder} in {build_type_dir}")
         build_type_platform_folder = os.path.join(build_type_dir, platform_folder)
         files = get_files(build_type_platform_folder)
@@ -280,16 +333,22 @@ def gather_build_info(build_type, config):
                 else:
                     grid = "SL"
 
+                if "x64" in base_name:
+                    variant = "avx"
+                else:
+                    variant = "regular"
+
                 file_key = f"{grid}-{platform_folder}"
 
                 # if platform_folder in config.os_download_dirs:
-                if "downloadable_artifacts" not in build_type:
-                    build_type["downloadable_artifacts"] = {}
+                if "downloadable_artifacts" not in build_type_info:
+                    build_type_info["downloadable_artifacts"] = {}
 
-                build_type["downloadable_artifacts"][f"{file_key}"] = {
+                build_type_info["downloadable_artifacts"][f"{file_key}"] = {
                     "file_path": full_file,         
                     "file_download_URI": file_URI,
                     "grid": grid,
+                    "variant": variant,
                     "fs_ver_mgr_platform": config.fs_version_mgr_platform.get(platform_folder),
                     "md5": md5,
                 }
@@ -300,8 +359,8 @@ def gather_build_info(build_type, config):
         except Exception as e:
             print(f"An error occurred while processing files for {platform_folder} in {build_type_dir}: {e}")
             continue
-        print(f"Created build info: {build_type}")
-    return build_type
+        print(f"Created build info: {build_type_info}")
+    return build_type_info
 
 def create_discord_message(build_info, config):
 # Start with a header line            
@@ -319,16 +378,19 @@ DOWNLOADS - {build_info["build_type"]}
         platform_folder = platform_folder.lower()
         for grid in ["SL", "OS"]:
             grid_printable = f"{config.grids_printable[grid]}"
-            try:
-                file_key = f"{grid}-{platform_folder}"
-                text_summary += f"{platform_printable} for {grid_printable}\n"
-                text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
-                text_summary += "\n"
-                text_summary += f"MD5: {build_info['downloadable_artifacts'][file_key]['md5']}\n"
-                text_summary += "\n"
-            except KeyError:
-                text_summary += f"{platform_printable} for {grid_printable} - NOT AVAILABLE\n"
-                text_summary += "\n"
+            for variant in ["avx", "regular"]:
+                variant_printable = f"{config.variant_printable[variant]}"
+                text_summary += f"{variant_printable}\n"
+                try:
+                    file_key = f"{grid}-{platform_folder}"
+                    text_summary += f"{platform_printable} for {grid_printable}\n"
+                    text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
+                    text_summary += "\n"
+                    text_summary += f"MD5: {build_info['downloadable_artifacts'][file_key]['md5']}\n"
+                    text_summary += "\n"
+                except KeyError:
+                    text_summary += f"{platform_printable} for {grid_printable} - NOT AVAILABLE\n"
+                    text_summary += "\n"
         text_summary += '''
 -------------------------------------------------------------------------------------------------------
 '''
@@ -345,15 +407,14 @@ def update_fs_version_mgr(build_info, config):
     secret_for_api = generate_secret(secret_key)  
     build_type = build_info["build_type"].lower()
     version = os.environ.get('FS_VIEWER_VERSION')
-    channel = os.environ.get('FS_VIEWER_CHANNEL')
     build_number = os.environ.get('FS_VIEWER_BUILD')
 
-    build_variant = "regular"
     for file_key in build_info["downloadable_artifacts"]:
         try:
             download_link = build_info["downloadable_artifacts"][file_key]["file_download_URI"]
             md5_checksum = build_info["downloadable_artifacts"][file_key]["md5"]
             grid = build_info["downloadable_artifacts"][file_key]["grid"].lower()
+            build_variant = build_info["downloadable_artifacts"][file_key]["variant"].lower()
             os_name = build_info["downloadable_artifacts"][file_key]["fs_ver_mgr_platform"]
         except KeyError:
             print(f"Error: Could not find downloadable artifacts for {file_key}")
@@ -363,7 +424,7 @@ def update_fs_version_mgr(build_info, config):
             "viewer_channel": build_type,
             "grid_type": grid,
             "operating_system": os_name,
-            "build_type": build_variant,
+            "build_type": build_variant, # on the webservice variant is known as build_type.
             "viewer_version": version,
             "build_number": int(build_number),
             "download_link": download_link,
@@ -433,10 +494,10 @@ def main():
         print(f"Processing artifacts in {args.path_to_directory}")
         build_types_created = unpack_artifacts(args.path_to_directory, config)
         print(f"buuild types created: {build_types_created}")
-        for build_type_key, build_type in build_types_created.items():            
+        for build_type_key, build_type_info in build_types_created.items():            
             print(f"Processing {build_type_key}")
-            restructure_folders(build_type, config)
-            build_info = gather_build_info(build_type, config)
+            restructure_folders(build_type_info, config)
+            build_info = gather_build_info(build_type_info, config)
             update_fs_version_mgr(build_info, config)
 
             discord_text = create_discord_message(build_info, config)

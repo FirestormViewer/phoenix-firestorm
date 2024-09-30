@@ -16,4 +16,4 @@ class BuildConfig:
         self.grids_printable = config_data.get('grids_printable', {})
         self.download_root = config_data.get('download_root', '')
         self.viewer_channel_mapping = config_data.get('viewer_channel_mapping', {})
-        self.build_type_mapping = config_data.get('build_type_mapping', {})
+        self.variant_printable = config_data.get('variant_printable', {})

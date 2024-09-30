@@ -11,7 +11,7 @@ Pour vous simplifier la tâche, l'encadré ci-dessous indique les dossiers utili
 Veuillez les ajouter à vos exclusions de dossiers AV, comme indiqué sur la page wiki ci-dessus.
 	</text>
 	<text name="whitelist_exe_instruction">
-La case suivante indique le nom et le chemin d'accès complet des exécutables de la visionneuse. 
-Ajoutez-les à vos exclusions d'exécutables AV comme indiqué dans le wiki ci-dessus.
+La case suivante indique les noms et chemins d'accès complets des exécutables de la visionneuse.
+Ajoutez les chemins d'accès complet à vos exclusions d'exécutables AV comme indiqué dans le wiki ci-dessus.
 	</text>
 </floater>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_region_restart_schedule" title="Pianifica Riavvio Regione">
+	<text name="days_general">
+		Riavvia regione nei seguenti giorni:
+	</text>
+	<check_box name="s_chk" tool_tip="Domenica" />
+	<check_box name="m_chk" tool_tip="Lunedì" />
+	<check_box name="t_chk" tool_tip="Martedì" />
+	<check_box name="w_chk" tool_tip="Mercoledì" />
+	<check_box name="r_chk" tool_tip="Giovedì" />
+	<check_box name="f_chk" tool_tip="Venerdì" />
+	<check_box name="a_chk" tool_tip="Sabato" />
+	<text name="su_label">
+		Do
+	</text>
+	<text name="mo_label">
+		Lu
+	</text>
+	<text name="tu_label">
+		Ma
+	</text>
+	<text name="we_label">
+		Me
+	</text>
+	<text name="th_label">
+		Gi
+	</text>
+	<text name="fr_label">
+		Ve
+	</text>
+	<text name="sa_label">
+		Sa
+	</text>
+	<text name="at_label">
+		alle
+	</text>
+	<button name="save_btn" label="Salva" />
+	<button name="cancel_btn" label="Annulla" />
+</floater>
