@@ -5,7 +5,7 @@
 			<button label="Сохранить на диск" name="save_to_computer_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_inventory">
-			<button label="В инвентарь (L$[AMOUNT])" name="save_to_inventory_btn"/>
+			<button label="В инвентарь" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">
 			<button label="Загрузить в профиль" name="save_to_profile_btn"/>

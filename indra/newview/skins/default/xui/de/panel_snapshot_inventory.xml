@@ -7,7 +7,7 @@
 		<combo_box.item label="Klein (128x128)" name="Small(128x128)"/>
 		<combo_box.item label="Mittel (256x256)" name="Medium(256x256)"/>
 		<combo_box.item label="Groß (512x512)" name="Large(512x512)"/>
-		<combo_box.item label="Aktuelles Fenster (512x512)" name="CurrentWindow"/>
+		<combo_box.item label="Aktuelles Fenster" name="CurrentWindow"/>
 		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
 	</combo_box>
 	<spinner label="Breite x Höhe" name="inventory_snapshot_width"/>
@@ -15,6 +15,8 @@
 	<check_box label="Seitenverhältnis beibehalten" name="inventory_keep_aspect_check"/>
 	<text name="hint_lbl">
 		Um das Bild als Textur zu speichern, wählen Sie eines der quadratischen Formate aus.
+
+Upload-Kosten: [UPLOAD_COST] L$
 	</text>
 	<button label="&#x25B6; Auswahl" name="cancel_btn"/>
 	<button label="Speichern" name="save_btn"/>

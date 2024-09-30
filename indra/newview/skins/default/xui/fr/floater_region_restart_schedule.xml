@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_region_restart_schedule">
+<floater name="floater_region_restart_schedule" title="Planning de redémarrage de la région">
 	<text name="days_general">
 		Redémarrer la région ces jours-ci :
 	</text>
