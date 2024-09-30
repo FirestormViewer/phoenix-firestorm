@@ -137,10 +137,6 @@
 
 #include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
 
-// <FS> [FIRE-30873]: Poser
-#include "bdposingmotion.h"
-// </FS>
-
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
@@ -175,6 +171,7 @@ const LLUUID ANIM_AGENT_PELVIS_FIX = LLUUID("0c5dd2a2-514d-8893-d44d-05beffad208
 const LLUUID ANIM_AGENT_TARGET = LLUUID("0e4896cb-fba4-926c-f355-8720189d5b55");  //"target"
 const LLUUID ANIM_AGENT_WALK_ADJUST = LLUUID("829bc85b-02fc-ec41-be2e-74cc6dd7215d");  //"walk_adjust"
 const LLUUID ANIM_AGENT_PHYSICS_MOTION = LLUUID("7360e029-3cb8-ebc4-863e-212df440d987");  //"physics_motion"
+
 
 //-----------------------------------------------------------------------------
 // Constants
