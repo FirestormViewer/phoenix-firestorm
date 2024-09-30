@@ -126,31 +126,31 @@
 	</notification>
 	<notification name="MerchantForceValidateListing">
 		Для того, чтобы создать свой список, мы исправили иерархию вашего списка содержимого.
-        <usetemplate ignoretext="Предупреждать меня, что создание исправленного списка иерархии содержания" name="okignore"  yestext="Да"/>
+		<usetemplate ignoretext="Предупредить что создание исправленного списка иерархии содержания" name="okignore"  yestext="Да"/>
 	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		Это действие вызовет изменение активного содержимого данного списка. Продолжить?
-		<usetemplate ignoretext="Подтверждать смену активного списка в торговом центре" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить смену активного списка в торговом центре" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmMerchantMoveInventory">
 		При перетаскивании в окно списков товаров торгового центра предметы перемещаются со своего исходного места, а не копируются. Продолжить?
-		<usetemplate ignoretext="Подтверждать перемещение предмета из инвентаря в торговый центр" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перемещение предмета из инвентаря в торговый центр" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmListingCutOrDelete">
 		В результате перемещения или удаления папки списка будет удален ваш список товаров в торговом центре. Если требуется сохранить список в торговом центре, переместите или удалите содержимое папки версии, которое необходимо изменить. Продолжить?
-		<usetemplate ignoretext="Подтверждать перемещение или удаление списка из торгового центра" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перемещение или удаление списка из торгового центра" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmCopyToMarketplace">
 		У вас нет прав на копирование этих предметов в торговый центр. Переместите их или оставьте здесь.
-		<usetemplate canceltext="Отмена" ignoretext="Подтверждать попытку копирования некопируемых предметов в торговый центр" name="yesnocancelbuttons" notext="Не перемещать предмет(ы)" yestext="Переместить предмет(ы)"/>
+		<usetemplate canceltext="Отмена" ignoretext="Подтвердить попытку копирования некопируемых предметов в торговый центр" name="yesnocancelbuttons" notext="Не перемещать предмет(ы)" yestext="Переместить предмет(ы)"/>
 	</notification>
 	<notification name="ConfirmMerchantUnlist">
 		Это действие вызовет отмену публикации списка. Продолжить?
-		<usetemplate ignoretext="Подтверждать отмену публикации активного списка в торговом центре" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить отмену публикации активного списка в торговом центре" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmMerchantClearVersion">
 		Это действие вызовет деактивацию папки версии текущего списка. Продолжить?
-		<usetemplate ignoretext="Подтверждать деактивирование папки версии списка в торговом центре" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить деактивирование папки версии списка в торговом центре" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="AlertMerchantListingNotUpdated">
 		Не удалось обновить этот список.
@@ -164,11 +164,11 @@
 	</notification>
 	<notification name="AlertMerchantListingActivateRequired">
 		В этом списке несколько папок версий или нет ни одной. Самостоятельно выберите и активируйте одну папку позже.
-		<usetemplate ignoretext="Предупреждать об активировании папки версии, если создан список с несколькими папками версий" name="okignore" yestext="Да"/>
+		<usetemplate ignoretext="Предупредить об активировании папки версии, если создан список с несколькими папками версий" name="okignore" yestext="Да"/>
 	</notification>
 	<notification name="AlertMerchantStockFolderSplit">
 		Предметы разных типов распределены по отдельным папкам запасов, поэтому папка систематизирована так, чтобы ее можно было опубликовать.
-		<usetemplate ignoretext="Предупреждать о разделении папки запасов перед публикацией" name="okignore" yestext="Да"/>
+		<usetemplate ignoretext="Предупредить о разделении папки запасов перед публикацией" name="okignore" yestext="Да"/>
 	</notification>
 	<notification name="AlertMerchantStockFolderEmpty">
 		Публикация вашего списка прекращена, так как папка запасов пуста. Добавьте предметы в папку запасов, чтобы опубликовать список снова.
@@ -241,7 +241,7 @@
 Удалить участников из этой роли нельзя.
 Участники сами должны отказаться от нее.
 Продолжить?
-		<usetemplate ignoretext="Подтверждать перед добавлением нового владельца группы" name="okcancelignore" notext="Нет" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед добавлением нового владельца группы" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="AssignDangerousActionWarning">
 		Вы собираетесь добавить привилегию &quot;[ACTION_NAME]&quot; к роли &quot;[ROLE_NAME]&quot;.
@@ -277,11 +277,11 @@
 	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Вы собираетесь исключить [AVATAR_NAME] из группы.
-		<usetemplate ignoretext="Подтвердите исключение участника из группы" name="okcancelignore" notext="Отмена" yestext="Исключить"/>
+		<usetemplate ignoretext="Подтвердить исключение участника из группы" name="okcancelignore" notext="Отмена" yestext="Исключить"/>
 	</notification>
 	<notification name="EjectGroupMembersWarning">
 		Вы собираетесь исключить [COUNT] участников из группы.
-		<usetemplate ignoretext="Подтвердите исключение участников из группы" name="okcancelignore" notext="Отмена" yestext="Исключить"/>
+		<usetemplate ignoretext="Подтвердить исключение участников из группы" name="okcancelignore" notext="Отмена" yestext="Исключить"/>
 	</notification>
 	<notification name="BanGroupMemberWarning">
 		Вы собираетесь заблокировать [AVATAR_NAME] в группе.
@@ -297,7 +297,7 @@
 	<notification name="AttachmentDrop">
 		Вы собираетесь сбросить свое присоединение.
     Продолжить?
-		<usetemplate ignoretext="Подтверждать перед сбросом присоединений" name="okcancelignore" notext="Нет" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед сбросом присоединений" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
 		Вступление в эту группу стоит L$[COST].
@@ -514,7 +514,7 @@
 	<notification name="DeleteMedia">
 		Вы собираетесь удалить медиа, связанное с этой гранью.
 Продолжить?
-		<usetemplate ignoretext="Подтверждать перед удалением медиа из объекта" name="okcancelignore" notext="Нет" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед удалением медиа из объекта" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="ClassifiedSave">
 		Сохранить изменения в рекламе [NAME]?
@@ -605,7 +605,7 @@
 	</notification>
 	<notification name="DeleteNotecard">
 		Вы уверены, что хотите удалить эту заметку?
-		<usetemplate ignoretext="Подтверждение удаления заметки" name="okcancelignore" notext="Отмена" yestext="Ok"/>
+		<usetemplate ignoretext="Подтвердить удаления заметки" name="okcancelignore" notext="Отмена" yestext="Ok"/>
 	</notification>
 	<notification name="LoadPreviousReportScreenshot">
 		Использовать для вашего отчета предыдущий снимок экрана?
@@ -656,7 +656,7 @@
 	</notification>
 	<notification name="MediaFileDownloadUnsupported">
 		Вы запросили загрузку файла, которая не поддерживается [APP_NAME].
-		<usetemplate ignoretext="Предупреждать о загрузке неподдерживаемых файлов" name="okignore" yestext="Да"/>
+		<usetemplate ignoretext="Предупредить о загрузке неподдерживаемых файлов" name="okignore" yestext="Да"/>
 	</notification>
 	<notification name="CannotWriteFile">
 		Невозможно записать файл [[FILE]]
@@ -1467,15 +1467,15 @@
 	<notification name="AgentComplexityWithVisibility">
 		Ваша [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 сложность аватара]: [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
-		<usetemplate ignoretext="Предупреждать о превышении сложности аватара" name="notifyignore"/>
+		<usetemplate ignoretext="Предупредить о превышении сложности аватара" name="notifyignore"/>
 	</notification>
 	<notification name="AgentComplexity">
 		Ваша [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 сложность аватара]: [AGENT_COMPLEXITY].
-		<usetemplate ignoretext="Предупреждать меня об изменении сложности аватара" name="notifyignore"/>
+		<usetemplate ignoretext="Предупредить об изменении сложности аватара" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
 		[HUD_REASON], возможно, отрицательно влияет на быстродействие.
-		<usetemplate ignoretext="Предупреждать о чрезмерной сложности данных в игре" name="notifyignore"/>
+		<usetemplate ignoretext="Предупредить о чрезмерной сложности данных в игре" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
 		Установка [APP_NAME] завершена.
@@ -1592,7 +1592,7 @@
 	</notification>
 	<notification name="ChangeObjectBonusFactor">
 		Снижение бонуса за объекты после сооружения построек в регионе может вызвать возврат или удаление объектов. Действительно изменить бонус за объекты?
-		<usetemplate ignoretext="Подтвердите изменение бонусного множителя для объектов" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить изменение бонусного множителя для объектов" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="EstateObjectReturn">
 		Вы действительно хотите вернуть объекты, принадлежащие [USER_NAME]?
@@ -1719,6 +1719,10 @@
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Нельзя изменять внешность, пока загружаются одежда и фигура.
 	</notification>
+	<notification name="UsavedWearableChanges">
+		У вас есть несохраненные изменения.
+		<usetemplate ignoretext="Подтвердить перед отказом от несохраненных изменений надетого" name="okcancelignore" notext="Продолжить редактировать" yestext="Отказаться"/>
+	</notification>
 	<notification name="ClassifiedMustBeAlphanumeric">
 		Название вашего объявления должно начинаться с буквы A - Z или цифры. Использовать знаки препинания не разрешено.
 	</notification>
@@ -1760,7 +1764,7 @@
 	<notification name="DeedObjectToGroup">
 		В результате передачи этого объекта группа:
 * Получит L$ в уплату за объект
-		<usetemplate ignoretext="Подтверждать перед передачей объекта группе" name="okcancelignore" notext="Отмена" yestext="Передать"/>
+		<usetemplate ignoretext="Подтвердить перед передачей объекта группе" name="okcancelignore" notext="Отмена" yestext="Передать"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		Открыть браузер для просмотра этого контента?
@@ -1799,7 +1803,7 @@
 		Вы действительно хотите вернуть выбранные объекты их владельцам? Передаваемые объекты будут возвращены прежним владельцам.
 
 *ПРЕДУПРЕЖДЕНИЕ* Непередаваемые объекты будут удалены!
-		<usetemplate ignoretext="Подтверждать перед возвратом объектов владельцам" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед возвратом объектов владельцам" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
 Покинуть группу &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
@@ -2022,23 +2026,23 @@
 	</notification>
 	<notification name="TeleportFromLandmark">
 		Вы действительно хотите телепортироваться в &lt;nolink&gt;[LOCATION]&lt;/nolink&gt;?
-		<usetemplate ignoretext="Подтверждать телепортацию на закладку" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
+		<usetemplate ignoretext="Подтвердить телепортацию на закладку" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
 	</notification>
 	<notification name="TeleportViaSLAPP">
 		Вы действительно хотите телепортироваться в &lt;nolink&gt;[LOCATION]&lt;/nolink&gt;?
-		<usetemplate ignoretext="Подтверждать телепортацию через SLAPP" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
+		<usetemplate ignoretext="Подтвердить телепортацию через SLAPP" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
 	</notification>
 	<notification name="TeleportToPick">
 		Телепортироваться в [PICK]?
-		<usetemplate ignoretext="Подтверждать телепортацию к месту" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
+		<usetemplate ignoretext="Подтвердить телепортацию к месту" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
 	</notification>
 	<notification name="TeleportToClassified">
 		Телепортироваться в [CLASSIFIED]?
-		<usetemplate ignoretext="Подтверждать телепортацию на место в рекламном объявлении" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
+		<usetemplate ignoretext="Подтвердить телепортацию на место в рекламном объявлении" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
 	</notification>
 	<notification name="TeleportToHistoryEntry">
 		Телепортироваться в [HISTORY_ENTRY]?
-		<usetemplate ignoretext="Подтверждать телепортацию на место в истории" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
+		<usetemplate ignoretext="Подтвердить телепортацию на место в истории" name="okcancelignore" notext="Отмена" yestext="Телепортация"/>
 	</notification>
 	<notification label="Сообщение всем в моем землевладении" name="MessageEstate">
 		Введите краткое объявление для всех жителей, которые сейчас находятся в вашем землевладении.
@@ -2435,7 +2439,7 @@
 Этот элемент будет перемещен в инвентарь объекта, а не скопирован.
 
 Переместите инвентарный элемент?
-		<usetemplate ignoretext="Предупредите меня, прежде чем я применю элементы &apos;без копирования&apos; к объекту" name="okcancelignore" notext="Отмена" yestext="OK"/>
+		<usetemplate ignoretext="Предупредить прежде чем я применю элементы &apos;без копирования&apos; к объекту" name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
 
 	<notification name="MoveInventoryFromObject">
@@ -2443,7 +2447,7 @@
 Они будут перемещены в ваш инвентарь, а не скопированы.
 
 Переместить предмет(ы)?
-		<usetemplate ignoretext="Предупреждать перед перемещением &quot;не копируемых&quot; предметов из объекта" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Предупредить перед перемещением &quot;не копируемых&quot; предметов из объекта" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 
 	<notification name="MoveInventoryFromScriptedObject">
@@ -2451,7 +2455,7 @@
 Так как объект является скриптовым, перемещение предметов в ваш инвентарий может вызвать ошибки скрипта.
 
 Переместить предмет(ы)?
-		<usetemplate ignoretext="Предупреждать перед перемещением &quot;не копируемых&quot; предметов, которые могут повредить скриптовый объект" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Предупредить перед перемещением &quot;не копируемых&quot; предметов, которые могут повредить скриптовый объект" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ClickActionNotPayable">
 		Предупреждение: Задано действие по нажатию &quot;Заплатить за объект&quot;, но оно будет работать, только если добавлен скрипт с событием money().
@@ -2460,8 +2464,8 @@
 		</form>
 	</notification>
 	<notification name="PayConfirmation">
-		Подтвердите, что вы хотите заплатить L$[AMOUNT] для [TARGET].
-		<usetemplate ignoretext="Подтверждение перед оплатой (сумма выше L$200)" name="okcancelignore" notext="Отмена" yestext="Pay"/>
+		Подтвердите что вы хотите заплатить L$[AMOUNT] для [TARGET].
+		<usetemplate ignoretext="Подтвердить перед оплатой (сумма выше L$200)" name="okcancelignore" notext="Отмена" yestext="Pay"/>
 	</notification>
 	<notification name="PayObjectFailed">
 		Ошибка платежа: объект не найден.
@@ -2478,11 +2482,11 @@
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
 		При добавлении участника в существующий разговор будет создан новый разговор.  Все участники получат уведомления о новом разговоре.
-		<usetemplate ignoretext="Подтвердите добавление участников чата" name="okcancelignore" notext="Отмена" yestext="ОК"/>
+		<usetemplate ignoretext="Подтвердить добавление участников чата" name="okcancelignore" notext="Отмена" yestext="ОК"/>
 	</notification>
 	<notification name="ConfirmQuit">
 		Вы уверены, что хотите выйти?
-		<usetemplate ignoretext="Подтверждать перед выходом" name="okcancelignore" notext="Не выходить" yestext="Выйти"/>
+		<usetemplate ignoretext="Подтвердить перед выходом" name="okcancelignore" notext="Не выходить" yestext="Выйти"/>
 	</notification>
 	<notification name="ConfirmRestoreToybox">
 		Это действие приведет к восстановлению стандартных кнопок и панелей инструментов.
@@ -2525,7 +2529,7 @@
 
 	<notification name="DeleteThumbnail">
 		Удалить изображение этого товара? Отмена невозможна.
-		<usetemplate ignoretext="Подтвердите перед удалением миниатюры." name="okcancelignore" notext="Отмена" yestext="Удалить"/>
+		<usetemplate ignoretext="Подтвердить перед удалением миниатюры." name="okcancelignore" notext="Отмена" yestext="Удалить"/>
 	</notification>
 	<notification name="ThumbnailDimentionsLimit">
 		Допускаются только квадратные изображения от 64 до 256 пикселей на сторону.
@@ -2622,7 +2626,7 @@
 	</notification>
 	<notification name="ConfirmDeleteProtectedCategory">
 		Папка &quot;[FOLDERNAME]&quot; является системной. Удаление системных папок может привести к нестабильности.  Действительно удалить эту папку?
-		<usetemplate ignoretext="Подтверждать перед удалением системной папки" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед удалением системной папки" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="PurgeSelectedItems">
 		[COUNT] предметов(а) будут окончательно удалены. Вы действительно хотите окончательно удалить выбранные предмет(ы) из Корзины?
@@ -2630,7 +2634,7 @@
 	</notification>
 	<notification name="ConfirmEmptyTrash">
 		[COUNT] предметов(а) и папки будут окончательно удалены. Вы действительно хотите удалить содержимое корзины без возможности восстановления?
-		<usetemplate ignoretext="Подтверждать перед опорожнением корзины инвентаря" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед опорожнением корзины инвентаря" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="TrashIsFull">
 		Ваша корзина переполнена. Это может вызвать проблемы при входе.
@@ -2668,12 +2672,12 @@
 	</notification>
 	<notification name="ConfirmEmptyLostAndFound">
 		Вы действительно хотите необратимо удалить содержимое папки Найденные вещи?
-		<usetemplate ignoretext="Подтверждать перед опорожнением папки Найденные вещи инвентаря" name="okcancelignore" notext="Нет" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед опорожнением папки Найденные вещи инвентаря" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmReplaceLink">
 		Вы собираетесь заменить ссылку '[TYPE]' на элемент тела, предметом который не соответствует типу.
 Вы уверены, что хотите продолжить?
-		<usetemplate ignoretext="Подтвердить, прежде чем я заменю ссылку" name="okcancelignore" notext="Нет" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить прежде чем я заменю ссылку" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="CopySLURL">
 		Данный SLurl был скопирован в буфер обмена:
@@ -2930,7 +2934,7 @@ URL: [AUDIOURL]
 
 	<notification name="CantSelectReflectionProbe">
 		Вы установили датчик отражения, но функция "Выбрать датчики отражения" отключена. Чтобы иметь возможность выбирать датчики отражения, установите флажок "Строить" &gt; "Параметры" &gt; "Выбрать датчики отражения".
-		<usetemplate ignoretext="Предупреждает, если выбор датчиков отражения отключен." name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Предупредить если выбор датчиков отражения отключен." name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="ScriptMissing">
@@ -3643,7 +3647,7 @@ URL: [AUDIOURL]
 	<notification name="VoiceEffectsNotSupported">
 Функция изменения голоса не поддерживается данным средством просмотра.
 Более подробную информацию о других инструментах для изменения голоса см. в [[FAQ_URL]этой статье].
-		<usetemplate name="okignore" ignoretext="Предупредить меня о том, что голосовая трансформация не поддерживается" yestext="OK"/>
+		<usetemplate name="okignore" ignoretext="Предупредить о том, что голосовая трансформация не поддерживается" yestext="OK"/>
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Эту область могут посещать только участники определенной группы.
@@ -3678,7 +3682,7 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="ConfirmCloseAll">
 		Вы действительно хотите закрыть все окна ЛС?
-		<usetemplate name="okcancelignore" notext="Отмена" yestext="Да" ignoretext="Подтверждать перед закрытием всех окон ЛС"/>
+		<usetemplate name="okcancelignore" notext="Отмена" yestext="Да" ignoretext="Подтвердить перед закрытием всех окон ЛС"/>
 	</notification>
 	<notification name="AttachmentSaved">
 		Присоединение сохранено.
@@ -3774,7 +3778,7 @@ URL: [AUDIOURL]
 Со следующими жителями:
 
 &lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
-		<usetemplate ignoretext="Подтверждать прежде чем делиться предметами" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить прежде чем делиться предметами" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
 		Раздать можно только одну папку за раз.
@@ -3894,12 +3898,12 @@ https://wiki.firestormviewer.org/fs_voice
 
 	<notification name="LivePreviewUnavailable">
 		Просмотр этой текстуры невозможен, так как запрещено ее копирование и/или передача.
-		<usetemplate ignoretext="Предупреждать, если режим просмотра вживую недоступен для текстур с запрещенным копированием и/или передачей" name="okignore" yestext="Да"/>
+		<usetemplate ignoretext="Предупредить если режим просмотра вживую недоступен для текстур с запрещенным копированием и/или передачей" name="okignore" yestext="Да"/>
 	</notification>
 
 	<notification name="LivePreviewUnavailablePBR">
 		Мы не можем показать предварительный просмотр этого материала, поскольку он запрещен для копирования, передачи и/или изменения.
-		<usetemplate ignoretext="Предупредить меня, что режим предварительного просмотра в реальном времени недоступен для материалов без копирования, передачи и/или изменения" name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Предупредить что режим предварительного просмотра в реальном времени недоступен для материалов без копирования, передачи и/или изменения" name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="FacePasteFailed">
@@ -3925,7 +3929,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 	<notification name="ConfirmLeaveCall">
 		Вы уверены, что хотите покинуть этот разговор?
-		<usetemplate ignoretext="Подтверждать перед выходом из разговора" name="okcancelignore" notext="Нет" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед выходом из разговора" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmMuteAll">
 		Вы решили заблокировать всех участников группового разговора.
@@ -3933,7 +3937,7 @@ https://wiki.firestormviewer.org/fs_voice
 позже, даже после того, как вы покинули разговор.
 
 Заблокировать всех?
-		<usetemplate ignoretext="Подтверждать перед заглушением всех участников группового разговора" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед заглушением всех участников группового разговора" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification label="Чат" name="HintChat">
 		Чтобы присоединиться к чату, введите слова в поле чата ниже.
@@ -4077,7 +4081,7 @@ https://wiki.firestormviewer.org/fs_voice
 	</notification>
 	<notification label="" name="ConfirmHideUI">
 		Это действие приведет к скрытию всех меню и кнопок. Чтобы вернуть их, щелкните [SHORTCUT] снова.
-		<usetemplate ignoretext="Подтверждать перед скрытием интерфейса" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить перед скрытием интерфейса" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom">
 		Признак фантомности некоторых выбранных наборов связей будет изменен.
@@ -4161,15 +4165,15 @@ https://wiki.firestormviewer.org/fs_voice
 	</global>
 	<notification name="ConfirmClearDebugSearchURL">
 		Вы уверены, что хотите очистить отладки URL поиска?
-		<usetemplate ignoretext="Подтверждение очистить отладки URL поиска" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить очистить отладки URL поиска" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmPickDebugSearchURL">
 		Вы уверены, что хотите выбрать текущий URL для поиска, как отладку URL поиска?
-		<usetemplate ignoretext="Подтверждение что хотите выбрать текущий URL для поиска" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить что хотите выбрать текущий URL для поиска" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="ConfirmRemoveGrid">
 		Вы уверены, что хотите удалить [REMOVE_GRID] из списка сеток?
-		<usetemplate ignoretext="Подтверждение удаление сетки" name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить удаление сетки" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="CanNotRemoveConnectedGrid">
 		Невозможно удалить [REMOVE_GRID] пока вы подключены к ней.
@@ -5096,7 +5100,7 @@ https://wiki.firestormviewer.org/fs_voice
 		</form>
 	</notification>
 	<notification name="InventoryValidationFailed" label="Ошибки проверки инвентаря">
-		<usetemplate name="okignore" ignoretext="Предупреждать, если были обнаружены ошибки проверки инвентаря."/>
+		<usetemplate name="okignore" ignoretext="Предупредить если были обнаружены ошибки проверки инвентаря."/>
 В вашем инвентаре обнаружено повреждение.
 Пожалуйста, свяжитесь с [HELP] со следующим списком проблем.
 Они могут использовать http://opensimulator.org/wiki/inventory чтобы устранить проблемы.
@@ -5109,11 +5113,11 @@ https://wiki.firestormviewer.org/fs_voice
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Будут удалены журналы предыдущих разговоров и все резервные копии этих файлов.
-		<usetemplate ignoretext="Подтверждать удаление журнала предыдущих разговоров." name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить удаление журнала предыдущих разговоров." name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
 		Будут удалены записи всех предыдущих разговоров. Список прошедших разговоров не изменится. Все файлы с расширениями .txt и txt.backup в папке [FOLDER] будут удалены.
-		<usetemplate ignoretext="Подтверждать удаление записей." name="okcancelignore" notext="Отмена" yestext="Да"/>
+		<usetemplate ignoretext="Подтвердить удаление записей." name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="PreferenceChatPathChanged">
 		Невозможно переместить файлы. Восстановлен прежний путь.
@@ -5503,7 +5507,7 @@ https://wiki.firestormviewer.org/fs_voice
 
 Если вы хотите увидеть этот объект, удалите его и снова прикрепите к точке прикрепления аватара.
 
-		<usetemplate ignoretext="Предупредить меня, когда к точке дисплея будет прикреплен меш." name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Предупредить когда к точке дисплея будет прикреплен меш." name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="ConfirmOverwriteOutfit">
@@ -5590,7 +5594,7 @@ https://wiki.firestormviewer.org/fs_voice
 	</notification>
 	<notification name="FSAOScriptedNotification">
 		Диспетчер анимаций (AO): [AO_MESSAGE]
-		<usetemplate ignoretext="Предупредить меня, когда к функции Диспетчера анимаций (AO) обращается скриптовый объект" name="notifyignore"/>
+		<usetemplate ignoretext="Предупредить когда к функции Диспетчера анимаций (AO) обращается скриптовый объект" name="notifyignore"/>
 	</notification>
 	<notification name="WarnForceLoginURL">
 		URL-адрес заставки входа в систему переопределен в целях тестирования.

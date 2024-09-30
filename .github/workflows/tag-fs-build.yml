@@ -155,7 +155,7 @@ jobs:
       - name: Tagging Confirmation
         run: |
           if [ "${{ steps.get_inputs.outputs.dry_run }}" == "true" ]; then
-            echo "Dry run mode enabled. Tag '$TAG_NAME' was not created or pushed."
+            echo "Dry run mode enabled. Tag '${{ steps.check_tag.outputs.tag_exists }}' was not created or pushed."
           elif [ "${{ steps.check_tag.outputs.tag_exists }}" == "true" ]; then
             echo "Tag '${{ steps.get_tag.outputs.tag_name }}' already exists. No new tag was created."
           else
