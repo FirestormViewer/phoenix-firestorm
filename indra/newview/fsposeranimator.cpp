@@ -33,8 +33,6 @@
 #include "llvoavatarself.h"
 #include <llanimationstates.h>
 
-#include "bdposingmotion.h" // BD - Use Black Dragon posing piece
-
 /// <summary>
 /// This has turned into a shim-class rather than the business of posing. *shrug*
 /// </summary>
@@ -46,7 +44,6 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
     if (!isAvatarSafeToUse(avatar))
         return false;
 
-    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
     if (!motion || motion->isStopped())
         return false;
 
@@ -66,7 +63,6 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
     if (arePosing && shouldPose || !arePosing && !shouldPose) // could !XOR, but this is readable
         return;
 
-    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
     if (!motion || motion->isStopped())
         return;
 
@@ -85,7 +81,6 @@ void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
     if (!isAvatarSafeToUse(avatar))
         return;
 
-    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
     if (!motion || motion->isStopped())
         return;
 
@@ -390,14 +385,12 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
     if (!isAvatarSafeToUse(avatar))
         return false;
 
-    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
     if (!motion || motion->isStopped())
     {
         if (avatar->isSelf())
             gAgent.stopFidget();
 
         avatar->startDefaultMotions();
-        avatar->startMotion(ANIM_BD_POSING_MOTION);
 
         // TODO: scrape motion state prior to edit, facilitating reset
 
@@ -412,7 +405,6 @@ void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)
     if (!avatar || avatar->isDead())
         return;
 
-    avatar->stopMotion(ANIM_BD_POSING_MOTION);
 }
 
 bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
@@ -420,7 +412,6 @@ bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
     if (!isAvatarSafeToUse(avatar))
         return false;
 
-    BDPosingMotion *motion = (BDPosingMotion *) avatar->findMotion(ANIM_BD_POSING_MOTION);
     if (!motion)
         return false;
 
