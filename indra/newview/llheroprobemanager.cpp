@@ -640,7 +640,7 @@ bool LLHeroProbeManager::registerViewerObject(LLVOVolume* drawablep)
         // Probe isn't in our list for consideration.  Add it.
         mHeroVOList.push_back(drawablep);
         return true;
-    }
+    } 
 
     return false;
 }
@@ -652,4 +652,16 @@ void LLHeroProbeManager::unregisterViewerObject(LLVOVolume* drawablep)
     {
         mHeroVOList.erase(found_itr);
     }
+    // <FS:Beq> FIRE-34587 - Bugsplat crash in getIsDynamic due to lifetime management of hero probe and underlying objects
+    // If the unregistered object is mNearestHero, reset mNearestHero and mDefaultProbe->mViewerObject
+    if (drawablep == mNearestHero)
+    {
+        mNearestHero = nullptr;
+        if (mDefaultProbe.notNull())
+        {
+            mDefaultProbe->mViewerObject = nullptr;
+        }
+    }
+    // </FS:Beq>    
+
 }
