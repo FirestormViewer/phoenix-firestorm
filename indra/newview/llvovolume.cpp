@@ -6018,8 +6018,15 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     continue;
                 }
-
-                LLFetchedGLTFMaterial *gltf_mat = (LLFetchedGLTFMaterial*) facep->getTextureEntry()->getGLTFRenderMaterial();
+                // <FS:Beq> FIRE-34589 - OpenSim crashes due to null facep. Only opensim, not sure why.
+                // LLFetchedGLTFMaterial *gltf_mat = (LLFetchedGLTFMaterial*) facep->getTextureEntry()->getGLTFRenderMaterial();
+                auto te = facep->getTextureEntry();
+                LLFetchedGLTFMaterial *gltf_mat = nullptr;
+                if (te)
+                {
+                    gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
+                }
+                // </FS:Beq>
                 bool is_pbr = gltf_mat != nullptr;
 
                 if (is_pbr)
