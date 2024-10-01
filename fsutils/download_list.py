@@ -338,7 +338,7 @@ def gather_build_info(build_type_info, config):
                 else:
                     variant = "regular"
 
-                file_key = f"{grid}-{platform_folder}"
+                file_key = f"{grid}-{variant}-{platform_folder}"
 
                 # if platform_folder in config.os_download_dirs:
                 if "downloadable_artifacts" not in build_type_info:
@@ -382,7 +382,7 @@ DOWNLOADS - {build_info["build_type"]}
                 variant_printable = f"{config.variant_printable[variant]}"
                 text_summary += f"{variant_printable}\n"
                 try:
-                    file_key = f"{grid}-{platform_folder}"
+                    file_key = f"{grid}-{variant}-{platform_folder}"
                     text_summary += f"{platform_printable} for {grid_printable}\n"
                     text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
                     text_summary += "\n"
