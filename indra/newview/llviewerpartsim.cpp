@@ -279,11 +279,15 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
 
     LLVector3 gravity(0.f, 0.f, GRAVITY);
 
+    // <FS:Beq> FIRE-34600 off by one particle count triggering bugsplat (LL_ERR)
+    S32 end = (S32) mParticles.size();
     LLViewerPartSim::checkParticleCount(static_cast<U32>(mParticles.size()));
+    std::atomic_signal_fence(std::memory_order_seq_cst);
+    // </FS:Beq>
 
     LLViewerCamera* camera = LLViewerCamera::getInstance();
     LLViewerRegion *regionp = getRegion();
-    S32 end = (S32) mParticles.size();
+    //S32 end = (S32) mParticles.size();// <FS:Beq> FIRE-34600 off by one particle count triggering bugsplat (LL_ERR)
     for (S32 i = 0 ; i < (S32)mParticles.size();)
     {
         LLVector3 a(0.f, 0.f, 0.f);
