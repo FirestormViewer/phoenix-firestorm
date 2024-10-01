@@ -160,6 +160,7 @@ set(viewer_SOURCE_FILES
     fsparticipantlist.cpp
     fspose.cpp
 	fsposeranimator.cpp
+	fsposingmotion.cpp
     fsradar.cpp
     fsradarentry.cpp
     fsradarlistctrl.cpp

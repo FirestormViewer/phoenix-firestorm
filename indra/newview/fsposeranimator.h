@@ -31,6 +31,7 @@
 #include "lljointsolverrp3.h"
 #include "v3dmath.h"
 #include "llcontrolavatar.h"
+#include "fsposingMotion.h"
 
 /// <summary>
 /// Describes how we will cluster the joints/bones/thingos.
@@ -343,11 +344,36 @@ public:
     LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation);
 
     /// <summary>
+    /// Creates a posing motion for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar to create the posing motion for.</param>
+    /// <returns>The posing motion, if created, otherwise nullptr.</returns>
+    /// <remarks>
+    /// When a pose is created for the avatar, it is 'registered' with their character for use later on.
+    /// Thus we start & stop posing the same animation.
+    /// </remarks>
+    FSPosingMotion* createPosingMotion(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Gets the poser posing-motion for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar to get the posing motion for.</param>
+    /// <returns>The posing motion if found, otherwise nullptr.</returns>
+    FSPosingMotion* getPosingMotion(LLVOAvatar* avatar);
+
+    /// <summary>
     /// Determines if the avatar can be used.
     /// </summary>
     /// <param name="avatar">The avatar to test if it is safe to animate.</param>
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar *avatar);
+
+    /// <summary>
+    /// Maps the avatar's ID to the animation registered to them.
+    /// Thus we start/stop the same animation.
+    /// An avatar's animation exists so long as their session does, and there is consideration for renewal (like if they relog/crash).
+    /// </summary>
+    std::map<LLUUID, LLAssetID> _avatarIdToRegisteredAnimationId;
 };
 
 #endif // LL_FSPoserAnimator_H
