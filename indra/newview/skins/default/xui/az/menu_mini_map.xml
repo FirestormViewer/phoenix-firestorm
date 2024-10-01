@@ -52,8 +52,6 @@
 		<menu_item_check label="Müvəqqəti obyektlər" name="Temp On Rez Objects"/>
 		<menu_item_check label="Sahə sərhədləri" name="Property Lines"/>
 		<menu_item_check label="Satılan sahələr" name="Parcels for Sale"/>
-		<menu_item_check label="Torpaq teksturları" name="Terrain Textures"/>
-		<menu_item_check label="Dünya xəritəsinin teksturları" name="World Map Textures"/>
 	</menu>
 	<menu_item_check label="Şimal yuxarıda" name="North at top"/>
 	<menu_item_check label="Kamera yuxarıda" name="Camera at top"/>
