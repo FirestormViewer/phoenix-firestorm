@@ -223,6 +223,7 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     onAvatarsRefresh();
     refreshJointScrollListMembers();
     onJointSelect();
+    onOpenSetAdvancedPanel();
 }
 
 void FSFloaterPoser::onClose(bool app_quitting)
@@ -931,6 +932,17 @@ void FSFloaterPoser::onUndoLastRotation()
 
     trackBall->undoLastValue();
     onLimbTrackballChanged();
+}
+
+void FSFloaterPoser::onOpenSetAdvancedPanel()
+{
+    LLButton* advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
+    if (!advancedButton)
+        return;
+
+    bool advancedPanelExpanded = advancedButton->getValue().asBoolean();
+    if (advancedPanelExpanded)
+        onToggleAdvancedPanel();
 }
 
 void FSFloaterPoser::onToggleAdvancedPanel()

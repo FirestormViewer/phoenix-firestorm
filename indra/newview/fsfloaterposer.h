@@ -222,6 +222,7 @@ class FSFloaterPoser : public LLFloater
     void onClickFlipPose();
     void onClickFlipSelectedJoints();
     void onPoseJointsReset();
+    void onOpenSetAdvancedPanel();
 
     // UI Refreshments
     void refreshRotationSliders();

@@ -853,7 +853,7 @@ width="565">
 				button_flash_rate="0.5"
 				tool_tip="Start posing the selected avatar or animesh, if you are allowed to"
 				name="start_stop_posing_button"
-				width="130">
+				width="108">
                     <button.commit_callback
                     function="Poser.StartStopAnimating"/>
                 </button>
@@ -862,18 +862,30 @@ width="565">
 				follows="top|left"
 				layout="topleft"
 				enabled="true"
-				visible="false"
+				visible="true"
 				is_toggle="true"
-				label="Adv..."
+				image_overlay="Script_Config"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
 				name="toggleAdvancedPanel"
-				width="52"
+				tool_tip="Toggle the Advanced Settings area"
+				width="20"
 				left_pad="2">
                     <button.commit_callback
                     function="Poser.ToggleAdvancedPanel"/>
                 </button>
+                <panel
+				follows="left|top|bottom"
+				height="22"
+				background_visible="false"
+				layout="topleft"
+				visible="true"
+				mouse_opaque="false"
+				left_pad="0"
+				top_delta="0"
+				name="advbutton_spacer_panel"
+				width="54"/>
                 <button
 				height="21"
 				follows="top|left"
@@ -1040,14 +1052,14 @@ width="565">
         <layout_panel
 		follows="top|left|right"
 		layout="topleft"
-		height="95"
+		height="75"
 		visible="true"
 		auto_resize="false"
 		name="advanced_controls_layout"
 		width="607">
             <panel
                 follows="top|left|right"
-                height="95"
+                height="75"
                 left="0"
                 layout="all"
                 background_visible="false"
@@ -1058,7 +1070,7 @@ width="565">
                 <tab_container
 				follows="all"
 				halign="center"
-				height="95"
+				height="75"
 				layout="topleft"
 				name="modifier_tabs"
 				enabled="true"
@@ -1066,133 +1078,17 @@ width="565">
 				tab_group="1"
 				tab_position="top"
 				top_pad="0"
-				width="420">
+				width="607">
                     <panel
 					follows="all"
 					background_visible="false"
-					height="95"
+					height="75"
 					layout="topleft"
 					left="0"
-					title="Rotation"
-					name="rotation_panel"
-					top="0"
-					width="622">
-                        <slider
-						decimal_digits="3"
-						can_edit_text="true"
-						follows="left|top"
-						height="14"
-						increment="0.001"
-						initial_value="0"
-						label="Rotation X:"
-						label_width="70"
-						layout="topleft"
-						left="10"
-						max_val="3.142"
-						min_val="-3.142"
-						name="Advanced_Rotation_X"
-						top_pad="6"
-						width="459" >
-                            <slider.commit_callback
-                            function="Poser.Advanced.RotationSet"
-                            parameter="0"/>
-                        </slider>
-                        <slider
-						decimal_digits="3"
-						can_edit_text="true"
-						follows="left|top"
-						height="14"
-						increment="0.001"
-						initial_value="0"
-						label="Rotation Y:"
-						label_width="70"
-						layout="topleft"
-						left="10"
-						max_val="3.142"
-						min_val="-3.142"
-						name="Advanced_Rotation_Y"
-						top_pad="1"
-						width="459" >
-                            <slider.commit_callback
-                            function="Poser.Advanced.RotationSet"
-                            parameter="1"/>
-                        </slider>
-                        <slider
-						decimal_digits="3"
-						visible="true"
-						can_edit_text="true"
-						follows="left|top"
-						height="14"
-						increment="0.001"
-						initial_value="0"
-						label="Rotation Z:"
-						label_width="70"
-						layout="topleft"
-						left="10"
-						max_val="3.142"
-						min_val="-3.142"
-						name="Advanced_Rotation_Z"
-						top_pad="1"
-						width="459" >
-                            <slider.commit_callback
-                            function="Poser.Advanced.RotationSet"
-                            parameter="2"/>
-                        </slider>
-                        <panel
-						follows="top|left|right"
-						height="21"
-						background_visible="false"
-						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top_pad="6"
-						width="480">
-                            <button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Reset Rotation"
-							label_selected="Disable Selected Bone(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="reset_bone_rot"
-							width="100"
-							top="0"
-							left_delta="0">
-                                <button.commit_callback
-                                function="Joint.ResetJointRotation"/>
-                            </button>
-                            <button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Revert Rotation"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="revert_pose"
-							width="100"
-							top_delta="0"
-							left_pad="1">
-                                <button.commit_callback
-                                function="Joint.RevertJointRotation"/>
-                            </button>
-                        </panel>
-                    </panel>
-                    <panel
-					follows="all"
-					background_visible="false"
-					height="95"
-					layout="topleft"
-					left="0"
-					title="Position"
+					title="Body Part Position"
 					name="position_panel"
 					top="0"
-					width="622">
+					width="607">
                         <slider
 						decimal_digits="3"
 						can_edit_text="true"
@@ -1208,7 +1104,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_X"
 						top_pad="6"
-						width="459" >
+						width="520" >
                             <slider.commit_callback
                             function="Poser.Advanced.PositionSet"
                             parameter="0"/>
@@ -1228,7 +1124,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_Y"
 						top_pad="1"
-						width="459" >
+						width="520" >
                             <slider.commit_callback
                             function="Poser.Advanced.PositionSet"
                             parameter="1"/>
@@ -1248,50 +1144,22 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_Z"
 						top_pad="1"
-						width="459" >
+						width="520" >
                             <slider.commit_callback
                             function="Poser.Advanced.PositionSet"
                             parameter="2"/>
                         </slider>
-                        <panel
-						follows="top|left|right"
-						height="21"
-						background_visible="false"
-						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top_pad="6"
-						width="480">
-                            <button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Reset Selected Position(s)"
-							label_selected="Disable Selected Bone(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="reset_bone_pos"
-							width="318"
-							top="0"
-							left_delta="2">
-                                <button.commit_callback
-                                function="Joint.ResetJointPosition"/>
-                            </button>
-                        </panel>
                     </panel>
                     <panel
 					follows="all"
 					background_visible="false"
-					height="95"
+					height="75"
 					layout="topleft"
 					left="0"
-					title="Scale"
+					title="Body Part Scale"
 					name="scale_panel"
 					top="0"
-					width="622">
+					width="607">
                         <slider
 						decimal_digits="3"
 						can_edit_text="true"
@@ -1307,7 +1175,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_X"
 						top_pad="6"
-						width="459" >
+						width="520" >
                             <slider.commit_callback
                             function="Poser.Advanced.ScaleSet"
                             parameter="0"/>
@@ -1327,7 +1195,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_Y"
 						top_pad="1"
-						width="459" >
+						width="520" >
                             <slider.commit_callback
                             function="Poser.Advanced.ScaleSet"
                             parameter="1"/>
@@ -1347,59 +1215,13 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_Z"
 						top_pad="1"
-						width="459" >
+						width="520" >
                             <slider.commit_callback
                             function="Poser.Advanced.ScaleSet"
                             parameter="2"/>
                         </slider>
-                        <panel
-						follows="top|left|right"
-						height="21"
-						background_visible="false"
-						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top_pad="6"
-						width="480">
-                            <button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Reset Selected Scale(s)"
-							label_selected="Disable Selected Bone(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="reset_bone_scale"
-							width="318"
-							top="0"
-							left_delta="2">
-                                <button.commit_callback
-                                function="Joint.ResetJointScale"/>
-                            </button>
-                        </panel>
                     </panel>
                 </tab_container>
-                <button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				is_toggle="true"
-				enabled="false"
-				label="Activate Selected Bone(s)"
-				label_selected="Disable Selected Bone(s)"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="toggle_bone"
-				width="157"
-				top_pad="-19"
-				left_delta="242">
-                    <button.commit_callback
-                    function="Joint.ChangeState"/>
-                </button>
             </panel>
         </layout_panel>
     </layout_stack>
