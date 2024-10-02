@@ -282,13 +282,19 @@ void FSFloaterPoser::onPoseFileSelect()
     if (!item)
         return;
 
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    bool enableButtons = _poserAnimator.isPosingAvatar(avatar);
+
     LLButton *loadPosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_LOAD_NAME);
     if (loadPosesButton)
-        loadPosesButton->setEnabled(true);
+        loadPosesButton->setEnabled(enableButtons);
 
     LLButton *savePosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
     if (savePosesButton)
-        savePosesButton->setEnabled(true);
+        savePosesButton->setEnabled(enableButtons);
 
     std::string pose_name = item->getColumn(0)->getValue().asString();
     if (pose_name.empty())
@@ -298,7 +304,7 @@ void FSFloaterPoser::onPoseFileSelect()
     if (!poseSaveName)
         return;
 
-    poseSaveName->setEnabled(true);
+    poseSaveName->setEnabled(enableButtons);
     LLStringExplicit name = LLStringExplicit(pose_name);
     poseSaveName->setText(name);
 }
