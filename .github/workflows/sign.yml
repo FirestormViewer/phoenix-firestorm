@@ -49,7 +49,7 @@ jobs:
         path: to_sign
             
     - name: Upload unsigned artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: unsigned-artifact
         path: ./to_sign
