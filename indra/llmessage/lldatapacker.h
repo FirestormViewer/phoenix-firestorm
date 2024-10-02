@@ -213,18 +213,9 @@ inline bool LLDataPackerBinaryBuffer::verifyLength(const S32 data_size, const ch
 {
     if (mWriteEnabled && (mCurBufferp - mBufferp) > mBufferSize - data_size)
     {
-        // <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
-
-        //LL_WARNS() << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << LL_ENDL;
-        //LL_WARNS() << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << LL_ENDL;
-        // return false;
-
-        std::stringstream strm;
-        strm << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << std::endl;
-        strm << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << std::endl;
-        throw nd::exceptions::xran( strm.str() );
-
-        // </FS:ND>
+        LL_WARNS() << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << LL_ENDL;
+        LL_WARNS() << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << LL_ENDL;
+        return false;
     }
 
     return true;

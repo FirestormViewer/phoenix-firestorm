@@ -1,13 +1,13 @@
 <floater name="whitelist_floater"
      title="Whitelist Folders and Binaries"
      width="700"
-     height="470"
+     height="492"
      can_minimize="true"
      can_resize="false">
      <text
           follows="top|left|right"
           font="SansSerif"
-          height="120"
+          height="150"
           layout="topleft"
           left="11"
           name="whitelist_intro"
@@ -28,7 +28,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
           layout="topleft"
           left="11"
           name="whitelist_folder_instruction"
-          top_pad="10"
+          top_pad="2"
           width="689"
           wrap="true">
 To help simplify the task the box below shows the folders the viewer is using. 

@@ -52,8 +52,6 @@
 		<menu_item_check label="Oggetti temporanei" name="Temp On Rez Objects"/>
 		<menu_item_check label="Linee di proprietà" name="Property Lines"/>
 		<menu_item_check label="Terreni in vendita" name="Parcels for Sale"/>
-		<menu_item_check label="Texture terreno" name="Terrain Textures"/>
-		<menu_item_check label="Texture mappa del mondo" name="World Map Textures"/>
 	</menu>
 	<menu_item_check label="Nord in alto" name="North at top" />
 	<menu_item_check label="Camera in alto" name="Camera at top" />

@@ -6,10 +6,6 @@ on:
       build_run_number:
         description: 'GitHub Run Number (per build_viewer.yml workflow)'
         required: true
-      viewer_channel:
-        description: 'viewer_channel'
-        required: true
-        default: 'Releasex64'
       viewer_version:
         description: 'viewer version not including build'
         required: true
@@ -44,15 +40,17 @@ jobs:
           sparse-checkout-cone-mode: false
           ref: ${{ github.head_ref || github.ref_name || 'master' }}
           fetch-depth: 1        
+
+      - name: Install discord-webhook library
+        run: pip install discord-webhook
+
       - name: Download Build Artifacts
         uses: dawidd6/action-download-artifact@v6
         id: download
         with:
           workflow: build_viewer.yml
           run_number: ${{ github.event.inputs.build_run_number  }}
-          path: to_deploy
-      - name: Install discord-webhook library
-        run: pip install discord-webhook
+          path: to_deploy    
 
       - name: find channel and webhook from build_matrix outputs
         run: | 
@@ -84,7 +82,6 @@ jobs:
 
       - name: Reorganise artifacts ready for server upload.
         env:
-          FS_VIEWER_CHANNEL: ${{ github.event.inputs.viewer_channel }}
           FS_VIEWER_VERSION: ${{ github.event.inputs.viewer_version }}
           FS_VIEWER_BUILD: ${{ github.event.inputs.viewer_build }}
           FS_VIEWER_RELEASE_TYPE: ${{ github.event.inputs.viewer_release_type }}

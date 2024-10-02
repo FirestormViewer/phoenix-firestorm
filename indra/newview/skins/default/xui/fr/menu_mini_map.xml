@@ -52,8 +52,6 @@
 		<menu_item_check label="État temporaire des objets" name="Temp On Rez Objects"/>
 		<menu_item_check label="Limites de terrain" name="Property Lines"/>
 		<menu_item_check label="Terrains à Vendre" name="Parcels for Sale"/>
-		<menu_item_check label="Textures du terrain" name="Terrain Textures"/>
-		<menu_item_check label="Textures de la carte" name="World Map Textures"/>
 	</menu>
 	<menu_item_check label="Nord en haut" name="North at top" />
 	<menu_item_check label="Caméra en haut" name="Camera at top" />

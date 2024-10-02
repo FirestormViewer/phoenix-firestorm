@@ -25,8 +25,6 @@
 		<menu_item_check label="Objetos temporales" name="Temp On Rez Objects"/>
 		<menu_item_check label="Lindes" name="Property Lines"/>
 		<menu_item_check label="Parcelas en venta" name="Parcels for Sale"/>
-		<menu_item_check label="Texturas del terreno" name="Terrain Textures"/>
-		<menu_item_check label="Texturas del mapa mundial" name="World Map Textures"/>
 	</menu>
 	<menu_item_check label="Girar el mapa" name="Rotate Map"/>
 	<menu_item_check label="Centrar automáticamente" name="Auto Center"/>

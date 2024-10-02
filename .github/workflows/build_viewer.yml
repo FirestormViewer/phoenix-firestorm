@@ -400,8 +400,15 @@ jobs:
           sparse-checkout-cone-mode: false
           ref: ${{ github.head_ref || github.ref_name || 'master' }}
           fetch-depth: 1
+
       - name: Install discord-webhook library
         run: pip install discord-webhook
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        id: download
+        with:
+          path: to_deploy        
 
       - name: find channel and webhook from build_matrix outputs
         run: | 
@@ -427,18 +434,12 @@ jobs:
           echo "FS_RELEASE_FOLDER=${FS_RELEASE_FOLDER}" >> $GITHUB_ENV
           echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        id: download
-        with:
-          path: to_deploy
       - name: List artifacts download
         run: ls -R
         working-directory: ${{steps.download.outputs.download-path}}
 
       - name: Create Build Info artifact
         env:
-          FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
           FS_VIEWER_VERSION: 
           FS_VIEWER_BUILD: 
           FS_VIEWER_RELEASE_TYPE: 
@@ -463,7 +464,6 @@ jobs:
 
       - name: Reorganise artifacts ready for server upload.
         env:
-          FS_VIEWER_CHANNEL: ${{ needs.build_matrix.outputs.viewer_channel }}
           FS_VIEWER_VERSION: ${{ needs.build_matrix.outputs.viewer_version }}
           FS_VIEWER_BUILD: ${{ needs.build_matrix.outputs.viewer_build }}
           FS_VIEWER_RELEASE_TYPE: ${{ needs.build_matrix.outputs.viewer_release_type }}

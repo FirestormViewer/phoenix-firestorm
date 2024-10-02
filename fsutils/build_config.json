@@ -35,10 +35,10 @@
         "Alpha": "alpha",
         "Nightly": "nightly"
     },
-    "build_type_mapping": {
-        "regular": "regular",
-        "avx": "avx",
-        "tracy": "tracy",
-        "arm": "arm"
+    "variant_printable": {
+        "regular": "Older CPUs",
+        "avx": "Modern CPUs (post 2013)",
+        "tracy": "Tracy profiler",
+        "arm": "Arm"
     }
 }
