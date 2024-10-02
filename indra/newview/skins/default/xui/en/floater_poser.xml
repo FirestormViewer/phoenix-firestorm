@@ -593,7 +593,7 @@ width="565">
 									top_delta="15"
 									height="153"
 									width="153"
-									tool_tip="Change the rotation of the currently selected joint(s). Roll the wheel while holding to adjust the 3rd axis"
+									tool_tip="Change the rotation of the currently selected body part(s). Roll the wheel while holding to adjust the 3rd axis"
 									pinch_mode="false"
 									infinite_scroll_mode="true"/>
                 <panel
@@ -911,7 +911,7 @@ width="565">
 				image_overlay="Sync_Progress_1"
 				image_unselected="Toolbar_Middle_Off"
 				name="FlipJoint_avatar"
-				tool_tip="Mirror the selected joint(s) left/right"
+				tool_tip="Mirror the selected body part(s) left/right"
 				width="23"
 				top_delta="0"
 				left_pad="1">
