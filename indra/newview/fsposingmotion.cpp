@@ -27,7 +27,7 @@
 #include "fsposingMotion.h"
 #include "llcharacter.h"
 
-FSPosingMotion::FSPosingMotion(const LLUUID &id) : LLMotion(id), _character(NULL)
+FSPosingMotion::FSPosingMotion(const LLUUID &id) : LLMotion(id)
 {
     mName = "fs_poser_pose";
     _motionID = id;
@@ -38,7 +38,6 @@ LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character
     if (!character)
         return STATUS_FAILURE;
 
-    _character = character;
     _jointPoses.clear();
 
     LLJoint* targetJoint;
