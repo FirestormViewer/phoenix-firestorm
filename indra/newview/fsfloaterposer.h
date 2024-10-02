@@ -29,11 +29,6 @@
 #define FS_FLOATER_POSER_H
 
 #include "llfloater.h"
-#include "llscrolllistctrl.h"
-#include "llsliderctrl.h"
-#include "lltabcontainer.h"
-#include "lltoggleablemenu.h"
-#include "llmenubutton.h"
 #include "fsposeranimator.h"
 
 /// <summary>

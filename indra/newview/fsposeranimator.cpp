@@ -24,15 +24,9 @@
  * $/LicenseInfo$
  */
 
-#include "linden_common.h"
-#include "llviewerprecompiledheaders.h"
 #include "fsposeranimator.h"
 #include "llcharacter.h"
-#include "llviewercontrol.h"
 #include "llagent.h"
-#include "llvoavatarself.h"
-#include <llanimationstates.h>
-#include "llkeyframemotion.h"
 #include "fsposingmotion.h"
 
 FSPoserAnimator::FSPoserAnimator() {}

@@ -27,11 +27,8 @@
 #ifndef LL_FSPoserAnimator_H
 #define LL_FSPoserAnimator_H
 
-#include "llmotion.h"
-#include "lljointsolverrp3.h"
-#include "v3dmath.h"
-#include "llcontrolavatar.h"
 #include "fsposingMotion.h"
+#include "llvoavatar.h"
 
 /// <summary>
 /// Describes how we will cluster the joints/bones/thingos.

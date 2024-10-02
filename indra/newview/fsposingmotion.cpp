@@ -26,7 +26,6 @@
 
 #include "fsposingMotion.h"
 #include "llcharacter.h"
-#include "llagent.h"
 
 FSPosingMotion::FSPosingMotion(const LLUUID &id) : LLMotion(id), _character(NULL)
 {

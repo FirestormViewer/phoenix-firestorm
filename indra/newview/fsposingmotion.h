@@ -31,8 +31,6 @@
 // Header files
 //-----------------------------------------------------------------------------
 #include "llmotion.h"
-#include "lljointsolverrp3.h"
-#include "v3dmath.h"
 
 #define MIN_REQUIRED_PIXEL_AREA_POSING 500.f
 

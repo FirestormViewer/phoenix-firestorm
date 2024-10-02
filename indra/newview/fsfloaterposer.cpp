@@ -39,6 +39,9 @@
 #include "llviewerwindow.h"
 #include "llwindow.h"
 #include "llcommonutils.h"
+#include "llscrolllistctrl.h"
+#include "llsliderctrl.h"
+#include "lltabcontainer.h"
 
 static const std::string POSE_INTERNAL_FORMAT_FILE_MASK     = "*.xml";
 static const std::string POSE_INTERNAL_FORMAT_FILE_EXT      = ".xml";
