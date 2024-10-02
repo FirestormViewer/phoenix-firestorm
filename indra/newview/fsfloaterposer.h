@@ -279,7 +279,23 @@ class FSFloaterPoser : public LLFloater
     /// The smallest text embiggens the noble selection.
     /// </summary>
     void refreshTextEmbiggeningOnAllScrollLists();
+
+    /// <summary>
+    /// Applies the appropriate font-face (such as bold) to the text of the supplied list, to indicate use.
+    /// </summary>
+    /// <param name="listName">The name of the list to adjust text-face for.</param>
+    /// <param name="avatar">The avatar to whom the list is relevant.</param>
     void addBoldToScrollList(std::string listName, LLVOAvatar *avatar);
+
+    /// <summary>
+    /// The time when the last click of a button was made.
+    /// </summary>
+    std::chrono::system_clock::time_point _timeLastClickedJointReset = std::chrono::system_clock::now();
+
+    /// <summary>
+    /// The constant time interval, in seconds, a user must click twice within to successfully double-click a button.
+    /// </summary>
+    std::chrono::duration<double> const _doubleClickInterval = std::chrono::duration<double>(0.3);
 };
 
 #endif

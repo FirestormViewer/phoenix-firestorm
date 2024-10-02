@@ -510,6 +510,12 @@ void FSFloaterPoser::onClickBrowsePoseCache()
 
 void FSFloaterPoser::onPoseJointsReset()
 {
+    // This is a double-click function: it needs to run twice within some amount of time to complete.
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
+    _timeLastClickedJointReset = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > _doubleClickInterval)
+        return;
+
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
