@@ -536,6 +536,9 @@ void FSFloaterPoser::onPoseJointsReset()
         if (currentlyPosing)
             _poserAnimator.resetAvatarJoint(avatar, *item);
     }
+
+    refreshRotationSliders();
+    refreshTrackpadCursor();
 }
 
 void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
