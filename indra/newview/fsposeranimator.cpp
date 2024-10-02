@@ -235,8 +235,6 @@ void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint
 
     FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
-        return;
-    if (!oppositeJointPose)
     {
         LLQuaternion rot_quat = jointPose->getTargetRotation();
         LLQuaternion inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
