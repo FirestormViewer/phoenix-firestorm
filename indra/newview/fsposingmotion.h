@@ -65,14 +65,39 @@ public:
         /// </summary>
         std::string jointName() const { return _jointName; }
 
+        /// <summary>
+        /// Gets the position the joint was in when the animation was initialized.
+        /// </summary>
         LLVector3 getBeginningPosition() const { return _beginningPosition; }
+
+        /// <summary>
+        /// Gets the position the animator wishes the joint to be in.
+        /// </summary>
         LLVector3 getTargetPosition() const { return _targetPosition; }
-        void      setTargetPosition(const LLVector3& pos) { _targetPosition.set(pos) ; }
 
+        /// <summary>
+        /// Sets the position the animator wishes the joint to be in.
+        /// </summary>
+        void setTargetPosition(const LLVector3& pos) { _targetPosition.set(pos) ; }
+
+        /// <summary>
+        /// Gets the rotation the joint was in when the animation was initialized.
+        /// </summary>
         LLQuaternion getBeginningRotation() const { return _beginningRotation; }
-        LLQuaternion getTargetRotation() const { return _targetRotation; }
-        void         setTargetRotation(const LLQuaternion& rot) { _targetRotation.set(rot); }
 
+        /// <summary>
+        /// Gets the rotation the animator wishes the joint to be in.
+        /// </summary>
+        LLQuaternion getTargetRotation() const { return _targetRotation; }
+
+        /// <summary>
+        /// Sets the rotation the animator wishes the joint to be in.
+        /// </summary>
+        void setTargetRotation(const LLQuaternion& rot) { _targetRotation.set(rot); }
+
+        /// <summary>
+        /// Gets the pointer to the jointstate for the joint this represents.
+        /// </summary>
         LLPointer<LLJointState> getJointState() const { return _jointState; }
 
         FSJointPose(LLJoint* joint)
@@ -155,17 +180,30 @@ public:
     /// <summary>
     /// Gets the motion identity for this animation.
     /// </summary>
-    /// <returns>The unique, per-session motion identity.</returns>
+    /// <returns>The unique, per-session, per-character motion identity.</returns>
     LLAssetID motionId() const { return _motionID; }
 
 private:
+    /// <summary>
+    /// The kind of joint state this animation is concerned with changing.
+    /// </summary>
     static const U32 POSER_JOINT_STATE = LLJointState::POS | LLJointState::ROT /* | LLJointState::SCALE*/;
     LLAssetID _motionID;
 
-    const F32    _interpolationTime = 0.25f;
+    /// <summary>
+    /// The amount of time, in seconds, we use for transitioning between one animation-state to another; this affects the 'fluidity'
+    /// of motion between changed to a joint.
+    /// </summary>
+    const F32 _interpolationTime = 0.25f;
 
+    /// <summary>
+    /// The timer used to smoothly transition from one joint position or rotation to another.
+    /// </summary>
     LLFrameTimer _interpolationTimer;
-    LLCharacter *_character;
+
+    /// <summary>
+    /// The collection of joint poses this motion uses to pose the joints of the character this is animating. 
+    /// </summary>
     std::vector<FSJointPose> _jointPoses;
 };
 
