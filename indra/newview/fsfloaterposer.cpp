@@ -133,7 +133,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.FlipJoint", boost::bind(&FSFloaterPoser::onClickFlipSelectedJoints, this));
     mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", boost::bind(&FSFloaterPoser::onClickRecaptureSelectedBones, this));
     mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", boost::bind(&FSFloaterPoser::onClickToggleSelectedBoneEnabled, this));
-    mCommitCallbackRegistrar.add("Pose.PoseResetMenu", boost::bind(&FSFloaterPoser::onPoseResetMenuAction, this, _2));
+    mCommitCallbackRegistrar.add("Pose.PoseJointsReset", boost::bind(&FSFloaterPoser::onPoseJointsReset, this));
 }
 
 FSFloaterPoser::~FSFloaterPoser() {}
@@ -508,12 +508,8 @@ void FSFloaterPoser::onClickBrowsePoseCache()
     gViewerWindow->getWindow()->openFile(pathname);
 }
 
-void FSFloaterPoser::onPoseResetMenuAction(const LLSD& param)
+void FSFloaterPoser::onPoseJointsReset()
 {
-    std::string resetKind = param.asString();
-    if (resetKind.empty())
-        return;
-
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
@@ -521,28 +517,15 @@ void FSFloaterPoser::onPoseResetMenuAction(const LLSD& param)
     if (!_poserAnimator.isPosingAvatar(avatar))
         return;
 
-    if (boost::iequals(resetKind, "selected"))
-    {
-        auto selectedJoints = getUiSelectedPoserJoints();
-        if (selectedJoints.size() < 1)
-            return;
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
 
-        for (auto item : selectedJoints)
-        {
-            bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
-            if (currentlyPosing)
-                _poserAnimator.resetAvatarJoint(avatar, *item);
-        }
-    }
-    else if (boost::iequals(resetKind, "entire"))
+    for (auto item : selectedJoints)
     {
-        std::vector<FSPoserAnimator::FSPoserJoint>::const_iterator poserJoint_iter;
-        for (poserJoint_iter = _poserAnimator.PoserJoints.begin(); poserJoint_iter != _poserAnimator.PoserJoints.end(); ++poserJoint_iter)
-        {
-            bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *poserJoint_iter);
-            if (currentlyPosing)
-                _poserAnimator.resetAvatarJoint(avatar, *poserJoint_iter);
-        }
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.resetAvatarJoint(avatar, *item);
     }
 }
 

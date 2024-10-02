@@ -95,11 +95,11 @@ void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
     if (posingMotion->isStopped())
         return;
 
-    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
-    if (!avJoint)
-        return;
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
 
-    // this or something? motion->resetJointState(avJoint);
+    jointPose->setTargetPosition(jointPose->getBeginningPosition());
+    jointPose->setTargetRotation(jointPose->getBeginningRotation());
 }
 
 LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint)

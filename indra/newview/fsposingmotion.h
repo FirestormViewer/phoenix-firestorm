@@ -55,8 +55,10 @@ public:
     class FSJointPose
     {
         std::string             _jointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
+        LLQuaternion            _beginningRotation;
         LLQuaternion            _targetRotation;
         LLVector3               _targetPosition;
+        LLVector3               _beginningPosition;
         LLPointer<LLJointState> _jointState;
 
       public:
@@ -65,9 +67,11 @@ public:
         /// </summary>
         std::string jointName() const { return _jointName; }
 
+        LLVector3 getBeginningPosition() const { return _beginningPosition; }
         LLVector3 getTargetPosition() const { return _targetPosition; }
         void      setTargetPosition(const LLVector3& pos) { _targetPosition.set(pos) ; }
 
+        LLQuaternion getBeginningRotation() const { return _beginningRotation; }
         LLQuaternion getTargetRotation() const { return _targetRotation; }
         void         setTargetRotation(const LLQuaternion& rot) { _targetRotation.set(rot); }
 
@@ -81,8 +85,8 @@ public:
 
             _jointName = joint->getName();
 
-            _targetRotation = joint->getRotation();
-            _targetPosition = joint->getPosition();
+            _beginningRotation = _targetRotation = joint->getRotation();
+            _beginningPosition = _targetPosition = joint->getPosition();
         }
     };
 

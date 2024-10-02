@@ -226,7 +226,7 @@ class FSFloaterPoser : public LLFloater
     void onClickRecaptureSelectedBones();
     void onClickFlipPose();
     void onClickFlipSelectedJoints();
-    void onPoseResetMenuAction(const LLSD &param);
+    void onPoseJointsReset();
 
     // UI Refreshments
     void refreshRotationSliders();

@@ -645,6 +645,21 @@ width="565">
                         function="Poser.ToggleTrackPadSensitivity"/>
                     </button>
                     <button
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					label=""
+					image_overlay="Inv_TrashOpen"
+					image_unselected="Toolbar_Middle_Off"
+					name="refresh_avatars"
+					tool_tip="Reset all selected body parts to when you first started"
+					width="20"
+					top_delta="0"
+					left_pad="1">
+                        <button.commit_callback
+                        function="Pose.PoseJointsReset"/>
+                    </button>
+                    <button
 					follows="left|top"
 					height="21"
 					is_toggle="true"
@@ -661,7 +676,7 @@ width="565">
 					tool_tip="Change the opposite joint, like in a mirror."
 					left_pad="1"
 					top_delta="0"
-					width="55" >
+					width="45" >
                         <button.commit_callback
                         function="Poser.ToggleMirrorChanges"/>
                     </button>
@@ -682,7 +697,7 @@ width="565">
 					tool_tip="Change the opposite joint, but in the same way."
 					left_pad="1"
 					top_delta="0"
-					width="55" >
+					width="45" >
                         <button.commit_callback
                         function="Poser.ToggleSympatheticChanges"/>
                     </button>
@@ -935,25 +950,7 @@ width="565">
 				left_pad="0"
 				top_delta="0"
 				name="button_spacer_panel"
-				width="10"/>
-                <menu_button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				label="Reset..."
-				enabled="true"
-				visible="false"
-				tool_tip="Reset your choice of joints back to when you started."
-				image_overlay_alignment="left"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				menu_filename="menu_poser_reset_btn.xml"
-                menu_position="topright"
-				name="reset_joints_button"
-				left_pad="1"
-				top_delta="0"
-				width="50"/>
+				width="60"/>
                 <button
 				follows="left|top"
 				height="21"
