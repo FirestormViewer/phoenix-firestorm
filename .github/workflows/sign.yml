@@ -45,7 +45,8 @@ jobs:
       with:
         workflow: build_viewer.yml
         run_number: ${{ github.event.inputs.build_run_number  }}
-        name: "windows"
+        name: .*windows.*
+        name_is_regexp: true
         path: to_sign
             
     - name: Upload unsigned artifact
