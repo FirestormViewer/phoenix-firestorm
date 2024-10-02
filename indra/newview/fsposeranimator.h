@@ -372,8 +372,9 @@ public:
     /// Maps the avatar's ID to the animation registered to them.
     /// Thus we start/stop the same animation.
     /// An avatar's animation exists so long as their session does, and there is consideration for renewal (like if they relog/crash).
+    /// Is static, so the animationId is not lost between sessions (such as when the UI floater is closed and reopened).
     /// </summary>
-    std::map<LLUUID, LLAssetID> _avatarIdToRegisteredAnimationId;
+    static std::map<LLUUID, LLAssetID> _avatarIdToRegisteredAnimationId;
 };
 
 #endif // LL_FSPoserAnimator_H

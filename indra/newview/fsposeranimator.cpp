@@ -37,6 +37,7 @@
 
 FSPoserAnimator::FSPoserAnimator() {}
 FSPoserAnimator::~FSPoserAnimator() {}
+std::map<LLUUID, LLAssetID> FSPoserAnimator::_avatarIdToRegisteredAnimationId;
 
 bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
 {
