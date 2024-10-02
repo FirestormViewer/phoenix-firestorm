@@ -43,7 +43,7 @@ LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character
     _jointPoses.clear();
 
     LLJoint* targetJoint;
-    for (S32 i = 0; (targetJoint = character->getCharacterJoint(i)); ++i)  // this seems poorly constrained
+    for (S32 i = 0; (targetJoint = character->getCharacterJoint(i)); ++i)
     {
         if (!targetJoint)
             continue;
