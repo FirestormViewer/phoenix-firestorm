@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: ${{ fromJson( needs.find-find-setup-files.outputs.setup_files) }}
+        file: ${{ fromJson( needs.find-setup-files.outputs.setup_files) }}
     steps:
       - name: Upload unsigned artifact
         id: upload-unsigned-artifact
