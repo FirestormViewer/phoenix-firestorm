@@ -42,7 +42,8 @@ jobs:
     needs: setup
     strategy:
       matrix:
-        runner: [windows-large, macos-12-xl]
+        #runner: [windows-large, macos-12-xl]
+        runner: [macos-12]
         configuration: ${{ fromJSON(needs.setup.outputs.configurations) }}
     runs-on: ${{ matrix.runner }}
     outputs:
