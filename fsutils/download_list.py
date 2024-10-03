@@ -338,7 +338,7 @@ def gather_build_info(build_type_info, config):
                 else:
                     variant = "regular"
 
-                file_key = f"{grid}-{platform_folder}"
+                file_key = f"{grid}-{variant}-{platform_folder}"
 
                 # if platform_folder in config.os_download_dirs:
                 if "downloadable_artifacts" not in build_type_info:
@@ -382,7 +382,7 @@ DOWNLOADS - {build_info["build_type"]}
                 variant_printable = f"{config.variant_printable[variant]}"
                 text_summary += f"{variant_printable}\n"
                 try:
-                    file_key = f"{grid}-{platform_folder}"
+                    file_key = f"{grid}-{variant}-{platform_folder}"
                     text_summary += f"{platform_printable} for {grid_printable}\n"
                     text_summary += f"{build_info['downloadable_artifacts'][file_key]['file_download_URI']}\n"
                     text_summary += "\n"
@@ -468,6 +468,40 @@ def update_fs_version_mgr(build_info, config):
         except ValueError:
             print("API response is not valid JSON")
 
+def split_discord_text_on_separator(discord_text, max_length=2000, separator=None):
+    if separator is None:
+        separator = "-" * 103  
+
+    # Split the text on the separator lines
+    chunks = discord_text.split(separator + '\n')
+
+    messages = []
+
+    for index, chunk in enumerate(chunks):
+        # Strip leading/trailing whitespace
+        chunk = chunk.strip('\n')
+
+        # Re-add the separator to the end of each chunk except the last one
+        if index < len(chunks) - 1:
+            chunk += '\n' + separator
+
+        # Split the chunk further if it exceeds max_length
+        while len(chunk) > max_length:
+            # Find the last newline before max_length
+            split_point = chunk.rfind('\n', 0, max_length)
+            if split_point == -1 or split_point == 0:
+                # Can't find a newline, split at max_length
+                split_point = max_length
+
+            part = chunk[:split_point].rstrip('\n')
+            messages.append(part)
+            chunk = chunk[split_point:].lstrip('\n')
+
+        if chunk:
+            messages.append(chunk)
+
+    return messages
+
 # parse args first arg optional -r (release) second arg mandatory string path_to_directory
 def main():
     try:
@@ -502,13 +536,12 @@ def main():
 
             discord_text = create_discord_message(build_info, config)
             if args.webhook:
-                # Add the message to the webhook
-                webhook.set_content(content=discord_text)
-                # Send the webhook
-                response = webhook.execute()
-                # Print the response
-                if not response.ok:
-                    print(f"Webhook Error {response.status_code}: {response.text}")        
+                messages = split_discord_text_on_separator(discord_text)
+                for message in messages:
+                    webhook.set_content(content=message)
+                    response = webhook.execute()
+                    if not response.ok:
+                        print(f"Webhook Error {response.status_code}: {response.text}")
             print(discord_text)
     except Exception as e:
         print(f"An error occurred: {e}")

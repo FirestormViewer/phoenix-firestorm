@@ -62,8 +62,6 @@
 		<menu_item_check label="境界線" name="Property Lines" />
 		<menu_item_check label="売り地" name="Parcels for Sale" />
 		<menu_item_separator />
-		<menu_item_check label="地面のテクスチャ" name="Terrain Textures" />
-		<menu_item_check label="世界地図のテクスチャ" name="World Map Textures" />
 	</menu>
 	<menu_item_check label="地図を回転" name="Rotate Map"/>
 	<menu_item_check label="中央へ自動移動" name="Auto Center"/>
