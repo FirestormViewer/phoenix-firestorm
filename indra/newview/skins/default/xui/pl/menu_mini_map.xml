@@ -52,8 +52,6 @@
 		<menu_item_check label="Obiekty zrezzowane tymczasowo" name="Temp On Rez Objects"/>
 		<menu_item_check label="Granice działek" name="Property Lines"/>
 		<menu_item_check label="Działki na sprzedaż" name="Parcels for Sale"/>
-		<menu_item_check label="Tekstury terenu" name="Terrain Textures"/>
-		<menu_item_check label="Tekstury mapy świata" name="World Map Textures"/>
 	</menu>
 	<menu_item_check label="Północ na górze" name="North at top" />
 	<menu_item_check label="Kamera na górze" name="Camera at top" />

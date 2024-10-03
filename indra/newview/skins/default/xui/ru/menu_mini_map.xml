@@ -52,8 +52,6 @@
 		<menu_item_check label="Временные объекты" name="Temp On Rez Objects"/>
 		<menu_item_check label="Границы участка" name="Property Lines"/>
 		<menu_item_check label="Участки на продажу" name="Parcels for Sale"/>
-		<menu_item_check label="Текстуры земли" name="Terrain Textures"/>
-		<menu_item_check label="Текстуры карты мира" name="World Map Textures"/>
 	</menu>
 	<menu_item_check label="Север вверху" name="North at top"/>
 	<menu_item_check label="Камера вверху" name="Camera at top"/>

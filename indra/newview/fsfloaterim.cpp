@@ -428,7 +428,11 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 #else
                     std::string str_address_size_tag = "";
 #endif
-
+#ifdef USE_AVX2_OPTIMIZATION
+                    std::string str_optimization_tag = "+";
+#else
+                    std::string str_optimization_tag = "-";
+#endif
                     //OpenSim check
                     std::string str_opensim_tag;
 #ifdef OPENSIM
@@ -470,18 +474,20 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                         if(chat_prefix_testing)
                         {
                             auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
+                            std::string str_version_tag;
                             if( viewer_maturity == LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
                             {
-                                utf8_text.insert(insert_pos, "(Release) ");
+                                str_version_tag = "Release";
                             }
                             else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
                             {
-                                utf8_text.insert(insert_pos, "(Unofficial) ");
+                                str_version_tag = "Unofficial";
                             }
-                            else // In testing groups we'll allow all non-release recognised channels.
+                            else// In testing groups we'll allow all non-release recognised channels.
                             {
-                                utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getBuildVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                                str_version_tag = LLVersionInfo::getInstance()->getBuildVersion();
                             }
+                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + str_optimization_tag + " " + str_version_tag + " " + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
                         }
 
                     }
@@ -490,19 +496,21 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                     {
                         if(chat_prefix_support)
                         {
+                            std::string str_version_tag;
                             auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
                             if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
                             {
-                                utf8_text.insert(insert_pos, "(Unofficial) ");
+                                str_version_tag = "Unofficial";
                             }
                             else if( viewer_maturity != LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
                             {
-                                utf8_text.insert(insert_pos, "(pre-Release) ");
+                                str_version_tag = "pre-Release";
                             }
                             else
                             {
-                                utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getShortVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
+                                str_version_tag = LLVersionInfo::getInstance()->getShortVersion();
                             }
+                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + str_optimization_tag + " " + str_version_tag + " " + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
                         }
                     }
                 }

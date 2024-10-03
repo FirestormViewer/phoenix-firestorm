@@ -946,7 +946,14 @@ void LLAdHocChiclet::switchToCurrentSpeaker()
     LLUUID speaker_id;
     LLSpeakerMgr::speaker_list_t speaker_list;
 
-    LLIMModel::getInstance()->findIMSession(getSessionId())->mSpeakers->getSpeakerList(&speaker_list, false);
+    // <FS:Beq> FIRE-34593 bugsplat when closing group chat
+    // LLIMModel::getInstance()->findIMSession(getSessionId())->mSpeakers->getSpeakerList(&speaker_list, false);
+    auto session = LLIMModel::getInstance()->findIMSession(getSessionId());
+    if (session && session->mSpeakers)
+    {
+        session->mSpeakers->getSpeakerList(&speaker_list, false);
+    }
+    // </FS:Beq>
     for (LLSpeakerMgr::speaker_list_t::iterator i = speaker_list.begin(); i != speaker_list.end(); ++i)
     {
         LLPointer<LLSpeaker> s = *i;
