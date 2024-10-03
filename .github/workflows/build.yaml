@@ -84,8 +84,6 @@ jobs:
       # Only set variants to the one configuration: don't let build.sh loop
       # over variants, let GitHub distribute variants over multiple hosts.
       variants: ${{ matrix.configuration }}
-      DLL_TESTS:BOOL: FALSE
-      DLL_TESTS: FALSE
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
