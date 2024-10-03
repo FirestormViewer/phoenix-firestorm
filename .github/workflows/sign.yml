@@ -49,20 +49,13 @@ jobs:
             name: .*windows.*
             name_is_regexp: true
             path: artifacts
-    #   - name: Unzip All Artifacts
-    #     shell: bash
-    #     run: |
-    #         mkdir unzipped
-    #         for artifact in artifacts/*; do
-    #         unzip "$artifact" -d unzipped
-    #         done
       - name: Get List of Setup.exe Files
         id: get-files
         shell: bash
         run: |
             files=$(find artifacts -type f -name '*Setup.exe')
-            files_json=$(printf '%s\n' "$files" | jq -R . | jq -s .)
-            echo "::set-output name=setup_files::$files_json"
+            files_json=$(printf '%s\n' "$files" | jq -R . | jq -s -c .)
+            echo "setup_files=$files_json" >> $GITHUB_OUTPUT
   sign-and-upload:
     name: Sign and Upload each Setup.exe
     needs: find-setup-files
