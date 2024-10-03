@@ -53,9 +53,19 @@ jobs:
         id: get-files
         shell: bash
         run: |
+            mkdir -p setup_exe_files
             files=$(find artifacts -type f -name '*Setup.exe')
-            files_json=$(printf '%s\n' "$files" | jq -R . | jq -s -c .)
+            for file in $files; do
+                basename=$(basename "$file")
+                cp "$file" "setup_exe_files/$basename"
+            done            
+            files_json=$(ls setup_exe_files | jq -R . | jq -s -c .)
             echo "setup_files=$files_json" >> $GITHUB_OUTPUT
+      - name: Upload Setup.exe Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: setup-exe-files
+          path: setup_exe_files/
   sign-and-upload:
     name: Sign and Upload each Setup.exe
     needs: find-setup-files
@@ -64,13 +74,23 @@ jobs:
       matrix:
         file: ${{ fromJson( needs.find-setup-files.outputs.setup_files) }}
     steps:
+      - name: Download Setup.exe Files Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: setup-exe-files
+          path: setup_exe_files
+      - name: Prepare File for Signing
+        run: |
+          mkdir -p to_sign
+          cp "setup_exe_files/${{ matrix.file }}" to_sign/
       - name: Upload unsigned artifact
         id: upload-unsigned-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: unsigned-artifact
-          path: ${{ matrix.file }}        
-      - name: sign
+          name: unsigned-artifact-${{ matrix.file }}
+          path: to_sign/          
+
+      - name: sign the file
         uses: signpath/github-action-submit-signing-request@v1
         env:
             SIGNPATH_SIGNING_POLICY_SLUG: ${{ github.event.inputs.policy == 'Test' && vars.SIGNPATH_SIGNING_POLICY_SLUG_TEST || vars.SIGNPATH_SIGNING_POLICY_SLUG_RELEASE }}
@@ -86,5 +106,5 @@ jobs:
       - name: Upload signed artifact
         uses: actions/upload-artifact@v4
         with:
-          name: signed-artifact
+          name: signed-artifact-${{ matrix.file }}
           path: ./application-signed
