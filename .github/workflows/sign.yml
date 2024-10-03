@@ -73,6 +73,9 @@ jobs:
     strategy:
       matrix:
         file: ${{ fromJson( needs.find-setup-files.outputs.setup_files) }}
+    permissions:
+        actions: read
+        contents: read
     steps:
       - name: Download Setup.exe Files Artifact
         uses: actions/download-artifact@v3
