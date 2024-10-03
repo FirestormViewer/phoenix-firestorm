@@ -53,6 +53,7 @@ static const std::string POSER_ADVANCEDWINDOWSTATE_SAVE_KEY = "FSPoserAdvancedWi
 
 static const std::string POSER_AVATAR_PANEL_JOINTSPARENT = "joints_parent_panel";
 static const std::string POSER_AVATAR_PANEL_TRACKBALL = "trackball_panel";
+static const std::string POSER_AVATAR_PANEL_ADVANCED = "advanced_parent_panel";
 static const std::string POSER_AVATAR_TABGROUP_JOINTS = "joints_tabs";
 static const std::string POSER_AVATAR_TAB_POSITION = "positionRotation_panel";
 static const std::string POSER_AVATAR_TAB_BODY = "body_joints_panel";
@@ -87,7 +88,6 @@ static const std::string POSER_AVATAR_ADV_BUTTON_NAME  = "start_stop_posing_butt
 static const std::string POSER_AVATAR_SCROLLLIST_AVATARSELECTION   = "avatarSelection_scroll";
 static const std::string POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME = "start_stop_posing_button";
 static const std::string POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME   = "toggleAdvancedPanel";
-static const std::string POSER_AVATAR_PANEL_ADVANCED_NAME          = "poses_AdvancedControls";
 static const std::string POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME   = "FlipPose_avatar";
 static const std::string POSER_AVATAR_PANEL_BUTTON_FLIPJOINT_NAME  = "FlipJoint_avatar";
 static const std::string POSER_AVATAR_PANEL_BUTTON_RECAPTURE_NAME  = "button_RecaptureParts";
@@ -710,9 +710,13 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
 
 void FSFloaterPoser::poseControlsEnable(bool enable)
 {
-    LLUICtrl *jointsParentPanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_JOINTSPARENT);
-    if (jointsParentPanel)
-        jointsParentPanel->setEnabled(enable);
+    LLUICtrl *somePanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_JOINTSPARENT);
+    if (somePanel)
+        somePanel->setEnabled(enable);
+
+    somePanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_ADVANCED);
+    if (somePanel)
+        somePanel->setEnabled(enable);
 
     LLUICtrl *trackballPanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_TRACKBALL);
     if (trackballPanel)
@@ -956,13 +960,12 @@ void FSFloaterPoser::onToggleAdvancedPanel()
     if (this->isMinimized())
         return;
 
-    // Get the "Advanced" button toggle state, find the Advanced panel, and set its visibility
     LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
     if (!advancedButton)
         return;
 
     bool      advancedPanelExpanded = advancedButton->getValue().asBoolean();
-    LLUICtrl *advancedPanel         = getChild<LLUICtrl>(POSER_AVATAR_PANEL_ADVANCED_NAME);
+    LLUICtrl* advancedPanel         = getChild<LLUICtrl>(POSER_AVATAR_PANEL_ADVANCED);
     if (!advancedPanel)
         return;
 

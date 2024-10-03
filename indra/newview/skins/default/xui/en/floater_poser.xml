@@ -1062,10 +1062,11 @@ width="565">
                 height="75"
                 left="0"
                 layout="all"
+				enabled="false"
                 background_visible="false"
                 mouse_opaque="false"
                 visible="false"
-                name="poses_AdvancedControls"
+                name="advanced_parent_panel"
                 width="607">
                 <tab_container
 				follows="all"
