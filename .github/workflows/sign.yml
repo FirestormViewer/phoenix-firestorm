@@ -38,7 +38,7 @@ jobs:
         actions: read
         contents: read
     outputs:
-        setup_files: ${{ steps.get-files.output.setup_files }}
+        setup_files: ${{ steps.get-files.outputs.setup_files }}
     steps:        
       - name: Download Build Artifacts
         uses: dawidd6/action-download-artifact@v6
