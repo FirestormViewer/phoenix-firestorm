@@ -1,0 +1,90 @@
+name: Manually Sign Windows Binaries
+
+on:
+  workflow_dispatch:
+    inputs:
+        build_run_number:
+          description: 'GitHub Run Number (per build_viewer.yml workflow)'
+          required: true
+        policy:
+            description: 'Policy to sign binaries'
+            required: true
+            type: choice
+            default: "Test"
+            options:
+            - "Test"
+            - "Release"
+        # viewer_version:
+        #   description: 'viewer version not including build'
+        #   required: true
+        #   default: '7.1.10'
+        # viewer_build:
+        #   description: 'build id'
+        #   required: true
+        #   default: '799999'
+        # viewer_release_type:
+        #   description: 'release type'
+        #   required: true
+        #   default: 'Release'
+        # branch:
+        #   description: 'Branch to deploy from'
+        #   required: false
+        #   default: 'master'
+
+jobs:
+  find-setup-files:
+    runs-on: ubuntu-latest
+    permissions:
+        actions: read
+        contents: read
+    outputs:
+        setup_files: ${{ steps.get-files.output.setup_files }}
+    steps:        
+      - name: Download Build Artifacts
+        uses: dawidd6/action-download-artifact@v6
+        id: download
+        with:
+            workflow: build_viewer.yml
+            run_number: ${{ github.event.inputs.build_run_number  }}
+            name: .*windows.*
+            name_is_regexp: true
+            path: artifacts
+      - name: Get List of Setup.exe Files
+        id: get-files
+        shell: bash
+        run: |
+            files=$(find artifacts -type f -name '*Setup.exe')
+            files_json=$(printf '%s\n' "$files" | jq -R . | jq -s -c .)
+            echo "setup_files=$files_json" >> $GITHUB_OUTPUT
+  sign-and-upload:
+    name: Sign and Upload each Setup.exe
+    needs: find-setup-files
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: ${{ fromJson( needs.find-find-setup-files.outputs.setup_files) }}
+    steps:
+      - name: Upload unsigned artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-artifact
+          path: ./to_sign        
+      - name: sign
+        uses: signpath/github-action-submit-signing-request@v1
+        env:
+            SIGNPATH_SIGNING_POLICY_SLUG: ${{ github.event.inputs.policy == 'Test' && vars.SIGNPATH_SIGNING_POLICY_SLUG_TEST || vars.SIGNPATH_SIGNING_POLICY_SLUG_RELEASE }}
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: '${{ vars.SIGNPATH_PROJECT_SLUG }}'
+          signing-policy-slug:  '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+          github-artifact-id:  "${{steps.upload-unsigned-artifact.outputs.artifact-id}}"
+          wait-for-completion: true
+          output-artifact-directory: 'application-signed'
+
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-artifact
+          path: ./application-signed
