@@ -570,6 +570,38 @@ width="565">
 							relative_width="0.9"  />
                         </scroll_list>
                     </panel>
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Vols"
+					name="collision_volumes_panel"
+					top="0"
+					width="481">
+                        <scroll_list
+                        column_padding="2"
+                        draw_heading="true"
+                        height="300"
+                        follows="all"
+                        can_sort="false"
+                        layout="topleft"
+                        left="2"
+                        width="479"
+                        multi_select="true"
+                        name="collision_volumes_scroll"
+                        top="0">
+                            <scroll_list.columns
+							label=""
+							name="icon"
+							relative_width="0.1"  />
+                            <scroll_list.columns
+							label="Volume"
+							name="joint"
+							relative_width="0.9"  />
+                        </scroll_list>
+                    </panel>
                 </tab_container>
             </panel>
             <panel

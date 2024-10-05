@@ -60,6 +60,7 @@ static const std::string POSER_AVATAR_TAB_BODY = "body_joints_panel";
 static const std::string POSER_AVATAR_TAB_FACE = "face_joints_panel";
 static const std::string POSER_AVATAR_TAB_HANDS = "hands_joints_panel";
 static const std::string POSER_AVATAR_TAB_MISC = "misc_joints_panel";
+static const std::string POSER_AVATAR_TAB_VOLUMES = "collision_volumes_panel";
 
 // standard controls
 static const std::string POSER_AVATAR_TRACKBALL_NAME   = "limb_rotation";
@@ -107,6 +108,7 @@ static const std::string POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME     = "body_joi
 static const std::string POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME     = "face_joints_scroll";
 static const std::string POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME     = "hand_joints_scroll";
 static const std::string POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME     = "misc_joints_scroll";
+static const std::string POSER_AVATAR_SCROLLLIST_VOLUMES_NAME        = "collision_volumes_scroll";
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
@@ -185,6 +187,13 @@ bool FSFloaterPoser::postBuild()
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME);
+    if (scrollList)
+    {
+        scrollList->setCommitOnSelectionChange(true);
+        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
+    }
+
+    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
@@ -712,9 +721,6 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
     if (!avatar || avatar->isDead())
         return false;
 
-#ifdef NDEBUG
-    return true;
-#endif
     return avatar->isSelf();
 }
 
@@ -770,13 +776,15 @@ void FSFloaterPoser::refreshJointScrollListMembers()
     LLScrollListCtrl *faceJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME);
     LLScrollListCtrl *handsJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME);
     LLScrollListCtrl *miscJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME);
-    if (!bodyJointsScrollList || !faceJointsScrollList || !handsJointsScrollList || !miscJointsScrollList)
+    LLScrollListCtrl *collisionVolumesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME);
+    if (!bodyJointsScrollList || !faceJointsScrollList || !handsJointsScrollList || !miscJointsScrollList || !collisionVolumesScrollList)
         return;
 
     bodyJointsScrollList->clearRows();
     faceJointsScrollList->clearRows();
     handsJointsScrollList->clearRows();
     miscJointsScrollList->clearRows();
+    collisionVolumesScrollList->clearRows();
 
     std::vector<FSPoserAnimator::FSPoserJoint>::const_iterator poserJoint_iter;
     for (poserJoint_iter = _poserAnimator.PoserJoints.begin();
@@ -823,6 +831,13 @@ void FSFloaterPoser::refreshJointScrollListMembers()
                     AddHeaderRowToScrollList(poserJoint_iter->jointName(), miscJointsScrollList);
 
                 item = miscJointsScrollList->addElement(row);
+                break;
+
+            case COL_VOLUMES:
+                if (hasListHeader)
+                    AddHeaderRowToScrollList(poserJoint_iter->jointName(), collisionVolumesScrollList);
+
+                item = collisionVolumesScrollList->addElement(row);
                 break;
         }
 
@@ -1098,6 +1113,8 @@ std::vector<FSPoserAnimator::FSPoserJoint *> FSFloaterPoser::getUiSelectedPoserJ
         scrollListName = POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME;
     else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_MISC))
         scrollListName = POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME;
+    else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_VOLUMES))
+        scrollListName = POSER_AVATAR_SCROLLLIST_VOLUMES_NAME;
 
     if (scrollListName.empty())
         return joints;
@@ -1869,6 +1886,7 @@ void FSFloaterPoser::refreshTextEmbiggeningOnAllScrollLists()
     addBoldToScrollList(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME, avatar);
     addBoldToScrollList(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME, avatar);
     addBoldToScrollList(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME, avatar);
+    addBoldToScrollList(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME, avatar);
 }
 
 void FSFloaterPoser::addBoldToScrollList(std::string listName, LLVOAvatar *avatar)

@@ -52,6 +52,17 @@ LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character
         addJointState(jointPose.getJointState());
     }
 
+    for (S32 i = 0; (targetJoint = character->findCollisionVolume(i)); ++i)
+    {
+        if (!targetJoint)
+            continue;
+
+        FSJointPose jointPose = FSJointPose(targetJoint);
+        _jointPoses.push_back(jointPose);
+
+        addJointState(jointPose.getJointState());
+    }
+
     return STATUS_SUCCESS;
 }
 

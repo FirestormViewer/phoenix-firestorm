@@ -40,7 +40,8 @@ typedef enum E_BoneTypes
     BODY        = 1,
     FACE        = 2,
     HANDS       = 3,
-    MISC        = 4
+    MISC        = 4,
+    COL_VOLUMES = 5
 } E_BoneTypes;
 
 /// <summary>
@@ -196,6 +197,9 @@ public:
         {"mWingsRoot", "", MISC},
         {"mWing1Left", "mWing1Right", MISC}, {"mWing2Left", "mWing2Right", MISC}, {"mWing3Left", "mWing3Right", MISC}, {"mWing4Left", "mWing4Right", MISC}, {"mWing4FanLeft", "mWing4FanRight", MISC},
         {"mWing1Right", "mWing1Left", MISC, true}, {"mWing2Right", "mWing2Left", MISC, true}, {"mWing3Right", "mWing3Left", MISC, true}, {"mWing4Right", "mWing4Left", MISC, true}, {"mWing4FanRight", "mWing4FanLeft", MISC, true},
+
+        // Collision Volumes
+        {"LEFT_PEC", "RIGHT_PEC", COL_VOLUMES}, {"RIGHT_PEC", "LEFT_PEC", COL_VOLUMES, true}, {"BELLY", "", COL_VOLUMES}, {"BUTT", "", COL_VOLUMES},
     };
     
 public:
