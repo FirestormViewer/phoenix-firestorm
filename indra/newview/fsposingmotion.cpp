@@ -63,7 +63,6 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
     LLQuaternion currentRotation;
     LLVector3 currentPosition;
     LLVector3 targetPosition;
-    F32 poseTransitionAmount = 0.0f; // when we change from one position/rotation to another, we do so over time; this documents the amount of transition. 
 
     for (FSJointPose jointPose : _jointPoses)
     {
@@ -76,7 +75,6 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
         targetRotation = jointPose.getTargetRotation();
         targetPosition = jointPose.getTargetPosition();
 
-        poseTransitionAmount = llclamp(_interpolationTimer.getElapsedTimeF32() / _interpolationTime, 0.0f, 1.0f);
         if (currentPosition != targetPosition)
         {
             currentPosition = lerp(currentPosition, targetPosition, _interpolationTime);
@@ -89,9 +87,6 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
             jointPose.getJointState()->setRotation(currentRotation);
         }
     }
-
-    if (_interpolationTimer.getStarted() && poseTransitionAmount >= 1.0f)
-        _interpolationTimer.stop();
 
     return true;
 }

@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_FSPOSINGMOTION_H
-#define LL_FSPOSINGMOTION_H
+#ifndef FS_POSINGMOTION_H
+#define FS_POSINGMOTION_H
 
 //-----------------------------------------------------------------------------
 // Header files
@@ -52,18 +52,73 @@ public:
     /// </summary>
     class FSJointPose
     {
-        std::string             _jointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
-        LLQuaternion            _beginningRotation;
-        LLQuaternion            _targetRotation;
+        const size_t MaximumUndoQueueLength = 20;
+
+        /// <summary>
+        /// The constant time interval, in seconds, 
+        /// </summary>
+        std::chrono::duration<double> const _undoUpdateInterval = std::chrono::duration<double>(0.3);
+
+        std::string              _jointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
+        LLPointer<LLJointState>  _jointState;
+
+        LLQuaternion             _targetRotation;
+        LLQuaternion             _beginningRotation;
+        std::deque<LLQuaternion> _lastSetRotations;
+        size_t                   _undoneRotationIndex = 0;
+        std::chrono::system_clock::time_point _timeLastUpdatedRotation = std::chrono::system_clock::now();
+
         LLVector3               _targetPosition;
         LLVector3               _beginningPosition;
-        LLPointer<LLJointState> _jointState;
+        std::deque<LLVector3>   _lastSetPositions;
+        size_t                  _undonePositionIndex = 0;
+        std::chrono::system_clock::time_point _timeLastUpdatedPosition = std::chrono::system_clock::now();
+
+        /// <summary>
+        /// Adds a last position to the deque.
+        /// </summary>
+        void addLastPositionToUndo()
+        {
+            if (_undonePositionIndex > 0)
+            {
+                for (int i = 0; i < _undonePositionIndex; i++)
+                    _lastSetPositions.pop_front();
+
+                _undonePositionIndex = 0;
+            }
+
+            _lastSetPositions.push_front(_targetPosition);
+
+            while (_lastSetPositions.size() > MaximumUndoQueueLength)
+                _lastSetPositions.pop_back();
+        }
+
+        /// <summary>
+        /// Adds a last rotation to the deque.
+        /// </summary>
+        void addLastRotationToUndo()
+        {
+            if (_undoneRotationIndex > 0)
+            {
+                for (int i = 0; i < _undoneRotationIndex; i++)
+                    _lastSetRotations.pop_front();
+
+                _undoneRotationIndex = 0;
+            }
+
+            _lastSetRotations.push_front(_targetRotation);
+
+            while (_lastSetRotations.size() > MaximumUndoQueueLength)
+                _lastSetRotations.pop_back();
+        }
 
       public:
         /// <summary>
         /// Gets the name of the joint.
         /// </summary>
         std::string jointName() const { return _jointName; }
+
+        bool canRedo() const { return _undoneRotationIndex > 0; }
 
         /// <summary>
         /// Gets the position the joint was in when the animation was initialized.
@@ -78,7 +133,15 @@ public:
         /// <summary>
         /// Sets the position the animator wishes the joint to be in.
         /// </summary>
-        void setTargetPosition(const LLVector3& pos) { _targetPosition.set(pos) ; }
+        void setTargetPosition(const LLVector3& pos)
+        {
+            auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - _timeLastUpdatedPosition;
+            if (timeIntervalSinceLastRotationChange > _undoUpdateInterval)
+                addLastPositionToUndo();
+
+            _timeLastUpdatedPosition = std::chrono::system_clock::now();
+            _targetPosition.set(pos);
+        }
 
         /// <summary>
         /// Gets the rotation the joint was in when the animation was initialized.
@@ -93,7 +156,82 @@ public:
         /// <summary>
         /// Sets the rotation the animator wishes the joint to be in.
         /// </summary>
-        void setTargetRotation(const LLQuaternion& rot) { _targetRotation.set(rot); }
+        void setTargetRotation(const LLQuaternion& rot)
+        {
+            auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - _timeLastUpdatedRotation;
+            if (timeIntervalSinceLastRotationChange > _undoUpdateInterval)
+                addLastRotationToUndo();
+
+            _timeLastUpdatedRotation = std::chrono::system_clock::now();
+            _targetRotation.set(rot);
+        }
+
+        /// <summary>
+        /// Undoes the last position set, if any.
+        /// </summary>
+        void undoLastPositionSet()
+        {
+            if (_lastSetPositions.empty())
+                return;
+
+            if (_undonePositionIndex == 0)  // at the top of the queue add the current
+                addLastPositionToUndo();
+
+            _undonePositionIndex++;
+            _undonePositionIndex = llclamp(_undonePositionIndex, 0, _lastSetPositions.size() - 1);
+            _targetPosition.set(_lastSetPositions[_undonePositionIndex]);
+        }
+
+        /// <summary>
+        /// Undoes the last position set, if any.
+        /// </summary>
+        void redoLastPositionSet()
+        {
+            if (_lastSetPositions.empty())
+                return;
+
+            _undonePositionIndex--;
+            _undonePositionIndex = llclamp(_undonePositionIndex, 0, _lastSetPositions.size() - 1);
+
+            _targetPosition.set(_lastSetPositions[_undonePositionIndex]);
+            if (_undonePositionIndex == 0)
+                _lastSetRotations.pop_front();
+        }
+
+        /// <summary>
+        /// Undoes the last rotation set, if any.
+        /// Ordinarily the queue does not contain the current rotation, because we rely on time to add, and not button-up.
+        /// When we undo, if we are at the top of the queue, we need to add the current rotation so we can redo back to it.
+        /// Thus when we start undoing, _undoneRotationIndex points at the current rotation.
+        /// </summary>
+        void undoLastRotationSet()
+        {
+            if (_lastSetRotations.empty())
+                return;
+
+            if (_undoneRotationIndex == 0) // at the top of the queue add the current
+                addLastRotationToUndo();
+
+            _undoneRotationIndex++;
+            _undoneRotationIndex = llclamp(_undoneRotationIndex, 0, _lastSetRotations.size() - 1);
+            _targetRotation.set(_lastSetRotations[_undoneRotationIndex]);
+        }
+
+        /// <summary>
+        /// Undoes the last rotation set, if any.
+        /// </summary>
+        void redoLastRotationSet()
+        {
+            if (_lastSetRotations.empty())
+                return;
+
+            _undoneRotationIndex--;
+            _undoneRotationIndex = llclamp(_undoneRotationIndex, 0, _lastSetRotations.size() - 1);
+
+            _targetRotation.set(_lastSetRotations[_undoneRotationIndex]);
+            if (_undoneRotationIndex == 0)
+                _lastSetRotations.pop_front();
+        }
 
         /// <summary>
         /// Gets the pointer to the jointstate for the joint this represents.
@@ -193,13 +331,10 @@ private:
     /// <summary>
     /// The amount of time, in seconds, we use for transitioning between one animation-state to another; this affects the 'fluidity'
     /// of motion between changed to a joint.
+    /// Use caution making this larger than the perceptual amount of time between adjusting a joint and then choosing to use 'undo'.
+    /// Undo-function waits this amount of time after the last user-incited joint change to add a 'restore point'.
     /// </summary>
     const F32 _interpolationTime = 0.25f;
-
-    /// <summary>
-    /// The timer used to smoothly transition from one joint position or rotation to another.
-    /// </summary>
-    LLFrameTimer _interpolationTimer;
 
     /// <summary>
     /// The collection of joint poses this motion uses to pose the joints of the character this is animating. 
@@ -207,5 +342,5 @@ private:
     std::vector<FSJointPose> _jointPoses;
 };
 
-#endif // LL_LLKEYFRAMEMOTION_H
+#endif // FS_POSINGMOTION_H
 

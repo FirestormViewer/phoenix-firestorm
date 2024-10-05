@@ -57,8 +57,8 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     mInfiniteScrollMode(p.infinite_scroll_mode)
 {
     LLRect border_rect = getLocalRect();
-    _valueX = _lastValueX = _pinchValueX = _lastPinchValueX = border_rect.getCenterX();
-    _valueY = _lastValueY = _pinchValueY = _lastPinchValueY = border_rect.getCenterY();
+    _valueX = _pinchValueX = border_rect.getCenterX();
+    _valueY = _pinchValueY = border_rect.getCenterY();
     _thumbClickOffsetX = _thumbClickOffsetY = _pinchThumbClickOffsetX = _pinchThumbClickOffsetY = 0;
     _valueWheelClicks = _pinchValueWheelClicks                                                  = 0;
 
@@ -246,10 +246,6 @@ void FSVirtualTrackpad::setValue(F32 x, F32 y) { convertNormalizedToPixelPos(x, 
 
 void FSVirtualTrackpad::setPinchValue(F32 x, F32 y) { convertNormalizedToPixelPos(x, y, &_pinchValueX, &_pinchValueY); }
 
-void FSVirtualTrackpad::undoLastValue() { setValueAndCommit(_lastValueX, _lastValueY); }
-
-void FSVirtualTrackpad::undoLastSetPinchValue() { setPinchValueAndCommit(_lastPinchValueX, _lastPinchValueY); }
-
 void FSVirtualTrackpad::setValueAndCommit(const S32 x, const S32 y)
 {
     _valueX                    = x;
@@ -405,8 +401,6 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
         determineThumbClickError(x, y);
         updateClickErrorIfInfiniteScrolling();
         _valueWheelClicks          = 0;
-        _lastValueX                = _valueX;
-        _lastValueY                = _valueY;
         _wheelClicksSinceMouseDown = 0;
         gFocusMgr.setMouseCapture(this);
 
@@ -440,8 +434,6 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
         determineThumbClickErrorForPinch(x, y);
         updateClickErrorIfInfiniteScrollingForPinch();
         _pinchValueWheelClicks     = 0;
-        _lastPinchValueX           = _pinchValueX;
-        _lastPinchValueY           = _pinchValueY;
         _wheelClicksSinceMouseDown = 0;
         doingPinchMode = true;
         gFocusMgr.setMouseCapture(this);

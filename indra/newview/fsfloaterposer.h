@@ -210,6 +210,8 @@ class FSFloaterPoser : public LLFloater
     void onToggleSympatheticChange();
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastRotation();
+    void onRedoLastRotation();
+    void enableOrDisableRedoButton(bool shouldEnable);
     void onPoseStartStop();
     void onLimbTrackballChanged();
     void onLimbYawPitchRollChanged();

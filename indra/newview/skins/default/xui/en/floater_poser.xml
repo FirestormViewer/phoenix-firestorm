@@ -612,15 +612,46 @@ width="565">
 					follows="top|left"
 					layout="topleft"
 					label=""
-					image_overlay="Refresh_Off"
+					image_overlay="Script_Undo"
 					image_unselected="Toolbar_Middle_Off"
-					name="refresh_avatars"
+					name="undo_change"
 					tool_tip="Undo the last rotation change"
-					width="20"
+					width="18"
 					top_pad="0"
 					left="4">
                         <button.commit_callback
                         function="Poser.UndoLastRotation"/>
+                    </button>
+                    <button
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					label=""
+					image_overlay="Script_Redo"
+					image_unselected="Toolbar_Middle_Off"
+					name="button_redo_change"
+					tool_tip="Re-do the last Undo change"
+					enabled="false"
+					width="18"
+					top_delta="0"
+					left_pad="1">
+                        <button.commit_callback
+                        function="Poser.RedoLastRotation"/>
+                    </button>
+                    <button
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					label=""
+					image_overlay="Inv_TrashOpen"
+					image_unselected="Toolbar_Middle_Off"
+					name="refresh_avatars"
+					tool_tip="Double click to reset all selected body parts to when you first started posing"
+					width="18"
+					top_delta="0"
+					left_pad="1">
+                        <button.commit_callback
+                        function="Pose.PoseJointsReset"/>
                     </button>
                     <button
 					follows="left|top"
@@ -640,31 +671,16 @@ width="565">
 					tool_tip="Make smaller changes when using the trackball."
 					left_pad="1"
 					top_delta="0"
-					width="20" >
+					width="18" >
                         <button.commit_callback
                         function="Poser.ToggleTrackPadSensitivity"/>
-                    </button>
-                    <button
-					height="21"
-					follows="top|left"
-					layout="topleft"
-					label=""
-					image_overlay="Inv_TrashOpen"
-					image_unselected="Toolbar_Middle_Off"
-					name="refresh_avatars"
-					tool_tip="Double click to reset all selected body parts to when you first started posing"
-					width="20"
-					top_delta="0"
-					left_pad="1">
-                        <button.commit_callback
-                        function="Pose.PoseJointsReset"/>
                     </button>
                     <button
 					follows="left|top"
 					height="21"
 					is_toggle="true"
 					layout="topleft"
-					label="Mirror"
+					label="Mirr."
 					image_hover_unselected="Toolbar_Middle_Over"
 					image_selected="Toolbar_Middle_Selected"
 					image_unselected="Toolbar_Middle_Off"
@@ -676,7 +692,7 @@ width="565">
 					tool_tip="Change the opposite joint, like in a mirror."
 					left_pad="1"
 					top_delta="0"
-					width="45" >
+					width="38" >
                         <button.commit_callback
                         function="Poser.ToggleMirrorChanges"/>
                     </button>
@@ -685,7 +701,7 @@ width="565">
 					height="21"
 					is_toggle="true"
 					layout="topleft"
-					label="Symp."
+					label="Sym."
 					image_hover_unselected="Toolbar_Middle_Over"
 					image_selected="Toolbar_Middle_Selected"
 					image_unselected="Toolbar_Middle_Off"
@@ -697,7 +713,7 @@ width="565">
 					tool_tip="Change the opposite joint, but in the same way."
 					left_pad="1"
 					top_delta="0"
-					width="45" >
+					width="38" >
                         <button.commit_callback
                         function="Poser.ToggleSympatheticChanges"/>
                     </button>

@@ -70,9 +70,6 @@ public:
     /// <param name="y">The y-axis (top/bottom) position to set; expected range 1..-1; top = 1</param>
     void            setValue(F32 x, F32 y);
 
-    void            undoLastValue();
-    void            undoLastSetPinchValue();
-
     /// <summary>
     /// Sets the position of the second cursor.
     /// </summary>
@@ -140,14 +137,10 @@ private:
     S32       _valueX;
     S32       _valueY;
     S32       _valueWheelClicks;
-    S32       _lastValueX;
-    S32       _lastValueY;
 
     S32       _pinchValueX;
     S32       _pinchValueY;
     S32       _pinchValueWheelClicks;
-    S32       _lastPinchValueX;
-    S32       _lastPinchValueY;
 
     /// <summary>
     /// Rolling the wheel is pioneering a 'delta' mode: where changes are handled by the control-owner in a relative way.

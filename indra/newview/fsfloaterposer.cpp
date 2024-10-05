@@ -69,6 +69,7 @@ static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ea
 static const std::string POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY = "button_toggleTrackPadSensitivity";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_MIRROR = "button_toggleMirrorRotation";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_SYMPATH = "button_toggleSympatheticRotation";
+static const std::string POSER_AVATAR_BUTTON_REDO = "button_redo_change";
 static const std::string POSER_AVATAR_SLIDER_POSX_NAME = "av_position_inout";
 static const std::string POSER_AVATAR_SLIDER_POSY_NAME = "av_position_leftright";
 static const std::string POSER_AVATAR_SLIDER_POSZ_NAME = "av_position_updown";
@@ -118,6 +119,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.ToggleAdvancedPanel", boost::bind(&FSFloaterPoser::onToggleAdvancedPanel, this));
 
     mCommitCallbackRegistrar.add("Poser.UndoLastRotation", boost::bind(&FSFloaterPoser::onUndoLastRotation, this));
+    mCommitCallbackRegistrar.add("Poser.RedoLastRotation", boost::bind(&FSFloaterPoser::onRedoLastRotation, this));
     mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", boost::bind(&FSFloaterPoser::onToggleMirrorChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", boost::bind(&FSFloaterPoser::onToggleSympatheticChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleTrackPadSensitivity", boost::bind(&FSFloaterPoser::refreshTrackpadCursor, this));
@@ -936,12 +938,67 @@ void FSFloaterPoser::setRotationChangeButtons(bool togglingMirror, bool toggling
 
 void FSFloaterPoser::onUndoLastRotation()
 {
-    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
-    if (!trackBall)
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
         return;
 
-    trackBall->undoLastValue();
-    onLimbTrackballChanged();
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.undoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
+
+        shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
+    }
+
+    enableOrDisableRedoButton(shouldEnableRedoButton);
+    refreshRotationSliders();
+    refreshTrackpadCursor();
+}
+
+void FSFloaterPoser::onRedoLastRotation()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.redoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
+
+        shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
+    }
+
+    enableOrDisableRedoButton(shouldEnableRedoButton);
+    refreshRotationSliders();
+    refreshTrackpadCursor();
+}
+
+void FSFloaterPoser::enableOrDisableRedoButton(bool shouldEnable)
+{
+    LLButton* redoButton = getChild<LLButton>(POSER_AVATAR_BUTTON_REDO);
+    if (!redoButton)
+        return;
+
+    redoButton->setEnabled(shouldEnable);
 }
 
 void FSFloaterPoser::onOpenSetAdvancedPanel()
