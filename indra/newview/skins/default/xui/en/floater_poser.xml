@@ -295,6 +295,10 @@ width="565">
                     label="UUID"
                     name="uuid"
                     relative_width="0.0"  />
+                    <scroll_list.columns
+                    label="SaveFileName"
+                    name="saveFileName"
+                    relative_width="0.0"  />
                 </scroll_list>
             </panel>
             <panel

@@ -53,6 +53,7 @@ typedef enum E_Columns
     COL_ICON = 0,
     COL_NAME = 1,
     COL_UUID = 2,
+    COL_SAVE = 3,
 } E_Columns;
 
 /// <summary>
@@ -200,6 +201,8 @@ class FSFloaterPoser : public LLFloater
     void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
     void loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileName, E_LoadPoseMethods loadMethod);
+    void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
+    void setUiSelectedAvatarSaveFileName(std::string saveFileName);
 
     // UI Event Handlers:
     void onAvatarsRefresh();
@@ -211,7 +214,7 @@ class FSFloaterPoser : public LLFloater
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastRotation();
     void onRedoLastRotation();
-    void enableOrDisableRedoButton(bool shouldEnable);
+    void enableOrDisableRedoButton();
     void onPoseStartStop();
     void onLimbTrackballChanged();
     void onLimbYawPitchRollChanged();

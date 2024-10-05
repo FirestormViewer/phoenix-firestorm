@@ -108,8 +108,6 @@ static const std::string POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME     = "face_joi
 static const std::string POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME     = "hand_joints_scroll";
 static const std::string POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME     = "misc_joints_scroll";
 
-const LLVector3          VectorZero(1.0f, 0.0f, 0.0f);
-
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
     // bind requests, other controls are find-and-binds, see postBuild()
@@ -298,8 +296,8 @@ void FSFloaterPoser::onPoseFileSelect()
     if (savePosesButton)
         savePosesButton->setEnabled(enableButtons);
 
-    std::string pose_name = item->getColumn(0)->getValue().asString();
-    if (pose_name.empty())
+    std::string poseName = item->getColumn(0)->getValue().asString();
+    if (poseName.empty())
         return;
 
     LLLineEditor *poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
@@ -307,7 +305,7 @@ void FSFloaterPoser::onPoseFileSelect()
         return;
 
     poseSaveName->setEnabled(enableButtons);
-    LLStringExplicit name = LLStringExplicit(pose_name);
+    LLStringExplicit name = LLStringExplicit(poseName);
     poseSaveName->setText(name);
 }
 
@@ -329,6 +327,7 @@ void FSFloaterPoser::onClickPoseSave()
     if (successfulSave)
     {
         refreshPosesScroll();
+        setUiSelectedAvatarSaveFileName(filename);
         // TODO: provide feedback for save
     }
 }
@@ -614,6 +613,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
         LLSD       pose;
         llifstream infile;
         LLVector3  vec3;
+        bool       enabled;
 
         infile.open(fullPath);
         if (!infile.is_open())
@@ -654,6 +654,12 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                     vec3.setValue(control_map["scale"]);
                     _poserAnimator.setJointScale(avatar, poserJoint, vec3, NONE);
                 }
+
+                if (control_map.has("enabled"))
+                {
+                    enabled = control_map["enabled"].asBoolean();
+                    _poserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled);
+                }
             }
         }
     }
@@ -662,7 +668,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
         LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << LL_ENDL;
     }
 
-    onJointSelect(); // update the controls to the newly loaded values
+    onJointSelect();
 }
 
 void FSFloaterPoser::onPoseStartStop()
@@ -706,7 +712,9 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
     if (!avatar || avatar->isDead())
         return false;
 
-    // TODO: permission request? maybe through Bridge? 
+#ifdef NDEBUG
+    return true;
+#endif
     return avatar->isSelf();
 }
 
@@ -747,6 +755,10 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
     someButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
     if (someButton)
         someButton->setEnabled(enable);
+
+    LLLineEditor* poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
+    if (poseSaveName)
+        poseSaveName->setEnabled(enable);
 }
 
 void FSFloaterPoser::refreshJointScrollListMembers()
@@ -959,7 +971,7 @@ void FSFloaterPoser::onUndoLastRotation()
         shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
     }
 
-    enableOrDisableRedoButton(shouldEnableRedoButton);
+    enableOrDisableRedoButton();
     refreshRotationSliders();
     refreshTrackpadCursor();
 }
@@ -987,18 +999,37 @@ void FSFloaterPoser::onRedoLastRotation()
         shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
     }
 
-    enableOrDisableRedoButton(shouldEnableRedoButton);
+    enableOrDisableRedoButton();
     refreshRotationSliders();
     refreshTrackpadCursor();
 }
 
-void FSFloaterPoser::enableOrDisableRedoButton(bool shouldEnable)
+void FSFloaterPoser::enableOrDisableRedoButton()
 {
     LLButton* redoButton = getChild<LLButton>(POSER_AVATAR_BUTTON_REDO);
     if (!redoButton)
         return;
 
-    redoButton->setEnabled(shouldEnable);
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
+    }
+
+    redoButton->setEnabled(shouldEnableRedoButton);
 }
 
 void FSFloaterPoser::onOpenSetAdvancedPanel()
@@ -1119,6 +1150,49 @@ LLVOAvatar* FSFloaterPoser::getUiSelectedAvatar()
     LLUUID selectedAvatarId = cell->getValue().asUUID();
 
     return getAvatarByUuid(selectedAvatarId);
+}
+
+void FSFloaterPoser::setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName()
+{
+    LLScrollListCtrl* avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
+    if (!avatarScrollList)
+        return;
+
+    LLScrollListItem* item = avatarScrollList->getFirstSelected();
+    if (!item)
+        return;
+
+    LLScrollListCell* cell = item->getColumn(COL_SAVE);
+    if (!cell)
+        return;
+
+    std::string lastSetName = cell->getValue().asString();
+    if (lastSetName.empty())
+        return;
+
+    LLLineEditor* poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
+    if (!poseSaveName)
+        return;
+
+    LLStringExplicit name = LLStringExplicit(lastSetName);
+    poseSaveName->setText(name);
+}
+
+void FSFloaterPoser::setUiSelectedAvatarSaveFileName(std::string saveFileName)
+{
+    LLScrollListCtrl *avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
+    if (!avatarScrollList)
+        return;
+
+    LLScrollListItem *item = avatarScrollList->getFirstSelected();
+    if (!item)
+        return;
+
+    LLScrollListCell* cell = item->getColumn(COL_SAVE);
+    if (!cell)
+        return;
+
+    return cell->setValue(saveFileName);
 }
 
 LLVOAvatar* FSFloaterPoser::getAvatarByUuid(LLUUID avatarToFind)
@@ -1535,6 +1609,7 @@ void FSFloaterPoser::onJointSelect()
     refreshAvatarPositionSliders();
     refreshRotationSliders();
     refreshTrackpadCursor();
+    enableOrDisableRedoButton();
 
     LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
     if (!advancedButton)
@@ -1618,6 +1693,7 @@ void FSFloaterPoser::onAvatarSelect()
     poseControlsEnable(arePosingSelected);
     refreshTextEmbiggeningOnAllScrollLists();
     onJointSelect();
+    setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
 }
 
 uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes()
@@ -1733,6 +1809,8 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][COL_NAME]["value"]  = av_name.getDisplayName();
         row["columns"][COL_UUID]["column"] = "uuid";
         row["columns"][COL_UUID]["value"]  = uuid;
+        row["columns"][COL_SAVE]["column"] = "saveFileName";
+        row["columns"][COL_SAVE]["value"]  = "";
         LLScrollListItem *item      = avatarScrollList->addElement(row);
     }
 
@@ -1755,6 +1833,8 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][COL_NAME]["value"]  = avatar->getFullname();
         row["columns"][COL_UUID]["column"] = "uuid";
         row["columns"][COL_UUID]["value"]  = avatar->getID();
+        row["columns"][COL_SAVE]["column"] = "saveFileName";
+        row["columns"][COL_SAVE]["value"]  = "";
         avatarScrollList->addElement(row);
     }
 
