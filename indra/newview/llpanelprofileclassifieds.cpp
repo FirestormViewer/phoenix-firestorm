@@ -1015,7 +1015,9 @@ void LLPanelProfileClassified::onSaveClick()
     }
     if(isNew() || isNewWithErrors())
     {
-        if(gStatusBar->getBalance() < MINIMUM_PRICE_FOR_LISTING)
+        // <FS:Ansariel> OpenSim compatibility
+        //if(gStatusBar->getBalance() < MINIMUM_PRICE_FOR_LISTING)
+        if(gStatusBar->getBalance() < getClassifiedFee())
         {
             LLNotificationsUtil::add("ClassifiedInsufficientFunds");
             return;
@@ -1497,10 +1499,14 @@ void LLPanelProfileClassified::doSave()
 
 void LLPanelProfileClassified::onPublishFloaterPublishClicked()
 {
-    if (mPublishFloater->getPrice() < MINIMUM_PRICE_FOR_LISTING)
+    // <FS:Ansariel> OpenSim compatibility
+    //if (mPublishFloater->getPrice() < MINIMUM_PRICE_FOR_LISTING)
+    if (mPublishFloater->getPrice() < getClassifiedFee())
     {
         LLSD args;
-        args["MIN_PRICE"] = MINIMUM_PRICE_FOR_LISTING;
+        // <FS:Ansariel> OpenSim compatibility
+        //args["MIN_PRICE"] = MINIMUM_PRICE_FOR_LISTING;
+        args["MIN_PRICE"] = getClassifiedFee();
         LLNotificationsUtil::add("MinClassifiedPrice", args);
         return;
     }
