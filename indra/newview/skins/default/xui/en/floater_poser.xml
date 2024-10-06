@@ -694,7 +694,7 @@ width="565">
 					top_delta="0"
 					left_pad="1">
                         <button.commit_callback
-                        function="Pose.PoseJointsReset"/>
+                        function="Poser.PoseJointsReset"/>
                     </button>
                     <button
 					follows="left|top"
@@ -1104,7 +1104,7 @@ width="565">
 				top_delta="0"
 				left_pad="1">
                     <button.commit_callback
-                    function="Pose.Save"/>
+                    function="Poser.Save"/>
                 </button>
             </panel>
         </layout_panel>
