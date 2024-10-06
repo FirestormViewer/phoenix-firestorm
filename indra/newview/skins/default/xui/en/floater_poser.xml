@@ -86,6 +86,8 @@ width="565">
     <string	name="joint_transform_mHandPinky2Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
     <string	name="joint_transform_mHandPinky3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
     <string	name="joint_transform_mHandPinky3Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
+    <string	name="joint_transform_LEFT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_RIGHT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	
     <!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
     <string	name="header_mTorso" translate="false">Body</string>
@@ -226,6 +228,10 @@ width="565">
     <string	name="title_mHindLimb2Right" translate="false">Right 2</string>
     <string	name="title_mHindLimb3Right" translate="false">Right 3</string>
     <string	name="title_mHindLimb4Right" translate="false">Right 4</string>
+    <string	name="title_BUTT" translate="false">Bottom</string>
+    <string	name="title_BELLY" translate="false">Belly</string>
+    <string	name="title_LEFT_PEC" translate="false">Left Pec</string>
+    <string	name="title_RIGHT_PEC" translate="false">Right Pec</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
     <layout_stack
@@ -576,7 +582,7 @@ width="565">
 					height="299"
 					layout="topleft"
 					left="0"
-					title="Vols"
+					title="Physics"
 					name="collision_volumes_panel"
 					top="0"
 					width="481">
@@ -597,7 +603,7 @@ width="565">
 							name="icon"
 							relative_width="0.1"  />
                             <scroll_list.columns
-							label="Volume"
+							label="Physics"
 							name="joint"
 							relative_width="0.9"  />
                         </scroll_list>
