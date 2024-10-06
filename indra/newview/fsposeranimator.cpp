@@ -211,7 +211,34 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
     if (!jointPose)
         return;
 
-    jointPose->setTargetPosition(position);
+    if (style == NONE)
+    {
+        jointPose->setTargetPosition(position);
+        return;
+    }
+
+    LLVector3 positionDelta = jointPose->getTargetPosition() - position;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    LLVector3 oppositeJointPosition = oppositeJointPose->getTargetPosition();
+    switch (style)
+    {
+        case SYMPATHETIC:
+            jointPose->setTargetPosition(position);
+            oppositeJointPose->setTargetPosition(oppositeJointPosition - positionDelta);
+            break;
+
+        case MIRROR:
+            jointPose->setTargetPosition(position);
+            oppositeJointPose->setTargetPosition(oppositeJointPosition + positionDelta);
+            break;
+
+        default:
+            break;
+    }
 }
 
 LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture)
