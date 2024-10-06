@@ -273,7 +273,6 @@ public:
             joint->setScale(_beginningScale);
         }
 
-        
         LLVector3 getJointScale() { return _targetScale; }
         void      setJointScale(LLVector3 scale)
         {
@@ -285,6 +284,9 @@ public:
             joint->setScale(_targetScale);
         }
 
+        /// <summary>
+        /// Restores the joint represented by this to the scale it had when this motion started.
+        /// </summary>
         void revertJointScale()
         {
             LLJoint* joint = _jointState->getJoint();
@@ -294,6 +296,9 @@ public:
             joint->setScale(_beginningScale);
         }
 
+        /// <summary>
+        /// Restores the joint represented by this to the position it had when this motion started.
+        /// </summary>
         void revertJointPosition()
         {
             LLJoint* joint = _jointState->getJoint();
@@ -404,7 +409,7 @@ private:
     /// The amount of time, in seconds, we use for transitioning between one animation-state to another; this affects the 'fluidity'
     /// of motion between changed to a joint.
     /// Use caution making this larger than the perceptual amount of time between adjusting a joint and then choosing to use 'undo'.
-    /// Undo-function waits this amount of time after the last user-incited joint change to add a 'restore point'.
+    /// Undo-function waits a similar amount of time after the last user-incited joint change to add a 'restore point'.
     /// </summary>
     const F32 _interpolationTime = 0.25f;
 
@@ -414,7 +419,8 @@ private:
     std::vector<FSJointPose> _jointPoses;
 
     /// <summary>
-    /// Because changes to scales and collision volumes to not end when the animation stops, we revert them manually.
+    /// Because changes to positions, scales and collision volumes do not end when the animation stops,
+    /// this is required to revert them manually.
     /// </summary>
     void revertChangesToPositionsScalesAndCollisionVolumes();
 };
