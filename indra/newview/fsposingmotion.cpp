@@ -57,7 +57,7 @@ LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character
         if (!targetJoint)
             continue;
 
-        FSJointPose jointPose = FSJointPose(targetJoint);
+        FSJointPose jointPose = FSJointPose(targetJoint, true);
         _jointPoses.push_back(jointPose);
 
         addJointState(jointPose.getJointState());
@@ -102,7 +102,25 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
     return true;
 }
 
-void FSPosingMotion::onDeactivate() {}
+void FSPosingMotion::onDeactivate() { revertChangesToPositionsScalesAndCollisionVolumes(); }
+
+void FSPosingMotion::revertChangesToPositionsScalesAndCollisionVolumes()
+{
+    for (FSJointPose jointPose : _jointPoses)
+    {
+        jointPose.revertJointScale();
+        jointPose.revertJointPosition();
+
+        if (jointPose.isCollisionVolume())
+            jointPose.revertCollisionVolume();
+
+        LLJoint* joint = jointPose.getJointState()->getJoint();
+        if (!joint)
+            continue;
+
+        addJointToState(joint);
+    }
+}
 
 void FSPosingMotion::addJointToState(LLJoint* joint) { setJointState(joint, POSER_JOINT_STATE); }
 

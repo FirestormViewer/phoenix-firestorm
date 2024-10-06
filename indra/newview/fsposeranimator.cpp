@@ -142,7 +142,7 @@ bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, FSPoserJoint join
     if (!jointPose)
         return false;
 
-    return jointPose->canRedo();
+    return jointPose->canRedoRotation();
 }
 
 void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
@@ -457,15 +457,21 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
 
 LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
 {
-    LLVector3 vec3;
+    LLVector3 scale;
+    if (!isAvatarSafeToUse(avatar))
+        return scale;
 
-    LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
-    if (!avJoint)
-        return vec3;
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return scale;
 
-    vec3 = avJoint->getScale();
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return scale;
 
-    return vec3;
+    scale = jointPose->getJointScale();
+
+    return scale;
 }
 
 void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style)
@@ -475,11 +481,28 @@ void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *join
     if (!joint)
         return;
 
-    LLJoint *avJoint = avatar->getJoint(JointKey::construct(joint->jointName()));
-    if (!avJoint)
+    std::string jn = joint->jointName();
+    if (jn.empty())
         return;
 
-    avJoint->setScale(scale);
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(jn);
+    if (!jointPose)
+        return;
+
+    jointPose->setJointScale(scale);
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->setJointScale(scale);
 }
 
 const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(std::string jointName)

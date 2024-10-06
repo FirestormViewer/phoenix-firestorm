@@ -62,6 +62,11 @@ public:
         std::string              _jointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
         LLPointer<LLJointState>  _jointState;
 
+        /// <summary>
+        /// Collision Volumes require special treatment when we stop animating an avatar, as they do not revert to their original state natively.
+        /// </summary>
+        bool                     _isCollisionVolume = false;
+
         LLQuaternion             _targetRotation;
         LLQuaternion             _beginningRotation;
         std::deque<LLQuaternion> _lastSetRotations;
@@ -73,6 +78,13 @@ public:
         std::deque<LLVector3>   _lastSetPositions;
         size_t                  _undonePositionIndex = 0;
         std::chrono::system_clock::time_point _timeLastUpdatedPosition = std::chrono::system_clock::now();
+
+        /// <summary>
+        /// Joint scales require special treatment, as they do not revert when we stop animating an avatar.
+        /// </summary>
+        LLVector3             _targetScale;
+        LLVector3             _beginningScale;
+        std::deque<LLVector3> _lastSetScales;
 
         /// <summary>
         /// Adds a last position to the deque.
@@ -118,7 +130,17 @@ public:
         /// </summary>
         std::string jointName() const { return _jointName; }
 
-        bool canRedo() const { return _undoneRotationIndex > 0; }
+        /// <summary>
+        /// Gets whether this represents a collision volume.
+        /// </summary>
+        /// <returns></returns>
+        bool isCollisionVolume() const { return _isCollisionVolume; }
+
+        /// <summary>
+        /// Gets whether a redo of this joints rotation may be performed.
+        /// </summary>
+        /// <returns></returns>
+        bool canRedoRotation() const { return _undoneRotationIndex > 0; }
 
         /// <summary>
         /// Gets the position the joint was in when the animation was initialized.
@@ -234,20 +256,70 @@ public:
         }
 
         /// <summary>
+        /// Collision Volumes do not 'reset' their position/rotation when the animation stops.
+        /// This requires special treatment to revert changes we've made this animation session.
+        /// </summary>
+        void revertCollisionVolume()
+        {
+            if (!_isCollisionVolume)
+                return;
+
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setRotation(_beginningRotation);
+            joint->setPosition(_beginningPosition);
+            joint->setScale(_beginningScale);
+        }
+
+        
+        LLVector3 getJointScale() { return _targetScale; }
+        void      setJointScale(LLVector3 scale)
+        {
+            _targetScale.set(scale);
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setScale(_targetScale);
+        }
+
+        void revertJointScale()
+        {
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setScale(_beginningScale);
+        }
+
+        void revertJointPosition()
+        {
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setPosition(_beginningPosition);
+        }
+
+        /// <summary>
         /// Gets the pointer to the jointstate for the joint this represents.
         /// </summary>
         LLPointer<LLJointState> getJointState() const { return _jointState; }
 
-        FSJointPose(LLJoint* joint)
+        FSJointPose(LLJoint* joint, bool isCollisionVolume = false)
         {
             _jointState = new LLJointState;
             _jointState->setJoint(joint);
             _jointState->setUsage(POSER_JOINT_STATE);
 
             _jointName = joint->getName();
+            _isCollisionVolume = isCollisionVolume;
 
             _beginningRotation = _targetRotation = joint->getRotation();
             _beginningPosition = _targetPosition = joint->getPosition();
+            _beginningScale = _targetScale = joint->getScale();
         }
     };
 
@@ -340,6 +412,11 @@ private:
     /// The collection of joint poses this motion uses to pose the joints of the character this is animating. 
     /// </summary>
     std::vector<FSJointPose> _jointPoses;
+
+    /// <summary>
+    /// Because changes to scales and collision volumes to not end when the animation stops, we revert them manually.
+    /// </summary>
+    void revertChangesToPositionsScalesAndCollisionVolumes();
 };
 
 #endif // FS_POSINGMOTION_H
