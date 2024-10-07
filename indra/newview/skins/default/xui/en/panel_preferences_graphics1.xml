@@ -1161,7 +1161,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="Texture Rendering"
-         top_pad="10"
+         top_pad="7"
          width="308">
             Texture Rendering:
         </text>
@@ -1180,9 +1180,10 @@ If you do not understand the distinction then leave this control alone."
         <combo_box
          control_name="FSRestrictMaxTexturePixels"
          enabled_control="FSRestrictMaxTextureSize"
-         height="23"
+         height="20"
          layout="topleft"
          left_pad="2"
+         top_delta="-2"
          name="FSRestrictMaxTexturePixels"
          width="100">
           <combo_box.item
@@ -1210,7 +1211,7 @@ If you do not understand the distinction then leave this control alone."
          height="12"
          layout="topleft"
          left_pad="10"
-         top_delta="5"
+         top_delta="2"
          width="150">
             (requires restart)
         </text>
@@ -1219,7 +1220,7 @@ If you do not understand the distinction then leave this control alone."
         <text
          type="string"
          length="1"
-         top_pad="18"
+         top_pad="15"
          follows="top|left"
          height="18"
          width="150"
@@ -1231,11 +1232,11 @@ If you do not understand the distinction then leave this control alone."
         </text>
         <combo_box
          control_name="TextureDiscardLevel"
-         height="23"
+         height="20"
          layout="topleft"
          follows="left|top"
          left_pad="5"
-         top_pad="-23"
+         top_pad="-20"
          name="TextureDetail"
          width="150"
          tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
@@ -1265,7 +1266,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="Alpha Mask Rendering"
-         top_pad="10"
+         top_pad="5"
          width="308">
             Alpha Mask Rendering:
         </text>
@@ -1290,7 +1291,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="Miscellaneous Rendering"
-         top_pad="10"
+         top_pad="7"
          width="308">
             Miscellaneous Rendering:
         </text>
@@ -1449,7 +1450,7 @@ If you do not understand the distinction then leave this control alone."
          min_val="1.0"
          max_val="4.0"
          name="ShadowResolution"
-         top_pad="3"
+         top_pad="1"
          width="408" />
         <slider
          control_name="RenderTerrainScale"
@@ -1466,7 +1467,7 @@ If you do not understand the distinction then leave this control alone."
          min_val="1"
          name="RenderTerrainScale"
          tool_tip="Determines scale of terrain textures - lower is more compressed (requires viewer restart)"
-         top_pad="3"
+         top_pad="1"
          width="405" />
         <!-- Sharpening Settings -->
         <slider
@@ -1483,11 +1484,59 @@ If you do not understand the distinction then leave this control alone."
          max_val="1.0"
          name="RenderSharpness"
          show_text="true"
-         top_pad="3"
+         top_pad="0"
          width="405">
         </slider>
         <!-- End of Sharpening Settings-->
-
+        <!-- Tone Mapping Settings -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="TonemapTypeText"
+         top_pad="8"
+         width="150">
+            Tone Mapper:
+        </text>
+        <combo_box
+         control_name="RenderTonemapType"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-2"
+         name="TonemapType"
+         width="150">
+         <combo_box.item
+          label="Khronos Neutral"
+          name="0"
+          value="0"/>
+         <combo_box.item
+          label="ACES"
+          name="1"
+          value="1"/>
+        </combo_box>
+        <slider
+         control_name="RenderTonemapMix"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         label="Tone Mapping Mix:"
+         tool_tip="Mix between linear and tone mapped colors"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="TonemapMix"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <!-- End of Tone Mapping Settings-->
     </panel>
 
 <!--Depth of Field-->

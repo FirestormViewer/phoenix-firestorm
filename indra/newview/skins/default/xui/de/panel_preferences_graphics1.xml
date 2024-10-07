@@ -222,6 +222,14 @@
 		<slider label="Schattenqualität" tool_tip="Qualität der Schattendarstellung (Standard: 1)" name="ShadowResolution"/>
 		<slider label="Skalierung der Bodentexturen (Erfordert Neustart)" name="RenderTerrainScale" tool_tip="Setzt die Skalierung der Bodentexturen - niedriger bedeutet höhere Kompression"/>
 		<slider label="Schärfung" name="RenderSharpness"/>
+		<text name="TonemapTypeText">
+			Tone Mapper:
+		</text>
+		<combo_box name="TonemapType">
+			<combo_box.item label="Khronos Neutral" name="0"/>
+			<combo_box.item label="ACES" name="1"/>
+		</combo_box>
+		<slider label="Tone Mapping Mix:" tool_tip="Mix zwischen linearen und tone-gemappten Farben" name="TonemapMix"/>
 	</panel>
 	
 	<panel label="Schärfentiefe" name="DOF panel">

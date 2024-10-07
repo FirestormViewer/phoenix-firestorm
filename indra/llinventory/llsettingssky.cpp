@@ -1999,6 +1999,7 @@ F32 LLSettingsSky::getCloudShadow() const
 void LLSettingsSky::setCloudShadow(F32 val)
 {
     mCloudShadow = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2055,6 +2056,7 @@ F32 LLSettingsSky::getMaxY() const
 void LLSettingsSky::setMaxY(F32 val)
 {
     mMaxY = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2066,6 +2068,7 @@ LLQuaternion LLSettingsSky::getMoonRotation() const
 void LLSettingsSky::setMoonRotation(const LLQuaternion &val)
 {
     mMoonRotation = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2077,6 +2080,7 @@ F32 LLSettingsSky::getMoonScale() const
 void LLSettingsSky::setMoonScale(F32 val)
 {
     mMoonScale = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2099,6 +2103,7 @@ F32 LLSettingsSky::getMoonBrightness() const
 void LLSettingsSky::setMoonBrightness(F32 brightness_factor)
 {
     mMoonBrightness = brightness_factor;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2135,6 +2140,7 @@ LLColor3 LLSettingsSky::getSunlightColorClamped() const
 void LLSettingsSky::setSunlightColor(const LLColor3 &val)
 {
     mSunlightColor = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2146,6 +2152,7 @@ LLQuaternion LLSettingsSky::getSunRotation() const
 void LLSettingsSky::setSunRotation(const LLQuaternion &val)
 {
     mSunRotation = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
@@ -2157,6 +2164,7 @@ F32 LLSettingsSky::getSunScale() const
 void LLSettingsSky::setSunScale(F32 val)
 {
     mSunScale = val;
+    setDirtyFlag(true);
     setLLSDDirty();
 }
 
