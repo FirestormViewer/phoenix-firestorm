@@ -98,7 +98,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-artifact-${{ matrix.file }}
-          path: to_sign/          
+          path: to_sign/${{ matrix.file }}          
 
       - name: sign the file
         uses: signpath/github-action-submit-signing-request@v1

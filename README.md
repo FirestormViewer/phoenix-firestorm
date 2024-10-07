@@ -1,8 +1,10 @@
-![Firestorm Viewer Logo](doc/ayanestorm_256.png)
+<img align="left" width="100" height="100" src="doc/ayanestorm_256.png" alt="Logo of AyaneStorm viewer"/>
 
-# AyaneStorm - A viewer for photographers
+**[Firestorm](https://www.firestormviewer.org) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.**
 
-## Features (so far)
+# AyaneStorm - A fork of Firestorm for photographers
+
+## Features (so far ; some features might get merged in official Firestorm)
 - Added poser from BlackDragon
 - Added experimental mouse look head scaling
 - Added camera roll/tilt buttons from Blackdragon (+ key bindings)
@@ -99,11 +101,6 @@ There is absolutely no instructions anywhere for building SecondLife / Firestorm
     ```
 - Just reconfigure with --kdu and recompile.
 
-
-# Forked from Firestorm
-
-**[Firestorm](https://www.firestormviewer.org/) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.** This repository contains the official source code for the Firestorm viewer.
-
 ## Open Source
 
 Firestorm is a third party viewer derived from the official [Second Life](https://github.com/secondlife/viewer) client. The client codebase has been open source since 2007 and is available under the LGPL license.
@@ -114,7 +111,7 @@ Pre-built versions of the viewer releases for Windows, Mac and Linux can be down
 
 ## Build Instructions
 
-Build instructions for each operating system can be found using the links below and in the official [wiki](https://wiki.firestormviewer.org/).
+Build instructions for each operating system can be found using the links below and in the official [wiki](https://wiki.firestormviewer.org).
 
 - [Windows](doc/building_windows.md)
 - [Mac](doc/building_macos.md)
