@@ -88,7 +88,7 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
 {
     mImage = raw_image;
 
-    LLImageDataLock lock(mImage);
+    LLImageDataSharedLock lock(mImage); // <FS:Beq> FIRE-34564 Bugsplat SHARED vs EXCLUSIVE lock conflict
 
     //std::cout << "Filter : size = " << mFilterData.size() << std::endl;
     for (S32 i = 0; i < mFilterData.size(); ++i)
