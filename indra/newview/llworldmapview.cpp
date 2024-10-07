@@ -121,6 +121,7 @@ std::map<std::string,std::string> LLWorldMapView::sStringsMap;
 // Fetch and draw info thresholds
 const F32 DRAW_TEXT_THRESHOLD = 96.f;       // Don't draw text under that resolution value (res = width region in meters)
 const S32 DRAW_SIMINFO_THRESHOLD = 3;       // Max level for which we load or display sim level information (level in LLWorldMipmap sense)
+const S32 DRAW_PEOPLEINFO_THRESHOLD = 5;    // Max level for which we load or display people information (level in LLWorldMipmap sense)
 const S32 DRAW_LANDFORSALE_THRESHOLD = 2;   // Max level for which we load or display land for sale picture data (level in LLWorldMipmap sense)
 
 // When on, draw an outline for each mipmap tile gotten from S3
@@ -694,7 +695,7 @@ void LLWorldMapView::draw()
 
     // Draw icons for the avatars in each region.
     // Drawn this after the current agent avatar so one can see nearby people
-    if (mapShowPeople && (level <= DRAW_SIMINFO_THRESHOLD))
+    if (mapShowPeople && (level <= DRAW_PEOPLEINFO_THRESHOLD))
     {
         drawAgents();
     }
