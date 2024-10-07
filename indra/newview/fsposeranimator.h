@@ -264,6 +264,27 @@ public:
     void undoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style);
 
     /// <summary>
+    /// Undoes the last applied position to the supplied PoserJoint.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint with the position to undo.</param>
+    void undoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style);
+
+    /// <summary>
+    /// Resets the position of the supplied PoserJoint.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint with the position to reset.</param>
+    void resetJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style);
+
+    /// <summary>
+    /// Resets the scale of the supplied joint to initial values.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint with the scale to reset.</param>
+    void resetJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style);
+
+    /// <summary>
     /// Determines if a redo action is currently permitted for the supplied joint.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>

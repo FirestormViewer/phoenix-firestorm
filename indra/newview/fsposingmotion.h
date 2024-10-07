@@ -273,7 +273,7 @@ public:
             joint->setScale(_beginningScale);
         }
 
-        LLVector3 getJointScale() { return _targetScale; }
+        LLVector3 getJointScale() const { return _targetScale; }
         void      setJointScale(LLVector3 scale)
         {
             _targetScale.set(scale);
@@ -293,6 +293,7 @@ public:
             if (!joint)
                 return;
 
+            _targetScale = _beginningScale;
             joint->setScale(_beginningScale);
         }
 

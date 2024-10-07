@@ -126,6 +126,90 @@ void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joi
     oppositeJointPose->undoLastRotationSet();
 }
 
+void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    if (posingMotion->isStopped())
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return;
+
+    jointPose->undoLastPositionSet();
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->undoLastPositionSet();
+}
+
+void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    if (posingMotion->isStopped())
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return;
+
+    jointPose->setTargetPosition(jointPose->getBeginningPosition());
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->setTargetPosition(oppositeJointPose->getBeginningPosition());
+}
+
+void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    if (posingMotion->isStopped())
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return;
+
+    jointPose->revertJointScale();
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->revertJointScale();
+}
+
 bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, FSPoserJoint joint)
 {
     if (!isAvatarSafeToUse(avatar))

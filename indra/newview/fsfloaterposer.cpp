@@ -129,6 +129,9 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.Advanced.PositionSet", boost::bind(&FSFloaterPoser::onAdvancedPositionSet, this));
     mCommitCallbackRegistrar.add("Poser.Advanced.RotationSet", boost::bind(&FSFloaterPoser::onAdvancedRotationSet, this));
     mCommitCallbackRegistrar.add("Poser.Advanced.ScaleSet", boost::bind(&FSFloaterPoser::onAdvancedScaleSet, this));
+    mCommitCallbackRegistrar.add("Poser.UndoLastPosition", boost::bind(&FSFloaterPoser::onUndoLastPosition, this));
+    mCommitCallbackRegistrar.add("Poser.ResetPosition", boost::bind(&FSFloaterPoser::onResetPosition, this));
+    mCommitCallbackRegistrar.add("Poser.ResetScale", boost::bind(&FSFloaterPoser::onResetScale, this));
 
     mCommitCallbackRegistrar.add("Poser.Save", boost::bind(&FSFloaterPoser::onClickPoseSave, this));
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
@@ -991,6 +994,78 @@ void FSFloaterPoser::onUndoLastRotation()
     refreshTrackpadCursor();
 }
 
+void FSFloaterPoser::onUndoLastPosition()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.undoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
+    }
+
+    refreshAdvancedPositionSliders();
+}
+
+void FSFloaterPoser::onResetPosition()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.resetJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
+    }
+
+    refreshAdvancedPositionSliders();
+}
+
+void FSFloaterPoser::onResetScale()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.resetJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
+    }
+
+    refreshAdvancedScaleSliders();
+}
+
 void FSFloaterPoser::onRedoLastRotation()
 {
     LLVOAvatar* avatar = getUiSelectedAvatar();
@@ -1284,6 +1359,7 @@ void FSFloaterPoser::onAvatarPositionSet()
     F32 posZ = (F32) zposSlider->getValue().asReal();
 
     setSelectedJointsPosition(posX, posY, posZ);
+    refreshAdvancedPositionSliders();
 }
 
 void FSFloaterPoser::onLimbTrackballChanged()
@@ -1599,7 +1675,7 @@ LLVector3 FSFloaterPoser::getPositionOfFirstSelectedJoint()
     if (!_poserAnimator.isPosingAvatar(avatar))
         return position;
 
-    position = _poserAnimator.getJointPosition(avatar, *selectedJoints.front());  // TODO: inject translations like rotation does?
+    position = _poserAnimator.getJointPosition(avatar, *selectedJoints.front());
     return position;
 }
 
@@ -1617,7 +1693,7 @@ LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint()
     if (!_poserAnimator.isPosingAvatar(avatar))
         return scale;
 
-    scale = _poserAnimator.getJointScale(avatar, *selectedJoints.front());  // TODO: inject translations like rotation does?
+    scale = _poserAnimator.getJointScale(avatar, *selectedJoints.front());
     return scale;
 }
 

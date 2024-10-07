@@ -1111,14 +1111,14 @@ width="565">
         <layout_panel
 		follows="top|left|right"
 		layout="topleft"
-		height="75"
+		height="97"
 		visible="true"
 		auto_resize="false"
 		name="advanced_controls_layout"
 		width="607">
             <panel
                 follows="top|left|right"
-                height="75"
+                height="97"
                 left="0"
                 layout="all"
 				enabled="false"
@@ -1130,7 +1130,7 @@ width="565">
                 <tab_container
 				follows="all"
 				halign="center"
-				height="75"
+				height="97"
 				layout="topleft"
 				name="modifier_tabs"
 				enabled="true"
@@ -1142,7 +1142,7 @@ width="565">
                     <panel
 					follows="all"
 					background_visible="false"
-					height="75"
+					height="97"
 					layout="topleft"
 					left="0"
 					title="Body Part Position"
@@ -1209,11 +1209,43 @@ width="565">
                             function="Poser.Advanced.PositionSet"
                             parameter="2"/>
                         </slider>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Undo Position Change"
+						image_overlay="Script_Undo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_position_change"
+						tool_tip="Undo the last position change"
+						width="150"
+						top_pad="2"
+						left_delta="0">
+							<button.commit_callback
+							function="Poser.UndoLastPosition"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Reset Position"
+						image_overlay="Inv_TrashOpen"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_position_change"
+						tool_tip="Reset position back to original"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.ResetPosition"/>
+						</button>
                     </panel>
                     <panel
 					follows="all"
 					background_visible="false"
-					height="75"
+					height="97"
 					layout="topleft"
 					left="0"
 					title="Body Part Scale"
@@ -1280,6 +1312,22 @@ width="565">
                             function="Poser.Advanced.ScaleSet"
                             parameter="2"/>
                         </slider>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Reset Scale Change"
+						image_overlay="Inv_TrashOpen"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="reset_scale_change"
+						tool_tip="Reset the scale of the selected body part(s) to normal"
+						width="150"
+						top_pad="2"
+						left_delta="0">
+							<button.commit_callback
+							function="Poser.ResetScale"/>
+						</button>
                     </panel>
                 </tab_container>
             </panel>
