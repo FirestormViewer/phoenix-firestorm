@@ -56,6 +56,8 @@
 					</panel>
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>
+						<button name="roll_left" tool_tip="Kamera nach links rollen" />
+						<button name="roll_right" tool_tip="Kamera nach rechts rollen" />
 						<slider_bar name="zoom_slider" tool_tip="Hierdurch wird die Kamera hinein- und herausbewegt. HINWEIS: Es handelt sich hierbei nicht um einen Zoom wie im echten Leben, diese Einstellung hat keinen Effekt auf das Sichtfeld der Kamera. Für echtes Zoomen muss der Regler „Sichtwinkel“ verwendet werden!"/>
 						<joystick_track name="cam_track_stick" tool_tip="Kamera nach oben, unten, links und rechts bewegen"/>
 					</panel>

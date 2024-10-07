@@ -181,6 +181,42 @@ Function dirPre
 
 FunctionEnd    
 
+; Add the AVX2 check functions
+Function CheckCPUFlagsAVX2
+    Push $1
+    System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
+    IntCmp $1 1 OK_AVX2
+    ; AVX2 not supported
+    MessageBox MB_OK $(MissingAVX2)
+    Quit
+
+  OK_AVX2:
+    Pop $1
+    Return
+FunctionEnd
+
+Function CheckCPUFlagsAVX2_Prompt
+    Push $1
+    System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
+    IntCmp $1 1 OK_AVX2 Not_AVX2
+
+  OK_AVX2:
+    MessageBox MB_YESNO $(AVX2Available) IDYES DownloadAVX2 IDNO ContinueInstall
+    DownloadAVX2:
+      ExecShell open 'https://www.firestormviewer.org/early-access-beta-downloads/'
+      Quit
+    ContinueInstall:
+      Goto End
+
+  Not_AVX2:
+    ; CPU does not support AVX2, continue installation
+    Goto End
+
+  End:
+    Pop $1
+    Return
+FunctionEnd
+
 # <FS:Ansariel> Optional start menu entry
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Post-directory page callback
@@ -224,6 +260,12 @@ ${If} $0 != ""
 ${EndIf}
 
 Call CheckCPUFlags							# Make sure we have SSE2 support
+${If} ${ISAVX2} == 1
+  Call CheckCPUFlagsAVX2
+${Else}
+  Call CheckCPUFlagsAVX2_Prompt
+${EndIf}
+
 Call CheckWindowsVersion					# Don't install On unsupported systems
     Push $0
     ${GetParameters} $COMMANDLINE			# Get our command line

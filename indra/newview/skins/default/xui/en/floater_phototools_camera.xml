@@ -238,6 +238,36 @@
 						 tool_tip="Orbit camera around focus"
 						 top="5"
 						 width="100"/>
+					<!-- <FS:Beq> FIRE-34509 Add Camera roll -->
+						<button
+						follows="bottom|left"
+						width="12"
+						height="12"
+						image_selected="VirtualTrackball_Rotate_Left_Active"
+						image_unselected="VirtualTrackball_Rotate_Left"
+						layout="topleft"
+						top_delta="85"
+						left_delta="5"
+						name="roll_left"
+						tool_tip="Roll camera Left">
+						<commit_callback function="Camera.roll_left" />
+						<mouse_held_callback function="Camera.roll_left" />
+					</button>
+					<button
+						follows="bottom|right"
+						width="12"
+						height="12"
+						image_selected="VirtualTrackball_Rotate_Right_Active"
+						image_unselected="VirtualTrackball_Rotate_Right"
+						layout="topleft"
+						top_delta="0"
+						left_delta="78"
+						name="roll_right"
+						tool_tip="Roll camera Right">
+						<commit_callback function="Camera.roll_right" />
+						<mouse_held_callback function="Camera.roll_right" />
+					</button>
+					<!-- </FS:Beq> -->						 
 						<button
 						 follows="top|left"
 						 height="18"
