@@ -57,6 +57,8 @@ LangString CheckAdministratorUnInstMB ${LANG_GERMAN} 'Sie besitzen ungenügende 
 
 ; checkcpuflags
 LangString MissingSSE2 ${LANG_GERMAN} "Dieser PC besitzt möglicherweise keinen Prozessor mit SSE2-Unterstützung, die für die Ausführung von Firestorm ${VERSION_LONG} benötigt wird. Trotzdem installieren?"
+LangString MissingAVX2 ${LANG_GERMAN} "Ihre CPU unterstützt keine AVX2-Anweisungen. Bitte laden Sie die Version für ältere CPUs von https://www.firestormviewer.org/early-access-beta-downloads-legacy-cpus/ herunter."
+LangString AVX2Available ${LANG_GERMAN} "Ihre CPU unterstützt AVX2-Anweisungen. Sie können die für AVX2 optimierte Version für eine bessere Leistung unter https://www.firestormviewer.org/early-access-beta-downloads/ herunterladen. Möchten Sie sie jetzt herunterladen?"
 
 ; closesecondlife function (install)
 LangString CloseSecondLifeInstDP ${LANG_GERMAN} "Warten auf die Beendigung von Firestorm ..."

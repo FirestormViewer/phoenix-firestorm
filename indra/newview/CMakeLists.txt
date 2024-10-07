@@ -2252,6 +2252,7 @@ if (WINDOWS)
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
+        "--avx2=${USE_AVX2_OPTIMIZATION}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=$<CONFIG>
         "--channel=${VIEWER_CHANNEL}"
@@ -2315,6 +2316,7 @@ if (WINDOWS)
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
               "--tracy=${USE_TRACY}"
+              "--avx2=${USE_AVX2_OPTIMIZATION}"
               --build=${CMAKE_CURRENT_BINARY_DIR}
               --buildtype=$<CONFIG>
               "--channel=${VIEWER_CHANNEL}"
@@ -2500,6 +2502,7 @@ if (LINUX)
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
+        "--avx2=${USE_AVX2_OPTIMIZATION}"        
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2527,6 +2530,7 @@ if (LINUX)
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
+      "--avx2=${USE_AVX2_OPTIMIZATION}"      
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       "--channel=${VIEWER_CHANNEL}"
@@ -2622,6 +2626,7 @@ if (DARWIN)
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
+      "--avx2=${USE_AVX2_OPTIMIZATION}"      
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=$<CONFIG>
       --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
@@ -2659,6 +2664,7 @@ if (DARWIN)
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
           "--tracy=${USE_TRACY}"
+          "--avx2=${USE_AVX2_OPTIMIZATION}"          
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}
           "--channel=${VIEWER_CHANNEL}"
