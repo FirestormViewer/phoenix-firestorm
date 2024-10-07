@@ -219,11 +219,11 @@ LLVersionInfo::FSViewerMaturity LLVersionInfo::getFSViewerMaturity() const
 
     std::string channel = getChannel();
 
-    static const boost::regex is_manual_channel("\\bManualx64\\b");
-    static const boost::regex is_beta_channel("\\bBetax64\\b");
-    static const boost::regex is_alpha_channel("\\bAlphax64\\b");
-    static const boost::regex is_release_channel("\\bReleasex64\\b");
-    static const boost::regex is_nightly_channel("\\bNightlyx64\\b");
+    static const boost::regex is_manual_channel("\\bManual(x64)?\\b");
+    static const boost::regex is_beta_channel("\\bBeta(x64)?\\b");
+    static const boost::regex is_alpha_channel("\\bAlpha(x64)?\\b");
+    static const boost::regex is_release_channel("\\bRelease(x64)?\\b");
+    static const boost::regex is_nightly_channel("\\bNightly(x64)?\\b");
 
     if (ll_regex_search(channel, is_release_channel))
     {

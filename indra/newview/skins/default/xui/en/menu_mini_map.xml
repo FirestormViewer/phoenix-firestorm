@@ -385,27 +385,6 @@
       <menu_item_check.on_enable
        control="MiniMapShowPropertyLines" />
     </menu_item_check>
-    <menu_item_separator />
-    <menu_item_check
-     label="Terrain Textures"
-     name="Terrain Textures">
-      <menu_item_check.on_click
-       function="Minimap.TextureType"
-       parameter="terrain" />
-      <menu_item_check.on_check
-       function="Minimap.CheckTextureType"
-       parameter="terrain" />
-    </menu_item_check>
-    <menu_item_check
-     label="World Map Textures"
-     name="World Map Textures">
-      <menu_item_check.on_click
-       function="Minimap.TextureType"
-       parameter="maptile" />
-      <menu_item_check.on_check
-       function="Minimap.CheckTextureType"
-       parameter="maptile" />
-    </menu_item_check>
   </menu>
     <menu_item_check
        label="North at top"

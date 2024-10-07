@@ -717,7 +717,7 @@ void LLVOVolume::onDrawableUpdateFromServer()
 
 void LLVOVolume::animateTextures()
 {
-    if (!mDead)
+    if (!mDead && mDrawable) // <FS:Beq/> FIRE-34601 - bugsplat accessing null drawable.
     {
         shrinkWrap();
         F32 off_s = 0.f, off_t = 0.f, scale_s = 1.f, scale_t = 1.f, rot = 0.f;
