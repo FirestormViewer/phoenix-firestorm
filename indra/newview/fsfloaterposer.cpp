@@ -130,8 +130,11 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.Advanced.RotationSet", boost::bind(&FSFloaterPoser::onAdvancedRotationSet, this));
     mCommitCallbackRegistrar.add("Poser.Advanced.ScaleSet", boost::bind(&FSFloaterPoser::onAdvancedScaleSet, this));
     mCommitCallbackRegistrar.add("Poser.UndoLastPosition", boost::bind(&FSFloaterPoser::onUndoLastPosition, this));
+    mCommitCallbackRegistrar.add("Poser.RedoLastPosition", boost::bind(&FSFloaterPoser::onRedoLastPosition, this));
     mCommitCallbackRegistrar.add("Poser.ResetPosition", boost::bind(&FSFloaterPoser::onResetPosition, this));
     mCommitCallbackRegistrar.add("Poser.ResetScale", boost::bind(&FSFloaterPoser::onResetScale, this));
+    mCommitCallbackRegistrar.add("Poser.UndoLastScale", boost::bind(&FSFloaterPoser::onUndoLastScale, this));
+    mCommitCallbackRegistrar.add("Poser.RedoLastScale", boost::bind(&FSFloaterPoser::onRedoLastScale, this));
 
     mCommitCallbackRegistrar.add("Poser.Save", boost::bind(&FSFloaterPoser::onClickPoseSave, this));
     mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
@@ -979,14 +982,11 @@ void FSFloaterPoser::onUndoLastRotation()
     if (selectedJoints.size() < 1)
         return;
 
-    bool shouldEnableRedoButton = false;
     for (auto item : selectedJoints)
     {
         bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
             _poserAnimator.undoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
-
-        shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
     }
 
     enableOrDisableRedoButton();
@@ -1007,7 +1007,6 @@ void FSFloaterPoser::onUndoLastPosition()
     if (selectedJoints.size() < 1)
         return;
 
-    bool shouldEnableRedoButton = false;
     for (auto item : selectedJoints)
     {
         bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
@@ -1016,9 +1015,10 @@ void FSFloaterPoser::onUndoLastPosition()
     }
 
     refreshAdvancedPositionSliders();
+    refreshAvatarPositionSliders();
 }
 
-void FSFloaterPoser::onResetPosition()
+void FSFloaterPoser::onUndoLastScale()
 {
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
@@ -1031,7 +1031,35 @@ void FSFloaterPoser::onResetPosition()
     if (selectedJoints.size() < 1)
         return;
 
-    bool shouldEnableRedoButton = false;
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.undoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
+    }
+
+    refreshAdvancedScaleSliders();
+}
+
+void FSFloaterPoser::onResetPosition()
+{
+    // This is a double-click function: it needs to run twice within some amount of time to complete.
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
+    _timeLastClickedJointReset      = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > _doubleClickInterval)
+        return;
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
     for (auto item : selectedJoints)
     {
         bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
@@ -1040,10 +1068,17 @@ void FSFloaterPoser::onResetPosition()
     }
 
     refreshAdvancedPositionSliders();
+    refreshAvatarPositionSliders();
 }
 
 void FSFloaterPoser::onResetScale()
 {
+    // This is a double-click function: it needs to run twice within some amount of time to complete.
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
+    _timeLastClickedJointReset      = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > _doubleClickInterval)
+        return;
+
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
@@ -1055,7 +1090,6 @@ void FSFloaterPoser::onResetScale()
     if (selectedJoints.size() < 1)
         return;
 
-    bool shouldEnableRedoButton = false;
     for (auto item : selectedJoints)
     {
         bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
@@ -1079,19 +1113,63 @@ void FSFloaterPoser::onRedoLastRotation()
     if (selectedJoints.size() < 1)
         return;
 
-    bool shouldEnableRedoButton = false;
     for (auto item : selectedJoints)
     {
         bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
             _poserAnimator.redoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
-
-        shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
     }
 
     enableOrDisableRedoButton();
     refreshRotationSliders();
     refreshTrackpadCursor();
+}
+
+void FSFloaterPoser::onRedoLastPosition()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.redoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
+    }
+
+    refreshAdvancedPositionSliders();
+    refreshAvatarPositionSliders();
+}
+
+void FSFloaterPoser::onRedoLastScale()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (currentlyPosing)
+            _poserAnimator.redoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
+    }
+
+    refreshAdvancedScaleSliders();
 }
 
 void FSFloaterPoser::enableOrDisableRedoButton()

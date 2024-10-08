@@ -85,6 +85,8 @@ public:
         LLVector3             _targetScale;
         LLVector3             _beginningScale;
         std::deque<LLVector3> _lastSetScales;
+        size_t                _undoneScaleIndex = 0;
+        std::chrono::system_clock::time_point _timeLastUpdatedScale = std::chrono::system_clock::now();
 
         /// <summary>
         /// Adds a last position to the deque.
@@ -122,6 +124,34 @@ public:
 
             while (_lastSetRotations.size() > MaximumUndoQueueLength)
                 _lastSetRotations.pop_back();
+        }
+
+        /// <summary>
+        /// Adds a last rotation to the deque.
+        /// </summary>
+        void addLastScaleToUndo()
+        {
+            if (_undoneScaleIndex > 0)
+            {
+                for (int i = 0; i < _undoneScaleIndex; i++)
+                    _lastSetScales.pop_front();
+
+                _undoneScaleIndex = 0;
+            }
+
+            _lastSetScales.push_front(_targetScale);
+
+            while (_lastSetScales.size() > MaximumUndoQueueLength)
+                _lastSetScales.pop_back();
+        }
+
+        void setScale(LLVector3 scale)
+        {
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setScale(scale);
         }
 
       public:
@@ -217,7 +247,7 @@ public:
 
             _targetPosition.set(_lastSetPositions[_undonePositionIndex]);
             if (_undonePositionIndex == 0)
-                _lastSetRotations.pop_front();
+                _lastSetPositions.pop_front();
         }
 
         /// <summary>
@@ -276,12 +306,44 @@ public:
         LLVector3 getJointScale() const { return _targetScale; }
         void      setJointScale(LLVector3 scale)
         {
+            auto timeIntervalSinceLastScaleChange = std::chrono::system_clock::now() - _timeLastUpdatedScale;
+            if (timeIntervalSinceLastScaleChange > _undoUpdateInterval)
+                addLastScaleToUndo();
+
+            _timeLastUpdatedScale = std::chrono::system_clock::now();
+
             _targetScale.set(scale);
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
+            setScale(_targetScale);
+        }
+
+        void undoLastScaleSet()
+        {
+            if (_lastSetScales.empty())
                 return;
 
-            joint->setScale(_targetScale);
+            if (_undoneScaleIndex == 0)  // at the top of the queue add the current
+                addLastScaleToUndo();
+
+            _undoneScaleIndex++;
+            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
+            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
+
+            setScale(_targetScale);
+        }
+
+        void redoLastScaleSet()
+        {
+            if (_lastSetScales.empty())
+                return;
+
+            _undoneScaleIndex--;
+            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
+
+            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
+            if (_undoneScaleIndex == 0)
+                _lastSetScales.pop_front();
+
+            setScale(_targetScale);
         }
 
         /// <summary>
@@ -289,12 +351,8 @@ public:
         /// </summary>
         void revertJointScale()
         {
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return;
-
-            _targetScale = _beginningScale;
-            joint->setScale(_beginningScale);
+            _targetScale.set(_beginningScale);
+            setScale(_beginningScale);
         }
 
         /// <summary>

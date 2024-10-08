@@ -1229,12 +1229,28 @@ width="565">
 						height="21"
 						follows="left|top"
 						layout="topleft"
+						label="Redo Position"
+						image_overlay="Script_Redo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="redo_position_change"
+						tool_tip="Redo the last position change"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.RedoLastPosition"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
 						label="Reset Position"
 						image_overlay="Inv_TrashOpen"
 						image_overlay_alignment="left"
 						image_unselected="Toolbar_Middle_Off"
 						name="undo_position_change"
-						tool_tip="Reset position back to original"
+						tool_tip="Double click to reset position back to original"
 						width="110"
 						top_delta="0"
 						left_pad="4">
@@ -1316,15 +1332,47 @@ width="565">
 						height="21"
 						follows="left|top"
 						layout="topleft"
-						label="Reset Scale Change"
-						image_overlay="Inv_TrashOpen"
+						label="Undo Scale Change"
+						image_overlay="Script_Undo"
 						image_overlay_alignment="left"
 						image_unselected="Toolbar_Middle_Off"
-						name="reset_scale_change"
-						tool_tip="Reset the scale of the selected body part(s) to normal"
+						name="undo_position_change"
+						tool_tip="Undo the last scale change"
 						width="150"
 						top_pad="2"
 						left_delta="0">
+							<button.commit_callback
+							function="Poser.UndoLastScale"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Redo Scale"
+						image_overlay="Script_Redo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="redo_scale_change"
+						tool_tip="Redo the last scale change"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.RedoLastScale"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Reset Scale"
+						image_overlay="Inv_TrashOpen"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_scale_change"
+						tool_tip="Double click to reset scale back to original"
+						width="110"
+						top_delta="0"
+						left_pad="4">
 							<button.commit_callback
 							function="Poser.ResetScale"/>
 						</button>

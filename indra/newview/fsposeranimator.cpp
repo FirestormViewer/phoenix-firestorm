@@ -154,6 +154,34 @@ void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joi
     oppositeJointPose->undoLastPositionSet();
 }
 
+void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    if (posingMotion->isStopped())
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return;
+
+    jointPose->undoLastScaleSet();
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->undoLastScaleSet();
+}
+
 void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
@@ -255,6 +283,62 @@ void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joi
         return;
 
     oppositeJointPose->redoLastRotationSet();
+}
+
+void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    if (posingMotion->isStopped())
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return;
+
+    jointPose->redoLastPositionSet();
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->redoLastPositionSet();
+}
+
+void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    if (posingMotion->isStopped())
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return;
+
+    jointPose->redoLastScaleSet();
+
+    if (style == NONE)
+        return;
+
+    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    oppositeJointPose->redoLastScaleSet();
 }
 
 LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint)

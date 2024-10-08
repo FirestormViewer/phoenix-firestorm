@@ -215,6 +215,9 @@ class FSFloaterPoser : public LLFloater
     void onUndoLastRotation();
     void onRedoLastRotation();
     void onUndoLastPosition();
+    void onRedoLastPosition();
+    void onUndoLastScale();
+    void onRedoLastScale();
     void onResetPosition();
     void onResetScale();
     void enableOrDisableRedoButton();
