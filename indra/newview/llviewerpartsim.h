@@ -188,29 +188,15 @@ public:
 
     friend class LLViewerPartGroup;
 
-    // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-    // bool aboveParticleLimit() const { return sParticleCount > sMaxParticleCount; }
-    bool aboveParticleLimit() const { return getParticleCount() > sMaxParticleCount; }
-    // </FS:Beq>
+    bool aboveParticleLimit() const { return sParticleCount > sMaxParticleCount; }
     static void setMaxPartCount(const S32 max_parts)    { sMaxParticleCount = max_parts; }
     static S32  getMaxPartCount()                       { return sMaxParticleCount; }
 
     // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    // Deprecate these and use native operators for consistency
     // static void incPartCount(const S32 count)           { sParticleCount += count; }
     // static void decPartCount(const S32 count)           { sParticleCount -= count; }
-    static void incParticleCount(const S32 count, std::memory_order order = std::memory_order_seq_cst ) 
-                                                        { sParticleCount.fetch_add( count , std::memory_order_seq_cst ); }
-    static void decParticleCount(const S32 count, std::memory_order order = std::memory_order_seq_cst )          
-                                                        { sParticleCount.fetch_sub( count , std::memory_order_seq_cst ); }
-    static void incParticleCount2(const S32 count, std::memory_order order = std::memory_order_seq_cst ) 
-                                                        { sParticleCount2.fetch_add( count , std::memory_order_seq_cst ); }
-    static void decParticleCount2(const S32 count, std::memory_order order = std::memory_order_seq_cst )          
-                                                        { sParticleCount2.fetch_sub( count , std::memory_order_seq_cst ); }
-    static inline S32 getParticleCount(std::memory_order order = std::memory_order_seq_cst) { return sParticleCount.load(order); }
-
-    static inline S32 getParticleCount2(std::memory_order order = std::memory_order_seq_cst) { return sParticleCount2.load(order); }
     // </FS:Beq>
-
     U32 mID;
 
 protected:

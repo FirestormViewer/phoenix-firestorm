@@ -205,7 +205,7 @@ LLViewerPartGroup::~LLViewerPartGroup()
     }
     mParticles.clear();
 
-    LLViewerPartSim::decParticleCount(count); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    LLViewerPartSim::sParticleCount -= count; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
 }
 
 void LLViewerPartGroup::cleanup()
@@ -268,7 +268,7 @@ bool LLViewerPartGroup::addPart(LLViewerPart* part, F32 desired_size)
 
     mParticles.push_back(part);
     part->mSkipOffset=mSkippedTime;
-    LLViewerPartSim::incParticleCount(1); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    ++LLViewerPartSim::sParticleCount; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
     return true;
 }
 
@@ -279,15 +279,11 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
 
     LLVector3 gravity(0.f, 0.f, GRAVITY);
 
-    // <FS:Beq> FIRE-34600 off by one particle count triggering bugsplat (LL_ERR)
-    S32 end = (S32) mParticles.size();
     LLViewerPartSim::checkParticleCount(static_cast<U32>(mParticles.size()));
-    std::atomic_signal_fence(std::memory_order_seq_cst);
-    // </FS:Beq>
 
     LLViewerCamera* camera = LLViewerCamera::getInstance();
     LLViewerRegion *regionp = getRegion();
-    //S32 end = (S32) mParticles.size();// <FS:Beq> FIRE-34600 off by one particle count triggering bugsplat (LL_ERR)
+    S32 end = (S32) mParticles.size();
     for (S32 i = 0 ; i < (S32)mParticles.size();)
     {
         LLVector3 a(0.f, 0.f, 0.f);
@@ -432,7 +428,7 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
         {
             gPipeline.markRebuild(mVOPartGroupp->mDrawable, LLDrawable::REBUILD_ALL);
         }
-        LLViewerPartSim::decParticleCount(removed); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+        LLViewerPartSim::sParticleCount -= removed; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
     }
 
     // Kill the viewer object if this particle group is empty
@@ -493,7 +489,7 @@ void LLViewerPartSim::checkParticleCount(U32 size)
     if( size > static_cast<U32>(count2) )
     // <FS:Beq/>
     {
-        LL_ERRS() << "current particle size: " << count2 << " array size: " << size << LL_ENDL ; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+        LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
     }
 }
 
@@ -539,16 +535,12 @@ void LLViewerPartSim::destroyClass()
 //static
 bool LLViewerPartSim::shouldAddPart()
 {
-    // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-    // if (sParticleCount < MAX_PART_COUNT)
-    auto count = LLViewerPartSim::getParticleCount();
-    if ( count >= MAX_PART_COUNT)
-    // <FS:Beq/>
+    if (sParticleCount < MAX_PART_COUNT)
     {
         return false;
     }
 
-    if ( count > PART_THROTTLE_THRESHOLD*sMaxParticleCount) // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    if ( sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
     {
         F32 frac = (F32)count/(F32)sMaxParticleCount; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
         frac -= PART_THROTTLE_THRESHOLD;
@@ -572,7 +564,7 @@ bool LLViewerPartSim::shouldAddPart()
 
 void LLViewerPartSim::addPart(LLViewerPart* part)
 {
-    if (LLViewerPartSim::getParticleCount() < MAX_PART_COUNT)
+    if (LLViewerPartSim::sParticleCount < MAX_PART_COUNT)
     {
         put(part);
     }
@@ -806,19 +798,14 @@ void LLViewerPartSim::updateSimulation()
     }
     if (LLDrawable::getCurrentFrame()%16==0)
     {
-        // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-        // if (sParticleCount > sMaxParticleCount * 0.875f
-        //      && sParticleAdaptiveRate < 2.0f)
-        auto count = LLViewerPartSim::getParticleCount();
-        if ( count > sMaxParticleCount * 0.875f
-            && sParticleAdaptiveRate < 2.0f)
-        // <FS:Beq/>
+        if (sParticleCount > sMaxParticleCount * 0.875f
+             && sParticleAdaptiveRate < 2.0f)
         {
             sParticleAdaptiveRate *= PART_ADAPT_RATE_MULT;
         }
         else
         {
-            if ( count < sMaxParticleCount * 0.5f // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+            if ( sParticleCount < sMaxParticleCount * 0.5f
                 && sParticleAdaptiveRate > 0.03125f)
             {
                 sParticleAdaptiveRate *= PART_ADAPT_RATE_MULT_RECIP;
