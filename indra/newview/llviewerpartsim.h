@@ -155,25 +155,14 @@ public:
     static bool shouldAddPart(); // Just decides whether this particle should be added or not (for particle count capping)
     F32 maxRate() // Return maximum particle generation rate
     {
-        // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-        // if (sParticleCount >= MAX_PART_COUNT)
-        // {
-        //     return 1.f;
-        // }
-        // if (sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
-        // {
-        //     return (((F32)sParticleCount/(F32)sMaxParticleCount)-PART_THROTTLE_THRESHOLD)*PART_THROTTLE_RESCALE;
-        // }
-        const auto count = getParticleCount(); 
-        if ( count >= MAX_PART_COUNT)
+        if (sParticleCount >= MAX_PART_COUNT)
         {
             return 1.f;
         }
-        if ( count > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
+        if (sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
         {
-            return (((F32)count/(F32)sMaxParticleCount)-PART_THROTTLE_THRESHOLD)*PART_THROTTLE_RESCALE;
+            return (((F32)sParticleCount/(F32)sMaxParticleCount)-PART_THROTTLE_THRESHOLD)*PART_THROTTLE_RESCALE;
         }
-        // </FS:Beq>
         return 0.f;
     }
     F32 getRefRate() { return sParticleAdaptiveRate; }
