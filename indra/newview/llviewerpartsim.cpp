@@ -82,7 +82,7 @@ LLViewerPart::LLViewerPart() :
     mPartSourcep = NULL;
     mParent = NULL;
     mChild = NULL;
-    LLViewerPartSim::incParticleCount2( 1 ); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    ++LLViewerPartSim::sParticleCount2 ;
 }
 
 LLViewerPart::~LLViewerPart()
@@ -107,7 +107,7 @@ LLViewerPart::~LLViewerPart()
 
     mPartSourcep = NULL;
 
-    LLViewerPartSim::decParticleCount2( 1 ); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    --LLViewerPartSim::sParticleCount2 ;
 }
 
 void LLViewerPart::init(LLPointer<LLViewerPartSource> sourcep, LLViewerTexture *imagep, LLVPCallback cb)
@@ -474,20 +474,12 @@ void LLViewerPartGroup::removeParticlesByID(const U32 source_id)
 //static
 void LLViewerPartSim::checkParticleCount(U32 size)
 {
-    // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-    // if(LLViewerPartSim::sParticleCount2 != LLViewerPartSim::sParticleCount)
-    S32 count = LLViewerPartSim::getParticleCount();
-    S32 count2 = LLViewerPartSim::getParticleCount2();
-    if( count != count2 ) 
-    // <FS:Beq/>
+    if(LLViewerPartSim::sParticleCount2 != LLViewerPartSim::sParticleCount)
     {
-        LL_ERRS() << "sParticleCount: " << count << " ; sParticleCount2: " << count2 << LL_ENDL ; //<FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+        LL_ERRS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
     }
 
-    // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-    // if(size > (U32)LLViewerPartSim::sParticleCount2)
-    if( size > static_cast<U32>(count2) )
-    // <FS:Beq/>
+    if(size > (U32)LLViewerPartSim::sParticleCount2)
     {
         LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
     }
@@ -542,7 +534,7 @@ bool LLViewerPartSim::shouldAddPart()
 
     if ( sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
     {
-        F32 frac = (F32)count/(F32)sMaxParticleCount; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+        F32 frac = (F32)sParticleCount/(F32)sMaxParticleCount;
         frac -= PART_THROTTLE_THRESHOLD;
         frac *= PART_THROTTLE_RESCALE;
         if (ll_frand() < frac)
@@ -822,25 +814,15 @@ void LLViewerPartSim::updatePartBurstRate()
 {
     if (!(LLDrawable::getCurrentFrame() & 0xf))
     {
-        // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-        // if (sParticleCount >= MAX_PART_COUNT) //set rate to zero
-        auto count = LLViewerPartSim::getParticleCount();
-        if (count >= MAX_PART_COUNT) //set rate to zero
-        // <FS:Beq/>
+        if (sParticleCount >= MAX_PART_COUNT) //set rate to zero
         {
             sParticleBurstRate = 0.0f ;
         }
-        // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-        // else if(sParticleCount > 0)
-        else if (count > 0)
-        // <FS:Beq/>
+        else if(sParticleCount > 0)
         {
             if(sParticleBurstRate > 0.0000001f)
             {
-                // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-                // F32 total_particles = sParticleCount / sParticleBurstRate ; //estimated
-                F32 total_particles = count / sParticleBurstRate ; //estimated
-                // <FS:Beq/>
+                F32 total_particles = sParticleCount / sParticleBurstRate ; //estimated
                 F32 new_rate = llclamp(0.9f * sMaxParticleCount / total_particles, 0.0f, 1.0f) ;
                 F32 delta_rate_threshold = llmin(0.1f * llmax(new_rate, sParticleBurstRate), 0.1f) ;
                 F32 delta_rate = llclamp(new_rate - sParticleBurstRate, -1.0f * delta_rate_threshold, delta_rate_threshold) ;
@@ -916,4 +898,3 @@ void LLViewerPartSim::clearParticlesByOwnerID(const LLUUID& task_id)
         }
     }
 }
-
