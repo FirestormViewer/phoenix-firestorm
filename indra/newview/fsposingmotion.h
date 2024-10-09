@@ -145,15 +145,6 @@ public:
                 _lastSetScales.pop_back();
         }
 
-        void setScale(LLVector3 scale)
-        {
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return;
-
-            joint->setScale(scale);
-        }
-
       public:
         /// <summary>
         /// Gets the name of the joint.
@@ -216,6 +207,29 @@ public:
 
             _timeLastUpdatedRotation = std::chrono::system_clock::now();
             _targetRotation.set(rot);
+        }
+
+        /// <summary>
+        /// Gets the scale the animator wishes the joint to have.
+        /// </summary>
+        LLVector3 getTargetScale() const { return _targetScale; }
+
+        /// <summary>
+        /// Gets the scale the joint had when the animation was initialized.
+        /// </summary>
+        LLVector3 getBeginningScale() const { return _beginningScale; }
+
+        /// <summary>
+        /// Sets the scale the animator wishes the joint to have.
+        /// </summary>
+        void setTargetScale(LLVector3 scale)
+        {
+            auto timeIntervalSinceLastScaleChange = std::chrono::system_clock::now() - _timeLastUpdatedScale;
+            if (timeIntervalSinceLastScaleChange > _undoUpdateInterval)
+                addLastScaleToUndo();
+
+            _timeLastUpdatedScale = std::chrono::system_clock::now();
+            _targetScale.set(scale);
         }
 
         /// <summary>
@@ -285,6 +299,56 @@ public:
                 _lastSetRotations.pop_front();
         }
 
+        void undoLastScaleSet()
+        {
+            if (_lastSetScales.empty())
+                return;
+
+            if (_undoneScaleIndex == 0)
+                addLastScaleToUndo();
+
+            _undoneScaleIndex++;
+            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
+            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
+        }
+
+        void redoLastScaleSet()
+        {
+            if (_lastSetScales.empty())
+                return;
+
+            _undoneScaleIndex--;
+            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
+
+            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
+            if (_undoneScaleIndex == 0)
+                _lastSetScales.pop_front();
+        }
+
+        /// <summary>
+        /// Restores the joint represented by this to the scale it had when this motion started.
+        /// </summary>
+        void revertJointScale()
+        {
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setScale(_beginningScale);
+        }
+
+        /// <summary>
+        /// Restores the joint represented by this to the position it had when this motion started.
+        /// </summary>
+        void revertJointPosition()
+        {
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return;
+
+            joint->setPosition(_beginningPosition);
+        }
+
         /// <summary>
         /// Collision Volumes do not 'reset' their position/rotation when the animation stops.
         /// This requires special treatment to revert changes we've made this animation session.
@@ -301,70 +365,6 @@ public:
             joint->setRotation(_beginningRotation);
             joint->setPosition(_beginningPosition);
             joint->setScale(_beginningScale);
-        }
-
-        LLVector3 getJointScale() const { return _targetScale; }
-        void      setJointScale(LLVector3 scale)
-        {
-            auto timeIntervalSinceLastScaleChange = std::chrono::system_clock::now() - _timeLastUpdatedScale;
-            if (timeIntervalSinceLastScaleChange > _undoUpdateInterval)
-                addLastScaleToUndo();
-
-            _timeLastUpdatedScale = std::chrono::system_clock::now();
-
-            _targetScale.set(scale);
-            setScale(_targetScale);
-        }
-
-        void undoLastScaleSet()
-        {
-            if (_lastSetScales.empty())
-                return;
-
-            if (_undoneScaleIndex == 0)  // at the top of the queue add the current
-                addLastScaleToUndo();
-
-            _undoneScaleIndex++;
-            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
-            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
-
-            setScale(_targetScale);
-        }
-
-        void redoLastScaleSet()
-        {
-            if (_lastSetScales.empty())
-                return;
-
-            _undoneScaleIndex--;
-            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
-
-            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
-            if (_undoneScaleIndex == 0)
-                _lastSetScales.pop_front();
-
-            setScale(_targetScale);
-        }
-
-        /// <summary>
-        /// Restores the joint represented by this to the scale it had when this motion started.
-        /// </summary>
-        void revertJointScale()
-        {
-            _targetScale.set(_beginningScale);
-            setScale(_beginningScale);
-        }
-
-        /// <summary>
-        /// Restores the joint represented by this to the position it had when this motion started.
-        /// </summary>
-        void revertJointPosition()
-        {
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return;
-
-            joint->setPosition(_beginningPosition);
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ private:
     /// <summary>
     /// The kind of joint state this animation is concerned with changing.
     /// </summary>
-    static const U32 POSER_JOINT_STATE = LLJointState::POS | LLJointState::ROT /* | LLJointState::SCALE*/;
+    static const U32 POSER_JOINT_STATE = LLJointState::POS | LLJointState::ROT | LLJointState::SCALE;
     LLAssetID _motionID;
 
     /// <summary>

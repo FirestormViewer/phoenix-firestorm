@@ -226,7 +226,7 @@ void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_
     if (!jointPose)
         return;
 
-    jointPose->revertJointScale();
+    jointPose->setTargetScale(jointPose->getBeginningScale());
 
     if (style == NONE)
         return;
@@ -235,7 +235,7 @@ void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_
     if (!oppositeJointPose)
         return;
 
-    oppositeJointPose->revertJointScale();
+    oppositeJointPose->setTargetScale(oppositeJointPose->getBeginningScale());
 }
 
 bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, FSPoserJoint joint)
@@ -664,7 +664,7 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
     if (!jointPose)
         return scale;
 
-    scale = jointPose->getJointScale();
+    scale = jointPose->getTargetScale();
 
     return scale;
 }
@@ -688,7 +688,7 @@ void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *join
     if (!jointPose)
         return;
 
-    jointPose->setJointScale(scale);
+    jointPose->setTargetScale(scale);
 
     if (style == NONE)
         return;
@@ -697,7 +697,7 @@ void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *join
     if (!oppositeJointPose)
         return;
 
-    oppositeJointPose->setJointScale(scale);
+    oppositeJointPose->setTargetScale(scale);
 }
 
 const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(std::string jointName)
@@ -727,8 +727,6 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
 
         avatar->startDefaultMotions();
         avatar->startMotion(posingMotion->motionId());
-
-        // TODO: scrape motion state prior to edit, facilitating reset
 
         return true;
     }

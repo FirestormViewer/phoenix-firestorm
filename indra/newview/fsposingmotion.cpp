@@ -74,6 +74,8 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
     LLQuaternion currentRotation;
     LLVector3 currentPosition;
     LLVector3 targetPosition;
+    LLVector3 currentScale;
+    LLVector3 targetScale;
 
     for (FSJointPose jointPose : _jointPoses)
     {
@@ -83,8 +85,10 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
 
         currentRotation = joint->getRotation();
         currentPosition = joint->getPosition();
+        currentScale = joint->getScale();
         targetRotation = jointPose.getTargetRotation();
         targetPosition = jointPose.getTargetPosition();
+        targetScale = jointPose.getTargetScale();
 
         if (currentPosition != targetPosition)
         {
@@ -96,6 +100,12 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
         {
             currentRotation = slerp(_interpolationTime, currentRotation, targetRotation);
             jointPose.getJointState()->setRotation(currentRotation);
+        }
+
+        if (currentScale != targetScale)
+        {
+            currentScale = lerp(currentScale, targetScale, _interpolationTime);
+            jointPose.getJointState()->setScale(currentScale);
         }
     }
 
