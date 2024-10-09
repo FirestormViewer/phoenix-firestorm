@@ -399,8 +399,7 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
         // Kill dead particles (either flagged dead, or too old)
         if ((part->mLastUpdateTime > part->mMaxAge) || (LLViewerPart::LL_PART_DEAD_MASK == part->mFlags))
         {
-            mParticles[i] = mParticles.back() ;
-            mParticles.pop_back() ;
+            vector_replace_with_last(mParticles, mParticles.begin() + i); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
             delete part ;
         }
         else
@@ -410,8 +409,7 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
             {
                 // Transfer particles between groups
                 LLViewerPartSim::getInstance()->put(part) ;
-                mParticles[i] = mParticles.back() ;
-                mParticles.pop_back() ;
+                vector_replace_with_last(mParticles, mParticles.begin() + i); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
             }
             else
             {
