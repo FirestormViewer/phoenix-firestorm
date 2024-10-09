@@ -184,6 +184,30 @@
       top_pad="10"
       name="remember_check"
       width="204" />
+    <button
+      name="password_show_btn"
+      tool_tip="Show password text"
+      follows="left|bottom"
+      left="194"
+      bottom_delta="0"
+      height="20"
+      width="20"
+      image_pressed="Profile_Group_Visibility_Off_Pressed"
+      image_unselected="Profile_Group_Visibility_Off"
+      tab_stop="false"
+      visible="true"  />
+    <button
+      name="password_hide_btn"
+      tool_tip="Hide password text"
+      follows="left|bottom"
+      left="194"
+      bottom_delta="0"
+      height="20"
+      width="20"
+      image_pressed="Profile_Group_Visibility_On_Pressed"
+      image_unselected="Profile_Group_Visibility_On"
+      tab_stop="false"
+      visible="false"  />
     </layout_panel> <!-- password_container -->
     <layout_panel
       auto_resize="false"
