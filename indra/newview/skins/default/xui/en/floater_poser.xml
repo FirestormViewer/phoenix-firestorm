@@ -62,30 +62,30 @@ width="565">
     <string	name="joint_transform_mHandThumb2Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
     <string	name="joint_transform_mHandThumb3Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
     <string	name="joint_transform_mHandThumb3Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
-    <string	name="joint_transform_mHandIndex1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandIndex1Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandIndex2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandIndex2Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandIndex3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandIndex3Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandMiddle1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandMiddle1Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandMiddle2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandMiddle2Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandMiddle3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandMiddle3Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandRing1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandRing1Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandRing2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandRing2Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandRing3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandRing3Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandPinky1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandPinky1Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandPinky2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandPinky2Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandPinky3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
-    <string	name="joint_transform_mHandPinky3Right" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
+    <string	name="joint_transform_mHandIndex1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
     <string	name="joint_transform_LEFT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_RIGHT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_BELLY" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
