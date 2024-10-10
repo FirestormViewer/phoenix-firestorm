@@ -42,14 +42,17 @@
 #include "llscrolllistctrl.h"
 #include "llsliderctrl.h"
 #include "lltabcontainer.h"
+#include "llcheckboxctrl.h"
 
 static const std::string POSE_INTERNAL_FORMAT_FILE_MASK     = "*.xml";
 static const std::string POSE_INTERNAL_FORMAT_FILE_EXT      = ".xml";
+static const std::string POSE_EXTERNAL_FORMAT_FILE_EXT      = ".bvh";
 static const std::string POSE_SAVE_SUBDIRECTORY             = "poses";
 static const std::string XML_LIST_HEADER_STRING_PREFIX      = "header_";
 static const std::string XML_LIST_TITLE_STRING_PREFIX       = "title_";
 static const std::string XML_JOINT_TRANSFORM_STRING_PREFIX  = "joint_transform_";
 static const std::string POSER_ADVANCEDWINDOWSTATE_SAVE_KEY = "FSPoserAdvancedWindowState";
+static const std::string POSER_ALSOSAVEBVHFILE_SAVE_KEY     = "FSPoserSaveBvhFileAlso";
 
 static const std::string POSER_AVATAR_PANEL_JOINTSPARENT = "joints_parent_panel";
 static const std::string POSER_AVATAR_PANEL_TRACKBALL = "trackball_panel";
@@ -86,6 +89,8 @@ static const std::string POSER_AVATAR_ADV_SLIDER_SCALEX_NAME = "Advanced_Scale_X
 static const std::string POSER_AVATAR_ADV_SLIDER_SCALEY_NAME = "Advanced_Scale_Y";
 static const std::string POSER_AVATAR_ADV_SLIDER_SCALEZ_NAME = "Advanced_Scale_Z";
 static const std::string POSER_AVATAR_ADV_BUTTON_NAME  = "start_stop_posing_button";
+static const std::string POSER_AVATAR_ADVANCED_SAVEOPTIONSPANEL_NAME = "save_file_options";
+static const std::string POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME = "also_save_bvh_checkbox";
 
 static const std::string POSER_AVATAR_SCROLLLIST_AVATARSELECTION   = "avatarSelection_scroll";
 static const std::string POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME = "start_stop_posing_button";
@@ -221,6 +226,14 @@ bool FSFloaterPoser::postBuild()
             advancedButton->setValue(true);
     }
 
+    bool saveBvhCheckboxState = gSavedSettings.getBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY);
+    if (saveBvhCheckboxState)
+    {
+        LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
+        if (saveBvhCheckbox)
+            saveBvhCheckbox->set(true);
+    }
+
     LLLineEditor *poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
     if (poseSaveName)
         poseSaveName->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
@@ -246,6 +259,10 @@ void FSFloaterPoser::onClose(bool app_quitting)
     LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
     if (advancedButton)
         gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, advancedButton->getValue().asBoolean());
+
+    LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
+    if (saveBvhCheckbox)
+        gSavedSettings.setBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY, saveBvhCheckbox->getValue());
 }
 
 void FSFloaterPoser::refreshPosesScroll()
@@ -344,7 +361,57 @@ void FSFloaterPoser::onClickPoseSave()
         refreshPosesScroll();
         setUiSelectedAvatarSaveFileName(filename);
         // TODO: provide feedback for save
+
+        LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
+        if (!saveBvhCheckbox)
+            return;
+
+        bool alsoSaveAsBvh = saveBvhCheckbox->getValue().asBoolean();
+        if (alsoSaveAsBvh)
+            savePoseToBvh(avatar, filename);
     }
+}
+
+bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, std::string poseFileName)
+{
+    if (poseFileName.empty())
+        return false;
+
+    if (!_poserAnimator.isPosingAvatar(avatar))
+        return false;
+
+    bool writeSuccess = false;
+
+    try
+    {
+        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+        if (!gDirUtilp->fileExists(pathname))
+        {
+            LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
+            LLFile::mkdir(pathname);
+        }
+
+        std::string fullSavePath =
+            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_EXTERNAL_FORMAT_FILE_EXT);
+
+        llofstream file;
+        file.open(fullSavePath.c_str());
+        if (!file.is_open())
+        {
+            LL_WARNS("Poser") << "Unable to save pose!" << LL_ENDL;
+            return false;
+        }
+
+        writeSuccess = _poserAnimator.writePoseAsBvh(&file, avatar);
+
+        file.close();
+    }
+    catch (...)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
@@ -360,7 +427,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
         std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
         if (!gDirUtilp->fileExists(pathname))
         {
-            LL_WARNS("Posing") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
+            LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
             LLFile::mkdir(pathname);
         }
 
@@ -393,7 +460,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
         file.open(fullSavePath.c_str());
         if (!file.is_open())
         {
-            LL_WARNS("GroupMute") << "Unable to save pose!" << LL_ENDL;
+            LL_WARNS("Poser") << "Unable to save pose!" << LL_ENDL;
             return false;
         }
         LLSDSerialize::toPrettyXML(record, file);
@@ -935,6 +1002,28 @@ void FSFloaterPoser::onToggleLoadSavePanel()
 
     if (loadSavePanelExpanded)
         refreshPosesScroll();
+
+    showOrHideAdvancedSaveOptions();
+}
+
+void FSFloaterPoser::showOrHideAdvancedSaveOptions()
+{
+    LLButton* yourPosesButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_LOADSAVE);
+    if (!yourPosesButton)
+        return;
+
+    LLButton* advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
+    if (!advancedButton)
+        return;
+
+    LLUICtrl* advSavePanel = getChild<LLUICtrl>(POSER_AVATAR_ADVANCED_SAVEOPTIONSPANEL_NAME);
+    if (!advSavePanel)
+        return;
+
+    bool loadSavePanelExpanded = yourPosesButton->getValue().asBoolean();
+    bool advancedPanelExpanded = advancedButton->getValue().asBoolean();
+
+    advSavePanel->setVisible(loadSavePanelExpanded && advancedPanelExpanded);
 }
 
 void FSFloaterPoser::onToggleMirrorChange() { setRotationChangeButtons(true, false); }
@@ -1238,7 +1327,7 @@ void FSFloaterPoser::onToggleAdvancedPanel()
         return;
 
     this->reshape(poserFloaterWidth, poserFloaterHeight);
-
+    showOrHideAdvancedSaveOptions();
     onJointSelect();
 }
 

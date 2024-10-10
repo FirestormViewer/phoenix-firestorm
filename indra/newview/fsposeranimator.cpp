@@ -800,3 +800,121 @@ bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar *avatar)
     return true;
 }
 
+bool FSPoserAnimator::writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar)
+{
+    if (!fileStream || !avatar)
+        return false;
+
+    *fileStream << "HIERARCHY" << std::endl;
+    auto startingJoint = getPoserJointByName("mPelvis");
+    writeBvhFragment(fileStream, avatar, startingJoint, 0);
+    *fileStream << "MOTION" << std::endl;
+    *fileStream << "Frames:    1" << std::endl;
+    *fileStream << "Frame Time: 1" << std::endl;
+    writeBvhMotion(fileStream, avatar, startingJoint);
+    *fileStream << std::endl;
+
+    return true;
+}
+
+bool FSPoserAnimator::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint, int tabStops)
+{
+    if (!joint)
+        return false;
+
+    auto position = getJointPosition(avatar, *joint);
+
+    switch (joint->boneType())
+    {
+        case WHOLEAVATAR:
+            *fileStream << "ROOT " + joint->jointName() << std::endl;
+            *fileStream << "{" << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "OFFSET " + vec3ToXYZString(position) << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "CHANNELS 6 Xposition Yposition Zposition Xrotation Yrotation Zrotation" << std::endl;
+            break;
+
+        default:
+            *fileStream << getTabs(tabStops) + "JOINT " + joint->jointName() << std::endl;
+            *fileStream << getTabs(tabStops) + "{" << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "OFFSET " + vec3ToXYZString(position) << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Xrotation Yrotation Zrotation" << std::endl;
+            break;
+    }
+
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
+    if (numberOfBvhChildNodes > 0)
+    {
+        for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
+        {
+            auto nextJoint = getPoserJointByName(joint->bvhChildren()[index]);
+            writeBvhFragment(fileStream, avatar, nextJoint, tabStops + 1);
+        }
+    }
+    else
+    {
+        *fileStream << getTabs(tabStops + 1) + "End Site" << std::endl;
+        *fileStream << getTabs(tabStops + 1) + "{" << std::endl;
+        *fileStream << getTabs(tabStops + 2) + "OFFSET " + vec3ToXYZString(position) << std::endl; // I don't understand this node
+        *fileStream << getTabs(tabStops + 1) + "}" << std::endl;
+    }
+
+    *fileStream << getTabs(tabStops) + "}" << std::endl;
+    return true;
+}
+
+bool FSPoserAnimator::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint)
+{
+    if (!joint)
+        return false;
+
+    auto rotation = getJointRotation(avatar, *joint, SWAP_NOTHING, NEGATE_NOTHING, false);
+    auto position = getJointPosition(avatar, *joint);
+
+    switch (joint->boneType())
+    {
+        case WHOLEAVATAR:
+            *fileStream << vec3ToXYZString(position) + " " + rotationToXZYString(rotation);
+            break;
+
+        default:
+            *fileStream << " " + rotationToXZYString(rotation);
+            break;
+    }
+
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
+    for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
+    {
+        auto nextJoint = getPoserJointByName(joint->bvhChildren()[index]);
+        writeBvhMotion(fileStream, avatar, nextJoint);
+    }
+
+    return true;
+}
+
+std::string FSPoserAnimator::vec3ToXYZString(LLVector3 val)
+{
+    return f32ToString(val[VX]) + " " + f32ToString(val[VY]) + " " + f32ToString(val[VZ]);
+}
+
+std::string FSPoserAnimator::rotationToXZYString(LLVector3 val)
+{
+    return f32ToString(val[VY] * RAD_TO_DEG) + " " + f32ToString(val[VZ] * RAD_TO_DEG) + " " + f32ToString(val[VX] * RAD_TO_DEG);
+}
+
+std::string FSPoserAnimator::getTabs(int numOfTabstops)
+{
+    std::string tabSpaces;
+    for (int i = 0; i < numOfTabstops; i++)
+        tabSpaces += "\t";
+
+    return tabSpaces;
+}
+
+std::string FSPoserAnimator::f32ToString(F32 val)
+{
+    std::string str;
+    char        buf[20];
+    snprintf(buf, 20, "%f", val);
+    str = buf;
+    return str;
+}

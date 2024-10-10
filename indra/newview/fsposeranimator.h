@@ -100,6 +100,7 @@ public:
         std::string _jointName; // expected to be a match to LLJoint.getName() for a joint implementation.
         std::string _mirrorJointName;
         E_BoneTypes _boneList;
+        std::vector<std::string> _bvhChildren;
         bool _dontFlipOnMirror = false;
       public:
         /// <summary>
@@ -123,6 +124,11 @@ public:
         bool dontFlipOnMirror() const { return _dontFlipOnMirror; }
 
         /// <summary>
+        /// Gets the collection of child bvh joints for this.
+        /// </summary>
+        std::vector<std::string> bvhChildren() const { return _bvhChildren; }
+
+        /// <summary>
         /// Creates a new instance of a PoserJoint.
         /// </summary>
         /// <param name="a">
@@ -132,13 +138,15 @@ public:
         /// </param>
         /// <param name="b">The opposite joint name, if any. Also expected to be a well-known name.</param>
         /// <param name="c">The type of bone, often determining with which other bones the new instance would appear with.</param>
-        /// <param name="d">The option for whether this joint should rotation-flip it counterpart when mirroring the pose of the entire body.</param>
-        FSPoserJoint(std::string a, std::string b, E_BoneTypes c, bool d = false)
+        /// <param name="d">The optional array of joints, needed for BVH saving, which are the direct decendent(s) of this joint.</param>
+        /// <param name="e">The option for whether this joint should rotation-flip it counterpart when mirroring the pose of the entire body.</param>
+        FSPoserJoint(std::string a, std::string b, E_BoneTypes c, std::vector<std::string> d = {}, bool e = false)
         {
             _jointName        = a;
             _mirrorJointName  = b;
             _boneList         = c;
-            _dontFlipOnMirror = d;
+            _bvhChildren      = d;
+            _dontFlipOnMirror = e;
         }
     };
 
@@ -152,25 +160,25 @@ public:
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints {
         // head, torso, legs
-        {"mPelvis", "", WHOLEAVATAR}, {"mTorso", "", BODY}, {"mChest", "", BODY}, {"mNeck", "", BODY}, {"mHead", "", BODY},
-        {"mCollarLeft", "mCollarRight", BODY}, {"mShoulderLeft", "mShoulderRight", BODY}, {"mElbowLeft", "mElbowRight", BODY}, {"mWristLeft", "mWristRight", BODY},
-        {"mCollarRight", "mCollarLeft", BODY, true}, {"mShoulderRight", "mShoulderLeft", BODY, true},  {"mElbowRight", "mElbowLeft", BODY, true},  {"mWristRight", "mWristLeft", BODY, true},
-        {"mHipLeft", "mHipRight", BODY}, {"mKneeLeft", "mKneeRight", BODY},  {"mAnkleLeft", "mAnkleRight", BODY},
-        {"mHipRight", "mHipLeft", BODY, true}, {"mKneeRight", "mKneeLeft", BODY, true},  {"mAnkleRight", "mAnkleLeft", BODY, true},
+        {"mPelvis", "", WHOLEAVATAR, {"mTorso", "mHipLeft", "mHipRight"}}, {"mTorso", "", BODY, {"mChest"}}, {"mChest", "", BODY, {"mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot"}}, {"mNeck", "", BODY, {"mHead"}}, {"mHead", "", BODY},
+        {"mCollarLeft", "mCollarRight", BODY, {"mShoulderLeft"}}, {"mShoulderLeft", "mShoulderRight", BODY, {"mElbowLeft"}}, {"mElbowLeft", "mElbowRight", BODY, {"mWristLeft"}}, {"mWristLeft", "mWristRight", BODY},
+        {"mCollarRight", "mCollarLeft", BODY, {"mShoulderRight"}, true}, {"mShoulderRight", "mShoulderLeft", BODY, {"mElbowRight"}, true},  {"mElbowRight", "mElbowLeft", BODY, {"mWristRight"}, true},  {"mWristRight", "mWristLeft", BODY, {}, true},
+        {"mHipLeft", "mHipRight", BODY, {"mKneeLeft"}}, {"mKneeLeft", "mKneeRight", BODY, {"mAnkleLeft"}},  {"mAnkleLeft", "mAnkleRight", BODY},
+        {"mHipRight", "mHipLeft", BODY, {"mKneeRight"}, true}, {"mKneeRight", "mKneeLeft", BODY, {"mAnkleRight"}, true},  {"mAnkleRight", "mAnkleLeft", BODY, {}, true},
 
         // face
-        {"mFaceForeheadLeft", "mFaceForeheadRight", FACE}, {"mFaceForeheadCenter", "", FACE},  {"mFaceForeheadRight", "mFaceForeheadLeft", FACE, true},
+        {"mFaceForeheadLeft", "mFaceForeheadRight", FACE}, {"mFaceForeheadCenter", "", FACE},  {"mFaceForeheadRight", "mFaceForeheadLeft", FACE, {}, true},
         {"mFaceEyebrowOuterLeft", "mFaceEyebrowOuterRight", FACE}, {"mFaceEyebrowCenterLeft", "mFaceEyebrowCenterRight", FACE},  {"mFaceEyebrowInnerLeft", "mFaceEyebrowInnerRight", FACE},
-        {"mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE, true}, {"mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE, true},  {"mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE, true},
+        {"mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE, {}, true}, {"mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE, {}, true},  {"mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE, {}, true},
 
-        {"mEyeLeft", "mEyeRight", FACE}, {"mEyeRight", "mEyeLeft", FACE, true},
-        {"mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE}, {"mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE}, {"mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, true}, {"mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, true},
+        {"mEyeLeft", "mEyeRight", FACE}, {"mEyeRight", "mEyeLeft", FACE, {}, true},
+        {"mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE}, {"mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE}, {"mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, {}, true}, {"mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, {}, true},
 
-        {"mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE}, {"mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE}, {"mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, true}, {"mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE, true},
-        {"mFaceLipUpperLeft", "mFaceLipUpperRight", FACE}, {"mFaceLipUpperCenter", "", FACE}, {"mFaceLipUpperRight", "mFaceLipUpperLeft", FACE, true},
-        {"mFaceLipCornerLeft", "mFaceLipCornerRight", FACE}, {"mFaceLipCornerRight", "mFaceLipCornerLeft", FACE, true},
-        {"mFaceTongueBase", "", FACE}, {"mFaceTongueTip", "", FACE, true},
-        {"mFaceLipLowerLeft", "mFaceLipLowerRight", FACE}, {"mFaceLipLowerCenter", "", FACE}, {"mFaceLipLowerRight", "mFaceLipLowerLeft", FACE, true},
+        {"mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE}, {"mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE}, {"mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, {}, true}, {"mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE, {}, true},
+        {"mFaceLipUpperLeft", "mFaceLipUpperRight", FACE}, {"mFaceLipUpperCenter", "", FACE}, {"mFaceLipUpperRight", "mFaceLipUpperLeft", FACE, {}, true},
+        {"mFaceLipCornerLeft", "mFaceLipCornerRight", FACE}, {"mFaceLipCornerRight", "mFaceLipCornerLeft", FACE, {}, true},
+        {"mFaceTongueBase", "", FACE}, {"mFaceTongueTip", "", FACE, {}, true},
+        {"mFaceLipLowerLeft", "mFaceLipLowerRight", FACE}, {"mFaceLipLowerCenter", "", FACE}, {"mFaceLipLowerRight", "mFaceLipLowerLeft", FACE, {}, true},
         {"mFaceJaw", "", FACE},
 
         //left hand
@@ -181,25 +189,25 @@ public:
         {"mHandPinky1Left", "mHandPinky1Right", HANDS}, {"mHandPinky2Left", "mHandPinky2Right", HANDS}, {"mHandPinky3Left", "mHandPinky3Right", HANDS},
 
         // right hand
-        {"mHandThumb1Right", "mHandThumb1Left", HANDS, true}, {"mHandThumb2Right", "mHandThumb2Left", HANDS, true}, {"mHandThumb3Right", "mHandThumb3Left", HANDS, true},
-        {"mHandIndex1Right", "mHandIndex1Left", HANDS, true}, {"mHandIndex2Right", "mHandIndex2Left", HANDS, true}, {"mHandIndex3Right", "mHandIndex3Left", HANDS, true},
-        {"mHandMiddle1Right", "mHandMiddle1Left", HANDS, true}, {"mHandMiddle2Right", "mHandMiddle2Left", HANDS, true}, {"mHandMiddle3Right", "mHandMiddle3Left", HANDS, true},
-        {"mHandRing1Right", "mHandRing1Left", HANDS, true}, {"mHandRing2Right", "mHandRing2Left", HANDS, true}, {"mHandRing3Right", "mHandRing3Left", HANDS, true},
-        {"mHandPinky1Right", "mHandPinky1Left", HANDS, true}, {"mHandPinky2Right", "mHandPinky2Left", HANDS, true}, {"mHandPinky3Right", "mHandPinky3Left", HANDS, true},
+        {"mHandThumb1Right", "mHandThumb1Left", HANDS, {}, true}, {"mHandThumb2Right", "mHandThumb2Left", HANDS, {}, true}, {"mHandThumb3Right", "mHandThumb3Left", HANDS, {}, true},
+        {"mHandIndex1Right", "mHandIndex1Left", HANDS, {}, true}, {"mHandIndex2Right", "mHandIndex2Left", HANDS, {}, true}, {"mHandIndex3Right", "mHandIndex3Left", HANDS, {}, true},
+        {"mHandMiddle1Right", "mHandMiddle1Left", HANDS, {}, true}, {"mHandMiddle2Right", "mHandMiddle2Left", HANDS, {}, true}, {"mHandMiddle3Right", "mHandMiddle3Left", HANDS, {}, true},
+        {"mHandRing1Right", "mHandRing1Left", HANDS, {}, true}, {"mHandRing2Right", "mHandRing2Left", HANDS, {}, true}, {"mHandRing3Right", "mHandRing3Left", HANDS, {}, true},
+        {"mHandPinky1Right", "mHandPinky1Left", HANDS, {}, true}, {"mHandPinky2Right", "mHandPinky2Left", HANDS, {}, true}, {"mHandPinky3Right", "mHandPinky3Left", HANDS, {}, true},
 
         // tail and hind limbs
         {"mTail1", "", MISC}, {"mTail2", "", MISC}, {"mTail3", "", MISC}, {"mTail4", "", MISC}, {"mTail5", "", MISC}, {"mTail6", "", MISC}, {"mGroin", "", MISC},
         {"mHindLimbsRoot", "", MISC},
         {"mHindLimb1Left", "mHindLimb1Right", MISC}, {"mHindLimb2Left", "mHindLimb2Right", MISC}, {"mHindLimb3Left", "mHindLimb3Right", MISC}, {"mHindLimb4Left", "mHindLimb4Right", MISC},
-        {"mHindLimb1Right", "mHindLimb1Left", MISC, true}, {"mHindLimb2Right", "mHindLimb2Left", MISC, true}, {"mHindLimb3Right", "mHindLimb3Left", MISC, true}, {"mHindLimb4Right", "mHindLimb4Left", MISC, true},
+        {"mHindLimb1Right", "mHindLimb1Left", MISC, {}, true}, {"mHindLimb2Right", "mHindLimb2Left", MISC, {}, true}, {"mHindLimb3Right", "mHindLimb3Left", MISC, {}, true}, {"mHindLimb4Right", "mHindLimb4Left", MISC, {}, true},
 
         // wings
         {"mWingsRoot", "", MISC},
         {"mWing1Left", "mWing1Right", MISC}, {"mWing2Left", "mWing2Right", MISC}, {"mWing3Left", "mWing3Right", MISC}, {"mWing4Left", "mWing4Right", MISC}, {"mWing4FanLeft", "mWing4FanRight", MISC},
-        {"mWing1Right", "mWing1Left", MISC, true}, {"mWing2Right", "mWing2Left", MISC, true}, {"mWing3Right", "mWing3Left", MISC, true}, {"mWing4Right", "mWing4Left", MISC, true}, {"mWing4FanRight", "mWing4FanLeft", MISC, true},
+        {"mWing1Right", "mWing1Left", MISC, {}, true}, {"mWing2Right", "mWing2Left", MISC, {}, true}, {"mWing3Right", "mWing3Left", MISC, {}, true}, {"mWing4Right", "mWing4Left", MISC, {}, true}, {"mWing4FanRight", "mWing4FanLeft", MISC, {}, true},
 
         // Collision Volumes
-        {"LEFT_PEC", "RIGHT_PEC", COL_VOLUMES}, {"RIGHT_PEC", "LEFT_PEC", COL_VOLUMES, true}, {"BELLY", "", COL_VOLUMES}, {"BUTT", "", COL_VOLUMES},
+        {"LEFT_PEC", "RIGHT_PEC", COL_VOLUMES}, {"RIGHT_PEC", "LEFT_PEC", COL_VOLUMES, {}, true}, {"BELLY", "", COL_VOLUMES}, {"BUTT", "", COL_VOLUMES},
     };
     
 public:
@@ -390,6 +398,14 @@ public:
     /// <param name="avatar">The avatar whose pose should flip left-right.</param>
     void flipEntirePose(LLVOAvatar *avatar);
 
+    /// <summary>
+    /// Determines whether the supplied PoserJoint for the supplied avatar is being posed.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint being queried for.</param>
+    /// <returns>True if this is joint is being posed for the supplied avatar, otherwise false.</returns>
+    bool writePoseAsBvh(llofstream *fileStream, LLVOAvatar* avatar);
+
   private:
     /// <summary>
     /// Translates a rotation vector from the UI to a Quaternion for the bone.
@@ -431,7 +447,16 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar to test if it is safe to animate.</param>
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
-    bool isAvatarSafeToUse(LLVOAvatar *avatar);
+    bool isAvatarSafeToUse(LLVOAvatar* avatar);
+
+    bool writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint, int tabStops);
+
+    bool writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint);
+
+    std::string static f32ToString(F32 val);
+    std::string static getTabs(int numOfTabstops);
+    std::string static rotationToXZYString(LLVector3 val);
+    std::string static vec3ToXYZString(LLVector3 val);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

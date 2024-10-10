@@ -1115,7 +1115,7 @@ width="565">
 		visible="true"
 		auto_resize="false"
 		name="advanced_controls_layout"
-		width="607">
+		width="600">
             <panel
                 follows="top|left|right"
                 height="97"
@@ -1126,7 +1126,7 @@ width="565">
                 mouse_opaque="false"
                 visible="false"
                 name="advanced_parent_panel"
-                width="607">
+                width="555">
                 <tab_container
 				follows="all"
 				halign="center"
@@ -1138,7 +1138,7 @@ width="565">
 				tab_group="1"
 				tab_position="top"
 				top_pad="0"
-				width="607">
+				width="555">
                     <panel
 					follows="all"
 					background_visible="false"
@@ -1148,7 +1148,7 @@ width="565">
 					title="Body Part Position"
 					name="position_panel"
 					top="0"
-					width="607">
+					width="555">
                         <slider
 						decimal_digits="3"
 						can_edit_text="true"
@@ -1164,7 +1164,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_X"
 						top_pad="6"
-						width="520" >
+						width="530" >
                             <slider.commit_callback
                             function="Poser.Advanced.PositionSet"
                             parameter="0"/>
@@ -1184,7 +1184,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_Y"
 						top_pad="1"
-						width="520" >
+						width="530" >
                             <slider.commit_callback
                             function="Poser.Advanced.PositionSet"
                             parameter="1"/>
@@ -1204,7 +1204,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_Z"
 						top_pad="1"
-						width="520" >
+						width="530" >
                             <slider.commit_callback
                             function="Poser.Advanced.PositionSet"
                             parameter="2"/>
@@ -1283,7 +1283,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_X"
 						top_pad="6"
-						width="520" >
+						width="530" >
                             <slider.commit_callback
                             function="Poser.Advanced.ScaleSet"
                             parameter="0"/>
@@ -1303,7 +1303,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_Y"
 						top_pad="1"
-						width="520" >
+						width="530" >
                             <slider.commit_callback
                             function="Poser.Advanced.ScaleSet"
                             parameter="1"/>
@@ -1323,7 +1323,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_Z"
 						top_pad="1"
-						width="520" >
+						width="530" >
                             <slider.commit_callback
                             function="Poser.Advanced.ScaleSet"
                             parameter="2"/>
@@ -1378,6 +1378,27 @@ width="565">
 						</button>
                     </panel>
                 </tab_container>
+            </panel>
+            <panel
+				follows="left|top"
+				height="100"
+				background_visible="false"
+				layout="topleft"
+				visible="false"
+				enabled="true"
+				mouse_opaque="false"
+				name="save_file_options"
+				left_pad="2"
+				width="235">
+				<check_box
+					name="also_save_bvh_checkbox"
+					height="16"
+					label="Write BVH when saving"
+					follows="left|top"
+					left="0"
+					tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build' menu to pose yourself or others in-world"
+					top_pad="5"
+					width="134" />
             </panel>
         </layout_panel>
     </layout_stack>
