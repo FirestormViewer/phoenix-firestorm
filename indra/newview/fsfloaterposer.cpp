@@ -576,8 +576,8 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
         LLVector3 newRotation = _poserAnimator.getJointRotation(avatar, *item, getJointTranslation(item->jointName()),
                                                                 getJointNegation(item->jointName()), true);
-        LLVector3 newPosition = _poserAnimator.getJointPosition(avatar, *item);
-        LLVector3 newScale = _poserAnimator.getJointScale(avatar, *item);
+        LLVector3 newPosition = _poserAnimator.getJointPosition(avatar, *item, true);
+        LLVector3 newScale    = _poserAnimator.getJointScale(avatar, *item, true);
 
         _poserAnimator.setPosingAvatarJoint(avatar, *item, true);
 

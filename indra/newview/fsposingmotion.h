@@ -174,6 +174,20 @@ public:
         LLVector3 getTargetPosition() const { return _targetPosition; }
 
         /// <summary>
+        /// Gets the position the animator wishes the joint to be in.
+        /// </summary>
+        LLVector3 getCurrentPosition()
+        {
+            LLVector3 vec3;
+            LLJoint*  joint = _jointState->getJoint();
+            if (!joint)
+                return vec3;
+
+            vec3 = joint->getPosition();
+            return vec3;
+        }
+
+        /// <summary>
         /// Sets the position the animator wishes the joint to be in.
         /// </summary>
         void setTargetPosition(const LLVector3& pos)
@@ -197,6 +211,20 @@ public:
         LLQuaternion getTargetRotation() const { return _targetRotation; }
 
         /// <summary>
+        /// Gets the rotation of the joint.
+        /// </summary>
+        LLQuaternion getCurrentRotation()
+        {
+            LLQuaternion quat;
+            LLJoint*  joint = _jointState->getJoint();
+            if (!joint)
+                return quat;
+
+            quat = joint->getRotation();
+            return quat;
+        }
+
+        /// <summary>
         /// Sets the rotation the animator wishes the joint to be in.
         /// </summary>
         void setTargetRotation(const LLQuaternion& rot)
@@ -213,6 +241,20 @@ public:
         /// Gets the scale the animator wishes the joint to have.
         /// </summary>
         LLVector3 getTargetScale() const { return _targetScale; }
+
+        /// <summary>
+        /// Gets the scale the joint has.
+        /// </summary>
+        LLVector3 getCurrentScale()
+        {
+            LLVector3 vec3;
+            LLJoint* joint = _jointState->getJoint();
+            if (!joint)
+                return vec3;
+
+            vec3 = joint->getScale();
+            return vec3;
+        }
 
         /// <summary>
         /// Gets the scale the joint had when the animation was initialized.

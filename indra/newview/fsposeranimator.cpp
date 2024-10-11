@@ -341,7 +341,7 @@ void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint,
     oppositeJointPose->redoLastScaleSet();
 }
 
-LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint)
+LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, bool forRecapture)
 {
     LLVector3 pos;
     if (!isAvatarSafeToUse(avatar))
@@ -355,7 +355,10 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar *avatar, FSPoserJoint joi
     if (!jointPose)
         return pos;
 
-    pos = jointPose->getTargetPosition();
+    if (forRecapture)
+        pos = jointPose->getCurrentPosition();
+    else
+        pos = jointPose->getTargetPosition();
 
     return pos;
 }
@@ -415,27 +418,19 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
     if (!isAvatarSafeToUse(avatar))
         return vec3;
 
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return vec3;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return vec3;
+
     LLQuaternion rot;
     if (forRecapture)
-    {
-        LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
-        if (!avJoint)
-            return vec3;
-
-        rot = avJoint->getRotation();
-    }
+        rot = jointPose->getCurrentRotation();
     else
-    {
-        FSPosingMotion* posingMotion = getPosingMotion(avatar);
-        if (!posingMotion)
-            return vec3;
-
-        FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
-        if (!jointPose)
-            return vec3;
-
         rot = jointPose->getTargetRotation();
-    }
     
     return translateRotationFromQuaternion(translation, negation, rot);
 }
@@ -650,7 +645,7 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
     return vec3;
 }
 
-LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
+LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar* avatar, FSPoserJoint joint, bool forRecapture)
 {
     LLVector3 scale;
     if (!isAvatarSafeToUse(avatar))
@@ -664,7 +659,10 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar *avatar, FSPoserJoint joint)
     if (!jointPose)
         return scale;
 
-    scale = jointPose->getTargetScale();
+    if (forRecapture)
+        scale = jointPose->getCurrentScale();
+    else
+        scale = jointPose->getTargetScale();
 
     return scale;
 }

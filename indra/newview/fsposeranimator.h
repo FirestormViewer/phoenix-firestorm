@@ -334,7 +334,7 @@ public:
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the position for.</param>
     /// <returns>The position of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointPosition(LLVOAvatar *avatar, FSPoserJoint joint);
+    LLVector3 getJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, bool forRecapture = false);
 
     /// <summary>
     /// Sets the position of a joint for the supplied avatar.
@@ -374,7 +374,7 @@ public:
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the scale for.</param>
     /// <returns>The scale of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointScale(LLVOAvatar *avatar, FSPoserJoint joint);
+    LLVector3 getJointScale(LLVOAvatar* avatar, FSPoserJoint joint, bool forRecapture = false);
 
     /// <summary>
     /// Sets the scale of a joint for the supplied avatar.
