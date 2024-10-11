@@ -722,7 +722,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults it will load BD poses
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
                 }
 
                 if (loadPositions && control_map.has("position"))
@@ -793,8 +793,12 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
 {
     if (!avatar || avatar->isDead())
         return false;
+    if (avatar->isSelf())
+        return true;
+    if (avatar->isControlAvatar())
+        return true;
 
-    return avatar->isSelf();
+    return false;
 }
 
 void FSFloaterPoser::poseControlsEnable(bool enable)

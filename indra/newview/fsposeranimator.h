@@ -36,7 +36,7 @@
 /// </summary>
 typedef enum E_BoneTypes
 {
-    WHOLEAVATAR = 0,  // possibly a single instance of, but this one manipulates everything
+    WHOLEAVATAR = 0,  // required to be a single instance of, this one manipulates everything
     BODY        = 1,
     FACE        = 2,
     HANDS       = 3,
