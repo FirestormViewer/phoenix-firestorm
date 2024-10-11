@@ -525,7 +525,7 @@ void LLViewerPartSim::destroyClass()
 //static
 bool LLViewerPartSim::shouldAddPart()
 {
-    if (sParticleCount < MAX_PART_COUNT)
+    if (sParticleCount >= MAX_PART_COUNT)
     {
         return false;
     }
