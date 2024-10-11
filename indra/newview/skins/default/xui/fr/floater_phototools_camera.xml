@@ -56,6 +56,8 @@
 					</panel>
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Fait tourner la caméra autour du focus"/>
+						<button name="roll_left" tool_tip="Faire pivoter la caméra vers la gauche"/>
+						<button name="roll_right" tool_tip="Faire pivoter la caméra vers la droite"/>
 						<slider_bar name="zoom_slider" tool_tip="Fait simplement bouger la caméra. NOTE :  Il ne s'agit pas d'un vrai zoom, ce réglage n'a aucun effet sur le champ de vision de la caméra. Pour un vrai zoom, il faut utiliser le curseur Angle de vue"/>
 						<joystick_track name="cam_track_stick" tool_tip="Déplacer la caméra vers le haut, le bas, la gauche et la droite"/>
 					</panel>

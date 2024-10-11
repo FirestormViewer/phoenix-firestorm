@@ -55,6 +55,8 @@
 					</panel>
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Obróć kamerę wokół punktu skupienia"/>
+						<button name="roll_left" tool_tip="Przechyl kamerę w lewo" />
+						<button name="roll_right" tool_tip="Przechyl kamerę w prawo" />
 						<slider_bar name="zoom_slider" tool_tip="Ta opcja po prostu przesuwa kamerę w przód i w tył. UWAGA: To nie ma nic wspólnego z opcją powiększania (zoomowania) z prawdziwego życia! Nie ma żadnego wpływu na pole widzenia (FOV). Użyj suwaka 'Kąt widzenia', aby uzyskać prawdziwy efekt zoomowania."/>
 						<joystick_track name="cam_track_stick" tool_tip="Poruszaj kamerą w górę, w dół, w lewo i w prawo."/>
 					</panel>

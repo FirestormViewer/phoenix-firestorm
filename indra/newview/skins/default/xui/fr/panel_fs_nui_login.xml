@@ -13,14 +13,16 @@
 					<layout_stack name="1st_row_stack">
 						<layout_panel name="login">
 							<combo_box name="username_combo" label="Nom de résident(e) :" tool_tip="Le nom de compte que vous avez choisi lors de votre inscription, par exemple, bobsmith420 ou Steller Sunshine"/>
-							<check_box label="Mémoriser le nom de résident(e)" name="remember_username_check"/>
+							<check_box label="Enr. le nom" name="remember_username_check"/>
 						</layout_panel>
 						<layout_panel name="delete_container">
 							<button tool_tip="Supprimer ce nom de résident(e)" name="remove_user_btn"/>
 						</layout_panel>
 						<layout_panel name="password_container">
 							<line_editor name="password_edit" label="Mot de passe"/>
-							<check_box label="Mémoriser le mot de passe" name="remember_check"/>
+							<check_box label="Enr. le mot de passe" name="remember_check"/>
+							<button name="password_show_btn" tool_tip="Afficher le mot de passe"/>
+							<button name="password_hide_btn" tool_tip="Masquer le mot de passe"/>
 						</layout_panel>
 						<layout_panel name="start_location_panel">
 							<combo_box name="start_location_combo" label="Démarrer :">
