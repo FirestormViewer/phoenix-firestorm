@@ -89,6 +89,12 @@ width="565">
     <string	name="joint_transform_LEFT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_RIGHT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
     <string	name="joint_transform_BELLY" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail1" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail2" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail3" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail4" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail5" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail6" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	
     <!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
     <string	name="header_mTorso" translate="false">Body</string>
