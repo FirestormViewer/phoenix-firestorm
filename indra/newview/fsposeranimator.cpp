@@ -45,11 +45,11 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
     if (posingMotion->isStopped())
         return false;
 
-    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
-    if (!avJoint)
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
         return false;
 
-    return posingMotion->currentlyPosingJoint(avJoint);
+    return posingMotion->currentlyPosingJoint(jointPose);
 }
 
 void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose)
@@ -68,14 +68,14 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
     if (posingMotion->isStopped())
         return;
 
-    LLJoint* avJoint = avatar->getJoint(JointKey::construct(joint.jointName()));
-    if (!avJoint)
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
         return;
 
     if (shouldPose)
-        posingMotion->addJointToState(avJoint);
+        posingMotion->addJointToState(jointPose);
     else
-        posingMotion->removeJointFromState(avJoint);
+        posingMotion->removeJointFromState(jointPose);
 }
 
 void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
@@ -714,7 +714,7 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
     if (!isAvatarSafeToUse(avatar))
         return false;
 
-    FSPosingMotion* posingMotion = createPosingMotion(avatar);
+    FSPosingMotion* posingMotion = findOrCreatePosingMotion(avatar);
     if (!posingMotion)
         return false;
 
@@ -767,7 +767,7 @@ FSPosingMotion* FSPoserAnimator::getPosingMotion(LLVOAvatar* avatar)
     return dynamic_cast<FSPosingMotion*>(avatar->findMotion(_avatarIdToRegisteredAnimationId[avatar->getID()]));
 }
 
-FSPosingMotion* FSPoserAnimator::createPosingMotion(LLVOAvatar* avatar)
+FSPosingMotion* FSPoserAnimator::findOrCreatePosingMotion(LLVOAvatar* avatar)
 {
     FSPosingMotion* motion = getPosingMotion(avatar);
 
@@ -871,11 +871,11 @@ bool FSPoserAnimator::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar,
     switch (joint->boneType())
     {
         case WHOLEAVATAR:
-            *fileStream << vec3ToXYZString(position) + " " + rotationToXZYString(rotation);
+            *fileStream << vec3ToXYZString(position) + " " + rotationToYZXString(rotation);
             break;
 
         default:
-            *fileStream << " " + rotationToXZYString(rotation);
+            *fileStream << " " + rotationToYZXString(rotation);
             break;
     }
 
@@ -894,7 +894,7 @@ std::string FSPoserAnimator::vec3ToXYZString(LLVector3 val)
     return f32ToString(val[VX]) + " " + f32ToString(val[VY]) + " " + f32ToString(val[VZ]);
 }
 
-std::string FSPoserAnimator::rotationToXZYString(LLVector3 val)
+std::string FSPoserAnimator::rotationToYZXString(LLVector3 val)
 {
     return f32ToString(val[VY] * RAD_TO_DEG) + " " + f32ToString(val[VZ] * RAD_TO_DEG) + " " + f32ToString(val[VX] * RAD_TO_DEG);
 }

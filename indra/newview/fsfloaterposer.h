@@ -58,7 +58,7 @@ typedef enum E_Columns
 
 /// <summary>
 /// A class containing the UI fiddling for the Poser Floater.
-/// Please don't do LLJoint stuff here, fsposeranimator is the class for that.
+/// Please don't do LLJoint stuff here, fsposingmotion (the LLMotion derivative) is the class for that.
 /// </summary>
 class FSFloaterPoser : public LLFloater
 {
@@ -265,8 +265,10 @@ class FSFloaterPoser : public LLFloater
     FSPoserAnimator _poserAnimator;
 
     /// <summary>
-    /// The supplied llJoint has a quaternion (and alternatively oily angles) describing its rotation.
-    /// This gets the kind of axial transformation required for viewing the joint's Euler angles on our UI.
+    /// The supplied Joint name has a quaternion describing its rotation.
+    /// This gets the kind of axial transformation required for 'easy' consumption of the joint's Euler angles on our UI.
+    /// This facilitates 'conceptual' conversion of Euler frame to up/down, left/right and roll and is rather subjective.
+    /// Thus, many of these 'conversions' are backed by values in the XML.
     /// </summary>
     /// <param name="jointName">The well-known name of the joint, eg: mChest.</param>
     /// <returns>The axial translation so the oily angles make better sense in terms of up/down/left/right/roll.</returns>
@@ -298,6 +300,7 @@ class FSFloaterPoser : public LLFloater
 
     /// <summary>
     /// The time when the last click of a button was made.
+    /// Utilized for controls needing a 'double click do' function.
     /// </summary>
     std::chrono::system_clock::time_point _timeLastClickedJointReset = std::chrono::system_clock::now();
 

@@ -464,27 +464,22 @@ public:
     virtual void onDeactivate();
 
     /// <summary>
+    /// Queries whether the supplied joint is being animated.
+    /// </summary>
+    /// <param name="joint">The joint to query.</param>
+    bool currentlyPosingJoint(FSJointPose* joint);
+
+    /// <summary>
     /// Adds the supplied joint to the current animation-state.
     /// </summary>
     /// <param name="joint">The joint to animate.</param>
-    void addJointToState(LLJoint *joint);
+    void addJointToState(FSJointPose* joint);
 
     /// <summary>
     /// Removes the supplied joint to the current animation-state.
     /// </summary>
     /// <param name="joint">The joint to stop animating.</param>
-    void removeJointFromState(LLJoint *joint);
-
-    /// <summary>
-    /// Queries whether the supplied joint is being animated.
-    /// </summary>
-    /// <param name="joint">The joint to query.</param>
-    bool currentlyPosingJoint(LLJoint *joint);
-
-    /// <summary>
-    /// Removes the current joint state, and adds a new one.
-    /// </summary>
-    void setJointState(LLJoint* joint, U32 state);
+    void removeJointFromState(FSJointPose* joint);
 
     /// <summary>
     /// Gets the joint pose by name.
@@ -520,10 +515,33 @@ private:
     std::vector<FSJointPose> _jointPoses;
 
     /// <summary>
+    /// Removes the current joint state, and adds a new one.
+    /// </summary>
+    void setJointState(LLJoint* joint, U32 state);
+
+    /// <summary>
     /// Because changes to positions, scales and collision volumes do not end when the animation stops,
     /// this is required to revert them manually.
     /// </summary>
     void revertChangesToPositionsScalesAndCollisionVolumes();
+
+    /// <summary>
+    /// Queries whether the supplied joint is being animated.
+    /// </summary>
+    /// <param name="joint">The joint to query.</param>
+    bool currentlyPosingJoint(LLJoint* joint);
+
+    /// <summary>
+    /// Adds the supplied joint to the current animation-state.
+    /// </summary>
+    /// <param name="joint">The joint to animate.</param>
+    void addJointToState(LLJoint* joint);
+
+    /// <summary>
+    /// Removes the supplied joint to the current animation-state.
+    /// </summary>
+    /// <param name="joint">The joint to stop animating.</param>
+    void removeJointFromState(LLJoint* joint);
 };
 
 #endif // FS_POSINGMOTION_H

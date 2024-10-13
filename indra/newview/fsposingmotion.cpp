@@ -132,6 +132,42 @@ void FSPosingMotion::revertChangesToPositionsScalesAndCollisionVolumes()
     }
 }
 
+bool FSPosingMotion::currentlyPosingJoint(FSJointPose* joint)
+{
+    if (!joint)
+        return false;
+
+    LLJoint* avJoint = joint->getJointState()->getJoint();
+    if (!avJoint)
+        return false;
+
+    return currentlyPosingJoint(avJoint);
+}
+
+void FSPosingMotion::addJointToState(FSJointPose* joint)
+{
+    if (!joint)
+        return;
+
+    LLJoint* avJoint = joint->getJointState()->getJoint();
+    if (!avJoint)
+        return;
+
+    setJointState(avJoint, POSER_JOINT_STATE);
+}
+
+void FSPosingMotion::removeJointFromState(FSJointPose* joint)
+{
+    if (!joint)
+        return;
+
+    LLJoint* avJoint = joint->getJointState()->getJoint();
+    if (!avJoint)
+        return;
+
+    setJointState(avJoint, 0);
+}
+
 void FSPosingMotion::addJointToState(LLJoint* joint) { setJointState(joint, POSER_JOINT_STATE); }
 
 void FSPosingMotion::removeJointFromState(LLJoint *joint) { setJointState(joint, 0); }

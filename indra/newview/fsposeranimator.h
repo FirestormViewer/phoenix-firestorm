@@ -433,7 +433,7 @@ public:
     /// When a pose is created for the avatar, it is 'registered' with their character for use later on.
     /// Thus we start & stop posing the same animation.
     /// </remarks>
-    FSPosingMotion* createPosingMotion(LLVOAvatar* avatar);
+    FSPosingMotion* findOrCreatePosingMotion(LLVOAvatar* avatar);
 
     /// <summary>
     /// Gets the poser posing-motion for the supplied avatar.
@@ -449,19 +449,51 @@ public:
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar* avatar);
 
+    /// <summary>
+    /// Recursively writes a fragment of a BVH file format representation of the supplied joint, then that joints BVH child(ren).
+    /// </summary>
+    /// <param name="fileStream">The stream to write the fragment to.</param>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint whose fragment should be written, and whose child(ren) will also be written.</param>
+    /// <param name="tabStops">The number of tab-stops to include for formatting purpose.</param>
+    /// <returns>True if the fragment wrote successfully, otherwise false.</returns>
     bool writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint, int tabStops);
 
+    /// <summary>
+    /// Writes a fragment of the 'single line' representing an animation frame within the BVH file respresenting the positions and/or rotations.
+    /// </summary>
+    /// <param name="fileStream">The stream to write the position and/or rotation to.</param>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint whose position and/or rotation should be written.</param>
+    /// <returns></returns>
     bool writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint);
 
+    /// <summary>
+    /// Converts an F32 to a nice string.
+    /// </summary>
     std::string static f32ToString(F32 val);
+
+    /// <summary>
+    /// Generates a string with the supplied number of tab-chars.
+    /// </summary>
     std::string static getTabs(int numOfTabstops);
-    std::string static rotationToXZYString(LLVector3 val);
+
+    /// <summary>
+    /// Transforms a rotation such that llbvhloader.cpp can resolve it to something vaguely approximating the supplied angle.
+    /// When I say vague, I mean, it's numbers, buuuuut.
+    /// </summary>
+    std::string static rotationToYZXString(LLVector3 val);
+
+    /// <summary>
+    /// Transforms the supplied vector into a string of three numbers, format suiting to writing into a BVH file.
+    /// </summary>
     std::string static vec3ToXYZString(LLVector3 val);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.
-    /// Thus we start/stop the same animation.
-    /// An avatar's animation exists so long as their session does, and there is consideration for renewal (like if they relog/crash).
+    /// Thus we start/stop the same animation, and get/set the same rotations etc.
+    /// Among other things this provides for the 'undo' of changes to shape/position when the poser stops animating someone.
+    /// An avatar's animation exists so long as their session does, and there is consideration for renewal (like if they relog/crash and their character is renewed).
     /// Is static, so the animationId is not lost between sessions (such as when the UI floater is closed and reopened).
     /// </summary>
     static std::map<LLUUID, LLAssetID> _avatarIdToRegisteredAnimationId;
