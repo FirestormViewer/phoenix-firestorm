@@ -3,7 +3,7 @@
 	<layout_stack name="maint_layout">
 		<layout_panel name="count_panel">
 			<text name="number_of_items">
-				Éléments à envoyer : [COUNT]
+				Éléments à charger : [COUNT]
 			</text>
 		</layout_panel>
 		<layout_panel name="warning_panel">
@@ -20,7 +20,7 @@
 			</text>
 		</layout_panel>
 		<layout_panel name="buttoms_panel">
-			<button label="Envoyer" name="upload_btn" />
+			<button label="Charger" name="upload_btn" />
 			<button label="Annuler" name="cancel_btn" />
 		</layout_panel>
 		<layout_panel name="link_panel">
