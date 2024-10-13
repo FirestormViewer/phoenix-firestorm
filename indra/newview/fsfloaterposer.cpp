@@ -493,6 +493,8 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
         _poserAnimator.setPosingAvatarJoint(avatar, *item, !currentlyPosing);
     }
 
+    refreshRotationSliders();
+    refreshTrackpadCursor();
     refreshTextEmbiggeningOnAllScrollLists();
 }
 
@@ -1485,6 +1487,7 @@ void FSFloaterPoser::onAdvancedPositionSet()
     F32 posZ = (F32) zposAdvSlider->getValue().asReal();
 
     setSelectedJointsPosition(posX, posY, posZ);
+    refreshAvatarPositionSliders();
 }
 
 void FSFloaterPoser::onAdvancedRotationSet()
@@ -1776,7 +1779,13 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
     LLVector3              vec3 = LLVector3(x, y, z);
 
     for (auto item : getUiSelectedPoserJoints())
+    {
+        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (!currentlyPosingJoint)
+            continue;
+
         _poserAnimator.setJointPosition(avatar, item, vec3, defl);
+    }
 }
 
 void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians)
@@ -1792,8 +1801,14 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     LLVector3              vec3 = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
 
     for (auto item : getUiSelectedPoserJoints())
-        _poserAnimator
-            .setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()), getJointNegation(item->jointName()));
+    {
+        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (!currentlyPosingJoint)
+            continue;
+
+        _poserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
+                                getJointNegation(item->jointName()));
+    }
 }
 
 void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
@@ -1809,7 +1824,13 @@ void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
     LLVector3              vec3 = LLVector3(x, y, z);
 
     for (auto item : getUiSelectedPoserJoints())
+    {
+        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (!currentlyPosingJoint)
+            continue;
+
         _poserAnimator.setJointScale(avatar, item, vec3, defl);
+    }
 }
 
 LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint()
