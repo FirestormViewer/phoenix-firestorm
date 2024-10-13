@@ -499,12 +499,16 @@ private:
     /// The kind of joint state this animation is concerned with changing.
     /// </summary>
     static const U32 POSER_JOINT_STATE = LLJointState::POS | LLJointState::ROT | LLJointState::SCALE;
+
+    /// <summary>
+    /// The unique identity of this motion.
+    /// </summary>
     LLAssetID _motionID;
 
     /// <summary>
     /// The amount of time, in seconds, we use for transitioning between one animation-state to another; this affects the 'fluidity'
-    /// of motion between changed to a joint.
-    /// Use caution making this larger than the perceptual amount of time between adjusting a joint and then choosing to use 'undo'.
+    /// of motion between changes to a joint.
+    /// Use caution making this larger than the subjective amount of time between adjusting a joint and then choosing to use 'undo' it.
     /// Undo-function waits a similar amount of time after the last user-incited joint change to add a 'restore point'.
     /// </summary>
     const F32 _interpolationTime = 0.25f;
@@ -515,7 +519,7 @@ private:
     std::vector<FSJointPose> _jointPoses;
 
     /// <summary>
-    /// Removes the current joint state, and adds a new one.
+    /// Removes the current joint state for the supplied joint, and adds a new one.
     /// </summary>
     void setJointState(LLJoint* joint, U32 state);
 
