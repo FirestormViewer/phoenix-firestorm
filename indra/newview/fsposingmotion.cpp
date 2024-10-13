@@ -165,6 +165,12 @@ void FSPosingMotion::removeJointFromState(FSJointPose* joint)
     if (!avJoint)
         return;
 
+    joint->revertJointScale();
+    joint->revertJointPosition();
+
+    if (joint->isCollisionVolume())
+        joint->revertCollisionVolume();
+
     setJointState(avJoint, 0);
 }
 
