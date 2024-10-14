@@ -98,6 +98,7 @@ private:
     void onSelectServer();
     void onLocationSLURL();
     void onUsernameTextChanged();
+    void syncShowHidePasswordButton();          // Update which button is shown based on mShowPassword
 
     static void onClickConnect(void*);
     static void onClickNewAccount(void*);
@@ -110,6 +111,7 @@ private:
     static void onRemoveCallback(const LLSD& notification, const LLSD& response);
     static void onClickGridMgrHelp(void*);
     static void onClickGridBuilder(void*);
+    static void onShowHidePasswordClick(void*);
     static std::string credentialName();
 
 private:
@@ -121,6 +123,8 @@ private:
     void*           mCallbackData;
 
     bool            mPasswordModified;
+    bool            mShowPassword;  // Show password in normal text vs. hidden by dots
+
     bool            mShowFavorites;
 
     static FSPanelLogin* sInstance;

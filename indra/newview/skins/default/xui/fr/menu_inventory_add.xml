@@ -4,8 +4,9 @@
 		<menu_item_call label="Image..." name="Upload Image"/>
 		<menu_item_call label="Son (L$[COST])..." name="Upload Sound"/>
 		<menu_item_call label="Animation (L$[COST])..." name="Upload Animation"/>
-		<menu_item_call label="Mesh..." name="Upload Model"/>
-		<menu_item_call label="En Bloc..." name="Bulk Upload"/>
+		<menu_item_call label="Maillage..." name="Upload Model"/>
+		<menu_item_call label="Matériau PBR..." name="Upload Material"/>
+		<menu_item_call label="Par lot..." name="Bulk Upload"/>
 		<menu_item_call label="Importer un ensemble lié..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Nouveau dossier" name="New Folder"/>
