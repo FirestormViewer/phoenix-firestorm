@@ -399,8 +399,7 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
         // Kill dead particles (either flagged dead, or too old)
         if ((part->mLastUpdateTime > part->mMaxAge) || (LLViewerPart::LL_PART_DEAD_MASK == part->mFlags))
         {
-            mParticles[i] = mParticles.back() ;
-            mParticles.pop_back() ;
+            vector_replace_with_last(mParticles, mParticles.begin() + i); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
             delete part ;
         }
         else
@@ -410,8 +409,7 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
             {
                 // Transfer particles between groups
                 LLViewerPartSim::getInstance()->put(part) ;
-                mParticles[i] = mParticles.back() ;
-                mParticles.pop_back() ;
+                vector_replace_with_last(mParticles, mParticles.begin() + i); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
             }
             else
             {
@@ -474,15 +472,44 @@ void LLViewerPartGroup::removeParticlesByID(const U32 source_id)
 //static
 void LLViewerPartSim::checkParticleCount(U32 size)
 {
+    // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    // if(LLViewerPartSim::sParticleCount2 != LLViewerPartSim::sParticleCount)
+    // {
+    //     LL_ERRS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
+    // }
+    //
+    // if(size > (U32)LLViewerPartSim::sParticleCount2)
+    // {
+    //     LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    // }
     if(LLViewerPartSim::sParticleCount2 != LLViewerPartSim::sParticleCount)
     {
-        LL_ERRS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
+        static int fail_count{0};
+        if(fail_count > 10)
+        {
+            LL_ERRS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
+        }
+        else
+        {
+            LL_WARNS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
+        }
+        fail_count++;
     }
 
     if(size > (U32)LLViewerPartSim::sParticleCount2)
     {
-        LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+        static int size_mismatch_count{0};
+        if(size_mismatch_count > 10)
+        {
+            LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ;
+        }
+        else
+        {
+            LL_WARNS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ;
+        }
+        size_mismatch_count++;
     }
+    // </FS:Beq>
 }
 
 LLViewerPartSim::LLViewerPartSim()
@@ -527,7 +554,7 @@ void LLViewerPartSim::destroyClass()
 //static
 bool LLViewerPartSim::shouldAddPart()
 {
-    if (sParticleCount < MAX_PART_COUNT)
+    if (sParticleCount >= MAX_PART_COUNT)
     {
         return false;
     }

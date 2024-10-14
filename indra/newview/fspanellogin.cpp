@@ -191,6 +191,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
     setBackgroundOpaque(true);
 
     mPasswordModified = false;
+    mShowPassword     = false;
 
     sInstance = this;
 
@@ -315,6 +316,10 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
     username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
     username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
     mPreviousUsername = username_combo->getValue().asString();
+
+    childSetAction("password_show_btn", onShowHidePasswordClick, this);
+    childSetAction("password_hide_btn", onShowHidePasswordClick, this);
+    syncShowHidePasswordButton();
 
     mInitialized = true;
 }
@@ -1057,6 +1062,37 @@ void FSPanelLogin::onClickForgotPassword(void*)
         LLWeb::loadURLExternal(sInstance->getString( "forgot_password_url" ));
     }
 }
+
+// static
+void FSPanelLogin::onShowHidePasswordClick(void*)
+{
+    if (sInstance)
+    {  // mShowPassword is not saved between sessions, it's just for short-term use
+        sInstance->mShowPassword = !sInstance->mShowPassword;
+        LL_INFOS("AppInit") << "Showing password text now " << (sInstance->mShowPassword ? "on" : "off") << LL_ENDL;
+
+        sInstance->syncShowHidePasswordButton();
+    }
+}
+
+
+void FSPanelLogin::syncShowHidePasswordButton()
+{   // Show or hide the two 'eye' buttons for password visibility
+    LLButton* show_password_btn = sInstance->findChild<LLButton>("password_show_btn");
+    if (show_password_btn)
+    {
+        show_password_btn->setVisible(!mShowPassword);
+    }
+    LLButton* hide_password_btn = sInstance->findChild<LLButton>("password_hide_btn");
+    if (hide_password_btn)
+    {
+        hide_password_btn->setVisible(mShowPassword);
+    }
+
+    // Update the edit field to replace password text with dots ... or not.  Will redraw
+    sInstance->getChild<LLLineEditor>("password_edit")->setDrawAsterixes(!mShowPassword);
+}
+
 
 //static
 void FSPanelLogin::onClickHelp(void*)

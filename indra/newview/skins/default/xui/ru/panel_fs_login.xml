@@ -45,6 +45,8 @@
 			<button label="Войти" name="connect_btn"/>
 			<check_box label="Запомнить пользователя" name="remember_username_check" />
 			<check_box label="Запомнить пароль" name="remember_check"/>
+			<button name="password_show_btn" tool_tip="Показать текст пароля"/>
+			<button name="password_hide_btn" tool_tip="Скрыть текст пароляt"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">

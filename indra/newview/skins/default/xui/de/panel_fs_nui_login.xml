@@ -21,6 +21,8 @@
 						<layout_panel name="password_container">
 							<line_editor name="password_edit" label="Kennwort"/>
 							<check_box label="Kennwort speichern" name="remember_check"/>
+							<button name="password_show_btn" tool_tip="Passwort anzeigen"/>
+							<button name="password_hide_btn" tool_tip="Passwort verstecken"/>
 						</layout_panel>
 						<layout_panel name="start_location_panel">
 							<combo_box name="start_location_combo" label="Hier starten:">

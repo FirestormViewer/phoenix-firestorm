@@ -31,7 +31,7 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-12,ubuntu-22.04,windows-2022]
+        os: [macos-14,ubuntu-22.04,windows-2022]
         grid: [sl,os]
         variant: [regular, avx]
     runs-on: ${{ matrix.os }}
