@@ -126,42 +126,45 @@ constexpr std::string_view POSER_AVATAR_SCROLLLIST_HAND_PRESETS_NAME     = "hand
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
-    // bind requests, other controls are find-and-binds, see postBuild()
-    mCommitCallbackRegistrar.add("Poser.RefreshAvatars", boost::bind(&FSFloaterPoser::onAvatarsRefresh, this));
-    mCommitCallbackRegistrar.add("Poser.StartStopAnimating", boost::bind(&FSFloaterPoser::onPoseStartStop, this));
-    mCommitCallbackRegistrar.add("Poser.ToggleLoadSavePanel", boost::bind(&FSFloaterPoser::onToggleLoadSavePanel, this));
-    mCommitCallbackRegistrar.add("Poser.ToggleAdvancedPanel", boost::bind(&FSFloaterPoser::onToggleAdvancedPanel, this));
+    // Bind requests, other controls are find-and-binds, see postBuild()
+    mCommitCallbackRegistrar.add("Poser.RefreshAvatars", [this](LLUICtrl*, const LLSD&) { onAvatarsRefresh(); });
+    mCommitCallbackRegistrar.add("Poser.StartStopAnimating", [this](LLUICtrl*, const LLSD&) { onPoseStartStop(); });
+    mCommitCallbackRegistrar.add("Poser.ToggleLoadSavePanel", [this](LLUICtrl*, const LLSD&) { onToggleLoadSavePanel(); });
+    mCommitCallbackRegistrar.add("Poser.ToggleAdvancedPanel", [this](LLUICtrl*, const LLSD&) { onToggleAdvancedPanel(); });
 
-    mCommitCallbackRegistrar.add("Poser.UndoLastRotation", boost::bind(&FSFloaterPoser::onUndoLastRotation, this));
-    mCommitCallbackRegistrar.add("Poser.RedoLastRotation", boost::bind(&FSFloaterPoser::onRedoLastRotation, this));
-    mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", boost::bind(&FSFloaterPoser::onToggleMirrorChange, this));
-    mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", boost::bind(&FSFloaterPoser::onToggleSympatheticChange, this));
-    mCommitCallbackRegistrar.add("Poser.ToggleDeltaModeChanges", boost::bind(&FSFloaterPoser::onToggleDeltaModeChange, this));
-    mCommitCallbackRegistrar.add("Poser.AdjustTrackPadSensitivity", boost::bind(&FSFloaterPoser::onAdjustTrackpadSensitivity, this));
+    mCommitCallbackRegistrar.add("Poser.UndoLastRotation", [this](LLUICtrl*, const LLSD&) { onUndoLastRotation(); });
+    mCommitCallbackRegistrar.add("Poser.RedoLastRotation", [this](LLUICtrl*, const LLSD&) { onRedoLastRotation(); });
+    mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", [this](LLUICtrl*, const LLSD&) { onToggleMirrorChange(); });
+    mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", [this](LLUICtrl*, const LLSD&) { onToggleSympatheticChange(); });
+    mCommitCallbackRegistrar.add("Poser.ToggleDeltaModeChanges", [this](LLUICtrl*, const LLSD &) { onToggleDeltaModeChange(); ));
+    mCommitCallbackRegistrar.add("Poser.AdjustTrackPadSensitivity", [this](LLUICtrl*, const LLSD&) { onAdjustTrackpadSensitivity(); });
+    
 
-    mCommitCallbackRegistrar.add("Poser.PositionSet", boost::bind(&FSFloaterPoser::onAvatarPositionSet, this));
+    mCommitCallbackRegistrar.add("Poser.PositionSet", [this](LLUICtrl*, const LLSD&) { onAvatarPositionSet(); });
 
-    mCommitCallbackRegistrar.add("Poser.Advanced.PositionSet", boost::bind(&FSFloaterPoser::onAdvancedPositionSet, this));
-    mCommitCallbackRegistrar.add("Poser.Advanced.ScaleSet", boost::bind(&FSFloaterPoser::onAdvancedScaleSet, this));
-    mCommitCallbackRegistrar.add("Poser.UndoLastPosition", boost::bind(&FSFloaterPoser::onUndoLastPosition, this));
-    mCommitCallbackRegistrar.add("Poser.RedoLastPosition", boost::bind(&FSFloaterPoser::onRedoLastPosition, this));
-    mCommitCallbackRegistrar.add("Poser.ResetPosition", boost::bind(&FSFloaterPoser::onResetPosition, this));
-    mCommitCallbackRegistrar.add("Poser.ResetScale", boost::bind(&FSFloaterPoser::onResetScale, this));
-    mCommitCallbackRegistrar.add("Poser.UndoLastScale", boost::bind(&FSFloaterPoser::onUndoLastScale, this));
-    mCommitCallbackRegistrar.add("Poser.RedoLastScale", boost::bind(&FSFloaterPoser::onRedoLastScale, this));
+    mCommitCallbackRegistrar.add("Poser.Advanced.PositionSet", [this](LLUICtrl*, const LLSD&) { onAdvancedPositionSet(); });
+    mCommitCallbackRegistrar.add("Poser.Advanced.ScaleSet", [this](LLUICtrl*, const LLSD&) { onAdvancedScaleSet(); });
+    mCommitCallbackRegistrar.add("Poser.UndoLastPosition", [this](LLUICtrl*, const LLSD&) { onUndoLastPosition(); });
+    mCommitCallbackRegistrar.add("Poser.RedoLastPosition", [this](LLUICtrl*, const LLSD&) { onRedoLastPosition(); });
+    mCommitCallbackRegistrar.add("Poser.ResetPosition", [this](LLUICtrl*, const LLSD&) { onResetPosition(); });
+    mCommitCallbackRegistrar.add("Poser.ResetScale", [this](LLUICtrl*, const LLSD&) { onResetScale(); });
+    mCommitCallbackRegistrar.add("Poser.UndoLastScale", [this](LLUICtrl*, const LLSD&) { onUndoLastScale(); });
+    mCommitCallbackRegistrar.add("Poser.RedoLastScale", [this](LLUICtrl*, const LLSD&) { onRedoLastScale(); });
 
-    mCommitCallbackRegistrar.add("Poser.Save", boost::bind(&FSFloaterPoser::onClickPoseSave, this));
-    mCommitCallbackRegistrar.add("Pose.Menu", boost::bind(&FSFloaterPoser::onPoseMenuAction, this, _2));
-    mCommitCallbackRegistrar.add("Poser.BrowseCache", boost::bind(&FSFloaterPoser::onClickBrowsePoseCache, this));
-    mCommitCallbackRegistrar.add("Poser.LoadLeftHand", boost::bind(&FSFloaterPoser::onClickLoadLeftHandPose, this));
-    mCommitCallbackRegistrar.add("Poser.LoadRightHand", boost::bind(&FSFloaterPoser::onClickLoadRightHandPose, this));
+    mCommitCallbackRegistrar.add("Poser.Save", [this](LLUICtrl*, const LLSD&) { onClickPoseSave(); });
+    mCommitCallbackRegistrar.add("Pose.Menu", [this](LLUICtrl*, const LLSD& data) { onPoseMenuAction(data); });
+    mCommitCallbackRegistrar.add("Poser.BrowseCache", [this](LLUICtrl*, const LLSD&) { onClickBrowsePoseCache(); });
+    mCommitCallbackRegistrar.add("Poser.LoadLeftHand", [this](LLUICtrl*, const LLSD&) { onClickLoadLeftHandPose(); });
+    mCommitCallbackRegistrar.add("Poser.LoadRightHand", [this](LLUICtrl*, const LLSD&) { onClickLoadRightHandPose(); });
 
-    mCommitCallbackRegistrar.add("Poser.FlipPose", boost::bind(&FSFloaterPoser::onClickFlipPose, this));
-    mCommitCallbackRegistrar.add("Poser.FlipJoint", boost::bind(&FSFloaterPoser::onClickFlipSelectedJoints, this));
-    mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", boost::bind(&FSFloaterPoser::onClickRecaptureSelectedBones, this));
-    mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", boost::bind(&FSFloaterPoser::onClickToggleSelectedBoneEnabled, this));
-    mCommitCallbackRegistrar.add("Poser.PoseJointsReset", boost::bind(&FSFloaterPoser::onPoseJointsReset, this));
+    mCommitCallbackRegistrar.add("Poser.FlipPose", [this](LLUICtrl*, const LLSD&) { onClickFlipPose(); });
+    mCommitCallbackRegistrar.add("Poser.FlipJoint", [this](LLUICtrl*, const LLSD&) { onClickFlipSelectedJoints(); });
+    mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickRecaptureSelectedBones(); });
+    mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickToggleSelectedBoneEnabled(); });
+    mCommitCallbackRegistrar.add("Poser.PoseJointsReset", [this](LLUICtrl*, const LLSD&) { onPoseJointsReset(); });
 }
+
+
 
 FSFloaterPoser::~FSFloaterPoser() {}
 
@@ -184,49 +187,49 @@ bool FSFloaterPoser::postBuild()
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onAvatarSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onAvatarSelect(); });
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onJointSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
     }
 
     scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
     if (scrollList)
     {
         scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback(boost::bind(&FSFloaterPoser::onPoseFileSelect, this));
+        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onPoseFileSelect(); });
     }
 
     bool advButtonState = gSavedSettings.getBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY);
