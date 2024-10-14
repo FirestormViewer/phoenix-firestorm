@@ -1109,7 +1109,7 @@ void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& the
     addSearchSkinDir(mUserSkinDir);
 
     // <FS:Ansariel> If working directory is different from executable directory, add executable subdirs as searchable folders
-    if (mExecutableDir != mWorkingDir)
+    if (LLStringUtil::compareInsensitive( mExecutableDir, mWorkingDir) != 0)
     {
         addSearchSkinDir(add(mExecutableDir, "skins"));
         addSearchSkinDir(add(mExecutableDir, "skins", "default"));
