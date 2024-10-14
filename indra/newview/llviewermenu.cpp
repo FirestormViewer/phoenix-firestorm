@@ -180,6 +180,9 @@
 #include "llvovolume.h"
 #include "particleeditor.h"
 #include "permissionstracker.h"
+// <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible)
+#include "fsareasearch.h"
+// </FS:Chanayane>
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -2185,18 +2188,20 @@ static void set_all_animation_time_factors(F32  time_factor)
     }
 }
 
+// <AS:chanayane> Freeze animations menu
 class LLAdvancedAnimFreeze : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
         //LL_INFOS() << "LLAdvancedAnimSlowedDown" << LL_ENDL;
-        F32 time_factor = LLMotionController::getCurrentTimeFactor();
-        time_factor = 0.0f;  // 0% of normal speed, effectively freezing all animations
+        F32 time_factor = 0.0f;  // 0% of normal speed, effectively freezing all animations
         set_all_animation_time_factors(time_factor);
         return true;
     }
 };
+// </AS:chanayane>
 
+// <AS:chanayane> Slow-motion animations menu
 class LLAdvancedAnimSlowedDown : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -2208,6 +2213,7 @@ class LLAdvancedAnimSlowedDown : public view_listener_t
         return true;
     }
 };
+// </AS:chanayane>
 
 class LLAdvancedAnimTenFaster : public view_listener_t
 {
@@ -2215,7 +2221,10 @@ class LLAdvancedAnimTenFaster : public view_listener_t
     {
         //LL_INFOS() << "LLAdvancedAnimTenFaster" << LL_ENDL;
         F32 time_factor = LLMotionController::getCurrentTimeFactor();
-        time_factor = llmin(time_factor + 0.1f, 2.f);   // Upper limit is 200% speed
+// <AS:chanayane> Higher max animation time factor
+        //time_factor = llmin(time_factor + 0.1f, 2.f);   // Upper limit is 200% speed
+        time_factor = llmin(time_factor + 0.1f, 5.f);   // Upper limit is 500% speed
+// </AS:chanayane>
         set_all_animation_time_factors(time_factor);
         return true;
     }
@@ -2227,7 +2236,10 @@ class LLAdvancedAnimTenSlower : public view_listener_t
     {
         //LL_INFOS() << "LLAdvancedAnimTenSlower" << LL_ENDL;
         F32 time_factor = LLMotionController::getCurrentTimeFactor();
-        time_factor = llmax(time_factor - 0.1f, 0.1f);  // Lower limit is at 10% of normal speed
+// <AS:chanayane> Lower max animation time factor
+        //time_factor = llmax(time_factor - 0.1f, 0.1f);  // Lower limit is at 10% of normal speed
+        time_factor = llmax(time_factor - 0.1f, 0.0f);  // Lower limit is at 0% of normal speed
+// </AS:chanayane>
         set_all_animation_time_factors(time_factor);
         return true;
     }
@@ -3553,6 +3565,43 @@ class LLAvatarTexRefresh : public view_listener_t
     }
 };
 // </FS:Zi> Texture Refresh
+
+// <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible)
+void inspect_avatar(LLVOAvatar *avatar) {
+    LLFloaterReg::showInstance("area_search");
+    FSAreaSearch* area_search = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
+    if (area_search)
+    {
+        LLCheckBoxCtrl *exclude_attachment = area_search->getChild<LLCheckBoxCtrl>("exclude_attachment");
+        exclude_attachment->set(FALSE);
+        area_search->setExcludeAttachment(FALSE);
+        LLCheckBoxCtrl *exclude_temporary = area_search->getChild<LLCheckBoxCtrl>("exclude_temporary");
+        exclude_temporary->set(FALSE);
+        area_search->setExcludetemporary(FALSE);
+        LLCheckBoxCtrl *filter_attachment = area_search->getChild<LLCheckBoxCtrl>("filter_attachment");
+        filter_attachment->setEnabled(TRUE);
+        filter_attachment->set(TRUE);
+        area_search->setFilterAttachment(TRUE);
+        std::string avatar_search_name = avatar->getFullname();
+        std::replace(avatar_search_name.begin(), avatar_search_name.end(), ' ', '.');
+        area_search->setFindOwnerText(avatar_search_name);
+        area_search->onButtonClickedSearch();
+        area_search->checkRegion();
+    }
+}
+class TSAvatarInspect : public view_listener_t
+{
+    bool handleEvent(const LLSD &userdata)
+    {
+        LLVOAvatar *avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        if (avatar)
+        {
+            inspect_avatar(avatar);
+        }
+        return true;
+    }
+};
+// </FS:Chanayane>
 
 class LLObjectReportAbuse : public view_listener_t
 {
@@ -13019,6 +13068,9 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAvatarReportAbuse(), "Avatar.ReportAbuse");
     view_listener_t::addMenu(new LLAvatarTexRefresh(), "Avatar.TexRefresh");    // ## Zi: Texture Refresh
 
+// <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible)
+    view_listener_t::addMenu(new TSAvatarInspect(), "Avatar.Inspect");
+// </FS:Chanayane>
     view_listener_t::addMenu(new LLAvatarToggleMyProfile(), "Avatar.ToggleMyProfile");
     view_listener_t::addMenu(new LLAvatarTogglePicks(), "Avatar.TogglePicks");
     view_listener_t::addMenu(new LLAvatarToggleSearch(), "Avatar.ToggleSearch");
