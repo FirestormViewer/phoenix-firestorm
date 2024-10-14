@@ -914,48 +914,60 @@
         </menu_item_call>
     </menu>
     
-    <!-- World Menu -->
-    
-    <menu
-     create_jump_keys="true"
-     label="World"
-     name="World"
-     tear_off="true"
-     visible="true">
-     <menu_item_check
-     label="Poser"
-     name="Poser"
-     use_mac_ctrl="true">
-         <menu_item_check.on_check
-            function="Floater.Visible"
-            parameter="poser" />
-         <menu_item_check.on_click
-            function="Floater.Toggle"
-            parameter="poser" />
-      </menu_item_check>
-      <menu_item_check
-         label="Pose Creator"
-         name="Pose Creator">
-         <menu_item_check.on_check
-            function="Floater.Visible"
-            parameter="poser_creator" />
-         <menu_item_check.on_click
-            function="Floater.Toggle"
-            parameter="poser_creator" />
-      </menu_item_check>
-        <menu_item_call
-         label="Resync Animations"
-         name="Resync Animations"
-         shortcut="control|S">
-            <menu_item_call.on_click
-             function="Tools.ResyncAnimations" />
-        </menu_item_call>
+   <!-- AyaneStorm Menu -->
 
-         <menu
+   <menu
+      create_jump_keys="true"
+      label="AyaneStorm"
+      name="AyaneStorm"
+      tear_off="true"
+      visible="true">
+      <menu
          create_jump_keys="true"
-         label="Animation Speed"
-         name="Animation Speed"
+         label="Poser"
+         name="Poser"
          tear_off="true">
+         <menu_item_check
+         label="Poser"
+         name="Poser"
+         use_mac_ctrl="true">
+         <menu_item_check.on_check
+            function="Floater.Visible"
+            parameter="poser" />
+            <menu_item_check.on_click
+               function="Floater.Toggle"
+               parameter="poser" />
+         </menu_item_check>
+         <menu_item_check
+            label="Pose Creator"
+            name="Pose Creator">
+            <menu_item_check.on_check
+               function="Floater.Visible"
+               parameter="poser_creator" />
+            <menu_item_check.on_click
+               function="Floater.Toggle"
+               parameter="poser_creator" />
+         </menu_item_check>
+      </menu>
+
+      <menu_item_separator />
+
+      <menu
+         create_jump_keys="true"
+         label="Animation"
+         name="Animation"
+         tear_off="true">
+
+         <menu_item_call
+            label="Resync Animations"
+            name="Resync Animations"
+            shortcut="control|S">
+               <menu_item_call.on_click
+                  function="Tools.ResyncAnimations" />
+         </menu_item_call>
+
+         <menu_item_separator />
+
          <menu_item_call
             label="Freeze Animations"
             name="Freeze Animations"
@@ -963,6 +975,7 @@
             <menu_item_call.on_click
                function="Advanced.AnimFreeze" />
          </menu_item_call>
+
          <menu_item_call
             label="All Animations Slowed Down"
             name="All Animations Slowed Down"
@@ -970,18 +983,23 @@
             <menu_item_call.on_click
                function="Advanced.AnimSlowedDown" />
          </menu_item_call>
+         
          <menu_item_call
             label="All Animations 10% Faster"
-            name="All Animations 10 Faster">
+            name="All Animations 10 Faster"
+            shortcut="control|shift|Up">
             <menu_item_call.on_click
                function="Advanced.AnimTenFaster" />
          </menu_item_call>
+         
          <menu_item_call
             label="All Animations 10% Slower"
-            name="All Animations 10 Slower">
+            name="All Animations 10 Slower"
+            shortcut="control|shift|Down">
             <menu_item_call.on_click
                function="Advanced.AnimTenSlower" />
          </menu_item_call>
+         
          <menu_item_call
             label="Reset All Animation Speed"
             name="Reset All Animation Speed"
@@ -989,6 +1007,7 @@
             <menu_item_call.on_click
                function="Advanced.AnimResetAll" />
          </menu_item_call>
+         
          <menu_item_check
             label="Slow Motion Animations"
             name="Slow Motion Animations">
@@ -999,9 +1018,28 @@
                function="ToggleControl"
                parameter="SlowMotionAnimation" />
          </menu_item_check>
-         </menu>
+      </menu>
+   </menu>
+
+    <!-- World Menu -->
+    
+    <menu
+     create_jump_keys="true"
+     label="World"
+     name="World"
+     tear_off="true"
+     visible="true">
+<!--
+         <menu_item_call
+         label="Resync Animations"
+         name="Resync Animations"
+         shortcut="control|S">
+            <menu_item_call.on_click
+             function="Tools.ResyncAnimations" />
+        </menu_item_call>
         
         <menu_item_separator/>
+-->
      
         <menu_item_call
             label="Nearby Avatars"
@@ -1314,7 +1352,7 @@
             function="World.EnableTeleportHome" />
         </menu_item_call>
         <menu_item_separator/>
-      <!--    <menu_item_check
+    <!--    <menu_item_check
          label="Show Navigation Bar"
          name="ShowNavbarNavigationPanel">
            <menu_item_check.on_click
@@ -1491,8 +1529,8 @@
                 </menu_item_call>
             </menu>
         </menu>
-
-      <!--   
+	    
+<!--   
 	    <menu
 	     create_jump_keys="true"
 	     label="Environment Editor"
@@ -2397,14 +2435,14 @@
             </menu_item_call>
         </menu>
 
-      <!-- local mesh begin -->
+        <!-- local mesh begin -->
         <menu_item_call
            enabled="true"
            label="Local Mesh"
            name="local_mesh">
           <menu_item_call.on_click function="Floater.Show" parameter="local_mesh_floater"/>
         </menu_item_call>
-      <!-- local mesh end -->
+        <!-- local mesh end -->
 
       <menu_item_separator/>
         <menu_item_call
@@ -2432,8 +2470,8 @@
              function="Edit.EnableRedo" />
         </menu_item_call>        
     </menu>
-
-   <!-- Content Menu -->
+    
+    <!-- Content Menu -->
     
     <menu
     	create_jump_keys="true"
@@ -2441,7 +2479,7 @@
     	name="Content"
     	tear_off="true"
         visible="true">
-      <!--
+<!--
         <menu_item_call
              label="Search"
              name="Search">
@@ -2547,9 +2585,9 @@
              function="Advanced.ToggleHUDInfo"
              parameter="motd" />
        </menu_item_call>
-      </menu>
-
-   <!-- Help Menu -->
+      </menu>   
+    
+    <!-- Help Menu -->
     
     
     <menu
@@ -2626,7 +2664,7 @@
              parameter="guidebook" />
         </menu_item_check>
 
-      <!--       <menu_item_call
+<!--       <menu_item_call
          label="Second Life Help"
          name="Second Life Help">
              <menu_item_call.on_click
@@ -2649,7 +2687,7 @@
              function="ShowHelp"
              parameter="grid_about" />
         </menu_item_call>
-      <!--        <menu_item_call
+<!--        <menu_item_call
          label="Tutorial"
          name="Tutorial">
             <menu_item_call.on_click
@@ -2983,7 +3021,7 @@
       </menu_item_check>
     </menu>
 
-   <!-- Advanced Menu -->
+    <!-- Advanced Menu -->
     <menu
      create_jump_keys="true"
      label="Advanced"
@@ -3600,7 +3638,7 @@
              parameter="search" />
             </menu_item_check>
 
-         <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+          <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
           <menu_item_check
            label="DoubleClick Teleport"
            name="DoubleClick Teleport"
@@ -3612,7 +3650,7 @@
                function="Advanced.SetDoubleClickAction"
                parameter="teleport_to"/>
           </menu_item_check>
-         <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+          <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
 
           <menu_item_separator/>
 
@@ -3784,7 +3822,7 @@
              function="Advanced.ShowDebugSettings"
              parameter="all" />
         </menu_item_call>
-      <!-- <FS:TS> FIRE-17589: Use control-alt-Q on OS X too -->
+     <!-- <FS:TS> FIRE-17589: Use control-alt-Q on OS X too -->
      <menu_item_check
          label="Show Developer Menu"
          name="Debug Mode"
@@ -3797,7 +3835,7 @@
              function="ToggleControl"
              parameter="QAMode" />
         </menu_item_check>
-      <!-- </FS:TS> FIRE-17589 -->
+     <!-- </FS:TS> FIRE-17589 -->
     </menu>
 
     <menu
@@ -4337,7 +4375,7 @@
          function="Advanced.ToggleInfoDisplay"
          parameter="bboxes" />
         </menu_item_check>
-         <!-- <FS:Zi> Add avatar hitbox debug -->
+        <!-- <FS:Zi> Add avatar hitbox debug -->
         <menu_item_check
          label="Avatar Hitboxes"
          name="Avatar Hitboxes">
@@ -4348,7 +4386,7 @@
          function="ToggleControl"
          parameter="DebugRenderHitboxes" />
         </menu_item_check>
-         <!-- </FS:Zi> Add avatar hitbox debug -->
+        <!-- </FS:Zi> Add avatar hitbox debug -->
         <menu_item_check
          label="Normals"
          name="Normals">
@@ -5466,7 +5504,8 @@
                      parameter="RenderAvatarFriendsOnly" />
                 </menu_item_check>
             </menu>
-            <!--<menu
+<!--
+            <menu
              create_jump_keys="true"
              label="Animation Speed"
              name="Animation Speed"
@@ -5479,15 +5518,13 @@
                 </menu_item_call>
                 <menu_item_call
                  label="All Animations 10% Slower"
-                 name="All Animations 10 Slower"
-                 shortcut="control|N">
+                 name="All Animations 10 Slower">
                     <menu_item_call.on_click
                      function="Advanced.AnimTenSlower" />
                 </menu_item_call>
                 <menu_item_call
                  label="Reset All Animation Speed"
-                 name="Reset All Animation Speed"
-                 shortcut="control|J">
+                 name="Reset All Animation Speed">
                     <menu_item_call.on_click
                      function="Advanced.AnimResetAll" />
                 </menu_item_call>
@@ -5501,7 +5538,8 @@
 					 function="ToggleControl"
 					 parameter="SlowMotionAnimation" />
 				</menu_item_check>
-            </menu>-->
+            </menu>
+-->
             <menu_item_call
              label="Force Params to Default"
              name="Force Params to Default">
@@ -5613,7 +5651,7 @@
                  function="Advanced.ToggleInfoDisplay"
                  parameter="impostors" />
             </menu_item_check>
-         <!-- Appears not to exist anymore
+            <!-- Appears not to exist anymore
             <menu_item_check
              label="Debug Rotation"
              name="Debug Rotation">
@@ -5918,9 +5956,9 @@
              function="IsGodCustomerService" />
         </menu_item_call>
     </menu>
-
-
-   <!-- God Menu -->
+    
+    
+    <!-- God Menu -->
     
     <menu
      create_jump_keys="true"
