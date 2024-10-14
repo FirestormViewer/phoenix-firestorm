@@ -431,10 +431,12 @@ bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, std::string poseFileName)
 
         file.close();
     }
-    catch (...)
+    catch (const std::exception& e)
     {
+        LL_WARNS("Posing") << "Exception caught in SaveToBVH: " << e.what() << LL_ENDL;
         return false;
     }
+
 
     return true;
 }
@@ -491,10 +493,12 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
         LLSDSerialize::toPrettyXML(record, file);
         file.close();
     }
-    catch (...)
+    catch (const std::exception& e)
     {
+        LL_WARNS("Posing") << "Exception caught in saveToXml: " << e.what() << LL_ENDL;
         return false;
     }
+
 
     return true;
 }
@@ -874,10 +878,10 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                 }
             }
         }
-    }
-    catch (...)
+    }    
+    catch ( const std::exception & e )
     {
-        LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << LL_ENDL;
+        LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << " exception: " << e.what() << LL_ENDL;
     }
 
     onJointSelect();
