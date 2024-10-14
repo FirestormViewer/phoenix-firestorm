@@ -2188,18 +2188,20 @@ static void set_all_animation_time_factors(F32  time_factor)
     }
 }
 
+// <AS:chanayane> Freeze animations menu
 class LLAdvancedAnimFreeze : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
         //LL_INFOS() << "LLAdvancedAnimSlowedDown" << LL_ENDL;
-        F32 time_factor = LLMotionController::getCurrentTimeFactor();
-        time_factor = 0.0f;  // 0% of normal speed, effectively freezing all animations
+        F32 time_factor = 0.0f;  // 0% of normal speed, effectively freezing all animations
         set_all_animation_time_factors(time_factor);
         return true;
     }
 };
+// </AS:chanayane>
 
+// <AS:chanayane> Slow-motion animations menu
 class LLAdvancedAnimSlowedDown : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -2211,6 +2213,7 @@ class LLAdvancedAnimSlowedDown : public view_listener_t
         return true;
     }
 };
+// </AS:chanayane>
 
 class LLAdvancedAnimTenFaster : public view_listener_t
 {
@@ -2218,7 +2221,10 @@ class LLAdvancedAnimTenFaster : public view_listener_t
     {
         //LL_INFOS() << "LLAdvancedAnimTenFaster" << LL_ENDL;
         F32 time_factor = LLMotionController::getCurrentTimeFactor();
-        time_factor = llmin(time_factor + 0.1f, 2.f);   // Upper limit is 200% speed
+// <AS:chanayane> Higher max animation time factor
+        //time_factor = llmin(time_factor + 0.1f, 2.f);   // Upper limit is 200% speed
+        time_factor = llmin(time_factor + 0.1f, 5.f);   // Upper limit is 500% speed
+// </AS:chanayane>
         set_all_animation_time_factors(time_factor);
         return true;
     }
@@ -2230,7 +2236,10 @@ class LLAdvancedAnimTenSlower : public view_listener_t
     {
         //LL_INFOS() << "LLAdvancedAnimTenSlower" << LL_ENDL;
         F32 time_factor = LLMotionController::getCurrentTimeFactor();
-        time_factor = llmax(time_factor - 0.1f, 0.1f);  // Lower limit is at 10% of normal speed
+// <AS:chanayane> Lower max animation time factor
+        //time_factor = llmax(time_factor - 0.1f, 0.1f);  // Lower limit is at 10% of normal speed
+        time_factor = llmax(time_factor - 0.1f, 0.0f);  // Lower limit is at 0% of normal speed
+// </AS:chanayane>
         set_all_animation_time_factors(time_factor);
         return true;
     }
