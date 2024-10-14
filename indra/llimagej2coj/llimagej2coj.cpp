@@ -500,52 +500,6 @@ public:
         parameters.cod_format = OPJ_CODEC_J2K;
         parameters.prog_order = OPJ_RLCP;
         parameters.cp_disto_alloc = 1;
-        
-        // <FS:Chanayane> Fixes bad upload quality issue with OpenJPEG
-        // if not lossless compression, computes tcp_numlayers and max_cs_size depending on the image dimensions
-        if( parameters.irreversible ) {
-
-            // computes a number of layers
-            U32 surface = rawImageIn.getWidth() * rawImageIn.getHeight();
-            U32 nb_layers = 1;
-            U32 s = 64*64;
-            while (surface > s)
-            {
-                nb_layers++;
-                s *= 4;
-            }
-            nb_layers = llclamp(nb_layers, 1, 6);
-
-            parameters.tcp_numlayers = nb_layers;
-            parameters.tcp_rates[nb_layers - 1] = (U32)(1.f / DEFAULT_COMPRESSION_RATE); // 1:8 by default
-
-            // for each subsequent layer, computes its rate and adds surface * numcomps * 1/rate to the max_cs_size
-            U32 max_cs_size = (U32)(surface * image->numcomps * DEFAULT_COMPRESSION_RATE);
-            U32 multiplier;
-            for (int i = nb_layers - 2; i >= 0; i--)
-            {
-                if( i == nb_layers - 2 )
-                {
-                    multiplier = 15;
-                }
-                else if( i == nb_layers - 3 )
-                {
-                    multiplier = 4;
-                }
-                else
-                {
-                    multiplier = 2;
-                }
-                parameters.tcp_rates[i] = parameters.tcp_rates[i + 1] * multiplier;
-                max_cs_size += (U32)(surface * image->numcomps * (1 / parameters.tcp_rates[i]));
-            }
-
-            //ensure that we have at least a minimal size
-            max_cs_size = llmax(max_cs_size, (U32)FIRST_PACKET_SIZE);
-           
-            parameters.max_cs_size = max_cs_size;
-        }
-        // </FS:Chanayane>
 
         // if not lossless compression, computes tcp_numlayers and max_cs_size depending on the image dimensions
         if( parameters.irreversible ) {
