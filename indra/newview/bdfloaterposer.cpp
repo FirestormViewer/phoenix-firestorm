@@ -397,19 +397,19 @@ void BDFloaterPoser::onPoseLoadSelective(const LLSD& param)
 
     S32 load_type = 0;
     if (param.asString() == "rotation")
-        load_type |= ROTATIONS;
+        load_type |= BD_ROTATIONS;
     else if (param.asString() == "position")
-        load_type |= POSITIONS;
+        load_type |= BD_POSITIONS;
     else if (param.asString() == "scale")
-        load_type |= SCALES;
+        load_type |= BD_SCALES;
     else if (param.asString() == "rot_pos")
-        load_type |= ROTATIONS | POSITIONS;
+        load_type |= BD_ROTATIONS | BD_POSITIONS;
     else if (param.asString() == "rot_scale")
-        load_type |= ROTATIONS | SCALES;
+        load_type |= BD_ROTATIONS | BD_SCALES;
     else if (param.asString() == "pos_scale")
-        load_type |= POSITIONS | SCALES;
+        load_type |= BD_POSITIONS | BD_SCALES;
     else if (param.asString() == "all")
-        load_type |= ROTATIONS | POSITIONS | SCALES;
+        load_type |= BD_ROTATIONS | BD_POSITIONS | BD_SCALES;
 
     gDragonAnimator.loadPose(pose_name, load_type);
     onJointRefresh();

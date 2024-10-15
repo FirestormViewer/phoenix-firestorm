@@ -33,10 +33,10 @@ enum BD_EActionType
 
 enum BD_ELoadType
 {
-    NOTHING = 0,
-    ROTATIONS = 0x1,            // Load rotations
-    POSITIONS = 0x1 << 1,       // Load positions
-    SCALES = 0x1 << 2,          // Load scales
+    BD_NOTHING = 0,
+    BD_ROTATIONS = 0x1,            // Load rotations
+    BD_POSITIONS = 0x1 << 1,       // Load positions
+    BD_SCALES = 0x1 << 2,          // Load scales
 };
 
 class Action

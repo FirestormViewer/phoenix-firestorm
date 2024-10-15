@@ -357,7 +357,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
                     }
 
                     LLVector3 vec3;
-                    if (load_type & ROTATIONS && control_map.has("rotation"))
+                    if (load_type & BD_ROTATIONS && control_map.has("rotation"))
                     {
                         LLQuaternion quat;
                         LLQuaternion new_quat = joint->getRotation();
@@ -370,7 +370,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
 
                     //BD - Position information is only ever written when it is actually safe to do.
                     //     It's safe to assume that IF information is available it's safe to apply.
-                    if (load_type & POSITIONS && control_map.has("position"))
+                    if (load_type & BD_POSITIONS && control_map.has("position"))
                     {
                         vec3.setValue(control_map["position"]);
                         joint->setLastPosition(joint->getPosition());
@@ -378,7 +378,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
                     }
 
                     //BD - Bone Scales
-                    if (load_type & SCALES && control_map.has("scale"))
+                    if (load_type & BD_SCALES && control_map.has("scale"))
                     {
                         vec3.setValue(control_map["scale"]);
                         joint->setScale(vec3);
@@ -426,7 +426,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
                 }
 
                 LLVector3 vec3;
-                if (load_type & ROTATIONS && pose["rotation"].isDefined())
+                if (load_type & BD_ROTATIONS && pose["rotation"].isDefined())
                 {
                     LLQuaternion quat;
                     LLQuaternion new_quat = joint->getRotation();
@@ -439,7 +439,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
 
                 //BD - Position information is only ever written when it is actually safe to do.
                 //     It's safe to assume that IF information is available it's safe to apply.
-                if (load_type & POSITIONS && pose["position"].isDefined())
+                if (load_type & BD_POSITIONS && pose["position"].isDefined())
                 {
                     vec3.setValue(pose["position"]);
                     joint->setLastPosition(joint->getPosition());
@@ -447,7 +447,7 @@ bool BDAnimator::loadPose(const LLSD& name, S32 load_type)
                 }
 
                 //BD - Bone Scales
-                if (load_type & SCALES && pose["scale"].isDefined())
+                if (load_type & BD_SCALES && pose["scale"].isDefined())
                 {
                     vec3.setValue(pose["scale"]);
                     joint->setScale(vec3);
