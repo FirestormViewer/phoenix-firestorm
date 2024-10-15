@@ -1,91 +1,249 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
 positioning="centered"
-height="431"
+height="310"
 layout="topleft"
 name="floater_poser"
-title="Poser - Live Editing Mode"
-width="654">
-	<!-- Expanded Size 745 -->
-	<!-- Expanded Size 906 -->
-	<panel
-	height="1"
-	visible="false"
-	name="max_panel"
-	width="886"/>
-	<!-- Collapsed Size 517 -->
-	<!-- Collapsed Size 678 -->
-	<panel
-	height="1"
-	visible="false"
-	name="min_panel"
-	width="654"/>
-	<string
-	name="linear_time" translate="false">
-	0.000+
-	</string>
-	<string
-	name="spherical_time" translate="false">
-	0.001 to 1.0
-	</string>
-	<string
-	name="live_mode_str" translate="false">
-	Poser - Live Editing Mode
-	</string>
-	<string
-	name="creation_mode_str" translate="false">
-	Poser - Create A Pose Mode
-	</string>
-	<string
-	name="icon_category" translate="false">
-	Inv_Shape
-	</string>
-	<string
-	name="icon_bone" translate="false">
-	Transparent
-	</string>
-	<string
-	name="icon_object" translate="false">
-	Inv_Object
-	</string>
-	<string
-	name="title_mPelvis" translate="false">
-	Main Body
-	</string>
-	<string
-	name="title_mHead" translate="false">
-	Head
-	</string>
-	<string
-	name="title_mCollarLeft" translate="false">
-	Left Arm
-	</string>
-	<string
-	name="title_mCollarRight" translate="false">
-	Right Arm
-	</string>
-	<string
-	name="title_mWingsRoot" translate="false">
-	Back
-	</string>
-	<string
-	name="title_mHipLeft" translate="false">
-	Left Leg
-	</string>
-	<string
-	name="title_mHipRight" translate="false">
-	Right Leg
-	</string>
-	<string
-	name="title_mTail1" translate="false">
-	Tail
-	</string>
-	<string
-	name="title_mGroin" translate="false">
-	Misc
-	</string>
+title="Avatar and Animesh Poser"
+width="565">
+    <string	name="icon_category" translate="false">Inv_BodyShape</string>
+    <string	name="icon_bone" translate="false"></string>
+    <string	name="icon_object" translate="false">Inv_Object</string>
+
+    <!-- Provides for axis-swapping per joint for slider/trackpad control -->
+    <!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
+			SWAP_NOTHING, SWAP_YAW_AND_ROLL, SWAP_YAW_AND_PITCH , SWAP_ROLL_AND_PITCH, SWAP_X2Y_Y2Z_Z2X, SWAP_X2Z_Y2X_Z2Y -->
+    <!-- You may also add any number of NEGATE_YAW NEGATE_PITCH NEGATE_ROLL and/or NEGATE_ALL to 'flip' the behaviour of the axes (so the trackpad up is down left is right etc.)-->
+    <!-- These values are all CaSe SeNsiTiVe!! (use all caps plz or you get default behaviour) Whitespace is ignored, that's just for you non-robots-->
+    <string	name="joint_transform_mPelvis" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTorso" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mChest" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mNeck" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mHead" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mCollarLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mShoulderLeft" translate="false">SWAP_ROLL_AND_PITCH NEGATE_ROLL</string>
+    <string	name="joint_transform_mShoulderRight" translate="false">SWAP_ROLL_AND_PITCH NEGATE_ROLL</string>
+    <string	name="joint_transform_mElbowLeft" translate="false">SWAP_X2Y_Y2Z_Z2X NEGATE_PITCH NEGATE_YAW</string>
+    <string	name="joint_transform_mWristLeft" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
+    <string	name="joint_transform_mWristRight" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mElbowRight" translate="false">SWAP_X2Y_Y2Z_Z2X</string>
+    <string	name="joint_transform_mFaceJaw" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mEyeRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mEyeLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mHipLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mKneeLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mAnkleLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mHipRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mKneeRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mAnkleRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipCornerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipUpperCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipLowerCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidUpperLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidUpperRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidLowerLeft" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyeLidLowerRight" translate="false">NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyebrowOuterLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyebrowOuterRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyebrowCenterLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyebrowCenterRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyebrowInnerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceEyebrowInnerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceCheekUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceCheekLowerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceCheekUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceCheekLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceLipUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandThumb1Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandThumb1Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandThumb2Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandThumb2Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandThumb3Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandThumb3Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandIndex3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandMiddle3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandRing3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_mHandPinky3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+    <string	name="joint_transform_LEFT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_RIGHT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_BELLY" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail1" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail2" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail3" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail4" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail5" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mTail6" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceTongueBase" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+    <string	name="joint_transform_mFaceTongueTip" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	
-	<layout_stack
+    <!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
+    <string	name="header_mTorso" translate="false">Body</string>
+    <string	name="header_mFaceForeheadLeft" translate="false">Forehead/Brows</string>
+    <string	name="header_mEyeLeft" translate="false">Eyes/Eye Lids</string>
+    <string	name="header_mFaceCheekUpperLeft" translate="false">Cheeks/Lips</string>
+    <string	name="header_mHandThumb1Left" translate="false">Left Hand</string>
+    <string	name="header_mCollarLeft" translate="false">Left Arm</string>
+    <string	name="header_mHandThumb1Right" translate="false">Right Hand</string>
+    <string	name="header_mCollarRight" translate="false">Right Arm</string>
+    <string	name="header_mHipLeft" translate="false">Legs</string>
+    <string	name="header_mTail1" translate="false">Tail</string>
+    <string	name="header_mHindLimbsRoot" translate="false">Hind Limbs</string>
+    <string	name="header_mWingsRoot" translate="false">Wings</string>
+
+    <!-- These are names to appear on the UI for the joints/bones/thingos -->
+    <string	name="title_mPelvis" translate="false">Whole Avatar</string>
+    <string	name="title_mTorso" translate="false">Torso</string>
+    <string	name="title_mChest" translate="false">Chest</string>
+    <string	name="title_mNeck" translate="false">Neck</string>
+    <string	name="title_mHead" translate="false">Head</string>
+    <string	name="title_mEyeRight" translate="false">Right Eye</string>
+    <string	name="title_mEyeLeft" translate="false">Left Eye</string>
+    <string	name="title_mFaceForeheadLeft" translate="false">Forehead Left Side</string>
+    <string	name="title_mFaceForeheadRight" translate="false">Forehead Right Side</string>
+    <string	name="title_mFaceEyebrowOuterLeft" translate="false">Eyebrow Outer Left</string>
+    <string	name="title_mFaceEyebrowCenterLeft" translate="false">Eyebrow Middle Left</string>
+    <string	name="title_mFaceEyebrowInnerLeft" translate="false">Eyebrow Inner Left</string>
+    <string	name="title_mFaceEyebrowOuterRight" translate="false">Eyebrow Outer Right</string>
+    <string	name="title_mFaceEyebrowCenterRight" translate="false">Eyebrow Middle Right</string>
+    <string	name="title_mFaceEyebrowInnerRight" translate="false">Eyebrow Inner Right</string>
+    <string	name="title_mFaceEyeLidUpperLeft" translate="false">EyeLid Upper Left </string>
+    <string	name="title_mFaceEyeLidLowerLeft" translate="false">EyeLid Lower Left</string>
+    <string	name="title_mFaceEyeLidUpperRight" translate="false">EyeLid Upper Right</string>
+    <string	name="title_mFaceEyeLidLowerRight" translate="false">EyeLid Lower Left</string>
+    <string	name="title_mFaceEar1Left" translate="false">Ear Upper Left</string>
+    <string	name="title_mFaceEar2Left" translate="false">Ear Lower Left</string>
+    <string	name="title_mFaceEar1Right" translate="false">Ear Upper Right</string>
+    <string	name="title_mFaceEar2Right" translate="false">Ear Lower Right</string>
+    <string	name="title_mFaceNoseLeft" translate="false">Nose Left</string>
+    <string	name="title_mFaceNoseCenter" translate="false">Nose Center</string>
+    <string	name="title_mFaceNoseRight" translate="false">Nose Right</string>
+    <string	name="title_mFaceCheekLowerLeft" translate="false">Cheek Lower Left</string>
+    <string	name="title_mFaceCheekUpperLeft" translate="false">Cheek Upper Left</string>
+    <string	name="title_mFaceCheekLowerRight" translate="false">Cheek Lower Right</string>
+    <string	name="title_mFaceCheekUpperRight" translate="false">Cheek Upper Right</string>
+    <string	name="title_mFaceJaw" translate="false">Jaw</string>
+    <string	name="title_mFaceTeethLower" translate="false">Teeth Lower</string>
+    <string	name="title_mFaceLipLowerLeft" translate="false">Lip Lower Left</string>
+    <string	name="title_mFaceLipLowerRight" translate="false">Lip Lower Right</string>
+    <string	name="title_mFaceLipLowerCenter" translate="false">Lip Lower Middle</string>
+    <string	name="title_mFaceTongueBase" translate="false">Tongue Base</string>
+    <string	name="title_mFaceTongueTip" translate="false">Tongue Tip</string>
+    <string	name="title_mFaceJawShaper" translate="false">Jaw Shaper</string>
+    <string	name="title_mFaceForeheadCenter" translate="false">Forehead Middle</string>
+    <string	name="title_mFaceNoseBase" translate="false">Nose Base</string>
+    <string	name="title_mFaceTeethUpper" translate="false">Teeth Upper</string>
+    <string	name="title_mFaceLipUpperLeft" translate="false">Lip Upper Left</string>
+    <string	name="title_mFaceLipUpperRight" translate="false">Lip Upper Right</string>
+    <string	name="title_mFaceLipCornerLeft" translate="false">Lip Corner Left</string>
+    <string	name="title_mFaceLipCornerRight" translate="false">Lip Corner Right</string>
+    <string	name="title_mFaceLipUpperCenter" translate="false">Lip Upper Center</string>
+    <string	name="title_mFaceEyecornerInnerLeft" translate="false">Eye corner Inner Left</string>
+    <string	name="title_mFaceEyecornerInnerRight" translate="false">Eye corner Inner Right</string>
+    <string	name="title_mFaceNoseBridge" translate="false">Nose Bridge</string>
+    <string	name="title_mCollarLeft" translate="false">Collar</string>
+    <string	name="title_mShoulderLeft" translate="false">Whole Arm</string>
+    <string	name="title_mElbowLeft" translate="false">Forearm</string>
+    <string	name="title_mWristLeft" translate="false">Wrist</string>
+    <string	name="title_mHandMiddle1Left" translate="false">Middle Finger Base</string>
+    <string	name="title_mHandMiddle2Left" translate="false">Middle Finger Mid</string>
+    <string	name="title_mHandMiddle3Left" translate="false">Middle Finger Tip</string>
+    <string	name="title_mHandIndex1Left" translate="false">Index Finger Base</string>
+    <string	name="title_mHandIndex2Left" translate="false">Index Finger Mid</string>
+    <string	name="title_mHandIndex3Left" translate="false">Index Finger Tip</string>
+    <string	name="title_mHandRing1Left" translate="false">Ring Finger Base</string>
+    <string	name="title_mHandRing2Left" translate="false">Ring Finger Mid</string>
+    <string	name="title_mHandRing3Left" translate="false">Ring Finger Tip</string>
+    <string	name="title_mHandPinky1Left" translate="false">Pinky Finger Base</string>
+    <string	name="title_mHandPinky2Left" translate="false">Pinky Finger Mid</string>
+    <string	name="title_mHandPinky3Left" translate="false">Pinky Finger Tip</string>
+    <string	name="title_mHandThumb1Left" translate="false">Thumb Base</string>
+    <string	name="title_mHandThumb2Left" translate="false">Thumb Mid</string>
+    <string	name="title_mHandThumb3Left" translate="false">Thumb Tip</string>
+    <string	name="title_mCollarRight" translate="false">Collar</string>
+    <string	name="title_mShoulderRight" translate="false">Whole Arm</string>
+    <string	name="title_mElbowRight" translate="false">Forearm</string>
+    <string	name="title_mWristRight" translate="false">Wrist</string>
+    <string	name="title_mHandMiddle1Right" translate="false">Middle Finger Base</string>
+    <string	name="title_mHandMiddle2Right" translate="false">Middle Finger Mid</string>
+    <string	name="title_mHandMiddle3Right" translate="false">Middle Finger Tip</string>
+    <string	name="title_mHandIndex1Right" translate="false">Index Finger Base</string>
+    <string	name="title_mHandIndex2Right" translate="false">Index Finger Mid</string>
+    <string	name="title_mHandIndex3Right" translate="false">Index Finger Tip</string>
+    <string	name="title_mHandRing1Right" translate="false">Ring Finger Base</string>
+    <string	name="title_mHandRing2Right" translate="false">Ring Finger Mid</string>
+    <string	name="title_mHandRing3Right" translate="false">Ring Finger Tip</string>
+    <string	name="title_mHandPinky1Right" translate="false">Pinky Finger Base</string>
+    <string	name="title_mHandPinky2Right" translate="false">Pinky Finger Mid</string>
+    <string	name="title_mHandPinky3Right" translate="false">Pinky Finger Tip</string>
+    <string	name="title_mHandThumb1Right" translate="false">Thumb Base</string>
+    <string	name="title_mHandThumb2Right" translate="false">Thumb Mid</string>
+    <string	name="title_mHandThumb3Right" translate="false">Thumb Tip</string>
+    <string	name="title_mWingsRoot" translate="false">Root</string>
+    <string	name="title_mWing1Left" translate="false">Left 1</string>
+    <string	name="title_mWing2Left" translate="false">Left 2</string>
+    <string	name="title_mWing3Left" translate="false">Left 3</string>
+    <string	name="title_mWing4Left" translate="false">Left 4</string>
+    <string	name="title_mWing4FanLeft" translate="false">Left Fan</string>
+    <string	name="title_mWing1Right" translate="false">Right 1</string>
+    <string	name="title_mWing2Right" translate="false">Right 2</string>
+    <string	name="title_mWing3Right" translate="false">Right 3</string>
+    <string	name="title_mWing4Right" translate="false">Right 4</string>
+    <string	name="title_mWing4FanRight" translate="false">Right Fan</string>
+    <string	name="title_mHipRight" translate="false">Right Hip</string>
+    <string	name="title_mKneeRight" translate="false">Right Knee</string>
+    <string	name="title_mAnkleRight" translate="false">Right Ankle</string>
+    <string	name="title_mFootRight" translate="false">Right Foot</string>
+    <string	name="title_mToeRight" translate="false">Right Toe</string>
+    <string	name="title_mHipLeft" translate="false">Left Hip</string>
+    <string	name="title_mKneeLeft" translate="false">Left Knee</string>
+    <string	name="title_mAnkleLeft" translate="false">Left Ankle</string>
+    <string	name="title_mFootLeft" translate="false">Left Foot</string>
+    <string	name="title_mToeLeft" translate="false">Left Toe</string>
+    <string	name="title_mTail1" translate="false">Tail Base</string>
+    <string	name="title_mTail2" translate="false">Tail 2</string>
+    <string	name="title_mTail3" translate="false">Tail 3</string>
+    <string	name="title_mTail4" translate="false">Tail 4</string>
+    <string	name="title_mTail5" translate="false">Tail 5</string>
+    <string	name="title_mTail6" translate="false">Tail Tip</string>
+    <string	name="title_mGroin" translate="false">Groin</string>
+    <string	name="title_mHindLimbsRoot" translate="false">Root</string>
+    <string	name="title_mHindLimb1Left" translate="false">Left Base</string>
+    <string	name="title_mHindLimb2Left" translate="false">Left 2</string>
+    <string	name="title_mHindLimb3Left" translate="false">Left 3</string>
+    <string	name="title_mHindLimb4Left" translate="false">Left 4</string>
+    <string	name="title_mHindLimb1Right" translate="false">Right Base</string>
+    <string	name="title_mHindLimb2Right" translate="false">Right 2</string>
+    <string	name="title_mHindLimb3Right" translate="false">Right 3</string>
+    <string	name="title_mHindLimb4Right" translate="false">Right 4</string>
+    <string	name="title_BUTT" translate="false">Bottom</string>
+    <string	name="title_BELLY" translate="false">Belly</string>
+    <string	name="title_LEFT_PEC" translate="false">Left Pec</string>
+    <string	name="title_RIGHT_PEC" translate="false">Right Pec</string>
+
+<!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
+    <layout_stack
 	follows="top|left|right"
 	height="425"
 	layout="topleft"
@@ -95,682 +253,911 @@ width="654">
 	open_time_constant="0.02"
 	mouse_opaque="false"
 	name="poser_stack"
-	orientation="horizontal"
+	orientation="vertical"
 	top="0"
-	width="642">
-		<layout_panel
-		follows="top|left|right"
+	width="607">
+        <layout_panel
+		follows="top|left"
 		layout="topleft"
-		height="420"
 		auto_resize="false"
 		visible="true"
-		name="poser_list_layout"
-		width="162">
-			<panel
+		name="regular_controls_layout"
+		height="290"
+		width="607">
+            <panel
 			follows="left|top|bottom"
-			height="420"
+			height="302"
+			background_visible="false"
+			layout="topleft"
+			visible="true"
+			mouse_opaque="false"
+			name="avatarSelection_panel"
+			top="0"
+			left="0"
+			width="153">
+                <avatar_list
+				 allow_select="true"
+				 follows="all"
+				 height="383"
+				 layout="topleft"
+				 multi_select="true"
+				 name="avatars_online"
+				 keep_one_selected="false"
+				 show_permissions_granted="true"
+				 width="317" />
+                <scroll_list
+				column_padding="0"
+				draw_heading="true"
+				height="285"
+				can_sort="false"
+				follows="all"
+				layout="topleft"
+				left="1"
+				tool_tip="Select the Avatar or Animesh you want to animate."
+				width="153"
+				multi_select="false"
+				name="avatarSelection_scroll"
+				top="0">
+                    <scroll_list.columns
+                    label=""
+                    name="icon"
+                    relative_width="0.0"  />
+                    <scroll_list.columns
+                    label="Select Someone..."
+                    name="name"
+                    relative_width="1.0"  />
+                    <scroll_list.columns
+                    label="UUID"
+                    name="uuid"
+                    relative_width="0.0"  />
+                    <scroll_list.columns
+                    label="SaveFileName"
+                    name="saveFileName"
+                    relative_width="0.0"  />
+                </scroll_list>
+            </panel>
+            <panel
+			follows="left"
+			height="290"
+			background_visible="false"
+			layout="topleft"
+			enabled="false"
+			mouse_opaque="false"
+			name="joints_parent_panel"
+			top="0"
+			left_pad="2"
+			width="235">
+                <tab_container
+					follows="all"
+					halign="center"
+					height="285"
+					layout="topleft"
+					left="0"
+					enabled="true"
+					name="joints_tabs"
+					tab_height="20"
+					tab_width="50"
+					tab_group="1"
+					tab_position="left"
+					top="0"
+					width="235">
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="302"
+					layout="topleft"
+					title="Move"
+					name="positionRotation_panel"
+					top="0"
+					width="235">
+                        <panel
+						follows="all"
+						height="302"
+						background_visible="false"
+						layout="topleft"
+						mouse_opaque="false"
+						left="5"
+						name="title"
+						top="0"
+						width="235">
+                            <text follows="left|top"
+                                name="av_position_updown_label"
+                                height="10"
+                                layout="topleft"
+                                left_delta="0"
+                                top_pad="5"
+                                width="172">Up/Down:</text>
+                            <slider decimal_digits="2"
+                                follows="left|top"
+                                height="16"
+                                increment="0.01"
+                                initial_value="0"
+                                layout="topleft"
+                                left_delta="5"
+                                min_val="-1.5"
+                                max_val="1.5"
+                                name="av_position_updown"
+                                top_pad="5"
+                                width="172"
+								tool_tip="Move the selected avatar up or down"
+                                can_edit_text="true">
+                                <slider.commit_callback
+                                function="Poser.PositionSet"/>
+                            </slider>
+                            <text follows="left|top"
+                                name="av_position_leftright_label"
+                                height="10"
+                                layout="topleft"
+                                left_delta="-5"
+                                top_pad="5"
+                                width="172">Left/Right:</text>
+                            <slider decimal_digits="2"
+                                follows="left|top"
+                                height="16"
+                                increment="0.01"
+                                initial_value="0"
+                                layout="topleft"
+                                left_delta="5"
+                                min_val="-1.5"
+                                max_val="1.5"
+                                name="av_position_leftright"
+                                top_pad="5"
+                                width="172"
+								tool_tip="Move the selected avatar left or right"
+                                can_edit_text="true">
+                                <slider.commit_callback
+                                function="Poser.PositionSet"/>
+                            </slider>
+                            <text follows="left|top"
+                                name="av_position_inout_label"
+                                height="10"
+                                layout="topleft"
+                                left_delta="-5"
+                                top_pad="5"
+                                width="172">In/Out:</text>
+                            <slider decimal_digits="2"
+                                follows="left|top"
+                                height="16"
+                                increment="0.01"
+                                initial_value="0"
+                                layout="topleft"
+                                left_delta="5"
+                                min_val="-1.5"
+                                max_val="1.5"
+                                name="av_position_inout"
+                                top_pad="5"
+                                width="172"
+								tool_tip="Move the selected avatar in or out"
+                                can_edit_text="true">
+                                <slider.commit_callback
+                                function="Poser.PositionSet"/>
+                            </slider>
+							<!-- so this panel behaves like the others in the code behind, it has an invisible list... -->
+							<scroll_list
+								visible="false"
+								column_padding="2"
+								draw_heading="true"
+								height="300"
+								follows="all"
+								can_sort="false"
+								layout="topleft"
+								left="2"
+								width="479"
+								multi_select="true"
+								name="entireAv_joint_scroll"
+								top="0">
+								<scroll_list.columns
+								label=""
+								name="icon"
+								relative_width="0.1"  />
+								<scroll_list.columns
+								label="Body Part"
+								name="joint"
+								relative_width="0.9"  />
+							</scroll_list>
+                        </panel>
+                    </panel>
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Body"
+					name="body_joints_panel"
+					top="0"
+					width="481">
+                        <scroll_list
+						column_padding="2"
+						draw_heading="true"
+						height="300"
+						follows="all"
+						can_sort="false"
+						layout="topleft"
+						left="2"
+						width="479"
+						multi_select="true"
+						name="body_joints_scroll"
+						top="0">
+                            <scroll_list.columns
+                            label=""
+                            name="icon"
+                            relative_width="0.1"  />
+                            <scroll_list.columns
+                            label="Body Part"
+                            name="joint"
+                            relative_width="0.9"  />
+                        </scroll_list>
+                    </panel>
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Face"
+					name="face_joints_panel"
+					top="0"
+					width="481">
+                        <scroll_list
+                        column_padding="2"
+                        draw_heading="true"
+                        height="300"
+                        follows="all"
+                        can_sort="false"
+                        layout="topleft"
+                        left="2"
+                        width="479"
+                        multi_select="true"
+                        name="face_joints_scroll"
+                        top="0">
+                            <scroll_list.columns
+							label=""
+							name="icon"
+							relative_width="0.1"  />
+                            <scroll_list.columns
+							label="Body Part"
+							name="joint"
+							relative_width="0.9"  />
+                        </scroll_list>
+                    </panel>
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Hands"
+					name="hands_joints_panel"
+					top="0"
+					width="481">
+                        <scroll_list
+                        column_padding="2"
+                        draw_heading="true"
+                        height="300"
+                        follows="all"
+                        can_sort="false"
+                        layout="topleft"
+                        left="2"
+                        width="479"
+                        multi_select="true"
+                        name="hand_joints_scroll"
+                        top="0">
+                            <scroll_list.columns
+							label=""
+							name="icon"
+							relative_width="0.1"  />
+                            <scroll_list.columns
+							label="Body Part"
+							name="joint"
+							relative_width="0.9"  />
+                        </scroll_list>
+                    </panel>
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Misc"
+					name="misc_joints_panel"
+					top="0"
+					width="481">
+                        <scroll_list
+                        column_padding="2"
+                        draw_heading="true"
+                        height="300"
+                        follows="all"
+                        can_sort="false"
+                        layout="topleft"
+                        left="2"
+                        width="479"
+                        multi_select="true"
+                        name="misc_joints_scroll"
+                        top="0">
+                            <scroll_list.columns
+							label=""
+							name="icon"
+							relative_width="0.1"  />
+                            <scroll_list.columns
+							label="Body Part"
+							name="joint"
+							relative_width="0.9"  />
+                        </scroll_list>
+                    </panel>
+                    <panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Physics"
+					name="collision_volumes_panel"
+					top="0"
+					width="481">
+                        <scroll_list
+                        column_padding="2"
+                        draw_heading="true"
+                        height="300"
+                        follows="all"
+                        can_sort="false"
+                        layout="topleft"
+                        left="2"
+                        width="479"
+                        multi_select="true"
+                        name="collision_volumes_scroll"
+                        top="0">
+                            <scroll_list.columns
+							label=""
+							name="icon"
+							relative_width="0.1"  />
+                            <scroll_list.columns
+							label="Physics"
+							name="joint"
+							relative_width="0.9"  />
+                        </scroll_list>
+                    </panel>
+                </tab_container>
+            </panel>
+            <panel
+			follows="left|top|bottom"
+			height="290"
 			background_visible="false"
 			layout="topleft"
 			mouse_opaque="false"
-			left="0"
-			name="title"
+			name="trackball_panel"
+			enabled="false"
 			top="0"
-			width="163">
-				<panel
+			width="160"
+			left_pad="2">
+                <text follows="top|left"
+					font="SansSerifBold"
+					height="10"
+					layout="topleft"
+					name="rotation_label"
+					left="5"
+					top="2"
+					width="105">Rotation:</text>
+                <fs_virtual_trackpad name="limb_rotation"
+									follows="left|top"
+									left_delta="0"
+									top_delta="15"
+									height="153"
+									width="153"
+									tool_tip="Change the rotation of the currently selected body part(s). Roll the wheel while holding to adjust the 3rd axis"
+									pinch_mode="false"
+									infinite_scroll_mode="true"/>
+                <panel
 				follows="left|top|bottom"
-				height="319"
+				height="22"
 				background_visible="false"
 				layout="topleft"
 				visible="true"
 				mouse_opaque="false"
 				left="0"
-				name="live_panel"
-				top="0"
-				width="153">
-					<fs_scroll_list
-					column_padding="0"
-					draw_heading="true"
-					height="279"
-					can_sort="false"
-					follows="left|top|right"
-					layout="topleft"
-					left="1"
-					tool_tip="Select the targeted avatar or animesh."
-					width="153"
-					multi_select="false"
-					name="avatar_scroll"
-					desired_line_height="16"
-					top="20">
-					<fs_scroll_list.columns
-					label=""
-					name="icon"
-					relative_width="0.14"  />
-					<fs_scroll_list.columns
-					label="Name"
-					name="name"
-					relative_width="0.86"  />
-					<fs_scroll_list.columns
-					label="UUID"
-					name="uuid"
-					relative_width="0.0"  />
-					</fs_scroll_list>
-					<button
+				top_pad="2"
+				name="trackball_button_panel"
+				width="232">
+                    <button
 					height="21"
 					follows="top|left"
 					layout="topleft"
-					label="Refresh Avatars"
+					label=""
+					image_overlay="Script_Undo"
+					image_unselected="Toolbar_Middle_Off"
+					name="undo_change"
+					tool_tip="Undo the last rotation change"
+					width="18"
+					top_pad="0"
+					left="4">
+                        <button.commit_callback
+                        function="Poser.UndoLastRotation"/>
+                    </button>
+                    <button
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					label=""
+					image_overlay="Script_Redo"
+					image_unselected="Toolbar_Middle_Off"
+					name="button_redo_change"
+					tool_tip="Re-do the last Undo change"
+					enabled="false"
+					width="18"
+					top_delta="0"
+					left_pad="1">
+                        <button.commit_callback
+                        function="Poser.RedoLastRotation"/>
+                    </button>
+                    <button
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					label=""
+					image_overlay="Inv_TrashOpen"
+					image_unselected="Toolbar_Middle_Off"
+					name="refresh_avatars"
+					tool_tip="Double click to reset all selected body parts to when you first started posing"
+					width="18"
+					top_delta="0"
+					left_pad="1">
+                        <button.commit_callback
+                        function="Poser.PoseJointsReset"/>
+                    </button>
+                    <button
+					follows="left|top"
+					height="21"
+					is_toggle="true"
+					layout="topleft"
+					label=""
+					image_overlay="Command_Search_Icon"
 					image_hover_unselected="Toolbar_Middle_Over"
 					image_selected="Toolbar_Middle_Selected"
 					image_unselected="Toolbar_Middle_Off"
-					name="refresh"
-					width="151"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
+					name="button_toggleTrackPadSensitivity"
+					tool_tip="Make smaller changes when using the trackball."
+					left_pad="1"
+					top_delta="0"
+					width="18" >
+                        <button.commit_callback
+                        function="Poser.ToggleTrackPadSensitivity"/>
+                    </button>
+                    <button
+					follows="left|top"
+					height="21"
+					is_toggle="true"
+					layout="topleft"
+					label="Mirr."
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
+					name="button_toggleMirrorRotation"
+					tool_tip="Change the opposite joint, like in a mirror."
+					left_pad="1"
+					top_delta="0"
+					width="38" >
+                        <button.commit_callback
+                        function="Poser.ToggleMirrorChanges"/>
+                    </button>
+                    <button
+					follows="left|top"
+					height="21"
+					is_toggle="true"
+					layout="topleft"
+					label="Sym."
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
+					name="button_toggleSympatheticRotation"
+					tool_tip="Change the opposite joint, but in the same way."
+					left_pad="1"
+					top_delta="0"
+					width="38" >
+                        <button.commit_callback
+                        function="Poser.ToggleSympatheticChanges"/>
+                    </button>
+                </panel>
+                <text follows="left|top"
+					name="limb_pitch_label"
+					height="10"
+					layout="topleft"
+					left_delta="0"
+					top_pad="2"
+					width="200">Up/Down:</text>
+                <slider decimal_digits="1"
+					follows="left|top"
+					height="16"
+					increment="0.1"
+					initial_value="0"
+					layout="topleft"
+					left_delta="5"
+					min_val="-180"
+					max_val="180"
+					name="limb_pitch"
+					top_pad="2"
+					width="150"
+					can_edit_text="true"/>
+                <text follows="left|top"
+					name="limb_yaw_label"
+					height="10"
+					layout="topleft"
+					left_delta="-5"
+					top_pad="0"
+					width="200">Left/Right:</text>
+                <slider decimal_digits="1"
+					follows="left|top"
+					height="16"
+					increment="0.1"
+					initial_value="0"
+					layout="topleft"
+					left_delta="5"
+					min_val="-180"
+					max_val="180"
+					name="limb_yaw"
+					top_pad="0"
+					width="150"
+					can_edit_text="true"/>
+                <text follows="left|top"
+					name="limb_roll_label"
+					height="10"
+					layout="topleft"
+					left_delta="-5"
 					top_pad="-1"
-					left="2">
-					<button.commit_callback
-					function="Poser.RefreshAvatars"/>
-					</button>
-				</panel>
-				<check_box
-				height="16"
-				initial_value="false"
-				label="Mirror Changes"
-				tool_tip="This option toggles whether all changes to rotations should be mirrored to the opposide side's bone as well. Left Arm will mirror to Right Arm and so on."
-				layout="topleft"
-				left="5"
-				name="Mirror"
-				top_pad="4"
-				width="115">
-				<check_box.commit_callback
-                    function="Joint.ToggleMirror"/>
-				</check_box>
-				<check_box
-				height="16"
-				initial_value="true"
-				label="Easy Rotations"
-				tool_tip="This option toggles whether the poser should display and use simplified rotation axis. This essentially means that when moving any axis, all other axis stay untouched, this can bring the rotations out of place so that 0 0 0 no longer is the default resting position depending on in which order bones were moved. Disabling this option will allow the other axis to be dynamically changed to represent the actual rotations which means sliders you are not touching will change with the slider you are currently moving. This is disabled by default as it may look confusing to the user. It is highly recommended that if you use this you start zeroing out Z then Y and lastly X in this order, otherwise you will not be able to zero out all axis unless you reset the bone rotation."
-				layout="topleft"
-				left="5"
-				name="EasyRotations"
-				top_pad="1"
-				width="115">
-				<check_box.commit_callback
-                    function="Joint.EasyRotations"/>
-				</check_box>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				enabled="true"
-				label="Symmetrize Pose"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="symmetrize_pose"
-				width="75"
-				top_pad="18"
-				left="2">
-				<button.commit_callback
-				function="Joint.SymmetrizePose"/>
-				</button>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				enabled="true"
-				label="Mirror Pose"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="flip_pose"
-				width="75"
-				top_pad="1"
-				left="2">
-				<button.commit_callback
-				function="Joint.FlipPose"/>
-				</button>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				enabled="true"
-				label="Recapture"
-				tool_tip="Recapture all disabled joints, this is useful when disabling bones to edit them via outside means such as HUDs and then recapture these changes into the Poser to make fine adjustments."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="recapture_bones"
-				width="75"
-				top_delta="0"
-				left_pad="1">
-				<button.commit_callback
-				function="Joint.Recapture"/>
-				</button>
-			</panel>
-		</layout_panel>
-		<layout_panel
-		follows="top|left|right"
-		layout="topleft"
-		height="420"
-		auto_resize="false"
-		visible="true"
-		name="poser_layout"
-		width="490">
-			<panel
-			follows="left|top|bottom"
-			height="420"
+					width="200">Roll:</text>
+                <slider decimal_digits="1"
+					follows="left|top"
+					height="16"
+					increment="0.1"
+					initial_value="0"
+					layout="topleft"
+					left_delta="5"
+					min_val="-180"
+					max_val="180"
+					name="limb_roll"
+					top_pad="-1"
+					width="150"
+					can_edit_text="true"/>
+            </panel>
+            <panel
+			follows="top|left|bottom"
+			height="290"
 			background_visible="false"
 			layout="topleft"
 			mouse_opaque="false"
-			left="0"
-			name="title"
+			left_pad="2"
+			visible="false"
+			name="poses_loadSave"
 			top="0"
-			width="485">
-				<layout_stack
-				follows="top|left|right"
-				height="319"
+			width="225">
+                <scroll_list
+				column_padding="0"
+				draw_heading="true"
+				height="268"
+				follows="left|top|right"
 				layout="topleft"
-				left="0"
-				border_size="-4"
-				close_time_constant="0.0"
-				open_time_constant="0.0"
+				tool_tip="Load a pose for who you are animating."
+				width="225"
+				multi_select="true"
+				name="poses_scroll"
+				top="0">
+                    <scroll_list.columns
+                    label="Pose Name"
+                    name="name"/>
+                </scroll_list>
+                <line_editor
+				follows="top|left"
+				layout="topleft"
+				height="21"
+				top_pad="-2"
+				commit_on_focus_lost="false"
+				label="Enter Pose Name To Save..."
+				enabled="true"
+				name="pose_save_name"
+				width="225"/>
+            </panel>
+        </layout_panel>
+        <layout_panel
+		follows="top|left|right"
+		layout="topleft"
+		height="22"
+		auto_resize="false"
+		visible="true"
+		name="button_controls_layout"
+		width="800">
+            <panel
+			follows="left|top|bottom"
+			height="100"
+			background_visible="false"
+			layout="topleft"
+			visible="true"
+			mouse_opaque="false"
+			top="0"
+			left="0"
+			name="button_controls_panel"
+			width="800">
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				image_overlay="Refresh_Off"
+				image_unselected="Toolbar_Middle_Off"
+				name="refresh_avatars"
+				tool_tip="Refresh the list of avatars and animeshes"
+				width="20"
+				top_pad="-1"
+				left="2">
+                    <button.commit_callback
+                    function="Poser.RefreshAvatars"/>
+                </button>
+                <button
+				height="21"
+				follows="top|left"
+				enabled="false"
+				is_toggle="true"
+				label="Start Posing"
+				top_delta="0"
+				left_pad="2"
+				label_selected="Stop Posing"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				button_flash_enable="true"
+				flash_color="0.7 0.7 1 1"
+				button_flash_count="64"
+				button_flash_rate="0.5"
+				tool_tip="Start posing the selected avatar or animesh, if you are allowed to"
+				name="start_stop_posing_button"
+				width="108">
+                    <button.commit_callback
+                    function="Poser.StartStopAnimating"/>
+                </button>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				enabled="true"
+				visible="true"
+				is_toggle="true"
+				image_overlay="Script_Config"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="toggleAdvancedPanel"
+				tool_tip="Toggle the Advanced Settings area"
+				width="20"
+				left_pad="2">
+                    <button.commit_callback
+                    function="Poser.ToggleAdvancedPanel"/>
+                </button>
+                <panel
+				follows="left|top|bottom"
+				height="22"
+				background_visible="false"
+				layout="topleft"
+				visible="true"
 				mouse_opaque="false"
-				name="poser_layout_stack"
-				orientation="vertical"
-				top="0"
-				width="666">
-					<layout_panel
-					follows="all"
-					layout="topleft"
-					height="302"
-					auto_resize="true"
-					name="poser_layout"
-					width="481">
-						<panel
-						follows="left|top|bottom"
-						height="302"
-						background_visible="false"
-						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top="0"
-						width="481">
-							<tab_container
-							follows="all"
-							halign="center"
-							height="299"
-							layout="topleft"
-							left="0"
-							enabled="false"
-							name="joints_tabs"
-							tab_height="20"
-							tab_group="1"
-							tab_position="top"
-							top="0"
-							width="483">
-								<panel
-								follows="all"
-								background_visible="false"
-								height="299"
-								layout="topleft"
-								left="0"
-								title="Skeleton"
-								name="joints_panel"
-								top="0"
-								width="481">
-									<panel
-									follows="left|top|bottom"
-									height="302"
-									background_visible="false"
-									layout="topleft"
-									mouse_opaque="false"
-									left="0"
-									name="title"
-									top="0"
-									width="481">
-										<fs_scroll_list
-										column_padding="2"
-										draw_heading="true"
-										height="300"
-										follows="all"
-										can_sort="false"
-										layout="topleft"
-										left="2"
-										width="479"
-										multi_select="true"
-										name="joints_scroll"
-										desired_line_height="16"
-										top="0">
-										<fs_scroll_list.columns
-										label=""
-										name="icon"
-										relative_width="0.04"  />
-										<fs_scroll_list.columns
-										label="Bone Name"
-										name="joint"
-										relative_width="0.33"  />
-										<fs_scroll_list.columns
-										label="Rot X"
-										name="x"
-										relative_width="0.10"  />
-										<fs_scroll_list.columns
-										label="Rot Y"
-										name="y"
-										relative_width="0.10"  />
-										<fs_scroll_list.columns
-										label="Rot Z"
-										name="z"
-										relative_width="0.10"  />
-										<fs_scroll_list.columns
-										label="Pos X"
-										name="pos_x"
-										relative_width="0.10"  />
-										<fs_scroll_list.columns
-										label="Pos Y"
-										name="pos_y"
-										relative_width="0.10"  />
-										<fs_scroll_list.columns
-										label="Pos Z"
-										name="pos_z"
-										relative_width="0.10"  />
-										<fs_scroll_list.columns
-										label="Size X"
-										name="scale_x"
-										relative_width="0.0"  />
-										<fs_scroll_list.columns
-										label="Size Y"
-										name="scale_y"
-										relative_width="0.0"  />
-										<fs_scroll_list.columns
-										label="Size Z"
-										name="scale_z"
-										relative_width="0.0"  />
-										</fs_scroll_list>
-									</panel>
-								</panel>
-								<panel
-								follows="all"
-								background_visible="false"
-								height="299"
-								layout="topleft"
-								left="0"
-								title="Collision Volumes"
-								name="cv_panel"
-								top="0"
-								width="481">
-									<fs_scroll_list
-									column_padding="2"
-									draw_heading="true"
-									height="300"
-									follows="left|top|right"
-									layout="topleft"
-									can_sort="false"
-									left="2"
-									width="479"
-									multi_select="true"
-									name="cv_scroll"
-									desired_line_height="16"
-									top="0">
-									<fs_scroll_list.columns
-									label=""
-									name="icon"
-									relative_width="0.04"  />
-									<fs_scroll_list.columns
-									label="Collision Volume Name"
-									name="joint"
-									relative_width="0.33"  />
-									<fs_scroll_list.columns
-									label="Rot X"
-									name="x"
-									relative_width="0.0"  />
-									<fs_scroll_list.columns
-									label="Rot Y"
-									name="y"
-									relative_width="0.0"  />
-									<fs_scroll_list.columns
-									label="Rot Z"
-									name="z"
-									relative_width="0.0"  />
-									<fs_scroll_list.columns
-									label="Pos X"
-									name="pos_x"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Pos Y"
-									name="pos_y"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Pos Z"
-									name="pos_z"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Size X"
-									name="scale_x"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Size Y"
-									name="scale_y"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Size Z"
-									name="scale_z"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="#"
-									name="number"
-									relative_width="0.00"  />
-									</fs_scroll_list>
-								</panel>
-								<panel
-								follows="all"
-								background_visible="false"
-								height="299"
-								layout="topleft"
-								left="0"
-								title="Attachment Bones"
-								name="attach_panel"
-								top="0"
-								width="481">
-									<fs_scroll_list
-									column_padding="2"
-									draw_heading="true"
-									height="300"
-									follows="left|top|right"
-									layout="topleft"
-									can_sort="false"
-									left="2"
-									width="479"
-									multi_select="true"
-									name="attach_scroll"
-									desired_line_height="16"
-									top="0">
-									<fs_scroll_list.columns
-									label=""
-									name="icon"
-									relative_width="0.04"  />
-									<fs_scroll_list.columns
-									label="Attachment Bone Name"
-									name="joint"
-									relative_width="0.33"  />
-									<fs_scroll_list.columns
-									label="Rot X"
-									name="x"
-									relative_width="0.0"  />
-									<fs_scroll_list.columns
-									label="Rot Y"
-									name="y"
-									relative_width="0.0"  />
-									<fs_scroll_list.columns
-									label="Rot Z"
-									name="z"
-									relative_width="0.0"  />
-									<fs_scroll_list.columns
-									label="Pos X"
-									name="pos_x"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Pos Y"
-									name="pos_y"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Pos Z"
-									name="pos_z"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Size X"
-									name="scale_x"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Size Y"
-									name="scale_y"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="Size Z"
-									name="scale_z"
-									relative_width="0.10"  />
-									<fs_scroll_list.columns
-									label="#"
-									name="number"
-									relative_width="0.00"  />
-									</fs_scroll_list>
-								</panel>
-							</tab_container>
-						</panel>
-					</layout_panel>
-					<layout_panel
-					follows="top|left|right"
-					layout="topleft"
-					height="21"
-					auto_resize="true"
-					visible="true"
-					name="poser_options_layout"
-					width="481">
-						<panel
-						follows="left|top"
-						height="21"
-						background_visible="false"
-						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top="0"
-						width="481">
-							<button
-							height="21"
-							follows="top|left"
-							is_toggle="true"
-							layout="topleft"
-							label="Start Posing"
-							label_selected="Stop Posing"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							button_flash_enable="true"
-							flash_color="0.7 0.7 1 1"
-							button_flash_count="64"
-							button_flash_rate="0.5"
-							name="activate"
-							width="106"
-							top_pad="0"
-							left="4">
-							<button.commit_callback
-							function="Pose.Start"/>
-							</button>
-							<line_editor
-							commit_on_focus_lost="false"
-							follows="left|top"
-							height="20"
-							label="Enter Pose Name"
-							left_pad="1"
-							enabled="false"
-							top_delta="0"
-							name="pose_name"
-							width="157"/>
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							label="Save Pose"
-							enabled="false"
-							image_overlay="Icon_Dock_Foreground"
-							image_overlay_alignment="left"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							tool_tip="Save the current pose."
-							name="save_poses"
-							width="105"
-							top_delta="0"
-							left_pad="1">
-								<button.commit_callback
-								function="Pose.Save"/>
-							</button>
-							<button
-							follows="left|top"
-							height="21"
-							is_toggle="true"
-							layout="topleft"
-							label="Pose Library"
-							image_overlay="Hierarchy_View_On"
-							image_overlay_alignment="left"
-							image_bottom_pad="1"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							button_flash_enable="true"
-							flash_color="0.7 0.7 1 1"
-							button_flash_count="64"
-							button_flash_rate="0.5"
-							name="extend"
-							left_pad="1"
-							top_delta="0"
-							width="105" >
-							<button.commit_callback
-							function="Pose.Layout"/>
-							</button>
-						</panel>
-					</layout_panel>
-				</layout_stack>
-				<tab_container
+				left_pad="0"
+				top_delta="0"
+				name="advbutton_spacer_panel"
+				width="54"/>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				enabled="false"
+				label=""
+				image_overlay="Inv_Physics"
+				image_unselected="Toolbar_Middle_Off"
+				name="FlipPose_avatar"
+				tool_tip="Flip the whole pose left/right"
+				width="23"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.FlipPose"/>
+                </button>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				enabled="false"
+				label=""
+				image_overlay="Sync_Progress_1"
+				image_unselected="Toolbar_Middle_Off"
+				name="FlipJoint_avatar"
+				tool_tip="Mirror the selected body part(s) left/right"
+				width="23"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.FlipJoint"/>
+                </button>
+                <button
+				follows="left|top"
+				height="21"
+				layout="topleft"
+				enabled="false"
+				label="Recap"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="button_RecaptureParts"
+				left_pad="1"
+				top_delta="0"
+				tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now"
+				width="45" >
+                    <button.commit_callback
+                    function="Poser.RecaptureSelectedBones"/>
+                </button>
+                <button
+				follows="left|top"
+				height="21"
+				layout="topleft"
+				enabled="false"
+				label="Part(s) On/Off"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="toggle_PosingSelectedBones"
+				left_pad="1"
+				top_delta="0"
+				tool_tip="Turn the Poser on or off for the selected body part(s). When off, that body part animates like normal (with your AO or a pose-ball/etc.)"
+				width="85" >
+                    <button.commit_callback
+                    function="Poser.TogglePosingSelectedBones"/>
+                </button>
+                <panel
+				follows="left|top|bottom"
+				height="22"
+				background_visible="false"
+				layout="topleft"
+				visible="true"
+				mouse_opaque="false"
+				left_pad="0"
+				top_delta="0"
+				name="button_spacer_panel"
+				width="60"/>
+                <button
+				follows="left|top"
+				height="21"
+				is_toggle="true"
+				layout="topleft"
+				enabled="true"
+				label="Your Poses"
+				image_overlay="Hierarchy_View_On"
+				image_overlay_alignment="left"
+				image_bottom_pad="1"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				button_flash_enable="true"
+				flash_color="0.7 0.7 1 1"
+				button_flash_count="64"
+				button_flash_rate="0.5"
+				name="toggleLoadSavePanel"
+				left_pad="1"
+				top_delta="0"
+				tool_tip="Load, save and manage the poses you make"
+				width="105" >
+                    <button.commit_callback
+                    function="Poser.ToggleLoadSavePanel"/>
+                </button>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				enabled="true"
+				visible="false"
+				tool_tip="Manage your pose directory"
+				image_overlay="Inv_FolderOpen"
+				image_overlay_alignment="center"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="open_poseDir_button"
+				width="30"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.BrowseCache"/>
+                </button>
+                <menu_button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Load Pose"
+				enabled="false"
+				visible="false"
+				tool_tip="Load the currently selected pose."
+				image_overlay="Icon_Undock_Foreground"
+				image_overlay_alignment="left"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				menu_filename="menu_poser_poses_btn.xml"
+                menu_position="topright"
+				name="load_poses_button"
+				left_pad="1"
+				top_delta="0"
+				width="97"/>
+                <button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Save Pose"
+				enabled="false"
+				visible="false"
+				tool_tip="Save the current pose."
+				image_overlay="Icon_Dock_Foreground"
+				image_overlay_alignment="left"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="save_poses_button"
+				width="97"
+				top_delta="0"
+				left_pad="1">
+                    <button.commit_callback
+                    function="Poser.Save"/>
+                </button>
+            </panel>
+        </layout_panel>
+        <layout_panel
+		follows="top|left|right"
+		layout="topleft"
+		height="97"
+		visible="true"
+		auto_resize="false"
+		name="advanced_controls_layout"
+		width="600">
+            <panel
+                follows="top|left|right"
+                height="97"
+                left="0"
+                layout="all"
+				enabled="false"
+                background_visible="false"
+                mouse_opaque="false"
+                visible="false"
+                name="advanced_parent_panel"
+                width="555">
+                <tab_container
 				follows="all"
 				halign="center"
-				height="95"
+				height="97"
 				layout="topleft"
-				left="2"
 				name="modifier_tabs"
-				enabled="false"
+				enabled="true"
 				tab_height="20"
 				tab_group="1"
 				tab_position="top"
-				top_pad="4"
-				width="481">
-					<panel
+				top_pad="0"
+				width="555">
+                    <panel
 					follows="all"
 					background_visible="false"
-					height="95"
+					height="97"
 					layout="topleft"
 					left="0"
-					title="Rotation"
-					name="rotation_panel"
-					top="0"
-					width="622">
-						<slider
-						decimal_digits="3"
-						can_edit_text="true"
-						follows="left|top"
-						height="14"
-						increment="0.001"
-						initial_value="0"
-						label="Rotation X:"
-						label_width="70"
-						layout="topleft"
-						left="10"
-						max_val="3.142"
-						min_val="-3.142"
-						name="Rotation_X"
-						top_pad="6"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.Set"
-						parameter="0"/>
-						</slider>
-						<slider
-						decimal_digits="3"
-						can_edit_text="true"
-						follows="left|top"
-						height="14"
-						increment="0.001"
-						initial_value="0"
-						label="Rotation Y:"
-						label_width="70"
-						layout="topleft"
-						left="10"
-						max_val="3.142"
-						min_val="-3.142"
-						name="Rotation_Y"
-						top_pad="1"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.Set"
-						parameter="1"/>
-						</slider>
-						<slider
-						decimal_digits="3"
-						visible="true"
-						can_edit_text="true"
-						follows="left|top"
-						height="14"
-						increment="0.001"
-						initial_value="0"
-						label="Rotation Z:"
-						label_width="70"
-						layout="topleft"
-						left="10"
-						max_val="3.142"
-						min_val="-3.142"
-						name="Rotation_Z"
-						top_pad="1"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.Set"
-						parameter="2"/>
-						</slider>
-						<panel
-						follows="top|left|right"
-						height="21"
-						background_visible="false"
-						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top_pad="6"
-						width="480">
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Reset Selected Rotation(s)"
-							label_selected="Disable Selected Bone(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="reset_bone_rot"
-							width="159"
-							top="0"
-							left_delta="0">
-							<button.commit_callback
-							function="Joint.ResetJointRotation"/>
-							</button>
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Revert Selected Rotation(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="revert_pose"
-							width="158"
-							top_delta="0"
-							left_pad="1">
-							<button.commit_callback
-							function="Joint.RevertJointRotation"/>
-							</button>
-						</panel>
-					</panel>
-					<panel
-					follows="all"
-					background_visible="false"
-					height="95"
-					layout="topleft"
-					left="0"
-					title="Position"
+					title="Body Part Position"
 					name="position_panel"
 					top="0"
-					width="622">
-						<slider
+					width="555">
+                        <slider
 						decimal_digits="3"
 						can_edit_text="true"
 						follows="left|top"
@@ -783,14 +1170,14 @@ width="654">
 						left="10"
 						max_val="0.5"
 						min_val="-0.5"
-						name="Position_X"
+						name="Advanced_Position_X"
 						top_pad="6"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.PosSet"
-						parameter="0"/>
-						</slider>
-						<slider
+						width="530" >
+                            <slider.commit_callback
+                            function="Poser.Advanced.PositionSet"
+                            parameter="0"/>
+                        </slider>
+                        <slider
 						decimal_digits="3"
 						can_edit_text="true"
 						follows="left|top"
@@ -803,14 +1190,14 @@ width="654">
 						left_delta="0"
 						max_val="0.5"
 						min_val="-0.5"
-						name="Position_Y"
+						name="Advanced_Position_Y"
 						top_pad="1"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.PosSet"
-						parameter="1"/>
-						</slider>
-						<slider
+						width="530" >
+                            <slider.commit_callback
+                            function="Poser.Advanced.PositionSet"
+                            parameter="1"/>
+                        </slider>
+                        <slider
 						decimal_digits="3"
 						can_edit_text="true"
 						follows="left|top"
@@ -823,53 +1210,73 @@ width="654">
 						left_delta="0"
 						max_val="0.5"
 						min_val="-0.5"
-						name="Position_Z"
+						name="Advanced_Position_Z"
 						top_pad="1"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.PosSet"
-						parameter="2"/>
-						</slider>
-						<panel
-						follows="top|left|right"
+						width="530" >
+                            <slider.commit_callback
+                            function="Poser.Advanced.PositionSet"
+                            parameter="2"/>
+                        </slider>
+						<button
 						height="21"
-						background_visible="false"
+						follows="left|top"
 						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top_pad="6"
-						width="480">
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Reset Selected Position(s)"
-							label_selected="Disable Selected Bone(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="reset_bone_pos"
-							width="318"
-							top="0"
-							left_delta="2">
+						label="Undo Position Change"
+						image_overlay="Script_Undo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_position_change"
+						tool_tip="Undo the last position change"
+						width="150"
+						top_pad="2"
+						left_delta="0">
 							<button.commit_callback
-							function="Joint.ResetJointPosition"/>
-							</button>
-						</panel>
-					</panel>
-					<panel
+							function="Poser.UndoLastPosition"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Redo Position"
+						image_overlay="Script_Redo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="redo_position_change"
+						tool_tip="Redo the last position change"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.RedoLastPosition"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Reset Position"
+						image_overlay="Inv_TrashOpen"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_position_change"
+						tool_tip="Double click to reset position back to original"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.ResetPosition"/>
+						</button>
+                    </panel>
+                    <panel
 					follows="all"
 					background_visible="false"
-					height="95"
+					height="97"
 					layout="topleft"
 					left="0"
-					title="Scale"
+					title="Body Part Scale"
 					name="scale_panel"
 					top="0"
-					width="622">
-						<slider
+					width="607">
+                        <slider
 						decimal_digits="3"
 						can_edit_text="true"
 						follows="left|top"
@@ -882,14 +1289,14 @@ width="654">
 						left="10"
 						max_val="2"
 						min_val="0"
-						name="Scale_X"
+						name="Advanced_Scale_X"
 						top_pad="6"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.SetScale"
-						parameter="0"/>
-						</slider>
-						<slider
+						width="530" >
+                            <slider.commit_callback
+                            function="Poser.Advanced.ScaleSet"
+                            parameter="0"/>
+                        </slider>
+                        <slider
 						decimal_digits="3"
 						can_edit_text="true"
 						follows="left|top"
@@ -902,14 +1309,14 @@ width="654">
 						left_delta="0"
 						max_val="2"
 						min_val="0"
-						name="Scale_Y"
+						name="Advanced_Scale_Y"
 						top_pad="1"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.SetScale"
-						parameter="1"/>
-						</slider>
-						<slider
+						width="530" >
+                            <slider.commit_callback
+                            function="Poser.Advanced.ScaleSet"
+                            parameter="1"/>
+                        </slider>
+                        <slider
 						decimal_digits="3"
 						can_edit_text="true"
 						follows="left|top"
@@ -922,485 +1329,85 @@ width="654">
 						left_delta="0"
 						max_val="2"
 						min_val="0"
-						name="Scale_Z"
+						name="Advanced_Scale_Z"
 						top_pad="1"
-						width="459" >
-						<slider.commit_callback
-						function="Joint.SetScale"
-						parameter="2"/>
-						</slider>
-						<panel
-						follows="top|left|right"
+						width="530" >
+                            <slider.commit_callback
+                            function="Poser.Advanced.ScaleSet"
+                            parameter="2"/>
+                        </slider>
+						<button
 						height="21"
-						background_visible="false"
+						follows="left|top"
 						layout="topleft"
-						mouse_opaque="false"
-						left="0"
-						name="title"
-						top_pad="6"
-						width="480">
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							enabled="true"
-							label="Reset Selected Scale(s)"
-							label_selected="Disable Selected Bone(s)"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							name="reset_bone_scale"
-							width="318"
-							top="0"
-							left_delta="2">
+						label="Undo Scale Change"
+						image_overlay="Script_Undo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_position_change"
+						tool_tip="Undo the last scale change"
+						width="150"
+						top_pad="2"
+						left_delta="0">
 							<button.commit_callback
-							function="Joint.ResetJointScale"/>
-							</button>
-						</panel>
-					</panel>
-				</tab_container>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				is_toggle="true"
-				enabled="false"
-				label="Activate Selected Bone(s)"
-				label_selected="Disable Selected Bone(s)"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="toggle_bone"
-				width="157"
-				top_pad="-19"
-				left_delta="322">
-				<button.commit_callback
-				function="Joint.ChangeState"/>
-				</button>
-			</panel>
-		</layout_panel>
-		<layout_panel
-		follows="top|left|right"
-		layout="topleft"
-		height="420"
-		visible="false"
-		auto_resize="false"
-		name="poses_layout"
-		width="233">
-			<panel
-			follows="top|left|bottom"
-			height="420"
-			background_visible="false"
-			layout="topleft"
-			mouse_opaque="false"
-			left="2"
-			name="poses_panel"
-			top="0"
-			width="225">
-				<fs_scroll_list
-				column_padding="0"
-				draw_heading="true"
-				height="402"
-				follows="left|top|right"
-				layout="topleft"
-				left="0"
-				tool_tip="Change the interpolation type for the currently selected pose."
-				width="225"
-				multi_select="true"
-				name="poses_scroll"
-				desired_line_height="16"
-				top="0">
-				<fs_scroll_list.columns
-				label="Pose Name"
-				name="name"/>
-				</fs_scroll_list>
-				<menu_button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				label="Load Pose"
-				enabled="false"
-				tool_tip="Load the currently selected pose and apply all bone rotations saved in it."
-				image_overlay="Icon_Undock_Foreground"
-				image_overlay_alignment="left"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				menu_filename="menu_poser_poses_btn.xml"
-                menu_position="topright"
-				name="load_poses"
-				width="110"
-				top_pad="-1"
-				left_delta="2"/>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				label="Delete Pose"
-				enabled="false"
-				tool_tip="Delete the currently selected pose."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="TrashItem_Off"
-				image_overlay_alignment="left"
-				name="delete_poses"
-				width="110"
-				top_delta="0"
-				left_pad="1">
-				<button.commit_callback
-				function="Pose.Delete"/>
-				</button>
-			</panel>
-		</layout_panel>
-		<!--<layout_panel
-		follows="top|left|right"
-		layout="topleft"
-		height="420"
-		visible="false"
-		auto_resize="false"
-		name="animator_layout"
-		width="261">
-			<panel
-			follows="top|left|bottom"
-			height="420"
-			background_visible="false"
-			layout="topleft"
-			mouse_opaque="false"
-			visible="true"
-			left="0"
-			name="animator_panel"
-			top="0"
-			width="260">
-				<button
-				height="31"
-				follows="top|left"
-				layout="topleft"
-				label=""
-				tool_tip="Add the currently selected pose below the currently selected entry in the animation queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="Arrow_Right"
-				name="add_entry"
-				enabled="false"
-				width="26"
-				top="130"
-				left="0">
-				<button.commit_callback
-				function="Anim.Add"/>
-				</button>
-				<button
-				height="26"
-				follows="top|left"
-				layout="topleft"
-				label=""
-				tool_tip="Add a configurable wait event below the currently selected entry in the animation queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="Conv_toolbar_call_log"
-				name="add_wait"
-				width="26"
-				top_pad="1"
-				left_delta="0">
-				<button.commit_callback
-				function="Anim.Add"
-				parameter="Wait"/>
-				</button>
-				<button
-				height="26"
-				follows="top|left"
-				layout="topleft"
-				label=""
-				tool_tip="Add a repeat event below the currently selected entry in the animation queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="Refresh_Off"
-				name="add_repeat"
-				width="26"
-				top_pad="1"
-				left_delta="0">
-				<button.commit_callback
-				function="Anim.Add"
-				parameter="Repeat"/>
-				</button>
-				<button
-				height="31"
-				follows="top|left"
-				layout="topleft"
-				label=""
-				tool_tip="Delete the currently selected entry in the animation queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="Arrow_Left"
-				name="delete_entry"
-				enabled="false"
-				width="26"
-				top_pad="1"
-				left_delta="0">
-				<button.commit_callback
-				function="Anim.Delete"/>
-				</button>
-				<button
-				height="26"
-				follows="top|left"
-				layout="topleft"
-				label=""
-				enabled="false"
-				tool_tip="Move the currently selected entry one row up in the queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="Arrow_Up"
-				name="move_up"
-				width="26"
-				top_pad="6"
-				left_delta="0">
-				<button.commit_callback
-				function="Anim.Move"
-				parameter="Up"/>
-				</button>
-				<button
-				height="26"
-				follows="top|left"
-				layout="topleft"
-				label=""
-				enabled="false"
-				tool_tip="Move the currently selected entry one row down in the queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				image_overlay="Arrow_Down"
-				name="move_down"
-				width="26"
-				top_pad="1"
-				left_delta="0">
-				<button.commit_callback
-				function="Anim.Move"
-				parameter="Down"/>
-				</button>
-				<icon
-				follows="top|left"
-				height="423"
-				color="1 1 1 1"
-				image_name="Panel_Background"
-				layout="topleft"
-				name="vicon"
-				mouse_opaque="false"
-				visible="true"
-				width="223"
-				top="0"
-				left_pad="3"/>
-				<panel
-				follows="left|top|right"
-				height="20"
-				bg_visible="true"
-				bg_alpha_color="0.10 0.43 0.77 0.28"
-				layout="topleft"
-				mouse_opaque="false"
-				left_delta="2"
-				name="title"
-				top="2"
-				width="219"/>
-				<text
-				name="first_person_label"
+							function="Poser.UndoLastScale"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Redo Scale"
+						image_overlay="Script_Redo"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="redo_scale_change"
+						tool_tip="Redo the last scale change"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.RedoLastScale"/>
+						</button>
+						<button
+						height="21"
+						follows="left|top"
+						layout="topleft"
+						label="Reset Scale"
+						image_overlay="Inv_TrashOpen"
+						image_overlay_alignment="left"
+						image_unselected="Toolbar_Middle_Off"
+						name="undo_scale_change"
+						tool_tip="Double click to reset scale back to original"
+						width="110"
+						top_delta="0"
+						left_pad="4">
+							<button.commit_callback
+							function="Poser.ResetScale"/>
+						</button>
+                    </panel>
+                </tab_container>
+            </panel>
+            <panel
 				follows="left|top"
+				height="100"
+				background_visible="false"
 				layout="topleft"
-				left_delta="8"
-				height="12"
-				width="350"
-				top_delta="4">
-				Animation Queue:
-				</text>
-				<fs_scroll_list
-				column_padding="2"
-				draw_heading="true"
-				height="379"
-				follows="left|top|right"
-				layout="topleft"
-				can_sort="false"
-				left_delta="-10"
-				width="223"
-				multi_select="true"
-				name="anim_editor_scroll"
-				top_pad="3">
-				<fs_scroll_list.columns
-				label="Action"
-				name="name"
-				relative_width="0.75"/>
-				<fs_scroll_list.columns
-				label="Time"
-				name="time"
-				relative_width="0.25"  />
-				<fs_scroll_list.columns
-				label="Type"
-				name="type"
-				relative_width="0.0"  />
-				</fs_scroll_list>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				label="Play"
-				enabled="false"
-				tool_tip="Start playing the animation queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="play_anim"
-				width="43"
-				top_pad="1"
-				left_delta="2">
-				<button.commit_callback
-				function="Anim.Play"/>
-				</button>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				label="Stop"
-				enabled="false"
-				tool_tip="Stop playing the animation queue."
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="stop_anim"
-				width="43"
-				top_delta="0"
-				left_pad="1">
-				<button.commit_callback
-				function="Anim.Stop"/>
-				</button>
-				<icon
-				follows="left|top|right"
-				image_name="Toolbar_Middle_Off"
-				height="21"
-				width="68"
-				layout="topleft"
-				left_pad="1"
-				top_delta="0"/>
-				<line_editor
-				commit_on_focus_lost="true"
-				follows="left|top"
-				height="20"
-				label="Wait time"
-				tool_tip="Change the time for the wait event."
-				enabled="false"
-				left_pad="1"
-				top_delta="0"
-				name="anim_time"
-				width="62">
-				<line_editor.commit_callback
-				function="Anim.Set"/>
-				</line_editor>
-			</panel>
-		</layout_panel>-->
-	</layout_stack>
-	
-	<!--<multi_slider
-	can_edit_text="false"
-	decimal_digits="0"
-	follows="bottom"
-	height="10"
-	increment="0.1"
-	initial_value="0"
-	layout="topleft"
-	left_delta="0"
-	max_sliders="120"
-	max_val="30"
-	min_val="25"
-	name="key_slider"
-	show_text="false"
-	top_pad="3"
-	width="475" />
-	<line_editor
-	commit_on_focus_lost="true"
-	follows="left|top"
-	height="20"
-	label=""
-	enabled="true"
-	left_pad="1"
-	top_delta="0"
-	name="time"
-	width="62">
-	<line_editor.commit_callback
-	function="Anim.Edit"/>
-	</line_editor>-->
-	
-	
-	<!--<multi_slider
-	can_edit_text="true"
-	decimal_digits="0"
-	draw_track="false"
-	follows="bottom"
-	height="10"
-	increment="0.1"
-	initial_value="0"
-	layout="topleft"
-	left="10"
-	max_sliders="60"
-	max_val="60"
-	name="time_slider"
-	show_text="false"
-	top_pad="5"
-	use_triangle="true"
-	width="475" >
-	<multi_slider.commit_callback
-	function="Anim.SetValue"/>
-	</multi_slider>
-	<multi_slider
-	can_edit_text="true"
-	decimal_digits="0"
-	follows="bottom"
-	height="10"
-	increment="0.1"
-	initial_value="0"
-	layout="topleft"
-	left_delta="0"
-	max_sliders="60"
-	max_val="60"
-	name="key_slider"
-	show_text="true"
-	top_pad="0"
-	width="475" />
-	<button
-	height="23"
-	label=" + "
-	label_selected="Add Key"
-	image_hover_unselected="Toolbar_Middle_Over"
-	image_selected="Toolbar_Middle_Selected"
-	image_unselected="Toolbar_Middle_Off"
-	layout="topleft"
-	left_pad="0"
-	name="add_key"
-	top_delta="-20"
-	width="26" />
-	<button
-	height="23"
-	label=" - "
-	label_selected="Delete Key"
-	image_hover_unselected="Toolbar_Middle_Over"
-	image_selected="Toolbar_Middle_Selected"
-	image_unselected="Toolbar_Middle_Off"
-	layout="topleft"
-	name="delete_key"
-	top_pad="0"
-	width="26" />
-	<line_editor
-	commit_on_focus_lost="true"
-	follows="left|top"
-	height="20"
-	label="Wait time"
-	tool_tip="Change the time for the wait event."
-	enabled="true"
-	left_pad="1"
-	top_delta="0"
-	name="time"
-	width="62">
-	<line_editor.commit_callback
-	function="Anim.SetValue"/>
-	</line_editor>-->
+				visible="false"
+				enabled="true"
+				mouse_opaque="false"
+				name="save_file_options"
+				left_pad="2"
+				width="235">
+				<check_box
+					name="also_save_bvh_checkbox"
+					height="16"
+					label="Write BVH when saving"
+					follows="left|top"
+					left="0"
+					tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build' menu to pose yourself or others in-world"
+					top_pad="5"
+					width="134" />
+            </panel>
+        </layout_panel>
+    </layout_stack>
 </floater>

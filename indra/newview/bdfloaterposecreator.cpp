@@ -176,7 +176,7 @@ bool BDFloaterPoseCreator::postBuild()
     //BD - Poser Right Click Menu
     pose_reg.add("Joints.Menu", boost::bind(&BDFloaterPoseCreator::onJointContextMenuAction, this, _2));
     enable_registrar.add("Joints.OnEnable", boost::bind(&BDFloaterPoseCreator::onJointContextMenuEnable, this, _2));
-    LLContextMenu* joint_menu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>("menu_poser_joints.xml",
+    LLContextMenu* joint_menu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>("menu_bd_poser_joints.xml",
         gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
     mJointScrolls[JOINTS]->setContextMenu(FSScrollListCtrl::MENU_EXTERNAL, joint_menu);
 
