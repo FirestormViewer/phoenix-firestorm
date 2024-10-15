@@ -3,9 +3,39 @@
 positioning="centered"
 height="431"
 layout="topleft"
-name="floater_poser"
-title="Pose Creator"
+name="bd_floater_poser"
+title="Poser - Live Editing Mode"
 width="654">
+	<!-- Expanded Size 745 -->
+	<!-- Expanded Size 906 -->
+	<panel
+	height="1"
+	visible="false"
+	name="max_panel"
+	width="886"/>
+	<!-- Collapsed Size 517 -->
+	<!-- Collapsed Size 678 -->
+	<panel
+	height="1"
+	visible="false"
+	name="min_panel"
+	width="654"/>
+	<string
+	name="linear_time" translate="false">
+	0.000+
+	</string>
+	<string
+	name="spherical_time" translate="false">
+	0.001 to 1.0
+	</string>
+	<string
+	name="live_mode_str" translate="false">
+	Poser - Live Editing Mode
+	</string>
+	<string
+	name="creation_mode_str" translate="false">
+	Poser - Create A Pose Mode
+	</string>
 	<string
 	name="icon_category" translate="false">
 	Inv_Shape
@@ -55,344 +85,220 @@ width="654">
 	Misc
 	</string>
 	
-	<tab_container
-	follows="all"
-	halign="center"
-	height="426"
+	<layout_stack
+	follows="top|left|right"
+	height="425"
 	layout="topleft"
-	left="5"
-	name="animation_tabs"
-	tab_height="20"
-	tab_group="1"
-	tab_position="top"
+	left="7"
+	border_size="-4"
+	close_time_constant="0.02"
+	open_time_constant="0.02"
+	mouse_opaque="false"
+	name="poser_stack"
+	orientation="horizontal"
 	top="0"
-	width="643">
-	<panel
-		follows="all"
-		background_visible="false"
-		height="426"
+	width="642">
+		<layout_panel
+		follows="top|left|right"
 		layout="topleft"
-		left="0"
-		title="General"
-		name="general_panel"
-		top="0"
-		width="644">
-				<text
-				follows="top|left|right"
-				height="25"
+		height="420"
+		auto_resize="false"
+		visible="true"
+		name="poser_list_layout"
+		width="162">
+			<panel
+			follows="left|top|bottom"
+			height="420"
+			background_visible="false"
+			layout="topleft"
+			mouse_opaque="false"
+			left="0"
+			name="title"
+			top="0"
+			width="163">
+				<panel
+				follows="left|top|bottom"
+				height="319"
+				background_visible="false"
+				layout="topleft"
+				visible="true"
+				mouse_opaque="false"
+				left="0"
+				name="live_panel"
+				top="0"
+				width="153">
+					<fs_scroll_list
+					column_padding="0"
+					draw_heading="true"
+					height="279"
+					can_sort="false"
+					follows="left|top|right"
+					layout="topleft"
+					left="1"
+					tool_tip="Select the targeted avatar or animesh."
+					width="153"
+					multi_select="false"
+					name="avatar_scroll"
+					desired_line_height="16"
+					top="20">
+					<fs_scroll_list.columns
+					label=""
+					name="icon"
+					relative_width="0.14"  />
+					<fs_scroll_list.columns
+					label="Name"
+					name="name"
+					relative_width="0.86"  />
+					<fs_scroll_list.columns
+					label="UUID"
+					name="uuid"
+					relative_width="0.0"  />
+					</fs_scroll_list>
+					<button
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					label="Refresh Avatars"
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					name="refresh"
+					width="151"
+					top_pad="-1"
+					left="2">
+					<button.commit_callback
+					function="Poser.RefreshAvatars"/>
+					</button>
+				</panel>
+				<check_box
+				height="16"
+				initial_value="false"
+				label="Mirror Changes"
+				tool_tip="This option toggles whether all changes to rotations should be mirrored to the opposide side's bone as well. Left Arm will mirror to Right Arm and so on."
 				layout="topleft"
 				left="5"
-				name="linden_intro"
-				top="1"
-				width="435"
-				wrap="true">
-				Pose Filename
-- This is the name the animation will have on upload.
-				</text>
-				<line_editor
-				commit_on_focus_lost="false"
-				follows="left|top"
-				height="20"
-				label=""
-				left="2"
-				top_pad="7"
-				name="export_name"
-				width="151"/>
-				<text
-				follows="top|left|right"
-				height="25"
-				layout="topleft"
-				left="5"
-				name="linden_intro"
-				top_pad="5"
-				width="635"
-				wrap="true">
-				Ease In / Ease Out Time
-- This is the time in seconds it takes for the animation to "fade" in and out when started or stopped.
-				</text>
-				<line_editor
-				commit_on_focus_lost="true"
-				follows="left|top"
-				height="20"
-				label=""
-				value="1.0"
-				left="2"
-				top_pad="7"
-				name="ease_in"
-				width="75">
-				<line_editor.commit_callback
-				function="Pose.EditInfo"
-				parameter="ease_in"/>
-				</line_editor>
-				<line_editor
-				commit_on_focus_lost="true"
-				follows="left|top"
-				height="20"
-				label=""
-				value="1.0"
-				left_pad="1"
-				top_delta="0"
-				name="ease_out"
-				width="75">
-				<line_editor.commit_callback
-				function="Pose.EditInfo"
-				parameter="ease_out"/>
-				</line_editor>
-				<text
-				follows="top|left|right"
-				height="25"
-				layout="topleft"
-				left="5"
-				name="linden_intro"
-				top_pad="5"
-				width="635"
-				wrap="true">
-				Animation Duration
-- How long in seconds the animation should last. It is recommended to keep "Automatic Duration" enabled.
-				</text>
+				name="Mirror"
+				top_pad="4"
+				width="115">
+				<check_box.commit_callback
+                    function="Joint.ToggleMirror"/>
+				</check_box>
 				<check_box
 				height="16"
 				initial_value="true"
-				label="Automatic Duration"
-				tool_tip="Automatically calculate the duration of the animation according to last keyframe."
+				label="Easy Rotations"
+				tool_tip="This option toggles whether the poser should display and use simplified rotation axis. This essentially means that when moving any axis, all other axis stay untouched, this can bring the rotations out of place so that 0 0 0 no longer is the default resting position depending on in which order bones were moved. Disabling this option will allow the other axis to be dynamically changed to represent the actual rotations which means sliders you are not touching will change with the slider you are currently moving. This is disabled by default as it may look confusing to the user. It is highly recommended that if you use this you start zeroing out Z then Y and lastly X in this order, otherwise you will not be able to zero out all axis unless you reset the bone rotation."
 				layout="topleft"
 				left="5"
-				name="AutoDuration"
-				top_pad="6"
+				name="EasyRotations"
+				top_pad="1"
 				width="115">
 				<check_box.commit_callback
-				function="Pose.EditInfo"
-				parameter="duration_auto"/>
+                    function="Joint.EasyRotations"/>
 				</check_box>
-				<slider
-				decimal_digits="1"
-				can_edit_text="true"
-				follows="left|top"
-				height="14"
-				increment="0.0166666666666667"
-				initial_value="1.0"
-				label=""
-				layout="topleft"
-				left_pad="50"
-				max_val="60.0"
-				min_val="0.0166666666666667"
-				name="keyframe_duration"
-				top_delta="3"
-				width="150" >
-				<slider.commit_callback
-				function="Pose.EditInfo"
-				parameter="duration"/>
-				</slider>
-				<text
-				follows="top|left|right"
-				height="25"
-				layout="topleft"
-				left="5"
-				name="linden_intro"
-				top_pad="5"
-				width="635"
-				wrap="true">
-				Loop Animation
-- Toggle whether the animation should be looped at the defined start and end time in seconds.
-				</text>
-				<check_box
-				height="16"
-				initial_value="true"
-				label="Loop animation between"
-				tool_tip="Toggle whether the animation should be looped at set timeframes in the animation."
-				layout="topleft"
-				left="5"
-				name="LoopAnimation"
-				top_pad="6"
-				width="115">
-				<check_box.commit_callback
-				function="Pose.EditInfo"
-				parameter="loop"/>
-				</check_box>
-				<line_editor
-				commit_on_focus_lost="true"
-				follows="left|top"
-				height="20"
-				label=""
-				value="0.0"
-				left_pad="55"
-				top_delta="0"
-				name="loop_in"
-				width="50">
-				<line_editor.commit_callback
-				function="Pose.EditInfo"
-				parameter="loop_in"/>
-				</line_editor>
-				<text
-				follows="top|left|right"
-				height="25"
-				layout="topleft"
-				left_pad="10"
-				name="linden_intro"
-				top_delta="5"
-				width="30"
-				wrap="true">
-				and
-				</text>
-				<line_editor
-				commit_on_focus_lost="true"
-				follows="left|top"
-				height="20"
-				label=""
-				value="1.0"
-				left_pad="1"
-				top_delta="-5"
-				name="loop_out"
-				width="50">
-				<line_editor.commit_callback
-				function="Pose.EditInfo"
-				parameter="loop_out"/>
-				</line_editor>
-				<text
-				follows="top|left|right"
-				height="50"
-				layout="topleft"
-				left="5"
-				name="linden_intro"
-				top_pad="5"
-				width="435"
-				wrap="true">
-				Base Priority
-- Set the minimum priority of this animation.
-- This affects whether this animation overrides others or is overridden by them.
-- Individual bones can potentially increase this.
-				</text>
-				<combo_box
-				follows="left|top"
-				height="21"
-				layout="topleft"
-				left="2"
-				top_pad="7"
-				max_chars="135"
-				name="base_priority"
-				width="151">
-				<combo_box.item
-				label="Low Priority (0)"
-				name="0"
-				value="0" />
-				<combo_box.item
-				label="Medium Priority (1)"
-				name="1"
-				value="1" />
-				<combo_box.item
-				label="High Priority (2)"
-				name="2"
-				value="2" />
-				<combo_box.item
-				label="Higher Priority (3)"
-				name="3"
-				value="3" />
-				<combo_box.item
-				label="Highest Priority (4)"
-				name="4"
-				value="4" />
-				<combo_box.item
-				label="Additive Priority (7)"
-				name="7"
-				value="7" />
-				<combo_box.commit_callback
-				function="Pose.EditInfo"
-				parameter="priority"/>
-				</combo_box>
-				<text
-				follows="top|left|right"
-				height="25"
-				layout="topleft"
-				left="5"
-				name="linden_intro"
-				top_pad="5"
-				width="435"
-				wrap="true">
-				Hand Pose
-- (OPTIONAL) Sets the default hand pose when using the default Linden body.
-				</text>
-				<combo_box
-				follows="left|top"
-				height="21"
-				layout="topleft"
-				left="2"
-				top_pad="7"
-				max_chars="135"
-				name="hand_poses"
-				width="151">
-				<combo_box.item
-				label="Spread"
-				name="0"
-				value="0" />
-				<combo_box.item
-				label="Relaxed"
-				name="1"
-				value="1" />
-				<combo_box.item
-				label="Point"
-				name="2"
-				value="2" />
-				<combo_box.item
-				label="Fist"
-				name="3"
-				value="3" />
-				<combo_box.commit_callback
-				function="Pose.EditInfo"
-				parameter="hand"/>
-				</combo_box>
-				
 				<button
 				height="21"
-				follows="bottom|left"
+				follows="top|left"
 				layout="topleft"
-				label="Import"
-				image_overlay="Icon_Undock_Foreground"
-				image_overlay_alignment="right"
+				enabled="true"
+				label="Symmetrize Pose"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
-				tool_tip="Import pose from disk."
-				name="import_poses"
+				name="symmetrize_pose"
 				width="75"
-				top="-24"
-				left="3">
-					<button.commit_callback
-					function="Pose.Import"/>
+				top_pad="18"
+				left="2">
+				<button.commit_callback
+				function="Joint.SymmetrizePose"/>
 				</button>
 				<button
 				height="21"
-				follows="bottom|left"
+				follows="top|left"
 				layout="topleft"
-				label="Export"
-				image_overlay="Icon_Dock_Foreground"
-				image_overlay_alignment="right"
+				enabled="true"
+				label="Mirror Pose"
 				image_hover_unselected="Toolbar_Middle_Over"
 				image_selected="Toolbar_Middle_Selected"
 				image_unselected="Toolbar_Middle_Off"
-				tool_tip="Export the current pose."
-				name="export_poses"
+				name="flip_pose"
+				width="75"
+				top_pad="1"
+				left="2">
+				<button.commit_callback
+				function="Joint.FlipPose"/>
+				</button>
+				<button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				enabled="true"
+				label="Recapture"
+				tool_tip="Recapture all disabled joints, this is useful when disabling bones to edit them via outside means such as HUDs and then recapture these changes into the Poser to make fine adjustments."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="recapture_bones"
 				width="75"
 				top_delta="0"
 				left_pad="1">
-					<button.commit_callback
-					function="Pose.Save"
-					parameter="anim"/>
+				<button.commit_callback
+				function="Joint.Recapture"/>
 				</button>
-		</panel>
-		<panel
-		follows="all"
-		background_visible="false"
-		height="299"
+			</panel>
+		</layout_panel>
+		<layout_panel
+		follows="top|left|right"
 		layout="topleft"
-		left="0"
-		title="Skeleton"
-		name="joints_panel"
-		top="0"
-		width="481">
+		height="420"
+		auto_resize="false"
+		visible="true"
+		name="poser_layout"
+		width="490">
+			<panel
+			follows="left|top|bottom"
+			height="420"
+			background_visible="false"
+			layout="topleft"
+			mouse_opaque="false"
+			left="0"
+			name="title"
+			top="0"
+			width="485">
+				<layout_stack
+				follows="top|left|right"
+				height="319"
+				layout="topleft"
+				left="0"
+				border_size="-4"
+				close_time_constant="0.0"
+				open_time_constant="0.0"
+				mouse_opaque="false"
+				name="poser_layout_stack"
+				orientation="vertical"
+				top="0"
+				width="666">
+					<layout_panel
+					follows="all"
+					layout="topleft"
+					height="302"
+					auto_resize="true"
+					name="poser_layout"
+					width="481">
+						<panel
+						follows="left|top|bottom"
+						height="302"
+						background_visible="false"
+						layout="topleft"
+						mouse_opaque="false"
+						left="0"
+						name="title"
+						top="0"
+						width="481">
 							<tab_container
-							follows="top|left"
+							follows="all"
 							halign="center"
-							height="279"
+							height="299"
 							layout="topleft"
 							left="0"
 							enabled="false"
@@ -401,109 +307,86 @@ width="654">
 							tab_group="1"
 							tab_position="top"
 							top="0"
-							width="220">
+							width="483">
 								<panel
 								follows="all"
 								background_visible="false"
 								height="299"
 								layout="topleft"
 								left="0"
-								title="Bones"
+								title="Skeleton"
 								name="joints_panel"
 								top="0"
 								width="481">
-									<fs_scroll_list
-									column_padding="2"
-									draw_heading="true"
+									<panel
+									follows="left|top|bottom"
 									height="302"
-									follows="top|left|bottom"
-									can_sort="false"
+									background_visible="false"
 									layout="topleft"
-									left="2"
-									width="169"
-									multi_select="true"
-									name="joints_scroll"
-									desired_line_height="16"
-									top="0">
-									<fs_scroll_list.columns
-									label=""
-									name="icon"
-									width="18"  />
-									<fs_scroll_list.columns
-									label="Bone Name"
-									name="joint"
-									width="108"  />
-									<fs_scroll_list.columns
-									label="Rot X"
-									name="x"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Rot Y"
-									name="y"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Rot Z"
-									name="z"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Pos X"
-									name="pos_x"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Pos Y"
-									name="pos_y"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Pos Z"
-									name="pos_z"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Size X"
-									name="scale_x"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Size Y"
-									name="scale_y"
-									width="0"  />
-									<fs_scroll_list.columns
-									label="Size Z"
-									name="scale_z"
-									width="0"  />
-									</fs_scroll_list>
-									<fs_scroll_list
-									column_padding="2"
-									draw_heading="true"
-									height="302"
-									follows="top|left|bottom"
-									can_sort="false"
-									layout="topleft"
-									left_pad="1"
-									width="45"
-									multi_select="true"
-									name="keyframe_scroll"
-									desired_line_height="16"
-									top_delta="0">
-									<fs_scroll_list.columns
-									label="Time"
-									name="time"
-									width="38"  />
-									<fs_scroll_list.columns
-									label="Value"
-									name="value"
-									width="20"  />
-									<fs_scroll_list.columns
-									label="X"
-									name="x"
-									width="48"  />
-									<fs_scroll_list.columns
-									label="Y"
-									name="y"
-									width="48"  />
-									<fs_scroll_list.columns
-									label="Z"
-									name="z"
-									width="48"  />
-									</fs_scroll_list>
+									mouse_opaque="false"
+									left="0"
+									name="title"
+									top="0"
+									width="481">
+										<fs_scroll_list
+										column_padding="2"
+										draw_heading="true"
+										height="300"
+										follows="all"
+										can_sort="false"
+										layout="topleft"
+										left="2"
+										width="479"
+										multi_select="true"
+										name="joints_scroll"
+										desired_line_height="16"
+										top="0">
+										<fs_scroll_list.columns
+										label=""
+										name="icon"
+										relative_width="0.04"  />
+										<fs_scroll_list.columns
+										label="Bone Name"
+										name="joint"
+										relative_width="0.33"  />
+										<fs_scroll_list.columns
+										label="Rot X"
+										name="x"
+										relative_width="0.10"  />
+										<fs_scroll_list.columns
+										label="Rot Y"
+										name="y"
+										relative_width="0.10"  />
+										<fs_scroll_list.columns
+										label="Rot Z"
+										name="z"
+										relative_width="0.10"  />
+										<fs_scroll_list.columns
+										label="Pos X"
+										name="pos_x"
+										relative_width="0.10"  />
+										<fs_scroll_list.columns
+										label="Pos Y"
+										name="pos_y"
+										relative_width="0.10"  />
+										<fs_scroll_list.columns
+										label="Pos Z"
+										name="pos_z"
+										relative_width="0.10"  />
+										<fs_scroll_list.columns
+										label="Size X"
+										name="scale_x"
+										relative_width="0.0"  />
+										<fs_scroll_list.columns
+										label="Size Y"
+										name="scale_y"
+										relative_width="0.0"  />
+										<fs_scroll_list.columns
+										label="Size Z"
+										name="scale_z"
+										relative_width="0.0"  />
+										</fs_scroll_list>
+									</panel>
 								</panel>
 								<panel
 								follows="all"
@@ -511,7 +394,7 @@ width="654">
 								height="299"
 								layout="topleft"
 								left="0"
-								title="Collision"
+								title="Collision Volumes"
 								name="cv_panel"
 								top="0"
 								width="481">
@@ -584,7 +467,7 @@ width="654">
 								height="299"
 								layout="topleft"
 								left="0"
-								title="Attachment"
+								title="Attachment Bones"
 								name="attach_panel"
 								top="0"
 								width="481">
@@ -652,38 +535,16 @@ width="654">
 									</fs_scroll_list>
 								</panel>
 							</tab_container>
-						
-									<fs_scroll_list
-									column_padding="2"
-									draw_heading="true"
-									height="280"
-									follows="top|left"
-									can_sort="false"
-									layout="topleft"
-									left_pad="3"
-									width="417"
-									multi_select="true"
-									name="timeframe_scroll"
-									desired_line_height="16"
-									top_delta="-1">
-									<fs_scroll_list.columns
-									label="Bone Name"
-									name="joint"
-									width="108" />
-									<fs_scroll_list.columns
-									label="Timeline"
-									name="multislider"
-									width="200" >
-										<column
-										name="multislider"
-										type="multislider"
-										min_value="0"
-										max_value="60"
-										increment="1"
-										max_sliders="600"/>
-									</fs_scroll_list.columns>
-									</fs_scroll_list>
-						
+						</panel>
+					</layout_panel>
+					<layout_panel
+					follows="top|left|right"
+					layout="topleft"
+					height="21"
+					auto_resize="true"
+					visible="true"
+					name="poser_options_layout"
+					width="481">
 						<panel
 						follows="left|top"
 						height="21"
@@ -692,8 +553,8 @@ width="654">
 						mouse_opaque="false"
 						left="0"
 						name="title"
-						top_pad="1"
-						width="681">
+						top="0"
+						width="481">
 							<button
 							height="21"
 							follows="top|left"
@@ -709,19 +570,50 @@ width="654">
 							button_flash_count="64"
 							button_flash_rate="0.5"
 							name="activate"
-							width="114"
+							width="106"
 							top_pad="0"
-							left="3">
+							left="4">
 							<button.commit_callback
 							function="Pose.Start"/>
 							</button>
+							<line_editor
+							commit_on_focus_lost="false"
+							follows="left|top"
+							height="20"
+							label="Enter Pose Name"
+							left_pad="1"
+							enabled="false"
+							top_delta="0"
+							name="pose_name"
+							width="157"/>
 							<button
 							height="21"
 							follows="top|left"
+							layout="topleft"
+							label="Save Pose"
+							enabled="false"
+							image_overlay="Icon_Dock_Foreground"
+							image_overlay_alignment="left"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							tool_tip="Save the current pose."
+							name="save_poses"
+							width="105"
+							top_delta="0"
+							left_pad="1">
+								<button.commit_callback
+								function="Pose.Save"/>
+							</button>
+							<button
+							follows="left|top"
+							height="21"
 							is_toggle="true"
 							layout="topleft"
-							label="Preview"
-							label_selected="Stop"
+							label="Pose Library"
+							image_overlay="Hierarchy_View_On"
+							image_overlay_alignment="left"
+							image_bottom_pad="1"
 							image_hover_unselected="Toolbar_Middle_Over"
 							image_selected="Toolbar_Middle_Selected"
 							image_unselected="Toolbar_Middle_Off"
@@ -729,142 +621,28 @@ width="654">
 							flash_color="0.7 0.7 1 1"
 							button_flash_count="64"
 							button_flash_rate="0.5"
-							name="preview"
-							width="100"
-							top_delta="0"
-							left_pad="1">
-							<button.commit_callback
-							function="Pose.StartStop"/>
-							</button>
-							<combo_box
-							follows="left|top"
-							height="21"
-							layout="topleft"
-							left_pad="6"
-							top_delta="0"
-							max_chars="135"
-							name="interpolation"
-							width="139">
-							<combo_box.item
-							label="Step"
-							name="0"
-							value="0" />
-							<combo_box.item
-							label="Linear"
-							name="1"
-							value="1" />
-							<combo_box.item
-							label="Spline"
-							name="2"
-							value="2" />
-							<combo_box.commit_callback
-							function="Pose.Interpolation"/>
-							</combo_box>
-							<line_editor
-							commit_on_focus_lost="false"
-							follows="left|top"
-							height="20"
-							label=""
+							name="extend"
 							left_pad="1"
 							top_delta="0"
-							name="key_time"
-							width="43">
-							<line_editor.commit_callback
-							function="Keyframe.Time"/>
-							</line_editor>
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							label="Add Key"
-							image_overlay="AddItem_Off"
-							image_overlay_alignment="right"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							tool_tip="Add a keyframe after the currently selected keyframe. Hold SHIFT to add it at the end. Hold CTRL to add it to the beginning."
-							name="add_keyframe"
-							width="105"
-							top_delta="0"
-							left_pad="1">
-								<button.commit_callback
-								function="Keyframe.Add"/>
-							</button>
-							<button
-							height="21"
-							follows="top|left"
-							layout="topleft"
-							label="Remove Key"
-							image_overlay="TrashItem_Off"
-							image_overlay_alignment="right"
-							image_hover_unselected="Toolbar_Middle_Over"
-							image_selected="Toolbar_Middle_Selected"
-							image_unselected="Toolbar_Middle_Off"
-							tool_tip="Remove the currently selected keyframe."
-							name="remove_keyframe"
-							width="125"
-							top_delta="0"
-							left_pad="1">
-								<button.commit_callback
-								function="Keyframe.Remove"/>
+							width="105" >
+							<button.commit_callback
+							function="Pose.Layout"/>
 							</button>
 						</panel>
-				
-				<check_box
-				height="16"
-				initial_value="false"
-				label="Mirror Changes"
-				tool_tip="This option toggles whether all changes to rotations should be mirrored to the opposide side's bone as well. Left Arm will mirror to Right Arm and so on."
-				layout="topleft"
-				left="5"
-				name="Mirror"
-				top_pad="4"
-				width="115">
-				<check_box.commit_callback
-                    function="Joint.ToggleMirror"/>
-				</check_box>
-				<check_box
-				height="16"
-				initial_value="true"
-				label="Easy Rotations"
-				tool_tip="This option toggles whether the poser should display and use simplified rotation axis. This essentially means that when moving any axis, all other axis stay untouched, this can bring the rotations out of place so that 0 0 0 no longer is the default resting position depending on in which order bones were moved. Disabling this option will allow the other axis to be dynamically changed to represent the actual rotations which means sliders you are not touching will change with the slider you are currently moving. This is disabled by default as it may look confusing to the user. It is highly recommended that if you use this you start zeroing out Z then Y and lastly X in this order, otherwise you will not be able to zero out all axis unless you reset the bone rotation."
-				layout="topleft"
-				left="5"
-				name="EasyRotations"
-				top_pad="1"
-				width="115">
-				<check_box.commit_callback
-                    function="Joint.EasyRotations"/>
-				</check_box>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
-				enabled="true"
-				label="Mirror Pose"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				name="flip_pose"
-				width="151"
-				top_pad="40"
-				left="3">
-				<button.commit_callback
-				function="Joint.FlipPose"/>
-				</button>
-
+					</layout_panel>
+				</layout_stack>
 				<tab_container
-				follows="top|left|bottom"
+				follows="all"
 				halign="center"
 				height="95"
 				layout="topleft"
-				left="161"
+				left="2"
 				name="modifier_tabs"
 				enabled="false"
 				tab_height="20"
 				tab_group="1"
 				tab_position="top"
-				top_delta="-76"
+				top_pad="4"
 				width="481">
 					<panel
 					follows="all"
@@ -960,7 +738,7 @@ width="654">
 							name="reset_bone_rot"
 							width="159"
 							top="0"
-							left_delta="2">
+							left_delta="0">
 							<button.commit_callback
 							function="Joint.ResetJointRotation"/>
 							</button>
@@ -1200,7 +978,328 @@ width="654">
 				function="Joint.ChangeState"/>
 				</button>
 			</panel>
-	</tab_container>
+		</layout_panel>
+		<layout_panel
+		follows="top|left|right"
+		layout="topleft"
+		height="420"
+		visible="false"
+		auto_resize="false"
+		name="poses_layout"
+		width="233">
+			<panel
+			follows="top|left|bottom"
+			height="420"
+			background_visible="false"
+			layout="topleft"
+			mouse_opaque="false"
+			left="2"
+			name="poses_panel"
+			top="0"
+			width="225">
+				<fs_scroll_list
+				column_padding="0"
+				draw_heading="true"
+				height="402"
+				follows="left|top|right"
+				layout="topleft"
+				left="0"
+				tool_tip="Change the interpolation type for the currently selected pose."
+				width="225"
+				multi_select="true"
+				name="poses_scroll"
+				desired_line_height="16"
+				top="0">
+				<fs_scroll_list.columns
+				label="Pose Name"
+				name="name"/>
+				</fs_scroll_list>
+				<menu_button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Load Pose"
+				enabled="false"
+				tool_tip="Load the currently selected pose and apply all bone rotations saved in it."
+				image_overlay="Icon_Undock_Foreground"
+				image_overlay_alignment="left"
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				menu_filename="menu_bd_poser_poses_btn.xml"
+                menu_position="topright"
+				name="load_poses"
+				width="110"
+				top_pad="-1"
+				left_delta="2"/>
+				<button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Delete Pose"
+				enabled="false"
+				tool_tip="Delete the currently selected pose."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="TrashItem_Off"
+				image_overlay_alignment="left"
+				name="delete_poses"
+				width="110"
+				top_delta="0"
+				left_pad="1">
+				<button.commit_callback
+				function="Pose.Delete"/>
+				</button>
+			</panel>
+		</layout_panel>
+		<!--<layout_panel
+		follows="top|left|right"
+		layout="topleft"
+		height="420"
+		visible="false"
+		auto_resize="false"
+		name="animator_layout"
+		width="261">
+			<panel
+			follows="top|left|bottom"
+			height="420"
+			background_visible="false"
+			layout="topleft"
+			mouse_opaque="false"
+			visible="true"
+			left="0"
+			name="animator_panel"
+			top="0"
+			width="260">
+				<button
+				height="31"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				tool_tip="Add the currently selected pose below the currently selected entry in the animation queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="Arrow_Right"
+				name="add_entry"
+				enabled="false"
+				width="26"
+				top="130"
+				left="0">
+				<button.commit_callback
+				function="Anim.Add"/>
+				</button>
+				<button
+				height="26"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				tool_tip="Add a configurable wait event below the currently selected entry in the animation queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="Conv_toolbar_call_log"
+				name="add_wait"
+				width="26"
+				top_pad="1"
+				left_delta="0">
+				<button.commit_callback
+				function="Anim.Add"
+				parameter="Wait"/>
+				</button>
+				<button
+				height="26"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				tool_tip="Add a repeat event below the currently selected entry in the animation queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="Refresh_Off"
+				name="add_repeat"
+				width="26"
+				top_pad="1"
+				left_delta="0">
+				<button.commit_callback
+				function="Anim.Add"
+				parameter="Repeat"/>
+				</button>
+				<button
+				height="31"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				tool_tip="Delete the currently selected entry in the animation queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="Arrow_Left"
+				name="delete_entry"
+				enabled="false"
+				width="26"
+				top_pad="1"
+				left_delta="0">
+				<button.commit_callback
+				function="Anim.Delete"/>
+				</button>
+				<button
+				height="26"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				enabled="false"
+				tool_tip="Move the currently selected entry one row up in the queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="Arrow_Up"
+				name="move_up"
+				width="26"
+				top_pad="6"
+				left_delta="0">
+				<button.commit_callback
+				function="Anim.Move"
+				parameter="Up"/>
+				</button>
+				<button
+				height="26"
+				follows="top|left"
+				layout="topleft"
+				label=""
+				enabled="false"
+				tool_tip="Move the currently selected entry one row down in the queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				image_overlay="Arrow_Down"
+				name="move_down"
+				width="26"
+				top_pad="1"
+				left_delta="0">
+				<button.commit_callback
+				function="Anim.Move"
+				parameter="Down"/>
+				</button>
+				<icon
+				follows="top|left"
+				height="423"
+				color="1 1 1 1"
+				image_name="Panel_Background"
+				layout="topleft"
+				name="vicon"
+				mouse_opaque="false"
+				visible="true"
+				width="223"
+				top="0"
+				left_pad="3"/>
+				<panel
+				follows="left|top|right"
+				height="20"
+				bg_visible="true"
+				bg_alpha_color="0.10 0.43 0.77 0.28"
+				layout="topleft"
+				mouse_opaque="false"
+				left_delta="2"
+				name="title"
+				top="2"
+				width="219"/>
+				<text
+				name="first_person_label"
+				follows="left|top"
+				layout="topleft"
+				left_delta="8"
+				height="12"
+				width="350"
+				top_delta="4">
+				Animation Queue:
+				</text>
+				<fs_scroll_list
+				column_padding="2"
+				draw_heading="true"
+				height="379"
+				follows="left|top|right"
+				layout="topleft"
+				can_sort="false"
+				left_delta="-10"
+				width="223"
+				multi_select="true"
+				name="anim_editor_scroll"
+				top_pad="3">
+				<fs_scroll_list.columns
+				label="Action"
+				name="name"
+				relative_width="0.75"/>
+				<fs_scroll_list.columns
+				label="Time"
+				name="time"
+				relative_width="0.25"  />
+				<fs_scroll_list.columns
+				label="Type"
+				name="type"
+				relative_width="0.0"  />
+				</fs_scroll_list>
+				<button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Play"
+				enabled="false"
+				tool_tip="Start playing the animation queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="play_anim"
+				width="43"
+				top_pad="1"
+				left_delta="2">
+				<button.commit_callback
+				function="Anim.Play"/>
+				</button>
+				<button
+				height="21"
+				follows="top|left"
+				layout="topleft"
+				label="Stop"
+				enabled="false"
+				tool_tip="Stop playing the animation queue."
+				image_hover_unselected="Toolbar_Middle_Over"
+				image_selected="Toolbar_Middle_Selected"
+				image_unselected="Toolbar_Middle_Off"
+				name="stop_anim"
+				width="43"
+				top_delta="0"
+				left_pad="1">
+				<button.commit_callback
+				function="Anim.Stop"/>
+				</button>
+				<icon
+				follows="left|top|right"
+				image_name="Toolbar_Middle_Off"
+				height="21"
+				width="68"
+				layout="topleft"
+				left_pad="1"
+				top_delta="0"/>
+				<line_editor
+				commit_on_focus_lost="true"
+				follows="left|top"
+				height="20"
+				label="Wait time"
+				tool_tip="Change the time for the wait event."
+				enabled="false"
+				left_pad="1"
+				top_delta="0"
+				name="anim_time"
+				width="62">
+				<line_editor.commit_callback
+				function="Anim.Set"/>
+				</line_editor>
+			</panel>
+		</layout_panel>-->
+	</layout_stack>
+	
 	<!--<multi_slider
 	can_edit_text="false"
 	decimal_digits="0"
