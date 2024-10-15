@@ -205,6 +205,8 @@ void LLHUDEffectSpiral::triggerLocal()
             }
             else
             {
+                if (show_beam)
+                {
                 LLVector3 pos;
                 if (mSourceObject)
                 {
@@ -223,6 +225,7 @@ void LLHUDEffectSpiral::triggerLocal()
                 pss->setOwnerUUID(gAgent.getID());
                 LLViewerPartSim::getInstance()->addPartSource(pss);
                 mPartSourcep = pss;
+                }
             }
         }
     }
