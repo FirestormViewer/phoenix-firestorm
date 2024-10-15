@@ -28,27 +28,27 @@
 
 #include "llviewerobject.h"
 
-typedef enum E_BoneTypes
+typedef enum BD_E_BoneTypes
 {
-    JOINTS = 0,
-    COLLISION_VOLUMES = 1,
-    ATTACHMENT_BONES = 2
-} E_BoneTypes;
+    BD_JOINTS = 0,
+    BD_COLLISION_VOLUMES = 1,
+    BD_ATTACHMENT_BONES = 2
+} BD_E_BoneTypes;
 
-typedef enum E_Columns
+typedef enum BD_E_Columns
 {
-    COL_ICON = 0,
-    COL_NAME = 1,
-    COL_ROT_X = 2,
-    COL_ROT_Y = 3,
-    COL_ROT_Z = 4,
-    COL_POS_X = 5,
-    COL_POS_Y = 6,
-    COL_POS_Z = 7,
-    COL_SCALE_X = 8,
-    COL_SCALE_Y = 9,
-    COL_SCALE_Z = 10
-} E_Columns;
+    BD_COL_ICON = 0,
+    BD_COL_NAME = 1,
+    BD_COL_ROT_X = 2,
+    BD_COL_ROT_Y = 3,
+    BD_COL_ROT_Z = 4,
+    BD_COL_POS_X = 5,
+    BD_COL_POS_Y = 6,
+    BD_COL_POS_Z = 7,
+    BD_COL_SCALE_X = 8,
+    BD_COL_SCALE_Y = 9,
+    BD_COL_SCALE_Z = 10
+} BD_E_Columns;
 
 class BDFloaterPoser :
     public LLFloater
