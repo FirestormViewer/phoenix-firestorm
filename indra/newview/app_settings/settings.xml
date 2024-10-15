@@ -8045,6 +8045,28 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserAdvancedWindowState</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether the 'advanced' pane is shown when opening the Avatar/Animesh Poser.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSPoserSaveBvhFileAlso</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to save a BVH file as well when saving a pose.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>MeshUploadLogXML</key>
   <map>
     <key>Comment</key>
