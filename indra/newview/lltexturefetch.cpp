@@ -2293,7 +2293,7 @@ bool LLTextureFetchWorker::deleteOK()
     // Allow any pending reads or writes to complete
     if (mCacheReadHandle != LLTextureCache::nullHandle())
     {
-        if (mFetcher->mTextureCache->readComplete(mCacheReadHandle, true))
+        if (!mFetcher->mTextureCache || mFetcher->mTextureCache->readComplete(mCacheReadHandle, true))
         {
             mCacheReadHandle = LLTextureCache::nullHandle();
         }
@@ -2304,7 +2304,7 @@ bool LLTextureFetchWorker::deleteOK()
     }
     if (mCacheWriteHandle != LLTextureCache::nullHandle())
     {
-        if (mFetcher->mTextureCache->writeComplete(mCacheWriteHandle))
+        if (!mFetcher->mTextureCache || mFetcher->mTextureCache->writeComplete(mCacheWriteHandle))
         {
             mCacheWriteHandle = LLTextureCache::nullHandle();
         }

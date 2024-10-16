@@ -108,8 +108,6 @@
 		<menu_item_check label="Unterhaltungsprotokoll..." name="Conversation Log..."/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
 		<menu_item_call label="Blockierliste" name="Block List"/>
-		<menu_item_check label="Medien und Klänge von Avatar-Position hören" name="Hear Media and Sound from Avatar"/>
-		<menu_item_check label="Voice-Chat von Avatar-Position hören" name="Hear Voice from Avatar"/>
 	</menu>
 	<menu label="Welt" name="World">
 		<menu_item_call label="Animationen synchronisieren" name="Resync Animations"/>
