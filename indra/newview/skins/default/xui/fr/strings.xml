@@ -7000,7 +7000,7 @@ Votre position actuelle : [AVATAR_POS]
 		Agent inconnu
 	</string>
 	<string name="groupcountstring">
-		Vous faites partie de [COUNT] groups ([REMAINING] restant).
+		Vous faites partie de [COUNT] groupes ([REMAINING] restant).
 	</string>
 	<string name="groupcountunlimitedstring">
 		Vous faites partie de [COUNT] groupes.
