@@ -54,6 +54,10 @@
 					<!--TODO: replace + - images -->
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Орбита камеры вокруг фокуса"/>
+						<!-- <FS:Beq> FIRE-34509 Add Camera roll -->
+						<button name="roll_left" tool_tip="Повернуть камеру влево"/>
+						<button name="roll_right" tool_tip="Повернуть камеру вправо"/>
+						<!-- </FS:Beq> -->
 						<slider_bar name="zoom_slider" tool_tip="Это просто перемещает камеру. ПРИМЕЧАНИЕ. Это не масштаб камеры! Это не влияет на угол обзора. Используйте ползунок «Угол обзора» для реального масштабирования."/>
 						<joystick_track name="cam_track_stick" tool_tip="Двигает камеру вверх и вниз, влево и вправо."/>
 					</panel>

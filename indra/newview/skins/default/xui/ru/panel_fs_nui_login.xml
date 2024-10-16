@@ -19,6 +19,8 @@
             <!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
               <line_editor name="password_edit" label="Пароль"/>
               <check_box label="Запомнить пароль" name="remember_check"/>
+              <button name="password_show_btn" tool_tip="Показать текст пароля"/>
+              <button name="password_hide_btn" tool_tip="Скрыть текст пароляt"/>
             </layout_panel> <!-- password_container -->
             <layout_panel name="start_location_panel">
               <combo_box label="Стартовое место" name="start_location_combo">

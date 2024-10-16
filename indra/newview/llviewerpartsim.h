@@ -155,25 +155,14 @@ public:
     static bool shouldAddPart(); // Just decides whether this particle should be added or not (for particle count capping)
     F32 maxRate() // Return maximum particle generation rate
     {
-        // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-        // if (sParticleCount >= MAX_PART_COUNT)
-        // {
-        //     return 1.f;
-        // }
-        // if (sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
-        // {
-        //     return (((F32)sParticleCount/(F32)sMaxParticleCount)-PART_THROTTLE_THRESHOLD)*PART_THROTTLE_RESCALE;
-        // }
-        const auto count = getParticleCount(); 
-        if ( count >= MAX_PART_COUNT)
+        if (sParticleCount >= MAX_PART_COUNT)
         {
             return 1.f;
         }
-        if ( count > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
+        if (sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
         {
-            return (((F32)count/(F32)sMaxParticleCount)-PART_THROTTLE_THRESHOLD)*PART_THROTTLE_RESCALE;
+            return (((F32)sParticleCount/(F32)sMaxParticleCount)-PART_THROTTLE_THRESHOLD)*PART_THROTTLE_RESCALE;
         }
-        // </FS:Beq>
         return 0.f;
     }
     F32 getRefRate() { return sParticleAdaptiveRate; }
@@ -188,29 +177,15 @@ public:
 
     friend class LLViewerPartGroup;
 
-    // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
-    // bool aboveParticleLimit() const { return sParticleCount > sMaxParticleCount; }
-    bool aboveParticleLimit() const { return getParticleCount() > sMaxParticleCount; }
-    // </FS:Beq>
+    bool aboveParticleLimit() const { return sParticleCount > sMaxParticleCount; }
     static void setMaxPartCount(const S32 max_parts)    { sMaxParticleCount = max_parts; }
     static S32  getMaxPartCount()                       { return sMaxParticleCount; }
 
     // <FS:Beq> FIRE-34600 - bugsplat AVX2 particle count mismatch
+    // Deprecate these and use native operators for consistency
     // static void incPartCount(const S32 count)           { sParticleCount += count; }
     // static void decPartCount(const S32 count)           { sParticleCount -= count; }
-    static void incParticleCount(const S32 count, std::memory_order order = std::memory_order_seq_cst ) 
-                                                        { sParticleCount.fetch_add( count , std::memory_order_seq_cst ); }
-    static void decParticleCount(const S32 count, std::memory_order order = std::memory_order_seq_cst )          
-                                                        { sParticleCount.fetch_sub( count , std::memory_order_seq_cst ); }
-    static void incParticleCount2(const S32 count, std::memory_order order = std::memory_order_seq_cst ) 
-                                                        { sParticleCount2.fetch_add( count , std::memory_order_seq_cst ); }
-    static void decParticleCount2(const S32 count, std::memory_order order = std::memory_order_seq_cst )          
-                                                        { sParticleCount2.fetch_sub( count , std::memory_order_seq_cst ); }
-    static inline S32 getParticleCount(std::memory_order order = std::memory_order_seq_cst) { return sParticleCount.load(order); }
-
-    static inline S32 getParticleCount2(std::memory_order order = std::memory_order_seq_cst) { return sParticleCount2.load(order); }
     // </FS:Beq>
-
     U32 mID;
 
 protected:
