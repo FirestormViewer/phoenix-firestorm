@@ -26,6 +26,14 @@
         <menu_item_call.on_click
          function="Land.Sit" />
     </menu_item_call>
+    <!-- <FS:makidoll> Add teleport here button -->
+    <menu_item_call
+     label="Teleport Here"
+     name="Teleport Here">
+        <menu_item_call.on_click
+         function="Land.TeleportHere" />
+    </menu_item_call>
+    <!-- </FS:makidoll> -->
     <menu_item_separator
      layout="topleft" />
         <menu_item_call
