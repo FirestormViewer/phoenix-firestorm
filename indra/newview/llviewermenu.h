@@ -116,6 +116,7 @@ void handle_buy();
 void handle_take(bool take_separate = false);
 void handle_take_copy();
 void handle_look_at_selection(const LLSD& param);
+void handle_object_teleport_here(); // <FS:makidoll> Add teleport here button
 void handle_script_info();
 // <FS:Ansariel> Option to try via exact position
 //void handle_zoom_to_object(LLUUID object_id);
