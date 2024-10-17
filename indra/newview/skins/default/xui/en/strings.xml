@@ -2762,6 +2762,8 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_RFO_Label">Show Friends Only</string>
   <string name="Command_DAO_Label">Derender Animesh</string>
   <string name="Command_Beacons_Label">Beacons</string>
+  <string name="Command_Poser_Label">Poser</string>
+  <string name="Command_Poser_Tooltip">Pose your avatar and animated objects</string>
 
   <string 
 name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
