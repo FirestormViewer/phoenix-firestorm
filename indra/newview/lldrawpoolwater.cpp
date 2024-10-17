@@ -152,6 +152,12 @@ void LLDrawPoolWater::renderPostDeferred(S32 pass)
     LLEnvironment& environment = LLEnvironment::instance();
     LLSettingsWater::ptr_t pwater = environment.getCurrentWater();
     LLSettingsSky::ptr_t   psky   = environment.getCurrentSky();
+    // <FS:Beq> FIRE-34590 - Bugsplat Crash typically in startup state, due to null water.
+    if (!pwater || !psky)
+    {
+        LL_WARNS() << "LLDrawPoolWater::renderPostDeferred: water or sky settings not available" << LL_ENDL;
+    }
+    // </FS:Beq>
     LLVector3              light_dir       = environment.getLightDirection();
     bool                   sun_up          = environment.getIsSunUp();
     bool                   moon_up         = environment.getIsMoonUp();
