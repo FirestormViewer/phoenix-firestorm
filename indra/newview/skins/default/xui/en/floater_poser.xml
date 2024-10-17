@@ -1407,6 +1407,27 @@ width="565">
 					tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build' menu to pose yourself or others in-world"
 					top_pad="5"
 					width="134" />
+				<slider
+				decimal_digits="2"
+				can_edit_text="true"
+				follows="left|top"
+				height="14"
+				increment="0.01"
+				initial_value="0"
+				label="Sensitivity"
+				label_width="70"
+				layout="topleft"
+				left_delta="0"
+				max_val="2"
+				min_val="0.0001"
+				name="trackpad_sensitivity_slider"
+				tool_tip="Adjusts the sensitivity of the trackball"
+				top_pad="1"
+				width="200" >
+					<slider.commit_callback
+					function="Poser.AdjustTrackPadSensitivity"
+					parameter="2"/>
+				</slider>
             </panel>
         </layout_panel>
     </layout_stack>

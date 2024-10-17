@@ -53,6 +53,7 @@ static const std::string XML_LIST_TITLE_STRING_PREFIX       = "title_";
 static const std::string XML_JOINT_TRANSFORM_STRING_PREFIX  = "joint_transform_";
 static const std::string POSER_ADVANCEDWINDOWSTATE_SAVE_KEY = "FSPoserAdvancedWindowState";
 static const std::string POSER_ALSOSAVEBVHFILE_SAVE_KEY     = "FSPoserSaveBvhFileAlso";
+static const std::string POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpadSensitivity";
 
 static const std::string POSER_AVATAR_PANEL_JOINTSPARENT = "joints_parent_panel";
 static const std::string POSER_AVATAR_PANEL_TRACKBALL = "trackball_panel";
@@ -67,6 +68,7 @@ static const std::string POSER_AVATAR_TAB_VOLUMES = "collision_volumes_panel";
 
 // standard controls
 static const std::string POSER_AVATAR_TRACKBALL_NAME   = "limb_rotation";
+static const std::string POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME = "trackpad_sensitivity_slider";
 static const std::string POSER_AVATAR_SLIDER_YAW_NAME  = "limb_yaw"; // turning your nose left or right
 static const std::string POSER_AVATAR_SLIDER_PITCH_NAME  = "limb_pitch"; // pointing your nose up or down
 static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ear touches your shoulder
@@ -128,6 +130,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", boost::bind(&FSFloaterPoser::onToggleMirrorChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", boost::bind(&FSFloaterPoser::onToggleSympatheticChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleTrackPadSensitivity", boost::bind(&FSFloaterPoser::refreshTrackpadCursor, this));
+    mCommitCallbackRegistrar.add("Poser.AdjustTrackPadSensitivity", boost::bind(&FSFloaterPoser::onAdjustTrackpadSensitivity, this));
 
     mCommitCallbackRegistrar.add("Poser.PositionSet", boost::bind(&FSFloaterPoser::onAvatarPositionSet, this));
 
@@ -232,6 +235,13 @@ bool FSFloaterPoser::postBuild()
         LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
         if (saveBvhCheckbox)
             saveBvhCheckbox->set(true);
+    }
+
+    LLSliderCtrl* trackpadSensitivitySlider = getChild<LLSliderCtrl>(POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME);
+    if (trackpadSensitivitySlider)
+    {
+        F32 trackPadSensitivity = gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY);
+        trackpadSensitivitySlider->setValue(trackPadSensitivity);
     }
 
     LLLineEditor *poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
@@ -1562,12 +1572,11 @@ void FSFloaterPoser::onLimbTrackballChanged()
             yaw *= trackPadHighSensitivity;
             pitch *= trackPadHighSensitivity;
         }
-        else
-        {
-            yaw *= trackPadDefaultSensitivity;
-            pitch *= trackPadDefaultSensitivity;
-        }
     }
+
+    F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
+    yaw *= trackPadSensitivity;
+    pitch *= trackPadSensitivity;
 
     // if the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the sliders; this wraps them to by the slider full-scale
     while (yaw > 1)
@@ -1633,6 +1642,10 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     if (!trackBall)
         return;
 
+    F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
+    yaw /= trackPadSensitivity;
+    pitch /= trackPadSensitivity;
+
     yaw /= normalTrackpadRangeInRads;
     pitch /= normalTrackpadRangeInRads;
     LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
@@ -1644,14 +1657,19 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
             yaw /= trackPadHighSensitivity;
             pitch /= trackPadHighSensitivity;
         }
-        else
-        {
-            yaw /= trackPadDefaultSensitivity;
-            pitch /= trackPadDefaultSensitivity;
-        }
     }
 
     trackBall->setValue(yaw, pitch);
+}
+
+void FSFloaterPoser::onAdjustTrackpadSensitivity()
+{
+    LLSliderCtrl* trackpadSensitivitySlider = getChild<LLSliderCtrl>(POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME);
+    if (!trackpadSensitivitySlider)
+        return;
+
+    gSavedSettings.setF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY, (F32) trackpadSensitivitySlider->getValue().asReal());
+    refreshTrackpadCursor();
 }
 
 void FSFloaterPoser::refreshTrackpadCursor()
@@ -1682,12 +1700,11 @@ void FSFloaterPoser::refreshTrackpadCursor()
             axis1 /= trackPadHighSensitivity;
             axis2 /= trackPadHighSensitivity;
         }
-        else
-        {
-            axis1 /= trackPadDefaultSensitivity;
-            axis2 /= trackPadDefaultSensitivity;
-        }
     }
+
+    F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
+    axis1 /= trackPadSensitivity;
+    axis2 /= trackPadSensitivity;
 
     trackBall->setValue(axis1, axis2);
 }

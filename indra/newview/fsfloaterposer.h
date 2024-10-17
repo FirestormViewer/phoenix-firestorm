@@ -79,14 +79,9 @@ class FSFloaterPoser : public LLFloater
     const F32 normalTrackpadRangeInRads = F_PI;
 
     /// <summary>
-    /// The trackpad is the size it is, mousing on it has arbitrary 'sensitivity': how much angular change do we want per pixels moved.
+    /// When the trackpad is placed in 'high' sensitivity mode, changes are moderated by this factor.
     /// </summary>
-    const F32 trackPadDefaultSensitivity = 0.8;
-
-    /// <summary>
-    /// These are defaults, subjective and should be overridden by optional values in XML.
-    /// </summary>
-    const F32 trackPadHighSensitivity = 0.3;
+    const F32 trackPadHighSensitivity = 0.5;
     
     /// <summary>
     /// Refreshes the pose load/save list.
@@ -236,6 +231,7 @@ class FSFloaterPoser : public LLFloater
     void onClickFlipSelectedJoints();
     void onPoseJointsReset();
     void onOpenSetAdvancedPanel();
+    void onAdjustTrackpadSensitivity();
 
     // UI Refreshments
     void refreshRotationSliders();
