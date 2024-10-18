@@ -48,45 +48,43 @@ public:
         Params();
     };
 
-
     virtual ~FSVirtualTrackpad();
-    /*virtual*/ bool postBuild();
-
-    virtual bool    handleHover(S32 x, S32 y, MASK mask);
-    virtual bool    handleMouseUp(S32 x, S32 y, MASK mask);
-    virtual bool    handleMouseDown(S32 x, S32 y, MASK mask);
-    virtual bool    handleRightMouseUp(S32 x, S32 y, MASK mask);
-    virtual bool    handleRightMouseDown(S32 x, S32 y, MASK mask);
-    virtual bool    handleScrollWheel(S32 x, S32 y, S32 clicks);
-
-    virtual void    draw();
-
-    virtual void    setValue(const LLSD& value);
+    bool         postBuild();
+    virtual bool handleHover(S32 x, S32 y, MASK mask);
+    virtual bool handleMouseUp(S32 x, S32 y, MASK mask);
+    virtual bool handleMouseDown(S32 x, S32 y, MASK mask);
+    virtual bool handleRightMouseUp(S32 x, S32 y, MASK mask);
+    virtual bool handleRightMouseDown(S32 x, S32 y, MASK mask);
+    virtual bool handleScrollWheel(S32 x, S32 y, S32 clicks);
+    virtual void draw();
+    virtual void setValue(const LLSD& value);
 
     /// <summary>
     /// Sets the position of the cursor.
     /// </summary>
     /// <param name="x">The x-axis (left/right) position to set; expected range -1..1; left= -1</param>
     /// <param name="y">The y-axis (top/bottom) position to set; expected range 1..-1; top = 1</param>
-    void            setValue(F32 x, F32 y);
+    /// <param name="y">The z-axis position to set; expected range 1..-1; top = 1</param>
+    void setValue(F32 x, F32 y, F32 z);
 
     /// <summary>
     /// Sets the position of the second cursor.
     /// </summary>
     /// <param name="x">The normalized x-axis value (ordinarily screen left-right), expected left-to-right range -1..1.</param>
     /// <param name="y">The normalized y-axis value (ordinarily screen up-down), expected top-to-bottom range 1..-1</param>
-    void            setPinchValue(F32 x, F32 y);
+    /// <param name="z">The normalized z-axis value, expected top-to-bottom range 1..-1</param>
+    void setPinchValue(F32 x, F32 y, F32 z);
 
-    virtual LLSD    getValue();
-    virtual LLSD    getPinchValue();
+    virtual LLSD getValue();
+    virtual LLSD getPinchValue();
 
 protected:
     friend class LLUICtrlFactory;
     FSVirtualTrackpad(const Params&);
 
 protected:
-    LLPanel*            mTouchArea;
-    LLViewBorder*       mBorder;
+    LLPanel*      mTouchArea;
+    LLViewBorder* mBorder;
 
 private:
     void setValueAndCommit(const S32 x, const S32 y);
@@ -104,16 +102,16 @@ private:
     LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;
     void      convertNormalizedToPixelPos(F32 x, F32 y, S32* valX, S32* valY);
 
-    LLUIImage*     mImgMoonBack;
-    LLUIImage*     mImgMoonFront;
-    LLUIImage*     mImgSunBack;
-    LLUIImage*     mImgSunFront;
-    LLUIImage*     mImgSphere;
+    LLUIImage* mImgMoonBack;
+    LLUIImage* mImgMoonFront;
+    LLUIImage* mImgSunBack;
+    LLUIImage* mImgSunFront;
+    LLUIImage* mImgSphere;
 
     /// <summary>
     /// Whether we allow the second cursor to appear.
     /// </summary>
-    bool mAllowPinchMode     = false;
+    bool mAllowPinchMode = false;
 
     /// <summary>
     /// Whether to allow the cursor(s) to 'wrap'.
@@ -134,13 +132,13 @@ private:
     /// The various values placing the cursors and documenting behaviours.
     /// Where relevant, all are scaled in pixels.
     /// </summary>
-    S32       _valueX;
-    S32       _valueY;
-    S32       _valueWheelClicks;
+    S32 _valueX;
+    S32 _valueY;
+    S32 _valueWheelClicks;
 
-    S32       _pinchValueX;
-    S32       _pinchValueY;
-    S32       _pinchValueWheelClicks;
+    S32 _pinchValueX;
+    S32 _pinchValueY;
+    S32 _pinchValueWheelClicks;
 
     /// <summary>
     /// Rolling the wheel is pioneering a 'delta' mode: where changes are handled by the control-owner in a relative way.

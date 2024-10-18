@@ -238,13 +238,13 @@ void FSVirtualTrackpad::setValue(const LLSD& value)
     {
         LLVector2 vec2;
         vec2.setValue(value);
-        setValue(vec2.mV[VX], vec2.mV[VY]);
+        setValue(vec2.mV[VX], vec2.mV[VY], 0);
     }
 }
 
-void FSVirtualTrackpad::setValue(F32 x, F32 y) { convertNormalizedToPixelPos(x, y, &_valueX, &_valueY); }
+void FSVirtualTrackpad::setValue(F32 x, F32 y, F32 z) { convertNormalizedToPixelPos(x, y, &_valueX, &_valueY); }
 
-void FSVirtualTrackpad::setPinchValue(F32 x, F32 y) { convertNormalizedToPixelPos(x, y, &_pinchValueX, &_pinchValueY); }
+void FSVirtualTrackpad::setPinchValue(F32 x, F32 y, F32 z) { convertNormalizedToPixelPos(x, y, &_pinchValueX, &_pinchValueY); }
 
 void FSVirtualTrackpad::setValueAndCommit(const S32 x, const S32 y)
 {
