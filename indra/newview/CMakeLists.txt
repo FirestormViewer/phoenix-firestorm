@@ -126,6 +126,7 @@ set(viewer_SOURCE_FILES
     fsfloaternearbychat.cpp
     fsfloaterpartialinventory.cpp
     fsfloaterplacedetails.cpp
+	fsfloaterposer.cpp
     fsfloaterposestand.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
@@ -158,6 +159,8 @@ set(viewer_SOURCE_FILES
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
+	fsposeranimator.cpp
+	fsposingmotion.cpp
     fsradar.cpp
     fsradarentry.cpp
     fsradarlistctrl.cpp
@@ -166,6 +169,7 @@ set(viewer_SOURCE_FILES
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
+	fsvirtualtrackpad.cpp
     fsworldmapmessage.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
