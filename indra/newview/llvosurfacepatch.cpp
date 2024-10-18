@@ -1057,7 +1057,7 @@ void LLTerrainPartition::getGeometry(LLSpatialGroup* group)
     }
 
     const bool has_tangents = tangents_start.get() != nullptr;
-    if (has_tangents)
+    if (has_tangents && index_offset > 0) // <FS:Beq/> FIRE-34672 OPENSIM bugsplat crash
     {
         LLStrider<LLVector3> vertices = vertices_start;
         LLStrider<LLVector3> normals = normals_start;
