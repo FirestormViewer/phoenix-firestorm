@@ -156,6 +156,7 @@ void LLDrawPoolWater::renderPostDeferred(S32 pass)
     if (!pwater || !psky)
     {
         LL_WARNS() << "LLDrawPoolWater::renderPostDeferred: water or sky settings not available" << LL_ENDL;
+        return;
     }
     // </FS:Beq>
     LLVector3              light_dir       = environment.getLightDirection();
