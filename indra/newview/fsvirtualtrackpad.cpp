@@ -59,8 +59,9 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     LLRect border_rect = getLocalRect();
     _valueX = _pinchValueX = border_rect.getCenterX();
     _valueY = _pinchValueY = border_rect.getCenterY();
+    _valueZ = _pinchValueZ = 0;
+
     _thumbClickOffsetX = _thumbClickOffsetY = _pinchThumbClickOffsetX = _pinchThumbClickOffsetY = 0;
-    _valueWheelClicks = _pinchValueWheelClicks                                                  = 0;
 
     LLViewBorder::Params border = p.border;
     border.rect(border_rect);
@@ -234,53 +235,32 @@ void FSVirtualTrackpad::draw()
 
 void FSVirtualTrackpad::setValue(const LLSD& value)
 {
-    if (value.isArray() && value.size() == 2)
+    if (!value.isArray())
+        return;
+
+    if (value.size() == 2)
     {
         LLVector2 vec2;
         vec2.setValue(value);
         setValue(vec2.mV[VX], vec2.mV[VY], 0);
     }
+    else if (value.size() == 3)
+    {
+        LLVector3 vec3;
+        vec3.setValue(value);
+        setValue(vec3.mV[VX], vec3.mV[VY], vec3.mV[VZ]);
+    }
 }
 
-void FSVirtualTrackpad::setValue(F32 x, F32 y, F32 z) { convertNormalizedToPixelPos(x, y, &_valueX, &_valueY); }
+void FSVirtualTrackpad::setValue(F32 x, F32 y, F32 z) { convertNormalizedToPixelPos(x, y, z, &_valueX, &_valueY, &_valueZ); }
 
-void FSVirtualTrackpad::setPinchValue(F32 x, F32 y, F32 z) { convertNormalizedToPixelPos(x, y, &_pinchValueX, &_pinchValueY); }
+void FSVirtualTrackpad::setPinchValue(F32 x, F32 y, F32 z) { convertNormalizedToPixelPos(x, y, z, &_pinchValueX, &_pinchValueY, &_pinchValueZ); }
 
-void FSVirtualTrackpad::setValueAndCommit(const S32 x, const S32 y)
-{
-    _valueX                    = x;
-    _valueY                    = y;
-    _valueWheelClicks          = -1 * _wheelClicksSinceMouseDown;
-    _wheelClicksSinceMouseDown = 0;
-    onCommit();
-}
+LLSD FSVirtualTrackpad::getValue() { return normalizePixelPos(_valueX, _valueY, _valueZ).getValue(); }
 
-void FSVirtualTrackpad::setPinchValueAndCommit(const S32 x, const S32 y)
-{
-    _pinchValueX               = x;
-    _pinchValueY               = y;
-    _pinchValueWheelClicks     = -1 * _wheelClicksSinceMouseDown;
-    _wheelClicksSinceMouseDown = 0;
-    onCommit();
-}
+LLSD FSVirtualTrackpad::getPinchValue() { return normalizePixelPos(_pinchValueX, _pinchValueY, _pinchValueZ).getValue(); }
 
-LLSD FSVirtualTrackpad::getValue()
-{
-    LLSD result   = normalizePixelPos(_valueX, _valueY, _valueWheelClicks).getValue();
-    _valueWheelClicks = 0;
-
-    return result;
-}
-
-LLSD FSVirtualTrackpad::getPinchValue()
-{
-    LLSD result        = normalizePixelPos(_pinchValueX, _pinchValueY, _pinchValueWheelClicks).getValue();
-    _pinchValueWheelClicks = 0;
-
-    return result;
-}
-
-void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y)
+void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y) const
 {
     if (!x || !y)
         return;
@@ -353,12 +333,12 @@ LLVector3 FSVirtualTrackpad::normalizePixelPos(S32 x, S32 y, S32 z) const
 
     result.mV[VX] = (F32) (x - centerX) / width * 2;
     result.mV[VY] = (F32) (y - centerY) / height * 2;
-    result.mV[VZ] = (F32) z;
+    result.mV[VZ] = (F32) z * ThirdAxisQuantization;
 
     return result;
 }
 
-void FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y, S32 *valX, S32 *valY)
+void FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y, F32 z, S32 *valX, S32 *valY, S32 *valZ)
 {
     if (!mTouchArea)
         return;
@@ -379,13 +359,14 @@ void FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y, S32 *valX, S32
         *valX = centerX + ll_round(llclamp(x, -1, 1) * width / 2);
         *valY = centerY + ll_round(llclamp(y, -1, 1) * height / 2);
     }
+
+    *valZ = ll_round(z / ThirdAxisQuantization);
 }
 
 bool FSVirtualTrackpad::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     if (hasMouseCapture())
     {
-        doingPinchMode = false; 
         gFocusMgr.setMouseCapture(NULL);
 
         make_ui_sound("UISndClickRelease");
@@ -400,8 +381,6 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
     {
         determineThumbClickError(x, y);
         updateClickErrorIfInfiniteScrolling();
-        _valueWheelClicks          = 0;
-        _wheelClicksSinceMouseDown = 0;
         gFocusMgr.setMouseCapture(this);
 
         make_ui_sound("UISndClick");
@@ -433,8 +412,6 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
     {
         determineThumbClickErrorForPinch(x, y);
         updateClickErrorIfInfiniteScrollingForPinch();
-        _pinchValueWheelClicks     = 0;
-        _wheelClicksSinceMouseDown = 0;
         doingPinchMode = true;
         gFocusMgr.setMouseCapture(this);
 
@@ -450,11 +427,9 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
     if (hasMouseCapture())
     {
         if (doingPinchMode)
-            _pinchValueWheelClicks = clicks;
+            _pinchValueZ -= clicks * WheelClickQuanta;
         else
-            _valueWheelClicks = clicks;
-
-        _wheelClicksSinceMouseDown += clicks;
+            _valueZ -= clicks * WheelClickQuanta;
 
         return true;
     }

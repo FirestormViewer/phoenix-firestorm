@@ -87,20 +87,19 @@ protected:
     LLViewBorder* mBorder;
 
 private:
-    void setValueAndCommit(const S32 x, const S32 y);
-    void setPinchValueAndCommit(const S32 x, const S32 y);
+    const F32 ThirdAxisQuantization = 0.001f; // To avoid quantizing the third axis as we add integer wheel clicks, use this to preserve some precision as int.
+    const S32 WheelClickQuanta = 10; // each click of the wheel moves the third axis by this normalized amount.
+
     void drawThumb(bool isPinchThumb);
     bool isPointInTouchArea(S32 x, S32 y) const;
-    void wrapOrClipCursorPosition(S32* x, S32* y);
-
+    void wrapOrClipCursorPosition(S32* x, S32* y) const;
     void determineThumbClickError(S32 x, S32 y);
     void updateClickErrorIfInfiniteScrolling();
     void determineThumbClickErrorForPinch(S32 x, S32 y);
     void updateClickErrorIfInfiniteScrollingForPinch();
 
-
+    void      convertNormalizedToPixelPos(F32 x, F32 y, F32 z, S32* valX, S32* valY, S32* valZ);
     LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;
-    void      convertNormalizedToPixelPos(F32 x, F32 y, S32* valX, S32* valY);
 
     LLUIImage* mImgMoonBack;
     LLUIImage* mImgMoonFront;
@@ -134,26 +133,17 @@ private:
     /// </summary>
     S32 _valueX;
     S32 _valueY;
-    S32 _valueWheelClicks;
+    S32 _valueZ;
 
     S32 _pinchValueX;
     S32 _pinchValueY;
-    S32 _pinchValueWheelClicks;
+    S32 _pinchValueZ;
 
-    /// <summary>
-    /// Rolling the wheel is pioneering a 'delta' mode: where changes are handled by the control-owner in a relative way.
-    /// One could make all the axes behave this way, making the getValue just a delta (and requiring no set); the
-    /// cursor would snap-back to centre on mouse-up...
-    /// The control would then be used like a real trackball, which only tracks relative movement.
-    /// </summary>
-    S32 _wheelClicksSinceMouseDown = 0;
-
-    // if one clicks on the thumb, don't move it, track the offset and factor the error out
+    // if one clicks on or about the thumb, we don't move it, instead we calculate the click-position error and factor it out
     S32 _thumbClickOffsetX;
     S32 _thumbClickOffsetY;
     S32 _pinchThumbClickOffsetX;
     S32 _pinchThumbClickOffsetY;
 };
-
 #endif
 

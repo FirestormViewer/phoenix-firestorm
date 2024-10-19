@@ -304,6 +304,13 @@ class FSFloaterPoser : public LLFloater
     /// The constant time interval, in seconds, a user must click twice within to successfully double-click a button.
     /// </summary>
     std::chrono::duration<double> const _doubleClickInterval = std::chrono::duration<double>(0.3);
+
+    /// <summary>
+    /// Unwraps a normalized value from the trackball to a slider value.
+    /// </summary>
+    /// <param name="scale">The scale value from the trackball.</param>
+    /// <returns>A value appropriate for fitting a slider.</returns>
+    static F32 unWrapScale(F32 scale);
 };
 
 #endif
