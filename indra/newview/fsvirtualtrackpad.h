@@ -101,6 +101,10 @@ private:
     void      convertNormalizedToPixelPos(F32 x, F32 y, F32 z, S32* valX, S32* valY, S32* valZ);
     LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;
 
+    void getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY);
+    void applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask);
+    bool heldDownCtrlBefore() const;
+
     LLUIImage* mImgMoonBack;
     LLUIImage* mImgMoonFront;
     LLUIImage* mImgSunBack;
@@ -144,6 +148,9 @@ private:
     S32 _thumbClickOffsetY;
     S32 _pinchThumbClickOffsetX;
     S32 _pinchThumbClickOffsetY;
+
+    S32 _posXwhenCtrlDown;
+    S32 _posYwhenCtrlDown;
 };
 #endif
 
