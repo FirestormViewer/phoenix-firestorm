@@ -72,7 +72,6 @@ static const std::string POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME = "trackpad_sens
 static const std::string POSER_AVATAR_SLIDER_YAW_NAME  = "limb_yaw"; // turning your nose left or right
 static const std::string POSER_AVATAR_SLIDER_PITCH_NAME  = "limb_pitch"; // pointing your nose up or down
 static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ear touches your shoulder
-static const std::string POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY = "button_toggleTrackPadSensitivity";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_MIRROR = "button_toggleMirrorRotation";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_SYMPATH = "button_toggleSympatheticRotation";
 static const std::string POSER_AVATAR_BUTTON_REDO = "button_redo_change";
@@ -129,7 +128,6 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.RedoLastRotation", boost::bind(&FSFloaterPoser::onRedoLastRotation, this));
     mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", boost::bind(&FSFloaterPoser::onToggleMirrorChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", boost::bind(&FSFloaterPoser::onToggleSympatheticChange, this));
-    mCommitCallbackRegistrar.add("Poser.ToggleTrackPadSensitivity", boost::bind(&FSFloaterPoser::refreshTrackpadCursor, this));
     mCommitCallbackRegistrar.add("Poser.AdjustTrackPadSensitivity", boost::bind(&FSFloaterPoser::onAdjustTrackpadSensitivity, this));
 
     mCommitCallbackRegistrar.add("Poser.PositionSet", boost::bind(&FSFloaterPoser::onAvatarPositionSet, this));
@@ -1564,17 +1562,6 @@ void FSFloaterPoser::onLimbTrackballChanged()
     pitch = trackPadPos.mV[VY];
     roll  = trackPadPos.mV[VZ];
 
-    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (toggleSensitivityButton)
-    {
-        bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
-        if (moreSensitive)
-        {
-            yaw *= trackPadHighSensitivity;
-            pitch *= trackPadHighSensitivity;
-        }
-    }
-
     F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
     yaw *= trackPadSensitivity;
     pitch *= trackPadSensitivity;
@@ -1648,16 +1635,6 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     yaw /= normalTrackpadRangeInRads;
     pitch /= normalTrackpadRangeInRads;
     roll /= normalTrackpadRangeInRads;
-    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (toggleSensitivityButton)
-    {
-        bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
-        if (moreSensitive)
-        {
-            yaw /= trackPadHighSensitivity;
-            pitch /= trackPadHighSensitivity;
-        }
-    }
 
     trackBall->setValue(yaw, pitch, roll);
 }
@@ -1695,17 +1672,6 @@ void FSFloaterPoser::refreshTrackpadCursor()
     axis1 /= normalTrackpadRangeInRads;
     axis2 /= normalTrackpadRangeInRads;
     axis3 /= normalTrackpadRangeInRads;
-
-    LLButton *toggleSensitivityButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_TRACKPADSENSITIVITY);
-    if (toggleSensitivityButton)
-    {
-        bool moreSensitive = toggleSensitivityButton->getValue().asBoolean();
-        if (moreSensitive)
-        {
-            axis1 /= trackPadHighSensitivity;
-            axis2 /= trackPadHighSensitivity;
-        }
-    }
 
     F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
     axis1 /= trackPadSensitivity;

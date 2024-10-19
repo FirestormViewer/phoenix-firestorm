@@ -77,11 +77,6 @@ class FSFloaterPoser : public LLFloater
     /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
     /// </summary>
     const F32 normalTrackpadRangeInRads = F_PI;
-
-    /// <summary>
-    /// When the trackpad is placed in 'high' sensitivity mode, changes are moderated by this factor.
-    /// </summary>
-    const F32 trackPadHighSensitivity = 0.5;
     
     /// <summary>
     /// Refreshes the pose load/save list.
