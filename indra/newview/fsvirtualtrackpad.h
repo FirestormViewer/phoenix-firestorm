@@ -103,7 +103,6 @@ private:
 
     void getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY);
     void applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask);
-    bool heldDownCtrlBefore() const;
 
     LLUIImage* mImgMoonBack;
     LLUIImage* mImgMoonFront;
@@ -114,7 +113,7 @@ private:
     /// <summary>
     /// Whether we allow the second cursor to appear.
     /// </summary>
-    bool mAllowPinchMode = false;
+    bool _allowPinchMode = false;
 
     /// <summary>
     /// Whether to allow the cursor(s) to 'wrap'.
@@ -124,12 +123,14 @@ private:
     /// When true, the cursor 'disappears' out the top, and starts from the bottom,
     /// effectively allowing infinite scrolling.
     /// </example>
-    bool mInfiniteScrollMode = false;
+    bool _infiniteScrollMode = false;
 
     /// <summary>
     /// Whether we should be moving the pinch cursor now
     /// </summary>
-    bool doingPinchMode = false;
+    bool _doingPinchMode = false;
+
+    bool _heldDownControlBefore = false;
 
     /// <summary>
     /// The various values placing the cursors and documenting behaviours.

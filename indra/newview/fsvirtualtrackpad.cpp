@@ -53,8 +53,8 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     mImgSunBack(p.image_sun_back),
     mImgSunFront(p.image_sun_front),
     mImgSphere(p.image_sphere),
-    mAllowPinchMode(p.pinch_mode),
-    mInfiniteScrollMode(p.infinite_scroll_mode)
+    _allowPinchMode(p.pinch_mode),
+    _infiniteScrollMode(p.infinite_scroll_mode)
 {
     LLRect border_rect = getLocalRect();
     _valueX = _pinchValueX = border_rect.getCenterX();
@@ -139,7 +139,7 @@ void FSVirtualTrackpad::determineThumbClickError(S32 x, S32 y)
 
 void FSVirtualTrackpad::updateClickErrorIfInfiniteScrolling()
 {
-    if (!mInfiniteScrollMode)
+    if (!_infiniteScrollMode)
         return;
     S32 errorX = _valueX;
     S32 errorY = _valueY;
@@ -194,7 +194,7 @@ void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
 
 void FSVirtualTrackpad::updateClickErrorIfInfiniteScrollingForPinch()
 {
-    if (!mInfiniteScrollMode)
+    if (!_infiniteScrollMode)
         return;
     S32 errorX = _valueX;
     S32 errorY = _valueY;
@@ -226,7 +226,7 @@ void FSVirtualTrackpad::draw()
 {
     mImgSphere->draw(mTouchArea->getRect(), mTouchArea->isInEnabledChain() ? UI_VERTEX_COLOR : UI_VERTEX_COLOR % 0.5f);
 
-    if (mAllowPinchMode)
+    if (_allowPinchMode)
         drawThumb(true);
 
     drawThumb(false);
@@ -267,7 +267,7 @@ void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y) const
         return;
 
     LLRect rect = mTouchArea->getRect();
-    if (mInfiniteScrollMode)
+    if (_infiniteScrollMode)
     {
         while (*x > rect.mRight)
             *x -= rect.getWidth();
@@ -304,18 +304,19 @@ void FSVirtualTrackpad::getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* del
         return;
 
     S32 fromX, fromY;
-    fromX = doingPinchMode ? _pinchValueX : _valueX;
-    fromY = doingPinchMode ? _pinchValueY : _valueY;
+    fromX = _doingPinchMode ? _pinchValueX : _valueX;
+    fromY = _doingPinchMode ? _pinchValueY : _valueY;
 
     if (mask & MASK_CONTROL)
     {
-        if (!heldDownCtrlBefore())
+        if (!_heldDownControlBefore)
         {
             _posXwhenCtrlDown = x;
             _posYwhenCtrlDown = y;
+            _heldDownControlBefore = true;
         }
 
-        if (doingPinchMode)
+        if (_doingPinchMode)
         {
             *deltaX = _posXwhenCtrlDown - (_posXwhenCtrlDown - x) / 8 + _pinchThumbClickOffsetX - fromX;
             *deltaY = _posYwhenCtrlDown - (_posYwhenCtrlDown - y) / 8 + _pinchThumbClickOffsetY - fromY;
@@ -328,14 +329,14 @@ void FSVirtualTrackpad::getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* del
     }
     else
     {
-        if (heldDownCtrlBefore())
+        if (_heldDownControlBefore)
         {
             _thumbClickOffsetX = fromX - x;
             _thumbClickOffsetY = fromY - y;
-            _posXwhenCtrlDown = _posYwhenCtrlDown = -1;
+            _heldDownControlBefore = false;
         }
 
-        if (doingPinchMode)
+        if (_doingPinchMode)
         {
             *deltaX = x + _pinchThumbClickOffsetX - fromX;
             *deltaY = y + _pinchThumbClickOffsetY - fromY;
@@ -348,15 +349,13 @@ void FSVirtualTrackpad::getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* del
     }
 }
 
-bool FSVirtualTrackpad::heldDownCtrlBefore() const { return _posXwhenCtrlDown >= 0 && _posYwhenCtrlDown >= 0; }
-
 void FSVirtualTrackpad::applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask)
 {
-    if (doingPinchMode)
+    if (_doingPinchMode)
     {
         _pinchValueX += deltaX;
         _pinchValueY += deltaY;
-        if (!mInfiniteScrollMode)  // then constrain the cursor within control area
+        if (!_infiniteScrollMode)  // then constrain the cursor within control area
             wrapOrClipCursorPosition(&_pinchValueX, &_pinchValueY);
     }
     else
@@ -364,7 +363,7 @@ void FSVirtualTrackpad::applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK ma
         _valueX += deltaX;
         _valueY += deltaY;
 
-        if (!mInfiniteScrollMode)  // then constrain the cursor within control area
+        if (!_infiniteScrollMode)  // then constrain the cursor within control area
             wrapOrClipCursorPosition(&_valueX, &_valueY);
     }
 }
@@ -399,7 +398,7 @@ void FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y, F32 z, S32 *va
     S32    width   = rect.getWidth();
     S32    height  = rect.getHeight();
 
-    if (mInfiniteScrollMode)
+    if (_infiniteScrollMode)
     {
         *valX = centerX + ll_round(x * width / 2);
         *valY = centerY + ll_round(y * height / 2);
@@ -418,7 +417,7 @@ bool FSVirtualTrackpad::handleMouseUp(S32 x, S32 y, MASK mask)
     if (hasMouseCapture())
     {
         gFocusMgr.setMouseCapture(NULL);
-        _posXwhenCtrlDown = _posYwhenCtrlDown = -1;
+        _heldDownControlBefore = false;
         make_ui_sound("UISndClickRelease");
     }
 
@@ -442,7 +441,7 @@ bool FSVirtualTrackpad::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
     if (hasMouseCapture())
     {
-        doingPinchMode = false;
+        _doingPinchMode = false;
         gFocusMgr.setMouseCapture(NULL);
 
         make_ui_sound("UISndClickRelease");
@@ -454,14 +453,14 @@ bool FSVirtualTrackpad::handleRightMouseUp(S32 x, S32 y, MASK mask)
 // move pinch cursor
 bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-    if (!mAllowPinchMode)
+    if (!_allowPinchMode)
         return LLView::handleRightMouseDown(x, y, mask);
 
     if (isPointInTouchArea(x, y))
     {
         determineThumbClickErrorForPinch(x, y);
         updateClickErrorIfInfiniteScrollingForPinch();
-        doingPinchMode = true;
+        _doingPinchMode = true;
         gFocusMgr.setMouseCapture(this);
 
         make_ui_sound("UISndClick");
@@ -475,7 +474,7 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
     if (hasMouseCapture())
     {
-        if (doingPinchMode)
+        if (_doingPinchMode)
             _pinchValueZ -= clicks * WheelClickQuanta;
         else
             _valueZ -= clicks * WheelClickQuanta;
