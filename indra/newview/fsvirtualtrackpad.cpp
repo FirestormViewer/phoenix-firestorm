@@ -472,12 +472,15 @@ bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
 // pass wheel-clicks to third axis
 bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-    if (hasMouseCapture())
+    if (hasMouseCapture() || isPointInTouchArea(x, y))
     {
         if (_doingPinchMode)
             _pinchValueZ -= clicks * WheelClickQuanta;
         else
             _valueZ -= clicks * WheelClickQuanta;
+
+        if (!hasMouseCapture())
+            onCommit();
 
         return true;
     }

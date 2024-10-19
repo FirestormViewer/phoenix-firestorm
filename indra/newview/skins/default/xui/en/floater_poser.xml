@@ -644,7 +644,7 @@ width="565">
 									top_delta="15"
 									height="153"
 									width="153"
-									tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel while holding to adjust the 3rd axis"
+									tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel any time to adjust the 3rd axis"
 									pinch_mode="false"
 									infinite_scroll_mode="true"/>
                 <panel
