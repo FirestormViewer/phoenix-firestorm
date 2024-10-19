@@ -55,6 +55,8 @@
 					</panel>
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Orbita la camera intorno al centro"/>
+						<button name="roll_left" tool_tip="Inclina la camera a sinistra" />
+						<button name="roll_right" tool_tip="Inclina la camera a destra" />
 						<slider_bar name="zoom_slider" tool_tip="Muove la camera dentro/fuori. NOTA: non funziona come uno zoom - non ha effetto sulla profondità di campo. Usare la funzione &apos;Angolo vista&apos; per un vero zoom"/>
 						<joystick_track name="cam_track_stick" tool_tip="Muove la camera su/giù e destra/sinistra"/>
 					</panel>
