@@ -103,6 +103,7 @@ private:
 
     void getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY);
     void applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask);
+    void applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask);
 
     LLUIImage* mImgMoonBack;
     LLUIImage* mImgMoonFront;
@@ -116,6 +117,11 @@ private:
     bool _allowPinchMode = false;
 
     /// <summary>
+    /// Whether we should be moving the pinch cursor now
+    /// </summary>
+    bool _doingPinchMode = false;
+
+    /// <summary>
     /// Whether to allow the cursor(s) to 'wrap'.
     /// </summary>
     /// <example>
@@ -125,31 +131,34 @@ private:
     /// </example>
     bool _infiniteScrollMode = false;
 
-    /// <summary>
-    /// Whether we should be moving the pinch cursor now
-    /// </summary>
-    bool _doingPinchMode = false;
-
     bool _heldDownControlBefore = false;
+
+    /// <summary>
+    /// The values the owner will get and set.
+    /// </summary>
+    S32 _valueX;
+    S32 _valueY;
+    S32 _valueZ;
+    S32 _pinchValueX;
+    S32 _pinchValueY;
+    S32 _pinchValueZ;
 
     /// <summary>
     /// The various values placing the cursors and documenting behaviours.
     /// Where relevant, all are scaled in pixels.
     /// </summary>
-    S32 _valueX;
-    S32 _valueY;
-    S32 _valueZ;
-
-    S32 _pinchValueX;
-    S32 _pinchValueY;
-    S32 _pinchValueZ;
+    S32 _cursorValueX;
+    S32 _cursorValueY;
+    S32 _cursorValueZ;
+    S32 _pinchCursorValueX;
+    S32 _pinchCursorValueY;
+    S32 _pinchCursorValueZ;
 
     // if one clicks on or about the thumb, we don't move it, instead we calculate the click-position error and factor it out
     S32 _thumbClickOffsetX;
     S32 _thumbClickOffsetY;
     S32 _pinchThumbClickOffsetX;
     S32 _pinchThumbClickOffsetY;
-
     S32 _posXwhenCtrlDown;
     S32 _posYwhenCtrlDown;
 };
