@@ -218,7 +218,6 @@ class FSFloaterPoser : public LLFloater
     void onLimbYawPitchRollChanged();
     void onAvatarPositionSet();
     void onAdvancedPositionSet();
-    void onAdvancedRotationSet();
     void onAdvancedScaleSet();
     void onClickToggleSelectedBoneEnabled();
     void onClickRecaptureSelectedBones();

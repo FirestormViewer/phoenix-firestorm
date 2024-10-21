@@ -133,7 +133,6 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.PositionSet", boost::bind(&FSFloaterPoser::onAvatarPositionSet, this));
 
     mCommitCallbackRegistrar.add("Poser.Advanced.PositionSet", boost::bind(&FSFloaterPoser::onAdvancedPositionSet, this));
-    mCommitCallbackRegistrar.add("Poser.Advanced.RotationSet", boost::bind(&FSFloaterPoser::onAdvancedRotationSet, this));
     mCommitCallbackRegistrar.add("Poser.Advanced.ScaleSet", boost::bind(&FSFloaterPoser::onAdvancedScaleSet, this));
     mCommitCallbackRegistrar.add("Poser.UndoLastPosition", boost::bind(&FSFloaterPoser::onUndoLastPosition, this));
     mCommitCallbackRegistrar.add("Poser.RedoLastPosition", boost::bind(&FSFloaterPoser::onRedoLastPosition, this));
@@ -1496,21 +1495,6 @@ void FSFloaterPoser::onAdvancedPositionSet()
 
     setSelectedJointsPosition(posX, posY, posZ);
     refreshAvatarPositionSliders();
-}
-
-void FSFloaterPoser::onAdvancedRotationSet()
-{
-    LLSliderCtrl *xRotAdvSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_ROTX_NAME);
-    LLSliderCtrl *yRotAdvSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_ROTY_NAME);
-    LLSliderCtrl *zRotAdvSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_ROTZ_NAME);
-    if (!xRotAdvSlider || !yRotAdvSlider || !zRotAdvSlider)
-        return;
-
-    F32 yaw   = (F32) xRotAdvSlider->getValue().asReal();
-    F32 pitch = (F32) yRotAdvSlider->getValue().asReal();
-    F32 roll  = (F32) zRotAdvSlider->getValue().asReal();
-
-    setSelectedJointsRotation(yaw, pitch, roll);
 }
 
 void FSFloaterPoser::onAdvancedScaleSet()
