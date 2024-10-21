@@ -63,7 +63,9 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     _cursorValueZ = _pinchCursorValueZ = 0;
 
     _thumbClickOffsetX = _thumbClickOffsetY = _pinchThumbClickOffsetX = _pinchThumbClickOffsetY = 0;
-    _posXwhenCtrlDown = _posYwhenCtrlDown = -1;
+    _posXwhenCtrlDown = _posYwhenCtrlDown = 0;
+    _pinchValueDeltaX = _pinchValueDeltaY = _pinchValueDeltaZ = 0;
+    _valueDeltaX = _valueDeltaY = _valueDeltaZ = 0;
 
     LLViewBorder::Params border = p.border;
     border.rect(border_rect);
@@ -271,8 +273,10 @@ void FSVirtualTrackpad::setPinchValue(F32 x, F32 y, F32 z)
 }
 
 LLSD FSVirtualTrackpad::getValue() { return normalizePixelPos(_valueX, _valueY, _valueZ).getValue(); }
+LLSD FSVirtualTrackpad::getValueDelta() { return normalizeDelta(_valueDeltaX, _valueDeltaY, _valueDeltaZ).getValue(); }
 
 LLSD FSVirtualTrackpad::getPinchValue() { return normalizePixelPos(_pinchValueX, _pinchValueY, _pinchValueZ).getValue(); }
+LLSD FSVirtualTrackpad::getPinchValueDelta() { return normalizeDelta(_pinchValueDeltaX, _pinchValueDeltaY, _pinchValueDeltaZ).getValue(); }
 
 void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y) const
 {
@@ -306,6 +310,7 @@ bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
     getHoverMovementDeltas(x, y, mask, &deltaX, &deltaY);
     applyHoverMovementDeltas(deltaX, deltaY, mask);
     applyDeltasToValues(deltaX, deltaY, mask);
+    applyDeltasToDeltaValues(deltaX, deltaY, mask);
 
     onCommit();
 
@@ -422,6 +427,52 @@ void FSVirtualTrackpad::applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask)
     }
 }
 
+void FSVirtualTrackpad::applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, MASK mask)
+{
+    if (_doingPinchMode)
+    {
+        if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
+        {
+            _pinchValueDeltaX = 0;
+            _pinchValueDeltaY = deltaY;
+            _pinchValueDeltaZ = deltaX;
+        }
+        else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
+        {
+            _pinchValueDeltaX = deltaX;
+            _pinchValueDeltaY = 0;
+            _pinchValueDeltaZ = deltaY;
+        }
+        else
+        {
+            _pinchValueDeltaX = deltaX;
+            _pinchValueDeltaY = deltaY;
+            _pinchValueDeltaZ = 0;
+        }
+    }
+    else
+    {
+        if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
+        {
+            _valueDeltaX = 0;
+            _valueDeltaY = deltaY;
+            _valueDeltaZ = deltaX;
+        }
+        else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
+        {
+            _valueDeltaX = deltaX;
+            _valueDeltaY = 0;
+            _valueDeltaZ = deltaY;
+        }
+        else
+        {
+            _valueDeltaX = deltaX;
+            _valueDeltaY = deltaY;
+            _valueDeltaZ = 0;
+        }
+    }
+}
+
 LLVector3 FSVirtualTrackpad::normalizePixelPos(S32 x, S32 y, S32 z) const
 {
     LLVector3 result;
@@ -436,6 +487,23 @@ LLVector3 FSVirtualTrackpad::normalizePixelPos(S32 x, S32 y, S32 z) const
 
     result.mV[VX] = (F32) (x - centerX) / width * 2;
     result.mV[VY] = (F32) (y - centerY) / height * 2;
+    result.mV[VZ] = (F32) z * ThirdAxisQuantization;
+
+    return result;
+}
+
+LLVector3 FSVirtualTrackpad::normalizeDelta(S32 x, S32 y, S32 z) const
+{
+    LLVector3 result;
+    if (!mTouchArea)
+        return result;
+
+    LLRect rect = mTouchArea->getRect();
+    S32    width = rect.getWidth();
+    S32    height = rect.getHeight();
+
+    result.mV[VX] = (F32) x / width * 2;
+    result.mV[VY] = (F32) y / height * 2;
     result.mV[VZ] = (F32) z * ThirdAxisQuantization;
 
     return result;

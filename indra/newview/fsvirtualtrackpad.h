@@ -75,8 +75,25 @@ public:
     /// <param name="z">The normalized z-axis value, expected top-to-bottom range 1..-1</param>
     void setPinchValue(F32 x, F32 y, F32 z);
 
+    /// <summary>
+    /// Gets the current position of the first 3-axis cursor.
+    /// </summary>
     virtual LLSD getValue();
+
+    /// <summary>
+    /// Gets the most recent delta of position of the first 3-axis cursor.
+    /// </summary>
+    virtual LLSD getValueDelta();
+
+    /// <summary>
+    /// Gets the current position of the second 3-axis cursor.
+    /// </summary>
     virtual LLSD getPinchValue();
+
+    /// <summary>
+    /// Gets the most recent delta of position of the second 3-axis cursor.
+    /// </summary>
+    virtual LLSD getPinchValueDelta();
 
 protected:
     friend class LLUICtrlFactory;
@@ -100,10 +117,12 @@ private:
 
     void      convertNormalizedToPixelPos(F32 x, F32 y, F32 z, S32* valX, S32* valY, S32* valZ);
     LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;
+    LLVector3 normalizeDelta(S32 x, S32 y, S32 z) const;
 
     void getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY);
     void applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask);
     void applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask);
+    void applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, MASK mask);
 
     LLUIImage* mImgMoonBack;
     LLUIImage* mImgMoonFront;
@@ -142,6 +161,16 @@ private:
     S32 _pinchValueX;
     S32 _pinchValueY;
     S32 _pinchValueZ;
+
+    /// <summary>
+    /// The delta values the owner will get and set.
+    /// </summary>
+    S32 _valueDeltaX;
+    S32 _valueDeltaY;
+    S32 _valueDeltaZ;
+    S32 _pinchValueDeltaX;
+    S32 _pinchValueDeltaY;
+    S32 _pinchValueDeltaZ;
 
     /// <summary>
     /// The various values placing the cursors and documenting behaviours.

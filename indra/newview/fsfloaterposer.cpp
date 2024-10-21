@@ -75,6 +75,7 @@ static const std::string POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ea
 static const std::string POSER_AVATAR_TOGGLEBUTTON_MIRROR = "button_toggleMirrorRotation";
 static const std::string POSER_AVATAR_TOGGLEBUTTON_SYMPATH = "button_toggleSympatheticRotation";
 static const std::string POSER_AVATAR_BUTTON_REDO = "button_redo_change";
+static const std::string POSER_AVATAR_BUTTON_DELTAMODE = "delta_mode_toggle";
 static const std::string POSER_AVATAR_SLIDER_POSX_NAME = "av_position_inout";
 static const std::string POSER_AVATAR_SLIDER_POSY_NAME = "av_position_leftright";
 static const std::string POSER_AVATAR_SLIDER_POSZ_NAME = "av_position_updown";
@@ -590,7 +591,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
         _poserAnimator.setPosingAvatarJoint(avatar, *item, true);
 
-        _poserAnimator.setJointRotation(avatar, item, newRotation, NONE, getJointTranslation(item->jointName()),
+        _poserAnimator.setJointRotation(avatar, item, newRotation, false, NONE, getJointTranslation(item->jointName()),
                                         getJointNegation(item->jointName()));
         _poserAnimator.setJointPosition(avatar, item, newPosition, NONE);
         _poserAnimator.setJointScale(avatar, item, newScale, NONE);
@@ -731,7 +732,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, false, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
                 }
 
                 if (loadPositions && control_map.has("position"))
@@ -1555,7 +1556,30 @@ void FSFloaterPoser::onLimbTrackballChanged()
     pitch = unWrapScale(pitch) * normalTrackpadRangeInRads;
     roll  = unWrapScale(roll) * normalTrackpadRangeInRads;
 
-    setSelectedJointsRotation(yaw, pitch, roll);
+    bool deltaMode = false;
+    LLButton* deltaModeToggleButton = getChild<LLButton>(POSER_AVATAR_BUTTON_DELTAMODE);
+    if (deltaModeToggleButton)
+        deltaMode = deltaModeToggleButton->getValue().asBoolean();
+
+    if (deltaMode)
+    {
+        F32 deltaYaw, deltaPitch, deltaRoll;
+        LLSD deltaPosition = trackBall->getValueDelta();
+        LLVector3 trackPadDeltaPos;
+        if (deltaPosition.isArray() && deltaPosition.size() == 3)
+        {
+            trackPadDeltaPos.setValue(deltaPosition);
+            deltaYaw   = trackPadDeltaPos[VX] * normalTrackpadRangeInRads;
+            deltaPitch = trackPadDeltaPos[VY] * normalTrackpadRangeInRads;
+            deltaRoll  = trackPadDeltaPos[VZ] * normalTrackpadRangeInRads;
+            deltaYaw *= trackPadSensitivity;
+            deltaPitch *= trackPadSensitivity;
+        
+            setSelectedJointsRotation(deltaYaw, deltaPitch, deltaRoll, true);
+        }
+    }
+    else
+        setSelectedJointsRotation(yaw, pitch, roll, false);
 
     // WARNING!
     // as tempting as it is to refactor the following to refreshRotationSliders(), don't.
@@ -1602,7 +1626,7 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     pitch *= DEG_TO_RAD;
     roll *= DEG_TO_RAD;
 
-    setSelectedJointsRotation(yaw, pitch, roll);
+    setSelectedJointsRotation(yaw, pitch, roll, false);
 
     // WARNING!
     // as tempting as it is to refactor the following to refreshTrackpadCursor(), don't.
@@ -1760,7 +1784,7 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
     }
 }
 
-void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians)
+void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians, bool isDelta)
 {
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)
@@ -1778,7 +1802,7 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
         if (!currentlyPosingJoint)
             continue;
 
-        _poserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
+        _poserAnimator.setJointRotation(avatar, item, vec3, isDelta, defl, getJointTranslation(item->jointName()),
                                 getJointNegation(item->jointName()));
     }
 }

@@ -365,7 +365,7 @@ public:
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
-    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
+    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, LLVector3 rotation, bool isDelta, E_BoneDeflectionStyles style,
                           E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
