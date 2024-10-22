@@ -41,6 +41,7 @@ Unicode true                # Enable unicode support
 # This placeholder is replaced by viewer_manifest.py
 %%VERSION%%
 
+!include "WordFunc.nsh"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; - language files - one for each language (or flavor thereof)
 ;; (these files are in the same place as the nsi template but the python script generates a new nsi file in the 
@@ -232,30 +233,44 @@ Call openLinkNewWindow
 ; Add the AVX2 check functions
 Function CheckCPUFlagsAVX2
     Push $1
+    Push $2
+    Push $3
     System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
     IntCmp $1 1 OK_AVX2
     ; AVX2 not supported
-    MessageBox MB_OK $(MissingAVX2)
-    ${OpenURL} 'https://www.firestormviewer.org/early-access-beta-downloads-legacy-cpus'
+    ; Prepare the URL by concatenating '-legacy-cpus' to $DL_URL
+    StrCpy $2 "${DL_URL}"
+    StrCpy $2 "-legacy-cpus" /APPEND    
+    ; Replace %DLURL% in the language string with the URL
+    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "$2" "+*" $3
+    MessageBox MB_OK "$3"    
+    ${OpenURL} '$2'
     Quit
 
   OK_AVX2:
+    Pop $3
+    Pop $2
     Pop $1
     Return
 FunctionEnd
 
 Function CheckCPUFlagsAVX2_Prompt
     Push $1
+    Push $3
     System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
     IntCmp $1 1 OK_AVX2 
     Pop $1
     Return
   OK_AVX2:
-    MessageBox MB_YESNO $(AVX2Available) IDYES DownloadAVX2 IDNO ContinueInstall
+    ; Replace %DLURL% in the language string with the URL
+    ${WordReplace} "$(AVX2Available)" "%DLURL%" "${DL_URL}" "+*" $3
+
+    MessageBox MB_YESNO $3 IDYES DownloadAVX2 IDNO ContinueInstall
     DownloadAVX2:
-      ${OpenURL} 'https://www.firestormviewer.org/early-access-beta-downloads/'
+      ${OpenURL} '$3'
       Quit
     ContinueInstall:
+      Pop $3
       Pop $1
       Return
 FunctionEnd
@@ -322,7 +337,7 @@ Call CheckWindowsVersion					# Don't install On unsupported systems
     # IfErrors +2 0	# If error jump past setting SKIP_DIALOGS
     #    StrCpy $SKIP_DIALOGS "true"
     IfErrors +3 0	# If error jump past setting SKIP_DIALOGS
-        StrCpy $SKIP_DIALOGS "true"
+      StrCpy $SKIP_DIALOGS "true"
         SetAutoClose true
     # </FS:Ansariel>
 
