@@ -717,6 +717,8 @@ width="565">
 					width="18"
 					top_delta="0"
 					left_pad="1">
+                        <button.commit_callback
+                        function="Poser.ToggleDeltaModeChanges"/>
                     </button>
                     <button
 					follows="left|top"

@@ -435,7 +435,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
     return translateRotationFromQuaternion(translation, negation, rot);
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, bool isDelta, E_BoneDeflectionStyles style,
+void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
                                        E_BoneAxisTranslation translation, S32 negation)
 {
     if (!isAvatarSafeToUse(avatar))
@@ -452,13 +452,22 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
         return;
 
     LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
-    if (isDelta)
-        jointPose->applyDeltaRotation(rot_quat);
-    else
-        jointPose->setTargetRotation(rot_quat);
+    switch (style)
+    {
+        case SYMPATHETIC:
+        case MIRROR:
+            jointPose->setTargetRotation(rot_quat);
+            break;
 
-    if (style == NONE)
-        return;
+        case DELTAMODE:
+            jointPose->applyDeltaRotation(rot_quat);
+            return;
+            
+        case NONE:
+        default:
+            jointPose->setTargetRotation(rot_quat);
+            return;
+    }
 
     FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
@@ -468,21 +477,12 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     switch (style)
     {
         case SYMPATHETIC:
-            if (isDelta)
-                oppositeJointPose->applyDeltaRotation(rot_quat);
-            else
-                oppositeJointPose->setTargetRotation(rot_quat);
-
+            oppositeJointPose->setTargetRotation(rot_quat);
             break;
 
         case MIRROR:
             inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
-
-            if (isDelta)
-                oppositeJointPose->applyDeltaRotation(inv_quat);
-            else
-                oppositeJointPose->setTargetRotation(inv_quat);
-
+            oppositeJointPose->setTargetRotation(inv_quat);
             break;
 
         default:

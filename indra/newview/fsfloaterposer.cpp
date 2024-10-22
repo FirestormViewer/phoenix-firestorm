@@ -129,6 +129,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.RedoLastRotation", boost::bind(&FSFloaterPoser::onRedoLastRotation, this));
     mCommitCallbackRegistrar.add("Poser.ToggleMirrorChanges", boost::bind(&FSFloaterPoser::onToggleMirrorChange, this));
     mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", boost::bind(&FSFloaterPoser::onToggleSympatheticChange, this));
+    mCommitCallbackRegistrar.add("Poser.ToggleDeltaModeChanges", boost::bind(&FSFloaterPoser::onToggleDeltaModeChange, this));
     mCommitCallbackRegistrar.add("Poser.AdjustTrackPadSensitivity", boost::bind(&FSFloaterPoser::onAdjustTrackpadSensitivity, this));
 
     mCommitCallbackRegistrar.add("Poser.PositionSet", boost::bind(&FSFloaterPoser::onAvatarPositionSet, this));
@@ -167,7 +168,7 @@ bool FSFloaterPoser::postBuild()
             [this](LLUICtrl*, const LLSD&)
             {
                 onJointSelect();
-                setRotationChangeButtons(false, false);
+                setRotationChangeButtons(false, false, false);
             });
 
     LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
@@ -591,7 +592,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
         _poserAnimator.setPosingAvatarJoint(avatar, *item, true);
 
-        _poserAnimator.setJointRotation(avatar, item, newRotation, false, NONE, getJointTranslation(item->jointName()),
+        _poserAnimator.setJointRotation(avatar, item, newRotation, NONE, getJointTranslation(item->jointName()),
                                         getJointNegation(item->jointName()));
         _poserAnimator.setJointPosition(avatar, item, newPosition, NONE);
         _poserAnimator.setJointScale(avatar, item, newScale, NONE);
@@ -732,7 +733,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, false, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
+                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
                 }
 
                 if (loadPositions && control_map.has("position"))
@@ -1040,11 +1041,13 @@ void FSFloaterPoser::showOrHideAdvancedSaveOptions()
     advSavePanel->setVisible(loadSavePanelExpanded && advancedPanelExpanded);
 }
 
-void FSFloaterPoser::onToggleMirrorChange() { setRotationChangeButtons(true, false); }
+void FSFloaterPoser::onToggleMirrorChange() { setRotationChangeButtons(true, false, false); }
 
-void FSFloaterPoser::onToggleSympatheticChange() { setRotationChangeButtons(false, true); }
+void FSFloaterPoser::onToggleSympatheticChange() { setRotationChangeButtons(false, true, false); }
 
-void FSFloaterPoser::setRotationChangeButtons(bool togglingMirror, bool togglingSympathetic)
+void FSFloaterPoser::onToggleDeltaModeChange() { setRotationChangeButtons(false, false, true); }
+
+void FSFloaterPoser::setRotationChangeButtons(bool togglingMirror, bool togglingSympathetic, bool togglingDelta)
 {
     LLButton *toggleMirrorButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_MIRROR);
     if (!toggleMirrorButton)
@@ -1052,24 +1055,18 @@ void FSFloaterPoser::setRotationChangeButtons(bool togglingMirror, bool toggling
     LLButton *toggleSympatheticButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_SYMPATH);
     if (!toggleSympatheticButton)
         return;
-
-    if (!togglingMirror && !togglingSympathetic) // turn off both buttons
-    {
-        toggleMirrorButton->setValue(false);
-        toggleSympatheticButton->setValue(false);
+    LLButton* deltaModeToggleButton = getChild<LLButton>(POSER_AVATAR_BUTTON_DELTAMODE);
+    if (!deltaModeToggleButton)
         return;
-    }
 
-    bool useMirror      = toggleMirrorButton->getValue().asBoolean();
-    bool useSympathetic = toggleSympatheticButton->getValue().asBoolean();
-    if (useMirror && useSympathetic) // if both buttons are down, turn one of them off
-    {
-        if (togglingSympathetic)
-            toggleMirrorButton->setValue(false);
+    if (togglingSympathetic || togglingDelta)
+        toggleMirrorButton->setValue(false);
 
-        if (togglingMirror)
-            toggleSympatheticButton->setValue(false);
-    }
+    if (togglingMirror || togglingDelta)
+        toggleSympatheticButton->setValue(false);
+
+    if (togglingMirror || togglingSympathetic)
+        deltaModeToggleButton->setValue(false);
 }
 
 void FSFloaterPoser::onUndoLastRotation()
@@ -1397,11 +1394,16 @@ E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle()
     LLButton *toggleSympatheticButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_SYMPATH);
     if (!toggleSympatheticButton)
         return NONE;
+    LLButton* deltaModeToggleButton = getChild<LLButton>(POSER_AVATAR_BUTTON_DELTAMODE);
+    if (!deltaModeToggleButton)
+        return NONE;
 
     if (toggleMirrorButton->getValue().asBoolean())
         return MIRROR;
     if (toggleSympatheticButton->getValue().asBoolean())
         return SYMPATHETIC;
+    if (deltaModeToggleButton->getValue().asBoolean())
+        return DELTAMODE;
 
     return NONE;
 }
@@ -1575,11 +1577,11 @@ void FSFloaterPoser::onLimbTrackballChanged()
             deltaYaw *= trackPadSensitivity;
             deltaPitch *= trackPadSensitivity;
         
-            setSelectedJointsRotation(deltaYaw, deltaPitch, deltaRoll, true);
+            setSelectedJointsRotation(deltaYaw, deltaPitch, deltaRoll);
         }
     }
     else
-        setSelectedJointsRotation(yaw, pitch, roll, false);
+        setSelectedJointsRotation(yaw, pitch, roll);
 
     // WARNING!
     // as tempting as it is to refactor the following to refreshRotationSliders(), don't.
@@ -1626,7 +1628,7 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     pitch *= DEG_TO_RAD;
     roll *= DEG_TO_RAD;
 
-    setSelectedJointsRotation(yaw, pitch, roll, false);
+    setSelectedJointsRotation(yaw, pitch, roll);
 
     // WARNING!
     // as tempting as it is to refactor the following to refreshTrackpadCursor(), don't.
@@ -1784,7 +1786,7 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
     }
 }
 
-void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians, bool isDelta)
+void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians)
 {
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)
@@ -1802,7 +1804,7 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
         if (!currentlyPosingJoint)
             continue;
 
-        _poserAnimator.setJointRotation(avatar, item, vec3, isDelta, defl, getJointTranslation(item->jointName()),
+        _poserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
                                 getJointNegation(item->jointName()));
     }
 }

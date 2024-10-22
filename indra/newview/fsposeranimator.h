@@ -53,6 +53,7 @@ typedef enum E_BoneDeflectionStyles
     NONE        = 0,  // do nothing additional
     MIRROR      = 1,  // change the other joint, like in a mirror, eg: one left one right
     SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
+    DELTAMODE   = 3,  // each selected joint changes by the same supplied amount relative to their current
 } E_BoneDeflectionStyles;
 
 /// <summary>
@@ -365,7 +366,7 @@ public:
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
-    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, LLVector3 rotation, bool isDelta, E_BoneDeflectionStyles style,
+    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, LLVector3 rotation, E_BoneDeflectionStyles style,
                           E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
