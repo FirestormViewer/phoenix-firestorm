@@ -367,10 +367,14 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
+        chan = self.channel_type()
+        if chan in ['alpha', 'nightly','manual', 'profiling']:
+            chan = 'test'
+
         if self.fs_is_opensim():
-            return "icons/" + self.channel_type() + "-os"
+            return "icons/" + chan + "-os"
         # </FS:ND>
-        return "icons/" + self.channel_type()
+        return "icons/" + chan
 
     def extract_names(self,src):
         """Extract contributor names from source file, returns string"""
