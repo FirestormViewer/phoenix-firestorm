@@ -1103,7 +1103,7 @@
           height="20"
           increment="1"
           initial_value="2"
-          label="GPU Dedicated VRAM (GB):"
+          label="Override GPU Dedicated VRAM (GB):"
           label_width="275"
           layout="topleft"
           left="10"

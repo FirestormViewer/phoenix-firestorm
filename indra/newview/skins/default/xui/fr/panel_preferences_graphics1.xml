@@ -71,10 +71,19 @@
 			<slider label="Distance d'affichage" name="DrawDistance"/>
 			<text name="DrawDistanceMeterText2">m</text>
 			<slider label="Nombre max. de particules" name="MaxParticleCount"/>
+			<text name="AvatarComplexityModeLabel">
+				Affichage des avatars
+			</text>
+			<combo_box name="AvatarComplexityMode">
+				<combo_box.item label="Limite par la complexité" name="0"/>
+				<combo_box.item label="Toujours afficher les amis" name="1"/>
+				<combo_box.item label="N'afficher que les amis" name="2"/>
+			</combo_box>
 			<slider label="Complexité maximale" name="IndirectMaxComplexity"/>
 			<slider label="Maximum d'avatars 3D" name="IndirectMaxNonImpostors"/>
 			<slider label="Qualité post-traitement" name="RenderPostProcess"/>
 			<text name="PostProcessText">Basse</text>
+			<slider label="Max. lumières proches" name="MaxLights"/>
 			<slider label="Propriétés physiques des avatars" name="AvatarPhysicsDetail"/>
 			<slider label="Exposition" name="RenderExposure"/>
 			<text name="MeshDetailText">Facteurs de détails liés à la distance :</text>
@@ -108,7 +117,7 @@
 				Paramètres avancés (redémarrage requis) :
 			</text>
 			<check_box label="Ignorer la détection de la VRAM" name="FSOverrideVRAMDetection" tool_tip="Permet à l'utilisateur d'ignorer la détection de VRAM (à utiliser avec une extrême prudence)"/>
-			<slider label="VRAM dédiée du GPU (Go) :" name="FSForcedVideoMemory" tool_tip="Important : à utiliser avec une extrême prudence.
+			<slider label="Ignorer la VRAM dédiée du GPU (Go) :" name="FSForcedVideoMemory" tool_tip="Important : à utiliser avec une extrême prudence.
 Ignorer la VRAM détectée sur votre GPU.
 Cela ne doit pas inclure la VRAM 'partagée' qui fait partie de la RAM du système.
 Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
