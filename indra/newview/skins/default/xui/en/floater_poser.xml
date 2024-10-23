@@ -521,38 +521,109 @@ width="565">
 							relative_width="0.9"  />
                         </scroll_list>
                     </panel>
-                    <panel
+					<tab_container
 					follows="all"
-					background_visible="false"
-					height="299"
+					halign="center"
+					height="285"
 					layout="topleft"
 					left="0"
+					enabled="true"
 					title="Hands"
-					name="hands_joints_panel"
+					name="hands_tabs"
+					tab_height="20"
+					tab_width="50"
+					tab_group="1"
+					tab_position="top"
 					top="0"
-					width="481">
-                        <scroll_list
-                        column_padding="2"
-                        draw_heading="true"
-                        height="300"
-                        follows="all"
-                        can_sort="false"
-                        layout="topleft"
-                        left="2"
-                        width="479"
-                        multi_select="true"
-                        name="hand_joints_scroll"
-                        top="0">
-                            <scroll_list.columns
-							label=""
-							name="icon"
-							relative_width="0.1"  />
-                            <scroll_list.columns
-							label="Body Part"
-							name="joint"
-							relative_width="0.9"  />
-                        </scroll_list>
-                    </panel>
+					width="235">
+						<panel
+						follows="all"
+						background_visible="false"
+						height="299"
+						layout="topleft"
+						left="0"
+						title="Presets"
+						name="hands_presets_panel"
+						top="0"
+						width="481">
+							<scroll_list
+							column_padding="2"
+							draw_heading="true"
+							height="275"
+							follows="all"
+							can_sort="false"
+							layout="topleft"
+							left="2"
+							width="479"
+							multi_select="false"
+							name="hand_presets_scroll"
+							top="0">
+								<scroll_list.columns
+								label="Preset Name"
+								name="name"
+								relative_width="0.9"  />
+							</scroll_list>
+							<button
+							follows="top|left"
+							height="21"
+							layout="topleft"
+							label="Set Left"
+							name="button_loadHandPoseLeft"
+							tool_tip="Double click to set your left hand to the selected preset"
+							top_delta="238"
+							left_pad="1"
+							left="2"
+							width="88" >
+								<button.commit_callback
+								function="Poser.LoadLeftHand"/>
+							</button>
+							<button
+							follows="left|top"
+							height="21"
+							layout="topleft"
+							label="Set Right"
+							name="button_loadHandPoseRight"
+							tool_tip="Double click to set your right hand to the selected preset"
+							left_pad="1"
+							top_delta="0"
+							width="88" >
+								<button.commit_callback
+								function="Poser.LoadRightHand"/>
+							</button>
+						</panel>
+						<panel
+						follows="all"
+						background_visible="false"
+						height="299"
+						layout="topleft"
+						left="0"
+						title="Adjust"
+						name="hands_joints_panel"
+						top="0"
+						width="481">
+							<scroll_list
+							column_padding="2"
+							draw_heading="true"
+							height="300"
+							follows="all"
+							can_sort="false"
+							layout="topleft"
+							left="2"
+							width="479"
+							multi_select="true"
+							name="hand_joints_scroll"
+							top="0">
+								<scroll_list.columns
+								label=""
+								name="icon"
+								relative_width="0.1"  />
+								<scroll_list.columns
+								label="Body Part"
+								name="joint"
+								relative_width="0.9"  />
+							</scroll_list>
+						</panel>
+					</tab_container>
                     <panel
 					follows="all"
 					background_visible="false"

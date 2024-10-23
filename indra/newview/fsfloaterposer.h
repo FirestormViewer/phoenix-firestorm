@@ -38,11 +38,14 @@ typedef enum E_LoadPoseMethods
 {
     ROTATIONS               = 1,
     POSITIONS               = 2,
-    SCALES                  = 4,
-    ROTATIONS_AND_POSITIONS = 3,
-    ROTATIONS_AND_SCALES    = 4,
-    POSITIONS_AND_SCALES    = 5,
-    ROT_POS_AND_SCALES      = 6
+    SCALES                  = 3,
+    ROTATIONS_AND_POSITIONS = 4,
+    ROTATIONS_AND_SCALES    = 5,
+    POSITIONS_AND_SCALES    = 6,
+    ROT_POS_AND_SCALES      = 7,
+    HAND_RIGHT              = 8,
+    HAND_LEFT               = 9,
+    FACE_ONLY               = 10,
 } E_LoadPoseMethods;
 
 /// <summary>
@@ -79,9 +82,9 @@ class FSFloaterPoser : public LLFloater
     const F32 normalTrackpadRangeInRads = F_PI;
     
     /// <summary>
-    /// Refreshes the pose load/save list.
+    /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
-    void refreshPosesScroll();
+    void refreshPoseScroll(std::string scrollListName, std::string subDirectory);
 
     /// <summary>
     /// (Dis)Enables all of the posing controls; such as when you can't pose for reasons.
@@ -227,6 +230,9 @@ class FSFloaterPoser : public LLFloater
     void onPoseJointsReset();
     void onOpenSetAdvancedPanel();
     void onAdjustTrackpadSensitivity();
+    void onClickLoadLeftHandPose();
+    void onClickLoadRightHandPose();
+    void onClickLoadHandPose(bool isRightHand);
 
     // UI Refreshments
     void refreshRotationSliders();
