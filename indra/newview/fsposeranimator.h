@@ -161,7 +161,7 @@ public:
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints {
         // head, torso, legs
-        {"mPelvis", "", WHOLEAVATAR, {"mTorso", "mHipLeft", "mHipRight"}}, {"mTorso", "", BODY, {"mChest"}}, {"mChest", "", BODY, {"mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot"}}, {"mNeck", "", BODY, {"mHead"}}, {"mHead", "", BODY},
+        {"mHead", "", BODY}, {"mNeck", "", BODY, {"mHead"}}, {"mPelvis", "", WHOLEAVATAR, {"mTorso", "mHipLeft", "mHipRight"}}, {"mChest", "", BODY, {"mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot"}}, {"mTorso", "", BODY, {"mChest"}},
         {"mCollarLeft", "mCollarRight", BODY, {"mShoulderLeft"}}, {"mShoulderLeft", "mShoulderRight", BODY, {"mElbowLeft"}}, {"mElbowLeft", "mElbowRight", BODY, {"mWristLeft"}}, {"mWristLeft", "mWristRight", BODY},
         {"mCollarRight", "mCollarLeft", BODY, {"mShoulderRight"}, true}, {"mShoulderRight", "mShoulderLeft", BODY, {"mElbowRight"}, true},  {"mElbowRight", "mElbowLeft", BODY, {"mWristRight"}, true},  {"mWristRight", "mWristLeft", BODY, {}, true},
         {"mHipLeft", "mHipRight", BODY, {"mKneeLeft"}}, {"mKneeLeft", "mKneeRight", BODY, {"mAnkleLeft"}},  {"mAnkleLeft", "mAnkleRight", BODY},

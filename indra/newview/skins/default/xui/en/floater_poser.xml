@@ -99,7 +99,7 @@ width="565">
     <string	name="joint_transform_mFaceTongueTip" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	
     <!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
-    <string	name="header_mTorso" translate="false">Body</string>
+    <string	name="header_mHead" translate="false">Body</string>
     <string	name="header_mFaceForeheadLeft" translate="false">Forehead/Brows</string>
     <string	name="header_mEyeLeft" translate="false">Eyes/Eye Lids</string>
     <string	name="header_mFaceCheekUpperLeft" translate="false">Cheeks/Lips</string>
