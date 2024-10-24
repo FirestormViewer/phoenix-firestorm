@@ -97,150 +97,150 @@ width="565">
 	<string	name="joint_transform_mTail6" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceTongueBase" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceTongueTip" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
-	
+
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
-	<string	name="header_mHead" translate="false">Body</string>
-	<string	name="header_mFaceForeheadLeft" translate="false">Forehead/Brows</string>
-	<string	name="header_mEyeLeft" translate="false">Eyes/Eye Lids</string>
-	<string	name="header_mFaceCheekUpperLeft" translate="false">Cheeks/Lips</string>
-	<string	name="header_mHandThumb1Left" translate="false">Left Hand</string>
-	<string	name="header_mCollarLeft" translate="false">Left Arm</string>
-	<string	name="header_mHandThumb1Right" translate="false">Right Hand</string>
-	<string	name="header_mCollarRight" translate="false">Right Arm</string>
-	<string	name="header_mHipLeft" translate="false">Legs</string>
-	<string	name="header_mTail1" translate="false">Tail</string>
-	<string	name="header_mHindLimbsRoot" translate="false">Hind Limbs</string>
-	<string	name="header_mWingsRoot" translate="false">Wings</string>
+	<string	name="header_mHead">Body</string>
+	<string	name="header_mFaceForeheadLeft">Forehead/Brows</string>
+	<string	name="header_mEyeLeft">Eyes/Eye Lids</string>
+	<string	name="header_mFaceCheekUpperLeft">Cheeks/Lips</string>
+	<string	name="header_mHandThumb1Left">Left Hand</string>
+	<string	name="header_mCollarLeft">Left Arm</string>
+	<string	name="header_mHandThumb1Right">Right Hand</string>
+	<string	name="header_mCollarRight">Right Arm</string>
+	<string	name="header_mHipLeft">Legs</string>
+	<string	name="header_mTail1">Tail</string>
+	<string	name="header_mHindLimbsRoot">Hind Limbs</string>
+	<string	name="header_mWingsRoot">Wings</string>
 
 	<!-- These are names to appear on the UI for the joints/bones/thingos -->
-	<string	name="title_mPelvis" translate="false">Whole Avatar</string>
-	<string	name="title_mTorso" translate="false">Torso</string>
-	<string	name="title_mChest" translate="false">Chest</string>
-	<string	name="title_mNeck" translate="false">Neck</string>
-	<string	name="title_mHead" translate="false">Head</string>
-	<string	name="title_mEyeRight" translate="false">Right Eye</string>
-	<string	name="title_mEyeLeft" translate="false">Left Eye</string>
-	<string	name="title_mFaceForeheadLeft" translate="false">Forehead Left Side</string>
-	<string	name="title_mFaceForeheadRight" translate="false">Forehead Right Side</string>
-	<string	name="title_mFaceEyebrowOuterLeft" translate="false">Eyebrow Outer Left</string>
-	<string	name="title_mFaceEyebrowCenterLeft" translate="false">Eyebrow Middle Left</string>
-	<string	name="title_mFaceEyebrowInnerLeft" translate="false">Eyebrow Inner Left</string>
-	<string	name="title_mFaceEyebrowOuterRight" translate="false">Eyebrow Outer Right</string>
-	<string	name="title_mFaceEyebrowCenterRight" translate="false">Eyebrow Middle Right</string>
-	<string	name="title_mFaceEyebrowInnerRight" translate="false">Eyebrow Inner Right</string>
-	<string	name="title_mFaceEyeLidUpperLeft" translate="false">EyeLid Upper Left </string>
-	<string	name="title_mFaceEyeLidLowerLeft" translate="false">EyeLid Lower Left</string>
-	<string	name="title_mFaceEyeLidUpperRight" translate="false">EyeLid Upper Right</string>
-	<string	name="title_mFaceEyeLidLowerRight" translate="false">EyeLid Lower Left</string>
-	<string	name="title_mFaceEar1Left" translate="false">Ear Upper Left</string>
-	<string	name="title_mFaceEar2Left" translate="false">Ear Lower Left</string>
-	<string	name="title_mFaceEar1Right" translate="false">Ear Upper Right</string>
-	<string	name="title_mFaceEar2Right" translate="false">Ear Lower Right</string>
-	<string	name="title_mFaceNoseLeft" translate="false">Nose Left</string>
-	<string	name="title_mFaceNoseCenter" translate="false">Nose Center</string>
-	<string	name="title_mFaceNoseRight" translate="false">Nose Right</string>
-	<string	name="title_mFaceCheekLowerLeft" translate="false">Cheek Lower Left</string>
-	<string	name="title_mFaceCheekUpperLeft" translate="false">Cheek Upper Left</string>
-	<string	name="title_mFaceCheekLowerRight" translate="false">Cheek Lower Right</string>
-	<string	name="title_mFaceCheekUpperRight" translate="false">Cheek Upper Right</string>
-	<string	name="title_mFaceJaw" translate="false">Jaw</string>
-	<string	name="title_mFaceTeethLower" translate="false">Teeth Lower</string>
-	<string	name="title_mFaceLipLowerLeft" translate="false">Lip Lower Left</string>
-	<string	name="title_mFaceLipLowerRight" translate="false">Lip Lower Right</string>
-	<string	name="title_mFaceLipLowerCenter" translate="false">Lip Lower Middle</string>
-	<string	name="title_mFaceTongueBase" translate="false">Tongue Base</string>
-	<string	name="title_mFaceTongueTip" translate="false">Tongue Tip</string>
-	<string	name="title_mFaceJawShaper" translate="false">Jaw Shaper</string>
-	<string	name="title_mFaceForeheadCenter" translate="false">Forehead Middle</string>
-	<string	name="title_mFaceNoseBase" translate="false">Nose Base</string>
-	<string	name="title_mFaceTeethUpper" translate="false">Teeth Upper</string>
-	<string	name="title_mFaceLipUpperLeft" translate="false">Lip Upper Left</string>
-	<string	name="title_mFaceLipUpperRight" translate="false">Lip Upper Right</string>
-	<string	name="title_mFaceLipCornerLeft" translate="false">Lip Corner Left</string>
-	<string	name="title_mFaceLipCornerRight" translate="false">Lip Corner Right</string>
-	<string	name="title_mFaceLipUpperCenter" translate="false">Lip Upper Center</string>
-	<string	name="title_mFaceEyecornerInnerLeft" translate="false">Eye corner Inner Left</string>
-	<string	name="title_mFaceEyecornerInnerRight" translate="false">Eye corner Inner Right</string>
-	<string	name="title_mFaceNoseBridge" translate="false">Nose Bridge</string>
-	<string	name="title_mCollarLeft" translate="false">Collar</string>
-	<string	name="title_mShoulderLeft" translate="false">Whole Arm</string>
-	<string	name="title_mElbowLeft" translate="false">Forearm</string>
-	<string	name="title_mWristLeft" translate="false">Wrist</string>
-	<string	name="title_mHandMiddle1Left" translate="false">Middle Finger Base</string>
-	<string	name="title_mHandMiddle2Left" translate="false">Middle Finger Mid</string>
-	<string	name="title_mHandMiddle3Left" translate="false">Middle Finger Tip</string>
-	<string	name="title_mHandIndex1Left" translate="false">Index Finger Base</string>
-	<string	name="title_mHandIndex2Left" translate="false">Index Finger Mid</string>
-	<string	name="title_mHandIndex3Left" translate="false">Index Finger Tip</string>
-	<string	name="title_mHandRing1Left" translate="false">Ring Finger Base</string>
-	<string	name="title_mHandRing2Left" translate="false">Ring Finger Mid</string>
-	<string	name="title_mHandRing3Left" translate="false">Ring Finger Tip</string>
-	<string	name="title_mHandPinky1Left" translate="false">Pinky Finger Base</string>
-	<string	name="title_mHandPinky2Left" translate="false">Pinky Finger Mid</string>
-	<string	name="title_mHandPinky3Left" translate="false">Pinky Finger Tip</string>
-	<string	name="title_mHandThumb1Left" translate="false">Thumb Base</string>
-	<string	name="title_mHandThumb2Left" translate="false">Thumb Mid</string>
-	<string	name="title_mHandThumb3Left" translate="false">Thumb Tip</string>
-	<string	name="title_mCollarRight" translate="false">Collar</string>
-	<string	name="title_mShoulderRight" translate="false">Whole Arm</string>
-	<string	name="title_mElbowRight" translate="false">Forearm</string>
-	<string	name="title_mWristRight" translate="false">Wrist</string>
-	<string	name="title_mHandMiddle1Right" translate="false">Middle Finger Base</string>
-	<string	name="title_mHandMiddle2Right" translate="false">Middle Finger Mid</string>
-	<string	name="title_mHandMiddle3Right" translate="false">Middle Finger Tip</string>
-	<string	name="title_mHandIndex1Right" translate="false">Index Finger Base</string>
-	<string	name="title_mHandIndex2Right" translate="false">Index Finger Mid</string>
-	<string	name="title_mHandIndex3Right" translate="false">Index Finger Tip</string>
-	<string	name="title_mHandRing1Right" translate="false">Ring Finger Base</string>
-	<string	name="title_mHandRing2Right" translate="false">Ring Finger Mid</string>
-	<string	name="title_mHandRing3Right" translate="false">Ring Finger Tip</string>
-	<string	name="title_mHandPinky1Right" translate="false">Pinky Finger Base</string>
-	<string	name="title_mHandPinky2Right" translate="false">Pinky Finger Mid</string>
-	<string	name="title_mHandPinky3Right" translate="false">Pinky Finger Tip</string>
-	<string	name="title_mHandThumb1Right" translate="false">Thumb Base</string>
-	<string	name="title_mHandThumb2Right" translate="false">Thumb Mid</string>
-	<string	name="title_mHandThumb3Right" translate="false">Thumb Tip</string>
-	<string	name="title_mWingsRoot" translate="false">Root</string>
-	<string	name="title_mWing1Left" translate="false">Left 1</string>
-	<string	name="title_mWing2Left" translate="false">Left 2</string>
-	<string	name="title_mWing3Left" translate="false">Left 3</string>
-	<string	name="title_mWing4Left" translate="false">Left 4</string>
-	<string	name="title_mWing4FanLeft" translate="false">Left Fan</string>
-	<string	name="title_mWing1Right" translate="false">Right 1</string>
-	<string	name="title_mWing2Right" translate="false">Right 2</string>
-	<string	name="title_mWing3Right" translate="false">Right 3</string>
-	<string	name="title_mWing4Right" translate="false">Right 4</string>
-	<string	name="title_mWing4FanRight" translate="false">Right Fan</string>
-	<string	name="title_mHipRight" translate="false">Right Hip</string>
-	<string	name="title_mKneeRight" translate="false">Right Knee</string>
-	<string	name="title_mAnkleRight" translate="false">Right Ankle</string>
-	<string	name="title_mFootRight" translate="false">Right Foot</string>
-	<string	name="title_mToeRight" translate="false">Right Toe</string>
-	<string	name="title_mHipLeft" translate="false">Left Hip</string>
-	<string	name="title_mKneeLeft" translate="false">Left Knee</string>
-	<string	name="title_mAnkleLeft" translate="false">Left Ankle</string>
-	<string	name="title_mFootLeft" translate="false">Left Foot</string>
-	<string	name="title_mToeLeft" translate="false">Left Toe</string>
-	<string	name="title_mTail1" translate="false">Tail Base</string>
-	<string	name="title_mTail2" translate="false">Tail 2</string>
-	<string	name="title_mTail3" translate="false">Tail 3</string>
-	<string	name="title_mTail4" translate="false">Tail 4</string>
-	<string	name="title_mTail5" translate="false">Tail 5</string>
-	<string	name="title_mTail6" translate="false">Tail Tip</string>
-	<string	name="title_mGroin" translate="false">Groin</string>
-	<string	name="title_mHindLimbsRoot" translate="false">Root</string>
-	<string	name="title_mHindLimb1Left" translate="false">Left Base</string>
-	<string	name="title_mHindLimb2Left" translate="false">Left 2</string>
-	<string	name="title_mHindLimb3Left" translate="false">Left 3</string>
-	<string	name="title_mHindLimb4Left" translate="false">Left 4</string>
-	<string	name="title_mHindLimb1Right" translate="false">Right Base</string>
-	<string	name="title_mHindLimb2Right" translate="false">Right 2</string>
-	<string	name="title_mHindLimb3Right" translate="false">Right 3</string>
-	<string	name="title_mHindLimb4Right" translate="false">Right 4</string>
-	<string	name="title_BUTT" translate="false">Bottom</string>
-	<string	name="title_BELLY" translate="false">Belly</string>
-	<string	name="title_LEFT_PEC" translate="false">Left Pec</string>
-	<string	name="title_RIGHT_PEC" translate="false">Right Pec</string>
+	<string	name="title_mPelvis">Whole Avatar</string>
+	<string	name="title_mTorso">Torso</string>
+	<string	name="title_mChest">Chest</string>
+	<string	name="title_mNeck">Neck</string>
+	<string	name="title_mHead">Head</string>
+	<string	name="title_mEyeRight">Right Eye</string>
+	<string	name="title_mEyeLeft">Left Eye</string>
+	<string	name="title_mFaceForeheadLeft">Forehead Left Side</string>
+	<string	name="title_mFaceForeheadRight">Forehead Right Side</string>
+	<string	name="title_mFaceEyebrowOuterLeft">Eyebrow Outer Left</string>
+	<string	name="title_mFaceEyebrowCenterLeft">Eyebrow Middle Left</string>
+	<string	name="title_mFaceEyebrowInnerLeft">Eyebrow Inner Left</string>
+	<string	name="title_mFaceEyebrowOuterRight">Eyebrow Outer Right</string>
+	<string	name="title_mFaceEyebrowCenterRight">Eyebrow Middle Right</string>
+	<string	name="title_mFaceEyebrowInnerRight">Eyebrow Inner Right</string>
+	<string	name="title_mFaceEyeLidUpperLeft">EyeLid Upper Left</string>
+	<string	name="title_mFaceEyeLidLowerLeft">EyeLid Lower Left</string>
+	<string	name="title_mFaceEyeLidUpperRight">EyeLid Upper Right</string>
+	<string	name="title_mFaceEyeLidLowerRight">EyeLid Lower Left</string>
+	<string	name="title_mFaceEar1Left">Ear Upper Left</string>
+	<string	name="title_mFaceEar2Left">Ear Lower Left</string>
+	<string	name="title_mFaceEar1Right">Ear Upper Right</string>
+	<string	name="title_mFaceEar2Right">Ear Lower Right</string>
+	<string	name="title_mFaceNoseLeft">Nose Left</string>
+	<string	name="title_mFaceNoseCenter">Nose Center</string>
+	<string	name="title_mFaceNoseRight">Nose Right</string>
+	<string	name="title_mFaceCheekLowerLeft">Cheek Lower Left</string>
+	<string	name="title_mFaceCheekUpperLeft">Cheek Upper Left</string>
+	<string	name="title_mFaceCheekLowerRight">Cheek Lower Right</string>
+	<string	name="title_mFaceCheekUpperRight">Cheek Upper Right</string>
+	<string	name="title_mFaceJaw">Jaw</string>
+	<string	name="title_mFaceTeethLower">Teeth Lower</string>
+	<string	name="title_mFaceLipLowerLeft">Lip Lower Left</string>
+	<string	name="title_mFaceLipLowerRight">Lip Lower Right</string>
+	<string	name="title_mFaceLipLowerCenter">Lip Lower Middle</string>
+	<string	name="title_mFaceTongueBase">Tongue Base</string>
+	<string	name="title_mFaceTongueTip">Tongue Tip</string>
+	<string	name="title_mFaceJawShaper">Jaw Shaper</string>
+	<string	name="title_mFaceForeheadCenter">Forehead Middle</string>
+	<string	name="title_mFaceNoseBase">Nose Base</string>
+	<string	name="title_mFaceTeethUpper">Teeth Upper</string>
+	<string	name="title_mFaceLipUpperLeft">Lip Upper Left</string>
+	<string	name="title_mFaceLipUpperRight">Lip Upper Right</string>
+	<string	name="title_mFaceLipCornerLeft">Lip Corner Left</string>
+	<string	name="title_mFaceLipCornerRight">Lip Corner Right</string>
+	<string	name="title_mFaceLipUpperCenter">Lip Upper Center</string>
+	<string	name="title_mFaceEyecornerInnerLeft">Eye corner Inner Left</string>
+	<string	name="title_mFaceEyecornerInnerRight">Eye corner Inner Right</string>
+	<string	name="title_mFaceNoseBridge">Nose Bridge</string>
+	<string	name="title_mCollarLeft">Collar</string>
+	<string	name="title_mShoulderLeft">Whole Arm</string>
+	<string	name="title_mElbowLeft">Forearm</string>
+	<string	name="title_mWristLeft">Wrist</string>
+	<string	name="title_mHandMiddle1Left">Middle Finger Base</string>
+	<string	name="title_mHandMiddle2Left">Middle Finger Mid</string>
+	<string	name="title_mHandMiddle3Left">Middle Finger Tip</string>
+	<string	name="title_mHandIndex1Left">Index Finger Base</string>
+	<string	name="title_mHandIndex2Left">Index Finger Mid</string>
+	<string	name="title_mHandIndex3Left">Index Finger Tip</string>
+	<string	name="title_mHandRing1Left">Ring Finger Base</string>
+	<string	name="title_mHandRing2Left">Ring Finger Mid</string>
+	<string	name="title_mHandRing3Left">Ring Finger Tip</string>
+	<string	name="title_mHandPinky1Left">Pinky Finger Base</string>
+	<string	name="title_mHandPinky2Left">Pinky Finger Mid</string>
+	<string	name="title_mHandPinky3Left">Pinky Finger Tip</string>
+	<string	name="title_mHandThumb1Left">Thumb Base</string>
+	<string	name="title_mHandThumb2Left">Thumb Mid</string>
+	<string	name="title_mHandThumb3Left">Thumb Tip</string>
+	<string	name="title_mCollarRight">Collar</string>
+	<string	name="title_mShoulderRight">Whole Arm</string>
+	<string	name="title_mElbowRight">Forearm</string>
+	<string	name="title_mWristRight">Wrist</string>
+	<string	name="title_mHandMiddle1Right">Middle Finger Base</string>
+	<string	name="title_mHandMiddle2Right">Middle Finger Mid</string>
+	<string	name="title_mHandMiddle3Right">Middle Finger Tip</string>
+	<string	name="title_mHandIndex1Right">Index Finger Base</string>
+	<string	name="title_mHandIndex2Right">Index Finger Mid</string>
+	<string	name="title_mHandIndex3Right">Index Finger Tip</string>
+	<string	name="title_mHandRing1Right">Ring Finger Base</string>
+	<string	name="title_mHandRing2Right">Ring Finger Mid</string>
+	<string	name="title_mHandRing3Right">Ring Finger Tip</string>
+	<string	name="title_mHandPinky1Right">Pinky Finger Base</string>
+	<string	name="title_mHandPinky2Right">Pinky Finger Mid</string>
+	<string	name="title_mHandPinky3Right">Pinky Finger Tip</string>
+	<string	name="title_mHandThumb1Right">Thumb Base</string>
+	<string	name="title_mHandThumb2Right">Thumb Mid</string>
+	<string	name="title_mHandThumb3Right">Thumb Tip</string>
+	<string	name="title_mWingsRoot">Root</string>
+	<string	name="title_mWing1Left">Left 1</string>
+	<string	name="title_mWing2Left">Left 2</string>
+	<string	name="title_mWing3Left">Left 3</string>
+	<string	name="title_mWing4Left">Left 4</string>
+	<string	name="title_mWing4FanLeft">Left Fan</string>
+	<string	name="title_mWing1Right">Right 1</string>
+	<string	name="title_mWing2Right">Right 2</string>
+	<string	name="title_mWing3Right">Right 3</string>
+	<string	name="title_mWing4Right">Right 4</string>
+	<string	name="title_mWing4FanRight">Right Fan</string>
+	<string	name="title_mHipRight">Right Hip</string>
+	<string	name="title_mKneeRight">Right Knee</string>
+	<string	name="title_mAnkleRight">Right Ankle</string>
+	<string	name="title_mFootRight">Right Foot</string>
+	<string	name="title_mToeRight">Right Toe</string>
+	<string	name="title_mHipLeft">Left Hip</string>
+	<string	name="title_mKneeLeft">Left Knee</string>
+	<string	name="title_mAnkleLeft">Left Ankle</string>
+	<string	name="title_mFootLeft">Left Foot</string>
+	<string	name="title_mToeLeft">Left Toe</string>
+	<string	name="title_mTail1">Tail Base</string>
+	<string	name="title_mTail2">Tail 2</string>
+	<string	name="title_mTail3">Tail 3</string>
+	<string	name="title_mTail4">Tail 4</string>
+	<string	name="title_mTail5">Tail 5</string>
+	<string	name="title_mTail6">Tail Tip</string>
+	<string	name="title_mGroin">Groin</string>
+	<string	name="title_mHindLimbsRoot">Root</string>
+	<string	name="title_mHindLimb1Left">Left Base</string>
+	<string	name="title_mHindLimb2Left">Left 2</string>
+	<string	name="title_mHindLimb3Left">Left 3</string>
+	<string	name="title_mHindLimb4Left">Left 4</string>
+	<string	name="title_mHindLimb1Right">Right Base</string>
+	<string	name="title_mHindLimb2Right">Right 2</string>
+	<string	name="title_mHindLimb3Right">Right 3</string>
+	<string	name="title_mHindLimb4Right">Right 4</string>
+	<string	name="title_BUTT">Bottom</string>
+	<string	name="title_BELLY">Belly</string>
+	<string	name="title_LEFT_PEC">Left Pec</string>
+	<string	name="title_RIGHT_PEC">Right Pec</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack
@@ -1101,7 +1101,7 @@ width="565">
 				is_toggle="true"
 				layout="topleft"
 				enabled="true"
-				label="Your Poses"
+				label="Own Poses"
 				image_overlay="Hierarchy_View_On"
 				image_overlay_alignment="left"
 				image_bottom_pad="1"
