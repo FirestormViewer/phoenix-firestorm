@@ -24,6 +24,7 @@
  * $/LicenseInfo$
  */
 #include <string_view>
+#include <boost/algorithm/string.hpp>
 #include "fsfloaterposer.h"
 #include "fsposeranimator.h"
 #include "llagent.h"
