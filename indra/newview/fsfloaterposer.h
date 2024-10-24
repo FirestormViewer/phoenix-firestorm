@@ -84,7 +84,7 @@ class FSFloaterPoser : public LLFloater
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
-    void refreshPoseScroll(std::string scrollListName, std::string subDirectory);
+    void refreshPoseScroll(std::string_view scrollListName, std::string_view subDirectory);
 
     /// <summary>
     /// (Dis)Enables all of the posing controls; such as when you can't pose for reasons.
@@ -120,7 +120,7 @@ class FSFloaterPoser : public LLFloater
     /// Gets the collection of poser joints currently selected on the active bones-tab of the UI.
     /// </summary>
     /// <returns>The selected joints</returns>
-    std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints();
+    std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints() const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.
