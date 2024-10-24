@@ -30,7 +30,6 @@
 #include "llcharacter.h"
 #include "llagent.h"
 #include "fsposingmotion.h"
-#include <boost/algorithm/string.hpp>
 
 FSPoserAnimator::FSPoserAnimator() {}
 FSPoserAnimator::~FSPoserAnimator() {}
