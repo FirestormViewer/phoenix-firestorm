@@ -940,19 +940,19 @@
              function="SideTray.PanelPeopleTab"
              parameter="nearby_panel" />
         </menu_item_call>
-		
-<!-- FS:AR FIRE-30873 -->		
-		<menu_item_check
+
+<!-- FS:AR FIRE-30873 -->
+        <menu_item_check
          label="Poser"
          name="Poser"
          use_mac_ctrl="true">
-			<menu_item_check.on_check
+            <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="poser" />
-			<menu_item_check.on_click
+             parameter="fs_poser" />
+            <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="poser" />
-		</menu_item_check>
+             parameter="fs_poser" />
+        </menu_item_check>
 <!-- /FS:AR FIRE-30873 -->
 
         <menu_item_check
@@ -1785,21 +1785,6 @@
                  function="Tools.EnableSelectNextPart" />
             </menu_item_call>
         </menu>
-        <menu_item_separator/>
-				<menu_item_call
-				label="Unalpha Selected"
-				name="Unalpha">
-				<menu_item_call.on_click
-				function="Object.SetAlphaMode"
-				parameter="dealpha"/>
-				</menu_item_call>
-				<menu_item_call
-				label="Alpha Selected"
-				name="Alpha">
-				<menu_item_call.on_click
-				function="Object.SetAlphaMode"
-				parameter="alpha"/>
-				</menu_item_call>
         <menu_item_separator/>
 
         <menu_item_call
