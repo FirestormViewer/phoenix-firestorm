@@ -25,6 +25,7 @@
  */
 
 #include <deque>
+#include <boost/algorithm/string.hpp>
 #include "fsposingmotion.h"
 #include "llcharacter.h"
 
