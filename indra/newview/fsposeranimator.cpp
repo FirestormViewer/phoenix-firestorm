@@ -24,6 +24,7 @@
  * $/LicenseInfo$
  */
 
+#include <deque>
 #include "fsposeranimator.h"
 #include "llcharacter.h"
 #include "llagent.h"
