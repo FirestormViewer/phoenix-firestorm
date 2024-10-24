@@ -787,9 +787,9 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
             }
         }
     }
-    catch (...)
+    catch ( const std::exception& e )
     {
-        LL_WARNS("Posing") << "Threw an exception trying to load a hand pose: " << poseName << LL_ENDL;
+        LL_WARNS("Posing") << "Threw an exception trying to load a hand pose: " << poseName << " exception: " << e.what() << LL_ENDL;
     }
 
 }
