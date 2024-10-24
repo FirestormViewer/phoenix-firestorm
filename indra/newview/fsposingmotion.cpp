@@ -24,6 +24,7 @@
  * $/LicenseInfo$
  */
 
+#include <deque>
 #include "fsposingmotion.h"
 #include "llcharacter.h"
 
