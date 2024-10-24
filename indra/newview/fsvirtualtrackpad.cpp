@@ -272,7 +272,7 @@ void FSVirtualTrackpad::setPinchValue(F32 x, F32 y, F32 z)
     _pinchValueZ = _pinchCursorValueZ;
 }
 
-LLSD FSVirtualTrackpad::getValue() { return normalizePixelPos(_valueX, _valueY, _valueZ).getValue(); }
+LLSD FSVirtualTrackpad::getValue() const { return normalizePixelPos(_valueX, _valueY, _valueZ).getValue(); }
 LLSD FSVirtualTrackpad::getValueDelta() { return normalizeDelta(_valueDeltaX, _valueDeltaY, _valueDeltaZ).getValue(); }
 
 LLSD FSVirtualTrackpad::getPinchValue() { return normalizePixelPos(_pinchValueX, _pinchValueY, _pinchValueZ).getValue(); }

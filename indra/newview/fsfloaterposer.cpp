@@ -44,6 +44,7 @@
 #include "llsliderctrl.h"
 #include "lltabcontainer.h"
 #include "llcheckboxctrl.h"
+#include <boost/algorithm/string.hpp>
 
 namespace
 {

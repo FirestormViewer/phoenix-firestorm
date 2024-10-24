@@ -78,7 +78,7 @@ public:
     /// <summary>
     /// Gets the current position of the first 3-axis cursor.
     /// </summary>
-    virtual LLSD getValue();
+    virtual LLSD getValue() const;
 
     /// <summary>
     /// Gets the most recent delta of position of the first 3-axis cursor.
