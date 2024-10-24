@@ -27,7 +27,7 @@
 #ifndef LL_FSPoserAnimator_H
 #define LL_FSPoserAnimator_H
 
-#include "fsposingMotion.h"
+#include "fsposingmotion.h"
 #include "llvoavatar.h"
 
 /// <summary>

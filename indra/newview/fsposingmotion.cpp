@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-#include "fsposingMotion.h"
+#include "fsposingmotion.h"
 #include "llcharacter.h"
 
 FSPosingMotion::FSPosingMotion(const LLUUID &id) : LLMotion(id)
