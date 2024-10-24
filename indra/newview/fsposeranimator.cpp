@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#include <deque>
+#include <boost/algorithm/string.hpp>
 #include "fsposeranimator.h"
 #include "llcharacter.h"
 #include "llagent.h"
@@ -58,7 +60,7 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
         return;
 
     bool arePosing = isPosingAvatarJoint(avatar, joint);
-    if (arePosing && shouldPose || !arePosing && !shouldPose) // could !XOR, but this is readable
+    if ( (arePosing && shouldPose) || (!arePosing && !shouldPose) ) // could !XOR, but this is readable
         return;
 
     FSPosingMotion* posingMotion = getPosingMotion(avatar);
@@ -452,10 +454,22 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
         return;
 
     LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
-    jointPose->setTargetRotation(rot_quat);
+    switch (style)
+    {
+        case SYMPATHETIC:
+        case MIRROR:
+            jointPose->setTargetRotation(rot_quat);
+            break;
 
-    if (style == NONE)
-        return;
+        case DELTAMODE:
+            jointPose->applyDeltaRotation(rot_quat);
+            return;
+            
+        case NONE:
+        default:
+            jointPose->setTargetRotation(rot_quat);
+            return;
+    }
 
     FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
@@ -865,8 +879,8 @@ bool FSPoserAnimator::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar,
     if (!joint)
         return false;
 
-    auto rotation = getJointRotation(avatar, *joint, SWAP_NOTHING, NEGATE_NOTHING, false);
-    auto position = getJointPosition(avatar, *joint);
+    auto rotation = getJointRotation(avatar, *joint, SWAP_NOTHING, NEGATE_NOTHING, true);
+    auto position = getJointPosition(avatar, *joint, true);
 
     switch (joint->boneType())
     {

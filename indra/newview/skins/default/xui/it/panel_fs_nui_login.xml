@@ -18,6 +18,8 @@
                         <layout_panel name="password_container">
                             <line_editor name="password_edit" label="Password"/>
                             <check_box label="Ricorda password" name="remember_check"/>
+                            <button name="password_show_btn" tool_tip="Mostra password" />
+                            <button name="password_hide_btn" tool_tip="Nascondi password" />
                         </layout_panel> <!-- password_container -->
                         <layout_panel name="start_location_panel">
                             <combo_box label="Luogo di avvio" name="start_location_combo">

@@ -1547,6 +1547,13 @@ void render_ui(F32 zoom_factor, int subfield)
             LLHUDObject::renderAll();
             render_ui_2d();
         }
+        // <FS:Beq> FIRE-33239 - particles do not sie when UI is disabled
+        if (!render_ui)
+        {
+            // Make sure particle effects disappear
+            LLHUDObject::renderAllForTimer();
+        }
+        // </FS:Beq>
 
         gViewerWindow->setup2DRender();
         gViewerWindow->updateDebugText();

@@ -238,6 +238,19 @@ public:
         }
 
         /// <summary>
+        /// Applies a delta to the rotation the joint currently targets.
+        /// </summary>
+        void applyDeltaRotation(const LLQuaternion& rot)
+        {
+            auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - _timeLastUpdatedRotation;
+            if (timeIntervalSinceLastRotationChange > _undoUpdateInterval)
+                addLastRotationToUndo();
+
+            _timeLastUpdatedRotation = std::chrono::system_clock::now();
+            _targetRotation          = _targetRotation * rot;
+        }
+
+        /// <summary>
         /// Gets the scale the animator wishes the joint to have.
         /// </summary>
         LLVector3 getTargetScale() const { return _targetScale; }

@@ -38,11 +38,14 @@ typedef enum E_LoadPoseMethods
 {
     ROTATIONS               = 1,
     POSITIONS               = 2,
-    SCALES                  = 4,
-    ROTATIONS_AND_POSITIONS = 3,
-    ROTATIONS_AND_SCALES    = 4,
-    POSITIONS_AND_SCALES    = 5,
-    ROT_POS_AND_SCALES      = 6
+    SCALES                  = 3,
+    ROTATIONS_AND_POSITIONS = 4,
+    ROTATIONS_AND_SCALES    = 5,
+    POSITIONS_AND_SCALES    = 6,
+    ROT_POS_AND_SCALES      = 7,
+    HAND_RIGHT              = 8,
+    HAND_LEFT               = 9,
+    FACE_ONLY               = 10,
 } E_LoadPoseMethods;
 
 /// <summary>
@@ -77,21 +80,11 @@ class FSFloaterPoser : public LLFloater
     /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
     /// </summary>
     const F32 normalTrackpadRangeInRads = F_PI;
-
-    /// <summary>
-    /// The trackpad is the size it is, mousing on it has arbitrary 'sensitivity': how much angular change do we want per pixels moved.
-    /// </summary>
-    const F32 trackPadDefaultSensitivity = 0.8;
-
-    /// <summary>
-    /// These are defaults, subjective and should be overridden by optional values in XML.
-    /// </summary>
-    const F32 trackPadHighSensitivity = 0.3;
     
     /// <summary>
-    /// Refreshes the pose load/save list.
+    /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
-    void refreshPosesScroll();
+    void refreshPoseScroll(std::string_view scrollListName, std::string_view subDirectory);
 
     /// <summary>
     /// (Dis)Enables all of the posing controls; such as when you can't pose for reasons.
@@ -127,7 +120,7 @@ class FSFloaterPoser : public LLFloater
     /// Gets the collection of poser joints currently selected on the active bones-tab of the UI.
     /// </summary>
     /// <returns>The selected joints</returns>
-    std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints();
+    std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints() const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.
@@ -213,7 +206,8 @@ class FSFloaterPoser : public LLFloater
     void onToggleAdvancedPanel();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
-    void setRotationChangeButtons(bool mirror, bool sympathetic);
+    void onToggleDeltaModeChange();
+    void setRotationChangeButtons(bool mirror, bool sympathetic, bool togglingDelta);
     void onUndoLastRotation();
     void onRedoLastRotation();
     void onUndoLastPosition();
@@ -228,7 +222,6 @@ class FSFloaterPoser : public LLFloater
     void onLimbYawPitchRollChanged();
     void onAvatarPositionSet();
     void onAdvancedPositionSet();
-    void onAdvancedRotationSet();
     void onAdvancedScaleSet();
     void onClickToggleSelectedBoneEnabled();
     void onClickRecaptureSelectedBones();
@@ -236,6 +229,10 @@ class FSFloaterPoser : public LLFloater
     void onClickFlipSelectedJoints();
     void onPoseJointsReset();
     void onOpenSetAdvancedPanel();
+    void onAdjustTrackpadSensitivity();
+    void onClickLoadLeftHandPose();
+    void onClickLoadRightHandPose();
+    void onClickLoadHandPose(bool isRightHand);
 
     // UI Refreshments
     void refreshRotationSliders();
@@ -308,6 +305,13 @@ class FSFloaterPoser : public LLFloater
     /// The constant time interval, in seconds, a user must click twice within to successfully double-click a button.
     /// </summary>
     std::chrono::duration<double> const _doubleClickInterval = std::chrono::duration<double>(0.3);
+
+    /// <summary>
+    /// Unwraps a normalized value from the trackball to a slider value.
+    /// </summary>
+    /// <param name="scale">The scale value from the trackball.</param>
+    /// <returns>A value appropriate for fitting a slider.</returns>
+    static F32 unWrapScale(F32 scale);
 };
 
 #endif

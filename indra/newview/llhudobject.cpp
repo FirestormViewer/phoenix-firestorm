@@ -309,10 +309,20 @@ void LLHUDObject::renderAllForTimer()
         {
             sHUDObjects.erase(cur_it);
         }
-        else if (hud_objp->isVisible())
+        // <FS:Beq> FIRE-33239 - particles do not sie when UI is disabled
+        // else if (hud_objp->isVisible())
+        // {
+        //     hud_objp->renderForTimer();
+        // }
+        else
         {
-            hud_objp->renderForTimer();
+            LLHUDEffect* effect = dynamic_cast<LLHUDEffect*>(hud_objp);
+            if (effect || hud_objp->isVisible())
+            {
+                hud_objp->renderForTimer();
+            }
         }
+        // </FS:Beq>
     }
 }
 
