@@ -3,8 +3,8 @@
 	<menu_item_call label="Nur Rotationen laden" name="rotations"/>
 	<menu_item_call label="Nur Positionen laden" name="positions"/>
 	<menu_item_call label="Nur Skalierung laden" name="scale"/>
-	<menu_item_call label="Rotationen &amp; Positionen laden" name="rotations"/>
-	<menu_item_call label="Rotationen &amp; Skalierung laden" name="rotations"/>
-	<menu_item_call label="Positionen und Skalierung laden" name="rotations"/>
-	<menu_item_call label="Alles laden" name="rotations"/>
+	<menu_item_call label="Rotationen &amp; Positionen laden" name="rotations_positions"/>
+	<menu_item_call label="Rotationen &amp; Skalierung laden" name="rotations_scales"/>
+	<menu_item_call label="Positionen und Skalierung laden" name="positions_scales"/>
+	<menu_item_call label="Alles laden" name="load_all"/>
 </toggleable_menu>
