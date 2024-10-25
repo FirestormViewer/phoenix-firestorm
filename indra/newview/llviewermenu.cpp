@@ -5796,6 +5796,23 @@ class LLLandCanSit : public view_listener_t
     }
 };
 
+// <FS:makidoll> Add teleport here button
+class LLLandTeleportHere : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLPickInfo pick = LLToolPie::getInstance()->getPick();
+
+        LLVector3d pos = pick.mPosGlobal;
+        pos.mdV[VZ] += gAgentAvatarp->getPelvisToFoot();
+
+        gAgent.teleportViaLocationLookAt(pos);
+        
+        return true;
+    }
+};
+// </FS:makidoll>
+
 //-------------------------------------------------------------------
 // Help menu functions
 //-------------------------------------------------------------------
@@ -8133,6 +8150,24 @@ void handle_look_at_selection(const LLSD& param)
         }
     }
 }
+
+// <FS:makidoll> Add teleport here button
+void handle_object_teleport_here()
+{
+    LLPickInfo pick = LLToolPie::getInstance()->getPick();
+    LLViewerObject *object = pick.getObject();
+
+    if (!object || pick.mPickType == LLPickInfo::PICK_FLORA)
+    {
+        return;
+    }
+
+    LLVector3d pos = pick.mPosGlobal;
+    pos.mdV[VZ] += gAgentAvatarp->getPelvisToFoot();
+
+    gAgent.teleportViaLocationLookAt(pos);
+}
+// </FS:makidoll>
 
 // <FS:Ansariel> Option to try via exact position
 //void handle_zoom_to_object(LLUUID object_id)
@@ -13060,6 +13095,7 @@ void initialize_menus()
     enable.add("Object.EnableUnmute", boost::bind(&enable_object_unmute));
     enable.add("Object.EnableBuy", boost::bind(&enable_buy_object));
     commit.add("Object.ZoomIn", boost::bind(&handle_look_at_selection, "zoom"));
+    commit.add("Object.TeleportHere", boost::bind(&handle_object_teleport_here)); // <FS:makidoll> Add teleport here button
     enable.add("Object.EnableScriptInfo", boost::bind(&enable_script_info));    // <FS:CR>
     enable.add("Object.EnableShowOriginal", boost::bind(&enable_object_show_original)); // <FS:Ansariel> Disable if prevented by RLVa
 
@@ -13077,6 +13113,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLLandBuild(), "Land.Build");
     view_listener_t::addMenu(new LLLandSit(), "Land.Sit");
     view_listener_t::addMenu(new LLLandCanSit(), "Land.CanSit");
+    view_listener_t::addMenu(new LLLandTeleportHere(), "Land.TeleportHere"); // <FS:makidoll> Add teleport here button
     view_listener_t::addMenu(new LLLandBuyPass(), "Land.BuyPass");
     view_listener_t::addMenu(new LLLandEdit(), "Land.Edit");
 
