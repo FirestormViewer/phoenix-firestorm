@@ -27,7 +27,7 @@
 #ifndef LL_FSPoserAnimator_H
 #define LL_FSPoserAnimator_H
 
-#include "fsposingMotion.h"
+#include "fsposingmotion.h"
 #include "llvoavatar.h"
 
 /// <summary>
@@ -53,6 +53,7 @@ typedef enum E_BoneDeflectionStyles
     NONE        = 0,  // do nothing additional
     MIRROR      = 1,  // change the other joint, like in a mirror, eg: one left one right
     SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
+    DELTAMODE   = 3,  // each selected joint changes by the same supplied amount relative to their current
 } E_BoneDeflectionStyles;
 
 /// <summary>
@@ -160,7 +161,7 @@ public:
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints {
         // head, torso, legs
-        {"mPelvis", "", WHOLEAVATAR, {"mTorso", "mHipLeft", "mHipRight"}}, {"mTorso", "", BODY, {"mChest"}}, {"mChest", "", BODY, {"mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot"}}, {"mNeck", "", BODY, {"mHead"}}, {"mHead", "", BODY},
+        {"mHead", "", BODY}, {"mNeck", "", BODY, {"mHead"}}, {"mPelvis", "", WHOLEAVATAR, {"mTorso", "mHipLeft", "mHipRight"}}, {"mChest", "", BODY, {"mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot"}}, {"mTorso", "", BODY, {"mChest"}},
         {"mCollarLeft", "mCollarRight", BODY, {"mShoulderLeft"}}, {"mShoulderLeft", "mShoulderRight", BODY, {"mElbowLeft"}}, {"mElbowLeft", "mElbowRight", BODY, {"mWristLeft"}}, {"mWristLeft", "mWristRight", BODY},
         {"mCollarRight", "mCollarLeft", BODY, {"mShoulderRight"}, true}, {"mShoulderRight", "mShoulderLeft", BODY, {"mElbowRight"}, true},  {"mElbowRight", "mElbowLeft", BODY, {"mWristRight"}, true},  {"mWristRight", "mWristLeft", BODY, {}, true},
         {"mHipLeft", "mHipRight", BODY, {"mKneeLeft"}}, {"mKneeLeft", "mKneeRight", BODY, {"mAnkleLeft"}},  {"mAnkleLeft", "mAnkleRight", BODY},
@@ -365,7 +366,7 @@ public:
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
-    void setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
+    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, LLVector3 rotation, E_BoneDeflectionStyles style,
                           E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>

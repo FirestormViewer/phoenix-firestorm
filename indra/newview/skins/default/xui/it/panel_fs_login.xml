@@ -45,6 +45,8 @@
 			<button label="Entra" name="connect_btn"/>
 			<check_box label="Ricorda nome utente" name="remember_username_check"/>
 			<check_box label="Ricorda password" name="remember_check"/>
+			<button name="password_show_btn" tool_tip="Mostra password" />
+			<button name="password_hide_btn" tool_tip="Nascondi password" />
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">

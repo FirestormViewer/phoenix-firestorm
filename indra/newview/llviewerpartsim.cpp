@@ -283,7 +283,10 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
 
     LLViewerCamera* camera = LLViewerCamera::getInstance();
     LLViewerRegion *regionp = getRegion();
-    S32 end = (S32) mParticles.size();
+    // <FS:Beq> FIRE-34600 - Bugsplat AVX2 particle count mismatch    
+    // S32 end = (S32) mParticles.size();
+    bool changed = false;
+    // </FS:Beq>
     for (S32 i = 0 ; i < (S32)mParticles.size();)
     {
         LLVector3 a(0.f, 0.f, 0.f);
@@ -399,8 +402,15 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
         // Kill dead particles (either flagged dead, or too old)
         if ((part->mLastUpdateTime > part->mMaxAge) || (LLViewerPart::LL_PART_DEAD_MASK == part->mFlags))
         {
-            vector_replace_with_last(mParticles, mParticles.begin() + i); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+            // <FS:Beq> FIRE-34600 - Bugsplat AVX2 particle count mismatch
+            // mParticles[i] = mParticles.back() ;
+            // mParticles.pop_back() ;
+            // delete part ;
+            vector_replace_with_last(mParticles, mParticles.begin() + i);
+            --LLViewerPartSim::sParticleCount; 
             delete part ;
+            changed = true; 
+            // </FS:Beq>
         }
         else
         {
@@ -408,8 +418,18 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
             if (!posInGroup(part->mPosAgent, desired_size))
             {
                 // Transfer particles between groups
-                LLViewerPartSim::getInstance()->put(part) ;
-                vector_replace_with_last(mParticles, mParticles.begin() + i); // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
+                // <FS:Beq> FIRE-34600 - Bugsplat AVX2 particle count mismatch
+                // LLViewerPartSim::getInstance()->put(part) ;
+                // mParticles[i] = mParticles.back() ;
+                // mParticles.pop_back() ;                
+                vector_replace_with_last(mParticles, mParticles.begin() + i); 
+                LLViewerPartSim::getInstance()->put(part) ; 
+                // Note: put() uses addpart when succesful, this increase sParticleCount by 1
+                // even though it has stayed the same. If it is not succesful then we need to decrease by 1
+                // so a decrement here works for both cases.
+                --LLViewerPartSim::sParticleCount; 
+                changed = true;
+                // </FS:Beq>
             }
             else
             {
@@ -418,16 +438,25 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
         }
     }
 
-    S32 removed = end - (S32)mParticles.size();
-    if (removed > 0)
+    // <FS:Beq> FIRE-34600 - Bugsplat AVX2 particle count mismatch
+    // S32 removed = end - (S32)mParticles.size();
+    // if (removed > 0)
+    // {
+    //     // we removed one or more particles, so flag this group for update
+    //     if (mVOPartGroupp.notNull())
+    //     {
+    //         gPipeline.markRebuild(mVOPartGroupp->mDrawable, LLDrawable::REBUILD_ALL);
+    //     }
+    //     LLViewerPartSim::decPartCount(removed);
+    // }    
+    if (changed)
     {
-        // we removed one or more particles, so flag this group for update
         if (mVOPartGroupp.notNull())
         {
             gPipeline.markRebuild(mVOPartGroupp->mDrawable, LLDrawable::REBUILD_ALL);
         }
-        LLViewerPartSim::sParticleCount -= removed; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
     }
+    // </FS:Beq>
 
     // Kill the viewer object if this particle group is empty
     if (mParticles.empty())

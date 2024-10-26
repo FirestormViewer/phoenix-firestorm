@@ -374,7 +374,9 @@ private:
 };
 
 // consts from viewer.h
-const S32 AGENT_UPDATES_PER_SECOND  = 125; // Value derived experimentally to avoid Input Delays with latest PBR-Capable Viewers when viewer FPS is highly volatile.
+// <AS:chanayane> Reduce AGENT_UPDATES_PER_SECOND to 20 instead of 125(TommyTheTerrible)
+const S32 AGENT_UPDATES_PER_SECOND = 20; // Value derived experimentally to avoid Input Delays with latest PBR-Capable Viewers when viewer FPS is highly volatile.
+// <AS:chanayane>
 const S32 AGENT_FORCE_UPDATES_PER_SECOND  = 1;
 
 // Globals with external linkage. From viewer.h

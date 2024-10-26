@@ -281,6 +281,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
             channel_type='beta'
+        elif channel_qualifier.startswith('alpha'):
+            channel_type='alpha'
         #<FS:TS> Use our more-or-less-standard channel types instead of LL's
         #elif channel_qualifier.startswith('project'):
         #    channel_type='project'
@@ -288,6 +290,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         #    channel_type='test'
         elif channel_qualifier.startswith('nightly'):
             channel_type='nightly'
+        elif channel_qualifier.startswith('manual'):
+            channel_type='manual'
+        elif channel_qualifier.startswith('profiling'):
+            channel_type='profiling'
         else:
             channel_type='private'
         return channel_type
@@ -361,10 +367,14 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
+        chan = self.channel_type()
+        if chan in ['alpha', 'nightly','manual', 'profiling']:
+            chan = 'test'
+
         if self.fs_is_opensim():
-            return "icons/" + self.channel_type() + "-os"
+            return "icons/" + chan + "-os"
         # </FS:ND>
-        return "icons/" + self.channel_type()
+        return "icons/" + chan
 
     def extract_names(self,src):
         """Extract contributor names from source file, returns string"""
@@ -928,6 +938,22 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         return result
         # </FS:Ansariel>
+    def dl_url_from_channel(self):
+        if self.channel_type() == 'release':
+            return 'https://www.firestormviewer.org/choose-your-platform'
+        elif self.channel_type() == 'beta':
+            return 'https://www.firestormviewer.org/early-access-beta-downloads'
+        elif self.channel_type() == 'alpha':
+            return 'https://www.firestormviewer.org/early-access-alpha-downloads'
+        elif self.channel_type() == 'manual':
+            return 'https://www.firestormviewer.org/early-access-manual-downloads'
+        elif self.channel_type() == 'profiling':
+            return 'https://www.firestormviewer.org/profiling-downloads'
+        elif self.channel_type() == 'nightly':
+            return 'https://www.firestormviewer.org/firestorm-nightly-build-downloads'
+        else:
+            return '<NO-URL>'
+        
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
@@ -939,7 +965,8 @@ class Windows_x86_64_Manifest(ViewerManifest):
             'final_exe' : self.final_exe(),
             'flags':'',
             'app_name':self.app_name(),
-            'app_name_oneword':self.app_name_oneword()
+            'app_name_oneword':self.app_name_oneword(),
+            'dl_url':self.dl_url_from_channel()
             }
 
         substitution_strings = self.fs_splice_grid_substitution_strings( substitution_strings ) #<FS:ND/> Add grid args
@@ -974,6 +1001,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             OutFile "%(installer_file)s"
             !define INSTNAME   "%(app_name_oneword)s"
             !define SHORTCUT   "%(app_name)s"
+            !define DL_URL   "%(dl_url)s"
             !define URLNAME   "secondlife"
             !define IS64BIT   "%(is64bit)d"
             !define ISAVX2   "%(isavx2)d"

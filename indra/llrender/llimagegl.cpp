@@ -1243,8 +1243,13 @@ void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 widt
                 if (!scratch)
                 {
                     LLError::LLUserWarningMsg::showOutOfMemory();
-                    LL_ERRS() << "Failed to allocate " << (U32)(width * height * sizeof(U32))
+                    // <FS:Beq> FIRE-34374 - OOM Crash 80% of which are in render debug text 
+                    // LL_ERRS() << "Failed to allocate " << (U32)(width * height * sizeof(U32))
+                    //           << " bytes for a manual image W" << width << " H" << height << LL_ENDL;                    
+                    LL_WARNS() << "Failed to allocate " << (U32)(width * height * sizeof(U32))
                               << " bytes for a manual image W" << width << " H" << height << LL_ENDL;
+                    return;
+                    // </FS:Beq>
                 }
 
                 U32 pixel_count = (U32)(width * height);
@@ -1269,8 +1274,13 @@ void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 widt
                 if (!scratch)
                 {
                     LLError::LLUserWarningMsg::showOutOfMemory();
-                    LL_ERRS() << "Failed to allocate " << (U32)(width * height * sizeof(U32))
+                    // <FS:Beq> FIRE-34374 - OOM Crash 80% of which are in render debug text 
+                    // LL_ERRS() << "Failed to allocate " << (U32)(width * height * sizeof(U32))
+                    //     << " bytes for a manual image W" << width << " H" << height << LL_ENDL;
+                    LL_WARNS() << "Failed to allocate " << (U32)(width * height * sizeof(U32))
                         << " bytes for a manual image W" << width << " H" << height << LL_ENDL;
+                    return;
+                    // </FS:Beq>
                 }
 
                 U32 pixel_count = (U32)(width * height);

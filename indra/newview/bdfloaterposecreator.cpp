@@ -1757,8 +1757,8 @@ void BDFloaterPoseCreator::onJointControlsRefresh()
         mModifierTabs->selectTab(0);
     }
     //BD - Swap out of "Scale" and "Rotation" tabs when they are not available.
-    if (curr_idx == 2 && !mModifierTabs->getTabButtonEnabled(2)
-        || curr_idx == 0 && !mModifierTabs->getTabButtonEnabled(0))
+    if ((curr_idx == 2 && !mModifierTabs->getTabButtonEnabled(2))
+        || (curr_idx == 0 && !mModifierTabs->getTabButtonEnabled(0)))
     {
         mModifierTabs->selectTab(1);
     }
