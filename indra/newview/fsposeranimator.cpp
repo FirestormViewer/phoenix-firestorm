@@ -31,11 +31,9 @@
 #include "llagent.h"
 #include "fsposingmotion.h"
 
-FSPoserAnimator::FSPoserAnimator() {}
-FSPoserAnimator::~FSPoserAnimator() {}
-std::map<LLUUID, LLAssetID> FSPoserAnimator::_avatarIdToRegisteredAnimationId;
+std::map<LLUUID, LLAssetID> FSPoserAnimator::sAvatarIdToRegisteredAnimationId;
 
-bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
+bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint)
 {
     if (!isAvatarSafeToUse(avatar))
         return false;
@@ -54,7 +52,7 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint
     return posingMotion->currentlyPosingJoint(jointPose);
 }
 
-void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint, bool shouldPose)
+void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, bool shouldPose)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -80,7 +78,7 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar *avatar, FSPoserJoint join
         posingMotion->removeJointFromState(jointPose);
 }
 
-void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
+void FSPoserAnimator::resetAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -100,7 +98,7 @@ void FSPoserAnimator::resetAvatarJoint(LLVOAvatar *avatar, FSPoserJoint joint)
     jointPose->setTargetRotation(jointPose->getBeginningRotation());
 }
 
-void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -128,7 +126,7 @@ void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joi
     oppositeJointPose->undoLastRotationSet();
 }
 
-void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -156,7 +154,7 @@ void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joi
     oppositeJointPose->undoLastPositionSet();
 }
 
-void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -184,7 +182,7 @@ void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint,
     oppositeJointPose->undoLastScaleSet();
 }
 
-void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -212,7 +210,7 @@ void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, FSPoserJoint joint,
     oppositeJointPose->setTargetPosition(oppositeJointPose->getBeginningPosition());
 }
 
-void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -240,7 +238,7 @@ void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_
     oppositeJointPose->setTargetScale(oppositeJointPose->getBeginningScale());
 }
 
-bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, FSPoserJoint joint)
+bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint)
 {
     if (!isAvatarSafeToUse(avatar))
         return false;
@@ -259,7 +257,7 @@ bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, FSPoserJoint join
     return jointPose->canRedoRotation();
 }
 
-void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -287,7 +285,7 @@ void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, FSPoserJoint joi
     oppositeJointPose->redoLastRotationSet();
 }
 
-void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -315,7 +313,7 @@ void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, FSPoserJoint joi
     oppositeJointPose->redoLastPositionSet();
 }
 
-void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint, E_BoneDeflectionStyles style)
+void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -343,7 +341,7 @@ void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, FSPoserJoint joint,
     oppositeJointPose->redoLastScaleSet();
 }
 
-LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar* avatar, FSPoserJoint joint, bool forRecapture)
+LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, bool forRecapture) const
 {
     LLVector3 pos;
     if (!isAvatarSafeToUse(avatar))
@@ -365,7 +363,7 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar* avatar, FSPoserJoint joi
     return pos;
 }
 
-void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 position, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -414,7 +412,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar *avatar, const FSPoserJoint *j
     }
 }
 
-LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture)
+LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture) const
 {
     LLVector3 vec3;
     if (!isAvatarSafeToUse(avatar))
@@ -437,7 +435,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar *avatar, FSPoserJoint joi
     return translateRotationFromQuaternion(translation, negation, rot);
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 rotation, E_BoneDeflectionStyles style,
+void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style,
                                        E_BoneAxisTranslation translation, S32 negation)
 {
     if (!isAvatarSafeToUse(avatar))
@@ -492,7 +490,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar *avatar, const FSPoserJoint *j
     }
 }
 
-void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint)
+void FSPoserAnimator::reflectJoint(LLVOAvatar* avatar, const FSPoserJoint* joint)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -526,7 +524,7 @@ void FSPoserAnimator::reflectJoint(LLVOAvatar *avatar, const FSPoserJoint *joint
     oppositeJointPose->setTargetRotation(first_inv);
 }
 
-void FSPoserAnimator::flipEntirePose(LLVOAvatar *avatar)
+void FSPoserAnimator::flipEntirePose(LLVOAvatar* avatar)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -553,8 +551,7 @@ void FSPoserAnimator::flipEntirePose(LLVOAvatar *avatar)
 }
 
 // from the UI to the bone, the inverse translation, the un-swap, the backwards
-LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslation translation, S32 negation,
-                                                            LLVector3 rotation)
+LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation)
 {
     if (negation & NEGATE_ALL)
     {
@@ -608,7 +605,7 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslatio
 }
 
 // from the bone to the UI; this is the 'forwards' use of the enum
-LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, LLQuaternion rotation)
+LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, const LLQuaternion& rotation) const
 {
     LLVector3 vec3;
 
@@ -659,7 +656,7 @@ LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation
     return vec3;
 }
 
-LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar* avatar, FSPoserJoint joint, bool forRecapture)
+LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, bool forRecapture) const
 {
     LLVector3 scale;
     if (!isAvatarSafeToUse(avatar))
@@ -681,7 +678,7 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar* avatar, FSPoserJoint joint,
     return scale;
 }
 
-void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *joint, LLVector3 scale, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -712,7 +709,7 @@ void FSPoserAnimator::setJointScale(LLVOAvatar *avatar, const FSPoserJoint *join
     oppositeJointPose->setTargetScale(scale);
 }
 
-const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(std::string jointName)
+const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(const std::string& jointName)
 {
     for (size_t index = 0; index != PoserJoints.size(); ++index)
     {
@@ -758,7 +755,7 @@ void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)
     avatar->stopMotion(posingMotion->motionId());
 }
 
-bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
+bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar) const
 {
     if (!isAvatarSafeToUse(avatar))
         return false;
@@ -770,15 +767,15 @@ bool FSPoserAnimator::isPosingAvatar(LLVOAvatar* avatar)
     return !posingMotion->isStopped();
 }
 
-FSPosingMotion* FSPoserAnimator::getPosingMotion(LLVOAvatar* avatar)
+FSPosingMotion* FSPoserAnimator::getPosingMotion(LLVOAvatar* avatar) const
 {
     if (!isAvatarSafeToUse(avatar))
         return nullptr;
 
-    if (_avatarIdToRegisteredAnimationId.find(avatar->getID()) == _avatarIdToRegisteredAnimationId.end())
+    if (sAvatarIdToRegisteredAnimationId.find(avatar->getID()) == sAvatarIdToRegisteredAnimationId.end())
         return nullptr;
 
-    return dynamic_cast<FSPosingMotion*>(avatar->findMotion(_avatarIdToRegisteredAnimationId[avatar->getID()]));
+    return dynamic_cast<FSPosingMotion*>(avatar->findMotion(sAvatarIdToRegisteredAnimationId[avatar->getID()]));
 }
 
 FSPosingMotion* FSPoserAnimator::findOrCreatePosingMotion(LLVOAvatar* avatar)
@@ -792,7 +789,7 @@ FSPosingMotion* FSPoserAnimator::findOrCreatePosingMotion(LLVOAvatar* avatar)
         LLAssetID animationAssetId = mTransactionID.makeAssetID(gAgent.getSecureSessionID());
 
         if (avatar->registerMotion(animationAssetId, FSPosingMotion::create))
-            _avatarIdToRegisteredAnimationId[avatar->getID()] = animationAssetId;
+            sAvatarIdToRegisteredAnimationId[avatar->getID()] = animationAssetId;
 
         return dynamic_cast<FSPosingMotion*>(avatar->createMotion(animationAssetId));
     }
@@ -800,7 +797,7 @@ FSPosingMotion* FSPoserAnimator::findOrCreatePosingMotion(LLVOAvatar* avatar)
     return motion;
 }
 
-bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar *avatar)
+bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar* avatar) const
 {
     if (!avatar)
         return false;
@@ -829,7 +826,7 @@ bool FSPoserAnimator::writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar)
     return true;
 }
 
-bool FSPoserAnimator::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint, int tabStops)
+bool FSPoserAnimator::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint, S32 tabStops)
 {
     if (!joint)
         return false;
@@ -903,30 +900,21 @@ bool FSPoserAnimator::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar,
     return true;
 }
 
-std::string FSPoserAnimator::vec3ToXYZString(LLVector3 val)
+std::string FSPoserAnimator::vec3ToXYZString(const LLVector3& val)
 {
-    return f32ToString(val[VX]) + " " + f32ToString(val[VY]) + " " + f32ToString(val[VZ]);
+    return std::to_string(val[VX]) + " " + std::to_string(val[VY]) + " " + std::to_string(val[VZ]);
 }
 
-std::string FSPoserAnimator::rotationToYZXString(LLVector3 val)
+std::string FSPoserAnimator::rotationToYZXString(const LLVector3& val)
 {
-    return f32ToString(val[VY] * RAD_TO_DEG) + " " + f32ToString(val[VZ] * RAD_TO_DEG) + " " + f32ToString(val[VX] * RAD_TO_DEG);
+    return std::to_string(val[VY] * RAD_TO_DEG) + " " + std::to_string(val[VZ] * RAD_TO_DEG) + " " + std::to_string(val[VX] * RAD_TO_DEG);
 }
 
-std::string FSPoserAnimator::getTabs(int numOfTabstops)
+std::string FSPoserAnimator::getTabs(S32 numOfTabstops)
 {
     std::string tabSpaces;
-    for (int i = 0; i < numOfTabstops; i++)
+    for (S32 i = 0; i < numOfTabstops; i++)
         tabSpaces += "\t";
 
     return tabSpaces;
-}
-
-std::string FSPoserAnimator::f32ToString(F32 val)
-{
-    std::string str;
-    char        buf[20];
-    snprintf(buf, 20, "%f", val);
-    str = buf;
-    return str;
 }

@@ -169,7 +169,7 @@ public:
     void initFromParams(const Params& p);
     bool initPanelXML(  LLXMLNodePtr node, LLView *parent, LLXMLNodePtr output_node, const LLPanel::Params& default_params);
 
-    bool hasString(std::string_view name);
+    bool hasString(std::string_view name) const;
     std::string getString(std::string_view name, const LLStringUtil::format_map_t& args) const;
     std::string getString(std::string_view name) const;
 
