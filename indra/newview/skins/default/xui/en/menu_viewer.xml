@@ -959,10 +959,10 @@
             use_mac_ctrl="true">
             <menu_item_check.on_check
                function="Floater.Visible"
-               parameter="poser" />
+               parameter="fs_poser" />
             <menu_item_check.on_click
                function="Floater.Toggle"
-               parameter="poser" />
+               parameter="fs_poser" />
          </menu_item_check>
       </menu>
 
