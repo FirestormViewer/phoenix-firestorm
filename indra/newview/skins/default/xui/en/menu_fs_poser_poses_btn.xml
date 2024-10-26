@@ -25,19 +25,19 @@
     <menu_item_call
      label="Load Rotations &amp; Positions"
      layout="topleft"
-     name="rotations">
+     name="rotations_positions">
         <on_click function="Pose.Menu" parameter="rot_pos"/>
     </menu_item_call>
     <menu_item_call
      label="Load Rotations &amp; Scales"
      layout="topleft"
-     name="rotations">
+     name="rotations_scales">
         <on_click function="Pose.Menu" parameter="rot_scale"/>
     </menu_item_call>
     <menu_item_call
      label="Load Position &amp; Scales"
      layout="topleft"
-     name="rotations">
+     name="positions_scales">
         <on_click function="Pose.Menu" parameter="pos_scale"/>
     </menu_item_call>
     <menu_item_separator
@@ -45,7 +45,7 @@
     <menu_item_call
      label="Load all"
      layout="topleft"
-     name="rotations">
+     name="load_all">
         <on_click function="Pose.Menu" parameter="all"/>
     </menu_item_call>
 </toggleable_menu>
