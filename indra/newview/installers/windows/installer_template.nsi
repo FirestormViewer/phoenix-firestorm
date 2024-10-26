@@ -238,13 +238,10 @@ Function CheckCPUFlagsAVX2
     System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
     IntCmp $1 1 OK_AVX2
     ; AVX2 not supported
-    ; Prepare the URL by concatenating '-legacy-cpus' to $DL_URL
-    StrCpy $2 "${DL_URL}"
-    StrCpy $2 "-legacy-cpus" /APPEND    
     ; Replace %DLURL% in the language string with the URL
-    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "$2" "+*" $3
+    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
     MessageBox MB_OK "$3"    
-    ${OpenURL} '$2'
+    ${OpenURL} "${DL_URL}-legacy-cpus"
     Quit
 
   OK_AVX2:
@@ -267,7 +264,7 @@ Function CheckCPUFlagsAVX2_Prompt
 
     MessageBox MB_YESNO $3 IDYES DownloadAVX2 IDNO ContinueInstall
     DownloadAVX2:
-      ${OpenURL} '$3'
+      ${OpenURL} '${DL_URL}'
       Quit
     ContinueInstall:
       Pop $3

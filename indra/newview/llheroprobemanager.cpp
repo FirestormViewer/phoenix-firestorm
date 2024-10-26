@@ -75,7 +75,7 @@ LLHeroProbeManager::~LLHeroProbeManager()
 // helper class to seed octree with probes
 void LLHeroProbeManager::update()
 {
-    if (!LLPipeline::RenderMirrors || !LLPipeline::sReflectionProbesEnabled || gTeleportDisplay || LLStartUp::getStartupState() < STATE_PRECACHE)
+    if (!LLPipeline::RenderMirrors || !LLPipeline::sReflectionProbesEnabled || gTeleportDisplay || LLStartUp::getStartupState() < STATE_STARTED)
     {
         return;
     }
@@ -226,7 +226,7 @@ void LLHeroProbeManager::update()
 void LLHeroProbeManager::renderProbes()
 {
     if (!LLPipeline::RenderMirrors || !LLPipeline::sReflectionProbesEnabled || gTeleportDisplay ||
-        LLStartUp::getStartupState() < STATE_PRECACHE)
+        LLStartUp::getStartupState() < STATE_STARTED)
     {
         return;
     }

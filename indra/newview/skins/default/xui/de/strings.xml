@@ -6118,6 +6118,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Discord_Label">
 		Discord
 	</string>
+	<string name="Command_Poser_Label">
+		Poser
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6315,6 +6318,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Discord_Tooltip">
 		Discord
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Eigenen Avatar und Animeshe posieren
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
