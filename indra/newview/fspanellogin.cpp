@@ -567,7 +567,7 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
         // We don't actually use the password input field,
         // fill it with MAX_PASSWORD_SL characters so we get a
         // nice row of asterisks.
-        const std::string filler("123456789!123456");
+        const std::string filler("Enter a password");
         sInstance->getChild<LLLineEditor>("password_edit")->setText(filler);
         sInstance->mPasswordLength = filler.length();
         sInstance->updateLoginButtons();
