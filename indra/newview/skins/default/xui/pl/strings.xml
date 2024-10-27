@@ -5486,6 +5486,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Beacons_Label">
 		Emitery
 	</string>
+	<string name="Command_Poser_Label">
+		Pozer
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Ustaw swojego awatara oraz animowane obiekty
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Uchwyć równoprostokątny obraz 360°
 	</string>
