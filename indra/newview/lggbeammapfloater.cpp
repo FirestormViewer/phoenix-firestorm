@@ -57,7 +57,7 @@ void lggBeamMapFloater::draw()
     }
 
     LLFloater::draw();
-    LLRect rec = mBeamshapePanel->getRect();
+    const LLRect& rec = mBeamshapePanel->getRect();
 
     gGL.pushMatrix();
     gGL.color4fv(LLColor4::white.mV);
@@ -120,7 +120,7 @@ void lggBeamMapFloater::onBackgroundChange()
     mBeamshapePanel->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
 }
 
-LLSD lggBeamMapFloater::getDataSerialized()
+LLSD lggBeamMapFloater::getDataSerialized() const
 {
     LLSD out;
     LLRect r  = mBeamshapePanel->getRect();

@@ -20,11 +20,11 @@ class lggBeamsColors
 {
 public:
     lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed);
-    lggBeamsColors();
+    lggBeamsColors() = default;
 
-    F32 mStartHue;
-    F32 mEndHue;
-    F32 mRotateSpeed;
+    F32 mStartHue{ 0.0f };
+    F32 mEndHue{ 360.0f };
+    F32 mRotateSpeed{ 1.f };
 
     LLSD toLLSD() const;
     static lggBeamsColors fromLLSD(const LLSD& inputData);

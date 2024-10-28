@@ -19,12 +19,11 @@
 class FSPanelPrefs;
 class LLPanel;
 
-class lggPoint
+struct lggPoint
 {
-    public:
-        S32 x;
-        S32 y;
-        LLColor4 c;
+    S32 x;
+    S32 y;
+    LLColor4 c;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -54,7 +53,7 @@ private:
 
     void clearPoints();
 
-    LLSD getDataSerialized();
+    LLSD getDataSerialized() const;
 
     std::vector<lggPoint>   mDots;
     F32                     mContextConeOpacity;

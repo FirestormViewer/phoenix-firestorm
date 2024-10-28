@@ -88,7 +88,7 @@ void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F3
     }
 }
 
-LLSD lggBeamMaps::getPic(const std::string& filename)
+LLSD lggBeamMaps::getPic(const std::string& filename) const
 {
     LLSD data;
     llifstream importer(filename.c_str());
@@ -136,7 +136,7 @@ LLColor4U lggBeamMaps::beamColorFromData(const lggBeamsColors& data)
     LLColor4U toReturn;
 
     F32 difference = data.mEndHue - data.mStartHue;
-    F32 timeinc = difference != 0.f ? timer.getElapsedTimeF32() * 0.3f * (data.mRotateSpeed + 0.01f) * (360 / difference) : 0.f;
+    F32 timeinc = difference != 0.f ? timer.getElapsedTimeF32() * 0.3f * (data.mRotateSpeed + 0.01f) * (360.f / difference) : 0.f;
 
     S32 rounded_difference = ll_round(difference);
     if (rounded_difference == 360 || rounded_difference == 720)

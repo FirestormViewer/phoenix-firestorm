@@ -186,7 +186,7 @@ void lggBeamColorMapFloater::onClickSlider()
     fixOrder();
 }
 
-F32 lggBeamColorMapFloater::getHueFromLocation(S32 x, S32 y)
+F32 lggBeamColorMapFloater::getHueFromLocation(S32 x, S32 y) const
 {
     if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
     {
@@ -227,7 +227,7 @@ void lggBeamColorMapFloater::setData(FSPanelPrefs* data)
     }
 }
 
-LLSD lggBeamColorMapFloater::getDataSerialized()
+LLSD lggBeamColorMapFloater::getDataSerialized() const
 {
     return mData.toLLSD();
 }

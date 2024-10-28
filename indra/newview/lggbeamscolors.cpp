@@ -60,10 +60,3 @@ lggBeamsColors::lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed) :
     mRotateSpeed(rotateSpeed)
 {
 }
-
-lggBeamsColors::lggBeamsColors():
-    mStartHue(0.0f),
-    mEndHue(360.0f),
-    mRotateSpeed(1.0f)
-{
-}
