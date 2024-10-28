@@ -28,7 +28,6 @@ class lggBeamColorMapFloater : public LLFloater
 {
 public:
     lggBeamColorMapFloater(const LLSD& seed);
-    virtual ~lggBeamColorMapFloater();
 
     bool postBuild() override;
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;

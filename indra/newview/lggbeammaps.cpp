@@ -28,7 +28,7 @@
 
 lggBeamMaps gLggBeamMaps;
 
-F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
+static F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
 {
     while (valHUeIn < 0.0f)
     {
@@ -166,21 +166,21 @@ void lggBeamMaps::fireCurrentBeams(LLPointer<LLHUDEffectSpiral> mBeam, const LLC
     static LLCachedControl<std::string> colorf(gSavedSettings, "FSBeamColorFile");
     bool colorsDisabled = (colorf().empty());
 
-    for (std::vector<lggBeamData>::iterator it = mDots.begin(); it != mDots.end(); ++it)
+    for (const auto& dot : mDots)
     {
         LLColor4U myColor = rgb;
         if (colorsDisabled)
         {
-            myColor = (*it).c;
+            myColor = dot.c;
         }
 
         F32 distanceAdjust = (F32)dist_vec(mBeam->getPositionGlobal(), gAgent.getPositionGlobal());
         F32 pulse = 0.75f + sinf(gFrameTimeSeconds * 1.0f) * 0.25f;
-        LLVector3d offset = (*it).p;
+        LLVector3d offset = dot.p;
         offset.mdV[VY] *= -1.f;
         offset *= pulse * mScale * distanceAdjust * 0.1f;
 
-        LLVector3 beamLine = LLVector3( mBeam->getPositionGlobal() - gAgent.getPositionGlobal());
+        LLVector3 beamLine = LLVector3(mBeam->getPositionGlobal() - gAgent.getPositionGlobal());
         LLVector3 beamLineFlat = beamLine;
         beamLineFlat.mV[VZ]= 0.0f;
 
@@ -243,7 +243,7 @@ F32 lggBeamMaps::setUpAndGetDuration()
                 dot.p *= (FSBeamShapeScale * 2.0f);
                 LLColor4 color = LLColor4(beamData["color"]);
                 dot.c = LLColor4U(color);
-                mDots.push_back(dot);
+                mDots.push_back(std::move(dot));
             }
 
             static LLCachedControl<F32> FSMaxBeamsPerSecond(gSavedSettings, "FSMaxBeamsPerSecond");
@@ -262,7 +262,7 @@ F32 lggBeamMaps::setUpAndGetDuration()
     return mDuration;
 }
 
-string_vec_t lggBeamMaps::getFileNames()
+string_vec_t lggBeamMaps::getFileNames() const
 {
     string_vec_t names;
     std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
@@ -294,7 +294,7 @@ string_vec_t lggBeamMaps::getFileNames()
     return names;
 }
 
-string_vec_t lggBeamMaps::getColorsFileNames()
+string_vec_t lggBeamMaps::getColorsFileNames() const
 {
     string_vec_t names;
     std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));

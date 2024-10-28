@@ -22,16 +22,14 @@ public:
     lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed);
     lggBeamsColors();
 
-    ~lggBeamsColors();
-
     F32 mStartHue;
     F32 mEndHue;
     F32 mRotateSpeed;
 
-    LLSD toLLSD();
+    LLSD toLLSD() const;
     static lggBeamsColors fromLLSD(const LLSD& inputData);
 
-    std::string toString();
+    std::string toString() const;
     // List sorted by name.
 };
 

@@ -47,8 +47,8 @@ public:
     void                        updateBeamChat(const LLVector3d& currentPos);
     static LLColor4U            beamColorFromData(const lggBeamsColors& data);
     LLColor4U                   getCurrentColor(const LLColor4U& agentColor);
-    string_vec_t                getFileNames();
-    string_vec_t                getColorsFileNames();
+    string_vec_t                getFileNames() const;
+    string_vec_t                getColorsFileNames() const;
 
 private:
     LLSD            getPic(const std::string& filename);

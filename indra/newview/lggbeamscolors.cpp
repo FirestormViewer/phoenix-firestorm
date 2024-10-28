@@ -40,7 +40,7 @@ lggBeamsColors lggBeamsColors::fromLLSD(const LLSD& inputData)
     return toReturn;
 }
 
-LLSD lggBeamsColors::toLLSD()
+LLSD lggBeamsColors::toLLSD() const
 {
     LLSD out;
     out["startHue"] = mStartHue;
@@ -49,7 +49,7 @@ LLSD lggBeamsColors::toLLSD()
     return out;
 }
 
-std::string lggBeamsColors::toString()
+std::string lggBeamsColors::toString() const
 {
     return llformat("Start Hue %d\nEnd Hue is %d\nRotate Speed is %d", mStartHue, mEndHue, mRotateSpeed);
 }
@@ -65,9 +65,5 @@ lggBeamsColors::lggBeamsColors():
     mStartHue(0.0f),
     mEndHue(360.0f),
     mRotateSpeed(1.0f)
-{
-}
-
-lggBeamsColors::~lggBeamsColors()
 {
 }
