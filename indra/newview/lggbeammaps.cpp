@@ -28,7 +28,7 @@
 
 lggBeamMaps gLggBeamMaps;
 
-static F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
+F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
 {
     while (valHUeIn < 0.0f)
     {
