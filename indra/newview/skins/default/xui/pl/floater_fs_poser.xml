@@ -237,12 +237,12 @@
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
 				<button name="refresh_avatars" tool_tip="Odśwież listę awatarów i animeszy" />
-				<button label="Start pozowania" tool_tip="Rozpocznij pozowanie wybranego awatara lub animesza, jeśli masz na to prawo" name="start_stop_posing_button" />
+				<button label="Zacznij pozować" label_selected="Przestań pozować" tool_tip="Rozpocznij pozowanie wybranego awatara lub animesza, jeśli masz na to prawa" name="start_stop_posing_button" />
 				<button name="toggleAdvancedPanel" tool_tip="Przełącz obszar ustawień zaawansowanych" />
 				<button name="FlipPose_avatar" tool_tip="Przerzuć całą pozę na lewo/prawo" />
 				<button name="FlipJoint_avatar" tool_tip="Odbij lustrzanie wybrane części ciała w lewo/prawo" />
 				<button label="Złap" name="button_RecaptureParts" tool_tip="Jeśli wybrane części ciała są WYŁĄCZONE, to ta opcja ponownie przechwytuje to, co te części ciała robią teraz" />
-				<button label="Część Wł/Wył" name="toggle_PosingSelectedBones" tool_tip="Włącz lub wyłącz Pozer dla wybranych części ciała. Po wyłączeniu ta część ciała animuje się jak zwykle (jak z AO lub z kulką itp.)" />
+				<button label="Wł/Wył część" name="toggle_PosingSelectedBones" tool_tip="Włącz lub wyłącz Pozer dla wybranych części ciała. Po wyłączeniu ta część ciała animuje się jak zwykle (jak z AO lub z kulką itp.)" />
 				<button label="Moje pozy" name="toggleLoadSavePanel" tool_tip="Wczytaj, zapisz i zarządzaj pozami, które tworzysz" />
 				<button tool_tip="Zarządzaj katalogiem poz" name="open_poseDir_button" />
 				<menu_button label="Wczytaj pozę" tool_tip="Wczytaj aktualnie wybraną pozę." name="load_poses_button" />
@@ -264,9 +264,9 @@
 						<slider label="Skala X:" name="Advanced_Scale_X" />
 						<slider label="Skala Y:" name="Advanced_Scale_Y" />
 						<slider label="Skala Z:" name="Advanced_Scale_Z" />
-						<button label="Undo Scale Change" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę skali" />
-						<button label="Redo Scale" name="redo_scale_change" tool_tip="Ponownie wykonaj ostatnią zmianę skali" />
-						<button label="Reset Scale" name="undo_scale_change" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną skalę" />
+						<button label="Cofnij zmianę skali" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę skali" />
+						<button label="Ponów skalę" name="redo_scale_change" tool_tip="Ponownie wykonaj ostatnią zmianę skali" />
+						<button label="Reset skali" name="undo_scale_change" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną skalę" />
 					</panel>
 				</tab_container>
 			</panel>
