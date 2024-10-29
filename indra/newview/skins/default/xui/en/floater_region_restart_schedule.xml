@@ -3,7 +3,7 @@
   height="180"
   layout="topleft"
   name="floater_region_restart_schedule"
-  help_topic="Preferences_Graphics_Advanced"
+  help_topic="region_restart_schedule"
   single_instance="true"
   save_rect="true"
   title="Region Restart Schedule"

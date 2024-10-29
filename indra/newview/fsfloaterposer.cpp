@@ -23,108 +23,44 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
-#include <string_view>
-#include <boost/algorithm/string.hpp>
+
 #include "fsfloaterposer.h"
 #include "fsposeranimator.h"
+#include "fsvirtualtrackpad.h"
 #include "llagent.h"
-#include "llavatarname.h"
 #include "llavatarnamecache.h"
+#include "llcheckboxctrl.h"
+#include "llcommonutils.h"
+#include "llcontrolavatar.h"
 #include "lldiriterator.h"
 #include "llsdserialize.h"
-#include "fsvirtualtrackpad.h"
-#include "llfloater.h"
-#include "llviewercontrol.h"
-#include "llcontrolavatar.h"
-#include "llstring.h"
-#include "llviewerwindow.h"
-#include "llwindow.h"
-#include "llcommonutils.h"
 #include "llscrolllistctrl.h"
 #include "llsliderctrl.h"
 #include "lltabcontainer.h"
-#include "llcheckboxctrl.h"
+#include "llviewercontrol.h"
+#include "llviewerwindow.h"
+#include "llwindow.h"
 
 namespace
 {
-constexpr std::string_view POSE_INTERNAL_FORMAT_FILE_MASK     = "*.xml";
-constexpr std::string_view POSE_INTERNAL_FORMAT_FILE_EXT      = ".xml";
-constexpr std::string_view POSE_EXTERNAL_FORMAT_FILE_EXT      = ".bvh";
-constexpr std::string_view POSE_SAVE_SUBDIRECTORY             = "poses";
-constexpr std::string_view POSE_PRESETS_HANDS_SUBDIRECTORY    = "poses\\hand_presets";
-constexpr std::string_view XML_LIST_HEADER_STRING_PREFIX      = "header_";
-constexpr std::string_view XML_LIST_TITLE_STRING_PREFIX       = "title_";
-constexpr std::string_view XML_JOINT_TRANSFORM_STRING_PREFIX  = "joint_transform_";
-constexpr std::string_view POSER_ADVANCEDWINDOWSTATE_SAVE_KEY = "FSPoserAdvancedWindowState";
-constexpr std::string_view POSER_ALSOSAVEBVHFILE_SAVE_KEY     = "FSPoserSaveBvhFileAlso";
+constexpr char             POSE_INTERNAL_FORMAT_FILE_MASK[]    = "*.xml";
+constexpr char             POSE_INTERNAL_FORMAT_FILE_EXT[]     = ".xml";
+constexpr char             POSE_EXTERNAL_FORMAT_FILE_EXT[]     = ".bvh";
+constexpr char             POSE_SAVE_SUBDIRECTORY[]            = "poses";
+constexpr std::string_view POSE_PRESETS_HANDS_SUBDIRECTORY     = "hand_presets";
+constexpr char             XML_LIST_HEADER_STRING_PREFIX[]     = "header_";
+constexpr char             XML_LIST_TITLE_STRING_PREFIX[]      = "title_";
+constexpr char             XML_JOINT_TRANSFORM_STRING_PREFIX[] = "joint_transform_";
+constexpr std::string_view POSER_ADVANCEDWINDOWSTATE_SAVE_KEY  = "FSPoserAdvancedWindowState";
+constexpr std::string_view POSER_ALSOSAVEBVHFILE_SAVE_KEY      = "FSPoserSaveBvhFileAlso";
 constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpadSensitivity";
+}  // namespace
 
-constexpr std::string_view POSER_AVATAR_PANEL_JOINTSPARENT = "joints_parent_panel";
-constexpr std::string_view POSER_AVATAR_PANEL_TRACKBALL = "trackball_panel";
-constexpr std::string_view POSER_AVATAR_PANEL_ADVANCED = "advanced_parent_panel";
-constexpr std::string_view POSER_AVATAR_TABGROUP_JOINTS = "joints_tabs";
-constexpr std::string_view POSER_AVATAR_TAB_POSITION = "positionRotation_panel";
-constexpr std::string_view POSER_AVATAR_TAB_BODY = "body_joints_panel";
-constexpr std::string_view POSER_AVATAR_TAB_FACE = "face_joints_panel";
-constexpr std::string_view POSER_AVATAR_TAB_HANDS = "hands_tabs";
-constexpr std::string_view POSER_AVATAR_TAB_HANDJOINTS = "hands_joints_panel";
-constexpr std::string_view POSER_AVATAR_TAB_MISC = "misc_joints_panel";
-constexpr std::string_view POSER_AVATAR_TAB_VOLUMES = "collision_volumes_panel";
-
-
-// standard controls
-constexpr std::string_view POSER_AVATAR_TRACKBALL_NAME   = "limb_rotation";
-constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME = "trackpad_sensitivity_slider";
-constexpr std::string_view POSER_AVATAR_SLIDER_YAW_NAME  = "limb_yaw"; // turning your nose left or right
-constexpr std::string_view POSER_AVATAR_SLIDER_PITCH_NAME  = "limb_pitch"; // pointing your nose up or down
-constexpr std::string_view POSER_AVATAR_SLIDER_ROLL_NAME = "limb_roll"; // your ear touches your shoulder
-constexpr std::string_view POSER_AVATAR_TOGGLEBUTTON_MIRROR = "button_toggleMirrorRotation";
-constexpr std::string_view POSER_AVATAR_TOGGLEBUTTON_SYMPATH = "button_toggleSympatheticRotation";
-constexpr std::string_view POSER_AVATAR_BUTTON_REDO = "button_redo_change";
-constexpr std::string_view POSER_AVATAR_BUTTON_DELTAMODE = "delta_mode_toggle";
-constexpr std::string_view POSER_AVATAR_SLIDER_POSX_NAME = "av_position_inout";
-constexpr std::string_view POSER_AVATAR_SLIDER_POSY_NAME = "av_position_leftright";
-constexpr std::string_view POSER_AVATAR_SLIDER_POSZ_NAME = "av_position_updown";
-
-
-// Advanced controls
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_ROTX_NAME = "Advanced_Rotation_X";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_ROTY_NAME = "Advanced_Rotation_Y";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_ROTZ_NAME = "Advanced_Rotation_Z";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_POSX_NAME = "Advanced_Position_X";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_POSY_NAME = "Advanced_Position_Y";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_POSZ_NAME = "Advanced_Position_Z";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_SCALEX_NAME = "Advanced_Scale_X";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_SCALEY_NAME = "Advanced_Scale_Y";
-constexpr std::string_view POSER_AVATAR_ADV_SLIDER_SCALEZ_NAME = "Advanced_Scale_Z";
-constexpr std::string_view POSER_AVATAR_ADV_BUTTON_NAME  = "start_stop_posing_button";
-constexpr std::string_view POSER_AVATAR_ADVANCED_SAVEOPTIONSPANEL_NAME = "save_file_options";
-constexpr std::string_view POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME = "also_save_bvh_checkbox";
-
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_AVATARSELECTION   = "avatarSelection_scroll";
-constexpr std::string_view POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME = "start_stop_posing_button";
-constexpr std::string_view POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME   = "toggleAdvancedPanel";
-constexpr std::string_view POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME   = "FlipPose_avatar";
-constexpr std::string_view POSER_AVATAR_PANEL_BUTTON_FLIPJOINT_NAME  = "FlipJoint_avatar";
-constexpr std::string_view POSER_AVATAR_PANEL_BUTTON_RECAPTURE_NAME  = "button_RecaptureParts";
-constexpr std::string_view POSER_AVATAR_PANEL_BUTTON_TOGGLEPOSING_NAME  = "toggle_PosingSelectedBones";
-
-constexpr std::string_view POSER_AVATAR_TOGGLEBUTTON_LOADSAVE        = "toggleLoadSavePanel";
-constexpr std::string_view POSER_AVATAR_PANEL_LOADSAVE_NAME          = "poses_loadSave";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME     = "poses_scroll";
-constexpr std::string_view POSER_AVATAR_BUTTON_BROWSEFOLDER_NAME     = "open_poseDir_button";
-constexpr std::string_view POSER_AVATAR_BUTTON_LOAD_NAME             = "load_poses_button";
-constexpr std::string_view POSER_AVATAR_BUTTON_SAVE_NAME             = "save_poses_button";
-constexpr std::string_view POSER_AVATAR_LINEEDIT_FILESAVENAME        = "pose_save_name";
-
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_HIDDEN_NAME         = "entireAv_joint_scroll";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME     = "body_joints_scroll";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME     = "face_joints_scroll";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME     = "hand_joints_scroll";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME     = "misc_joints_scroll";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_VOLUMES_NAME        = "collision_volumes_scroll";
-constexpr std::string_view POSER_AVATAR_SCROLLLIST_HAND_PRESETS_NAME   = "hand_presets_scroll";
-}
+/// <summary>
+/// The amount of deflection 'one unit' on the trackpad translates to in radians.
+/// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
+/// </summary>
+constexpr F32 NormalTrackpadRangeInRads = F_PI;
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
@@ -140,7 +76,6 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.ToggleSympatheticChanges", [this](LLUICtrl*, const LLSD&) { onToggleSympatheticChange(); });
     mCommitCallbackRegistrar.add("Poser.ToggleDeltaModeChanges", [this](LLUICtrl*, const LLSD &) { onToggleDeltaModeChange(); });
     mCommitCallbackRegistrar.add("Poser.AdjustTrackPadSensitivity", [this](LLUICtrl*, const LLSD&) { onAdjustTrackpadSensitivity(); });
-    
 
     mCommitCallbackRegistrar.add("Poser.PositionSet", [this](LLUICtrl*, const LLSD&) { onAvatarPositionSet(); });
 
@@ -166,107 +101,121 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.PoseJointsReset", [this](LLUICtrl*, const LLSD&) { onPoseJointsReset(); });
 }
 
-
-
-FSFloaterPoser::~FSFloaterPoser() {}
-
 bool FSFloaterPoser::postBuild()
 {
+    mAvatarTrackball = getChild<FSVirtualTrackpad>("limb_rotation");
+    mAvatarTrackball->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbTrackballChanged(); });
+
+    mLimbYawSlider = getChild<LLSliderCtrl>("limb_yaw");
+    mLimbYawSlider->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
+
+    mLimbPitchSlider = getChild<LLSliderCtrl>("limb_pitch");
+    mLimbPitchSlider->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
+
+    mLimbRollSlider = getChild<LLSliderCtrl>("limb_roll");
+    mLimbRollSlider->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
+
     // find-and-binds
-    getChild<LLUICtrl>(POSER_AVATAR_TRACKBALL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbTrackballChanged(); });
-    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_YAW_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
-    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_PITCH_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
-    getChild<LLUICtrl>(POSER_AVATAR_SLIDER_ROLL_NAME)->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
-    getChild<LLTabContainer>(POSER_AVATAR_TABGROUP_JOINTS)
-        ->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&)
-            {
-                onJointSelect();
-                setRotationChangeButtons(false, false, false);
-            });
+    mJointsTabs = getChild<LLTabContainer>("joints_tabs");
+    mJointsTabs->setCommitCallback(
+        [this](LLUICtrl*, const LLSD&)
+        {
+            onJointSelect();
+            setRotationChangeButtons(false, false, false);
+        });
 
-    LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (scrollList)
+    mAvatarSelectionScrollList = getChild<LLScrollListCtrl>("avatarSelection_scroll");
+    mAvatarSelectionScrollList->setCommitOnSelectionChange(true);
+    mAvatarSelectionScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onAvatarSelect(); });
+
+    mBodyJointsScrollList = getChild<LLScrollListCtrl>("body_joints_scroll");
+    mBodyJointsScrollList->setCommitOnSelectionChange(true);
+    mBodyJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+
+    mFaceJointsScrollList = getChild<LLScrollListCtrl>("face_joints_scroll");
+    mFaceJointsScrollList->setCommitOnSelectionChange(true);
+    mFaceJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+
+    mHandJointsScrollList = getChild<LLScrollListCtrl>("hand_joints_scroll");
+    mHandJointsScrollList->setCommitOnSelectionChange(true);
+    mHandJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+
+    mMiscJointsScrollList = getChild<LLScrollListCtrl>("misc_joints_scroll");
+    mMiscJointsScrollList->setCommitOnSelectionChange(true);
+    mMiscJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+
+    mCollisionVolumesScrollList = getChild<LLScrollListCtrl>("collision_volumes_scroll");
+    mCollisionVolumesScrollList->setCommitOnSelectionChange(true);
+    mCollisionVolumesScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+
+    mEntireAvJointScroll = getChild<LLScrollListCtrl>("entireAv_joint_scroll");
+
+    mPosesScrollList = getChild<LLScrollListCtrl>("poses_scroll");
+    mPosesScrollList->setCommitOnSelectionChange(true);
+    mPosesScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onPoseFileSelect(); });
+
+    mToggleAdvancedPanelBtn = getChild<LLButton>("toggleAdvancedPanel");
+    if (gSavedSettings.getBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY))
     {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onAvatarSelect(); });
+        mToggleAdvancedPanelBtn->setValue(true);
     }
 
-    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME);
-    if (scrollList)
+    mAlsoSaveBvhCbx = getChild<LLCheckBoxCtrl>("also_save_bvh_checkbox");
+    if (gSavedSettings.getBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY))
     {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+        mAlsoSaveBvhCbx->set(true);
     }
 
-    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME);
-    if (scrollList)
-    {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
-    }
+    mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
+    mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
 
-    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME);
-    if (scrollList)
-    {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
-    }
+    mPoseSaveNameEditor = getChild<LLLineEditor>("pose_save_name");
+    mPoseSaveNameEditor->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 
-    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME);
-    if (scrollList)
-    {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
-    }
+    mHandPresetsScrollList = getChild<LLScrollListCtrl>("hand_presets_scroll");
 
-    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME);
-    if (scrollList)
-    {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
-    }
+    mPosXSlider = getChild<LLSliderCtrl>("av_position_inout");
+    mPosYSlider = getChild<LLSliderCtrl>("av_position_leftright");
+    mPosZSlider = getChild<LLSliderCtrl>("av_position_updown");
 
-    scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
-    if (scrollList)
-    {
-        scrollList->setCommitOnSelectionChange(true);
-        scrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onPoseFileSelect(); });
-    }
+    mAdvPosXSlider = getChild<LLSliderCtrl>("Advanced_Position_X");
+    mAdvPosYSlider = getChild<LLSliderCtrl>("Advanced_Position_Y");
+    mAdvPosZSlider = getChild<LLSliderCtrl>("Advanced_Position_Z");
 
-    bool advButtonState = gSavedSettings.getBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY);
-    if (advButtonState)
-    {
-        LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
-        if (advancedButton)
-            advancedButton->setValue(true);
-    }
+    mAdvScaleXSlider = getChild<LLSliderCtrl>("Advanced_Scale_X");
+    mAdvScaleYSlider = getChild<LLSliderCtrl>("Advanced_Scale_Y");
+    mAdvScaleZSlider = getChild<LLSliderCtrl>("Advanced_Scale_Z");
 
-    bool saveBvhCheckboxState = gSavedSettings.getBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY);
-    if (saveBvhCheckboxState)
-    {
-        LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
-        if (saveBvhCheckbox)
-            saveBvhCheckbox->set(true);
-    }
+    mSaveFilePptionsPnl = getChild<LLPanel>("save_file_options");
+    mPosesLoadSavePnl = getChild<LLPanel>("poses_loadSave");
+    mStartStopPosingBtn = getChild<LLButton>("start_stop_posing_button");
+    mToggleLoadSavePanelBtn = getChild<LLButton>("toggleLoadSavePanel");
+    mBrowserFolderBtn = getChild<LLButton>("open_poseDir_button");
+    mLoadPosesBtn = getChild<LLButton>("load_poses_button");
+    mSavePosesBtn = getChild<LLButton>("save_poses_button");
 
-    LLSliderCtrl* trackpadSensitivitySlider = getChild<LLSliderCtrl>(POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME);
-    if (trackpadSensitivitySlider)
-    {
-        F32 trackPadSensitivity = gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY);
-        trackpadSensitivitySlider->setValue(trackPadSensitivity);
-    }
+    mFlipPoseBtn = getChild<LLButton>("FlipPose_avatar");
+    mFlipJointBtn = getChild<LLButton>("FlipJoint_avatar");
+    mRecaptureBtn = getChild<LLButton>("button_RecaptureParts");
+    mTogglePosingBonesBtn = getChild<LLButton>("toggle_PosingSelectedBones");
 
-    LLLineEditor *poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
-    if (poseSaveName)
-        poseSaveName->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
+    mToggleMirrorRotationBtn = getChild<LLButton>("button_toggleMirrorRotation");
+    mToggleSympatheticRotationBtn = getChild<LLButton>("button_toggleSympatheticRotation");
+    mToggleDeltaModeBtn = getChild<LLButton>("delta_mode_toggle");
+    mRedoChangeBtn = getChild<LLButton>("button_redo_change");
+
+    mJointsParentPnl = getChild<LLPanel>("joints_parent_panel");
+    mAdvancedParentPnl = getChild<LLPanel>("advanced_parent_panel");
+    mTrackballPnl = getChild<LLPanel>("trackball_panel");
+    mPositionRotationPnl = getChild<LLPanel>("positionRotation_panel");
+    mBodyJointsPnl = getChild<LLPanel>("body_joints_panel");
+    mFaceJointsPnl = getChild<LLPanel>("face_joints_panel");
+    mHandsTabs = getChild<LLTabContainer>("hands_tabs");
+    mHandsJointsPnl = mHandsTabs->getChild<LLPanel>("hands_joints_panel");
+    mMiscJointsPnl = getChild<LLPanel>("misc_joints_panel");
+    mCollisionVolumesPnl = getChild<LLPanel>("collision_volumes_panel");
 
     return true;
-}
-
-void FSFloaterPoser::draw()
-{
-    LLFloater::draw();
 }
 
 void FSFloaterPoser::onOpen(const LLSD& key)
@@ -275,34 +224,32 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     refreshJointScrollListMembers();
     onJointSelect();
     onOpenSetAdvancedPanel();
-    refreshPoseScroll(POSER_AVATAR_SCROLLLIST_HAND_PRESETS_NAME, POSE_PRESETS_HANDS_SUBDIRECTORY);
+    refreshPoseScroll(mHandPresetsScrollList, POSE_PRESETS_HANDS_SUBDIRECTORY);
+
+    LLFloater::onOpen(key);
 }
 
 void FSFloaterPoser::onClose(bool app_quitting)
 {
-    LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
-    if (advancedButton)
-        gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, advancedButton->getValue().asBoolean());
+    gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, mToggleAdvancedPanelBtn->getValue().asBoolean());
+    gSavedSettings.setBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY, mAlsoSaveBvhCbx->getValue());
 
-    LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
-    if (saveBvhCheckbox)
-        gSavedSettings.setBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY, saveBvhCheckbox->getValue());
+    LLFloater::onClose(app_quitting);
 }
 
-void FSFloaterPoser::refreshPoseScroll(std::string_view scrollListName, std::string_view subDirectory)
+void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::optional<std::string_view> subDirectory)
 {
-    if (scrollListName.empty() || subDirectory.empty())
-        return;
-
-    LLScrollListCtrl* posesScrollList = getChild<LLScrollListCtrl>(scrollListName);
     if (!posesScrollList)
         return;
 
     posesScrollList->clearRows();
 
-    std::string   dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(subDirectory));
+    std::string dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+    if (subDirectory.has_value())
+        gDirUtilp->append(dir, std::string(subDirectory.value()));
+
     std::string file;
-    LLDirIterator dir_iter(dir, std::string(POSE_INTERNAL_FORMAT_FILE_MASK));
+    LLDirIterator dir_iter(dir, POSE_INTERNAL_FORMAT_FILE_MASK);
     while (dir_iter.next(file))
     {
         std::string path = gDirUtilp->add(dir, file);
@@ -333,11 +280,7 @@ void FSFloaterPoser::refreshPoseScroll(std::string_view scrollListName, std::str
 
 void FSFloaterPoser::onPoseFileSelect()
 {
-    LLScrollListCtrl *posesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
-    if (!posesScrollList)
-        return;
-
-    LLScrollListItem *item = posesScrollList->getFirstSelected();
+    LLScrollListItem* item = mPosesScrollList->getFirstSelected();
     if (!item)
         return;
 
@@ -345,36 +288,22 @@ void FSFloaterPoser::onPoseFileSelect()
     if (!avatar)
         return;
 
-    bool enableButtons = _poserAnimator.isPosingAvatar(avatar);
-
-    LLButton *loadPosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_LOAD_NAME);
-    if (loadPosesButton)
-        loadPosesButton->setEnabled(enableButtons);
-
-    LLButton *savePosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
-    if (savePosesButton)
-        savePosesButton->setEnabled(enableButtons);
+    bool enableButtons = mPoserAnimator.isPosingAvatar(avatar);
+    mLoadPosesBtn->setEnabled(enableButtons);
+    mSavePosesBtn->setEnabled(enableButtons);
 
     std::string poseName = item->getColumn(0)->getValue().asString();
     if (poseName.empty())
         return;
 
-    LLLineEditor *poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
-    if (!poseSaveName)
-        return;
-
-    poseSaveName->setEnabled(enableButtons);
     LLStringExplicit name = LLStringExplicit(poseName);
-    poseSaveName->setText(name);
+    mPoseSaveNameEditor->setEnabled(enableButtons);
+    mPoseSaveNameEditor->setText(name);
 }
 
 void FSFloaterPoser::onClickPoseSave()
 {
-    LLUICtrl *poseSaveName = getChild<LLUICtrl>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
-    if (!poseSaveName)
-        return;
-
-    std::string filename = poseSaveName->getValue().asString();
+    std::string filename = mPoseSaveNameEditor->getValue().asString();
     if (filename.empty())
         return;
 
@@ -385,33 +314,29 @@ void FSFloaterPoser::onClickPoseSave()
     bool successfulSave = savePoseToXml(avatar, filename);
     if (successfulSave)
     {
-        refreshPoseScroll(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME, POSE_SAVE_SUBDIRECTORY);
+        refreshPoseScroll(mPosesScrollList);
         setUiSelectedAvatarSaveFileName(filename);
         // TODO: provide feedback for save
 
-        LLCheckBoxCtrl* saveBvhCheckbox = getChild<LLCheckBoxCtrl>(POSER_AVATAR_ADVANCED_SAVEBVHCHECKBOX_NAME);
-        if (!saveBvhCheckbox)
-            return;
-
-        bool alsoSaveAsBvh = saveBvhCheckbox->getValue().asBoolean();
+        bool alsoSaveAsBvh = mAlsoSaveBvhCbx->getValue().asBoolean();
         if (alsoSaveAsBvh)
             savePoseToBvh(avatar, filename);
     }
 }
 
-bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, std::string poseFileName)
+bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, const std::string& poseFileName)
 {
     if (poseFileName.empty())
         return false;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return false;
 
     bool writeSuccess = false;
 
     try
     {
-        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY));
+        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
         if (!gDirUtilp->fileExists(pathname))
         {
             LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
@@ -419,7 +344,7 @@ bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, std::string poseFileName)
         }
 
         std::string fullSavePath =
-            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY), poseFileName + std::string(POSE_EXTERNAL_FORMAT_FILE_EXT));
+            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_EXTERNAL_FORMAT_FILE_EXT);
 
         llofstream file;
         file.open(fullSavePath.c_str());
@@ -429,7 +354,7 @@ bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, std::string poseFileName)
             return false;
         }
 
-        writeSuccess = _poserAnimator.writePoseAsBvh(&file, avatar);
+        writeSuccess = mPoserAnimator.writePoseAsBvh(&file, avatar);
 
         file.close();
     }
@@ -443,17 +368,17 @@ bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, std::string poseFileName)
     return true;
 }
 
-bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
+bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFileName)
 {
     if (poseFileName.empty())
         return false;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return false;
 
     try
     {
-        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY));
+        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
         if (!gDirUtilp->fileExists(pathname))
         {
             LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
@@ -461,28 +386,28 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, std::string poseFileName)
         }
 
         std::string fullSavePath =
-            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY), poseFileName + std::string(POSE_INTERNAL_FORMAT_FILE_EXT));
+            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
         LLSD record;
         S32 version = 3;
         record["version"]["value"] = version;
 
-        for (const FSPoserAnimator::FSPoserJoint& pj : _poserAnimator.PoserJoints)
+        for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator.PoserJoints)
         {
             std::string  bone_name = pj.jointName();
 
-            LLVector3 vec3 = _poserAnimator.getJointRotation(avatar, pj, SWAP_NOTHING, NEGATE_NOTHING);
+            LLVector3 vec3 = mPoserAnimator.getJointRotation(avatar, pj, SWAP_NOTHING, NEGATE_NOTHING);
 
             record[bone_name]     = pj.jointName();   
             record[bone_name]["rotation"] = vec3.getValue();
 
-            vec3                          = _poserAnimator.getJointPosition(avatar, pj);
+            vec3                          = mPoserAnimator.getJointPosition(avatar, pj);
             record[bone_name]["position"] = vec3.getValue();
 
-            vec3                       = _poserAnimator.getJointScale(avatar, pj);
+            vec3                       = mPoserAnimator.getJointScale(avatar, pj);
             record[bone_name]["scale"] = vec3.getValue();
 
-            record[bone_name]["enabled"] = _poserAnimator.isPosingAvatarJoint(avatar, pj);
+            record[bone_name]["enabled"] = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
         }
 
         llofstream file;
@@ -515,13 +440,13 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
-        _poserAnimator.setPosingAvatarJoint(avatar, *item, !currentlyPosing);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
+        mPoserAnimator.setPosingAvatarJoint(avatar, *item, !currentlyPosing);
     }
 
     refreshRotationSliders();
@@ -539,21 +464,21 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     for (auto item : selectedJoints)
     {
         // need to be posing the joint to flip
-        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosingJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (!currentlyPosingJoint)
             continue;
 
         // need to be posing opposite joint too, or don't flip
-        auto oppositeJoint = _poserAnimator.getPoserJointByName(item->mirrorJointName());
+        auto oppositeJoint = mPoserAnimator.getPoserJointByName(item->mirrorJointName());
         if (oppositeJoint)
         {
-            bool currentlyPosingOppositeJoint = _poserAnimator.isPosingAvatarJoint(avatar, *oppositeJoint);
+            bool currentlyPosingOppositeJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *oppositeJoint);
             if (!currentlyPosingOppositeJoint)
                 continue;
         }
@@ -566,7 +491,7 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
                 continue;
         }
 
-        _poserAnimator.reflectJoint(avatar, item);
+        mPoserAnimator.reflectJoint(avatar, item);
     }
 
     refreshRotationSliders();
@@ -579,10 +504,10 @@ void FSFloaterPoser::onClickFlipPose()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    _poserAnimator.flipEntirePose(avatar);
+    mPoserAnimator.flipEntirePose(avatar);
 
     refreshRotationSliders();
     refreshTrackpadCursor();
@@ -598,26 +523,26 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
             continue;
 
-        LLVector3 newRotation = _poserAnimator.getJointRotation(avatar, *item, getJointTranslation(item->jointName()),
+        LLVector3 newRotation = mPoserAnimator.getJointRotation(avatar, *item, getJointTranslation(item->jointName()),
                                                                 getJointNegation(item->jointName()), true);
-        LLVector3 newPosition = _poserAnimator.getJointPosition(avatar, *item, true);
-        LLVector3 newScale    = _poserAnimator.getJointScale(avatar, *item, true);
+        LLVector3 newPosition = mPoserAnimator.getJointPosition(avatar, *item, true);
+        LLVector3 newScale    = mPoserAnimator.getJointScale(avatar, *item, true);
 
-        _poserAnimator.setPosingAvatarJoint(avatar, *item, true);
+        mPoserAnimator.setPosingAvatarJoint(avatar, *item, true);
 
-        _poserAnimator.setJointRotation(avatar, item, newRotation, NONE, getJointTranslation(item->jointName()),
+        mPoserAnimator.setJointRotation(avatar, item, newRotation, NONE, getJointTranslation(item->jointName()),
                                         getJointNegation(item->jointName()));
-        _poserAnimator.setJointPosition(avatar, item, newPosition, NONE);
-        _poserAnimator.setJointScale(avatar, item, newScale, NONE);
+        mPoserAnimator.setJointPosition(avatar, item, newPosition, NONE);
+        mPoserAnimator.setJointScale(avatar, item, newScale, NONE);
     }
 
     refreshRotationSliders();
@@ -627,7 +552,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
 void FSFloaterPoser::onClickBrowsePoseCache()
 {
-    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY));
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     if (!gDirUtilp->fileExists(pathname))
         LLFile::mkdir(pathname);
 
@@ -637,16 +562,16 @@ void FSFloaterPoser::onClickBrowsePoseCache()
 void FSFloaterPoser::onPoseJointsReset()
 {
     // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
-    _timeLastClickedJointReset = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > _doubleClickInterval)
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
+    mTimeLastClickedJointReset = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > mDoubleClickInterval)
         return;
 
-    LLVOAvatar *avatar = getUiSelectedAvatar();
+    LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -655,45 +580,41 @@ void FSFloaterPoser::onPoseJointsReset()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.resetAvatarJoint(avatar, *item);
+            mPoserAnimator.resetAvatarJoint(avatar, *item);
     }
 
     refreshRotationSliders();
     refreshTrackpadCursor();
 }
 
-void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
+void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
 {
     std::string loadStyle = param.asString();
     if (loadStyle.empty())
         return;
 
-    LLScrollListCtrl *posesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME);
-    if (!posesScrollList)
-        return;
-
-    LLScrollListItem *item = posesScrollList->getFirstSelected();
+    LLScrollListItem* item = mPosesScrollList->getFirstSelected();
     if (!item)
         return;
 
     std::string poseName = item->getColumn(0)->getValue().asString();
 
     E_LoadPoseMethods loadType = ROT_POS_AND_SCALES; // the default is to load everything
-    if (boost::iequals(loadStyle, "rotation"))
+    if (loadStyle == "rotation")
         loadType = ROTATIONS;
-    else if (boost::iequals(loadStyle, "position"))
+    else if (loadStyle == "position")
         loadType = POSITIONS;
-    else if (boost::iequals(loadStyle, "scale"))
+    else if (loadStyle == "scale")
         loadType = SCALES;
-    else if (boost::iequals(loadStyle, "rot_pos"))
+    else if (loadStyle == "rot_pos")
         loadType = ROTATIONS_AND_POSITIONS;
-    else if (boost::iequals(loadStyle, "rot_scale"))
+    else if (loadStyle == "rot_scale")
         loadType = ROTATIONS_AND_SCALES;
-    else if (boost::iequals(loadStyle, "pos_scale"))
+    else if (loadStyle == "pos_scale")
         loadType = POSITIONS_AND_SCALES;
-    else if (boost::iequals(loadStyle, "all"))
+    else if (loadStyle == "all")
         loadType = ROT_POS_AND_SCALES;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
@@ -707,9 +628,9 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD &param)
 void FSFloaterPoser::onClickLoadLeftHandPose()
 {
     // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
-    _timeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > _doubleClickInterval)
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
+    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > mDoubleClickInterval)
         return;
 
     onClickLoadHandPose(false);
@@ -718,9 +639,9 @@ void FSFloaterPoser::onClickLoadLeftHandPose()
 void FSFloaterPoser::onClickLoadRightHandPose()
 {
     // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
-    _timeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > _doubleClickInterval)
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
+    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > mDoubleClickInterval)
         return;
 
     onClickLoadHandPose(true);
@@ -728,26 +649,22 @@ void FSFloaterPoser::onClickLoadRightHandPose()
 
 void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
 {
-    LLScrollListCtrl* handPosesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HAND_PRESETS_NAME);
-    if (!handPosesScrollList)
-        return;
-
-    LLScrollListItem* item = handPosesScrollList->getFirstSelected();
+    LLScrollListItem* item = mHandPresetsScrollList->getFirstSelected();
     if (!item)
         return;
 
     std::string poseName = item->getColumn(0)->getValue().asString();
-    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY));
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY));
     if (!gDirUtilp->fileExists(pathname))
         return;
 
     std::string fullPath =
-        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY), poseName + std::string(POSE_INTERNAL_FORMAT_FILE_EXT));
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY), poseName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
     LLVOAvatar* avatar   = getUiSelectedAvatar();
     if (!avatar)
         return;
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     try
@@ -779,12 +696,12 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
                 if (isRightHand != (name.find("Left") == std::string::npos))
                     continue;
 
-                const FSPoserAnimator::FSPoserJoint* poserJoint = _poserAnimator.getPoserJointByName(name);
+                const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator.getPoserJointByName(name);
                 if (!poserJoint)
                     continue;
 
                 vec3.setValue(control_map["rotation"]);
-                _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING);
+                mPoserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING);
             }
         }
     }
@@ -795,17 +712,17 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
 
 }
 
-void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileName, E_LoadPoseMethods loadMethod)
+void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod)
 {
-    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY));
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     if (!gDirUtilp->fileExists(pathname))
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     std::string fullPath =
-        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSE_SAVE_SUBDIRECTORY), poseFileName + std::string(POSE_INTERNAL_FORMAT_FILE_EXT));
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
     bool loadRotations = loadMethod == ROTATIONS || loadMethod == ROTATIONS_AND_POSITIONS || loadMethod == ROTATIONS_AND_SCALES ||
                          loadMethod == ROT_POS_AND_SCALES;
@@ -843,7 +760,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                 if (loadHandsOnly && name.find("Hand") == std::string::npos)
                     continue;
 
-                const FSPoserAnimator::FSPoserJoint *poserJoint = _poserAnimator.getPoserJointByName(name);
+                const FSPoserAnimator::FSPoserJoint *poserJoint = mPoserAnimator.getPoserJointByName(name);
                 if (!poserJoint)
                     continue;
 
@@ -851,32 +768,32 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileNam
                 {
                     vec3.setValue(control_map["rotation"]);
 
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING);
+                    mPoserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING);
                     continue;
                 }
 
                 if (loadRotations && control_map.has("rotation"))
                 {
                     vec3.setValue(control_map["rotation"]);
-                    _poserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
+                    mPoserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING); // If we keep defaults BD poses mostly load, except fingers
                 }
 
                 if (loadPositions && control_map.has("position"))
                 {
                     vec3.setValue(control_map["position"]);
-                    _poserAnimator.setJointPosition(avatar, poserJoint, vec3, NONE);
+                    mPoserAnimator.setJointPosition(avatar, poserJoint, vec3, NONE);
                 }
 
                 if (loadScales && control_map.has("scale"))
                 {
                     vec3.setValue(control_map["scale"]);
-                    _poserAnimator.setJointScale(avatar, poserJoint, vec3, NONE);
+                    mPoserAnimator.setJointScale(avatar, poserJoint, vec3, NONE);
                 }
 
                 if (control_map.has("enabled"))
                 {
                     enabled = control_map["enabled"].asBoolean();
-                    _poserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled);
+                    mPoserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled);
                 }
             }
         }
@@ -895,10 +812,10 @@ void FSFloaterPoser::onPoseStartStop()
     if (!avatar)
         return;
 
-    bool arePosingSelected = _poserAnimator.isPosingAvatar(avatar);
+    bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
     if (arePosingSelected)
     {
-        _poserAnimator.stopPosingAvatar(avatar);
+        mPoserAnimator.stopPosingAvatar(avatar);
     }
     else
     {
@@ -908,14 +825,14 @@ void FSFloaterPoser::onPoseStartStop()
         if (!havePermissionToAnimateAvatar(avatar))
             return;
 
-        _poserAnimator.tryPosingAvatar(avatar);
+        mPoserAnimator.tryPosingAvatar(avatar);
     }
 
     onAvatarsRefresh();
     onAvatarSelect();
 }
 
-bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar *avatar)
+bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar *avatar) const
 {
     if (!avatar || avatar->isDead())
         return false;
@@ -925,7 +842,7 @@ bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar *avatar)
     return true;
 }
 
-bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
+bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar) const
 {
     if (!avatar || avatar->isDead())
         return false;
@@ -939,126 +856,87 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar)
 
 void FSFloaterPoser::poseControlsEnable(bool enable)
 {
-    LLUICtrl *somePanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_JOINTSPARENT);
-    if (somePanel)
-        somePanel->setEnabled(enable);
-
-    somePanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_ADVANCED);
-    if (somePanel)
-        somePanel->setEnabled(enable);
-
-    LLUICtrl *trackballPanel = getChild<LLUICtrl>(POSER_AVATAR_PANEL_TRACKBALL);
-    if (trackballPanel)
-        trackballPanel->setEnabled(enable);
-
-    LLButton *someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPPOSE_NAME);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_FLIPJOINT_NAME);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_RECAPTURE_NAME);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    someButton = getChild<LLButton>(POSER_AVATAR_PANEL_BUTTON_TOGGLEPOSING_NAME);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    someButton = getChild<LLButton>(POSER_AVATAR_BUTTON_LOAD_NAME);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    someButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
-    if (someButton)
-        someButton->setEnabled(enable);
-
-    LLLineEditor* poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
-    if (poseSaveName)
-        poseSaveName->setEnabled(enable);
+    mJointsParentPnl->setEnabled(enable);
+    mAdvancedParentPnl->setEnabled(enable);
+    mTrackballPnl->setEnabled(enable);
+    mFlipPoseBtn->setEnabled(enable);
+    mFlipJointBtn->setEnabled(enable);
+    mRecaptureBtn->setEnabled(enable);
+    mTogglePosingBonesBtn->setEnabled(enable);
+    mLoadPosesBtn->setEnabled(enable);
+    mSavePosesBtn->setEnabled(enable);
+    mPoseSaveNameEditor->setEnabled(enable);
 }
 
 void FSFloaterPoser::refreshJointScrollListMembers()
 {
-    LLVOAvatar *avatar = getUiSelectedAvatar();
-
-    LLScrollListCtrl *hiddenScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HIDDEN_NAME);
-    LLScrollListCtrl *bodyJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME);
-    LLScrollListCtrl *faceJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME);
-    LLScrollListCtrl *handsJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME);
-    LLScrollListCtrl *miscJointsScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME);
-    LLScrollListCtrl *collisionVolumesScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME);
-    if (!bodyJointsScrollList || !faceJointsScrollList || !handsJointsScrollList || !miscJointsScrollList || !collisionVolumesScrollList)
-        return;
-
-    bodyJointsScrollList->clearRows();
-    faceJointsScrollList->clearRows();
-    handsJointsScrollList->clearRows();
-    miscJointsScrollList->clearRows();
-    collisionVolumesScrollList->clearRows();
+    mBodyJointsScrollList->clearRows();
+    mFaceJointsScrollList->clearRows();
+    mHandJointsScrollList->clearRows();
+    mMiscJointsScrollList->clearRows();
+    mCollisionVolumesScrollList->clearRows();
 
     std::vector<FSPoserAnimator::FSPoserJoint>::const_iterator poserJoint_iter;
-    for (poserJoint_iter = _poserAnimator.PoserJoints.begin();
-         poserJoint_iter != _poserAnimator.PoserJoints.end();
+    for (poserJoint_iter = mPoserAnimator.PoserJoints.begin();
+         poserJoint_iter != mPoserAnimator.PoserJoints.end();
          ++poserJoint_iter)
     {
-        LLSD row  = createRowForJoint(poserJoint_iter->jointName(), false);
+        LLSD row = createRowForJoint(poserJoint_iter->jointName(), false);
         if (!row)
             continue;
 
         LLScrollListItem *item = nullptr;
-        bool hasListHeader = hasString(std::string(XML_LIST_HEADER_STRING_PREFIX) + poserJoint_iter->jointName());
+        bool hasListHeader = hasString(XML_LIST_HEADER_STRING_PREFIX + poserJoint_iter->jointName());
 
         switch (poserJoint_iter->boneType())
         {
             case WHOLEAVATAR:
-                item = hiddenScrollList->addElement(row);
-                hiddenScrollList->selectFirstItem();
+                item = mEntireAvJointScroll->addElement(row);
+                mEntireAvJointScroll->selectFirstItem();
                 break;
 
             case BODY:
                 if (hasListHeader)
-                    AddHeaderRowToScrollList(poserJoint_iter->jointName(), bodyJointsScrollList);
+                    addHeaderRowToScrollList(poserJoint_iter->jointName(), mBodyJointsScrollList);
 
-                item = bodyJointsScrollList->addElement(row);
+                item = mBodyJointsScrollList->addElement(row);
                 break;
 
             case FACE:
                 if (hasListHeader)
-                    AddHeaderRowToScrollList(poserJoint_iter->jointName(), faceJointsScrollList);
+                    addHeaderRowToScrollList(poserJoint_iter->jointName(), mFaceJointsScrollList);
 
-                item = faceJointsScrollList->addElement(row);
+                item = mFaceJointsScrollList->addElement(row);
                 break;
 
             case HANDS:
                 if (hasListHeader)
-                    AddHeaderRowToScrollList(poserJoint_iter->jointName(), handsJointsScrollList);
+                    addHeaderRowToScrollList(poserJoint_iter->jointName(), mHandJointsScrollList);
 
-                item = handsJointsScrollList->addElement(row);
+                item = mHandJointsScrollList->addElement(row);
                 break;
 
             case MISC:
                 if (hasListHeader)
-                    AddHeaderRowToScrollList(poserJoint_iter->jointName(), miscJointsScrollList);
+                    addHeaderRowToScrollList(poserJoint_iter->jointName(), mMiscJointsScrollList);
 
-                item = miscJointsScrollList->addElement(row);
+                item = mMiscJointsScrollList->addElement(row);
                 break;
 
             case COL_VOLUMES:
                 if (hasListHeader)
-                    AddHeaderRowToScrollList(poserJoint_iter->jointName(), collisionVolumesScrollList);
+                    addHeaderRowToScrollList(poserJoint_iter->jointName(), mCollisionVolumesScrollList);
 
-                item = collisionVolumesScrollList->addElement(row);
+                item = mCollisionVolumesScrollList->addElement(row);
                 break;
         }
 
         if (item)
         {
             item->setUserdata((void*) &*poserJoint_iter);
+            LLVOAvatar* avatar = getUiSelectedAvatar();
 
-            if (_poserAnimator.isPosingAvatarJoint(avatar, *poserJoint_iter))
+            if (mPoserAnimator.isPosingAvatarJoint(avatar, *poserJoint_iter))
                 ((LLScrollListText *) item->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
             else
                 ((LLScrollListText *) item->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
@@ -1066,7 +944,7 @@ void FSFloaterPoser::refreshJointScrollListMembers()
     }
 }
 
-void FSFloaterPoser::AddHeaderRowToScrollList(std::string jointName, LLScrollListCtrl *bodyJointsScrollList)
+void FSFloaterPoser::addHeaderRowToScrollList(const std::string& jointName, LLScrollListCtrl* bodyJointsScrollList)
 {
     LLSD headerRow = createRowForJoint(jointName, true);
     if (!headerRow)
@@ -1076,7 +954,7 @@ void FSFloaterPoser::AddHeaderRowToScrollList(std::string jointName, LLScrollLis
     hdrRow->setEnabled(FALSE);
 }
 
-LLSD FSFloaterPoser::createRowForJoint(std::string jointName, bool isHeaderRow)
+LLSD FSFloaterPoser::createRowForJoint(const std::string& jointName, bool isHeaderRow)
 {
     if (jointName.empty())
         return NULL;
@@ -1086,7 +964,7 @@ LLSD FSFloaterPoser::createRowForJoint(std::string jointName, bool isHeaderRow)
         headerValue = isHeaderRow ? getString("icon_category") : getString("icon_bone");
 
     std::string jointValue    = jointName;
-    std::string parameterName = (isHeaderRow ? std::string(XML_LIST_HEADER_STRING_PREFIX) : std::string(XML_LIST_TITLE_STRING_PREFIX)) + jointName;
+    std::string parameterName = (isHeaderRow ? XML_LIST_HEADER_STRING_PREFIX : XML_LIST_TITLE_STRING_PREFIX) + jointName;
     if (hasString(parameterName))
         jointValue = getString(parameterName);
 
@@ -1102,96 +980,67 @@ LLSD FSFloaterPoser::createRowForJoint(std::string jointName, bool isHeaderRow)
 
 void FSFloaterPoser::onToggleLoadSavePanel()
 {
-    if (this->isMinimized())
+    if (isMinimized())
         return;
 
     // Get the load/save button toggle state, find the load/save panel, and set its visibility
-    LLButton *yourPosesButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_LOADSAVE);
-    if (!yourPosesButton)
-        return;
-
-    bool      loadSavePanelExpanded = yourPosesButton->getValue().asBoolean();
-    LLUICtrl *loadSavePanel         = getChild<LLUICtrl>(POSER_AVATAR_PANEL_LOADSAVE_NAME);
-    if (!loadSavePanel)
-        return;
-
-    loadSavePanel->setVisible(loadSavePanelExpanded);
-    LLButton *loadPosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_LOAD_NAME);
-    if (loadPosesButton)
-        loadPosesButton->setVisible(loadSavePanelExpanded);
-
-    LLButton *savePosesButton = getChild<LLButton>(POSER_AVATAR_BUTTON_SAVE_NAME);
-    if (savePosesButton)
-        savePosesButton->setVisible(loadSavePanelExpanded);
-
-    LLButton *exploreFolderButton = getChild<LLButton>(POSER_AVATAR_BUTTON_BROWSEFOLDER_NAME);
-    if (exploreFolderButton)
-        exploreFolderButton->setVisible(loadSavePanelExpanded);
+    bool loadSavePanelExpanded = mToggleLoadSavePanelBtn->getValue().asBoolean();
+    mPosesLoadSavePnl->setVisible(loadSavePanelExpanded);
+    mLoadPosesBtn->setVisible(loadSavePanelExpanded);
+    mSavePosesBtn->setVisible(loadSavePanelExpanded);
+    mBrowserFolderBtn->setVisible(loadSavePanelExpanded);
 
     // change the width of the Poser panel for the (dis)appearance of the load/save panel
-    S32 currentWidth = this->getRect().getWidth();
-    S32 loadSavePanelWidth = loadSavePanel->getRect().getWidth();
+    S32 currentWidth       = getRect().getWidth();
+    S32 loadSavePanelWidth = mPosesLoadSavePnl->getRect().getWidth();
 
-    S32 poserFloaterHeight = this->getRect().getHeight();
+    S32 poserFloaterHeight = getRect().getHeight();
     S32 poserFloaterWidth  = loadSavePanelExpanded ? currentWidth + loadSavePanelWidth : currentWidth - loadSavePanelWidth;
 
     if (poserFloaterWidth < 0)
         return;
 
-    this->reshape(poserFloaterWidth, poserFloaterHeight);
+    reshape(poserFloaterWidth, poserFloaterHeight);
 
     if (loadSavePanelExpanded)
-        refreshPoseScroll(POSER_AVATAR_SCROLLLIST_LOADSAVE_NAME, POSE_SAVE_SUBDIRECTORY);
+        refreshPoseScroll(mPosesScrollList);
 
     showOrHideAdvancedSaveOptions();
 }
 
 void FSFloaterPoser::showOrHideAdvancedSaveOptions()
 {
-    LLButton* yourPosesButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_LOADSAVE);
-    if (!yourPosesButton)
-        return;
+    bool loadSavePanelExpanded = mToggleLoadSavePanelBtn->getValue().asBoolean();
+    bool advancedPanelExpanded = mToggleAdvancedPanelBtn->getValue().asBoolean();
 
-    LLButton* advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
-    if (!advancedButton)
-        return;
-
-    LLUICtrl* advSavePanel = getChild<LLUICtrl>(POSER_AVATAR_ADVANCED_SAVEOPTIONSPANEL_NAME);
-    if (!advSavePanel)
-        return;
-
-    bool loadSavePanelExpanded = yourPosesButton->getValue().asBoolean();
-    bool advancedPanelExpanded = advancedButton->getValue().asBoolean();
-
-    advSavePanel->setVisible(loadSavePanelExpanded && advancedPanelExpanded);
+    mSaveFilePptionsPnl->setVisible(loadSavePanelExpanded && advancedPanelExpanded);
 }
 
-void FSFloaterPoser::onToggleMirrorChange() { setRotationChangeButtons(true, false, false); }
+void FSFloaterPoser::onToggleMirrorChange()
+{
+    setRotationChangeButtons(true, false, false);
+}
 
-void FSFloaterPoser::onToggleSympatheticChange() { setRotationChangeButtons(false, true, false); }
+void FSFloaterPoser::onToggleSympatheticChange()
+{
+    setRotationChangeButtons(false, true, false);
+}
 
-void FSFloaterPoser::onToggleDeltaModeChange() { setRotationChangeButtons(false, false, true); }
+void FSFloaterPoser::onToggleDeltaModeChange()
+{
+    setRotationChangeButtons(false, false, true);
+}
 
 void FSFloaterPoser::setRotationChangeButtons(bool togglingMirror, bool togglingSympathetic, bool togglingDelta)
 {
-    LLButton *toggleMirrorButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_MIRROR);
-    if (!toggleMirrorButton)
-        return;
-    LLButton *toggleSympatheticButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_SYMPATH);
-    if (!toggleSympatheticButton)
-        return;
-    LLButton* deltaModeToggleButton = getChild<LLButton>(POSER_AVATAR_BUTTON_DELTAMODE);
-    if (!deltaModeToggleButton)
-        return;
-
     if (togglingSympathetic || togglingDelta)
-        toggleMirrorButton->setValue(false);
+        mToggleMirrorRotationBtn->setValue(false);
 
     if (togglingMirror || togglingDelta)
-        toggleSympatheticButton->setValue(false);
+        mToggleSympatheticRotationBtn->setValue(false);
 
     if (togglingMirror || togglingSympathetic)
-        deltaModeToggleButton->setValue(false);
+        mToggleDeltaModeBtn->setValue(false);
 
     refreshTrackpadCursor();
 }
@@ -1202,7 +1051,7 @@ void FSFloaterPoser::onUndoLastRotation()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1211,9 +1060,9 @@ void FSFloaterPoser::onUndoLastRotation()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.undoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.undoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     enableOrDisableRedoButton();
@@ -1227,7 +1076,7 @@ void FSFloaterPoser::onUndoLastPosition()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1236,9 +1085,9 @@ void FSFloaterPoser::onUndoLastPosition()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.undoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.undoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedPositionSliders();
@@ -1251,7 +1100,7 @@ void FSFloaterPoser::onUndoLastScale()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1260,9 +1109,9 @@ void FSFloaterPoser::onUndoLastScale()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.undoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.undoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedScaleSliders();
@@ -1271,16 +1120,16 @@ void FSFloaterPoser::onUndoLastScale()
 void FSFloaterPoser::onResetPosition()
 {
     // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
-    _timeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > _doubleClickInterval)
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
+    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > mDoubleClickInterval)
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1289,9 +1138,9 @@ void FSFloaterPoser::onResetPosition()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.resetJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.resetJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedPositionSliders();
@@ -1301,16 +1150,16 @@ void FSFloaterPoser::onResetPosition()
 void FSFloaterPoser::onResetScale()
 {
     // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - _timeLastClickedJointReset;
-    _timeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > _doubleClickInterval)
+    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
+    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
+    if (timeIntervalSinceLastClick > mDoubleClickInterval)
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1319,9 +1168,9 @@ void FSFloaterPoser::onResetScale()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.resetJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.resetJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedScaleSliders();
@@ -1333,7 +1182,7 @@ void FSFloaterPoser::onRedoLastRotation()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1342,9 +1191,9 @@ void FSFloaterPoser::onRedoLastRotation()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.redoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.redoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     enableOrDisableRedoButton();
@@ -1358,7 +1207,7 @@ void FSFloaterPoser::onRedoLastPosition()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1367,9 +1216,9 @@ void FSFloaterPoser::onRedoLastPosition()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.redoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.redoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedPositionSliders();
@@ -1382,7 +1231,7 @@ void FSFloaterPoser::onRedoLastScale()
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1391,9 +1240,9 @@ void FSFloaterPoser::onRedoLastScale()
 
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            _poserAnimator.redoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
+            mPoserAnimator.redoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedScaleSliders();
@@ -1401,15 +1250,11 @@ void FSFloaterPoser::onRedoLastScale()
 
 void FSFloaterPoser::enableOrDisableRedoButton()
 {
-    LLButton* redoButton = getChild<LLButton>(POSER_AVATAR_BUTTON_REDO);
-    if (!redoButton)
-        return;
-
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -1419,127 +1264,99 @@ void FSFloaterPoser::enableOrDisableRedoButton()
     bool shouldEnableRedoButton = false;
     for (auto item : selectedJoints)
     {
-        bool currentlyPosing = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            shouldEnableRedoButton |= _poserAnimator.canRedoJointRotation(avatar, *item);
+            shouldEnableRedoButton |= mPoserAnimator.canRedoJointRotation(avatar, *item);
     }
 
-    redoButton->setEnabled(shouldEnableRedoButton);
+    mRedoChangeBtn->setEnabled(shouldEnableRedoButton);
 }
 
 void FSFloaterPoser::onOpenSetAdvancedPanel()
 {
-    LLButton* advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
-    if (!advancedButton)
-        return;
-
-    bool advancedPanelExpanded = advancedButton->getValue().asBoolean();
+    bool advancedPanelExpanded = mToggleAdvancedPanelBtn->getValue().asBoolean();
     if (advancedPanelExpanded)
         onToggleAdvancedPanel();
 }
 
 void FSFloaterPoser::onToggleAdvancedPanel()
 {
-    if (this->isMinimized())
+    if (isMinimized())
         return;
 
-    LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
-    if (!advancedButton)
-        return;
+    bool advancedPanelExpanded = mToggleAdvancedPanelBtn->getValue().asBoolean();
 
-    bool      advancedPanelExpanded = advancedButton->getValue().asBoolean();
-    LLUICtrl* advancedPanel         = getChild<LLUICtrl>(POSER_AVATAR_PANEL_ADVANCED);
-    if (!advancedPanel)
-        return;
-
-    advancedPanel->setVisible(advancedPanelExpanded);
+    mAdvancedParentPnl->setVisible(advancedPanelExpanded);
 
     // change the height of the Poser panel
-    S32 currentHeight       = this->getRect().getHeight();
-    S32 advancedPanelHeight = advancedPanel->getRect().getHeight();
+    S32 currentHeight       = getRect().getHeight();
+    S32 advancedPanelHeight = mAdvancedParentPnl->getRect().getHeight();
 
     S32 poserFloaterHeight = advancedPanelExpanded ? currentHeight + advancedPanelHeight : currentHeight - advancedPanelHeight;
-    S32 poserFloaterWidth  = this->getRect().getWidth();
+    S32 poserFloaterWidth  = getRect().getWidth();
 
     if (poserFloaterHeight < 0)
         return;
 
-    this->reshape(poserFloaterWidth, poserFloaterHeight);
+    reshape(poserFloaterWidth, poserFloaterHeight);
     showOrHideAdvancedSaveOptions();
     onJointSelect();
 }
 
-std::vector<FSPoserAnimator::FSPoserJoint *> FSFloaterPoser::getUiSelectedPoserJoints() const
+std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJoints() const
 {
-    std::vector<FSPoserAnimator::FSPoserJoint *> joints;
+    std::vector<FSPoserAnimator::FSPoserJoint*> joints;
 
-    LLTabContainer *tabGroup = getChild<LLTabContainer>(POSER_AVATAR_TABGROUP_JOINTS);
-    if (!tabGroup)
+    auto activeTab = mJointsTabs->getCurrentPanel();
+    if (!activeTab)
     {
         return joints;
     }
 
-    std::string activeTabName = tabGroup->getCurrentPanel()->getName();
-    if (activeTabName.empty())
-    {
-        return joints;
-    }
+    LLScrollListCtrl* scrollList{ nullptr };
 
-    std::string scrollListName;
-
-    if (boost::iequals(activeTabName, POSER_AVATAR_TAB_POSITION))
+    if (activeTab == mPositionRotationPnl)
     {
-        scrollListName = POSER_AVATAR_SCROLLLIST_HIDDEN_NAME;
+        scrollList = mEntireAvJointScroll;
     }
-    else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_BODY))
+    else if (activeTab == mBodyJointsPnl)
     {
-        scrollListName = POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME;
+        scrollList = mBodyJointsScrollList;
     }
-    else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_FACE))
+    else if (activeTab == mFaceJointsPnl)
     {
-        scrollListName = POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME;
+        scrollList = mFaceJointsScrollList;
     }
-    else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_HANDS))
+    else if (activeTab == mHandsTabs)
     {
-        tabGroup = getChild<LLTabContainer>(POSER_AVATAR_TAB_HANDS);
-        if (!tabGroup)
+        auto activeHandsSubTab = mHandsTabs->getCurrentPanel();
+        if (!activeHandsSubTab)
         {
             return joints;
         }
 
-        activeTabName = tabGroup->getCurrentPanel()->getName();
-        if (activeTabName.empty())
+        if (activeHandsSubTab == mHandsJointsPnl)
         {
-            return joints;
-        }
-
-        if (boost::iequals(activeTabName, POSER_AVATAR_TAB_HANDJOINTS))
-        {
-            scrollListName = POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME;
+            scrollList = mHandJointsScrollList;
         }
     }
-    else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_MISC))
+    else if (activeTab == mMiscJointsPnl)
     {
-        scrollListName = POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME;
+        scrollList = mMiscJointsScrollList;
     }
-    else if (boost::iequals(activeTabName, POSER_AVATAR_TAB_VOLUMES))
+    else if (activeTab == mCollisionVolumesPnl)
     {
-        scrollListName = POSER_AVATAR_SCROLLLIST_VOLUMES_NAME;
-    }
-
-    if (scrollListName.empty())
-    {
-        return joints;
+        scrollList = mCollisionVolumesScrollList;
     }
 
-    LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(scrollListName);
     if (!scrollList)
     {
         return joints;
     }
+
     for (auto item : scrollList->getAllSelected())
     {
-        auto *userData = static_cast<FSPoserAnimator::FSPoserJoint *>(item->getUserdata());
+        auto* userData = static_cast<FSPoserAnimator::FSPoserJoint*>(item->getUserdata());
         if (userData)
         {
             joints.push_back(userData);
@@ -1549,27 +1366,17 @@ std::vector<FSPoserAnimator::FSPoserJoint *> FSFloaterPoser::getUiSelectedPoserJ
     return joints;
 }
 
-E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle()
+E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle() const
 {
-
-    // Use early return to reduce nesting and improve readability
-    auto* toggleMirrorButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_MIRROR);
-    auto* toggleSympatheticButton = getChild<LLButton>(POSER_AVATAR_TOGGLEBUTTON_SYMPATH);
-    auto* deltaModeToggleButton = getChild<LLButton>(POSER_AVATAR_BUTTON_DELTAMODE);
-    if (!toggleMirrorButton || !toggleSympatheticButton || !deltaModeToggleButton)
-    {
-        return NONE;
-    }
-
-    if (toggleMirrorButton->getValue().asBoolean())
+    if (mToggleMirrorRotationBtn->getValue().asBoolean())
     {
         return MIRROR;
     }
-    if (toggleSympatheticButton->getValue().asBoolean())
+    if (mToggleSympatheticRotationBtn->getValue().asBoolean())
     {
         return SYMPATHETIC;
     }
-    if (deltaModeToggleButton->getValue().asBoolean())
+    if (mToggleDeltaModeBtn->getValue().asBoolean())
     {
         return DELTAMODE;
     }
@@ -1577,13 +1384,9 @@ E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle()
     return NONE;
 }
 
-LLVOAvatar* FSFloaterPoser::getUiSelectedAvatar()
+LLVOAvatar* FSFloaterPoser::getUiSelectedAvatar() const
 {
-    LLScrollListCtrl *avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
-        return nullptr;
-
-    LLScrollListItem *item = avatarScrollList->getFirstSelected();
+    LLScrollListItem* item = mAvatarSelectionScrollList->getFirstSelected();
     if (!item)
         return nullptr;
 
@@ -1598,11 +1401,7 @@ LLVOAvatar* FSFloaterPoser::getUiSelectedAvatar()
 
 void FSFloaterPoser::setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName()
 {
-    LLScrollListCtrl* avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
-        return;
-
-    LLScrollListItem* item = avatarScrollList->getFirstSelected();
+    LLScrollListItem* item = mAvatarSelectionScrollList->getFirstSelected();
     if (!item)
         return;
 
@@ -1614,21 +1413,13 @@ void FSFloaterPoser::setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName()
     if (lastSetName.empty())
         return;
 
-    LLLineEditor* poseSaveName = getChild<LLLineEditor>(POSER_AVATAR_LINEEDIT_FILESAVENAME);
-    if (!poseSaveName)
-        return;
-
     LLStringExplicit name = LLStringExplicit(lastSetName);
-    poseSaveName->setText(name);
+    mPoseSaveNameEditor->setText(name);
 }
 
-void FSFloaterPoser::setUiSelectedAvatarSaveFileName(std::string saveFileName)
+void FSFloaterPoser::setUiSelectedAvatarSaveFileName(const std::string& saveFileName)
 {
-    LLScrollListCtrl *avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
-        return;
-
-    LLScrollListItem *item = avatarScrollList->getFirstSelected();
+    LLScrollListItem* item = mAvatarSelectionScrollList->getFirstSelected();
     if (!item)
         return;
 
@@ -1639,7 +1430,7 @@ void FSFloaterPoser::setUiSelectedAvatarSaveFileName(std::string saveFileName)
     return cell->setValue(saveFileName);
 }
 
-LLVOAvatar* FSFloaterPoser::getAvatarByUuid(LLUUID avatarToFind)
+LLVOAvatar* FSFloaterPoser::getAvatarByUuid(const LLUUID& avatarToFind) const
 {
     for (LLCharacter* character : LLCharacter::sInstances)
     {
@@ -1655,15 +1446,9 @@ LLVOAvatar* FSFloaterPoser::getAvatarByUuid(LLUUID avatarToFind)
 
 void FSFloaterPoser::onAdvancedPositionSet()
 {
-    LLSliderCtrl *xposAdvSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_POSX_NAME);
-    LLSliderCtrl *yposAdvSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_POSY_NAME);
-    LLSliderCtrl *zposAdvSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_POSZ_NAME);
-    if (!xposAdvSlider || !yposAdvSlider || !zposAdvSlider)
-        return;
-
-    F32 posX = (F32) xposAdvSlider->getValue().asReal();
-    F32 posY = (F32) yposAdvSlider->getValue().asReal();
-    F32 posZ = (F32) zposAdvSlider->getValue().asReal();
+    F32 posX = (F32)mAdvPosXSlider->getValue().asReal();
+    F32 posY = (F32)mAdvPosYSlider->getValue().asReal();
+    F32 posZ = (F32)mAdvPosZSlider->getValue().asReal();
 
     setSelectedJointsPosition(posX, posY, posZ);
     refreshAvatarPositionSliders();
@@ -1671,30 +1456,18 @@ void FSFloaterPoser::onAdvancedPositionSet()
 
 void FSFloaterPoser::onAdvancedScaleSet()
 {
-    LLSliderCtrl *scalex = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_SCALEX_NAME);
-    LLSliderCtrl *scaley = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_SCALEY_NAME);
-    LLSliderCtrl *scalez = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_SCALEZ_NAME);
-    if (!scalex || !scaley || !scalez)
-        return;
-
-    F32 scX = (F32) scalex->getValue().asReal();
-    F32 scY = (F32) scaley->getValue().asReal();
-    F32 scZ = (F32) scalez->getValue().asReal();
+    F32 scX = (F32)mAdvScaleXSlider->getValue().asReal();
+    F32 scY = (F32)mAdvScaleYSlider->getValue().asReal();
+    F32 scZ = (F32)mAdvScaleZSlider->getValue().asReal();
 
     setSelectedJointsScale(scX, scY, scZ);
 }
 
 void FSFloaterPoser::onAvatarPositionSet()
 {
-    LLSliderCtrl *xposSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSX_NAME);
-    LLSliderCtrl *yposSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSY_NAME);
-    LLSliderCtrl *zposSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSZ_NAME);
-    if (!xposSlider || !yposSlider || !zposSlider)
-        return;
-
-    F32 posX = (F32) xposSlider->getValue().asReal();
-    F32 posY = (F32) yposSlider->getValue().asReal();
-    F32 posZ = (F32) zposSlider->getValue().asReal();
+    F32 posX = (F32)mPosXSlider->getValue().asReal();
+    F32 posY = (F32)mPosYSlider->getValue().asReal();
+    F32 posZ = (F32)mPosZSlider->getValue().asReal();
 
     setSelectedJointsPosition(posX, posY, posZ);
     refreshAdvancedPositionSliders();
@@ -1702,12 +1475,8 @@ void FSFloaterPoser::onAvatarPositionSet()
 
 void FSFloaterPoser::onLimbTrackballChanged()
 {
-    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
-    if (!trackBall)
-        return;
-
     LLVector3 trackPadPos;
-    LLSD position = trackBall->getValue();
+    LLSD position = mAvatarTrackball->getValue();
     if (position.isArray() && position.size() == 3)
         trackPadPos.setValue(position);
     else
@@ -1723,26 +1492,21 @@ void FSFloaterPoser::onLimbTrackballChanged()
     pitch *= trackPadSensitivity;
 
     // if the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the sliders; this wraps them to by the slider full-scale
-    yaw   = unWrapScale(yaw) * normalTrackpadRangeInRads;
-    pitch = unWrapScale(pitch) * normalTrackpadRangeInRads;
-    roll  = unWrapScale(roll) * normalTrackpadRangeInRads;
+    yaw   = unWrapScale(yaw) * NormalTrackpadRangeInRads;
+    pitch = unWrapScale(pitch) * NormalTrackpadRangeInRads;
+    roll  = unWrapScale(roll) * NormalTrackpadRangeInRads;
 
-    bool deltaMode = false;
-    LLButton* deltaModeToggleButton = getChild<LLButton>(POSER_AVATAR_BUTTON_DELTAMODE);
-    if (deltaModeToggleButton)
-        deltaMode = deltaModeToggleButton->getValue().asBoolean();
-
-    if (deltaMode)
+    if (mToggleDeltaModeBtn->getValue().asBoolean())
     {
         F32 deltaYaw, deltaPitch, deltaRoll;
-        LLSD deltaPosition = trackBall->getValueDelta();
+        LLSD deltaPosition = mAvatarTrackball->getValueDelta();
         LLVector3 trackPadDeltaPos;
         if (deltaPosition.isArray() && deltaPosition.size() == 3)
         {
             trackPadDeltaPos.setValue(deltaPosition);
-            deltaYaw   = trackPadDeltaPos[VX] * normalTrackpadRangeInRads;
-            deltaPitch = trackPadDeltaPos[VY] * normalTrackpadRangeInRads;
-            deltaRoll  = trackPadDeltaPos[VZ] * normalTrackpadRangeInRads;
+            deltaYaw   = trackPadDeltaPos[VX] * NormalTrackpadRangeInRads;
+            deltaPitch = trackPadDeltaPos[VY] * NormalTrackpadRangeInRads;
+            deltaRoll  = trackPadDeltaPos[VZ] * NormalTrackpadRangeInRads;
             deltaYaw *= trackPadSensitivity;
             deltaPitch *= trackPadSensitivity;
         
@@ -1750,21 +1514,17 @@ void FSFloaterPoser::onLimbTrackballChanged()
         }
     }
     else
+    {
         setSelectedJointsRotation(yaw, pitch, roll);
+    }
 
     // WARNING!
     // as tempting as it is to refactor the following to refreshRotationSliders(), don't.
     // getRotationOfFirstSelectedJoint/setSelectedJointsRotation are
     // not necessarily symmetric functions (see their remarks).
-    LLSliderCtrl *yawSlider   = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
-    LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
-    LLSliderCtrl* rollSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!yawSlider || !pitchSlider || !rollSlider)
-        return;
-
-    yawSlider->setValue(yaw *= RAD_TO_DEG);
-    pitchSlider->setValue(pitch *= RAD_TO_DEG);
-    rollSlider->setValue(roll *= RAD_TO_DEG);
+    mLimbYawSlider->setValue(yaw *= RAD_TO_DEG);
+    mLimbPitchSlider->setValue(pitch *= RAD_TO_DEG);
+    mLimbRollSlider->setValue(roll *= RAD_TO_DEG);
 }
 
 F32 FSFloaterPoser::unWrapScale(F32 scale)
@@ -1783,15 +1543,9 @@ F32 FSFloaterPoser::unWrapScale(F32 scale)
 
 void FSFloaterPoser::onLimbYawPitchRollChanged()
 {
-    LLSliderCtrl *yawSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
-    LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
-    LLSliderCtrl *rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!yawSlider || !pitchSlider || !rollSlider)
-        return;
-
-    F32 yaw   = (F32) yawSlider->getValue().asReal();
-    F32 pitch = (F32) pitchSlider->getValue().asReal();
-    F32 roll  = (F32) rollSlider->getValue().asReal();
+    F32 yaw   = (F32)mLimbYawSlider->getValue().asReal();
+    F32 pitch = (F32)mLimbPitchSlider->getValue().asReal();
+    F32 roll  = (F32)mLimbRollSlider->getValue().asReal();
 
     yaw *= DEG_TO_RAD;
     pitch *= DEG_TO_RAD;
@@ -1803,60 +1557,42 @@ void FSFloaterPoser::onLimbYawPitchRollChanged()
     // as tempting as it is to refactor the following to refreshTrackpadCursor(), don't.
     // getRotationOfFirstSelectedJoint/setSelectedJointsRotation are
     // not necessarily symmetric functions (see their remarks).
-    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
-    if (!trackBall)
-        return;
-
     F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
     yaw /= trackPadSensitivity;
     pitch /= trackPadSensitivity;
 
-    yaw /= normalTrackpadRangeInRads;
-    pitch /= normalTrackpadRangeInRads;
-    roll /= normalTrackpadRangeInRads;
+    yaw /= NormalTrackpadRangeInRads;
+    pitch /= NormalTrackpadRangeInRads;
+    roll /= NormalTrackpadRangeInRads;
 
-    trackBall->setValue(yaw, pitch, roll);
+    mAvatarTrackball->setValue(yaw, pitch, roll);
 }
 
 void FSFloaterPoser::onAdjustTrackpadSensitivity()
 {
-    LLSliderCtrl* trackpadSensitivitySlider = getChild<LLSliderCtrl>(POSER_TRACKPAD_SENSITIVITY_SLIDER_NAME);
-    if (!trackpadSensitivitySlider)
-        return;
-
-    gSavedSettings.setF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY, (F32) trackpadSensitivitySlider->getValue().asReal());
+    gSavedSettings.setF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY, (F32)mTrackpadSensitivitySlider->getValue().asReal());
     refreshTrackpadCursor();
 }
 
 void FSFloaterPoser::refreshTrackpadCursor()
 {
-    FSVirtualTrackpad *trackBall = getChild<FSVirtualTrackpad>(POSER_AVATAR_TRACKBALL_NAME);
-    if (!trackBall)
-        return;
-
-    LLSliderCtrl* yawSlider   = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
-    LLSliderCtrl* pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
-    LLSliderCtrl* rollSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!yawSlider || !pitchSlider || !rollSlider)
-        return;
-
-    F32 axis1 = (F32) yawSlider->getValue().asReal();
-    F32 axis2 = (F32) pitchSlider->getValue().asReal();
-    F32 axis3 = (F32) rollSlider->getValue().asReal();
+    F32 axis1 = (F32)mLimbYawSlider->getValue().asReal();
+    F32 axis2 = (F32)mLimbPitchSlider->getValue().asReal();
+    F32 axis3 = (F32)mLimbRollSlider->getValue().asReal();
 
     axis1 *= DEG_TO_RAD;
     axis2 *= DEG_TO_RAD;
     axis3 *= DEG_TO_RAD;
 
-    axis1 /= normalTrackpadRangeInRads;
-    axis2 /= normalTrackpadRangeInRads;
-    axis3 /= normalTrackpadRangeInRads;
+    axis1 /= NormalTrackpadRangeInRads;
+    axis2 /= NormalTrackpadRangeInRads;
+    axis3 /= NormalTrackpadRangeInRads;
 
     F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
     axis1 /= trackPadSensitivity;
     axis2 /= trackPadSensitivity;
 
-    trackBall->setValue(axis1, axis2, axis3);
+    mAvatarTrackball->setValue(axis1, axis2, axis3);
 }
 
 /// <summary>
@@ -1864,73 +1600,44 @@ void FSFloaterPoser::refreshTrackpadCursor()
 /// </summary>
 void FSFloaterPoser::refreshAvatarPositionSliders()
 {
-    LLTabContainer *jointTabGroup = getChild<LLTabContainer>(POSER_AVATAR_TABGROUP_JOINTS);
-    if (!jointTabGroup)
+    auto activeTab = mJointsTabs->getCurrentPanel();
+    if (!activeTab)
         return;
 
-    std::string activeTabName = jointTabGroup->getCurrentPanel()->getName();
-    if (activeTabName.empty())
-        return;
-
-    if (!boost::iequals(activeTabName, POSER_AVATAR_TAB_POSITION))
+    if (activeTab != mPositionRotationPnl)
         return; // if the active tab isn't the av position one, don't set anything.
 
-    LLSliderCtrl *xSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSX_NAME);
-    LLSliderCtrl *ySlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSY_NAME);
-    LLSliderCtrl *zSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_POSZ_NAME);
-    if (!xSlider || !ySlider || !zSlider)
-        return;
-
     LLVector3 position = getPositionOfFirstSelectedJoint();
-
-    xSlider->setValue(position.mV[VX]);
-    ySlider->setValue(position.mV[VY]);
-    zSlider->setValue(position.mV[VZ]);
+    mPosXSlider->setValue(position.mV[VX]);
+    mPosYSlider->setValue(position.mV[VY]);
+    mPosZSlider->setValue(position.mV[VZ]);
 }
 
 void FSFloaterPoser::refreshRotationSliders()
 {
-    LLSliderCtrl *yawSlider   = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_YAW_NAME);
-    LLSliderCtrl *pitchSlider = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_PITCH_NAME);
-    LLSliderCtrl *rollSlider  = getChild<LLSliderCtrl>(POSER_AVATAR_SLIDER_ROLL_NAME);
-    if (!yawSlider || !pitchSlider || !rollSlider)
-        return;
-
     LLVector3 rotation = getRotationOfFirstSelectedJoint();
 
-    yawSlider->setValue(rotation.mV[VX] *= RAD_TO_DEG);
-    pitchSlider->setValue(rotation.mV[VY] *= RAD_TO_DEG);
-    rollSlider->setValue(rotation.mV[VZ] *= RAD_TO_DEG);
+    mLimbYawSlider->setValue(rotation.mV[VX] *= RAD_TO_DEG);
+    mLimbPitchSlider->setValue(rotation.mV[VY] *= RAD_TO_DEG);
+    mLimbRollSlider->setValue(rotation.mV[VZ] *= RAD_TO_DEG);
 }
 
 void FSFloaterPoser::refreshAdvancedPositionSliders()
 {
-    LLSliderCtrl *xSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_POSX_NAME);
-    LLSliderCtrl *ySlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_POSY_NAME);
-    LLSliderCtrl *zSlider = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_POSZ_NAME);
-    if (!xSlider || !ySlider || !zSlider)
-        return;
-
     LLVector3 position = getPositionOfFirstSelectedJoint();
 
-    xSlider->setValue(position.mV[VX]);
-    ySlider->setValue(position.mV[VY]);
-    zSlider->setValue(position.mV[VZ]);
+    mAdvPosXSlider->setValue(position.mV[VX]);
+    mAdvPosYSlider->setValue(position.mV[VY]);
+    mAdvPosZSlider->setValue(position.mV[VZ]);
 }
 
 void FSFloaterPoser::refreshAdvancedScaleSliders()
 {
-    LLSliderCtrl *xSlider     = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_SCALEX_NAME);
-    LLSliderCtrl *ySlider    = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_SCALEY_NAME);
-    LLSliderCtrl *zSlider     = getChild<LLSliderCtrl>(POSER_AVATAR_ADV_SLIDER_SCALEZ_NAME);
-    if (!xSlider || !ySlider || !zSlider)
-        return;
-
     LLVector3 rotation = getScaleOfFirstSelectedJoint();
 
-    xSlider->setValue(rotation.mV[VX]);
-    ySlider->setValue(rotation.mV[VY]);
-    zSlider->setValue(rotation.mV[VZ]);
+    mAdvScaleXSlider->setValue(rotation.mV[VX]);
+    mAdvScaleYSlider->setValue(rotation.mV[VY]);
+    mAdvScaleZSlider->setValue(rotation.mV[VZ]);
 }
 
 void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
@@ -1939,7 +1646,7 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
@@ -1947,11 +1654,11 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
 
     for (auto item : getUiSelectedPoserJoints())
     {
-        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosingJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (!currentlyPosingJoint)
             continue;
 
-        _poserAnimator.setJointPosition(avatar, item, vec3, defl);
+        mPoserAnimator.setJointPosition(avatar, item, vec3, defl);
     }
 }
 
@@ -1961,7 +1668,7 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
@@ -1969,11 +1676,11 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
 
     for (auto item : getUiSelectedPoserJoints())
     {
-        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosingJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (!currentlyPosingJoint)
             continue;
 
-        _poserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
+        mPoserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
                                 getJointNegation(item->jointName()));
     }
 }
@@ -1984,7 +1691,7 @@ void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
     if (!avatar)
         return;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
     E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
@@ -1992,15 +1699,15 @@ void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
 
     for (auto item : getUiSelectedPoserJoints())
     {
-        bool currentlyPosingJoint = _poserAnimator.isPosingAvatarJoint(avatar, *item);
+        bool currentlyPosingJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (!currentlyPosingJoint)
             continue;
 
-        _poserAnimator.setJointScale(avatar, item, vec3, defl);
+        mPoserAnimator.setJointScale(avatar, item, vec3, defl);
     }
 }
 
-LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint()
+LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint() const
 {
     LLVector3 rotation;
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -2011,16 +1718,16 @@ LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint()
     if (!avatar)
         return rotation;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return rotation;
 
-    rotation = _poserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(selectedJoints.front()->jointName()),
+    rotation = mPoserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(selectedJoints.front()->jointName()),
                                                getJointNegation(selectedJoints.front()->jointName()));
 
     return rotation;
 }
 
-LLVector3 FSFloaterPoser::getPositionOfFirstSelectedJoint()
+LLVector3 FSFloaterPoser::getPositionOfFirstSelectedJoint() const
 {
     LLVector3 position;
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -2031,14 +1738,14 @@ LLVector3 FSFloaterPoser::getPositionOfFirstSelectedJoint()
     if (!avatar)
         return position;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return position;
 
-    position = _poserAnimator.getJointPosition(avatar, *selectedJoints.front());
+    position = mPoserAnimator.getJointPosition(avatar, *selectedJoints.front());
     return position;
 }
 
-LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint()
+LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint() const
 {
     LLVector3 scale;
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -2049,10 +1756,10 @@ LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint()
     if (!avatar)
         return scale;
 
-    if (!_poserAnimator.isPosingAvatar(avatar))
+    if (!mPoserAnimator.isPosingAvatar(avatar))
         return scale;
 
-    scale = _poserAnimator.getJointScale(avatar, *selectedJoints.front());
+    scale = mPoserAnimator.getJointScale(avatar, *selectedJoints.front());
     return scale;
 }
 
@@ -2063,27 +1770,23 @@ void FSFloaterPoser::onJointSelect()
     refreshTrackpadCursor();
     enableOrDisableRedoButton();
 
-    LLButton *advancedButton = getChild<LLButton>(POSER_AVATAR_ADVANCED_TOGGLEBUTTON_NAME);
-    if (!advancedButton)
-        return;
-
-    if (advancedButton->getValue().asBoolean())
+    if (mToggleAdvancedPanelBtn->getValue().asBoolean())
     {
         refreshAdvancedPositionSliders();
         refreshAdvancedScaleSliders();
     }
 }
 
-E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)
+E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(const std::string& jointName) const
 {
     if (jointName.empty())
         return SWAP_NOTHING;
 
-    bool hasTransformParameter = hasString(std::string(XML_JOINT_TRANSFORM_STRING_PREFIX) + jointName);
+    bool hasTransformParameter = hasString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
     if (!hasTransformParameter)
         return SWAP_NOTHING;
 
-    std::string paramValue = getString(std::string(XML_JOINT_TRANSFORM_STRING_PREFIX) + jointName);
+    std::string paramValue = getString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
 
     if (strstr(paramValue.c_str(), "SWAP_YAW_AND_ROLL"))
         return SWAP_YAW_AND_ROLL;
@@ -2099,18 +1802,18 @@ E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(std::string jointName)
         return SWAP_NOTHING;
 }
 
-S32 FSFloaterPoser::getJointNegation(std::string jointName)
+S32 FSFloaterPoser::getJointNegation(const std::string& jointName) const
 {
     S32 result = NEGATE_NOTHING;
 
     if (jointName.empty())
         return result;
 
-    bool hasTransformParameter = hasString(std::string(XML_JOINT_TRANSFORM_STRING_PREFIX) + jointName);
+    bool hasTransformParameter = hasString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
     if (!hasTransformParameter)
         return result;
 
-    std::string paramValue = getString(std::string(XML_JOINT_TRANSFORM_STRING_PREFIX) + jointName);
+    std::string paramValue = getString(XML_JOINT_TRANSFORM_STRING_PREFIX + jointName);
 
     if (strstr(paramValue.c_str(), "NEGATE_YAW"))
         result |= NEGATE_YAW;
@@ -2130,25 +1833,18 @@ S32 FSFloaterPoser::getJointNegation(std::string jointName)
 /// </summary>
 void FSFloaterPoser::onAvatarSelect()
 {
-    LLButton *startStopButton = getChild<LLButton>(POSER_AVATAR_STARTSTOP_POSING_BUTTON_NAME);
-    if (!startStopButton)
-        return;
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    mStartStopPosingBtn->setEnabled(couldAnimateAvatar(avatar));
 
-    LLVOAvatar *avatar = getUiSelectedAvatar();
-    if (couldAnimateAvatar(avatar))
-        startStopButton->setEnabled(true);
-    else
-        startStopButton->setEnabled(false);
-
-    bool arePosingSelected = _poserAnimator.isPosingAvatar(avatar);
-    startStopButton->setValue(arePosingSelected);
+    bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
+    mStartStopPosingBtn->setValue(arePosingSelected);
     poseControlsEnable(arePosingSelected);
     refreshTextEmbiggeningOnAllScrollLists();
     onJointSelect();
     setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
 }
 
-uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes()
+uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes() const
 {
     uuid_vec_t avatar_ids;
 
@@ -2164,15 +1860,11 @@ uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes()
     return avatar_ids;
 }
 
-uuid_vec_t FSFloaterPoser::getCurrentlyListedAvatarsAndAnimeshes()
+uuid_vec_t FSFloaterPoser::getCurrentlyListedAvatarsAndAnimeshes() const
 {
     uuid_vec_t avatar_ids;
 
-    LLScrollListCtrl* avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
-        return avatar_ids;
-
-    for (auto listItem : avatarScrollList->getAllData())
+    for (auto listItem : mAvatarSelectionScrollList->getAllData())
     {
         LLScrollListCell* cell = listItem->getColumn(COL_UUID);
         if (!cell)
@@ -2185,14 +1877,10 @@ uuid_vec_t FSFloaterPoser::getCurrentlyListedAvatarsAndAnimeshes()
     return avatar_ids;
 }
 
-S32 FSFloaterPoser::getAvatarListIndexForUuid(LLUUID toFind)
+S32 FSFloaterPoser::getAvatarListIndexForUuid(const LLUUID& toFind) const
 {
-    LLScrollListCtrl* avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
-        return -1;
-
     S32 result = -1;
-    for (auto listItem : avatarScrollList->getAllData())
+    for (auto listItem : mAvatarSelectionScrollList->getAllData())
     {
         result++;
 
@@ -2210,10 +1898,6 @@ S32 FSFloaterPoser::getAvatarListIndexForUuid(LLUUID toFind)
 
 void FSFloaterPoser::onAvatarsRefresh()
 {
-    LLScrollListCtrl *avatarScrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (!avatarScrollList)
-        return;
-
     uuid_vec_t avatarsToAddToList, avatarsToRemoveFromList;
     uuid_vec_t nearbyAvatarIds = getNearbyAvatarsAndAnimeshes();
     uuid_vec_t currentlyListedAvatars = getCurrentlyListedAvatarsAndAnimeshes();
@@ -2223,7 +1907,7 @@ void FSFloaterPoser::onAvatarsRefresh()
     {
         S32 indexToRemove = getAvatarListIndexForUuid(toRemove);
         if (indexToRemove >= 0)
-            avatarScrollList->deleteSingleItem(indexToRemove);
+            mAvatarSelectionScrollList->deleteSingleItem(indexToRemove);
     }
 
     std::string iconCatagoryName = "Inv_BodyShape";
@@ -2262,7 +1946,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][COL_UUID]["value"]  = uuid;
         row["columns"][COL_SAVE]["column"] = "saveFileName";
         row["columns"][COL_SAVE]["value"]  = "";
-        LLScrollListItem *item      = avatarScrollList->addElement(row);
+        LLScrollListItem* item = mAvatarSelectionScrollList->addElement(row);
     }
 
     // Add Animesh avatars
@@ -2286,58 +1970,53 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][COL_UUID]["value"]  = avatar->getID();
         row["columns"][COL_SAVE]["column"] = "saveFileName";
         row["columns"][COL_SAVE]["value"]  = "";
-        avatarScrollList->addElement(row);
+        mAvatarSelectionScrollList->addElement(row);
     }
 
-    avatarScrollList->updateLayout();
+    mAvatarSelectionScrollList->updateLayout();
     refreshTextEmbiggeningOnAllScrollLists();
 }
 
 void FSFloaterPoser::refreshTextEmbiggeningOnAllScrollLists()
 {
-    LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(POSER_AVATAR_SCROLLLIST_AVATARSELECTION);
-    if (scrollList)
+    // the avatars
+    for (auto listItem : mAvatarSelectionScrollList->getAllData())
     {
-        // the avatars
-        for (auto listItem : scrollList->getAllData())
-        {
-            LLScrollListCell* cell = listItem->getColumn(COL_UUID);
-            if (!cell)
-                continue;
+        LLScrollListCell* cell = listItem->getColumn(COL_UUID);
+        if (!cell)
+            continue;
 
-            LLUUID selectedAvatarId = cell->getValue().asUUID();
-            LLVOAvatar* listAvatar = getAvatarByUuid(selectedAvatarId);
+        LLUUID selectedAvatarId = cell->getValue().asUUID();
+        LLVOAvatar* listAvatar = getAvatarByUuid(selectedAvatarId);
 
-            if (_poserAnimator.isPosingAvatar(listAvatar))
-                ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
-            else
-                ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
-        }
+        if (mPoserAnimator.isPosingAvatar(listAvatar))
+            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
+        else
+            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
     
     LLVOAvatar *avatar = getUiSelectedAvatar();
-    addBoldToScrollList(std::string(POSER_AVATAR_SCROLLLIST_BODYJOINTS_NAME), avatar);
-    addBoldToScrollList(std::string(POSER_AVATAR_SCROLLLIST_FACEJOINTS_NAME), avatar);
-    addBoldToScrollList(std::string(POSER_AVATAR_SCROLLLIST_HANDJOINTS_NAME), avatar);
-    addBoldToScrollList(std::string(POSER_AVATAR_SCROLLLIST_MISCJOINTS_NAME), avatar);
-    addBoldToScrollList(std::string(POSER_AVATAR_SCROLLLIST_VOLUMES_NAME), avatar);
+    addBoldToScrollList(mBodyJointsScrollList, avatar);
+    addBoldToScrollList(mFaceJointsScrollList, avatar);
+    addBoldToScrollList(mHandJointsScrollList, avatar);
+    addBoldToScrollList(mMiscJointsScrollList, avatar);
+    addBoldToScrollList(mCollisionVolumesScrollList, avatar);
 }
 
-void FSFloaterPoser::addBoldToScrollList(std::string listName, LLVOAvatar *avatar)
+void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar)
 {
     if (!avatar)
         return;
 
-    LLScrollListCtrl *scrollList = getChild<LLScrollListCtrl>(listName);
-    if (!scrollList)
+    if (!list)
         return;
 
-    for (auto listItem : scrollList->getAllData())
+    for (auto listItem : list->getAllData())
     {
         FSPoserAnimator::FSPoserJoint *userData = static_cast<FSPoserAnimator::FSPoserJoint *>(listItem->getUserdata());
         if (userData)
         {
-            if (_poserAnimator.isPosingAvatarJoint(avatar, *userData))
+            if (mPoserAnimator.isPosingAvatarJoint(avatar, *userData))
                 ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
             else
                 ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);

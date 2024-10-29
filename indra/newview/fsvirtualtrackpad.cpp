@@ -54,18 +54,18 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     mImgSunBack(p.image_sun_back),
     mImgSunFront(p.image_sun_front),
     mImgSphere(p.image_sphere),
-    _allowPinchMode(p.pinch_mode),
-    _infiniteScrollMode(p.infinite_scroll_mode)
+    mAllowPinchMode(p.pinch_mode),
+    mInfiniteScrollMode(p.infinite_scroll_mode)
 {
     LLRect border_rect = getLocalRect();
-    _cursorValueX = _pinchCursorValueX = border_rect.getCenterX();
-    _cursorValueY = _pinchCursorValueY = border_rect.getCenterY();
-    _cursorValueZ = _pinchCursorValueZ = 0;
+    mCursorValueX = mPinchCursorValueX = border_rect.getCenterX();
+    mCursorValueY = mPinchCursorValueY = border_rect.getCenterY();
+    mCursorValueZ = mPinchCursorValueZ = 0;
 
-    _thumbClickOffsetX = _thumbClickOffsetY = _pinchThumbClickOffsetX = _pinchThumbClickOffsetY = 0;
-    _posXwhenCtrlDown = _posYwhenCtrlDown = 0;
-    _pinchValueDeltaX = _pinchValueDeltaY = _pinchValueDeltaZ = 0;
-    _valueDeltaX = _valueDeltaY = _valueDeltaZ = 0;
+    mThumbClickOffsetX = mThumbClickOffsetY = mPinchThumbClickOffsetX = mPinchThumbClickOffsetY = 0;
+    mPosXwhenCtrlDown = mPosYwhenCtrlDown = 0;
+    mPinchValueDeltaX = mPinchValueDeltaY = mPinchValueDeltaZ = 0;
+    mValueDeltaX = mValueDeltaY = mValueDeltaZ = 0;
 
     LLViewBorder::Params border = p.border;
     border.rect(border_rect);
@@ -93,8 +93,8 @@ void FSVirtualTrackpad::drawThumb(bool isPinchThumb)
     else
         thumb = isPinchThumb ? mImgSunBack : mImgMoonBack;
 
-    S32 x = isPinchThumb ? _pinchCursorValueX : _cursorValueX;
-    S32 y = isPinchThumb ? _pinchCursorValueY : _cursorValueY;
+    S32 x = isPinchThumb ? mPinchCursorValueX : mCursorValueX;
+    S32 y = isPinchThumb ? mPinchCursorValueY : mCursorValueY;
 
     wrapOrClipCursorPosition(&x, &y);
 
@@ -122,11 +122,11 @@ void FSVirtualTrackpad::determineThumbClickError(S32 x, S32 y)
     if (!mImgSunFront)
         return;
 
-    _thumbClickOffsetX = 0;
-    _thumbClickOffsetY = 0;
+    mThumbClickOffsetX = 0;
+    mThumbClickOffsetY = 0;
 
-    S32 errorX = _cursorValueX;
-    S32 errorY = _cursorValueY;
+    S32 errorX = mCursorValueX;
+    S32 errorY = mCursorValueY;
     wrapOrClipCursorPosition(&errorX, &errorY);
     errorX -= x;
     errorY -= y;
@@ -136,37 +136,37 @@ void FSVirtualTrackpad::determineThumbClickError(S32 x, S32 y)
     if (fabs(errorY) > mImgSunFront->getHeight() / 2.0)
         return;
 
-    _thumbClickOffsetX = errorX;
-    _thumbClickOffsetY = errorY;
+    mThumbClickOffsetX = errorX;
+    mThumbClickOffsetY = errorY;
 }
 
 void FSVirtualTrackpad::updateClickErrorIfInfiniteScrolling()
 {
-    if (!_infiniteScrollMode)
+    if (!mInfiniteScrollMode)
         return;
-    S32 errorX = _cursorValueX;
-    S32 errorY = _cursorValueY;
+    S32 errorX = mCursorValueX;
+    S32 errorY = mCursorValueY;
 
     LLRect rect = mTouchArea->getRect();
     while (errorX > rect.mRight)
     {
         errorX -= rect.getWidth();
-        _thumbClickOffsetX += rect.getWidth();
+        mThumbClickOffsetX += rect.getWidth();
     }
     while (errorX < rect.mLeft)
     {
         errorX += rect.getWidth();
-        _thumbClickOffsetX -= rect.getWidth();
+        mThumbClickOffsetX -= rect.getWidth();
     }
     while (errorY > rect.mTop)
     {
         errorY -= rect.getHeight();
-        _thumbClickOffsetY += rect.getHeight();
+        mThumbClickOffsetY += rect.getHeight();
     }
     while (errorY < rect.mBottom)
     {
         errorY += rect.getHeight();
-        _thumbClickOffsetY -= rect.getHeight();
+        mThumbClickOffsetY -= rect.getHeight();
     }
 }
 
@@ -177,11 +177,11 @@ void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
     if (!mImgMoonFront)
         return;
 
-    _pinchThumbClickOffsetX = 0;
-    _pinchThumbClickOffsetY = 0;
+    mPinchThumbClickOffsetX = 0;
+    mPinchThumbClickOffsetY = 0;
 
-    S32 errorX = _pinchCursorValueX;
-    S32 errorY = _pinchCursorValueY;
+    S32 errorX = mPinchCursorValueX;
+    S32 errorY = mPinchCursorValueY;
     wrapOrClipCursorPosition(&errorX, &errorY);
     errorX -= x;
     errorY -= y;
@@ -191,37 +191,37 @@ void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
     if (fabs(errorY) > mImgMoonFront->getHeight() / 2.0)
         return;
 
-    _pinchThumbClickOffsetX = errorX;
-    _pinchThumbClickOffsetY = errorY;
+    mPinchThumbClickOffsetX = errorX;
+    mPinchThumbClickOffsetY = errorY;
 }
 
 void FSVirtualTrackpad::updateClickErrorIfInfiniteScrollingForPinch()
 {
-    if (!_infiniteScrollMode)
+    if (!mInfiniteScrollMode)
         return;
-    S32 errorX = _cursorValueX;
-    S32 errorY = _cursorValueY;
+    S32 errorX = mCursorValueX;
+    S32 errorY = mCursorValueY;
 
     LLRect rect = mTouchArea->getRect();
     while (errorX > rect.mRight)
     {
         errorX -= rect.getWidth();
-        _pinchThumbClickOffsetX += rect.getWidth();
+        mPinchThumbClickOffsetX += rect.getWidth();
     }
     while (errorX < rect.mLeft)
     {
         errorX += rect.getWidth();
-        _pinchThumbClickOffsetX -= rect.getWidth();
+        mPinchThumbClickOffsetX -= rect.getWidth();
     }
     while (errorY > rect.mTop)
     {
         errorY -= rect.getHeight();
-        _pinchThumbClickOffsetY += rect.getHeight();
+        mPinchThumbClickOffsetY += rect.getHeight();
     }
     while (errorY < rect.mBottom)
     {
         errorY += rect.getHeight();
-        _pinchThumbClickOffsetY -= rect.getHeight();
+        mPinchThumbClickOffsetY -= rect.getHeight();
     }
 }
 
@@ -229,7 +229,7 @@ void FSVirtualTrackpad::draw()
 {
     mImgSphere->draw(mTouchArea->getRect(), mTouchArea->isInEnabledChain() ? UI_VERTEX_COLOR : UI_VERTEX_COLOR % 0.5f);
 
-    if (_allowPinchMode)
+    if (mAllowPinchMode)
         drawThumb(true);
 
     drawThumb(false);
@@ -258,25 +258,25 @@ void FSVirtualTrackpad::setValue(const LLSD& value)
 
 void FSVirtualTrackpad::setValue(F32 x, F32 y, F32 z)
 {
-    convertNormalizedToPixelPos(x, y, z, &_cursorValueX, &_cursorValueY, &_cursorValueZ);
-    _valueX = _cursorValueX;
-    _valueY = _cursorValueY;
-    _valueZ = _cursorValueZ;
+    convertNormalizedToPixelPos(x, y, z, &mCursorValueX, &mCursorValueY, &mCursorValueZ);
+    mValueX = mCursorValueX;
+    mValueY = mCursorValueY;
+    mValueZ = mCursorValueZ;
 }
 
 void FSVirtualTrackpad::setPinchValue(F32 x, F32 y, F32 z)
 {
-    convertNormalizedToPixelPos(x, y, z, &_pinchCursorValueX, &_pinchCursorValueY, &_pinchCursorValueZ);
-    _pinchValueX = _pinchCursorValueX;
-    _pinchValueY = _pinchCursorValueY;
-    _pinchValueZ = _pinchCursorValueZ;
+    convertNormalizedToPixelPos(x, y, z, &mPinchCursorValueX, &mPinchCursorValueY, &mPinchCursorValueZ);
+    mPinchValueX = mPinchCursorValueX;
+    mPinchValueY = mPinchCursorValueY;
+    mPinchValueZ = mPinchCursorValueZ;
 }
 
-LLSD FSVirtualTrackpad::getValue() const { return normalizePixelPos(_valueX, _valueY, _valueZ).getValue(); }
-LLSD FSVirtualTrackpad::getValueDelta() { return normalizeDelta(_valueDeltaX, _valueDeltaY, _valueDeltaZ).getValue(); }
+LLSD FSVirtualTrackpad::getValue() const { return normalizePixelPos(mValueX, mValueY, mValueZ).getValue(); }
+LLSD FSVirtualTrackpad::getValueDelta() { return normalizeDelta(mValueDeltaX, mValueDeltaY, mValueDeltaZ).getValue(); }
 
-LLSD FSVirtualTrackpad::getPinchValue() { return normalizePixelPos(_pinchValueX, _pinchValueY, _pinchValueZ).getValue(); }
-LLSD FSVirtualTrackpad::getPinchValueDelta() { return normalizeDelta(_pinchValueDeltaX, _pinchValueDeltaY, _pinchValueDeltaZ).getValue(); }
+LLSD FSVirtualTrackpad::getPinchValue() { return normalizePixelPos(mPinchValueX, mPinchValueY, mPinchValueZ).getValue(); }
+LLSD FSVirtualTrackpad::getPinchValueDelta() { return normalizeDelta(mPinchValueDeltaX, mPinchValueDeltaY, mPinchValueDeltaZ).getValue(); }
 
 void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y) const
 {
@@ -284,7 +284,7 @@ void FSVirtualTrackpad::wrapOrClipCursorPosition(S32* x, S32* y) const
         return;
 
     LLRect rect = mTouchArea->getRect();
-    if (_infiniteScrollMode)
+    if (mInfiniteScrollMode)
     {
         while (*x > rect.mRight)
             *x -= rect.getWidth();
@@ -323,152 +323,152 @@ void FSVirtualTrackpad::getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* del
         return;
 
     S32 fromX, fromY;
-    fromX = _doingPinchMode ? _pinchCursorValueX : _cursorValueX;
-    fromY = _doingPinchMode ? _pinchCursorValueY : _cursorValueY;
+    fromX = mDoingPinchMode ? mPinchCursorValueX : mCursorValueX;
+    fromY = mDoingPinchMode ? mPinchCursorValueY : mCursorValueY;
 
     if (mask & MASK_CONTROL)
     {
-        if (!_heldDownControlBefore)
+        if (!mHeldDownControlBefore)
         {
-            _posXwhenCtrlDown = x;
-            _posYwhenCtrlDown = y;
-            _heldDownControlBefore = true;
+            mPosXwhenCtrlDown = x;
+            mPosYwhenCtrlDown = y;
+            mHeldDownControlBefore = true;
         }
 
-        if (_doingPinchMode)
+        if (mDoingPinchMode)
         {
-            *deltaX = _posXwhenCtrlDown - (_posXwhenCtrlDown - x) / 8 + _pinchThumbClickOffsetX - fromX;
-            *deltaY = _posYwhenCtrlDown - (_posYwhenCtrlDown - y) / 8 + _pinchThumbClickOffsetY - fromY;
+            *deltaX = mPosXwhenCtrlDown - (mPosXwhenCtrlDown - x) / 8 + mPinchThumbClickOffsetX - fromX;
+            *deltaY = mPosYwhenCtrlDown - (mPosYwhenCtrlDown - y) / 8 + mPinchThumbClickOffsetY - fromY;
         }
         else
         {
-            *deltaX = _posXwhenCtrlDown - (_posXwhenCtrlDown - x) / 8 + _thumbClickOffsetX - fromX;
-            *deltaY = _posYwhenCtrlDown - (_posYwhenCtrlDown - y) / 8 + _thumbClickOffsetY - fromY;
+            *deltaX = mPosXwhenCtrlDown - (mPosXwhenCtrlDown - x) / 8 + mThumbClickOffsetX - fromX;
+            *deltaY = mPosYwhenCtrlDown - (mPosYwhenCtrlDown - y) / 8 + mThumbClickOffsetY - fromY;
         }
     }
     else
     {
-        if (_heldDownControlBefore)
+        if (mHeldDownControlBefore)
         {
-            _thumbClickOffsetX = fromX - x;
-            _thumbClickOffsetY = fromY - y;
-            _heldDownControlBefore = false;
+            mThumbClickOffsetX = fromX - x;
+            mThumbClickOffsetY = fromY - y;
+            mHeldDownControlBefore = false;
         }
 
-        if (_doingPinchMode)
+        if (mDoingPinchMode)
         {
-            *deltaX = x + _pinchThumbClickOffsetX - fromX;
-            *deltaY = y + _pinchThumbClickOffsetY - fromY;
+            *deltaX = x + mPinchThumbClickOffsetX - fromX;
+            *deltaY = y + mPinchThumbClickOffsetY - fromY;
         }
         else
         {
-            *deltaX = x + _thumbClickOffsetX - fromX;
-            *deltaY = y + _thumbClickOffsetY - fromY;
+            *deltaX = x + mThumbClickOffsetX - fromX;
+            *deltaY = y + mThumbClickOffsetY - fromY;
         }
     }
 }
 
 void FSVirtualTrackpad::applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask)
 {
-    if (_doingPinchMode)
+    if (mDoingPinchMode)
     {
-        _pinchCursorValueX += deltaX;
-        _pinchCursorValueY += deltaY;
-        if (!_infiniteScrollMode)  // then constrain the cursor within control area
-            wrapOrClipCursorPosition(&_pinchCursorValueX, &_pinchCursorValueY);
+        mPinchCursorValueX += deltaX;
+        mPinchCursorValueY += deltaY;
+        if (!mInfiniteScrollMode)  // then constrain the cursor within control area
+            wrapOrClipCursorPosition(&mPinchCursorValueX, &mPinchCursorValueY);
     }
     else
     {
-        _cursorValueX += deltaX;
-        _cursorValueY += deltaY;
+        mCursorValueX += deltaX;
+        mCursorValueY += deltaY;
 
-        if (!_infiniteScrollMode)  // then constrain the cursor within control area
-            wrapOrClipCursorPosition(&_cursorValueX, &_cursorValueY);
+        if (!mInfiniteScrollMode)  // then constrain the cursor within control area
+            wrapOrClipCursorPosition(&mCursorValueX, &mCursorValueY);
     }
 }
 
 void FSVirtualTrackpad::applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask)
 {
-    if (_doingPinchMode)
+    if (mDoingPinchMode)
     {
         if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
         {
-            _pinchValueY += deltaY;
-            _pinchValueZ += deltaX;
+            mPinchValueY += deltaY;
+            mPinchValueZ += deltaX;
         }
         else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
         {
-            _pinchValueX += deltaX;
-            _pinchValueZ += deltaY;
+            mPinchValueX += deltaX;
+            mPinchValueZ += deltaY;
         }
         else
         {
-            _pinchValueX += deltaX;
-            _pinchValueY += deltaY;
+            mPinchValueX += deltaX;
+            mPinchValueY += deltaY;
         }
     }
     else
     {
         if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
         {
-            _valueY += deltaY;
-            _valueZ += deltaX;
+            mValueY += deltaY;
+            mValueZ += deltaX;
         }
         else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
         {
-            _valueX += deltaX;
-            _valueZ += deltaY;
+            mValueX += deltaX;
+            mValueZ += deltaY;
         }
         else
         {
-            _valueX += deltaX;
-            _valueY += deltaY;
+            mValueX += deltaX;
+            mValueY += deltaY;
         }
     }
 }
 
 void FSVirtualTrackpad::applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, MASK mask)
 {
-    if (_doingPinchMode)
+    if (mDoingPinchMode)
     {
         if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
         {
-            _pinchValueDeltaX = 0;
-            _pinchValueDeltaY = deltaY;
-            _pinchValueDeltaZ = deltaX;
+            mPinchValueDeltaX = 0;
+            mPinchValueDeltaY = deltaY;
+            mPinchValueDeltaZ = deltaX;
         }
         else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
         {
-            _pinchValueDeltaX = deltaX;
-            _pinchValueDeltaY = 0;
-            _pinchValueDeltaZ = deltaY;
+            mPinchValueDeltaX = deltaX;
+            mPinchValueDeltaY = 0;
+            mPinchValueDeltaZ = deltaY;
         }
         else
         {
-            _pinchValueDeltaX = deltaX;
-            _pinchValueDeltaY = deltaY;
-            _pinchValueDeltaZ = 0;
+            mPinchValueDeltaX = deltaX;
+            mPinchValueDeltaY = deltaY;
+            mPinchValueDeltaZ = 0;
         }
     }
     else
     {
         if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
         {
-            _valueDeltaX = 0;
-            _valueDeltaY = deltaY;
-            _valueDeltaZ = deltaX;
+            mValueDeltaX = 0;
+            mValueDeltaY = deltaY;
+            mValueDeltaZ = deltaX;
         }
         else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
         {
-            _valueDeltaX = deltaX;
-            _valueDeltaY = 0;
-            _valueDeltaZ = deltaY;
+            mValueDeltaX = deltaX;
+            mValueDeltaY = 0;
+            mValueDeltaZ = deltaY;
         }
         else
         {
-            _valueDeltaX = deltaX;
-            _valueDeltaY = deltaY;
-            _valueDeltaZ = 0;
+            mValueDeltaX = deltaX;
+            mValueDeltaY = deltaY;
+            mValueDeltaZ = 0;
         }
     }
 }
@@ -520,7 +520,7 @@ void FSVirtualTrackpad::convertNormalizedToPixelPos(F32 x, F32 y, F32 z, S32 *va
     S32    width   = rect.getWidth();
     S32    height  = rect.getHeight();
 
-    if (_infiniteScrollMode)
+    if (mInfiniteScrollMode)
     {
         *valX = centerX + ll_round(x * width / 2);
         *valY = centerY + ll_round(y * height / 2);
@@ -539,7 +539,7 @@ bool FSVirtualTrackpad::handleMouseUp(S32 x, S32 y, MASK mask)
     if (hasMouseCapture())
     {
         gFocusMgr.setMouseCapture(NULL);
-        _heldDownControlBefore = false;
+        mHeldDownControlBefore = false;
         make_ui_sound("UISndClickRelease");
     }
 
@@ -563,7 +563,7 @@ bool FSVirtualTrackpad::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
     if (hasMouseCapture())
     {
-        _doingPinchMode = false;
+        mDoingPinchMode = false;
         gFocusMgr.setMouseCapture(NULL);
 
         make_ui_sound("UISndClickRelease");
@@ -575,14 +575,14 @@ bool FSVirtualTrackpad::handleRightMouseUp(S32 x, S32 y, MASK mask)
 // move pinch cursor
 bool FSVirtualTrackpad::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-    if (!_allowPinchMode)
+    if (!mAllowPinchMode)
         return LLView::handleRightMouseDown(x, y, mask);
 
     if (isPointInTouchArea(x, y))
     {
         determineThumbClickErrorForPinch(x, y);
         updateClickErrorIfInfiniteScrollingForPinch();
-        _doingPinchMode = true;
+        mDoingPinchMode = true;
         gFocusMgr.setMouseCapture(this);
 
         make_ui_sound("UISndClick");
@@ -602,23 +602,23 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
         if (mask & MASK_CONTROL)
             changeAmount /= 5;
 
-        if (_doingPinchMode)
+        if (mDoingPinchMode)
         {
             if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
-                _pinchValueX -= clicks * changeAmount;
+                mPinchValueX -= clicks * changeAmount;
             else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
-                _pinchValueY -= clicks * changeAmount;
+                mPinchValueY -= clicks * changeAmount;
             else
-                _pinchValueZ -= clicks * changeAmount;
+                mPinchValueZ -= clicks * changeAmount;
         }
         else
         {
             if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
-                _valueX -= clicks * changeAmount;
+                mValueX -= clicks * changeAmount;
             else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
-                _valueY -= clicks * changeAmount;
+                mValueY -= clicks * changeAmount;
             else
-                _valueZ -= clicks * changeAmount;
+                mValueZ -= clicks * changeAmount;
         }
 
         if (!hasMouseCapture())

@@ -21,9 +21,8 @@
 F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn);
 void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F32& bValOut);
 
-class lggBeamData
+struct lggBeamData
 {
-public:
     LLVector3d p;
     LLColor4U c;
 };
@@ -31,15 +30,6 @@ public:
 class lggBeamMaps
 {
 public:
-    lggBeamMaps() :
-        mLastFileName(""),
-        mScale(0.0f),
-        mDuration(0.25f),
-        mPartsNow(false),
-        mBeamLastAt(LLVector3d::zero)
-        {}
-    ~lggBeamMaps() {}
-
     F32                         setUpAndGetDuration();
     void                        fireCurrentBeams(LLPointer<LLHUDEffectSpiral>, const LLColor4U& rgb);
     void                        forceUpdate();
@@ -47,19 +37,19 @@ public:
     void                        updateBeamChat(const LLVector3d& currentPos);
     static LLColor4U            beamColorFromData(const lggBeamsColors& data);
     LLColor4U                   getCurrentColor(const LLColor4U& agentColor);
-    string_vec_t                getFileNames();
-    string_vec_t                getColorsFileNames();
+    string_vec_t                getFileNames() const;
+    string_vec_t                getColorsFileNames() const;
 
 private:
-    LLSD            getPic(const std::string& filename);
+    LLSD            getPic(const std::string& filename) const;
 
-    std::string     mLastFileName;
-    std::string     mLastColorFileName;
-    lggBeamsColors  mLastColorsData;
-    F32             mDuration;
-    F32             mScale;
-    bool            mPartsNow;
-    LLVector3d      mBeamLastAt;
+    std::string     mLastFileName{};
+    std::string     mLastColorFileName{};
+    lggBeamsColors  mLastColorsData{};
+    F32             mDuration{ 0.25f };
+    F32             mScale{ 0.0f };
+    bool            mPartsNow{ false };
+    LLVector3d      mBeamLastAt{ LLVector3d::zero };
 
     std::vector<lggBeamData> mDots;
 };
