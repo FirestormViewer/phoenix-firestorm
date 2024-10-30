@@ -271,7 +271,6 @@
 				</tab_container>
 			</panel>
 			<panel name="save_file_options">
-				<check_box name="also_save_bvh_checkbox" label="Zapisz BVH podczas zapisu" tool_tip="Kiedy zapisujesz swoją pozę, zapisz również plik BVH, który można przesłać za pomocą menu 'Buduj', aby ustawić siebie lub innych w świecie" />
 				<slider label="Czułość" name="trackpad_sensitivity_slider" tool_tip="Dostosowuje czułość trackballa / kółka" />
 			</panel>
 		</layout_panel>

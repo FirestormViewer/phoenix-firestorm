@@ -262,7 +262,6 @@
 				</tab_container>
 			</panel>
 			<panel name="save_file_options">
-				<check_box name="also_save_bvh_checkbox" label="При сохранении пишем BVH" tool_tip="При сохранении позы также создайте файл BVH, который можно загрузить через меню «Создать», чтобы позировать самому или другим в мире."/>
 				<slider label="Чувствительность" name="trackpad_sensitivity_slider" tool_tip="Регулирует чувствительность трекбола"/>
 			</panel>
 		</layout_panel>
