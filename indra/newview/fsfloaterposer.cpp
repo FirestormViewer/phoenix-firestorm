@@ -45,14 +45,12 @@ namespace
 {
 constexpr char             POSE_INTERNAL_FORMAT_FILE_MASK[]    = "*.xml";
 constexpr char             POSE_INTERNAL_FORMAT_FILE_EXT[]     = ".xml";
-constexpr char             POSE_EXTERNAL_FORMAT_FILE_EXT[]     = ".bvh";
 constexpr char             POSE_SAVE_SUBDIRECTORY[]            = "poses";
 constexpr std::string_view POSE_PRESETS_HANDS_SUBDIRECTORY     = "hand_presets";
 constexpr char             XML_LIST_HEADER_STRING_PREFIX[]     = "header_";
 constexpr char             XML_LIST_TITLE_STRING_PREFIX[]      = "title_";
 constexpr char             XML_JOINT_TRANSFORM_STRING_PREFIX[] = "joint_transform_";
 constexpr std::string_view POSER_ADVANCEDWINDOWSTATE_SAVE_KEY  = "FSPoserAdvancedWindowState";
-constexpr std::string_view POSER_ALSOSAVEBVHFILE_SAVE_KEY      = "FSPoserSaveBvhFileAlso";
 constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpadSensitivity";
 }  // namespace
 
@@ -160,12 +158,6 @@ bool FSFloaterPoser::postBuild()
         mToggleAdvancedPanelBtn->setValue(true);
     }
 
-    mAlsoSaveBvhCbx = getChild<LLCheckBoxCtrl>("also_save_bvh_checkbox");
-    if (gSavedSettings.getBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY))
-    {
-        mAlsoSaveBvhCbx->set(true);
-    }
-
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
     mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
 
@@ -232,7 +224,6 @@ void FSFloaterPoser::onOpen(const LLSD& key)
 void FSFloaterPoser::onClose(bool app_quitting)
 {
     gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, mToggleAdvancedPanelBtn->getValue().asBoolean());
-    gSavedSettings.setBOOL(POSER_ALSOSAVEBVHFILE_SAVE_KEY, mAlsoSaveBvhCbx->getValue());
 
     LLFloater::onClose(app_quitting);
 }
@@ -317,55 +308,7 @@ void FSFloaterPoser::onClickPoseSave()
         refreshPoseScroll(mPosesScrollList);
         setUiSelectedAvatarSaveFileName(filename);
         // TODO: provide feedback for save
-
-        bool alsoSaveAsBvh = mAlsoSaveBvhCbx->getValue().asBoolean();
-        if (alsoSaveAsBvh)
-            savePoseToBvh(avatar, filename);
     }
-}
-
-bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, const std::string& poseFileName)
-{
-    if (poseFileName.empty())
-        return false;
-
-    if (!mPoserAnimator.isPosingAvatar(avatar))
-        return false;
-
-    bool writeSuccess = false;
-
-    try
-    {
-        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
-        if (!gDirUtilp->fileExists(pathname))
-        {
-            LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
-            LLFile::mkdir(pathname);
-        }
-
-        std::string fullSavePath =
-            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_EXTERNAL_FORMAT_FILE_EXT);
-
-        llofstream file;
-        file.open(fullSavePath.c_str());
-        if (!file.is_open())
-        {
-            LL_WARNS("Poser") << "Unable to save pose!" << LL_ENDL;
-            return false;
-        }
-
-        writeSuccess = mPoserAnimator.writePoseAsBvh(&file, avatar);
-
-        file.close();
-    }
-    catch (const std::exception& e)
-    {
-        LL_WARNS("Posing") << "Exception caught in SaveToBVH: " << e.what() << LL_ENDL;
-        return false;
-    }
-
-
-    return true;
 }
 
 bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFileName)

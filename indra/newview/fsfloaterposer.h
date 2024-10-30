@@ -192,7 +192,6 @@ class FSFloaterPoser : public LLFloater
     void onClickPoseSave();
     void onPoseFileSelect();
     bool savePoseToXml(LLVOAvatar* avatar, const std::string& posePath);
-    bool savePoseToBvh(LLVOAvatar* avatar, const std::string& posePath);
     void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
     void loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
