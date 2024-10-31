@@ -476,14 +476,6 @@ public:
     /// <param name="avatar">The avatar whose pose should flip left-right.</param>
     void flipEntirePose(LLVOAvatar* avatar);
 
-    /// <summary>
-    /// Determines whether the supplied PoserJoint for the supplied avatar is being posed.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint being queried for.</param>
-    /// <returns>True if this is joint is being posed for the supplied avatar, otherwise false.</returns>
-    bool writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar);
-
   private:
     /// <summary>
     /// Translates a rotation vector from the UI to a Quaternion for the bone.
@@ -526,41 +518,6 @@ public:
     /// <param name="avatar">The avatar to test if it is safe to animate.</param>
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar* avatar) const;
-
-    /// <summary>
-    /// Recursively writes a fragment of a BVH file format representation of the supplied joint, then that joints BVH child(ren).
-    /// </summary>
-    /// <param name="fileStream">The stream to write the fragment to.</param>
-    /// <param name="avatar">The avatar owning the supplied joint.</param>
-    /// <param name="joint">The joint whose fragment should be written, and whose child(ren) will also be written.</param>
-    /// <param name="tabStops">The number of tab-stops to include for formatting purpose.</param>
-    /// <returns>True if the fragment wrote successfully, otherwise false.</returns>
-    bool writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint, S32 tabStops);
-
-    /// <summary>
-    /// Writes a fragment of the 'single line' representing an animation frame within the BVH file respresenting the positions and/or rotations.
-    /// </summary>
-    /// <param name="fileStream">The stream to write the position and/or rotation to.</param>
-    /// <param name="avatar">The avatar owning the supplied joint.</param>
-    /// <param name="joint">The joint whose position and/or rotation should be written.</param>
-    /// <returns></returns>
-    bool writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserJoint* joint);
-
-    /// <summary>
-    /// Generates a string with the supplied number of tab-chars.
-    /// </summary>
-    std::string static getTabs(S32 numOfTabstops);
-
-    /// <summary>
-    /// Transforms a rotation such that llbvhloader.cpp can resolve it to something vaguely approximating the supplied angle.
-    /// When I say vague, I mean, it's numbers, buuuuut.
-    /// </summary>
-    std::string static rotationToYZXString(const LLVector3& val);
-
-    /// <summary>
-    /// Transforms the supplied vector into a string of three numbers, format suiting to writing into a BVH file.
-    /// </summary>
-    std::string static vec3ToXYZString(const LLVector3& val);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.
