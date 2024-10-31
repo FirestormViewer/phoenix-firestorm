@@ -1166,7 +1166,7 @@ If you do not understand the distinction then leave this control alone."
          left_pad="5"
          name="TextureDiscardBackgroundedTime_seconds"
          top_delta="5"
-         width="50">
+         width="100">
             Second(s)
         </text>
 
@@ -1205,7 +1205,7 @@ If you do not understand the distinction then leave this control alone."
          left_pad="5"
          name="TextureDiscardMinimizedTime_seconds"
          top_delta="5"
-         width="50">
+         width="100">
             Second(s)
         </text>
     </panel>
