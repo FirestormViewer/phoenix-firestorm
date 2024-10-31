@@ -52,398 +52,186 @@ public:
     /// </summary>
     class FSJointPose
     {
-        const size_t MaximumUndoQueueLength = 20;
-
-        /// <summary>
-        /// The constant time interval, in seconds, 
-        /// </summary>
-        std::chrono::duration<double> const _undoUpdateInterval = std::chrono::duration<double>(0.3);
-
-        std::string              _jointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
-        LLPointer<LLJointState>  _jointState;
+        std::string              mJointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
+        LLPointer<LLJointState>  mJointState{ nullptr };
 
         /// <summary>
         /// Collision Volumes require special treatment when we stop animating an avatar, as they do not revert to their original state natively.
         /// </summary>
-        bool                     _isCollisionVolume = false;
+        bool                     mIsCollisionVolume{ false };
 
-        LLQuaternion             _targetRotation;
-        LLQuaternion             _beginningRotation;
-        std::deque<LLQuaternion> _lastSetRotations;
-        size_t                   _undoneRotationIndex = 0;
-        std::chrono::system_clock::time_point _timeLastUpdatedRotation = std::chrono::system_clock::now();
+        LLQuaternion             mTargetRotation;
+        LLQuaternion             mBeginningRotation;
+        std::deque<LLQuaternion> mLastSetRotations;
+        size_t                   mUndoneRotationIndex = 0;
+        std::chrono::system_clock::time_point mTimeLastUpdatedRotation = std::chrono::system_clock::now();
 
-        LLVector3               _targetPosition;
-        LLVector3               _beginningPosition;
-        std::deque<LLVector3>   _lastSetPositions;
-        size_t                  _undonePositionIndex = 0;
-        std::chrono::system_clock::time_point _timeLastUpdatedPosition = std::chrono::system_clock::now();
+        LLVector3               mTargetPosition;
+        LLVector3               mBeginningPosition;
+        std::deque<LLVector3>   mLastSetPositions;
+        size_t                  mUndonePositionIndex = 0;
+        std::chrono::system_clock::time_point mTimeLastUpdatedPosition = std::chrono::system_clock::now();
 
         /// <summary>
         /// Joint scales require special treatment, as they do not revert when we stop animating an avatar.
         /// </summary>
-        LLVector3             _targetScale;
-        LLVector3             _beginningScale;
-        std::deque<LLVector3> _lastSetScales;
-        size_t                _undoneScaleIndex = 0;
-        std::chrono::system_clock::time_point _timeLastUpdatedScale = std::chrono::system_clock::now();
+        LLVector3             mTargetScale;
+        LLVector3             mBeginningScale;
+        std::deque<LLVector3> mLastSetScales;
+        size_t                mUndoneScaleIndex = 0;
+        std::chrono::system_clock::time_point mTimeLastUpdatedScale = std::chrono::system_clock::now();
 
         /// <summary>
         /// Adds a last position to the deque.
         /// </summary>
-        void addLastPositionToUndo()
-        {
-            if (_undonePositionIndex > 0)
-            {
-                for (int i = 0; i < _undonePositionIndex; i++)
-                    _lastSetPositions.pop_front();
-
-                _undonePositionIndex = 0;
-            }
-
-            _lastSetPositions.push_front(_targetPosition);
-
-            while (_lastSetPositions.size() > MaximumUndoQueueLength)
-                _lastSetPositions.pop_back();
-        }
+        void addLastPositionToUndo();
 
         /// <summary>
         /// Adds a last rotation to the deque.
         /// </summary>
-        void addLastRotationToUndo()
-        {
-            if (_undoneRotationIndex > 0)
-            {
-                for (int i = 0; i < _undoneRotationIndex; i++)
-                    _lastSetRotations.pop_front();
-
-                _undoneRotationIndex = 0;
-            }
-
-            _lastSetRotations.push_front(_targetRotation);
-
-            while (_lastSetRotations.size() > MaximumUndoQueueLength)
-                _lastSetRotations.pop_back();
-        }
+        void addLastRotationToUndo();
 
         /// <summary>
         /// Adds a last rotation to the deque.
         /// </summary>
-        void addLastScaleToUndo()
-        {
-            if (_undoneScaleIndex > 0)
-            {
-                for (int i = 0; i < _undoneScaleIndex; i++)
-                    _lastSetScales.pop_front();
-
-                _undoneScaleIndex = 0;
-            }
-
-            _lastSetScales.push_front(_targetScale);
-
-            while (_lastSetScales.size() > MaximumUndoQueueLength)
-                _lastSetScales.pop_back();
-        }
+        void addLastScaleToUndo();
 
       public:
         /// <summary>
         /// Gets the name of the joint.
         /// </summary>
-        std::string jointName() const { return _jointName; }
+        std::string jointName() const { return mJointName; }
 
         /// <summary>
         /// Gets whether this represents a collision volume.
         /// </summary>
         /// <returns></returns>
-        bool isCollisionVolume() const { return _isCollisionVolume; }
+        bool isCollisionVolume() const { return mIsCollisionVolume; }
 
         /// <summary>
         /// Gets whether a redo of this joints rotation may be performed.
         /// </summary>
         /// <returns></returns>
-        bool canRedoRotation() const { return _undoneRotationIndex > 0; }
+        bool canRedoRotation() const { return mUndoneRotationIndex > 0; }
 
         /// <summary>
         /// Gets the position the joint was in when the animation was initialized.
         /// </summary>
-        LLVector3 getBeginningPosition() const { return _beginningPosition; }
+        LLVector3 getBeginningPosition() const { return mBeginningPosition; }
 
         /// <summary>
         /// Gets the position the animator wishes the joint to be in.
         /// </summary>
-        LLVector3 getTargetPosition() const { return _targetPosition; }
+        LLVector3 getTargetPosition() const { return mTargetPosition; }
 
         /// <summary>
         /// Gets the position the animator wishes the joint to be in.
         /// </summary>
-        LLVector3 getCurrentPosition()
-        {
-            LLVector3 vec3;
-            LLJoint*  joint = _jointState->getJoint();
-            if (!joint)
-                return vec3;
-
-            vec3 = joint->getPosition();
-            return vec3;
-        }
+        LLVector3 getCurrentPosition();
 
         /// <summary>
         /// Sets the position the animator wishes the joint to be in.
         /// </summary>
-        void setTargetPosition(const LLVector3& pos)
-        {
-            auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - _timeLastUpdatedPosition;
-            if (timeIntervalSinceLastRotationChange > _undoUpdateInterval)
-                addLastPositionToUndo();
-
-            _timeLastUpdatedPosition = std::chrono::system_clock::now();
-            _targetPosition.set(pos);
-        }
+        void setTargetPosition(const LLVector3& pos);
 
         /// <summary>
         /// Gets the rotation the joint was in when the animation was initialized.
         /// </summary>
-        LLQuaternion getBeginningRotation() const { return _beginningRotation; }
+        LLQuaternion getBeginningRotation() const { return mBeginningRotation; }
 
         /// <summary>
         /// Gets the rotation the animator wishes the joint to be in.
         /// </summary>
-        LLQuaternion getTargetRotation() const { return _targetRotation; }
+        LLQuaternion getTargetRotation() const { return mTargetRotation; }
 
         /// <summary>
         /// Gets the rotation of the joint.
         /// </summary>
-        LLQuaternion getCurrentRotation()
-        {
-            LLQuaternion quat;
-            LLJoint*  joint = _jointState->getJoint();
-            if (!joint)
-                return quat;
-
-            quat = joint->getRotation();
-            return quat;
-        }
+        LLQuaternion getCurrentRotation();
 
         /// <summary>
         /// Sets the rotation the animator wishes the joint to be in.
         /// </summary>
-        void setTargetRotation(const LLQuaternion& rot)
-        {
-            auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - _timeLastUpdatedRotation;
-            if (timeIntervalSinceLastRotationChange > _undoUpdateInterval)
-                addLastRotationToUndo();
-
-            _timeLastUpdatedRotation = std::chrono::system_clock::now();
-            _targetRotation.set(rot);
-        }
+        void setTargetRotation(const LLQuaternion& rot);
 
         /// <summary>
         /// Applies a delta to the rotation the joint currently targets.
         /// </summary>
-        void applyDeltaRotation(const LLQuaternion& rot)
-        {
-            auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - _timeLastUpdatedRotation;
-            if (timeIntervalSinceLastRotationChange > _undoUpdateInterval)
-                addLastRotationToUndo();
-
-            _timeLastUpdatedRotation = std::chrono::system_clock::now();
-            _targetRotation          = _targetRotation * rot;
-        }
+        void applyDeltaRotation(const LLQuaternion& rot);
 
         /// <summary>
         /// Gets the scale the animator wishes the joint to have.
         /// </summary>
-        LLVector3 getTargetScale() const { return _targetScale; }
+        LLVector3 getTargetScale() const { return mTargetScale; }
 
         /// <summary>
         /// Gets the scale the joint has.
         /// </summary>
-        LLVector3 getCurrentScale()
-        {
-            LLVector3 vec3;
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return vec3;
-
-            vec3 = joint->getScale();
-            return vec3;
-        }
+        LLVector3 getCurrentScale();
 
         /// <summary>
         /// Gets the scale the joint had when the animation was initialized.
         /// </summary>
-        LLVector3 getBeginningScale() const { return _beginningScale; }
+        LLVector3 getBeginningScale() const { return mBeginningScale; }
 
         /// <summary>
         /// Sets the scale the animator wishes the joint to have.
         /// </summary>
-        void setTargetScale(LLVector3 scale)
-        {
-            auto timeIntervalSinceLastScaleChange = std::chrono::system_clock::now() - _timeLastUpdatedScale;
-            if (timeIntervalSinceLastScaleChange > _undoUpdateInterval)
-                addLastScaleToUndo();
-
-            _timeLastUpdatedScale = std::chrono::system_clock::now();
-            _targetScale.set(scale);
-        }
+        void setTargetScale(LLVector3 scale);
 
         /// <summary>
         /// Undoes the last position set, if any.
         /// </summary>
-        void undoLastPositionSet()
-        {
-            if (_lastSetPositions.empty())
-                return;
-
-            if (_undonePositionIndex == 0)  // at the top of the queue add the current
-                addLastPositionToUndo();
-
-            _undonePositionIndex++;
-            _undonePositionIndex = llclamp(_undonePositionIndex, 0, _lastSetPositions.size() - 1);
-            _targetPosition.set(_lastSetPositions[_undonePositionIndex]);
-        }
+        void undoLastPositionSet();
 
         /// <summary>
         /// Undoes the last position set, if any.
         /// </summary>
-        void redoLastPositionSet()
-        {
-            if (_lastSetPositions.empty())
-                return;
-
-            _undonePositionIndex--;
-            _undonePositionIndex = llclamp(_undonePositionIndex, 0, _lastSetPositions.size() - 1);
-
-            _targetPosition.set(_lastSetPositions[_undonePositionIndex]);
-            if (_undonePositionIndex == 0)
-                _lastSetPositions.pop_front();
-        }
+        void redoLastPositionSet();
 
         /// <summary>
         /// Undoes the last rotation set, if any.
         /// Ordinarily the queue does not contain the current rotation, because we rely on time to add, and not button-up.
         /// When we undo, if we are at the top of the queue, we need to add the current rotation so we can redo back to it.
-        /// Thus when we start undoing, _undoneRotationIndex points at the current rotation.
+        /// Thus when we start undoing, mUndoneRotationIndex points at the current rotation.
         /// </summary>
-        void undoLastRotationSet()
-        {
-            if (_lastSetRotations.empty())
-                return;
-
-            if (_undoneRotationIndex == 0) // at the top of the queue add the current
-                addLastRotationToUndo();
-
-            _undoneRotationIndex++;
-            _undoneRotationIndex = llclamp(_undoneRotationIndex, 0, _lastSetRotations.size() - 1);
-            _targetRotation.set(_lastSetRotations[_undoneRotationIndex]);
-        }
+        void undoLastRotationSet();
 
         /// <summary>
         /// Undoes the last rotation set, if any.
         /// </summary>
-        void redoLastRotationSet()
-        {
-            if (_lastSetRotations.empty())
-                return;
+        void redoLastRotationSet();
 
-            _undoneRotationIndex--;
-            _undoneRotationIndex = llclamp(_undoneRotationIndex, 0, _lastSetRotations.size() - 1);
+        void undoLastScaleSet();
 
-            _targetRotation.set(_lastSetRotations[_undoneRotationIndex]);
-            if (_undoneRotationIndex == 0)
-                _lastSetRotations.pop_front();
-        }
-
-        void undoLastScaleSet()
-        {
-            if (_lastSetScales.empty())
-                return;
-
-            if (_undoneScaleIndex == 0)
-                addLastScaleToUndo();
-
-            _undoneScaleIndex++;
-            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
-            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
-        }
-
-        void redoLastScaleSet()
-        {
-            if (_lastSetScales.empty())
-                return;
-
-            _undoneScaleIndex--;
-            _undoneScaleIndex = llclamp(_undoneScaleIndex, 0, _lastSetScales.size() - 1);
-
-            _targetScale.set(_lastSetScales[_undoneScaleIndex]);
-            if (_undoneScaleIndex == 0)
-                _lastSetScales.pop_front();
-        }
+        void redoLastScaleSet();
 
         /// <summary>
         /// Restores the joint represented by this to the scale it had when this motion started.
         /// </summary>
-        void revertJointScale()
-        {
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return;
-
-            joint->setScale(_beginningScale);
-        }
+        void revertJointScale();
 
         /// <summary>
         /// Restores the joint represented by this to the position it had when this motion started.
         /// </summary>
-        void revertJointPosition()
-        {
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return;
-
-            joint->setPosition(_beginningPosition);
-        }
+        void revertJointPosition();
 
         /// <summary>
         /// Collision Volumes do not 'reset' their position/rotation when the animation stops.
         /// This requires special treatment to revert changes we've made this animation session.
         /// </summary>
-        void revertCollisionVolume()
-        {
-            if (!_isCollisionVolume)
-                return;
-
-            LLJoint* joint = _jointState->getJoint();
-            if (!joint)
-                return;
-
-            joint->setRotation(_beginningRotation);
-            joint->setPosition(_beginningPosition);
-            joint->setScale(_beginningScale);
-        }
+        void revertCollisionVolume();
 
         /// <summary>
         /// Gets the pointer to the jointstate for the joint this represents.
         /// </summary>
-        LLPointer<LLJointState> getJointState() const { return _jointState; }
+        LLPointer<LLJointState> getJointState() const { return mJointState; }
 
-        FSJointPose(LLJoint* joint, bool isCollisionVolume = false)
-        {
-            _jointState = new LLJointState;
-            _jointState->setJoint(joint);
-            _jointState->setUsage(POSER_JOINT_STATE);
-
-            _jointName = joint->getName();
-            _isCollisionVolume = isCollisionVolume;
-
-            _beginningRotation = _targetRotation = joint->getRotation();
-            _beginningPosition = _targetPosition = joint->getPosition();
-            _beginningScale = _targetScale = joint->getScale();
-        }
+        FSJointPose(LLJoint* joint, bool isCollisionVolume = false);
     };
 
 public:
-    virtual bool getLoop() { return TRUE; }
+    virtual bool getLoop() { return true; }
 
     virtual F32 getDuration() { return 0.0; }
 
@@ -499,13 +287,13 @@ public:
     /// </summary>
     /// <param name="name">The name of the joint to get the pose for.</param>
     /// <returns>The matching joint pose, if found, otherwise null.</returns>
-    FSJointPose* getJointPoseByJointName(std::string name);
+    FSJointPose* getJointPoseByJointName(const std::string& name);
 
     /// <summary>
     /// Gets the motion identity for this animation.
     /// </summary>
     /// <returns>The unique, per-session, per-character motion identity.</returns>
-    LLAssetID motionId() const { return _motionID; }
+    LLAssetID motionId() const { return mMotionID; }
 
 private:
     /// <summary>
@@ -516,7 +304,7 @@ private:
     /// <summary>
     /// The unique identity of this motion.
     /// </summary>
-    LLAssetID _motionID;
+    LLAssetID mMotionID;
 
     /// <summary>
     /// The amount of time, in seconds, we use for transitioning between one animation-state to another; this affects the 'fluidity'
@@ -524,12 +312,12 @@ private:
     /// Use caution making this larger than the subjective amount of time between adjusting a joint and then choosing to use 'undo' it.
     /// Undo-function waits a similar amount of time after the last user-incited joint change to add a 'restore point'.
     /// </summary>
-    const F32 _interpolationTime = 0.25f;
+    const F32 mInterpolationTime = 0.25f;
 
     /// <summary>
     /// The collection of joint poses this motion uses to pose the joints of the character this is animating. 
     /// </summary>
-    std::vector<FSJointPose> _jointPoses;
+    std::vector<FSJointPose> mJointPoses;
 
     /// <summary>
     /// Removes the current joint state for the supplied joint, and adds a new one.

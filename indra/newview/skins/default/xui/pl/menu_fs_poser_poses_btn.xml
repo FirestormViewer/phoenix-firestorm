@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Settings">
+	<menu_item_call label="Załaduj tylko obroty" name="rotations" />
+	<menu_item_call label="Załaduj tylko pozycje" name="positions" />
+	<menu_item_call label="Załaduj tylko rozmiary" name="scale" />
+	<menu_item_call label="Załaduj obroty i pozycje" name="rotations_positions" />
+	<menu_item_call label="Załaduj obroty i rozmiary" name="rotations_scales" />
+	<menu_item_call label="Załaduj pozycję i rozmiary" name="positions_scales" />
+	<menu_item_call label="Załaduj wszystko" name="load_all" />
+</toggleable_menu>

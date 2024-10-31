@@ -114,6 +114,7 @@
 		<menu_item_call label="Синхронизация анимации" name="Resync Animations"/>
 		<menu_item_call label="Ближайшие аватары" name="Active Speakers"/>
 		<menu_item_check label="Радар" name="Radar"/>
+		<menu_item_check label="Позер" name="Poser"/>
 		<menu_item_call label="История телепортаций" name="Teleport History"/>
 		<menu_item_check label="Места" name="Places"/>
 		<menu_item_call label="Пункты" name="Destinations"/>

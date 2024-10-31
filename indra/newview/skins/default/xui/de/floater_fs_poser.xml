@@ -277,7 +277,6 @@
 				</tab_container>
 			</panel>
 			<panel name="save_file_options">
-				<check_box name="also_save_bvh_checkbox" label="BVH beim Speichern schreiben" tool_tip="Wenn eine Pose gespeichert wird, zusätzlich eine BVH-Datei erstellen, die über das Bauen-Menü hochgeladen werden kann"/>
 				<slider label="Sensitivität" name="trackpad_sensitivity_slider" tool_tip="Passt die Sensitivität der Steuerkugel an"/>
 			</panel>
 		</layout_panel>
