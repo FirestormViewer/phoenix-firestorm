@@ -43,6 +43,7 @@ void LLAutoReplace::autoreplaceCallback(S32& replacement_start, S32& replacement
     if (perform_autoreplace)
     {
         S32 word_end = cursor_pos - 1;
+        if (word_end < 0 ) { word_end = 0; }; // <FS:Beq/> FIRE-34765
 
         bool at_space  = (input_text[word_end] == ' ');
         bool have_word = (LLWStringUtil::isPartOfWord(input_text[word_end]));

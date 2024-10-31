@@ -5741,6 +5741,12 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Command_Beacons_Label">
 		Маяки
 	</string>
+	<string name="Command_Poser_Label">
+		Позер
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Позы вашего аватара или анимированного объекта
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Создание равнопрямоугольного изображения в формате 360°
 	</string>

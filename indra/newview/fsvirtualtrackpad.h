@@ -100,8 +100,8 @@ protected:
     FSVirtualTrackpad(const Params&);
 
 protected:
-    LLPanel*      mTouchArea;
-    LLViewBorder* mBorder;
+    LLPanel*      mTouchArea{ nullptr };
+    LLViewBorder* mBorder{ nullptr };
 
 private:
     const F32 ThirdAxisQuantization = 0.001f; // To avoid quantizing the third axis as we add integer wheel clicks, use this to preserve some precision as int.
@@ -124,21 +124,21 @@ private:
     void applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask);
     void applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, MASK mask);
 
-    LLUIImage* mImgMoonBack;
-    LLUIImage* mImgMoonFront;
-    LLUIImage* mImgSunBack;
-    LLUIImage* mImgSunFront;
-    LLUIImage* mImgSphere;
+    LLUIImage* mImgMoonBack{ nullptr };
+    LLUIImage* mImgMoonFront{ nullptr };
+    LLUIImage* mImgSunBack{ nullptr };
+    LLUIImage* mImgSunFront{ nullptr };
+    LLUIImage* mImgSphere{ nullptr };
 
     /// <summary>
     /// Whether we allow the second cursor to appear.
     /// </summary>
-    bool _allowPinchMode = false;
+    bool mAllowPinchMode{ false };
 
     /// <summary>
     /// Whether we should be moving the pinch cursor now
     /// </summary>
-    bool _doingPinchMode = false;
+    bool mDoingPinchMode{ false };
 
     /// <summary>
     /// Whether to allow the cursor(s) to 'wrap'.
@@ -148,48 +148,48 @@ private:
     /// When true, the cursor 'disappears' out the top, and starts from the bottom,
     /// effectively allowing infinite scrolling.
     /// </example>
-    bool _infiniteScrollMode = false;
+    bool mInfiniteScrollMode{ false };
 
-    bool _heldDownControlBefore = false;
+    bool mHeldDownControlBefore{ false };
 
     /// <summary>
     /// The values the owner will get and set.
     /// </summary>
-    S32 _valueX;
-    S32 _valueY;
-    S32 _valueZ;
-    S32 _pinchValueX;
-    S32 _pinchValueY;
-    S32 _pinchValueZ;
+    S32 mValueX{ 0 };
+    S32 mValueY{ 0 };
+    S32 mValueZ{ 0 };
+    S32 mPinchValueX{ 0 };
+    S32 mPinchValueY{ 0 };
+    S32 mPinchValueZ{ 0 };
 
     /// <summary>
     /// The delta values the owner will get and set.
     /// </summary>
-    S32 _valueDeltaX;
-    S32 _valueDeltaY;
-    S32 _valueDeltaZ;
-    S32 _pinchValueDeltaX;
-    S32 _pinchValueDeltaY;
-    S32 _pinchValueDeltaZ;
+    S32 mValueDeltaX{ 0 };
+    S32 mValueDeltaY{ 0 };
+    S32 mValueDeltaZ{ 0 };
+    S32 mPinchValueDeltaX{ 0 };
+    S32 mPinchValueDeltaY{ 0 };
+    S32 mPinchValueDeltaZ{ 0 };
 
     /// <summary>
     /// The various values placing the cursors and documenting behaviours.
     /// Where relevant, all are scaled in pixels.
     /// </summary>
-    S32 _cursorValueX;
-    S32 _cursorValueY;
-    S32 _cursorValueZ;
-    S32 _pinchCursorValueX;
-    S32 _pinchCursorValueY;
-    S32 _pinchCursorValueZ;
+    S32 mCursorValueX{ 0 };
+    S32 mCursorValueY{ 0 };
+    S32 mCursorValueZ{ 0 };
+    S32 mPinchCursorValueX{ 0 };
+    S32 mPinchCursorValueY{ 0 };
+    S32 mPinchCursorValueZ{ 0 };
 
     // if one clicks on or about the thumb, we don't move it, instead we calculate the click-position error and factor it out
-    S32 _thumbClickOffsetX;
-    S32 _thumbClickOffsetY;
-    S32 _pinchThumbClickOffsetX;
-    S32 _pinchThumbClickOffsetY;
-    S32 _posXwhenCtrlDown;
-    S32 _posYwhenCtrlDown;
+    S32 mThumbClickOffsetX{ 0 };
+    S32 mThumbClickOffsetY{ 0 };
+    S32 mPinchThumbClickOffsetX{ 0 };
+    S32 mPinchThumbClickOffsetY{ 0 };
+    S32 mPosXwhenCtrlDown{ 0 };
+    S32 mPosYwhenCtrlDown{ 0 };
 };
 #endif
 

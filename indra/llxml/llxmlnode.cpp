@@ -3403,7 +3403,7 @@ bool LLXMLNode::fromXMLRPCValue(LLSD& target)
 
     if (childp->hasName("string"))
     {
-        target.assign(LLStringFn::xml_decode(childp->getTextContents()));
+        target.assign(childp->getValue());
         return true;
     }
 

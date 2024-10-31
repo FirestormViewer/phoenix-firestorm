@@ -28,7 +28,6 @@ class lggBeamColorMapFloater : public LLFloater
 {
 public:
     lggBeamColorMapFloater(const LLSD& seed);
-    virtual ~lggBeamColorMapFloater();
 
     bool postBuild() override;
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;
@@ -47,9 +46,9 @@ protected:
     void onSaveCallback(const std::vector<std::string>& filenames);
     void onLoadCallback(const std::vector<std::string>& filenames);
 
-    F32  getHueFromLocation(S32 x, S32 y);
+    F32  getHueFromLocation(S32 x, S32 y) const;
     void fixOrder();
-    LLSD getDataSerialized();
+    LLSD getDataSerialized() const;
 
     F32                 mContextConeOpacity;
     F32                 mContextConeInAlpha;

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Settings">
+	<menu_item_call label="Загрузка только Вращений" name="rotations"/>
+	<menu_item_call label="Загрузка только Позиций" name="positions"/>
+	<menu_item_call label="Загрузка только Размеров" name="scale"/>
+	<menu_item_call label="Загрузка Вращений и Позиций" name="rotations_positions"/>
+	<menu_item_call label="Загрузка Вращений и Размеров" name="rotations_scales"/>
+	<menu_item_call label="Загрузка Позиций и Размеров" name="positions_scales"/>
+	<menu_item_call label="Загрузка Всего" name="load_all"/>
+</toggleable_menu>

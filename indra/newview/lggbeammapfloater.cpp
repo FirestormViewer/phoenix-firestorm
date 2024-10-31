@@ -27,11 +27,9 @@ lggBeamMapFloater::lggBeamMapFloater(const LLSD& seed) : LLFloater(seed),
     mContextConeOpacity(0.f),
     mContextConeInAlpha(CONTEXT_CONE_IN_ALPHA),
     mContextConeOutAlpha(CONTEXT_CONE_OUT_ALPHA),
-    mContextConeFadeTime(CONTEXT_CONE_FADE_TIME)
-{
-}
-
-lggBeamMapFloater::~lggBeamMapFloater()
+    mContextConeFadeTime(CONTEXT_CONE_FADE_TIME),
+    mFSPanel(nullptr),
+    mBeamshapePanel(nullptr)
 {
 }
 
@@ -52,11 +50,14 @@ bool lggBeamMapFloater::postBuild()
 
 void lggBeamMapFloater::draw()
 {
-    static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
-    drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("custom_beam_btn"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+    if (mFSPanel)
+    {
+        static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+        drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("custom_beam_btn"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+    }
 
     LLFloater::draw();
-    LLRect rec = mBeamshapePanel->getRect();
+    const LLRect& rec = mBeamshapePanel->getRect();
 
     gGL.pushMatrix();
     gGL.color4fv(LLColor4::white.mV);
@@ -70,10 +71,8 @@ void lggBeamMapFloater::draw()
     gGL.color4fv(LLColor4::white.mV);
     gl_circle_2d((F32)rec.getCenterX(), (F32)rec.getCenterY(), 120.0f, 30, false);
 
-    for (std::vector<lggPoint>::iterator it = mDots.begin(); it != mDots.end(); ++it)
+    for (const auto& dot : mDots)
     {
-        lggPoint dot = *it;
-
         gGL.color4fv(LLColor4::white.mV);
         gl_circle_2d((F32)dot.x, (F32)dot.y, 9.0f, 30, true);
 
@@ -103,12 +102,11 @@ bool lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 bool lggBeamMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     std::vector<lggPoint> newDots;
-    for (std::vector<lggPoint>::iterator it = mDots.begin(); it != mDots.end(); ++it)
+    for (const auto& dot : mDots)
     {
-        lggPoint dot = *it;
         if (dist_vec(LLVector2((F32)x, (F32)y), LLVector2((F32)dot.x, (F32)dot.y)) >= 7)
         {
-            newDots.push_back(dot);
+            newDots.emplace_back(dot);
         }
 
     }
@@ -122,19 +120,19 @@ void lggBeamMapFloater::onBackgroundChange()
     mBeamshapePanel->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
 }
 
-LLSD lggBeamMapFloater::getDataSerialized()
+LLSD lggBeamMapFloater::getDataSerialized() const
 {
     LLSD out;
     LLRect r  = mBeamshapePanel->getRect();
     for (S32 i = 0; i < mDots.size(); ++i)
     {
         LLSD point;
-        lggPoint t = mDots[i];
-        LLVector3 vec = LLVector3(0.f, (F32)t.x, (F32)t.y);
+        const lggPoint& dot = mDots.at(i);
+        LLVector3 vec{ 0.f, (F32)dot.x, (F32)dot.y };
         vec -= LLVector3(0.f, (F32)r.getCenterX(), (F32)r.getCenterY());
 
         point["offset"] = vec.getValue();
-        point["color"] = t.c.getValue();
+        point["color"] = dot.c.getValue();
 
         out[i] = point;
     }
@@ -192,7 +190,7 @@ void lggBeamMapFloater::onLoadCallback(const std::vector<std::string>& filenames
 
         LLSD beam_data = *it;
         lggPoint p;
-        LLVector3 vec = LLVector3(beam_data["offset"]);
+        LLVector3 vec{ beam_data["offset"] };
         vec *= scale / (8.0f / rec.getWidth());
         LLColor4 color = LLColor4(beam_data["color"]);
         p.c = color;

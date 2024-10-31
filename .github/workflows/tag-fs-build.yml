@@ -134,8 +134,12 @@ jobs:
       # Create the Tag (Conditional)
       - name: Create tag
         if: >
-          ${{ steps.get_inputs.outputs.dry_run != 'true' &&
-             steps.check_tag.outputs.tag_exists == 'false' }}
+          ${{ 
+            steps.get_inputs.outputs.release_type != 'Nightly' &&
+            steps.get_inputs.outputs.release_type != 'Manual' &&
+            steps.get_inputs.outputs.release_type != 'Profiling' &&
+            steps.get_inputs.outputs.dry_run != 'true' &&
+            steps.check_tag.outputs.tag_exists == 'false' }}
         run: |
           echo "Creating tag: ${{ steps.get_tag.outputs.tag_name }}"
           git tag ${{ steps.get_tag.outputs.tag_name }}

@@ -593,7 +593,7 @@ bool LLPanel::initPanelXML(LLXMLNodePtr node, LLView *parent, LLXMLNodePtr outpu
     return true;
 }
 
-bool LLPanel::hasString(std::string_view name)
+bool LLPanel::hasString(std::string_view name) const
 {
     return mUIStrings.find(name) != mUIStrings.end();
 }

@@ -31,6 +31,14 @@
 #include "llfloater.h"
 #include "fsposeranimator.h"
 
+class FSVirtualTrackpad;
+class LLButton;
+class LLCheckBoxCtrl;
+class LLLineEditor;
+class LLScrollListCtrl;
+class LLSliderCtrl;
+class LLTabContainer;
+
 /// <summary>
 /// Describes how to load a pose file.
 /// </summary>
@@ -68,23 +76,16 @@ class FSFloaterPoser : public LLFloater
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
 
-  private:
-    /*virtual*/ ~FSFloaterPoser();
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void draw();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void onClose(bool app_quitting);
+ private:
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void onClose(bool app_quitting) override;
 
-    /// <summary>
-    /// The amount of deflection 'one unit' on the trackpad translates to in radians.
-    /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
-    /// </summary>
-    const F32 normalTrackpadRangeInRads = F_PI;
     
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
-    void refreshPoseScroll(std::string_view scrollListName, std::string_view subDirectory);
+    void refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::optional<std::string_view> subDirectory = std::nullopt);
 
     /// <summary>
     /// (Dis)Enables all of the posing controls; such as when you can't pose for reasons.
@@ -105,7 +106,7 @@ class FSFloaterPoser : public LLFloater
     /// This does a lookup into the poser XML for a friendly header title by joint name, if it exists.
     /// </param>
     /// <param name="bodyJointsScrollList">The scroll list to add the header-row to.</param>
-    void AddHeaderRowToScrollList(std::string jointName, LLScrollListCtrl *bodyJointsScrollList);
+    void addHeaderRowToScrollList(const std::string& jointName, LLScrollListCtrl* bodyJointsScrollList);
 
     /// <summary>
     /// Generates the data for a row to add to a scroll-list.
@@ -114,52 +115,52 @@ class FSFloaterPoser : public LLFloater
     /// <param name="jointName">The well-known joint name of the joint to add the row for, eg: mChest.</param>
     /// <param name="isHeaderRow">Whether the joint is one which should come immediately after a header.</param>
     /// <returns>The data required to make the row.</returns>
-    LLSD createRowForJoint(std::string jointName, bool isHeaderRow);
+    LLSD createRowForJoint(const std::string& jointName, bool isHeaderRow);
 
     /// <summary>
     /// Gets the collection of poser joints currently selected on the active bones-tab of the UI.
     /// </summary>
     /// <returns>The selected joints</returns>
-    std::vector<FSPoserAnimator::FSPoserJoint *> getUiSelectedPoserJoints() const;
+    std::vector<FSPoserAnimator::FSPoserJoint*> getUiSelectedPoserJoints() const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.
     /// </summary>
     /// <param name="avatarToFind">The ID of the avatar to find.</param>
     /// <returns>The avatar, if found, otherwise nullptr.</returns>
-    LLVOAvatar* getAvatarByUuid(LLUUID avatarToFind);
+    LLVOAvatar* getAvatarByUuid(const LLUUID& avatarToFind) const;
 
     /// <summary>
     /// Gets the currently selected avatar or animesh.
     /// </summary>
     /// <returns>The currently selected avatar or animesh.</returns>
-    LLVOAvatar *getUiSelectedAvatar();
+    LLVOAvatar* getUiSelectedAvatar() const;
 
     /// <summary>
     /// Gets the current bone-deflection style: encapsulates 'anything else you want to do' while you're manipulating a joint.
     /// Such as: fiddle the opposite joint too.
     /// </summary>
     /// <returns>A E_BoneDeflectionStyles member.</returns>
-    E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle();
+    E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle() const;
 
     /// <summary>
     /// Gets the collection of UUIDs for nearby avatars.
     /// </summary>
     /// <returns>A the collection of UUIDs for nearby avatars.</returns>
-    uuid_vec_t getNearbyAvatarsAndAnimeshes();
+    uuid_vec_t getNearbyAvatarsAndAnimeshes() const;
 
     /// <summary>
     /// Gets a collection of UUIDs for avatars currently being presented on the UI.
     /// </summary>
     /// <returns>A the collection of UUIDs.</returns>
-    uuid_vec_t getCurrentlyListedAvatarsAndAnimeshes();
+    uuid_vec_t getCurrentlyListedAvatarsAndAnimeshes() const;
 
     /// <summary>
     /// Gets the scroll-list index of the supplied avatar.
     /// </summary>
     /// <param name="toFind">The avatar UUID to find on the avatars scroll list.</param>
     /// <returns>The scroll-list index for the supplied avatar, if found, otherwise -1.</returns>
-    S32 getAvatarListIndexForUuid(LLUUID toFind);
+    S32 getAvatarListIndexForUuid(const LLUUID& toFind) const;
 
     /// <summary>
     /// There are several control-callbacks manipulating rotations etc, they all devolve to these.
@@ -182,21 +183,20 @@ class FSFloaterPoser : public LLFloater
     /// There may be +/- PI difference two axes, because harmonics.
     /// Thus keep your UI synced with less gets.
     /// </remarks>
-    LLVector3 getRotationOfFirstSelectedJoint();
-    LLVector3 getPositionOfFirstSelectedJoint();
-    LLVector3 getScaleOfFirstSelectedJoint();
+    LLVector3 getRotationOfFirstSelectedJoint() const;
+    LLVector3 getPositionOfFirstSelectedJoint() const;
+    LLVector3 getScaleOfFirstSelectedJoint() const;
 
     // Pose load/save
     void onToggleLoadSavePanel();
     void onClickPoseSave();
     void onPoseFileSelect();
-    bool savePoseToXml(LLVOAvatar* avatar, std::string posePath);
-    bool savePoseToBvh(LLVOAvatar* avatar, std::string posePath);
+    bool savePoseToXml(LLVOAvatar* avatar, const std::string& posePath);
     void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
-    void loadPoseFromXml(LLVOAvatar* avatar, std::string poseFileName, E_LoadPoseMethods loadMethod);
+    void loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
-    void setUiSelectedAvatarSaveFileName(std::string saveFileName);
+    void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
     void showOrHideAdvancedSaveOptions();
 
     // UI Event Handlers:
@@ -246,20 +246,20 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <param name="avatar">The avatar to animate.</param>
     /// <returns>True if we have permission to animate, otherwise false.</returns>
-    bool havePermissionToAnimateAvatar(LLVOAvatar *avatar);
+    bool havePermissionToAnimateAvatar(LLVOAvatar* avatar) const;
 
     /// <summary>
     /// Determines if we could animate the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar to animate.</param>
     /// <returns>True if the avatar is non-null, not dead, in the same region as self, otherwise false.</returns>
-    bool couldAnimateAvatar(LLVOAvatar *avatar);
+    bool couldAnimateAvatar(LLVOAvatar* avatar) const;
 
     /// <summary>
     /// Our instance of the class which lets us do the business of manipulating the avatar.
     /// This separates that business from the code-behind the UI.
     /// </summary>
-    FSPoserAnimator _poserAnimator;
+    FSPoserAnimator mPoserAnimator;
 
     /// <summary>
     /// The supplied Joint name has a quaternion describing its rotation.
@@ -274,14 +274,14 @@ class FSFloaterPoser : public LLFloater
     /// No the translation isn't untangling all of that, it's not needed until it is.
     /// We're not landing on Mars with this code, just offering a user reasonable thumb-twiddlings.
     /// </remarks>
-    E_BoneAxisTranslation getJointTranslation(std::string jointName);
+    E_BoneAxisTranslation getJointTranslation(const std::string& jointName) const;
 
     /// <summary>
     /// Gets the collection of E_BoneAxisNegation values for the supplied joint.
     /// </summary>
     /// <param name="jointName">The name of the joind to get the axis transformation for.</param>
     /// <returns>The kind of axis transformation to perform.</returns>
-    S32 getJointNegation(std::string jointName);
+    S32 getJointNegation(const std::string& jointName) const;
 
     /// <summary>
     /// The smallest text embiggens the noble selection.
@@ -293,18 +293,18 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <param name="listName">The name of the list to adjust text-face for.</param>
     /// <param name="avatar">The avatar to whom the list is relevant.</param>
-    void addBoldToScrollList(std::string listName, LLVOAvatar *avatar);
+    void addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar);
 
     /// <summary>
     /// The time when the last click of a button was made.
     /// Utilized for controls needing a 'double click do' function.
     /// </summary>
-    std::chrono::system_clock::time_point _timeLastClickedJointReset = std::chrono::system_clock::now();
+    std::chrono::system_clock::time_point mTimeLastClickedJointReset = std::chrono::system_clock::now();
 
     /// <summary>
     /// The constant time interval, in seconds, a user must click twice within to successfully double-click a button.
     /// </summary>
-    std::chrono::duration<double> const _doubleClickInterval = std::chrono::duration<double>(0.3);
+    std::chrono::duration<double> const mDoubleClickInterval = std::chrono::duration<double>(0.3);
 
     /// <summary>
     /// Unwraps a normalized value from the trackball to a slider value.
@@ -312,6 +312,65 @@ class FSFloaterPoser : public LLFloater
     /// <param name="scale">The scale value from the trackball.</param>
     /// <returns>A value appropriate for fitting a slider.</returns>
     static F32 unWrapScale(F32 scale);
+
+    FSVirtualTrackpad* mAvatarTrackball{ nullptr };
+
+    LLSliderCtrl* mTrackpadSensitivitySlider{ nullptr };
+    LLSliderCtrl* mLimbYawSlider{ nullptr };
+    LLSliderCtrl* mLimbPitchSlider{ nullptr }; // pointing your nose up or down
+    LLSliderCtrl* mLimbRollSlider{ nullptr }; // your ear touches your shoulder
+    LLSliderCtrl* mPosXSlider{ nullptr };
+    LLSliderCtrl* mPosYSlider{ nullptr };
+    LLSliderCtrl* mPosZSlider{ nullptr };
+    LLSliderCtrl* mAdvPosXSlider{ nullptr };
+    LLSliderCtrl* mAdvPosYSlider{ nullptr };
+    LLSliderCtrl* mAdvPosZSlider{ nullptr };
+    LLSliderCtrl* mAdvScaleXSlider{ nullptr };
+    LLSliderCtrl* mAdvScaleYSlider{ nullptr };
+    LLSliderCtrl* mAdvScaleZSlider{ nullptr };
+
+    LLTabContainer* mJointsTabs{ nullptr };
+    LLTabContainer* mHandsTabs{ nullptr };
+
+    LLScrollListCtrl* mAvatarSelectionScrollList{ nullptr };
+    LLScrollListCtrl* mBodyJointsScrollList{ nullptr };
+    LLScrollListCtrl* mFaceJointsScrollList{ nullptr };
+    LLScrollListCtrl* mHandJointsScrollList{ nullptr };
+    LLScrollListCtrl* mMiscJointsScrollList{ nullptr };
+    LLScrollListCtrl* mCollisionVolumesScrollList{ nullptr };
+    LLScrollListCtrl* mEntireAvJointScroll{ nullptr };
+    LLScrollListCtrl* mPosesScrollList{ nullptr };
+    LLScrollListCtrl* mHandPresetsScrollList{ nullptr };
+
+    LLButton* mToggleAdvancedPanelBtn{ nullptr };
+    LLButton* mStartStopPosingBtn{ nullptr };
+    LLButton* mToggleLoadSavePanelBtn{ nullptr };
+    LLButton* mBrowserFolderBtn{ nullptr };
+    LLButton* mLoadPosesBtn{ nullptr };
+    LLButton* mSavePosesBtn{ nullptr };
+    LLButton* mFlipPoseBtn{ nullptr };
+    LLButton* mFlipJointBtn{ nullptr };
+    LLButton* mRecaptureBtn{ nullptr };
+    LLButton* mTogglePosingBonesBtn{ nullptr };
+    LLButton* mToggleMirrorRotationBtn{ nullptr };
+    LLButton* mToggleSympatheticRotationBtn{ nullptr };
+    LLButton* mToggleDeltaModeBtn{ nullptr };
+    LLButton* mRedoChangeBtn{ nullptr };
+
+    LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
+    LLLineEditor* mPoseSaveNameEditor{ nullptr };
+
+    LLPanel* mAdvancedParentPnl{ nullptr };
+    LLPanel* mJointsParentPnl{ nullptr };
+    LLPanel* mTrackballPnl{ nullptr };
+    LLPanel* mPositionRotationPnl{ nullptr };
+    LLPanel* mBodyJointsPnl{ nullptr };
+    LLPanel* mFaceJointsPnl{ nullptr };
+    LLPanel* mHandsJointsPnl{ nullptr };
+    LLPanel* mMiscJointsPnl{ nullptr };
+    LLPanel* mCollisionVolumesPnl{ nullptr };
+    LLPanel* mSaveFilePptionsPnl{ nullptr };
+    LLPanel* mPosesLoadSavePnl{ nullptr };
 };
 
 #endif
