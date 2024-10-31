@@ -1117,6 +1117,97 @@ If you do not understand the distinction then leave this control alone."
           top_pad="5"
           width="475" 
         />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="automatic_texture_downscale_settings"
+         top_pad="10"
+         width="308">
+            Automatic Texture Downscaling:
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardBackgroundedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when not the active window."
+         top_pad="10"
+         width="275">
+            In Background (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardBackgroundedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          name="TextureDiscardBackgroundedTime"
+          tool_tip="Downscales textures after selected amount of seconds when not the active window."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardBackgroundedTime_seconds"
+         top_delta="5"
+         width="50">
+            Second(s)
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardMinimizedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when minimized."
+         top_pad="10"
+         width="275">
+            Minimized (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardMinimizedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          name="TextureDiscardMinimizedTime"
+          tool_tip="Downscales textures after selected amount of seconds when minimized."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardMinimizedTime_seconds"
+         top_delta="5"
+         width="50">
+            Second(s)
+        </text>
     </panel>
 
 <!--Rendering-->

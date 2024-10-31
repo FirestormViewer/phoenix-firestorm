@@ -167,6 +167,23 @@
 		</text>
 		<check_box label="VRAM-Erkennung übersteuern" name="FSOverrideVRAMDetection" tool_tip="Erlaubt die Übersteuerung der VRAM-Erkennung (mit extreme Vorsicht verwenden)" />
 		<slider label="Dedizierter GPU-VRAM(GB):" name="FSForcedVideoMemory" tool_tip="Wichtig: Mit extremer Vorsicht verwenden. Übersteuert den erkannten VRAM der GPU. Dieser Wert darf nicht den geteilten VRAM enthalten, der Teil des Systemspeichers ist. Falls Sie den Unterschied nicht kennen, verändern Sie diese Einstellung bitte nicht!" />
+		<text name="automatic_texture_downscale_settings">
+			Automatische Textur-Herunterskalierung:
+		</text>
+		<text name="TextureDiscardBackgroundedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt.">
+			Im Hintergrund (0 zum deaktivieren)
+		</text>
+		<spinner name="TextureDiscardBackgroundedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt."/>
+		<text name="TextureDiscardBackgroundedTime_seconds">
+			Sekunde(n)
+		</text>
+		<text name="TextureDiscardMinimizedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist.">
+			Minimiert (0 zum deaktivieren)
+		</text>
+		<spinner name="TextureDiscardMinimizedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist."/>
+		<text name="TextureDiscardMinimizedTime_seconds">
+			Sekunde(n)
+		</text>
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">
