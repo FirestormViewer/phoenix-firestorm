@@ -264,15 +264,15 @@
 						<slider label="Position Z:" name="Advanced_Position_Z"/>
 						<button label="Positionsänd. zurücks." name="undo_position_change" tool_tip="Macht die letzte Positionsänderung rückgängig"/>
 						<button label="Pos. wiederh." name="redo_position_change" tool_tip="Stellt die letzte Positionsänderung wieder her"/>
-						<button label="Pos. zurücks." name="undo_position_change" tool_tip="Doppelklicken, um Position auf Originalwert zurückzusetzen"/>
+						<button label="Pos. zurücks." name="reset_positions" tool_tip="Doppelklicken, um Position auf Originalwert zurückzusetzen"/>
 					</panel>
 					<panel title="Körperteil-Skalierung" name="scale_panel">
 						<slider label="Skalierung X:" name="Advanced_Scale_X"/>
 						<slider label="Skalierung Y:" name="Advanced_Scale_Y"/>
 						<slider label="Skalierung Z:" name="Advanced_Scale_Z"/>
-						<button label="Skal.-Änd. zurücks." name="undo_position_change" tool_tip="Macht die letzte Änderung der Skalierung rückgängig"/>
+						<button label="Skal.-Änd. zurücks." name="undo_scale_change" tool_tip="Macht die letzte Änderung der Skalierung rückgängig"/>
 						<button label="Skal. wiederh." name="redo_scale_change" tool_tip="Stellt die letzte Änderung der Skalierung wieder her"/>
-						<button label="Skal. zurücks." name="undo_scale_change" tool_tip="Doppelklicken, um Skalierung auf Originalwert zurückzusetzen"/>
+						<button label="Skal. zurücks." name="reset_scales" tool_tip="Doppelklicken, um Skalierung auf Originalwert zurückzusetzen"/>
 					</panel>
 				</tab_container>
 			</panel>

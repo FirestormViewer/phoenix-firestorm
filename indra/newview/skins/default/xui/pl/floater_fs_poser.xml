@@ -61,7 +61,7 @@
 	<string	name="title_mFaceEyecornerInnerLeft">Wewn. lewy kącik oka</string>
 	<string	name="title_mFaceEyecornerInnerRight">Wewn. prawy kącik oka</string>
 	<string	name="title_mFaceNoseBridge">Grzbiet nosa</string>
-	<string	name="title_mCollarLeft">Kołnierz</string>
+	<string	name="title_mCollarLeft">Obojczyk</string>
 	<string	name="title_mShoulderLeft">Całe ramię</string>
 	<string	name="title_mElbowLeft">Przedramię</string>
 	<string	name="title_mWristLeft">Nadgarstek</string>
@@ -80,7 +80,7 @@
 	<string	name="title_mHandThumb1Left">Podstawa kciuka</string>
 	<string	name="title_mHandThumb2Left">Środek kciuka</string>
 	<string	name="title_mHandThumb3Left">Czubek kciuka</string>
-	<string	name="title_mCollarRight">Kołnierz</string>
+	<string	name="title_mCollarRight">Obojczyk</string>
 	<string	name="title_mShoulderRight">Całe ramię</string>
 	<string	name="title_mElbowRight">Przedramię</string>
 	<string	name="title_mWristRight">Nadgarstek</string>
@@ -258,15 +258,15 @@
 						<slider label="Pozycja Z:" name="Advanced_Position_Z" />
 						<button label="Cofnij zmianę pozycji" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę pozycji" />
 						<button label="Ponów pozycję" name="redo_position_change" tool_tip="Ponownie wykonaj ostatnią zmianę pozycji" />
-						<button label="Reset pozycji" name="undo_position_change" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną pozycję" />
+						<button label="Reset pozycji" name="reset_positions" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną pozycję" />
 					</panel>
 					<panel title="Skala części ciała" name="scale_panel">
 						<slider label="Skala X:" name="Advanced_Scale_X" />
 						<slider label="Skala Y:" name="Advanced_Scale_Y" />
 						<slider label="Skala Z:" name="Advanced_Scale_Z" />
-						<button label="Cofnij zmianę skali" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę skali" />
+						<button label="Cofnij zmianę skali" name="undo_scale_change" tool_tip="Cofnij ostatnią zmianę skali" />
 						<button label="Ponów skalę" name="redo_scale_change" tool_tip="Ponownie wykonaj ostatnią zmianę skali" />
-						<button label="Reset skali" name="undo_scale_change" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną skalę" />
+						<button label="Reset skali" name="reset_scales" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną skalę" />
 					</panel>
 				</tab_container>
 			</panel>
