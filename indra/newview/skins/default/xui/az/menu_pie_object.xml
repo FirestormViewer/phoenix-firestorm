@@ -37,7 +37,6 @@
 			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Qaytar" name="Return..."/>
-		<pie_slice label="Almaq" name="Buy..."/>
 		<pie_menu label="İrəli &gt;" name="Object Pie More 2">
 			<pie_menu name="ResetMenu" label="Sıfırla &gt;">
 				<pie_slice label="Tekstur.yenilə" name="Texture Refresh"/>
@@ -72,6 +71,7 @@
 			</pie_menu>
 			<pie_slice label="Müayinə" name="Object Inspect"/>
 		</pie_menu>
+		<pie_slice label="Almaq" name="Buy..."/>
 	</pie_menu>
 	<pie_slice label="Dəyişdir" name="Edit..."/>
 </pie_menu>

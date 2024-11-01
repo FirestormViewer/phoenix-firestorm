@@ -41,7 +41,6 @@
 			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Restituisci" name="Return..."/>
-		<pie_slice label="Compra" name="Buy..."/>
 		<pie_menu label="Altro &gt;" name="Object Pie More 2">
 			<pie_menu name="ResetMenu" label="Ripristina &gt;">
 				<pie_slice label="Ricar. texture" name="Texture Refresh"/>
@@ -76,6 +75,7 @@
 			</pie_menu>
 			<pie_slice label="Ispeziona" name="Object Inspect"/>
 		</pie_menu>
+		<pie_slice label="Compra" name="Buy..."/>
 	</pie_menu>
 	<pie_slice label="Modifica" name="Edit..."/>
 </pie_menu>

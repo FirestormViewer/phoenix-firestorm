@@ -339,16 +339,7 @@
         <pie_slice.on_enable
             function="Object.EnableReturn" />
     </pie_slice>
-
-    <pie_slice
-        enabled="false"
-        label="Buy"
-        name="Buy...">
-        <pie_slice.on_click
-            function="Object.Buy" />
-        <pie_slice.on_enable
-            function="Object.EnableBuy" />
-        </pie_slice>
+    <pie_separator/>
 
     <pie_menu
         label="More &gt;"
@@ -573,6 +564,16 @@
         </pie_slice>
 
     </pie_menu>
+
+    <pie_slice
+        enabled="false"
+        label="Buy"
+        name="Buy...">
+        <pie_slice.on_click
+            function="Object.Buy" />
+        <pie_slice.on_enable
+            function="Object.EnableBuy" />
+        </pie_slice>
 
     </pie_menu>
 

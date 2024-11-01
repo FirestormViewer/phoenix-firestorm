@@ -41,7 +41,6 @@
 			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Вернуть" name="Return..."/>
-		<pie_slice label="Купить" name="Buy..."/>
 		<pie_menu label="Далее &gt;" name="Object Pie More 2">
 			<pie_menu name="ResetMenu" label="Сбросить &gt;">
 				<pie_slice label="Обнов.Текстуру" name="Texture Refresh"/>
@@ -76,6 +75,7 @@
 			</pie_menu>
 			<pie_slice label="Инспекция" name="Object Inspect"/>
 		</pie_menu>
+		<pie_slice label="Купить" name="Buy..."/>
 	</pie_menu>
 	<pie_slice label="Править" name="Edit..."/>
 </pie_menu>

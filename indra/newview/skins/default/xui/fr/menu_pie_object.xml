@@ -41,7 +41,6 @@
 			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Renvoyer" name="Return..."/>
-		<pie_slice label="Acheter" name="Buy..."/>
 		<pie_menu label="Plus &gt;" name="Object Pie More 2">
 			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">
@@ -72,6 +71,7 @@
 			</pie_menu>
 			<pie_slice label="Inspecter" name="Object Inspect"/>
 		</pie_menu>
+		<pie_slice label="Acheter" name="Buy..."/>
 	</pie_menu>
 	<pie_slice label="Modifier" name="Edit..."/>
 </pie_menu>

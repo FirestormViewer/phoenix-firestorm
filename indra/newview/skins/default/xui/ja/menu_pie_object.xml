@@ -44,9 +44,6 @@
     <pie_slice
         label="返却" 
         name="Return..."/>
-    <pie_slice
-        label="購入" 
-		name="Buy..."/>
     <pie_menu
         label="詳細 &gt;"
         name="Object Pie More 2">
@@ -104,6 +101,9 @@
             label="検査"
             name="Object Inspect"/>
     </pie_menu>
+    <pie_slice
+        label="購入" 
+		name="Buy..."/>
     </pie_menu>
     <pie_slice
         label="編集" name="Edit..."/>
