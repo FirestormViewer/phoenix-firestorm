@@ -8,6 +8,7 @@
 		<string>CameraFNumber</string>
 		<string>FramePerSecondLimit</string>
 		<string>FSLimitFramerate</string>
+		<string>FSLimitTextureVRAMUsage</string>
 		<string>FSRenderVignette</string>
 		<string>FullScreen</string>
 		<string>RenderAnisotropic</string>
@@ -102,6 +103,8 @@
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
+		<string>TextureDiscardBackgroundedTime</string>
+		<string>TextureDiscardMinimizedTime</string>
 		<string>WLSkyDetail</string>
 	</array>
 </llsd>
