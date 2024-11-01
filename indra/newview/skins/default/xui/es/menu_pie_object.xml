@@ -17,6 +17,7 @@
 		<pie_menu label="Anexar HUD &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Anexar &gt;" name="Pie Object Attach"/>
 		<pie_slice label="Devolver" name="Return..."/>
+		<pie_slice label="Comprar" name="Buy..."/>
 		<pie_menu label="Más &gt;" name="Object Pie More 2">
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Desdibujar &gt;">
@@ -47,7 +48,6 @@
 			</pie_menu>
 			<pie_slice label="Inspeccionar" name="Object Inspect"/>
 		</pie_menu>
-		<pie_slice label="Comprar" name="Buy..."/>
 	</pie_menu>
 	<pie_slice label="Editar" name="Edit..."/>
 </pie_menu>
