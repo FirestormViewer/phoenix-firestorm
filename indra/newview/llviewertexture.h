@@ -44,6 +44,7 @@
 
 // <FS:Ansariel> Max texture resolution
 extern U32 DESIRED_NORMAL_TEXTURE_SIZE;
+constexpr F32 MIN_VRAM_BUDGET = 768.f; // <FS:Ansariel> Expose max texture VRAM setting
 
 class LLFace;
 class LLImageGL ;

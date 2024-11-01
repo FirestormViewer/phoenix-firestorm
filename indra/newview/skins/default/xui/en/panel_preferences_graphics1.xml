@@ -1071,6 +1071,34 @@
              value="2" />
         </combo_box>
 
+        <check_box
+          control_name="FSLimitTextureVRAMUsage"
+          height="16"
+          label="Limit VRAM texture usage (MB)"
+          layout="topleft"
+          left="10"
+          top_pad="15"
+          name="FSLimitTextureVRAMUsage"
+          tool_tip="Limits the amount of VRAM used for textures. Overall usage may still be higher because other elements also use VRAM."
+          width="275" 
+        />
+        <slider
+          control_name="RenderMaxVRAMBudget"
+          enabled_control="FSLimitTextureVRAMUsage"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="16"
+          layout="topleft"
+          left_pad="5"
+          min_val="0"
+          max_val="4096"
+          name="RenderMaxVRAMBudget"
+          tool_tip="The maximum amount of VRAM in Megabytes used for textures."
+          top_delta="0"
+          width="200"
+        />
+
         <text
          type="string"
          length="1"

@@ -2238,6 +2238,12 @@ void LLFloaterPreference::refreshEnabledState()
         getChild<LLUICtrl>("do_not_disturb_response")->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_SENDIM));
     }
     // [/RLVa:KB]
+
+    // <FS:Ansariel> Expose max texture VRAM setting
+    auto max_texmem = getChild<LLSliderCtrl>("RenderMaxVRAMBudget");
+    max_texmem->setMinValue(MIN_VRAM_BUDGET);
+    max_texmem->setMaxValue((F32)gGLManager.mVRAM);
+    // </FS:Ansariel>
 }
 
 // <FS:Zi> Support preferences search SLURLs

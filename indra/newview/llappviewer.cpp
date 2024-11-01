@@ -1513,12 +1513,12 @@ bool LLAppViewer::init()
 void LLAppViewer::overrideDetectedHardware()
 {
     // Override the VRAM Detection if FSOverrideVRAMDetection is set.
-    if ( gSavedSettings.getBOOL("FSOverrideVRAMDetection") )
+    if (gSavedSettings.getBOOL("FSOverrideVRAMDetection"))
     {
-        S32 forced_video_memory = gSavedSettings.getS32("FSForcedVideoMemory");
+        U32 forced_video_memory = gSavedSettings.getU32("FSForcedVideoMemory");
         // Note: 0 is allowed here, some systems detect VRAM as zero so override should support emulating them.
-        LL_INFOS("AppInit") << "Overriding VRAM to " << forced_video_memory*1024 << " MB" << LL_ENDL;
-        gGLManager.mVRAM = forced_video_memory*1024;
+        LL_INFOS("AppInit") << "Overriding VRAM to " << forced_video_memory * 1024U << " MB" << LL_ENDL;
+        gGLManager.mVRAM = forced_video_memory * 1024U;
     }
 }
 // </FS:Beq>
@@ -4169,8 +4169,9 @@ LLSD LLAppViewer::getViewerInfo() const
     // </FS:PP>
 
     // <FS:Ansariel> Include VRAM budget
-    if (auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget"); budget > 0)
+    if (gSavedSettings.getBOOL("FSLimitTextureVRAMUsage"))
     {
+        auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget");
         info["VRAM_BUDGET"] = std::to_string(budget) + " MB";
         info["VRAM_BUDGET_ENGLISH"] = std::to_string(budget) + " MB";
     }

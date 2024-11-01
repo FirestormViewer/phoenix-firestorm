@@ -165,6 +165,8 @@
 		<text name="advanced_settings">
 			Erweiterte Einstellungen (Neustart erforderlich):
 		</text>
+		<check_box label="VRAM-Speicher für Texturen begrenzen (MB)" name="FSLimitTextureVRAMUsage" tool_tip="Begrenzt die Nutzung von VRAM-Speicher für Texturen. Der gesamte Speicherverbrauch kann höher sein, da andere Elemente ebenfalls VRAM-Speicher nutzen."/>
+		<slider name="RenderMaxVRAMBudget" tool_tip="Maximaler VRAM-Speicher in Megabytes, der für Texturen verwendet wird."/>
 		<check_box label="VRAM-Erkennung übersteuern" name="FSOverrideVRAMDetection" tool_tip="Erlaubt die Übersteuerung der VRAM-Erkennung (mit extreme Vorsicht verwenden)" />
 		<slider label="Dedizierter GPU-VRAM(GB):" name="FSForcedVideoMemory" tool_tip="Wichtig: Mit extremer Vorsicht verwenden. Übersteuert den erkannten VRAM der GPU. Dieser Wert darf nicht den geteilten VRAM enthalten, der Teil des Systemspeichers ist. Falls Sie den Unterschied nicht kennen, verändern Sie diese Einstellung bitte nicht!" />
 		<text name="automatic_texture_downscale_settings">

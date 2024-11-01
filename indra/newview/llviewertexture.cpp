@@ -103,7 +103,7 @@ bool LLViewerTexture::sFreezeImageUpdates = false;
 F32 LLViewerTexture::sCurrentTime = 0.0f;
 
 constexpr F32 MEMORY_CHECK_WAIT_TIME = 1.0f;
-constexpr F32 MIN_VRAM_BUDGET = 768.f;
+//constexpr F32 MIN_VRAM_BUDGET = 768.f; // <FS:Ansariel> Expose max texture VRAM setting
 F32 LLViewerTexture::sFreeVRAMMegabytes = MIN_VRAM_BUDGET;
 
 LLViewerTexture::EDebugTexels LLViewerTexture::sDebugTexelsMode = LLViewerTexture::DEBUG_TEXELS_OFF;
@@ -510,6 +510,7 @@ void LLViewerTexture::updateClass()
     LLViewerMediaTexture::updateClass();
 
     static LLCachedControl<U32> max_vram_budget(gSavedSettings, "RenderMaxVRAMBudget", 0);
+    static LLCachedControl<bool> max_vram_budget_enabled(gSavedSettings, "FSLimitTextureVRAMUsage"); // <FS:Ansariel> Expose max texture VRAM setting
 
     F64 texture_bytes_alloc = LLImageGL::getTextureBytesAllocated() / 1024.0 / 512.0;
     F64 vertex_bytes_alloc = LLVertexBuffer::getBytesAllocated() / 1024.0 / 512.0;
@@ -518,7 +519,9 @@ void LLViewerTexture::updateClass()
     // NOTE: our metrics miss about half the vram we use, so this biases high but turns out to typically be within 5% of the real number
     F32 used = (F32)ll_round(texture_bytes_alloc + vertex_bytes_alloc);
 
-    F32 budget = max_vram_budget == 0 ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
+    // <FS:Ansariel> Expose max texture VRAM setting
+    //F32 budget = max_vram_budget == 0 ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
+    F32 budget = !max_vram_budget_enabled ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
 
     // Try to leave at least half a GB for everyone else and for bias,
     // but keep at least 768MB for ourselves

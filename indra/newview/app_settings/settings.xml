@@ -11177,13 +11177,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderMaxVRAMBudget</key>
   <map>
     <key>Comment</key>
-    <string>Maximum amount of texture memory to budget for (in MB), or 0 for autodetect.</string>
+    <string>Maximum amount of texture memory to budget for (in MB), or autodetect if FSLimitTextureVRAMUsage is disabled.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>768</integer>
   </map>
   <key>RenderMinFreeMainMemoryThreshold</key>
   <map>
@@ -23923,7 +23923,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>HideFromEditor</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>S32</string>
+      <string>U32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
@@ -25974,6 +25974,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSLimitTextureVRAMUsage</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, limits the amount of VRAM used for textures to the value of RenderMaxVRAMBudget.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
   </map>
 </llsd>
