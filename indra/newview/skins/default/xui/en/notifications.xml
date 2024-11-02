@@ -14629,4 +14629,21 @@ Camera reset might be inhibited by the following objects:
   </notification>
   <!-- </FS:Zi> -->
 
+  <notification
+    icon="notifytip.tga"
+    name="WhitelistReminder"
+    type="alertmodal">
+To improve [APP_NAME]'s performance, please whitelist it
+
+Some antivirus programs may mistakenly block parts of [APP_NAME], slowing down its performance and causing some features to malfunction. To prevent these issues, we strongly recommend adding [APP_NAME] to your antivirus program's whitelist (or exclusion list). This will ensure the viewer runs smoothly.
+
+For detailed instructions on how to whitelist [APP_NAME] - including a list of files and folders to exclude - please visit our guide:
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+    <usetemplate
+     ignoretext="Show whitelist reminder on launch"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+
 </notifications>
