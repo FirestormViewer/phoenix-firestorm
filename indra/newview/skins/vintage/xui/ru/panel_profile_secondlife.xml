@@ -44,6 +44,16 @@
 			<icon name="cant_edit_objects" tool_tip="Друг не может править мои объекты"/>
 			<text_editor name="user_age" value="(загрузка...)"/>
 			<text name="label2" value="Аккаунт:"/>
+			<panel name="badge_layout">
+				<layout_stack name="badge_stacker">
+					<layout_panel name="top_badge_layout">
+						<icon name="top_badge_icon" tool_tip="Сотрудник лаборатории Линден"/>
+					</layout_panel>
+					<layout_panel name="bottom_badge_layout">
+						<icon name="bottom_badge_icon" tool_tip="Сотрудник лаборатории Линден"/>
+					</layout_panel>
+				</layout_stack>
+			</panel>
 			<text name="partner_label" value="Партнер:"/>
 		</layout_panel>
 	</layout_stack>
