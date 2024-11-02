@@ -5576,6 +5576,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Command_Beacons_Label">
 		Marcatori
 	</string>
+	<string name="Command_Poser_Label">
+		Poser
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Metti in posa il tuo avatar e le animesh
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Cattura foto panoramica a 360°
 	</string>
@@ -5724,7 +5730,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Apre l'elenco dei teleport effetuati (Alt+H)
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
-		Pose statiche dell'avatar per sistemare gli attachments
+		Pose statiche dell'avatar per sistemare gli attachment
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Scatta una foto e la salva su disco

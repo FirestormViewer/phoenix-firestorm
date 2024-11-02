@@ -3,11 +3,6 @@
 	<string name="status_unknown">
 		Sconosciuto
 	</string>
-	<string name="CaptionTextAcctInfo">
-[ACCTTYPE]
-[PAYMENTINFO]
-[FSDEV][FSSUPP][FSQA][FSGW][FIRESTORM]
-	</string>
 	<string name="BadgeBeta" value="Beta Tester originale" />
 	<string name="BadgeBetaLifetime" value="Membro a vita Beta" />
 	<string name="BadgeLifetime" value="Membro a vita" />
@@ -46,7 +41,14 @@
 			<text name="label2" value="Account:" />
 			<layout_stack name="badgepositioner">
 				<layout_panel name="badge_layout">
-					<icon name="badge_icon" tool_tip="Dipendente Linden Lab" />
+					<layout_stack name="badge_stacker">
+						<layout_panel name="top_badge_layout">
+							<icon name="top_badge_icon" tool_tip="Dipendente Linden Lab" />
+						</layout_panel>
+						<layout_panel name="bottom_badge_layout">
+							<icon name="bottom_badge_icon" tool_tip="Dipendente Linden Lab" />
+						</layout_panel>
+					</layout_stack>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
