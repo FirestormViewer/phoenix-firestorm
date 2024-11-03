@@ -601,6 +601,20 @@
 				parameter="fs_when_not_sitting" />
         </menu_item_call>
 
+<!-- FS:AR FIRE-30873 -->
+        <menu_item_check
+         label="Poser"
+         name="Poser"
+         use_mac_ctrl="true">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_poser" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_poser" />
+        </menu_item_check>
+<!-- /FS:AR FIRE-30873 -->
+
         <menu_item_separator/>
 
         <menu_item_call
@@ -940,20 +954,6 @@
              function="SideTray.PanelPeopleTab"
              parameter="nearby_panel" />
         </menu_item_call>
-
-<!-- FS:AR FIRE-30873 -->
-        <menu_item_check
-         label="Poser"
-         name="Poser"
-         use_mac_ctrl="true">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="fs_poser" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="fs_poser" />
-        </menu_item_check>
-<!-- /FS:AR FIRE-30873 -->
 
         <menu_item_check
          label="Radar"
