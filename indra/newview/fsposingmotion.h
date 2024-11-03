@@ -223,6 +223,11 @@ public:
         void revertCollisionVolume();
 
         /// <summary>
+        /// Sets all rotations to zero.
+        /// </summary>
+        void setRotationsToZero();
+
+        /// <summary>
         /// Gets the pointer to the jointstate for the joint this represents.
         /// </summary>
         LLPointer<LLJointState> getJointState() const { return mJointState; }
@@ -294,6 +299,17 @@ public:
     /// </summary>
     /// <returns>The unique, per-session, per-character motion identity.</returns>
     LLAssetID motionId() const { return mMotionID; }
+
+    /// <summary>
+    /// Gets whether all starting rotations are zero.
+    /// </summary>
+    /// <returns>True if all starting rotations are zero, otherwise false.</returns>
+    bool allStartingRotationsAreZero() const;
+
+    /// <summary>
+    /// Sets all of the non-Collision Volume rotations to zero.
+    /// </summary>
+    void setAllRotationsToZero();
 
 private:
     /// <summary>

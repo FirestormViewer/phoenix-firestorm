@@ -5,7 +5,7 @@ height="310"
 layout="topleft"
 name="floater_poser"
 title="Avatar and Animesh Poser"
-width="565">
+width="403">
 	<string	name="icon_category" translate="false">Inv_BodyShape</string>
 	<string	name="icon_bone" translate="false"></string>
 	<string	name="icon_object" translate="false">Inv_Object</string>
@@ -256,7 +256,7 @@ width="565">
 	follows="top|left|right"
 	height="425"
 	layout="topleft"
-	left="7"
+	left="3"
 	border_size="-4"
 	close_time_constant="0.02"
 	open_time_constant="0.02"
@@ -274,67 +274,15 @@ width="565">
 		height="290"
 		width="607">
 			<panel
-			follows="left|top|bottom"
-			height="302"
-			background_visible="false"
-			layout="topleft"
-			visible="true"
-			mouse_opaque="false"
-			name="avatarSelection_panel"
-			top="0"
-			left="0"
-			width="153">
-				<avatar_list
-				 allow_select="true"
-				 follows="all"
-				 height="383"
-				 layout="topleft"
-				 multi_select="true"
-				 name="avatars_online"
-				 keep_one_selected="false"
-				 show_permissions_granted="true"
-				 width="317" />
-				<scroll_list
-				column_padding="0"
-				draw_heading="true"
-				height="285"
-				can_sort="false"
-				follows="all"
-				layout="topleft"
-				left="1"
-				tool_tip="Select the Avatar or Animesh you want to animate."
-				width="153"
-				multi_select="false"
-				name="avatarSelection_scroll"
-				top="0">
-					<scroll_list.columns
-					label=""
-					name="icon"
-					relative_width="0.0"  />
-					<scroll_list.columns
-					label="Select Someone..."
-					name="name"
-					relative_width="1.0"  />
-					<scroll_list.columns
-					label="UUID"
-					name="uuid"
-					relative_width="0.0"  />
-					<scroll_list.columns
-					label="SaveFileName"
-					name="saveFileName"
-					relative_width="0.0"  />
-				</scroll_list>
-			</panel>
-			<panel
 			follows="left"
 			height="290"
 			background_visible="false"
 			layout="topleft"
-			enabled="false"
+			enabled="true"
 			mouse_opaque="false"
 			name="joints_parent_panel"
 			top="0"
-			left_pad="2"
+			left="0"
 			width="235">
 				<tab_container
 					follows="all"
@@ -345,7 +293,7 @@ width="565">
 					enabled="true"
 					name="joints_tabs"
 					tab_height="20"
-					tab_width="50"
+					tab_width="55"
 					tab_group="1"
 					tab_position="left"
 					top="0"
@@ -551,6 +499,38 @@ width="565">
 						height="299"
 						layout="topleft"
 						left="0"
+						title="Adjust"
+						name="hands_joints_panel"
+						top="0"
+						width="481">
+							<scroll_list
+							column_padding="2"
+							draw_heading="true"
+							height="300"
+							follows="all"
+							can_sort="false"
+							layout="topleft"
+							left="2"
+							width="479"
+							multi_select="true"
+							name="hand_joints_scroll"
+							top="0">
+								<scroll_list.columns
+								label=""
+								name="icon"
+								relative_width="0.1"  />
+								<scroll_list.columns
+								label="Body Part"
+								name="joint"
+								relative_width="0.9"  />
+							</scroll_list>
+						</panel>
+						<panel
+						follows="all"
+						background_visible="false"
+						height="299"
+						layout="topleft"
+						left="0"
 						title="Presets"
 						name="hands_presets_panel"
 						top="0"
@@ -599,38 +579,6 @@ width="565">
 								<button.commit_callback
 								function="Poser.LoadRightHand"/>
 							</button>
-						</panel>
-						<panel
-						follows="all"
-						background_visible="false"
-						height="299"
-						layout="topleft"
-						left="0"
-						title="Adjust"
-						name="hands_joints_panel"
-						top="0"
-						width="481">
-							<scroll_list
-							column_padding="2"
-							draw_heading="true"
-							height="300"
-							follows="all"
-							can_sort="false"
-							layout="topleft"
-							left="2"
-							width="479"
-							multi_select="true"
-							name="hand_joints_scroll"
-							top="0">
-								<scroll_list.columns
-								label=""
-								name="icon"
-								relative_width="0.1"  />
-								<scroll_list.columns
-								label="Body Part"
-								name="joint"
-								relative_width="0.9"  />
-							</scroll_list>
 						</panel>
 					</tab_container>
 					<panel
@@ -696,6 +644,157 @@ width="565">
 							name="joint"
 							relative_width="0.9"  />
 						</scroll_list>
+					</panel>
+					<panel
+					follows="left|top|bottom"
+					height="302"
+					background_visible="false"
+					layout="topleft"
+					visible="true"
+					title="Posee"
+					mouse_opaque="false"
+					name="avatarSelection_panel"
+					top="0"
+					left="0"
+					width="153">
+						<avatar_list
+						 allow_select="true"
+						 follows="all"
+						 height="150"
+						 layout="topleft"
+						 multi_select="true"
+						 name="avatars_online"
+						 keep_one_selected="false"
+						 show_permissions_granted="true"
+						 width="317" />
+						<scroll_list
+						column_padding="0"
+						draw_heading="true"
+						height="160"
+						can_sort="false"
+						follows="all"
+						layout="topleft"
+						left="3"
+						tool_tip="Select the Avatar or Animesh you want to animate."
+						width="151"
+						multi_select="false"
+						name="avatarSelection_scroll"
+						top="0">
+							<scroll_list.columns
+							label=""
+							name="icon"
+							relative_width="0.0"  />
+							<scroll_list.columns
+							label="Select Someone to Pose..."
+							name="name"
+							relative_width="1.0"  />
+							<scroll_list.columns
+							label="UUID"
+							name="uuid"
+							relative_width="0.0"  />
+							<scroll_list.columns
+							label="SaveFileName"
+							name="saveFileName"
+							relative_width="0.0"  />
+						</scroll_list>
+						<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							label=""
+							image_overlay="Refresh_Off"
+							image_unselected="Toolbar_Middle_Off"
+							name="refresh_avatars"
+							tool_tip="Refresh the list of avatars and animeshes"
+							width="20"
+							top="142"
+							left="3">
+								<button.commit_callback
+								function="Poser.RefreshAvatars"/>
+						</button>
+						<button
+							height="21"
+							follows="top|left"
+							enabled="false"
+							is_toggle="true"
+							label="Start Posing"
+							top_delta="0"
+							left_pad="2"
+							label_selected="Stop Posing"
+							image_hover_unselected="Toolbar_Middle_Over"
+							image_selected="Toolbar_Middle_Selected"
+							image_unselected="Toolbar_Middle_Off"
+							button_flash_enable="true"
+							flash_color="0.7 0.7 1 1"
+							button_flash_count="64"
+							button_flash_rate="0.5"
+							tool_tip="Start posing the selected avatar or animesh, if you are allowed to"
+							name="start_stop_posing_button"
+							width="150">
+								<button.commit_callback
+								function="Poser.StartStopAnimating"/>
+						</button>
+						<button
+							height="21"
+							follows="top|left"
+							layout="topleft"
+							left="3"
+							top_pad="1"
+							label="Set to T-Pose"
+							image_unselected="Toolbar_Middle_Off"
+							name="set_t_pose_button"
+							tool_tip="Double-click to set the selected avatar to a 'T-Pose'"
+							width="172">
+								<button.commit_callback
+								function="Poser.SetToTPose"/>
+						</button>
+					</panel>
+					<panel
+					follows="all"
+					background_visible="false"
+					height="299"
+					layout="topleft"
+					left="0"
+					title="Settings"
+					name="settings_panel"
+					top="0"
+					width="481">
+						<text follows="left|top"
+							name="limb_pitch_label"
+							height="10"
+							layout="topleft"
+							left_delta="3"
+							top_pad="2"
+							width="200">Trackpad Sensitivity:</text>
+						<slider
+						decimal_digits="2"
+						can_edit_text="true"
+						follows="left|top"
+						height="14"
+						increment="0.01"
+						initial_value="0"
+						layout="topleft"
+						left_delta="0"
+						max_val="2"
+						min_val="0.01"
+						name="trackpad_sensitivity_slider"
+						tool_tip="Adjusts the sensitivity of the trackball"
+						top_pad="3"
+						logarithmic="1"
+						width="170" >
+							<slider.commit_callback
+							function="Poser.AdjustTrackPadSensitivity"
+							parameter="2"/>
+						</slider>
+						<check_box
+							name="stop_posing_on_close_checkbox"
+							height="16"
+							label="Stop posing when closed"
+							follows="left|top"
+							left="5"
+							tool_tip="Not stopping you pose can be helpful if you do a lot of work, and don't want to accidentally lose it."
+							top_pad="5"
+							width="134" />
 					</panel>
 				</tab_container>
 			</panel>
@@ -965,43 +1064,6 @@ width="565">
 				height="21"
 				follows="top|left"
 				layout="topleft"
-				label=""
-				image_overlay="Refresh_Off"
-				image_unselected="Toolbar_Middle_Off"
-				name="refresh_avatars"
-				tool_tip="Refresh the list of avatars and animeshes"
-				width="20"
-				top_pad="-1"
-				left="2">
-					<button.commit_callback
-					function="Poser.RefreshAvatars"/>
-				</button>
-				<button
-				height="21"
-				follows="top|left"
-				enabled="false"
-				is_toggle="true"
-				label="Start Posing"
-				top_delta="0"
-				left_pad="2"
-				label_selected="Stop Posing"
-				image_hover_unselected="Toolbar_Middle_Over"
-				image_selected="Toolbar_Middle_Selected"
-				image_unselected="Toolbar_Middle_Off"
-				button_flash_enable="true"
-				flash_color="0.7 0.7 1 1"
-				button_flash_count="64"
-				button_flash_rate="0.5"
-				tool_tip="Start posing the selected avatar or animesh, if you are allowed to"
-				name="start_stop_posing_button"
-				width="108">
-					<button.commit_callback
-					function="Poser.StartStopAnimating"/>
-				</button>
-				<button
-				height="21"
-				follows="top|left"
-				layout="topleft"
 				enabled="true"
 				visible="true"
 				is_toggle="true"
@@ -1012,7 +1074,8 @@ width="565">
 				name="toggleAdvancedPanel"
 				tool_tip="Toggle the Advanced Settings area"
 				width="20"
-				left_pad="2">
+				top_pad="-1"
+				left="2">
 					<button.commit_callback
 					function="Poser.ToggleAdvancedPanel"/>
 				</button>
@@ -1025,8 +1088,8 @@ width="565">
 				mouse_opaque="false"
 				left_pad="0"
 				top_delta="0"
-				name="advbutton_spacer_panel"
-				width="54"/>
+				name="button_spacer_panel"
+				width="36"/>
 				<button
 				height="21"
 				follows="top|left"
@@ -1037,7 +1100,7 @@ width="565">
 				image_unselected="Toolbar_Middle_Off"
 				name="FlipPose_avatar"
 				tool_tip="Flip the whole pose left/right"
-				width="23"
+				width="21"
 				top_delta="0"
 				left_pad="1">
 					<button.commit_callback
@@ -1049,11 +1112,11 @@ width="565">
 				layout="topleft"
 				enabled="false"
 				label=""
-				image_overlay="Sync_Progress_1"
+				image_overlay="Edit_Flip_X"
 				image_unselected="Toolbar_Middle_Off"
 				name="FlipJoint_avatar"
 				tool_tip="Mirror the selected body part(s) left/right"
-				width="23"
+				width="21"
 				top_delta="0"
 				left_pad="1">
 					<button.commit_callback
@@ -1089,7 +1152,7 @@ width="565">
 				left_pad="1"
 				top_delta="0"
 				tool_tip="Turn the Poser on or off for the selected body part(s). When off, that body part animates like normal (with your AO or a pose-ball/etc.)"
-				width="85" >
+				width="84" >
 					<button.commit_callback
 					function="Poser.TogglePosingSelectedBones"/>
 				</button>
@@ -1103,7 +1166,7 @@ width="565">
 				left_pad="0"
 				top_delta="0"
 				name="button_spacer_panel"
-				width="60"/>
+				width="58"/>
 				<button
 				follows="left|top"
 				height="21"
@@ -1172,10 +1235,10 @@ width="565">
 				height="21"
 				follows="top|left"
 				layout="topleft"
-				label="Save Pose"
+				label="Save Diff"
 				enabled="false"
 				visible="false"
-				tool_tip="Save the current pose."
+				tool_tip="A Diff is just your changes to an existing Pose. Start from a T-Pose to save a new work"
 				image_overlay="Icon_Dock_Foreground"
 				image_overlay_alignment="left"
 				image_hover_unselected="Toolbar_Middle_Over"
@@ -1246,7 +1309,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_X"
 						top_pad="6"
-						width="530" >
+						width="380" >
 							<slider.commit_callback
 							function="Poser.Advanced.PositionSet"
 							parameter="0"/>
@@ -1266,7 +1329,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_Y"
 						top_pad="1"
-						width="530" >
+						width="380" >
 							<slider.commit_callback
 							function="Poser.Advanced.PositionSet"
 							parameter="1"/>
@@ -1286,7 +1349,7 @@ width="565">
 						min_val="-0.5"
 						name="Advanced_Position_Z"
 						top_pad="1"
-						width="530" >
+						width="380" >
 							<slider.commit_callback
 							function="Poser.Advanced.PositionSet"
 							parameter="2"/>
@@ -1331,7 +1394,7 @@ width="565">
 						image_overlay="Inv_TrashOpen"
 						image_overlay_alignment="left"
 						image_unselected="Toolbar_Middle_Off"
-						name="reset_positions"
+						name="undo_position_change"
 						tool_tip="Double click to reset position back to original"
 						width="110"
 						top_delta="0"
@@ -1365,7 +1428,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_X"
 						top_pad="6"
-						width="530" >
+						width="380" >
 							<slider.commit_callback
 							function="Poser.Advanced.ScaleSet"
 							parameter="0"/>
@@ -1385,7 +1448,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_Y"
 						top_pad="1"
-						width="530" >
+						width="380" >
 							<slider.commit_callback
 							function="Poser.Advanced.ScaleSet"
 							parameter="1"/>
@@ -1405,7 +1468,7 @@ width="565">
 						min_val="0"
 						name="Advanced_Scale_Z"
 						top_pad="1"
-						width="530" >
+						width="380" >
 							<slider.commit_callback
 							function="Poser.Advanced.ScaleSet"
 							parameter="2"/>
@@ -1418,7 +1481,7 @@ width="565">
 						image_overlay="Script_Undo"
 						image_overlay_alignment="left"
 						image_unselected="Toolbar_Middle_Off"
-						name="undo_scale_change"
+						name="undo_position_change"
 						tool_tip="Undo the last scale change"
 						width="150"
 						top_pad="2"
@@ -1450,7 +1513,7 @@ width="565">
 						image_overlay="Inv_TrashOpen"
 						image_overlay_alignment="left"
 						image_unselected="Toolbar_Middle_Off"
-						name="reset_scales"
+						name="undo_scale_change"
 						tool_tip="Double click to reset scale back to original"
 						width="110"
 						top_delta="0"
@@ -1460,39 +1523,6 @@ width="565">
 						</button>
 					</panel>
 				</tab_container>
-			</panel>
-			<panel
-				follows="left|top"
-				height="100"
-				background_visible="false"
-				layout="topleft"
-				visible="false"
-				enabled="true"
-				mouse_opaque="false"
-				name="save_file_options"
-				left_pad="2"
-				width="235">
-				<slider
-				decimal_digits="2"
-				can_edit_text="true"
-				follows="left|top"
-				height="14"
-				increment="0.01"
-				initial_value="0"
-				label="Sensitivity"
-				label_width="70"
-				layout="topleft"
-				left_delta="0"
-				max_val="2"
-				min_val="0.0001"
-				name="trackpad_sensitivity_slider"
-				tool_tip="Adjusts the sensitivity of the trackball"
-				top_pad="1"
-				width="200" >
-					<slider.commit_callback
-					function="Poser.AdjustTrackPadSensitivity"
-					parameter="2"/>
-				</slider>
 			</panel>
 		</layout_panel>
 	</layout_stack>

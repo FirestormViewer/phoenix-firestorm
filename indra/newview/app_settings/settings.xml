@@ -8056,6 +8056,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserStopPosingWhenClosed</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to stop animating with the poser when the poser window is closed.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>FSPoserTrackpadSensitivity</key>
   <map>
     <key>Comment</key>

@@ -249,6 +249,34 @@ bool FSPosingMotion::currentlyPosingJoint(LLJoint* joint)
     return (state & POSER_JOINT_STATE);
 }
 
+bool FSPosingMotion::allStartingRotationsAreZero() const
+{
+    LLQuaternion zeroQuat;
+    for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    {
+        if (poserJoint_iter->jointName() == "mPelvis")
+            continue;
+        if (poserJoint_iter->isCollisionVolume())
+            continue;
+
+        LLQuaternion quat = poserJoint_iter->getBeginningRotation();
+        if (quat != zeroQuat)
+            return false;
+    }
+
+    return true;
+}
+
+void FSPosingMotion::setAllRotationsToZero()
+{
+    for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    {
+        if (poserJoint_iter->isCollisionVolume())
+            continue;
+
+        poserJoint_iter->setRotationsToZero();
+    }
+}
 
 constexpr size_t MaximumUndoQueueLength = 20;
 
@@ -488,6 +516,8 @@ void FSPosingMotion::FSJointPose::revertCollisionVolume()
     joint->setPosition(mBeginningPosition);
     joint->setScale(mBeginningScale);
 }
+
+void FSPosingMotion::FSJointPose::setRotationsToZero() { mBeginningRotation = mTargetRotation = LLQuaternion(); }
 
 FSPosingMotion::FSJointPose::FSJointPose(LLJoint* joint, bool isCollisionVolume)
 {

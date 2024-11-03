@@ -412,7 +412,35 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
     }
 }
 
-LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation, bool forRecapture) const
+bool FSPoserAnimator::posingStartedFromZeroRotations(LLVOAvatar* avatar) const
+{
+    if (!isAvatarSafeToUse(avatar))
+        return false;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return false;
+
+    bool allStartingRotationsAreZero = posingMotion->allStartingRotationsAreZero();
+    if (allStartingRotationsAreZero)
+        return true;
+
+    return false;
+}
+
+void FSPoserAnimator::setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    posingMotion->setAllRotationsToZero();
+}
+
+LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation, E_BoneRotationType rotType) const
 {
     LLVector3 vec3;
     if (!isAvatarSafeToUse(avatar))
@@ -427,11 +455,18 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoi
         return vec3;
 
     LLQuaternion rot;
-    if (forRecapture)
-        rot = jointPose->getCurrentRotation();
-    else
-        rot = jointPose->getTargetRotation();
-    
+    switch (rotType)
+    {
+        case TARGETROTATION:
+            rot = jointPose->getTargetRotation();
+            break;
+
+        case CURRENTROTATION:
+        default:
+            rot = jointPose->getCurrentRotation();
+            break;
+    }
+ 
     return translateRotationFromQuaternion(translation, negation, rot);
 }
 
@@ -709,6 +744,85 @@ void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* join
     oppositeJointPose->setTargetScale(scale);
 }
 
+bool FSPoserAnimator::tryGetJointSaveVectors(LLVOAvatar* avatar, const FSPoserJoint& joint, LLVector3* rot, LLVector3* pos, LLVector3* scale)
+{
+    if (!rot || !pos || !scale)
+        return false;
+
+    if (!isAvatarSafeToUse(avatar))
+        return false;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return false;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return false;
+
+    LLQuaternion difference = jointPose->getTargetRotation() * jointPose->getBeginningRotation().conjugate();  // diff * q1 = q2  ->  diff = q2 * inverse(q1)
+
+    difference.getEulerAngles(&rot->mV[VX], &rot->mV[VY], &rot->mV[VZ]);
+    pos->set(jointPose->getTargetPosition() - jointPose->getBeginningPosition());
+    scale->set(jointPose->getTargetScale() - jointPose->getBeginningScale());
+    return true;
+}
+
+void FSPoserAnimator::loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, LLVector3 rotation)
+{
+    if (!isAvatarSafeToUse(avatar) || !joint)
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    if (!jointPose)
+        return;
+
+    LLQuaternion rot = translateRotationToQuaternion(SWAP_NOTHING, NEGATE_NOTHING, rotation);
+    jointPose->setTargetRotation(rot * jointPose->getBeginningRotation());
+}
+
+void FSPoserAnimator::loadJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, bool loadPositionAsDelta, LLVector3 position)
+{
+    if (!isAvatarSafeToUse(avatar) || !joint)
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    if (!jointPose)
+        return;
+
+    if (loadPositionAsDelta)
+        jointPose->setTargetPosition(jointPose->getBeginningPosition() + position);
+    else
+        jointPose->setTargetPosition(position);
+}
+
+void FSPoserAnimator::loadJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, bool loadScaleAsDelta, LLVector3 scale)
+{
+    if (!isAvatarSafeToUse(avatar) || !joint)
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    if (!jointPose)
+        return;
+
+    if (loadScaleAsDelta)
+        jointPose->setTargetScale(jointPose->getTargetScale() + scale);
+    else
+        jointPose->setTargetScale(scale);
+}
+
 const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(const std::string& jointName)
 {
     for (size_t index = 0; index != PoserJoints.size(); ++index)
@@ -720,7 +834,7 @@ const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(const 
     return nullptr;
 }
 
-bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar *avatar)
+bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar* avatar)
 {
     if (!isAvatarSafeToUse(avatar))
         return false;
@@ -781,20 +895,18 @@ FSPosingMotion* FSPoserAnimator::getPosingMotion(LLVOAvatar* avatar) const
 FSPosingMotion* FSPoserAnimator::findOrCreatePosingMotion(LLVOAvatar* avatar)
 {
     FSPosingMotion* motion = getPosingMotion(avatar);
+    if (motion)
+        return motion;
 
-    if (!motion)
-    {
-        LLTransactionID mTransactionID;
-        mTransactionID.generate();
-        LLAssetID animationAssetId = mTransactionID.makeAssetID(gAgent.getSecureSessionID());
+    LLTransactionID mTransactionID;
+    mTransactionID.generate();
+    LLAssetID animationAssetId = mTransactionID.makeAssetID(gAgent.getSecureSessionID());
 
-        if (avatar->registerMotion(animationAssetId, FSPosingMotion::create))
-            sAvatarIdToRegisteredAnimationId[avatar->getID()] = animationAssetId;
+    if (avatar->registerMotion(animationAssetId, FSPosingMotion::create))
+        sAvatarIdToRegisteredAnimationId[avatar->getID()] = animationAssetId;
 
-        return dynamic_cast<FSPosingMotion*>(avatar->createMotion(animationAssetId));
-    }
+    return dynamic_cast<FSPosingMotion*>(avatar->createMotion(animationAssetId));
 
-    return motion;
 }
 
 bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar* avatar) const
