@@ -14633,7 +14633,7 @@ Camera reset might be inhibited by the following objects:
     icon="notifytip.tga"
     name="WhitelistReminder"
     type="alertmodal">
-To improve [APP_NAME]'s performance, please whitelist it
+To improve [APP_NAME]'s performance, please whitelist it.
 
 Some antivirus programs may mistakenly block parts of [APP_NAME], slowing down its performance and causing some features to malfunction. To prevent these issues, we strongly recommend adding [APP_NAME] to your antivirus program's whitelist (or exclusion list). This will ensure the viewer runs smoothly.
 
