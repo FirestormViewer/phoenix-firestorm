@@ -97,6 +97,10 @@ width="565">
 	<string	name="joint_transform_mTail6" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceTongueBase" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceTongueTip" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceEar1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceEar2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceEar1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceEar2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
 	<string	name="header_mHead">Body</string>
@@ -111,6 +115,7 @@ width="565">
 	<string	name="header_mTail1">Tail</string>
 	<string	name="header_mHindLimbsRoot">Hind Limbs</string>
 	<string	name="header_mWingsRoot">Wings</string>
+	<string	name="header_mFaceEar1Left">Ears</string>
 
 	<!-- These are names to appear on the UI for the joints/bones/thingos -->
 	<string	name="title_mPelvis">Whole Avatar</string>
@@ -241,6 +246,10 @@ width="565">
 	<string	name="title_BELLY">Belly</string>
 	<string	name="title_LEFT_PEC">Left Pec</string>
 	<string	name="title_RIGHT_PEC">Right Pec</string>
+	<string	name="title_mFaceEar1Left">Left Base</string>
+	<string	name="title_mFaceEar1Right">Right Base</string>
+	<string	name="title_mFaceEar2Left">Left Tip</string>
+	<string	name="title_mFaceEar2Right">Right Tip</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack

@@ -200,6 +200,11 @@ public:
         { "mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, {}, true },
         { "mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, {}, true },
 
+        { "mFaceEar1Left", "mFaceEar1Right", FACE },
+        { "mFaceEar2Left", "mFaceEar2Right", FACE },
+        { "mFaceEar1Right", "mFaceEar1Left", FACE, {}, true },
+        { "mFaceEar2Right", "mFaceEar2Left", FACE, {}, true },
+
         { "mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE },
         { "mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE },
         { "mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, {}, true },
