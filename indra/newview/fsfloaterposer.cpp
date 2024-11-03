@@ -733,7 +733,10 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 loadPositionsAndScalesAsDeltas = true;
 
             if (startFromZeroRot) // old save formats will always start from T-Pose, for better or worse.
+            {
+                disableRecapture();
                 mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
+            }
 
             for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
             {
@@ -1129,10 +1132,7 @@ void FSFloaterPoser::onSetAvatarToTpose()
     if (!avatar)
         return;
 
-    mRecaptureJointsButton->setEnabled(false);
-    mSavePosesBtn->setLabel("Save Pose");
-    mDisableRecaptureUntilStopPosing = true;
-
+    disableRecapture();
     mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
 }
 
@@ -2037,6 +2037,13 @@ void FSFloaterPoser::refreshTextHighlightingOnAllScrollLists()
     addBoldToScrollList(mHandJointsScrollList, avatar);
     addBoldToScrollList(mMiscJointsScrollList, avatar);
     addBoldToScrollList(mCollisionVolumesScrollList, avatar);
+}
+
+void FSFloaterPoser::disableRecapture()
+{
+    mRecaptureJointsButton->setEnabled(false);
+    mSavePosesBtn->setLabel("Save Pose");
+    mDisableRecaptureUntilStopPosing = true;
 }
 
 void FSFloaterPoser::reEnableRecaptureIfAllowed()

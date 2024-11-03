@@ -299,6 +299,11 @@ class FSFloaterPoser : public LLFloater
     void refreshTextHighlightingOnAllScrollLists();
 
     /// <summary>
+    /// Disables recapturing joint traits.
+    /// </summary>
+    void disableRecapture();
+
+    /// <summary>
     /// Recapture is be disabled if user is making their own pose (starting from a T-Pose).
     /// </summary>
     void reEnableRecaptureIfAllowed();
