@@ -686,9 +686,9 @@ bool LLCrashLogger::init()
 
     // We assume that all the logs we're looking for reside on the current drive
 #if ADDRESS_SIZE == 64
-    gDirUtilp->initAppDirs( "Firestorm_x64" );
+    gDirUtilp->initAppDirs( "AyaneStorm_x64" );
 #else
-    gDirUtilp->initAppDirs("Firestorm");
+    gDirUtilp->initAppDirs("AyaneStorm");
 #endif
 
     LLError::initForApplication(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""), gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
@@ -697,7 +697,7 @@ bool LLCrashLogger::init()
 
     // <FS:ND> Change default to Firestorm
     //  mProductName = "Second Life";
-    mProductName = "Firestorm";
+    mProductName = "AyaneStorm";
     // </FS:ND>
 
     // Rename current log file to ".old"

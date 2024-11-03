@@ -32,7 +32,7 @@
 class LLUUID;
 
 // <FS:Ansariel> Centralize definition of application name
-const std::string APP_NAME = "Firestorm";
+const std::string APP_NAME = "AyaneStorm";
 
 static const F32 REGION_WIDTH_METERS = 256.f;
 static const S32 REGION_WIDTH_UNITS = 256;
