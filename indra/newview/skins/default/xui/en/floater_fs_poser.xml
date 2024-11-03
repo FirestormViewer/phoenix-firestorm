@@ -101,6 +101,9 @@ width="403">
 	<string	name="joint_transform_mFaceEar2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceEar1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceEar2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceNoseLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceNoseCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceNoseRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
 	<string	name="header_mHead">Body</string>
@@ -115,7 +118,7 @@ width="403">
 	<string	name="header_mTail1">Tail</string>
 	<string	name="header_mHindLimbsRoot">Hind Limbs</string>
 	<string	name="header_mWingsRoot">Wings</string>
-	<string	name="header_mFaceEar1Left">Ears</string>
+	<string	name="header_mFaceEar1Left">Ears/Nose</string>
 
 	<!-- These are names to appear on the UI for the joints/bones/thingos -->
 	<string	name="title_mPelvis">Whole Avatar</string>
