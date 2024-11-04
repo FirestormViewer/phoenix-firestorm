@@ -32,7 +32,7 @@
 
 /// <summary>
 /// Describes how we will cluster the joints/bones/thingos.
-/// Each joint/bone/thingo should have one of these, <see:"FSPoserAnimator.PoserJoints"/>.
+/// Each joint/bone/thingo should have one of these, FSPoserAnimator.PoserJoints.
 /// </summary>
 typedef enum E_BoneTypes
 {
@@ -446,7 +446,7 @@ public:
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the rotation for.</param>
     /// <param name="translation">The joint to determine the rotation for.</param>
-    /// <param name="negation">The style of negation to apply to the set.</param>
+    /// <param name="negation">The style of negation to dis-apply to the get.</param>
     /// <param name="rotType">The type of rotation to get from the supplied joint for the supplied avatar.</param>
     /// <returns>The rotation of the requested joint, if determinable, otherwise a default vector.</returns>
     LLVector3 getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation, E_BoneRotationType rotType) const;
@@ -459,6 +459,7 @@ public:
     /// <param name="rotation">The rotation to set the joint to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
+    /// <param name="negation">The style of negation to apply to the set.</param>
     void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style,
                           E_BoneAxisTranslation translation, S32 negation);
 
@@ -491,6 +492,15 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose pose should flip left-right.</param>
     void flipEntirePose(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Recaptures the rotation, position and scale state of the supplied joint for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
+    /// <param name="joint">The joint to recapture.</param>
+    /// <param name="translation">The axial translation form the supplied joint.</param>
+    /// <param name="negation">The style of negation to apply to the recapture.</param>
+    void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
@@ -533,8 +543,8 @@ public:
     /// <param name="rotation">The rotation to load.</param>
     /// <remarks>
     /// All rotations we load are deltas to the current rotation the supplied joint has.
-    /// Whether the joint already has a rotation because some animation is playing (sp possibly a non-zero rotation),
-    /// or whether it is a rotation relative to zero, the result is always the same: just 'add' this rotation to the existing.
+    /// Whether the joint already has a rotation because some animation is playing,
+    /// or whether its rotation is zero, the result is always the same: just 'add' the supplied rotation to the existing rotation.
     /// </remarks>
     void loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, LLVector3 rotation);
 
@@ -549,7 +559,7 @@ public:
     /// A position is saved as an absolute if the user created the pose from 'scratch' (at present the 'T-Pose').
     /// Otherwise the position is saved as a delta.
     /// The primary purpose is aesthetic: the numbers inside of a 'delta save file' have 'zeros everywhere'.
-    /// A delta-save thus accurately reflects what the user changed, and not what the original creator of the modified pose specified.
+    /// A delta-save thus accurately reflects what the user changed, and not what the original pose is.
     /// 'Legacy' (pre save format version-4) poses we expect to load as absolutes.
     /// </remarks>
     void loadJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, bool loadPositionAsDelta, LLVector3 position);
@@ -611,6 +621,9 @@ public:
     /// <param name="avatar">The avatar to test if it is safe to animate.</param>
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar* avatar) const;
+
+    void setStartingJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation,
+                                  E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

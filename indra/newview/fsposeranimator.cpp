@@ -440,6 +440,40 @@ void FSPoserAnimator::setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar)
     posingMotion->setAllRotationsToZero();
 }
 
+void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation)
+{
+    LLVector3 newRotation = getJointRotation(avatar, joint, translation, negation, CURRENTROTATION);
+    LLVector3 newPosition = getJointPosition(avatar, joint, true);
+    LLVector3 newScale    = getJointScale(avatar, joint, true);
+
+    setPosingAvatarJoint(avatar, joint, true);
+    setStartingJointRotation(avatar, &joint, newRotation, translation, negation);
+
+    // recapture of positions and scale does not reset starting values, since this this could result in unwanted residue deformation after posing stops.
+    setJointPosition(avatar, &joint, newPosition, NONE);
+    setJointScale(avatar, &joint, newScale, NONE);
+}
+
+void FSPoserAnimator::setStartingJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation,
+                                                E_BoneAxisTranslation translation, S32 negation)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+    if (!joint)
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    if (!jointPose)
+        return;
+
+    LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
+    jointPose->setJointStartRotations(rot_quat);
+}
+
 LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation, E_BoneRotationType rotType) const
 {
     LLVector3 vec3;

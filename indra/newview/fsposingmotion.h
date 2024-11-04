@@ -223,9 +223,9 @@ public:
         void revertCollisionVolume();
 
         /// <summary>
-        /// Sets all rotations to zero.
+        /// Sets the beginning and target rotations to the supplied rotation.
         /// </summary>
-        void setRotationsToZero();
+        void setJointStartRotations(LLQuaternion quat);
 
         /// <summary>
         /// Gets the pointer to the jointstate for the joint this represents.

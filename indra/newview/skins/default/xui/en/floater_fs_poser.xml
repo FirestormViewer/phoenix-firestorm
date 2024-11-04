@@ -654,7 +654,7 @@ width="403">
 					background_visible="false"
 					layout="topleft"
 					visible="true"
-					title="Posee"
+					title="Model"
 					mouse_opaque="false"
 					name="avatarSelection_panel"
 					top="0"
@@ -1137,7 +1137,7 @@ width="403">
 				name="button_RecaptureParts"
 				left_pad="1"
 				top_delta="0"
-				tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now"
+				tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now. This button disables if you start from a T-Pose"
 				width="45" >
 					<button.commit_callback
 					function="Poser.RecaptureSelectedBones"/>

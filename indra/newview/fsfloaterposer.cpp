@@ -307,6 +307,12 @@ void FSFloaterPoser::onPoseFileSelect()
     LLStringExplicit name = LLStringExplicit(poseName);
     mPoseSaveNameEditor->setEnabled(enableButtons);
     mPoseSaveNameEditor->setText(name);
+
+    bool isDeltaSave = !poseFileStartsFromTeePose(name);
+    if (isDeltaSave)
+        mLoadPosesBtn->setLabel("Load Diff");
+    else
+        mLoadPosesBtn->setLabel("Load Pose");
 }
 
 void FSFloaterPoser::onClickPoseSave()
@@ -348,13 +354,13 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
         std::string fullSavePath =
             gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
-        bool fromZeroRot = mPoserAnimator.posingStartedFromZeroRotations(avatar);
+        bool savingDiff = !mPoserAnimator.posingStartedFromZeroRotations(avatar);
 
         LLSD record;
         record["version"]["value"] = (S32)4;
-        record["startFromTeePose"]["value"] = fromZeroRot;
+        record["startFromTeePose"]["value"] = !savingDiff;
 
-        LLVector3 rotation, position, scale;
+        LLVector3 rotation, position, scale, zeroVector;
 
         for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator.PoserJoints)
         {
@@ -362,8 +368,13 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
             if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale))
                 continue;
 
-            record[bone_name]             = pj.jointName();
-            record[bone_name]["enabled"]  = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
+            bool jointRotPosScaleAllZero = rotation == zeroVector && position == zeroVector && scale == zeroVector;
+            bool posingThisJoint = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
+            if (savingDiff && (!posingThisJoint || jointRotPosScaleAllZero))
+                continue;
+
+            record[bone_name]             = bone_name;
+            record[bone_name]["enabled"]  = posingThisJoint;
             record[bone_name]["rotation"] = rotation.getValue();
             record[bone_name]["position"] = position.getValue();
             record[bone_name]["scale"]    = scale.getValue();
@@ -494,17 +505,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
         if (currentlyPosing)
             continue;
 
-        LLVector3 newRotation = mPoserAnimator.getJointRotation(avatar, *item, getJointTranslation(item->jointName()),
-                                                                getJointNegation(item->jointName()), CURRENTROTATION);
-        LLVector3 newPosition = mPoserAnimator.getJointPosition(avatar, *item, true);
-        LLVector3 newScale    = mPoserAnimator.getJointScale(avatar, *item, true);
-
-        mPoserAnimator.setPosingAvatarJoint(avatar, *item, true);
-
-        mPoserAnimator.setJointRotation(avatar, item, newRotation, NONE, getJointTranslation(item->jointName()),
-                                        getJointNegation(item->jointName()));
-        mPoserAnimator.setJointPosition(avatar, item, newPosition, NONE);
-        mPoserAnimator.setJointScale(avatar, item, newScale, NONE);
+        mPoserAnimator.recaptureJoint(avatar, *item, getJointTranslation(item->jointName()), getJointNegation(item->jointName()));
     }
 
     refreshRotationSliders();
@@ -674,6 +675,51 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
 
 }
 
+bool FSFloaterPoser::poseFileStartsFromTeePose(const std::string& poseFileName)
+{
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+    if (!gDirUtilp->fileExists(pathname))
+        return false;
+
+    std::string fullPath =
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
+
+    try
+    {
+        LLSD       pose;
+        llifstream infile;
+        bool       startFromZeroRot = false;
+
+        infile.open(fullPath);
+        if (!infile.is_open())
+            return false;
+
+        S32 lineCount = LLSDSerialize::fromXML(pose, infile);
+        if (lineCount == LLSDParser::PARSE_FAILURE)
+        {
+            LL_WARNS("Posing") << "Failed to parse file: " << poseFileName << LL_ENDL;
+            return startFromZeroRot;
+        }
+
+        for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
+        {
+            std::string const& name        = itr->first;
+            LLSD const&        control_map = itr->second;
+
+            if (name == "startFromTeePose")
+                startFromZeroRot = control_map["value"].asBoolean();
+        }
+
+        return startFromZeroRot;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS("Posing") << "Unable to load or parse the pose: " << poseFileName << " exception: " << e.what() << LL_ENDL;
+    }
+
+    return false;
+}
+
 void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod)
 {
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
@@ -732,7 +778,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
             if (version > 3)
                 loadPositionsAndScalesAsDeltas = true;
 
-            if (startFromZeroRot) // old save formats will always start from T-Pose, for better or worse.
+            if (startFromZeroRot) // legacy saves will always start from T-Pose, for better or worse.
             {
                 disableRecapture();
                 mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
@@ -772,7 +818,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 }
             }
         }
-    }    
+    }
     catch ( const std::exception & e )
     {
         LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << " exception: " << e.what() << LL_ENDL;
