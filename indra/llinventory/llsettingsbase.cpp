@@ -688,7 +688,14 @@ void LLSettingsBlender::update(const LLSettingsBase::BlendFactor& blendf)
     F64 res = setBlendFactor(blendf);
     llassert(res >= 0.0 && res <= 1.0);
     (void)res;
-    mTarget->update();
+    // <FS:Beq> FIRE-34805 another issue with missing EEP on or shortly after login.
+    // Ideally we'll find the true fix at a higher level. But for now fix the symptom.
+    // mTarget->update();
+    if(mTarget) 
+    {
+        mTarget->update();
+    }
+    // </FS:Beq>
 }
 
 F64 LLSettingsBlender::setBlendFactor(const LLSettingsBase::BlendFactor& blendf_in)
