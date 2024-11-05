@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_eyes_panel">
 	<panel name="avatar_eye_color_panel">
-		<texture_picker label="Iride" name="Iris" tool_tip="Clic per scegliere una texture"/>
+		<texture_picker label="Iride" name="Iris" tool_tip="Clicca per scegliere una texture"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">

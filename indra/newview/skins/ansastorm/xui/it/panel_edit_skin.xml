@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_skin_panel">
 	<panel name="avatar_skin_color_panel">
 		<texture_picker label="Testa" name="Head" tool_tip="Clicca per scegliere una texture"/>

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
- <panel name="edit_hair_panel">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
 	<panel name="avatar_hair_color_panel">
 		<texture_picker label="Texture" name="Texture" tool_tip="Clicca per scegliere una texture"/>
 	</panel>
@@ -20,6 +20,10 @@
 			</accordion>
 		</panel>
 		<panel name="hair_facial_tab_holder" title="Viso">
+			<text name="hair_facial_not_available">
+				Le opzioni del viso sono disponibili
+solo per gli avatar maschili.
+			</text>
 			<accordion name="hair_facial_accordion">
 				<accordion_tab name="hair_facial_tab" title="Viso"/>
 			</accordion>

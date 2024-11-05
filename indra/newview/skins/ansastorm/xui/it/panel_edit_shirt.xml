@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="edit_skirt_panel">
-	<panel name="avatar_skirt_color_panel">
+<panel name="edit_shirt_panel">
+	<panel name="avatar_shirt_color_panel">
 		<texture_picker label="Texture" name="Fabric" tool_tip="Clicca per scegliere una texture"/>
 		<color_swatch label="Colore" name="Color/Tint" tool_tip="Clicca per scegliere il colore"/>
 	</panel>
-	<panel name="accordion_panel">
-		<accordion name="wearable_accordion">
-			<accordion_tab name="skirt_main_tab" title="Gonna"/>
+	<panel name="shirt_main_tab_holder">
+		<accordion name="shirt_main_accordion">
+			<accordion_tab name="shirt_main_tab" title="Camicia"/>
 		</accordion>
 	</panel>
 </panel>
