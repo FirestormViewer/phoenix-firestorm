@@ -509,6 +509,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>ASDeleteUserDataOnExit</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, the viewer will delete all data associated with the current user, except the user settings</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RadarAlertChannel</key>
     <map>
       <key>Comment</key>
