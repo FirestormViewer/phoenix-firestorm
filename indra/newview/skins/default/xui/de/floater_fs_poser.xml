@@ -13,6 +13,7 @@
 	<string	name="header_mTail1">Schwanz</string>
 	<string	name="header_mHindLimbsRoot">Hintere Glieder</string>
 	<string	name="header_mWingsRoot">Flügel</string>
+	<string	name="header_mFaceEar1Left">Ohren/Nase</string>
 
 	<!-- These are names to appear on the UI for the joints/bones/thingos -->
 	<string	name="title_mPelvis">Ganzer Avatar</string>
@@ -33,7 +34,7 @@
 	<string	name="title_mFaceEyeLidUpperLeft">Linkes oberes Augenlid</string>
 	<string	name="title_mFaceEyeLidLowerLeft">Linkes unteres Augenlid</string>
 	<string	name="title_mFaceEyeLidUpperRight">Rechtes oberes Augenlid</string>
-	<string	name="title_mFaceEyeLidLowerRight">Linkes unteres Augenlid</string>
+	<string	name="title_mFaceEyeLidLowerRight">Rechtes unteres Augenlid</string>
 	<string	name="title_mFaceEar1Left">Linkes oberes Ohr</string>
 	<string	name="title_mFaceEar2Left">Linkes unteres Ohr</string>
 	<string	name="title_mFaceEar1Right">Rechtes oberes Ohr</string>
@@ -113,12 +114,12 @@
 	<string	name="title_mWing3Right">Rechts 3</string>
 	<string	name="title_mWing4Right">Rechts 4</string>
 	<string	name="title_mWing4FanRight">Rechter Fächer</string>
-	<string	name="title_mHipRight">Rechte Hüfte</string>
+	<string	name="title_mHipRight">Rechtes Bein</string>
 	<string	name="title_mKneeRight">Rechtes Knie</string>
 	<string	name="title_mAnkleRight">Rechter Knöchel</string>
 	<string	name="title_mFootRight">Rechter Fuß</string>
 	<string	name="title_mToeRight">Rechter Zeh</string>
-	<string	name="title_mHipLeft">Linke Hüfte</string>
+	<string	name="title_mHipLeft">Linkes Bein</string>
 	<string	name="title_mKneeLeft">Linkes Knie</string>
 	<string	name="title_mAnkleLeft">Linker Knöchel</string>
 	<string	name="title_mFootLeft">Linker Fuß</string>
@@ -143,15 +144,14 @@
 	<string	name="title_BELLY">Bauch</string>
 	<string	name="title_LEFT_PEC">Linke Brustmuskeln</string>
 	<string	name="title_RIGHT_PEC">Rechte Brustmuskeln</string>
+	<string	name="title_mFaceEar1Left">Linke Basis</string>
+	<string	name="title_mFaceEar1Right">Rechte Basis</string>
+	<string	name="title_mFaceEar2Left">Linke Spitze</string>
+	<string	name="title_mFaceEar2Right">Rechte Spitze</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
-			<panel name="avatarSelection_panel">
-				<scroll_list tool_tip="Avatar oder Animesh zum Animieren auswählen." name="avatarSelection_scroll">
-					<scroll_list.columns label="Auswahl..." name="name"/>
-				</scroll_list>
-			</panel>
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="Beweg." name="positionRotation_panel">
@@ -185,17 +185,17 @@
 						</scroll_list>
 					</panel>
 					<tab_container title="Hände" name="hands_tabs">
+						<panel title="Justieren" name="hands_joints_panel">
+							<scroll_list name="hand_joints_scroll">
+								<scroll_list.columns label="Körperteil" name="joint"/>
+							</scroll_list>
+						</panel>
 						<panel title="Vorauswahl" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Name Vorauswahl" name="name"/>
 							</scroll_list>
 							<button label="Links setzen" name="button_loadHandPoseLeft" tool_tip="Doppelklicken um linke Hand auf ausgewählte Vorauswahl zu setzen"/>
 							<button label="Rechts setzen" name="button_loadHandPoseRight" tool_tip="Doppelklicken um rechte Hand auf ausgewählte Vorauswahl zu setzen"/>
-						</panel>
-						<panel title="Justieren" name="hands_joints_panel">
-							<scroll_list name="hand_joints_scroll">
-								<scroll_list.columns label="Körperteil" name="joint"/>
-							</scroll_list>
 						</panel>
 					</tab_container>
 					<panel title="Sonst." name="misc_joints_panel">
@@ -207,6 +207,21 @@
 						<scroll_list name="collision_volumes_scroll">
 							<scroll_list.columns label="Physik" name="joint"/>
 						</scroll_list>
+					</panel>
+					<panel title="Modell" name="avatarSelection_panel">
+						<scroll_list tool_tip="Avatar oder Animesh zum Animieren auswählen." name="avatarSelection_scroll">
+							<scroll_list.columns label="Auswahl..." name="name"/>
+						</scroll_list>
+						<button name="refresh_avatars" tool_tip="Liste der Avatar und Animeshe aktualisieren"/>
+						<button label="Posieren starten" label_selected="Posieren stoppen" tool_tip="Posieren des ausgewählten Avatar oder Animesh starten sofern berechtigt" name="start_stop_posing_button"/>
+						<button label="Auf T-Pose setzen" tool_tip="Doppelklicken, um den ausgewählten Avatar auf eine T-Pose zu setzen" name="set_t_pose_button"/>
+					</panel>
+					<panel title="Einst." name="settings_panel">
+						<text name="trackpad_sensitivity_label">
+							Steuerkugel-Sensitivität:
+						</text>
+						<slider name="trackpad_sensitivity_slider" tool_tip="Stellt die Sensitivität der Steuerkugel ein"/>
+						<check_box name="stop_posing_on_close_checkbox" label="Beim Schließen stoppen" tool_tip="Die Pose beim Schließen nicht zu stoppen kann hilfreich sein, um die bisher getätigte Arbeit nicht zu verlieren."/>
 					</panel>
 				</tab_container>
 			</panel>
@@ -242,17 +257,15 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="refresh_avatars" tool_tip="Liste der Avatar und Animeshe aktualisieren"/>
-				<button label="Posieren starten" tool_tip="Posieren des ausgewählten Avatar oder Animesh starten sofern berechtigt" name="start_stop_posing_button"/>
 				<button name="toggleAdvancedPanel" tool_tip="Erweiterte Einstellungen aktivieren/deaktivieren"/>
 				<button name="FlipPose_avatar" tool_tip="Komplette Pose links/rechts umschalten"/>
 				<button name="FlipJoint_avatar" tool_tip="Ausgewählte Körperteile links/rechts spiegeln"/>
-				<button label="Ausw." name="button_RecaptureParts" tool_tip="Falls ausgewählte Körperteile nicht posiert werden, werden die Werte der aktuellen Pose erfasst."/>
+				<button label="Ausw." name="button_RecaptureParts" tool_tip="Falls ausgewählte Körperteile nicht posiert werden, werden die Werte der aktuellen Pose erfasst. Diese Schaltfläche ist deaktiviert, wenn aus einer T-Pose heraus gestartet wird."/>
 				<button label="Teile an/aus" name="toggle_PosingSelectedBones" tool_tip="Schaltet Poser für ausgewählte Körperteile an bzw. aus. Falls aus, werden die entsprechenden Körperteile normal animiert (z.B. via AO, Poseball usw.)."/>
 				<button label="Eigene Posen" name="toggleLoadSavePanel" tool_tip="Laden, speichern under verwalten der eigenen erstellten Posen"/>
 				<button tool_tip="Posen-Verzeichnis verwalten" name="open_poseDir_button"/>
 				<menu_button label="Pose laden" tool_tip="Lädt die aktuell ausgewählte Pose." name="load_poses_button"/>
-				<button label="Pose speich." tool_tip="Speichert die aktuelle Pose." name="save_poses_button"/>
+				<button label="Diff. speich." tool_tip="Speichert die Differenz zu einer bestehenden Pose. Aus einer T-Pose heraus starten, um ein neues Werk zu beginnen." name="save_poses_button"/>
 			</panel>
 		</layout_panel>
 		<layout_panel name="advanced_controls_layout">
@@ -275,9 +288,6 @@
 						<button label="Skal. zurücks." name="reset_scales" tool_tip="Doppelklicken, um Skalierung auf Originalwert zurückzusetzen"/>
 					</panel>
 				</tab_container>
-			</panel>
-			<panel name="save_file_options">
-				<slider label="Sensitivität" name="trackpad_sensitivity_slider" tool_tip="Passt die Sensitivität der Steuerkugel an"/>
 			</panel>
 		</layout_panel>
 	</layout_stack>
