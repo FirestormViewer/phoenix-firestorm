@@ -61,7 +61,7 @@ constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPos
 /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
 /// </summary>
 constexpr F32 NormalTrackpadRangeInRads = F_PI;
-bool FSFloaterPoser::mDisableRecaptureUntilStopPosing;
+bool FSFloaterPoser::sDisableRecaptureUntilStopPosing;
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
@@ -199,7 +199,7 @@ bool FSFloaterPoser::postBuild()
     mRedoChangeBtn = getChild<LLButton>("button_redo_change");
     mSetToTposeButton = getChild<LLButton>("set_t_pose_button");
     mRecaptureJointsButton = getChild<LLButton>("button_RecaptureParts");
-    mRecaptureJointsButton->setEnabled(!mDisableRecaptureUntilStopPosing);
+    mRecaptureJointsButton->setEnabled(!sDisableRecaptureUntilStopPosing);
 
     mJointsParentPnl = getChild<LLPanel>("joints_parent_panel");
     mAdvancedParentPnl = getChild<LLPanel>("advanced_parent_panel");
@@ -485,7 +485,7 @@ void FSFloaterPoser::onClickFlipPose()
 
 void FSFloaterPoser::onClickRecaptureSelectedBones()
 {
-    if (mDisableRecaptureUntilStopPosing)
+    if (sDisableRecaptureUntilStopPosing)
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
@@ -2089,7 +2089,7 @@ void FSFloaterPoser::disableRecapture()
 {
     mRecaptureJointsButton->setEnabled(false);
     mSavePosesBtn->setLabel("Save Pose");
-    mDisableRecaptureUntilStopPosing = true;
+    sDisableRecaptureUntilStopPosing = true;
 }
 
 void FSFloaterPoser::reEnableRecaptureIfAllowed()
@@ -2099,7 +2099,7 @@ void FSFloaterPoser::reEnableRecaptureIfAllowed()
 
     mRecaptureJointsButton->setEnabled(true);
     mSavePosesBtn->setLabel("Save Diff");
-    mDisableRecaptureUntilStopPosing = false;
+    sDisableRecaptureUntilStopPosing = false;
 }
 
 bool FSFloaterPoser::posingAnyoneOnScrollList()

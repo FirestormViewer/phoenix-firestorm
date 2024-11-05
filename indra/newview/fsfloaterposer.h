@@ -81,7 +81,7 @@ class FSFloaterPoser : public LLFloater
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
 
-    static bool mDisableRecaptureUntilStopPosing;
+    static bool sDisableRecaptureUntilStopPosing;
 
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
