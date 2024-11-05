@@ -180,7 +180,6 @@ bool FSFloaterPoser::postBuild()
     mAdvScaleYSlider = getChild<LLSliderCtrl>("Advanced_Scale_Y");
     mAdvScaleZSlider = getChild<LLSliderCtrl>("Advanced_Scale_Z");
 
-    mSaveFilePptionsPnl = getChild<LLPanel>("save_file_options");
     mPosesLoadSavePnl = getChild<LLPanel>("poses_loadSave");
     mStartStopPosingBtn = getChild<LLButton>("start_stop_posing_button");
     mToggleLoadSavePanelBtn = getChild<LLButton>("toggleLoadSavePanel");
@@ -212,10 +211,6 @@ bool FSFloaterPoser::postBuild()
     mMiscJointsPnl = getChild<LLPanel>("misc_joints_panel");
     mCollisionVolumesPnl = getChild<LLPanel>("collision_volumes_panel");
 
-    mStopPosingWhenClosed = getChild<LLCheckBoxCtrl>("stop_posing_on_close_checkbox");
-    if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
-        mStopPosingWhenClosed->set(true);
-
     return true;
 }
 
@@ -235,9 +230,6 @@ void FSFloaterPoser::onClose(bool app_quitting)
 {
     if (mToggleAdvancedPanelBtn)
         gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, mToggleAdvancedPanelBtn->getValue().asBoolean());
-
-    if (mStopPosingWhenClosed)
-        gSavedSettings.setBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY, mStopPosingWhenClosed->getValue());
 
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
         stopPosingSelf();
@@ -1054,16 +1046,6 @@ void FSFloaterPoser::onToggleLoadSavePanel()
 
     if (loadSavePanelExpanded)
         refreshPoseScroll(mPosesScrollList);
-
-    showOrHideAdvancedSaveOptions();
-}
-
-void FSFloaterPoser::showOrHideAdvancedSaveOptions()
-{
-    bool loadSavePanelExpanded = mToggleLoadSavePanelBtn->getValue().asBoolean();
-    bool advancedPanelExpanded = mToggleAdvancedPanelBtn->getValue().asBoolean();
-
-    mSaveFilePptionsPnl->setVisible(loadSavePanelExpanded && advancedPanelExpanded);
 }
 
 void FSFloaterPoser::onToggleMirrorChange()
@@ -1364,7 +1346,6 @@ void FSFloaterPoser::onToggleAdvancedPanel()
         return;
 
     reshape(poserFloaterWidth, poserFloaterHeight);
-    showOrHideAdvancedSaveOptions();
     onJointSelect();
 }
 

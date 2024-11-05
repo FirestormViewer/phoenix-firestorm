@@ -4,7 +4,6 @@
     width="150"
     height="150"
     pinch_mode="false"
-    user_resize="false"
     image_sphere="VirtualTrackball_Sphere"
     image_moon_back="VirtualTrackball_Moon_Back"
     image_moon_front="VirtualTrackball_Moon_Front"
