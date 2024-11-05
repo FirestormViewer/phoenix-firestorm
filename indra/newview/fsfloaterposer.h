@@ -205,7 +205,6 @@ class FSFloaterPoser : public LLFloater
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
-    void showOrHideAdvancedSaveOptions();
 
     // UI Event Handlers:
     void onAvatarsRefresh();
@@ -385,7 +384,6 @@ class FSFloaterPoser : public LLFloater
     LLButton* mSetToTposeButton{ nullptr };
     LLButton* mRecaptureJointsButton{ nullptr };
 
-    LLCheckBoxCtrl* mStopPosingWhenClosed{ nullptr };
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
     LLPanel* mAdvancedParentPnl{ nullptr };
@@ -397,7 +395,6 @@ class FSFloaterPoser : public LLFloater
     LLPanel* mHandsJointsPnl{ nullptr };
     LLPanel* mMiscJointsPnl{ nullptr };
     LLPanel* mCollisionVolumesPnl{ nullptr };
-    LLPanel* mSaveFilePptionsPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
 };
 
