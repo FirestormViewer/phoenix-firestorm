@@ -66,6 +66,7 @@
 		<menu_item_call label="Zdjęcie 360°" name="Capture 360"/>
 		<menu_item_call label="Śledzenie transakcji" name="money_tracker"/>
 		<menu_item_call label="Podest do pozowania" name="pose_stand"/>
+		<menu_item_check label="Pozer" name="Poser" />
 		<menu_item_call label="Ustawienia" name="Preferences"/>
 		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
 		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
@@ -99,7 +100,6 @@
 	<menu label="Świat" name="World">
 		<menu_item_call label="Synchronizuj animacje" name="Resync Animations"/>
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
-		<menu_item_check label="Pozer" name="Poser" />
 		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
 		<menu_item_check label="Landmarki" name="Places"/>
