@@ -795,7 +795,7 @@ width="403">
 							label="Stop posing when closed"
 							follows="left|top"
 							left="5"
-							tool_tip="Not stopping you pose can be helpful if you do a lot of work, and don't want to accidentally lose it."
+							tool_tip="Not stopping your pose can be helpful if you do a lot of work, and don't want to accidentally lose it."
 							top_pad="5"
 							width="134" />
 					</panel>
