@@ -82,7 +82,7 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Abilita Luci Attachments" tool_tip="Abilita tutte le luci provenienti da oggetti indossati dagli avatar, come ad esempio le face-light. Utile per disabilitare le face-light quando necessario." name="Render Attached Lights"/>
+				<check_box label="Abilita Luci Attachment" tool_tip="Abilita tutte le luci provenienti da oggetti indossati dagli avatar, come ad esempio le face-light. Utile per disabilitare le face-light quando necessario." name="Render Attached Lights"/>
 			</panel>
 			<panel name="P_Shadows">
 				<text name="T_Shadow_Types" tool_tip="Questa impostazione ha effetto solo sulle ombre renderizzate dalle sorgenti luminose. Le luci che non hanno la funzione di proiezione abilitata, creeranno sempre un senso di ombra, ma non le proietteranno su nessuna superficie. È importante notare che, indipendentemente dall'impostazione scelta, le texture proiettate saranno comunque abilitate.">
@@ -457,7 +457,7 @@
 								Sensibilità Mouse
 							</text>
 							<button name="Reset_Mouse_Sens" label="R" tool_tip="Ripristina valore."/>
-							<check_box label="Mostra avatar in Mouselook" tool_tip="Mostra avatar e attachments dal collo in giù in modalità Mouselook (predefinito = off)." name="first_person_avatar_visible"/>
+							<check_box label="Mostra avatar in Mouselook" tool_tip="Mostra l'avatar e gli attachment dal collo in giù in modalità Mouselook (predefinito = off)." name="first_person_avatar_visible"/>
 							<check_box label="Addolcisci movimenti in Mouselook" tool_tip="Addolcisce i movimenti del mouse in modalità Mouselook." name="MouseSmooth"/>
 						</panel>
 					</panel>

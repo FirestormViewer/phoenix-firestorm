@@ -2,7 +2,7 @@
 <panel name="cof_wearables">
 	<tab_container name="wearable_accordion">
 		<panel name="tab_clothing" title="Vestiti"/>
-		<panel name="tab_attachments" title="Accessori"/>
+		<panel name="tab_attachments" title="Attachment"/>
 		<panel name="tab_body_parts" title="Parti del corpo"/>
 	</tab_container>
 </panel>

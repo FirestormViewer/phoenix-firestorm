@@ -475,8 +475,6 @@ LLAgent::LLAgent() :
     // </FS>
 
     mControlFlags(0x00000000),
-    mbFlagsDirty(false),
-    mbFlagsNeedReset(false),
 
     mAutoPilot(false),
     mAutoPilotFlyOnStop(false),
@@ -1060,8 +1058,6 @@ void LLAgent::setFlying(bool fly, bool fail_sound)
 
     // Update Movement Controls according to Fly mode
     LLFloaterMove::setFlyingMode(fly);
-
-    mbFlagsDirty = true;
 }
 
 
@@ -1230,7 +1226,6 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             {
                 regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
             }
-
         }
         else
         {
@@ -1758,7 +1753,6 @@ U32 LLAgent::getControlFlags()
 void LLAgent::setControlFlags(U32 mask)
 {
     mControlFlags |= mask;
-    mbFlagsDirty = true;
 }
 
 
@@ -1767,28 +1761,7 @@ void LLAgent::setControlFlags(U32 mask)
 //-----------------------------------------------------------------------------
 void LLAgent::clearControlFlags(U32 mask)
 {
-    U32 old_flags = mControlFlags;
     mControlFlags &= ~mask;
-    if (old_flags != mControlFlags)
-    {
-        mbFlagsDirty = true;
-    }
-}
-
-//-----------------------------------------------------------------------------
-// controlFlagsDirty()
-//-----------------------------------------------------------------------------
-bool LLAgent::controlFlagsDirty() const
-{
-    return mbFlagsDirty;
-}
-
-//-----------------------------------------------------------------------------
-// enableControlFlagReset()
-//-----------------------------------------------------------------------------
-void LLAgent::enableControlFlagReset()
-{
-    mbFlagsNeedReset = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -1796,14 +1769,9 @@ void LLAgent::enableControlFlagReset()
 //-----------------------------------------------------------------------------
 void LLAgent::resetControlFlags()
 {
-    if (mbFlagsNeedReset)
-    {
-        mbFlagsNeedReset = false;
-        mbFlagsDirty = false;
-        // reset all of the ephemeral flags
-        // some flags are managed elsewhere
-        mControlFlags &= AGENT_CONTROL_AWAY | AGENT_CONTROL_FLY | AGENT_CONTROL_MOUSELOOK;
-    }
+    // reset all of the ephemeral flags
+    // some flags are managed elsewhere
+    mControlFlags &= AGENT_CONTROL_AWAY | AGENT_CONTROL_FLY | AGENT_CONTROL_MOUSELOOK;
 }
 
 //-----------------------------------------------------------------------------
@@ -2516,11 +2484,19 @@ void LLAgent::propagate(const F32 dt)
     }
 
     // handle rotation based on keyboard levels
-    const F32 YAW_RATE = 90.f * DEG_TO_RAD;             // radians per second
-    yaw(YAW_RATE * gAgentCamera.getYawKey() * dt);
+    constexpr F32 YAW_RATE = 90.f * DEG_TO_RAD;                // radians per second
+    F32 angle = YAW_RATE * gAgentCamera.getYawKey() * dt;
+    if (fabs(angle) > 0.0f)
+    {
+        yaw(angle);
+    }
 
-    const F32 PITCH_RATE = 90.f * DEG_TO_RAD;           // radians per second
-    pitch(PITCH_RATE * gAgentCamera.getPitchKey() * dt);
+    constexpr F32 PITCH_RATE = 90.f * DEG_TO_RAD;            // radians per second
+    angle = PITCH_RATE * gAgentCamera.getPitchKey() * dt;
+    if (fabs(angle) > 0.0f)
+    {
+        pitch(angle);
+    }
 
     // handle auto-land behavior
     if (isAgentAvatarValid())

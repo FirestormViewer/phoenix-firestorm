@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_skin_panel">
 	<panel name="avatar_skin_color_panel">
-		<texture_picker label="Testa" name="Head" tool_tip="Clic per scegliere una texture"/>
-		<texture_picker label="Parte superiore del corpo" name="Upper Body" tool_tip="Clic per scegliere una texture"/>
-		<texture_picker label="Parte inferiore del corpo" name="Lower Body" tool_tip="Clic per scegliere una texture"/>
+		<texture_picker label="Testa" name="Head" tool_tip="Clicca per scegliere una texture"/>
+		<texture_picker label="Parte sopra" name="Upper Body" tool_tip="Clicca per scegliere una texture"/>
+		<texture_picker label="Parte sotto" name="Lower Body" tool_tip="Clicca per scegliere una texture"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">
-			<accordion_tab name="skin_color_tab" title="Colore della pelle"/>
-			<accordion_tab name="skin_face_tab" title="Dettagli del viso"/>
-			<accordion_tab name="skin_makeup_tab" title="Makeup"/>
-			<accordion_tab name="skin_body_tab" title="Dettagli del corpo"/>
+			<accordion_tab name="skin_color_tab" title="Colore pelle"/>
+			<accordion_tab name="skin_face_tab" title="Dettagli viso"/>
+			<accordion_tab name="skin_makeup_tab" title="Trucco"/>
+			<accordion_tab name="skin_body_tab" title="Dettagli corpo"/>
 		</accordion>
 	</panel>
 </panel>

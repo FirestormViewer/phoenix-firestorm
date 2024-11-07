@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
  <panel name="edit_shape_panel">
-	<string name="meters">Metri</string>
-	<string name="feet">Piedi</string>
-	<string name="height">Altezza:</string>
-	<text name="avatar_height"/>
+	<string name="meters">
+		Metri
+	</string>
+	<string name="feet">
+		Piedi
+	</string>
+	<string name="height">
+		Altezza:
+	</string>
 	<tab_container name="wearable_accordion">
 		<panel name="shape_body_tab_holder" title="Corpo">
 			<accordion name="shape_body_accordion">
@@ -38,6 +43,11 @@
 		<panel name="shape_chin_tab_holder" title="Mento">
 			<accordion name="shape_chin_accordion">
 				<accordion_tab name="shape_chin_tab" title="Mento"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Torso">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Torso"/>
 			</accordion>
 		</panel>
 		<panel name="shape_legs_tab_holder" title="Gambe">

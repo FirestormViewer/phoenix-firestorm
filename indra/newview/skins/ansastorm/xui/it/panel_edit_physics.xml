@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="Rimbalzo seno">
+			<text name="physics_breast_updown_not_available">
+				Il rimbalzo del seno è disponibile solo
+per gli avatar femminili.
+			</text>
+		</panel>
+		<panel name="physics_breast_inout_tab_holder" title="Scollatura seno">
+			<text name="physics_breast_inout_not_available">
+				La scollatura del seno è disponibile solo
+per gli avatar femminili.
+			</text>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="Oscillazione seno">
+			<text name="physics_breast_leftright_not_available">
+				L'oscillazione del seno è disponibile solo
+per gli avatar femminili.
+			</text>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="Rimbalzo pancia"/>
+		<panel name="physics_butt_tab_holder" title="Rimbalzo natiche"/>
+		<panel name="physics_butt_leftright_tab_holder" title="Oscillaz. natiche"/>
+		<panel name="physics_advanced_tab_holder" title="Param. avanzati"/>
+	</tab_container>
+</panel>

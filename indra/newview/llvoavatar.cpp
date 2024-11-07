@@ -640,7 +640,6 @@ bool LLVOAvatar::sVisibleInFirstPerson = false;
 F32 LLVOAvatar::sLODFactor = 1.f;
 F32 LLVOAvatar::sPhysicsLODFactor = 1.f;
 bool LLVOAvatar::sJointDebug            = false;
-bool LLVOAvatar::sLipSyncEnabled        = false;
 F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
@@ -1269,7 +1268,6 @@ void LLVOAvatar::initClass()
     LLControlAvatar::sRegionChangedSlot = gAgent.addRegionChangedCallback(&LLControlAvatar::onRegionChanged);
 
     sCloudTexture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
-    gSavedSettings.getControl("LipSyncEnabled")->getSignal()->connect(boost::bind(&LLVOAvatar::handleVOAvatarPrefsChanged, _2));
 
     initCloud();
 }
@@ -1277,12 +1275,6 @@ void LLVOAvatar::initClass()
 
 void LLVOAvatar::cleanupClass()
 {
-}
-
-bool LLVOAvatar::handleVOAvatarPrefsChanged(const LLSD &newvalue)
-{
-    sLipSyncEnabled = gSavedSettings.getBOOL("LipSyncEnabled");
-    return true;
 }
 
 LLPartSysData LLVOAvatar::sCloud;
@@ -3326,7 +3318,7 @@ void LLVOAvatar::idleUpdateLipSync(bool voice_enabled)
     // Use the Lipsync_Ooh and Lipsync_Aah morphs for lip sync
     if ( voice_enabled
         && mLastRezzedStatus > 0 // no point updating lip-sync for clouds
-        && sLipSyncEnabled
+        && LLVoiceVisualizer::getLipSyncEnabled()
         && LLVoiceClient::getInstance()->getIsSpeaking( mID ) )
     {
         F32 ooh_morph_amount = 0.0f;

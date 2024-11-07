@@ -129,7 +129,7 @@
 				Impostazioni avanzate (richiede riavvio):
 			</text>
 			<check_box label="Disabilita rilevamento automatico della VRAM" name="FSOverrideVRAMDetection" tool_tip="Consenti la disattivazione del rilevamento automatico della VRAM (da utilizzare con estrema cautela)" />
-			<slider label="VRAM dedicata alla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Importante: usare con estrema cautela. || Sostituisci la VRAM rilevata per la tua scheda grafica. || Non può contenere VRAM 'condivisa', che fa parte della RAM di sistema. || Se non capisci la differenza, lascia stare questa opzione." />
+			<slider label="Sostituisci VRAM dedicata alla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Importante: usare con estrema cautela. || Sostituisci la VRAM rilevata per la tua scheda grafica. || Non può contenere VRAM 'condivisa', che fa parte della RAM di sistema. || Se non capisci la differenza, lascia stare questa opzione." />
 		</panel>
 		<panel label="Rendering" name="Rendering">
 			<text name="World Updating">
@@ -170,7 +170,7 @@
 			<check_box label="Mostra avatar che non hanno terminato il caricamento" name="RenderUnloadedAvatars"/>
 			<check_box label="Limita framerate" name="FSLimitFramerate"/>
 			<check_box label="Mostra scena come wireframe" name="Wireframe"/>
-			<check_box label="Abilita Luci Attachments (face-light)" tool_tip="Abilita tutte le luci che gli avatar hanno attaccate al corpo come le luci per la faccia. Utile per spegnerle quando necessario." name="Render Attached Lights"/>
+			<check_box label="Abilita luci dagli attachment (face-light)" tool_tip="Abilita tutte le luci che gli avatar hanno attaccate al corpo come le luci per la faccia. Utile per spegnerle quando necessario." name="Render Attached Lights"/>
 			<check_box label="Renderizza particelle generate da altri avatar" name="Render Attached Particles"/>
 			<slider label="Ritardo pre-caricamento di visualizzazione mondo" tool_tip="Quanto tempo deve passare, prima di visualizzare il mondo dopo che gli altri vi hanno visto online (predef. 6 secondi)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">

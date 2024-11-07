@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="Wearing">
 	<panel.string name="no_attachments">
-		Nessun accessorio.
+		Nessun attachment
 	</panel.string>
 	<accordion name="wearables_accordion">
 		<accordion_tab name="tab_wearables" title="Abiti"/>
-		<accordion_tab name="tab_temp_attachments" title="Accessori temporanei"/>
+		<accordion_tab name="tab_temp_attachments" title="Attachment temporanei"/>
 	</accordion>
 	<panel name="bottom_panel">
 		<menu_button name="options_gear_btn" tool_tip="Mostra altre opzioni"/>
