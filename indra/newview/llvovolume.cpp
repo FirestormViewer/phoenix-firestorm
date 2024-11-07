@@ -6835,6 +6835,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
                     if (gltf_mat->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_BLEND)
                     {
                         registerFace(group, facep, LLRenderPass::PASS_ALPHA);
+                        is_alpha = true;
                     }
                     else if (gltf_mat->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_MASK)
                     {
