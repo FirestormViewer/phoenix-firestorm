@@ -72,6 +72,7 @@
 		<menu_item_call label="360° Снимок" name="Capture 360"/>
 		<menu_item_call label="Отслеживание денег" name="money_tracker"/>
 		<menu_item_call label="Поза редактирования..." name="pose_stand"/>
+		<menu_item_check label="Позер" name="Poser"/>
 
 		<menu_item_call label="Настройки" name="Preferences"/>
 		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
@@ -114,7 +115,6 @@
 		<menu_item_call label="Синхронизация анимации" name="Resync Animations"/>
 		<menu_item_call label="Ближайшие аватары" name="Active Speakers"/>
 		<menu_item_check label="Радар" name="Radar"/>
-		<menu_item_check label="Позер" name="Poser"/>
 		<menu_item_call label="История телепортаций" name="Teleport History"/>
 		<menu_item_check label="Места" name="Places"/>
 		<menu_item_call label="Пункты" name="Destinations"/>

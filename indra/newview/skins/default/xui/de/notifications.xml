@@ -5856,4 +5856,14 @@ URL auf Standard zurücksetzen?
 	<notification name="ImageEmptyAlphaLayer" label="Textur enthält leeren Alpha-Kanal">
 		Die Textur, die Sie hochladen möchten, enthält einen leeren oder fast-leeren Alpha-Kanal (Transparenz-Informationen). Dies ist fast immer nicht gewünscht und der Kanel sollte daher entfernt werden. Das Hinzufügen eines Alpha-Kanals kann zu Textur-Flackern bei übereinanderliegenden Texturen bei unterschiedlichem Kamerawinkel führen. Zudem verringert sich dadurch die Darstellungsgeschwindigkeit. Sofern diese Textur nicht unbedingt einen (fast-)leeren Alpgha-Kanal benötigt, sollte dieser möglichst entfernt werden.
 	</notification>
+	<notification name="WhitelistReminder">
+		Bitte whitelisten Sie [APP_NAME], um die Leistung zu verbessern.
+
+Einige Antivirus-Programme können fälschlicherweise Teile von [APP_NAME] blockieren, die Leistung verschlechtern oder zu Fehlfunktionen von Featuren führen. Um entsprechende Probleme zu vermeiden, raten wir dringend [APP_NAME] zur Whitelist (oder auch Ausnahmeliste) Ihres Antivirus-Programms hinzuzufügen. Hierdurch wird sichergestellt, dass der Viewer korrekt funktioniert.
+
+Detaillierte Instruktionen zum whitelisten von [APP_NAME] - inklusive einer Liste von Dateien und Verzeichnissen - finden Sie in unserem Ratgeber:
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+		<usetemplate ignoretext="Whitelist-Erinnerung beim Start anzeigen" name="okignore" yestext="OK"/>
+	</notification>
 </notifications>

@@ -54,7 +54,7 @@
 			<menu_item_call label="Ripristina scheletro" name="Reset Skeleton" />
 			<menu_item_call label="Ripristina scheletro e animazioni" name="Reset Skeleton And Animations" />
 			<menu_item_call label="Ricarica texture (rebake)" name="Rebake Texture"/>
-			<menu_item_call label="Ricarica attachments" name="Refresh Attachments"/>
+			<menu_item_call label="Ricarica gli attachment" name="Refresh Attachments"/>
 			<menu_item_call label="Ripristina avatar maschio (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Ripristina avatar femmina (Character Test)" name="ResetDefaultAvF"/>
 			<menu_item_check label="Mostra info complessità" name="Avatar Draw Info"/>
@@ -303,7 +303,7 @@
 			<menu_item_check label="Nascondi messaggi non impostati o duplicati" name="Hide Unset or Duplicate Messages"/>
 			<menu_item_check label="Mostra Assertion Failures" name="Show Assertion Failures"/>
 			<menu_item_check label="Nascondi livelli bloccati" name="Hide Locked Layers"/>
-			<menu_item_check label="Nascondi attachments bloccati" name="Hide Locked Attachments"/>
+			<menu_item_check label="Nascondi attachment bloccati" name="Hide Locked Attachments"/>
 			<menu_item_check label="Permetti Legacy Naming" name="Enable Legacy Naming"/>
 			<menu_item_check label="Permetti indossa condiviso" name="Enable Shared Wear"/>
 			<menu_item_check label="Rinomina oggetti condivisi quando indossati" name="Rename Shared Items on Wear"/>
@@ -313,7 +313,7 @@
 		<menu_item_check label="Mostra chat filtrata" name="Show Filtered Chat"/>
 		<menu_item_check label="Mostra digitazione chat reindirizzata" name="Show Redirected Chat Typing" />
 		<menu_item_check label="Dividi chat reindirizzata lunga" name="Split Long Redirected Chat" />
-		<menu_item_check label="Permetti attachments temporanei" name="Allow Temporary Attachments"/>
+		<menu_item_check label="Permetti attachment temporanei" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Vieta Give to #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Indossa sostituisce sbloccati" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Console..." name="Console"/>
@@ -322,7 +322,7 @@
 	</menu>
 	<menu label="Avanzato" name="Advanced">
 		<menu_item_call label="Ricarica texture" name="Rebake Texture"/>
-		<menu_item_call label="Ricarica attachments" name="Refresh Attachments"/>
+		<menu_item_call label="Ricarica gli attachment" name="Refresh Attachments"/>
 		<menu_item_call label="Imposta interfaccia predefinita" name="Set UI Size to Default"/>
 		<menu_item_call label="Dimensione Finestra..." name="Set Window Size..."/>
 		<menu_item_check label="Limita distanza selezione" name="Limit Select Distance"/>

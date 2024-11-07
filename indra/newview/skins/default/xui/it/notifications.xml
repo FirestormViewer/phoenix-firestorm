@@ -280,9 +280,9 @@ Se non desideri che queste abilità siano assegnate a questo ruolo, disattivale 
 		Ad alcuni utenti non è stato mandato un invito a causa del blocco nel gruppo.
 	</notification>
 	<notification name="AttachmentDrop">
-		Stai per abbandonare il tuo accessorio.
+		Stai per abbandonare il tuo attachment.
 Continuare?
-		<usetemplate ignoretext="Conferma prima di staccare gli accessori" name="okcancelignore" notext="No" yestext="Sì"/>
+		<usetemplate ignoretext="Conferma prima di staccare gli attachment" name="okcancelignore" notext="No" yestext="Sì"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
 		Iscriversi a questo gruppo costa [COST]L$.
@@ -452,7 +452,7 @@ Per collocare il media su una sola faccia, scegli Seleziona faccia, clicca su un
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Non è stato possibile indossare un abito.
-La cartella abiti non contiene vestiti, parti del corpo o accessori.
+La cartella abiti non contiene vestiti, parti del corpo o attachment.
 	</notification>
 	<notification name="CannotWearTrash">
 		Non puoi indossare vestiti e parti del corpo che sono nel cestino.
@@ -4522,8 +4522,8 @@ Riprova tra un minuto.
 		Sei stato teleportato a casa dall&apos;oggetto &apos;[OBJECT_NAME]&apos;
 	</notification>
 	<notification name="TeleportedByAttachment">
-		Sei stato teleportato da un elemento collegato a [ITEM_ID]
-		<usetemplate ignoretext="Teleport: sei stato teleportato da un elemento accessorio" name="notifyignore"/>
+		Sei stato teleportato da un attachment su [ITEM_ID]
+		<usetemplate ignoretext="Teleport: sei stato teleportato da un attachment" name="notifyignore"/>
 	</notification>
 	<notification name="TeleportedByObjectOnParcel">
 		Sei stato teleportato dall&apos;oggetto &apos;[OBJECT_NAME]&apos; sul lotto &apos;[PARCEL_NAME]&apos;
@@ -4973,15 +4973,23 @@ Simulatore precedente: [OLDVERSION]
 	<notification name="BackupPathEmpty">
 		La cartella del backup è vuota. Per prima cosa indicare una posizione in cui salvare e recuperare le impostazioni.
 	</notification>
+	<notification name="SettingsConfirmBackup">
+		Sei sicuro di voler salvare il backup in questo percorso?
+
+[DIRECTORY]
+
+Tutti i backup presenti in questa posizione verranno sovrascritti!
+		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Salva backup" />
+	</notification>
+	<notification name="SettingsRestoreNeedsLogout">
+		Il ripristino delle impostazioni richiede un riavvio. Ripristinare le impostazioni e uscire?
+		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Ripristina e esci"/>
+	</notification>
 	<notification name="BackupPathDoesNotExistOrCreateFailed">
 		Impossibile trovare o creare la cartella del backup.
 	</notification>
 	<notification name="BackupPathDoesNotExist">
 		Impossibile trovare la cartella del backup.
-	</notification>
-	<notification name="SettingsRestoreNeedsLogout">
-		Il ripristino delle impostazioni richiede un riavvio. Ripristinare le impostazioni e uscire?
-		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Ripristina e esci"/>
 	</notification>
 	<notification name="RestoreFinished">
 		Ripristino completato. Riavviare il viewer.
@@ -5352,5 +5360,15 @@ Reimpostare l'URL predefinito?
 			<button name="strip" text="Rimuovi alfa" />
 			<button name="use_as_is" text="Mantieni alfa" />
 		</form>
+	</notification>
+	<notification name="WhitelistReminder">
+		Per migliorare le prestazioni dell'applicazione [APP_NAME] - aggiungila all'elenco delle eccezioni.
+
+Alcuni programmi antivirus potrebbero bloccare erroneamente parti di [APP_NAME], rallentando il viewer e impedendo la corretta esecuzione di alcune funzionalità. Per evitare questi problemi, ti consigliamo vivamente di aggiungere [APP_NAME] alla whitelist (o all'elenco delle esclusioni) del tuo programma antivirus. Ciò garantirà un funzionamento regolare del viewer.
+
+Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenco di file e cartelle da escludere, consulta la nostra guida:
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+		<usetemplate ignoretext="Mostra promemoria sulla whitelist all'avvio" name="okignore" />
 	</notification>
 </notifications>

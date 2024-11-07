@@ -3336,6 +3336,8 @@ void login_show()
     //LLPanelLogin::show(   gViewerWindow->getWindowRectScaled(), login_callback, NULL );
     FSPanelLogin::show( gViewerWindow->getWindowRectScaled(), login_callback, NULL );
     // </FS:Ansariel> [FS Login Panel]
+
+    LLNotificationsUtil::add("WhitelistReminder"); // <FS:PP> Whitelist reminder
 }
 
 // Callback for when login screen is closed.  Option 0 = connect, option 1 = quit.

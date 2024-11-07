@@ -339,6 +339,7 @@
         <pie_slice.on_enable
             function="Object.EnableReturn" />
     </pie_slice>
+    <pie_separator/>
 
     <pie_menu
         label="More &gt;"

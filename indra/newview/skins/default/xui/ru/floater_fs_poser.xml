@@ -249,15 +249,15 @@
 						<slider label="Позиция Z:" name="Advanced_Position_Z"/>
 						<button label="Отмена" name="undo_position_change" tool_tip="Отменить последнее изменение позиции"/>
 						<button label="Повторить" name="redo_position_change" tool_tip="Повторить последнее изменение позиции"/>
-						<button label="Сброс" name="undo_position_change" tool_tip="Дважды щелкните, чтобы вернуть исходное положение."/>
+						<button label="Сброс" name="reset_positions" tool_tip="Дважды щелкните, чтобы вернуть исходное положение."/>
 					</panel>
 					<panel title="Часть тела Размер" name="scale_panel">
 						<slider label="Размер X:" name="Advanced_Scale_X"/>
 						<slider label="Размер Y:" name="Advanced_Scale_Y"/>
 						<slider label="Размер Z:" name="Advanced_Scale_Z"/>
-						<button label="Отмена" name="undo_position_change" tool_tip="Отменить последнее изменение размера"/>
+						<button label="Отмена" name="undo_scale_change" tool_tip="Отменить последнее изменение размера"/>
 						<button label="Повторить" name="redo_scale_change" tool_tip="Повторить последнее изменение размера"/>
-						<button label="Сброс" name="undo_scale_change" tool_tip="Дважды щелкните, чтобы сбросить размер до исходного."/>
+						<button label="Сброс" name="reset_scales" tool_tip="Дважды щелкните, чтобы сбросить размер до исходного."/>
 					</panel>
 				</tab_container>
 			</panel>

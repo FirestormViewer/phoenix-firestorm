@@ -7,9 +7,8 @@
 		Piedi
 	</string>
 	<string name="height">
-		Statura:
+		Altezza:
 	</string>
-	<text name="avatar_height"/>
 	<panel label="Camicia" name="accordion_panel">
 		<accordion name="wearable_accordion">
 			<accordion_tab name="shape_body_tab" title="Corpo"/>
@@ -19,7 +18,7 @@
 			<accordion_tab name="shape_nose_tab" title="Naso"/>
 			<accordion_tab name="shape_mouth_tab" title="Bocca"/>
 			<accordion_tab name="shape_chin_tab" title="Mento"/>
-			<accordion_tab name="shape_torso_tab" title="Torace"/>
+			<accordion_tab name="shape_torso_tab" title="Torso"/>
 			<accordion_tab name="shape_legs_tab" title="Gambe"/>
 		</accordion>
 	</panel>

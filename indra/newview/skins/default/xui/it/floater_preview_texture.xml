@@ -10,18 +10,21 @@
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</floater.string>
 	<floater.string name="UploaderDateTime">
-		Caricata da [UPLOADER] il [DATE_TIME]
+		Caricata da [UPLOADER] [DATE_TIME]
 	</floater.string>
 	<text name="desc txt">
 		Descrizione:
 	</text>
 	<button label="Profilo" name="openprofile"/>
 	<panel name="dimensions_panel">
+		<text name="dimensions">
+			[WIDTH] x [HEIGHT] px
+		</text>
 		<button name="copyuuid" tool_tip="Copia UUID negli appunti"/>
 		<text name="aspect_ratio">
-			Rapporto vista
+			Proporzioni
 		</text>
-		<combo_box name="combo_aspect_ratio" tool_tip="Anteprima con rapporto di visualizzazione fisso"/>
+		<combo_box name="combo_aspect_ratio" tool_tip="Visualizza anteprima con proporzioni fisse"/>
 	</panel>
 	<panel name="button_panel">
 		<button label="Elimina" name="Discard"/>

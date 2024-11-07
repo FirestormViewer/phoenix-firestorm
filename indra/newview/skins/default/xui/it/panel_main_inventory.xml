@@ -10,7 +10,7 @@
 		Recuperati [ITEM_COUNT] elementi [FILTER]
 	</panel.string>
 	<panel.string name="inventory_title">
-		INVENTARIO
+		Inventario
 	</panel.string>
 	<layout_stack name="top_stack">
 		<layout_panel name="nav_buttons">

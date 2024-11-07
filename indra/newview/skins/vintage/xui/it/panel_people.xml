@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Persone" name="people_panel">
+	<string name="no_recent_people" value="Nessuna persona recente. Stai cercando persone da frequentare? Prova la [secondlife:///app/search/people Ricerca] o la [secondlife:///app/worldmap Mappa del mondo]."/>
+	<string name="no_filtered_recent_people" value="Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/people/[SEARCH_TERM] Cerca]."/>
+	<string name="no_one_near" value="Nessuno vicino. Stai cercando persone da frequentare? Prova a vedere la [secondlife:///app/search/people Ricerca] o la [secondlife:///app/worldmap Mappa del mondo]."/>
+	<string name="no_one_filtered_near" value="Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/people/[SEARCH_TERM] Cerca]."/>
+	<string name="no_friends_online" value="Nessun amico online"/>
+	<string name="no_friends" value="Nessun amico"/>
+	<string name="no_friends_msg">
+		Per trovare amici, utilizza [secondlife:///app/search/people Cerca] oppure fai clic col tasto destro del mouse su un residente per aggiungerlo come amico.
+Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa del mondo].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/people/[SEARCH_TERM] Cerca].
+	</string>
+	<string name="people_filter_label" value="Filtra persone" />
+	<string name="groups_filter_label" value="Filtra gruppi" />
+	<string name="no_filtered_groups_msg" value="Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/groups/[SEARCH_TERM] Cerca]."/>
+	<string name="no_groups_msg" value="Stai cercando gruppi di cui far parte? Prova [secondlife:///app/search/groups Cerca]."/>
+	<string name="MiniMapToolTipMsg" value="[REGION](Fai doppio clic per aprire la mappa, premi il tasto Maiusc e trascina per la panoramica)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION](Fai doppio clic per teleport, premi il tasto Maiusc e trascina per la panoramica)"/>
+	<string name="GroupCountWithInfo" value="Fai parte di [COUNT] gruppi, puoi aderire ad altri [REMAINING].  [secondlife:/// Cerchi altro?]"/>
+	<string name="avatar_name_count" value="Nome [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+	<panel.string name="empty_list">
+		Set di contatti vuoto.
+	</panel.string>
+	<panel.string name="no_sets">
+		Nessun set
+	</panel.string>
+	<panel.string name="all_sets">
+		Tutti i set
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Alias
+	</panel.string>
+	<tab_container name="tabs">
+		<panel label="Nelle Vicinanze" name="nearby_panel">
+			<tab_container name="tabcont_radarpeople_main">
+				<panel name="panel_radar" label="Lista" />
+				<panel name="radarmap_options_panel" label="Opzioni">
+					<scroll_container label="Opzioni" name="radarmap_options_scroll_container">
+						<container_view name="radarmap_options_container_view" label="Opzioni">
+							<panel name="radarmap_options_scrolled_panel">
+								<check_box label="Mostra la minimappa sopra al radar" name="ShowRadarMinimap"/>
+								<check_box label="Mostra avatar bloccati e nella Lista Nera" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="Notifica quando qualcuno entra nell'area di disegno" name="RadarReportDrawRangeEnter"/>
+								<check_box label="Notifica quando qualcuno esce dall'area di disegno" name="RadarReportDrawRangeLeaving"/>
+								<check_box label="Notifica quando qualcuno entra nell'area della chat locale" name="RadarReportChatRangeEnter"/>
+								<check_box label="Notifica quando qualcuno esce dall'area della chat locale" name="RadarReportChatRangeLeave"/>
+								<check_box label="Notifica quando qualcuno entra in regione" name="RadarReportSimRangeEnter"/>
+								<check_box label="Notifica quando qualcuno esce dalla regione" name="RadarReportSimRangeLeave"/>
+								<check_box label="Mostra notifiche sugli script in entrata" name="RadarEnterChannelAlert"/>
+								<check_box label="Mostra notifiche sugli script in uscita" name="RadarLeaveChannelAlert"/>
+								<check_box label="Potenzia il radar utilizzando il Bridge di Firestorm" tool_tip="Quando questa opzione è abilitata, le funzioni radar che determinano la distanza degli avatar, sono supportate da LSL Bridge, soprattutto quando le persone sono fuori dal campo visivo." name="FSRadarEnhanceByBridge"/>
+								<check_box label="Colora i nomi in base alla distanza" name="FSRadarColorNamesByDistance"/>
+								<check_box label="Limita distanza:" tool_tip="Limita i risultati a una distanza specifica" name="LimitRadarByRange" />
+								<text name="radarmap_range_label" value="Formato nome radar:"/>
+								<combo_box name="RadarNameFormat">
+									<combo_box.item name="RadarNameFormat_display" label="Nome Visualizzato" />
+									<combo_box.item name="RadarNameFormat_user" label="Nome Utente" />
+									<combo_box.item name="RadarNameFormat_displayuser" label="Nome Visualizzato (Nome Utente)" />
+									<combo_box.item name="RadarNameFormat_userdisplay" label="Nome Utente (Nome Visualizzato)" />
+								</combo_box>
+								<text name="columns_label" value="Colonne visualizzate:" />
+								<check_box label="Usa la voce" name="column_voice" />
+								<check_box label="Tempo" name="column_seen" />
+								<check_box label="Età" name="column_age" />
+								<check_box label="Stessa regione" name="column_region" />
+								<check_box label="Sta scrivendo" name="column_typing_status" />
+								<check_box label="Sta seduto" name="column_sitting_status" />
+								<check_box label="Info di pagamento" name="column_flags" />
+								<check_box label="Note sul profilo" name="notes_flags" />
+							</panel>
+						</container_view>
+					</scroll_container>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel label="Recenti" name="recent_panel" />
+		<panel label="Bloccati" name="blocked_panel" />
+	</tab_container>
+</panel>
