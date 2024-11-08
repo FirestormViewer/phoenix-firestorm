@@ -1110,6 +1110,47 @@ If you do not understand the distinction then leave this control alone."
          top_pad="6"
          width="256"/>
 
+         <check_box
+         control_name="FSLimitFramerate"
+         height="16"
+         initial_value="true"
+         label="Limit Framerate"
+         layout="topleft"
+         left_delta="0"
+         name="FSLimitFramerate"
+         tool_tip="Limits the framerate to a user defined value. Can reduce GPU/CPU power consumption and heat."
+         top_pad="2"
+         width="256"/>
+        <slider
+         enabled_control="FSLimitFramerate"
+         control_name="FramePerSecondLimit"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="FPS:"
+         label_width="30"
+         layout="topleft"
+         max_val="360"
+         min_val="15"
+         name="MaxFPS"
+         left_delta="240"
+         mouse_opaque="true"
+         show_text="true"
+         width="200" />
+
+         <check_box
+         control_name="RenderVSyncEnable"
+         height="16"
+         initial_value="false"
+         label="Limit Framerate to monitor frequency (VSync)"
+         layout="topleft"
+         left="15"
+         top_pad="2"
+         name="vsync"
+         tool_tip="Synchronizes the frame rate to the refresh rate of the monitor, can result in increased stutter and input lag."
+         width="315" />
+
         <text
          type="string"
          length="1"
@@ -1294,33 +1335,6 @@ If you do not understand the distinction then leave this control alone."
          name="RenderUnloadedAvatars"
          top_pad="2"
          width="256"/>
-        <check_box
-         control_name="FSLimitFramerate"
-         height="16"
-         initial_value="true"
-         label="Limit Framerate"
-         layout="topleft"
-         left_delta="0"
-         name="FSLimitFramerate"
-         top_pad="2"
-         width="256"/>
-        <slider
-         enabled_control="FSLimitFramerate"
-         control_name="FramePerSecondLimit"
-         decimal_digits="0"
-         follows="left|top"
-         height="16"
-         increment="1"
-         label="FPS:"
-         label_width="30"
-         layout="topleft"
-         max_val="360"
-         min_val="15"
-         name="MaxFPS"
-         left_delta="240"
-         mouse_opaque="true"
-         show_text="true"
-         width="200" />
         <check_box
          follows="top|left"
          layout="topleft"
