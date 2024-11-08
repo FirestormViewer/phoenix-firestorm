@@ -61,7 +61,6 @@ constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPos
 /// The trackpad ordinarily has a range of +1..-1; multiplied by PI, gives PI to -PI, or all 360 degrees of deflection.
 /// </summary>
 constexpr F32 NormalTrackpadRangeInRads = F_PI;
-bool FSFloaterPoser::sDisableRecaptureUntilStopPosing;
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
@@ -117,12 +116,11 @@ bool FSFloaterPoser::postBuild()
     mLimbRollSlider = getChild<LLSliderCtrl>("limb_roll");
     mLimbRollSlider->setCommitCallback([this](LLUICtrl *, const LLSD &) { onLimbYawPitchRollChanged(); });
 
-    // find-and-binds
     mJointsTabs = getChild<LLTabContainer>("joints_tabs");
     mJointsTabs->setCommitCallback(
         [this](LLUICtrl*, const LLSD&)
         {
-            onJointSelect();
+            onJointTabSelect();
             setRotationChangeButtons(false, false, false);
         });
 
@@ -132,23 +130,23 @@ bool FSFloaterPoser::postBuild()
 
     mBodyJointsScrollList = getChild<LLScrollListCtrl>("body_joints_scroll");
     mBodyJointsScrollList->setCommitOnSelectionChange(true);
-    mBodyJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+    mBodyJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointTabSelect(); });
 
     mFaceJointsScrollList = getChild<LLScrollListCtrl>("face_joints_scroll");
     mFaceJointsScrollList->setCommitOnSelectionChange(true);
-    mFaceJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+    mFaceJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointTabSelect(); });
 
     mHandJointsScrollList = getChild<LLScrollListCtrl>("hand_joints_scroll");
     mHandJointsScrollList->setCommitOnSelectionChange(true);
-    mHandJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+    mHandJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointTabSelect(); });
 
     mMiscJointsScrollList = getChild<LLScrollListCtrl>("misc_joints_scroll");
     mMiscJointsScrollList->setCommitOnSelectionChange(true);
-    mMiscJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+    mMiscJointsScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointTabSelect(); });
 
     mCollisionVolumesScrollList = getChild<LLScrollListCtrl>("collision_volumes_scroll");
     mCollisionVolumesScrollList->setCommitOnSelectionChange(true);
-    mCollisionVolumesScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointSelect(); });
+    mCollisionVolumesScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onJointTabSelect(); });
 
     mEntireAvJointScroll = getChild<LLScrollListCtrl>("entireAv_joint_scroll");
 
@@ -197,8 +195,6 @@ bool FSFloaterPoser::postBuild()
     mToggleDeltaModeBtn = getChild<LLButton>("delta_mode_toggle");
     mRedoChangeBtn = getChild<LLButton>("button_redo_change");
     mSetToTposeButton = getChild<LLButton>("set_t_pose_button");
-    mRecaptureJointsButton = getChild<LLButton>("button_RecaptureParts");
-    mRecaptureJointsButton->setEnabled(!sDisableRecaptureUntilStopPosing);
 
     mJointsParentPnl = getChild<LLPanel>("joints_parent_panel");
     mAdvancedParentPnl = getChild<LLPanel>("advanced_parent_panel");
@@ -218,7 +214,7 @@ void FSFloaterPoser::onOpen(const LLSD& key)
 {
     onAvatarsRefresh();
     refreshJointScrollListMembers();
-    onJointSelect();
+    onJointTabSelect();
     onOpenSetAdvancedPanel();
     refreshPoseScroll(mHandPresetsScrollList, POSE_PRESETS_HANDS_SUBDIRECTORY);
     startPosingSelf();
@@ -477,9 +473,6 @@ void FSFloaterPoser::onClickFlipPose()
 
 void FSFloaterPoser::onClickRecaptureSelectedBones()
 {
-    if (sDisableRecaptureUntilStopPosing)
-        return;
-
     auto selectedJoints = getUiSelectedPoserJoints();
     if (selectedJoints.size() < 1)
         return;
@@ -516,10 +509,7 @@ void FSFloaterPoser::onClickBrowsePoseCache()
 
 void FSFloaterPoser::onPoseJointsReset()
 {
-    // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
-    mTimeLastClickedJointReset = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > mDoubleClickInterval)
+    if (notDoubleClicked())
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
@@ -580,12 +570,17 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
     refreshJointScrollListMembers();
 }
 
+bool FSFloaterPoser::notDoubleClicked()
+{
+    auto timeIntervalSinceLastExecution = std::chrono::system_clock::now() - mTimeLastExecutedDoubleClickMethod;
+    mTimeLastExecutedDoubleClickMethod  = std::chrono::system_clock::now();
+
+    return timeIntervalSinceLastExecution > mDoubleClickInterval;
+}
+
 void FSFloaterPoser::onClickLoadLeftHandPose()
 {
-    // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
-    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > mDoubleClickInterval)
+    if (notDoubleClicked())
         return;
 
     onClickLoadHandPose(false);
@@ -593,10 +588,7 @@ void FSFloaterPoser::onClickLoadLeftHandPose()
 
 void FSFloaterPoser::onClickLoadRightHandPose()
 {
-    // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
-    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > mDoubleClickInterval)
+    if (notDoubleClicked())
         return;
 
     onClickLoadHandPose(true);
@@ -688,10 +680,7 @@ bool FSFloaterPoser::poseFileStartsFromTeePose(const std::string& poseFileName)
 
         S32 lineCount = LLSDSerialize::fromXML(pose, infile);
         if (lineCount == LLSDParser::PARSE_FAILURE)
-        {
-            LL_WARNS("Posing") << "Failed to parse file: " << poseFileName << LL_ENDL;
             return startFromZeroRot;
-        }
 
         for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
         {
@@ -771,10 +760,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 loadPositionsAndScalesAsDeltas = true;
 
             if (startFromZeroRot) // legacy saves will always start from T-Pose, for better or worse.
-            {
-                disableRecapture();
                 mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
-            }
 
             for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
             {
@@ -816,7 +802,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << " exception: " << e.what() << LL_ENDL;
     }
 
-    onJointSelect();
+    onJointTabSelect();
 }
 
 void FSFloaterPoser::startPosingSelf()
@@ -845,7 +831,6 @@ void FSFloaterPoser::stopPosingSelf()
 
     mPoserAnimator.stopPosingAvatar(avatar);
     onAvatarSelect();
-    reEnableRecaptureIfAllowed();
 }
 
 void FSFloaterPoser::onPoseStartStop()
@@ -858,7 +843,6 @@ void FSFloaterPoser::onPoseStartStop()
     if (arePosingSelected)
     {
         mPoserAnimator.stopPosingAvatar(avatar);
-        reEnableRecaptureIfAllowed();
     }
     else
     {
@@ -1151,25 +1135,20 @@ void FSFloaterPoser::onUndoLastScale()
 
 void FSFloaterPoser::onSetAvatarToTpose()
 {
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
-    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > mDoubleClickInterval)
+    if (notDoubleClicked())
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    disableRecapture();
+    setSavePosesButtonText(false);
     mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
 }
 
 void FSFloaterPoser::onResetPosition()
 {
-    // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
-    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > mDoubleClickInterval)
+    if (notDoubleClicked())
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
@@ -1196,10 +1175,7 @@ void FSFloaterPoser::onResetPosition()
 
 void FSFloaterPoser::onResetScale()
 {
-    // This is a double-click function: it needs to run twice within some amount of time to complete.
-    auto timeIntervalSinceLastClick = std::chrono::system_clock::now() - mTimeLastClickedJointReset;
-    mTimeLastClickedJointReset      = std::chrono::system_clock::now();
-    if (timeIntervalSinceLastClick > mDoubleClickInterval)
+    if (notDoubleClicked())
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
@@ -1346,7 +1322,7 @@ void FSFloaterPoser::onToggleAdvancedPanel()
         return;
 
     reshape(poserFloaterWidth, poserFloaterHeight);
-    onJointSelect();
+    onJointTabSelect();
 }
 
 std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJoints() const
@@ -1415,17 +1391,13 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
 E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle() const
 {
     if (mToggleMirrorRotationBtn->getValue().asBoolean())
-    {
         return MIRROR;
-    }
+
     if (mToggleSympatheticRotationBtn->getValue().asBoolean())
-    {
         return SYMPATHETIC;
-    }
+
     if (mToggleDeltaModeBtn->getValue().asBoolean())
-    {
         return DELTAMODE;
-    }
 
     return NONE;
 }
@@ -1554,7 +1526,6 @@ void FSFloaterPoser::onLimbTrackballChanged()
     yaw *= trackPadSensitivity;
     pitch *= trackPadSensitivity;
 
-    // if the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the sliders; this wraps them to by the slider full-scale
     yaw   = unWrapScale(yaw) * NormalTrackpadRangeInRads;
     pitch = unWrapScale(pitch) * NormalTrackpadRangeInRads;
     roll  = unWrapScale(roll) * NormalTrackpadRangeInRads;
@@ -1826,7 +1797,7 @@ LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint() const
     return scale;
 }
 
-void FSFloaterPoser::onJointSelect()
+void FSFloaterPoser::onJointTabSelect()
 {
     refreshAvatarPositionSliders();
     refreshRotationSliders();
@@ -1904,7 +1875,7 @@ void FSFloaterPoser::onAvatarSelect()
     mSetToTposeButton->setEnabled(arePosingSelected);
     poseControlsEnable(arePosingSelected);
     refreshTextHighlightingOnAllScrollLists();
-    onJointSelect();
+    onJointTabSelect();
     setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
 }
 
@@ -2057,7 +2028,7 @@ void FSFloaterPoser::refreshTextHighlightingOnAllScrollLists()
         else
             ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
-    
+
     LLVOAvatar *avatar = getUiSelectedAvatar();
     addBoldToScrollList(mBodyJointsScrollList, avatar);
     addBoldToScrollList(mFaceJointsScrollList, avatar);
@@ -2066,21 +2037,9 @@ void FSFloaterPoser::refreshTextHighlightingOnAllScrollLists()
     addBoldToScrollList(mCollisionVolumesScrollList, avatar);
 }
 
-void FSFloaterPoser::disableRecapture()
+void FSFloaterPoser::setSavePosesButtonText(bool setAsSaveDiff)
 {
-    mRecaptureJointsButton->setEnabled(false);
-    mSavePosesBtn->setLabel("Save Pose");
-    sDisableRecaptureUntilStopPosing = true;
-}
-
-void FSFloaterPoser::reEnableRecaptureIfAllowed()
-{
-    if (posingAnyoneOnScrollList())
-        return;
-
-    mRecaptureJointsButton->setEnabled(true);
-    mSavePosesBtn->setLabel("Save Diff");
-    sDisableRecaptureUntilStopPosing = false;
+    setAsSaveDiff ? mSavePosesBtn->setLabel("Save Diff") : mSavePosesBtn->setLabel("Save Pose");
 }
 
 bool FSFloaterPoser::posingAnyoneOnScrollList()
@@ -2112,12 +2071,12 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
     for (auto listItem : list->getAllData())
     {
         FSPoserAnimator::FSPoserJoint *userData = static_cast<FSPoserAnimator::FSPoserJoint *>(listItem->getUserdata());
-        if (userData)
-        {
-            if (mPoserAnimator.isPosingAvatarJoint(avatar, *userData))
-                ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
-            else
-                ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
-        }
+        if (!userData)
+            continue;
+
+        if (mPoserAnimator.isPosingAvatarJoint(avatar, *userData))
+            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
+        else
+            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
 }

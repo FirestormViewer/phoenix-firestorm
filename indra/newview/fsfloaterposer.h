@@ -81,8 +81,6 @@ class FSFloaterPoser : public LLFloater
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
 
-    static bool sDisableRecaptureUntilStopPosing;
-
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
@@ -209,7 +207,7 @@ class FSFloaterPoser : public LLFloater
     // UI Event Handlers:
     void onAvatarsRefresh();
     void onAvatarSelect();
-    void onJointSelect();
+    void onJointTabSelect();
     void onToggleAdvancedPanel();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
@@ -299,14 +297,10 @@ class FSFloaterPoser : public LLFloater
     void refreshTextHighlightingOnAllScrollLists();
 
     /// <summary>
-    /// Disables recapturing joint traits.
+    /// Sets the text of the save pose button.
     /// </summary>
-    void disableRecapture();
-
-    /// <summary>
-    /// Recapture is be disabled if user is making their own pose (starting from a T-Pose).
-    /// </summary>
-    void reEnableRecaptureIfAllowed();
+    /// <param name="setAsSaveDiff">Whether to indicate a diff will be saved, instead of a pose.</param>
+    void setSavePosesButtonText(bool setAsSaveDiff);
 
     /// <summary>
     /// Gets whether any avatar know by the UI is being posed.
@@ -321,13 +315,19 @@ class FSFloaterPoser : public LLFloater
     void addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar);
 
     /// <summary>
+    /// Determines if the user has run this method twice within mDoubleClickInterval.
+    /// </summary>
+    /// <returns>true if this method has executed since mDoubleClickInterval seconds ago, otherwise false.</returns>
+    bool notDoubleClicked();
+
+    /// <summary>
     /// The time when the last click of a button was made.
     /// Utilized for controls needing a 'double click do' function.
     /// </summary>
-    std::chrono::system_clock::time_point mTimeLastClickedJointReset = std::chrono::system_clock::now();
+    std::chrono::system_clock::time_point mTimeLastExecutedDoubleClickMethod = std::chrono::system_clock::now();
 
     /// <summary>
-    /// The constant time interval, in seconds, a user must click twice within to successfully double-click a button.
+    /// The constant time interval, in seconds, a user must execute the notDoubleClicked twice to successfully 'double-click' a button.
     /// </summary>
     std::chrono::duration<double> const mDoubleClickInterval = std::chrono::duration<double>(0.3);
 
@@ -336,6 +336,10 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <param name="scale">The scale value from the trackball.</param>
     /// <returns>A value appropriate for fitting a slider.</returns>
+    /// <remarks>
+    /// If the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the sliders.
+    /// This method ensures whatever value the trackpad produces, they work with the sliders.
+    /// </remarks>
     static F32 unWrapScale(F32 scale);
 
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
@@ -382,7 +386,6 @@ class FSFloaterPoser : public LLFloater
     LLButton* mToggleDeltaModeBtn{ nullptr };
     LLButton* mRedoChangeBtn{ nullptr };
     LLButton* mSetToTposeButton{ nullptr };
-    LLButton* mRecaptureJointsButton{ nullptr };
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
