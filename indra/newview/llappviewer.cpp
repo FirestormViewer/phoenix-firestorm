@@ -713,8 +713,6 @@ LLAppViewer::LLAppViewer()
     mQuitRequested(false),
     mClosingFloaters(false),
     mLogoutRequestSent(false),
-    mLastAgentControlFlags(0),
-    mLastAgentForceUpdate(0),
     mMainloopTimeout(NULL),
     mAgentRegionLastAlive(false),
     mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", false)),
@@ -2443,6 +2441,36 @@ bool LLAppViewer::cleanup()
         std::string user_path = gDirUtilp->getOSUserAppDir() + gDirUtilp->getDirDelimiter() + LLStartUp::getUserId();
         gDirUtilp->deleteDirAndContents(user_path);
     }
+
+// <AS:chanayane> delete user data on exit
+    if (gSavedSettings.getBOOL("ASDeleteUserDataOnExit"))
+    {
+        // Deletes user data
+        std::string user_path = gDirUtilp->getOSUserAppDir() + gDirUtilp->getDirDelimiter() + LLStartUp::getUserId();
+        gDirUtilp->deleteDirAndContents(user_path);
+
+        //Deletes user from login screen
+        /*
+        std::string credName = gSavedSettings.getString("UserLoginInfo");
+        if (!credName.empty()) {
+            gSavedSettings.getControl("UserLoginInfo")->resetToDefault();
+            LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
+            if (size_t arobase = credName.find("@"); arobase != std::string::npos && arobase + 1 < credName.length() && arobase > 1)
+            {
+                auto gridname = credName.substr(arobase + 1, credName.length() - arobase - 1);
+                std::string grid_id = LLGridManager::getInstance()->getGridId(gridname);
+                if (grid_id.empty())
+                {
+                    grid_id = gridname;
+                }
+                gSecAPIHandler->removeFromProtectedMap("mfa_hash", grid_id, credential->userID()); // doesn't write
+                gSecAPIHandler->syncProtectedMap();
+            }
+            gSecAPIHandler->deleteCredential(credential);
+        }
+        */
+    }
+// </AS:chanayane>
 
     // Delete workers first
     // shotdown all worker threads before deleting them in case of co-dependencies
@@ -5581,31 +5609,13 @@ void LLAppViewer::idle()
             gDragonAnimator.update();
         }
 
-        static LLFrameTimer agent_update_timer;
+        send_agent_update(false);
 
-        // When appropriate, update agent location to the simulator.
-        F32 agent_update_time = agent_update_timer.getElapsedTimeF32();
-        F32 agent_force_update_time = mLastAgentForceUpdate + agent_update_time;
-        bool timed_out = agent_update_time > (1.0f / (F32)AGENT_UPDATES_PER_SECOND);
-        bool force_send =
-            // if there is something to send
-            (gAgent.controlFlagsDirty() && timed_out)
-            // if something changed
-            || (mLastAgentControlFlags != gAgent.getControlFlags())
-            // keep alive
-            || (agent_force_update_time > (1.0f / (F32) AGENT_FORCE_UPDATES_PER_SECOND));
-        // timing out doesn't warranty that an update will be sent,
-        // just that it will be checked.
-        if (force_send || timed_out)
-        {
-            LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
-            // Send avatar and camera info
-            mLastAgentControlFlags = gAgent.getControlFlags();
-            mLastAgentForceUpdate = force_send ? 0 : agent_force_update_time;
-            if(!gAgent.getPhantom())
-                send_agent_update(force_send);
-            agent_update_timer.reset();
-        }
+        // After calling send_agent_update() in the mainloop we always clear
+        // the agent's ephemeral ControlFlags (whether an AgentUpdate was
+        // actually sent or not) because these will be recomputed based on
+        // real-time key/controller input and resubmitted next frame.
+        gAgent.resetControlFlags();
     }
 
     //////////////////////////////////////
@@ -6242,11 +6252,6 @@ void LLAppViewer::idleNetwork()
             CheckMessagesMaxTime = CHECK_MESSAGES_DEFAULT_MAX_TIME;
         }
 #endif
-
-
-
-        // we want to clear the control after sending out all necessary agent updates
-        gAgent.resetControlFlags();
 
         // Decode enqueued messages...
         S32 remaining_possible_decodes = MESSAGE_MAX_PER_FRAME - total_decoded;

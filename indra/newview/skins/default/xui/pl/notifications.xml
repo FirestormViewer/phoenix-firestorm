@@ -5470,4 +5470,14 @@ Zresetować adres URL do domyślnego?
 			<button name="use_as_is" text="Zostaw jak jest" />
 		</form>
 	</notification>
+	<notification name="WhitelistReminder">
+		Aby poprawić wydajność aplikacji [APP_NAME] - dodaj ją do listy wyjątków.
+
+Niektóre programy antywirusowe mogą błędnie blokować części [APP_NAME]a, spowalniając go i powodując nieprawidłowe działanie niektórych funkcji. Aby zapobiec tym problemom, zdecydowanie zalecamy dodanie [APP_NAME]a do białej listy (lub listy wykluczeń) programu antywirusowego. Zapewni to płynne działanie przeglądarki.
+
+Aby uzyskać szczegółowe instrukcje dotyczące umieszczania [APP_NAME]a na białej liście - w tym listę plików i folderów do wykluczenia - zapoznaj się z naszym przewodnikiem:
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+		<usetemplate ignoretext="Pokaż przypomnienie o dodaniu do białej listy podczas uruchamiania" name="okignore" />
+	</notification>
 </notifications>

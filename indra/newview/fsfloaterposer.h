@@ -81,7 +81,8 @@ class FSFloaterPoser : public LLFloater
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
 
-    
+    static bool sDisableRecaptureUntilStopPosing;
+
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
@@ -135,6 +136,12 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <returns>The currently selected avatar or animesh.</returns>
     LLVOAvatar* getUiSelectedAvatar() const;
+
+    /// <summary>
+    /// Sets the UI selection for avatar or animesh.
+    /// </summary>
+    /// <param name="avatarToSelect">The ID of the avatar to select, if found.</param>
+    void setUiSelectedAvatar(const LLUUID& avatarToSelect);
 
     /// <summary>
     /// Gets the current bone-deflection style: encapsulates 'anything else you want to do' while you're manipulating a joint.
@@ -195,9 +202,9 @@ class FSFloaterPoser : public LLFloater
     void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
     void loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
+    bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
-    void showOrHideAdvancedSaveOptions();
 
     // UI Event Handlers:
     void onAvatarsRefresh();
@@ -216,8 +223,11 @@ class FSFloaterPoser : public LLFloater
     void onRedoLastScale();
     void onResetPosition();
     void onResetScale();
+    void onSetAvatarToTpose();
     void enableOrDisableRedoButton();
     void onPoseStartStop();
+    void startPosingSelf();
+    void stopPosingSelf();
     void onLimbTrackballChanged();
     void onLimbYawPitchRollChanged();
     void onAvatarPositionSet();
@@ -284,9 +294,24 @@ class FSFloaterPoser : public LLFloater
     S32 getJointNegation(const std::string& jointName) const;
 
     /// <summary>
-    /// The smallest text embiggens the noble selection.
+    /// Refreshes the text on all scroll lists based on their state.
     /// </summary>
-    void refreshTextEmbiggeningOnAllScrollLists();
+    void refreshTextHighlightingOnAllScrollLists();
+
+    /// <summary>
+    /// Disables recapturing joint traits.
+    /// </summary>
+    void disableRecapture();
+
+    /// <summary>
+    /// Recapture is be disabled if user is making their own pose (starting from a T-Pose).
+    /// </summary>
+    void reEnableRecaptureIfAllowed();
+
+    /// <summary>
+    /// Gets whether any avatar know by the UI is being posed.
+    /// </summary>
+    bool posingAnyoneOnScrollList();
 
     /// <summary>
     /// Applies the appropriate font-face (such as bold) to the text of the supplied list, to indicate use.
@@ -356,8 +381,9 @@ class FSFloaterPoser : public LLFloater
     LLButton* mToggleSympatheticRotationBtn{ nullptr };
     LLButton* mToggleDeltaModeBtn{ nullptr };
     LLButton* mRedoChangeBtn{ nullptr };
+    LLButton* mSetToTposeButton{ nullptr };
+    LLButton* mRecaptureJointsButton{ nullptr };
 
-    LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
     LLPanel* mAdvancedParentPnl{ nullptr };
@@ -369,7 +395,6 @@ class FSFloaterPoser : public LLFloater
     LLPanel* mHandsJointsPnl{ nullptr };
     LLPanel* mMiscJointsPnl{ nullptr };
     LLPanel* mCollisionVolumesPnl{ nullptr };
-    LLPanel* mSaveFilePptionsPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
 };
 

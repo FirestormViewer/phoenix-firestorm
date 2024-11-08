@@ -1807,7 +1807,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Apri segnaposto
 	</string>
 	<string name="Unconstrained">
-		Senza limitazioni
+		Senza vincoli
 	</string>
 	<string name="active" value=" (attivo)"/>
 	<string name="no_transfer" value=" (no trasferimento)"/>
@@ -1962,10 +1962,10 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Tutto
 	</string>
 	<string name="no_attachments">
-		Nessun accessorio indossato
+		Nessun attachment indossato
 	</string>
 	<string name="Attachments remain">
-		Accessori ([COUNT] restanti)
+		Attachment ([COUNT] rimanenti)
 	</string>
 	<string name="Buy">
 		Acquista
@@ -3200,7 +3200,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Capigliatura grande: in  alto
 	</string>
 	<string name="Big Head">
-		Grande testa
+		Testa grande
 	</string>
 	<string name="Big Pectorals">
 		Grandi pettorali
@@ -3260,7 +3260,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Larghezza setto
 	</string>
 	<string name="Broad">
-		Largo
+		Più
 	</string>
 	<string name="Brow Size">
 		Grandezza delle sopracciglia
@@ -3389,7 +3389,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Sopracciglia cespugliose
 	</string>
 	<string name="Bushy Hair">
-		Capelli a cespuglio
+		Barba cespugliosa
 	</string>
 	<string name="Butt Size">
 		Grandezza del sedere
@@ -3449,7 +3449,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Occhi ravvicinati
 	</string>
 	<string name="Closed">
-		Chiusa
+		Chiuso
 	</string>
 	<string name="Closed Back">
 		Chiuso dietro
@@ -3503,7 +3503,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Tacchi standard
 	</string>
 	<string name="Dense">
-		Folti
+		Più folte
 	</string>
 	<string name="Double Chin">
 		Doppio mento
@@ -3713,7 +3713,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Altezza
 	</string>
 	<string name="High">
-		Alto
+		Più
 	</string>
 	<string name="High Heels">
 		Tacchi alti
@@ -3824,7 +3824,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Meno muscoli
 	</string>
 	<string name="Less Muscular">
-		Meno muscolari
+		Meno muscoli
 	</string>
 	<string name="Less Rosy">
 		Meno rosato
@@ -3878,7 +3878,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Colore rossetto
 	</string>
 	<string name="Long">
-		Lungo
+		Più
 	</string>
 	<string name="Long Head">
 		Testa lunga
@@ -3917,7 +3917,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Maniglie dell&apos;amore
 	</string>
 	<string name="Low">
-		Basso
+		Meno
 	</string>
 	<string name="Low Heels">
 		Tacchi bassi
@@ -3983,7 +3983,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Più muscoli
 	</string>
 	<string name="More Muscular">
-		Più muscolatura
+		Più muscoli
 	</string>
 	<string name="More Rosy">
 		Più rosato
@@ -4037,7 +4037,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Colore smalto
 	</string>
 	<string name="Narrow">
-		Socchiusi
+		Meno
 	</string>
 	<string name="Narrow Back">
 		Laterali post. vicini
@@ -4322,7 +4322,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Altezza scarpe
 	</string>
 	<string name="Short">
-		Basso
+		Meno
 	</string>
 	<string name="Short Arms">
 		Braccia corte
@@ -4397,7 +4397,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Spacco: Destra
 	</string>
 	<string name="Small">
-		Piccola
+		Piccolo
 	</string>
 	<string name="Small Hands">
 		Mani piccole
@@ -4418,7 +4418,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Pizzetto labbro inferiore
 	</string>
 	<string name="Sparse">
-		Piu rade
+		Più rade
 	</string>
 	<string name="Spiked Hair">
 		Capelli a punta
@@ -4451,7 +4451,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Avanti
 	</string>
 	<string name="Tall">
-		Alto
+		Più
 	</string>
 	<string name="Taper Back">
 		Ravv. lat. posteriore
@@ -4553,7 +4553,7 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 		Capelli bianchi
 	</string>
 	<string name="Wide">
-		Largo
+		Più
 	</string>
 	<string name="Wide Back">
 		Dietro largo
@@ -5576,6 +5576,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Command_Beacons_Label">
 		Marcatori
 	</string>
+	<string name="Command_Poser_Label">
+		Poser
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Metti in posa il tuo avatar e le animesh
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Cattura foto panoramica a 360°
 	</string>
@@ -5724,7 +5730,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Apre l'elenco dei teleport effetuati (Alt+H)
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
-		Pose statiche dell'avatar per sistemare gli attachments
+		Pose statiche dell'avatar per sistemare gli attachment
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Scatta una foto e la salva su disco

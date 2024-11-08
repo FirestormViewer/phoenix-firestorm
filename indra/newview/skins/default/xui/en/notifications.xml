@@ -4832,7 +4832,7 @@ Incoming instant messages from anyone who is not your friend will now be answere
       The pose can be loaded from the expanded pose list.
 
       The file can be found in:
-      C:\Users\USERNAME\AppData\Roaming\Firestorm_x64\user_settings\poses
+      C:\Users\USERNAME\AppData\Roaming\AyaneStorm_x64\user_settings\poses
    </notification>
 
    <notification
@@ -4842,7 +4842,7 @@ Incoming instant messages from anyone who is not your friend will now be answere
       The pose has been exported successfully as an ANIM file.
 
       The file can be found in:
-      C:\Users\USERNAME\AppData\Roaming\Firestorm_x64\user_settings\animations
+      C:\Users\USERNAME\AppData\Roaming\AyaneStorm_x64\user_settings\animations
    </notification>
 
     <notification
@@ -14650,5 +14650,22 @@ Camera reset might be inhibited by the following objects:
     </form>
   </notification>
    <!-- </FS:Zi> -->
+
+  <notification
+    icon="notifytip.tga"
+    name="WhitelistReminder"
+    type="alertmodal">
+To improve [APP_NAME]'s performance, please whitelist it.
+
+Some antivirus programs may mistakenly block parts of [APP_NAME], slowing down its performance and causing some features to malfunction. To prevent these issues, we strongly recommend adding [APP_NAME] to your antivirus program's whitelist (or exclusion list). This will ensure the viewer runs smoothly.
+
+For detailed instructions on how to whitelist [APP_NAME] - including a list of files and folders to exclude - please visit our guide:
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+    <usetemplate
+     ignoretext="Show whitelist reminder on launch"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
 
 </notifications>

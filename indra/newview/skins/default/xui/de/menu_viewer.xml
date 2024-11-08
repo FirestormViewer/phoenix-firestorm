@@ -71,6 +71,7 @@
 		<menu_item_call label="360° Foto" name="Capture 360"/>
 		<menu_item_call label="Money-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
+		<menu_item_check label="Poser" name="Poser"/>
 		<menu_item_call label="Einstellungen" name="Preferences"/>
 		<menu_item_call label="Symbolleistenschaltflächen" name="Toolbar Buttons"/>
 		<menu_item_check label="HUD-Anhänge anzeigen" name="Show HUD Attachments"/>
@@ -113,7 +114,6 @@
 		<menu_item_call label="Animationen synchronisieren" name="Resync Animations"/>
 		<menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
 		<menu_item_check label="Radar" name="Radar"/>
-		<menu_item_check label="Poser" name="Poser"/>
 		<menu_item_call label="Teleport-Liste" name="Teleport History"/>
 		<menu_item_check label="Orte" name="Places"/>
 		<menu_item_call label="Ziele" name="Destinations"/>

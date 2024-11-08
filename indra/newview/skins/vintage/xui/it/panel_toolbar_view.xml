@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+  <layout_stack name="bottom_toolbar_stack">
+  <layout_panel name="bottom_chat_bar_panel">
+  <layout_stack name="chat_bar_utility_bar_stack">
+  <layout_panel name="chat_panel">
+  <layout_stack name="bottom_chat_stack">
+  <layout_panel name="bottom_chat_bar_panel">
+  <button name="local_chat_button" tool_tip="Mostra / Nascondi finestra chat locale (Ctrl+H)" label="Chat Locale" /> <!-- width="92" -->
+  <fs_nearby_chat_control name="default_chat_bar" label="Chat Locale" />
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  <layout_panel name="utility_bar_layout_panel">
+  <panel name="utility_bar_panel">
+  <button name="utility_parcel_audio_stream_button" tool_tip="Accendi / Spegni musica del lotto" />
+  <button name="utility_parcel_media_button" tool_tip="Accendi / Spegni media del lotto" />
+  <slider name="System Volume" tool_tip="Volume generale" />
+  <button name="mute_audio" tool_tip="Disattiva audio" />
+  <button name="show_volume_controls_button" tool_tip="Mostra / Nascondi controlli del volume" />
+  </panel>
+  </layout_panel>
+  <layout_panel name="voice_chat_controls_layout_panel">
+  <panel name="voice_chat_controls_panel">
+  <button name="show_voice_controls_button" tool_tip="Mostra / Nascondi controlli del volume per le persone nelle vicinanze" />
+  <button name="utility_talk_button" tool_tip="Premi questo pulsante per parlare. Clicca sul lucchetto per impostare la modalità premi-per-parlare" label="Parla" />
+  <button name="utility_push_to_talk_lock_button" tool_tip="Attiva / Disattiva la modalità premi-per-parlare" />
+  <nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Attività del canale vocale" />
+  </panel>
+  </layout_panel>
+  <layout_panel name="quick_preferences_button_layout_panel">
+  <panel name="quick_preferences_button_panel">
+  <button name="enable_disable_ao_button" tool_tip="Attiva / Disattiva AO del viewer" />
+  <button name="show_ao_interface_button" tool_tip="Mostra / Nascondi l'interfaccia dell'AO del viewer" />
+  <button name="show_quick_prefs_button" tool_tip="Mostra / Nascondi la finestra Preferenze Rapide (opzioni modificate di frequente)" />
+  </panel>
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  <layout_panel name="bottom_toolbar_panel">
+    <button name="open_chat_bar_button" tool_tip="Mostra la barra della chat locale (Invio)" />
+  </layout_panel>
+  </layout_stack>
+</toolbar_view>

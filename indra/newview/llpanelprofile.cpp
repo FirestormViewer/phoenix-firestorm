@@ -1457,14 +1457,8 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeLinden"));
         //childSetVisible("badge_layout", true);
         //childSetVisible("partner_spacer_layout", false);
-        setBadge("Profile_Badge_Linden", "BadgeLinden");
+        setBadge("Profile_Badge_Linden", "BadgeLinden", BadgeLocation::bottom);
     }
-    // <FS:Ansariel> Add Firestorm team badge
-    else if (FSData::getInstance()->getAgentFlags(avatar_data->avatar_id) != -1)
-    {
-        setBadge("Profile_Badge_Team", "BadgeTeam");
-    }
-    // </FS:Ansariel>
     else if (avatar_data->born_on < sl_release)
     {
         // <FS:Ansariel> Fix LL UI/UX design accident
@@ -1472,7 +1466,7 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeBeta"));
         //childSetVisible("badge_layout", true);
         //childSetVisible("partner_spacer_layout", false);
-        setBadge("Profile_Badge_Beta", "BadgeBeta");
+        setBadge("Profile_Badge_Beta", "BadgeBeta", BadgeLocation::bottom);
     }
     else if (customer_lower == "beta_lifetime")
     {
@@ -1481,7 +1475,7 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeBetaLifetime"));
         //childSetVisible("badge_layout", true);
         //childSetVisible("partner_spacer_layout", false);
-        setBadge("Profile_Badge_Beta_Lifetime", "BadgeBetaLifetime");
+        setBadge("Profile_Badge_Beta_Lifetime", "BadgeBetaLifetime", BadgeLocation::bottom);
     }
     else if (customer_lower == "lifetime")
     {
@@ -1490,7 +1484,7 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeLifetime"));
         //childSetVisible("badge_layout", true);
         //childSetVisible("partner_spacer_layout", false);
-        setBadge("Profile_Badge_Lifetime", "BadgeLifetime");
+        setBadge("Profile_Badge_Lifetime", "BadgeLifetime", BadgeLocation::bottom);
     }
     else if (customer_lower == "secondlifetime_premium")
     {
@@ -1499,7 +1493,7 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumLifetime"));
         //childSetVisible("badge_layout", true);
         //childSetVisible("partner_spacer_layout", false);
-        setBadge("Profile_Badge_Premium_Lifetime", "BadgePremiumLifetime");
+        setBadge("Profile_Badge_Premium_Lifetime", "BadgePremiumLifetime", BadgeLocation::bottom);
     }
     else if (customer_lower == "secondlifetime_premium_plus")
     {
@@ -1508,7 +1502,7 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumPlusLifetime"));
         //childSetVisible("badge_layout", true);
         //childSetVisible("partner_spacer_layout", false);
-        setBadge("Profile_Badge_Pplus_Lifetime", "BadgePremiumPlusLifetime");
+        setBadge("Profile_Badge_Pplus_Lifetime", "BadgePremiumPlusLifetime", BadgeLocation::bottom);
     }
     else
     {
@@ -1516,14 +1510,22 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         // <FS:Ansariel> Fix LL UI/UX design accident
         //childSetVisible("partner_spacer_layout", true);
     }
+
+    // <FS:Ansariel> Add Firestorm team badge
+    if (FSData::getInstance()->getAgentFlags(avatar_data->avatar_id) != -1)
+    {
+        setBadge("Profile_Badge_Team", "BadgeTeam", BadgeLocation::top);
+    }
+    // </FS:Ansariel>
 }
 
 // <FS:Ansariel> Fix LL UI/UX design accident
-void LLPanelProfileSecondLife::setBadge(std::string_view icon_name, std::string_view tooltip)
+void LLPanelProfileSecondLife::setBadge(std::string_view icon_name, std::string_view tooltip, BadgeLocation location)
 {
-    auto iconctrl = getChild<LLIconCtrl>("badge_icon");
+    auto iconctrl = getChild<LLIconCtrl>(location == BadgeLocation::top ? "top_badge_icon" : "bottom_badge_icon");
     iconctrl->setValue(icon_name.data());
     iconctrl->setToolTip(getString(tooltip.data()));
+    childSetVisible(location == BadgeLocation::top ? "top_badge_layout" : "bottom_badge_layout", true);
     childSetVisible("badge_layout", true);
 }
 // </FS:Ansariel>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Profilo">
+	<string name="status_unknown">
+		Sconosciuto
+	</string>
+	<string name="CaptionTextAcctInfo">
+[ACCTTYPE]
+[PAYMENTINFO]
+[FSDEV][FSSUPP][FSQA][FSGW][FIRESTORM]
+	</string>
+	<string name="BadgeBeta" value="Beta Tester originale" />
+	<string name="BadgeBetaLifetime" value="Membro a vita Beta" />
+	<string name="BadgeLifetime" value="Membro a vita" />
+	<string name="BadgeLinden" value="Dipendente Linden Lab" />
+	<string name="BadgePremiumLifetime" value="Membro a vita Premium" />
+	<string name="BadgePremiumPlusLifetime" value="Membro a vita Premium Plus" />
+	<string name="BadgeTeam" value="Membro [APP_NAME] Team" />
+	<string name="no_partner_text" value="Nessuno" />
+	<string name="no_group_text" value="Nessuno" />
+	<string name="age_format_short">
+		Data di nascita: [REG_DATE]
+	</string>
+	<string name="age_format_full">
+Data di nascita: [REG_DATE]
+([AGE])
+	</string>
+	<string name="FSDev" value="Sviluppatore "/>
+	<string name="FSSupp" value="Supporto "/>
+	<string name="FSQualityAssurance" value="Bug Hunter "/>
+	<string name="FSGW" value="Gateway "/>
+	<string name="texture_picker_label" value="Immagine del profilo" />
+	<text name="name_label" value="Nome:" />
+	<button label="Nome:" name="set_name" tool_tip="Imposta Nome Visualizzato" />
+	<panel name="name_holder">
+		<text_editor name="complete_name" value="(caricamento...)" />
+		<menu_button name="copy_btn" tool_tip="Opzioni di copia" />
+	</panel>
+	<text name="Key:" value="UUID:" />
+	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Azioni relative all'immagine del profilo" />
+		</layout_panel>
+		<layout_panel name="label_stack">
+			<icon tool_tip="L'amico può vedere il mio stato online" name="can_see_online" />
+			<icon tool_tip="L'amico non può vedere il mio stato online" name="cant_see_online" />
+			<icon tool_tip="L'amico può vedermi sulla mappa" name="can_see_on_map" />
+			<icon tool_tip="L'amico non può vedermi sulla mappa" name="cant_see_on_map" />
+			<icon tool_tip="L'amico può modificare i miei oggetti" name="can_edit_objects" />
+			<icon tool_tip="L'amico non può modificare i miei oggetti" name="cant_edit_objects" />
+			<text_editor name="user_age" value="(caricamento...)" />
+			<text name="label2" value="Account:" />
+			<panel name="badge_layout">
+				<layout_stack name="badge_stacker">
+					<layout_panel name="top_badge_layout">
+						<icon name="top_badge_icon" tool_tip="Dipendente Linden Lab" />
+					</layout_panel>
+					<layout_panel name="bottom_badge_layout">
+						<icon name="bottom_badge_icon" tool_tip="Dipendente Linden Lab" />
+					</layout_panel>
+				</layout_stack>
+			</panel>
+		</layout_panel>
+	</layout_stack>
+	<text name="Groups:" value="Gruppi:" />
+	<button name="group_invite" tool_tip="Invita al gruppo" />
+	<text name="About:" value="Info:" />
+	<text name="Give item:" value="Condividi:" />
+	<text name="Give inventory" tool_tip="Rilascia qui un oggetto da passare a questa persona">
+		Rilascia qui l'oggetto da condividere.
+	</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button label="Trova sulla Mappa" label_selected="Trova sulla Mappa" name="show_on_map_btn" tool_tip="Trova amico sulla mappa"/>
+			<button label="Paga" label_selected="Paga" name="pay" tool_tip="Paga questo residente"/>
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button label="Offri Teleport" label_selected="Offri Teleport" name="teleport" tool_tip="Offri il teleport a questo residente"/>
+			<button label="Messaggio Istantaneo" label_selected="Messaggio Istantaneo" name="im" tool_tip="Avvia una conversazione con questo residente (IM)"/>
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button label="Aggiungi agli Amici" label_selected="Aggiungi agli Amici" name="add_friend" tool_tip="Invia una richiesta di amicizia a questo residente"/>
+			<button label="Rimuovi Amico" label_selected="Rimuovi Amico" name="remove_friend" tool_tip="Togli l'amicizia a questo residente"/>
+			<button label="Blocca" name="block" tool_tip="Blocca questo residente"/>
+			<button label="Sblocca" name="unblock" tool_tip="Sblocca questo residente"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search" label="Mostra nella ricerca" tool_tip="Consenti agli altri di vedermi nei risultati di ricerca" />
+	<check_box name="hide_sl_age" label="Mostra data di nascita completa" tool_tip="Consenti agli altri di vedere la tua età in SL" />
+	<button name="save_description_changes" label="Salva" />
+	<button name="discard_description_changes" label="Annulla" />
+</panel>

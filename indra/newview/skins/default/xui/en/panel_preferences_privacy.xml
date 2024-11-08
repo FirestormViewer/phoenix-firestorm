@@ -209,6 +209,23 @@
      <button.commit_callback
       function="Pref.BlockList"/>
     </button>
+<!-- [chanayane] delete user data on exit -->
+    <check_box
+    follows="left|top"
+    height="16"
+    control_name="ASDeleteUserDataOnExit"
+    label="Delete user data on exit. Includes chat logs, TP history, search history..."
+    tool_tip="If checked, the viewer will delete all data associated with the current user, except the user settings. Disabled by default."
+    left="15"
+    mouse_opaque="true"
+    name="delete_user_data_on_exit"
+    radio_style="false"
+    width="400"
+    top_pad="10">
+     <check_box.commit_callback
+      function="Pref.DeleteUserDataOnExit" />
+   </check_box>
+<!-- [/chanayane] -->
     </panel>
 
     <!--Logging-->

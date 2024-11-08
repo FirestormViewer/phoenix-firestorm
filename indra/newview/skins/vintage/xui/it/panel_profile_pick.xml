@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_pick_info">
+	<panel.string name="location_notice">
+		(si aggiornerà dopo il salvataggio)
+	</panel.string>
+	<layout_stack name="main_pick_stack">
+		<layout_panel name="main_pick_lp">
+			<line_editor name="pick_location">
+				Caricamento...
+			</line_editor>
+			<layout_stack name="actions_stack">
+				<layout_panel name="map_btn_lp">
+					<button name="show_on_map_btn" label="Mappa" />
+				</layout_panel>
+				<layout_panel name="tp_btn_lp">
+					<button name="teleport_btn" label="Teleport" />
+				</layout_panel>
+				<layout_panel name="set_to_curr_location_btn_lp">
+					<button name="set_to_curr_location_btn" label="Imposta Posiz." tool_tip="Imposta posizione del luogo preferito selezionato" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="save_changes_lp">
+			<layout_stack name="save_changes_stack">
+				<layout_panel name="create_btn_lp">
+					<button name="create_changes_btn" label="Crea Preferito" />
+				</layout_panel>
+				<layout_panel name="save_btn_lp">
+					<button name="save_changes_btn" label="Salva" />
+				</layout_panel>
+				<layout_panel name="cancel_btn_lp">
+					<button name="cancel_changes_btn" label="Annulla" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>
