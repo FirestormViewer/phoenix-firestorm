@@ -45,7 +45,7 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint
     if (posingMotion->isStopped())
         return false;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return false;
 
@@ -68,7 +68,7 @@ void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoin
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -90,7 +90,7 @@ void FSPoserAnimator::resetAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& j
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -110,7 +110,7 @@ void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -119,7 +119,7 @@ void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -138,7 +138,7 @@ void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoi
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -147,7 +147,7 @@ void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoi
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -166,7 +166,7 @@ void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint&
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -175,7 +175,7 @@ void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint&
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -194,7 +194,7 @@ void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, const FSPoserJoint&
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -203,7 +203,7 @@ void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, const FSPoserJoint&
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -222,7 +222,7 @@ void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, const FSPoserJoint& jo
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -231,7 +231,7 @@ void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, const FSPoserJoint& jo
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -250,7 +250,7 @@ bool FSPoserAnimator::canRedoJointRotation(LLVOAvatar* avatar, const FSPoserJoin
     if (posingMotion->isStopped())
         return false;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return false;
 
@@ -269,7 +269,7 @@ void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -278,7 +278,7 @@ void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -297,7 +297,7 @@ void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoi
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -306,7 +306,7 @@ void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoi
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -325,7 +325,7 @@ void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint&
     if (posingMotion->isStopped())
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;
 
@@ -334,7 +334,7 @@ void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint&
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -351,7 +351,7 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar* avatar, const FSPoserJoi
     if (!posingMotion)
         return pos;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return pos;
 
@@ -378,7 +378,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(jn);
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(jn);
     if (!jointPose)
         return;
 
@@ -390,7 +390,7 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
 
     LLVector3 positionDelta = jointPose->getTargetPosition() - position;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -466,7 +466,7 @@ void FSPoserAnimator::setStartingJointRotation(LLVOAvatar* avatar, const FSPoser
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
 
@@ -484,7 +484,7 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     if (!posingMotion)
         return vec3;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return vec3;
 
@@ -516,7 +516,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
 
@@ -538,7 +538,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
             return;
     }
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -571,11 +571,11 @@ void FSPoserAnimator::reflectJoint(LLVOAvatar* avatar, const FSPoserJoint* joint
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
     {
         LLQuaternion rot_quat = jointPose->getTargetRotation();
@@ -735,7 +735,7 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar* avatar, const FSPoserJoint&
     if (!posingMotion)
         return scale;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return scale;
 
@@ -762,7 +762,7 @@ void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* join
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(jn);
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(jn);
     if (!jointPose)
         return;
 
@@ -771,7 +771,7 @@ void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* join
     if (style == NONE)
         return;
 
-    FSPosingMotion::FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
         return;
 
@@ -790,7 +790,7 @@ bool FSPoserAnimator::tryGetJointSaveVectors(LLVOAvatar* avatar, const FSPoserJo
     if (!posingMotion)
         return false;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return false;
 
@@ -811,7 +811,7 @@ void FSPoserAnimator::loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* 
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
 
@@ -828,7 +828,7 @@ void FSPoserAnimator::loadJointPosition(LLVOAvatar* avatar, const FSPoserJoint* 
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
 
@@ -847,7 +847,7 @@ void FSPoserAnimator::loadJointScale(LLVOAvatar* avatar, const FSPoserJoint* joi
     if (!posingMotion)
         return;
 
-    FSPosingMotion::FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
 

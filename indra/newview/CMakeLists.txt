@@ -139,6 +139,7 @@ set(viewer_SOURCE_FILES
     fsfloatervramusage.cpp
     fsfloaterwearablefavorites.cpp
     fsfloaterwhitelisthelper.cpp
+	fsjointpose.cpp
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
