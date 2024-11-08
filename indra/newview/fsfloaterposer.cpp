@@ -1756,7 +1756,7 @@ LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint() const
         return rotation;
 
     rotation = mPoserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(selectedJoints.front()->jointName()),
-                                               getJointNegation(selectedJoints.front()->jointName()), TARGETROTATION);
+                                               getJointNegation(selectedJoints.front()->jointName()));
 
     return rotation;
 }

@@ -45,208 +45,117 @@ FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
     mJointName         = joint->getName();
     mIsCollisionVolume = isCollisionVolume;
 
-    mBeginningRotation = mTargetRotation = joint->getRotation();
-    mBeginningPosition = mTargetPosition = joint->getPosition();
-    mBeginningScale = mTargetScale = joint->getScale();
+    mBeginningRotation = joint->getRotation();
+    mBeginningPosition = joint->getPosition();
+    mBeginningScale = joint->getScale();
 }
 
-void FSJointPose::addLastPositionToUndo()
+void FSJointPose::setPositionDelta(const LLVector3& pos)
 {
-    if (mUndonePositionIndex > 0)
-    {
-        for (int i = 0; i < mUndonePositionIndex; i++)
-            mLastSetPositions.pop_front();
+    addToUndo(mPositionDelta, &mUndonePositionIndex, &mLastSetPositionDeltas, &mTimeLastUpdatedPosition);
+    mPositionDelta.set(pos);
+}
 
-        mUndonePositionIndex = 0;
+void FSJointPose::setRotationDelta(const LLQuaternion& rot)
+{
+    addToUndo(mRotationDelta, &mUndoneRotationIndex, &mLastSetRotationDeltas, &mTimeLastUpdatedRotation);
+    mRotationDelta.set(rot);
+}
+
+void FSJointPose::setScaleDelta(LLVector3 scale)
+{
+    addToUndo(mScaleDelta, &mUndoneScaleIndex, &mLastSetScaleDeltas, &mTimeLastUpdatedScale);
+    mScaleDelta.set(scale);
+}
+
+void FSJointPose::undoLastPositionChange()
+{
+    mPositionDelta.set(undoLastChange(mPositionDelta, &mUndonePositionIndex, &mLastSetPositionDeltas));
+}
+
+void FSJointPose::undoLastRotationChange()
+{
+    mRotationDelta.set(undoLastChange(mRotationDelta, &mUndoneRotationIndex, &mLastSetRotationDeltas));
+}
+
+void FSJointPose::undoLastScaleChange() { mScaleDelta.set(undoLastChange(mScaleDelta, &mUndoneScaleIndex, &mLastSetScaleDeltas)); }
+
+void FSJointPose::redoLastPositionChange()
+{
+    mPositionDelta.set(redoLastChange(mPositionDelta, &mUndonePositionIndex, &mLastSetPositionDeltas));
+}
+
+void FSJointPose::redoLastRotationChange()
+{
+    mRotationDelta.set(redoLastChange(mRotationDelta, &mUndoneRotationIndex, &mLastSetRotationDeltas));
+}
+
+void FSJointPose::redoLastScaleChange() { mScaleDelta.set(redoLastChange(mScaleDelta, &mUndoneScaleIndex, &mLastSetScaleDeltas)); }
+
+template <typename T>
+inline void FSJointPose::addToUndo(T delta, size_t* undoIndex, std::deque<T>* dequeue,
+                                   std::chrono::system_clock::time_point* timeLastUpdated)
+{
+    auto timeIntervalSinceLastChange = std::chrono::system_clock::now() - *timeLastUpdated;
+    *timeLastUpdated                 = std::chrono::system_clock::now();
+
+    if (timeIntervalSinceLastChange < UndoUpdateInterval)
+        return;
+
+    if (*undoIndex > 0)
+    {
+        for (size_t i = 0; i < *undoIndex; i++)
+            dequeue->pop_front();
+
+        *undoIndex = 0;
     }
 
-    mLastSetPositions.push_front(mTargetPosition);
+    dequeue->push_front(delta);
 
-    while (mLastSetPositions.size() > MaximumUndoQueueLength)
-        mLastSetPositions.pop_back();
+    while (dequeue->size() > MaximumUndoQueueLength)
+        dequeue->pop_back();
 }
 
-void FSJointPose::addLastRotationToUndo()
+template <typename T> T FSJointPose::undoLastChange(T thingToSet, size_t* undoIndex, std::deque<T>* dequeue)
 {
-    if (mUndoneRotationIndex > 0)
-    {
-        for (int i = 0; i < mUndoneRotationIndex; i++)
-            mLastSetRotations.pop_front();
+    if (dequeue->empty())
+        return thingToSet;
 
-        mUndoneRotationIndex = 0;
-    }
+    if (*undoIndex == 0)
+        dequeue->push_front(thingToSet);
 
-    mLastSetRotations.push_front(mTargetRotation);
+    *undoIndex += 1;
+    *undoIndex = llclamp(*undoIndex, 0, dequeue->size() - 1);
 
-    while (mLastSetRotations.size() > MaximumUndoQueueLength)
-        mLastSetRotations.pop_back();
+    return dequeue->at(*undoIndex);
 }
 
-void FSJointPose::addLastScaleToUndo()
+template <typename T> T FSJointPose::redoLastChange(T thingToSet, size_t* undoIndex, std::deque<T>* dequeue)
 {
-    if (mUndoneScaleIndex > 0)
-    {
-        for (int i = 0; i < mUndoneScaleIndex; i++)
-            mLastSetScales.pop_front();
+    if (dequeue->empty())
+        return thingToSet;
+    if (*undoIndex == 0)
+        return thingToSet;
 
-        mUndoneScaleIndex = 0;
-    }
+    *undoIndex -= 1;
+    *undoIndex = llclamp(*undoIndex, 0, dequeue->size() - 1);
+    T result = dequeue->at(*undoIndex);
+    if (*undoIndex == 0)
+        dequeue->pop_front();
 
-    mLastSetScales.push_front(mTargetScale);
-
-    while (mLastSetScales.size() > MaximumUndoQueueLength)
-        mLastSetScales.pop_back();
+    return result;
 }
 
-LLVector3 FSJointPose::getCurrentPosition()
+void FSJointPose::recaptureJoint()
 {
-    LLVector3 vec3;
+    if (mIsCollisionVolume)
+        return;
+
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
-        return vec3;
-
-    vec3 = joint->getPosition();
-    return vec3;
-}
-
-void FSJointPose::setTargetPosition(const LLVector3& pos)
-{
-    auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - mTimeLastUpdatedPosition;
-    if (timeIntervalSinceLastRotationChange > UndoUpdateInterval)
-        addLastPositionToUndo();
-
-    mTimeLastUpdatedPosition = std::chrono::system_clock::now();
-    mTargetPosition.set(pos);
-}
-
-LLQuaternion FSJointPose::getCurrentRotation()
-{
-    LLQuaternion quat;
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return quat;
-
-    quat = joint->getRotation();
-    return quat;
-}
-
-void FSJointPose::setTargetRotation(const LLQuaternion& rot)
-{
-    auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - mTimeLastUpdatedRotation;
-    if (timeIntervalSinceLastRotationChange > UndoUpdateInterval)
-        addLastRotationToUndo();
-
-    mTimeLastUpdatedRotation = std::chrono::system_clock::now();
-    mTargetRotation.set(rot);
-}
-
-void FSJointPose::applyDeltaRotation(const LLQuaternion& rot)
-{
-    auto timeIntervalSinceLastRotationChange = std::chrono::system_clock::now() - mTimeLastUpdatedRotation;
-    if (timeIntervalSinceLastRotationChange > UndoUpdateInterval)
-        addLastRotationToUndo();
-
-    mTimeLastUpdatedRotation = std::chrono::system_clock::now();
-    mTargetRotation = mTargetRotation * rot;
-}
-
-LLVector3 FSJointPose::getCurrentScale()
-{
-    LLVector3 vec3;
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return vec3;
-
-    vec3 = joint->getScale();
-    return vec3;
-}
-
-void FSJointPose::setTargetScale(LLVector3 scale)
-{
-    auto timeIntervalSinceLastScaleChange = std::chrono::system_clock::now() - mTimeLastUpdatedScale;
-    if (timeIntervalSinceLastScaleChange > UndoUpdateInterval)
-        addLastScaleToUndo();
-
-    mTimeLastUpdatedScale = std::chrono::system_clock::now();
-    mTargetScale.set(scale);
-}
-
-void FSJointPose::undoLastPositionSet()
-{
-    if (mLastSetPositions.empty())
         return;
 
-    if (mUndonePositionIndex == 0)  // at the top of the queue add the current
-        addLastPositionToUndo();
-
-    mUndonePositionIndex++;
-    mUndonePositionIndex = llclamp(mUndonePositionIndex, 0, mLastSetPositions.size() - 1);
-    mTargetPosition.set(mLastSetPositions[mUndonePositionIndex]);
-}
-
-void FSJointPose::redoLastPositionSet()
-{
-    if (mLastSetPositions.empty())
-        return;
-
-    mUndonePositionIndex--;
-    mUndonePositionIndex = llclamp(mUndonePositionIndex, 0, mLastSetPositions.size() - 1);
-
-    mTargetPosition.set(mLastSetPositions[mUndonePositionIndex]);
-    if (mUndonePositionIndex == 0)
-        mLastSetPositions.pop_front();
-}
-
-void FSJointPose::undoLastRotationSet()
-{
-    if (mLastSetRotations.empty())
-        return;
-
-    if (mUndoneRotationIndex == 0) // at the top of the queue add the current
-        addLastRotationToUndo();
-
-    mUndoneRotationIndex++;
-    mUndoneRotationIndex = llclamp(mUndoneRotationIndex, 0, mLastSetRotations.size() - 1);
-    mTargetRotation.set(mLastSetRotations[mUndoneRotationIndex]);
-}
-
-void FSJointPose::redoLastRotationSet()
-{
-    if (mLastSetRotations.empty())
-        return;
-
-    mUndoneRotationIndex--;
-    mUndoneRotationIndex = llclamp(mUndoneRotationIndex, 0, mLastSetRotations.size() - 1);
-
-    mTargetRotation.set(mLastSetRotations[mUndoneRotationIndex]);
-    if (mUndoneRotationIndex == 0)
-        mLastSetRotations.pop_front();
-}
-
-void FSJointPose::undoLastScaleSet()
-{
-    if (mLastSetScales.empty())
-        return;
-
-    if (mUndoneScaleIndex == 0)
-        addLastScaleToUndo();
-
-    mUndoneScaleIndex++;
-    mUndoneScaleIndex = llclamp(mUndoneScaleIndex, 0, mLastSetScales.size() - 1);
-    mTargetScale.set(mLastSetScales[mUndoneScaleIndex]);
-}
-
-void FSJointPose::redoLastScaleSet()
-{
-    if (mLastSetScales.empty())
-        return;
-
-    mUndoneScaleIndex--;
-    mUndoneScaleIndex = llclamp(mUndoneScaleIndex, 0, mLastSetScales.size() - 1);
-
-    mTargetScale.set(mLastSetScales[mUndoneScaleIndex]);
-    if (mUndoneScaleIndex == 0)
-        mLastSetScales.pop_front();
+    mBeginningRotation = joint->getRotation();
 }
 
 void FSJointPose::revertJointScale()
@@ -281,4 +190,18 @@ void FSJointPose::revertCollisionVolume()
     joint->setScale(mBeginningScale);
 }
 
-void FSJointPose::setJointStartRotations(LLQuaternion quat) { mBeginningRotation = mTargetRotation = quat; }
+void FSJointPose::zeroBaseRotation()
+{
+    if (mIsCollisionVolume)
+        return;
+
+    mBeginningRotation = LLQuaternion::DEFAULT;
+}
+
+bool FSJointPose::isBaseRotationZero() const
+{
+    if (mIsCollisionVolume)
+        return true;
+
+    return mBeginningRotation == LLQuaternion::DEFAULT;
+}

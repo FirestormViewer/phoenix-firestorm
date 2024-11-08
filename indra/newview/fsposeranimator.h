@@ -57,15 +57,6 @@ typedef enum E_BoneDeflectionStyles
 } E_BoneDeflectionStyles;
 
 /// <summary>
-/// When getting the rotation of a joint, we can apply different considerations to the rotation.
-/// </summary>
-typedef enum E_BoneRotationType
-{
-    CURRENTROTATION = 0,  // the current rotation the joint has
-    TARGETROTATION  = 1,  // the rotation the we want to achieve
-} E_BoneRotationType;
-
-/// <summary>
 /// When we're going from bone-rotation to the UI sliders, some of the axes need swapping so they make sense in UI-terms.
 /// eg: for one bone, the X-axis may mean up and down, but for another bone, the x-axis might be left-right.
 /// This is an ease-of-use option making the trackpad more 'natural' when manipulating a joint.
@@ -429,7 +420,7 @@ public:
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the position for.</param>
     /// <returns>The position of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, bool forRecapture = false) const;
+    LLVector3 getJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
 
     /// <summary>
     /// Sets the position of a joint for the supplied avatar.
@@ -449,7 +440,7 @@ public:
     /// <param name="negation">The style of negation to dis-apply to the get.</param>
     /// <param name="rotType">The type of rotation to get from the supplied joint for the supplied avatar.</param>
     /// <returns>The rotation of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation, E_BoneRotationType rotType) const;
+    LLVector3 getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation) const;
 
     /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
@@ -469,7 +460,7 @@ public:
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the scale for.</param>
     /// <returns>The scale of the requested joint, if determinable, otherwise a default vector.</returns>
-    LLVector3 getJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, bool forRecapture = false) const;
+    LLVector3 getJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
 
     /// <summary>
     /// Sets the scale of a joint for the supplied avatar.
@@ -621,9 +612,6 @@ public:
     /// <param name="avatar">The avatar to test if it is safe to animate.</param>
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar* avatar) const;
-
-    void setStartingJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation,
-                                  E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

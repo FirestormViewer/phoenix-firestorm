@@ -91,9 +91,9 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
         currentRotation = joint->getRotation();
         currentPosition = joint->getPosition();
         currentScale = joint->getScale();
-        targetRotation = jointPose.getTargetRotation();
-        targetPosition = jointPose.getTargetPosition();
-        targetScale = jointPose.getTargetScale();
+        targetRotation  = jointPose.getTargetRotation();
+        targetPosition  = jointPose.getTargetPosition();
+        targetScale     = jointPose.getTargetScale();
 
         if (currentPosition != targetPosition)
         {
@@ -254,13 +254,10 @@ bool FSPosingMotion::allStartingRotationsAreZero() const
     LLQuaternion zeroQuat;
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
     {
-        if (poserJoint_iter->jointName() == "mPelvis")
-            continue;
         if (poserJoint_iter->isCollisionVolume())
             continue;
 
-        LLQuaternion quat = poserJoint_iter->getBeginningRotation();
-        if (quat != zeroQuat)
+        if (!poserJoint_iter->isBaseRotationZero())
             return false;
     }
 
@@ -275,7 +272,7 @@ void FSPosingMotion::setAllRotationsToZero()
         if (poserJoint_iter->isCollisionVolume())
             continue;
 
-        poserJoint_iter->setJointStartRotations(zeroQuat);
+        poserJoint_iter->zeroBaseRotation();
     }
 }
 

@@ -58,9 +58,58 @@ class FSJointPose
     bool isCollisionVolume() const { return mIsCollisionVolume; }
 
     /// <summary>
-    /// Adds a last rotation to the deque.
+    /// Gets the position change the animator wishes the joint to have.
     /// </summary>
-    void addLastRotationToUndo();
+    LLVector3 getPositionDelta() const { return mPositionDelta; }
+
+    /// <summary>
+    /// Sets the position the animator wishes the joint to be in.
+    /// </summary>
+    void setPositionDelta(const LLVector3& pos);
+
+    /// <summary>
+    /// Undoes the last position set, if any.
+    /// </summary>
+    void undoLastPositionChange();
+
+    /// <summary>
+    /// Undoes the last position set, if any.
+    /// </summary>
+    void redoLastPositionChange();
+
+    /// <summary>
+    /// Gets the rotation the animator wishes the joint to be in.
+    /// </summary>
+    LLQuaternion getRotationDelta() const { return mRotationDelta; }
+
+    /// <summary>
+    /// Sets the rotation the animator wishes the joint to be in.
+    /// </summary>
+    void setRotationDelta(const LLQuaternion& rot);
+
+    /// <summary>
+    /// Sets the base rotation of the represented joint to zero.
+    /// </summary>
+    void zeroBaseRotation();
+
+    /// <summary>
+    /// Queries whether the represented joint is zero.
+    /// </summary>
+    /// <returns>True if the represented joint is zero, otherwise false.</returns>
+    bool isBaseRotationZero() const;
+
+    /// <summary>
+    /// Undoes the last rotation set, if any.
+    /// Ordinarily the queue does not contain the current rotation, because we rely on time to add, and not button-up.
+    /// When we undo, if we are at the top of the queue, we need to add the current rotation so we can redo back to it.
+    /// Thus when we start undoing, mUndoneRotationIndex points at the current rotation.
+    /// </summary>
+    void undoLastRotationChange();
+
+    /// <summary>
+    /// Redoes the last rotation set, if any.
+    /// </summary>
+    void redoLastRotationChange();
 
     /// <summary>
     /// Gets whether a redo of this joints rotation may be performed.
@@ -69,117 +118,29 @@ class FSJointPose
     bool canRedoRotation() const { return mUndoneRotationIndex > 0; }
 
     /// <summary>
-    /// Gets the position the joint was in when the animation was initialized.
-    /// </summary>
-    LLVector3 getBeginningPosition() const { return mBeginningPosition; }
-
-    /// <summary>
-    /// Gets the position the animator wishes the joint to be in.
-    /// </summary>
-    LLVector3 getTargetPosition() const { return mTargetPosition; }
-
-    /// <summary>
-    /// Gets the position the animator wishes the joint to be in.
-    /// </summary>
-    LLVector3 getCurrentPosition();
-
-    /// <summary>
-    /// Sets the position the animator wishes the joint to be in.
-    /// </summary>
-    void setTargetPosition(const LLVector3& pos);
-
-    /// <summary>
-    /// Adds a last position to the deque.
-    /// </summary>
-    void addLastPositionToUndo();
-
-    /// <summary>
-    /// Undoes the last position set, if any.
-    /// </summary>
-    void undoLastPositionSet();
-
-    /// <summary>
-    /// Undoes the last position set, if any.
-    /// </summary>
-    void redoLastPositionSet();
-
-    /// <summary>
-    /// Gets the rotation the joint was in when the animation was initialized.
-    /// </summary>
-    LLQuaternion getBeginningRotation() const { return mBeginningRotation; }
-
-    /// <summary>
-    /// Gets the rotation the animator wishes the joint to be in.
-    /// </summary>
-    LLQuaternion getTargetRotation() const { return mTargetRotation; }
-
-    /// <summary>
-    /// Gets the rotation of the joint.
-    /// </summary>
-    LLQuaternion getCurrentRotation();
-
-    /// <summary>
-    /// Sets the beginning and target rotations to the supplied rotation.
-    /// </summary>
-    void setJointStartRotations(LLQuaternion quat);
-
-    /// <summary>
-    /// Sets the rotation the animator wishes the joint to be in.
-    /// </summary>
-    void setTargetRotation(const LLQuaternion& rot);
-
-    /// <summary>
-    /// Applies a delta to the rotation the joint currently targets.
-    /// </summary>
-    void applyDeltaRotation(const LLQuaternion& rot);
-
-    /// <summary>
-    /// Undoes the last rotation set, if any.
-    /// Ordinarily the queue does not contain the current rotation, because we rely on time to add, and not button-up.
-    /// When we undo, if we are at the top of the queue, we need to add the current rotation so we can redo back to it.
-    /// Thus when we start undoing, mUndoneRotationIndex points at the current rotation.
-    /// </summary>
-    void undoLastRotationSet();
-
-    /// <summary>
-    /// Redoes the last rotation set, if any.
-    /// </summary>
-    void redoLastRotationSet();
-
-    /// <summary>
     /// Gets the scale the animator wishes the joint to have.
     /// </summary>
-    LLVector3 getTargetScale() const { return mTargetScale; }
-
-    /// <summary>
-    /// Gets the scale the joint has.
-    /// </summary>
-    LLVector3 getCurrentScale();
-
-    /// <summary>
-    /// Gets the scale the joint had when the animation was initialized.
-    /// </summary>
-    LLVector3 getBeginningScale() const { return mBeginningScale; }
+    LLVector3 getScaleDelta() const { return mScaleDelta; }
 
     /// <summary>
     /// Sets the scale the animator wishes the joint to have.
     /// </summary>
-    void setTargetScale(LLVector3 scale);
+    void setScaleDelta(LLVector3 scale);
 
     /// <summary>
     /// Undoes the last scale set, if any.
     /// </summary>
-    void undoLastScaleSet();
+    void undoLastScaleChange();
 
     /// <summary>
     /// Redoes the last scale set, if any.
     /// </summary>
-    void redoLastScaleSet();
+    void redoLastScaleChange();
 
     /// <summary>
-    /// Adds a last rotation to the deque.
+    /// Resets the beginning properties of the joint this represents.
     /// </summary>
-    void addLastScaleToUndo();
+    void recaptureJoint();
 
     /// <summary>
     /// Restores the joint represented by this to the scale it had when this motion started.
@@ -197,6 +158,10 @@ class FSJointPose
     /// </summary>
     void revertCollisionVolume();
 
+    LLVector3 getTargetPosition() const { return mPositionDelta + mBeginningPosition; }
+    LLQuaternion getTargetRotation() const { return mRotationDelta * mBeginningRotation; }
+    LLVector3 getTargetScale() const { return mScaleDelta + mBeginningScale; }
+
     /// <summary>
     /// Gets the pointer to the jointstate for the joint this represents.
     /// </summary>
@@ -212,27 +177,33 @@ private:
     /// </summary>
     bool mIsCollisionVolume{ false };
 
-    LLQuaternion                          mTargetRotation;
+    LLQuaternion                          mRotationDelta;
     LLQuaternion                          mBeginningRotation;
-    std::deque<LLQuaternion>              mLastSetRotations;
+    std::deque<LLQuaternion>              mLastSetRotationDeltas;
     size_t                                mUndoneRotationIndex     = 0;
     std::chrono::system_clock::time_point mTimeLastUpdatedRotation = std::chrono::system_clock::now();
 
-    LLVector3                             mTargetPosition;
+    LLVector3                             mPositionDelta;
     LLVector3                             mBeginningPosition;
-    std::deque<LLVector3>                 mLastSetPositions;
+    std::deque<LLVector3>                 mLastSetPositionDeltas;
     size_t                                mUndonePositionIndex     = 0;
     std::chrono::system_clock::time_point mTimeLastUpdatedPosition = std::chrono::system_clock::now();
 
     /// <summary>
     /// Joint scales require special treatment, as they do not revert when we stop animating an avatar.
     /// </summary>
-    LLVector3                             mTargetScale;
+    LLVector3                             mScaleDelta;
     LLVector3                             mBeginningScale;
-    std::deque<LLVector3>                 mLastSetScales;
+    std::deque<LLVector3>                 mLastSetScaleDeltas;
     size_t                                mUndoneScaleIndex     = 0;
     std::chrono::system_clock::time_point mTimeLastUpdatedScale = std::chrono::system_clock::now();
+
+    template <typename T>
+    void addToUndo(T delta, size_t* undoIndex, std::deque<T>* dequeue, std::chrono::system_clock::time_point* timeLastUpdated);
+
+    template <typename T> T undoLastChange(T thingToSet, size_t* undoIndex, std::deque<T>* dequeue);
+
+    template <typename T> T redoLastChange(T thingToSet, size_t* undoIndex, std::deque<T>* dequeue);
 };
 
 #endif // FS_JOINTPPOSE_H
-
