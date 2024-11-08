@@ -5371,6 +5371,5 @@ Alcuni programmi antivirus potrebbero bloccare erroneamente parti di [APP_NAME],
 Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenco di file e cartelle da escludere, consulta la nostra guida:
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
-		<usetemplate ignoretext="Mostra promemoria sulla whitelist all'avvio" name="okignore" />
 	</notification>
 </notifications>
