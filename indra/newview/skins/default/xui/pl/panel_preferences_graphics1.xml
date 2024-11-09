@@ -136,6 +136,8 @@
 				Odświeżanie świata:
 			</text>
 			<check_box label="Wstrzymaj odświeżanie świata (pauzuj wszystko)" tool_tip="Wstrzymaj odświeżanie świata z serwera - zatrzymaj wszystkie akcje w świecie Second Life, ale bez wpływu na czat, IM czy rozmowy głosowe" name="WorldPause"/>
+			<check_box label="Limit klatek wyświetlanych na sekundę" tool_tip="Ogranicza liczbę klatek na sekundę do wartości zdefiniowanej przez użytkownika. Może zmniejszyć zużycie energii i wydzielanie ciepła GPU/CPU." name="FSLimitFramerate"/>
+			<check_box label="Włącz VSync" name="vsync" tool_tip="Synchronizuje liczbę klatek na sekundę z częstotliwością odświeżania monitora, może skutkować zmniejszeniem widocznej płynności i opóźnieniami."/>
 			<text name="Texture Rendering">
 				Rendering tekstur:
 			</text>
@@ -168,7 +170,6 @@
 			<check_box label="Renderuj blask" tool_tip="Renderuj blask. Siła musi być ustawiona na 0, aby wyłączyć blask gdy cienie są włączone." name="RenderGlow"/>
 			<slider label="Siła:" tool_tip="Siła blasku. Więcej = szerszy i gładszy (domyślnie 2) " name="glow_strength"/>
 			<check_box label="Pokazuj awatary, które nie skończyły się ładować" name="RenderUnloadedAvatars"/>
-			<check_box label="Limit klatek wyświetlanych na sekundę" name="FSLimitFramerate"/>
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>

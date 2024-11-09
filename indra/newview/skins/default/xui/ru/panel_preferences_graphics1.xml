@@ -141,6 +141,8 @@
 				Обновление мира:
 			</text>
 			<check_box label="Заморозить обновления мира (приостановить все)" tool_tip="Установите, чтобы заморозить все обновления с сервера - останавливает все действия в мире, но не влияет на чат или голос" name="WorldPause"/>
+			<check_box label="Ограничение частоты кадров" name="FSLimitFramerate"/>
+			<check_box label="Включить VSync" name="vsync" tool_tip="Синхронизирует частоту кадров с частотой обновления монитора, что обеспечивает плавную работу."/>
 			<text name="Texture Rendering">
 				Прорисовка текстур:
 			</text>
@@ -175,7 +177,6 @@
 			<check_box label="Прорисовка свечения" tool_tip="Прорисовка свечения. Обратите внимание, что сила должна быть установлена на ноль, чтобы отключить свечение, когда тени включены." name="RenderGlow"/>
 			<slider label="Сила:" tool_tip="Сила. Выше = шире и размытей (по умолчанию 2) " name="glow_strength"/>
 			<check_box label="Показывать не полностью загруженные аватары" name="RenderUnloadedAvatars"/>
-			<check_box label="Ограничение частоты кадров" name="FSLimitFramerate"/>
 			<check_box label="Режим отображения скелета" name="Wireframe"/>
 			<check_box label="Включить прикрепленное освещение" tool_tip="Эта опция включает свет, прикрепленный к аватару, такой как освещение лица. " name="Render Attached Lights"/>
 			<check_box label="Отображать частицы других аватаров" name="Render Attached Particles"/>

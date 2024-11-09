@@ -127,6 +127,8 @@
 				Dünya yeniləməsi:
 			</text>
 			<check_box label="Dünya yeniləmələrini dondurun (hamısını dayandırın)" tool_tip="Serverdən bütün yeniləmələri dondurmaq üçün təyin edin - dünyadakı bütün fəaliyyəti dayandırır, lakin söhbətə və ya səsə təsir etmir" name="WorldPause"/>
+			<check_box label="Kadr dərəcəsi həddi" name="FSLimitFramerate"/>
+			<check_box label="VSync yandır" name="vsync" tool_tip="Daha hamar təcrübə üçün kadr sürətini monitorun yeniləmə tezliyi ilə sinxronlaşdırır."/>
 			<text name="Texture Rendering">
 				Teksturların çəkilişi:
 			</text>
@@ -150,7 +152,6 @@
 			<check_box label="İşıqsaçma çəkilişi" tool_tip="İşıqsaçma çəkilişi. Nəzərə alın ki, kölgələr işə salındıqda işıqsaçmanı söndürmək üçün gücü sıfıra təyin etmək lazımdır." name="RenderGlow"/>
 			<slider label="Güc:" tool_tip="Güc. Yüksək = geniş və bulanıq (susmaya görə 2) " name="glow_strength"/>
 			<check_box label="Natamam yüklənmiş avatarları göstərin" name="RenderUnloadedAvatars"/>
-			<check_box label="Kadr dərəcəsi həddi" name="FSLimitFramerate"/>
 			<check_box label="Skelet göstərmə rejimi" name="Wireframe"/>
 			<check_box label="Birləşdirilmiş İşıqlandırmanı aktivləşdirin" tool_tip="Bu seçim üz işıqlandırması kimi avatara əlavə edilmiş işığı işə salır. " name="Render Attached Lights"/>
 			<check_box label="Digər avatarların hissəciklərini göstərin" name="Render Attached Particles"/>
