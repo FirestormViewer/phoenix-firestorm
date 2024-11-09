@@ -306,9 +306,6 @@ bool LLStatusBar::postBuild()
     mBoxBalance = getChild<LLTextBox>("balance");
     mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
 
-    // <FS:Beq> show fpslimit reached in FPS status bar
-    getChild<LLTextBox>("FPSText")->setClickedCallback( std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=limit%20framerate", true));
-
     mIconPresetsCamera = getChild<LLButton>( "presets_icon_camera" );
     //mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::mIconPresetsCamera, this));
     if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
@@ -489,8 +486,9 @@ bool LLStatusBar::postBuild()
     mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
 
     // <FS:Beq> Make FPS a clickable button with contextual colour
-    mFPSText = getChild<LLTextBox>("FPSText");
     // mFPSText = getChild<LLButton>("FPSText");
+    mFPSText = getChild<LLTextBox>("FPSText");
+    mFPSText->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=limit%20framerate", true));
     // </FS:Beq>
     mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 
@@ -606,60 +604,52 @@ void LLStatusBar::refresh()
     static LLCachedControl<bool> fsStatusBarShowFPS(gSavedSettings, "FSStatusBarShowFPS");
     if (fsStatusBarShowFPS && mFPSUpdateTimer.getElapsedTimeF32() > 1.f)
     {
-        static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
+        static LLCachedControl<U32>  max_fps(gSavedSettings, "FramePerSecondLimit");
         static LLCachedControl<bool> limit_fps_enabled(gSavedSettings, "FSLimitFramerate");
         static LLCachedControl<bool> vsync_enabled(gSavedSettings, "RenderVSyncEnable");
 
-        const auto FPS_below_limit_color = LLUIColorTable::instance().getColor( "Yellow" );
-        const auto FPS_limit_reached_color = LLUIColorTable::instance().getColor( "Green" );
-        const auto vsync_limit_reached_color = LLUIColorTable::instance().getColor( "Green" );
-        const auto FPS_uncapped_color = LLUIColorTable::instance().getColor( "White" );
-        const auto FPS_unfocussed_color = LLUIColorTable::instance().getColor( "Gray" );
+        static const auto fps_below_limit_color     = LLUIColorTable::instance().getColor("Yellow");
+        static const auto fps_limit_reached_color   = LLUIColorTable::instance().getColor("Green");
+        static const auto vsync_limit_reached_color = LLUIColorTable::instance().getColor("Green");
+        static const auto fps_uncapped_color        = LLUIColorTable::instance().getColor("White");
+        static const auto fps_unfocussed_color      = LLUIColorTable::instance().getColor("Gray");
+        static auto       current_fps_color         = fps_uncapped_color;
+
         mFPSUpdateTimer.reset();
-        S32 vsync_freq=-1;
-        auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS);
-        if (gViewerWindow && gViewerWindow->getWindow())
-        {
-            vsync_freq = gViewerWindow->getWindow()->getRefreshRate();
-        }
-        mFPSText->setText(llformat("%.1f", fps ));
+        const auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS);
+        mFPSText->setText(llformat("%.1f", fps));
+
         // if background, go grey, else go white unless we have a cap (checked next)
-        auto fps_color = FPS_uncapped_color;
-        if ((gViewerWindow && !gViewerWindow->getWindow()->getVisible())
-                || !gFocusMgr.getAppHasFocus())
+        auto fps_color{ fps_uncapped_color };
+        auto window = gViewerWindow ? gViewerWindow->getWindow() : nullptr;
+        if ((window && !window->getVisible()) || !gFocusMgr.getAppHasFocus())
         {
-            fps_color = FPS_unfocussed_color;
+            fps_color = fps_unfocussed_color;
         }
         else
         {
+            S32 vsync_freq{ -1 };
+            if (window)
+            {
+                vsync_freq = window->getRefreshRate();
+            }
+
             if (limit_fps_enabled && max_fps > 0)
             {
-                if (fps >= max_fps-1) // allow a small undershoot
-                {
-                    fps_color = FPS_limit_reached_color;
-                }
-                else
-                {
-                    fps_color = FPS_below_limit_color;
-                }
+                fps_color = (fps >= max_fps - 1) ? fps_limit_reached_color : fps_below_limit_color;
             }
             // use vsync if enabled and the freq is lower than the max_fps
-            if (vsync_enabled && vsync_freq > 0) 
+            if (vsync_enabled && vsync_freq > 0 && (!limit_fps_enabled || vsync_freq < (S32)max_fps))
             {
-                if ( !limit_fps_enabled || (limit_fps_enabled && vsync_freq < (S32)max_fps) )
-                {
-                    if (fps >= vsync_freq -1 )
-                    {
-                        fps_color = vsync_limit_reached_color;
-                    }
-                    else
-                    {
-                        fps_color = FPS_below_limit_color;
-                    }
-                }
+                fps_color = (fps >= vsync_freq - 1) ? vsync_limit_reached_color : fps_below_limit_color;
             }
         }
-        mFPSText->setColor(fps_color);
+
+        if (current_fps_color != fps_color)
+        {
+            mFPSText->setColor(fps_color);
+            current_fps_color = fps_color;
+        }
     }
     // </FS:Ansariel>
 
