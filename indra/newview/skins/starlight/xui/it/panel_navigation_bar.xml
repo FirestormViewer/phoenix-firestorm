@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel">
+					<pull_button name="back_btn" tool_tip="Torna al luogo precendente"/>
+					<pull_button name="forward_btn" tool_tip="Vai al luogo seguente"/>
+					<button name="home_btn" tool_tip="Teleport a casa"/>
+					<button name="About_Land" tool_tip="Mostra finestra delle informazioni sul terreno"/>
+					<button name="PersonalLighting" tool_tip="Mostra finestra di illuminazione personalizzata"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Posizione" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Cerca" name="search_combo_box" tool_tip="Cerca">
+						<combo_editor label="Cerca (MetaVerse)" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="Trascina qui i segnaposto per un accesso rapido ai tuoi luoghi preferiti">
+				<more_button name="more_btn_stl" tool_tip="Mostra altri preferiti">
+					Altri &#9660;
+				</more_button>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
+</panel>
