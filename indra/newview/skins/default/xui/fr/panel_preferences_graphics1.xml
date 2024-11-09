@@ -125,8 +125,8 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>
 			<check_box label="Figer les mises à jour de l'univers (Met tout en pause)" tool_tip="Cochez cette option pour figer toutes les mises à jour provenant de l'univers - Ceci interrompra toutes les actions visuelles mais n'affectera pas les conversations écrites  ou vocales" name="WorldPause"/>
-			<check_box label="Limiter les images par secondes" name="FSLimitFramerate"/>
-			<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
+			<check_box label="Limiter les images par secondes" name="FSLimitFramerate" tool_tip="Limite le taux de rafraîchissement à une valeur définie par l'utilisateur. Peut réduire la consommation d'énergie et la chaleur du GPU/CPU."/>
+			<check_box label="Limiter le taux de rafraîchissement à la fréquence du moniteur (VSync)" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
 			<text name="Texture Rendering">Rendu des textures :</text>
 			<check_box width="270" label="Limiter le résolution maximale des textures à :" tool_tip="Activée, cette option limite la résomution maximale d'affichage des textures dans Second Life. Cela permet d'afficher plus de textures avant de dépasser la limite de mémoire disponible et évite de voir des textures floues." name="FSRestrictMaxTextureSize"/>
 			<text name="FSRestrictMaxTextureSizeRestartText">
