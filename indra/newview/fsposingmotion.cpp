@@ -251,7 +251,6 @@ bool FSPosingMotion::currentlyPosingJoint(LLJoint* joint)
 
 bool FSPosingMotion::allStartingRotationsAreZero() const
 {
-    LLQuaternion zeroQuat;
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
     {
         if (poserJoint_iter->isCollisionVolume())
@@ -266,14 +265,8 @@ bool FSPosingMotion::allStartingRotationsAreZero() const
 
 void FSPosingMotion::setAllRotationsToZero()
 {
-    LLQuaternion zeroQuat;
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
-    {
-        if (poserJoint_iter->isCollisionVolume())
-            continue;
-
         poserJoint_iter->zeroBaseRotation();
-    }
 }
 
 constexpr size_t MaximumUndoQueueLength = 20;

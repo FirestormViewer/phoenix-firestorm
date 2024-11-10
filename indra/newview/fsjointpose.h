@@ -80,12 +80,17 @@ class FSJointPose
     /// <summary>
     /// Gets the rotation the animator wishes the joint to be in.
     /// </summary>
-    LLQuaternion getRotationDelta() const { return mRotationDelta; }
+    LLQuaternion getRotationDelta() const { return mRotation.deltaRotation; }
 
     /// <summary>
     /// Sets the rotation the animator wishes the joint to be in.
     /// </summary>
     void setRotationDelta(const LLQuaternion& rot);
+
+    /// <summary>
+    /// Reflects the base and delta rotation of the represented joint left-right.
+    /// </summary>
+    void reflectRotation();
 
     /// <summary>
     /// Sets the base rotation of the represented joint to zero.
@@ -138,6 +143,11 @@ class FSJointPose
     void redoLastScaleChange();
 
     /// <summary>
+    /// Exchanges the rotations between two joints.
+    /// </summary>
+    void swapRotationWith(FSJointPose* oppositeJoint);
+
+    /// <summary>
     /// Resets the beginning properties of the joint this represents.
     /// </summary>
     void recaptureJoint();
@@ -159,13 +169,49 @@ class FSJointPose
     void revertCollisionVolume();
 
     LLVector3 getTargetPosition() const { return mPositionDelta + mBeginningPosition; }
-    LLQuaternion getTargetRotation() const { return mRotationDelta * mBeginningRotation; }
+    LLQuaternion getTargetRotation() const { return mRotation.getTargetRotation(); }
     LLVector3 getTargetScale() const { return mScaleDelta + mBeginningScale; }
 
     /// <summary>
     /// Gets the pointer to the jointstate for the joint this represents.
     /// </summary>
     LLPointer<LLJointState> getJointState() const { return mJointState; }
+
+    /// <summary>
+    /// A class wrapping base and delta rotation, attempting to keep baseRotation as secret as possible.
+    /// Among other things, facilitates easy undo/redo through the joint-recapture process.
+    /// </summary>
+    class FSJointRotation
+    {
+      public:
+        FSJointRotation(LLQuaternion base) { baseRotation.set(base); }
+
+        FSJointRotation(LLQuaternion base, LLQuaternion delta)
+        {
+            baseRotation.set(base);
+            deltaRotation.set(delta);
+        }
+
+        FSJointRotation() {}
+
+        LLQuaternion baseRotation;
+        LLQuaternion deltaRotation;
+        LLQuaternion getTargetRotation() const { return deltaRotation * baseRotation; }
+
+        void         reflectRotation()
+        {
+            baseRotation.mQ[VX] *= -1;
+            baseRotation.mQ[VZ] *= -1;
+            deltaRotation.mQ[VX] *= -1;
+            deltaRotation.mQ[VZ] *= -1;
+        }
+
+        void set(FSJointRotation jRot)
+        {
+            baseRotation.set(jRot.baseRotation);
+            deltaRotation.set(jRot.deltaRotation);
+        }
+    };
 
 private:
     std::string             mJointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
@@ -177,9 +223,15 @@ private:
     /// </summary>
     bool mIsCollisionVolume{ false };
 
-    LLQuaternion                          mRotationDelta;
-    LLQuaternion                          mBeginningRotation;
-    std::deque<LLQuaternion>              mLastSetRotationDeltas;
+    /// <summary>
+    /// Whether this joint has been 'mirrored'.
+    /// For joints that have no opposite, mirrors the rotation.
+    /// For joints that do have an opposite, it indicates the rotation should be gotten from the opposite joint.
+    /// </summary>
+    bool mIsRotationMirrored{ false };
+
+    FSJointRotation                       mRotation;
+    std::deque<FSJointRotation>           mLastSetRotationDeltas;
     size_t                                mUndoneRotationIndex     = 0;
     std::chrono::system_clock::time_point mTimeLastUpdatedRotation = std::chrono::system_clock::now();
 

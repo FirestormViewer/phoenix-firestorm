@@ -45,7 +45,7 @@ FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
     mJointName         = joint->getName();
     mIsCollisionVolume = isCollisionVolume;
 
-    mBeginningRotation = joint->getRotation();
+    mRotation          = FSJointRotation(joint->getRotation());
     mBeginningPosition = joint->getPosition();
     mBeginningScale = joint->getScale();
 }
@@ -58,8 +58,8 @@ void FSJointPose::setPositionDelta(const LLVector3& pos)
 
 void FSJointPose::setRotationDelta(const LLQuaternion& rot)
 {
-    addToUndo(mRotationDelta, &mUndoneRotationIndex, &mLastSetRotationDeltas, &mTimeLastUpdatedRotation);
-    mRotationDelta.set(rot);
+    addToUndo(mRotation, &mUndoneRotationIndex, &mLastSetRotationDeltas, &mTimeLastUpdatedRotation);
+    mRotation = FSJointRotation(mRotation.baseRotation, rot);
 }
 
 void FSJointPose::setScaleDelta(LLVector3 scale)
@@ -75,7 +75,7 @@ void FSJointPose::undoLastPositionChange()
 
 void FSJointPose::undoLastRotationChange()
 {
-    mRotationDelta.set(undoLastChange(mRotationDelta, &mUndoneRotationIndex, &mLastSetRotationDeltas));
+    mRotation.set(undoLastChange(mRotation, &mUndoneRotationIndex, &mLastSetRotationDeltas));
 }
 
 void FSJointPose::undoLastScaleChange() { mScaleDelta.set(undoLastChange(mScaleDelta, &mUndoneScaleIndex, &mLastSetScaleDeltas)); }
@@ -87,7 +87,7 @@ void FSJointPose::redoLastPositionChange()
 
 void FSJointPose::redoLastRotationChange()
 {
-    mRotationDelta.set(redoLastChange(mRotationDelta, &mUndoneRotationIndex, &mLastSetRotationDeltas));
+    mRotation.set(redoLastChange(mRotation, &mUndoneRotationIndex, &mLastSetRotationDeltas));
 }
 
 void FSJointPose::redoLastScaleChange() { mScaleDelta.set(redoLastChange(mScaleDelta, &mUndoneScaleIndex, &mLastSetScaleDeltas)); }
@@ -155,7 +155,24 @@ void FSJointPose::recaptureJoint()
     if (!joint)
         return;
 
-    mBeginningRotation = joint->getRotation();
+    addToUndo(mRotation, &mUndoneRotationIndex, &mLastSetRotationDeltas, &mTimeLastUpdatedRotation);
+    mRotation = FSJointRotation(joint->getRotation());
+}
+
+void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
+{
+    if (!oppositeJoint)
+        return;
+    if (mIsCollisionVolume)
+        return;
+
+    LLJoint* joint = mJointState->getJoint();
+    if (!joint)
+        return;
+
+    auto tempRot = FSJointRotation(mRotation);
+    mRotation    = FSJointRotation(oppositeJoint->mRotation);
+    oppositeJoint->mRotation = tempRot;
 }
 
 void FSJointPose::revertJointScale()
@@ -185,9 +202,17 @@ void FSJointPose::revertCollisionVolume()
     if (!joint)
         return;
 
-    joint->setRotation(mBeginningRotation);
+    joint->setRotation(mRotation.baseRotation);
     joint->setPosition(mBeginningPosition);
     joint->setScale(mBeginningScale);
+}
+
+void FSJointPose::reflectRotation()
+{
+    if (mIsCollisionVolume)
+        return;
+
+    mRotation.reflectRotation();
 }
 
 void FSJointPose::zeroBaseRotation()
@@ -195,7 +220,7 @@ void FSJointPose::zeroBaseRotation()
     if (mIsCollisionVolume)
         return;
 
-    mBeginningRotation = LLQuaternion::DEFAULT;
+    mRotation.baseRotation = LLQuaternion::DEFAULT;
 }
 
 bool FSJointPose::isBaseRotationZero() const
@@ -203,5 +228,5 @@ bool FSJointPose::isBaseRotationZero() const
     if (mIsCollisionVolume)
         return true;
 
-    return mBeginningRotation == LLQuaternion::DEFAULT;
+    return mRotation.baseRotation == LLQuaternion::DEFAULT;
 }

@@ -135,10 +135,16 @@ private:
     LLAssetID mMotionID;
 
     /// <summary>
-    /// The amount of time, in seconds, we use for transitioning between one animation-state to another; this affects the 'fluidity'
-    /// of motion between changes to a joint.
+    /// The time constant, in seconds, we use for transitioning between one animation-state to another; this affects the 'damping'
+    /// of motion between changes to a joint. 'Constant' in this context is not a reference to the language-idea of 'const' value.
+    /// Smaller is less damping => faster transition.
+    /// As implemented, the actual rotation of a joint decays towards the target rotation in something akin to (if not) an exponential.
+    /// This time constant effects how fast this decay occurs rather than how long it takes to complete (it often never completes).
+    /// This contributes to the fact that actual rotation != target rotation (in addition to rotation being non-monotonic).
     /// Use caution making this larger than the subjective amount of time between adjusting a joint and then choosing to use 'undo' it.
-    /// Undo-function waits a similar amount of time after the last user-incited joint change to add a 'restore point'.
+    /// Undo-function waits an amount of time after the last user-incited joint change to add a 'restore point'.
+    /// Important to note is that the actual rotation/position/scale never reaches the target, which seems absurd, however
+    /// it's the user that closes the feedback loop here: if they want more change, they input more until the result is as they like it.
     /// </summary>
     const F32 mInterpolationTime = 0.25f;
 

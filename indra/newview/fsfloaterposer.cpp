@@ -342,27 +342,34 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
         std::string fullSavePath =
             gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
-        bool savingDiff = !mPoserAnimator.posingStartedFromZeroRotations(avatar);
+        bool savingDiff = !mPoserAnimator.allBaseRotationsAreZero(avatar);
 
         LLSD record;
-        record["version"]["value"] = (S32)4;
+        record["version"]["value"] = (S32)5;
         record["startFromTeePose"]["value"] = !savingDiff;
 
         LLVector3 rotation, position, scale, zeroVector;
+        bool      baseRotationIsZero;
 
         for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator.PoserJoints)
         {
             std::string bone_name = pj.jointName();
-            if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale))
+            bool posingThisJoint  = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
+
+            record[bone_name]            = bone_name;
+            record[bone_name]["enabled"] = posingThisJoint;
+            if (!posingThisJoint)
+                continue;
+
+            if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
                 continue;
 
             bool jointRotPosScaleAllZero = rotation == zeroVector && position == zeroVector && scale == zeroVector;
-            bool posingThisJoint = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
-            if (savingDiff && (!posingThisJoint || jointRotPosScaleAllZero))
+
+            if (savingDiff && jointRotPosScaleAllZero)
                 continue;
 
-            record[bone_name]             = bone_name;
-            record[bone_name]["enabled"]  = posingThisJoint;
+            record[bone_name]["jointBaseRotationIsZero"] = baseRotationIsZero;
             record[bone_name]["rotation"] = rotation.getValue();
             record[bone_name]["position"] = position.getValue();
             record[bone_name]["scale"]    = scale.getValue();
@@ -432,7 +439,6 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
         if (!currentlyPosingJoint)
             continue;
 
-        // need to be posing opposite joint too, or don't flip
         auto oppositeJoint = mPoserAnimator.getPoserJointByName(item->mirrorJointName());
         if (oppositeJoint)
         {
@@ -493,6 +499,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
         mPoserAnimator.recaptureJoint(avatar, *item, getJointTranslation(item->jointName()), getJointNegation(item->jointName()));
     }
 
+    setSavePosesButtonText(true);
     refreshRotationSliders();
     refreshTrackpadCursor();
     refreshTextHighlightingOnAllScrollLists();
@@ -727,8 +734,9 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         LLVector3    vec3;
         LLQuaternion quat;
         bool         enabled;
+        bool         setJointBaseRotationToZero;
         S32          version = 0;
-        bool startFromZeroRot = false;
+        bool startFromZeroRot = true;
 
         infile.open(fullPath);
         if (!infile.is_open())
@@ -759,9 +767,6 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
             if (version > 3)
                 loadPositionsAndScalesAsDeltas = true;
 
-            if (startFromZeroRot) // legacy saves will always start from T-Pose, for better or worse.
-                mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
-
             for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
             {
                 std::string const& name        = itr->first;
@@ -771,11 +776,16 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 if (!poserJoint)
                     continue;
 
-                if (loadRotations && control_map.has("rotation"))
+                if (control_map.has("enabled"))
                 {
-                    vec3.setValue(control_map["rotation"]);
-                    mPoserAnimator.loadJointRotation(avatar, poserJoint, vec3);
+                    enabled = control_map["enabled"].asBoolean();
+                    mPoserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled);
                 }
+
+                if (control_map.has("jointBaseRotationIsZero"))
+                    setJointBaseRotationToZero = control_map["jointBaseRotationIsZero"].asBoolean();
+                else
+                    setJointBaseRotationToZero = startFromZeroRot;
 
                 if (loadPositions && control_map.has("position"))
                 {
@@ -783,16 +793,16 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                     mPoserAnimator.loadJointPosition(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
                 }
 
+                if (loadRotations && control_map.has("rotation"))
+                {
+                    vec3.setValue(control_map["rotation"]);
+                    mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
+                }
+
                 if (loadScales && control_map.has("scale"))
                 {
                     vec3.setValue(control_map["scale"]);
                     mPoserAnimator.loadJointScale(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
-                }
-
-                if (control_map.has("enabled"))
-                {
-                    enabled = control_map["enabled"].asBoolean();
-                    mPoserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled);
                 }
             }
         }
@@ -1705,17 +1715,28 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
-    LLVector3              vec3 = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
+    E_BoneDeflectionStyles defl           = getUiSelectedBoneDeflectionStyle();
+    LLVector3              vec3           = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
+    auto                   selectedJoints = getUiSelectedPoserJoints();
 
-    for (auto item : getUiSelectedPoserJoints())
+    for (auto item : selectedJoints)
     {
         bool currentlyPosingJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (!currentlyPosingJoint)
             continue;
 
+        auto oppositeJoint = mPoserAnimator.getPoserJointByName(item->mirrorJointName());
+        if (oppositeJoint)
+        {
+            bool oppositeJointAlsoSelectedOnUi =
+                std::find(selectedJoints.begin(), selectedJoints.end(), oppositeJoint) != selectedJoints.end();
+
+            if (oppositeJointAlsoSelectedOnUi && item->dontFlipOnMirror())
+                continue;
+        }
+
         mPoserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
-                                getJointNegation(item->jointName()));
+                                        getJointNegation(item->jointName()));
     }
 }
 
