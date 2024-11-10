@@ -258,31 +258,67 @@
             <pie_slice.on_enable
                 function="Object.EnableInspect" />
         </pie_slice>
-		
+
+<!-- [AS:Chanayane] Allow derendering of attachment owner -->
         <pie_menu
             name="DerenderMenu"
             label="Derender &gt;">
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_slice
-				enabled="true"
-				label="Blacklist"
-				name="DerenderPermanent">
-				<pie_slice.on_click
-					function="Object.DerenderPermanent" />
-			</pie_slice>
-			<pie_slice
-				enabled="true"
-				label="Temporary"
-				name="Derender">
-				<pie_slice.on_click
-					function="Object.Derender" />
-			</pie_slice>
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_menu
+                name="DerenderAttachmentMenu"
+                label="Attachment &gt;">
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_slice
+                    enabled="true"
+                    label="Blacklist"
+                    name="DerenderPermanent">
+                    <pie_slice.on_click
+                        function="Object.DerenderPermanent" />
+                </pie_slice>
+                <pie_slice
+                    enabled="true"
+                    label="Temporary"
+                    name="Derender">
+                    <pie_slice.on_click
+                        function="Object.Derender" />
+                </pie_slice>
+            </pie_menu>
+            <pie_menu
+                name="DerenderAttachmentOwnerMenu"
+                label="Avatar &gt;">
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_separator />
+                <pie_slice
+                    enabled="true"
+                    label="Blacklist"
+                    name="DerenderAttachmentOwnerPermanent">
+                    <pie_slice.on_click
+                        function="Object.DerenderAttachmentOwnerPermanent" />
+                </pie_slice>
+                <pie_slice
+                    enabled="true"
+                    label="Temporary"
+                    name="DerenderAttachmentOwner">
+                    <pie_slice.on_click
+                        function="Object.DerenderAttachmentOwner" />
+                </pie_slice>
+            </pie_menu>
         </pie_menu>
+<!-- [/AS:Chanayane] -->
 
     </pie_menu>
 
