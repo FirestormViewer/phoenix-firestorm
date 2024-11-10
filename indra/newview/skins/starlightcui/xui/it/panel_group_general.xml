@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Generale" name="general_tab">
+	<panel.string name="help_text">
+		La scheda generale contiene informazioni generali su questo gruppo, lista dei soci, preferenze del gruppo e opzioni dei soci.
+
+Muovi il tuo mouse sopra le opzioni per maggiore aiuto.
+	</panel.string>
+	<panel.string name="group_info_unchanged">
+		Le informazioni generali sul gruppo sono cambiate
+	</panel.string>
+	<panel.string name="incomplete_member_data_str">
+		Rilevando i dati dei membri
+	</panel.string>
+	<panel name="group_info_top">
+		<texture_picker name="insignia" tool_tip="Clicca per scegliere un'immagine"/>
+		<text name="prepend_founded_by">
+			Fondatore:
+		</text>
+		<text name="join_cost_text">
+			Gratis
+		</text>
+		<button label="Aderisci" name="btn_join"/>
+	</panel>
+	<text_editor name="charter">
+		Statuto del gruppo
+	</text_editor>
+	<name_list name="visible_members">
+		<name_list.columns label="Membro" name="name"/>
+		<name_list.columns label="Titolo" name="title"/>
+		<name_list.columns label="Stato" name="status"/>
+	</name_list>
+	<text name="my_group_settngs_label">
+		Impostazioni personali
+	</text>
+	<text name="active_title_label">
+		Il mio titolo:
+	</text>
+	<combo_box name="active_title" tool_tip="Imposta il titolo che compare con il nome del tuo avatar quando questo gruppo è attivo"/>
+	<check_box label="Ricevi avvisi dal gruppo" name="receive_notices" tool_tip="Metti questa spunta se vuoi ricevere gli avvisi da questo gruppo"/>
+	<check_box label="Ricevi IM dal gruppo" name="receive_chat" tool_tip="Metti questa spunta se vuoi partecipare alla chat del gruppo"/>
+	<check_box label="Mostra nel mio profilo" name="list_groups_in_profile" tool_tip="Metti questa spunta se vuoi mostrare questo gruppo nel tuo profilo"/>
+	<panel name="preferences_container">
+		<text name="group_settngs_label">
+			Impostazioni gruppo
+		</text>
+		<check_box label="Chiunque può aderire" name="open_enrollement" tool_tip="Imposta se a questo gruppo possono aderire nuovi membri senza essere invitati"/>
+		<check_box label="Quota di adesione" name="check_enrollment_fee" tool_tip="Imposta se richiedere una tassa d&apos;iscrizione per aderire al gruppo"/>
+		<spinner label="L$" name="spin_enrollment_fee" tool_tip="I nuovi membri devono pagare questa tassa d&apos;iscrizione quando è selezionata" />
+		<combo_box name="group_mature_check" tool_tip="Le categorie di accesso definiscono il tipo di contenuti e di comportamenti ammessi in un gruppo">
+			<combo_item name="select_mature">
+				- Seleziona categoria di accesso -
+			</combo_item>
+			<combo_box.item label="Contenuti di tipo Moderato" name="mature"/>
+			<combo_box.item label="Contenuti di tipo Generale" name="pg"/>
+		</combo_box>
+		<check_box label="Mostra nella ricerca" name="show_in_group_list" tool_tip="Mostra questo gruppo nei risultati delle ricerche"/>
+		<text name="group_key_label">
+			ID gruppo:
+		</text>
+		<button name="copy_name" label="Copia nome gruppo" />
+		<text_editor name="group_key" label="ID gruppo:" initial_value="(caricamento...)"/>
+		<button name="copy_uri" label="Copia URI"/>
+	</panel>
+</panel>

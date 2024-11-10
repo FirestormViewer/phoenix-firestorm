@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Terreni e L$" name="land_money_tab">
+	<panel.string name="help_text">
+		Viene visualizzata un&apos;avvertenza fino a quando il terreno totale in uso è inferiore o uguale al contributo totale.
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		Non sei autorizzato a vedere quali terreni appartengono al gruppo.
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		Nessuna voce
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		Non sei autorizzato a visionare le informazioni finanziarie del gruppo.
+	</panel.string>
+	<panel.string name="loading_txt">
+		Attendi...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		Impossibile definire il tuo contributo di terreno
+	</panel.string>
+	<panel name="layout_panel_landmoney">
+		<scroll_list name="group_parcel_list">
+			<scroll_list.columns label="Lotto" name="name"/>
+			<scroll_list.columns label="Regione" name="location"/>
+			<scroll_list.columns label="Tipo" name="type"/>
+			<scroll_list.columns label="Area" name="area"/>
+			<scroll_list.columns label="Nascosto" name="hidden"/>
+		</scroll_list>
+		<text name="total_contributed_land_label">
+			Contributo totale:
+		</text>
+		<button label="Mappa" label_selected="Mappa" name="map_button"/>
+		<text name="total_land_in_use_label">
+			Terreno totale in uso:
+		</text>
+		<text name="land_available_label">
+			Terreno disponibile:
+		</text>
+		<text name="your_contribution_label">
+			Il tuo contributo:
+		</text>
+		<text name="your_contribution_max_value">
+			(max [AMOUNT])
+		</text>
+		<text name="group_over_limit_text">
+			Sono necessari più crediti del terreno per mantenere la terra in uso.
+		</text>
+		<text name="group_money_heading">
+			L$ gruppo
+		</text>
+	</panel>
+	<tab_container name="group_money_tab_container">
+		<panel label="Pianificazione" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				Caricamento...
+			</text_editor>
+		</panel>
+		<panel label="Dettagli" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				Caricamento...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="Indietro"/>
+			<button name="later_details_button" tool_tip="Avanti"/>
+		</panel>
+		<panel label="Vendite" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				Caricamento...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="Indietro"/>
+			<button name="later_sales_button" tool_tip="Avanti"/>
+		</panel>
+	</tab_container>
+</panel>

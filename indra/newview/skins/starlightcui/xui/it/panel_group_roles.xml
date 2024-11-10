@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Membri e Ruoli" name="roles_tab">
+	<panel.string name="default_needs_apply_text">
+		Ci sono modifiche non salvate
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Vuoi salvare le modifiche?
+	</panel.string>
+	<tab_container name="roles_tab_container">
+		<panel label="Membri" name="members_sub_tab" tool_tip="Membri">
+			<panel.string name="help_text">
+				Puoi aggiungere o rimuovere i ruoli assegnati ai membri. 
+Seleziona più membri tenendo premuto il tasto Ctrl e 
+cliccando sui loro nomi.
+			</panel.string>
+			<filter_editor label="Filtra membri" name="filter_input"/>
+			<name_list name="member_list">
+				<name_list.columns label="Membro" name="name"/>
+				<name_list.columns label="Donazioni" name="donated"/>
+				<name_list.columns label="Stato" name="online"/>
+				<name_list.columns label="Titolo" name="title"/>
+			</name_list>
+			<button label="Invita" name="member_invite"/>
+			<button label="Espelli" name="member_eject"/>
+			<button label="Ban dal gruppo" name="member_ban"/>
+			<button name="export_list" label="Esporta lista"/>
+		</panel>
+		<panel label="Ruoli" name="roles_sub_tab" tool_tip="Ruoli">
+			<panel.string name="help_text">
+				I ruoli hanno un titolo con un elenco di abilità permesse
+che i membri possono eseguire. I membri possono avere
+uno o più ruoli. Un gruppo può avere fino a 10 ruoli,
+fra cui il ruolo &apos;Tutti&apos; e il ruolo &apos;Proprietario&apos;, ovvero il capogruppo.
+			</panel.string>
+			<panel.string name="cant_delete_role">
+				I ruoli &apos;Tutti&apos; e &apos;Proprietari&apos; sono speciali e non possono essere eliminati.
+			</panel.string>
+			<filter_editor label="Filtra ruoli" name="filter_input"/>
+			<scroll_list name="role_list">
+				<scroll_list.columns label="Ruolo" name="name"/>
+				<scroll_list.columns label="Titolo" name="title"/>
+				<scroll_list.columns label="N." name="members"/>
+			</scroll_list>
+			<button label="Nuovo ruolo" name="role_create"/>
+			<button label="Copia ruolo" name="role_copy" />
+			<button label="Elimina ruolo" name="role_delete"/>
+		</panel>
+		<panel label="Abilità" name="actions_sub_tab" tool_tip="Puoi vedere la descrizione dell&apos;abilità e quali ruoli o membri ne beneficiano.">
+			<panel.string name="help_text">
+				Le abilità consentono ai membri nei ruoli di eseguire specifiche
+attività nel gruppo. Ci sono vari tipi di abilità.
+			</panel.string>
+			<filter_editor label="Filtra abilità" name="filter_input"/>
+			<scroll_list name="action_list" tool_tip="Seleziona un&apos;abilità per vedere maggiori dettagli."/>
+		</panel>
+		<panel label="Utenti Bannati" name="banlist_sub_tab" tool_tip="Visualizza gli utenti bannati dal gruppo.">
+			<panel.string name="help_text">
+				Nessun utente incluso nella lista bannati potrà iscriversi al gruppo.
+			</panel.string>
+			<panel.string name="ban_count_template">
+				Bannati: [COUNT]/[LIMIT]
+			</panel.string>
+			<name_list name="ban_list">
+				<name_list.columns label="Utente" name="name"/>
+				<name_list.columns label="Data del ban" name="ban_date"/>
+			</name_list>
+			<button label="Ban dal gruppo" name="ban_create" tool_tip="Seleziona gli utenti da bannare dal gruppo"/>
+			<button label="Rimuovi ban" name="ban_delete" tool_tip="Rimuovi il ban dal gruppo agli utenti selezionati"/>
+			<button name="ban_refresh" tool_tip="Aggiorna la lista bannati"/>
+		</panel>
+	</tab_container>
+	<panel name="members_footer">
+		<text name="static">
+			Ruoli
+		</text>
+		<text name="static2">
+			Abilità
+		</text>
+		<scroll_list name="member_allowed_actions" tool_tip="Per i dettagli di ogni abilità vedi la scheda Abilità"/>
+	</panel>
+	<panel name="roles_footer">
+		<text name="static">
+			Nome ruolo
+		</text>
+		<text name="static3">
+			Titolo ruolo
+		</text>
+		<text name="static2">
+			Descrizione
+		</text>
+		<text name="static4">
+			Membri assegnati
+		</text>
+		<check_box label="Rivela membri" name="role_visible_in_list" tool_tip="I membri con questo ruolo saranno visibili anche alle persone esterne al gruppo"/>
+		<text name="static5">
+			Abilità consentite
+		</text>
+		<scroll_list name="role_allowed_actions" tool_tip="Per i dettagli sulle abilità vedi la scheda Abilità"/>
+	</panel>
+	<panel name="actions_footer">
+		<text_editor name="action_description">
+			Questa abilità è &apos;Espelli i membri dal gruppo&apos;. Solo un proprietario può espellere un&apos;altro proprietario
+		</text_editor>
+		<text name="static2">
+			Ruoli con questa abilità
+		</text>
+		<text name="static3">
+			Membri con questa abilità
+		</text>
+	</panel>
+</panel>

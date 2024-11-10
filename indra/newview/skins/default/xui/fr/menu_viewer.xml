@@ -65,6 +65,7 @@
 		<menu_item_call label="Photos 360°" name="Capture 360"/>
 		<menu_item_call label="Suivi des transactions" name="money_tracker"/>
 		<menu_item_call label="Stand de pose..." name="pose_stand"/>
+		<menu_item_check label="Poseur" name="Poser"/>
 		<menu_item_call label="Préférences..." name="Preferences"/>
 		<menu_item_call label="Boutons de la barre d'outils" name="Toolbar Buttons"/>
 		<menu_item_check label="Afficher les éléments HUD" name="Show HUD Attachments"/>
@@ -161,6 +162,11 @@
 		<menu_item_call label="Explorateur d'animations" name="Animation Explorer"/>
 		<menu_item_call label="Liste noire d'éléments" name="asset_blacklist"/>
 		<menu_item_call label="Paramètres d'affichage de l'avatar" name="Avatar Render Settings"/>
+		<menu label="Affichage des avatars" name="AvatarComplexityMode">
+			<menu_item_check label="Limiter par la complexité" name="complexity_limit_everone"/>
+			<menu_item_check label="Toujours afficher les amis" name="complexity_always_show_friends"/>
+			<menu_item_check label="N'afficher que les amis" name="complexity_only_show_friends"/>
+		</menu>
 		<menu_item_check label="N'afficher que les amis" name="Render Friends Only"/>
 	</menu>
 	<menu label="Construire" name="BuildTools">

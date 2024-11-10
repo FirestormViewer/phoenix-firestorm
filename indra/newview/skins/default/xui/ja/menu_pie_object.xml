@@ -35,6 +35,9 @@
     <pie_slice
         label="装着"
         name="Wear"/>
+    <pie_slice
+        label="コピーを取る"
+        name="Take Copy" />
     <pie_menu
         label="HUD装着先 &gt;"
         name="Pie Object Attach HUD" />

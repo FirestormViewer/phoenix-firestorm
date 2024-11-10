@@ -18,6 +18,7 @@
 	<pie_menu label="Далее &gt;" name="Object Pie More 1">
 		<pie_slice label="Удалить" name="Delete"/>
 		<pie_slice label="Надеть" name="Wear"/>
+		<pie_slice label="Взять Копию" name="Take Copy" />
 		<pie_menu label="Добавить HUD &gt;" name="Pie Object Attach HUD" />
 		<pie_menu label="Прикрепить &gt;" name="Pie Object Attach">
 			<pie_menu label="Доп.Скелет &gt;" name="Enhanced Skeleton">
