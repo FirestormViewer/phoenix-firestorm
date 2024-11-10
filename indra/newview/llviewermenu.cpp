@@ -3406,7 +3406,7 @@ void derenderAttachmentOwner(bool permanent)
     LLViewerObject* objp;
     LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 
-    while (objp = select_mgr->getSelection()->getFirstRootObject(true))
+    while ((objp = select_mgr->getSelection()->getFirstRootObject(true)))
     {
         if (gAgentID != objp->getID())
         {
