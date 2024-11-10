@@ -121,6 +121,14 @@
                 function="Avatar.EnableFreezeEject"/>
         </pie_slice>
 
+        <pie_separator/>
+        <pie_slice
+            label="Inspect Avatar"
+            name="Inspect Avatar">
+            <pie_slice.on_click
+                function="Avatar.Inspect" />
+        </pie_slice>
+
         <pie_menu
             name="Avatar Pie More 2"
             label="More &gt;">
@@ -224,30 +232,32 @@
         </pie_menu>
 
         <pie_separator />
+<!-- [AS:Chanayane] Allow derendering of attachment owner -->
         <pie_menu
             name="DerenderMenu"
-            label="Derender &gt;">
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_slice
-				enabled="true"
-				label="Blacklist"
-				name="DerenderPermanent">
-				<pie_slice.on_click
-					function="Object.DerenderPermanent" />
-			</pie_slice>
-			<pie_slice
-				enabled="true"
-				label="Temporary"
-				name="Derender">
-				<pie_slice.on_click
-					function="Object.Derender" />
-			</pie_slice>
+            label="Derender avatar &gt;">
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_separator />
+            <pie_slice
+                enabled="true"
+                label="Blacklist"
+                name="DerenderPermanent">
+                <pie_slice.on_click
+                    function="Object.DerenderPermanent" />
+            </pie_slice>
+            <pie_slice
+                enabled="true"
+                label="Temporary"
+                name="Derender">
+                <pie_slice.on_click
+                    function="Object.Derender" />
+            </pie_slice>
         </pie_menu>
+<!-- [/AS:Chanayane] -->
 
     </pie_menu>
 

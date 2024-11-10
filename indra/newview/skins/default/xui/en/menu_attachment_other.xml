@@ -3,6 +3,15 @@
 <context_menu
  layout="topleft"
  name="Avatar Pie">
+ <!-- <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible) -->
+   <menu_item_call
+   enabled="true"
+   label="Inspect avatar attachments"
+   name="InspectAvatarAttachments">
+      <menu_item_call.on_click
+       function="Avatar.Inspect" />
+    </menu_item_call>
+<!-- </FS:Chanayane> -->
     <menu_item_call
      label="View Profile"
      name="Profile...">
@@ -224,20 +233,43 @@
       <menu_item_call.on_enable
        function="Object.EnableScriptInfo" />
   </menu_item_call>
-    <menu_item_call 
-    enabled="true"
-    label="Derender"
-    name="Derender">
-    <menu_item_call.on_click
-       function="Object.Derender" />
-    </menu_item_call>
-   <menu_item_call
-      enabled="true"
-      label="Derender + Blacklist"
-      name="DerenderPermanent">
-    <menu_item_call.on_click
-      function="Object.DerenderPermanent" />
-   </menu_item_call>
+<!-- [AS:Chanayane] Allow derendering of attachment owner -->
+  <menu_item_separator />
+  <context_menu
+      label="Derender"
+      name="Derender">
+      <menu_item_call 
+         enabled="true"
+         label="Derender attachment"
+         name="Derender">
+      <menu_item_call.on_click
+         function="Object.Derender" />
+      </menu_item_call>
+      <menu_item_call
+         enabled="true"
+         label="Derender attachment + Blacklist"
+         name="DerenderPermanent">
+      <menu_item_call.on_click
+         function="Object.DerenderPermanent" />
+      </menu_item_call>
+      <menu_item_separator />
+      <menu_item_call 
+         enabled="true"
+         label="Derender avatar"
+         name="DerenderAttachmentOwner">
+      <menu_item_call.on_click
+         function="Object.DerenderAttachmentOwner" />
+      </menu_item_call>
+      <menu_item_call
+         enabled="true"
+         label="Derender avatar + Blacklist"
+         name="DerenderPermanent">
+      <menu_item_call.on_click
+         function="Object.DerenderAttachmentOwnerPermanent" />
+      </menu_item_call>
+   </context_menu>
+   <menu_item_separator />
+<!-- [/AS:Chanayane] -->
     <menu_item_call
          label="Show Textures"
          name="Debug...">

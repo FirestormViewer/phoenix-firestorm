@@ -116,7 +116,6 @@
 		</panel>
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani" tool_tip="Il filtro anisotropico è un metodo per migliorare la qualità delle texture quando vengono visualizzate ad angoli relativamente ampi rispetto alla posizione della fotocamera. Di solito le rende meno sfocate a distanze maggiori."/>
-			<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<check_box label="Abilita supporto display HiDPI (solo Mac OSX; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
 			<text name="Antialiasing:" tool_tip="Le modifiche a questa impostazione potrebbero richiedere il riavvio su alcuni dispositivi.">
@@ -136,6 +135,8 @@
 				Caricamento del mondo:
 			</text>
 			<check_box label="Congela visualizzazione (mette in pausa tutto)" tool_tip="Setta questo per bloccare tutti gli aggiornamenti dal server - ferma tutte le azioni ma non ha effetto sulla chat e sulla voce" name="WorldPause"/>
+			<check_box label="Limita framerate" name="FSLimitFramerate"/>
+			<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili."/>
 			<text name="Texture Rendering">
 				Rendering texture:
 			</text>
@@ -168,7 +169,6 @@
 			<check_box label="Mostra bagliore" tool_tip="Mostra il bagliore (glow). Da notare che deve essere impostata a zero per disabilitare la luce quando le ombre sono attive." name="RenderGlow"/>
 			<slider label="Intensità:" tool_tip="Forza del bagliore. Più alto = più ampio e uniforme (predef. 2)" name="glow_strength"/>
 			<check_box label="Mostra avatar che non hanno terminato il caricamento" name="RenderUnloadedAvatars"/>
-			<check_box label="Limita framerate" name="FSLimitFramerate"/>
 			<check_box label="Mostra scena come wireframe" name="Wireframe"/>
 			<check_box label="Abilita luci dagli attachment (face-light)" tool_tip="Abilita tutte le luci che gli avatar hanno attaccate al corpo come le luci per la faccia. Utile per spegnerle quando necessario." name="Render Attached Lights"/>
 			<check_box label="Renderizza particelle generate da altri avatar" name="Render Attached Particles"/>

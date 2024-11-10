@@ -18,6 +18,7 @@
 	<pie_menu label="Mehr &gt;" name="Object Pie More 1">
 		<pie_slice label="Löschen" name="Delete"/>
 		<pie_slice label="Anziehen" name="Wear"/>
+		<pie_slice label="Kopie nehmen" name="Take Copy" />
 		<pie_menu label="HUD anhängen &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Anhängen &gt;" name="Pie Object Attach">
 			<pie_menu label="Erw. Skelett &gt;" name="Enhanced Skeleton">

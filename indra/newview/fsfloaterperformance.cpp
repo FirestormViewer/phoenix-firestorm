@@ -315,7 +315,7 @@ void FSFloaterPerformance::draw()
             args["FPSCAP"] = llformat("%02u", (U32)fpsCap);
             args["FPSTARGET"] = llformat("%02u", (U32)targetFPS);
             S32 refresh_rate = gViewerWindow->getWindow()->getRefreshRate();
-            args["VSYNCFREQ"] = llformat("%02d", (U32)refresh_rate);
+            args["VSYNCFREQ"] = llformat("%03d", (U32)refresh_rate);
             auto textbox = getChild<LLTextBox>("fps_warning");
             // Note: the ordering of these is important.
             // 1) background_yield should override others

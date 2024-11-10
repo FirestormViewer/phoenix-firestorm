@@ -6,8 +6,8 @@
 <!-- <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible) -->
     <menu_item_call
      enabled="true"
-     label="Inspect"
-     name="Inspect Avatar">
+     label="Inspect avatar attachments"
+     name="InspectAvatarAttachments">
         <menu_item_call.on_click
          function="Avatar.Inspect" />
       </menu_item_call>
@@ -166,20 +166,28 @@
         <menu_item_call.on_enable
          function="EnablePayAvatar" />
     </menu_item_call>
-    <menu_item_call 
-      enabled="true"
+<!-- [AS:Chanayane] Allow derendering of attachment owner -->
+   <menu_item_separator />
+   <context_menu
       label="Derender"
       name="Derender">
+      <menu_item_call 
+         enabled="true"
+         label="Derender avatar"
+         name="Derender">
       <menu_item_call.on_click
-       function="Object.Derender" />
-    </menu_item_call>
-   <menu_item_call
-      enabled="true"
-      label="Derender + Blacklist"
-      name="DerenderPermanent">
-    <menu_item_call.on_click
-      function="Object.DerenderPermanent" />
-   </menu_item_call>
+         function="Object.Derender" />
+      </menu_item_call>
+      <menu_item_call
+         enabled="true"
+         label="Derender avatar + Blacklist"
+         name="DerenderPermanent">
+      <menu_item_call.on_click
+         function="Object.DerenderPermanent" />
+      </menu_item_call>
+   </context_menu>
+   <menu_item_separator />
+<!-- [/AS:Chanayane] -->
     <menu_item_call 
       enabled="true"
       label="Script Info"

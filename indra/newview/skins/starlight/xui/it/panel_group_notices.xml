@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Avvisi" name="notices_tab">
+	<panel.string name="help_text">
+		Gli avvisi sono un modo veloce per comunicare in un gruppo diffondendo un messaggio e recapitando un eventuale oggetto allegato. Arrivano solo ai membri del gruppo il cui ruolo è abilitato a riceverli.
+Puoi disattivare la ricezione degli avvisi nella scheda Generale.
+	</panel.string>
+	<panel.string name="no_notices_text">
+		Nessun avviso
+	</panel.string>
+	<text name="lbl2">
+		Gli avvisi sono conservati per 14 giorni.
+Massimo 200 per gruppo al giorno
+	</text>
+	<scroll_list name="notice_list">
+		<scroll_list.columns label="Oggetto" name="subject"/>
+		<scroll_list.columns label="Da" name="from"/>
+		<scroll_list.columns label="Data" name="date"/>
+	</scroll_list>
+	<text name="notice_list_none_found">
+		Non trovato
+	</text>
+	<button label="Nuovo avviso" name="create_new_notice" tool_tip="Crea un nuovo avviso"/>
+	<button name="refresh_notices" tool_tip="Aggiorna la lista degli avvisi"/>
+	<panel label="Crea nuovo avviso" name="panel_create_new_notice">
+		<text name="lbl">
+			Crea avviso
+		</text>
+		<text name="lbl3">
+			Oggetto:
+		</text>
+		<text name="lbl4">
+			Messaggio:
+		</text>
+		<text name="lbl5">
+			Allega:
+		</text>
+		<text name="string">
+			Trascina e rilascia qui l'elemento da allegare:
+		</text>
+		<button label="Inventario" name="open_inventory" tool_tip="Apri l'inventario"/>
+		<button name="remove_attachment" tool_tip="Rimuovi l'allegato dall'avviso"/>
+		<button label="Invia" label_selected="Invia" name="send_notice"/>
+		<group_drop_target name="drop_target" tool_tip="Trascina l'allegato dal tuo inventario su questa casella per inviarlo con l'avviso. Devi avere i permessi di copia e di trasferimento sull'allegato per aggiungerlo all'avviso."/>
+	</panel>
+	<panel label="Visualizza avvisi archiviati" name="panel_view_past_notice">
+		<text name="lbl">
+			Avvisi archiviati
+		</text>
+		<text name="lbl3b">
+			Oggetto:
+		</text>
+		<text name="lbl5b">
+			Messaggio:
+		</text>
+		<button label="Apri l'allegato" name="open_attachment"/>
+	</panel>
+</panel>

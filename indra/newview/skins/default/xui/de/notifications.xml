@@ -5858,6 +5858,5 @@ Einige Antivirus-Programme können fälschlicherweise Teile von [APP_NAME] block
 Detaillierte Instruktionen zum whitelisten von [APP_NAME] - inklusive einer Liste von Dateien und Verzeichnissen - finden Sie in unserem Ratgeber:
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
-		<usetemplate ignoretext="Whitelist-Erinnerung beim Start anzeigen" name="okignore" yestext="OK"/>
 	</notification>
 </notifications>

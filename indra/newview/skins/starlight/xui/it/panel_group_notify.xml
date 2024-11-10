@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_group_notify">
+	<panel name="header">
+		<text name="title" value="Mittente / Gruppo"/>
+	</panel>
+	<text name="attachment" value="Allegato"/>
+	<button label="Avvisi di gruppo" name="btn_notices" />
+	<button label="Chat di gruppo" name="btn_groupchat" />
+</panel>

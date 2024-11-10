@@ -5478,6 +5478,5 @@ Niektóre programy antywirusowe mogą błędnie blokować części [APP_NAME]a, 
 Aby uzyskać szczegółowe instrukcje dotyczące umieszczania [APP_NAME]a na białej liście - w tym listę plików i folderów do wykluczenia - zapoznaj się z naszym przewodnikiem:
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
-		<usetemplate ignoretext="Pokaż przypomnienie o dodaniu do białej listy podczas uruchamiania" name="okignore" />
 	</notification>
 </notifications>

@@ -3399,6 +3399,87 @@ bool enable_derender_object()
 }
 // </FS:CR>
 
+// <AS:Chanayane> Allow derendering of attachment owner
+void derenderAttachmentOwner(bool permanent)
+{
+    bool need_save = false;
+    LLViewerObject* objp;
+    LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
+
+    while (objp = select_mgr->getSelection()->getFirstRootObject(true))
+    {
+        if (gAgentID != objp->getID())
+        {
+            if (!objp->isAttachment() || !objp->permYouOwner())
+            {
+                LLUUID id = objp->getID();
+                std::string entry_name = "";
+                std::string region_name;
+                LLAssetType::EType asset_type;
+
+                LLVOAvatar* owner = find_avatar_from_object(objp);
+                if (owner)
+                {
+                    id         = owner->getID();
+                    entry_name = owner->getFullname();
+                    asset_type = LLAssetType::AT_PERSON;
+
+                    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(id, entry_name, region_name, asset_type, permanent, false);
+
+                    if (permanent)
+                    {
+                        need_save = true;
+                    }
+
+                    select_mgr->deselectObjectOnly(objp);
+                    gObjectList.addDerenderedItem(id, permanent);
+                    gObjectList.killObject(owner);
+                    if (LLViewerRegion::sVOCacheCullingEnabled && owner->getRegion())
+                    {
+                        owner->getRegion()->killCacheEntry(owner->getLocalID());
+                    }
+
+                    LLTool* tool = LLToolMgr::getInstance()->getCurrentTool();
+                    LLViewerObject* tool_editing_object = tool->getEditingObject();
+                    if (tool_editing_object && tool_editing_object->mID == id)
+                    {
+                        tool->stopEditing();
+                    }
+                }
+            }
+            else if (objp->isAttachment() || objp->permYouOwner())
+            {
+                select_mgr->deselectObjectOnly(objp);
+                return;
+            }
+        }
+    }
+
+    if (need_save)
+    {
+        FSAssetBlacklist::getInstance()->saveBlacklist();
+    }
+}
+
+class LLObjectDerenderAttachmentOwnerPermanent : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        derenderAttachmentOwner(true);
+        return true;
+    }
+};
+
+class LLObjectDerenderAttachmentOwner : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        derenderAttachmentOwner(false);
+        return true;
+    }
+};
+// </AS:Chanayane>
+
 class LLEnableEditParticleSource : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -13101,6 +13182,10 @@ void initialize_menus()
     view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
     view_listener_t::addMenu(new LLObjectDerenderPermanent(), "Object.DerenderPermanent"); // <FS:Ansariel> Optional derender & blacklist
     enable.add("Object.EnableDerender", boost::bind(&enable_derender_object));  // <FS:CR> FIRE-10082 - Don't enable derendering own attachments when RLVa is enabled as well
+// <AS:Chanayane> Allow derendering of attachment owner
+    view_listener_t::addMenu(new LLObjectDerenderAttachmentOwner(), "Object.DerenderAttachmentOwner");
+    view_listener_t::addMenu(new LLObjectDerenderAttachmentOwnerPermanent(), "Object.DerenderAttachmentOwnerPermanent"); // <FS:Ansariel> Optional derender & blacklist
+// </AS:Chanayane>
     view_listener_t::addMenu(new LLObjectTexRefresh(), "Object.TexRefresh");    // ## Zi: Texture Refresh
     view_listener_t::addMenu(new LLEditParticleSource(), "Object.EditParticles");
     view_listener_t::addMenu(new LLEnableEditParticleSource(), "Object.EnableEditParticles");
