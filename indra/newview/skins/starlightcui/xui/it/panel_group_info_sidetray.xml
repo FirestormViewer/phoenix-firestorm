@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Profilo del gruppo" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		Ci sono modifiche non salvate
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Vuoi salvare le modifiche?
+	</panel.string>
+	<panel.string name="group_join_btn">
+		Aderisci ([AMOUNT] L$)
+	</panel.string>
+	<panel.string name="group_join_free">
+		Gratuito
+	</panel.string>
+	<panel.string name="group_member">
+		Membro
+	</panel.string>
+	<panel.string name="join_txt">
+		Aderisci
+	</panel.string>
+	<panel.string name="leave_txt">
+		Abbandona
+	</panel.string>
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+			<panel name="group_info_top">
+				<text_editor name="group_name" value="(Caricamento...)"/>
+				<line_editor label="Scrivi qui il nome del gruppo" name="group_name_editor"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="group_info_content">
+			<layout_stack name="layout">
+				<layout_panel name="group_accordions">
+					<accordion name="groups_accordion">
+						<accordion_tab name="group_general_tab" title="Generale"/>
+						<accordion_tab name="group_roles_tab" title="Membri e Ruoli"/>
+						<accordion_tab name="group_notices_tab" title="Avvisi"/>
+						<accordion_tab name="group_land_tab" title="Terreni e L$"/>
+						<accordion_tab name="group_experiences_tab" title="Esperienze"/>
+					</accordion>
+				</layout_panel>
+			</layout_stack>
+			<layout_stack name="layout">
+				<layout_panel name="button_row">
+					<layout_stack name="button_row_ls">
+						<layout_panel name="btn_activate_lp">
+							<button label="Attiva" name="btn_activate" />
+						</layout_panel>
+						<layout_panel name="btn_chat_lp">
+							<button label="Chat" name="btn_chat"/>
+						</layout_panel>
+						<layout_panel name="call_btn_lp">
+							<button label="Chiama" name="btn_call" tool_tip="Avvia una conferenza vocale in questo gruppo"/>
+						</layout_panel>
+						<layout_panel name="btn_apply_lp">
+							<button label="Salva" label_selected="Salva" name="btn_apply"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

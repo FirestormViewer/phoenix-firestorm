@@ -168,6 +168,7 @@
         </text>
 <!-- world pauser -->
         <check_box label="インワールドの描画更新を停止（全ての動きが停止します）" tool_tip="サーバから送られて来る更新情報を全て停止します。結果、インワールドの動作が全て停止します。但し、チャット、IM、ボイスへの影響はありません。" name="WorldPause" />
+        <check_box label="フレームレートを制限" name="FSLimitFramerate" />
 
         <text name="Texture Rendering">
             テクスチャ・レンダリング：
@@ -201,7 +202,6 @@
         <check_box label="グローをレンダリング" tool_tip="グロー（輝き）をレンダリングします。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow" />
 		<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength" />
 		<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars" />
-		<check_box label="フレームレートを制限" name="FSLimitFramerate" />
 		<slider label="FPS:" name="MaxFPS" />
 		<check_box label="風景をワイヤーフレームで表示" name="Wireframe"/>
 		<check_box label="装着している光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>

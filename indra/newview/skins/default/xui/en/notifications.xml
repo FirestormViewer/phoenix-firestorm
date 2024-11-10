@@ -14662,10 +14662,6 @@ Some antivirus programs may mistakenly block parts of [APP_NAME], slowing down i
 For detailed instructions on how to whitelist [APP_NAME] - including a list of files and folders to exclude - please visit our guide:
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
-    <usetemplate
-     ignoretext="Show whitelist reminder on launch"
-     name="okignore"
-     yestext="OK"/>
   </notification>
 
 </notifications>

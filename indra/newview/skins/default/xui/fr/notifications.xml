@@ -5608,4 +5608,13 @@ L'image que vous essayez de télécharger contient un canal alpha (informations 
 			<button name="use_as_is" text="Utiliser tel quel"/>
 		</form>
 	</notification>
+	<notification name="WhitelistReminder">
+Pour améliorer les performances de [APP_NAME], veuillez la mettre sur liste blanche.
+
+Certains programmes antivirus peuvent bloquer par erreur des parties de [APP_NAME], ralentissant ainsi ses performances et provoquant le dysfonctionnement de certaines fonctions. Pour éviter ces problèmes, nous vous recommandons vivement d'ajouter [APP_NAME] à la liste blanche (ou liste d'exclusion) de votre programme antivirus. Cela garantira le bon fonctionnement de la visionneuse.
+
+Pour obtenir des instructions détaillées sur la manière de mettre [APP_NAME] sur liste blanche - y compris une liste de fichiers et de dossiers à exclure - veuillez consulter notre guide :
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</notification>
 </notifications>
