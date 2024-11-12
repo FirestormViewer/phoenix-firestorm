@@ -23,12 +23,14 @@
 		<menu_item_call label="Tout détacher" name="Detach All"/>
 	</context_menu>
 	<context_menu label="Apparence" name="AppearanceSubmenu">
+		<menu_item_call label="Tenue actuelle" name="NowWearing"/>
 		<menu_item_call label="Changer de tenue" name="Chenge Outfit"/>
 		<menu_item_call label="Modifier la tenue" name="Edit Outfit Parts"/>
 		<menu_item_call label="Modifier la silhouette" name="Edit My Shape"/>
 		<menu_item_call label="Voltigement" name="Hover Height"/>
 		<menu_item_call label="Réinitialiser le squelette" name="Reset Skeleton"/>
 		<menu_item_call label="Réinitialiser le squelette et les animations" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Réinitialiser le LOD du maillage" name="Reset Mesh LOD"/>
 	</context_menu>
 	<context_menu label="Communauté" name="CommunitySubmenu">
 		<menu_item_call label="Amis" name="Friends..."/>

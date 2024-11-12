@@ -5,8 +5,8 @@
 	</panel.string>
 	<check_box label="Consenti più viewer (può compromettere la stabilità e le prestazioni)" name="allow_multiple_viewer_check"/>
 	<check_box label="Mostra selezione grid all&apos;accesso (non tutte supportano Firestorm)" name="show_grid_selection_check"/>
-	<check_box label="Mostra menu Avanzato (a vostro rischio)" name="show_advanced_menu_check"/>
-	<check_box label="Mostra menu Sviluppatore (a vostro rischio)" name="show_develop_menu_check"/>
+	<check_box label="Mostra menu Avanzato (usare a proprio rischio e pericolo)" name="show_advanced_menu_check"/>
+	<check_box label="Mostra menu Sviluppo (usare a proprio rischio e pericolo)" name="show_develop_menu_check"/>
 	<check_box label="Disabilita ricerca VRAM attraverso test WMI sui sistemi Windows" name="FSDisableWMIProbing"/>
 	<check_box tool_tip="Questa impostazione può ridurre il carico di resa per gli avatar lontani, ma può anche causare un rallentamento nelle loro animazioni" label="Abilita animation timesteps (sperimentale)" name="UseAnimationTimeSteps"/>
 	<text name="BackgroundYieldTimeText">

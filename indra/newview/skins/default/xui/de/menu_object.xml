@@ -41,9 +41,9 @@
 	<menu_item_call label="Nicht anzeigen" name="Derender"/>
 	<menu_item_call label="Nicht anzeigen + Blacklist" name="DerenderPermanent"/>
 	<menu_item_call label="Zurückgeben" name="Return..."/>
-	<context_menu label="Objekt nehmen" name="Take Submenu">
-		<menu_item_call label="Nehmen" name="Pie Object Take"/>
-		<menu_item_call label="Kopie nehmen" name="Take Copy"/>
+	<menu_item_call label="Nehmen" name="Pie Object Take"/>
+	<menu_item_call label="Kopie nehmen" name="Take Copy"/>
+	<context_menu label="Mehrere nehmen" name="Take Multiple">
 		<menu_item_call label="Als kombiniertes Objekt nehmen" name="Take combined"/>
 		<menu_item_call label="Kopie als kombiniertes Objekt nehmen" name="Take Copy combined"/>
 		<menu_item_call label="Als separate Objekte nehmen" name="Take Separate"/>
