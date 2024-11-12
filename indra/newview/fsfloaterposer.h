@@ -292,9 +292,14 @@ class FSFloaterPoser : public LLFloater
     S32 getJointNegation(const std::string& jointName) const;
 
     /// <summary>
-    /// Refreshes the text on all scroll lists based on their state.
+    /// Refreshes the text on the avatars scroll list based on their state.
     /// </summary>
-    void refreshTextHighlightingOnAllScrollLists();
+    void refreshTextHighlightingOnAvatarScrollList();
+
+    /// <summary>
+    /// Refreshes the text on all joints scroll lists based on their state.
+    /// </summary>
+    void refreshTextHighlightingOnJointScrollLists();
 
     /// <summary>
     /// Sets the text of the save pose button.
@@ -319,6 +324,14 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <returns>true if this method has executed since mDoubleClickInterval seconds ago, otherwise false.</returns>
     bool notDoubleClicked();
+
+    /// <summary>
+    /// Gets whether the user wishes to reset the base-rotation to zero when they start editing a joint.
+    /// </summary>
+    /// <remarks>
+    /// If a joint has a base-rotation of zero, the rotation then appears to be the user's work and qualifies to save to a re-importable format.
+    /// </remarks>
+    bool getWhetherToResetBaseRotationOnEdit();
 
     /// <summary>
     /// The time when the last click of a button was made.
@@ -400,6 +413,7 @@ class FSFloaterPoser : public LLFloater
     LLPanel* mCollisionVolumesPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
     LLCheckBoxCtrl* mStopPosingOnCloseCbx{ nullptr };
+    LLCheckBoxCtrl* mResetBaseRotOnEditCbx{ nullptr };
 };
 
 #endif

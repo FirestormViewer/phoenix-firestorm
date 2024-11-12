@@ -54,6 +54,7 @@ constexpr char             XML_JOINT_TRANSFORM_STRING_PREFIX[] = "joint_transfor
 constexpr std::string_view POSER_ADVANCEDWINDOWSTATE_SAVE_KEY  = "FSPoserAdvancedWindowState";
 constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpadSensitivity";
 constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPosingWhenClosed";
+constexpr std::string_view POSER_RESETBASEROTONEDIT_SAVE_KEY   = "FSPoserResetBaseRotationOnEdit";
 }  // namespace
 
 /// <summary>
@@ -158,10 +159,13 @@ bool FSFloaterPoser::postBuild()
     if (gSavedSettings.getBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY))
         mToggleAdvancedPanelBtn->setValue(true);
 
-
     mStopPosingOnCloseCbx = getChild<LLCheckBoxCtrl>("stop_posing_on_close_checkbox");
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
-        mAlsoSaveBvhCbx->set(true);
+        mStopPosingOnCloseCbx->set(true);
+
+    mResetBaseRotOnEditCbx = getChild<LLCheckBoxCtrl>("reset_base_rotation_on_edit_checkbox");
+    if (gSavedSettings.getBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY))
+        mResetBaseRotOnEditCbx->set(true);
 
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
     mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
@@ -234,6 +238,9 @@ void FSFloaterPoser::onClose(bool app_quitting)
 
     if (mStopPosingOnCloseCbx)
         gSavedSettings.setBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY, mStopPosingOnCloseCbx->getValue().asBoolean());
+
+    if (mResetBaseRotOnEditCbx)
+        gSavedSettings.setBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY, mResetBaseRotOnEditCbx->getValue().asBoolean());
 
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
         stopPosingSelf();
@@ -424,7 +431,7 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
 
     refreshRotationSliders();
     refreshTrackpadCursor();
-    refreshTextHighlightingOnAllScrollLists();
+    refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::onClickFlipSelectedJoints()
@@ -510,7 +517,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
     setSavePosesButtonText(true);
     refreshRotationSliders();
     refreshTrackpadCursor();
-    refreshTextHighlightingOnAllScrollLists();
+    refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::onClickBrowsePoseCache()
@@ -582,7 +589,9 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
         return;
 
     loadPoseFromXml(avatar, poseName, loadType);
+    onJointTabSelect();
     refreshJointScrollListMembers();
+    setSavePosesButtonText(mPoserAnimator.allBaseRotationsAreZero(avatar));
 }
 
 bool FSFloaterPoser::notDoubleClicked()
@@ -819,8 +828,6 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
     {
         LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << " exception: " << e.what() << LL_ENDL;
     }
-
-    onJointTabSelect();
 }
 
 void FSFloaterPoser::startPosingSelf()
@@ -914,6 +921,7 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
 
 void FSFloaterPoser::refreshJointScrollListMembers()
 {
+    mEntireAvJointScroll->clearRows();
     mBodyJointsScrollList->clearRows();
     mFaceJointsScrollList->clearRows();
     mHandJointsScrollList->clearRows();
@@ -976,16 +984,10 @@ void FSFloaterPoser::refreshJointScrollListMembers()
         }
 
         if (item)
-        {
             item->setUserdata((void*) &*poserJoint_iter);
-            LLVOAvatar* avatar = getUiSelectedAvatar();
-
-            if (mPoserAnimator.isPosingAvatarJoint(avatar, *poserJoint_iter))
-                ((LLScrollListText *) item->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
-            else
-                ((LLScrollListText *) item->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
-        }
     }
+
+    refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::addHeaderRowToScrollList(const std::string& jointName, LLScrollListCtrl* bodyJointsScrollList)
@@ -1162,7 +1164,7 @@ void FSFloaterPoser::onSetAvatarToTpose()
 
     setSavePosesButtonText(false);
     mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
-    refreshTextHighlightingOnAllScrollLists();
+    refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::onResetPosition()
@@ -1724,10 +1726,10 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    E_BoneDeflectionStyles defl           = getUiSelectedBoneDeflectionStyle();
-    LLVector3              vec3           = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
-    auto                   selectedJoints = getUiSelectedPoserJoints();
-    bool                   savingToBvh    = getSavingToBvh();
+    E_BoneDeflectionStyles defl             = getUiSelectedBoneDeflectionStyle();
+    LLVector3              vec3             = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
+    auto                   selectedJoints   = getUiSelectedPoserJoints();
+    bool                   savingToExternal = getWhetherToResetBaseRotationOnEdit();
 
     for (auto item : selectedJoints)
     {
@@ -1746,11 +1748,11 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
         }
 
         mPoserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
-                                        getJointNegation(item->jointName()), savingToBvh);
+                                        getJointNegation(item->jointName()), savingToExternal);
     }
 
-    if (savingToBvh)
-        refreshTextHighlightingOnAllScrollLists();
+    if (savingToExternal)
+        refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
@@ -1908,7 +1910,8 @@ void FSFloaterPoser::onAvatarSelect()
     mStartStopPosingBtn->setValue(arePosingSelected);
     mSetToTposeButton->setEnabled(arePosingSelected);
     poseControlsEnable(arePosingSelected);
-    refreshTextHighlightingOnAllScrollLists();
+    refreshTextHighlightingOnAvatarScrollList();
+    refreshTextHighlightingOnJointScrollLists();
     onJointTabSelect();
     setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
 }
@@ -2043,10 +2046,10 @@ void FSFloaterPoser::onAvatarsRefresh()
     }
 
     mAvatarSelectionScrollList->updateLayout();
-    refreshTextHighlightingOnAllScrollLists();
+    refreshTextHighlightingOnAvatarScrollList();
 }
 
-void FSFloaterPoser::refreshTextHighlightingOnAllScrollLists()
+void FSFloaterPoser::refreshTextHighlightingOnAvatarScrollList()
 {
     for (auto listItem : mAvatarSelectionScrollList->getAllData())
     {
@@ -2062,8 +2065,12 @@ void FSFloaterPoser::refreshTextHighlightingOnAllScrollLists()
         else
             ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
+}
 
+void FSFloaterPoser::refreshTextHighlightingOnJointScrollLists()
+{
     LLVOAvatar *avatar = getUiSelectedAvatar();
+
     addBoldToScrollList(mBodyJointsScrollList, avatar);
     addBoldToScrollList(mFaceJointsScrollList, avatar);
     addBoldToScrollList(mHandJointsScrollList, avatar);
@@ -2103,10 +2110,10 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
         return;
 
     std::string iconValue   = "";
-    bool considerBvh = getSavingToBvh();
+    bool considerExternalFormatSaving = getWhetherToResetBaseRotationOnEdit();
 
-    if (considerBvh && hasString("icon_will_save_to_bvh"))
-        iconValue = getString("icon_will_save_to_bvh");
+    if (considerExternalFormatSaving && hasString("icon_rotation_is_own_work"))
+        iconValue = getString("icon_rotation_is_own_work");
 
     for (auto listItem : list->getAllData())
     {
@@ -2114,7 +2121,7 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
         if (!userData)
             continue;
 
-        if (considerBvh)
+        if (considerExternalFormatSaving)
         {
             if (mPoserAnimator.baseRotationIsZero(avatar, *userData))
                 ((LLScrollListText*) listItem->getColumn(COL_ICON))->setValue(iconValue);
@@ -2129,10 +2136,10 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
     }
 }
 
-bool FSFloaterPoser::getSavingToBvh()
+bool FSFloaterPoser::getWhetherToResetBaseRotationOnEdit()
 {
-    if (!mAlsoSaveBvhCbx)
+    if (!mResetBaseRotOnEditCbx)
         return false;
 
-    return mAlsoSaveBvhCbx->getValue().asBoolean();
+    return mResetBaseRotOnEditCbx->getValue().asBoolean();
 }
