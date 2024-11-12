@@ -158,6 +158,11 @@ bool FSFloaterPoser::postBuild()
     if (gSavedSettings.getBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY))
         mToggleAdvancedPanelBtn->setValue(true);
 
+
+    mStopPosingOnCloseCbx = getChild<LLCheckBoxCtrl>("stop_posing_on_close_checkbox");
+    if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
+        mAlsoSaveBvhCbx->set(true);
+
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
     mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
 
@@ -226,6 +231,9 @@ void FSFloaterPoser::onClose(bool app_quitting)
 {
     if (mToggleAdvancedPanelBtn)
         gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, mToggleAdvancedPanelBtn->getValue().asBoolean());
+
+    if (mStopPosingOnCloseCbx)
+        gSavedSettings.setBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY, mStopPosingOnCloseCbx->getValue().asBoolean());
 
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
         stopPosingSelf();
@@ -655,7 +663,7 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
                     continue;
 
                 vec3.setValue(control_map["rotation"]);
-                mPoserAnimator.setJointRotation(avatar, poserJoint, vec3, NONE, SWAP_NOTHING, NEGATE_NOTHING);
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, true, vec3);
             }
         }
     }
@@ -996,8 +1004,8 @@ LLSD FSFloaterPoser::createRowForJoint(const std::string& jointName, bool isHead
         return NULL;
 
     std::string headerValue = "";
-    if (hasString("icon_category") && hasString("icon_bone"))
-        headerValue = isHeaderRow ? getString("icon_category") : getString("icon_bone");
+    if (isHeaderRow && hasString("icon_category"))
+        headerValue = getString("icon_category");
 
     std::string jointValue    = jointName;
     std::string parameterName = (isHeaderRow ? XML_LIST_HEADER_STRING_PREFIX : XML_LIST_TITLE_STRING_PREFIX) + jointName;
@@ -1154,6 +1162,7 @@ void FSFloaterPoser::onSetAvatarToTpose()
 
     setSavePosesButtonText(false);
     mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
+    refreshTextHighlightingOnAllScrollLists();
 }
 
 void FSFloaterPoser::onResetPosition()
@@ -1718,6 +1727,7 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
     E_BoneDeflectionStyles defl           = getUiSelectedBoneDeflectionStyle();
     LLVector3              vec3           = LLVector3(yawInRadians, pitchInRadians, rollInRadians);
     auto                   selectedJoints = getUiSelectedPoserJoints();
+    bool                   savingToBvh    = getSavingToBvh();
 
     for (auto item : selectedJoints)
     {
@@ -1736,8 +1746,11 @@ void FSFloaterPoser::setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadi
         }
 
         mPoserAnimator.setJointRotation(avatar, item, vec3, defl, getJointTranslation(item->jointName()),
-                                        getJointNegation(item->jointName()));
+                                        getJointNegation(item->jointName()), savingToBvh);
     }
+
+    if (savingToBvh)
+        refreshTextHighlightingOnAllScrollLists();
 }
 
 void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
@@ -2089,15 +2102,37 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
     if (!list)
         return;
 
+    std::string iconValue   = "";
+    bool considerBvh = getSavingToBvh();
+
+    if (considerBvh && hasString("icon_will_save_to_bvh"))
+        iconValue = getString("icon_will_save_to_bvh");
+
     for (auto listItem : list->getAllData())
     {
         FSPoserAnimator::FSPoserJoint *userData = static_cast<FSPoserAnimator::FSPoserJoint *>(listItem->getUserdata());
         if (!userData)
             continue;
 
+        if (considerBvh)
+        {
+            if (mPoserAnimator.baseRotationIsZero(avatar, *userData))
+                ((LLScrollListText*) listItem->getColumn(COL_ICON))->setValue(iconValue);
+            else
+                ((LLScrollListText*) listItem->getColumn(COL_ICON))->setValue("");
+        }
+
         if (mPoserAnimator.isPosingAvatarJoint(avatar, *userData))
             ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
         else
             ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
+}
+
+bool FSFloaterPoser::getSavingToBvh()
+{
+    if (!mAlsoSaveBvhCbx)
+        return false;
+
+    return mAlsoSaveBvhCbx->getValue().asBoolean();
 }

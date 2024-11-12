@@ -407,6 +407,22 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
     }
 }
 
+bool FSPoserAnimator::baseRotationIsZero(LLVOAvatar* avatar, const FSPoserJoint& joint) const
+{
+    if (!isAvatarSafeToUse(avatar))
+        return false;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return false;
+
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return false;
+
+    return jointPose->isBaseRotationZero();
+}
+
 bool FSPoserAnimator::allBaseRotationsAreZero(LLVOAvatar* avatar) const
 {
     if (!isAvatarSafeToUse(avatar))
@@ -469,8 +485,8 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     return translateRotationFromQuaternion(translation, negation, jointPose->getRotationDelta());
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style,
-                                       E_BoneAxisTranslation translation, S32 negation)
+void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style, E_BoneAxisTranslation translation, S32 negation,
+                                       bool resetBaseRotationToZero)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -484,6 +500,9 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!jointPose)
         return;
+
+    if (resetBaseRotationToZero)
+        jointPose->zeroBaseRotation();
 
     LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
     switch (style)
@@ -506,6 +525,9 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
         return;
+
+    if (resetBaseRotationToZero)
+        oppositeJointPose->zeroBaseRotation();
 
     LLQuaternion inv_quat;
     switch (style)

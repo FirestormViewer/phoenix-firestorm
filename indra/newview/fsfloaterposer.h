@@ -399,6 +399,7 @@ class FSFloaterPoser : public LLFloater
     LLPanel* mMiscJointsPnl{ nullptr };
     LLPanel* mCollisionVolumesPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
+    LLCheckBoxCtrl* mStopPosingOnCloseCbx{ nullptr };
 };
 
 #endif

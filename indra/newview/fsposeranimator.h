@@ -451,8 +451,9 @@ public:
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
     /// <param name="negation">The style of negation to apply to the set.</param>
+    /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
     void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style,
-                          E_BoneAxisTranslation translation, S32 negation);
+                          E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero);
 
     /// <summary>
     /// Gets the scale of a joint for the supplied avatar.
@@ -498,6 +499,17 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose joint rotations should be set to zero.</param>
     void setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Determines if the kind of save to perform should be a 'delta' save, or a complete save.
+    /// </summary>
+    /// <param name="avatar">The avatar whose pose-rotations are being considered for saving.</param>
+    /// <returns>True if the save should save only 'deltas' to the rotation, otherwise false.</returns>
+    /// <remarks>
+    /// A save of the rotation 'deltas' facilitates a user saving their changes to an existing animation.
+    /// Thus the save represents 'nothing other than the changes the user made', to some other pose which they may have limited rights to.
+    /// </remarks>
+    bool baseRotationIsZero(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
 
     /// <summary>
     /// Determines if the kind of save to perform should be a 'delta' save, or a complete save.
