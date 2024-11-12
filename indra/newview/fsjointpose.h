@@ -198,7 +198,7 @@ class FSJointPose
         LLQuaternion deltaRotation;
         LLQuaternion getTargetRotation() const { return deltaRotation * baseRotation; }
 
-        void         reflectRotation()
+        void reflectRotation()
         {
             baseRotation.mQ[VX] *= -1;
             baseRotation.mQ[VZ] *= -1;

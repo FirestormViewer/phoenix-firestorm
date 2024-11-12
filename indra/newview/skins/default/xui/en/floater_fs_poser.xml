@@ -807,7 +807,7 @@ width="403">
 						 label="Reset base-rotation on edit"
 						 follows="left|top"
 						 left="5"
-						 tool_tip="When you first edit a rotation, reset it to zero. This means you save a pose and not a diff (see load/save). A green ticks appears next each joint that will export."
+						 tool_tip="When you first edit a rotation, reset it to zero. This means your work can save a pose (and not a diff see load/save). A green tick appears next each joint you have zero-ed export."
 						 top_pad="5"
 						 width="134" />
 					</panel>

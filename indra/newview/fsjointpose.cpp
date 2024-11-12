@@ -1,6 +1,6 @@
 /**
- * @file fsposingmotion.cpp
- * @brief Model for posing your (and other) avatar(s).
+ * @file fsjointpose.cpp
+ * @brief Container for the pose of a joint.
  *
  * $LicenseInfo:firstyear=2024&license=viewerlgpl$
  * Phoenix Firestorm Viewer Source Code

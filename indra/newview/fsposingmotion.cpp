@@ -59,7 +59,7 @@ LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character
         if (!targetJoint)
             continue;
 
-        FSJointPose jointPose = FSJointPose(targetJoint, true);
+        FSJointPose jointPose = FSJointPose(targetJoint, POSER_JOINT_STATE, true);
         mJointPoses.push_back(jointPose);
 
         addJointState(jointPose.getJointState());
