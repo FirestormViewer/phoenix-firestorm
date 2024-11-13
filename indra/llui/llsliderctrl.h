@@ -140,7 +140,10 @@ protected:
         std::string strLabel;
         if( mLabelBox )
             strLabel = mLabelBox->getLabel();
-        return strLabel + getToolTip();
+        // <FS:PP> Look in name attributes, making search independent from localization
+        // return strLabel + getToolTip();
+        return strLabel + getToolTip() + getName();
+        // </FS:PP>
     }
     virtual void onSetHighlight() const  // When highlight, really do highlight the label
     {

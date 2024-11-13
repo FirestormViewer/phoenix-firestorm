@@ -488,7 +488,7 @@ bool LLStatusBar::postBuild()
     // <FS:Beq> Make FPS a clickable button with contextual colour
     // mFPSText = getChild<LLButton>("FPSText");
     mFPSText = getChild<LLTextBox>("FPSText");
-    mFPSText->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=limit%20framerate", true));
+    mFPSText->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=limitframerate", true));
     // </FS:Beq>
     mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 
