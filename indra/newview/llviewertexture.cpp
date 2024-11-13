@@ -564,7 +564,9 @@ void LLViewerTexture::updateClass()
         if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
         {
             static LLCachedControl<F32> low_mem_min_discard_increment(gSavedSettings, "RenderLowMemMinDiscardIncrement", .1f);
-            sDesiredDiscardBias += (F32) low_mem_min_discard_increment * (F32) gFrameIntervalSeconds;
+
+            F32 increment = low_mem_min_discard_increment + llmax(over_pct, 0.f);
+            sDesiredDiscardBias += increment * gFrameIntervalSeconds;
         }
     }
     else
@@ -625,7 +627,7 @@ void LLViewerTexture::updateClass()
                 last_desired_discard_bias = sDesiredDiscardBias;
                 was_backgrounded = true;
             }
-            sDesiredDiscardBias = 4.f;
+            sDesiredDiscardBias = 5.f;
         }
     }
     else
@@ -639,7 +641,7 @@ void LLViewerTexture::updateClass()
         }
     }
 
-    sDesiredDiscardBias = llclamp(sDesiredDiscardBias, 1.f, 4.f);
+    sDesiredDiscardBias = llclamp(sDesiredDiscardBias, 1.f, 5.f);
 
     LLViewerTexture::sFreezeImageUpdates = false;
 }

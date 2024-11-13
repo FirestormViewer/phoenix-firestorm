@@ -2513,7 +2513,7 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         }
     }
 
-    if (success)
+    if (success && gGLManager.mGLVersion > 4.05f)
     {
         gCASProgram.mName = "Contrast Adaptive Sharpening Shader";
         gCASProgram.mFeatures.hasSrgb = true;
