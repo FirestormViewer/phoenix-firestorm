@@ -1120,7 +1120,10 @@ std::string LLComboBox::_getSearchText() const
             iter++;
         }
     }
-    return res + getToolTip();
+    // <FS:PP> Look in name attributes, making search independent from localization
+    // return res + getToolTip();
+    return res + getToolTip() + getName();
+    // </FS:PP>
 }
 
 //virtual
