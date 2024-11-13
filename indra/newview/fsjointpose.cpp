@@ -62,7 +62,7 @@ void FSJointPose::setRotationDelta(const LLQuaternion& rot)
     mRotation = FSJointRotation(mRotation.baseRotation, rot);
 }
 
-void FSJointPose::setScaleDelta(LLVector3 scale)
+void FSJointPose::setScaleDelta(const LLVector3& scale)
 {
     addToUndo(mScaleDelta, &mUndoneScaleIndex, &mLastSetScaleDeltas, &mTimeLastUpdatedScale);
     mScaleDelta.set(scale);

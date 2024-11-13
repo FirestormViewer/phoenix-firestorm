@@ -937,6 +937,7 @@ set(viewer_HEADER_FILES
     fsfloaternearbychat.h
     fsfloaterpartialinventory.h
     fsfloaterplacedetails.h
+	fsfloaterposer.h
     fsfloaterposestand.h
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
@@ -949,6 +950,7 @@ set(viewer_HEADER_FILES
     fsfloatervramusage.h
     fsfloaterwearablefavorites.h
     fsfloaterwhitelisthelper.h
+	fsjointpose.h
     fsgridhandler.h
     fskeywords.h
     fslslbridge.h
@@ -970,6 +972,8 @@ set(viewer_HEADER_FILES
     fspanelradar.h
     fsparticipantlist.h
     fspose.h
+	fsposeranimator.h
+	fsposingmotion.h
     fsradar.h
     fsradarentry.h
     fsradarlistctrl.h
@@ -979,6 +983,7 @@ set(viewer_HEADER_FILES
     fsscrolllistctrl.h
     fsslurl.h
     fsslurlcommand.h
+	fsvirtualtrackpad.h
     fsworldmapmessage.h
     lggbeamcolormapfloater.h
     lggbeammapfloater.h

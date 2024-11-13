@@ -130,7 +130,7 @@ class FSJointPose
     /// <summary>
     /// Sets the scale the animator wishes the joint to have.
     /// </summary>
-    void setScaleDelta(LLVector3 scale);
+    void setScaleDelta(const LLVector3& scale);
 
     /// <summary>
     /// Undoes the last scale set, if any.
@@ -192,7 +192,7 @@ class FSJointPose
             deltaRotation.set(delta);
         }
 
-        FSJointRotation() {}
+        FSJointRotation() = default;
 
         LLQuaternion baseRotation;
         LLQuaternion deltaRotation;
@@ -206,7 +206,7 @@ class FSJointPose
             deltaRotation.mQ[VZ] *= -1;
         }
 
-        void set(FSJointRotation jRot)
+        void set(const FSJointRotation& jRot)
         {
             baseRotation.set(jRot.baseRotation);
             deltaRotation.set(jRot.deltaRotation);
@@ -222,13 +222,6 @@ private:
     /// natively.
     /// </summary>
     bool mIsCollisionVolume{ false };
-
-    /// <summary>
-    /// Whether this joint has been 'mirrored'.
-    /// For joints that have no opposite, mirrors the rotation.
-    /// For joints that do have an opposite, it indicates the rotation should be gotten from the opposite joint.
-    /// </summary>
-    bool mIsRotationMirrored{ false };
 
     FSJointRotation                       mRotation;
     std::deque<FSJointRotation>           mLastSetRotationDeltas;

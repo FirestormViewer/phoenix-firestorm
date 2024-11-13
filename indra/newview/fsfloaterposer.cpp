@@ -156,16 +156,12 @@ bool FSFloaterPoser::postBuild()
     mPosesScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onPoseFileSelect(); });
 
     mToggleAdvancedPanelBtn = getChild<LLButton>("toggleAdvancedPanel");
-    if (gSavedSettings.getBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY))
-        mToggleAdvancedPanelBtn->setValue(true);
 
     mStopPosingOnCloseCbx = getChild<LLCheckBoxCtrl>("stop_posing_on_close_checkbox");
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
         mStopPosingOnCloseCbx->set(true);
 
     mResetBaseRotOnEditCbx = getChild<LLCheckBoxCtrl>("reset_base_rotation_on_edit_checkbox");
-    if (gSavedSettings.getBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY))
-        mResetBaseRotOnEditCbx->set(true);
 
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
     mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
@@ -235,12 +231,6 @@ void FSFloaterPoser::onClose(bool app_quitting)
 {
     if (mToggleAdvancedPanelBtn)
         gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, mToggleAdvancedPanelBtn->getValue().asBoolean());
-
-    if (mStopPosingOnCloseCbx)
-        gSavedSettings.setBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY, mStopPosingOnCloseCbx->getValue().asBoolean());
-
-    if (mResetBaseRotOnEditCbx)
-        gSavedSettings.setBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY, mResetBaseRotOnEditCbx->getValue().asBoolean());
 
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
         stopPosingSelf();
