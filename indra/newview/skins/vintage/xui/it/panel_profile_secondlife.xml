@@ -3,6 +3,11 @@
 	<string name="status_unknown">
 		Sconosciuto
 	</string>
+	<string name="CaptionTextAcctInfo">
+[ACCTTYPE]
+[PAYMENTINFO]
+[FSDEV][FSSUPP][FSQA][FSGW][FIRESTORM]
+	</string>
 	<string name="BadgeBeta" value="Beta Tester originale" />
 	<string name="BadgeBetaLifetime" value="Membro a vita Beta" />
 	<string name="BadgeLifetime" value="Membro a vita" />

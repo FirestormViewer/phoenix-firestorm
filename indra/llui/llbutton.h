@@ -415,7 +415,10 @@ private:
 protected:
     virtual std::string _getSearchText() const override
     {
-        return getLabelUnselected() + getToolTip();
+        // <FS:PP> Look in name attributes, making search independent from localization
+        // return getLabelUnselected() + getToolTip();
+        return getLabelUnselected() + getToolTip() + getName();
+        // </FS:PP>
     }
 };
 

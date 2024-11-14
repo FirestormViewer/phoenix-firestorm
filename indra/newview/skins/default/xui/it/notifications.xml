@@ -3490,7 +3490,7 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 		<usetemplate ignoretext="Conferma prima della chiusura di tutti gli IM" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="AttachmentSaved">
-		L&apos;elemento da collegare è stato salvato.
+		L&apos;elemento in allegato è stato salvato.
 	</notification>
 	<notification name="AppearanceToXMLSaved">
 		L&apos;aspetto è stato salvato in XML su [PATH]
@@ -5369,6 +5369,5 @@ Alcuni programmi antivirus potrebbero bloccare erroneamente parti di [APP_NAME],
 Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenco di file e cartelle da escludere, consulta la nostra guida:
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
-		<usetemplate ignoretext="Mostra promemoria sulla whitelist all'avvio" name="okignore" />
 	</notification>
 </notifications>

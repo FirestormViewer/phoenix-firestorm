@@ -385,7 +385,7 @@
      height="16"
      width="42"
      halign="center"
-     tool_tip="Frames per second"
+     tool_tip="Frames per second (click to adjust limit)"
      wrap="false">
         200.0
     </text>

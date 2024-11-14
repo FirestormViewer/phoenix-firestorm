@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Colori Personalizzati" name="custom_colors_panel">
+  <text name="custom_colors_text">
+    Colori UI personalizzati:
+  </text>
+  <text name="text_boxc1">
+	Pulsanti, barre scorrimento, ecc.
+  </text>
+  <text name="text_boxc3">
+    Testo evidenziato
+  </text>
+  <text name="text_boxc4">
+    Testo pulsante - normale
+  </text>
+  <text name="text_boxc6">
+    Testo pulsante - selezionato
+  </text>
+  <text name="text_boxbn">
+    Sfondo pannello - normale
+  </text>
+  <text name="text_boxbn_restart">
+    (richiede riavvio)
+  </text>
+  <text name="text_boxbl">
+    Sfondo pannello - più chiaro
+  </text>
+  <text name="text_boxb1_restart">
+    (richiede riavvio)
+  </text>
+</panel>

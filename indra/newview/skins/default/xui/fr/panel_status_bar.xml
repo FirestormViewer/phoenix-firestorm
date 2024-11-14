@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Le terrain est à vendre"/>
+		<text tool_tip="Le nom du terrain sur lequel vous vous trouvez. Cliquez pour obtenir des informations sur le terrain." name="parcel_info_text" value="(ładowanie...)"/>
+	</panel>
 	<panel.string name="packet_loss_tooltip">
 		Perte de paquets
 	</panel.string>
@@ -19,9 +23,15 @@
 		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="L$ ??"/>
 		<button label="Ach. L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$."/>
 	</panel>
-	<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">
-		00h00 PST
-	</text>
-	<button name="media_toggle_btn" tool_tip="Arrêter tous les médias (musique, vidéo, pages web)."/>
-	<button name="volume_btn" tool_tip="Régler le volume global."/>
+	<panel name="time_and_media_bg">
+		<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">
+			00h00 PST
+		</text>
+		<button name="stream_toggle_btn" tool_tip="Lecture/arrêt du flux audio de cette parcelle"/>
+		<button name="media_toggle_btn" tool_tip="Lecture/arrêt de tous les médias (musique, vidéo, pages web)."/>
+		<button name="volume_btn" tool_tip="Régler le volume global."/>
+		<text name="FPSText" tool_tip="Images par seconde (cliquez pour ajuster la limite)">
+			200.0
+		</text>
+	</panel>
 </panel>

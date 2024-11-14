@@ -143,7 +143,10 @@ private:
 protected:
     virtual std::string _getSearchText() const
     {
-        return getLabel() + getToolTip();
+        // <FS:PP> Look in name attributes, making search independent from localization
+        // return getLabel() + getToolTip();
+        return getLabel() + getToolTip() + getName();
+        // </FS:PP>
     }
 
     virtual void onSetHighlight() const // When highlight, really do highlight the label

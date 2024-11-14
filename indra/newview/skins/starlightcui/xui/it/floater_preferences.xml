@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="Preferenze">
+	<floater.string name="email_unverified_tooltip">
+		Verifica la tua email per inviare messaggi IM:
+https://accounts.secondlife.com/change_email/
+	</floater.string>
+	<floater.string name="LoginToChange">
+		Accedi per modificare
+	</floater.string>
+	<button label="OK" label_selected="OK" name="OK"/>
+	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
+	<panel name="search_panel">
+		<search_editor label="Ricerca Impostazioni" name="search_prefs_edit" tool_tip="Digita qui il termine della tua ricerca. I risultati verranno mostrati secondo la corrispondenza parziale o totale con il nome dell'impostazione"/>
+		<button name="copy_search_slurl_btn" tool_tip="Copia il termine di ricerca come SLURL" />
+	</panel>
+	<tab_container name="pref core">
+		<panel label="Generale" name="general"/>
+		<panel label="Chat" name="chat"/>
+		<panel label="Colori" name="colors"/>
+		<panel label="Colori Interfaccia" name="custom_colors"/>
+		<panel label="Grafica" name="display"/>
+		<panel label="Audio e Media" name="audio"/>
+		<panel label="Rete e Cartelle" name="input"/>
+		<panel label="Movimento e Vista" name="move"/>
+		<panel label="Controlli" name="controls" />
+		<panel label="Notifiche" name="msgs"/>
+		<panel label="Riservatezza" name="im"/>
+		<panel label="Avanzate" name="advanced1"/>
+		<panel label="Interfaccia" name="ui"/>
+		<panel label="Skin del Viewer" name="skins" />
+		<panel label="Segnala Crash" name="crashreports" />
+		<panel label="Firestorm" name="firestorm" />
+		<panel label="OpenSim" name="opensim" />
+		<panel label="Backup e Ripristino" name="backup" />
+	</tab_container>
+</floater>

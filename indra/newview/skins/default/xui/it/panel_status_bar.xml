@@ -27,6 +27,6 @@
 		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
 		<button name="stream_toggle_btn" tool_tip="Accendi/Spegni la musica del lotto"/>
 		<button name="media_toggle_btn" tool_tip="Accendi/Spegni tutti i media"/>
-		<text name="FPSText" tool_tip="Fotogrammi al secondo (FPS)"/>
+		<text name="FPSText" tool_tip="Fotogrammi al secondo (FPS) - clicca per impostare il limite"/>
 	</panel>
 </panel>
