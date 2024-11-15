@@ -33,6 +33,8 @@
 #include "lltrans.h"
 #include "llviewertexturelist.h"
 
+#include "rlvactions.h"
+
 
 // ============================================================================
 // Helper functions
@@ -41,6 +43,11 @@
 LLToolTip* LLInspectTextureUtil::createInventoryToolTip(LLToolTip::Params p)
 {
     const LLSD& sdTooltip = p.create_params;
+
+    // <FS:Ansariel> Texture tooltip RLVa fix
+    if (!RlvActions::canPreviewTextures())
+        return LLUICtrlFactory::create<LLToolTip>(p);
+    // </FS:Ansariel>
 
     if (sdTooltip.has("thumbnail_id") && sdTooltip["thumbnail_id"].asUUID().notNull())
     {
