@@ -102,7 +102,7 @@
 			<check_box label="Anizotrop filtrləmə (aktiv olduqda yavaşladır)" name="ani" tool_tip = "Bu qutu anizotrop filtrləməni təmin edir. Bu, kamera mövqeyinə nisbətən nisbətən böyük bucaqlarla baxıldıqda teksturların keyfiyyətini artırmaq üçün bir texnikadır. Adətən teksturlar daha uzun məsafələrdə daha az bulanıq görünür."/>
 			<check_box label="Axın VBO-nu yandır" name="vbo_stream" tool_tip="Bunun söndürülməsi VBO aktivləşdirildikdə performansı yaxşılaşdıra bilər. Müşahidə göstərdi ki, söndürülməsi müxtəlif AMD və Intel qrafik kartlarında təkmilləşdirmələr təmin edib."/>
 			<check_box label="İtkili tekstura sıxılmasını aktivləşdirin (yenidən başlama tələb olunur)" name="texture compression" tool_tip="Video yaddaşda teksturanın sıxılması rəng keyfiyyətində müəyyən itkilər hesabına yüksək rezolyusiyaya malik teksturaların yüklənməsinə imkan verir."/>
-			<check_box label="HiDPI displey dəstəyini aktivləşdirin (yalnız Mac OSX; yenidən başladın tələb olunur)" name="use HiDPI" tool_tip="Yüksək nisbət ilə göstərmək üçün OpenGL-i aktiv edin."/>
+			<check_box label="HiDPI displey dəstəyini aktivləşdirin (yalnız macOS; yenidən başladın tələb olunur)" name="use HiDPI" tool_tip="Yüksək nisbət ilə göstərmək üçün OpenGL-i aktiv edin."/>
 			<text name="Antialiasing:" tool_tip = "Bu seçimin dəyişdirilməsi bəzi avadanlıqların yenidən başlamasını tələb edə bilər." width="290">
 				Hamarlaşdırma (yenidən başlatma tövsiyyə olunur):
 			</text>
