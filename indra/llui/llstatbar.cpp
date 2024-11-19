@@ -702,7 +702,7 @@ void LLStatBar::drawTicks( F32 min, F32 max, F32 value_scale, LLRect &bar_rect )
 {
     // <FS:Beq> FIRE-33481 - FS hangs on login, progress bar full
     LL_DEBUGS("STATBAR") << "name: " << this->getName() << "min: " << min << ", max: " << max << ", value_scale: " << value_scale << LL_ENDL;
-    if ( value_scale == INFINITY )
+    if ( value_scale == std::numeric_limits<float>::infinity() )
     {
         return;
     }
