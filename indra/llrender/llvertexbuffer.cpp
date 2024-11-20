@@ -962,8 +962,9 @@ void LLVertexBuffer::initClass(LLWindow* window)
 {
     llassert(sVBOPool == nullptr);
 
-    LL_INFOS() << "VBO Pooling Disabled" << LL_ENDL;
-    sVBOPool = new LLAppleVBOPool();
+    // <FS:Ansariel> Fix memory leak
+    //LL_INFOS() << "VBO Pooling Disabled" << LL_ENDL;
+    //sVBOPool = new LLAppleVBOPool();
 
     if (gGLManager.mIsApple)
     {
