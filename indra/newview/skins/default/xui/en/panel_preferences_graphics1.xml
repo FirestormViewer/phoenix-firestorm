@@ -976,7 +976,7 @@
          control_name="RenderHiDPI"
          height="16"
          initial_value="true"
-         label="Enable support for HiDPI displays (Mac OSX only; requires restart)"
+         label="Enable support for HiDPI displays (macOS only; requires restart)"
          layout="topleft"
          left="10"
          top_pad="5"

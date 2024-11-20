@@ -143,7 +143,7 @@
 			S3TC aktivieren:
 		</text>
 		<check_box label="Textur-Komprimierung aktivieren (Erfordert Neustart)" name="texture compression" tool_tip="Komprimiert Texturen im Videospeicher und erlaubt dadurch eine höhrere Auflösung und/oder Laden von mehr Texturen auf Kosten der Textqualität."/>
-		<check_box label="Unterstützung für HiDPI-Displays aktivieren (nur Mac OSX; erfordert Neustart)" name="use HiDPI" tool_tip="Aktiviert OpenGL für High-Resolution Drawing."/>
+		<check_box label="Unterstützung für HiDPI-Displays aktivieren (nur macOS; erfordert Neustart)" name="use HiDPI" tool_tip="Aktiviert OpenGL für High-Resolution Drawing."/>
 		<text name="antialiasing label" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
 			Antialiasing (Neustart empfohlen):
 		</text>
