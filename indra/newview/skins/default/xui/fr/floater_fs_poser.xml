@@ -207,12 +207,13 @@
 						<button label="Commencer pose" label_selected="Arrêter pose" tool_tip="Commencez à faire poser l'avatar ou l'animesh sélectionné, si vous y êtes autorisé." name="start_stop_posing_button"/>
 						<button label="Mettre en pose T" name="set_t_pose_button" tool_tip="Double-cliquez sur l'avatar sélectionné pour lui faire prendre la pose en « T »."/>
 					</panel>
-					<panel title="Paramètres" name="settings_panel">
+					<panel title="Param." name="settings_panel">
 						<text name="trackpad_sensitivity_label">
 							Sensibilité du trackpad :
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Règle la sensibilité du trackpad"/>
 						<check_box name="stop_posing_on_close_checkbox" label="Arrêt pose si fermeture" tool_tip="Ne pas arrêter votre pose peut être utile si vous travaillez beaucoup et que vous ne voulez pas la perdre accidentellement."/>
+						<check_box name="reset_base_rotation_on_edit_checkbox" label="Réinitialisation de la rotation" tool_tip="Lorsque vous modifiez une rotation pour la première fois, la remet à zéro. Cela signifie que votre travail peut enregistrer une pose (et non une différence - voir charger/enregistrer). Une coche verte apparaît à côté de chaque articulation dont l'exportation a été remise à zéro."/>
 					</panel>
 				</tab_container>
 			</panel>
