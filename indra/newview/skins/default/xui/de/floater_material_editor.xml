@@ -6,15 +6,6 @@
 	<string name="upload_fee_string">
 		[FEE] L$ Upload-Geb.
 	</string>
-	<string name="material_selection_title">
-		Material-Auswahl
-	</string>
-	<string name="material_selection_text">
-		Material auswählen:
-	</string>
-	<string name="material_batch_import_text">
-		--- Alle hochladen ---
-	</string>
 	<string name="material_override_title">
 		Material bearbeiten
 	</string>

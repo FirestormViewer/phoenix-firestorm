@@ -560,7 +560,7 @@ private:
     F32 mImagePriority; // should map to max virtual size
     F32 mRequestedPriority;
     S32 mDesiredDiscard;
-    S32 mSimRequestedDiscard;
+    S32 mSimRequestedDiscard; // <FS:Ansariel> OpenSim compatibility
     S32 mRequestedDiscard;
     S32 mLoadedDiscard;
     S32 mDecodedDiscard;
@@ -912,7 +912,7 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
       mImagePriority(priority),
       mRequestedPriority(0.f),
       mDesiredDiscard(-1),
-      mSimRequestedDiscard(-1),
+      mSimRequestedDiscard(-1), // <FS:Ansariel> OpenSim compatibility
       mRequestedDiscard(-1),
       mLoadedDiscard(-1),
       mDecodedDiscard(-1),

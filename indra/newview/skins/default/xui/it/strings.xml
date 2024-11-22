@@ -6068,6 +6068,15 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Material Texture Name Header">
 		Texture esistenti nel materiale:
 	</string>
+	<string name="material_selection_title">
+		Selezione del materiale
+	</string>
+	<string name="material_selection_text">
+		Seleziona materiale:
+	</string>
+	<string name="material_batch_import_text">
+		--- Carica tutto ---
+	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Le conversazioni non vengono registrate. Per iniziare a registrare, seleziona &quot;Salva: Solo registro&quot; oppure &quot;Salva: Registri e trascrizioni&quot; in Preferenze &gt; Chat.
 	</string>

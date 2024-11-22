@@ -2,9 +2,6 @@
 <floater name="material editor" title="[MATERIAL_NAME]">
 	<string name="no_upload_fee_string">pas de frais d'envoi</string>
 	<string name="upload_fee_string">Frais d'envoi L$[FEE]</string>
-	<string name="material_selection_title">Sélection des matériaux</string>
-	<string name="material_selection_text">Sélectionner un matériau l:</string>
-	<string name="material_batch_import_text">--- Les charger tous ---</string>
 	<string name="material_override_title">Modification du matériau</string>
 	<panel name="button_panel">
 		<text name="unsaved_changes">
