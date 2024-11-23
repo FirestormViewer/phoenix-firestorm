@@ -45,6 +45,7 @@ public:
     virtual PermissionMask getPermissionMask() const = 0;
     virtual LLFolderType::EType getPreferredType() const = 0;
     virtual void showProperties(void) = 0;
+    virtual bool isItemAFolder( void) const { return false; } // TODO: make   into pure virtual.
     virtual bool isItemInTrash( void) const { return false; } // TODO: make   into pure virtual.
     virtual bool isItemInOutfits() const { return false; }
     virtual bool isAgentInventory() const { return false; }

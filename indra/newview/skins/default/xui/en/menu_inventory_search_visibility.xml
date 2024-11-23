@@ -51,5 +51,18 @@
     <on_check
      function="Inventory.GearDefault.Check"
      parameter="include_links" />         
-  </menu_item_check>    
+  </menu_item_check>
+  <menu_item_separator
+   layout="topleft" />
+  <menu_item_check
+   label="Do not limit to folders"
+   layout="topleft"
+   name="limit_to_folders">
+    <on_click
+     function="Inventory.GearDefault.Custom.Action"
+     parameter="toggle_limit_to_folders" />
+    <on_check
+     function="Inventory.GearDefault.Check"
+     parameter="toggle_limit_to_folders" />         
+  </menu_item_check>   
 </toggleable_menu>

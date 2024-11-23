@@ -2426,6 +2426,11 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         getCurrentFilter().toggleSearchVisibilityLinks();
     }
 
+    if (command_name == "toggle_limit_to_folders")
+    {
+        getCurrentFilter().toggleSearchVisibilityLimitToFolders();
+    }
+
     if (command_name == "share")
     {
         if(mSingleFolderMode && isGalleryViewMode())
@@ -2650,6 +2655,11 @@ bool LLPanelMainInventory::isActionChecked(const LLSD& userdata)
     if (command_name == "sort_system_folders_to_top")
     {
         return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
+    }
+
+    if (command_name == "toggle_limit_to_folders")
+    {
+        return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LIMIT_TO_FOLDERS) != 0;
     }
 
     if (command_name == "toggle_search_outfits")

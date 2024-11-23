@@ -1380,6 +1380,17 @@ LLInventoryFilter* LLInvFVBridge::getInventoryFilter() const
     return panel ? &(panel->getFilter()) : NULL;
 }
 
+bool LLInvFVBridge::isItemAFolder() const
+{
+    LLInventoryModel* model = getInventoryModel();
+    if(!model) return false;
+
+    const LLViewerInventoryItem* item = model->getItem(mUUID);
+    if (!item) return false;
+    
+    return LLAssetType::AT_CATEGORY != item->getType();
+}
+
 bool LLInvFVBridge::isItemInTrash() const
 {
     LLInventoryModel* model = getInventoryModel();

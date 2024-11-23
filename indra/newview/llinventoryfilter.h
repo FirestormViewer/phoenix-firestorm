@@ -113,7 +113,8 @@ public:
         VISIBILITY_TRASH = 0x1 << 0,
         VISIBILITY_LIBRARY = 0x1 << 1,
         VISIBILITY_LINKS    = 0x1 << 2,
-        VISIBILITY_OUTFITS    = 0x1 << 3
+        VISIBILITY_OUTFITS    = 0x1 << 3,
+        VISIBILITY_LIMIT_TO_FOLDERS = 0x1 << 4
     };
 
     struct FilterOps
@@ -245,6 +246,7 @@ public:
     ESearchType         getSearchType() { return mSearchType; }
     void                setFilterCreator(EFilterCreatorType type);
 
+    void                toggleSearchVisibilityLimitToFolders();
     void                toggleSearchVisibilityLinks();
     void                toggleSearchVisibilityTrash();
     void                toggleSearchVisibilityOutfits();

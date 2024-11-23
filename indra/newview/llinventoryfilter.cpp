@@ -684,6 +684,9 @@ bool LLInventoryFilter::checkAgainstSearchVisibility(const LLFolderViewModelItem
     if (is_link && ((mFilterOps.mSearchVisibility & VISIBILITY_LINKS) == 0))
         return false;
 
+    if (listener->isItemAFolder() && ((mFilterOps.mSearchVisibility & VISIBILITY_LIMIT_TO_FOLDERS) == 0))
+        return false;
+
     if (listener->isItemInOutfits() && ((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0))
         return false;
 
@@ -912,6 +915,23 @@ void LLInventoryFilter::setFilterMarketplaceListingFolders(bool select_only_list
     }
 }
 
+void LLInventoryFilter::toggleSearchVisibilityLimitToFolders()
+{
+    bool limit_to_folders = mFilterOps.mSearchVisibility & VISIBILITY_LIMIT_TO_FOLDERS;
+    if (limit_to_folders)
+    {
+        mFilterOps.mSearchVisibility &= ~VISIBILITY_LIMIT_TO_FOLDERS;
+    }
+    else
+    {
+        mFilterOps.mSearchVisibility |= VISIBILITY_LIMIT_TO_FOLDERS;
+    }
+
+    if (hasFilterString())
+    {
+        setModified(limit_to_folders ? FILTER_MORE_RESTRICTIVE : FILTER_LESS_RESTRICTIVE);
+    }
+}
 
 void LLInventoryFilter::toggleSearchVisibilityLinks()
 {
