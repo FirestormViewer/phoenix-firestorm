@@ -2122,6 +2122,14 @@ set_source_files_properties(${viewer_PY_SCRIPTS}
 list(APPEND viewer_SOURCE_FILES ${viewer_PY_SCRIPTS})
 # </FS:Ansariel>
 
+# <FS:AR> Add Poser Presets
+file(GLOB viewer_POSER_PRESET_FILES poses/hand_presets/*.xml)
+source_group("Poser Presets" FILES ${viewer_POSER_PRESET_FILES})
+set_source_files_properties(${viewer_POSER_PRESET_FILES}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_POSER_PRESET_FILES})
+# </FS:AR> Poser presets
+
 if (WINDOWS)
   file(GLOB viewer_INSTALLER_FILES installers/windows/*.nsi)
 

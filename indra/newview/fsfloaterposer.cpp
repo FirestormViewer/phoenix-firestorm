@@ -214,6 +214,7 @@ bool FSFloaterPoser::postBuild()
 
 void FSFloaterPoser::onOpen(const LLSD& key)
 {
+    createUserPoseDirectoryIfNeeded();
     onAvatarsRefresh();
     refreshJointScrollListMembers();
     onJointTabSelect();
@@ -324,6 +325,41 @@ void FSFloaterPoser::onClickPoseSave()
     }
 }
 
+void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
+{
+    std::string userPath =
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+
+    if (!gDirUtilp->fileExists(userPath))
+    {
+        LL_WARNS("Poser") << "Couldn't find folder: " << userPath << " - creating one." << LL_ENDL;
+        LLFile::mkdir(userPath);
+    }
+
+    userPath = userPath + gDirUtilp->getDirDelimiter() + std::string(POSE_PRESETS_HANDS_SUBDIRECTORY);
+    if (gDirUtilp->fileExists(userPath))
+        return;
+
+    LL_WARNS("Poser") << "Couldn't find folder: " << userPath << " - creating one." << LL_ENDL;
+    LLFile::mkdir(userPath);
+
+    std::string sourcePresetPath =
+        gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, POSE_SAVE_SUBDIRECTORY, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY));
+
+    if (!gDirUtilp->fileExists(sourcePresetPath))
+        return;
+
+    auto posesToCopy = gDirUtilp->getFilesInDir(sourcePresetPath);
+    for (auto pose : posesToCopy)
+    {
+        std::string source = sourcePresetPath + gDirUtilp->getDirDelimiter() + pose;
+        std::string destination = userPath + gDirUtilp->getDirDelimiter() + pose;
+
+        if (!LLFile::copy(source, destination))
+            LL_WARNS("LLDiskCache") << "Failed to copy " << source << " to " << destination << LL_ENDL;
+    }
+}
+
 bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFileName)
 {
     if (poseFileName.empty())
@@ -334,18 +370,9 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
 
     try
     {
-        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
-        if (!gDirUtilp->fileExists(pathname))
-        {
-            LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
-            LLFile::mkdir(pathname);
-        }
-
-        std::string fullSavePath =
-            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
+        createUserPoseDirectoryIfNeeded();
 
         bool savingDiff = !mPoserAnimator.allBaseRotationsAreZero(avatar);
-
         LLSD record;
         record["version"]["value"] = (S32)5;
         record["startFromTeePose"]["value"] = !savingDiff;
@@ -376,6 +403,9 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
             record[bone_name]["position"] = position.getValue();
             record[bone_name]["scale"]    = scale.getValue();
         }
+
+        std::string fullSavePath =
+            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
         llofstream file;
         file.open(fullSavePath.c_str());
@@ -509,10 +539,9 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
 void FSFloaterPoser::onClickBrowsePoseCache()
 {
-    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
-    if (!gDirUtilp->fileExists(pathname))
-        LLFile::mkdir(pathname);
+    createUserPoseDirectoryIfNeeded();
 
+    std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     gViewerWindow->getWindow()->openFile(pathname);
 }
 
@@ -667,7 +696,6 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
     {
         LL_WARNS("Posing") << "Threw an exception trying to load a hand pose: " << poseName << " exception: " << e.what() << LL_ENDL;
     }
-
 }
 
 bool FSFloaterPoser::poseFileStartsFromTeePose(const std::string& poseFileName)

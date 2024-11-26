@@ -193,6 +193,7 @@ class FSFloaterPoser : public LLFloater
     LLVector3 getScaleOfFirstSelectedJoint() const;
 
     // Pose load/save
+    void createUserPoseDirectoryIfNeeded();
     void onToggleLoadSavePanel();
     void onClickPoseSave();
     void onPoseFileSelect();
