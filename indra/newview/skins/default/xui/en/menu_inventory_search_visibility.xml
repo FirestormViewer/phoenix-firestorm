@@ -55,14 +55,14 @@
   <menu_item_separator
    layout="topleft" />
   <menu_item_check
-   label="Do not limit to folders"
+   label="Include Items"
    layout="topleft"
-   name="limit_to_folders">
+   name="include_items">
     <on_click
      function="Inventory.GearDefault.Custom.Action"
-     parameter="toggle_limit_to_folders" />
+     parameter="toggle_include_items" />
     <on_check
      function="Inventory.GearDefault.Check"
-     parameter="toggle_limit_to_folders" />         
+     parameter="toggle_include_items" />         
   </menu_item_check>   
 </toggleable_menu>

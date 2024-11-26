@@ -117,7 +117,7 @@ public:
     //virtual bool renameItem(const std::string& new_name) {}
     virtual bool isItemRemovable(bool check_worn = true) const;
     virtual bool isItemMovable() const;
-    virtual bool isItemAFolder() const;
+    virtual bool isItemNotAFolder() const;
     virtual bool isItemInTrash() const;
     virtual bool isItemInOutfits() const;
     virtual bool isLink() const;
