@@ -41,6 +41,7 @@
 #include "llviewerwindow.h"
 #include "llwindow.h"
 #include "llvoavatarself.h"
+#include "llinventoryfunctions.h"
 
 namespace
 {
@@ -2018,12 +2019,17 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (!couldAnimateAvatar(avatar))
             continue;
 
+        LLAvatarName av_name;
+        std::string animeshName = getControlAvatarName(avatar);
+        if (animeshName.empty())
+            animeshName = avatar->getFullname();
+
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
         row["columns"][COL_ICON]["type"]   = "icon";
         row["columns"][COL_ICON]["value"]  = iconObjectName;
         row["columns"][COL_NAME]["column"] = "name";
-        row["columns"][COL_NAME]["value"]  = avatar->getFullname();
+        row["columns"][COL_NAME]["value"]  = animeshName;
         row["columns"][COL_UUID]["column"] = "uuid";
         row["columns"][COL_UUID]["value"]  = avatar->getID();
         row["columns"][COL_SAVE]["column"] = "saveFileName";
@@ -2033,6 +2039,25 @@ void FSFloaterPoser::onAvatarsRefresh()
 
     mAvatarSelectionScrollList->updateLayout();
     refreshTextHighlightingOnAvatarScrollList();
+}
+
+std::string FSFloaterPoser::getControlAvatarName(const LLControlAvatar* avatar)
+{
+    if (!avatar)
+        return "";
+
+    const LLVOVolume*     rootVolume     = avatar->mRootVolp;
+    const LLViewerObject* rootEditObject = (rootVolume) ? rootVolume->getRootEdit() : NULL;
+    if (!rootEditObject)
+        return "";
+
+    const LLViewerInventoryItem* attachedItem =
+        (rootEditObject->isAttachment()) ? gInventory.getItem(rootEditObject->getAttachmentItemID()) : NULL;
+
+    if (attachedItem)
+        return attachedItem->getName();
+
+    return "";
 }
 
 void FSFloaterPoser::refreshTextHighlightingOnAvatarScrollList()

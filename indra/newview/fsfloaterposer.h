@@ -334,6 +334,17 @@ class FSFloaterPoser : public LLFloater
     bool getWhetherToResetBaseRotationOnEdit();
 
     /// <summary>
+    /// Gets the name of an item from the supplied object ID.
+    /// </summary>
+    /// <param name="avatar">The control avatar to get the name for.</param>
+    /// <returns>The name of the supplied object.</returns>
+    /// <devnotes>
+    /// Getting the name for an arbitrary item appears to involve sending system message and creating a
+    /// callback, making for unwanted dependencies and conflict-risk; so not implemented.
+    /// </devnotes>
+    std::string getControlAvatarName(const LLControlAvatar* avatar);
+
+    /// <summary>
     /// The time when the last click of a button was made.
     /// Utilized for controls needing a 'double click do' function.
     /// </summary>
