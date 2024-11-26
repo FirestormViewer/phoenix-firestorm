@@ -377,18 +377,14 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!jointPose)
         return;
 
-    if (style == NONE)
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    if (style == NONE || !oppositeJointPose)
     {
         jointPose->setPositionDelta(position);
         return;
     }
 
     LLVector3 positionDelta = jointPose->getPositionDelta() - position;
-
-    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
-    if (!oppositeJointPose)
-        return;
-
     LLVector3 oppositeJointPosition = oppositeJointPose->getPositionDelta();
     switch (style)
     {
