@@ -568,7 +568,7 @@ width="403">
 							 top_delta="238"
 							 left_pad="1"
 							 left="2"
-							 width="88" >
+							 width="85" >
 								<button.commit_callback
 								 function="Poser.LoadLeftHand"/>
 							</button>
@@ -579,9 +579,9 @@ width="403">
 							 label="Set Right"
 							 name="button_loadHandPoseRight"
 							 tool_tip="Double click to set your right hand to the selected preset"
-							 left_pad="1"
+							 left_pad="2"
 							 top_delta="0"
-							 width="88" >
+							 width="85" >
 								<button.commit_callback
 								 function="Poser.LoadRightHand"/>
 							</button>
@@ -673,7 +673,7 @@ width="403">
 						 width="317" />
 						<scroll_list
 						 column_padding="0"
-						 height="160"
+						 height="250"
 						 can_sort="false"
 						 follows="all"
 						 layout="topleft"
@@ -710,7 +710,7 @@ width="403">
 						 name="refresh_avatars"
 						 tool_tip="Refresh the list of avatars and animeshes"
 						 width="20"
-						 top="142"
+						 top="232"
 						 left="3">
 							<button.commit_callback
 							 function="Poser.RefreshAvatars"/>
