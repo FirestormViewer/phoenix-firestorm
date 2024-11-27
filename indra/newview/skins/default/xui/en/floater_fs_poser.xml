@@ -39,8 +39,12 @@ width="403">
 	<string	name="joint_transform_mAnkleRight" translate="false">NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipCornerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceLipUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipUpperCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceLipUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceLipLowerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipLowerCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceLipLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceEyeLidUpperLeft" translate="false">NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceEyeLidUpperRight" translate="false">NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceEyeLidLowerLeft" translate="false">NEGATE_PITCH</string>
@@ -57,35 +61,35 @@ width="403">
 	<string	name="joint_transform_mFaceCheekLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandThumb1Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandThumb1Left" translate="false">SWAP_ROLL_AND_PITCH</string>
 	<string	name="joint_transform_mHandThumb1Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandThumb2Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandThumb2Left" translate="false">SWAP_ROLL_AND_PITCH</string>
 	<string	name="joint_transform_mHandThumb2Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandThumb3Left" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandThumb3Left" translate="false">SWAP_ROLL_AND_PITCH</string>
 	<string	name="joint_transform_mHandThumb3Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandIndex1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandIndex1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandIndex1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandIndex2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandIndex2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandIndex2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandIndex3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandIndex3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandIndex3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandMiddle1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandMiddle1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandMiddle1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandMiddle2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandMiddle2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandMiddle2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandMiddle3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandMiddle3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandMiddle3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandRing1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandRing1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandRing1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandRing2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandRing2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandRing2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandRing3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandRing3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandRing3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandPinky1Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandPinky1Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandPinky1Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandPinky2Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandPinky2Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandPinky2Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
-	<string	name="joint_transform_mHandPinky3Left" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
+	<string	name="joint_transform_mHandPinky3Left" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
 	<string	name="joint_transform_mHandPinky3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
 	<string	name="joint_transform_LEFT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_RIGHT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -105,6 +109,9 @@ width="403">
 	<string	name="joint_transform_mFaceNoseLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceNoseCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceNoseRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceForeheadLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceForeheadCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceForeheadRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
 	<string	name="header_mHead">Body</string>
@@ -146,7 +153,7 @@ width="403">
 	<string	name="title_mFaceEar1Right">Ear Upper Right</string>
 	<string	name="title_mFaceEar2Right">Ear Lower Right</string>
 	<string	name="title_mFaceNoseLeft">Nose Left</string>
-	<string	name="title_mFaceNoseCenter">Nose Center</string>
+	<string	name="title_mFaceNoseCenter">Nose Middle</string>
 	<string	name="title_mFaceNoseRight">Nose Right</string>
 	<string	name="title_mFaceCheekLowerLeft">Cheek Lower Left</string>
 	<string	name="title_mFaceCheekUpperLeft">Cheek Upper Left</string>
@@ -167,7 +174,7 @@ width="403">
 	<string	name="title_mFaceLipUpperRight">Lip Upper Right</string>
 	<string	name="title_mFaceLipCornerLeft">Lip Corner Left</string>
 	<string	name="title_mFaceLipCornerRight">Lip Corner Right</string>
-	<string	name="title_mFaceLipUpperCenter">Lip Upper Center</string>
+	<string	name="title_mFaceLipUpperCenter">Lip Upper Middle</string>
 	<string	name="title_mFaceEyecornerInnerLeft">Eye corner Inner Left</string>
 	<string	name="title_mFaceEyecornerInnerRight">Eye corner Inner Right</string>
 	<string	name="title_mFaceNoseBridge">Nose Bridge</string>
