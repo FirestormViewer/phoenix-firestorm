@@ -1624,8 +1624,8 @@ void LLViewerFetchedTexture::postCreateTexture()
     if (!needsToSaveRawImage())
     {
         mNeedsAux = false;
-        destroyRawImage();
     }
+    destroyRawImage(); // will save raw image if needed
 
     mNeedsCreateTexture = false;
 }
@@ -1945,7 +1945,7 @@ bool LLViewerFetchedTexture::updateFetch()
         if (mRawImage.notNull()) sRawCount--;
         if (mAuxRawImage.notNull()) sAuxCount--;
         // keep in mind that fetcher still might need raw image, don't modify original
-        bool finished = LLAppViewer::getTextureFetch()->getRequestFinished(getID(), fetch_discard, mRawImage, mAuxRawImage,
+        bool finished = LLAppViewer::getTextureFetch()->getRequestFinished(getID(), fetch_discard, mFetchState, mRawImage, mAuxRawImage,
                                                                            mLastHttpGetStatus);
         if (mRawImage.notNull()) sRawCount++;
         if (mAuxRawImage.notNull())
@@ -2041,7 +2041,9 @@ bool LLViewerFetchedTexture::updateFetch()
 
         if (!mIsFetching)
         {
-            if ((decode_priority > 0) && (mRawDiscardLevel < 0 || mRawDiscardLevel == INVALID_DISCARD_LEVEL))
+            if ((decode_priority > 0)
+                && (mRawDiscardLevel < 0 || mRawDiscardLevel == INVALID_DISCARD_LEVEL)
+                && mFetchState > 1) // 1 - initial, make sure fetcher did at least something
             {
                 // We finished but received no data
                 if (getDiscardLevel() < 0)
@@ -2053,6 +2055,7 @@ bool LLViewerFetchedTexture::updateFetch()
                                 << " mRawDiscardLevel " << mRawDiscardLevel
                                 << " current_discard " << current_discard
                                 << " stats " << mLastHttpGetStatus.toHex()
+                                << " worker state " << mFetchState
                                 << LL_ENDL;
                     }
                     setIsMissingAsset();
@@ -2079,6 +2082,9 @@ bool LLViewerFetchedTexture::updateFetch()
             {
                 // We have data, but our fetch failed to return raw data
                 // *TODO: FIgure out why this is happening and fix it
+                // Potentially can happen when TEX_LIST_SCALE and TEX_LIST_STANDARD
+                // get requested for the same texture id at the same time
+                // (two textures, one fetcher)
                 destroyRawImage();
             }
         }

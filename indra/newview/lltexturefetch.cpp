@@ -1696,18 +1696,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
             {
                 if (http_not_found == mGetStatus)
                 {
-                    if (mFTType != FTT_MAP_TILE)
-                    {
-                        LL_WARNS(LOG_TXT) << "Texture missing from server (404): " << mUrl << LL_ENDL;
-                    }
-
                     if(mWriteToCacheState == NOT_WRITE) //map tiles or server bakes
                     {
                         setState(DONE);
                         releaseHttpSemaphore();
                         if (mFTType != FTT_MAP_TILE)
                         {
-                            LL_WARNS(LOG_TXT) << mID << " abort: WAIT_HTTP_REQ not found" << LL_ENDL;
+                            LL_WARNS(LOG_TXT) << mID << "NOT_WRITE texture missing from server (404), abort: " << mUrl << LL_ENDL;
                         }
                         return true;
                     }
@@ -1717,6 +1712,10 @@ bool LLTextureFetchWorker::doWork(S32 param)
                         LLViewerRegion* region = getRegion();
                         if (!region || mLastRegionId != region->getRegionID())
                         {
+                            if (mFTType != FTT_MAP_TILE)
+                            {
+                                LL_INFOS(LOG_TXT) << "Texture missing from server (404), retrying: " << mUrl << " mRetryAttempt " << mRetryAttempt << LL_ENDL;
+                            }
                             // cap failure? try on new region.
                             mUrl.clear();
                             ++mRetryAttempt;
@@ -1737,6 +1736,11 @@ bool LLTextureFetchWorker::doWork(S32 param)
                         return doWork(param);
                     }
                     // </FS:Ansariel>
+
+                    if (mFTType != FTT_MAP_TILE)
+                    {
+                        LL_WARNS(LOG_TXT) << "Texture missing from server (404): " << mUrl << LL_ENDL;
+                    }
                 }
                 else if (http_service_unavail == mGetStatus)
                 {
@@ -3047,7 +3051,7 @@ LLTextureFetchWorker* LLTextureFetch::getWorker(const LLUUID& id)
 
 
 // Threads:  T*
-bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level,
+bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level, S32& worker_state,
                                         LLPointer<LLImageRaw>& raw, LLPointer<LLImageRaw>& aux,
                                         LLCore::HttpStatus& last_http_get_status)
 {
@@ -3056,6 +3060,7 @@ bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level,
     LLTextureFetchWorker* worker = getWorker(id);
     if (worker)
     {
+        worker_state = worker->mState;
         if (worker->wasAborted())
         {
             res = true;
@@ -3134,6 +3139,7 @@ bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level,
     }
     else
     {
+        worker_state = 0;
         res = true;
     }
     return res;

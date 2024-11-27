@@ -99,6 +99,7 @@
 		<string>RenderUnloadedAvatar</string>
 		<string>RenderUseStreamVBO</string>
 		<string>RenderVBOEnable</string>
+		<string>RenderVintageMode</string>
 		<string>RenderVSyncEnable</string>
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>

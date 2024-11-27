@@ -1245,7 +1245,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="World Updating"
-         top_pad="10"
+         top_pad="5"
          width="308">
             World Updating:
         </text>
@@ -1310,7 +1310,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="Texture Rendering"
-         top_pad="7"
+         top_pad="4"
          width="308">
             Texture Rendering:
         </text>
@@ -1369,13 +1369,13 @@ If you do not understand the distinction then leave this control alone."
         <text
          type="string"
          length="1"
-         top_pad="15"
+         top_pad="10"
          follows="top|left"
          height="18"
          width="150"
          word_wrap="true"
          layout="topleft"
-         left="10"
+         left="22"
          name="TextureDetailLabel">
             Max Texture Quality Level:
         </text>
@@ -1414,12 +1414,25 @@ If you do not understand the distinction then leave this control alone."
          height="12"
          layout="topleft"
          left="10"
-         name="Alpha Mask Rendering"
-         top_pad="5"
+         name="Miscellaneous Rendering"
+         top_pad="4"
          width="308">
-            Alpha Mask Rendering:
+            Miscellaneous Rendering:
         </text>
-
+        <check_box
+         control_name="RenderVintageMode"
+         height="16"
+         initial_value="false"
+         label="Vintage Mode"
+         tool_tip="Disable different rendering pipeline features to improve performance on older machines that makes the world look closer to how it used to prior to V7."
+         layout="topleft"
+         left_delta="10"
+         name="RenderVintageMode"
+         top_pad="6"
+         width="256">
+         <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
+        </check_box>
         <check_box
          control_name="RenderAutoMaskAlphaDeferred"
          height="16"
@@ -1427,24 +1440,10 @@ If you do not understand the distinction then leave this control alone."
          label="Render alpha masks"
          tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly"
          layout="topleft"
-         left_delta="10"
+         left_delta="0"
          name="RenderAutoMaskAlphaDeferred"
-         top_pad="6"
+         top_pad="2"
          width="256"/>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left="10"
-         name="Miscellaneous Rendering"
-         top_pad="7"
-         width="308">
-            Miscellaneous Rendering:
-        </text>
-
         <check_box
          control_name="RenderGlow"
          height="16"
@@ -1452,9 +1451,9 @@ If you do not understand the distinction then leave this control alone."
          label="Render glow"
          tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
          layout="topleft"
-         left_delta="10"
+         left_delta="0"
          name="RenderGlow"
-         top_pad="6"
+         top_pad="2"
          width="256"/>
 		<slider
 		enabled_control="RenderGlow"
