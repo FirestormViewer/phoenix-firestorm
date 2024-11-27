@@ -2301,6 +2301,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 {
     LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
     LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+    LLSliderCtrl* cas_slider = getChild<LLSliderCtrl>("RenderSharpness");
 
     // disabled deferred SSAO
     if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
@@ -2315,6 +2316,20 @@ void LLFloaterPreference::disableUnavailableSettings()
         ctrl_shadows->setEnabled(false);
         ctrl_shadows->setValue(0);
     }
+
+    // Vintage mode
+    LLCachedControl<bool> is_vintage(gSavedSettings, "RenderVintageMode");
+    LLSliderCtrl* tonemapMix = getChild<LLSliderCtrl>("TonemapMix");
+    LLComboBox* tonemapSelect = getChild<LLComboBox>("TonemapType");
+    LLTextBox* tonemapLabel = getChild<LLTextBox>("TonemapTypeText");
+    LLSliderCtrl* exposureSlider = getChild<LLSliderCtrl>("RenderExposure");
+
+    tonemapSelect->setEnabled(!is_vintage);
+    tonemapLabel->setEnabled(!is_vintage);
+    tonemapMix->setEnabled(!is_vintage);
+    exposureSlider->setEnabled(!is_vintage);
+    cas_slider->setEnabled(!is_vintage);
+
 }
 
 void LLFloaterPreference::refresh()
