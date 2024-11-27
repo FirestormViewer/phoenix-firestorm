@@ -266,7 +266,10 @@ bool FSPosingMotion::allStartingRotationsAreZero() const
 void FSPosingMotion::setAllRotationsToZero()
 {
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    {
         poserJoint_iter->zeroBaseRotation();
+        poserJoint_iter->setRotationDelta(LLQuaternion::DEFAULT);
+    }
 }
 
 constexpr size_t MaximumUndoQueueLength = 20;
