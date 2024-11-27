@@ -54,6 +54,8 @@ typedef enum E_LoadPoseMethods
     HAND_RIGHT              = 8,
     HAND_LEFT               = 9,
     FACE_ONLY               = 10,
+    SELECTIVE               = 11,
+    SELECTIVE_ROT           = 12,
 } E_LoadPoseMethods;
 
 /// <summary>

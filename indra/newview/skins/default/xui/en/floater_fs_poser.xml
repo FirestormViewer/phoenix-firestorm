@@ -1158,7 +1158,7 @@ width="403">
 				 name="button_RecaptureParts"
 				 left_pad="1"
 				 top_delta="0"
-				 tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now. This button disables if you start from a T-Pose"
+				 tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now."
 				 width="45" >
 					<button.commit_callback
 					 function="Poser.RecaptureSelectedBones"/>

@@ -599,6 +599,10 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
         loadType = POSITIONS_AND_SCALES;
     else if (loadStyle == "all")
         loadType = ROT_POS_AND_SCALES;
+    else if (loadStyle == "selective")
+        loadType = SELECTIVE;
+    else if (loadStyle == "selective_rot")
+        loadType = SELECTIVE_ROT;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
@@ -753,11 +757,12 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
 
     bool loadRotations = loadMethod == ROTATIONS || loadMethod == ROTATIONS_AND_POSITIONS || loadMethod == ROTATIONS_AND_SCALES ||
-                         loadMethod == ROT_POS_AND_SCALES;
+                         loadMethod == ROT_POS_AND_SCALES || loadMethod == SELECTIVE || loadMethod == SELECTIVE_ROT;
     bool loadPositions = loadMethod == POSITIONS || loadMethod == ROTATIONS_AND_POSITIONS || loadMethod == POSITIONS_AND_SCALES ||
-                         loadMethod == ROT_POS_AND_SCALES;
+                         loadMethod == ROT_POS_AND_SCALES || loadMethod == SELECTIVE;
     bool loadScales    = loadMethod == SCALES || loadMethod == POSITIONS_AND_SCALES || loadMethod == ROTATIONS_AND_SCALES ||
-                         loadMethod == ROT_POS_AND_SCALES;
+                         loadMethod == ROT_POS_AND_SCALES || loadMethod == SELECTIVE;
+    bool loadSelective = loadMethod == SELECTIVE || loadMethod == SELECTIVE_ROT;
 
     try
     {
@@ -808,10 +813,13 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 if (!poserJoint)
                     continue;
 
+                if (loadSelective && mPoserAnimator.isPosingAvatarJoint(avatar, *poserJoint))
+                    continue;
+
                 if (control_map.has("enabled"))
                 {
                     enabled = control_map["enabled"].asBoolean();
-                    mPoserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled);
+                    mPoserAnimator.setPosingAvatarJoint(avatar, *poserJoint, enabled || loadSelective);
                 }
 
                 if (control_map.has("jointBaseRotationIsZero"))
