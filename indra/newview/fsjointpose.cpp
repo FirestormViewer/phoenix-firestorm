@@ -29,12 +29,15 @@
 #include "fsposingmotion.h"
 #include "llcharacter.h"
 
+/// <summary>
+/// The maximum length of any undo queue; adding new members preens older ones.
+/// </summary>
 constexpr size_t MaximumUndoQueueLength = 20;
 
 /// <summary>
 /// The constant time interval, in seconds, specifying whether an 'undo' value should be added.
 /// </summary>
-constexpr std::chrono::duration<double> UndoUpdateInterval = std::chrono::duration<double>(0.3);
+constexpr std::chrono::duration<double> UndoUpdateInterval = std::chrono::duration<double>(0.8);
 
 FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
 {
