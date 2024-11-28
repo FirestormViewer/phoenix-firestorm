@@ -93,7 +93,7 @@ Dummy Name replaced at run time
     <panel
       height="910"
       border="true"
-      label="Firestorm Credits"
+      label="AyaneStorm Credits"
       help_topic="about_fscredits_tab"
       name="fs_credits_panel">
         <scroll_container

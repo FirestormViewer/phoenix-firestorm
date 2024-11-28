@@ -24,6 +24,8 @@
 		<button label="Acquista L$" name="buyL" tool_tip="Clicca per acquistare L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="Distanza di disegno"/>
+		<slider tool_tip="Distanza massima di disegno dalla camera (metri)" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
 		<button name="stream_toggle_btn" tool_tip="Accendi/Spegni la musica del lotto"/>
 		<button name="media_toggle_btn" tool_tip="Accendi/Spegni tutti i media"/>

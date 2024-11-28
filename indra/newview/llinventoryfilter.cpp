@@ -680,17 +680,33 @@ bool LLInventoryFilter::checkAgainstSearchVisibility(const LLFolderViewModelItem
     const LLInventoryObject *object = gInventory.getObject(object_id);
     if (!object) return true;
 
-    const bool is_link = object->getIsLinkType();
-    if (is_link && ((mFilterOps.mSearchVisibility & VISIBILITY_LINKS) == 0))
+// <AS:chanayane> Short circuit search optimisation
+    //const bool is_link = object->getIsLinkType();
+    //if (is_link && ((mFilterOps.mSearchVisibility & VISIBILITY_LINKS) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_LINKS) == 0) && object->getIsLinkType())
+// </AS:chanayane>
         return false;
 
-    if (listener->isItemInOutfits() && ((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0))
+// <AS:chanayane> Added "Show Items" in inventory search options
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_ITEMS) == 0) && listener->isItemNotAFolder())
+        return false;
+// </AS:chanayane>
+
+// <AS:chanayane> Short circuit search optimisation
+    //if (listener->isItemInOutfits() && ((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0) && listener->isItemInOutfits())
+// </AS:chanayane>
         return false;
 
-    if (listener->isItemInTrash() && ((mFilterOps.mSearchVisibility & VISIBILITY_TRASH) == 0))
+// <AS:chanayane> Short circuit search optimisation
+    //if (listener->isItemInTrash() && ((mFilterOps.mSearchVisibility & VISIBILITY_TRASH) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_TRASH) == 0) && listener->isItemInTrash())
+// </AS:chanayane>
         return false;
-
-    if (!listener->isAgentInventory() && ((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0))
+// <AS:chanayane> Short circuit search optimisation
+    //if (!listener->isAgentInventory() && ((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0) && !listener->isAgentInventory())
+// </AS:chanayane>
         return false;
 
     return true;
@@ -912,6 +928,25 @@ void LLInventoryFilter::setFilterMarketplaceListingFolders(bool select_only_list
     }
 }
 
+// <AS:chanayane> Added "Show Items" in inventory search options
+void LLInventoryFilter::toggleSearchVisibilityItems()
+{
+    bool hide_items = mFilterOps.mSearchVisibility & VISIBILITY_ITEMS;
+    if (hide_items)
+    {
+        mFilterOps.mSearchVisibility &= ~VISIBILITY_ITEMS;
+    }
+    else
+    {
+        mFilterOps.mSearchVisibility |= VISIBILITY_ITEMS;
+    }
+
+    if (hasFilterString())
+    {
+        setModified(hide_items ? FILTER_MORE_RESTRICTIVE : FILTER_LESS_RESTRICTIVE);
+    }
+}
+// </AS:chanayane>
 
 void LLInventoryFilter::toggleSearchVisibilityLinks()
 {

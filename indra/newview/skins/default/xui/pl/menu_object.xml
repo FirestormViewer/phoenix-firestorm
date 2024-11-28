@@ -41,9 +41,9 @@
 	<menu_item_call label="Derenderuj" name="Derender"/>
 	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
 	<menu_item_call label="Zwróć" name="Return..."/>
-	<context_menu label="Weź obiekt" name="Take Submenu">
-		<menu_item_call label="Weź" name="Pie Object Take" />
-		<menu_item_call label="Weź kopię" name="Take Copy" />
+	<menu_item_call label="Weź" name="Pie Object Take" />
+	<menu_item_call label="Weź kopię" name="Take Copy" />
+	<context_menu label="Weź kilka" name="Take Multiple">
 		<menu_item_call label="Weź jako: podniesione razem" name="Take combined" />
 		<menu_item_call label="Weź kopię jako: podniesione razem" name="Take Copy combined" />
 		<menu_item_call label="Weź jako: oddzielne obiekty" name="Take Separate" />

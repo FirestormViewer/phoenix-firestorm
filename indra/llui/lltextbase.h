@@ -703,7 +703,10 @@ protected:
     // virtual
     std::string _getSearchText() const override
     {
-        return mLabel.getString() + getToolTip();
+        // <FS:PP> Look in name attributes, making search independent from localization
+        // return mLabel.getString() + getToolTip();
+        return mLabel.getString() + getToolTip() + getName();
+        // </FS:PP>
     }
 
     std::vector<LLRect> getSelectionRects();

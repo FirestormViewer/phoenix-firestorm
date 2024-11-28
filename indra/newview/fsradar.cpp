@@ -297,10 +297,12 @@ void FSRadar::updateRadarList()
         LLUUID avId          = static_cast<LLUUID>(*item_it);
         LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
 
-        if (avId == gAgentID)
-        {
-            continue;
-        }
+// <AS:chanayane> Adds own avatar in nearby people list
+        // if (avId == gAgentID)
+        // {
+        //     continue;
+        // }
+// </AS:chanayane>
 
         // Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
         auto ent = getEntry(avId);
@@ -601,12 +603,27 @@ void FSRadar::updateRadarList()
         {
             nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::ITALIC);
         }
+        
+// <AS:chanayane> Adds own avatar in nearby people list
+        if (avId == gAgentID)
+        {
+            nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | (LLFontGL::BOLD | LLFontGL::UNDERLINE));
+        }
+// </AS:chanayane>
+
         entry_options["name_style"] = nameCellStyle;
 
         LLColor4 name_color = colortable.getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
         name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), ContactSetType::RADAR);
 
         contactsets->hasFriendColorThatShouldShow(avId, ContactSetType::RADAR, name_color);
+
+// <AS:chanayane> Adds own avatar in nearby people list
+        if (avId == gAgentID)
+        {
+            name_color = colortable.getColor("AvatarListItemChatRange", LLColor4::green);
+        }
+// </AS:chanayane>
 
         entry_options["name_color"] = name_color.getValue();
 
