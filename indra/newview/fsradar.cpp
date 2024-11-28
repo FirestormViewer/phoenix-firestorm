@@ -297,10 +297,10 @@ void FSRadar::updateRadarList()
         LLUUID avId          = static_cast<LLUUID>(*item_it);
         LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
 
-        if (avId == gAgentID)
-        {
-            continue;
-        }
+        // if (avId == gAgentID)
+        // {
+        //     continue;
+        // }
 
         // Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
         auto ent = getEntry(avId);
@@ -601,12 +601,23 @@ void FSRadar::updateRadarList()
         {
             nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::ITALIC);
         }
+        
+        if (avId == gAgentID)
+        {
+            nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | (LLFontGL::BOLD | LLFontGL::UNDERLINE));
+        }
+
         entry_options["name_style"] = nameCellStyle;
 
         LLColor4 name_color = colortable.getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
         name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), ContactSetType::RADAR);
 
         contactsets->hasFriendColorThatShouldShow(avId, ContactSetType::RADAR, name_color);
+
+        if (avId == gAgentID)
+        {
+            name_color = colortable.getColor("AvatarListItemChatRange", LLColor4::green);
+        }
 
         entry_options["name_color"] = name_color.getValue();
 
