@@ -131,3 +131,4 @@ firestorm.code-workspace
 .github/release.yaml
 
 *_special.bat
+bs.cmd
