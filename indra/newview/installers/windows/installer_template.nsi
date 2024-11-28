@@ -903,28 +903,28 @@ Push $2
 # Required since ProfileImagePath is of type REG_EXPAND_SZ
     ExpandEnvStrings $2 $2
 
-# Delete files in \Users\<User>\AppData\Roaming\Firestorm
+# Delete files in \Users\<User>\AppData\Roaming\AyaneStorm
 # Remove all settings files but leave any other .txt files to preserve the chat logs
-    RMDir /r "$2\AppData\Roaming\Firestorm\logs"
-    RMDir /r "$2\AppData\Roaming\Firestorm\browser_profile"
-    RMDir /r "$2\AppData\Roaming\Firestorm\user_settings"
-    Delete  "$2\AppData\Roaming\Firestorm\*.xml"
-    Delete  "$2\AppData\Roaming\Firestorm\*.bmp"
-    Delete  "$2\AppData\Roaming\Firestorm\search_history.txt"
-    Delete  "$2\AppData\Roaming\Firestorm\plugin_cookies.txt"
-    Delete  "$2\AppData\Roaming\Firestorm\typed_locations.txt"
-# Delete files in \Users\<User>\AppData\Local\Firestorm
+    RMDir /r "$2\AppData\Roaming\AyaneStorm\logs"
+    RMDir /r "$2\AppData\Roaming\AyaneStorm\browser_profile"
+    RMDir /r "$2\AppData\Roaming\AyaneStorm\user_settings"
+    Delete  "$2\AppData\Roaming\AyaneStorm\*.xml"
+    Delete  "$2\AppData\Roaming\AyaneStorm\*.bmp"
+    Delete  "$2\AppData\Roaming\AyaneStorm\search_history.txt"
+    Delete  "$2\AppData\Roaming\AyaneStorm\plugin_cookies.txt"
+    Delete  "$2\AppData\Roaming\AyaneStorm\typed_locations.txt"
+# Delete files in \Users\<User>\AppData\Local\AyaneStorm
     ${If} ${ISOPENSIM} == "0"
         ${If} ${IS64BIT} == "0"
-            RMDir /r "$2\AppData\Local\Firestorm"				#Delete the Havok cache folder
+            RMDir /r "$2\AppData\Local\AyaneStorm"				#Delete the Havok cache folder
         ${Else}
-            RMDir /r "$2\AppData\Local\Firestorm_x64"			#Delete the OpenSim cache folder
+            RMDir /r "$2\AppData\Local\AyaneStorm_x64"			#Delete the OpenSim cache folder
         ${EndIf}
     ${Else}
         ${If} ${IS64BIT} == "0"
-            RMDir /r "$2\AppData\Local\FirestormOS"			#Delete the Havok cache folder
+            RMDir /r "$2\AppData\Local\AyaneStormOS"			#Delete the Havok cache folder
         ${Else}
-            RMDir /r "$2\AppData\Local\FirestormOS_x64"		#Delete the OpenSim cache folder
+            RMDir /r "$2\AppData\Local\AyaneStormOS_x64"		#Delete the OpenSim cache folder
         ${EndIf}
     ${EndIf}
 
