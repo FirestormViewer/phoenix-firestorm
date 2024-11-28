@@ -2352,6 +2352,7 @@ bool LLToolPie::handleRightClickPick()
                 }
                 else
                 {
+                    gMenuObject->setItemVisible("Take Multiple", (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() > 1));
                     gMenuObject->show(x, y);
                 }
                 // </FS:Zi>

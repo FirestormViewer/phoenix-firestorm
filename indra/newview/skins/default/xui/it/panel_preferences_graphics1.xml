@@ -117,7 +117,7 @@
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani" tool_tip="Il filtro anisotropico è un metodo per migliorare la qualità delle texture quando vengono visualizzate ad angoli relativamente ampi rispetto alla posizione della fotocamera. Di solito le rende meno sfocate a distanze maggiori."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
-			<check_box label="Abilita supporto display HiDPI (solo Mac OSX; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
+			<check_box label="Abilita supporto display HiDPI (solo macOS; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
 			<text name="Antialiasing:" tool_tip="Le modifiche a questa impostazione potrebbero richiedere il riavvio su alcuni dispositivi.">
 				Antialiasing:
 			</text>

@@ -142,16 +142,13 @@
 	<string	name="title_BELLY">Живот</string>
 	<string	name="title_LEFT_PEC">Левая грудь</string>
 	<string	name="title_RIGHT_PEC">Правая грудь</string>
+	<string	name="title_mFaceEar1Left">Левая основа</string>
+	<string	name="title_mFaceEar1Right">Правая основа</string>
+	<string	name="title_mFaceEar2Left">Левый кончик</string>
+	<string	name="title_mFaceEar2Right">Правый кончик</string>
 
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
-			<panel name="avatarSelection_panel">
-				<avatar_list name="avatars_online"/>
-				<scroll_list name="avatarSelection_scroll" tool_tip="Выберите аватар или анимеш, который вы хотите анимировать.">
-					<scroll_list.columns label="Выберите кого-нибудь..." name="name"/>
-					<scroll_list.columns label="Сохранить имя файла" name="saveFileName"/>
-				</scroll_list>
-			</panel>
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="Сдвиг" name="positionRotation_panel">
@@ -178,17 +175,17 @@
 						</scroll_list>
 					</panel>
 					<tab_container title="Руки" name="hands_tabs">
+						<panel title="Настроить" name="hands_joints_panel">
+							<scroll_list name="hand_joints_scroll">
+								<scroll_list.columns label="Часть тела" name="joint"/>
+							</scroll_list>
+						</panel>
 						<panel title="Пресеты" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Имя пресета" name="name"/>
 							</scroll_list>
 							<button label="Уст. Левая" name="button_loadHandPoseLeft" tool_tip="Двойной клик чтобы настроить левую руку на выбранный пресет"/>
 							<button label="Уст. Правая" name="button_loadHandPoseRight" tool_tip="Двойной клик чтобы настроить правую руку на выбранный пресет"/>
-						</panel>
-						<panel title="Настроить" name="hands_joints_panel">
-							<scroll_list name="hand_joints_scroll">
-								<scroll_list.columns label="Часть тела" name="joint"/>
-							</scroll_list>
 						</panel>
 					</tab_container>
 					<panel title="Разное" name="misc_joints_panel">
@@ -200,6 +197,21 @@
 						<scroll_list name="collision_volumes_scroll">
 							<scroll_list.columns label="Физика" name="joint"/>
 						</scroll_list>
+					</panel>
+					<panel title="Модель" name="avatarSelection_panel">
+						<scroll_list name="avatarSelection_scroll" tool_tip="Выберите аватар или анимеш, который вы хотите анимировать.">
+							<scroll_list.columns label="Выберите кого-нибудь..." name="name"/>
+							<scroll_list.columns label="Сохранить имя файла" name="saveFileName"/>
+						</scroll_list>
+						<button name="refresh_avatars" tool_tip="Обновить список аватаров и анимешей."/>
+						<button label="Начать позу" label_selected="Остановить позу" tool_tip="Начните позировать с выбранным аватаром или анимешем, если вам это разрешено" name="start_stop_posing_button"/>
+						<button label="Поставить в Т-позу" name="set_t_pose_button" tool_tip="Дважды щелкните, чтобы установить выбранный аватар в 'Т-позу'"/>
+					</panel>
+					<panel title="Настр." name="settings_panel">
+						<text name="trackpad_sensitivity_label">Чувствительность трекпада:</text>
+						<slider name="trackpad_sensitivity_slider" tool_tip="Регулирует чувствительность трекбола"/>
+						<check_box name="stop_posing_on_close_checkbox" label="Стоп позы по закрытию" tool_tip="Не прерывать позу может быть полезно, если вы много работаете и не хотите случайно потерять ее."/>
+						<check_box name="reset_base_rotation_on_edit_checkbox" label="Сброс базовый поворот" tool_tip="При первом редактировании поворота обнулите его значение. Это означает, что в вашей работе можно сохранить позу (а не разницу, см. раздел Загрузка/сохранение). Рядом с каждым суставом, экспорт которого вы обнулили, появляется зеленая галочка."/>
 					</panel>
 				</tab_container>
 			</panel>
@@ -227,13 +239,11 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="refresh_avatars" tool_tip="Обновить список аватаров и анимешей, которые она использует."/>
-				<button label="Начать" label_selected="Остановить" tool_tip="Начните позировать с выбранным аватаром или анимешем, если вам это разрешено" name="start_stop_posing_button"/>
 				<button name="toggleAdvancedPanel" tool_tip="Переключить область дополнительных настроек"/>
 				<button name="FlipPose_avatar" tool_tip="Перевернуть всю позу влево/вправо"/>
 				<button name="FlipJoint_avatar" tool_tip="Зеркально отобразить выбранные части тела влево/вправо"/>
 				<button label="Recap" name="button_RecaptureParts" tool_tip="Если выбранная часть тела включена/выключены, это возвращает то, что эти части тела делают прямо сейчас"/>
- 				<button label="Части Вкл/Выкл" name="toggle_PosingSelectedBones" tool_tip="Включите или выключите Позер для выбранной части тела. Если выключено, эта часть тела анимируется как обычно (с вашим AO или pose-ball/и т.д.)"/>
+				<button label="Части Вкл/Выкл" name="toggle_PosingSelectedBones" tool_tip="Включите или выключите Позер для выбранной части тела. Если выключено, эта часть тела анимируется как обычно (с вашим AO или pose-ball/и т.д.)"/>
 				<button label="Свои позы" name="toggleLoadSavePanel" tool_tip="Загружайте, сохраняйте и управляйте позами, которые вы создаете"/>
 				<button tool_tip="Управляйте своим каталогом поз" name="open_poseDir_button"/>
 				<menu_button label="Загрузить" tool_tip="Загрузить текущую выбранную позу." name="load_poses_button"/>
@@ -260,9 +270,6 @@
 						<button label="Сброс" name="reset_scales" tool_tip="Дважды щелкните, чтобы сбросить размер до исходного."/>
 					</panel>
 				</tab_container>
-			</panel>
-			<panel name="save_file_options">
-				<slider label="Чувствительность" name="trackpad_sensitivity_slider" tool_tip="Регулирует чувствительность трекбола"/>
 			</panel>
 		</layout_panel>
 	</layout_stack>

@@ -9,6 +9,7 @@ width="403">
 	<string	name="icon_category" translate="false">Inv_BodyShape</string>
 	<string	name="icon_bone" translate="false"></string>
 	<string	name="icon_object" translate="false">Inv_Object</string>
+	<string	name="icon_rotation_is_own_work" translate="false">Check_Mark</string>
 
 	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
 	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
@@ -799,6 +800,16 @@ width="403">
 						 tool_tip="Not stopping your pose can be helpful if you do a lot of work, and don't want to accidentally lose it."
 						 top_pad="5"
 						 width="134" />
+						<check_box
+						 control_name="FSPoserResetBaseRotationOnEdit"
+						 name="reset_base_rotation_on_edit_checkbox"
+						 height="16"
+						 label="Reset base-rotation on edit"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="When you first edit a rotation, reset it to zero. This means your work can save a pose (and not a diff see load/save). A green tick appears next each joint you have zero-ed export."
+						 top_pad="5"
+						 width="134" />
 					</panel>
 				</tab_container>
 			</panel>
@@ -1422,7 +1433,7 @@ width="403">
 						 layout="topleft"
 						 left="10"
 						 max_val="2"
-						 min_val="0"
+						 min_val="-2"
 						 name="Advanced_Scale_X"
 						 top_pad="6"
 						 width="380" >
@@ -1441,7 +1452,7 @@ width="403">
 						 layout="topleft"
 						 left_delta="0"
 						 max_val="2"
-						 min_val="0"
+						 min_val="-2"
 						 name="Advanced_Scale_Y"
 						 top_pad="1"
 						 width="380" >
@@ -1460,7 +1471,7 @@ width="403">
 						 layout="topleft"
 						 left_delta="0"
 						 max_val="2"
-						 min_val="0"
+						 min_val="-2"
 						 name="Advanced_Scale_Z"
 						 top_pad="1"
 						 width="380" >
