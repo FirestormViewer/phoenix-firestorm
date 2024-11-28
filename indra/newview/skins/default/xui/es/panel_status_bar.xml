@@ -27,6 +27,8 @@
 		<button name="buyL" label="COMPRAR L$" halign="left" tool_tip="Pulsa para comprar más L$" left_pad="-15"/>
 	</panel>
 	<panel name="time_and_media_bg" width="229">
+		<icon name="dd_icon" tool_tip="Distancia de dibujo"/>
+		<slider tool_tip="Distancia máxima desde la cámara, en metros a la que se dibujarán objetos" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)" width="78">
 			24:00:00 PST
 		</text>

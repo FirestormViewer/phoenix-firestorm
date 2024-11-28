@@ -32,6 +32,8 @@
 		<button label="Купить L$" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="Дальность прорисовки"/>
+		<slider tool_tip="Максимальное расстояние прорисовки от камеры (метры)" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Текущее время (Тихоокеанское)"/>
 		<button name="stream_toggle_btn" tool_tip="Включить/Выключить воспроизведение потокового аудио"/>
 		<button name="media_toggle_btn" tool_tip="Включить/Выключить воспроизведение всего медиа (Музыка, Видео, Web)"/>

@@ -24,6 +24,8 @@
 		<button label="Ach. L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$."/>
 	</panel>
 	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="Distance d'affichage"/>
+		<slider tool_tip="Distance d'affiche maximale de la caméra au delà de laquelle les objets disparaissent" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">
 			00h00 PST
 		</text>

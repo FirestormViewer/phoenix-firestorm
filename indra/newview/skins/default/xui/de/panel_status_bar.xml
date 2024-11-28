@@ -27,6 +27,8 @@
 		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
 	</panel>
 	<panel name="time_and_media_bg" width="229">
+		<icon name="dd_icon" tool_tip="Draw Distance"/>
+		<slider tool_tip="Maximale Distanz von der Kamera, die angezeigt werden soll (in Meter)" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)" width="78">
 			24:00:00 PST
 		</text>

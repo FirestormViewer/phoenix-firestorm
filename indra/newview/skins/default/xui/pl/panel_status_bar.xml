@@ -24,6 +24,8 @@
 		<button label="KUP L$" name="buyL" tool_tip="Kliknij aby kupić więcej L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="Pole widzenia"/>
+		<slider tool_tip="Maksymalny dystans rezzowania od kamery (metry)" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>
 		<button name="stream_toggle_btn" tool_tip="Odtwórz/Zatrzymaj strumień audio tej działki"/>
 		<button name="media_toggle_btn" tool_tip="Odtwórz/Zatrzymaj wszystkie media (Muzyka, Wideo, WWW)"/>
