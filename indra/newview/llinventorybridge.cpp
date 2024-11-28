@@ -1380,6 +1380,7 @@ LLInventoryFilter* LLInvFVBridge::getInventoryFilter() const
     return panel ? &(panel->getFilter()) : NULL;
 }
 
+// <AS:chanayane> Added "Show Items" in inventory search options
 bool LLInvFVBridge::isItemNotAFolder() const
 {
     LLInventoryModel* model = getInventoryModel();
@@ -1390,6 +1391,7 @@ bool LLInvFVBridge::isItemNotAFolder() const
 
     return LLAssetType::AT_CATEGORY != item->getType();
 }
+// </AS:chanayane>
 
 bool LLInvFVBridge::isItemInTrash() const
 {

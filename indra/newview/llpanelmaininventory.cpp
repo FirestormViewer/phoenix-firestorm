@@ -2426,10 +2426,12 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         getCurrentFilter().toggleSearchVisibilityLinks();
     }
 
+// <AS:chanayane> Added "Show Items" in inventory search options
     if (command_name == "toggle_include_items")
     {
         getCurrentFilter().toggleSearchVisibilityItems();
     }
+// <AS:chanayane> Added "Show Items" in inventory search options
 
     if (command_name == "share")
     {
@@ -2657,10 +2659,12 @@ bool LLPanelMainInventory::isActionChecked(const LLSD& userdata)
         return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
     }
 
+// <AS:chanayane> Added "Show Items" in inventory search options
     if (command_name == "toggle_include_items")
     {
         return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_ITEMS) != 0;
     }
+// </AS:chanayane>
 
     if (command_name == "toggle_search_outfits")
     {
