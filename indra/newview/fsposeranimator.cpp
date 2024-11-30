@@ -377,25 +377,40 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!jointPose)
         return;
 
-    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
-    if (style == NONE || !oppositeJointPose)
-    {
-        jointPose->setPositionDelta(position);
-        return;
-    }
-
     LLVector3 positionDelta = jointPose->getPositionDelta() - position;
-    LLVector3 oppositeJointPosition = oppositeJointPose->getPositionDelta();
+
     switch (style)
     {
+        case MIRROR:
+        case MIRROR_DELTA:
+        case SYMPATHETIC_DELTA:
         case SYMPATHETIC:
             jointPose->setPositionDelta(position);
-            oppositeJointPose->setPositionDelta(oppositeJointPosition - positionDelta);
             break;
 
-        case MIRROR:
+        case DELTAMODE:
+        case NONE:
+        default:
             jointPose->setPositionDelta(position);
+            return;
+    }
+
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    LLVector3 oppositeJointPosition = oppositeJointPose->getPositionDelta();
+
+    switch (style)
+    {
+        case MIRROR:
+        case MIRROR_DELTA:
             oppositeJointPose->setPositionDelta(oppositeJointPosition + positionDelta);
+            break;
+
+        case SYMPATHETIC_DELTA:
+        case SYMPATHETIC:
+            oppositeJointPose->setPositionDelta(oppositeJointPosition - positionDelta);
             break;
 
         default:
@@ -751,15 +766,24 @@ void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* join
         return;
 
     jointPose->setScaleDelta(scale);
-
-    if (style == NONE)
-        return;
-
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
         return;
 
-    oppositeJointPose->setScaleDelta(scale);
+    switch (style)
+    {
+        case SYMPATHETIC:
+        case MIRROR:
+        case SYMPATHETIC_DELTA:
+        case MIRROR_DELTA:
+            oppositeJointPose->setScaleDelta(scale);
+            break;
+
+        case DELTAMODE:
+        case NONE:
+        default:
+            return;
+    }
 }
 
 bool FSPoserAnimator::tryGetJointSaveVectors(LLVOAvatar* avatar, const FSPoserJoint& joint, LLVector3* rot, LLVector3* pos,
