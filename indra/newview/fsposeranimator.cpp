@@ -116,7 +116,7 @@ void FSPoserAnimator::undoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoi
 
     jointPose->undoLastRotationChange();
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -144,7 +144,7 @@ void FSPoserAnimator::undoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoi
 
     jointPose->undoLastPositionChange();
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -172,7 +172,7 @@ void FSPoserAnimator::undoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint&
 
     jointPose->undoLastScaleChange();
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -200,7 +200,7 @@ void FSPoserAnimator::resetJointPosition(LLVOAvatar* avatar, const FSPoserJoint&
 
     jointPose->setPositionDelta(LLVector3());
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -228,7 +228,7 @@ void FSPoserAnimator::resetJointScale(LLVOAvatar* avatar, const FSPoserJoint& jo
 
     jointPose->setScaleDelta(LLVector3());
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -275,7 +275,7 @@ void FSPoserAnimator::redoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoi
 
     jointPose->redoLastRotationChange();
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -303,7 +303,7 @@ void FSPoserAnimator::redoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoi
 
     jointPose->redoLastPositionChange();
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
@@ -331,7 +331,7 @@ void FSPoserAnimator::redoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint&
 
     jointPose->redoLastScaleChange();
 
-    if (style == NONE)
+    if (style == NONE || style == DELTAMODE)
         return;
 
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint.mirrorJointName());
