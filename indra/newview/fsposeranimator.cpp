@@ -508,9 +508,14 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
             jointPose->setRotationDelta(rot_quat);
             break;
 
-        case DELTAMODE:
+        case SYMPATHETIC_DELTA:
+        case MIRROR_DELTA:
             jointPose->setRotationDelta(rot_quat * jointPose->getRotationDelta());
             break;
+
+        case DELTAMODE:
+            jointPose->setRotationDelta(rot_quat * jointPose->getRotationDelta());
+            return;
 
         case NONE:
         default:
@@ -532,13 +537,18 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
             oppositeJointPose->setRotationDelta(rot_quat);
             break;
 
+        case SYMPATHETIC_DELTA:
+            oppositeJointPose->setRotationDelta(rot_quat * oppositeJointPose->getRotationDelta());
+            break;
+
         case MIRROR:
             inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
             oppositeJointPose->setRotationDelta(inv_quat);
             break;
 
-        case DELTAMODE:
-            oppositeJointPose->setRotationDelta(rot_quat * oppositeJointPose->getRotationDelta());
+        case MIRROR_DELTA:
+            inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
+            oppositeJointPose->setRotationDelta(inv_quat * oppositeJointPose->getRotationDelta());
             break;
 
         default:

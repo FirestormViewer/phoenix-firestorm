@@ -113,6 +113,16 @@ width="403">
 	<string	name="joint_transform_mFaceForeheadCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceForeheadRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 
+	<!-- For the joints/bones/thingos that are apt to Gimbal Lock, we may instead apply rotations as deltas by default, which never lock -->
+	<string	name="joint_delta_rotate_mHipLeft">true</string>
+	<string	name="joint_delta_rotate_mHipRight">true</string>
+	<string	name="joint_delta_rotate_mKneeLeft">true</string>
+	<string	name="joint_delta_rotate_mKneeRight">true</string>
+	<string	name="joint_delta_rotate_mElbowLeft">true</string>
+	<string	name="joint_delta_rotate_mElbowRight">true</string>
+	<string	name="joint_delta_rotate_mWristLeft">true</string>
+	<string	name="joint_delta_rotate_mWristRight">true</string>
+
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
 	<string	name="header_mHead">Body</string>
 	<string	name="header_mFaceForeheadLeft">Forehead/Brows</string>
@@ -913,12 +923,10 @@ width="403">
 					 image_overlay="Inv_Mesh"
 					 image_unselected="Toolbar_Middle_Off"
 					 name="delta_mode_toggle"
-					 tool_tip="If changing multiple joints each changes by the same amount, rather than all of them getting the same rotation."
+					 tool_tip="If changing multiple joints each changes by the same amount, rather than all of them getting the same rotation. Also used for breaking Gimbal Lock."
 					 width="18"
 					 top_delta="0"
 					 left_pad="1">
-						<button.commit_callback
-						 function="Poser.ToggleDeltaModeChanges"/>
 					</button>
 					<button
 					 follows="left|top"

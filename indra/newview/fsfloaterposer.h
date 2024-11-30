@@ -147,8 +147,16 @@ class FSFloaterPoser : public LLFloater
     /// Gets the current bone-deflection style: encapsulates 'anything else you want to do' while you're manipulating a joint.
     /// Such as: fiddle the opposite joint too.
     /// </summary>
+    /// <param name="jointName">The well-known joint name of the joint to add the row for, eg: mChest.</param>
     /// <returns>A E_BoneDeflectionStyles member.</returns>
-    E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle() const;
+    E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle(const std::string& jointName) const;
+
+    /// <summary>
+    /// Gets whether the supplied joint name should be rotated using the delta method.
+    /// </summary>
+    /// <param name="deflection">The deflection to consider.</param>
+    /// <returns>true if the joint should be rotated by delta for any reason, otherwise false.</returns>
+    bool isAnyDeltaModeRotation(const E_BoneDeflectionStyles deflection);
 
     /// <summary>
     /// Gets the collection of UUIDs for nearby avatars.
@@ -178,7 +186,7 @@ class FSFloaterPoser : public LLFloater
     /// There may be +/- PI difference two axes, because harmonics.
     /// Thus keep your UI synced with less gets.
     /// </remarks>
-    void setSelectedJointsRotation(F32 yawInRadians, F32 pitchInRadians, F32 rollInRadians);
+    void setSelectedJointsRotation(LLVector3 absoluteRot, LLVector3 deltaRot);
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
 
@@ -214,8 +222,7 @@ class FSFloaterPoser : public LLFloater
     void onToggleAdvancedPanel();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
-    void onToggleDeltaModeChange();
-    void setRotationChangeButtons(bool mirror, bool sympathetic, bool togglingDelta);
+    void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastRotation();
     void onRedoLastRotation();
     void onUndoLastPosition();
@@ -230,7 +237,7 @@ class FSFloaterPoser : public LLFloater
     void startPosingSelf();
     void stopPosingSelf();
     void onLimbTrackballChanged();
-    void onLimbYawPitchRollChanged();
+    void onYawPitchRollSliderChanged();
     void onAvatarPositionSet();
     void onAdvancedPositionSet();
     void onAdvancedScaleSet();
@@ -369,6 +376,7 @@ class FSFloaterPoser : public LLFloater
     /// </remarks>
     static F32 unWrapScale(F32 scale);
 
+    LLVector3          mLastSliderRotation;
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
 
     LLSliderCtrl* mTrackpadSensitivitySlider{ nullptr };

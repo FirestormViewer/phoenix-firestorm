@@ -50,10 +50,12 @@ typedef enum E_BoneTypes
 /// </summary>
 typedef enum E_BoneDeflectionStyles
 {
-    NONE        = 0,  // do nothing additional
-    MIRROR      = 1,  // change the other joint, like in a mirror, eg: one left one right
-    SYMPATHETIC = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
-    DELTAMODE   = 3,  // each selected joint changes by the same supplied amount relative to their current
+    NONE              = 0,  // do nothing additional
+    MIRROR            = 1,  // change the other joint, like in a mirror, eg: one left one right
+    SYMPATHETIC       = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
+    DELTAMODE         = 3,  // each selected joint changes by the same supplied amount relative to their current
+    MIRROR_DELTA      = 4,  // As MIRROR, but applied as negated delta to opposite
+    SYMPATHETIC_DELTA = 5,  // As SYMPATHETIC, but applied as delta
 } E_BoneDeflectionStyles;
 
 /// <summary>
