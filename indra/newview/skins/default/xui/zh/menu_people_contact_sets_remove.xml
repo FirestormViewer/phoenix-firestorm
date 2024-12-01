@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_people_contact_sets_remove">
+	<menu_item_call label="移除聯絡人分組" name="remove_set" />
+	<menu_item_call label="移除聯絡人" name="remove_contact" />
+	<menu_item_call label="移除別名" name="remove_alias" />
+	<menu_item_call label="移除顯示名" name="remove_display_name" />
+</toggleable_menu>

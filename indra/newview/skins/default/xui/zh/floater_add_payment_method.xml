@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_add_payment_method">
+	<panel name="wrapper_panel">
+		<text name="title_txt">
+			新增一種購買林登幣的付款方式，並從第二人生中體驗更多。
+		</text>
+		<button label="現在開始" name="continue_btn" />
+		<button label="稍後" name="close_btn" />
+		<text name="image_left_desc">
+			建立一個你喜歡的化身。從商店和第二人生市場的數百萬件商品中進行選擇。找到適合你的風格。
+		</text>
+		<text name="image_center_desc">
+			為您喜愛的藝術家和主持人捐款。您的支援將幫助他們創造美好的體驗。
+		</text>
+		<text name="image_right_desc">
+			打造您夢想中的家，數以百萬計的商品可供選擇，讓您的度假勝地獨一無二。
+		</text>
+	</panel>
+</floater>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+	<string name="ServerComboTooltip">
+		已知的類比網路或類比網路URI
+	</string>
+	<layout_stack name="ui_stack">
+		<layout_panel name="ui_container">
+			<layout_stack name="vert_stack_left">
+				<layout_panel name="1st_row">
+					<layout_stack name="1st_row_stack">
+						<layout_panel name="login">
+							<combo_box name="username_combo" label="使用者名稱" tool_tip="在註冊時選擇的使用者名稱，例如「berndschmidt12」或「Liebe Sonne」" />
+							<check_box label="儲存使用者名稱" name="remember_username_check" />
+						</layout_panel>
+						<layout_panel name="delete_container">
+							<button tool_tip="刪除此使用者名稱" name="remove_user_btn" />
+						</layout_panel>
+						<layout_panel name="password_container">
+							<line_editor name="password_edit" label="密碼" />
+							<check_box label="儲存密碼" name="remember_check" />
+							<button name="password_show_btn" tool_tip="顯示密碼文字" />
+							<button name="password_hide_btn" tool_tip="隱藏密碼文字" />
+						</layout_panel>
+						<layout_panel name="start_location_panel">
+							<combo_box name="start_location_combo" label="開始位置:">
+								<combo_box.item label="我上一次的位置" name="MyLastLocation" />
+								<combo_box.item label="我的家" name="MyHome" />
+								<combo_box.item label="&lt;請輸入區域名稱&gt;" name="Typeregionname" />
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="2nd_row">
+					<layout_stack name="2nd_row_stack">
+						<layout_panel name="grid_panel">
+							<text name="grid_login_text">
+								網路:
+							</text>
+							<text name="grid_builder_text">
+								+ 新增更多類比網格
+							</text>
+						</layout_panel>
+						<layout_panel name="mode_selection">
+							<text name="mode_selection_text">
+								模式:
+							</text>
+							<combo_box name="mode_combo" tool_tip="選擇您最熟悉的檢視器樣式，以便根據您的需求進行調整。">
+								<combo_box.item label="混合" name="Hybrid" />
+								<combo_box.item label="文字" name="Text" />
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+			<button label="登入" name="connect_btn" />
+			<text name="create_new_account_text">
+				註冊新帳戶
+			</text>
+			<text name="forgot_password_text">
+				忘記密碼？
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

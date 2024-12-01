@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="contents" title="縮圖助手">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="從您的庫存中黏貼檔案">
+		<scroll_list.columns label="檔案" name="item_name" />
+		<scroll_list.columns label="現有圖像" name="existing_texture" />
+		<scroll_list.columns label="新圖像" name="new_texture" />
+	</scroll_list>
+	<button label="從庫存中黏貼物件" name="paste_items_btn" />
+	<button label="從庫存中黏貼紋理" name="paste_textures_btn" />
+	<button label="儲存縮圖" name="write_thumbnails_btn" />
+	<button label="記錄沒有縮圖的檔案" name="log_missing_thumbnails_btn" />
+	<button label="刪除黏貼檔案的縮圖" name="clear_thumbnails_btn" />
+</floater>

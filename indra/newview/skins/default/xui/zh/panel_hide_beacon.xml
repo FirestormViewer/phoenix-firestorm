@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_hide_beacon">
+	<button label="隱藏標記" name="hide_beacon_btn" tool_tip="停止追蹤並隱藏標記" />
+</panel>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skirt_panel">
+	<panel name="avatar_skirt_color_panel">
+		<texture_picker label="面料" name="Fabric" tool_tip="點擊以挑選圖片" />
+		<color_swatch label="顏色/色調" name="Color/Tint" tool_tip="點擊以開啟顏色挑選器" />
+	</panel>
+	<panel name="skirt_main_tab_holder">
+		<accordion name="skirt_main_accordion">
+			<accordion_tab name="skirt_main_tab" title="裙子" />
+		</accordion>
+	</panel>
+</panel>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Toolbars Popup" label="工具列按鈕">
+	<menu_item_call label="移除此按鈕" name="Remove button" />
+	<menu_item_call label="工具列按鈕" name="Choose Buttons" />
+	<menu_item_check label="左對齊" name="left_aligned" />
+	<menu_item_check label="居中對齊" name="center_aligned" />
+	<menu_item_check label="右對齊" name="right_aligned" />
+	<menu_item_check label="圖示和文字" name="icons_with_text" />
+	<menu_item_check label="僅圖示" name="icons_only" />
+	<menu_item_check label="僅文字" name="text_only" />
+	<menu_item_check label="按鈕自動調整寬度" name="layout_style_none" />
+	<menu_item_check label="按鈕固定寬度" name="layout_style_equalize" />
+	<menu_item_check label="按鈕填充工具列" name="layout_style_fill" />
+	<menu_item_check label="鎖定" name="toolbars_locked" />
+</context_menu>

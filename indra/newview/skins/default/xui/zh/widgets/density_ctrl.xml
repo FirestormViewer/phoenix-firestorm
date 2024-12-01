@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<densityctrl label="密度" name="density_ctrl">
+	<text name="exponential_term_label">
+		指數項
+	</text>
+	<text name="exponential_scale_factor_label">
+		指數比例等級
+	</text>
+	<text name="linear_term_label">
+		線性項
+	</text>
+	<text name="constant_term_label">
+		常數項
+	</text>
+	<text name="max_altitude_label">
+		最大高度
+	</text>
+	<text name="aniso_factor_label">
+		各向異性等級
+	</text>
+</densityctrl>

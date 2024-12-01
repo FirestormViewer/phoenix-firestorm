@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_wearable_favorites" title="裝扮收藏夾">
+	<floater.string name="empty_list">
+		拖拽裝扮或物件到此處以新增到列表中。
+	</floater.string>
+	<floater.string name="search_no_items">
+		沒有找到比對的物件。
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="篩選裝扮收藏夾" name="wearable_filter_input" />
+		<menu_button name="options_btn" tool_tip="裝扮收藏夾選項" />
+		<button name="remove_btn" tool_tip="從裝扮收藏夾中移除裝扮" />
+	</panel>
+</floater>

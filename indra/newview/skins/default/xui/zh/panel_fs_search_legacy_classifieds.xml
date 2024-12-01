@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="廣告" name="panel_ls_classifieds">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			搜尋條件：
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_classifieds">
+			<columns label="名稱" name="classified_name" />
+			<columns label="廣告價格" name="price" />
+		</scroll_list>
+		<button label="上一頁" name="classifieds_back" />
+		<button label="下一頁" name="classifieds_next" />
+	</panel>
+</panel>

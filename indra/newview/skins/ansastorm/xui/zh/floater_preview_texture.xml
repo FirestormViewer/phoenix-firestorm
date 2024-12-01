@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_texture">
+	<floater.string name="Title">
+		紋理：[NAME]
+	</floater.string>
+	<floater.string name="Copy">
+		複製到庫存
+	</floater.string>
+	<floater.string name="DateTime">
+		[weekday,datetime,slt], [day,datetime,slt]. [month,datetime,slt] [year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
+	<text name="desc txt">
+		描述:
+	</text>
+	<text name="uploader_label">
+		上傳者:
+	</text>
+	<button label="檔案" name="openprofile" />
+	<text name="upload_time_label">
+		時間:
+	</text>
+	<text name="uuid_label">
+		UUID:
+	</text>
+	<button label="複製" name="copyuuid" />
+	<panel name="dimensions_panel">
+		<text name="dimensions">
+			[WIDTH]畫素 x [HEIGHT]畫素
+		</text>
+		<text name="aspect_ratio">
+			寬高比
+		</text>
+		<combo_box name="combo_aspect_ratio" tool_tip="以預定義的寬高比顯示">
+			<combo_item name="Unconstrained">
+				無限制
+			</combo_item>
+			<combo_item name="1:1" tool_tip="群組徽章或描述">
+				1:1
+			</combo_item>
+			<combo_item name="4:3" tool_tip="[CURRENT_GRID]設定檔案">
+				4:3
+			</combo_item>
+			<combo_item name="10:7" tool_tip="廣告和搜尋結果，地標">
+				10:7
+			</combo_item>
+			<combo_item name="3:2" tool_tip="關於土地">
+				3:2
+			</combo_item>
+			<combo_item name="16:10">
+				16:10
+			</combo_item>
+			<combo_item name="16:9" tool_tip="設定檔案選擇">
+				16:9
+			</combo_item>
+			<combo_item name="2:1">
+				2:1
+			</combo_item>
+		</combo_box>
+	</panel>
+	<panel name="button_panel">
+		<button label="確定" name="Keep" />
+		<button label="丟棄" name="Discard" />
+		<flyout_button label="儲存..." name="save_tex_btn">
+			<flyout_button.item label="儲存為TGA" name="save_item_tga" />
+			<flyout_button.item label="儲存為PNG" name="save_item_png" />
+		</flyout_button>
+	</panel>
+</floater>

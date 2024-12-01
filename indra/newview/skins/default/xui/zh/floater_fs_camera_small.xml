@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_camera_floater_small" title="相機控制">
+	<floater.string name="rotate_tooltip">
+		圍繞焦點旋轉相機
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		縮放相機焦點
+	</floater.string>
+	<floater.string name="move_tooltip">
+		移動相機：上、下、左、右
+	</floater.string>
+	<floater.string name="free_mode_title">
+		自由模式：檢視物件
+	</floater.string>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="圍繞焦點旋轉相機" />
+				<button name="roll_left" tool_tip="向左捲動攝影機" />
+				<button name="roll_right" tool_tip="向右捲動攝影機" />
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="縮放相機焦點" />
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="上、下、左、右移動相機" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="buttons_view">
+		<panel_camera_item name="front_view" tool_tip="前視圖">
+			<panel_camera_item.text name="front_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="group_view" tool_tip="側視圖">
+			<panel_camera_item.text name="side_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="rear_view" tool_tip="後視圖">
+			<panel_camera_item.text name="rear_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+	<panel name="buttons">
+		<panel_camera_item name="object_view" tool_tip="物件視圖">
+			<panel_camera_item.text name="object_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="mouselook_view" tool_tip="滑鼠視圖">
+			<panel_camera_item.text name="mouselook_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="reset_view" tool_tip="重設視圖">
+			<panel_camera_item.text name="reset_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+</floater>

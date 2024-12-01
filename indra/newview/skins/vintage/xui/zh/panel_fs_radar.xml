@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_radar">
+	<string name="TypingColumnIcon" value="radarbox_p" />
+	<string name="MiniMapToolTipMsg" value="[REGION]（雙擊打開地圖；按住Shift鍵並拖動進行平移）" />
+	<string name="AltMiniMapToolTipMsg" value="[REGION]（雙擊傳送；按住Shift鍵並拖動進行平移）" />
+	<string name="avatar_name_count" value="名字[[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]" />
+	<panel name="nearby_panel">
+		<layout_stack name="radar_ls">
+			<layout_panel name="radarlayout">
+				<radar_list name="radar_list">
+					<radar_list.columns label="名字" name="name" tool_tip="[TOTAL]個化身，[IN_REGION]在同一區域， [IN_CHAT_RANGE] 在聊天範圍內" />
+					<radar_list.columns tool_tip="正在使用語音" name="voice_level" />
+					<radar_list.columns name="in_region" tool_tip="位於同一區域（綠色）或同一地塊（黃綠色）" />
+					<radar_list.columns name="typing_status" tool_tip="正在輸入中" />
+					<radar_list.columns name="sitting_status" tool_tip="正在坐著" />
+					<radar_list.columns tool_tip="有支付資訊" name="flags" />
+					<radar_list.columns tool_tip="有檔案" name="has_notes" />
+					<radar_list.columns label="年齡" name="age" />
+					<radar_list.columns label="時間" name="seen" />
+					<radar_list.columns label="距離" name="range" />
+				</radar_list>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_discord" title="Discord">
+	<string name="discord_connected">
+		已連線到 Discord：
+	</string>
+	<string name="discord_disconnected">
+		未連線到 Discord。
+	</string>
+	<string name="SocialDiscordConnecting">
+		正在連線到 Discord...
+	</string>
+	<string name="SocialDiscordErrorConnecting">
+		連線到 Discord 時出現問題
+	</string>
+	<string name="SocialDiscordDisconnecting">
+		正在斷開 Discord 連線...
+	</string>
+	<text name="account_caption_label">
+		未連線到 Discord。
+	</text>
+	<check_box label="登入時自動連線" name="startup_check" />
+	<check_box label="與 Discord 共享使用者名稱" name="name_check" />
+	<button label="連線中..." name="connect_btn" />
+	<button label="斷開連線" name="disconnect_btn" />
+	<text name="rating_label">
+		將以下等級的區域名稱與 Discord 共享：
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="普級、適度成人、完全成人" name="Desired_Adult" />
+		<combo_box.item label="普級和適度成人" name="Desired_Mature" />
+		<combo_box.item label="普級" name="Desired_PG" />
+		<combo_box.item label="不共享" name="Desired_None" />
+	</combo_box>
+	<text name="dont_names_label">
+		將以下列出的區域名稱不與 Discord 共享：
+	</text>
+	<text name="connection_status_text">
+		正在載入...
+	</text>
+</floater>

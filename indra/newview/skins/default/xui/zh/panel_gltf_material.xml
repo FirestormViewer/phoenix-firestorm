@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_gltf_material">
+	<check_box label="雙面" name="double sided" />
+	<panel name="base_color_texture_pnl">
+		<text name="base_color_lbl">
+			基礎顏色:
+		</text>
+		<texture_picker name="base_color_texture" tool_tip="基礎顏色貼圖。 alpha 通道可選，用於透明度。" />
+		<text name="base_color_upload_fee">
+			無上傳費用
+		</text>
+		<text name="base_color_tint_lbl">
+			色調
+		</text>
+		<text name="base_color_transparency_lbl">
+			Alpha透明度
+		</text>
+		<text name="alpha_mode_lbl">
+			Alpha模式
+		</text>
+		<combo_box name="alpha mode">
+			<combo_box.item label="不透明" name="None" />
+			<combo_box.item label="混合" name="Alpha blending" />
+			<combo_box.item label="遮罩" name="Alpha masking" />
+		</combo_box>
+		<text name="alpha_cutoff_lbl">
+			Alpha臨界值
+		</text>
+	</panel>
+	<panel name="metallic_texture_pnl">
+		<text name="metallic_roughness_lbl">
+			金屬-粗糙度:
+		</text>
+		<texture_picker name="metallic_roughness_texture" tool_tip="GLTF 金屬粗糙度貼圖，可選環境光遮蔽。紅色通道為環境光遮蔽，綠色通道為粗糙度，藍色通道為金屬度。" />
+		<text name="metallic_upload_fee">
+			無上傳費用
+		</text>
+		<text name="metallic_factor_lbl">
+			金屬度等級
+		</text>
+		<text name="roughness_factor_lbl">
+			粗糙度等級
+		</text>
+	</panel>
+	<panel name="emissive_texture_pnl">
+		<text name="emissive_lbl">
+			自發光:
+		</text>
+		<text name="emissive_upload_fee">
+			無上傳費用
+		</text>
+		<text name="emissive_tint_lbl">
+			色調
+		</text>
+	</panel>
+	<panel name="normal_texture_pnl">
+		<text name="normal_lbl">
+			法線:
+		</text>
+		<text name="normal_upload_fee">
+			無上傳費用
+		</text>
+	</panel>
+</panel>

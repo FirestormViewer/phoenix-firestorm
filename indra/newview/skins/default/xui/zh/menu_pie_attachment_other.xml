@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Avatar Pie">
+	<pie_slice label="檢視檔案" name="Profile..." />
+	<pie_menu name="mute_menu" label="封鎖 &gt;">
+		<pie_slice label="封鎖" name="Avatar Mute" />
+		<pie_slice label="粒子所有者" name="Mute Particle" />
+	</pie_menu>
+	<pie_slice label="去這裡" name="Go to" />
+	<pie_slice label="檢舉" name="abuse" />
+	<pie_menu label="新增 &gt;" name="add_avatar">
+		<pie_slice label="加為朋友" name="Add Friend" />
+		<pie_slice label="聯絡人分組" name="Add to set" />
+	</pie_menu>
+	<pie_slice label="支付" name="Pay..." />
+	<pie_menu name="Avatar Pie More 1" label="更多 &gt;">
+		<pie_slice label="凍結" name="Freeze..." />
+		<pie_slice label="傳送名片" name="Give Calling Card" />
+		<pie_slice label="邀請加入群組" name="Group Invite..." />
+		<pie_slice label="踢出" name="Eject..." />
+		<pie_menu name="Avatar Pie More 2" label="更多 &gt;">
+			<pie_slice label="除錯紋理" name="Debug..." />
+			<pie_slice label="指令碼資訊" name="ScriptInfo" />
+			<pie_slice label="語音通話" name="Call" />
+			<pie_slice label="放大" name="Zoom In" />
+			<pie_slice label="重新整理紋理" name="Texture Refresh" />
+			<pie_menu name="ResetMenu" label="重設 &gt;">
+				<pie_slice label="骨架和動畫" name="Reset Skeleton And Animations" />
+				<pie_slice label="骨架" name="Reset Skeleton" />
+				<pie_slice label="網格細節層次" name="Reset Mesh LOD" />
+			</pie_menu>
+			<pie_menu name="ExportMenu" label="另存為 &gt;">
+				<pie_slice label="備份" name="Backup" />
+				<pie_slice label="Collada" name="Collada" />
+				<pie_slice label="轉儲 XML" name="Dump XML" />
+			</pie_menu>
+			<pie_menu name="RenderMenu" label="彩現 &gt;">
+				<pie_slice name="RenderNormally" label="正常彩現" />
+				<pie_slice name="DoNotRender" label="永不彩現" />
+				<pie_slice name="AlwaysRenderFully" label="完全綵現" />
+			</pie_menu>
+		</pie_menu>
+		<pie_slice label="檢查化身" name="Avatar Inspect" />
+		<pie_menu name="DerenderMenu" label="隱藏 &gt;">
+			<pie_slice label="封鎖" name="DerenderPermanent" />
+			<pie_slice label="暫時" name="Derender" />
+		</pie_menu>
+	</pie_menu>
+	<pie_slice label="發起私聊" name="Send IM..." />
+</pie_menu>

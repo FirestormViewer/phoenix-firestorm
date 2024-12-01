@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="描述" name="description" />
+	<menu_item_check label="所有者" name="owner_name" />
+	<menu_item_check label="創造者" name="creator_name" />
+	<menu_item_check label="面數" name="facecount" />
+	<menu_item_check label="頂點數" name="vertexcount" />
+	<menu_item_check label="三角形數" name="trianglecount" />
+	<menu_item_check label="紋理記憶體" name="tramcount" />
+	<menu_item_check label="視訊記憶體" name="vramcount" />
+	<menu_item_check label="建立日期" name="creation_date" />
+</toggleable_menu>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="區域設定" name="RegionSettings">
+	<spinner label="預設繪製距離" name="draw_distance" tool_tip="設定此區域的預設繪製距離。" />
+	<check_box label="強制繪製距離" name="force_draw_distance" tool_tip="如果啟用，將為這個區域的所有居民強制設定繪製距離。注意：這個設定可能會對使用較舊硬體的居民產生延遲。（預設值：關閉）" />
+	<spinner label="最大拖動距離" name="max_drag_distance" tool_tip="設定這個區域內可以移動元素的最大距離。" />
+	<spinner label="最大元素尺寸" name="max_prim_scale" tool_tip="設定這個區域內元素可以達到的最大大小。" />
+	<spinner label="最小元素尺寸" name="min_prim_scale" tool_tip="設定這個區域內元素可以達到的最小大小。" />
+	<spinner label="最大物理元素尺寸" name="max_phys_prim_scale" tool_tip="設定這個區域內物理元素可以達到的最大大小。" />
+	<spinner label="最大空心尺寸" name="max_hollow_size" tool_tip="設定這個區域內元素可以設定的最大空心尺寸。" />
+	<spinner label="最小空心尺寸" name="min_hole_size" tool_tip="設定這個區域內元素可以設定的最小空心尺寸。" />
+	<spinner label="最大聯結數量" name="max_link_count" tool_tip="設定這個區域內可以聯結的非物理元素的最大數量。" />
+	<spinner label="最大物理聯結數量" name="max_link_count_phys" tool_tip="設定這個區域內可以聯結的物理元素的最大數量。" />
+	<spinner label="最大庫存物件轉移數量" name="max_inventory_items_transfer" tool_tip="設定可以同時在區域間轉讓的物件數量。-1的值表示沒有限制。（預設值：-1）" />
+	<spinner label="地形細節縮放" name="terrain_detail_scale" tool_tip="設定區域的地形細節縮放。" />
+	<spinner label="顯示標籤" name="show_tags" tool_tip="設定在區域內的化身上方如何顯示化身名稱。（總是顯示 = 2，短暫顯示 = 1，從不顯示 = 0）" />
+	<spinner label="最大群組數量" name="max_groups" tool_tip="設定一個居民可以加入的群組的數量。-1的值表示沒有限制。（預設值：-1）" />
+	<check_box label="顯示水面" name="render_water" tool_tip="如果啟用，將在區域內顯示水面。（預設值：啟用）" />
+	<check_box label="允許小地圖" name="allow_minimap" tool_tip="如果啟用，將允許在區域內使用小地圖。（預設值：啟用）" />
+	<check_box label="允許物理元素" name="allow_physical_prims" tool_tip="如果啟用，將允許在區域內建立物理元素。（預設值：啟用）" />
+	<check_box label="強制最大建築限制" name="enforce_max_build" tool_tip="如果啟用，將由區域強制執行最大的建築限制。" />
+	<check_box label="允許地塊大氣彩現" name="allow_parcel_windlight" tool_tip="如果啟用，將啟用地塊的大氣彩現設定。（預設值：啟用）" />
+	<button label="應用" name="apply_ors_btn" />
+</panel>

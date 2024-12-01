@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="物件備份">
+	<floater.string name="title_floater">
+		正在將 [OBJECT] 備份到磁碟...
+	</floater.string>
+	<floater.string name="title_working">
+		正在將 [OBJECT] 備份 - 取得詳細資訊...
+	</floater.string>
+	<floater.string name="title_inventory">
+		正在將 [OBJECT] 備份 - 載入庫存...
+	</floater.string>
+	<floater.string name="title_assets">
+		正在將 [OBJECT] 備份 - 載入資源...
+	</floater.string>
+	<floater.string name="title_textures">
+		正在將 [OBJECT] 備份 - 載入紋理...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				選擇資訊
+			</text>
+			<text name="exportable_prims">
+				可匯出的元素：[COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				可匯出的紋理：[COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				選項：
+			</text>
+			<check_box name="contents_check" label="將物件內容儲存到磁碟" />
+			<button name="export_btn" label="另存為..." />
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel name="prims_panel" label="元素" />
+				<panel name="texture_panel" label="紋理" />
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

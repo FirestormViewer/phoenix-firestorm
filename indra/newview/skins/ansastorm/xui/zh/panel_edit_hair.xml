@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="紋理" name="Texture" tool_tip="點擊以挑選圖片" />
+	</panel>
+	<accordion name="wearable_accordion">
+		<panel name="hair_color_tab_holder" title="顏色">
+			<accordion name="hair_color_accordion">
+				<accordion_tab name="hair_color_tab" title="顏色" />
+			</accordion>
+		</panel>
+		<panel name="hair_style_tab_holder" title="風格">
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="風格" />
+			</accordion>
+		</panel>
+		<panel name="hair_eyebrows_tab_holder" title="眉毛">
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="眉毛" />
+			</accordion>
+		</panel>
+		<panel name="hair_facial_tab_holder" title="臉部">
+			<text name="hair_facial_not_available">
+				臉部選項僅適用於男性化身。
+			</text>
+			<accordion name="hair_facial_accordion">
+				<accordion_tab name="hair_facial_tab" title="臉部" />
+			</accordion>
+		</panel>
+	</accordion>
+</panel>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker" title="資金追蹤">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="時間" />
+		<name_list.columns name="name" label="名稱" />
+		<name_list.columns name="amount" label="金額" />
+	</name_list>
+	<text name="summary">
+		已支付：[PAID] L$ - 已收到：[RECEIVED] L$
+	</text>
+	<check_box label="始終記錄" name="FSAlwaysTrackPayments" tool_tip="即使關閉資金追蹤，也始終記錄支付。" />
+	<button name="Clear" label="移除" />
+</floater>

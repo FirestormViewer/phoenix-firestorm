@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="av_nearby_title">
+		附近的化身
+	</text>
+	<text name="av_nearby_desc">
+		隱藏複雜化身以提高速度
+	</text>
+	<slider tool_tip="定義化身因太複雜而無法彩現的時間門檻值（單位：微秒）" label="最大彩現時間（微秒）" name="RenderAvatarMaxART" />
+	<text name="RenderAvatarMaxARTText">
+		無限制
+	</text>
+	<text name="av_nearby_desc2">
+		右鍵單擊化身也可以調整顯示方式。
+	</text>
+	<text name="AvatarComplexityModeLabel">
+		化身顯示模式：
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="按複雜度限制" name="0" />
+		<combo_box.item label="始終顯示好友" name="1" />
+		<combo_box.item label="僅顯示好友" name="2" />
+	</combo_box>
+	<button label="例外..." name="exceptions_btn" />
+	<check_box label="隱藏所有化身（適用於景觀相片）" name="hide_avatars" />
+	<text name="name_tags_textbox">
+		化身名稱：
+	</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="開啟" name="radio" />
+		<radio_item label="關閉" name="radio2" />
+		<radio_item label="精簡顯示" name="radio3" />
+	</radio_group>
+</panel>

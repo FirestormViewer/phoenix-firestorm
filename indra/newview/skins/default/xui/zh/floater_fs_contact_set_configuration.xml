@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_contact_set_configure" title="聯絡人分組設定">
+	<floater.string name="title">
+		[NAME] 設定
+	</floater.string>
+	<panel name="top_panel">
+		<text name="set_label">
+			聯絡人分組設定：
+		</text>
+		<line_editor name="set_name_editor" right="-100" />
+		<button name="rename_btn" width="85" label="重新命名" />
+		<color_swatch label="顏色選擇" name="set_swatch" tool_tip="點擊以打開顏色選擇" />
+		<check_box label="顯示通知" name="show_set_notifications" />
+	</panel>
+	<panel name="bottom_panel">
+		<text name="global_label">
+			全域設定：
+		</text>
+		<color_swatch label="顏色" name="global_swatch" tool_tip="點擊以打開顏色選擇" />
+		<text name="label_online">
+			線上通知：
+		</text>
+		<check_box label="將所有好友的線上通知顯示在彈出視窗中" name="ChatOnlineNotification" />
+		<check_box label="將所有好友的線上通知顯示在聊天中" name="OnlineOfflinetoNearbyChat" />
+		<check_box label="將特定分組的線上通知顯示為彈出視窗中" name="FSContactSetsNotificationToast" />
+		<check_box label="將特定分組的線上通知顯示在聊天中" name="FSContactSetsNotificationNearbyChat" />
+		<text name="label_colors">
+			自訂顏色：
+		</text>
+		<check_box label="基於聯絡人分組在小地圖上顯示不同顏色的圖示" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="基於聯絡人分組在名稱標籤上顯示不同顏色" name="FSContactSetsColorizeNameTag" />
+		<check_box label="基於聯絡人分組在雷達上顯示不同顏色的條目" name="FSContactSetsColorizeRadar" />
+		<check_box label="基於聯絡人分組在聊天中顯示不同顏色" name="FSContactSetsColorizeChat" />
+	</panel>
+</floater>

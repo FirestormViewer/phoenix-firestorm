@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_add_contact" title="新增到聯絡人分組...">
+	<floater.string name="no_sets">
+		暫無可用的聯絡人分組。
+	</floater.string>
+	<floater.string name="text_add_single">
+		要將 [NAME] 新增到哪個聯絡人分組：
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		要將 [COUNT] 個化身新增到哪個聯絡人分組：
+	</floater.string>
+	<text name="textfield"></text>
+	<button label="新增到分組" name="add_btn" />
+	<button label="取消" name="cancel_btn" />
+</floater>

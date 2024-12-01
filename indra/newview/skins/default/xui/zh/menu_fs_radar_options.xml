@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="雷達上方顯示小地圖" name="ShowRadarMinimap" />
+	<menu_item_check label="限制顯示範圍" name="LimitRadarByRange" />
+	<menu_item_check label="顯示被靜音和封鎖的居民" name="FSRadarShowMutedAndDerendered" />
+	<context_menu label="雷達名稱格式" name="radarNameFormat">
+		<menu_item_check label="顯示名" name="radarFmtDN" />
+		<menu_item_check label="使用者名稱" name="radarFmtUN" />
+		<menu_item_check label="顯示名（使用者名稱）" name="radarFmtDNUN" />
+		<menu_item_check label="使用者名稱（顯示名）" name="radarFmtUNDN" />
+	</context_menu>
+	<context_menu label="顯示內容欄" name="visible_columns">
+		<menu_item_check label="語音" name="voice_level" />
+		<menu_item_check label="同一區域" name="in_region" />
+		<menu_item_check label="輸入狀態" name="typing_status" />
+		<menu_item_check label="坐姿狀態" name="sitting_status" />
+		<menu_item_check label="支付資訊狀態" name="flags" />
+		<menu_item_check label="備註狀態" name="has_notes" />
+		<menu_item_check label="年齡" name="age" />
+		<menu_item_check label="上線時間" name="seen" />
+	</context_menu>
+	<menu_item_check label="根據距離著色名字" name="radarColorNamesBasedOnDistance" />
+	<context_menu label="報告傳送到" name="report_to_menu">
+		<menu_item_check label="通知提示" name="radar_nearby_chat" />
+		<menu_item_check label="通知提示" name="radar_nearby_chat" />
+	</context_menu>
+	<menu_item_check label="在地圖上顯示聊天範圍" name="MiniMapChatRing" />
+	<menu_item_check label="報告進入繪製距離" name="RadarReportDrawRangeEnter" />
+	<menu_item_check label="報告離開繪製距離" name="RadarReportDrawRangeLeave" />
+	<menu_item_check label="報告進入聊天範圍" name="RadarReportChatRangeEnter" />
+	<menu_item_check label="報告離開聊天範圍" name="RadarReportChatRangeLeave" />
+	<menu_item_check label="報告進入區域" name="RadarReportSimRangeEnter" />
+	<menu_item_check label="報告離開區域" name="RadarReportSimRangeLeave" />
+	<menu_item_check label="觸發年齡警報時報告" name="RadarReportAgeAlert" />
+	<menu_item_check label="傳送進入頻道提示" name="RadarEnterChannelAlert" />
+	<menu_item_check label="傳送離開頻道提示" name="RadarLeaveChannelAlert" />
+	<menu_item_check label="使用LSL橋提高準確性" name="FSRadarEnhanceByBridge" />
+	<menu_item_call label="檢視被封鎖的居民&amp;物件列表" name="show_blocked_list" />
+</toggleable_menu>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents>
+	<rows name="media_actions">
+		<columns label="聲音與媒體" name="lst_action" />
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="播放/停止媒體" />
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="播放/停止所有媒體" />
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="語音聊天" />
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="切換語音聊天" />
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="開始聊天" />
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="開始手勢" />
+	</rows>
+	<rows name="script_trigger_lbutton">
+		<columns name="lst_action" value="互動（滑鼠左鍵）" />
+	</rows>
+</contents>
