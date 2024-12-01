@@ -2253,8 +2253,9 @@ bool FSFloaterPoser::writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar)
     auto startingJoint = mPoserAnimator.getPoserJointByName("mPelvis");
     writeBvhFragment(fileStream, avatar, startingJoint, 0);
     *fileStream << "MOTION" << std::endl;
-    *fileStream << "Frames:    1" << std::endl;
+    *fileStream << "Frames:    2" << std::endl;
     *fileStream << "Frame Time: 1" << std::endl;
+    *fileStream << "0.000000 0.000000 0.000000 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" << std::endl;
     writeBvhMotion(fileStream, avatar, startingJoint);
     *fileStream << std::endl;
 
