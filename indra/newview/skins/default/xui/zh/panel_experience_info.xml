@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_experience_info">
-	<text name="title" value="體驗簡覽"/>
+	<text name="title" value="體驗資訊" />
 	<scroll_container name="xp_scroll">
 		<panel name="scrolling_panel">
 			<layout_stack name="ls1">
 				<layout_panel name="title panel">
-					<text name="experience_title" value="Kyle&apos;s Superhero RPG"/>
+					<text name="experience_title" value="Kyle's Superhero RPG" />
 				</layout_panel>
 				<layout_panel name="location panel">
 					<text name="Location">
@@ -14,12 +14,12 @@
 					<text name="LocationTextText">
 						某某地點
 					</text>
-					<button label="瞬間傳送" name="teleport_btn"/>
-					<button label="地圖" name="map_btn"/>
+					<button label="瞬間傳送" name="teleport_btn" />
+					<button label="地圖" name="map_btn" />
 				</layout_panel>
 				<layout_panel name="marketplace panel">
 					<text name="Location">
-						第二人生購物市集商店：
+						第二人生購物市場商店：
 					</text>
 					<text name="LocationTextText">
 						某某地點
@@ -33,12 +33,12 @@
 						完全成人
 					</text>
 					<text name="Owner">
-						所有人：
+						所有者：
 					</text>
 					<text name="OwnerText">
 						Kyle
 					</text>
-					<button label="編輯" name="edit_btn"/>
+					<button label="編輯" name="edit_btn" />
 				</layout_panel>
 			</layout_stack>
 		</panel>

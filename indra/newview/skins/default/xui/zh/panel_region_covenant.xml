@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="契約" name="Covenant">
-	<panel.string name="can_resell">
-		購買這地區的土地允許轉售。
-	</panel.string>
-	<panel.string name="can_not_resell">
-		購買這地區的土地不允許轉售。
-	</panel.string>
-	<panel.string name="can_change">
-		購買這地區的土地允許進行合併或分割。
-	</panel.string>
-	<panel.string name="can_not_change">
-		購買這地區的土地不允許進行合併或分割。
-	</panel.string>
 	<text name="estate_section_lbl">
 		領地
 	</text>
@@ -22,7 +10,7 @@
 		大陸
 	</text>
 	<text name="estate_owner_lbl">
-		所有人：
+		所有者：
 	</text>
 	<text name="estate_owner_text">
 		（無）
@@ -33,18 +21,19 @@
 	<text name="covenant_timestamp_text">
 		上次修改於 Wed Dec 31 16:00:00 1969
 	</text>
-	<text_editor name="covenant_editor">
+	<button label="?" name="covenant_help" />
+	<text_editor bottom="-247" height="162" name="covenant_editor">
 		此領地沒有任何契約要求。
 	</text_editor>
-	<button label="重設" name="reset_covenant"/>
+	<button label="重設" name="reset_covenant" />
 	<text name="covenant_help_text">
-		契約修訂內容將顯示於領地裡所有地段。
+		契約修訂內容將顯示於領地裡所有地塊。
 	</text>
-	<text name="covenant_instructions">
-		拖曳並置放一張記事卡，即可修訂領地契約。
+	<text bottom_delta="-36" name="covenant_instructions">
+		拖放一張記事卡，即可修訂領地契約。
 	</text>
-	<text name="region_section_lbl">
-		地區
+	<text bottom_delta="-36" name="region_section_lbl">
+		區域
 	</text>
 	<text name="region_name_lbl">
 		名稱：
@@ -68,12 +57,24 @@
 		轉售：
 	</text>
 	<text name="resellable_clause">
-		這地區的土地不能轉售。
+		這區域的土地不能轉售。
 	</text>
 	<text name="changeable_lbl">
 		分割：
 	</text>
 	<text name="changeable_clause">
-		這地區的土地不能合併或分割。
+		這區域的土地不能合併或分割。
 	</text>
+	<string name="can_resell">
+		購買這區域的土地允許轉售。
+	</string>
+	<string name="can_not_resell">
+		購買這區域的土地不允許轉售。
+	</string>
+	<string name="can_change">
+		購買這區域的土地允許進行合併或分割。
+	</string>
+	<string name="can_not_change">
+		購買這區域的土地不允許進行合併或分割。
+	</string>
 </panel>

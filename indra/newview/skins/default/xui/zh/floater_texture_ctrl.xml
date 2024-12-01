@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="texture picker" title="精選：材質">
+<floater name="texture picker" title="選擇紋理">
 	<floater.string name="choose_picture">
-		點按以挑選圖片
+		點擊以挑選圖片
 	</floater.string>
 	<floater.string name="pick title">
-		精選地點：
+		精選：
+	</floater.string>
+	<floater.string name="pick_material">
+		精選: 材質
+	</floater.string>
+	<floater.string name="pick_texture">
+		精選: 紋理
 	</floater.string>
 	<text name="Multiple">
-		多重材質
+		多重紋理
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="收納區" name="inventory"/>
-		<radio_item label="本地" name="local"/>
-		<radio_item label="確定產出" name="bake"/>
+		<radio_item label="庫存" name="inventory" />
+		<radio_item label="本地" name="local" />
+		<radio_item label="烘焙" name="bake" />
 	</radio_group>
 	<text name="size_lbl">
 		尺寸：
 [DIMENSIONS]
 	</text>
-	<button label="預設" label_selected="預設" name="Default"/>
-	<button label="空白" label_selected="空白" name="Blank"/>
-	<button label="無" label_selected="無" name="None"/>
-	<text name="preview_disabled" value="已停用預覽"/>
-	<filter_editor label="材質過濾器" name="inventory search editor"/>
-	<check_box initial_value="false" label="顯示資料夾" name="show_folders_check"/>
-	<button label="添加" label_selected="添加" name="l_add_btn"/>
-	<button label="移除" label_selected="移除" name="l_rem_btn"/>
-	<button label="上傳" label_selected="上傳" name="l_upl_btn"/>
+	<text name="over_limit_lbl">
+		選擇的紋理是 [TEXDIM]。庫存圖像必須是正方形的，且尺寸介於 [MINTEXDIM] 和 [MAXTEXDIM] 之間。
+	</text>
+	<button label="標準" label_selected="標準" name="Default" />
+	<button label="無" label_selected="無" name="None" />
+	<button label="空" label_selected="空" name="Blank" />
+	<button label="透明" label_selected="透明" name="Transparent" tool_tip="提示：如果選擇了透明紋理或其他部分透明的紋理，則不會投射光線。" />
+	<button label="" label_selected="" name="Pipette" />
+	<text name="preview_disabled">
+		預覽已禁用
+	</text>
+	<search_editor label="紋理過濾器" name="inventory search editor" />
+	<button label="新增" label_selected="新增" name="l_add_btn" />
+	<button label="移除" label_selected="移除" name="l_rem_btn" />
+	<button label="上傳" label_selected="上傳" name="l_upl_btn" />
 	<scroll_list name="l_name_list">
-		<column label="名稱" name="unit_name"/>
-		<column label="ID" name="unit_id_HIDDEN"/>
+		<column label="名稱" name="unit_name" />
 	</scroll_list>
-	<combo_box name="l_bake_use_texture_combo_box" tool_tip="選擇定貌材質">
-		<combo_box.item label="無" name="None"/>
-		<combo_box.item label="BAKED_HEAD" name="BAKED_HEAD"/>
-		<combo_box.item label="BAKED_UPPER" name="BAKED_UPPER"/>
-		<combo_box.item label="BAKED_LOWER" name="BAKED_LOWER"/>
-		<combo_box.item label="BAKED_EYES" name="BAKED_EYES"/>
-		<combo_box.item label="BAKED_SKIRT" name="BAKED_SKIRT"/>
-		<combo_box.item label="BAKED_HAIR" name="BAKED_HAIR"/>
-		<combo_box.item label="BAKED_LEFTARM" name="BAKED_LEFTARM"/>
-		<combo_box.item label="BAKED_LEFTLEG" name="BAKED_LEFTLEG"/>
-		<combo_box.item label="BAKED_AUX1" name="BAKED_AUX1"/>
-		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
-		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="選擇烘焙紋理">
+		<combo_box.item label="無" name="None" />
+		<combo_box.item label="頭部" name="BAKED_HEAD" />
+		<combo_box.item label="上身" name="BAKED_UPPER" />
+		<combo_box.item label="下身" name="BAKED_LOWER" />
+		<combo_box.item label="眼睛" name="BAKED_EYES" />
+		<combo_box.item label="裙子" name="BAKED_SKIRT" />
+		<combo_box.item label="頭髮" name="BAKED_HAIR" />
+		<combo_box.item label="左臂" name="BAKED_LEFTARM" />
+		<combo_box.item label="左腿" name="BAKED_LEFTLEG" />
+		<combo_box.item label="輔助1" name="BAKED_AUX1" />
+		<combo_box.item label="輔助2" name="BAKED_AUX2" />
+		<combo_box.item label="輔助3" name="BAKED_AUX3" />
 	</combo_box>
-	<check_box initial_value="false" label="隱藏基底網面區域" name="hide_base_mesh_region"/>
-	<button label="確定" label_selected="確定" name="Select"/>
-	<button label="取消" label_selected="取消" name="Cancel"/>
-	<check_box initial_value="true" label="立即套用" name="apply_immediate_check"/>
+	<line_editor name="TextureKey" tool_tip="紋理UUID" />
+	<button name="TextureKeyApply" label="應用UUID" tool_tip="應用此UUID的紋理" />
+	<button label="取消" label_selected="取消" name="Cancel" />
+	<button label="確定" label_selected="確定" name="Select" />
+	<check_box label="即時預覽" name="apply_immediate_check" />
 </floater>

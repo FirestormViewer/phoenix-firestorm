@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="group_list_item">
-	<text name="group_name" value="未知"/>
-	<button name="info_btn" tool_tip="詳情"/>
-	<button name="profile_btn" tool_tip="察看檔案"/>
+	<text name="group_name" value="未知" />
+	<button name="notices_btn" tool_tip="群組通知" />
+	<button name="visibility_hide_btn" tool_tip="在我的個人檔案中隱藏群組" />
+	<button name="visibility_show_btn" tool_tip="在我的個人檔案中顯示群組" />
+	<button name="info_btn" tool_tip="詳情" />
+	<button name="profile_btn" tool_tip="檢視檔案" />
 </panel>

@@ -4,7 +4,7 @@
 		未發現物件包含此記事卡。
 	</floater.string>
 	<floater.string name="not_allowed">
-		你並沒有權限去察看此記事卡。
+		你並沒有權限去檢視此記事卡。
 	</floater.string>
 	<floater.string name="Title">
 		記事卡： [NAME]
@@ -15,7 +15,8 @@
 	<text_editor name="Notecard Editor">
 		載入中...
 	</text_editor>
-	<button label="編輯…" label_selected="編輯" name="Edit"/>
-	<button label="儲存" label_selected="儲存" name="Save"/>
-	<button label="刪除" label_selected="刪除" name="Delete"/>
+	<button tool_tip="尋找和替換" name="Search" />
+	<button label="編輯…" label_selected="編輯" name="Edit" />
+	<button label="儲存" label_selected="儲存" name="Save" />
+	<button label="刪除" label_selected="刪除" name="Delete" />
 </floater>

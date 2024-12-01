@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_postcard_settings">
 	<combo_box label="解析度" name="postcard_size_combo">
-		<combo_box.item label="目前視窗" name="CurrentWindow"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="自訂" name="Custom"/>
+		<combo_box.item label="當前視窗" name="CurrentWindow" />
+		<combo_box.item label="自訂" name="Custom" />
 	</combo_box>
-	<spinner label="寬 x 高" name="postcard_snapshot_width"/>
-	<check_box label="鎖住比例" name="postcard_keep_aspect_check"/>
-	<slider label="清晰度：" name="image_quality_slider"/>
+	<spinner label="寬 x 高" name="postcard_snapshot_width" />
+	<check_box label="鎖定比例" name="postcard_keep_aspect_check" />
+	<slider label="清晰度：" name="image_quality_slider" />
 </panel>

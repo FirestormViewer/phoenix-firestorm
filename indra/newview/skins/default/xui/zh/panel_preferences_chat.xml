@@ -1,111 +1,215 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="文字聊天" name="chat">
-	<check_box initial_value="true" label="在附近聊天中，自動完成姿勢" name="auto_complete_gestures"/>
-	<panel name="general_chat_settings">
-		<check_box initial_value="true" label="聊天時呈現打字動作" name="play_typing_animation"/>
-		<check_box label="當我離線時將收到的 IM 訊息郵寄給我" name="send_im_to_email"/>
-		<check_box label="只允許我的朋友和群組與我通話或 IM 給我" name="voice_call_friends_only_check"/>
-		<text name="font_size">
-			字型大小：
-		</text>
-		<combo_box name="chat_font_size">
-			<item label="小" name="Small" value="0"/>
-			<item label="中" name="Medium" value="1"/>
-			<item label="大" name="Large" value="2"/>
-		</combo_box>
-		<check_box label="聊天泡泡" name="bubble_text_chat"/>
-	</panel>
-	<panel name="im_notification_settings">
-		<text name="friend_ims">
-			朋友 IM：
-		</text>
-		<combo_box name="FriendIMOptions">
-			<item label="開啟交談視窗" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="以突顯式視窗顯示訊息" name="PopUpMessage" value="toast"/>
-			<item label="Flash 工具列按鈕" name="FlashToolbarButton" value="flash"/>
-			<item label="無動作" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="播放聲音" name="play_sound_friend_im"/>
-		<text name="non_friend_ims">
-			非朋友 IM：
-		</text>
-		<combo_box name="NonFriendIMOptions">
-			<item label="開啟交談視窗" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="以突顯式視窗顯示訊息" name="PopUpMessage" value="toast"/>
-			<item label="Flash 工具列按鈕" name="FlashToolbarButton" value="flash"/>
-			<item label="無動作" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="播放聲音" name="play_sound_non_friend_im"/>
-		<text name="conference_ims">
-			多方交談 IM：
-		</text>
-		<combo_box name="ConferenceIMOptions">
-			<item label="開啟交談視窗" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="以突顯式視窗顯示訊息" name="PopUpMessage" value="toast"/>
-			<item label="Flash 工具列按鈕" name="FlashToolbarButton" value="flash"/>
-			<item label="無動作" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="播放聲音" name="play_sound_conference_im"/>
-		<text name="group_chat">
-			群組聊天：
-		</text>
-		<combo_box name="GroupChatOptions">
-			<item label="開啟交談視窗" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="以突顯式視窗顯示訊息" name="PopUpMessage" value="toast"/>
-			<item label="Flash 工具列按鈕" name="FlashToolbarButton" value="flash"/>
-			<item label="無動作" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="播放聲音" name="play_sound_group_chat_im"/>
-		<text name="nearby_chat">
-			附近的聊天：
-		</text>
-		<combo_box name="NearbyChatOptions">
-			<item label="開啟交談視窗" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="以突顯式視窗顯示訊息" name="PopUpMessage" value="toast"/>
-			<item label="Flash 工具列按鈕" name="FlashToolBarButton" value="flash"/>
-			<item label="無動作" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="播放聲音" name="play_sound_nearby_chat_im"/>
-		<text name="object_ims">
-			來自物件的 IM：
-		</text>
-		<combo_box name="ObjectIMOptions">
-			<item label="開啟交談視窗" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="以突顯式視窗顯示訊息" name="PopUpMessage" value="toast"/>
-			<item label="Flash 工具列按鈕" name="FlashToolBarButton" value="flash"/>
-			<item label="無動作" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="播放聲音" name="play_sound_object_im"/>
-		<text name="notifications_alert">
-			若要暫時停止所有通知，請設定「溝通 &gt; 請勿打擾」。
-		</text>
-	</panel>
-	<panel name="play_sound_settings">
-		<text name="play_sound">
-			播放聲音：
-		</text>
-		<check_box label="新交談" name="new_conversation"/>
-		<check_box label="語音通話來電" name="incoming_voice_call"/>
-		<check_box label="瞬間傳送邀請" name="teleport_offer"/>
-		<check_box label="收納物品贈送" name="inventory_offer"/>
-	</panel>
-	<panel name="log_settings">
-		<text name="logging_label">
-			儲存：
-		</text>
-		<combo_box name="conversation_log_combo">
-			<item label="活動記錄和交談記錄" name="log_and_transcripts" value="2"/>
-			<item label="僅活動記錄" name="log_only" value="1"/>
-			<item label="沒有活動記錄或交談記錄" name="no_log_or_transcript" value="0"/>
-		</combo_box>
-		<button label="清空記錄…" name="clear_log"/>
-		<button label="刪除交談內容記錄…" name="delete_transcripts"/>
-		<text name="log_location_label">
-			位置：
-		</text>
-		<button label="瀏覽…" label_selected="瀏覽" name="log_path_button"/>
-	</panel>
-	<button label="翻譯…" name="ok_btn"/>
-	<button label="自動取代…" name="autoreplace_showgui"/>
-	<button label="拼字檢查…" name="spellcheck_showgui"/>
+<panel label="聊天" name="chat">
+	<tab_container label="聊天" name="tabs">
+		<panel label="外觀" name="ChatVisuals">
+			<text name="console_font_size" width="170">聊天控制檯的字型：</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="小" name="consradio" />
+				<radio_item label="中等" name="consradio2" />
+				<radio_item label="大" name="consradio3" />
+				<radio_item label="巨大" name="consradio4" />
+			</radio_group>
+			<check_box label="播放化身動畫（如尖叫）" name="play_avatar_animations" />
+			<check_box name="FSIMSystemMessageBrackets" label="系統訊息用括號括起來" />
+			<check_box name="FSChatHistoryShowYou" label="在記錄中顯示「你」而不是你的名稱" />
+			<check_box name="EmotesUseItalic" label="以斜體顯示表情" />
+			<check_box name="FSEmphasizeShoutWhisper" label="將大聲呼喊和竊竊私語加粗並以斜體顯示" />
+			<check_box name="FSMarkObjects" label="將無名稱的說話物件重新命名為「(無名稱)」以避免混淆" />
+			<check_box label="將通過 llOwnerSay 發出的訊息重新導向到指令碼除錯視窗中" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
+			<check_box label="顯示聊天氣泡" name="bubble_text_chat" />
+			<check_box label="不要在本地聊天控制檯和提示框中顯示對話" name="FSBubblesHideConsoleAndToasts" />
+			<check_box label="在聊天氣泡中顯示文字輸入指示器" name="bubble_text_typing" />
+			<check_box label="在頭頂標籤中顯示文字輸入指示器" name="FSShowTypingStateInNameTag" />
+			<check_box name="FSSecondsinChatTimestamps" label="在時間戳中顯示秒數 [HH:MM:SS]" />
+			<text name="show_timestamps_label">在以下時間戳中顯示秒數：</text>
+			<check_box label="本地聊天" name="show_timestamps_nearby_chat" width="80" />
+			<check_box label="私聊" name="show_timestamps_im" width="50" />
+			<check_box label="記錄" name="show_timestamps_transcripts" />
+			<check_box name="FSConsoleClassicDrawMode" label="使用經典模式繪製控制檯" tool_tip="經典控制檯顯示所有行的背景為一個塊，長度為最長行的長度。" />
+			<check_box name="ChatFullWidth" label="使用全螢幕寬度顯示控制檯" />
+			<spinner label="訊息消失時間：" name="fade_chat_time" />
+			<text name="text_box4">(秒)</text>
+			<text name="text_box5">(行數)</text>
+		</panel>
+		<panel label="視窗" name="ChatWindows">
+			<text name="font_size" width="230">聊天中的字型大小：</text>
+			<radio_group name="chat_font_size" left_delta="230" width="250">
+				<radio_item label="小" name="radio" />
+				<radio_item label="中等" name="radio2" />
+				<radio_item label="大" name="radio3" />
+				<radio_item label="巨大" name="radio4" />
+			</radio_group>
+			<check_box name="IMShowNamesForP2PConv" label="在私聊中顯示名字" />
+			<check_box label="使用V1 樣式的聊天頭" name="plain_text_chat_history" />
+			<check_box label="當使用 [SHORT_VIEWER_GENERATION] 樣式的聊天頭時，在人名前顯示圖示" name="ShowChatMiniIcons" />
+			<check_box label="顯示最後聊天的結尾" name="LogShowHistory" />
+			<check_box name="FSTypingChevronPrefix" label="在私聊中使用額外的大於符號 (&gt;) 作為輸入指示器" />
+			<text name="show_unread_messages_label">新訊息通知：</text>
+			<check_box name="FSNotifyUnreadChatMessages" label="本地聊天" tool_tip="如果捲動條未捲動到最大值，則在本地聊天中顯示未讀訊息數量通知。" />
+			<check_box name="FSNotifyUnreadIMMessages" label="私聊和群組訊息" tool_tip="如果捲動條未捲動到最大值，則在私聊或群組訊息中顯示未讀訊息數量通知。" />
+			<text name="show_ims_in_label" width="150">用以下方式顯示私聊：</text>
+			<radio_group name="chat_window" tool_tip="將您的私聊顯示在單獨的視窗中，或在一個帶有多個索引標籤的視窗中（需要重新啟動）。">
+				<radio_item label="單獨視窗" name="radio" />
+				<radio_item label="索引標籤" name="radio2" />
+			</radio_group>
+			<text name="req_restart_ims" width="140">(需要重新啟動)</text>
+			<text name="tab_direction_label">索引標籤方向：</text>
+			<radio_group width="190" name="chat_tab_direction" tool_tip="當索引標籤聊天合併啟用時，更改聊天索引標籤的水準和垂直佈局。（需要重新啟動）">
+				<radio_item label="水平" name="radio_horizontal" width="130" />
+				<radio_item label="垂直" name="radio_vertical" />
+			</radio_group>
+			<text name="req_restart_chattabs" width="140">(需要重新啟動)</text>
+			<text name="FSIMTabNameFormat_label" width="180">索引標籤名稱格式：</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="顯示名" name="display_name" />
+				<combo_box.item label="使用者名稱" name="user_name" />
+				<combo_box.item label="顯示名 (使用者名稱)" name="display_user_name" />
+				<combo_box.item label="使用者名稱 (顯示名)" name="user_display_name" />
+			</combo_box>
+			<check_box name="FSHighlightGroupMods" label="突出顯示群組管理員的訊息" />
+			<text name="Moderator Name Style">名稱：</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="正常" name="normal" />
+				<combo_box.item label="粗體" name="BOLD" />
+				<combo_box.item label="斜體" name="ITALIC" />
+				<combo_box.item label="粗斜體" name="BOLDITALIC" />
+				<combo_box.item label="底線" name="UNDERLINE" />
+				<combo_box.item label="粗體底線" name="BOLDUNDERLINE" />
+				<combo_box.item label="斜體底線" name="ITALICUNDERLINE" />
+				<combo_box.item label="粗斜體底線" name="BOLDITALICUNDERLINE" />
+			</combo_box>
+			<text name="Moderator Text Style">文字：</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="正常" name="normal" />
+				<combo_box.item label="粗體" name="BOLD" />
+				<combo_box.item label="斜體" name="ITALIC" />
+				<combo_box.item label="粗斜體" name="BOLDITALIC" />
+				<combo_box.item label="底線" name="UNDERLINE" />
+				<combo_box.item label="粗體底線" name="BOLDUNDERLINE" />
+				<combo_box.item label="斜體底線" name="ITALICUNDERLINE" />
+				<combo_box.item label="粗斜體底線" name="BOLDITALICUNDERLINE" />
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="禁用所有群組聊天" />
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="當群組通知被禁用時禁用群組聊天" />
+			<check_box name="FSIgnoreAdHocSessions" label="自動忽略任何私聊提議" />
+			<check_box name="FSReportIgnoredAdHocSession" label="在本地聊天中報告它們" />
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="不要忽略來自我的朋友的私聊" />
+			<text name="group_snooze_time_label" tool_tip="按下「暫時休眠」按鈕後，忽略群組聊天的時間。如果值為 0，則視窗將關閉，直到收到下一條訊息。">
+				休眠時間：
+			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="按下「暫時休眠」按鈕後，忽略群組聊天的時間。如果值為 0，則視窗將關閉，直到收到下一條訊息。" />
+			<text name="group_snooze_time_seconds_label" tool_tip="按下「暫時休眠」按鈕後，忽略群組聊天的時間。如果值為 0，則視窗將關閉，直到收到下一條訊息。">秒</text>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="按群組設定休眠時間" />
+		</panel>
+		<panel label="輸入" name="ChatTyping">
+			<button name="autoreplace_showgui" label="自動替換..." />
+			<button name="spellcheck_showgui" label="拼寫檢查..." />
+			<button name="translation_settings_btn" label="自動翻譯..." />
+			<check_box label="當我聊天時播放輸入動畫" name="play_typing_animation" />
+			<check_box label="當我使用 '/me' 時也播放輸入動畫" name="play_typing_animation_emote" />
+			<check_box label="當附近的人在輸入時播放鍵盤聲音" name="play_typing_sound" />
+			<check_box label="在私聊中指示我正在輸入" name="FSSendTypingState" />
+			<check_box name="FSChatbarGestureAutoCompleteEnable" label="在本地聊天輸入欄中啟用手勢自動完成" />
+			<check_box name="FSChatbarNamePrediction" label="在本地聊天中啟用名稱自動完成" />
+			<check_box name="AllowMUpose" label="':' 為 '/me' 的同義詞" />
+			<check_box name="AutoCloseOOC" label="自動關閉雙括號 ((OOC))" />
+			<check_box name="FSSuppressEmojiWindowPopupWhileTyping" label="在聊天欄輸入時阻止表情選擇視窗自動彈出" />
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="在聊天欄輸入時自動打開表情選擇視窗" />
+			<check_box name="FSShowEmojiButton" label="在私聊和附近聊天中顯示表情符號按鈕" />
+			<check_box name="FSShowIMSendButton" label="在私聊中顯示傳送按鈕" />
+			<check_box name="FSNearbyChatbar" label="在本地聊天視窗顯示輸入框" />
+			<check_box name="FSShowChatChannel" label="在本地聊天視窗中顯示頻道號選擇" />
+			<check_box name="FSShowChatType" label="在本地聊天視窗中顯示說話/竊竊私語/大聲呼喊按鈕" />
+			<check_box label="隱藏主聊天欄" name="AutohideChatBar" tool_tip="當滑鼠懸停在該區域上方時，隱藏螢幕左下角的聊天欄，並在滑鼠離開該區域時顯示。" />
+			<check_box label="傳送訊息後取消輸入框選擇" name="CloseChatOnReturn" />
+			<check_box label="傳送訊息後也取消聊天歷史記錄的選擇" name="FSUnfocusChatHistoryOnReturn" />
+			<text name="textUseKeyboardShortcuts">使用鍵盤快速鍵：</text>
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (大聲呼喊)" tool_tip="使用 Ctrl+Enter 快速鍵在本地聊天中喊話。" />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (竊竊私語)" tool_tip="使用 Shift+Enter 快速鍵在本地聊天中竊竊私語。" />
+			<check_box name="FSUseAltOOC" label="Alt+Enter ((OOC))" tool_tip="使用 Alt+Enter 快速鍵在本地聊天中傳送 OOC 訊息。" />
+		</panel>
+		<panel label="通知" name="ChatNotices">
+			<text name="disable_toast_label">接收新訊息時彈出聊天提示：</text>
+			<check_box name="EnableGroupChatPopups" label="群組聊天" tool_tip="勾選以在收到新的群組訊息時看到通知。" />
+			<check_box name="EnableIMChatPopups" label="私聊" tool_tip="勾選以在收到新的私聊時看到通知。" />
+			<check_box name="FSUseNearbyChatConsole" label="使用控制檯顯示聊天通知而不是浮動視窗" />
+			<check_box name="FSLogImToChatConsole" label="在聊天控制檯中顯示私聊" />
+			<check_box name="FSLogGroupImToChatConsole" label="在聊天控制檯中顯示群組聊天" />
+			<text name="FSShowGroupNameLength_label">在記錄中顯示的群組名稱長度</text>
+			<spinner tool_tip="設定為-1表示完整名稱，設定為0表示禁用" name="FSShowGroupNameLength" />
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="連線時顯示離線訊息" />
+			<text name="email_settings">
+				[https://accounts.secondlife.com/change_email 設定離線私聊的電子郵件通知]
+			</text>
+			<check_box label="如果我離線，則通過電子郵件傳送私聊 ([EMAIL])" name="send_im_to_email" />
+			<text name="email_settings_login_to_change">登入以更改離線私聊傳送到電子郵件的設定</text>
+			<check_box name="FSShowIMInChatHistory" label="在本地聊天中顯示私聊" />
+			<check_box name="FSLogIMInChatHistory" label="在本地聊天中儲存私聊" />
+			<text name="FSIMChatHistoryFade_label">在聊天視窗底部漸變私聊文字</text>
+			<spinner tool_tip="設定範圍從0.25到1.0，0.25表示明顯的漸變，1表示沒有漸變" name="FSIMChatHistoryFade" />
+			<check_box name="FSShowMessageCountInWindowTitle" label="在 Firestorm 視窗標題列中顯示未讀私聊數量" />
+			<check_box name="FSAnnounceIncomingIM" label="當發件人開始輸入時立即宣佈接收到的私聊" />
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="當好友上線或下線時在私聊索引標籤中閃爍" />
+			<check_box name="FSNotifyNearbyChatFlash" label="收到本地聊天時，聊天工具列按鈕閃爍" tool_tip="當本地聊天中有人說話時，聊天工具按鈕會閃爍。本地聊天視窗必須與聊天視窗合併，並且聊天視窗必須關閉才能觸發按鈕閃爍。" />
+			<check_box name="FSNotifyIMFlash" label="收到私聊時，聊天工具列按鈕閃爍" tool_tip="如果有新的（群組）私聊訊息到來，聊天工具列按鈕就會閃爍。私聊視窗必須停靠在聊天視窗合併，並且聊天視窗必須關閉才能觸發按鈕閃爍。該選項只有在私聊以標籤頁而非單獨視窗顯示時才可用（請參閱&quot;一般設定&quot;索引標籤）。" />
+			<check_box name="FSReportMutedGroupChat" label="在本地聊天中報告被靜音的群組聊天" />
+			<check_box name="FSGroupNoticesToIMLog" label="在群組聊天中顯示群組公告" />
+			<check_box name="FSBetterGroupNoticesToIMLog" label="同時顯示公告的主題和作者" />
+		</panel>
+		<panel label="雷達" name="ChatRadar">
+			<check_box name="reportChatRangeEnter" label="當化身進入聊天範圍時雷達報告" />
+			<check_box name="PlayModeUISndRadarChatEnter" label="播放聲音：" />
+			<button name="Prev_UISndRadarChatEnter" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarChatEnter" label="↻" tool_tip="重設。" />
+			<check_box name="reportChatRangeLeave" label="當化身離開聊天範圍時雷達報告" />
+			<check_box name="PlayModeUISndRadarChatLeave" label="播放聲音：" />
+			<button name="Prev_UISndRadarChatLeave" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarChatLeave" label="↻" tool_tip="重設。" />
+			<check_box name="reportDrawRangeEnter" label="當化身進入繪圖範圍時雷達報告" />
+			<check_box name="PlayModeUISndRadarDrawEnter" label="播放聲音：" />
+			<button name="Prev_UISndRadarDrawEnter" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarDrawEnter" label="↻" tool_tip="重設。" />
+			<check_box name="reportDrawRangeLeaave" label="當化身離開繪圖範圍時雷達報告" />
+			<check_box name="PlayModeUISndRadarDrawLeave" label="播放聲音：" />
+			<button name="Prev_UISndRadarDrawLeave" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarDrawLeave" label="↻" tool_tip="重設。" />
+			<check_box name="RadarReportSimRangeEnter" label="當化身進入類比範圍時雷達報告" />
+			<check_box name="PlayModeUISndRadarSimEnter" label="播放聲音：" />
+			<button name="Prev_UISndRadarSimEnter" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarSimEnter" label="↻" tool_tip="重設。" />
+			<check_box name="RadarReportSimRangeLeave" label="當化身離開類比範圍時雷達報告" />
+			<check_box name="PlayModeUISndRadarSimLeave" label="播放聲音：" />
+			<button name="Prev_UISndRadarSimLeave" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarSimLeave" label="↻" tool_tip="重設。" />
+			<check_box name="RadarEnterChannelAlert" label="通知指令碼有人進入頻道" />
+			<check_box name="RadarLeaveChannelAlert" label="通知指令碼有人離開頻道" />
+			<check_box name="FSRadarEnhanceByBridge" label="通過 Bridge LSL 加強雷達功能" tool_tip="啟用此選項將改善雷達中高海拔位置的化身位置確定，尤其是那些超出繪圖範圍的化身。" />
+			<text name="AgeAlertLabel">年齡警報：</text>
+			<text name="RadarAvatarAgeAlertValueLabel">門檻值：</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="在雷達中對年齡欄著色。將其設定為-1以禁用。" />
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">天</text>
+			<check_box name="RadarAvatarAgeAlert" label="報告低於指定年齡的居民" />
+			<check_box name="PlayModeUISndRadarAgeAlert" label="播放聲音：" />
+			<button name="Prev_UISndRadarAgeAlert" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndRadarAgeAlert" label="↻" tool_tip="重設。" />
+		</panel>
+		<panel label="關鍵字警報" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="啟用關鍵字警報" />
+			<check_box name="FSKeywordInChat" label="在本地聊天中檢測關鍵字" />
+			<check_box name="FSKeywordInIM" label="在私聊和群組聊天中檢測關鍵字" />
+			<check_box name="FSKeywordSpeakersName" label="在關鍵字中檢測發件人姓名" />
+			<check_box name="FSKeywordCaseSensitive" label="所有關鍵字區分大小寫" />
+			<check_box name="FSKeywordMatchWholeWords" label="僅比對完整單字" />
+			<text name="textFSKeywords">關鍵字（用逗號分隔）：</text>
+			<check_box name="FSKeywordChangeColor" label="警報顏色" />
+			<color_swatch name="colorswatch" tool_tip="單擊以打開顏色選擇器" />
+			<check_box name="FSKeywordPlaySound" label="播放警報聲音" />
+			<text name="textFSKeywordSound">聲音：</text>
+			<button name="Prev_UISndFSKeywordSound" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndFSKeywordSound" label="↻" tool_tip="重設。" />
+		</panel>
+		<panel label="指令" name="tab-CmdLine">
+			<check_box label="使用聊天欄傳送指令行" name="chat_cmd_toggle" />.
+			<text name="FSCmdLineCalc_txt">計算表達式（例如：cmd SIN(2+2)）</text><text name="FSCmdLineDrawDistance_txt">更改顯示距離（例如：cmd meters）</text><text name="FSCmdLineBandWidth_txt">最大頻寬（例如：cmd kbps）</text><text name="FSCmdLineCopyCam_txt">複製相機位置</text><text name="FSCmdLineAO_txt">啟用/禁用環境光遮蔽（例如：cmd on/off）</text><text name="FSCmdLineClearChat_txt">清除記錄（例如：cmd）</text><line_editor tool_tip="清除聊天記錄以減少垃圾影響。" name="FSCmdLineClearChat" /><text name="FSCmdLineMedia_txt">設定媒體 URL（例如：cmd url type）</text><line_editor tool_tip="設定並播放與輸入的 URL 對應的流。" name="FSCmdLineMedia" /><text name="FSCmdLineMusic_txt">設定音樂 URL（例如：cmd url）</text><line_editor tool_tip="設定並播放與輸入的 URL 對應的音樂流。" name="FSCmdLineMusic" /><text name="FSCmdLineRezPlatform_txt">建立平臺（例如：cmd 0 - 64）</text><slider name="FSCmdLinePlatformSize" label="寬度" tool_tip="您希望平臺有多大？" /><text name="FSCmdLineKeyToName_txt">通過 UUID 取得化身名稱（例如：cmd key）</text><text name="FSCmdLineRollDice_txt">擲骰子（例如：cmd dice faces mt mv）</text><line_editor tool_tip="擲骰子 - cmd [骰子數量] [面數] [修改類型（可選）] [修改值（可選）]。例如：cmd 1 20、cmd 2 40 + 5。如果沒有參數，則為 cmd 1 6（標準骰子）。" name="FSCmdLineRollDice" /><text name="FSCmdLinePos_txt">傳送到類比主機(sim)中（例如：cmd x y z）</text><text name="FSCmdLineGround_txt">傳送到地面（例如：cmd）</text><text name="FSCmdLineHeight_txt">傳送到指定高度..（例如：cmd z）</text><text name="FSCmdTeleportToCam_txt">傳送到相機位置（例如：cmd）</text><text name="FSCmdLineOfferTp_txt">傳送化身（例如：cmd key）</text><text name="FSCmdLineTP2_txt">傳送至化身（例如：cmd name）</text><line_editor tool_tip="此指令的語法允許部分名稱，並且不區分大小寫。 在打開雷達的情況下，結果更具相關性。" name="FSCmdLineTP2" /><text name="FSCmdLineTeleportHome_txt">傳送回家（例如：cmd）</text><text name="FSCmdLineMapTo_txt">傳送到類比主機(sim)（例如：cmd simname）</text><check_box label="在類比主機(sim)之間使用相同的位置" name="toggle" /></panel>
+	</tab_container>
 </panel>

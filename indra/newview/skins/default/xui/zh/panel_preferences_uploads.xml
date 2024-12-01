@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="上傳內容" name="uploads">
 	<text name="title">
-		目前的上傳目的資料夾
+		當前的上傳目的檔案夾
 	</text>
 	<text name="title_models">
 		圖像
@@ -10,13 +10,16 @@
 		聲音
 	</text>
 	<text name="title_animation">
-		動作
+		動畫
 	</text>
 	<text name="title_model">
 		模型
 	</text>
+	<text name="title_pbr">
+		PBR材質
+	</text>
 	<text name="upload_help">
-		要變更目的資料夾，請在收納區用滑鼠右鍵按一下新的資料夾並選擇
+		要變更目的檔案夾，請在庫存用滑鼠右鍵按一下新的檔案夾並選擇
  「用作預設值」
 	</text>
 </panel>

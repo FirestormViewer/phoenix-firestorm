@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="領地" name="Estate">
 	<text name="estate_help_text">
-		變更此夜籤中的設定會影響這個領地內的全部地區設定。
+		變更此索引標籤中的設定會影響這個領地內的全部區域設定。
 	</text>
 	<text name="estate_text">
 		領地：
@@ -10,41 +10,42 @@
 		（未知）
 	</text>
 	<text name="owner_text">
-		領地所有人：
+		領地所有者：
 	</text>
 	<text name="estate_owner">
 		（未知）
 	</text>
 	<radio_group name="externally_visible_radio">
-		<radio_item label="只允許名列於「准入」頁籤的居民和群組" name="estate_restricted_access"/>
-		<radio_item label="任何人都可造訪" name="estate_public_access"/>
+		<radio_item label="只允許處在「準入」索引標籤的居民和群組" name="estate_restricted_access" />
+		<radio_item label="任何人都可造訪" name="estate_public_access" />
 	</radio_group>
-	<check_box label="必須滿18歲" name="limit_age_verified" tool_tip="居民必須年滿 18 歲才能進入這領地。 參閱 [SUPPORT_SITE] 獲取進一步資訊。"/>
-	<check_box label="須具備預留的付款資料" name="limit_payment" tool_tip="居民必須提供付款資料才能進入這領地。  參閱 [SUPPORT_SITE] 獲取進一步資訊。"/>
-	<check_box label="地段所有人可能施加更多限制" name="parcel_access_override"/>
-	<check_box label="允許語音聊天" name="voice_chat_check"/>
-	<check_box label="允許直接瞬間傳送" name="allow_direct_teleport"/>
-	<button label="套用" name="apply_btn"/>
+	<check_box label="必須滿18歲" name="limit_age_verified" tool_tip="居民必須年滿 18 歲才能進入這領地。 參閱 [SUPPORT_SITE] 取得進一步資訊。" />
+	<check_box label="須具備預留的付款資訊" name="limit_payment" tool_tip="居民必須提供付款資訊才能進入這領地。  參閱 [SUPPORT_SITE] 取得進一步資訊。" />
+	<check_box label="地塊所有者可能施加更多限制" name="parcel_access_override" />
+	<check_box label="不能是指令碼化的代理（機器人）" name="limit_bots" tool_tip="存取此區域的居民不能是指令碼化的代理（機器人）。更多資訊請查閱 [SUPPORT_SITE]。" />
+	<check_box label="允許語音聊天" name="voice_chat_check" />
+	<check_box label="允許直接瞬間傳送" name="allow_direct_teleport" />
+	<button label="應用" name="apply_btn" />
 	<text name="estate_manager_label">
 		領地管理員：
 	</text>
 	<text name="allow_resident_label">
-		永遠准許：
+		永遠準許：
 	</text>
-	<button label="新增…" name="add_estate_manager_btn"/>
-	<button label="移除…" name="remove_estate_manager_btn"/>
-	<button label="新增…" name="add_allowed_avatar_btn"/>
-	<button label="移除…" name="remove_allowed_avatar_btn"/>
+	<button label="新增…" name="add_estate_manager_btn" />
+	<button label="移除…" name="remove_estate_manager_btn" />
+	<button label="新增…" name="add_allowed_avatar_btn" />
+	<button label="移除…" name="remove_allowed_avatar_btn" />
 	<text name="allow_group_label">
-		永遠准許的群組：
+		永遠準許的群組：
 	</text>
 	<text name="ban_resident_label">
 		永遠禁入：
 	</text>
-	<button label="新增…" name="add_allowed_group_btn"/>
-	<button label="移除…" name="remove_allowed_group_btn"/>
-	<button label="新增…" name="add_banned_avatar_btn"/>
-	<button label="移除…" name="remove_banned_avatar_btn"/>
-	<button label="送出訊息到領地..." name="message_estate_btn"/>
-	<button label="由領地將居民踢出..." name="kick_user_from_estate_btn"/>
+	<button label="新增…" name="add_allowed_group_btn" />
+	<button label="移除…" name="remove_allowed_group_btn" />
+	<button label="新增…" name="add_banned_avatar_btn" />
+	<button label="移除…" name="remove_banned_avatar_btn" />
+	<button label="傳送訊息到領地..." name="message_estate_btn" />
+	<button label="從領地將居民踢出..." name="kick_user_from_estate_btn" />
 </panel>

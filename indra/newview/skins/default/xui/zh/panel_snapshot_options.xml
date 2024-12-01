@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_options">
-	<button label="儲存到硬碟" name="save_to_computer_btn"/>
-	<button label="儲存到收納區" name="save_to_inventory_btn"/>
-	<button label="分享至檔案訊息發佈" name="save_to_profile_btn"/>
-	<button label="分享到臉書" name="send_to_facebook_btn"/>
-	<button label="分享到推特" name="send_to_twitter_btn"/>
-	<button label="分享到Flickr" name="send_to_flickr_btn"/>
-	<button label="用電郵傳送" name="save_to_email_btn"/>
+	<layout_stack name="option_buttons">
+		<layout_panel name="lp_download">
+			<button label="儲存到硬碟" name="save_to_computer_btn" />
+		</layout_panel>
+		<layout_panel name="lp_inventory">
+			<button label="儲存到庫存" name="save_to_inventory_btn" />
+		</layout_panel>
+		<layout_panel name="lp_profile">
+			<button label="分享到個人檔案" name="save_to_profile_btn" />
+		</layout_panel>
+		<layout_panel name="lp_flickr">
+			<button label="分享到Flickr" name="send_to_flickr_btn" />
+		</layout_panel>
+		<layout_panel name="lp_email">
+			<button label="通過電子郵件傳送" name="save_to_email_btn" />
+		</layout_panel>
+	</layout_stack>
+	<text name="fee_hint_lbl">
+		費用根據會員級別確定。級別越高，收費越低。
+	</text>
 </panel>

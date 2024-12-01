@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="除錯" name="Debug">
 	<text name="region_text_lbl">
-		地區：
+		區域：
 	</text>
 	<text name="region_text">
 		未知
 	</text>
-	<check_box label="關閉腳本" name="disable_scripts_check" tool_tip="關閉這個地區現在的全部腳本"/>
-	<check_box label="禁止碰撞" name="disable_collisions_check" tool_tip="關閉這個地區現在的非化身碰撞"/>
-	<check_box label="關閉物理" name="disable_physics_check" tool_tip="關閉這個地區現在的全部物理"/>
-	<button label="套用" name="apply_btn"/>
+	<check_box label="關閉指令碼" name="disable_scripts_check" tool_tip="關閉這個區域現在的全部指令碼" />
+	<check_box label="禁止碰撞" name="disable_collisions_check" tool_tip="關閉這個區域現在的非化身碰撞" />
+	<check_box label="關閉物理" name="disable_physics_check" tool_tip="關閉這個區域現在的全部物理" />
+	<button label="應用" name="apply_btn" />
 	<text name="objret_text_lbl">
 		物件退回
 	</text>
@@ -19,17 +19,21 @@
 	<line_editor name="target_avatar_name">
 		（無）
 	</line_editor>
-	<button label="選擇" name="choose_avatar_btn"/>
+	<button label="選擇" name="choose_avatar_btn" />
 	<text name="options_text_lbl">
 		選項：
 	</text>
-	<check_box label="包含有腳本" name="return_scripts" tool_tip="只退回包含腳本的物件"/>
-	<check_box label="位於其他人土地上" name="return_other_land" tool_tip="只退回物件在屬於某個其他人土地上的物件"/>
-	<check_box label="於這個領地內的每一個地區" name="return_estate_wide" tool_tip="退回這個領地內全部地區中標記為他的物件"/>
-	<button label="退回" name="return_btn"/>
-	<button label="取得最常碰撞的物件..." name="top_colliders_btn" tool_tip="條列出目前運作中最常碰撞的物件清單"/>
-	<button label="地區重新啟動" name="restart_btn" tool_tip="給予兩分鐘倒數計時並重新啟動"/>
-	<button label="取得最耗能腳本..." name="top_scripts_btn" tool_tip="條列���目前運作中最耗能的腳本清單"/>
-	<button label="取消重新啟動" name="cancel_restart_btn" tool_tip="取消地區重新啟動"/>
-	<button label="地區除錯控制台" name="region_debug_console_btn" tool_tip="開啟地區除錯控制台"/>
+	<check_box label="包含有指令碼" name="return_scripts" tool_tip="只退回包含指令碼的物件" />
+	<check_box label="位於其他人土地上" name="return_other_land" tool_tip="只退回所選使用者在屬於其他人的土地上的物件" />
+	<check_box label="於這個領地內的每一個區域" name="return_estate_wide" tool_tip="退回這個領地內全部區域中標記為他的物件" />
+	<button label="退回" name="return_btn" />
+	<button label="取得最常碰撞的物件..." name="top_colliders_btn" tool_tip="列出當前運行中最常碰撞的物件清單" />
+	<button label="區域重新啟動" name="restart_btn" tool_tip="給予兩分鐘倒數計時並重新啟動" />
+	<button label="取得最耗能指令碼..." name="top_scripts_btn" tool_tip="列出���當前運行中最耗能的指令碼清單" />
+	<text name="label_restart_delay">
+		秒:
+	</text>
+	<spinner name="restart_delay" />
+	<button label="取消重新啟動" name="cancel_restart_btn" tool_tip="取消區域重新啟動" />
+	<button label="區域除錯控制檯" name="region_debug_console_btn" tool_tip="開啟區域除錯控制檯" />
 </panel>

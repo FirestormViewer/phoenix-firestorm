@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="settings_debug" title="除錯設定">
-	<radio_group name="boolean_combo">
-		<radio_item label="TRUE" name="TRUE" value="true"/>
-		<radio_item label="FALSE" name="FALSE" value=""/>
-	</radio_group>
-	<color_swatch label="顏色" name="val_color_swatch"/>
-	<spinner label="x" name="val_spinner_1"/>
-	<spinner label="x" name="val_spinner_2"/>
-	<spinner label="x" name="val_spinner_3"/>
-	<spinner label="x" name="val_spinner_4"/>
-	<button label="回復至預設值" name="default_btn"/>
+	<panel name="debug_settings_search_panel">
+		<search_editor label="在此搜尋" name="search_settings_input" tool_tip="在此輸入搜尋詞。將顯示設定名稱和注釋中全文搜尋的結果。" />
+	</panel>
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="除錯設定注釋。通常提供有關所選設定的有用資訊。" />
+		<combo_box name="boolean_combo">
+			<combo_box.item label="開" name="TRUE" />
+			<combo_box.item label="關" name="FALSE" />
+		</combo_box>
+		<color_swatch label="顏色" name="val_color_swatch" />
+		<spinner label="x" name="val_spinner_1" />
+		<spinner label="x" name="val_spinner_2" />
+		<spinner label="x" name="val_spinner_3" />
+		<spinner label="x" name="val_spinner_4" />
+		<button name="sanity_warning_btn" tool_tip="這個設定未通過合理性檢查 - 值超出了推薦範圍。" />
+		<button label="複製" name="copy_btn" tool_tip="複製設定名稱到剪貼簿。" />
+		<button label="預設值" name="default_btn" tool_tip="將這個設定的值重設為預設值。" />
+	</panel>
 </floater>
