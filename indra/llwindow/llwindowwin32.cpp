@@ -48,7 +48,7 @@
 #include "llthreadsafequeue.h"
 #include "stringize.h"
 #include "llframetimer.h"
-
+#include "llfontgl.h" // <FS:Beq/> FIRE-34906 - try a sensible default font height
 // System includes
 #include <commdlg.h>
 #include <WinUser.h>
@@ -4126,7 +4126,18 @@ void LLWindowWin32::fillCompositionLogfont(LOGFONT *logfont)
         break;
     }
 
-    logfont->lfHeight = mPreeditor->getPreeditFontSize();
+    // <FS:Beq> FIRE-34906 (BugSplat) crash when mPreEditor is NULL. (affects at least version 6.6.17->7.1.11)
+    // logfont->lfHeight = mPreeditor->getPreeditFontSize();
+    if(mPreeditor)
+    {
+        logfont->lfHeight = mPreeditor->getPreeditFontSize();
+    }
+    else
+    {
+        // In the absence of other options, use the default font height for monospace.
+        logfont->lfHeight = LLFontGL::getFontMonospace()->getLineHeight();
+    }
+    // </FS:Beq>
     logfont->lfWeight = FW_NORMAL;
 }
 
