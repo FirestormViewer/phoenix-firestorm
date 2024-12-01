@@ -273,6 +273,10 @@ width="403">
 	<string	name="title_mFaceEar2Left">Left Tip</string>
 	<string	name="title_mFaceEar2Right">Right Tip</string>
 
+	<!-- Just to demonstrate there is provision for axis-swapping/Negation per joint for BVH saving. -->
+	<!-- A default of SWAP_X2Y_Y2Z_Z2X is used, which is overridden if anything (even blank) is provided here. -->
+	<string	name="bvh_joint_transform_mHead" translate="false">SWAP_X2Y_Y2Z_Z2X</string>
+
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack
 	 follows="top|left|right"
@@ -826,6 +830,17 @@ width="403">
 						 follows="left|top"
 						 left="5"
 						 tool_tip="When you first edit a rotation, reset it to zero. This means your work can save a pose (and not a diff see load/save). A green tick appears next each joint you have zero-ed export."
+						 top_pad="5"
+						 width="134" />
+						<check_box
+						 control_name="FSPoserSaveExternalFileAlso"
+						 name="also_save_bvh_checkbox"
+						 height="16"
+						 enabled="false"
+						 label="Write BVH when saving**"
+						 follows="left|top"
+						 left="20"
+						 tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
 						 top_pad="5"
 						 width="134" />
 					</panel>

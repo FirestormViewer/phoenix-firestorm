@@ -8056,6 +8056,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserSaveExternalFileAlso</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to save to an external format (like BVH or ANIM) file as well when saving a pose.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSPoserResetBaseRotationOnEdit</key>
   <map>
     <key>Comment</key>

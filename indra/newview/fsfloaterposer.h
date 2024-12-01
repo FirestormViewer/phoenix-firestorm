@@ -208,6 +208,7 @@ class FSFloaterPoser : public LLFloater
     void onClickPoseSave();
     void onPoseFileSelect();
     bool savePoseToXml(LLVOAvatar* avatar, const std::string& posePath);
+    bool savePoseToBvh(LLVOAvatar* avatar, const std::string& posePath);
     void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
     void loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
@@ -251,6 +252,7 @@ class FSFloaterPoser : public LLFloater
     void onClickLoadLeftHandPose();
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
+    void onClickSetBaseRotZero();
 
     // UI Refreshments
     void refreshRotationSliders();
@@ -300,6 +302,15 @@ class FSFloaterPoser : public LLFloater
     /// <param name="jointName">The name of the joind to get the axis transformation for.</param>
     /// <returns>The kind of axis transformation to perform.</returns>
     S32 getJointNegation(const std::string& jointName) const;
+
+    /// <summary>
+    /// Gets the axial translation required for joints when saving to BVH.
+    /// </summary>
+    /// <param name="jointName">The name of the joint to get the transformation for.</param>
+    /// <returns>The axial translation required.</returns>
+    E_BoneAxisTranslation getBvhJointTranslation(const std::string& jointName) const;
+
+    S32 getBvhJointNegation(const std::string& jointName) const;
 
     /// <summary>
     /// Refreshes the text on the avatars scroll list based on their state.
@@ -353,6 +364,59 @@ class FSFloaterPoser : public LLFloater
     /// callback, making for unwanted dependencies and conflict-risk; so not implemented.
     /// </devnotes>
     std::string getControlAvatarName(const LLControlAvatar* avatar);
+
+    /// Gets whether the pose should also write a BVH file when saved.
+    /// </summary>
+    /// <returns>True if the user wants to additionally save a BVH file, otherwise false.</returns>
+    bool getSavingToBvh();
+
+    /// <summary>
+    /// Writes the current pose in BVH-format to the supplied stream.
+    /// </summary>
+    /// <param name="fileStream">The stream to write the pose to.</param>
+    /// <param name="avatar">The avatar whose pose should be saved.</param>
+    /// <returns>True if the pose saved successfully as a BVH, otherwise false.</returns>
+    /// <remarks>
+    /// Only joints with a zero base-rotation should export to BVH.
+    /// </remarks>
+    bool writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Recursively writes a fragment of a BVH file format representation of the supplied joint, then that joints BVH child(ren).
+    /// None of what is written here matters a jot; it's just here so it parses on read.
+    /// </summary>
+    /// <param name="fileStream">The stream to write the fragment to.</param>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint whose fragment should be written, and whose child(ren) will also be written.</param>
+    /// <param name="tabStops">The number of tab-stops to include for formatting purpose.</param>
+    /// <returns>True if the fragment wrote successfully, otherwise false.</returns>
+    bool writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint, S32 tabStops);
+
+    /// <summary>
+    /// Writes a fragment of the 'single line' representing an animation frame within the BVH file respresenting the positions and/or
+    /// rotations.
+    /// </summary>
+    /// <param name="fileStream">The stream to write the position and/or rotation to.</param>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint whose position and/or rotation should be written.</param>
+    /// <returns></returns>
+    bool writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint);
+
+    /// <summary>
+    /// Generates a string with the supplied number of tab-chars.
+    /// </summary>
+    std::string static getTabs(S32 numOfTabstops);
+
+    /// <summary>
+    /// Transforms a rotation such that llbvhloader.cpp can resolve it to something vaguely approximating the supplied angle.
+    /// When I say vague, I mean, it's numbers, buuuuut.
+    /// </summary>
+    std::string static rotationToString(const LLVector3& val);
+
+    /// <summary>
+    /// Transforms the supplied vector into a string of three numbers, format suiting to writing into a BVH file.
+    /// </summary>
+    std::string static vec3ToXYZString(const LLVector3& val);
 
     /// <summary>
     /// The time when the last click of a button was made.
@@ -434,6 +498,9 @@ class FSFloaterPoser : public LLFloater
     LLPanel* mMiscJointsPnl{ nullptr };
     LLPanel* mCollisionVolumesPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
+
+    LLCheckBoxCtrl* mResetBaseRotCbx{ nullptr };
+    LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
 };
 
 #endif

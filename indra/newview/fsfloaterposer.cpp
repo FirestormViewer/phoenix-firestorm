@@ -47,16 +47,19 @@ namespace
 {
 constexpr char             POSE_INTERNAL_FORMAT_FILE_MASK[]    = "*.xml";
 constexpr char             POSE_INTERNAL_FORMAT_FILE_EXT[]     = ".xml";
+constexpr char             POSE_EXTERNAL_FORMAT_FILE_EXT[]     = ".bvh";
 constexpr char             POSE_SAVE_SUBDIRECTORY[]            = "poses";
 constexpr std::string_view POSE_PRESETS_HANDS_SUBDIRECTORY     = "hand_presets";
 constexpr char             XML_LIST_HEADER_STRING_PREFIX[]     = "header_";
 constexpr char             XML_LIST_TITLE_STRING_PREFIX[]      = "title_";
 constexpr char             XML_JOINT_TRANSFORM_STRING_PREFIX[] = "joint_transform_";
 constexpr char             XML_JOINT_DELTAROT_STRING_PREFIX[]  = "joint_delta_rotate_";
+constexpr char             BVH_JOINT_TRANSFORM_STRING_PREFIX[] = "bvh_joint_transform_";
 constexpr std::string_view POSER_ADVANCEDWINDOWSTATE_SAVE_KEY  = "FSPoserAdvancedWindowState";
 constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpadSensitivity";
 constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPosingWhenClosed";
 constexpr std::string_view POSER_RESETBASEROTONEDIT_SAVE_KEY   = "FSPoserResetBaseRotationOnEdit";
+constexpr std::string_view POSER_SAVEEXTERNALFORMAT_SAVE_KEY   = "FSPoserSaveExternalFileAlso";
 }  // namespace
 
 /// <summary>
@@ -209,6 +212,10 @@ bool FSFloaterPoser::postBuild()
     mMiscJointsPnl = getChild<LLPanel>("misc_joints_panel");
     mCollisionVolumesPnl = getChild<LLPanel>("collision_volumes_panel");
 
+    mAlsoSaveBvhCbx = getChild<LLCheckBoxCtrl>("also_save_bvh_checkbox");
+    mResetBaseRotCbx = getChild<LLCheckBoxCtrl>("reset_base_rotation_on_edit_checkbox");
+    mResetBaseRotCbx->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClickSetBaseRotZero(); });
+
     return true;
 }
 
@@ -321,6 +328,10 @@ void FSFloaterPoser::onClickPoseSave()
     {
         refreshPoseScroll(mPosesScrollList);
         setUiSelectedAvatarSaveFileName(filename);
+
+        if (getSavingToBvh())
+            savePoseToBvh(avatar, filename);
+
         // TODO: provide feedback for save
     }
 }
@@ -1868,6 +1879,7 @@ void FSFloaterPoser::onJointTabSelect()
     refreshRotationSliders();
     refreshTrackpadCursor();
     enableOrDisableRedoButton();
+    onClickSetBaseRotZero();
 
     if (mToggleAdvancedPanelBtn->getValue().asBoolean())
     {
@@ -2189,4 +2201,255 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
     }
 }
 
+bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, const std::string& poseFileName)
+{
+    if (poseFileName.empty())
+        return false;
+
+    if (!mPoserAnimator.isPosingAvatar(avatar))
+        return false;
+
+    bool writeSuccess = false;
+
+    try
+    {
+        std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
+        if (!gDirUtilp->fileExists(pathname))
+        {
+            LL_WARNS("Poser") << "Couldn't find folder: " << pathname << " - creating one." << LL_ENDL;
+            LLFile::mkdir(pathname);
+        }
+
+        std::string fullSavePath =
+            gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_EXTERNAL_FORMAT_FILE_EXT);
+
+        llofstream file;
+        file.open(fullSavePath.c_str());
+        if (!file.is_open())
+        {
+            LL_WARNS("Poser") << "Unable to save pose!" << LL_ENDL;
+            return false;
+        }
+
+        writeSuccess = writePoseAsBvh(&file, avatar);
+
+        file.close();
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS("Posing") << "Exception caught in SaveToBVH: " << e.what() << LL_ENDL;
+        return false;
+    }
+
+    return true;
+}
+
+bool FSFloaterPoser::writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar)
+{
+    if (!fileStream || !avatar)
+        return false;
+
+    *fileStream << "HIERARCHY" << std::endl;
+    auto startingJoint = mPoserAnimator.getPoserJointByName("mPelvis");
+    writeBvhFragment(fileStream, avatar, startingJoint, 0);
+    *fileStream << "MOTION" << std::endl;
+    *fileStream << "Frames:    1" << std::endl;
+    *fileStream << "Frame Time: 1" << std::endl;
+    writeBvhMotion(fileStream, avatar, startingJoint);
+    *fileStream << std::endl;
+
+    return true;
+}
+
+bool FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint, S32 tabStops)
+{
+    if (!joint)
+        return false;
+
+    auto position = mPoserAnimator.getJointPosition(avatar, *joint);
+    auto saveAxis = getBvhJointTranslation(joint->jointName());
+
+    switch (joint->boneType())
+    {
+        case WHOLEAVATAR:
+            *fileStream << "ROOT " + joint->jointName() << std::endl;
+            *fileStream << "{" << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "OFFSET " + joint->bvhOffset() << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "CHANNELS 6 Xposition Yposition Zposition Xrotation Zrotation Yrotation" << std::endl;
+            break;
+
+        default:
+            *fileStream << getTabs(tabStops) + "JOINT " + joint->jointName() << std::endl;
+            *fileStream << getTabs(tabStops) + "{" << std::endl;
+            *fileStream << getTabs(tabStops + 1) + "OFFSET " + joint->bvhOffset() << std::endl;
+
+            switch (saveAxis)
+            {
+                default:
+                case SWAP_NOTHING:
+                    *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Xrotation Yrotation Zrotation" << std::endl;
+                    break;
+
+                case SWAP_YAW_AND_ROLL:
+                    *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Zrotation Yrotation Xrotation" << std::endl;
+                    break;
+
+                case SWAP_ROLL_AND_PITCH:
+                    *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Xrotation Zrotation Yrotation" << std::endl;
+                    break;
+
+                case SWAP_X2Z_Y2X_Z2Y:
+                    *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Yrotation Zrotation Xrotation" << std::endl;
+                    break;
+
+                case SWAP_X2Y_Y2Z_Z2X:
+                    *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Zrotation Xrotation Yrotation" << std::endl;
+                    break;
+
+                case SWAP_YAW_AND_PITCH:
+                    *fileStream << getTabs(tabStops + 1) + "CHANNELS 3 Yrotation Xrotation Zrotation" << std::endl;
+                    break;
+            }
+            break;
+    }
+
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
+    if (numberOfBvhChildNodes > 0)
+    {
+        for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
+        {
+            auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
+            writeBvhFragment(fileStream, avatar, nextJoint, tabStops + 1);
+        }
+    }
+    else
+    {
+        *fileStream << getTabs(tabStops + 1) + "End Site" << std::endl;
+        *fileStream << getTabs(tabStops + 1) + "{" << std::endl;
+
+        // append the 'end knot' magic number
+        if (strstr(joint->jointName().c_str(), "mHead"))
+            *fileStream << getTabs(tabStops + 2) + "OFFSET    0.000000 3.148289 0.000000" << std::endl;
+        if (strstr(joint->jointName().c_str(), "mWristLeft"))
+            *fileStream << getTabs(tabStops + 2) + "OFFSET    4.106464 0.000000 0.000000" << std::endl;
+        if (strstr(joint->jointName().c_str(), "mWristRight"))
+            *fileStream << getTabs(tabStops + 2) + "OFFSET    -4.106464 0.000000 0.000000" << std::endl;
+        if (strstr(joint->jointName().c_str(), "mAnkleLeft"))
+            *fileStream << getTabs(tabStops + 2) + "OFFSET    0.000000 -2.463878 4.653993" << std::endl;
+        if (strstr(joint->jointName().c_str(), "mAnkleRight"))
+            *fileStream << getTabs(tabStops + 2) + "OFFSET    0.000000 -2.463878 4.653993" << std::endl;
+
+        *fileStream << getTabs(tabStops + 1) + "}" << std::endl;
+    }
+
+    *fileStream << getTabs(tabStops) + "}" << std::endl;
+    return true;
+}
+
+bool FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint)
+{
+    if (!joint)
+        return false;
+
+    auto rotation = mPoserAnimator.getJointRotation(avatar, *joint, SWAP_NOTHING, NEGATE_NOTHING);
+    auto position = mPoserAnimator.getJointPosition(avatar, *joint);
+
+    switch (joint->boneType())
+    {
+        case WHOLEAVATAR:
+            *fileStream << vec3ToXYZString(position) + " " + rotationToString(rotation);
+            break;
+
+        default:
+            *fileStream << " " + rotationToString(rotation);
+            break;
+    }
+
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
+    for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
+    {
+        auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
+        writeBvhMotion(fileStream, avatar, nextJoint);
+    }
+
+    return true;
+}
+
+std::string FSFloaterPoser::vec3ToXYZString(const LLVector3& val)
+{
+    return std::to_string(val[VX]) + " " + std::to_string(val[VY]) + " " + std::to_string(val[VZ]);
+}
+
+std::string FSFloaterPoser::rotationToString(const LLVector3& val)
+{
+    return std::to_string(val[VX] * RAD_TO_DEG) + " " + std::to_string(val[VY] * RAD_TO_DEG) + " " + std::to_string(val[VZ] * RAD_TO_DEG);
+}
+
+std::string FSFloaterPoser::getTabs(S32 numOfTabstops)
+{
+    std::string tabSpaces;
+    for (S32 i = 0; i < numOfTabstops; i++)
+        tabSpaces += "\t";
+
+    return tabSpaces;
+}
+
+E_BoneAxisTranslation FSFloaterPoser::getBvhJointTranslation(const std::string& jointName) const
+{
+    if (jointName.empty())
+        return SWAP_X2Y_Y2Z_Z2X;
+
+    bool hasTransformParameter = hasString(BVH_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+    if (!hasTransformParameter)
+        return SWAP_X2Y_Y2Z_Z2X;
+
+    std::string paramValue = getString(BVH_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+
+    if (strstr(paramValue.c_str(), "SWAP_YAW_AND_ROLL"))
+        return SWAP_YAW_AND_ROLL;
+    else if (strstr(paramValue.c_str(), "SWAP_YAW_AND_PITCH"))
+        return SWAP_YAW_AND_PITCH;
+    else if (strstr(paramValue.c_str(), "SWAP_ROLL_AND_PITCH"))
+        return SWAP_ROLL_AND_PITCH;
+    else if (strstr(paramValue.c_str(), "SWAP_X2Y_Y2Z_Z2X"))
+        return SWAP_X2Y_Y2Z_Z2X;
+    else if (strstr(paramValue.c_str(), "SWAP_X2Z_Y2X_Z2Y"))
+        return SWAP_X2Z_Y2X_Z2Y;
+    else
+        return SWAP_NOTHING;
+}
+
+S32 FSFloaterPoser::getBvhJointNegation(const std::string& jointName) const
+{
+    S32 result = NEGATE_NOTHING;
+
+    if (jointName.empty())
+        return result;
+
+    bool hasTransformParameter = hasString(BVH_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+    if (!hasTransformParameter)
+        return result;
+
+    std::string paramValue = getString(BVH_JOINT_TRANSFORM_STRING_PREFIX + jointName);
+
+    if (strstr(paramValue.c_str(), "NEGATE_YAW"))
+        result |= NEGATE_YAW;
+    if (strstr(paramValue.c_str(), "NEGATE_PITCH"))
+        result |= NEGATE_PITCH;
+    if (strstr(paramValue.c_str(), "NEGATE_ROLL"))
+        result |= NEGATE_ROLL;
+    if (strstr(paramValue.c_str(), "NEGATE_ALL"))
+        return NEGATE_ALL;
+
+    return result;
+}
+
+
 bool FSFloaterPoser::getWhetherToResetBaseRotationOnEdit() { return gSavedSettings.getBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY); }
+void FSFloaterPoser::onClickSetBaseRotZero() { mAlsoSaveBvhCbx->setEnabled(getWhetherToResetBaseRotationOnEdit()); }
+
+bool FSFloaterPoser::getSavingToBvh()
+{
+    return getWhetherToResetBaseRotationOnEdit() && gSavedSettings.getBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY);
+}
+

@@ -100,11 +100,12 @@ public:
     /// </summary>
     class FSPoserJoint
     {
-        std::string mJointName; // expected to be a match to LLJoint.getName() for a joint implementation.
-        std::string mMirrorJointName;
-        E_BoneTypes mBoneList;
+        std::string              mJointName;  // expected to be a match to LLJoint.getName() for a joint implementation.
+        std::string              mMirrorJointName;
+        E_BoneTypes              mBoneList;
         std::vector<std::string> mBvhChildren;
-        bool mDontFlipOnMirror = false;
+        std::string              bvhOffsetMagicNumber;
+        bool                     mDontFlipOnMirror = false;
 
       public:
         /// <summary>
@@ -133,6 +134,11 @@ public:
         std::vector<std::string> bvhChildren() const { return mBvhChildren; }
 
         /// <summary>
+        /// Gets the bvh offset magic number for this joint.
+        /// </summary>
+        std::string bvhOffset() const { return bvhOffsetMagicNumber; }
+
+        /// <summary>
         /// Creates a new instance of a PoserJoint.
         /// </summary>
         /// <param name="joint_name">
@@ -144,13 +150,15 @@ public:
         /// <param name="bone_list">The type of bone, often determining with which other bones the new instance would appear with.</param>
         /// <param name="bhv_children">The optional array of joints, needed for BVH saving, which are the direct decendent(s) of this joint.</param>
         /// <param name="dont_flip_on_mirror">The option for whether this joint should rotation-flip it counterpart when mirroring the pose of the entire body.</param>
-        FSPoserJoint(std::string joint_name, std::string mirror_joint_name, E_BoneTypes bone_list, std::vector<std::string> bhv_children = {}, bool dont_flip_on_mirror = false)
+        FSPoserJoint(std::string joint_name, std::string mirror_joint_name, E_BoneTypes bone_list,
+                     std::vector<std::string> bhv_children = {}, std::string bvhOffset = "", bool dont_flip_on_mirror = false)
         {
-            mJointName        = joint_name;
-            mMirrorJointName  = mirror_joint_name;
-            mBoneList         = bone_list;
-            mBvhChildren      = bhv_children;
-            mDontFlipOnMirror = dont_flip_on_mirror;
+            mJointName           = joint_name;
+            mMirrorJointName     = mirror_joint_name;
+            mBoneList            = bone_list;
+            mBvhChildren         = bhv_children;
+            bvhOffsetMagicNumber = bvhOffset;
+            mDontFlipOnMirror    = dont_flip_on_mirror;
         }
     };
 
@@ -164,66 +172,66 @@ public:
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints{
         // head, torso, legs
-        { "mHead", "", BODY },
-        { "mNeck", "", BODY, { "mHead" } },
-        { "mPelvis", "", WHOLEAVATAR, { "mTorso", "mHipLeft", "mHipRight" } },
-        { "mChest", "", BODY, { "mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot" } },
-        { "mTorso", "", BODY, { "mChest" } },
-        { "mCollarLeft", "mCollarRight", BODY, { "mShoulderLeft" } },
-        { "mShoulderLeft", "mShoulderRight", BODY, { "mElbowLeft" } },
-        { "mElbowLeft", "mElbowRight", BODY, { "mWristLeft" } },
-        { "mWristLeft", "mWristRight", BODY },
-        { "mCollarRight", "mCollarLeft", BODY, { "mShoulderRight" }, true },
-        { "mShoulderRight", "mShoulderLeft", BODY, { "mElbowRight" }, true },
-        { "mElbowRight", "mElbowLeft", BODY, { "mWristRight" }, true },
-        { "mWristRight", "mWristLeft", BODY, {}, true },
-        { "mHipLeft", "mHipRight", BODY, { "mKneeLeft" } },
-        { "mKneeLeft", "mKneeRight", BODY, { "mAnkleLeft" } },
-        { "mAnkleLeft", "mAnkleRight", BODY },
-        { "mHipRight", "mHipLeft", BODY, { "mKneeRight" }, true },
-        { "mKneeRight", "mKneeLeft", BODY, { "mAnkleRight" }, true },
-        { "mAnkleRight", "mAnkleLeft", BODY, {}, true },
+        { "mHead", "", BODY, {}, "0.000000 3.148285 0.000000" },
+        { "mNeck", "", BODY, { "mHead" }, "0.000000 10.266162 -0.273764" },
+        { "mPelvis", "", WHOLEAVATAR, { "mTorso", "mHipLeft", "mHipRight" }, "0.000000 0.000000 0.000000" },
+        { "mChest", "", BODY, { "mNeck", "mCollarLeft", "mCollarRight" }, "0.000000 8.486693 -0.684411" },
+        { "mTorso", "", BODY, { "mChest" }, "0.000000 3.422050 0.000000" },
+        { "mCollarLeft", "mCollarRight", BODY, { "mShoulderLeft" }, "3.422053 6.707223 -0.821293" },
+        { "mShoulderLeft", "mShoulderRight", BODY, { "mElbowLeft" }, "3.285171 0.000000 0.000000" },
+        { "mElbowLeft", "mElbowRight", BODY, { "mWristLeft" }, "10.129278 0.000000 0.000000" },
+        { "mWristLeft", "mWristRight", BODY, {}, "8.486692 0.000000 0.000000" },
+        { "mCollarRight", "mCollarLeft", BODY, { "mShoulderRight" }, "-3.558935 6.707223 -0.821293", true },
+        { "mShoulderRight", "mShoulderLeft", BODY, { "mElbowRight" }, "-3.148289 0.000000 0.000000", true },
+        { "mElbowRight", "mElbowLeft", BODY, { "mWristRight" }, "-10.266159 0.000000 0.000000", true },
+        { "mWristRight", "mWristLeft", BODY, {}, "-8.349810 0.000000 0.000000", true },
+        { "mHipLeft", "mHipRight", BODY, { "mKneeLeft" }, "5.338403 -1.642589 1.368821" },
+        { "mKneeLeft", "mKneeRight", BODY, { "mAnkleLeft" }, "-2.053232 -20.121670 0.000000" },
+        { "mAnkleLeft", "mAnkleRight", BODY, {}, "0.000000 -19.300380 -1.231939" },
+        { "mHipRight", "mHipLeft", BODY, { "mKneeRight" }, "-5.338403 -1.642589 1.368821", true },
+        { "mKneeRight", "mKneeLeft", BODY, { "mAnkleRight" }, "2.053232 -20.121670 0.000000", true },
+        { "mAnkleRight", "mAnkleLeft", BODY, {}, "0.000000 -19.300380 -1.231939", true },
 
         // face
         { "mFaceForeheadLeft", "mFaceForeheadRight", FACE },
         { "mFaceForeheadCenter", "", FACE },
-        { "mFaceForeheadRight", "mFaceForeheadLeft", FACE, {}, true },
+        { "mFaceForeheadRight", "mFaceForeheadLeft", FACE, {}, "", true },
         { "mFaceEyebrowOuterLeft", "mFaceEyebrowOuterRight", FACE },
         { "mFaceEyebrowCenterLeft", "mFaceEyebrowCenterRight", FACE },
         { "mFaceEyebrowInnerLeft", "mFaceEyebrowInnerRight", FACE },
-        { "mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE, {}, true },
-        { "mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE, {}, true },
-        { "mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE, {}, true },
+        { "mFaceEyebrowOuterRight", "mFaceEyebrowOuterLeft", FACE, {}, "", true },
+        { "mFaceEyebrowCenterRight", "mFaceEyebrowCenterLeft", FACE, {}, "", true },
+        { "mFaceEyebrowInnerRight", "mFaceEyebrowInnerLeft", FACE, {}, "", true },
 
         { "mEyeLeft", "mEyeRight", FACE },
-        { "mEyeRight", "mEyeLeft", FACE, {}, true },
+        { "mEyeRight", "mEyeLeft", FACE, {}, "", true },
         { "mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE },
         { "mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE },
-        { "mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, {}, true },
-        { "mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, {}, true },
+        { "mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, {}, "", true },
+        { "mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, {}, "", true },
 
         { "mFaceEar1Left", "mFaceEar1Right", FACE },
         { "mFaceEar2Left", "mFaceEar2Right", FACE },
-        { "mFaceEar1Right", "mFaceEar1Left", FACE, {}, true },
-        { "mFaceEar2Right", "mFaceEar2Left", FACE, {}, true },
+        { "mFaceEar1Right", "mFaceEar1Left", FACE, {}, "", true },
+        { "mFaceEar2Right", "mFaceEar2Left", FACE, {}, "", true },
         { "mFaceNoseLeft", "mFaceNoseRight", FACE },
         { "mFaceNoseCenter", "", FACE },
-        { "mFaceNoseRight", "mFaceNoseLeft", FACE, {}, true },
+        { "mFaceNoseRight", "mFaceNoseLeft", FACE, {}, "", true },
 
         { "mFaceCheekUpperLeft", "mFaceCheekUpperRight", FACE },
         { "mFaceCheekLowerLeft", "mFaceCheekLowerRight", FACE },
-        { "mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, {}, true },
-        { "mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE, {}, true },
+        { "mFaceCheekUpperRight", "mFaceCheekUpperLeft", FACE, {}, "", true },
+        { "mFaceCheekLowerRight", "mFaceCheekLowerLeft", FACE, {}, "", true },
         { "mFaceLipUpperLeft", "mFaceLipUpperRight", FACE },
         { "mFaceLipUpperCenter", "", FACE },
-        { "mFaceLipUpperRight", "mFaceLipUpperLeft", FACE, {}, true },
+        { "mFaceLipUpperRight", "mFaceLipUpperLeft", FACE, {}, "", true },
         { "mFaceLipCornerLeft", "mFaceLipCornerRight", FACE },
-        { "mFaceLipCornerRight", "mFaceLipCornerLeft", FACE, {}, true },
+        { "mFaceLipCornerRight", "mFaceLipCornerLeft", FACE, {}, "", true },
         { "mFaceTongueBase", "", FACE },
-        { "mFaceTongueTip", "", FACE, {}, true },
+        { "mFaceTongueTip", "", FACE, {}, "", true },
         { "mFaceLipLowerLeft", "mFaceLipLowerRight", FACE },
         { "mFaceLipLowerCenter", "", FACE },
-        { "mFaceLipLowerRight", "mFaceLipLowerLeft", FACE, {}, true },
+        { "mFaceLipLowerRight", "mFaceLipLowerLeft", FACE, {}, "", true },
         { "mFaceJaw", "", FACE },
 
         // left hand
@@ -244,21 +252,21 @@ public:
         { "mHandPinky3Left", "mHandPinky3Right", HANDS },
 
         // right hand
-        { "mHandThumb1Right", "mHandThumb1Left", HANDS, {}, true },
-        { "mHandThumb2Right", "mHandThumb2Left", HANDS, {}, true },
-        { "mHandThumb3Right", "mHandThumb3Left", HANDS, {}, true },
-        { "mHandIndex1Right", "mHandIndex1Left", HANDS, {}, true },
-        { "mHandIndex2Right", "mHandIndex2Left", HANDS, {}, true },
-        { "mHandIndex3Right", "mHandIndex3Left", HANDS, {}, true },
-        { "mHandMiddle1Right", "mHandMiddle1Left", HANDS, {}, true },
-        { "mHandMiddle2Right", "mHandMiddle2Left", HANDS, {}, true },
-        { "mHandMiddle3Right", "mHandMiddle3Left", HANDS, {}, true },
-        { "mHandRing1Right", "mHandRing1Left", HANDS, {}, true },
-        { "mHandRing2Right", "mHandRing2Left", HANDS, {}, true },
-        { "mHandRing3Right", "mHandRing3Left", HANDS, {}, true },
-        { "mHandPinky1Right", "mHandPinky1Left", HANDS, {}, true },
-        { "mHandPinky2Right", "mHandPinky2Left", HANDS, {}, true },
-        { "mHandPinky3Right", "mHandPinky3Left", HANDS, {}, true },
+        { "mHandThumb1Right", "mHandThumb1Left", HANDS, {}, "", true },
+        { "mHandThumb2Right", "mHandThumb2Left", HANDS, {}, "", true },
+        { "mHandThumb3Right", "mHandThumb3Left", HANDS, {}, "", true },
+        { "mHandIndex1Right", "mHandIndex1Left", HANDS, {}, "", true },
+        { "mHandIndex2Right", "mHandIndex2Left", HANDS, {}, "", true },
+        { "mHandIndex3Right", "mHandIndex3Left", HANDS, {}, "", true },
+        { "mHandMiddle1Right", "mHandMiddle1Left", HANDS, {}, "", true },
+        { "mHandMiddle2Right", "mHandMiddle2Left", HANDS, {}, "", true },
+        { "mHandMiddle3Right", "mHandMiddle3Left", HANDS, {}, "", true },
+        { "mHandRing1Right", "mHandRing1Left", HANDS, {}, "", true },
+        { "mHandRing2Right", "mHandRing2Left", HANDS, {}, "", true },
+        { "mHandRing3Right", "mHandRing3Left", HANDS, {}, "", true },
+        { "mHandPinky1Right", "mHandPinky1Left", HANDS, {}, "", true },
+        { "mHandPinky2Right", "mHandPinky2Left", HANDS, {}, "", true },
+        { "mHandPinky3Right", "mHandPinky3Left", HANDS, {}, "", true },
 
         // tail and hind limbs
         { "mTail1", "", MISC },
@@ -273,10 +281,10 @@ public:
         { "mHindLimb2Left", "mHindLimb2Right", MISC },
         { "mHindLimb3Left", "mHindLimb3Right", MISC },
         { "mHindLimb4Left", "mHindLimb4Right", MISC },
-        { "mHindLimb1Right", "mHindLimb1Left", MISC, {}, true },
-        { "mHindLimb2Right", "mHindLimb2Left", MISC, {}, true },
-        { "mHindLimb3Right", "mHindLimb3Left", MISC, {}, true },
-        { "mHindLimb4Right", "mHindLimb4Left", MISC, {}, true },
+        { "mHindLimb1Right", "mHindLimb1Left", MISC, {}, "", true },
+        { "mHindLimb2Right", "mHindLimb2Left", MISC, {}, "", true },
+        { "mHindLimb3Right", "mHindLimb3Left", MISC, {}, "", true },
+        { "mHindLimb4Right", "mHindLimb4Left", MISC, {}, "", true },
 
         // wings
         { "mWingsRoot", "", MISC },
@@ -285,15 +293,15 @@ public:
         { "mWing3Left", "mWing3Right", MISC },
         { "mWing4Left", "mWing4Right", MISC },
         { "mWing4FanLeft", "mWing4FanRight", MISC },
-        { "mWing1Right", "mWing1Left", MISC, {}, true },
-        { "mWing2Right", "mWing2Left", MISC, {}, true },
-        { "mWing3Right", "mWing3Left", MISC, {}, true },
-        { "mWing4Right", "mWing4Left", MISC, {}, true },
-        { "mWing4FanRight", "mWing4FanLeft", MISC, {}, true },
+        { "mWing1Right", "mWing1Left", MISC, {}, "", true },
+        { "mWing2Right", "mWing2Left", MISC, {}, "", true },
+        { "mWing3Right", "mWing3Left", MISC, {}, "", true },
+        { "mWing4Right", "mWing4Left", MISC, {}, "", true },
+        { "mWing4FanRight", "mWing4FanLeft", MISC, {}, "", true },
 
         // Collision Volumes
         { "LEFT_PEC", "RIGHT_PEC", COL_VOLUMES },
-        { "RIGHT_PEC", "LEFT_PEC", COL_VOLUMES, {}, true },
+        { "RIGHT_PEC", "LEFT_PEC", COL_VOLUMES, {}, "", true },
         { "BELLY", "", COL_VOLUMES },
         { "BUTT", "", COL_VOLUMES },
     };

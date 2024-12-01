@@ -673,6 +673,7 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslatio
 
     LLQuaternion rot_quat;
     rot_quat = LLQuaternion(rot_mat) * rot_quat;
+    rot_quat.normalize();
 
     return rot_quat;
 }
