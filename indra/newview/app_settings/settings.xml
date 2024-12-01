@@ -24787,6 +24787,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <string>ja</string>
         <string>pl</string>
         <string>ru</string>
+        <string>zh</string>
       </array>
     </map>
     <key>FSRememberUsername</key>
