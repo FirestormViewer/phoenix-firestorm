@@ -1662,7 +1662,10 @@ void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool f
 
     if ((mCurrentEnvironment != pinstance) || forced)
     {
-        if (transition != TRANSITION_INSTANT)
+        // <FS:Beq> FIRE-34726 Avoid null water in startup transitions
+        // if (transition != TRANSITION_INSTANT)
+        if (transition != TRANSITION_INSTANT && mCurrentEnvironment->getWater() && mCurrentEnvironment->getSky())
+        // </FS:Beq>
         {
             DayInstance::ptr_t trans = std::make_shared<DayTransition>(
                 mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
@@ -3099,7 +3102,6 @@ bool LLEnvironment::DayTransition::applyTimeDelta(const LLSettingsBase::Seconds&
 void LLEnvironment::DayTransition::animate()
 {
     mNextInstance->animate();
-
     mWater = mStartWater->buildClone();
     mBlenderWater = std::make_shared<LLSettingsBlenderTimeDelta>(mWater, mStartWater, mNextInstance->getWater(), mTransitionTime);
     mBlenderWater->setOnFinished(
@@ -3786,7 +3788,14 @@ namespace
             }
 
             LL_WARNS("PUSHENV", "ENVIRONMENT") << "Underlying environment has changed (" << env << ")! Base env is type " << base_env << LL_ENDL;
-
+            // <FS:Beq> FIRE-34726 - BugSplat EEP transition crash fix
+            if(!mBaseDayInstance->getWater() || !mBaseDayInstance->getSky())
+            {
+                LL_WARNS("PUSHENV", "ENVIRONMENT") << "Environment does not have sky or water settings! Transition skipped completely" << LL_ENDL;
+                setBaseDayInstance(nextbase);
+                return;
+            }
+            // </FS:Beq>
             LLEnvironment::DayInstance::ptr_t trans = std::make_shared<InjectedTransition>(std::static_pointer_cast<DayInjection>(shared_from_this()),
                 mBaseDayInstance->getSky(), mBaseDayInstance->getWater(), nextbase, LLEnvironment::TRANSITION_DEFAULT);
 
