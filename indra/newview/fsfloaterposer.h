@@ -147,16 +147,16 @@ class FSFloaterPoser : public LLFloater
     /// Gets the current bone-deflection style: encapsulates 'anything else you want to do' while you're manipulating a joint.
     /// Such as: fiddle the opposite joint too.
     /// </summary>
-    /// <param name="jointName">The well-known joint name of the joint to add the row for, eg: mChest.</param>
     /// <returns>A E_BoneDeflectionStyles member.</returns>
-    E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle(const std::string& jointName) const;
+    E_BoneDeflectionStyles getUiSelectedBoneDeflectionStyle() const;
 
     /// <summary>
-    /// Gets whether the supplied joint name should be rotated using the delta method.
+    /// Gets the means by which the rotation should be applied to the supplied joint name.
+    /// Such as: fiddle the opposite joint too.
     /// </summary>
-    /// <param name="deflection">The deflection to consider.</param>
-    /// <returns>true if the joint should be rotated by delta for any reason, otherwise false.</returns>
-    bool isAnyDeltaModeRotation(const E_BoneDeflectionStyles deflection);
+    /// <param name="jointName">The well-known joint name of the joint to add the row for, eg: mChest.</param>
+    /// <returns>A E_RotationStyle member.</returns>
+    E_RotationStyle getUiSelectedBoneRotationStyle(const std::string& jointName) const;
 
     /// <summary>
     /// Gets the collection of UUIDs for nearby avatars.

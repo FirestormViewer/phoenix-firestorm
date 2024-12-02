@@ -1131,7 +1131,7 @@ void FSFloaterPoser::onUndoLastRotation()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.undoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.undoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     enableOrDisableRedoButton();
@@ -1156,7 +1156,7 @@ void FSFloaterPoser::onUndoLastPosition()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.undoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.undoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedPositionSliders();
@@ -1180,7 +1180,7 @@ void FSFloaterPoser::onUndoLastScale()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.undoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.undoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedScaleSliders();
@@ -1220,7 +1220,7 @@ void FSFloaterPoser::onResetPosition()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.resetJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.resetJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedPositionSliders();
@@ -1247,7 +1247,7 @@ void FSFloaterPoser::onResetScale()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.resetJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.resetJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedScaleSliders();
@@ -1270,7 +1270,7 @@ void FSFloaterPoser::onRedoLastRotation()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.redoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.redoLastJointRotation(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     enableOrDisableRedoButton();
@@ -1295,7 +1295,7 @@ void FSFloaterPoser::onRedoLastPosition()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.redoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.redoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedPositionSliders();
@@ -1319,7 +1319,7 @@ void FSFloaterPoser::onRedoLastScale()
     {
         bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
         if (currentlyPosing)
-            mPoserAnimator.redoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle(item->jointName()));
+            mPoserAnimator.redoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
     refreshAdvancedScaleSliders();
@@ -1443,39 +1443,25 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
     return joints;
 }
 
-bool FSFloaterPoser::isAnyDeltaModeRotation(const E_BoneDeflectionStyles deflection)
-{
-    if (mToggleDeltaModeBtn->getValue().asBoolean())
-        return true;
-
-    switch (deflection)
-    {
-        case DELTAMODE:
-        case SYMPATHETIC_DELTA:
-        case MIRROR_DELTA:
-            return true;
-
-        case NONE:
-        case SYMPATHETIC:
-        case MIRROR:
-        default:
-            return false;
-    }
-}
-
-E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle(const std::string& jointName) const
+E_RotationStyle FSFloaterPoser::getUiSelectedBoneRotationStyle(const std::string& jointName) const
 {
     if (jointName.empty())
-        return NONE;
+        return ABSOLUTE_ROT;
 
-    bool isDelta                             = mToggleDeltaModeBtn->getValue().asBoolean();
     bool hasRotationStylePreferenceParameter = hasString(XML_JOINT_DELTAROT_STRING_PREFIX + jointName);
-    if (hasRotationStylePreferenceParameter)
-    {
-        std::string paramValue = getString(XML_JOINT_DELTAROT_STRING_PREFIX + jointName);
-        if (strstr(paramValue.c_str(), "true"))
-            isDelta = true;
-    }
+    if (!hasRotationStylePreferenceParameter)
+        return ABSOLUTE_ROT;
+ 
+    std::string paramValue = getString(XML_JOINT_DELTAROT_STRING_PREFIX + jointName);
+    if (strstr(paramValue.c_str(), "true"))
+        return DELTAIC_ROT;
+
+    return ABSOLUTE_ROT;
+}
+
+E_BoneDeflectionStyles FSFloaterPoser::getUiSelectedBoneDeflectionStyle() const
+{
+    bool isDelta = mToggleDeltaModeBtn->getValue().asBoolean();
 
     if (mToggleMirrorRotationBtn->getValue().asBoolean())
         return isDelta ? MIRROR_DELTA : MIRROR;
@@ -1746,6 +1732,7 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
         return;
 
     LLVector3 vec3 = LLVector3(x, y, z);
+    E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
 
     for (auto item : getUiSelectedPoserJoints())
     {
@@ -1753,7 +1740,6 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
         if (!currentlyPosingJoint)
             continue;
 
-        E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle(item->jointName());
         mPoserAnimator.setJointPosition(avatar, item, vec3, defl);
     }
 }
@@ -1767,8 +1753,9 @@ void FSFloaterPoser::setSelectedJointsRotation(LLVector3 absoluteRot, LLVector3 
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    auto selectedJoints   = getUiSelectedPoserJoints();
-    bool savingToExternal = getWhetherToResetBaseRotationOnEdit();
+    auto                   selectedJoints   = getUiSelectedPoserJoints();
+    bool                   savingToExternal = getWhetherToResetBaseRotationOnEdit();
+    E_BoneDeflectionStyles defl             = getUiSelectedBoneDeflectionStyle();
 
     for (auto item : selectedJoints)
     {
@@ -1786,9 +1773,9 @@ void FSFloaterPoser::setSelectedJointsRotation(LLVector3 absoluteRot, LLVector3 
                 continue;
         }
 
-        E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle(item->jointName());
-        mPoserAnimator.setJointRotation(avatar, item, isAnyDeltaModeRotation(defl) ? deltaRot : absoluteRot, defl,
-                                        getJointTranslation(item->jointName()), getJointNegation(item->jointName()), savingToExternal);
+        mPoserAnimator.setJointRotation(avatar, item, absoluteRot, deltaRot, defl,
+                                        getJointTranslation(item->jointName()), getJointNegation(item->jointName()), savingToExternal,
+                                        getUiSelectedBoneRotationStyle(item->jointName()));
     }
 
     if (savingToExternal)
@@ -1804,7 +1791,8 @@ void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    LLVector3 vec3 = LLVector3(x, y, z);
+    LLVector3              vec3 = LLVector3(x, y, z);
+    E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle();
 
     for (auto item : getUiSelectedPoserJoints())
     {
@@ -1812,7 +1800,6 @@ void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
         if (!currentlyPosingJoint)
             continue;
 
-        E_BoneDeflectionStyles defl = getUiSelectedBoneDeflectionStyle(item->jointName());
         mPoserAnimator.setJointScale(avatar, item, vec3, defl);
     }
 }

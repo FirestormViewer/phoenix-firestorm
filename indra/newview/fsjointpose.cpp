@@ -169,13 +169,30 @@ void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
     if (mIsCollisionVolume)
         return;
 
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
+    auto tempRot             = FSJointRotation(mRotation);
+    mRotation                = FSJointRotation(oppositeJoint->mRotation);
+    oppositeJoint->mRotation = tempRot;
+}
+
+void FSJointPose::cloneRotationFrom(FSJointPose* fromJoint)
+{
+    if (!fromJoint)
         return;
 
-    auto tempRot = FSJointRotation(mRotation);
-    mRotation    = FSJointRotation(oppositeJoint->mRotation);
-    oppositeJoint->mRotation = tempRot;
+    mRotation = FSJointRotation(fromJoint->mRotation);
+}
+
+void FSJointPose::mirrorRotationFrom(FSJointPose* fromJoint)
+{
+    if (!fromJoint)
+        return;
+
+    cloneRotationFrom(fromJoint);
+
+    mRotation.baseRotation = LLQuaternion(-mRotation.baseRotation.mQ[VX], mRotation.baseRotation.mQ[VY], -mRotation.baseRotation.mQ[VZ],
+                                          mRotation.baseRotation.mQ[VW]);
+    mRotation.deltaRotation = LLQuaternion(-mRotation.deltaRotation.mQ[VX], mRotation.deltaRotation.mQ[VY], -mRotation.deltaRotation.mQ[VZ],
+                                           mRotation.deltaRotation.mQ[VW]);
 }
 
 void FSJointPose::revertJointScale()

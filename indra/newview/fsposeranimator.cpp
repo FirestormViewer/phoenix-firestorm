@@ -496,8 +496,9 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     return translateRotationFromQuaternion(translation, negation, jointPose->getRotationDelta());
 }
 
-void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style, E_BoneAxisTranslation translation, S32 negation,
-                                       bool resetBaseRotationToZero)
+void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& absRotation,
+                                       const LLVector3& deltaRotation, E_BoneDeflectionStyles deflectionStyle,
+                                       E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero, E_RotationStyle rotationStyle)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -515,26 +516,35 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     if (resetBaseRotationToZero)
         jointPose->zeroBaseRotation();
 
-    LLQuaternion rot_quat = translateRotationToQuaternion(translation, negation, rotation);
-    switch (style)
+    LLQuaternion absRot = translateRotationToQuaternion(translation, negation, absRotation);
+    LLQuaternion deltaRot = translateRotationToQuaternion(translation, negation, deltaRotation);
+    switch (deflectionStyle)
     {
         case SYMPATHETIC:
         case MIRROR:
-            jointPose->setRotationDelta(rot_quat);
+            if (rotationStyle == DELTAIC_ROT)
+                jointPose->setRotationDelta(deltaRot * jointPose->getRotationDelta());
+            else
+                jointPose->setRotationDelta(absRot);
+
             break;
 
         case SYMPATHETIC_DELTA:
         case MIRROR_DELTA:
-            jointPose->setRotationDelta(rot_quat * jointPose->getRotationDelta());
+            jointPose->setRotationDelta(deltaRot * jointPose->getRotationDelta());
             break;
 
         case DELTAMODE:
-            jointPose->setRotationDelta(rot_quat * jointPose->getRotationDelta());
+            jointPose->setRotationDelta(deltaRot * jointPose->getRotationDelta());
             return;
 
         case NONE:
         default:
-            jointPose->setRotationDelta(rot_quat);
+            if (rotationStyle == DELTAIC_ROT)
+                jointPose->setRotationDelta(deltaRot * jointPose->getRotationDelta());
+            else
+                jointPose->setRotationDelta(absRot);
+
             return;
     }
 
@@ -542,27 +552,23 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!oppositeJointPose)
         return;
 
-    if (resetBaseRotationToZero)
-        oppositeJointPose->zeroBaseRotation();
-
     LLQuaternion inv_quat;
-    switch (style)
+    switch (deflectionStyle)
     {
         case SYMPATHETIC:
-            oppositeJointPose->setRotationDelta(rot_quat);
+            oppositeJointPose->cloneRotationFrom(jointPose);
             break;
 
         case SYMPATHETIC_DELTA:
-            oppositeJointPose->setRotationDelta(rot_quat * oppositeJointPose->getRotationDelta());
+            oppositeJointPose->setRotationDelta(deltaRot * oppositeJointPose->getRotationDelta());
             break;
 
         case MIRROR:
-            inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
-            oppositeJointPose->setRotationDelta(inv_quat);
+            oppositeJointPose->mirrorRotationFrom(jointPose);
             break;
 
         case MIRROR_DELTA:
-            inv_quat = LLQuaternion(-rot_quat.mQ[VX], rot_quat.mQ[VY], -rot_quat.mQ[VZ], rot_quat.mQ[VW]);
+            inv_quat = LLQuaternion(-deltaRot.mQ[VX], deltaRot.mQ[VY], -deltaRot.mQ[VZ], deltaRot.mQ[VW]);
             oppositeJointPose->setRotationDelta(inv_quat * oppositeJointPose->getRotationDelta());
             break;
 

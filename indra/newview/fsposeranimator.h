@@ -54,9 +54,23 @@ typedef enum E_BoneDeflectionStyles
     MIRROR            = 1,  // change the other joint, like in a mirror, eg: one left one right
     SYMPATHETIC       = 2,  // change the other joint, but opposite to a mirrored way, eg: both go right or both go left
     DELTAMODE         = 3,  // each selected joint changes by the same supplied amount relative to their current
-    MIRROR_DELTA      = 4,  // As MIRROR, but applied as negated delta to opposite
-    SYMPATHETIC_DELTA = 5,  // As SYMPATHETIC, but applied as delta
+    MIRROR_DELTA      = 4,  // Applies a MIRROR delta, this limb and its opposite change by opposite amount
+    SYMPATHETIC_DELTA = 5,  // Applies a SYMPATHETIC delta, this limb and the opposite change by the same amount
 } E_BoneDeflectionStyles;
+
+/// <summary>
+/// Joints may have rotations applied by applying an absolute value or a delta value.
+/// When applying a rotation as absolutes, feedback via the UI can tend to Gimbal lock control of the quaternion.
+/// For certain joints, particularly "down the centreline", absolute rotations provide the best feel.
+/// For other joints, such as hips, knees, elbows and wrists, Gimbal lock readily occurs (sitting poses particularly), and
+/// applying small angle changes directly to the quaternion (rather than going via the locked absolute) makes for
+/// a more sensible user experience.
+/// </summary>
+typedef enum E_RotationStyle
+{
+    ABSOLUTE_ROT = 0,  //  The rotation should be applied as an absolute value because while it can Gimbal lock, it doesn't happen often.
+    DELTAIC_ROT  = 1,  //  The rotation should be applied as a delta value because it is apt to Gimbal lock.
+} E_RotationStyle;
 
 /// <summary>
 /// When we're going from bone-rotation to the UI sliders, some of the axes need swapping so they make sense in UI-terms.
@@ -457,13 +471,15 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be set.</param>
     /// <param name="joint">The joint to set.</param>
-    /// <param name="rotation">The rotation to set the joint to.</param>
+    /// <param name="absRotation">The absolute rotation to apply to the joint, if appropriate.</param>
+    /// <param name="deltaRotation">The delta of rotation to apply to the joint, if appropriate.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
     /// <param name="negation">The style of negation to apply to the set.</param>
     /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
-    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& rotation, E_BoneDeflectionStyles style,
-                          E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero);
+    /// <param name="rotationStyle">Whether to apply the supplied rotation as a delta to the supplied joint.</param>
+    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& absRotation, const LLVector3& deltaRotation, E_BoneDeflectionStyles style,
+                          E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero, E_RotationStyle rotationStyle);
 
     /// <summary>
     /// Gets the scale of a joint for the supplied avatar.
