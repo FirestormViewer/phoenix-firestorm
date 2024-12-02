@@ -221,6 +221,7 @@
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="設定觸控板的敏感度"/>
 						<check_box name="stop_posing_on_close_checkbox" label="關閉時停止" tool_tip="關閉時不停止姿勢可有助於保留目前工作。"/>
+						<check_box name="reset_base_rotation_on_edit_checkbox" label="編輯時重置基礎旋轉" tool_tip="首次編輯旋轉時，將其重設為零。這意味著可以保存完整的姿勢（而不僅僅是差異，請參閱載入/保存）。每個以零為基準匯出的關節旁都會顯示綠色勾選標誌。" />
 					</panel>
 				</tab_container>
 			</panel>

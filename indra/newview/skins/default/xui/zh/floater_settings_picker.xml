@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="settings picker" title="選擇：環境設定">
 	<floater.string name="pick title">
-		精選地點：
+		最愛：
 	</floater.string>
 	<floater.string name="pick_track">
-		選擇蹤跡
+		選擇軌道
 	</floater.string>
 	<floater.string name="pick_settings">
 		選擇環境設定
