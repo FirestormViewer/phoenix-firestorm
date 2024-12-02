@@ -3,7 +3,7 @@
 	<panel.string name="help_text">
 		通知可讓你傳送訊息並選擇性地附上一個附件。
 通知僅能傳給可接收通知的角色的群組成員。
-你可到基本資料頁籤停用通知功能。
+你可到基本資料索引標籤停用通知功能。
 	</panel.string>
 	<panel.string name="no_notices_text">
 		沒有過去的通知
@@ -13,15 +13,15 @@
 每個群組一天最多 200 則
 	</text>
 	<scroll_list name="notice_list">
-		<scroll_list.columns label="主旨" name="subject"/>
-		<scroll_list.columns label="由" name="from"/>
-		<scroll_list.columns label="日期" name="date"/>
+		<scroll_list.columns label="主旨" name="subject" />
+		<scroll_list.columns label="發布者" name="from" />
+		<scroll_list.columns label="日期" name="date" />
 	</scroll_list>
+	<button label="新通知" name="create_new_notice" tool_tip="建立一個新通知" />
+	<button name="refresh_notices" tool_tip="重新整理通知清單。" />
 	<text name="notice_list_none_found">
 		沒發現。
 	</text>
-	<button label="新通知" name="create_new_notice" tool_tip="建立一個新通知"/>
-	<button name="refresh_notices" tool_tip="刷新通知清單。"/>
 	<panel label="建立新通知" name="panel_create_new_notice">
 		<text name="lbl">
 			建立一個通知
@@ -36,26 +36,29 @@
 			附件：
 		</text>
 		<text name="string">
-			拖曳並置放物品到這裡，即可添加為附件：
+			拖放物件到這裡，即可新增為附件：
 		</text>
-		<button label="收納區" name="open_inventory" tool_tip="開啟收納區"/>
-		<button name="remove_attachment" tool_tip="由你的通知移除附件"/>
-		<button label="送出" label_selected="送出" name="send_notice"/>
-		<group_drop_target name="drop_target" tool_tip="將一個收納區物項拖曳到這個目標箱框，便可隨通知送出該物項。 你必須有權複製並轉移此物項，才可以附加它。"/>
+		<button name="remove_attachment" tool_tip="從你的通知移除附件" />
+		<button label="庫存" name="open_inventory" tool_tip="開啟庫存" />
+		<button label="傳送" label_selected="發送" name="send_notice" />
+		<group_drop_target name="drop_target" tool_tip="將一個庫存物件拖放到這個目標箱框，便可隨通知傳送該物件。 你必須有權複製並轉讓此物件，才可以傳送它。" />
 	</panel>
-	<panel label="察看過去的通知" name="panel_view_past_notice">
-		<text name="lbl">
+	<panel label="檢視過去的通知" name="panel_view_past_notice">
+		<text name="lbl6">
 			存檔的通知
 		</text>
-		<text name="lbl2">
-			要送出一個新通知，點按 + 按鈕
+		<text name="lbl7">
+			要傳送一個新通知，點擊 + 按鈕
 		</text>
-		<text name="lbl3">
+		<text name="lbl8">
 			主旨：
 		</text>
-		<text name="lbl4">
+		<text name="lbl9">
 			訊息：
 		</text>
-		<button label="開啟附件" name="open_attachment"/>
+		<text name="lbl10">
+			附件：
+		</text>
+		<button label="開啟附件" name="open_attachment" />
 	</panel>
 </panel>

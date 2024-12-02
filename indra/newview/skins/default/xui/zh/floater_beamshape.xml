@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="BeamCreator" title="選擇光束-形狀編輯器">
+	<text name="beamcreator_text">
+要建立一個新的選擇光束，請點擊滑鼠左鍵
+以放置一個帶有所選顏色的點。
+點擊滑鼠右鍵以移除一個點。
+	</text>
+	<color_swatch label="光束顏色" name="beam_color_swatch" tool_tip="單擊打開顏色選擇器" />
+	<button label="儲存" name="beamshape_save" />
+	<button label="讀取" name="beamshape_load" />
+	<button label="移除" name="beamshape_clear" />
+	<button label="取消" name="cancel" />
+</floater>

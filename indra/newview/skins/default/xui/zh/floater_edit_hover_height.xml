@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="HoverHeight" title="設定懸浮高度">
-	<slider label="高度" name="HoverHeightSlider"/>
+	<slider label="高度" name="HoverHeightSlider" />
+	<check_box name="BindCameraCheck" label="影響相機視角" />
 </floater>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="settings_title">
+		圖形設定
+	</text>
+	<text name="quality_lbl">
+		品質與速度
+	</text>
+	<text name="FasterText">
+		快速
+	</text>
+	<text name="BetterText">
+		品質
+	</text>
+	<text name="ShadersPrefText">
+		低
+	</text>
+	<text name="ShadersPrefText2">
+		中
+	</text>
+	<text name="ShadersPrefText3">
+		高
+	</text>
+	<text name="ShadersPrefText4">
+		極高
+	</text>
+	<text name="quality_desc">
+		選擇預設會重設所有手動調整。
+	</text>
+	<text name="distance_lbl">
+		距離可見性
+	</text>
+	<text name="faster_lbl">
+		更快
+	</text>
+	<text name="farther_lbl">
+		更遠
+	</text>
+	<text name="distance_desc1">
+		低水準以獲得更好的效能。高水準以看到更遠的地方。
+	</text>
+	<text name="environment_lbl">
+		環境
+	</text>
+	<text name="enhancements_desc">
+		減少/移除陰影可以顯著提高影格率，但會影響場景的氛圍和外觀。
+	</text>
+	<text name="RenderShadowDetailText">
+		陰影來源：
+	</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="無" name="0" />
+		<combo_box.item label="太陽/月亮" name="1" />
+		<combo_box.item label="太陽/月亮 + 投影機" name="2" />
+	</combo_box>
+	<text name="water_lbl">
+		水文
+	</text>
+	<text name="water_desc">
+		降低水文品質可以顯著提高影格率。
+	</text>
+	<text name="ReflectionsText">
+		水反射：
+	</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="無（不透明）" name="-2" />
+		<combo_box.item label="無（透明）" name="-1" />
+		<combo_box.item label="最小" name="0" />
+		<combo_box.item label="地形和樹木" name="1" />
+		<combo_box.item label="所有靜態物件" name="2" />
+		<combo_box.item label="所有化身和物件" name="3" />
+		<combo_box.item label="全部" name="4" />
+	</combo_box>
+	<text name="photo_lbl">
+		攝影
+	</text>
+	<text name="photo_desc">
+		攝影師需要高品質，但通常會犧牲效能。
+攝影工具可以幫助你找到正確的平衡。
+	</text>
+	<button name="open_phototools" label="攝影工具" tool_tip="打開專門的攝影工具進行進階設定。" />
+</panel>

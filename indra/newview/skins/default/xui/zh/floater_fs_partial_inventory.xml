@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_partial_inventory" title="庫存">
+	<floater.string name="title">庫存： [FOLDERNAME]</floater.string>
+	<filter_editor label="篩選庫存檔案夾" name="flt_search" />
+</floater>

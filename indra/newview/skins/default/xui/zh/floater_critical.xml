@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="modal container">
-	<button label="繼續" label_selected="繼續" name="Continue"/>
+	<button label="繼續" label_selected="繼續" name="Continue" />
+	<button label="取消" label_selected="取消" name="Cancel" />
+	<text name="tos_title">
+		關鍵資訊
+	</text>
 	<text name="tos_heading">
 		請仔細閱讀下列的訊息。
 	</text>

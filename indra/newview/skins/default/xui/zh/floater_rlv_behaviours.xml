@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="rlv_behaviours" title="活躍的RLV限制">
+	<tab_container name="behaviour_tab">
+		<panel label="限制" name="behaviour_panel">
+			<scroll_list name="behaviour_list" tool_tip="所有當前RLVa限制的列表。">
+				<scroll_list.columns label="限制" name="behaviour" />
+				<scroll_list.columns label="物件名稱" name="issuer" />
+			</scroll_list>
+		</panel>
+		<panel label="例外" name="exception_panel">
+			<scroll_list name="exception_list" tool_tip="所有當前RLVa例外的列表。">
+				<scroll_list.columns label="限制" name="behaviour" />
+				<scroll_list.columns label="來源" name="option" />
+				<scroll_list.columns label="物件名稱" name="issuer" />
+			</scroll_list>
+		</panel>
+		<panel label="修改器" name="modifier_panel">
+			<scroll_list name="modifier_list" tool_tip="所有當前RLVa修改器的列表。">
+				<scroll_list.columns label="修改器" name="modifier" />
+				<scroll_list.columns label="值" name="value" />
+				<scroll_list.columns label="主物件" name="primary" />
+			</scroll_list>
+		</panel>
+	</tab_container>
+	<panel name="bottom_panel">
+		<button label="複製到剪貼簿" name="copy_btn" tool_tip="將限制複製到剪貼簿" width="181" />
+		<icon name="dummy_icon" width="101" />
+	</panel>
+</floater>

@@ -1,485 +1,700 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
 	<menu label="我自己" name="Me">
-		<menu_item_call label="檔案..." name="Profile"/>
-		<menu_item_check label="外觀…" name="ChangeOutfit"/>
-		<menu_item_call label="選擇一個化身…" name="Avatar Picker"/>
-		<menu_item_check label="收納區…" name="Inventory"/>
-		<menu_item_call label="新收納區視窗" name="NewInventoryWindow"/>
-		<menu_item_call label="地點…" name="Places"/>
-		<menu_item_call label="精選地點…" name="Picks"/>
-		<menu_item_call label="體驗…" name="Experiences"/>
-		<menu_item_call label="我的腳本…" name="MyScripts"/>
-		<menu_item_call label="攝影機控制…" name="Camera Controls"/>
+		<menu_item_call label="帳戶" name="Manage Account" />
+		<menu_item_call label="市場刊登" name="MarketplaceListings" />
+		<menu_item_call label="購買 L$" name="Buy and Sell L$" />
+		<menu_item_check label="庫存" name="Inventory" />
+		<menu_item_call label="新庫存視窗" name="NewInventoryWindow" />
+		<menu_item_check label="受保護的檔案夾" name="Protected Folders" />
+		<menu_item_check label="裝扮收藏夾" name="WearableFavorites" />
+		<menu_item_call label="精選" name="Picks" />
+		<menu_item_call label="體驗" name="Experiences" />
+		<menu_item_call label="檔案" name="Profile" />
+		<menu_item_call label="當前裝扮" name="NowWearing" />
+		<menu_item_check label="更換裝扮" name="ChangeOutfit" />
+		<menu label="脫下" name="Take Off &gt;">
+			<menu label="服裝" name="Clothes &gt;">
+				<menu_item_call label="襯衫" name="Shirt" />
+				<menu_item_call label="褲子" name="Pants" />
+				<menu_item_call label="裙子" name="Skirt" />
+				<menu_item_call label="鞋子" name="Shoes" />
+				<menu_item_call label="襪子" name="Socks" />
+				<menu_item_call label="外套" name="Jacket" />
+				<menu_item_call label="手套" name="Gloves" />
+				<menu_item_call label="內衣" name="Self Undershirt" />
+				<menu_item_call label="內褲" name="Self Underpants" />
+				<menu_item_call label="刺青" name="Self Tattoo" />
+				<menu_item_call label="身體物理" name="Self Physics" />
+				<menu_item_call label="Alpha" name="Self Alpha" />
+				<menu_item_call label="全部服裝" name="All Clothes" />
+			</menu>
+			<menu label="HUD" name="Avatar Detach HUD" />
+			<menu label="卸下" name="Avatar Detach" />
+			<menu_item_call label="全部卸下" name="Detach All" />
+		</menu>
+		<menu_item_call label="移除選定的附件" name="Remove Selected Attachments" />
+		<menu_item_call label="選擇化身" name="Avatar Picker" />
+		<menu_item_call label="懸浮高度" name="HoverHeight" />
 		<menu label="動作" name="Movement">
-			<menu_item_call label="坐下" name="Sit Down Here"/>
-			<menu_item_call label="起立" name="Stand up"/>
-			<menu_item_check label="飛行" name="Fly"/>
-			<menu_item_check label="以跑代步" name="Always Run"/>
-			<menu_item_call label="停止我身上的動作" name="Stop Animating My Avatar"/>
-			<menu_item_call label="行走 / 跑步 / 飛行…" name="WalkRunFly"/>
+			<menu_item_call label="坐下" name="Sit Down Here" />
+			<menu_item_call label="起立" name="Stand up" />
+			<menu_item_check label="飛行" name="Fly" />
+			<menu_item_call label="停止飛行" name="Stop flying" />
+			<menu_item_check label="以跑代步" name="Always Run" />
+			<menu_item_check label="強行坐下" name="Force Toggle Sitting" />
+			<menu_item_check label="移動鎖定" name="Move Lock" />
+			<menu_item_check label="快速跳躍" name="Avatar Ignore Prejump" />
 		</menu>
-		<menu label="狀態" name="Status">
-			<menu_item_check label="離開" name="Away"/>
-			<menu_item_check label="請勿打擾" name="Do Not Disturb"/>
+		<menu_item_check label="移動控制" name="Movement Controls" />
+		<menu_item_check label="相機控制" name="Camera Controls" />
+		<menu label="化身狀態" name="avhealth">
+			<menu_item_call label="停止我身上的動畫" name="Stop Animating My Avatar" />
+			<menu_item_call label="停止我身上的動畫 &amp; 取消指令碼權限" name="Stop Animating My Avatar With Revoke" />
+			<menu_item_call label="化身不變形" name="undeform_avatar" />
+			<menu_item_call label="重設骨架" name="Reset Skeleton" />
+			<menu_item_call label="重設骨架和動畫" name="Reset Skeleton And Animations" />
+			<menu_item_call label="強制重新整理外觀(烘焙)" name="Rebake Texture" />
+			<menu_item_call label="重新整理附件" name="Refresh Attachments" />
+			<menu_item_call label="重設為預設男性化身" name="ResetDefaultAvM" />
+			<menu_item_call label="重設為預設女性化身" name="ResetDefaultAvF" />
+			<menu_item_check label="顯示化身複雜性資訊" name="Avatar Draw Info" />
+			<menu_item_call label="指令碼" name="MyScripts" />
+			<menu_item_call label="延遲測試" name="Lag Meter" />
+			<menu_item_call label="重建LSL橋" name="Recreate LSL Bridge" />
 		</menu>
-		<menu_item_call label="購買 L$…" name="Buy and Sell L$"/>
-		<menu_item_call label="Marketplace 刊登…" name="MarketplaceListings"/>
-		<menu_item_call label="帳戶主控臺…" name="Manage My Account"/>
-		<menu_item_call label="偏好設定…" name="Preferences"/>
-		<menu_item_call label="工具列按鈕…" name="Toolbars"/>
-		<menu_item_call label="隱藏所有控制" name="Hide UI"/>
-		<menu_item_check label="顯示 HUD 附件" name="Show HUD Attachments"/>
-		<menu_item_call label="退出 [APP_NAME]" name="Quit"/>
+		<menu_item_call label="快照" name="Take Snapshot" />
+		<menu_item_call label="360°快照" name="Capture 360" />
+		<menu_item_call label="資金追蹤" name="money_tracker" />
+		<menu_item_call label="站立姿勢" name="pose_stand" />
+		<menu_item_check label="姿勢編輯器" name="Poser"/>
+		<menu_item_call label="偏好設定" name="Preferences" />
+		<menu_item_call label="工具列按鈕" name="Toolbar Buttons" />
+		<menu_item_check label="顯示 HUD 附件" name="Show HUD Attachments" />
+		<menu_item_check label="顯示使用者界面" name="Show User Interface" />
+		<menu_item_call label="請求管理員身份" name="Request Admin Options" />
+		<menu_item_call label="取消管理員身份" name="Leave Admin Options" />
+		<menu_item_call label="退出 [APP_NAME]" name="Quit" />
 	</menu>
-	<menu label="溝通" name="Communicate">
-		<menu_item_check label="交談……" name="Conversations"/>
-		<menu_item_check label="附近的聊天……" name="Nearby Chat"/>
-		<menu_item_check label="說話" name="Speak"/>
-		<menu_item_check label="交談記錄…" name="Conversation Log..."/>
-		<menu_item_check label="姿勢…" name="Gestures"/>
-		<menu_item_check label="朋友" name="My Friends"/>
-		<menu_item_check label="群組" name="My Groups"/>
-		<menu_item_check label="附近的人群" name="Active Speakers"/>
-		<menu_item_check label="封鎖清單" name="Block List"/>
-		<menu_item_check label="請勿打擾" name="Do Not Disturb"/>
+	<menu label="通訊" name="Communicate">
+		<menu label="線上狀態" name="Status">
+			<menu_item_check label="離開" name="Away" />
+			<menu_item_check label="請勿打擾" name="Do Not Disturb" />
+			<menu_item_check label="自動回復" name="Set Autorespond" />
+			<menu_item_check label="非好友自動回復" name="Set Autorespond to non-friends" />
+			<menu_item_check label="拒絕傳送邀請和請求" name="Automatically reject teleport offers" />
+			<menu_item_check label="拒絕所有群組邀請" name="Reject all group invites" />
+			<menu_item_check label="拒絕所有好友請求" name="Reject all friendship requests" />
+		</menu>
+		<menu_item_call label="朋友" name="My Friends" />
+		<menu_item_check label="聯絡人" name="Contacts" />
+		<menu_item_call label="聯絡人分組" name="Contact Sets" />
+		<menu_item_call label="群組" name="My Groups" />
+		<menu_item_check label="本地聊天" name="Nearby Chat" />
+		<menu_item_check label="人員" name="People" />
+		<menu_item_check label="聊天" name="Conversations" />
+		<menu_item_check label="快捷手勢" name="Gestures" />
+		<menu_item_call label="Flickr..." name="Flickr" />
+		<menu_item_call label="Discord..." name="Discord" />
+		<menu_item_check label="聊天記錄" name="Conversation Log..." />
+		<menu_item_check label="附近的語音" name="Nearby Voice" />
+		<menu_item_call label="封鎖列表" name="Block List" />
 	</menu>
 	<menu label="世界" name="World">
-		<menu_item_call label="將此處記為地標" name="Create Landmark Here"/>
-		<menu_item_call label="目的地…" name="Destinations"/>
-		<menu_item_check label="世界地圖" name="World Map"/>
-		<menu_item_check label="迷你地圖" name="Mini-Map"/>
-		<menu_item_call label="活動" name="Events"/>
-		<menu_item_check label="搜尋…" name="Search"/>
-		<menu_item_call label="瞬間傳送回家" name="Teleport Home"/>
-		<menu_item_call label="把這裡設為我的家" name="Set Home to Here"/>
-		<menu_item_call label="快照" name="Take Snapshot"/>
-		<menu_item_call label="地點小檔案" name="Place Profile"/>
-		<menu_item_call label="土地資料" name="About Land"/>
-		<menu_item_call label="地區/領地" name="RegionEstate"/>
-		<menu_item_call label="我所擁有的土地…" name="My Land"/>
-		<menu_item_call label="購買這塊土地" name="Buy Land"/>
-		<menu label="顯示" name="LandShow">
-			<menu_item_check label="禁越線" name="Ban Lines"/>
-			<menu_item_check label="指標" name="beacons"/>
-			<menu_item_check label="地產邊界" name="Property Lines"/>
-			<menu_item_check label="地主" name="Land Owners"/>
-			<menu_item_check label="座標" name="Coordinates"/>
-			<menu_item_check label="地段屬性" name="Parcel Properties"/>
-			<menu_item_check label="進階選單" name="Show Advanced Menu"/>
+		<menu_item_call label="重新同步動畫" name="Resync Animations" />
+		<menu_item_call label="附近的化身" name="Active Speakers" />
+		<menu_item_check label="雷達" name="Radar" />
+		<menu_item_call label="瞬間傳送歷史" name="Teleport History" />
+		<menu_item_check label="地點" name="Places" />
+		<menu_item_call label="目的地…" name="Destinations" />
+		<menu_item_call label="活動" name="Events" />
+		<menu_item_check label="小地圖" name="Mini-Map" />
+		<menu_item_check label="世界地圖" name="World Map" />
+		<menu_item_check label="區域監測" name="Region Tracker" />
+		<menu_item_check label="媒體流標題" name="Stream Title" />
+		<menu_item_call label="將此處記為地標" name="Create Landmark Here" />
+		<menu_item_call label="地點小檔案" name="Place Profile" />
+		<menu_item_call label="土地資訊" name="About Land" />
+		<menu_item_call label="區域詳情" name="RegionEstate" />
+		<menu_item_call label="把這裡設為我的家" name="Set Home to Here" />
+		<menu_item_call label="購買這塊土地" name="Buy Land" />
+		<menu_item_call label="我所擁有的土地…" name="My Land" />
+		<menu_item_call label="我的房子(Linden Home)" name="Linden Home" />
+		<menu label="顯示更多" name="LandShow">
+			<menu_item_check label="隱藏禁越線" name="Hide Ban Lines" />
+			<menu_item_check label="碰撞時顯示禁越線" name="Show Ban Lines On Collision" />
+			<menu_item_check label="顯示附近的禁越線" name="Show Ban Lines On Proximity" />
+			<menu_item_check label="信標" name="beacons" />
+			<menu_item_check label="地產邊界" name="Property Lines" />
+			<menu_item_check label="土地所有者" name="Land Owners" />
+			<menu_item_check label="坐標" name="Coordinates" />
+			<menu_item_check label="地塊屬性" name="Parcel Properties" />
+			<menu_item_check label="進階選項" name="Show Advanced Menu" />
 		</menu>
-		<menu label="太陽" name="Sun">
-			<menu_item_call label="日出" name="Sunrise"/>
-			<menu_item_call label="中午" name="Noon"/>
-			<menu_item_call label="日落" name="Sunset"/>
-			<menu_item_call label="午夜" name="Midnight"/>
-			<menu_item_call label="使用地區設定" name="Use Region Settings"/>
-		</menu>
-		<menu label="環境編輯器" name="Environment Editor">
-			<menu_item_call label="環境設定…" name="Environment Settings"/>
-			<menu label="水的自訂配置" name="Water Presets">
-				<menu_item_call label="新的自訂配置…" name="new_water_preset"/>
-				<menu_item_call label="編輯自訂配置…" name="edit_water_preset"/>
-			</menu>
-			<menu label="天空自訂配置" name="Sky Presets">
-				<menu_item_call label="新的自訂配置…" name="new_sky_preset"/>
-				<menu_item_call label="編輯自訂配置…" name="edit_sky_preset"/>
-			</menu>
-			<menu label="日的自訂配置" name="Day Presets">
-				<menu_item_call label="新的自訂配置…" name="new_day_preset"/>
-				<menu_item_call label="編輯自訂配置…" name="edit_day_preset"/>
+		<menu_item_check label="提高圖形效能" name="Performance" />
+		<menu_item_call label="瞬間傳送回家" name="Teleport Home" />
+		<menu label="環境編輯器" name="Environment">
+			<menu_item_check label="日出" name="Sunrise" />
+			<menu_item_check label="中午" name="Noon" />
+			<menu_item_check label="中午（舊版）" name="legacy noon" />
+			<menu_item_check label="日落" name="Sunset" />
+			<menu_item_check label="午夜" name="Midnight" />
+			<menu_item_check label="使用共享環境" name="Use Shared Environment" />
+			<menu_item_call label="我的環境" name="my_environs" />
+			<menu_item_call label="個人照明" name="adjustment_tool" />
+			<menu_item_check label="凍結雲彩" name="pause_clouds" />
+			<menu label="批次匯入" name="WL Bulk Import">
+				<menu_item_call label="時間..." name="WL Bulk Import Days" />
+				<menu_item_call label="天空..." name="WL Bulk Import Skies" />
+				<menu_item_call label="水..." name="WL Bulk Import Water" />
 			</menu>
 		</menu>
+		<menu label="相片和影片" name="photo_and_video">
+			<menu_item_call label="相片工具" name="phototools_item_call" />
+			<menu_item_call label="相機工具" name="cameratools_item_call" />
+			<menu_item_check label="景深對焦鎖定" name="lock_focus_point" />
+		</menu>
+		<menu_item_call label="區域搜尋" name="area_search" />
+		<menu_item_call label="聲音瀏覽器" name="Sound Explorer" />
+		<menu_item_call label="動畫瀏覽器" name="Animation Explorer" />
+		<menu_item_call label="資源封鎖清單" name="asset_blacklist" />
+		<menu_item_call label="化身彩現設定" name="Avatar Render Settings" />
+		<menu label="化身顯示模式" name="AvatarComplexityMode">
+			<menu_item_check label="按複雜度限制" name="complexity_limit_everone" />
+			<menu_item_check label="始終顯示好友" name="complexity_always_show_friends" />
+			<menu_item_check label="只顯示好友" name="complexity_only_show_friends" />
+		</menu>
+		<menu_item_check label="僅彩現好友" name="Render Friends Only" />
 	</menu>
 	<menu label="建造" name="BuildTools">
-		<menu_item_check label="建造" name="Show Build Tools"/>
+		<menu_item_check label="建造" name="Show Build Tools" />
 		<menu label="選擇建造工具" name="Select Tool">
-			<menu_item_call label="聚焦工具" name="Focus"/>
-			<menu_item_call label="移動工具" name="Move"/>
-			<menu_item_call label="編輯工具" name="Edit"/>
-			<menu_item_call label="創造工具" name="Create"/>
-			<menu_item_call label="土地工具" name="Land"/>
+			<menu_item_call label="聚焦工具" name="Focus" />
+			<menu_item_call label="移動工具" name="Move" />
+			<menu_item_call label="編輯工具" name="Edit" />
+			<menu_item_call label="創造工具" name="Create" />
+			<menu_item_call label="土地工具" name="Land" />
 		</menu>
-		<menu_item_call label="聯結" name="Link"/>
-		<menu_item_call label="取消聯結" name="Unlink"/>
-		<menu_item_check label="編輯聯結部位" name="Edit Linked Parts"/>
-		<menu label="選擇元素" name="Select Elements">
-			<menu_item_call label="選擇下一部位或臉" name="Select Next Part or Face"/>
-			<menu_item_call label="選擇上一部位或臉" name="Select Previous Part or Face"/>
-			<menu_item_call label="包括下一部位或臉" name="Include Next Part or Face"/>
-			<menu_item_call label="包括上一部位或臉" name="Include Previous Part or Face"/>
+		<menu_item_call label="聯結" name="Link" />
+		<menu_item_call label="取消聯結" name="Unlink" />
+		<menu_item_check label="編輯聯結部件" name="Edit Linked Parts" />
+		<menu label="選擇內容" name="Select Elements">
+			<menu_item_call label="選擇下一部件或面" name="Select Next Part or Face" />
+			<menu_item_call label="選擇上一部件或面" name="Select Previous Part or Face" />
+			<menu_item_call label="包括下一部件或面" name="Include Next Part or Face" />
+			<menu_item_call label="包括上一部件或面" name="Include Previous Part or Face" />
 		</menu>
-		<menu_item_call label="地區物件" name="pathfinding_linkset_menu_item"/>
-		<menu_item_call label="聚焦於所選部位" name="Focus on Selection"/>
-		<menu_item_call label="縮放至所選部位" name="Zoom to Selection"/>
+		<menu_item_call label="聚焦於所選部件" name="Focus on Selection" />
+		<menu_item_call label="縮放所選部件" name="Zoom to Selection" />
 		<menu label="物件" name="Object">
-			<menu_item_call label="購買" name="Menu Object Buy"/>
-			<menu_item_call label="取得" name="Menu Object Take"/>
-			<menu_item_call label="取得副本" name="Take Copy"/>
-			<menu_item_call label="回存到物件內容" name="Save Object Back to Object Contents"/>
-			<menu_item_call label="退回物件" name="Return Object back to Owner"/>
-			<menu_item_call label="複製" name="DuplicateObject"/>
+			<menu_item_call label="購買" name="Menu Object Buy" />
+			<menu_item_call label="取得" name="Menu Object Take" />
+			<menu_item_call label="取得副本" name="Take Copy" />
+			<menu_item_call label="建立副本" name="Duplicate" />
+			<menu_item_call label="編輯粒子" name="Menu Object Edit Particles" />
+			<menu_item_call label="回存到物件內容" name="Save Object Back to Object Contents" />
+			<menu_item_call label="退回物件" name="Return Object back to Owner" />
+			<menu label="另存為" name="Export Menu">
+				<menu_item_call label="備份" name="Backup" />
+				<menu_item_call label="Collada" name="Collada" />
+			</menu>
 		</menu>
-		<menu label="腳本" name="Scripts">
-			<menu_item_check label="腳本警告/錯誤…" name="Script debug"/>
-			<menu_item_call label="重新編譯腳本（Mono）" name="Mono"/>
-			<menu_item_call label="重新編譯腳本（LSL）" name="LSL"/>
-			<menu_item_call label="重設腳本" name="Reset Scripts"/>
-			<menu_item_call label="設定腳本為執行中" name="Set Scripts to Running"/>
-			<menu_item_call label="設定腳本為非執行中" name="Set Scripts to Not Running"/>
+		<menu label="指令碼" name="Scripts">
+			<menu_item_call label="指令碼警告/錯誤…" name="Script Debug" />
+			<menu_item_call label="指令碼資訊 (計數器)" name="Script Info" />
+			<menu_item_call label="重新編譯指令碼（Mono）" name="Mono" />
+			<menu_item_call label="重新編譯指令碼（LSL）" name="LSL" />
+			<menu_item_call label="重設指令碼" name="Reset Scripts" />
+			<menu_item_call label="運行指令碼" name="Set Scripts to Running" />
+			<menu_item_call label="停止指令碼" name="Set Scripts to Not Running" />
+			<menu_item_call label="從選擇中移除指令碼" name="Remove Scripts From Selection" />
 		</menu>
-		<menu label="尋徑" name="Pathfinding">
-			<menu_item_call label="地區物件" name="pathfinding_linksets_menu_item"/>
-			<menu_item_call label="角色…" name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="察看 / 測試…" name="pathfinding_console_menu_item"/>
-			<menu_item_call label="重新產出地區" name="pathfinding_rebake_navmesh_item"/>
+		<menu label="尋路" name="Pathfinding">
+			<menu_item_call label="區域物件" name="pathfinding_linksets_menu_item" />
+			<menu_item_call label="角色" name="pathfinding_characters_menu_item" />
+			<menu_item_call label="檢視 / 測試" name="pathfinding_console_menu_item" />
+			<menu_item_call label="重新烘焙區域" name="pathfinding_rebake_navmesh_item" />
 		</menu>
 		<menu label="選項" name="Options">
-			<menu_item_check label="顯示進階權限" name="DebugPermissions"/>
-			<menu_item_check label="只選取我的物件" name="Select Only My Objects"/>
-			<menu_item_check label="只選取可移動的物件" name="Select Only Movable Objects"/>
-			<menu_item_check label="環繞選取" name="Select By Surrounding"/>
-			<menu_item_check label="顯示選取輪廓線" name="Show Selection Outlines"/>
-			<menu_item_check label="顯示隱藏的選取" name="Show Hidden Selection"/>
-			<menu_item_check label="顯示選擇的 Light 半徑" name="Show Light Radius for Selection"/>
-			<menu_item_check label="顯示選擇導引線" name="Show Selection Beam"/>
-			<menu_item_check label="高亮顯示透明物件" name="Highlight Transparent"/>
-			<menu_item_check label="貼齊格線" name="Snap to Grid"/>
-			<menu_item_call label="貼齊物件 XY 軸到格線" name="Snap Object XY to Grid"/>
-			<menu_item_call label="以所選擇作為格線" name="Use Selection for Grid"/>
-			<menu_item_call label="格線選項..." name="Grid Options"/>
-			<menu_item_call label="设置默认权限..." name="Set default permissions"/>
+			<menu_item_check label="顯示進階權限" name="DebugPermissions" />
+			<menu_item_check label="只選擇我的物件" name="Select Only My Objects" />
+			<menu_item_check label="只選擇抽取式的物件" name="Select Only Movable Objects" />
+			<menu_item_check label="只選擇鎖定的物件" name="Select Only Locked Objects" />
+			<menu_item_check label="只選擇可複製的物件" name="Select Only Copyable Objects" />
+			<menu_item_check label="選擇不可見物體" name="Select Invisible Objects" />
+			<menu_item_check label="選擇反射探針" name="Select Reflection Probes" />
+			<menu_item_check label="按周圍環境選擇" name="Select By Surrounding" />
+			<menu_item_check label="包括屬於群組的物件" name="Include Group-Owned Objects" />
+			<menu_item_check label="編輯時顯示物理形狀" name="Show Physics Shape" />
+			<menu_item_check label="顯示選區輪廓" name="Show Selection Outlines" />
+			<menu_item_check label="顯示隱藏的選區" name="Show Hidden Selection" />
+			<menu_item_check label="顯示選區的光照半徑" name="Show Light Radius for Selection" />
+			<menu_item_check label="顯示反射探針體積" name="Show Reflection Probe Volumes" />
+			<menu_item_check label="顯示選擇光束" name="Show Selection Beam" />
+			<menu_item_check label="突出顯示透明物件" name="Highlight Transparent" />
+			<menu_item_check label="-包括骨骼繫結透明物件" name="Include Transparent Rigged" />
+			<menu_item_check label="無後期處理" name="No Post" />
+			<menu_item_check label="對齊到網格" name="Snap to Grid" />
+			<menu_item_call label="將物件XY對齊到網格" name="Snap Object XY to Grid" />
+			<menu_item_call label="使用選區為網格" name="Use Selection for Grid" />
+			<menu_item_call label="網格選項" name="Grid Options" />
+			<menu_item_call label="設定預設權限" name="Set default permissions" />
 		</menu>
 		<menu label="上傳" name="Upload">
-			<menu_item_call label="圖像..." name="Upload Image"/>
-			<menu_item_call label="聲音（L$[COST]）..." name="Upload Sound"/>
-			<menu_item_call label="動作（L$[COST]）..." name="Upload Animation"/>
-			<menu_item_call label="模型…" name="Upload Model"/>
-			<menu_item_call label="批量..." name="Bulk Upload"/>
+			<menu_item_call label="圖像" name="Upload Image" />
+			<menu_item_call label="聲音（[COST] L$）" name="Upload Sound" />
+			<menu_item_call label="動畫（[COST] L$）" name="Upload Animation" />
+			<menu_item_call label="網格模型" name="Upload Model" />
+			<menu_item_call label="材質" name="Upload Material" />
+			<menu_item_call label="批次" name="Bulk Upload" />
+			<menu_item_call label="匯入聯結集" name="import linkset" />
 		</menu>
-		<menu_item_call label="復原" name="Undo"/>
-		<menu_item_call label="重做" name="Redo"/>
+		<menu_item_call label="本地網格模型" name="local_mesh" />
+		<menu_item_call label="復原" name="Undo" />
+		<menu_item_call label="重做" name="Redo" />
+	</menu>
+	<menu label="內容" name="Content">
+		<menu_item_check label="搜尋" name="Search" />
+		<menu_item_call label="SL市場" name="SL Marketplace" />
+		<menu_item_call label="L$ 匯率" name="LindenXchange" />
+		<menu_item_call label="指令碼庫" name="Script Library" />
+		<menu_item_call label="SL社群（部落格、論壇、新聞）" name="SL Community Pages" />
+		<menu_item_call label="今日訊息" name="Firestorm MoTD" />
 	</menu>
 	<menu label="幫助" name="Help">
-		<menu_item_call label="[CURRENT_GRID] 幫助" name="current_grid_help"/>
-		<menu_item_call label="使用者指南" name="User’s guide"/>
-		<menu_item_call label="知識庫" name="Knowledge Base"/>
-		<menu_item_call label="維基" name="Wiki"/>
-		<menu_item_call label="社群論壇" name="Community Forums"/>
-		<menu_item_call label="支援入口" name="Support portal"/>
-		<menu_item_call label="[SECOND_LIFE] 最新消息" name="Second Life News"/>
-		<menu_item_call label="[SECOND_LIFE] 部落格" name="Second Life Blogs"/>
-		<menu_item_call label="違規舉報" name="Report Abuse"/>
-		<menu_item_call label="回報臭蟲" name="Report Bug"/>
-        <menu_item_call label="碰撞、推擠與打擊" name="Bumps, Pushes &amp;amp; Hits"/>
-		<menu_item_call label="關於 [APP_NAME]" name="About Second Life"/>
+		<menu_item_check label="啟用瀏覽器UI提示" name="Enable Hints" />
+		<menu_item_call label="Firestorm 維基" name="Firestorm Wiki" />
+		<menu_item_call label="除錯" name="Troubleshooting" />
+		<menu_item_call label="加入 Firestorm 支援小組" name="firestorm_support_group" />
+		<menu_item_call label="Firestorm 課程" name="Firestorm Classes Schedule" />
+		<menu_item_call label="Firestorm 活動日曆" name="Firestorm Events Calendar" />
+		<menu_item_check label="指南" name="How To" />
+		<menu_item_call label="[CURRENT_GRID] 幫助" name="current_grid_help" />
+		<menu_item_call label="關於 [CURRENT_GRID]" name="current_grid_about" />
+		<menu_item_call name="whitelist_folders" label="白名單顧問" />
+		<menu_item_check label="檢查網路狀態" name="Grid Status" />
+		<menu_item_call label="違規檢舉" name="Report Abuse" />
+		<menu_item_call label="報告問題" name="Report Bug" />
+		<menu_item_call label="碰撞、推擠與打擊" name="Bumps, Pushes &amp;amp; Hits" />
+		<menu_item_check label="啟用系統資訊按鈕" name="Enable Sysinfo Button" />
+		<menu_item_call label="關於 [APP_NAME]" name="About Second Life" />
+	</menu>
+	<menu label="RLVa" name="RLVa Main">
+		<menu label="除錯" name="Debug">
+			<menu_item_check label="在頂部顯示RLVa選單" name="Show Top-level RLVa Menu" />
+			<menu_item_check label="顯示除錯訊息" name="Show Debug Messages" />
+			<menu_item_check label="隱藏未設定或重複訊息" name="Hide Unset or Duplicate Messages" />
+			<menu_item_check label="顯示斷言錯誤" name="Show Assertion Failures" />
+			<menu_item_check label="隱藏鎖定的層" name="Hide Locked Layers" />
+			<menu_item_check label="隱藏鎖定的附件" name="Hide Locked Attachments" />
+			<menu_item_check label="啟用傳統命名方案" name="Enable Legacy Naming" />
+			<menu_item_check label="啟用共享裝扮" name="Enable Shared Wear" />
+			<menu_item_check label="重新命名裝扮裡的共享物件" name="Rename Shared Items on Wear" />
+			<menu_item_check label="鎖定" name="Locks" />
+		</menu>
+		<menu_item_check label="允許OOC聊天" name="Allow OOC Chat" />
+		<menu_item_check label="顯示過濾的聊天" name="Show Filtered Chat" />
+		<menu_item_check label="顯示重新導向的聊天輸入" name="Show Redirected Chat Typing" />
+		<menu_item_check label="分割長的重新導向聊天" name="Split Long Redirected Chat" />
+		<menu_item_check label="允許臨時附件" name="Allow Temporary Attachments" />
+		<menu_item_check label="禁止自動進入#RLV檔案夾" name="Forbid Give to #RLV" />
+		<menu_item_check label="裝扮替換解鎖" name="Wear Replaces Unlocked" />
+		<menu_item_check label="控制檯" name="Console" />
+		<menu_item_check label="限制" name="Restrictions" />
+		<menu_item_check label="字元" name="Strings" />
 	</menu>
 	<menu label="進階" name="Advanced">
-		<menu_item_call label="重新產出材質" name="Rebake Texture"/>
-		<menu_item_call label="以預設值設定使用者界面大小" name="Set UI Size to Default"/>
-		<menu_item_call label="設定視窗大小..." name="Set Window Size..."/>
-		<menu_item_check label="限制選擇距離" name="Limit Select Distance"/>
-		<menu_item_check label="取消鏡頭限制" name="Disable Camera Distance"/>
-		<menu_item_check label="高解析度快照" name="HighResSnapshot"/>
-		<menu_item_check label="靜音拍攝快照到硬碟" name="QuietSnapshotsToDisk"/>
+		<menu_item_call label="重新烘焙紋理" name="Rebake Texture" />
+		<menu_item_call label="重新整理附件" name="Refresh Attachments" />
+		<menu_item_call label="以預設值設定UI大小" name="Set UI Size to Default" />
+		<menu_item_call label="設定視窗大小" name="Set Window Size..." />
+		<menu_item_check label="限制選擇距離" name="Limit Select Distance" />
+		<menu_item_check label="取消鏡頭限制" name="Disable Camera Distance" />
+		<menu_item_check label="高解析度快照" name="HighResSnapshot" />
+		<menu_item_check label="靜音快照" name="QuietSnapshotsToDisk" />
 		<menu label="效能工具" name="Performance Tools">
-			<menu_item_call label="Lag 測量器" name="Lag Meter"/>
-			<menu_item_check label="統計列" name="Statistics Bar"/>
-			<menu_item_check label="顯示化身的繪製重量" name="Avatar Rendering Cost"/>
+			<menu_item_call label="延遲測量器" name="Lag Meter" />
+			<menu_item_check label="統計欄" name="Statistics Bar" />
+			<menu_item_check label="場景載入統計" name="Scene Load Statistics" />
+			<menu_item_check label="提高圖形效能" name="Performance" />
+			<menu_item_check label="顯示化身複雜性資訊" name="Avatar Draw Info" />
 		</menu>
 		<menu label="高亮顯示與可見度" name="Highlighting and Visibility">
-			<menu_item_check label="Cheesy 指標" name="Cheesy Beacon"/>
-			<menu_item_check label="隱藏粒子效果" name="Hide Particles"/>
-			<menu_item_check label="隱藏所選擇的" name="Hide Selected"/>
-			<menu_item_check label="顯示第一人稱視角準星" name="ShowCrosshairs"/>
+			<menu_item_check label="醒目信標" name="Cheesy Beacon" />
+			<menu_item_check label="隱藏粒子效果" name="Hide Particles" />
+			<menu_item_check label="隱藏所選擇的" name="Hide Selected" />
+			<menu_item_check label="顯示第一人稱視角準星" name="ShowCrosshairs" />
+			<menu label="懸停提示" name="Hover Tips">
+				<menu_item_check label="顯示提示" name="Show Tips" />
+				<menu_item_check label="顯示土地資訊提示" name="Land Tips" />
+				<menu_item_check label="在所有物件上顯示提示" name="Tips On All Objects" />
+			</menu>
 		</menu>
-		<menu label="呈像類型" name="Rendering Types">
-			<menu_item_check label="簡單" name="Rendering Type Simple"/>
-			<menu_item_check label="半透明" name="Rendering Type Alpha"/>
-			<menu_item_check label="樹木" name="Rendering Type Tree"/>
-			<menu_item_check label="化身" name="Rendering Type Character"/>
-			<menu_item_check label="表面修補" name="Rendering Type Surface Patch"/>
-			<menu_item_check label="天空" name="Rendering Type Sky"/>
-			<menu_item_check label="水文" name="Rendering Type Water"/>
-			<menu_item_check label="地面" name="Rendering Type Ground"/>
-			<menu_item_check label="體積" name="Rendering Type Volume"/>
-			<menu_item_check label="草地" name="Rendering Type Grass"/>
-			<menu_item_check label="雲彩" name="Rendering Type Clouds"/>
-			<menu_item_check label="粒子效果" name="Rendering Type Particles"/>
-			<menu_item_check label="碰撞" name="Rendering Type Bump"/>
+		<menu label="彩現類型" name="Rendering Types">
+			<menu_item_check label="簡單" name="Rendering Type Simple" />
+			<menu_item_check label="材質" name="Rendering Type Materials" />
+			<menu_item_check label="Alpha遮罩" name="Rendering Type Alpha Mask" />
+			<menu_item_check label="全亮Alpha遮罩" name="Rendering Type Fullbright Alpha Mask" />
+			<menu_item_check label="發光" name="Rendering Type Glow" />
+			<menu_item_check label="全亮" name="Rendering Type Fullbright" />
+			<menu_item_check label="Alpha" name="Rendering Type Alpha" />
+			<menu_item_check label="樹木" name="Rendering Type Tree" />
+			<menu_item_check label="化身" name="Rendering Type Character" />
+			<menu_item_check label="網格動畫" name="Rendering Type Control Avatar" />
+			<menu_item_check label="表面修補" name="Rendering Type Surface Patch" />
+			<menu_item_check label="天空" name="Rendering Type Sky" />
+			<menu_item_check label="水文" name="Rendering Type Water" />
+			<menu_item_check label="體積" name="Rendering Type Volume" />
+			<menu_item_check label="草地" name="Rendering Type Grass" />
+			<menu_item_check label="雲彩" name="Rendering Type Clouds" />
+			<menu_item_check label="粒子效果" name="Rendering Type Particles" />
+			<menu_item_check label="碰撞" name="Rendering Type Bump" />
+			<menu_item_check label="PBR" name="Rendering Type PBR" />
 		</menu>
-		<menu label="呈像功能" name="Rendering Features">
-			<menu_item_check label="使用者界面" name="ToggleUI"/>
-			<menu_item_check label="選擇" name="Selected"/>
-			<menu_item_check label="高亮顯示" name="Highlighted"/>
-			<menu_item_check label="動態材質" name="Dynamic Textures"/>
-			<menu_item_check label="腳步陰影" name="Foot Shadows"/>
-			<menu_item_check label="霧氣" name="Fog"/>
-			<menu_item_check label="測試 FRInfo" name="Test FRInfo"/>
-			<menu_item_check label="彈性物件" name="Flexible Objects"/>
+		<menu label="彩現功能" name="Rendering Features">
+			<menu_item_check label="使用者界面" name="ToggleUI" />
+			<menu_item_check label="選區" name="Selected" />
+			<menu_item_check label="高亮顯示" name="Highlighted" />
+			<menu_item_check label="動態紋理" name="Dynamic Textures" />
+			<menu_item_check label="腳步陰影" name="Foot Shadows" />
+			<menu_item_check label="霧氣" name="Fog" />
+			<menu_item_check label="測試 FRInfo" name="Test FRInfo" />
+			<menu_item_check label="彈性物件" name="Flexible Objects" />
 		</menu>
-		<menu_item_check label="使用外卦讀取緒" name="Use Plugin Read Thread"/>
-		<menu_item_call label="清除群組快取資料" name="ClearGroupCache"/>
-		<menu_item_check label="滑鼠平滑移動" name="Mouse Smoothing"/>
-		<menu_item_call label="釋出按鍵" name="Release Keys"/>
+		<menu label="備份媒體流" name="media_stream_import_export">
+			<menu_item_call label="匯入媒體流列表 XML..." name="media_stream_import" />
+			<menu_item_call label="匯出媒體流列表 XML..." name="media_stream_export" />
+		</menu>
+		<menu_item_check label="使用外掛程式讀取執行緒" name="Use Plugin Read Thread" />
+		<menu_item_call label="清除群組快取資料" name="ClearGroupCache" />
+		<menu_item_check label="滑鼠平滑移動" name="Mouse Smoothing" />
+		<menu_item_call label="釋放按鍵" name="Release Keys" />
 		<menu label="快速鍵" name="Shortcuts">
-			<menu_item_check label="顯示進階選單 － 舊版捷徑" name="Show Advanced Menu - legacy shortcut"/>
-			<menu_item_call label="關閉視窗" name="Close Window"/>
-			<menu_item_call label="關閉全部視窗" name="Close All Windows"/>
-			<menu_item_call label="拍攝快照到硬碟" name="Snapshot to Disk"/>
-			<menu_item_call label="第一人稱視角" name="Mouselook"/>
-			<menu_item_check label="搖桿移動攝影機" name="Joystick Flycam"/>
-			<menu_item_call label="重設視角" name="Reset View"/>
-			<menu_item_call label="注視上一位聊天者" name="Look at Last Chatter"/>
-			<menu_item_call label="放大" name="Zoom In"/>
-			<menu_item_call label="縮放恢復預設" name="Zoom Default"/>
-			<menu_item_call label="縮小" name="Zoom Out"/>
+			<menu_item_check label="搜尋" name="Search" />
+			<menu_item_check label="雙擊傳送" name="DoubleClick Teleport" />
+			<menu_item_check label="以跑代步" name="Always Run" />
+			<menu_item_check label="飛行" name="Fly" />
+			<menu_item_call label="關閉視窗" name="Close Window" />
+			<menu_item_call label="關閉全部視窗" name="Close All Windows" />
+			<menu_item_call label="關閉視窗組" name="Close Window Group" />
+			<menu_item_call label="拍攝快照到硬碟" name="Snapshot to Disk" />
+			<menu_item_call label="第一人稱視角" name="Mouselook" />
+			<menu_item_check label="搖桿移動相機" name="Joystick Flycam" />
+			<menu_item_call label="重設視角" name="Reset View" />
+			<menu_item_call label="重設相機角度" name="Reset Camera Angles" />
+			<menu_item_call label="檢視上一位聊天對象" name="Look at Last Chatter" />
+			<menu_item_call label="放大" name="Zoom In" />
+			<menu_item_call label="縮放恢復預設" name="Zoom Default" />
+			<menu_item_call label="縮小" name="Zoom Out" />
 		</menu>
-		<menu_item_call label="顯示除錯設定" name="Debug Settings"/>
-		<menu_item_check label="顯示開發選單" name="Debug Mode"/>
+		<menu_item_check label="忽略飛行限制" name="Fly Override" />
+		<menu_item_check label="RLV API " name="RLV API" />
+		<menu_item_call label="顯示除錯設定" name="Debug Settings" />
+		<menu_item_check label="顯示開發選項" name="Debug Mode" />
 	</menu>
 	<menu label="開發" name="Develop">
-		<menu label="控制台" name="Consoles">
-			<menu_item_check label="材質控制台" name="Texture Console"/>
-			<menu_item_check label="除錯控制台" name="Debug Console"/>
-			<menu_item_call label="通知控制台" name="Notifications"/>
-			<menu_item_check label="地區除錯控制台" name="Region Debug Console"/>
-			<menu_item_check label="快速碼錶" name="Fast Timers"/>
-			<menu_item_check label="記憶體" name="Memory"/>
-			<menu_item_check label="場景統計資料" name="Scene Statistics"/>
-			<menu_item_call label="材質擷取除錯控制台" name="Texture Fetch Debug Console"/>
-			<menu_item_call label="地區資訊傳至除錯控制台" name="Region Info to Debug Console"/>
-			<menu_item_call label="群組資訊至除錯控制台" name="Group Info to Debug Console"/>
-			<menu_item_call label="性能資訊傳至除錯控制台" name="Capabilities Info to Debug Console"/>
-			<menu_item_check label="攝影機" name="Camera"/>
-			<menu_item_check label="風力" name="Wind"/>
-			<menu_item_check label="視角" name="FOV"/>
-			<menu_item_check label="勛章" name="Badge"/>
+		<menu label="控制檯" name="Consoles">
+			<menu_item_check label="紋理控制檯" name="Texture Console" />
+			<menu_item_check label="除錯控制檯" name="Debug Console" />
+			<menu_item_call label="通知控制檯" name="Notifications" />
+			<menu_item_check label="快速計時器" name="Fast Timers" />
+			<menu_item_check label="記憶體" name="Memory" />
+			<menu_item_check label="場景統計資料" name="Scene Statistics" />
+			<menu_item_check label="場景載入監視器" name="Scene Loading Monitor" />
+			<menu_item_check label="區域除錯控制檯" name="Region Debug Console" />
+			<menu_item_call label="區域資訊傳至除錯控制檯" name="Region Info to Debug Console" />
+			<menu_item_call label="群組資訊傳至除錯控制檯" name="Group Info to Debug Console" />
+			<menu_item_call label="效能資訊傳至除錯控制檯" name="Capabilities Info to Debug Console" />
+			<menu_item_check label="相機" name="Camera" />
+			<menu_item_check label="風力" name="Wind" />
+			<menu_item_check label="視角" name="FOV" />
+			<menu_item_check label="徽章" name="Badge" />
 		</menu>
 		<menu label="顯示資訊" name="Display Info">
-			<menu_item_check label="顯示時間" name="Show Time"/>
-			<menu_item_check label="顯示上傳費用" name="Show Upload Cost"/>
-			<menu_item_check label="顯示呈像資訊" name="Show Render Info"/>
-			<menu_item_check label="顯示材質資訊" name="Show Texture Info"/>
-			<menu_item_check label="顯示矩陣" name="Show Matrices"/>
-			<menu_item_check label="游標下顯示顏色" name="Show Color Under Cursor"/>
-			<menu_item_check label="顯示記憶體" name="Show Memory"/>
-			<menu_item_check label="顯示更新到物件" name="Show Updates"/>
+			<menu_item_check label="顯示時間" name="Show Time" />
+			<menu_item_check label="顯示上傳費用" name="Show Upload Transaction" />
+			<menu_item_check label="顯示紋理資訊" name="Show Texture Info" />
+			<menu_item_call label="物件的視訊記憶體使用情況" name="VRAM usage per object" />
+			<menu_item_check label="顯示化身彩現資訊" name="Show Avatar Render Info" />
+			<menu_item_check label="顯示彩現資訊" name="Show Render Info" />
+			<menu_item_check label="顯示矩陣" name="Show Matrices" />
+			<menu_item_check label="顯示指標下的顏色" name="Show Color Under Cursor" />
+			<menu_item_check label="顯示記憶體" name="Show Memory" />
+			<menu_item_check label="顯示物件更新" name="Show Updates" />
+		</menu>
+		<menu label="分析/遙測" name="Enable / Disable telemetry capture">
+			<menu_item_check label="分析" name="Profiling" />
+			<menu_item_check label="連線時啟動" name="Start when telemetry client connects" />
 		</menu>
 		<menu label="強制錯誤" name="Force Errors">
-			<menu_item_call label="強制中斷點" name="Force Breakpoint"/>
-			<menu_item_call label="強制腳本錯誤並崩潰" name="Force LLError And Crash"/>
-			<menu_item_call label="強制不良的記憶體存取" name="Force Bad Memory Access"/>
-			<menu_item_call label="強制無限迴圈" name="Force Infinite Loop"/>
-			<menu_item_call label="強制驅動程式崩潰" name="Force Driver Carsh"/>
-			<menu_item_call label="強制軟體例外異常" name="Force Software Exception"/>
-			<menu_item_call label="強制瀏覽器斷線" name="Force Disconnect Viewer"/>
-			<menu_item_call label="模擬記憶體不足" name="Memory Leaking Simulation"/>
+			<menu_item_call label="強制斷點" name="Force Breakpoint" />
+			<menu_item_call label="強制指令碼錯誤並崩潰" name="Force LLError And Crash" />
+			<menu_item_call label="強制產生LLError、資訊和崩潰" name="Force LLError Message And Crash" />
+			<menu_item_call label="強制讀取錯誤記憶體" name="Force Bad Memory Access" />
+			<menu_item_call label="強制讀取協程中的錯誤記憶體" name="Force Bad Memory Access in Coroutine" />
+			<menu_item_call label="強制無限迴圈" name="Force Infinite Loop" />
+			<menu_item_call label="強制驅動程式崩潰" name="Force Driver Carsh" />
+			<menu_item_call label="強制軟體異常" name="Force Software Exception" />
+			<menu_item_call label="強製作業系統異常" name="Force OS Exception" />
+			<menu_item_call label="強制協程中軟體異常" name="Force Software Exception in Coroutine" />
+			<menu_item_call label="強製程式崩潰" name="Force a Crash in a Thread" />
+			<menu_item_call label="強制瀏覽器斷線" name="Force Disconnect Viewer" />
+			<menu_item_call label="類比記憶體不足" name="Memory Leaking Simulation" />
 		</menu>
-		<menu label="呈像測試" name="Render Tests">
-			<menu_item_check label="攝影機位移" name="Camera Offset"/>
-			<menu_item_check label="隨機變動幀率" name="Randomize Framerate"/>
-			<menu_item_check label="定期出現慢幀率" name="Periodic Slow Frame"/>
-			<menu_item_check label="畫面測試" name="Frame Test"/>
-			<menu_item_call label="幀特性" name="Frame Profile"/>
+		<menu label="GLTF" name="GLTF">
+			<menu_item_call label="打開..." name="Open..." />
+			<menu_item_call label="另存為..." name="Save As..." />
+			<menu_item_call label="上傳..." name="Upload..." />
+			<menu_item_call label="編輯..." name="Edit..." />
 		</menu>
-		<menu label="呈像的元資料" name="Render Metadata">
-			<menu_item_check label="外框箱" name="Bounding Boxes"/>
-			<menu_item_check label="法線" name="Normals"/>
-			<menu_item_check label="八叉樹" name="Octree"/>
-			<menu_item_check label="陰影平截頭體" name="Shadow Frusta"/>
-			<menu_item_check label="物理形狀" name="Physics Shapes"/>
-			<menu_item_check label="遮蔽" name="Occlusion"/>
-			<menu_item_check label="呈像批次" name="Render Batches"/>
-			<menu_item_check label="更新類型" name="Update Type"/>
-			<menu_item_check label="材質動畫" name="Texture Anim"/>
-			<menu_item_check label="材質優先序" name="Texture Priority"/>
-			<menu_item_check label="材質區域" name="Texture Area"/>
-			<menu_item_check label="臉區域" name="Face Area"/>
-			<menu_item_check label="細節層次資訊" name="LOD Info"/>
-			<menu_item_check label="三角數量" name="Triangle Count"/>
-			<menu_item_check label="建製佇列" name="Build Queue"/>
-			<menu_item_check label="燈光" name="Lights"/>
-			<menu_item_check label="碰撞骨架" name="Collision Skeleton"/>
-			<menu_item_check label="光線投射" name="Raycast"/>
-			<menu_item_check label="風力向量" name="Wind Vectors"/>
-			<menu_item_check label="繪出複雜度" name="rendercomplexity"/>
-			<menu_item_check label="附件位元組" name="attachment bytes"/>
-			<menu_item_check label="雕刻" name="Sculpt"/>
-			<menu label="材質密度" name="Texture Density">
-				<menu_item_check label="無" name="None"/>
-				<menu_item_check label="目前" name="Current"/>
-				<menu_item_check label="理想" name="Desired"/>
-				<menu_item_check label="完全" name="Full"/>
+		<menu label="解析度" name="Video">
+			<menu_item_call label="1080x1920" name="1080x1920" />
+			<menu_item_call label="1920x1080" name="1920x1080" />
+			<menu_item_call label="1280x720" name="1280x720" />
+			<menu_item_call label="720x1280" name="720x1280" />
+		</menu>
+		<menu label="彩現測試" name="Render Tests">
+			<menu_item_check label="相機位移" name="Camera Offset" />
+			<menu_item_check label="隨機影格率" name="Randomize Framerate" />
+			<menu_item_check label="定期慢影格" name="Periodic Slow Frame" />
+			<menu_item_call label="影格設定檔案" name="Frame Profile" />
+			<menu_item_call label="基準" name="Benchmark" />
+			<menu_item_call label="HDRI預覽" name="HDRI Preview" />
+		</menu>
+		<menu label="彩現元資料" name="Render Metadata">
+			<menu_item_check label="邊界框" name="Bounding Boxes" />
+			<menu_item_check label="化身碰撞箱" name="Avatar Hitboxes" />
+			<menu_item_check label="法線" name="Normals" />
+			<menu_item_check label="八元樹" name="Octree" />
+			<menu_item_check label="GLTF節點" name="GLTF Nodes" />
+			<menu_item_check label="陰影視錐體" name="Shadow Frusta" />
+			<menu_item_check label="物理形狀" name="Physics Shapes" />
+			<menu_item_check label="遮擋" name="Occlusion" />
+			<menu_item_check label="彩現批次" name="Render Batches" />
+			<menu_item_check label="更新類型" name="Update Type" />
+			<menu_item_check label="紋理動畫" name="Texture Anim" />
+			<menu_item_check label="紋理優先序" name="Texture Priority" />
+			<menu_item_check label="紋理區域" name="Texture Area" />
+			<menu_item_check label="面區域" name="Face Area" />
+			<menu_item_check label="細節層次訊息" name="LOD Info" />
+			<menu_item_check label="三角數量" name="Triangle Count" />
+			<menu_item_check label="燈光" name="Lights" />
+			<menu_item_check label="反射探針" name="Reflection Probes" />
+			<menu_item_check label="探針更新" name="Probe Updates" />
+			<menu_item_check label="粒子" name="Particles" />
+			<menu_item_check label="碰撞骨架" name="Collision Skeleton" />
+			<menu_item_check label="關節" name="Joints" />
+			<menu_item_check label="光線投射" name="Raycast" />
+			<menu_item_check label="風力向量" name="Wind Vectors" />
+			<menu_item_check label="雕刻" name="Sculpt" />
+			<menu_item_check label="紋理大小" name="Texture Size" />
+			<menu label="紋理密度" name="Texture Density">
+				<menu_item_check label="無" name="None" />
+				<menu_item_check label="當前" name="Current" />
+				<menu_item_check label="理想" name="Desired" />
+				<menu_item_check label="完全" name="Full" />
 			</menu>
 		</menu>
-		<menu label="呈像" name="Rendering">
-			<menu_item_check label="軸" name="Axes"/>
-			<menu_item_check label="切線基礎" name="Tangent Basis"/>
-			<menu_item_call label="已選取材質資訊基礎" name="Selected Texture Info Basis"/>
-			<menu_item_call label="所選材料資訊" name="Selected Material Info"/>
-			<menu_item_check label="線框" name="Wireframe"/>
-			<menu_item_check label="物件導向的遮蔽" name="Object-Object Occlusion"/>
-			<menu_item_check label="進階照明模型" name="Advanced Lighting Model"/>
-			<menu_item_check label="來自日/月/投影物的陰影" name="Shadows from Sun/Moon/Projectors"/>
-			<menu_item_check label="屏幕空間環境光遮蔽和陰影平滑技術" name="SSAO and Shadow Smoothing"/>
-			<menu_item_check label="GL 除錯" name="Debug GL"/>
-			<menu_item_check label="管線除錯" name="Debug Pipeline"/>
-			<menu_item_check label="自動半透明遮罩（遞延）" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="自動半透明遮罩（非遞延）" name="Automatic Alpha Masks (non-deferred)"/>
-			<menu_item_check label="動作材質" name="Animation Textures"/>
-			<menu_item_check label="關閉材質" name="Disable Textures"/>
-			<menu_item_check label="全解析度材質" name="Rull Res Textures"/>
-			<menu_item_check label="使附著燈光呈像" name="Render Attached Lights"/>
-			<menu_item_check label="使附著例子效果呈像" name="Render Attached Particles"/>
-			<menu_item_check label="停懸發光物件" name="Hover Glow Objects"/>
+		<menu label="彩現" name="Rendering">
+			<menu_item_check label="軸" name="Axes" />
+			<menu_item_check label="切線基礎" name="Tangent Basis" />
+			<menu_item_call label="已選擇紋理資訊基礎" name="Selected Texture Info Basis" />
+			<menu_item_call label="所選材料資訊" name="Selected Material Info" />
+			<menu_item_check label="線框" name="Wireframe" />
+			<menu_item_check label="物件間遮擋" name="Object-Object Occlusion" />
+			<menu_item_check label="來自日/月/投影物的陰影" name="Shadows from Sun/Moon/Projectors" />
+			<menu_item_check label="環境光遮蔽和陰影平滑" name="SSAO and Shadow Smoothing" />
+			<menu_item_check label="GL 除錯" name="Debug GL" />
+			<menu_item_check label="管線除錯" name="Debug Pipeline" />
+			<menu_item_check label="自動Alpha遮罩（延遲）" name="Automatic Alpha Masks (deferred)" />
+			<menu_item_check label="動畫紋理" name="Animation Textures" />
+			<menu_item_check label="禁用紋理" name="Disable Textures" />
+			<menu_item_call label="不顯示動畫" name="Derender Animesh" />
+			<menu_item_check label="全解析度紋理(有風險)" name="Full Res Textures" />
+			<menu_item_check label="使附著燈光彩現" name="Render Attached Lights" />
+			<menu_item_check label="使附著粒子彩現" name="Render Attached Particles" />
+			<menu_item_check label="啟用著色器快取" name="Enable Shader Cache" />
+			<menu_item_call label="清除著色器快取" name="Shader Cache Clear" />
 		</menu>
 		<menu label="網路" name="Network">
-			<menu_item_check label="暫停用戶" name="AgentPause"/>
-			<menu_item_call label="啟用訊息記錄" name="Enable Message Log"/>
-			<menu_item_call label="停用訊息記錄" name="Disable Message Log"/>
-			<menu_item_check label="速度內插物件" name="Velocity Interpolate Objects"/>
-			<menu_item_check label="探詢內插物件位置" name="Ping Interpolate Object Positions"/>
-			<menu_item_call label="丟出一個封包" name="Drop a Packet"/>
+			<menu_item_check label="暫停代理" name="AgentPause" />
+			<menu_item_call label="啟用訊息記錄" name="Enable Message Log" />
+			<menu_item_call label="停用訊息記錄" name="Disable Message Log" />
+			<menu_item_check label="物件速度插值" name="Velocity Interpolate Objects" />
+			<menu_item_check label="延遲納入物件插值" name="Ping Interpolate Object Positions" />
+			<menu_item_call label="封包遺失" name="Drop a Packet" />
 		</menu>
-		<menu_item_call label="傾印腳本控制的攝影機" name="Dump Scripted Camera"/>
+		<menu label="快取" name="Cache">
+			<menu_item_call label="清空磁碟快取" name="Purge Disk Cache" />
+		</menu>
+		<menu_item_call label="轉儲指令碼相機" name="Dump Scripted Camera" />
 		<menu label="錄製器" name="Recorder">
-			<menu_item_call label="開始播放" name="Start Playback"/>
-			<menu_item_call label="停止播放" name="Stop Playback"/>
-			<menu_item_check label="循環播放" name="Loop Playback"/>
-			<menu_item_call label="開始錄製" name="Start Record"/>
-			<menu_item_call label="停止錄製" name="Stop Record"/>
+			<menu_item_call label="開始事件記錄" name="Start event recording" />
+			<menu_item_call label="停止事件記錄" name="Stop event recording" />
+			<menu_item_call label="重播事件記錄" name="Playback event recording" />
+			<menu_item_call label="開始播放" name="Start Playback" />
+			<menu_item_call label="停止播放" name="Stop Playback" />
+			<menu_item_check label="迴圈播放" name="Loop Playback" />
+			<menu_item_call label="開始錄製" name="Start Record" />
+			<menu_item_call label="停止錄製" name="Stop Record" />
 		</menu>
 		<menu label="世界" name="DevelopWorld">
-			<menu_item_check label="模擬器太陽設定覆蓋" name="Sim Sun Override"/>
-			<menu_item_check label="固定天氣" name="Fixed Weather"/>
-			<menu_item_call label="傾印地區物件快取" name="Dump Region Object Cache"/>
+			<menu_item_check label="類比主機(sim)太陽設定涵蓋" name="Sim Sun Override" />
+			<menu_item_check label="固定天氣" name="Fixed Weather" />
+			<menu_item_call label="轉儲區域物件快取" name="Dump Region Object Cache" />
+			<menu_item_check label="將統計資料輸出到檔案" name="Stats Recorder File" />
+			<menu_item_check label="興趣列表：360模式" name="Interest List: 360 Mode" />
+			<menu_item_call label="興趣列表：完整更新" name="Reset Interest Lists" />
+			<menu_item_call label="將類比主機功能轉儲到附近聊天" name="DumpSimFeaturesToChat" />
+		</menu>
+		<menu label="地形" name="DevelopTerrain">
+			<menu_item_call label="重建地形" name="Rebuild Terrain" />
+			<menu_item_call label="建立本地繪製圖" name="Create Local Paintmap" />
+			<menu_item_call label="刪除本地繪製圖" name="Delete Local Paintmap" />
 		</menu>
 		<menu label="使用者界面" name="UI">
-			<menu_item_call label="媒體瀏覽器" name="Media Browser"/>
-			<menu_item_call label="傾印 SelectMgr" name="Dump SelectMgr"/>
-			<menu_item_call label="傾印收納區" name="Dump Inventory"/>
-			<menu_item_call label="傾印碼錶" name="Dump Timers"/>
-			<menu_item_call label="傾印焦點容器" name="Dump Focus Holder"/>
-			<menu_item_call label="列印所選物件資訊" name="Print Selected Object Info"/>
-			<menu_item_call label="列印用戶資訊" name="Print Agent Info"/>
-			<menu_item_check label="地區除錯控制台" name="Region Debug Console"/>
-			<menu_item_check label="除錯 SelectMgr" name="Debug SelectMgr"/>
-			<menu_item_check label="除錯點按動作" name="Debug Clicks"/>
-			<menu_item_check label="視角除錯" name="Debug Views"/>
-			<menu_item_check label="除錯名稱訊息提示" name="Debug Name Tooltips"/>
-			<menu_item_check label="滑鼠事件除錯" name="Debug Mouse Events"/>
-			<menu_item_check label="按鍵除錯" name="Debug Keys"/>
-			<menu_item_check label="除錯 WindowProc" name="Debug WindowProc"/>
+			<menu_item_call label="媒體瀏覽器測試" name="Web Browser Test" />
+			<menu_item_check label="區域重新啟動測試..." name="Region Restart Test" />
+			<menu_item_call label="網頁內容瀏覽器 " name="Web Content Browser" />
+			<menu_item_call label="庫存縮圖助手" name="Inventory Thumbnails Helper" />
+			<menu_item_call label="轉儲字型" name="Dump Fonts" />
+			<menu_item_call label="轉儲字型紋理" name="Dump Font Textures" />
+			<menu_item_call label="轉儲 SelectMgr" name="Dump SelectMgr" />
+			<menu_item_call label="轉儲庫存" name="Dump Inventory" />
+			<menu_item_call label="轉儲計時器" name="Dump Timers" />
+			<menu_item_call label="轉儲焦點容器" name="Dump Focus Holder" />
+			<menu_item_call label="列印所選物件資訊" name="Print Selected Object Info" />
+			<menu_item_call label="列印使用者資訊" name="Print Agent Info" />
+			<menu_item_check label="雙擊自動前往" name="Double-ClickAuto-Pilot" />
+			<menu_item_check label="雙擊瞬間傳送" name="DoubleClick Teleport" />
+			<menu_item_check label="焦點容器除錯" name="Debug SelectMgr" />
+			<menu_item_check label="點擊操作除錯" name="Debug Clicks" />
+			<menu_item_check label="視圖除錯" name="Debug Views" />
+			<menu_item_check label="Unicode除錯" name="Debug Unicode" />
+			<menu_item_check label="相機控制除錯" name="Debug Camera Controls" />
+			<menu_item_check label="名稱訊息提示除錯" name="Debug Name Tooltips" />
+			<menu_item_check label="滑鼠事件除錯" name="Debug Mouse Events" />
+			<menu_item_check label="按鍵除錯" name="Debug Keys" />
+			<menu_item_check label="視窗程式除錯" name="Debug WindowProc" />
 		</menu>
 		<menu label="XUI" name="XUI">
-			<menu_item_call label="重新載入顏色設定" name="Reload Color Settings"/>
-			<menu_item_call label="顯示字型測試" name="Show Font Test"/>
-			<menu_item_check label="顯示 XUI 名稱" name="Show XUI Names"/>
-			<menu_item_call label="XUI 預覽工具" name="UI Preview Tool"/>
-			<menu_item_call label="送出測試 IMs" name="Send Test IMs"/>
-			<menu_item_call label="沖洗名稱快取資料" name="Flush Names Caches"/>
+			<menu_item_call label="重新載入顏色設定" name="Reload Color Settings" />
+			<menu_item_call label="顯示字型測試" name="Show Font Test" />
+			<menu_item_call label="從 XML 載入" name="Load from XML" />
+			<menu_item_call label="儲存到 XML" name="Save to XML" />
+			<menu_item_check label="顯示 XUI 名稱" name="Show XUI Names" />
+			<menu_item_check label="顯示視圖的除錯資訊" name="DebugViews" />
+			<menu_item_call label="顯示顏色設定" name="Color Settings" />
+			<menu_item_call label="XUI 預覽工具" name="UI Preview Tool" />
+			<menu_item_call label="傳送測試訊息" name="Send Test IMs" />
+			<menu_item_call label="重新整理名稱快取" name="Flush Names Caches" />
 		</menu>
 		<menu label="化身" name="Character">
-			<menu label="抓取已產出材質" name="Grab Baked Texture">
-				<menu_item_call label="虹膜" name="Grab Iris"/>
-				<menu_item_call label="頭部" name="Grab Head"/>
-				<menu_item_call label="上半身" name="Grab Upper Body"/>
-				<menu_item_call label="下半身" name="Grab Lower Body"/>
-				<menu_item_call label="裙子" name="Grab Skirt"/>
+			<menu label="抓取已烘焙紋理" name="Grab Baked Texture">
+				<menu_item_call label="虹膜" name="Grab Iris" />
+				<menu_item_call label="頭部" name="Grab Head" />
+				<menu_item_call label="上半身" name="Grab Upper Body" />
+				<menu_item_call label="下半身" name="Grab Lower Body" />
+				<menu_item_call label="裙子" name="Grab Skirt" />
 			</menu>
-			<menu label="字元測試" name="Character Tests">
-				<menu_item_call label="將外觀轉成 XML" name="Appearance To XML"/>
-				<menu_item_call label="切換字元幾何特性" name="Toggle Character Geometry"/>
-				<menu_item_call label="男性測試" name="Test Male"/>
-				<menu_item_call label="女性測試" name="Test Female"/>
-				<menu_item_check label="允許選擇化身" name="Allow Select Avatar"/>
+			<menu label="角色測試" name="Character Tests">
+				<menu_item_call label="將外觀轉成 XML" name="Appearance To XML" />
+				<menu_item_call label="切換角色幾何特性" name="Toggle Character Geometry" />
+				<menu_item_call label="男性測試" name="Test Male" />
+				<menu_item_call label="女性測試" name="Test Female" />
+				<menu_item_check label="允許選擇化身" name="Allow Select Avatar" />
+				<menu_item_check label="禁用注視動畫" name="Disable Look At Animation" />
+				<menu_item_check label="只顯示好友" name="Render Only Friends" />
 			</menu>
-			<menu label="動作速度" name="Animation Speed">
-				<menu_item_call label="所有動作加快 10%" name="All Animations 10 Faster"/>
-				<menu_item_call label="所有動作放慢 10%" name="All Animations 10 Slower"/>
-				<menu_item_call label="將所有動作恢復原速" name="Reset All Animation Speed"/>
-				<menu_item_check label="慢動作" name="Slow Motion Animations"/>
+			<menu label="動畫速度" name="Animation Speed">
+				<menu_item_call label="所有動畫加快 10%" name="All Animations 10 Faster" />
+				<menu_item_call label="所有動畫放慢 10%" name="All Animations 10 Slower" />
+				<menu_item_call label="將所有動畫恢復原速" name="Reset All Animation Speed" />
+				<menu_item_check label="慢動畫" name="Slow Motion Animations" />
 			</menu>
-			<menu_item_call label="強制參數為預設值" name="Force Params to Default"/>
-			<menu_item_check label="動作資訊" name="Animation Info"/>
-			<menu_item_check label="顯示注視在" name="Show Look At"/>
-			<menu_item_check label="顯示指向在" name="Show Point At"/>
-			<menu_item_check label="除錯旋軸的更新" name="Debug Joint Updates"/>
-			<menu_item_check label="停用細節層次" name="Disable LOD"/>
-			<menu_item_check label="除錯字元可見性" name="Debug Character Vis"/>
-			<menu_item_check label="顯示碰撞骨架" name="Show Collision Skeleton"/>
-			<menu_item_check label="顯示骨頭" name="Show Bones"/>
-			<menu_item_check label="顯示用戶目標" name="Display Agent Target"/>
-			<menu_item_check label="顯示假冒者的範圍" name="Show Impostor Extents"/>
-			<menu_item_call label="傾印附件" name="Dump Attachments"/>
-			<menu_item_call label="除錯化身材質" name="Debug Avatar Textures"/>
-			<menu_item_call label="傾印本地材質" name="Dump Local Textures"/>
+			<menu_item_call label="強制參數為預設值" name="Force Params to Default" />
+			<menu_item_check label="動畫資訊" name="Animation Info" />
+			<menu_item_check label="顯示注視點" name="Show Look At" />
+			<menu_item_check label="顯示目標選擇指示" name="Show Point At" />
+			<menu_item_check label="旋軸的更新除錯" name="Debug Joint Updates" />
+			<menu_item_check label="停用細節層次" name="Disable LOD" />
+			<menu_item_check label="角色可見性除錯" name="Debug Character Vis" />
+			<menu_item_check label="除錯角色復位狀態" name="Debug Character Rez State" />
+			<menu_item_check label="顯示碰撞骨架" name="Show Collision Skeleton" />
+			<menu_item_check label="顯示骨骼" name="Show Bones" />
+			<menu_item_check label="顯示使用者目標" name="Display Agent Target" />
+			<menu_item_check label="精簡顯示的範圍" name="Show Impostor Extents" />
+			<menu_item_call label="轉儲附件" name="Dump Attachments" />
+			<menu_item_call label="化身紋理除錯" name="Debug Avatar Textures" />
+			<menu_item_call label="轉儲本地紋理" name="Dump Local Textures" />
+			<menu_item_call label="重新載入化身粒子云" name="Reload Avatar Cloud Particle" />
 		</menu>
-		<menu_item_check label="HTTP 材質" name="HTTP Textures"/>
-		<menu_item_check label="HTTP 收納區" name="HTTP Inventory"/>
-		<menu_item_call label="壓縮圖像" name="Compress Images"/>
-		<menu_item_call label="啟用記憶體洩漏視覺偵測器" name="Enable Visual Leak Detector"/>
-		<menu_item_check label="輸出除錯小型傾印" name="Output Debug Minidump"/>
-		<menu_item_check label="下次執行時顯示控制台視窗" name="Console Window"/>
+		<menu_item_check label="HTTP 紋理" name="HTTP Textures" />
+		<menu_item_check label="HTTP 庫存" name="HTTP Inventory" />
+		<menu_item_call label="壓縮圖像" name="Compress Images" />
+		<menu_item_call label="測試檔案壓縮" name="Compress File Test" />
+		<menu_item_call label="啟用記憶體洩漏視覺偵測器" name="Enable Visual Leak Detector" />
+		<menu_item_check label="輸出除錯小型轉儲" name="Output Debug Minidump" />
+		<menu_item_check label="下次運行時顯示控制檯視窗" name="Console Window" />
 		<menu label="設定記錄細節" name="Set Logging Level">
-			<menu_item_check label="除錯" name="Debug"/>
-			<menu_item_check label="資訊" name="Info"/>
-			<menu_item_check label="警告" name="Warning"/>
-			<menu_item_check label="錯誤" name="Error"/>
-			<menu_item_check label="無" name="None"/>
+			<menu_item_check label="除錯" name="Debug" />
+			<menu_item_check label="資訊" name="Info" />
+			<menu_item_check label="警告" name="Warning" />
+			<menu_item_check label="錯誤" name="Error" />
+			<menu_item_check label="無" name="None" />
 		</menu>
-		<menu_item_call label="要求管理員狀態" name="Request Admin Options"/>
-		<menu_item_call label="離開管理員狀態" name="Leave Admin Options"/>
-		<menu_item_check label="顯示管理員選單" name="View Admin Options"/>
+		<menu_item_call label="要求管理員狀態" name="Request Admin Options" />
+		<menu_item_call label="離開管理員狀態" name="Leave Admin Options" />
+		<menu_item_check label="顯示管理員選項" name="View Admin Options" />
 	</menu>
 	<menu label="管理員" name="Admin">
 		<menu label="物件" name="AdminObject">
-			<menu_item_call label="取得副本" name="Admin Take Copy"/>
-			<menu_item_call label="將所有人強設為我自己" name="Force Owner To Me"/>
-			<menu_item_call label="強設為「准許所有人」" name="Force Owner Permissive"/>
-			<menu_item_call label="刪除" name="Delete"/>
-			<menu_item_call label="鎖定" name="Lock"/>
-			<menu_item_call label="取得資產 ID" name="Get Assets IDs"/>
+			<menu_item_call label="取得副本" name="Admin Take Copy" />
+			<menu_item_call label="將所有者強設為我自己" name="Force Owner To Me" />
+			<menu_item_call label="強設為「準許所有者」" name="Force Owner Permissive" />
+			<menu_item_call label="刪除" name="Delete" />
+			<menu_item_call label="鎖定" name="Lock" />
+			<menu_item_call label="取得資源 ID" name="Get Assets IDs" />
 		</menu>
-		<menu label="地段" name="Parcel">
-			<menu_item_call label="將所有人強設為我自己" name="Owner To Me"/>
-			<menu_item_call label="設為 Linden 內容" name="Set to Linden Content"/>
-			<menu_item_call label="收取公共地" name="Claim Public Land"/>
+		<menu label="地塊" name="Parcel">
+			<menu_item_call label="將所有者強設為我自己" name="Owner To Me" />
+			<menu_item_call label="設為林登內容" name="Set to Linden Content" />
+			<menu_item_call label="收取公共土地" name="Claim Public Land" />
 		</menu>
-		<menu label="地區" name="Region">
-			<menu_item_call label="傾印暫用資產資料" name="Dump Temp Asset Data"/>
-			<menu_item_call label="儲存區域狀態" name="Save Region State"/>
+		<menu label="區域" name="Region">
+			<menu_item_call label="轉儲暫用資源資料" name="Dump Temp Asset Data" />
+			<menu_item_call label="儲存區域狀態" name="Save Region State" />
 		</menu>
-		<menu_item_call label="神之工具" name="God Tools"/>
+		<menu_item_call label="神之工具" name="God Tools" />
 	</menu>
 	<menu label="管理員" name="Deprecated">
-		<menu label="附著物件" name="Attach Object"/>
-		<menu label="卸去物件" name="Detach Object"/>
+		<menu label="附著物件" name="Attach Object" />
+		<menu label="卸下物件" name="Detach Object" />
 		<menu label="脫下服裝" name="Take Off Clothing">
-			<menu_item_call label="襯衫" name="Shirt"/>
-			<menu_item_call label="褲子" name="Pants"/>
-			<menu_item_call label="鞋子" name="Shoes"/>
-			<menu_item_call label="襪子" name="Socks"/>
-			<menu_item_call label="夾克" name="Jacket"/>
-			<menu_item_call label="手套" name="Gloves"/>
-			<menu_item_call label="內衣" name="Menu Undershirt"/>
-			<menu_item_call label="內褲" name="Menu Underpants"/>
-			<menu_item_call label="裙子" name="Skirt"/>
-			<menu_item_call label="半透明" name="Alpha"/>
-			<menu_item_call label="刺青" name="Tattoo"/>
-			<menu_item_call label="身體物理" name="Physics"/>
-			<menu_item_call label="全部衣服" name="All Clothes"/>
+			<menu_item_call label="襯衫" name="Shirt" />
+			<menu_item_call label="褲子" name="Pants" />
+			<menu_item_call label="鞋子" name="Shoes" />
+			<menu_item_call label="襪子" name="Socks" />
+			<menu_item_call label="外套" name="Jacket" />
+			<menu_item_call label="手套" name="Gloves" />
+			<menu_item_call label="內衣" name="Menu Undershirt" />
+			<menu_item_call label="內褲" name="Menu Underpants" />
+			<menu_item_call label="裙子" name="Skirt" />
+			<menu_item_call label="Alpha" name="Alpha" />
+			<menu_item_call label="刺青" name="Tattoo" />
+			<menu_item_call label="通用層" name="Universal" />
+			<menu_item_call label="身體物理" name="Physics" />
+			<menu_item_call label="全部服裝" name="All Clothes" />
 		</menu>
 		<menu label="幫助" name="DeprecatedHelp">
-			<menu_item_call label="林登官方部落格" name="Official Linden Blog"/>
-			<menu_item_call label="腳本門戶" name="Scripting Portal"/>
-			<menu label="臭蟲回報" name="Bug Reporting">
-				<menu_item_call label="大眾問題反應追蹤處" name="Public Issue Tracker"/>
-				<menu_item_call label="大眾問題反應追蹤處幫助" name="Publc Issue Tracker Help"/>
-				<menu_item_call label="臭蟲回報 101" name="Bug Reporing 101"/>
-				<menu_item_call label="安全問題" name="Security Issues"/>
-				<menu_item_call label="品管維基" name="QA Wiki"/>
+			<menu_item_call label="林登官方Blog" name="Official Linden Blog" />
+			<menu_item_call label="指令碼門戶" name="Scripting Portal" />
+			<menu label="報告問題" name="Bug Reporting">
+				<menu_item_call label="問題意見反應（JIRA）" name="Public Issue Tracker" />
+				<menu_item_call label="問題意見反應（JIRA）幫助" name="Publc Issue Tracker Help" />
+				<menu_item_call label="報告錯誤 " name="Bug Reporing 101" />
+				<menu_item_call label="安全問題" name="Security Issues" />
+				<menu_item_call label="QA維基" name="QA Wiki" />
 			</menu>
 		</menu>
 	</menu>

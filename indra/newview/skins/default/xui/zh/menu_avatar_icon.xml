@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="Avatar Icon Menu">
-	<menu_item_call label="察看檔案" name="Show Profile"/>
-	<menu_item_call label="送出 IM..." name="Send IM"/>
-	<menu_item_call label="要求瞬間傳送" name="Request Teleport"/>
-	<menu_item_call label="加為朋友..." name="Add Friend"/>
-	<menu_item_call label="移除朋友..." name="Remove Friend"/>
+	<menu_item_call label="檢視檔案" name="Show Profile" />
+	<menu_item_call label="發起私聊" name="Send IM" />
+	<menu_item_call label="瞬間傳送至" name="Teleport to" />
+	<menu_item_call label="傳送瞬間傳送邀請" name="Offer Teleport" />
+	<menu_item_call label="請求瞬間傳送" name="Request Teleport" />
+	<menu_item_call label="語音通話" name="Voice Call" />
+	<menu_item_call label="開啟聊天歷史" name="Chat History" />
+	<menu_item_call label="加為朋友" name="Add Friend" />
+	<menu_item_call label="移除朋友" name="Remove Friend" />
+	<menu_item_call label="新增到聯絡人分組" name="Add Contact Set" />
+	<menu_item_call label="邀請加入群組" name="Invite Group" />
+	<menu_item_call label="放大" name="Zoom In" />
+	<menu_item_call label="地圖" name="Map" />
+	<menu_item_call label="追蹤" name="track" />
+	<menu_item_call label="分享" name="Share" />
+	<menu_item_call label="支付" name="Pay" />
+	<menu_item_call label="複製名稱" name="copy name" />
+	<menu_item_call label="複製 URL" name="copy url" />
+	<menu_item_call label="違規檢舉" name="Report Abuse" />
+	<menu_item_check label="封鎖" name="Block Unblock" />
+	<menu_item_check label="封鎖文字" name="Mute Text" />
 	<context_menu label="主持人選項" name="Moderator Options">
-		<menu_item_check label="允許文字聊天" name="AllowTextChat"/>
-		<menu_item_call label="將此參與者消音" name="ModerateVoiceMuteSelected"/>
-		<menu_item_call label="取消對此一參與者的消音" name="ModerateVoiceUnMuteSelected"/>
+		<menu_item_call label="允許文字聊天" name="AllowTextChat" />
+		<menu_item_call label="禁止文字聊天" name="ForbidTextChat" />
+		<menu_item_call label="將此參與者靜音" name="ModerateVoiceMuteSelected" />
+		<menu_item_call label="取消此參與者的靜音" name="ModerateVoiceUnMuteSelected" />
 	</context_menu>
-	<menu_item_call label="封鎖成員" name="BanMember"/>
+	<menu_item_call label="封鎖成員" name="BanMember" />
 </toggleable_menu>

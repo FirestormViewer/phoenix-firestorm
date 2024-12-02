@@ -1,48 +1,64 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="地點" name="places panel">
-	<string name="landmarks_tab_title" value="我的地標"/>
-	<string name="teleport_history_tab_title" value="瞬間傳送歷史紀錄"/>
-	<filter_editor label="我的地點過濾器" name="Filter"/>
-	<panel name="button_panel">
-		<layout_stack name="bottom_bar_ls0">
-			<layout_panel name="lp1">
-				<layout_stack name="bottom_bar_ls1">
-					<layout_panel name="teleport_btn_lp">
-						<button label="瞬間傳送" name="teleport_btn" tool_tip="瞬間傳送到所選的區域"/>
+	<string name="landmarks_tab_title" value="我的地標" />
+	<string name="teleport_history_tab_title" value="瞬間傳送歷史紀錄" />
+	<string name="favorites_tab_title" value="最愛的" />
+	<layout_stack name="places_layout_panel">
+		<layout_panel name="main_panel">
+			<layout_stack name="top_menu_panel">
+				<layout_panel name="filter_panel">
+					<filter_editor label="我的地點過濾器" name="Filter" />
+				</layout_panel>
+				<layout_panel name="options_gear_btn_panel">
+					<menu_button tool_tip="顯示選項" name="options_gear_btn" />
+				</layout_panel>
+				<layout_panel name="options_sort_btn_panel">
+					<menu_button tool_tip="顯示排序選項" name="sorting_menu_btn" />
+				</layout_panel>
+				<layout_panel name="add_btn_panel">
+					<menu_button name="add_menu_btn" tool_tip="新增新的地標或檔案夾" />
+				</layout_panel>
+				<layout_panel name="trash_btn_panel" tool_tip="刪除選定的地標或檔案夾" />
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="button_layout_panel">
+			<panel name="button_panel">
+				<layout_stack name="bottom_bar_ls0">
+					<layout_panel name="lp1">
+						<layout_stack name="bottom_bar_ls1">
+							<layout_panel name="teleport_btn_lp">
+								<button label="瞬間傳送" name="teleport_btn" tool_tip="瞬間傳送到所選的區域" />
+							</layout_panel>
+							<layout_panel name="chat_btn_lp">
+								<button label="地圖" name="map_btn" tool_tip="在世界地圖上顯示相對應的區域" />
+							</layout_panel>
+						</layout_stack>
 					</layout_panel>
-					<layout_panel name="chat_btn_lp">
-						<button label="地圖" name="map_btn" tool_tip="在世界地圖上顯示相對應的區域"/>
+					<layout_panel name="lp_options">
+						<menu_button name="overflow_btn" tool_tip="顯示額外選項" />
+					</layout_panel>
+					<layout_panel name="lp2">
+						<layout_stack name="bottom_bar_profile_ls">
+							<layout_panel name="profile_btn_lp">
+								<button label="檔案" name="profile_btn" tool_tip="顯示地點檔案" />
+							</layout_panel>
+						</layout_stack>
+						<layout_stack name="bottom_bar_close_ls3">
+							<layout_panel name="close_btn_lp">
+								<button label="關閉" name="close_btn" />
+							</layout_panel>
+						</layout_stack>
 					</layout_panel>
 				</layout_stack>
-			</layout_panel>
-			<layout_panel name="lp2">
-				<layout_stack name="bottom_bar_ls3">
-					<layout_panel name="edit_btn_lp">
-						<button label="編輯" name="edit_btn" tool_tip="編輯地標資訊"/>
+				<layout_stack name="bottom_bar_ls2">
+					<layout_panel name="save_btn_lp">
+						<button label="儲存" name="save_btn" />
 					</layout_panel>
-					<layout_panel name="overflow_btn_lp">
-						<menu_button name="overflow_btn" tool_tip="顯示額外選項"/>
+					<layout_panel name="cancel_btn_lp">
+						<button label="取消" name="cancel_btn" />
 					</layout_panel>
 				</layout_stack>
-				<layout_stack name="bottom_bar_profile_ls">
-					<layout_panel name="profile_btn_lp">
-						<button label="檔案" name="profile_btn" tool_tip="顯示地點檔案"/>
-					</layout_panel>
-				</layout_stack>
-				<layout_stack name="bottom_bar_close_ls3">
-					<layout_panel name="close_btn_lp">
-						<button label="關閉" name="close_btn"/>
-					</layout_panel>
-				</layout_stack>
-			</layout_panel>
-		</layout_stack>
-		<layout_stack name="bottom_bar_ls2">
-			<layout_panel name="save_btn_lp">
-				<button label="儲存" name="save_btn"/>
-			</layout_panel>
-			<layout_panel name="cancel_btn_lp">
-				<button label="取消" name="cancel_btn"/>
-			</layout_panel>
-		</layout_stack>
-	</panel>
+			</panel>
+		</layout_panel>
+	</layout_stack>
 </panel>

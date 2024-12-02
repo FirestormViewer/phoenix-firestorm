@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_region_restart_schedule" title="區域重新啟動計劃">
+	<!-- This block shows Advanced Settings -->
+	<floater.string name="am_string">上午</floater.string>
+	<floater.string name="pm_string">下午</floater.string>
+	<text name="days_general">
+		在以下日期重新啟動區域：
+	</text>
+	<check_box name="s_chk" tool_tip="週日" />
+	<check_box name="m_chk" tool_tip="週一" />
+	<check_box name="t_chk" tool_tip="週二" />
+	<check_box name="w_chk" tool_tip="週三" />
+	<check_box name="r_chk" tool_tip="週四" />
+	<check_box name="f_chk" tool_tip="週五" />
+	<check_box name="a_chk" tool_tip="週六" />
+	<text name="su_label">
+		週日
+	</text>
+	<text name="mo_label">
+		週一
+	</text>
+	<text name="tu_label">
+		週二
+	</text>
+	<text name="we_label">
+		週三
+	</text>
+	<text name="th_label">
+		週四
+	</text>
+	<text name="fr_label">
+		週五
+	</text>
+	<text name="sa_label">
+		週六
+	</text>
+	<text name="at_label">
+		於
+	</text>
+	<button name="am_pm_btn" label="上午" />
+	<text name="utc_label">
+		UTC
+	</text>
+	<button name="save_btn" label="儲存" />
+	<button name="cancel_btn" label="取消" />
+</floater>

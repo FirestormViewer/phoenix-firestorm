@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		此聯絡人分組為空。
+	</panel.string>
+	<panel.string name="no_sets">
+		沒有聯絡人分組
+	</panel.string>
+	<panel.string name="all_sets">
+		所有聯絡人分組
+	</panel.string>
+	<panel.string name="pseudonyms">
+		別名
+	</panel.string>
+	<panel.string name="non_friends">
+		非好友
+	</panel.string>
+	<button name="config_btn" tool_tip="設定所選聯絡人分組" />
+	<button name="add_set_btn" tool_tip="新增新的聯絡人分組" />
+	<button name="remove_set_btn" tool_tip="移除所選聯絡人分組" />
+	<button label="新增..." name="add_btn" tool_tip="向當前聯絡人分組新增一個化身" />
+	<button label="移除..." name="remove_btn" tool_tip="從當前聯絡人分組中移除化身" />
+	<button label="個人檔案..." name="profile_btn" tool_tip="打開化身的個人檔案" />
+	<button label="私聊..." name="start_im_btn" tool_tip="打開私聊視窗" />
+	<button label="傳送..." name="offer_teleport_btn" tool_tip="向此化身提供傳送到您當前位置的選項" />
+	<button label="設定別名" name="set_pseudonym_btn" tool_tip="為此化身設定一個別名" />
+	<button label="移除別名" name="remove_pseudonym_btn" tool_tip="移除化身的別名" />
+	<button label="移除顯示名" name="remove_displayname_btn" tool_tip="移除化身的顯示名" />
+	<text name="member_count">
+		成員: [COUNT]
+	</text>
+</panel>

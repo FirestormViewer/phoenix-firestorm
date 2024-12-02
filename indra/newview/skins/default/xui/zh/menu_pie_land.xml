@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Land Pie">
+	<pie_slice label="土地資訊" name="Place Information..." />
+	<pie_slice label="建造" name="Create" />
+	<pie_slice label="去那裡" name="Go Here" />
+	<pie_slice label="坐在這裡" name="Sit Here" />
+	<pie_slice label="封鎖粒子所有者" name="Mute Particle" />
+	<pie_slice label="購買通行權" name="Land Buy Pass Pie" />
+	<pie_slice label="編輯地形" name="Edit Terrain" />
+	<pie_slice label="購買這塊土地" name="Land Buy Pie" />
+</pie_menu>

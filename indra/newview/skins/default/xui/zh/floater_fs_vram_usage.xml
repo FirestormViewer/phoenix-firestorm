@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="object_vram_usage" title="物件對視訊記憶體的影響">
+	<scroll_list name="result_list">
+		<column name="uuid" label="UUID" />
+		<column name="name" label="名稱" />
+		<column name="distance" label="距離" />
+		<column name="faces" label="面數" />
+		<column name="vertices" label="頂點數" />
+		<column name="indices" label="三角數" />
+		<column name="vram_usage" label="紋理視訊記憶體佔用KB" />
+		<column name="vram_usage_vbo" label="VBO視訊記憶體佔用KB" />
+	</scroll_list>
+	<button label="重新整理" label_selected="重新整理" name="refresh_button" />
+</floater>

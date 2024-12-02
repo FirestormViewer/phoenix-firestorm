@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel">
+					<pull_button name="back_btn" tool_tip="傳回上一個位置" />
+					<pull_button name="forward_btn" tool_tip="前往下一個位置" />
+					<button name="home_btn" tool_tip="傳送回我的家" />
+					<button name="About_Land" tool_tip="打開土地資訊視窗" />
+					<button name="PersonalLighting" tool_tip="打開個人照明視窗" />
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="位置" name="location_combo" />
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="搜尋" name="search_combo_box" tool_tip="搜尋">
+						<combo_editor label="全球搜尋" name="search_combo_editor" />
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="拖放傳送地標到此以便讓你能快速傳送到在第二人生中你最愛的地點!!">
+				<more_button name="more_btn_stl" tool_tip="顯示更多收藏">
+					更多 ▼
+				</more_button>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
+</panel>

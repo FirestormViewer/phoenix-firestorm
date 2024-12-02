@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="area_search" title="周邊區域搜尋">
+	<tab_container name="area_searchtab">
+		<panel name="area_search_list_panel" label="列表">
+			<panel.string name="ListedPendingTotalBlank">
+				已列出 | 待處理 | 總計
+			</panel.string>
+			<panel.string name="ListedPendingTotalFilled">
+				[LISTED] 已列出 | [PENDING] 待處理 | [TOTAL] 總計
+			</panel.string>
+			<fs_scroll_list name="result_list">
+				<fs_scroll_list.columns name="distance" label="距離" width="50" tool_tip="從化身到物件的距離。" />
+				<fs_scroll_list.columns name="name" label="名稱" width="150" />
+				<fs_scroll_list.columns name="description" label="描述" width="150" />
+				<fs_scroll_list.columns name="price" label="價格" width="50" tool_tip="物件的價格，如果正在出售。" />
+				<fs_scroll_list.columns name="land_impact" label="土地影響" width="70" tool_tip="會與地塊的元素最大限制進行計算。" />
+				<fs_scroll_list.columns name="prim_count" label="元素" width="50" tool_tip="組成物件的元素數量。" />
+				<fs_scroll_list.columns name="owner" label="所有者" width="90" />
+				<fs_scroll_list.columns name="group" label="群組" width="90" tool_tip="物件所屬的群組。" />
+				<fs_scroll_list.columns name="creator" label="創造者" width="90" />
+				<fs_scroll_list.columns name="last_owner" label="前所有者" width="90" tool_tip="物件的上一個所有者。" />
+			</fs_scroll_list>
+			<button name="Refresh" label="重新整理" />
+			<text name="counter" left_delta="110">
+				已列出 | 待處理 | 總計
+			</text>
+			<check_box name="beacons" label="顯示信標" />
+		</panel>
+		<panel label="搜尋" name="area_search_find_panel">
+			<text name="name_label">
+				名稱：
+			</text>
+			<text name="desc_label">
+				描述：
+			</text>
+			<text name="owner_label">
+				所有者：
+			</text>
+			<text name="group_label">
+				群組：
+			</text>
+			<text name="creator_label">
+				創造者：
+			</text>
+			<text name="last_owner_label">
+				其所有者：
+			</text>
+			<check_box name="regular_expression" label="使用正規表示式" />
+			<button name="search" label="搜尋" />
+			<button name="clear" label="移除" />
+		</panel>
+		<panel label="過濾" name="area_search_filter_panel">
+			<text name="only_list">
+				排除具有以下屬性的物件：
+			</text>
+			<check_box name="filter_locked" label="鎖定" />
+			<check_box name="filter_physical" label="物理" />
+			<check_box name="filter_phantom" label="虛像" />
+			<check_box name="filter_temporary" label="臨時" />
+			<check_box name="filter_attachment" label="附件" />
+			<check_box name="filter_moap" label="共享媒體" />
+			<check_box name="filter_perm_copy" label="可複製" />
+			<check_box name="filter_perm_modify" label="可修改" />
+			<check_box name="filter_perm_transfer" label="可轉讓" />
+			<check_box name="filter_for_sale" label="出售價格介於" />
+			<text name="and">
+				和
+			</text>
+			<text name="mouse_text">
+				滑鼠點擊操作
+			</text>
+			<combo_box name="click_action" tool_tip="點擊物件執行的操作。">
+				<combo_box.item label=" " name="click_blank" />
+				<combo_box.item label="任意" name="click_any" />
+				<combo_box.item label="觸碰" name="click_touch" />
+				<combo_box.item label="坐下" name="click_sit" />
+				<combo_box.item label="購買" name="click_buy" />
+				<combo_box.item label="支付" name="click_pay" />
+				<combo_box.item label="打開" name="click_open" />
+				<combo_box.item label="播放" name="click_play" />
+				<combo_box.item label="打開媒體" name="click_open_media" />
+				<combo_box.item label="縮放" name="click_zoom" />
+			</combo_box>
+			<check_box name="filter_distance" label="距離介於" />
+			<text name="and2">
+				和
+			</text>
+			<check_box name="filter_agent_parcel_only" label="僅限當前地塊" />
+			<text name="only_list">
+				排除具有以下屬性的物件：
+			</text>
+			<check_box name="exclude_attachment" label="附件" />
+			<check_box name="exclude_physical" label="物理" />
+			<check_box name="exclude_temporary" label="臨時" />
+			<check_box name="exclude_childprim" label="子元素" />
+			<check_box name="exclude_neighbor_region" label="鄰近地塊" />
+			<button name="apply" label="應用" />
+		</panel>
+		<panel label="選項" name="area_search_options_panel">
+			<text name="display_column">
+				顯示列：
+			</text>
+			<check_box name="show_distance" label="距離" />
+			<check_box name="show_name" label="名稱" />
+			<check_box name="show_description" label="描述" />
+			<check_box name="show_price" label="價格" />
+			<check_box name="show_land_impact" label="土地影響" />
+			<check_box name="show_prim_count" label="元素數量" />
+			<check_box name="show_owner" label="所有者" />
+			<check_box name="show_group" label="群組" />
+			<check_box name="show_creator" label="創造者" />
+			<check_box name="show_last_owner" label="前所有者" />
+		</panel>
+		<panel label="進階" name="area_search_advanced_panel">
+			<check_box name="double_click_touch" label="雙擊觸碰物件" />
+			<check_box name="double_click_buy" label="雙擊購買物件" />
+			<check_box name="double_click_sit" label="雙擊坐在物件上" />
+		</panel>
+	</tab_container>
+</floater>

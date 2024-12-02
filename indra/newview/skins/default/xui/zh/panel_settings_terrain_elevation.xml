@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="海拔" name="panel_settings_terrain_elevation">
+	<spinner label="水面高度" name="water_height_spin" />
+	<spinner label="地形高度限制" name="terrain_raise_spin" />
+	<spinner label="地形深度限制" name="terrain_lower_spin" />
+	<text name="height_text_lbl5">
+		紋理海拔範圍
+	</text>
+	<text name="height_text_lbl5_material">
+		材質海拔範圍
+	</text>
+	<text name="height_text_lbl10">
+		這些值是上述紋理的混合範圍。
+	</text>
+	<text name="height_text_lbl10_material">
+		這些值是上述材質的混合範圍。
+	</text>
+	<text name="height_text_lbl11">
+		以米為單位，低值是紋理 #1 的最大高度，高值是紋理 #4 的最小高度。
+	</text>
+	<text name="height_text_lbl11_material">
+		以米為單位，低值是材質 #1 的最大高度，高值是材質 #4 的最小高度。
+	</text>
+	<text name="height_text_lbl6">
+		西北
+	</text>
+	<text name="height_text_lbl7">
+		東北
+	</text>
+	<!--  northwest low-->
+	<spinner label="低" name="height_start_spin_1" />
+	<!--    northeast low-->
+	<spinner label="低" name="height_start_spin_3" />
+	<!--  northwest high-->
+	<spinner label="高" name="height_range_spin_1" />
+	<!--  northeast high-->
+	<spinner label="高" name="height_range_spin_3" />
+	<text name="height_text_lbl8">
+		西南
+	</text>
+	<text name="height_text_lbl9">
+		東南
+	</text>
+	<!--  southwest low-->
+	<spinner label="低" name="height_start_spin_0" />
+	<!--  southeast low-->
+	<spinner label="低" name="height_start_spin_2" />
+	<!--southwest high-->
+	<spinner label="高" name="height_range_spin_0" />
+	<!--  southeast high-->
+	<spinner label="高" name="height_range_spin_2" />
+	<!-- Terrain Download/Upload/Bake buttons -->
+	<button label="下載RAW地形..." name="download_raw_btn" tool_tip="僅對領地所有者開放，管理者不可用" />
+	<button label="上傳RAW地形..." name="upload_raw_btn" tool_tip="僅對領地所有者開放，管理者不可用" />
+	<button label="烘焙地形" name="bake_terrain_btn" tool_tip="將當前地形設為高度/深度限制的中間點" />
+</panel>

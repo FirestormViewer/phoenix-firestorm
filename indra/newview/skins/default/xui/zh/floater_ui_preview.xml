@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="gui_preview_tool" title="XUI預覽工具">
+	<string name="ExternalEditorNotSet">
+請通過設定環境變數LL_XUI_EDITOR、ExternalEditor參數或在「編輯器路徑」欄位中指定其路徑來選擇一個編輯器。
+	</string>
+	<panel name="main_panel">
+		<text name="select_language_label">
+			主要語言：
+		</text>
+		<combo_box name="language_select_combo">
+			<combo_box.item label="en" name="item1" value="en" />
+		</combo_box>
+		<button label="顯示" label_selected="顯示" name="display_floater" tool_tip="顯示由選定XML檔案定義的XUI浮動視窗" />
+		<button label="隱藏" label_selected="隱藏" name="close_displayed_floater" tool_tip="關閉當前顯示的浮動視窗（如果存在）。" />
+		<button label="編輯..." label_selected="編輯..." name="edit_floater" tool_tip="編輯由選定XML檔案定義的XUI浮動視窗（打開外部編輯器）。如果沒有在地化版本存在，則打開英文版本。" />
+		<button label="儲存" label_selected="儲存" name="save_floater" tool_tip="儲存由選定XML檔案定義的XUI浮動視窗" />
+		<button label="全部儲存" label_selected="全部儲存" name="save_all_floaters" tool_tip="儲存所選語言定義的所有XUI浮動視窗" />
+		<button label="&gt; &gt;" label_selected="&lt; &lt;" name="toggle_overlap_panel" tool_tip="切換重疊元素的高亮顯示和顯示面板；右鍵單擊元素以將其選為此功能。選中的元素將被紅色矩形標記。" />
+		<text name="select_language_label_2">
+			次要語言：
+		</text>
+		<combo_box name="language_select_combo_2">
+			<combo_box.item label="en" name="item1" value="en" />
+		</combo_box>
+		<button label="顯示" name="display_floater_2" tool_tip="顯示由選定XML檔案定義的XUI浮動視窗" />
+		<button label="隱藏" name="close_displayed_floater_2" tool_tip="關閉當前顯示的浮動視窗（如果存在）。" />
+		<button label="匯出架構" name="export_schema" />
+		<button label="重新整理" name="refresh_btn" />
+		<check_box label="顯示矩形" name="show_rectangles" />
+		<scroll_list label="名稱" name="name_list">
+			<scroll_list.columns label="標題" name="title_column" />
+			<scroll_list.columns label="檔案" name="file_column" />
+			<scroll_list.columns label="頂級節點" name="top_level_node_column" />
+		</scroll_list>
+		<panel name="editor_panel">
+			<text name="editor_path_label">
+				編輯器路徑：
+			</text>
+			<line_editor name="executable_path_field" tool_tip="編輯器的完整路徑（可執行檔案），用於編輯浮動視窗的XML檔案（不需要引號）。" />
+			<button label="瀏覽..." label_selected="瀏覽..." name="browse_for_executable" tool_tip="瀏覽用於編輯浮動視窗XML檔案的編輯器（可執行檔案）" />
+			<text name="executable_args_label">
+				編輯器參數：
+			</text>
+			<line_editor name="executable_args_field" tool_tip="編輯器的指令行參數；使用'%FILE%'來參照目標檔案；如果此欄位為空，則執行'YourProgram.exe FileName.xml'。" />
+		</panel>
+		<panel name="vlt_panel">
+			<text name="diff_file_label">
+				差異檔案：
+			</text>
+			<line_editor name="vlt_diff_path_field" tool_tip="完整路徑到一個由Viewer Localization Toolkit產生的XML在地化差異檔案D0或D1。" />
+			<button label="瀏覽..." label_selected="瀏覽..." name="browse_for_vlt_diffs" tool_tip="搜尋由VLT產生的D0或D1差異檔案，以突出顯示修改的檔案和元素。" />
+			<button label="差異高亮顯示" label_selected="不再高亮顯示差異" name="toggle_vlt_diff_highlight" tool_tip="高亮顯示包含修改的在地化資料的檔案和元素。" />
+		</panel>
+	</panel>
+	<scroll_container name="overlap_scroll">
+		<panel name="overlap_dummy_panel">
+			<overlap_panel label="重疊面板" name="overlap_panel" tool_tip="此面板顯示當前選中的元素和所有與之重疊的元素，它們通過水平線分隔。" />
+			<text name="overlap_panel_label">
+				重疊元素：
+			</text>
+		</panel>
+	</scroll_container>
+</floater>

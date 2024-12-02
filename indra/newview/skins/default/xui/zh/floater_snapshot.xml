@@ -4,76 +4,87 @@
 		未知
 	</floater.string>
 	<string name="postcard_progress_str">
-		正在發送電郵
-	</string>
-	<string name="facebook_progress_str">
-		發佈到臉書
+		正在傳送電子郵件
 	</string>
 	<string name="profile_progress_str">
-		發佈
+		發布
 	</string>
 	<string name="inventory_progress_str">
-		儲存到收納區
+		儲存到庫存
 	</string>
 	<string name="local_progress_str">
 		正在存到電腦
-	</string>
-	<string name="facebook_succeeded_str">
-		圖像已上傳
 	</string>
 	<string name="profile_succeeded_str">
 		圖像已上傳
 	</string>
 	<string name="postcard_succeeded_str">
-		電郵發送成功！
+		電子郵件傳送成功！
 	</string>
 	<string name="inventory_succeeded_str">
-		成功存入收納區！
+		成功存入庫存！
 	</string>
 	<string name="local_succeeded_str">
 		成功存入電腦！
 	</string>
-	<string name="facebook_failed_str">
-		上傳圖像到你的臉書時間線時失敗。
-	</string>
 	<string name="profile_failed_str">
-		上傳圖像到你的檔案訊息發佈時出錯。
+		上傳圖像到你的檔案發布時出錯。
 	</string>
 	<string name="postcard_failed_str">
-		電郵傳送失敗。
+		電子郵件傳送失敗。
 	</string>
 	<string name="inventory_failed_str">
-		無法存入收納區。
+		無法存入庫存。
 	</string>
 	<string name="local_failed_str">
-		無法儲入電腦。
+		無法存入電腦。
 	</string>
-	<button label="刷新" name="new_snapshot_btn"/>
 	<view name="controls_container">
-	<panel name="advanced_options_panel">
-		<text name="layer_type_label">
-			擷取快照：
+		<button label="重新整理" name="new_snapshot_btn" />
+		<panel name="advanced_options_panel">
+			<text name="layer_type_label">
+				取得快照：
+			</text>
+			<combo_box label="圖層" name="layer_types">
+				<combo_box.item label="顏色" name="Colors" />
+				<combo_box.item label="深度" name="Depth" />
+				<combo_box.item label="深度 (24位元元元)" name="Depth24" />
+			</combo_box>
+			<check_box label="使用者界面" name="ui_check" />
+			<check_box label="L$帳戶餘額" name="currency_check" />
+			<check_box label="HUD" name="hud_check" />
+			<check_box label="將影格凍結（全螢幕）" name="freeze_frame_check" />
+			<check_box label="自動重新整理" name="auto_snapshot_check" />
+			<check_box label="無後期處理" name="no_post_check" />
+			<text name="filter_list_label">
+				濾鏡：
+			</text>
+			<combo_box name="filters_combobox" tool_tip="圖像濾鏡">
+				<combo_box.item label="不用濾鏡" name="NoFilter" />
+			</combo_box>
+		</panel>
+		<panel name="succeeded_panel">
+			<text name="succeeded_lbl">
+				成功
+			</text>
+		</panel>
+		<panel name="failed_panel">
+			<text name="failed_lbl">
+				失敗
+			</text>
+		</panel>
+		<text name="working_lbl">
+			請等待
 		</text>
-		<combo_box label="圖層" name="layer_types">
-			<combo_box.item label="顏色" name="Colors"/>
-			<combo_box.item label="深度" name="Depth"/>
-		</combo_box>
-		<check_box label="介面" name="ui_check"/>
-		<check_box label="擡頭顯示" name="hud_check"/>
-		<check_box label="將幀凍結（全螢幕）" name="freeze_frame_check"/>
-		<check_box label="自動刷新" name="auto_snapshot_check"/>
-		<text name="filter_list_label">
-			濾鏡：
+		<text name="refresh_lbl">
+			更新以儲存
 		</text>
-		<combo_box name="filters_combobox" tool_tip="圖像濾鏡">
-			<combo_box.item label="不用濾鏡" name="NoFilter"/>
-		</combo_box>
-	</panel>
 	</view>
 	<text name="image_res_text">
-		[WIDTH] 像素（寬） x [HEIGHT] 像素（高）
+		[WIDTH]畫素（寬）x [HEIGHT]畫素（高）
 	</text>
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
+	<button label="製作360°相片" name="360_label" />
 </floater>

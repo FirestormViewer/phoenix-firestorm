@@ -1,108 +1,192 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="顯像" name="Display panel">
-	<text name="QualitySpeed">
-		品質與速度：
-	</text>
-	<text name="FasterText">
-		最快
-	</text>
-	<text name="BetterText">
-		最佳
-	</text>
-	<text name="ShadersPrefText">
-		低
-	</text>
-	<text name="ShadersPrefText2">
-		中
-	</text>
-	<text name="ShadersPrefText3">
-		高
-	</text>
-	<text name="ShadersPrefText4">
-		超高
-	</text>
-	<panel label="自訂圖形" name="CustomGraphics Panel">
-		<text name="ShadersText">
-			著色器：
-		</text>
-		<check_box label="清澈透明的水" name="TransparentWater"/>
-		<check_box label="凹凸映射與光澤效果" name="BumpShiny"/>
-		<check_box label="大氣著色" name="WindLightUseAtmosShaders"/>
-		<check_box label="進階照明模型" name="UseLightShaders"/>
-		<check_box label="環境光遮蔽" name="UseSSAO"/>
-		<check_box label="景深" name="UseDoF"/>
-		<text name="shadows_label">
-			陰影：
-		</text>
-		<combo_box name="ShadowDetail">
-			<combo_box.item label="無" name="0"/>
-			<combo_box.item label="日 / 月" name="1"/>
-			<combo_box.item label="日 / 月 + 投影物" name="2"/>
-		</combo_box>
-		<text name="reflection_label">
-			水文反射：
-		</text>
-		<combo_box name="Reflections">
-			<combo_box.item label="最小" name="0"/>
-			<combo_box.item label="地形與樹木" name="1"/>
-			<combo_box.item label="全部靜態物件" name="2"/>
-			<combo_box.item label="全部化身與物件" name="3"/>
-			<combo_box.item label="一切" name="4"/>
-		</combo_box>
-		<slider label="化身物理：" name="AvatarPhysicsDetail"/>
-		<text name="AvatarPhysicsDetailText">
-			低
-		</text>
-		<slider label="描繪距離：" name="DrawDistance"/>
-		<text name="DrawDistanceMeterText2">
-			公尺
-		</text>
-		<slider label="最大粒子效果數量：" name="MaxParticleCount"/>
-		<slider label="非假冒化身上限：" name="MaxNumberAvatarDrawn"/>
-		<slider label="後處理品質：" name="RenderPostProcess"/>
-		<text name="MeshDetailText">
-			網面細節：
-		</text>
-		<slider label="物件：" name="ObjectMeshDetail"/>
-		<slider label="彈性幾何元件：" name="FlexibleMeshDetail"/>
-		<slider label="樹木：" name="TreeMeshDetail"/>
-		<slider label="化身：" name="AvatarMeshDetail"/>
-		<slider label="地形：" name="TerrainMeshDetail"/>
-		<slider label="天空：" name="SkyMeshDetail"/>
-		<text name="PostProcessText">
-			低
-		</text>
-		<text name="ObjectMeshDetailText">
-			低
-		</text>
-		<text name="FlexibleMeshDetailText">
-			低
-		</text>
-		<text name="TreeMeshDetailText">
-			低
-		</text>
-		<text name="AvatarMeshDetailText">
-			低
-		</text>
-		<text name="TerrainMeshDetailText">
-			低
-		</text>
-		<text name="SkyMeshDetailText">
-			低
-		</text>
-		<check_box label="化身假冒者" name="AvatarImpostors"/>
-		<check_box label="化身衣服" name="AvatarCloth"/>
-		<text name="TerrainDetailText">
-			地形細節：
-		</text>
-		<radio_group name="TerrainDetailRadio">
-			<radio_item label="低" name="0"/>
-			<radio_item label="高" name="2"/>
-		</radio_group>
-		--&gt;
-	</panel>
-	<button label="套用" label_selected="套用" name="Apply"/>
-	<button label="重設" name="Defaults"/>
-	<button label="進階" name="Advanced"/>
-	<button label="硬體" label_selected="硬體" name="GraphicsHardwareButton"/>
+<panel label="顯示" name="Display panel">
+	<tab_container label="圖形設定" name="tabs">
+		<panel label="通用" name="General">
+			<text name="preset_label">使用的預設：</text>
+			<text name="preset_text">(無)</text>
+			<text name="QualitySpeed">
+				品質與速度：
+			</text>
+			<text name="FasterText">
+				最快
+			</text>
+			<text name="BetterText">
+				最佳
+			</text>
+			<button tool_tip="重新載入預設圖形設定。" name="Defaults" />
+			<text name="ShadersPrefText">
+				低
+			</text>
+			<text name="ShadersPrefText2">
+				中
+			</text>
+			<text name="ShadersPrefText3">
+				高
+			</text>
+			<text name="ShadersPrefText4">
+				超高
+			</text>
+			<text name="ShadersText">
+				著色器：
+			</text>
+			<check_box label="清澈透明的水" name="TransparentWater" />
+			<check_box label="環境光遮蔽" name="UseSSAO" />
+			<check_box label="螢幕空間反射" name="ScreenSpaceReflections" />
+			<check_box label="鏡面" name="Mirrors" />
+			<text name="shadows_label">
+				陰影：
+			</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="無" name="0" />
+				<combo_box.item label="日 / 月" name="1" />
+				<combo_box.item label="日 / 月 + 投影物" name="2" />
+			</combo_box>
+			<text name="ReflectionDetailText">
+				反射細節：
+			</text>
+			<combo_box name="ReflectionDetail">
+				<combo_box.item label="僅靜態" name="0" />
+				<combo_box.item label="靜態 &amp; 動態" name="1" />
+				<combo_box.item label="即時" name="2" />
+			</combo_box>
+			<text name="ReflectionProbeText">
+				反射涵蓋率：
+			</text>
+			<combo_box name="ReflectionLevel">
+				<combo_box.item label="無" name="0" />
+				<combo_box.item label="僅手動" name="1" />
+				<combo_box.item label="手動 &amp; 地形" name="2" />
+				<combo_box.item label="全場景" name="3" />
+			</combo_box>
+			<text name="local lights_label" tool_tip="當進階照明關閉時的光源數量。更改此設定需要重新啟動。">
+				區域性光源
+			</text>
+			<combo_box name="LocalLightsDetail">
+				<combo_box.item label="全部（預設）" name="3" />
+				<combo_box.item label="減少" name="2" />
+				<combo_box.item label="僅太陽/月亮" name="1" />
+			</combo_box>
+			<!-- Mirror settings. -->
+			<text name="MirrorResolutionText">
+				鏡像解析度:
+			</text>
+			<text name="HeroProbeUpdateText">
+				鏡像更新頻率:
+			</text>
+			<combo_box name="HeroProbeUpdateRate">
+				<combo_box.item label="低" name="6" />
+				<combo_box.item label="中" name="3" />
+				<combo_box.item label="高" name="1" />
+				<combo_box.item label="超高" name="0" />
+			</combo_box>
+			<!-- 映象設定結束 -->
+			<!--General選項卡第二列頂部-->
+			<check_box label="全螢幕模式" name="Fullscreen Mode" tool_tip="以全螢幕模式運行Firestorm。更改模式需要重新啟動。" />
+			<slider label="顯示距離" name="DrawDistance" />
+			<text name="DrawDistanceMeterText2">米</text>
+			<slider label="最大粒子數量" name="MaxParticleCount" />
+			<text width="125" name="AvatarComplexityModeLabel">
+				化身顯示模式：
+			</text>
+			<combo_box name="AvatarComplexityMode">
+				<combo_box.item label="按複雜度限制" name="0" />
+				<combo_box.item label="始終顯示好友" name="1" />
+				<combo_box.item label="僅顯示好友" name="2" />
+			</combo_box>
+			<slider label="化身最大複雜度" name="IndirectMaxComplexity" tool_tip="控制在什麼時候將視覺複雜的頭貼繪製成 JellyDoll（果凍娃娃）。" />
+			<slider label="最大3D化身數" name="IndirectMaxNonImpostors" />
+			<slider label="後期處理品質" name="RenderPostProcess" />
+			<text name="PostProcessText">低</text>
+			<slider label="附近最大光源數：" name="MaxLights" />
+			<slider label="化身物理特性" name="AvatarPhysicsDetail" />
+			<slider label="曝光" name="RenderExposure" />
+			<text name="MeshDetailText">細節層次 (LOD) 距離細節：</text>
+			<slider label="  物件和雕刻" name="ObjectMeshDetail" tool_tip="控制何時可以使用較低細節的物件來降低彩現成本。 數值越大越緩慢，請謹慎使用。" />
+			<slider label="  彈性物件" name="FlexibleMeshDetail" />
+			<slider label="  樹木" name="TreeMeshDetail" />
+			<slider label="  化身" name="AvatarMeshDetail" />
+			<slider label="  地形" name="TerrainMeshDetail" />
+			<slider label="  天空" name="SkyMeshDetail" />
+			<text name="Presets_Label">
+				預設值:
+			</text>
+			<button label="儲存" name="PrefSaveButton" />
+			<button label="載入" name="PrefLoadButton" />
+			<button label="刪除" name="PrefDeleteButton" />
+		</panel>
+		<panel label="硬體設定" name="Hardware Settings">
+			<check_box label="各向異性過濾（啟用後速度變慢）" name="ani" tool_tip="將影格率同步到顯示器的重新整理率，可能會導致增加的卡頓和輸入延遲" />
+			<text name="tc label">
+				啟用有損紋理壓縮（S3TC）:
+			</text>
+			<check_box label="啟用無失真紋理壓縮（需要重新啟動）" name="texture compression" tool_tip="在視訊記憶體中啟用紋理壓縮可以載入更高解析度的紋理並支援更多紋理的情況下，記憶體使用效率更高。" />
+			<check_box label="啟用HiDPI螢幕支援（僅適用於Mac OSX；需要重新啟動）" name="use HiDPI" tool_tip="啟用OpenGL以支援高解析度顯示。" />
+			<text name="Antialiasing:" tool_tip="在某些硬體上更改此設定可能需要重新啟動。">
+				反鋸齒（建議重新啟動）：
+			</text>
+			<combo_box label="反鋸齒" name="fsaa">
+				<combo_box.item label="禁用" name="FSAADisabled" />
+				<combo_box.item label="FXAA" name="FXAA" />
+			</combo_box>
+			<text name="advanced_settings">
+				進階設定（需要重新啟動）：
+			</text>
+			<check_box label="涵蓋VRAM檢測" name="FSOverrideVRAMDetection" tool_tip="允許使用者涵蓋視訊記憶體檢測（極度謹慎使用）" />
+			<slider label="涵蓋GPU專用視訊記憶體（GB）：" name="FSForcedVideoMemory" tool_tip="重要：極度謹慎使用。 涵蓋GPU上檢測到的視訊記憶體。 這不應包括作為系統RAM一部分的「共享」視訊記憶體。 如果您不理解這個區別，請不要使用此控制項。" />
+		</panel>
+		<panel label="彩現" name="Rendering">
+			<text name="World Updating">世界更新：</text>
+			<check_box label="暫停世界更新 (使所有內容暫停)" tool_tip="勾選此項可暫停來自世界的所有更新- 這將暫停所有視覺操作，但不會影響書面或語音聊天" name="WorldPause" />
+			<check_box label="限制影格率" name="FSLimitFramerate" />
+			<slider label="FPS：" name="MaxFPS" />
+			<check_box label="啟用垂直同步" name="vsync" tool_tip="將影格速率與顯示器重新整理率同步，可能會導致延遲增加和圖像卡頓。" />
+			<text name="Texture Rendering">紋理彩現：</text>
+			<check_box label="載入最小紋理" tool_tip="設定「紋理禁用」參數-紋理載入速度極慢，可能對GPU較慢的電腦有用" name="TexturesLoaded" />
+			<check_box label="使用HTTP載入紋理" tool_tip="啟用通過HTTP協定載入紋理-如果出現紋理載入緩慢或不正確的問題，並且要使用過時的UDP協定，則禁用此選項。" name="TexturesHTTP" />
+			<check_box label="將紋理的最大解析度限制為：（需要重新啟動）" tool_tip="將紋理的最大解析度限制為指定的畫素。這允許在現有紋理記憶體用盡之前顯示多個紋理，並且不會顯示模糊的紋理。" name="FSRestrictMaxTextureSize" />
+			<combo_box name="FSRestrictMaxTexturePixels">
+				<combo_box.item label="512畫素" name="512" />
+				<combo_box.item label="1024畫素" name="1024" />
+				<!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
+				<combo_box.item label="2048畫素" name="2048"/>-->
+			</combo_box>
+			<text name="FSRestrictMaxTextureSizeRestartText">
+				(需要重新啟動)
+			</text>
+			<slider label="最大同時HTTP請求數" name="HTTPFetchMaxRequests" />
+			<text name="TextureDetailLabel" tool_tip="載入紋理的品質級別。影響紋理丟棄設定">
+				最大紋理品質：
+			</text>
+			<combo_box name="TextureDetail">
+				<combo_box.item label="普通" name="0" />
+				<combo_box.item label="中等" name="3" />
+				<combo_box.item label="低" name="4" />
+				<combo_box.item label="無紋理" name="5" />
+			</combo_box>
+			<text name="Alpha Mask Rendering">Alpha遮色片彩現：</text>
+			<check_box label="啟用Alpha遮色片" tool_tip="勾選此項可以使Alpha遮色片（透明部分）正確彩現" name="RenderAutoMaskAlphaDeferred" />
+			<text name="Miscellaneous Rendering">其他：</text>
+			<check_box label="光暈" tool_tip="啟用光暈。請注意，如果陰影被啟用，強度必須設為0才能禁用光暈。" name="RenderGlow" />
+			<slider label="強度：" tool_tip="光暈的強度。較高的值會使其更散射和更柔和（預設為2）" name="glow_strength" />
+			<check_box label="顯示尚未載入完成的化身" name="RenderUnloadedAvatars" />
+			<check_box label="以線框模式檢視" name="Wireframe" />
+			<check_box label="啟用附著的光源 (臉部光照)" tool_tip="此選項將啟用所有附著的光源，例如 '臉部光照'。" name="Render Attached Lights" />
+			<check_box label="彩現附著的粒子" name="Render Attached Particles" />
+			<slider label="世界快取預載入延遲" tool_tip="在連線之前需要世界快取的延遲時間（預設為6秒）" name="PrecachingDelay" />
+			<text name="PrecachingDelayText">秒</text>
+			<slider label="陰影品質" tool_tip="陰影的品質（預設為1）" name="ShadowResolution" />
+			<slider label="地形紋理彩現比例 (需要重新啟動)" name="RenderTerrainScale" tool_tip="確定地形紋理的彩現比例-較低的值更壓縮（需要重新啟動）" />
+		</panel>
+		<panel label="景深" name="DOF panel">
+			<check_box label="啟用景深 (除了相機的焦點外，使視圖模糊)" name="UseDoF" />
+			<check_box label="在編輯物件或地形時啟用" name="RenderDepthOfFieldInEditMode" />
+			<check_box label="景深焦點跟隨指標" name="FSFocusPointFollowsPointer" tool_tip="景深焦點將跟隨您的指標移動，此行為類似於使用flycam。 與景深焦點鎖定一起使用" />
+			<slider label="光圈數：" name="CameraFNum" tool_tip="相機光圈數用於景深效果" />
+			<slider label="焦距：" name="CameraFocal" tool_tip="用於景深效果的相機焦距（以毫米為單位）" />
+			<slider label="視場角：" name="Camera FOV" tool_tip="相機垂直視場角（以度為單位）" />
+			<slider label="畫幅比：" name="CameraAspectRatio" tool_tip="用於景深效果的螢幕畫幅比" />
+			<slider label="轉換動態性：" name="CameraFocusTrans" tool_tip="相機移動時修改景深效果所需的時間" />
+			<slider label="模糊彩現品質：" name="CameraDoFResScale" tool_tip="定義模糊彩現的品質和彩現效能。（越高的值品質越好，效能越低）" />
+		</panel>
+	</tab_container>
 </panel>

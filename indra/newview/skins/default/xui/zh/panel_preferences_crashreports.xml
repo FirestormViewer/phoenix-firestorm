@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="錯誤報告" name="crash_reports">
+	<check_box label="傳送錯誤報告至 firestormviewer.org" name="checkSendCrashReports" />
+	<check_box label="始終在傳送前詢問" name="checkSendCrashReportsAlwaysAsk" />
+	<check_box label="包括 settings.xml 檔案" name="checkSendSettings" />
+	<text name="textSendSettings">(包含第二人生使用者名稱)</text>
+	<check_box label="包括我的 Second Life 使用者名稱" name="checkSendName" />
+	<text name="textSendName">(如果需要，用於請求額外資訊)</text>
+	<text name="textRestartRequired">任何設定的更改都需要重新啟動才能生效。</text>
+	<text name="textInformation1">除非另有說明，報告僅包含與崩潰有關的必要資訊</text>
+	<text name="textInformation2">第二人生記錄不會被傳送，如果您認為它們可能包含額外資訊，請在電子郵件中註明其內容並列送。</text>
+	<text name="textInformation3">如果您認為它們可能包含額外資訊，請通過電子郵件傳送。</text>
+	<text name="textInformation4">隱私政策：[URL]</text>
+</panel>

@@ -1,8 +1,85 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-	<layout_stack name="im_panels">
+	<floater.string name="participant_added" value="[NAME] 已被邀請加入聊天。" />
+	<floater.string name="multiple_participants_added" value="[NAME] 已被邀請加入聊天。" />
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="顯示群組資料" />
+		</layout_panel>
+		<layout_panel name="profile_panel">
+			<button name="view_profile_btn" tool_tip="顯示居民資料" />
+		</layout_panel>
+		<layout_panel name="trans_panel">
+			<button name="translate_btn" tool_tip="使用設定的服務進行聊天翻譯" />
+		</layout_panel>
+		<layout_panel name="friend_panel">
+			<button name="add_friend_btn" tool_tip="將居民新增為朋友" />
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<menu_button name="teleport_btn" tool_tip="提供或請求瞬間傳送" />
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button name="share_btn" tool_tip="向居民傳送物件" />
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button name="pay_btn" tool_tip="向居民傳送貨幣" />
+		</layout_panel>
+		<layout_panel name="call_btn_panel">
+			<button name="call_btn" tool_tip="使用語音呼叫居民" />
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button name="end_call_btn" tool_tip="結束呼叫" />
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">
+			<button name="voice_ctrls_btn" tool_tip="呼叫屬性" />
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="打開聊天歷史記錄" />
+		</layout_panel>
+		<layout_panel name="add_participant_panel">
+			<button name="add_participant_btn" tool_tip="將某人新增到此聊天" />
+		</layout_panel>
+		<layout_panel name="send_sysinfo_btn_panel">
+			<button name="send_sysinfo_btn" tool_tip="傳送系統資訊" />
+		</layout_panel>
+		<layout_panel name="lp_options_btn">
+			<button name="chat_options_btn" tool_tip="聊天選項" />
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="搜尋聊天內容" />
+		</layout_panel>
+		<layout_panel name="support_panel">
+			<check_box label="傳送版本資訊" name="FSSupportGroupChatPrefix_toggle" tool_tip="在傳送到該群組的每條訊息開頭新增當前檢視器版本、 檢視器皮膚、作業系統和 RLVa 狀態， 以幫助支援人員更好地診斷可能的問題並提供更準確的答案。" />
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="傳送測試資訊" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="在傳送到該群組的每條訊息開頭新增當前檢視器版本、 檢視器皮膚、作業系統和 RLVa 狀態， 以幫助支援人員更好地診斷可能的問題並提供更準確的答案。（此設定與支援群組無關。）" />
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="chat_stack">
 		<layout_panel name="panel_im_control_lp">
-			<line_editor label="至" name="chat_editor"/>
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						未讀訊息：[NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="顯示表情符號面板" />
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="顯示/隱藏最近使用的表情符號" />
+						</layout_panel>
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="傳送" tool_tip="傳送這條訊息" />
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						最近使用過的表情符號將顯示在這裡
+					</text>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </floater>

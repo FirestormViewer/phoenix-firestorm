@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Self Pie">
+	<pie_slice label="個人檔案" name="Profile..." />
+	<pie_slice label="群組" name="Groups..." />
+	<pie_menu label="脫下 &gt;" name="Take Off &gt;">
+		<pie_menu label="服裝 &gt;" name="Clothes &gt;">
+			<pie_slice label="襯衫" name="Shirt" />
+			<pie_slice label="褲子" name="Pants" />
+			<pie_slice label="鞋子" name="Shoes" />
+			<pie_slice label="襪子" name="Socks" />
+			<pie_slice label="外套" name="Jacket" />
+			<pie_slice label="手套" name="Gloves" />
+			<pie_menu label="更多 &gt;" name="Clothes More">
+				<pie_slice label="內衣" name="Self Undershirt" />
+				<pie_slice label="全部服裝" name="All Clothes" />
+				<pie_slice label="內褲" name="Self Underpants" />
+				<pie_slice label="刺青" name="Self Tattoo" />
+				<pie_slice label="身體物理" name="Self Physics" />
+				<pie_slice label="Alpha" name="Self Alpha" />
+			</pie_menu>
+			<pie_slice label="裙子" name="Skirt" />
+		</pie_menu>
+		<pie_menu label="HUD &gt;" name="Pie Object Detach HUD" />
+		<pie_menu label="卸下 &gt;" name="Pie Object Detach">
+			<pie_menu label="增強型骨架 &gt;" name="Enhanced Skeleton">
+				<pie_slice label="右翼" name="Right Wing" />
+				<pie_slice label="鼠蹊" name="Groin" />
+				<pie_slice label="尾巴根部" name="Tail Base" />
+				<pie_slice label="尾巴末梢" name="Tail Tip" />
+				<pie_slice label="左翼" name="Left Wing" />
+				<pie_slice label="左後腳" name="Left Hind Foot" />
+				<pie_menu label="更多 &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="替代右耳" name="Alt Right Ear" />
+					<pie_slice label="替代右眼" name="Alt Right Eye" />
+					<pie_slice label="舌頭" name="Tongue" />
+					<pie_slice label="替代左眼" name="Alt Left Eye" />
+					<pie_slice label="替代左耳" name="Alt Left Ear" />
+					<pie_slice label="左無名指" name="Left Ring Finger" />
+					<pie_slice label="顎" name="Jaw" />
+					<pie_slice label="右無名指" name="Right Ring Finger" />
+				</pie_menu>
+				<pie_slice label="右後腳" name="Right Hind Foot" />
+			</pie_menu>
+		</pie_menu>
+		<pie_slice label="全部卸下" name="Detach All" />
+	</pie_menu>
+	<pie_slice label="坐在這裡" name="Sit Down Here" />
+	<pie_slice label="起立" name="Stand Up" />
+	<pie_slice label="指令碼資訊" name="ScriptInfo" />
+	<pie_slice label="手勢" name="Gestures" />
+	<pie_menu label="外觀 &gt;" name="Appearance &gt;">
+		<pie_slice label="編輯我的身形" name="Edit My Shape" />
+		<pie_menu name="ResetMenu" label="重設 &gt;">
+			<pie_slice label="骨架和動畫" name="Reset Skeleton And Animations" />
+			<pie_slice label="骨架" name="Reset Skeleton" />
+			<pie_slice label="網格細節層次" name="Reset Mesh LOD" />
+		</pie_menu>
+		<pie_slice label="重新整理紋理" name="Texture Refresh" />
+		<pie_slice label="編輯我的裝扮" name="Edit My Outfit" />
+		<pie_slice label="轉儲 XML" name="Dump XML" />
+		<pie_slice label="懸浮高度" name="Hover Height" />
+	</pie_menu>
+	<pie_slice label="除錯紋理" name="Debug..." />
+</pie_menu>

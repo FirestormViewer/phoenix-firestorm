@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- 主要用於 @showloc 受限時 -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(隱藏)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(隱藏地塊)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(隱藏區域)</string>
+		</map>
+
+		<!-- 當 @recvim/sendim 受限時，接收/發送的即時訊息將被替換為匹配的字串 -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** 私聊訊息已被您的檢視器阻止。</string>
+			<key>description</key>
+			<string>當一個接收的私聊訊息被阻止時，此訊息將顯示原始訊息的位置。</string>
+			<key>label</key>
+			<string>被阻止的接收的私聊（本地）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** 私聊已被髮送者的檢視器阻止。</string>
+			<key>description</key>
+			<string>當一個發送的私聊被阻止時，此訊息將顯示併發送給接收方。</string>
+			<key>label</key>
+			<string>被阻止發送的私聊（本地 + 遠端）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- 當遠端使用者發出 @list 或 @except 即時訊息查詢時發送給他們的資訊（如果啟用的話） -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** 對方恭敬地請求您不要過問（是兔子逼我這麼說的！）</string>
+			<key>description</key>
+			<string>當您拒絕他們請求列出您的活躍RLV限制時，發送給遠端使用者的資訊</string>
+			<key>label</key>
+			<string>@list 和 @except 命令（遠端）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- 作為 @list 的後綴發送給遠端使用者，以通知他們可能有更多資訊 -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>（使用 @except 來檢視活躍的例外列表）</string>
+			<key>description</key>
+			<string>作為 @list 的後綴發送給遠端使用者，告知他們如何請求您的例外資訊</string>
+			<key>label</key>
+			<string>@list 命令後綴（遠端）</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
+		</map>
+
+		<!-- 當遠端使用者發出 @stopim 即時訊息查詢時發送給他們的資訊（如果啟用的話） -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** 對方沒有受到 @startim 限制</string>
+			<key>description</key>
+			<string>當他們試圖強制關閉與您的私聊會話時（且沒有這樣的會話存在）發送給遠端使用者的資訊（且沒有這樣的會話存在）</string>
+			<key>label</key>
+			<string>@stopim 命令/無會話（遠端）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** 已為對方結束會話</string>
+			<key>description</key>
+			<string>當他們試圖強制結束私聊會話時（且會話存在）發送給遠端使用者的資訊</string>
+			<key>label</key>
+			<string>@stopim 命令/有活躍的會話（遠端）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] 已經通過 @stopim 遠端關閉了私聊會話</string>
+		</map>
+
+		<!-- 作為通知顯示 -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法使用自動尋路功能。</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法執行操作。</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法更改活躍群組。重設為 "[GROUP_SLURL]"。</string>
+		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV鎖定資料夾，無法執行所需的庫存操作。</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法顯示附近的化身。</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>嘗試附著 "[OBJECT]" 由於RLV限制而被拒絕。</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>"[OBJECT]" 由於RLV限制而被拒絕傳送你。</string>
+		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法顯示指令碼對話方塊或文字框。</string>
+		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法與 [RECIPIENT] 共享庫存。</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法共享庫存。</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法開始與 [RECIPIENT] 私聊。</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法開始會議。</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法啟動傳送。</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法提供傳送。</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法打開 [TYPE]。</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>由於RLV限制，無法啟用格線線模式。</string>
+		</map>
+
+		<!-- 發送給遠端使用者的「忙碌」訊息 -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>您聯繫的居民目前無法閱讀您的私聊，請稍後再試。</string>
+			<key>description</key>
+			<string>當他們的私聊訊息被阻止時發送給遠端使用者</string>
+			<key>label</key>
+			<string>被阻止的私聊訊息（遠端）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>該居民目前無法接受，請稍後再試。</string>
+			<key>description</key>
+			<string>當他們的傳送邀請或請求被阻止時發送給遠端使用者</string>
+			<key>label</key>
+			<string>被阻止的傳送邀請/請求（遠端）</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+	</map>
+
+	<!-- 當@shownames受限時用於替代居民名字的通用名詞 -->
+	<key>anonyms</key>
+	<array>
+		<string>一位居民</string>
+		<string>這位居民</string>
+		<string>那位居民</string>
+		<string>一位個體</string>
+		<string>這位個體</string>
+		<string>那位個體</string>
+		<string>一個人</string>
+		<string>這個人</string>
+		<string>那個人</string>
+		<string>一個陌生人</string>
+		<string>這位陌生人</string>
+		<string>那位陌生人</string>
+		<string>一個生物</string>
+		<string>這個生物</string>
+		<string>那個生物</string>
+		<string>一個使用者</string>
+		<string>這個使用者</string>
+		<string>那個使用者</string>
+		<string>一個靈魂</string>
+		<string>這個靈魂</string>
+		<string>那個靈魂</string>
+		<string>某人</string>
+		<string>一些人</string>
+		<string>有人</string>
+		<string>神秘的人</string>
+		<string>一個未知的生物</string>
+		<string>身份不明的人</string>
+		<string>一個未知的人</string>
+	</array>
+
+</map>
+</llsd>
+

@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_about" title="關於 [APP_NAME]">
-	<floater.string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
-	</floater.string>
-	<floater.string name="AboutCompiler">
-		Built with [COMPILER] version [COMPILER_VERSION]
-	</floater.string>
-	<floater.string name="AboutPosition">
-		你的方位是 [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1]，地區名：[REGION]，主機：&lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
-SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
-(全球坐標 [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
-[SERVER_VERSION]
-[[SERVER_RELEASE_NOTES_URL] [ReleaseNotes]]
-	</floater.string>
-	<floater.string name="AboutSystem">
-		CPU：[CPU]
-記憶體：[MEMORY_MB] MB
-作業系統版本：[OS_VERSION]
-顯示卡供應商：[GRAPHICS_CARD_VENDOR]
-顯示卡：[GRAPHICS_CARD]
-	</floater.string>
-	<floater.string name="AboutDriver">
-		Windows 顯示驅動程式版本：[GRAPHICS_DRIVER_VERSION]
-	</floater.string>
-	<floater.string name="AboutLibs">
-		OpenGL 版本：[OPENGL_VERSION]
-
-libcurl 版本： [LIBCURL_VERSION]
-J2C 解碼器版本： [J2C_VERSION]
-音效驅動程式版本： [AUDIO_DRIVER_VERSION]
-Qt Webkit 版本： [QT_WEBKIT_VERSION]
-語音伺服器版本： [VOICE_VERSION]
-	</floater.string>
-	<floater.string name="none">
-		（無）
-	</floater.string>
-	<floater.string name="AboutTraffic">
-		封包損失：[PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
-	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="資訊" name="support_panel">
-			<text name="support_intro">    
-For the latest information about Firestorm, visit    
+			<text name="support_intro">
+如需瞭解有關 Firestorm 的最新資訊，請存取
 https://www.firestormviewer.org
-    		</text>
-			<button label="覆製到剪貼簿" name="copy_btn"/>
-			<button label="查詢是否有更新版" name="update_btn"/>
+			</text>
+			<button label="複製到剪貼簿" name="copy_btn" />
+			<button label="尋找是否有更新版本" name="update_btn" />
 		</panel>
-		<panel label="貸記" name="credits_panel">
+		<panel label="鳴謝" name="credits_panel">
+			<text name="linden_intro">
+如果沒有林登實驗室將第二人生檢視器原始碼開放的決定，Firestorm 就不可能出現。
+
+"第二人生"由林登實驗室提供、
+開放原始碼的貢獻者：
+			</text>
+			<text_editor name="contrib_names">
+				運行時會替換虛擬名稱
+			</text_editor>
+		</panel>
+		<!-- Firestorm Credits -->
+		<panel label="Firestorm" name="fs_credits_panel" height="930">
+			<scroll_container name="fs_credits_scroll_container">
+				<panel name="fs_credits_scroll_container_content_panel">
+					<text name="firestorm_intro" height="120">
+Firestorm是一個改善SecondLife(tm)檢視器體驗的社群檔案。 我們將社群開發人員的貢獻與林登實驗室的代碼以及我們自己的擴充結合起來， 以提供高品質、功能豐富的瀏覽器體驗。我們擁有一支龐大的志願者支援團隊。 Firestorm由非營利組織The Phoenix Firestorm Project, Inc提供。
+
+Firestorm開發團隊：
+					</text>
+					<text name="fs_contrib_intro">
+附加程式碼來自:
+					</text>
+					<text name="fs_support_intro">
+特別感謝我們的Firestorm支援團隊、wiki作者、教學和翻譯人員：
+					</text>
+					<text name="fs_art_intro">
+火風暴包含為火風暴修改的Starlight。它是由社群中的居民開發的設計的， 旨在提供一個更友好、更易於使用的界面。更多詳情，請參閱  &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+UI 藝術家和設計師：
+					</text>
+				</panel>
+			</scroll_container>
 		</panel>
 		<panel label="許可" name="licenses_panel">
 			<text_editor name="licenses_editor">
@@ -74,11 +67,13 @@ SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
 xxHash Copyright (C) 2012-2020 Yann Collet.
 zlib Copyright (C) 1995-2012 Jean-loup Gailly and Mark Adler.
 
-第二人生 Viewer 採用 Havok (TM) 物理引擎。 (c)Copyright 1999-2010 Havok.com Inc.（及其放照人）。 保留一切權利。 詳情見 www.havok.com。
+第二人生檢視器採用 Havok (TM) 物理引擎。 (c)Copyright 1999-2010 Havok.com Inc.（及其放照人）。 保留一切權利。 詳情見 www.havok.com。
+
+本套裝軟體含 NVIDIA 公司提供的原始碼。
 
 保留一切權利。  詳情見 licenses.txt。
 
-語音聊天音頻技術：Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
+語音聊天音訊技術：Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
 			</text_editor>
 		</panel>
 	</tab_container>

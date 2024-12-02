@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="精選地點" name="panel_picks">
-	<string name="no_picks" value="無精選地點"/>
+	<string name="no_picks" value="無精選地點" />
 	<layout_stack name="main_stack">
 		<layout_panel name="buttons_header">
 			<text name="header_text">
 				告訴大家你在[GRID]中最愛的去處。
 			</text>
-			<button label="新增…" name="new_btn"/>
-			<button label="刪除…" name="delete_btn"/>
+			<button label="新增…" tool_tip="將當前位置保存為新的精選地點" name="new_btn" />
+			<button label="刪除..." tool_tip="刪除當前選中的選擇" name="delete_btn" />
 		</layout_panel>
 		<layout_panel name="main_body">
 			<text name="picks_panel_text">

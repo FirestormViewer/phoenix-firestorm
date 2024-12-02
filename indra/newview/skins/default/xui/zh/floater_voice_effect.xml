@@ -7,7 +7,7 @@
 		（使用中）
 	</string>
 	<string name="unsubscribed_voice_effect">
-		（已停止訂用）
+		（已停止訂閱）
 	</string>
 	<string name="new_voice_effect">
 		（新的！）
@@ -49,7 +49,7 @@
 		調情
 	</string>
 	<string name="effect_Foxy">
-		香豔
+		香艷
 	</string>
 	<string name="effect_Halloween 2010 Bonus">
 		2010萬聖節加贈
@@ -145,15 +145,15 @@
 		預覽
 	</text>
 	<text name="status_text">
-		錄下一段樣本，再點按聲音檢查結果。
+		錄下一段樣本，再點擊聲音檢查結果。
 	</text>
-	<button label="錄音" name="record_btn" tool_tip="錄下一段你的聲音。"/>
-	<button label="停止" name="record_stop_btn"/>
+	<button label="錄音" name="record_btn" tool_tip="錄下一段你的聲音。" />
+	<button label="停止" name="record_stop_btn" />
 	<text name="voice_morphing_link">
-		[[URL] 現在訂用]
+		[[URL] 現在訂閱]
 	</text>
-	<scroll_list name="voice_effect_list" tool_tip="錄下一段你的聲音，再點選一個效果試聽。">
-		<scroll_list.columns label="語音名稱" name="name"/>
-		<scroll_list.columns label="過期" name="expires"/>
+	<scroll_list name="voice_effect_list" tool_tip="錄下一段你的聲音，再點擊一個效果試聽。">
+		<scroll_list.columns label="語音名稱" name="name" />
+		<scroll_list.columns label="過期時間" name="expires" />
 	</scroll_list>
 </floater>

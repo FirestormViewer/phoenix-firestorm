@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Inventory Finder" title="最近_收納區_物品">
-	<check_box label="動作" name="check_animation"/>
-	<check_box label="名片" name="check_calling_card"/>
-	<check_box label="服裝" name="check_clothing"/>
-	<check_box label="姿勢" name="check_gesture"/>
-	<check_box label="地標" name="check_landmark"/>
-	<check_box label="記事卡" name="check_notecard"/>
-	<check_box label="網面" name="check_mesh"/>
-	<check_box label="物件" name="check_object"/>
-	<check_box label="腳本" name="check_script"/>
-	<check_box label="聲音" name="check_sound"/>
-	<check_box label="材質" name="check_texture"/>
-	<check_box label="快照" name="check_snapshot"/>
-	<check_box label="設定" name="check_settings"/>
-	<button label="全部" label_selected="全部" name="All"/>
-	<button label="無" label_selected="無" name="None"/>
-	<check_box label="固定顯示資料夾" name="check_show_empty"/>
-	<check_box label="我建立的" name="check_created_by_me"/>
-	<check_box label="其他人所建立" name="check_created_by_others"/>
-	<check_box label="自上次登出" name="check_since_logoff"/>
+<floater name="Inventory Finder">
+	<check_box label="動畫" name="check_animation" />
+	<check_box label="名片" name="check_calling_card" />
+	<check_box label="服裝" name="check_clothing" />
+	<check_box label="手勢" name="check_gesture" />
+	<check_box label="地標" name="check_landmark" />
+	<check_box label="材質" name="check_material" />
+	<check_box label="記事卡" name="check_notecard" />
+	<check_box label="網格模型" name="check_mesh" />
+	<check_box label="物件" name="check_object" />
+	<check_box label="指令碼" name="check_script" />
+	<check_box label="聲音" name="check_sound" />
+	<check_box label="紋理" name="check_texture" />
+	<check_box label="快照" name="check_snapshot" />
+	<check_box label="環境設定" name="check_settings" />
+	<button label="全部" label_selected="全部" name="All" />
+	<button label="無" label_selected="無" name="None" />
+	<check_box label="編輯" name="check_modify" />
+	<check_box label="複製" name="check_copy" />
+	<check_box label="轉讓" name="check_transfer" />
+	<check_box label="固定顯示檔案夾" name="check_show_empty" />
+	<check_box label="我建立的" name="check_created_by_me" />
+	<check_box label="其他人所建立" name="check_created_by_others" />
+	<check_box label="自上次登出" name="check_since_logoff" />
 	<text name="- OR -">
 		- 或 -
 	</text>
 	<radio_group name="date_search_direction">
-		<radio_item label="新近於" name="newer"/>
-		<radio_item label="早於" name="older"/>
+		<radio_item label="最新" name="newer" />
+		<radio_item label="最早" name="older" />
 	</radio_group>
-	<spinner label="小時前" name="spin_hours_ago"/>
+	<spinner label="小時前" name="spin_hours_ago" />
 	<text name="label_hours">
 		小時
 	</text>
-	<spinner label="天前" name="spin_days_ago"/>
+	<spinner label="天前" name="spin_days_ago" />
 	<text name="label_days">
 		日
 	</text>
-	<button label="關閉" label_selected="關閉" name="Close"/>
+	<button label="重設" label_selected="重設" name="btnReset" />
+	<button label="關閉" label_selected="關閉" name="Close" />
 </floater>

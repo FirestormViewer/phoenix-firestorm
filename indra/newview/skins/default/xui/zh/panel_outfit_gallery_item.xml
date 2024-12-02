@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="gallery_item_panel">
+	<string name="worn_string">
+		(已穿戴)
+	</string>
+	<panel name="text_bg_panel">
+		<text name="outfit_name">
+			Summer hipster, Pierce Pierce Pierce Pierce
+		</text>
+		<text name="outfit_worn_text">
+			(已穿戴)
+		</text>
+	</panel>
+</panel>

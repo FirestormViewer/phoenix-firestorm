@@ -3,10 +3,10 @@
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
 			<text name="info_parcel_label">
-				地段：
+				地塊：
 			</text>
 			<text name="info_parcel">
-				地段名稱
+				地塊名稱
 			</text>
 			<text name="info_size_label">
 				尺寸：
@@ -15,10 +15,10 @@
 				[AREA] 平方公尺
 			</text>
 			<text name="info_action">
-				出售地段：
+				出售地塊：
 			</text>
 			<text name="price_label">
-				1. 訂定價格：
+				1. 設定價格：
 			</text>
 			<text name="price_text">
 				選擇適合的價格。
@@ -30,7 +30,7 @@
 				0
 			</line_editor>
 			<text name="price_per_m">
-				（每平方公尺 L$[PER_METER]）
+				（每平方公尺 [PER_METER] L$）
 			</text>
 			<text name="sell_to_label">
 				2. 出售土地給：
@@ -39,27 +39,27 @@
 				選擇要賣給任何人或賣給特定買主。
 			</text>
 			<combo_box name="sell_to">
-				<combo_box.item label="- 選擇一個 -" name="--selectone--"/>
-				<combo_box.item label="任何人" name="Anyone"/>
-				<combo_box.item label="指定人：" name="Specificuser:"/>
+				<combo_box.item label="- 選擇一個 -" name="--selectone--" />
+				<combo_box.item label="任何人" name="Anyone" />
+				<combo_box.item label="指定人：" name="Specificuser:" />
 			</combo_box>
-			<button label="選擇" name="sell_to_select_agent"/>
+			<button label="選擇" name="sell_to_select_agent" />
 			<text name="sell_objects_label">
 				3. 物件連同土地一起售出？
 			</text>
 			<text name="sell_objects_text">
-				地段上地主的可轉讓物件將過繼所有權。
+				地塊上所有者的可轉讓物件將過繼所有權。
 			</text>
 			<radio_group name="sell_objects">
-				<radio_item label="不，我要保留物件所有權" name="no"/>
-				<radio_item label="好，物件連同土地一起售出" name="yes"/>
+				<radio_item label="不，我要保留物件所有權" name="no" />
+				<radio_item label="好，物件連同土地一起售出" name="yes" />
 			</radio_group>
-			<button label="顯示物件" name="show_objects"/>
+			<button label="顯示物件" name="show_objects" />
 			<text name="nag_message_label">
 				請記住：售後一概不退。
 			</text>
-			<button label="設定土地待售" name="sell_btn"/>
-			<button label="取消" name="cancel_btn"/>
+			<button label="設定土地待售" name="sell_btn" />
+			<button label="取消" name="cancel_btn" />
 		</panel>
 	</scroll_container>
 </floater>

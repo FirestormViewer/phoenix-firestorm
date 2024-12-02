@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_gear_default">
-	<menu_item_call label="新收納區視窗" name="new_window"/>
-	<menu_item_check label="依名稱排序" name="sort_by_name"/>
-	<menu_item_check label="依最近排序" name="sort_by_recent"/>
-	<menu_item_check label="總是由名稱排序資料夾" name="sort_folders_by_name"/>
-	<menu_item_check label="系統資料夾排序到最上方" name="sort_system_folders_to_top"/>
-	<menu_item_call label="顯示過濾器…" name="show_filters"/>
-	<menu_item_call label="重設過濾器" name="reset_filters"/>
-	<menu_item_call label="關閉全部資料夾" name="close_folders"/>
-	<menu_item_call label="清空 Lost and Found" name="empty_lostnfound"/>
-	<menu_item_call label="儲存材質為" name="Save Texture As"/>
-	<menu_item_call label="分享" name="Share"/>
-	<menu_item_call label="尋找原件" name="Find Original"/>
-	<menu_item_call label="尋找全部聯結" name="Find All Links"/>
-	<menu_item_call label="取代連結" name="Replace Links"/>
-	<menu_item_call label="清空垃圾筒" name="empty_trash"/>
+	<menu_item_call label="新庫存視窗" name="new_window" />
+	<menu_item_check label="受保護的檔案夾" name="Protected Folders" />
+	<menu_item_check label="庫存設定" name="inv_settings" />
+	<menu_item_check label="列表視圖" name="list_view" />
+	<menu_item_check label="圖片視圖" name="gallery_view" />
+	<menu_item_check label="組合視圖" name="combination_view" />
+	<menu_item_check label="按名稱排序" name="sort_by_name" />
+	<menu_item_check label="按時間排序" name="sort_by_recent" />
+	<menu_item_check label="總是按名稱排序檔案夾" name="sort_folders_by_name" />
+	<menu_item_check label="系統檔案夾置頂" name="sort_system_folders_to_top" />
+	<context_menu label="按以下方式搜尋" name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="名稱" />
+		<menu_item_check name="inventory_search_by_creator" label="創造者" />
+		<menu_item_check name="inventory_search_by_description" label="描述" />
+		<menu_item_check name="inventory_search_by_uuid" label="UUID" />
+		<menu_item_check name="inventory_search_by_all" label="全部" />
+	</context_menu>
+	<menu_item_check label="雙擊新增物件" name="add_inv_toggle" />
+	<menu_item_check label="雙擊新增裝扮" name="add_invclothing_toggle" />
+	<menu_item_call label="顯示過濾器" name="show_filters" />
+	<menu_item_call label="重設過濾器" name="reset_filters" />
+	<menu_item_call label="關閉全部檔案夾" name="close_folders" />
+	<menu_item_call label="關閉所有視窗" name="close_windows" />
+	<menu_item_call label="清空失物招領" name="empty_lostnfound" />
+	<menu_item_call label="儲存紋理為" name="Save Texture As" />
+	<menu_item_call label="分享" name="Share" />
+	<menu_item_call label="尋找原件" name="Find Original" />
+	<menu_item_call label="尋找全部聯結" name="Find All Links" />
+	<menu_item_call label="替換聯結" name="Replace Links" />
+	<menu_item_check name="inventory_filter_show_links" label="顯示聯結" />
+	<menu_item_check name="inventory_filter_only_links" label="僅顯示聯結" />
+	<menu_item_check name="inventory_filter_hide_links" label="隱藏聯結" />
+	<menu_item_check name="inventory_filter_only_modify" label="僅顯示可修改物件" />
+	<menu_item_check name="inventory_filter_only_copy" label="僅顯示可複製物件" />
+	<menu_item_check name="inventory_filter_only_transfer" label="僅顯示可轉讓物件" />
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="僅顯示合併物件" />
+	<menu_item_call label="清空垃圾桶" name="empty_trash" />
 </toggleable_menu>

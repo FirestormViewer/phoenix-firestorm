@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="simple_snapshot" title="檔案快照">
+	<button label="建立快照" name="new_snapshot_btn" />
+	<button label="儲存" name="save_btn" />
+	<button label="取消" name="cancel_btn" />
+</floater>

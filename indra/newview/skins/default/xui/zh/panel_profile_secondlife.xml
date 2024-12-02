@@ -1,72 +1,79 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="簡覽" name="panel_profile">
+<panel label="預覽" name="panel_profile">
 	<string name="status_online">
-		Online
+		線上上
 	</string>
 	<string name="status_offline">
-		Offline
+		離線
 	</string>
-	<string name="payment_update_link_url">
-		http://www.secondlife.com/account/billing.php?lang=en
+	<string name="status_unknown">
+		未知
 	</string>
-	<string name="partner_edit_link_url">
-		http://www.secondlife.com/account/partners.php?lang=en
-	</string>
-	<string name="my_account_link_url" value="http://secondlife.com/account"/>
-	<string name="no_partner_text" value="無"/>
-	<string name="no_group_text" value="無"/>
-	<string name="name_text_args">
-		[NAME]
-	</string>
-	<string name="display_name_text_args">
-		[DISPLAY_NAME]
-	</string>
-	<string name="FSDev" value="開發者"/>
-	<string name="FSSupp" value="支援"/>
-	<string name="FSQualityAssurance" value="除錯獵人"/>
-	<string name="FSGW" value="網關"/>
-	<text name="name_label" value="名稱："/>
-	<button label="名稱：" name="set_name" tool_tip="設定顯示名稱"/>
+	<string name="BadgeBeta" value="原始 Beta 測試者" />
+	<string name="BadgeBetaLifetime" value="Beta 終身會員" />
+	<string name="BadgeLifetime" value="終身會員" />
+	<string name="BadgeLinden" value="Linden Lab 員工" />
+	<string name="BadgePremiumLifetime" value="Premium 終身會員" />
+	<string name="BadgePremiumPlusLifetime" value="Premium Plus 終身會員" />
+	<string name="BadgeTeam" value="[APP_NAME] 會員" />
+	<string name="no_partner_text" value="無" />
+	<string name="no_group_text" value="無" />
+	<string name="FSDev" value="開發者" />
+	<string name="FSSupp" value="支援" />
+	<string name="FSQualityAssurance" value="除錯人員" />
+	<string name="FSGW" value="閘道器" />
+	<string name="texture_picker_label" value="個人檔案相片" />
+	<text name="name_label" value="名稱：" />
+	<button label="名稱：" name="set_name" tool_tip="設定顯示名稱" />
 	<panel name="name_holder">
-		<text_editor name="complete_name" value="（載入中...）"/>
+		<text_editor name="complete_name" value="(正在載入...)" />
+		<menu_button name="copy_btn" tool_tip="複製選項" />
 	</panel>
-	<text_editor name="user_key" value="（載入中...）"/>
+	<button name="set_name" tool_tip="設定顯示名稱" />
+	<icon tool_tip="朋友可以看到我的線上狀態" name="can_see_online" />
+	<icon tool_tip="朋友無法看到我的線上狀態" name="cant_see_online" />
+	<icon tool_tip="朋友可以在世界地圖上找到我" name="can_see_on_map" />
+	<icon tool_tip="朋友無法在世界地圖上找到我" name="cant_see_on_map" />
+	<icon tool_tip="朋友可以編輯我的物件" name="can_edit_objects" />
+	<icon tool_tip="朋友無法編輯我的物件" name="cant_edit_objects" />
+	<text name="Key:" value="UUID:" />
+	<text_editor name="user_key" value="(正在載入...)" />
 	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="執行個人資料圖片操作" />
+		</layout_panel>
 		<layout_panel name="label_stack">
-			<text name="status" value="狀態不明"/>
-			<text name="label" value="生日："/>
-			<text_editor name="register_date" value="（載入中...）"/>
-			<text name="label2" value="帳戶："/>
-			<text name="partner_label" value="伴侶："/>
+			<text name="label" value="出生日期:" />
+			<text_editor name="user_age" value="(正在載入...)" />
+			<text name="label2" value="帳戶:" />
+			<text name="partner_label" value="搭檔:" />
 		</layout_panel>
 	</layout_stack>
-	<text name="Groups:" value="群組："/>
-	<button label="+" label_selected="+" name="group_invite" tool_tip="邀請加入群組"/>
-	<layout_stack name="aboutpositioner">
-		<layout_panel name="about_stack">
-			<text name="About:" value="關於："/>
-		</layout_panel>
-		<layout_panel name="give_stack">
-			<text name="Give item:" value="贈與物品："/>
-			<text name="Give inventory" tool_tip="把收納區物品放到這裡，送給此人。">
-				把收納區物品放到這裡。
-			</text>
-		</layout_panel>
-	</layout_stack>
+	<text name="About:" value="資訊:" />
+	<text name="Groups:" value="群組:" />
+	<button name="group_invite" tool_tip="邀請加入群組" />
+	<text name="Give item:" value="分享:" />
+	<text name="Give inventory" tool_tip="將庫存物件放在這裡，以便給這個人。">
+		放置庫存物件。
+	</text>
 	<layout_stack name="buttonstack">
 		<layout_panel name="left_buttonstack">
-			<button label="在地圖上查找" label_selected="在地圖上查找" name="show_on_map_btn" tool_tip="在地圖上找出這個居民"/>
-			<button label="支付" label_selected="支付" name="pay" tool_tip="付款給這個居民"/>
+			<button label="在地圖上顯示" label_selected="在地圖上顯示" name="show_on_map_btn" tool_tip="在地圖上定位居民" />
+			<button label="支付" label_selected="支付" name="pay" tool_tip="向居民支付金錢" />
 		</layout_panel>
 		<layout_panel name="middle_buttonstack">
-			<button label="發出瞬間傳送邀請" label_selected="發出瞬間傳送邀請" name="teleport" tool_tip="向這個居民發出瞬間傳送邀請"/>
-			<button label="即時訊息" label_selected="即時訊息" name="im" tool_tip="開啟即時訊息會話"/>
+			<button label="提供傳送" label_selected="提供傳送" name="teleport" tool_tip="向居民提供傳送" />
+			<button label="私聊" label_selected="私聊" name="im" tool_tip="開始私聊" />
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
-			<button label="加為朋友" label_selected="加為朋友" name="add_friend" tool_tip="向這個居民發出交友邀請"/>
-			<button label="封鎖" name="block" tool_tip="封鎖這位居民"/>
-			<button label="解除封鎖" name="unblock" tool_tip="不再封鎖這位居民"/>
+			<button label="新增朋友" label_selected="新增朋友" name="add_friend" tool_tip="向居民提出朋友申請" />
+			<button label="移除朋友" label_selected="移除朋友" name="remove_friend" tool_tip="結束與此居民的友誼" />
+			<button label="封鎖" name="block" tool_tip="封鎖此居民" />
+			<button label="解除封鎖" name="unblock" tool_tip="解除封鎖此居民" />
 		</layout_panel>
 	</layout_stack>
-	<check_box label="在搜尋結果中顯示" name="show_in_search_checkbox"/>
+	<check_box label="在搜尋中顯示" tool_tip="允許其他居民在搜尋結果中找到你" name="show_in_search" />
+	<check_box name="hide_sl_age" label="顯示完整生日" tool_tip="讓人們看到您的SL年齡" />
+	<button name="save_description_changes" label="儲存" />
+	<button name="discard_description_changes" label="放棄" />
 </panel>

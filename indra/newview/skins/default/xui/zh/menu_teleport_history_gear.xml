@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="Teleport History Gear Context Menu">
-	<menu_item_call label="展開全部資料夾" name="Expand all folders"/>
-	<menu_item_call label="摺疊全部資料夾" name="Collapse all folders"/>
-	<menu_item_call label="清除瞬間傳送歷史紀錄" name="Clear Teleport History"/>
+	<menu_item_call label="展開全部檔案夾" name="Expand all folders" />
+	<menu_item_call label="摺疊全部檔案夾" name="Collapse all folders" />
+	<menu name="TPHistoryTimeZone" label="時區">
+		<menu_item_check name="teleport_history_tz_utc" label="協調世界時" />
+		<menu_item_check name="teleport_history_tz_slt" label="SL時間" />
+		<menu_item_check name="teleport_history_tz_local" label="本地時區" />
+	</menu>
+	<menu name="Show Menu" label="顯示">
+		<menu_item_check name="Show Position" label="位置" />
+		<menu_item_check name="Show Date" label="日期" />
+	</menu>
+	<menu_item_call label="清除瞬間傳送歷史紀錄" name="Clear Teleport History" />
 </toggleable_menu>

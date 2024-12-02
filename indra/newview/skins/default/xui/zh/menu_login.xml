@@ -1,31 +1,46 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
 	<menu label="我自己" name="File">
-		<menu_item_call label="偏好設定…" name="Preferences..."/>
-		<menu_item_call label="關閉視窗" name="Close Window"/>
-		<menu_item_check label="顯示格線挑選器" name="Show Grid Picker"/>
-		<menu_item_call label="退出 [APP_NAME]" name="Quit"/>
+		<menu_item_call label="偏好設定…" name="Preferences..." />
+		<menu_item_call label="關閉視窗" name="Close Window" />
+		<menu_item_check label="顯示類比網路挑選器" name="Show Grid Picker" />
+		<menu_item_call label="退出 [APP_NAME]" name="Quit" />
 	</menu>
 	<menu label="幫助" name="Help">
-		<menu_item_call label="[CURRENT_GRID] 幫助" name="Second Life Help"/>
-		<menu_item_call label="關於 [APP_NAME]" name="About Second Life"/>
+		<menu_item_call label="除錯" name="Troubleshooting" />
+		<menu_item_call label="指南" name="How To" />
+		<menu_item_call label="報告問題" name="Report Bug" />
+		<menu_item_call label="關於 [APP_NAME]" name="About Second Life" />
+		<menu_item_call label="[CURRENT_GRID] 幫助" name="current_grid_help_login" />
+		<menu_item_call label="關於 [CURRENT_GRID]" name="current_grid_about_login" />
 	</menu>
-	<menu_item_check label="顯示除錯選單" name="Show Debug Menu"/>
+	<menu_item_check label="顯示除錯選項" name="Show Debug Menu" />
 	<menu label="除錯" name="Debug">
-		<menu_item_call label="顯示除錯設定" name="Debug Settings"/>
-		<menu_item_call label="XUI 預覽工具" name="UI Preview Tool"/>
-		<menu label="UI 測試" name="UI Tests"/>
-		<menu_item_call label="設定視窗大小..." name="Set Window Size..."/>
-		<menu_item_call label="顯示 TOS" name="TOS"/>
-		<menu_item_call label="顯示嚴重訊息" name="Critical"/>
-		<menu_item_call label="媒體瀏覽器" name="Media Browser"/>
-		<menu label="設定記錄細節" name="Set Logging Level">
-			<menu_item_check label="除錯" name="Debug"/>
-			<menu_item_check label="資訊" name="Info"/>
-			<menu_item_check label="警告" name="Warning"/>
-			<menu_item_check label="錯誤" name="Error"/>
-			<menu_item_check label="無" name="None"/>
+		<menu_item_call label="顯示除錯設定" name="Debug Settings" />
+		<menu_item_call label="顯示顏色設定" name="Color Settings" />
+		<menu_item_call label="XUI 預覽工具" name="UI Preview Tool" />
+		<menu label="字型" name="Fonts">
+			<menu_item_call label="顯示字型測試" name="Show Font Test" />
+			<menu_item_call label="轉儲字型" name="Dump Fonts" />
+			<menu_item_call label="轉儲字型紋理" name="Dump Font Textures" />
 		</menu>
-		<menu_item_call label="顯示通知控制台" name="Show Notifications Console"/>
+		<menu label="使用者界面測試" name="UI Tests">
+			<menu_item_call label="文字方塊" name="Textbox" />
+			<menu_item_call label="文字編輯器" name="Text Editor" />
+			<menu_item_call label="小部件" name="Widgets" />
+			<menu_item_call label="檢查器" name="Inspectors" />
+		</menu>
+		<menu_item_call label="設定視窗大小" name="Set Window Size..." />
+		<menu_item_call label="顯示 TOS" name="TOS" />
+		<menu_item_call label="顯示重要訊息" name="Critical" />
+		<menu_item_call label="媒體瀏覽器" name="Media Browser" />
+		<menu label="設定記錄細節" name="Set Logging Level">
+			<menu_item_check name="Debug" label="除錯" />
+			<menu_item_check name="Info" label="資訊" />
+			<menu_item_check name="Warning" label="警告" />
+			<menu_item_check name="Error" label="錯誤" />
+			<menu_item_check name="None" label="無" />
+		</menu>
+		<menu_item_call label="顯示通知控制檯" name="Show Notifications Console" />
 	</menu>
 </menu_bar>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Copy Paste Position Menu">
+	<menu_item_call label="複製全部" name="psr_copy" />
+	<menu_item_call label="複製位置" name="pos_copy" />
+	<menu_item_call label="黏貼全部" name="psr_paste" />
+	<menu_item_call label="黏貼位置" name="pos_paste" />
+</toggleable_menu>
