@@ -588,6 +588,7 @@ void FSFloaterPoser::onPoseJointsReset()
 
     refreshRotationSliders();
     refreshTrackpadCursor();
+    refreshAvatarPositionSliders();
 }
 
 void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
