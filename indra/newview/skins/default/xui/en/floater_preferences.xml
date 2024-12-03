@@ -200,10 +200,17 @@
         <panel
          class="panel_preference_firestorm"
          filename="panel_preferences_firestorm.xml"
-         label="AyaneStorm"
+         label="Firestorm"
          layout="topleft"
          help_topic="preferences_firestorm_tab"
          name="firestorm" />
+        <panel
+         class="panel_preference_ayanestorm"
+         filename="panel_preferences_ayanestorm.xml"
+         label="AyaneStorm"
+         layout="topleft"
+         help_topic="preferences_ayanestorm_tab"
+         name="ayanestorm" />
         <panel
          class="panel_preference_opensim"
          filename="panel_preferences_opensim.xml"
