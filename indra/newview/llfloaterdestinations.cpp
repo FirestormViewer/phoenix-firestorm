@@ -75,6 +75,6 @@ void LLFloaterDestinations::onOpen(const LLSD& key)
 
 void LLFloaterDestinations::handleUrlChanged(const std::string& url)
 {
-    getChild<LLMediaCtrl>("destination_guide_contents")->navigateTo(LLWeb::expandURLSubstitutions(url, LLSD()), HTTP_CONTENT_TEXT_HTML);
+    //getChild<LLMediaCtrl>("destination_guide_contents")->navigateTo(LLWeb::expandURLSubstitutions(url, LLSD()), HTTP_CONTENT_TEXT_HTML);
 }
 // </FS:Ansariel>
