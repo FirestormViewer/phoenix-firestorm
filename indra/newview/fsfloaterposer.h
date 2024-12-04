@@ -186,7 +186,7 @@ class FSFloaterPoser : public LLFloater
     /// There may be +/- PI difference two axes, because harmonics.
     /// Thus keep your UI synced with less gets.
     /// </remarks>
-    void setSelectedJointsRotation(LLVector3 absoluteRot, LLVector3 deltaRot);
+    void setSelectedJointsRotation(const LLVector3& absoluteRot, const LLVector3& deltaRot);
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
 

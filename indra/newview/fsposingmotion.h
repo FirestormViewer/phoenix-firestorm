@@ -202,12 +202,12 @@ private:
     bool vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const;
 
     /// <summary>
-    /// Determines if two vectors are near enough to equal.
+    /// Determines if two quaternions are near enough to equal.
     /// </summary>
-    /// <param name="v1">The first vector to compare.</param>
-    /// <param name="v2">The sceond vector to compare.</param>
-    /// <returns>true if the vectors are "close enough", otherwise false.</returns>
-    bool quatsNotQuiteEqual(LLQuaternion q1, LLQuaternion q2) const;
+    /// <param name="v1">The first quaternion to compare.</param>
+    /// <param name="v2">The sceond quaternion to compare.</param>
+    /// <returns>true if the quaternion are "close enough", otherwise false.</returns>
+    bool quatsNotQuiteEqual(const LLQuaternion& q1, const LLQuaternion& q2) const;
 
     bool vectorAxesAlmostEqual(F32 qA, F32 qB) const { return llabs(qA - qB) < closeEnough; }
 };

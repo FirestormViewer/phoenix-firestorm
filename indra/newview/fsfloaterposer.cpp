@@ -1454,7 +1454,7 @@ E_RotationStyle FSFloaterPoser::getUiSelectedBoneRotationStyle(const std::string
         return ABSOLUTE_ROT;
  
     std::string paramValue = getString(XML_JOINT_DELTAROT_STRING_PREFIX + jointName);
-    if (strstr(paramValue.c_str(), "true"))
+    if (paramValue == "true")
         return DELTAIC_ROT;
 
     return ABSOLUTE_ROT;
@@ -1745,7 +1745,7 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
     }
 }
 
-void FSFloaterPoser::setSelectedJointsRotation(LLVector3 absoluteRot, LLVector3 deltaRot)
+void FSFloaterPoser::setSelectedJointsRotation(const LLVector3& absoluteRot, const LLVector3& deltaRot)
 {
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)

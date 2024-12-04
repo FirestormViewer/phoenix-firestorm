@@ -282,7 +282,7 @@ bool FSPosingMotion::vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const
     return true;
 }
 
-bool FSPosingMotion::quatsNotQuiteEqual(LLQuaternion q1, LLQuaternion q2) const
+bool FSPosingMotion::quatsNotQuiteEqual(const LLQuaternion& q1, const LLQuaternion& q2) const
 {
     if (vectorAxesAlmostEqual(q1.mQ[VW], q2.mQ[VW]) &&
         vectorAxesAlmostEqual(q1.mQ[VX], q2.mQ[VX]) &&
