@@ -29,6 +29,7 @@
 		<string>RenderDesaturateIrradiance</string>
 		<string>RenderDiffuseLuminanceScale</string>
 		<string>RenderDisablePostProcessing</string>
+		<string>RenderDisableVintageMode</string>
 		<string>RenderDefaultProbeUpdatePeriod</string>
 		<string>RenderDynamicExposureCoefficient</string>
 		<string>RenderExposure</string>
@@ -99,7 +100,6 @@
 		<string>RenderUnloadedAvatar</string>
 		<string>RenderUseStreamVBO</string>
 		<string>RenderVBOEnable</string>
-		<string>RenderVintageMode</string>
 		<string>RenderVSyncEnable</string>
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>

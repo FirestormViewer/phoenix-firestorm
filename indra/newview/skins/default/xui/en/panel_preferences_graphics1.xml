@@ -754,7 +754,7 @@
 
         <slider
          control_name="RenderExposure"
-         disabled_control="RenderVintageMode"
+         disabled_control="RenderDisableVintageMode"
          decimal_digits="1"
          follows="left|top"
          height="15"
@@ -1421,14 +1421,14 @@ If you do not understand the distinction then leave this control alone."
             Miscellaneous Rendering:
         </text>
         <check_box
-         control_name="RenderVintageMode"
+         control_name="RenderDisableVintageMode"
          height="16"
          initial_value="false"
-         label="Vintage Mode"
-         tool_tip="Disable different rendering pipeline features to improve performance on older machines that makes the world look closer to how it used to prior to V7."
+         label="HDR and Emissive"
+         tool_tip="Enables additional rendering pipeline features on newer machines such as HDR and emissive textures on PBR content."
          layout="topleft"
          left_delta="10"
-         name="RenderVintageMode"
+         name="VintageMode"
          top_pad="6"
          width="256">
          <check_box.commit_callback

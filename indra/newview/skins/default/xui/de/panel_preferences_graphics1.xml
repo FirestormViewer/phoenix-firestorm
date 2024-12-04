@@ -223,7 +223,7 @@
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>
-		<check_box label="Vintage-Modus" tool_tip="Deaktiviert diverse Features der Rendering-Pipeline um die Leistung auf älteren Maschinen zu verbessern und nähert das Aussehen der Welt näher an das Aussehen vor Version 7 an." name="RenderVintageMode"/>
+		<check_box label="HDR und Emissive" tool_tip="Aktiviert zusätzliche Features der Rendering-Pipeline auf neueren Maschinen, wie HDR und Emissive-Texturen auf PBR-Materialien." name="VintageMode"/>
 		<check_box label="Alpha-Masken verwenden" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt." name="RenderAutoMaskAlphaDeferred"/>
 		<check_box label="Leuchten anzeigen" tool_tip="Stellt Leuchteffekte dar. Stärke muss auf 0 gesetzt werden, um Leuchteffekte zu deaktiveren, falls Schatten aktiviert sind." name="RenderGlow"/>
 		<slider label="Stärke:" tool_tip="Leuchtstärke. Größer = Breitere und weichere Darstellung (Standardwert: 2)" name="glow_strength"/>

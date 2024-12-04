@@ -776,7 +776,7 @@ void LLModelPreview::rebuildUploadData()
                         {
                             // in case user provided a missing file later
                             texture->setIsMissingAsset(false);
-                            texture->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, true, false, this, &mCallbackTextureList, false);
+                            texture->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, true, false, new LLHandle<LLModelPreview>(getHandle()), &mCallbackTextureList, false);
                             texture->forceToSaveRawImage(0, F32_MAX);
                             texture->updateFetch();
                             if (mModelLoader)
@@ -1023,6 +1023,10 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     std::map<std::string, std::string> joint_alias_map;
     getJointAliases(joint_alias_map);
 
+    LLHandle<LLModelPreview> preview_handle = getHandle();
+    auto load_textures_cb =
+            [preview_handle](LLImportMaterial& material, void* opaque) { return LLModelPreview::loadTextures(material, preview_handle); };
+
     // three possible file extensions, .dae .gltf .glb
     // check for .dae and if not then assume one of the .gl??
     std::string filename_lc(filename);
@@ -1042,7 +1046,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
             lod,
             &LLModelPreview::loadedCallback,
             &LLModelPreview::lookupJointByName,
-            &LLModelPreview::loadTextures,
+            load_textures_cb,
             &LLModelPreview::stateChangedCallback,
             this,
             mJointTransformMap,
@@ -1062,7 +1066,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
             lod,
             &LLModelPreview::loadedCallback,
             &LLModelPreview::lookupJointByName,
-            &LLModelPreview::loadTextures,
+            load_textures_cb,
             &LLModelPreview::stateChangedCallback,
             this,
             mJointTransformMap,
@@ -4189,9 +4193,9 @@ LLJoint* LLModelPreview::lookupJointByName(const std::string& str, void* opaque)
     return NULL;
 }
 
-U32 LLModelPreview::loadTextures(LLImportMaterial& material, void* opaque)
+U32 LLModelPreview::loadTextures(LLImportMaterial& material, LLHandle<LLModelPreview> handle)
 {
-    if (material.mDiffuseMapFilename.size())
+    if (material.mDiffuseMapFilename.size() && !handle.isDead())
     {
         material.mOpaqueData = new LLPointer< LLViewerFetchedTexture >;
         LLPointer< LLViewerFetchedTexture >& tex = (*reinterpret_cast< LLPointer< LLViewerFetchedTexture > * >(material.mOpaqueData));
@@ -4202,10 +4206,8 @@ U32 LLModelPreview::loadTextures(LLImportMaterial& material, void* opaque)
             // file was loaded previosly, reload image to get potential changes
             tex->clearFetchedResults();
         }
-        // Todo: might cause a crash if preview gets closed before we get the callback.
-        // Use a callback list or guard callback in some way
-        LLModelPreview* preview = (LLModelPreview*)opaque;
-        tex->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, true, false, opaque, &preview->mCallbackTextureList, false);
+        LLModelPreview* preview = (LLModelPreview*)handle.get();
+        tex->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, true, false, new LLHandle<LLModelPreview>(handle), &preview->mCallbackTextureList, false);
         tex->forceToSaveRawImage(0, F32_MAX);
         material.setDiffuseMap(tex->getID()); // record tex ID
         return 1;
@@ -5151,15 +5153,28 @@ void LLModelPreview::textureLoadedCallback(
     bool final,
     void* userdata)
 {
-    LLModelPreview* preview = (LLModelPreview*)userdata;
-    preview->refresh();
+    if (!userdata)
+        return;
 
-    if (final && preview->mModelLoader)
+    LLHandle<LLModelPreview>* handle = (LLHandle<LLModelPreview>*)userdata;
+
+    if (!handle->isDead())
     {
-        if (preview->mModelLoader->mNumOfFetchingTextures > 0)
+        LLModelPreview* preview = static_cast<LLModelPreview*>(handle->get());
+        preview->refresh();
+
+        if (final && preview->mModelLoader)
         {
-            preview->mModelLoader->mNumOfFetchingTextures--;
+            if (preview->mModelLoader->mNumOfFetchingTextures > 0)
+            {
+                preview->mModelLoader->mNumOfFetchingTextures--;
+            }
         }
+    }
+
+    if (final || !success)
+    {
+        delete handle;
     }
 }
 
