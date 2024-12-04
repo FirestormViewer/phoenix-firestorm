@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_report_abuse" title="舉報濫用">
+<floater name="floater_report_abuse" title="檢舉違規">
 	<floater.string name="Screenshot">
 		快照
 	</floater.string>
-	<check_box label="使用這張快照" name="screen_check"/>
+	<floater.string name="chat_report_format">
+時間: [MSG_TIME]
+文字: [MSG_DESCRIPTION]
+	</floater.string>
+	<button name="refresh_screenshot" tool_tip="更新相片" />
+	<check_box label="使用這張快照" name="screen_check" />
 	<text name="reporter_title">
-		舉報者：
+		檢舉者：
 	</text>
 	<text name="sim_title">
-		地區：
+		區域：
 	</text>
 	<text name="sim_field">
-		地區名稱
+		區域名稱
 	</text>
 	<text name="pos_title">
 		位置：
@@ -20,62 +25,38 @@
 		{128.1, 128.1, 15.4}
 	</text>
 	<text name="select_object_label">
-		點按按鈕，再點按違紀的物件：
+		點擊按鈕，再點擊違規的物件：
 	</text>
-	<button name="pick_btn" tool_tip="物件選取器 - 指明本舉報的對象物件"/>
+	<button name="pick_btn" tool_tip="物件選擇器 - 指明檢舉的物件" />
 	<text name="object_name_label">
 		物件：
 	</text>
 	<text name="owner_name_label">
-		所有人：
+		所有者：
 	</text>
-	<combo_box name="category_combo" tool_tip="類別 -- 選擇最符合此次舉報內容的類別">
-		<combo_box.item label="選擇類別" name="Select_category"/>
-		<combo_box.item label="年齡 &gt; 年齡 play" name="Age__Age_play"/>
-		<combo_box.item label="年齡 &gt; 成人居民出現在青少年專用第二人生" name="Age__Adult_resident_on_Teen_Second_Life"/>
-		<combo_box.item label="年齡 &gt; 未成年居民出現在青少年專用第二人生以外場所" name="Age__Underage_resident_outside_of_Teen_Second_Life"/>
-		<combo_box.item label="攻擊 &gt; 戰鬥沙盤 / 不安全區域" name="Assault__Combat_sandbox___unsafe_area"/>
-		<combo_box.item label="攻擊 &gt; 在安全地區射擊、推擠或推撞另一名居民" name="Assault__Safe_area"/>
-		<combo_box.item label="攻擊 &gt; 測試武器的沙盤" name="Assault__Weapons_testing_sandbox"/>
-		<combo_box.item label="商業 &gt; 未送交產品或履行服務" name="Commerce__Failure_to_deliver_product_or_service"/>
-		<combo_box.item label="揭露 &gt; 真實世界資訊" name="Disclosure__Real_world_information"/>
-		<combo_box.item label="揭露 &gt; 遠端監控聊天內容" name="Disclosure__Remotely_monitoring chat"/>
-		<combo_box.item label="揭露 &gt; 第二人生資訊 / 聊天內容 / 即時訊息" name="Disclosure__Second_Life_information_chat_IMs"/>
-		<combo_box.item label="擾亂 &gt; 不公平使用地區資源" name="Disturbing_the_peace__Unfair_use_of_region_resources"/>
-		<combo_box.item label="擾亂 &gt; 過度使用帶腳本的物件" name="Disturbing_the_peace__Excessive_scripted_objects"/>
-		<combo_box.item label="擾亂 &gt; 任意棄置物件" name="Disturbing_the_peace__Object_littering"/>
-		<combo_box.item label="擾亂 &gt; 一再發出垃圾訊息" name="Disturbing_the_peace__Repetitive_spam"/>
-		<combo_box.item label="擾亂 &gt; 不受歡迎的垃圾廣告" name="Disturbing_the_peace__Unwanted_advert_spam"/>
-		<combo_box.item label="詐欺 &gt; L$" name="Fraud__L$"/>
-		<combo_box.item label="詐欺 &gt; 土地" name="Fraud__Land"/>
-		<combo_box.item label="詐欺 &gt; 層壓式推銷或連環信" name="Fraud__Pyramid_scheme_or_chain_letter"/>
-		<combo_box.item label="詐欺 &gt; L$ 或美元" name="Fraud__US$"/>
-		<combo_box.item label="騷擾 &gt; 廣告農場 / 視覺轟炸" name="Harassment__Advert_farms___visual_spam"/>
-		<combo_box.item label="騷擾 &gt; 詆譭個人或群組" name="Harassment__Defaming_individuals_or_groups"/>
-		<combo_box.item label="騷擾 &gt; 阻撓移動" name="Harassment__Impeding_movement"/>
-		<combo_box.item label="騷擾 &gt; 性騷擾" name="Harassment__Sexual_harassment"/>
-		<combo_box.item label="騷擾 &gt; 意圖滋事的有針對性的行為" name="Harassment__Solicting_inciting_others_to_violate_ToS"/>
-		<combo_box.item label="騷擾 &gt; 言語暴力" name="Harassment__Verbal_abuse"/>
-		<combo_box.item label="不雅 &gt; 令大多人不快的內容或行為" name="Indecency__Broadly_offensive_content_or_conduct"/>
-		<combo_box.item label="不雅 &gt; 冒犯人的化身名稱" name="Indecency__Inappropriate_avatar_name"/>
-		<combo_box.item label="失當 &gt; 對一地區的分級不恰當的的內容或行為" name="Indecency__Mature_content_in_PG_region"/>
-		<combo_box.item label="不雅 &gt; 在適度成人地區出現冒犯人的內容或行為" name="Indecency__Inappropriate_content_in_Mature_region"/>
-		<combo_box.item label="侵犯智產權 &gt; 移除內容" name="Intellectual_property_infringement_Content_Removal"/>
-		<combo_box.item label="侵犯智產權 &gt; 複製機器程式碼 CopyBot 或濫用權限" name="Intellectual_property_infringement_CopyBot_or_Permissions_Exploit"/>
-		<combo_box.item label="不容異己" name="Intolerance"/>
-		<combo_box.item label="土地 &gt; 不當使用沙盤資源" name="Land__Abuse_of_sandbox_resources"/>
-		<combo_box.item label="土地 &gt; 侵佔 &gt; 物件或材質" name="Land__Encroachment__Objects_textures"/>
-		<combo_box.item label="土地 &gt; 侵佔 &gt; 粒子" name="Land__Encroachment__Particles"/>
-		<combo_box.item label="土地 &gt; 侵佔 &gt; 樹種 / 植物" name="Land__Encroachment__Trees_plants"/>
-		<combo_box.item label="違反技術遊戲規則" name="Wagering_gambling"/>
-		<combo_box.item label="其他" name="Other"/>
+	<combo_box name="category_combo" tool_tip="類別 -- 選擇最符合此報告的類別">
+		<combo_box.item label="選擇類別" name="Select_category" />
+		<combo_box.item label="年齡 &gt; 年齡遊戲" name="Age__Age_play" />
+		<combo_box.item label="攻擊 &gt; 在安全區域射擊、推搡或撞擊其他居民" name="Assault__Safe_area" />
+		<combo_box.item label="資訊洩露 &gt; 現實世界的資訊" name="Disclosure__Real_world_information" />
+		<combo_box.item label="擾亂秩序 &gt; 過度使用指令碼物件" name="Disturbing_the_peace__Excessive_scripted_objects" />
+		<combo_box.item label="擾亂秩序 &gt; 隨意產生物件" name="Disturbing_the_peace__Object_littering" />
+		<combo_box.item label="擾亂秩序 &gt; 持續的垃圾資訊" name="Disturbing_the_peace__Repetitive_spam" />
+		<combo_box.item label="欺詐 &gt; L$ 或 US$" name="Fraud__US$" />
+		<combo_box.item label="騷擾 &gt; 惡意破壞行為" name="Harassment__Solicting_inciting_others_to_violate_ToS" />
+		<combo_box.item label="猥褻 &gt; 在公共場合的冒犯性內容或行為" name="Indecency__Broadly_offensive_content_or_conduct" />
+		<combo_box.item label="猥褻 &gt; 不當的化身名稱" name="Indecency__Inappropriate_avatar_name" />
+		<combo_box.item label="不當行為 &gt; 不適合區域評級的內容/行為" name="Indecency__Mature_content_in_PG_region" />
+		<combo_box.item label="歧視" name="Intolerance" />
+		<combo_box.item label="土地 &gt; 非法使用 &gt; 物件或紋理" name="Land__Encroachment__Objects_textures" />
+		<combo_box.item label="違反技巧遊戲政策" name="Wagering_gambling" />
 	</combo_box>
 	<text name="abuser_name_title">
-		濫用者名稱：
+		違規者名稱：
 	</text>
-	<button label="選擇" name="select_abuser" tool_tip="從清單中選擇違紀者姓名"/>
+	<button label="選擇" name="select_abuser" tool_tip="從清單中選擇違規使用者姓名" />
 	<text name="abuser_name_title2">
-		濫用位置：
+		違規位置：
 	</text>
 	<text name="sum_title">
 		摘要：
@@ -87,8 +68,8 @@
 		請盡可能提供具體細節
 	</text>
 	<text name="incomplete_title">
-		* 不完整的舉報內容概不受理調查
+		* 不完整的檢舉內容概不受理調查
 	</text>
-	<button label="違規舉報" label_selected="違規舉報" name="send_btn"/>
-	<button label="取消" label_selected="取消" name="cancel_btn"/>
+	<button label="違規檢舉" label_selected="違規舉報" name="send_btn" />
+	<button label="取消" label_selected="取消" name="cancel_btn" />
 </floater>

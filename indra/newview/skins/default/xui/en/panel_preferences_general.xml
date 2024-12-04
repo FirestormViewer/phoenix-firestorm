@@ -97,13 +97,11 @@
          label="日本語 (Japanese) - Beta"
          name="(Japanese)"
          value="ja" />
-        <!--
         <combo_box.item
          enabled="true"
          label="正體中文 (Traditional Chinese) - Beta"
          name="Traditional Chinese"
          value="zh" />
-        -->
     </combo_box>
     <text
 	 top_delta="4"

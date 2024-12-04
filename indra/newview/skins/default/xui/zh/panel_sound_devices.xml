@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<panel label="設備設定" name="device_settings_panel">
+<panel label="裝置設定" name="device_settings_panel">
 	<panel.string name="default_text">
 		預設
 	</panel.string>
 	<string name="name_no_device">
-		無設備
+		無裝置
 	</string>
 	<string name="name_default_system_device">
-		預設系統設備
+		預設系統裝置
 	</string>
 	<text name="Input">
 		輸入
@@ -18,8 +18,12 @@
 	<text name="My volume label">
 		麥克風音量：
 	</text>
-	<slider_bar name="mic_volume_slider" tool_tip="用這個控制條調整麥克風音量"/>
+	<slider_bar name="mic_volume_slider" tool_tip="用這個控制條調整麥克風音量" />
 	<text name="wait_text">
 		請稍候
 	</text>
+	<text name="disabled_text">
+		禁用
+	</text>
+	<button name="unmute_btn" label="取消靜音" />
 </panel>

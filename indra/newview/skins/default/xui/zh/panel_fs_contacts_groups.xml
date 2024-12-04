@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="groups">
+	<filter_editor label="篩選群組" name="group_filter_input" />
+	<button label="私聊/通話" name="chat_btn" tool_tip="打開私聊視窗" />
+	<button label="個人檔案" name="info_btn" />
+	<button label="群組頭銜" name="titles_btn" />
+	<button label="啟用" name="activate_btn" />
+	<button label="離開" name="leave_btn" />
+	<button label="建立..." name="create_btn" />
+	<button label="搜尋..." name="search_btn" />
+	<button label="邀請..." name="invite_btn" />
+</panel>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="動畫-檔案總管">
+	<scroll_list name="animation_list">
+		<scroll_list.column label="由誰播放" name="played_by" />
+		<scroll_list.column label="播放" name="played" />
+		<scroll_list.column label="優先度" name="priority" />
+		<scroll_list.column label="時間" name="timestamp" />
+		<scroll_list.column label="動畫-ID" name="animation_id" />
+		<scroll_list.column label="物件-ID" name="object_id" />
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="停止" name="stop_btn" />
+		<button label="停止並重設" name="stop_and_revoke_btn" />
+		<button label="封鎖名單" name="blacklist_btn" />
+		<check_box label="過濾自己的" name="no_owned_animations_check" tool_tip="如果啟用，則會過濾自己的化身擁有的所有動畫，例如 AO 動畫或標準系統動畫" />
+	</panel>
+</floater>

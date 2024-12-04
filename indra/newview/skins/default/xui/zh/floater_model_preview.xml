@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="上傳模型">
-	<string name="status_idle"/>
+	<string name="no_havok">
+		物理網格模型上傳
+	</string>
 	<string name="status_parse_error">
-		錯誤：剖析 dae 時出錯，詳見記錄檔。
+		錯誤：剖析 dae 時出錯，詳見記錄檔案。
 	</string>
 	<string name="status_bind_shape_orientation">
-		警告：綁定形狀矩陣並未處於標準的「X-向前」方位。
+		警告：繫結形狀矩陣並未處於標準的「X-向前」方位。
 	</string>
 	<string name="status_material_mismatch">
 		錯誤：模型材料並非參考模型的子集合。
+	</string>
+	<string name="status_lod_model_mismatch">
+		錯誤：細節層次模型沒有找到原模型。
 	</string>
 	<string name="status_reading_file">
 		載入中...
 	</string>
 	<string name="status_generating_meshes">
-		正在生成網面…
+		正在產生網格模型…
 	</string>
 	<string name="status_vertex_number_overflow">
-		錯誤：頂點數目超過 65535，程序已中止！
+		錯誤：頂點數超過 65535，程式已中止！
 	</string>
 	<string name="bad_element">
 		錯誤：無效的元件
@@ -44,10 +49,10 @@
 		無
 	</string>
 	<string name="mesh_status_submesh_mismatch">
-		細節層次裡，可使用材質的臉部數目不同。
+		細節層次裡，可使用紋理的麵數不同。
 	</string>
 	<string name="mesh_status_mesh_mismatch">
-		細節層次裡，網面實例的數目不同。
+		細節層次裡，網格執行個體的數目不同。
 	</string>
 	<string name="mesh_status_too_many_vertices">
 		細節層次裡，頂點數目太多。
@@ -61,6 +66,21 @@
 	<string name="phys_status_vertex_limit_exceeded">
 		有些具體殼面超出頂點限制。
 	</string>
+	<string name="phys_status_hull_limit_exceeded">
+		一些模型超過了外殼限制（256）。嘗試使用「簡化」功能。
+	</string>
+	<string name="phys_status_degenerate_triangles">
+		物理網格包含退化三角形。嘗試「分析/簡化」。
+	</string>
+	<string name="phys_status_no_havok">
+		此版本不包含Havok支援，不推薦用於上傳Second Life的物理內容。可能會出現不可預測的結果！
+	</string>
+	<string name="phys_status_too_thin">
+		一個或多個次元小於0.5公尺 - 只有基於外殼的（分析過的）物理形狀才會正確工作。
+	</string>
+	<string name="phys_status_unknown_error">
+		發生未知錯誤。
+	</string>
 	<string name="layer_all">
 		全部
 	</string>
@@ -73,6 +93,59 @@
 	<string name="tbd">
 		（未定）
 	</string>
+	<string name="TooManyJoint">
+		由於關節過多，蒙皮已被禁用：[JOINTS]，最大值：[MAX]
+	</string>
+	<string name="UnrecognizedJoint">
+		繫結到一個未知的關節：[NAME]
+	</string>
+	<string name="UnknownJoints">
+		由於[COUNT]個未知關節，蒙皮已被禁用。
+	</string>
+	<string name="ModelLoaded">
+		模型 [MODEL_NAME] 已載入。
+	</string>
+	<string name="IncompleteTC">
+		紋理座標數據不完整。
+	<string name="PositionNaN">
+		在從DAE模型載入位置資料時發現NaN，模型無效。
+	</string></string>
+	<string name="NormalsNaN">
+		載入DAE模型時發現法線NaN，模型無效。
+	</string>
+	<string name="NegativeScaleTrans">
+		檢測到負縮放 - 不支援的變換。domInstance_geometry: [LABEL]
+	</string>
+	<string name="NegativeScaleNormTrans">
+		檢測到負縮放 - 不支援的法線後變換。domInstance_geometry: [LABEL]
+	</string>
+	<string name="CantResolveGeometryUrl">
+		無法解析幾何體URL。
+	</string>
+	<string name="ParsingErrorBadElement">
+		元素無效。
+	</string>
+	<string name="ParsingErrorCantParseScene">
+		無法解析場景。
+	</string>
+	<string name="ParsingErrorCorrupt">
+		DAE錯誤 - 通常這表示檔案已損壞。
+	</string>
+	<string name="ParsingErrorNoController">
+		無法驗證控制器。
+	</string>
+	<string name="ParsingErrorNoDoc">
+		無法找到內部檔案。
+	</string>
+	<string name="ParsingErrorNoRoot">
+		檔案沒有根元素。
+	</string>
+	<string name="ParsingErrorNoScene">
+		檔案不包含visual_scene。
+	</string>
+	<string name="ParsingErrorPositionInvalidModel">
+		沒有位置資料的網格無法處理 - 模型無效。
+	</string>
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
 			<text name="name_label">
@@ -82,75 +155,85 @@
 				這模型代表…
 			</text>
 			<combo_box name="model_category_combo">
-				<combo_item label="選擇一項…" name="Choose one"/>
-				<combo_item label="化身形狀" name="Avatar shape"/>
-				<combo_item label="化身附件" name="Avatar attachment"/>
-				<combo_item label="會移動的物件（車輛、動物）" name="Moving object (vehicle, animal)"/>
-				<combo_item label="建製元件" name="Building Component"/>
-				<combo_item label="大型、不會移動等類型" name="Large, non moving etc"/>
-				<combo_item label="較小型、不會移動等類型" name="Smaller, non-moving etc"/>
-				<combo_item label="並非其中任何一個" name="Not really any of these"/>
+				<combo_item label="選擇一項…" name="Choose one" />
+				<combo_item label="化身形狀" name="Avatar shape" />
+				<combo_item label="化身附件" name="Avatar attachment" />
+				<combo_item label="會移動的物件（車輛、動物）" name="Moving object (vehicle, animal)" />
+				<combo_item label="建造元件" name="Building Component" />
+				<combo_item label="大型、不會移動等類型" name="Large, non moving etc" />
+				<combo_item label="較小型、不會移動等類型" name="Smaller, non-moving etc" />
+				<combo_item label="並非其中任何一個" name="Not really any of these" />
 			</combo_box>
 		</panel>
 		<tab_container name="import_tab">
 			<panel label="細節層次" name="lod_panel" title="細節層次">
-				<text initial_value="來源" name="source" value="來源"/>
-				<text initial_value="三角形" name="triangles" value="三角形"/>
-				<text initial_value="頂點" name="vertices" value="頂點"/>
-				<text initial_value="高" name="high_label" value="高"/>
+				<text initial_value="來源" name="source" value="來源" />
+				<text initial_value="三角形" name="triangles" value="三角形" />
+				<text initial_value="頂點" name="vertices" value="頂點" />
+				<text initial_value="高" name="high_label" value="高" />
 				<combo_box name="lod_source_high">
-					<item label="從檔案載入" name="Load from file"/>
-					<item label="產生" name="Generate"/>
+					<item label="從檔案載入" name="Load from file" />
+					<item name="MeshOpt Auto" label="自動產生" />
+					<item name="MeshOptCombine" label="精確產生" />
+					<item name="MeshOptSloppy" label="粗略產生" />
+					<item label="產生" name="Generate" />
 				</combo_box>
-				<button label="瀏覽…" name="lod_browse_high"/>
+				<button label="瀏覽…" name="lod_browse_high" />
 				<combo_box name="lod_mode_high">
-					<item label="三角形上限" name="Triangle Limit"/>
-					<item label="錯誤門檻" name="Error Threshold"/>
+					<item label="三角形上限" name="Triangle Limit" />
+					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="high_triangles" value="0"/>
-				<text initial_value="0" name="high_vertices" value="0"/>
-				<text initial_value="中" name="medium_label" value="中"/>
+				<text initial_value="中" name="medium_label" value="中" />
 				<combo_box name="lod_source_medium">
-					<item label="從檔案載入" name="Load from file"/>
-					<item label="產生" name="Generate"/>
-					<item label="以上使用低階細節" name="Use LoD above"/>
+					<item label="從檔案載入" name="Load from file" />
+					<item name="MeshOpt Auto" label="自動產生" />
+					<item name="MeshOptCombine" label="精確產生" />
+					<item name="MeshOptSloppy" label="粗略產生" />
+					<item label="產生" name="Generate" />
+					<item label="以上使用低階細節" name="Use LoD above" />
 				</combo_box>
-				<button label="瀏覽…" name="lod_browse_medium"/>
+				<button label="瀏覽…" name="lod_browse_medium" />
 				<combo_box name="lod_mode_medium">
-					<item label="三角形上限" name="Triangle Limit"/>
-					<item label="錯誤門檻" name="Error Threshold"/>
+					<item label="三角形上限" name="Triangle Limit" />
+					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="medium_triangles" value="0"/>
-				<text initial_value="0" name="medium_vertices" value="0"/>
-				<text initial_value="低" name="low_label" value="低"/>
+				<text initial_value="0" name="medium_triangles" value="0" />
+				<text initial_value="0" name="medium_vertices" value="0" />
+				<text initial_value="低" name="low_label" value="低" />
 				<combo_box name="lod_source_low">
-					<item label="從檔案載入" name="Load from file"/>
-					<item label="產生" name="Generate"/>
-					<item label="以上使用低階細節" name="Use LoD above"/>
+					<item label="從檔案載入" name="Load from file" />
+					<item name="MeshOpt Auto" label="自動產生" />
+					<item name="MeshOptCombine" label="精確產生" />
+					<item name="MeshOptSloppy" label="粗略產生" />
+					<item label="產生" name="Generate" />
+					<item label="以上使用低階細節" name="Use LoD above" />
 				</combo_box>
-				<button label="瀏覽…" name="lod_browse_low"/>
+				<button label="瀏覽…" name="lod_browse_low" />
 				<combo_box name="lod_mode_low">
-					<item label="三角形上限" name="Triangle Limit"/>
-					<item label="錯誤門檻" name="Error Threshold"/>
+					<item label="三角形上限" name="Triangle Limit" />
+					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="low_triangles" value="0"/>
-				<text initial_value="0" name="low_vertices" value="0"/>
-				<text initial_value="最低" name="lowest_label" value="最低"/>
+				<text initial_value="0" name="low_triangles" value="0" />
+				<text initial_value="0" name="low_vertices" value="0" />
+				<text initial_value="最低" name="lowest_label" value="最低" />
 				<combo_box name="lod_source_lowest">
-					<item label="從檔案載入" name="Load from file"/>
-					<item label="產生" name="Generate"/>
-					<item label="以上使用低階細節" name="Use LoD above"/>
+					<item label="從檔案載入" name="Load from file" />
+					<item name="MeshOpt Auto" label="自動產生" />
+					<item name="MeshOptCombine" label="精確產生" />
+					<item name="MeshOptSloppy" label="粗略產生" />
+					<item label="產生" name="Generate" />
+					<item label="以上使用低階細節" name="Use LoD above" />
 				</combo_box>
-				<button label="瀏覽…" name="lod_browse_lowest"/>
+				<button label="瀏覽…" name="lod_browse_lowest" />
 				<combo_box name="lod_mode_lowest">
-					<item label="三角形上限" name="Triangle Limit"/>
-					<item label="錯誤門檻" name="Error Threshold"/>
+					<item label="三角形上限" name="Triangle Limit" />
+					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="lowest_triangles" value="0"/>
-				<text initial_value="0" name="lowest_vertices" value="0"/>
-				<check_box label="產生法線" name="gen_normals"/>
-				<text initial_value="皺褶角度：" name="crease_label" value="皺褶角度："/>
-				<spinner name="crease_angle" value="75"/>
+				<text initial_value="0" name="lowest_triangles" value="0" />
+				<text initial_value="0" name="lowest_vertices" value="0" />
+				<check_box label="產生法線" name="gen_normals" />
+				<text initial_value="皺褶角度：" name="crease_label" value="皺褶角度：" />
+				<spinner name="crease_angle" value="75" />
 			</panel>
 			<panel label="物理" name="physics_panel">
 				<panel name="physics geometry">
@@ -173,11 +256,23 @@
 						<combo_item name="physics_lowest">
 							最低
 						</combo_item>
+						<combo_item name="physics_bounding_box">
+							邊界框
+						</combo_item>
+						<combo_item name="physics_cube">
+							立方體
+						</combo_item>
+						<combo_item name="physics_hex">
+							六邊形
+						</combo_item>
+						<combo_item name="physics_ud">
+							使用者定義
+						</combo_item>
 						<combo_item name="load_from_file">
 							來自檔案
 						</combo_item>
 					</combo_box>
-					<button label="瀏覽…" name="physics_browse"/>
+					<button label="瀏覽…" name="physics_browse" />
 				</panel>
 				<panel name="physics analysis">
 					<text name="method_label">
@@ -192,9 +287,9 @@
 					<text name="smooth_method_label">
 						平滑：
 					</text>
-					<check_box label="關閉洞口" name="Close Holes (Slow)"/>
-					<button label="分析" name="Decompose"/>
-					<button label="取消" name="decompose_cancel"/>
+					<check_box label="封閉孔洞" name="Close Holes (Slow)" />
+					<button label="分析" name="Decompose" />
+					<button label="取消" name="decompose_cancel" />
 				</panel>
 				<panel name="physics simplification">
 					<text name="second_step_label">
@@ -212,9 +307,9 @@
 					<text name="Retain%_label">
 						保留：
 					</text>
-					<combo_box name="Combine Quality" value="1"/>
-					<button label="簡化" name="Simplify"/>
-					<button label="取消" name="simplify_cancel"/>
+					<combo_box name="Combine Quality" value="1" />
+					<button label="簡化" name="Simplify" />
+					<button label="取消" name="simplify_cancel" />
 				</panel>
 				<panel name="physics info">
 					<text name="results_text">
@@ -235,36 +330,140 @@
 				<text name="scale_label">
 					比例（1 = 原比例）：
 				</text>
-				<spinner name="import_scale" value="1.0"/>
+				<spinner name="import_scale" value="1.0" />
 				<text name="dimensions_label">
 					規格：
 				</text>
 				<text name="import_dimensions">
 					[X] X [Y] X [Z]
 				</text>
-				<check_box label="包含材質" name="upload_textures"/>
-				<text name="include_label">
-					僅限化身模型：
+				<check_box label="包含紋理" name="upload_textures" />
+			</panel>
+			<panel label="涵蓋" title="繫結" name="rigging_panel">
+				<text name="scale_label">
+					縮放比例 (1=無):
 				</text>
-				<check_box label="包含表皮重量" name="upload_skin"/>
-				<check_box label="包含接點位置" name="upload_joints"/>
-				<check_box label="若接點位置已定義，就鎖住比例" name="lock_scale_if_joint_position"/>
+				<spinner name="import_scale" value="1.0" />
+				<text name="dimensions_label">
+					尺寸:
+				</text>
+				<text name="import_dimensions">
+					[X] X [Y] X [Z]
+				</text>
+				<check_box label="包括紋理" name="upload_textures" />
+				<text name="include_label">
+					僅限化身模型:
+				</text>
+				<check_box label="包括皮膚權重" name="upload_skin" top_pad="0" />
+				<check_box label="包括關節位置" name="upload_joints" top_pad="2" />
+				<check_box label="如果定義了關節位置則鎖定縮放" name="lock_scale_if_joint_position" top_pad="15" />
+				<check_box label="適應化身形狀" name="deform" />
+				<radio_group name="deform_base">
+					<radio_item label="男性" name="0" />
+					<radio_item label="女性" name="1" />
+					<radio_item label="男性（瘦身）" name="2" />
+				</radio_group>
 				<text name="pelvis_offset_label">
 					Z 偏距（升高或降低化身）：
 				</text>
-				<spinner name="pelvis_offset" value="0.0"/>
+				<spinner name="pelvis_offset" value="0.0" />
+				<text name="skin_too_many_joints" text_color="Orange">
+					皮膚權重關節過多
+				</text>
+				<text name="skin_unknown_joint">
+					模型包含未知關節
+				</text>
+				<text name="joints_descr">
+					關節：
+				</text>
+				<text name="conflicts_description">
+					[CONFLICTS]衝突[JOINTS_COUNT]個關節
+				</text>
+				<text name="pos_overrides_descr">
+					位置涵蓋於關節'[JOINT]':
+				</text>
+				<scroll_list name="pos_overrides_list">
+					<scroll_list.columns label="模型" name="model_name" />
+					<scroll_list.columns label="X" name="axis_x" />
+					<scroll_list.columns label="Y" name="axis_y" />
+					<scroll_list.columns label="Z" name="axis_z" />
+				</scroll_list>
+			</panel>
+			<panel label="日誌" name="logs_panel">
+				<check_box label="顯示詳細日誌" name="verbose_logging" />
+			</panel>
+			<panel label="預覽設定" name="mesh_preview_settings_panel">
+				<text name="mesh_upload_behaviour_label">
+					模型上傳行為設定：
+				</text>
+				<check_box label="自動啟用權重" tool_tip="自動為包含繫結資訊的網格啟用權重" name="mesh_preview_auto_weights" />
+				<check_box label="預設使用'可靠'的細節層次" tool_tip="預設使用'可靠'的方法（GLOD）" name="mesh_upload_default_to_reliable" />
+				<check_box label="自動預覽權重" tool_tip="自動在預覽中顯示包含繫結資訊的網格的權重" name="mesh_preview_auto_show_weights" />
+				<text name="lod_suffix_label">
+					細節層次字尾：
+				</text>
+				<combo_box name="lod_suffix_combo" tool_tip="選擇預設或自訂">
+					<combo_item name="choose_one">選擇標準或手動編輯...</combo_item>
+					<combo_item name="suff_sl">SL標準 (最低=LOD0)</combo_item>
+					<combo_item name="suff_unity">遊戲引擎標準 (最低=LOD3)</combo_item>
+					<combo_item name="suff_descriptive">文字描述 (高,中...)</combo_item>
+				</combo_box>
+				<text name="suf_lowest_lab">
+					最低：
+				</text>
+				<line_editor name="suf_lowest" tool_tip="標識檔案名中或檔案內模型的最低細節層次的字尾。" />
+				<text name="suf_low_lab">
+					較低：
+				</text>
+				<line_editor name="suf_low" tool_tip="標識檔案名中或檔案內模型的較低細節層次的字尾。" />
+				<text name="suf_medium_lab" width="45">
+					中等：
+				</text>
+				<line_editor name="suf_medium" tool_tip="標識檔案名中或檔案內模型的中等細節層次的字尾。" />
+				<text name="suf_high_lab">
+					高：
+				</text>
+				<line_editor name="suf_high" tool_tip="標識檔案名中或檔案內模型的高細節層次的字尾。" />
+				<text name="suf_physics_lab">
+					物理：
+				</text>
+				<line_editor name="suf_physics" tool_tip="標識檔案名中或檔案內模型的物理相關部分的字尾。" />
+				<text name="mesh_preview_ud_preset_label" width="190">
+					使用者自訂物理設定：
+				</text>
+				<line_editor name="ud_physics" tool_tip="用於物理的簡單Collada網格定義的檔案路徑。" />
+				<button label="瀏覽" label_selected="瀏覽" name="set_user_def_phys" />
+				<text name="mesh_preview_colors_label">
+					模型上傳顏色：
+				</text>
+				<text name="user_label">
+					通用：
+				</text>
+				<color_swatch label="背景" tool_tip="上傳器的背景顏色" name="mesh_preview_canvas_color" />
+				<color_swatch label="模型邊緣" tool_tip="預覽視窗中模型邊緣的顏色" name="mesh_preview_edge_color" />
+				<color_swatch label="環境光" tool_tip="預覽視窗中的環境光顏色（同樣影響動畫上傳預覽等）" name="preview_ambient_color" />
+				<text name="physics_settings_label">
+					物理：
+				</text>
+				<color_swatch label="物理邊緣" tool_tip="預覽視窗中物理模型邊緣的顏色" name="mesh_preview_physics_edge_color" />
+				<color_swatch label="物理填充色" tool_tip="預覽視窗中物理模型的填充顏色" name="mesh_preview_physics_fill_color" />
+				<text name="physics_issues_setting_label">
+					物理問題：
+				</text>
+				<color_swatch label="不良邊緣" tool_tip="預覽視窗中退化（細）三角形邊緣的顏色" name="mesh_preview_degenerate_edge_color" />
+				<color_swatch label="不良三角形" tool_tip="預覽視窗中退化（細）三角形的填充顏色" name="mesh_degenerate_fill_color" />
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
-			<button label="計算重量和費用" name="calculate_btn" tool_tip="計算重量和費用"/>
-			<button label="取消" name="cancel_btn"/>
-			<button label="上傳" name="ok_btn" tool_tip="上傳至模擬器"/>
-			<button label="清除設定並重設形式" name="reset_btn"/>
+			<button label="計算重量和費用" name="calculate_btn" tool_tip="計算重量和費用" />
+			<button label="取消" name="cancel_btn" />
+			<button label="上傳" name="ok_btn" tool_tip="上傳至類比主機" />
+			<button label="清除設定並重設形式" name="reset_btn" />
 			<text name="upload_fee">
-				上傳費用：L$ [FEE]
+				上傳費用：[FEE] L$
 			</text>
 			<text name="prim_weight">
-				土地衝擊量：[EQ]
+				土地影響：[EQ]
 			</text>
 			<text name="download_weight">
 				下載：[ST]
@@ -275,11 +474,66 @@
 			<text name="server_weight">
 				伺服器：[SIM]
 			</text>
-			<text name="warning_title">
-				附註：
+			<panel name="price_breakdown_panel">
+				<text name="price_breakdown_title">
+					成本明細
+				</text>
+				<text name="price_breakdown_labels">
+下載:
+物理:
+執行個體:
+紋理:
+模型:
+				</text>
+			</panel>
+			<!--
+			<text name="streaming_breakdown_labels">
+流媒體/下載:
+高:
+中:
+低:
+最低:
+			</text>
+			-->
+			<panel name="physics_costs_panel">
+				<text name="physics_breakdown_title">
+					物理成本
+				</text>
+				<text name="physics_breakdown_labels">
+基礎外殼:
+網格:
+分析:
+				</text>
+			</panel>
+			<panel name="preview_controls_panel">
+				<panel name="preview_controls_inner_panel">
+					<text name="preview_controls_title">
+						預覽控制
+					</text>
+					<combo_box name="preview_lod_combo" tool_tip="在預覽中顯示的細節層次">
+						<combo_item name="high">高</combo_item>
+						<combo_item name="medium">中</combo_item>
+						<combo_item name="low">低</combo_item>
+						<combo_item name="lowest">最低</combo_item>
+					</combo_box>
+				</panel>
+				<check_box label="邊緣" name="show_edges" />
+				<check_box label="紋理" name="show_textures" />
+				<check_box label="UV輔助" name="show_uv_guide" />
+				<check_box label="物理" name="show_physics" />
+				<text name="exploder_label" width="105">
+					展開預覽:
+				</text>
+				<slider name="physics_explode" width="75" />
+				<check_box label="關節位置" name="show_joint_positions" />
+				<check_box label="關節位置涵蓋" name="show_joint_overrides" />
+				<check_box label="皮膚權重" name="show_skin_weight" />
+			</panel>
+			<text name="warning_title" width="60">
+				注意:
 			</text>
 			<text name="warning_message">
-				你無權上傳網面模型。 [[VURL] 瞭解如何]通過認證。
+				你無權上傳網格模型。 [[VURL] 瞭解如何]通過認證。
 			</text>
 			<text name="status">
 				[STATUS]
@@ -289,31 +543,4 @@
 	<text name="lod_label">
 		預覽：
 	</text>
-	<panel name="right_panel">
-		<combo_box name="preview_lod_combo" tool_tip="要在呈像預覽中察看的細節層次">
-			<combo_item name="high">
-				高
-			</combo_item>
-			<combo_item name="medium">
-				中
-			</combo_item>
-			<combo_item name="low">
-				低
-			</combo_item>
-			<combo_item name="lowest">
-				最低
-			</combo_item>
-		</combo_box>
-		<text name="label_display">
-			顯示…
-		</text>
-		<check_box label="邊" name="show_edges"/>
-		<check_box label="物理" name="show_physics"/>
-		<check_box label="材質" name="show_textures"/>
-		<check_box label="表皮重量" name="show_skin_weight"/>
-		<check_box label="接點" name="show_joint_positions"/>
-		<text name="physics_explode_label">
-			預覽伸展：
-		</text>
-	</panel>
 </floater>

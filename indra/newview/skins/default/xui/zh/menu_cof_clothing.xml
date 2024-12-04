@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="COF Clothing">
-	<menu_item_call label="脫下" name="take_off"/>
-	<menu_item_call label="編輯" name="edit"/>
-	<menu_item_call label="取代" name="replace"/>
+	<menu_item_call label="脫下" name="take_off" />
+	<menu_item_call label="編輯" name="edit" />
+	<menu_item_call label="替換" name="replace" />
+	<menu_item_call label="建立" name="create_new" />
 </context_menu>

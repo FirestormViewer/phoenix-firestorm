@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Object Pie">
+	<pie_slice label="打開" name="Open" />
+	<pie_slice label="建造" name="Build" />
+	<pie_slice label="觸碰" name="Pie Object Touch" />
+	<pie_slice label="坐在這裡" name="Pie Object Sit" />
+	<pie_slice label="起立" name="Object Stand Up" />
+	<pie_slice label="購買" name="Buy..." />
+	<pie_menu label="取得 &gt;" name="Take Submenu">
+		<pie_slice label="單獨複製" name="Take Copy Separate" />
+		<pie_slice label="取得副本" name="Take Copy" />
+		<pie_slice label="取得" name="Take" />
+		<pie_slice label="合併取得" name="Take combined" />
+		<pie_slice label="合併複製" name="Take Copy combined" />
+		<pie_slice label="單獨取得" name="Take Separate" />
+	</pie_menu>
+	<pie_slice label="支付" name="Pay..." />
+	<pie_menu label="更多 &gt;" name="Object Pie More 1">
+		<pie_slice label="刪除" name="Delete" />
+		<pie_slice label="穿上" name="Wear" />
+		<pie_slice label="取得副本" name="Take Copy"/>
+		<pie_menu label="附著到HUD &gt;" name="Pie Object Attach HUD" />
+		<pie_menu label="附著 &gt;" name="Pie Object Attach">
+			<pie_menu label="增強型骨架 &gt;" name="Enhanced Skeleton">
+				<pie_slice label="右翼" name="Right Wing" />
+				<pie_slice label="鼠蹊" name="Groin" />
+				<pie_slice label="尾巴根部" name="Tail Base" />
+				<pie_slice label="尾巴末梢" name="Tail Tip" />
+				<pie_slice label="左翼" name="Left Wing" />
+				<pie_slice label="左後腳" name="Left Hind Foot" />
+				<pie_menu label="更多 &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="替代右耳" name="Alt Right Ear" />
+					<pie_slice label="替代右眼" name="Alt Right Eye" />
+					<pie_slice label="舌頭" name="Tongue" />
+					<pie_slice label="替代左眼" name="Alt Left Eye" />
+					<pie_slice label="替代左耳" name="Alt Left Ear" />
+					<pie_slice label="左無名指" name="Left Ring Finger" />
+					<pie_slice label="顎" name="Jaw" />
+					<pie_slice label="右無名指" name="Right Ring Finger" />
+				</pie_menu>
+				<pie_slice label="右後腳" name="Right Hind Foot" />
+			</pie_menu>
+		</pie_menu>
+		<pie_slice label="退回" name="Return..." />
+		<pie_menu label="更多 &gt;" name="Object Pie More 2">
+			<pie_menu name="ResetMenu" label="重設 &gt;">
+				<pie_slice label="重新整理紋理" name="Texture Refresh" />
+				<pie_slice label="骨架" name="Reset Skeleton" />
+			</pie_menu>
+			<pie_menu name="DerenderMenu" label="隱藏 &gt;">
+				<pie_slice label="封鎖" name="DerenderPermanent" />
+				<pie_slice label="暫時" name="Derender" />
+			</pie_menu>
+			<pie_slice label="違規檢舉" name="Report Abuse..." />
+			<pie_menu name="ExportMenu" label="另存為 &gt;">
+				<pie_slice label="備份" name="Backup" />
+				<pie_slice label="Collada" name="Collada" />
+				<pie_slice label="轉儲 XML" name="Dump XML" />
+			</pie_menu>
+			<pie_menu label="尋路 &gt;" name="Pathfinding">
+				<pie_slice label="在聯結集顯示" name="show_in_linksets" />
+				<pie_slice label="在角色中顯示" name="show_in_characters" />
+			</pie_menu>
+			<pie_menu name="mute_menu" label="封鎖 &gt;">
+				<pie_slice label="封鎖" name="Object Mute" />
+				<pie_slice label="粒子所有者" name="Mute Particle" />
+			</pie_menu>
+			<pie_menu label="指令碼 &gt;" name="ScriptsMenu">
+				<pie_slice label="編譯（Mono）" name="CompileMono" />
+				<pie_slice label="編譯（LSL）" name="CompileLSL" />
+				<pie_slice label="重設指令碼" name="Object Reset Scripts" />
+				<pie_slice label="運行指令碼" name="Object Set Scripts to Running" />
+				<pie_slice label="停止指令碼" name="Object Set Scripts to Not Running" />
+				<pie_slice label="移除指令碼" name="Remove Scripts From Selection" />
+				<pie_slice label="指令碼資訊" name="ScriptInfo" />
+			</pie_menu>
+			<pie_slice label="檢查" name="Object Inspect" />
+		</pie_menu>
+		<pie_slice label="支付" name="Buy..." />
+	</pie_menu>
+	<pie_slice label="編輯" name="Edit..." />
+</pie_menu>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Avatar Profile Menu Self">
+	<menu_item_call label="編輯顯示名" name="edit_display_name" />
+	<menu_item_call label="編輯伴侶" name="edit_partner" />
+	<menu_item_call label="上傳相片" name="upload_photo" />
+	<menu_item_call label="更改相片" name="change_photo" />
+	<menu_item_call label="移除相片" name="remove_photo" />
+	<menu_item_call label="複製顯示名" name="copy_display_name" />
+	<menu_item_call label="複製使用者名稱" name="copy_name" />
+	<menu_item_call label="複製使用者ID" name="copy_id" />
+</toggleable_menu>

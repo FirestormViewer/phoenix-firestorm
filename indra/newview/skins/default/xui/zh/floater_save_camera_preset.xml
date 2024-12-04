@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="save_camera_preset" title="儲存相機預設">
+	<string name="btn_label_save">儲存</string>
+	<string name="btn_label_replace">替換</string>
+	<radio_group name="radio_save_preset">
+		<radio_item label="儲存為新預設" name="new_preset" />
+		<radio_item label="替換預設" name="replace_preset" />
+	</radio_group>
+	<button label="儲存" name="save" />
+	<button label="取消" name="cancel" />
+</floater>

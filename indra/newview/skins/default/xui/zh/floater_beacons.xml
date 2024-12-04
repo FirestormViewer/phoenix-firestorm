@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="指標">
+<floater name="beacons" title="信標">
 	<panel name="beacons_panel">
 		<text name="label_show">
 			顯示：
 		</text>
-		<check_box label="指標" name="beacons"/>
-		<check_box label="高亮顯示" name="highlights"/>
-		<text name="beacon_width_label" tool_tip="指標寬度">
+		<check_box label="光源邊界框" name="lights_bounding_boxes" />
+		<check_box label="信標" name="beacons" />
+		<check_box label="高亮顯示" name="highlights" />
+		<check_box label="瀏覽器視窗中的游標資訊文字" name="FSRenderBeaconText" />
+		<text name="beacon_width_label" tool_tip="游標寬度">
 			寬：
 		</text>
 		<text name="label_objects">
-			對象物件：
+			目標物件：
 		</text>
-		<check_box label="物理性" name="physical"/>
-		<check_box label="有腳本" name="scripted"/>
-		<check_box label="僅可觸碰" name="touch_only"/>
-		<check_box label="聲音來源" name="sounds"/>
-		<check_box label="例子來源" name="particles"/>
-		<check_box label="媒體來源" name="moapbeacon"/>
-		<check_box label="太陽" name="sun"/>
-		<check_box label="月亮" name="moon"/>
+		<check_box label="物理性" name="physical" />
+		<check_box label="有指令碼" name="scripted" />
+		<check_box label="僅可觸碰" name="touch_only" />
+		<check_box label="聲音來源" name="sounds" />
+		<check_box label="粒子來源" name="particles" />
+		<check_box label="媒體來源" name="moapbeacon" />
+		<text name="label_direction">
+			顯示方向
+		</text>
+		<check_box label="太陽" name="sun" />
+		<check_box label="月亮" name="moon" />
 	</panel>
 </floater>

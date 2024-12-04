@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_people_contact_sets_gear">
+	<menu_item_call label="檢視檔案" name="profile" />
+	<menu_item_call label="私聊" name="im" />
+	<menu_item_call label="傳送瞬間傳送邀請" name="teleport" />
+	<menu_item_call label="設定別名" name="set_pseudonym" />
+	<menu_item_call label="移除別名" name="remove_pseudonym" />
+	<menu_item_call label="移除顯示名" name="remove_displayname" />
+	<menu_item_call label="聯絡人分組設定" name="set_config" />
+</toggleable_menu>

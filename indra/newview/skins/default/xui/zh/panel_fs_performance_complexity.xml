@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_complexity">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="attachments_title">
+		化身附件複雜度
+	</text>
+	<text name="tot_att_count">
+		總數: 50 (120000.10微妙)
+	</text>
+	<text name="attachments_desc1">
+		附件增加了化身的複雜性並使其彩現速度變慢。
+	</text>
+	<text name="attachments_desc2">
+		此視窗顯示了您化身的所有附件。
+	</text>
+	<text name="attachments_desc3">
+		您可以透過單擊「X」來簡單選擇和移除附件。
+	</text>
+	<name_list name="obj_list">
+		<name_list.columns label="時間(微秒)" name="art_value" tool_tip="彩現附件所需的微秒數。" />
+		<name_list.columns name="complex_value" label="複雜度" tool_tip="附件複雜度 (ARC)" width="55" />
+		<name_list.columns label="附件名稱" tool_tip="單擊「X」移除附件。" name="name" />
+	</name_list>
+</panel>

@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Map" title="迷你地圖">
+<floater name="Map" title="小地圖">
+	<floater.string name="ParcelSalePriceMsg">
+		價格: [PRICE]L$ ([PRICE_PER_SQM]L$/平方公尺)
+	</floater.string>
+	<floater.string name="ParcelSaleAreaMsg">
+		面積：[AREA]平方公尺
+	</floater.string>
+	<floater.string name="ParcelOwnerMsg">
+		業主：[PARCEL_OWNER]
+	</floater.string>
+	<floater.string name="RegionNameMsg">
+		區域：[REGION_NAME]
+	</floater.string>
+	<floater.string name="ToolTipHintMsg">
+		雙擊打開地圖
+	</floater.string>
+	<floater.string name="AltToolTipHintMsg">
+		雙擊進行傳送
+	</floater.string>
 	<floater.string name="mini_map_caption">
-		迷你地圖
+		小地圖
 	</floater.string>
 	<text label="北" name="floater_map_north">
 		北
 	</text>
-	<text label="E" name="floater_map_east">
-		E
+	<text label="東" name="floater_map_east">
+		東
 	</text>
 	<text label="西" name="floater_map_west">
 		西

@@ -1,20 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="設定" name="Input panel">
-	<tab_container name="tabs">
-		<panel label="網路" name="tab-conn">
-			<text name="Maximum bandwidth">
-				最大頻寬 ([https://wiki.firestormviewer.org/fs_speedtest 你需要一个建议?]):
-			</text>
-			<check_box label="自訂埠" name="connection_port_enabled"/>
-			<spinner label="埠號:" name="connection_port"/>
-			<text name="Web:">
-				網頁:
-			</text>
-			<check_box label="接受 cookies" name="cookies_enabled"/>
-			<check_box label="啟用 Javascript" name="browser_javascript_enabled"/>
-			<check_box label="啟用媒體瀏覽的突顯式視窗" name="media_popup_enabled"/>
-			<button label="代理伺服器設定" label_selected="代理伺服器設定" name="set_proxy"/>
+<panel label="初始化" name="Input panel">
+	<tab_container name="tabs" label="初始化">
+		<panel label="連線" name="tab-conn">
+			<text name="Maximum bandwidth">最大頻寬（[https://wiki.firestormviewer.org/fs_speedtest 需要幫助？]）：</text>
+			<text name="text_box2">Kbps</text>
+			<text name="NetworkPrefText1">Wi-Fi</text>
+			<text name="NetworkPrefText2">DSL</text>
+			<text name="NetworkPrefText3">光纜</text>
+			<text name="NetworkPrefText4">可能有問題</text>
+			<check_box label="自訂埠" name="connection_port_enabled" />
+			<spinner label="號碼：" name="connection_port" />
+			<text name="Web:">網路瀏覽器：</text>
+			<radio_group name="preferred_browser_behavior">
+				<radio_item label="使用我的瀏覽器（Chrome、Firefox、Edge）打開所有連結" name="new_external" tool_tip="使用系統預設瀏覽器打開所有連結和幫助。如果您在全螢幕模式下，不建議使用此選項。" />
+				<radio_item label="僅使用內建瀏覽器打開Second Life連結" name="new_internal" tool_tip="使用預設瀏覽器打開幫助和Web連結。僅當涉及到LindenLab/SecondLife連結時才會使用內建瀏覽器。" />
+				<radio_item label="使用內建瀏覽器打開所有連結" name="new_internal_all" />
+			</radio_group>
+			<text name="numberwebfloaters_label">最大瀏覽器視窗數：</text>
+			<combo_box tool_tip="內建瀏覽器中可以同時打開的最大瀏覽器視窗數" name="web_number_combobox">
+				<combo_box.item label="無限制" name="web_unlimited" />
+				<combo_box.item label="一個視窗" name="web_1" />
+				<combo_box.item label="五個視窗" name="web_5" />
+				<combo_box.item label="十個視窗" name="web_10" />
+			</combo_box>
+			<button label="清除瀏覽器快取" name="ClearWebBrowserCache" />
+			<check_box label="接受 Cookies" name="cookies_enabled" />
+			<check_box label="啟用 JavaScript" name="browser_javascript_enabled" />
+			<check_box label="在瀏覽器中啟用彈出視窗" name="media_popup_enabled" />
+			<button label="設定代理設定" label_selected="配置代理設定" name="set_proxy" />
+			<text name="home_page_label_l">瀏覽器首頁：</text>
 		</panel>
-		<panel label="地点" name="tab-dir" />
+		<panel label="檔案夾" name="tab-dir">
+			<text name="cache_size_label_l">快取大小（[https://wiki.firestormviewer.org/cache 需要幫助？]）：</text>
+			<text name="text_box5">mb</text>
+			<text name="asset_cache_size_label_l">
+				資料資源（資產）快取：
+			</text>
+			<text name="asset_text_box5">
+				mb
+			</text>
+			<button label="清除庫存快取" name="ClearInventoryCache" left="350" width="180" />
+			<text name="Cache location">快取位置：</text>
+			<button label="打開" label_selected="打開" name="open_cache" />
+			<button label="設定" width="55" label_selected="設定" name="set_cache" />
+			<button label="重設" width="75" label_selected="重設" name="reset_cache" />
+			<button label="清除" width="45" label_selected="清除" name="clear_cache" />
+			<text name="Sound Cache location">音訊快取位置：</text>
+			<button label="打開" label_selected="打開" name="open_sound_cache" />
+			<button label="設定" width="55" label_selected="設定" name="set_sound_cache" />
+			<button label="重設" width="75" label_selected="重設" name="reset_sound_cache" />
+			<check_box label="退出時不刪除解壓的 DSF（音訊）快取" tool_tip="如果啟用，檢視器將在退出時不刪除解壓的快取聲音，從而實作更快的播放。 請注意：啟用此選項將快速填滿您的快取，並且不會受到定義的配額限制。這可能導致磁碟使用過量。預設情況下未啟用。" name="keep_unpacked_cache" />
+			<text name="log_path_desc">聊天記錄和記錄路徑：</text>
+			<button label="打開" label_selected="打開" name="open_log_path_button-panelsetup" />
+			<button label="設定" label_selected="設定" name="log_path_button-panelsetup" />
+			<button label="重設" label_selected="重設" name="reset_logpath" />
+			<button label="崩潰日誌" label_selected="崩潰日誌" name="browse_crashlogs" />
+			<button label="設定檔案夾" label_selected="設定資料夾" name="browse_settingsdir" />
+		</panel>
 	</tab_container>
 </panel>

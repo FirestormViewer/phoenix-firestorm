@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="採樣" name="panel_settings_terrain_transform">
+	<text name="terrain0_label">
+		1
+	</text>
+	<text name="terrain1_label">
+		2
+	</text>
+	<text name="terrain2_label">
+		3
+	</text>
+	<text name="terrain3_label">
+		4
+	</text>
+	<text name="terrain0ScaleU_label">
+		u方向縮放
+	</text>
+	<spinner label="u方向縮放" name="terrain0ScaleU" />
+	<spinner label="u方向縮放" name="terrain1ScaleU" />
+	<spinner label="u方向縮放" name="terrain2ScaleU" />
+	<spinner label="u方向縮放" name="terrain3ScaleU" />
+	<text name="terrain0ScaleV_label">
+		v方向縮放
+	</text>
+	<spinner label="v方向縮放" name="terrain0ScaleV" />
+	<spinner label="v方向縮放" name="terrain1ScaleV" />
+	<spinner label="v方向縮放" name="terrain2ScaleV" />
+	<spinner label="v方向縮放" name="terrain3ScaleV" />
+	<text name="terrain0Rotation_label">
+		旋轉
+	</text>
+	<spinner label="旋轉" name="terrain0Rotation" />
+	<spinner label="旋轉" name="terrain1Rotation" />
+	<spinner label="旋轉" name="terrain2Rotation" />
+	<spinner label="旋轉" name="terrain3Rotation" />
+	<text name="terrain0OffsetU_label">
+		u方向偏移
+	</text>
+	<spinner label="u方向偏移" name="terrain0OffsetU" />
+	<spinner label="u方向偏移" name="terrain1OffsetU" />
+	<spinner label="u方向偏移" name="terrain2OffsetU" />
+	<spinner label="u方向偏移" name="terrain3OffsetU" />
+	<text name="terrain0OffsetV_label">
+		v方向偏移
+	</text>
+	<spinner label="v方向偏移" name="terrain0OffsetV" />
+	<spinner label="v方向偏移" name="terrain1OffsetV" />
+	<spinner label="v方向偏移" name="terrain2OffsetV" />
+	<spinner label="v方向偏移" name="terrain3OffsetV" />
+</panel>

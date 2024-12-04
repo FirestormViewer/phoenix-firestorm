@@ -1,33 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Object Pie">
-	<menu_item_call label="觸碰" name="Object Touch"/>
-	<menu_item_call label="編輯" name="Edit..."/>
-	<menu_item_call label="建造" name="Build"/>
-	<menu_item_call label="打開" name="Open"/>
-	<menu_item_call label="坐在這裡" name="Object Sit"/>
-	<menu_item_call label="起立" name="Object Stand Up"/>
-	<menu_item_call label="物件檔案" name="Object Inspect"/>
-	<menu_item_call label="放大" name="Zoom In"/>
-	<menu_item_call label="在聯結集裡顯示" name="show_in_linksets"/>
-	<menu_item_call label="在角色中顯示" name="show_in_characters"/>
+	<menu_item_call label="觸碰" name="Object Touch" />
+	<menu_item_call label="編輯" name="Edit..." />
+	<menu_item_call label="編輯PBR材質" name="EditGLTFMaterial" />
+	<menu_item_call label="建造" name="Build" />
+	<menu_item_call label="打開" name="Open" />
+	<menu_item_call label="坐在這裡" name="Object Sit" />
+	<menu_item_call label="起立" name="Object Stand Up" />
+	<context_menu label="物件" name="Object Features">
+		<menu_item_call label="物件檔案" name="Object Inspect" />
+		<menu_item_call label="檢查" name="Object_Inspect_Floater" />
+		<menu_item_call label="指令碼資訊" name="ScriptInfo" />
+		<menu_item_call label="聯結" name="Object Link" />
+		<menu_item_call label="取消聯結" name="Object Unlink" />
+		<menu_item_check label="編輯聯結部分" name="Object Edit Linked Parts" />
+		<menu_item_call label="編譯（Mono）" name="Mono" />
+		<menu_item_call label="編譯（LSL）" name="LSL" />
+		<menu_item_call label="重設指令碼" name="Object Reset Scripts" />
+		<menu_item_call label="運行指令碼" name="Object Set Scripts to Running" />
+		<menu_item_call label="停止指令碼" name="Object Set Scripts to Not Running" />
+		<menu_item_call label="移除指令碼" name="Remove Scripts From Selection" />
+	</context_menu>
+	<menu_item_call label="放大" name="Zoom In" />
+	<menu_item_call label="在區域內顯示" name="show_in_linksets" />
+	<menu_item_call label="在角色中顯示" name="show_in_characters" />
 	<context_menu label="穿上" name="Put On">
-		<menu_item_call label="穿上" name="Wear"/>
-		<menu_item_call label="添加" name="Add"/>
-		<context_menu label="附著" name="Object Attach"/>
-		<context_menu label="附加擡頭顯示" name="Object Attach HUD"/>
+		<menu_item_call label="穿上" name="Wear" />
+		<menu_item_call label="新增" name="Add" />
+		<context_menu label="附著" name="Object Attach" />
+		<context_menu label="附著到HUD" name="Object Attach HUD" />
 	</context_menu>
 	<context_menu label="管理" name="Remove">
-		<menu_item_call label="違規舉報" name="Report Abuse..."/>
-		<menu_item_call label="封鎖" name="Object Mute"/>
-		<menu_item_call label="解除封鎖" name="Object Unmute"/>
-		<menu_item_call label="退回" name="Return..."/>
+		<menu_item_call label="違規檢舉" name="Report Abuse..." />
+		<menu_item_call label="封鎖" name="Object Mute" />
+		<menu_item_call label="解除封鎖" name="Object Unmute" />
 	</context_menu>
+	<menu_item_call label="重新整理紋理" name="Texture Refresh" />
+	<menu_item_call label="隱藏" name="Derender" />
+	<menu_item_call label="永久隱藏&amp;封鎖" name="DerenderPermanent" />
+	<menu_item_call label="退回" name="Return..." />
 	<menu_item_call label="取得" name="Pie Object Take"/>
 	<menu_item_call label="取得副本" name="Take Copy"/>
-	<menu_item_call label="支付" name="Pay..."/>
-	<menu_item_call label="購買" name="Buy..."/>
-	<menu_item_call label="刪除" name="Delete"/>
-	<menu_item_call label="封鎖粒子所有人" name="Mute Particle"/>
-	<menu_item_call label="傾印 XML" name="Dump XML"/>
-	<menu_item_call label="重設骨架" name="Reset Skeleton"/>
+	<context_menu label="取得多個" name="Take Multiple">
+		<menu_item_call label="取得合併物件" name="Take combined" />
+		<menu_item_call label="取得合併對象副本" name="Take Copy combined" />
+		<menu_item_call label="取得獨立物件" name="Take Separate" />
+		<menu_item_call label="取得獨立物件副本" name="Take Copy Separate" />
+	</context_menu>
+	<menu_item_call label="支付" name="Pay..." />
+	<menu_item_call label="購買" name="Buy..." />
+	<context_menu label="另存為" name="Export Menu">
+		<menu_item_call label="備份" name="Backup" />
+		<menu_item_call label="Collada" name="Collada" />
+	</context_menu>
+	<menu_item_call label="刪除" name="Delete" />
+	<menu_item_call label="封鎖粒子所有者" name="Mute Particle" />
+	<menu_item_call label="轉儲 XML" name="Dump XML" />
+	<menu_item_call label="重設骨架" name="Reset Skeleton" />
 </context_menu>

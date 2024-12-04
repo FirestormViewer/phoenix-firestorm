@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="camera_preset_item">
+	<text name="preset_name" value="預設選項" />
+	<button name="delete_btn" tool_tip="刪除預設" />
+	<button name="reset_btn" tool_tip="將預設重設為預設值" />
+</panel>

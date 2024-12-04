@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="活動" name="panel_ls_events">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			搜尋條件：
+		</text>
+		<radio_group name="events_search_mode">
+			<radio_item label="進行中和即將到來的活動" name="current" />
+			<radio_item label="按日期" name="date" />
+		</radio_group>
+		<combo_box name="events_category">
+			<combo_box.item label="所有類別" name="any" />
+			<combo_box.item label="論壇" name="discussion" />
+			<combo_box.item label="體育" name="sports" />
+			<combo_box.item label="音樂" name="music" />
+			<combo_box.item label="商業" name="commercial" />
+			<combo_box.item label="俱樂部/娛樂" name="nightlife" />
+			<combo_box.item label="遊戲/比賽" name="games" />
+			<combo_box.item label="戲劇" name="pageants" />
+			<combo_box.item label="教育" name="education" />
+			<combo_box.item label="藝術和文化" name="arts" />
+			<combo_box.item label="慈善" name="charity" />
+			<combo_box.item label="其他" name="misc" />
+		</combo_box>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_events">
+			<columns label="活動名稱" name="name" />
+			<columns label="日期/時間" name="date" />
+			<columns label="時間" name="time" />
+		</scroll_list>
+		<button label="昨天" name="events_yesterday" />
+		<button label="今天" name="events_today" />
+		<button label="明天" name="events_tomorrow" />
+		<button label="上一頁" name="events_back" />
+		<button label="下一頁" name="events_next" />
+	</panel>
+</panel>

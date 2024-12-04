@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="top_objects" title="排行最高的物件">
 	<floater.string name="top_scripts_title">
-		排行最高的腳本
+		排行最高的指令碼
 	</floater.string>
 	<floater.string name="top_scripts_text">
-		[COUNT]個腳本共需時[TIME]毫秒，耗用[MEMORY]KB
+		[COUNT]個指令碼共需時[TIME]毫秒，耗用[MEMORY]KB
 	</floater.string>
 	<floater.string name="scripts_score_label">
 		時間
 	</floater.string>
 	<floater.string name="top_colliders_title">
-		最常碰撞物項
+		最常碰撞物件
 	</floater.string>
 	<floater.string name="top_colliders_text">
 		排行最高的 [COUNT] 個物件可能發生多次碰撞
@@ -19,7 +19,7 @@
 		積分
 	</floater.string>
 	<floater.string name="none_descriptor">
-		查無結果。
+		沒有查到結果。
 	</floater.string>
 	<floater.string name="URLs">
 		URL
@@ -31,33 +31,36 @@
 		載入中...
 	</text>
 	<scroll_list name="objects_list">
-		<scroll_list.columns label="積分" name="score"/>
-		<scroll_list.columns label="名稱" name="name"/>
-		<scroll_list.columns label="所有人" name="owner"/>
-		<scroll_list.columns label="位置" name="location"/>
-		<scroll_list.columns label="地段" name="parcel"/>
-		<scroll_list.columns label="日期" name="time"/>
-		<scroll_list.columns label="URL" name="URLs"/>
-		<scroll_list.columns label="記憶體 (KB)" name="memory"/>
+		<scroll_list.columns label="評分" name="score" />
+		<scroll_list.columns label="名稱" name="name" />
+		<scroll_list.columns label="所有者" name="owner" />
+		<scroll_list.columns label="位置" name="location" />
+		<scroll_list.columns label="地塊" name="parcel" />
+		<scroll_list.columns label="日期" name="time" />
+		<scroll_list.columns label="URL" name="URLs" />
+		<scroll_list.columns label="記憶體(KB)" name="memory" width="65" />
 	</scroll_list>
 	<text name="id_text">
 		物件 ID:
 	</text>
-	<button label="顯示指標" name="show_beacon_btn"/>
+	<button label="顯示信標" name="show_beacon_btn" />
 	<text name="obj_name_text">
 		物件名稱：
 	</text>
-	<button label="過濾器" name="filter_object_btn"/>
+	<button label="過濾器" name="filter_object_btn" />
 	<text name="owner_name_text">
-		所有人：
+		所有者：
 	</text>
-	<button label="過濾器" name="filter_owner_btn"/>
+	<button label="過濾器" name="filter_owner_btn" />
 	<text name="parcel_name_text">
-		地段：
+		地塊：
 	</text>
-	<button label="過濾器" name="filter_parcel_btn"/>
-	<button label="退回所選擇的" name="return_selected_btn"/>
-	<button label="全部退回" name="return_all_btn"/>
-	<button label="停用所選的" name="disable_selected_btn"/>
-	<button label="全部停用" name="disable_all_btn"/>
+	<button label="過濾器" name="filter_parcel_btn" />
+	<button label="重新整理" name="refresh_btn" />
+	<button label="退回所選擇的" name="return_selected_btn" />
+	<button label="全部退回" name="return_all_btn" />
+	<button label="傳送到" name="teleport_to_btn" />
+	<button label="個人檔案" name="profile_btn" />
+	<button label="指令碼資訊" name="script_info_btn" />
+	<button label="地產：踢出" name="estate_kick_btn" />
 </floater>

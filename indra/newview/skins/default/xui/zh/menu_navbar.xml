@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Navbar Menu">
-	<menu_item_check label="顯示座標" name="Show Coordinates"/>
-	<menu_item_check label="顯示地段屬性" name="Show Parcel Properties"/>
-	<menu_item_call label="地標" name="Landmark"/>
-	<menu_item_call label="剪下" name="Cut"/>
-	<menu_item_call label="恚庨" name="Copy"/>
-	<menu_item_call label="貼上" name="Paste"/>
-	<menu_item_call label="刪除" name="Delete"/>
-	<menu_item_call label="全選" name="Select All"/>
+	<menu_item_check label="顯示坐標" name="Show Coordinates" />
+	<menu_item_check label="顯示地塊屬性" name="Show Parcel Properties" />
+	<menu_item_call label="地標" name="Landmark" />
+	<menu_item_call label="剪下" name="Cut" />
+	<menu_item_call label="複製" name="Copy" />
+	<menu_item_call label="黏貼" name="Paste" />
+	<menu_item_call label="刪除" name="Delete" />
+	<menu_item_call label="全選" name="Select All" />
 </menu>

@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="事物" name="Outfits">
+<panel name="Outfits" label="裝扮">
 	<panel.string name="wear_outfit_tooltip">
 		穿上所選擇的裝扮
 	</panel.string>
 	<panel.string name="wear_items_tooltip">
 		穿上所選擇的物件
 	</panel.string>
+	<panel.string name="cof_tab_label">
+		穿著 ([COUNT]/[MAX] 件)
+	</panel.string>
 	<tab_container name="appearance_tabs">
-		<panel label="裝扮陳列" name="outfit_gallery_tab"/>
-		<panel label="我的裝扮" name="outfitslist_tab"/>
-		<panel label="目前穿著" name="cof_tab"/>
+		<panel label="裝扮陳列" name="outfit_gallery_tab" />
+		<panel label="我的裝扮" name="outfitslist_tab" />
+		<panel label="當前穿戴" name="cof_tab" />
 	</tab_container>
 	<panel name="bottom_panel">
 		<layout_stack name="bottom_panel_ls">
 			<layout_panel name="save_btn_lp">
-				<button label="节省" name="save_btn"/>
+				<button label="儲存" name="save_btn" />
 			</layout_panel>
 			<layout_panel name="save_as_btn_lp">
 				<button label="另存為" name="save_as_btn" />
 			</layout_panel>
 			<layout_panel name="wear_btn_lp">
-				<button label="穿上" name="wear_btn"/>
+				<button label="穿上" name="wear_btn" />
 			</layout_panel>
 		</layout_stack>
 	</panel>

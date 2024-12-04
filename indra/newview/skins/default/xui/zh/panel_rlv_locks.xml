@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="啟用RLV限制" name="panel_rlvLocks">
+	<scroll_list name="lock_list">
+		<scroll_list.columns label="類型" name="lock_type" />
+		<scroll_list.columns label="方法" name="lock_addrem" />
+		<scroll_list.columns label="物件/目標點" name="lock_target" />
+		<scroll_list.columns label="限制源" name="lock_origin" />
+	</scroll_list>
+	<panel name="bottom_panel">
+		<button label="重新整理" name="refresh_btn" />
+	</panel>
+</panel>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="gltf asset editor">
+	<floater.string name="floater_title" value="GLTF 場景編輯器" />
+	<floater.string name="scene_tittle" value="場景" />
+	<floater.string name="node_tittle" value="節點" />
+	<floater.string name="mesh_tittle" value="網格" />
+	<floater.string name="skin_tittle" value="皮膚" />
+	<layout_stack name="main_layout">
+		<layout_panel name="transforms_panel">
+			<menu_button name="clipboard_pos_btn" tool_tip="黏貼選項" />
+			<text name="label position" tool_tip="位置（米）">
+				位置 (m)
+			</text>
+			<menu_button name="clipboard_size_btn" tool_tip="黏貼選項" />
+			<text name="label size" tool_tip="大小（米）">
+				大小 (m)
+			</text>
+			<menu_button name="clipboard_rot_btn" tool_tip="黏貼選項" />
+			<text name="label rotation" tool_tip="旋轉（度）">
+				旋轉 (°)
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -4,5 +4,5 @@
   Single instance - only have one at a time, recycle it each spawn
 -->
 <floater name="floater_voice_volume" title="音量">
-	<slider name="volume_slider" tool_tip="音量" value="0.5"/>
+	<slider name="volume_slider" tool_tip="音量" />
 </floater>

@@ -1,24 +1,62 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Attachment Pie">
-	<menu_item_call label="觸碰" name="Attachment Object Touch"/>
-	<menu_item_call label="編輯" name="Edit..."/>
-	<menu_item_call label="卸下" name="Detach"/>
-	<menu_item_call label="坐下" name="Sit Down Here"/>
-	<menu_item_call label="起立" name="Stand Up"/>
+	<menu_item_call label="觸碰" name="Attachment Object Touch" />
+	<menu_item_call label="在庫存中顯示" name="Show original" />
+	<menu_item_call label="編輯" name="Edit..." />
+	<menu_item_call label="編輯PBR材質" name="EditGLTFMaterial" />
+	<menu_item_call label="卸下" name="Detach" />
+	<context_menu label="另存為" name="Export Menu">
+		<menu_item_call label="備份" name="Backup" />
+		<menu_item_call label="Collada" name="Collada" />
+	</context_menu>
+	<menu_item_call label="坐下" name="Sit Down Here" />
+	<menu_item_call label="起立" name="Stand Up" />
 	<context_menu label="外觀" name="AppearanceSubmenu">
-		<menu_item_call label="我的外觀" name="Change Outfit"/>
-		<menu_item_call label="編輯我的體形" name="Edit Shape"/>
-		<menu_item_call label="懸浮高度" name="Hover Height"/>
-		<menu_item_call label="重設骨架" name="Reset Skeleton"/>
-		<menu_item_call label="重設骨架和動作" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="當前裝扮" name="NowWearing" />
+		<menu_item_call label="更換裝扮" name="Change Outfit" />
+		<menu_item_call label="編輯我的身形" name="Edit Shape" />
+		<menu_item_call label="編輯裝扮" name="Edit Outfit Parts" />
+		<menu_item_call label="懸浮高度" name="Hover Height" />
+		<menu_item_call label="重設骨架" name="Reset Skeleton" />
+		<menu_item_call label="重設骨架和動畫" name="Reset Skeleton And Animations" />
+		<menu_item_call label="重設網格細節層次" name="Reset Mesh LOD" />
 	</context_menu>
-	<context_menu label="社區" name="CommunitySubmenu">
-		<menu_item_call label="我的朋友" name="Friends..."/>
-		<menu_item_call label="我的群組" name="Groups..."/>
-		<menu_item_call label="我的個人檔案" name="Profile..."/>
+	<context_menu label="脫下" name="Take Off &gt;">
+		<context_menu label="裝扮" name="Clothes &gt;">
+			<menu_item_call label="襯衫" name="Shirt" />
+			<menu_item_call label="褲子" name="Pants" />
+			<menu_item_call label="裙子" name="Skirt" />
+			<menu_item_call label="鞋子" name="Shoes" />
+			<menu_item_call label="襪子" name="Socks" />
+			<menu_item_call label="外套" name="Jacket" />
+			<menu_item_call label="手套" name="Gloves" />
+			<menu_item_call label="內衣" name="Self Undershirt" />
+			<menu_item_call label="內褲" name="Self Underpants" />
+			<menu_item_call label="刺青" name="Self Tattoo" />
+			<menu_item_call label="物理" name="Self Physics" />
+			<menu_item_call label="Alpha" name="Self Alpha" />
+			<menu_item_call label="所有裝扮" name="All Clothes" />
+		</context_menu>
+		<context_menu label="HUD" name="Detach Self HUD" />
+		<context_menu label="卸下" name="Detach Self" />
+		<menu_item_call label="全部卸下" name="Detach All" />
 	</context_menu>
-	<menu_item_call label="材質除錯" name="Debug..."/>
-	<menu_item_call label="傾印 XML" name="Dump XML"/>
-	<menu_item_call label="丟棄" name="Drop"/>
-	<menu_item_call label="封鎖粒子所有人" name="Mute Particle"/>
+	<menu_item_call label="坐下/站起" name="Sit stand" />
+	<menu_item_call label="飛行/降落" name="Fly land" />
+	<menu_item_call label="停止我的動畫" name="Stop Animating My Avatar" />
+	<context_menu label="社群" name="CommunitySubmenu">
+		<menu_item_call label="我的朋友" name="Friends..." />
+		<menu_item_call label="我的群組" name="Groups..." />
+		<menu_item_call label="我的個人檔案" name="Profile..." />
+	</context_menu>
+	<menu_item_call label="轉儲 XML" name="Dump XML" />
+	<menu_item_call label="物件檔案" name="Object Inspect" />
+	<menu_item_call label="檢查" name="Object_Inspect_Floater" />
+	<menu_item_call label="指令碼資訊" name="ScriptInfo" />
+	<menu_item_call label="隱藏" name="Derender" />
+	<menu_item_call label="永久隱藏 &amp; 封鎖" name="DerenderPermanent" />
+	<menu_item_call label="除錯紋理" name="Debug..." />
+	<menu_item_call label="重新整理紋理" name="Texture Refresh" />
+	<menu_item_call label="丟在地上" name="Drop" />
+	<menu_item_call label="封鎖粒子所有者" name="Mute Particle" />
 </context_menu>

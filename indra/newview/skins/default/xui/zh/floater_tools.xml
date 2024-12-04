@@ -16,99 +16,110 @@
 		附件
 	</floater.string>
 	<floater.string name="status_rotate">
-		拖曳色條可以旋轉物件
+		拖拽色條可以旋轉物件
 	</floater.string>
 	<floater.string name="status_scale">
-		按住並拖曳，可以拉伸所選的一面
+		按住並拖拽，可以拉伸所選的一面
 	</floater.string>
 	<floater.string name="status_move">
-		拖曳就會移動，按下 Shift 再拖曳則可複製
+		拖拽就會移動，按下 Shift 再拖拽則可複製
 	</floater.string>
 	<floater.string name="status_modifyland">
 		按住不放開，可以修改土地
 	</floater.string>
 	<floater.string name="status_camera">
-		按住並拖曳，可以移動攝影機
+		按住並拖拽，可以移動相機
 	</floater.string>
 	<floater.string name="status_grab">
-		拖曳就可移動，按下 Ctrl 可以拿起，按下 Ctrl+Shift 可以旋轉
+		拖拽就抽取式，按下 Ctrl 可以拿起，按下 Ctrl+Shift 可以旋轉
 	</floater.string>
 	<floater.string name="status_place">
-		在虛擬世界裡點按一下，可以建製物件
+		在虛擬世界裡點擊一下，可以建造物件
 	</floater.string>
 	<floater.string name="status_selectland">
-		按住並拖曳，可以選取土地
+		按住並拖拽，可以選擇土地
 	</floater.string>
 	<floater.string name="status_selectcount">
-		選取了 [OBJ_COUNT] 個物件，土地衝擊量 [LAND_IMPACT]
+		選擇了 [OBJ_COUNT] 個物件，土地影響 [LAND_IMPACT]
 	</floater.string>
 	<floater.string name="status_remaining_capacity">
 		剩餘容納量 [LAND_CAPACITY]。
 	</floater.string>
-	<button name="button focus" tool_tip="聚焦"/>
-	<button name="button move" tool_tip="移動"/>
-	<button name="button edit" tool_tip="編輯"/>
-	<button name="button create" tool_tip="創造"/>
-	<button name="button land" tool_tip="土地"/>
+	<floater.string name="link_number">
+		聯結數：
+	</floater.string>
+	<floater.string name="selected_faces">
+		面:
+	</floater.string>
+	<button name="button focus" tool_tip="聚焦" />
+	<button name="button move" tool_tip="移動" />
+	<button name="button edit" tool_tip="編輯" />
+	<button name="button create" tool_tip="創造" />
+	<button name="button land" tool_tip="土地" />
 	<text name="text status">
-		拖曳就會移動，按下 Shift 再拖曳則可複製
+		拖拽就會移動，按下 Shift 再拖拽則可複製
 	</text>
 	<radio_group name="focus_radio_group">
-		<radio_item label="縮放" name="radio zoom"/>
-		<radio_item label="環繞（Ctrl）" name="radio orbit"/>
-		<radio_item label="平移（Ctrl+Shift）" name="radio pan"/>
+		<radio_item label="縮放" name="radio zoom" />
+		<radio_item label="環繞（Ctrl）" name="radio orbit" />
+		<radio_item label="平移（Ctrl+Shift）" name="radio pan" />
 	</radio_group>
-	<slider_bar initial_value="0.125" name="slider zoom"/>
 	<radio_group name="move_radio_group">
-		<radio_item label="移動" name="radio move"/>
-		<radio_item label="舉起（Ctrl）" name="radio lift"/>
-		<radio_item label="旋轉（Ctrl+Shift）" name="radio spin"/>
+		<radio_item label="移動" name="radio move" />
+		<radio_item label="舉起（Ctrl）" name="radio lift" />
+		<radio_item label="旋轉（Ctrl+Shift）" name="radio spin" />
 	</radio_group>
 	<radio_group name="edit_radio_group">
-		<radio_item label="移動" name="radio position"/>
-		<radio_item label="旋轉（Ctrl）" name="radio rotate"/>
-		<radio_item label="伸展（Ctrl+Shift）" name="radio stretch"/>
-		<radio_item label="選擇面" name="radio select face"/>
+		<radio_item label="移動" name="radio position" />
+		<radio_item label="旋轉（Ctrl）" name="radio rotate" />
+		<radio_item label="伸展（Ctrl+Shift）" name="radio stretch" />
+		<radio_item label="選擇面" name="radio select face" />
+		<radio_item label="對齊" name="radio align" />
 	</radio_group>
-	<check_box label="編輯聯結部分" name="checkbox edit linked parts"/>
-	<button label="聯結" name="link_btn"/>
-	<button label="取消聯結" name="unlink_btn"/>
-	<techeck_boxxt label="同時伸展兩側" name="checkbox uniform label"/>
-	<check_box initial_value="true" label="伸展材質" name="checkbox stretch textures"/>
-	<check_box initial_value="true" label="Snap" name="checkbox snap to grid"/>
-	<combo_box name="combobox grid mode" tool_tip="選擇物件定位參考的格線尺度類型">
-		<combo_box.item label="世界" name="World"/>
-		<combo_box.item label="本地" name="Local"/>
-		<combo_box.item label="參考" name="Reference"/>
+	<check_box label="編輯聯結部分" name="checkbox edit linked parts" />
+	<button name="prev_part_btn" tool_tip="選擇上一個聯結的部分或面" />
+	<button name="next_part_btn" tool_tip="選擇下一個聯結的部分或面" />
+	<button label="聯結" name="link_btn" />
+	<button label="取消聯結" name="unlink_btn" />
+	<combo_box name="combobox grid mode" tool_tip="選擇物件定位參考的網格尺度類型">
+		<combo_box.item label="世界" name="World" />
+		<combo_box.item label="本地" name="Local" />
+		<combo_box.item label="參考" name="Reference" />
 	</combo_box>
-	<button label="" name="Options..." tool_tip="察看更多格線選項"/>
-	<button name="ToolCube" tool_tip="立方體"/>
-	<button name="ToolPrism" tool_tip="稜鏡體"/>
-	<button name="ToolPyramid" tool_tip="金字塔"/>
-	<button name="ToolTetrahedron" tool_tip="正四面體"/>
-	<button name="ToolCylinder" tool_tip="圓柱體"/>
-	<button name="ToolHemiCylinder" tool_tip="半圓柱體"/>
-	<button name="ToolCone" tool_tip="圓錐"/>
-	<button name="ToolHemiCone" tool_tip="半圓錐"/>
-	<button name="ToolSphere" tool_tip="球體"/>
-	<button name="ToolHemiSphere" tool_tip="半球體"/>
-	<button name="ToolTorus" tool_tip="環面"/>
-	<button name="ToolTube" tool_tip="圓管"/>
-	<button name="ToolRing" tool_tip="圓環"/>
-	<button name="ToolTree" tool_tip="樹木"/>
-	<button name="ToolGrass" tool_tip="草地"/>
-	<check_box label="保持已選擇的工具" name="checkbox sticky"/>
-	<check_box label="複製選擇" name="checkbox copy selection"/>
-	<check_box initial_value="true" label="複製物置中" name="checkbox copy centers"/>
-	<check_box label="旋轉複製物" name="checkbox copy rotates"/>
+	<check_box label="同時伸展兩側" name="checkbox uniform" />
+	<check_box label="伸展紋理" name="checkbox stretch textures" />
+	<check_box label="對齊到網格" name="checkbox snap to grid" />
+	<check_box label="編輯根軸" name="checkbox actual root" />
+	<check_box label="啟用高亮顯示" name="checkbox show highlight" />
+	<check_box label="選擇反射探針" name="checkbox select probes" />
+	<button name="Options..." tool_tip="檢視更多網格選項" />
+	<button name="ToolCube" tool_tip="立方體" />
+	<button name="ToolPrism" tool_tip="稜鏡體" />
+	<button name="ToolPyramid" tool_tip="金字塔" />
+	<button name="ToolTetrahedron" tool_tip="正四面體" />
+	<button name="ToolCylinder" tool_tip="圓柱體" />
+	<button name="ToolHemiCylinder" tool_tip="半圓柱體" />
+	<button name="ToolCone" tool_tip="圓椎" />
+	<button name="ToolHemiCone" tool_tip="半圓椎" />
+	<button name="ToolSphere" tool_tip="球體" />
+	<button name="ToolHemiSphere" tool_tip="半球體" />
+	<button name="ToolTorus" tool_tip="環面" />
+	<button name="ToolTube" tool_tip="圓管" />
+	<button name="ToolRing" tool_tip="圓環" />
+	<button name="ToolTree" tool_tip="樹木" />
+	<button name="ToolGrass" tool_tip="草地" />
+	<check_box label="保持已選擇的工具" name="checkbox sticky" />
+	<check_box label="複製選擇" name="checkbox copy selection" />
+	<check_box label="居中複製物" name="checkbox copy centers" />
+	<check_box label="旋轉複製物" name="checkbox copy rotates" />
 	<radio_group name="land_radio_group">
-		<radio_item label="選擇土地" name="radio select land"/>
-		<radio_item label="攤平" name="radio flatten"/>
-		<radio_item label="提高" name="radio raise"/>
-		<radio_item label="降低" name="radio lower"/>
-		<radio_item label="平滑" name="radio smooth"/>
-		<radio_item label="粗糙" name="radio noise"/>
-		<radio_item label="還原" name="radio revert"/>
+		<radio_item label="選擇土地" name="radio select land" />
+		<radio_item label="攤平" name="radio flatten" />
+		<radio_item label="提高" name="radio raise" />
+		<radio_item label="降低" name="radio lower" />
+		<radio_item label="平滑" name="radio smooth" />
+		<radio_item label="粗糙" name="radio noise" />
+		<radio_item label="還原" name="radio revert" />
 	</radio_group>
 	<text name="Bulldozer:">
 		推土機：
@@ -116,25 +127,26 @@
 	<text name="Dozer Size:">
 		尺寸
 	</text>
-	<slider_bar initial_value="2.0" name="slider brush size"/>
 	<text name="Strength:">
 		力道
 	</text>
-	<slider_bar initial_value="0.00" name="slider force"/>
-	<button label="套用" label_selected="套用" name="button apply to selection" tool_tip="修改所選擇的土地"/>
+	<button label="應用" label_selected="應用" name="button apply to selection" tool_tip="修改所選擇的土地" />
 	<text name="selection_empty">
 		未做任何選擇。
 	</text>
-	<text name="remaining_capacity">
-		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights 詳情]
+	<!--<text name="selection_faces">
+		選擇的面: [FACES_STRING]
+	</text>-->
+	<text name="more info label">
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights 更多資訊]
 	</text>
 	<tab_container name="Object Info Tabs">
 		<panel label="一般" name="General">
 			<panel.string name="text deed continued">
-				讓渡
+				轉讓
 			</panel.string>
 			<panel.string name="text deed">
-				讓渡
+				轉讓
 			</panel.string>
 			<panel.string name="text modify info 1">
 				你能修改這個物件
@@ -149,13 +161,13 @@
 				你不能修改這些物件
 			</panel.string>
 			<panel.string name="text modify info 5">
-				無法跨地區修改這個物件
+				無法跨區域修改這個物件
 			</panel.string>
 			<panel.string name="text modify info 6">
-				無法跨地區修改這些物件
+				無法跨區域修改這些物件
 			</panel.string>
 			<panel.string name="text modify warning">
-				你必須選取整個物件以設定權限
+				你必須選擇整個物件以設定權限
 			</panel.string>
 			<panel.string name="Cost Default">
 				價格： L$
@@ -172,47 +184,55 @@
 			<panel.string name="Sale Mixed">
 				混合銷售
 			</panel.string>
+			<panel.string name="multiple selection">
+				多選
+			</panel.string>
 			<text name="Name:">
 				名稱：
 			</text>
-			<line_editor name="Object Name" tool_tip="名稱限長63字元。 幾何元件名稱超過限長，會被截短。 名稱僅可使用ASCII-7字元集（非延伸版）的可列印字元，唯一的例外是垂直槓字元「|」。"/>
+			<line_editor name="Object Name" tool_tip="名稱限制為63個字元。 如果元素名稱超過限制，將被截斷。 名稱只能使用ASCII-7字元集（非延伸版）的可列印字元，唯一的例外是豎線字元「|」。" />
 			<text name="Description:">
 				描述：
 			</text>
-			<line_editor name="Object Description" tool_tip="當人們在瀏覽器設定中選擇了「針對所有物件懸置顯示提醒」時，他們滑鼠所指的物件將會彈出描述該物件的內容。 幾何元件的描述內容不得超過127位元組，否則會被截短。"/>
+			<line_editor name="Object Description" tool_tip="當使用者在檢視器設定中選擇了「對所有物件懸停顯示提醒」時，他們懸停滑鼠指標的物件將會彈出顯示該物件的描述內容。 元素的描述內容不得超過127位元組，否則將被截斷。" />
 			<text name="Creator:">
 				創造者：
 			</text>
 			<text name="Owner:">
-				所有人：
+				所有者：
+			</text>
+			<text name="Last Owner:">
+				前所有者:
 			</text>
 			<text name="Group:">
 				群組：
 			</text>
-			<name_box initial_value="載入中..." name="Group Name Proxy"/>
-			<button name="button set group" tool_tip="選擇一個群組以分享這物件的權限"/>
-			<check_box label="分享" name="checkbox share with group" tool_tip="允許此群組所有成員共享你修改此物件的權限。 你必須讓渡才能啟動角色限制。"/>
-			<button label="讓渡" label_selected="讓渡" name="button deed" tool_tip="「讓渡」會把這物件贈送出去並賦予「下一個所有人」權限。 群組所分享的物件可由群組職員加以讓渡。"/>
+			<button name="button set group" tool_tip="選擇一個群組以分享這物件的權限" />
+			<check_box label="分享" name="checkbox share with group" tool_tip="允許此群組所有成員共享你修改此物件的權限。 你必須轉讓才能啟用角色限制。" />
+			<button label="轉讓" label_selected="轉讓" name="button deed" tool_tip="「轉讓」會把這物件贈送出去並賦予「下一個所有者」權限。 群組所分享的物件可由群組職員加以轉讓。" />
 			<text name="label click action">
-				點按以：
+				點擊以：
 			</text>
-			<combo_box name="clickaction" tool_tip="點按的動作讓你點一下滑鼠左鍵，就可以與物件互動。 每一個動作都有特殊的游標，顯示它的作用。 有些點按動作需配合其他條件才可正常運作。 例如，觸摸和付款動作要有配合腳本">
-				<combo_box.item label="觸碰（預設）" name="Touch/grab(default)"/>
-				<combo_box.item label="坐在物件上" name="Sitonobject"/>
-				<combo_box.item label="購買物件" name="Buyobject"/>
-				<combo_box.item label="支付物件" name="Payobject"/>
-				<combo_box.item label="打開" name="Open"/>
-				<combo_box.item label="縮放" name="Zoom"/>
-				<combo_box.item label="無" name="None"/>
+			<combo_box name="clickaction" tool_tip="點擊操作讓你點一下滑鼠左鍵，就可以與物件互動。 每一個操作都有特殊的指標，顯示它的作用。 有些點擊操作需配合其他條件才可正常運作。 例如，觸碰和付款操作要有配合指令碼">
+				<combo_box.item label="觸碰（預設）" name="Touch/grab(default)" />
+				<combo_box.item label="坐在物件上" name="Sitonobject" />
+				<combo_box.item label="購買物件" name="Buyobject" />
+				<combo_box.item label="支付物件" name="Payobject" />
+				<combo_box.item label="打開" name="Open" />
+				<combo_box.item label="縮放" name="Zoom" />
+				<combo_box.item label="忽略物件" name="Ignoreobject" />
+				<combo_box.item label="無" name="None" />
 			</combo_box>
-			<check_box label="出售中：" name="checkbox for sale" tool_tip="允許別人在虛擬世界裡以特定的價格購買此物件、其內容或其複本。"/>
-			<spinner label="L$" name="Edit Cost" tool_tip="物件成本。"/>
-			<combo_box name="sale type" tool_tip="決定購買者會收到物件複本、物件內容複本、還是物件本身。">
-				<combo_box.item label="恚庨" name="Copy"/>
-				<combo_box.item label="內容" name="Contents"/>
-				<combo_box.item label="原件" name="Original"/>
+			<check_box label="出售中：" name="checkbox for sale" tool_tip="允許別人在虛擬世界裡以特定的價格購買此物件、其內容或其副本。" />
+			<spinner label="價格: L$" name="Edit Cost" tool_tip="物件成本。" />
+			<combo_box name="sale type" tool_tip="決定購買者會收到物件副本、物件內容副本、還是物件本身。">
+				<combo_box.item label="複製" name="Copy" />
+				<combo_box.item label="內容" name="Contents" />
+				<combo_box.item label="原件" name="Original" />
 			</combo_box>
-			<check_box label="顯示在搜尋中" name="search_check" tool_tip="讓其他人可以在搜尋結果中察看到此物件"/>
+			<button label="應用" name="button mark for sale" tool_tip="提供/更新出售的物件。" />
+			<button label="複製UUID" name="btnCopyKeys" tool_tip="複製根元素的金鑰到剪貼簿。按住Shift鍵點擊可複製物件的所有金鑰。" />
+			<check_box label="顯示在搜尋中" name="search_check" tool_tip="讓其他人可以在搜尋結果中檢視到此物件" />
 			<panel name="perms_build">
 				<text name="perm_modify">
 					你能修改這個物件
@@ -220,14 +240,15 @@
 				<text name="Anyone can:">
 					任何人：
 				</text>
-				<check_box label="移動" name="checkbox allow everyone move" tool_tip="任何人皆可移動該物件。"/>
-				<check_box label="恚庨" name="checkbox allow everyone copy" tool_tip="任何人都可取用本物件的複本。 物件和其所有內容都必須允許複製和轉移。"/>
+				<check_box label="移動" name="checkbox allow everyone move" tool_tip="任何人皆抽取式該物件。" />
+				<check_box label="複製" name="checkbox allow everyone copy" tool_tip="任何人都可取用本物件的副本。 物件和其所有內容都必須允許複製和轉讓。" />
+				<check_box label="匯出" name="checkbox allow export" tool_tip="任何人都可匯出該物件。" />
 				<text name="Next owner can:">
-					下一個所有人：
+					下一個所有者：
 				</text>
-				<check_box label="修改" name="checkbox next owner can modify" tool_tip="下一個所有人可以編輯本物件的性質，如名稱或尺寸。"/>
-				<check_box label="恚庨" name="checkbox next owner can copy" tool_tip="下一個所有人可無限複製本物件。 複本將保留創作人的資料，其允許設定不能比原本物件更加放寬。"/>
-				<check_box label="轉移" name="checkbox next owner can transfer" tool_tip="下一個所有人可贈送或轉售這個物件。"/>
+				<check_box label="修改" name="checkbox next owner can modify" tool_tip="下一個所有者可以編輯本物件的性質，如名稱或尺寸。" />
+				<check_box label="複製" name="checkbox next owner can copy" tool_tip="下一個所有者可無限複製本物件。 副本將保留創作人的資料，其允許設定不能比原本物件更加放寬。" />
+				<check_box label="轉讓" name="checkbox next owner can transfer" tool_tip="下一個所有者可贈送或轉售這個物件。" />
 				<text name="B:">
 					B:
 				</text>
@@ -249,48 +270,85 @@
 			</panel>
 			<panel name="pathfinding_attrs_panel">
 				<text name="pathfinding_attributes_label">
-					尋徑屬性：
+					尋路屬性：
 				</text>
 			</panel>
 		</panel>
 		<panel label="物件" name="Object">
-			<check_box label="已鎖住" name="checkbox locked" tool_tip="避免物件被移動或刪除。 這在建製過程中非常有用，可避免意外的編輯更動。"/>
-			<check_box label="物理性" name="Physical Checkbox Ctrl" tool_tip="允許物件被推撞與受重力影響"/>
-			<check_box label="暫時性" name="Temporary Checkbox Ctrl" tool_tip="使物件在建造後的一分鐘自動刪除"/>
-			<check_box label="幻影性" name="Phantom Checkbox Ctrl" tool_tip="使物件不會與其他物件或化身產生碰撞"/>
+			<panel.string name="paste_position">
+黏貼位置
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_size">
+黏貼大小
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_rotation">
+黏貼旋轉
+[VALUE]
+			</panel.string>
+			<check_box label="鎖定" name="checkbox locked" tool_tip="避免物件被移動或刪除。 這在建造過程中非常有用，可避免意外的編輯更動。" />
+			<check_box label="物理性" name="Physical Checkbox Ctrl" tool_tip="允許物件被推撞與受重力影響" />
+			<check_box label="暫時性" name="Temporary Checkbox Ctrl" tool_tip="使物件在建造後的一分鐘自動刪除" />
+			<check_box label="幻影性" name="Phantom Checkbox Ctrl" tool_tip="使物件不會與其他物件或化身產生碰撞" />
 			<text name="label position">
-				位置（公尺）
+				位置（米）
 			</text>
-			<spinner label="X" name="Pos X"/>
-			<spinner label="Y" name="Pos Y"/>
-			<spinner label="Z" name="Pos Z"/>
+			<spinner label="X" name="Pos X" />
+			<spinner label="Y" name="Pos Y" />
+			<spinner label="Z" name="Pos Z" />
+			<button label="C" name="copy_rot_btn" tool_tip="複製旋轉" />
+			<button label="P" name="paste_rot_btn" tool_tip="貼上旋轉" />
+			<button label="p" name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
 			<text name="label size">
-				尺寸（公尺）
+				尺寸（米）
 			</text>
-			<spinner label="X" name="Scale X"/>
-			<spinner label="Y" name="Scale Y"/>
-			<spinner label="Z" name="Scale Z"/>
+			<spinner label="X" name="Scale X" />
+			<spinner label="Y" name="Scale Y" />
+			<spinner label="Z" name="Scale Z" />
+			<button label="C" name="copy_rot_btn" tool_tip="複製尺寸" />
+			<button label="P" name="paste_rot_btn" tool_tip="貼上尺寸" />
+			<button label="p" name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上尺寸" />
 			<text name="label rotation">
 				旋轉（角度）
 			</text>
-			<spinner label="X" name="Rot X"/>
-			<spinner label="Y" name="Rot Y"/>
-			<spinner label="Z" name="Rot Z"/>
+			<spinner label="X" name="Rot X" />
+			<spinner label="Y" name="Rot Y" />
+			<spinner label="Z" name="Rot Z" />
+			<button label="C" name="copy_rot_btn" tool_tip="複製旋轉" />
+			<button label="P" name="paste_rot_btn" tool_tip="貼上旋轉" />
+			<button label="p" name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
+			<button name="copy_params_btn" tool_tip="複製物件參數到剪貼簿" />
+			<button name="paste_params_btn" tool_tip="從剪貼簿黏貼物件參數" />
 			<combo_box name="comboBaseType">
-				<combo_box.item label="箱子" name="Box"/>
-				<combo_box.item label="圓柱體" name="Cylinder"/>
-				<combo_box.item label="稜鏡體" name="Prism"/>
-				<combo_box.item label="球體" name="Sphere"/>
-				<combo_box.item label="環面" name="Torus"/>
-				<combo_box.item label="圓管" name="Tube"/>
-				<combo_box.item label="圓環" name="Ring"/>
-				<combo_box.item label="雕刻的" name="Sculpted"/>
+				<combo_box.item label="箱子" name="Box" />
+				<combo_box.item label="圓柱體" name="Cylinder" />
+				<combo_box.item label="稜鏡體" name="Prism" />
+				<combo_box.item label="球體" name="Sphere" />
+				<combo_box.item label="環面" name="Torus" />
+				<combo_box.item label="圓管" name="Tube" />
+				<combo_box.item label="圓環" name="Ring" />
+				<combo_box.item label="雕刻的" name="Sculpted" />
+				<combo_item name="PathLineProfileHalfCircle" label="線條-&gt;半圓" />
+				<combo_item name="PathCircleProfileHalfCircle" label="圓-&gt;半圓" />
+				<combo_item name="PathCircle2ProfileSquare" label="圓2-&gt;正方形" />
+				<combo_item name="PathCircle2ProfileTriangle" label="圓2-&gt;三角形" />
+				<combo_item name="PathCircle2ProfileCircle" label="圓2-&gt;圓" />
+				<combo_item name="PathCircle2ProfileHalfCircle" label="圓2-&gt;半圓" />
+				<combo_item name="PathTestProfileSquare" label="測試-&gt;正方形" />
+				<combo_item name="PathTestProfileTriangle" label="測試-&gt;三角形" />
+				<combo_item name="PathTestProfileCircle" label="測試-&gt;圓" />
+				<combo_item name="PathTestProfileHalfCircle" label="測試-&gt;半圓" />
+				<combo_item name="Path33Profile0" label="33-&gt;圓" />
+				<combo_item name="Path33Profile1" label="33-&gt;正方形" />
+				<combo_item name="Path33Profile2" label="33-&gt;三角形" />
+				<combo_item name="Path33Profile5" label="33-&gt;半圓" />
 			</combo_box>
 			<text name="text cut">
 				路徑切斷（開始 / 結束）
 			</text>
-			<spinner label="B" name="cut begin"/>
-			<spinner label="E" name="cut end"/>
+			<spinner label="B" name="cut begin" />
+			<spinner label="E" name="cut end" />
 			<text name="text hollow">
 				中空
 			</text>
@@ -301,29 +359,29 @@
 				中空形狀
 			</text>
 			<combo_box name="hole">
-				<combo_box.item label="預設" name="Default"/>
-				<combo_box.item label="圓圈" name="Circle"/>
-				<combo_box.item label="方形" name="Square"/>
-				<combo_box.item label="三角形" name="Triangle"/>
+				<combo_box.item label="預設" name="Default" />
+				<combo_box.item label="圓圈" name="Circle" />
+				<combo_box.item label="方形" name="Square" />
+				<combo_box.item label="三角形" name="Triangle" />
 			</combo_box>
 			<text name="text twist">
 				扭曲（開始 / 結束）
 			</text>
-			<spinner label="B" name="Twist Begin"/>
-			<spinner label="E" name="Twist End"/>
+			<spinner label="B" name="Twist Begin" />
+			<spinner label="E" name="Twist End" />
 			<text name="scale_taper">
 				錐化
 			</text>
 			<text name="scale_hole">
-				洞尺寸
+				開口尺寸
 			</text>
-			<spinner label="X" name="Taper Scale X"/>
-			<spinner label="Y" name="Taper Scale Y"/>
+			<spinner label="X" name="Taper Scale X" />
+			<spinner label="Y" name="Taper Scale Y" />
 			<text name="text topshear">
 				頂部斜變
 			</text>
-			<spinner label="X" name="Shear X"/>
-			<spinner label="Y" name="Shear Y"/>
+			<spinner label="X" name="Shear X" />
+			<spinner label="Y" name="Shear Y" />
 			<text name="advanced_cut">
 				側面切斷（開始 / 結束）
 			</text>
@@ -331,189 +389,171 @@
 				凹陷（開始 / 結束）
 			</text>
 			<text name="advanced_slice">
-				Slice（開始 / 結束）
+				切割（開始/結束）
 			</text>
-			<spinner label="B" name="Path Limit Begin"/>
-			<spinner label="E" name="Path Limit End"/>
-			<text name="text taper2">
+			<spinner label="B" name="Path Limit Begin" />
+			<spinner label="E" name="Path Limit End" />
+			<text name="text taper2" tool_tip="不適用於所有基本類型">
 				錐化
 			</text>
-			<spinner label="X" name="Taper X"/>
-			<spinner label="Y" name="Taper Y"/>
+			<spinner label="X" name="Taper X" />
+			<spinner label="Y" name="Taper Y" />
 			<text name="text radius delta">
 				半徑
 			</text>
 			<text name="text revolutions">
 				旋轉
 			</text>
-			<texture_picker label="雕刻材質" name="sculpt texture control" tool_tip="點按以挑選圖片"/>
-			<check_box label="鏡像" name="sculpt mirror control" tool_tip="沿X軸翻轉雕刻幾何元件"/>
-			<check_box label="內外倒翻" name="sculpt invert control" tool_tip="將雕刻幾何元件的正常值顛倒，使其看來有如內外倒翻"/>
+			<texture_picker label="雕刻紋理" name="sculpt texture control" tool_tip="點擊以挑選圖片" />
+			<check_box label="鏡像" name="sculpt mirror control" tool_tip="沿X軸翻轉雕刻元素" />
+			<check_box label="內外倒翻" name="sculpt invert control" tool_tip="將雕刻元素的正常值顛倒，使其看來有如內外倒翻" />
 			<text name="label sculpt type">
 				縫合類型
 			</text>
-			<combo_box name="sculpt type control">
-				<combo_box.item label="球體" name="Sphere"/>
-				<combo_box.item label="環面" name="Torus"/>
-				<combo_box.item label="平面" name="Plane"/>
-				<combo_box.item label="圓柱體" name="Cylinder"/>
+			<combo_box name="sculpt type control" tool_tip="「無」選項已被移除，因為它與「平面」相同。">
+				<combo_box.item label="球體" name="Sphere" />
+				<combo_box.item label="環面" name="Torus" />
+				<combo_box.item label="平面/無" name="Plane" />
+				<combo_box.item label="圓柱體" name="Cylinder" />
 			</combo_box>
+			<text name="mesh_info_label">
+				網格模型資訊：
+			</text>
+			<text name="lod_label" value="細節層次:" />
+			<text name="lod_num_tris" value="三角形數量" />
+			<text name="mesh_lod_label">
+高：
+中：
+低：
+最低：
+			</text>
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="標準" name="Default" />
+				<combo_box.item label="高" name="High" />
+				<combo_box.item label="中" name="Medium" />
+				<combo_box.item label="低" name="Low" />
+				<combo_box.item label="最低" name="Lowest/Imposter" />
+			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="物件細節層次行為：" />
+			<text name="object_radius" value="物件半徑：" />
+			<text name="LOD_swap_factors_label" value="細節層次等級" />
+			<text name="LOD_swap_defaults_label" value="標準" tool_tip="大多數檢視器應用此標準細節層次等級。" />
+			<text name="LOD_swap_usr_label" value="您的" tool_tip="基於RenderVolumeLODFactor的當前設定。" />
+			<text name="LOD_swap_label" value="細節層次切換" />
+			<string name="ll_lod_tooltip_msg">林登實驗室第二人生檢視器標準 ([FACTOR])</string>
+			<string name="fs_lod_tooltip_msg">[APP_NAME]檢視器標準 ([FACTOR])</string>
+			<text name="LOD_swap_usr_current" tool_tip="您當前的細節層次等級。" />
+			<text name="LOD_swap_LOD_Change_label">
+高 ↔ 中
+中 ↔ 低
+低 ↔ 最低
+			</text>
+			<text name="LODSwapTableDscriptionsText" tool_tip="最佳實踐：製造商應確保所有檢視器的標準設定具有良好的細節層次行為。">
+				此表顯示了從相機位置到細節層次切換的距離限制（以米為單位）。
+			</text>
 		</panel>
 		<panel label="特性" name="Features">
 			<panel.string name="None">
 				無
 			</panel.string>
 			<panel.string name="Prim">
-				幾何元件
+				元素
 			</panel.string>
 			<panel.string name="Convex Hull">
 				凸包
 			</panel.string>
 			<text name="select_single">
-				只能選擇一個幾何元件去編輯細節。
+				只能選擇一個元素去編輯細節。
 			</text>
 			<text name="edit_object">
 				編輯物件特性：
 			</text>
-			<check_box label="動作網面" name="Animated Mesh Checkbox Ctrl" tool_tip="允許架設網面物件獨立動作"/>
-			<check_box label="彈性路徑" name="Flexible1D Checkbox Ctrl" tool_tip="允許物件繞 Z 軸伸展（僅限客戶端）"/>
-			<spinner label="柔軟" name="FlexNumSections"/>
-			<spinner label="重力" name="FlexGravity"/>
-			<spinner label="拖曳" name="FlexFriction"/>
-			<spinner label="風力" name="FlexWind"/>
-			<spinner label="張力" name="FlexTension"/>
-			<spinner label="強制 X 軸" name="FlexForceX"/>
-			<spinner label="強制 Y 軸" name="FlexForceY"/>
-			<spinner label="強制 Z 軸" name="FlexForceZ"/>
-			<check_box label="光源" name="Light Checkbox Ctrl" tool_tip="導致物件發光"/>
-			<color_swatch name="colorswatch" tool_tip="點按以開啟顏色挑選器"/>
-			<texture_picker label="" name="light texture control" tool_tip="點選投影圖像（只在啟用延遲呈像時生效）"/>
-			<spinner label="強度" name="Light Intensity"/>
-			<spinner label="視角" name="Light FOV"/>
-			<spinner label="半徑" name="Light Radius"/>
-			<spinner label="焦點" name="Light Focus"/>
-			<spinner label="衰減" name="Light Falloff"/>
-			<spinner label="環境" name="Light Ambiance"/>
+			<check_box label="網格動畫" name="Animated Mesh Checkbox Ctrl" tool_tip="允許架設網格物件獨立動畫" />
+			<check_box label="彈性路徑" name="Flexible1D Checkbox Ctrl" tool_tip="允許物件繞 Z 軸伸展（僅限使用者端）" />
+			<button name="copy_features_btn" tool_tip="複製屬性參數到剪貼簿" />
+			<button name="paste_features_btn" tool_tip="從剪貼簿黏貼屬性參數" />
+			<spinner label="柔軟" name="FlexNumSections" />
+			<spinner label="重力" name="FlexGravity" />
+			<spinner label="拖拽" name="FlexFriction" />
+			<spinner label="風力" name="FlexWind" />
+			<spinner label="張力" name="FlexTension" />
+			<spinner label="強制 X 軸" name="FlexForceX" />
+			<spinner label="強制 Y 軸" name="FlexForceY" />
+			<spinner label="強制 Z 軸" name="FlexForceZ" />
+			<check_box label="光源" name="Light Checkbox Ctrl" tool_tip="導致物件發光" />
+			<color_swatch name="colorswatch" tool_tip="點擊以開啟顏色挑選器" />
+			<texture_picker name="light texture control" tool_tip="點擊投影圖像（只在啟用延遲渲染時生效）" />
+			<spinner label="強度" name="Light Intensity" />
+			<spinner label="視角" name="Light FOV" />
+			<spinner label="半徑" name="Light Radius" />
+			<spinner label="焦點" name="Light Focus" />
+			<spinner label="衰減" name="Light Falloff" />
+			<spinner label="環境" name="Light Ambiance" />
+			<check_box label="反射探針" name="Reflection Probe" tool_tip="啟用 PBR 時，調整此體積內物體接收反射的方式" />
+			<combo_box label="探測體積類型" name="Probe Volume Type" tool_tip="選擇探測影響體積">
+				<combo_box.item label="球體" name="Sphere" />
+				<combo_box.item label="盒子" name="Box" />
+			</combo_box>
+			<check_box label="動態" name="Probe Dynamic" tool_tip="啟用後,化身將出現在此探針影響範圍內的反射中。" />
+			<text name="Probe Update Label">
+				探針更新
+			</text>
+			<combo_box name="Probe Update Type" tool_tip="決定探針如何更新。靜態更新最慢且不包含化身。動態更新更頻繁,探針中可見化身。 鏡面(環境)將此探針轉換為僅反射環境的即時平面投影探針,但不計算環境光。鏡面(全部)類似於鏡像(環境),但它還反射粒子和化身。">
+				<combo_box.item label="靜態" name="Static" />
+				<combo_box.item label="動態" name="Dynamic" />
+				<combo_box.item label="鏡面(環境)" name="Mirror" />
+				<combo_box.item label="鏡面(全部)" name="Dynamic Mirror" />
+			</combo_box>
+			<spinner label="環境光" name="Probe Ambiance" />
+			<spinner label="近裁剪" name="Probe Near Clip" />
 			<text name="label physicsshapetype">
 				物理形狀類型：
 			</text>
-			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="選擇物理形狀類型"/>
+			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="選擇物理形狀類型" />
+			<button name="PhysicsViewToggle" tool_tip="在編輯模式下打開物理視圖" />
 			<combo_box name="material">
-				<combo_box.item label="石頭" name="Stone"/>
-				<combo_box.item label="金屬" name="Metal"/>
-				<combo_box.item label="玻璃" name="Glass"/>
-				<combo_box.item label="木頭" name="Wood"/>
-				<combo_box.item label="肌肉" name="Flesh"/>
-				<combo_box.item label="塑膠" name="Plastic"/>
-				<combo_box.item label="橡膠" name="Rubber"/>
+				<combo_box.item label="石頭" name="Stone" />
+				<combo_box.item label="金屬" name="Metal" />
+				<combo_box.item label="玻璃" name="Glass" />
+				<combo_box.item label="木頭" name="Wood" />
+				<combo_box.item label="肌膚" name="Flesh" />
+				<combo_box.item label="塑膠" name="Plastic" />
+				<combo_box.item label="橡膠" name="Rubber" />
 			</combo_box>
-			<spinner label="重力" name="Physics Gravity"/>
-			<spinner label="摩擦" name="Physics Friction"/>
-			<spinner label="密度（100 公斤 / 立方公尺）" name="Physics Density"/>
-			<spinner label="恢復" name="Physics Restitution"/>
+			<spinner label="重力" name="Physics Gravity" />
+			<spinner label="摩擦" name="Physics Friction" />
+			<spinner label="密度（100公斤/立方公尺）" name="Physics Density" />
+			<spinner label="恢復" name="Physics Restitution" />
 		</panel>
-		<panel label="材質" name="Texture">
-			<panel.string name="string repeats per meter">
-				每公尺重覆次數
-			</panel.string>
-			<panel.string name="string repeats per face">
-				每一面重覆次數
-			</panel.string>
-			<texture_picker label="材質" name="texture control" tool_tip="點按以挑選圖片"/>
-			<color_swatch label="顏色" name="colorswatch" tool_tip="點按以開啟顏色挑選器"/>
-			<text name="color trans">
-				透明度 %
-			</text>
-			<text name="glow label">
-				光暈
-			</text>
-			<check_box label="全亮" name="checkbox fullbright"/>
-			<text name="tex gen">
-				映射方式
-			</text>
-			<combo_box name="combobox texgen">
-				<combo_box.item label="預設" name="Default"/>
-				<combo_box.item label="平面" name="Planar"/>
-			</combo_box>
-			<text name="label shininess">
-				光澤
-			</text>
-			<combo_box name="combobox shininess">
-				<combo_box.item label="無" name="None"/>
-				<combo_box.item label="低" name="Low"/>
-				<combo_box.item label="中" name="Medium"/>
-				<combo_box.item label="高" name="High"/>
-			</combo_box>
-			<text name="label bumpiness">
-				凹凸貼圖
-			</text>
-			<combo_box name="combobox bumpiness">
-				<combo_box.item label="無" name="None"/>
-				<combo_box.item label="亮度" name="Brightness"/>
-				<combo_box.item label="暗度" name="Darkness"/>
-				<combo_box.item label="木紋" name="woodgrain"/>
-				<combo_box.item label="樹皮" name="bark"/>
-				<combo_box.item label="磚" name="bricks"/>
-				<combo_box.item label="格子" name="checker"/>
-				<combo_box.item label="混凝土" name="concrete"/>
-				<combo_box.item label="粗花磚" name="crustytile"/>
-				<combo_box.item label="石磚" name="cutstone"/>
-				<combo_box.item label="圓盤" name="discs"/>
-				<combo_box.item label="碎石" name="gravel"/>
-				<combo_box.item label="培養皿" name="petridish"/>
-				<combo_box.item label="側邊片" name="siding"/>
-				<combo_box.item label="石磚格" name="stonetile"/>
-				<combo_box.item label="彩色沙岩" name="stucco"/>
-				<combo_box.item label="吸附" name="suction"/>
-				<combo_box.item label="編織" name="weave"/>
-			</combo_box>
-			<spinner label="水平（U）" name="TexScaleU"/>
-			<check_box label="翻轉" name="checkbox flip s"/>
-			<spinner label="垂直（V）" name="TexScaleV"/>
-			<check_box label="翻轉" name="checkbox flip t"/>
-			<spinner label="旋轉˚" name="TexRot"/>
-			<button label="套用" label_selected="套用" name="button apply"/>
-			<text name="tex offset">
-				材質位移
-			</text>
-			<spinner label="水平（U）" name="TexOffsetU"/>
-			<spinner label="垂直（V）" name="TexOffsetV"/>
-			<panel name="Add_Media">
-				<text name="media_tex">
-					媒體
-				</text>
-				<button name="add_media" tool_tip="添加媒體"/>
-				<button name="delete_media" tool_tip="刪除這個媒體材質"/>
-				<button name="edit_media" tool_tip="編輯這個媒體"/>
-				<button label="對齊" label_selected="對齊媒體" name="button align" tool_tip="對齊媒體材質（須先載入）"/>
-			</panel>
-		</panel>
+		<!--<panel label="紋理" name="Texture"/>-->
 		<panel label="內容" name="Contents">
-			<button label="新腳本" label_selected="新腳本" name="button new script"/>
-			<button label="權限" name="button permissions"/>
+			<button label="新指令碼" label_selected="新指令碼" name="button new script" />
+			<button label="權限" name="button permissions" />
+			<button label="重新整理" name="button refresh" />
+			<button label="重設指令碼" name="btn_reset_scripts" />
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
 		<text name="label_parcel_info">
-			地段資訊
+			地塊資訊
 		</text>
 		<text name="label_area_price">
-			價格： L$[PRICE] 購買 [AREA] m²
+			價格： [PRICE] L$ 購買 [AREA] m²
 		</text>
 		<text name="label_area">
-			面積： [AREA] m²
+			面積：[AREA]平方公尺
 		</text>
-		<button label="土地資料" label_selected="土地資料" name="button about land"/>
-		<check_box label="顯示所有人" name="checkbox show owners" tool_tip="根據所有人將地段分類上色：   綠色 = 你的土地  水藍 = 你群組的土地  紅色 = 其他人所有  黃色 = 出售  紫色 = 拍賣  灰色 = 公有地"/>
+		<button label="土地資訊" label_selected="土地資訊" name="button about land" />
+		<check_box label="顯示所有者" name="checkbox show owners" tool_tip="根據所有者將地塊分類上色：   綠色 = 你的土地  水藍 = 你群組的土地  紅色 = 其他人所有  黃色 = 出售  紫色 = 拍賣  灰色 = 公有地" />
 		<text name="label_parcel_modify">
-			修改地段
+			修改地塊
 		</text>
-		<button label="分割" label_selected="分割" name="button subdivide land"/>
-		<button label="合併" label_selected="合併" name="button join land"/>
+		<button label="分割" label_selected="分割" name="button subdivide land" />
+		<button label="合併" label_selected="合併" name="button join land" />
 		<text name="label_parcel_trans">
 			土地交易
 		</text>
-		<button label="購買土地" label_selected="購買土地" name="button buy land"/>
-		<button label="放棄土地" label_selected="放棄土地" name="button abandon land"/>
+		<button label="購買土地" label_selected="購買土地" name="button buy land" />
+		<button label="放棄土地" label_selected="放棄土地" name="button abandon land" />
 	</panel>
 </floater>

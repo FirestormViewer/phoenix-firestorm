@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="建立群組" name="GroupCreation">
+	<panel.string name="current_membership">
+		(您的會員資格)
+	</panel.string>
+	<panel name="group_info_top">
+		<text name="group_name_label" width="80">
+			群組名稱：
+		</text>
+		<line_editor label="在此輸入新群組的名稱" name="group_name_editor" />
+	</panel>
+	<scroll_container name="content_scroll_container">
+		<panel name="content_panel">
+			<layout_stack name="layout">
+				<layout_panel name="group_info">
+					<panel name="group_info_top2">
+						<texture_picker name="insignia" tool_tip="單擊以選擇圖像" />
+						<text_editor name="charter">
+							群組狀態
+						</text_editor>
+					</panel>
+					<panel name="preferences_container">
+						<check_box label="免費加入" name="open_enrollement" tool_tip="入群是否免費且不需要邀請。" />
+						<check_box label="加入費" name="check_enrollment_fee" tool_tip="加入群組是否需要支付入會費。" />
+						<spinner name="spin_enrollment_fee" tool_tip="如果選中「加入費」複選框，則必須支付此金額才能加入群組。" />
+						<combo_box name="group_mature_check" tool_tip="成熟度和年齡分類確定了群組中允許的內容和行為類型。">
+							<combo_item name="select_mature">
+								- 選擇內容分級 -
+							</combo_item>
+							<combo_box.item label="適度成人內容" name="mature" />
+							<combo_box.item label="一般普級內容" name="pg" />
+						</combo_box>
+					</panel>
+				</layout_panel>
+				<layout_panel name="create_info">
+					<text name="fee_information">
+						建立群組的費用取決於您的會員資格級別。 [https://secondlife.com/my/account/membership.php 瞭解更多資訊]
+					</text>
+					<scroll_list name="membership_list">
+						<scroll_list.rows name="basic" value="基礎會員（填充）" />
+						<scroll_list.rows name="premium" value="進階會員（填充）" />
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="create_actions">
+					<layout_stack name="button_row_ls">
+						<layout_panel name="layout_crt">
+							<button label="以[COST] L$建立群組" name="btn_create" tool_tip="建立一個新的群組" />
+							<button name="back" label="取消" />
+						</layout_panel>
+					</layout_stack>
+					<text name="info_deletion">
+						注意：在2天內，如果一個群組除了創造者以外 沒有超過2名成員，該群組將被刪除！
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</scroll_container>
+</panel>
