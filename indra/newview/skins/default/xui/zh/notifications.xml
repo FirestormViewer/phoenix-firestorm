@@ -1781,7 +1781,7 @@ SHA1指紋：[MD5_DIGEST]
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		無法變更外觀，直到服裝與身形下載完畢。
 	</notification>
-	<notification name="UnsavedWearableChanges">
+	<notification name="UsavedWearableChanges">
 		您有未儲存的更改。
 		<usetemplate ignoretext="放棄儲存對裝扮的更改前請確認" name="okcancelignore" notext="繼續編輯" yestext="放棄更改"/>
 	</notification>
@@ -4000,7 +4000,7 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="InvalidMaterialName">
 		請輸入非空名稱
 	</notification>
-	<notification name="UnsavedMaterialChanges">
+	<notification name="UsavedMaterialChanges">
 		你有未儲存的更改。
 		<form name="form">
 			<button name="discard" text="放棄更改"/>
