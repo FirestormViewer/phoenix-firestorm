@@ -2836,7 +2836,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		należący do nieznanego właściciela
 	</string>
 	<string name="InvOfferGaveYou">
-		dał Ci
+		dał/a Ci
 	</string>
 	<string name="InvOfferYouDecline">
 		Odrzucono
@@ -2846,6 +2846,12 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="InvOfferFrom">
 		od
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		Obiekt o nazwie [OBJECT_NAME] dał Ci [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] dał/a Ci [OBJECT_TYPE]: [DESC]
 	</string>
 	<string name="GroupMoneyTotal">
 		Suma
