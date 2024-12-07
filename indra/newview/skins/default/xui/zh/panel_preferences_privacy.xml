@@ -17,6 +17,7 @@
 			<check_box label="登入時自動顯示我的收藏夾項目（在「開始」下拉式選單中）" name="favorites_on_login_check" />
 			<check_box label="自動接受新物件" name="Auto_Accept_New_Inventory" />
 			<check_box label="自動將接受的物件記錄到本地聊天中" name="FSLogAutoAcceptInventoryToChat" />
+			<check_box label="即使已啟用自動接受，仍會顯示新庫存通知" name="FSShowAutoAcceptInventoryInNotifications" />
 			<check_box label="使用原始的物件接受和拒絕訊息" name="FSUseLegacyInventoryAcceptMessages" tool_tip="如果啟用，檢視器將在按下相應按鈕後才接受或拒絕訊息。 如果禁用，一旦收到轉讓提議，接受訊息將自動傳送。這個選項對自動接受轉讓提議無效。" />
 			<check_box label="自動在庫存中顯示接受的新物件" name="Show_In_Inventory" />
 			<check_box label="自動在接受後在庫存中顯示備註、紋理、地點" name="Show_New_Inventory" />
