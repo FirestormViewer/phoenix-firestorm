@@ -195,6 +195,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             with self.prefix(src_dst="fs_resources"):
                 self.path("*.lsltxt")
                 self.path("*.dae") # <FS:Beq> FIRE-30963 - better physics defaults
+                
+            # <FS:AR> Poser Presets
+            with self.prefix(src_dst="poses/hand_presets"):
+                self.path("*.xml")
 
             # skins
             with self.prefix(src_dst="skins"):
