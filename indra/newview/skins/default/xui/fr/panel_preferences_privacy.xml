@@ -17,6 +17,7 @@
 			<check_box label="Afficher mes repères favoris à la connexion (dans le menu déroulant 'Démarrer :')" name="favorites_on_login_check"/>
 			<check_box label="Accepter automatiquement les nouveaux objets" name="Auto_Accept_New_Inventory"/>
 			<check_box label="Inscrire automatiquement les objets acceptés dans le chat local" name="FSLogAutoAcceptInventoryToChat"/>
+			<check_box label="Afficher la notification de nouvel inventaire même si l'acceptation automatique est activée" name="FSShowAutoAcceptInventoryInNotifications"/>
 			<check_box label="Utiliser les messages originaux d'acceptation et de refus de transfert d'objet" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Si activé, le Viewer n'acceptera ou déclinera les messages qu'après avoir pressé le bouton concerné. Si désactivé, le message d'acceptation sera envoyé automatiquement dès que l'offre de transfert aura été reçue. Cette option est sans effet si les offres de transfert sont acceptées automatiquement."/>
 			<check_box label="Afficher automatiquement les nouveaux objets acceptés dans l'inventaire" name="Show_In_Inventory"/>
 			<check_box label="Afficher automatiquement les notes, textures, repères, après acceptation" name="Show_New_Inventory"/>
