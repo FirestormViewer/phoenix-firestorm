@@ -179,6 +179,7 @@ void FSJointPose::cloneRotationFrom(FSJointPose* fromJoint)
     if (!fromJoint)
         return;
 
+    addToUndo(mRotation, &mUndoneRotationIndex, &mLastSetRotationDeltas, &mTimeLastUpdatedRotation);
     mRotation = FSJointRotation(fromJoint->mRotation);
 }
 
