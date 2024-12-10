@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script ed float" title="腳本：　新腳本">
+<floater name="script ed float" title="指令碼：新指令碼">
 	<floater.string name="not_allowed">
-		你無法察看或編輯這腳本，它被設為「禁止複製」。 你需要完整權限去察看或編輯物件內的腳本。
+		你無法檢視或編輯這指令碼，它被設為「禁止複製」。 你需要完整權限去檢視或編輯物件內的指令碼。
 	</floater.string>
 	<floater.string name="script_running">
-		執行中
+		運行中
 	</floater.string>
 	<floater.string name="Title">
-		腳本：[NAME]
+		指令碼：[NAME]
 	</floater.string>
 	<floater.string name="experience_enabled">
-		清除勾選即可移除目前的體驗
+		清除勾選即可移除當前的體驗
 	</floater.string>
 	<floater.string name="no_experiences">
 		你未經授權使用任何體驗
 	</floater.string>
 	<floater.string name="add_experiences">
-		選取新增一個體驗
+		選擇新增一個體驗
 	</floater.string>
 	<floater.string name="show_experience_profile">
-		點按即可簡覽該體驗
+		點擊即可預覽該體驗
 	</floater.string>
 	<floater.string name="loading">
 		載入中…
 	</floater.string>
-	<button label="重設" label_selected="重設" name="Reset"/>
-	<check_box initial_value="true" label="執行中" name="running"/>
-	<check_box initial_value="true" label="Mono" name="mono"/>
-	<check_box label="使用體驗：" name="enable_xp"/>
-	<button label="&gt;" name="view_profile"/>
+	<text name="obj_name">
+		來自物體: [SOURCE_OBJECT]
+	</text>
+	<button label="重設" label_selected="重設" name="Reset" />
+	<check_box initial_value="true" label="運行中" name="running" />
+	<check_box initial_value="true" label="Mono" name="mono" />
+	<check_box label="使用體驗：" name="enable_xp" />
 </floater>

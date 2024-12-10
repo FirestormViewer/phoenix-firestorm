@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="particle_editor_floater" title="粒子編輯器">
+	<panel name="particle_editor_panel">
+		<panel name="top_left_panel">
+			<text name="Pattern_Label">
+				模式：
+			</text>
+			<combo_box name="pattern_type_combo">
+				<combo_box.item label="爆炸" name="explode" />
+				<combo_box.item label="角度" name="angle" />
+				<combo_box.item label="角錐" name="angle_cone" />
+				<combo_box.item label="空心角錐" name="angle_cone_empty" />
+				<combo_box.item label="下落" name="drop" />
+			</combo_box>
+			<text name="Texture_Label">
+				紋理：
+			</text>
+			<text name="Burst_Rate_Label">
+				爆發速率：
+			</text>
+			<text name="Burst_Count_Label">
+				爆發數量：
+			</text>
+			<text name="Burst_Radius_Label">
+				爆發半徑：
+			</text>
+			<text name="Angle_Begin_Label">
+				起始角度：
+			</text>
+			<text name="Burst_Speed_Min_Label">
+				最小爆發速度：
+			</text>
+			<text name="Angle_End_Label">
+				結束角度：
+			</text>
+			<text name="Burst_Speed_Max_Label">
+				最大爆發速度：
+			</text>
+			<text name="Source_Max_Age_Label">
+				最大源頭時間：
+			</text>
+			<text name="Start_Alpha_Label">
+				起始透明度：
+			</text>
+			<text name="Particles_Max_Age_Label">
+				最大粒子壽命：
+			</text>
+			<text name="End_Alpha_Label">
+				結束透明度：
+			</text>
+			<text name="Start_Glow_Label">
+				初始發光：
+			</text>
+			<combo_box name="blend_func_src_combo">
+				<combo_box.item label="混合一" name="blend_one" />
+				<combo_box.item label="混合零" name="blend_zero" />
+				<combo_box.item label="混合目標顏色" name="blend_dest_color" />
+				<combo_box.item label="混合源顏色" name="blend_src_color" />
+				<combo_box.item label="混合 1 - 目標顏色" name="blend_one_minus_dest_color" />
+				<combo_box.item label="混合 1 - 源顏色" name="blend_one_minus_src_color" />
+				<combo_box.item label="混合源透明度" name="blend_src_alpha" />
+				<combo_box.item label="混合 1 - 源透明度" name="blend_one_minus_src_alpha" />
+			</combo_box>
+			<text name="End_Glow_Label">
+				結束發光：
+			</text>
+			<combo_box name="blend_func_dest_combo">
+				<combo_box.item label="混合一" name="blend_one" />
+				<combo_box.item label="混合零" name="blend_zero" />
+				<combo_box.item label="混合目標顏色" name="blend_dest_color" />
+				<combo_box.item label="混合源顏色" name="blend_src_color" />
+				<combo_box.item label="混合 1 - 目標顏色" name="blend_one_minus_dest_color" />
+				<combo_box.item label="混合 1 - 源顏色" name="blend_one_minus_src_color" />
+				<combo_box.item label="混合源透明度" name="blend_src_alpha" />
+				<combo_box.item label="混合 1 - 源透明度" name="blend_one_minus_src_alpha" />
+			</combo_box>
+			<text name="Scale_Start_Label">
+				起始大小：
+			</text>
+			<text name="End_Label">
+				結束：
+			</text>
+		</panel>
+		<panel name="top_right_panel">
+			<check_box name="bounce_checkbox" label="反彈" />
+			<check_box name="emissive_checkbox" label="自發光" />
+			<check_box name="follow_source_checkbox" label="跟隨源" />
+			<check_box name="follow_velocity_checkbox" label="跟隨速度" />
+			<check_box name="interpolate_color_checkbox" label="顏色插值" />
+			<check_box name="interpolate_scale_checkbox" label="縮放插值" />
+			<check_box name="target_position_checkbox" label="定位目標" />
+			<check_box name="target_linear_checkbox" label="線性目標" />
+			<check_box name="wind_checkbox" label="被風影響" />
+			<check_box name="ribbon_checkbox" label="帶狀" />
+			<button name="copy_button" label="複製" tool_tip="複製粒子系統參數為LSL指令碼到剪貼簿。" />
+			<button name="inject_button" label="注入" tool_tip="將此粒子系統注入到選定的物件中。" />
+		</panel>
+		<panel name="bottom_left_panel">
+			<text name="Target_Key_Label">
+				目標UUID：
+			</text>
+			<button name="clear_target_button" tool_tip="清除物件或化身作為目標。" />
+			<button name="pick_target_button" tool_tip="點擊設定物件或化身作為目標。" />
+			<text name="Acceleration_Label">
+				加速度：
+			</text>
+			<text name="Omega_Label">
+				歐米茄：
+			</text>
+		</panel>
+		<panel name="bottom_right_panel">
+			<color_swatch label="起始顏色" name="start_color_selector" />
+			<color_swatch label="結束顏色" name="end_color_selector" />
+		</panel>
+	</panel>
+</floater>

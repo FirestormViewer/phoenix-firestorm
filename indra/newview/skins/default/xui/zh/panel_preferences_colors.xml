@@ -1,44 +1,136 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="顏色" name="colors_panel">
-	<text name="effects_color_textbox">
-		我的效果（選擇指標）：
-	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="點按以開啟顏色挑選器"/>
-	<text name="font_colors">
-		聊天字型顏色：
-	</text>
-	<text name="text_box1">
-		我自己
-	</text>
-	<text name="text_box2">
-		其他人
-	</text>
-	<text name="text_box3">
-		物件
-	</text>
-	<text name="text_box4">
-		系統
-	</text>
-	<text name="text_box5">
-		錯誤
-	</text>
-	<text name="text_box10">
-		直接
-	</text>
-	<text name="text_box7">
-		所有人
-	</text>
-	<text name="text_box9">
-		URL
-	</text>
-	<text name="bubble_chat">
-		名稱標籤背景色（亦會影響聊天泡泡）：
-	</text>
-	<color_swatch name="background" tool_tip="挑選名稱標籤顏色"/>
-	<slider label="不透明度：" name="bubble_chat_opacity" tool_tip="挑選名稱標籤不透明度"/>
-	<text name="floater_opacity">
-		浮動視窗不透明度：
-	</text>
-	<slider label="啟用：" name="active"/>
-	<slider label="停用：" name="inactive"/>
+	<tab_container label="顏色" name="tabs">
+		<panel label="聊天顏色" name="tab-chat">
+			<text name="font_colors">訊息：</text>
+			<text name="user_label">我的訊息</text>
+			<text name="others_label">其他</text>
+			<text name="text_box3">物件</text>
+			<text name="friends_label">好友</text>
+			<text name="linden_label">林登實驗室</text>
+			<text name="muted_label">已封鎖</text>
+			<text name="system_label">系統</text>
+			<text name="script_error_label">錯誤</text>
+			<text name="object_im_label">物件資訊</text>
+			<text name="llownersay_label">所有者</text>
+			<text name="htmllink_label">網址</text>
+			<text name="uriquerypart_label">網址路徑</text>
+			<text name="direct_label">管理</text>
+			<text name="header_colors">發件人：</text>
+			<text name="chat_name_label">化身</text>
+			<text name="object_name_header_label">物件</text>
+			<slider label="聊天超出範圍顏色衰減：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="如果訊息的發件人不在附近，訊息的顏色衰減。" />
+			<check_box name="FSColorIMsDistinctly" label="在控制檯中分別為私聊和群組聊天著色：" />
+			<panel name="im_color_panel">
+				<text name="console_im_label">私聊/群組聊天</text>
+			</panel>
+		</panel>
+		<panel label="標籤" name="tab-nametag">
+			<text name="nametag_colors">標籤顏色：</text>
+			<text name="self_tag_label">我的名稱</text>
+			<text name="friend_tag_label">好友</text>
+			<text name="muted_tag_label">已封鎖</text>
+			<text name="linden_tag_label">林登實驗室</text>
+			<text name="match_tag_label">比對項</text>
+			<text name="mismatch_tag_label">不比對項</text>
+			<check_box name="FSColorUsername" label="分別為使用者名稱著色" tool_tip="以不同顏色顯示使用者名稱" />
+			<check_box name="NameTagShowFriends" label="分別為我的好友標籤著色" tool_tip="以不同顏色顯示好友的標籤" />
+			<text name="username_tag_label">使用者名稱</text>
+			<text name="bubble_chat">標籤/聊天氣泡：</text>
+			<color_swatch name="background" tool_tip="選擇標籤的顏色" />
+			<slider label="透明度" name="bubble_chat_opacity" tool_tip="選擇標籤的透明度" />
+			<slider label="垂直對齊" name="FSNameTagZOffsetCorrection" tool_tip="調整居民標籤的垂直對齊。預設為 0" />
+			<check_box name="FSTagShowDistance" label="在標籤旁顯示距離" tool_tip="在標籤旁邊顯示化身與您之間的距離" />
+			<check_box name="FSTagShowDistanceColors" label="根據距離著色標籤：" />
+			<panel name="distance_panel">
+				<text name="chat_distance_tag_label">說話距離</text>
+				<text name="whisper_distance_tag_label">竊竊私語距離</text>
+				<text name="shout_tag_label">大聲呼喊距離</text>
+				<text name="beyond_shout_distance_tag_label">超出大聲呼喊距離</text>
+			</panel>
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">按檢視器著色：（僅限 OpenSim/AuroraSim）</text>
+				<text name="whattagstoshow">要顯示哪些標籤？</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_box.item name="No Viewertags" label=" 無" />
+					<combo_box.item name="TPVD Viewer" label=" 官方第三方檢視器" />
+					<combo_box.item name="All known Viewers" label=" 所有已知的檢視器（由列表定義）" />
+					<combo_box.item name="All Viewers" label=" 所有檢視器" />
+				</combo_box>
+				<text name="colorbasedonviewer">按檢視器著色標籤</text>
+				<combo_box name="ColorClienttags">
+					<combo_box.item name="Color not based on Viewer" label=" 否" />
+					<combo_box.item name="Single color per Viewer" label=" 每個檢視器一種顏色" />
+					<combo_box.item name="Multiple colors per Viewer" label=" 每個檢視器多種顏色" />
+					<combo_box.item name="Userdefined color" label=" 使用者定義的顏色" />
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">要顯示的檢視器標籤列表？</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_box.item name="Don't use a list" label=" 否" />
+					<combo_box.item name="Local Clienttags" label=" 靜態列表" />
+					<combo_box.item name="Download Clienttags" label=" 每次啟動都重新整理列表" />
+				</combo_box>
+			</panel>
+		</panel>
+		<panel label="小地圖" name="tab-minimap">
+			<slider label="背景透明度：" label_width="180" width="485" name="FSMiniMapOpacity" />
+			<text name="netmap_pickradius_textbox">透明度 &amp; 點顏色：</text>
+			<text name="netmap_pickradius_color_textbox">點顏色：</text>
+			<color_swatch name="MapPickRadiusColor" tool_tip="控制小地圖上點的顏色。可使用「點大小」參數調整點的大小。" />
+			<text name="netmap_pickradius_opacity_textbox">透明度：</text>
+			<text name="netmap_dots_textbox">小地圖示記：</text>
+			<text name="MapAvatarSelfColor_label">我</text>
+			<text name="MapAvatarColor_label">其他</text>
+			<text name="MapAvatarFriendColor_label">好友</text>
+			<text name="MapAvatarLindenColor_label">林登實驗室</text>
+			<text name="MapAvatarMutedColor_label">已封鎖</text>
+			<check_box name="MiniMapChatRing" label="在小地圖上顯示竊竊私語、正常說話和大聲呼喊的範圍：" />
+			<text name="netmap_whisperring_color_label">竊竊私語</text>
+			<text name="netmap_chatring_color_label">說話</text>
+			<text name="netmap_shoutring_color_label">大聲呼喊</text>
+		</panel>
+		<panel label="其他" name="tab-misc">
+			<text name="effects_color_textbox">選擇游標：</text>
+			<text left="240" name="ScriptDialogFgLabel" width="300">指令碼對話方塊的前景和背景：</text>
+			<text name="floater_opacity">視窗透明度：</text>
+			<slider label="活躍視窗：" name="active" />
+			<slider label="非活躍視窗：" name="inactive" />
+			<slider label="相機 / 移動：" name="camera_movement" />
+			<text name="console_opacity">控制檯透明度：</text>
+			<color_swatch name="console_background" tool_tip="選擇控制檯的顏色" />
+			<slider label="透明度：" name="console_background_opacity" tool_tip="選擇控制檯背景的透明度" />
+			<text name="preferences_search_label">突出顯示搜尋偏好設定：</text>
+			<color_swatch name="preferences_search_color" tool_tip="選擇搜尋結果突出顯示的偏好設定的顏色" />
+			<text name="area_search_beacon_color_label">區域搜尋標記顏色：</text>
+			<color_swatch name="area_search_beacon_color" tool_tip="選擇區域搜尋標記的顏色" />
+			<text name="notecard_editor_color_label">
+				記事卡顏色：
+			</text>
+			<text name="notecard_editor_writable_text_color_label">
+				文字：
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="選擇記事卡文字的顏色" />
+			<text name="notecard_editor_writable_bg_color_label">
+				背景：
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="選擇記事卡背景的顏色" />
+			<text name="notecard_editor_writable_cursor_color_label">
+				游標：
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="選擇記事卡中游標的顏色" />
+			<text name="notecard_editor_writable_selection_color_label">
+				選擇：
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="選擇記事本中所選文字的顏色" />
+			<check_box name="FSScriptDialogNoTransparency" label="始終在不透明背景上顯示指令碼對話方塊" />
+			<check_box name="FSGroupNotifyNoTransparency" label="始終使用不透明背景顯示群組通知" />
+			<check_box name="override_pie_color_checkbox" label="設定圓形選單的背景顏色和透明度：" />
+			<panel name="tab-colorize">
+				<color_swatch name="pie_bg_color_override" tool_tip="選擇圓形選單的背景顏色" />
+				<color_swatch name="pie_selected_color_override" tool_tip="選擇圓形選單的背景顏色" />
+				<slider label="透明度：" label_width="80" name="pie_menu_opacity" tool_tip="選擇圓形選單的透明度" />
+				<slider label="漸變：" label_width="80" name="pie_menu_fade_out" tool_tip="選擇圓形選單主要顏色的漸變級別" />
+			</panel>
+		</panel>
+	</tab_container>
 </panel>

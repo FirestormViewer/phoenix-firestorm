@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="stream_history" title="最近播放的標題:">
+	<fs_scroll_list name="history">
+		<columns label="標題" name="title" />
+	</fs_scroll_list>
+</floater>

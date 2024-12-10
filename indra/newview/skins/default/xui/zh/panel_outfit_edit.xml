@@ -1,56 +1,65 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray Outfit Edit panel -->
-<panel name="outfit_edit">
-	<string name="No Outfit" value="無裝扮"/>
-	<string name="unsaved_changes" value="變更未儲存"/>
-	<string name="now_editing" value="現在編輯中"/>
+<panel label="編輯裝扮" name="outfit_edit">
+	<string name="No Outfit" value="無裝扮" />
+	<string name="unsaved_changes" value="變更未儲存" />
+	<string name="now_editing" value="現在編輯中" />
 	<panel.string name="not_available">
 		（不適用）
 	</panel.string>
 	<panel.string name="unknown">
 		（未知）
 	</panel.string>
-	<string name="Filter.All" value="全部"/>
-	<string name="Filter.Clothes/Body" value="衣服 / 身體"/>
-	<string name="Filter.Objects" value="物件"/>
-	<string name="Filter.Clothing" value="服裝"/>
-	<string name="Filter.Bodyparts" value="身體部位"/>
-	<string name="replace_body_part" value="點按以取代你現存的體形"/>
-	<text name="title" value="編輯裝扮"/>
+	<string name="Filter.All" value="全部" />
+	<string name="Filter.Clothes/Body" value="服裝 / 身體" />
+	<string name="Filter.Objects" value="物件" />
+	<string name="Filter.Clothing" value="服裝" />
+	<string name="Filter.Bodyparts" value="身體部位" />
+	<string name="replace_body_part" value="點擊以替換你現存的身形" />
+	<text name="title" value="編輯裝扮" />
 	<panel name="header_panel">
 		<panel name="outfit_name_and_status">
-			<text name="status" value="現在編輯中..."/>
-			<text name="curr_outfit_name" value="[Current Outfit]"/>
+			<text name="status" value="現在編輯中..." />
+			<text name="curr_outfit_name" value="[Current Outfit]" />
 		</panel>
 	</panel>
 	<layout_stack name="im_panels">
 		<layout_panel name="outfit_wearables_panel">
 			<layout_stack name="filter_panels">
 				<layout_panel name="add_button_and_combobox">
-					<button label="添加更多..." name="show_add_wearables_btn" tool_tip="開啟 / 關閉"/>
+					<button label="新增更多..." name="show_add_wearables_btn" tool_tip="開啟 / 關閉" />
 				</layout_panel>
 				<layout_panel name="filter_panel">
-					<filter_editor label="收納區可穿著過濾器" name="look_item_filter"/>
+					<filter_editor label="庫存裝扮過濾器" name="look_item_filter" />
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="add_wearables_panel">
-			<button label="穿上物品" name="plus_btn"/>
+			<button label="穿上物件" name="plus_btn" />
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
-		<button name="shop_btn_1" tool_tip="前往第二人生購物市集。 你也可選擇你穿著中的一個物件，再點按這裡察看其他同類物件。"/>
+		<text name="avatar_complexity_label">
+			複雜度：[WEIGHT]
+		</text>
+		<button name="shop_btn_1" tool_tip="前往第二人生購物市場。 你也可選擇你穿戴中的一個物件，再點擊這裡檢視其他同類物件。" />
 	</panel>
 	<panel name="add_wearables_button_bar">
-		<button name="shop_btn_2" tool_tip="前往第二人生購物市集。 你也可選擇你穿著中的一個物件，再點按這裡察看其他同類物件。"/>
+		<text name="avatar_complexity_adding_label">
+			複雜度：[WEIGHT]
+		</text>
+		<button name="shop_btn_2" tool_tip="前往第二人生購物市場。 你也可選擇你穿戴中的一個物件，再點擊這裡檢視其他同類物件。" />
 	</panel>
 	<panel name="save_revert_button_bar">
 		<layout_stack name="button_bar_ls">
 			<layout_panel name="save_btn_lp">
-				<button label="儲存" name="save_btn"/>
+				<button label="儲存" name="save_btn" />
+			</layout_panel>
+			<layout_panel name="save_as_btn_lp">
+				<button label="另存為" name="save_as_btn" />
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
-				<button label="復原變更" name="revert_btn" tool_tip="恢復上一個已儲存版本"/>
+				<button label="復原變更" name="revert_btn" tool_tip="恢復上一個已儲存版本" />
 			</layout_panel>
 		</layout_stack>
 	</panel>

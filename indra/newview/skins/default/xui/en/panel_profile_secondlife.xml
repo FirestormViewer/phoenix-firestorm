@@ -4,8 +4,8 @@
  label="Profile"
  top="0"
  left="0"
- height="480"
- width="420"
+ height="580"
+ width="520"
  follows="all"
  layout="topleft"
 >
@@ -347,7 +347,7 @@
      top_pad="2"
      left="4"
      right="-1"
-     height="158"
+     height="258"
      follows="top|left|right"
      layout="topleft"
      orientation="horizontal">
@@ -356,7 +356,7 @@
          follows="all"
          layout="topleft"
          width="52"
-         height="158"
+         height="258"
          auto_resize="false"
          user_resize="false">
             <menu_button
@@ -375,8 +375,8 @@
          name="image_panel"
          follows="all"
          layout="topleft"
-         width="158"
-         height="158"
+         width="258"
+         height="258"
          auto_resize="false"
          user_resize="false">
             <texture_picker
@@ -384,8 +384,8 @@
              fallback_image="Generic_Person_Large"
              top="0"
              left="0"
-             width="158"
-             height="158"
+             width="258"
+             height="258"
              follows="all"
              show_caption="false"
              layout="topleft" />

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autoadjustments">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="settings_title">
+		自動調整設定
+	</text>
+	<button label="重設為推薦設定" name="defaults_btn" />
+	<text name="targetfps_desc">
+		期望影格率
+	</text>
+	<spinner name="target_fps" tool_tip="檢視器將嘗試通過調整圖形設定來實作這一目標。" />
+	<text name="display_desc">
+		您的顯示器支援最高[FPS_LIMIT]fps。
+	</text>
+	<text name="settings_desc">
+		影響的設定
+	</text>
+	<text name="display_desc">
+		您的顯示器支援最高[FPS_LIMIT]fps。
+	</text>
+	<combo_box name="TuningFPSStrategy">
+		<combo_box.item label="僅限化身" name="av_only" value="0" />
+		<combo_box.item label="化身和世界" name="av_and_scene" value="1" />
+		<combo_box.item label="僅限世界" name="scene_only" value="2" />
+	</combo_box>
+	<button label="立即自動調整" name="start_autotune" tool_tip="檢視器將嘗試調整設定以達到目標FPS，然後停止。" />
+	<button label="取消" name="stop_autotune" tool_tip="停止調整設定。" />
+	<text name="wip_desc">
+		正在處理中...
+	</text>
+	<check_box label="持續調整" name="AutoTuneContinuous" tool_tip="檢視器將在視窗關閉後，繼續調整設定以滿足目標FPS。" />
+	<radio_group name="autotune_lock_type">
+		<radio_item label="僅本次登入" name="one_session_lock" />
+		<radio_item label="每次登入" name="next_session_lock" />
+	</radio_group>
+	<check_box label="啟用垂直同步" name="vsync" tool_tip="啟用垂直同步來減少螢幕撕裂和斷裂。" />
+	<text name="vsync_desc">
+		將顯示器的重新整理率與影格率同步。
+	</text>
+	<text name="vsync_desc_limit">
+		注意：啟用垂直同步會將影格率限制在[FPS_LIMIT]fps。
+	</text>
+	<text name="simplify_dist_desc">
+		減少遠處頭貼的細節顯示可以提高圖形處理速度。
+	</text>
+	<check_box label="進一步簡化頭貼" name="AutoTuneImpostorByDistEnabled" tool_tip="啟用後，檢視器會調整MaxNonImpostors設定，只在指定半徑內完全綵現頭貼。" />
+	<text name="dist_meters">
+		米
+	</text>
+	<text name="dist_limits_desc">
+		選擇自動調整設定影響的距離範圍。
+	</text>
+	<text name="min_dist_lbl">
+		最小距離
+	</text>
+	<text name="pref_dist_lbl">
+		最大距離
+	</text>
+</panel>

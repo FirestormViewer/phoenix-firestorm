@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="whitelist_entry" title="許可的項目清單">
+<floater name="whitelist_entry" title="許可的項目清單" tool_tip="輸入一個 URL 位址或 URL 格式到白名單">
 	<text name="media_label">
-		輸入一個 URL 位址或 URL 格式以添加到允許的網域清單中
+		輸入一個 URL 位址或 URL 格式以新增到允許的域名清單中
 	</text>
-	<line_editor name="whitelist_entry" tool_tip="輸入一個 URL 位址或 URL 格式到白名單"/>
-	<button label="確定" name="ok_btn"/>
-	<button label="取消" name="cancel_btn"/>
+	<line_editor name="whitelist_entry" tool_tip="輸入一個 URL 地址或 URL 格式到白名單" />
+	<button label="確定" name="ok_btn" />
+	<button label="取消" name="cancel_btn" />
 </floater>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_search_visibility">
+	<menu_item_check label="搜尋裝扮檔案夾" name="search_outfits" />
+	<menu_item_check label="搜尋垃圾桶" name="search_trash" />
+	<menu_item_check label="搜尋資源庫" name="search_library" />
+	<menu_item_check label="包括聯結" name="include_links" />
+</toggleable_menu>

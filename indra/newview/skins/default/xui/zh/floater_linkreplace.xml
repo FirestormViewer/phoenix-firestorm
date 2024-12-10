@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="linkreplace" title="替換庫存聯結">
+	<string name="Ready">
+		準備就緒...
+	</string>
+	<string name="TargetNotFound">
+		未找到目標物件。
+	</string>
+	<string name="ItemsIdentical">
+		源物件和目標物件是相同的。
+	</string>
+	<string name="ItemsFound">
+		找到 [NUM] 個庫存聯結。
+	</string>
+	<string name="ItemsRemaining">
+		剩餘物件：[NUM]
+	</string>
+	<string name="ReplaceFinished">
+		替換庫存聯結完成。
+	</string>
+	<text name="source_label">
+		舊的：
+	</text>
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="將庫存中的源物件拖放到此處。" />
+	<text name="delete_text">
+		將移除與此物件的聯結。
+	</text>
+	<text name="target_label">
+		新的：
+	</text>
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="將庫存中的目標物件拖放到此處。" />
+	<check_box label="僅移除聯結" name="delete_links_only" />
+	<text name="status_text">
+		準備就緒...
+	</text>
+	<button name="btn_refresh" label="重新整理" />
+	<button name="btn_start" label="開始" />
+</floater>

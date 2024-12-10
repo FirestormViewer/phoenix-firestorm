@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Inventory Gallery">
+	<text name="empty_txt">
+		檔案已送出。
+	</text>
+</panel>

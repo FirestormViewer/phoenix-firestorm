@@ -4,6 +4,6 @@
 		6
 	</string>
 	<panel label="im_header" name="im_header">
-		<text name="time_box" value="23:30"/>
+		<text name="time_box" value="2022/09/23 23:30" />
 	</panel>
 </panel>

@@ -4,91 +4,117 @@
 		使用預設設定
 	</string>
 	<string name="str_label_use_region">
-		使用地區設定
+		使用區域設定
 	</string>
 	<string name="str_altitude_desription">
 		天空 [INDEX]([ALTITUDE]m)
 	</string>
 	<string name="str_no_parcel">
-		未選擇地段。 環境設定已停用。
+		未選擇地塊。 環境設定已停用。
 	</string>
 	<string name="str_cross_region">
-		跨越地區不提供環境設定。
+		跨越區域不提供環境設定。
 	</string>
 	<string name="str_legacy">
-		這地區不提供環境設定。
+		這區域不提供環境設定。
 	</string>
 	<string name="str_disallowed">
-		領地管理人不允許改變此區域的地段環境。
+		領地管理人不允許改變此區域的地塊環境。
 	</string>
 	<string name="str_too_small">
-		地段必須至少128平方公尺才可支撐環境。
+		地塊必須至少128平方公尺才可支撐環境。
 	</string>
 	<string name="str_empty">
 		（空白）
 	</string>
 	<string name="str_region_env">
-		（地區環境）
+		（區域環境）
 	</string>
-	<layout_stack>
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text name="region_text_lbl">
+				區域：
+			</text>
+			<text name="region_text">
+				未知
+			</text>
+		</layout_panel>
 		<layout_panel name="pnl_environment_disabled">
 			<text name="txt_environment_disabled">
 				...
 			</text>
 		</layout_panel>
 		<layout_panel name="pnl_environment_config">
-			<layout_stack>
+			<layout_stack name="ls_environment_config">
 				<layout_panel name="pnl_environment_config">
-					<layout_stack>
+					<layout_stack name="ls_environment_config2">
 						<layout_panel name="pnl_environment_current">
-							<button label="[USEDEFAULT]" name="btn_usedefault"/>
-							<button label="使用收納區" name="btn_select_inventory"/>
-							<button label="自訂" name="btn_edit"/>
-							<check_box label="地段所有人可強制設定環境" name="chk_allow_override"/>
+							<text name="select_environment_label">
+								選擇環境
+							</text>
+							<button label="[USEDEFAULT]" name="btn_usedefault" />
+							<button label="使用庫存" name="btn_select_inventory" />
+							<button label="自訂" name="btn_edit" />
+							<check_box label="地塊所有者可強制設定環境" name="chk_allow_override" />
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
+							<text name="day_settings_label">
+								日間設定
+							</text>
+							<text name="day_length_label">
+								日長（小時）
+							</text>
+							<text name="day_offset_label">
+								時差（小時）
+							</text>
+							<text name="apparent_time_of_day_label">
+								可見的一天時間：
+							</text>
 							<text name="lbl_apparent_time">
 								[HH]:[MM][AP] ([PRC]%)
 							</text>
 						</layout_panel>
-						<layout_panel name="pnl_environment_buttons"/>
+						<layout_panel name="pnl_environment_buttons" />
 					</layout_stack>
 				</layout_panel>
 				<layout_panel name="pnl_environment_altitudes">
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
 							天空[INDEX]
-                            [ALTITUDE]公尺
+[ALTITUDE]米
 						</text>
 						<line_editor name="edt_invname_alt1">
 							未知
 						</line_editor>
-						<settings_drop_target name="sdt_alt1" tool_tip="將一個設定從收納區拖曳到這個目標箱框，便可把它選定為目前的天空。"/>
+						<settings_drop_target name="sdt_alt1" tool_tip="將一個設定從庫存拖拽到這個目標箱框，便可把它選定為當前的天空。" />
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
 							天空[INDEX]
-                            [ALTITUDE]公尺
+[ALTITUDE]米
 						</text>
 						<line_editor name="edt_invname_alt2">
 							未知
 						</line_editor>
-						<settings_drop_target name="sdt_alt2" tool_tip="將一個設定從收納區拖曳到這個目標箱框，便可把它選定為目前的天空。"/>
+						<settings_drop_target name="sdt_alt2" tool_tip="將一個設定從庫存拖拽到這個目標箱框，便可把它選定為當前的天空。" />
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
 							天空[INDEX]
-                            [ALTITUDE]公尺
+[ALTITUDE]米
 						</text>
 						<line_editor name="edt_invname_alt3">
 							未知
 						</line_editor>
-						<settings_drop_target name="sdt_alt3" tool_tip="將一個設定從收納區拖曳到這個目標箱框，便可把它選定為目前的天空。"/>
+						<settings_drop_target name="sdt_alt3" tool_tip="將一個設定從庫存拖拽到這個目標箱框，便可把它選定為當前的天空。" />
 					</panel>
+					<text name="sky_altitudes_label">
+						天空高度
+					</text>
 					<multi_slider initial_value="0" name="sld_altitudes">
-						<slider name="sld1" value="1000"/>
-						<slider name="sld2" value="2000"/>
-						<slider name="sld3" value="3000"/>
+						<slider name="sld1" value="1000" />
+						<slider name="sld2" value="2000" />
+						<slider name="sld3" value="3000" />
 					</multi_slider>
 					<panel name="pnl_ground">
 						<text name="txt_ground">
@@ -97,7 +123,7 @@
 						<line_editor name="edt_invname_ground">
 							未知
 						</line_editor>
-						<settings_drop_target name="sdt_ground" tool_tip="將一個設定從收納區拖曳到這個目標箱框，便可把它選定為地面水平的天空。"/>
+						<settings_drop_target name="sdt_ground" tool_tip="將一個設定從庫存拖拽到這個目標箱框，便可把它選定為地面水平的天空。" />
 					</panel>
 					<panel name="pnl_water">
 						<text name="txt_water">
@@ -106,9 +132,9 @@
 						<line_editor name="edt_invname_water">
 							未知
 						</line_editor>
-						<settings_drop_target name="sdt_water" tool_tip="將一個設定從收納區拖曳到這個目標箱框，便可把它選定為目前的水文。"/>
+						<settings_drop_target name="sdt_water" tool_tip="將一個設定從庫存拖拽到這個目標箱框，便可把它選定為當前的水文。" />
 					</panel>
-					<button label="重設" name="btn_rst_altitudes" tool_tip="重設為預設高度"/>
+					<button label="重設" name="btn_rst_altitudes" tool_tip="重設為預設高度" />
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

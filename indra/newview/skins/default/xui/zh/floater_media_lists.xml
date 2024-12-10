@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floatermedialists" title="媒體列表">
+	<floater.string name="EnterUrlAllow">
+		輸入總是允許的域名或URL：
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		輸入永遠不允許的域名或URL：
+	</floater.string>
+	<layout_stack name="lists_layout_stack">
+		<layout_panel name="whitelist_layout_panel">
+			<text name="whitelist_text">
+				允許的域名：
+			</text>
+			<layout_stack name="whitelist_buttons_layout_stack">
+				<layout_panel name="whitelist_buttons_panel_add">
+					<button label="新增..." label_selected="新增..." name="add_whitelist" />
+				</layout_panel>
+				<layout_panel name="whitelist_buttons_panel_remove">
+					<button label="移除" label_selected="移除" name="remove_whitelist" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="blacklist_layout_panel">
+			<text name="blacklist_text">
+				被阻止的域名：
+			</text>
+			<layout_stack name="blacklist_buttons_layout_stack">
+				<layout_panel name="blacklist_buttons_panel_add">
+					<button label="新增..." label_selected="新增..." name="add_blacklist" />
+				</layout_panel>
+				<layout_panel name="blacklist_buttons_panel_remove">
+					<button label="移除" label_selected="移除" name="remove_blacklist" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

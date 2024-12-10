@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="BeamColor" title="選擇光束顏色旋轉">
+	<floater.string name="start_hue">
+		開始顏色
+	</floater.string>
+	<floater.string name="end_hue">
+		結束顏色
+	</floater.string>
+	<text name="beamcolor_text">
+請用滑鼠選擇您希望光束開始和停止的顏色。
+左鍵單擊可改變開始顏色。
+右擊改變結束顏色。
+	</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="單擊打開顏色選擇" />
+	<text name="beamcolor_text2">
+		預覽
+	</text>
+	<slider name="BeamColor_Speed" label="速度" tool_tip="控制顏色旋轉的速度" />
+	<button label="儲存" name="BeamColor_Save" />
+	<button label="讀取" name="BeamColor_Load" />
+	<button label="取消" name="BeamColor_Cancel" />
+</floater>

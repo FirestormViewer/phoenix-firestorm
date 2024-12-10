@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floaterpreferencesviewadvanced" title="相機位置">
+	<text name="camera_offset_lbl">
+		相機偏移:
+	</text>
+	<text name="focus_offset_lbl">
+		焦點偏移:
+	</text>
+	<text name="offset_scale_lbl">
+		相機偏移尺度:
+	</text>
+	<button label="儲存為預設..." name="save_preset_btn" width="180" />
+	<button label="關閉" name="close_btn" width="70" />
+</floater>

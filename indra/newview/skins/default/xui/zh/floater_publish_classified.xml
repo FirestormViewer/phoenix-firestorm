@@ -2,10 +2,14 @@
 <floater name="publish_classified" title="刊登個人廣告">
 	<text name="explanation_text">
 		你的個人廣告將從刊登日起連續刊載一星期。
-        
+
 請注意，個人廣告刊登費恕不退還。
 	</text>
-	<spinner label="價格： L$" name="price_for_listing" tool_tip="刊登費。" value="50"/>
-	<button label="發布" name="publish_btn"/>
-	<button label="取消" name="cancel_btn"/>
+	<spinner label="價格：L$" name="price_for_listing" tool_tip="刊登費。" value="50" />
+	<text name="l$_text" value="L$" />
+	<text name="more_info_text">
+		更多資訊（幫助連結）
+	</text>
+	<button label="發布" name="publish_btn" />
+	<button label="取消" name="cancel_btn" />
 </floater>

@@ -15,15 +15,18 @@
 	<floater.string name="no_transfer_text">
 		（禁止轉讓）
 	</floater.string>
+	<floater.string name="multiple_selected">
+		多選
+	</floater.string>
 	<text name="contents_text">
 		內含：
 	</text>
 	<text name="buy_text">
-		購買，支付 L$[AMOUNT] 給：
+		購買，支付 [AMOUNT] L$ 給：
 	</text>
 	<text name="buy_name_text">
 		[NAME]？
 	</text>
-	<button label="購買" label_selected="購買" name="buy_btn"/>
-	<button label="取消" label_selected="取消" name="cancel_btn"/>
+	<button label="購買" label_selected="購買" name="buy_btn" />
+	<button label="取消" label_selected="取消" name="cancel_btn" />
 </floater>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="gesture_preview">
 	<floater.string name="step_anim">
-		要播放的動作：
+		要播放的動畫：
 	</floater.string>
 	<floater.string name="step_sound">
 		要播放的聲音：
@@ -22,7 +22,7 @@
 		-- 無 --
 	</floater.string>
 	<floater.string name="Title">
-		姿勢：[NAME]
+		手勢：[NAME]
 	</floater.string>
 	<text name="desc_label">
 		描述：
@@ -30,44 +30,45 @@
 	<text name="trigger_label">
 		觸發：
 	</text>
-	<text name="replace_text" tool_tip="用這些字眼取代觸發字眼。 例如，觸發 &apos;hello&apos; 取代為 &apos;howdy&apos; 後，將使得聊天文字「我想說 hello」變成「我想說 howdy」，同時還會播放該姿勢！">
-		取代成：
+	<text name="replace_text" tool_tip="用這些字元替換觸發字元。 例如，觸發 'hello' 替換為 'howdy' 後，將使得聊天文字「我想說 hello」變成「我想說 howdy」，同時還會播放該手勢！">
+		替換成：
 	</text>
-	<line_editor name="replace_editor" tool_tip="用這些字眼取代觸發字眼。 例如，觸發 &apos;hello&apos; 取代為 &apos;howdy&apos; 後，將使得聊天文字「我想說 hello」變成「我想說 howdy」，同時還會播放該姿勢。"/>
+	<line_editor name="replace_editor" tool_tip="用這些字元替換觸發字元。 例如，觸發 'hello' 替換為 'howdy' 後，將使得聊天文字「我想說 hello」變成「我想說 howdy」，同時還會播放該手勢。" />
 	<text name="key_label">
-		快捷鍵：
+		快速鍵：
 	</text>
-	<combo_box label="無" name="modifier_combo"/>
-	<combo_box label="無" name="key_combo"/>
+	<combo_box label="無" name="modifier_combo" />
+	<combo_box label="無" name="key_combo" />
 	<text name="library_label">
 		資源庫：
 	</text>
 	<scroll_list name="library_list">
-		<scroll_list.rows name="action_animation" value="動作"/>
-		<scroll_list.rows name="action_sound" value="聲音"/>
-		<scroll_list.rows name="action_chat" value="聊天"/>
-		<scroll_list.rows name="action_wait" value="等待"/>
+		<scroll_list.rows name="action_animation" value="動畫" />
+		<scroll_list.rows name="action_sound" value="聲音" />
+		<scroll_list.rows name="action_chat" value="聊天" />
+		<scroll_list.rows name="action_wait" value="等待" />
 	</scroll_list>
-	<button label="添加 &gt;&gt;" name="add_btn"/>
+	<button label="新增 &gt;&gt;" name="add_btn" />
 	<text name="steps_label">
 		步驟：
 	</text>
-	<button label="上移鍵" name="up_btn"/>
-	<button label="下移鍵" name="down_btn"/>
-	<button label="移除" name="delete_btn"/>
+	<button label="上移鍵" name="up_btn" />
+	<button label="下移鍵" name="down_btn" />
+	<button label="移除" name="delete_btn" />
 	<text name="options_text">
 		（選項）
 	</text>
 	<radio_group name="animation_trigger_type">
-		<radio_item label="開始" name="start"/>
-		<radio_item label="停止" name="stop"/>
+		<radio_item label="開始" name="start" />
+		<radio_item label="停止" name="stop" />
 	</radio_group>
-	<check_box label="直到動作結束。" name="wait_anim_check"/>
-	<check_box label="時間（秒）：" name="wait_time_check"/>
+	<check_box label="直到按鍵釋放" name="wait_key_release_check" />
+	<check_box label="直到動畫結束。" name="wait_anim_check" />
+	<check_box label="時間（秒）：" name="wait_time_check" />
 	<text name="help_label">
 		所有步驟都會同時進行，除非你加入「等待」步驟。
 	</text>
-	<check_box label="可用" name="active_check" tool_tip="你可以在聊天中鍵入「觸發字眼」，或按某姿勢的熱鍵來啟動可用的姿勢。  熱鍵的綁定若有衝突，通常會使姿勢變成不可用。"/>
-	<button label="預覽" name="preview_btn"/>
-	<button label="儲存" name="save_btn"/>
+	<check_box label="可用" name="active_check" tool_tip="你可以在聊天中鍵入「觸發字元」，或按某手勢的快速鍵來啟用可用的手勢。  快速鍵的繫結若有衝突，通常會使手勢變成不可用。" />
+	<button label="預覽" name="preview_btn" />
+	<button label="儲存" name="save_btn" />
 </floater>

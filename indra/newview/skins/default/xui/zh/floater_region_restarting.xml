@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="region_restarting" title="地區重新啟動中">
+<floater name="region_restarting" title="區域重新啟動中">
 	<string name="RegionName">
-		你所在的地區([NAME])即將重新啟動。
+		你所在的區域([NAME])即將重新啟動。
 
-如果你繼續留在這地區，你將會被登出。
+如果你繼續留在這區域，你將會被登出。
 	</string>
 	<string name="RestartSeconds">
 		重新啟動倒數秒數：
@@ -11,13 +11,17 @@
 	</string>
 	<panel name="layout_panel_1">
 		<text name="region_name">
-			你所在的地區(-最長地區名-)即將重新啟動。
+			你所在的區域(-最長區域名-)即將重新啟動。
 
-如果你繼續留在這地區，你將會被登出。
+如果你繼續留在這區域，你將會被登出。
 		</text>
 		<text name="restart_seconds">
 			重新啟動倒數秒數：
-     32767
+32767
 		</text>
+		<combo_box label="我的地標" name="landmark combo">
+			<combo_box.item label="我的地標" name="item1" />
+		</combo_box>
+		<button tool_tip="傳送到地標" name="teleport_btn" />
 	</panel>
 </floater>

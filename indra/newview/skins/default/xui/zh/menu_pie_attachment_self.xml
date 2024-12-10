@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Attachment Pie">
+	<pie_slice label="檢視檔案" name="Profile..." />
+	<pie_slice label="丟在地上" name="Drop" />
+	<pie_menu name="Attachment Pie More" label="更多 &gt;">
+		<pie_slice label="重新整理紋理" name="Texture Refresh" />
+		<pie_slice label="指令碼資訊" name="ScriptInfo" />
+		<pie_slice label="觸碰" name="Attachment Object Touch" />
+		<pie_menu name="DerenderMenu" label="隱藏 &gt;">
+			<pie_slice label="暫時" name="Derender" />
+			<pie_slice label="封鎖" name="DerenderPermanent" />
+		</pie_menu>
+		<pie_menu name="ExportMenu" label="另存為 &gt;">
+			<pie_slice label="備份" name="Backup" />
+			<pie_slice label="Collada" name="Collada" />
+		</pie_menu>
+		<pie_slice label="在庫存中顯示" name="Show original" />
+		<pie_slice label="檢查化身" name="Avatar Inspect" />
+		<pie_slice label="除錯紋理" name="Debug..." />
+	</pie_menu>
+	<pie_slice label="坐在這裡" name="Sit Down Here" />
+	<pie_slice label="起立" name="Stand Up" />
+	<pie_slice label="卸下" name="Detach" />
+	<pie_slice label="手勢" name="Gestures" />
+	<pie_menu label="外觀 &gt;" name="Appearance &gt;">
+		<pie_slice label="編輯我的身形" name="Edit My Shape" />
+		<pie_menu name="ResetMenu" label="重設 &gt;">
+			<pie_slice label="骨架和動畫" name="Reset Skeleton And Animations" />
+			<pie_slice label="骨架" name="Reset Skeleton" />
+			<pie_slice label="網格細節層次" name="Reset Mesh LOD" />
+		</pie_menu>
+		<pie_slice label="編輯我的裝扮" name="Edit My Outfit" />
+		<pie_slice label="轉儲 XML" name="Dump XML" />
+		<pie_slice label="懸浮高度" name="Hover Height" />
+	</pie_menu>
+	<pie_slice label="編輯" name="Edit..." />
+</pie_menu>

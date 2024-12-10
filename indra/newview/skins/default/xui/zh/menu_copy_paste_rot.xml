@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Copy Paste Rotation Menu">
+	<menu_item_call label="全部複製" name="psr_copy" />
+	<menu_item_call label="複製旋轉" name="rot_copy" />
+	<menu_item_call label="全部黏貼" name="psr_paste" />
+	<menu_item_call label="黏貼旋轉" name="rot_paste" />
+</toggleable_menu>

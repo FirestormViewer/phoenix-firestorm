@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_script_colors" title="腳本文字色彩">
+<floater name="floater_script_colors" title="指令碼文字色彩">
 	<text name="color_pickers_label">
 		選擇所要的色彩：
 	</text>
@@ -7,10 +7,13 @@
 		文字
 	</text>
 	<text name="cursor_label">
-		游標
+		指標
 	</text>
 	<text name="background_label">
 		背景
+	</text>
+	<text name="section_label">
+		區域
 	</text>
 	<text name="datatype_label">
 		資料類型
@@ -18,31 +21,53 @@
 	<text name="event_label">
 		活動
 	</text>
+	<text name="comment_label">
+		註解
+	</text>
+	<text name="function_label">
+		函式
+	</text>
 	<text name="string_literal_label">
 		字串常值
 	</text>
 	<text name="constant_label">
 		常數
 	</text>
+	<text name="i_constant_label">
+		整數常數
+	</text>
+	<text name="s_constant_label">
+		字串常數
+	</text>
+	<text name="f_constant_label">
+		浮點常數
+	</text>
+	<text name="c_constant_label">
+		複合常數
+	</text>
 	<text name="flow_control_label">
 		流程控制
 	</text>
-	<text name="function_label">
-		函式
+	<text name="preprocessor_label">
+		前處理器
 	</text>
-	<text name="comment_label">
-		註解
+	<text name="prefs_label">
+		指令碼編輯器選項：
 	</text>
-	<script_editor name="Script Preview">
-		/* 範例腳本 */
-default
-{
-    state_entry()
-    {
-        // 註解
-        string greeting = &quot;大家好&quot;;
-        llSay(PUBLIC_CHANNEL, greeting);
-    }
-}
-	</script_editor>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="將製表符轉換為空格" tool_tip="如果啟用，當從外部編輯器黏貼指令碼時，製表符將被轉換為空格（通常是4個）。" />
+	<check_box label="啟用LSL前處理器" tool_tip="為LSL指令碼啟用前處理器支援" name="preproc_checkbox" />
+	<check_box label="指令碼最佳化器" tool_tip="最佳化指令碼所需的空間。" name="preprocoptimizer_checkbox" />
+	<check_box label="switch()指令" tool_tip="提供switch()指令進行流程控制。" name="preprocswitch_checkbox" />
+	<check_box label="Lazy Lists" tool_tip="啟用列表操作的擴充語法。" name="preproclazy_checkbox" />
+	<check_box label="#includes從硬碟" tool_tip="啟用#include指令以包含本機硬碟上的檔案。" name="preprocinclude_checkbox" />
+	<text name="lslpreprocinclude_textbox">
+		前處理器包含目錄：
+	</text>
+	<button label="..." label_selected="瀏覽" name="SetPreprocInclude" />
+	<text name="advanced_label">
+		進階選項：
+	</text>
+	<check_box label="通過指令碼除錯視窗路由llOwnerSay" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
+	<check_box label="啟用重新編譯按鈕（適用於#include指令碼等）" name="FSScriptEditorRecompileButton_checkbox" />
+	<button name="close_btn" label="確定" />
 </floater>

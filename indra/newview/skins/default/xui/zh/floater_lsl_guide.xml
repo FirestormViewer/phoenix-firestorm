@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="script ed float" title="LSL 參考">
-	<check_box label="跟隨游標" name="lock_check"/>
-	<combo_box label="鎖定" name="history_combo"/>
-	<button label="返回" name="back_btn"/>
-	<button label="向前" name="fwd_btn"/>
+	<check_box label="跟隨指標" name="lock_check" />
+	<combo_box label="鎖定" name="history_combo" />
+	<button label="傳回" name="back_btn" />
+	<button label="前進" name="fwd_btn" />
 </floater>

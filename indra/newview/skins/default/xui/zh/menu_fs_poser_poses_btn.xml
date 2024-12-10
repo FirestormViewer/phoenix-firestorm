@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Settings">
+    <menu_item_call label="僅載入旋轉" name="rotations"/>
+    <menu_item_call label="僅載入位置" name="positions"/>
+    <menu_item_call label="僅載入縮放" name="scale"/>
+    <menu_item_call label="載入旋轉和位置" name="rotations_positions"/>
+    <menu_item_call label="載入旋轉和縮放" name="rotations_scales"/>
+    <menu_item_call label="載入位置和縮放" name="positions_scales"/>
+    <menu_item_call label="載入全部" name="load_all"/>
+</toggleable_menu>

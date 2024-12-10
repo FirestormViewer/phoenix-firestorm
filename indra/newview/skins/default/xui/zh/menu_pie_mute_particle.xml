@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Mute Particle Pie">
+	<pie_slice label="封鎖粒子所有者" name="Mute Particle" />
+</pie_menu>

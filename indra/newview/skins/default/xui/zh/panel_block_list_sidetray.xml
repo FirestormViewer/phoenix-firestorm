@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
-	<layout_stack name="block_list_sidetray_main">
-		<layout_panel name="back_button_container">
-	<text name="title_text">
-		封鎖清單
+	<panel label="bottom_panel" name="blocked_buttons_panel">
+		<filter_editor label="篩選" name="blocked_filter_input" />
+		<menu_button name="blocked_gear_btn" tool_tip="對所選化身或物件執行操作" />
+		<menu_button name="view_btn" tool_tip="排序選項" />
+		<menu_button name="plus_btn" tool_tip="選擇要封鎖的居民或物件" />
+		<button name="unblock_btn" tool_tip="停止封鎖某個居民或物件" />
+	</panel>
+	<text name="block_limit">
+		[COUNT] 個條目在您的封鎖列表中，限制為 [LIMIT]。
 	</text>
-		</layout_panel>
-		<layout_panel name="block_list_blocklaypanels">
-	<scroll_list name="blocked" tool_tip="目前封鎖的居民清單"/>
-	<button label="封鎖他人" name="Block resident..." tool_tip="挑選一位居民以進行封鎖"/>
-	<button label="依名稱封鎖物件" name="Block object by name..." tool_tip="依名稱挑選一個物件進行封鎖"/>
-	<button label="解除封鎖" name="Unblock" tool_tip="將居民或物件由封鎖清單中移除"/>
-		</layout_panel>
-	</layout_stack>
+	<block_list name="blocked" tool_tip="當前被封鎖的居民列表" />
 </panel>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="自訂顏色" name="custom_colors_panel">
+	<text name="custom_colors_text">
+		自訂顏色 UI:
+	</text>
+	<text name="text_boxc1">
+		按鈕、捲動條等
+	</text>
+	<text name="text_boxc3">
+		突出顯示的文字
+	</text>
+	<text name="text_boxc4">
+		按鈕 - 正常
+	</text>
+	<text name="text_boxc6">
+		按鈕 - 選中
+	</text>
+	<text name="text_boxbn">
+		面板背景 - 正常
+	</text>
+	<text name="text_boxbn_restart">
+		(需要重新啟動)
+	</text>
+	<text name="text_boxbl">
+		面板背景 - 更亮
+	</text>
+	<text name="text_boxb1_restart">
+		(需要重新啟動)
+	</text>
+</panel>

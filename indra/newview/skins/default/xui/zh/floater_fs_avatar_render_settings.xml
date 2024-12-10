@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings" title="居民彩現例外">
+	<floater.string name="av_render_never">
+		永不
+	</floater.string>
+	<floater.string name="av_render_always">
+		始終
+	</floater.string>
+	<filter_editor label="篩選居民" name="filter_input" />
+	<menu_button name="plus_btn" tool_tip="將居民新增到列表" />
+	<name_list name="avatar_list">
+		<name_list.columns label="名字" name="name" />
+		<name_list.columns label="完整細節" name="render_setting" />
+	</name_list>
+	<button name="close_btn" label="關閉" />
+</floater>

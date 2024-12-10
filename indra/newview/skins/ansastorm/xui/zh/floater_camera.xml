@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater">
+	<floater.string name="rotate_tooltip">
+		繞著焦點轉動相機
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		相機移近焦點
+	</floater.string>
+	<floater.string name="move_tooltip">
+		相機上下左右移動
+	</floater.string>
+	<floater.string name="free_mode_title">
+		物件視角
+	</floater.string>
+	<string name="inactive_combo_text">
+		預設值
+	</string>
+	<panel name="controls">
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="相機繞焦點旋轉" />
+			<button name="roll_left" tool_tip="向左滾動相機" />
+			<button name="roll_right" tool_tip="向右滾動相機" />
+			<slider_bar name="zoom_slider" tool_tip="相機移近焦點" />
+			<joystick_track name="cam_track_stick" tool_tip="相機上下左右移動" />
+		</panel>
+	</panel>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="正面視圖">
+			<panel_camera_item.text name="front_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="group_view" tool_tip="側面視圖">
+			<panel_camera_item.text name="side_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="rear_view" tool_tip="背面視圖">
+			<panel_camera_item.text name="rear_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="object_view" tool_tip="物件視圖">
+			<panel_camera_item.text name="object_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="mouselook_view" tool_tip="滑鼠觀察">
+			<panel_camera_item.text name="mouselook_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="reset_view" tool_tip="重設視圖">
+			<panel_camera_item.text name="reset_view_text"></panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="使用預設" name="Use preset" />
+	</combo_box>
+	<button name="gear_btn" tool_tip="相機預設" />
+	<button label="位置..." name="camera_position_btn" />
+	<button label="儲存" name="save_btn" />
+</floater>

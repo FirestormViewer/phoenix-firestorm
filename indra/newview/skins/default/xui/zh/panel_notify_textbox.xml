@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="即時訊息" name="panel_notify_textbox">
-	<string name="message_max_lines_count" value="14"/>
-	<panel label="info_panel" name="info_panel"/>
+<panel label="私聊" name="panel_notify_textbox">
 	<panel label="info_panel" name="textbox_panel">
-		<text_editor name="message" value="訊息"/>
+		<text_editor name="message" value="訊息" />
 	</panel>
 	<panel label="control_panel" name="control_panel">
-		<button label="提交" name="btn_submit"/>
-		<button label="忽視" name="ignore_btn"/>
+		<button label="送出" name="btn_submit" />
+		<button label="忽視" name="ignore_btn" />
 	</panel>
 </panel>

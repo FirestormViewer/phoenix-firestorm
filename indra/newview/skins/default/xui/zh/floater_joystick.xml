@@ -1,33 +1,74 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="搖桿設置">
-	<floater.string name="NoDevice">
-		未偵測到設備
-	</floater.string>
-	<check_box label="啟用搖桿：" name="enable_joystick"/>
-	<spinner label="X 軸映射" name="JoystickAxis1"/>
-	<spinner label="Y 軸映射" name="JoystickAxis2"/>
-	<spinner label="Z 軸映射" name="JoystickAxis0"/>
-	<spinner label="俯仰映射" name="JoystickAxis4"/>
-	<spinner label="偏擺映射" name="JoystickAxis5"/>
-	<spinner label="翻滾映射" name="JoystickAxis3"/>
-	<spinner label="縮放映射" name="JoystickAxis6"/>
-	<check_box label="直接縮放" name="ZoomDirect"/>
-	<check_box label="三維游標" name="Cursor3D"/>
-	<check_box label="自動水平" name="AutoLeveling"/>
+<floater name="Joystick" title="搖桿設定">
+	<string name="JoystickDisabled">
+		無
+	</string>
+	<text name="joystick_lbl">
+		搖桿：
+	</text>
+	<spinner label="X 軸對映" name="JoystickAxis1" />
+	<spinner label="Y 軸對映" name="JoystickAxis2" />
+	<spinner label="Z 軸對映" name="JoystickAxis0" />
+	<spinner label="俯仰對映" name="JoystickAxis4" />
+	<spinner label="偏擺對映" name="JoystickAxis5" />
+	<spinner label="翻滾對映" name="JoystickAxis3" />
+	<spinner label="縮放對映" name="JoystickAxis6" />
+	<check_box label="直接縮放" name="ZoomDirect" />
+	<check_box label="三維指標" name="Cursor3D" />
+	<check_box label="自動水平" name="AutoLeveling" />
 	<text name="Control Modes:">
 		控制模式：
 	</text>
-	<check_box label="化身" name="JoystickAvatarEnabled"/>
-	<check_box label="建造" name="JoystickBuildEnabled"/>
-	<check_box label="移動攝影機" name="JoystickFlycamEnabled"/>
-	<stat_view label="搖桿監控器" name="axis_view">
-		<stat_bar label="軸 0" name="axis0"/>
-		<stat_bar label="軸 1" name="axis1"/>
-		<stat_bar label="軸 2" name="axis2"/>
-		<stat_bar label="軸 3" name="axis3"/>
-		<stat_bar label="軸 4" name="axis4"/>
-		<stat_bar label="軸 5" name="axis5"/>
-	</stat_view>
+	<check_box label="化身" name="JoystickAvatarEnabled" />
+	<check_box label="建造" name="JoystickBuildEnabled" />
+	<check_box label="移動相機" name="JoystickFlycamEnabled" />
+	<text name="joystick_monitor_label">
+		搖桿監視器
+	</text>
+	<icon name="button_light_0" tool_tip="搖桿按鈕 0" />
+	<icon name="button_light_1" tool_tip="搖桿按鈕 1" />
+	<icon name="button_light_2" tool_tip="搖桿按鈕 2" />
+	<icon name="button_light_3" tool_tip="搖桿按鈕 3" />
+	<icon name="button_light_4" tool_tip="搖桿按鈕 4" />
+	<icon name="button_light_5" tool_tip="搖桿按鈕 5" />
+	<icon name="button_light_6" tool_tip="搖桿按鈕 6" />
+	<icon name="button_light_7" tool_tip="搖桿按鈕 7" />
+	<icon name="button_light_8" tool_tip="搖桿按鈕 8" />
+	<icon name="button_light_9" tool_tip="搖桿按鈕 9" />
+	<icon name="button_light_10" tool_tip="搖桿按鈕 10" />
+	<icon name="button_light_11" tool_tip="搖桿按鈕 11" />
+	<icon name="button_light_12" tool_tip="搖桿按鈕 12" />
+	<icon name="button_light_13" tool_tip="搖桿按鈕 13" />
+	<icon name="button_light_14" tool_tip="搖桿按鈕 14" />
+	<icon name="button_light_15" tool_tip="搖桿按鈕 15" />
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+			<stat_view name="axis_view_0">
+				<stat_bar label="軸0" name="axis0" />
+			</stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="軸1" name="axis1" />
+			</stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="軸2" name="axis2" />
+			</stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="軸3" name="axis3" />
+			</stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="軸4" name="axis4" />
+			</stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="軸5" name="axis5" />
+			</stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="軸6" name="axis6" />
+			</stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="軸7" name="axis7" />
+			</stat_view>
+		</container_view>
+	</scroll_container>
 	<text name="XScale">
 		X 比例
 	</text>
@@ -73,7 +114,7 @@
 	<text name="ZoomDeadZone">
 		縮放死區
 	</text>
-	<button label="SpaceNavigator 預設值" name="SpaceNavigatorDefaults"/>
-	<button label="確定" label_selected="確定" name="ok_btn"/>
-	<button label="取消" label_selected="取消" name="cancel_btn"/>
+	<button label="三維控制器預設值" name="SpaceNavigatorDefaults" />
+	<button label="確定" label_selected="確定" name="ok_btn" />
+	<button label="取消" label_selected="取消" name="cancel_btn" />
 </floater>

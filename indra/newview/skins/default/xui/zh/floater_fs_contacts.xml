@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="imcontacts" title="聯絡人">
+	<string name="no_friends" value="沒有朋友" />
+	<string name="no_filtered_groups_msg" value="未找到名稱包含「[SEARCH_TERM]」的群組。" />
+	<string name="no_groups_msg" value="你在尋找要加入的群組嗎？嘗試 [secondlife:///app/search/groups 搜尋]。" />
+	<tab_container name="friends_and_groups">
+		<panel label="朋友" name="friends_panel" />
+		<panel label="群組" name="groups_panel" />
+		<panel label="聯絡人分組" name="contact_sets_panel" />
+	</tab_container>
+</floater>

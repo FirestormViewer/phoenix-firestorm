@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Import Collada" title="匯入場景">
 	<text name="mesh count">
-		網面：[COUNT]
+		網格模型：[COUNT]
 	</text>
 	<text name="texture count">
-		材質： [COUNT]
+		紋理： [COUNT]
 	</text>
 	<text name="status">
 		狀態：[STATUS]
 	</text>
-	<button label="取消" name="cancel"/>
-	<button label="確定" name="ok"/>
+	<button label="取消" name="cancel" />
+	<button label="確定" name="ok" />
 	<string name="status_idle">
 		閒置中
 	</string>

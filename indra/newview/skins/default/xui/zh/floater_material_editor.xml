@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="material editor">
+	<string name="no_upload_fee_string">無上傳費用</string>
+	<string name="upload_fee_string">上傳費用[FEE]L$</string>
+	<string name="material_selection_title">材質選擇</string>
+	<string name="material_selection_text">選擇材質：</string>
+	<string name="material_batch_import_text">--- 批次上傳全部 ---</string>
+	<string name="material_override_title">編輯材質</string>
+	<panel name="button_panel">
+		<text name="unsaved_changes">
+			未儲存的更改
+		</text>
+		<button label="儲存" name="save" />
+		<button label="另存為" name="save_as" />
+		<text name="total_upload_fee">
+			總上傳費用：[FEE]L$ 
+		</text>
+		<button label="取消" name="cancel" />
+	</panel>
+</floater>

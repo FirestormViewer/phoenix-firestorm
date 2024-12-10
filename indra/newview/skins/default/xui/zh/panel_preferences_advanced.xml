@@ -1,32 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="進階" name="advanced">
-	<panel.string name="aspect_ratio_text">
-		[NUM]:[DEN]
+	<panel.string name="middle_mouse">
+		中鍵單擊
 	</panel.string>
-	<text name="Cache:">
-		快取：
+	<check_box label="允許多使用者端登入（可能降低穩定性和效能）" name="allow_multiple_viewer_check" />
+	<check_box label="允許連線到其他類比網路（並非所有類比網路都支援Firestorm）" name="show_grid_selection_check" />
+	<check_box label="顯示進階選單（使用時需自擔風險！）" name="show_advanced_menu_check" />
+	<check_box label="顯示開發者選單（使用時需自擔風險！）" name="show_develop_menu_check" />
+	<check_box label="在Windows系統上禁用WMI分析檢測視訊記憶體" name="FSDisableWMIProbing" />
+	<!--<check_box tool_tip="此設定將減少遠端渲染的載入，但可能導致這些遠端渲染的動畫不正確" label="啟用動畫時間步長（實驗性）" name="UseAnimationTimeSteps"/>-->
+	<text name="BackgroundYieldTimeText">
+		當[APP_NAME]不在前臺時，每影格的延遲時間（預設為40毫秒）：
 	</text>
-	<spinner label="快取大小 (256 - 9984MB)" name="cachesizespinner"/>
-	<text name="text_box5">
-		MB
-	</text>
-	<button label="清除快取" label_selected="清除快取" name="clear_cache"/>
-	<text name="Cache location">
-		快取位置：
-	</text>
-	<button label="瀏覽" label_selected="瀏覽" name="set_cache"/>
-	<button label="預設位置" label_selected="預設位置" name="default_cache_location"/>
-	<text name="UI Size:">
-		使用者界面尺寸：
-	</text>
-	<check_box label="顯示腳本錯誤訊息於：" name="show_script_errors"/>
-	<radio_group name="show_location">
-		<radio_item label="附近的聊天中" name="0"/>
-		<radio_item label="分開的視窗中" name="1"/>
-	</radio_group>
-	<check_box label="允許同時執行多個瀏覽器" name="allow_multiple_viewer_check"/>
-	<check_box label="登入時顯示網格選擇" name="show_grid_selection_check"/>
-	<check_box label="顯示進階選單" name="show_advanced_menu_check"/>
-	<check_box label="顯示開發選單" name="show_develop_menu_check"/>
-	<button label="預設的創建權限" name="default_creation_permissions"/>
+	<button label="重設所有設定" label_selected="重設所有設定..." name="clear_settings" />
 </panel>

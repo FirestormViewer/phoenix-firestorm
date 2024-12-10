@@ -1,73 +1,75 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="worldmap" title="世界地圖">
-	<panel name="layout_panel_1">
-		<text name="events_label">
-			圖例
-		</text>
-	</panel>
-	<panel name="layout_panel_2">
-		<button name="Show My Location" tool_tip="以我的化身所在位置居中地圖"/>
-		<text name="me_label">
-			我自己
-		</text>
-		<text name="person_label">
-			人
-		</text>
-		<text name="infohub_label">
-			資訊中心
-		</text>
-		<text name="land_sale_label">
-			土地出售
-		</text>
-		<text name="auction_label">
-			土地拍賣
-		</text>
-		<text name="by_owner_label">
-			依所有人
-		</text>
-		<button name="Go Home" tool_tip="瞬間返回我的家"/>
-		<text name="Home_label">
-			我的家
-		</text>
-		<text name="events_label">
-			活動：
-		</text>
-		<text name="pg_label">
-			一般普級
-		</text>
-		<check_box initial_value="true" name="events_mature_chk"/>
-		<text name="events_mature_label">
-			適度成人
-		</text>
-		<text name="events_adult_label">
-			完全成人
-		</text>
-	</panel>
-	<panel name="layout_panel_3">
-		<text name="find_on_map_label">
-			在地圖上發現
-		</text>
-	</panel>
-	<panel name="layout_panel_4">
-		<combo_box label="線上的朋友" name="friend combo" tool_tip="顯示朋友在地圖上">
-			<combo_box.item label="我線上的朋友" name="item1"/>
-		</combo_box>
-		<combo_box label="我的地標" name="landmark combo" tool_tip="將地標位置顯示在地圖上">
-			<combo_box.item label="我的地標" name="item1"/>
-		</combo_box>
-		<search_editor label="地區依名稱" name="location" tool_tip="輸入一個地區的名稱"/>
-		<button label="尋找" name="DoSearch" tool_tip="搜尋地區"/>
-		<button name="Clear" tool_tip="清楚追蹤線並重設地圖"/>
-		<text name="events_label">
-			位置：
-		</text>
-		<button label="瞬間傳送" name="Teleport" tool_tip="瞬間傳送到所選的位置"/>
-		<button label="覆製 SLurl" name="copy_slurl" tool_tip="將目前位置複製為可在網路上使用的 SLurl。"/>
-		<button label="顯示選擇" name="Show Destination" tool_tip="將所選位置移到地圖中央"/>
-	</panel>
-	<panel name="layout_panel_5">
-		<text name="zoom_label">
-			縮放
-		</text>
-	</panel>
+	<string name="UnnamedParcel">
+		（無名地塊）
+	</string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="map_details_panel">
+			<panel name="layout_panel_1">
+				<text name="events_label">
+					圖例
+				</text>
+			</panel>
+			<panel name="layout_panel_2">
+				<button name="Show My Location" tool_tip="以我的化身所在位置居中地圖" />
+				<text name="me_label">
+					我自己
+				</text>
+				<text name="person_label">
+					人
+				</text>
+				<text name="infohub_label">
+					資訊中心
+				</text>
+				<text name="land_sale_label">
+					土地出售
+				</text>
+				<text name="auction_label">
+					土地拍賣
+				</text>
+				<text name="by_owner_label">
+					按所有者
+				</text>
+				<button name="Go Home" tool_tip="瞬間傳回我的家" />
+				<text name="Home_label">
+					我的家
+				</text>
+				<text name="events_label">
+					活動：
+				</text>
+				<text name="pg_label">
+					一般普級
+				</text>
+				<text name="events_mature_label">
+					適度成人
+				</text>
+				<text name="events_adult_label">
+					完全成人
+				</text>
+			</panel>
+			<panel name="layout_panel_3">
+				<text name="find_on_map_label">
+					在地圖上發現
+				</text>
+			</panel>
+			<panel name="layout_panel_4">
+				<combo_box label="線上的朋友" name="friend combo" tool_tip="顯示朋友在地圖上">
+					<combo_box.item label="我線上的朋友" name="item1" />
+				</combo_box>
+				<combo_box label="我的地標" name="landmark combo" tool_tip="將地標位置顯示在地圖上">
+					<combo_box.item label="我的地標" name="item1" />
+				</combo_box>
+				<search_editor label="按區域名稱" name="location" tool_tip="輸入一個區域的名稱" />
+				<button label="尋找" name="DoSearch" tool_tip="搜尋區域" />
+				<text name="events_label">
+					位置：
+				</text>
+				<button label="瞬間傳送" label_selected="瞬間" name="Teleport" tool_tip="傳送到選定位置" />
+				<button label="複製SLurl" name="copy_slurl" tool_tip="複製當前位置的SLurl以在網頁中使用。" width="88" />
+				<button label="刪除" name="Clear" tool_tip="關閉追蹤並重設地圖。" width="75" />
+				<button label="顯示選擇" label_selected="顯示目標" name="Show Destination" tool_tip="將地圖中心移到選定位置" />
+				<button label="追蹤區域" name="track_region" tool_tip="將區域新增到區域追蹤器" />
+			</panel>
+		</layout_panel>
+	</layout_stack>
 </floater>

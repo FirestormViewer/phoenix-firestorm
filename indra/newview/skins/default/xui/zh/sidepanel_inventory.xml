@@ -1,42 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="事物" name="objects panel">
-	<panel label="" name="sidepanel_inventory_panel">
+<panel label="物件" name="objects panel">
+	<panel name="sidepanel_inventory_panel">
 		<layout_stack name="inventory_layout_stack">
 			<layout_panel name="inbox_layout_panel">
-				<panel label="" name="marketplace_inbox">
+				<panel name="marketplace_inbox">
 					<string name="InboxLabelWithArg">
-						收到的物項 ([NUM])
+						收到的物件 ([NUM])
 					</string>
 					<string name="InboxLabelNoArg">
-						收到的物項
+						收到的物件
 					</string>
-					<button label="收到的物項" name="inbox_btn"/>
+					<button label="收到的物件" name="inbox_btn" />
+					<button tool_tip="重新整理收到的物件列表" name="reload_received_items_btn" />
 					<text name="inbox_fresh_new_count">
 						[NUM] 項新的
 					</text>
-					<panel name="inbox_inventory_placeholder_panel" tool_tip="將物項拖曳置放到收納區，即可開始使用">
+					<panel name="inbox_inventory_placeholder_panel" tool_tip="將物件拖放到庫存，即可開始使用">
 						<text name="inbox_inventory_placeholder">
-							從第二人生購物市集購得物項將送到這裡。
+							從第二人生購物市場購得物件將送到這裡。
 						</text>
 					</panel>
 				</panel>
 			</layout_panel>
 		</layout_stack>
-		<panel name="button_panel">
-			<layout_stack name="button_panel_ls">
-				<layout_panel name="info_btn_lp">
-					<button label="檔案" name="info_btn" tool_tip="顯示物件簡介"/>
-				</layout_panel>
-				<layout_panel name="share_btn_lp">
-					<button label="分享" name="share_btn" tool_tip="分享一個收納區物品"/>
-				</layout_panel>
-				<layout_panel name="shop_btn_lp">
-					<button label="購物" name="shop_btn" tool_tip="開啟購物市集網頁"/>
-					<button label="穿上" name="wear_btn" tool_tip="穿上所選擇的裝扮"/>
-					<button label="遊戲" name="play_btn"/>
-					<button label="瞬間傳送" name="teleport_btn" tool_tip="瞬間傳送到所選的區域"/>
-				</layout_panel>
-			</layout_stack>
-		</panel>
 	</panel>
 </panel>

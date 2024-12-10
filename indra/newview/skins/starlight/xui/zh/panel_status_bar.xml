@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="此地塊可購買。" />
+		<text name="parcel_info_text" value="(載入中)" tool_tip="你所在的地塊的名稱。點擊打開土地資訊。" />
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		封包損失
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		頻寬
+	</panel.string>
+	<panel.string name="time">
+		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="搜尋選項" name="search_menu_edit" tool_tip="在這裡輸入你想搜尋的字詞。 若在選項中有全文配對到結果，將會顯示部分結果。" />
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="點擊以更新L$餘額" value="?? L$" />
+		<button label="購買L$" name="buyL" tool_tip="點擊此處購買更多的L$" />
+	</panel>
+	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="視野範圍" />
+		<slider tool_tip="與相機的最大距離（米）" name="drawdistance" />
+		<text name="TimeText" tool_tip="當前時間（太平洋時間）" />
+		<button name="stream_toggle_btn" tool_tip="啟動/停止地塊音訊串流" />
+		<button name="media_toggle_btn" tool_tip="啟動/停止所有媒體（音樂，影片，網站）" />
+		<button name="volume_btn" tool_tip="總音量控制" />
+		<text name="FPSText" tool_tip="每秒影格數" />
+	</panel>
+</panel>

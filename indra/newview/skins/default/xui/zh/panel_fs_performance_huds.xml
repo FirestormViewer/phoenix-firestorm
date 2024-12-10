@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="huds_title">
+		活動的HUD
+	</text>
+	<text name="huds_desc1">
+		移除不需要的HUD可以節省記憶體並提高檢視器的速度。
+	</text>
+	<text name="huds_desc2">
+		HUD經常包含大量指令碼，還會產生伺服器端的延遲。
+	</text>
+	<text name="huds_desc3">
+		注意: 將HUD最小化的按鈕不會將其移除。要移除，請點擊「X」。
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns label="時間(微秒)" name="art_value" tool_tip="彩現HUD所需的微秒數。" />
+		<name_list.columns label="名稱" tool_tip="單擊「X」移除HUD。" name="name" />
+	</name_list>
+</panel>
