@@ -42,6 +42,8 @@
 #include "lluictrl.h"
 #include "llgroupiconctrl.h"
 
+#include "llagent.h"                // for gAgent
+
 //////////////////////////////////////////////////////////////////////////////
 // LLInspectGroup
 //////////////////////////////////////////////////////////////////////////////
@@ -86,6 +88,7 @@ public:
     void onClickViewProfile();
     void onClickJoin();
     void onClickLeave();
+    void onClickActivateGroup();
 
 private:
     LLUUID              mGroupID;
@@ -102,6 +105,8 @@ LLInspectGroup::LLInspectGroup(const LLSD& sd)
         boost::bind(&LLInspectGroup::onClickJoin, this));
     mCommitCallbackRegistrar.add("InspectGroup.Leave",
         boost::bind(&LLInspectGroup::onClickLeave, this));
+    mCommitCallbackRegistrar.add("InspectGroup.ActivateGroup",
+        boost::bind(&LLInspectGroup::onClickActivateGroup, this));
 
     // can't make the properties request until the widgets are constructed
     // as it might return immediately, so do it in postBuild.
@@ -160,6 +165,7 @@ void LLInspectGroup::requestUpdate()
     getChild<LLUICtrl>("view_profile_btn")->setVisible(true);
     getChild<LLUICtrl>("leave_btn")->setVisible(false);
     getChild<LLUICtrl>("join_btn")->setVisible(false);
+    getChild<LLUICtrl>("activate_group_btn")->setVisible(false);
 
     LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
     if (!gdatap || !gdatap->isGroupPropertiesDataComplete() )
@@ -255,6 +261,9 @@ void LLInspectGroup::processGroupData()
 
         getChild<LLUICtrl>("join_btn")->setVisible(!is_member);
         getChild<LLUICtrl>("leave_btn")->setVisible(is_member);
+        getChild<LLUICtrl>("activate_group_btn")->setVisible(is_member);
+        if (is_member)
+            getChild<LLUICtrl>("activate_group_btn")->setEnabled(mGroupID != gAgent.getGroupID());
 
         // Only enable join button if you are allowed to join
         bool can_join = !is_member && data->mOpenEnrollment;
@@ -278,6 +287,12 @@ void LLInspectGroup::onClickLeave()
 {
     closeFloater();
     LLGroupActions::leave(mGroupID);
+}
+
+void LLInspectGroup::onClickActivateGroup()
+{
+    closeFloater();
+    LLGroupActions::activate(mGroupID);
 }
 
 //////////////////////////////////////////////////////////////////////////////

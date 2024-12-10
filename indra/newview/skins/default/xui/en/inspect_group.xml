@@ -15,7 +15,7 @@
  single_instance="true"
  sound_flags="0"
  visible="true"
- width="228">
+ width="340">
   <string name="PrivateGroup">Private group</string>
   <string name="FreeToJoin">Free to join</string>
   <string name="CostToJoin">L$[AMOUNT] to join</string>
@@ -101,4 +101,13 @@ L$123 to join
      left="117"
      width="103"
      commit_callback.function="InspectGroup.ViewProfile" />
+  <button
+     follows="bottom|left"
+     height="23"
+     label="Activate"
+     name="activate_group_btn"
+     top="125"
+     left="225"
+     width="103"
+     commit_callback.function="InspectGroup.ActivateGroup" />
 </floater>
