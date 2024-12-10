@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Url Popup">
-	<menu_item_call label="察看檔案" name="show_agent"/>
-	<menu_item_call label="送出 IM..." name="send_im"/>
-	<menu_item_call label="加為朋友..." name="add_friend"/>
-	<menu_item_call label="移除朋友…" name="remove_friend"/>
-	<menu_item_call label="覆製名稱到剪貼簿" name="url_copy_label"/>
-	<menu_item_call label="覆製 SLurl 到剪貼簿" name="url_copy"/>
+	<menu_item_call label="檢視檔案" name="show_agent" />
+	<menu_item_call label="私聊" name="send_im" />
+	<menu_item_call label="聊天歷史" name="chat_history" />
+	<menu_item_call label="加為朋友" name="add_friend" />
+	<menu_item_call label="新增到聯絡人分組" name="Add to Set" />
+	<menu_item_call label="聚焦朋友" name="zoom_agent" />
+	<menu_item_call label="傳送到居民身邊" name="teleportto_agent" />
+	<menu_item_call label="傳送瞬間傳送邀請" name="offer_teleport" />
+	<menu_item_call label="請求瞬間傳送" name="request_teleport" />
+	<menu_item_call label="追蹤朋友" name="track_agent" />
+	<menu_item_call label="移除朋友" name="remove_friend" />
+	<menu_item_call label="違規檢舉" name="report_abuse" />
+	<menu_item_call label="封鎖" name="Block" />
+	<context_menu label="主持人選項" name="GroupModerationSubmenu">
+		<menu_item_call label="允許文字聊天" name="AllowGroupChat" />
+		<menu_item_call label="禁止文字聊天" name="ForbidGroupChat" />
+		<menu_item_call label="從群組封鎖成員" name="BanGroupMember" />
+		<menu_item_call label="從群組移除成員" name="BanEjectMember" />
+	</context_menu>
+	<menu_item_call label="複製名稱到剪貼簿" name="url_copy_label" />
+	<menu_item_call label="複製SLurl到剪貼簿" name="url_copy" />
 </context_menu>

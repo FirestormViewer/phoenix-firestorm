@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="sound_explorer" title="聲音探索器">
+	<floater.string name="Playing">
+		正在播放
+	</floater.string>
+	<floater.string name="NotPlaying">
+		[TIME] 分鐘前
+	</floater.string>
+	<floater.string name="Type_UI">
+		使用者界面
+	</floater.string>
+	<floater.string name="Type_Avatar">
+		化身
+	</floater.string>
+	<floater.string name="Type_llTriggerSound">
+		llTriggerSound
+	</floater.string>
+	<floater.string name="Type_llLoopSound">
+		llLoopSound
+	</floater.string>
+	<floater.string name="Type_llPlaySound">
+		llPlaySound
+	</floater.string>
+	<check_box name="avatars_chk" label="化身" />
+	<check_box name="objects_chk" label="物件" />
+	<check_box name="collision_chk" label="預設碰撞聲音" />
+	<check_box name="repeated_asset_chk" label="重複資產" />
+	<check_box name="pause_chk" label="暫停日誌" left_delta="125" />
+	<scroll_list name="sound_list">
+		<columns label="正在播放" name="playing" width="95" />
+		<columns label="類型" name="type" />
+		<columns label="所有者" name="owner" />
+		<columns label="聲音" name="sound" />
+	</scroll_list>
+	<button label="本地播放" name="play_locally_btn" />
+	<button label="本地停止" name="stop_locally_btn" />
+	<button label="聚焦" name="look_at_btn" />
+	<button label="停止" name="stop_btn" />
+	<button label="封鎖名單" name="bl_btn" />
+</floater>

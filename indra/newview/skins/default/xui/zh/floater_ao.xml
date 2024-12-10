@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_overrider" title="動畫涵蓋器">
+	<floater.string name="ao_no_sets_loaded">
+		未載入設定
+	</floater.string>
+	<floater.string name="ao_no_animations_loaded">
+		未載入動畫
+	</floater.string>
+	<floater.string name="ao_dnd_only_on_full_interface">
+		帶有 AO 設定的記事卡&amp;只能拖放到最大化的視窗中。點擊工具圖示可最大化視窗。
+	</floater.string>
+</floater>

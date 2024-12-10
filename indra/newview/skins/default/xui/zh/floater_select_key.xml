@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container">
-	<text name="Save item as:">
-		按任一鍵設定「說話」按鈕的觸發。
+<floater name="modal container" title="設定按鍵">
+	<floater.string name="keyboard">
+		鍵盤
+	</floater.string>
+	<floater.string name="mouse">
+		滑鼠按鍵
+	</floater.string>
+	<floater.string name="basic_description">
+		按下鍵盤或滑鼠按鍵以設定觸發器。
+允許的輸入：[INPUT]。
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+		組合鍵 [KEYSTR] 已被選單預留。
+	</floater.string>
+	<text name="description">
+		按下鍵盤或滑鼠按鍵以設定觸發器。
+允許的輸入：[INPUT]。
 	</text>
-	<button label="取消" label_selected="取消" name="Cancel"/>
+	<check_box label="為所有模式設定" name="apply_all" tool_tip="檢視器根據您在虛擬世界中的當前活動使用不同的鍵位設定。啟用此選項將使您的更改適用於所有模式。" />
+	<button label="清除" name="SetEmpty" />
+	<button label="預設" name="Default" />
+	<button label="取消" name="Cancel" />
 </floater>

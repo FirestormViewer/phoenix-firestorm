@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="Gear Outfit">
-	<menu_item_call label="穿上 － 取代目前裝扮" name="wear"/>
-	<menu_item_call label="穿上 － 添加到目前裝扮" name="wear_add"/>
-	<menu_item_call label="脫下 － 由目前裝扮移除" name="take_off"/>
-	<menu_item_call label="上傳相片(L$[UPLOAD_COST])" name="upload_photo"/>
-	<menu_item_call label="選擇相片" name="select_photo"/>
-	<menu_item_call label="拍攝快照" name="take_snapshot"/>
-	<menu_item_call label="移除相片" name="remove_photo"/>
-	<context_menu label="新衣服" name="New Clothes">
-		<menu_item_call label="新襯衫" name="New Shirt"/>
-		<menu_item_call label="新褲子" name="New Pants"/>
-		<menu_item_call label="新鞋子" name="New Shoes"/>
-		<menu_item_call label="新襪子" name="New Socks"/>
-		<menu_item_call label="新外套" name="New Jacket"/>
-		<menu_item_call label="新裙子" name="New Skirt"/>
-		<menu_item_call label="新手套" name="New Gloves"/>
-		<menu_item_call label="新內衣" name="New Undershirt"/>
-		<menu_item_call label="新內褲" name="New Underpants"/>
-		<menu_item_call label="新半透明" name="New Alpha"/>
-		<menu_item_call label="新身體物理" name="New Physics"/>
-		<menu_item_call label="新刺青" name="New Tattoo"/>
+	<menu_item_call label="替換當前裝扮" name="wear" />
+	<menu_item_call label="新增到當前裝扮" name="wear_add" />
+	<menu_item_call label="從當前裝扮移除" name="take_off" />
+	<menu_item_call label="圖像" name="thumbnail" />
+	<menu_item_call label="儲存到此裝扮" name="save" />
+	<menu_item_call label="裝扮重新命名" name="rename" />
+	<menu_item_call label="刪除裝扮" name="delete_outfit" />
+	<menu_item_check label="總是按名稱排序檔案夾" name="sort_folders_by_name" />
+	<menu_item_call label="展開全部檔案夾" name="expand" />
+	<menu_item_call label="摺疊全部檔案夾" name="collapse" />
+	<context_menu label="新服裝" name="New Clothes">
+		<menu_item_call label="新襯衫" name="New Shirt" />
+		<menu_item_call label="新褲子" name="New Pants" />
+		<menu_item_call label="新鞋子" name="New Shoes" />
+		<menu_item_call label="新襪子" name="New Socks" />
+		<menu_item_call label="新外套" name="New Jacket" />
+		<menu_item_call label="新裙子" name="New Skirt" />
+		<menu_item_call label="新手套" name="New Gloves" />
+		<menu_item_call label="新內衣" name="New Undershirt" />
+		<menu_item_call label="新內褲" name="New Underpants" />
+		<menu_item_call label="新Alpha" name="New Alpha" />
+		<menu_item_call label="新身體物理" name="New Physics" />
+		<menu_item_call label="新刺青" name="New Tattoo" />
+		<menu_item_call label="新通用層" name="New Universal" />
 	</context_menu>
 	<context_menu label="新身體部位" name="New Body Parts">
-		<menu_item_call label="新體形" name="New Shape"/>
-		<menu_item_call label="新皮膚" name="New Skin"/>
-		<menu_item_call label="新頭髮" name="New Hair"/>
-		<menu_item_call label="新眼睛" name="New Eyes"/>
+		<menu_item_call label="新身形" name="New Shape" />
+		<menu_item_call label="新皮膚" name="New Skin" />
+		<menu_item_call label="新頭髮" name="New Hair" />
+		<menu_item_call label="新眼睛" name="New Eyes" />
 	</context_menu>
-	<menu_item_call label="展開全部資料夾" name="expand"/>
-	<menu_item_call label="摺疊全部資料夾" name="collapse"/>
-	<menu_item_call label="裝扮更名" name="rename"/>
-	<menu_item_call label="刪除裝扮" name="delete_outfit"/>
-	<menu_item_check label="總是由名稱排序資料夾" name="sort_folders_by_name"/>
 </toggleable_menu>

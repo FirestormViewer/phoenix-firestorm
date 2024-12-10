@@ -7,19 +7,19 @@
 		&lt;空白&gt;
 	</string>
 	<string name="parcel_media_name">
-		地段串流媒體
+		地塊串串流媒體
 	</string>
 	<string name="parcel_audio_name">
-		地段串流音樂
+		地塊串流音樂
 	</string>
 	<string name="playing_suffix">
 		（播放中）
 	</string>
 	<panel name="minimized_controls">
-		<button label="全部停止" name="all_nearby_media_disable_btn" tool_tip="關閉附近全部的媒體"/>
-		<button label="全部開始" name="all_nearby_media_enable_btn" tool_tip="開啟附近全部的媒體"/>
-		<button name="open_prefs_btn" tool_tip="打開媒體偏好設定"/>
-		<button label="細節&gt;&gt;" label_selected="&lt;&lt;基本" name="more_btn" tool_tip="進階控制"/>
+		<button label="全部停止" name="all_nearby_media_disable_btn" tool_tip="關閉附近全部的媒體" />
+		<button label="全部開始" name="all_nearby_media_enable_btn" tool_tip="開啟附近全部的媒體" />
+		<button name="open_prefs_btn" tool_tip="打開媒體偏好設定" />
+		<button label="細節&gt;&gt;" label_selected="&lt;&lt;基本" name="more_btn" tool_tip="進階控制" />
 	</panel>
 	<panel name="nearby_media_panel">
 		<text name="nearby_media_title">
@@ -29,40 +29,40 @@
 			顯示：
 		</text>
 		<combo_box name="show_combo">
-			<combo_box.item label="全部" name="All"/>
-			<combo_box.item label="在此地段內" name="WithinParcel"/>
-			<combo_box.item label="在此地段外部" name="OutsideParcel"/>
-			<combo_box.item label="在其他化身身上" name="OnOthers"/>
+			<combo_box.item label="全部" name="All" />
+			<combo_box.item label="在此地塊內" name="WithinParcel" />
+			<combo_box.item label="在此地塊外部" name="OutsideParcel" />
+			<combo_box.item label="在其他化身身上" name="OnOthers" />
 		</combo_box>
 		<scroll_list name="media_list">
-			<scroll_list.columns label="鄰近" name="media_proximity"/>
-			<scroll_list.columns label="可看到" name="media_visibility"/>
-			<scroll_list.columns label="類型" name="media_class"/>
-			<scroll_list.columns label="名稱" name="media_name"/>
-			<scroll_list.columns label="除錯" name="media_debug"/>
+			<scroll_list.columns label="鄰近" name="media_proximity" />
+			<scroll_list.columns label="可看到" name="media_visibility" />
+			<scroll_list.columns label="類型" name="media_class" />
+			<scroll_list.columns label="名稱" name="media_name" />
+			<scroll_list.columns label="除錯" name="media_debug" />
 		</scroll_list>
 		<panel name="media_controls_panel">
 			<layout_stack name="media_controls">
 				<layout_panel name="stop">
-					<button name="stop_btn" tool_tip="停止所選擇媒體"/>
+					<button name="stop_btn" tool_tip="停止所選擇媒體" />
 				</layout_panel>
 				<layout_panel name="play">
-					<button name="play_btn" tool_tip="播放所選擇的媒體"/>
+					<button name="play_btn" tool_tip="播放所選擇的媒體" />
 				</layout_panel>
 				<layout_panel name="pause">
-					<button name="pause_btn" tool_tip="暫停所選擇的媒體"/>
+					<button name="pause_btn" tool_tip="暫停所選擇的媒體" />
 				</layout_panel>
 				<layout_panel name="volume_slider_ctrl">
-					<slider_bar initial_value="0.5" name="volume_slider" tool_tip="所選擇的媒體之音頻音量"/>
+					<slider_bar initial_value="0.5" name="volume_slider" tool_tip="所選擇的媒體之音訊音量" />
 				</layout_panel>
 				<layout_panel name="mute">
-					<button name="mute_btn" tool_tip="靜音所選擇的媒體音頻"/>
+					<button name="mute_btn" tool_tip="靜音所選擇的媒體音訊" />
 				</layout_panel>
 				<layout_panel name="zoom">
-					<button name="zoom_btn" tool_tip="以所選媒體為中心放大"/>
+					<button name="zoom_btn" tool_tip="以所選媒體為中心放大" />
 				</layout_panel>
 				<layout_panel name="unzoom">
-					<button name="unzoom_btn" tool_tip="縮小遠離所選媒體"/>
+					<button name="unzoom_btn" tool_tip="縮小所選媒體" />
 				</layout_panel>
 			</layout_stack>
 		</panel>

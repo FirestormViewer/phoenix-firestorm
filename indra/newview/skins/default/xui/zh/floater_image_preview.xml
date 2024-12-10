@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Image Preview">
+	<string name="with_alpha">
+		有 Alpha
+	</string>
+	<string name="no_alpha">
+		無 Alpha
+	</string>
 	<text name="name_label">
 		名稱：
 	</text>
@@ -10,23 +16,30 @@
 		預覽圖像為：
 	</text>
 	<combo_box label="服裝類型" name="clothing_type_combo">
-		<item label="圖像" name="Image" value="圖像"/>
-		<item label="頭髮" name="Hair" value="頭髮"/>
-		<item label="女性頭部" name="FemaleHead" value="女性頭部"/>
-		<item label="女性上半身" name="FemaleUpperBody" value="女性上半身"/>
-		<item label="女性下半身" name="FemaleLowerBody" value="女性下半身"/>
-		<item label="男性頭部" name="MaleHead" value="男性頭部"/>
-		<item label="男性上半身" name="MaleUpperBody" value="男性上半身"/>
-		<item label="男性下半身" name="MaleLowerBody" value="男性下半身"/>
-		<item label="裙子" name="Skirt" value="裙子"/>
-		<item label="雕刻的幾何元件" name="SculptedPrim" value="雕刻的幾何元件"/>
+		<item label="圖像" name="Image" value="圖像" />
+		<item label="頭髮" name="Hair" value="頭髮" />
+		<item label="女性頭部" name="FemaleHead" value="女性頭部" />
+		<item label="女性上半身" name="FemaleUpperBody" value="女性上半身" />
+		<item label="女性下半身" name="FemaleLowerBody" value="女性下半身" />
+		<item label="男性頭部" name="MaleHead" value="男性頭部" />
+		<item label="男性上半身" name="MaleUpperBody" value="男性上半身" />
+		<item label="男性下半身" name="MaleLowerBody" value="男性下半身" />
+		<item label="裙子" name="Skirt" value="裙子" />
+		<item label="雕刻的元素" name="SculptedPrim" value="雕刻的元素" />
 	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box name="strip_alpha_check" label="移除空白 Alpha 通道" />
+	</panel>
 	<text name="bad_image_text">
 		無法讀取圖像。
 
 請嘗試儲存圖像為 24 位元 Targa（.tga）格式。
 	</text>
-	<check_box label="使用零失真壓縮" name="lossless_check"/>
-	<button label="取消" name="cancel_btn"/>
-	<button label="上傳（L$[AMOUNT]）" name="ok_btn"/>
+	<text name="uploaded_size_text">
+		上傳大小：[X_RES]x[Y_RES], [ALPHA]
+	</text>
+	<check_box label="使用零失真壓縮" name="lossless_check" />
+	<check_box name="temp_check" label="臨時上傳（免費）" tool_tip="免費上傳臨時圖片，但是圖片將在一段時間後自動刪除。" />
+	<button label="上傳（[AMOUNT] L$）" name="ok_btn" />
+	<button label="取消" name="cancel_btn" />
 </floater>

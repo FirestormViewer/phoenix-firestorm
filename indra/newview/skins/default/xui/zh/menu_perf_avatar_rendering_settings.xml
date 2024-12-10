@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Settings">
+	<menu_item_check label="始終完整彩現" name="always_render" />
+	<menu_item_check label="永不完整彩現" name="never_render" />
+	<menu_item_check label="正常彩現" name="default" />
+	<menu_item_call label="檢查化身" name="inspect" />
+	<menu_item_call label="放大化身" tool_tip="移動相機，以便您可以看到此化身。" name="zoom" />
+</context_menu>

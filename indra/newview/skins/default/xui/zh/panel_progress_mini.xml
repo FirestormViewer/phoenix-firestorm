@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="mini_progress_panel">
+	<progress_bar name="progress_bar_mini" />
+	<button label="取消" name="cancel_btn" />
+	<text name="progress_text" value="進度..." />
+</panel>

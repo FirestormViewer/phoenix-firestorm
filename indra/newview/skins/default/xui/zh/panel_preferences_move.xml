@@ -1,51 +1,98 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="移動" name="move_panel">
-	<tab_container name="tabs">
-		<!--View-->
-		<panel name="tab-view">
-			<slider label="視角" name="camera_fov"/>
-			<slider label="距離" name="camera_offset_scale"/>
-			<text name="heading2">
-				自動位移：
-			</text>
-			<check_box label="建造 / 編輯" name="edit_camera_movement" tool_tip="使用進入或離開編輯模式時自動調整攝影機位置功能"/>
-			<check_box label="編輯外觀" name="appearance_camera_movement" tool_tip="使用編輯模式時自動調整攝影機位置功能"/>
+<panel label="移動 &amp; 相機" name="move_panel">
+	<tab_container label="移動 &amp; 相機" name="tabs">
+		<panel label="相機" name="tab-view">
+			<slider label="視野角度" name="camera_fov" />
+			<slider label="距離" name="camera_offset_scale" />
+			<slider label="過渡時間" name="camera_transition_time" />
+			<slider label="平滑度" name="camera_position_smoothing" />
+			<check_box label="禁用縮放限制" name="DisableCameraConstraints" tool_tip="勾選此選項允許相機在超出限制的情況下進行縮放" />
+			<check_box label="禁用滑鼠滾輪調整縮放" name="FSDisableMouseWheelCameraZoom" />
+			<text name="heading2">自動定位至：</text>
+			<check_box label="建造/編輯" name="edit_camera_movement" tool_tip="進入和退出建造模式時自動定位相機" />
+			<check_box label="修改外觀" name="appearance_camera_movement" tool_tip="當編輯外觀時，將相機轉向正面" />
+			<check_box label="視覺指示" name="FSAppearanceShowHints" tool_tip="啟用或禁用顯示正在編輯外觀時的視覺指示。" />
+			<check_box label="單擊您的化身不會影響相機" name="clickonavatarkeepscamera" tool_tip="啟用此選項會阻止單擊您的化身時相機重新設定。" />
+			<check_box label="在區域內瞬間傳送後重設相機" name="FSResetCameraOnTP" tool_tip="啟用此選項將在在同一區域內瞬間傳送後重設相機的縮放級別。" />
+			<check_box label="在化身移動時重新定位相機" name="FSResetCameraOnMovement" />
+			<check_box label="重設相機時將化身轉向" name="resetviewturnsavatar" tool_tip="啟用此選項不會移動相機，而是將您的化身朝向相機的方向。" />
+			<check_box label="允許相機穿過物件" name="ignorecameraconstraints" tool_tip="忽略類比主機對相機施加的「推力」，以使其遠離物件。" />
+			<text name="ignorecameraconstraints_requires_restart">(需要重新啟動)</text>
+			<check_box label="始終以不透明方式顯示相機控制視窗" name="FSAlwaysOpaqueCameraControls" />
+			<check_box label="在瞬間傳送後重新顯示暫時隱藏的物件" name="FSTempDerenderUntilTeleport" tool_tip="啟用後，瞬間傳送後暫時隱藏的物件將保持隱藏，直到下一次瞬間傳送。禁用後，這些物件將保持隱藏，直到對談結束或在元素封鎖清單視窗中手動重新顯示。" />
 		</panel>
-		<!--Mouselook-->
-		<panel name="tab-mouselook">
-			<text name="mouse_lbl">
-				滑鼠：
-			</text>
-			<check_box label="將我顯示於第一人稱視角中" name="first_person_avatar_visible"/>
-			<text name="Mouse Sensitivity">
-				第一人稱視角滑鼠敏感度：
-			</text>
-			<check_box label="反轉" name="invert_mouse"/>
+		<panel label="第一人稱視角" name="tab-mouselook">
+			<check_box label="啟用第一人稱視角" name="EnableMouselook" tool_tip="允許第一人稱視角和使用滑鼠控制相機" />
+			<check_box label="在第一人稱視角中顯示我的化身" name="first_person_avatar_visible" />
+			<check_box label="在第一人稱視角顯示使用者界面" name="first_person_ui_visible" />
+			<check_box label="第一人稱視角不隱藏聊天視窗和雷達" name="FSShowConvoAndRadarInML" />
+			<check_box label="第一人稱視角啟用右鍵選單" name="FSEnableRightclickMenuInMouselook" tool_tip="啟用此選項後，您可以通過ALT + 滑鼠右鍵單擊在第一人稱視角中顯示聊天選單。" />
+			<check_box label="滾輪向下退出第一人稱視角" name="FSScrollWheelExitsMouselook" tool_tip="啟用此選項後，您可以通過向下捲動滑鼠滾輪退出第一人稱視角。" />
+			<check_box label="顯示視角提示" name="mouselook_instructions_visible" tool_tip="顯示視角的提示。" />
+			<check_box label="第一人稱視角顯示準星" name="ShowCrosshairs" tool_tip="在第一人稱視角中螢幕中央顯示準星。" />
+			<check_box label="啟用戰鬥功能" name="FSMouselookCombatFeatures" />
+			<check_box label="啟用目標跟蹤" name="ExodusMouselookIFF" />
+			<slider label="距離 (米)：" name="ExodusMouselookIFFRange" />
+			<text name="Mouse Sensitivity">滑鼠靈敏度：</text>
+			<check_box label="反轉Y軸" name="invert_mouse" />
 		</panel>
-		<!--Movement-->
-		<panel name="tab-movement">
-			<text name="keyboard_lbl">
-				鍵盤：
-			</text>
-			<check_box label="總是使用方向鍵移動" name="arrow_keys_move_avatar_check"/>
-			<check_box label="按下字母鍵 - 影響移動（例如 WASD鍵）" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="連點按住後跑步" name="tap_tap_hold_to_run"/>
-			<text name="single_click_action_lbl">
-				在土地上點按一下：
-			</text>
+		<panel label="移動" name="tab-movement">
+			<check_box label="始終用方向鍵移動我的化身" name="arrow_keys_move_avatar_check" tool_tip="僅適用於在檢視器底部的本地聊天輸入欄位中，而不適用於聊天索引標籤中的本地聊天。" />
+			<check_box label="按字母鍵移動我的化身 (WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
+			<check_box label="雙擊方向鍵以跑步" name="tap_tap_hold_to_run" />
+			<check_box label="按住跳躍/下蹲鍵可以起飛/降落" name="automatic_fly" />
+			<check_box label="保持下蹲直到站立起來" name="crouch_toggle_mode" />
+			<check_box label="在跳躍和降落之前禁用動畫延遲" name="FSIgnoreFinishAnimation" />
+			<check_box label="向後走時不會自動轉身" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="阻止您的化身在向後行走時自動轉身以面向相機。 此選項僅影響您的視角，不與AO相容。" />
+			<check_box label="選中物件時自動轉向" name="FSTurnAvatarToSelectedObject" tool_tip="將您的化身朝向當前選擇的物件。" />
+			<slider label="化身旋轉速度" name="av_turn_spd" tool_tip="更改您的化身響應旋轉的速度。 0-100 以最大旋轉速度的估計百分比。較高的值會導致突然而明顯的結果。" />
+			<text name="Region_Crossing_Movement_Label">區域切換時的移動預測：</text>
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="無限制" name="move_predict" />
+				<radio_item label="如果誤差過大則停止" name="move_stop" />
+			</radio_group>
+			<text name="movelock_lbl">如果LSL橋正在運行...</text>
+			<check_box label="區域切換後重新啟用LSL橋" name="RelockMoveLockAfterRegionChange" />
+			<check_box label="移動時禁用/重新啟用LSL橋" name="RelockMoveLockAfterMovement" />
+			<text name="single_click_action_lbl">單擊地面的操作：</text>
 			<combo_box name="single_click_action_combo">
-				<combo_box.item label="無動作" name="0"/>
-				<combo_box.item label="移動至點按的地點" name="1"/>
+				<combo_box.item label="無操作" name="0" />
+				<combo_box.item label="移動至此處" name="1" />
 			</combo_box>
-			<text name="double_click_action_lbl">
-				在土地上點按兩下：
-			</text>
+			<text name="double_click_action_lbl">雙擊地面的操作：</text>
 			<combo_box name="double_click_action_combo">
-				<combo_box.item label="無動作" name="0"/>
-				<combo_box.item label="移動至點按的地點" name="1"/>
-				<combo_box.item label="瞬間傳送至點按的地點" name="2"/>
+				<combo_box.item label="無操作" name="0" />
+				<combo_box.item label="移動至此處" name="1" />
+				<combo_box.item label="瞬間傳送至此處" name="2" />
 			</combo_box>
-			<button label="其他設備" name="joystick_setup_button"/>
+			<check_box label="允許在指令碼化物件上雙擊" name="FSAllowDoubleClickOnScriptedObjects" />
+			<button label="遊戲手把設定" name="joystick_setup_button" />
+		</panel>
+		<panel label="瞬間傳送" name="tab-teleports">
+			<check_box label="瞬間傳送時播放音效" name="PlayTeleportSound" />
+			<check_box label="瞬間傳送後自動飛行" name="FSFlyAfterTeleport" />
+			<check_box label="在瞬間傳送螢幕上始終顯示取消按鈕" name="FSAlwaysShowTPCancel" tool_tip="瞬間傳送時始終顯示取消按鈕，即使該區域指示瞬間傳送不可行。此選項可能會被RLV選項忽略。" />
+			<check_box label="禁用瞬間傳送目的地信標" name="tp_beam_toggle" tool_tip="瞬間傳送後禁用目的地信標顯示。" />
+			<check_box label="禁用瞬間傳送時黑畫面" name="tp_screen_toggle" tool_tip="在所有瞬間傳送過程中禁用黑色瞬間傳送頁面。" />
+			<check_box label="瞬間傳送時不隱藏地圖" name="FSDoNotHideMapOnTeleport" tool_tip="瞬間傳送時不自動關閉地圖。" />
+			<check_box label="在瞬間傳送後保持'僅顯示好友'選項" name="FSRenderFriendsOnlyPersistsTP" tool_tip="在瞬間傳送後保持「僅顯示好友」功能的狀態不變（預設：關閉）。" />
+			<check_box label="在瞬間傳送後顯示瞬間傳送前的地點" name="FSShowBackSLURL" />
+		</panel>
+		<panel label="地圖 &amp; 小地圖" name="tab-maps">
+			<text name="minimap_options_label">小地圖選項：</text>
+			<check_box label="啟用小地圖旋轉" name="minimaprotate" tool_tip="將小地圖旋轉到化身朝向的方向。" />
+			<text name="netmap_double_click_action_lbl">小地圖雙擊：</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="無操作" name="0" />
+				<combo_box.item label="打開地圖" name="1" />
+				<combo_box.item label="瞬間傳送至此處" name="2" />
+			</combo_box>
+			<slider label="地圖點大小：" name="FSMinimapPickScale" tool_tip="定義小地圖上滑鼠指標繪製的點的半徑。" />
+			<text name="world_map_options_label">世界地圖選項：</text>
+			<check_box label="在世界地圖上刪除重複地標" name="WorldmapFilterDuplicateLandmarks" tool_tip="在顯示地標之前處理地標列表中的重複項。" />
+			<check_box label="在世界地圖上顯示區域額外資訊" name="FSAdvancedWorldmapRegionInfo" tool_tip="顯示區域內的居民數量和分類。" />
+			<check_box label="在世界地圖上顯示區域坐標" name="FSShowRegionGridCoordinates" tool_tip="在地圖上顯示區域的坐標。" />
+			<check_box label="在世界地圖上通過雙擊瞬間傳送" name="FSWorldMapDoubleclickTeleport" tool_tip="在地圖上雙擊時啟用瞬間傳送功能。" />
 		</panel>
 	</tab_container>
 </panel>

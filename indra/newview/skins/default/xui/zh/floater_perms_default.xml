@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="perms default" title="預設的創建權限">
+<floater name="perms default" title="預設的建立權限">
 	<panel label="預設的權限" name="default permissions">
 		<text name="label_1">
-			下一個所有人：
+			下一個所有者：
 		</text>
 		<text name="label_2">
 			複製
@@ -11,37 +11,39 @@
 			修改
 		</text>
 		<text name="label_4">
-			轉移
+			轉讓
 		</text>
 		<text name="label_5">
 			與群組分享
 		</text>
 		<text name="label_6">
-			允許任何人覆製
+			允許任何人複製
 		</text>
-		<text name="label_7" tool_tip="設定預設權限決定何時建立物件">
+		<text name="label_7" tool_tip="設定建立物件時的預設權限">
 			物件
 		</text>
-		<text name="label_8" tool_tip="設定已上傳物項的預設權限">
+		<text name="label_8" tool_tip="設定已上傳物件的預設權限">
 			上傳內容
 		</text>
-		<text name="label_9" tool_tip="設定預設權限決定何時建立腳本">
-			腳本
+		<text name="label_9" tool_tip="設定建立指令碼預設權限時的">
+			指令碼
 		</text>
-		<text name="label_10" tool_tip="設定預設權限決定何時建立記事卡">
+		<text name="label_10" tool_tip="設定建立記事卡時的預設權限">
 			記事卡
 		</text>
-		<text name="label_11" tool_tip="設定預設權限決定何時建立姿勢">
-			姿勢
+		<text name="label_11" tool_tip="設定建立手勢時的預設權限">
+			手勢
 		</text>
-		<text name="label_12" tool_tip="設定預設權限決定何時建立服裝或身體部位">
+		<text name="label_12" tool_tip="設定建立服裝或身體部位時的預設權限">
 			可穿裝扮
 		</text>
-		<text name="label_13" tool_tip="設定預設權限決定何時建立環境設定">
-			設定
+		<text name="label_13" tool_tip="設定建立環境設定時的預設權限">
+			環境設定
 		</text>
-		<check_box name="env_settings_c" value="true"/>
+		<text name="label_14" tool_tip="設定建立 GLTF 材質時的預設權限">
+			材質
+		</text>
 	</panel>
-	<button label="確定" label_selected="確定" name="ok"/>
-	<button label="取消" label_selected="取消" name="cancel"/>
+	<button label="確定" label_selected="確定" name="ok" />
+	<button label="取消" label_selected="取消" name="cancel" />
 </floater>

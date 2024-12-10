@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Multi-Selected People Context Menu">
+	<menu_item_call label="新增到聯絡人分組" name="Add to Set" />
+	<menu_item_call label="移除朋友" name="Remove Friend" />
+	<menu_item_call label="私聊" name="IM" />
+	<menu_item_call label="語音通話" name="Call" />
+	<menu_item_call label="傳送瞬間傳送邀請" name="teleport" />
+</context_menu>

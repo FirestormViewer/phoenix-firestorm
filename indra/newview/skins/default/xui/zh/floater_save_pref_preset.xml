@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<floater name="save_pref_preset" title="儲存偏好預設">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="save_pref_preset" title="儲存預設偏好">
 	<text name="Preset">
 		輸入預設名稱，或選擇一組現有預設。
 	</text>
-	<button label="儲存" name="save"/>
-	<button label="取消" name="cancel"/>
+	<button label="儲存" name="save" />
+	<button label="取消" name="cancel" />
 </floater>

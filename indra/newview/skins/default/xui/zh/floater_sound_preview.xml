@@ -6,6 +6,9 @@
 	<text name="description_label">
 		描述：
 	</text>
-	<button label="上傳（L$[AMOUNT]）" name="ok_btn"/>
-	<button label="取消" label_selected="取消" name="cancel_btn"/>
+	<button label="取消" label_selected="取消" name="cancel_btn" />
+	<button label="上傳（[AMOUNT] L$）" label_selected="上傳（[AMOUNT] L$）" name="ok_btn" />
+	<text name="text">
+		位元率（千位元/秒）：
+	</text>
 </floater>

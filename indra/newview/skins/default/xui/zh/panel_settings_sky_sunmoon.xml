@@ -1,15 +1,56 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="日與月" name="panel_settings_sky_hbodies">
-	<layout_stack>
+	<layout_stack name="main_ls">
 		<layout_panel name="sun_layout">
-			<check_box label="顯示指標" name="sunbeacon"/>
+			<text name="sun_stars_label">
+				太陽 &amp; 星星
+			</text>
+			<check_box label="顯示太陽信標" name="sunbeacon" />
+			<text name="position_label">
+				位置：
+			</text>
+			<text name="image_label">
+				圖像 &amp; 縮放：
+			</text>
+			<text name="color_label">
+				顏色：
+			</text>
+			<text name="sun_azimuth_label">
+				方位角：
+			</text>
+			<text name="sun_elevation_label">
+				高度角：
+			</text>
+			<text name="glow_focus_label">
+				光暈焦點：
+			</text>
+			<text name="glow_size_label">
+				光暈強度：
+			</text>
+			<text name="star_brightness_label">
+				星星亮度：
+			</text>
 		</layout_panel>
-		<layout_panel>
-			<layout_stack>
-				<layout_panel name="moon_layout">
-					<check_box label="顯示指標" name="moonbeacon"/>
-				</layout_panel>
-			</layout_stack>
+		<layout_panel name="moon_layout">
+			<text name="moon_label">
+				月亮
+			</text>
+			<check_box label="顯示月信標" name="moonbeacon" />
+			<text name="position_label">
+				位置：
+			</text>
+			<text name="moon_image_label">
+				圖像 &amp; 縮放：
+			</text>
+			<text name="moon_azimuth_label">
+				方位角：
+			</text>
+			<text name="moon_elevation_label">
+				高度角：
+			</text>
+			<text name="brightness_label">
+				亮度：
+			</text>
 		</layout_panel>
 	</layout_stack>
 </panel>

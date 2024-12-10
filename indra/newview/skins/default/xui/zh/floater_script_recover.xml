@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="script_recover" title="指令碼恢復">
+	<text name="txt2">
+		[APP_NAME] 發現了可能來源於之前崩潰的觀察者的指令碼。
+
+選擇「恢復」將會把這些指令碼恢復到庫存中的「失物招領」檔案夾。
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="指令碼名稱" width="300" name="script_name" />
+	</scroll_list>
+	<button label="恢復" left="55" name="recover_btn" width="120" />
+	<button label="取消" name="cancel_btn" />
+</floater>

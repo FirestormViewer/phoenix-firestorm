@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents>
+	<rows name="editing_actions">
+		<columns label="編輯" name="lst_action" />
+	</rows>
+	<rows name="edit_avatar_spin_ccw">
+		<columns name="lst_action" tool_tip="圍繞化身逆時針旋轉相機" value="逆時針旋轉" />
+	</rows>
+	<rows name="edit_avatar_spin_cw">
+		<columns name="lst_action" tool_tip="圍繞化身順時針旋轉相機" value="順時針旋轉" />
+	</rows>
+	<rows name="edit_avatar_spin_over">
+		<columns name="lst_action" tool_tip="相機向化身上方旋轉" value="相機向上旋轉" />
+	</rows>
+	<rows name="edit_avatar_spin_under">
+		<columns name="lst_action" tool_tip="相機向化身下方旋轉" value="相機向下旋轉" />
+	</rows>
+	<rows name="edit_avatar_move_forward">
+		<columns name="lst_action" value="相機前進" />
+	</rows>
+	<rows name="edit_avatar_move_backward">
+		<columns name="lst_action" value="相機後退" />
+	</rows>
+</contents>

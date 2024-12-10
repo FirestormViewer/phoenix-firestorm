@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="360capture" title="360° 相片">
+	<panel name="ui_panel_left">
+		<text name="quality_level_label">
+			品質
+		</text>
+		<radio_group name="360_quality_selection">
+			<radio_item label="預覽（快速）" name="preview_quality" tool_tip="預覽品質" />
+			<radio_item label="中等" name="medium_quality" tool_tip="中等品質" />
+			<radio_item label="高" name="high_quality" tool_tip="高品質" />
+			<radio_item label="最高" name="maximum_quality" tool_tip="最高品質" />
+		</radio_group>
+		<check_box label="隱藏所有化身" name="360_hide_avatar" />
+		<button label="產生360°圖片" name="capture_button" />
+		<button label="另存為..." name="save_local_button" />
+	</panel>
+	<panel name="ui_panel_right">
+		<text name="statusbar">
+			點擊並移動圖片以旋轉視角。
+		</text>
+	</panel>
+</floater>

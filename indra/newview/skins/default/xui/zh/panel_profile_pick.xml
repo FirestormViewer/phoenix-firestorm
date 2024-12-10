@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_pick_info">
 	<panel.string name="location_notice">
-		（儲存後將會更新）
+		(儲存後更新)
 	</panel.string>
-	<line_editor name="pick_location">
-		載入中…
-	</line_editor>
-	<button label="瞬間傳送" name="teleport_btn"/>
-	<button label="顯示在地圖上" name="show_on_map_btn"/>
-	<button label="設定位置" name="set_to_curr_location_btn" tool_tip="設定為目前位置"/>
-	<button label="儲存精選地點" name="save_changes_btn"/>
+	<layout_stack name="main_pick_stack">
+		<layout_panel name="main_pick_lp">
+			<text name="title_label">
+				標題:
+			</text>
+			<text name="description_label">
+				描述:
+			</text>
+			<text name="location_label">
+				位置:
+			</text>
+			<line_editor name="pick_location">
+				載入中...
+			</line_editor>
+		</layout_panel>
+		<layout_panel name="util_buttons_lp">
+			<layout_stack name="util_buttons_stack">
+				<layout_panel name="map_btn_lp">
+					<button label="在地圖上顯示" name="show_on_map_btn" />
+				</layout_panel>
+				<layout_panel name="tp_btn_lp">
+					<button label="傳送" name="teleport_btn" />
+				</layout_panel>
+				<layout_panel name="set_to_curr_location_btn_lp">
+					<button label="設定地點" name="set_to_curr_location_btn" tool_tip="使用當前位置" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="save_changes_lp">
+			<layout_stack name="save_changes_stack">
+				<layout_panel name="create_btn_lp">
+					<button name="create_changes_btn" label="建立選擇" />
+				</layout_panel>
+				<layout_panel name="save_btn_lp">
+					<button name="save_changes_btn" label="儲存選擇" />
+				</layout_panel>
+				<layout_panel name="cancel_btn_lp">
+					<button name="cancel_changes_btn" label="取消" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
 </panel>

@@ -4,28 +4,28 @@
 		[AREA] 平方公尺
 	</floater.string>
 	<scroll_list name="parcel list">
-		<scroll_list.columns label="地段" name="name"/>
-		<scroll_list.columns label="地區" name="location"/>
-		<scroll_list.columns label="類型" name="type"/>
-		<scroll_list.columns label="區域" name="area"/>
+		<scroll_list.columns label="地塊" name="name" />
+		<scroll_list.columns label="區域" name="location" />
+		<scroll_list.columns label="類型" name="type" />
+		<scroll_list.columns label="區域" name="area" />
 	</scroll_list>
-	<button label="瞬間傳送" label_selected="瞬間傳送" name="Teleport" tool_tip="瞬間傳送到這土地的中央。"/>
-	<button label="地圖" label_selected="地圖" name="Show on Map" tool_tip="將這塊土地顯示在世界地圖上。"/>
+	<button label="瞬間傳送" label_selected="瞬間傳送" name="Teleport" tool_tip="瞬間傳送到這土地的中央。" />
+	<button label="地圖" label_selected="地圖" name="Show on Map" tool_tip="將這塊土地顯示在世界地圖上。" />
 	<text name="contrib_label">
 		對你的群組的貢獻：
 	</text>
 	<scroll_list name="grant list">
-		<scroll_list.columns label="群組" name="group"/>
-		<scroll_list.columns label="區域" name="area"/>
+		<scroll_list.columns label="群組" name="group" />
+		<scroll_list.columns label="區域" name="area" />
 	</scroll_list>
 	<text name="allowed_label">
-		目前付費計劃所允許擁有的土地：
+		當前付費計劃所允許擁有的土地：
 	</text>
 	<text name="allowed_text">
 		[AREA] 平方公尺
 	</text>
 	<text name="current_label">
-		目前擁有的土地：
+		當前擁有的土地：
 	</text>
 	<text name="current_text">
 		[AREA] 平方公尺

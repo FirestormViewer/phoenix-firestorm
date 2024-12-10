@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="土地和 L$" name="land_money_tab">
+	<panel.string name="help_text">
+		將持續出現提示，直到使用中總土地小於或等於總貢獻面積為止。
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		你無權檢視群組所有地。
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		沒有項目
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		你無權檢視該群組的帳目資料。
+	</panel.string>
+	<panel.string name="loading_txt">
+		載入中...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		無法設定你的土地捐獻
+	</panel.string>
+	<panel name="layout_panel_landmoney">
+		<scroll_list name="group_parcel_list">
+			<scroll_list.columns label="地塊" name="name" />
+			<scroll_list.columns label="區域" name="location" />
+			<scroll_list.columns label="類型" name="type" />
+			<scroll_list.columns label="面積" name="area" />
+			<scroll_list.columns label="隱藏" name="hidden"/>
+		</scroll_list>
+		<text name="total_contributed_land_label">
+			總貢獻：
+		</text>
+		<text name="total_contributed_land_value">
+			[AREA] 平方公尺
+		</text>
+		<button label="地圖" label_selected="地圖" name="map_button" />
+		<text name="total_land_in_use_label">
+			使用中土地總面積：
+		</text>
+		<text name="total_land_in_use_value">
+			[AREA] 平方公尺
+		</text>
+		<text name="land_available_label">
+			可用土地：
+		</text>
+		<text name="land_available_value">
+			[AREA] 平方公尺
+		</text>
+		<text name="your_contribution_label">
+			你的捐獻：
+		</text>
+		<text name="your_contribution_units">
+			平方公尺
+		</text>
+		<text name="your_contribution_max_value">
+			（[AMOUNT] 最大）
+		</text>
+		<text name="group_over_limit_text">
+			使用中土地需要更大的土地額度
+		</text>
+		<text name="group_money_heading">
+			群組 L$
+		</text>
+	</panel>
+	<tab_container name="group_money_tab_container">
+		<panel label="策劃" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				載入中...
+			</text_editor>
+		</panel>
+		<panel label="細節" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				載入中...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="傳回" />
+			<button name="later_details_button" tool_tip="下一個" />
+		</panel>
+		<panel label="銷售" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				載入中...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="傳回" />
+			<button name="later_sales_button" tool_tip="下一個" />
+		</panel>
+	</tab_container>
+</panel>

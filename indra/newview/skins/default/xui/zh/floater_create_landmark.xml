@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="create_landmark" title="建立地標">
+	<string name="favorites_bar">
+		最愛的地點
+	</string>
+	<text name="title_label" value="地標詳情" />
+	<text name="name_label" value="名稱:" />
+	<text name="folder_label" value="儲存地點：" />
+	<text name="new_folder_textbox">
+		[secondlife:/// 新檔案夾]
+	</text>
+	<text name="notes_label" value="自己的說明：" />
+	<button label="確定" name="ok_btn" />
+	<button label="取消" name="cancel_btn" />
+</floater>

@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="雲彩" name="panel_settings_sky_clouds">
-	<layout_stack>
-		<layout_panel>
-			<slider label="X" name="cloud_density_x"/>
-			<slider label="Y" name="cloud_density_y"/>
-			<slider label="D" name="cloud_density_d"/>
-			<slider label="X" name="cloud_detail_x"/>
-			<slider label="Y" name="cloud_detail_y"/>
-			<slider label="D" name="cloud_detail_d"/>
+	<layout_stack name="main_ls">
+		<layout_panel name="left_lp">
+			<text name="cloud_coverage_label" width="110">
+				雲層涵蓋範圍:
+			</text>
+			<text name="cloud_scale_label" width="110">
+				雲層尺寸:
+			</text>
+			<text name="cloud_variance_label" width="110">
+				雲層變換：
+			</text>
+			<text name="cloud_scroll_label">
+				雲層捲動：
+			</text>
+			<text name="cloud_image_label">
+				雲彩圖像：
+			</text>
+			<text name="cloud_color_label">
+				雲層色彩：
+			</text>
+		</layout_panel>
+		<layout_panel name="right_lp">
+			<text name="cloud_density_label">
+				雲層密度：
+			</text>
+			<slider label="X" name="cloud_density_x" />
+			<slider label="Y" name="cloud_density_y" />
+			<slider label="D" name="cloud_density_d" />
+			<text name="cloud_detail_label">
+				雲層細節:
+			</text>
+			<slider label="X" name="cloud_detail_x" />
+			<slider label="Y" name="cloud_detail_y" />
+			<slider label="D" name="cloud_detail_d" />
 		</layout_panel>
 	</layout_stack>
 </panel>

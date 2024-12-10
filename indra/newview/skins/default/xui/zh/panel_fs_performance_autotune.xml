@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="settings_title">
+		自動調節選項
+	</text>
+	<text name="quality_lbl">
+		遠距離化身
+	</text>
+	<check_box label="基於距離精簡" name="FSAutoTuneImpostorByDistEnabled" tool_tip="檢視器將根據最大非精簡化身參數來限制完全綵現的化身數量，該參數將調整為僅在指定半徑範圍內顯示。" />
+	<spinner label="完整化身最大範圍" name="ffa_autotune" />
+	<text name="distant_av_advice">
+遠距離的化身始終會產生較大影響。
+請設定相機距離，在該距離之外的化身將進行精簡。
+注意：如果附近沒有化身，此設定會將最大非精簡化身設定為1。
+	</text>
+	<text name="distance_lbl">
+		可見距離設定
+	</text>
+	<spinner label="最小距離" name="min_dd_autotune" />
+	<spinner label="首選距離" name="pref_dd_autotune" />
+	<text name="distance_desc1">
+在場景參數調節期間，自動調節將最佳化可見距離在最小值和最大值之間。
+	</text>
+	<text name="sundry_lbl">
+		其他
+	</text>
+	<check_box label="允許精簡您的化身" name="alow_self_impostor" tool_tip="如果啟用，檢視器可以將您的化身精簡顯示" />
+	<check_box label="顯示最佳化後的彩現時間" name="show_tuned_art" tool_tip="如果啟用，時間欄將顯示當前彩現時間，而不是最佳化前的彩現時間。" />
+	<text name="sundry_desc1">
+這些選項控制更精細的參數。請使用線上幫助頁面取得更多有關其操作的資訊。
+	</text>
+</panel>

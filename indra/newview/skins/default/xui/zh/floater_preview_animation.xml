@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="preview_anim">
 	<floater.string name="Title">
-		動作：[NAME]
+		動畫：[NAME]
 	</floater.string>
 	<panel name="basic_info_panel">
 		<text name="desc txt">
 			描述：
 		</text>
-		<button label="在虛擬世界播放" label_selected="停止" name="Inworld" tool_tip="播放此動作讓他人看見"/>
-		<button label="在本地播放" label_selected="停止" name="Locally" tool_tip="播放此動作，只給自己看"/>
+		<button label="在虛擬世界播放" label_selected="停止" name="Inworld" tool_tip="播放此動畫讓他人看見" />
+		<button label="在本地播放" label_selected="停止" name="Locally" tool_tip="播放此動畫，只給自己看" />
+		<button name="btn_expand" tool_tip="展開以取得有關這個動畫的更多資訊。" />
+	</panel>
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
+優先度：[PRIORITY]
+持續時間：[DURATION]秒
+迴圈：[IS_LOOP]
+		</text>
+		<text name="AdvancedStatsRight">
+淡入：[EASE_IN]秒
+淡出：[EASE_OUT]秒
+關節數：[NUM_JOINTS]
+		</text>
 	</panel>
 </floater>

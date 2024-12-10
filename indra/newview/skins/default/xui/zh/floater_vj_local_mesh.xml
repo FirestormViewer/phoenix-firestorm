@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Local Mesh" title="本地網格">
+	<tab_container name="local_mesh_tabs">
+		<panel name="local_mesh_assets_panel" label="本地網格資源" title="本地網格資源">
+			<fs_scroll_list name="l_name_list">
+				<column name="unit_status" label="狀態" />
+				<column name="unit_name" label="名稱" />
+				<column name="unit_lods" label="細節" />
+				<column name="unit_objects" label="物件" />
+			</fs_scroll_list>
+		</panel>
+		<panel name="logs_panel" label="日誌" />
+		<panel name="local_mesh_settings_panel" label="設定">
+			<check_box name="local_mesh_scale_use_meters" label="假定比例為米" tool_tip="忽略在Maya等工具中使用的以公分為單位的縮放。" />
+			<text name="lod_suffix_label">
+				細節層次字尾:
+			</text>
+			<combo_box name="lod_suffix_combo" tool_tip="選擇預設值或手動編輯... || SL標準 - 最低=細節層次0，最高無字尾 || 遊戲引擎 - Unity/UE5等（最低=細節層次3，最高=細節層次0）。 || 細節層次名稱 - 英文細節層次名稱（最低='LOWEST'，最高='HIGH'）。">
+				<combo_item name="choose_one">當前的</combo_item>
+				<combo_item name="suff_sl">SL標準</combo_item>
+				<combo_item name="suff_unity">遊戲引擎標準</combo_item>
+				<combo_item name="suff_descriptive">細節層次名稱</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				最低:
+			</text>
+			<line_editor name="suf_lowest" tool_tip="辨識檔案名中或檔案內模型的最低細節層次的字尾。" />
+			<text name="suf_low_lab">
+				較低:
+			</text>
+			<line_editor name="suf_low" tool_tip="辨識檔案名中或檔案內模型的較低細節層次的字尾。" />
+			<text name="suf_medium_lab">
+				中等:
+			</text>
+			<line_editor name="suf_medium" tool_tip="辨識檔案名中或檔案內模型的中等細節層次的字尾。" />
+			<text name="suf_high_lab">
+				較高:
+			</text>
+			<line_editor name="suf_high" tool_tip="辨識檔案名中或檔案內模型的較高細節層次的字尾。" />
+			<text name="suf_physics_lab">
+				物理:
+			</text>
+			<line_editor name="suf_physics" tool_tip="辨識檔案名中或檔案內模型的物理特性的字尾。" />
+		</panel>
+	</tab_container>
+	<button name="btn_apply" label="應用" />
+	<button name="btn_add" label="新增" />
+	<button name="btn_remove" label="移除" />
+	<button name="btn_reload" label="重新載入" />
+	<button name="btn_clear" label="清空" />
+	<button name="btn_rez" label="放置所選" tool_tip="在世界中建立一個範本網格物件並用所選的本地網格填充。這將在世界中建立一個空物件。" />
+</floater>

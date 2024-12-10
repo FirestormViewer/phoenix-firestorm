@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="rlva_strings" title="RLVa文字">
+	<panel name="bottom_panel">
+		<button label="恢復到預設值" name="default_btn" width="200" />
+	</panel>
+</floater>

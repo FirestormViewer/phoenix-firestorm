@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="圖形效能最佳化">
+	<floater.string name="frame_stats">
+		影格率：[TOT_FRAME_TIME] 場景-毫秒：[SCENERY_FRAME_PCT]% 化身：[AV_FRAME_PCT]% 使用者界面：[UI_FRAME_PCT]% HUD：[HUDS_FRAME_PCT]% 資料交換：[SWAP_FRAME_PCT]% 空閒：[IDLE_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="limit_fps">
+		限制影格率為 [FPSCAP] FPS
+	</floater.string>
+	<floater.string name="tuning_fps">
+		自動調整影格率為 [FPSTARGET] FPS
+	</floater.string>
+	<floater.string name="av_frame_pct">
+		[AV_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="huds_frame_pct">
+		[HUDS_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="focus_fps">
+		背景執行
+	</floater.string>
+	<floater.string name="info_waitforit">
+		等待 5-10 秒以取得調整效果。
+	</floater.string>
+	<floater.string name="info_frozen">
+		影格統計在限制影格率或背景執行時暫停。
+	</floater.string>
+	<floater.string name="tot_av_template">
+		總計：[TOT_AV]（[TOT_AV_TIME]μs）
+	</floater.string>
+	<floater.string name="tot_att_template">
+		總計：[TOT_ATT]（[TOT_ATT_TIME]μs）
+	</floater.string>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				每秒影格數（FPS）
+			</text>
+			<text name="fps_warning">
+				影格率限制為 000 FPS
+			</text>
+			<text name="fps_desc1_lbl">
+				影格統計在限制影格率或背景執行時暫停。
+			</text>
+			<text name="frame_breakdown">
+[-----------------------------影格詳細資訊在此處。------------------------------]
+			</text>
+		</panel>
+		<panel name="target_subpanel">
+			<text name="settings_lbl" tool_tip="自動調整設定，以保持 FPS。將目標設定為所需的影格率  檢視器將自動嘗試通過調整設定來達到該影格率。">
+				自動調整：
+			</text>
+			<text name="targetfps_desc">
+				目標 FPS：
+			</text>
+			<spinner name="target_fps" tool_tip="目標 FPS - 檢視器將通過調整設定自動嘗試達到目標 FPS。" />
+			<check_box label="自動調整" label_selected="停止" name="AutoTuneFPS" tool_tip="檢視器將自動嘗試達到目標 FPS。" />
+			<check_box label="持續自動調整" name="AutoTuneContinuous" tool_tip="檢視器將持續調整設定以保持所需的目標 FPS，即使視窗被關閉。 如果關閉，單擊自動調整按鈕會一次性調整設定。" />
+			<button name="PrefSaveButton" tool_tip="將當前設定儲存為將來使用的預設設定。" />
+			<button name="PrefLoadButton" tool_tip="載入現有的預設設定。" />
+			<button tool_tip="載入適用於檢測到的硬體的預設設定。" name="Defaults" />
+			<text name="settings_desc">
+				調整策略：
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="僅化身" name="av_only" />
+				<combo_box.item label="化身和場景" name="av_and_scene" />
+			</combo_box>
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				圖形設定
+			</text>
+			<text name="settings_desc">
+				距離、水、光照等設定。
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				附近的化身
+			</text>
+			<text name="avatars_nearby_desc">
+				調整完全綵現的化身。
+			</text>
+			<text name="avatars_frme_pct_lbl">
+化身渲染
+所需時間
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				我的化身複雜度
+			</text>
+			<text name="complexity_info">
+				做一個負責任的居民 - 管理自己化身的影響。
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				啟用的 HUD
+			</text>
+			<text name="huds_desc">
+				移除 HUD 可以提升速度。
+			</text>
+			<text name="huds_frme_pct_lbl">
+HUD渲染
+所需時間
+			</text>
+		</panel>
+	</panel>
+</floater>

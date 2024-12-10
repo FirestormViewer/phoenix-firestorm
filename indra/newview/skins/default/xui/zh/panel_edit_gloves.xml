@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_gloves_panel">
 	<panel name="avatar_gloves_color_panel">
-		<texture_picker label="材質" name="Fabric" tool_tip="點按以挑選圖片"/>
-		<color_swatch label="顏色/色調" name="Color/Tint" tool_tip="點按以開啟顏色挑選器"/>
+		<texture_picker label="面料" name="Fabric" tool_tip="點擊以挑選圖片" />
+		<color_swatch label="顏色/色調" name="Color/Tint" tool_tip="點擊以開啟顏色挑選器" />
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">
-			<accordion_tab name="gloves_main_tab" title="手套"/>
+			<accordion_tab name="gloves_main_tab" title="手套" />
 		</accordion>
 	</panel>
 </panel>

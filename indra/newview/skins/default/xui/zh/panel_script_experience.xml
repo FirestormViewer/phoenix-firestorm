@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="script_experience" title="體驗">
-	<button label="體驗" name="Expand Experience"/>
-	<check_box label="使用體驗" name="enable_xp"/>
+	<button label="體驗" name="Expand Experience" />
+	<check_box label="使用體驗" name="enable_xp" />
 	<layout_stack name="xp_details">
-		<layout_panel>
-			<combo_box label="選擇體驗…" name="Experiences..."/>
+		<layout_panel name="xp_layout_panel">
+			<text name="lbl_script">
+				指令碼：
+			</text>
+			<text name="lbl_associated">
+				關聯物件：
+			</text>
+			<text name="lbl_contribute">
+				您可以貢獻：
+			</text>
+			<text name="lbl_associate">
+				關聯物件：
+			</text>
+		</layout_panel>
+		<layout_panel name="xp_choose_panel">
+			<combo_box label="選擇體驗…" name="Experiences..." />
 		</layout_panel>
 	</layout_stack>
 	<text name="No Experiences">

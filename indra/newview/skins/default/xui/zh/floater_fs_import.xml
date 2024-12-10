@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="物件匯入">
+	<floater.string name="floater_title">
+		匯入 [FILENAME]
+	</floater.string>
+	<floater.string name="file_status">
+		[LINKSETS] 聯結，[PRIMS] 元素，[TEXTURES] 紋理。
+[SOUNDS] 聲音，[ANIMATIONS] 動畫。
+	</floater.string>
+	<floater.string name="file_status_error">
+		讀取檔案時出錯，請選擇其他檔案。
+	</floater.string>
+	<floater.string name="file_version_error">
+		處理檔案時出錯：格式或版本不正確。
+	</floater.string>
+	<floater.string name="file_status_running">
+		正在處理聯結 [LINKSET] 中的 [LINKSETS]，元素 [PRIM] 中的 [PRIMS]
+	</floater.string>
+	<floater.string name="file_status_done">
+		匯入完成。
+	</floater.string>
+	<floater.string name="texture_uploading">
+		正在上傳紋理 [TEXTURE]，總共 [TEXTURETOTAL]。
+	</floater.string>
+	<floater.string name="sound_uploading">
+		正在上傳聲音 [SOUND]，總共 [SOUNDTOTAL]。
+	</floater.string>
+	<floater.string name="animation_uploading">
+		正在上傳動畫 [ANIMATION]，總共 [ANIMATIONTOTAL]。
+	</floater.string>
+	<floater.string name="asset_uploading">
+		正在上傳資源 [ASSET]，總共 [ASSETTOTAL]。
+	</floater.string>
+	<floater.string name="upload_cost">
+		上傳總成本：[COST] L$。
+	</floater.string>
+	<floater.string name="object">
+		物件
+	</floater.string>
+	<floater.string name="objects">
+		物件
+	</floater.string>
+	<text name="filename_text">
+		[FILENAME]
+	</text>
+	<text name="creation_date_text">
+		建立於 [DATE_STRING]
+	</text>
+	<text name="author_text">
+		從 [AUTHOR] [GRID] 建立
+	</text>
+	<text name="client_text">
+		使用者端：[CLIENT] 版本 [VERSION]
+	</text>
+	<text name="file_status_text">
+		選擇檔案。
+	</text>
+	<check_box name="do_not_attach" label="不附著物件" />
+	<check_box name="region_position" label="恢復到區域位置" />
+	<check_box name="upload_asset" label="上傳內容" />
+	<check_box name="temp_asset" label="臨時" />
+	<button name="import_btn" label="匯入" />
+</floater>

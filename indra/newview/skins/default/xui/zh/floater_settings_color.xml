@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings_color">
+	<filter_editor label="輸入搜尋詞" name="filter_input" />
+	<scroll_list name="setting_list">
+		<scroll_list.columns label="顏色" name="color" />
+	</scroll_list>
+	<text name="color_name_txt">
+		顏色名稱
+	</text>
+	<spinner label="透明度" name="alpha_spinner" />
+	<button label="恢復預設" name="default_btn" />
+	<check_box label="只顯示更改的顏色" name="hide_default" />
+</floater>

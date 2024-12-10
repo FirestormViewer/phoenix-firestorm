@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_view_default">
+	<menu_item_check label="按名稱排序" name="sort_by_name" />
+	<menu_item_check label="按時間排序" name="sort_by_recent" />
+	<menu_item_check label="總是按名稱排序檔案夾" name="sort_folders_by_name" />
+	<menu_item_check label="系統檔案夾置頂" name="sort_system_folders_to_top" />
+	<menu_item_check label="列表視圖" name="list_view" />
+	<menu_item_check label="圖片視圖" name="gallery_view" />
+	<menu_item_check label="組合視圖" name="combination_view" />
+	<menu_item_check label="庫存設定" name="inv_settings" />
+</toggleable_menu>

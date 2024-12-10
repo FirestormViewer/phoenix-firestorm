@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="inventory_settings" title="庫存設定">
+	<text name="multi_folder_txt">
+		在多檔案夾視圖中雙擊一個檔案夾:
+	</text>
+	<radio_group name="multi_double_click_setting">
+		<radio_item label="展開和摺疊檔案夾" name="0" />
+		<radio_item label="打開一個新視窗" name="1" />
+		<radio_item label="切換視圖" name="2" />
+	</radio_group>
+	<text name="single_folder_txt">
+		在單檔案夾視圖中雙擊一個檔案夾
+	</text>
+	<radio_group name="single_double_click_setting">
+		<radio_item label="保持在當前視窗" name="false" />
+		<radio_item label="打開一個新視窗" name="true" />
+	</radio_group>
+	<text name="find_original_txt">
+		點擊「顯示在庫存中」或「尋找原件」:
+	</text>
+	<radio_group name="find_original_settings">
+		<radio_item label="在主庫存視窗中顯示" name="false" />
+		<radio_item label="打開一個新的單檔案夾視窗" name="true" />
+	</radio_group>
+	<button label="確定" name="ok_btn" />
+</floater>

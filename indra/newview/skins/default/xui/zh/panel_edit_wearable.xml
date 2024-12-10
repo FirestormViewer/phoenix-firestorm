@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="可穿裝扮" name="panel_edit_wearable">
 	<string name="edit_shape_title">
-		體形編輯中
+		身形編輯中
 	</string>
 	<string name="edit_skin_title">
 		編輯皮膚
@@ -40,19 +40,19 @@
 		編輯內褲
 	</string>
 	<string name="edit_alpha_title">
-		半透明遮罩編輯中
+		Alpha遮罩編輯中
 	</string>
 	<string name="edit_tattoo_title">
 		刺青編輯中
 	</string>
 	<string name="edit_universal_title">
-		編輯通用值
+		編輯通用層
 	</string>
 	<string name="edit_physics_title">
 		身體物理編輯中
 	</string>
 	<string name="shape_desc_text">
-		體形：
+		身形：
 	</string>
 	<string name="skin_desc_text">
 		皮膚：
@@ -76,7 +76,7 @@
 		襪子：
 	</string>
 	<string name="jacket_desc_text">
-		夾克：
+		外套：
 	</string>
 	<string name="skirt_desc_text">
 		裙子：
@@ -91,35 +91,38 @@
 		內褲：
 	</string>
 	<string name="alpha_desc_text">
-		半透明遮罩：
+		Alpha遮罩：
 	</string>
 	<string name="tattoo_desc_text">
 		刺青：
 	</string>
 	<string name="universal_desc_text">
-		通用值：
+		通用層：
 	</string>
 	<string name="physics_desc_text">
 		身體物理：
 	</string>
-	<labeled_back_button label="儲存" name="back_btn" tool_tip="回到編輯裝扮"/>
-	<text name="edit_wearable_title" value="體形編輯中"/>
+	<labeled_back_button label="儲存" name="back_btn" tool_tip="回到編輯裝扮" />
+	<text name="edit_wearable_title" value="身形編輯中" />
 	<panel label="襯衫" name="wearable_type_panel">
-		<text name="description_text" value="體形："/>
+		<text name="description_text" value="身形：" />
 		<radio_group name="sex_radio">
-			<radio_item label="" name="sex_male" tool_tip="男性" value="1"/>
-			<radio_item label="" name="sex_female" tool_tip="女性" value="0"/>
+			<radio_item label="" name="sex_male" tool_tip="男性" value="1" />
+			<radio_item label="" name="sex_female" tool_tip="女性" value="0" />
 		</radio_group>
-		<icon name="male_icon" tool_tip="男性"/>
-		<icon name="female_icon" tool_tip="女性"/>
+		<icon name="male_icon" tool_tip="男性" />
+		<icon name="female_icon" tool_tip="女性" />
 	</panel>
 	<panel name="button_panel">
 		<layout_stack name="button_panel_ls">
 			<layout_panel name="save_as_btn_lp">
-				<button label="另存為" name="save_as_button"/>
+				<button label="另存為" name="save_as_button" />
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
-				<button label="復原變更" name="revert_button"/>
+				<button label="復原變更" name="revert_button" />
+			</layout_panel>
+			<layout_panel name="import_btn_lp">
+				<button label="匯入" name="import_btn" />
 			</layout_panel>
 		</layout_stack>
 	</panel>

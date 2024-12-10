@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="即時訊息" name="panel_group_notify">
-	<panel label="表頭" name="header">
-		<text name="title" value="發件者名/群組名"/>
+<panel label="instant_message" name="panel_group_notify">
+	<panel label="標題" name="header">
+		<text name="title" value="發件人/群組名" />
 	</panel>
-	<text_editor name="message" value="訊息"/>
-	<text name="attachment" value="附件"/>
-	<button label="確定" name="btn_ok"/>
+	<text name="attachment" value="附件" />
+	<text name="group_notice" value="群組通知" />
+	<text name="title" value="傳送人姓名、群組名稱" />
+	<button label="確定" name="btn_ok" />
+	<button label="通知" name="btn_notices" />
+	<button label="聊天" name="btn_groupchat" />
 </panel>

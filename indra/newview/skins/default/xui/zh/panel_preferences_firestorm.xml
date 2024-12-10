@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Firestorm" name="firestorm">
+	<panel.string name="BeamsOffLabel">=== 關閉 ===</panel.string>
+	<string name="EmbeddedItemNotSet">未設定</string>
+	<string name="EmbeddedItemNotAvailable">不可用</string>
+	<string name="EmbeddedItemNotLoggedIn">未登入</string>
+	<tab_container label="Firestorm Preferences" name="tabs">
+		<panel label="更多" name="tab-extras">
+			<check_box name="checkMiscRLVa" label="允許遠端指令碼檢視器控制項 (RLVa)" />
+			<text name="textMiscRLVaRestart">(需要重新啟動)</text>
+			<check_box label="始終將放置的物件分配給地塊群組（如有可能）" name="grouplandrez" tool_tip="如果您是地塊的所有者，則將放置在地塊上的物件分配給群組所有者，即使該群組未啟用。" />
+			<check_box label="當指令碼通訊時建立粒子效果" name="EffectScriptChatParticles" tool_tip="啟用此選項會在與通訊的物件周圍顯示一個小的旋轉雲。" />
+			<check_box label="當您接近特定人物時關閉追蹤標籤 (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="啟用此選項將在您接近人物時自動關閉追蹤標籤 (&lt;= 3m 預設)" />
+			<check_box label="設定閒置便當動畫" name="play_default_bento_idle_animation_toggle" tool_tip="如果啟用此選項，檢視器將在沒有其他便當動畫正在運行時播放預設的便當動畫， 優先度為0，將手、翅膀、嘴和尾巴放在自然位置。" />
+			<check_box label="登入時禁用載入螢幕" name="login_screen_toggle" tool_tip="禁用登入時的載入螢幕" />
+			<check_box label="登出時禁用載入螢幕" name="logout_screen_toggle" tool_tip="禁用登出時的載入螢幕" />
+			<check_box label="啟用漸進式遠景剪裁距離" name="FSRenderFarClipStepping" tool_tip="如果啟用，Firestorm 將在傳送後使用逐步遠景剪裁距離。" />
+			<slider name="progressive_draw_distance_interval" tool_tip="每次距離變化間隔的秒數" />
+			<check_box name="UseLSLBridge" label="啟用 LSL 橋" tool_tip="攜帶一個指令碼物件以啟用某些進階功能" />
+			<combo_box name="UseLSLFlightAssist" tool_tip="啟用飛行輔助和高空漂浮功能">
+				<combo_box.item label="飛行輔助：已禁用" name="flight_disabled" />
+				<combo_box.item label="飛行輔助：輕微增強" name="flight_mild" />
+				<combo_box.item label="飛行輔助：中度增強" name="flight_moderate" />
+				<combo_box.item label="飛行輔助：全力飛行" name="flight_strong" />
+				<combo_box.item label="飛行輔助：極端增壓" name="flight_extreme" />
+			</combo_box>
+			<slider name="manual_environment_change_transition_period" label="環境過渡時長：" tool_tip="在環境之間的轉換間隔時間（以秒為單位）。0 表示瞬時。" />
+			<check_box name="EnvironmentPersistAcrossLogin" label="在對談之間保持環境設定" tool_tip="在下次登入時保留當前的環境設定。" />
+		</panel>
+		<panel label="保護" name="ProtectionTab">
+			<check_box label="阻止通過簡單點擊坐在物件上" name="FSBlockClickSit" />
+			<check_box label="允許指令碼顯示地圖 (llMapDestination)" name="ScriptsCanShowUI" />
+			<text name="revokepermissions_txt">復原權限：</text>
+			<radio_group name="FSRevokePerms">
+				<radio_item label="從不 (預設行為)" name="never_radio" />
+				<radio_item label="復原坐下權限" name="sit_radio" />
+				<radio_item label="復原站立權限" name="stand_radio" />
+				<radio_item label="復原坐下和站立權限" name="sitnstand_radio" />
+			</radio_group>
+			<text name="SurfaceAreaThreshholdLabel">防止大貼圖：</text>
+			<check_box label="在遇到貼圖過大的物件時自動隱藏：" name="RenderVolumeSAProtection" tool_tip="啟用此選項將自動隱藏貼圖過大的物件。（預設為 5000 平方公尺）" />
+			<check_box label="啟用反垃圾郵件功能" name="UseAntiSpam" />
+			<check_box label="對您的物件啟用反垃圾郵件功能" name="FSUseAntiSpamMine" tool_tip="將反垃圾郵件保護應用於您擁有的物件。" />
+			<text name="AntiSpamText1">每條訊息的最大行數：</text>
+			<spinner name="_NACL_AntiSpamNewlines" tool_tip="每條訊息中允許的最大行數（預設為 70）" />
+			<text name="AntiSpamText2">每個發件人的最大事件數：</text>
+			<spinner name="_NACL_AntiSpamAmount" tool_tip="允許來自同一發件人的相似事件的最大數量（預設為 10）" />
+			<text name="AntiSpamText3">用於音訊的倍數：</text>
+			<spinner name="_NACL_AntiSpamSoundMulti" tool_tip="用於音訊請求的上述設定的倍數（預設為 6）" />
+			<text name="AntiSpamText4">用於音訊預載入：</text>
+			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="用於音訊預載入請求的事件允許倍數（預設為 6）" />
+			<button name="AntiSpamUnblock" label="清空垃圾郵寄清單" />
+			<check_box label="大額支付前要求確認：" name="FSConfirmPayments" tool_tip="在向居民支付超過指定的金額時顯示確認視窗。 要始終進行確認，請將數值設定為 0。" />
+			<spinner name="FSPaymentConfirmationThreshold" tool_tip="在向居民支付超過指定的金額時顯示確認視窗。要始終進行確認，請將數值設定為 0。" />
+		</panel>
+		<panel label="進階" name="firestorm_avatar">
+			<text name="HeadMovement">我的頭部跟隨滑鼠的最大傾斜角度（0 = 不移動）：</text>
+			<slider label="垂直傾斜角度：" tool_tip="我的頭部在垂直方向上跟隨滑鼠的最大傾斜角度" name="PitchFromMousePositionSlider" />
+			<text name="PitchFromMousePositionText">度</text>
+			<slider label="水平傾斜角度：" tool_tip="我的頭部在水平方向上跟隨滑鼠的最大傾斜角度" name="YawFromMousePositionSlider" />
+			<text name="YawFromMousePositionText">度</text>
+			<text name="note_lookat">注視點設定在隱私索引標籤中</text>
+			<check_box label="禁用化身眼睛的隨機移動" name="FSStaticEyes" />
+			<text name="BeamPrefs">選擇光束效果</text>
+			<button name="BeamColor_delete" label="刪除" tool_tip="刪除此顏色預設" />
+			<combo_box name="BeamColor_combo" tool_tip="選擇光束的顏色" left_delta="80" width="160" />
+			<button name="BeamColor_new" label="建立.." tool_tip="建立新的顏色預設" />
+			<button name="BeamColor_refresh" label="重新整理" tool_tip="重新整理預設列表" />
+			<slider name="FSMaxBeamsPerSecond" label="頻率：" tool_tip="每秒更新光束的頻率。預設為 40" />
+			<check_box label="啟用選擇光束" name="SLPartBeam" />
+			<check_box label="將選擇傳送到聊天視窗" name="FSParticleChat" tool_tip="將選擇的資料（起始時間、結束時間和全域坐標）傳送到聊天頻道 9000。" />
+			<combo_box name="FSBeamShape_combo" tool_tip="選擇光束的形狀" />
+			<button name="delete_beam" label="刪除" width="75" tool_tip="刪除此形狀" />
+			<button name="custom_beam_btn" label="建立.." tool_tip="建立新的光束形狀" />
+			<button name="refresh_beams" label="重新整理" tool_tip="重新整理形狀列表" />
+			<slider name="FSBeamShapeScale" label="比例：" tool_tip="修改所用形狀的比例" label_width="50" width="200" />
+			<text name="BridgeProtocols">內建外部協定到 LSL 橋：</text>
+			<check_box label="允許 OpenCollar 控制內建動畫涵蓋的啟用或禁用" name="BridgeIntegrationOC" />
+			<check_box label="允許 LockMeister 控制內建動畫涵蓋的啟用或禁用" name="BridgeIntegrationLM" />
+		</panel>
+		<panel label="建造 1" name="BuildTab">
+			<text name="text_box_objprams">預設尺寸</text>
+			<text name="text_box_objprams2">參數</text>
+			<text name="text_box_objprams3">紋理</text>
+			<spinner label="X" name="X size" />
+			<spinner label="Y" name="Y size" />
+			<spinner label="Z" name="Z size" />
+			<check_box label="幻影" name="FSBuildPrefs_PhantomToggle" />
+			<check_box label="物理" name="FSBuildPrefs_PhysicalToggle" />
+			<check_box label="臨時" name="FSBuildPrefs_TemporaryToggle" />
+			<combo_box name="material">
+				<combo_item name="Stone" label="石頭" />
+				<combo_item name="Metal" label="金屬" />
+				<combo_item name="Glass" label="玻璃" />
+				<combo_item name="Wood" label="木頭" />
+				<combo_item name="Flesh" label="肌膚" />
+				<combo_item name="Plastic" label="塑膠" />
+				<combo_item name="Rubber" label="橡膠" />
+			</combo_box>
+			<texture_picker label="紋理" name="texture control" tool_tip="點擊選擇圖像" />
+			<color_swatch label="顏色" name="colorswatch" tool_tip="點擊打開顏色選擇器" />
+			<spinner label="透明度" name="alpha" />
+			<spinner label="發光" name="glow" />
+			<check_box label="最大亮度" name="EmFBToggle" />
+			<combo_box name="combobox shininess" tool_tip="設定物件髮光亮度">
+				<combo_item name="None" label="無" />
+				<combo_item name="Low" label="低" />
+				<combo_item name="Medium" label="中" />
+				<combo_item name="High" label="高" />
+			</combo_box>
+			<check_box name="FSBuildPrefs_EmbedItem" label="將物件嵌入新的元素" />
+			<fs_embedded_item_drop_target name="embed_item" tool_tip="將物件拖到此處">將物件拖到此處</fs_embedded_item_drop_target>
+			<text name="build_item_add_disp_rect_txt">當前: [ITEM]</text>
+			<text name="text_box_pivotpoint">軸心點</text>
+			<check_box label="根元素軸" tool_tip="預設情況下，軸位於聯結集的重心位置。 如果啟用，則軸將位於聯結集的子元素上。" name="FSBuildPrefsActualRoot_toggle" />
+			<spinner label="X 軸" name="X pos" />
+			<spinner label="Y 軸" name="Y pos" />
+			<spinner label="Z 軸" name="Z pos" />
+			<check_box label="百分比" tool_tip="預設情況下，所有值都是百分比，每個軸都固定為 50%" name="FSPivotPercToggle" />
+			<button label="預設建立權限" name="fs_default_creation_permissions" />
+			<text name="text_box_scripting_font" width="155">指令碼編輯器字型：</text>
+			<combo_box name="FSScriptingFontName" tool_tip="LSL 指令碼編輯器中使用的字型名稱">
+				<combo_item name="Monospace" label="等寬" />
+				<combo_item name="Scripting" label="斜體" />
+				<combo_item name="Cascadia" label="新型等寬" />
+			</combo_box>
+			<combo_box name="FSScriptingFontSize" tool_tip="LSL 指令碼編輯器中使用的字型大小">
+				<combo_item name="Monospace" label="等寬" />
+				<combo_item name="Scripting" label="斜體" />
+				<combo_item name="Cascadia" label="新型等寬" />
+				<combo_item name="Small" label="小" />
+				<combo_item name="Medium" label="中" />
+				<combo_item name="Large" label="大" />
+			</combo_box>
+			<check_box label="啟用 LSL 前處理器" tool_tip="勾選此項將啟用 LSL 前處理器。" name="preproc_checkbox" />
+			<check_box label="最佳化指令碼" tool_tip="勾選此項，LSL 前處理器將最佳化指令碼所佔用的空間。" name="preprocoptimizer_checkbox" />
+			<check_box label="switch() 語句" tool_tip="勾選後，LSL 前處理器將允許使用 switch() 語句進行指令碼流程控制。" name="preprocswitch_checkbox" />
+			<check_box label="列表簡化" tool_tip="勾選此項，LSL 前處理器將支援列表操作的擴充語法。" name="preproclazy_checkbox" />
+			<check_box label="從磁碟載入 #include" tool_tip="勾選此項，LSL 前處理器將允許 #include 指令指向您硬碟上的檔案。" name="preprocinclude_checkbox" />
+			<text name="lslpreprocinclude_textbox">前處理器包含路徑：</text>
+			<button label="瀏覽" label_selected="瀏覽" name="SetPreprocInclude" />
+			<text name="externaleditor_textbox">外部編輯器：</text>
+			<button label="瀏覽" label_selected="瀏覽" name="SetExternalEditor" />
+		</panel>
+		<panel label="建造 2" name="BuildTab2">
+			<check_box label="高亮選定元素邊框" tool_tip="取消選擇將不顯示黃色/藍色邊框，當選擇大量元素時，可提高效能。" name="FSBuildPrefsRenderHighlight_toggle" />
+			<check_box label="顯示所選地塊邊界" name="RenderParcelSelection" />
+			<check_box label="顯示建造的最大高度限制" name="FSRenderParcelSelectionToMaxBuildHeight" />
+			<check_box label="選擇距離限制（米）：" name="LimitSelectDistance" />
+			<spinner name="MaxSelectDistance" tool_tip="選擇的最大允許距離（從化身出發到，單位：米） [預設值：128.000]" />
+			<check_box label="拖動距離限制（米）：" name="LimitDragDistance" />
+			<spinner name="MaxDragDistance" tool_tip="單次移動的最大允許距離（從起始點，單位：米） [預設值：48.000]" />
+			<text name="RotationStepText1">旋轉限制為以下倍數：</text>
+			<spinner name="RotationStep" width="45" tool_tip="透過旋轉工具進行的所有旋轉都將約束為指定數的倍數（預設值：1.0）" />
+			<text name="RotationStepText2">度，如果「對齊到網格」未啟用</text>
+			<check_box name="FSUnlinkConfirmEnabled" label="如果集合中至少包含以下數量，則刪除聯結時確認" />
+			<text name="MinObjectsForUnlinkConfirmText2">個物件</text>
+			<check_box label="使用 Ctrl+單擊來捕獲和移動物件" tool_tip="勾選此項，您可以使用滑鼠和 Ctrl 鍵來捕獲和移動物件。" name="FSEnableGrab" />
+			<check_box label="在建造模式下按住 Shift+單擊直接拖動紋理" tool_tip="啟用此選項後，您可以在建造模式下直接將紋理拖放到物件的表面上。" name="FSExperimentalDragTexture" />
+			<check_box label="在「設定此物件出售」時使用舊功能" tool_tip="啟用此選項將直接儲存物件的銷售資訊，而不需要確認。" name="FSCommitForSaleOnChange_toggle" />
+			<check_box label="將編輯的指令碼儲存到 Mono 中" tool_tip="啟用此選項將直接將儲存在庫存中的指令碼儲存為 Mono，而不是 LSL。" name="FSSaveInventoryScriptsAsMono_toggle" />
+			<check_box label="將紋理儲存到硬碟上的 PNG 格式而不是 TGA" tool_tip="用於紋理預覽和庫存上下文選單。" name="FSTextureDefaultSaveAsFormat" />
+			<check_box label="上傳到伺服器時在自己的化身上預覽動畫" tool_tip="如果啟用，您可以在上傳到伺服器時用自己的化身預覽動畫。" name="FSUploadAnimationOnOwnAvatar" />
+			<check_box label="始終展開動畫預覽的詳細資訊" tool_tip="動畫預覽懸浮窗中的詳細資訊預設展開。" name="FSAnimationPreviewExpanded" />
+			<check_box label="為指令碼啟用詳細資訊" tool_tip="啟用後，將向指令碼基本資訊中新增對創造者有用的詳細資訊。" name="FSScriptInfoExtended" />
+			<check_box label="按字母順序排序「附著到」選單中的附著點（需要重新啟動）" tool_tip="如果啟用此選項，「附著到」選單中的附件點列表將按字母順序排序。" name="FSSortAttachmentSpotsAlphabetically" />
+			<check_box label="在工具視窗中使用新的Firestorm紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的FS工作流,並允許編輯BlinnPhong" name="FSUseNewTexturePanel" />
+		</panel>
+		<panel label="上傳" name="UploadsTab">
+			<text name="title">上傳的目標檔案夾：</text>
+			<text name="title_images">圖像</text>
+			<text name="title_sounds">聲音</text>
+			<text name="title_animations">動畫</text>
+			<text name="title_models">模型</text>
+			<text name="title_pbr">PBR材質</text>
+			<text name="upload_help">要更改目標檔案夾，請在庫存中右鍵單擊該檔案夾，
+然後選擇「設定為預設目錄」
+		</text>
+			<button name="reset_default_folders" label="重設預設檔案夾" />
+		</panel>
+	</tab_container>
+</panel>

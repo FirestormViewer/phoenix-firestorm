@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Explicit left edge to avoid overlapping build tools -->
 <floater name="telehub" title="瞬間傳送中心">
 	<text name="status_text_connected">
-		瞬間傳送中心已連通物件 [OBJECT]
+		瞬間傳送中心已連線物件 [OBJECT]
 	</text>
 	<text name="status_text_not_connected">
-		無連通的瞬間傳送中心。
+		無連線的瞬間傳送中心。
 	</text>
 	<text name="help_text_connected">
-		點按「中斷」即可移除。
+		點擊「中斷」即可移除。
 	</text>
 	<text name="help_text_not_connected">
-		選擇物件，並點按「連通瞬間傳送中心」。
+		選擇物件，並點擊「連線瞬間傳送中心」。
 	</text>
-	<button label="連通瞬間傳送中心" name="connect_btn"/>
-	<button label="中斷" name="disconnect_btn"/>
+	<button label="連線瞬間傳送中心" name="connect_btn" />
+	<button label="中斷" name="disconnect_btn" />
 	<text name="spawn_points_text">
 		產生點（位置而非物件）：
 	</text>
-	<button label="新增產生" name="add_spawn_point_btn"/>
-	<button label="移除產生" name="remove_spawn_point_btn"/>
+	<button label="新增產生" name="add_spawn_point_btn" />
+	<button label="移除產生" name="remove_spawn_point_btn" />
 	<text name="spawn_point_help">
-		選擇物件，並點按「新增產生」來指定位置。
+		選擇物件，並點擊「新增產生」來指定位置。
 你可以接著移動或刪除該物件。
 位置是與瞬間傳送中心相對。
-從清單中選取一項，在虛擬世界中以高亮顯示。
+從選單中選擇一項，在虛擬世界中以高亮顯示。
 	</text>
 </floater>

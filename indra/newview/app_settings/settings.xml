@@ -24798,6 +24798,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <string>ja</string>
         <string>pl</string>
         <string>ru</string>
+        <string>zh</string>
       </array>
     </map>
     <key>FSRememberUsername</key>
@@ -25212,6 +25213,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If enabled, auto-accepted inventory items will be logged to nearby chat.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSShowAutoAcceptInventoryInNotifications</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, auto-accepted inventory items will be shown in notifications.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

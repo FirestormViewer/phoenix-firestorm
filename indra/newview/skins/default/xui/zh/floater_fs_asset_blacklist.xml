@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_asset_blacklist" title="資源封鎖名單">
+	<floater.string name="asset_object">
+		物件
+	</floater.string>
+	<floater.string name="asset_texture">
+		紋理
+	</floater.string>
+	<floater.string name="asset_sound">
+		聲音
+	</floater.string>
+	<floater.string name="asset_animation">
+		動畫
+	</floater.string>
+	<floater.string name="asset_resident">
+		居民
+	</floater.string>
+	<floater.string name="asset_unknown">
+		未知
+	</floater.string>
+	<floater.string name="unknown_object">
+		未知物件
+	</floater.string>
+	<floater.string name="unknown_region">
+		未知地塊
+	</floater.string>
+	<floater.string name="DateFormatString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<filter_editor label="篩選資源封鎖清單" name="filter_input" />
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="名稱" />
+		<columns name="region" label="地塊" width="210" />
+		<columns name="type" label="類型" />
+		<columns name="date" label="日期" />
+		<columns name="permanent" label="永久" width="50" />
+	</fs_scroll_list>
+	<button name="remove_btn" label="移除選定對象" />
+	<button name="remove_temp_btn" label="移除所有臨時對象" />
+	<button name="play_btn" label="播放聲音" tool_tip="播放選定的聲音；只能選擇一個檔案播放。" />
+	<button name="stop_btn" label="停止聲音" tool_tip="停止當前正在播放的聲音。" />
+	<button name="close_btn" label="關閉" />
+</floater>

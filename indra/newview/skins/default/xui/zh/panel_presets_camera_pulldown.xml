@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="presets_camera_pulldown">
+	<text name="Camera Presets">
+		相機預設
+	</text>
+	<button label="打開相機視窗" name="open_prefs_btn" tool_tip="顯示相機視窗" />
+</panel>

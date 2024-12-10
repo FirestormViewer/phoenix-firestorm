@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skin_panel">
+	<panel name="avatar_skin_color_panel">
+		<texture_picker label="頭部" name="Head" tool_tip="點擊以挑選圖片" />
+		<texture_picker label="上半身" name="Upper Body" tool_tip="點擊以挑選圖片" />
+		<texture_picker label="下半身" name="Lower Body" tool_tip="點擊以挑選圖片" />
+	</panel>
+	<tab_container name="wearable_accordion">
+		<panel name="skin_color_tab_holder" title="膚色">
+			<accordion name="skin_color_accordion">
+				<accordion_tab name="skin_color_tab" title="膚色" />
+			</accordion>
+		</panel>
+		<panel name="skin_face_tab_holder" title="臉部細節">
+			<accordion name="skin_face_accordion">
+				<accordion_tab name="skin_face_tab" title="臉部細節" />
+			</accordion>
+		</panel>
+		<panel name="skin_makeup_holder" title="化妝">
+			<accordion name="skin_makeup_accordion">
+				<accordion_tab name="skin_makeup_tab" title="化妝" />
+			</accordion>
+		</panel>
+		<panel name="skin_body_holder" title="身體細節">
+			<accordion name="skin_body_accordion">
+				<accordion_tab name="skin_body_tab" title="身體細節" />
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

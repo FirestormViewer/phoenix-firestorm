@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_auction" title="開始Linden土地出售">
+<floater name="floater_auction" title="開始林登土地出售">
 	<floater.string name="already for sale">
-		出售中的地段無法進行拍賣。
+		出售中的地塊無法進行拍賣。
 	</floater.string>
-	<check_box initial_value="true" label="包括黃色圍線" name="fence_check"/>
-	<button label="快照" label_selected="快照" name="snapshot_btn"/>
-	<button label="出售給任何人" label_selected="出售給任何人" name="sell_to_anyone_btn"/>
-	<button label="清除設定" label_selected="清除設定" name="reset_parcel_btn"/>
-	<button label="開始拍賣" label_selected="開始拍賣" name="start_auction_btn"/>
+	<check_box initial_value="true" label="包括黃色圍線" name="fence_check" />
+	<button label="快照" label_selected="快照" name="snapshot_btn" />
+	<button label="出售給任何人" label_selected="出售給任何人" name="sell_to_anyone_btn" />
+	<button label="清除設定" label_selected="清除設定" name="reset_parcel_btn" />
+	<button label="開始拍賣" label_selected="開始拍賣" name="start_auction_btn" />
 </floater>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="群組" name="panel_ls_groups">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			搜尋條件：
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_groups">
+			<columns label="群組名稱" name="group_name" />
+			<columns label="成員" name="members" />
+			<columns label="分數" name="score" />
+		</scroll_list>
+		<button label="上一頁" name="groups_back" />
+		<button label="下一頁" name="groups_next" />
+	</panel>
+</panel>
