@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
  name="avatarinfo"
- height="510"
- width="485"
+ height="610"
+ width="635"
  layout="topleft"
  can_close="true"
  can_resize="true"
  help_topic="panel_my_profile_tab"
- min_height="510"
- min_width="480"
+ min_height="610"
+ min_width="630"
  positioning="centered"
  save_rect="true"
  title="Profile"
@@ -17,8 +17,8 @@
      name="panel_profile_view"
      top="0"
      left="0"
-     height="500"
-     width="480"
+     height="600"
+     width="630"
      follows="all"
      class="panel_profile"
     >
@@ -26,8 +26,8 @@
          name="panel_profile_tabs"
          top_pad="5"
          left="0"
-         height="500"
-         width="480"
+         height="600"
+         width="630"
          follows="all"
          layout="topleft"
          halign="center"
@@ -84,4 +84,3 @@
         </tab_container>
     </panel>
 </floater>
-
