@@ -1,4 +1,5 @@
 #include "bugsplatattributes.h"
+#include "llstring.h"
 #include <fstream>
 #include <filesystem>
 
@@ -67,10 +68,18 @@ bool BugSplatAttributes::writeToFile(const std::wstring& file_path)
     std::lock_guard<std::mutex> lock(mMutex);
 
     // Write to a temporary file first
+    #ifdef LL_WINDOWS
     std::wstring tmp_file = file_path + L".tmp";
+    #else // use non-wide characters for Linux and Mac
+    std::string tmp_file = ll_convert_wide_to_string(file_path) + ".tmp";
+    #endif
 
     {
+    #ifdef LL_WINDOWS
         std::wofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
+    #else // use non-wide characters for Linux and Mac
+        std::ofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
+    #endif
         if (!ofs.good())
         {
             return false;
