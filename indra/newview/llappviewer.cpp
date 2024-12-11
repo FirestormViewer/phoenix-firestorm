@@ -289,7 +289,7 @@ using namespace LL;
 
 #include "fsradar.h"
 #include "fsassetblacklist.h"
-
+#include "bugsplatattributes.h"
 // #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
 
 #if LL_LINUX && LL_GTK
@@ -767,6 +767,10 @@ LLAppViewer::LLAppViewer()
     // MAINT-8917: don't create a dump directory just for the
     // static_debug_info.log file
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+    // <FS:Beq> Improve Bugsplat tracking by using attribu
+    std::wstring wlogdir(logdir.begin(), logdir.end());
+    BugSplatAttributes::setCrashContextFileName(wlogdir + L"crash-context.xml");
+    // </FS:Beq>
 #   else // ! LL_BUGSPLAT
     // write Google Breakpad minidump files to a per-run dump directory to avoid multiple viewer issues.
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
@@ -3762,6 +3766,10 @@ bool LLAppViewer::waitForUpdater()
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
 #if LL_WINDOWS && LL_BUGSPLAT
+    // <FS:Beq> Improve Bugsplat tracking by using attributes for certain static data items.
+    const LLSD& info = getViewerInfo();
+    bugsplatAddStaticAttributes(info);
+    // </FS:Beq>
     // bugsplat does not create dump folder and debug logs are written directly
     // to logs folder, so it conflicts with main instance
     if (mSecondInstance)
@@ -3970,10 +3978,17 @@ LLSD LLAppViewer::getViewerInfo() const
     info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
     info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
-
-    LLRect window_rect = gViewerWindow->getWindowRectRaw();
-    info["WINDOW_WIDTH"] = window_rect.getWidth();
-    info["WINDOW_HEIGHT"] = window_rect.getHeight();
+    // <FS:Beq> gViewerWindow can be null on shutdown. Crashes if bugsplatt uses the info
+    // LLRect window_rect = gViewerWindow->getWindowRectRaw();
+    // info["WINDOW_WIDTH"] = window_rect.getWidth();
+    // info["WINDOW_HEIGHT"] = window_rect.getHeight();
+    if(gViewerWindow)
+    {
+        LLRect window_rect = gViewerWindow->getWindowRectRaw();
+        info["WINDOW_WIDTH"] = window_rect.getWidth();
+        info["WINDOW_HEIGHT"] = window_rect.getHeight();
+    }
+    // </FS:Beq>
 
     // <FS> Custom sysinfo
     //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
@@ -3994,7 +4009,7 @@ LLSD LLAppViewer::getViewerInfo() const
     info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
     bool want_fullname = true;
     info["AUDIO_DRIVER_VERSION"] = gAudiop ? LLSD(gAudiop->getDriverName(want_fullname)) : "Undefined";
-    if(LLVoiceClient::getInstance()->voiceEnabled())
+    if(LLStartUp::getStartupState() == STATE_STARTED && LLVoiceClient::getInstance()->voiceEnabled()) // <FS:Beq/> Calling this too earli leads to a nasty crash loop
     {
         LLVoiceVersionInfo version = LLVoiceClient::getInstance()->getVersion();
         const std::string build_version = version.mBuildVersion;
@@ -4086,7 +4101,13 @@ LLSD LLAppViewer::getViewerInfo() const
     }
 
     // populate field for new local disk cache with some details
-    info["DISK_CACHE_INFO"] = LLDiskCache::getInstance()->getCacheInfo();
+    // <FS:Beq> only populate if the cache is available
+    // info["DISK_CACHE_INFO"] = LLDiskCache::getInstance()->getCacheInfo();
+    if (auto cache = LLDiskCache::getInstance(); cache)
+    {
+        info["DISK_CACHE_INFO"] = cache->getCacheInfo();
+    }
+    // </FS:Beq>
 
     // <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
     switch (gSavedSettings.getU32("RenderQualityPerformance"))

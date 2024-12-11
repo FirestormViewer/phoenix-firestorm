@@ -75,6 +75,7 @@
 
 // Bugsplat (http://bugsplat.com) crash reporting tool
 #ifdef LL_BUGSPLAT
+#include "bugsplatattributes.h"
 #include "BugSplat.h"
 #include "boost/json.hpp"                 // Boost.Json
 #include "llagent.h"                // for agent location
@@ -164,6 +165,7 @@ namespace
             flavor = "oss";
 #endif
             sBugSplatSender->setDefaultUserEmail( WCSTR(STRINGIZE(LLOSInfo::instance().getOSStringSimple() << " ("  << ADDRESS_SIZE << "-bit, flavor " << flavor <<")")));
+            // BugSplatAttributes::instance().setAttribute(L"Flavor", flavor);
             // </FS:ND>
 
             //<FS:ND/> Clear out username first, as we get some crashes that has the OS set as username, let's see if this fixes it. Use Crash.Linden as a usr can never have a "Linden"
@@ -195,7 +197,6 @@ namespace
 
             // LL_ERRS message, when there is one
             sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
-
             sBugSplatSender->setAttribute(WCSTR(L"OS"), WCSTR(LLOSInfo::instance().getOSStringSimple())); // In case we ever stop using email for this
             sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
             sBugSplatSender->setAttribute(WCSTR(L"GL Vendor"), WCSTR(gGLManager.mGLVendor));
@@ -203,18 +204,41 @@ namespace
             sBugSplatSender->setAttribute(WCSTR(L"GPU Version"), WCSTR(gGLManager.mDriverVersionVendorString));
             sBugSplatSender->setAttribute(WCSTR(L"GL Renderer"), WCSTR(gGLManager.mGLRenderer));
             sBugSplatSender->setAttribute(WCSTR(L"VRAM"), WCSTR(STRINGIZE(gGLManager.mVRAM)));
-            sBugSplatSender->setAttribute(WCSTR(L"RAM"), WCSTR(STRINGIZE(gSysMemory.getPhysicalMemoryKB().value())));
+            // sBugSplatSender->setAttribute(WCSTR(L"RAM"), WCSTR(STRINGIZE(gSysMemory.getPhysicalMemoryKB().value())));
+            // <FS:Beq> Improve bugsplpat reporting with attributes
+            // sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));            
+            // sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
 
+            auto fatal_message = LLError::getFatalMessage();
+            sBugSplatSender->setDefaultUserDescription(WCSTR(fatal_message));
+            BugSplatAttributes::instance().setAttribute(L"FatalMessage", fatal_message); // <FS:Beq/> Store this additionally as an attribute in case user overwrites.
+            // App state
+            BugSplatAttributes::instance().setAttribute(L"AppState", LLStartUp::getStartupStateString());
+            // Location
+            // </FS:Beq>
             if (gAgent.getRegion())
             {
                 // region location, when we have it
-                LLVector3 loc = gAgent.getPositionAgent();
-                sBugSplatSender->resetAppIdentifier(
-                    WCSTR(STRINGIZE(gAgent.getRegion()->getName()
+                // <FS:Beq> Improve bugsplat reporting with attributes
+                // LLVector3 loc = gAgent.getPositionAgent();
+                // sBugSplatSender->resetAppIdentifier(
+                //     WCSTR(STRINGIZE(gAgent.getRegion()->getName()
+                //                     << '/' << loc.mV[0]
+                //                     << '/' << loc.mV[1]
+                //                     << '/' << loc.mV[2])));
+                const LLVector3 loc = gAgent.getPositionAgent();
+                const auto & fullLocation = STRINGIZE(gAgent.getRegion()->getName()
                                     << '/' << loc.mV[0]
                                     << '/' << loc.mV[1]
-                                    << '/' << loc.mV[2])));
+                                    << '/' << loc.mV[2]);
+                sBugSplatSender->resetAppIdentifier(WCSTR(fullLocation));
+                BugSplatAttributes::instance().setAttribute(L"Location", std::string(fullLocation));
+                // </FS:Beq>
             }
+            // <FS:Beq> Improve bugsplat reporting with attributes
+            LLAppViewer::instance()->writeDebugInfo();            
+            sBugSplatSender->sendAdditionalFile(WCSTR(BugSplatAttributes::getCrashContextFileName())); // <FS:Beq/> Add the new attributes file
+            // </FS:Beq>
         } // MDSCB_EXCEPTIONCODE
 
         return false;
@@ -619,6 +643,71 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     }
 }
 #endif
+// <FS:Beq> Use the Attributes API on Windows to enhance crash metadata
+void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
+{
+#ifdef LL_BUGSPLAT
+    static bool write_statics = true;
+
+    auto& bugSplatMap = BugSplatAttributes::instance();
+
+    if (write_statics)
+    {
+        write_statics = false;
+        auto multipleInstances = gDebugInfo["FoundOtherInstanceAtStartup"].asBoolean();
+        bugSplatMap.setAttribute(L"MultipleInstance", multipleInstances);
+
+        bugSplatMap.setAttribute(L"GPU", info["GRAPHICS_CARD"].asString());
+        bugSplatMap.setAttribute(L"GPU VRAM (MB)", info["GRAPHICS_CARD_MEMORY"].asInteger());
+        bugSplatMap.setAttribute(L"GPU VRAM Detected (MB)", info["GRAPHICS_CARD_MEMORY_DETECTED"].asInteger());
+        bugSplatMap.setAttribute(L"GPU VRAM (Budget)", info["VRAM_BUDGET_ENGLISH"].asInteger());
+
+        bugSplatMap.setAttribute(L"CPU", info["CPU"].asString());
+        bugSplatMap.setAttribute(L"Graphics Driver", info["GRAPHICS_DRIVER_VERSION"].asString());
+        bugSplatMap.setAttribute(L"CPU MHz", (S32)gSysCPU.getMHz()); // 
+#ifdef USE_AVX2_OPTIMIZATION
+        bugSplatMap.setAttribute(L"SIMD", L"AVX2");
+#elif USE_AVX_OPTIMIZATION
+        bugSplatMap.setAttribute(L"SIMD", L"AVX");
+#else
+        bugSplatMap.setAttribute(L"SIMD", L"SSE2");
+#endif
+        // set physical ram integer as a string attribute
+        bugSplatMap.setAttribute(L"Physical RAM (KB)", LLMemory::getMaxMemKB().value());
+        bugSplatMap.setAttribute(L"OpenGL Version", info["OPENGL_VERSION"].asString());
+        bugSplatMap.setAttribute(L"libcurl Version", info["LIBCURL_VERSION"].asString());
+        bugSplatMap.setAttribute(L"J2C Decoder Version", info["J2C_VERSION"].asString());
+        bugSplatMap.setAttribute(L"Audio Driver Version", info["AUDIO_DRIVER_VERSION"].asString());
+        // bugSplatMap.setAttribute(L"CEF Info", info["LIBCEF_VERSION"].asString());
+        bugSplatMap.setAttribute(L"LibVLC Version", info["LIBVLC_VERSION"].asString());
+        bugSplatMap.setAttribute(L"Vivox Version", info["VOICE_VERSION"].asString());
+        bugSplatMap.setAttribute(L"RLVa", info["RLV_VERSION"].asString());
+        bugSplatMap.setAttribute(L"Mode", info["MODE"].asString());
+        bugSplatMap.setAttribute(L"Skin", llformat("%s (%s)", info["SKIN"].asString().c_str(), info["THEME"].asString().c_str()));
+    #if LL_DARWIN
+        bugSplatMap.setAttribute(L"HiDPI", info["HIDPI"].asBoolean() ? L"Enabled" : L"Disabled");
+    #endif
+    }
+    // These attributes are potentially dynamic
+    bugSplatMap.setAttribute(L"Packets Lost", llformat("%.0f/%.0f (%.1f%%)", info["PACKETS_LOST"].asReal(), info["PACKETS_IN"].asReal(), info["PACKETS_PCT"].asReal()));
+    bugSplatMap.setAttribute(L"Window Size", llformat("%sx%s px", info["WINDOW_WIDTH"].asString().c_str(), info["WINDOW_HEIGHT"].asString().c_str()));
+    bugSplatMap.setAttribute(L"Draw Distance (m)", info["DRAW_DISTANCE"].asInteger());
+    bugSplatMap.setAttribute(L"Bandwidth (kbit/s)", info["BANDWIDTH"].asInteger());
+    bugSplatMap.setAttribute(L"LOD Factor", info["LOD"].asReal());
+    bugSplatMap.setAttribute(L"Render quality", info["RENDERQUALITY_FSDATA_ENGLISH"].asString());
+    bugSplatMap.setAttribute(L"Disk Cache", info["DISK_CACHE_INFO"].asString());
+
+    bugSplatMap.setAttribute(L"GridName", gDebugInfo["GridName"].asString());
+    bugSplatMap.setAttribute(L"Available RAM (KB)", LLMemory::getAvailableMemKB().value());
+    bugSplatMap.setAttribute(L"Allocated RAM (KB)", LLMemory::getAllocatedMemKB().value());
+
+    if (bugSplatMap.writeToFile(BugSplatAttributes::getCrashContextFileName()))
+    {
+        LL_INFOS() << "Crash context saved to " << WCSTR(BugSplatAttributes::getCrashContextFileName()) << LL_ENDL;
+    }
+#endif
+}
+// </FS:Beq>
 
 void LLAppViewerWin32::disableWinErrorReporting()
 {
