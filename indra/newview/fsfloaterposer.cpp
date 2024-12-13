@@ -1770,7 +1770,8 @@ void FSFloaterPoser::setSelectedJointsRotation(const LLVector3& absoluteRot, con
             bool oppositeJointAlsoSelectedOnUi =
                 std::find(selectedJoints.begin(), selectedJoints.end(), oppositeJoint) != selectedJoints.end();
 
-            if (oppositeJointAlsoSelectedOnUi && item->dontFlipOnMirror())
+            bool deflectionDoesOppositeLimbs = !(defl == NONE || defl == DELTAMODE);
+            if (oppositeJointAlsoSelectedOnUi && deflectionDoesOppositeLimbs && item->dontFlipOnMirror())
                 continue;
         }
 
