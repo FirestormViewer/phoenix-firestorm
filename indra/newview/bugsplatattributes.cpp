@@ -1,9 +1,8 @@
 #include "bugsplatattributes.h"
-#include "llstring.h"
 #include <fstream>
 #include <filesystem>
 
-std::wstring BugSplatAttributes::mCrashContextFileName;
+std::string BugSplatAttributes::mCrashContextFileName;
 
 BugSplatAttributes& BugSplatAttributes::instance()
 {
@@ -15,46 +14,46 @@ BugSplatAttributes& BugSplatAttributes::instance()
 #include <string>
 #include <cctype>
 
-std::wstring BugSplatAttributes::to_xml_token(const std::wstring& input)
+std::string BugSplatAttributes::to_xml_token(const std::string& input)
 {
     // Example usage:
     // std::wstring token = to_xml_token(L"Bandwidth (kbit/s)");
     // The result should be: L"Bandwidth_kbit_per_s"
-    std::wstring result;
+    std::string result;
     result.reserve(input.size() * 2); // Reserve some space, since we might insert more chars for "/"
 
-    for (wchar_t ch : input)
+    for (char ch : input)
     {
-        if (ch == L'/')
+        if (ch == '/')
         {
             // Replace '/' with "_per_"
-            result.append(L"_per_");
+            result.append("_per_");
         }
-        else if (std::iswalnum(ch) || ch == L'_' || ch == L'-')
+        else if (std::isalnum(ch) || ch == '_' || ch == '-')
         {
             // Letters, digits, underscore, and hyphen are okay
             result.push_back(ch);
         }
-        else if (ch == L' ' || ch == L'(' || ch == L')')
+        else if (ch == ' ' || ch == '(' || ch == ')')
         {
             // Replace spaces and parentheses with underscore
-            result.push_back(L'_');
+            result.push_back('_');
         }
         else
         {
             // Other characters map to underscore
-            result.push_back(L'_');
+            result.push_back('_');
         }
     }
 
     // Ensure the first character is a letter or underscore:
     // If not, prepend underscore.
-    if (result.empty() || !(std::iswalpha(result.front()) || result.front() == L'_'))
+    if (result.empty() || !(std::isalpha(result.front()) || result.front() == '_'))
     {
-        result.insert(result.begin(), L'_');
+        result.insert(result.begin(), '_');
     }
     // trim trailing underscores
-    while (!result.empty() && result.back() == L'_')
+    while (!result.empty() && result.back() == '_')
     {
         result.pop_back();
     }
@@ -63,23 +62,14 @@ std::wstring BugSplatAttributes::to_xml_token(const std::wstring& input)
 
 
 
-bool BugSplatAttributes::writeToFile(const std::wstring& file_path)
+bool BugSplatAttributes::writeToFile(const std::string& file_path)
 {
     std::lock_guard<std::mutex> lock(mMutex);
 
     // Write to a temporary file first
-    #ifdef LL_WINDOWS
-    std::wstring tmp_file = file_path + L".tmp";
-    #else // use non-wide characters for Linux and Mac
-    std::string tmp_file = ll_convert_wide_to_string(file_path) + ".tmp";
-    #endif
-
+    std::string tmp_file = file_path + ".tmp";
     {
-    #ifdef LL_WINDOWS
-        std::wofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
-    #else // use non-wide characters for Linux and Mac
         std::ofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
-    #endif
         if (!ofs.good())
         {
             return false;
@@ -89,21 +79,21 @@ bool BugSplatAttributes::writeToFile(const std::wstring& file_path)
         ofs << L"<XmlCrashContext>\n";
 
         // First, write out attributes that have an empty category (top-level)
-        auto empty_category_it = mAttributes.find(L"");
+        auto empty_category_it = mAttributes.find("");
         if (empty_category_it != mAttributes.end())
         {
             for (const auto& kv : empty_category_it->second)
             {
-                const std::wstring& key = kv.first;
-                const std::wstring& val = kv.second;
-                ofs << L"    <" << key << L">" << val << L"</" << key << L">\n";
+                const std::string& key = kv.first;
+                const std::string& val = kv.second;
+                ofs << "    <" << key << ">" << val << "</" << key << ">\n";
             }
         }
 
         // Write out all other categories
         for (const auto& cat_pair : mAttributes)
         {
-            const std::wstring& category = cat_pair.first;
+            const std::string& category = cat_pair.first;
 
             // Skip empty category since we already handled it above
             if (category.empty())
@@ -111,17 +101,17 @@ bool BugSplatAttributes::writeToFile(const std::wstring& file_path)
                 continue;
             }
 
-            ofs << L"    <" << category << L">\n";
+            ofs << "    <" << category << ">\n";
             for (const auto& kv : cat_pair.second)
             {
-                const std::wstring& key = kv.first;
-                const std::wstring& val = kv.second;
-                ofs << L"        <" << key << L">" << val << L"</" << key << L">\n";
+                const std::string& key = kv.first;
+                const std::string& val = kv.second;
+                ofs << "        <" << key << ">" << val << "</" << key << ">\n";
             }
-            ofs << L"    </" << category << L">\n";
+            ofs << "    </" << category << ">\n";
         }
 
-        ofs << L"</XmlCrashContext>\n";
+        ofs << "</XmlCrashContext>\n";
 
         // Close the file before renaming
         ofs.close();

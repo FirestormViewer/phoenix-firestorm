@@ -14,57 +14,55 @@ public:
     static BugSplatAttributes& instance();
 
     template<typename T>
-    void setAttribute(const std::wstring& key, const T& value, const std::wstring& category = L"FS")
+    void setAttribute(const std::string& key, const T& value, const std::string& category = "FS")
     {
         std::lock_guard<std::mutex> lock(mMutex);
         const auto& xml_key = to_xml_token(key);
-        if constexpr (std::is_same_v<T, std::wstring>)
+        if constexpr (std::is_same_v<T, std::string>)
         {
-            // Already wide string
             mAttributes[category][xml_key] = value;
         }
-        else if constexpr (std::is_same_v<T, const wchar_t*> || std::is_array_v<T>)
+        else if constexpr (std::is_same_v<T, std::wstring>)
         {
-            // Handle wide string literals and arrays (which includes string literals)
-            mAttributes[category][xml_key] = std::wstring(value);
+            // Wide to narrow
+            mAttributes[category][xml_key] = ll_convert_wide_to_string(value);
         }
-        else if constexpr (std::is_same_v<T, std::string>)
+        else if constexpr (std::is_same_v<T, const char*> || std::is_array_v<T>)
         {
-            // Convert narrow to wide
-            std::wstring wide_value(value.begin(), value.end());
-            mAttributes[category][xml_key] = wide_value;
+            // Handle string literals and arrays (which includes string literals)
+            mAttributes[category][xml_key] = std::string(value);
         }
         else if constexpr (std::is_same_v<T, bool>)
         {
             // Convert boolean to "true"/"false"
-            mAttributes[category][xml_key] = value ? L"true" : L"false";
+            mAttributes[category][xml_key] = value ? "true" : "false";
         }
         else if constexpr (std::is_arithmetic_v<T>)
         {
             // Convert arithmetic types (int, float, double, etc.) to wstring
-            mAttributes[category][xml_key] = std::to_wstring(value);
+            mAttributes[category][xml_key] = std::to_string(value);
         }
         else
         {
-            static_assert(!sizeof(T*), "No known conversion for this type to std::wstring.");
+            static_assert(!sizeof(T*), "No known conversion for this type to std::string.");
         }
     }
     // Returns true on success, false on failure.
-    bool writeToFile(const std::wstring& file_path);
-    const static std::wstring& getCrashContextFileName() { return mCrashContextFileName; }
-    static void setCrashContextFileName(const std::wstring& file_name) { mCrashContextFileName = file_name; }
+    bool writeToFile(const std::string& file_path);
+    const static std::string& getCrashContextFileName() { return mCrashContextFileName; }
+    static void setCrashContextFileName(const std::string& file_name) { mCrashContextFileName = file_name; }
 private:
     BugSplatAttributes() = default;
     ~BugSplatAttributes() = default;
     BugSplatAttributes(const BugSplatAttributes&) = delete;
     BugSplatAttributes& operator=(const BugSplatAttributes&) = delete;
-    std::wstring to_xml_token(const std::wstring& input);
+    std::string to_xml_token(const std::string& input);
     // Internal structure to hold attributes by category
     // For example:
-    //   attributes_["RuntimeProperties"]["CrashGUID"] = L"649F57B7EE6E92A0_0000"
-    std::unordered_map<std::wstring, std::unordered_map<std::wstring, std::wstring>> mAttributes;
+    //   mAttributes["RuntimeProperties"]["CrashGUID"] = "649F57B7EE6E92A0_0000"
+    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> mAttributes;
     std::mutex mMutex;
-    static std::wstring mCrashContextFileName;
+    static std::string mCrashContextFileName;
 };
 
 #endif // LL_BUGSPLAT
