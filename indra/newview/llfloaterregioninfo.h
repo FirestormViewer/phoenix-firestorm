@@ -350,7 +350,7 @@ public:
     bool onMessageCommit(const LLSD& notification, const LLSD& response);
 
     LLPanelEstateInfo();
-    ~LLPanelEstateInfo() {}
+    ~LLPanelEstateInfo();
 
     void updateControls(LLViewerRegion* region);
 
@@ -382,6 +382,8 @@ protected:
     bool checkSunHourSlider(LLUICtrl* child_ctrl);
 
     U32 mEstateID;
+    boost::signals2::connection mEstateInfoCommitConnection;
+    boost::signals2::connection mEstateInfoUpdateConnection;
 };
 
 /////////////////////////////////////////////////////////////////////////////
