@@ -2444,14 +2444,6 @@ bool LLImageGL::scaleDown(S32 desired_discard)
         return false;
     }
 
-    // <FS:Beq> - Crash on startup with invalid format
-    if (mFormatInternal == -1)
-    {
-        // format not initialised, can't downscale
-        return false;
-    }
-    // </FS:Beq>
-
     desired_discard = llmin(desired_discard, mMaxDiscardLevel);
 
     if (desired_discard <= mCurrentDiscardLevel)
