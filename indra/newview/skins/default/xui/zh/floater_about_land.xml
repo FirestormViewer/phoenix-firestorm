@@ -288,7 +288,7 @@
 			<text name="Object Owners:">
 				物件所有者：
 			</text>
-			<button label="重新整理清單" label_selected="重新整理清單" name="Refresh List" tool_tip="重新整理物件清單" />
+			<button label="更新清單" label_selected="更新清單" name="Refresh List" tool_tip="更新物件清單" />
 			<button label="退回物件" label_selected="退回物件中..." name="Return objects..." />
 			<name_list name="owner list">
 				<name_list.columns label="類型" name="type" />

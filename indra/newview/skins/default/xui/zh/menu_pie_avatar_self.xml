@@ -55,7 +55,7 @@
 			<pie_slice label="骨架" name="Reset Skeleton" />
 			<pie_slice label="網格細節層次" name="Reset Mesh LOD" />
 		</pie_menu>
-		<pie_slice label="重新整理紋理" name="Texture Refresh" />
+		<pie_slice label="更新紋理" name="Texture Refresh" />
 		<pie_slice label="編輯我的裝扮" name="Edit My Outfit" />
 		<pie_slice label="轉儲 XML" name="Dump XML" />
 		<pie_slice label="懸浮高度" name="Hover Height" />

@@ -20,7 +20,7 @@
 				<fs_scroll_list.columns name="creator" label="創造者" width="90" />
 				<fs_scroll_list.columns name="last_owner" label="前所有者" width="90" tool_tip="物件的上一個所有者。" />
 			</fs_scroll_list>
-			<button name="Refresh" label="重新整理" />
+			<button name="Refresh" label="更新" />
 			<text name="counter" left_delta="110">
 				已列出 | 待處理 | 總計
 			</text>

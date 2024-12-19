@@ -37,7 +37,7 @@
 	</radio_group>
 	<check_box label="啟用垂直同步" name="vsync" tool_tip="啟用垂直同步來減少螢幕撕裂和斷裂。" />
 	<text name="vsync_desc">
-		將顯示器的重新整理率與影格率同步。
+		將顯示器的更新率與影格率同步。
 	</text>
 	<text name="vsync_desc_limit">
 		注意：啟用垂直同步會將影格率限制在[FPS_LIMIT]fps。

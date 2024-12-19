@@ -65,14 +65,14 @@
 			<button name="BeamColor_delete" label="刪除" tool_tip="刪除此顏色預設" />
 			<combo_box name="BeamColor_combo" tool_tip="選擇光束的顏色" left_delta="80" width="160" />
 			<button name="BeamColor_new" label="建立.." tool_tip="建立新的顏色預設" />
-			<button name="BeamColor_refresh" label="重新整理" tool_tip="重新整理預設列表" />
+			<button name="BeamColor_refresh" label="更新" tool_tip="更新預設列表" />
 			<slider name="FSMaxBeamsPerSecond" label="頻率：" tool_tip="每秒更新光束的頻率。預設為 40" />
 			<check_box label="啟用選擇光束" name="SLPartBeam" />
 			<check_box label="將選擇傳送到聊天視窗" name="FSParticleChat" tool_tip="將選擇的資料（起始時間、結束時間和全域坐標）傳送到聊天頻道 9000。" />
 			<combo_box name="FSBeamShape_combo" tool_tip="選擇光束的形狀" />
 			<button name="delete_beam" label="刪除" width="75" tool_tip="刪除此形狀" />
 			<button name="custom_beam_btn" label="建立.." tool_tip="建立新的光束形狀" />
-			<button name="refresh_beams" label="重新整理" tool_tip="重新整理形狀列表" />
+			<button name="refresh_beams" label="更新" tool_tip="更新形狀列表" />
 			<slider name="FSBeamShapeScale" label="比例：" tool_tip="修改所用形狀的比例" label_width="50" width="200" />
 			<text name="BridgeProtocols">內建外部協定到 LSL 橋：</text>
 			<check_box label="允許 OpenCollar 控制內建動畫涵蓋的啟用或禁用" name="BridgeIntegrationOC" />

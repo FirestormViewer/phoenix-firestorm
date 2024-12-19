@@ -11,7 +11,7 @@
 				<scroll_list.columns label="類比網路名稱" name="grid_label" />
 				<scroll_list.columns label="連線位址" name="login_uri" />
 			</scroll_list>
-			<button label="重新整理" name="refresh_grid" />
+			<button label="更新" name="refresh_grid" />
 			<button label="移除" name="remove_grid" />
 			<panel name="advanced_grid_panel">
 				<text name="grid_name_text">類比網路名稱：</text>

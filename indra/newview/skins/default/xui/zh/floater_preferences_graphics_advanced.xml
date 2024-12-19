@@ -13,12 +13,12 @@
 		低
 	</text>
 	<slider label="最大鄰近光源數：" name="MaxLights" />
-	<check_box label="啟用垂直同步" tool_tip="將影格速率與顯示器的重新整理率同步，可能會增加卡頓和輸入延遲。" name="vsync" />
+	<check_box label="啟用垂直同步" tool_tip="將影格速率與顯示器的更新率同步，可能會導致更多的卡頓和輸入延遲。" name="vsync" />
 	<text name="AvatarText">
 		化身
 	</text>
 	<text name="AvatarComplexityModeLabel">
-		化身示：
+		化身顯示：
 	</text>
 	<combo_box name="AvatarComplexityMode">
 		<combo_box.item label="按複雜度限制" name="0" />
@@ -54,6 +54,16 @@
 	<combo_box label="反鋸齒" name="fsaa">
 		<combo_box.item label="禁用" name="FSAADisabled" />
 		<combo_box.item label="FXAA" name="FXAA" />
+		<combo_box.item label="SMAA" name="SMAA"/>
+	</combo_box>
+	<text name="antialiasing quality label">
+		反鋸齒品質：
+	</text>
+	<combo_box label="反鋸齒" name="fsaa quality">
+		<combo_box.item label="低" name="Low"/>
+		<combo_box.item label="中" name="Medium"/>
+		<combo_box.item label="高" name="High"/>
+		<combo_box.item label="超高" name="Ultra"/>
 	</combo_box>
 	<text name="MeshText">
 		網格模型
@@ -87,6 +97,7 @@
 	</text>
 	<check_box label="環境光遮蔽" name="UseSSAO" />
 	<check_box label="景深" name="UseDoF" />
+	<check_box label="HDR和自發光" name="VintageMode"/>
 	<text name="RenderShadowDetailText">
 		陰影：
 	</text>
@@ -128,6 +139,15 @@
 		<combo_box.item label="高" name="1" />
 		<combo_box.item label="超高" name="0" />
 	</combo_box>
+	<slider label="銳化：" name="RenderSharpness"/>
+	<text name="TonemapTypeText">
+		色調映射器：
+	</text>
+	<combo_box name="TonemapType">
+		<combo_box.item label="Khronos 中性" name="0"/>
+		<combo_box.item label="ACES" name="1"/>
+	</combo_box>
+	<slider label="色調映射混合：" tool_tip="在線性與色調映射顏色之間進行混合" name="TonemapMix"/>
 	<!-- End of mirror settings -->
 	<button label="重設為我們建議的設定" name="Defaults" />
 	<button label="確定" label_selected="確定" name="OK" />

@@ -12,5 +12,5 @@
 		<scroll_list.columns label="物件名稱" width="230" name="name" />
 		<scroll_list.columns label="位置" width="170" name="location" />
 	</scroll_list>
-	<button label="重新整理清單" name="refresh_list_btn" />
+	<button label="更新清單" name="refresh_list_btn" />
 </panel>

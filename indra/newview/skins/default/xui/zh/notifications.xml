@@ -3716,6 +3716,7 @@ URL：[AUDIOURL]
 [[URL] 點擊這裡]繼續訂閱。
 
 付費使用者請[[PREMIUM_URL] 點擊這裡]領取免費變聲工具。
+		<usetemplate ignoretext="提醒我語音變聲即將過期" name="okignore" yestext="確定"/>
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
 		至少一個你訂閱的變聲效果將在 [INTERVAL] 天后到期。
@@ -5044,7 +5045,7 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 		地形已烘焙。
 	</notification>
 	<notification name="TenObjectsDisabledPlzRefresh">
-		只成功停用前 10 個所選物件。 若有需要，請重新整理之後再選擇更多的物件。
+		只成功停用前 10 個所選物件。 若有需要，請更新之後再選擇更多的物件。
 	</notification>
 	<notification name="UpdateViewerBuyParcel">
 		你必須先更新檢視器後，才可購買這個地塊。

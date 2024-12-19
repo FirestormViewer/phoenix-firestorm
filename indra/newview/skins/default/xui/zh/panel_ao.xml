@@ -33,7 +33,7 @@
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">
 			<text name="reload_label">
-				重新整理
+				更新
 			</text>
 			<text name="wait_label">
 				請稍候

@@ -56,7 +56,7 @@
 		地塊：
 	</text>
 	<button label="過濾器" name="filter_parcel_btn" />
-	<button label="重新整理" name="refresh_btn" />
+	<button label="更新" name="refresh_btn" />
 	<button label="退回所選擇的" name="return_selected_btn" />
 	<button label="全部退回" name="return_all_btn" />
 	<button label="傳送到" name="teleport_to_btn" />

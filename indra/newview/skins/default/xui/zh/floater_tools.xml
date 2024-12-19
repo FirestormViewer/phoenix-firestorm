@@ -529,8 +529,9 @@
 		<panel label="內容" name="Contents">
 			<button label="新指令碼" label_selected="新指令碼" name="button new script" />
 			<button label="權限" name="button permissions" />
-			<button label="重新整理" name="button refresh" />
+			<button label="更新" name="button refresh" />
 			<button label="重設指令碼" name="btn_reset_scripts" />
+			<filter_editor label="輸入篩選文字" name="contents_filter"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

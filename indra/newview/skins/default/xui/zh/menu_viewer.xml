@@ -54,8 +54,8 @@
 			<menu_item_call label="化身不變形" name="undeform_avatar" />
 			<menu_item_call label="重設骨架" name="Reset Skeleton" />
 			<menu_item_call label="重設骨架和動畫" name="Reset Skeleton And Animations" />
-			<menu_item_call label="強制重新整理外觀(烘焙)" name="Rebake Texture" />
-			<menu_item_call label="重新整理附件" name="Refresh Attachments" />
+			<menu_item_call label="強制更新外觀(烘焙)" name="Rebake Texture" />
+			<menu_item_call label="更新附件" name="Refresh Attachments" />
 			<menu_item_call label="重設為預設男性化身" name="ResetDefaultAvM" />
 			<menu_item_call label="重設為預設女性化身" name="ResetDefaultAvF" />
 			<menu_item_check label="顯示化身複雜性資訊" name="Avatar Draw Info" />
@@ -305,7 +305,7 @@
 	</menu>
 	<menu label="進階" name="Advanced">
 		<menu_item_call label="重新烘焙紋理" name="Rebake Texture" />
-		<menu_item_call label="重新整理附件" name="Refresh Attachments" />
+		<menu_item_call label="更新附件" name="Refresh Attachments" />
 		<menu_item_call label="以預設值設定UI大小" name="Set UI Size to Default" />
 		<menu_item_call label="設定視窗大小" name="Set Window Size..." />
 		<menu_item_check label="限制選擇距離" name="Limit Select Distance" />
@@ -511,8 +511,9 @@
 			<menu_item_check label="禁用紋理" name="Disable Textures" />
 			<menu_item_call label="不顯示動畫" name="Derender Animesh" />
 			<menu_item_check label="全解析度紋理(有風險)" name="Full Res Textures" />
-			<menu_item_check label="使附著燈光彩現" name="Render Attached Lights" />
-			<menu_item_check label="使附著粒子彩現" name="Render Attached Particles" />
+			<menu_item_check label="彩現附著的燈光" name="Render Attached Lights" />
+			<menu_item_check label="彩現附著的粒子" name="Render Attached Particles" />
+			<menu_item_check label="收集字體頂點緩衝區" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="啟用著色器快取" name="Enable Shader Cache" />
 			<menu_item_call label="清除著色器快取" name="Shader Cache Clear" />
 		</menu>
@@ -587,7 +588,7 @@
 			<menu_item_call label="顯示顏色設定" name="Color Settings" />
 			<menu_item_call label="XUI 預覽工具" name="UI Preview Tool" />
 			<menu_item_call label="傳送測試訊息" name="Send Test IMs" />
-			<menu_item_call label="重新整理名稱快取" name="Flush Names Caches" />
+			<menu_item_call label="更新名稱快取" name="Flush Names Caches" />
 		</menu>
 		<menu label="化身" name="Character">
 			<menu label="抓取已烘焙紋理" name="Grab Baked Texture">
