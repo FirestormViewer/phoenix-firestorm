@@ -423,6 +423,7 @@ public:
     virtual void doItem(LLFolderViewItem* item) {}
     void setApply(bool apply);
     void clearOpenFolders() { mOpenFolders.clear(); }
+    bool hasOpenFolders() { return !mOpenFolders.empty(); }
 protected:
     std::set<LLUUID> mOpenFolders;
     bool mApply;
