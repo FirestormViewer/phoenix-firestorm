@@ -135,7 +135,7 @@
 				Caricamento del mondo:
 			</text>
 			<check_box label="Congela visualizzazione (mette in pausa tutto)" tool_tip="Setta questo per bloccare tutti gli aggiornamenti dal server - ferma tutte le azioni ma non ha effetto sulla chat e sulla voce" name="WorldPause"/>
-			<check_box label="Limita framerate" name="FSLimitFramerate"/>
+			<check_box label="Limita framerate" tool_tip="Limita la frequenza dei fotogrammi ad un valore definito dall'utente. Può ridurre il consumo energetico e il surriscaldamento della GPU/CPU" name="FSLimitFramerate"/>
 			<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili."/>
 			<text name="Texture Rendering">
 				Rendering texture:
@@ -153,11 +153,11 @@
 			<text name="TextureDetailLabel">
 				Max livello qualità texture:
 			</text>
-			<combo_box name="TextureDetail">
-				<combo_box.item label="Normale" name="0"/>
-				<combo_box.item label="Medio" name="3"/>
-				<combo_box.item label="Basso" name="4"/>
-				<combo_box.item label="Nessuna texture" name="5"/>
+			<combo_box name="TextureDetail" tool_tip="La qualità delle texture caricate influisce sull'impostazione TextureDiscardLevel">
+				<combo_box.item label="Qualità normale (0)" name="0"/>
+				<combo_box.item label="Qualità media (3)" name="3"/>
+				<combo_box.item label="Qualità bassa (4)" name="4"/>
+				<combo_box.item label="Nessuna texture (5)" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">
 				Maschere alfa:
@@ -176,7 +176,7 @@
 			<text name="PrecachingDelayText">
 				secondi
 			</text>
-			<slider label="Qualità ombre" tool_tip="Qual&apos;è la qualità delle ombre (predef. 1)" name="ShadowResolution"/>
+			<slider label="Qualità ombre" tool_tip="Determina la qualità delle ombre (predefinita 1)" name="ShadowResolution"/>
 			<slider label="Grandezza texture del terreno (richiede riavvio)" name="RenderTerrainScale" tool_tip="Determina la grandezza della texture del terreno valore più basso = texture più compressa (richiede riavvio viewer)."/>
 		</panel>
 		<panel label="Profondità di Campo" name="DOF panel">
