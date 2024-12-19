@@ -4154,12 +4154,6 @@ https://wiki.firestormviewer.org/fs_voice
 この問題が何度も起きる場合は、[SUPPORT_SITE] をご確認ください。
 	</global>
 	
-	<global name="UnsupportedIntelDriver">
-インストールされている [GPUNAME] のインテル製グラフィックドライバのバージョン [VERSION] は極めて古いものとなっており、プログラムのクラッシュを高い頻度で引き起こすことが知られています。最新のインテル製ドライバにアップグレードすることを強くお勧めします。
-
-インテルドライバのウェブサイトを確認しますか？
-	</global>
-	
 	<global name="UnsupportedCPUAmount">
 		796
 	</global>

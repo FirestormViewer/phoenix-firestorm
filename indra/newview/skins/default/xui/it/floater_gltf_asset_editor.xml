@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="gltf asset editor">
 	<floater.string name="floater_title" value="Editor Scena GLTF" />
-	<floater.string name="scene_tittle" value="Scena" />
-	<floater.string name="node_tittle" value="Nodo" />
-	<floater.string name="mesh_tittle" value="Mesh" />
-	<floater.string name="skin_tittle" value="Skin" />
+	<floater.string name="scene_title" value="Scena" />
+	<floater.string name="node_title" value="Nodo" />
+	<floater.string name="mesh_title" value="Mesh" />
+	<floater.string name="skin_title" value="Skin" />
 	<layout_stack name="main_layout">
 		<layout_panel name="transforms_panel">
 			<menu_button name="clipboard_pos_btn" tool_tip="Opzioni incolla" />

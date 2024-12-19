@@ -6788,6 +6788,15 @@ support@secondlife.com.
 	<string name="Material Texture Name Header">
 		此材質使用的紋理:
 	</string>
+	<string name="material_selection_title">
+		材質選擇
+	</string>
+	<string name="material_selection_text">
+		選擇材質：
+	</string>
+	<string name="material_batch_import_text">
+		--- 批次上傳全部 ---
+	</string>
 	<!-- Conversation log messages -->
 	<string name="logging_calls_disabled_log_empty">
 		聊天未被記錄。要開始儲存記錄，請在「偏好設定」&gt;「隱私」下選擇「儲存：僅記錄」或「儲存：記錄和聊天內容」。

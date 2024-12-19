@@ -5,6 +5,7 @@
 	<!-- Locale Information -->
 	<string name="MicrosoftLocale">az-Latn-AZ</string>
 	<string name="MacLocale">az-Latn.UTF-8</string>
+	<string name="macOSLocale">az-Latn.UTF-8</string>
 	<string name="DarwinLocale">az_AZ.UTF-8</string>
 	<string name="LinuxLocale">az_AZ.UTF-8</string>
 

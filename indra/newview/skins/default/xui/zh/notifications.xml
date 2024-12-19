@@ -4256,11 +4256,6 @@ https://wiki.firestormviewer.org/fs_voice
 		所選的物件會影響導航格線。  將它改為彈性路徑，將使它從導航格線中被移除。
 		<usetemplate ignoretext="所選的物件會影響導航格線。  將它改為彈性路徑，將使它從導航格線中被移除。" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
-	<global name="UnsupportedIntelDriver">
-		您的 [GPUNAME] 安裝的Intel顯示卡驅動程式版本 [VERSION] 已經嚴重過時，並且已知會導致多種程式崩潰。強烈建議您更新到最新的驅動程式版本。
-
-您想存取Intel的驅動程式網頁嗎？
-	</global>
 	<global name="UnsupportedCPUAmount">
 		796
 	</global>

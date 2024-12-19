@@ -4,6 +4,7 @@
 	<!-- Locale Information -->
 	<string name="MicrosoftLocale">chinese</string>
 	<string name="MacLocale">zh_CN.UTF-8</string>
+	<string name="macOSLocale">zh_CN.UTF-8</string>
 	<string name="DarwinLocale">zh_CN.UTF-8</string>
 	<string name="LinuxLocale">zh_CN.UTF-8</string>
 	<!--

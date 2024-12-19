@@ -5,6 +5,7 @@
 	<!-- Locale Information -->
 	<string name="MicrosoftLocale">russian</string>
 	<string name="MacLocale">ru_RU.UTF-8</string>
+	<string name="macOSLocale">ru_RU.UTF-8</string>
 	<string name="DarwinLocale">ru_RU.UTF-8</string>
 	<string name="LinuxLocale">ru_RU.UTF-8</string>
 
