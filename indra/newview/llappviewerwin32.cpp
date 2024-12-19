@@ -196,7 +196,8 @@ namespace
             }
 
             // LL_ERRS message, when there is one
-            // sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            // <FS:Beq> Improve bugsplpat reporting with attributes
+           // sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
             // sBugSplatSender->setAttribute(WCSTR(L"OS"), WCSTR(LLOSInfo::instance().getOSStringSimple())); // In case we ever stop using email for this
             // sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
             // sBugSplatSender->setAttribute(WCSTR(L"GL Vendor"), WCSTR(gGLManager.mGLVendor));
@@ -205,9 +206,6 @@ namespace
             // sBugSplatSender->setAttribute(WCSTR(L"GL Renderer"), WCSTR(gGLManager.mGLRenderer));
             // sBugSplatSender->setAttribute(WCSTR(L"VRAM"), WCSTR(STRINGIZE(gGLManager.mVRAM)));
             // sBugSplatSender->setAttribute(WCSTR(L"RAM"), WCSTR(STRINGIZE(gSysMemory.getPhysicalMemoryKB().value())));
-            // <FS:Beq> Improve bugsplpat reporting with attributes
-            // sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));            
-            // sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
 
             auto fatal_message = LLError::getFatalMessage();
             sBugSplatSender->setDefaultUserDescription(WCSTR(fatal_message));
