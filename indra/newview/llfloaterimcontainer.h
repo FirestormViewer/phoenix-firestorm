@@ -236,6 +236,7 @@ private:
     conversations_items_deque mConversationEventQueue;
 
     LLTimer mParticipantRefreshTimer;
+    bool mGeneralTitleInUse = true;
 };
 
 #endif // LL_LLFLOATERIMCONTAINER_H

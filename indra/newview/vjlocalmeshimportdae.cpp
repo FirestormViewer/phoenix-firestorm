@@ -33,29 +33,19 @@
 
 /* linden headers */
 #include "llviewercontrol.h" // for gSavedSettings
-#include "llmodelloader.h"
+#include <llmodelloader.h>
 #include "llvoavatarself.h"
-#include "lldaeloader.h" // for preProcessDAE
-#include "llerror.h"
+#include <lldaeloader.h> // for preProcessDAE
+#include <llerror.h>
 
 /* dae headers*/
-#if LL_MSVC
-#pragma warning (disable : 4263)
-#pragma warning (disable : 4264)
-#endif
-
-#include "dae.h"
-#include "dom/domConstants.h"
-#include "dom/domMesh.h"
-#include "dom/domSkin.h"
-#include "dom/domGeometry.h"
-#include "dom/domInstance_controller.h"
-#include "dom/domNode.h"
-
-#if LL_MSVC
-#pragma warning (default : 4263)
-#pragma warning (default : 4264)
-#endif
+#include <dae.h>
+#include <dom/domConstants.h>
+#include <dom/domMesh.h>
+#include <dom/domSkin.h>
+#include <dom/domGeometry.h>
+#include <dom/domInstance_controller.h>
+#include <dom/domNode.h>
 
 LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod)
 {
@@ -538,9 +528,9 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
     mesh_scale *= normalized_transformation;
     normalized_transformation = mesh_scale;
 
-    glh::matrix4f inv_mat((F32*)normalized_transformation.mMatrix);
-    inv_mat = inv_mat.inverse();
-    LLMatrix4 inverse_normalized_transformation(inv_mat.m);
+    glm::mat4 inv_mat = glm::make_mat4((F32*)normalized_transformation.mMatrix);
+    inv_mat = glm::inverse(inv_mat);
+    LLMatrix4 inverse_normalized_transformation(glm::value_ptr(inv_mat));
 
     // bind shape matrix
     domSkin::domBind_shape_matrix* skin_current_bind_matrix = current_skin->getBind_shape_matrix();

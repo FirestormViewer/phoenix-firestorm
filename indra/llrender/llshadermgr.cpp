@@ -79,7 +79,7 @@ bool LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
     //////////////////////////////////////
 
     // NOTE order of shader object attaching is VERY IMPORTANT!!!
-    if (features->calculatesAtmospherics)
+    if (features->calculatesAtmospherics || features->hasGamma || features->isDeferred)
     {
         if (!shader->attachVertexObject("windlight/atmosphericsVarsV.glsl"))
         {
@@ -218,6 +218,14 @@ bool LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
     if (features->isDeferred || features->hasReflectionProbes)
     {
         if (!shader->attachFragmentObject("deferred/deferredUtil.glsl"))
+        {
+            return false;
+        }
+    }
+
+    if (features->hasFullGBuffer)
+    {
+        if (!shader->attachFragmentObject("deferred/gbufferUtil.glsl"))
         {
             return false;
         }
@@ -565,17 +573,11 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
         }
         else if (major_version == 3)
         {
-            if (minor_version < 10)
+            if (minor_version <= 29)
             {
-                shader_code_text[shader_code_count++] = strdup("#version 300\n");
-            }
-            else if (minor_version <= 19)
-            {
-                shader_code_text[shader_code_count++] = strdup("#version 310\n");
-            }
-            else if (minor_version <= 29)
-            {
-                shader_code_text[shader_code_count++] = strdup("#version 320\n");
+                // OpenGL 3.2 had GLSL version 1.50.  anything after that the version numbers match.
+                // https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)#OpenGL_and_GLSL_versions
+                shader_code_text[shader_code_count++] = strdup("#version 150\n");
             }
             else
             {
@@ -584,7 +586,8 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
         }
         else
         {
-            if (type == GL_GEOMETRY_SHADER)
+            // OpenGL 3.2 had GLSL version 1.50.  anything after that the version numbers match.
+            if (type == GL_GEOMETRY_SHADER || minor_version >= 50)
             {
                 //set version to 1.50
                 shader_code_text[shader_code_count++] = strdup("#version 150\n");
@@ -601,8 +604,15 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
                 extra_code_text[extra_code_count++] = strdup("precision highp float;\n");
             }
         }
+    }
 
-        extra_code_text[extra_code_count++] = strdup("#define FXAA_GLSL_130 1\n");
+    if (type == GL_FRAGMENT_SHADER)
+    {
+        extra_code_text[extra_code_count++] = strdup("#define FRAGMENT_SHADER 1\n");
+    }
+    else
+    {
+        extra_code_text[extra_code_count++] = strdup("#define VERTEX_SHADER 1\n");
     }
 
     // Use alpha float to store bit flags
@@ -611,7 +621,7 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
     extra_code_text[extra_code_count++] = strdup("#define GBUFFER_FLAG_HAS_ATMOS    0.34\n"); // bit 0
     extra_code_text[extra_code_count++] = strdup("#define GBUFFER_FLAG_HAS_PBR      0.67\n"); // bit 1
     extra_code_text[extra_code_count++] = strdup("#define GBUFFER_FLAG_HAS_HDRI      1.0\n");  // bit 2
-    extra_code_text[extra_code_count++] = strdup("#define GET_GBUFFER_FLAG(flag)    (abs(norm.w-flag)< 0.1)\n");
+    extra_code_text[extra_code_count++] = strdup("#define GET_GBUFFER_FLAG(data, flag)    (abs(data-flag)< 0.1)\n");
 
     if (defines)
     {
@@ -721,6 +731,9 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
             LL_ERRS() << "Indexed texture rendering requires GLSL 1.30 or later." << LL_ENDL;
         }
     }
+
+    // Master definition can be found in deferredUtil.glsl
+    extra_code_text[extra_code_count++] = strdup("struct GBufferInfo { vec4 albedo; vec4 specular; vec3 normal; vec4 emissive; float gbufferFlag; float envIntensity; };\n");
 
     //copy file into memory
     enum {
@@ -1254,6 +1267,7 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("sky_hdr_scale");
     mReservedUniforms.push_back("sky_sunlight_scale");
     mReservedUniforms.push_back("sky_ambient_scale");
+    mReservedUniforms.push_back("classic_mode");
     mReservedUniforms.push_back("blue_horizon");
     mReservedUniforms.push_back("blue_density");
     mReservedUniforms.push_back("haze_horizon");
@@ -1487,6 +1501,11 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("moonlight_color");
 
     mReservedUniforms.push_back("debug_normal_draw_length");
+
+    mReservedUniforms.push_back("edgesTex");
+    mReservedUniforms.push_back("areaTex");
+    mReservedUniforms.push_back("searchTex");
+    mReservedUniforms.push_back("blendTex");
 
     llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

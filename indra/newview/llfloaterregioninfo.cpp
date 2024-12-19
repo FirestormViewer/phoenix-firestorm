@@ -2335,8 +2335,14 @@ LLPanelEstateInfo::LLPanelEstateInfo()
     mEstateID(0)    // invalid
 {
     LLEstateInfoModel& estate_info = LLEstateInfoModel::instance();
-    estate_info.setCommitCallback(boost::bind(&LLPanelEstateInfo::refreshFromEstate, this));
-    estate_info.setUpdateCallback(boost::bind(&LLPanelEstateInfo::refreshFromEstate, this));
+    mEstateInfoCommitConnection = estate_info.setCommitCallback(boost::bind(&LLPanelEstateInfo::refreshFromEstate, this));
+    mEstateInfoUpdateConnection = estate_info.setUpdateCallback(boost::bind(&LLPanelEstateInfo::refreshFromEstate, this));
+}
+
+LLPanelEstateInfo::~LLPanelEstateInfo()
+{
+    mEstateInfoCommitConnection.disconnect();
+    mEstateInfoUpdateConnection.disconnect();
 }
 
 // static
@@ -3052,6 +3058,16 @@ std::string LLPanelEstateCovenant::getEstateName() const
 void LLPanelEstateCovenant::setEstateName(const std::string& name)
 {
     mEstateNameText->setText(name);
+}
+
+// static
+void LLPanelEstateCovenant::updateCovenant(const LLTextBase* source, const LLUUID& asset_id)
+{
+    if (LLPanelEstateCovenant* panelp = LLFloaterRegionInfo::getPanelCovenant())
+    {
+        panelp->mEditor->copyContents(source);
+        panelp->setCovenantID(asset_id);
+    }
 }
 
 // static
@@ -4526,7 +4542,7 @@ void LLPanelRegionEnvironment::refreshFromSource()
     }
 
     LLEnvironment::instance().requestRegion(
-        [that_h](S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo) { _onEnvironmentReceived(that_h, parcel_id, envifo); });
+        [that_h](S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo) { onEnvironmentReceived(that_h, parcel_id, envifo); });
 
     setControlsEnabled(false);
 }

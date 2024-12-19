@@ -77,6 +77,8 @@
 #include "llinventorypanel.h"
 #include "lluploaddialog.h"
 #include "llfloaterreg.h"
+#include "llvoavatarself.h"
+#include "llskinningutil.h"
 
 #include "boost/iostreams/device/array.hpp"
 #include "boost/iostreams/stream.hpp"
@@ -773,7 +775,7 @@ void log_upload_error(LLCore::HttpStatus status, const LLSD& content,
                        << " (" << status.toTerseString() << ")" << LL_ENDL;
 
     std::ostringstream details;
-    typedef std::set<std::string> mav_errors_set_t;
+    typedef std::unordered_set<std::string> mav_errors_set_t;
     mav_errors_set_t mav_errors;
 
     if (content.has("error"))
@@ -855,9 +857,12 @@ LLMeshRepoThread::LLMeshRepoThread()
   mHttpLargeOptions(),
   mHttpHeaders(),
   mHttpPolicyClass(LLCore::HttpRequest::DEFAULT_POLICY_ID),
-  mHttpLegacyPolicyClass(LLCore::HttpRequest::DEFAULT_POLICY_ID), // <FS:Ansariel> [UDP Assets]
+  mHttpLegacyPolicyClass(LLCore::HttpRequest::DEFAULT_POLICY_ID),
+  // <FS:Ansariel> [UDP Assets]
   mHttpLargePolicyClass(LLCore::HttpRequest::DEFAULT_POLICY_ID),
-  mLegacyGetMeshVersion(0) // <FS:Ansariel> [UDP Assets]
+  mLegacyGetMeshVersion(0),
+  // <FS:Ansariel> [UDP Assets]
+  mWorkQueue("MeshRepoThread", 1024*1024)
 {
     LLAppCoreHttp & app_core_http(LLAppViewer::instance()->getAppCoreHttp());
 
@@ -891,7 +896,7 @@ LLMeshRepoThread::~LLMeshRepoThread()
 
     while (!mSkinInfoQ.empty())
     {
-        delete mSkinInfoQ.front();
+        llassert(mSkinInfoQ.front()->getNumRefs() == 1);
         mSkinInfoQ.pop_front();
     }
 
@@ -940,6 +945,10 @@ void LLMeshRepoThread::run()
         {
             break;
         }
+
+        // run mWorkQueue for up to 8ms
+        static std::chrono::nanoseconds WorkTimeNanoSec{std::chrono::nanoseconds::rep(8 * 1000000) };
+        mWorkQueue.runFor(WorkTimeNanoSec);
 
         if (! mHttpRequestSet.empty())
         {
@@ -1392,7 +1401,7 @@ LLCore::HttpHandle LLMeshRepoThread::getByteRange(const std::string & url, int l
 
 bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id, bool can_retry)
 {
-
+    LL_PROFILE_ZONE_SCOPED;
     if (!mHeaderMutex)
     {
         return false;
@@ -1524,6 +1533,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id, bool can_retry)
 
 bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if (!mHeaderMutex)
     {
         return false;
@@ -1638,6 +1648,7 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 
 bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if (!mHeaderMutex)
     {
         return false;
@@ -1784,6 +1795,7 @@ void LLMeshRepoThread::decActiveHeaderRequests()
 //return false if failed to get header
 bool LLMeshRepoThread::fetchMeshHeader(const LLVolumeParams& mesh_params, bool can_retry)
 {
+    LL_PROFILE_ZONE_SCOPED;
     ++LLMeshRepository::sMeshRequestCount;
 
     {
@@ -1854,6 +1866,7 @@ bool LLMeshRepoThread::fetchMeshHeader(const LLVolumeParams& mesh_params, bool c
 //return false if failed to get mesh lod.
 bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, bool can_retry)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if (!mHeaderMutex)
     {
         return false;
@@ -2045,6 +2058,18 @@ EMeshProcessingResult LLMeshRepoThread::headerReceived(const LLVolumeParams& mes
             LLMeshRepository::sCacheBytesHeaders += (U32)header_size;
         }
 
+        // immediately request SkinInfo since we'll need it before we can render any LoD if it is present
+        {
+            LLMutexLock lock(gMeshRepo.mMeshMutex);
+
+            if (gMeshRepo.mLoadingSkins.find(mesh_id) == gMeshRepo.mLoadingSkins.end())
+            {
+                gMeshRepo.mLoadingSkins[mesh_id] = {}; // add an empty vector to indicate to main thread that we are loading skin info
+            }
+        }
+
+        fetchMeshSkinInfo(mesh_id);
+
         LLMutexLock lock(mMutex); // make sure only one thread access mPendingLOD at the same time.
 
         //check for pending requests
@@ -2076,6 +2101,18 @@ EMeshProcessingResult LLMeshRepoThread::lodReceived(const LLVolumeParams& mesh_p
     {
         if (volume->getNumFaces() > 0)
         {
+            // if we have a valid SkinInfo, cache per-joint bounding boxes for this LOD
+            LLMeshSkinInfo* skin_info = mSkinMap[mesh_params.getSculptID()];
+            if (skin_info && isAgentAvatarValid())
+            {
+                for (S32 i = 0; i < volume->getNumFaces(); ++i)
+                {
+                    // NOTE: no need to lock gAgentAvatarp as the state being checked is not changed after initialization
+                    LLVolumeFace& face = volume->getVolumeFace(i);
+                    LLSkinningUtil::updateRiggingInfo(skin_info, gAgentAvatarp, face);
+                }
+            }
+
             LoadedMesh mesh(volume, mesh_params, lod);
             {
                 LLMutexLock lock(mMutex);
@@ -2119,21 +2156,24 @@ bool LLMeshRepoThread::skinInfoReceived(const LLUUID& mesh_id, U8* data, S32 dat
     }
 
     {
-        LLMeshSkinInfo* info = nullptr;
-        try
-        {
-            info = new LLMeshSkinInfo(mesh_id, skin);
-        }
-        catch (const std::bad_alloc& ex)
-        {
-            LL_WARNS() << "Failed to allocate skin info with exception: " << ex.what()  << LL_ENDL;
-            return false;
+        LLPointer<LLMeshSkinInfo> info = nullptr;
+        info = new LLMeshSkinInfo(mesh_id, skin);
+
+        if (isAgentAvatarValid())
+        { // joint numbers are consistent inside LLVOAvatar and animations, but inconsistent inside meshes,
+            // generate a map of mesh joint numbers to LLVOAvatar joint numbers
+            LLSkinningUtil::initJointNums(info, gAgentAvatarp);
         }
 
-        // LL_DEBUGS(LOG_MESH) << "info pelvis offset" << info.mPelvisOffset << LL_ENDL;
+        // copy the skin info for the background thread so we can use it
+        // to calculate per-joint bounding boxes when volumes are loaded
+        mSkinMap[mesh_id] = new LLMeshSkinInfo(*info);
+
         {
+            // Move the LLPointer in to the skin info queue to avoid reference
+            // count modification after we leave the lock
             LLMutexLock lock(mMutex);
-            mSkinInfoQ.push_back(info);
+            mSkinInfoQ.emplace_back(std::move(info));
         }
     }
 
@@ -2370,10 +2410,10 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
     S32 mesh_num = 0;
     S32 texture_num = 0;
 
-    std::set<LLViewerTexture* > textures;
-    std::map<LLViewerTexture*,S32> texture_index;
+    std::unordered_set<LLViewerTexture* > textures;
+    std::unordered_map<LLViewerTexture*,S32> texture_index;
 
-    std::map<LLModel*,S32> mesh_index;
+    std::unordered_map<LLModel*,S32> mesh_index;
     std::string model_name;
 
     S32 instance_num = 0;
@@ -3062,7 +3102,7 @@ void LLMeshRepoThread::notifyLoadedMeshes()
     {
         if (mMutex->trylock())
         {
-            std::deque<LLMeshSkinInfo*> skin_info_q;
+            std::deque<LLPointer<LLMeshSkinInfo>> skin_info_q;
             std::deque<UUIDBasedRequest> skin_info_unavail_q;
             std::list<LLModel::Decomposition*> decomp_q;
 
@@ -3185,6 +3225,7 @@ S32 LLMeshRepository::getActualMeshLOD(LLMeshHeader& header, S32 lod)
 // are cases far off the norm.
 void LLMeshHandlerBase::onCompleted(LLCore::HttpHandle handle, LLCore::HttpResponse * response)
 {
+    LL_PROFILE_ZONE_SCOPED;
     mProcessed = true;
 
     unsigned int retries(0U);
@@ -3461,6 +3502,7 @@ void LLMeshLODHandler::processFailure(LLCore::HttpStatus status)
 void LLMeshLODHandler::processData(LLCore::BufferArray * /* body */, S32 /* body_offset */,
                                    U8 * data, S32 data_size)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if ((!MESH_LOD_PROCESS_FAILED)
         && ((data != NULL) == (data_size > 0))) // if we have data but no size or have size but no data, something is wrong
     {
@@ -3526,6 +3568,7 @@ void LLMeshSkinInfoHandler::processFailure(LLCore::HttpStatus status)
 void LLMeshSkinInfoHandler::processData(LLCore::BufferArray * /* body */, S32 /* body_offset */,
                                         U8 * data, S32 data_size)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if ((!MESH_SKIN_INFO_PROCESS_FAILED)
         && ((data != NULL) == (data_size > 0)) // if we have data but no size or have size but no data, something is wrong
         && gMeshRepo.mThread->skinInfoReceived(mMeshID, data, data_size))
@@ -3575,6 +3618,7 @@ void LLMeshDecompositionHandler::processFailure(LLCore::HttpStatus status)
 void LLMeshDecompositionHandler::processData(LLCore::BufferArray * /* body */, S32 /* body_offset */,
                                              U8 * data, S32 data_size)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if ((!MESH_DECOMP_PROCESS_FAILED)
         && ((data != NULL) == (data_size > 0)) // if we have data but no size or have size but no data, something is wrong
         && gMeshRepo.mThread->decompositionReceived(mMeshID, data, data_size))
@@ -3622,6 +3666,7 @@ void LLMeshPhysicsShapeHandler::processFailure(LLCore::HttpStatus status)
 void LLMeshPhysicsShapeHandler::processData(LLCore::BufferArray * /* body */, S32 /* body_offset */,
                                             U8 * data, S32 data_size)
 {
+    LL_PROFILE_ZONE_SCOPED;
     if ((!MESH_PHYS_SHAPE_PROCESS_FAILED)
         && ((data != NULL) == (data_size > 0)) // if we have data but no size or have size but no data, something is wrong
         && gMeshRepo.mThread->physicsShapeReceived(mMeshID, data, data_size) == MESH_OK)
@@ -4021,6 +4066,7 @@ void LLMeshRepository::notifyLoadedMeshes()
         for (auto iter = mSkinMap.begin(), ender = mSkinMap.end(); iter != ender;)
         {
             auto copy_iter = iter++;
+            LLUUID id = copy_iter->first;
 
             //skinbytes += U64Bytes(sizeof(LLMeshSkinInfo));
             //skinbytes += U64Bytes(copy_iter->second->mJointNames.size() * sizeof(std::string));
@@ -4032,6 +4078,12 @@ void LLMeshRepository::notifyLoadedMeshes()
             {
                 mSkinMap.erase(copy_iter);
             }
+
+            // erase from background thread
+            mThread->mWorkQueue.post([=]()
+                {
+                    mThread->mSkinMap.erase(id);
+                });
         }
         //LL_INFOS() << "Skin info cache elements:" << mSkinMap.size() << " Memory: " << U64Kilobytes(skinbytes) << LL_ENDL;
     }
@@ -4382,7 +4434,7 @@ void LLMeshRepository::fetchPhysicsShape(const LLUUID& mesh_id)
         {
             LLMutexLock lock(mMeshMutex);
             //add volume to list of loading meshes
-            std::set<LLUUID>::iterator iter = mLoadingPhysicsShapes.find(mesh_id);
+            std::unordered_set<LLUUID>::iterator iter = mLoadingPhysicsShapes.find(mesh_id);
             if (iter == mLoadingPhysicsShapes.end())
             { //no request pending for this skin info
                 // *FIXME:  Nothing ever deletes entries, can't be right
@@ -4412,7 +4464,7 @@ LLModel::Decomposition* LLMeshRepository::getDecomposition(const LLUUID& mesh_id
         {
             LLMutexLock lock(mMeshMutex);
             //add volume to list of loading meshes
-            std::set<LLUUID>::iterator iter = mLoadingDecompositions.find(mesh_id);
+            std::unordered_set<LLUUID>::iterator iter = mLoadingDecompositions.find(mesh_id);
             if (iter == mLoadingDecompositions.end())
             { //no request pending for this skin info
                 mLoadingDecompositions.insert(mesh_id);
@@ -4463,6 +4515,8 @@ bool LLMeshRepository::hasPhysicsShape(const LLUUID& mesh_id)
 
 bool LLMeshRepository::hasSkinInfo(const LLUUID& mesh_id)
 {
+    LL_PROFILE_ZONE_SCOPED;
+
     if (mesh_id.isNull())
     {
         return false;

@@ -302,6 +302,7 @@ public:
         dirtyFilter();
         requestSort();
     }
+
     virtual void removeChild(LLFolderViewModelItem* child)
     {
         mChildren.remove(child);

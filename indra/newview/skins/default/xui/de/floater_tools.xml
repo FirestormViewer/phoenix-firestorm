@@ -533,6 +533,7 @@ Ndrg ↔ Nst
 			<button label="Berechtigungen" name="button permissions" width="95" left_pad="3"/>
 			<button label="Aktualisieren" name="button refresh" width="92" left_pad="3"/>
 			<button label="Skripte zurücks." name="btn_reset_scripts" width="92"/>
+			<filter_editor label="Inhalt filtern" name="contents_filter"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

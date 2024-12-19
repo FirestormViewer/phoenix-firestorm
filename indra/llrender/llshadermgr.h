@@ -121,6 +121,7 @@ public:
         SKY_HDR_SCALE,                      //  "sky_hdr_scale"
         SKY_SUNLIGHT_SCALE,                 //  "sky_sunlight_scale"
         SKY_AMBIENT_SCALE,                  //  "sky_ambient_scale"
+        CLASSIC_MODE,                       //  "classic_mode"
         BLUE_HORIZON,                       //  "blue_horizon"
         BLUE_DENSITY,                       //  "blue_density"
         HAZE_HORIZON,                       //  "haze_horizon"
@@ -344,6 +345,11 @@ public:
         MOONLIGHT_COLOR,                    //  "moonlight_color"
 
         DEBUG_NORMAL_DRAW_LENGTH,           //  "debug_normal_draw_length"
+
+        SMAA_EDGE_TEX,                      //  "edgesTex"
+        SMAA_AREA_TEX,                      //  "areaTex"
+        SMAA_SEARCH_TEX,                    //  "searchTex"
+        SMAA_BLEND_TEX,                     //  "blendTex"
 
         END_RESERVED_UNIFORMS
     } eGLSLReservedUniforms;

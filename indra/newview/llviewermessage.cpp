@@ -8539,7 +8539,8 @@ void onCovenantLoadComplete(const LLUUID& asset_uuid,
 {
     LL_DEBUGS("Messaging") << "onCovenantLoadComplete()" << LL_ENDL;
     std::string covenant_text;
-    if(0 == status)
+    std::unique_ptr<LLViewerTextEditor> editorp;
+    if (0 == status)
     {
         LLFileSystem file(asset_uuid, type, LLFileSystem::READ);
 
@@ -8560,13 +8561,13 @@ void onCovenantLoadComplete(const LLUUID& asset_uuid,
             {
                 LL_WARNS("Messaging") << "Problem importing estate covenant." << LL_ENDL;
                 covenant_text = "Problem importing estate covenant.";
+                delete editor;
             }
             else
             {
                 // Version 0 (just text, doesn't include version number)
-                covenant_text = editor->getText();
+                editorp.reset(editor); // Use covenant from editorp;
             }
-            delete editor;
         }
         else
         {
@@ -8592,14 +8593,30 @@ void onCovenantLoadComplete(const LLUUID& asset_uuid,
 
         LL_WARNS("Messaging") << "Problem loading notecard: " << status << LL_ENDL;
     }
-    LLPanelEstateCovenant::updateCovenantText(covenant_text, asset_uuid);
-    LLPanelLandCovenant::updateCovenantText(covenant_text);
-    LLFloaterBuyLand::updateCovenantText(covenant_text, asset_uuid);
 
-    LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::getPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
-    if (panel)
+    if (editorp)
     {
-        panel->updateCovenantText(covenant_text);
+        LLPanelEstateCovenant::updateCovenant(editorp.get(), asset_uuid);
+        LLPanelLandCovenant::updateCovenant(editorp.get());
+        LLFloaterBuyLand::updateCovenant(editorp.get(), asset_uuid);
+    }
+    else
+    {
+        LLPanelEstateCovenant::updateCovenantText(covenant_text, asset_uuid);
+        LLPanelLandCovenant::updateCovenantText(covenant_text);
+        LLFloaterBuyLand::updateCovenantText(covenant_text, asset_uuid);
+    }
+
+    if (LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::getPanel<LLPanelPlaceProfile>("places", "panel_place_profile"))
+    {
+        if (editorp)
+        {
+            panel->updateCovenant(editorp.get());
+        }
+        else
+        {
+            panel->updateCovenantText(covenant_text);
+        }
     }
 
     // <FS:Ansariel> Standalone location profile floater
@@ -8610,7 +8627,6 @@ void onCovenantLoadComplete(const LLUUID& asset_uuid,
     }
     // </FS:Ansariel>
 }
-
 
 void process_feature_disabled_message(LLMessageSystem* msg, void**)
 {

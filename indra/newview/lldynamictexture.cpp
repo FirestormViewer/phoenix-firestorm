@@ -191,51 +191,46 @@ bool LLViewerDynamicTexture::updateAllInstances()
         return true;
     }
 
-    // <FS:Ansariel> Auxillary render target pack for 1024px LLDynamicTexture
-    //LLRenderTarget& bake_target = gPipeline.mAuxillaryRT.deferredScreen;
-    LLRenderTarget& bake_target = gPipeline.mDynamicTextureRT.deferredScreen;
-
-    if (!bake_target.isComplete())
+    LLRenderTarget& preview_target = gPipeline.mAuxillaryRT.deferredScreen;
+    LLRenderTarget& bake_target = gPipeline.mBakeMap;
+    if (!preview_target.isComplete() || !bake_target.isComplete())
     {
         llassert(false);
         return false;
     }
-    llassert(bake_target.getWidth() >= LLPipeline::MAX_BAKE_WIDTH);
-    llassert(bake_target.getHeight() >= LLPipeline::MAX_BAKE_WIDTH);
+    llassert(preview_target.getWidth() >= LLPipeline::MAX_PREVIEW_WIDTH);
+    llassert(preview_target.getHeight() >= LLPipeline::MAX_PREVIEW_WIDTH);
+    llassert(bake_target.getWidth() >= (U32) LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH);
+    llassert(bake_target.getHeight() >= (U32) LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT);
 
-    bake_target.bindTarget();
-    bake_target.clear();
+    preview_target.bindTarget();
+    preview_target.clear();
 
     LLGLSLShader::unbind();
     LLVertexBuffer::unbind();
 
     bool result = false;
     bool ret = false ;
-    for( S32 order = 0; order < ORDER_COUNT; order++ )
-    {
-        LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-        for (instance_list_t::iterator iter = LLViewerDynamicTexture::sInstances[order].begin();
-             iter != LLViewerDynamicTexture::sInstances[order].end(); ++iter)
+    auto update_func = [&](LLViewerDynamicTexture* dynamicTexture, LLRenderTarget& renderTarget, S32 width, S32 height)
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-            LLViewerDynamicTexture *dynamicTexture = *iter;
             if (dynamicTexture->needsRender())
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("needsRender");
-                llassert(dynamicTexture->getFullWidth() <= S32(LLPipeline::MAX_BAKE_WIDTH));
-                llassert(dynamicTexture->getFullHeight() <= S32(LLPipeline::MAX_BAKE_WIDTH));
+                llassert(dynamicTexture->getFullWidth() <= width);
+                llassert(dynamicTexture->getFullHeight() <= height);
 
                 glClear(GL_DEPTH_BUFFER_BIT);
 
-                gGL.color4f(1,1,1,1);
-                dynamicTexture->setBoundTarget(&bake_target);
+                gGL.color4f(1.f, 1.f, 1.f, 1.f);
+                dynamicTexture->setBoundTarget(&renderTarget);
                 dynamicTexture->preRender();    // Must be called outside of startRender()
                 result = false;
                 {
                     LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("DynTexture->render");
                 if (dynamicTexture->render())
                 {
-                    ret = true ;
+                    ret = true;
                     result = true;
                     sNumRenders++;
                 }
@@ -248,9 +243,31 @@ bool LLViewerDynamicTexture::updateAllInstances()
                 dynamicTexture->setBoundTarget(nullptr);
                 dynamicTexture->postRender(result);
             }
+        };
+
+    // ORDER_FIRST is unused, ORDER_MIDDLE is various ui preview
+    for(S32 order = 0; order < ORDER_LAST; ++order)
+    {
+        for (LLViewerDynamicTexture* dynamicTexture : LLViewerDynamicTexture::sInstances[order])
+        {
+            update_func(dynamicTexture, preview_target, LLPipeline::MAX_PREVIEW_WIDTH, LLPipeline::MAX_PREVIEW_WIDTH);
         }
     }
+    preview_target.flush();
 
+    // ORDER_LAST is baked skin preview, ORDER_RESET resets appearance parameters and does not render.
+    bake_target.bindTarget();
+    bake_target.clear();
+
+    result = false;
+    ret = false;
+    for (S32 order = ORDER_LAST; order < ORDER_COUNT; ++order)
+    {
+        for (LLViewerDynamicTexture* dynamicTexture : LLViewerDynamicTexture::sInstances[order])
+        {
+            update_func(dynamicTexture, bake_target, LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH, LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT);
+        }
+    }
     bake_target.flush();
 
     gGL.flush();

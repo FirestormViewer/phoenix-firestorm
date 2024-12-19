@@ -2125,23 +2125,48 @@ bool LLVivoxVoiceClient::waitForChannel()
                     llcoro::suspend();
                     break;
                 }
-                sessionStatePtr_t joinSession = mNextAudioSession;
-                mNextAudioSession.reset();
-                mIsProcessingChannels = true;
-                if (!runSession(joinSession)) //suspends
+
+                try
                 {
-                    mIsProcessingChannels = false;
-                    LL_DEBUGS("Voice") << "runSession returned false; leaving inner loop" << LL_ENDL;
-                    // break; <FS:Beq/> Fix broken state model
+                    sessionStatePtr_t joinSession = mNextAudioSession;
+                    mNextAudioSession.reset();
+                    mIsProcessingChannels = true;
+                    if (!runSession(joinSession)) //suspends
+                    {
+                        mIsProcessingChannels = false;
+                        LL_DEBUGS("Voice") << "runSession returned false; leaving inner loop" << LL_ENDL;
+                        // break; <FS:Beq/> Fix broken state model
+                    }
+                    else
+                    {
+                        mIsProcessingChannels = false;
+                        LL_DEBUGS("Voice")
+                            << "runSession returned true to inner loop"
+                            << " RelogRequested=" << mRelogRequested
+                            << " VoiceEnabled=" << mVoiceEnabled
+                            << LL_ENDL;
+                    }
                 }
-                else
+                catch (const LLCoros::Stop&)
                 {
-                    mIsProcessingChannels = false;
-                    LL_DEBUGS("Voice")
-                        << "runSession returned true to inner loop"
-                        << " RelogRequested=" << mRelogRequested
-                        << " VoiceEnabled=" << mVoiceEnabled
+                    LL_DEBUGS("LLVivoxVoiceClient") << "Received a shutdown exception" << LL_ENDL;
+                }
+                catch (const LLContinueError&)
+                {
+                    LOG_UNHANDLED_EXCEPTION("LLVivoxVoiceClient");
+                }
+                catch (...)
+                {
+                    // Ideally for Windows need to log SEH exception instead or to set SEH
+                    // handlers but bugsplat shows local variables for windows, which should
+                    // be enough
+                    LL_WARNS("Voice") << "voiceControlStateMachine crashed in state VOICE_CHANNEL_STATE_PROCESS_CHANNEL"
+                        << " mRelogRequested " << mRelogRequested
+                        << " mVoiceEnabled " << mVoiceEnabled
+                        << " mIsProcessingChannels " << mIsProcessingChannels
+                        << " mProcessChannels " << mProcessChannels
                         << LL_ENDL;
+                    throw;
                 }
             }
 
@@ -6602,7 +6627,6 @@ LLVivoxVoiceClient::voiceFontEntry::voiceFontEntry(LLUUID& id) :
     mIsNew(false)
 {
     mExpiryTimer.stop();
-    mExpiryWarningTimer.stop();
 }
 
 LLVivoxVoiceClient::voiceFontEntry::~voiceFontEntry()
@@ -6713,20 +6737,6 @@ void LLVivoxVoiceClient::addVoiceFont(const S32 font_index,
             font->mExpiryTimer.start();
             font->mExpiryTimer.setExpiryAt(expiration_date.secondsSinceEpoch() - VOICE_FONT_EXPIRY_INTERVAL);
 
-            // Set the warning timer to some interval before actual expiry.
-            S32 warning_time = gSavedSettings.getS32("VoiceEffectExpiryWarningTime");
-            if (warning_time != 0)
-            {
-                font->mExpiryWarningTimer.start();
-                F64 expiry_time = (expiration_date.secondsSinceEpoch() - (F64)warning_time);
-                font->mExpiryWarningTimer.setExpiryAt(expiry_time - VOICE_FONT_EXPIRY_INTERVAL);
-            }
-            else
-            {
-                // Disable the warning timer.
-                font->mExpiryWarningTimer.stop();
-            }
-
              // Only flag new session fonts after the first time we have fetched the list.
             if (mVoiceFontsReceived)
             {
@@ -6768,7 +6778,6 @@ void LLVivoxVoiceClient::expireVoiceFonts()
     // than checking each font individually.
 
     bool have_expired = false;
-    bool will_expire = false;
     bool expired_in_use = false;
 
     LLUUID current_effect = LLVoiceClient::instance().getVoiceEffectDefault();
@@ -6778,7 +6787,6 @@ void LLVivoxVoiceClient::expireVoiceFonts()
     {
         voiceFontEntry* voice_font = iter->second;
         LLFrameTimer& expiry_timer  = voice_font->mExpiryTimer;
-        LLFrameTimer& warning_timer = voice_font->mExpiryWarningTimer;
 
         // Check for expired voice fonts
         if (expiry_timer.getStarted() && expiry_timer.hasExpired())
@@ -6794,14 +6802,6 @@ void LLVivoxVoiceClient::expireVoiceFonts()
             LL_DEBUGS("Voice") << "Voice Font " << voice_font->mName << " has expired." << LL_ENDL;
             deleteVoiceFont(voice_font->mID);
             have_expired = true;
-        }
-
-        // Check for voice fonts that will expire in less that the warning time
-        if (warning_timer.getStarted() && warning_timer.hasExpired())
-        {
-            LL_DEBUGS("VoiceFont") << "Voice Font " << voice_font->mName << " will expire soon." << LL_ENDL;
-            will_expire = true;
-            warning_timer.stop();
         }
     }
 
@@ -6823,15 +6823,6 @@ void LLVivoxVoiceClient::expireVoiceFonts()
 
         // Refresh voice font lists in the UI.
         notifyVoiceFontObservers();
-    }
-
-    // Give a warning notification if any voice fonts are due to expire.
-    if (will_expire)
-    {
-        S32Seconds seconds(gSavedSettings.getS32("VoiceEffectExpiryWarningTime"));
-        args["INTERVAL"] = llformat("%d", LLUnit<S32, LLUnits::Days>(seconds).value());
-
-        LLNotificationsUtil::add("VoiceEffectsWillExpire", args);
     }
 }
 

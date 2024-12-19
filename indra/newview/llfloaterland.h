@@ -51,6 +51,7 @@ class LLRadioGroup;
 class LLParcelSelectionObserver;
 class LLSpinCtrl;
 class LLTabContainer;
+class LLTextBase;
 class LLTextBox;
 class LLTextEditor;
 class LLTextureCtrl;
@@ -434,6 +435,7 @@ public:
     virtual ~LLPanelLandCovenant();
     virtual bool postBuild();
     void refresh();
+    static void updateCovenant(const LLTextBase* source);
     static void updateCovenantText(const std::string& string);
     static void updateEstateName(const std::string& name);
     static void updateLastModified(const std::string& text);

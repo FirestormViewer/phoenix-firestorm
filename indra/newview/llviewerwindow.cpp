@@ -2043,6 +2043,11 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     }
 
     LLFontManager::initClass();
+
+    // fonts use an GL_UNSIGNED_BYTE image format,
+    // so they need convertion, init buffers if needed
+    LLImageGL::allocateConversionBuffer();
+
     // Init font system, load default fonts and generate basic glyphs
     // currently it takes aprox. 0.5 sec and we would load these fonts anyway
     // before login screen.
@@ -4369,7 +4374,9 @@ void LLViewerWindow::updateKeyboardFocus()
     LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(gFocusMgr.getKeyboardFocus());
     if (cur_focus)
     {
-        if (!cur_focus->isInVisibleChain() || !cur_focus->isInEnabledChain())
+        bool is_in_visible_chain = cur_focus->isInVisibleChain();
+        bool is_in_enabled_chain = cur_focus->isInEnabledChain();
+        if (!is_in_visible_chain || !is_in_enabled_chain)
         {
             // don't release focus, just reassign so that if being given
             // to a sibling won't call onFocusLost on all the ancestors
@@ -4380,11 +4387,19 @@ void LLViewerWindow::updateKeyboardFocus()
             bool new_focus_found = false;
             while(parent)
             {
+                if (!is_in_visible_chain)
+                {
+                    is_in_visible_chain = parent->isInVisibleChain();
+                }
+                if (!is_in_enabled_chain)
+                {
+                    is_in_enabled_chain = parent->isInEnabledChain();
+                }
                 if (parent->isCtrl()
                     && (parent->hasTabStop() || parent == focus_root)
                     && !parent->getIsChrome()
-                    && parent->isInVisibleChain()
-                    && parent->isInEnabledChain())
+                    && is_in_visible_chain
+                    && is_in_enabled_chain)
                 {
                     if (!parent->focusFirstItem())
                     {
@@ -5131,7 +5146,7 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
                 // setup opengl common parameters before we iterate over each object
                 gGL.pushMatrix();
                 //Need to because crash on ATI 3800 (and similar cards) MAINT-5018
-                LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+                LLGLDisable multisample(LLPipeline::RenderFSAAType > 0 ? GL_MULTISAMPLE_ARB : 0);
                 LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
                 if (shader)
                 {
@@ -6558,8 +6573,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     LLViewerCamera* camera = LLViewerCamera::getInstance();
 
     LLViewerCamera saved_camera = LLViewerCamera::instance();
-    glh::matrix4f saved_proj = get_current_projection();
-    glh::matrix4f saved_mod = get_current_modelview();
+    glm::mat4 saved_proj = get_current_projection();
+    glm::mat4 saved_mod = get_current_modelview();
 
     camera->disconnectCameraAngleSignal();  // <FS:Zi> disconnect the "CameraAngle" changed signal
 
@@ -6577,6 +6592,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
         previousClipPlane = camera->getUserClipPlane();
         camera->setUserClipPlane(clipPlane);
     }
+
+    gPipeline.pushRenderTypeMask();
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT); // stencil buffer is deprecated | GL_STENCIL_BUFFER_BIT);
 
@@ -6666,16 +6683,7 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
         }
     }
 
-    if (!dynamic_render)
-    {
-        for (int i = 0; i < dynamic_render_type_count; ++i)
-        {
-            if (prev_dynamic_render_type[i])
-            {
-                gPipeline.toggleRenderType(dynamic_render_types[i]);
-            }
-        }
-    }
+    gPipeline.popRenderTypeMask();
 
     if (hide_hud)
     {

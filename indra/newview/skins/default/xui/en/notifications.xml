@@ -9527,7 +9527,11 @@ One or more of your Voice Morphs will expire in less than [INTERVAL] days.
 
 If you are a Premium Member, [[PREMIUM_URL] click here] to receive your voice morphing perk.
   <tag>fail</tag>
-    <tag>voice</tag>
+  <tag>voice</tag>
+  <usetemplate
+      ignoretext="Warn me about voice morph expiring"
+      name="okignore"
+      yestext="OK"/>
   </notification>
 
   <notification
@@ -10847,12 +10851,6 @@ Do you wish to continue?
      notext="Cancel"
      yestext="OK"/>
   </notification>
-
-  <global name="UnsupportedIntelDriver">
-The installed Intel graphics driver for [GPUNAME], version [VERSION], is significantly out of date and is known to cause excessive rates of program crashes. You are strongly advised to update to a current Intel driver.
-
-Do you want to check the Intel driver website?
-  </global>
 
   <global name="UnsupportedCPUAmount">
 796
@@ -14515,7 +14513,6 @@ This will replace the items in the selected outfit with the items you are wearin
        name="okbutton"
        yestext="OK"/>
   </notification>
-
 
   <notification
    icon="alertmodal.tga"
