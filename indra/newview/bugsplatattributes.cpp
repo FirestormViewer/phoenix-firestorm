@@ -1,5 +1,5 @@
+#include "linden_common.h"
 #include "bugsplatattributes.h"
-#include <fstream>
 #include <filesystem>
 
 std::string BugSplatAttributes::mCrashContextFileName;
@@ -17,8 +17,8 @@ BugSplatAttributes& BugSplatAttributes::instance()
 std::string BugSplatAttributes::to_xml_token(const std::string& input)
 {
     // Example usage:
-    // std::wstring token = to_xml_token(L"Bandwidth (kbit/s)");
-    // The result should be: L"Bandwidth_kbit_per_s"
+    // std::string token = to_xml_token("Bandwidth (kbit/s)");
+    // The result should be: "Bandwidth_kbit_per_s"
     std::string result;
     result.reserve(input.size() * 2); // Reserve some space, since we might insert more chars for "/"
 
@@ -69,14 +69,14 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
     // Write to a temporary file first
     std::string tmp_file = file_path + ".tmp";
     {
-        std::ofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
+        llofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
         if (!ofs.good())
         {
             return false;
         }
 
-        ofs << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        ofs << L"<XmlCrashContext>\n";
+        ofs << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        ofs << "<XmlCrashContext>\n";
 
         // First, write out attributes that have an empty category (top-level)
         auto empty_category_it = mAttributes.find("");
