@@ -1817,9 +1817,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9f70048bed4c3fc487bee9e9f4276037</string>
+              <string>9520266bd701bddeaa1982c40f11220c</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.11371371972-darwin64-11371371972.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.12401597145-darwin64-12401597145.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1841,9 +1841,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>31daa8f133168cc9ab500aa3a235b63c</string>
+              <string>ab4b9d3ff7b6b53f1ab6d9d3bef012da</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.11371371972-windows64-11371371972.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.12401597145-windows64-12401597145.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
