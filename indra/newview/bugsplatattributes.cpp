@@ -69,7 +69,7 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
     // Write to a temporary file first
     std::string tmp_file = file_path + ".tmp";
     {
-        llofstream ofs(tmp_file, std::ios::out | std::ios::trunc);
+        llofstream ofs(tmp_file.c_str(), std::ios::out | std::ios::trunc);
         if (!ofs.good())
         {
             return false;
