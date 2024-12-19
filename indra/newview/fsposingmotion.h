@@ -125,6 +125,17 @@ public:
 
 private:
     /// <summary>
+    /// The axial difference considered close enough to be the same.
+    /// </summary>
+    /// <remarks>
+    /// This is intended to minimize lerps and slerps, preventing wasted CPU time over fractionally small rotation/position/scale differences.
+    /// Too small and it's inefficient. Too large and there is noticeable error in the pose.
+    /// This takes advantage of how the actual vector migrates to equality with the target vector.
+    /// Certain physics settings (bouncing whatnots) account for some longer term work, but as this is applied per joint, it tends to reduce a lot of work.
+    /// </remarks>
+    const F32 closeEnough = 1e-6;
+
+    /// <summary>
     /// The kind of joint state this animation is concerned with changing.
     /// </summary>
     static const U32 POSER_JOINT_STATE = LLJointState::POS | LLJointState::ROT | LLJointState::SCALE;
@@ -181,6 +192,24 @@ private:
     /// </summary>
     /// <param name="joint">The joint to stop animating.</param>
     void removeJointFromState(LLJoint* joint);
+
+    /// <summary>
+    /// Determines if two vectors are near enough to equal.
+    /// </summary>
+    /// <param name="v1">The first vector to compare.</param>
+    /// <param name="v2">The sceond vector to compare.</param>
+    /// <returns>true if the vectors are "close enough", otherwise false.</returns>
+    bool vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const;
+
+    /// <summary>
+    /// Determines if two quaternions are near enough to equal.
+    /// </summary>
+    /// <param name="v1">The first quaternion to compare.</param>
+    /// <param name="v2">The sceond quaternion to compare.</param>
+    /// <returns>true if the quaternion are "close enough", otherwise false.</returns>
+    bool quatsNotQuiteEqual(const LLQuaternion& q1, const LLQuaternion& q2) const;
+
+    bool vectorAxesAlmostEqual(F32 qA, F32 qB) const { return llabs(qA - qB) < closeEnough; }
 };
 
 #endif // FS_POSINGMOTION_H

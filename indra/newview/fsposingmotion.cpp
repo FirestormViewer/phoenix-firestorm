@@ -95,19 +95,19 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
         targetPosition  = jointPose.getTargetPosition();
         targetScale     = jointPose.getTargetScale();
 
-        if (currentPosition != targetPosition)
+        if (vectorsNotQuiteEqual(currentPosition, targetPosition))
         {
             currentPosition = lerp(currentPosition, targetPosition, mInterpolationTime);
             jointPose.getJointState()->setPosition(currentPosition);
         }
 
-        if (currentRotation != targetRotation)
+        if (quatsNotQuiteEqual(currentRotation, targetRotation))
         {
             currentRotation = slerp(mInterpolationTime, currentRotation, targetRotation);
             jointPose.getJointState()->setRotation(currentRotation);
         }
 
-        if (currentScale != targetScale)
+        if (vectorsNotQuiteEqual(currentScale, targetScale))
         {
             currentScale = lerp(currentScale, targetScale, mInterpolationTime);
             jointPose.getJointState()->setScale(currentScale);
@@ -266,12 +266,35 @@ bool FSPosingMotion::allStartingRotationsAreZero() const
 void FSPosingMotion::setAllRotationsToZero()
 {
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    {
         poserJoint_iter->zeroBaseRotation();
+        poserJoint_iter->setRotationDelta(LLQuaternion::DEFAULT);
+    }
 }
 
-constexpr size_t MaximumUndoQueueLength = 20;
+bool FSPosingMotion::vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const
+{
+    if (vectorAxesAlmostEqual(v1.mV[VX], v2.mV[VX]) &&
+        vectorAxesAlmostEqual(v1.mV[VY], v2.mV[VY]) &&
+        vectorAxesAlmostEqual(v1.mV[VZ], v2.mV[VZ]))
+        return false;
 
-/// <summary>
-/// The constant time interval, in seconds, specifying whether an 'undo' value should be added.
-/// </summary>
-constexpr std::chrono::duration<double> UndoUpdateInterval = std::chrono::duration<double>(0.3);
+    return true;
+}
+
+bool FSPosingMotion::quatsNotQuiteEqual(const LLQuaternion& q1, const LLQuaternion& q2) const
+{
+    if (vectorAxesAlmostEqual(q1.mQ[VW], q2.mQ[VW]) &&
+        vectorAxesAlmostEqual(q1.mQ[VX], q2.mQ[VX]) &&
+        vectorAxesAlmostEqual(q1.mQ[VY], q2.mQ[VY]) &&
+        vectorAxesAlmostEqual(q1.mQ[VZ], q2.mQ[VZ]))
+        return false;
+
+    if (vectorAxesAlmostEqual(q1.mQ[VW], -q2.mQ[VW]) &&
+        vectorAxesAlmostEqual(q1.mQ[VX], -q2.mQ[VX]) &&
+        vectorAxesAlmostEqual(q1.mQ[VY], -q2.mQ[VY]) &&
+        vectorAxesAlmostEqual(q1.mQ[VZ], -q2.mQ[VZ]))
+        return false;
+
+    return true;
+}
