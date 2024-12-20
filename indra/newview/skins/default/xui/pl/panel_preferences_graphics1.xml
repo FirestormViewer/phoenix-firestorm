@@ -144,18 +144,18 @@
 				Auto-zmniejszanie tekstur:
 			</text>
 			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund, gdy okno nie jest aktywne.">
-				W tle (0 aby wyłączyć)
+				Okno w tle (0 aby wyłączyć)
 			</text>
 			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund, gdy okno nie jest aktywne." />
 			<text name="TextureDiscardBackgroundedTime_seconds">
-				Sekund
+				sekund
 			</text>
 			<text name="TextureDiscardMinimizedTime_label" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund po zminimalizowaniu.">
 				Zminimalizowane (0 aby wyłączyć)
 			</text>
 			<spinner name="TextureDiscardMinimizedTime" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund po zminimalizowaniu." />
 			<text name="TextureDiscardMinimizedTime_seconds">
-				Sekund
+				sekund
 			</text>
 		</panel>
 		<panel name="Rendering">
