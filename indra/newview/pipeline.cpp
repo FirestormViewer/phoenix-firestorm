@@ -7219,37 +7219,18 @@ void LLPipeline::generateExposure(LLRenderTarget* src, LLRenderTarget* dst, bool
         LLSettingsSky::ptr_t sky = LLEnvironment::instance().getCurrentSky();
 
         F32 probe_ambiance = LLEnvironment::instance().getCurrentSky()->getReflectionProbeAmbiance(should_auto_adjust);
+        F32 exp_min = sky->getHDRMin();
+        F32 exp_max = sky->getHDRMax();
 
-        F32 exp_min = 1.f;
-        F32 exp_max = 1.f;
-
-        static LLCachedControl<bool> use_exposure_sky_settings(gSavedSettings, "RenderUseExposureSkySettings", false);
-
-        if (use_exposure_sky_settings)
+        if (dynamic_exposure_enabled)
         {
-            if (dynamic_exposure_enabled)
-            {
-                exp_min = sky->getHDROffset() - sky->getHDRMin();
-                exp_max = sky->getHDROffset() + sky->getHDRMax();
-            }
-            else
-            {
-                exp_min = sky->getHDROffset();
-                exp_max = sky->getHDROffset();
-            }
+            exp_min = sky->getHDROffset() - exp_min;
+            exp_max = sky->getHDROffset() + exp_max;
         }
-        else if (dynamic_exposure_enabled)
+        else
         {
-            if (probe_ambiance > 0.f)
-            {
-                F32 hdr_scale = sqrtf(LLEnvironment::instance().getCurrentSky()->getGamma()) * 2.f;
-
-                if (hdr_scale > 1.f)
-                {
-                    exp_min = 1.f / hdr_scale;
-                    exp_max = hdr_scale;
-                }
-            }
+            exp_min = sky->getHDROffset();
+            exp_max = sky->getHDROffset();
         }
 
         shader->uniform1f(dt, gFrameIntervalSeconds);
