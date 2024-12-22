@@ -2,6 +2,10 @@
 <floater name="settings_debug" title="Debug Impostazioni">
 	<panel name="debug_settings_search_panel">
 		<search_editor label="Cerca qui" name="search_settings_input" tool_tip="Scrivi i termini che stai cercando. Verranno mostrate anche corrispondenze parziali sul nome o sul commento dell&apos;impostazione."/>
+		<scroll_list name="settings_scroll_list">
+			<scroll_list.columns label="Impostazione" name="setting" />
+		</scroll_list>
+		<check_box label="Solo impostazioni cambiate" name="hide_default" />
 	</panel>
 	<panel name="debug_settings_values_panel">
 		<text_editor name="comment_text" tool_tip="Commento sull&apos;impostazione. Spesso dà info utili sugli effetti dell&apos;impostazione."/>

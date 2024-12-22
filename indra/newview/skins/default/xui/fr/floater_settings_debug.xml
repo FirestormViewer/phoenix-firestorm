@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="settings_debug" title="Paramètres de débogage">
-	<panel name="debug_settings_search_panel"><search_editor label="Chercher ici" name="search_settings_input" tool_tip="Saisissez ici les termes de votre recherche. Les résultats affichés contiendront votre recherche dans le nom du paramètre ou son commentaire."/></panel>
+	<panel name="debug_settings_search_panel">
+		<search_editor label="Chercher ici" name="search_settings_input" tool_tip="Saisissez ici les termes de votre recherche. Les résultats affichés contiendront votre recherche dans le nom du paramètre ou son commentaire."/>
+		<scroll_list name="settings_scroll_list">
+			<scroll_list.columns label="Paramètres" name="setting"/>
+		</scroll_list>
+		<check_box label="Afficher paramètres modif." name="hide_default"/>
+	</panel>
 	<panel name="debug_settings_values_panel">
 		<text_editor name="comment_text" tool_tip="Commentaire des paramètres de débogage. Donne des informations utiles sur le réglage que vous avez sélectionné."/>
 		<radio_group name="boolean_combo">

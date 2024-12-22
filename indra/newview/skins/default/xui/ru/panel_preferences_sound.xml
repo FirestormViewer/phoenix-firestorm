@@ -130,7 +130,7 @@
 				<item label="Высокое" name="noise_suppression_high"/>
 				<item label="Максимум" name="noise_suppression_max"/>
 			</combo_box>
-			<button label="Настройки звукового устройства" name="device_settings_btn"/>
+			<button label="Настройки звукового устройства" name="device_settings_btn" width="210"/>
 		</panel>
 		<panel label="Интерфейс 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">
