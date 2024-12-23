@@ -3,15 +3,6 @@
 <context_menu
  layout="topleft"
  name="Avatar Pie">
-<!-- <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible) -->
-    <menu_item_call
-     enabled="true"
-     label="Inspect avatar attachments"
-     name="InspectAvatarAttachments">
-        <menu_item_call.on_click
-         function="Avatar.Inspect" />
-      </menu_item_call>
-<!-- </FS:Chanayane> -->
     <menu_item_call
      label="View Profile"
      name="Profile...">
@@ -210,6 +201,18 @@
       <menu_item_call.on_click
        function="Avatar.TexRefresh" />
     </menu_item_call>
+
+   <menu_item_separator />
+
+<!-- <FS:Chanayane> Add inspect on other avatars (thanks to TommyTheTerrible) -->
+   <menu_item_call
+      enabled="true"
+      label="Inspect avatar attachments"
+      name="InspectAvatarAttachments">
+         <menu_item_call.on_click
+            function="Avatar.Inspect" />
+   </menu_item_call>
+<!-- </FS:Chanayane> -->
 
    <menu_item_separator />
     
