@@ -164,7 +164,7 @@
 			<check_box label="始終展開動畫預覽的詳細資訊" tool_tip="動畫預覽懸浮窗中的詳細資訊預設展開。" name="FSAnimationPreviewExpanded" />
 			<check_box label="為指令碼啟用詳細資訊" tool_tip="啟用後，將向指令碼基本資訊中新增對創造者有用的詳細資訊。" name="FSScriptInfoExtended" />
 			<check_box label="按字母順序排序「附著到」選單中的附著點（需要重新啟動）" tool_tip="如果啟用此選項，「附著到」選單中的附件點列表將按字母順序排序。" name="FSSortAttachmentSpotsAlphabetically" />
-			<check_box label="在工具視窗中使用新的Firestorm紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的FS工作流,並允許編輯BlinnPhong" name="FSUseNewTexturePanel" />
+			<check_box label="在工具視窗中使用新的[APP_NAME]紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的[APP_NAME]工作流,並允許編輯BlinnPhong和PBR材質" name="FSUseNewTexturePanel" />
 		</panel>
 		<panel label="上傳" name="UploadsTab">
 			<text name="title">上傳的目標檔案夾：</text>
