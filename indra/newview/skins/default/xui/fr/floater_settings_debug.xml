@@ -5,7 +5,7 @@
 		<scroll_list name="settings_scroll_list">
 			<scroll_list.columns label="Paramètres" name="setting"/>
 		</scroll_list>
-		<check_box label="Afficher paramètres modif." name="hide_default"/>
+		<check_box label="Que les paramètres modifiés" name="hide_default"/>
 	</panel>
 	<panel name="debug_settings_values_panel">
 		<text_editor name="comment_text" tool_tip="Commentaire des paramètres de débogage. Donne des informations utiles sur le réglage que vous avez sélectionné."/>
