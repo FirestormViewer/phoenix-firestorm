@@ -881,7 +881,7 @@ bool LLToolPie::handleHover(S32 x, S32 y, MASK mask)
     if (object)
     {
         parent = object->getRootEdit();
-    } 
+    }
 
     if (!handleMediaHover(mHoverPick)
         && !mMouseOutsideSlop
