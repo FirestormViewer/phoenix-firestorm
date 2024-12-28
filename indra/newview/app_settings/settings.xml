@@ -9767,7 +9767,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>1024</integer>
+    <integer>2048</integer>
   </map>
   <key>PreviewAmbientColor</key>
   <map>
