@@ -984,8 +984,16 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
                 // animated faces get moved to a smaller partition to reduce
                 // side-effects of their updates (see shrinkWrap in
                 // LLVOVolume::animateTextures).
-                mDrawable->getSpatialGroup()->dirtyGeom();
-                gPipeline.markRebuild(mDrawable->getSpatialGroup());
+                // <FS:Beq> FIRE-35018 (Bugsplat) Crash due to spatial group being null
+                // mDrawable->getSpatialGroup()->dirtyGeom();
+                // gPipeline.markRebuild(mDrawable->getSpatialGroup());
+                auto spatial_group = mDrawable->getSpatialGroup();
+                if (spatial_group)
+                {
+                    spatial_group->dirtyGeom();
+                    gPipeline.markRebuild(spatial_group);
+                }
+                // </FS:Beq>
             }
         }
 
