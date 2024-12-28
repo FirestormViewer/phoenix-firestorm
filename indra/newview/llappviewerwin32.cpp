@@ -645,18 +645,22 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
 {
 #ifdef LL_BUGSPLAT
-    static bool write_statics = true;
-
     auto& bugSplatMap = BugSplatAttributes::instance();
-
-    if (write_statics)
+    static bool write_once_after_startup = false;
+    if (!write_once_after_startup )
     {
-        write_statics = false;
+        // Only write the attributes that are fixed once after we've started.
+        // note we might update them more than once and some/many may be empty during startup as we want to catch early crashes
+        // once we're started we can assume they don't change for this run.
+        if( LLStartUp::getStartupState() == STATE_STARTED)
+        {
+            write_once_after_startup = true;
+        }
+
         auto multipleInstances = gDebugInfo["FoundOtherInstanceAtStartup"].asBoolean();
         bugSplatMap.setAttribute("MultipleInstance", multipleInstances);
 
         bugSplatMap.setAttribute("GPU", info["GRAPHICS_CARD"].asString());
-        bugSplatMap.setAttribute("GPU VRAM (MB)", info["GRAPHICS_CARD_MEMORY"].asInteger());
         bugSplatMap.setAttribute("GPU VRAM Detected (MB)", info["GRAPHICS_CARD_MEMORY_DETECTED"].asInteger());
         bugSplatMap.setAttribute("GPU VRAM (Budget)", info["VRAM_BUDGET_ENGLISH"].asInteger());
 
@@ -670,13 +674,13 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
 #else
         bugSplatMap.setAttribute("SIMD", "SSE2");
 #endif
-        // set physical ram integer as a string attribute
+    // set physical ram integer as a string attribute
         bugSplatMap.setAttribute("Physical RAM (KB)", LLMemory::getMaxMemKB().value());
         bugSplatMap.setAttribute("OpenGL Version", info["OPENGL_VERSION"].asString());
         bugSplatMap.setAttribute("libcurl Version", info["LIBCURL_VERSION"].asString());
         bugSplatMap.setAttribute("J2C Decoder Version", info["J2C_VERSION"].asString());
         bugSplatMap.setAttribute("Audio Driver Version", info["AUDIO_DRIVER_VERSION"].asString());
-        // bugSplatMap.setAttribute("CEF Info", info["LIBCEF_VERSION"].asString());
+    // bugSplatMap.setAttribute("CEF Info", info["LIBCEF_VERSION"].asString());
         bugSplatMap.setAttribute("LibVLC Version", info["LIBVLC_VERSION"].asString());
         bugSplatMap.setAttribute("Vivox Version", info["VOICE_VERSION"].asString());
         bugSplatMap.setAttribute("RLVa", info["RLV_VERSION"].asString());
@@ -685,7 +689,17 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
     #if LL_DARWIN
         bugSplatMap.setAttribute("HiDPI", info["HIDPI"].asBoolean() ? "Enabled" : "Disabled");
     #endif
+
+        if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
+        {
+            bugSplatMap.setAttribute("Max Texture Size", gSavedSettings.getString("FSRestrictMaxTexturePixels"));
+        }
+        else
+        {
+            bugSplatMap.setAttribute("Max Texture Size", gSavedSettings.getString("Unlimited"));
+        }    
     }
+
     // These attributes are potentially dynamic
     bugSplatMap.setAttribute("Packets Lost", llformat("%.0f/%.0f (%.1f%%)", info["PACKETS_LOST"].asReal(), info["PACKETS_IN"].asReal(), info["PACKETS_PCT"].asReal()));
     bugSplatMap.setAttribute("Window Size", llformat("%sx%s px", info["WINDOW_WIDTH"].asString().c_str(), info["WINDOW_HEIGHT"].asString().c_str()));
@@ -696,8 +710,11 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
     bugSplatMap.setAttribute("Disk Cache", info["DISK_CACHE_INFO"].asString());
 
     bugSplatMap.setAttribute("GridName", gDebugInfo["GridName"].asString());
+    LLMemory::updateMemoryInfo();
     bugSplatMap.setAttribute("Available RAM (KB)", LLMemory::getAvailableMemKB().value());
     bugSplatMap.setAttribute("Allocated RAM (KB)", LLMemory::getAllocatedMemKB().value());
+    bugSplatMap.setAttribute("GPU VRAM (MB)", info["GRAPHICS_CARD_MEMORY"].asInteger());
+
 
     if (bugSplatMap.writeToFile(BugSplatAttributes::getCrashContextFileName()))
     {
