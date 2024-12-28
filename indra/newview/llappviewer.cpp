@@ -1673,7 +1673,7 @@ bool LLAppViewer::doFrame()
 
         if (!LLApp::isExiting())
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df MainLoop"); // <FS:Beq/> More appropriate name
             pingMainloopTimeout("Main:JoystickKeyboard");
 
             // Scan keyboard for movement keys.  Command keys and typing
@@ -1687,6 +1687,7 @@ bool LLAppViewer::doFrame()
                 && (gHeadlessClient || !gViewerWindow->getShowProgress())
                 && !gFocusMgr.focusLocked())
             {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard"); // <FS:Beq/> Move this to the right place
                 LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE);
                 joystick->scanJoystick();
                 gKeyboard->scanKeyboard();
