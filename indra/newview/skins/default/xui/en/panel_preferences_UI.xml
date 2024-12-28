@@ -201,6 +201,18 @@
          width="80">
             seconds
         </text>
+        <text
+         type="string"
+         left="10"
+         top="130"
+         top_pad="15"
+         width="180"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         name="FSHudTextLabel">
+            Floating Text Options:
+        </text>
         <slider
          control_name="FSHudTextFadeDistance"
          decimal_digits="2"
@@ -215,7 +227,6 @@
          min_val="0"
          max_val="64"
          name="FSHudTextFadeDistance"
-         top="130"
          width="481" />
         <slider
          control_name="FSHudTextFadeRange"
@@ -233,6 +244,62 @@
          name="FSHudTextFadeRange"
          top_pad="2"
          width="474" />
+        <check_box
+        control_name="FSHudTextUseHoverHighlight"
+        name="FSHudTextUseHoverHighlight"
+        label="Hover over prim to highlight floating text:"
+        tool_tip="When an object is being hovered over, highlight the HUD text by moving to the foreground and disable alpha"
+        layout="topleft"
+        top_pad="5"
+        left_delta="0"
+        height="16"
+        width="350" />        
+        <text
+         type="string"
+         left="10"
+         top_pad="5"
+         width="180"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         name="FSHudTextShowBackgroundLabel">
+            Show floating text background:
+        </text>
+        <combo_box
+               control_name="FSHudTextShowBackground"
+               height="23"
+               layout="topleft"
+               left_pad="10"
+               top_delta="-5"  
+               name="FSHudTextShowBackgroundDropdown"
+               tool_tip="Displays a black/white background behind the HUD text to make the text more readable"
+               width="180">
+            <combo_box.item
+             label="Off"
+             name="ScriptDialogOption_0"
+             value="0"/>
+            <combo_box.item
+             label="Only Highlighted Prim"
+             name="ScriptDialogOption_1"
+             value="1"/>
+            <combo_box.item
+             label="All Prims"
+             name="ScriptDialogOption_2"
+             value="2"/>            
+        </combo_box>
+        <!--
+        <check_box
+        control_name="FSHudTextShowBackground"
+        name="FSHudTextShowBackground"
+        label="Show floating text background:"
+        tool_tip="Displays a black/white background behind the HUD text to make the text more readable"
+        layout="topleft"
+        top_pad="5"
+        left_delta="0"
+        height="16"
+        width="350" />
+        -->
+
     </panel>
 
     <!--2D Overlay-->

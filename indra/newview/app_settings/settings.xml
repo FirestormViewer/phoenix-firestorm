@@ -25106,6 +25106,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>This value needs to be greater than 0 for a fading effect.</string>
     </map>
+    <key>FSHudTextShowBackground</key>
+    <map>
+        <key>Comment</key>
+        <string>Displays a black/white background behind the HUD text to make the text more readable</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
+    <key>FSHudTextUseHoverHighlight</key>
+    <map>
+        <key>Comment</key>
+        <string>When an object is being hovered over, highlight the HUD text by moving to the foreground and disable alpha</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>    
     <key>FSStartupClearBrowserCache</key>
     <map>
       <key>Comment</key>

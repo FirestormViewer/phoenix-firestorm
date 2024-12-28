@@ -52,6 +52,19 @@ struct hud_object_further_away
 
 bool hud_object_further_away::operator()(const LLPointer<LLHUDObject>& lhs, const LLPointer<LLHUDObject>& rhs) const
 {
+    // <FS:minerjr> FIRE-35019 Add LLHUBNameTag background to floating text and hover highlights
+    if (lhs->getUseHoverHighlight() || rhs->getUseHoverHighlight())
+    {
+        if (lhs->getIsHighlighted())
+        {
+            return false;
+        }
+        else if (rhs->getIsHighlighted())
+        {
+            return true;
+        }
+    }
+    // </FS:minerjr> FIRE-35019 
     return lhs->getDistance() > rhs->getDistance();
 }
 
@@ -64,6 +77,10 @@ LLHUDObject::LLHUDObject(const U8 type) :
     mVisible = true;
     mType = type;
     mDead = false;
+    // <FS:minerjr> FIRE-35019 Add LLHUBNameTag background to floating text and hover highlights
+    mbIsHighlighted     = false;
+    mbUseHoverHighlight = false;
+    // </FS:minerjr> FIRE-35019 
 }
 
 LLHUDObject::~LLHUDObject()

@@ -498,6 +498,9 @@ public:
 
     void updatePositionCaches() const; // Update the global and region position caches from the object (and parent's) xform.
     void updateText(); // update text label position
+    // <FS:minerjr> FIRE-35019 Add LLHUBNameTag background to floating text and hover highlights
+    void setTextIsHighlighted(bool is_highlighted);
+    // </FS:minerjr>
     virtual void updateDrawable(bool force_damped); // force updates on static objects
 
     bool isOwnerInMuteList(LLUUID item_id = LLUUID());

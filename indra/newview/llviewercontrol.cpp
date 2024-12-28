@@ -1501,6 +1501,9 @@ void settings_setup_listeners()
     // <FS:Ansariel> FIRE-17393: Control HUD text fading by options
     setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeDistance", LLHUDText::onFadeSettingsChanged);
     setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeRange", LLHUDText::onFadeSettingsChanged);
+    // <FS:minerjr> FIRE-35019 Add LLHUBNameTag background to floating text and hover highlights 
+    setting_setup_signal_listener(gSavedSettings, "FSHudTextShowBackground", LLHUDText::onHighlightSettingsChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSHudTextUseHoverHighlight", LLHUDText::onHighlightSettingsChanged);
 
     //<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
     setting_setup_signal_listener(gSavedSettings, "ThrottleBandwidthKBPS", handleBandwidthChanged);

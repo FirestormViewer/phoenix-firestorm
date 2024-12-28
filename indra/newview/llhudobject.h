@@ -59,7 +59,12 @@ public:
     void setPositionAgent(const LLVector3 &position_agent);
 
     bool isVisible() const { return mVisible; }
-
+    // <FS:minerjr> FIRE-35019 Add LLHUBNameTag background to floating text and hover highlights
+    void setIsHighlighted(bool isHighlighted) { mbIsHighlighted = isHighlighted; }
+    bool getIsHighlighted() const { return mbIsHighlighted; }
+    void setUseHoverHighlight(bool useHoverHighlight) { mbUseHoverHighlight = useHoverHighlight; }
+    bool getUseHoverHighlight() const { return mbUseHoverHighlight; }
+    // </FS:minerjr>
     U8 getType() const { return mType; }
 
     LLVector3d getPositionGlobal() const { return mPositionGlobal; }
@@ -111,6 +116,10 @@ protected:
     U8              mType;
     bool            mDead;
     bool            mVisible;
+    // <FS:minerjr> FIRE-35019 Add LLHUBNameTag background to floating text and hover highlights
+    bool            mbIsHighlighted;
+    bool            mbUseHoverHighlight;
+    // </FS:minerjr>
     LLVector3d      mPositionGlobal;
     LLPointer<LLViewerObject> mSourceObject;
     LLPointer<LLViewerObject> mTargetObject;
