@@ -1033,6 +1033,14 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
             weights.emplace_back(new_wght);
         }
     }
+
+    // combine mBindShapeMatrix and mInvBindMatrix into mBindPoseMatrix
+    skininfop->mBindPoseMatrix.resize(skininfop->mInvBindMatrix.size());
+    for (U32 i = 0; i < skininfop->mInvBindMatrix.size(); ++i)
+    {
+        matMul(skininfop->mBindShapeMatrix, skininfop->mInvBindMatrix[i], skininfop->mBindPoseMatrix[i]);
+    }
+
     skininfop->updateHash();
     LL_DEBUGS("LocalMesh") << "hash: " << skininfop->mHash << LL_ENDL;
     current_object->setObjectMeshSkinInfo(skininfop);
