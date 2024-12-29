@@ -3303,6 +3303,9 @@ bool LLAppViewer::initConfiguration()
         tempSetControl("SLURLPassToOtherInstance", "false");
         tempSetControl("RenderWater", "false");
         tempSetControl("FlyingAtExit", "false");
+        // <FS:minerjr> FIRE-35024 Store always run flag on exit and restore when logging in
+        tempSetControl("FSAlwaysRunAtExit", "false");
+        // </FS:minerjr>
         tempSetControl("WindowWidth", "1024");
         tempSetControl("WindowHeight", "200");
         LLError::setEnabledLogTypesMask(0);
@@ -6252,6 +6255,11 @@ void LLAppViewer::disconnectViewer()
 
     // Remember if we were flying
     gSavedSettings.setBOOL("FlyingAtExit", gAgent.getFlying() );
+
+    // <FS:minerjr> FIRE-35024 Store always run flag on exit and restore when logging in
+    // Remember if we were always running, save it even if the user is not using it
+    gSavedSettings.setBOOL("FSAlwaysRunAtExit", gAgent.getAlwaysRun());
+    // </FS:minerjr>
 
     // Un-minimize all windows so they don't get saved minimized
     if (gFloaterView)
