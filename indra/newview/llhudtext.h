@@ -199,6 +199,7 @@ private:
 // [RLVa:KB] - Checked: RLVa-1.0.0
     std::string     mObjText;
 // [/RLVa:KB]
+
     // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights   
     LLPointer<LLUIImage> mRoundedRectImgp; // Added background rect image from LLHUBNameTag
     F32             mBackgroundHeight; // Store the actual height of the background image (calculated from the visible text segments)

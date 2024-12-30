@@ -215,6 +215,7 @@ void LLHUDText::renderText()
         }        
     }	
     // </FS:minerjr> [FIRE-35019]
+
     const S32 border_height = 16;
     const S32 border_width = 16;
 
@@ -301,6 +302,7 @@ void LLHUDText::renderText()
             y_offset -= fontp->getLineHeight(); // Match the same positioning as LLHUBNameTag as the windows don't line up otherwise.
             y_offset -= LINE_PADDING;
             // </FS:minerjr> [FIRE-35019]
+
             U8 style = segment_iter->mStyle;
             LLFontGL::ShadowType shadow = LLFontGL::DROP_SHADOW;
 
@@ -633,6 +635,7 @@ void LLHUDText::updateSize()
 {
     F32 height = 0.f;
     F32 width = 0.f;
+
     // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights
     // We want to create a background that fits just the visible text area only, otherwise a llsetstring('Hello, World\n\n\n') will have a text
     // box that covers 4 lines, but only the top line is visible to the user.
