@@ -267,7 +267,7 @@ void LLHUDText::renderText()
     // Also, only show the background if it is show all is checked, or if on highlight, only if use hover highlight is enabled.
     if ((mShowBackground == SHOW_BACKGROUND_ALL ||
          mShowBackground == SHOW_BACKGROUND_ONLY_HIGHLIGHTED && mbIsHighlighted && mbUseHoverHighlight) &&
-        mSourceObject->getAttachmentState() == 0)
+        (mSourceObject.notNull() && mSourceObject->getAttachmentState() == 0))
     {
         LLRect screen_rect;
         screen_rect.setCenterAndSize(0, static_cast<S32>(lltrunc(-mBackgroundHeight / 2 + mOffsetY + mBackgroundOffsetY)),
