@@ -533,8 +533,8 @@ void LLHUDText::updateVisibility()
     // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights
     //if (!mTextSegments.size() || (mDoFade && (mLastDistance > mFadeDistance + mFadeRange)))
     // Use local do fade check to allow highlighed objects to force text to be visible	
-	if (!mTextSegments.size() || (doFade && (mLastDistance > mFadeDistance + mFadeRange)))
-	// </FS:minerjr> [FIRE-35019]
+    if (!mTextSegments.size() || (doFade && (mLastDistance > mFadeDistance + mFadeRange)))
+    // </FS:minerjr> [FIRE-35019]
     {
         mVisible = false;
         return;
