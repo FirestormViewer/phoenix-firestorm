@@ -927,129 +927,6 @@
               parameter="blocked_panel" />
         </menu_item_call>
     </menu>
-    
-   <!-- AyaneStorm Menu -->
-
-   <menu
-      create_jump_keys="true"
-      label="AyaneStorm"
-      name="AyaneStorm"
-      tear_off="true"
-      visible="true">
-      <menu
-         create_jump_keys="true"
-         label="Poser"
-         name="Poser"
-         tear_off="true">
-
-         <menu_item_check
-            label="BD Poser"
-            name="BD Poser"
-            use_mac_ctrl="true">
-            <menu_item_check.on_check
-               function="Floater.Visible"
-               parameter="bd_poser" />
-            <menu_item_check.on_click
-               function="Floater.Toggle"
-               parameter="bd_poser" />
-         </menu_item_check>
-
-         <menu_item_check
-            label="BD Pose Creator"
-            name="BD Pose Creator">
-            <menu_item_check.on_check
-               function="Floater.Visible"
-               parameter="bd_poser_creator" />
-            <menu_item_check.on_click
-               function="Floater.Toggle"
-               parameter="bd_poser_creator" />
-         </menu_item_check>
-
-         <menu_item_separator />
-
-         <menu_item_check
-            label="New Poser"
-            name="New Poser"
-            use_mac_ctrl="true">
-            <menu_item_check.on_check
-               function="Floater.Visible"
-               parameter="fs_poser" />
-            <menu_item_check.on_click
-               function="Floater.Toggle"
-               parameter="fs_poser" />
-         </menu_item_check>
-      </menu>
-
-      <menu_item_separator />
-
-      <menu
-         create_jump_keys="true"
-         label="Animation"
-         name="Animation"
-         tear_off="true">
-
-         <menu_item_call
-            label="Resync Animations"
-            name="Resync Animations"
-            shortcut="control|S">
-               <menu_item_call.on_click
-                  function="Tools.ResyncAnimations" />
-         </menu_item_call>
-
-         <menu_item_separator />
-
-         <menu_item_call
-            label="Freeze Animations"
-            name="Freeze Animations"
-            shortcut="control|alt|N">
-            <menu_item_call.on_click
-               function="Advanced.AnimFreeze" />
-         </menu_item_call>
-
-         <menu_item_call
-            label="All Animations Slowed Down"
-            name="All Animations Slowed Down"
-            shortcut="control|N">
-            <menu_item_call.on_click
-               function="Advanced.AnimSlowedDown" />
-         </menu_item_call>
-         
-         <menu_item_call
-            label="All Animations 10% Faster"
-            name="All Animations 10 Faster"
-            shortcut="control|shift|Up">
-            <menu_item_call.on_click
-               function="Advanced.AnimTenFaster" />
-         </menu_item_call>
-         
-         <menu_item_call
-            label="All Animations 10% Slower"
-            name="All Animations 10 Slower"
-            shortcut="control|shift|Down">
-            <menu_item_call.on_click
-               function="Advanced.AnimTenSlower" />
-         </menu_item_call>
-         
-         <menu_item_call
-            label="Reset All Animation Speed"
-            name="Reset All Animation Speed"
-            shortcut="control|J">
-            <menu_item_call.on_click
-               function="Advanced.AnimResetAll" />
-         </menu_item_call>
-         
-         <menu_item_check
-            label="Slow Motion Animations"
-            name="Slow Motion Animations">
-            <menu_item_check.on_check
-               function="CheckControl"
-               parameter="SlowMotionAnimation" />
-            <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="SlowMotionAnimation" />
-         </menu_item_check>
-      </menu>
-   </menu>
 
     <!-- World Menu -->
     
@@ -6234,4 +6111,127 @@
             </menu>
         </menu>
     </menu>
+
+   <!-- AyaneStorm Menu -->
+
+   <menu
+      create_jump_keys="true"
+      label="AyaneStorm"
+      name="AyaneStorm"
+      tear_off="true"
+      visible="true">
+      <menu
+         create_jump_keys="true"
+         label="Poser"
+         name="Poser"
+         tear_off="true">
+
+         <menu_item_check
+            label="BD Poser"
+            name="BD Poser"
+            use_mac_ctrl="true">
+            <menu_item_check.on_check
+               function="Floater.Visible"
+               parameter="bd_poser" />
+            <menu_item_check.on_click
+               function="Floater.Toggle"
+               parameter="bd_poser" />
+         </menu_item_check>
+
+         <menu_item_check
+            label="BD Pose Creator"
+            name="BD Pose Creator">
+            <menu_item_check.on_check
+               function="Floater.Visible"
+               parameter="bd_poser_creator" />
+            <menu_item_check.on_click
+               function="Floater.Toggle"
+               parameter="bd_poser_creator" />
+         </menu_item_check>
+
+         <menu_item_separator />
+
+         <menu_item_check
+            label="New Poser"
+            name="New Poser"
+            use_mac_ctrl="true">
+            <menu_item_check.on_check
+               function="Floater.Visible"
+               parameter="fs_poser" />
+            <menu_item_check.on_click
+               function="Floater.Toggle"
+               parameter="fs_poser" />
+         </menu_item_check>
+      </menu>
+
+      <menu_item_separator />
+
+      <menu
+         create_jump_keys="true"
+         label="Animation"
+         name="Animation"
+         tear_off="true">
+
+         <menu_item_call
+            label="Resync Animations"
+            name="Resync Animations"
+            shortcut="control|S">
+               <menu_item_call.on_click
+                  function="Tools.ResyncAnimations" />
+         </menu_item_call>
+
+         <menu_item_separator />
+
+         <menu_item_call
+            label="Freeze Animations"
+            name="Freeze Animations"
+            shortcut="control|alt|N">
+            <menu_item_call.on_click
+               function="Advanced.AnimFreeze" />
+         </menu_item_call>
+
+         <menu_item_call
+            label="All Animations Slowed Down"
+            name="All Animations Slowed Down"
+            shortcut="control|N">
+            <menu_item_call.on_click
+               function="Advanced.AnimSlowedDown" />
+         </menu_item_call>
+         
+         <menu_item_call
+            label="All Animations 10% Faster"
+            name="All Animations 10 Faster"
+            shortcut="control|shift|Up">
+            <menu_item_call.on_click
+               function="Advanced.AnimTenFaster" />
+         </menu_item_call>
+         
+         <menu_item_call
+            label="All Animations 10% Slower"
+            name="All Animations 10 Slower"
+            shortcut="control|shift|Down">
+            <menu_item_call.on_click
+               function="Advanced.AnimTenSlower" />
+         </menu_item_call>
+         
+         <menu_item_call
+            label="Reset All Animation Speed"
+            name="Reset All Animation Speed"
+            shortcut="control|J">
+            <menu_item_call.on_click
+               function="Advanced.AnimResetAll" />
+         </menu_item_call>
+         
+         <menu_item_check
+            label="Slow Motion Animations"
+            name="Slow Motion Animations">
+            <menu_item_check.on_check
+               function="CheckControl"
+               parameter="SlowMotionAnimation" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="SlowMotionAnimation" />
+         </menu_item_check>
+      </menu>
+   </menu>
 </menu_bar>
