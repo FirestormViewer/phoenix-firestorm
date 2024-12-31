@@ -4,7 +4,7 @@
  label="Profile"
  top="0"
  left="0"
- height="580"
+ height="560"
  width="520"
  follows="all"
  layout="topleft"
