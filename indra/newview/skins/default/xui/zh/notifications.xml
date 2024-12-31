@@ -3786,7 +3786,7 @@ URL：[AUDIOURL]
 		儲存預設名稱[NAME]時出錯。
 	</notification>
 	<notification name="DefaultPresetNotSaved">
-		無法涵蓋預先設定。
+		無法覆蓋預先設定。
 	</notification>
 	<notification name="PresetAlreadyExists">
 		「[NAME]」已經被使用。您可以覆蓋這個預設
@@ -4254,8 +4254,8 @@ https://wiki.firestormviewer.org/fs_voice
 		<usetemplate ignoretext="所選的一些聯結集的幻影旗標將被切換，其他則因許可權不足且形狀屬於非凸面，因此無法設定。" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
-		所選的物件會影響導航格線。  將它改為彈性路徑，將使它從導航格線中被移除。
-		<usetemplate ignoretext="所選的物件會影響導航格線。  將它改為彈性路徑，將使它從導航格線中被移除。" name="okcancelignore" notext="取消" yestext="確定"/>
+		所選的物件會影響導航網格。  將它改為彈性路徑，將使它從導航網格中被移除。
+		<usetemplate ignoretext="所選的物件會影響導航網格。  將它改為彈性路徑，將使它從導航網格中被移除。" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<global name="UnsupportedCPUAmount">
 		796
@@ -4324,10 +4324,10 @@ https://wiki.firestormviewer.org/fs_voice
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="刪除"/>
 	</notification>
 	<notification name="AOForeignItemsFound">
-		在動畫涵蓋中發現了不屬於設定的物件。請檢查「失物招領」檔案夾中是否有從動畫涵蓋設定中移除的物件。
+		在動畫覆蓋中發現了不屬於設定的物件。請檢查「失物招領」檔案夾中是否有從動畫覆蓋設定中移除的物件。
 	</notification>
 	<notification name="AOImportComplete">
-		動畫涵蓋通知匯入完成！
+		動畫覆蓋通知匯入完成！
 	</notification>
 	<notification name="AOImportSetAlreadyExists">
 		已經存在同名的動畫集。
@@ -4883,7 +4883,7 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 		無法建立要求的物件。 區域已滿載。
 	</notification>
 	<notification name="CantCreateAnimatedObjectTooLarge">
-		無法建立所求的動畫物件，因為超過架設三角形的限制。
+		無法建立所求的動畫物件，因為超過已綁定三角形的限制。
 	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		你不能將多個物件附著到同一個點。
@@ -4937,10 +4937,10 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 		操作會導致附著的動畫物件數目超過限制。
 	</notification>
 	<notification name="NoPermsLinkAnimatedObjectTooLarge">
-		無法聯結這些物件，因為聯結後的動畫物件會超過架設三角形的限制。
+		無法聯結這些物件，因為聯結後的動畫物件會超過已綁定三角形的限制。
 	</notification>
 	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
-		無法使這物件變為動畫物件，因為會超過架設三角形的限制。
+		無法使這物件變為動畫物件，因為會超過已綁定三角形的限制。
 	</notification>
 	<notification name="CantChangeAnimatedObjectStateInsufficientLand">
 		無法改變這一物件的動畫物件狀態，因為會超過地塊的限制。
@@ -5625,12 +5625,12 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="RiggedMeshAttachedToHUD">
-		一個名為「[NAME]」的物件，附著到HUD附著點「[POINT]」，包含繫結網格模型。
+		一個名為「[NAME]」的物件，附著到HUD附著點「[POINT]」，包含已綁定的網格模型。
 
-繫結格線物件是爲了附著到化身上的。您自己和其他人都看不到它。
+已綁定的網格物件是爲了附著到化身上的。您自己和其他人都看不到它。
 
 如果您想要看到這個物件，請取下它並將其附著到化身附著點上。
-		<usetemplate ignoretext="警告，如果繫結網格模型附著到HUD附著點上。" name="okignore" yestext="確定"/>
+		<usetemplate ignoretext="警告，如果已綁定的網格模型附著到HUD附著點上。" name="okignore" yestext="確定"/>
 	</notification>
 以下是程式碼中文字的翻譯：
 

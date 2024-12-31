@@ -4,8 +4,8 @@
 	<text name="skin_textbox1">(需要重新啟動)</text>
 	<text name="theme_textbox">配色方案：</text>
 	<text name="theme_textbox2">(需要重新啟動)</text>
-	<check_box label="在更改主題時重設工具列" tool_tip="啟用此選項時，將在更改主題時強制將工具列設定為所選主題， 並在更改時涵蓋您的自訂設定。" name="reset_toolbar_settings" />
-	<check_box label="在更改連線模式時重設工具列" tool_tip="啟用此選項時，將在更改連線模式時強制將工具列設定為所選模式， 並在更改時涵蓋您的自訂設定。" name="FSToolbarsResetOnModeChange" />
+	<check_box label="在更改主題時重設工具列" tool_tip="啟用此選項時，將在更改主題時強制將工具列設定為所選主題， 並在更改時覆蓋您的自訂設定。" name="reset_toolbar_settings" />
+	<check_box label="在更改連線模式時重設工具列" tool_tip="啟用此選項時，將在更改連線模式時強制將工具列設定為所選模式， 並在更改時覆蓋您的自訂設定。" name="FSToolbarsResetOnModeChange" />
 	<check_box label="使用 Viewer 1 的指標" name="use_legacy_cursors" />
 	<text name="theme_textbox3">(需要重新啟動)</text>
 </panel>

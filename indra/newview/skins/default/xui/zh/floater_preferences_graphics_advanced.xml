@@ -116,7 +116,7 @@
 		<combo_box.item label="即時" name="2" />
 	</combo_box>
 	<text name="ReflectionProbeText">
-			反射涵蓋率:
+			反射覆蓋率:
 	</text>
 	<combo_box name="ReflectionLevel">
 		<combo_box.item label="無" name="0" />

@@ -50,7 +50,7 @@
 				<combo_box.item label="即時" name="2" />
 			</combo_box>
 			<text name="ReflectionProbeText">
-				反射涵蓋率：
+				反射覆蓋率：
 			</text>
 			<combo_box name="ReflectionLevel">
 				<combo_box.item label="無" name="0" />
@@ -143,26 +143,26 @@
 			<text name="advanced_settings">
 				進階設定（需要重新啟動）：
 			</text>
-			<check_box label="涵蓋視訊記憶體檢測" name="FSOverrideVRAMDetection" tool_tip="允許使用者涵蓋視訊記憶體檢測（極度謹慎使用）" />
-			<slider label="涵蓋GPU專用視訊記憶體（GB）：" name="FSForcedVideoMemory" tool_tip="重要：極度謹慎使用。 涵蓋GPU上檢測到的視訊記憶體。 這不應包括作為系統RAM一部分的「共享」視訊記憶體。 如果您不理解這個區別，請不要使用此控制項。" />
+			<check_box label="覆蓋視訊記憶體檢測" name="FSOverrideVRAMDetection" tool_tip="允許使用者覆蓋視訊記憶體檢測（極度謹慎使用）" />
+			<slider label="覆蓋GPU專用視訊記憶體（GB）：" name="FSForcedVideoMemory" tool_tip="重要：極度謹慎使用。 覆蓋GPU上檢測到的視訊記憶體。 這不應包括作為系統RAM一部分的「共享」視訊記憶體。 如果您不理解這個區別，請不要使用此控制項。" />
+			<text name="automatic_texture_downscale_settings">
+				自動纹理縮減：
+			</text>
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="非活動視窗時，在選定秒數後縮減纹理。">
+				在背景中（0 為停用）
+			</text>
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="非活動視窗時，在選定秒數後縮減纹理。"/>
+			<text name="TextureDiscardBackgroundedTime_seconds">
+				秒
+			</text>
+			<text name="TextureDiscardMinimizedTime_label" tool_tip="最小化時，在選定秒數後縮減纹理。">
+				最小化（0 為停用）
+			</text>
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="最小化時，在選定秒數後縮減纹理。"/>
+			<text name="TextureDiscardMinimizedTime_seconds">
+				秒
+			</text>
 		</panel>
-		<text name="automatic_texture_downscale_settings">
-			自動纹理縮減：
-		</text>
-		<text name="TextureDiscardBackgroundedTime_label" tool_tip="非活動視窗時，在選定秒數後縮減纹理。">
-			在背景中（0 為停用）
-		</text>
-		<spinner name="TextureDiscardBackgroundedTime" tool_tip="非活動視窗時，在選定秒數後縮減纹理。"/>
-		<text name="TextureDiscardBackgroundedTime_seconds">
-			秒
-		</text>
-		<text name="TextureDiscardMinimizedTime_label" tool_tip="最小化時，在選定秒數後縮減纹理。">
-			最小化（0 為停用）
-		</text>
-		<spinner name="TextureDiscardMinimizedTime" tool_tip="最小化時，在選定秒數後縮減纹理。"/>
-		<text name="TextureDiscardMinimizedTime_seconds">
-			秒
-		</text>
 		<panel label="彩現" name="Rendering">
 			<text name="World Updating">世界更新：</text>
 			<check_box label="暫停世界更新 (使所有內容暫停)" tool_tip="勾選此項可暫停來自世界的所有更新- 這將暫停所有視覺操作，但不會影響書面或語音聊天" name="WorldPause" />

@@ -327,7 +327,7 @@
 				禁止推撞
 			</panel.string>
 			<panel.string name="push_restrict_region_text">
-				禁止推撞（區域設定涵蓋）
+				禁止推撞（區域設定覆蓋）
 			</panel.string>
 			<panel.string name="DirectoryFree">
 				將地點刊登顯示在搜尋中

@@ -232,7 +232,7 @@
 			<menu_item_check label="顯示反射探針體積" name="Show Reflection Probe Volumes" />
 			<menu_item_check label="顯示選擇光束" name="Show Selection Beam" />
 			<menu_item_check label="突出顯示透明物件" name="Highlight Transparent" />
-			<menu_item_check label="-包括骨骼繫結透明物件" name="Include Transparent Rigged" />
+			<menu_item_check label="-包括已綁定骨骼的透明物件" name="Include Transparent Rigged" />
 			<menu_item_check label="無後期處理" name="No Post" />
 			<menu_item_check label="對齊到網格" name="Snap to Grid" />
 			<menu_item_call label="將物件XY對齊到網格" name="Snap Object XY to Grid" />
@@ -513,7 +513,7 @@
 			<menu_item_check label="全解析度紋理(有風險)" name="Full Res Textures" />
 			<menu_item_check label="彩現附著的燈光" name="Render Attached Lights" />
 			<menu_item_check label="彩現附著的粒子" name="Render Attached Particles" />
-			<menu_item_check label="收集字體頂點緩衝區" name="Collect Font Vertex Buffers"/>
+			<menu_item_check label="收集字型頂點緩衝區" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="啟用著色器快取" name="Enable Shader Cache" />
 			<menu_item_call label="清除著色器快取" name="Shader Cache Clear" />
 		</menu>
@@ -540,7 +540,7 @@
 			<menu_item_call label="停止錄製" name="Stop Record" />
 		</menu>
 		<menu label="世界" name="DevelopWorld">
-			<menu_item_check label="類比主機(sim)太陽設定涵蓋" name="Sim Sun Override" />
+			<menu_item_check label="類比主機(sim)太陽設定覆蓋" name="Sim Sun Override" />
 			<menu_item_check label="固定天氣" name="Fixed Weather" />
 			<menu_item_call label="轉儲區域物件快取" name="Dump Region Object Cache" />
 			<menu_item_check label="將統計資料輸出到檔案" name="Stats Recorder File" />
