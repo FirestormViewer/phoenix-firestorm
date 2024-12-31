@@ -565,6 +565,20 @@ void LLAgent::init()
     {
         setFlying(is_flying);
     }
+    // <FS:minerjr> [FIRE-35024] Store always run flag on exit and restore when logging in
+    // Leaving it up to the user to choose in the Preferences->Move & View->Movement panel if they want to restore FSAlwaysRunAtExit flag
+    // using the "Restore always running on login" check box. 
+    static LLCachedControl<bool> restore_always_run(gSavedSettings, "FSRestoreAlwaysRunAtExit");    
+    if (restore_always_run)
+    {
+        // Use the same mechanics as saving and restoring the FlayingAtExit flag
+        bool is_always_run = gSavedSettings.getBOOL("FSAlwaysRunAtExit");
+        if (is_always_run)
+        {
+            setAlwaysRun();
+        }
+    }
+    // </FS:minerjr> [FIRE-35024]
 
     *mEffectColor = LLUIColorTable::instance().getColor("EffectColor");
 

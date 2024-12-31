@@ -5612,6 +5612,34 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <!-- <FS:minerjr> [FIRE-35024] Store always run flag on exit and restore when logging in -->
+    <key>FSRestoreAlwaysRunAtExit</key>
+    <map>
+        <key>Comment</key>
+        <string>Should we restore the always run flag on login</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+        <key>Backup</key>
+        <integer>0</integer>
+    </map>
+    <key>FSAlwaysRunAtExit</key>
+    <map>
+        <key>Comment</key>
+        <string>Was always running when last logged out, so always run when logging in</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+        <key>Backup</key>
+        <integer>0</integer>
+    </map>  
+    <!-- </FS:minerjr> [FIRE-35024] -->      
     <key>FocusOffsetRearView</key>
     <map>
       <key>Comment</key>
