@@ -3304,7 +3304,7 @@ bool LLAppViewer::initConfiguration()
         tempSetControl("RenderWater", "false");
         tempSetControl("FlyingAtExit", "false");
         // <FS:minerjr> [FIRE-35024] Store always run flag on exit and restore when logging in
-        tempSetControl("FSAlwaysRunAtExit", "false");
+        tempSetControl("FSAlwaysRunAtExit", "false"); // Set a default value for the Always Run At Exit flag to false similar to the FlyingAtExit flag
         // </FS:minerjr> [FIRE-35024]
         tempSetControl("WindowWidth", "1024");
         tempSetControl("WindowHeight", "200");

@@ -490,7 +490,7 @@
          name="FSRestoreAlwaysRunAtExit"
          width="300"
          top_pad="3"/>
-	 <!-- </FS:minerjr> [FIRE-35024] -->
+        <!-- </FS:minerjr> [FIRE-35024] -->
         <check_box
          control_name="AutomaticFly"
          follows="left|top"
