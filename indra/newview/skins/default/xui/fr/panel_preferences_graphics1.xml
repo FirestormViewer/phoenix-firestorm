@@ -105,13 +105,24 @@
 			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
 			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
 			<check_box label="Active la prise en charge des écrans HiDPI (macOS seulement; Redémarrage requis)" name="use HiDPI" tool_tip="Active OpenGL pour l'affichage haute résolution."/>
-			<text width="235" name="Antialiasing:" tool_tip="La modification de ce paramètre peut nécessiter un redémarrage de certains ordinateurs.">
+			<text width="235" name="antialiasing label" tool_tip="La modification de ce paramètre peut nécessiter un redémarrage de certains ordinateurs.">
 				Anticrénelage (redémarrage recommandé) :
+			</text>
+			<text name="antialiasing quality label" tool_tip="La modification de ce paramètre peut nécessiter un redémarrage de certains ordinateurs.">
+				Qualité de l'anticrénelage :
 			</text>
 			<combo_box label="Anticrénelage" name="fsaa">
 				<combo_box.item label="Désactivé" name="FSAADisabled"/>
 				<combo_box.item label="FXAA" name="FXAA"/>
 			</combo_box>
+			<combo_box name="fsaa quality">
+				<combo_box.item label="Faible" name="Low"/>
+				<combo_box.item label="Moyenne" name="Medium"/>
+				<combo_box.item label="Élevée" name="High"/>
+				<combo_box.item label="Ultra" name="Ultra"/>
+			</combo_box>
+			<check_box label="Limiter la VRAM utilisée pour les textures (Mo)" name="FSLimitTextureVRAMUsage" tool_tip="Limite la quantité de VRAM utilisée pour les textures. L'utilisation globale peut être plus élevée car d'autres éléments utilisent également de la VRAM."/>
+			<slider name="RenderMaxVRAMBudget" tool_tip="Quantité maximale de VRAM en mégaoctets utilisée pour les textures."/>
 			<text name="advanced_settings">
 				Paramètres avancés (redémarrage requis) :
 			</text>
@@ -120,6 +131,23 @@
 Ignorer la VRAM détectée sur votre GPU.
 Cela ne doit pas inclure la VRAM 'partagée' qui fait partie de la RAM du système.
 Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
+			<text name="automatic_texture_downscale_settings">
+				Réduction automatique de la taille des textures :
+			</text>
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque la fenêtre n'est pas active.">
+				En arrière-plan (0 pour désactiver)
+			</text>
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque la fenêtre n'est pas active."/>
+			<text name="TextureDiscardBackgroundedTime_seconds">
+				Seconde(s)
+			</text>
+			<text name="TextureDiscardMinimizedTime_label" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque l'application est réduite.">
+			Réduite (0 pour désactiver)
+			</text>
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque l'application est réduite."/>
+			<text name="TextureDiscardMinimizedTime_seconds">
+				Seconde(s)
+			</text>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>
@@ -150,10 +178,15 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			<check_box label="Voir en mode fil de fer" name="Wireframe"/>
 			<check_box label="Activer les sources lumineuses portées (Face Lights)" tool_tip="Ce paramètre activera toutes les sources de lumière que les avatars portent, comme les 'Face Lights'." name="Render Attached Lights"/>
 			<check_box label="Rendu des particules portées" name="Render Attached Particles"/>
-			<slider width="480" label_width="340" label="Temporisation de mise en cache de l'univers" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
+			<slider width="480" label_width="340" label="Temporisation de mise en cache de l'univers :" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText" left_delta="480">sec.</text>
-			<slider width="480" label_width="340" label="Qualité des ombres" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>
-			<slider width="480" label_width="340" label="Échelle de rendu des textures du terrain (Redémarrage requis)" name="RenderTerrainScale" tool_tip="Détermine l'échelle de rendu des textures du terrain - une valeur plus basse est plus compressée (nécessite un redémarrage)"/>
+			<slider width="480" label_width="340" label="Qualité des ombres :" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>
+			<slider width="480" label_width="340" label="Taille de rendu des textures du terrain (Redémarrage requis) :" name="RenderTerrainScale" tool_tip="Détermine la taille de rendu des textures du terrain - une valeur plus basse est plus compressée (nécessite un redémarrage)"/>
+			<slider label="Amélioration de la netteté :" name="RenderSharpness"/>
+			<text name="TonemapTypeText">
+				Mappage de tons :
+			</text>
+			<slider label="Mixage de mappage de tons :" tool_tip="Mélange de couleurs linéaires et de couleurs mappées" name="TonemapMix"/>
 		</panel>
 		<panel label="Profondeur de champ" name="DOF panel">
 			<check_box label="Activer la profondeur de champ (Floutera la vue sauf au point de focalisation de la caméra)" name="UseDoF"/>
