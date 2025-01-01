@@ -175,6 +175,17 @@ void LLConsole::draw()
         return;
     }
 
+    // <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console   
+    // Get the Show On-screen Console flag from the Comm menu
+    static LLCachedControl<bool> showOnscreenConsole(*LLUI::getInstance()->mSettingGroups["config"], "FSShowOnscreenConsole");    
+    // If the Show On-screen Console flag is disabled and the current console is the global console
+    // (Not a debug console), then don't try to draw
+    if (!showOnscreenConsole && this == gConsole)
+    {
+        return;
+    }
+    // </FS:minerjr> [FIRE-35039]
+
     // <FS:Ansariel> Session support
     if (!mSessionSupport)
     {
