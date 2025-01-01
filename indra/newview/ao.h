@@ -55,6 +55,7 @@ class FloaterAO
         virtual void onOpen(const LLSD& key);
         virtual void onClose(bool app_quitting);
         void updateList();
+        void updateScrollListData();
         void updateSetParameters();
         void updateAnimationList();
 
