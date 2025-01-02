@@ -38,7 +38,7 @@
 		<text name="messaging_status">
 			角色：
 		</text>
-		<button label="重新整理清單" name="refresh_objects_list" />
+		<button label="更新清單" name="refresh_objects_list" />
 		<button label="全選" name="select_all_objects" />
 		<button label="全都不選" name="select_none_objects" />
 	</panel>

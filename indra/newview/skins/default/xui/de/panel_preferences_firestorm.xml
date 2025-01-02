@@ -240,6 +240,7 @@
 		<check_box label="Immer erweiterte Informationen zu Animationen anzeigen" tool_tip="Erweiterte Informationen zu Animation im Eigentschaftsfenster anzeigen" name="FSAnimationPreviewExpanded"/>
 		<check_box label="Erweiterte Skript-Informationen aktivieren" tool_tip="Falls aktiviert, werden die Skript-Informationen um weitergehende Details ergänzt." name="FSScriptInfoExtended"/>
 		<check_box label="Anhänge-Punkte in „Anhängen an“-Menüs alphabetisch sortieren (Erfordert Neustart)" tool_tip="Falls aktiviert, werden die Einträge in den „Anhängen an“-Menüs alphabetisch sortiert." name="FSSortAttachmentSpotsAlphabetically"/>
+		<check_box label="Neues [APP_NAME] Textur-Panel im Werkzeug-Fenster verwenden (Erforder Neustart)" tool_tip="Falls aktiviert, werden die Werkzeuge zum Bearbeiten von Texturen den von [APP_NAME] verbesserten Workflow benutzen und gleichzeitiges Bearbeiten von Blinn-Phong- und PBR-Texturen erlauben." name="FSUseNewTexturePanel"/>
 	</panel>
 
 	<!--Uploads-->

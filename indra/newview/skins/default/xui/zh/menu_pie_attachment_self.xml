@@ -3,7 +3,7 @@
 	<pie_slice label="檢視檔案" name="Profile..." />
 	<pie_slice label="丟在地上" name="Drop" />
 	<pie_menu name="Attachment Pie More" label="更多 &gt;">
-		<pie_slice label="重新整理紋理" name="Texture Refresh" />
+		<pie_slice label="更新紋理" name="Texture Refresh" />
 		<pie_slice label="指令碼資訊" name="ScriptInfo" />
 		<pie_slice label="觸碰" name="Attachment Object Touch" />
 		<pie_menu name="DerenderMenu" label="隱藏 &gt;">

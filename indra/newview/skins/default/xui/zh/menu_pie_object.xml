@@ -44,7 +44,7 @@
 		<pie_slice label="退回" name="Return..." />
 		<pie_menu label="更多 &gt;" name="Object Pie More 2">
 			<pie_menu name="ResetMenu" label="重設 &gt;">
-				<pie_slice label="重新整理紋理" name="Texture Refresh" />
+				<pie_slice label="更新紋理" name="Texture Refresh" />
 				<pie_slice label="骨架" name="Reset Skeleton" />
 			</pie_menu>
 			<pie_menu name="DerenderMenu" label="隱藏 &gt;">

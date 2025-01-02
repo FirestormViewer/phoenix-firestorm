@@ -41,8 +41,17 @@
 	<text name="antialiasing label">
 		Antialiasing:
 	</text>
-	<combo_box label="Antialiasing" name="fsaa">
+	<combo_box name="fsaa">
 		<combo_box.item label="Disabilita" name="FSAADisabled"/>
+	</combo_box>
+	<text name="antialiasing quality label">
+		Qualità antialiasing:
+	</text>
+	<combo_box name="fsaa quality">
+		<combo_box.item label="Bassa" name="Low" />
+		<combo_box.item label="Media" name="Medium" />
+		<combo_box.item label="Alta" name="High" />
+		<combo_box.item label="Ultra" name="Ultra" />
 	</combo_box>
 	<text name="MeshText">
 		Mesh
@@ -76,6 +85,7 @@
 	</text>
 	<check_box label="Occlusione ambientale" name="UseSSAO"/>
 	<check_box label="Profondità di campo" name="UseDoF"/>
+	<check_box label="HDR e texture emissive" name="VintageMode" />
 	<text name="RenderShadowDetailText">
 		Ombre:
 	</text>
@@ -115,6 +125,11 @@
 		<combo_box.item label="Medio" name="3" />
 		<combo_box.item label="Veloce" name="1" />
 	</combo_box>
+	<slider label="Affilatura:" name="RenderSharpness" />
+	<text name="TonemapTypeText">
+		Mappatura toni:
+	</text>
+	<slider label="Mix mappatura toni:" tool_tip="Combinazione di colori lineari e colori con mappatura dei toni" name="TonemapMix" />
 	<button label="Ripristina impostazioni predefinite" name="Defaults"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 </floater>

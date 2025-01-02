@@ -526,6 +526,7 @@
 			<menu_item_check label="Risoluzione massima della texture (pericoloso)" name="Full Res Textures"/>
 			<menu_item_check label="Renderizza luci indossate" name="Render Attached Lights"/>
 			<menu_item_check label="Renderizza particelle indossate" name="Render Attached Particles"/>
+			<menu_item_check label="Raccogli buffer dei vertici del font" name="Collect Font Vertex Buffers" />
 			<menu_item_check label="Abilita cache degli shader" name="Enable Shader Cache" />
 			<menu_item_call label="Cancella cache degli shader" name="Shader Cache Clear" />
 		</menu>

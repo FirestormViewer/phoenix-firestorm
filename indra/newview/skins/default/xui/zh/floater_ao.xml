@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="animation_overrider" title="動畫涵蓋器">
+<floater name="animation_overrider" title="動畫覆蓋器">
 	<floater.string name="ao_no_sets_loaded">
 		未載入設定
 	</floater.string>

@@ -11,7 +11,7 @@
 						收到的物件
 					</string>
 					<button label="收到的物件" name="inbox_btn" />
-					<button tool_tip="重新整理收到的物件列表" name="reload_received_items_btn" />
+					<button tool_tip="更新收到的物件列表" name="reload_received_items_btn" />
 					<text name="inbox_fresh_new_count">
 						[NUM] 項新的
 					</text>

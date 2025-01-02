@@ -717,6 +717,11 @@ public:
     // auxillary 512x512 render target pack
     // used by reflection probes and dynamic texture bakes
     RenderTargetPack mAuxillaryRT;
+    // <FS:Beq> Fix the build floater preview window
+    // dedicated 2048x2048 render target for preview
+    // used by preview window dynamic textures
+    LLRenderTarget mPreviewScreen; 
+    // </FS:Beq>
 
     // Auxillary render target pack scaled to the hero probe's per-face size.
     RenderTargetPack mHeroProbeRT;
@@ -793,6 +798,7 @@ public:
     LLRenderTarget              mWaterDis;
 
     static const U32 MAX_PREVIEW_WIDTH;
+    static const U32 MAX_PREVIEW_HEIGHT; // <FS:Beq/> dedicated render target for previews
 
     //texture for making the glow
     LLRenderTarget              mGlow[3];

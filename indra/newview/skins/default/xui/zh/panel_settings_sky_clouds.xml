@@ -3,7 +3,7 @@
 	<layout_stack name="main_ls">
 		<layout_panel name="left_lp">
 			<text name="cloud_coverage_label" width="110">
-				雲層涵蓋範圍:
+				雲層覆蓋範圍:
 			</text>
 			<text name="cloud_scale_label" width="110">
 				雲層尺寸:

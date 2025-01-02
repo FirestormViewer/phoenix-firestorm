@@ -8,14 +8,14 @@
 		<combo_box.item label="Dansk (Датский) - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Немецкий)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Испанский) - Beta" name="Spanish"/>
-		<combo_box.item label="Français (Французский) - Beta" name="French"/>
-		<combo_box.item label="Italiano (Итальянский) - Beta" name="Italian"/>
+		<combo_box.item label="Français (Французский)" name="French"/>
+		<combo_box.item label="Italiano (Итальянский)" name="Italian"/>
 		<combo_box.item label="Polski (Польский)" name="Polish"/>
 		<combo_box.item label="Português (Португальский) - Beta" name="Portugese"/>
 		<combo_box.item label="Русский" name="Russian"/>
 		<combo_box.item label="Türkçe (Турецкий) - Beta" name="Turkish"/>
 		<combo_box.item label="日本語 (Японский) - Beta" name="(Japanese)"/>
-		<combo_box.item label="正體中文 (Традиционный Китайский) - Beta" name="Traditional Chinese"/>
+		<combo_box.item label="正體中文 (Традиционный Китайский)" name="Traditional Chinese"/>
 	</combo_box>
 	<text name="language_textbox2" width="145">
 		(Необходим перезапуск)

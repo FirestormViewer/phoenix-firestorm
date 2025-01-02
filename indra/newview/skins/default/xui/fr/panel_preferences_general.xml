@@ -7,10 +7,10 @@
 		<!-- <combo_box.item label="Dansk (Danois) - Beta" name="Danish"/> -->
 		<combo_box.item label="Deutsch (Allemand)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Espagnol) - Beta" name="Spanish"/>
-		<combo_box.item label="Français - Beta" name="French"/>
-		<combo_box.item label="Italiano (Italien) - Beta" name="Italian"/>
+		<combo_box.item label="Français" name="French"/>
+		<combo_box.item label="Italiano (Italien)" name="Italian"/>
 		<combo_box.item label="Polski (Polonais)" name="Polish"/>
-		<combo_box.item label="Русский (Russe) - Beta" name="Russian"/>
+		<combo_box.item label="Русский (Russe)" name="Russian"/>
 		<combo_box.item label="日本語 (Japonais) - Beta" name="(Japanese)"/>
 	</combo_box>
 	<text name="language_textbox2">(Redémarrage requis)</text>

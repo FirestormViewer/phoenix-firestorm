@@ -179,7 +179,7 @@
 		<key>blocked_wireframe</key>
 		<map>
 			<key>value</key>
-			<string>由於RLV限制，無法啟用格線線模式。</string>
+			<string>由於RLV限制，無法啟用格線模式。</string>
 		</map>
 
 		<!-- 發送給遠端使用者的「忙碌」訊息 -->

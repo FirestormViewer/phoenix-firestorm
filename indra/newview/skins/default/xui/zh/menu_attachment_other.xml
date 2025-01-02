@@ -30,7 +30,7 @@
 	<menu_item_call label="隱藏" name="Derender" />
 	<menu_item_call label="永久隱藏 &amp; 封鎖" name="DerenderPermanent" />
 	<menu_item_call label="修改紋理" name="Debug..." />
-	<menu_item_call label="重新整理紋理" name="Texture Refresh" />
+	<menu_item_call label="更新紋理" name="Texture Refresh" />
 	<context_menu label="另存為" name="Export Menu">
 		<menu_item_call label="備份" name="Backup" />
 		<menu_item_call label="Collada" name="Collada" />

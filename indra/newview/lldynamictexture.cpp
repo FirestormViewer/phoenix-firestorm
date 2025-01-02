@@ -190,8 +190,10 @@ bool LLViewerDynamicTexture::updateAllInstances()
     {
         return true;
     }
-
-    LLRenderTarget& preview_target = gPipeline.mAuxillaryRT.deferredScreen;
+    // <FS:Beq> Add dedicated preview target 
+    // LLRenderTarget& preview_target = gPipeline.mAuxillaryRT.deferredScreen;
+    LLRenderTarget& preview_target = gPipeline.mPreviewScreen; 
+    // </FS:Beq>
     LLRenderTarget& bake_target = gPipeline.mBakeMap;
     if (!preview_target.isComplete() || !bake_target.isComplete())
     {
@@ -199,7 +201,7 @@ bool LLViewerDynamicTexture::updateAllInstances()
         return false;
     }
     llassert(preview_target.getWidth() >= LLPipeline::MAX_PREVIEW_WIDTH);
-    llassert(preview_target.getHeight() >= LLPipeline::MAX_PREVIEW_WIDTH);
+    llassert(preview_target.getHeight() >= LLPipeline::MAX_PREVIEW_HEIGHT); // <FS:Beq/> make this consistent with other render targets
     llassert(bake_target.getWidth() >= (U32) LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH);
     llassert(bake_target.getHeight() >= (U32) LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT);
 

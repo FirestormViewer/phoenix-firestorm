@@ -235,7 +235,9 @@ S32 LLPipeline::RenderHeroProbeUpdateRate;
 S32 LLPipeline::RenderHeroProbeConservativeUpdateMultiplier;
 LLTrace::EventStatHandle<S64> LLPipeline::sStatBatchSize("renderbatchsize");
 
-const U32 LLPipeline::MAX_PREVIEW_WIDTH = 512;
+// const U32 LLPipeline::MAX_PREVIEW_WIDTH = 512;
+constexpr U32 LLPipeline::MAX_PREVIEW_WIDTH = 2048;
+constexpr U32 LLPipeline::MAX_PREVIEW_HEIGHT = 2048;
 
 const F32 BACKLIGHT_DAY_MAGNITUDE_OBJECT = 0.1f;
 const F32 BACKLIGHT_NIGHT_MAGNITUDE_OBJECT = 0.08f;
@@ -999,6 +1001,7 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
         // See LLViwerTextureList::updateImagesCreateTextures and LLImageGL::scaleDown
         mDownResMap.allocate(1024, 1024, GL_RGBA);
 
+        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA); // <FS:Beq/> create an independent preview screen target
         mBakeMap.allocate(LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH, LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT, GL_RGBA);
     }
     //HACK make screenbuffer allocations start failing after 30 seconds
@@ -1326,6 +1329,8 @@ void LLPipeline::releaseScreenBuffers()
     mHeroProbeRT.screen.release();
     mHeroProbeRT.deferredScreen.release();
     mHeroProbeRT.deferredLight.release();
+
+    mPreviewScreen.release(); // <FS:Beq/> dedicated preview target
 }
 
 void LLPipeline::releaseSunShadowTarget(U32 index)
