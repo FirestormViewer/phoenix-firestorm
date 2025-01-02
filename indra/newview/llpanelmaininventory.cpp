@@ -98,6 +98,12 @@ public:
 
     void onCreatorSelfFilterCommit();
     void onCreatorOtherFilterCommit();
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Callback to check the value of the check box to sync with the main inventory Only Coalesced flag
+    bool isOnlyCoalescedFilterChecked();
+    // Callback for new checkbox to modify the main inventory's Only Colesced filter (Combined (Clumps))
+    void onOnlyCoalescedFilterCommit();
+    // </FS:minerjr> [FIRE-35042]
 
     void onPermissionsChanged(); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 
@@ -115,6 +121,9 @@ private:
     LLCheckBoxCtrl*     mCreatorSelf;
     LLCheckBoxCtrl*     mCreatorOthers;
     LLInventoryFilter*  mFilter;
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    LLCheckBoxCtrl*     mOnlyCoalescedFilterCheck; // Store the pointer to the Only Coalesced filter checkbox
+    // </FS:minerjr> [FIRE-35042]
 };
 
 ///----------------------------------------------------------------------------
@@ -1074,6 +1083,17 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 
         return;
     }
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible 
+    // Special treatment for "coalesced" filter
+    else if (filter_type_name == "filter_type_coalesced")
+    {
+        // Turn on Only Coalesced filter. This will also trigger the button "only_coalesced_inv_btn"
+        // and menu item check "inventory_filter_coalesced_objects_only" toggle states.
+        getActivePanel()->setFilterCoalescedObjects(true);
+        // As all Coalesced objects are only objects, then set the filter type to filter_type_objects
+        filterTypes = mFilterMap["filter_type_objects"];
+    }
+    // </FS:minerjr> [FIRE-35042]
     // invalid selection (broken XML?)
     else
     {
@@ -1522,6 +1542,19 @@ bool LLFloaterInventoryFinder::postBuild()
     mCreatorSelf->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorSelfFilterCommit, this));
     mCreatorOthers->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorOtherFilterCommit, this));
 
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Get the Finder's Only Coalesced check box for use later on, instead of calling getChild everytime accessing it
+    mOnlyCoalescedFilterCheck = getChild<LLCheckBoxCtrl>("check_only_coalesced");
+    // Add callbacks only if the checkbox is available
+    if (mOnlyCoalescedFilterCheck)
+    {
+        // Set a callback for when the check_only_coalesced checkbox is pressed to change the value of the main panel.
+        mOnlyCoalescedFilterCheck->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit, this));
+        // Set a callback for syncing the check_only_coalesced check state to the Only Coalesced flag of the main inventory
+        mOnlyCoalescedFilterCheck->setCheckCallback(boost::bind(&LLFloaterInventoryFinder::isOnlyCoalescedFilterChecked, this));
+    }
+    // </FS:minerjr> [FIRE-35042]
+
     childSetAction("Close", onCloseBtn, this);
 
     // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
@@ -1830,6 +1863,41 @@ void LLFloaterInventoryFinder::onCreatorOtherFilterCommit()
         mCreatorSelf->set(true);
     }
 }
+
+// <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+// Callback function that controls setting the actual Only Coalesced filter flag in the Main Inventory when the check_coalesced checkbox is changed by the user
+void LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit()
+{
+    // If the Main Inventory Panel and the Finder's OnlyCoalescedFilterCheck are both valid (should be, but just in case)
+    if (mPanelMainInventory && mOnlyCoalescedFilterCheck)
+    {
+        // Make sure the main panel exists before trying to set the Filter Coalesced Objects value to the check_only_coalesced checkbox value
+        LLInventoryPanel* main_panel = mPanelMainInventory->getPanel();
+        if (main_panel)
+        {
+            main_panel->setFilterCoalescedObjects(mOnlyCoalescedFilterCheck->getValue());
+        }
+    }
+
+}
+// Callback function that syncs the Finder's Only Coalesced checkbox to the main panel's FilterCoalescedObjects value
+bool LLFloaterInventoryFinder::isOnlyCoalescedFilterChecked()
+{
+    // Check if the Main Inventory Panel exists (should be, but just in case)
+    if (mPanelMainInventory)
+    {
+        // Make sure the main panel exists before trying to get the Filter Coalesced Objects 
+        LLInventoryPanel* main_panel = mPanelMainInventory->getPanel();
+        if (main_panel)
+        {
+            //Return the Only Coalesced filter value from the main inventory
+            return main_panel->getFilterCoalescedObjects();
+        }
+    }
+    //If the main panel cannot be accessed at this time, just return false
+    return false;
+}
+// </FS:minerjr> [FIRE-35042]
 
 // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 void LLFloaterInventoryFinder::onPermissionsChanged()
