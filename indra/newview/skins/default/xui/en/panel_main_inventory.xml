@@ -438,7 +438,7 @@
            layout="topleft"
            left="0"
            name="only_coalesced_inv_btn"
-           tool_tip="Only Combined (Clumps) - Enableds filter for only Combined Objects (Clumps) that are made up of 2 or more prims"
+           tool_tip="Only Combined (Clumps) - Enables filter that displays only Combined Objects (Clumps) which are made up of 2 or more prims"
            top="0"
            width="31">
               <button.commit_callback
