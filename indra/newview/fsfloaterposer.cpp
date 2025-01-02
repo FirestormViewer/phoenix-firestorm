@@ -818,6 +818,9 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
 
 void FSFloaterPoser::startPosingSelf()
 {
+    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+        return;
+
     setUiSelectedAvatar(gAgentAvatarp->getID());
     LLVOAvatar* avatar = getAvatarByUuid(gAgentAvatarp->getID());
     if (!avatar)
@@ -832,6 +835,9 @@ void FSFloaterPoser::startPosingSelf()
 
 void FSFloaterPoser::stopPosingSelf()
 {
+    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+        return;
+
     LLVOAvatar* avatar = getAvatarByUuid(gAgentAvatarp->getID());
     if (!avatar)
         return;
