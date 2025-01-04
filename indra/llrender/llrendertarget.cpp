@@ -364,7 +364,8 @@ void LLRenderTarget::release()
 
         sBytesAllocated -= mResX*mResY*4;
     }
-    else if (mFBO)
+    // else if (mFBO)
+    if (mFBO)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 
