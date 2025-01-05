@@ -118,24 +118,52 @@
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani" tool_tip="Il filtro anisotropico è un metodo per migliorare la qualità delle texture quando vengono visualizzate ad angoli relativamente ampi rispetto alla posizione della fotocamera. Di solito le rende meno sfocate a distanze maggiori."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<check_box label="Abilita supporto display HiDPI (solo macOS; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
-			<text name="Antialiasing:" tool_tip="Le modifiche a questa impostazione potrebbero richiedere il riavvio su alcuni dispositivi.">
-				Antialiasing:
+			<text name="antialiasing label" tool_tip="Le modifiche a questa impostazione potrebbero richiedere il riavvio su alcuni dispositivi.">
+				Antialiasing (riavvio consigliato):
 			</text>
-			<combo_box label="Antialiasing" name="fsaa">
+			<text name="antialiasing quality label" tool_tip="La modifica di questa impostazione potrebbe richiedere il riavvio su alcuni dispositivi.">
+				Qualità antialiasing:
+			</text>
+			<combo_box name="fsaa">
 				<combo_box.item label="Disabilita" name="FSAADisabled"/>
 			</combo_box>
+			<combo_box name="fsaa quality">
+				<combo_box.item label="Bassa" name="Low" />
+				<combo_box.item label="Media" name="Medium" />
+				<combo_box.item label="Alta" name="High" />
+				<combo_box.item label="Ultra" name="Ultra" />
+			</combo_box>
+			<check_box label="Limita utilizzo della VRAM delle texture (MB)" name="FSLimitTextureVRAMUsage" tool_tip="Limita la quantità di VRAM utilizzata per le texture. L'utilizzo totale potrebbe essere ancora più elevato perché anche altri componenti utilizzano VRAM." />
+			<slider name="RenderMaxVRAMBudget" tool_tip="Quantità massima di VRAM (in megabyte) utilizzata per le texture." />
 			<text name="advanced_settings">
 				Impostazioni avanzate (richiede riavvio):
 			</text>
 			<check_box label="Disabilita rilevamento automatico della VRAM" name="FSOverrideVRAMDetection" tool_tip="Consenti la disattivazione del rilevamento automatico della VRAM (da utilizzare con estrema cautela)" />
 			<slider label="Sostituisci VRAM dedicata alla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Importante: usare con estrema cautela. || Sostituisci la VRAM rilevata per la tua scheda grafica. || Non può contenere VRAM 'condivisa', che fa parte della RAM di sistema. || Se non capisci la differenza, lascia stare questa opzione." />
+			<text name="automatic_texture_downscale_settings">
+				Riduzione automatica delle texture:
+			</text>
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando la finestra del viewer non è in primo piano.">
+				In background (0 per disabilitare)
+			</text>
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando la finestra del viewer non è in primo piano." />
+			<text name="TextureDiscardBackgroundedTime_seconds">
+				secondi
+			</text>
+			<text name="TextureDiscardMinimizedTime_label" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando il viewer è ridotto a icona.">
+				Ridotto a icona (0 per disabilitare)
+			</text>
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando il viewer è ridotto a icona." />
+			<text name="TextureDiscardMinimizedTime_seconds">
+				secondi
+			</text>
 		</panel>
 		<panel label="Rendering" name="Rendering">
 			<text name="World Updating">
 				Caricamento del mondo:
 			</text>
 			<check_box label="Congela visualizzazione (mette in pausa tutto)" tool_tip="Setta questo per bloccare tutti gli aggiornamenti dal server - ferma tutte le azioni ma non ha effetto sulla chat e sulla voce" name="WorldPause"/>
-			<check_box label="Limita framerate" name="FSLimitFramerate"/>
+			<check_box label="Limita framerate" tool_tip="Limita la frequenza dei fotogrammi ad un valore definito dall'utente. Può ridurre il consumo energetico e il surriscaldamento della GPU/CPU" name="FSLimitFramerate"/>
 			<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili."/>
 			<text name="Texture Rendering">
 				Rendering texture:
@@ -153,19 +181,17 @@
 			<text name="TextureDetailLabel">
 				Max livello qualità texture:
 			</text>
-			<combo_box name="TextureDetail">
-				<combo_box.item label="Normale" name="0"/>
-				<combo_box.item label="Medio" name="3"/>
-				<combo_box.item label="Basso" name="4"/>
-				<combo_box.item label="Nessuna texture" name="5"/>
+			<combo_box name="TextureDetail" tool_tip="La qualità delle texture caricate influisce sull'impostazione TextureDiscardLevel">
+				<combo_box.item label="Qualità normale (0)" name="0"/>
+				<combo_box.item label="Qualità media (3)" name="3"/>
+				<combo_box.item label="Qualità bassa (4)" name="4"/>
+				<combo_box.item label="Nessuna texture (5)" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				Maschere alfa:
-			</text>
-			<check_box label="Renderizza maschere alfa" tool_tip="Se selezionato, le maschere alfa (bit trasparenti) vengono visualizzate correttamente" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Altre impostazioni:
 			</text>
+			<check_box label="HDR e texture emissive" tool_tip="Abilita funzionalità di rendering aggiuntive sui computer più recenti, come HDR e texture emissive sui contenuti PBR" name="VintageMode" />
+			<check_box label="Renderizza maschere alfa" tool_tip="Se selezionato, le maschere alfa (bit trasparenti) vengono visualizzate correttamente" name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Mostra bagliore" tool_tip="Mostra il bagliore (glow). Da notare che deve essere impostata a zero per disabilitare la luce quando le ombre sono attive." name="RenderGlow"/>
 			<slider label="Intensità:" tool_tip="Forza del bagliore. Più alto = più ampio e uniforme (predef. 2)" name="glow_strength"/>
 			<check_box label="Mostra avatar che non hanno terminato il caricamento" name="RenderUnloadedAvatars"/>
@@ -176,8 +202,13 @@
 			<text name="PrecachingDelayText">
 				secondi
 			</text>
-			<slider label="Qualità ombre" tool_tip="Qual&apos;è la qualità delle ombre (predef. 1)" name="ShadowResolution"/>
+			<slider label="Qualità ombre" tool_tip="Determina la qualità delle ombre (predefinita 1)" name="ShadowResolution"/>
 			<slider label="Grandezza texture del terreno (richiede riavvio)" name="RenderTerrainScale" tool_tip="Determina la grandezza della texture del terreno valore più basso = texture più compressa (richiede riavvio viewer)."/>
+			<slider label="Affilatura:" name="RenderSharpness" />
+			<text name="TonemapTypeText">
+				Mappatura toni:
+			</text>
+			<slider label="Mix mappatura toni:" tool_tip="Combinazione di colori lineari e colori con mappatura dei toni" name="TonemapMix" />
 		</panel>
 		<panel label="Profondità di Campo" name="DOF panel">
 			<check_box label="Abilita Profondità di Campo (PdC: sfoca la vista tranne che nella direzione della camera)" name="UseDoF"/>

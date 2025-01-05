@@ -25,7 +25,7 @@
 		<button label="顯示" name="display_floater_2" tool_tip="顯示由選定XML檔案定義的XUI浮動視窗" />
 		<button label="隱藏" name="close_displayed_floater_2" tool_tip="關閉當前顯示的浮動視窗（如果存在）。" />
 		<button label="匯出架構" name="export_schema" />
-		<button label="重新整理" name="refresh_btn" />
+		<button label="更新" name="refresh_btn" />
 		<check_box label="顯示矩形" name="show_rectangles" />
 		<scroll_list label="名稱" name="name_list">
 			<scroll_list.columns label="標題" name="title_column" />

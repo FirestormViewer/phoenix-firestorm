@@ -894,10 +894,7 @@ void LLMediaCtrl::draw()
             calcOffsetsAndSize(&x_offset, &y_offset, &width, &height);
 
             // draw the browser
-            // <FS:Ansariel> Remove QUADS rendering mode
-            //gGL.begin( LLRender::QUADS );
-            gGL.begin( LLRender::TRIANGLES );
-            // </FS:Ansariel>
+            gGL.begin(LLRender::TRIANGLES);
             if (! media_plugin->getTextureCoordsOpenGL())
             {
                 // render using web browser reported width and height, instead of trying to invert GL scale
@@ -910,13 +907,11 @@ void LLMediaCtrl::draw()
                 gGL.texCoord2f( 0.f, max_v );
                 gGL.vertex2i( x_offset, y_offset );
 
-                // <FS:Ansariel> Remove QUADS rendering mode
-                gGL.texCoord2f( max_u, 0.f );
-                gGL.vertex2i( x_offset + width, y_offset + height );
+                gGL.texCoord2f(max_u, 0.f);
+                gGL.vertex2i(x_offset + width, y_offset + height);
 
-                gGL.texCoord2f( 0.f, max_v );
-                gGL.vertex2i( x_offset, y_offset );
-                // </FS:Ansariel>
+                gGL.texCoord2f(0.f, max_v);
+                gGL.vertex2i(x_offset, y_offset);
 
                 gGL.texCoord2f( max_u, max_v );
                 gGL.vertex2i( x_offset + width, y_offset );
@@ -933,13 +928,11 @@ void LLMediaCtrl::draw()
                 gGL.texCoord2f( 0.f, 0.f );
                 gGL.vertex2i( x_offset, y_offset );
 
-                // <FS:Ansariel> Remove QUADS rendering mode
-                gGL.texCoord2f( max_u, max_v );
-                gGL.vertex2i( x_offset + width, y_offset + height );
+                gGL.texCoord2f(max_u, max_v);
+                gGL.vertex2i(x_offset + width, y_offset + height);
 
-                gGL.texCoord2f( 0.f, 0.f );
-                gGL.vertex2i( x_offset, y_offset );
-                // </FS:Ansariel>
+                gGL.texCoord2f(0.f, 0.f);
+                gGL.vertex2i(x_offset, y_offset);
 
                 gGL.texCoord2f( max_u, 0.f );
                 gGL.vertex2i( x_offset + width, y_offset );

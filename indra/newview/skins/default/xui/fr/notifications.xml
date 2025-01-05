@@ -3646,11 +3646,11 @@ Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votr
 
 Si vous êtes un membre Premium, [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Au moins l&apos;un de vos effets de voix expirera dans moins de [INTERVAL] jours.
-[[URL] Cliquez ici] pour renouveler votre abonnement.
+	<notification name="VoiceEffectsWillExpire">Au moins l'un de vos effets de voix expirera dans moins de [INTERVAL] jours.  
+[[URL] Cliquez ici] pour renouveler votre abonnement. 
 
 Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
+		<usetemplate ignoretext="M'avertir de l'expiration du morphing vocal" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="VoiceEffectsNew">
 		De nouveaux effets de voix sont disponibles !
@@ -4170,11 +4170,6 @@ Si vous continuez à rencontrer des problèmes, veuillez consulter le [SUPPORT_S
 		Vous semblez ne pas avoir le matériel requis pour utiliser [APP_NAME]. [APP_NAME] requiert une carte graphique OpenGL avec une prise en charge du multitexturing. Si vous avez une telle carte, assurez-vous que vous avez aussi les pilotes les plus récents pour la carte, ainsi que les service packs et les patchs pour votre système d&apos;exploitation.
 
 Si vous avez toujours des problèmes, veuillez consulter la page [SUPPORT_SITE].
-	</global>
-	<global name="UnsupportedIntelDriver">
-		Le pilote graphique Intel installé pour [GPUNAME], version [VERSION], est obsolète et connu pour provoquer un nombre excessif de plantages du programme. Il est conseillé de mettre à jour le pilote Intel.
-
-Voulez-vous consulter le site web des pilotes Intel ?
 	</global>
 	<global name="UnsupportedGPU">
 		- Votre carte graphique ne remplit pas les conditions minimum requises.

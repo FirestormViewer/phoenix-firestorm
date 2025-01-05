@@ -53,7 +53,9 @@
 		</search_editor>
 
 		<scroll_list
-			height="160"
+			height="140"
+			draw_heading="true"
+			heading_height="20"
 			follows="left|top|bottom"
 			layout="topleft"
 			left="0"
@@ -62,7 +64,27 @@
 			top_pad="4">
 			<scroll_list.commit_callback
 				function="SettingSelect" />
+			<scroll_list.columns
+			name="changed_setting"
+			relative_width="0.05"  />
+			<scroll_list.columns
+			label="Setting"
+			name="setting"
+			relative_width="0.95"  			
+			/>				
 		</scroll_list>
+		<check_box
+		control_name="DebugSettingsHideDefault"
+		height="16"
+		initial_value="true"
+		label="Show changed settings only"
+		layout="topleft"
+		top_pad="5"
+		left="0"
+		follows="left|bottom"
+		name="hide_default"
+		width="330">
+		</check_box>		
 	</panel>
 
 	<panel

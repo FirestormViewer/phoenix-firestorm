@@ -973,7 +973,7 @@
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"
-         control_name="FSShowVoiceVisualizer"
+         control_name="VoiceVisualizerEnabled"
          follows="left|top"
          height="15"
          label="Show voice visualizers over avatars"

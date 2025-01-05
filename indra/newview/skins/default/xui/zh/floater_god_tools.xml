@@ -2,7 +2,7 @@
 <floater name="godtools floater" title="神之工具">
 	<tab_container name="GodTools Tabs">
 		<panel label="類比網路" name="grid">
-			<button label="重新整理這個區域的地圖可視快取" label_selected="重新整理這個區域的地圖可視快取" name="Flush This Region's Map Visibility Caches" />
+			<button label="更新這個區域的地圖可視快取" label_selected="更新這個區域的地圖可視快取" name="Flush This Region's Map Visibility Caches" />
 		</panel>
 		<panel label="區域" name="region">
 			<text name="Region Name:">
@@ -40,7 +40,7 @@
 			<text name="land cost text">
 				每平方公尺 L$：
 			</text>
-			<button label="重新整理" label_selected="重新整理" name="Refresh" tool_tip="點擊這裡重新整理上列資料" />
+			<button label="更新" label_selected="更新" name="Refresh" tool_tip="點擊這裡更新上列資料" />
 			<button label="應用" label_selected="應用" name="Apply" tool_tip="點擊此處以接受應用上述變更" />
 			<button label="選擇區域" label_selected="選擇區域" name="Select Region" tool_tip="以土地工具選擇整個區域" />
 			<button label="立即自動儲存" label_selected="立即自動儲存" name="Autosave now" tool_tip="儲存 gzip 壓縮狀態至自動儲存目錄" />

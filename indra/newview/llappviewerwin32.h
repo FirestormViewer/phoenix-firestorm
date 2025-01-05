@@ -62,7 +62,7 @@ protected:
 
 private:
     void disableWinErrorReporting();
-
+    void bugsplatAddStaticAttributes(const LLSD& info) override; // <FS:Beq> override for windows attributes
     std::string mCmdLine;
     bool mIsConsoleAllocated;
 

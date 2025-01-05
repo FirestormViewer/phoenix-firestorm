@@ -56,7 +56,7 @@
 	<menu_item_call label="隱藏" name="Derender" />
 	<menu_item_call label="永久隱藏 &amp; 封鎖" name="DerenderPermanent" />
 	<menu_item_call label="除錯紋理" name="Debug..." />
-	<menu_item_call label="重新整理紋理" name="Texture Refresh" />
+	<menu_item_call label="更新紋理" name="Texture Refresh" />
 	<menu_item_call label="丟在地上" name="Drop" />
 	<menu_item_call label="封鎖粒子所有者" name="Mute Particle" />
 </context_menu>

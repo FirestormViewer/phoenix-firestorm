@@ -65,8 +65,8 @@ const U8 UPD_UNIFORM        = 0x10; // used with UPD_SCALE
 
 // <FS:Ansariel> Moved here to make them publically accessible
 // For linked sets
-const S32 MAX_CHILDREN_PER_TASK = 255;
-const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
+constexpr S32 MAX_CHILDREN_PER_TASK = 255;
+constexpr S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
 // </FS:Ansariel>
 
 // <FS:KC> show/hide build highlight
@@ -216,6 +216,8 @@ public:
     // final gltf material that users see.
     // Ids get applied and restored by tools floater,
     // overrides get applied in live material editor
+    // @param override_materials' content will be copied to not
+    // affect originals
     void saveGLTFMaterials(const uuid_vec_t& materials, const gltf_materials_vec_t& override_materials);
 
     bool allowOperationOnNode(PermissionBit op, U64 group_proxy_power) const;

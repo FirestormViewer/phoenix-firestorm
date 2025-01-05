@@ -500,6 +500,7 @@
 			<menu_item_check label="Textures pleine résolution" name="Rull Res Textures"/>
 			<menu_item_check label="Rendu des lumières jointes" name="Render Attached Lights"/>
 			<menu_item_check label="Rendu des particules jointes" name="Render Attached Particles"/>
+			<menu_item_check label="Collecter les buffers de vertex des polices" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Activer le cache des shaders" name="Enable Shader Cache"/>
 			<menu_item_call label="Vider le cache des shaders" name="Shader Cache Clear"/>
 			<menu_item_call label="Reconstruire le terrain" name="Rebuild Terrain"/>

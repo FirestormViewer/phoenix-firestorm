@@ -1658,8 +1658,8 @@
          top_pad="8"
          follows="left|top"
          height="16"
-         label="Use the new Firestorm texture panel in the tools floater (requires restart)"
-         tool_tip="If enabled, the texture editing tools will use the refined FS workflow and allow editing of BlinnPhong"
+         label="Use the new [APP_NAME] texture panel in the tools floater (requires restart)"
+         tool_tip="If enabled, the texture editing tools will use the refined [APP_NAME] workflow and allow editing of both Blinn-Phong and PBR textures."
          name="FSUseNewTexturePanel"
          control_name="FSUseNewTexturePanel"/>
     </panel>

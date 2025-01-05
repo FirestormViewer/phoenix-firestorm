@@ -2061,20 +2061,24 @@ void LLItemBridge::selectItem()
     }
 }
 
+// virtual
 void LLItemBridge::restoreItem()
 {
-    LLViewerInventoryItem* item = static_cast<LLViewerInventoryItem*>(getItem());
-    if(item)
+    if (LLViewerInventoryItem* item = getItem())
     {
-        LLInventoryModel* model = getInventoryModel();
-        bool is_snapshot = (item->getInventoryType() == LLInventoryType::IT_SNAPSHOT);
+        bool is_snapshot = item->getInventoryType() == LLInventoryType::IT_SNAPSHOT;
+        LLFolderType::EType preferred_type = is_snapshot ?
+            LLFolderType::FT_SNAPSHOT_CATEGORY :
+            LLFolderType::assetTypeToFolderType(item->getType());
 
-        const LLUUID new_parent = model->findCategoryUUIDForType(is_snapshot? LLFolderType::FT_SNAPSHOT_CATEGORY : LLFolderType::assetTypeToFolderType(item->getType()));
-        // do not restamp on restore.
+        LLInventoryModel* model = getInventoryModel();
+        LLUUID new_parent = model->findCategoryUUIDForType(preferred_type);
+        // Do not restamp on restore.
         LLInvFVBridge::changeItemParent(model, item, new_parent, false);
     }
 }
 
+// virtual
 void LLItemBridge::restoreToWorld()
 {
     //Similar functionality to the drag and drop rez logic
@@ -2142,26 +2146,27 @@ void LLItemBridge::restoreToWorld()
 
         //remove local inventory copy, sim will deal with permissions and removing the item
         //from the actual inventory if its a no-copy etc
-        if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
+        if (!itemp->getPermissions().allowCopyBy(gAgent.getID()))
         {
             remove_from_inventory = true;
         }
 
         // Check if it's in the trash. (again similar to the normal rez logic)
         const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-        if(gInventory.isObjectDescendentOf(itemp->getUUID(), trash_id))
+        if (gInventory.isObjectDescendentOf(itemp->getUUID(), trash_id))
         {
             remove_from_inventory = true;
         }
     }
 
-    if(remove_from_inventory)
+    if (remove_from_inventory)
     {
         gInventory.deleteObject(itemp->getUUID());
         gInventory.notifyObservers();
     }
 }
 
+// virtual
 void LLItemBridge::gotoItem()
 {
     LLInventoryObject *obj = getInventoryObject();
@@ -2171,39 +2176,43 @@ void LLItemBridge::gotoItem()
     }
 }
 
+// virtual
 LLUIImagePtr LLItemBridge::getIcon() const
 {
-    LLInventoryObject *obj = getInventoryObject();
-    if (obj)
+    if (LLInventoryObject* obj = getInventoryObject())
     {
-        return LLInventoryIcon::getIcon(obj->getType(),
-                                        LLInventoryType::IT_NONE,
-                                        mIsLink);
+        return LLInventoryIcon::getIcon(obj->getType(), LLInventoryType::IT_NONE, mIsLink);
     }
 
     return LLInventoryIcon::getIcon(LLInventoryType::ICONNAME_OBJECT);
 }
 
+// virtual
 LLUIImagePtr LLItemBridge::getIconOverlay() const
 {
     if (getItem() && getItem()->getIsLinkType())
     {
         return LLUI::getUIImage("Inv_Link");
     }
+
     return NULL;
 }
 
+// virtual
 PermissionMask LLItemBridge::getPermissionMask() const
 {
-    LLViewerInventoryItem* item = getItem();
-    PermissionMask perm_mask = 0;
-    if (item) perm_mask = item->getPermissionMask();
-    return perm_mask;
+    if (LLViewerInventoryItem* item = getItem())
+    {
+        return item->getPermissionMask();
+    }
+
+    return 0;
 }
 
+// virtual
 void LLItemBridge::buildDisplayName() const
 {
-    if(getItem())
+    if (getItem())
     {
         mDisplayName.assign(getItem()->getName());
     }
@@ -2216,14 +2225,15 @@ void LLItemBridge::buildDisplayName() const
     mSearchableName.append(getLabelSuffix());
     LLStringUtil::toUpper(mSearchableName);
 
-    //Name set, so trigger a sort
+    // Name set, so trigger a sort
     LLInventorySort sorter = static_cast<LLFolderViewModelInventory&>(mRootViewModel).getSorter();
-    if(mParent && !sorter.isByDate())
+    if (mParent && !sorter.isByDate())
     {
         mParent->requestSort();
     }
 }
 
+// virtual
 LLFontGL::StyleFlags LLItemBridge::getLabelStyle() const
 {
     U8 font = LLFontGL::NORMAL;
@@ -2234,7 +2244,7 @@ LLFontGL::StyleFlags LLItemBridge::getLabelStyle() const
         // LL_INFOS() << "BOLD" << LL_ENDL;
         font |= LLFontGL::BOLD;
     }
-    else if(item && item->getIsLinkType())
+    else if (item && item->getIsLinkType())
     {
         font |= LLFontGL::ITALIC;
     }
@@ -2242,6 +2252,7 @@ LLFontGL::StyleFlags LLItemBridge::getLabelStyle() const
     return (LLFontGL::StyleFlags)font;
 }
 
+// virtual
 std::string LLItemBridge::getLabelSuffix() const
 {
     // String table is loaded before login screen and inventory items are
@@ -2256,19 +2267,19 @@ std::string LLItemBridge::getLabelSuffix() const
     // </FS:Ansariel>
     static std::string LINK = LLTrans::getString("link");
     static std::string BROKEN_LINK = LLTrans::getString("broken_link");
+
     std::string suffix;
-    LLInventoryItem* item = getItem();
-    if(item)
+    if (LLInventoryItem* item = getItem())
     {
         // Any type can have the link suffix...
-        bool broken_link = LLAssetType::lookupIsLinkType(item->getType());
-        if (broken_link) return BROKEN_LINK;
+        if (LLAssetType::lookupIsLinkType(item->getType()))
+            return BROKEN_LINK;
 
-        bool link = item->getIsLinkType();
-        if (link) return LINK;
+        if (item->getIsLinkType())
+            return LINK;
 
         // ...but it's a bit confusing to put nocopy/nomod/etc suffixes on calling cards.
-        if(LLAssetType::AT_CALLINGCARD != item->getType()
+        if (LLAssetType::AT_CALLINGCARD != item->getType()
            && item->getPermissions().getOwner() == gAgent.getID())
         {
             bool copy = item->getPermissions().allowCopyBy(gAgent.getID());
@@ -2283,8 +2294,7 @@ std::string LLItemBridge::getLabelSuffix() const
                 //suffix += suffix.empty() ? " " : ","; // <FS:Ansariel> Keep it the old way please
                 suffix += NO_MOD;
             }
-            bool xfer = item->getPermissions().allowOperationBy(PERM_TRANSFER,
-                                                                gAgent.getID());
+            bool xfer = item->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID());
             if (!xfer)
             {
                 //suffix += suffix.empty() ? " " : ","; // <FS:Ansariel> Keep it the old way please
@@ -2292,24 +2302,25 @@ std::string LLItemBridge::getLabelSuffix() const
             }
         }
     }
+
     return suffix;
 }
 
+// virtual
 time_t LLItemBridge::getCreationDate() const
 {
-    LLViewerInventoryItem* item = getItem();
-    if (item)
+    if (LLViewerInventoryItem* item = getItem())
     {
         return item->getCreationDate();
     }
+
     return 0;
 }
 
-
+// virtual
 bool LLItemBridge::isItemRenameable() const
 {
-    LLViewerInventoryItem* item = getItem();
-    if(item)
+    if (LLViewerInventoryItem* item = getItem())
     {
         // (For now) Don't allow calling card rename since that may confuse users as to
         // what the calling card points to.
@@ -2335,50 +2346,62 @@ bool LLItemBridge::isItemRenameable() const
         }
 // [/RLVa:KB]
 
-        return (item->getPermissions().allowModifyBy(gAgent.getID()));
+        return item->getPermissions().allowModifyBy(gAgent.getID());
     }
+
     return false;
 }
 
+// virtual
 bool LLItemBridge::renameItem(const std::string& new_name)
 {
-    if(!isItemRenameable())
+    if (!isItemRenameable())
         return false;
+
     LLPreview::dirty(mUUID);
     LLInventoryModel* model = getInventoryModel();
-    if(!model)
+    if (!model)
         return false;
+
     LLViewerInventoryItem* item = getItem();
-    if(item && (item->getName() != new_name))
+    if (item && (item->getName() != new_name))
     {
         LLSD updates;
         updates["name"] = new_name;
         update_inventory_item(item->getUUID(),updates, NULL);
     }
-    // return false because we either notified observers (& therefore
-    // rebuilt) or we didn't update.
+
+    // return false because we either notified observers
+    // (& therefore rebuilt) or we didn't update.
     return false;
 }
 
+// virtual
 bool LLItemBridge::removeItem()
 {
-    if(!isItemRemovable())
+    if (!isItemRemovable())
     {
         return false;
     }
 
     // move it to the trash
     LLInventoryModel* model = getInventoryModel();
-    if(!model) return false;
+    if (!model)
+        return false;
+
     const LLUUID& trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH);
     LLViewerInventoryItem* item = getItem();
-    if (!item) return false;
+    if (!item)
+        return false;
+
     if (item->getType() != LLAssetType::AT_LSL_TEXT)
     {
         LLPreview::hide(mUUID, true);
     }
+
     // Already in trash
-    if (model->isObjectDescendentOf(mUUID, trash_id)) return false;
+    if (model->isObjectDescendentOf(mUUID, trash_id))
+        return false;
 
     LLNotification::Params params("ConfirmItemDeleteHasLinks");
     params.functor.function(boost::bind(&LLItemBridge::confirmRemoveItem, this, _1, _2));
@@ -2413,26 +2436,31 @@ bool LLItemBridge::removeItem()
 bool LLItemBridge::confirmRemoveItem(const LLSD& notification, const LLSD& response)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    if (option != 0) return false;
+    if (option != 0)
+        return false;
 
     LLInventoryModel* model = getInventoryModel();
-    if (!model) return false;
+    if (!model)
+        return false;
 
     LLViewerInventoryItem* item = getItem();
-    if (!item) return false;
+    if (!item)
+        return false;
 
     const LLUUID& trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH);
     // if item is not already in trash
-    if(item && !model->isObjectDescendentOf(mUUID, trash_id))
+    if (item && !model->isObjectDescendentOf(mUUID, trash_id))
     {
         // move to trash, and restamp
         LLInvFVBridge::changeItemParent(model, item, trash_id, true);
         // delete was successful
         return true;
     }
+
     return false;
 }
 
+// virtual
 bool LLItemBridge::isItemCopyable(bool can_copy_as_link) const
 {
     LLViewerInventoryItem* item = getItem();
@@ -2440,6 +2468,7 @@ bool LLItemBridge::isItemCopyable(bool can_copy_as_link) const
     {
         return false;
     }
+
 /*
     // Can't copy worn objects.
     // Worn objects are tied to their inworld conterparts
@@ -2482,37 +2511,36 @@ bool LLItemBridge::isItemLinkable() const
 
 LLViewerInventoryItem* LLItemBridge::getItem() const
 {
-    LLViewerInventoryItem* item = NULL;
-    LLInventoryModel* model = getInventoryModel();
-    if(model)
+    if (LLInventoryModel* model = getInventoryModel())
     {
-        item = (LLViewerInventoryItem*)model->getItem(mUUID);
+        return model->getItem(mUUID);
     }
-    return item;
+
+    return NULL;
 }
 
+// virtual
 const LLUUID& LLItemBridge::getThumbnailUUID() const
 {
-    LLViewerInventoryItem* item = NULL;
-    LLInventoryModel* model = getInventoryModel();
-    if(model)
+    if (LLInventoryModel* model = getInventoryModel())
     {
-        item = (LLViewerInventoryItem*)model->getItem(mUUID);
+        if (LLViewerInventoryItem* item = model->getItem(mUUID))
+        {
+            return item->getThumbnailUUID();
+        }
     }
-    if (item)
-    {
-        return item->getThumbnailUUID();
-    }
+
     return LLUUID::null;
 }
 
+// virtual
 bool LLItemBridge::isItemPermissive() const
 {
-    LLViewerInventoryItem* item = getItem();
-    if(item)
+    if (LLViewerInventoryItem* item = getItem())
     {
         return item->getIsFullPerm();
     }
+
     return false;
 }
 
@@ -2871,19 +2899,25 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 
     LLInventoryModel* model = getInventoryModel();
 
-    if (!inv_cat) return false; // shouldn't happen, but in case item is incorrectly parented in which case inv_cat will be NULL
-    if (!model) return false;
-    if (!isAgentAvatarValid()) return false;
-    if (!isAgentInventory()) return false; // cannot drag categories into library
+    if (!inv_cat) // shouldn't happen, but in case item is incorrectly parented in which case inv_cat will be NULL
+        return false;
+    if (!model)
+        return false;
+    if (!isAgentAvatarValid())
+        return false;
+    if (!isAgentInventory())
+        return false; // cannot drag categories into library
     // <FS:TT> Client LSL Bridge (also for #AO)
     if (isLockedFolder()) return false;
     // </FS:TT>
 
     LLInventoryPanel* destination_panel = mInventoryPanel.get();
-    if (!destination_panel) return false;
+    if (!destination_panel)
+        return false;
 
     LLInventoryFilter* filter = getInventoryFilter();
-    if (!filter) return false;
+    if (!filter)
+        return false;
 
     const LLUUID &cat_id = inv_cat->getUUID();
     const LLUUID &current_outfit_id = model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
@@ -2980,7 +3014,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
                 is_movable = false;
             }
         }
-        if(is_movable && move_is_into_current_outfit && is_link)
+        if (is_movable && move_is_into_current_outfit && is_link)
         {
             is_movable = false;
         }
@@ -3008,7 +3042,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
             for (S32 i=0; i < descendent_categories.size(); ++i)
             {
                 LLInventoryCategory* category = descendent_categories[i];
-                if(LLFolderType::lookupIsProtectedType(category->getPreferredType()))
+                if (LLFolderType::lookupIsProtectedType(category->getPreferredType()))
                 {
                     // Can't move "special folders" (e.g. Textures Folder).
                     is_movable = false;
@@ -3040,9 +3074,8 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
         }
         if (is_movable && move_is_into_trash)
         {
-            for (S32 i=0; i < descendent_items.size(); ++i)
+            for (LLViewerInventoryItem* item : descendent_items)
             {
-                LLInventoryItem* item = descendent_items[i];
                 if (get_is_item_worn(item->getUUID()))
                 {
                     is_movable = false;
@@ -3053,10 +3086,8 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
         // <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
         //if (is_movable && move_is_into_landmarks)
         //{
-        //  for (S32 i=0; i < descendent_items.size(); ++i)
+        //  for (LLViewerInventoryItem* item : descendent_items)
         //  {
-        //      LLViewerInventoryItem* item = descendent_items[i];
-
         //      // Don't move anything except landmarks and categories into Landmarks folder.
         //      // We use getType() instead of getActua;Type() to allow links to landmarks and folders.
         //      if (LLAssetType::AT_LANDMARK != item->getType() && LLAssetType::AT_CATEGORY != item->getType())
@@ -3357,7 +3388,7 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
     // permissions.
     // content category has same ID as object itself
     LLViewerObject* object = gObjectList.findObject(object_id);
-    if(!object)
+    if (!object)
     {
         LL_INFOS() << "Object not found for drop." << LL_ENDL;
         return false;
@@ -3385,11 +3416,9 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
 
     // coming from a task. Need to figure out if the person can
     // move/copy this item.
-    LLInventoryObject::object_list_t::iterator it = inventory_objects.begin();
-    LLInventoryObject::object_list_t::iterator end = inventory_objects.end();
-    for ( ; it != end; ++it)
+    for (LLPointer<LLInventoryObject> obj : inventory_objects)
     {
-        LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(it->get());
+        LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(obj.get());
         if (!item)
         {
             LL_WARNS() << "Invalid inventory item for drop" << LL_ENDL;
@@ -3399,13 +3428,13 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
         // coming from a task. Need to figure out if the person can
         // move/copy this item.
         LLPermissions perm(item->getPermissions());
-        if((perm.allowCopyBy(gAgent.getID(), gAgent.getGroupID())
+        if ((perm.allowCopyBy(gAgent.getID(), gAgent.getGroupID())
             && perm.allowTransferTo(gAgent.getID())))
 //          || gAgent.isGodlike())
         {
             accept = true;
         }
-        else if(object->permYouOwner())
+        else if (object->permYouOwner())
         {
             // If the object cannot be copied, but the object the
             // inventory is owned by the agent, then the item can be
@@ -3425,22 +3454,21 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
         }
     }
 
-    if(drop && accept)
+    if (drop && accept)
     {
-        it = inventory_objects.begin();
         std::shared_ptr<LLMoveInv> move_inv(new LLMoveInv);
         move_inv->mObjectID = object_id;
         move_inv->mCategoryID = category_id;
         move_inv->mCallback = callback;
         move_inv->mUserData = user_data;
 
-        for ( ; it != end; ++it)
+        for (LLPointer<LLInventoryObject> obj : inventory_objects)
         {
-            two_uuids_t two(category_id, (*it)->getUUID());
+            two_uuids_t two(category_id, obj->getUUID());
             move_inv->mMoveList.push_back(two);
         }
 
-        if(is_move)
+        if (is_move)
         {
             // Callback called from within here.
             warn_move_inventory(object, move_inv);
@@ -3458,13 +3486,13 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
 void LLRightClickInventoryFetchDescendentsObserver::execute(bool clear_observer)
 {
     // Bail out immediately if no descendents
-    if( mComplete.empty() )
+    if (mComplete.empty())
     {
         LL_WARNS() << "LLRightClickInventoryFetchDescendentsObserver::done with empty mCompleteFolders" << LL_ENDL;
         if (clear_observer)
         {
-        gInventory.removeObserver(this);
-        delete this;
+            gInventory.removeObserver(this);
+            delete this;
         }
         return;
     }
@@ -3488,13 +3516,13 @@ void LLRightClickInventoryFetchDescendentsObserver::execute(bool clear_observer)
         gInventory.getDirectDescendentsOf(*current_folder, cat_array, item_array);
 
         size_t item_count(0);
-        if( item_array )
+        if (item_array)
         {
             item_count = item_array->size();
         }
 
         size_t cat_count(0);
-        if( cat_array )
+        if (cat_array)
         {
             cat_count = cat_array->size();
         }
@@ -3593,20 +3621,16 @@ protected:
 };
 
 
-
 void LLInventoryCopyAndWearObserver::changed(U32 mask)
 {
-    if((mask & (LLInventoryObserver::ADD)) != 0)
+    if ((mask & (LLInventoryObserver::ADD)) != 0)
     {
         if (!mFolderAdded)
         {
             const std::set<LLUUID>& changed_items = gInventory.getChangedIDs();
-
-            std::set<LLUUID>::const_iterator id_it = changed_items.begin();
-            std::set<LLUUID>::const_iterator id_end = changed_items.end();
-            for (;id_it != id_end; ++id_it)
+            for (const LLUUID& item_id : changed_items)
             {
-                if ((*id_it) == mCatID)
+                if (item_id == mCatID)
                 {
                     mFolderAdded = true;
                     break;
@@ -3624,8 +3648,7 @@ void LLInventoryCopyAndWearObserver::changed(U32 mask)
             }
             else
             {
-                if (category->getDescendentCount() ==
-                    mContentsCount)
+                if (category->getDescendentCount() == mContentsCount)
                 {
                     gInventory.removeObserver(this);
                     LLAppearanceMgr::instance().wearInventoryCategory(category, false, !mReplace);
@@ -3636,8 +3659,6 @@ void LLInventoryCopyAndWearObserver::changed(U32 mask)
 
     }
 }
-
-
 
 void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 {
@@ -3748,19 +3769,19 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
             LLMarketplaceValidator::getInstance()->validateMarketplaceListings(
                 version_folder_id,
                 [this](bool result)
-            {
-                // todo: might need to ensure bridge/mUUID exists or this will cause crashes
-                if (!result)
                 {
-                    LLSD subs;
-                    subs["[ERROR_CODE]"] = mMessage;
-                    LLNotificationsUtil::add("MerchantListingFailed", subs);
-                }
-                else
-                {
-                    LLMarketplaceData::instance().activateListing(mUUID, true);
-                }
-            },
+                    // todo: might need to ensure bridge/mUUID exists or this will cause crashes
+                    if (!result)
+                    {
+                        LLSD subs;
+                        subs["[ERROR_CODE]"] = mMessage;
+                        LLNotificationsUtil::add("MerchantListingFailed", subs);
+                    }
+                    else
+                    {
+                        LLMarketplaceData::instance().activateListing(mUUID, true);
+                    }
+                },
                 boost::bind(&LLFolderBridge::gatherMessage, this, _1, _2, _3)
             );
         }
@@ -3775,19 +3796,19 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
             LLMarketplaceValidator::getInstance()->validateMarketplaceListings(
                 mUUID,
                 [this](bool result)
-            {
-                if (!result)
                 {
-                    LLSD subs;
-                    subs["[ERROR_CODE]"] = mMessage;
-                    LLNotificationsUtil::add("MerchantFolderActivationFailed", subs);
-                }
-                else
-                {
-                    LLInventoryCategory* category = gInventory.getCategory(mUUID);
-                    LLMarketplaceData::instance().setVersionFolder(category->getParentUUID(), mUUID);
-                }
-            },
+                    if (!result)
+                    {
+                        LLSD subs;
+                        subs["[ERROR_CODE]"] = mMessage;
+                        LLNotificationsUtil::add("MerchantFolderActivationFailed", subs);
+                    }
+                    else
+                    {
+                        LLInventoryCategory* category = gInventory.getCategory(mUUID);
+                        LLMarketplaceData::instance().setVersionFolder(category->getParentUUID(), mUUID);
+                    }
+                },
                 boost::bind(&LLFolderBridge::gatherMessage, this, _1, _2, _3),
                 false,
                 2);
@@ -3819,35 +3840,35 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
         LLMarketplaceValidator::getInstance()->validateMarketplaceListings(
             mUUID,
             [this](bool result)
-        {
-            if (!result)
             {
-                mMessage = "";
-
-                LLMarketplaceValidator::getInstance()->validateMarketplaceListings(
-                    mUUID,
-                    [this](bool result)
+                if (!result)
                 {
-                    if (result)
+                    mMessage = "";
+
+                    LLMarketplaceValidator::getInstance()->validateMarketplaceListings(
+                        mUUID,
+                        [this](bool result)
                     {
-                        LLNotificationsUtil::add("MerchantForceValidateListing");
-                        LLMarketplaceData::instance().createListing(mUUID);
-                    }
-                    else
-                    {
-                        LLSD subs;
-                        subs["[ERROR_CODE]"] = mMessage;
-                        LLNotificationsUtil::add("MerchantListingFailed", subs);
-                    }
-                },
-                    boost::bind(&LLFolderBridge::gatherMessage, this, _1, _2, _3),
-                    true);
-            }
-            else
-            {
-                LLMarketplaceData::instance().createListing(mUUID);
-            }
-        },
+                        if (result)
+                        {
+                            LLNotificationsUtil::add("MerchantForceValidateListing");
+                            LLMarketplaceData::instance().createListing(mUUID);
+                        }
+                        else
+                        {
+                            LLSD subs;
+                            subs["[ERROR_CODE]"] = mMessage;
+                            LLNotificationsUtil::add("MerchantListingFailed", subs);
+                        }
+                    },
+                        boost::bind(&LLFolderBridge::gatherMessage, this, _1, _2, _3),
+                        true);
+                }
+                else
+                {
+                    LLMarketplaceData::instance().createListing(mUUID);
+                }
+            },
             boost::bind(&LLFolderBridge::gatherMessage, this, _1, _2, _3),
             false);
 
@@ -3983,7 +4004,7 @@ void LLFolderBridge::copyOutfitToClipboard()
     gInventory.getDirectDescendentsOf(mUUID, cat_array, item_array);
 
     size_t item_count(0);
-    if( item_array )
+    if (item_array)
     {
         item_count = item_array->size();
     }
@@ -4075,8 +4096,7 @@ void LLFolderBridge::restoreItem()
 LLFolderType::EType LLFolderBridge::getPreferredType() const
 {
     LLFolderType::EType preferred_type = LLFolderType::FT_NONE;
-    LLViewerInventoryCategory* cat = getCategory();
-    if(cat)
+    if (LLViewerInventoryCategory* cat = getCategory())
     {
         // <FS:Ansariel> Special virtual system folder icons; Since these folders can be user-created
         //               and not protected, we will assign the folder type here instead of in
@@ -4130,7 +4150,6 @@ LLUIImagePtr LLFolderBridge::getIconOverlay() const
 
 bool LLFolderBridge::renameItem(const std::string& new_name)
 {
-
     LLScrollOnRenameObserver *observer = new LLScrollOnRenameObserver(mUUID, mRoot);
     gInventory.addObserver(observer);
 
@@ -4143,7 +4162,7 @@ bool LLFolderBridge::renameItem(const std::string& new_name)
 
 bool LLFolderBridge::removeItem()
 {
-    if(!isItemRemovable())
+    if (!isItemRemovable())
     {
         return false;
     }
@@ -4158,7 +4177,6 @@ bool LLFolderBridge::removeItem()
     LLNotifications::instance().forceResponse(params, 0);
     return true;
 }
-
 
 bool LLFolderBridge::removeSystemFolder()
 {

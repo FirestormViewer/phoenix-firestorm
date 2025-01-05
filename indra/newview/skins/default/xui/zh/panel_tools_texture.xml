@@ -40,9 +40,9 @@
 		<combo_box.item label="媒體" name="Media" />
 	</combo_box>
 	<radio_group name="radio_material_type">
-		<radio_item label="紋理（漫反射圖）" name="Texture (diffuse)" />
-		<radio_item label="凹凸度（正交）" name="Bumpiness (normal)" />
-		<radio_item label="閃亮度（鏡反光）" name="Shininess (specular)" />
+		<radio_item label="紋理（漫反射）" name="Texture (diffuse)" />
+		<radio_item label="凹凸度（法線）" name="Bumpiness (normal)" />
+		<radio_item label="閃亮度（鏡反射）" name="Shininess (specular)" />
 	</radio_group>
 	<radio_group name="radio_pbr_type">
 		<radio_item label="完整材質" name="Complete material" />

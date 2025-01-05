@@ -8,6 +8,7 @@
 		<string>CameraFNumber</string>
 		<string>FramePerSecondLimit</string>
 		<string>FSLimitFramerate</string>
+		<string>FSLimitTextureVRAMUsage</string>
 		<string>FSRenderVignette</string>
 		<string>FullScreen</string>
 		<string>RenderAnisotropic</string>
@@ -20,6 +21,7 @@
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
+		<string>RenderCASSharpness</string>
 		<string>RenderCompressTextures</string>
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
@@ -27,13 +29,14 @@
 		<string>RenderDesaturateIrradiance</string>
 		<string>RenderDiffuseLuminanceScale</string>
 		<string>RenderDisablePostProcessing</string>
-		<string>RenderPostProcessingHDR</string>
+		<string>RenderDisableVintageMode</string>
 		<string>RenderDefaultProbeUpdatePeriod</string>
 		<string>RenderDynamicExposureCoefficient</string>
 		<string>RenderExposure</string>
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
 		<string>RenderFSAASamples</string>
+		<string>RenderFSAAType</string>
 		<string>RenderGlow</string>
 		<string>RenderGlowHDR</string>
 		<string>RenderGlowIterations</string>
@@ -49,6 +52,7 @@
 		<string>RenderHeroProbeConservativeUpdateMultiplier</string>
 		<string>RenderLocalLightCount</string>
 		<string>RenderMaxPartCount</string>
+		<string>RenderMaxTextureResolution</string>
 		<string>RenderMaxVRAMBudget</string>
 		<string>RenderMirrors</string>
 		<string>RenderQualityPerformance</string>
@@ -89,7 +93,8 @@
 		<string>RenderTerrainPBRPlanarSampleCount</string>
 		<string>RenderTerrainPBRTriplanarBlendFactor</string>
 		<string>RenderTerrainScale</string>
-		<string>RenderMaxTextureResolution</string>
+		<string>RenderTonemapMix</string>
+		<string>RenderTonemapType</string>
 		<string>RenderTreeLODFactor</string>
 		<string>RenderTransparentWater</string>
 		<string>RenderUnloadedAvatar</string>
@@ -99,6 +104,8 @@
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
+		<string>TextureDiscardBackgroundedTime</string>
+		<string>TextureDiscardMinimizedTime</string>
 		<string>WLSkyDetail</string>
 	</array>
 </llsd>

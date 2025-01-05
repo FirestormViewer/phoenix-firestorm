@@ -107,7 +107,7 @@
 	<button name="ToolTube" tool_tip="圓管" />
 	<button name="ToolRing" tool_tip="圓環" />
 	<button name="ToolTree" tool_tip="樹木" />
-	<button name="ToolGrass" tool_tip="草地" />
+	<button name="ToolGrass" tool_tip="草" />
 	<check_box label="保持已選擇的工具" name="checkbox sticky" />
 	<check_box label="複製選擇" name="checkbox copy selection" />
 	<check_box label="居中複製物" name="checkbox copy centers" />
@@ -468,18 +468,18 @@
 			<text name="edit_object">
 				編輯物件特性：
 			</text>
-			<check_box label="網格動畫" name="Animated Mesh Checkbox Ctrl" tool_tip="允許架設網格物件獨立動畫" />
+			<check_box label="網格動畫" name="Animated Mesh Checkbox Ctrl" tool_tip="允許已綁定的網格物件使用獨立的動畫" />
 			<check_box label="彈性路徑" name="Flexible1D Checkbox Ctrl" tool_tip="允許物件繞 Z 軸伸展（僅限使用者端）" />
 			<button name="copy_features_btn" tool_tip="複製屬性參數到剪貼簿" />
 			<button name="paste_features_btn" tool_tip="從剪貼簿黏貼屬性參數" />
-			<spinner label="柔軟" name="FlexNumSections" />
+			<spinner label="柔軟性" name="FlexNumSections" />
 			<spinner label="重力" name="FlexGravity" />
-			<spinner label="拖拽" name="FlexFriction" />
-			<spinner label="風力" name="FlexWind" />
+			<spinner label="阻力" name="FlexFriction" />
+			<spinner label="風力影響" name="FlexWind" />
 			<spinner label="張力" name="FlexTension" />
-			<spinner label="強制 X 軸" name="FlexForceX" />
-			<spinner label="強制 Y 軸" name="FlexForceY" />
-			<spinner label="強制 Z 軸" name="FlexForceZ" />
+			<spinner label="X軸力" name="FlexForceX" />
+			<spinner label="Y軸力" name="FlexForceY" />
+			<spinner label="Z軸力" name="FlexForceZ" />
 			<check_box label="光源" name="Light Checkbox Ctrl" tool_tip="導致物件發光" />
 			<color_swatch name="colorswatch" tool_tip="點擊以開啟顏色挑選器" />
 			<texture_picker name="light texture control" tool_tip="點擊投影圖像（只在啟用延遲渲染時生效）" />
@@ -521,16 +521,17 @@
 				<combo_box.item label="橡膠" name="Rubber" />
 			</combo_box>
 			<spinner label="重力" name="Physics Gravity" />
-			<spinner label="摩擦" name="Physics Friction" />
+			<spinner label="摩擦力" name="Physics Friction" />
 			<spinner label="密度（100公斤/立方公尺）" name="Physics Density" />
-			<spinner label="恢復" name="Physics Restitution" />
+			<spinner label="彈性" name="Physics Restitution" />
 		</panel>
 		<!--<panel label="紋理" name="Texture"/>-->
 		<panel label="內容" name="Contents">
 			<button label="新指令碼" label_selected="新指令碼" name="button new script" />
 			<button label="權限" name="button permissions" />
-			<button label="重新整理" name="button refresh" />
+			<button label="更新" name="button refresh" />
 			<button label="重設指令碼" name="btn_reset_scripts" />
+			<filter_editor label="輸入篩選文字" name="contents_filter"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

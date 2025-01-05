@@ -68,7 +68,7 @@
 				<combo_box name="UseLegacyClienttags">
 					<combo_box.item name="Don't use a list" label=" 否" />
 					<combo_box.item name="Local Clienttags" label=" 靜態列表" />
-					<combo_box.item name="Download Clienttags" label=" 每次啟動都重新整理列表" />
+					<combo_box.item name="Download Clienttags" label=" 每次啟動都更新列表" />
 				</combo_box>
 			</panel>
 		</panel>

@@ -144,18 +144,47 @@
 		</text>
 		<check_box label="Textur-Komprimierung aktivieren (Erfordert Neustart)" name="texture compression" tool_tip="Komprimiert Texturen im Videospeicher und erlaubt dadurch eine höhrere Auflösung und/oder Laden von mehr Texturen auf Kosten der Textqualität."/>
 		<check_box label="Unterstützung für HiDPI-Displays aktivieren (nur macOS; erfordert Neustart)" name="use HiDPI" tool_tip="Aktiviert OpenGL für High-Resolution Drawing."/>
-		<text name="Antialiasing:" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
+		<text name="antialiasing label" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
 			Antialiasing (Neustart empfohlen):
 		</text>
-		<combo_box label="Antialiasing" name="fsaa">
+		<text name="antialiasing quality label" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
+			Antialiasing-Qualität:
+		</text>
+		<combo_box name="fsaa">
 			<combo_box.item label="Deaktiviert" name="FSAADisabled"/>
 			<combo_box.item label="FXAA" name="FXAA"/>
+			<combo_box.item label="SMAA" name="SMAA"/>
+		</combo_box>
+		<combo_box name="fsaa quality">
+			<combo_box.item label="Niedrig" name="Low"/>
+			<combo_box.item label="Mittel" name="Medium"/>
+			<combo_box.item label="Hoch" name="High"/>
+			<combo_box.item label="Ultra" name="Ultra"/>
 		</combo_box>
 		<text name="advanced_settings">
 			Erweiterte Einstellungen (Neustart erforderlich):
 		</text>
+		<check_box label="VRAM-Speicher für Texturen begrenzen (MB)" name="FSLimitTextureVRAMUsage" tool_tip="Begrenzt die Nutzung von VRAM-Speicher für Texturen. Der gesamte Speicherverbrauch kann höher sein, da andere Elemente ebenfalls VRAM-Speicher nutzen."/>
+		<slider name="RenderMaxVRAMBudget" tool_tip="Maximaler VRAM-Speicher in Megabytes, der für Texturen verwendet wird."/>
 		<check_box label="VRAM-Erkennung übersteuern" name="FSOverrideVRAMDetection" tool_tip="Erlaubt die Übersteuerung der VRAM-Erkennung (mit extreme Vorsicht verwenden)" />
 		<slider label="Dedizierter GPU-VRAM(GB):" name="FSForcedVideoMemory" tool_tip="Wichtig: Mit extremer Vorsicht verwenden. Übersteuert den erkannten VRAM der GPU. Dieser Wert darf nicht den geteilten VRAM enthalten, der Teil des Systemspeichers ist. Falls Sie den Unterschied nicht kennen, verändern Sie diese Einstellung bitte nicht!" />
+		<text name="automatic_texture_downscale_settings">
+			Automatische Textur-Herunterskalierung:
+		</text>
+		<text name="TextureDiscardBackgroundedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt.">
+			Im Hintergrund (0 zum deaktivieren)
+		</text>
+		<spinner name="TextureDiscardBackgroundedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt."/>
+		<text name="TextureDiscardBackgroundedTime_seconds">
+			Sekunde(n)
+		</text>
+		<text name="TextureDiscardMinimizedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist.">
+			Minimiert (0 zum deaktivieren)
+		</text>
+		<spinner name="TextureDiscardMinimizedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist."/>
+		<text name="TextureDiscardMinimizedTime_seconds">
+			Sekunde(n)
+		</text>
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">
@@ -191,13 +220,11 @@
 			<combo_box.item label="Geringe (4) Qualität" name="4"/>
 			<combo_box.item label="Keine (5) Texturen" name="5"/>
 		</combo_box>
-		<text name="Alpha Mask Rendering">
-			Darstellung von Alpha-Masken:
-		</text>
-		<check_box label="Alpha-Masken verwenden" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt." name="RenderAutoMaskAlphaDeferred"/>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>
+		<check_box label="HDR und Emissive" tool_tip="Aktiviert zusätzliche Features der Rendering-Pipeline auf neueren Maschinen, wie HDR und Emissive-Texturen auf PBR-Materialien." name="VintageMode"/>
+		<check_box label="Alpha-Masken verwenden" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt." name="RenderAutoMaskAlphaDeferred"/>
 		<check_box label="Leuchten anzeigen" tool_tip="Stellt Leuchteffekte dar. Stärke muss auf 0 gesetzt werden, um Leuchteffekte zu deaktiveren, falls Schatten aktiviert sind." name="RenderGlow"/>
 		<slider label="Stärke:" tool_tip="Leuchtstärke. Größer = Breitere und weichere Darstellung (Standardwert: 2)" name="glow_strength"/>
 		<check_box label="Avatare anzeigen, die nicht vollständig geladen sind" name="RenderUnloadedAvatars"/>
@@ -211,6 +238,15 @@
 		</text>
 		<slider label="Schattenqualität" tool_tip="Qualität der Schattendarstellung (Standard: 1)" name="ShadowResolution"/>
 		<slider label="Skalierung der Bodentexturen (Erfordert Neustart)" name="RenderTerrainScale" tool_tip="Setzt die Skalierung der Bodentexturen - niedriger bedeutet höhere Kompression"/>
+		<slider label="Schärfung" name="RenderSharpness"/>
+		<text name="TonemapTypeText">
+			Tone Mapper:
+		</text>
+		<combo_box name="TonemapType">
+			<combo_box.item label="Khronos Neutral" name="0"/>
+			<combo_box.item label="ACES" name="1"/>
+		</combo_box>
+		<slider label="Tone Mapping Mix:" tool_tip="Mix zwischen linearen und tone-gemappten Farben" name="TonemapMix"/>
 	</panel>
 	
 	<panel label="Schärfentiefe" name="DOF panel">

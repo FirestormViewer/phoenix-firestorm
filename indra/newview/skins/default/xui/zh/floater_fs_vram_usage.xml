@@ -10,5 +10,5 @@
 		<column name="vram_usage" label="紋理視訊記憶體佔用KB" />
 		<column name="vram_usage_vbo" label="VBO視訊記憶體佔用KB" />
 	</scroll_list>
-	<button label="重新整理" label_selected="重新整理" name="refresh_button" />
+	<button label="更新" label_selected="更新" name="refresh_button" />
 </floater>

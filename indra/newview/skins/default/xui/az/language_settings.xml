@@ -5,6 +5,7 @@
 	<!-- Locale Information -->
 	<string name="MicrosoftLocale">az-Latn-AZ</string>
 	<string name="MacLocale">az-Latn.UTF-8</string>
+	<string name="macOSLocale">az-Latn.UTF-8</string>
 	<string name="DarwinLocale">az_AZ.UTF-8</string>
 	<string name="LinuxLocale">az_AZ.UTF-8</string>
 
@@ -44,7 +45,6 @@
 	<string name="TimeWeek">wkday,datetime,slt</string>
 	<string name="TimeAMPM">ampm,datetime,slt</string>
 	<string name="TimeHour12">hour12,datetime,slt</string>
-	<string name="TimeSec">second,datetime,slt</string>
 	<string name="TimeTimezone">timezone,datetime,slt</string>
 
 	<string name="LTimeMthNum">mthnum,datetime,local</string>
