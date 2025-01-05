@@ -881,7 +881,6 @@ private:
         bool        mIsNew;
 
         LLFrameTimer    mExpiryTimer;
-        LLFrameTimer    mExpiryWarningTimer;
     };
 
     bool mVoiceFontsReceived;

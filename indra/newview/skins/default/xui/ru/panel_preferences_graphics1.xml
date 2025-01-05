@@ -123,18 +123,49 @@
 			<check_box label="Анизотропная фильтрация (медленнее, когда включено)" name="ani" tool_tip = "Этот флажок включает анизотропную фильтрацию, которая представляет собой метод повышения качества текстур, когда они просматриваются под относительно большими углами по отношению к положению вашей камеры. Обычно заставляет их выглядеть менее размытыми на больших расстояниях."/>
 			<check_box label="Включить сжатие текстур с потерями (требуется перезапуск)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, позволяет текстурам с высоким разрешение загружаться за счет некоторого потери качества цвета."/>
 			<check_box label="Включить поддержку дисплеев HiDPI (только macOS; требуется перезапуск)" name="use HiDPI" tool_tip="Включить OpenGL для отображения в высоком разрешении."/>
-			<text name="Antialiasing:" tool_tip = "Изменения этого параметра может потребовать перезапуск на некотором оборудовании." width="290">
+			<text name="antialiasing label" tool_tip = "Изменения этого параметра может потребовать перезапуск на некотором оборудовании." width="290">
 				Сглаживание (рекомендуется перезапуск):
+			</text>
+			<text name="antialiasing quality label" width="220" tool_tip="Изменение этого параметра может потребовать перезагрузки некоторого оборудования.">
+				Качество сглаживания:
 			</text>
 			<combo_box label="Сглаживание" name="fsaa">
 				<combo_box.item label="Отключено" name="FSAADisabled"/>
 			</combo_box>
+			<combo_box name="fsaa quality">
+				<combo_box.item label="Низкое" name="Low"/>
+				<combo_box.item label="Среднее" name="Medium"/>
+				<combo_box.item label="Высокое" name="High"/>
+				<combo_box.item label="Ультра" name="Ultra"/>
+			</combo_box>
+			<check_box label="Ограничить видеопамять для текстур (МБ)" name="FSLimitTextureVRAMUsage" tool_tip="Ограничивает объем видеопамяти, используемой для текстур. Общее использование может быть выше, поскольку другие элементы также используют видеопамять."/>
+			<slider name="RenderMaxVRAMBudget" tool_tip="Максимальный объем видеопамяти в мегабайтах, используемый для текстур."/>
 			<text name="advanced_settings">
 				Расширенные настройки (требуется перезагрузка):
 			</text>
 			<check_box label="Переопределение обнаружения видеопамяти" name="FSOverrideVRAMDetection" tool_tip="Разрешить пользователю переопределять обнаружение видеопамяти (использовать с особой осторожностью)"/>
 			<slider label="Выделенная видеопамять GPU (ГБ):" name="FSForcedVideoMemory" tool_tip="Важно: используйте с особой осторожностью. Переопределите обнаруженную видеопамять в вашем графическом процессоре. Это не должно включать 'общую' видеопамять, которая является частью системной оперативной памяти. Если вы не понимаете разницы, оставьте этот элемент управления в покое."/>
+
+			<text name="automatic_texture_downscale_settings" width="308">
+				Автоматическое уменьшение масштаба текстуры:
+			</text>
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Уменьшенные текстуры через выбранное количество секунд, когда окно неактивно." width="275">
+				В фоновом режиме (0 отключить)
+			</text>
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Уменьшенные текстуры через выбранное количество секунд, когда окно неактивно." width="100"/>
+			<text name="TextureDiscardBackgroundedTime_seconds" width="100">
+				Секунд(ы)
+			</text>
+			<text name="TextureDiscardMinimizedTime_label" tool_tip="Уменьшенные текстуры через выбранное количество секунд при сворачивании." width="275">
+				Минимизировано (0 отключить)
+			</text>
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="Уменьшенные текстуры через выбранное количество секунд при сворачивании." width="100"/>
+			<text name="TextureDiscardMinimizedTime_seconds" width="100">
+				Секунд(ы)
+			</text>
+
 		</panel>
+
 		<panel label="Прорисовка" name="Rendering">
 			<text name="World Updating">
 				Обновление мира:
@@ -173,6 +204,7 @@
 			<text name="Miscellaneous Rendering">
 				Разное:
 			</text>
+			<check_box label="HDR и Эмиссионные" tool_tip="Включает дополнительные функции конвейера рендеринга на новых компьютерах, такие как HDR и эмиссионные текстуры для PBR-контента." name="VintageMode" width="256"/>
 			<check_box label="Прорисовка свечения" tool_tip="Прорисовка свечения. Обратите внимание, что сила должна быть установлена на ноль, чтобы отключить свечение, когда тени включены." name="RenderGlow"/>
 			<slider label="Сила:" tool_tip="Сила. Выше = шире и размытей (по умолчанию 2) " name="glow_strength"/>
 			<check_box label="Показывать не полностью загруженные аватары" name="RenderUnloadedAvatars"/>
@@ -185,6 +217,15 @@
 			</text>
 			<slider label="Качество теней" tool_tip="Качество теней (по умолчанию 1)" name="ShadowResolution"/>
 			<slider label="Масштабирование прорисовки текстуры земли" name="RenderTerrainScale" tool_tip="Определяет масштаб текстуры местности - ниже более сжато (требуется перезапуск)"/>
+			<slider label="Заострение:" name="RenderSharpness"/>
+			<text name="TonemapTypeText">
+				Карты тонов:
+			</text>
+			<combo_box name="TonemapType">
+				<combo_box.item label="Khronos Neutral" name="0"/>
+				<combo_box.item label="ACES" name="1"/>
+			</combo_box>
+			<slider label="Смесь карт тонов:" tool_tip="Комбинируйте цвета с линейной и тональной картировкой" name="TonemapMix"/>
 		</panel>
 		<panel label="Глубина резкости (DoF)" name="DOF panel">
 			<check_box label="Включить глубину резкости (Это размоет вид за исключением фокусировки камеры.)" name="UseDoF"/>

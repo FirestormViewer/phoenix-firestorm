@@ -8,14 +8,14 @@
 		<combo_box.item label="Dansk (Dinamarquês) - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Alemão)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Espanhol) - Beta" name="Spanish"/>
-		<combo_box.item label="Français (Francês) - Beta" name="French"/>
-		<combo_box.item label="Italiano - Beta" name="Italian"/>
+		<combo_box.item label="Français (Francês)" name="French"/>
+		<combo_box.item label="Italiano" name="Italian"/>
 		<combo_box.item label="Polski (Polonês)" name="Polish"/>
 		<combo_box.item label="Português (Português) - Beta" name="Portugese"/>
-		<combo_box.item label="Русский (Russo) - Beta" name="Russian"/>
+		<combo_box.item label="Русский (Russo)" name="Russian"/>
 		<combo_box.item label="Türkçe (Turco) - Beta" name="Turkish"/>
 		<combo_box.item label="日本語 (Japonês) - Beta" name="(Japanese)"/>
-		<combo_box.item label="正體中文 (Chinês tradicional) - Beta" name="Traditional Chinese"/>
+		<combo_box.item label="正體中文 (Chinês tradicional)" name="Traditional Chinese"/>
 	</combo_box>
 	<text name="language_textbox2">
 		(Reinicie para trocar de idioma)

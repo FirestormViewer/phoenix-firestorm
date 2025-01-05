@@ -118,17 +118,45 @@
 			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani" tool_tip="To pole wyboru włącza filtrowanie anizotropowe, które jest metodą polepszania jakości tekstur, gdy są one oglądane pod względnie dużymi kątami w stosunku do położenia kamery. Zazwyczaj sprawia, że wydają się mniej rozmyte przy większych odległościach." />
 			<check_box label="Włącz stratną kompresję tekstur (wymaga restartu)" name="texture compression" tool_tip="Kompresuje tekstury w pamięci wideo. Umożliwi to ładowanie tekstur w wyższej rozdzielczości / większej ich ilości, ale kosztem jakości obrazu."/>
 			<check_box label="Włącz wsparcie dla ekranów HiDPI (tylko macOS; wymaga restartu)" name="use HiDPI" tool_tip="Włącz funkcje OpenGL dla rysowania w wysokich rozdzielczościach." />
-			<text name="Antialiasing:" tool_tip="Zmiana tego ustawienia może wymagać ponownego uruchomienia na niektórych urządzeniach.">
+			<text name="antialiasing label" tool_tip="Zmiana tego ustawienia może wymagać ponownego uruchomienia na niektórych urządzeniach.">
 				Antyaliasing (zalecany restart):
 			</text>
-			<combo_box label="Antyaliasing" name="fsaa">
+			<text name="antialiasing quality label" tool_tip="Zmiana tego ustawienia może wymagać ponownego uruchomienia na niektórych urządzeniach.">
+				Jakość antyaliasingu:
+			</text>
+			<combo_box name="fsaa">
 				<combo_box.item label="Wyłączony" name="FSAADisabled"/>
 			</combo_box>
+			<combo_box name="fsaa quality">
+				<combo_box.item label="Niska" name="Low" />
+				<combo_box.item label="Średnia" name="Medium" />
+				<combo_box.item label="Wysoka" name="High" />
+				<combo_box.item label="Ultra" name="Ultra" />
+			</combo_box>
+			<check_box label="Ogranicz użycie VRAM tekstur (MB)" name="FSLimitTextureVRAMUsage" tool_tip="Ogranicza ilość pamięci VRAM używanej do tekstur. Całkowite wykorzystanie może być w dalszym ciągu wyższe, ponieważ inne elementy również używają pamięci VRAM." />
+			<slider name="RenderMaxVRAMBudget" tool_tip="Maksymalna ilość pamięci VRAM w megabajtach używana do tekstur." />
 			<text name="advanced_settings">
 				Zaawansowane (wymagany restart):
 			</text>
 			<check_box label="Wyłącz autodetekcję VRAM" name="FSOverrideVRAMDetection" tool_tip="Zezwól na wyłączenie automatycznego wykrywania VRAM (używaj z zachowaniem szczególnej ostrożności)" />
 			<slider label="Zastąp dedykowaną VRAM dla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Ważne: używaj ze szczególną ostrożnością. || Zastąp wykrytą pamięć VRAM dla karty graficznej. || Nie może zawierać 'współdzielonej' pamięci VRAM, która jest częścią systemowej pamięci RAM. || Jeśli nie rozumiesz różnicy, zostaw tę opcję w spokoju." />
+			<text name="automatic_texture_downscale_settings">
+				Auto-zmniejszanie tekstur:
+			</text>
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund, gdy okno nie jest aktywne.">
+				Okno w tle (0 aby wyłączyć)
+			</text>
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund, gdy okno nie jest aktywne." />
+			<text name="TextureDiscardBackgroundedTime_seconds">
+				sekund
+			</text>
+			<text name="TextureDiscardMinimizedTime_label" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund po zminimalizowaniu.">
+				Zminimalizowane (0 aby wyłączyć)
+			</text>
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund po zminimalizowaniu." />
+			<text name="TextureDiscardMinimizedTime_seconds">
+				sekund
+			</text>
 		</panel>
 		<panel name="Rendering">
 			<text name="World Updating">
@@ -159,13 +187,11 @@
 				<combo_box.item label="Niska jakość (4)" name="4"/>
 				<combo_box.item label="Bez tekstur (5)" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				Maski przezroczystości (alpha):
-			</text>
-			<check_box label="Renderuj maski przezroczystości" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów)" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Inne opcje wyświetlania:
 			</text>
+			<check_box label="HDR i emisyjność" tool_tip="Włącza dodatkowe funkcje renderowania na nowszych maszynach, takie jak HDR i tekstury emisyjne dla PBR." name="VintageMode" />
+			<check_box label="Renderuj maski przezroczystości" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów)" name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Renderuj blask" tool_tip="Renderuj blask. Siła musi być ustawiona na 0, aby wyłączyć blask gdy cienie są włączone." name="RenderGlow"/>
 			<slider label="Siła:" tool_tip="Siła blasku. Więcej = szerszy i gładszy (domyślnie 2) " name="glow_strength"/>
 			<check_box label="Pokazuj awatary, które nie skończyły się ładować" name="RenderUnloadedAvatars"/>
@@ -178,6 +204,11 @@
 			</text>
 			<slider label="Jakość cieni" tool_tip="Określa jakość cieni (domyślnie 1)" name="ShadowResolution"/>
 			<slider label="Wielkość tekstur terenu (wymaga restartu)" name="RenderTerrainScale" tool_tip="Określa wielkość tekstur terenu - mniej oznacza: bardziej skompresowane (wymaga restartu)."/>
+			<slider label="Wyostrzanie:" name="RenderSharpness" />
+			<text name="TonemapTypeText">
+				Tone mapping:
+			</text>
+			<slider label="Miks tone mappingu:" tool_tip="Łączenie kolorów liniowych i tonalnie odwzorowanych (mappingowanych)" name="TonemapMix" />
 		</panel>
 		<panel label="Głębia ostrości" name="DOF panel">
 			<check_box label="Włącz głębię ostrości (rozmywaj widok z wyjątkiem miejsca, gdzie skupiona jest kamera)" name="UseDoF"/>

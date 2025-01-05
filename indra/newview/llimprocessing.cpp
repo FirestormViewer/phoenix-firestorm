@@ -764,8 +764,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
         case IM_NOTHING_SPECIAL:    // p2p IM
             // Don't show dialog, just do IM
             if (!gAgent.isGodlike()
-                && gAgent.getRegion() // <FS:Beq/> FIRE-34696 - BugSplat Crash: Firestorm_Releasex64!LLViewerRegion::isPrelude getRegion is null.
-                && gAgent.getRegion()->isPrelude()
+                && gAgent.inPrelude()
                 && to_id.isNull())
             {
                 // do nothing -- don't distract newbies in

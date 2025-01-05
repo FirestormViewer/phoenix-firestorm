@@ -214,7 +214,7 @@
         <check_box label="Zawsze rozwijaj zaawansowane informacje o podglądzie animacji" tool_tip="Domyślnie rozwiń zaawansowane informacje o animacji w oknie podglądu animacji" name="FSAnimationPreviewExpanded" />
         <check_box label="Włącz rozszerzanie funkcjonalności informacji o skryptach" tool_tip="Gdy zaznaczysz tą opcję, to podstawowa funkcjonalność informacji o skryptach zostanie rozszerzona za pomocą różnych szczegółów przydatnych dla budowniczych" name="FSScriptInfoExtended" />
         <check_box label="Sortuj miejsca dodatków w sekcjach menu &quot;Dołącz do&quot; alfabetycznie (wymaga restartu)" tool_tip="Jeśli ta opcja jest włączona, to lista miejsc dla doczepienia dodatków pojawiająca się w menusach &quot;Dołącz do&quot; będzie posortowana alfabetycznie" name="FSSortAttachmentSpotsAlphabetically" />
-        <check_box label="Nowy panel tekstur Firestorma w panelu budowania (wymaga restartu)" tool_tip="Gdy zaznaczysz tą opcję, to narzędzia do edycji tekstur będą korzystać z udoskonalonego panelu FS i pozwolą na edycję BlinnPhong" name="FSUseNewTexturePanel" />
+        <check_box label="Nowy panel tekstur [APP_NAME] w panelu budowania (wymaga restartu)" tool_tip="Gdy zaznaczysz tą opcję, to narzędzia do edycji tekstur będą korzystać z udoskonalonego panelu [APP_NAME] i pozwolą na edycję tekstur BlinnPhong oraz PBR." name="FSUseNewTexturePanel" />
     </panel>
     <panel label="Nowe pliki" name="UploadsTab">
         <text name="title">

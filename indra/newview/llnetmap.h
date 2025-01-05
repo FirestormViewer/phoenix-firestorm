@@ -224,8 +224,6 @@ private:
     void handleCam();
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
     void handleOverlayToggle(const LLSD& sdParam);
-    bool checkTextureType(const LLSD& sdParam) const;
-    void handleTextureType(const LLSD& sdParam) const;
     void setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& avName, const std::string& item_name);
     typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
     avatar_name_cache_connection_map_t mAvatarNameCacheConnections;

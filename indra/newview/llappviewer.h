@@ -253,6 +253,7 @@ protected:
     virtual void overrideDetectedHardware(); // <FS:Beq/> Override VRAM (and others in future?) consistently.
     virtual bool initSLURLHandler();
     virtual bool sendURLToOtherInstance(const std::string& url);
+    virtual void bugsplatAddStaticAttributes(const LLSD& info) {/*empty*/}; // <FS:Beq/> create a NOOP base impl
 
     virtual bool initParseCommandLine(LLCommandLineParser& clp)
         { return true; } // Allow platforms to specify the command line args.

@@ -50,7 +50,7 @@ LLPluginProcessParentOwner::~LLPluginProcessParentOwner()
 bool LLPluginProcessParent::sUseReadThread = false;
 apr_pollset_t *LLPluginProcessParent::sPollSet = NULL;
 bool LLPluginProcessParent::sPollsetNeedsRebuild = false;
-LLCoros::Mutex *LLPluginProcessParent::sInstancesMutex;
+LLCoros::Mutex *LLPluginProcessParent::sInstancesMutex = nullptr;
 LLPluginProcessParent::mapInstances_t LLPluginProcessParent::sInstances;
 LLThread *LLPluginProcessParent::sReadThread = NULL;
 
@@ -157,18 +157,14 @@ LLPluginProcessParent::ptr_t LLPluginProcessParent::create(LLPluginProcessParent
 /*static*/
 void LLPluginProcessParent::shutdown()
 {
-    // <FS:Beq> FIRE-34497 - lock maybe be null during shutdown due to fiber shutdown race condition
-    // LLCoros::LockType lock(*sInstancesMutex);
-    std::unique_ptr<LLCoros::LockType> lock;
-    if (sInstancesMutex)
+    if (!sInstancesMutex)
     {
-        lock = std::make_unique<LLCoros::LockType>(*sInstancesMutex);
+        // setup was not complete, skip shutdown
+        return;
     }
-    else
-    {
-        LL_WARNS("Plugin") << "shutdown called but no instances mutex available" << LL_ENDL;
-    }
-    // </FS:Beq>
+
+    LLCoros::LockType lock(*sInstancesMutex);
+
     mapInstances_t::iterator it;
     for (it = sInstances.begin(); it != sInstances.end(); ++it)
     {

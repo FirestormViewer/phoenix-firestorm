@@ -2238,6 +2238,12 @@ void LLFloaterPreference::refreshEnabledState()
         getChild<LLUICtrl>("do_not_disturb_response")->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_SENDIM));
     }
     // [/RLVa:KB]
+
+    // <FS:Ansariel> Expose max texture VRAM setting
+    auto max_texmem = getChild<LLSliderCtrl>("RenderMaxVRAMBudget");
+    max_texmem->setMinValue(MIN_VRAM_BUDGET);
+    max_texmem->setMaxValue((F32)gGLManager.mVRAM);
+    // </FS:Ansariel>
 }
 
 // <FS:Zi> Support preferences search SLURLs
@@ -2295,6 +2301,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 {
     LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
     LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+    LLSliderCtrl* cas_slider = getChild<LLSliderCtrl>("RenderSharpness");
 
     // disabled deferred SSAO
     if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
@@ -2309,6 +2316,20 @@ void LLFloaterPreference::disableUnavailableSettings()
         ctrl_shadows->setEnabled(false);
         ctrl_shadows->setValue(0);
     }
+
+    // Vintage mode
+    static LLCachedControl<bool> is_not_vintage(gSavedSettings, "RenderDisableVintageMode");
+    LLSliderCtrl* tonemapMix = getChild<LLSliderCtrl>("TonemapMix");
+    LLComboBox* tonemapSelect = getChild<LLComboBox>("TonemapType");
+    LLTextBox* tonemapLabel = getChild<LLTextBox>("TonemapTypeText");
+    LLSliderCtrl* exposureSlider = getChild<LLSliderCtrl>("RenderExposure");
+
+    tonemapSelect->setEnabled(is_not_vintage);
+    tonemapLabel->setEnabled(is_not_vintage);
+    tonemapMix->setEnabled(is_not_vintage);
+    exposureSlider->setEnabled(is_not_vintage);
+    cas_slider->setEnabled(is_not_vintage);
+
 }
 
 void LLFloaterPreference::refresh()
@@ -3849,17 +3870,24 @@ bool LLPanelPreferenceGraphics::postBuild()
     // </FS:Ansariel>
 
     // <FS:Ansariel> Advanced graphics preferences
-// Don't do this on Mac as their braindead GL versioning
-// sets this when 8x and 16x are indeed available
-//
-#if !LL_DARWIN
-    if (gGLManager.mIsIntel || gGLManager.mGLVersion < 3.f)
-    { //remove FSAA settings above "4x"
+    // Disable FSAA combo when shaders are not loaded
+    //
+    {
         LLComboBox* combo = getChild<LLComboBox>("fsaa");
-        combo->remove("8x");
-        combo->remove("16x");
+        if (!gFXAAProgram[0].isComplete())
+            combo->remove("FXAA");
+
+        if (!gSMAAEdgeDetectProgram[0].isComplete())
+            combo->remove("SMAA");
+
+        if (!gFXAAProgram[0].isComplete() && !gSMAAEdgeDetectProgram[0].isComplete())
+        {
+            combo->setEnabled(false);
+            getChild<LLComboBox>("fsaa quality")->setEnabled(false);
+        }
     }
 
+#if !LL_DARWIN
     LLCheckBoxCtrl *use_HiDPI = getChild<LLCheckBoxCtrl>("use HiDPI");
     use_HiDPI->setEnabled(false);
 #endif

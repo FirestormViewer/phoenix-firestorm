@@ -6,15 +6,6 @@
 	<string name="upload_fee_string">
 		Opłata: [FEE]L$
 	</string>
-	<string name="material_selection_title">
-		Wybór materiału
-	</string>
-	<string name="material_selection_text">
-		Wybierz materiał:
-	</string>
-	<string name="material_batch_import_text">
-		--- Prześlij zbiorczo ---
-	</string>
 	<string name="material_override_title">
 		Edycja materiału
 	</string>

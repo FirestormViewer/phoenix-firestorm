@@ -12,10 +12,19 @@
 	<text name="PostProcessText">
 		Низкое
 	</text>
+	<slider label="Макс. источн.света рядом:" label_width="185" name="MaxLights" width="336" />
 	<check_box label="Включить VSync" name="vsync" tool_tip="Синхронизирует частоту кадров с частотой обновления монитора, что обеспечивает плавную работу."/>
 	<text name="AvatarText">
 		Аватар
 	</text>
+	<text name="AvatarComplexityModeLabel" width="140">
+		Отображение аватара:
+	</text>
+	<combo_box name="AvatarComplexityMode" left_delta="140">
+		<combo_box.item label="Огр. по сложности" name="0"/>
+		<combo_box.item label="Всегда показ друзей" name="1"/>
+		<combo_box.item label="Только показ друзей" name="2"/>
+	</combo_box>
 	<slider label="Максимальная сложность:" name="IndirectMaxComplexity" tool_tip="Указывает расстояние, начиная с которого визуально сложный аватар рисуется как желейная фигура"/>
 	<slider label="Макс. кол-во объемных:" name="IndirectMaxNonImpostors"/>
 	<slider label="Детализация:" name="AvatarMeshDetail"/>
@@ -37,6 +46,15 @@
 	</text>
 	<combo_box label="Сглаживание" name="fsaa">
 		<combo_box.item label="Выключено" name="FSAADisabled"/>
+	</combo_box>
+	<text name="antialiasing quality label" width="135">
+		Качество сглаживания:
+	</text>
+	<combo_box label="Сглаживание" name="fsaa quality" left_pad="25">
+		<combo_box.item label="Низкое" name="Low"/>
+		<combo_box.item label="Среднее" name="Medium"/>
+		<combo_box.item label="Высокое" name="High"/>
+		<combo_box.item label="Ультра" name="Ultra"/>
 	</combo_box>
 	<text name="MeshText">
 		Меш
@@ -70,6 +88,7 @@
 	</text>
 	<check_box label="Экранное пространство Окружающая окклюзия" name="UseSSAO"/>
 	<check_box label="Глубина резкости" name="UseDoF"/>
+	<check_box label="HDR и Эмиссионные" name="VintageMode"/>
 	<text name="RenderShadowDetailText">
 		Тени:
 	</text>
@@ -110,6 +129,15 @@
 		<combo_box.item label="Каждый 4-й кадр" name="3"/>
 	</combo_box>
 	<!-- End of mirror settings -->
+	<slider label="Заострение:" name="RenderSharpness"/>
+	<text name="TonemapTypeText">
+		Карты тонов:
+	</text>
+	<combo_box name="TonemapType">
+		<combo_box.item label="Khronos Neutral" name="0"/>
+		<combo_box.item label="ACES" name="1"/>
+	</combo_box>
+	<slider label="Смесь карт тонов:" tool_tip="Комбинируйте цвета с линейной и тональной картировкой" name="TonemapMix"/>
 	<button label="Вернуть рекомендуемые настройки" name="Defaults"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>

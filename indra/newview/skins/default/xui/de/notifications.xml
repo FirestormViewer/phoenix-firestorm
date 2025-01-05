@@ -3632,12 +3632,10 @@ Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice
 
 Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Ein oder mehrere Ihrer Voice-Morph-Abos laufen in weniger als [INTERVAL] Tagen ab. 
+	<notification name="VoiceEffectsWillExpire">Ein oder mehrere Ihrer Voice-Morph-Abos laufen in weniger als [INTERVAL] Tagen ab. 
 [[URL] Klicken Sie hier], um Ihr Abo zu erneuern. 
 
-Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.
-	</notification>
+Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.</notification>
 	<notification name="VoiceEffectsNew">
 		Neue Voice-Morph-Effekte sind erhältlich!
 	</notification>
@@ -4177,11 +4175,6 @@ Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 
 Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT_SITE].
-	</global>
-	<global name="UnsupportedIntelDriver">
-		Der installierte Intel-Grafikkartentreiber für [GPUNAME], Version [VERSION], ist erheblich veraltet und dafür bekannt, eine Vielzahl von Programmabstürzen zu verursachen. Es wird dringend geraten, auf eine aktuelle Treiberversion zu aktualisieren.
-
-Möchten Sie die Treiber-Webseite von Intel besuchen?
 	</global>
 	<global name="UnsupportedCPUAmount">
 		796
@@ -5129,6 +5122,14 @@ Möchten Sie fortfahren?
 	<notification name="NoSupportGLTFShader">
 		GLTF-Szenen werden auf Ihrer Hardware momentan noch nicht unterstützt.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="TextureDiscardBackgrounded">
+		Um die Systemleistung zu verbessern hat [APP_NAME] die Nutzung von Textur-Speicher nach [DELAY] Sekunden im Hintergrund reduziert. Es kann einen Moment dauern, bis die Textur-Qualität wieder den normalen Standard erreicht.
+		<usetemplate ignoretext="Über Nutzung von Textur-Speicher im Hintergrund hinweisen" name="okcancelignore" yestext="OK" notext="Deaktivieren"/>
+	</notification>
+	<notification name="TextureDiscardMinimized">
+		Um die Systemleistung zu verbessern hat [APP_NAME] die Nutzung von Textur-Speicher nach [DELAY] Sekunden im minimierten Zustand reduziert. Es kann einen Moment dauern, bis die Textur-Qualität wieder den normalen Standard erreicht.
+		<usetemplate ignoretext="Über Nutzung von Textur-Speicher im minimierten Zustand hinweisen" name="okcancelignore" yestext="OK" notext="Deaktivieren"/>
 	</notification>
 
 	<notification name="NoValidEnvSettingFound">

@@ -3442,11 +3442,11 @@ Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta d
 
 Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta di manipolazioni vocali.
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Almeno una delle tue manipolazioni vocali scadrà tra meno di [INTERVAL] giorni. 
-[[URL] Fai clic qui] per rinnovare l&apos;abbonamento. 
+	<notification name="VoiceEffectsWillExpire">Almeno una delle tue manipolazioni vocali scadrà tra meno di [INTERVAL] giorni. 
+[[URL] Fai clic qui] per rinnovare l'abbonamento. 
 
-Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta di manipolazioni vocali.
+Se sei un membro Premium, [[PREMIUM_URL] fai clic qui] per ricevere in regalo la manipolazione vocale.
+		<usetemplate ignoretext="Avvisami quando scade la trasformazione vocale" name="okignore" />
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Sono disponibili nuove manipolazioni vocali.

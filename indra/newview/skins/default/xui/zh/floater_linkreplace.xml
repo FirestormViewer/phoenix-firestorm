@@ -33,6 +33,6 @@
 	<text name="status_text">
 		準備就緒...
 	</text>
-	<button name="btn_refresh" label="重新整理" />
+	<button name="btn_refresh" label="更新" />
 	<button name="btn_start" label="開始" />
 </floater>

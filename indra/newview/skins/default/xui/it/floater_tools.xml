@@ -498,6 +498,7 @@ Bas ↔ Min
 			<button label="Permessi" name="button permissions"/>
 			<button label="Ricarica" name="button refresh"/>
 			<button label="Ripristina script" name="btn_reset_scripts"/>
+			<filter_editor label="Filtro..." name="contents_filter" />
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

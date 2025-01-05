@@ -493,6 +493,7 @@ Nis ↔ Najniż
 			<button label="Prawa" name="button permissions"/>
 			<button label="Odśwież" name="button refresh"/>
 			<button label="Resetuj skrypty" name="btn_reset_scripts"/>
+			<filter_editor label="Filtruj..." name="contents_filter" />
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

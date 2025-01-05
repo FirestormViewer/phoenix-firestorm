@@ -3487,12 +3487,6 @@ Abunəliyi yeniləmək üçün [[URL] buraya basın].
 
 Əgər siz premium hesab sahibisinizsə, zəhmət olmasa animasiyalı səs dəyişikliyinin hüququnu almaq üçün [[PREMIUM_URL] bura basın].
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Animasiyalı səs dəyişdiricisinin bir və ya daha çox növlərinin müddəti [INTERVAL] gün və ya daha az müddətdə başa çatacaq.
-Abunəliyi yeniləmək üçün [[URL] buraya basın].
-
-Əgər siz premium hesab sahibisinizsə, zəhmət olmasa animasiyalı səs dəyişikliyinin hüququnu almaq üçün [[PREMIUM_URL] bura basın].
-	</notification>
 	<notification name="VoiceEffectsNew">
 		Səs dəyişikliklərinin yeni növləri var!
 	</notification>
@@ -3953,11 +3947,6 @@ Davam edilsin?
 		Seçilmiş obyekt navigasiya şəbəkəsinə təsir edir. Onu Çevik Yola dəyişdirmək onu navigasiya şəbəkəsindən siləcək.
 		<usetemplate ignoretext="Seçilmiş obyekt navigasiya şəbəkəsinə təsir edir. Onu Çevik Yola dəyişdirmək onu navigasiya şəbəkəsindən siləcək." name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
-	<global name="UnsupportedIntelDriver">
-[GPUNAME] üçün quraşdırılmış Intel qrafik drayveri, versiya [VERSION] əhəmiyyətli dərəcədə köhnəlib və proqramın həddindən artıq çökməsinə səbəb olduğu bilinir. Sizə cari Intel drayverini yeniləməyiniz tövsiyə olunur.
-
-Intel drayver veb-saytını yoxlamaq istəyirsiniz?
-	</global>
 	<global name="UnsupportedGPU">
 		- Qrafik kartınız minimum tələblərə cavab vermir.
 	</global>

@@ -6474,6 +6474,15 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="ExperiencePermissionShort17">
 		Environnement
 	</string>
+	<string name="material_selection_title">
+		Sélection des matériaux
+	</string>
+	<string name="material_selection_text">
+		Sélectionner un matériau l:
+	</string>
+	<string name="material_batch_import_text">
+		--- Les charger tous ---
+	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Les conversations ne sont pas archivées. Pour commencer à tenir un journal, choisissez Enregistrer : Journal seul ou Enregistrer : Journal et transcriptions sous Préférences &gt; Chat.
 	</string>

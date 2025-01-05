@@ -4,6 +4,7 @@
 	<!-- Locale Information -->
 	<string name="MicrosoftLocale">chinese</string>
 	<string name="MacLocale">zh_CN.UTF-8</string>
+	<string name="macOSLocale">zh_CN.UTF-8</string>
 	<string name="DarwinLocale">zh_CN.UTF-8</string>
 	<string name="LinuxLocale">zh_CN.UTF-8</string>
 	<!--
@@ -35,7 +36,6 @@
 	<string name="TimeWeek">wkday,datetime,slt</string>
 	<string name="TimeAMPM">ampm,datetime,slt</string>
 	<string name="TimeHour12">hour12,datetime,slt</string>
-	<string name="TimeSec">second,datetime,slt</string>
 	<string name="TimeTimezone">timezone,datetime,slt</string>
 	<string name="LTimeMthNum">mthnum,datetime,local</string>
 	<string name="LTimeWeek">wkday,datetime,local</string>

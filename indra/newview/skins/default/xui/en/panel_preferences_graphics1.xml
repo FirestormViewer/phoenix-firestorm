@@ -754,6 +754,7 @@
 
         <slider
          control_name="RenderExposure"
+         disabled_control="RenderDisableVintageMode"
          decimal_digits="1"
          follows="left|top"
          height="15"
@@ -990,17 +991,29 @@
          height="12"
          layout="topleft"
          left="10"
-         name="Antialiasing:"
+         name="antialiasing label"
          top_pad="10"
          width="220"
-          tool_tip="Changes to this setting may require a restart on some hardware.">
+         tool_tip="Changes to this setting may require a restart on some hardware.">
           Antialiasing (restart recommended):
+        </text>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="300"
+         name="antialiasing quality label"
+         top_delta="0"
+         width="220"
+         tool_tip="Changes to this setting may require a restart on some hardware.">
+          Antialiasing Quality:
         </text>
         <combo_box
          control_name="RenderFSAASamples"
          height="22"
          initial_value="false"
-         label="Antialiasing"
          follows="left|top"
          layout="topleft"
          left="10"
@@ -1014,8 +1027,67 @@
             <combo_box.item
              label="FXAA"
              name="FXAA"
+             value="1" />
+            <combo_box.item
+             label="SMAA"
+             name="SMAA"
              value="2" />
         </combo_box>
+        <combo_box
+         control_name="RenderFSAASamples"
+         height="22"
+         initial_value="false"
+         follows="left|top"
+         layout="topleft"
+         left="300"
+         name="fsaa quality"
+         top_delta="5"
+         width="130">
+            <combo_box.item
+             label="Low"
+             name="Low"
+             value="0" />
+            <combo_box.item
+             label="Medium"
+             name="Medium"
+             value="1" />
+            <combo_box.item
+             label="High"
+             name="High"
+             value="2" />
+            <combo_box.item
+             label="Ultra"
+             name="Ultra"
+             value="2" />
+        </combo_box>
+
+        <check_box
+          control_name="FSLimitTextureVRAMUsage"
+          height="16"
+          label="Limit VRAM texture usage (MB)"
+          layout="topleft"
+          left="10"
+          top_pad="15"
+          name="FSLimitTextureVRAMUsage"
+          tool_tip="Limits the amount of VRAM used for textures. Overall usage may still be higher because other elements also use VRAM."
+          width="275" 
+        />
+        <slider
+          control_name="RenderMaxVRAMBudget"
+          enabled_control="FSLimitTextureVRAMUsage"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="16"
+          layout="topleft"
+          left_pad="5"
+          min_val="0"
+          max_val="4096"
+          name="RenderMaxVRAMBudget"
+          tool_tip="The maximum amount of VRAM in Megabytes used for textures."
+          top_delta="0"
+          width="200"
+        />
 
         <text
          type="string"
@@ -1063,6 +1135,101 @@ If you do not understand the distinction then leave this control alone."
           top_pad="5"
           width="475" 
         />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="automatic_texture_downscale_settings"
+         top_pad="10"
+         width="308">
+            Automatic Texture Downscaling:
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardBackgroundedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when not the active window."
+         top_pad="10"
+         width="275">
+            In Background (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardBackgroundedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardBackgroundedTime"
+          tool_tip="Downscales textures after selected amount of seconds when not the active window."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardBackgroundedTime_seconds"
+         top_delta="5"
+         width="100">
+            Second(s)
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardMinimizedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when minimized."
+         top_pad="10"
+         width="275">
+            Minimized (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardMinimizedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardMinimizedTime"
+          tool_tip="Downscales textures after selected amount of seconds when minimized."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardMinimizedTime_seconds"
+         top_delta="5"
+         width="100">
+            Second(s)
+        </text>
     </panel>
 
 <!--Rendering-->
@@ -1083,7 +1250,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="World Updating"
-         top_pad="10"
+         top_pad="5"
          width="308">
             World Updating:
         </text>
@@ -1148,7 +1315,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="Texture Rendering"
-         top_pad="10"
+         top_pad="4"
          width="308">
             Texture Rendering:
         </text>
@@ -1167,9 +1334,10 @@ If you do not understand the distinction then leave this control alone."
         <combo_box
          control_name="FSRestrictMaxTexturePixels"
          enabled_control="FSRestrictMaxTextureSize"
-         height="23"
+         height="20"
          layout="topleft"
          left_pad="2"
+         top_delta="-2"
          name="FSRestrictMaxTexturePixels"
          width="100">
           <combo_box.item
@@ -1197,7 +1365,7 @@ If you do not understand the distinction then leave this control alone."
          height="12"
          layout="topleft"
          left_pad="10"
-         top_delta="5"
+         top_delta="2"
          width="150">
             (requires restart)
         </text>
@@ -1206,23 +1374,23 @@ If you do not understand the distinction then leave this control alone."
         <text
          type="string"
          length="1"
-         top_pad="18"
+         top_pad="10"
          follows="top|left"
          height="18"
          width="150"
          word_wrap="true"
          layout="topleft"
-         left="10"
+         left="22"
          name="TextureDetailLabel">
             Max Texture Quality Level:
         </text>
         <combo_box
          control_name="TextureDiscardLevel"
-         height="23"
+         height="20"
          layout="topleft"
          follows="left|top"
          left_pad="5"
-         top_pad="-23"
+         top_pad="-20"
          name="TextureDetail"
          width="150"
          tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
@@ -1251,12 +1419,25 @@ If you do not understand the distinction then leave this control alone."
          height="12"
          layout="topleft"
          left="10"
-         name="Alpha Mask Rendering"
-         top_pad="10"
+         name="Miscellaneous Rendering"
+         top_pad="4"
          width="308">
-            Alpha Mask Rendering:
+            Miscellaneous Rendering:
         </text>
-
+        <check_box
+         control_name="RenderDisableVintageMode"
+         height="16"
+         initial_value="false"
+         label="HDR and Emissive"
+         tool_tip="Enables additional rendering pipeline features on newer machines such as HDR and emissive textures on PBR content."
+         layout="topleft"
+         left_delta="10"
+         name="VintageMode"
+         top_pad="6"
+         width="256">
+         <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
+        </check_box>
         <check_box
          control_name="RenderAutoMaskAlphaDeferred"
          height="16"
@@ -1264,24 +1445,10 @@ If you do not understand the distinction then leave this control alone."
          label="Render alpha masks"
          tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly"
          layout="topleft"
-         left_delta="10"
+         left_delta="0"
          name="RenderAutoMaskAlphaDeferred"
-         top_pad="6"
+         top_pad="2"
          width="256"/>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left="10"
-         name="Miscellaneous Rendering"
-         top_pad="10"
-         width="308">
-            Miscellaneous Rendering:
-        </text>
-
         <check_box
          control_name="RenderGlow"
          height="16"
@@ -1289,9 +1456,9 @@ If you do not understand the distinction then leave this control alone."
          label="Render glow"
          tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
          layout="topleft"
-         left_delta="10"
+         left_delta="0"
          name="RenderGlow"
-         top_pad="6"
+         top_pad="2"
          width="256"/>
 		<slider
 		enabled_control="RenderGlow"
@@ -1409,7 +1576,7 @@ If you do not understand the distinction then leave this control alone."
          min_val="1.0"
          max_val="4.0"
          name="ShadowResolution"
-         top_pad="3"
+         top_pad="1"
          width="408" />
         <slider
          control_name="RenderTerrainScale"
@@ -1426,8 +1593,76 @@ If you do not understand the distinction then leave this control alone."
          min_val="1"
          name="RenderTerrainScale"
          tool_tip="Determines scale of terrain textures - lower is more compressed (requires viewer restart)"
-         top_pad="3"
+         top_pad="1"
          width="405" />
+        <!-- Sharpening Settings -->
+        <slider
+         control_name="RenderCASSharpness"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="Sharpening:"
+         label_width="300"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="RenderSharpness"
+         show_text="true"
+         top_pad="0"
+         width="405">
+        </slider>
+        <!-- End of Sharpening Settings-->
+        <!-- Tone Mapping Settings -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="TonemapTypeText"
+         top_pad="8"
+         width="150">
+            Tone Mapper:
+        </text>
+        <combo_box
+         control_name="RenderTonemapType"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-2"
+         name="TonemapType"
+         width="150">
+         <combo_box.item
+          label="Khronos Neutral"
+          name="0"
+          value="0"/>
+         <combo_box.item
+          label="ACES"
+          name="1"
+          value="1"/>
+        </combo_box>
+        <slider
+         control_name="RenderTonemapMix"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         label="Tone Mapping Mix:"
+         tool_tip="Mix between linear and tone mapped colors"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="TonemapMix"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <!-- End of Tone Mapping Settings-->
     </panel>
 
 <!--Depth of Field-->

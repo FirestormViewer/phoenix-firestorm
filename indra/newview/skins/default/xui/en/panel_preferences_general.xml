@@ -60,12 +60,12 @@
          value="es" />
         <combo_box.item
          enabled="true"
-         label="Français (French) - Beta"
+         label="Français (French)"
          name="French"
          value="fr" />
         <combo_box.item
          enabled="true"
-         label="Italiano (Italian) - Beta"
+         label="Italiano (Italian)"
          name="Italian"
          value="it" />        
         <combo_box.item
@@ -82,7 +82,7 @@
         -->
         <combo_box.item
          enabled="true"
-         label="Русский (Russian) - Beta"
+         label="Русский (Russian)"
          name="Russian"
          value="ru" />
         <!--
@@ -99,7 +99,7 @@
          value="ja" />
         <combo_box.item
          enabled="true"
-         label="正體中文 (Traditional Chinese) - Beta"
+         label="正體中文 (Traditional Chinese)"
          name="Traditional Chinese"
          value="zh" />
     </combo_box>

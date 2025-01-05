@@ -180,7 +180,7 @@ private:
 
 public:
     template<bool SHARED>
-    class DataLock : LLSharedMutexLockTemplate<SHARED>
+    class DataLock : public LLSharedMutexLockTemplate<SHARED>
     {
     public:
         DataLock(const LLImageBase* image)

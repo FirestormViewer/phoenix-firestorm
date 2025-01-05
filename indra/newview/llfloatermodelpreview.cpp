@@ -874,19 +874,6 @@ void LLFloaterModelPreview::draw3dPreview()
 
     gGL.getTexUnit(0)->bind(mModelPreview);
 
-    // <FS:Ansariel> Remove QUADS rendering mode
-    //gGL.begin( LLRender::QUADS );
-    //{
-    //  gGL.texCoord2f(0.f, 1.f);
-    //  gGL.vertex2i(mPreviewRect.mLeft+1, mPreviewRect.mTop-1);
-    //  gGL.texCoord2f(0.f, 0.f);
-    //  gGL.vertex2i(mPreviewRect.mLeft+1, mPreviewRect.mBottom+1);
-    //  gGL.texCoord2f(1.f, 0.f);
-    //  gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom+1);
-    //  gGL.texCoord2f(1.f, 1.f);
-    //  gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mTop-1);
-    //}
-    //gGL.end();
     gGL.begin(LLRender::TRIANGLES);
     {
         gGL.texCoord2f(0.f, 1.f);
@@ -904,7 +891,6 @@ void LLFloaterModelPreview::draw3dPreview()
         gGL.vertex2i(mPreviewRect.mLeft + 1, mPreviewRect.mTop - 1);
     }
     gGL.end();
-    // </FS:Ansariel>
 
     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 }

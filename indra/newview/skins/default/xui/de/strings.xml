@@ -6505,6 +6505,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Material Texture Name Header">
 		Vorhandene Texturen im Material:
 	</string>
+	<string name="material_selection_title">
+		Material-Auswahl
+	</string>
+	<string name="material_selection_text">
+		Material auswählen:
+	</string>
+	<string name="material_batch_import_text">
+		--- Alle hochladen ---
+	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Unterhaltungen werden nicht protokolliert. Um ein Protokoll zu starten, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Chat“.
 	</string>

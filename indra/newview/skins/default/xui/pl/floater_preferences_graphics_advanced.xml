@@ -44,6 +44,15 @@
 	<combo_box label="Antyaliasing" name="fsaa">
 		<combo_box.item label="Wyłączony" name="FSAADisabled" />
 	</combo_box>
+	<text name="antialiasing quality label">
+		Jakość antyaliasingu:
+	</text>
+	<combo_box name="fsaa quality">
+		<combo_box.item label="Niska" name="Low" />
+		<combo_box.item label="Średnia" name="Medium" />
+		<combo_box.item label="Wysoka" name="High" />
+		<combo_box.item label="Ultra" name="Ultra" />
+	</combo_box>
 	<text name="MeshText">
 		Mesz
 	</text>
@@ -76,6 +85,7 @@
 	</text>
 	<check_box label="Okluzja otoczenia (SSAO)" name="UseSSAO" />
 	<check_box label="Włącz głębię ostrości" name="UseDoF" />
+	<check_box label="HDR i emisyjność" name="VintageMode" />
 	<text name="RenderShadowDetailText">
 		Cienie:
 	</text>
@@ -115,6 +125,11 @@
 		<combo_box.item label="Średnio" name="3" />
 		<combo_box.item label="Szybko" name="1" />
 	</combo_box>
+	<slider label="Wyostrzanie:" name="RenderSharpness" />
+	<text name="TonemapTypeText">
+		Tone mapping:
+	</text>
+	<slider label="Miks tone mappingu:" tool_tip="Łączenie kolorów liniowych i tonalnie odwzorowanych (mappingowanych)" name="TonemapMix" />
 	<button label="Zresetuj wartości ustawień grafiki" name="Defaults" />
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel" />
 </floater>

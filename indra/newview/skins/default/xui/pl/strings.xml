@@ -5981,6 +5981,15 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Material Texture Name Header">
 		Tekstury przedstawiają materiał:
 	</string>
+	<string name="material_selection_title">
+		Wybór materiału
+	</string>
+	<string name="material_selection_text">
+		Wybierz materiał:
+	</string>
+	<string name="material_batch_import_text">
+		--- Prześlij zbiorczo ---
+	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
 	</string>

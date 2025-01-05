@@ -54,8 +54,8 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_LL_ICON             ICON                    "firestorm_icon.ico"
-IDI_LCD_LL_ICON         ICON                    "firestorm_icon.ico"
+IDI_LL_ICON             ICON                    "ayanestorm_icon.ico"
+IDI_LCD_LL_ICON         ICON                    "ayanestorm_icon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -163,7 +163,7 @@ BEGIN
             VALUE "InternalName", "AyaneStorm"
             VALUE "LegalCopyright", "Copyright \251 2010-2024, The Phoenix Firestorm Project, Inc."
             VALUE "OriginalFilename", "FirestormOS-AyaneStorm.exe"
-            VALUE "ProductName", "AyaneSTorm"
+            VALUE "ProductName", "AyaneStorm"
             VALUE "ProductVersion", "${VIEWER_VERSION_MAJOR}.${VIEWER_VERSION_MINOR}.${VIEWER_VERSION_PATCH}.${VIEWER_VERSION_REVISION}"
         END
     END

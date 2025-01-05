@@ -5,6 +5,7 @@
 	<!-- Locale Information -->
 	<string name="MicrosoftLocale">english</string>
 	<string name="MacLocale">C</string>
+	<string name="macOSLocale">C</string>
 	<string name="DarwinLocale">C</string>
 	<string name="LinuxLocale">C</string>
   
@@ -44,7 +45,6 @@
 	<string name="TimeWeek">wkday,datetime,slt</string>
 	<string name="TimeAMPM">ampm,datetime,slt</string>
 	<string name="TimeHour12">hour12,datetime,slt</string>	
-	<string name="TimeSec">second,datetime,slt</string>
 	<string name="TimeTimezone">timezone,datetime,slt</string>
 
 	<string name="LTimeMthNum">mthnum,datetime,local</string>

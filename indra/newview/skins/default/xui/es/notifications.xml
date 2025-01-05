@@ -3389,12 +3389,10 @@ Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio
 
 Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio de transformación de voz.
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Una o más de tus transformaciones de voz caducarán en menos de [INTERVAL] días. 
+	<notification name="VoiceEffectsWillExpire">Una o más de tus transformaciones de voz caducarán en menos de [INTERVAL] días. 
 [[URL] Pulsa aquí] para renovar la suscripción 
 
-Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio de transformación de voz.
-	</notification>
+Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio de transformación de voz.</notification>
 	<notification name="VoiceEffectsNew">
 		Están disponibles nuevos filtros de voz.
 	</notification>

@@ -3659,11 +3659,10 @@ M キーを押して変更します。
 
 プレミアム会員の方は、 [[PREMIUM_URL] click here] をクリックしてボイスモーフィング特典をお受け取りください。
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		ボイスモーフィング効果の1つまたは複数の有効期限が [INTERVAL] 日以内に終了します。
-期限を延長・更新するには [[URL] Click here] をクリックしてください。
+	<notification name="VoiceEffectsWillExpire">ボイスモーフィング効果の１つ、または複数の有効期限が[INTERVAL]日以内に終了します。
+期限を延長・更新するには[[URL] ここ]をクリックしてください。
 
-プレミアム会員の方は、 [[PREMIUM_URL] click here] をクリックしてボイスモーフィング特典をお受け取りください。
+プレミアム会員の方は、[[PREMIUM_URL] ここ]をクリックしてボイスモーフィング特典をお受け取りください。
 	</notification>
 	<notification name="VoiceEffectsNew">
 		新しいボイスモーフィング効果が登場！
@@ -4153,12 +4152,6 @@ https://wiki.firestormviewer.org/fs_voice
 		[APP_NAME] に必要なハードウェアがないようです。 [APP_NAME] にはマルチテクスチャをサポートする OpenGL グラフィックカードが必要です。 お使いのグラフィックカードの最新ドライバがインストールされているかどうか、オペレーティングシステムのサービスパックとパッチが入っているかをご確認ください。
 
 この問題が何度も起きる場合は、[SUPPORT_SITE] をご確認ください。
-	</global>
-	
-	<global name="UnsupportedIntelDriver">
-インストールされている [GPUNAME] のインテル製グラフィックドライバのバージョン [VERSION] は極めて古いものとなっており、プログラムのクラッシュを高い頻度で引き起こすことが知られています。最新のインテル製ドライバにアップグレードすることを強くお勧めします。
-
-インテルドライバのウェブサイトを確認しますか？
 	</global>
 	
 	<global name="UnsupportedCPUAmount">

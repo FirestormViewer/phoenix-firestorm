@@ -80,15 +80,17 @@ LLFloaterSettingsDebug::~LLFloaterSettingsDebug()
 
 void LLFloaterSettingsDebug::onUpdateFilter()
 {
-    std::string searchTerm = mSearchSettingsInput->getValue();
+    static LLCachedControl<bool> hide_default(gSavedSettings, "DebugSettingsHideDefault", false);
+    static bool previous_hide_default{hide_default};
 
+    std::string searchTerm = mSearchSettingsInput->getValue();
     // make sure not to reselect the first item in the list on focus restore
-    if (searchTerm == mOldSearchTerm)
+    if (searchTerm == mOldSearchTerm && previous_hide_default == hide_default)
     {
         return;
     }
     mOldSearchTerm = searchTerm;
-
+    previous_hide_default = hide_default;
     mSettingsScrollList->deleteAllItems();
 
     settings_map_t::iterator it;
@@ -125,7 +127,25 @@ void LLFloaterSettingsDebug::onUpdateFilter()
         if (addItem)
         {
             LLSD item;
-            item["columns"][0]["value"] = it->second->getName();
+            // <FS:Beq> indicate non-default settings in debug view
+            // item["columns"][0]["value"] = it->second->getName();
+            // Skip default settings if hide_default is enabled
+            const auto& setting_name = it->second->getName();
+            bool current_setting_is_default = it->second->isDefault();
+
+            if (hide_default && current_setting_is_default)
+            {
+                continue;
+            }
+
+            item["columns"][1]["column"] = "setting";
+            item["columns"][1]["value"] = setting_name;
+            if (!current_setting_is_default)
+            {
+                item["columns"][0]["column"] = "changed_setting";
+                item["columns"][0]["value"] = LLSD::String( "*"); // Indicate non-default settings
+            }
+            // </FS:Beq>
             mSettingsScrollList->addElement(item, ADD_BOTTOM, it->second);
         }
     }
@@ -134,7 +154,7 @@ void LLFloaterSettingsDebug::onUpdateFilter()
     // but only if actually a search term was given
     if (mSettingsScrollList->getItemCount() && !searchTerm.empty())
     {
-        mSettingsScrollList->sortByColumnIndex(0, true);
+        mSettingsScrollList->sortByColumnIndex(1, true);
         mSettingsScrollList->selectFirstItem();
     }
 
@@ -186,8 +206,10 @@ bool LLFloaterSettingsDebug::postBuild()
         gSavedPerAccountSettings.applyToAll(&func);
     }
 
+    gSavedSettings.getControl("DebugSettingsHideDefault")->getCommitSignal()->connect(boost::bind(&LLFloaterSettingsDebug::onUpdateFilter, this)); // <FS:Beq/> bind the show changed settings toggle
+
     onUpdateFilter();
-    mSettingsScrollList->sortByColumnIndex(0,true);
+    mSettingsScrollList->sortByColumnIndex(1,true); // <FS:Beq/> Sort by name (column 1) 
 
     LLNotificationsUtil::add("DebugSettingsWarning");
 
