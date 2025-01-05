@@ -1366,7 +1366,12 @@ bool LLViewerTextureList::createUploadFile(LLPointer<LLImageRaw> raw_image,
         raw_image->getHeight(),
         raw_image->getComponents());
 
+// <AS:Chanayane> Lossless OpenJPEG uploads
+    /*
+    LLPointer<LLImageJ2C> compressedImage = LLViewerTextureList::convertToUploadFile(scale_image, max_image_dimentions);
+    */
     LLPointer<LLImageJ2C> compressedImage = LLViewerTextureList::convertToUploadFile(scale_image, max_image_dimentions, false, true);
+// <AS:Chanayane>
 
     if (compressedImage->getWidth() < min_image_dimentions || compressedImage->getHeight() < min_image_dimentions)
     {
@@ -1439,10 +1444,12 @@ bool LLViewerTextureList::createUploadFile(const std::string& filename,
         return false;
     }
     // Convert to j2c (JPEG2000) and save the file locally
-    // <AS:Chanayane> Lossless OpenJPEG uploads
-    // LLPointer<LLImageJ2C> compressedImage = convertToUploadFile(raw_image, max_image_dimentions, force_square);
+// <AS:Chanayane> Lossless OpenJPEG uploads
+    /*
+    LLPointer<LLImageJ2C> compressedImage = convertToUploadFile(raw_image, max_image_dimentions, force_square);
+    */
     LLPointer<LLImageJ2C> compressedImage = convertToUploadFile(raw_image, max_image_dimentions, force_square, true);
-    // </AS:Chanayane>
+// </AS:Chanayane>
     if (compressedImage.isNull())
     {
         image->setLastError("Couldn't convert the image to jpeg2000.");

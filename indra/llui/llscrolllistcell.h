@@ -297,7 +297,7 @@ class LLScrollListLineEditor : public LLScrollListCell
 public:
     LLScrollListLineEditor( const LLScrollListCell::Params&);
     /*virtual*/ ~LLScrollListLineEditor();
-    void    draw(const LLColor4& color, const LLColor4& highlight_color) const override;
+    void    draw(const LLColor4& color, const LLColor4& highlight_color);
     S32     getHeight() const override { return 0; }
     const LLSD  getValue() const override { return mLineEditor->getValue(); }
     void    setValue(const LLSD& value) override { mLineEditor->setValue(value); }
@@ -323,7 +323,7 @@ class LLScrollListMultiSlider : public LLScrollListCell
 public:
     LLScrollListMultiSlider(const LLScrollListCell::Params& p);
     /*virtual*/ ~LLScrollListMultiSlider();
-    /*virtual*/ void    draw(const LLColor4& color, const LLColor4& highlight_color) const;
+    /*virtual*/ void    draw(const LLColor4& color, const LLColor4& highlight_color);
     /*virtual*/ const LLSD      getValue() const;
     /*virtual*/ void    setValue(const LLSD& value);
 

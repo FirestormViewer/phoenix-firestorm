@@ -737,7 +737,7 @@ LLScrollListLineEditor::~LLScrollListLineEditor()
     mLineEditor = NULL;
 }
 
-void LLScrollListLineEditor::draw(const LLColor4& color, const LLColor4& highlight_color) const
+void LLScrollListLineEditor::draw(const LLColor4& color, const LLColor4& highlight_color)
 {
     mLineEditor->draw();
 }
@@ -827,7 +827,7 @@ void LLScrollListMultiSlider::setWidth(S32 width)
 }
 
 
-void LLScrollListMultiSlider::draw(const LLColor4& color, const LLColor4& highlight_color)   const
+void LLScrollListMultiSlider::draw(const LLColor4& color, const LLColor4& highlight_color)
 {
     mMultiSlider->draw();
 }
