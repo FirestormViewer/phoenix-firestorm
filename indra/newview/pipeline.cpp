@@ -8039,7 +8039,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
             F32 blur_constant = focal_length * focal_length / (fnumber * (subject_distance - focal_length));
             blur_constant /= 1000.f; // convert to meters for shader
             F32 magnification = focal_length / (subject_distance - focal_length);
-
+            // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+            F32 screen_to_target_scale_factor = (F32)gViewerWindow->getWindowHeightRaw()/dst->getHeight();
+            F32 adj_COF = CameraMaxCoF / screen_to_target_scale_factor;
+            // </FS:Beq>
             { // build diffuse+bloom+CoF
                 mRT->deferredLight.bindTarget();
 
@@ -8053,9 +8056,16 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredCoFProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, (GLfloat)dst->getWidth(), (GLfloat)dst->getHeight());
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_FOCAL_DISTANCE, -subject_distance / 1000.f);
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_BLUR_CONSTANT, blur_constant);
-                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_TAN_PIXEL_ANGLE, tanf(1.f / LLDrawable::sCurPixelAngle));
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_TAN_PIXEL_ANGLE, tanf(1.f / LLDrawable::sCurPixelAngle));
+                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_TAN_PIXEL_ANGLE, tanf(1.f / LLDrawable::sCurPixelAngle) * screen_to_target_scale_factor);
+                // </FS:Beq>
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAGNIFICATION, magnification);
-                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // divide by the screen->target ratio so tha a larger target (ratio < 1) has a higher MaxCoF value
+                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
+                // </FS:Beq>
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
 
                 mScreenTriangleVB->setBuffer();
@@ -8077,7 +8087,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredPostProgram.bindTexture(LLShaderMgr::DEFERRED_DIFFUSE, &mRT->deferredLight, LLTexUnit::TFO_POINT);
 
                 gDeferredPostProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, (GLfloat)dst->getWidth(), (GLfloat)dst->getHeight());
-                gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
+                // </FS:Beq>
                 gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
 
                 mScreenTriangleVB->setBuffer();
@@ -8099,7 +8112,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredDoFCombineProgram.bindTexture(LLShaderMgr::DEFERRED_LIGHT, &mRT->deferredLight, LLTexUnit::TFO_POINT);
 
                 gDeferredDoFCombineProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, (GLfloat)dst->getWidth(), (GLfloat)dst->getHeight());
-                gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
+                // </FS:Beq>
                 gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
                 gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_WIDTH, (dof_width - 1) / (F32)src->getWidth());
                 gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_HEIGHT, (dof_height - 1) / (F32)src->getHeight());
