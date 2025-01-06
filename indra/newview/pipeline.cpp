@@ -372,7 +372,13 @@ bool addDeferredAttachments(LLRenderTarget& target, bool for_impostor = false)
     U32 orm = GL_RGBA;
     U32 norm = GL_RGBA16F;
     U32 emissive = GL_RGB16F;
-
+    // <FS:Beq> FIRE-34483 additional fix
+    if (target.getNumTextures() > 1)
+    {
+        LL_DEBUGS() << "LLPipeline::addDeferredAttachments() - target already has textures - skipping" << LL_ENDL;
+        return true;
+    }
+    // </FS:Beq>
     static LLCachedControl<bool> has_emissive(gSavedSettings, "RenderEnableEmissiveBuffer", false);
     static LLCachedControl<bool> has_hdr(gSavedSettings, "RenderHDREnabled", true);
     bool hdr = has_hdr() && gGLManager.mGLVersion > 4.05f;
@@ -877,6 +883,7 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 
     if (mRT == &mMainRT)
     { // hacky -- allocate auxillary buffer
+        LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("check reflection map setup"); // <FS:Beq/> improve Tracy scoping 
 
         gCubeSnapshot = true;
 
@@ -961,8 +968,10 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 
     if (!gCubeSnapshot) // hack to not re-allocate various targets for cube snapshots
     {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("non-cube allocations"); // <FS:Beq/> improve Tracy scoping 
         if (RenderUIBuffer)
         {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("UIBuffer"); // <FS:Beq/> improve Tracy scoping 
             if (!mUIScreen.allocate(resX, resY, GL_RGBA))
             {
                 return false;
@@ -971,9 +980,11 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 
         if (RenderFSAAType > 0)
         {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("FSAABuffer"); // <FS:Beq/> improve Tracy scoping 
             if (!mFXAAMap.allocate(resX, resY, GL_RGBA)) return false;
             if (RenderFSAAType == 2)
             {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("SMAABuffer"); // <FS:Beq/> improve Tracy scoping 
                 if (!mSMAABlendBuffer.allocate(resX, resY, GL_RGBA, false)) return false;
             }
         }
@@ -988,6 +999,7 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 
         if(RenderScreenSpaceReflections)
         {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("SSRBuffer"); // <FS:Beq/> improve Tracy scoping 
             mSceneMap.allocate(resX, resY, screenFormat, true);
         }
         else
@@ -995,14 +1007,22 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
             mSceneMap.release();
         }
 
+        {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("mPostMapBuffer"); // <FS:Beq/> improve Tracy scoping 
         mPostMap.allocate(resX, resY, screenFormat);
-
+        } // <FS:Beq/> improve Tracy scoping 
         // used to scale down textures
         // See LLViwerTextureList::updateImagesCreateTextures and LLImageGL::scaleDown
+        {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("DownResBuffer");// <FS:Beq/> create an independent preview screen target
         mDownResMap.allocate(1024, 1024, GL_RGBA);
+        }// <FS:Beq/> create an independent preview screen target
 
-        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA); // <FS:Beq/> create an independent preview screen target
+        // <FS:Beq> create an independent preview screen target
+        {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("PreviewScreenBuffer");
+        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA); 
+        } // </FS:Beq>
+        {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("BakeMapBuffer");// <FS:Beq/> create an independent preview screen target
         mBakeMap.allocate(LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH, LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT, GL_RGBA);
+        }// <FS:Beq/> create an independent preview screen target
     }
     //HACK make screenbuffer allocations start failing after 30 seconds
     if (gSavedSettings.getBOOL("SimulateFBOFailure"))
@@ -8019,7 +8039,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
             F32 blur_constant = focal_length * focal_length / (fnumber * (subject_distance - focal_length));
             blur_constant /= 1000.f; // convert to meters for shader
             F32 magnification = focal_length / (subject_distance - focal_length);
-
+            // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+            F32 screen_to_target_scale_factor = (F32)gViewerWindow->getWindowHeightRaw()/dst->getHeight();
+            F32 adj_COF = CameraMaxCoF / screen_to_target_scale_factor;
+            // </FS:Beq>
             { // build diffuse+bloom+CoF
                 mRT->deferredLight.bindTarget();
 
@@ -8033,9 +8056,16 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredCoFProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, (GLfloat)dst->getWidth(), (GLfloat)dst->getHeight());
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_FOCAL_DISTANCE, -subject_distance / 1000.f);
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_BLUR_CONSTANT, blur_constant);
-                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_TAN_PIXEL_ANGLE, tanf(1.f / LLDrawable::sCurPixelAngle));
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_TAN_PIXEL_ANGLE, tanf(1.f / LLDrawable::sCurPixelAngle));
+                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_TAN_PIXEL_ANGLE, tanf(1.f / LLDrawable::sCurPixelAngle) * screen_to_target_scale_factor);
+                // </FS:Beq>
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAGNIFICATION, magnification);
-                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // divide by the screen->target ratio so tha a larger target (ratio < 1) has a higher MaxCoF value
+                gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
+                // </FS:Beq>
                 gDeferredCoFProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
 
                 mScreenTriangleVB->setBuffer();
@@ -8057,7 +8087,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredPostProgram.bindTexture(LLShaderMgr::DEFERRED_DIFFUSE, &mRT->deferredLight, LLTexUnit::TFO_POINT);
 
                 gDeferredPostProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, (GLfloat)dst->getWidth(), (GLfloat)dst->getHeight());
-                gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
+                // </FS:Beq>
                 gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
 
                 mScreenTriangleVB->setBuffer();
@@ -8079,7 +8112,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredDoFCombineProgram.bindTexture(LLShaderMgr::DEFERRED_LIGHT, &mRT->deferredLight, LLTexUnit::TFO_POINT);
 
                 gDeferredDoFCombineProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, (GLfloat)dst->getWidth(), (GLfloat)dst->getHeight());
-                gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                // <FS:Beq> FIRE-13989 DOF should be equivalent in all resolutions of the same rendered image
+                // gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
+                gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
+                // </FS:Beq>
                 gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
                 gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_WIDTH, (dof_width - 1) / (F32)src->getWidth());
                 gDeferredDoFCombineProgram.uniform1f(LLShaderMgr::DOF_HEIGHT, (dof_height - 1) / (F32)src->getHeight());
