@@ -372,7 +372,13 @@ bool addDeferredAttachments(LLRenderTarget& target, bool for_impostor = false)
     U32 orm = GL_RGBA;
     U32 norm = GL_RGBA16F;
     U32 emissive = GL_RGB16F;
-
+    // <FS:Beq> FIRE-34483 additional fix
+    if (target.getNumTextures() > 1)
+    {
+        LL_DEBUGS() << "LLPipeline::addDeferredAttachments() - target already has textures - skipping" << LL_ENDL;
+        return true;
+    }
+    // </FS:Beq>
     static LLCachedControl<bool> has_emissive(gSavedSettings, "RenderEnableEmissiveBuffer", false);
     static LLCachedControl<bool> has_hdr(gSavedSettings, "RenderHDREnabled", true);
     bool hdr = has_hdr() && gGLManager.mGLVersion > 4.05f;
