@@ -183,6 +183,7 @@ void LLPanelContents::onFilterEdit()
     }
     else
     {
+        LLFolderView* root_folder = mPanelInventoryObject->getRootFolder();
         if (filter_substring.empty())
         {
             if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
@@ -193,19 +194,28 @@ void LLPanelContents::onFilterEdit()
 
             if (mDirtyFilter && !mSavedFolderState.hasOpenFolders())
             {
-                mPanelInventoryObject->getRootFolder()->setOpenArrangeRecursively(true, LLFolderViewFolder::ERecurseType::RECURSE_DOWN);
+                if (root_folder)
+                {
+                    root_folder->setOpenArrangeRecursively(true, LLFolderViewFolder::ERecurseType::RECURSE_DOWN);
+                }
             }
             else
             {
                 mSavedFolderState.setApply(true);
-                mPanelInventoryObject->getRootFolder()->applyFunctorRecursively(mSavedFolderState);
+                if (root_folder)
+                {
+                    root_folder->applyFunctorRecursively(mSavedFolderState);
+                }
             }
             mDirtyFilter = false;
 
             // Add a folder with the current item to the list of previously opened folders
-            LLOpenFoldersWithSelection opener;
-            mPanelInventoryObject->getRootFolder()->applyFunctorRecursively(opener);
-            mPanelInventoryObject->getRootFolder()->scrollToShowSelection();
+            if (root_folder)
+            {
+                LLOpenFoldersWithSelection opener;
+                root_folder->applyFunctorRecursively(opener);
+                root_folder->scrollToShowSelection();
+            }
         }
         else if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
         {
@@ -213,7 +223,10 @@ void LLPanelContents::onFilterEdit()
             if (!mPanelInventoryObject->getFilter().isNotDefault())
             {
                 mSavedFolderState.setApply(false);
-                mPanelInventoryObject->getRootFolder()->applyFunctorRecursively(mSavedFolderState);
+                if (root_folder)
+                {
+                    root_folder->applyFunctorRecursively(mSavedFolderState);
+                }
                 mDirtyFilter = false;
             }
         }

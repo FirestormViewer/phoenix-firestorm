@@ -2202,7 +2202,7 @@ bool idle_startup()
         // by the voice's events
         // <FS:Ansariel> [FS communication UI]
         //LLFloaterIMContainer *im_inst = LLFloaterIMContainer::getInstance();
-        //if(gAgent.isFirstLogin())
+        //if(gAgent.isFirstLogin() && im_inst)
         //{
         //    im_inst->openFloater(im_inst->getKey());
         //}
