@@ -7,6 +7,6 @@
 		<scroll_list.columns label="限制源" name="lock_origin" />
 	</scroll_list>
 	<panel name="bottom_panel">
-		<button label="重新整理" name="refresh_btn" />
+		<button label="更新" name="refresh_btn" />
 	</panel>
 </panel>

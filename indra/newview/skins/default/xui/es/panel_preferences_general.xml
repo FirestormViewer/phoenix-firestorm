@@ -58,7 +58,7 @@
 	<check_box label="Usar nombres antiguos en vez de nombres de usuario" name="FSshow_legacyun" tool_tip="Muestra los nombres en el formato (Nombre Apellido) en vez de (nombre.apellido)"/>
 	<check_box label="Destacar amigos" name="show_friends" tool_tip="Realzar las etiquetas de los nombres de tus amigos"/>
 	<check_box label="Ocultar 'Resident' en los nombres clásicos" name="legacy_trim_check" tool_tip="Suprime 'Resident' de los nombres clásicos"/>
-	<check_box label="Posicionamiento clásico de la etiqueta de nombre" name="FSLegacyNametagPosition" tool_tip="Si lo activas, la etiqueta de nombre permanecerá fija en la posición del avatar y no lo seguirá si se mueve a causa de sus animaciones."/>
+	<check_box label="Posic. clásico de la etiq. de nom." name="FSLegacyNametagPosition" tool_tip="Si lo activas, la etiqueta de nombre permanecerá fija en la posición del avatar y no lo seguirá si se mueve a causa de sus animaciones."/>
 	<text name="title_afk_text">
 		Ausente tras:
 	</text>

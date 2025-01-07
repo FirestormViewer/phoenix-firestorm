@@ -35,7 +35,7 @@
 		<menu_item_call label="封鎖" name="Object Mute" />
 		<menu_item_call label="解除封鎖" name="Object Unmute" />
 	</context_menu>
-	<menu_item_call label="重新整理紋理" name="Texture Refresh" />
+	<menu_item_call label="更新紋理" name="Texture Refresh" />
 	<menu_item_call label="隱藏" name="Derender" />
 	<menu_item_call label="永久隱藏&amp;封鎖" name="DerenderPermanent" />
 	<menu_item_call label="退回" name="Return..." />

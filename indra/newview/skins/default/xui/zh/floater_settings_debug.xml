@@ -2,6 +2,10 @@
 <floater name="settings_debug" title="除錯設定">
 	<panel name="debug_settings_search_panel">
 		<search_editor label="在此搜尋" name="search_settings_input" tool_tip="在此輸入搜尋詞。將顯示設定名稱和注釋中全文搜尋的結果。" />
+		<scroll_list name="settings_scroll_list">
+			<scroll_list.columns label="設定" name="setting"/>
+		</scroll_list>
+		<check_box label="僅顯示已更改的設定" name="hide_default"/>
 	</panel>
 	<panel name="debug_settings_values_panel">
 		<text_editor name="comment_text" tool_tip="除錯設定注釋。通常提供有關所選設定的有用資訊。" />

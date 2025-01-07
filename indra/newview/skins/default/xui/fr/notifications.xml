@@ -3649,7 +3649,9 @@ Si vous êtes un membre Premium, [[PREMIUM_URL] cliquez ici] pour recevoir votre
 	<notification name="VoiceEffectsWillExpire">Au moins l'un de vos effets de voix expirera dans moins de [INTERVAL] jours.  
 [[URL] Cliquez ici] pour renouveler votre abonnement. 
 
-Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.</notification>
+Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
+		<usetemplate ignoretext="M'avertir de l'expiration du morphing vocal" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="VoiceEffectsNew">
 		De nouveaux effets de voix sont disponibles !
 	</notification>

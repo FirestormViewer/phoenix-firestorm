@@ -18,7 +18,7 @@
 		<scroll_list.columns label="日期" name="date" />
 	</scroll_list>
 	<button label="新通知" name="create_new_notice" tool_tip="建立一個新通知" />
-	<button name="refresh_notices" tool_tip="重新整理通知清單。" />
+	<button name="refresh_notices" tool_tip="更新通知清單。" />
 	<text name="notice_list_none_found">
 		沒發現。
 	</text>

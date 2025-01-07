@@ -1691,6 +1691,15 @@ set(viewer_HEADER_FILES
   list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
   list(APPEND viewer_HEADER_FILES llperfstats.h)
 
+if (USE_BUGSPLAT)
+    list(APPEND viewer_SOURCE_FILES
+                bugsplatattributes.cpp
+        )
+    list(APPEND viewer_HEADER_FILES
+                bugsplatattributes.h
+        )
+endif (USE_BUGSPLAT)
+
 # <FS:Ansariel> Flickr / Discord keys and fsversionvalues headers are generated in here
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 

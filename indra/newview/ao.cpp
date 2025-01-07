@@ -203,6 +203,16 @@ void FloaterAO::updateList()
     }
 }
 
+void FloaterAO::updateScrollListData()
+{
+    auto animationListData = mAnimationList->getAllData();
+    for (auto index = 0; index < mSelectedState->mAnimations.size(); ++index)
+    {
+        LLScrollListItem* item = animationListData[index];
+        item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
+    }
+}
+
 bool FloaterAO::postBuild()
 {
     LLPanel* aoPanel = getChild<LLPanel>("animation_overrider_outer_panel");
@@ -674,6 +684,7 @@ void FloaterAO::onClickMoveUp()
     if (AOEngine::instance().swapWithPrevious(mSelectedState, currentIndex))
     {
         mAnimationList->swapWithPrevious(currentIndex);
+        updateScrollListData();
     }
 }
 
@@ -699,6 +710,7 @@ void FloaterAO::onClickMoveDown()
     if (AOEngine::instance().swapWithNext(mSelectedState, currentIndex))
     {
         mAnimationList->swapWithNext(currentIndex);
+        updateScrollListData();
     }
 }
 

@@ -22,7 +22,7 @@
 			<pie_slice label="指令碼資訊" name="ScriptInfo" />
 			<pie_slice label="語音通話" name="Call" />
 			<pie_slice label="放大" name="Zoom In" />
-			<pie_slice label="重新整理紋理" name="Texture Refresh" />
+			<pie_slice label="更新紋理" name="Texture Refresh" />
 			<pie_menu label="重設 &gt;" name="ResetMenu">
 				<pie_slice label="骨架和動畫" name="Reset Skeleton And Animations" />
 				<pie_slice label="骨架" name="Reset Skeleton" />

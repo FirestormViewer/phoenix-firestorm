@@ -2,7 +2,7 @@
 <menu name="Popup">
 	<menu_item_call label="建立刊登" name="Marketplace Create Listing" />
 	<menu_item_call label="關聯刊登" name="Marketplace Associate Listing" />
-	<menu_item_call label="取得（重新整理）刊登" name="Marketplace Get Listing" />
+	<menu_item_call label="取得（更新）刊登" name="Marketplace Get Listing" />
 	<menu_item_call label="檢查是否有誤" name="Marketplace Check Listing" />
 	<menu_item_call label="編輯刊登" name="Marketplace Edit Listing" />
 	<menu_item_call label="刊登" name="Marketplace List" />
@@ -89,7 +89,7 @@
 	<menu_item_call label="縮圖..." name="thumbnail" />
 	<menu_item_call label="鎖定檔案夾" name="ProtectFolder" />
 	<menu_item_call label="解鎖檔案夾" name="UnprotectFolder" />
-	<menu_item_call label="重新整理檔案夾" name="ReloadFolder" />
+	<menu_item_call label="更新檔案夾" name="ReloadFolder" />
 	<menu_item_call label="複製資源UUID" name="Copy Asset UUID" />
 	<menu_item_call label="還原至之前的位置" name="Restore to Last Position" />
 	<menu_item_call label="剪下" name="Cut" />
@@ -132,7 +132,7 @@
 	<menu_item_call label="打開" name="open_in_current_window" />
 	<menu_item_call label="在新視窗中打開" name="open_in_new_window" />
 	<menu_item_call label="新增" name="Wearable Add" />
-	<menu_item_call label="重新整理紋理" name="Texture Refresh Attachment" />
+	<menu_item_call label="更新紋理" name="Texture Refresh Attachment" />
 	<menu_item_call label="脫下" name="Take Off" />
 	<menu_item_call label="僅應用到我自己" name="Settings Apply Local" />
 	<menu_item_call label="應用到地塊" name="Settings Apply Parcel" />

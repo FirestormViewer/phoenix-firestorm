@@ -631,8 +631,9 @@
 			<menu_item_check label="Отладка клавиш" name="Debug Keys"/>
 			<menu_item_check label="Отладка окна процесса" name="Debug WindowProc"/>
 		</menu>
-		<menu label="XUI/XML" name="XUI">
-			<menu_item_call label="Перезагрузить цветовые установки" name="Reload Color Settings"/>
+		<menu label="XUI" name="XUI">
+			<menu_item_call label="Показать настройки цвета" name="Color Settings"/>
+			<menu_item_call label="Перезагрузить настройки цвета" name="Reload Color Settings"/>
 			<menu_item_call label="Показать проверку шрифтов" name="Show Font Test"/>
 			<menu_item_call label="Загрузить из XML" name="Load from XML"/>
 			<menu_item_call label="Сохранить в XML" name="Save to XML"/>

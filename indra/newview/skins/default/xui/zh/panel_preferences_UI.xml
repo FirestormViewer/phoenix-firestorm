@@ -30,7 +30,7 @@
 			<slider label_width="230" label="懸停文字淡出範圍（單位：米）：" tool_tip="設定懸停文字從完全可見到完全不可見的淡出範圍。" name="FSHudTextFadeRange" />
 		</panel>
 		<!-- 2D覆蓋 -->
-		<panel label="2D涵蓋" name="ui-2d-overlay">
+		<panel label="2D覆蓋" name="ui-2d-overlay">
 			<text name="UI Size:" width="95">
 				使用者界面大小：
 			</text>

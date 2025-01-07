@@ -581,6 +581,7 @@
 			<button label="Разрешения" name="button permissions"/>
 			<button label="Обновить" name="button refresh" width="100"/>
 			<button label="Сброс скриптов" name="btn_reset_scripts" width="100"/>
+			<filter_editor label="Введите текст фильтра" name="contents_filter"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

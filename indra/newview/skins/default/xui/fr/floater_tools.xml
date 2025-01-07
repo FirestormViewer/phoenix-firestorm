@@ -506,6 +506,7 @@ Bas ↔ + bas
 			<button label="Droits" name="button permissions"/>
 			<button label="Rafraîchir" name="button refresh"/>
 			<button label="Réinit. scripts" name="btn_reset_scripts"/>
+			<filter_editor label="Saisir le texte du filtre" name="contents_filter"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

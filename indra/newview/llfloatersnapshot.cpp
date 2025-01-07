@@ -1501,7 +1501,10 @@ bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
 void LLFloaterSnapshotBase::ImplBase::updateLivePreview()
 {
     // don't update preview for hidden floater
-    if (mFloater && mFloater->isInVisibleChain() && ImplBase::updatePreviewList(true))
+    // <FS:Beq> FIRE-35002 - Post to flickr broken
+    // if (mFloater && mFloater->isInVisibleChain() && ImplBase::updatePreviewList(true))
+    if (ImplBase::updatePreviewList(true) && mFloater)
+    // </FS:Beq>
     {
         LL_DEBUGS() << "changed" << LL_ENDL;
         updateControls(mFloater);

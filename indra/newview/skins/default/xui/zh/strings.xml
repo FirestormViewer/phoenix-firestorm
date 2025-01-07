@@ -6192,7 +6192,7 @@ support@secondlife.com.
 		快速存取
 	</string>
 	<string name="Command_AO_Label">
-		動畫涵蓋
+		動畫覆蓋
 	</string>
 	<string name="Command_Webbrowser_Label">
 		Web瀏覽器
@@ -6382,7 +6382,7 @@ support@secondlife.com.
 		快速更改常用首選設定
 	</string>
 	<string name="Command_AO_Tooltip">
-		動畫涵蓋
+		動畫覆蓋
 	</string>
 	<string name="Command_Webbrowser_Tooltip">
 		打開內部web瀏覽器 (CTRL+SHIFT+Z)
@@ -7052,10 +7052,10 @@ SecondLife.com網站的「支援」部分
 	</string>
 	<!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
 	<string name="FSAOEnabled">
-		[APP_NAME] 動畫涵蓋器已啟用。
+		[APP_NAME] 動畫覆蓋器已啟用。
 	</string>
 	<string name="FSAODisabled">
-		[APP_NAME] 動畫涵蓋器已禁用。
+		[APP_NAME] 動畫覆蓋器已禁用。
 	</string>
 	<string name="FSAOPausedScript">
 		已被指令碼附件暫停。
@@ -7064,10 +7064,10 @@ SecondLife.com網站的「支援」部分
 		已被指令碼附件恢復。
 	</string>
 	<string name="FSAOStandsPausedScript">
-		常駐動畫涵蓋已被指令碼附件暫停。
+		常駐動畫覆蓋已被指令碼附件暫停。
 	</string>
 	<string name="FSAOStandsResumedScript">
-		常駐動畫涵蓋已被指令碼附件暫停。
+		常駐動畫覆蓋已被指令碼附件暫停。
 	</string>
 	<!-- <FS:Zi> Quick preferences default options -->
 	<string name="QP Draw Distance">
@@ -7213,10 +7213,10 @@ SecondLife.com網站的「支援」部分
 		[ERR_NAME] ([LINENUMBER]): 攔截到意料之外的異常。
 	</string>
 	<string name="fs_preprocessor_lsl2_directive_override">
-		檢測到 compile-as-LSL2 指令正在涵蓋偏好設定。
+		檢測到 compile-as-LSL2 指令正在覆蓋偏好設定。
 	</string>
 	<string name="fs_preprocessor_mono_directive_override">
-		檢測到 compile-as-Mono 指令正在涵蓋偏好設定。
+		檢測到 compile-as-Mono 指令正在覆蓋偏好設定。
 	</string>
 	<!-- LSL Optimizer -->
 	<string name="fs_preprocessor_optimizer_start">

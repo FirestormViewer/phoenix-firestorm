@@ -1849,7 +1849,9 @@ bool LLViewerFetchedTexture::isActiveFetching()
 {
     static LLCachedControl<bool> monitor_enabled(gSavedSettings,"DebugShowTextureInfo");
 
-    return mFetchState > 7 && mFetchState < 10 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
+    // <FS:Ansariel> OpenSim compatibility
+    //return mFetchState > 7 && mFetchState < 10 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
+    return mFetchState > 8 && mFetchState < 11 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
 }
 
 void LLViewerFetchedTexture::setBoostLevel(S32 level)
