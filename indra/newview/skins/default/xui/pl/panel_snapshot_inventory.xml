@@ -7,6 +7,8 @@
 		<combo_box.item label="Mała (128x128)" name="Small(128x128)" />
 		<combo_box.item label="Średnia (256x256)" name="Medium(256x256)" />
 		<combo_box.item label="Duża (512x512)" name="Large(512x512)" />
+		<combo_box.item label="Bardzo duża (1024x1024)" name="Very Large(1024x1024)" />
+		<combo_box.item label="Ogromna (2048x2048)" name="Huge(2048x2048)" />
 		<combo_box.item label="Obecne okno" name="CurrentWindow" />
 		<combo_box.item label="Własna" name="Custom" />
 	</combo_box>
