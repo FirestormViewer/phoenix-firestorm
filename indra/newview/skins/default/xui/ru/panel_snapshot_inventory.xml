@@ -3,18 +3,24 @@
 	<text name="title">
 		Инвентарь
 	</text>
-	<text name="hint_lbl">
-		Сохранение изображения в инвентаре стоит L$[UPLOAD_COST]. Чтобы сохранить его как текстуру, выберите один из квадратных форматов.
-	</text>
 	<combo_box label="Размер" name="texture_size_combo">
 		<combo_box.item label="Текущее окно" name="CurrentWindow"/>
 		<combo_box.item label="Маленький (128x128)" name="Small(128x128)"/>
 		<combo_box.item label="Средний (256x256)" name="Medium(256x256)"/>
 		<combo_box.item label="Большой (512x512)" name="Large(512x512)"/>
+		<combo_box.item label="Очень большой (1024x1024)" name="Very Large(1024x1024)"/>
+		<combo_box.item label="Огромный (2048x2048)" name="Huge(2048x2048)"/>
+		<combo_box.item label="Текущее окно" name="CurrentWindow"/>
 		<combo_box.item label="Задать" name="Custom"/>
 	</combo_box>
 	<spinner label="Ширина Высота" name="inventory_snapshot_width"/>
 	<check_box label="Сохранять пропорции" name="inventory_keep_aspect_check"/>
+	<check_box label="Temp upload" name="inventory_temp_upload"/>
+	<text name="hint_lbl">
+		Чтобы сохранить ваше изображение как текстуру, выберите один из квадратных форматов.
+
+Стоимость загрузки L$[UPLOAD_COST].
+	</text>
 	<button label="&#x25B6; Выбор" name="cancel_btn"/>
 	<button label="Сохранить" name="save_btn"/>
 </panel>
