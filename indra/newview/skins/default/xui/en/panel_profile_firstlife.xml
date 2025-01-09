@@ -93,8 +93,8 @@
      layout="topleft"
      image_overlay="Profile_Group_Visibility_On"
      is_toggle="true"
-     enabled="true"
-     visible="true"/>
+     enabled="false"
+     visible="false"/>
 <!-- [/AS:chanayane] -->
     <text_editor
      name="fl_description_edit"
