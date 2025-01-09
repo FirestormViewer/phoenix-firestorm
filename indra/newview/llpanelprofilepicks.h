@@ -215,6 +215,13 @@ public:
     void onClickSetLocation();
     // <FS:Ansariel>
 
+    // <AS:Chanayane> Preview button
+    /**
+     * Callback for "Preview" button click
+     */
+    void onClickPreview();
+    // </AS:Chanayane>
+
     /**
      * Callback for "Save" and "Create" button click
      */
@@ -241,6 +248,7 @@ protected:
     LLButton*           mSaveButton;
     LLButton*           mCreateButton;
     LLButton*           mCancelButton;
+    LLButton*           mPreviewButton; // <AS:Chanayane> Preview button
 
     LLVector3d mPosGlobal;
     LLUUID mParcelId;
@@ -254,6 +262,11 @@ protected:
     bool mLocationChanged;
     bool mNewPick;
     bool                mIsEditing;
+// <AS:Chanayane> Preview button
+    bool                mPreview;
+    bool                mWasDirty;
+    std::string         mOriginalPickText;
+// </AS:Chanayane>
 
     void onDescriptionFocusReceived();
 };
