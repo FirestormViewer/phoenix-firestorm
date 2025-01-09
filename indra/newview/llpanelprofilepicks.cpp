@@ -543,6 +543,10 @@ LLPanelProfilePick::LLPanelProfilePick()
  , mIsEditing(false)
  , mRegionCallbackConnection()
  , mParcelCallbackConnection()
+// <AS:Chanayane> Preview button
+ , mPreview(false)
+ , mWasDirty(false)
+// </AS:Chanayane>
 {
 }
 
@@ -622,6 +626,8 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
 
     resetDirty();
 
+    mPreviewButton->setVisible(getSelfProfile()); // <AS:Chanayane> Preview button
+
     if (getSelfProfile())
     {
         mPickName->setEnabled(true);
@@ -645,6 +651,7 @@ bool LLPanelProfilePick::postBuild()
     mCreateButton = getChild<LLButton>("create_changes_btn");
     mCancelButton = getChild<LLButton>("cancel_changes_btn");
     mSetCurrentLocationButton = getChild<LLButton>("set_to_curr_location_btn"); // <FS:Ansariel> Keep set location button
+    mPreviewButton = getChild<LLButton>("btn_preview"); // <AS:Chanayane> Preview button
 
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
     mSnapshotCtrl->setCommitCallback(boost::bind(&LLPanelProfilePick::onSnapshotChanged, this));
@@ -658,6 +665,9 @@ bool LLPanelProfilePick::postBuild()
     mCreateButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCancelButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickCancel, this));
     mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this)); // <FS:Ansariel> Keep set location button
+    // <AS:Chanayane> Preview button
+    mPreviewButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickPreview, this));
+    // </AS:Chanayane>
 
     mPickName->setKeystrokeCallback(boost::bind(&LLPanelProfilePick::onPickChanged, this, _1), NULL);
     mPickName->setEnabled(false);
@@ -847,6 +857,35 @@ void LLPanelProfilePick::onClickSetLocation()
     enableSaveButton(true);
 }
 // </FS:Ansariel>
+
+// <AS:Chanayane> Preview button
+void LLPanelProfilePick::onClickPreview()
+{
+    mPreview = !mPreview;
+    mWasDirty = isDirty();
+
+    if (mPreview) {
+        mPreviewButton->setImageOverlay("Profile_Group_Visibility_Off");
+        mOriginalPickText = mPickDescription->getValue().asString();
+        mPickDescription->setEnabled(!mPreview);
+        mPickDescription->setParseHTML(mPreview);
+        mPickDescription->setValue(mOriginalPickText);
+        enableSaveButton(false);
+        if (mWasDirty) {
+            mPickDescription->getViewModel()->setDirty();
+        }
+    } else {
+        mPreviewButton->setImageOverlay("Profile_Group_Visibility_On");
+        mPickDescription->setEnabled(!mPreview);
+        mPickDescription->setParseHTML(mPreview);
+        mPickDescription->setValue(mOriginalPickText);
+        if (mWasDirty) {
+            mPickDescription->getViewModel()->setDirty();
+        }
+        enableSaveButton(isDirty());
+    }
+}
+// </AS:Chanayane>
 
 void LLPanelProfilePick::onClickSave()
 {
