@@ -108,6 +108,10 @@ bool LLRenderTarget::allocate(U32 resx, U32 resy, U32 color_fmt, bool depth, LLT
     llassert(usage == LLTexUnit::TT_TEXTURE);
     llassert(!isBoundInStack());
 
+    if(mResX == resx && mResY == resy && mUsage == usage && depth == mUseDepth && mGenerateMipMaps == generateMipMaps)
+    {
+        return true;
+    }
     resx = llmin(resx, (U32) gGLManager.mGLMaxTextureSize);
     resy = llmin(resy, (U32) gGLManager.mGLMaxTextureSize);
 
@@ -360,7 +364,8 @@ void LLRenderTarget::release()
 
         sBytesAllocated -= mResX*mResY*4;
     }
-    else if (mFBO)
+    // else if (mFBO)
+    if (mFBO)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 

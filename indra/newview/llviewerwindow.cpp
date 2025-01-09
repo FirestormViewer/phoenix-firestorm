@@ -551,9 +551,12 @@ public:
         static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
         if (debugShowMemory)
         {
+            auto rss = LLMemory::getCurrentRSS() / 1024;
             addText(xpos, ypos,
-                    STRINGIZE("Memory: " << (LLMemory::getCurrentRSS() / 1024) << " (KB)"));
+                    STRINGIZE("Memory: " << rss << " (KB)"));
             ypos += y_inc;
+            LL_PROFILE_PLOT("RSS", (int64_t)rss );
+            LL_PROFILE_PLOT("GL:", (int64_t)LLRenderTarget::sBytesAllocated );
         }
 
         if (gDisplayCameraPos)

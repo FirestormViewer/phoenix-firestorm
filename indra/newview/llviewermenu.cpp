@@ -2291,8 +2291,8 @@ class LLAdvancedToggleShowLookAt : public view_listener_t
         //<FS:AO improve use of controls with radiogroups>
         //bool value = !gSavedPerAccountSettings.getBOOL("DebugLookAt");
         //gSavedPerAccountSettings.setBOOL("DebugLookAt",value);
-        S32 value = !gSavedPerAccountSettings.getS32("DebugLookAt");
-        gSavedPerAccountSettings.setS32("DebugLookAt",value);
+        S32 value = gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? 1 : 0;
+        gSavedPerAccountSettings.setS32("DebugLookAt", value);
         //</FS:AO>
         return true;
     }
@@ -2301,21 +2301,21 @@ class LLAdvancedToggleShowLookAt : public view_listener_t
 // <AO>
 class LLAdvancedToggleShowColor : public view_listener_t
 {
-        bool handleEvent(const LLSD& userdata)
-        {
-                S32 value = !gSavedSettings.getS32("DebugShowColor");
-                gSavedSettings.setS32("DebugShowColor",value);
-                return true;
-        }
+    bool handleEvent(const LLSD& userdata)
+    {
+        S32 value = gSavedSettings.getS32("DebugShowColor") == 0 ? 1 : 0;
+        gSavedSettings.setS32("DebugShowColor", value);
+        return true;
+    }
 };
 
 class LLAdvancedCheckShowColor : public view_listener_t
 {
-        bool handleEvent(const LLSD& userdata)
-        {
-                S32 new_value = gSavedSettings.getS32("DebugShowColor");
-                return (bool)new_value;
-        }
+    bool handleEvent(const LLSD& userdata)
+    {
+        bool new_value = gSavedSettings.getS32("DebugShowColor") != 0;
+        return new_value;
+    }
 };
 // </AO>
 
@@ -2326,7 +2326,7 @@ class LLAdvancedCheckShowLookAt : public view_listener_t
         //bool new_value = LLHUDEffectLookAt::sDebugLookAt;
         //<FS:AO improve use of controls with radiogroups>
         //bool new_value = gSavedPerAccountSettings.getBOOL("DebugLookAt");
-        S32 new_value = gSavedPerAccountSettings.getS32("DebugLookAt");
+        bool new_value = gSavedPerAccountSettings.getS32("DebugLookAt") > 0;
         return (bool)new_value;
     }
 };

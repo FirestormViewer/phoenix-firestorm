@@ -718,7 +718,7 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
 
     if (bugSplatMap.writeToFile(BugSplatAttributes::getCrashContextFileName()))
     {
-        LL_INFOS() << "Crash context saved to " << WCSTR(BugSplatAttributes::getCrashContextFileName()) << LL_ENDL;
+        LL_INFOS() << "Crash context saved to " << BugSplatAttributes::getCrashContextFileName() << LL_ENDL;
     }
 #endif
 }

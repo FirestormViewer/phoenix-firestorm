@@ -7,6 +7,8 @@
 		<combo_box.item label="小（128x128）" name="Small(128x128)" />
 		<combo_box.item label="中（256x256）" name="Medium(256x256)" />
 		<combo_box.item label="大（512x512）" name="Large(512x512)" />
+		<combo_box.item label="非常大 (1024x1024)" name="Very Large(1024x1024)"/>
+		<combo_box.item label="巨大 (2048x2048)" name="Huge(2048x2048)"/>
 		<combo_box.item label="當前視窗" name="CurrentWindow" />
 		<combo_box.item label="自訂" name="Custom" />
 	</combo_box>
@@ -18,6 +20,6 @@
 
 上傳費用: [UPLOAD_COST]L$
 	</text>
-	<button label="▶ 取消" name="cancel_btn" />
+	<button label="&#x25B6; 取消" name="cancel_btn" />
 	<button label="儲存" name="save_btn" />
 </panel>

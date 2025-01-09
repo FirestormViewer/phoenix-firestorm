@@ -60,6 +60,14 @@
          name="Large(512x512)"
          value="[i512,i512]" />
         <combo_box.item
+         label="Very Large (1024x1024)"
+         name="Very Large(1024x1024)"
+         value="[i1024,i1024]" />
+        <combo_box.item
+         label="Huge (2048x2048)"
+         name="Huge(2048x2048)"
+         value="[i2048,i2048]" />
+        <combo_box.item
          label="Current Window"
          name="CurrentWindow"
          value="[i0,i0]" />
