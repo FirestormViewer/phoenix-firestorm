@@ -7,6 +7,8 @@
 		<combo_box.item label="Klein (128x128)" name="Small(128x128)"/>
 		<combo_box.item label="Mittel (256x256)" name="Medium(256x256)"/>
 		<combo_box.item label="Groß (512x512)" name="Large(512x512)"/>
+		<combo_box.item label="Sehr Groß (1024x1024)" name="Very Large(1024x1024)"/>
+		<combo_box.item label="Riesig (2048x2048)" name="Huge(2048x2048)"/>
 		<combo_box.item label="Aktuelles Fenster" name="CurrentWindow"/>
 		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
 	</combo_box>
