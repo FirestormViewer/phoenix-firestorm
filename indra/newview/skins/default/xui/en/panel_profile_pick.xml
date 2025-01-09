@@ -84,6 +84,21 @@
                 >
         Description:
       </text>
+<!-- [AS:chanayane] Preview button -->
+      <button
+       name="btn_preview"
+       tool_tip="Toggle preview of your pick description"
+       top_pad="-18"
+       left="280"
+       height="20"
+       width="20"
+       follows="top|right"
+       layout="topleft"
+       image_overlay="Profile_Group_Visibility_On"
+       is_toggle="true"
+       enabled="false"
+       visible="false"/>
+<!-- [/AS:chanayane] -->
       <text_editor
        name="pick_desc"
        trusted_content="false"

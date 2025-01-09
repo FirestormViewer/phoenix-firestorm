@@ -43,7 +43,17 @@
      follows="top|left"
      layout="topleft"
      visible="false"/>
+<!-- [AS:chanayane] Preview button -->
     <button
+     name="fl_upload_image"
+     label="Upload Photo"
+     top="55"
+     left="285"
+     height="20"
+     width="120"
+     follows="top|left"
+     layout="topleft"/>
+    <!-- <button
      name="fl_upload_image"
      label="Upload Photo"
      top="80"
@@ -51,7 +61,8 @@
      height="20"
      width="120"
      follows="top|left"
-     layout="topleft"/>
+     layout="topleft"/> -->
+<!-- [AS:chanayane] Preview button -->
     <button
      name="fl_change_image"
      label="Change Photo"
@@ -70,6 +81,21 @@
      width="120"
      follows="top|left"
      layout="topleft"/>
+<!-- [AS:chanayane] Preview button -->
+    <button
+     name="btn_preview"
+     tool_tip="Toggle preview of your first life introduction"
+     top_pad="5"
+     left_delta="0"
+     height="20"
+     width="120"
+     follows="top|left"
+     layout="topleft"
+     image_overlay="Profile_Group_Visibility_On"
+     is_toggle="true"
+     enabled="true"
+     visible="true"/>
+<!-- [/AS:chanayane] -->
     <text_editor
      name="fl_description_edit"
      trusted_content="false"
