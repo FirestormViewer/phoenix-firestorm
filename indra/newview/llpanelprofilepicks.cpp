@@ -626,7 +626,10 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
 
     resetDirty();
 
-    mPreviewButton->setVisible(getSelfProfile()); // <AS:Chanayane> Preview button
+// <AS:Chanayane> Preview button
+    mPreviewButton->setVisible(getSelfProfile());
+    mPreviewButton->setEnabled(getSelfProfile());
+// </AS:Chanayane>
 
     if (getSelfProfile())
     {
