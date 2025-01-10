@@ -1887,7 +1887,7 @@ void LLToolDragAndDrop::dropInventory(LLViewerObject* hit_obj,
     if (LLFloaterReg::instanceVisible("build"))
     {
         // *FIX: only show this if panel not expanded?
-        LLFloaterReg::showInstance("build", "Content");
+        LLFloaterReg::showInstance("build", "Contents");
     }
 
     // VEFFECT: AddToInventory

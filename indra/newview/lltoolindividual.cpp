@@ -88,7 +88,7 @@ bool LLToolIndividual::handleDoubleClick(S32 x, S32 y, MASK mask)
     {
         // You should already have an object selected from the mousedown.
         // If so, show its inventory.
-        LLFloaterReg::showInstance("build", "Content");
+        LLFloaterReg::showInstance("build", "Contents");
         return true;
     }
     else
