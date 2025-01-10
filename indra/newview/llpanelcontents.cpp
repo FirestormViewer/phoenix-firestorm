@@ -177,6 +177,14 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 void LLPanelContents::onFilterEdit()
 {
     const std::string& filter_substring = mFilterEditor->getText();
+    // <FS:Beq> FIRE-35010 Bugsplat crash with filter while loading contents
+    auto root_folder = mPanelInventoryObject->getRootFolder();
+    if (!root_folder)
+    {
+        mPanelInventoryObject->getFilter().setFilterSubString(filter_substring);
+        return;
+    }
+    // </FS:Beq>
     if (filter_substring.empty())
     {
         if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
@@ -186,12 +194,12 @@ void LLPanelContents::onFilterEdit()
         }
 
         mSavedFolderState.setApply(true);
-        mPanelInventoryObject->getRootFolder()->applyFunctorRecursively(mSavedFolderState);
+        root_folder->applyFunctorRecursively(mSavedFolderState); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
 
         // Add a folder with the current item to the list of previously opened folders
         LLOpenFoldersWithSelection opener;
-        mPanelInventoryObject->getRootFolder()->applyFunctorRecursively(opener);
-        mPanelInventoryObject->getRootFolder()->scrollToShowSelection();
+        root_folder->applyFunctorRecursively(opener); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
+        root_folder->scrollToShowSelection(); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
     }
     else if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
     {
@@ -199,7 +207,7 @@ void LLPanelContents::onFilterEdit()
         if (!mPanelInventoryObject->getFilter().isNotDefault())
         {
             mSavedFolderState.setApply(false);
-            mPanelInventoryObject->getRootFolder()->applyFunctorRecursively(mSavedFolderState);
+            root_folder->applyFunctorRecursively(mSavedFolderState); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
         }
     }
 
