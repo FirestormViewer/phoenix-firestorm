@@ -88,19 +88,6 @@
                  width="60" />
             </radio_group>
 
-            <!-- <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console -->
-			<check_box
-			 control_name="FSShowOnscreenConsole"
-			 follows="left|top"
-			 height="16"
-			 label="Show on-screen console"
-			 tool_tip="Show/Hide the chat console text, when the Conversations window is not displayed"
-			 layout="topleft"
-			 left="20"
-			 top_pad="5"
-			 name="FSShowOnscreenConsole"
-			 width="400" />
-            <!-- Changed the PlayChatAnim check_box's top_pad = 5 -> 1 to fix up the alignment with the new option -->
 			<check_box
 			 control_name="PlayChatAnim"
 			 follows="left|top"
@@ -108,10 +95,9 @@
 			 label="Play avatar animations (such as shouting)"
 			 layout="topleft"
 			 left="20"
-			 top_pad="1"
+			 top_pad="5"
 			 name="play_avatar_animations"
 			 width="400" />
-            <!-- </FS:minerjr> [FIRE-35039] -->            
             <check_box
              control_name="FSIMSystemMessageBrackets"
              enabled_control="PlainTextChatHistory"
@@ -248,9 +234,20 @@
              width="100" />
 
             <check_box
+             control_name="FSShowOnscreenConsole"
+             follows="left|top"
+             height="18"
+             top_pad="15"
+             label="Show on-screen chat console"
+             tool_tip="Show/Hide the chat console text, when the Conversations window is not displayed"
+             layout="topleft"
+             left="20"
+             name="FSShowOnscreenConsole"
+             width="400" />
+            <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="15"
+             top_pad="-2"
              left="20"
              width="200"
              height="18"
