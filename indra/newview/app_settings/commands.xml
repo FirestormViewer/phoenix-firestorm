@@ -46,6 +46,8 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="build"
            />
+    <!-- <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console -->
+    <!-- Added checkbox_control to the chat toolbar control to show/hide the on-screen console -->
   <command name="chat"
            available_in_toybox="true"
 		   is_flashing_allowed="true"
@@ -56,7 +58,9 @@
            execute_parameters="fs_im_container"
            is_running_function="Floater.IsOpen"
            is_running_parameters="fs_im_container"
+           checkbox_control="FSShowOnscreenConsole"
            />
+    <!-- </FS:minerjr> [FIRE-35039] -->    
   <command name="compass"
            available_in_toybox="false"
            icon="Command_Compass_Icon"
