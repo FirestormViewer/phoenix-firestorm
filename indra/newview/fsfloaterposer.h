@@ -253,6 +253,7 @@ class FSFloaterPoser : public LLFloater
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
+    void onCommitSpinner(LLUICtrl* spinner);
 
     // UI Refreshments
     void refreshRotationSliders();
@@ -496,6 +497,20 @@ class FSFloaterPoser : public LLFloater
 
     LLCheckBoxCtrl* mResetBaseRotCbx{ nullptr };
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
+
+    LLUICtrl* mTrackpadSensitivitySpnr{ nullptr };
+    LLUICtrl* mYawSpnr{ nullptr };
+    LLUICtrl* mPitchSpnr{ nullptr };
+    LLUICtrl* mRollSpnr{ nullptr };
+    LLUICtrl* mUpDownSpnr{ nullptr };
+    LLUICtrl* mLeftRightSpnr{ nullptr };
+    LLUICtrl* mInOutSpnr{ nullptr };
+    LLUICtrl* mAdvPosXSpnr{ nullptr };
+    LLUICtrl* mAdvPosYSpnr{ nullptr };
+    LLUICtrl* mAdvPosZSpnr{ nullptr };
+    LLUICtrl* mScaleXSpnr{ nullptr };
+    LLUICtrl* mScaleYSpnr{ nullptr };
+    LLUICtrl* mScaleZSpnr{ nullptr };
 };
 
 #endif

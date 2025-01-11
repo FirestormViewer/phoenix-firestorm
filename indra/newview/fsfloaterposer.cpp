@@ -105,6 +105,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickRecaptureSelectedBones(); });
     mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickToggleSelectedBoneEnabled(); });
     mCommitCallbackRegistrar.add("Poser.PoseJointsReset", [this](LLUICtrl*, const LLSD&) { onPoseJointsReset(); });
+
+    mCommitCallbackRegistrar.add("Poser.CommitSpinner", [this](LLUICtrl* spinnerControl, const LLSD&) { onCommitSpinner(spinnerControl); });
 }
 
 bool FSFloaterPoser::postBuild()
@@ -215,6 +217,20 @@ bool FSFloaterPoser::postBuild()
     mAlsoSaveBvhCbx = getChild<LLCheckBoxCtrl>("also_save_bvh_checkbox");
     mResetBaseRotCbx = getChild<LLCheckBoxCtrl>("reset_base_rotation_on_edit_checkbox");
     mResetBaseRotCbx->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClickSetBaseRotZero(); });
+
+    mTrackpadSensitivitySpnr = getChild<LLUICtrl>("trackpad_sensitivity_spinner");
+    mYawSpnr                 = getChild<LLUICtrl>("limb_yaw_spinner");
+    mPitchSpnr               = getChild<LLUICtrl>("limb_pitch_spinner");
+    mRollSpnr                = getChild<LLUICtrl>("limb_roll_spinner");
+    mUpDownSpnr              = getChild<LLUICtrl>("av_position_updown_spinner");
+    mLeftRightSpnr           = getChild<LLUICtrl>("av_position_leftright_spinner");
+    mInOutSpnr               = getChild<LLUICtrl>("av_position_inout_spinner");
+    mAdvPosXSpnr             = getChild<LLUICtrl>("adv_posx_spinner");
+    mAdvPosYSpnr             = getChild<LLUICtrl>("adv_posy_spinner");
+    mAdvPosZSpnr             = getChild<LLUICtrl>("adv_posz_spinner");
+    mScaleXSpnr              = getChild<LLUICtrl>("adv_scalex_spinner");
+    mScaleYSpnr              = getChild<LLUICtrl>("adv_scaley_spinner");
+    mScaleZSpnr              = getChild<LLUICtrl>("adv_scalez_spinner");
 
     return true;
 }
@@ -564,6 +580,84 @@ void FSFloaterPoser::onClickBrowsePoseCache()
 
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     gViewerWindow->getWindow()->openFile(pathname);
+}
+
+void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner)
+{
+    if (!spinner)
+        return;
+
+    F32 value = (F32)spinner->getValue().asReal();
+
+    if (spinner == mTrackpadSensitivitySpnr)
+    {
+        mTrackpadSensitivitySlider->setValue(value);
+        onAdjustTrackpadSensitivity();
+        return;
+    }
+
+    if (spinner == mInOutSpnr || spinner == mAdvPosXSpnr)
+    {
+        mPosXSlider->setValue(value);
+        onAvatarPositionSet();
+        return;
+    }
+
+    if (spinner == mLeftRightSpnr || spinner == mAdvPosYSpnr)
+    {
+        mPosYSlider->setValue(value);
+        onAvatarPositionSet();
+        return;
+    }
+
+    if (spinner == mUpDownSpnr || spinner == mAdvPosZSpnr)
+    {
+        mPosZSlider->setValue(value);
+        onAvatarPositionSet();
+        return;
+    }
+
+    if (spinner == mScaleXSpnr)
+    {
+        mAdvScaleXSlider->setValue(value);
+        onAdvancedScaleSet();
+        return;
+    }
+
+    if (spinner == mScaleYSpnr)
+    {
+        mAdvScaleYSlider->setValue(value);
+        onAdvancedScaleSet();
+        return;
+    }
+
+    if (spinner == mScaleZSpnr)
+    {
+        mAdvScaleZSlider->setValue(value);
+        onAdvancedScaleSet();
+        return;
+    }
+
+    if (spinner == mYawSpnr)
+    {
+        mLimbYawSlider->setValue(value);
+        onYawPitchRollSliderChanged();
+        return;
+    }
+
+    if (spinner == mPitchSpnr)
+    {
+        mLimbPitchSlider->setValue(value);
+        onYawPitchRollSliderChanged();
+        return;
+    }
+
+    if (spinner == mRollSpnr)
+    {
+        mLimbRollSlider->setValue(value);
+        onYawPitchRollSliderChanged();
+        return;
+    }
 }
 
 void FSFloaterPoser::onPoseJointsReset()
@@ -1569,6 +1663,13 @@ void FSFloaterPoser::onAdvancedPositionSet()
     F32 posY = mAdvPosYSlider->getValueF32();
     F32 posZ = mAdvPosZSlider->getValueF32();
 
+    mAdvPosXSpnr->setValue(posX);
+    mInOutSpnr->setValue(posX);
+    mAdvPosYSpnr->setValue(posY);
+    mLeftRightSpnr->setValue(posY);
+    mAdvPosZSpnr->setValue(posZ);
+    mUpDownSpnr->setValue(posZ);
+
     setSelectedJointsPosition(posX, posY, posZ);
     refreshAvatarPositionSliders();
 }
@@ -1579,6 +1680,10 @@ void FSFloaterPoser::onAdvancedScaleSet()
     F32 scY = mAdvScaleYSlider->getValueF32();
     F32 scZ = mAdvScaleZSlider->getValueF32();
 
+    mScaleXSpnr->setValue(scX);
+    mScaleYSpnr->setValue(scY);
+    mScaleZSpnr->setValue(scZ);
+
     setSelectedJointsScale(scX, scY, scZ);
 }
 
@@ -1587,6 +1692,13 @@ void FSFloaterPoser::onAvatarPositionSet()
     F32 posX = mPosXSlider->getValueF32();
     F32 posY = mPosYSlider->getValueF32();
     F32 posZ = mPosZSlider->getValueF32();
+
+    mAdvPosXSpnr->setValue(posX);
+    mInOutSpnr->setValue(posX);
+    mAdvPosYSpnr->setValue(posY);
+    mLeftRightSpnr->setValue(posY);
+    mAdvPosZSpnr->setValue(posZ);
+    mUpDownSpnr->setValue(posZ);
 
     setSelectedJointsPosition(posX, posY, posZ);
     refreshAdvancedPositionSliders();
@@ -1628,6 +1740,10 @@ void FSFloaterPoser::onLimbTrackballChanged()
     mLimbYawSlider->setValue(trackPadPos.mV[VX] *= RAD_TO_DEG);
     mLimbPitchSlider->setValue(trackPadPos.mV[VY] *= RAD_TO_DEG);
     mLimbRollSlider->setValue(trackPadPos.mV[VZ] *= RAD_TO_DEG);
+
+    mYawSpnr->setValue(mLimbYawSlider->getValueF32());
+    mPitchSpnr->setValue(mLimbPitchSlider->getValueF32());
+    mRollSpnr->setValue(mLimbRollSlider->getValueF32());
 }
 
 F32 FSFloaterPoser::unWrapScale(F32 scale)
@@ -1669,6 +1785,10 @@ void FSFloaterPoser::onYawPitchRollSliderChanged()
     absoluteRotation.mV[VZ] /= NormalTrackpadRangeInRads;
 
     mAvatarTrackball->setValue(absoluteRotation.getValue());
+
+    mYawSpnr->setValue(mLimbYawSlider->getValueF32());
+    mPitchSpnr->setValue(mLimbPitchSlider->getValueF32());
+    mRollSpnr->setValue(mLimbRollSlider->getValueF32());
 }
 
 void FSFloaterPoser::onAdjustTrackpadSensitivity()
