@@ -127,3 +127,5 @@ firestorm.code-workspace
 *-compiled.glsl
 
 .github/release.yaml
+
+checks.json
