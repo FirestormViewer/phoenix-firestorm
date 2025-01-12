@@ -201,7 +201,7 @@
          width="80">
             seconds
         </text>
-	<!--<FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights -->
+	<!--<FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights -->
 	<!--Added new heading label for the Floating Text Options as there are now 4 -->
         <text
          type="string"

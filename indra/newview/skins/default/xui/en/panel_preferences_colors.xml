@@ -1202,7 +1202,7 @@
       </combo_box>
     </panel>
    </panel>
-     <!-- <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights -->
+     <!-- <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights -->
      <!-- Add new Floating Text panel as the Misc panel was full. Could go under Name Tag panel, but may have more options in the future for Floating Text -->
      <panel
 	  top_pad="5"
@@ -1212,7 +1212,7 @@
 	  follows="all"
 	  label="Floating Text"
 	  name="tab-chat" >
-         <!-- Add slider to change the opacity of the floating text background indendant of the LLHUBNameTag ChatBubbleOpacity -->
+         <!-- Add slider to change the opacity of the floating text background indendant of the LLHUDNameTag ChatBubbleOpacity -->
          <slider
           control_name="FSHudTextBackgroundOpacity"
           follows="left|top"

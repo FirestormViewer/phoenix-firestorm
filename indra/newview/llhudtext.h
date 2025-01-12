@@ -59,7 +59,7 @@ protected:
             mStyle(style),
             mText(text),
             mFont(font)
-        // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
         //{}        
         {            
             // Added a bool check to see if the current line is blank (empty, or has only a single space character stored.
@@ -80,7 +80,7 @@ protected:
         const LLWString& getText() const { return mText; }
         void clearFontWidthMap() { mFontWidthMap.clear(); }
 
-        // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
         bool isBlank() { return mbIsBlank; } // Accessor method for checking to see if the current Text Segment is blank
         // </FS:minerjr> [FIRE-35019]
         LLColor4                mColor;
@@ -90,7 +90,7 @@ protected:
     private:
         LLWString               mText;
         std::map<const LLFontGL*, F32> mFontWidthMap;
-        // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
         bool                    mbIsBlank; // True if mText length is 0, or only contains " " characters, otherwise false
         // <FS:minerjr> [FIRE-35019]
     };
@@ -200,8 +200,8 @@ private:
     std::string     mObjText;
 // [/RLVa:KB]
 
-    // <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights   
-    LLPointer<LLUIImage> mRoundedRectImgp; // Added background rect image from LLHUBNameTag
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights   
+    LLPointer<LLUIImage> mRoundedRectImgp; // Added background rect image from LLHUDNameTag
     F32             mBackgroundHeight; // Store the actual height of the background image (calculated from the visible text segments)
     F32             mBackgroundOffsetY; // Store the offset of the top of the first visible text segment
     F32             mLuminance; // Store the luminance of the text (used to determine if the background should be white or black for higher contrast)

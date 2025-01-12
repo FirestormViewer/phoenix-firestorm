@@ -6141,14 +6141,14 @@ void LLViewerObject::updateText()
     }
 }
 
-// <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights
+// <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
 // Method that sets the current viewer object's mText to be highlighted or the objects children if there is no mText.
 void LLViewerObject::setTextIsHighlighted(bool is_highlighted)
 {
     // If the object it not dead, try to set the highlight value
     if (!isDead())
     {
-        // Check to see if the current LLHUBText object is not null, most of the time the root object contains the floating text.
+        // Check to see if the current LLHUDText object is not null, most of the time the root object contains the floating text.
         if (mText.notNull())
         {
             mText->setIsHighlighted(is_highlighted);
@@ -6156,7 +6156,7 @@ void LLViewerObject::setTextIsHighlighted(bool is_highlighted)
         // But in case the current object does not, try to set all the children to use the flag
         else
         {
-            // Else, there may be children with the LLHUBText objects..
+            // Else, there may be children with the LLHUDText objects..
             for (child_list_t::const_iterator iter = mChildList.begin(); iter != mChildList.end(); iter++)
             {
                 LLViewerObject* child = *iter;

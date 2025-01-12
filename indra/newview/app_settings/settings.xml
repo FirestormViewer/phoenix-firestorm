@@ -25106,7 +25106,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>This value needs to be greater than 0 for a fading effect.</string>
     </map>
-    <!-- <FS:minerjr> [FIRE-35019] Add LLHUBNameTag background to floating text and hover highlights -->
+    <!-- <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights -->
     <key>FSHudTextShowBackground</key>
     <map>
         <key>Comment</key>
