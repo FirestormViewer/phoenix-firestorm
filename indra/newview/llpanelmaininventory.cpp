@@ -1596,7 +1596,7 @@ bool LLFloaterInventoryFinder::postBuild()
 
     // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
     getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
-    
+
     updateElementsFromFilter();
 
     // <FS:Zi> FIRE-1175 - Filter Permissions Menu
@@ -1661,16 +1661,14 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
         return;
 
     // Get data needed for filter display
-    U32                            filter_types          = (U32)mFilter->getFilterObjectTypes();
-    LLInventoryFilter::EFolderShow show_folders          = mFilter->getShowFolderState();
-    U32                            hours                 = mFilter->getHoursAgo();
-    U32                            date_search_direction = mFilter->getDateSearchDirection();
+    U32 filter_types = (U32)mFilter->getFilterObjectTypes();
+    LLInventoryFilter::EFolderShow show_folders = mFilter->getShowFolderState();
+    U32 hours = mFilter->getHoursAgo();
+    U32 date_search_direction = mFilter->getDateSearchDirection();
 
     LLInventoryFilter::EFilterCreatorType filter_creator = mFilter->getFilterCreatorType();
-    bool                                  show_created_by_me =
-        ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_SELF));
-    bool show_created_by_others =
-        ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_OTHERS));
+    bool show_created_by_me = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_SELF));
+    bool show_created_by_others = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_OTHERS));
 
     // update the ui elements
     // <FS:PP> Make floater title translatable
@@ -1678,19 +1676,19 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
     setTitle(LLTrans::getString(mFilter->getName()));
     // </FS:PP>
 
-    getChild<LLUICtrl>("check_animation")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
+    getChild<LLUICtrl>("check_animation")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
 
-    getChild<LLUICtrl>("check_calling_card")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_CALLINGCARD));
-    getChild<LLUICtrl>("check_clothing")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_WEARABLE));
-    getChild<LLUICtrl>("check_gesture")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_GESTURE));
-    getChild<LLUICtrl>("check_landmark")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_LANDMARK));
-    getChild<LLUICtrl>("check_material")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_MATERIAL));
-    getChild<LLUICtrl>("check_notecard")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_NOTECARD));
-    getChild<LLUICtrl>("check_object")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_OBJECT));
-    getChild<LLUICtrl>("check_script")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_LSL));
-    getChild<LLUICtrl>("check_sound")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SOUND));
-    getChild<LLUICtrl>("check_texture")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
-    getChild<LLUICtrl>("check_snapshot")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
+    getChild<LLUICtrl>("check_calling_card")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_CALLINGCARD));
+    getChild<LLUICtrl>("check_clothing")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_WEARABLE));
+    getChild<LLUICtrl>("check_gesture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_GESTURE));
+    getChild<LLUICtrl>("check_landmark")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LANDMARK));
+    getChild<LLUICtrl>("check_material")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_MATERIAL));
+    getChild<LLUICtrl>("check_notecard")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_NOTECARD));
+    getChild<LLUICtrl>("check_object")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_OBJECT));
+    getChild<LLUICtrl>("check_script")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LSL));
+    getChild<LLUICtrl>("check_sound")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
+    getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
+    getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
     getChild<LLUICtrl>("check_settings")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SETTINGS));
     getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
 
@@ -1703,9 +1701,9 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
     getChild<LLRadioGroup>("date_search_direction")->setSelectedIndex(date_search_direction);
 
     // <FS:Zi> FIRE-1175 - Filter Permissions Menu
-    getChild<LLUICtrl>("check_modify")->setValue((bool)(mFilter->getFilterPermissions() & PERM_MODIFY));
-    getChild<LLUICtrl>("check_copy")->setValue((bool)(mFilter->getFilterPermissions() & PERM_COPY));
-    getChild<LLUICtrl>("check_transfer")->setValue((bool)(mFilter->getFilterPermissions() & PERM_TRANSFER));
+    getChild<LLUICtrl>("check_modify")->setValue((bool) (mFilter->getFilterPermissions() & PERM_MODIFY));
+    getChild<LLUICtrl>("check_copy")->setValue((bool) (mFilter->getFilterPermissions() & PERM_COPY));
+    getChild<LLUICtrl>("check_transfer")->setValue((bool) (mFilter->getFilterPermissions() & PERM_TRANSFER));
     // </FS:Zi>
 
     // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
