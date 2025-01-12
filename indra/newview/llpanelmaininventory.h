@@ -189,6 +189,12 @@ protected:
     bool isSortByChecked(const LLSD& userdata);
     // </FS:Zi> Sort By menu handlers
 
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Callback method for the new Show Filter button on the bottom button panel of the main inventory.
+    // Stays highlighted if any filter is enabled.
+    bool isAnyFilterChecked(const LLSD& userdata);
+    // </FS:minerjr> [FIRE-35042]
+
     void saveTexture(const LLSD& userdata);
     bool isSaveTextureEnabled(const LLSD& userdata);
     void updateItemcountText();

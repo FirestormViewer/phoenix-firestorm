@@ -845,8 +845,8 @@ with the same filename but different name
   <texture name="TrashItem_Off" file_name="icons/TrashItem_Off.png" preload="true" />
   <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="true" />
   <!-- <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible  -->
-  <!-- New UI 18 px image created for inventory UI for Only Coalesced toggle -->
-  <texture name="coalesced_18" file_name="bottomtray/coalesced_18.png" preload="true" />
+  <!-- New UI 18 px image created for inventory UI for Show Filters toggle -->
+  <texture name="show_filters_18" file_name="bottomtray/show_filters_18.png" preload="true" />
   <!-- </FS:minerjr> [FIRE-35042] -->
   <texture name="inventory_18" file_name="bottomtray/inventory_18.png" preload="true" />
   <texture name="chatbar_18" file_name="bottomtray/chatbar_18.png" preload="true" />

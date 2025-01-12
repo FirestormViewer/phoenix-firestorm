@@ -186,8 +186,7 @@
         <!-- <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible  -->
         <combo_box.item value="filter_separator" label="------------" enabled="false" />
         <!-- Add new custom filter to toggle Only Coalesced on and switch to filter_type_objects as only objects can be combined -->
-        <!-- Changed label from Only Coalesced to Only Combined (Clumps) to make it more descriptive and match the UI verbiage that creates the Coalesced objects -->
-        <combo_box.item value="filter_type_coalesced" label="Only Combined (Clumps)"/>
+        <combo_box.item value="filter_type_coalesced" label="Only Coalesced"/>
         <!-- </FS:minerjr> [FIRE-35042] -->
         <combo_box.item value="filter_separator" label="------------" enabled="false" />
         <combo_box.item value="filter_type_custom" label="Custom..." />
@@ -420,35 +419,34 @@
            </button>
       </panel>
       <!-- <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible  -->
-      <!-- This is a new panel button for adding a on screen visual indicator that Only Coalesced filter is enabled -->
-      <!-- Changed label from Only Coalesced to Only Combined (Clumps) to make it more descriptive and match the UI verbiage that creates the Coalesced objects -->
+      <!-- This is a new panel button for adding an on screen visual indicator that shows when any filter is enabled -->
       <!-- A new inventory image was required to be used -->
       <panel
        follows="top|left"
        height="25"
        layout="topleft"
        left_pad="0"
-       name="only_coalesced_panel"
+       name="show_filters_panel"
        width="32">
           <button
            follows="top|left"
            height="25"
            image_hover_unselected="Toolbar_Middle_Over"
-           image_overlay="coalesced_18"
+           image_overlay="show_filters_18"
            image_selected="Toolbar_Middle_Selected"
            image_unselected="Toolbar_Middle_Off"
            layout="topleft"
            left="0"
-           name="only_coalesced_inv_btn"
-           tool_tip="Only Combined (Clumps) - Enables filter that displays only Combined Objects (Clumps) which are made up of 2 or more prims"
+           name="show_filters_inv_btn"
+           tool_tip="Show Filters - Shows the filter side menu when selected. Becomes highlighted when any filter is enabled."
            top="0"
            width="31">
               <button.commit_callback
-               function="Inventory.CoalescedObjects.Toggle"
-               parameter="coalesced_objects_only" />
+                 function="Inventory.GearDefault.Custom.Action"
+                 parameter="show_filters" />
               <button.is_toggled_callback
-               function="Inventory.CoalescedObjects.Check"
-               parameter="coalesced_objects_only" />
+               function="Inventory.ShowFilters.Check"
+               parameter="show_filters_modified" />
           </button>
       </panel>
       <!-- </FS:minerjr> [FIRE-35042] -->

@@ -1211,7 +1211,6 @@
 		 width="270"
 		 control_name="FSSplitInventorySearchOverTabs"
 		 tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory."/>
-
     </panel>
 
     <!--Toasts-->
