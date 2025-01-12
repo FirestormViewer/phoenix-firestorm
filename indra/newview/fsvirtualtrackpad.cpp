@@ -306,25 +306,28 @@ bool FSVirtualTrackpad::handleHover(S32 x, S32 y, MASK mask)
     if (!hasMouseCapture())
         return true;
 
-    S32 deltaX, deltaY;
-    getHoverMovementDeltas(x, y, mask, &deltaX, &deltaY);
+    S32 deltaX, deltaY, deltaZ;
+    getHoverMovementDeltas(x, y, mask, &deltaX, &deltaY, &deltaZ);
     applyHoverMovementDeltas(deltaX, deltaY, mask);
     applyDeltasToValues(deltaX, deltaY, mask);
-    applyDeltasToDeltaValues(deltaX, deltaY, mask);
+    applyDeltasToDeltaValues(deltaX, deltaY, deltaZ, mask);
 
     onCommit();
 
     return true;
 }
 
-void FSVirtualTrackpad::getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY)
+void FSVirtualTrackpad::getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY, S32* deltaZ)
 {
-    if (!deltaX || !deltaY)
+    if (!deltaX || !deltaY || !deltaZ)
         return;
 
     S32 fromX, fromY;
     fromX = mDoingPinchMode ? mPinchCursorValueX : mCursorValueX;
     fromY = mDoingPinchMode ? mPinchCursorValueY : mCursorValueY;
+
+    *deltaZ = mWheelClicksSinceLastDelta;
+    mWheelClicksSinceLastDelta = 0;
 
     if (mask & MASK_CONTROL)
     {
@@ -427,48 +430,48 @@ void FSVirtualTrackpad::applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask)
     }
 }
 
-void FSVirtualTrackpad::applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, MASK mask)
+void FSVirtualTrackpad::applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, S32 deltaZ, MASK mask)
 {
     if (mDoingPinchMode)
     {
         if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
         {
-            mPinchValueDeltaX = 0;
+            mPinchValueDeltaX = deltaZ;
             mPinchValueDeltaY = deltaY;
             mPinchValueDeltaZ = deltaX;
         }
         else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
         {
             mPinchValueDeltaX = deltaX;
-            mPinchValueDeltaY = 0;
+            mPinchValueDeltaY = deltaZ;
             mPinchValueDeltaZ = deltaY;
         }
         else
         {
             mPinchValueDeltaX = deltaX;
             mPinchValueDeltaY = deltaY;
-            mPinchValueDeltaZ = 0;
+            mPinchValueDeltaZ = deltaZ;
         }
     }
     else
     {
         if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
         {
-            mValueDeltaX = 0;
+            mValueDeltaX = deltaZ;
             mValueDeltaY = deltaY;
             mValueDeltaZ = deltaX;
         }
         else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
         {
             mValueDeltaX = deltaX;
-            mValueDeltaY = 0;
+            mValueDeltaY = deltaZ;
             mValueDeltaZ = deltaY;
         }
         else
         {
             mValueDeltaX = deltaX;
             mValueDeltaY = deltaY;
-            mValueDeltaZ = 0;
+            mValueDeltaZ = deltaZ;
         }
     }
 }
@@ -602,23 +605,43 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
         if (mask & MASK_CONTROL)
             changeAmount /= 5;
 
+        mWheelClicksSinceLastDelta = -1 * clicks * changeAmount;
+
         if (mDoingPinchMode)
         {
             if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
-                mPinchValueX -= clicks * changeAmount;
+            {
+                mPinchValueX += mWheelClicksSinceLastDelta;
+                mPinchValueDeltaX = mWheelClicksSinceLastDelta;
+            }
             else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
-                mPinchValueY -= clicks * changeAmount;
+            {
+                mPinchValueY += mWheelClicksSinceLastDelta;
+                mPinchValueDeltaY = mWheelClicksSinceLastDelta;
+            }
             else
-                mPinchValueZ -= clicks * changeAmount;
+            {
+                mPinchValueZ += mWheelClicksSinceLastDelta;
+                mPinchValueDeltaZ = mWheelClicksSinceLastDelta;
+            }
         }
         else
         {
             if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_ALT)
-                mValueX -= clicks * changeAmount;
+            {
+                mValueX += mWheelClicksSinceLastDelta;
+                mValueDeltaX = mWheelClicksSinceLastDelta;
+            }
             else if ((mask & (MASK_SHIFT | MASK_ALT)) == MASK_SHIFT)
-                mValueY -= clicks * changeAmount;
+            {
+                mValueY += mWheelClicksSinceLastDelta;
+                mValueDeltaY = mWheelClicksSinceLastDelta;
+            }
             else
-                mValueZ -= clicks * changeAmount;
+            {
+                mValueZ += mWheelClicksSinceLastDelta;
+                mValueDeltaZ = mWheelClicksSinceLastDelta;
+            }
         }
 
         if (!hasMouseCapture())

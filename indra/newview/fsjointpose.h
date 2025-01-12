@@ -148,6 +148,16 @@ class FSJointPose
     void swapRotationWith(FSJointPose* oppositeJoint);
 
     /// <summary>
+    /// Clones the rotation to this from the supplied joint.
+    /// </summary>
+    void cloneRotationFrom(FSJointPose* fromJoint);
+
+    /// <summary>
+    /// Mirrors the rotation to this from the supplied joint.
+    /// </summary>
+    void mirrorRotationFrom(FSJointPose* fromJoint);
+
+    /// <summary>
     /// Resets the beginning properties of the joint this represents.
     /// </summary>
     void recaptureJoint();
