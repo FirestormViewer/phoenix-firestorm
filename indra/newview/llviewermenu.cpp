@@ -11767,7 +11767,7 @@ class LLWorldEnvSettings : public view_listener_t
             // <FS:Beq> Add legacy noon to the manually selected environments that can have a user defined transition time.
             // LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY, LLEnvironment::TRANSITION_INSTANT);
             // LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY);
+            LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             // </FS:Beq>
             defocusEnvFloaters();
