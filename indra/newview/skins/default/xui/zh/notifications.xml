@@ -4054,7 +4054,7 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification label="說話" name="HintSpeak">
 		點擊「說話」按鈕來打開或關閉麥克風。
 
-點擊向上箭頭鍵，可顯示聲音控制檯。
+點擊向上箭頭鍵，可顯示聲音控制台。
 
 隱藏「說話」按鈕將停用語音功能。
 	</notification>

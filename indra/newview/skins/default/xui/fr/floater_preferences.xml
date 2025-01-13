@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Preferences" title="PRÉFÉRENCES">
+<floater name="Preferences" title="Préférences">
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>
 	<panel name="search_panel">
@@ -7,7 +7,7 @@
 	</panel>
 	<tab_container name="pref core">
 		<panel label="Général" name="general"/>
-		<panel label="Chat" name="chat"/>
+		<panel label="Conversations" name="chat"/>
 		<panel label="Couleurs" name="colors"/>
 		<panel label="Graphiques" name="display"/>
 		<panel label="Son et Média" name="audio"/>

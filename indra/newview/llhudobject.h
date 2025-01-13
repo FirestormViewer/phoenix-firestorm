@@ -60,6 +60,11 @@ public:
 
     bool isVisible() const { return mVisible; }
 
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // Accessor methods for indicating if the HUB object is highlighted
+    void setIsHighlighted(bool isHighlighted) { mbIsHighlighted = isHighlighted; }
+    bool getIsHighlighted() const { return mbIsHighlighted; }
+    // </FS:minerjr> [FIRE-35019]
     U8 getType() const { return mType; }
 
     LLVector3d getPositionGlobal() const { return mPositionGlobal; }
@@ -111,6 +116,9 @@ protected:
     U8              mType;
     bool            mDead;
     bool            mVisible;
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    bool            mbIsHighlighted; // Flag to determine if the object is currently highlighted by hover
+    // </FS:minerjr> [FIRE-35019]
     LLVector3d      mPositionGlobal;
     LLPointer<LLViewerObject> mSourceObject;
     LLPointer<LLViewerObject> mTargetObject;

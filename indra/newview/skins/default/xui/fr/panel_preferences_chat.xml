@@ -25,6 +25,7 @@
 			<check_box label="Chat local" name="show_timestamps_nearby_chat" width="80"/>
 			<check_box label="IMs" name="show_timestamps_im" width="50"/>
 			<check_box label="Transcriptions" name="show_timestamps_transcripts"/>
+			<check_box label="Afficher la console de conversation" tool_tip="Afficher/masquer le texte de la console de conversation, lorsque la fenêtre Conversations n'est pas affichée" name="FSShowOnscreenConsole"/>
 			<check_box name="FSConsoleClassicDrawMode" label="Utiliser le mode classique pour la console" tool_tip="L'affichage classique de la console affiche son arrière-plan d'un bloc pour toutes les lignes, avec comme longueur celle de la plus longue ligne."/>
 			<check_box name="ChatFullWidth" label="Utiliser la largeur totale de l'écran pour la console"/>
 			<spinner label="Faire disparaitre les messages après :" name="fade_chat_time" label_width="200" width="260"/>

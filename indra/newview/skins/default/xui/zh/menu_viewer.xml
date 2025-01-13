@@ -99,6 +99,7 @@
 		<menu_item_check label="聊天記錄" name="Conversation Log..." />
 		<menu_item_check label="附近的語音" name="Nearby Voice" />
 		<menu_item_call label="封鎖列表" name="Block List" />
+		<menu_item_check label="顯示螢幕控制台" name="Show On-screen Console" />
 	</menu>
 	<menu label="世界" name="World">
 		<menu_item_call label="重新同步動畫" name="Resync Animations" />
@@ -299,7 +300,7 @@
 		<menu_item_check label="允許臨時附件" name="Allow Temporary Attachments" />
 		<menu_item_check label="禁止自動進入#RLV檔案夾" name="Forbid Give to #RLV" />
 		<menu_item_check label="裝扮替換解鎖" name="Wear Replaces Unlocked" />
-		<menu_item_check label="控制檯" name="Console" />
+		<menu_item_check label="控制台" name="Console" />
 		<menu_item_check label="限制" name="Restrictions" />
 		<menu_item_check label="字元" name="Strings" />
 	</menu>
@@ -393,18 +394,18 @@
 		<menu_item_check label="顯示開發選項" name="Debug Mode" />
 	</menu>
 	<menu label="開發" name="Develop">
-		<menu label="控制檯" name="Consoles">
-			<menu_item_check label="紋理控制檯" name="Texture Console" />
-			<menu_item_check label="除錯控制檯" name="Debug Console" />
-			<menu_item_call label="通知控制檯" name="Notifications" />
+		<menu label="控制台" name="Consoles">
+			<menu_item_check label="紋理控制台" name="Texture Console" />
+			<menu_item_check label="除錯控制台" name="Debug Console" />
+			<menu_item_call label="通知控制台" name="Notifications" />
 			<menu_item_check label="快速計時器" name="Fast Timers" />
 			<menu_item_check label="記憶體" name="Memory" />
 			<menu_item_check label="場景統計資料" name="Scene Statistics" />
 			<menu_item_check label="場景載入監視器" name="Scene Loading Monitor" />
-			<menu_item_check label="區域除錯控制檯" name="Region Debug Console" />
-			<menu_item_call label="區域資訊傳至除錯控制檯" name="Region Info to Debug Console" />
-			<menu_item_call label="群組資訊傳至除錯控制檯" name="Group Info to Debug Console" />
-			<menu_item_call label="效能資訊傳至除錯控制檯" name="Capabilities Info to Debug Console" />
+			<menu_item_check label="區域除錯控制台" name="Region Debug Console" />
+			<menu_item_call label="區域資訊傳至除錯控制台" name="Region Info to Debug Console" />
+			<menu_item_call label="群組資訊傳至除錯控制台" name="Group Info to Debug Console" />
+			<menu_item_call label="效能資訊傳至除錯控制台" name="Capabilities Info to Debug Console" />
 			<menu_item_check label="相機" name="Camera" />
 			<menu_item_check label="風力" name="Wind" />
 			<menu_item_check label="視角" name="FOV" />
@@ -636,7 +637,7 @@
 		<menu_item_call label="測試檔案壓縮" name="Compress File Test" />
 		<menu_item_call label="啟用記憶體洩漏視覺偵測器" name="Enable Visual Leak Detector" />
 		<menu_item_check label="輸出除錯小型轉儲" name="Output Debug Minidump" />
-		<menu_item_check label="下次運行時顯示控制檯視窗" name="Console Window" />
+		<menu_item_check label="下次運行時顯示控制台視窗" name="Console Window" />
 		<menu label="設定記錄細節" name="Set Logging Level">
 			<menu_item_check label="除錯" name="Debug" />
 			<menu_item_check label="資訊" name="Info" />
