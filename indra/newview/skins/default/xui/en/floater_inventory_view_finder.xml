@@ -312,7 +312,7 @@
      layout="topleft"
      left="8"
      top_pad="6"
-     tool_tip="Filters linked objects - objects can be linked in the Tools menu in edit mode"
+     tool_tip="Filters linked objects"
      name="inventory_filter_show_links_combo"
      width="120">
         <combo_box.item name="show_links"
