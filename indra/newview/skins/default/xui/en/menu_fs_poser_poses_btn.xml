@@ -10,7 +10,7 @@
         <on_click function="Pose.Menu" parameter="selective"/>
     </menu_item_call>
     <menu_item_call
-     label="Load Selective - Rot Only"
+     label="Load Selective - Rotations Only"
 	 tool_tip="Loads only rotations, only to the joints that are off, and turns them on"
      layout="topleft"
      name="rotations_positions">
