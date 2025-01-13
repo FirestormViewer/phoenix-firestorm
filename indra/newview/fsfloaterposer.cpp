@@ -341,8 +341,8 @@ void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
     std::string userPath =
         gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
 
-    userPath = userPath + gDirUtilp->getDirDelimiter() + std::string(POSE_PRESETS_HANDS_SUBDIRECTORY);
-    if (gDirUtilp->fileExists(userPath))
+    std::string userHandPresetsPath = userPath + gDirUtilp->getDirDelimiter() + std::string(POSE_PRESETS_HANDS_SUBDIRECTORY);
+    if (gDirUtilp->fileExists(userHandPresetsPath))
         return;
 
     try
@@ -353,8 +353,11 @@ void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
             LLFile::mkdir(userPath);
         }
 
-        LL_WARNS("Poser") << "Couldn't find folder: " << userPath << " - creating one." << LL_ENDL;
-        LLFile::mkdir(userPath);
+        if (!gDirUtilp->fileExists(userHandPresetsPath))
+        {
+            LL_WARNS("Poser") << "Couldn't find folder: " << userHandPresetsPath << " - creating one." << LL_ENDL;
+            LLFile::mkdir(userHandPresetsPath);
+        }
 
         std::string sourcePresetPath =
             gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, POSE_SAVE_SUBDIRECTORY, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY));
@@ -366,10 +369,10 @@ void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
         for (auto pose : posesToCopy)
         {
             std::string source      = sourcePresetPath + gDirUtilp->getDirDelimiter() + pose;
-            std::string destination = userPath + gDirUtilp->getDirDelimiter() + pose;
+            std::string destination = userHandPresetsPath + gDirUtilp->getDirDelimiter() + pose;
 
             if (!LLFile::copy(source, destination))
-                LL_WARNS("LLDiskCache") << "Failed to copy " << source << " to " << destination << LL_ENDL;
+                LL_WARNS("Poser") << "Failed to copy " << source << " to " << destination << LL_ENDL;
         }
     }
     catch (const std::exception& e)
