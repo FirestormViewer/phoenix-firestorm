@@ -20,7 +20,7 @@
 	<check_box label="Kop" name="check_copy"/>
 	<check_box label="Trans" name="check_transfer"/>
 	<check_box label="Ordner immer anzeig." name="check_show_empty"/>
-	<check_box label="Nur verbundene" name="check_only_coalesced"/>
+	<check_box label="Nur verbundene" name="check_only_coalesced" width="110"/>
 	<combo_box tool_tip="Verknüpfte Objekte filtern" name="inventory_filter_show_links_combo">
 		<combo_box.item name="show_links" label="Verknüpfungen anzeigen"/>
 		<combo_box.item name="show_links_only" label="Nur Verknüpfungen anzeigen"/>

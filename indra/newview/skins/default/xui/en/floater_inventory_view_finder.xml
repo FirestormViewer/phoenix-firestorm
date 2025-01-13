@@ -314,7 +314,7 @@
      top_pad="6"
      tool_tip="Filters linked objects"
      name="inventory_filter_show_links_combo"
-     width="120">
+     width="145">
         <combo_box.item name="show_links"
                         label="Show Links"
                         value="0"/>
