@@ -266,9 +266,11 @@ void LLHUDText::renderText()
     // Render text window background
     // Don't add if the parent object is attached (clothing on player avatar: as some cloths have blank text and render a background...)
     // Also, only show the background if it is show all is checked, or if on highlight, only if use hover highlight is enabled.
-    if ((mShowBackground == SHOW_BACKGROUND_ALL ||
-         mShowBackground == SHOW_BACKGROUND_ONLY_HIGHLIGHTED && mbIsHighlighted && mbUseHoverHighlight) &&
-        (mSourceObject.notNull() && mSourceObject->getAttachmentState() == 0))
+    bool show_all_backgrounds = (mShowBackground == SHOW_BACKGROUND_ALL);
+    bool show_highlighted_background = (mShowBackground == SHOW_BACKGROUND_ONLY_HIGHLIGHTED && mbIsHighlighted && mbUseHoverHighlight);
+    bool is_valid_source_object = (mSourceObject.notNull() && mSourceObject->getAttachmentState() == 0);
+
+    if ( (show_all_backgrounds || show_highlighted_background) && is_valid_source_object )
     {
         LLRect screen_rect;
         screen_rect.setCenterAndSize(0, static_cast<S32>(lltrunc(-mBackgroundHeight / 2 + mOffsetY + mBackgroundOffsetY)),
