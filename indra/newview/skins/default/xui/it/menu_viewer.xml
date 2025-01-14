@@ -95,6 +95,7 @@
 		<menu_item_check label="Storico Conversazioni" name="Conversation Log..."/>
 		<menu_item_check label="Voce nelle vicinanze" name="Nearby Voice"/>
 		<menu_item_call label="Lista Bloccati" name="Block List"/>
+		<menu_item_check label="Mostra console della chat" name="Show On-screen Console" />
 	</menu>
 	<menu label="Mondo" name="World">
 		<menu_item_call label="Risinc animazioni" name="Resync Animations"/>
