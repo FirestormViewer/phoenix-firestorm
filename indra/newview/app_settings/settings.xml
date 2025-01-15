@@ -2,6 +2,9 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+    <!-- <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card -->
+    <!-- Added new flag to turn on the new bias adjustments - Can be enabled in the Preferences->Graphics->Hardware Settings -->
+    <!-- Checkbox labeled "Enable New Texture Bias Adjustments" -->
     <key>FSTextureNewBiasAdjustments</key>
     <map>
         <key>Comment</key>
@@ -11,8 +14,9 @@
         <key>Type</key>
         <string>Boolean</string>
         <key>Value</key>
-        <integer>1</integer>
+        <integer>0</integer>
     </map>
+    <!-- </FS:minerjr> [FIRE-35011] -->
   <key>FSLandmarkCreatedNotification</key>
   <map>
     <key>Comment</key>

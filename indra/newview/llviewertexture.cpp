@@ -91,11 +91,11 @@ S32 LLViewerTexture::sAuxCount = 0;
 LLFrameTimer LLViewerTexture::sEvaluationTimer;
 F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
 
-// <FS:minerjr>
+// <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
 F32 LLViewerTexture::sPreviousDesiredDiscardBias = 0.f; // Init the static value of the previous discard bias, used to know what direction the bias is going, up, down or staying the same
 F32 LLViewerTexture::sOverMemoryBudgetStartTime = 0.0f; // Init the static time when system first went over VRAM budget
 F32 LLViewerTexture::sOverMemoryBudgetEndTime = 0.0f; // Init the static time when the system finally reached a normal memory amount
-// </FS:minerjr>
+// </FS:minerjr> [FIRE-35011]
 S32 LLViewerTexture::sMaxSculptRez = 128; //max sculpt image size
 constexpr S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64;
 const S32 MAX_CACHED_RAW_SCULPT_IMAGE_AREA = LLViewerTexture::sMaxSculptRez * LLViewerTexture::sMaxSculptRez;
@@ -544,7 +544,7 @@ void LLViewerTexture::updateClass()
     static bool was_low = false;
     static bool was_sys_low = false;
 
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     //if (is_low && !was_low)
     //{
     //    // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
@@ -583,7 +583,7 @@ void LLViewerTexture::updateClass()
             }
         }
     }
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35011]
 
     was_low = is_low;
     was_sys_low = is_sys_low;
@@ -654,14 +654,14 @@ void LLViewerTexture::updateClass()
     }
 
     sDesiredDiscardBias = llclamp(sDesiredDiscardBias, 1.f, 4.f);
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // If the desired discard bias is 1.0 but was previously a larger number, that means we are back to normal memory usage again
     if (sDesiredDiscardBias == 1.0f && sPreviousDesiredDiscardBias > sDesiredDiscardBias)
     {
         // So we need to set the memory buget end time to the current time
         sOverMemoryBudgetEndTime = sCurrentTime;
     }
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35011]
 
     LLViewerTexture::sFreezeImageUpdates = false;
 }
@@ -1768,7 +1768,7 @@ void LLViewerFetchedTexture::setDebugText(const std::string& text)
 
 extern bool gCubeSnapshot;
 
-// <FS:minerjr>
+// <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
 // This method will will handle the memory overage for the process texture stats methods for both Fetched and LOD textures
 bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
 {
@@ -1800,9 +1800,10 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                         mDelayToNormalUseAfterOverBudget += 0.5f * sDesiredDiscardBias;
                     }
 
-                    // Clear the Recovery delay as we should go back to see about lowering the quality of this texture again
                     // Save the current state back to to the next state
                     mPreviousTextureState = mTextureState;
+                    // Clear the RECOVERY_DELAY flag so the regular memory overage code can take over
+                    mTextureState &= ~LLViewerTexture::ETextureStates::RECOVERY_DELAY;
 
                     return true;
                 }
@@ -1885,8 +1886,9 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                 return true;
             }
         }
-        // Else if we hve returned to normal memory usage after the memory acted up and it affected this texture
-        else if (sDesiredDiscardBias == 1.0f && mTextureState != ETextureStates::NORMAL && sOverMemoryBudgetEndTime != 0.0f)
+        // Else if we have returned to normal memory usage after the memory acted up and it affected this texture
+        else if (sDesiredDiscardBias == 1.0f && mTextureState != ETextureStates::NORMAL && mTextureState != ETextureStates::DELETED &&
+                 sOverMemoryBudgetEndTime != 0.0f)
         {
             // Create an additional 1 second delay for this texture
             mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f;
@@ -1917,7 +1919,7 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
     // Default to return false, and that we don't want the parent method to return early.
     return false;
 }
-// </FS:minerjr>
+// </FS:minerjr> [FIRE-35011]
 // 
 //virtual
 void LLViewerFetchedTexture::processTextureStats()
@@ -1926,7 +1928,7 @@ void LLViewerFetchedTexture::processTextureStats()
     llassert(!gCubeSnapshot);  // should only be called when the main camera is active
     llassert(!LLPipeline::sShadowRender);
 
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Static saved settings allowing to enable/disable the new bias adjustment feature
     static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
     if (use_new_bias_adjustments)
@@ -1938,7 +1940,7 @@ void LLViewerFetchedTexture::processTextureStats()
             return;
         }
     }
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35011]
     if(mFullyLoaded)
     {
         if(mDesiredDiscardLevel > mMinDesiredDiscardLevel)//need to load more
@@ -2591,7 +2593,10 @@ void LLViewerFetchedTexture::clearCallbackEntryList()
 
     return;
 }
-
+// <FS:minerjr> [FIRE-35011]
+// These following three methods may need to modified for use by the mUUIDDeleteMap, but right now they are
+// not causing any issue. Just a future note. When on the Delete list, they are not active.
+// </FS:minerjr> [FIRE-35011]
 void LLViewerFetchedTexture::deleteCallbackEntry(const LLLoadedCallbackEntry::source_callback_list_t* callback_list)
 {
     if(mLoadedCallbackList.empty() || !callback_list)
@@ -3218,7 +3223,7 @@ bool LLViewerLODTexture::isUpdateFrozen()
 void LLViewerLODTexture::processTextureStats()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Static saved settings allowing to enable/disable the new bias adjustment feature
     static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
     if (use_new_bias_adjustments)
@@ -3230,7 +3235,7 @@ void LLViewerLODTexture::processTextureStats()
             return;
         }
     }
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35011]
     updateVirtualSize();
 
     bool did_downscale = false;

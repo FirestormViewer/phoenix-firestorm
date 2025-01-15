@@ -238,7 +238,9 @@ public:
 private:
     typedef std::map< LLTextureKey, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
     uuid_map_t mUUIDMap;
-    uuid_map_t mUUIDDeleteMap;
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    uuid_map_t mUUIDDeleteMap; // New storage for Delete Textures (they now don't go away fully), fixing manuy performace issues
+    // <FS:minerjr> [FIRE-35011]
     LLTextureKey mLastUpdateKey;
 
     image_list_t mImageList;

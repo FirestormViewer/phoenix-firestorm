@@ -1230,6 +1230,8 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+        <!-- <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card -->
+        <!-- Check box to enable the new texture bias adjustments -->
         <check_box
          control_name="FSTextureNewBiasAdjustments"
          height="16"
@@ -1240,6 +1242,7 @@ If you do not understand the distinction then leave this control alone."
          tool_tip=""
          top_delta="20"
          width="256" />
+        <!-- </FS:minerjr> [FIRE-35011] -->
     </panel>
 
 <!--Rendering-->

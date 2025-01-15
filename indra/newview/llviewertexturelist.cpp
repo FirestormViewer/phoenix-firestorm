@@ -117,10 +117,10 @@ void LLViewerTextureList::doPreloadImages()
     llassert_always(mInitialized) ;
     llassert_always(mImageList.empty()) ;
     llassert_always(mUUIDMap.empty()) ;
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Clear out the mUUIDDeleteMap as well
     llassert_always(mUUIDDeleteMap.empty());
-    // </FS:minerjr> FIRE-35011
+    // </FS:minerjr> [FIRE-35011]
 
     // Set the "missing asset" image
     LLViewerFetchedTexture::sMissingAssetImagep = LLViewerTextureManager::getFetchedTextureFromFile("missing_asset.tga", FTT_LOCAL_FILE, MIPMAP_NO, LLViewerFetchedTexture::BOOST_UI);
@@ -355,6 +355,7 @@ void LLViewerTextureList::shutdown()
         LL_DEBUGS() << "saving " << imagelist.size() << " image list entries" << LL_ENDL;
         LLSDSerialize::toPrettyXML(imagelist, file);
     }
+
     //
     // Clean up "loaded" callbacks.
     //
@@ -369,9 +370,9 @@ void LLViewerTextureList::shutdown()
     mFastCacheList.clear();
 
     mUUIDMap.clear();
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     mUUIDDeleteMap.clear(); // Clear the UUIDMap for delete textures
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35011]
     mImageList.clear();
 
     mInitialized = false ; //prevent loading textures again.
@@ -694,9 +695,9 @@ void LLViewerTextureList::findTexturesByID(const LLUUID &image_id, std::vector<L
         output.push_back(iter->second);
         iter++;
     }
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Possibly add the deleted images on to this list, depending on the use case.
-    // </FS:minerjr> FIRE-35011
+    // </FS:minerjr> [FIRE-35011]
 }
 
 LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &search_key)
@@ -705,7 +706,7 @@ LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &searc
     uuid_map_t::iterator iter = mUUIDMap.find(search_key);    
     if (iter == mUUIDMap.end())
     {
-        // <FS:minerjr> FIRE-35011
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
         // If the iterator reached the end, instead of returning null, try to see if the image exists on the deleted list
         // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
         static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
@@ -723,7 +724,7 @@ LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &searc
             return mUUIDMap[search_key];
         }
         // Otherwise, return false as the image does not exist on either the normal or deleted lists
-        // </FS:minerjr> FIRE-35011
+        // </FS:minerjr> [FIRE-35011]
         return NULL;
     }
     return iter->second;
@@ -832,7 +833,7 @@ void LLViewerTextureList::addImage(LLViewerFetchedTexture *new_image, ETexListTy
     new_image->setTextureListType(tex_type);
 }
         
-// <FS:minerjr>
+// <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
 /*
 void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
 {
@@ -900,7 +901,7 @@ void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
         removeImageFromList(image);
     }
 }
-// </FS:minerjr>
+// </FS:minerjr> [FIRE-35011]
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -962,6 +963,30 @@ void LLViewerTextureList::updateImages(F32 max_time)
         }
     }
 
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    /*
+    // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+
+    // Currently we are no longer deleting the Texture Memory at all, just forcing all images to scale down.
+    // We can possibly have an emergency clear for the map of deleted textures if we spend over 2 minutes at high memory.
+    // But this may just re-introduce the issue with the deleting textures as it is.    
+    if (use_new_bias_adjustments && LLViewerTexture::sDesiredDiscardBias >= 4.0f && (LLViewerTexture::sCurrentTime - LLViewerTexture::sOverMemoryBudgetStartTime) > 120.0f)
+    {
+        // Need to purge any requests on the delete list
+        for (uuid_map_t::iterator iter = mUUIDDeleteMap.begin(); iter != mUUIDDeleteMap.end(); ++iter)
+        {
+            LLViewerFetchedTexture* imagep = iter->second;
+            if (imagep)
+            {
+                imagep->forceToDeleteRequest();
+            }
+        }
+        mUUIDDeleteMap.clear(); // Clear the UUIDMap for delete textures
+    }
+    */
+    // </FS:minerjr> [FIRE-35011]
+
     updateImagesUpdateStats();
 }
 
@@ -981,7 +1006,7 @@ void LLViewerTextureList::clearFetchingRequests()
         LLViewerFetchedTexture* imagep = *iter;
         imagep->forceToDeleteRequest() ;
     }
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Need to purge any requests on the delete list
     for (uuid_map_t::iterator iter = mUUIDDeleteMap.begin(); iter != mUUIDDeleteMap.end(); ++iter)
     {
@@ -1312,7 +1337,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 
     //update MIN_UPDATE_COUNT or 5% of other textures, whichever is greater
     update_count = llmax((U32) MIN_UPDATE_COUNT, (U32) mUUIDMap.size()/20);
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     //if (LLViewerTexture::sDesiredDiscardBias > 1.f)
     //{
     //    // we are over memory target, update more agresively
@@ -1321,12 +1346,24 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
     // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
     static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
     // If the desired discard bias is greater then 1 and is increasing or stable, if descreasing, use the normal about of texture updates
-    if (LLViewerTexture::sDesiredDiscardBias > 1.f && LLViewerTexture::sDesiredDiscardBias >= LLViewerTexture::sPreviousDesiredDiscardBias)
+    if (use_new_bias_adjustments)
     {
-        // we are over memory target, update more agresively
-        update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
+        if (LLViewerTexture::sDesiredDiscardBias > 1.f &&
+            LLViewerTexture::sDesiredDiscardBias >= LLViewerTexture::sPreviousDesiredDiscardBias)
+        {
+            // we are over memory target, update more agresively
+            update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
+        }
     }
-    // </FS:minerjr>
+    else
+    {
+        if (LLViewerTexture::sDesiredDiscardBias > 1.f)
+        {
+            // we are over memory target, update more agresively
+            update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
+        }
+    }
+    // </FS:minerjr> [FIRE-35011]
     update_count = llmin(update_count, (U32) mUUIDMap.size());
 
     { // copy entries out of UUID map to avoid iterator invalidation from deletion inside updateImageDecodeProiroty or updateFetch below

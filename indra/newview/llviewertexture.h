@@ -185,7 +185,7 @@ public:
     typedef std::vector<MaterialEntry> material_list_t;
     material_list_t   mMaterialList;  // reverse pointer pointing to LL::GLTF::Materials using this image as texture
 
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Create an enum bitfield for storing the various memory states
     enum ETextureStates
     {
@@ -200,7 +200,7 @@ public:
     mutable U8 mPreviousTextureState; // Bitfield which represents the texture's current state
     F32 mDelayToNormalUseAfterOverBudget; // Time to wait for returning to normal texture adjustments for larger resolution requests after
                                           // being over VRAM budget
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35011]
 
 protected:
     void cleanup() ;
@@ -243,11 +243,11 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     static F32 sPreviousDesiredDiscardBias; // Static value of the previous Desired Discard Bias (Used to determine if the desired discard bias is increasing, decreasing, or staying the same
     static F32 sOverMemoryBudgetStartTime;  // Static value stores the mCurrentTime when the viewer first went over budget of RAM (sDesiredDiscardBias > 1.0)
     static F32 sOverMemoryBudgetEndTime;    // Static value stores the mCurrentTime when the viewer first exists over budget of RAM (sDesiredDiscardBias == 1.0)
-    // </FS:minerjr> FIRE-35011
+    // </FS:minerjr> [FIRE-35011]
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;
@@ -375,7 +375,7 @@ public:
 
     void destroyTexture() ;
 
-    // <FS:minerjr> FIRE-35011
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // New behavior for handling low memory for the ProcessTextureStats method for both Fetch and LOD textures
     // Returns true if the the 
     bool handleMemoryOverageForProcessTextureStats();
