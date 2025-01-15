@@ -238,6 +238,7 @@ public:
 private:
     typedef std::map< LLTextureKey, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
     uuid_map_t mUUIDMap;
+    uuid_map_t mUUIDDeleteMap;
     LLTextureKey mLastUpdateKey;
 
     image_list_t mImageList;

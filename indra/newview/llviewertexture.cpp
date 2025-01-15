@@ -91,6 +91,11 @@ S32 LLViewerTexture::sAuxCount = 0;
 LLFrameTimer LLViewerTexture::sEvaluationTimer;
 F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
 
+// <FS:minerjr>
+F32 LLViewerTexture::sPreviousDesiredDiscardBias = 0.f; // Init the static value of the previous discard bias, used to know what direction the bias is going, up, down or staying the same
+F32 LLViewerTexture::sOverMemoryBudgetStartTime = 0.0f; // Init the static time when system first went over VRAM budget
+F32 LLViewerTexture::sOverMemoryBudgetEndTime = 0.0f; // Init the static time when the system finally reached a normal memory amount
+// </FS:minerjr>
 S32 LLViewerTexture::sMaxSculptRez = 128; //max sculpt image size
 constexpr S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64;
 const S32 MAX_CACHED_RAW_SCULPT_IMAGE_AREA = LLViewerTexture::sMaxSculptRez * LLViewerTexture::sMaxSculptRez;
@@ -539,10 +544,35 @@ void LLViewerTexture::updateClass()
     static bool was_low = false;
     static bool was_sys_low = false;
 
+    // <FS:minerjr> FIRE-35011
+    //if (is_low && !was_low)
+    //{
+    //    // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
+    //    sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.5f);
+    //
+    //    if (is_sys_low || over_pct > 2.f)
+    //    { // if we're low on system memory, emergency purge off screen textures to avoid a death spiral
+    //        LL_WARNS() << "Low system memory detected, emergency downrezzing off screen textures" << LL_ENDL;
+    //        for (auto& image : gTextureList)
+    //        {
+    //            gTextureList.updateImageDecodePriority(image, false /*will modify gTextureList otherwise!*/);
+    //        }
+    //    }
+    //}
+    // Update the previous desired discard bias with the current value before it is modified below. (By comparing the two, you can see if
+    // the bias is increasing, decreasing or staying the same. This is useful for determining how the system handles being over budget of
+    // RAM.
+    sPreviousDesiredDiscardBias = sDesiredDiscardBias;
     if (is_low && !was_low)
     {
         // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
         sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.5f);
+        // We want to store the time from when the system went over budget to when it finished, this can be used to help delay when textures are
+        // updated again after back to normal memory usage is achieved. This can help smooth out the suddent spikes in high resolution fetch
+        // requests. Set the over memory budget start time to the current time
+        sOverMemoryBudgetStartTime = sCurrentTime;
+        // Reset the over memory budget end time to 0.0 as the old value is longer valid
+        sOverMemoryBudgetEndTime = 0.0f;
 
         if (is_sys_low || over_pct > 2.f)
         { // if we're low on system memory, emergency purge off screen textures to avoid a death spiral
@@ -553,6 +583,7 @@ void LLViewerTexture::updateClass()
             }
         }
     }
+    // </FS:minerjr>
 
     was_low = is_low;
     was_sys_low = is_sys_low;
@@ -623,6 +654,14 @@ void LLViewerTexture::updateClass()
     }
 
     sDesiredDiscardBias = llclamp(sDesiredDiscardBias, 1.f, 4.f);
+    // <FS:minerjr>
+    // If the desired discard bias is 1.0 but was previously a larger number, that means we are back to normal memory usage again
+    if (sDesiredDiscardBias == 1.0f && sPreviousDesiredDiscardBias > sDesiredDiscardBias)
+    {
+        // So we need to set the memory buget end time to the current time
+        sOverMemoryBudgetEndTime = sCurrentTime;
+    }
+    // </FS:minerjr>
 
     LLViewerTexture::sFreezeImageUpdates = false;
 }

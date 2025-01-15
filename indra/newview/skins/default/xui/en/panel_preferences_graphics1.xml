@@ -1230,6 +1230,16 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+        <check_box
+         control_name="FSTextureNewBiasAdjustments"
+         height="16"
+         label="Enable New Texture Bias Adjustments"
+         layout="topleft"
+         left="10"
+         name="FSTextureNewBiasAdjustments"
+         tool_tip=""
+         top_delta="20"
+         width="256" />
     </panel>
 
 <!--Rendering-->

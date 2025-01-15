@@ -226,6 +226,11 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
+    // <FS:minerjr>
+    static F32 sPreviousDesiredDiscardBias; // Static value of the previous Desired Discard Bias (Used to determine if the desired discard bias is increasing, decreasing, or staying the same
+    static F32 sOverMemoryBudgetStartTime;  // Static value stores the mCurrentTime when the viewer first went over budget of RAM (sDesiredDiscardBias > 1.0)
+    static F32 sOverMemoryBudgetEndTime;    // Static value stores the mCurrentTime when the viewer first exists over budget of RAM (sDesiredDiscardBias == 1.0)
+    // <//FS:minerjr>
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;

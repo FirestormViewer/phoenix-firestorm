@@ -117,6 +117,10 @@ void LLViewerTextureList::doPreloadImages()
     llassert_always(mInitialized) ;
     llassert_always(mImageList.empty()) ;
     llassert_always(mUUIDMap.empty()) ;
+    // <FS:minerjr> FIRE-35011
+    // Clear out the mUUIDDeleteMap as well
+    llassert_always(mUUIDDeleteMap.empty());
+    // </FS:minerjr> FIRE-35011
 
     // Set the "missing asset" image
     LLViewerFetchedTexture::sMissingAssetImagep = LLViewerTextureManager::getFetchedTextureFromFile("missing_asset.tga", FTT_LOCAL_FILE, MIPMAP_NO, LLViewerFetchedTexture::BOOST_UI);
@@ -351,7 +355,6 @@ void LLViewerTextureList::shutdown()
         LL_DEBUGS() << "saving " << imagelist.size() << " image list entries" << LL_ENDL;
         LLSDSerialize::toPrettyXML(imagelist, file);
     }
-
     //
     // Clean up "loaded" callbacks.
     //
@@ -366,7 +369,9 @@ void LLViewerTextureList::shutdown()
     mFastCacheList.clear();
 
     mUUIDMap.clear();
-
+    // <FS:minerjr> FIRE-35011
+    mUUIDDeleteMap.clear(); // Clear the UUIDMap for delete textures
+    // </FS:minerjr>
     mImageList.clear();
 
     mInitialized = false ; //prevent loading textures again.
@@ -689,14 +694,38 @@ void LLViewerTextureList::findTexturesByID(const LLUUID &image_id, std::vector<L
         output.push_back(iter->second);
         iter++;
     }
+    // <FS:minerjr> FIRE-35011
+    // Possibly add the deleted images on to this list, depending on the use case.
+    // </FS:minerjr> FIRE-35011
 }
 
 LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &search_key)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     uuid_map_t::iterator iter = mUUIDMap.find(search_key);
+    // <FS:minerjr> FIRE-35011
+    // If the iterator reached the end, instead of returning null, try to see if the image exists on the deleted list
     if (iter == mUUIDMap.end())
+    {
+        // <FS:minerjr>
+        // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+        static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+        // </FS:minerjr>
+        // If the search_key exists on the delete map
+        if (mUUIDDeleteMap.count(search_key) == 1 && use_new_bias_adjustments)
+        {
+            // Set the normal map to have the same image as the delete map
+            mUUIDMap[search_key] = mUUIDDeleteMap[search_key];
+            // Add the deleted image to the Image List
+            mImageList.insert(mUUIDMap[search_key]);
+            // Set the flag that the image is on the list to try
+            mUUIDMap[search_key]->setInImageList(true);
+            // And return the found image
+            return mUUIDMap[search_key];
+        }
+        // Otherwise, return false as the image does not exist on either the normal or deleted lists
         return NULL;
+    }
     return iter->second;
 }
 
@@ -790,14 +819,21 @@ void LLViewerTextureList::addImage(LLViewerFetchedTexture *new_image, ETexListTy
     {
         LL_INFOS() << "Image with ID " << image_id << " already in list" << LL_ENDL;
     }
+    //
+    if (mUUIDDeleteMap.count(key) == 1)
+    {
+        // The key also exists on the delete list
+        // Remove the reference        
+    }
     sNumImages++;
 
     addImageToList(new_image);
     mUUIDMap[key] = new_image;
     new_image->setTextureListType(tex_type);
 }
-
-
+        
+// <FS:minerjr>
+/*
 void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
@@ -813,7 +849,35 @@ void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
         removeImageFromList(image);
     }
 }
-
+*/
+// Added new mapping for storing deleted textures (The deleting and creating new textures is what is killing the system.
+void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+    if( image)
+    {
+        //if (image->hasCallbacks())
+        //{
+        //    mCallbackList.erase(image);
+        //}
+        LLTextureKey key(image->getID(), (ETexListType)image->getTextureListType());
+        // Check to see if the key exists on the delete list first, if not, then
+        if (mUUIDDeleteMap.count(key) == 0)
+        {
+            // Add the image to the delete UUIDMap
+            mUUIDDeleteMap[key] = image; 
+        }
+        else
+        {
+            // We should clean up the one that is about to be replaced. (SHould not happed)
+            mUUIDDeleteMap[key] = image; 
+        }
+        llverify(mUUIDMap.erase(key) == 1);
+        sNumImages--;
+        removeImageFromList(image);
+    }
+}
+// </FS:minerjr>
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -894,6 +958,17 @@ void LLViewerTextureList::clearFetchingRequests()
         LLViewerFetchedTexture* imagep = *iter;
         imagep->forceToDeleteRequest() ;
     }
+    // <FS:minerjr> FIRE-35011
+    // Need to purge any requests on the delete list
+    for (uuid_map_t::iterator iter = mUUIDDeleteMap.begin(); iter != mUUIDDeleteMap.end(); ++iter)
+    {
+        LLViewerFetchedTexture* imagep = iter->second;
+        if (imagep)
+        {
+            imagep->forceToDeleteRequest();
+        }
+    }
+    // </FS:minerjr> FIRE-35011
 }
 
 extern bool gCubeSnapshot;
@@ -1214,11 +1289,21 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 
     //update MIN_UPDATE_COUNT or 5% of other textures, whichever is greater
     update_count = llmax((U32) MIN_UPDATE_COUNT, (U32) mUUIDMap.size()/20);
-    if (LLViewerTexture::sDesiredDiscardBias > 1.f)
+    // <FS:minerjr>
+    //if (LLViewerTexture::sDesiredDiscardBias > 1.f)
+    //{
+    //    // we are over memory target, update more agresively
+    //    update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
+    //}
+    // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    // If the desired discard bias is greater then 1 and is increasing or stable, if descreasing, use the normal about of texture updates
+    if (LLViewerTexture::sDesiredDiscardBias > 1.f && LLViewerTexture::sDesiredDiscardBias >= LLViewerTexture::sPreviousDesiredDiscardBias)
     {
         // we are over memory target, update more agresively
         update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
     }
+    // </FS:minerjr>
     update_count = llmin(update_count, (U32) mUUIDMap.size());
 
     { // copy entries out of UUID map to avoid iterator invalidation from deletion inside updateImageDecodeProiroty or updateFetch below
