@@ -185,6 +185,23 @@ public:
     typedef std::vector<MaterialEntry> material_list_t;
     material_list_t   mMaterialList;  // reverse pointer pointing to LL::GLTF::Materials using this image as texture
 
+    // <FS:minerjr> FIRE-35011
+    // Create an enum bitfield for storing the various memory states
+    enum ETextureStates
+    {
+        NORMAL                  = 0, // Normal state
+        DELETED                 = 1, // Normal Delete
+        VRAM_OVERAGE_DELETED    = 2, // Deleted during VRAM overage
+        VRAM_SCALED_DOWN        = 4, // Scaled down during VRAM overage
+        RECOVERY_DELAY          = 8  // Recovery delay after VRAM_OVERAGE_DELETED or VRAM_SCALED_DOWN is true
+    };
+
+    mutable U8 mTextureState; // Bitfield which represents the texture's current state
+    mutable U8 mPreviousTextureState; // Bitfield which represents the texture's current state
+    F32 mDelayToNormalUseAfterOverBudget; // Time to wait for returning to normal texture adjustments for larger resolution requests after
+                                          // being over VRAM budget
+    // </FS:minerjr>
+
 protected:
     void cleanup() ;
     void init(bool firstinit) ;
@@ -226,11 +243,11 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
-    // <FS:minerjr>
+    // <FS:minerjr> FIRE-35011
     static F32 sPreviousDesiredDiscardBias; // Static value of the previous Desired Discard Bias (Used to determine if the desired discard bias is increasing, decreasing, or staying the same
     static F32 sOverMemoryBudgetStartTime;  // Static value stores the mCurrentTime when the viewer first went over budget of RAM (sDesiredDiscardBias > 1.0)
     static F32 sOverMemoryBudgetEndTime;    // Static value stores the mCurrentTime when the viewer first exists over budget of RAM (sDesiredDiscardBias == 1.0)
-    // <//FS:minerjr>
+    // </FS:minerjr> FIRE-35011
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;
@@ -358,7 +375,11 @@ public:
 
     void destroyTexture() ;
 
-    virtual void processTextureStats() ;
+    // <FS:minerjr> FIRE-35011
+    // New behavior for handling low memory for the ProcessTextureStats method for both Fetch and LOD textures
+    // Returns true if the the 
+    bool handleMemoryOverageForProcessTextureStats();
+    virtual void processTextureStats() ;    
 
     bool needsAux() const { return mNeedsAux; }
 

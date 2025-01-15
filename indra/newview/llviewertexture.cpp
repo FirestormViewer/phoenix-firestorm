@@ -534,7 +534,7 @@ void LLViewerTexture::updateClass()
     // can negatively impact performance, so leave 20% of a breathing room for
     // 'bias' calculation to kick in.
     F32 target = llmax(llmin(budget - 512.f, budget * 0.8f), MIN_VRAM_BUDGET);
-    sFreeVRAMMegabytes = llmax(target - used, 0.f);
+    sFreeVRAMMegabytes = llmax(target - used, 0.001f);
 
     F32 over_pct = (used - target) / target;
 
@@ -1768,6 +1768,157 @@ void LLViewerFetchedTexture::setDebugText(const std::string& text)
 
 extern bool gCubeSnapshot;
 
+// <FS:minerjr>
+// This method will will handle the memory overage for the process texture stats methods for both Fetched and LOD textures
+bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
+{
+    // Static saved settings allowing to enable/disable the new bias adjustment feature
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    if (use_new_bias_adjustments)
+    {
+        // Check the current texture state is in delay, and if so,
+        if (mTextureState & LLViewerTexture::ETextureStates::RECOVERY_DELAY)
+        {
+            // Check to see if the current time is past the delay to normal use
+            if (mDelayToNormalUseAfterOverBudget <= sCurrentTime)
+            {
+                // If we are still in memory overage, then
+                if (sDesiredDiscardBias > 1.0f)
+                {
+                    // Create an additional 1 second delay for this texture
+                    mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f;
+                    // If the texture was deleted, we want to have a larger delay
+                    if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
+                    {
+                        // We want to reset the delay as we should still wait
+                        mDelayToNormalUseAfterOverBudget += 2.0f * sDesiredDiscardBias;
+                    }
+                    // Else if the texture was just scaled down, delay it a smaller amount
+                    else if (mTextureState & ETextureStates::VRAM_SCALED_DOWN)
+                    {
+                        // Add to the delay 1/2 the current discard bias
+                        mDelayToNormalUseAfterOverBudget += 0.5f * sDesiredDiscardBias;
+                    }
+
+                    // Clear the Recovery delay as we should go back to see about lowering the quality of this texture again
+                    // Save the current state back to to the next state
+                    mPreviousTextureState = mTextureState;
+
+                    return true;
+                }
+                else
+                {
+                    // Reset the delay to noral use back to 0.0f
+                    mDelayToNormalUseAfterOverBudget = 0.0f;
+                    // Store the current texture state in the previous state
+                    mPreviousTextureState = mTextureState;
+                    // Reset the texture back to normal
+                    mTextureState = ETextureStates::NORMAL;
+                }
+            }
+            else
+            {
+                // Still waiting, so just return
+                return true;
+            }
+        }
+        // Else, we want to check to see if we are in a memory overage state
+        else if (sDesiredDiscardBias > 1.0f)
+        {
+            // If the texture currently is Normal
+            if (mTextureState == ETextureStates::NORMAL)
+            {
+                // Check to see if the texture should be scaled down
+                if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                {
+                    // If the current desired discard bias is great then 2 and the discard level is incresing
+                    if (sDesiredDiscardBias > 2.0f && sPreviousDesiredDiscardBias < sDesiredDiscardBias)
+                    {
+                        // Textures use a scale of 0 = max resolution, 5 = MAX_DISCARD_LEVEL (smallest level)
+                        // Try to increase the current desired discard level by 1 level to see that helps
+                        mDesiredDiscardLevel += 1;
+                        // Store the current texture state before modifing it
+                        mPreviousTextureState = mTextureState;
+                        // Flag the texture as haven scaled down
+                        mTextureState |= ETextureStates::VRAM_SCALED_DOWN;
+                        // Update the virtual size
+                        updateVirtualSize();
+                    }
+
+                    return true;
+                }
+            }
+            // Else, the texture has already been affected by the delay, check its status
+            else
+            {
+                // If the texture has already been deleted by the overage at least already
+                if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
+                {
+                    // If the desired discard level is below the max discard level and the boost on the texture is less then BOOST_SCULPTED
+                    if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                    {
+                        // Set the desired discard level to the max low quality
+                        mDesiredDiscardLevel = MAX_DISCARD_LEVEL - 1;
+                        // Update the virtual size
+                        updateVirtualSize();
+                    }
+                }
+                // Else if the texture was scaled down before
+                else if (mTextureState & ETextureStates::VRAM_SCALED_DOWN)
+                {
+                    // If more then 30 seconds has elapsed since going into texture over budget, then try to down size it to free
+                    // up more memory
+                    if (sCurrentTime - sOverMemoryBudgetStartTime > 30.0f)
+                    {
+                        // If the desired discard level is below the max discard level and the boost on the texture is less then
+                        // BOOST_SCULPTED
+                        if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                        {
+                            // Set the desired discard level to the next lower quality (by increaseing the value by 1)
+                            mDesiredDiscardLevel += 1;
+                            // Update the virtual size
+                            updateVirtualSize();
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+        // Else if we hve returned to normal memory usage after the memory acted up and it affected this texture
+        else if (sDesiredDiscardBias == 1.0f && mTextureState != ETextureStates::NORMAL && sOverMemoryBudgetEndTime != 0.0f)
+        {
+            // Create an additional 1 second delay for this texture
+            mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f;
+
+            // If the texture was deleted, we want to have a larger delay
+            if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
+            {
+                // We want to hold off on updating the time based upon how much time was spent during over budget, within 1 to 45 seconds
+                mDelayToNormalUseAfterOverBudget += llclamp((sOverMemoryBudgetEndTime - sOverMemoryBudgetStartTime), 1.0f, 45.0f);
+            }
+            // Else if the texture was just scaled down, delay it a smaller amount
+            else if (mTextureState & ETextureStates::VRAM_SCALED_DOWN)
+            {
+                // We want to hold off on updating the time based upon how much time was spent during over budget, within 1 to 5 seconds
+                mDelayToNormalUseAfterOverBudget += llclamp((sOverMemoryBudgetEndTime - sOverMemoryBudgetStartTime), 1.0f, 5.0f);
+            }
+
+            // Store the current texture state before modifing it
+            mPreviousTextureState = mTextureState;
+            // Set the current texture state RECOVERY_DELAY flag
+            mTextureState |= ETextureStates::RECOVERY_DELAY;
+
+            // Return as we don't want to process the bolow code
+            return true;
+        }
+    }
+
+    // Default to return false, and that we don't want the parent method to return early.
+    return false;
+}
+// </FS:minerjr>
+// 
 //virtual
 void LLViewerFetchedTexture::processTextureStats()
 {
@@ -1775,6 +1926,19 @@ void LLViewerFetchedTexture::processTextureStats()
     llassert(!gCubeSnapshot);  // should only be called when the main camera is active
     llassert(!LLPipeline::sShadowRender);
 
+    // <FS:minerjr>
+    // Static saved settings allowing to enable/disable the new bias adjustment feature
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    if (use_new_bias_adjustments)
+    {
+        // If the handle memory overage returns true, then this method needs to exit early as it wants to delay loading more
+        // textures
+        if (handleMemoryOverageForProcessTextureStats())
+        {
+            return;
+        }
+    }
+    // </FS:minerjr>
     if(mFullyLoaded)
     {
         if(mDesiredDiscardLevel > mMinDesiredDiscardLevel)//need to load more
@@ -3054,6 +3218,19 @@ bool LLViewerLODTexture::isUpdateFrozen()
 void LLViewerLODTexture::processTextureStats()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+    // <FS:minerjr>
+    // Static saved settings allowing to enable/disable the new bias adjustment feature
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    if (use_new_bias_adjustments)
+    {
+        // If the handle memory overage returns true, then this method needs to exit early as it wants to delay loading more
+        // textures
+        if (handleMemoryOverageForProcessTextureStats())
+        {
+            return;
+        }
+    }
+    // </FS:minerjr>
     updateVirtualSize();
 
     bool did_downscale = false;

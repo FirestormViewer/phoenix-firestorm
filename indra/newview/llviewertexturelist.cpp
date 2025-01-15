@@ -702,15 +702,14 @@ void LLViewerTextureList::findTexturesByID(const LLUUID &image_id, std::vector<L
 LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &search_key)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    uuid_map_t::iterator iter = mUUIDMap.find(search_key);
-    // <FS:minerjr> FIRE-35011
-    // If the iterator reached the end, instead of returning null, try to see if the image exists on the deleted list
+    uuid_map_t::iterator iter = mUUIDMap.find(search_key);    
     if (iter == mUUIDMap.end())
     {
-        // <FS:minerjr>
+        // <FS:minerjr> FIRE-35011
+        // If the iterator reached the end, instead of returning null, try to see if the image exists on the deleted list
         // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
         static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
-        // </FS:minerjr>
+        
         // If the search_key exists on the delete map
         if (mUUIDDeleteMap.count(search_key) == 1 && use_new_bias_adjustments)
         {
@@ -724,6 +723,7 @@ LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &searc
             return mUUIDMap[search_key];
         }
         // Otherwise, return false as the image does not exist on either the normal or deleted lists
+        // </FS:minerjr> FIRE-35011
         return NULL;
     }
     return iter->second;
@@ -856,22 +856,45 @@ void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     if( image)
     {
-        //if (image->hasCallbacks())
-        //{
-        //    mCallbackList.erase(image);
-        //}
+        // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+        static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+        // Do the old method of deleteing the call backs if using the old method, but we want to skip that in the
+        // new process
+        if (image->hasCallbacks() && !use_new_bias_adjustments)
+        {
+            mCallbackList.erase(image);
+        }
         LLTextureKey key(image->getID(), (ETexListType)image->getTextureListType());
-        // Check to see if the key exists on the delete list first, if not, then
-        if (mUUIDDeleteMap.count(key) == 0)
-        {
-            // Add the image to the delete UUIDMap
-            mUUIDDeleteMap[key] = image; 
-        }
-        else
-        {
-            // We should clean up the one that is about to be replaced. (SHould not happed)
-            mUUIDDeleteMap[key] = image; 
-        }
+        // Instead of deleting the object, what we want to do it move it over to the UUID Delete Map
+        if (use_new_bias_adjustments)
+        {            
+            // Check to see if the key exists on the delete list first, if not, then
+            if (mUUIDDeleteMap.count(key) == 0)
+            {
+                // Add the image to the delete UUIDMap
+                mUUIDDeleteMap[key] = image;
+            }
+            else
+            {
+                // We should clean up the one that is about to be replaced. (Should not happed)
+                mUUIDDeleteMap[key] = image;
+            }
+            // Store the current texture state in the previous texture state
+            image->mPreviousTextureState = image->mTextureState;
+            // Set the texture state based upon if the system is running out of memory
+            // If we are running out of memory
+            if (LLViewerTexture::sDesiredDiscardBias > 1.0f)
+            {
+                // Set the texture state to VRAM_OVERAGE_DELETED
+                image->mTextureState = LLViewerTexture::ETextureStates::VRAM_OVERAGE_DELETED;
+            }
+            // Else, this is normal delete,
+            else
+            {
+                // So just set the texture state to the normal delete state
+                image->mTextureState = LLViewerTexture::ETextureStates::DELETED;
+            }
+        }        
         llverify(mUUIDMap.erase(key) == 1);
         sNumImages--;
         removeImageFromList(image);
