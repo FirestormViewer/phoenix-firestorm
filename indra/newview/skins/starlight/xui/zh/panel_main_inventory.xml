@@ -12,7 +12,7 @@
 	<panel.string name="inventory_title">
 		庫存
 	</panel.string>
-	<layout_stack name="top_stack">
+	<layout_stack name="nav_stack">
 		<layout_panel name="nav_buttons">
 			<button name="back_btn" tool_tip="後退" />
 			<button name="forward_btn" tool_tip="前進" />
@@ -24,8 +24,8 @@
 	</layout_stack>
 	<layout_stack name="ctrl_stack">
 		<layout_panel name="collapse_expand_buttons">
-			<button name="collapse_btn" label="收起" />
-			<button name="expand_btn" label="展開" />
+			<button name="collapse_btn" label="收起"/>
+			<button name="expand_btn" label="展開"/>
 		</layout_panel>
 		<layout_panel name="filter_ctrls">
 			<text name="filter_label" value="過濾器：" />
@@ -42,9 +42,8 @@
 				<combo_box.item value="filter_type_sounds" label="聲音" />
 				<combo_box.item value="filter_type_textures" label="紋理" />
 				<combo_box.item value="filter_type_snapshots" label="快照" />
-				<combo_box.item value="filter_type_meshes" label="網格模型" />
-				<combo_box.item value="filter_type_materials" label="材質" />
 				<combo_box.item value="filter_type_settings" label="環境設定" />
+				<combo_box.item value="filter_type_materials" label="材質" />
 				<combo_box.item value="filter_type_coalesced" label="僅合併物件"/>
 				<combo_box.item value="filter_type_custom" label="自訂..." />
 			</combo_box>
@@ -53,10 +52,9 @@
 	</layout_stack>
 	<panel name="default_inventory_panel">
 		<tab_container name="inventory filter tabs">
-			<inventory_panel label="庫存" name="All Items" sort_order_setting="InventorySortOrder" />
-			<recent_inventory_panel label="最近" sort_order_setting="RecentItemsSortOrder" name="Recent Items" />
+			<inventory_panel label="庫存" name="All Items"/>
+			<recent_inventory_panel label="最近" name="Recent Items" />
 			<worn_inventory_panel label="裝扮" name="Worn Items" />
-			<favorites_inventory_panel label="收藏夾" name="Favorite Items" />
 		</tab_container>
 	</panel>
 	<panel name="bottom_panel">
