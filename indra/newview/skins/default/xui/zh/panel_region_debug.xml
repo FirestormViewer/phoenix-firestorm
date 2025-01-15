@@ -35,5 +35,5 @@
 	</text>
 	<spinner name="restart_delay" />
 	<button label="取消重新啟動" name="cancel_restart_btn" tool_tip="取消區域重新啟動" />
-	<button label="區域除錯控制檯" name="region_debug_console_btn" tool_tip="開啟區域除錯控制檯" />
+	<button label="區域除錯控制台" name="region_debug_console_btn" tool_tip="開啟區域除錯控制台" />
 </panel>

@@ -2255,8 +2255,8 @@ class LLAdvancedToggleShowLookAt : public view_listener_t
         //<FS:AO improve use of controls with radiogroups>
         //bool value = !gSavedPerAccountSettings.getBOOL("DebugLookAt");
         //gSavedPerAccountSettings.setBOOL("DebugLookAt",value);
-        S32 value = !gSavedPerAccountSettings.getS32("DebugLookAt");
-        gSavedPerAccountSettings.setS32("DebugLookAt",value);
+        S32 value = gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? 1 : 0;
+        gSavedPerAccountSettings.setS32("DebugLookAt", value);
         //</FS:AO>
         return true;
     }
@@ -2265,21 +2265,21 @@ class LLAdvancedToggleShowLookAt : public view_listener_t
 // <AO>
 class LLAdvancedToggleShowColor : public view_listener_t
 {
-        bool handleEvent(const LLSD& userdata)
-        {
-                S32 value = !gSavedSettings.getS32("DebugShowColor");
-                gSavedSettings.setS32("DebugShowColor",value);
-                return true;
-        }
+    bool handleEvent(const LLSD& userdata)
+    {
+        S32 value = gSavedSettings.getS32("DebugShowColor") == 0 ? 1 : 0;
+        gSavedSettings.setS32("DebugShowColor", value);
+        return true;
+    }
 };
 
 class LLAdvancedCheckShowColor : public view_listener_t
 {
-        bool handleEvent(const LLSD& userdata)
-        {
-                S32 new_value = gSavedSettings.getS32("DebugShowColor");
-                return (bool)new_value;
-        }
+    bool handleEvent(const LLSD& userdata)
+    {
+        bool new_value = gSavedSettings.getS32("DebugShowColor") != 0;
+        return new_value;
+    }
 };
 // </AO>
 
@@ -2290,7 +2290,7 @@ class LLAdvancedCheckShowLookAt : public view_listener_t
         //bool new_value = LLHUDEffectLookAt::sDebugLookAt;
         //<FS:AO improve use of controls with radiogroups>
         //bool new_value = gSavedPerAccountSettings.getBOOL("DebugLookAt");
-        S32 new_value = gSavedPerAccountSettings.getS32("DebugLookAt");
+        bool new_value = gSavedPerAccountSettings.getS32("DebugLookAt") > 0;
         return (bool)new_value;
     }
 };
@@ -7717,6 +7717,33 @@ class LLWorldSetDoNotDisturb : public view_listener_t
     }
 };
 
+// <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console
+// View Listener class to toggle the saved settings value FSShowOnscreenConsole
+class LLCommSetShowOnscreenConsole : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        // Toggle the value to the opposite and just save the value back to the settings.
+        // This change will propagate to the other controls for this value
+        bool show_onscreen_console = !gSavedSettings.getBOOL("FSShowOnscreenConsole");
+        gSavedSettings.setBOOL("FSShowOnscreenConsole", show_onscreen_console);
+        
+        return true;
+    }
+};
+
+// View Listener class to retrieve the saved settings value FSShowOnscreenConsole
+class LLCommCheckShowOnscreenConsole : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        // Retrieve the Show On-screen Console flag and return it the the UI to update the state of the menu toggle.
+        bool show_onscreen_console = gSavedSettings.getBOOL("FSShowOnscreenConsole");
+        return show_onscreen_console;
+    }
+};
+// </FS:minerjr> [FIRE-35039]
+
 // [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
 class LLWorldGetBusy : public view_listener_t
 {
@@ -11740,7 +11767,7 @@ class LLWorldEnvSettings : public view_listener_t
             // <FS:Beq> Add legacy noon to the manually selected environments that can have a user defined transition time.
             // LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY, LLEnvironment::TRANSITION_INSTANT);
             // LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY);
+            LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             // </FS:Beq>
             defocusEnvFloaters();
@@ -12369,6 +12396,11 @@ void initialize_menus()
 
     // <FS:Ansariel> [FS communication UI]
     //enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
+    // <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console
+    // Add menu view listener to controll the FSShowOnscreenConsole value
+    view_listener_t::addMenu(new LLCommCheckShowOnscreenConsole(), "Comm.CheckShowOnscreenConsole"); // Add menu listener for "Show On-screen Console" check class
+    view_listener_t::addMenu(new LLCommSetShowOnscreenConsole(), "Comm.SetShowOnscreenConsole"); // Add menu listener for "Show On-screen Console" set class
+    // </FS:minerjr> [FIRE-35039]
 
     enable.add("GridCheck", boost::bind(&checkIsGrid, _2)); // <FS:CR> Opensim menu item visibility control
     enable.add("GridFeatureCheck", boost::bind(&isGridFeatureEnabled, _2));

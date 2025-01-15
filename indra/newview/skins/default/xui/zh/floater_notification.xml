@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="notification" title="通知控制檯">
+<floater name="notification" title="通知控制台">
 	<text_editor name="payload">
 		載入中...
 	</text_editor>

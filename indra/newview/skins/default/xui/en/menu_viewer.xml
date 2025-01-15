@@ -926,6 +926,17 @@
               function="SideTray.PanelPeopleTab"
               parameter="blocked_panel" />
         </menu_item_call>
+        <!-- <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console -->
+	    <menu_item_check
+	    label="Show On-screen Chat Console"
+	    name="Show On-screen Console"
+	    shortcut="shift|`">
+	      <menu_item_check.on_check
+	      function="Comm.CheckShowOnscreenConsole" />
+	      <menu_item_check.on_click
+	      function="Comm.SetShowOnscreenConsole" />
+	    </menu_item_check>
+        <!-- </FS:minerjr> [FIRE-35039] -->		      
     </menu>
     
     <!-- World Menu -->

@@ -20,6 +20,12 @@
 	<check_box label="Kop" name="check_copy"/>
 	<check_box label="Trans" name="check_transfer"/>
 	<check_box label="Ordner immer anzeig." name="check_show_empty"/>
+	<check_box label="Nur verbundene" name="check_only_coalesced" width="110"/>
+	<combo_box tool_tip="Verknüpfte Objekte filtern" name="inventory_filter_show_links_combo">
+		<combo_box.item name="show_links" label="Verknüpfungen anzeigen"/>
+		<combo_box.item name="show_links_only" label="Nur Verknüpfungen anzeigen"/>
+		<combo_box.item name="hide_links" label="Verknüpfungen verstecken"/>
+	</combo_box>
 	<check_box label="Von mir erstellt" name="check_created_by_me"/>
 	<check_box label="Von anderen erstellt" name="check_created_by_others"/>
 	<check_box label="Seit Abmeldung" name="check_since_logoff"/>

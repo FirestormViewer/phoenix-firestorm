@@ -31,6 +31,7 @@
 			<check_box label="Chat in der Nähe" name="show_timestamps_nearby_chat" width="120"/>
 			<check_box label="Instant Messages" name="show_timestamps_im" width="120"/>
 			<check_box label="Verlauf" name="show_timestamps_transcripts"/>
+			<check_box label="Chat-Konsole anzeigen" tool_tip="Chat in Konsole anzeigen/verstecken, falls das Gespräche-Fenster nicht angezeigt wird" name="FSShowOnscreenConsole"/>
 			<check_box name="FSConsoleClassicDrawMode" label="Klassischen Anzeigemodus für Konsole verwenden" tool_tip="Im klassischen Anzeigemodus wird der Hintergrund der Konsole als einzelner Block über alle Zeilen und mit der Breite der längsten Zeile dargestellt."/>
 			<check_box name="ChatFullWidth" label="Bildschirmbreite für Konsole verwenden" width="240"/>
 			<spinner label="Chat ausblenden nach:" label_width="130" name="fade_chat_time" width="180" />

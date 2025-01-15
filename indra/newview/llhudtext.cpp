@@ -55,6 +55,12 @@ const F32 HORIZONTAL_PADDING = 15.f;
 const F32 VERTICAL_PADDING = 12.f;
 const F32 BUFFER_SIZE = 2.f;
 const F32 HUD_TEXT_MAX_WIDTH = 190.f;
+// <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+const F32 LINE_PADDING = 3.f; // aka "leading" - Taken from LLHUDNameTag
+const S32 SHOW_BACKGROUND_NONE = 0; // Default value and disables the LLHUDText background
+const S32 SHOW_BACKGROUND_ONLY_HIGHLIGHTED = 1; // Only LLHUDText that is part of the highlighted prim will have a background
+const S32 SHOW_BACKGROUND_ALL = 2; // All prims that have a LLHUDText will have a background, but the highlighted prim will have a non-transparent background.
+// </FS:minerjr> [FIRE-35019]
 const F32 HUD_TEXT_MAX_WIDTH_NO_BUBBLE = 1000.f;
 const F32 MAX_DRAW_DISTANCE = 300.f;
 
@@ -93,11 +99,20 @@ LLHUDText::LLHUDText(const U8 type) :
     mFadeDistance = gSavedSettings.getF32("FSHudTextFadeDistance");
     mFadeRange = gSavedSettings.getF32("FSHudTextFadeRange");
     // </FS:Ansariel>
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    mLastDistance = 0.0f; // Just to get rid of a compiler warning
+    // </FS:minerjr> [FIRE-35019]
     mZCompare = true;
     mOffscreen = false;
     mRadius = 0.1f;
     LLPointer<LLHUDText> ptr(this);
     sTextObjects.insert(ptr);
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    mRoundedRectImgp = LLUI::getUIImage("Rounded_Rect"); // Taken from LLHUDNameTag, uses the existing art asset  
+    mBackgroundHeight = 0.0f; // Default background height to 0.0
+    mBackgroundOffsetY = 0.0f; // Default background Y offset to 0.0
+    mLuminance = 1.0f; // Default luminance is 1.0 as the default color is white (1.0, 1.0, 1.0, 1.0)
+    // </FS:minerjr> [FIRE-35019]
 }
 
 LLHUDText::~LLHUDText()
@@ -108,7 +123,21 @@ void LLHUDText::render()
 {
     if (!mOnHUDAttachment && sDisplayText)
     {
-        LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+        //LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
+        // If the current text object is highighed and the use hover highlight feature is enabled, then 
+        // disable writing to the depth buffer
+        static LLCachedControl<bool> mbUseHoverHighlight(gSavedSettings, "FSHudTextUseHoverHighlight");
+        if (mbUseHoverHighlight && mbIsHighlighted)
+        {            
+            LLGLDepthTest gls_depth(GL_FALSE, GL_FALSE);
+        }
+        //Else, use the standard method of writing to the depth buffer for all other non-highlighted text objects
+        else
+        {
+            LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
+        }
+        // </FS:minerjr> [FIRE-35019]		
         //LLGLDisable gls_stencil(GL_STENCIL_TEST);
         renderText();
     }
@@ -128,7 +157,13 @@ void LLHUDText::renderText()
     LLColor4 shadow_color(0.f, 0.f, 0.f, 1.f);
     F32 alpha_factor = 1.f;
     LLColor4 text_color = mColor;
-    if (mDoFade)
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights	
+    //if (mDoFade)
+    static LLCachedControl<bool> mbUseHoverHighlight(gSavedSettings, "FSHudTextUseHoverHighlight"); // Flag to indicate if hover highlight of prims is enabled
+    static LLCachedControl<S32>  mShowBackground(gSavedSettings, "FSHudTextShowBackground"); // Show background values (0 - off, 1 - only highlighted prims, 2 - all prims)
+    // Support fading the text if the text is not highlighted and only if use hover highlight flag is set
+    if (mDoFade && (!mbUseHoverHighlight || (mbUseHoverHighlight && !mbIsHighlighted)))
+    // </FS:minerjr> [FIRE-35019]
     {
         // <FS:Ansariel> FIRE-17393: Control HUD text fading by options
         //if (mLastDistance > mFadeDistance)
@@ -143,15 +178,43 @@ void LLHUDText::renderText()
     {
         return;
     }
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    //If there is only 1 string and it is blank, don't render as it could add a background on a prim with no text
+    if ((S32)mTextSegments.size() == 1 && mTextSegments[0].isBlank())
+    {
+        return;
+    }
+    // </FS:minerjr> [FIRE-35019]
     shadow_color.mV[3] = text_color.mV[3];
 
     mOffsetY = lltrunc(mHeight * ((mVertAlignment == ALIGN_VERT_CENTER) ? 0.5f : 1.f));
 
     // *TODO: make this a per-text setting
-    static LLCachedControl<F32> bubble_opacity(gSavedSettings, "ChatBubbleOpacity");
-    static LLUIColor nametag_bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
-    LLColor4 bg_color = nametag_bg_color;
-    bg_color.setAlpha(bubble_opacity * alpha_factor);
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // static LLCachedControl<F32> bubble_opacity(gSavedSettings, "ChatBubbleOpacity");
+    // static LLUIColor nametag_bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
+    // LLColor4 bg_color = nametag_bg_color;
+    // bg_color.setAlpha(bubble_opacity * alpha_factor);
+    // Use new background opacity value, independant of the LLHUDNameTag value
+    static LLCachedControl<F32> background_opacity(gSavedSettings, "FSHudTextBackgroundOpacity"); // Can be modified under Preferences->Colors->Floating Text tab
+    LLColor4 bg_color = LLColor4::black; // Default the background to black color
+    bg_color.setAlpha(background_opacity * alpha_factor);
+    // If the show background flag is set, so change the background color depending on the luminance
+    if (mShowBackground)
+    {
+        // If the luminance is below 40%, then use white background color
+        if (mLuminance <= 0.4f)
+        {
+            bg_color.set(LLColor3::white); // Set background color keep the alpha
+        }
+        // If hover highlight is enabled and the text object is highlighted then, change the alpha value (Background Opacity if only highlighted objects
+        // have a background, otherwise, use the alpha value (which should be 1.0))
+        if (mbUseHoverHighlight && mbIsHighlighted)
+        {
+            bg_color.setAlpha(mShowBackground == SHOW_BACKGROUND_ONLY_HIGHLIGHTED ? background_opacity : alpha_factor);
+        }        
+    }	
+    // </FS:minerjr> [FIRE-35019]
 
     const S32 border_height = 16;
     const S32 border_width = 16;
@@ -199,6 +262,23 @@ void LLHUDText::renderText()
     F32 y_offset = (F32)mOffsetY;
 
     // Render label
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // Render text window background
+    // Don't add if the parent object is attached (clothing on player avatar: as some cloths have blank text and render a background...)
+    // Also, only show the background if it is show all is checked, or if on highlight, only if use hover highlight is enabled.
+    bool show_all_backgrounds = (mShowBackground == SHOW_BACKGROUND_ALL);
+    bool show_highlighted_background = (mShowBackground == SHOW_BACKGROUND_ONLY_HIGHLIGHTED && mbIsHighlighted && mbUseHoverHighlight);
+    bool is_valid_source_object = (mSourceObject.notNull() && mSourceObject->getAttachmentState() == 0);
+
+    if ( (show_all_backgrounds || show_highlighted_background) && is_valid_source_object )
+    {
+        LLRect screen_rect;
+        screen_rect.setCenterAndSize(0, static_cast<S32>(lltrunc(-mBackgroundHeight / 2 + mOffsetY + mBackgroundOffsetY)),
+                                     static_cast<S32>(lltrunc(mWidth)),
+                                     static_cast<S32>(lltrunc(mBackgroundHeight)));
+        mRoundedRectImgp->draw3D(render_position, x_pixel_vec, y_pixel_vec, screen_rect, bg_color);
+    }
+    // </FS:minerjr> [FIRE-35019]
 
     // Render text
     {
@@ -219,7 +299,11 @@ void LLHUDText::renderText()
              segment_iter != mTextSegments.end(); ++segment_iter )
         {
             const LLFontGL* fontp = segment_iter->mFont;
-            y_offset -= fontp->getLineHeight() - 1; // correction factor to match legacy font metrics
+            // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+            //y_offset -= fontp->getLineHeight() - 1; // correction factor to match legacy font metrics            
+            y_offset -= fontp->getLineHeight(); // Match the same positioning as LLHUDNameTag as the windows don't line up otherwise.
+            y_offset -= LINE_PADDING;
+            // </FS:minerjr> [FIRE-35019]
 
             U8 style = segment_iter->mStyle;
             LLFontGL::ShadowType shadow = LLFontGL::DROP_SHADOW;
@@ -232,6 +316,10 @@ void LLHUDText::renderText()
             else // ALIGN_LEFT
             {
                 x_offset = -0.5f * mWidth + (HORIZONTAL_PADDING / 2.f);
+                // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+                // *HACK -> borrowed from LLHUDNameTag to match
+                x_offset += 1;
+                // </FS:minerjr> [FIRE-35019]
             }
 
             text_color = segment_iter->mColor;
@@ -240,6 +328,13 @@ void LLHUDText::renderText()
                 text_color = linearColor4(text_color);
             }
             text_color.mV[VALPHA] *= alpha_factor;
+            // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights	
+            // If the text object is highlighted and use hover highlight is enabled, then reset the alpha factor (1.0f)
+            if (mbUseHoverHighlight && mbIsHighlighted)
+            {
+                text_color.mV[VALPHA] = alpha_factor;
+            }
+            // </FS:minerjr> [FIRE-35019]
 
             hud_render_text(segment_iter->getText(), render_position, *fontp, style, shadow, x_offset, y_offset, text_color, mOnHUDAttachment);
         }
@@ -336,6 +431,13 @@ void LLHUDText::setFont(const LLFontGL* font)
 void LLHUDText::setColor(const LLColor4 &color)
 {
     mColor = color;
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // Added luminance value for the text color to determine if the background should be white or black
+    // Based upon https://stackoverflow.com/questions/596216/formula-to-determine-perceived-brightness-of-rgb-color
+    // used Digital ITU BT.601 (gives more weight to the R and B components):
+    // Y = 0.299 R + 0.587 G + 0.114 B
+    mLuminance = 0.299f * mColor.mV[0] + 0.587f * mColor.mV[1] + 0.114f * mColor.mV[2];
+    // </FS:minerjr> [FIRE-35019]
     for (std::vector<LLHUDTextSegment>::iterator segment_iter = mTextSegments.begin();
          segment_iter != mTextSegments.end(); ++segment_iter )
     {
@@ -361,6 +463,15 @@ void LLHUDText::setDoFade(const bool do_fade)
 
 void LLHUDText::updateVisibility()
 {
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // Create local doFade flag based upon member doFade flag and overide it if the object is highlighted and hover highlight is enabled.
+    bool doFade = mDoFade;
+    static LLCachedControl<bool> mbUseHoverHighlight(gSavedSettings, "FSHudTextUseHoverHighlight");
+    if (mbUseHoverHighlight && mbIsHighlighted)
+    {
+        doFade = false;
+    }
+    // </FS:minerjr> [FIRE-35019]
     if (mSourceObject)
     {
         mSourceObject->updateText();
@@ -421,7 +532,11 @@ void LLHUDText::updateVisibility()
 
     mLastDistance = (mPositionAgent - LLViewerCamera::getInstance()->getOrigin()).magVec();
 
-    if (!mTextSegments.size() || (mDoFade && (mLastDistance > mFadeDistance + mFadeRange)))
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    //if (!mTextSegments.size() || (mDoFade && (mLastDistance > mFadeDistance + mFadeRange)))
+    // Use local do fade check to allow highlighed objects to force text to be visible	
+    if (!mTextSegments.size() || (doFade && (mLastDistance > mFadeDistance + mFadeRange)))
+    // </FS:minerjr> [FIRE-35019]
     {
         mVisible = false;
         return;
@@ -523,6 +638,14 @@ void LLHUDText::updateSize()
     F32 height = 0.f;
     F32 width = 0.f;
 
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // We want to create a background that fits just the visible text area only, otherwise a llsetstring('Hello, World\n\n\n') will have a text
+    // box that covers 4 lines, but only the top line is visible to the user.
+    // Another example is llsetstring('\n\n\nHello, World'), which would also have a 4 line high window, but the text be visible only on the last line.
+    F32 backgroundFirstNoneBlankPosition = 0.0f; // Stores the position just above the first non blank line
+    F32 backgroundLastNoneBlankPosition = 0.0f; // Stores the position just below the last none blank line
+    bool firstNoneBlank = true; // Flag to determine that if the first blank line has been reached and to store the first none black position
+    // <FS:minerjr> [FIRE-35019] 
     S32 max_lines = getMaxLines();
 
     S32 start_segment;
@@ -533,11 +656,41 @@ void LLHUDText::updateSize()
     while (iter != mTextSegments.end())
     {
         const LLFontGL* fontp = iter->mFont;
-        height += fontp->getLineHeight() - 1; // correction factor to match legacy font metrics
-        width = llmax(width, llmin(iter->getWidth(fontp), HUD_TEXT_MAX_WIDTH));
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+        //height += fontp->getLineHeight() - 1; // correction factor to match legacy font metrics
+        //width = llmax(width, llmin(iter->getWidth(fontp), HUD_TEXT_MAX_WIDTH));
+        
+        //If there is no blank on the current line, skip over it so that we don't make the window cover the empty space above or below a blank text box.
+        if (!iter->isBlank())
+        {
+            //If this is the first line without a blank, get the height above current line (0.0 for line 1, previous height if not the first line
+            if (firstNoneBlank)
+            {
+                backgroundFirstNoneBlankPosition = height;
+                firstNoneBlank = false;
+            }
+            //Always get the position below the non-blank line
+            backgroundLastNoneBlankPosition = height + fontp->getLineHeight() + LINE_PADDING;            
+        }
+        // </FS:minerjr> 
+        height += fontp->getLineHeight(); // Taken from LLHUBNameTa::UpdateSize
+        height += LINE_PADDING; // Taken from LLHUBNameTa::UpdateSize  
+        // The max width of the text is set to HUD_TEXT_MAX_WIDTH_NO_BUBBLE and not HUD_TEXT_MAX_WIDTH, so the window would be limited but the text could spill over...
+        width = llmax(width, llmin(iter->getWidth(fontp), HUD_TEXT_MAX_WIDTH_NO_BUBBLE));
+        // <FS:minerjr> [FIRE-35019]		
         ++iter;
     }
 
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // Don't want line spacing under the last line (Taken from LLHUBNameTa::UpdateSize)
+    if (height > 0.f)
+    {
+        height -= LINE_PADDING;
+        // Also update the background last non blank position by the LINE_PADDING
+        backgroundLastNoneBlankPosition -= LINE_PADDING;
+    }
+    // <FS:minerjr> [FIRE-35019]
+	
     if (width == 0.f)
     {
         return;
@@ -550,6 +703,11 @@ void LLHUDText::updateSize()
     F32 u = 1.f;
     mWidth = llmax(width, lerp(mWidth, (F32)width, u));
     mHeight = llmax(height, lerp(mHeight, (F32)height, u));
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    backgroundLastNoneBlankPosition += VERTICAL_PADDING; // Add the vertical padding to the last non-blank position
+    mBackgroundOffsetY = backgroundFirstNoneBlankPosition; // Set the background Y offset to the top of the first blank
+    mBackgroundHeight  = backgroundLastNoneBlankPosition - backgroundFirstNoneBlankPosition; // Set the background height to the difference between the top of the first non-blank, and bottom of the last non-blank line
+    // <FS:minerjr> [FIRE-35019]
 }
 
 void LLHUDText::updateAll()
