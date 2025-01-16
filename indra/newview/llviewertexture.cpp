@@ -527,14 +527,14 @@ void LLViewerTexture::updateClass()
     // <FS:Ansariel> Expose max texture VRAM setting
     //F32 budget = max_vram_budget == 0 ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
     F32 budget = !max_vram_budget_enabled ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
-
+    //budget *= 2.0f;
     // Try to leave at least half a GB for everyone else and for bias,
     // but keep at least 768MB for ourselves
     // Viewer can 'overshoot' target when scene changes, if viewer goes over budget it
     // can negatively impact performance, so leave 20% of a breathing room for
     // 'bias' calculation to kick in.
     F32 target = llmax(llmin(budget - 512.f, budget * 0.8f), MIN_VRAM_BUDGET);
-    sFreeVRAMMegabytes = llmax(target - used, 0.001f);
+    sFreeVRAMMegabytes = llmax(target - used, 0.0f);
 
     F32 over_pct = (used - target) / target;
 
@@ -607,12 +607,13 @@ void LLViewerTexture::updateClass()
         // don't execute above until the slam to 1.5 has a chance to take effect
         sEvaluationTimer.reset();
 
-        // lower discard bias over time when free memory is available
-        if (sDesiredDiscardBias > 1.f && over_pct < 0.f)
+        // lower discard bias over time when at least 10% of budget is free
+        const F32 FREE_PERCENTAGE_TRESHOLD = -0.1f;
+        if (sDesiredDiscardBias > 1.f && over_pct < FREE_PERCENTAGE_TRESHOLD)
         {
             static LLCachedControl<F32> high_mem_discard_decrement(gSavedSettings, "RenderHighMemMinDiscardDecrement", .1f);
 
-            F32 decrement = high_mem_discard_decrement - llmin(over_pct, 0.f);
+            F32 decrement = high_mem_discard_decrement - llmin(over_pct - FREE_PERCENTAGE_TRESHOLD, 0.f);
             sDesiredDiscardBias -= decrement * gFrameIntervalSeconds;
         }
     }
@@ -665,6 +666,17 @@ void LLViewerTexture::updateClass()
 
     LLViewerTexture::sFreezeImageUpdates = false;
 }
+
+// <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+// Accessor method to store the current texture state and update the current texture state
+void LLViewerTexture::setTextureState(ETextureStates newState)
+{
+    // Store the current texture state
+    mPreviousTextureState = mTextureState;
+    // Update the current texture state with the flag passed in
+    mTextureState |= mPreviousTextureState;
+}
+// </FS:minerjr> [FIRE-35011]
 
 //static
 bool LLViewerTexture::isSystemMemoryLow()
@@ -741,7 +753,12 @@ void LLViewerTexture::init(bool firstinit)
     mMaxVirtualSizeResetInterval = 1;
     mMaxVirtualSizeResetCounter = mMaxVirtualSizeResetInterval;
     mParcelMedia = NULL;
-
+    
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    mTextureState = ETextureStates::NORMAL; // Init the Texture state to NORMAL
+    mPreviousTextureState = ETextureStates::NORMAL; // Init the prevous texture state to NORMAL
+    mDelayToNormalUseAfterOverBudget = 0.0f; // Set the delay to normal use after over budget to 0.0f
+    // </FS:minerjr> [FIRE-35011]
     memset(&mNumVolumes, 0, sizeof(U32)* LLRender::NUM_VOLUME_TEXTURE_CHANNELS);
     mVolumeList[LLRender::LIGHT_TEX].clear();
     mVolumeList[LLRender::SCULPT_TEX].clear();
@@ -1786,7 +1803,7 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                 if (sDesiredDiscardBias > 1.0f)
                 {
                     // Create an additional 1 second delay for this texture
-                    mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f;
+                    mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f + ll_rand() * 10.0f;
                     // If the texture was deleted, we want to have a larger delay
                     if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
                     {
@@ -1799,11 +1816,6 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                         // Add to the delay 1/2 the current discard bias
                         mDelayToNormalUseAfterOverBudget += 0.5f * sDesiredDiscardBias;
                     }
-
-                    // Save the current state back to to the next state
-                    mPreviousTextureState = mTextureState;
-                    // Clear the RECOVERY_DELAY flag so the regular memory overage code can take over
-                    mTextureState &= ~LLViewerTexture::ETextureStates::RECOVERY_DELAY;
 
                     return true;
                 }
@@ -1829,6 +1841,7 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
             // If the texture currently is Normal
             if (mTextureState == ETextureStates::NORMAL)
             {
+                /*
                 // Check to see if the texture should be scaled down
                 if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
                 {
@@ -1844,14 +1857,25 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                         mTextureState |= ETextureStates::VRAM_SCALED_DOWN;
                         // Update the virtual size
                         updateVirtualSize();
+                        //Reset
+                        
+
+                        // If we are not forced to save the raw iamge, then
+                        if (!mForceToSaveRawImage)
+                        {
+                            // should scale down
+                            //scaleDown();
+                        }
                     }
 
-                    return true;
+                    //return true;
                 }
+                */
             }
             // Else, the texture has already been affected by the delay, check its status
             else
             {
+                /*
                 // If the texture has already been deleted by the overage at least already
                 if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
                 {
@@ -1862,6 +1886,12 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                         mDesiredDiscardLevel = MAX_DISCARD_LEVEL - 1;
                         // Update the virtual size
                         updateVirtualSize();
+                        // If we are not forced to save the raw iamge, then
+                        if (!mForceToSaveRawImage)
+                        {
+                            // should scale down
+                            //scaleDown();
+                        }
                     }
                 }
                 // Else if the texture was scaled down before
@@ -1879,11 +1909,18 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                             mDesiredDiscardLevel += 1;
                             // Update the virtual size
                             updateVirtualSize();
+                            // If we are not forced to save the raw iamge, then
+                            if (!mForceToSaveRawImage)
+                            {
+                                // should scale down
+                                //scaleDown();
+                            }
                         }
                     }
                 }
-
-                return true;
+                */
+          
+                return false;
             }
         }
         // Else if we have returned to normal memory usage after the memory acted up and it affected this texture
@@ -2208,7 +2245,10 @@ bool LLViewerFetchedTexture::updateFetch()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     static LLCachedControl<bool> textures_decode_disabled(gSavedSettings,"TextureDecodeDisabled", false);
-
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    // </FS:minerjr> [FIRE-35011]
     if(textures_decode_disabled) // don't fetch the surface textures in wireframe mode
     {
         return false;
@@ -2341,8 +2381,38 @@ bool LLViewerFetchedTexture::updateFetch()
         }
         else
         {
+            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
             // already at a higher resolution mip, don't discard
-            if (current_discard >= 0 && current_discard <= desired_discard)
+            //if (current_discard >= 0 && current_discard <= desired_discard)
+            // If we are in a high memory situation which is increasing and our texture is not normal
+            if (use_new_bias_adjustments && sDesiredDiscardBias > 1.0f && sDesiredDiscardBias > sPreviousDesiredDiscardBias && mTextureState != LLViewerTexture::ETextureStates::NORMAL)
+            {
+                // If the texture has already been deleted by the overage at least already
+                if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
+                {
+                    // If the desired discard level is below the max discard level and the boost on the texture is less then BOOST_SCULPTED
+                    if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                    {
+                        // Set the desired discard level to the max low quality
+                        mDesiredDiscardLevel = MAX_DISCARD_LEVEL - 1;
+                    }
+                }
+                // Else if the texture was scaled down before
+                else if (mTextureState & ETextureStates::VRAM_SCALED_DOWN)
+                {
+                    // If the desired discard level is below the max discard level and the boost on the texture is less then
+                    // BOOST_SCULPTED
+                    if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                    {
+                        // Set the desired discard level to the next lower quality (by increaseing the value by 1)
+                        mDesiredDiscardLevel += 1;
+                    }                    
+                }
+            }                        
+            // already at a higher resolution mip, don't discard
+            //if (current_discard >= 0 && current_discard <= desired_discard)
+            else if (current_discard >= 0 && current_discard <= desired_discard)
+            // </FS:minerjr> [FIRE-35011]
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - current <= desired");
                 make_request = false;
@@ -2593,6 +2663,7 @@ void LLViewerFetchedTexture::clearCallbackEntryList()
 
     return;
 }
+
 // <FS:minerjr> [FIRE-35011]
 // These following three methods may need to modified for use by the mUUIDDeleteMap, but right now they are
 // not causing any issue. Just a future note. When on the Delete list, they are not active.
@@ -3367,6 +3438,17 @@ bool LLViewerLODTexture::scaleDown()
 
     if (!mDownScalePending)
     {
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+        // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+        static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+        if (sDesiredDiscardBias > 1.0f && use_new_bias_adjustments)
+        {
+            // Store the previous texture state
+            mPreviousTextureState = mTextureState;
+            // Flag that the texture was downscaled during low memory
+            mTextureState |= ETextureStates::VRAM_SCALED_DOWN;
+        }
+        // </FS:minerjr> [FIRE-35011]
         mDownScalePending = true;
         gTextureList.mDownScaleQueue.push(this);
     }

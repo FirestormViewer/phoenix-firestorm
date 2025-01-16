@@ -696,7 +696,27 @@ void LLViewerTextureList::findTexturesByID(const LLUUID &image_id, std::vector<L
         iter++;
     }
     // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
-    // Possibly add the deleted images on to this list, depending on the use case.
+    // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    // If we are using the new bias adjustments, then
+    if (use_new_bias_adjustments)
+    {
+        // Add the deleted images on to this list, 
+        uuid_map_t::iterator del_iter = mUUIDDeleteMap.lower_bound(search_key);
+        while (del_iter != mUUIDDeleteMap.end() && del_iter->first.textureId == image_id)
+        {
+            // Set the normal map to have the same image as the delete map
+            mUUIDMap[del_iter->first] = del_iter->second;
+            // Add the deleted image to the Image List
+            mImageList.insert(del_iter->second);
+            // Set the flag that the image is on the list to try
+            mUUIDMap[del_iter->first]->setInImageList(true);
+            output.push_back(del_iter->second);
+            // Remove the deleted texture from the delete UUID Map
+            mUUIDDeleteMap.erase(del_iter->first);
+            del_iter++;
+        }
+    }
     // </FS:minerjr> [FIRE-35011]
 }
 
@@ -720,6 +740,8 @@ LLViewerFetchedTexture *LLViewerTextureList::findImage(const LLTextureKey &searc
             mImageList.insert(mUUIDMap[search_key]);
             // Set the flag that the image is on the list to try
             mUUIDMap[search_key]->setInImageList(true);
+            // Remove the deleted texture from the delete UUID Map
+            mUUIDDeleteMap.erase(search_key);
             // And return the found image
             return mUUIDMap[search_key];
         }
@@ -824,7 +846,8 @@ void LLViewerTextureList::addImage(LLViewerFetchedTexture *new_image, ETexListTy
     if (mUUIDDeleteMap.count(key) == 1)
     {
         // The key also exists on the delete list
-        // Remove the reference        
+        // Remove the reference
+        mUUIDDeleteMap.erase(key);
     }
     sNumImages++;
 
@@ -1008,15 +1031,22 @@ void LLViewerTextureList::clearFetchingRequests()
     }
     // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // Need to purge any requests on the delete list
-    for (uuid_map_t::iterator iter = mUUIDDeleteMap.begin(); iter != mUUIDDeleteMap.end(); ++iter)
+    // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
+    static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
+    // If we are using the new bias system
+    if (use_new_bias_adjustments)
     {
-        LLViewerFetchedTexture* imagep = iter->second;
-        if (imagep)
+        // Iterator over all of the objects in the UUID Delete Map
+        for (uuid_map_t::iterator iter = mUUIDDeleteMap.begin(); iter != mUUIDDeleteMap.end(); ++iter)
         {
-            imagep->forceToDeleteRequest();
+            LLViewerFetchedTexture* imagep = iter->second;
+            if (imagep)
+            {
+                imagep->forceToDeleteRequest();
+            }
         }
     }
-    // </FS:minerjr> FIRE-35011
+    // </FS:minerjr> [FIRE-35011]
 }
 
 extern bool gCubeSnapshot;
@@ -1110,11 +1140,21 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
           // this is an alternative to decaying mMaxVirtualSize over time
           // that keeps textures from continously downrezzing and uprezzing in the background
 
-            if (LLViewerTexture::sDesiredDiscardBias > 1.5f ||
-                (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f))
+            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+            //if (LLViewerTexture::sDesiredDiscardBias > 1.5f ||
+            //    (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f))
+            //{
+            //    imagep->mMaxVirtualSize = 0.f;
+            //}
+            // Only keep downsizeing if the bias is increasing
+            if ((LLViewerTexture::sDesiredDiscardBias > 1.5f || (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f)) &&
+                LLViewerTexture::sDesiredDiscardBias > LLViewerTexture::sPreviousDesiredDiscardBias)
             {
                 imagep->mMaxVirtualSize = 0.f;
+                // Flag the image that it was downsized
+                imagep->setTextureState(LLViewerTexture::ETextureStates::VRAM_SCALED_DOWN);
             }
+            // </FS:minerjr> [FIRE-35011] 
         }
 
         imagep->addTextureStats(max_vsize);
@@ -1345,9 +1385,11 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
     //}
     // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
     static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
-    // If the desired discard bias is greater then 1 and is increasing or stable, if descreasing, use the normal about of texture updates
+    // If using the new bias adjustments, then perform the new actions
     if (use_new_bias_adjustments)
     {
+        // If the desired discard bias is greater then 1 and is increasing or stable, if descreasing, use the normal about of texture
+        // updates
         if (LLViewerTexture::sDesiredDiscardBias > 1.f &&
             LLViewerTexture::sDesiredDiscardBias >= LLViewerTexture::sPreviousDesiredDiscardBias)
         {
@@ -1357,6 +1399,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
     }
     else
     {
+        // Else, use the standard method
         if (LLViewerTexture::sDesiredDiscardBias > 1.f)
         {
             // we are over memory target, update more agresively

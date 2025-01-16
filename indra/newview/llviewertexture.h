@@ -196,6 +196,7 @@ public:
         RECOVERY_DELAY          = 8  // Recovery delay after VRAM_OVERAGE_DELETED or VRAM_SCALED_DOWN is true
     };
 
+    void setTextureState(ETextureStates newState);
     mutable U8 mTextureState; // Bitfield which represents the texture's current state
     mutable U8 mPreviousTextureState; // Bitfield which represents the texture's current state
     F32 mDelayToNormalUseAfterOverBudget; // Time to wait for returning to normal texture adjustments for larger resolution requests after
@@ -375,11 +376,12 @@ public:
 
     void destroyTexture() ;
 
+    virtual void processTextureStats() ;
     // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
     // New behavior for handling low memory for the ProcessTextureStats method for both Fetch and LOD textures
     // Returns true if the the 
     bool handleMemoryOverageForProcessTextureStats();
-    virtual void processTextureStats() ;    
+    
 
     bool needsAux() const { return mNeedsAux; }
 
