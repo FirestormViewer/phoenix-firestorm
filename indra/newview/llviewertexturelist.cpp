@@ -907,7 +907,7 @@ void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
             image->mPreviousTextureState = image->mTextureState;
             // Set the texture state based upon if the system is running out of memory
             // If we are running out of memory
-            if (LLViewerTexture::sDesiredDiscardBias > 1.0f)
+            if (LLViewerTexture::sOverMemoryBudgetState.States.UseBias)
             {
                 // Set the texture state to VRAM_OVERAGE_DELETED
                 image->mTextureState = LLViewerTexture::ETextureStates::VRAM_OVERAGE_DELETED;
@@ -1055,13 +1055,14 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 {
     llassert(!gCubeSnapshot);
 
-    if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH)  // don't bother checking face list for boosted textures
+    if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH) // don't bother checking face list for boosted textures
     {
         static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.04f);
         static LLCachedControl<F32> texture_scale_max(gSavedSettings, "TextureScaleMaxAreaFactor", 25.f);
 
-        F32 max_vsize = 0.f;
-        bool on_screen = false;
+        F32  max_vsize         = 0.f;
+        bool on_screen         = false;
+        F32  original_max_size = imagep->getMaxVirtualSize();
 
         U32 face_count = 0;
 
@@ -1070,7 +1071,12 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         F32 bias = llclamp(max_discard - 2.f, 1.f, LLViewerTexture::sDesiredDiscardBias);
 
         // convert bias into a vsize scaler
-        bias = (F32) llroundf(powf(4, bias - 1.f));
+        bias = (F32)llroundf(powf(4, bias - 1.f));
+
+        if (LLViewerTexture::sOverMemoryBudgetState.States.UseBias == 0)
+        {
+            bias = 1.0f;
+        }
 
         LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
@@ -1089,7 +1095,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     { // only call calcPixelArea at most once every 10 frames for a given face
                         // this helps eliminate redundant calls to calcPixelArea for faces that have multiple textures
                         // assigned to them, such as is the case with GLTF materials or Blinn-Phong materials
-                        face->mInFrustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
+                        face->mInFrustum         = face->calcPixelArea(cos_angle_to_view_dir, radius);
                         face->mLastTextureUpdate = gFrameCount;
                     }
 
@@ -1104,11 +1110,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     //
                     // Maximum usage examples: huge chunk of terrain repeats texture
                     // TODO: make this work with the GLTF texture transforms
-                    S32 te_offset = face->getTEOffset();  // offset is -1 if not inited
-                    LLViewerObject* objp = face->getViewerObject();
-                    const LLTextureEntry* te = (te_offset < 0 || te_offset >= objp->getNumTEs()) ? nullptr : objp->getTE(te_offset);
-                    F32 min_scale = te ? llmin(fabsf(te->getScaleS()), fabsf(te->getScaleT())) : 1.f;
-                    min_scale = llclamp(min_scale * min_scale, texture_scale_min(), texture_scale_max());
+                    S32                   te_offset = face->getTEOffset(); // offset is -1 if not inited
+                    LLViewerObject*       objp      = face->getViewerObject();
+                    const LLTextureEntry* te        = (te_offset < 0 || te_offset >= objp->getNumTEs()) ? nullptr : objp->getTE(te_offset);
+                    F32                   min_scale = te ? llmin(fabsf(te->getScaleS()), fabsf(te->getScaleT())) : 1.f;
+                    min_scale                       = llclamp(min_scale * min_scale, texture_scale_min(), texture_scale_max());
                     vsize /= min_scale;
 
                     // apply bias to offscreen faces all the time, but only to onscreen faces when bias is large
@@ -1121,7 +1127,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     if (face->mInFrustum)
                     {
                         static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 8.f);
-                        vsize *= llmax(face->mImportanceToCamera*texture_camera_boost, 1.f);
+                        vsize *= llmax(face->mImportanceToCamera * texture_camera_boost, 1.f);
                     }
 
                     max_vsize = llmax(max_vsize, vsize);
@@ -1140,24 +1146,41 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
           // this is an alternative to decaying mMaxVirtualSize over time
           // that keeps textures from continously downrezzing and uprezzing in the background
 
-            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
-            //if (LLViewerTexture::sDesiredDiscardBias > 1.5f ||
-            //    (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f))
-            //{
-            //    imagep->mMaxVirtualSize = 0.f;
-            //}
-            // Only keep downsizeing if the bias is increasing
-            if ((LLViewerTexture::sDesiredDiscardBias > 1.5f || (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f)) &&
-                LLViewerTexture::sDesiredDiscardBias > LLViewerTexture::sPreviousDesiredDiscardBias)
+            if (LLViewerTexture::sDesiredDiscardBias > 1.5f || (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f) && LLViewerTexture::sOverMemoryBudgetState.States.UseBias)
             {
                 imagep->mMaxVirtualSize = 0.f;
-                // Flag the image that it was downsized
-                imagep->setTextureState(LLViewerTexture::ETextureStates::VRAM_SCALED_DOWN);
             }
-            // </FS:minerjr> [FIRE-35011] 
         }
 
         imagep->addTextureStats(max_vsize);
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+        if (imagep->getMaxVirtualSize() < original_max_size)
+        {
+            //imagep->addTextureStats(original_max_size);
+            if (LLViewerTexture::sOverMemoryBudgetState.States.UseBias)
+            {
+                // Flag the image that it was downsized
+               // imagep->setTextureState(LLViewerTexture::ETextureStates::VRAM_SCALED_DOWN);
+            }
+            else
+            {
+                //imagep->setTextureState(LLViewerTexture::ETextureStates::SCALED_DOWN);
+            }
+        }
+        else
+        {
+            // If we are in a low state, just reset the max virtual size back to the original value
+            if (LLViewerTexture::sOverMemoryBudgetState.States.UseBias)
+            {
+                //imagep->mMaxVirtualSize = original_max_size;
+            }
+            else if (imagep->mTextureState & LLViewerTexture::ETextureStates::SCALED_DOWN &&
+                     LLViewerTexture::sOverMemoryBudgetState.States.NormalHoldBias)
+            {
+                //imagep->mMaxVirtualSize = original_max_size;
+            }
+        }
+        // </FS:minerjr> [FIRE-35011]
     }
 
 #if 0
@@ -1195,7 +1218,14 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             return;
         }
     }
-    else
+    // <FS:minerjr>
+    else if (imagep->mTextureState & LLViewerTexture::ETextureStates::VRAM_SCALED_DOWN && imagep->getMaxVirtualSize() == 0.0f &&
+             imagep->getType() == LLViewerTexture::LOD_TEXTURE && imagep->getBoostLevel() == LLViewerTexture::BOOST_NONE)
+    {
+        // We are going to delete the image after scaling it down, so do it now.
+        //deleteImage(imagep);
+    }
+    // </FS:minerjr>
     {
         // still referenced outside of image list, reset timer
         imagep->getLastReferencedTimer()->reset();
@@ -1391,7 +1421,8 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
         // If the desired discard bias is greater then 1 and is increasing or stable, if descreasing, use the normal about of texture
         // updates
         if (LLViewerTexture::sDesiredDiscardBias > 1.f &&
-            LLViewerTexture::sDesiredDiscardBias >= LLViewerTexture::sPreviousDesiredDiscardBias)
+            LLViewerTexture::sDesiredDiscardBias >= LLViewerTexture::sPreviousDesiredDiscardBias &&
+            LLViewerTexture::sOverMemoryBudgetState.States.UseBias && !LLViewerTexture::sOverMemoryBudgetState.States.NormalHoldBias)
         {
             // we are over memory target, update more agresively
             update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);

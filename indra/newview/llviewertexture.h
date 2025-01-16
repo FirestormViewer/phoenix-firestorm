@@ -191,9 +191,10 @@ public:
     {
         NORMAL                  = 0, // Normal state
         DELETED                 = 1, // Normal Delete
-        VRAM_OVERAGE_DELETED    = 2, // Deleted during VRAM overage
-        VRAM_SCALED_DOWN        = 4, // Scaled down during VRAM overage
-        RECOVERY_DELAY          = 8  // Recovery delay after VRAM_OVERAGE_DELETED or VRAM_SCALED_DOWN is true
+        SCALED_DOWN             = 2, // Normal Scaled Down
+        VRAM_OVERAGE_DELETED    = 4, // Deleted during VRAM overage
+        VRAM_SCALED_DOWN        = 8, // Scaled down during VRAM overage
+        RECOVERY_DELAY          = 16  // Recovery delay after VRAM_OVERAGE_DELETED or VRAM_SCALED_DOWN is true
     };
 
     void setTextureState(ETextureStates newState);
@@ -248,6 +249,28 @@ public:
     static F32 sPreviousDesiredDiscardBias; // Static value of the previous Desired Discard Bias (Used to determine if the desired discard bias is increasing, decreasing, or staying the same
     static F32 sOverMemoryBudgetStartTime;  // Static value stores the mCurrentTime when the viewer first went over budget of RAM (sDesiredDiscardBias > 1.0)
     static F32 sOverMemoryBudgetEndTime;    // Static value stores the mCurrentTime when the viewer first exists over budget of RAM (sDesiredDiscardBias == 1.0)
+    typedef union
+    {
+        U32 ClearState;
+        struct 
+        {
+            U32 Normal : 1;
+            U32 LowSystemRAM : 1;
+            U32 LowVRAM : 1;
+            U32 PreviousLowSystemRam : 1;
+            U32 PrevouusLowVRAM : 1;
+            U32 Overage_High : 1;
+            U32 Overage_Low : 1;
+            U32 No_Overage : 1;
+            U32 NormalHoldBias : 1;
+            U32 UseBias : 1;
+            U32 IncreaseBias : 1;
+            U32 DecreaseBias : 1;
+        } States;
+
+    } OverMemoryBudetStates_u;
+
+    static OverMemoryBudetStates_u sOverMemoryBudgetState; // State of the over memory budget
     // </FS:minerjr> [FIRE-35011]
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;

@@ -95,6 +95,7 @@ F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
 F32 LLViewerTexture::sPreviousDesiredDiscardBias = 0.f; // Init the static value of the previous discard bias, used to know what direction the bias is going, up, down or staying the same
 F32 LLViewerTexture::sOverMemoryBudgetStartTime = 0.0f; // Init the static time when system first went over VRAM budget
 F32 LLViewerTexture::sOverMemoryBudgetEndTime = 0.0f; // Init the static time when the system finally reached a normal memory amount
+LLViewerTexture::OverMemoryBudetStates_u LLViewerTexture::sOverMemoryBudgetState; // Init the static flag to determine if the over budget is staying still
 // </FS:minerjr> [FIRE-35011]
 S32 LLViewerTexture::sMaxSculptRez = 128; //max sculpt image size
 constexpr S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64;
@@ -563,8 +564,15 @@ void LLViewerTexture::updateClass()
     // the bias is increasing, decreasing or staying the same. This is useful for determining how the system handles being over budget of
     // RAM.
     sPreviousDesiredDiscardBias = sDesiredDiscardBias;
+    // Update the state of the over memory budget state to the values stored here
+    sOverMemoryBudgetState.ClearState = 0;
+    sOverMemoryBudgetState.States.LowSystemRAM         = is_sys_low;
+    sOverMemoryBudgetState.States.PreviousLowSystemRam = was_sys_low;
+    sOverMemoryBudgetState.States.LowVRAM              = was_low;
+
     if (is_low && !was_low)
     {
+        sOverMemoryBudgetState.States.UseBias = 1;
         // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
         sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.5f);
         // We want to store the time from when the system went over budget to when it finished, this can be used to help delay when textures are
@@ -577,6 +585,7 @@ void LLViewerTexture::updateClass()
         if (is_sys_low || over_pct > 2.f)
         { // if we're low on system memory, emergency purge off screen textures to avoid a death spiral
             LL_WARNS() << "Low system memory detected, emergency downrezzing off screen textures" << LL_ENDL;
+            sOverMemoryBudgetState.States.Overage_High = 1;
             for (auto& image : gTextureList)
             {
                 gTextureList.updateImageDecodePriority(image, false /*will modify gTextureList otherwise!*/);
@@ -590,6 +599,8 @@ void LLViewerTexture::updateClass()
 
     if (is_low)
     {
+        // Flag that we are using the bias
+        sOverMemoryBudgetState.States.UseBias = 1;
         // ramp up discard bias over time to free memory
         LL_DEBUGS("TextureMemory") << "System memory is low, use more aggressive discard bias." << LL_ENDL;
         if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
@@ -598,6 +609,7 @@ void LLViewerTexture::updateClass()
 
             F32 increment = low_mem_min_discard_increment + llmax(over_pct, 0.f);
             sDesiredDiscardBias += increment * gFrameIntervalSeconds;
+            sOverMemoryBudgetState.States.IncreaseBias;
         }
     }
     else
@@ -612,9 +624,16 @@ void LLViewerTexture::updateClass()
         if (sDesiredDiscardBias > 1.f && over_pct < FREE_PERCENTAGE_TRESHOLD)
         {
             static LLCachedControl<F32> high_mem_discard_decrement(gSavedSettings, "RenderHighMemMinDiscardDecrement", .1f);
-
+            //F32 decrement = high_mem_discard_decrement - llmin(over_pct, 0.f);
             F32 decrement = high_mem_discard_decrement - llmin(over_pct - FREE_PERCENTAGE_TRESHOLD, 0.f);
-            sDesiredDiscardBias -= decrement * gFrameIntervalSeconds;
+            sDesiredDiscardBias -= decrement * gFrameIntervalSeconds;            
+            sOverMemoryBudgetState.States.DecreaseBias;
+        }
+        // Else if we are good on memory, but at the 10% range
+        else if (sDesiredDiscardBias > 1.f)
+        {
+            // Flag the over memory budget state that we are holding the bias.
+            sOverMemoryBudgetState.States.NormalHoldBias = 1;
         }
     }
 
@@ -661,6 +680,12 @@ void LLViewerTexture::updateClass()
     {
         // So we need to set the memory buget end time to the current time
         sOverMemoryBudgetEndTime = sCurrentTime;
+    }
+    // If none of the flags were set
+    if (sOverMemoryBudgetState.ClearState == 0)
+    {
+        // Set the normal flag as true
+        sOverMemoryBudgetState.States.Normal = 1;
     }
     // </FS:minerjr> [FIRE-35011]
 
@@ -1800,7 +1825,7 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
             if (mDelayToNormalUseAfterOverBudget <= sCurrentTime)
             {
                 // If we are still in memory overage, then
-                if (sDesiredDiscardBias > 1.0f)
+                if (sOverMemoryBudgetState.States.UseBias)
                 {
                     // Create an additional 1 second delay for this texture
                     mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f + ll_rand() * 10.0f;
@@ -1836,7 +1861,7 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
             }
         }
         // Else, we want to check to see if we are in a memory overage state
-        else if (sDesiredDiscardBias > 1.0f)
+        else if (sOverMemoryBudgetState.States.UseBias)
         {
             // If the texture currently is Normal
             if (mTextureState == ETextureStates::NORMAL)
@@ -1923,9 +1948,20 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
                 return false;
             }
         }
+        else if ((sOverMemoryBudgetState.States.Normal || sOverMemoryBudgetState.States.NormalHoldBias) &&
+                 mTextureState == ETextureStates::SCALED_DOWN)
+        {
+            // Create an additional 1 second delay for this texture
+            mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f + (F32)ll_rand(5);
+
+            // Store the current texture state before modifing it
+            mPreviousTextureState = mTextureState;
+            // Set the current texture state RECOVERY_DELAY flag
+            mTextureState |= ETextureStates::RECOVERY_DELAY;
+        }
         // Else if we have returned to normal memory usage after the memory acted up and it affected this texture
-        else if (sDesiredDiscardBias == 1.0f && mTextureState != ETextureStates::NORMAL && mTextureState != ETextureStates::DELETED &&
-                 sOverMemoryBudgetEndTime != 0.0f)
+        else if ((sOverMemoryBudgetState.States.Normal || sOverMemoryBudgetState.States.NormalHoldBias) && mTextureState != ETextureStates::NORMAL &&
+                 mTextureState != ETextureStates::DELETED)
         {
             // Create an additional 1 second delay for this texture
             mDelayToNormalUseAfterOverBudget = sCurrentTime + 1.0f;
@@ -1934,13 +1970,19 @@ bool LLViewerFetchedTexture::handleMemoryOverageForProcessTextureStats()
             if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
             {
                 // We want to hold off on updating the time based upon how much time was spent during over budget, within 1 to 45 seconds
-                mDelayToNormalUseAfterOverBudget += llclamp((sOverMemoryBudgetEndTime - sOverMemoryBudgetStartTime), 1.0f, 45.0f);
+                
+                mDelayToNormalUseAfterOverBudget += 1.0f + (F32)ll_rand(45);
             }
             // Else if the texture was just scaled down, delay it a smaller amount
             else if (mTextureState & ETextureStates::VRAM_SCALED_DOWN)
             {
                 // We want to hold off on updating the time based upon how much time was spent during over budget, within 1 to 5 seconds
-                mDelayToNormalUseAfterOverBudget += llclamp((sOverMemoryBudgetEndTime - sOverMemoryBudgetStartTime), 1.0f, 5.0f);
+                mDelayToNormalUseAfterOverBudget += 1.0f + (F32)ll_rand(5);
+            }
+            else if (mTextureState & ETextureStates::SCALED_DOWN)
+            {
+                // We want to hold off on updating the time based upon how much time was spent during over budget, within 1 to 5 seconds
+                mDelayToNormalUseAfterOverBudget += 1.0f + (F32)ll_rand(5);
             }
 
             // Store the current texture state before modifing it
@@ -2381,6 +2423,15 @@ bool LLViewerFetchedTexture::updateFetch()
         }
         else
         {
+            // already at a higher resolution mip, don't discard
+            // if (current_discard >= 0 && current_discard <= desired_discard)
+            if (current_discard >= 0 && current_discard <= desired_discard)
+            // </FS:minerjr> [FIRE-35011]
+            {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - current <= desired");
+                make_request = false;
+            }
+            /*
             // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
             // already at a higher resolution mip, don't discard
             //if (current_discard >= 0 && current_discard <= desired_discard)
@@ -2391,10 +2442,10 @@ bool LLViewerFetchedTexture::updateFetch()
                 if (mTextureState & ETextureStates::VRAM_OVERAGE_DELETED)
                 {
                     // If the desired discard level is below the max discard level and the boost on the texture is less then BOOST_SCULPTED
-                    if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                    if (desired_discard < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
                     {
                         // Set the desired discard level to the max low quality
-                        mDesiredDiscardLevel = MAX_DISCARD_LEVEL - 1;
+                        desired_discard = mDesiredDiscardLevel = MAX_DISCARD_LEVEL - 1;
                     }
                 }
                 // Else if the texture was scaled down before
@@ -2402,21 +2453,15 @@ bool LLViewerFetchedTexture::updateFetch()
                 {
                     // If the desired discard level is below the max discard level and the boost on the texture is less then
                     // BOOST_SCULPTED
-                    if (mDesiredDiscardLevel < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
+                    if (desired_discard < (MAX_DISCARD_LEVEL - 1) && mBoostLevel < LLGLTexture::BOOST_SCULPTED)
                     {
                         // Set the desired discard level to the next lower quality (by increaseing the value by 1)
-                        mDesiredDiscardLevel += 1;
+                        desired_discard = mDesiredDiscardLevel += 1;
                     }                    
                 }
-            }                        
-            // already at a higher resolution mip, don't discard
-            //if (current_discard >= 0 && current_discard <= desired_discard)
-            else if (current_discard >= 0 && current_discard <= desired_discard)
-            // </FS:minerjr> [FIRE-35011]
-            {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - current <= desired");
-                make_request = false;
             }
+            // </FS:minerjr> [FIRE-35011]
+            */
         }
     }
 
@@ -3441,12 +3486,19 @@ bool LLViewerLODTexture::scaleDown()
         // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
         // Saved Settings bool flag used to enable the newer system (Can be removed but good for testing and comparing)
         static LLCachedControl<bool> use_new_bias_adjustments(gSavedSettings, "FSTextureNewBiasAdjustments", false);
-        if (sDesiredDiscardBias > 1.0f && use_new_bias_adjustments)
+        if (sOverMemoryBudgetState.States.UseBias && use_new_bias_adjustments)
         {
             // Store the previous texture state
             mPreviousTextureState = mTextureState;
             // Flag that the texture was downscaled during low memory
             mTextureState |= ETextureStates::VRAM_SCALED_DOWN;
+        }
+        else if (use_new_bias_adjustments)
+        {
+            // Store the previous texture state
+            mPreviousTextureState = mTextureState;
+            // Flag that the texture was downscaled during low memory
+            mTextureState |= ETextureStates::SCALED_DOWN;
         }
         // </FS:minerjr> [FIRE-35011]
         mDownScalePending = true;
