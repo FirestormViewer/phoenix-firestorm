@@ -2240,15 +2240,13 @@ class LinuxManifest(ViewerManifest):
 
             self.path_optional("libjemalloc.so*")
 
-            # WebRTC libraries
-            with self.prefix(src=os.path.join(self.args['build'], os.pardir,
-                        'sharedlibs', 'lib')):
-
-             for libfile in (
-                   'libllwebrtc.so',
-             ):
-
-                    self.path(libfile)
+        # WebRTC libraries
+        with self.prefix(src=os.path.join(self.args['build'], os.pardir,
+                        'sharedlibs', 'lib'), dst='lib'):
+            for libfile in (
+                'libllwebrtc.so',
+            ):
+                self.path(libfile)
 
             # Vivox runtimes
             # Currentelly, the 32-bit ones will work with a 64-bit client.
