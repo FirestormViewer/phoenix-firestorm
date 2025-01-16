@@ -104,7 +104,7 @@
          parameter="sort_by_recent" />
         <on_check
          function="Inventory.GearDefault.Check"
-         parameter="sort_by_recent" />         
+         parameter="sort_by_recent" />
     </menu_item_check>
     <menu_item_check
      label="Sort Folders Always by Name"
@@ -409,7 +409,7 @@
 		<on_check
 			function="Inventory.CoalescedObjects.Check"
 			parameter="coalesced_objects_only" />
-	</menu_item_check>  
+	</menu_item_check>
     <menu_item_separator>
         <menu_item_separator.on_visible
          function="Inventory.GearDefault.Visible"
