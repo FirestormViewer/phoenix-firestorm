@@ -11,7 +11,7 @@
 			<text name="composite_label">
 				混合紋理
 			</text>
-			<button label="轉儲 ID 到控制檯" label_selected="轉儲" name="Dump" />
+			<button label="轉儲 ID 到控制台" label_selected="轉儲" name="Dump" />
 			<panel name="scroll_content_panel">
 				<texture_picker label="頭髮" name="hair-baked" />
 				<texture_picker label="頭髮" name="hair_grain" />

@@ -119,10 +119,10 @@ private:
     LLVector3 normalizePixelPos(S32 x, S32 y, S32 z) const;
     LLVector3 normalizeDelta(S32 x, S32 y, S32 z) const;
 
-    void getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY);
+    void getHoverMovementDeltas(S32 x, S32 y, MASK mask, S32* deltaX, S32* deltaY, S32* deltaZ);
     void applyHoverMovementDeltas(S32 deltaX, S32 deltaY, MASK mask);
     void applyDeltasToValues(S32 deltaX, S32 deltaY, MASK mask);
-    void applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, MASK mask);
+    void applyDeltasToDeltaValues(S32 deltaX, S32 deltaY, S32 deltaZ, MASK mask);
 
     LLUIImage* mImgMoonBack{ nullptr };
     LLUIImage* mImgMoonFront{ nullptr };
@@ -151,6 +151,11 @@ private:
     bool mInfiniteScrollMode{ false };
 
     bool mHeldDownControlBefore{ false };
+
+    /// <summary>
+    /// The values the owner will get and set.
+    /// </summary>
+    S32 mWheelClicksSinceLastDelta{ 0 };
 
     /// <summary>
     /// The values the owner will get and set.

@@ -32,9 +32,9 @@
 	<menu_item_check name="inventory_filter_show_links" label="顯示聯結" />
 	<menu_item_check name="inventory_filter_only_links" label="僅顯示聯結" />
 	<menu_item_check name="inventory_filter_hide_links" label="隱藏聯結" />
-	<menu_item_check name="inventory_filter_only_modify" label="僅顯示可修改物件" />
-	<menu_item_check name="inventory_filter_only_copy" label="僅顯示可複製物件" />
-	<menu_item_check name="inventory_filter_only_transfer" label="僅顯示可轉讓物件" />
-	<menu_item_check name="inventory_filter_coalesced_objects_only" label="僅顯示合併物件" />
+	<menu_item_check name="inventory_filter_only_modify" label="僅可修改物件" />
+	<menu_item_check name="inventory_filter_only_copy" label="僅可複製物件" />
+	<menu_item_check name="inventory_filter_only_transfer" label="僅可轉讓物件" />
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="僅合併物件" />
 	<menu_item_call label="清空垃圾桶" name="empty_trash" />
 </toggleable_menu>

@@ -45,6 +45,7 @@
 				<combo_box.item value="filter_type_meshes" label="網格模型" />
 				<combo_box.item value="filter_type_materials" label="材質" />
 				<combo_box.item value="filter_type_settings" label="環境設定" />
+				<combo_box.item value="filter_type_coalesced" label="僅合併物件"/>
 				<combo_box.item value="filter_type_custom" label="自訂..." />
 			</combo_box>
 			<menu_button name="options_visibility_btn" tool_tip="顯示搜尋結果的可見性設定" />
@@ -67,6 +68,9 @@
 		</panel>
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="新增庫存視窗" />
+		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="顯示過濾器 - 選取後會顯示過濾側邊選單。當啟用任何過濾器時會高亮顯示。"/>
 		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="切換視圖模式" />
