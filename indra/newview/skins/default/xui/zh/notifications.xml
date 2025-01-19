@@ -3632,12 +3632,12 @@ URL：[AUDIOURL]
 請按 M 鍵做切換。
 	</notification>
 	<notification name="FirstSandbox">
-		這個一個沙盤區，旨在幫助居民學習如何建造物件。
+		這是一個沙盤區，旨在幫助居民學習如何建造物件。
 
 你在這裡建造的物件，在你離開後將被刪除。別忘了按滑鼠右鍵，選擇「拿取」，將你的建造物送到你的庫存。
 	</notification>
 	<notification name="MaxListSelectMessage">
-		你最多隻能從這清單中選擇 [MAX_SELECT] 個物件。
+		你最多隻能從這個清單中選擇 [MAX_SELECT] 個物件。
 	</notification>
 	<notification name="VoiceInviteP2P">
 		[NAME] 正邀請你加入語音聊天。
@@ -3655,7 +3655,7 @@ URL：[AUDIOURL]
 		[NAME] 已收到錢，並已被自動解除封鎖。
 	</notification>
 	<notification name="AutoUnmuteByInventory">
-		[NAME] 已得知你要贈送收納物件，並已被自動解除封鎖。
+		[NAME] 已得知你要贈送庫存物件，並已被自動解除封鎖。
 	</notification>
 	<notification name="VoiceInviteGroup">
 		[NAME] 已加入和群組 [GROUP] 的語音聊天通話。
@@ -4054,7 +4054,7 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification label="說話" name="HintSpeak">
 		點擊「說話」按鈕來打開或關閉麥克風。
 
-點擊向上箭頭鍵，可顯示聲音控制檯。
+點擊向上箭頭鍵，可顯示聲音控制台。
 
 隱藏「說話」按鈕將停用語音功能。
 	</notification>

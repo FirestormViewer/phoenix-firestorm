@@ -2,7 +2,7 @@
 <panel label="聊天" name="chat">
 	<tab_container label="聊天" name="tabs">
 		<panel label="外觀" name="ChatVisuals">
-			<text name="console_font_size" width="170">聊天控制檯的字型：</text>
+			<text name="console_font_size" width="170">聊天控制台的字型：</text>
 			<radio_group name="chat_console_font_size">
 				<radio_item label="小" name="consradio" />
 				<radio_item label="中等" name="consradio2" />
@@ -17,7 +17,7 @@
 			<check_box name="FSMarkObjects" label="將無名稱的說話物件重新命名為「(無名稱)」以避免混淆" />
 			<check_box label="將通過 llOwnerSay 發出的訊息重新導向到指令碼除錯視窗中" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
 			<check_box label="顯示聊天氣泡" name="bubble_text_chat" />
-			<check_box label="不要在本地聊天控制檯和提示框中顯示對話" name="FSBubblesHideConsoleAndToasts" />
+			<check_box label="不要在本地聊天控制台和提示框中顯示對話" name="FSBubblesHideConsoleAndToasts" />
 			<check_box label="在聊天氣泡中顯示文字輸入指示器" name="bubble_text_typing" />
 			<check_box label="在頭頂標籤中顯示文字輸入指示器" name="FSShowTypingStateInNameTag" />
 			<check_box name="FSSecondsinChatTimestamps" label="在時間戳中顯示秒數 [HH:MM:SS]" />
@@ -25,8 +25,9 @@
 			<check_box label="本地聊天" name="show_timestamps_nearby_chat" width="80" />
 			<check_box label="私聊" name="show_timestamps_im" width="50" />
 			<check_box label="記錄" name="show_timestamps_transcripts" />
-			<check_box name="FSConsoleClassicDrawMode" label="使用經典模式繪製控制檯" tool_tip="經典控制檯顯示所有行的背景為一個塊，長度為最長行的長度。" />
-			<check_box name="ChatFullWidth" label="使用全螢幕寬度顯示控制檯" />
+			<check_box label="顯示螢幕控制台" tool_tip="在聊天視窗未開啟時，顯示或隱藏聊天控制台文字" name="FSShowOnscreenConsole"/>
+			<check_box name="FSConsoleClassicDrawMode" label="使用經典模式繪製控制台" tool_tip="經典控制台顯示所有行的背景為一個塊，長度為最長行的長度。" />
+			<check_box name="ChatFullWidth" label="使用全螢幕寬度顯示控制台" />
 			<spinner label="訊息消失時間：" name="fade_chat_time" />
 			<text name="text_box4">(秒)</text>
 			<text name="text_box5">(行數)</text>
@@ -132,9 +133,9 @@
 			<text name="disable_toast_label">接收新訊息時彈出聊天提示：</text>
 			<check_box name="EnableGroupChatPopups" label="群組聊天" tool_tip="勾選以在收到新的群組訊息時看到通知。" />
 			<check_box name="EnableIMChatPopups" label="私聊" tool_tip="勾選以在收到新的私聊時看到通知。" />
-			<check_box name="FSUseNearbyChatConsole" label="使用控制檯顯示聊天通知而不是浮動視窗" />
-			<check_box name="FSLogImToChatConsole" label="在聊天控制檯中顯示私聊" />
-			<check_box name="FSLogGroupImToChatConsole" label="在聊天控制檯中顯示群組聊天" />
+			<check_box name="FSUseNearbyChatConsole" label="使用控制台顯示聊天通知而不是浮動視窗" />
+			<check_box name="FSLogImToChatConsole" label="在聊天控制台中顯示私聊" />
+			<check_box name="FSLogGroupImToChatConsole" label="在聊天控制台中顯示群組聊天" />
 			<text name="FSShowGroupNameLength_label">在記錄中顯示的群組名稱長度</text>
 			<spinner tool_tip="設定為-1表示完整名稱，設定為0表示禁用" name="FSShowGroupNameLength" />
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="連線時顯示離線訊息" />

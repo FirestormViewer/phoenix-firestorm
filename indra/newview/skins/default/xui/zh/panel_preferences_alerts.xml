@@ -19,7 +19,7 @@
 			<check_box label="當我封鎖或解除封鎖某人時通知我" name="FSReportBlockToNearbyChat" />
 			<text name="friends_logon_label">當我的朋友登入和退出時以這種方式通知我：</text>
 			<check_box label="彈出提示" name="friends_online_notify_checkbox" />
-			<check_box name="OnlineOfflinetoNearbyChat" label="本地聊天和控制檯" />
+			<check_box name="OnlineOfflinetoNearbyChat" label="本地聊天和控制台" />
 			<check_box label="僅本地聊天" name="OnlineOfflinetoNearbyChatHistory" />
 		</panel>
 		<!-- Objects & Scripts -->

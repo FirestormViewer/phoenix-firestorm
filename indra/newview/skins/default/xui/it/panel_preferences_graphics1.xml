@@ -204,7 +204,7 @@
 			</text>
 			<slider label="Qualità ombre" tool_tip="Determina la qualità delle ombre (predefinita 1)" name="ShadowResolution"/>
 			<slider label="Grandezza texture del terreno (richiede riavvio)" name="RenderTerrainScale" tool_tip="Determina la grandezza della texture del terreno valore più basso = texture più compressa (richiede riavvio viewer)."/>
-			<slider label="Affilatura:" name="RenderSharpness" />
+			<slider label="Nitidezza:" name="RenderSharpness" />
 			<text name="TonemapTypeText">
 				Mappatura toni:
 			</text>

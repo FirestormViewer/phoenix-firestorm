@@ -155,8 +155,8 @@
 			<check_box label="Prévisualiser les animations sur son avatar pendant le téléchargement sur le serveur" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le téléchargement sur le serveur" name="FSUploadAnimationOnOwnAvatar"/>
 			<check_box label="Toujours développer les informations détaillées de la prévisualisation de l'animation" tool_tip="Développer par défaut les informations détaillées sur l'animation dans le flotteur de l'aperçu de l'animation" name="FSAnimationPreviewExpanded"/>
 			<check_box label="Active les informations détaillées pour les script" tool_tip="Activée, ajoute aux informations de base sur les scripts des détails utiles aux créateurs" name="FSScriptInfoExtended"/>
-			<check_box label="Points d'attachement par ordre alphabétique les dans les menus &quot;Attacher à&quot; (redémarrage requis)" tool_tip="Si cette option est activée, la liste des points d'attachement dans les menus &amp;Attacher à&amp; sera triée par ordre alphabétique." name="FSSortAttachmentSpotsAlphabetically"/>
-			<check_box label="Utiliser le nouveau module de texture Firestorm dans la fenêtre d'outils (nécessite un redémarrage)." tool_tip="Si cette option est activée, les outils d'édition de textures utiliseront le flux de travail amélioré de FS et permettront l'édition de textures Blinn-Phong et PBR." name="FSUseNewTexturePanel"/>
+			<check_box label="Points d'attachement alphabétiques dans les menus &quot;Attacher à&quot; (redémarrage requis)" tool_tip="Si cette option est activée, la liste des points d'attachement dans les menus 'Attacher à' sera triée par ordre alphabétique." name="FSSortAttachmentSpotsAlphabetically"/>
+			<check_box label="Nouveau module de texture Firestorm dans la fenêtre d'outils (nécessite un redémarrage)" tool_tip="Si cette option est activée, les outils d'édition de textures utiliseront le flux de travail amélioré de FS et permettront l'édition de textures Blinn-Phong et PBR." name="FSUseNewTexturePanel"/>
 		</panel>
 		<panel label="Chargements" name="UploadsTab">
 			<text name="title">Dossiers de destination pour les chargements :</text>

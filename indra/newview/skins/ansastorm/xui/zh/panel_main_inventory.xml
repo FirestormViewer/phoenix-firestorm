@@ -113,6 +113,7 @@
 				<combo_box.item value="filter_type_snapshots" label="快照" />
 				<combo_box.item value="filter_type_settings" label="環境設定" />
 				<combo_box.item value="filter_type_materials" label="材質" />
+				<combo_box.item value="filter_type_coalesced" label="僅合併物件"/>
 				<combo_box.item value="filter_type_custom" label="自訂..." />
 			</combo_box>
 			<menu_button name="options_visibility_btn" tool_tip="顯示搜尋結果的可見性設定" />

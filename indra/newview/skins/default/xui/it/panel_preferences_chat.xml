@@ -29,6 +29,7 @@
 			<check_box label="Chat locale" name="show_timestamps_nearby_chat" />
 			<check_box label="IM" name="show_timestamps_im"/>
 			<check_box label="Trascrizioni chat" name="show_timestamps_transcripts"/>
+			<check_box label="Mostra console della chat" tool_tip="Mostra/nascondi il testo della console della chat quando la finestra della chat non è visualizzata" name="FSShowOnscreenConsole" />
 			<check_box name="FSConsoleClassicDrawMode" label="Usa modo classico per finestra chat" tool_tip="Lo sfondo della chat è un blocco unico per tutte le righe con la larghezza della riga più lunga."/>
 			<check_box name="ChatFullWidth" label="Usa larghezza schermo per la console"/>
 			<spinner label="Sfuma chat dopo:" name="fade_chat_time" label_width="100" width="150"/>

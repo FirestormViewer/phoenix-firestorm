@@ -196,6 +196,7 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="Wybierz kolor konsoli"/>
 			<slider label="Przezroczystość:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
+			<slider label="Przezrocz. tła tekstu pływającego:" name="FSHudTextBackgroundOpacity" tool_tip="Wybierz przezroczystość tła tekstu pływającego" />
 			<text name="preferences_search_label">
 				Wyniki wyszukiwania w opcjach:
 			</text>

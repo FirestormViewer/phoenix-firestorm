@@ -199,6 +199,7 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="Hintergrundfarbe der Konsole auswählen"/>
 			<slider name="console_background_opacity" label="Deckkraft:" tool_tip="Deckkraft für Konsole auswählen"/>
+			<slider label="Deckkraft für Schwebe-Text:" name="FSHudTextBackgroundOpacity" tool_tip="Deckkraft für Hintergrund von Schwebe-Text festlegen"/>
 			<text name="preferences_search_label">
 				Farbe für Einstellungssuche:
 			</text>

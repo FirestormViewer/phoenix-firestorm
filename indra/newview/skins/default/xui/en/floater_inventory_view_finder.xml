@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- <FS:Zi> Changed height from 512 to 528 in this block -->
+<!-- <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible  -->
+<!-- Changed height from 528 to 598 to make room for new Only Coalesced and Show Links filter -->
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="548"
+ height="598"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
  title="Inventory Recent Items"
  width="160">
+    <!-- </FS:minerjr> [FIRE-35042] -->
     <icon
      height="16"
      image_name="Inv_Animation"
@@ -280,6 +283,49 @@
      top_pad="0"
      width="144" />
     <!-- </FS:Zi> -->
+    <!-- <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible  -->
+    <!-- Added new check box to allow finder panel the ability to set and view the Only Coalesced flag -->
+    <!-- Switched icon and checkbox left/right order to better fit aesthetics of the rest of the panel -->
+    <check_box
+     height="16"
+     label="Only Coalesced"
+     layout="topleft"
+     left="8"
+     name="check_only_coalesced"
+     top_pad="6"
+     width="106" />
+    <icon
+     height="16"
+     follows="left|top"
+     image_name="Inv_Object_Multi"
+     layout="topleft"
+     left_pad="3"
+     mouse_opaque="true"
+     name="icon_coalesced"
+     top_delta="0"
+     width="16" />
+    <!-- Added combo box for the link filters -->
+    <!-- The order matches the order in the Gear->menu, but the values are the actual filter value, used to simplify the actual code -->
+    <combo_box     
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left="8"
+     top_pad="6"
+     tool_tip="Filters linked objects"
+     name="inventory_filter_show_links_combo"
+     width="145">
+        <combo_box.item name="show_links"
+                        label="Show Links"
+                        value="0"/>
+        <combo_box.item name="show_links_only"
+                        label="Show Links Only"
+                        value="2"/>
+        <combo_box.item name="hide_links"
+                        label="Hide Links"
+                        value="1"/>
+    </combo_box>
+    <!-- </FS:minerjr> [FIRE-35042] -->    
     <check_box
      height="16"
      label="Created by me"
