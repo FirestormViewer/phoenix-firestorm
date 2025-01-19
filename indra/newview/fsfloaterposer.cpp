@@ -2265,7 +2265,9 @@ bool FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar
             *fileStream << "ROOT " + joint->jointName() << std::endl;
             *fileStream << "{" << std::endl;
             *fileStream << getTabs(tabStops + 1) + "OFFSET " + joint->bvhOffset() << std::endl;
-            *fileStream << getTabs(tabStops + 1) + "CHANNELS 6 Xposition Yposition Zposition Xrotation Zrotation Yrotation" << std::endl;
+// <AS:chanayane> BVH fixes
+            *fileStream << getTabs(tabStops + 1) + "CHANNELS 6 Xposition Yposition Zposition Zrotation Xrotation Yrotation" << std::endl;
+// </AS:chanayane>
             break;
 
         default:
