@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="sound_explorer" title="サウンド">
+	<floater.string name="Playing">
+		再生中
+	</floater.string>
+	<floater.string name="NotPlaying">
+		[TIME]分前
+	</floater.string>
+	<floater.string name="Type_UI">
+		ＵＩ
+	</floater.string>
+	<floater.string name="Type_Avatar">
+		アバター
+	</floater.string>
+	<floater.string name="Type_llTriggerSound">
+		llTriggerSound関数
+	</floater.string>
+	<floater.string name="Type_llLoopSound">
+		llLoopSound関数
+	</floater.string>
+	<floater.string name="Type_llPlaySound">
+		llPlaySound関数
+	</floater.string>
+	<check_box name="avatars_chk" label="アバター"/>
+	<check_box name="objects_chk" label="オブジェクト"/>
+	<check_box name="collision_chk" label="デフォルトのぶつかり音"/>
+	<check_box name="repeated_asset_chk" label="繰り返しアセット"/>
+	<check_box name="pause_chk" label="一時停止ログ"/>
+	<scroll_list name="sound_list">
+		<columns label="再生中" name="playing"/>
+		<columns label="種別" name="type"/>
+		<columns label="所有者" name="owner"/>
+		<columns label="サウンド" name="sound"/>
+	</scroll_list>
+	<button label="ローカルで再生" name="play_locally_btn"/>
+	<button label="ローカルで停止" name="stop_locally_btn"/>
+	<button label="見る" name="look_at_btn"/>
+	<button label="停止" name="stop_btn"/>
+	<button label="ブロック" name="block_btn"/>
+</floater>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="clear_cache" title="キャッシュの消去">
+	<text name="region_name">
+		どのキャッシュデータを削除しますか？
+	</text>
+	<check_box label="テクスチャ" name="clear_textures" tool_tip="ここをチェックすると、すべてのテクスチャのキャッシュデータがクリアされます。"/>
+	<check_box label="アセット（メッシュ、サウンド、アニメーション）" name="clear_assets" tool_tip="ここをチェックすると、メッシュ、アニメーション、サウンド、その他雑多なアセットデータを含む全てのアセットキャッシュデータがクリアされます。"/>
+	<check_box label="インベントリ" name="clear_inventory" tool_tip="ここをチェックすると、インベントリのキャッシュデータがすべて消去されます。"/>
+	<check_box label="リージョンのオブジェクト" name="clear_regions" tool_tip="ここをチェックすると、リージョンの関心リストとオブジェクトの更新キャッシュが消去されます。"/>
+	<check_box label="シェーダー" name="clear_shaders" tool_tip="ここをチェックすると、プリコンパイルされたシェーダーキャッシュデータが消去されます。"/>
+	<check_box label="WebのデータとCookies" name="clear_web" tool_tip="ここをチェックすると、すべてのウェブブラウザのデータが消去されます。"/>
+	<check_box label="その他のデータ" name="clear_userdata" tool_tip="ここをチェックすると、すべてのミュートリスト、体験、アバター、グループ名のキャッシュが消去されます。"/>
+	<button label="選択を消去" name="clear_selected"/>
+	<button label="すべてを消去" name="clear_all"/>
+	<button label="キャンセル" name="cancel"/>
+</floater>

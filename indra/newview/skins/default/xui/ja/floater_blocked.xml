@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="blocked" title="ブロック／非描画リスト">
+	<filter_editor label="フィルタ" name="blocked_filter"/>
+	<tab_container name="blocked_tabs">
+		<panel label="ブロック" name="mute_tab"/>
+		<panel label="描画解除" name="derender_tab"/>
+		<panel label="アセット" name="asset_tab"/>
+		<panel label="アバターの描画" name="avatar_rendering_tab"/>
+	</tab_container>
+</floater>

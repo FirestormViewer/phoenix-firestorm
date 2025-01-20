@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="topinfo_bar">
+	<button name="place_info_btn"/>
+	<text name="parcel_info_text" value="（読み込んでいます…）"/>
+	<icon name="voice_icon"/>
+	<icon name="fly_icon"/>
+	<icon name="push_icon"/>
+	<icon name="build_icon"/>
+	<icon name="scripts_icon"/>
+	<icon name="damage_icon"/>
+	<icon name="see_avatars_icon"/>
+	<text name="damage_text"/>
+</panel>
