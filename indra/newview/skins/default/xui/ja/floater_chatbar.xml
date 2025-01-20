@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="chatbar" title="">
-	<line_editor name="Chat Editor"/>
-	<menu_button name="chatbar_gear_menu" tool_tip="チャットバーのオプションを表示します。"/>
-	<icon name="drag"/>
-</floater>

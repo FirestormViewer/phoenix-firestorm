@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="レーダーアラート" name="radar_alert">
-	<icon name="radar_icon"/>
-	<text name="message"/>
-</panel>
