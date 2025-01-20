@@ -24,7 +24,7 @@
 				自動調整設定（推奨）
 			</text>
 			<text name="auto_adj_desc">
-				求めているフレームレートになるように自動調整します。
+				目標フレームレートになるように自動調整します。
 			</text>
 			<icon name="icon_arrow4"/>
 		</panel>
@@ -33,13 +33,13 @@
 				グラフィック設定
 			</text>
 			<text name="settings_desc">
-				距離、水面、照明などの設定を選択します。
+				距離、水面、光源などの設定を選択します。
 			</text>
 			<icon name="icon_arrow3"/>
 		</panel>
 		<panel name="nearby_subpanel">
 			<text name="avatars_nearby_lbl">
-				近隣のアバター
+				近くのアバター
 			</text>
 			<text name="avatars_nearby_desc">
 				近くにいるアバターのうち、どのタイプのアバターを完全に表示するかを管理します。
@@ -65,9 +65,9 @@
 			<icon name="icon_arrow4"/>
 		</panel>
 	</panel>
-	<panel filename="panel_performance_nearby.xml" name="panel_performance_nearby"/>
-	<panel filename="panel_performance_complexity.xml" name="panel_performance_complexity"/>
-	<panel filename="panel_performance_preferences.xml" name="panel_performance_preferences"/>
-	<panel filename="panel_performance_huds.xml" name="panel_performance_huds"/>
-	<panel filename="panel_performance_autoadjustments.xml" name="panel_performance_autoadjustments"/>
+	<panel name="panel_performance_nearby"/>
+	<panel name="panel_performance_complexity"/>
+	<panel name="panel_performance_preferences"/>
+	<panel name="panel_performance_huds"/>
+	<panel name="panel_performance_autoadjustments"/>
 </floater>

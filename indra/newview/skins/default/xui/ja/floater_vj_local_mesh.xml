@@ -10,7 +10,7 @@
 				<column name="unit_id_HIDDEN" label="ＩＤ"/>
 			</fs_scroll_list>
 		</panel>
-		<panel name="logs_panel">
+		<panel name="logs_panel" label="ログ">
 			<view_border name="local_mesh_log_tab_border"/>
 			<text_editor name="local_mesh_log"/>
 		</panel>

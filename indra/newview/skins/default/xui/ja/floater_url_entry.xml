@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="url_entry">
+<floater name="url_entry"  width="300">
 	<text name="media_label">
 		メディアＵＲＬ：
 	</text>
-	<combo_box name="media_entry"/>
+	<combo_box name="media_entry" left_delta="100"/>
 	<button label="ＯＫ" name="ok_btn"/>
-	<button label="キャンセル" name="cancel_btn"/>
+	<button label="キャンセル" name="cancel_btn" width="80"/>
 	<button label="クリア" name="clear_btn"/>
 	<text name="loading_label">
 		読み込んでいます…

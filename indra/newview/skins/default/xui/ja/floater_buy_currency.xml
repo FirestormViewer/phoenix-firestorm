@@ -22,7 +22,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_price">
 			<text name="target_price_label">
-				必要金額
+				必要な金額
 			</text>
 			<text name="target_price">
 				L$ [AMT]
@@ -59,7 +59,7 @@
 				平均[LOCALAMOUNT]
 			</text>
 			<text name="getting_data">
-				見積もり中…
+				見積もりを出しています…
 			</text>
 			<text name="total_label">
 				購入後の残高
@@ -71,19 +71,19 @@
 		<layout_panel name="layout_panel_msg">
 			<view_border name="text_border_3"/>
 			<text name="currency_links">
-				[https://accounts.secondlife.com/billing_information/ 支払い方法]｜[https://www.secondlife.com/my/lindex/buy.php L$の購入]
+				[https://accounts.secondlife.com/billing_information/ 支払い情報]｜[https://www.secondlife.com/my/lindex/buy.php L$の購入]
 			</text>
 			<text name="exchange_rate_note">
 				金額を再入力して、最新の為替レートを確認してください。
 			</text>
 			<text name="purchase_warning_repurchase">
-				L$ を受け取ったら、
+				L$を受け取ったら、
 もう一度購入してください。
 			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_buttons">
 			<text name="contacting">
-				LindeXに接続中…
+				LindeXに接続しています…
 			</text>
 			<button label="今すぐL$を購入" name="buy_btn"/>
 			<button label="キャンセル" name="cancel_btn"/>

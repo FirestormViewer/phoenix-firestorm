@@ -58,10 +58,9 @@
 				目標フレームレート（ｆｐｓ）
 			</text>
 			<spinner name="target_fps" tool_tip="目標ＦＰＳ‐希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。"/>
-			<button name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。">
+			<button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。">
 			</button>
-			<check_box name="AutoTuneContinuous" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。">
-			</check_box>
+			<check_box label="継続的に" name="AutoTuneContinuous" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。"/>
 			<button name="PrefSaveButton" tool_tip="将来使用するために、現在の設定をデフォルトとして保存します。"/>
 			<button name="PrefLoadButton" tool_tip="既存のプリセットを読み込みます。"/>
 			<!--Reset Button-->

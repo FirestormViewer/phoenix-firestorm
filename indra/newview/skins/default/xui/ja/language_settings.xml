@@ -18,6 +18,9 @@
 	<string name="TimeMin">
 		min,datetime,slt
 	</string>
+	<string name="TimeSec">
+		second,datetime,slt
+	</string>
 	<string name="TimeYear">
 		year,datetime,slt
 	</string>
@@ -27,6 +30,9 @@
 	<string name="TimeMonth">
 		mthnum,datetime,slt
 	</string>
+	<string name="TimeMth">
+		mth,datetime,slt
+	</string>
 	<string name="TimeWeek">
 		wkday,datetime,slt
 	</string>
@@ -35,6 +41,9 @@
 	</string>
 	<string name="TimeHour12">
 		hour12,datetime,slt
+	</string>
+	<string name="TimeTimezone">
+		timezone,datetime,slt
 	</string>
 	<string name="LTimeMthNum">
 		mthnum,datetime,local

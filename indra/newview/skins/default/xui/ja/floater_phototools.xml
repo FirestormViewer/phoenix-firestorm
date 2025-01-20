@@ -1,110 +1,75 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-
 <floater title="フォトツール" name="phototools">
-
 	<tab_container name="tabs">
-	
 		<panel name="EnvironmentTab" label="自然環境">
-
 			<panel name="PT_WL_Settings">
-				<text name="T_WL_Settings" >
-					自然環境設定
+				<text name="T_WL_Settings">
+					自然環境の設定
 				</text>
 			</panel>
-
-			<panel name="P_WL_Settings">
-				<check_box label="環境（大気）シェーダー（WindLight）を有効にする" name="WindLightUseAtmosShaders" tool_tip="ここにチェックを入れるとWindLightの機能（環境シェーダー）をフルに利用できます。もしこの機能を有効にできない時は、「基本シェーダー」が有効になっているか確認して下さい。" />
-			</panel>
-
 			<panel name="P_WL_Sky_Water">
-				<text name="WL Sky" tool_tip="空の事前設定です。">
+				<text name="WL Sky" tool_tip="空のプリセットです。">
 					空
 				</text>
-				<combo_box name="WLPresetsCombo" />
-				<button name="WLPrevPreset" />
-				<button name="WLNextPreset" />
-				<text name="WL Water" tool_tip="水の事前設定です。">
-					水
+				<combo_box name="WLPresetsCombo"/>
+				<button name="WLPrevPreset"/>
+				<button name="WLNextPreset"/>
+				<text name="WL Water" tool_tip="水のプリセットです。">
+					水面
 				</text>
-				<combo_box name="WaterPresetsCombo" />
-				<button name="WWPrevPreset" />
-				<button name="WWNextPreset" />
-				<text name="Day Cycle" tool_tip="デイサイクルの事前設定です。">
+				<combo_box name="WaterPresetsCombo"/>
+				<button name="WWPrevPreset"/>
+				<button name="WWNextPreset"/>
+				<text name="Day Cycle" tool_tip="デイサイクルのプリセットです。">
 					デイサイクル
 				</text>
-				<combo_box name="DCPresetsCombo" />
-				<button name="DCPrevPreset" />
-				<button name="DCNextPreset" />
-				<button name="btn_personal_lighting" label="個人環境設定..." />
-				<button name="ResetToRegionDefault" label="" tool_tip="自然環境の設定を共有された環境にリセットします。" />
-				<button label="雲を停止" name="PauseClouds" tool_tip="雲のアニメーションを停止します。" />
+				<combo_box name="DCPresetsCombo"/>
+				<button name="DCPrevPreset"/>
+				<button name="DCNextPreset"/>
+				<button name="btn_personal_lighting" label="個人的な光源…"/>
+				<button name="ResetToRegionDefault" label="" tool_tip="自然環境の設定を共有された環境にリセットします。"/>
+				<button label="雲を停止" name="PauseClouds" tool_tip="雲のアニメーションを停止します。"/>
 			</panel>
-			
-			<!--
-			<panel name="P_Sun">
-				<icon name="SkyDayCycle" tool_tip="その日の時間を変更します。※注意！　この設定は通常、WindLightの事前設定を初期設定に戻します。特定の事前設定で太陽の位置を変更したい場合は、下のメニューにある「新しい空の事前設定」または「空の事前設定を編集」を選択して下さい。" />
-				<multi_slider name="WLSunPos" tool_tip="この機能は必ずしも正確に機能しない場合があります。もし調整が難しいようでしたら、「新しい空の事前設定」または「空の事前設定を編集」をご利用下さい。" />
-				<button name="ResetToRegionDefault" tool_tip="WindLightのオプションを地域のデフォルトにリセットします。" />
-			</panel>
-			-->
-
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
 					クィック自然環境設定
 				</text>
-				<view_border name="horiz_separator1" />
-				<button name="Sunrise" label="日の出" />
-				<button name="Noon"	 label="正午" />
-				<button name="Sunset" label="日没" />
-				<button name="Midnight" label="深夜" />
-				<button name="Revert to Region Default" label="共有された環境" />
+				<view_border name="horiz_separator1"/>
+				<button name="Sunrise" label="日の出"/>
+				<button name="Noon" label="正午"/>
+				<button name="Sunset" label="日没"/>
+				<button name="Midnight" label="深夜"/>
+				<button name="Revert to Region Default" label="共有された環境"/>
 			</panel>
-			
 			<panel name="P_WL_Presets">
-				<text name="T_WL_Presets" tool_tip="新しい事前設定を作成したり、既存の事前設定に修正を加えたい場合は、以下の該当の項目をクリックします。">
-					WindLightの事前設定
+				<text name="T_WL_Presets" tool_tip="新しいプリセットを作成したり、既存のプリセットに修正を加えたい場合は、以下の該当の項目をクリックします。">
+					WindLightのプリセット
 				</text>
 				<view_border name="horiz_separator2"/>
-				<button name="new_sky_preset" label="新しい空の事前設定" />
-				<button name="edit_sky_preset" label="空の事前設定を編集" />
-			
-				<view_border	 name="horiz_separator3"/>
-				<button name="new_water_preset" label="新しい水の事前設定" />
-				<button name="edit_water_preset" label="水の事前設定を編集"/>
+				<button name="new_sky_preset" label="新しい空のプリセット"/>
+				<button name="edit_sky_preset" label="空のプリセットを編集"/>
+				<view_border name="horiz_separator3"/>
+				<button name="new_water_preset" label="新しい水のプリセット"/>
+				<button name="edit_water_preset" label="水面のプリセットを編集"/>
 			</panel>
-
 			<panel name="P_W_Reflections">
 				<text name="T_W_Reflections">
-					水の反射の設定
+					水面の反射の設定
 				</text>
 			</panel>
-
-			<panel name="P_W_R_Types">
-				<text name="T_W_R_Types" tool_tip="水に反射して映し出されるものを決定します。">
-					種類
-				</text>
-				<combo_box name="Reflections">
-					<combo_box.item label="最小" name="0" />
-					<combo_box.item label="地形と樹木" name="1" />
-					<combo_box.item label="すべての静止オブジェクト" name="2" />
-					<combo_box.item label="すべてのアバターとオブジェクト" name="3" />
-					<combo_box.item label="すべて" name="4" />
-				</combo_box>
-			</panel>
-		
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="水の反射の解像度／品質を決定します。">
+				<text name="T_R_Res" tool_tip="水面の反射の解像度／品質を決定します。">
 					解像度
 				</text>
 				<combo_box name="ReflectionRescombo">
-					<combo_box.item label="ふつう" name="0" />
-					<combo_box.item label="よい" name="1" />
-					<combo_box.item label="非常によい" name="2" />
-					<combo_box.item label="優れている" name="3" />
-					<combo_box.item label="非常に優れている" name="4" />
-					<combo_box.item label="実物レベル" name="5" />
+					<combo_box.item label="普通" name="0"/>
+					<combo_box.item label="よい" name="1"/>
+					<combo_box.item label="非常によい" name="2"/>
+					<combo_box.item label="優れている" name="3"/>
+					<combo_box.item label="非常に優れている" name="4"/>
+					<combo_box.item label="実物レベル" name="5"/>
 				</combo_box>
-				<check_box label="透明な水" name="TransparentWater" tool_tip="水を透明に描画します。ここにチェックを入れると、単純なテクスチャが適用された不透明な水を描画しなくなります。" />
+				<check_box label="透明な水" name="TransparentWater" tool_tip="水を透明に描画します。ここにチェックを入れると、単純なテクスチャが適用された不透明な水を描画しなくなります。"/>
 			</panel>
 		</panel>
 
@@ -116,7 +81,7 @@
 			</panel>
 
 			<panel name="P_L_S_Settings">
-				<check_box label="装着している光源（フェイスライト）を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。その必要がある時にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights" />
+				<check_box label="装着している光源（フェイスライト）を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。その必要がある時にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
 			</panel>
 
 			<panel name="P_Shadows">
@@ -124,63 +89,63 @@
 					影の種類
 				</text>
 				<combo_box name="ShadowDetail">
-					<combo_box.item label="なし" name="0" />
-					<combo_box.item label="太陽/月" name="1" />
-					<combo_box.item label="太陽/月とプロジェクタ" name="2" />
+					<combo_box.item label="なし" name="0"/>
+					<combo_box.item label="太陽/月" name="1"/>
+					<combo_box.item label="太陽/月とプロジェクタ" name="2"/>
 				</combo_box>
 			</panel>
 
 			<panel name="P_Shadow_Res">
-				<text name="T_Shadow_Res" tool_tip="影の解像度：これは非常に重要な設定です。ここで影の品質が決定されます。同時にこれはコンピュータにとって非常に重い設定でもあります。従って、撮影をしな時にはここの値を極力低くしておくのがよいと思います。撮影に当たっては、準備段階ではこの値を1.0に設定します。撮影準備が整ったら、スライダーバーをゆっくりと右の方に動かしてみて下さい。設定を上げて行く時は、フレームレートに注意していて下さい。この作業を行う時、最初の何回かは「統計バー」を表示しておくとよいでしょう。（「支援ツール」タブにあります。）どの位の設定にすればお使いのシステムで最も効果的な影が作れるか確認できると思います。※注意！　設定値を大きくし過ぎたり早く動かし過ぎたりするとビューワがクラッシュすることがあります。">
+				<text name="T_Shadow_Res" tool_tip="影の解像度：これは非常に重要な設定です。ここで影の品質が決定されます。同時にこれはコンピュータにとって非常に重い設定でもあります。従って、撮影をしな時にはここの値を極力低くしておくのがよいと思います。撮影に当たっては、準備段階ではこの値を1.0に設定します。撮影準備が整ったら、スライダーバーをゆっくりと右の方に動かしてみて下さい。設定を上げて行く時は、フレームレートに注意していて下さい。この作業を行う時、最初の何回かは「統計バー」を表示しておくとよいでしょう。（「支援ツール」タブにあります。）どの位の設定にすればお使いのシステムで最も効果的な影が作れるか確認できると思います。※注意！　設定値を大きくし過ぎたり早く動かし過ぎたりするとビューアがクラッシュすることがあります。">
 					影の解像度
 				</text>
-				<slider_bar name="SB_Shadow_Res" />
-				<spinner name="S_Shadow_Res" />
-				<button name="Reset_Shadow_Res" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Shadow_Res"/>
+				<spinner name="S_Shadow_Res"/>
+				<button name="Reset_Shadow_Res" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<!-- RenderShadowSplitExponent Y component -->
 				<text name="T_Shd_Clarity" tool_tip="これは非常に重要な設定です。ここで太陽や月による影がどの程度くっきりと描画されるか全体的に決定されるからです。この設定は以下の設定を行う前に、必ず最初にしておかなくてはならないものです。上の「影の解像度」を1.0に設定して、「影の明瞭度」のスライダーを、最もシャープな結果が得られるところまで動かします。注意しておきたいのは、影の明瞭度はカメラの位置及び太陽／月の位置と直接に関係しているということです。従って、カメラの位置が変わる、または太陽／月の位置が変わる度にこの値を再設定するのが最もよい結果につながります。更に、この値の調整を簡単にするには、まず最初に「影のぼかし」の値を「0.0」にしておくことです。">
 					影の明瞭度
 				</text>
-				<slider_bar name="SB_Shd_Clarity" />
-				<spinner name="S_Shd_Clarity" />
-				<button name="Shd_Clarity_Reset" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Shd_Clarity"/>
+				<spinner name="S_Shd_Clarity"/>
+				<button name="Shd_Clarity_Reset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Blur_Size" tool_tip="値が大きくなるにつれて影の輪郭が柔らかくなります。「0」に設定すると可能な限り最もシャープな輪郭の影となります。この設定は次の設定とも直接関係があります。この設定は可能な限り影をぼかす全体の量を決めます。例えば、「4.0」に設定しておいて、「影の柔らかさ」を使って、アンビエントオクルージョンとは独立して影のぼけ具合を調整することができます。※注意！　この機能を使うには、「アンビエントオクルージョン」が有効になっていることが必要です。">
 					影のぼかし
 				</text>
-				<slider_bar name="SB_Blur_Size" />
-				<spinner name="S_Blur_Size" />
-				<button name="Blur_Reset" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Blur_Size"/>
+				<spinner name="S_Blur_Size"/>
+				<button name="Blur_Reset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<!-- RenderShadowGaussian X component -->
-				<text name="T_Shd_Soften"  tool_tip="太陽／月による影の効果を柔らかくする調整をします。特定の目的のためにこの値を手っ取り早く設定する方法は、上の「影のぼかし」の値を「3.0」前後に設定し、続いてこのスライダーをあなたの好みのアンビエントオクルージョンの柔らかさになるよう調整します。注意しておきたいのは、この値を「0.0」にすると太陽／月の影は消えてしまうということです。更に、この機能は投影光（プロジェクタ）によって作られる影には何の効果もないということです。">
+				<text name="T_Shd_Soften" tool_tip="太陽／月による影の効果を柔らかくする調整をします。特定の目的のためにこの値を手っ取り早く設定する方法は、上の「影のぼかし」の値を「3.0」前後に設定し、続いてこのスライダーをあなたの好みのアンビエントオクルージョンの柔らかさになるよう調整します。注意しておきたいのは、この値を「0.0」にすると太陽／月の影は消えてしまうということです。更に、この機能は投影光（プロジェクタ）によって作られる影には何の効果もないということです。">
 					影の柔らかさ
 				</text>
-				<slider_bar name="SB_Shd_Soften" />
-				<spinner name="S_Shd_Soften" />
-				<button name="Shd_Soften_Reset" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Shd_Soften"/>
+				<spinner name="S_Shd_Soften"/>
+				<button name="Shd_Soften_Reset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Blur_Dist" tool_tip="この設定は、カメラに対して影がどのくらい近付いたらぼやけ始めるかを決めるものです。値が低い程、より近い場所にある影がぼやけ始めます。※注意！　この機能を利用するには、「アンビエントオクルージョン」が有効になっていることが必要です。">
 					ぼかし開始距離
 				</text>
-				<slider_bar name="SB_Blur_Dist" />
-				<spinner name="S_Blur_Dist" />
-				<button name="Blur_Dist_Reset" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Blur_Dist"/>
+				<spinner name="S_Blur_Dist"/>
+				<button name="Blur_Dist_Reset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_FOV_Cutoff" tool_tip="ビューワが中心投影でなく正射投影に切り替えるポイントであるFOVカットオフを決定する設定です。もし影が「ギザギザ」しているようなら、この設定を調整してみて下さい。同様にデバッグ設定にある「RenderShadowSplitExponent」のXYZ値を調整してみるのもとても役に立つかもしれません。">
+				<text name="T_FOV_Cutoff" tool_tip="ビューアが中心投影でなく正射投影に切り替えるポイントであるFOVカットオフを決定する設定です。もし影が「ギザギザ」しているようなら、この設定を調整してみて下さい。同様にデバッグ設定にある「RenderShadowSplitExponent」のXYZ値を調整してみるのもとても役に立つかもしれません。">
 					FOVカットオフ
 				</text>
-				<slider_bar name="SB_FOV_Cutoff" />
-				<spinner name="S_FOV_Cutoff" />
-				<button name="FOV_Cutoff_Reset" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_FOV_Cutoff"/>
+				<spinner name="S_FOV_Cutoff"/>
+				<button name="FOV_Cutoff_Reset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Shd_Bias" tool_tip="">
 					影の傾き
 				</text>
-				<slider_bar name="SB_Shd_Bias" />
-				<spinner name="S_Shd_Bias" />
-				<button name="Shd_Bias_Reset" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Shd_Bias"/>
+				<spinner name="S_Shd_Bias"/>
+				<button name="Shd_Bias_Reset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 
 			<panel name="P_Ambient_Occlusion">
@@ -190,118 +155,111 @@
 			</panel>
 
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="アンビエントオクルージョンを有効にする（奥行知覚）" name="UseSSAO" tool_tip="アンビエントオクルージョンはあらゆるオブジェクトに陰影を加えます。下にある「効果」と「アンビエントオクルージョンの柔らかさ」を使用すると最も効果が現れます。画像にハイレベルのリアリズムを加えることができるのです。特に、2048ピクセル以上の解像度の画像に於いてそうです。" />
+				<check_box label="アンビエントオクルージョンを有効にする（奥行知覚）" name="UseSSAO" tool_tip="アンビエントオクルージョンはあらゆるオブジェクトに陰影を加えます。下にある「効果」と「アンビエントオクルージョンの柔らかさ」を使用すると最も効果が現れます。画像にハイレベルのリアリズムを加えることができるのです。特に、2048ピクセル以上の解像度の画像に於いてそうです。"/>
 			</panel>
-		
+
 			<panel name="P_Scale">
 				<text name="T_Scale" tool_tip="サンプルする部分の大きさを調整します。より大きな部分を設定するほど正確になります。この値を高めに設定して、効果を和らげるために影のぼかしを加えるのも効果的です。">
 					大きさ
 				</text>
-				<slider_bar name="SB_Scale" />
-				<spinner name="S_Scale" />
-				<button name="Reset_Scale" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Scale"/>
+				<spinner name="S_Scale"/>
+				<button name="Reset_Scale" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Max_Scale" tool_tip="サンプルを採取する画面の最大半径を調整します。グラフィックカードがキャッシュし損ない、その結果大きな性能上の損失を蒙ることがないようにするための設定です。この値を高めに設定して、効果を和らげるために影のぼかしを加えるのも効果的です。">
 					最大半径
 				</text>
-				<slider_bar name="SB_Max_Scale" />
-				<spinner name="S_Max_Scale" />
-				<button name="Reset_Max_Scale" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Max_Scale"/>
+				<spinner name="S_Max_Scale"/>
+				<button name="Reset_Max_Scale" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Scaling_Factor" tool_tip="この効果を適用する倍率です。（大きいほど暗くなります。）この値を高めに設定して、効果を和らげるために影のぼかしを加えるのも効果的です。">
 					倍率
 				</text>
-				<slider_bar name="SB_Scaling_Factor" />
-				<spinner name="S_Scaling_Factor" />
-				<button name="Reset_Scaling_Factor" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Scaling_Factor"/>
+				<spinner name="S_Scaling_Factor"/>
+				<button name="Reset_Scaling_Factor" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<!-- RenderSSAOEffect X component -->
-				<text name="T_Effect"  tool_tip="アンビエントオクルージョンが与える暗くする効果を全体的に調整します。初期設定の「0.8」では、殆ど知覚できないほどの微小な効果しかありませんが、値を「0.0」以下にすると、よりリアルな結果が得られます。注意して頂きたいのは、「アンビエントオクルージョン」が生み出すのは一種のノイズのような効果だということで、これを和らげるのに下の「アンビエントオクルージョンの柔らかさ」を利用できます。更に、標準メッシュのアバターは「効果」の値を高めに設定するとアバターの形状品質が低いために、見映えがあまりよくなくなるかも知れません。※注意！　スライダーの最小値は「0」ですが、一方ダイヤルの方は「-10000」までの負の数の入力が可能となっています。">
+				<text name="T_Effect" tool_tip="アンビエントオクルージョンが与える暗くする効果を全体的に調整します。初期設定の「0.8」では、殆ど知覚できないほどの微小な効果しかありませんが、値を「0.0」以下にすると、よりリアルな結果が得られます。注意して頂きたいのは、「アンビエントオクルージョン」が生み出すのは一種のノイズのような効果だということで、これを和らげるのに下の「アンビエントオクルージョンの柔らかさ」を利用できます。更に、標準メッシュのアバターは「効果」の値を高めに設定するとアバターの形状品質が低いために、見映えがあまりよくなくなるかも知れません。※注意！　スライダーの最小値は「0」ですが、一方ダイヤルの方は「-10000」までの負の数の入力が可能となっています。">
 					効果
 				</text>
-				<slider_bar name="SB_Effect" />
-				<spinner name="S_Effect" />
-				<button name="Reset_Effect" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Effect"/>
+				<spinner name="S_Effect"/>
+				<button name="Reset_Effect" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<!-- RenderShadowGaussian Y component -->
-				<text name="T_AO_Soften"  tool_tip="アンビエントオクルージョン効果を和らげる調整をします。特定の目的のためにこの値を手っ取り早く設定する方法は、上の「影のぼかし」の値を「4.0」前後に設定し、続いてこのスライダーをあなたの好みのアンビエントオクルージョンの柔らかさになるよう調整します。注意しておきたいのは、この値を「0.0」にするとアンビエントオクルージョンの効果はなくなるということです。">
+				<text name="T_AO_Soften" tool_tip="アンビエントオクルージョン効果を和らげる調整をします。特定の目的のためにこの値を手っ取り早く設定する方法は、上の「影のぼかし」の値を「4.0」前後に設定し、続いてこのスライダーをあなたの好みのアンビエントオクルージョンの柔らかさになるよう調整します。注意しておきたいのは、この値を「0.0」にするとアンビエントオクルージョンの効果はなくなるということです。">
 					柔らかさ
 				</text>
-				<slider_bar name="SB_AO_Soften" />
-				<spinner name="S_AO_Soften" />
-				<button name="Reset_AO_Soften" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_AO_Soften"/>
+				<spinner name="S_AO_Soften"/>
+				<button name="Reset_AO_Soften" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 		</panel>
 
 		<panel name="P_DoF_Glow" label="DOF／グロー">
 			<panel name="PT_DoF_Glow">
 				<text name="T_DoF">
-					被写界深度（DOF）設定
+					被写界深度（ＤｏＦ）設定
 				</text>
 			</panel>
 
 			<panel name="P_DoF_Settings">
-				<check_box label="被写界深度（DOF）を有効にする" name="UseDepthofField" tool_tip="この設定は「写真の焦点が合っているように見える被写体側の距離の範囲」（Wikipedia）を決める「被写界深度」を決定するものです。この機能を無効にするとフレームレートのスピードが向上します。もしこの機能を有効にできない場合は、「光と影」タブの「高度な照明モデル」を有効にして下さい。" />
-				<check_box label="DOF フォーカスがポインターに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（DOF）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。" />
-				<check_box label="現在のビューワ画面の画角（FOV）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（FOV）を表示します。ビューワの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（FOV）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（FOV）を有しています。画角（FOV）を調整するには、下のスライダーを使用します。画角（FOV）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="MIC_Show_FOV" />
+				<check_box label="被写界深度（ＤｏＦ）を有効にする" name="UseDepthofField" tool_tip="この設定は「写真の焦点が合っているように見える被写体側の距離の範囲」（Wikipedia）を決める「被写界深度」を決定するものです。この機能を無効にするとフレームレートのスピードが向上します。もしこの機能を有効にできない場合は、「光と影」タブの「高度な照明モデル」を有効にして下さい。"/>
+				<check_box label="DOF フォーカスがポインターに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤｏＦ）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。"/>
+				<check_box label="現在のビューア画面の画角（ＦｏＶ）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（ＦｏＶ）を表示します。ビューアの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（ＦｏＶ）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（ＦｏＶ）を有しています。画角（ＦｏＶ）を調整するには、下のスライダーを使用します。画角（ＦｏＶ）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="MIC_Show_FOV"/>
 			</panel>
 
 			<panel name="P_Zoom">
-				<text name="T_Zoom" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューワの画角（FOV）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。"
-				 width="80">
+				<text name="T_Zoom" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦｏＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。" width="80">
 					視野角
 				</text>
-				<slider_bar name="SB_Zoom" />
-				<spinner name="S_Zoom" />
-				<button name="Reset_Zoom" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Zoom"/>
+				<spinner name="S_Zoom"/>
+				<button name="Reset_Zoom" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_FOV" tool_tip="画角（FOV）：ここでこのビューワであなたが被写界深度（DOF）の効果を得るためにシミュレートしたい画角（FOV）を知ることができます。この値はビューワの現在の画角（FOV）に設定しておくのがベストです。">
-					画角（FOV）
+				<text name="T_FOV" tool_tip="画角（ＦｏＶ）：ここでこのビューアであなたが被写界深度（ＤｏＦ）の効果を得るためにシミュレートしたい画角（ＦｏＶ）を知ることができます。この値はビューアの現在の画角（ＦｏＶ）に設定しておくのがベストです。">
+					画角（ＦｏＶ）
 				</text>
-				<slider_bar name="SB_FOV" />
+				<slider_bar name="SB_FOV"/>
 				<spinner name="S_FOV"/>
-				<button name="Reset_FOV" label="D" tool_tip="初期設定に戻します。" />
+				<button name="Reset_FOV" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_F_Number" tool_tip="RLで言うレンズの「絞り値」の設定で、値が小さいほど被写界深度（DOF）は短くなります。SLに於いても同様です。">
+				<text name="T_F_Number" tool_tip="RLで言うレンズの「絞り値」の設定で、値が小さいほど被写界深度（ＤｏＦ）は短くなります。SLに於いても同様です。">
 					F値（絞り）
 				</text>
-				<slider_bar name="SB_F_Number" />
-				<spinner name="S_F_Number" />
-				<button name="Reset_F_Number" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_F_Number"/>
+				<spinner name="S_F_Number"/>
+				<button name="Reset_F_Number" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_Focal_Length" tool_tip="ここでこのビューワであなたが被写界深度（DOF）の効果を得るためにシミュレートしたいの焦点距離／レンズ距離を知ることができます。値が大きくなる程被写界深度（DOF）は狭くなります。">
+				<text name="T_Focal_Length" tool_tip="ここでこのビューアであなたが被写界深度（ＤｏＦ）の効果を得るためにシミュレートしたいの焦点距離／レンズ距離を知ることができます。値が大きくなる程被写界深度（ＤｏＦ）は狭くなります。">
 					焦点距離
 				</text>
-				<slider_bar name="SB_Focal_Length" />
-				<spinner name="S_Focal_Length" />
-				<button name="Reset_Focal_Length" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Focal_Length"/>
+				<spinner name="S_Focal_Length"/>
+				<button name="Reset_Focal_Length" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Foc_Time" tool_tip="焦点移動時間：焦点がある場所から次の場所へ遷移するのにかかる時間を秒で設定します。">
 					焦点移動時間
 				</text>
-				<slider_bar name="SB_Foc_Time" />
-				<spinner name="S_Foc_Time" />
-				<button name="Reset_Foc_Time" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Foc_Time"/>
+				<spinner name="S_Foc_Time"/>
+				<button name="Reset_Foc_Time" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_CoC" tool_tip="錯乱円：これは非常に重要な設定です。ここでは、ぼかし自体の強度を設定します。被写界深度（DOF）は変えずに、被写界深度（DOF）の外側にある被写体をどれだけぼかすかを調整します。ダイヤルになっているテキストボックスに負の値を入れておもしろい効果を演出することも出来ます。">
+				<text name="T_CoC" tool_tip="錯乱円：これは非常に重要な設定です。ここでは、ぼかし自体の強度を設定します。被写界深度（ＤｏＦ）は変えずに、被写界深度（ＤｏＦ）の外側にある被写体をどれだけぼかすかを調整します。ダイヤルになっているテキストボックスに負の値を入れておもしろい効果を演出することも出来ます。">
 					錯乱円
 				</text>
-				<slider_bar name="SB_CoC" />
-				<spinner name="S_CoC" />
-				<button name="Reset_CoC" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_CoC"/>
+				<spinner name="S_CoC"/>
+				<button name="Reset_CoC" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_Resolution" tool_tip="解像度：被写体深度（DOF）効果の品質を決定します。写真でない場合は「0.25」が適切です。凝った撮影をしたい場合は「0.50」や「0.70」でいい感じが出せるでしょう。高品質な画像の撮影には「1.00」がベストです。大きな値を設定するほどFPSを低下させますので要注意！　ダイヤルになっているテキストボックスに負の値を入れておもしろい効果を演出することも出来ます。">
+				<text name="T_Resolution" tool_tip="解像度：被写体深度（ＤｏＦ）効果の品質を決定します。写真でない場合は「0.25」が適切です。凝った撮影をしたい場合は「0.50」や「0.70」でいい感じが出せるでしょう。高品質な画像の撮影には「1.00」がベストです。大きな値を設定するほどFPSを低下させますので要注意！　ダイヤルになっているテキストボックスに負の値を入れておもしろい効果を演出することも出来ます。">
 					解像度
 				</text>
 				<slider_bar name="SB_Resolution"/>
-				<spinner name="S_Resolution" />
-				<button name="Reset_Resolution" label="D" tool_tip="初期設定に戻します。" />
-
-				<text name="T_Aspect_Ratio" tool_tip="あなたがシミュレートしようとしているカメラのアスペクト比を表すはずのものです。例えば、通常の35mmのカメラであれば「3:2」つまり「1.5」のアスペクト比を有しています。ビューワはこの値をウィンドウのサイズによって画角（FOV）と焦点距離とをどのように調整するかのの基準に使用しています。実際には何の効果もないようです！">
-					アスペクト比
-				</text>
-				<slider_bar name="SB_Aspect_Ratio" />
-				<button	 name="Reset_Aspect_Ratio" label="D" tool_tip="初期設定に戻します。" />
+				<spinner name="S_Resolution"/>
+				<button name="Reset_Resolution" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 
 			<panel name="P_Glow_Settings">
@@ -312,236 +270,201 @@
 
 			<panel name="P_Glow_Quality">
 				<!--
-				<check_box
-				 height="16"
-				 label="Enable Glow Effect (please read the tool tip)"
-				 layout="topleft"
-				 left="5"
-				 name="UseGlow"
-				 top_pad="10"
-				 width="110"
-				 tool_tip="If Shadows are turned on, you must set the Strength to 0.0 to turn off this effect as the check box will not work."/>
+				<check_box height="16" label="Enable Glow Effect (please read the tool tip)" layout="topleft" left="5" name="UseGlow" top_pad="10" width="110" tool_tip="If Shadows are turned on, you must set the Strength to 0.0 to turn off this effect as the check box will not work."/>
 				-->
-				<text name="T_Glow_Quality"  tool_tip="ここではグロー効果の品質を決定します。値が大きいほど品質も高くなります。「8」と「10」との間では、視覚上は殆ど違いを見分けられません。">
+				<text name="T_Glow_Quality" tool_tip="ここではグロー効果の品質を決定します。値が大きいほど品質も高くなります。「8」と「10」との間では、視覚上は殆ど違いを見分けられません。">
 					品質
 				</text>
-				<!--slider_bar
-				 name="SB_Glow_Quality"
-				 follows="top|left"
-				 height="16"
-				 decimal_digits="0"
-				 increment="1"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="8"
-				 max_val="10"
-				 top_delta="-2"
-				 width="127" /-->
-				<spinner name="S_Glow_Quality" />
-				<button name="Reset_Glow_Quality" label="D" tool_tip="初期設定に戻します。" />
+				<!--slider_bar name="SB_Glow_Quality" follows="top|left" height="16" decimal_digits="0" increment="1" layout="topleft" left_pad="-20" min_val="8" max_val="10" top_delta="-2" width="127" /-->
+				<spinner name="S_Glow_Quality"/>
+				<button name="Reset_Glow_Quality" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 
 			<panel name="P_Glow_Iterations">
 				<text name="T_Glow_Iterations" tool_tip="グローが反復／繰り返される回数です。（値が大きいほど広くスムーズに、そして少し遅くなっていきます。）">
 					反復回数
 				</text>
-				<slider_bar name="SB_Glow_Iterations" />
-				<spinner name="S_Glow_Iterations" />
-				<button name="Reset_Glow_Iterations" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Glow_Iterations"/>
+				<spinner name="S_Glow_Iterations"/>
+				<button name="Reset_Glow_Iterations" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Glow_Strength" tool_tip="グローに対する追加強度です。効果を確認するには非常に小さい値を設定することが必要です。小さい値から始めて下さい。">
 					強度
 				</text>
-				<slider_bar name="SB_Glow_Strength" />
-				<spinner name="S_Glow_Strength" />
-				<button label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Glow_Strength"/>
+				<spinner name="S_Glow_Strength"/>
+				<button name="Reset_Glow_Strength" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Luminance" tool_tip="あるオブジェクトが自分で光を放つのに必要なだけの最低限の輝度を設定します。">
 					輝度
 				</text>
-				<slider_bar name="SB_Luminance" />
-				<spinner name="S_Luminance" />
-				<button name="Reset_Luminance" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Luminance"/>
+				<spinner name="S_Luminance"/>
+				<button name="Reset_Luminance" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Warmth" tool_tip="暖かさの量を表します。（輝度とは相反する関係になっています。）輝度=0の時、暖かさ＝1.0の関係です。多くの場合この設定は殆ど或いは全く効果が期待できません！">
 					暖かさ
 				</text>
 				<slider_bar name="SB_Warmth"/>
 				<spinner name="S_Warmth"/>
-				<button name="Reset_Warmth" label="D" tool_tip="初期設定に戻します。" />
+				<button name="Reset_Warmth" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Glow_Width" tool_tip="グローのサンプルサイズです。値が大きいほど広く柔らかなグローになりますが、最後にはピクセル化してしまいます。">
 					広がり
 				</text>
 				<slider_bar name="SB_Glow_Width"/>
-				<spinner name="S_Glow_Width" />
-				<button name="Reset_Glow_Width" label="D" tool_tip="初期設定に戻します。" />
+				<spinner name="S_Glow_Width"/>
+				<button name="Reset_Glow_Width" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Alpha" tool_tip="基本的には、グローがどれだけの明るさを取得可能かを表します。">
 					アルファ
 				</text>
-				<slider_bar name="SB_Alpha" />
-				<spinner name="S_Alpha" />
-				<button name="Reset_Alpha" label="D"	 tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Alpha"/>
+				<spinner name="S_Alpha"/>
+				<button name="Reset_Alpha" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 		</panel>
 
 		<panel name="P_General" label="一般設定">
 			<panel name="PT_General">
 				<text name="T_General">
-					一般的なレンダリング設定
+					一般的な描画設定
 				</text>
 			</panel>
 
 			<panel name="P_General_Settings">
-				<text name="T_Draw_Distance" tool_tip="ビューワがその内側にあるものを何でも描画する最長の距離を設定します。大きい値を設置するとFPSの低下につながります！">
+				<text name="T_Draw_Distance" tool_tip="ビューアがその内側にあるものを何でも描画する最長の距離を設定します。大きい値を設置するとFPSの低下につながります！">
 					描画距離
 				</text>
-				<slider_bar name="SB_Draw_Distance" />
-				<spinner name="S_Draw_Distance" />
-				<button name="Reset_Draw_Distance" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Draw_Distance"/>
+				<spinner name="S_Draw_Distance"/>
+				<button name="Reset_Draw_Distance" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Avi_Count" tool_tip="シーン中に描画するアバターの最大人数です。アバターがたくさんいてFPSを低下させているような状況で使うと有効です。">
 					アバター数
 				</text>
-				<slider_bar name="SB_Avi_Count" />
-				<spinner name="S_Avi_Count" />
-				<button name="Reset_Avi_Count" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Avi_Count"/>
+				<spinner name="S_Avi_Count"/>
+				<button name="Reset_Avi_Count" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Avi_Detail" tool_tip="アバター描画の品質を設定します。大きな値を設定するほど品質が高くなります。">
 					アバター精度
 				</text>
 				<slider_bar name="SB_Avi_Detail"/>
-				<spinner name="S_Avi_Detail" />
-				<button name="Reset_Avi_Detail" label="D" tool_tip="初期設定に戻します。" />
+				<spinner name="S_Avi_Detail"/>
+				<button name="Reset_Avi_Detail" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Avi_Physics" tool_tip="アバターの物理作用（胸の動きといったような）の精度を調整します。大きな値を設定するほど細かくなります。">
 					物理作用
 				</text>
-				<slider_bar name="SB_Avi_Physics" />
-				<spinner name="S_Avi_Physics" />
-				<button name="Reset_Avi_Physics" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Avi_Physics"/>
+				<spinner name="S_Avi_Physics"/>
+				<button name="Reset_Avi_Physics" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Particle_Cnt" tool_tip="描画するパーティクルの最大数を設定します">
 					パーティクル数
 				</text>
-				<slider_bar name="SB_Particle_Cnt" />
-				<spinner name="S_Particle_Cnt" />
-				<button name="Reset_Particle_Cnt" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Particle_Cnt"/>
+				<spinner name="S_Particle_Cnt"/>
+				<button name="Reset_Particle_Cnt" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Terrain_Scale" tool_tip="地面（地形）のテクスチャのデフォルトの品質を設定します。">
 					地形詳細
 				</text>
-				<slider_bar name="SB_Terrain_Scale" />
-				<spinner name="S_Terrain_Scale" />
-				<button name="Reset_Terrain_Scale" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Terrain_Scale"/>
+				<spinner name="S_Terrain_Scale"/>
+				<button name="Reset_Terrain_Scale" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Terrain_Quality" tool_tip="地形の品質を設定します。値が大きい程、遠くから見た場合でもより詳細な地形になります。">
 					地形品質
 				</text>
-				<slider_bar name="SB_Terrain_Quality" />
-				<spinner name="S_Terrain_Quality" />
-				<button name="Reset_Terrain_Quality" label="D"	 tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Terrain_Quality"/>
+				<spinner name="S_Terrain_Quality"/>
+				<button name="Reset_Terrain_Quality" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Object_Detail" tool_tip="プリムの描画精度を調整します。大きな値を設定する程、オブジェクトが詳細に描画されます。">
 					オブジェクト詳細
 				</text>
-				<slider_bar name="SB_Object_Detail" />
-				<spinner name="S_Object_Detail" />
-				<button name="Reset_Object_Detail" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Object_Detail"/>
+				<spinner name="S_Object_Detail"/>
+				<button name="Reset_Object_Detail" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Flexi_Detail" tool_tip="フレキシプリム・オブジェクトの描画精度を調整します。大きな値を設定する程、詳細に描画されます。">
 					フレキシプリム
 				</text>
-				<slider_bar name="SB_Flexi_Detail" />
-				<spinner name="S_Flexi_Detail" />
-				<button name="Reset_Flexi_Detail" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Flexi_Detail"/>
+				<spinner name="S_Flexi_Detail"/>
+				<button name="Reset_Flexi_Detail" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Tree_Detail" tool_tip="植物の描画精度を調整します。大きな値を設定する程、詳細に描画されます。">
-					樹木詳細
+					樹木の詳細
 				</text>
-				<slider_bar name="SB_Tree_Detail" />
-				<spinner name="S_Tree_Detail" />
-				<button name="Reset_Tree_Detail" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Tree_Detail"/>
+				<spinner name="S_Tree_Detail"/>
+				<button name="Reset_Tree_Detail" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Sky_Detail" tool_tip="WindLightの空の天頂の描画精度を調整します。値を小さくするほど性能が向上しますが、空の素晴らしい感じは失われていきます。">
-					空詳細
+					空の詳細
 				</text>
-				<slider_bar name="SB_Sky_Detail" />
-				<spinner name="S_Sky_Detail" />
-				<button name="Reset_Sky_Detail" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Sky_Detail"/>
+				<spinner name="S_Sky_Detail"/>
+				<button name="Reset_Sky_Detail" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator4"
-			 top_pad="5"
-			 width="260"/-->
-			
+			<!--view_border bevel_style="none" follows="left|top" height="0" layout="topleft" left="10" name="horiz_separator4" top_pad="5" width="260"/-->
+
 			<panel name="P_Vignetting">
 				<text name="T_VignetteX">
 					ビネット量
 				</text>
-				<slider_bar name="VignetteSliderX" />
-				<spinner name="VignetteSpinnerX" />
-				<button name="Reset_VignetteX" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="VignetteSliderX"/>
+				<spinner name="VignetteSpinnerX"/>
+				<button name="Reset_VignetteX" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 				<text name="T_VignetteY">
 					ビネット強度
 				</text>
-				<slider_bar name="VignetteSliderY" />
-				<spinner name="VignetteSpinnerY" />
-				<button name="Reset_VignetteY" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="VignetteSliderY"/>
+				<spinner name="VignetteSpinnerY"/>
+				<button name="Reset_VignetteY" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 				<text name="T_VignetteZ">
-				 ビネット倍率
+					ビネット倍率
 				</text>
-				<slider_bar name="VignetteSliderZ" />
-				<spinner name="VignetteSpinnerZ" />
-				<button name="Reset_VignetteZ" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="VignetteSliderZ"/>
+				<spinner name="VignetteSpinnerZ"/>
+				<button name="Reset_VignetteZ" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 
 			<panel name="P_Render">
-				<check_box label="描画距離を有効にする" name="UseFarClip" tool_tip="描画距離を有効にする：もしこの機能を無効にした場合は、ビューワはあなたが過去に設定した描画距離を使用してレンダリングを行います。" />
-				<check_box label="詳細レベルを動的に調整" name="RednerLod1" tool_tip="ここにチェックを入れると、あなたがオブジェクトから遠ざかっていくような場合にシーンにおけるそれらオブジェクトの詳細レベルを動的に調整します。これを使用することで性能の向上につながりますが、同時に、シーンにおけるそれらのオブジェクトの描画品質の低下にもなります。" />
-				<check_box label="カメラに映るオブジェクトのみ描画" tool_tip="この機能は、ビューワがカメラの画角（FOV）内にあって、しかも他の何かの陰になっていないオブジェクトのみを生成／描画することを可能にするものです。通常、この機能を有効にすると性能は向上します。時に、特にそのシーン／SIMにオブジェクトが殆どないような場合は、逆に性能を低下させることも実際にあります。自分の役に立つかどうか、チェックを入れて試してみて下さい。" name="UssOcclusion1" />
-				<check_box label="異方性フィルタリング（テクスチャ精彩）" tool_tip="ここにチェックを入れるとテクスチャがくっきりと精彩あるものになります。" name="Anisotropic" />
-				<check_box label="他のアバターが装着しているパーティクルを描画する" tool_tip="他のアバターが装着しているまたは他のアバターから出ている全てのパーティクルを描画します。" name="Render Attached Particle" />
+				<check_box label="描画距離を有効にする" name="UseFarClip" tool_tip="描画距離を有効にする：もしこの機能を無効にした場合は、ビューアはあなたが過去に設定した描画距離を使用して描画を行います。"/>
+				<check_box label="詳細レベルを動的に調整" name="RednerLod1" tool_tip="ここにチェックを入れると、あなたがオブジェクトから遠ざかっていくような場合にシーンにおけるそれらオブジェクトの詳細レベルを動的に調整します。これを使用することで性能の向上につながりますが、同時に、シーンにおけるそれらのオブジェクトの描画品質の低下にもなります。"/>
+				<check_box label="カメラに映るオブジェクトのみ描画" tool_tip="この機能は、ビューアがカメラの画角（ＦｏＶ）内にあって、しかも他の何かの陰になっていないオブジェクトのみを生成／描画することを可能にするものです。通常、この機能を有効にすると性能は向上します。時に、特にそのシーン／ＳＩＭにオブジェクトが殆どないような場合は、逆に性能を低下させることも実際にあります。自分の役に立つかどうか、チェックを入れて試してみて下さい。" name="UssOcclusion1"/>
+				<check_box label="異方性フィルタリング（テクスチャ精彩）" tool_tip="ここにチェックを入れるとテクスチャがくっきりと精彩あるものになります。" name="Anisotropic"/>
+				<check_box label="他のアバターが装着しているパーティクルを描画する" tool_tip="他のアバターが装着しているまたは他のアバターから出ている全てのパーティクルを描画します。" name="Render Attached Particle"/>
 			</panel>
 
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator5"
-			 top_pad="5"
-			 width="260"/-->
+			<!--view_border bevel_style="none" follows="left|top" height="0" layout="topleft" left="10" name="horiz_separator5" top_pad="5" width="260"/-->
 
 			<panel name="P_Anti-aliasing">
 				<text name="T_Anti-aliasing" tool_tip="オブジェクトの輪郭をどれだけシャープでスムーズなものにするかを決定します。トップレベルのグラフィックカードでは、高い値を設定しても実質何の性能に対する影響もありませんが、低機能のグラフィックカードでは、高い値を設定すると性能が低下することがあります。">
 					アンチエイリアス
 				</text>
 				<combo_box label="アンチエイリアス" name="fsaa">
-					<combo_box.item label="使用しない" name="FSAADisabled" />
-					<combo_box.item label="2倍" name="2x" />
-					<combo_box.item label="4倍" name="4x" />
-					<combo_box.item label="8倍" name="8x" />
-					<combo_box.item label="16倍" name="16x" />
+					<combo_box.item label="使用しない" name="FSAADisabled"/>
+					<combo_box.item label="2倍" name="2x"/>
+					<combo_box.item label="4倍" name="4x"/>
+					<combo_box.item label="8倍" name="8x"/>
+					<combo_box.item label="16倍" name="16x"/>
 				</combo_box>
 				<text name="T_Texture_Bumpiness" tool_tip="ノーマルマッピングとバンプマッピングの強度と解像度を調整します。">
 					テクスチャバンプ詳細
 				</text>
 				<combo_box name="BumpStrengthSelection">
-					<combo_box.item label="非常に精細（最も弱い）" name="0" />
-					<combo_box.item label="より精細（より弱い）" name="1" />
-					<combo_box.item label="精細（弱い）" name="2" />
-					<combo_box.item label="通常l" name="3" />
-					<combo_box.item label="粗い（より強い）" name="4" />
-					<combo_box.item label="より粗い（最も強い）" name="5" />
+					<combo_box.item label="非常に精細（最も弱い）" name="0"/>
+					<combo_box.item label="より精細（より弱い）" name="1"/>
+					<combo_box.item label="精細（弱い）" name="2"/>
+					<combo_box.item label="通常" name="3"/>
+					<combo_box.item label="粗い（より強い）" name="4"/>
+					<combo_box.item label="より粗い（最も強い）" name="5"/>
 				</combo_box>
 			</panel>
 		</panel>
@@ -552,48 +475,40 @@
 					支援インターフェイス
 				</text>
 			</panel>
-			
-			<check_box label="シーン内の全ての光にバウンディングボックスを表示" name="Lights" />
-			<check_box label="選択した光の半径範囲を表示する" name="Show Light Radius for Selection" />
-			<check_box label="シーン内のオブジェクトにバウンディングボックスを表示" name="Bounding Boxes" />
-			<check_box label="統計バーを表示" name="Statistics Bar" />
-			<check_box label="詳細なカメラの位置データを表示" name="Camera" />
-			<check_box label="詳細なテクスチャ読み込み情報を表示" name="Texture Console" />
-			<check_box label="カーソルを乗せた場所のRGB-I 値を表示" name="Show Color Under Cursor" />
-			<check_box label="透明部分を赤でハイライトする" name="Highlight Transparent" />
-			<check_box label="シーンをワイヤーフレームで表示" name="Wireframe" />
-			<check_box label="装着しているHUD を表示" name="Show HUD Attachments" />
-			<check_box label="自分のアバターの動きをスローモーションする（自分にだけ適用）" name="Slow Motion Animations" />
-			<button name="Rebake Texture" label="テクスチャのリベークをする" />
-			<button name="Set Window Size..." label="ウィンドウのサイズを設定する..." />
-			<button name="Debug Settings" label="デバッグ設定を表示する" />
-			
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator6"
-			 top_pad="265"
-			 width="260"/-->
+
+			<check_box label="シーン内の全ての光にバウンディングボックスを表示" name="Lights"/>
+			<check_box label="選択した光の半径範囲を表示する" name="Show Light Radius for Selection"/>
+			<check_box label="シーン内のオブジェクトにバウンディングボックスを表示" name="Bounding Boxes"/>
+			<check_box label="統計バーを表示" name="Statistics Bar"/>
+			<check_box label="詳細なカメラの位置データを表示" name="Camera"/>
+			<check_box label="詳細なテクスチャ読み込み情報を表示" name="Texture Console"/>
+			<check_box label="カーソルを乗せた場所のＲＧＢ－Ｉ値を表示" name="Show Color Under Cursor"/>
+			<check_box label="透過部分を赤でハイライトする" name="Highlight Transparent"/>
+			<check_box label="シーンをワイヤーフレームで表示" name="Wireframe"/>
+			<check_box label="装着しているＨＵＤを表示" name="Show HUD Attachments"/>
+			<check_box label="自分のアバターの動きをスローモーションする（自分にだけ適用）" name="Slow Motion Animations"/>
+			<button name="Rebake Texture" label="テクスチャをリベークをする"/>
+			<button name="Set Window Size..." label="ウィンドウサイズ設定…"/>
+			<button name="Debug Settings" label="デバッグ設定を表示する"/>
+
+			<!--view_border bevel_style="none" follows="left|top" height="0" layout="topleft" left="10" name="horiz_separator6" top_pad="265" width="260"/-->
 
 			<panel name="P_Quick_Stats">
 				<text name="T_Quick_Stats" tool_tip="ここにはシステム性能を評価するのに有用な統計情報がいくつか集められています。それぞれのラベルをクリックすることで、項目を展開したり折りたたんだりできます。">
 					クィック統計
 				</text>
 			</panel>
-			
+
 			<scroll_container name="statistics_scroll">
 				<container_view name="statistics_view">
 					<stat_view name="basic">
-						<stat_bar name="fps" label="１秒当たりフレーム数（FPS）" tool_tip="FPS：お使いのコンピュータが１秒当たり何回画面上で再描画（または更新）を行っているかを表します。通常のアニメーションのFPSは12〜15です。24が映画の標準となっており、テレビ放送で使われているFPSは25 (PAL)や30 (NTSC)となっています。" />
-						<stat_bar name="bandwidth" label="帯域幅" tool_tip="帯域幅：お使いのコンピュータと仮想世界との間でどれだけのデータが行き来しているかを表します。この値はどのような帯域幅の設定にしているか、インワールドのどこにいるのか、どのような事がそこで行われているのか、現在もまだ何か（オブジェクトやテクスチャなどを）画角（FOV）内に読み込み中なのかどうかといった諸条件によって大きく変化します。もし帯域幅が「0 Kbps」と表示されているとすると何かがおかしいと言えます。（恐らくは一部ネットワークと切断している可能性があります。）" />
-						<stat_bar name="ktrisframe" label="フレーム当たりポリゴン数" tool_tip="フレーム当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、現在のシーンのフレーム毎にどれだけの数の三角形が描画されているかを表しています。" />
-						<stat_bar name="ktrissec" label="秒当たりポリゴン数" tool_tip="秒当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、毎秒どれだけの数の三角形が描画されているかを表しています。." />
-						<stat_bar name="objs" label="総オブジェクト数" tool_tip="総オブジェクト数：現在の視界にあるオブジェクトの数を表します。これには、プリム、アバター、地形、樹木、パーティクル、水が含まれます。" />
-						<stat_bar name="newobjs" label="新規オブジェクト数" tool_tip="新規オブジェクト数：１秒当たりに読み込まれているオブジェクトの数を表します。" />
-						<stat_bar name="numimagesstat" label="テクスチャ数" tool_tip="テスクチャ数：ビューワによって読み込まれているテクスチャの数です。" />
+						<stat_bar name="fps" label="１秒当たりフレーム数（FPS）" tool_tip="FPS：お使いのコンピュータが１秒当たり何回画面上で再描画（または更新）を行っているかを表します。通常のアニメーションのFPSは12〜15です。24が映画の標準となっており、テレビ放送で使われているFPSは25 (PAL)や30 (NTSC)となっています。"/>
+						<stat_bar name="bandwidth" label="帯域幅" tool_tip="帯域幅：お使いのコンピュータと仮想世界との間でどれだけのデータが行き来しているかを表します。この値はどのような帯域幅の設定にしているか、インワールドのどこにいるのか、どのような事がそこで行われているのか、現在もまだ何か（オブジェクトやテクスチャなどを）画角（ＦｏＶ）内に読み込み中なのかどうかといった諸条件によって大きく変化します。もし帯域幅が「0 Kbps」と表示されているとすると何かがおかしいと言えます。（恐らくは一部ネットワークと切断している可能性があります。）"/>
+						<stat_bar name="ktrisframe" label="フレーム当たりポリゴン数" tool_tip="フレーム当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、現在のシーンのフレーム毎にどれだけの数の三角形が描画されているかを表しています。"/>
+						<stat_bar name="ktrissec" label="秒当たりポリゴン数" tool_tip="秒当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、毎秒どれだけの数の三角形が描画されているかを表しています。."/>
+						<stat_bar name="objs" label="総オブジェクト数" tool_tip="総オブジェクト数：現在の視界にあるオブジェクトの数を表します。これには、プリム、アバター、地形、樹木、パーティクル、水が含まれます。"/>
+						<stat_bar name="newobjs" label="新規オブジェクト数" tool_tip="新規オブジェクト数：１秒当たりに読み込まれているオブジェクトの数を表します。"/>
+						<stat_bar name="numimagesstat" label="テクスチャ数" tool_tip="テスクチャ数：ビューアによって読み込まれているテクスチャの数です。"/>
 					</stat_view>
 				</container_view>
 			</scroll_container>
@@ -610,68 +525,68 @@
 				<text name="T_LR_Axis" tool_tip="左右に動かす時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					左右の動き
 				</text>
-				<slider_bar name="SB_LR_Axis" />
-				<spinner name="S_LR_Axis" />
-				<button name="Reset_LR_Axis" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_LR_Axis"/>
+				<spinner name="S_LR_Axis"/>
+				<button name="Reset_LR_Axis" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_UD_Axis" tool_tip="上下に動かす時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					上下の動き
 				</text>
-				<slider_bar name="SB_UD_Axis" />
-				<spinner name="S_UD_Axis" />
-				<button name="Reset_UD_Axis" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_UD_Axis"/>
+				<spinner name="S_UD_Axis"/>
+				<button name="Reset_UD_Axis" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_IO_Axis" tool_tip="近寄ったり遠ざかったりする時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					遠近の動き
 				</text>
-				<slider_bar name="SB_IO_Axis" />
-				<spinner name="S_IO_Axis" />
-				<button name="Reset_IO_Axis" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_IO_Axis"/>
+				<spinner name="S_IO_Axis"/>
+				<button name="Reset_IO_Axis" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Tilt" tool_tip="縦に揺れる（ピッチング）時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					縦揺れ
 				</text>
-				<slider_bar name="SB_Tilt" />
-				<spinner name="S_Tilt" />
-				<button name="Reset_Tilt" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Tilt"/>
+				<spinner name="S_Tilt"/>
+				<button name="Reset_Tilt" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Spin" tool_tip="左右に首を振る（ヨーイング）時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					偏揺れ
 				</text>
-				<slider_bar name="SB_Spin" />
-				<button name="Reset_Spin" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Spin"/>
+				<button name="Reset_Spin" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Roll" tool_tip="横に揺れる（ローリング）時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					横揺れ
 				</text>
-				<slider_bar name="SB_Roll" />
-				<spinner name="S_Roll" />
-				<button name="Reset_Roll" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Roll"/>
+				<spinner name="S_Roll"/>
+				<button name="Reset_Roll" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Zoom_Speed" tool_tip="ズームスピードの感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
 					ズームスピード
 				</text>
-				<slider_bar name="SB_Zoom_Speed" />
-				<spinner name="S_Zoom_Speed" />
-				<button name="Reset_Zoom_Speed" label="D" tool_tip="初期設定に戻します。" />
+				<slider_bar name="SB_Zoom_Speed"/>
+				<spinner name="S_Zoom_Speed"/>
+				<button name="Reset_Zoom_Speed" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 				<text name="T_Feathering" tool_tip="このスライダーを右端まで持って行くと、カメラはしっかりと安定し、ジョイスティックのままに動くようになります。反対に、左端まで持って行くと、動きが滑らかになり、カメラがとても重いように感じられるでしょう。近接撮影には効果的でしょうが、きっちりとしたフレーミングには向きません。">
 					フェザー
 				</text>
-				<slider_bar name="SB_Feathering" />
+				<slider_bar name="SB_Feathering"/>
 				<spinner name="S_Feathering"/>
-				<button name="Reset_Feathering" label="D" tool_tip="初期設定に戻します。" />
+				<button name="Reset_Feathering" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
 
 			<panel name="P_Axis_Mapping">
-				<spinner label="ズーム軸のマッピング" name="JoystickAxis6" tool_tip="マウスのどの軸にズーム機能を割り当てるかを調整します。" />
-				<check_box label="3D マウスを有効にする" tool_tip="ここにチェックを入れることで3D マウスが動作します。" name="enable_joystick" />
-				<check_box name="CB_ZoomDirect" label="ズームコントロールを有効にする（ヒント参照！）" tool_tip="ズームコントロールの機能を利用するには、「ズーム軸のマッピング」の値を「4」以上に設定する必要があります。" />
-				<check_box name="CB_AutoLeveling" label="自動水平装置を有効にする（カメラの横揺れを回避）" tool_tip="ここにチェックを入れると、カメラは常に水平を保ちます。" />
-				<check_box name="CB_Move_Avatar" label="アバターの移動に 3D マウスを利用" tool_tip="ここにチェックを入れると3D マウスでアバターを動かせるようになります。" />
-				<check_box name="CB_Move_Objects" label="オブジェクトの移動（制作）に 3D マウスを使用" tool_tip="オブジェクトを制作したり修正したりする時にも 3D マウスを使用します。" />
-				<check_box label="現在のビューワ画面の画角（FOV）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（FOV）を表示します。ビューワの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（FOV）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（FOV）を有しています。画角（FOV）を調整するには、下のスライダーを使用します。画角（FOV）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="CAM_Show_FOV" />
-				<check_box label="詳細なカメラの位置データを表示" name="Camera" />
+				<spinner label="ズーム軸のマッピング" name="JoystickAxis6" tool_tip="マウスのどの軸にズーム機能を割り当てるかを調整します。"/>
+				<check_box label="3D マウスを有効にする" tool_tip="ここにチェックを入れることで3D マウスが動作します。" name="enable_joystick"/>
+				<check_box name="CB_ZoomDirect" label="ズームコントロールを有効にする（ヒント参照！）" tool_tip="ズームコントロールの機能を利用するには、「ズーム軸のマッピング」の値を「4」以上に設定する必要があります。"/>
+				<check_box name="CB_AutoLeveling" label="自動水平装置を有効にする（カメラの横揺れを回避）" tool_tip="ここにチェックを入れると、カメラは常に水平を保ちます。"/>
+				<check_box name="CB_Move_Avatar" label="アバターの移動に 3D マウスを利用" tool_tip="ここにチェックを入れると3D マウスでアバターを動かせるようになります。"/>
+				<check_box name="CB_Move_Objects" label="オブジェクトの移動（制作）に 3D マウスを使用" tool_tip="オブジェクトを制作したり修正したりする時にも 3D マウスを使用します。"/>
+				<check_box label="現在のビューア画面の画角（ＦｏＶ）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（ＦｏＶ）を表示します。ビューアの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（ＦｏＶ）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（ＦｏＶ）を有しています。画角（ＦｏＶ）を調整するには、下のスライダーを使用します。画角（ＦｏＶ）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="CAM_Show_FOV"/>
+				<check_box label="詳細なカメラの位置データを表示" name="Camera"/>
 			</panel>
 
 			<panel name="P_Viewer_Cam_Menu">
@@ -684,46 +599,36 @@
 				<tab_container name="TC_Viewer_Cam_Menu_Settings">
 					<panel name="CamMov" label="カメラの動き">
 						<panel name="P_Cam2">
-							<text name="T_Zoom2" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューワの画角（FOV）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。">
+							<text name="T_Zoom2" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦｏＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。">
 								視野角
 							</text>
-							<slider name="SB_Zoom2" />
-							<!--spinner
-							 name="S_Zoom2"
-							 top_delta="-3"
-							 label_width="0"
-							 left_delta="120"
-							 decimal_digits="3"
-							 follows="top|right"
-							 max_val="3.06"
-							 min_val="0.08"
-							 width="53"
-							 increment="0.001"/-->
-							<button name="Reset_Zoom2" label="D" tool_tip="初期設定に戻します。" />
+							<slider name="SB_Zoom2"/>
+							<!--spinner name="S_Zoom2" top_delta="-3" label_width="0" left_delta="120" decimal_digits="3" follows="top|right" max_val="3.06" min_val="0.08" width="53" increment="0.001"/-->
+							<button name="Reset_Zoom2" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 							<text name="T_Zoom_Speed2" tool_tip="カメラがズームイン／ズームアウトするスピードを調整します。値が大きいほどゆっくりと、スムーズにズームします。">
 								ズームスピード
 							</text>
 							<slider name="S_Zoom_Speed2"/>
-							<button name="Reset_Zoom_Speed2" label="D" tool_tip="初期設定に戻します。" />
+							<button name="Reset_Zoom_Speed2" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 							<text name="T_Camera_Lag" tool_tip="アバターの動きに対するカメラの動きの遅れを調整します。（「0」でアバターの動きに左右されず、「30」でアバターと同じスピードで動きます。）">
 								カメラの遅れ
 							</text>
-							<slider name="S_Camera_Lag" />
-							<button name="Reset_Camera_Lag" label="D" tool_tip="初期設定に戻します。" />
+							<slider name="S_Camera_Lag"/>
+							<button name="Reset_Camera_Lag" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 							<text name="T_Camera_Offset" tool_tip="デフォルトのカメラ位置からどれだけカメラを遠くに移動させるかのオフセット値です。">
 								カメラオフセット位置
 							</text>
 							<slider name="S_Camera_Offset"/>
-							<button name="Reset_Camera_Offset" label="D" tool_tip="初期設定に戻します。" />
+							<button name="Reset_Camera_Offset" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
 							<text name="T_Cam_Smoothing" tool_tip="カメラがどれだけスムーズに動き始め、停止するかを調整します。値が大きいほどスムーズに（従って若干遅く）動きます。">
 								カメラスムージング
 							</text>
 							<slider name="S_Cam_Smoothing"/>
-							<button name="Reset_Cam_Smoothing" label="D" tool_tip="初期設定に戻します。" />
+							<button name="Reset_Cam_Smoothing" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 						</panel>
 					</panel>
 
@@ -732,9 +637,9 @@
 							<text name="T_Mouse_Sens" tool_tip="マウスルック・モードの時のマウスの反応を調整します。">
 								マウス感度
 							</text>
-							<slider name="S_Mouse_Sens" />
-							<button name="Reset_Mouse_Sens" label="D" tool_tip="初期設定に戻します。" />
-							<check_box label="アバターをマウスルックでも表示" tool_tip="マウスルック・モードの時にアバターと装着しているものを首から下だけ表示します。デフォルトは「OFF」です。" name="first_person_avatar_visible" />
+							<slider name="S_Mouse_Sens"/>
+							<button name="Reset_Mouse_Sens" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
+							<check_box label="アバターをマウスルックでも表示" tool_tip="マウスルック・モードの時にアバターと装着しているものを首から下だけ表示します。デフォルトは「OFF」です。" name="first_person_avatar_visible"/>
 							<check_box label="マウスルックの動きをスムーズにする" tool_tip="マウスルックの時にマウスの動きをスムーズにします。" name="MouseSmooth"/>
 						</panel>
 					</panel>

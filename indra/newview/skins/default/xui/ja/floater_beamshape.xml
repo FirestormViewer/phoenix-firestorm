@@ -11,7 +11,7 @@
 	<panel name="beamshape_draw" />
 
 	<button label="保存" name="beamshape_save" />
-	<button label="ロード" name="beamshape_load" />
+	<button label="読み込む" name="beamshape_load" />
 	<button label="クリア" name="beamshape_clear" />
 	<button label="取り消し" name="cancel" />
 </floater>

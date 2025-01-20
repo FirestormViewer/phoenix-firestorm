@@ -3,16 +3,16 @@
 	<layout_stack name="maint_layout">
 		<layout_panel name="count_panel">
 			<text name="number_of_items">
-                Number of items to upload: [COUNT]
+				アップロードするアイテムの数：[COUNT]個
 			</text>
 		</layout_panel>
 		<layout_panel name="warning_panel">
 			<text name="textures_2k_warning">
-                By default, one or more selected textures will be scaled to 2048px.
+				デフォルトでは、選択された１つ以上のテクスチャが2048ピクセルに拡大縮小されます。
 			</text>
 		</layout_panel>
 		<layout_panel name="checkbox_panel">
-			<check_box label="Scale textures to a maximum of 1024px" name="upload_2k" />
+			<check_box label="テクスチャを最大1024ピクセルに拡大縮小する" name="upload_2k" />
 		</layout_panel>
 		<layout_panel name="cost_panel">
 			<text name="upload_cost">
