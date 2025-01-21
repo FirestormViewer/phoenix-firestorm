@@ -4513,10 +4513,9 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
             if (fsExperimentalLostAttachmentsFix &&
                 isAgentAvatarValid() &&
                 (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gPostTeleportFinishKillObjectDelayTimer.getElapsedTimeF32() <= fsExperimentalLostAttachmentsFixKillDelay || gAgentAvatarp->isCrossingRegion()) &&
-                //(objectp->isAttachment() || objectp->isTempAttachment()) &&
-                (objectp->isAttachment() && !objectp->isTempAttachment()) && //<FS:TT-lp0> FIRE-31264: Temp attachments attached by experinece are ghosted. 
-                //Window for experience to request detach on change to non-experienced area is shorter than the default FixKillDelay.
-                          
+                /*<FS:TT-lp0> FIRE-31264: Temp attachments attached by experinece are ghosted. 
+                (objectp->isAttachment() || objectp->isTempAttachment()) && */
+                (objectp->isAttachment() && !objectp->isTempAttachment()) &&        
                 objectp->permYouOwner())
             {
                 // Simply ignore the request and don't kill the object - this should work...
