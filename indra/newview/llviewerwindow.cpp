@@ -2095,33 +2095,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         gSavedSettings.setU32("RenderQualityPerformance", 0);
     }
 
-    // <FS:Ansariel> Max texture resolution / Zi: changed this to accept pixel values so we are independent from maximum texture size
-    if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
-    {
-        // fallback value if no matching pixel size is found (i.e. someone fiddled with the debugs)
-        DESIRED_NORMAL_TEXTURE_SIZE = 512;
-
-        // clamp pixels between 512 and half the current maximum texture size
-        U32 pixels = llclamp(gSavedSettings.getU32("FSRestrictMaxTexturePixels"), 512, (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2);
-
-        // check pixel value against powers of 2 up to (not including) current maximum texture size
-        U32 pow_of_2 =  512;
-        while(pow_of_2 < (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT)
-        {
-            // power of 2 matches, save it
-            if (pixels == pow_of_2)
-            {
-                DESIRED_NORMAL_TEXTURE_SIZE = pixels;
-                break;
-            }
-
-            // next power of 2
-            pow_of_2 <<= 1;
-        }
-    }
-    LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_TEXTURE_SIZE << "px" << LL_ENDL;
-    // </FS:Ansariel>
-
     // Init the image list.  Must happen after GL is initialized and before the images that
     // LLViewerWindow needs are requested, as well as before LLViewerMedia starts updating images.
     LLImageGL::initClass(mWindow, LLViewerTexture::MAX_GL_IMAGE_CATEGORY, false, gSavedSettings.getBOOL("RenderGLMultiThreadedTextures"), gSavedSettings.getBOOL("RenderGLMultiThreadedMedia"));

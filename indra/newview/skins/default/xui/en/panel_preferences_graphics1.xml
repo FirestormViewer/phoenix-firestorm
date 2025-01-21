@@ -1320,23 +1320,24 @@ If you do not understand the distinction then leave this control alone."
             Texture Rendering:
         </text>
 
-        <check_box
-         control_name="FSRestrictMaxTextureSize"
+        <text
+         type="string"
+         follows="left|top"
          height="16"
-         label="Restrict maximum texture resolution to:"
-         tool_tip="Set this restrict the maximum display resolution for inworld textures. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
          layout="topleft"
          left_delta="10"
          name="FSRestrictMaxTextureSize"
          top_pad="4"
-         width="250"/>
+         width="250">
+            Restrict maximum texture resolution to:
+        </text>
 
         <combo_box
-         control_name="FSRestrictMaxTexturePixels"
-         enabled_control="FSRestrictMaxTextureSize"
+         control_name="RenderMaxTextureResolution"
          height="20"
          layout="topleft"
          left_pad="2"
+         tool_tip="Sets the maximum display resolution for inworld textures. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
          top_delta="-2"
          name="FSRestrictMaxTexturePixels"
          width="100">
@@ -1348,27 +1349,11 @@ If you do not understand the distinction then leave this control alone."
            label="1024 pixels"
            name="1024"
            value="1024"/>
-          <!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
           <combo_box.item
            label="2048 pixels"
            name="2048"
            value="2048"/>
-          -->
         </combo_box>
-
-        <text
-         name="FSRestrictMaxTextureSizeRestartText"
-         type="string"
-         text_color="White_50"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_pad="10"
-         top_delta="2"
-         width="150">
-            (requires restart)
-        </text>
 
       <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
