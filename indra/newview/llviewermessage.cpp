@@ -4513,9 +4513,10 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
             if (fsExperimentalLostAttachmentsFix &&
                 isAgentAvatarValid() &&
                 (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gPostTeleportFinishKillObjectDelayTimer.getElapsedTimeF32() <= fsExperimentalLostAttachmentsFixKillDelay || gAgentAvatarp->isCrossingRegion()) &&
-                /*<FS:TT-lp0> FIRE-31264: Temp attachments attached by experinece are ghosted. 
-                (objectp->isAttachment() || objectp->isTempAttachment()) && */
-                (objectp->isAttachment() && !objectp->isTempAttachment()) &&        
+                //<FS:TT-lp0> FIRE-31264: Temp attachments attached by experinece are ghosted.
+                //(objectp->isAttachment() || objectp->isTempAttachment()) && 
+                (objectp->isAttachment() && !objectp->isTempAttachment()) &&
+                //</FS:TT-lp0>
                 objectp->permYouOwner())
             {
                 // Simply ignore the request and don't kill the object - this should work...
