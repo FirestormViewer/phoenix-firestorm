@@ -488,7 +488,7 @@
       <panel
        follows="top|left|right"
        height="25"
-       left_pad="168"
+       left_pad="200"
        right="-33"
        layout="topleft"
        name="dummy_panel">
