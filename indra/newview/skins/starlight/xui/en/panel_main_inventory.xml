@@ -181,6 +181,9 @@
         <combo_box.item value="filter_type_snapshots" label="Snapshots" />
         <combo_box.item value="filter_type_materials" label="Materials" />
         <combo_box.item value="filter_type_settings" label="Settings" />
+        <!-- [AS:Chanayane] Search folders only -->
+        <combo_box.item value="filter_type_folders" label="Folders" />
+        <!-- [/AS:Chanayane] -->
         <!-- <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible  -->
         <combo_box.item value="filter_separator" label="------------" enabled="false" />
         <!-- Add new custom filter to toggle Only Coalesced on and switch to filter_type_objects as only objects can be combined -->

@@ -224,6 +224,9 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
     mFilterMap["filter_type_snapshots"]     = 0x01 << LLInventoryType::IT_SNAPSHOT;
     mFilterMap["filter_type_settings"]      = 0x01 << LLInventoryType::IT_SETTINGS;
     mFilterMap["filter_type_materials"]     = 0x01 << LLInventoryType::IT_MATERIAL;
+// <AS:chanayane> Search folders only
+    mFilterMap["filter_type_folders"]       = 0x01 << LLInventoryType::IT_CATEGORY;
+// </AS:chanayane>
 
     // initialize empty filter mask
     mFilterMask = 0;
