@@ -709,11 +709,6 @@ bool LLInventoryFilter::checkAgainstSearchVisibility(const LLFolderViewModelItem
 // </AS:chanayane>
         return false;
 
-// <AS:chanayane> Added "Show Items" in inventory search options
-    if (((mFilterOps.mSearchVisibility & VISIBILITY_ITEMS) == 0) && listener->isItemNotAFolder())
-        return false;
-// </AS:chanayane>
-
 // <AS:chanayane> Short circuit search optimisation
     //if (listener->isItemInOutfits() && ((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0))
     if (((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0) && listener->isItemInOutfits())
@@ -725,6 +720,7 @@ bool LLInventoryFilter::checkAgainstSearchVisibility(const LLFolderViewModelItem
     if (((mFilterOps.mSearchVisibility & VISIBILITY_TRASH) == 0) && listener->isItemInTrash())
 // </AS:chanayane>
         return false;
+
 // <AS:chanayane> Short circuit search optimisation
     //if (!listener->isAgentInventory() && ((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0))
     if (((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0) && !listener->isAgentInventory())
@@ -947,26 +943,6 @@ void LLInventoryFilter::setFilterMarketplaceListingFolders(bool select_only_list
         setModified(FILTER_LESS_RESTRICTIVE);
     }
 }
-
-// <AS:chanayane> Added "Show Items" in inventory search options
-void LLInventoryFilter::toggleSearchVisibilityItems()
-{
-    bool hide_items = mFilterOps.mSearchVisibility & VISIBILITY_ITEMS;
-    if (hide_items)
-    {
-        mFilterOps.mSearchVisibility &= ~VISIBILITY_ITEMS;
-    }
-    else
-    {
-        mFilterOps.mSearchVisibility |= VISIBILITY_ITEMS;
-    }
-
-    if (hasFilterString())
-    {
-        setModified(hide_items ? FILTER_MORE_RESTRICTIVE : FILTER_LESS_RESTRICTIVE);
-    }
-}
-// </AS:chanayane>
 
 void LLInventoryFilter::toggleSearchVisibilityLinks()
 {
@@ -1651,6 +1627,20 @@ const std::string& LLInventoryFilter::getFilterText()
         not_filtered_types +=  LLTrans::getString("Settings");
         filtered_by_all_types = false;
     }
+
+// <AS:chanayane> Search folders only
+    if (isFilterObjectTypesWith(LLInventoryType::IT_CATEGORY))
+    {
+        filtered_types +=  LLTrans::getString("Folders");
+        filtered_by_type = true;
+        num_filter_types++;
+    }
+    else
+    {
+        not_filtered_types +=  LLTrans::getString("Folders");
+        filtered_by_all_types = false;
+    }
+// </AS:chanayane>
 
     if (!LLInventoryModelBackgroundFetch::instance().folderFetchActive()
         && filtered_by_type

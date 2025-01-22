@@ -45,9 +45,6 @@ public:
     virtual PermissionMask getPermissionMask() const = 0;
     virtual LLFolderType::EType getPreferredType() const = 0;
     virtual void showProperties(void) = 0;
-// <AS:chanayane> Added "Show Items" in inventory search options
-    virtual bool isItemNotAFolder( void) const { return false; } // TODO: make   into pure virtual.
-// </AS:chanayane>
     virtual bool isItemInTrash( void) const { return false; } // TODO: make   into pure virtual.
     virtual bool isItemInOutfits() const { return false; }
     virtual bool isAgentInventory() const { return false; }

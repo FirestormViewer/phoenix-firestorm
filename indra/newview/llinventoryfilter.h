@@ -114,10 +114,7 @@ public:
         VISIBILITY_TRASH = 0x1 << 0,
         VISIBILITY_LIBRARY = 0x1 << 1,
         VISIBILITY_LINKS    = 0x1 << 2,
-        VISIBILITY_OUTFITS    = 0x1 << 3,
-// <AS:chanayane> Added "Show Items" in inventory search options
-        VISIBILITY_ITEMS = 0x1 << 4
-// </AS:chanayane>
+        VISIBILITY_OUTFITS    = 0x1 << 3
     };
 
     struct FilterOps
@@ -249,7 +246,6 @@ public:
     ESearchType         getSearchType() { return mSearchType; }
     void                setFilterCreator(EFilterCreatorType type);
 
-    void                toggleSearchVisibilityItems();
     void                toggleSearchVisibilityLinks();
     void                toggleSearchVisibilityTrash();
     void                toggleSearchVisibilityOutfits();

@@ -117,9 +117,6 @@ public:
     //virtual bool renameItem(const std::string& new_name) {}
     virtual bool isItemRemovable(bool check_worn = true) const;
     virtual bool isItemMovable() const;
-// <AS:chanayane> Added "Show Items" in inventory search options
-    virtual bool isItemNotAFolder() const;
-// </AS:chanayane>
     virtual bool isItemInTrash() const;
     virtual bool isItemInOutfits() const;
     virtual bool isLink() const;

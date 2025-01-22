@@ -224,6 +224,9 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
     mFilterMap["filter_type_snapshots"]     = 0x01 << LLInventoryType::IT_SNAPSHOT;
     mFilterMap["filter_type_settings"]      = 0x01 << LLInventoryType::IT_SETTINGS;
     mFilterMap["filter_type_materials"]     = 0x01 << LLInventoryType::IT_MATERIAL;
+// <AS:chanayane> Search folders only
+    mFilterMap["filter_type_folders"]       = 0x01 << LLInventoryType::IT_CATEGORY;
+// </AS:chanayane>
 
     // initialize empty filter mask
     mFilterMask = 0;
@@ -2574,13 +2577,6 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         getCurrentFilter().toggleSearchVisibilityLinks();
     }
 
-// <AS:chanayane> Added "Show Items" in inventory search options
-    if (command_name == "toggle_include_items")
-    {
-        getCurrentFilter().toggleSearchVisibilityItems();
-    }
-// <AS:chanayane> Added "Show Items" in inventory search options
-
     if (command_name == "share")
     {
         if(mSingleFolderMode && isGalleryViewMode())
@@ -2806,13 +2802,6 @@ bool LLPanelMainInventory::isActionChecked(const LLSD& userdata)
     {
         return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
     }
-
-// <AS:chanayane> Added "Show Items" in inventory search options
-    if (command_name == "toggle_include_items")
-    {
-        return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_ITEMS) != 0;
-    }
-// </AS:chanayane>
 
     if (command_name == "toggle_search_outfits")
     {
