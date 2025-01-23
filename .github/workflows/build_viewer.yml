@@ -328,18 +328,31 @@ jobs:
         if: runner.os == 'Windows'
         id: validate-sdk
         run: |
-          $sdkPath = (Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" -Recurse -Directory | Sort-Object Name -Descending | Select-Object -First 1).FullName
-          if (-not $sdkPath) {
-            Write-Error "Required Windows 10 SDK version not installed."
-            exit 1
+          try {
+              $Arch = ($env:RUNNER_ARCH).ToLower()
+              $SearchBase = "${env:ProgramFiles(x86)}\Windows Kits\10\bin"
+
+              "Searching `"$SearchBase`" for signtool ($Arch)..."
+              $Tool = Get-ChildItem $SearchBase -Recurse -Force -ErrorAction SilentlyContinue |
+                  Where-Object {$_.Name -eq 'signtool.exe' -and $_.Directory -like "*\$Arch"} |
+                  Sort-Object -Descending |
+                  Select-Object -First 1
+
+              if (!($Tool)) {throw [System.IO.FileNotFoundException]::new('File not found.', 'signtool.exe')}
+
+              'Adding signtool to PATH'
+              $Tool.Directory.FullName | Out-File $env:GITHUB_PATH -Append
+              "signtool-$Arch=$($Tool.FullName)" | Out-File $env:GITHUB_OUTPUT -Append
+              $env:PATH = "$($Tool.Directory.FullName);$env:PATH"
+
+              signtool.exe /h
+          } catch {
+              Write-Output "::error::$($_.Exception)"
+              Write-Output '::endgroup::'
+
+              exit 1
           }
-          $signtoolPath = Join-Path $sdkPath "x64\signtool.exe"
-          if (-not (Test-Path $signtoolPath)) {
-            Write-Error "signtool.exe not found in the SDK path."
-            exit 1
-          }
-          echo "SIGNSDK_PATH=$sdkPath" >> $env:GITHUB_ENV
-          echo "SIGNTOOL_PATH=$signtoolPath" >> $env:GITHUB_ENV
+          echo "SIGNTOOL_PATH="signtool.exe" >> $env:GITHUB_ENV
         shell: pwsh          
       - name: Install nuget.exe
         if: runner.os == 'Windows'
