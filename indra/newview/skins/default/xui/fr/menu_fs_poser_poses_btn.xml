@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toggleable_menu name="Settings">
-	<menu_item_call label="Charger uniquement les rotations" name="rotations"/>
-	<menu_item_call label="Charger uniquement les positions" name="positions"/>
-	<menu_item_call label="Charger uniquement les échelles" name="scale"/>
-	<menu_item_call label="Charger les rotations &amp; les positions" name="rotations_positions"/>
-	<menu_item_call label="Charger les rotations &amp; les échelles" name="rotations_scales"/>
-	<menu_item_call label="Charger les positions &amp; les échelles" name="positions_scales"/>
-	<menu_item_call label="Tout charger" name="load_all"/>
+	<menu_item_call label="Charger la sélection" tool_tip="Charge uniquement les jointures qui sont désactivées et les activer." name="load_selective"/>
+	<menu_item_call label="Charger la sélection - Uniquement les rotations " tool_tip="Charge uniquement les rotations des jointures qui sont désactivées, et les active." name="rotations_positions"/>
+	<menu_item_call label="Charger uniquement les rotations" tool_tip="Charge uniquement les rotations. Bien pour les poses faites pour d'autres avatars/silhouettes." name="rotations"/>
+	<menu_item_call label="Charger" tool_tip="Charge les rotations, les positions et les échelles" name="load_all"/>
 </toggleable_menu>

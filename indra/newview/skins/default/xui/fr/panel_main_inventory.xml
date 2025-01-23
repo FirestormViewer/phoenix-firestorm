@@ -35,6 +35,7 @@
 				<combo_box.item value="filter_type_textures" label="Textures"/>
 				<combo_box.item value="filter_type_snapshots" label="Photos"/>
 				<combo_box.item value="filter_type_settings" label="Paramètres" />
+				<combo_box.item value="filter_type_coalesced" label="Uniquement les objets groupés"/>
 				<combo_box.item value="filter_type_custom" label="Personnalisé..."/>
 			</combo_box>
 			<menu_button name="options_visibility_btn" tool_tip="Afficher les paramètres de visibilité des résultats de recherche"/>
@@ -56,6 +57,9 @@
 		</panel>
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Ajouter une Fenêtre d'inventaire"/>
+		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="Afficher les filtres - Affiche le menu latéral des filtres lorsqu'il est sélectionné. Il est mis en surbrillance lorsqu'un filtre est activé."/>
 		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="Passer d'une vue à l'autre"/>

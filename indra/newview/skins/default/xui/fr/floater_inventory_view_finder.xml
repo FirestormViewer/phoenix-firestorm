@@ -16,6 +16,12 @@
 	<button label="Aucun" label_selected="Aucun" name="None"/>
 	<check_box label="Cop" name="check_copy"/>
 	<check_box label="Lister tous les dossiers" name="check_show_empty"/>
+	<check_box label="Objets groupés" name="check_only_coalesced"/>
+	<combo_box tool_tip="Filtre les objets liés" name="inventory_filter_show_links_combo">
+		<combo_box.item name="show_links" label="Afficher les liens"/>
+		<combo_box.item name="show_links_only" label="Afficher seulement les liens"/>
+		<combo_box.item name="hide_links" label="Masquer les liens"/>
+	</combo_box>
 	<check_box label="Créé par moi" name="check_created_by_me"/>
 	<check_box label="Créé par d'autres" name="check_created_by_others"/>
 	<check_box label="Depuis la connexion" name="check_since_logoff"/>
