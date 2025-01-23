@@ -313,8 +313,8 @@ jobs:
               "ManagedIdentityCredential"
               ]
             }' > ${{github.workspace}}/metadata.json
-          echo "CODESIGNING_METADATA_PATH=${{github.workspace}}/metadata.json" >> $GITHUB_ENV            
-        shell: bash
+          echo "CODESIGNING_METADATA_PATH=${{github.workspace}}/metadata.json" >> $env:GITHUB_ENV            
+        shell: pwsh
       - name: Validate Windows 10 SDK version and find signtool.exe
         if: runner.os == 'Windows'
         id: validate-sdk
