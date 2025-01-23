@@ -324,8 +324,7 @@ jobs:
           echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
           echo "AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
           echo "CODESIGNING_METADATA_PATH=${{github.workspace}}/metadata.json" >> $GITHUB_ENV
-          - name: Validate Windows 10 SDK version and find signtool.exe
-      - name: locate signtool
+      - name: Validate Windows 10 SDK version and find signtool.exe
         if: runner.os == 'Windows'
         id: validate-sdk
         run: |
