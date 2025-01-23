@@ -352,7 +352,7 @@ jobs:
 
               exit 1
           }
-          echo "SIGNTOOL_PATH="signtool.exe" >> $env:GITHUB_ENV
+          echo "SIGNTOOL_PATH=signtool.exe" >> $env:GITHUB_ENV
         shell: pwsh          
       - name: Install nuget.exe
         if: runner.os == 'Windows'
