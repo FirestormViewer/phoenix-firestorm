@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
-  
 	<menu_item_check label="ミニマップをレーダーの上に表示" name="ShowRadarMinimap" />
 	<menu_item_check label="設定した範囲内の結果を表示" name="LimitRadarByRange" />
 	<menu_item_check label="ミュート／ブラックリストにしたアバターも表示" name="FSRadarShowMutedAndDerendered" />
@@ -12,7 +11,7 @@
 	</context_menu>
 	<context_menu label="表示する項目" name="visible_columns">
 		<menu_item_check label="ボイス" name="voice_level" />
-		<menu_item_check label="同一SIM" name="in_region" />
+		<menu_item_check label="同一リージョン" name="in_region" />
 		<menu_item_check label="入力状態" name="typing_status" />
 		<menu_item_check label="着座状態" name="sitting_status" />
 		<menu_item_check label="支払情報" name="flags" />
@@ -21,28 +20,22 @@
 		<menu_item_check label="表示時間" name="seen" />
 	</context_menu>
 	<menu_item_check label="距離で名前を色分け" name="radarColorNamesBasedOnDistance" />
-	
-	<menu_item_separator layout="topleft" />
-
+	<menu_item_separator/>
 	<context_menu label="通知方法" name="report_to_menu">
 		<menu_item_check label="周辺チャットで通知" name="radar_nearby_chat" />
 		<menu_item_check label="トーストで通知" name="radar_nearby_chat" />
 	</context_menu>
-    
 	<menu_item_check label="ミニマップにチャットレンジを表示" name="MiniMapChatRing" />
 	<menu_item_check label="描画範囲に入ってきたら通知" name="RadarReportDrawRangeEnter" />
 	<menu_item_check label="描画範囲から出て行ったら通知" name="RadarReportDrawRangeLeave" />
 	<menu_item_check label="チャットレンジに入ってきたら通知" name="RadarReportChatRangeEnter" />
 	<menu_item_check label="チャットレンジから出て行ったら通知" name="RadarReportChatRangeLeave" />
-	<menu_item_check label="同じSIMに入ってきたら通知" name="RadarReportSimRangeEnter" />
-	<menu_item_check label="同じSIMから出て行ったら通知" name="RadarReportSimRangeLeave" />
+	<menu_item_check label="同じＳＩＭに入ってきたら通知" name="RadarReportSimRangeEnter" />
+	<menu_item_check label="同じＳＩＭから出て行ったら通知" name="RadarReportSimRangeLeave" />
 	<menu_item_check label="アバターの年齢に問題があったら通知" name="RadarReportAgeAlert" />
 	<menu_item_check label="入ってきた通知をスクリプトに表示" name="RadarEnterChannelAlert" />
 	<menu_item_check label="出て行った通知をスクリプトに表示" name="RadarLeaveChannelAlert" />
-	<menu_item_check label="LSL クライアントブリッジでレーダーを強化" name="FSRadarEnhanceByBridge" />
-
+	<menu_item_check label="ＬＳＬクライアントブリッジでレーダーを強化" name="FSRadarEnhanceByBridge" />
 	<menu_item_separator layout="topleft" />
-
 	<menu_item_call name="show_blocked_list" label="ブロックした人とオブジェクトを表示" />
-	
 </toggleable_menu>

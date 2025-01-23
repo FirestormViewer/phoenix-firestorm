@@ -14,6 +14,6 @@
 	<menu_item_separator/>
 	<menu_item_check label="ブロック" name="Block"/>
 	<menu_item_separator/>
-	<menu_item_call label="クリップボードに名前をコピー" name="url_copy_label"/>
-	<menu_item_call label="クリップボードにＵＲＬをコピー" name="url_copy"/>
+	<menu_item_call label="名前をコピー" name="url_copy_label"/>
+	<menu_item_call label="ＵＲＬをコピー" name="url_copy"/>
 </context_menu>
