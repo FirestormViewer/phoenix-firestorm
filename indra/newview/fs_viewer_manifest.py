@@ -63,10 +63,13 @@ class FSViewerManifest:
         signtool_path = os.getenv('SIGNTOOL_PATH')
         codesigning_dlib_path = os.getenv('CODESIGNING_DLIB_PATH')
         metadata_file = os.getenv("CODESIGNING_METADATA_PATH")
+        # at some point we might want to sign other DLLs as well.
         executable_paths = [
-            self.args['configuration'] + "\\firestorm-bin.exe",
+            # self.args['configuration'] + "\\firestorm-bin.exe", # no need to sign this we are not packaging it.
             self.args['configuration'] + "\\slplugin.exe",
             self.args['configuration'] + "\\SLVoice.exe",
+            self.args['configuration'] + "\\llwebrtc.dll",
+            self.args['configuration'] + "\\llplugin\\dullahan_host.exe",
             self.args['configuration'] + "\\" + self.final_exe()
         ]
 
@@ -82,6 +85,7 @@ class FSViewerManifest:
                     "/tr", "http://timestamp.acs.microsoft.com", "/td", "SHA256",
                     "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, exe_path
                 ], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+                print(f"Signed {exe_path}")
             except Exception as e:
                 print(f"Couldn't sign binary: {exe_path}. Error: {e}")
 
