@@ -6237,10 +6237,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
                         if (te)
                         {
-                            // <FS> Skip if no te entry
-                            if (!te)
-                                continue;
-
                             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
                             if (gltf_mat != nullptr || (te->getMaterialParams().notNull()))
