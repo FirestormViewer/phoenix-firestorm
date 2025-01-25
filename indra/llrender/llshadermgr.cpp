@@ -472,6 +472,7 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
 
     if (filename.empty())
     {
+        LL_WARNS("ShaderLoading") << "tried loading empty filename" << LL_ENDL;
         return 0;
     }
 
@@ -929,6 +930,8 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
         }
         LL_WARNS("ShaderLoading") << "Failed to load " << filename << LL_ENDL;
     }
+
+    LL_DEBUGS("ShaderLoading") << "loadShaderFile() completed, ret: " << U32(ret) << LL_ENDL;
     return ret;
 }
 

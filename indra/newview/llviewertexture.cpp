@@ -3005,8 +3005,6 @@ LLViewerLODTexture::LLViewerLODTexture(const std::string& url, FTType f_type, co
 void LLViewerLODTexture::init(bool firstinit)
 {
     mTexelsPerImage = 64*64;
-    mDiscardVirtualSize = 0.f;
-    mCalculatedDiscardLevel = -1.f;
 }
 
 //virtual
@@ -3087,8 +3085,6 @@ void LLViewerLODTexture::processTextureStats()
         {
             // Calculate the required scale factor of the image using pixels per texel
             discard_level = (F32)(log(mTexelsPerImage / mMaxVirtualSize) / log_4);
-            mDiscardVirtualSize = mMaxVirtualSize;
-            mCalculatedDiscardLevel = discard_level;
         }
 
         discard_level = floorf(discard_level);
@@ -3666,7 +3662,7 @@ void LLViewerMediaTexture::setPlaying(bool playing)
         {
             LLFace* facep = *iter;
             const LLTextureEntry* te = facep->getTextureEntry();
-            if (te->getGLTFMaterial())
+            if (te && te->getGLTFMaterial())
             {
                 // PBR material, switch emissive and basecolor
                 switchTexture(LLRender::EMISSIVE_MAP, *iter);

@@ -6066,15 +6066,13 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     continue;
                 }
-                // <FS:Beq> FIRE-34589 - OpenSim crashes due to null facep. Only opensim, not sure why.
-                // LLFetchedGLTFMaterial *gltf_mat = (LLFetchedGLTFMaterial*) facep->getTextureEntry()->getGLTFRenderMaterial();
-                auto te = facep->getTextureEntry();
-                LLFetchedGLTFMaterial *gltf_mat = nullptr;
+
+                LLFetchedGLTFMaterial* gltf_mat = nullptr;
+                const LLTextureEntry* te = facep->getTextureEntry();
                 if (te)
                 {
                     gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
-                }
-                // </FS:Beq>
+                } // if not te, continue?
                 bool is_pbr = gltf_mat != nullptr;
 
                 if (is_pbr)
@@ -6136,13 +6134,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     cur_total += facep->getGeomCount();
 
-                    const LLTextureEntry* te = facep->getTextureEntry();
                     LLViewerTexture* tex = facep->getTexture();
 
-                    // <FS:ND> More crash avoding ...
-                    // if (te->getGlow() > 0.f)
                     if (te && te->getGlow() > 0.f)
-                    // </FS:ND>
                     {
                         emissive = true;
                     }
@@ -6241,6 +6235,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                             facep->mLastUpdateTime = gFrameTimeSeconds;
                         }
 
+                        if (te)
                         {
                             // <FS> Skip if no te entry
                             if (!te)
@@ -6308,6 +6303,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                                 facep->setState(LLFace::FULLBRIGHT);
                                 add_face(sFullbrightFaces, fullbright_count, facep);
                             }
+                        }
+                        else // no texture entry
+                        {
+                            facep->setState(LLFace::FULLBRIGHT);
+                            add_face(sFullbrightFaces, fullbright_count, facep);
                         }
                     }
                 }

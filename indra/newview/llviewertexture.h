@@ -578,10 +578,6 @@ public:
 
 private:
     void init(bool firstinit) ;
-
-private:
-    F32 mDiscardVirtualSize;        // Virtual size used to calculate desired discard
-    F32 mCalculatedDiscardLevel;    // Last calculated discard level
 };
 
 //
