@@ -240,8 +240,19 @@ Function CheckCPUFlagsAVX2
     ; AVX2 not supported
     ; Replace %DLURL% in the language string with the URL
     ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
-    MessageBox MB_OK "$3"    
+    MessageBox MB_OK "$3"
     ${OpenURL} "${DL_URL}-legacy-cpus"
+    
+    MessageBox MB_YESNO "If you believe that your PC can support AVX2 optimization, you may install anyway. Do you want to proceed?" IDNO NoInstall
+    MessageBox MB_OKCANCEL "By overriding the installer, you are about to install a version that might crash immediately after launching. If this happens, please immediately install the standard CPU version." IDCANCEL NoInstall
+    
+    ; User chose to proceed
+    Pop $3
+    Pop $2
+    Pop $1
+    Return
+
+  NoInstall:
     Quit
 
   OK_AVX2:
