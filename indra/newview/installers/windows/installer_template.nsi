@@ -63,7 +63,7 @@ Unicode true                # Enable unicode support
 ##!include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
 ##!include "%%SOURCE%%\installers\windows\lang_tr.nsi"
-##!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
+!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
 # *TODO: Move these into the language files themselves
 ##LangString LanguageCode ${LANG_DANISH}   "da"
@@ -77,7 +77,7 @@ LangString LanguageCode ${LANG_POLISH}   "pl"
 ##LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
 LangString LanguageCode ${LANG_RUSSIAN}  "ru"
 ##LangString LanguageCode ${LANG_TURKISH}  "tr"
-##LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
+LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
 
 # This placeholder is replaced by viewer_manifest.py
 %%INST_VARS%%
