@@ -155,13 +155,18 @@
                     stat="glboundmemstat"
                     setting="DebugStatModeBoundMem"/>
         </stat_view>
+          <!-- <FS:minerjr> [FIRE-35083] Floater_stats.xml has in correct stat_view setting for materials -->
+          <!-- The material stat_view had the incorrect setting, which was causing and convert_from_llsd warning and a bugsplat in Debug mode -->
+          <!-- It also prevented the material count of the floater_stats from remembering its open/close state -->
        <stat_view name="material"
                   label="Material"
-                  setting="DebugStatModeMaterials">
+                  setting="OpenDebugStatMaterials">
          <stat_bar name="nummaterials"
                    label="Count"
-                   stat="nummaterials"/>
+                   stat="nummaterials"
+                   setting="DebugStatModeMaterials"/>
        </stat_view>
+          <!-- </FS:minerjr> [FIRE-35083] -->
         <stat_view name="network"
                    label="Network"
                    setting="OpenDebugStatNet">

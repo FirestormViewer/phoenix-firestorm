@@ -6,6 +6,10 @@ on:
         description: 'Include tracy profiling builds'
         required: false
         default: 'false'
+      override_signing:
+        description: 'Manual builds are not signned by default. Force code signing for this run.'
+        required: false
+        default: 'false'
   push:
     branches:
       - "Firestorm*.*.*"
@@ -141,7 +145,18 @@ jobs:
           echo "Building for channel ${FS_RELEASE_CHAN}"
           viewer_channel=${FS_RELEASE_CHAN}
         shell: bash
-        
+      - name: Check if release type is signable
+        if: runner.os == 'Windows'
+        run: |
+          if [[ "${FS_RELEASE_TYPE}" == "Release" || "${FS_RELEASE_TYPE}" == "Beta" ]]; then
+            CODESIGNING_ENABLED=true
+          else
+            CODESIGNING_ENABLED=false
+          fi
+          echo "CODESIGNING_ENABLED=${CODESIGNING_ENABLED}" >> $GITHUB_ENV
+          echo "Codesigning enabled: ${CODESIGNING_ENABLED}"
+        shell: bash
+    
       - name: Get the code
         uses: actions/checkout@v4
         with:
@@ -261,7 +276,7 @@ jobs:
           done
         shell: bash
 
-      - name: Set expiration days based on FS_RELEASE_TYPE
+      - name: Set expiration days and codesigning based on FS_RELEASE_TYPE
         run: |
           case "${{ env.FS_RELEASE_TYPE }}" in
             "Nightly" | "Manual" | "Profiling")
@@ -301,6 +316,78 @@ jobs:
         run: |
           autobuild configure -c ReleaseFS -A${addrsize} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
           echo "BUGSPLAT_DB=$BUGSPLAT_DB" >> $GITHUB_ENV
+        shell: bash
+      - name: Generate metadata.json
+        if: runner.os == 'Windows'
+        run: |
+          echo '{
+            "Endpoint": "${{ secrets.AZURE_ENDPOINT }}",
+            "CodeSigningAccountName": "${{ secrets.AZURE_CODE_SIGNING_NAME }}",
+            "CertificateProfileName": "${{ secrets.AZURE_CERT_PROFILE_NAME }}",
+            "ExcludeCredentials": [
+              "ManagedIdentityCredential"
+              ]
+            }' > ${{github.workspace}}/metadata.json
+          echo "CODESIGNING_METADATA_PATH=${{github.workspace}}/metadata.json" >> $env:GITHUB_ENV            
+        shell: pwsh
+      - name: Validate Windows 10 SDK version and find signtool.exe IFF codesigning is enabled for these builds or overridden
+        if: ${{ runner.os == 'Windows' && (env.CODESIGNING_ENABLED == 'true' || github.event.inputs.override_signing == 'true') }}
+        id: validate-sdk
+        run: |
+          try {
+              $Arch = ($env:RUNNER_ARCH).ToLower()
+              $SearchBase = "${env:ProgramFiles(x86)}\Windows Kits\10\bin"
+
+              "Searching `"$SearchBase`" for signtool ($Arch)..."
+              $Tool = Get-ChildItem $SearchBase -Recurse -Force -ErrorAction SilentlyContinue |
+                  Where-Object {$_.Name -eq 'signtool.exe' -and $_.Directory -like "*\$Arch"} |
+                  Sort-Object -Descending |
+                  Select-Object -First 1
+
+              if (!($Tool)) {throw [System.IO.FileNotFoundException]::new('File not found.', 'signtool.exe')}
+
+              'Adding signtool to PATH'
+              $Tool.Directory.FullName | Out-File $env:GITHUB_PATH -Append
+              "signtool-$Arch=$($Tool.FullName)" | Out-File $env:GITHUB_OUTPUT -Append
+              $env:PATH = "$($Tool.Directory.FullName);$env:PATH"
+
+              signtool.exe /h
+          } catch {
+              Write-Output "::error::$($_.Exception)"
+              Write-Output '::endgroup::'
+
+              exit 1
+          }
+          echo "SIGNTOOL_PATH=signtool.exe" >> $env:GITHUB_ENV
+        shell: pwsh          
+      - name: Install nuget.exe
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.exe
+        shell: pwsh
+
+      - name: Install Microsoft.Trusted.Signing.Client
+        if: runner.os == 'Windows'
+        run: |
+          .\nuget.exe install Microsoft.Trusted.Signing.Client -Version 1.0.53 -OutputDirectory .
+        shell: pwsh
+
+      - name: Locate Azure.CodeSigning.Dlib.dll
+        if: runner.os == 'Windows'
+        run: |
+          $dllPath = (Get-ChildItem ".\Microsoft.Trusted.Signing.Client.1.0.53\bin\x64\Azure.CodeSigning.Dlib.dll" -Recurse -File | Select-Object -First 1).FullName
+          if (-not $dllPath) {
+            Write-Error "Azure.CodeSigning.Dlib.dll not found."
+            exit 1
+          }
+          echo "CODESIGNING_DLIB_PATH=$dllPath" >> $env:GITHUB_ENV
+        shell: pwsh
+      - name: Prep env for Trusted code on Windows only
+        if: runner.os == 'Windows'
+        run: |
+          echo "AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         shell: bash
       - name: build
         id: build

@@ -6,14 +6,14 @@ on:
         build_run_number:
           description: 'GitHub Run Number (per build_viewer.yml workflow)'
           required: true
-        policy:
-            description: 'Policy to sign binaries'
-            required: true
-            type: choice
-            default: "Test"
-            options:
-            - "Test"
-            - "Release"
+        # policy:
+        #     description: 'Policy to sign binaries'
+        #     required: true
+        #     type: choice
+        #     default: "Test"
+        #     options:
+        #     - "Test"
+        #     - "Release"
         # viewer_version:
         #   description: 'viewer version not including build'
         #   required: true
@@ -33,7 +33,7 @@ on:
 
 jobs:
   find-setup-files:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
         actions: read
         contents: read
@@ -69,7 +69,7 @@ jobs:
   sign-and-upload:
     name: Sign and Upload each Setup.exe
     needs: find-setup-files
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         file: ${{ fromJson( needs.find-setup-files.outputs.setup_files) }}
@@ -83,6 +83,7 @@ jobs:
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts
+        shell: bash
       
       - name: Download Setup.exe Files Artifact
         uses: actions/download-artifact@v4
@@ -93,28 +94,49 @@ jobs:
         run: |
           mkdir -p to_sign
           cp "setup_exe_files/${{ matrix.file }}" to_sign/
-      - name: Upload unsigned artifact
+        shell: bash
+      # - name: Upload unsigned artifact
+      #   id: upload-unsigned-artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: unsigned-artifact-${{ matrix.file }}
+      #     path: to_sign/${{ matrix.file }}          
+
+      # - name: sign the file
+        # uses: signpath/github-action-submit-signing-request@v1
+        # env:
+        #     SIGNPATH_SIGNING_POLICY_SLUG: ${{ github.event.inputs.policy == 'Test' && vars.SIGNPATH_SIGNING_POLICY_SLUG_TEST || vars.SIGNPATH_SIGNING_POLICY_SLUG_RELEASE }}
+        # with:
+        #   api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+        #   organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+        #   project-slug: '${{ vars.SIGNPATH_PROJECT_SLUG }}'
+        #   signing-policy-slug:  '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+        #   github-artifact-id:  "${{steps.upload-unsigned-artifact.outputs.artifact-id}}"
+        #   wait-for-completion: true
+        #   output-artifact-directory: 'application-signed'
+      - name: Azure Trusted Signing
+        uses: azure/trusted-signing-action@v0.5.1
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: ${{ secrets.AZURE_ENDPOINT }}
+          trusted-signing-account-name: ${{ secrets.AZURE_CODE_SIGNING_NAME }}
+          certificate-profile-name: ${{ secrets.AZURE_CERT_PROFILE_NAME }}
+        
+          # Sign all exes inside the folder
+          files-folder: ${{ github.workspace }}\to_sign
+          files-folder-filter: exe
+          
+      # - name: Upload signed artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: signed-artifact-${{ matrix.file }}
+      #     path: ./application-signed
+            # - name: Upload unsigned artifact
+      - name: Upload signed artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-artifact-${{ matrix.file }}
-          path: to_sign/${{ matrix.file }}          
-
-      - name: sign the file
-        uses: signpath/github-action-submit-signing-request@v1
-        env:
-            SIGNPATH_SIGNING_POLICY_SLUG: ${{ github.event.inputs.policy == 'Test' && vars.SIGNPATH_SIGNING_POLICY_SLUG_TEST || vars.SIGNPATH_SIGNING_POLICY_SLUG_RELEASE }}
-        with:
-          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
-          project-slug: '${{ vars.SIGNPATH_PROJECT_SLUG }}'
-          signing-policy-slug:  '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
-          github-artifact-id:  "${{steps.upload-unsigned-artifact.outputs.artifact-id}}"
-          wait-for-completion: true
-          output-artifact-directory: 'application-signed'
-
-      - name: Upload signed artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: signed-artifact-${{ matrix.file }}
-          path: ./application-signed
+          path: to_sign\${{ matrix.file }}          

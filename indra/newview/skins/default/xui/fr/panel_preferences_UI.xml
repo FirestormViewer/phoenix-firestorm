@@ -15,8 +15,20 @@
 			<text name="AvatarInspectorTooltipDelay_text">secondes</text>
 			<slider label="Objets :" name="ObjectInspectorTooltipDelay_slider" tool_tip="Délai d'affichage d'une infobulle après avoir passé la souris au-dessus d'un objet. (Par défaut : 0.35s)"/>
 			<text name="ObjectInspectorTooltipDelay_text">secondes</text>
+			<text name="FSHudTextLabel">
+				Options du texte flottant :
+			</text>
 			<slider label="Distance d'atténuation des textes flottants (en mètres) :" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants commencent à s'atténuer" name="FSHudTextFadeDistance"/>
 			<slider label="Distance de disparition des textes flottants (en mètres) :" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants ne s'affichent plus" name="FSHudTextFadeRange"/>
+			<check_box name="FSHudTextUseHoverHighlight" label="Survoler l'objet pour mettre en évidence le texte flottant :" tool_tip="Lorsqu'un objet est survolé, met en évidence le texte flottant (hovertext) en le déplaçant au premier plan et désactive son alpha."/>
+			<text name="FSHudTextShowBackgroundLabel">
+				Afficher arrière-plan texte flottant :
+			</text>
+			<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Affiche un arrière-plan noir/blanc derrière le texte flottant (hovertext) pour le rendre plus lisible. L'opacité peut être modifiée dans Couleurs > Divers.">
+				<combo_box.item label="Non" name="ScriptDialogOption_0"/>
+				<combo_box.item label="Uniquement l'objet en surbrillance" name="ScriptDialogOption_1"/>
+				<combo_box.item label="Tous les objets" name="ScriptDialogOption_2"/>
+			</combo_box>
 		</panel>
 		<panel label="Interface 2D" name="ui-2d-overlay">
 			<text name="UI Size:" width="240">Échelle de l'UI (peut poser problème) :</text>
