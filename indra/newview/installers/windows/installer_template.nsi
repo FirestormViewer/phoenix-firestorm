@@ -242,10 +242,10 @@ Function CheckCPUFlagsAVX2
     ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
     MessageBox MB_OK "$3"
     ${OpenURL} "${DL_URL}-legacy-cpus"
-    
-    MessageBox MB_YESNO "If you believe that your PC can support AVX2 optimization, you may install anyway. Do you want to proceed?" IDNO NoInstall
-    MessageBox MB_OKCANCEL "By overriding the installer, you are about to install a version that might crash immediately after launching. If this happens, please immediately install the standard CPU version." IDCANCEL NoInstall
-    
+
+    MessageBox MB_YESNO $(AVX2OverrideConfirmation) IDNO NoInstall
+    MessageBox MB_OKCANCEL $(AVX2OverrideNote) IDCANCEL NoInstall
+
     ; User chose to proceed
     Pop $3
     Pop $2
@@ -590,7 +590,7 @@ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}
 # <FS:Ansariel> Separate install sizes for 32 and 64 bit
 #WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x0001D500"		# ~117 MB
 ${If} ${IS64BIT} == "1"
-  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00064000"		# 400 MB
+  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00098800"		# 610 MB
 ${Else}
   WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00061800"		# 390 MB
 ${EndIf}
