@@ -236,7 +236,7 @@ class FSFloaterPoser : public LLFloater
     void enableOrDisableRedoButton();
     void onPoseStartStop();
     void startPosingSelf();
-    void stopPosingSelf();
+    void stopPosingAllAvatars();
     void onLimbTrackballChanged();
     void onYawPitchRollSliderChanged();
     void onAvatarPositionSet();
@@ -327,11 +327,6 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <param name="setAsSaveDiff">Whether to indicate a diff will be saved, instead of a pose.</param>
     void setSavePosesButtonText(bool setAsSaveDiff);
-
-    /// <summary>
-    /// Gets whether any avatar know by the UI is being posed.
-    /// </summary>
-    bool posingAnyoneOnScrollList();
 
     /// <summary>
     /// Applies the appropriate font-face (such as bold) to the text of the supplied list, to indicate use.
