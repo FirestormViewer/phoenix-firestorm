@@ -235,7 +235,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Letzte Rotationsänderung rückgängig machen"/>
 					<button name="button_redo_change" tool_tip="Letzte Rotationsänderung wiederherstellen"/>
-					<button name="refresh_avatars" tool_tip="Doppelklicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
+					<button name="poser_joint_reset" tool_tip="Doppelklicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
 					<button name="delta_mode_toggle" tool_tip="Falls mehrere Gelenke geändert werden, diese um denselben Wert ändern anstatt in dieselbe Rotation zu versetzen. Wird auch zur Verhinderung von Gimbal Lock verwendet."/>
 					<button label="Spieg." name="button_toggleMirrorRotation" tool_tip="Änderungen an gegenüberliegendem Gelenk spiegeln."/>
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Gegenüberliegendes Gelenk gleichermaßen anpassen."/>

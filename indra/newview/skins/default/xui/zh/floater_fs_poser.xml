@@ -234,7 +234,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="撤銷最後一次旋轉變化"/>
 					<button name="button_redo_change" tool_tip="重做最後一次旋轉變化"/>
-					<button name="refresh_avatars" tool_tip="雙擊將所有選定身體部位重設為原始值。"/>
+					<button name="poser_joint_reset" tool_tip="雙擊將所有選定身體部位重設為原始值。"/>
 					<button name="delta_mode_toggle" tool_tip="如果改變多個關節，則改變它們相同的值而不是相同的角度。這也用於解決萬向節鎖定的問題。"/>
 					<button label="映象" name="button_toggleMirrorRotation" tool_tip="映象對稱關節的變化。"/>
 					<button label="同步" name="button_toggleSympatheticRotation" tool_tip="同步調整對稱關節。"/>
