@@ -46,7 +46,7 @@
 		剩餘容納量 [LAND_CAPACITY]。
 	</floater.string>
 	<floater.string name="link_number">
-		聯結數：
+		聯結序號：
 	</floater.string>
 	<floater.string name="selected_faces">
 		面:
