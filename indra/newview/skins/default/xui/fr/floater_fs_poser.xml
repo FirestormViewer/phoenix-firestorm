@@ -226,7 +226,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Annuler la dernière rotation" />
 					<button name="button_redo_change" tool_tip="Rétablir la dernière modification annulée" />
-					<button name="refresh_avatars" tool_tip="Double-cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
+					<button name="poser_joint_reset" tool_tip="Double-cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
 					<button name="delta_mode_toggle" tool_tip="Si vous modifiez plusieurs articulations, chacune d'entre elles sera modifiée de la même manière, au lieu de toutes les modifier du même coup. Sert également à déverrouiller le Gimbal Lock." />
 					<button label="Miroir" name="button_toggleMirrorRotation" tool_tip="Changer l'articulation opposée, comme dans un miroir." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Modifier l'articulation opposée, mais de la même manière." />

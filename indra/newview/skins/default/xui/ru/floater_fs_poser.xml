@@ -221,7 +221,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Отмените последнее изменение поворота"/>
 					<button name="button_redo_change" tool_tip="Повторить последнее отмененное изменение"/>
-					<button name="refresh_avatars" tool_tip="Двойной клик чтобы восстановить все выбранные части тела на тот момент, когда вы впервые начали изменения"/>
+					<button name="poser_joint_reset" tool_tip="Двойной клик чтобы восстановить все выбранные части тела на тот момент, когда вы впервые начали изменения"/>
 					<button name="delta_mode_toggle" tool_tip="При изменении нескольких суставов каждый из них изменяется на одинаковую величину, а не все они получают одинаковое вращение."/>
 					<button label="Зерк." name="button_toggleMirrorRotation" tool_tip="Изменять положение противоположного сустава как в зеркале."/>
 					<button label="Симм." name="button_toggleSympatheticRotation" tool_tip="Изменять положение противоположного сустав таким же образом."/>

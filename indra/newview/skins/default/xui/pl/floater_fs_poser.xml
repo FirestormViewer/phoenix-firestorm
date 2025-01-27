@@ -227,7 +227,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Cofnij ostatnią zmianę obrotu" />
 					<button name="button_redo_change" tool_tip="Ponów ostatnią cofniętą zmianę" />
-					<button name="refresh_avatars" tool_tip="Kliknij dwukrotnie, aby zresetować wszystkie wybrane części ciała do stanu z momentu, w którym po raz pierwszy zacząłeś/aś pozować" />
+					<button name="poser_joint_reset" tool_tip="Kliknij dwukrotnie, aby zresetować wszystkie wybrane części ciała do stanu z momentu, w którym po raz pierwszy zacząłeś/aś pozować" />
 					<button name="delta_mode_toggle" tool_tip="Jeśli zmienisz wiele stawów, każdy z nich zmieni się o tę samą wartość, zamiast wszystkie o taki sam obrót. Stosowany również do pozbywania się blokady Gimbala." />
 					<button label="Odbij" name="button_toggleMirrorRotation" tool_tip="Zmień przeciwległy staw, jak w lustrze." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Zmień przeciwległy staw, ale w ten sam sposób." />

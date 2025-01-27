@@ -234,7 +234,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="撤銷最後一次旋轉變化"/>
 					<button name="button_redo_change" tool_tip="重做最後一次旋轉變化"/>
-					<button name="refresh_avatars" tool_tip="雙擊將所有選定身體部位重設為原始值。"/>
+					<button name="poser_joint_reset" tool_tip="雙擊將所有選定身體部位重設為原始值。"/>
 					<button name="delta_mode_toggle" tool_tip="如果改變多個關節，則改變它們相同的值而不是相同的角度。這也用於解決萬向節鎖定的問題。"/>
 					<button label="映象" name="button_toggleMirrorRotation" tool_tip="映象對稱關節的變化。"/>
 					<button label="同步" name="button_toggleSympatheticRotation" tool_tip="同步調整對稱關節。"/>
@@ -261,7 +261,7 @@
 				<button name="toggleAdvancedPanel" tool_tip="啟用/禁用高級設定"/>
 				<button name="FlipPose_avatar" tool_tip="左右翻轉整個姿勢"/>
 				<button name="FlipJoint_avatar" tool_tip="映象翻轉選定的身體部位"/>
-				<button label="取得選擇" name="button_RecaptureParts" tool_tip="如果選中的身體部位沒有姿勢，將取得目前姿勢的值。"/>
+				<button label="重捕" name="button_RecaptureParts" tool_tip="如果選擇的身體部位已關閉，這將重新捕捉這些身體部位當前的姿勢。"/>
 				<button label="啟用/禁用部位" name="toggle_PosingSelectedBones" tool_tip="啟用或禁用選定身體部位的姿勢。如果禁用，這些部位將正常動畫化。"/>
 				<button label="自定義姿勢" name="toggleLoadSavePanel" tool_tip="載入、儲存並管理自定義建立的姿勢"/>
 				<button tool_tip="管理姿勢目錄" name="open_poseDir_button"/>
