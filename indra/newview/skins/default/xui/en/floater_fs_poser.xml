@@ -841,6 +841,7 @@ width="403">
 						</text>
 						<slider
 						 decimal_digits="2"
+						 control_name="FSPoserTrackpadSensitivity"
 						 can_edit_text="true"
 						 follows="left|top"
 						 height="14"
@@ -862,6 +863,7 @@ width="403">
 						 height="16"
 						 decimal_digits="2"
 						 follows="left|top"
+						 control_name="FSPoserTrackpadSensitivity"
 						 increment="0.01"
 						 top_pad="-19"
 						 left_pad="0"

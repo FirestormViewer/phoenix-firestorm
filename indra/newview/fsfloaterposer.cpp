@@ -166,7 +166,6 @@ bool FSFloaterPoser::postBuild()
         mToggleAdvancedPanelBtn->setValue(true);
 
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
-    mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
 
     mPoseSaveNameEditor = getChild<LLLineEditor>("pose_save_name");
     mPoseSaveNameEditor->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
@@ -591,7 +590,6 @@ void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner)
 
     if (spinner == mTrackpadSensitivitySpnr)
     {
-        mTrackpadSensitivitySlider->setValue(value);
         onAdjustTrackpadSensitivity();
         return;
     }
@@ -1793,7 +1791,6 @@ void FSFloaterPoser::onYawPitchRollSliderChanged()
 
 void FSFloaterPoser::onAdjustTrackpadSensitivity()
 {
-    gSavedSettings.setF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY, mTrackpadSensitivitySlider->getValueF32());
     refreshTrackpadCursor();
 }
 
