@@ -256,11 +256,11 @@ class FSFloaterPoser : public LLFloater
     void onCommitSpinner(LLUICtrl* spinner);
 
     // UI Refreshments
-    void refreshRotationSliders();
-    void refreshAvatarPositionSliders();
+    void refreshRotationSlidersAndSpinners();
+    void refreshAvatarPositionSlidersAndSpinners();
     void refreshTrackpadCursor();
-    void refreshAdvancedPositionSliders();
-    void refreshAdvancedScaleSliders();
+    void refreshAdvancedPositionSlidersAndSpinners();
+    void refreshAdvancedScaleSlidersAndSpinners();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.

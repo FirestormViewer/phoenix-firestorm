@@ -868,8 +868,8 @@ width="403">
 						 top_pad="-19"
 						 left_pad="0"
 						 name="trackpad_sensitivity_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
+						 min_val="0.01"
+						 max_val="2"
 						 width="47">
 							<spinner.commit_callback
 							 function="Poser.CommitSpinner" />
@@ -901,9 +901,9 @@ width="403">
 						 enabled="false"
 						 label="Write BVH when saving**"
 						 follows="left|top"
-						 left="5"
+						 left="15"
 						 tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
-						 top_pad="5"
+						 top_pad="2"
 						 width="134" />
 					</panel>
 				</tab_container>
