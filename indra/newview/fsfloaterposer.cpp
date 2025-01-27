@@ -1870,11 +1870,11 @@ void FSFloaterPoser::refreshRotationSlidersAndSpinners()
 
     mLastSliderRotation = rotation;
     mLimbYawSlider->setValue(rotation.mV[VX] *= RAD_TO_DEG);
-    mYawSpnr->setValue(rotation.mV[VX] *= RAD_TO_DEG);
+    mYawSpnr->setValue(rotation.mV[VX]);
     mLimbPitchSlider->setValue(rotation.mV[VY] *= RAD_TO_DEG);
-    mPitchSpnr->setValue(rotation.mV[VY] *= RAD_TO_DEG);
+    mPitchSpnr->setValue(rotation.mV[VY]);
     mLimbRollSlider->setValue(rotation.mV[VZ] *= RAD_TO_DEG);
-    mRollSpnr->setValue(rotation.mV[VZ] *= RAD_TO_DEG);
+    mRollSpnr->setValue(rotation.mV[VZ]);
 }
 
 void FSFloaterPoser::refreshAdvancedPositionSlidersAndSpinners()
