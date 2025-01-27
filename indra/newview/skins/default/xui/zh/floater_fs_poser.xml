@@ -261,7 +261,7 @@
 				<button name="toggleAdvancedPanel" tool_tip="啟用/禁用高級設定"/>
 				<button name="FlipPose_avatar" tool_tip="左右翻轉整個姿勢"/>
 				<button name="FlipJoint_avatar" tool_tip="映象翻轉選定的身體部位"/>
-				<button label="取得選擇" name="button_RecaptureParts" tool_tip="如果選中的身體部位沒有姿勢，將取得目前姿勢的值。"/>
+				<button label="重捕" name="button_RecaptureParts" tool_tip="如果選擇的身體部位已關閉，這將重新捕捉這些身體部位當前的姿勢。"/>
 				<button label="啟用/禁用部位" name="toggle_PosingSelectedBones" tool_tip="啟用或禁用選定身體部位的姿勢。如果禁用，這些部位將正常動畫化。"/>
 				<button label="自定義姿勢" name="toggleLoadSavePanel" tool_tip="載入、儲存並管理自定義建立的姿勢"/>
 				<button tool_tip="管理姿勢目錄" name="open_poseDir_button"/>
