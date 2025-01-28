@@ -110,6 +110,7 @@ LLHUDText::LLHUDText(const U8 type) :
     // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
     mRoundedRectImgp = LLUI::getUIImage("Rounded_Rect"); // Taken from LLHUDNameTag, uses the existing art asset  
     mBackgroundHeight = 0.0f; // Default background height to 0.0
+    mBackgroundWidth   = 0.0f; // <FS:minerjr> [FIRE-35078] Added background width independent of the LLHUDTexts mWidth
     mBackgroundOffsetY = 0.0f; // Default background Y offset to 0.0
     mLuminance = 1.0f; // Default luminance is 1.0 as the default color is white (1.0, 1.0, 1.0, 1.0)
     // </FS:minerjr> [FIRE-35019]
@@ -128,16 +129,12 @@ void LLHUDText::render()
         // If the current text object is highighed and the use hover highlight feature is enabled, then 
         // disable writing to the depth buffer
         static LLCachedControl<bool> mbUseHoverHighlight(gSavedSettings, "FSHudTextUseHoverHighlight");
-        if (mbUseHoverHighlight && mbIsHighlighted)
-        {            
-            LLGLDepthTest gls_depth(GL_FALSE, GL_FALSE);
-        }
-        //Else, use the standard method of writing to the depth buffer for all other non-highlighted text objects
-        else
-        {
-            LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
-        }
-        // </FS:minerjr> [FIRE-35019]		
+        // <FS:minerjr> [FIRE-35102] - Hover text appearing through walls in Beta 7.1.12.7737
+        // So it turns out when the LLGLDepthTest object goes out of scope, it reverts back
+        // to the previous state. So by having the LLGLDepthTest in the if statements, they were
+        // never applied.
+        LLGLDepthTest gls_depth(mbUseHoverHighlight && mbIsHighlighted ? GL_FALSE : GL_TRUE, GL_FALSE);
+        // </FS:minerjr> [FIRE-35019] </FS:minerjr> [FIRE-35102]	
         //LLGLDisable gls_stencil(GL_STENCIL_TEST);
         renderText();
     }
@@ -272,10 +269,9 @@ void LLHUDText::renderText()
 
     if ( (show_all_backgrounds || show_highlighted_background) && is_valid_source_object )
     {
-        LLRect screen_rect;
-        screen_rect.setCenterAndSize(0, static_cast<S32>(lltrunc(-mBackgroundHeight / 2 + mOffsetY + mBackgroundOffsetY)),
-                                     static_cast<S32>(lltrunc(mWidth)),
-                                     static_cast<S32>(lltrunc(mBackgroundHeight)));
+        LLRect screen_rect;        
+        screen_rect.setCenterAndSize(0, static_cast<S32>(lltrunc(-mBackgroundHeight / 2 + mOffsetY + mBackgroundOffsetY)), // <FS:minerjr> [FIRE-35078] llSetText(...) differences in latest Nightly Builds
+                                     static_cast<S32>(lltrunc(mBackgroundWidth)), static_cast<S32>(lltrunc(mBackgroundHeight))); // Added background width independent of the LLHUDTexts mWidth </FS:minerjr>
         mRoundedRectImgp->draw3D(render_position, x_pixel_vec, y_pixel_vec, screen_rect, bg_color);
     }
     // </FS:minerjr> [FIRE-35019]
@@ -299,11 +295,7 @@ void LLHUDText::renderText()
              segment_iter != mTextSegments.end(); ++segment_iter )
         {
             const LLFontGL* fontp = segment_iter->mFont;
-            // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
-            //y_offset -= fontp->getLineHeight() - 1; // correction factor to match legacy font metrics            
-            y_offset -= fontp->getLineHeight(); // Match the same positioning as LLHUDNameTag as the windows don't line up otherwise.
-            y_offset -= LINE_PADDING;
-            // </FS:minerjr> [FIRE-35019]
+            y_offset -= fontp->getLineHeight() - 1; // correction factor to match legacy font metrics
 
             U8 style = segment_iter->mStyle;
             LLFontGL::ShadowType shadow = LLFontGL::DROP_SHADOW;
@@ -316,10 +308,6 @@ void LLHUDText::renderText()
             else // ALIGN_LEFT
             {
                 x_offset = -0.5f * mWidth + (HORIZONTAL_PADDING / 2.f);
-                // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
-                // *HACK -> borrowed from LLHUDNameTag to match
-                x_offset += 1;
-                // </FS:minerjr> [FIRE-35019]
             }
 
             text_color = segment_iter->mColor;
@@ -645,6 +633,9 @@ void LLHUDText::updateSize()
     F32 backgroundFirstNoneBlankPosition = 0.0f; // Stores the position just above the first non blank line
     F32 backgroundLastNoneBlankPosition = 0.0f; // Stores the position just below the last none blank line
     bool firstNoneBlank = true; // Flag to determine that if the first blank line has been reached and to store the first none black position
+    // <FS:minerjr> [FIRE-35078] llSetText(...) differences in latest Nightly Builds
+    mBackgroundWidth = 0.0f; // Reset the current background width to 0
+    // </FS:minerjr> [FIRE-35078]
     // <FS:minerjr> [FIRE-35019] 
     S32 max_lines = getMaxLines();
 
@@ -670,27 +661,19 @@ void LLHUDText::updateSize()
                 firstNoneBlank = false;
             }
             //Always get the position below the non-blank line
-            backgroundLastNoneBlankPosition = height + fontp->getLineHeight() + LINE_PADDING;            
+            backgroundLastNoneBlankPosition = height + fontp->getLineHeight() - 1; //  Use the older spacing
         }
-        // </FS:minerjr> 
-        height += fontp->getLineHeight(); // Taken from LLHUBNameTa::UpdateSize
-        height += LINE_PADDING; // Taken from LLHUBNameTa::UpdateSize  
-        // The max width of the text is set to HUD_TEXT_MAX_WIDTH_NO_BUBBLE and not HUD_TEXT_MAX_WIDTH, so the window would be limited but the text could spill over...
-        width = llmax(width, llmin(iter->getWidth(fontp), HUD_TEXT_MAX_WIDTH_NO_BUBBLE));
-        // <FS:minerjr> [FIRE-35019]		
+        // <FS:minerjr> [FIRE-35078] llSetText(...) differences in latest Nightly Builds
+        // The max width of the text is set to HUD_TEXT_MAX_WIDTH_NO_BUBBLE and not HUD_TEXT_MAX_WIDTH, so the window would be limited but
+        // the text could spill over...
+        // But the background needs to full width so use HUD_TEXT_MAX_WIDTH_NO_BUBBLE
+        mBackgroundWidth = llmax(mBackgroundWidth, llmin(iter->getWidth(fontp), HUD_TEXT_MAX_WIDTH_NO_BUBBLE));
+        // </FS:minerjr> [FIRE-35078] </FS:minerjr> [FIRE-35019]
+        height += fontp->getLineHeight() - 1; // correction factor to match legacy font metrics
+        width = llmax(width, llmin(iter->getWidth(fontp), HUD_TEXT_MAX_WIDTH));
         ++iter;
     }
 
-    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
-    // Don't want line spacing under the last line (Taken from LLHUBNameTa::UpdateSize)
-    if (height > 0.f)
-    {
-        height -= LINE_PADDING;
-        // Also update the background last non blank position by the LINE_PADDING
-        backgroundLastNoneBlankPosition -= LINE_PADDING;
-    }
-    // <FS:minerjr> [FIRE-35019]
-	
     if (width == 0.f)
     {
         return;
@@ -704,9 +687,10 @@ void LLHUDText::updateSize()
     mWidth = llmax(width, lerp(mWidth, (F32)width, u));
     mHeight = llmax(height, lerp(mHeight, (F32)height, u));
     // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
-    backgroundLastNoneBlankPosition += VERTICAL_PADDING; // Add the vertical padding to the last non-blank position
-    mBackgroundOffsetY = backgroundFirstNoneBlankPosition; // Set the background Y offset to the top of the first blank
+    backgroundLastNoneBlankPosition += VERTICAL_PADDING * 1.5f; // Add the vertical padding to the last non-blank position scaled up by 50%
+    mBackgroundOffsetY = backgroundFirstNoneBlankPosition + VERTICAL_PADDING * 0.5f; // Set the background Y offset to the top of the first blank + 50% of the vertical padding
     mBackgroundHeight  = backgroundLastNoneBlankPosition - backgroundFirstNoneBlankPosition; // Set the background height to the difference between the top of the first non-blank, and bottom of the last non-blank line
+    mBackgroundWidth += HORIZONTAL_PADDING; // Add the horizontal padding
     // <FS:minerjr> [FIRE-35019]
 }
 

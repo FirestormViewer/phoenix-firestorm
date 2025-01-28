@@ -203,6 +203,9 @@ private:
     // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights   
     LLPointer<LLUIImage> mRoundedRectImgp; // Added background rect image from LLHUDNameTag
     F32             mBackgroundHeight; // Store the actual height of the background image (calculated from the visible text segments)
+    // <FS:minerjr> [FIRE-35078] llSetText(...) differences in latest Nightly Builds
+    F32             mBackgroundWidth;  // Store the actual width of the background image (calculated from the visible text segments)
+    // </FS:minerjr> [FIRE-35078]
     F32             mBackgroundOffsetY; // Store the offset of the top of the first visible text segment
     F32             mLuminance; // Store the luminance of the text (used to determine if the background should be white or black for higher contrast)
     // </FS:minerjr> [FIRE-35019]

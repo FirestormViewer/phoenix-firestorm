@@ -59,25 +59,55 @@ class FSViewerManifest:
     def fs_channel_unique(self):
         return self.channel().replace("Firestorm", "").strip()
 
-    def fs_sign_win_binaries( self ):
-        try:
-            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com","/t","http://timestamp.verisign.com/scripts/timstamp.dll",self.args['configuration']+"\\firestorm-bin.exe"],
-                                  stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com","/t","http://timestamp.verisign.com/scripts/timstamp.dll",self.args['configuration']+"\\slplugin.exe"],
-                                  stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com","/t","http://timestamp.verisign.com/scripts/timstamp.dll",self.args['configuration']+"\\SLVoice.exe"],
-                                  stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com","/t","http://timestamp.verisign.com/scripts/timstamp.dll",self.args['configuration']+"\\"+self.final_exe()],
-                                  stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        except Exception as e:
-            print("Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe())
+    def fs_sign_win_binaries(self):
+        signtool_path = os.getenv('SIGNTOOL_PATH')
+        codesigning_dlib_path = os.getenv('CODESIGNING_DLIB_PATH')
+        metadata_file = os.getenv("CODESIGNING_METADATA_PATH")
+        # at some point we might want to sign other DLLs as well.
+        executable_paths = [
+            # self.args['configuration'] + "\\firestorm-bin.exe", # no need to sign this we are not packaging it.
+            self.args['configuration'] + "\\slplugin.exe",
+            self.args['configuration'] + "\\SLVoice.exe",
+            self.args['configuration'] + "\\llwebrtc.dll",
+            self.args['configuration'] + "\\llplugin\\dullahan_host.exe",
+            self.args['configuration'] + "\\" + self.final_exe()
+        ]
 
-    def fs_sign_win_installer( self, substitution_strings ):
+        if not signtool_path or not codesigning_dlib_path:
+            print("Signing configuration is missing. Skipping signing process.")
+            return
+
+        print("Signing executables.")
+        for exe_path in executable_paths:
+            try:
+                subprocess.check_call([
+                    signtool_path, "sign", "/v", "/debug", "/fd", "SHA256",
+                    "/tr", "http://timestamp.acs.microsoft.com", "/td", "SHA256",
+                    "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, exe_path
+                ], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+                print(f"Signed {exe_path}")
+            except Exception as e:
+                print(f"Couldn't sign binary: {exe_path}. Error: {e}")
+
+    def fs_sign_win_installer(self, substitution_strings):
+        signtool_path = os.getenv('SIGNTOOL_PATH')
+        codesigning_dlib_path = os.getenv('CODESIGNING_DLIB_PATH')
+        metadata_file = os.getenv("CODESIGNING_METADATA_PATH")
+        installer_path = self.args['configuration'] + "\\" + substitution_strings['installer_file']
+
+        if not signtool_path or not codesigning_dlib_path:
+            print("Signing configuration is missing. Skipping signing process.")
+            return
+        print("Signing installer.")
+
         try:
-            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call([
+                signtool_path, "sign", "/v", "/debug", "/fd", "SHA256",
+                "/tr", "http://timestamp.acs.microsoft.com", "/td", "SHA256",
+                "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, installer_path
+            ], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         except Exception as e:
-            print("Working directory: %s" % os.getcwd())
-            print("Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file'])
+            print(f"Couldn't sign windows installer: {installer_path}. Error: {e}")
 
     def fs_delete_linux_symbols( self ):
         debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
