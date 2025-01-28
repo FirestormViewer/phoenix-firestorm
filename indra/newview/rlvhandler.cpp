@@ -2494,7 +2494,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-    const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "env_fixed_environmentent_water", "my_environments" };
+    const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_adjust_snapshot_advanced", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "env_fixed_environmentent_water", "my_environments" };
     for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
     {
         if (fHasBhvr)

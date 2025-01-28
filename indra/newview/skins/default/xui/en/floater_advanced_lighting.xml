@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- KS mashup from floater_adjust_environment, etc.  2025/01 -->
 
-<floater title="Advanced Lighting" name="advanced_lighting" help_topic="advanced_lighting_floater" layout="topleft" save_rect="true" width="370" height="590" single_instance="true" can_resize="false">
+<floater title="Advanced Lighting" name="advanced_lighting" help_topic="advanced_lighting_floater" layout="topleft" width="370" height="590" single_instance="true" can_resize="false">
    <string name="hdr_string">HDR Scale:</string>
    <string name="brightness_string">Brightness:</string>
    <string name="hdr_tooltip">Intensity of lighting effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.</string>
@@ -98,4 +98,3 @@
       </layout_panel>
    </layout_stack>
 </floater>
-

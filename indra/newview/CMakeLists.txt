@@ -333,6 +333,7 @@ set(viewer_SOURCE_FILES
     llfloatereditextdaycycle.cpp
     llfloateremojipicker.cpp
     llfloaterenvironmentadjust.cpp
+    llfloaterenvironmentadjustadvanced.cpp
     llfloaterevent.cpp
     llfloaterexperiencepicker.cpp
     llfloaterexperienceprofile.cpp
@@ -1152,6 +1153,7 @@ set(viewer_HEADER_FILES
     llfloatereditextdaycycle.h
     llfloateremojipicker.h
     llfloaterenvironmentadjust.h
+    llfloaterenvironmentadjustadvanced.h
     llfloaterevent.h
     llfloaterexperiencepicker.h
     llfloaterexperienceprofile.h

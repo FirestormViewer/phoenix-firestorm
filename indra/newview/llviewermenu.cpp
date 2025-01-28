@@ -11964,6 +11964,10 @@ class LLWorldEnvSettings : public view_listener_t
         {
             LLFloaterReg::showInstance("env_adjust_snapshot");
         }
+        else if (event_name == "adjust_tool_advanced")
+        {
+            LLFloaterReg::showInstance("env_adjust_snapshot_advanced");
+        }
         else if (event_name == "my_environs")
         {
             LLFloaterReg::showInstance("my_environments");

@@ -513,4 +513,18 @@ help you find the right balance.
           function="Button.SetFloaterToggle"
           parameter="phototools"/>
   </button>
+  <button
+  name="open_phototools_advanced"
+  label="Advanced Phototools"
+  tool_tip="Open the dedicated advanced photo tools for advanced photo settings."
+  top_delta="0"
+  right="-20"
+  height="23"
+  width="120"
+  follows="bottom|right"
+  layout="topleft">
+  <button.init_callback
+          function="Button.SetFloaterToggle"
+          parameter="phototools_advanced"/>
+  </button>
 </panel>

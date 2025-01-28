@@ -868,6 +868,7 @@ with the same filename but different name
   <texture name="sound_explorer" file_name="toolbar_icons/sound_explorer.png" preload="true" />
   <texture name="asset_blacklist" file_name="toolbar_icons/asset_blacklist.png" preload="true" />
   <texture name="phototools" file_name="toolbar_icons/phototools.png" preload="true" />
+  <texture name="phototools_advanced" file_name="toolbar_icons/advanced_phototools.png" preload="true" />
   <texture name="phototools_camera" file_name="toolbar_icons/phototools_cam.png" preload="true" />
   <texture name="contact_sets" file_name="toolbar_icons/contact_sets.png" preload="true" />
   <texture name="mouselook" file_name="toolbar_icons/mouselook.png" preload="true" />

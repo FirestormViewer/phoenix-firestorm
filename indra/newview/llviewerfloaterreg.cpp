@@ -69,6 +69,7 @@
 #include "llfloatereditextdaycycle.h"
 #include "llfloateremojipicker.h"
 #include "llfloaterenvironmentadjust.h"
+#include "llfloaterenvironmentadjustadvanced.h"
 #include "llfloaterexperienceprofile.h"
 #include "llfloaterexperiences.h"
 #include "llfloaterexperiencepicker.h"
@@ -442,6 +443,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("env_fixed_environmentent_sky", "floater_fixedenvironment.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFixedEnvironmentSky>);
 
     LLFloaterReg::add("env_adjust_snapshot", "floater_adjust_environment.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEnvironmentAdjust>);
+    LLFloaterReg::add("env_adjust_snapshot_advanced", "floater_advanced_lighting.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEnvironmentAdjustAdvanced>);
 
     LLFloaterReg::add("env_edit_extdaycycle", "floater_edit_ext_day_cycle.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEditExtDayCycle>);
     LLFloaterReg::add("my_environments", "floater_my_environments.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMyEnvironment>);
@@ -657,6 +659,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("bd_poser_creator", "bd_floater_poser_creator.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<BDFloaterPoseCreator>);
     LLFloaterReg::add("performance", "floater_fs_performance.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPerformance>);
     LLFloaterReg::add(PHOTOTOOLS_FLOATER, "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
+    LLFloaterReg::add(PHOTOTOOLS_FLOATER_ADVANCED, "floater_advanced_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
     LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
     LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
     LLFloaterReg::add("region_tracker", "floater_region_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ALFloaterRegionTracker>);

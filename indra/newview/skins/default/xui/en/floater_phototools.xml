@@ -68,7 +68,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="135"
+			 height="155"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -231,6 +231,19 @@
 				 scale_image="true"
 				/>
 				
+				<button
+				 enabled="true"
+				 name="btn_personal_lighting_advanced"
+				 follows="top|left|right"
+				 height="20"
+				 top_pad="3"
+				 left="5"
+				 right="-5"
+				 label="Advanced Lighting...">
+					<button.commit_callback
+					 function="Floater.ToggleOrBringToFront"
+					 parameter="env_adjust_snapshot_advanced" />
+				</button>
 				
 				<button
 				 follows="top|left|right"

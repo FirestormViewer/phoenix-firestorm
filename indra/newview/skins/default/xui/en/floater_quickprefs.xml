@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="178"
+    height="198"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,7 +20,7 @@
     left="0"
     top="16"
     width="260"
-    height="155"
+    height="175"
     follows="all"
     layout="topleft">
     <layout_stack
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="150"
+      height="170"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="150">
+      height="170">
         <text
             type="string"
             length="1"
@@ -355,6 +355,22 @@
                  toggle="true"
                 />
         <!-- </FS:Zi> -->
+        <button
+            enabled="true"
+            name="btn_personal_lighting_advanced"
+            follows="left|top"
+            height="20"
+            width="208"
+            top_delta="20"
+            left="5"
+            label="Advanced lighting...">
+            <button.commit_callback
+             function="Floater.ToggleOrBringToFront"
+             parameter="env_adjust_snapshot_advanced" />
+            <button.on_enable
+             function="RLV.EnableIfNot"
+             parameter="setenv" />
+        </button>
 
     </layout_panel>
     </layout_stack>

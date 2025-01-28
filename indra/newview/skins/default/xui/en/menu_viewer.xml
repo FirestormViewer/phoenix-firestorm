@@ -1400,6 +1400,16 @@
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_call>
+            <menu_item_call
+             label="Advanced Lighting..."
+             name="adjustment_tool_advanced">
+                <menu_item_call.on_click
+                 function="World.EnvSettings"
+                 parameter="adjust_tool_advanced" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
+            </menu_item_call>
             <menu_item_separator/>
             <menu_item_check
              label="Pause Clouds"
@@ -1556,6 +1566,13 @@
 					<menu_item_call.on_click
 					function="Floater.Toggle"
 					parameter="phototools" />
+				</menu_item_call>
+				<menu_item_call
+				label="Advanced Phototools"
+				name="phototools_advanced_item_call">
+					<menu_item_call.on_click
+					function="Floater.Toggle"
+					parameter="phototools_advanced" />
 				</menu_item_call>
 				<menu_item_call
 				label="Cameratools"

@@ -115,7 +115,7 @@ FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
     // For Phototools
     mCommitCallbackRegistrar.add("Quickprefs.ShaderChanged", boost::bind(&handleSetShaderChanged, LLSD()));
 
-    if (!getIsPhototools() && !FSCommon::isLegacySkin())
+    if (!getIsPhototools() && !getIsPhototoolsAdvanced() && !FSCommon::isLegacySkin())
     {
         LLTransientFloaterMgr::getInstance()->addControlView(this);
     }
@@ -138,7 +138,7 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
         mEnvChangedConnection.disconnect();
     }
 
-    if (!getIsPhototools() && !FSCommon::isLegacySkin())
+    if (!getIsPhototools() && !getIsPhototoolsAdvanced() && !FSCommon::isLegacySkin())
     {
         LLTransientFloaterMgr::getInstance()->removeControlView(this);
     }
@@ -153,7 +153,7 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
     LLAvatarComplexityControls::setIndirectMaxNonImpostors();
 
     // bail out here if this is a reused Phototools floater
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         return;
     }
@@ -203,7 +203,7 @@ void FloaterQuickPrefs::initCallbacks()
     getChild<LLUICtrl>("ResetToRegionDefault")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetToRegionDefault, this));
 
     // Phototools additions
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
         gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
@@ -590,7 +590,7 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 bool FloaterQuickPrefs::postBuild()
 {
     // Phototools additions
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
         mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
@@ -643,7 +643,7 @@ bool FloaterQuickPrefs::postBuild()
     // <FS:Zi> Dynamic quick prefs
 
     // bail out here if this is a reused Phototools floater
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         return LLTransientDockableFloater::postBuild();
     }
@@ -1077,7 +1077,7 @@ void FloaterQuickPrefs::refreshSettings()
     }
 
     // <FS:CR> FIRE-9630 - Vignette UI controls
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
         mSpinnerVignetteX->setValue(vignette.mV[VX]);
@@ -1126,7 +1126,7 @@ void FloaterQuickPrefs::enableWindlightButtons(bool enable)
     childSetEnabled("DCNextPreset", enable);
     childSetEnabled("btn_personal_lighting", enable);
 
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         childSetEnabled("Sunrise", enable);
         childSetEnabled("Noon", enable);
@@ -1865,7 +1865,7 @@ void FloaterQuickPrefs::onMoveDownClicked()
 void FloaterQuickPrefs::onClose(bool app_quitting)
 {
     // bail out here if this is a reused Phototools floater
-    if (getIsPhototools())
+    if (getIsPhototools() || getIsPhototoolsAdvanced())
     {
         return;
     }
