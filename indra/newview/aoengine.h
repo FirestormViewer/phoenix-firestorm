@@ -123,6 +123,11 @@ class AOEngine
         void cycleTimeout(const AOSet* set);
         void cycle(eCycleMode cycleMode);
 
+// <AS:Chanayane> Double click on animation in AO
+        void playAnimation(const LLUUID& animation);
+        const AOSet* getCurrentSet() const;
+// </AS:Chanayane>
+
         void inMouselook(bool mouselook);
         void selectSet(AOSet* set);
         AOSet* selectSetByName(const std::string& name);

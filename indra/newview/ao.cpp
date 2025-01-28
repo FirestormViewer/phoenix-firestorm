@@ -282,6 +282,10 @@ bool FloaterAO::postBuild()
     mPreviousButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious, this));
     mNextButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickNext, this));
 
+// <AS:Chanayane> Double click on animation in AO
+    mAnimationList->setDoubleClickCallback(boost::bind(&FloaterAO::onDoubleClick, this));
+// </AS:Chanayane>
+
     updateSmart();
 
     AOEngine::instance().setReloadCallback(boost::bind(&FloaterAO::updateList, this));
@@ -779,6 +783,34 @@ void FloaterAO::onClickNext()
 {
     AOEngine::instance().cycle(AOEngine::CycleNext);
 }
+
+// <AS:Chanayane> Double click on animation in AO
+void FloaterAO::onDoubleClick()
+{
+    LLScrollListItem* item = mAnimationList->getFirstSelected();
+    if (!item)
+    {
+        return;
+    }
+    LLUUID* animUUID = (LLUUID*)item->getUserdata();
+    if (!animUUID)
+    {
+        return;
+    }
+
+    // activate AO set if necessary
+    if (AOEngine::instance().getCurrentSet() != mSelectedSet)
+    {
+        // sync small set selector with main set selector
+        mSetSelectorSmall->selectNthItem(mSetSelector->getCurrentIndex());
+
+        LL_DEBUGS("AOEngine") << "Set activated: " << mSetSelector->getSelectedItemLabel() << LL_ENDL;
+        AOEngine::instance().selectSet(mSelectedSet);
+    }
+
+    AOEngine::instance().playAnimation(*animUUID);
+}
+// </AS:Chanayane>
 
 void FloaterAO::onClickMore()
 {

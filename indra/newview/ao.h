@@ -91,6 +91,10 @@ class FloaterAO
         void onClickMore();
         void onClickLess();
 
+// <AS:Chanayane> Double click on animation in AO
+        void onDoubleClick();
+// </AS:Chanayane>
+
         void onAnimationChanged(const LLUUID& animation);
 
         void reloading(bool reload);
