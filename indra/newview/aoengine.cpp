@@ -960,6 +960,112 @@ void AOEngine::cycle(eCycleMode cycleMode)
     }
 }
 
+// <AS:Chanayane> Double click on animation in AO
+void AOEngine::playAnimation(const LLUUID& animation)
+{
+    if (!mEnabled)
+    {
+        return;
+    }
+
+    if (!mCurrentSet)
+    {
+        LL_DEBUGS("AOEngine") << "cycle without set." << LL_ENDL;
+        return;
+    }
+
+    // do not cycle if we're sitting and sit-override is off
+    if (mLastMotion == ANIM_AGENT_SIT && !mCurrentSet->getSitOverride())
+    {
+        return;
+    }
+    // do not cycle if we're standing and mouselook stand override is disabled while being in mouselook
+    else if (mLastMotion == ANIM_AGENT_STAND && mCurrentSet->getMouselookStandDisable() && mInMouselook)
+    {
+        return;
+    }
+
+    AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastMotion);
+    if (!state)
+    {
+        LL_DEBUGS("AOEngine") << "cycle without state." << LL_ENDL;
+        return;
+    }
+
+    if (!state->mAnimations.size())
+    {
+        LL_DEBUGS("AOEngine") << "cycle without animations in state." << LL_ENDL;
+        return;
+    }
+
+    LLViewerInventoryItem* item = gInventory.getItem(animation);
+    AOSet::AOAnimation anim;
+    anim.mName = item->LLInventoryItem::getName();
+    anim.mInventoryUUID = item->getUUID();
+    anim.mOriginalUUID = item->getLinkedUUID();
+    anim.mAssetUUID = LLUUID::null;
+
+    // if we can find the original animation already right here, save its asset ID, otherwise this will
+    // be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
+    if (item->getLinkedItem())
+    {
+        anim.mAssetUUID = item->getAssetUUID();
+    }
+
+    LLUUID newAnimation = anim.mAssetUUID;
+    LLUUID oldAnimation = state->mCurrentAnimationID;
+
+    // don't do anything if the animation didn't change
+    if (newAnimation == oldAnimation)
+    {
+        return;
+    }
+
+    mAnimationChangedSignal(LLUUID::null);
+
+    // Searches for the index of the animation
+    U32 idx = -1;
+    for (U32 i = 0; i < state->mAnimations.size(); i++)
+    {
+        LLUUID* id = &(state->mAnimations[i].mAssetUUID);
+        if (*id == newAnimation)
+        {
+            idx = i;
+            break;
+        }
+    }
+    if (idx < 0)
+    {
+        idx = 0;
+    }
+
+    state->mCurrentAnimation = idx;
+    state->mCurrentAnimationID = newAnimation;
+    if (newAnimation.notNull())
+    {
+        LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(mLastMotion) << ": " << newAnimation << LL_ENDL;
+        gAgent.sendAnimationRequest(newAnimation, ANIM_REQUEST_START);
+        mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+    }
+    else
+    {
+        LL_DEBUGS("AOEngine") << "overrider came back with NULL animation for motion " << gAnimLibrary.animationName(mLastMotion) << "." << LL_ENDL;
+    }
+
+    if (oldAnimation.notNull())
+    {
+        LL_DEBUGS("AOEngine") << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << LL_ENDL;
+        gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
+        gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
+    }
+}
+
+const AOSet* AOEngine::getCurrentSet() const
+{
+    return mCurrentSet;
+}
+// </AS:Chanayane>
+
 void AOEngine::updateSortOrder(AOSet::AOState* state)
 {
     for (U32 index = 0; index < state->mAnimations.size(); ++index)
