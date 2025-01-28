@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KS mashup from floater_phototools, etc. 2025/01 -->
+
+<floater title="Advanced Phototools" name="advanced_phototools" help_topic="advanced_phototools_floater" positioning="right" can_resize="false" can_dock="false" can_close="true" can_minimize="true" height="906" width="285" layout="topleft" save_rect="true" single_instance="true">
+   
+   <tab_container follows="all" halign="center" name="tabs" layout="topleft" height="906" width="285" top="0" left="0" tab_group="0" tab_width="41" tab_position="top">
+
+   <panel follows="all" name="LightingTab" layout="topleft" width="285" top="0" label="Lighting" left="0">
+
+      <panel name="PT_WL_Settings" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+         <text name="T_WL_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="200">Lights: Environment</text> 
+      </panel>
+      <panel name="P_WL_Sky_Water" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="165" border_visible="true" background_visible="true">
+            <button follows="left|top" name="Revert to Region Default" height="20" label="Shared Environment" layout="topleft" left="10" top_pad="8" width="255" 
+	       tool_tip="Reset the environment options to shared environment."> <button.commit_callback function="World.EnvSettings" parameter="region" /> </button>
+
+            <button follows="left|top" name="Sunrise" height="20"  label="Sunrise"  layout="topleft" left="10"  top_pad="5"   width="120">
+               <button.commit_callback function="World.EnvSettings" parameter="sunrise" /> </button>
+            <button follows="left|top" name="Noon" height="20"     label="Noon"     layout="topleft" left="145" top_pad="-20" width="120">
+               <button.commit_callback function="World.EnvSettings" parameter="noon" /> </button>
+            <button follows="left|top" name="Sunset" height="20"   label="Sunset"   layout="topleft" left="10"  top_pad="5"   width="120">
+               <button.commit_callback function="World.EnvSettings" parameter="sunset" /> </button>
+            <button follows="left|top" name="Midnight" height="20" label="Midnight" layout="topleft" left="145" top_pad="-20" width="120">
+               <button.commit_callback function="World.EnvSettings" parameter="midnight" /> </button>
+
+            <text type="string" length="1" follows="left|top" height="10" layout="topleft" left="10" name="WL Sky" mouse_opaque="false" top_pad="12" width="60">Sky</text>
+            <combo_box max_chars="50" height="23" layout="topleft" left_delta="58" follows="top|left" name="WLPresetsCombo" top_delta="-5" width="160" allow_text_entry="true" tool_tip="Presets for your sky." />
+            <button name="WLPrevPreset" enabled="true" follows="top|left" height="23" width="20" bottom_delta="-0" left_pad="-3" image_overlay="Arrow_Left_Off"  scale_image="true" />
+            <button name="WLNextPreset" enabled="true" follows="top|left" height="23" width="20" bottom_delta="-0" left_pad="0"  image_overlay="Arrow_Right_Off" scale_image="true" />
+
+            <text type="string" length="1" follows="left|top" height="10" layout="topleft" left="10" name="WL Water" mouse_opaque="false" top_pad="8" width="60">Water</text>
+            <combo_box max_chars="50" height="23" follows="top|left" layout="topleft" left_delta="58" name="WaterPresetsCombo" top_delta="-4" width="160" allow_text_entry="true" tool_tip="Presets for your water."/>
+            <button name="WWPrevPreset" enabled="true" follows="top|left" height="23" width="20" bottom_delta="-0" left_pad="-3" image_overlay="Arrow_Left_Off"  scale_image="true" />
+            <button name="WWNextPreset" enabled="true" follows="top|left" height="23" width="20" bottom_delta="-0" left_pad="0"  image_overlay="Arrow_Right_Off" scale_image="true" />
+
+            <button name="btn_advanced_lighting" enabled="true" follows="left|top" height="20" width="235" top_pad="8" left="10" label="Advanced Lighting...">
+               <button.commit_callback function="Floater.ToggleOrBringToFront" parameter="env_adjust_snapshot" /></button>
+
+            <button name="ResetToRegionDefault" label="" enabled="true" top_delta="0" left_pad="0" height="20" width="20" follows="left|top" image_overlay="StopReload_Off" label_selected="" scale_image="true"
+               tool_tip="Reset the environment options to shared environment." />
+      </panel>
+
+      <panel name="PT_Lights" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Lights" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Lights: Local</text>
+      </panel>
+      <panel name="P_L_S_Settings" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="58" border_visible="true" background_visible="true">
+            <text follows="left|top" name="max_lights_label" height="10" layout="topleft" left_delta="8" top_pad="8" width="175">Max to render:</text>
+            <slider decimal_digits="0" follows="left|top" height="16" increment="1" layout="topleft" left_delta="84" min_val="0" max_val="512" name="local_light_count" control_name="RenderLocalLightCount" top_pad="-12" width="175" can_edit_text="true" 
+                    tool_tip="The maximum number of local lights (object and attached) to render."/>
+            <check_box follows="top|left" layout="topleft" left="94" top_pad="8" height="16" label="Enable attached (face)lights" 
+                    tool_tip="Useful for turning off facelights when necessary." name="Render Attached Lights">
+               <check_box.on_check function="CheckControl" parameter="RenderAttachedLights" />
+               <check_box.check_button.commit_callback function="Advanced.HandleAttachedLightParticles" parameter="RenderAttachedLights" />
+            </check_box>
+      </panel>
+
+      <panel name="Shadows" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Shadows" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Shadows</text>
+      </panel>
+      <panel name="P_Shadows" follows="top|left" layout="topleft" top_pad="0" left="5" width="275" height="240" border_visible="true" background_visible="true">
+            <text name="T_Shadow_Types" follows="left|top" height="16" left="8" top_pad="10" width="40" layout="topleft">Types</text>
+            <combo_box control_name="RenderShadowDetail" enabled_control="RenderDeferred" follows="left|right" height="20" layout="topleft" left_pad="20" name="ShadowDetail" width="200" 
+                        tool_tip="Regardless of the setting you choose here, textures projected from projection lights will still be enabled.">
+               <combo_box.item label="None" name="0" value="0" /> <combo_box.item label="Sun/Moon" name="1" value="1" /> <combo_box.item label="Sun/Moon + Projectors" name="2" value="2" /> </combo_box>
+
+            <text name="T_Shadow_Res" follows="top|left" layout="topleft" left="8" top_pad="10" width="80">Resolution</text>
+            <slider_bar name="SB_Shadow_Res" control_name="RenderShadowResolutionScale" follows="left|right" height="16" increment="1" layout="topleft" left_pad="-20" min_val="1" max_val="4" top_delta="-2" width="127" 
+                        tool_tip="Determines shadow quality. Impacts performance - it is a good idea to leave this setting LOW when you are not shooting. When you want to take a photo, raise the slider, watching framerate."/>
+            <spinner name="S_Shadow_Res" control_name="RenderShadowResolutionScale" top_delta="-3" label_width="0" left_pad="3" decimal_digits="1" follows="top|left" max_val="5" min_val="0.1" width="50" increment="0.1" 
+                        tool_tip="Determines shadow quality. Impacts performance - it is a good idea to leave this setting LOW when you are not shooting. When you want to take a photo, raise the slider, watching framerate."/>
+            <button follows="left|top" name="Reset_Shadow_Res" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderShadowResolutionScale" /> </button>
+
+            <text name="T_Shd_Bias" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Bias</text>
+            <slider_bar name="SB_Shd_Bias" control_name="RenderShadowBias" follows="left|right" height="16" increment="0.001" layout="topleft" left_pad="-20" min_val="-0.008" max_val="0.003" top_delta="-2" width="122" 
+                        tool_tip="Positions of shadows relative to casting objects. Usually 0. Small tweaks can fix gaps."/>
+            <spinner name="S_Shd_Bias" control_name="RenderShadowBias" top_delta="-3" label_width="0" left_pad="-2" decimal_digits="4" follows="top|right" max_val=".005" min_val="-0.01" width="60" increment="0.001" 
+                        tool_tip="Positions of shadows relative to casting objects. Usually 0. Small tweaks can fix gaps."/>
+            <button follows="left|top" name="Shd_Bias_Reset" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderShadowBias" /> </button>
+
+            <check_box control_name="RenderDeferredSSAO" enabled_control="RenderDeferred" height="16" label="Enable Ambient Occlusion (AO)" layout="topleft" left="5" name="UseSSAO" 
+                        tool_tip="Softens shadows and simulates overall shading - it can add a high level of realism to the image." top_pad="12" width="230" />
+
+            <text name="T_Blur_Size" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Shdw blur</text>
+            <slider_bar name="SB_Blur_Size" control_name="RenderShadowBlurSize" enabled_control="RenderDeferredSSAO" follows="left|right" height="16" increment="0.1" layout="topleft" left_pad="-20" min_val="1" max_val="10" top_delta="-2" width="127" 
+                        tool_tip="Set to '0' for the sharpest shadows possible; increase to soften shadow edges. This setting is directly related to the one below it as well. If set to 4.00, you can use Shadows Soften to adjust the shadow blur independent of the ambient occlusion."/>
+            <spinner name="S_Blur_Size" control_name="RenderShadowBlurSize" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="1" follows="top|left" max_val="100" min_val="0" width="53" increment="0.1" 
+                        tool_tip="Controls softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Blur' value above. Then the slider here to soften the AO to your liking. This has no effect on shadows caused by projector lights."/>
+            <button follows="left|top" name="Blur_Reset" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderShadowBlurSize" /></button>
+
+            <!-- RenderShadowGaussian X component -->
+            <text name="T_Shd_Soften" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Shdw soft</text>
+            <slider_bar name="SB_Shd_Soften" enabled_control="RenderDeferredSSAO" follows="left|right" height="16" increment="0.001" layout="topleft" left_pad="-20" min_val="0.001" max_val="3" top_delta="-2" width="127" 
+                        tool_tip="Controls softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Blur' value above. Then the slider here to soften the AO to your liking. This has no effect on shadows caused by projector lights."/>
+            <spinner name="S_Shd_Soften" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" increment=".001" decimal_digits="3" follows="top|right" max_val="10" min_val="-1" width="53"
+                        tool_tip="Controls softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Blur' value above. Then the slider here to soften the AO to your liking. This has no effect on shadows caused by projector lights."/>
+            <button follows="left|top" name="Shd_Soften_Reset" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value." />
+
+            <text name="T_Scale" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Scale</text>
+            <slider_bar name="SB_Scale" control_name="RenderSSAOScale" enabled_control="RenderDeferredSSAO" follows="left|right" height="16" increment="10" layout="topleft" left_pad="-20" min_val="0" max_val="10000" top_delta="-2" width="127"
+                        tool_tip="Controls sampling region; larger regions are more accurate. The spinner offers finer control over a larger range." />
+            <spinner name="S_Scale" control_name="RenderSSAOScale" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="0" follows="top|right" max_val="100000" min_val="-100" width="53" increment="1"
+                        tool_tip="Controls sampling region; larger regions are more accurate. The spinner offers finer control over a larger range." />
+            <button follows="left|top" name="Reset_Scale" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderSSAOScale" /></button>
+
+            <text name="T_Max_Scale" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Radius</text>
+            <slider_bar name="SB_Max_Scale" control_name="RenderSSAOMaxScale" enabled_control="RenderDeferredSSAO" follows="left|right" height="16" increment="1" layout="topleft" left_pad="-20" min_val="0" max_val="1024" top_delta="-2" width="127"
+                        tool_tip="Controls maximum screen radius to sample from, to avoid graphics card cache misses and associated large performance penalty." />
+            <spinner name="S_Max_Scale" control_name="RenderSSAOMaxScale" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="0" follows="top|right" max_val="100000" min_val="0" width="53" increment="1" 
+                        tool_tip="Controls maximum screen radius to sample from, to avoid graphics card cache misses and associated large performance penalty."/>
+            <button follows="left|top" name="Reset_Max_Scale" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."><button.commit_callback function="ResetControl" parameter="RenderSSAOMaxScale" /> </button>
+
+            <!-- RenderSSAOEffect X component -->
+            <text name="T_Effect" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Luminance</text> 
+            <slider_bar name="SB_Effect" enabled_control="RenderDeferredSSAO" follows="left|right" height="16" increment="0.01" layout="topleft" left_pad="-20" min_val="-10" max_val="10" top_delta="-2" width="127" 
+                        tool_tip="Controls the overall light occlusion.  Values of 0.0 and below provide more realistic results. Note: The spinner offers a larger range than the slider." />
+            <spinner name="S_Effect" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="2" follows="top|right" max_val="1000" min_val="-100" width="53" increment=".01"
+                        tool_tip="Controls the overall light occlusion.  Values of 0.0 and below provide more realistic results. Note: The spinner offers a larger range than the slider." />
+            <button follows="left|top" name="Reset_Effect" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value." />
+
+            <text name="T_Scaling_Factor" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Multiplier</text>
+            <slider_bar name="SB_Scaling_Factor" control_name="RenderSSAOFactor" enabled_control="RenderDeferredSSAO" follows="left|right" height="16" increment="0.01" layout="topleft" left_pad="-20" min_val="0" max_val="10" top_delta="-2" width="127" 
+                        tool_tip="Scaling factor for the effect (larger is wider)." />
+            <spinner name="S_Scaling_Factor" control_name="RenderSSAOFactor" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="1" follows="top|right" max_val="100" min_val="0" width="53" increment="0.1"
+                        tool_tip="Scaling factor for the effect (larger is wider)." />
+            <button follows="left|top" name="Reset_Scaling_Factor" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderSSAOFactor"/> </button>
+      </panel>
+
+      <panel name="T_Glow_Settings" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Glow_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Glow</text>
+      </panel>
+      <panel name="P_Glow_Iterations" follows="top|left" layout="topleft" top_pad="0" left="5" width="275" height="125" border_visible="true" background_visible="true">
+            <check_box control_name="RenderGlow" height="16" label="Enable" layout="topleft" left="5" name="RenderGlow" top_pad="10" width="256" 
+                        tool_tip="Materials with glow set will glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."/>
+
+            <text name="T_Glow_Res" follows="top|left" layout="topleft" left="8" top_pad="10" width="80">Quality</text>
+            <slider_bar name="SB_Glow_Res" control_name="RenderGlowResolutionPow" enabled_control="RenderGlow" follows="left|right" height="16" increment="1" layout="topleft" left_pad="-20" min_val="8" max_val="10" top_delta="-2" width="127" 
+                        tool_tip="Glow resolution. Higher is smoother but slower." />
+            <spinner name="S_Glow_Res" control_name="RenderGlowResolutionPow" enabled_control="RenderGlow" top_delta="-3" label_width="0" left_pad="3" increment="1" decimal_digits="0" follows="top|left" max_val="10" min_val="8" width="53" 
+                        tool_tip="Glow resolution. Higher is smoother but slower." />
+            <button follows="left|top" name="Reset_RenderGlowResolutionPow" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowResolutionPow" /></button>
+
+            <text name="T_Glow_Iterations" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Iterations</text>
+            <slider_bar name="SB_Glow_Iterations" control_name="RenderGlowIterations" enabled_control="RenderGlow" follows="top|left" height="16" increment="1" layout="topleft" left_pad="-20" min_val="1" max_val="20" top_delta="-2" width="127" 
+                        tool_tip="Number of times to expand the glow Higher is wider and smoother but slower)." />
+            <spinner name="S_Glow_Iterations" control_name="RenderGlowIterations" enabled_control="RenderGlow" top_delta="-3" label_width="0" left_pad="3" increment="1" decimal_digits="1" follows="top|left" max_val="20" min_val="1" width="53"
+                        tool_tip="Number of times to expand the glow Higher is wider and smoother but slower)." />
+            <button follows="left|top" name="Reset_Glow_Iterations" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowIterations" /></button>
+
+            <text name="T_Glow_Strength" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Strength</text>
+            <slider_bar name="SB_Glow_Strength" control_name="RenderGlowStrength" enabled_control="RenderGlow" follows="top|left" height="16" increment=".01" layout="topleft" left_pad="-20" min_val="0" max_val="2" top_delta="-2" width="127" 
+                        tool_tip="Additive strength of glow, effective values begin very low.  The spinner offers finer resolution." />
+            <spinner name="S_Glow_Strength" control_name="RenderGlowStrength"     enabled_control="RenderGlow" follows="top|left" top_delta="-3" increment=".001" label_width="0" left_pad="3" decimal_digits="3" min_val="0" max_val="2" width="53" 
+                        tool_tip="Additive strength of glow, effective values begin very low.  The spinner offers finer resolution." />
+            <button follows="left|top" name="Reset_Glow_Strength" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowStrength" /></button>
+
+            <text name="T_Glow_Width" follows="top|left" layout="topleft" left="8" top_pad="5" width="80">Width</text>
+            <slider_bar name="SB_Glow_Width" control_name="RenderGlowWidth" enabled_control="RenderGlow" follows="left|right" height="16" increment="0.1" layout="topleft" left_pad="-20" min_val="0.1" max_val="5" top_delta="-2" width="127" 
+                        tool_tip="Glow sample size. Higher = wider and softer glow, but eventually it will become more pixelated." />
+            <spinner name="S_Glow_Width" control_name="RenderGlowWidth" enabled_control="RenderGlow" top_delta="-3" label_width="0" left_pad="3" increment="0.1" decimal_digits="1" follows="top|left" max_val="5000" min_val="0" width="53" 
+                        tool_tip="Glow sample size. Higher = wider and softer glow, but eventually it will become more pixelated." />
+            <button follows="left|top" name="Reset_Glow_Width" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowWidth" /></button>
+      </panel>
+
+      <panel name="PT_Reflections" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Reflections_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" width="230">Reflections</text>
+            </panel>
+      <panel name="P_Reflections" follows="top|left" layout="topleft" top_pad="0" left="5" width="275" height="140" border_visible="true" background_visible="true">
+            <check_box control_name="RenderScreenSpaceReflections" height="16" initial_value="true" label="Screen Space Reflections" name="ScreenSpaceReflections" layout="topleft" left="5" top_pad="10" width="40"
+                  tool_tip="Toggling requires a re-render of the global illumination, which may take seconds.">
+                  <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="ReflectionProbeText" text_readonly_color="LabelDisabledColor" width="128">Coverage:</text>
+            <combo_box control_name="RenderReflectionProbeLevel" height="16" layout="topleft" left="120" top_delta="0" name="ReflectionLevel" width="150" enabled_control="RenderScreenSpaceReflections">
+                  <combo_box.item label="None" name="0" value="0" /> <combo_box.item label="Manual only" name="1" value="1" /> <combo_box.item label="Manual + terrain" name="2" value="2" /> <combo_box.item label="Full scene" name="3" value="3" /> </combo_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="ReflectionDetailText" text_readonly_color="LabelDisabledColor" width="128">Update Rate:</text>
+            <combo_box control_name="RenderReflectionProbeDetail" height="16" layout="topleft" left="120" top_delta="0" name="ReflectionDetail" width="150" enabled_control="RenderScreenSpaceReflections" >
+                  <combo_box.item label="Static Only" name="0" value="0" /> <combo_box.item label="Static+Dynamic" name="1" value="1" /> <combo_box.item label="Realtime" name="2" value="2" /> </combo_box>
+
+            <check_box control_name="RenderMirrors" height="16" initial_value="false" label="Mirrors" layout="topleft" left="5" name="Mirrors" top_delta="24" width="240"
+                  tool_tip="Toggling requires a re-render of the global illumination, which may take seconds.">
+                  <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="MirrorResolutionText" text_readonly_color="LabelDisabledColor" width="128">Resolution:</text>
+            <combo_box control_name="RenderHeroProbeResolution" height="16" layout="topleft" left="120" top_delta="0" name="MirrorResolution" width="150" enabled_control="RenderMirrors">
+                  <combo_box.item label="256" name="0" value="256" /> <combo_box.item label="512" name="1" value="512" /> <combo_box.item label="1024" name="2" value="1024" /> <combo_box.item label="2048" name="3" value="2048" /> </combo_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="HeroProbeUpdateText" text_readonly_color="LabelDisabledColor" width="128">Update Rate:</text>
+            <combo_box control_name="RenderHeroProbeUpdateRate" height="16" layout="topleft" left="120" top_delta="0" name="HeroProbeUpdateRate" width="150" enabled_control="RenderMirrors">
+                  <combo_box.item label="Low" name="6" value="6" /> <combo_box.item label="Medium" name="3" value="3" /> <combo_box.item label="High" name="1" value="2" /> <combo_box.item label="Ultra" name="0" value="1" /> </combo_box>
+      </panel>
+   </panel>
+
+
+   <panel name="P_Camera" follows="all" layout="topleft" width="285" top="0" label="Camera, Etc" left="0">
+
+      <panel name="PT_Camera" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Camera" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Camera</text>
+      </panel>
+      <panel name="PD_Camera" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="136" border_visible="true" background_visible="true">
+            <text name="T_Zoom" follows="top|left" layout="topleft" left="7" top_pad="15" width="86">Zoom</text>
+            <slider_bar name="SB_Zoom" control_name="CameraAngle" follows="left|top" height="16" increment="0.01" layout="topleft" left_pad="-20" min_val="0.08" max_val="1.67" top_delta="-2" width="120" 
+                       tool_tip="This will change your viewing angle and thus the field of view - and if enabled, the effective depth of field. Or type Ctrl+8, Ctrl+9, or Ctrl+0." />
+            <spinner name="S_Zoom" control_name="CameraAngle" top_delta="-3" label_width="0" left_pad="3" decimal_digits="2" follows="left|top" max_val="1.67" min_val="0.08" width="53" increment="0.01" 
+                       tool_tip="This will change your viewing angle and thus the field of view - and if enabled, the effective depth of field. Or type Ctrl+8, Ctrl+9, or Ctrl+0." />
+            <button follows="left|top" name="Reset_Zoom" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                       tool_tip="Reset to the default value."><button.commit_callback function="ResetControl" parameter="CameraAngle" /></button>
+            <slider control_name="RenderCASSharpness" decimal_digits="1" follows="left|top" height="16" increment="0.1" label="Sharpening" label_width="62" layout="topleft" left="8" min_val="0.0" max_val="1.0" name="RenderSharpness" show_text="true" width="214" 
+                       tool_tip="Level of Contrast Adaptive Sharpening to apply: 0.0(off)-1.0. If this control has no effect, enable Render HDR and Emissive on Preferences/Graphics/Rendering."/>
+            <check_box follows="left|top" height="16" label="Allow the camera to move w/o constraints" layout="topleft" left="7" name="ignorecameraconstraints" width="250" control_name="FSIgnoreSimulatorCameraConstraints" 
+                       tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!" />
+            <check_box follows="left|top" height="16" label="Reset camera position on avatar movement" layout="topleft" left="7" name="resetcamerapositiononmovement" width="250" control_name="FSResetCameraOnMovement" 
+                       tool_tip="Resets the camera to its default position when you move the avatar" />
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="3" height="16" label="Show the Current FOV of Viewer Screen" 
+                       tool_tip="Show the vertical field of view for the camera - the smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use keystrokes Ctrl+8, 9, and 0." name="MIC_Show_FOV">
+                       <check_box.on_check function="Advanced.CheckHUDInfo" parameter="fov" /> <check_box.check_button.commit_callback function="Advanced.ToggleHUDInfo" parameter="fov" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" label="Show Detailed Camera Position Data" name="Camera"> <check_box.on_check function="Advanced.CheckHUDInfo" parameter="camera" /> 
+                       <check_box.check_button.commit_callback function="Advanced.ToggleHUDInfo" parameter="camera" /> </check_box>
+      </panel>
+
+      <panel name="PT_DoF_Glow" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_DoF" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Depth of Field (DOF)</text>
+      </panel>
+      <panel name="P_DOF" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="136" border_visible="true" background_visible="true">
+            <check_box control_name="RenderDepthOfField" enabled_control="RenderDeferred" height="16" label="Enable" layout="topleft" left="7" name="UseDepthofField" top_pad="10" width="230" 
+                       tool_tip="This 'determines distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). Shallow DOF can substantially reduce your frame rate - if you are not using it turn it off."/>
+            <check_box control_name="FSFocusPointFollowsPointer" enabled_control="RenderDepthOfField" left="27" height="16" label="Focus follows pointer" layout="topleft" name="FSFocusPointFollowsPointer" 
+                       tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with Focus locked." top_pad="4" width="256" />
+            <check_box control_name="FSFocusPointLocked" enabled_control="FSFocusPointFollowsPointer" left="47" height="16" label="Focus locked (Alt-Shift-X)" layout="topleft" name="FSFocusPointLocked" 
+                       tool_tip="Depth of Field (DoF) focus is locked, allowing you to move the pointer. Use in conjunction with Focus follows pointer." top_pad="4" width="256" />
+
+            <text name="f_stop_label" follows="top|left" layout="topleft" left="7" top_pad="5" width="80">Aperture</text>
+            <slider_bar name="SB_F_Number" control_name="CameraFNumber" enabled_control="RenderDepthOfField" follows="top|left" height="16" increment="0.1" layout="topleft" left_pad="-20" min_val="1" max_val="64" top_delta="-2" width="127" 
+                       tool_tip="F/Stop. Lower numbers produce a shallower depth of field." />
+            <spinner name="S_F_Number" control_name="CameraFNumber" enabled_control="RenderDepthOfField" top_delta="-3" label_width="0" left_pad="3" increment="0.1" decimal_digits="1" follows="top|left" max_val="128" min_val="1" width="53" 
+                       tool_tip="F/Stop. Lower numbers produce a shallower depth of field." />
+            <button follows="left|top" name="Reset_F_Number" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                       tool_tip="Reset to the default value."><button.commit_callback function="ResetControl" parameter="CameraFNumber"/> </button>
+
+            <text name="T_Focal_Length" follows="top|left" layout="topleft" left="7" top_pad="5" width="80">Foc Length</text>
+            <slider_bar name="SB_Focal_Length" control_name="CameraFocalLength" enabled_control="RenderDepthOfField" follows="top|left" height="16" increment="1" layout="topleft" left_pad="-20" min_val="10" max_val="600" top_delta="-2" width="127" 
+                       tool_tip="Focal Length (mm): This tells the viewer what Focal Length/Lens Length to simulate for the DOF effect. Higher numbers produce a shallower depth of field." />
+            <spinner name="S_Focal_Length" control_name="CameraFocalLength" enabled_control="RenderDepthOfField" top_delta="-3" label_width="0" left_pad="3" increment="1" decimal_digits="0" follows="top|left" max_val="1800" min_val="0" width="53"  
+                       tool_tip="Focal Length (mm): This tells the viewer what Focal Length/Lens Length to simulate for the DOF effect. Higher numbers produce a shallower depth of field." />
+            <button follows="left|top" name="Reset_Focal_Length" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                       tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="CameraFocalLength"/> </button>
+
+            <text name="T_CoC" follows="top|left" layout="topleft" left="7" top_pad="5" width="80">CoC</text>
+            <slider_bar name="SB_CoC" control_name="CameraMaxCoF" enabled_control="RenderDepthOfField" follows="top|left" height="16" increment="0.1" layout="topleft" left_pad="-20" min_val="0" max_val="50" top_delta="-2" width="127" 
+                       tool_tip="Circle of Confusion does not affect the depth of field, it affects how much to blur objects outside of it." />
+            <spinner name="S_CoC" control_name="CameraMaxCoF" enabled_control="RenderDepthOfField" top_delta="-3" label_width="0" left_pad="3" increment="0.1" decimal_digits="1" follows="top|left" max_val="50" min_val="0" width="53"
+                       tool_tip="Circle of Confusion does not affect the depth of field, it affects how much to blur objects outside of it." />
+            <button follows="left|top" name="Reset_CoC" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" tool_tip="Reset to the default value.">
+                       <button.commit_callback function="ResetControl" parameter="CameraMaxCoF"/> </button>
+      </panel>
+
+      <panel name="PT_ToneMap_Settings" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_ToneMap_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Tone Mapping</text>
+      </panel>
+      <panel name="P_ToneMap" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="56" border_visible="true" border_thickness="1" background_visible="true">
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="7" top_pad="10" name="TonemapTypeText" text_readonly_color="LabelDisabledColor" width="128">Mapper:</text>
+            <combo_box control_name="RenderTonemapType" height="18" layout="topleft" left="150" name="TonemapType" width="120" top_delta="-2"
+                       tool_tip="The mapping function: in theory, ACES is more artistic while Kronos is more realistic. If this control is disabled, enable Render HDR and Emissive on Preferences/Graphics/Rendering.">
+                       <combo_box.item label="Khronos Neutral" name="0" value="0" /><combo_box.item label="ACES" name="1" value="1" /></combo_box>
+            <slider name="TonemapMix" control_name="RenderTonemapMix" label="Fraction:" label_width="135" width="264" height="16" follows="left|top" layout="topleft" top="34" left="7" min_val="0.0" max_val="1.0" increment="0.1" decimal_digits="1" 
+                       tool_tip="Mix of tone mapped into linear colors. If this control is disabled, enable Render HDR and Emissive on Preferences/Graphics/Rendering"> </slider>
+      </panel>
+
+      <panel name="PT_Vignette_Settings" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Vignette_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="230">Vignette</text>
+      </panel>
+      <panel name="P_Vignetting" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="78" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_VignetteZ" follows="left|top" layout="topleft" left="5" top_pad="10" width="80">Radius</text>
+            <slider_bar name="VignetteSliderZ" follows="left|top" height="16" increment="0.1" layout="topleft" left_pad="-10" min_val="0.0" max_val="8.0" initial_value="1" top_delta="-2" width="117"
+                       tool_tip="The radius of the unaffected area." />
+            <spinner name="VignetteSpinnerZ" top_delta="-3" label_width="0" left_pad="3" decimal_digits="2" follows="left|top" max_val="8.0" min_val="0.0" width="53" increment="0.1"
+                       tool_tip="The radius of the unaffected area." />
+            <button follows="left|top" name="Reset_VignetteZ" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                       tool_tip="Reset to the default value." />
+
+            <text name="T_VignetteY" follows="left|top" layout="topleft" left="5" top_pad="5" tool_tip="" width="80">Focus</text>
+            <slider_bar name="VignetteSliderY" follows="left|top" height="16" increment="0.1" layout="topleft" left_pad="-10" min_val="0.0" max_val="40.0" initial_value="1" top_delta="-2" width="117"
+                       tool_tip="The hardness of the vignette edge." />
+            <spinner name="VignetteSpinnerY" top_delta="-3" label_width="0" left_pad="3" decimal_digits="1" follows="left|top" max_val="32.0" min_val="0.0" width="53" increment="0.1" 
+                       tool_tip="The hardness of the vignette edge." />
+            <button follows="left|top" name="Reset_VignetteY" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                       tool_tip="Reset to the default value." />
+
+            <text name="T_VignetteX" follows="left|top" layout="topleft" left="5" top_pad="5" tool_tip="" width="80">Density</text>
+            <slider_bar name="VignetteSliderX" follows="left|top" height="16" increment="0.05" layout="topleft" left_pad="-10" min_val="0.0" max_val="1.0" initial_value="0" top_delta="-2" width="117"
+                       tool_tip="The density of the vignette." />
+            <spinner name="VignetteSpinnerX" top_delta="-3" label_width="0" left_pad="3" decimal_digits="1" follows="left|top" max_val="1.0" min_val="0.0" width="53" increment="0.05"
+                       tool_tip="The density of the vignette." />
+            <button follows="left|top" name="Reset_VignetteX" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                       tool_tip="Reset to the default value." />
+      </panel>
+
+      <panel name="PT_Aids" follows="top|left" layout="topleft" top_pad="8" left="0" width="285" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Aids" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="220">Aids</text>
+      </panel>
+      <panel name="P_Aids" follows="top|left" layout="topleft" top_pad="0" left="4" width="275" height="230" border_visible="true" background_visible="true">
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="15" 
+                       label="Show Avatar Names" name="Show Avatar Names"
+		       control_name="AvatarNameTagMode">  </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Toggle Avatars" name="ToggleAvatars" control_name="character">
+	               <check_box.check_button.commit_callback function="Advanced.ToggleRenderType" parameter="character" /> </check_box> 
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Show the HUD attached to Your Avatar" name="Show HUD Attachments"> 
+                       <check_box.on_check function="View.CheckHUDAttachments" /> 
+                       <check_box.check_button.commit_callback function="View.ShowHUDAttachments" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Slow-mo Your Avatar (in your viewer only)" name="Slow Motion Animations"> 
+                       <check_box.on_check function="CheckControl" parameter="SlowMotionAnimation" /> 
+                       <check_box.check_button.commit_callback function="ToggleControl" parameter="SlowMotionAnimation" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Render Particles Attached to other Avatars" name="Render Attached Particle"> 
+                       <check_box.on_check function="CheckControl" parameter="RenderAttachedParticles" /> 
+                       <check_box.check_button.commit_callback function="Advanced.HandleAttachedLightParticles" parameter="RenderAttachedParticles" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Highlight Transparent Objects in Red" name="Highlight Transparent"> 
+                       <check_box.on_check function="View.CheckHighlightTransparent" /> 
+                       <check_box.check_button.commit_callback function="View.HighlightTransparent" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Show the Scene as Wireframe" name="Wireframe"> 
+                       <check_box.on_check function="Advanced.CheckWireframe" parameter="Wireframe" /> 
+                       <check_box.check_button.commit_callback function="Advanced.ToggleWireframe" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Show Bounding Boxes for All Lights in Scene" name="Lights"> 
+                       <check_box.on_check function="Advanced.CheckInfoDisplay" parameter="lights" /> 
+                       <check_box.check_button.commit_callback function="Advanced.ToggleInfoDisplay" parameter="lights" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Show Light Radius for Selected Light(s)" name="Show Light Radius for Selection"> 
+                       <check_box.on_check function="CheckControl" parameter="RenderLightRadius" /> 
+                       <check_box.check_button.commit_callback function="Tools.ShowSelectionLightRadius" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Show Bounding Boxes for Objects in Scene" name="Bounding Boxes"> 
+                       <check_box.on_check function="Advanced.CheckInfoDisplay" parameter="bboxes" /> 
+                       <check_box.check_button.commit_callback function="Advanced.ToggleInfoDisplay" parameter="bboxes" /> </check_box>
+            <check_box follows="top|left" layout="topleft" left="7" top_pad="10" 
+                       label="Show RGB-I Color Values Under Cursor" name="Show Color Under Cursor"> 
+                       <check_box.on_check function="Advanced.CheckShowColor" /> 
+                       <check_box.check_button.commit_callback function="Advanced.ToggleShowColor" /> </check_box>
+      </panel>
+
+      <button follows="left|top" name="Rebake Texture" height="22" label="Force Appearance Update (Rebake)" layout="topleft" left="7" top_pad="40" width="270"> <button.commit_callback function="Advanced.RebakeTextures" /> </button>
+
+   </panel>
+
+   </tab_container>
+</floater>
+
+

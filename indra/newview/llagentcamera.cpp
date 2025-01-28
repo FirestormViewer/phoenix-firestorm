@@ -1434,14 +1434,6 @@ void LLAgentCamera::updateCamera()
     }
 // </FS:Chanayane>
 
-// <FS:Chanayane> Camera roll (from Alchemy)
-    if (getRollLeftKey() || getRollRightKey())
-    {
-        F32 input_rate = getRollRightKey() - getRollLeftKey();
-        cameraRollOver(input_rate * ROLL_RATE / gFPSClamped);
-    }
-// </FS:Chanayane>
-
     // Clear camera keyboard keys.
     gAgentCamera.clearOrbitKeys();
     gAgentCamera.clearPanKeys();

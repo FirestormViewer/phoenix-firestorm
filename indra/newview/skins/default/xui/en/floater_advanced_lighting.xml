@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KS mashup from floater_adjust_environment, etc.  2025/01 -->
+
+<floater title="Advanced Lighting" name="advanced_lighting" help_topic="advanced_lighting_floater" layout="topleft" save_rect="true" width="370" height="590" single_instance="true" can_resize="false">
+   <string name="hdr_string">HDR Scale:</string>
+   <string name="brightness_string">Brightness:</string>
+   <string name="hdr_tooltip">Intensity of lighting effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.</string>
+   <layout_stack name="outer_stack" width="366" height="595" follows="all" animate="false" top="0" orientation="vertical">
+      <layout_panel name="env_controls" border="false" bevel_style="in" auto_resize="true" user_resize="true" height="580" visible="true">
+         <layout_stack name="settings_stack" width="360" height="580" follows="all" animate="false" orientation="horizontal">
+            <layout_panel border="false" name="lp_2" bevel_style="in" auto_resize="false" user_resize="false" visible="true" width="200" height="150">
+
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="12" left="8" name="reflection_probe_ambiance_label">Reflection Probe Ambiance:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="10"  increment="0.1"  can_edit_text="true" name="probe_ambiance" 
+                       tool_tip="Intensity of global illumination as seen by the active ambient probe. At zero, HDR is turned off and 'HDR scale' becomes 'Brightness'. Values between 0 and 1 mix Environment and HDR ambiences. Above 1 is entirely HDR."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="scene_gamma_label">Brightness:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="20"  increment="0.1"  can_edit_text="true" name="scene_gamma"
+                       tool_tip=""/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="sunlight_scale_label">Sunlight scale:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="50"  increment="0.1"  can_edit_text="true" name="RenderHDRSkySunlightScale" control_name="RenderHDRSkySunlightScale" 
+                       tool_tip="Sunlight Brightness. Recommended: set the 'Sun' color swatch Luminance = 50."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="ambient_scale_label">Ambient scale:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="-10" max_val="40"  increment="0.1"  can_edit_text="true" name="RenderSkyAmbientScale" control_name="RenderSkyAmbientScale"
+                       tool_tip="Changes to Ambient Brightness may take multiple seconds to recompute global illumination - have patience. Recommended: set the 'Ambient' color swatch Luminance = 50."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_density_label">Haze Density:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="5"   increment="0.1"  can_edit_text="true" name="haze_density" 
+                       tool_tip=""/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="18" name="haze_horizon_label">Haze Horizon:</text>
+               <slider follows="top|left" height="16" width="170" layout="topleft" top_pad="2" left="18" decimal_digits="1" min_val="0.1" max_val="5"   increment="0.1"  can_edit_text="true" name="haze_horizon" 
+                       tool_tip="Haze Density must be > 0 for this to work."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="18"  name="exposure_label">Exposure:</text>
+               <slider follows="top|left" height="16" width="170" layout="topleft" top_pad="2" left="18"  decimal_digits="1" min_val="0.2" max_val="4.0" increment="0.1"  can_edit_text="true" name="RenderExposure" control_name="RenderExposure" 
+                       tool_tip="Overall Brightness. If this control has no effect, enable 'Render HDR and Emissive' on Preferences/Graphics/Rendering and ensure Haze is > 0."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_focus_label">Sun Glow Focus:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="-2" max_val="2.00" increment="0.01" can_edit_text="true" name="glow_focus" 
+                       tool_tip="When > 0, Sun Glow appears in haze or clouds.  For interesting effects, try &lt; 0."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_size_label">Sun Glow Intensity:</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0"  max_val="1.99" increment="0.01" can_edit_text="true" name="glow_size" 
+                       tool_tip="Sun Glow Focus must not be 0 for this to have a visible effect."/>
+<!-- KS: code from panel_settings_sky_atmos.xml.  Hidden pending binding to pipeline.
+               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="density_multiplier_label">Density Multiplier:</text>
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="4" min_val="0.0001" max_val="2" increment="0.0001" can_edit_text="true" name="density_multiplier" control_name="density_multiplier"
+                       tool_tip="Fog/haze/glow density."/>
+               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="distance_multiplier_label">Distance Multiplier:</text>
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0.05" max_val="1000" increment="0.01" can_edit_text="true" name="distance_multiplier" control_name="distance_multiplier"
+                       initial_value="0.8" tool_tip="Fog/haze/glow multiplier for distance."/>
+               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="maximum_altitude_label">Maximum Altitude:</text>
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0" max_val="10000"  increment="0.1"   can_edit_text="true" name="max_alt" 
+                       tool_tip="fog/haze/glow maximum altitude."/>
+-->
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" label="Ambient Occlusion" control_name="RenderDeferredSSAO">
+                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="ScreenSpaceReflections" label="Screen Space Reflections" control_name="RenderScreenSpaceReflections">
+                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="DepthOfField" label="Depth Of Field" control_name="RenderDepthOfField">
+                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+               <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="2"  name="f_stop_label" >F/Stop:</text>
+               <slider    follows="top|left" height="16" width="170" layout="topleft" left="20" top_pad="2"  decimal_digits="0" min_val="2" max_val="32"  increment="1" can_edit_text="true" name="f_stop" control_name="CameraFNumber" 
+                          tool_tip="Sets 'distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). The blur rendered for shallow DOF can substantially reduce your frame rate." />
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="26" top_pad="2"  name="FocusFollowsPointer" label="Focus@Pointer" control_name="FSFocusPointFollowsPointer">
+                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+               <text      follows="top|left" height="10" width="180" layout="topleft" left="10" top_pad="18" name="max_lights_label">Max local lights:</text>
+               <slider    follows="top|left" height="16" width="180" layout="topleft" left="12" top_pad="2"  decimal_digits="0" min_val="0" max_val="512" increment="1" can_edit_text="true" name="local_light_count" control_name="RenderLocalLightCount" 
+                          tool_tip="Up to this number of lights, including worn lights, nearest to the camera will be lit."/>
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="20"              name="AttachedLights" label="Render Attached Lights" control_name="RenderAttachedLights">
+                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+               <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="24" name="camera_roll_hint"
+                          tool_tip="Or see Preferences/Controls/Camera: Roll Left and Roll Right.">ALT-Q  :Camera roll:  ALT-E</text>
+            </layout_panel>
+
+            <layout_panel border="false" name="lp_sun_moon_atmos" bevel_style="none" auto_resize="false" user_resize="false" height="156" width="310">
+               <tab_container follows="top|left" halign="center" name="tabs" layout="topleft" height="240" width="154" top="6" left="4" tab_group="0" tab_width="44" tab_position="top">
+                  <panel       follows="top|left" height="150" width="152" layout="topleft" border="false" name="sun_panel" bevel_style="in" auto_resize="false" user_resize="false" visible="true" font="SansSerifBold" label="Sun">
+                     <sun_moon_trackball follows="top|left" height="146" width="146" top="0" left="4" thumb_mode="sun" name="sun_rotation"/>
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="5" width="100" name="sun_elevation_label">Elevation:</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="-90" max_val="90" name="sun_elevation"  can_edit_text="true" />
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="0" width="100" name="sunn_azimuth_label">Azimuth:</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="0"  max_val="359" name="sun_azimuth"    can_edit_text="true" />
+                  </panel>
+                  <panel       follows="top|left" height="150" width="152" layout="topleft" border="false" name="moon_panel" bevel_style="in" auto_resize="false" user_resize="false" visible="true" font="SansSerifBold" label="Moon">
+                     <sun_moon_trackball follows="top|left" height="146" width="146" top="0" left="4" thumb_mode="moon" name="moon_rotation"/>
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="5" width="100" name="moon_elevation_label">Elevation:</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="-90" max_val="90" name="moon_elevation" can_edit_text="true" />
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="0" width="100" name="moon_azimuth_label">Azimuth:</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="0"  max_val="359" name="moon_azimuth"   can_edit_text="true" />
+                  </panel>
+               </tab_container>
+               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="10" label_height="10" left="38" label="Sun Color"    name="sun_color"     can_apply_immediately="true"/>
+               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Ambient"      name="ambient_light" can_apply_immediately="true" />
+               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Blue Horizon" name="blue_horizon"  can_apply_immediately="true" />
+               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Blue Density" name="blue_density"  can_apply_immediately="true" />
+               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Cloud Color"  name="cloud_color"   can_apply_immediately="true" />
+               <texture_picker follows="top|left" height="60" width="80" layout="topleft" top_pad="12" label_height="10"           label="Cloud Image"  name="cloud_map"/>
+               <button         follows="top|left" height="23" width="98" layout="topleft" top_pad="10"                   left="30" label="Reset"        name="btn_reset" tool_tip="Close and reset to Shared Environment"/>
+            </layout_panel>
+
+         </layout_stack>
+      </layout_panel>
+   </layout_stack>
+</floater>
+
