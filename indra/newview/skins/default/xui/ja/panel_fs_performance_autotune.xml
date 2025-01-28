@@ -11,7 +11,7 @@
 	<text name="quality_lbl">
 		遠距離のアバター
 	</text>
-	<check_box label="距離ベースの最適化を有効にする" name="FSAutoTuneImpostorByDistEnabled" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を調整して、完全にレンダリングされたアバターを定義された半径内のアバターに制限します。" />
+	<check_box label="距離ベースの最適化を有効にする" name="FSAutoTuneImpostorByDistEnabled" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を調整して、完全にレンダリングされたアバターを定義された半径内のアバターに制限します。"/>
 	<spinner label="アバターを完全描画する最大距離" name="ffa_autotune"/>
 	<text name="distant_av_advice">
 		遠距離にいるアバターは、描画コストに関係なく自動的に最適化されます。

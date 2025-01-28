@@ -15,7 +15,7 @@
 		速度優先
 	</text>
 	<icon name="LowGraphicsDivet"/>
-	<icon name="LowMidGraphicsDivet" />
+	<icon name="LowMidGraphicsDivet"/>
 	<icon name="MidGraphicsDivet"/>
 	<icon name="MidHighGraphicsDivet"/>
 	<icon name="HighGraphicsDivet"/>
@@ -40,14 +40,14 @@
 	<text name="quality_desc">
 		プリセットを選択すると、手動で行った変更がすべてリセットされます。
 	</text>
-	<view_border name="border2" />
+	<view_border name="border2"/>
 	<text name="distance_lbl">
 		表示距離
 	</text>
 	<text name="faster_lbl">
 		より速く
 	</text>
-	<slider name="draw_distance" />
+	<slider name="draw_distance"/>
 	<text name="draw_distance_m">
 		ｍ
 	</text>
@@ -57,7 +57,7 @@
 	<text name="distance_desc1">
 		パフォーマンスを向上させるにはこの値を低く保ち、遠くまで見るにはこの値を上げます。
 	</text>
-	<view_border name="border3" />
+	<view_border name="border3"/>
 	<text name="environment_lbl">
 		環境
 	</text>
@@ -69,9 +69,9 @@
 		影の元：
 	</text>
 	<combo_box name="ShadowDetail">
-		<combo_box.item label="なし" name="0" />
-		<combo_box.item label="太陽／月" name="1" />
-		<combo_box.item label="太陽／月＋プロジェクター" name="2" />
+		<combo_box.item label="なし" name="0"/>
+		<combo_box.item label="太陽／月" name="1"/>
+		<combo_box.item label="太陽／月＋プロジェクター" name="2"/>
 	</combo_box>
 	<view_border name="border3"/>
 	<text name="water_lbl">
@@ -84,13 +84,13 @@
 		水面の反射：
 	</text>
 	<combo_box name="Reflections">
-		<combo_box.item label="なし；不透明" name="-2" />
-		<combo_box.item label="なし；透明" name="-1" />
-		<combo_box.item label="最小限" name="0" />
-		<combo_box.item label="地形と樹木" name="1" />
-		<combo_box.item label="すべての静的なオブジェクト" name="2" />
-		<combo_box.item label="全てのアバターとオブジェクト" name="3" />
-		<combo_box.item label="全て" name="4" />
+		<combo_box.item label="なし；不透明" name="-2"/>
+		<combo_box.item label="なし；透明" name="-1"/>
+		<combo_box.item label="最小限" name="0"/>
+		<combo_box.item label="地形と樹木" name="1"/>
+		<combo_box.item label="すべての静的なオブジェクト" name="2"/>
+		<combo_box.item label="全てのアバターとオブジェクト" name="3"/>
+		<combo_box.item label="全て" name="4"/>
 	</combo_box>
 	<view_border name="border4"/>
 	<text name="photo_lbl">

@@ -2,29 +2,68 @@
 <panel label="水" name="panel_settings_water">
 	<layout_stack name="water_stack1">
 		<layout_panel name="lp_top">
-			<text name="water_fog_label">水中のフォグ：</text>
-			<text name="color_label">フォグ効果の色：</text>
-			<text name="density_exponent_label">D透明度指数：</text>
-			<text name="underwater_modifier_label">フォグ効果加減：</text>
-			<text name="FresnelScaleText">フレネル・スケール：</text>
-			<text name="FresnelOffsetText">フレネル・オフセット：</text>
+			<text name="water_fog_label">
+				水中のフォグ：
+			</text>
+			<text name="color_label">
+				色：
+			</text>
+			<color_swatch name="water_fog_color"/>
+			<text name="density_exponent_label">
+				密度指数：
+			</text>
+			<slider name="water_fog_density"/>
+			<text name="underwater_modifier_label">
+				水中のモディファイア：
+			</text>
+			<slider name="water_underwater_mod"/>
+			<text name="FresnelScaleText">
+				フレネル係数：
+			</text>
+			<slider name="water_fresnel_scale"/>
+			<text name="FresnelOffsetText">
+				フレネルオフセット：
+			</text>
+			<slider name="water_fresnel_offset"/>
 		</layout_panel>
 		<layout_panel name="lp_bottom">
 			<layout_stack name="water_stack2">
 				<layout_panel name="lp_left">
-					<text name="normal_map_label">ノーマル・マップ</text>
-					<text name="large_wave_speed_label">大波のスピード</text>
-					<text name="small_wave_speed_label">小波のスピード</text>
-					<text name="reflection_wavelet_scale_label">さざ波の反射スケール</text>
-					<slider label="X：" name="water_normal_scale_x"/>
-					<slider label="Y：" name="water_normal_scale_y"/>
-					<slider label="Z：" name="water_normal_scale_z"/>
+					<text name="normal_map_label">
+						ノーマル（法線）マップ
+					</text>
+					<texture_picker name="water_normal_map"/>
+					<text name="large_wave_speed_label">
+						大波の速度
+					</text>
+					<xy_vector name="water_wave1_xy"/>
+					<text name="small_wave_speed_label">
+						小波の速度
+					</text>
+					<xy_vector name="water_wave2_xy"/>
+					<text name="reflection_wavelet_scale_label">
+						さざ波の反射係数
+					</text>
+					<slider name="water_normal_scale_x" label="Ｘ："/>
+					<slider name="water_normal_scale_y" label="Ｙ："/>
+					<slider name="water_normal_scale_z" label="Ｚ："/>
 				</layout_panel>
 				<layout_panel name="lp_right">
-					<text name="refraction_and_blur_label">屈折と不透明度：</text>
-					<text name="refraction_scale_above_label">水面の屈折スケール：</text>
-					<text name="refraction_scale_below_label">水中の屈折スケール：</text>
-					<text name="blur_multiplier_label">不透明度の増幅</text>
+					<text name="refraction_and_blur_label">
+						反射とブラー：
+					</text>
+					<text name="refraction_scale_above_label">
+						反射係数（上）
+					</text>
+					<slider name="water_scale_above"/>
+					<text name="refraction_scale_below_label">
+						反射係数（下）
+					</text>
+					<slider name="water_scale_below"/>
+					<text name="blur_multiplier_label">
+						ブラー乗数
+					</text>
+					<slider name="water_blur_multip"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

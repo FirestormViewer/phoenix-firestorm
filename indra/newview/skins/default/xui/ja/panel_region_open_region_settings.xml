@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="リージョン設定">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="RegionSettings" label="リージョン設定">
 	<spinner label="デフォルトの描画距離" name="draw_distance" tool_tip="デフォルトのリージョンの描画距離に戻します。"/>
 	<check_box label="描画距離を強制する" name="force_draw_distance" tool_tip="このリージョン内のすべてのエージェントの描画距離をロックします。注意：パフォーマンスの低いコンピューターを使用している場合、遅延が発生する可能性があります。（デフォルト：オフ）"/>
 	<spinner label="最大ドラッグ距離" name="max_drag_distance" tool_tip="このリージョンでプリムをドラッグできる最大距離を指定します。"/>

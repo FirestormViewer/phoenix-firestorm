@@ -28,7 +28,7 @@
 		<name_list.columns label="時間（㎲）" tool_tip="アバターの描画にかかった時間。自動調整する前にこのアバターを描画するのにかかる実際の時間です。（マイクロ秒単位）" name="art_value"/>
 		<name_list.columns label="調整済み時間（㎲）" tool_tip="アバターの描画にかかった時間。自動調整する前にこのアバターを描画するのにかかる実際の時間です。（マイクロ秒単位）" name="adj_art_value"/>
 		<name_list.columns label="ＡＲＣ" tool_tip="標準ルールに基づく複雑さ（ＡＲＣ）です。" name="complex_value"/>
-		<name_list.columns label="" tool_tip="チューニングを表示します。I=インポスター、S=影なし" name="state" />
+		<name_list.columns label="" tool_tip="チューニングを表示します。I=インポスター、S=影なし" name="state"/>
 		<name_list.columns label="名前" name="name"/>
 		<name_list.columns label="ブレイクダウン" tool_tip="描画時間に費やされる場所（ジオメトリ／シェード／その他）" name="breakdown"/>
 	</name_list>
@@ -44,7 +44,7 @@
 	<combo_box name="AvatarComplexityMode">
 		<combo_box.item label="複雑度で制限" name="complexity_limit_everone"/>
 		<combo_box.item label="フレンドは常に表示" name="complexity_always_show_friends"/>
-		<combo_box.item label="フレンドのみ表示" name="complexity_only_show_friends" />
+		<combo_box.item label="フレンドのみ表示" name="complexity_only_show_friends"/>
 	</combo_box>
 	<button label="例外…" name="exceptions_btn">
 	</button>

@@ -27,7 +27,7 @@
 			<!-- panel_material_maps -->
 			<panel name="panel_material_parameters">
 				<check_box label="両面" name="double sided"/>
-				<spinner label="アルファ" name="transparency"></spinner>
+				<spinner label="アルファ" name="transparency"/>
 				<text name="blend mode label">
 					モード
 				</text>
@@ -84,7 +84,7 @@
 					<!-- pbr_transforms_all_rotation -->
 				</panel>
 				<!-- panel_pbr_transforms_all -->
-				<panel name="panel_pbr_transforms_base_color">
+				<panel label="ベースカラー" name="panel_pbr_transforms_base_color">
 					<panel name="pbr_transforms_base_color_scale">
 						<text name="pbr_transforms_base_color_scale_label">
 							スケール
@@ -124,7 +124,7 @@
 					<!-- pbr_transforms_base_color_rotation -->
 				</panel>
 				<!-- panel_pbr_transforms_base_color -->
-				<panel label="法線（ノーマル）" name="panel_pbr_transforms_normal">
+				<panel label="法線" name="panel_pbr_transforms_normal">
 					<panel name="pbr_transforms_normal_scale">
 						<text name="pbr_transforms_normal_scale_label">
 							スケール
@@ -204,7 +204,7 @@
 					<!-- pbr_transforms_orm_rotation -->
 				</panel>
 				<!-- panel_pbr_transforms_metallic -->
-				<panel label="放射（エミッシブ）" name="panel_pbr_transforms_emissive">
+				<panel label="放射" name="panel_pbr_transforms_emissive">
 					<panel name="pbr_transforms_emissive_scale">
 						<text name="pbr_transforms_emissive_scale_label">
 							スケール
@@ -257,7 +257,7 @@
 					<texture_picker label="法線" name="bumpytexture control" tool_tip="クリックで画像を選択します。"/>
 					<button name="btn_select_same_norm" tool_tip="この法線（ノーマル）マップと同じ法線マップを持つすべての面を選択します。"/>
 					<texture_picker label="鏡面反射" name="shinytexture control" tool_tip="クリックで画像を選択します。"/>
-					<color_swatch name="shinycolorswatch" tool_tip="クリックでカラーピッカーを開きます。"/>
+					<color_swatch label="発光色" name="shinycolorswatch" tool_tip="クリックでカラーピッカーを開きます。"/>
 					<button name="btn_select_same_spec" tool_tip="この鏡面反射（スペキュラ）マップと同じ鏡面反射マップを持つすべての面を選択します。"/>
 				</layout_panel>
 				<!-- panel_blinn_phong_maps -->
@@ -319,7 +319,7 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 				<!-- panel_blinn_phong_options -->
 			</layout_stack>
 			<tab_container name="tabs_blinn_phong_uvs">
-				<panel label="拡散（ディフューズ）" name="panel_blinn_phong_diffuse">
+				<panel label="拡散" name="panel_blinn_phong_diffuse">
 					<panel name="transforms_diffuse_scale">
 						<text name="transforms_diffuse_scale_label">
 							スケール
@@ -359,7 +359,7 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 					<!-- transforms_diffuse_rotation -->
 				</panel>
 				<!-- panel_blinn_phong_diffuse -->
-				<panel label="法線（ノーマル）" name="panel_blinn_phong_normal">
+				<panel label="法線" name="panel_blinn_phong_normal">
 					<panel name="transforms_normal_scale">
 						<text name="transforms_normal_scale_label">
 							スケール
@@ -399,7 +399,7 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 					<!-- transforms_normal_rotation -->
 				</panel>
 				<!-- panel_blinn_phong_normal -->
-				<panel label="鏡面反射（スペキュラ）" name="panel_blinn_phong_specular">
+				<panel label="鏡面反射" name="panel_blinn_phong_specular">
 					<panel name="transforms_specular_scale">
 						<text name="transforms_specular_scale_label">
 							スケール
@@ -443,7 +443,7 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 			<!-- tabs_blinn_phong_uvs -->
 		</panel>
 		<!-- panel_material_type_blinn_phong -->
-		<panel name="panel_material_type_media">
+		<panel label="メディア" name="panel_material_type_media">
 			<text name="media_info">
 				選択したメディアのＵＲＬがある場合はここに入力します。
 			</text>

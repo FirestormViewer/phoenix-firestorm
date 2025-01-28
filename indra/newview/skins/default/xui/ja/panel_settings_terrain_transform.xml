@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_settings_terrain_transform">
+<panel label="サンプリング" name="panel_settings_terrain_transform">
 	<text name="terrain0_label">
 		１
 	</text>

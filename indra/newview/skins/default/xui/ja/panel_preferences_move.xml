@@ -1,79 +1,71 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="移動" name="move_panel">
-	<tab_container name="tabs">
-	
-	
+	<tab_container name="tabs" label="移動と視界">
 		<!--View-->
-		
-		<panel label="表示" name="tab-view">
-			<slider label="視界角" name="camera_fov" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューワの画角（FOV）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。" />
+		<panel label="視界" name="tab-view">
+			<slider label="視界角" name="camera_fov" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（FOV）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。"/>
 			<slider label="距離" name="camera_offset_scale"/>
-			<slider label="ズーム移動時間" name="camera_transition_time" />
-			<slider label="スムージング" name="camera_position_smoothing" />
-			<check_box label="カメラ移動により自由を与える" name="DisableCameraConstraints" tool_tip="通常の限界を越えてカメラを動かしたい時や地面の下に潜りたい時に設定して下さい。カメラコントロールが苦手な方は、アングルなどのコントロールが難しくなります。" />
-			<check_box label="カメラのズームレベルコントロールにマウスのホイールを使用しない" name="FSDisableMouseWheelCameraZoom" />
+			<slider label="ズーム移動時間" name="camera_transition_time"/>
+			<slider label="スムージング" name="camera_position_smoothing"/>
+			<check_box label="カメラ移動により自由を与える" name="DisableCameraConstraints" tool_tip="通常の限界を越えてカメラを動かしたい時や地面の下に潜りたい時に設定して下さい。カメラコントロールが苦手な方は、アングルなどのコントロールが難しくなります。"/>
+			<check_box label="カメラのズームレベルコントロールにマウスのホイールを使用しない" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
 				自動ポジション：
 			</text>
-			<check_box label="制作・編集" name="edit_camera_movement" tool_tip="編集モードのオン・オフの切り替えに、自動カメラポジションを使います"/>
+			<check_box label="ビルド・編集" name="edit_camera_movement" tool_tip="編集モードのオン・オフの切り替えに、自動カメラポジションを使います"/>
 			<check_box label="容姿" name="appearance_camera_movement" tool_tip="編集モードに入ったときに、自動カメラポジションを使います"/>
-			<check_box label="ビジュアルヒントを表示" name="FSAppearanceShowHints" tool_tip="アバターの身体部位を修正中にビジュアルヒントの表示／非表示を切り替えます。" />
+			<check_box label="ビジュアルヒントを表示" name="FSAppearanceShowHints" tool_tip="アバターの身体部位を修正中にビジュアルヒントの表示／非表示を切り替えます。"/>
 			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
-			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
-			<check_box label="アバターが動く時にカメラの位置を元に戻す" name="FSResetCameraOnMovement" />
+			<check_box label="（同じＳＩＭ内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
+			<check_box label="アバターが動く時にカメラの位置を元に戻す" name="FSResetCameraOnMovement"/>
 			<check_box label="カメラリセット時にアバターを振り返らせる" name="resetviewturnsavatar" tool_tip="Escキーでカメラをリセットすると、アバターがカメラの方を向きます。"/>
 			<check_box label="プリムの向こう側が見えるようにカメラ移動の制限を解除" name="ignorecameraconstraints" tool_tip="通常はプリムにぶつかるとそれより先にカメラを進めることはできないが、この制限を解除してプリムの向こう側にカメラを回ることができます。"/>
 			<text name="ignorecameraconstraints_requires_restart">
-				（再起動が必要）
+				（要再起動）
 			</text>
-			<check_box label="一時的に非表示にしたオブジェクトをテレポート後には再表示するようにする" name="FSTempDerenderUntilTeleport" tool_tip="ここにチェックを入れると、一時的に非表示にしたオブジェクトはテレポートすると再表示されるようになります。チェックを外すと、次回ログインするまで、または「非表示アイテムリスト」を手動で表示するように変更するまでは非表示のままとなります。" />
-
+			<check_box label="一時的に非表示にしたオブジェクトをテレポート後には再表示するようにする" name="FSTempDerenderUntilTeleport" tool_tip="ここにチェックを入れると、一時的に非表示にしたオブジェクトはテレポートすると再表示されるようになります。チェックを外すと、次回ログインするまで、または「非表示アイテムリスト」を手動で表示するように変更するまでは非表示のままとなります。"/>
 		</panel>
-
 		<!--Mouselook-->
-	
 		<panel label="マウスルック" name="tab-mouselook">
-			<check_box label="マウスルック機能を有効にする" name="EnableMouselook" tool_tip="一人称視点を可能にし、マウスでカメラをコントロールできるようにします。" />
+			<check_box label="マウスルック機能を有効にする" name="EnableMouselook" tool_tip="一人称視点を可能にし、マウスでカメラをコントロールできるようにします。"/>
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
-			<check_box label="マウスルックにユーザーインターフェイスを表示" name="first_person_ui_visible" />
-			<check_box label="マウスルックにした時に会話とレーダーのウィンドウが閉じないようにする" name="FSShowConvoAndRadarInML" />
-			<check_box label="マウスルックでコンテキストメニューを有効にする" name="FSEnableRightclickMenuInMouselook" tool_tip="ALT-右クリックでパイメニュー／コンテキストメニューを開けるようにします。" />
-			<check_box label="マウスのホイールでマウスルックから抜ける" name="FSScrollWheelExitsMouselook" tool_tip="チェックを入れると、マウスのホイールを回転させることでマウスルックから抜けることができるようになります" />
-			<check_box label="マウスルックのガイドを表示" name="mouselook_instructions_visible" />
-			<check_box label="マウスルックに十字を表示" name="ShowCrosshairs" tool_tip="マウスルックモードの時に、焦点を示す十字を表示します。" />
-			<check_box label="コンバット機能を有効にする" name="FSMouselookCombatFeatures" />
-			<check_box label="ターゲットマーカーを表示" name="ExodusMouselookIFF" />
-			<slider label="範囲 (m):" name="ExodusMouselookIFFRange" />
+			<check_box label="マウスルック時にユーザインターフェイスを表示する" name="first_person_ui_visible"/>
+			<check_box label="マウスルック時にした時に会話とレーダーのウィンドウが閉じないようにする" name="FSShowConvoAndRadarInML"/>
+			<check_box label="マウスルック時にコンテキストメニューを有効にする" name="FSEnableRightclickMenuInMouselook" tool_tip="ALT-右クリックでパイメニュー／コンテキストメニューを開けるようにします。"/>
+			<check_box label="マウスのホイールでマウスルックから抜ける" name="FSScrollWheelExitsMouselook" tool_tip="チェックを入れると、マウスのホイールを回転させることでマウスルックから抜けることができるようになります"/>
+			<check_box label="マウスルック時にガイドを表示する" name="mouselook_instructions_visible" tool_tip="マウスルック時のインタラクションを表示します。"/>
+			<check_box label="マウスルック時にクロスヘアーを表示する" name="ShowCrosshairs" tool_tip="マウスルックモードの時に、焦点を示すクロスヘアーを表示します。"/>
+			<check_box label="コンバット機能を有効にする" name="FSMouselookCombatFeatures"/>
+			<check_box label="ターゲットマーカーを表示" name="ExodusMouselookIFF"/>
+			<slider label="範囲（ｍ）：" name="ExodusMouselookIFFRange"/>
 			<text name="Mouse Sensitivity">
 				一人称視点のマウスの感度：
 			</text>
 			<check_box label="切り替え" name="invert_mouse"/>
 		</panel>
-		
 		<!--Movement-->
-		
 		<panel label="移動" name="tab-movement">
-			<check_box label="常に矢印キー操作で動くようにする" name="arrow_keys_move_avatar_check"/>
-			<check_box label="WASDなどの文字キーを押すと、ローカルチャットを始めるのではなく、前左後右に移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar" />
-			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run"/>
-			<check_box label="UP/DOWNキーの長押しで飛行／着地する" name="automatic_fly" />
-			<check_box label="身をかがめる動作を有効にする" name="crouch_toggle_mode" />
-			<check_box label="構えてからジャンプしたり、着地のポーズをしてから動き出すのをやめる" name="FSIgnoreFinishAnimation" />
-			<check_box label="画面上でアバターが後ろ向きに歩くのを許可する。（SLの仕様により、ローカルでのみ有効）" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="ここにチェックを入れると、後ろ向きに歩き出したアバターが、あなたの画面上ではそのまま後ろ向きに歩くように見えるようになります。この設定はあなたのビューワでの見せ方だけに影響しており、実際にアバターがそのような動きをしているわけではありません。動き出した時にその方向に振り返るのはセカンドライフ・ビューワのデフォルトの動きです。アバターがAOを使用していると、この動きをオーバーライドし、強制的にアバターを進行方向に振り返らせる可能性があります。" />
-			<check_box label="選択したオブジェクトの方にアバターが向くようにする" name="FSTurnAvatarToSelectedObject" tool_tip="選択しているオブジェクトの方向にアバターが顔をむけるようにします" />
-			<slider label="アバターの振り返る速度" name="av_turn_spd" tool_tip="アバターが振り返るのに想定される比率を 0〜100 のパーセンテージで変更します。大きな値を設定するほど、ぞんざいでぎこちない動きになります。" />
+			<check_box label="常に矢印キー操作で動くようにする" name="arrow_keys_move_avatar_check" tool_tip="ビューアの下部にある「近くのチャット」入力フィールドにのみ適用され、「会話」の「近くのチャット」タブには適用されません。"/>
+			<check_box label="WASDなどの文字キーを押すと、ローカルチャットを始めるのではなく、前後左右に移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="↑キー２度押し＋長押しで走る" name="tap_tap_hold_to_run"/>
+			<check_box label="↑／↓キーの長押しで飛行／着地する" name="automatic_fly"/>
+			<check_box label="しゃがむ動作を有効にする" name="crouch_toggle_mode"/>
+			<check_box label="ジャンプ時の事前動作と、着地時の事後動作を省略して移動できるようにする" name="FSIgnoreFinishAnimation"/>
+			<check_box label="画面上でアバターが後ろ向きに歩くのを許可する。（ＳＬの仕様により、ローカルでのみ有効）" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="ここにチェックを入れると、後ろ向きに歩き出したアバターが、あなたの画面上ではそのまま後ろ向きに歩くように見えるようになります。この設定はあなたのビューアでの見せ方だけに影響しており、実際にアバターがそのような動きをしているわけではありません。動き出した時にその方向に振り返るのはセカンドライフ・ビューアのデフォルトの動きです。アバターがＡＯを使用しているときに、この動きをオーバーライドし、強制的にアバターを進行方向に振り返らせる可能性があります。"/>
+			<check_box label="選択したオブジェクトの方角にアバターが向くようにする" name="FSTurnAvatarToSelectedObject" tool_tip="選択しているオブジェクトの方向にアバターが顔を向くようにします。"/>
+			<slider label="アバターが振り向く速度" name="av_turn_spd" tool_tip="アバターが振り向くのに想定される比率を0〜100のパーセンテージで変更します。大きな値を設定するほど、ぞんざいでぎこちない動きになります。"/>
 			<text name="Region_Crossing_Movement_Label">
-				SIM を跨ぐ時の動作:
+				ＳＩＭを跨ぐ時の動作:
 			</text>
 			<radio_group name="Region_Crossing_Movement">
-				<radio_item label="予告する" name="move_predict" />
-				<radio_item label="立ち止まる" name="move_stop" />
+				<radio_item label="予告する" name="move_predict"/>
+				<radio_item label="立ち止まる" name="move_stop"/>
 			</radio_group>
 			<text name="movelock_lbl">
-				内蔵のLSL Bridgeのムーブメントロックが有効になっている場合...
-		</text>
-        <check_box label="地域を移動したら常に位置を再ロックする" name="RelockMoveLockAfterRegionChange" />
-        <check_box label="ムーブメントを停止または開始したら位置をロックまたはアンロックする" name="RelockMoveLockAfterMovement" />
+				内蔵のLSL Bridgeの移動ロックが有効になっている場合…
+			</text>
+			<check_box label="リージョンを表示を移動したら常に位置を再ロックする" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="移動を停止または開始したら位置をロックまたはアンロックする" name="RelockMoveLockAfterMovement"/>
 			<text name="single_click_action_lbl">
 				地面をシングルクリック：
 			</text>
@@ -90,59 +82,50 @@
 				<combo_box.item label="その場所に移動" name="1"/>
 				<combo_box.item label="その場所にテレポート" name="2"/>
 			</combo_box>
-			<check_box label="スクリプト入りのオブジェクトにもダブルクリックテレポートできるようにする" name="FSAllowDoubleClickOnScriptedObjects" />
+			<check_box label="スクリプト入りのオブジェクトにもダブルクリックテレポートできるようにする" name="FSAllowDoubleClickOnScriptedObjects"/>
 			<button label="ジョイスティック設定" name="joystick_setup_button"/>
 		</panel>
-		
 		<!-- Teleports -->
-		
 		<panel label="テレポート" name="tab-teleports">
 			<!--
 			<text name="camera_options_label">
 				カメラ・オプション
 			</text>
 			-->
-			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
-			<check_box label="テレポート後は常に飛行状態のままにする" name="FSFlyAfterTeleport" />
-			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRestrainedLoveAPIでは無効です（つまり、RestrainedLoveAPIの制約により、この機能は停止されています）。"/>
-			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
-			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
-			<check_box label="テレポートした時に世界地図を閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時に世界地図が自動的に閉じる機能をオフにします。"/>
-			<check_box label="テレポートした後も「フレンドのみ表示」機能を維持する" name="FSRenderFriendsOnlyPersistsTP" tool_tip="「フレンドのみ表示」機能が自動的にキャンセルされないようにします。（デフォルトはオフ）" />
-			<check_box label="テレポートした元の地域の SLURL を報告" name="FSShowBackSLURL" />
+			<check_box label="テレポート時にサウンドを鳴らす" name="PlayTeleportSound"/>
+			<check_box label="テレポート後も常に飛行状態のままにする" name="FSFlyAfterTeleport"/>
+			<check_box label="テレポート時にキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRestrainedLoveAPIでは無効です（つまり、RestrainedLoveAPIの制約により、この機能は停止されています）。"/>
+			<check_box label="テレポート時にビーコンを消す" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
+			<check_box label="テレポート画面を使わない" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
+			<check_box label="テレポート後にワールドマップを閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時にワールドマップが自動的に閉じる機能をオフにします。"/>
+			<check_box label="テレポート後も「フレンドのみ表示」機能を維持する" name="FSRenderFriendsOnlyPersistsTP" tool_tip="「フレンドのみ表示」機能が自動的にキャンセルされないようにします。（デフォルトはオフ）"/>
+			<check_box label="テレポート後に元のリージョンのSLURLを報告" name="FSShowBackSLURL"/>
 		</panel>
-		
 		<!-- Map & Minimap -->
-		
-		<panel label="世界地図とミニマップ" name="tab-maps">
+		<panel label="ワールドマップとミニマップ" name="tab-maps">
 			<text name="minimap_options_label">
 				ミニマップのオプション:
 			</text>
 			<check_box label="ミニマップを回転" name="minimaprotate" tool_tip="アバターの向きに合わせてミニマップを回転します。"/>
-			<check_box name="MiniMapChatRing" label="ミニマップにチャット可能範囲を示す円を表示" />
-
 			<text name="netmap_double_click_action_lbl">
 				ミニマップをダブルクリック：
 			</text>
 			<combo_box name="netmap_double_click_action_combo">
 				<combo_box.item label="何もしない" name="0"/>
-            <combo_box.item label="世界地図を開く" name="1"/>
-            <combo_box.item label="その場所にテレポート" name="2"/>
+				<combo_box.item label="ワールドマップを開く" name="1"/>
+				<combo_box.item label="その場所にテレポート" name="2"/>
 			</combo_box>
-			<slider label="選択範囲：" name="FSMinimapPickScale" tool_tip="ミニマップ上で選択する範囲の半径を設定します。選択する範囲の不透明度と色は、「選択する半径」の色と「不透明度」の設定で調整できます。" />
-			
+			<slider label="選択範囲：" name="FSMinimapPickScale" tool_tip="ミニマップ上で選択する範囲の半径を設定します。選択する範囲の不透明度と色は、「選択する半径」の色と「不透明度」の設定で調整できます。"/>
 			<text name="world_map_options_label">
-				世界地図のオプション:
+				ワールドマップのオプション:
 			</text>
-
-			<check_box label="世界地図上で同じランドマークをダブって表示しない" name="WorldmapFilterDuplicateLandmarks" tool_tip="世界地図のランドマークリストに、同じランドマークが何度も表示されないようにします。"/>
-			<check_box label="世界地図にその地域の追加情報を表示" name="FSAdvancedWorldmapRegionInfo" tool_tip="世界地図上にその地域の追加情報（現在のアバター数やレーティング・レベルなど）を表示します。"/>
-			<check_box label="世界地図にグリッド座標を表示" name="FSShowRegionGridCoordinates" tool_tip="世界地図上にグリッド座標を地域単位で表示します。" />
-			<check_box label="世界地図でダブルクリックテレポート" name="FSWorldMapDoubleclickTeleport" tool_tip="世界地図をダブルクリックしてその場所にテレポートできるようにします"/>
+			<check_box label="ワールドマップ上で同じランドマークをダブって表示しない" name="WorldmapFilterDuplicateLandmarks" tool_tip="ワールドマップのランドマークリストに、同じランドマークが何度も表示されないようにします。"/>
+			<check_box label="ワールドマップにそのリージョンを表示の追加情報を表示" name="FSAdvancedWorldmapRegionInfo" tool_tip="ワールドマップ上にそのリージョンを表示の追加情報（現在のアバター数やレーティング・レベルなど）を表示します。"/>
+			<check_box label="ワールドマップにグリッド座標を表示" name="FSShowRegionGridCoordinates" tool_tip="ワールドマップ上にグリッド座標をリージョンを表示単位で表示します。"/>
+			<check_box label="ワールドマップでダブルクリックテレポート" name="FSWorldMapDoubleclickTeleport" tool_tip="ワールドマップをダブルクリックしてその場所にテレポートできるようにします"/>
 			<!--
 			<check_box label="後退する時に、アバターに正面を向いて歩かせるようにする" name="backwardsturnavatar" tool_tip="通常後退させると後ろ向きに歩きますが、正面を向いて歩くようにします。"/>
 			-->
 		</panel>
-		
 	</tab_container>
 </panel>
