@@ -126,6 +126,7 @@ class AOEngine
 // <AS:Chanayane> Double click on animation in AO
         void playAnimation(const LLUUID& animation);
         const AOSet* getCurrentSet() const;
+        const AOSet::AOState* getCurrentState() const;
 // </AS:Chanayane>
 
         void inMouselook(bool mouselook);

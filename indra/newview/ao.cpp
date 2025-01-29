@@ -798,6 +798,12 @@ void FloaterAO::onDoubleClick()
         return;
     }
 
+    // do nothing if animation is for a different state than the active state
+    if (mSelectedState != AOEngine::instance().getCurrentState())
+    {
+        return;
+    }
+
     // activate AO set if necessary
     if (AOEngine::instance().getCurrentSet() != mSelectedSet)
     {

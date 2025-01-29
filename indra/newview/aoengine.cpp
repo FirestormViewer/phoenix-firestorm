@@ -1063,6 +1063,10 @@ const AOSet* AOEngine::getCurrentSet() const
 {
     return mCurrentSet;
 }
+const AOSet::AOState* AOEngine::getCurrentState() const
+{
+    return mCurrentSet->getStateByRemapID(mLastMotion);
+}
 // </AS:Chanayane>
 
 void AOEngine::updateSortOrder(AOSet::AOState* state)
