@@ -1027,8 +1027,7 @@ void AOEngine::playAnimation(const LLUUID& animation)
     U32 idx = -1;
     for (U32 i = 0; i < state->mAnimations.size(); i++)
     {
-        LLUUID* id = &(state->mAnimations[i].mAssetUUID);
-        if (*id == newAnimation)
+        if (state->mAnimations[i].mAssetUUID == newAnimation)
         {
             idx = i;
             break;
