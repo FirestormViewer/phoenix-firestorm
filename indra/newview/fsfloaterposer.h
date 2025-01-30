@@ -253,7 +253,8 @@ class FSFloaterPoser : public LLFloater
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
-    void onCommitSpinner(LLUICtrl* spinner);
+    //void onCommitSpinner(LLUICtrl* spinner);
+    void onCommitSpinner(LLUICtrl* spinner, S32 ID);
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();

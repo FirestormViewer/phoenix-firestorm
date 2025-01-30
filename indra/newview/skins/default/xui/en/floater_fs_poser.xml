@@ -380,7 +380,8 @@ width="403">
 							 max_val="1.5"
 							 width="47">
 								<spinner.commit_callback
-								 function="Poser.CommitSpinner" />
+								 function="Poser.CommitSpinner"
+                                 parameter="0"/>
 							</spinner>
 							<text
 							 follows="left|top"
@@ -423,7 +424,8 @@ width="403">
 							 max_val="1.5"
 							 width="47">
 								<spinner.commit_callback
-								 function="Poser.CommitSpinner" />
+								 function="Poser.CommitSpinner"
+                                 parameter="1"/>
 							</spinner>
 							<text
 							 follows="left|top"
@@ -466,7 +468,8 @@ width="403">
 							 max_val="1.5"
 							 width="47">
 								<spinner.commit_callback
-								 function="Poser.CommitSpinner" />
+								 function="Poser.CommitSpinner"
+                                 parameter="2"/>
 							</spinner>
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
 							<scroll_list
@@ -872,7 +875,8 @@ width="403">
 						 max_val="2"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                             parameter="3"/>
 						</spinner>
 						<check_box
 						 control_name="FSPoserStopPosingWhenClosed"
@@ -1085,7 +1089,8 @@ width="403">
 				 max_val="180"
 				 width="57">
 					<spinner.commit_callback
-					 function="Poser.CommitSpinner" />
+					 function="Poser.CommitSpinner"
+                     parameter="4"/>
 				</spinner>
 				<text
 				 follows="left|top"
@@ -1124,7 +1129,8 @@ width="403">
 				 max_val="180"
 				 width="57">
 					<spinner.commit_callback
-					 function="Poser.CommitSpinner" />
+					 function="Poser.CommitSpinner"
+                     parameter="5"/>
 				</spinner>
 				<text
 				 follows="left|top"
@@ -1163,7 +1169,8 @@ width="403">
 				 max_val="180"
 				 width="57">
 					<spinner.commit_callback
-					 function="Poser.CommitSpinner" />
+					 function="Poser.CommitSpinner"
+                     parameter="6"/>
 				</spinner>
 			</panel>
 			<panel
@@ -1472,7 +1479,8 @@ width="403">
 						 max_val="1.5"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                             parameter="7"/>
 						</spinner>
 						<slider
 						 label="Position Y:"
@@ -1504,7 +1512,8 @@ width="403">
 						 max_val="1.5"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                             parameter="8"/>
 						</spinner>
 						<slider
 						 label="Position Z:"
@@ -1536,7 +1545,8 @@ width="403">
 						 max_val="1.5"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                             parameter="9"/>
 						</spinner>
 						<button
 						 height="21"
@@ -1629,7 +1639,8 @@ width="403">
 						 max_val="1.5"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                             parameter="10"/>
 						</spinner>
 						<slider
 						 decimal_digits="3"
@@ -1663,7 +1674,8 @@ width="403">
 						 max_val="1.5"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                                    parameter="11"/>
 						</spinner>
 						<slider
 						 decimal_digits="3"
@@ -1697,7 +1709,8 @@ width="403">
 						 max_val="1.5"
 						 width="47">
 							<spinner.commit_callback
-							 function="Poser.CommitSpinner" />
+							 function="Poser.CommitSpinner"
+                             parameter="12"/>
 						</spinner>
 						<button
 						 height="21"

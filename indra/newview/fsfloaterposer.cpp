@@ -106,7 +106,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickToggleSelectedBoneEnabled(); });
     mCommitCallbackRegistrar.add("Poser.PoseJointsReset", [this](LLUICtrl*, const LLSD&) { onPoseJointsReset(); });
 
-    mCommitCallbackRegistrar.add("Poser.CommitSpinner", [this](LLUICtrl* spinnerControl, const LLSD&) { onCommitSpinner(spinnerControl); });
+    //mCommitCallbackRegistrar.add("Poser.CommitSpinner", [this](LLUICtrl* spinnerControl, const LLSD&) { onCommitSpinner(spinnerControl); });
+    mCommitCallbackRegistrar.add("Poser.CommitSpinner", boost::bind(&FSFloaterPoser::onCommitSpinner, this, _1, _2));
 }
 
 bool FSFloaterPoser::postBuild()
@@ -581,7 +582,9 @@ void FSFloaterPoser::onClickBrowsePoseCache()
     gViewerWindow->getWindow()->openFile(pathname);
 }
 
-void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner)
+//void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner)
+// Pass in an ID as a parameter, so you can use a switch statement
+void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner, S32 id)
 {
     if (!spinner)
         return;
@@ -594,103 +597,96 @@ void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner)
 
     F32 value = (F32)spinner->getValue().asReal();
 
-    if (spinner == mTrackpadSensitivitySpnr)
+    // Use the ID passed in to perform a switch statment
+    // which should make each action take the same amount of time.
+    switch (id)
     {
-        onAdjustTrackpadSensitivity();
-        return;
-    }
-
-    if (spinner == mInOutSpnr)
-    {
-        mPosXSlider->setValue(value);
-        onAvatarPositionSet();
-        return;
-    }
-
-    if (spinner == mAdvPosXSpnr)
-    {
-        if (changingBodyPosition)
-            mPosXSlider->setValue(value);
-
-        mAdvPosXSlider->setValue(value);
-        onAdvancedPositionSet();
-        return;
-    }
-
-    if (spinner == mLeftRightSpnr)
-    {
-        mPosYSlider->setValue(value);
-        onAvatarPositionSet();
-        return;
-    }
-
-    if (spinner == mAdvPosYSpnr)
-    {
-        if (changingBodyPosition)
-            mPosYSlider->setValue(value);
-
-        mAdvPosYSlider->setValue(value);
-        onAdvancedPositionSet();
-        return;
-    }
-
-    if (spinner == mUpDownSpnr)
-    {
-        mPosZSlider->setValue(value);
-        onAvatarPositionSet();
-        return;
-    }
-
-    if (spinner == mAdvPosZSpnr)
-    {
-        if (changingBodyPosition)
+        case 0: // av_position_updown_spinner
+        {
             mPosZSlider->setValue(value);
+            onAvatarPositionSet();
+            break;
+        }
+        case 1: // av_position_leftright
+        {
+            mPosYSlider->setValue(value);
+            onAvatarPositionSet();
+            break;
+        }
+        case 2: // av_position_inout_spinner
+        {
+            mPosXSlider->setValue(value);
+            onAvatarPositionSet();
+            break;
+        }
+        case 3: // trackpad_sensitivity_spinner
+        {
+            onAdjustTrackpadSensitivity();
+            break;
+        }
+        case 4: // limb_pitch_spinner
+        {
+            mLimbPitchSlider->setValue(value);
+            onYawPitchRollSliderChanged();
+            break;
+        }
+        case 5: // limb_yaw_spinner
+        {
+            mLimbYawSlider->setValue(value);
+            onYawPitchRollSliderChanged();
+            break;
+        }
+        case 6: // limb_roll_spinner
+        {
+            mLimbRollSlider->setValue(value);
+            onYawPitchRollSliderChanged();
+            break;
+        }
+        case 7: // adv_posx_spinner
+        {
+            if (changingBodyPosition)
+                mPosXSlider->setValue(value);
 
-        mAdvPosZSlider->setValue(value);
-        onAdvancedPositionSet();
-        return;
-    }
+            mAdvPosXSlider->setValue(value);
+            onAdvancedPositionSet();
+            break;
+        }
+        case 8: // adv_posy_spinner
+        {
+            if (changingBodyPosition)
+                mPosYSlider->setValue(value);
 
-    if (spinner == mScaleXSpnr)
-    {
-        mAdvScaleXSlider->setValue(value);
-        onAdvancedScaleSet();
-        return;
-    }
+            mAdvPosYSlider->setValue(value);
+            onAdvancedPositionSet();
+            break;
+        }
+        case 9: // adv_posz_spinner
+        {
+            if (changingBodyPosition)
+                mPosZSlider->setValue(value);
 
-    if (spinner == mScaleYSpnr)
-    {
-        mAdvScaleYSlider->setValue(value);
-        onAdvancedScaleSet();
-        return;
-    }
-
-    if (spinner == mScaleZSpnr)
-    {
-        mAdvScaleZSlider->setValue(value);
-        onAdvancedScaleSet();
-        return;
-    }
-
-    if (spinner == mYawSpnr)
-    {
-        mLimbYawSlider->setValue(value);
-        onYawPitchRollSliderChanged();
-        return;
-    }
-
-    if (spinner == mPitchSpnr)
-    {
-        mLimbPitchSlider->setValue(value);
-        onYawPitchRollSliderChanged();
-        return;
-    }
-
-    if (spinner == mRollSpnr)
-    {
-        mLimbRollSlider->setValue(value);
-        onYawPitchRollSliderChanged();
-        return;
+            mAdvPosZSlider->setValue(value);
+            onAdvancedPositionSet();
+            break;
+        }
+        case 10: // adv_scalex_spinner
+        {
+            mAdvScaleXSlider->setValue(value);
+            onAdvancedScaleSet();
+            break;
+        }
+        case 11: // adv_scaley_spinner
+        {
+            mAdvScaleYSlider->setValue(value);
+            onAdvancedScaleSet();
+            break;
+        }
+        case 12: // adv_scalez_spinner
+        {
+            mAdvScaleZSlider->setValue(value);
+            onAdvancedScaleSet();
+            break;
+        }
     }
 }
 
