@@ -702,17 +702,19 @@ bool LLInventoryFilter::checkAgainstSearchVisibility(const LLFolderViewModelItem
     if (!object)
         return true;
 
-    const bool is_link = object->getIsLinkType();
-    if (is_link && ((mFilterOps.mSearchVisibility & VISIBILITY_LINKS) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_LINKS) == 0) && object->getIsLinkType())
         return false;
 
-    if (listener->isItemInOutfits() && ((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_ITEMS) == 0) && listener->isItemNotAFolder())
         return false;
 
-    if (listener->isItemInTrash() && ((mFilterOps.mSearchVisibility & VISIBILITY_TRASH) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_OUTFITS) == 0) && listener->isItemInOutfits())
         return false;
 
-    if (!listener->isAgentInventory() && ((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0))
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_TRASH) == 0) && listener->isItemInTrash())
+        return false;
+
+    if (((mFilterOps.mSearchVisibility & VISIBILITY_LIBRARY) == 0) && !listener->isAgentInventory())
         return false;
 
     return true;
@@ -932,6 +934,23 @@ void LLInventoryFilter::setFilterMarketplaceListingFolders(bool select_only_list
     }
 }
 
+void LLInventoryFilter::toggleSearchVisibilityItems()
+{
+    bool hide_items = mFilterOps.mSearchVisibility & VISIBILITY_ITEMS;
+    if (hide_items)
+    {
+        mFilterOps.mSearchVisibility &= ~VISIBILITY_ITEMS;
+    }
+    else
+    {
+        mFilterOps.mSearchVisibility |= VISIBILITY_ITEMS;
+    }
+
+    if (hasFilterString())
+    {
+        setModified(hide_items ? FILTER_MORE_RESTRICTIVE : FILTER_LESS_RESTRICTIVE);
+    }
+}
 
 void LLInventoryFilter::toggleSearchVisibilityLinks()
 {
