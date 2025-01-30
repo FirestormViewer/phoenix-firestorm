@@ -253,13 +253,15 @@ class FSFloaterPoser : public LLFloater
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
+    //void onCommitSpinner(LLUICtrl* spinner);
+    void onCommitSpinner(LLUICtrl* spinner, S32 ID);
 
     // UI Refreshments
-    void refreshRotationSliders();
-    void refreshAvatarPositionSliders();
+    void refreshRotationSlidersAndSpinners();
+    void refreshAvatarPositionSlidersAndSpinners();
     void refreshTrackpadCursor();
-    void refreshAdvancedPositionSliders();
-    void refreshAdvancedScaleSliders();
+    void refreshAdvancedPositionSlidersAndSpinners();
+    void refreshAdvancedScaleSlidersAndSpinners();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
@@ -496,6 +498,20 @@ class FSFloaterPoser : public LLFloater
 
     LLCheckBoxCtrl* mResetBaseRotCbx{ nullptr };
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
+
+    LLUICtrl* mTrackpadSensitivitySpnr{ nullptr };
+    LLUICtrl* mYawSpnr{ nullptr };
+    LLUICtrl* mPitchSpnr{ nullptr };
+    LLUICtrl* mRollSpnr{ nullptr };
+    LLUICtrl* mUpDownSpnr{ nullptr };
+    LLUICtrl* mLeftRightSpnr{ nullptr };
+    LLUICtrl* mInOutSpnr{ nullptr };
+    LLUICtrl* mAdvPosXSpnr{ nullptr };
+    LLUICtrl* mAdvPosYSpnr{ nullptr };
+    LLUICtrl* mAdvPosZSpnr{ nullptr };
+    LLUICtrl* mScaleXSpnr{ nullptr };
+    LLUICtrl* mScaleYSpnr{ nullptr };
+    LLUICtrl* mScaleZSpnr{ nullptr };
 };
 
 #endif
