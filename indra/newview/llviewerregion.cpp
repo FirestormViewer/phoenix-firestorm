@@ -3978,7 +3978,7 @@ bool LLViewerRegion::meshUploadEnabled() const
 
 bool LLViewerRegion::bakesOnMeshEnabled() const
 {
-    return (mSimulatorFeatures.has("BakesOnMeshEnabled") &&
+    return (mSimulatorFeaturesReceived && mSimulatorFeatures.has("BakesOnMeshEnabled") && // FIRE-35111 (bugsplat) checking bakes on mesh feature before features received.
         mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean());
 }
 

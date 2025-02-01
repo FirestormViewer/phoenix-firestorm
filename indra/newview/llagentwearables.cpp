@@ -1098,15 +1098,20 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 
         const LLWearableType::EType type = new_wearable->getType();
         //<FS:Beq> BOM fallback legacy opensim
-        if(!gAgent.getRegion()->bakesOnMeshEnabled())
+        #ifdef OPENSIM
+        if (!LLGridManager::getInstance()->isInSecondLife())
         {
-            if(type == LLWearableType::WT_UNIVERSAL)
+            if(!gAgent.getRegion()->bakesOnMeshEnabled())
             {
-                LL_DEBUGS("Avatar") << "Universal wearable not supported on this region - ignoring." << LL_ENDL;
-                mismatched++;
-                continue;
+                if(type == LLWearableType::WT_UNIVERSAL)
+                {
+                    LL_DEBUGS("Avatar") << "Universal wearable not supported on this region - ignoring." << LL_ENDL;
+                    mismatched++;
+                    continue;
+                }
             }
         }
+        #endif
         //</FS:Beq>
         if (type < 0 || type>=LLWearableType::WT_COUNT)
         {
