@@ -3,6 +3,7 @@
 	<slider label="全般" name="System Volume"/>
 	<slider label="ボタン" name="UI Volume"/>
 	<slider label="環境音" name="Wind Volume"/>
+	<check_box name="collisions_audio_play_btn" tool_tip="衝突時のデフォルトのサウンドを有効にします。" />
 	<slider label="サウンド" name="SFX Volume"/>
 	<check_box name="gesture_audio_play_btn" tool_tip="ジェスチャーの音を有効にします。"/>
 	<slider label="音楽" name="Music Volume"/>

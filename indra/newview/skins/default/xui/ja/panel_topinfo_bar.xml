@@ -9,5 +9,5 @@
 	<icon name="scripts_icon"/>
 	<icon name="damage_icon"/>
 	<icon name="see_avatars_icon"/>
-	<text name="damage_text"/>
+	<text name="damage_text" value="100%"/>
 </panel>
