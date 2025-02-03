@@ -7928,10 +7928,10 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     float bottom = 1.f;        
 
     // TODO - add debug settings to control the appearance of the snapshot frameand guides
-    LLVector3 border_color = { 1.f, 0.f, 0.f };
-    LLVector3 guide_color = { 1.f, 1.f, 0.f };
-    F32 border_thickness = 2.f;
-    F32 guide_thickness = 2.f;
+    static LLCachedControl<LLColor3> border_color(gSavedSettings, "FSSnapshotFrameBorderColor", LLColor3(1.f, 0.f, 0.f));    
+    static LLCachedControl<LLColor3> guide_color(gSavedSettings, "FSSnapshotFrameGuideColor", LLColor3(1.f, 1.f, 0.f));    
+    static LLCachedControl<F32> border_thickness(gSavedSettings, "FSSnapshotFrameBorderWidth", 2.0f);    
+    static LLCachedControl<F32> guide_thickness(gSavedSettings, "FSSnapshotFrameGuideWidth", 2.0f);    
 
     F32 guide_style = 1.f; // 0:off, 1:rule_of_thirds, others maybe in the future
     if (!show_guides)
@@ -8038,7 +8038,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     shader->uniform3fv(
         LLShaderMgr::SNAPSHOT_BORDER_COLOR,
         1,
-        border_color.mV);
+        border_color().mV);
 
     shader->uniform1f(
         LLShaderMgr::SNAPSHOT_BORDER_THICKNESS,
@@ -8047,7 +8047,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     shader->uniform3fv(
         LLShaderMgr::SNAPSHOT_GUIDE_COLOR,
         1,
-        guide_color.mV);
+        guide_color().mV);
 
     shader->uniform1f(
         LLShaderMgr::SNAPSHOT_GUIDE_THICKNESS,
