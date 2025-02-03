@@ -208,7 +208,7 @@
          left="10"
          top_pad="7"
          width="180"
-         name="show_frame" />                
+         name="show_frame" />
         <check_box
          enabled_control="FSSnapshotShowCaptureFrame"
          control_name="FSSnapshotShowGuides"
@@ -218,7 +218,7 @@
          left="30"
          top_pad="7"
          width="180"
-         name="show_guides" />                
+         name="show_guides" />
         <check_box
          label="Freeze frame (fullscreen)"
          layout="topleft"
