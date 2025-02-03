@@ -276,16 +276,16 @@
 						<slider label="位置 X：" name="Advanced_Position_X"/>
 						<slider label="位置 Y：" name="Advanced_Position_Y"/>
 						<slider label="位置 Z：" name="Advanced_Position_Z"/>
-						<button label="撤銷位置變更" name="undo_position_change" tool_tip="撤銷最後一次位置變化"/>
-						<button label="重做位置變更" name="redo_position_change" tool_tip="重做最後一次位置變化"/>
+						<button label="撤銷位置" name="undo_position_change" tool_tip="撤銷最後一次位置變化"/>
+						<button label="重做位置" name="redo_position_change" tool_tip="重做最後一次位置變化"/>
 						<button label="重設位置" name="reset_positions" tool_tip="雙擊重設位置為原始值"/>
 					</panel>
 					<panel title="身體部位縮放" name="scale_panel">
 						<slider label="縮放 X：" name="Advanced_Scale_X"/>
 						<slider label="縮放 Y：" name="Advanced_Scale_Y"/>
 						<slider label="縮放 Z：" name="Advanced_Scale_Z"/>
-						<button label="撤銷縮放變更" name="undo_scale_change" tool_tip="撤銷最後一次縮放變化"/>
-						<button label="重做縮放變更" name="redo_scale_change" tool_tip="重做最後一次縮放變化"/>
+						<button label="撤銷縮放" name="undo_scale_change" tool_tip="撤銷最後一次縮放變化"/>
+						<button label="重做縮放" name="redo_scale_change" tool_tip="重做最後一次縮放變化"/>
 						<button label="重設縮放" name="reset_scales" tool_tip="雙擊重設縮放為原始值"/>
 					</panel>
 				</tab_container>

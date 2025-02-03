@@ -53,7 +53,7 @@
 			<check_box label="大額支付前要求確認：" name="FSConfirmPayments" tool_tip="在向居民支付超過指定的金額時顯示確認視窗。 要始終進行確認，請將數值設定為 0。" />
 			<spinner name="FSPaymentConfirmationThreshold" tool_tip="在向居民支付超過指定的金額時顯示確認視窗。要始終進行確認，請將數值設定為 0。" />
 		</panel>
-		<panel label="進階" name="firestorm_avatar">
+		<panel label="化身" name="firestorm_avatar">
 			<text name="HeadMovement">我的頭部跟隨滑鼠的最大傾斜角度（0 = 不移動）：</text>
 			<slider label="垂直傾斜角度：" tool_tip="我的頭部在垂直方向上跟隨滑鼠的最大傾斜角度" name="PitchFromMousePositionSlider" />
 			<text name="PitchFromMousePositionText">度</text>
