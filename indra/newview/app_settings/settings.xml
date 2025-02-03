@@ -16874,7 +16874,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>UpdaterWillingToTest</key>
     <map>
       <key>Comment</key>
-      <string>Whether or not the updater should offer test candidate upgrades.</string>
+      <string>Whether or not the updater should offer Beta upgrades.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

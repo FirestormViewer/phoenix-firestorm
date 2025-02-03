@@ -320,6 +320,7 @@ namespace LLError
     class LLUserWarningMsg
     {
     public:
+        // error codes, tranlates to last_exec states like LAST_EXEC_OTHER_CRASH
         typedef enum
         {
             ERROR_OTHER = 0,
