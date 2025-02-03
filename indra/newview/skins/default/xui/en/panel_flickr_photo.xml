@@ -137,6 +137,24 @@
                 width="251">
                 Refreshing...
             </text>
+            <check_box
+             control_name="FSSnapshotShowCaptureFrame"
+             label="Show capture frame"
+             tool_tip="Show a frame on-screen that surrounds the areas of the snapshot. Parts of the scene that are outside of the snapshot will be de-saturated and slightly blurred."         
+             layout="topleft"
+             left="10"
+             top_pad="7"
+             width="124"
+             name="show_frame" />
+            <check_box
+             enabled_control="FSSnapshotShowCaptureFrame"
+             control_name="FSSnapshotShowGuides"
+             label="Framing guide"
+             tool_tip="Show framing guide (rule of thirds) inside the snapshot frame."
+             layout="topleft"
+             left_pad="10"
+             width="60"
+             name="show_guides" />
 			<view_border 
 			 bevel_style="in"
 			 follows="left|top"

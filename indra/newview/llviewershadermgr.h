@@ -214,6 +214,7 @@ extern LLGLSLShader         gImpostorProgram;
 // Post Process Shaders
 extern LLGLSLShader         gPostScreenSpaceReflectionProgram;
 extern LLGLSLShader         gPostVignetteProgram;   // <FS:CR> Import Vignette from Exodus
+extern LLGLSLShader         gPostSnapshotFrameProgram;   // <FS:Beq/> Snapshot Frame overlay
 
 // Deferred rendering shaders
 extern LLGLSLShader         gDeferredImpostorProgram;

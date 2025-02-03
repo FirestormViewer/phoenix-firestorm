@@ -966,3 +966,13 @@ void LLFloaterFlickr::onOpen(const LLSD& key)
     mFlickrPhotoPanel->onOpen(key);
 }
 // </FS:Ansariel>
+//<FS:Beq> Add snapshot frame support to flickr
+LLSnapshotLivePreview* LLFloaterFlickr::getPreviewView()
+{
+    if(mFlickrPhotoPanel)
+    {
+        return mFlickrPhotoPanel->getPreviewView();
+    }
+    return nullptr;
+}
+//</FS:Beq>

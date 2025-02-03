@@ -109,6 +109,9 @@
 #include "llfloaterpathfindingconsole.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloatertools.h"
+#include "llfloatersnapshot.h" // <FS:Beq/> for snapshotFrame
+#include "llfloaterflickr.h" // <FS:Beq/> for snapshotFrame
+#include "llsnapshotlivepreview.h" // <FS:Beq/> for snapshotFrame
 // #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 #include "llpathfindingpathtool.h"
 #include "llscenemonitor.h"
@@ -7867,7 +7870,7 @@ void LLPipeline::combineGlow(LLRenderTarget* src, LLRenderTarget* dst)
 }
 
 // <FS:Beq> updated Vignette code (based on original Exo Vignette)
-void LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
+bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
     if (RenderVignette.mV[0] > 0.f)
     {
@@ -7904,11 +7907,163 @@ void LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
         shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
         shader->unbind();
         dst->flush();
+        return true;
     }
     else
     {
-        copyRenderTarget(src, dst);
+        return false;
     }
+}
+// </FS:Beq>
+
+// <FS:Beq> Render Snapshot frame oerlay
+bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
+{
+    static LLCachedControl<bool> show_frame(gSavedSettings, "FSSnapshotShowCaptureFrame", false);
+    static LLCachedControl<bool> show_guides(gSavedSettings, "FSSnapshotShowGuides", false);
+
+    float left   = 0.f;
+    float top    = 0.f;
+    float right  = 1.f;
+    float bottom = 1.f;        
+
+    // TODO - add debug settings to control the appearance of the snapshot frameand guides
+    static LLCachedControl<LLColor3> border_color(gSavedSettings, "FSSnapshotFrameBorderColor", LLColor3(1.f, 0.f, 0.f));    
+    static LLCachedControl<LLColor3> guide_color(gSavedSettings, "FSSnapshotFrameGuideColor", LLColor3(1.f, 1.f, 0.f));    
+    static LLCachedControl<F32> border_thickness(gSavedSettings, "FSSnapshotFrameBorderWidth", 2.0f);    
+    static LLCachedControl<F32> guide_thickness(gSavedSettings, "FSSnapshotFrameGuideWidth", 2.0f);    
+
+    F32 guide_style = 1.f; // 0:off, 1:rule_of_thirds, others maybe in the future
+    if (!show_guides)
+    {
+        guide_style = 0.f;
+    }
+    const bool simple_snapshot_visible = LLFloaterReg::instanceVisible("simple_snapshot");
+    const bool flickr_snapshot_visible = LLFloaterReg::instanceVisible("flickr");
+    const bool snapshot_visible = LLFloaterReg::instanceVisible("snapshot");
+    const bool any_snapshot_visible = simple_snapshot_visible || flickr_snapshot_visible || snapshot_visible;
+    if (!show_frame || !any_snapshot_visible || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        return false;
+
+    }
+    LLSnapshotLivePreview * previewView = nullptr;
+    if (snapshot_visible)
+    {
+        auto * floater =dynamic_cast<LLFloaterSnapshotBase*>(LLFloaterReg::findInstance("snapshot"));
+        previewView = floater->impl->getPreviewView();
+    }
+    // Note: simple_snapshot not supported as there can be more than one active and more complex selection is required
+    if (flickr_snapshot_visible && !previewView)
+    {
+        auto * floater = dynamic_cast<LLFloaterFlickr*>(LLFloaterReg::findInstance("flickr"));
+        previewView = floater->getPreviewView();
+    }
+    if(!previewView)
+    {
+        return false;
+    }
+    
+    static LLCachedControl<bool> keep_aspect(gSavedSettings, "KeepAspectForSnapshot", false);
+    
+    S32 snapshot_width;
+    S32 snapshot_height;
+    previewView->getSize(snapshot_width, snapshot_height);
+    F32 screen_aspect = float(gViewerWindow->getWindowWidthRaw()) / float(gViewerWindow->getWindowHeightRaw());
+    F32 snapshot_aspect = float(snapshot_width) / float(snapshot_height);
+
+    if (keep_aspect || (std::fabs(screen_aspect - snapshot_aspect) < 1e-6f) )
+    {
+        top    = 0.0f;
+        left   = 0.0f;
+        bottom = 1.0f;
+        right  = 1.0f;
+    }
+
+    float w = screen_aspect;
+    float h = 1.0;
+    if (snapshot_aspect > screen_aspect)
+    {
+        float frame_width = w;
+        float frame_height = frame_width / snapshot_aspect;
+        // Centre this box in [0..1]×[0..1]
+        float y_offset = 0.5f * (h - frame_height);
+        left   = 0.f;
+        top    = y_offset / h;
+        right  = 1.f;
+        bottom = (y_offset + frame_height) / h;        
+    }
+    else
+    {
+        float frame_height = h;
+        float frame_width = h * snapshot_aspect;
+        // Centre this box in [0..1]×[0..1]
+        float x_offset = 0.5f * (w - frame_width);
+        left   = x_offset / w;
+        top    = 0.f;
+        right  = (x_offset + frame_width) / w;
+        bottom = 1.f;        
+
+    }
+    LL_PROFILE_GPU_ZONE("Snapshot Frame");
+    dst->bindTarget();
+    LLGLSLShader *shader = &gPostSnapshotFrameProgram;
+
+    // bind the program and output to screentriangle VBO
+    shader->bind();
+
+    S32 channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
+    if (channel > -1)
+    {
+        src->bindTexture(0, channel, LLTexUnit::TFO_POINT);
+    }
+    else
+    {
+        LL_ERRS("snapshot_frame") << "Failed to bind diffuse texture" << LL_ENDL;
+    }
+
+    shader->uniform2f(
+        LLShaderMgr::DEFERRED_SCREEN_RES,
+        (GLfloat)dst->getWidth(),
+        (GLfloat)dst->getHeight());
+
+    // Assuming frame_rect is a static or accessible variable containing the frame dimensions
+    shader->uniform4f(
+        LLShaderMgr::SNAPSHOT_FRAME_RECT,
+        (GLfloat)left,
+        (GLfloat)top,
+        (GLfloat)right,
+        (GLfloat)bottom);
+
+    shader->uniform3fv(
+        LLShaderMgr::SNAPSHOT_BORDER_COLOR,
+        1,
+        border_color().mV);
+
+    shader->uniform1f(
+        LLShaderMgr::SNAPSHOT_BORDER_THICKNESS,
+        (GLfloat)border_thickness);
+
+    shader->uniform3fv(
+        LLShaderMgr::SNAPSHOT_GUIDE_COLOR,
+        1,
+        guide_color().mV);
+
+    shader->uniform1f(
+        LLShaderMgr::SNAPSHOT_GUIDE_THICKNESS,
+        (GLfloat)guide_thickness);
+    shader->uniform1f(
+        LLShaderMgr::SNAPSHOT_GUIDE_STYLE,
+        (GLfloat)guide_style);
+
+    mScreenTriangleVB->setBuffer();
+    mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+    stop_glerror();
+
+    shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
+    shader->unbind();
+    dst->flush();
+    return true;
 }
 // </FS:Beq>
 
@@ -8212,8 +8367,23 @@ void LLPipeline::renderFinalize()
         targetBuffer = params.m_pSrcBuffer;
     }
 // [/RLVa:KB]
-    renderVignette(activeBuffer, targetBuffer);
-    finalBuffer = targetBuffer;
+
+    if (renderVignette(activeBuffer, targetBuffer))
+    {
+        auto prevActiveBuffer = activeBuffer;
+        activeBuffer = targetBuffer;
+        targetBuffer = prevActiveBuffer;
+    };
+    // </FS:Beq>
+    // <FS:Beq> new shader for snapshot frame helper
+    if (renderSnapshotFrame(targetBuffer, activeBuffer))
+    {
+        auto prevActiveBuffer = activeBuffer;
+        activeBuffer = targetBuffer;
+        targetBuffer = prevActiveBuffer;
+    };
+
+    finalBuffer = activeBuffer;
     // </FS:Beq>
     if (RenderBufferVisualization > -1)
     {

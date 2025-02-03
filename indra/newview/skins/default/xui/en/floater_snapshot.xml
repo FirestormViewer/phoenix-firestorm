@@ -5,7 +5,7 @@
  can_minimize="true"
  can_resize="false"
  can_close="true"
- height="475"
+ height="480"
  layout="topleft"
  name="Snapshot"
  single_instance="true"
@@ -124,7 +124,7 @@
 	   top_delta="0"
        width="31" />
 	<panel
-     height="174"
+     height="200"
      layout="topleft"
 	 follows="top|left"
      left="0"
@@ -200,6 +200,25 @@
          top_pad="0"
          width="180"
          name="hud_check" />
+        <check_box
+         control_name="FSSnapshotShowCaptureFrame"
+         label="Show capture frame"
+         tool_tip="Show a frame on-screen that surrounds the areas of the snapshot. Parts of the scene that are outside of the snapshot will be de-saturated and slightly blurred."
+         layout="topleft"
+         left="10"
+         top_pad="7"
+         width="180"
+         name="show_frame" />
+        <check_box
+         enabled_control="FSSnapshotShowCaptureFrame"
+         control_name="FSSnapshotShowGuides"
+         label="Show framing guide"
+         tool_tip="Show framing guide (rule of thirds) inside the snapshot frame"
+         layout="topleft"
+         left="30"
+         top_pad="7"
+         width="180"
+         name="show_guides" />
         <check_box
          label="Freeze frame (fullscreen)"
          layout="topleft"
