@@ -129,16 +129,12 @@ void LLHUDText::render()
         // If the current text object is highighed and the use hover highlight feature is enabled, then 
         // disable writing to the depth buffer
         static LLCachedControl<bool> mbUseHoverHighlight(gSavedSettings, "FSHudTextUseHoverHighlight");
-        if (mbUseHoverHighlight && mbIsHighlighted)
-        {            
-            LLGLDepthTest gls_depth(GL_FALSE, GL_FALSE);
-        }
-        //Else, use the standard method of writing to the depth buffer for all other non-highlighted text objects
-        else
-        {
-            LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
-        }
-        // </FS:minerjr> [FIRE-35019]		
+        // <FS:minerjr> [FIRE-35102] - Hover text appearing through walls in Beta 7.1.12.7737
+        // So it turns out when the LLGLDepthTest object goes out of scope, it reverts back
+        // to the previous state. So by having the LLGLDepthTest in the if statements, they were
+        // never applied.
+        LLGLDepthTest gls_depth(mbUseHoverHighlight && mbIsHighlighted ? GL_FALSE : GL_TRUE, GL_FALSE);
+        // </FS:minerjr> [FIRE-35019] </FS:minerjr> [FIRE-35102]	
         //LLGLDisable gls_stencil(GL_STENCIL_TEST);
         renderText();
     }

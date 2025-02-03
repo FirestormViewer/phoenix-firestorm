@@ -28,11 +28,35 @@ if [[ -f "$CONFIG_FILE" ]]; then
             echo "Notarized with id: [$match]"
         else
             echo "No match found"
+            exit 1
         fi
 
-        # if [[ ! $match -eq 0 ]]; then
-        echo "Running Stapler"
-        xcrun stapler staple "$app_file"
+        # --- WAIT / RETRY LOGIC FOR STAPLER ---
+        # Try stapler up to 5 times with a 5-second delay in between attempts
+        max_attempts=5
+        sleep_seconds=5
+        attempt=1
+
+        while [[ $attempt -le $max_attempts ]]; do
+            echo "Running stapler (attempt $attempt of $max_attempts)..."
+            xcrun stapler staple "$app_file"
+            ret=$?
+
+            if [[ $ret -eq 0 ]]; then
+                echo "Stapling succeeded on attempt $attempt"
+                break
+            else
+                if [[ $attempt -lt $max_attempts ]]; then
+                    echo "Stapling failed (Error $ret). Waiting $sleep_seconds seconds before retry..."
+                    sleep $sleep_seconds
+                else
+                    echo "Stapling failed after $max_attempts attempts, giving up."
+                    exit 65
+                fi
+            fi
+            attempt=$((attempt + 1))
+        done
+
         # Delete the zip file to stop it being packed in the dmg
         rm -f "$zip_file"
         if [[ $? -eq 0 ]]; then

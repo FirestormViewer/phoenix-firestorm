@@ -236,7 +236,7 @@ class FSFloaterPoser : public LLFloater
     void enableOrDisableRedoButton();
     void onPoseStartStop();
     void startPosingSelf();
-    void stopPosingSelf();
+    void stopPosingAllAvatars();
     void onLimbTrackballChanged();
     void onYawPitchRollSliderChanged();
     void onAvatarPositionSet();
@@ -253,13 +253,15 @@ class FSFloaterPoser : public LLFloater
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
+    //void onCommitSpinner(LLUICtrl* spinner);
+    void onCommitSpinner(LLUICtrl* spinner, S32 ID);
 
     // UI Refreshments
-    void refreshRotationSliders();
-    void refreshAvatarPositionSliders();
+    void refreshRotationSlidersAndSpinners();
+    void refreshAvatarPositionSlidersAndSpinners();
     void refreshTrackpadCursor();
-    void refreshAdvancedPositionSliders();
-    void refreshAdvancedScaleSliders();
+    void refreshAdvancedPositionSlidersAndSpinners();
+    void refreshAdvancedScaleSlidersAndSpinners();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
@@ -327,11 +329,6 @@ class FSFloaterPoser : public LLFloater
     /// </summary>
     /// <param name="setAsSaveDiff">Whether to indicate a diff will be saved, instead of a pose.</param>
     void setSavePosesButtonText(bool setAsSaveDiff);
-
-    /// <summary>
-    /// Gets whether any avatar know by the UI is being posed.
-    /// </summary>
-    bool posingAnyoneOnScrollList();
 
     /// <summary>
     /// Applies the appropriate font-face (such as bold) to the text of the supplied list, to indicate use.
@@ -501,6 +498,20 @@ class FSFloaterPoser : public LLFloater
 
     LLCheckBoxCtrl* mResetBaseRotCbx{ nullptr };
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
+
+    LLUICtrl* mTrackpadSensitivitySpnr{ nullptr };
+    LLUICtrl* mYawSpnr{ nullptr };
+    LLUICtrl* mPitchSpnr{ nullptr };
+    LLUICtrl* mRollSpnr{ nullptr };
+    LLUICtrl* mUpDownSpnr{ nullptr };
+    LLUICtrl* mLeftRightSpnr{ nullptr };
+    LLUICtrl* mInOutSpnr{ nullptr };
+    LLUICtrl* mAdvPosXSpnr{ nullptr };
+    LLUICtrl* mAdvPosYSpnr{ nullptr };
+    LLUICtrl* mAdvPosZSpnr{ nullptr };
+    LLUICtrl* mScaleXSpnr{ nullptr };
+    LLUICtrl* mScaleYSpnr{ nullptr };
+    LLUICtrl* mScaleZSpnr{ nullptr };
 };
 
 #endif

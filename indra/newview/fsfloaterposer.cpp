@@ -105,6 +105,9 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.RecaptureSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickRecaptureSelectedBones(); });
     mCommitCallbackRegistrar.add("Poser.TogglePosingSelectedBones", [this](LLUICtrl*, const LLSD&) { onClickToggleSelectedBoneEnabled(); });
     mCommitCallbackRegistrar.add("Poser.PoseJointsReset", [this](LLUICtrl*, const LLSD&) { onPoseJointsReset(); });
+
+    //mCommitCallbackRegistrar.add("Poser.CommitSpinner", [this](LLUICtrl* spinnerControl, const LLSD&) { onCommitSpinner(spinnerControl); });
+    mCommitCallbackRegistrar.add("Poser.CommitSpinner", boost::bind(&FSFloaterPoser::onCommitSpinner, this, _1, _2));
 }
 
 bool FSFloaterPoser::postBuild()
@@ -164,7 +167,6 @@ bool FSFloaterPoser::postBuild()
         mToggleAdvancedPanelBtn->setValue(true);
 
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
-    mTrackpadSensitivitySlider->setValue(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY));
 
     mPoseSaveNameEditor = getChild<LLLineEditor>("pose_save_name");
     mPoseSaveNameEditor->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
@@ -216,6 +218,20 @@ bool FSFloaterPoser::postBuild()
     mResetBaseRotCbx = getChild<LLCheckBoxCtrl>("reset_base_rotation_on_edit_checkbox");
     mResetBaseRotCbx->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClickSetBaseRotZero(); });
 
+    mTrackpadSensitivitySpnr = getChild<LLUICtrl>("trackpad_sensitivity_spinner");
+    mYawSpnr                 = getChild<LLUICtrl>("limb_yaw_spinner");
+    mPitchSpnr               = getChild<LLUICtrl>("limb_pitch_spinner");
+    mRollSpnr                = getChild<LLUICtrl>("limb_roll_spinner");
+    mUpDownSpnr              = getChild<LLUICtrl>("av_position_updown_spinner");
+    mLeftRightSpnr           = getChild<LLUICtrl>("av_position_leftright_spinner");
+    mInOutSpnr               = getChild<LLUICtrl>("av_position_inout_spinner");
+    mAdvPosXSpnr             = getChild<LLUICtrl>("adv_posx_spinner");
+    mAdvPosYSpnr             = getChild<LLUICtrl>("adv_posy_spinner");
+    mAdvPosZSpnr             = getChild<LLUICtrl>("adv_posz_spinner");
+    mScaleXSpnr              = getChild<LLUICtrl>("adv_scalex_spinner");
+    mScaleYSpnr              = getChild<LLUICtrl>("adv_scaley_spinner");
+    mScaleZSpnr              = getChild<LLUICtrl>("adv_scalez_spinner");
+
     return true;
 }
 
@@ -238,7 +254,7 @@ void FSFloaterPoser::onClose(bool app_quitting)
         gSavedSettings.setBOOL(POSER_ADVANCEDWINDOWSTATE_SAVE_KEY, mToggleAdvancedPanelBtn->getValue().asBoolean());
 
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
-        stopPosingSelf();
+        stopPosingAllAvatars();
 
     LLFloater::onClose(app_quitting);
 }
@@ -467,7 +483,7 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
         mPoserAnimator.setPosingAvatarJoint(avatar, *item, !currentlyPosing);
     }
 
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
     refreshTextHighlightingOnJointScrollLists();
 }
@@ -511,7 +527,7 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
         mPoserAnimator.reflectJoint(avatar, item);
     }
 
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
 }
 
@@ -526,7 +542,7 @@ void FSFloaterPoser::onClickFlipPose()
 
     mPoserAnimator.flipEntirePose(avatar);
 
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
 }
 
@@ -553,7 +569,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
     }
 
     setSavePosesButtonText(true);
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
     refreshTextHighlightingOnJointScrollLists();
 }
@@ -564,6 +580,114 @@ void FSFloaterPoser::onClickBrowsePoseCache()
 
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     gViewerWindow->getWindow()->openFile(pathname);
+}
+
+//void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner)
+// Pass in an ID as a parameter, so you can use a switch statement
+void FSFloaterPoser::onCommitSpinner(LLUICtrl* spinner, S32 id)
+{
+    if (!spinner)
+        return;
+
+    auto activeTab = mJointsTabs->getCurrentPanel();
+    if (!activeTab)
+        return;
+
+    bool changingBodyPosition = activeTab == mPositionRotationPnl;
+
+    F32 value = (F32)spinner->getValue().asReal();
+
+    // Use the ID passed in to perform a switch statment
+    // which should make each action take the same amount of time.
+    switch (id)
+    {
+        case 0: // av_position_updown_spinner
+        {
+            mPosZSlider->setValue(value);
+            onAvatarPositionSet();
+            break;
+        }
+        case 1: // av_position_leftright
+        {
+            mPosYSlider->setValue(value);
+            onAvatarPositionSet();
+            break;
+        }
+        case 2: // av_position_inout_spinner
+        {
+            mPosXSlider->setValue(value);
+            onAvatarPositionSet();
+            break;
+        }
+        case 3: // trackpad_sensitivity_spinner
+        {
+            onAdjustTrackpadSensitivity();
+            break;
+        }
+        case 4: // limb_pitch_spinner
+        {
+            mLimbPitchSlider->setValue(value);
+            onYawPitchRollSliderChanged();
+            break;
+        }
+        case 5: // limb_yaw_spinner
+        {
+            mLimbYawSlider->setValue(value);
+            onYawPitchRollSliderChanged();
+            break;
+        }
+        case 6: // limb_roll_spinner
+        {
+            mLimbRollSlider->setValue(value);
+            onYawPitchRollSliderChanged();
+            break;
+        }
+        case 7: // adv_posx_spinner
+        {
+            if (changingBodyPosition)
+                mPosXSlider->setValue(value);
+
+            mAdvPosXSlider->setValue(value);
+            onAdvancedPositionSet();
+            break;
+        }
+        case 8: // adv_posy_spinner
+        {
+            if (changingBodyPosition)
+                mPosYSlider->setValue(value);
+
+            mAdvPosYSlider->setValue(value);
+            onAdvancedPositionSet();
+            break;
+        }
+        case 9: // adv_posz_spinner
+        {
+            if (changingBodyPosition)
+                mPosZSlider->setValue(value);
+
+            mAdvPosZSlider->setValue(value);
+            onAdvancedPositionSet();
+            break;
+        }
+        case 10: // adv_scalex_spinner
+        {
+            mAdvScaleXSlider->setValue(value);
+            onAdvancedScaleSet();
+            break;
+        }
+        case 11: // adv_scaley_spinner
+        {
+            mAdvScaleYSlider->setValue(value);
+            onAdvancedScaleSet();
+            break;
+        }
+        case 12: // adv_scalez_spinner
+        {
+            mAdvScaleZSlider->setValue(value);
+            onAdvancedScaleSet();
+            break;
+        }
+    }
 }
 
 void FSFloaterPoser::onPoseJointsReset()
@@ -589,9 +713,9 @@ void FSFloaterPoser::onPoseJointsReset()
             mPoserAnimator.resetAvatarJoint(avatar, *item);
     }
 
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
-    refreshAvatarPositionSliders();
+    refreshAvatarPositionSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
@@ -892,20 +1016,24 @@ void FSFloaterPoser::startPosingSelf()
     onAvatarSelect();
 }
 
-void FSFloaterPoser::stopPosingSelf()
+void FSFloaterPoser::stopPosingAllAvatars()
 {
     if (!gAgentAvatarp || gAgentAvatarp.isNull())
         return;
 
-    LLVOAvatar* avatar = getAvatarByUuid(gAgentAvatarp->getID());
-    if (!avatar)
-        return;
+    for (auto listItem : mAvatarSelectionScrollList->getAllData())
+    {
+        LLScrollListCell* cell = listItem->getColumn(COL_UUID);
+        if (!cell)
+            continue;
 
-    bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
-    if (!arePosingSelected)
-        return;
+        LLUUID      selectedAvatarId = cell->getValue().asUUID();
+        LLVOAvatar* listAvatar       = getAvatarByUuid(selectedAvatarId);
 
-    mPoserAnimator.stopPosingAvatar(avatar);
+        if (mPoserAnimator.isPosingAvatar(listAvatar))
+            mPoserAnimator.stopPosingAvatar(listAvatar);
+    }
+
     onAvatarSelect();
 }
 
@@ -1145,7 +1273,7 @@ void FSFloaterPoser::onUndoLastRotation()
     }
 
     enableOrDisableRedoButton();
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
 }
 
@@ -1169,8 +1297,8 @@ void FSFloaterPoser::onUndoLastPosition()
             mPoserAnimator.undoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
-    refreshAdvancedPositionSliders();
-    refreshAvatarPositionSliders();
+    refreshAdvancedPositionSlidersAndSpinners();
+    refreshAvatarPositionSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onUndoLastScale()
@@ -1193,7 +1321,7 @@ void FSFloaterPoser::onUndoLastScale()
             mPoserAnimator.undoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
-    refreshAdvancedScaleSliders();
+    refreshAdvancedScaleSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onSetAvatarToTpose()
@@ -1233,8 +1361,8 @@ void FSFloaterPoser::onResetPosition()
             mPoserAnimator.resetJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
-    refreshAdvancedPositionSliders();
-    refreshAvatarPositionSliders();
+    refreshAdvancedPositionSlidersAndSpinners();
+    refreshAvatarPositionSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onResetScale()
@@ -1260,7 +1388,7 @@ void FSFloaterPoser::onResetScale()
             mPoserAnimator.resetJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
-    refreshAdvancedScaleSliders();
+    refreshAdvancedScaleSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onRedoLastRotation()
@@ -1284,7 +1412,7 @@ void FSFloaterPoser::onRedoLastRotation()
     }
 
     enableOrDisableRedoButton();
-    refreshRotationSliders();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
 }
 
@@ -1308,8 +1436,8 @@ void FSFloaterPoser::onRedoLastPosition()
             mPoserAnimator.redoLastJointPosition(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
-    refreshAdvancedPositionSliders();
-    refreshAvatarPositionSliders();
+    refreshAdvancedPositionSlidersAndSpinners();
+    refreshAvatarPositionSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onRedoLastScale()
@@ -1332,7 +1460,7 @@ void FSFloaterPoser::onRedoLastScale()
             mPoserAnimator.redoLastJointScale(avatar, *item, getUiSelectedBoneDeflectionStyle());
     }
 
-    refreshAdvancedScaleSliders();
+    refreshAdvancedScaleSlidersAndSpinners();
 }
 
 void FSFloaterPoser::enableOrDisableRedoButton()
@@ -1565,8 +1693,15 @@ void FSFloaterPoser::onAdvancedPositionSet()
     F32 posY = mAdvPosYSlider->getValueF32();
     F32 posZ = mAdvPosZSlider->getValueF32();
 
+    mAdvPosXSpnr->setValue(posX);
+    mInOutSpnr->setValue(posX);
+    mAdvPosYSpnr->setValue(posY);
+    mLeftRightSpnr->setValue(posY);
+    mAdvPosZSpnr->setValue(posZ);
+    mUpDownSpnr->setValue(posZ);
+
     setSelectedJointsPosition(posX, posY, posZ);
-    refreshAvatarPositionSliders();
+    refreshAvatarPositionSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onAdvancedScaleSet()
@@ -1574,6 +1709,10 @@ void FSFloaterPoser::onAdvancedScaleSet()
     F32 scX = mAdvScaleXSlider->getValueF32();
     F32 scY = mAdvScaleYSlider->getValueF32();
     F32 scZ = mAdvScaleZSlider->getValueF32();
+
+    mScaleXSpnr->setValue(scX);
+    mScaleYSpnr->setValue(scY);
+    mScaleZSpnr->setValue(scZ);
 
     setSelectedJointsScale(scX, scY, scZ);
 }
@@ -1584,8 +1723,15 @@ void FSFloaterPoser::onAvatarPositionSet()
     F32 posY = mPosYSlider->getValueF32();
     F32 posZ = mPosZSlider->getValueF32();
 
+    mAdvPosXSpnr->setValue(posX);
+    mInOutSpnr->setValue(posX);
+    mAdvPosYSpnr->setValue(posY);
+    mLeftRightSpnr->setValue(posY);
+    mAdvPosZSpnr->setValue(posZ);
+    mUpDownSpnr->setValue(posZ);
+
     setSelectedJointsPosition(posX, posY, posZ);
-    refreshAdvancedPositionSliders();
+    refreshAdvancedPositionSlidersAndSpinners();
 }
 
 void FSFloaterPoser::onLimbTrackballChanged()
@@ -1624,6 +1770,10 @@ void FSFloaterPoser::onLimbTrackballChanged()
     mLimbYawSlider->setValue(trackPadPos.mV[VX] *= RAD_TO_DEG);
     mLimbPitchSlider->setValue(trackPadPos.mV[VY] *= RAD_TO_DEG);
     mLimbRollSlider->setValue(trackPadPos.mV[VZ] *= RAD_TO_DEG);
+
+    mYawSpnr->setValue(mLimbYawSlider->getValueF32());
+    mPitchSpnr->setValue(mLimbPitchSlider->getValueF32());
+    mRollSpnr->setValue(mLimbRollSlider->getValueF32());
 }
 
 F32 FSFloaterPoser::unWrapScale(F32 scale)
@@ -1665,11 +1815,14 @@ void FSFloaterPoser::onYawPitchRollSliderChanged()
     absoluteRotation.mV[VZ] /= NormalTrackpadRangeInRads;
 
     mAvatarTrackball->setValue(absoluteRotation.getValue());
+
+    mYawSpnr->setValue(mLimbYawSlider->getValueF32());
+    mPitchSpnr->setValue(mLimbPitchSlider->getValueF32());
+    mRollSpnr->setValue(mLimbRollSlider->getValueF32());
 }
 
 void FSFloaterPoser::onAdjustTrackpadSensitivity()
 {
-    gSavedSettings.setF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY, mTrackpadSensitivitySlider->getValueF32());
     refreshTrackpadCursor();
 }
 
@@ -1689,7 +1842,7 @@ void FSFloaterPoser::refreshTrackpadCursor()
 /// <summary>
 /// This only sets the position sliders of the 'basic' view (not the advanced sliders).
 /// </summary>
-void FSFloaterPoser::refreshAvatarPositionSliders()
+void FSFloaterPoser::refreshAvatarPositionSlidersAndSpinners()
 {
     auto activeTab = mJointsTabs->getCurrentPanel();
     if (!activeTab)
@@ -1700,36 +1853,48 @@ void FSFloaterPoser::refreshAvatarPositionSliders()
 
     LLVector3 position = getPositionOfFirstSelectedJoint();
     mPosXSlider->setValue(position.mV[VX]);
+    mInOutSpnr->setValue(position.mV[VX]);
     mPosYSlider->setValue(position.mV[VY]);
+    mLeftRightSpnr->setValue(position.mV[VY]);
     mPosZSlider->setValue(position.mV[VZ]);
+    mUpDownSpnr->setValue(position.mV[VZ]);
 }
 
-void FSFloaterPoser::refreshRotationSliders()
+void FSFloaterPoser::refreshRotationSlidersAndSpinners()
 {
     LLVector3 rotation = getRotationOfFirstSelectedJoint();
 
     mLastSliderRotation = rotation;
     mLimbYawSlider->setValue(rotation.mV[VX] *= RAD_TO_DEG);
+    mYawSpnr->setValue(rotation.mV[VX]);
     mLimbPitchSlider->setValue(rotation.mV[VY] *= RAD_TO_DEG);
+    mPitchSpnr->setValue(rotation.mV[VY]);
     mLimbRollSlider->setValue(rotation.mV[VZ] *= RAD_TO_DEG);
+    mRollSpnr->setValue(rotation.mV[VZ]);
 }
 
-void FSFloaterPoser::refreshAdvancedPositionSliders()
+void FSFloaterPoser::refreshAdvancedPositionSlidersAndSpinners()
 {
     LLVector3 position = getPositionOfFirstSelectedJoint();
 
     mAdvPosXSlider->setValue(position.mV[VX]);
+    mAdvPosXSpnr->setValue(position.mV[VX]);
     mAdvPosYSlider->setValue(position.mV[VY]);
+    mAdvPosYSpnr->setValue(position.mV[VY]);
     mAdvPosZSlider->setValue(position.mV[VZ]);
+    mAdvPosZSpnr->setValue(position.mV[VZ]);
 }
 
-void FSFloaterPoser::refreshAdvancedScaleSliders()
+void FSFloaterPoser::refreshAdvancedScaleSlidersAndSpinners()
 {
     LLVector3 rotation = getScaleOfFirstSelectedJoint();
 
     mAdvScaleXSlider->setValue(rotation.mV[VX]);
+    mScaleXSpnr->setValue(rotation.mV[VX]);
     mAdvScaleYSlider->setValue(rotation.mV[VY]);
+    mScaleYSpnr->setValue(rotation.mV[VY]);
     mAdvScaleZSlider->setValue(rotation.mV[VZ]);
+    mScaleZSpnr->setValue(rotation.mV[VZ]);
 }
 
 void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
@@ -1873,16 +2038,16 @@ LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint() const
 
 void FSFloaterPoser::onJointTabSelect()
 {
-    refreshAvatarPositionSliders();
-    refreshRotationSliders();
+    refreshAvatarPositionSlidersAndSpinners();
+    refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
     enableOrDisableRedoButton();
     onClickSetBaseRotZero();
 
     if (mToggleAdvancedPanelBtn->getValue().asBoolean())
     {
-        refreshAdvancedPositionSliders();
-        refreshAdvancedScaleSliders();
+        refreshAdvancedPositionSlidersAndSpinners();
+        refreshAdvancedScaleSlidersAndSpinners();
     }
 }
 
@@ -2074,7 +2239,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         LLAvatarName av_name;
         std::string animeshName = getControlAvatarName(avatar);
         if (animeshName.empty())
-            animeshName = avatar->getFullname();
+            continue;
 
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
@@ -2108,6 +2273,9 @@ std::string FSFloaterPoser::getControlAvatarName(const LLControlAvatar* avatar)
 
     if (attachedItem)
         return attachedItem->getName();
+
+    if (rootEditObject->permYouOwner())
+        return avatar->getFullname();
 
     return "";
 }
@@ -2144,24 +2312,6 @@ void FSFloaterPoser::refreshTextHighlightingOnJointScrollLists()
 void FSFloaterPoser::setSavePosesButtonText(bool setAsSaveDiff)
 {
     setAsSaveDiff ? mSavePosesBtn->setLabel("Save Diff") : mSavePosesBtn->setLabel("Save Pose");
-}
-
-bool FSFloaterPoser::posingAnyoneOnScrollList()
-{
-    for (auto listItem : mAvatarSelectionScrollList->getAllData())
-    {
-        LLScrollListCell* cell = listItem->getColumn(COL_UUID);
-        if (!cell)
-            continue;
-
-        LLUUID      selectedAvatarId = cell->getValue().asUUID();
-        LLVOAvatar* listAvatar       = getAvatarByUuid(selectedAvatarId);
-
-        if (mPoserAnimator.isPosingAvatar(listAvatar))
-            return true;
-    }
-
-    return false;
 }
 
 void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar)
