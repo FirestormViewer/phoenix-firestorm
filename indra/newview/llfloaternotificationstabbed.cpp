@@ -359,17 +359,63 @@ void LLFloaterNotificationsTabbed::getAllItemsOnCurrentTab(std::vector<LLPanel*>
 void LLFloaterNotificationsTabbed::closeAllOnCurrentTab()
 {
     // Need to clear notification channel, to add storable toasts into the list.
+    mDeleteNotificationsTimer.reset();
+
     clearScreenChannels();
     std::vector<LLPanel*> items;
     getAllItemsOnCurrentTab(items);
     std::vector<LLPanel*>::iterator iter = items.begin();
     for (; iter != items.end(); ++iter)
-    {
+    {   // <FS:SimonLsAlt>  Linden viewer just calls onItemClose() for each item
+        //  which can turn into a lag event several seconds long.   Firestorm will queue
+        //  notification UUIDs to close them one by one in the new idle() function.
+
+        // Put all items into the FIFO to close them one by one
         LLNotificationListItem* notify_item = dynamic_cast<LLNotificationListItem*>(*iter);
         if (notify_item)
-            onItemClose(notify_item);
+        {   // Save via UUID instead of pointers to avoid dangling pointers
+            const LLUUID id = notify_item->getID();
+            if (id.notNull())
+            {
+                mToastsToGo.push(id); // Add UUID to back of queue
+            }
+        }
+    }
+    LL_INFOS() << "Close all on current tab: " << mDeleteNotificationsTimer.getElapsedTimeF32() << " sec "
+               << " to queue " << mToastsToGo.size() << " notices to delete" << LL_ENDL;
+}
+
+
+//---------------------------------------------------------------------------------
+// <FS:SimonLsAlt>  Deferred deletion of notifications
+void LLFloaterNotificationsTabbed::idle()
+{
+    if (!mToastsToGo.empty())
+    {   // If there are any toasts to close, close them one by one
+        LLUUID toast_id = mToastsToGo.front();      // FIFO queue
+        mToastsToGo.pop();
+
+        // Should just be "GroupNotice" but use the API to get the list of types
+        std::set<std::string> notice_types = LLGroupNoticeNotificationListItem::getTypes();
+        for (auto type_it = notice_types.begin(); type_it != notice_types.end(); ++type_it)
+        {   // Find the group notice by ID
+            LLNotificationListItem* item = dynamic_cast<LLNotificationListItem*>(findItemByID(toast_id, *type_it));
+            if (item)
+            {
+                // LL_INFOS() << "Found deferred item to close: " << toast_id << " type " << *type_it << LL_ENDL;
+                onItemClose(item);
+
+                if (mToastsToGo.empty())
+                {
+                    LL_INFOS() << "Close all on current tab took " << mDeleteNotificationsTimer.getElapsedTimeF32() << " sec "
+                               << " to delete all notices " << LL_ENDL;
+                }
+                break;
+            }
+        }
     }
 }
+// </FS:SimonLsAlt>
 
 //---------------------------------------------------------------------------------
 void LLFloaterNotificationsTabbed::collapseAllOnCurrentTab()

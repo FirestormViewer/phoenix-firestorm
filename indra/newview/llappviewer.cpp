@@ -37,6 +37,7 @@
 #include "llerrorcontrol.h"
 #include "lleventtimer.h"
 #include "llfile.h"
+#include "llfloaternotificationstabbed.h"
 #include "llviewertexturelist.h"
 #include "llgroupmgr.h"
 #include "llagent.h"
@@ -5663,6 +5664,9 @@ void LLAppViewer::idle()
         }
     }
 
+    // <FS:SimonLsAlt> Handle deferred notice deletions
+    LLFloaterNotificationsTabbed::getInstance()->idle();
+    // </FS:SimonLsAlt>
 
     // Update layonts, handle mouse events, tooltips, e t c
     // updateUI() needs to be called even in case viewer disconected
