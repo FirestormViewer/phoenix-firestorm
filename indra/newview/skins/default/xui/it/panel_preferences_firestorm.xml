@@ -211,7 +211,7 @@
             <check_box label="Espandi sempre le informazioni avanzate sull'anteprima dell'animazione" tool_tip="Espandi le informazioni avanzate sull'animazione nella finestra dell'anteprima dell'animazione per impostazione predefinita" name="FSAnimationPreviewExpanded" />
             <check_box label="Abilita i dettagli estesi sulle informazioni degli script" tool_tip="Estendi la funzionalità delle informazioni di base sugli script con vari dettagli utili per i costruttori." name="FSScriptInfoExtended" />
             <check_box label="Elenca i punti di attacco nei menu &quot;Attacca a&quot; in ordine alfabetico (richiede riavvio)" tool_tip="Se abilitato, i punti di attacco nei menu &quot;Attacca a&quot; verranno elencati in ordine alfabetico" name="FSSortAttachmentSpotsAlphabetically" />
-            <check_box label="Usa il nuovo pannello texture di Firestorm nella finestra Costruisci/Modifica (richiede riavvio)" tool_tip="Se abilitata, gli strumenti di modifica delle texture utilizzeranno il pannello FS migliorato e consentiranno la modifica di BlinnPhong" name="FSUseNewTexturePanel" />
+            <check_box label="Usa il nuovo pannello texture di Firestorm nella finestra Costruisci/Modifica (richiede riavvio)" tool_tip="Se abilitata, gli strumenti di modifica delle texture utilizzeranno il pannello FS migliorato e consentiranno la modifica sia delle texture Blinn-Phong che PBR." name="FSUseNewTexturePanel" />
         </panel>
         <panel label="Caricamenti" name="UploadsTab">
             <text name="title">

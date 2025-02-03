@@ -848,6 +848,26 @@ void LLToolPie::selectionPropertiesReceived()
 bool LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
     bool pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights 
+    // We want to unhighlight the previous hover object's parent before we get the next hover pick and lose the reference
+    // (Possible optimization - check if the current object and previous ones are the same, and if so, don't set the text is highlighed flag to false)
+    LLViewerObject* oldObject = NULL;
+    LLViewerObject* oldParent = NULL; 
+    // If the previous mHoverPick object is valid, then try to set the Text Is Highlighted flag to false to clear it.
+    if (mHoverPick.isValid())
+    {
+        oldObject = mHoverPick.getObject();
+        if (oldObject)
+        {
+            oldParent = oldObject->getRootEdit();
+            if (oldParent)
+            {
+                // We want to set the parent object's flag to false, and it will recursively change until it finds a valid mText object.
+                oldParent->setTextIsHighlighted(false);
+            } 
+        }
+    }
+    // <FS:minerjr> [FIRE-35019]
     mHoverPick = gViewerWindow->pickImmediate(x, y, false, pick_rigged);
     LLViewerObject *parent = NULL;
     LLViewerObject *object = mHoverPick.getObject();
@@ -940,6 +960,17 @@ bool LLToolPie::handleHover(S32 x, S32 y, MASK mask)
     {
         LLViewerMediaFocus::getInstance()->clearHover();
     }
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // If there is an object that was hovered over, set the root of the object to have the text highlighted.
+    // This will work if the parent does not have a LLHUDText object, but a child does.
+    else
+    {
+        if (parent)
+        {
+            parent->setTextIsHighlighted(true);
+        }
+    }    
+    // </FS:minerjr> [FIRE-35019]
 
     return true;
 }

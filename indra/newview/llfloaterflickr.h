@@ -134,6 +134,7 @@ public:
 
     // <FS:Ansariel> Exodus' flickr upload
     void onOpen(const LLSD& key);
+    LLSnapshotLivePreview* getPreviewView(); // <FS:Beq/> Required for snapshot frame rendering
 
 private:
     LLFlickrPhotoPanel* mFlickrPhotoPanel;

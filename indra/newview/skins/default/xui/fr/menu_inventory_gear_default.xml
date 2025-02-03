@@ -35,6 +35,6 @@
 	<menu_item_check name="inventory_filter_only_modify" label="Uniquement les éléments modifiables"/>
 	<menu_item_check name="inventory_filter_only_copy" label="Uniquement les éléments copiables"/>
 	<menu_item_check name="inventory_filter_only_transfer" label="Uniquement les éléments transférables"/>
-	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Uniquement les éléments regroupés"/>
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Uniquement les objets groupés"/>
 	<menu_item_call label="Vider la corbeille" name="empty_trash"/>
 </toggleable_menu>

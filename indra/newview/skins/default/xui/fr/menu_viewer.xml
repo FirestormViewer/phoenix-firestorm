@@ -103,6 +103,7 @@
 		<menu_item_check label="Journal des conversations..." name="Conversation Log..."/>
 		<menu_item_check label="Chat vocal à proximité" name="Nearby Voice"/>
 		<menu_item_call label="Liste des ignorés" name="Block List"/>
+		<menu_item_check label="Afficher la console de conversation" name="Show On-screen Console"/>
 	</menu>
 	<menu label="Monde" name="World">
 		<menu_item_call label="Resynchroniser les animations" name="Resync Animations"/>

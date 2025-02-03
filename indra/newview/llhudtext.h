@@ -59,11 +59,30 @@ protected:
             mStyle(style),
             mText(text),
             mFont(font)
-        {}
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+        //{}        
+        {            
+            // Added a bool check to see if the current line is blank (empty, or has only a single space character stored.
+            // There are issues with users using "Hello World \n \n \n \n" as strings which would create a 4 text segments, but only 1 had actual text
+            // and the background would cover all 4, and would not look nice. So store a flag on each segment to see if it is blank, so we don't have to
+            // do the check every frame for every text segment.
+            if (text.length() == 0 || text.find_first_not_of(utf8str_to_wstring(" "), 0) == std::string::npos)
+            {
+                mbIsBlank = true;
+            }
+            else
+            {
+                mbIsBlank = false;
+            }            
+        }
+        // </FS:minerjr> [FIRE-35019]
         F32 getWidth(const LLFontGL* font);
         const LLWString& getText() const { return mText; }
         void clearFontWidthMap() { mFontWidthMap.clear(); }
 
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+        bool isBlank() { return mbIsBlank; } // Accessor method for checking to see if the current Text Segment is blank
+        // </FS:minerjr> [FIRE-35019]
         LLColor4                mColor;
         LLFontGL::StyleFlags    mStyle;
         const LLFontGL*         mFont;
@@ -71,6 +90,9 @@ protected:
     private:
         LLWString               mText;
         std::map<const LLFontGL*, F32> mFontWidthMap;
+        // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+        bool                    mbIsBlank; // True if mText length is 0, or only contains " " characters, otherwise false
+        // <FS:minerjr> [FIRE-35019]
     };
 
 public:
@@ -178,6 +200,15 @@ private:
     std::string     mObjText;
 // [/RLVa:KB]
 
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights   
+    LLPointer<LLUIImage> mRoundedRectImgp; // Added background rect image from LLHUDNameTag
+    F32             mBackgroundHeight; // Store the actual height of the background image (calculated from the visible text segments)
+    // <FS:minerjr> [FIRE-35078] llSetText(...) differences in latest Nightly Builds
+    F32             mBackgroundWidth;  // Store the actual width of the background image (calculated from the visible text segments)
+    // </FS:minerjr> [FIRE-35078]
+    F32             mBackgroundOffsetY; // Store the offset of the top of the first visible text segment
+    F32             mLuminance; // Store the luminance of the text (used to determine if the background should be white or black for higher contrast)
+    // </FS:minerjr> [FIRE-35019]
     static bool    sDisplayText ;
     static std::set<LLPointer<LLHUDText> > sTextObjects;
     static std::vector<LLPointer<LLHUDText> > sVisibleTextObjects;

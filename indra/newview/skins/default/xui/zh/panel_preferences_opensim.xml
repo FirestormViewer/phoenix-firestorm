@@ -29,7 +29,7 @@
 		</panel>
 		<panel label="雜項" name="opensim_misc_panel">
 			<check_box label="除錯搜尋" name="DebugSearch" />
-			<text name="search_url_debug_text">涵蓋當前搜尋頁面：（如果為空，則不活動）</text>
+			<text name="search_url_debug_text">覆蓋當前搜尋頁面：（如果為空，則不活動）</text>
 			<button label="清除" label_selected="清除" name="clear_search_url_debug" />
 			<button label="設定" name="pick_current_search_url" />
 		</panel>

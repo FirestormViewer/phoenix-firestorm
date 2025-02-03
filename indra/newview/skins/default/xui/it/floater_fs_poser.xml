@@ -226,7 +226,7 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Annulla l'ultima modifica della rotazione" />
 					<button name="button_redo_change" tool_tip="Ripristina l'ultima modifica annullata" />
-					<button name="refresh_avatars" tool_tip="Fai doppio clic per ripristinare tutte le parti del corpo selezionate al momento in cui hai iniziato a modificare la posa" />
+					<button name="poser_joint_reset" tool_tip="Fai doppio clic per ripristinare tutte le parti del corpo selezionate al momento in cui hai iniziato a modificare la posa" />
 					<button name="delta_mode_toggle" tool_tip="Se si cambiano più giunture, ognuna cambia della stessa quantità, anziché ottenere la stessa rotazione per tutte" />
 					<button label="Spec." name="button_toggleMirrorRotation" tool_tip="Cambia la giuntura opposta, come in uno specchio" />
 					<button label="Simp." name="button_toggleSympatheticRotation" tool_tip="Cambia la giuntura opposta, ma nello stesso modo" />

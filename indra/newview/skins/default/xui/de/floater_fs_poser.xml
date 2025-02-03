@@ -223,6 +223,7 @@
 						<slider name="trackpad_sensitivity_slider" tool_tip="Stellt die Sensitivität der Steuerkugel ein"/>
 						<check_box name="stop_posing_on_close_checkbox" label="Beim Schließen stoppen" tool_tip="Die Pose beim Schließen nicht zu stoppen kann hilfreich sein, um die bisher getätigte Arbeit nicht zu verlieren."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Basis-Rot. beim Edit. zurück." tool_tip="Wenn das erste Mal eine Pose bearbeitet wird, diese auf Null zurücksetzen. Hierdurch eine eine komplette Pose und nicht nur die Differenz gespeichert werden. Ein grüner Haken erscheint neben jedem Gelenk, dass auf Null-basierend exportiert wurde."/>
+						<check_box name="also_save_bvh_checkbox" label="BHV beim Speichern erst." tool_tip="Wenn die Pose gespeichert wird, wird ebenfalls eine BHV-Datei erstellt, die via Bauen > Hochladen > Animation hochgeladen und zum Posieren vom eigenen Avatar oder anderen Avataren verwendet werden kann. Hierzu muss die Basis der Gelenke auf Null gesetzt werden, da BHV nicht von anderen Posen abgeleitet wird."/>
 					</panel>
 				</tab_container>
 			</panel>
@@ -234,8 +235,8 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Letzte Rotationsänderung rückgängig machen"/>
 					<button name="button_redo_change" tool_tip="Letzte Rotationsänderung wiederherstellen"/>
-					<button name="refresh_avatars" tool_tip="Doppelklicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
-					<button name="delta_mode_toggle" tool_tip="Falls mehrere Gelenke geändert werden, diese um denselben Wert ändern anstatt in dieselbe Rotation zu versetzen."/>
+					<button name="poser_joint_reset" tool_tip="Doppelklicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
+					<button name="delta_mode_toggle" tool_tip="Falls mehrere Gelenke geändert werden, diese um denselben Wert ändern anstatt in dieselbe Rotation zu versetzen. Wird auch zur Verhinderung von Gimbal Lock verwendet."/>
 					<button label="Spieg." name="button_toggleMirrorRotation" tool_tip="Änderungen an gegenüberliegendem Gelenk spiegeln."/>
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Gegenüberliegendes Gelenk gleichermaßen anpassen."/>
 				</panel>
@@ -261,7 +262,7 @@
 				<button name="toggleAdvancedPanel" tool_tip="Erweiterte Einstellungen aktivieren/deaktivieren"/>
 				<button name="FlipPose_avatar" tool_tip="Komplette Pose links/rechts umschalten"/>
 				<button name="FlipJoint_avatar" tool_tip="Ausgewählte Körperteile links/rechts spiegeln"/>
-				<button label="Ausw." name="button_RecaptureParts" tool_tip="Falls ausgewählte Körperteile nicht posiert werden, werden die Werte der aktuellen Pose erfasst. Diese Schaltfläche ist deaktiviert, wenn aus einer T-Pose heraus gestartet wird."/>
+				<button label="Ausw." name="button_RecaptureParts" tool_tip="Falls ausgewählte Körperteile nicht posiert werden, werden die Werte der aktuellen Pose erfasst."/>
 				<button label="Teile an/aus" name="toggle_PosingSelectedBones" tool_tip="Schaltet Poser für ausgewählte Körperteile an bzw. aus. Falls aus, werden die entsprechenden Körperteile normal animiert (z.B. via AO, Poseball usw.)."/>
 				<button label="Eigene Posen" name="toggleLoadSavePanel" tool_tip="Laden, speichern under verwalten der eigenen erstellten Posen"/>
 				<button tool_tip="Posen-Verzeichnis verwalten" name="open_poseDir_button"/>

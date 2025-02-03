@@ -75,8 +75,8 @@
 			<button name="refresh_beams" label="更新" tool_tip="更新形狀列表" />
 			<slider name="FSBeamShapeScale" label="比例：" tool_tip="修改所用形狀的比例" label_width="50" width="200" />
 			<text name="BridgeProtocols">內建外部協定到 LSL 橋：</text>
-			<check_box label="允許 OpenCollar 控制內建動畫涵蓋的啟用或禁用" name="BridgeIntegrationOC" />
-			<check_box label="允許 LockMeister 控制內建動畫涵蓋的啟用或禁用" name="BridgeIntegrationLM" />
+			<check_box label="允許 OpenCollar 控制內建動畫覆蓋的啟用或禁用" name="BridgeIntegrationOC" />
+			<check_box label="允許 LockMeister 控制內建動畫覆蓋的啟用或禁用" name="BridgeIntegrationLM" />
 		</panel>
 		<panel label="建造 1" name="BuildTab">
 			<text name="text_box_objprams">預設尺寸</text>

@@ -99,6 +99,11 @@ public:
     void onCreatorSelfFilterCommit();
     void onCreatorOtherFilterCommit();
 
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    void onOnlyCoalescedFilterCommit(); // Commit method for the Only Coalesced Filter checkbox
+    void onShowLinksFilterCommit(); // Commit method for the Show Links Filter combo box
+    // </FS:minerjr> [FIRE-35042]
+
     void onPermissionsChanged(); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 
     static void onTimeAgo(LLUICtrl*, void *);
@@ -115,6 +120,10 @@ private:
     LLCheckBoxCtrl*     mCreatorSelf;
     LLCheckBoxCtrl*     mCreatorOthers;
     LLInventoryFilter*  mFilter;
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    LLCheckBoxCtrl*     mOnlyCoalescedFilterCheck; // Stores the pointer to the Only Coalesced filter checkbox
+    LLComboBox*         mShowLinksFilterCombo; // Stores the pointer to the Show Links filter combo box
+    // </FS:minerjr> [FIRE-35042]
 };
 
 ///----------------------------------------------------------------------------
@@ -190,6 +199,12 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
     mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
     mEnableCallbackRegistrar.add("Inventory.GearDefault.Visible", boost::bind(&LLPanelMainInventory::isActionVisible, this, _2));
     // </FS:Ansariel>
+
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Added new button to show all filters, not just Only Coalesced Filter
+    // Add a call back on the existing Inventory ShowFilters Check on the show_filters_inv_btn
+    mEnableCallbackRegistrar.add("Inventory.ShowFilters.Check", boost::bind(&LLPanelMainInventory::isAnyFilterChecked, this, _2));
+    // </FS:minerjr> [FIRE-35042]
 
     mSavedFolderState = new LLSaveFolderState();
     mSavedFolderState->setApply(false);
@@ -908,6 +923,31 @@ bool LLPanelMainInventory::isSortByChecked(const LLSD& userdata)
 }
 // </FS:Zi> Sort By menu handlers
 
+// <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+// Callback method used to update the Show Filter button on the inventory bottom UI
+bool LLPanelMainInventory::isAnyFilterChecked(const LLSD& userdata)
+{
+    // Validate that the command came from the right check box (Show Filters Modified)
+    const std::string command_name = userdata.asString();
+    if (command_name == "show_filters_modified")
+    {
+        // Only use thte active panel if it is valid
+        if (mActivePanel)
+        {
+            // Get the current filter object
+            LLInventoryFilter& filter = getCurrentFilter();
+            // If either of the three filter checks are true, Is Not Default, Filter Creator Type is not set to all creators,
+            // and Show Folder State is set to show folder state then we need to turn on the Show Filter Button check higlight,
+            // so return true if any of these are true.
+            return filter.isNotDefault() || filter.getFilterCreatorType() != LLInventoryFilter::FILTERCREATOR_ALL ||
+                   filter.getShowFolderState() == LLInventoryFilter::SHOW_ALL_FOLDERS;
+        }
+    }
+
+    return false;
+}
+// </FS:minerjr> [FIRE-35042]
+
 // static
 bool LLPanelMainInventory::filtersVisible(void* user_data)
 {
@@ -1074,6 +1114,17 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 
         return;
     }
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible 
+    // Special treatment for "coalesced" filter
+    else if (filter_type_name == "filter_type_coalesced")
+    {
+        // Turn on Only Coalesced filter. This will also trigger the button "only_coalesced_inv_btn"
+        // and menu item check "inventory_filter_coalesced_objects_only" toggle states.
+        getActivePanel()->setFilterCoalescedObjects(true);
+        // As all Coalesced objects are only objects, then set the filter type to filter_type_objects
+        filterTypes = mFilterMap["filter_type_objects"];
+    }
+    // </FS:minerjr> [FIRE-35042]
     // invalid selection (broken XML?)
     else
     {
@@ -1522,6 +1573,25 @@ bool LLFloaterInventoryFinder::postBuild()
     mCreatorSelf->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorSelfFilterCommit, this));
     mCreatorOthers->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorOtherFilterCommit, this));
 
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Get the Finder's Only Coalesced check box for use later on, instead of calling getChild everytime accessing it
+    mOnlyCoalescedFilterCheck = getChild<LLCheckBoxCtrl>("check_only_coalesced");
+    // If the checkbox could be found, then set the commit callback to onOnlyCoalescedFilterCommit to update the mFilter object
+    // with the value in the checkbox.
+    if (mOnlyCoalescedFilterCheck)
+    {
+        mOnlyCoalescedFilterCheck->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit, this));
+    }
+    // Get the Finder's Show Links Filter combobox for use later as well to also prevent having to call get child everytime accessing it.
+    mShowLinksFilterCombo = getChild<LLComboBox>("inventory_filter_show_links_combo");
+    // If the combobox could be found, then set the commit callback to onShowLinksFilterCommit to update the mFilter object
+    // with the value in the checkbox.
+    if (mShowLinksFilterCombo)
+    {
+        mShowLinksFilterCombo->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onShowLinksFilterCommit, this));
+    }
+    // </FS:minerjr> [FIRE-35042]
+
     childSetAction("Close", onCloseBtn, this);
 
     // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
@@ -1635,6 +1705,26 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
     getChild<LLUICtrl>("check_copy")->setValue((bool) (mFilter->getFilterPermissions() & PERM_COPY));
     getChild<LLUICtrl>("check_transfer")->setValue((bool) (mFilter->getFilterPermissions() & PERM_TRANSFER));
     // </FS:Zi>
+
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Sync the Only Coalesced Filter Checkbox with the value from the mFilter
+    // Make sure the Only Coalseced Filter checkbox and the filter are valid before accessing them.
+    if (mOnlyCoalescedFilterCheck && mFilter)
+    {
+        // Set the check value to the value of the UI to the Only Coalesced Objects of the mFilter
+        mOnlyCoalescedFilterCheck->set(mFilter->getFilterCoalescedObjects());
+    }
+    // Sync the Show Links Filter combo box with the value from the mFilter
+    // Make sure the Show Links Filter combo box and filter are both valid
+    if (mShowLinksFilterCombo && mFilter)
+    {
+        // Set the combo box value to the value of the FitlerLinks of the mFilter
+        // In the UI, the choices match the same values as the filter values
+        // 0 - Show Links, 2 Show Links Only, 1 = Hide Links
+        // So we convert from the filters from U64 to LLSD (integer) as the SelectByValue takes a LLSD object as an input
+        mShowLinksFilterCombo->selectByValue(LLSD(mFilter->getFilterLinks()));
+    }
+    // </FS:minerjr> [FIRE-35042]
 }
 
 void LLFloaterInventoryFinder::draw()
@@ -1854,6 +1944,30 @@ void LLFloaterInventoryFinder::onPermissionsChanged()
     mFilter->setFilterPermissions(perms);
 }
 // </FS:Zi>
+
+// <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+// Callback method used to update the mFilter's Only Coalesced filter and syncs with the main inventory filter
+void LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit()
+{
+    // This will sync the Filter panels value with the value of the mFilter object
+    if (mOnlyCoalescedFilterCheck && mFilter)
+    {
+        // Set the mFilter's Filter Coalesced Objects value to the Only Coalesced Filter Checkbox value
+        mFilter->setFilterCoalescedObjects(mOnlyCoalescedFilterCheck->getValue());        
+    }
+}
+// Callback method used to update the mFilter's Show Links filter and syncs with the main inventory filter
+void LLFloaterInventoryFinder::onShowLinksFilterCommit()
+{
+    // This will sync the Show Links combo box with the value of the main inventory filter
+    if (mShowLinksFilterCombo)
+    {
+        // Set the mFilter's Filter Links value to the selected value of the Show Links Filter Combo.
+        // The values match up to the bit values that are used by the filter (0 = Show Links, 1 = Show Links Only, 2 = Hide Links)
+        mFilter->setFilterLinks((U64)mShowLinksFilterCombo->getSelectedValue().asInteger());
+    }
+}
+// </FS:minerjr> [FIRE-35042]
 
 bool LLFloaterInventoryFinder::getCheckShowEmpty()
 {
@@ -2741,6 +2855,14 @@ void LLPanelMainInventory::onCoalescedObjectsToggled(const LLSD& userdata)
     {
         getActivePanel()->setFilterCoalescedObjects(!getActivePanel()->getFilterCoalescedObjects());
     }
+
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Update the Filter Finder window with the change to the filters, so they can sync
+    if (getFinder())
+    {
+        getFinder()->updateElementsFromFilter();
+    }
+    // <FS:minerjr> [FIRE-35042]
 }
 
 bool LLPanelMainInventory::isCoalescedObjectsChecked(const LLSD& userdata)
@@ -2773,6 +2895,13 @@ void LLPanelMainInventory::onFilterLinksChecked(const LLSD& userdata)
     {
         getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
     }
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Update the Filter Finder window with the change to the filters, so they can sync
+    if (getFinder())
+    {
+        getFinder()->updateElementsFromFilter();
+    }
+    // <FS:minerjr> [FIRE-35042]
 }
 
 bool LLPanelMainInventory::isFilterLinksChecked(const LLSD& userdata)

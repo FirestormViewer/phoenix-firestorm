@@ -27,8 +27,20 @@
 		<text name="ObjectInspectorTooltipDelay_text">
 			Sekunden
 		</text>
+		<text name="FSHudTextLabel">
+			Optionen für Schwebetext:
+		</text>
 		<slider label_width="230" label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
 		<slider label_width="230" label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
+		<check_box name="FSHudTextUseHoverHighlight" label="Schwebetext von Objekten hervorheben:" tool_tip="Wenn mit der Maus über ein Objekt gefahren wird, wird der Schwebetext von Objekten (falls vorhanden) hervorgehoben, indem der Text in den Vordergrund geholt und der durchsichtige Hintergrund deaktiviert wird."/>
+		<text name="FSHudTextShowBackgroundLabel" width="220">
+			Hintergrund von Schwebetext anzeigen:
+		</text>
+		<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Zeigt einen schwarz/weißen Hintergrund hinter Schwebetext an, um ihn besser lesbar zu machen. Die Deckkraft kann unter Farben > Sonstige angepasst werden">
+			<combo_box.item label="Deaktiviert" name="ScriptDialogOption_0"/>
+			<combo_box.item label="Nur hervorgehobenes Object" name="ScriptDialogOption_1"/>
+			<combo_box.item label="Alle Objekte" name="ScriptDialogOption_2"/>
+		</combo_box>
 	</panel>
 
 	<!--2D Overlay-->

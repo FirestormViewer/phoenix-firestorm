@@ -214,6 +214,7 @@
 						<slider name="trackpad_sensitivity_slider" tool_tip="Règle la sensibilité du trackpad"/>
 						<check_box name="stop_posing_on_close_checkbox" label="Arrêt pose si fermeture" tool_tip="Ne pas arrêter votre pose peut être utile si vous travaillez beaucoup et que vous ne voulez pas la perdre accidentellement."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Réinitialisation de la rotation" tool_tip="Lorsque vous modifiez une rotation pour la première fois, la remet à zéro. Cela signifie que votre travail peut enregistrer une pose (et non une différence - voir charger/enregistrer). Une coche verte apparaît à côté de chaque articulation dont l'exportation a été remise à zéro."/>
+						<check_box name="also_save_bvh_checkbox" label="Ajouter BVH en enregistrant**" tool_tip="Lorsque vous enregistrez votre pose, écrivez également un fichier BVH, qui peut être téléchargé via 'Construire > Charger > Animation' pour poser vous-même ou d'autres personnes dans le monde. Pour ce faire, les articulations doivent remettre leur « base » à zéro, car le BVH nécessite que l'on travaille sur l'original."/>
 					</panel>
 				</tab_container>
 			</panel>
@@ -225,8 +226,8 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Annuler la dernière rotation" />
 					<button name="button_redo_change" tool_tip="Rétablir la dernière modification annulée" />
-					<button name="refresh_avatars" tool_tip="Double-cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
-					<button name="delta_mode_toggle" tool_tip="Si vous modifiez plusieurs articulations, chacune d'entre elles sera modifiée de la même manière, au lieu de toutes les modifier du même coup." />
+					<button name="poser_joint_reset" tool_tip="Double-cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
+					<button name="delta_mode_toggle" tool_tip="Si vous modifiez plusieurs articulations, chacune d'entre elles sera modifiée de la même manière, au lieu de toutes les modifier du même coup. Sert également à déverrouiller le Gimbal Lock." />
 					<button label="Miroir" name="button_toggleMirrorRotation" tool_tip="Changer l'articulation opposée, comme dans un miroir." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Modifier l'articulation opposée, mais de la même manière." />
 				</panel>
@@ -252,7 +253,7 @@
 				<button name="toggleAdvancedPanel" tool_tip="Passer à la section des paramètres avancés"/>
 				<button name="FlipPose_avatar" tool_tip="Inverser toute la pose vers la gauche/droite" />
 				<button name="FlipJoint_avatar" tool_tip="Miroir des parties du corps sélectionnées gauche/droite" />
-				<button label="Capter" name="button_RecaptureParts" tool_tip="Si les parties du corps sélectionnées sont désactivées, cette option permet de capturer à nouveau ce que ces parties du corps font actuellement. Ce bouton est désactivé si vous commencez à partir d`une pose T." />
+				<button label="Capter" name="button_RecaptureParts" tool_tip="Si les parties du corps sélectionnées sont désactivées, cette option permet de capturer à nouveau ce que ces parties du corps font actuellement."/>
 				<button label="Marche/arrêt" name="toggle_PosingSelectedBones" tool_tip="Active ou désactive le Poser pour les parties du corps sélectionnées. Lorsqu'elle est désactivée, cette partie du corps s'anime comme d'habitude (comme avec une AO ou avec une balle, etc.)." />
 				<button label="Mes poses" name="toggleLoadSavePanel" tool_tip="Charger, enregistrer et gérer les poses que vous créez" />
 				<button tool_tip="Gérer le catalogue des poses" name="open_poseDir_button" />
@@ -276,8 +277,8 @@
 						<slider label="Échelle Y :" name="Advanced_Scale_Y" />
 						<slider label="Échelle Z :" name="Advanced_Scale_Z" />
 						<button label="Annuler le changement d'échelle" name="undo_scale_change" tool_tip="Annuler le dernier changement d'échelle" />
-						<button label="Remise à l'échelle" name="redo_scale_change" tool_tip="Refaire le dernier changement d'échelle" />
-						<button label="Réinitialisation de I'échelle" name="reset_scales" tool_tip="Double-cliquez pour rétablir l'échelle d'origine" />
+						<button label="À l'échelle" name="redo_scale_change" tool_tip="Refaire le dernier changement d'échelle" />
+						<button label="Réinit. échelle" name="reset_scales" tool_tip="Double-cliquez pour rétablir l'échelle d'origine" />
 					</panel>
 				</tab_container>
 			</panel>

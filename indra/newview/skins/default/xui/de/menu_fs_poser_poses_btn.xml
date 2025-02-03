@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toggleable_menu name="Settings">
-	<menu_item_call label="Nur Rotationen laden" name="rotations"/>
-	<menu_item_call label="Nur Positionen laden" name="positions"/>
-	<menu_item_call label="Nur Skalierung laden" name="scale"/>
-	<menu_item_call label="Rotationen &amp; Positionen laden" name="rotations_positions"/>
-	<menu_item_call label="Rotationen &amp; Skalierung laden" name="rotations_scales"/>
-	<menu_item_call label="Positionen und Skalierung laden" name="positions_scales"/>
-	<menu_item_call label="Alles laden" name="load_all"/>
+	<menu_item_call label="Selektiv laden" tool_tip="Lädt nur deaktivierte Gelenke und aktiviert diese" name="load_selective"/>
+	<menu_item_call label="Selektiv laden - Nur Rotation" tool_tip="Lädt nur Rotationen von deaktivierten Gelenken und aktiviert diese" name="rotations_positions"/>
+	<menu_item_call label="Laden - Nur Rotationen" tool_tip="Lädt nur Rotationen. Gut für Posen die für andere Avatare/Körperformen erstellt wurden." name="rotations"/>
+	<menu_item_call label="Laden" tool_tip="Lädt Rotationen, Position und Skalierung." name="load_all"/>
 </toggleable_menu>

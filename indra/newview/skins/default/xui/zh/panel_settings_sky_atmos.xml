@@ -12,7 +12,7 @@
 				天空色彩：
 			</text>
 			<text name="blue_density_label">
-				天空色彩飽和度：
+				天空飽和度：
 			</text>
 		</layout_panel>
 		<layout_panel name="bottom_lp">

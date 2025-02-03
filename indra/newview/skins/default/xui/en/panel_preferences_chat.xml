@@ -234,9 +234,20 @@
              width="100" />
 
             <check_box
+             control_name="FSShowOnscreenConsole"
+             follows="left|top"
+             height="18"
+             top_pad="15"
+             label="Show on-screen chat console"
+             tool_tip="Show/Hide the chat console text, when the Conversations window is not displayed"
+             layout="topleft"
+             left="20"
+             name="FSShowOnscreenConsole"
+             width="400" />
+            <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="15"
+             top_pad="-2"
              left="20"
              width="200"
              height="18"

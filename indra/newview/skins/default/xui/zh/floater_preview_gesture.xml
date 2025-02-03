@@ -68,7 +68,7 @@
 	<text name="help_label">
 		所有步驟都會同時進行，除非你加入「等待」步驟。
 	</text>
-	<check_box label="可用" name="active_check" tool_tip="你可以在聊天中鍵入「觸發字元」，或按某手勢的快速鍵來啟用可用的手勢。  快速鍵的繫結若有衝突，通常會使手勢變成不可用。" />
+	<check_box label="可用" name="active_check" tool_tip="你可以在聊天中鍵入「觸發字元」，或按某手勢的快速鍵來啟用可用的手勢。  快速鍵的綁定若有衝突，通常會使手勢變成不可用。" />
 	<button label="預覽" name="preview_btn" />
 	<button label="儲存" name="save_btn" />
 </floater>

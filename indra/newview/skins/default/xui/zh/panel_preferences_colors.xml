@@ -20,7 +20,7 @@
 			<text name="chat_name_label">化身</text>
 			<text name="object_name_header_label">物件</text>
 			<slider label="聊天超出範圍顏色衰減：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="如果訊息的發件人不在附近，訊息的顏色衰減。" />
-			<check_box name="FSColorIMsDistinctly" label="在控制檯中分別為私聊和群組聊天著色：" />
+			<check_box name="FSColorIMsDistinctly" label="在控制台中分別為私聊和群組聊天著色：" />
 			<panel name="im_color_panel">
 				<text name="console_im_label">私聊/群組聊天</text>
 			</panel>
@@ -96,9 +96,10 @@
 			<slider label="活躍視窗：" name="active" />
 			<slider label="非活躍視窗：" name="inactive" />
 			<slider label="相機 / 移動：" name="camera_movement" />
-			<text name="console_opacity">控制檯透明度：</text>
-			<color_swatch name="console_background" tool_tip="選擇控制檯的顏色" />
-			<slider label="透明度：" name="console_background_opacity" tool_tip="選擇控制檯背景的透明度" />
+			<text name="console_opacity">控制台透明度：</text>
+			<color_swatch name="console_background" tool_tip="選擇控制台的顏色" />
+			<slider label="透明度：" name="console_background_opacity" tool_tip="選擇控制台背景的透明度" />
+			<slider label="懸停文字背景透明度：" name="FSHudTextBackgroundOpacity" tool_tip="設定懸停文字背景的透明度"/>
 			<text name="preferences_search_label">突出顯示搜尋偏好設定：</text>
 			<color_swatch name="preferences_search_color" tool_tip="選擇搜尋結果突出顯示的偏好設定的顏色" />
 			<text name="area_search_beacon_color_label">區域搜尋標記顏色：</text>

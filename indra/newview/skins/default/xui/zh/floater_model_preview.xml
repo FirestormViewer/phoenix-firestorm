@@ -7,7 +7,7 @@
 		錯誤：剖析 dae 時出錯，詳見記錄檔案。
 	</string>
 	<string name="status_bind_shape_orientation">
-		警告：繫結形狀矩陣並未處於標準的「X-向前」方位。
+		警告：綁定形狀矩陣並未處於標準的「X-向前」方位。
 	</string>
 	<string name="status_material_mismatch">
 		錯誤：模型材料並非參考模型的子集合。
@@ -97,7 +97,7 @@
 		由於關節過多，蒙皮已被禁用：[JOINTS]，最大值：[MAX]
 	</string>
 	<string name="UnrecognizedJoint">
-		繫結到一個未知的關節：[NAME]
+		綁定到一個未知的關節：[NAME]
 	</string>
 	<string name="UnknownJoints">
 		由於[COUNT]個未知關節，蒙皮已被禁用。
@@ -339,7 +339,7 @@
 				</text>
 				<check_box label="包含紋理" name="upload_textures" />
 			</panel>
-			<panel label="涵蓋" title="繫結" name="rigging_panel">
+			<panel label="覆蓋" title="已綁定" name="rigging_panel">
 				<text name="scale_label">
 					縮放比例 (1=無):
 				</text>
@@ -380,7 +380,7 @@
 					[CONFLICTS]衝突[JOINTS_COUNT]個關節
 				</text>
 				<text name="pos_overrides_descr">
-					位置涵蓋於關節'[JOINT]':
+					位置覆蓋於關節'[JOINT]':
 				</text>
 				<scroll_list name="pos_overrides_list">
 					<scroll_list.columns label="模型" name="model_name" />
@@ -396,9 +396,9 @@
 				<text name="mesh_upload_behaviour_label">
 					模型上傳行為設定：
 				</text>
-				<check_box label="自動啟用權重" tool_tip="自動為包含繫結資訊的網格啟用權重" name="mesh_preview_auto_weights" />
+				<check_box label="自動啟用權重" tool_tip="自動為包含綁定資訊的網格啟用權重" name="mesh_preview_auto_weights" />
 				<check_box label="預設使用'可靠'的細節層次" tool_tip="預設使用'可靠'的方法（GLOD）" name="mesh_upload_default_to_reliable" />
-				<check_box label="自動預覽權重" tool_tip="自動在預覽中顯示包含繫結資訊的網格的權重" name="mesh_preview_auto_show_weights" />
+				<check_box label="自動預覽權重" tool_tip="自動在預覽中顯示包含綁定資訊的網格的權重" name="mesh_preview_auto_show_weights" />
 				<text name="lod_suffix_label">
 					細節層次字尾：
 				</text>
@@ -526,7 +526,7 @@
 				</text>
 				<slider name="physics_explode" width="75" />
 				<check_box label="關節位置" name="show_joint_positions" />
-				<check_box label="關節位置涵蓋" name="show_joint_overrides" />
+				<check_box label="關節位置覆蓋" name="show_joint_overrides" />
 				<check_box label="皮膚權重" name="show_skin_weight" />
 			</panel>
 			<text name="warning_title" width="60">

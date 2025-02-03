@@ -1506,6 +1506,14 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("areaTex");
     mReservedUniforms.push_back("searchTex");
     mReservedUniforms.push_back("blendTex");
+    // <FS:Beq> reserved uniforms for snapshot frame
+    mReservedUniforms.push_back("border_color");
+    mReservedUniforms.push_back("border_thickness");
+    mReservedUniforms.push_back("guide_color");
+    mReservedUniforms.push_back("guide_thickness");
+    mReservedUniforms.push_back("guide_style");
+    mReservedUniforms.push_back("frame_rect");
+    // </FS:Beq>
 
     llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

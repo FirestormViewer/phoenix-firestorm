@@ -52,6 +52,25 @@ struct hud_object_further_away
 
 bool hud_object_further_away::operator()(const LLPointer<LLHUDObject>& lhs, const LLPointer<LLHUDObject>& rhs) const
 {
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    // This overrides distance comparision if either of the objects is highlighted.
+    // Get the FSHudTextUseHoverHighlight value from the saved settings and if it is enabled, then check if either object is highlighed	
+    static LLCachedControl<bool> mbUseHoverHighlight(*LLControlGroup::getInstance("Global"), "FSHudTextUseHoverHighlight");
+    if (mbUseHoverHighlight)
+    {
+        // If the left object is highlighted then return false to force it be closer to the screen.
+        if (lhs->getIsHighlighted())
+        {
+            return false;
+        }
+        // Else if the right object is highlighted, then return true to force it to be closer to the screen.
+        else if (rhs->getIsHighlighted())
+        {
+            return true;
+        }
+    }
+    // Otherwise, neither object is heighlighted, so fall back to the normal distance comparison.
+    // </FS:minerjr> [FIRE-35019] 
     return lhs->getDistance() > rhs->getDistance();
 }
 
@@ -64,6 +83,9 @@ LLHUDObject::LLHUDObject(const U8 type) :
     mVisible = true;
     mType = type;
     mDead = false;
+    // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
+    mbIsHighlighted = false; // Default is off 
+    // </FS:minerjr> [FIRE-35019] 
 }
 
 LLHUDObject::~LLHUDObject()

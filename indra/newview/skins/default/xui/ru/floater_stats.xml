@@ -16,8 +16,12 @@
 					<stat_bar label="Треугольников на кадр" name="ktrisframe"/>
 					<stat_bar label="Треугольников в секунду" name="ktrissec"/>
 					<stat_bar label="Всего объектов" name="objs"/>
+					<stat_bar name="cachedobjs" label="Кэшированных объектов"/>
 					<stat_bar label="Новых объектов" name="newobjs"/>
 					<stat_bar label="Частота попаданий в кэш объектов" name="object_cache_hits"/>
+					<stat_bar name="occlusion_queries" label="Выполненные запросы на окклюзию"/>
+					<stat_bar name="occluded" label="Закрытые объекты"/>
+					<stat_bar name="unoccluded" label="Незакрытый объекты"/>
 				</stat_view>
 				<stat_view label="Текстура" name="texture">
 					<stat_bar label="Частота попаданий в кэш" name="texture_cache_hits"/>
@@ -29,15 +33,18 @@
 					<stat_bar label="Неформатированная память" name="rawmemstat"/>
 					<stat_bar label="Ограничение памяти" name="glboundmemstat"/>
 				</stat_view>
+				<stat_view name="material" label="Материал">
+					<stat_bar name="nummaterials" label="Подсчет"/>
+				</stat_view>
 				<stat_view label="Сеть" name="network">
 					<stat_bar label="Входящие пакеты" name="packetsinstat"/>
 					<stat_bar label="Исходящие пакеты" name="packetsoutstat"/>
-					<stat_bar label="Объекты" name="objectkbitstat"/>
-					<stat_bar label="Текстура" name="texturekbitstat"/>
-					<stat_bar label="Актив" name="assetkbitstat"/>
-					<stat_bar label="Слои" name="layerskbitstat"/>
-					<stat_bar label="Действительный ввод" name="actualinkbitstat"/>
-					<stat_bar label="Действительный вывод" name="actualoutkbitstat"/>
+					<stat_bar label="Объекты" name="objectdatareceived"/>
+					<stat_bar label="Текстура" name="texturedatareceived"/>
+					<stat_bar label="Актив" name="assetudpdatareceived"/>
+					<stat_bar label="Слои" name="layersdatareceived"/>
+					<stat_bar label="Фактический ввод" name="messagedatain"/>
+					<stat_bar label="Фактический вывод" name="messagedataout"/>
 				</stat_view>
 			</stat_view>
 			<stat_view label="Симулятор" name="sim">

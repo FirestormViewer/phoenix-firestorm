@@ -344,7 +344,7 @@ bool LLToolCompTranslate::handleDoubleClick(S32 x, S32 y, MASK mask)
     {
         // You should already have an object selected from the mousedown.
         // If so, show its properties
-        LLFloaterReg::showInstance("build", "Content");
+        LLFloaterReg::showInstance("build", "Contents");
         return true;
     }
     // Nothing selected means the first mouse click was probably
@@ -463,7 +463,7 @@ bool LLToolCompScale::handleDoubleClick(S32 x, S32 y, MASK mask)
     {
         // You should already have an object selected from the mousedown.
         // If so, show its properties
-        LLFloaterReg::showInstance("build", "Content");
+        LLFloaterReg::showInstance("build", "Contents");
         return true;
     }
     else
@@ -674,7 +674,7 @@ bool LLToolCompRotate::handleDoubleClick(S32 x, S32 y, MASK mask)
     {
         // You should already have an object selected from the mousedown.
         // If so, show its properties
-        LLFloaterReg::showInstance("build", "Content");
+        LLFloaterReg::showInstance("build", "Contents");
         return true;
     }
     else

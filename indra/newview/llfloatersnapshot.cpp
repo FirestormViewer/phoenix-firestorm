@@ -1478,12 +1478,14 @@ bool LLFloaterSnapshot::isWaitingState()
     return (impl->getStatus() == ImplBase::STATUS_WORKING);
 }
 
-bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
+// <FS:Beq> FIRE-35002 - Post to flickr broken, improved solution
+// bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
+bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized, bool have_flickr)
+// </FS:Beq>
 {
     // <FS:Ansariel> Share to Flickr
     //if (!initialized)
-    LLFloaterFlickr* floater_flickr = LLFloaterReg::findTypedInstance<LLFloaterFlickr>("flickr");
-    if (!initialized && !floater_flickr)
+    if (!initialized && !have_flickr)
     // </FS:Ansariel>
         return false;
 
@@ -1502,8 +1504,11 @@ void LLFloaterSnapshotBase::ImplBase::updateLivePreview()
 {
     // don't update preview for hidden floater
     // <FS:Beq> FIRE-35002 - Post to flickr broken
-    // if (mFloater && mFloater->isInVisibleChain() && ImplBase::updatePreviewList(true))
-    if (ImplBase::updatePreviewList(true) && mFloater)
+    LLFloaterFlickr* floater_flickr = LLFloaterReg::findTypedInstance<LLFloaterFlickr>("flickr");
+    auto have_flickr = floater_flickr != nullptr;
+    if ( ((mFloater && mFloater->isInVisibleChain()) ||
+          have_flickr) &&
+          ImplBase::updatePreviewList(true, have_flickr))
     // </FS:Beq>
     {
         LL_DEBUGS() << "changed" << LL_ENDL;

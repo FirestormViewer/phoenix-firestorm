@@ -3,48 +3,32 @@
  layout="topleft"
  name="Settings">
     <menu_item_call
-     label="Load Rotations only"
+     label="Load Selective"
+	 tool_tip="Loads only the joints that are off, and turns them on"
      layout="topleft"
+     name="load_selective">
+        <on_click function="Pose.Menu" parameter="selective"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Load Selective - Rotations Only"
+	 tool_tip="Loads only rotations, only to the joints that are off, and turns them on"
+     layout="topleft"
+     name="rotations_positions">
+        <on_click function="Pose.Menu" parameter="selective_rot"/>
+    </menu_item_call>
+    <menu_item_separator
+     layout="topleft" />
+    <menu_item_call
+     label="Load - Rotations Only"
+     layout="topleft"
+	 tool_tip="Loads just the rotations. Good for poses made for other avatars/shapes"
      name="rotations">
         <on_click function="Pose.Menu" parameter="rotation"/>
     </menu_item_call>
     <menu_item_call
-     label="Load Positions only"
+     label="Load"
      layout="topleft"
-     name="positions">
-        <on_click function="Pose.Menu" parameter="position"/>
-    </menu_item_call>
-    <menu_item_call
-     label="Load Scales only"
-     layout="topleft"
-     name="scale">
-        <on_click function="Pose.Menu" parameter="scale"/>
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Load Rotations &amp; Positions"
-     layout="topleft"
-     name="rotations_positions">
-        <on_click function="Pose.Menu" parameter="rot_pos"/>
-    </menu_item_call>
-    <menu_item_call
-     label="Load Rotations &amp; Scales"
-     layout="topleft"
-     name="rotations_scales">
-        <on_click function="Pose.Menu" parameter="rot_scale"/>
-    </menu_item_call>
-    <menu_item_call
-     label="Load Position &amp; Scales"
-     layout="topleft"
-     name="positions_scales">
-        <on_click function="Pose.Menu" parameter="pos_scale"/>
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Load all"
-     layout="topleft"
+	 tool_tip="Loads rotations, positions and scales"
      name="load_all">
         <on_click function="Pose.Menu" parameter="all"/>
     </menu_item_call>

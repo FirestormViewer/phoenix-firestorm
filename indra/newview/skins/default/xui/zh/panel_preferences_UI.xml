@@ -26,11 +26,23 @@
 			<text name="ObjectInspectorTooltipDelay_text">
 				秒
 			</text>
+			<text name="FSHudTextLabel">
+				懸停文字選項：
+			</text>
 			<slider label_width="230" label="懸停文字淡出距離（單位：米）：" tool_tip="設定懸停文字淡出的距離。" name="FSHudTextFadeDistance" />
 			<slider label_width="230" label="懸停文字淡出範圍（單位：米）：" tool_tip="設定懸停文字從完全可見到完全不可見的淡出範圍。" name="FSHudTextFadeRange" />
+			<check_box name="FSHudTextUseHoverHighlight" label="突出顯示物件的懸停文字：" tool_tip="當滑鼠懸停於物件上時，物件的懸停文字（若存在）將被突出顯示，文字會置於前景，並停用透明背景。"/>
+			<text name="FSHudTextShowBackgroundLabel">
+				顯示懸停文字背景：
+			</text>
+			<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="在懸停文字後顯示黑/白背景以提升可讀性。背景透明度可於顏色 > 其他進行調整。">
+				<combo_box.item label="停用" name="ScriptDialogOption_0"/>
+				<combo_box.item label="僅限突出顯示的物件" name="ScriptDialogOption_1"/>
+				<combo_box.item label="所有物件" name="ScriptDialogOption_2"/>
+			</combo_box>
 		</panel>
 		<!-- 2D覆蓋 -->
-		<panel label="2D涵蓋" name="ui-2d-overlay">
+		<panel label="2D覆蓋" name="ui-2d-overlay">
 			<text name="UI Size:" width="95">
 				使用者界面大小：
 			</text>
@@ -183,7 +195,7 @@
 		<!-- 提示框 -->
 		<panel label="提示框" name="UI-toasts-tab">
 			<text name="ToastSettings">
-				通知設定（彈出視窗，控制檯，提示框）：
+				通知設定（彈出視窗，控制台，提示框）：
 			</text>
 			<slider label="提示框與UI底部的距離：" tool_tip="提示框底部與UI底部之間的畫素距離" name="ToastSpace" />
 			<text name="ToastSpaceText">
