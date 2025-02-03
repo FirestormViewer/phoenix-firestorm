@@ -269,7 +269,7 @@
 						<slider label="Pozycja X:" name="Advanced_Position_X" />
 						<slider label="Pozycja Y:" name="Advanced_Position_Y" />
 						<slider label="Pozycja Z:" name="Advanced_Position_Z" />
-						<button label="Cofnij zmianę pozycji" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę pozycji" />
+						<button label="Cofnij pozycję" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę pozycji" />
 						<button label="Ponów pozycję" name="redo_position_change" tool_tip="Ponownie wykonaj ostatnią zmianę pozycji" />
 						<button label="Reset pozycji" name="reset_positions" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną pozycję" />
 					</panel>
@@ -277,7 +277,7 @@
 						<slider label="Skala X:" name="Advanced_Scale_X" />
 						<slider label="Skala Y:" name="Advanced_Scale_Y" />
 						<slider label="Skala Z:" name="Advanced_Scale_Z" />
-						<button label="Cofnij zmianę skali" name="undo_scale_change" tool_tip="Cofnij ostatnią zmianę skali" />
+						<button label="Cofnij skalę" name="undo_scale_change" tool_tip="Cofnij ostatnią zmianę skali" />
 						<button label="Ponów skalę" name="redo_scale_change" tool_tip="Ponownie wykonaj ostatnią zmianę skali" />
 						<button label="Reset skali" name="reset_scales" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną skalę" />
 					</panel>
