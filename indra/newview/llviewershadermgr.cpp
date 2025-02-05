@@ -137,6 +137,7 @@ LLGLSLShader            gGlowProgram;
 LLGLSLShader            gGlowExtractProgram;
 LLGLSLShader            gPostScreenSpaceReflectionProgram;
 LLGLSLShader            gPostVignetteProgram;   // <FS:CR> Import Vignette from Exodus
+LLGLSLShader            gPostSnapshotFrameProgram;   // <FS:Beq/> Add Snapshot frame guide
 
 // Deferred rendering shaders
 LLGLSLShader            gDeferredImpostorProgram;
@@ -1031,6 +1032,7 @@ bool LLViewerShaderMgr::loadShadersEffects()
         gGlowProgram.unload();
         gGlowExtractProgram.unload();
         gPostVignetteProgram.unload();  // <FS:Ansariel> Import Vignette from Exodus
+        gPostSnapshotFrameProgram.unload();  // <FS:Beq/> Add Snapshot framing shader
         return true;
     }
 
@@ -1082,6 +1084,17 @@ bool LLViewerShaderMgr::loadShadersEffects()
         success = gPostVignetteProgram.createShader();
     }
 // </FS:CR>
+// <FS:Beq> Add Snapshot framing shader
+    if (success)
+    {
+        gPostSnapshotFrameProgram.mName = "Snapshot Frame Post";
+        gPostSnapshotFrameProgram.mShaderFiles.clear();
+        gPostSnapshotFrameProgram.mShaderFiles.push_back(make_pair("post/exoPostBaseV.glsl", GL_VERTEX_SHADER));
+        gPostSnapshotFrameProgram.mShaderFiles.push_back(make_pair("post/snapshotFrameF.glsl", GL_FRAGMENT_SHADER));
+        gPostSnapshotFrameProgram.mShaderLevel = mShaderLevel[SHADER_EFFECT];
+        success = gPostSnapshotFrameProgram.createShader();
+    }
+// </FS:Beq>
 
     return success;
 

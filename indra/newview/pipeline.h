@@ -348,7 +348,8 @@ public:
     void renderShadow(const glm::mat4& view, const glm::mat4& proj, LLCamera& camera, LLCullResult& result, bool depth_clamp);
     void renderSelectedFaces(const LLColor4& color);
     void renderHighlights();
-    void renderVignette(LLRenderTarget* src, LLRenderTarget* dst);
+    bool renderVignette(LLRenderTarget* src, LLRenderTarget* dst);
+    bool renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst); // <FS:Beq/> Add snapshot frame rendering
     void renderDebug();
     void renderPhysicsDisplay();
 
