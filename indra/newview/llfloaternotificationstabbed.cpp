@@ -47,6 +47,7 @@ LLFloaterNotificationsTabbed::LLFloaterNotificationsTabbed(const LLSD& key) : LL
     mSystemMessageList(NULL),
     mNotificationsSeparator(NULL),
     mNotificationsTabContainer(NULL),
+    mNotificationsToGo(), // <FS:Beq/> FIRE-35130 bugsplat in notification::idle updates. 
     NOTIFICATION_TABBED_ANCHOR_NAME("notification_well_panel"),
     IM_WELL_ANCHOR_NAME("im_well_panel"),
     mIsReshapedByUser(false)
