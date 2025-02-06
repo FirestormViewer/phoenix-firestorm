@@ -3896,6 +3896,33 @@ S32 LLTextureFetch::getLastRawImage(const LLUUID& id,
     return decoded_discard;
 }
 
+// <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+// Combine the two methods above into a single command so that there is only 1 thread lock per request
+// instead of 2. (There are actually many thread locks)
+S32 LLTextureFetch::getLastFetchState(const LLUUID& id, S32& requested_discard, S32& decoded_discard, bool& decoded, LLPointer<LLImageRaw>& raw, LLPointer<LLImageRaw>& aux)
+{
+    LL_PROFILE_ZONE_SCOPED;
+    S32 state = LLTextureFetchWorker::INVALID;
+    decoded_discard = -1;
+    LLTextureFetchWorker* worker = getWorker(id);
+    if (worker && !worker->haveWork() && worker->mDecodedDiscard >= 0)
+    {
+        worker->lockWorkMutex();                                        // +Mw
+        state = worker->mState;        
+        requested_discard = worker->mDesiredDiscard;
+        decoded_discard = worker->mDecodedDiscard;
+        decoded = worker->mDecoded;
+        // IF the texture was decoded, then get the raw and aux textures at the same time
+        if (decoded)
+        {
+            raw = worker->mRawImage;
+            aux = worker->mAuxImage;
+        }
+        worker->unlockWorkMutex();                                      // -Mw
+    }
+    return state;
+}
+// </FS:minerjr> [FIRE-35011]
 void LLTextureFetch::dump()
 {
     LL_INFOS(LOG_TXT) << "LLTextureFetch ACTIVE_HTTP:" << LL_ENDL;

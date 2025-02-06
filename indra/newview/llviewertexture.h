@@ -415,6 +415,9 @@ public:
     bool        isRawImageValid()const { return mIsRawImageValid ; }
     void        forceToSaveRawImage(S32 desired_discard = 0, F32 kept_time = 0.f) ;
 
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    bool        tryToClearRawImages(); // Try to clear the raw images every 30 seconds (Can be made to be variable to allow users control over time frame)
+    // </FS:minerjr> [FIRE-35011]
     // readback the raw image from OpenGL if mRawImage is not valid
     void        readbackRawImage();
 
@@ -508,6 +511,14 @@ protected:
     F32             mLastCallBackActiveTime;
 
     LLPointer<LLImageRaw> mRawImage;
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card  
+    // Replace the single raw iamge with a array of raw iamges (Sized to MAX_DISCARD_LEVEL)
+    std::array<LLPointer<LLImageRaw>, MAX_DISCARD_LEVEL> mRawImages;
+    // Store the last time a Raw image was accessed
+    F32 mLastRawImageAccess;
+    // Replace the raw aux image with a array of raw images (Sized to the MAX_DISCARD_LEVEL)    
+    std::array<LLPointer<LLImageRaw>, MAX_DISCARD_LEVEL> mAuxRawImages;
+    // </FS:minerjr> [FIRE-35011]
     S32 mRawDiscardLevel = -1;
 
     // Used ONLY for cloth meshes right now.  Make SURE you know what you're

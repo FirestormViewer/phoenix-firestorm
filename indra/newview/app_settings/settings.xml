@@ -15229,6 +15229,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>FSPerformanceAdditions</key>
+    <map>
+        <key>Comment</key>
+        <string>Stores the state of the performance additions for validating</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>   
     <key>TextureDecodeDisabled</key>
     <map>
       <key>Comment</key>

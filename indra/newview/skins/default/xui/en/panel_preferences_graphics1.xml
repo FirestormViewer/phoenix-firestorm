@@ -1230,6 +1230,48 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+        <!-- <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card -->
+        <!-- This is just here for testing purposes, will be removed later on -->
+        <combo_box
+         control_name="FSPerformanceAdditions"
+         follows="left|top"
+         layout="topleft"
+         top_delta="20"
+         left="10"
+         name="FSPerformanceAdditions"
+         tool_tip="Performance Features"
+         height="21"
+         width="300">
+            <combo_box.item
+             label="Use current methods"
+             name="0"
+             value="0" />
+            <combo_box.item
+             label="Use 1 spinlock instead of 2 to get worker texture object"
+             name="1"
+             value="1" />
+            <combo_box.item
+             label="Replace fetch with local Raw cache"
+             name="2"
+             value="2" />
+            <combo_box.item
+             label="Texture List Tracking of Bias Improvements"
+             name="3"
+             value="3" />            
+            <combo_box.item
+             label="Add max_time to imposter generation"
+             name="4"
+             value="4" />
+            <combo_box.item
+             label="Limit the amount of cube map regens to only visible ones"
+             name="5"
+             value="5" />
+            <combo_box.item
+             label="Limit the regen to cube maps to 1 time when become visible"
+             name="6"
+             value="6" />
+        </combo_box>
+        <!-- </FS:minerjr> [FIRE-35011] -->
     </panel>
 
 <!--Rendering-->

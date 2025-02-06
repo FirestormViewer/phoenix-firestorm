@@ -140,6 +140,10 @@ public:
     // Threads:  T*
     S32 getLastFetchState(const LLUUID& id, S32& requested_discard, S32 &decoded_discard, bool &decoded);
 
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    // Replaces the two above commands with a single one to reduce the number of mutex locks by 1.. this is causing issues. and will be replaced soon
+    S32 getLastFetchState(const LLUUID& id, S32& requested_discard, S32& decoded_discard, bool& decoded, LLPointer<LLImageRaw>& raw, LLPointer<LLImageRaw>& aux);
+    // </FS:minerjr> [FIRE-35011]
     // @return  Fetch last raw image
     // Threads:  T*
     S32 getLastRawImage(const LLUUID& id, LLPointer<LLImageRaw>& raw, LLPointer<LLImageRaw>& aux);
