@@ -12,7 +12,7 @@
 				許可するドメイン：
 			</text>
 			<scroll_list name="whitelist">
-				<column label="Whitelist" name="list" width="195" />
+				<column label="Whitelist" name="list" />
 			</scroll_list>
 			<layout_stack name="whitelist_buttons_layout_stack">
 				<layout_panel name="whitelist_buttons_panel_add">
@@ -28,7 +28,7 @@
 				拒否するドメイン：
 			</text>
 			<scroll_list name="blacklist">
-				<column label="Blacklist" name="list" width="195" />
+				<column label="Blacklist" name="list" />
 			</scroll_list>
 			<layout_stack name="blacklist_buttons_layout_stack">
 				<layout_panel name="blacklist_buttons_panel_add">

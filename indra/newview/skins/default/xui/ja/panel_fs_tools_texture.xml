@@ -39,7 +39,7 @@
 				<spinner label="カットオフ" name="alpha cutoff"/>
 				<spinner label="メタリック" name="metalness factor"/>
 				<spinner label="粗さ" name="roughness factor"/>
-				<button name="save_selected_pbr" label="Save"/>
+				<button name="save_selected_pbr" label="保存"/>
 			</panel>
 			<!-- panel_material_parameters -->
 			<!-- BEGIN PBR Material texture transform parameters -->

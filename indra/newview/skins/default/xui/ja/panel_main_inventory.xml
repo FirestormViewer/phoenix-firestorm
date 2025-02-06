@@ -37,7 +37,7 @@
 			<button name="expand_btn" label="拡げる"/>
 		</layout_panel>
 		<layout_panel name="filter_ctrls">
-			<text name="filter_label" value="フィルタ："/>
+			<text name="filter_label" width="50" value="フィルタ："/>
 			<combo_box name="filter_combo_box">
 				<combo_box.item value="filter_type_all" label="すべての種類"/>
 				<combo_box.item value="filter_separator" label="──────"/>

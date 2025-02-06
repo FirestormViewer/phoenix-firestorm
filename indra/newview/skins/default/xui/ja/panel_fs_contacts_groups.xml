@@ -8,9 +8,9 @@
 	</text>
 	<button label="ＩＭ／コール" name="chat_btn" tool_tip="インスタントメッセージのセッションを開きます。"/>
 	<button label="情報" name="info_btn"/>
-	<button label="グループのタイトル" name="titles_btn"/>
+	<button label="タイトル" name="titles_btn"/>
 	<button label="アクティブ" name="activate_btn"/>
-	<button label="抜ける" name="leave_btn"/>
+	<button label="脱退する" name="leave_btn"/>
 	<button label="作成…" name="create_btn"/>
 	<button label="検索…" name="search_btn"/>
 	<button label="招待…" name="invite_btn"/>

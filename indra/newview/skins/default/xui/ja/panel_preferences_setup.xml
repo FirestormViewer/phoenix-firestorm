@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="セットアップ" name="Input panel">
-	<!-- Deleted Aug.21, 2012
-	<text name="Network:">
-		ネットワーク：
-	</text>
-	-->
 	<tab_container name="tabs" label="セットアップ">
 		<panel label="接続" name="tab-conn">
 			<text name="Maximum bandwidth">
-				最大帯域幅 ([https://wiki.firestormviewer.org/fs_speedtest 適正な値を設定するには？]):
+				最大帯域幅（[https://wiki.firestormviewer.org/fs_speedtest 適正な値を設定するには？]）：
 			</text>
 			<icon name="NetworkLowGraphicsDivet"/>
 			<icon name="NetworkMidGraphicsDivet"/>
@@ -22,7 +17,7 @@
 				Wi-Fi
 			</text>
 			<text name="NetworkPrefText2">
-				DSL
+				ＤＳＬ
 			</text>
 			<text name="NetworkPrefText3">
 				ケーブル
@@ -53,7 +48,7 @@
 			<!--
 			<check_box label="Cookie を受け入れる" name="cookies_enabled"/>
 			-->
-			<check_box label="Javascript を有効にする" name="browser_javascript_enabled"/>
+			<check_box label="Javascriptを有効にする" name="browser_javascript_enabled"/>
 			<check_box label="メディアブラウザのポップアップを有効にする" name="media_popup_enabled"/>
 			<button label="プロキシ設定を調整" label_selected="プロキシ設定を調整" name="set_proxy"/>
 			<text name="home_page_label_l">
@@ -73,7 +68,7 @@
 			<text name="asset_text_box5">
 				㎆
 			</text>
-			<button label="持ち物のキャッシュクリア" name="ClearInventoryCache"/>
+			<button label="インベントリのキャッシュクリア" name="ClearInventoryCache"/>
 			<text name="Cache location">
 				キャッシュの場所：
 			</text>
@@ -88,7 +83,7 @@
 			<button label="開く" label_selected="開く" name="open_sound_cache"/>
 			<button label="設定" label_selected="設定" name="set_sound_cache"/>
 			<button label="初期化" label_selected="初期化" name="reset_sound_cache"/>
-			<check_box label="ログアウト時に展開されていないDSF（サウンド）キャッシュファイルを削除しない" tool_tip="ここにチェックを入れると、ログアウトする時に展開されていないサウンドファイルをビューアが削除しません。これによってインワールドでのサウンド再生の性能が向上するかもしれません。但し、これによってキャッシュディレクトリがあっと言う間に増大し、しかも最大キャッシュの設定は無視されます。結果的にディスクスペースを過剰に消費することとなります。デフォルトではこのチェックは外してあります。" name="keep_unpacked_cache"/>
+			<check_box label="ログアウト時に展開されていないＤＳＦ（サウンド）キャッシュファイルを削除しない" tool_tip="ここにチェックを入れると、ログアウトする時に展開されていないサウンドファイルをビューアが削除しません。これによってインワールドでのサウンド再生の性能が向上するかもしれません。但し、これによってキャッシュディレクトリがあっと言う間に増大し、しかも最大キャッシュの設定は無視されます。結果的にディスクスペースを過剰に消費することとなります。デフォルトではこのチェックは外してあります。" name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				チャットログの場所：
 			</text>

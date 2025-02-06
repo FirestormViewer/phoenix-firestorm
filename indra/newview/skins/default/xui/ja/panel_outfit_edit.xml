@@ -16,9 +16,9 @@
 	</panel.string>
 	<!-- Wearables filtering strings -->
 	<string name="Filter.All" value="全て"/>
-	<string name="Filter.Clothes/Body" value="服装／身体"/>
+	<string name="Filter.Clothes/Body" value="衣装／身体"/>
 	<string name="Filter.Objects" value="オブジェクト"/>
-	<string name="Filter.Clothing" value="服装"/>
+	<string name="Filter.Clothing" value="衣装"/>
 	<string name="Filter.Bodyparts" value="身体部位"/>
 	<string name="replace_body_part" value="クリックして既存のシェイプと置き換える"/>
 	<button name="back_btn"/>

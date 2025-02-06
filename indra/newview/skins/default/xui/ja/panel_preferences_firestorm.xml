@@ -28,8 +28,8 @@
 			<!-- 
 			<check_box label="表示名が表示されている場合でも、ユーザ名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザ名で並べ替わるようになります。"/>
 				-->
-			<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的にレンダリングすることができます。"/>
-			<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものをレンダリングするまでの秒数です。"/>
+			<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的に描画することができます。"/>
+			<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものを描画するまでの秒数です。"/>
 			<check_box name="UseLSLBridge" label="ＬＳＬクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューアの機能を拡張できるようにします。"/>
 			<combo_box name="UseLSLFlightAssist" tool_tip="より高い場所での飛行やホバリングを支援するスクリプトを有効にします。">
 				<combo_box.item label="飛行アシスト：無効" name="flight_disabled"/>
@@ -111,7 +111,7 @@
 			<button name="BeamColor_refresh" label="リスト更新" tool_tip="色設定のリストを更新します。"/>
 			<button name="PhoenixBeamPrev_rainbow" label=""/>
 			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
-			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルでレンダリングされなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
+			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
 			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャネル9000に送信します。"/>
 			<view_border name="BeamDivisor2"/>
 			<combo_box name="FSBeamShape_combo" tool_tip="パーティクルビームの形を選択します。"/>
@@ -168,8 +168,8 @@
 			</combo_box>
 			<check_box name="FSBuildPrefs_EmbedItem" label="新規作成プリムにアイテムを埋め込む"/>
 			<view_border name="embed_item_drop_target_rect"/>
-			<fs_embedded_item_drop_target name="embed_item" tool_tip="ここに持ち物をドロップします。">
-				ここに持ち物をドロップ
+			<fs_embedded_item_drop_target name="embed_item" tool_tip="ここにインベントリをドロップします。">
+				ここにインベントリをドロップ
 			</fs_embedded_item_drop_target>
 			<view_border name="build_item_add_disp_rect"/>
 			<text name="build_item_add_disp_rect_txt" tool_tip="">
@@ -254,7 +254,7 @@
 				個以上
 			</text>
 			<check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
-			<check_box label="持ち物内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、持ち物内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
+			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
 			<check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab"/>
 			<check_box label="ビルドモードにおいて、CapsLockの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、ビルドモードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture"/>

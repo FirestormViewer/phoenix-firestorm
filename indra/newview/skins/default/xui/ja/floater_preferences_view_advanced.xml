@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterpreferencesviewadvanced" title="カメラ位置">
-	<text name="camera_offset_lbl" width="130">
+	<text name="camera_offset_lbl">
 		カメラのオフセット値：
 	</text>
 	<spinner label="Ｘ" name="camera_x"/>
 	<spinner label="Ｙ" name="camera_y"/>
 	<spinner label="Ｚ" name="camera_z"/>
-	<text name="focus_offset_lbl" width="158">
+	<text name="focus_offset_lbl">
 		フォーカスのオフセット値：
 	</text>
 	<spinner label="Ｘ" name="focus_x"/>

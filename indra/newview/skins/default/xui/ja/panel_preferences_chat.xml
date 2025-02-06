@@ -107,7 +107,7 @@
 				<combo_box.item label="ボールド＋イタリック＋下線" name="BOLDITALICUNDERLINE"/>
 			</combo_box>
 			<text name="Moderator Text Style">
-			発言：
+				発言：
 			</text>
 			<combo_box name="mod_text_style">
 				<combo_box.item label="標準" name="normal"/>
@@ -126,11 +126,11 @@
 			<check_box name="FSReportIgnoredAdHocSession" label="無視した会話を周辺チャットで報告する"/>
 			<check_box name="FSDontIgnoreAdHocFromFriends" label="フレンドからの会話チャットへの招待は無視しない"/>
 			<text name="group_snooze_time_label" tool_tip="スヌーズボタンを押した時、グループチャットを無視する時間の長さ。「0」に設定すると、次のグループメッセージが届くまでウィンドウを閉じます。">
-			グループチャットの居眠り時間:
+				グループチャットの居眠り時間:
 			</text>
 			<spinner name="GroupSnoozeTime" tool_tip="スヌーズボタンを押した時、グループチャットを無視する時間の長さ。「0」に設定すると、次のグループメッセージが届くまでウィンドウを閉じます。"/>
 			<text name="group_snooze_time_seconds_label" tool_tip="スヌーズボタンを押した時、グループチャットを無視する時間の長さ。「0」に設定すると、次のグループメッセージが届くまでウィンドウを閉じます。">
-			秒
+				秒
 			</text>
 			<check_box name="FSEnablePerGroupSnoozeDuration" label="グループチャットのスヌーズ時間はグループごとに個別に設定する"/>
 		</panel>
@@ -194,66 +194,66 @@
 			<check_box label="相手が入力を始めたら、ＩＭが来ることを事前に通知" name="FSAnnounceIncomingIM"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="フレンドのオンラインステータスが変わったらＩＭタブを点滅"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="新しい周辺チャットを受信したらチャットツールバーのボタンを点滅" tool_tip="新しい周辺チャットを受信したらチャットツールバーのボタンが点滅します。この時、周辺チャットは会話ウィンドウにドッキングしている必要があり、また、ボタンを点滅させるには会話ウィンドウが閉じている必要があります。"/>
-			<check_box name="FSNotifyIMFlash" label="新しいＩＭを受信したらチャットツールバーのボタンを点滅" tool_tip="新しい（グループ）ＩＭを受信したらチャットツールバーのボタンが点滅します。この時、IMウィンドウは会話ウィンドウにドッキングしている必要があり、また、ボタンを点滅させるには会話ウィンドウが閉じている必要があります。このオプションが有効となるのは、IMが別のウィンドウとして分かれておらず、タブで表示されている場合に限ります。（「一般」タブを参照）"/>
+			<check_box name="FSNotifyIMFlash" label="新しいＩＭを受信したらチャットツールバーのボタンを点滅" tool_tip="新しい（グループ）ＩＭを受信したらチャットツールバーのボタンが点滅します。この時、ＩＭウィンドウは会話ウィンドウにドッキングしている必要があり、また、ボタンを点滅させるには会話ウィンドウが閉じている必要があります。このオプションが有効となるのは、ＩＭが別のウィンドウとして分かれておらず、タブで表示されている場合に限ります。（「一般」タブを参照）"/>
 			<check_box name="FSReportMutedGroupChat" label="無視したグループチャットを周辺チャットウィンドウに表示"/>
 			<!--
-			<text name="WhenPlayIMLabel">
+				<text name="WhenPlayIMLabel">
 				ＩＭを受信した時：
-			</text>
-			<combo_box name="WhenPlayIM">
+				</text>
+				<combo_box name="WhenPlayIM">
 				<combo_box.item label="新しいＩＭセッションの時だけ音を鳴らす" name="1"/>
 				<combo_box.item label="メッセージを受信する度に音を鳴らす" name="2"/>
 				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
 				<combo_box.item label="通知音は鳴らさない" name="0"/>
-			</combo_box>
+				</combo_box>
 				<text name="WhenPlayGroupIMLabel">
 				グループＩＭを受信した時：
-			</text>
-			<combo_box name="WhenPlayGroupIM">
+				</text>
+				<combo_box name="WhenPlayGroupIM">
 				<combo_box.item label="新しいＩＭセッションの時だけ音を鳴らす" name="1"/>
 				<combo_box.item label="メッセージを受信する度に音を鳴らす" name="2"/>
 				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
 				<combo_box.item label="通知音は鳴らさない" name="0"/>
-			</combo_box>
-			<text name="WhenPlayConfIMLabel">
+				</combo_box>
+				<text name="WhenPlayConfIMLabel">
 				会話IMを受信した時：
-			</text>
+				</text>
 				<combo_box name="WhenPlayConfIM">
 				<combo_box.item label="新しいＩＭセッションの時だけ音を鳴らす" name="1"/>
 				<combo_box.item label="メッセージを受信する度に音を鳴らす" name="2"/>
 				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
 				<combo_box.item label="通知音は鳴らさない" name="0"/>
-			</combo_box>
-			-->
+				</combo_box>
+				-->
 			<check_box name="FSGroupNoticesToIMLog" label="グループ通知をポップアップだけでなくグループチャットにも含める"/>
 			<check_box name="FSBetterGroupNoticesToIMLog" label="通知のタイトルと作成者も表示する"/>
 		</panel>
 		<!-- チャット：レーダー -->
 		<panel label="レーダー" name="ChatRadar">
 			<check_box label="アバターがチャットレンジに入ってきた時" name="reportChatRangeEnter"/>
-			<check_box name="PlayModeUISndRadarChatEnter" label="鳴らしたい音のＵＵＩＤ："/>
-			<button name="Prev_UISndRadarChatEnter" label="P" tool_tip="この音のプレビューを聞きます。"/>
-			<button name="Def_UISndRadarChatEnter" label="D" tool_tip="デフォルトのＵＵＩＤにもどします。"/>
+			<check_box name="PlayModeUISndRadarChatEnter" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarChatEnter" label="P" tool_tip="この音をプレビュー再生します。"/>
+			<button name="Def_UISndRadarChatEnter" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 			<check_box label="アバターがチャットレンジから出て行った時" name="reportChatRangeLeave"/>
-			<check_box name="PlayModeUISndRadarChatLeave" label="鳴らしたい音のＵＵＩＤ："/>
-			<button name="Prev_UISndRadarChatLeave" label="P" tool_tip="この音のプレビューを聞きます。"/>
-			<button name="Def_UISndRadarChatLeave" label="D" tool_tip="デフォルトのＵＵＩＤにもどします。"/>
+			<check_box name="PlayModeUISndRadarChatLeave" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarChatLeave" label="P" tool_tip="この音をプレビュー再生します。"/>
+			<button name="Def_UISndRadarChatLeave" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 			<check_box label="アバターが描画範囲に入ってきた時" name="reportDrawRangeEnter"/>
-			<check_box name="PlayModeUISndRadarDrawEnter" label="鳴らしたい音のＵＵＩＤ："/>
-			<button name="Prev_UISndRadarDrawEnter" label="P" tool_tip="この音のプレビューを聞きます。"/>
-			<button name="Def_UISndRadarDrawEnter" label="D" tool_tip="デフォルトのＵＵＩＤにもどします。"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarDrawEnter" label="P" tool_tip="この音をプレビュー再生します。"/>
+			<button name="Def_UISndRadarDrawEnter" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 			<check_box label="アバターが描画範囲から出て行った時" name="reportDrawRangeLeaave"/>
-			<check_box name="PlayModeUISndRadarDrawLeave" label="鳴らしたい音のＵＵＩＤ："/>
-			<button name="Prev_UISndRadarDrawLeave" label="P" tool_tip="この音のプレビューを聞きます。"/>
-			<button name="Def_UISndRadarDrawLeave" label="D" tool_tip="デフォルトのＵＵＩＤにもどします。"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarDrawLeave" label="P" tool_tip="この音をプレビュー再生します。"/>
+			<button name="Def_UISndRadarDrawLeave" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 			<check_box label="アバターが同じSIMに入ってきた時" name="RadarReportSimRangeEnter"/>
-			<check_box name="PlayModeUISndRadarSimEnter" label="鳴らしたい音のＵＵＩＤ："/>
-			<button name="Prev_UISndRadarSimEnter" label="P" tool_tip="この音のプレビューを聞きます。"/>
-			<button name="Def_UISndRadarSimEnter" label="D" tool_tip="デフォルトのＵＵＩＤにもどします。"/>
+			<check_box name="PlayModeUISndRadarSimEnter" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarSimEnter" label="P" tool_tip="この音をプレビュー再生します。"/>
+			<button name="Def_UISndRadarSimEnter" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 			<check_box label="アバターが同じSIMから出て行った時" name="RadarReportSimRangeLeave"/>
-			<check_box name="PlayModeUISndRadarSimLeave" label="鳴らしたい音のＵＵＩＤ："/>
-			<button name="Prev_UISndRadarSimLeave" label="P" tool_tip="この音のプレビューを聞きます。"/>
-			<button name="Def_UISndRadarSimLeave" label="D" tool_tip="デフォルトのＵＵＩＤにもどします。"/>
+			<check_box name="PlayModeUISndRadarSimLeave" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarSimLeave" label="P" tool_tip="この音をプレビュー再生します。"/>
+			<button name="Def_UISndRadarSimLeave" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 			<check_box name="RadarEnterChannelAlert" label="ＳＩＭに人が来た情報をスクリプトに転送"/>
 			<check_box name="RadarLeaveChannelAlert" label="ＳＩＭから人が出て行った情報をスクリプトに転送"/>
 			<check_box name="FSRadarEnhanceByBridge" label="LSL-Client Bridgeを使用してレーダーの精度を高める" tool_tip="チェックするとレーダーが高い場所にいるアバターを決定する機能がLSL-Client Bridgeの支援により高められます。特にそのアバターが描画範囲の外にいる場合に有効です。"/>
@@ -268,9 +268,9 @@
 				日
 			</text>
 			<check_box name="RadarAvatarAgeAlert" label="指定した年齢より若いアバターが近づいたらレーダーが報告する"/>
-			<check_box name="PlayModeUISndRadarAgeAlert" label="通知音ＵＵＩＤ:"/>
-			<button name="Prev_UISndRadarAgeAlert" label="P" tool_tip="指定した通知音を確認します"/>
-			<button name="Def_UISndRadarAgeAlert" label="D" tool_tip="デフォルトのＵＵＩＤに戻します"/>
+			<check_box name="PlayModeUISndRadarAgeAlert" label="通知音のＵＵＩＤ："/>
+			<button name="Prev_UISndRadarAgeAlert" label="P" tool_tip="指定した通知音を確認します。"/>
+			<button name="Def_UISndRadarAgeAlert" label="D" tool_tip="デフォルトのＵＵＩＤに戻します。"/>
 		</panel>
 		<!-- チャット：キーワード通知 -->
 		<panel label="キーワード" name="ChatKeywordAlerts">

@@ -11,7 +11,7 @@
 	<menu_item_separator/>
 	<menu_item_call label="アウトフィットを削除" name="delete"/>
 	<menu_item_separator/>
-	<menu label="新しい服装" name="New Clothes">
+	<menu label="新しい衣装" name="New Clothes">
 		<menu_item_call label="新しいシャツ" name="New Shirt"/>
 		<menu_item_call label="新しいズボン" name="New Pants"/>
 		<menu_item_call label="新しい靴" name="New Shoes"/>

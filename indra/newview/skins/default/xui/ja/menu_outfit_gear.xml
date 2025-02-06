@@ -16,7 +16,7 @@
 	<menu_item_separator/>
 	<!-- copied (with minor modifications) from menu_inventory_add.xml -->
 	<!-- *TODO: generate dynamically? -->
-	<menu label="新しい服装" name="New Clothes">
+	<menu label="新しい衣装" name="New Clothes">
 		<menu_item_call label="新しいシャツ" name="New Shirt"/>
 		<menu_item_call label="新しいズボン" name="New Pants"/>
 		<menu_item_call label="新しい靴" name="New Shoes"/>

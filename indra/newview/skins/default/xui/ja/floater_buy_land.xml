@@ -85,10 +85,10 @@
 		この区画は[AMOUNT]㎡です。
 	</floater.string>
 	<floater.string name="premium_land">
-		この土地は割り増し付です。[AMOUNT]㎡の料金がかかります。
+		この土地は割り増しされています。[AMOUNT]㎡の料金がかかります。
 	</floater.string>
 	<floater.string name="discounted_land">
-		この土地はディスカウントされています。[AMOUNT]㎡の料金がかかります。
+		この土地は割り引きされています。[AMOUNT]㎡の料金がかかります。
 	</floater.string>
 	<floater.string name="meters_supports_object">
 		[AMOUNT]㎡

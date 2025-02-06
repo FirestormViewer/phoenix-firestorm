@@ -171,7 +171,7 @@
 			<text name="estate_section_lbl">
 				不動産：
 			</text>
-			<text name="estate_name_text" width="300">
+			<text name="estate_name_text">
 				メインランド
 			</text>
 			<text name="estate_owner_lbl">
@@ -227,13 +227,13 @@
 			<text name="parcel_object_bonus">
 				オブジェクトボーナス：[BONUS]倍
 			</text>
-			<text name="Simulator primitive usage:" width="364">
+			<text name="Simulator primitive usage:">
 				リージョン全体の最大プリム数：
 			</text>
 			<text name="objects_available">
 				全[MAX]個中[COUNT]個（残り[AVAILABLE]個利用可能）
 			</text>
-			<text name="Primitives parcel supports:" width="364">
+			<text name="Primitives parcel supports:">
 				区画で利用可能な最大プリム数：
 			</text>
 			<text name="object_contrib_text">
@@ -242,13 +242,13 @@
 			<text name="Primitives on parcel:">
 				区画で使用中のプリム数：
 			</text>
-			<text name="total_objects_text" width="64">
+			<text name="total_objects_text">
 				[COUNT]個
 			</text>
 			<text name="Owned by parcel owner:">
 				うち区画所有者のプリム数：
 			</text>
-			<text name="owner_objects_text" width="64">
+			<text name="owner_objects_text">
 				[COUNT]個
 			</text>
 			<button label="表示" label_selected="表示" name="ShowOwner"/>
@@ -256,7 +256,7 @@
 			<text name="Set to group:">
 				グループに設定：
 			</text>
-			<text name="group_objects_text" width="64">
+			<text name="group_objects_text">
 				[COUNT]個
 			</text>
 			<button label="表示" label_selected="表示" name="ShowGroup"/>
@@ -264,7 +264,7 @@
 			<text name="Owned by others:">
 				他人の所有物：
 			</text>
-			<text name="other_objects_text" width="64">
+			<text name="other_objects_text">
 				[COUNT]個
 			</text>
 			<button label="表示" label_selected="表示" name="ShowOther"/>
@@ -272,14 +272,14 @@
 			<text name="Selected / sat upon:">
 				選択済み／座っている：
 			</text>
-			<text name="selected_objects_text" width="64">
+			<text name="selected_objects_text">
 				[COUNT]個
 			</text>
 			<text name="Autoreturn">
 				他者のオブジェクトの自動返却（分単位、0で自動返却なし）：
 			</text>
 			<line_editor name="clean other time"/>
-			<text name="Object Owners:" width="130">
+			<text name="Object Owners:">
 				オブジェクトの所有者：
 			</text>
 			<button name="Refresh List" tool_tip="オブジェクトのリストを更新します。"/>
@@ -422,11 +422,11 @@
 				このテクスチャを使用するオブジェクトの「再生」をクリックすると、動画やWebページを表示します。テクスチャを変更するにはサムネイルを選択してください。
 			</text>
 			<check_box label="スケールを自動設定" name="media_auto_scale" tool_tip="このオプションをチェックすると、この区画のコンテンツのスケールが自動的に設定されます。動作速度と画質が少し低下することがありますが、他のテクスチャのスケーリングや整列が必要になることはありません。"/>
-			<text name="media_size" tool_tip="レンダリングするWebメディアのサイズです。デフォルトの０のままにします。">
+			<text name="media_size" tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。">
 				サイズ：
 			</text>
-			<spinner name="media_size_width" tool_tip="レンダリングするWebメディアのサイズです。デフォルトの０のままにします。"/>
-			<spinner name="media_size_height" tool_tip="レンダリングするWebメディアのサイズです。デフォルトの０のままにします。"/>
+			<spinner name="media_size_width" tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。"/>
+			<spinner name="media_size_height" tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。"/>
 			<text name="pixels">
 				ピクセル
 			</text>

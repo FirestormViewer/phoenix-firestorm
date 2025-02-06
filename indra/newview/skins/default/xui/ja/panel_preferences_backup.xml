@@ -50,6 +50,16 @@
 								クイック設定
 							</column>
 						</row>
+						<row name="restore_global_row_favorites">
+							<column name="restore_global_files_label">
+								お気に入り
+							</column>
+						</row>
+						<row name="restore_global_row_controls">
+							<column name="restore_global_files_label">
+								操作
+							</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_per_account_files">
@@ -161,9 +171,8 @@
 			<button label="全て選択解除" name="deselect_all_button"/>
 			<check_box label="グローバル設定を復元" name="restore_global_settings_checkbox"/>
 			<check_box label="アカウント固有設定を復元" name="restore_per_account_settings_checkbox"/>
-			<button label="バックアップ設定" name="backup_settings"/>
-			<button label="復元設定" name="restore_settings"/>
+			<button label="設定をバックアップ" name="backup_settings"/>
+			<button label="設定を復元" name="restore_settings"/>
 		</layout_panel>
 	</layout_stack>
-
 </panel>

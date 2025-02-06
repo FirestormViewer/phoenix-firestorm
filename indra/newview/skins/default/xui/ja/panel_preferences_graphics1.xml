@@ -65,7 +65,7 @@
 				<combo_box.item label="マニュアル＆地形" name="2"/>
 				<combo_box.item label="全てのシーン" name="3"/>
 			</combo_box>
-			<text name="local lights_label" tool_tip="レンダリングされる光源の数に影響します。モードを変更するには再起動が必要です。">
+			<text name="local lights_label" tool_tip="描画される光源の数に影響します。モードを変更するには再起動が必要です。">
 				ポイント光源（要再起動）
 			</text>
 			<combo_box name="LocalLightsDetail">
@@ -103,6 +103,11 @@
 			<text name="AvatarComplexityModeLabel">
 				アバターの表示
 			</text>
+			<combo_box name="AvatarComplexityMode">
+				<combo_box.item label="複雑度で制限" name="0"/>
+				<combo_box.item label="フレンドは常に表示" name="1"/>
+				<combo_box.item label="フレンドのみ表示" name="2"/>
+			</combo_box>
 			<slider tool_tip="複雑度の高いアバターをJerryDoll表示し始める値を設定します。" label="複雑度の最大値" name="IndirectMaxComplexity"/>
 			<text name="IndirectMaxComplexityText">
 				0
@@ -170,7 +175,7 @@
 			<text name="Texture Rendering">
         テクスチャの描画：
 			</text>
-			<check_box label="Restrict maximum texture resolution to:" tool_tip="これを設定すると、インワールドテクスチャの最大表示解像度が制限されます。これにより、使用可能なテクスチャメモリを超過してぼやけたテクスチャが表示される前に、より多くのテクスチャを表示できるようになります。" name="FSRestrictMaxTextureSize"/>
+			<check_box label="最大テクスチャ解像度の制限：" tool_tip="これを設定すると、インワールドテクスチャの最大表示解像度が制限されます。これにより、使用可能なテクスチャメモリを超過してぼやけたテクスチャが表示される前に、より多くのテクスチャを表示できるようになります。" name="FSRestrictMaxTextureSize"/>
 			<combo_box name="FSRestrictMaxTexturePixels">
 				<combo_box.item label="512ピクセル" name="512"/>
 				<combo_box.item label="1024ピクセル" name="1024"/>
@@ -185,7 +190,7 @@
 			<text name="TextureDetailLabel">
 				テクスチャの読み込み精度
 			</text>
-			<combo_box name="TextureDetail" tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel">
+			<combo_box name="TextureDetail" tool_tip="読み込むテクスチャの品質です。TextureDiscardLevelの設定に影響します。">
 				<!-- To translators, do not try to translate the word TextureDiscardLevel -->
 				<combo_box.item label="標準（0）品質" name="0"/>
 				<combo_box.item label= "中（3）品質" name="3"/>
@@ -207,7 +212,7 @@
 			<check_box label="風景をワイヤーフレームで表示" name="Wireframe"/>
 			<check_box label="装着している光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
 			<check_box label="装着しているパーティクルを描画する" name="Render Attached Particles"/>
-			<slider label="世界を表示する前のプレキャッシングを遅らせる時間" tool_tip="あなたに世界が見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay"/>
+			<slider label="ワールドが表示される前のプレキャッシングを遅らせる時間" tool_tip="ワールドが見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				秒
 			</text>
@@ -220,7 +225,7 @@
 			<check_box label="編集モード中でも有効にする" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="ＤＯＦ フォーカスがポインタに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤＯＦ）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「ＤＯＦ フォーカスのロック」機能と合わせてお使い下さい。"/>
 			<slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="ＤＯＦ効果を得るためのカメラのF値（絞り）"/>
-			<slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="ＤＯＦ効果を得るための焦点距離（単位はミリ）"/>
+			<slider label="カメラの焦点距離（㎜）：" name="CameraFocal" tool_tip="ＤＯＦ効果を得るための焦点距離（単位はミリ）"/>
 			<slider label="カメラの視野角（画角）：" name="Camera FOV" tool_tip="ＤＯＦ効果を得るためのカメラの垂直画角（単位は度）"/>
 			<slider label="ＤＯＦ焦点移動時間：" name="CameraFocusTrans" tool_tip="焦点がある場所から次の場所へ遷移するのにかかる時間"/>
 			<slider label="ＤＯＦ描画品質：" name="CameraDoFResScale" tool_tip="ぼかしの品質と描画のパフォーマンスに影響します。（高い＝より良い品質、低い＝より良いパフォーマンス）"/>

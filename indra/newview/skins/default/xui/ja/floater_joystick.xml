@@ -3,7 +3,7 @@
 	<floater.string name="JoystickDisabled">
 		なし
 	</floater.string>
-	<text name="joystick_lbl" width="112">
+	<text name="joystick_lbl">
 		ジョイスティック：
 	</text>
 	<spinner label="Ｘ軸マッピング" name="JoystickAxis1"/>

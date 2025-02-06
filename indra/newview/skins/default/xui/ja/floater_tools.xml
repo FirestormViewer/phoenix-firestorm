@@ -138,7 +138,15 @@
 	<text name="selection_empty">
 		選択されていません。
 	</text>
+	<!--
+	<text name="selection_faces">
+		選択された面：[FACES_STRING]
+  </text>
+	-->
 	<text name="selection_count"/>
+	<text name="more info label">
+		[CAPACITY_STRING]　[secondlife:///app/openfloater/object_weights 詳細情報]
+	</text>
 	<view_border name="cost_text_border"/>
 	<tab_container name="Object Info Tabs">
 		<panel label="一般" name="General">
@@ -587,7 +595,7 @@
 		<text name="label_parcel_modify">
 			区画の編集
 		</text>
-		<button label="分離" label_selected="分離" name="button subdivide land"/>
+		<button label="分割" label_selected="分割" name="button subdivide land"/>
 		<button label="結合" label_selected="結合" name="button join land"/>
 		<text name="label_parcel_trans">
 			土地の取引

@@ -59,7 +59,7 @@
 		<panel name="advanced_options_panel">
 			<view_border name="advanced_options_hr" />
 			<text name="layer_type_label">
-				キャプチャーオプション：
+				キャプチャ：
 			</text>
 			<combo_box label="画像レイヤー" name="layer_types">
 				<combo_box.item label="カラー" name="Colors" value="colors"/>

@@ -25,7 +25,7 @@
 	<menu_item_call label="新しいノートカード" name="New Note"/>
 	<menu_item_call label="新しいジェスチャー" name="New Gesture"/>
 	<menu_item_call label="新しいマテリアル" name="New Material"/>
-	<menu label="新しい服装" name="New Clothes">
+	<menu label="新しい衣装" name="New Clothes">
 		<menu_item_call label="新しいシャツ" name="New Shirt"/>
 		<menu_item_call label="新しいズボン" name="New Pants"/>
 		<menu_item_call label="新しい靴" name="New Shoes"/>

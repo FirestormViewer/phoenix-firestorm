@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Local Mesh" title="ローカルメッシュ">
 	<tab_container name="local_mesh_tabs">
-		<panel name="local_mesh_assets_panel" label="ローカルメッシュのアセット" title="Local Mesh Assets">
+		<panel name="local_mesh_assets_panel" label="ローカルメッシュのアセット" title="ローカルメッシュのアセット">
 			<fs_scroll_list name="l_name_list">
 				<column name="unit_status" label="状況"/>
 				<column name="unit_name" label="名前"/>

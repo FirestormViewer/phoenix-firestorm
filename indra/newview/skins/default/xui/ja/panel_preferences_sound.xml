@@ -106,14 +106,14 @@
 				秒
 			</text>
 			<text name="show_stream_metadata_text">
-				曲のタイトルの通知方法：
+				曲名の通知方法：
 			</text>
 			<radio_group name="show_stream_metadata">
 				<radio_item label="通知しない" name="radio_off"/>
 				<radio_item label="トースト" name="radio_toasts"/>
 				<radio_item label="周辺チャット" name="radio_chat"/>
 			</radio_group>
-			<check_box label="曲のタイトルを次のチャンネルに送る" name="StreamMetadataAnnounceToChat"/>
+			<check_box label="曲名を次のチャンネルに送る" name="StreamMetadataAnnounceToChat"/>
 		</panel>
 		<!-- ボイス -->
 		<panel label="ボイス" name="Media Voice tab">
@@ -122,6 +122,7 @@
 			<radio_group name="ear_location">
 				<radio_item label="カメラの位置から聞く" name="0"/>
 				<radio_item label="アバターの位置から聞く" name="1"/>
+				<radio_item label="近くの声を最大音量で聞く（Open Simのみ）" name="2"/>
 			</radio_group>
 			<check_box label="話すときにアバターの口を動かす" name="enable_lip_sync"/>
 			<check_box label="アバターの頭上にボイスビジュアライザーを表示" name="FSShowVoiceVisualizer" tool_tip="アバターの頭上にボイス・インジケータ（白い点）を表示します。"/>
@@ -149,10 +150,10 @@
 			<panel label="デバイス設定" name="device_settings_panel"/>
 		</panel>
 		<!-- UI Sounds 1 -->
-		<panel label="UI サウンド 1" name="UI Sounds tab 1">
+		<panel label="ＵＩサウンド１" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">
-				ここで（サウンドのUUIDを指定することで）デフォルトのインターフェイス・サウンドを変更したり、
-有効、無効にすることができます。初期設定値を確認するにはマウスをUUIDフィールドの上に乗せて下さい。
+				ここで（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイス・サウンドを変更したり、
+有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
 			<text tool_tip="Firestormが通知／警告した時に再生するデフォルトのサウンドＵＵＩＤです。" name="textFSSndAlert">
 				デフォルトの警告音：
@@ -297,7 +298,7 @@
 			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOut"/>
 		</panel>
 		<!-- UI Sounds 2 -->
-		<panel label="UI サウンド 2" name="UI Sounds tab 2">
+		<panel label="ＵＩサウンド２" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				ここで（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
@@ -317,7 +318,7 @@
 			<button name="Def_UISndPieMenuHide" label="D" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuHide"/>
 			<text tool_tip="パイメニューの１番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight0">
-				パイメニュー選択１:
+				パイメニュー選択１：
 			</text>
 			<line_editor name="UISndPieMenuSliceHighlight0"/>
 			<button name="Prev_UISndPieMenuSliceHighlight0" label="P" tool_tip="このサウンドをプレビューします。"/>
@@ -430,10 +431,10 @@
 			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 		<!-- UI Sounds 3 -->
-		<panel label="UI サウンド 3" name="UI Sounds tab 3">
+		<panel label="ＵＩサウンド３" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
-			ここで（サウンドのUUIDを指定することで）デフォルトのインターフェイス・サウンドを変更したり、
-有効、無効にすることができます。初期設定値を確認するにはマウスをUUIDフィールドの上に乗せて下さい。
+			ここで（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイス・サウンドを変更したり、
+有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
 			<text tool_tip="インベントリに物が送られて来た時に再生するサウンドのＵＵＩＤです。" name="textFSInventoryOffer">
 				インベントリに受け取った：

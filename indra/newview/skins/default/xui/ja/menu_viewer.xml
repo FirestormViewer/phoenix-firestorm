@@ -6,7 +6,6 @@
 		</menu_item_call>
 		<menu_item_call label="マーケティングプレイスの出品リスト…" name="MarketplaceListings"/>
 		<menu_item_call label="L$ の購入" name="Buy and Sell L$"/>
-
 		<menu_item_check label="インベントリ" name="Inventory"/>
 		<menu_item_call label="新着のインベントリのウィンドウ" name="NewInventoryWindow"/>
 		<menu_item_check label="保護フォルダ" name="Protected Folders"/>
@@ -18,7 +17,7 @@
 		<menu_item_call label="装着中…" name="NowWearing"/>
 		<menu_item_check label="アウトフィット" name="ChangeOutfit"/>
 		<menu label="取り外す" name="Take Off &gt;">
-			<menu label="衣類" name="Clothes &gt;">
+			<menu label="衣装" name="Clothes &gt;">
 				<menu_item_call label="シャツ" name="Shirt"/>
 				<menu_item_call label="ズボン" name="Pants"/>
 				<menu_item_call label="スカート" name="Skirt"/>
@@ -31,16 +30,15 @@
 				<menu_item_call label="タトゥ" name="Self Tattoo"/>
 				<menu_item_call label="物理作用" name="Self Physics"/>
 				<menu_item_call label="アルファ" name="Self Alpha"/>
-				<menu_item_call label="すべての衣類" name="All Clothes"/>
+				<menu_item_call label="すべての衣装" name="All Clothes"/>
 			</menu>
 			<menu label="ＨＵＤ" name="Avatar Detach HUD"/>
 			<menu label="取り外す" name="Avatar Detach"/>
 			<menu_item_call label="すべてを取り外す" name="Detach All"/>
-			<menu_item_call label="選択した装着物を削除" name="Remove Selected Attachments"/>
 		</menu>
+		<menu_item_call label="選択した装着物を削除" name="Remove Selected Attachments"/>
 		<menu_item_call label="アバター選択…" name="Avatar Picker"/>
 		<menu_item_call label="ホバーする高さ" name="HoverHeight"/>
-
 		<menu label="移動" name="Movement">
 			<menu_item_call label="座る" name="Sit Down Here"/>
 			<menu_item_call label="立つ" name="Stand up"/>
@@ -48,12 +46,11 @@
 			<menu_item_call label="着地する" name="Stop flying"/>
 			<menu_item_check label="常に走る" name="Always Run"/>
 			<menu_item_check label="地面に座る" name="Force Toggle Sitting"/>
-			<menu_item_check label="移動をロック" name="Move Lock"/>
+			<menu_item_check label="移動ロック" name="Move Lock"/>
 			<menu_item_check label="アバターを身軽に" name="Avatar Ignore Prejump"/>
 		</menu>
 		<menu_item_check label="移動操作" name="Movement Controls"/>
 		<menu_item_check label="カメラ操作" name="Camera Controls"/>
-
 		<menu label="アバターの状態" name="avhealth">
 			<menu_item_call label="自分のアニメーションを停止する" name="Stop Animating My Avatar"/>
 			<menu_item_call label="アニメーションを停止＆権限を取り消し" name="Stop Animating My Avatar With Revoke"/>
@@ -139,6 +136,8 @@
 			<menu_item_check label="区画のプロパティ" name="Parcel Properties"/>
 			<menu_item_check label="高度な操作メニューを表示する" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_check label="グラフィック性能の最適化…" name="Performance"/>
+		<menu_item_separator/>
 		<menu_item_call label="ホームにテレポート" name="Teleport Home"/>
 		<menu label="自然環境" name="Environment">
 			<menu_item_check label="夜明け" name="Sunrise"/>
@@ -303,7 +302,7 @@
 		<menu_item_call label="[CURRENT_GRID]ヘルプ" name="current_grid_help"/>
 		<menu_item_call label="[CURRENT_GRID]について" name="current_grid_about"/>
 		<menu_item_call name="whitelist_folders" label="ホワイトリストアドバイザー"/>
-		<menu_item_call label="Grid status をチェック" name="Grid Status"/>
+		<menu_item_call label="グリッド状況の確認" name="Grid Status"/>
 		<menu_item_separator/>
 		<menu_item_call label="嫌がらせの報告" name="Report Abuse"/>
 		<menu_item_call label="バグの報告" name="Report Bug"/>
@@ -340,14 +339,13 @@
 		<menu_item_separator/>
 		<menu_item_check label="一時的な装着物を許可" name="Allow Temporary Attachments"/>
 		<menu_item_check label="#RLVへの受け渡しを禁止" name="Forbid Give to #RLV"/>
-		<menu_item_check label="衣類の交換をアンロック" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="衣装の交換をアンロック" name="Wear Replaces Unlocked"/>
 		<menu_item_separator/>
 		<menu_item_check label="コンソール…" name="Console"/>
 		<menu_item_check label="制限…" name="Restrictions"/>
 		<menu_item_check label="文章…" name="Strings"/>
 	</menu>
 	<menu label="高度な操作" name="Advanced">
-		<menu_item_check label="グラフィック性能の最適化…" name="Performance"/>
 		<menu_item_call label="テクスチャをリベークする" name="Rebake Texture"/>
 		<menu_item_call label="装着物をリフレッシュ" name="Refresh Attachments"/>
 		<menu_item_call label="ＵＩサイズをデフォルトにする" name="Set UI Size to Default"/>
@@ -400,8 +398,8 @@
 			<menu_item_check label="ＰＢＲ" name="Rendering Type PBR"/>
 		</menu>
 		<menu label="メディアストリームのバックアップ" name="media_stream_import_export">
-			<menu_item_call label="ストリームリストＸＭＬをインポート…" name="media_stream_import"/>
-			<menu_item_call label="ストリームリストＸＭＬをエクスポート…" name="media_stream_export"/>
+			<menu_item_call label="ストリームリストのＸＭＬをインポート…" name="media_stream_import"/>
+			<menu_item_call label="ストリームリストのＸＭＬをエクスポート…" name="media_stream_export"/>
 		</menu>
 		<menu label="描画機能" name="Rendering Features">
 			<menu_item_check label="ＵＩ" name="ToggleUI"/>
@@ -435,11 +433,10 @@
 			<menu_item_call label="ズーム・イン" name="Zoom In"/>
 			<menu_item_call label="ズーム（デフォルト）" name="Zoom Default"/>
 			<menu_item_call label="ズーム・アウト" name="Zoom Out"/>
-			<menu_item_separator/>
-			<menu_item_check label="飛行オーバーライド" name="Fly Override"/>
 		</menu>
 		<!--Shortcuts-->
 		<menu_item_separator/>
+		<menu_item_check label="飛行オーバーライド" name="Fly Override"/>
 		<menu_item_check label="RestrainedLove API（ＲＬＶａ）を有効化" name="RLV API"/>
 		<menu_item_call label="デバッグ設定を表示" name="Debug Settings"/>
 		<menu_item_check label="開発メニューを表示" name="Debug Mode"/>
@@ -743,7 +740,7 @@
 	<menu label="管理" name="Deprecated">
 		<menu label="オブジェクトを取り付ける" name="Attach Object"/>
 		<menu label="オブジェクトを取り外す" name="Detach Object"/>
-		<menu label="服装を脱ぐ" name="Take Off Clothing">
+		<menu label="衣装を脱ぐ" name="Take Off Clothing">
 			<menu_item_call label="シャツ" name="Shirt"/>
 			<menu_item_call label="ズボン" name="Pants"/>
 			<menu_item_call label="靴" name="Shoes"/>
@@ -757,7 +754,7 @@
 			<menu_item_call label="タトゥ" name="Tattoo"/>
 			<menu_item_call label="ユニバーサル" name="Universal"/>
 			<menu_item_call label="物理作用" name="Physics"/>
-			<menu_item_call label="すべての服装" name="All Clothes"/>
+			<menu_item_call label="すべての衣装" name="All Clothes"/>
 		</menu>
 		<menu label="ヘルプ" name="DeprecatedHelp">
 			<menu_item_call label="Linden公式ブログ" name="Official Linden Blog"/>

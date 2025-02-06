@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">https://secondlife.com/my/account/request.php?lang=ja-JP
-	</panel.string>
+	<panel.string name="forgot_password_url">https://secondlife.com/my/account/request.php?lang=ja-JP</panel.string>
 	<string name="ServerComboTooltip">
 		既存のグリッドまたはＵＲＩ
 	</string>
@@ -40,10 +39,10 @@
 		</layout_panel>
 		<layout_panel name="links_login_panel">
 			<text name="create_new_account_text">
-				アカウント作成
+				アカウントを作成
 			</text>
 			<text name="forgot_password_text">
-				ユーザ名またはパスワードをお忘れですか？
+				ユーザ名かパスワードを忘れましたか？
 			</text>
 			<button label="ログイン" name="connect_btn"/>
 			<check_box label="ユーザネームを記憶" name="remember_username_check"/>

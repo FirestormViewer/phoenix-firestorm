@@ -177,9 +177,9 @@
 			<check_box label="検索フィルターを表示" name="FSContactListShowSearch" tool_tip="連絡先リストに検索テキストボックスを表示し、リストをフィルターすることができるようになります">
 			</check_box>
 			<text name="textInventoryOptions">
-		インベントリ（持ち物）のオプション:
+				インベントリのオプション:
 			</text>
-			<check_box label="空のシステムフォルダをインベントリに表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、持ち物ウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。"/>
+			<check_box label="空のシステムフォルダをインベントリに表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、インベントリウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。"/>
 			<check_box label="受け取りアイテムフォルダを通常のインベントリ内に表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。"/>
 			<check_box label="受け取りアイテムボタンをインベントリの下に常に表示" name="FSAlwaysShowInboxButton" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。"/>
 			<check_box label="インベントリのそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="こにチェックを入れると、インベントリのそれぞれのタブに異なる検索キーワードを入力することが可能になります。"/>
@@ -231,7 +231,7 @@
 			</text>
 			<slider label="周辺チャットのトースト通知の幅：" tool_tip="周辺チャットを表示する幅を、画面に対するパーセントで設定します。" name="NearbyToastWidth"/>
 			<text name="NearbyToastWidthText">
-				%
+				％
 			</text>
 			<check_box label="トースト通知は必ず最前面に表示" name="FSShowToastsInFront"/>
 			<check_box label="新しいＳＩＭ再起動の通知方法を使用" name="FSUseNewRegionRestartNotification"/>

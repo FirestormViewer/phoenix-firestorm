@@ -213,7 +213,7 @@ LibVLCのバージョン：[LIBVLC_VERSION]
 		リージョンに接続しています…
 	</string>
 	<string name="LoginDownloadingClothing">
-		服装をダウンロードしています…
+		衣装をダウンロードしています…
 	</string>
 	<string name="InvalidCertificate">
 		証明書が無効であるか、壊れています。グリッド管理者にご連絡ください。
@@ -856,7 +856,7 @@ https://secondlife.com/viewer-access-faq
 		レガシースクリプト
 	</string>
 	<string name="clothing">
-		服装
+		衣装
 	</string>
 	<string name="object">
 		オブジェクト
@@ -1791,7 +1791,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		（Ｆ：[FOLDER_COUNT]　Ｉ：[ITEMS_COUNT]　Ｖ：[VERSION]　ＤＣ：[VIEWER_DESCENDANT_COUNT]／[SERVER_DESCENDANT_COUNT]）
 	</string>
 	<string name="InventoryItemsCount">
-		（[ITEMS_COUNT]個のアイテム）
+		（[ITEMS]個／[CATEGORIES]個のフォルダ）
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		バージョンフォルダには、在庫フォルダが含まれなければなりません。
@@ -1924,7 +1924,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<!-- use value="" because they have preceding spaces -->
 	<string name="Animations" value="アニメーション、"/>
 	<string name="Calling Cards" value="コーリングカード、"/>
-	<string name="Clothing" value="服装、"/>
+	<string name="Clothing" value="衣装、"/>
 	<string name="Gestures" value="ジェスチャー、"/>
 	<string name="Landmarks" value="ランドマーク、"/>
 	<string name="Materials" value=" マテリアル、"/>
@@ -1966,7 +1966,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		スクリプト
 	</string>
 	<string name="InvFolder Clothing">
-		服装
+		衣装
 	</string>
 	<string name="InvFolder Objects">
 		オブジェクト

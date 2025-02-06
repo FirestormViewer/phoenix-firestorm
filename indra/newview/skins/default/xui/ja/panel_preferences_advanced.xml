@@ -12,7 +12,7 @@
 	<check_box label="開発メニューを表示（自己責任で！）" name="show_develop_menu_check"/>
 	<check_box label="WindowsシステムでＷＭＩプローブによるＶＲＡＭ検出を無効にする" name="FSDisableWMIProbing"/>
 	<!-- Ansa: Timesteps are currently disabled in the viewer
-  <check_box tool_tip="この設定により、遠くのアバターのレンダリング負荷が軽減される可能性がありますが、アニメーションが誤った速度で再生される可能性もあります。" label="アニメーションタイムステップの使用を有効にする（実験的）" name="UseAnimationTimeSteps"/>
+  <check_box tool_tip="この設定により、遠くのアバターの描画負荷が軽減される可能性がありますが、アニメーションが誤った速度で再生される可能性もあります。" label="アニメーションタイムステップの使用を有効にする（実験的）" name="UseAnimationTimeSteps"/>
     -->
 	<text name="BackgroundYieldTimeText">[APP_NAME]が前面ウィンドウでない場合に、すべてのフレームを他のアプリケーションに渡す時間（ミリ秒単位）（既定値：40、1秒=1000ミリ秒）： 
 	</text>

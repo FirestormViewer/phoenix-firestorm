@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="cof_wearables">
 	<tab_container name="wearable_accordion">
-		<panel name="tab_clothing" title="服装">
+		<panel name="tab_clothing" title="衣装">
 			<flat_list_view name="list_clothing"/>
 		</panel>
 		<!-- The Attachments title is overwritten by the definition of "Attachments remain" in strings.xml -->

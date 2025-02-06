@@ -4,9 +4,9 @@
   <menu_item_separator/>
   <menu_item_call label="ツールバーのボタン…" name="Choose Buttons"/>
   <menu_item_separator/>
-  <menu_item_check label="左に揃える　⭰" name="left_aligned"/>
+  <menu_item_check label="左に揃える" name="left_aligned"/>
   <menu_item_check label="中央に揃える" name="center_aligned"/>
-  <menu_item_check label="右に揃える　⭲" name="right_aligned"/>
+  <menu_item_check label="右に揃える" name="right_aligned"/>
   <menu_item_separator/>
   <menu_item_check label="アイコンとラベル" name="icons_with_text"/>
   <menu_item_check label="アイコンのみ" name="icons_only"/>

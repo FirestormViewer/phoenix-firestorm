@@ -3,7 +3,7 @@
     <pie_slice label="プロフィール…" name="Profile..."/>
     <pie_slice label="グループ…" name="Groups..."/>
     <pie_menu label="取り外す　＞" name="Take Off &gt;">
-        <pie_menu label="衣類　＞" name="Clothes &gt;">
+        <pie_menu label="衣装　＞" name="Clothes &gt;">
             <pie_slice label="シャツ" name="Shirt"/>
             <pie_slice label="ズボン" name="Pants"/>
             <pie_slice label="靴" name="Shoes"/>
@@ -60,7 +60,7 @@
         </pie_menu>
         <pie_slice label="テクスチャ更新" name="Texture Refresh"/>
         <pie_separator />
-        <pie_slice label="服装を編集" name="Edit My Outfit"/>
+        <pie_slice label="衣装を編集" name="Edit My Outfit"/>
         <pie_separator />
         <pie_slice label="ＸＭＬとしてダンプ" name="Dump XML" />
         <pie_slice label="ホバーする高さ" name="Hover Height" />

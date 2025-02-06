@@ -11,7 +11,7 @@
 		総計：50（120000.10㎲）
 	</text>
 	<text name="attachments_desc1">
-		装着物を追加すると、アバターがより複雑になり、レンダリングが遅くなります。
+		装着物を追加すると、アバターがより複雑になり、描画が遅くなります。
 	</text>
 	<text name="attachments_desc2">
 		この画面では、自分のアバターの装着物を表示できます。
@@ -21,7 +21,7 @@
 	</text>
 	<name_list name="obj_list">
 		<name_list.columns label="" name="art_visual"/>
-		<name_list.columns label="時間（㎲）" name="art_value" tool_tip="この装着物のレンダリングにかかった時間（マイクロ秒）"/>
+		<name_list.columns label="時間（㎲）" name="art_value" tool_tip="この装着物の描画にかかった時間（マイクロ秒）"/>
 		<name_list.columns label="ＡＲＣ" name="complex_value" tool_tip="アイテムの複雑度（ＡＲＣ）"/>
 		<name_list.columns label="装着物名" tool_tip="「X」をクリックすることで取り外せます。" name="name"/>
 	</name_list>

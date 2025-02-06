@@ -14,7 +14,7 @@
 				<combo_box name="WLPresetsCombo"/>
 				<button name="WLPrevPreset"/>
 				<button name="WLNextPreset"/>
-				<text name="WL Water" tool_tip="水のプリセットです。">
+				<text name="WL Water" tool_tip="水面のプリセットです。">
 					水面
 				</text>
 				<combo_box name="WaterPresetsCombo"/>
@@ -32,12 +32,12 @@
 			</panel>
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
-					クィック自然環境設定
+					簡易自然環境設定
 				</text>
 				<view_border name="horiz_separator1"/>
-				<button name="Sunrise" label="日の出"/>
+				<button name="Sunrise" label="夜明け"/>
 				<button name="Noon" label="正午"/>
-				<button name="Sunset" label="日没"/>
+				<button name="Sunset" label="夕方"/>
 				<button name="Midnight" label="深夜"/>
 				<button name="Revert to Region Default" label="共有された環境"/>
 			</panel>
@@ -90,8 +90,8 @@
 				</text>
 				<combo_box name="ShadowDetail">
 					<combo_box.item label="なし" name="0"/>
-					<combo_box.item label="太陽/月" name="1"/>
-					<combo_box.item label="太陽/月とプロジェクタ" name="2"/>
+					<combo_box.item label="太陽／月" name="1"/>
+					<combo_box.item label="太陽／月とプロジェクタ" name="2"/>
 				</combo_box>
 			</panel>
 
@@ -207,12 +207,12 @@
 
 			<panel name="P_DoF_Settings">
 				<check_box label="被写界深度（ＤｏＦ）を有効にする" name="UseDepthofField" tool_tip="この設定は「写真の焦点が合っているように見える被写体側の距離の範囲」（Wikipedia）を決める「被写界深度」を決定するものです。この機能を無効にするとフレームレートのスピードが向上します。もしこの機能を有効にできない場合は、「光と影」タブの「高度な照明モデル」を有効にして下さい。"/>
-				<check_box label="DOF フォーカスがポインターに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤｏＦ）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。"/>
-				<check_box label="現在のビューア画面の画角（ＦｏＶ）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（ＦｏＶ）を表示します。ビューアの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（ＦｏＶ）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（ＦｏＶ）を有しています。画角（ＦｏＶ）を調整するには、下のスライダーを使用します。画角（ＦｏＶ）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="MIC_Show_FOV"/>
+				<check_box label="DOF フォーカスがポインターに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤｏＦ）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「ＤＯＦフォーカスのロック」機能と合わせてお使い下さい。"/>
+				<check_box label="現在のビューア画面の画角（ＦｏＶ）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（ＦｏＶ）を表示します。ビューアの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（ＦｏＶ）が小さいほどカメラのレンズ距離は長くなります。50㎜のレンズは27.0度の画角（ＦｏＶ）を有しています。画角（ＦｏＶ）を調整するには、下のスライダーを使用します。画角（ＦｏＶ）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="MIC_Show_FOV"/>
 			</panel>
 
 			<panel name="P_Zoom">
-				<text name="T_Zoom" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦｏＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。" width="80">
+				<text name="T_Zoom" tool_tip="ＲＬで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦｏＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。" width="80">
 					視野角
 				</text>
 				<slider_bar name="SB_Zoom"/>
@@ -226,8 +226,8 @@
 				<spinner name="S_FOV"/>
 				<button name="Reset_FOV" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 
-				<text name="T_F_Number" tool_tip="RLで言うレンズの「絞り値」の設定で、値が小さいほど被写界深度（ＤｏＦ）は短くなります。SLに於いても同様です。">
-					F値（絞り）
+				<text name="T_F_Number" tool_tip="ＲＬで言うレンズの「絞り値」の設定で、値が小さいほど被写界深度（ＤｏＦ）は短くなります。ＳＬにおいても同様です。">
+					Ｆ値（絞り）
 				</text>
 				<slider_bar name="SB_F_Number"/>
 				<spinner name="S_F_Number"/>
@@ -415,19 +415,19 @@
 
 			<panel name="P_Vignetting">
 				<text name="T_VignetteX">
-					ビネット量
+					周辺減光量
 				</text>
 				<slider_bar name="VignetteSliderX"/>
 				<spinner name="VignetteSpinnerX"/>
 				<button name="Reset_VignetteX" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 				<text name="T_VignetteY">
-					ビネット強度
+					周辺減光強度
 				</text>
 				<slider_bar name="VignetteSliderY"/>
 				<spinner name="VignetteSpinnerY"/>
 				<button name="Reset_VignetteY" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 				<text name="T_VignetteZ">
-					ビネット倍率
+					周辺減光倍率
 				</text>
 				<slider_bar name="VignetteSliderZ"/>
 				<spinner name="VignetteSpinnerZ"/>
@@ -502,10 +502,10 @@
 			<scroll_container name="statistics_scroll">
 				<container_view name="statistics_view">
 					<stat_view name="basic">
-						<stat_bar name="fps" label="１秒当たりフレーム数（FPS）" tool_tip="FPS：お使いのコンピュータが１秒当たり何回画面上で再描画（または更新）を行っているかを表します。通常のアニメーションのFPSは12〜15です。24が映画の標準となっており、テレビ放送で使われているFPSは25 (PAL)や30 (NTSC)となっています。"/>
+						<stat_bar name="fps" label="１秒当たりフレーム数（ＦＰＳ）" tool_tip="ＦＰＳ：お使いのコンピュータが１秒当たり何回画面上で再描画（または更新）を行っているかを表します。通常のアニメーションのＦＰＳは１２〜１５です。２４が映画の標準となっており、テレビ放送で使われているＦＰＳは２５（ＰＡＬ）や３０（ＮＴＳＣ）となっています。"/>
 						<stat_bar name="bandwidth" label="帯域幅" tool_tip="帯域幅：お使いのコンピュータと仮想世界との間でどれだけのデータが行き来しているかを表します。この値はどのような帯域幅の設定にしているか、インワールドのどこにいるのか、どのような事がそこで行われているのか、現在もまだ何か（オブジェクトやテクスチャなどを）画角（ＦｏＶ）内に読み込み中なのかどうかといった諸条件によって大きく変化します。もし帯域幅が「0 Kbps」と表示されているとすると何かがおかしいと言えます。（恐らくは一部ネットワークと切断している可能性があります。）"/>
 						<stat_bar name="ktrisframe" label="フレーム当たりポリゴン数" tool_tip="フレーム当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、現在のシーンのフレーム毎にどれだけの数の三角形が描画されているかを表しています。"/>
-						<stat_bar name="ktrissec" label="秒当たりポリゴン数" tool_tip="秒当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、毎秒どれだけの数の三角形が描画されているかを表しています。."/>
+						<stat_bar name="ktrissec" label="秒当たりポリゴン数" tool_tip="秒当たりポリゴン数：コンピュータで生成される3Dオブジェクトは三角形から組み立てられており、三角形が基本的な幾何学的形状、ポリゴンとなっています。この値は、毎秒どれだけの数の三角形が描画されているかを表しています。"/>
 						<stat_bar name="objs" label="総オブジェクト数" tool_tip="総オブジェクト数：現在の視界にあるオブジェクトの数を表します。これには、プリム、アバター、地形、樹木、パーティクル、水が含まれます。"/>
 						<stat_bar name="newobjs" label="新規オブジェクト数" tool_tip="新規オブジェクト数：１秒当たりに読み込まれているオブジェクトの数を表します。"/>
 						<stat_bar name="numimagesstat" label="テクスチャ数" tool_tip="テスクチャ数：ビューアによって読み込まれているテクスチャの数です。"/>
@@ -517,7 +517,7 @@
 		<panel name="P_Cam" label="カメラ">
 			<panel name="PT_Cam">
 				<text name="T_Cam">
-					3D マウス（ジョイスティック）設定
+					３Ｄマウス（ジョイスティック）設定
 				</text>
 			</panel>
 
@@ -580,11 +580,11 @@
 
 			<panel name="P_Axis_Mapping">
 				<spinner label="ズーム軸のマッピング" name="JoystickAxis6" tool_tip="マウスのどの軸にズーム機能を割り当てるかを調整します。"/>
-				<check_box label="3D マウスを有効にする" tool_tip="ここにチェックを入れることで3D マウスが動作します。" name="enable_joystick"/>
+				<check_box label="３Ｄマウスを有効にする" tool_tip="ここにチェックを入れることで３Ｄマウスが動作します。" name="enable_joystick"/>
 				<check_box name="CB_ZoomDirect" label="ズームコントロールを有効にする（ヒント参照！）" tool_tip="ズームコントロールの機能を利用するには、「ズーム軸のマッピング」の値を「4」以上に設定する必要があります。"/>
 				<check_box name="CB_AutoLeveling" label="自動水平装置を有効にする（カメラの横揺れを回避）" tool_tip="ここにチェックを入れると、カメラは常に水平を保ちます。"/>
-				<check_box name="CB_Move_Avatar" label="アバターの移動に 3D マウスを利用" tool_tip="ここにチェックを入れると3D マウスでアバターを動かせるようになります。"/>
-				<check_box name="CB_Move_Objects" label="オブジェクトの移動（制作）に 3D マウスを使用" tool_tip="オブジェクトを制作したり修正したりする時にも 3D マウスを使用します。"/>
+				<check_box name="CB_Move_Avatar" label="アバターの移動に３Ｄマウスを利用" tool_tip="ここにチェックを入れると３Ｄマウスでアバターを動かせるようになります。"/>
+				<check_box name="CB_Move_Objects" label="オブジェクトの移動（制作）に３Ｄマウスを使用" tool_tip="オブジェクトを制作したり修正したりする時にも３Ｄマウスを使用します。"/>
 				<check_box label="現在のビューア画面の画角（ＦｏＶ）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（ＦｏＶ）を表示します。ビューアの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（ＦｏＶ）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（ＦｏＶ）を有しています。画角（ＦｏＶ）を調整するには、下のスライダーを使用します。画角（ＦｏＶ）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="CAM_Show_FOV"/>
 				<check_box label="詳細なカメラの位置データを表示" name="Camera"/>
 			</panel>

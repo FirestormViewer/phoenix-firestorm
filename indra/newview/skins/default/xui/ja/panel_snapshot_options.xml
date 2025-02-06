@@ -5,7 +5,7 @@
 			<button label="ディスクに保存" name="save_to_computer_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_inventory">
-			<button label="インベントリに保存（L$ [AMOUNT]）" name="save_to_inventory_btn"/>
+			<button label="インベントリに保存" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">
 			<button label="プロフィールで共有する" name="save_to_profile_btn"/>

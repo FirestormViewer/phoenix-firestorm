@@ -113,7 +113,7 @@
 		</panel>
 		<panel name="huds_subpanel">
 			<text name="huds_lbl">
-Your active HUDs
+				アクティブなＨＵＤ
 			</text>
 			<text name="huds_desc">
 				使用していないＨＵＤを外すと、速度が向上する可能性があります。
@@ -124,7 +124,7 @@ Your active HUDs
 かかった時間
 			</text>
 			<text name="huds_frame_stats">
-00%
+				00%
 			</text>
 			<icon name="icon_arrow4"/>
 		</panel>

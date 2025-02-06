@@ -110,7 +110,7 @@
 		<tag>fail</tag>
 	</notification>
 	<notification name="WearableSave">
-		現在の服装／身体部位の変更を保存しますか？
+		現在の衣装／身体部位の変更を保存しますか？
 		<usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="保存しない" yestext="保存"/>
 	</notification>
 	<notification name="ConfirmNoCopyToOutbox">
@@ -226,7 +226,7 @@
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="AlertMerchantListingCannotWear">
-		マーケットプレイスの出品リストフォルダにある衣服装やボディパーツを着用できません。
+		マーケットプレイスの出品リストフォルダにある衣衣装やボディパーツを着用できません。
 		<tag>fail</tag>
 	</notification>
 	<notification name="AlertMerchantListingInvalidID">
@@ -267,7 +267,7 @@
 		<tag>fail</tag>
 	</notification>
 	<notification name="SaveClothingBodyChanges">
-		服装、身体部位に対する変更をすべて保存しますか？
+		衣装、身体部位に対する変更をすべて保存しますか？
 		<tag>confirm</tag>
 		<usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="保存しない" yestext="すべて保存"/>
 	</notification>
@@ -631,11 +631,11 @@ L$が不足しているので、このグループに参加することができ
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		アウトフィットを装着できません。
-アウトフィットフォルダに服装、身体部位、装着物がありません。
+アウトフィットフォルダに衣装、身体部位、装着物がありません。
 		<tag>fail</tag>
 	</notification>
 	<notification name="CannotWearTrash">
-		ごみ箱にある服装や身体部位は、着用できません。
+		ごみ箱にある衣装や身体部位は、着用できません。
 		<tag>fail</tag>
 	</notification>
 	<notification name="MaxAttachmentsOnOutfit">
@@ -770,10 +770,10 @@ L$が不足しているので、このグループに参加することができ
 		デバッグ設定の変更は、[APP_NAME]再起動後に反映されます。
 	</notification>
 	<notification name="ChangeSkin">
-		新しいスキンは、[APP_NAME]再起動後に表示されます。
+		新しいスキンは、[APP_NAME]再起動後に反映されます。
 変更した色をデフォルトに戻してもよろしいですか？
 		<tag>confirm</tag>
-		<usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="いいえ" yestext="はい"/>
+		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		言語の変更は、[APP_NAME]再起動後に反映されます。
@@ -793,7 +793,7 @@ L$が不足しているので、このグループに参加することができ
 		このノートカードを削除してもよろしいですか？
 		<unique/>
 		<tag>confirm</tag>
-		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
+		<usetemplate ignoretext="ノートカード削除前の確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="LoadPreviousReportScreenshot">
 		以前のスクリーンショットをレポートに使用しますか？
@@ -1582,7 +1582,7 @@ L$が不足しているので、このグループに参加することができ
 		<tag>fail</tag>
 	</notification>
 	<notification name="CannotSaveWearableOutOfSpace">
-		「[NAME]」を服装のファイルに保存できません。
+		「[NAME]」を衣装のファイルに保存できません。
 コンピューターのディスクスペースを少し増やしてから、もう一度保存してみてください。
 		<tag>fail</tag>
 	</notification>
@@ -1881,7 +1881,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 「[THIS_GPU]」まで
 	</notification>
 	<notification name="DisplaySetToRecommendedFeatureChange">
-		レンダリングサブシステムの変更により、画面設定は推奨レベルに設定されました。
+		描画サブシステムの変更により、画面設定は推奨レベルに設定されました。
 	</notification>
 	<notification name="ErrorMessage">
 [ERROR_MESSAGE]
@@ -1909,10 +1909,10 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		<tag>fail</tag>
 	</notification>
 	<notification name="ClothingLoading">
-		現在服装をダウンロードしています。
+		現在衣装をダウンロードしています。
 このまま[CURRENT_GRID]を通常通りご使用いただけます。他者からはあなたは正常に表示されています。
 		<form name="form">
-			<ignore name="ignore" text="服装がダウンロードされるまで時間がかかっているとき"/>
+			<ignore name="ignore" text="衣装がダウンロードされるまで時間がかかっているとき"/>
 		</form>
 	</notification>
 	<notification name="AgentComplexityWithVisibility">
@@ -2148,7 +2148,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		[AGENT]が、[ESTATE]の[LIST_TYPE]リストから削除されました。
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
-		服装およびシェイプが読み込まれるまでは、容姿の変更はできません。
+		衣装およびシェイプが読み込まれるまでは、容姿の変更はできません。
 	</notification>
 	<notification name="UsavedWearableChanges">
 		保存されていない変更があります。
@@ -3352,8 +3352,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="AutoWearNewClothing">
-		作成する服装を自動的に装着しますか？
-		<usetemplate ignoretext="「容姿」を編集中に、作成する服装を装着するとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
+		作成する衣装を自動的に装着しますか？
+		<usetemplate ignoretext="「容姿」を編集中に、作成する衣装を装着するとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="NotAgeVerified">
 		訪問しようとしている場所は、１８歳以上の住人に制限されています。
@@ -3467,7 +3467,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		添付が取り消されました。
 	</notification>
 	<notification name="ReplacedMissingWearable">
-		欠落している服装や身体部位をデフォルトに置き換えます。
+		欠落している衣装や身体部位をデフォルトに置き換えます。
 	</notification>
 	<notification name="GroupNotice">件名：[SUBJECT]　メッセージ：[MESSAGE]
 		<tag>group</tag>
@@ -4562,7 +4562,7 @@ Your L$ balance is shown in the upper-right.
 
 次の住人と共有：&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
 		<tag>confirm</tag>
-		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
+		<usetemplate ignoretext="自分のアイテムを共有する前の確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
 		フォルダは一度に１つしか共有できません。
@@ -4655,7 +4655,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 音声通話は利用できなくなります。
 		<tag>voice</tag>
 		<tag>fail</tag>
-		<usetemplate name="okbutton" yestext="ＯＫ"/>
+		<usetemplate ignoretext="ビューアが音声サーバーに接続できない場合の警告" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
 		ボイスサーバーに接続できません。
@@ -4779,7 +4779,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 		<unique/>
 	</notification>
 	<notification label="サイドパネル" name="HintSidePanel">
-		サイドパネルから、インベントリや服装、プロフィールなどに素早くアクセスできます。
+		サイドパネルから、インベントリや衣装、プロフィールなどに素早くアクセスできます。
 		<unique/>
 	</notification>
 	<notification label="移動" name="HintMove">
@@ -5244,6 +5244,9 @@ Intelドライバーのウェブサイトを確認しますか？
 	</notification>
 	<notification name="ParticleScriptInjected">
 		パーティクルスクリプトが正常に挿入されました。
+		<form name="form">
+			<ignore name="ignore" text="パーティクルスクリプトがオブジェクトに挿入された時"/>
+		</form>
 	</notification>
 	<notification name="ParticleScriptCapsFailed">
 		オブジェクトにスクリプトを挿入できませんでした。機能の要求で空のアドレスが返されました。
@@ -6246,7 +6249,7 @@ Phoenix/Firestormビューアサポートグループへようこそ!
 			<button name="Allow" text="許可"/>
 			<button name="Always Allow" text="常に許可"/>
 			<button name="Deny" text="拒否"/>
-			<ignore text="現在のＲＬＶの制限のリストを誰かに送る前の確認"/>
+			<ignore name="ignore" text="現在のＲＬＶの制限のリストを誰かに送る前の確認"/>
 		</form>
 	</notification>
 	<notification name="InventoryValidationFailed" label="インベントリー検証エラー">
@@ -6308,7 +6311,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 	<notification name="LSLColorCopiedToClipboard">
 		ＬＳＬのカラー文字列がクリップボードにコピーされました。これをスクリプトに貼り付けて使用できます。
 		<form name="form">
-			<ignore name="ignore" text="An LSL color string was copied to my clipboard"/>
+			<ignore name="ignore" text="ＬＳＬカラー文字列がクリップボードにコピーされた時"/>
 		</form>
 	</notification>
 	<!-- <FS:Zi> Add float LSL color entry widgets -->
@@ -6800,7 +6803,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 	</notification>
 	<!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
 	<notification label="空のアルファチャンネルが含まれた画像" name="ImageEmptyAlphaLayer">
-    アップロードしようとしている画像には、空またはほぼ空のアルファチャンネル（透明情報）が含まれています。これはほとんどの場合望ましくないため、削除する必要があります。画像にアルファチャンネルを追加すると、異なるカメラ角度でテクスチャが互いに反転し、レンダリングが遅くなります。したがって、このテクスチャに空またはほぼ空のアルファチャンネルが本当に必要な場合を除き、削除することを検討してください。
+    アップロードしようとしている画像には、空またはほぼ空のアルファチャンネル（透明情報）が含まれています。これはほとんどの場合望ましくないため、削除する必要があります。画像にアルファチャンネルを追加すると、異なるカメラ角度でテクスチャが互いに反転し、描画が遅くなります。したがって、このテクスチャに空またはほぼ空のアルファチャンネルが本当に必要な場合を除き、削除することを検討してください。
 		<tag>confirm_strip</tag>
 		<form name="form">
 			<button name="strip" text="アルファチャンネルを削除"/>

@@ -417,7 +417,7 @@
 				<text_editor name="log_text"/>
 				<check_box label="詳細ログを有効にする。（非常に遅くなる可能性があります）" name="verbose_logging"/>
 			</panel>
-			<panel label="Preview Settings" name="mesh_preview_settings_panel">
+			<panel label="プレビュー設定" name="mesh_preview_settings_panel">
 				<view_border name="mesh_preview_settings_tab_border"/>
 				<text name="mesh_upload_behaviour_label">
 					モデルアップロード動作設定：

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url"> https://secondlife.com/my/account/request.php?lang=ja-JP
-	</panel.string>
+	<panel.string name="forgot_password_url">https://secondlife.com/my/account/request.php?lang=ja-JP</panel.string>
 	<panel.string name="sign_up_url">
 		https://www.firestormviewer.org/join-secondlife/
 	</panel.string>
@@ -19,7 +18,7 @@
 					<check_box label="名前を保持" name="remember_name" tool_tip="すでに記憶されているユーザーは、「アバター」＞「初期設定」＞「高度な設定」＞「記憶されているユーザー名」から削除することができます。"/>
 					<check_box label="パスワードを保持" name="remember_password"/>
 					<text name="forgot_password_text">
-						パスワードを忘れた場合
+						パスワードを忘れましたか？
 					</text>
 				</layout_panel>
 			</layout_stack>
