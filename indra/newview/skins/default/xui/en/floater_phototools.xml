@@ -25,7 +25,7 @@
 	 top="0"
 	 left="0"
 	 tab_group="0"
-	 tab_width="41"
+	 tab_width="45"
 	 tab_position="top">
 	
 		<panel
@@ -39,24 +39,24 @@
 
 			<panel
 			 name="PT_WL_Settings"
-			 follows="top|left"
+			 follows="left|right|top"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="5"
 			 left="0"
 			 width="285"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
-			 border_visible="true"
-			 border_thickness="1"
+			 border_visible="false"
+			 border_thickness="0"
 			 background_visible="true">
 				<text
 				 name="T_WL_Settings" 
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="200">
+				 width="150">
 					Environment Settings
 				</text>
 			</panel>
@@ -65,10 +65,11 @@
 			 name="P_WL_Sky_Water"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
+			 top_pad="0"
+			 left="5"
+			 top="30"
 			 width="275"
-			 height="135"
+			 height="75"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -88,7 +89,7 @@
 				<combo_box
 				 allow_text_entry="true"
 				 max_chars="50"
-				 height="23"
+				 height="20"
 				 layout="topleft"
 				 left_delta="58"
 				 follows="top|left"
@@ -99,7 +100,7 @@
 				 enabled="true"
 				 name="WLPrevPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
@@ -109,7 +110,7 @@
 				 enabled="true"
 				 name="WLNextPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
@@ -132,7 +133,7 @@
 				<combo_box
 				 allow_text_entry="true"
 				 max_chars="50"
-				 height="23"
+				 height="20"
 				 follows="top|left"
 				 layout="topleft"
 				 left_delta="58"
@@ -143,7 +144,7 @@
 				 enabled="true"
 				 name="WWPrevPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
@@ -153,7 +154,7 @@
 				 enabled="true"
 				 name="WWNextPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
@@ -176,7 +177,7 @@
 				<combo_box
 				 allow_text_entry="true"
 				 max_chars="50"
-				 height="23"
+				 height="20"
 				 follows="top|left"
 				 layout="topleft"
 				 left_delta="58"
@@ -187,7 +188,7 @@
 				 enabled="true"
 				 name="DCPrevPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
@@ -197,21 +198,35 @@
 				 enabled="true"
 				 name="DCNextPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
 				 image_overlay="Arrow_Right_Off"
 				 scale_image="true"/>
+			</panel>
+	
+			<panel
+			 name="P_WL_Sky_Water_2"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 top_delta="-5"
+			 width="275"
+			 height="28"
+			 border_visible="true"
+			 background_visible="true">	
+				 
 				<button
 				 enabled="true"
 				 name="btn_personal_lighting"
 				 follows="left|top"
 				 height="20"
-				 width="245"
+				 width="115"
 				 top_pad="5"
 				 left="5"
-				 label="Personal Lighting...">
+				 label="Personal Lighting">
 					<button.commit_callback
 					 function="Floater.ToggleOrBringToFront"
 					 parameter="env_adjust_snapshot" />
@@ -230,8 +245,7 @@
 				 label_selected=""
 				 scale_image="true"
 				/>
-				
-				
+							
 				<button
 				 follows="top|left|right"
 				 height="20"
@@ -244,8 +258,7 @@
 				 layout="topleft"
 				 name="PauseClouds"
 				 tool_tip="Pauses cloud animations"
-				 top_pad="3"
-				 left="5"
+				 left_pad="5"
 				 right="-5">
 					<button.commit_callback
 					 function="World.EnvSettings"
@@ -261,41 +274,41 @@
 			 name="P_Q_Windlights"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
-			 width="275"
-			 height="135"
+			 width="135"
+			 height="132"
 			 border_visible="true"
 			 background_visible="true">
 				<text
 				 name="T_Q_Windlights"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
-				 top_pad="5"
+				 left="5"
+				 top_pad="3"
 				 height="20"
 				 word_wrap="true"
-				 width="155">
-					Quick Environments
+				 width="125">
+					Quick Env.
 				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 name="horiz_separator1"
 				 top_pad="-7"
-				 width="255"/>
+				 width="125"/>
 				<button
 				 follows="left|top"
 				 name="Sunrise"
 				 height="20"
 				 label="Sunrise"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="5"
-				 width="255">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunrise"/>
@@ -306,9 +319,9 @@
 				 height="20"
 				 label="Noon"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="2"
-				 width="255">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="noon"/>
@@ -319,9 +332,9 @@
 				 height="20"
 				 label="Sunset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="2"
-				 width="255">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunset"/>
@@ -332,9 +345,9 @@
 				 height="20"
 				 label="Midnight"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="2"
-				 width="255">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="midnight"/>
@@ -343,11 +356,11 @@
 				 follows="left|top"
 				 name="Revert to Region Default"
 				 height="20"
-				 label="Shared Environment"
+				 label="Shared Env."
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="2"
-				 width="255">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="region"/>
@@ -355,46 +368,46 @@
 			</panel>
 			
 			<panel
-			 visible="false"
+			 visible="true"
 			 name="P_WL_Presets"
 			 follows="top|left"
 			 layout="topleft"
 			 top_delta="0"
 			 left_pad="5"
 			 width="135"
-			 height="135"
+			 height="132"
 			 border_visible="true"
 			 background_visible="true">
 				<text
 				 name="T_WL_Presets"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
-				 top_pad="5"
+				 left="5"
+				 top_pad="3"
 				 height="20"
 				 word_wrap="true"
 				 tool_tip="Click an item below to create new preset or modify an existing one."
-				 width="150">
-					Windlight Presets
+				 width="125">
+					Env. Presets
 				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 name="horiz_separator2"
 				 top_pad="-7"
-				 width="120"/>
+				 width="125"/>
 				<button
 				 follows="left|top"
 				 name="new_sky_preset"
 				 height="20"
 				 label="New Sky Preset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="5"
-				 width="120">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_sky"/>
@@ -405,9 +418,9 @@
 				 height="20"
 				 label="Edit Sky Preset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="2"
-				 width="120">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_sky"/>
@@ -428,9 +441,9 @@
 				 height="20"
 				 label="New Water Preset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="10"
-				 width="120">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_water"/>
@@ -441,9 +454,9 @@
 				 height="20"
 				 label="Edit Water Preset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="2"
-				 width="120">
+				 width="125">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_water"/>
@@ -454,7 +467,7 @@
 			 name="P_W_Reflections"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="4"
 			 left="0"
 			 width="285"
 			 height="22"
@@ -470,7 +483,7 @@
 				 font="SansSerif"
 				 height="17"
 				 width="230">
-					Water Reflection Settings
+					Reflection Settings
 				</text>
 			</panel>
 
@@ -478,32 +491,81 @@
 			 name="P_R_Res"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
+			 top_pad="3"
+			 left="5"
 			 width="275"
-			 height="54"
+			 height="60"
+			 border_visible="true"
+			 background_visible="true">
+			 	<check_box
+				 control_name="RenderTransparentWater"
+				 height="16"
+				 label="Enable Transparent Water"
+				 layout="topleft"
+				 left="5"
+				 name="TransparentWater"
+				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
+				 top_pad="7"
+				 width="240">
+				</check_box>
+				<check_box
+				 control_name="RenderScreenSpaceReflections"
+				 height="16"
+				 initial_value="true"
+				 label="Enable Screen Space Reflections"
+				 layout="topleft"
+				 left_delta="0"
+				 name="ScreenSpaceReflections"
+				 top_pad="1"
+				 width="256">
+				 <check_box.commit_callback
+				  function="Pref.RenderOptionUpdate" />
+				</check_box>
+				<check_box
+				 control_name="RenderMirrors"
+				 height="16"
+				 initial_value="false"
+				 label="Enable Mirrors"
+				 layout="topleft"
+				 left_delta="0"
+				 name="Mirrors"
+				 top_pad="1"
+				 width="280">
+				  <check_box.commit_callback
+				   function="Pref.RenderOptionUpdate" />
+				</check_box>
+			</panel>
+			<panel
+			 name="P_R_Res_2"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="5"
+			 width="275"
+			 height="123"
 			 border_visible="true"
 			 background_visible="true">
 				<text
 				 name="T_R_Res"
 				 follows="left|top"
 				 height="15"
-				 left="10" 
-				 top_pad="13"
-				 width="80"
+				 left="7" 
+				 top_pad="10"
+				 width="140"
 				 layout="topleft"
 				 tool_tip="Determines the resolution/quality of water reflections.">
-					Resolution
+					Water Reflection Res.
 				</text>
 				<combo_box
 				 control_name="RenderWaterRefResolution"
-				 height="22"
+				 height="20"
 				 layout="topleft"
-				 left_pad="65"
+				 left_pad="3"
 				 top_delta="-5"
 				 follows="left|top"
 				 name="ReflectionRescombo"
-				 width="115">
+				 right_delta="-5"
+				 width="120">
 					<combo_box.item
 					 label="Decent"
 					 name="0"
@@ -531,18 +593,316 @@
 					<combo_box.commit_callback
 					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-				<check_box
-				 control_name="RenderTransparentWater"
-				 height="16"
-				 label="Transparent Water"
+				<!--text
+				 type="string"
+				 length="1"
+				 top_pad="4"
+				 follows="top|left"
+				 height="15"
+				 width="120"
+				 word_wrap="true"
+				 layout="topleft"
+				 left="7"
+				 name="shadows_label">
+				  Shadows
+				</text>
+				<combo_box
+				 control_name="RenderShadowDetail"
+				 height="22"
+				 layout="topleft"
+				 left_pad="3"
+				 top_delta="-5"
+				 follows="left|top"
+				 name="ShadowDetail"
+				 right="-5"
+				 width="150">
+				  <combo_box.commit_callback
+				 function="Pref.RenderOptionUpdate" />
+				  <combo_box.item
+				   label="None"
+				   name="0"
+				   value="0"/>
+				  <combo_box.item
+				   label="Sun/Moon"
+				   name="1"
+				   value="1"/>
+				  <combo_box.item
+				   label="Sun/Moon + Projectors"
+				   name="2"
+				   value="2"/>
+				</combo_box-->
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="7"
+				 name="ReflectionDetailText"
+				 text_readonly_color="LabelDisabledColor"
+				 top_pad="4"
+				 width="140">
+				  Reflection Detail
+				</text>
+				<combo_box
+				 control_name="RenderReflectionProbeDetail"
+				 height="20"
+				 layout="topleft"
+				 left_pad="3"
+				 top_delta="-5"
+				 name="ReflectionDetail"
+				 width="120">
+				  <combo_box.item
+				   label="Static Only"
+				   name="0"
+				   value="0"/>
+				  <combo_box.item
+				   label="Static &amp; Dynamic"
+				   name="1"
+				   value="1"/>
+				  <combo_box.item
+				   label="Realtime"
+				   name="2"
+				   value="2"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="7"
+				 name="ReflectionProbeText"
+				 text_readonly_color="LabelDisabledColor"
+				 top_pad="4"
+				 width="140">
+				  Reflection Coverage
+				</text>
+				<combo_box
+				 control_name="RenderReflectionProbeLevel"
+				 height="20"
+				 layout="topleft"
+				 left_pad="3"
+				 top_delta="-5"
+				 name="ReflectionLevel"
+				 width="120">
+				  <combo_box.item
+				   label="None"
+				   name="0"
+				   value="0"/>
+				  <combo_box.item
+				   label="Manual only"
+				   name="1"
+				   value="1"/>
+				  <combo_box.item
+				   label="Manual &amp; terrain"
+				   name="2"
+				   value="2"/>
+				  <combo_box.item
+				   label="Full scene"
+				   name="3"
+				   value="3"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="7"
+				 name="MirrorResolutionText"
+				 text_readonly_color="LabelDisabledColor"
+				 top_pad="4"
+				 width="140">
+				  Mirror Resolution
+				</text>
+				<combo_box
+				 control_name="RenderHeroProbeResolution"
+				 enabled_control="RenderMirrors"
+				 height="20"
+				 layout="topleft"
+				 left_pad="3"
+				 top_delta="-5"
+				 name="MirrorResolution"
+				 width="120">
+				  <combo_box.item
+				   label="256"
+				   name="0"
+				   value="256"/>
+				  <combo_box.item
+				   label="512"
+				   name="1"
+				   value="512"/>
+				  <combo_box.item
+				   label="1024"
+				   name="2"
+				   value="1024"/>
+				  <combo_box.item
+				   label="2048"
+				   name="3"
+				   value="2048"/>
+				   <combo_box.item
+				   label="4096"
+				   name="4"
+				   value="4096"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="7"
+				 name="HeroProbeUpdateText"
+				 text_readonly_color="LabelDisabledColor"
+				 top_pad="4"
+				 width="140">
+				  Mirror Update Rate
+				</text>
+				<combo_box
+				 control_name="RenderHeroProbeUpdateRate"
+				 enabled_control="RenderMirrors"
+				 height="20"
+				 layout="topleft"
+				 left_pad="3"
+				 top_delta="-5"
+				 name="HeroProbeUpdateRate"
+				 width="120">
+				  <combo_box.item
+				   label="Low"
+				   name="6"
+				   value="6"/>
+				  <combo_box.item
+				   label="Medium"
+				   name="3"
+				   value="3"/>
+				  <combo_box.item
+				   label="High"
+				   name="1"
+				   value="2"/>
+				  <combo_box.item
+				   label="Ultra"
+				   name="0"
+				   value="1"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="7"
+				 name="Probe_Resolution"				 
+				 top_pad="4"
+				 width="140">
+					Probe Resolution (Restart)
+				</text>
+				<combo_box
+				 control_name="RenderReflectionProbeResolution"
+				 enabled_control="VertexShaderEnable"
+				 height="20"
+				 layout="topleft"
+				 left_pad="3"
+				 top_delta="-5"
+				 right_detla="-5"
+				 follows="left|top"
+				 name="Probe_Resolution_Combo"
+				 width="120">
+					<combo_box.item
+					 label="64"
+					 name="0"
+					 value="64"/>
+					<combo_box.item
+					 label="128"
+					 name="1"
+					 value="128"/>
+					<combo_box.item
+					 label="256"
+					 name="2"
+					 value="256"/>
+					<combo_box.item
+					 label="512"
+					 name="3"
+					 value="512"/>
+					<combo_box.item
+					 label="1024"
+					 name="4"
+					 value="1024"/>
+					<combo_box.item
+					 label="2048"
+					 name="5"
+					 value="2048"/>
+					<combo_box.commit_callback
+					 function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+			</panel>
+			
+			<!--panel
+			 name="Graphic_Presets"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="4"
+			 width="275"
+			 height="31"
+			 border_visible="true"
+			 bg_alpha_color="Phototools_Header"
+			 background_visible="true">	
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="24"
 				 layout="topleft"
 				 left="5"
-				 name="TransparentWater"
-				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
-				 top_pad="5"
-				 width="240">
-				</check_box>
-			</panel>
+				 name="Presets_Label"
+				 top_pad="3"
+				 width="45"
+				 font_size="Monospace"
+				 word_wrap="true">
+				  Graphic Presets
+				</text>
+				<button
+				 follows="left|top"
+				 height="20"
+				 label="Save"
+				 layout="topleft"
+				 left_pad="13"
+				 name="PrefSaveButton"
+				 top_delta="3"
+				 width="66">
+				 <button.commit_callback
+				  function="Pref.PrefSave"
+				  parameter="graphic" />
+				</button>
+				<button
+				 follows="left|top"
+				 height="20"
+				 label="Load"
+				 layout="topleft"
+				 left_pad="5"
+				 name="PrefLoadButton"
+				 top_delta="0"
+				 width="66">
+				 <button.commit_callback
+				  function="Pref.PrefLoad"
+				  parameter="graphic" />
+				</button>
+				<button
+				 follows="left|top"
+				 height="20"
+				 label="Delete"
+				 layout="topleft"
+				 left_pad="5"
+				 name="PrefDeleteButton"
+				 top_delta="0"
+				 width="66">
+				 <button.commit_callback
+				  function="Pref.PrefDelete"
+				  parameter="graphic" />
+				</button>
+			</panel-->
+			
 		</panel>
 
 		<panel
@@ -551,7 +911,7 @@
 		 layout="topleft"
 		 width="267"
 		 top="0"
-		 label="Light"
+		 label="Shd"
 		 left="0">
 			<panel
 			 name="PT_Light_Shadows"
@@ -584,14 +944,14 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="28"
+			 height="65"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="9"
+				 top_pad="5"
 				 height="16"
 				 label="Enable Attached Lights (Face Lights)"
 				 tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
@@ -603,26 +963,26 @@
 					 function="Advanced.HandleAttachedLightParticles"
 					 parameter="RenderAttachedLights"/>
 				</check_box>
-			</panel>
+			<!--/panel-->
 
-			<panel
+			<!--panel
 			 name="P_Shadows"
 			 follows="top|left"
 			 layout="topleft"
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="40"
+			 height="50"
 			 border_visible="true"
-			 background_visible="true">
+			 background_visible="true"-->
 				<text
 				 name="T_Shadow_Types"
 				 follows="left|top"
 				 height="16"
 				 left="5" 
-				 top_pad="8"
-				 width="50"
-				 word_wrap="true"
+				 top_pad="5"
+				 width="120"
+				 word_wrap="false"
 				 layout="topleft"
 				 tool_tip="This setting only affects the shadows that are rendered from light sources, the lights will still function normally otherwise. Point light (lights that do not have the projection feature enabled) will always create a sense of shadows, yet they will not cast them upon any surface. It is important to note that regardless of the setting you choose here, textures projected from projection lights will still be enabled.">
 					Shadow Types
@@ -633,10 +993,10 @@
 				 follows="left|right"
 				 height="20"
 				 layout="topleft"
-				 left_pad="10"
-				 top_delta="3"
+				 left_pad="5"
+				 top_delta="-2"
 				 name="ShadowDetail"
-				 width="200">
+				 width="140">
 					<combo_box.item
 					 label="None"
 					 name="0"
@@ -650,6 +1010,42 @@
 					 name="2"
 					 value="2"/>
 				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 top_pad="5"
+				 follows="top|left"
+				 height="16"
+				 width="120"
+				 word_wrap="false"
+				 layout="topleft"
+				 left="4"
+				 name="local lights_label"
+				 tool_tip="Affects the number of rendered light sources. A restart is required to change mode.">
+				  Point Lighting (Restart)
+				</text>
+				<combo_box
+				 control_name="RenderShaderLightingMaxLevel"
+				 height="20"
+				 layout="topleft"
+				 left_pad="5"
+				 top_delta=""
+				 name="LocalLightsDetail"
+				 width="140">
+				  <combo_box.item
+				   label="Full (default)"
+				   name="3"
+				   value="3"/>
+				  <combo_box.item
+				   label="Reduced"
+				   name="2"
+				   value="2"/>
+				  <combo_box.item
+				   label="Sun/Moon Only"
+				   name="1"
+				   value="1"/>
+				</combo_box>
+
 			</panel>
 
 			<panel
@@ -659,15 +1055,68 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="165"
+			 height="202"
 			 border_visible="true"
 			 background_visible="true">
+			 
+			 	<text
+				 name="T_Local_Lights"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="10"
+				 tool_tip="Number of local lights to render."
+				 width="80">
+					Loc Lights
+				</text>
+				<slider_bar
+				 name="SB_Shadow_Res"
+				 can_edit_text="true"
+				 control_name="RenderLocalLightCount"
+				 follows="left|right"
+				 height="16"
+				 decimal_digits="2"
+				 increment="1"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="100"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Local_Lights"
+				 can_edit_text="true"
+				 control_name="RenderLocalLightCount"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="2"
+				 follows="top|left"
+				 max_val="10000"
+				 min_val="0"
+				 width="53"
+				 increment="1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Local_Lights"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderLocalLightCount"/>
+				</button>
 				<text
 				 name="T_Shadow_Res"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
+				 top_pad="5"
 				 tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under 'Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
 				 width="80">
 					Shd. Res
@@ -677,11 +1126,11 @@
 				 control_name="RenderShadowResolutionScale"
 				 follows="left|right"
 				 height="16"
-				 increment="0.01"
+				 increment="0.5"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="4"
+				 max_val="8"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -691,11 +1140,11 @@
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
-				 follows="top|left"
+				 follows="left|right"
 				 max_val="7"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"/>
+				 increment="0.5"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Shadow_Res"
@@ -720,17 +1169,17 @@
 				 top_pad="5"
 				 tool_tip="This is a VERY important setting. It essentially determines how clear the Sun/Moon shadows are drawn overall. This setting should be set first before adjusting the setting below. With the value of 'Shd. Res' above set to 1.0, slide the value for 'Shd. Clarity' until the sharpest possible result is achieved. Please note, the clarity of shadows is directly related to the position of the camera and Sun/Moon. Every time you move either the camera or the Sun/Moon, it is best to adjust this value again. In addition, in order to make adjusting this value easier, it is helpful to set 'Shd. Blur' to 0.0 first."
 				 width="80">
-					Shd Clarity
+					Shd. Clarity
 				</text>
 				<slider_bar
 				 name="SB_Shd_Clarity"
 				 follows="left|right"
 				 height="16"
-				 increment="0.001"
+				 increment="0.025"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="65"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -738,7 +1187,7 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="4"
+				 decimal_digits="3"
 				 follows="top|right"
 				 max_val="1000"
 				 min_val="0"
@@ -856,7 +1305,7 @@
 				 top_pad="5"
 				 tool_tip="This will determine the point at which the shadows will begin to blur relative to the camera. The lower the value the closer the point of shadow blur will begin. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
 				 width="80">
-					Blur. Dist.
+					Blur Dist.
 				</text>
 				<slider_bar
 				 name="SB_Blur_Dist"
@@ -947,6 +1396,58 @@
 				</button>
 
 				<text
+				 name="T_Spot_Cutoff"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 width="80">
+					Spot Offset
+				</text>
+				<slider_bar
+				 name="SB_Spot_Cutoff"
+				 can_edit_text="true"
+				 control_name="RenderSpotShadowOffset"
+				 follows="left|right"
+				 height="16"
+				 increment="0.0001"
+				 decimal_digits="4"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val=".04"
+				 top_delta="-2"
+				 width="123"/>
+				<spinner
+				 name="S_Spot_Cutoff"
+				 can_edit_text="true"
+				 control_name="RenderSpotShadowOffset"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="4"
+				 follows="top|right"
+				 max_val="100"
+				 min_val="0"
+				 width="57"
+				 increment="0.001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Spot_Cutoff_Reset"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSpotShadowOffset"/>
+				</button>
+
+				<text
 				 name="T_Shd_Bias"
 				 follows="top|left"
 				 layout="topleft"
@@ -958,28 +1459,32 @@
 				</text>
 				<slider_bar
 				 name="SB_Shd_Bias"
+				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 follows="left|right"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.000001"
+				 decimal_digits="6"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="-.008"
-				 max_val="0"
+				 min_val="-0.001"
+				 max_val="0.0"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Shd_Bias"
+				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="4"
+				 decimal_digits="6"
 				 follows="top|right"
 				 max_val="5"
 				 min_val="-5"
-				 width="53"
-				 increment="0.0001"/>
+				 width="73"
+				 increment="0.000001"
+				 border_visible="false"/>
 				<button
 				 follows="left|top"
 				 name="Shd_Bias_Reset"
@@ -1000,7 +1505,7 @@
 			 name="P_Ambient_Occlusion"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="0"
 			 width="285"
 			 height="22"
@@ -1024,10 +1529,10 @@
 			 name="P_Amb_Occ_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="35"
+			 height="25"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -1039,7 +1544,7 @@
 				 left="5"
 				 name="UseSSAO"
 				 tool_tip="Ambient Occlusion adds shading to all objects. It is most effective when the Effect and AO Soften settings below are used. It can add a high level of realism to the image. This is especially true when images are made at resolutions of 2048 pixels or above."
-				 top_pad="12"
+				 top_pad="7"
 				 width="230">
 				</check_box>
 			</panel>
@@ -1048,10 +1553,10 @@
 			 name="P_Scale"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="120"
+			 height="159"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1059,7 +1564,7 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
+				 top_pad="8"
 				 tool_tip="Controls sampling region; larger regions are more accurate. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
 				 width="80">
 					Scale
@@ -1201,6 +1706,112 @@
 					 parameter="RenderSSAOFactor"/>
 				</button>
 
+				<text
+				 name="I_Max_Scale" 
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Max factor for irradiance input to SSAO"
+				 width="80">
+					Irrad Max
+				</text>
+				<slider_bar
+				 name="IS_Max_Scale"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceMax"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 decimal_digits="0"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="10000"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Max_Scale"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceMax"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="0"
+				 follows="top|right"
+				 max_val="10000000"
+				 min_val="0"
+				 width="53"
+				 increment="1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_I_Max_Scale"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOIrradianceMax"/>
+				</button>
+
+				<text
+				 name="I_Scaling_Max"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="RenderSSAOIrradianceMax is a clamp, or upper limit, on the scaled irradiance. "
+				 width="80">
+					Irrad Scale
+				</text>
+				<slider_bar
+				 name="IS_Scaling_Factor"
+				 decimal_digits="2"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceScale"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="100"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="I_Scaling"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceScale"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="1"
+				 follows="top|right"
+				 max_val="100000"
+				 min_val="0"
+				 width="53"
+				 increment="0.5"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_I_Scaling_Factor"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOIrradianceScale"/>
+				</button>
+
 				<!-- RenderSSAOEffect X component -->
 				<text
 				 name="T_Effect" 
@@ -1216,10 +1827,10 @@
 				 name="SB_Effect"
 				 follows="left|right"
 				 height="16"
-				 increment="0.001"
+				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
+				 min_val="-1"
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
@@ -1244,6 +1855,7 @@
 				 top_delta="0"
 				 width="20"
 				 tool_tip="Reset to the default value."/>
+
 
 				<!-- RenderShadowGaussian Y component -->
 				<text
@@ -1296,7 +1908,7 @@
 		 follows="top|left"
 		 layout="topleft"
 		 top_pad="0"
-		 label="DoF/Glow"
+		 label="VFX"
 		 left="0">
 			<panel
 			 name="PT_DoF_Glow"
@@ -1326,10 +1938,10 @@
 			 name="P_DoF_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="66"
+			 height="55"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -1341,7 +1953,7 @@
 				 left="5"
 				 name="UseDepthofField"
 				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Advanced Lighting Model' in tab 'Light'."
-				 top_pad="10"
+				 top_pad="5"
 				 width="230"/>
 				<check_box
 				control_name="FSFocusPointFollowsPointer"
@@ -1351,13 +1963,13 @@
 				layout="topleft"
 				name="FSFocusPointFollowsPointer"
 				tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
-				top_pad="4"
+				top_pad="0"
 				width="256"/>	   
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="3"
+				 top_pad="0"
 				 height="16"
 				 label="Show the Current FOV of Viewer Screen"
 				 tool_tip="This will show you the vertical field of view for the camera. Within the viewer it is possible to change the lens length just like in real life. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'http://en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
@@ -1375,10 +1987,10 @@
 			 name="P_Zoom"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="175"
+			 height="161"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1386,7 +1998,7 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="15"
+				 top_pad="10"
 				 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
 				 width="80">
 					View angle
@@ -1724,12 +2336,152 @@
 					 parameter="CameraDoFResScale"/>
 				</button>
 			</panel>
-
+			<panel
+			 name="P_Tone_Settings"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Tone_Settings"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 height="17"
+				 width="230">
+					HDR Tone Mapping Settings
+				</text>
+			</panel>
+			
+			<panel
+			 name="P_Tone_Settings_2"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="4"
+			 width="275"
+			 height="25"
+			 border_visible="true"
+			 background_visible="true">
+			 
+				<check_box
+				 control_name="RenderDisableVintageMode"
+				 height="16"
+				 label="Enable HDR and Emissive"
+				 layout="topleft"
+				 left="5"
+				 name="Disable_Vintage_Mode"
+				 top_pad="6"
+				 width="240">
+				</check_box>
+			</panel>
+			
+			<panel
+			 name="P_Tone_Settings_3"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="4"
+			 width="275"
+			 height="50"
+			 border_visible="true"
+			 background_visible="true">			
+				
+				<text
+				 name="T_Tonemap_Type"
+				 follows="left|top"
+				 height="15"
+				 left="5" 
+				 top_pad="7"
+				 width="120"
+				 layout="topleft">
+					HDR Tonemap Type
+				</text>
+				<combo_box
+				 control_name="RenderTonemapType"
+				 enabled_control="VertexShaderEnable"
+				 height="20"
+				 layout="topleft"
+				 left_pad="10"
+				 top_delta="-3"
+				 follows="left|top"
+				 name="CB_Tonemap_Type"
+				 width="135">
+					<combo_box.item
+					 label="Khronos Neutral"
+					 name="0"
+					 value="0"/>
+					<combo_box.item
+					 label="ACES"
+					 name="1"
+					 value="1"/>
+					<combo_box.commit_callback
+					 function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+				<text
+				 name="T_Shadow_Res"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 width="50">
+					Tone Mix
+				</text>
+				<slider_bar
+				 name="SB_Tonemap_Type"
+				 can_edit_text="true"
+				 control_name="RenderTonemapMix"
+				 follows="left|right"
+				 height="16"
+				 decimal_digits="2"
+				 increment="0.05"
+				 layout="topleft"
+				 left_pad="5"
+				 min_val="0"
+				 max_val="1"
+				 top_delta="0"
+				 width="134"/>
+				<spinner
+				 name="S_Tonemap_Type"
+				 can_edit_text="true"
+				 control_name="RenderTonemapMix"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="top|left"
+				 max_val="1"
+				 min_val="0"
+				 width="53"
+				 increment="0.001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Tonemap_Type"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderTonemapMix"/>
+				</button>
+			 </panel>
 			<panel
 			 name="P_Glow_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="0"
 			 width="285"
 			 height="22"
@@ -1753,24 +2505,47 @@
 			 name="P_Glow_Quality"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="30"
+			 height="38"
 			 border_visible="true"
 			 background_visible="true">
-				<!--
+				
 				<check_box
 				 control_name="RenderGlow"
 				 height="16"
-				 label="Enable Glow Effect (please read the tool tip)"
+				 label="Enable Glow Effect"
 				 layout="topleft"
 				 left="5"
 				 name="UseGlow"
-				 top_pad="10"
-				 width="110"
-				 tool_tip="If Shadows are turned on, you must set the Strength to 0.0 to turn off this effect as the check box will not work."/>
-				-->
+				 top_pad="5"
+				 width="110"/>
+				 <check_box
+				 control_name="RenderGlowHDR"
+				 height="16"
+				 label="Enable HDR for Glow Map"
+				 layout="topleft"
+				 left="5"
+				 name="GlowHDR"
+				 top_pad="0"
+				 width="240">
+				</check_box>	
+
+			</panel>
+
+			<panel
+			 name="P_Glow_Iterations"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="4"
+			 width="275"
+			 height="93"
+			 border_visible="true"
+			 background_visible="true">
+
+			
 				<text
 				 name="T_Glow_Quality" 
 				 follows="top|left"
@@ -1781,7 +2556,7 @@
 				 width="80">
 					Quality
 				</text>
-				<!--slider_bar
+				<slider_bar
 				 name="SB_Glow_Quality"
 				 control_name="RenderGlowResolutionPow"
 				 follows="top|left"
@@ -1793,13 +2568,13 @@
 				 min_val="8"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127" /-->
+				 width="127" />
 				<spinner
 				 name="S_Glow_Quality"
 				 control_name="RenderGlowResolutionPow"
 				 top_delta="-5"
 				 label_width="0"
-				 left_pad="110"
+				 left_pad="3"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="10"
@@ -1820,24 +2595,13 @@
 					 function="ResetControl"
 					 parameter="RenderGlowResolutionPow"/>
 				</button>
-			</panel>
-
-			<panel
-			 name="P_Glow_Iterations"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="145"
-			 border_visible="true"
-			 background_visible="true">
+			 
 				<text
 				 name="T_Glow_Iterations"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
+				 top_pad="5"
 				 tool_tip="Number of times to iterate/repeat the glow (higher = wider and smoother and a bit slower)."
 				 width="80">
 					Iterations
@@ -1929,7 +2693,7 @@
 					 parameter="RenderGlowStrength"/>
 				</button>
 
-				<text
+				<!--text
 				 name="T_Luminance"
 				 follows="top|left"
 				 layout="topleft"
@@ -2025,7 +2789,7 @@
 					<button.commit_callback
 					 function="ResetControl"
 					 parameter="RenderGlowWarmthAmount"/>
-				</button>
+				</button-->
 
 				<text
 				 name="T_Glow_Width"
@@ -2076,7 +2840,7 @@
 					 parameter="RenderGlowWidth"/>
 				</button>
 
-				<text
+				<!--text
 				 name="T_Alpha"
 				 follows="top|left"
 				 layout="topleft"
@@ -2123,7 +2887,7 @@
 					<button.commit_callback
 					 function="ResetControl"
 					 parameter="RenderGlowMaxExtractAlpha"/>
-				</button>
+				</button-->
 			</panel>
 		</panel>
 
@@ -2165,7 +2929,7 @@
 			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="250"
+			 height="287"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -2173,7 +2937,7 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
+				 top_pad="5"
 				 tool_tip="This sets the furthest distance the viewer will draw anything. High values will slow your FPS!"
 				 width="80">
 					Draw Dist.
@@ -2314,7 +3078,97 @@
 					 function="ResetControl"
 					 parameter="RenderAvatarLODFactor"/>
 				</button>
+				
+				<!--text
+				  name="T_IndirectMaxComplexity"
+				  follows="left|top"
+				  layout="topleft"
+				  left="5"
+				  tool_tip="This determines the maximu avatar complexity. Controls at what point a visually complex avatar is drawn as a JellyDoll"
+				  top_pad="5"
+				  width="80"> 
+				  Avi Comp
+				</text>
 
+				<slider_bar
+				  name="IndirectMaxComplexity"
+				  control_name="IndirectMaxComplexity"
+				  follows="left|top"
+				  height="16"
+				  increment="1"          
+				  layout="topleft"
+				  left_pad="-20"        
+				  min_val="1"
+				  max_val="101"        
+				  top_delta="-2"
+				  width="127">
+				  <slider_bar.commit_callback
+					function="Pref.UpdateIndirectMaxComplexity"
+					parameter="IndirectMaxComplexityText" />
+				</slider_bar>
+
+				<spinner
+				  name="S_IndirectMaxComplexity"
+				  control_name="IndirectMaxComplexity"
+				  top_delta="-3"
+				  label_width="0"
+				  left_pad="3"
+				  decimal_digits="0"     
+				  follows="left|top"
+				  max_val="101"
+				  min_val="1"
+				  width="53"
+				  increment="1" />      
+
+				<button
+				  follows="left|top"
+				  name="Reset_IndirectMaxComplexity"
+				  height="22"
+				  label="D"
+				  layout="topleft"
+				  left_pad="0"
+				  top_delta="0"
+				  width="20"
+				  tool_tip="Reset to the default value.">
+				  <button.commit_callback
+					function="ResetControl"
+					parameter="IndirectMaxComplexity" />
+				</button-->
+        <!--slider
+         control_name="IndirectMaxComplexity"
+         tool_tip="Controls at what point a visually complex avatar is drawn as a JellyDoll"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="101"
+         label="Avi Comp"
+         label_width="60"
+         layout="topleft"
+         left="5"
+         max_val="101"
+         min_val="1"
+         show_text="false"
+         name="IndirectMaxComplexity"
+         top_pad="3"
+         width="227">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxComplexity"
+          parameter="IndirectMaxComlexityText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="0"
+         name="IndirectMaxComplexityText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="30">
+          0
+        </text-->
 				<text
 				 name="T_Avi_Physics"
 				 follows="top|left"
@@ -2330,11 +3184,11 @@
 				 control_name="RenderAvatarPhysicsLODFactor"
 				 follows="left|top"
 				 height="16"
-				 increment="1"
+				 increment=".01"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="10"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2343,12 +3197,12 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="0"
+				 decimal_digits="2"
 				 follows="top|right"
 				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment="1"/>
+				 increment=".01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Avi_Physics"
@@ -2383,7 +3237,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="10000"
+				 max_val="8192"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2526,7 +3380,7 @@
 				 control_name="RenderVolumeLODFactor"
 				 follows="left|top"
 				 height="16"
-				 increment="0.125"
+				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -2539,12 +3393,12 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="3"
+				 decimal_digits="0"
 				 follows="left|top"
 				 max_val="8.0"
 				 min_val="0"
 				 width="53"
-				 increment="0.125"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Object_Detail"
@@ -2706,6 +3560,100 @@
 					 function="ResetControl"
 					 parameter="WLSkyDetail"/>
 				</button>
+				<text
+				 name="T_Sharpening"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 width="80">
+					Sharpening
+				</text>
+				<slider_bar
+				 name="SB_Sharpening"
+				 control_name="RenderCASSharpness"
+				 follows="left|top"
+				 height="16"
+				 increment=".001"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="1"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Sharpening"
+				 control_name="RenderCASSharpness"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="left|top"
+				 max_val="1.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.1"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Sharpening"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderCASSharpness"/>
+				</button>
+				<text
+				 name="T_Exposure"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 width="80">
+					Exposure
+				</text>
+				<slider_bar
+				 name="SB_Exposure"
+				 control_name="RenderExposure"
+				 follows="left|top"
+				 height="16"
+				 increment=".25"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="10"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Exposure"
+				 control_name="RenderExposure"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="2"
+				 follows="left|top"
+				 max_val="10.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.01"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Exposure"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderExposure"/>
+				</button>
 			</panel>
 
 			<!--view_border
@@ -2718,7 +3666,7 @@
 			 top_pad="5"
 			 width="260"/-->
 			
-			<panel
+			<!--panel
 			 name="P_Vignetting"
 			 follows="top|left"
 			 layout="topleft"
@@ -2858,7 +3806,7 @@
 				 top_delta="0"
 				 width="20"
 				 tool_tip="Reset to the default value." />
-			</panel>
+			</panel-->
 
 			<panel
 			 name="P_Render"
@@ -2867,7 +3815,7 @@
 			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="98"
+			 height="87"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2877,7 +3825,7 @@
 				 height="16"
 				 label="Enable Draw Distance"
 				 layout="topleft"
-				 top_pad="10" 
+				 top_pad="5" 
 				 left="5"
 				 name="UseFarClip"
 				 tool_tip="Enable Draw Distance, if you disable this feature the Viewer will render past your set draw distance."
@@ -2891,7 +3839,7 @@
 				 left="5"
 				 name="RednerLod1"
 				 tool_tip="This enables the feature that allows the viewer to dynamically adjust the level of detail in scene as you move further away from objects. It helps improve performance, it also can reduce the quality of the objects in the scene."
-				 top_pad="2"
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -2902,7 +3850,7 @@
 				 left="5"
 				 tool_tip="This allows the viewer only to process/draw those objects that are within the camera field of view and not hidden behind anything else. Usually this is a performance booster. Sometimes it can actually reduce performance especially when the scene/sim has few objects. Toggle to see if it helps or not!"
 				 name="UssOcclusion1"
-				 top_pad="2"
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -2913,13 +3861,13 @@
 				 left="5"
 				 tool_tip="This enables higher texture crispness."
 				 name="Anisotropic"
-				 top_pad="2"
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="2"
+				 top_pad="0"
 				 height="16"
 				 label="Render Particles Attached to other Avatars"
 				 tool_tip="Enables the viewer to render any and all particles attached to/coming from other avatars."
@@ -2931,6 +3879,17 @@
 					 function="Advanced.HandleAttachedLightParticles"
 					 parameter="RenderAttachedParticles"/>
 				</check_box>
+				<!--check_box
+				 control_name="RenderAutoMaskAlphaDeferred"
+				 height="16"
+				 initial_value="false"
+				 label="Render alpha masks"
+				 tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly"
+				 layout="topleft"
+				 left_delta="0"
+				 name="RenderAutoMaskAlphaDeferred"
+				 top_pad="0"
+				 width="256"/-->
 			</panel>
 
 			<!--view_border
@@ -2950,82 +3909,116 @@
 			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="60"
+			 height="105"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
-				<text
+			 
+			 	<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="5"
+				 name="T_Antialiasing_Type"
+				 top_pad="5"
+				 width="180"
+				 tool_tip="Changes to this setting may require a restart on some hardware.">
+				  Antialiasing Type (Restart)
+				</text>
+					<combo_box
+					 control_name="RenderFSAAType"
+					 height="20"
+					 initial_value="false"
+					 follows="left|top"
+					 layout="topleft"
+					 left_pad="0"
+					 name="CB_Antialiasing_Type"
+					 top_delta="-3"
+					 width="85">
+						<combo_box.item
+						 label="Disabled"
+						 name="FSAADisabled"
+						 value="0" />
+						<combo_box.item
+						 label="FXAA"
+						 name="FXAA"
+						 value="1" />
+						<combo_box.item
+						 label="SMAA"
+						 name="SMAA"
+						 value="2" />
+					</combo_box>
+			 	<text
+				 type="string"
+				 length="1"
 				 name="T_Anti-aliasing"
 				 follows="left|top"
-				 height="18"
-				 left="10" 
-				 top_pad="12"
-				 width="80"
+				 height="15"
+				 left="5" 
+				 top_pad="5"
+				 width="180"
 				 layout="topleft"
 				 tool_tip="Determines how sharp and smooth the edges of objects will be. On top level graphics cards, higher values have virtually NO performance impact. On lower graphics cards, higher values can slow performance.">
-					Anti-aliasing
+					Antialiasing Quality
 				</text>
 				<combo_box
 				 control_name="RenderFSAASamples"
-				 height="22"						
-				 label="Antialiasing"
+				 height="20"
 				 layout="topleft"
 				 follows="left|top"
 				 left_pad="0"
 				 name="fsaa"
 				 top_delta="-5"
-				 width="180">
-					<combo_box.item
-					 label="Disabled (Rougher Edges)"
-					 name="FSAADisabled"
-					 value="0"/>
-					<combo_box.item
-					 label="2x (Smooth Edges)"
-					 name="2x"
-					 value="2"/>
-					<combo_box.item
-					 label="4x (Smoother Edges)"
-					 name="4x"
-					 value="4"/>
-					<combo_box.item
-					 label="8x (Even Smoother)"
-					 name="8x"
-					 value="8"/>
-					<combo_box.item
-					 label="16x (Smoothest)"
-					 name="16x"
-					 value="16"/>
+				 width="85">
+						<combo_box.item
+						 label="Low"
+						 name="Low"
+						 value="0" />
+						<combo_box.item
+						 label="Medium"
+						 name="Medium"
+						 value="1" />
+						<combo_box.item
+						 label="High"
+						 name="High"
+						 value="2" />
+						<combo_box.item
+						 label="Ultra"
+						 name="Ultra"
+						 value="2" />
 				</combo_box>
 				<text
 				 name="T_Texture_Bumpiness"
 				 follows="left|top"
 				 height="15"
-				 left="10" 
-				 top_pad="12"
-				 width="110"
+				 left="5" 
+				 top_pad="5"
+				 width="180"
 				 layout="topleft"
 				 tool_tip="Controls the strength and resolution of normal and bump maps.">
 					Texture Bumpiness
 				</text>
 				<combo_box
 				 control_name="RenderNormalMapScale"
-				 height="22"
+				 height="20"
 				 layout="topleft"
 				 left_pad="0"	
 				 follows="left|top"
 				 top_delta="-5"
 				 name="BumpStrengthSelection"
-				 width="150">
+				 width="85">
 					<combo_box.item
-					 label="Very fine (very weak)"
+					 label="Very fine"
 					 name="0"
 					 value="1024"/>
 					<combo_box.item
-					 label="Finer (weaker)"
+					 label="Finer"
 					 name="1"
 					 value="512"/>
 					<combo_box.item
-					 label="Fine (weak)"
+					 label="Fine"
 					 name="2"
 					 value="256"/>
 					<combo_box.item
@@ -3033,16 +4026,98 @@
 					 name="3"
 					 value="64"/>
 					<combo_box.item
-					 label="Rough (stronger)"
+					 label="Rough"
 					 name="4"
 					 value="32"/>
 					<combo_box.item
-					 label="Rougher (very strong)"
+					 label="Rougher"
 					 name="5"
 					 value="16"/>
 					<combo_box.commit_callback
 					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
+				<text
+				  name="T_RestrictMaxTexture"
+				  follows="left|top"
+				  height="15"
+				  left="5" 
+				  top_pad="5"
+				  width="180"
+				  layout="topleft"
+				  tool_tip="Sets the maximum display resolution for inworld textures. This allows displaying more textures before exceeding the available texture memory and observing blurry textures.">
+				  Max Texture Resolution
+				</text>
+
+				<combo_box
+				  control_name="RenderMaxTextureResolution"
+				  height="20"
+				  layout="topleft"
+				  left_pad="0"	
+				  follows="left|top"
+				  top_delta="-5"
+				  name="MaxTextureResolutionSelection"
+				  width="85">
+				  
+				  <combo_box.item
+					label="512 px"
+					name="512"
+					value="512"/>
+					
+				  <combo_box.item
+					label="1024 px"
+					name="1024"
+					value="1024"/>
+					
+				  <combo_box.item
+					label="2048 px"
+					name="2048"
+					value="2048"/>
+					
+				  <combo_box.commit_callback
+					function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+				<text
+				  name="T_AvatarDisplay"
+				  follows="left|top"
+				  height="15"
+				  left="5" 
+				  top_pad="5"
+				  width="135"
+				  layout="topleft"
+				  tool_tip="Controls how avatars are displayed based on complexity and friendship status.">
+				  Avatar Display
+				</text>
+
+				<combo_box
+				  control_name="RenderAvatarComplexityMode"
+				  height="20"
+				  layout="topleft"
+				  left_pad="0"	
+				  follows="left|top"
+				  top_delta="-5"
+				  name="AvatarComplexityModeSelection"
+				  width="130">
+				  
+				  <combo_box.item
+					label="Limit by Complexity"
+					name="0"
+					value="0"/>
+					
+				  <combo_box.item
+					label="Always Show Friends"
+					name="1"
+					value="1"/>
+					
+				  <combo_box.item
+					label="Only Show Friends"
+					name="2"
+					value="2"/>
+					
+				  <combo_box.commit_callback
+					function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+
+				
 			</panel>
 		</panel>
 
@@ -3765,25 +4840,25 @@
 				</text>
 				<slider_bar
 				 name="SB_Zoom_Speed"
-				 control_name="FlycamAxisScale6"
+				 control_name="FlycamAxisDeadZone6"
 				 follows="left|right"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.001"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val=".05"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
 				 name="S_Zoom_Speed"
-				 control_name="FlycamAxisScale6"
+				 control_name="FlycamAxisDeadZone6"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
 				 follows="top|left"
-				 max_val="1024"
+				 max_val="1"
 				 min_val="0"
 				 width="53"
 				 increment=".0001"/>
@@ -3799,7 +4874,7 @@
 				 tool_tip="Reset to the default value.">
 					<button.commit_callback
 					 function="ResetControl"
-					 parameter="FlycamAxisScale6"/>
+					 parameter="FlycamAxisDeadZone6"/>
 				</button>
 
 				<text
@@ -3817,11 +4892,11 @@
 				 control_name="FlycamFeathering"
 				 follows="left|right"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.5"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="3"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
