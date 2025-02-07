@@ -118,6 +118,7 @@
 		<combo_box.item value="filter_type_snapshots" label="快照" />
 		<combo_box.item value="filter_type_materials" label="材質" />
 		<combo_box.item value="filter_type_settings" label="環境設定" />
+		<combo_box.item value="filter_type_folders" label="檔案夾" />
 		<combo_box.item value="filter_type_coalesced" label="僅合併物件"/>
 		<combo_box.item value="filter_type_custom" label="自訂..." />
 	</combo_box>

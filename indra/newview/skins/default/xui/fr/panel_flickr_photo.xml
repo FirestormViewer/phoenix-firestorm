@@ -7,6 +7,8 @@
 	<combo_box name="filters_combobox" tool_tip="Filtres sur l'image"><combo_box.item label="Aucun filtre" name="NoFilter"/></combo_box>
 	<check_box label="Ratio conservé" name="keep_aspect_ratio"/>
 	<text name="working_lbl">Actualisation...</text>
+	<check_box label="Cadre de la photo" tool_tip="Affiche un cadre à l'écran qui entoure la zones de la photo. Les parties de la scène qui se trouvent en dehors de la photo sont dé-saturées et légèrement floues." name="show_frame"/>
+	<check_box label="Guide de cadrage" tool_tip="Affiche le guide de cadrage (règle des tiers) à l'intérieur du cadre de la photo." name="show_guides"/>
 	<button label="Actualiser" name="new_snapshot_btn" tool_tip="Cliquez pour actualiser"/>
 	<button label="Prévisualiser" name="big_preview_btn" tool_tip="Cliquez pour obtenir un aperçu"/>
 	<text name="title_label">Titre :</text>

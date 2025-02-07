@@ -57,12 +57,16 @@
 		<combo_box label="Слои изображения" name="layer_types">
 			<combo_box.item label="Цвета" name="Colors"/>
 			<combo_box.item label="Глубина" name="Depth"/>
+			<combo_box.item label="Глубина (24 бит)" name="Depth24"/>
 		</combo_box>
 		<check_box label="Интерфейс" name="ui_check"/>
 		<check_box label="L$ Баланс" name="currency_check"/>
 		<check_box label="Данные в игре" name="hud_check"/>
+		<check_box label="Показать кадр захвата" tool_tip="Показать на экране рамку, окружающую области снимка. Части сцены, находящиеся за пределами снимка, будут обесцвечены и слегка размыты." name="show_frame" />
+		<check_box label="Показать кадрирование" tool_tip="Показать руководство по кадрированию (правило третей) внутри рамки снимка" name="show_guides" />
 		<check_box label="Стоп-кадр (полноэкранный)" name="freeze_frame_check"/>
 		<check_box label="Автообновление" name="auto_snapshot_check"/>
+		<check_box label="Без постобработки" name="no_post_check" />
 		<text name="filter_list_label" width="60">
             Фильтр:
         </text>
