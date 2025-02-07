@@ -98,6 +98,8 @@ public:
     void setSysWellChiclet(LLSysWellChiclet* chiclet);
     void closeAll();
 
+    void idle();    // <FS:SimonLsAlt/>  FIRE-35118 Deferred deletion of notifications
+
     static LLFloaterNotificationsTabbed* getInstance(const LLSD& key = LLSD());
 
     // size constants for the window and for its elements
@@ -166,6 +168,12 @@ private:
     LLTabContainer* mNotificationsTabContainer;
     LLButton*   mDeleteAllBtn;
     LLButton*   mCollapseAllBtn;
+
+    // <FS:SimonLsAlt>  FIRE-35118 Deferred deletion of notifications
+    std::queue<std::pair<LLUUID, std::string>> mNotificationsToGo;
+
+    LLTimer         mDeleteNotificationsTimer;  // only for logging, could be removed
+    // </FS:SimonLsAlt>
 };
 
 #endif // LL_FLOATERNOTIFICATIONSTABBED_H

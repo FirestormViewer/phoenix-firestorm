@@ -53,6 +53,8 @@
 			<check_box label="Interfejs" name="ui_check" />
 			<check_box label="Stan L$" name="currency_check"/>
 			<check_box label="Obiekty HUD" name="hud_check" />
+			<check_box label="Ramka migawki" tool_tip="Pokaż na ekranie ramkę otaczającą obszary migawki. Części sceny, które są poza migawką, zostaną odbarwione i lekko rozmyte." name="show_frame" />
+			<check_box label="Prowadnice" tool_tip="Pokaż prowadnicę kadrowania (zasadę trójpodziału) wewnątrz ramki migawki." name="show_guides" />
 			<check_box label="Wstrzymaj (pełny ekran)" name="freeze_frame_check" />
 			<check_box label="Autoodświeżanie" name="auto_snapshot_check" />
 			<check_box label="Bez obróbki końcowej" name="no_post_check" />

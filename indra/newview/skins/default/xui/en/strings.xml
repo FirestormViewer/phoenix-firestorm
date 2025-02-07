@@ -927,6 +927,9 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="Textures"      value=" Textures," />
 	<string name="Settings"      value=" Settings," />
 	<string name="Snapshots"     value=" Snapshots," />
+	<!-- [AS:Chanayane] Search folders only -->
+	<string name="Folders"       value=" Folders," />
+	<!-- [/AS:Chanayane] -->
 	<string name="No Filters"    value="No " />
 	<string name="Since Logoff"  value=" - Since Logoff" />
 	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->

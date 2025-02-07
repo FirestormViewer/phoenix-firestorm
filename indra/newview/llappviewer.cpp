@@ -117,6 +117,9 @@
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0)
 #include "llfloaterscriptrecover.h"
 // [/SL:KB]
+
+#include "llfloaternotificationstabbed.h"   // <FS:SimonLsAlt/> FIRE-35118 - Add idle() processing to delete notifications
+
 #include "llspellcheck.h"
 #include "llscenemonitor.h"
 #include "llavatarrenderinfoaccountant.h"
@@ -5762,6 +5765,12 @@ void LLAppViewer::idle()
         }
     }
 
+    // <FS:SimonLsAlt> Handle deferred notice deletions
+    if (auto* notificationsTabbed = LLFloaterReg::findTypedInstance<LLFloaterNotificationsTabbed>("notification_well_window"))
+    {
+        notificationsTabbed->idle();
+    }
+    // </FS:SimonLsAlt/>
 
     // Update layonts, handle mouse events, tooltips, e t c
     // updateUI() needs to be called even in case viewer disconected

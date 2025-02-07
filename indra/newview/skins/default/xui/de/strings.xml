@@ -1952,6 +1952,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Textures" value=" Texturen,"/>
 	<string name="Settings" value=" Einstellungen," />
 	<string name="Snapshots" value=" Fotos,"/>
+	<string name="Folders" value=" Ordner,"/>
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
 	<string name="Modifiable" value="Modifizierbar" />

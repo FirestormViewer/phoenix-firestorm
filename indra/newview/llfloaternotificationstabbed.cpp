@@ -47,6 +47,7 @@ LLFloaterNotificationsTabbed::LLFloaterNotificationsTabbed(const LLSD& key) : LL
     mSystemMessageList(NULL),
     mNotificationsSeparator(NULL),
     mNotificationsTabContainer(NULL),
+    mNotificationsToGo(), // <FS:Beq/> FIRE-35130 bugsplat in notification::idle updates. 
     NOTIFICATION_TABBED_ANCHOR_NAME("notification_well_panel"),
     IM_WELL_ANCHOR_NAME("im_well_panel"),
     mIsReshapedByUser(false)
@@ -359,6 +360,13 @@ void LLFloaterNotificationsTabbed::getAllItemsOnCurrentTab(std::vector<LLPanel*>
 void LLFloaterNotificationsTabbed::closeAllOnCurrentTab()
 {
     // Need to clear notification channel, to add storable toasts into the list.
+
+    // <FS:SimonLsAlt>  FIRE-35118 Linden viewer just calls onItemClose() for each item
+    //  which can turn into a lag event several seconds long.   Firestorm will queue
+    //  notificatsion UUIDs to close them one by one in the new idle() function below.
+    mDeleteNotificationsTimer.reset();
+    // </FS:SimonLsAlt>
+
     clearScreenChannels();
     std::vector<LLPanel*> items;
     getAllItemsOnCurrentTab(items);
@@ -367,7 +375,49 @@ void LLFloaterNotificationsTabbed::closeAllOnCurrentTab()
     {
         LLNotificationListItem* notify_item = dynamic_cast<LLNotificationListItem*>(*iter);
         if (notify_item)
-            onItemClose(notify_item);
+        // <FS:SimonLsAlt>
+        //  onItemClose(notify_item);
+        {   // Put all items into the FIFO with UUID and type
+            LLUUID id = notify_item->getID();
+            if (id.notNull())
+            {
+                // Add UUID and key to back of queue
+                mNotificationsToGo.push( {id, notify_item->getNotificationName()} );
+            }
+        }
+    }
+    LL_INFOS() << "Close all on current tab: " << mDeleteNotificationsTimer.getElapsedTimeF32() << " sec "
+               << " to queue " << mNotificationsToGo.size() << " notices to delete" << LL_ENDL;
+}
+
+//---------------------------------------------------------------------------------
+// Firestorm Deferred deletion of notifications  FIRE-35118
+void LLFloaterNotificationsTabbed::idle()
+{
+    if (!mNotificationsToGo.empty())
+    {   // If there are any toasts to close, close them one by one
+        std::pair<LLUUID, std::string> pear = mNotificationsToGo.front(); // FIFO queue
+        mNotificationsToGo.pop();
+
+        // Find the notice by ID
+        LLNotificationListItem* item = dynamic_cast<LLNotificationListItem*>(findItemByID(pear.first, pear.second));
+        if (item)
+        {
+            // LL_INFOS() << "Found deferred item to close: " << pear.first << " type " << pear.second << LL_ENDL;
+            onItemClose(item);
+
+            if (mNotificationsToGo.empty())
+            {
+                LL_INFOS() << "Close all on current tab took " << mDeleteNotificationsTimer.getElapsedTimeF32() << " sec "
+                            << " to delete all notices " << LL_ENDL;
+            }
+        }
+        else
+        {
+            LL_WARNS() << "Unable to find deferred notification with ID: " << pear.first
+                       << " key " << pear.second << LL_ENDL;
+        }
+        // </FS:SimonLsAlt>
     }
 }
 

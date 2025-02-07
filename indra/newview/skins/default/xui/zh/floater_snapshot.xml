@@ -53,6 +53,8 @@
 			<check_box label="使用者界面" name="ui_check" />
 			<check_box label="L$帳戶餘額" name="currency_check" />
 			<check_box label="HUD" name="hud_check" />
+			<check_box label="顯示捕捉框架" tool_tip="在螢幕上顯示一個框架，圍繞快照區域。場景中超出快照範圍的部分將被去飽和並稍微模糊。" name="show_frame"/>
+			<check_box label="顯示構圖指南" tool_tip="在快照框架內顯示構圖指南（九宮格規則）" name="show_guides"/>
 			<check_box label="將影格凍結（全螢幕）" name="freeze_frame_check" />
 			<check_box label="自動更新" name="auto_snapshot_check" />
 			<check_box label="無後期處理" name="no_post_check" />
