@@ -1938,6 +1938,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Textures" value=" Текстуры,"/>
 	<string name="Settings" value=" Настройки,"/>
 	<string name="Snapshots" value=" Снимки,"/>
+	<string name="Folders" value=" Папки," />
 	<string name="No Filters" value="Нет "/>
 	<string name="Since Logoff" value=" - с выхода"/>
 	<string name="Modifiable" value="Изменяемое"/>

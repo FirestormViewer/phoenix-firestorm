@@ -1,5 +1,3 @@
-#extension GL_ARB_texture_rectangle : enable
-
 out vec4 frag_color;
 
 uniform sampler2D diffuseRect;

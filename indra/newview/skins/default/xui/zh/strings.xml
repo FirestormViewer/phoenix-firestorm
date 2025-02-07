@@ -2016,8 +2016,8 @@ support@secondlife.com.
 	<string name="PermNo">
 		否
 	</string>
-	<!-- 手勢標籤 -->
-	<!-- 因為前面有空格所以使用 value="" -->
+	<!-- inventory filter -->
+	<!-- use value="" because they have preceding spaces -->
 	<string name="Chat Message" value=" 聊天訊息 : " />
 	<string name="Sound" value=" 聲音 : " />
 	<string name="Wait" value=" --- 等待 : " />
@@ -2028,8 +2028,8 @@ support@secondlife.com.
 	<string name="HelloAvatar" value=" 你好, 居民! " />
 	<string name="ViewAllGestures" value="  檢視所有 &gt;&gt;" />
 	<string name="GetMoreGestures" value="  取得更多 &gt;&gt;" />
-	<!-- 物件欄過濾器 -->
-	<!-- 因為前面有空格所以使用 value="" -->
+	<!-- inventory filter -->
+	<!-- use value="" because they have preceding spaces -->
 	<string name="Animations" value=" 動畫," />
 	<string name="Calling Cards" value=" 名片," />
 	<string name="Clothing" value=" 服裝," />
@@ -2043,9 +2043,10 @@ support@secondlife.com.
 	<string name="Textures" value=" 紋理," />
 	<string name="Settings" value=" 環境設定," />
 	<string name="Snapshots" value=" 快照," />
+	<string name="Folders" value=" 檔案夾," />
 	<string name="No Filters" value="無過濾器 " />
 	<string name="Since Logoff" value=" - 自上次登出之後" />
-	<!-- <FS:Zi> FIRE-1175 - 過濾許可權菜單 -->
+	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
 	<string name="Modifiable" value="可修改" />
 	<string name="Copyable" value="可複製" />
 	<string name="Transferable" value="可轉讓" />

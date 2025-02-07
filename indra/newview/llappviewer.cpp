@@ -5666,7 +5666,12 @@ void LLAppViewer::idle()
         }
     }
 
-    LLFloaterNotificationsTabbed::getInstance()->idle();    // <FS:SimonLsAlt/> Handle deferred notice deletions
+    // <FS:SimonLsAlt> Handle deferred notice deletions
+    if (auto* notificationsTabbed = LLFloaterReg::findTypedInstance<LLFloaterNotificationsTabbed>("notification_well_window"))
+    {
+        notificationsTabbed->idle();
+    }
+    // </FS:SimonLsAlt/>
 
     // Update layonts, handle mouse events, tooltips, e t c
     // updateUI() needs to be called even in case viewer disconected
