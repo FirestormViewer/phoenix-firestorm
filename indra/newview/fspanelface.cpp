@@ -1517,14 +1517,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
         mTabsPBRMatMedia->enableTabButton(
             mTabsPBRMatMedia->getIndexForPanel(
                 mTabsPBRMatMedia->getPanelByName("panel_material_type_blinn_phong")), editable );
-        if(!has_pbr_material)
-        {
-            mTabsPBRMatMedia->selectTabByName("panel_material_type_blinn_phong");
-        }
-        else
-        {
-            mTabsPBRMatMedia->selectTabByName("panel_material_type_pbr");
-        }
+
         // only turn on auto-adjust button if there is a media renderer and the media is loaded
         mBtnAlignMedia->setEnabled(editable);
 
