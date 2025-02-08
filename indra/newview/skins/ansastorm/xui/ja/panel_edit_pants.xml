@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_pants_panel">
+	<panel name="avatar_pants_color_panel">
+		<texture_picker label="テクスチャ" name="Fabric" tool_tip="クリックで画像を選択します。"/>
+		<color_swatch label="色／明暗" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
+	</panel>
+	<!-- Begin Pants Panel -->
+	<panel name="pants_main_tab_holder" title="ズボン">
+		<!-- Viewer demands an accordion here, so we provide one -->
+		<accordion name="pants_main_accordion">
+			<accordion_tab name="pants_main_tab" title="ズボン">
+				<!-- Viewer will replace things here with tiled editing views -->
+				<scrolling_panel_list name="pants_main_param_list"/>
+			</accordion_tab>
+		</accordion>
+	</panel>
+	<!-- End Pants Panel -->
+</panel>

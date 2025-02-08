@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_undershirt_panel">
+	<panel name="avatar_undershirt_color_panel">
+		<texture_picker label="テクスチャ" name="Fabric" tool_tip="クリックで画像を選択します。"/>
+		<color_swatch label="色／明暗" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
+	</panel>
+	<!-- Begin Undershirt Panel -->
+	<panel name="undershirt_main_tab_holder" title="下着（上半身）">
+		<!-- Viewer demands an accordion here, so we provide one -->
+		<accordion name="undershirt_main_accordion">
+			<accordion_tab name="undershirt_main_tab" title="下着（上半身）">
+				<!-- Viewer will replace things here with tiled editing views -->
+				<scrolling_panel_list name="undershirt_main_param_list"/>
+			</accordion_tab>
+		</accordion>
+	</panel>
+	<!-- End Undershirt Panel -->
+</panel>
