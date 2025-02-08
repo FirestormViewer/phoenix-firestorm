@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pane name="status">
+	<panel name="parcel_info_panel">
+		<icon name="voice_icon" />
+		<icon name="fly_icon" />
+		<icon name="push_icon" />
+		<icon name="build_icon" />
+		<icon name="scripts_icon" />
+		<icon name="see_avs_icon" />
+		<icon name="pathfinding_dirty_icon" />
+		<icon name="pathfinding_disabled_icon" />
+		<button name="buy_land_btn" tool_tip="Parcel is for sale" />
+		<icon name="damage_icon" />
+		<text name="damage_text" />
+		<icon name="scriptout" />
+		<text tool_tip="Name of land parcel on which you are standing. Click for About Land." name="parcel_info_text" value="(loading...)"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		パケット損失
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		帯域幅
+	</panel.string>
+	<panel.string name="time">
+		[ampm, datetime, slt]　[hour12, datetime, slt]：[min, datetime, slt]　[timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="timeTooltip">
+		[year, datetime, slt]年[month, datetime, slt]月[day, datetime, slt]日（[weekday, datetime, slt]）
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		L$ [AMT]
+	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="メニュー検索" name="search_menu_edit" tool_tip="検索したい内容をここに入力してください。メニューに部分的に一致する結果が表示されます。"/>
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="クリックしてL$残高を更新します。" value="L$ ???"/>
+		<button label="L$を購入" name="buyL" tool_tip="クリックしてL$を購入します。"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<!-- Draw distance widget here -->
+		<icon name="dd_icon" tool_tip="描画距離"/>
+		<slider tool_tip="Maximum distance away from camera to be rezzed (meters)" name="drawdistance" />
+		<text name="TimeText" tool_tip="現在時刻（太平洋）">AM　24：00：00 PST</text>
+		<button name="presets_icon_camera"/>
+		<button name="presets_icon_graphic"/>
+		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
+		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Web ページ）を開始／停止します。"/>
+		<button name="volume_btn" tool_tip="前大ボリュームの操作"/>
+		<text name="FPSText" tool_tip="フレーム毎秒">
+			200.0
+		</text>
+	</panel>
+</pane>
