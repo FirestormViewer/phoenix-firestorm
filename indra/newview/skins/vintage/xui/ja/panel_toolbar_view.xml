@@ -9,10 +9,10 @@
 					</toolbar>
 				</layout_panel>
 				<layout_panel name="non_toolbar_panel">
-					<view top="0" name="floater_snap_region" />
-					<view top="0" name="minimized_floaters_region" />
+					<view name="floater_snap_region" />
+					<view name="minimized_floaters_region" />
 					<panel name="chiclet_container">
-					</panel> 
+					</panel>
 					<!-- FS:Ansariel: For chiclets and notices at bottom -->
 					<panel name="chiclet_container_bottom">
 					</panel>
@@ -20,12 +20,11 @@
 				</layout_panel>
 				<layout_panel name="right_toolbar_panel">
 					<toolbar name="toolbar_right">
-						<icon  name="caret" />
+						<icon name="caret" />
 					</toolbar>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
-		
 		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
 		<layout_panel name="bottom_chat_bar_panel">
 			<!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
@@ -44,8 +43,8 @@
 						<!-- Panel to house the chat bar in, will be set visible/invisible in code
 						as parent of the chat control -->
 						<layout_panel name="bottom_chat_bar_panel">
-							<button name="local_chat_button" tool_tip="周辺チャットウィンドウを表示または非表示にします。 (CTRL+H)" label="周辺チャット" />
-							<fs_nearby_chat_control name="default_chat_bar" label="周辺チャットへ" />
+							<button name="local_chat_button" tool_tip="近くのチャットウィンドウを表示または非表示にします。（CTRL＋H）" label="近くのチャット" />
+							<fs_nearby_chat_control name="default_chat_bar" label="近くのチャットへ" />
 						</layout_panel>
 						<!-- Panel to house the chat bar in, will be set visible/invisible in code
 						as parent of the chat control -->
@@ -79,13 +78,13 @@
 					<!-- Voice Chat panel -->
 					<panel name="voice_chat_controls_panel">
 						<button name="show_voice_controls_button" tool_tip="近くにいるボイスで会話している人とボイスコントロールを表示します。" label="" />
-						<button name="utility_talk_button" tool_tip="このボタンを押してボイスで会話します。鍵をクリックしてプッシュ・トゥ・トークモードのオンとオフを切り替えます。" label="Talk" />
+						<button name="utility_talk_button" tool_tip="このボタンを押してボイスで会話します。鍵をクリックしてプッシュ・トゥ・トークモードのオンとオフを切り替えます。" label="話す" />
 						<button name="utility_push_to_talk_lock_button" tool_tip="プッシュ・トゥ・トーク機能を切り替えます。" label="" />
 						<nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="現在のボイスチャンネルの活動モニタです。" />
 						<!-- Do we need this button? -Zi -->
 						<!--
 						<button name="utility_show_voice_channel_button" tool_tip="(TODO) Shows current voice channel" label="" />
-						 -->
+						-->
 					</panel>
 					<!-- Voice Chat panel -->
 				</layout_panel>
@@ -94,10 +93,10 @@
 				<layout_panel name="quick_preferences_button_layout_panel">
 					<!-- Quick Preferences Button panel -->
 					<panel name="quick_preferences_button_panel">
-						<button name="enable_disable_ao_button" tool_tip="クライアントAOを有効／無効にします。" label="" />
-						<button name="show_ao_interface_button" tool_tip="クライアントAOの画面を表示／非表示にします。" label="" />
+						<button name="enable_disable_ao_button" tool_tip="クライアントＡＯを有効／無効にします。" label="" />
+						<button name="show_ao_interface_button" tool_tip="クライアントＡＯの画面を表示／非表示にします。" label="" />
 						<!-- Tooltip text defined in commands.xml - buttons can't use tool_tip_ref yet -->
-						<button name="show_quick_prefs_button" tool_tip="頻繁に使用する設定を変更できるクィック環境設定です。" label="" />
+						<button name="show_quick_prefs_button" tool_tip="頻繁に使用する設定を変更できる簡易設定です。" label="" />
 					</panel>
 					<!-- Quick Preferences Button panel -->
 				</layout_panel>
@@ -107,7 +106,7 @@
 		</layout_panel>
 		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
 		<layout_panel name="bottom_toolbar_panel">
-			<button name="open_chat_bar_button" tool_tip="チャットバーを表示します。 (Enter)" label="" />
+			<button name="open_chat_bar_button" tool_tip="チャットバーを表示します。（Enter）" label="" />
 			<toolbar name="toolbar_bottom">
 				<icon name="caret" />
 			</toolbar>

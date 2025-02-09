@@ -4,13 +4,13 @@
 		ボイス設定
 	</string>
 	<string name="title_group">
-		[GROUP] とグループコール
+		[GROUP]からのグループコール
 	</string>
 	<string name="title_adhoc">
-		カンファレンスコール
+		会話コール
 	</string>
 	<string name="title_peer_2_peer">
-		[NAME] とコール
+		[NAME]からのコール
 	</string>
 	<string name="no_one_near">
 		近くにボイスを有効にしている人はいません。

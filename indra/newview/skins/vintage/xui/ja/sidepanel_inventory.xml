@@ -5,7 +5,7 @@
 			<panel label="インベントリ" name="panel_main_inventory" />
 			<panel label="マーケットプレイス" name="marketplace_inbox">
 				<string name="InboxLabelWithArg">
-					受け取ったアイテム（[NUM]）
+					受け取ったアイテム（[NUM]個）
 				</string>
 				<string name="InboxLabelNoArg">
 					受け取ったアイテム
@@ -13,10 +13,10 @@
 				<text value="受け取ったアイテム" name="inbox_label" />
 				<!-- gets auto-hidden in preview editor, change name to view -->
 				<text name="inbox_fresh_new_count">
-					[NUM] 個の新アイテム
+					[NUM]個の新着アイテム
 				</text>
 				<view_border />
-				<panel name="inbox_inventory_placeholder_panel" tool_tip="アイテムを使用するには、そのアイテムをインベントリにドラッグアンドドロップ">
+				<panel name="inbox_inventory_placeholder_panel" tool_tip="アイテムを使用するには、そのアイテムをインベントリにドラッグアンドドロップしてください。">
 					<text name="inbox_inventory_placeholder">
 						マーケットプレイスから購入した商品はここに配達されます。
 					</text>
@@ -36,8 +36,6 @@
 		<button name="inbox_btn" />
 		<button name="outbox_btn" />
 	</panel>
-	<panel name="sidepanel__item_panel" label="">
-	</panel>
-	<panel name="sidepanel__task_panel" label="">
-	</panel>
+	<panel name="sidepanel__item_panel" label=""/>
+	<panel name="sidepanel__task_panel" label=""/>
 </panel>
