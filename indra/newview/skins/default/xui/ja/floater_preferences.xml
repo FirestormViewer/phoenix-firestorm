@@ -11,10 +11,11 @@
 		<panel label="グラフィック" name="display"/>
 		<panel label="サウンドとメディア" name="audio"/>
 		<panel label="チャット" name="chat"/>
-		<panel label="移動と表示" name="move"/>
+		<panel label="移動と視界" name="move"/>
 		<panel label="通知" name="msgs"/>
-		<panel label="色" name="colors"/>
+		<panel label="カラー" name="colors"/>
 		<panel label="プライバシー" name="im"/>
+		<!--字数制限のため「ネットワークとファイル」から変更-->
 		<panel label="セットアップ" name="input"/>
 		<panel label="高度な設定" name="advanced1"/>
 		<panel label="ＵＩ" name="ui"/>

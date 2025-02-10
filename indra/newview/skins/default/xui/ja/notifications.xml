@@ -110,7 +110,7 @@
 		<tag>fail</tag>
 	</notification>
 	<notification name="WearableSave">
-		現在の衣装／身体部位の変更を保存しますか？
+		現在の着用物／身体部位の変更を保存しますか？
 		<usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="保存しない" yestext="保存"/>
 	</notification>
 	<notification name="ConfirmNoCopyToOutbox">
@@ -226,7 +226,7 @@
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="AlertMerchantListingCannotWear">
-		マーケットプレイスの出品リストフォルダにある衣衣装やボディパーツを着用できません。
+		マーケットプレイスの出品リストフォルダにある着用物や身体部位は着用できません。
 		<tag>fail</tag>
 	</notification>
 	<notification name="AlertMerchantListingInvalidID">
@@ -635,7 +635,7 @@ L$が不足しているので、このグループに参加することができ
 		<tag>fail</tag>
 	</notification>
 	<notification name="CannotWearTrash">
-		ごみ箱にある衣装や身体部位は、着用できません。
+		ごみ箱にある着用物や身体部位は、着用できません。
 		<tag>fail</tag>
 	</notification>
 	<notification name="MaxAttachmentsOnOutfit">
@@ -3180,7 +3180,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		</form>
 	</notification>
 	<notification name="TooManyWearables">
-		[AMOUNT]個以上のアイテムを含むフォルダを装着できません。「詳細設定」＞「デバッグ設定を表示」＞「WearFolderLimit」でこの制限を変更できます。
+		[AMOUNT]個以上のアイテムを含むフォルダを装着できません。「高度な操作」＞「デバッグ設定を表示」＞「WearFolderLimit」でこの制限を変更できます。
 		<tag>fail</tag>
 	</notification>
 	<notification label="「取り込み中」モードの警告" name="DoNotDisturbModePay">
@@ -3377,7 +3377,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	</notification>
 	<notification name="EnableMediaFilter"> 
 		メディアや音楽を再生すると、[CURRENT_GRID]外のサイトにあなたの個人情報が公開される可能性があります。フィルターを有効にすると、メディアリクエストを受信するサイトを選択でき、プライバシーをより適切に管理できます。
-メディア フィルターを有効にしますか？
+メディアフィルターを有効にしますか？
 （このオプションは、後で「初期設定」＞「サウンドとメディア」で変更できます。）
 		<form name="form">
 			<button name="Enable" text="有効"/>
@@ -3397,8 +3397,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="MediaAlert2"> 
 		選択内容を記憶し、[LCONDITION]からのソースのメディアを許可しますか？
 
-ドメイン：[MEDIADOMAIN]
-ＵＲＬ：[MEDIAURL]
+ドメイン： [MEDIADOMAIN]
+ＵＲＬ： [MEDIAURL]
 		<form name="form">
 			<button name="Do Now" text="[ACTION]する"/>
 			<button name="RememberDomain" text="[CONDITION]このドメインを許可"/>
@@ -3417,22 +3417,21 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 			<button name="WhitelistDomain" text="ホワイトリスト"/>
 		</form>
 	</notification>
-
 	<notification name="AudioAlert"> 
-		この区画には以下のメディアが提供されます：
+		この区画には以下の音楽が提供されます：
 
-ドメイン：[MEDIADOMAIN]
-ＵＲＬ：[MEDIAURL]
+ドメイン：[AUDIODOMAIN]
+ＵＲＬ：[AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="許可"/>
 			<button name="Deny" text="拒否"/>
 		</form>
 	</notification>
 	<notification name="AudioAlert2"> 
-選択内容を記憶し、[LCONDITION]からのソースのメディアを許可しますか？
+選択内容を記憶し、[LCONDITION]からのソースの音楽を許可しますか？
 
-ドメイン：[MEDIADOMAIN]
-ＵＲＬ：[MEDIAURL]
+ドメイン： [AUDIODOMAIN]
+ＵＲＬ： [AUDIOURL]
 		<form name="form">
 			<button name="Do Now" text="[ACTION]する"/>
 			<button name="RememberDomain" text="[CONDITION]このドメインを許可"/>
@@ -3440,10 +3439,10 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		</form>
 	</notification>
 	<notification name="AudioAlertSingle"> 
-選択内容を記憶し、[LCONDITION]からのソースのメディアを許可しますか？
+選択内容を記憶し、[LCONDITION]からのソースの音楽を許可しますか？
 
-ドメイン：[MEDIADOMAIN]
-ＵＲＬ：[MEDIAURL]
+ドメイン：[AUDIODOMAIN]
+ＵＲＬ：[AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="許可"/>
 			<button name="Deny" text="拒否"/>
@@ -3467,7 +3466,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		添付が取り消されました。
 	</notification>
 	<notification name="ReplacedMissingWearable">
-		欠落している衣装や身体部位をデフォルトに置き換えます。
+		欠落している着用物や身体部位をデフォルトに置き換えます。
 	</notification>
 	<notification name="GroupNotice">件名：[SUBJECT]　メッセージ：[MESSAGE]
 		<tag>group</tag>

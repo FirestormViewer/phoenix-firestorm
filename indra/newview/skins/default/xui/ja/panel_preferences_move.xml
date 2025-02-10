@@ -3,7 +3,7 @@
 	<tab_container name="tabs" label="移動と視界">
 		<!--View-->
 		<panel label="視界" name="tab-view">
-			<slider label="視界角" name="camera_fov" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（FOV）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。"/>
+			<slider label="視野角" name="camera_fov" tool_tip="ＲＬで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦＯＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。"/>
 			<slider label="距離" name="camera_offset_scale"/>
 			<slider label="ズーム移動時間" name="camera_transition_time"/>
 			<slider label="スムージング" name="camera_position_smoothing"/>
@@ -31,7 +31,7 @@
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
 			<check_box label="マウスルック時にユーザインターフェイスを表示する" name="first_person_ui_visible"/>
 			<check_box label="マウスルック時にした時に会話とレーダーのウィンドウが閉じないようにする" name="FSShowConvoAndRadarInML"/>
-			<check_box label="マウスルック時にコンテキストメニューを有効にする" name="FSEnableRightclickMenuInMouselook" tool_tip="ALT-右クリックでパイメニュー／コンテキストメニューを開けるようにします。"/>
+			<check_box label="マウスルック時にコンテキストメニューを有効にする" name="FSEnableRightclickMenuInMouselook" tool_tip="Alt＋右クリックでパイメニュー／コンテキストメニューを開けるようにします。"/>
 			<check_box label="マウスのホイールでマウスルックから抜ける" name="FSScrollWheelExitsMouselook" tool_tip="チェックを入れると、マウスのホイールを回転させることでマウスルックから抜けることができるようになります"/>
 			<check_box label="マウスルック時にガイドを表示する" name="mouselook_instructions_visible" tool_tip="マウスルック時のインタラクションを表示します。"/>
 			<check_box label="マウスルック時にクロスヘアーを表示する" name="ShowCrosshairs" tool_tip="マウスルックモードの時に、焦点を示すクロスヘアーを表示します。"/>

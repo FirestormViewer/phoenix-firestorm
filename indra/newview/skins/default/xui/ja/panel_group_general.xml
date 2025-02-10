@@ -23,7 +23,7 @@
 		</text>
 		<name_box name="founder_name"/>
 		<button name="copy_name" label="名前をコピー"/>
-		<texture_picker name="insignia" tool_tip="クリックして写真を選択します。" label=""/>
+		<texture_picker name="insignia" tool_tip="画像を拡大するにはクリックしてください。" label=""/>
 		<text_editor name="charter">
 			グループの理念、指針を記入してください
 		</text_editor>
@@ -47,7 +47,7 @@
 				<check_box label="グループＩＭを受信" name="receive_chat" tool_tip="このグループのグループチャットに参加するかどうかの設定を行います。"/>
 				<!-- </exodus> -->
 				<text name="active_title_label">
-					タイトル:
+					タイトル：
 				</text>
 				<combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。"/>
 			</layout_panel>
@@ -56,11 +56,11 @@
 				<text name="group_settngs_label">
 					グループの設定
 				</text>
-				<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます" label="検索結果に表示"/>
+				<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます。" label="検索結果に表示"/>
 				<check_box name="open_enrollement" label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。"/>
-				<check_box name="check_enrollment_fee" tool_tip="入会費が必要かどうかを設定します。" label="入会費がかかります"/>
+				<check_box name="check_enrollment_fee" tool_tip="グループ加入に入会費が必要かどうかを設定します。" label="入会費がかかります。"/>
 				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" label="L$"/>
-				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです">
+				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
 					<combo_item name="select_mature" value="Select">
 						‐レーティング区分を指定‐
 					</combo_item>

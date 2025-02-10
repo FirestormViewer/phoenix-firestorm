@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_fs_wearable_favorites" title="お気に入りの服やＨＵＤ">
+<floater name="floater_fs_wearable_favorites" title="お気に入りの着用物やＨＵＤ">
 	<floater.string name="empty_list">
-		装着可能な服やＨＵＤをドラッグしてリストに追加します。
+		装着可能な着用物やＨＵＤをドラッグしてリストに追加します。
 	</floater.string>
 	<floater.string name="search_no_items">
 		アイテムが見つかりませんでした。

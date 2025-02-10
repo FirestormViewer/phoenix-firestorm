@@ -32,7 +32,7 @@
 	</string>
 	<string name="age_format_full">
 		[REG_DATE]
-		（[AGE]歳）
+（[AGE]）
 	</string>
 	<string name="name_text_args">
 		[NAME]

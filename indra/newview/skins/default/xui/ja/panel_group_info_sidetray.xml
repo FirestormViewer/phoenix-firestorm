@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="グループインベントリ" name="GroupInfo">
+<panel label="グループのプロフィール" name="GroupInfo">
 	<panel.string name="default_needs_apply_text">
 		保存されていない変更があります。
 	</panel.string>
@@ -45,7 +45,7 @@
 					<button name="btn_refresh"/>
 				</layout_panel>
 				<layout_panel name="btn_activate_lp">
-					<button label="有効化" name="btn_activate"/>
+					<button label="アクティブ化" name="btn_activate"/>
 				</layout_panel>
 				<layout_panel name="btn_chat_lp">
 					<button label="チャット" name="btn_chat"/>

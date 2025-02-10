@@ -63,7 +63,7 @@
 	<panel name="default_inventory_panel">
 		<tab_container name="inventory filter tabs">
 			<inventory_panel label="インベントリ" name="All Items"/>
-			<recent_inventory_panel label="最近のアイテム" name="Recent Items"/>
+			<recent_inventory_panel label="新着アイテム" name="Recent Items"/>
 			<worn_inventory_panel label="着用中" name="Worn Items"/>
 		</tab_container>
 	</panel>

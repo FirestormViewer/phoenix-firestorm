@@ -6094,7 +6094,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_ResyncAnimations_Label">アニメーション再同期</string>
 	<string name="Command_RegionTracker_Label">リージョントラッカー</string>
 	<string name="Command_Group_Titles_Label">グループのタイトル</string>
-	<string name="Command_Wearable_Favorites_Label">お気に入りの服やＨＵＤ</string>
+	<string name="Command_Wearable_Favorites_Label">お気に入りの着用物やＨＵＤ</string>
 	<string name="Command_RFO_Label">フレンドのみ表示</string>
 	<string name="Command_DAO_Label">アニメッシュの描画解除</string>
 	<string name="Command_Beacons_Label">ビーコン</string>
@@ -6225,7 +6225,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_ResyncAnimations_Tooltip">アバターアニメーションを同期します。</string>
 	<string name="Command_RegionTracker_Tooltip">さまざまなリージョンの状況を追跡します。</string>
 	<string name="Command_Group_Titles_Tooltip">アクティブなグループタグを変更します。</string>
-	<string name="Command_Wearable_Favorites_Tooltip">お気に入りの装着物リストを開きます。</string>
+	<string name="Command_Wearable_Favorites_Tooltip">お気に入りの着用物のリストを開きます。</string>
 	<string name="Command_RFO_Tooltip">ビューアにはフレンドのアバターのみが表示され、他のすべてのアバターは削除されます。有効にすると、他のユーザを見えるようにするＴＰが必要になります。</string>
 	<string name="Command_DAO_Tooltip">アニメーションオブジェクトの描画解除（別名アニメッシュ）‐現在表示されているすべてのアニメッシュ（アタッチされているもの、フリーローミングのもの）を一時的に描画解除します。描画解除されたアニメッシュは、ＴＰ後に再び表示されます。</string>
 	<string name="Command_Beacons_Tooltip">ビーコンを表示します。</string>
@@ -6606,28 +6606,28 @@ www.secondlife.com のウェブサイトに接続できるかご確認くださ�
 このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから問題を報告してください。
 [https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%A8%E3%83%A9%E3%83%BC-r1283/ ナレッジベース]
 	</string>
-	<string name="LoadCameraPositionNoneSaved">No camera view has been saved yet.</string>
-	<string name="LoadCameraPositionOutsideDrawDistance">Can't restore camera view because the camera position is beyond draw distance.</string>
+	<string name="LoadCameraPositionNoneSaved">カメラビューはまだ保存されていません。</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">カメラの位置が描画距離を超えているため、カメラビューを復元できません。</string>
 
-	<string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
-	<string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
+	<string name="DrawDistanceSteppingGestureObsolete">コードの変更により、このジェスチャーを使用する必要がなくなりました。プログレッシブ描画距離ステップが有効になりました。</string>
+	<string name="FSCameraPositionCopied">カメラ位置[POS]がクリップボードにコピーされました。</string>
 
-	<string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
-	<string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>
-	<string name="FSCmdLineRollDiceLimits">You must provide positive values for dice (max 100) and faces (max 1000).</string>
-	<string name="FSCmdLineRollDiceModifiersInvalid">If you want to use a modifier, then you must provide valid modifier number and the type of modifier. Modifier must be in range from -1000 to 1000. Valid modifier types are "+" (bonuses), "-" (penalties), "&gt;", "&lt;" (successes), "r&gt;", "r&lt;", "r" (rerolls), "!p&gt;", "!p&lt;", "!p" (penetrations), "!&gt;", "!&lt;" and "!" (explosions). You can use only one modifier type per roll. Examples: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".</string>
-	<string name="FSCmdLineRollDiceExploded">Exploded</string>
-	<string name="FSCmdLineRollDicePenetrated">Penetrated</string>
-	<string name="FSCmdLineRollDiceSuccess">Success</string>
-	<string name="FSCmdLineRollDiceReroll">Reroll</string>
-	<string name="FSCmdLineRollDiceFreezeGuard">This operation cannot be completed because the viewer would freeze in an infinite rolling loop. Please change the criteria.</string>
-	<string name="FSCmdLineCalcRandError">'[RAND]' is not a valid expression for RAND(min,max). MAX must be higher than MIN, both in range from -10000 to 10000.</string>
-	<string name="FSCmdLineRSP">Maximum bandwidth set to [VALUE] KBPS.</string>
-	<string name="FSCmdLineTpOffered">Offered teleport to [NAME].</string>
+	<string name="FSCmdLineDrawDistanceSet">描画距離が[DISTANCE]ｍに設定されました。</string>
+	<string name="FSCmdLineRollDiceTotal">[DICE]d[FACES][MODIFIER]の合計結果：[RESULT]</string>
+	<string name="FSCmdLineRollDiceLimits">サイコロ（最大100）と面（最大1000）には正の値を指定する必要があります。</string>
+	<string name="FSCmdLineRollDiceModifiersInvalid">修飾子を使用する場合は、有効な修飾子番号と修飾子の種類を指定する必要があります。修飾子は-1000～1000の範囲でなければなりません。有効な修飾子の種類は、「+」(ボーナス)、「-」(ペナルティ)、「&gt;」、「&lt;」(成功)、「r&gt;」、「r&lt;」、「r」(再ロール)、「!p&gt;」、「!p&lt;」、「!p」(貫通)、「!&gt;」、「!&lt;」、および「!」(爆発)です。ロールごとに１つの修飾子の種類のみ使用できます。例："[COMMAND] 1 20 + 5"、"[COMMAND] 5 40 &gt; 15"、"[COMMAND] 10 25 ! 25"、"[COMMAND] 15 25 !&lt; 10"</string>
+	<string name="FSCmdLineRollDiceExploded">爆発した</string>
+	<string name="FSCmdLineRollDicePenetrated">侵入した</string>
+	<string name="FSCmdLineRollDiceSuccess">成功</string>
+	<string name="FSCmdLineRollDiceReroll">再ロール</string>
+	<string name="FSCmdLineRollDiceFreezeGuard">ビューアが無限ローリングループでフリーズするため、この操作を完了できません。条件を変更してください。</string>
+	<string name="FSCmdLineCalcRandError">「[RAND]」は RAND(min,max)の有効な式ではありません。MAXはMINより大きく、両方とも-10000から10000の範囲でなければなりません。</string>
+	<string name="FSCmdLineRSP">最大帯域幅が[VALUE]Kbps に設定されました。</string>
+	<string name="FSCmdLineTpOffered">[NAME]へのテレポートのオファーをしました。</string>
 
 	<!-- Build types for about floater -->
-	<string name="FSWithHavok">with Havok support</string>
-	<string name="FSWithOpensim">with OpenSimulator support</string>
+	<string name="FSWithHavok">Havokサポート</string>
+	<string name="FSWithOpensim">OpenSimulatorサポート</string>
 
 	<!-- Firestorm search -->
 	<string name="not_found">
@@ -6688,7 +6688,7 @@ www.secondlife.com のウェブサイトに接続できるかご確認くださ�
 速度：[OBJECT_VELOCITY]
 位置：[OBJECT_POS]
 回転：[OBJECT_ROT]
-角速度：[OBJECT_OMEGA] （ラジアン毎秒）
+角速度：[OBJECT_OMEGA]（ラジアン毎秒）
 制作者：[OBJECT_CREATOR]
 所有者：[OBJECT_OWNER]
 前の所有者：[OBJECT_LAST_OWNER_ID]
@@ -6944,7 +6944,8 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="mode_settings_hybrid.xml">ハイブリッド</string>
 	<string name="mode_settings_text.xml">テキスト</string>
 
-	<string name="Asset_Uploading">アップロードしています…
+	<string name="Asset_Uploading">
+		アップロードしています…
 [ASSET_NAME]
 	</string>
 	<string name="Yes">はい</string>

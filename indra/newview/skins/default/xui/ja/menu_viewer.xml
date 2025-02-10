@@ -9,12 +9,12 @@
 		<menu_item_check label="インベントリ" name="Inventory"/>
 		<menu_item_call label="新着のインベントリのウィンドウ" name="NewInventoryWindow"/>
 		<menu_item_check label="保護フォルダ" name="Protected Folders"/>
-		<menu_item_check label="お気に入りの服やＨＵＤ" name="WearableFavorites"/>
+		<menu_item_check label="お気に入りの着用物やＨＵＤ" name="WearableFavorites"/>
 		<menu_item_call label="ピック…" name="Picks"/>
 		<menu_item_call label="体験…" name="Experiences"/>
 		<menu_item_call label="スクリプト…" name="MyScripts"/>
 		<menu_item_call label="プロフィール" name="Profile"/>
-		<menu_item_call label="装着中…" name="NowWearing"/>
+		<menu_item_call label="着用中…" name="NowWearing"/>
 		<menu_item_check label="アウトフィット" name="ChangeOutfit"/>
 		<menu label="取り外す" name="Take Off &gt;">
 			<menu label="衣装" name="Clothes &gt;">
@@ -361,6 +361,7 @@
 			<menu_item_call label="遅延メーター" name="Lag Meter"/>
 			<menu_item_check label="統計バー" name="Statistics Bar"/>
 			<menu_item_call label="シーン負荷の統計情報" name="Scene Load Statistics"/>
+			<menu_item_check label="グラフィック性能の最適化…" name="Performance"/>
 			<menu_item_check label="アバターの複雑度を表示" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="ハイライトと表示" name="Highlighting and Visibility">
@@ -369,12 +370,12 @@
 			<menu_item_check label="選択を非表示" name="Hide Selected"/>
 			<menu_item_check label="透明部分をハイライト" name="Highlight Transparent"/>
 			<menu_item_check label="マウスルックのときにクロスヘアーを表示" name="ShowCrosshairs"/>
-		</menu>
-		<menu label="マウスホバー時のツールチップ" name="Hover Tips">
-			<menu_item_check label="ツールチップを表示" name="Show Tips"/>
-			<menu_item_separator/>
-			<menu_item_check label="土地のツールチップを表示" name="Land Tips"/>
-			<menu_item_check label="すべてのオブジェクトのツールチップを表示" name="Tips On All Objects"/>
+			<menu label="マウスホバー時のツールチップ" name="Hover Tips">
+				<menu_item_check label="ツールチップを表示" name="Show Tips"/>
+				<menu_item_separator/>
+				<menu_item_check label="土地のツールチップを表示" name="Land Tips"/>
+				<menu_item_check label="すべてのオブジェクトのツールチップを表示" name="Tips On All Objects"/>
+			</menu>
 		</menu>
 		<menu label="描画種別" name="Rendering Types">
 			<menu_item_check label="シンプル" name="Rendering Type Simple"/>
@@ -418,6 +419,14 @@
 		<menu_item_call label="リリースキー" name="Release Keys"/>
 		<menu_item_separator/>
 		<menu label="ショートカット" name="Shortcuts">
+			<menu_item_check label="検索" name="Search"/>
+			<!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+			<menu_item_check label="ダブルクリックでテレポート" name="DoubleClick Teleport"/>
+			<!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
+			<menu_item_separator/>
+			<menu_item_check label="常に走る" name="Always Run"/>
+			<menu_item_check label="飛行" name="Fly"/>
+			<menu_item_separator/>
 			<menu_item_call label="ウィンドウを閉じる" name="Close Window"/>
 			<menu_item_call label="ウィンドウグループを閉じる" name="Close Window Group"/>
 			<menu_item_call label="全てのウィンドウを閉じる" name="Close All Windows"/>
@@ -631,6 +640,7 @@
 			<menu_item_call label="選択したオブジェクト情報をプリント" name="Print Selected Object Info"/>
 			<menu_item_call label="エージェント情報をプリント" name="Print Agent Info"/>
 			<menu_item_check label="ダブルクリックでオートパイロット" name="Double-ClickAuto-Pilot"/>
+			<menu_item_check label="ダブルクリックでテレポート" name="DoubleClick Teleport"/>
 			<menu_item_separator/>
 			<menu_item_check label="SelectMgrのデバッグ" name="Debug SelectMgr"/>
 			<menu_item_check label="ダブルクリック" name="Debug Clicks"/>
