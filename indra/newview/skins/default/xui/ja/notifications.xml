@@ -1023,7 +1023,7 @@ L$が不足しているので、このグループに参加することができ
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
-	<notification label="ホームにてレポートさせる前の確認" name="EstateTeleportHomeUser">
+	<notification label="ホームにテレポートさせる前の確認" name="EstateTeleportHomeUser">
 [AVATAR_NAME]をホームにテレポートさせますか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>

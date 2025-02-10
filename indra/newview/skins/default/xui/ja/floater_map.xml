@@ -23,7 +23,7 @@
 		ダブルクリックでマップを開きます。
 	</floater.string>
 	<floater.string name="AltToolTipHintMsg">
-		ダブルクリック出てレポートします。
+		ダブルクリックでテレポートします。
 	</floater.string>
 	<floater.string name="mini_map_caption">
 		ミニマップ

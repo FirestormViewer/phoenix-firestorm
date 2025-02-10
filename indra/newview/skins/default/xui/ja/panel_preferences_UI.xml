@@ -42,8 +42,8 @@
 			</text>
 			<combo_box name="ScriptDialogPerObjectDropdown">
 				<combo_box.item label="オブジェクトごとに１つ" name="ScriptDialogOption_0"/>
-				<combo_box.item label="チャネルごとに１つ" name="ScriptDialogOption_1"/>
-				<combo_box.item label="装着物はチャネルごとに１つ" name="ScriptDialogOption_2"/>
+				<combo_box.item label="チャンネルごとに１つ" name="ScriptDialogOption_1"/>
+				<combo_box.item label="装着物はチャンネルごとに１つ" name="ScriptDialogOption_2"/>
 				<combo_box.item label="ＨＵＤのチャンネルごとに１つ" name="ScriptDialogOption_3"/>
 				<combo_box.item label="ＨＵＤの制約なし" name="ScriptDialogOption_4"/>
 				<combo_box.item label="無制限" name="ScriptDialogOption_5"/>
@@ -236,7 +236,7 @@
 			<check_box label="トースト通知は必ず最前面に表示" name="FSShowToastsInFront"/>
 			<check_box label="新しいＳＩＭ再起動の通知方法を使用" name="FSUseNewRegionRestartNotification"/>
 			<check_box label="ＳＩＭ再起動の警告メッセージが表示される時に画面を揺らさない" name="FSNoScreenShakeOnRegionRestart"/>
-			<check_box label="リージョンの再起動情報をチャネルに送信します：" name="FSReportRegionRestartToChat"/>
+			<check_box label="リージョンの再起動情報をチャンネルに送信します：" name="FSReportRegionRestartToChat"/>
 			<spinner name="FSRegionRestartAnnounceChannel"/>
 		</panel>
 		<!-- フォント -->

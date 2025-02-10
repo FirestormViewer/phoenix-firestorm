@@ -109,7 +109,7 @@
 			<button name="pay" label="支払う" tool_tip="この住民にお金を支払います。" label_selected="支払う"/>
 		</layout_panel>
 		<layout_panel name="middle_buttonstack">
-			<button name="teleport" label="テレポートのオファー" tool_tip="この住民にてレポートのオファーを送ります。" label_selected="テレポートのオファー"/>
+			<button name="teleport" label="テレポートのオファー" tool_tip="この住民にテレポートのオファーを送ります。" label_selected="テレポートのオファー"/>
 			<button name="im" label="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" label_selected="インスタントメッセージ"/>
 		</layout_panel>
 		<layout_panel name="right_buttonstack">

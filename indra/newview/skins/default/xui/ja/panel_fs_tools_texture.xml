@@ -22,7 +22,7 @@
 				<texture_picker name="normal_map_picker" label="法線" tool_tip="クリックで法線（ノーマル）マップを選択します。"/>
 				<texture_picker name="emissive_map_picker" label="放射" tool_tip="クリックで放射（エミッシブ）マップを選択します。"/>
 				<color_swatch name="emissive_color_tint_picker" label="色彩" tool_tip="クリックで放射光の色を選択します。"/>
-				<texture_picker name="metallic_map_picker" label="（Ｏ）ＲＭ" tool_tip="クリックしてメタリック粗さマップを選択します。オプションのオクルージョンチャネルが含まれる場合があります。"/>
+				<texture_picker name="metallic_map_picker" label="（Ｏ）ＲＭ" tool_tip="クリックしてメタリック粗さマップを選択します。オプションのオクルージョンチャンネルが含まれる場合があります。"/>
 			</panel>
 			<!-- panel_material_maps -->
 			<panel name="panel_material_parameters">

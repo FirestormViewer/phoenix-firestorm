@@ -112,7 +112,7 @@
 			<button name="PhoenixBeamPrev_rainbow" label=""/>
 			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
 			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
-			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャネル9000に送信します。"/>
+			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャンネル9000に送信します。"/>
 			<view_border name="BeamDivisor2"/>
 			<combo_box name="FSBeamShape_combo" tool_tip="パーティクルビームの形を選択します。"/>
 			<button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。"/>

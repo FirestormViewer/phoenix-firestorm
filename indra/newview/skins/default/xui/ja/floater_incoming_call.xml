@@ -16,7 +16,7 @@
 		が会話チャットで、ボイスチャットに参加しました。
 	</floater.string>
 	<floater.string name="VoiceInviteGroup">
-		が「[GROUP]」のボイスチャネルに参加しました。
+		が「[GROUP]」のボイスチャンネルに参加しました。
 	</floater.string>
 	<floater.string name="VoiceInviteQuestionGroup">
 		[CURRENT_CHAT]を退席して、「[GROUP]」とのチャットに参加しますか？

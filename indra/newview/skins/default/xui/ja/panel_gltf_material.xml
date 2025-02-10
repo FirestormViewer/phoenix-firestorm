@@ -5,7 +5,7 @@
 		<text name="base_color_lbl">
 			ベースカラー（アルベド）：
 		</text>
-		<texture_picker name="base_color_texture" tool_tip="ベースカラー（アルベド）マップを指定します。アルファチャネルはオプションで透明度で使用されます。"/>
+		<texture_picker name="base_color_texture" tool_tip="ベースカラー（アルベド）マップを指定します。アルファチャンネルはオプションで透明度で使用されます。"/>
 		<text name="base_color_upload_fee">
 			アップロード料金なし
 		</text>
