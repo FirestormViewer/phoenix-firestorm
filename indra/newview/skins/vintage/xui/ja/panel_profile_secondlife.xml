@@ -78,7 +78,14 @@
 			<text name="label2" value="アカウント："/>
 			<view_border name="info_border_acc_status_text"/>
 			<panel name="badge_layout">
-				<icon name="badge_icon" tool_tip="Linden Lab従業員"/>
+				<layout_stack name="badge_stacker">
+					<layout_panel name="top_badge_layout">
+						<icon name="top_badge_icon" tool_tip="Linden Lab従業員"/>
+					</layout_panel>
+					<layout_panel name="bottom_badge_layout">
+						<icon name="bottom_badge_icon" tool_tip="Linden Lab従業員"/>
+					</layout_panel>
+				</layout_stack>
 			</panel>
 			<text name="partner_label" value="パートナー："/>
 			<view_border name="info_border_partner_text"/>

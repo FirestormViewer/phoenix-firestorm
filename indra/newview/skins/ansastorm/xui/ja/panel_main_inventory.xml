@@ -57,11 +57,16 @@
 				<menu_item_call name="inventory_new_alpha" label="新しいアルファ"/>
 				<menu_item_call name="inventory_new_physics" label="新しい物理作用"/>
 			</menu>
-			<menu name="inventory_new_body_parts" label="新しい身体部位"/>
-			<menu label="New Settings" name="新しい自然環境の設定">
-				<menu_item_call label="New Sky" name="新しい空"/>
-				<menu_item_call label="New Water" name="新しい水面"/>
-				<menu_item_call label="New Day Cycle" name="新しいデイサイクル"/>
+			<menu name="inventory_new_body_parts" label="新しい身体部位">
+				<menu_item_call name="inventory_new_shape" label="新しいシェイプ"/>
+				<menu_item_call name="inventory_new_skin" label="新しいスキン"/>
+				<menu_item_call name="inventory_new_hair" label="新しい髪型"/>
+				<menu_item_call name="inventory_new_eyes" label="新しい目"/>
+			</menu>
+			<menu label="新しい自然環境の設定" name="New Settings">
+				<menu_item_call label="新しい空" name="New Sky"/>
+				<menu_item_call label="新しい水面" name="New Water"/>
+				<menu_item_call label="新しいデイサイクル" name="New Day Cycle"/>
 			</menu>
 		</menu>
 		<!-- TODO: try to make these check items that actually reflect their state -Zi -->
@@ -124,6 +129,11 @@
 				<combo_box.item value="filter_type_snapshots" label="スナップショット"/>
 				<combo_box.item value="filter_type_materials" label="マテリアル"/>
 				<combo_box.item value="filter_type_settings" label="自然環境の設定"/>
+				<!-- [AS:Chanayane] Search folders only -->
+				<combo_box.item value="filter_type_folders" label="フォルダ" />
+				<!-- [/AS:Chanayane] -->
+				<combo_box.item value="filter_separator" label="──────"/>
+				<combo_box.item value="filter_type_coalesced" label="複合のみ"/>
 				<combo_box.item value="filter_separator" label="──────"/>
 				<combo_box.item value="filter_type_custom" label="カスタム…"/>
 			</combo_box>
