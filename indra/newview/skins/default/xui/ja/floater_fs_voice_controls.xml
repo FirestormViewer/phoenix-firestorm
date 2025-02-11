@@ -4,10 +4,10 @@
 		ボイス設定
 	</string>
 	<string name="title_group">
-		[GROUP]とグループコール
+		グループ「[GROUP]」からのコール
 	</string>
 	<string name="title_adhoc">
-		会話スコール
+		会話のコール
 	</string>
 	<string name="title_peer_2_peer">
 		[NAME]からのコール
