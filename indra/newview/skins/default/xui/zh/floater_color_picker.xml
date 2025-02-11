@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="顏色挑選器">
-	<text name="r_val_text">
-		紅色：
-	</text>
-	<text name="g_val_text">
-		綠色：
-	</text>
-	<text name="b_val_text">
-		藍色：
-	</text>
+	<tab_container name="scale_type_container">
+		<panel name="RGB">
+			<text name="r_val_text">
+				紅色：
+			</text>
+			<text name="g_val_text">
+				綠色：
+			</text>
+			<text name="b_val_text">
+				藍色：
+			</text>
+		</panel>
+		<panel name="LSL">
+			<text name="r_val_text_lsl">
+				紅色:
+			</text>
+			<text name="g_val_text_lsl">
+				綠色:
+			</text>
+			<text name="b_val_text_lsl">
+				藍色:
+			</text>
+		</panel>
+		<panel name="Hex">
+			<text name="hex_text">
+				代碼 (#rrggbb):
+			</text>
+		</panel>
+	</tab_container>
 	<text name="h_val_text">
 		色調：
 	</text>
@@ -18,13 +38,14 @@
 	<text name="l_val_text">
 		亮度：
 	</text>
-	<check_box label="立即套用" name="apply_immediate"/>
-	<button label="確定" label_selected="確定" name="select_btn"/>
-	<button label="取消" label_selected="取消" name="cancel_btn"/>
+	<check_box label="立即應用" name="apply_immediate" />
+	<button label="複製到 LSL" label_selected="複製到 LSL" name="copy_lsl_btn" tool_tip="將顏色代碼複製到 LSL 顏色向量中，格式為 &lt;r, g, b&gt;." />
+	<button label="確定" label_selected="確定" name="select_btn" />
+	<button label="取消" label_selected="取消" name="cancel_btn" />
 	<text name="Current color:">
-		目前顏色：
+		當前顏色：
 	</text>
 	<text name="(Drag below to save.)">
-		（拖曳到下方即可儲存）
+		（拖拽到下方即可儲存）
 	</text>
 </floater>

@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="preview_texture">
 	<floater.string name="Title">
-		材質：[NAME]
+		紋理：[NAME]
 	</floater.string>
 	<floater.string name="Copy">
-		覆製到收納區
+		複製到庫存
 	</floater.string>
-	<layout_stack name="preview_stack">
-		<layout_panel name="texture_panel">
-			<text name="desc txt">
-				描述：
-			</text>
-			<text name="dimensions">
-				[WIDTH]像素 x [HEIGHT]像素
-			</text>
-			<text name="aspect_ratio">
-				預覽長寬比
-			</text>
-			<combo_box name="combo_aspect_ratio" tool_tip="以固定長寬比預覽"/>
-		</layout_panel>
-		<layout_panel name="buttons_panel">
-			<button label="確定" name="Keep"/>
-			<button label="丟棄" name="Discard"/>
-			<button label="另存為" name="save_tex_btn"/>
-		</layout_panel>
-	</layout_stack>
+	<floater.string name="DateTime">
+		[weekday,datetime,slt], [day,datetime,slt]. [month,datetime,slt] [year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
+	<floater.string name="UploaderDateTime">
+		由 [UPLOADER] 上傳於 [DATE_TIME]。
+	</floater.string>
+	<text name="desc txt">
+		描述:
+	</text>
+	<text name="uploader_label">
+		上傳者:
+	</text>
+	<button label="檔案" name="openprofile" />
+	<panel name="dimensions_panel">
+		<text name="dimensions">
+			[WIDTH]畫素 x [HEIGHT]畫素
+		</text>
+		<button label="UUID" name="copyuuid" tool_tip="複製UUID到剪貼簿" />
+		<text name="aspect_ratio">
+			寬高比
+		</text>
+		<combo_box name="combo_aspect_ratio" tool_tip="以預定義的寬高比顯示" />
+	</panel>
+	<panel name="button_panel">
+		<button label="確定" name="Keep" />
+		<button label="丟棄" name="Discard" />
+		<flyout_button label="儲存..." name="save_tex_btn">
+			<flyout_button.item label="儲存為TGA" name="save_item_tga" />
+			<flyout_button.item label="儲存為PNG" name="save_item_png" />
+		</flyout_button>
+	</panel>
 </floater>

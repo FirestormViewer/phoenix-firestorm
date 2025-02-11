@@ -71,7 +71,7 @@ jobs:
             echo "build_run_number=${{ github.event.inputs.build_run_number  }}"  >> "$GITHUB_OUTPUT"
           fi
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v8
         id: download_build_info
         with:
           workflow: build_viewer.yml
@@ -134,8 +134,11 @@ jobs:
       # Create the Tag (Conditional)
       - name: Create tag
         if: >
-          ${{ steps.get_inputs.outputs.dry_run != 'true' &&
-             steps.check_tag.outputs.tag_exists == 'false' }}
+          steps.get_inputs.outputs.release_type != 'Nightly' &&
+          steps.get_inputs.outputs.release_type != 'Manual' &&
+          steps.get_inputs.outputs.release_type != 'Profiling' &&
+          steps.get_inputs.outputs.dry_run != 'true' &&
+          steps.check_tag.outputs.tag_exists == 'false'
         run: |
           echo "Creating tag: ${{ steps.get_tag.outputs.tag_name }}"
           git tag ${{ steps.get_tag.outputs.tag_name }}
@@ -144,8 +147,8 @@ jobs:
       # Push the Tag to the Repository (Conditional)
       - name: Push tag
         if: >
-          ${{ steps.get_inputs.outputs.dry_run != 'true' &&
-             steps.check_tag.outputs.tag_exists == 'false' }}
+          steps.get_inputs.outputs.dry_run != 'true' &&
+          steps.check_tag.outputs.tag_exists == 'false'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

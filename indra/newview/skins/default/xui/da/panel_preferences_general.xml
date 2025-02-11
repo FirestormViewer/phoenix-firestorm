@@ -8,7 +8,7 @@
 		<combo_box.item label="Dansk - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Tysk)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Spansk) - Beta" name="Spanish"/>
-		<combo_box.item label="Français (Fransk) - Beta" name="French"/>
+		<combo_box.item label="Français (Fransk)" name="French"/>
 		<combo_box.item label="Polski (Polsk)" name="Polish"/>
 		<combo_box.item label="Português (Portugisisk) - Beta" name="Portugese"/>
 		<combo_box.item label="日本語 (Japansk) - Beta" name="(Japanese)"/>

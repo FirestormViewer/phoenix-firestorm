@@ -182,6 +182,11 @@
         <combo_box.item value="filter_type_snapshots" label="Snapshots" />
         <combo_box.item value="filter_type_materials" label="Materials" />
         <combo_box.item value="filter_type_settings" label="Settings" />
+        <!-- [AS:Chanayane] Search folders only -->
+        <combo_box.item value="filter_type_folders" label="Folders" />
+        <!-- [/AS:Chanayane] -->
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_coalesced" label="Only Coalesced"/>
         <combo_box.item value="filter_separator" label="------------" enabled="false" />
         <combo_box.item value="filter_type_custom" label="Custom..." />
       </combo_box>
@@ -410,6 +415,34 @@
                  function="Button.SetDockableFloaterToggle"
                  parameter="secondary_inventory" />
            </button>
+      </panel>
+      <panel
+       follows="top|left"
+       height="25"
+       layout="topleft"
+       left_pad="0"
+       name="show_filters_panel"
+       width="32">
+          <button
+           follows="top|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="show_filters_18"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="show_filters_inv_btn"
+           tool_tip="Show Filters - Shows the filter side menu when selected. Becomes highlighted when any filter is enabled."
+           top="0"
+           width="31">
+              <button.commit_callback
+                 function="Inventory.GearDefault.Custom.Action"
+                 parameter="show_filters" />
+              <button.is_toggled_callback
+               function="Inventory.ShowFilters.Check"
+               parameter="show_filters_modified" />
+          </button>
       </panel>
       <panel
        follows="top|left"

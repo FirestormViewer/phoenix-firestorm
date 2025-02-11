@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="相機" name="lst_action" />
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="往上看" />
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="往下看" />
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="相機前進" />
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="相機後退" />
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="相機快速前進" />
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="相機快速後退" />
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="相機向上旋轉" />
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="相機向下旋轉" />
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="相機上搖" />
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="相機下搖" />
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="相機左搖" />
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="相機右搖" />
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="相機推近" />
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="相機拉遠" />
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="逆時針旋轉相機" value="逆時針旋轉" />
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="順時針旋轉相機" value="順時針旋轉" />
+	</rows>
+	<rows name="roll_left">
+		<columns name="lst_action" tool_tip="向左捲動相機" />
+	</rows>
+	<rows name="roll_right">
+		<columns name="lst_action" tool_tip="向右捲動相機" />
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="相機前進 坐著時" />
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="相機後退 坐著時" />
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="相機向上旋轉 坐著時 " />
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="相機向下旋轉 坐著時 " />
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="逆時針旋轉相機 坐著時" value="逆時針旋轉 坐著時" />
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="順時針旋轉相機 坐著時" value="順時針旋轉 坐著時" />
+	</rows>
+</contents>

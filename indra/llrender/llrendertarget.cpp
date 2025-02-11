@@ -108,6 +108,10 @@ bool LLRenderTarget::allocate(U32 resx, U32 resy, U32 color_fmt, bool depth, LLT
     llassert(usage == LLTexUnit::TT_TEXTURE);
     llassert(!isBoundInStack());
 
+    if(mResX == resx && mResY == resy && mUsage == usage && depth == mUseDepth && mGenerateMipMaps == generateMipMaps)
+    {
+        return true;
+    }
     resx = llmin(resx, (U32) gGLManager.mGLMaxTextureSize);
     resy = llmin(resy, (U32) gGLManager.mGLMaxTextureSize);
 
@@ -360,7 +364,8 @@ void LLRenderTarget::release()
 
         sBytesAllocated -= mResX*mResY*4;
     }
-    else if (mFBO)
+    // else if (mFBO)
+    if (mFBO)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 
@@ -475,12 +480,10 @@ void LLRenderTarget::clear(U32 mask_in)
 
 U32 LLRenderTarget::getTexture(U32 attachment) const
 {
-    if (attachment > mTex.size()-1)
+    if (attachment >= mTex.size())
     {
-        LL_ERRS() << "Invalid attachment index." << LL_ENDL;
-    }
-    if (mTex.empty())
-    {
+        LL_WARNS() << "Invalid attachment index " << attachment << " for size " << mTex.size() << LL_ENDL;
+        llassert(false);
         return 0;
     }
     return mTex[attachment];
@@ -511,7 +514,6 @@ void LLRenderTarget::bindTexture(U32 index, S32 channel, LLTexUnit::eTextureFilt
     }
 
     gGL.getTexUnit(channel)->setTextureFilteringOption(filter_options);
-    gGL.getTexUnit(channel)->setTextureColorSpace(isSRGB ? LLTexUnit::TCS_SRGB : LLTexUnit::TCS_LINEAR);
 }
 
 void LLRenderTarget::flush()

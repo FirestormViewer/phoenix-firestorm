@@ -48,7 +48,7 @@
 #include "llthreadsafequeue.h"
 #include "stringize.h"
 #include "llframetimer.h"
-
+#include "llfontgl.h" // <FS:Beq/> FIRE-34906 - try a sensible default font height
 // System includes
 #include <commdlg.h>
 #include <WinUser.h>
@@ -1632,9 +1632,11 @@ const   S32   max_format  = (S32)num_formats - 1;
     }
     else
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"));
-        // mWindowHandle is 0, going to crash either way
-        LL_ERRS("Window") << "No wgl_ARB_pixel_format extension!" << LL_ENDL;
+        LL_WARNS("Window") << "No wgl_ARB_pixel_format extension!" << LL_ENDL;
+        // cannot proceed without wgl_ARB_pixel_format extension, shutdown same as any other gGLManager.initGL() failure
+        OSMessageBox(mCallbacks->translateString("MBVideoDrvErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+        close();
+        return false;
     }
 
     // Verify what pixel format we actually received.
@@ -3788,6 +3790,10 @@ S32 OSMessageBoxWin32(const std::string& text, const std::string& caption, U32 t
     //
     // "This is why I'm doing it this way, instead of what you would think would be more obvious..."
     // (C) Nat Goodspeed
+    if (!IsWindow(sWindowHandleForMessageBox))
+    {
+        sWindowHandleForMessageBox = NULL;
+    }
     int retval_win = MessageBoxW(sWindowHandleForMessageBox, // HWND
                                  ll_convert_string_to_wide(text).c_str(),
                                  ll_convert_string_to_wide(caption).c_str(),
@@ -4126,7 +4132,18 @@ void LLWindowWin32::fillCompositionLogfont(LOGFONT *logfont)
         break;
     }
 
-    logfont->lfHeight = mPreeditor->getPreeditFontSize();
+    // <FS:Beq> FIRE-34906 (BugSplat) crash when mPreEditor is NULL. (affects at least version 6.6.17->7.1.11)
+    // logfont->lfHeight = mPreeditor->getPreeditFontSize();
+    if(mPreeditor)
+    {
+        logfont->lfHeight = mPreeditor->getPreeditFontSize();
+    }
+    else
+    {
+        // In the absence of other options, use the default font height for monospace.
+        logfont->lfHeight = LLFontGL::getFontMonospace()->getLineHeight();
+    }
+    // </FS:Beq>
     logfont->lfWeight = FW_NORMAL;
 }
 

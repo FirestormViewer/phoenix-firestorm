@@ -73,7 +73,7 @@
 #include <vector>
 
 // Height of the yellow selection highlight posts for land
-const F32 PARCEL_POST_HEIGHT = 0.666f;
+constexpr F32 PARCEL_POST_HEIGHT = 0.666f;
 
 // Returns true if you got at least one object
 void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
@@ -235,36 +235,27 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
     {
         std::vector<LLDrawable*> potentials;
 
-        for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
-            iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+        for (LLViewerRegion* region : LLWorld::getInstance()->getRegionList())
         {
-            LLViewerRegion* region = *iter;
             for (U32 i = 0; i < LLViewerRegion::NUM_PARTITIONS; i++)
             {
-                LLSpatialPartition* part = region->getSpatialPartition(i);
-                if (part)
+                if (LLSpatialPartition* part = region->getSpatialPartition(i))
                 {
                     part->cull(camera, &potentials, true);
                 }
             }
         }
 
-        for (std::vector<LLDrawable*>::iterator iter = potentials.begin();
-             iter != potentials.end(); iter++)
+        for (LLDrawable* drawable : potentials)
         {
-            LLDrawable* drawable = *iter;
-            // <FS:Ansariel> FIRE-15206: Crash fixing
             if (!drawable)
             {
                 continue;
             }
-            // </FS:Ansariel>
+
             LLViewerObject* vobjp = drawable->getVObj();
 
-            // <FS:Ansariel> FIRE-15206: Crash fixing
-            //if (!drawable || !vobjp ||
             if (!vobjp ||
-            // </FS:Ansariel>
                 vobjp->getPCode() != LL_PCODE_VOLUME ||
                 vobjp->isAttachment() ||
                 (deselect && !vobjp->isSelected()))
@@ -317,7 +308,7 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
     gViewerWindow->setup3DRender();
 }
 
-const F32 WIND_RELATIVE_ALTITUDE            = 25.f;
+constexpr F32 WIND_RELATIVE_ALTITUDE = 25.f;
 
 void LLWind::renderVectors()
 {
@@ -342,14 +333,14 @@ void LLWind::renderVectors()
             x = mVelX[i + j*mSize] * WIND_SCALE_HACK;
             y = mVelY[i + j*mSize] * WIND_SCALE_HACK;
             gGL.pushMatrix();
-            gGL.translatef((F32)i * region_width_meters/mSize, (F32)j * region_width_meters/mSize, 0.0);
-            gGL.color3f(0,1,0);
+            gGL.translatef((F32)i * region_width_meters/mSize, (F32)j * region_width_meters/mSize, 0.f);
+            gGL.color3f(0.f, 1.f, 0.f);
             gGL.begin(LLRender::POINTS);
-                gGL.vertex3f(0,0,0);
+                gGL.vertex3f(0.f, 0.f, 0.f);
             gGL.end();
-            gGL.color3f(1,0,0);
+            gGL.color3f(1.f, 0.f, 0.f);
             gGL.begin(LLRender::LINES);
-                gGL.vertex3f(x * 0.1f, y * 0.1f ,0.f);
+                gGL.vertex3f(x * 0.1f, y * 0.1f, 0.f);
                 gGL.vertex3f(x, y, 0.f);
             gGL.end();
             gGL.popMatrix();
@@ -363,7 +354,7 @@ void LLWind::renderVectors()
 
 // Used by lltoolselectland
 void LLViewerParcelMgr::renderRect(const LLVector3d &west_south_bottom_global,
-                                   const LLVector3d &east_north_top_global )
+                                   const LLVector3d &east_north_top_global)
 {
     LLGLSUIDefault gls_ui;
     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -416,30 +407,6 @@ void LLViewerParcelMgr::renderRect(const LLVector3d &west_south_bottom_global,
     gGL.end();
 
     gGL.color4f(1.f, 1.f, 0.f, 0.2f);
-    // <FS:Ansariel> Remove QUADS rendering mode
-    //gGL.begin(LLRender::QUADS);
-
-    //gGL.vertex3f(west, north, nw_bottom);
-    //gGL.vertex3f(west, north, nw_top);
-    //gGL.vertex3f(east, north, ne_top);
-    //gGL.vertex3f(east, north, ne_bottom);
-
-    //gGL.vertex3f(east, north, ne_bottom);
-    //gGL.vertex3f(east, north, ne_top);
-    //gGL.vertex3f(east, south, se_top);
-    //gGL.vertex3f(east, south, se_bottom);
-
-    //gGL.vertex3f(east, south, se_bottom);
-    //gGL.vertex3f(east, south, se_top);
-    //gGL.vertex3f(west, south, sw_top);
-    //gGL.vertex3f(west, south, sw_bottom);
-
-    //gGL.vertex3f(west, south, sw_bottom);
-    //gGL.vertex3f(west, south, sw_top);
-    //gGL.vertex3f(west, north, nw_top);
-    //gGL.vertex3f(west, north, nw_bottom);
-
-    //gGL.end();
     gGL.begin(LLRender::TRIANGLE_STRIP);
     {
         gGL.vertex3f(west, north, nw_bottom);
@@ -454,96 +421,9 @@ void LLViewerParcelMgr::renderRect(const LLVector3d &west_south_bottom_global,
         gGL.vertex3f(west, north, nw_bottom);
     }
     gGL.end();
-    // </FS:Ansariel>
 
     LLUI::setLineWidth(1.f);
 }
-
-/*
-void LLViewerParcelMgr::renderParcel(LLParcel* parcel )
-{
-    S32 i;
-    S32 count = parcel->getBoxCount();
-    for (i = 0; i < count; i++)
-    {
-        const LLParcelBox& box = parcel->getBox(i);
-
-        F32 west = box.mMin.mV[VX];
-        F32 south = box.mMin.mV[VY];
-
-        F32 east = box.mMax.mV[VX];
-        F32 north = box.mMax.mV[VY];
-
-        // HACK: At edge of last region of world, we need to make sure the region
-        // resolves correctly so we can get a height value.
-        const F32 FUDGE = 0.01f;
-
-        F32 sw_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( west, south, 0.f ) );
-        F32 se_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( east-FUDGE, south, 0.f ) );
-        F32 ne_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( east-FUDGE, north-FUDGE, 0.f ) );
-        F32 nw_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( west, north-FUDGE, 0.f ) );
-
-        // little hack to make nearby lines not Z-fight
-        east -= 0.1f;
-        north -= 0.1f;
-
-        F32 sw_top = sw_bottom + POST_HEIGHT;
-        F32 se_top = se_bottom + POST_HEIGHT;
-        F32 ne_top = ne_bottom + POST_HEIGHT;
-        F32 nw_top = nw_bottom + POST_HEIGHT;
-
-        gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-        LLGLDepthTest gls_depth(GL_TRUE);
-
-        LLUI::setLineWidth(2.f);
-        gGL.color4f(0.f, 1.f, 1.f, 1.f);
-
-        // Cheat and give this the same pick-name as land
-        gGL.begin(LLRender::LINES);
-
-        gGL.vertex3f(west, north, nw_bottom);
-        gGL.vertex3f(west, north, nw_top);
-
-        gGL.vertex3f(east, north, ne_bottom);
-        gGL.vertex3f(east, north, ne_top);
-
-        gGL.vertex3f(east, south, se_bottom);
-        gGL.vertex3f(east, south, se_top);
-
-        gGL.vertex3f(west, south, sw_bottom);
-        gGL.vertex3f(west, south, sw_top);
-
-        gGL.end();
-
-        gGL.color4f(0.f, 1.f, 1.f, 0.2f);
-        gGL.begin(LLRender::QUADS);
-
-        gGL.vertex3f(west, north, nw_bottom);
-        gGL.vertex3f(west, north, nw_top);
-        gGL.vertex3f(east, north, ne_top);
-        gGL.vertex3f(east, north, ne_bottom);
-
-        gGL.vertex3f(east, north, ne_bottom);
-        gGL.vertex3f(east, north, ne_top);
-        gGL.vertex3f(east, south, se_top);
-        gGL.vertex3f(east, south, se_bottom);
-
-        gGL.vertex3f(east, south, se_bottom);
-        gGL.vertex3f(east, south, se_top);
-        gGL.vertex3f(west, south, sw_top);
-        gGL.vertex3f(west, south, sw_bottom);
-
-        gGL.vertex3f(west, south, sw_bottom);
-        gGL.vertex3f(west, south, sw_top);
-        gGL.vertex3f(west, north, nw_top);
-        gGL.vertex3f(west, north, nw_bottom);
-
-        gGL.end();
-
-        LLUI::setLineWidth(1.f);
-    }
-}
-*/
 
 
 // north = a wall going north/south.  Need that info to set up texture
@@ -596,10 +476,9 @@ void LLViewerParcelMgr::renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 hei
 
         gGL.vertex3f(x2, y2, z2);
 
-        // <FS:Ansariel> Remove QUADS rendering mode
         gGL.vertex3f(x1, y1, z);
+
         gGL.vertex3f(x2, y2, z2);
-        // </FS:Ansariel>
 
         // <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
         //z = z2+height;
@@ -634,10 +513,10 @@ void LLViewerParcelMgr::renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 hei
         }
 
 
-        gGL.texCoord2f(tex_coord1*0.5f+0.5f, z1*0.5f);
+        gGL.texCoord2f(tex_coord1 * 0.5f + 0.5f, z1 * 0.5f);
         gGL.vertex3f(x1, y1, z1);
 
-        gGL.texCoord2f(tex_coord2*0.5f+0.5f, z2*0.5f);
+        gGL.texCoord2f(tex_coord2 * 0.5f + 0.5f, z2 * 0.5f);
         gGL.vertex3f(x2, y2, z2);
 
         // top edge stairsteps
@@ -645,18 +524,16 @@ void LLViewerParcelMgr::renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 hei
         //z = llmax(z2+height, z1+height);
         z = absolute_height ? height : llmax(z2+height, z1+height);
         // </FS:Ansariel>
-        gGL.texCoord2f(tex_coord2*0.5f+0.5f, z*0.5f);
+        gGL.texCoord2f(tex_coord2 * 0.5f + 0.5f, z * 0.5f);
         gGL.vertex3f(x2, y2, z);
 
-        // <FS:Ansariel> Remove QUADS rendering mode
-        gGL.texCoord2f(tex_coord1*0.5f+0.5f, z1*0.5f);
+        gGL.texCoord2f(tex_coord1 * 0.5f + 0.5f, z1 * 0.5f);
         gGL.vertex3f(x1, y1, z1);
 
-        gGL.texCoord2f(tex_coord2*0.5f+0.5f, z*0.5f);
+        gGL.texCoord2f(tex_coord2 * 0.5f + 0.5f, z * 0.5f);
         gGL.vertex3f(x2, y2, z);
-        // </FS:Ansariel>
 
-        gGL.texCoord2f(tex_coord1*0.5f+0.5f, z*0.5f);
+        gGL.texCoord2f(tex_coord1 * 0.5f + 0.5f, z * 0.5f);
         gGL.vertex3f(x1, y1, z);
     }
 }
@@ -704,10 +581,7 @@ void LLViewerParcelMgr::renderHighlightSegments(const U8* segments, LLViewerRegi
                 if (!has_segments)
                 {
                     has_segments = true;
-                    // <FS:Ansariel> Remove QUADS rendering mode
-                    //gGL.begin(LLRender::QUADS);
                     gGL.begin(LLRender::TRIANGLES);
-                    // </FS:Ansariel>
                 }
                 // <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
                 //renderOneSegment(x1, y1, x2, y2, PARCEL_POST_HEIGHT, SOUTH_MASK, regionp);
@@ -726,10 +600,7 @@ void LLViewerParcelMgr::renderHighlightSegments(const U8* segments, LLViewerRegi
                 if (!has_segments)
                 {
                     has_segments = true;
-                    // <FS:Ansariel> Remove QUADS rendering mode
-                    //gGL.begin(LLRender::QUADS);
                     gGL.begin(LLRender::TRIANGLES);
-                    // </FS:Ansariel>
                 }
                 // <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
                 //renderOneSegment(x1, y1, x2, y2, PARCEL_POST_HEIGHT, WEST_MASK, regionp);
@@ -788,10 +659,7 @@ void LLViewerParcelMgr::renderCollisionSegments(U8* segments, bool use_pass, LLV
         gGL.getTexUnit(0)->bind(mBlockedImage);
     }
 
-    // <FS:Ansariel> Remove QUADS rendering mode
-    //gGL.begin(LLRender::QUADS);
     gGL.begin(LLRender::TRIANGLES);
-    // </FS:Ansariel>
 
     for (y = 0; y < STRIDE; y++)
     {
@@ -1073,7 +941,7 @@ struct ShaderProfileHelper
     }
     ~ShaderProfileHelper()
     {
-        LLGLSLShader::finishProfile(false);
+        LLGLSLShader::finishProfile();
     }
 };
 

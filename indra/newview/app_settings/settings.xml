@@ -2253,7 +2253,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>120</integer>
+      <integer>60</integer>
     </map>
     <key>BackgroundYieldTime</key>
     <map>
@@ -4866,6 +4866,17 @@
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>UseGroupMemberPagination</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable pagination of group memeber list 50 members at a time.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>DisplayTimecode</key>
@@ -8045,6 +8056,61 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserAdvancedWindowState</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether the 'advanced' pane is shown when opening the Avatar/Animesh Poser.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSPoserSaveExternalFileAlso</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to save to an external format (like BVH or ANIM) file as well when saving a pose.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSPoserResetBaseRotationOnEdit</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to reset the base-rotation of a joint to zero when a user edits it.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSPoserStopPosingWhenClosed</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to stop animating with the poser when the poser window is closed.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSPoserTrackpadSensitivity</key>
+  <map>
+    <key>Comment</key>
+    <string>The relative sensitivity of the poser trackpad.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+  </map>
   <key>MeshUploadLogXML</key>
   <map>
     <key>Comment</key>
@@ -8455,17 +8521,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>MiniMapWorldMapTextures</key>
-    <map>
-      <key>Comment</key>
-      <string>Use the world map texture tile on the mini-map rather than the terrain texture</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <boolean>1</boolean>
     </map>
     <key>MiniMapRotate</key>
     <map>
@@ -9187,6 +9242,20 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <!-- <FS:minerjr> [FIRE-35083] Floater_stats.xml has in correct stat_view setting for materials -->
+    <!-- Missing boolean flag for remembering the open/close state of the Materials stat_view of the floater_stats.xml file -->
+    <key>OpenDebugStatMaterials</key>
+    <map>
+        <key>Comment</key>
+        <string>Expand Materials performance stats display</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
+    <!-- </FS:minerjr> [FIRE-35083] -->
     <key>OpenDebugStatTexture</key>
     <map>
       <key>Comment</key>
@@ -9723,7 +9792,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>1024</integer>
+    <integer>2048</integer>
   </map>
   <key>PreviewAmbientColor</key>
   <map>
@@ -10650,7 +10719,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderBufferVisualization</key>
   <map>
     <key>Comment</key>
-    <string>Outputs a selected buffer to the screen.  -1 = final render buffer.  0 = Albedo, 1 = Specular/ORM, 2 = Normal, 3 = Emissive, 4 = Eye luminance</string>
+    <string>Outputs a selected buffer to the screen.  -1 = final render buffer.  0 = Albedo, 1 = Specular/ORM, 2 = Normal, 3 = Emissive, 4 = Eye luminance, 5 = FXAA Luminance/SMAA Edge Tex, 6 = SMAA Blend Weights</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>Type</key>
@@ -11086,16 +11155,16 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>RenderPostProcessingHDR</key>
+  <key>RenderEnableEmissiveBuffer</key>
   <map>
     <key>Comment</key>
-    <string>Enable HDR for post processing buffer</string>
+    <string>Enable emissive buffer in gbuffer.  Should only be disabled in GL3 mode.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
   <key>RenderHDRIExposure</key>
   <map>
@@ -11144,7 +11213,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderMaxOpenGLVersion</key>
   <map>
     <key>Comment</key>
-    <string>Maximum OpenGL version to attempt use (minimum 3.2 maximum 4.6).  Requires restart.</string>
+    <string>Maximum OpenGL version to attempt use (minimum 3.1 maximum 4.6).  Requires restart.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -11155,13 +11224,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderMaxVRAMBudget</key>
   <map>
     <key>Comment</key>
-    <string>Maximum amount of texture memory to budget for (in MB), or 0 for autodetect.</string>
+    <string>Maximum amount of texture memory to budget for (in MB), or autodetect if FSLimitTextureVRAMUsage is disabled.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>768</integer>
   </map>
   <key>RenderMinFreeMainMemoryThreshold</key>
   <map>
@@ -11177,7 +11246,18 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderLowMemMinDiscardIncrement</key>
   <map>
     <key>Comment</key>
-    <string>Minimum increment of discard level if system memory gets low</string>
+    <string>Minimum increment of discard bias if available texture memory gets low</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.1</real>
+  </map>
+  <key>RenderHighMemMinDiscardDecrement</key>
+  <map>
+    <key>Comment</key>
+    <string>Minimum decrement of discard bias if excess texture memory is available</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -11216,7 +11296,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Type</key>
         <string>U32</string>
         <key>Value</key>
-        <integer>1</integer>
+        <integer>0</integer>
     </map>
     <key>RenderDebugTextureBind</key>
     <map>
@@ -11900,7 +11980,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderFSAASamples</key>
     <map>
       <key>Comment</key>
-      <string>Number of samples to use for FSAA (0 = no AA).</string>
+      <string>Quality of antialiasing: 0 = Low, 1 = Medium, 2 = High, 3 = Ultra</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RenderFSAAType</key>
+    <map>
+      <key>Comment</key>
+      <string>Type of Antialiasing to use: 0 = None, 1 = FXAA, 2 = SMAA</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12541,7 +12632,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>1</real>
+    <real>1.0</real>
   </map>
   
   <key>RenderReflectionProbeDrawDistance</key>
@@ -12654,7 +12745,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
   <key>RenderSkyAutoAdjustAmbientScale</key>
   <map>
@@ -12725,14 +12816,25 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderSkySunlightScale</key>
   <map>
     <key>Comment</key>
-    <string>Sunlight scale fudge factor for matching with pre-PBR viewer</string>
+    <string>Sunlight scale fudge factor for matching with pre-PBR viewer when HDR is disabled</string>
     <key>Persist</key>
-    <integer>1</integer>
+    <integer>0</integer>
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
     <real>1.0</real>
   </map>
+    <key>RenderHDRSkySunlightScale</key>
+    <map>
+        <key>Comment</key>
+        <string>Sunlight scale fudge factor for matching with pre-PBR viewer when HDR is enabled</string>
+        <key>Persist</key>
+        <integer>0</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>1.0</real>
+    </map>
   <key>RenderSkyAmbientScale</key>
   <map>
     <key>Comment</key>
@@ -12742,7 +12844,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.7</real>
+    <real>1.0</real>
   </map>
   
   <key>RenderReflectionProbeMaxLocalLightAmbiance</key>
@@ -12755,6 +12857,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>F32</string>
     <key>Value</key>
     <real>4.0</real>
+  </map>
+  <key>RenderUseExposureSkySettings</key>
+  <map>
+    <key>Comment</key>
+    <string>Use exposure sky settings instead of deriving from HDR scale.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   <key>RenderDynamicExposureCoefficient</key>
   <map>
@@ -13080,6 +13193,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>CollectFontVertexBuffers</key>
+  <map>
+    <key>Comment</key>
+    <string>When enabled some UI elements with cache buffers generated by fonts and reuse them. When disabled general cahce will be used with a significant overhead for hash, but it regenerates vertices each frame so it's always up to date.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <real>1</real>
+  </map>
   <key>ShowMyComplexityChanges</key>
   <map>
     <key>Comment</key>
@@ -13371,6 +13495,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>00000000-0000-0000-0000-000000000000</string>
+    </map>
+    <key>RenderCASSharpness</key>
+    <map>
+        <key>Comment</key>
+        <string>Level of sharpening to apply via Contrast Adaptive Sharpening (0.0(off) - 1.0)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>0.4</real>
+    </map>
+    <key>RenderTonemapMix</key>
+    <map>
+        <key>Comment</key>
+        <string>Mix between linear and tonemapped colors (0.0(Linear) - 1.0(Tonemapped)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>0.7</real>
+    </map>
+    <key>RenderTonemapType</key>
+    <map>
+        <key>Comment</key>
+        <string>What tonemapper to use: 0 = Khronos Neutral, 1 = ACES</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>1</integer>
     </map>
     <key>ReplaySession</key>
     <map>
@@ -15046,29 +15203,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
-    <key>TextureBiasDistanceScale</key>
+    <key>TextureCameraBoost</key>
     <map>
       <key>Comment</key>
-      <string>When biasing textures to lower resolution due to lack of vram, weight to put on distance factor.</string>
+      <string>Amount to boost resolution of textures that are important to the camera.</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
       <real>8.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureBiasUnimportantFactor</key>
-    <map>
-      <key>Comment</key>
-      <string>When biasing textures to lower resolution due to lack of vram, the importance threshold below which is considered unimportant and getting an extra bias.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.25</real>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -15139,6 +15283,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>This might cause textures to look blurry and sculpties might fail to load properly. Please see &quot;Preferences -&gt; Graphics -&gt; Rendering -&gt; Max Texture Quality Level&quot; to change.</string>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>TextureDiscardBackgroundedTime</key>
+    <map>
+        <key>Comment</key>
+        <string>Specify how long to wait before discarding texture data after viewer is backgrounded.  (zero or negative to disable)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>60.0</real>
+    </map>
+    <key>TextureDiscardMinimizedTime</key>
+    <map>
+        <key>Comment</key>
+        <string>Specify how long to wait before discarding texture data after viewer is minimized.  (zero or negative to disable)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>1.0</real>
     </map>
     <key>TextureFetchConcurrency</key>
     <map>
@@ -17426,17 +17592,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>VoiceEffectExpiryWarningTime</key>
-    <map>
-      <key>Comment</key>
-      <string>How much notice to give of Voice Morph subscriptions expiry, in seconds.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>259200</integer>
-    </map>
     <key>VoiceMorphingEnabled</key>
     <map>
       <key>Comment</key>
@@ -17662,6 +17817,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>4</integer>
+    </map>
+    <key>VoiceVisualizerEnabled</key>
+    <map>
+      <key>Comment</key>
+      <string>Display voice dot indicator above an avatar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>WarningsAsChat</key>
     <map>
@@ -20823,6 +20989,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <!-- <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console -->
+    <key>FSShowOnscreenConsole</key>
+    <map>
+        <key>Comment</key>
+        <string>Displays the on-screen console</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>   
+  <!-- <FS:minerjr> [FIRE-35039] -->     
   <key>FSAdvancedWorldmapRegionInfo</key>
   <map>
     <key>Comment</key>
@@ -22284,17 +22463,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
     </map>
     <!-- End: Prefs > Sound/Media => UI Sounds -->
-    <key>FSShowVoiceVisualizer</key>
-    <map>
-      <key>Comment</key>
-      <string>Shows the voice visualizer over avatars if enabled.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>FSShowMyOwnVoiceVisualizer</key>
     <map>
       <key>Comment</key>
@@ -23076,6 +23244,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>RenderHDREnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable HDR rendering.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+    <key>RenderDisableVintageMode</key>
+    <map>
+        <key>Comment</key>
+        <string>Enables additional rendering pipeline features on newer machines such as HDR and emissive textures on PBR content.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
 
   <key>FSNetMapPhantomOpacity</key>
   <map>
@@ -23835,7 +24025,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>HideFromEditor</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>S32</string>
+      <string>U32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
@@ -24041,7 +24231,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>FSSoundCacheLocation</key>
     <map>
@@ -24743,6 +24933,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <string>ja</string>
         <string>pl</string>
         <string>ru</string>
+        <string>zh</string>
       </array>
     </map>
     <key>FSRememberUsername</key>
@@ -24953,6 +25144,41 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>This value needs to be greater than 0 for a fading effect.</string>
     </map>
+    <!-- <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights -->
+    <key>FSHudTextShowBackground</key>
+    <map>
+        <key>Comment</key>
+        <string>Displays a black/white background behind the prim floating text to make the text more readable</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
+    <key>FSHudTextBackgroundOpacity</key>
+    <map>
+        <key>Comment</key>
+        <string>Opacity of floating text background (0.0 = completely transparent, 1.0 = completely opaque)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>0.75</real>
+    </map>
+    <key>FSHudTextUseHoverHighlight</key>
+    <map>
+        <key>Comment</key>
+        <string>When an object is being hovered over, highlight the HUD text by moving to the foreground and disable alpha</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>   
+    <!-- </FS:minerjr> [FIRE-35019] -->  
     <key>FSStartupClearBrowserCache</key>
     <map>
       <key>Comment</key>
@@ -25157,6 +25383,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If enabled, auto-accepted inventory items will be logged to nearby chat.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSShowAutoAcceptInventoryInNotifications</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, auto-accepted inventory items will be shown in notifications.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -25886,6 +26123,91 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSShowWhitelistReminder</key>
+    <map>
+      <key>Comment</key>
+      <string>Show the whitelist reminder on first install.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSLimitTextureVRAMUsage</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, limits the amount of VRAM used for textures to the value of RenderMaxVRAMBudget.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSSnapshotShowCaptureFrame</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, masks the main screen according to the capture frame.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSSnapshotFrameBorderColor</key>
+    <map>
+      <key>Comment</key>
+      <string>The color of the border for the Snapshot frame</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Color3</string>
+      <key>Value</key>
+      <array>
+        <real>0.0</real>
+        <real>0.0</real>
+        <real>0.0</real>
+      </array>
+    </map>    
+    <key>FSSnapshotFrameGuideColor</key>
+    <map>
+      <key>Comment</key>
+      <string>The color of the Snapshot composition guides</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Color3</string>
+      <key>Value</key>
+      <array>
+        <real>1.0</real>
+        <real>1.0</real>
+        <real>0.0</real>
+      </array>
+    </map>    
+    <key>FSSnapshotFrameBorderWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The thickness of the line drawn around the snapshot frame</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>2.0</real>
+    </map>
+    <key>FSSnapshotFrameGuideWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The thickness of the lines drawn for the composition guides</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
     </map>
   </map>
 </llsd>

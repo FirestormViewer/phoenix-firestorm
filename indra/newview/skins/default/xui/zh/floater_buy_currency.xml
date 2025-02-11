@@ -1,65 +1,84 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="buy currency" title="購買 L$">
 	<floater.string name="buy_currency">
-		購買 L$ [LINDENS]，所需花費約為 [LOCALAMOUNT]
+		購買 [LINDENS] L$，所需花費約為 [LOCALAMOUNT]
 	</floater.string>
-	<text name="info_need_more">
-		你的 L$ 不足
-	</text>
-	<text name="contacting">
-		聯接到 LindeX 中...
-	</text>
-	<text name="info_buying">
-		購買 L$
-	</text>
-	<text name="balance_label">
-		我有
-	</text>
-	<text name="balance_amount">
-		L$ [AMT]
-	</text>
-	<text name="currency_action">
-		我想購買
-	</text>
-	<text name="currency_label">
-		L$
-	</text>
-	<line_editor label="L$" name="currency_amt">
-		1234
-	</line_editor>
-	<text name="buying_label">
-		以此價格
-	</text>
-	<text name="currency_est">
-		約合 [LOCALAMOUNT]
-	</text>
-	<text name="getting_data">
-		估算中…
-	</text>
-	<text name="buy_action">
-		[ACTION]
-	</text>
-	<text name="total_label">
-		我的帳戶餘額將為
-	</text>
-	<text name="total_amount">
-		L$ [AMT]
-	</text>
-	<text name="currency_links">
-		[http://www.secondlife.com/my/account/payment_method_management.php 付費方式] | [http://www.secondlife.com/my/account/currency.php 幣種]
-	</text>
-	<text name="exchange_rate_note">
-		重新輸入金額即可察看最新的匯率。
-	</text>
-	<text name="purchase_warning_repurchase">
-		確認這次購買只是添購 L$，並非購買物件。
-	</text>
-	<text name="purchase_warning_notenough">
-		你購買的林登幣不足， 請增加數額。
-	</text>
-	<button label="立即購買" name="buy_btn"/>
-	<button label="取消" name="cancel_btn"/>
 	<floater.string name="info_cannot_buy">
 		無法購買
 	</floater.string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="layout_panel_title">
+			<text name="info_need_more">
+				你的餘額不足
+			</text>
+			<text name="info_buying">
+				購買 L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_price">
+			<text name="target_price_label">
+				我需要
+			</text>
+			<text name="target_price">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_balance">
+			<text name="balance_label">
+				我有
+			</text>
+			<text name="balance_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_required">
+			<text name="required_label">
+				您至少應購買
+			</text>
+			<text name="required_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_action">
+			<text name="currency_action">
+				我想購買
+			</text>
+			<text name="currency_label">
+				L$
+			</text>
+			<line_editor label="L$" name="currency_amt">
+				1234
+			</line_editor>
+			<text name="currency_est">
+				約合 [LOCALAMOUNT]
+			</text>
+			<text name="getting_data">
+				估算中…
+			</text>
+			<text name="total_label">
+				我的帳戶餘額將為
+			</text>
+			<text name="total_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_msg">
+			<text name="currency_links">
+				[http://www.secondlife.com/my/account/payment_method_management.php 付費方式] | [http://www.secondlife.com/my/account/currency.php 幣種]
+			</text>
+			<text name="exchange_rate_note">
+				重新輸入金額即可檢視最新的匯率。
+			</text>
+			<text name="purchase_warning_repurchase">
+				確認這次購買只是添購 L$，並非購買物件。
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_buttons">
+			<text name="contacting">
+				連線到 LindeX 中...
+			</text>
+			<button label="立即購買" name="buy_btn" />
+			<button label="取消" name="cancel_btn" />
+		</layout_panel>
+	</layout_stack>
 </floater>

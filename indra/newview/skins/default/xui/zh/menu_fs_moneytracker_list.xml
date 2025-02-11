@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Money Tracker List Context Menu">
+	<menu_item_call label="複製為 CSV" name="Copy" />
+	<menu_item_call label="移除" name="Delete" />
+</context_menu>

@@ -3632,12 +3632,10 @@ Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice
 
 Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.
 	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Ein oder mehrere Ihrer Voice-Morph-Abos laufen in weniger als [INTERVAL] Tagen ab. 
+	<notification name="VoiceEffectsWillExpire">Ein oder mehrere Ihrer Voice-Morph-Abos laufen in weniger als [INTERVAL] Tagen ab. 
 [[URL] Klicken Sie hier], um Ihr Abo zu erneuern. 
 
-Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.
-	</notification>
+Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.</notification>
 	<notification name="VoiceEffectsNew">
 		Neue Voice-Morph-Effekte sind erhältlich!
 	</notification>
@@ -4177,11 +4175,6 @@ Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 
 Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT_SITE].
-	</global>
-	<global name="UnsupportedIntelDriver">
-		Der installierte Intel-Grafikkartentreiber für [GPUNAME], Version [VERSION], ist erheblich veraltet und dafür bekannt, eine Vielzahl von Programmabstürzen zu verursachen. Es wird dringend geraten, auf eine aktuelle Treiberversion zu aktualisieren.
-
-Möchten Sie die Treiber-Webseite von Intel besuchen?
 	</global>
 	<global name="UnsupportedCPUAmount">
 		796
@@ -5130,6 +5123,14 @@ Möchten Sie fortfahren?
 		GLTF-Szenen werden auf Ihrer Hardware momentan noch nicht unterstützt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="TextureDiscardBackgrounded">
+		Um die Systemleistung zu verbessern hat [APP_NAME] die Nutzung von Textur-Speicher nach [DELAY] Sekunden im Hintergrund reduziert. Es kann einen Moment dauern, bis die Textur-Qualität wieder den normalen Standard erreicht.
+		<usetemplate ignoretext="Über Nutzung von Textur-Speicher im Hintergrund hinweisen" name="okcancelignore" yestext="OK" notext="Deaktivieren"/>
+	</notification>
+	<notification name="TextureDiscardMinimized">
+		Um die Systemleistung zu verbessern hat [APP_NAME] die Nutzung von Textur-Speicher nach [DELAY] Sekunden im minimierten Zustand reduziert. Es kann einen Moment dauern, bis die Textur-Qualität wieder den normalen Standard erreicht.
+		<usetemplate ignoretext="Über Nutzung von Textur-Speicher im minimierten Zustand hinweisen" name="okcancelignore" yestext="OK" notext="Deaktivieren"/>
+	</notification>
 
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
@@ -5849,5 +5850,14 @@ URL auf Standard zurücksetzen?
 	</notification>
 	<notification name="ImageEmptyAlphaLayer" label="Textur enthält leeren Alpha-Kanal">
 		Die Textur, die Sie hochladen möchten, enthält einen leeren oder fast-leeren Alpha-Kanal (Transparenz-Informationen). Dies ist fast immer nicht gewünscht und der Kanel sollte daher entfernt werden. Das Hinzufügen eines Alpha-Kanals kann zu Textur-Flackern bei übereinanderliegenden Texturen bei unterschiedlichem Kamerawinkel führen. Zudem verringert sich dadurch die Darstellungsgeschwindigkeit. Sofern diese Textur nicht unbedingt einen (fast-)leeren Alpgha-Kanal benötigt, sollte dieser möglichst entfernt werden.
+	</notification>
+	<notification name="WhitelistReminder">
+		Bitte whitelisten Sie [APP_NAME], um die Leistung zu verbessern.
+
+Einige Antivirus-Programme können fälschlicherweise Teile von [APP_NAME] blockieren, die Leistung verschlechtern oder zu Fehlfunktionen von Featuren führen. Um entsprechende Probleme zu vermeiden, raten wir dringend [APP_NAME] zur Whitelist (oder auch Ausnahmeliste) Ihres Antivirus-Programms hinzuzufügen. Hierdurch wird sichergestellt, dass der Viewer korrekt funktioniert.
+
+Detaillierte Instruktionen zum whitelisten von [APP_NAME] - inklusive einer Liste von Dateien und Verzeichnissen - finden Sie in unserem Ratgeber:
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 </notifications>

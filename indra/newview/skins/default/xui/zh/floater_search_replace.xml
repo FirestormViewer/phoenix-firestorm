@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="search replace" title="尋找/替換">
+	<check_box label="忽略大小寫" name="case_text" />
+	<check_box label="向上尋找" name="find_previous" />
+	<button label="尋找" label_selected="查詢" name="search_btn" />
+	<button label="替換" label_selected="替換" name="replace_btn" />
+	<button label="替換全部" label_selected="替換全部" name="replace_all_btn" />
+	<text name="txt">
+		尋找
+	</text>
+	<text name="txt2">
+		替換
+	</text>
+</floater>

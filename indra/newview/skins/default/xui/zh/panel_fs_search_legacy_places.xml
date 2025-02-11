@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="地點" name="panel_ls_places">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			搜尋條件：
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_places">
+			<columns label="名稱" relwidth="0.78" name="place_name" />
+			<columns label="人流量" relwidth="0.19" name="dwell" />
+		</scroll_list>
+		<button label="上一頁" name="places_back" />
+		<button label="下一頁" name="places_next" />
+	</panel>
+</panel>

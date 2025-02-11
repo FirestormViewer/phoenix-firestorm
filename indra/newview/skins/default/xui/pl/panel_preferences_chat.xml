@@ -29,6 +29,7 @@
 			<check_box label="Czat w pobliżu" name="show_timestamps_nearby_chat" width="100"/>
 			<check_box label="Wiadomości IM" name="show_timestamps_im" width="105"/>
 			<check_box label="Logi czatów i IM" name="show_timestamps_transcripts"/>
+			<check_box label="Pokaż konsolę czatu" tool_tip="Pokaż/ukryj tekst konsoli czatu, gdy okno Rozmów nie jest wyświetlane" name="FSShowOnscreenConsole" />
 			<check_box name="FSConsoleClassicDrawMode" label="Używaj klasycznej konsoli" tool_tip="Ta opcja renderuje tło konsoli jako jeden duży blok pod wszystkimi liniami tekstu, o szerokości takiej jak najdłuższa z nich."/>
 			<check_box name="ChatFullWidth" label="Używaj pełnej szerokości ekranu"/>
 			<spinner label="Zanikanie po:" name="fade_chat_time"/>

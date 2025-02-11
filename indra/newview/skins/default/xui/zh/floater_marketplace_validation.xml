@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_marketplace_validation" title="查核 Marketplace 刊登清單">
-	<button label="確定" label_selected="確定" name="OK"/>
-	<text_editor name="validation_text">MARKETPLACE_VALIDATION_TEXT</text_editor>
+<floater name="floater_marketplace_validation" title="查覈市場刊登清單">
+	<button label="確定" label_selected="確定" name="OK" />
 </floater>

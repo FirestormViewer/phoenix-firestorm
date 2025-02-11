@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_poser" title="Позер для аватаров и анимешей">
+
+	<string	name="header_mHead">Тело</string>
+	<string	name="header_mFaceForeheadLeft">Лоб/Брови</string>
+	<string	name="header_mEyeLeft">Глаза/Веки</string>
+	<string	name="header_mFaceCheekUpperLeft">Щеки/Губы</string>
+	<string	name="header_mHandThumb1Left">Левая Кисть</string>
+	<string	name="header_mCollarLeft">Левая Рука</string>
+	<string	name="header_mHandThumb1Right">Правая Кисть</string>
+	<string	name="header_mCollarRight">Правая Рука</string>
+	<string	name="header_mHipLeft">Ноги</string>
+	<string	name="header_mTail1">Хвост</string>
+	<string	name="header_mHindLimbsRoot">Задние конечности</string>
+	<string	name="header_mWingsRoot">Крылья</string>
+
+	<string	name="title_mPelvis">Весь аватар</string>
+	<string	name="title_mTorso">Торс</string>
+	<string	name="title_mChest">Грудь</string>
+	<string	name="title_mNeck">Шея</string>
+	<string	name="title_mHead">Голова</string>
+	<string	name="title_mEyeRight">Глаз правый</string>
+	<string	name="title_mEyeLeft">Глаз левый</string>
+	<string	name="title_mFaceForeheadLeft">Лоб левая сторона</string>
+	<string	name="title_mFaceForeheadRight">Лоб правая сторона</string>
+	<string	name="title_mFaceEyebrowOuterLeft">Бровь левая внешняя </string>
+	<string	name="title_mFaceEyebrowCenterLeft">Бровь левая середина</string>
+	<string	name="title_mFaceEyebrowInnerLeft">Бровь левая внутренняя сторона </string>
+	<string	name="title_mFaceEyebrowOuterRight">Бровь правая внешняя</string>
+	<string	name="title_mFaceEyebrowCenterRight">Бровь правая середина</string>
+	<string	name="title_mFaceEyebrowInnerRight">Бровь правая внутренняя</string>
+	<string	name="title_mFaceEyeLidUpperLeft">Веко левое верхнее</string>
+	<string	name="title_mFaceEyeLidLowerLeft">Веко левое нижнее</string>
+	<string	name="title_mFaceEyeLidUpperRight">Веко правое верхнее</string>
+	<string	name="title_mFaceEyeLidLowerRight">Веко правое нижнее</string>
+	<string	name="title_mFaceEar1Left">Ухо левое верхнее</string>
+	<string	name="title_mFaceEar2Left">Ухо левое нижнее</string>
+	<string	name="title_mFaceEar1Right">Ухо правое верхнее</string>
+	<string	name="title_mFaceEar2Right">Ухо правое нижнее</string>
+	<string	name="title_mFaceNoseLeft">Нос слева</string>
+	<string	name="title_mFaceNoseCenter">Нос центр</string>
+	<string	name="title_mFaceNoseRight">Нос справа</string>
+	<string	name="title_mFaceCheekLowerLeft">Щека левая нижняя</string>
+	<string	name="title_mFaceCheekUpperLeft">Щека левая верхняя</string>
+	<string	name="title_mFaceCheekLowerRight">Щека правая нижняя </string>
+	<string	name="title_mFaceCheekUpperRight">Щека правая верхняя</string>
+	<string	name="title_mFaceJaw">Челюсть</string>
+	<string	name="title_mFaceTeethLower">Зубы нижние</string>
+	<string	name="title_mFaceLipLowerLeft">Губа нижняя слева</string>
+	<string	name="title_mFaceLipLowerRight">Губа нижняя справа</string>
+	<string	name="title_mFaceLipLowerCenter">Губа нижняя середина</string>
+	<string	name="title_mFaceTongueBase">Язык основание</string>
+	<string	name="title_mFaceTongueTip">Язык кончик</string>
+	<string	name="title_mFaceJawShaper">Челюсть форма</string>
+	<string	name="title_mFaceForeheadCenter">Лоб середина</string>
+	<string	name="title_mFaceNoseBase">Нос основание</string>
+	<string	name="title_mFaceTeethUpper">Зубы верхние</string>
+	<string	name="title_mFaceLipUpperLeft">Губа верхняя левая</string>
+	<string	name="title_mFaceLipUpperRight">Губа верхняя правая</string>
+	<string	name="title_mFaceLipCornerLeft">Губа уголок левая</string>
+	<string	name="title_mFaceLipCornerRight">Губа уголок правая</string>
+	<string	name="title_mFaceLipUpperCenter">Губа верхняя центр</string>
+	<string	name="title_mFaceEyecornerInnerLeft">Глаз левый внутренний уголок</string>
+	<string	name="title_mFaceEyecornerInnerRight">Глаз правый внутренний уголок</string>
+	<string	name="title_mFaceNoseBridge">Переносица</string>
+	<string	name="title_mCollarLeft">Ворот</string>
+	<string	name="title_mShoulderLeft">Вся рука</string>
+	<string	name="title_mElbowLeft">Предплечье</string>
+	<string	name="title_mWristLeft">Запястье</string>
+	<string	name="title_mHandMiddle1Left">Средний палец основа</string>
+	<string	name="title_mHandMiddle2Left">Средний палец средина</string>
+	<string	name="title_mHandMiddle3Left">Средний палец кончик</string>
+	<string	name="title_mHandIndex1Left">Указат. палец основа</string>
+	<string	name="title_mHandIndex2Left">Указат. палец средина</string>
+	<string	name="title_mHandIndex3Left">Указат. палец кончик</string>
+	<string	name="title_mHandRing1Left">Безым. палец основа</string>
+	<string	name="title_mHandRing2Left">Безым. палец средина</string>
+	<string	name="title_mHandRing3Left">Безым. палец кончик</string>
+	<string	name="title_mHandPinky1Left">Мизинец основа</string>
+	<string	name="title_mHandPinky2Left">Мизинец средина</string>
+	<string	name="title_mHandPinky3Left">Мизинец кончик</string>
+	<string	name="title_mHandThumb1Left">Большой палец основа</string>
+	<string	name="title_mHandThumb2Left">Большой палец средина</string>
+	<string	name="title_mHandThumb3Left">Большой палец кончик</string>
+	<string	name="title_mCollarRight">Ворот</string>
+	<string	name="title_mShoulderRight">Вся рука</string>
+	<string	name="title_mElbowRight">Предплечье</string>
+	<string	name="title_mWristRight">Запястье</string>
+	<string	name="title_mHandMiddle1Right">Средний палец основа</string>
+	<string	name="title_mHandMiddle2Right">Средний палец средина</string>
+	<string	name="title_mHandMiddle3Right">Средний палец кончик</string>
+	<string	name="title_mHandIndex1Right">Указат. палец основа</string>
+	<string	name="title_mHandIndex2Right">Указат. палец средина</string>
+	<string	name="title_mHandIndex3Right">Указат. палец кончик</string>
+	<string	name="title_mHandRing1Right">Безым. палец основа</string>
+	<string	name="title_mHandRing2Right">Безым. палец средина</string>
+	<string	name="title_mHandRing3Right">Безым. палец кончик</string>
+	<string	name="title_mHandPinky1Right">Мизинец основа</string>
+	<string	name="title_mHandPinky2Right">Мизинец средина</string>
+	<string	name="title_mHandPinky3Right">Мизинец кончик</string>
+	<string	name="title_mHandThumb1Right">Большой палец основа</string>
+	<string	name="title_mHandThumb2Right">Большой палец средина</string>
+	<string	name="title_mHandThumb3Right">Большой палец кончик</string>
+	<string	name="title_mWingsRoot">Корень</string>
+	<string	name="title_mWing1Left">Левое 1</string>
+	<string	name="title_mWing2Left">Левое 2</string>
+	<string	name="title_mWing3Left">Левое 3</string>
+	<string	name="title_mWing4Left">Левое 4</string>
+	<string	name="title_mWing4FanLeft">Левое Перо</string>
+	<string	name="title_mWing1Right">Правое 1</string>
+	<string	name="title_mWing2Right">Правое 2</string>
+	<string	name="title_mWing3Right">Правое 3</string>
+	<string	name="title_mWing4Right">Правое 4</string>
+	<string	name="title_mWing4FanRight">Правое Перо</string>
+	<string	name="title_mHipRight">Правое Бедро</string>
+	<string	name="title_mKneeRight">Правое Колено</string>
+	<string	name="title_mAnkleRight">Правая Лодыжка</string>
+	<string	name="title_mFootRight">Правая Ступня</string>
+	<string	name="title_mToeRight">Правый Носок</string>
+	<string	name="title_mHipLeft">Левое Бедро</string>
+	<string	name="title_mKneeLeft">Левое Колено</string>
+	<string	name="title_mAnkleLeft">Левая Лодыжка</string>
+	<string	name="title_mFootLeft">Левая Ступня</string>
+	<string	name="title_mToeLeft">Левая Носок</string>
+	<string	name="title_mTail1">Хвост основа</string>
+	<string	name="title_mTail2">Хвост 2</string>
+	<string	name="title_mTail3">Хвост 3</string>
+	<string	name="title_mTail4">Хвост 4</string>
+	<string	name="title_mTail5">Хвост 5</string>
+	<string	name="title_mTail6">Хвост Кончик</string>
+	<string	name="title_mGroin">Пах</string>
+	<string	name="title_mHindLimbsRoot">Корень</string>
+	<string	name="title_mHindLimb1Left">Левая основа</string>
+	<string	name="title_mHindLimb2Left">Левая 2</string>
+	<string	name="title_mHindLimb3Left">Левая 3</string>
+	<string	name="title_mHindLimb4Left">Левая 4</string>
+	<string	name="title_mHindLimb1Right">Правая основа</string>
+	<string	name="title_mHindLimb2Right">Правая 2</string>
+	<string	name="title_mHindLimb3Right">Правая 3</string>
+	<string	name="title_mHindLimb4Right">Правая 4</string>
+	<string	name="title_BUTT">Ягодицы</string>
+	<string	name="title_BELLY">Живот</string>
+	<string	name="title_LEFT_PEC">Левая грудь</string>
+	<string	name="title_RIGHT_PEC">Правая грудь</string>
+	<string	name="title_mFaceEar1Left">Левая основа</string>
+	<string	name="title_mFaceEar1Right">Правая основа</string>
+	<string	name="title_mFaceEar2Left">Левый кончик</string>
+	<string	name="title_mFaceEar2Right">Правый кончик</string>
+
+	<layout_stack name="poser_stack">
+		<layout_panel name="regular_controls_layout">
+			<panel name="joints_parent_panel">
+				<tab_container name="joints_tabs">
+					<panel title="Сдвиг" name="positionRotation_panel">
+						<panel name="title">
+							<text name="av_position_updown_label">Вверх/Вниз:</text>
+							<slider name="av_position_updown" tool_tip="Двигать выбранный аватар вверх или вниз"/>
+							<text name="av_position_leftright_label">Влево/Вправо:</text>
+							<slider name="av_position_leftright" tool_tip="Двигать выбранный аватар влево или вправо"/>
+							<text name="av_position_inout_label">Внутрь/Наружу:</text>
+							<slider name="av_position_inout" tool_tip="Двигать выбранный аватар внутрь или наружу"/>
+							<scroll_list name="entireAv_joint_scroll">
+								<scroll_list.columns label="Часть тела" name="joint"/>
+							</scroll_list>
+						</panel>
+					</panel>
+					<panel title="Тело" name="body_joints_panel">
+						<scroll_list name="body_joints_scroll">
+							<scroll_list.columns label="Часть тела" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="Лицо" name="face_joints_panel">
+						<scroll_list name="face_joints_scroll">
+							<scroll_list.columns label="Часть тела" name="joint"/>
+						</scroll_list>
+					</panel>
+					<tab_container title="Руки" name="hands_tabs">
+						<panel title="Настроить" name="hands_joints_panel">
+							<scroll_list name="hand_joints_scroll">
+								<scroll_list.columns label="Часть тела" name="joint"/>
+							</scroll_list>
+						</panel>
+						<panel title="Пресеты" name="hands_presets_panel">
+							<scroll_list name="hand_presets_scroll">
+								<scroll_list.columns label="Имя пресета" name="name"/>
+							</scroll_list>
+							<button label="Уст. Левая" name="button_loadHandPoseLeft" tool_tip="Двойной клик чтобы настроить левую руку на выбранный пресет"/>
+							<button label="Уст. Правая" name="button_loadHandPoseRight" tool_tip="Двойной клик чтобы настроить правую руку на выбранный пресет"/>
+						</panel>
+					</tab_container>
+					<panel title="Разное" name="misc_joints_panel">
+						<scroll_list name="misc_joints_scroll">
+							<scroll_list.columns label="Часть тела" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="Физика" name="collision_volumes_panel">
+						<scroll_list name="collision_volumes_scroll">
+							<scroll_list.columns label="Физика" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="Модель" name="avatarSelection_panel">
+						<scroll_list name="avatarSelection_scroll" tool_tip="Выберите аватар или анимеш, который вы хотите анимировать.">
+							<scroll_list.columns label="Выберите кого-нибудь..." name="name"/>
+							<scroll_list.columns label="Сохранить имя файла" name="saveFileName"/>
+						</scroll_list>
+						<button name="refresh_avatars" tool_tip="Обновить список аватаров и анимешей."/>
+						<button label="Начать позу" label_selected="Остановить позу" tool_tip="Начните позировать с выбранным аватаром или анимешем, если вам это разрешено" name="start_stop_posing_button"/>
+						<button label="Поставить в Т-позу" name="set_t_pose_button" tool_tip="Дважды щелкните, чтобы установить выбранный аватар в 'Т-позу'"/>
+					</panel>
+					<panel title="Настр." name="settings_panel">
+						<text name="trackpad_sensitivity_label">Чувствительность трекпада:</text>
+						<slider name="trackpad_sensitivity_slider" tool_tip="Регулирует чувствительность трекбола"/>
+						<check_box name="stop_posing_on_close_checkbox" label="Стоп позы по закрытию" tool_tip="Не прерывать позу может быть полезно, если вы много работаете и не хотите случайно потерять ее."/>
+						<check_box name="reset_base_rotation_on_edit_checkbox" label="Сброс базовый поворот" tool_tip="При первом редактировании поворота обнулите его значение. Это означает, что в вашей работе можно сохранить позу (а не разницу, см. раздел Загрузка/сохранение). Рядом с каждым суставом, экспорт которого вы обнулили, появляется зеленая галочка."/>
+					</panel>
+				</tab_container>
+			</panel>
+			<panel name="trackball_panel">
+				<text name="rotation_label">Вращение:</text>
+				<fs_virtual_trackpad name="limb_rotation" tool_tip="Измените поворот выбранной в данный момент части(ей) тела. Удерживайте нажатой клавишу Ctrl для замедления перемещения. Поверните колесо, чтобы отрегулировать 3-ю ось. Используйте Shift или Alt, чтобы изменить направление вращения."/>
+				<panel name="trackball_button_panel">
+					<button name="undo_change" tool_tip="Отмените последнее изменение поворота"/>
+					<button name="button_redo_change" tool_tip="Повторить последнее отмененное изменение"/>
+					<button name="poser_joint_reset" tool_tip="Двойной клик чтобы восстановить все выбранные части тела на тот момент, когда вы впервые начали изменения"/>
+					<button name="delta_mode_toggle" tool_tip="При изменении нескольких суставов каждый из них изменяется на одинаковую величину, а не все они получают одинаковое вращение."/>
+					<button label="Зерк." name="button_toggleMirrorRotation" tool_tip="Изменять положение противоположного сустава как в зеркале."/>
+					<button label="Симм." name="button_toggleSympatheticRotation" tool_tip="Изменять положение противоположного сустав таким же образом."/>
+				</panel>
+				<text name="limb_pitch_label">Вверх/Вниз:</text>
+				<text name="limb_yaw_label">Влево/Вправо:</text>
+				<text name="limb_roll_label">Крен:</text>
+			</panel>
+			<panel name="poses_loadSave">
+				<scroll_list name="poses_scroll" tool_tip="Загрузите позу для того, кого вы анимируете.">
+					<scroll_list.columns label="Имя Позы" name="name"/>
+				</scroll_list>
+				<line_editor label="Введите название для сохранения..." name="pose_save_name"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="button_controls_layout">
+			<panel name="button_controls_panel">
+				<button name="toggleAdvancedPanel" tool_tip="Переключить область дополнительных настроек"/>
+				<button name="FlipPose_avatar" tool_tip="Перевернуть всю позу влево/вправо"/>
+				<button name="FlipJoint_avatar" tool_tip="Зеркально отобразить выбранные части тела влево/вправо"/>
+				<button label="Recap" name="button_RecaptureParts" tool_tip="Если выбранная часть тела включена/выключены, это возвращает то, что эти части тела делают прямо сейчас"/>
+				<button label="Части Вкл/Выкл" name="toggle_PosingSelectedBones" tool_tip="Включите или выключите Позер для выбранной части тела. Если выключено, эта часть тела анимируется как обычно (с вашим AO или pose-ball/и т.д.)"/>
+				<button label="Свои позы" name="toggleLoadSavePanel" tool_tip="Загружайте, сохраняйте и управляйте позами, которые вы создаете"/>
+				<button tool_tip="Управляйте своим каталогом поз" name="open_poseDir_button"/>
+				<menu_button label="Загрузить" tool_tip="Загрузить текущую выбранную позу." name="load_poses_button"/>
+				<button label="Сохранить" tool_tip="Сохранить текущую позу." name="save_poses_button"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="advanced_controls_layout">
+			<panel name="advanced_parent_panel">
+				<tab_container name="modifier_tabs">
+					<panel title="Часть тела Позиция" name="position_panel">
+						<slider label="Позиция X:" name="Advanced_Position_X"/>
+						<slider label="Позиция Y:" name="Advanced_Position_Y"/>
+						<slider label="Позиция Z:" name="Advanced_Position_Z"/>
+						<button label="Отмена" name="undo_position_change" tool_tip="Отменить последнее изменение позиции"/>
+						<button label="Повторить" name="redo_position_change" tool_tip="Повторить последнее изменение позиции"/>
+						<button label="Сброс" name="reset_positions" tool_tip="Дважды щелкните, чтобы вернуть исходное положение."/>
+					</panel>
+					<panel title="Часть тела Размер" name="scale_panel">
+						<slider label="Размер X:" name="Advanced_Scale_X"/>
+						<slider label="Размер Y:" name="Advanced_Scale_Y"/>
+						<slider label="Размер Z:" name="Advanced_Scale_Z"/>
+						<button label="Отмена" name="undo_scale_change" tool_tip="Отменить последнее изменение размера"/>
+						<button label="Повторить" name="redo_scale_change" tool_tip="Повторить последнее изменение размера"/>
+						<button label="Сброс" name="reset_scales" tool_tip="Дважды щелкните, чтобы сбросить размер до исходного."/>
+					</panel>
+				</tab_container>
+			</panel>
+		</layout_panel>
+	</layout_stack>
+</floater>

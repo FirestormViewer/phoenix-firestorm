@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gltf asset editor" title="[OBJECT_NAME]">
+	<floater.string name="floater_title" value="GLTF Редактор сцен"/>
+	<floater.string name="scene_title" value="Сцена"/>
+	<floater.string name="node_title" value="Узел"/>
+	<floater.string name="mesh_title" value="Меш"/>
+	<floater.string name="skin_title" value="Кожа"/>
+	<layout_stack name="main_layout">
+		<layout_panel name="transforms_panel">
+			<menu_button name="clipboard_pos_btn" tool_tip="Параметры вставки"/>
+			<text name="label position" tool_tip="Позиция (метры)" width="121">
+				Позиция (м)
+			</text>
+			<menu_button name="clipboard_size_btn" tool_tip="Параметры вставки" width="19"/>
+			<text name="label size" tool_tip="Размер (метры)" width="121">
+				Размер (м)
+			</text>
+			<menu_button name="clipboard_rot_btn" tool_tip="Параметры вставки" width="19"/>
+			<text name="label rotation" tool_tip="Вращение (градусы)" width="121">
+				Вращение (°)
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

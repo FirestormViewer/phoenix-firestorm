@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_search" title="Firestorm搜尋">
+	<floater.string name="string.location">
+		位置：[LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		流量：[DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		面積：[AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		成員：[MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		創造者：[FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		年齡：[AGE]
+	</floater.string>
+	<floater.string name="string.partner">
+		伴侶：[PARTNER]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		廣告價格：[LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.slurl">
+		[SLURL]
+	</floater.string>
+	<floater.string name="string.duration">
+		活動時長：[DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		入場費：[COVERCHARGE]
+	</floater.string>
+	<tab_container name="ls_tabs">
+		<panel label="網路搜尋" name="panel_ls_web" />
+		<panel label="使用者" name="panel_ls_people" />
+		<panel label="群組" name="panel_ls_groups" />
+		<panel label="地點" name="panel_ls_places" />
+		<panel label="土地銷售" name="panel_ls_land" />
+		<panel label="活動" name="panel_ls_events" />
+		<panel label="廣告" name="panel_ls_classifieds" />
+	</tab_container>
+	<!-- Details/Action Panes -->
+	<panel name="panel_ls_details">
+		<button label="檢視個人資料" name="people_profile_btn" />
+		<button label="傳送訊息" name="people_message_btn" />
+		<button label="加為朋友" name="people_friend_btn" />
+		<button label="檢視群組資料" name="group_profile_btn" />
+		<button label="加入群組聊天" name="group_message_btn" />
+		<button label="加入群組" name="group_join_btn" />
+		<button label="瞬間傳送" name="teleport_btn" />
+		<button label="地圖" name="map_btn" />
+		<button label="提醒" name="event_reminder_btn" />
+	</panel>
+</floater>

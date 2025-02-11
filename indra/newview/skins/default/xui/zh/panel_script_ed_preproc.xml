@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="script panel">
+	<panel.string name="loading">
+		載入中...
+	</panel.string>
+	<panel.string name="can_not_view">
+		你無法檢視或編輯這指令碼，它被設為「禁止複製」。 你需要完整權限去檢視或編輯物件內的指令碼。
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		公開物件不能運行指令碼
+	</panel.string>
+	<panel.string name="script_running">
+		運行中
+	</panel.string>
+	<panel.string name="Title">
+		指令碼：[NAME]
+	</panel.string>
+	<panel.string name="external_editor_not_set">
+		由環境變數設定 LL_SCRIPT_EDITOR 或是 ExternalEditor 設定來選擇一個編輯器。
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu label="檔案" name="File">
+			<menu_item_call label="儲存" name="Save" />
+			<menu_item_call label="還原全部變更" name="Revert All Changes" />
+			<menu_item_call label="從檔案載入…" name="LoadFromFile" />
+			<menu_item_call label="存入檔案…" name="SaveToFile" />
+			<menu_item_call label="指令碼編輯器偏好設定" name="ScriptPrefs" />
+		</menu>
+		<menu label="編輯" name="Edit">
+			<menu_item_call label="復原" name="Undo" />
+			<menu_item_call label="重做" name="Redo" />
+			<menu_item_call label="剪下" name="Cut" />
+			<menu_item_call label="複製" name="Copy" />
+			<menu_item_call label="黏貼" name="Paste" />
+			<menu_item_call label="全選" name="Select All" />
+			<menu_item_call label="取消選擇" name="Deselect" />
+			<menu_item_call label="搜尋 / 替換..." name="Search / Replace..." />
+			<menu_item_call label="前往某行數…" name="Go to line..." />
+		</menu>
+		<menu label="幫助" name="Help">
+			<menu_item_call label="幫助..." name="Help..." />
+			<menu_item_call label="關鍵字幫助..." name="Keyword Help..." />
+			<menu_item_call label="指令碼庫" name="Script Library" />
+		</menu>
+	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="儲存指令碼" name="save_btn" />
+			<button tool_tip="外部指令碼編輯器" name="Edit_btn" />
+			<button tool_tip="從硬碟載入指令碼" name="load_disk_btn" />
+			<button tool_tip="將指令碼儲存到硬碟" name="save_disk_btn" />
+			<button tool_tip="剪下" name="cut_btn" />
+			<button tool_tip="複製" name="copy_btn" />
+			<button tool_tip="黏貼" name="paste_btn" />
+			<button tool_tip="復原" name="undo_btn" />
+			<button tool_tip="重做" name="redo_btn" />
+			<button tool_tip="尋找/替換" name="search_btn" />
+			<button tool_tip="指令碼編輯器設定" name="prefs_btn" />
+		</layout_panel>
+	</layout_stack>
+	<tab_container name="Tabset">
+		<panel name="Script" label="指令碼">
+			<script_editor name="Script Editor">
+				正在載入...
+			</script_editor>
+		</panel>
+		<panel name="Preprocessed" label="預處理">
+			<fs_lsl_preproc_viewer name="Post Editor">
+				正在載入...
+			</fs_lsl_preproc_viewer>
+		</panel>
+	</tab_container>
+	<combo_box label="插入..." name="Insert..." />
+	<button label="編輯..." name="edit_btn_2" />
+	<button label="儲存" label_selected="儲存" name="save_btn_2" />
+</panel>

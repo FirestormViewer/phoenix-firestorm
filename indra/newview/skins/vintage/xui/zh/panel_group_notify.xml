@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_group_notify">
+	<text name="attachment_label" value="已新增：" />
+	<text name="group_notice" value="群組通知" />
+	<text name="title" value="傳送人姓名、群組名稱" />
+	<panel name="attachment_container">
+		<text name="attachment" value="附件" />
+	</panel>
+	<button label="通知" name="btn_notices" />
+	<button label="聊天" name="btn_groupchat" />
+</panel>

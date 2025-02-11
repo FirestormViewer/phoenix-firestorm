@@ -10,7 +10,7 @@
   single_instance="true"
   reuse_instance="true"
   title="Share to Flickr"
-  height="590"
+  height="600"
   width="272">
   <panel
    height="590"
@@ -27,7 +27,7 @@
      tab_height="21"
      tab_position="top"
      top="7"
-     height="555"
+     height="565"
      follows="all"
      halign="center">
      <panel

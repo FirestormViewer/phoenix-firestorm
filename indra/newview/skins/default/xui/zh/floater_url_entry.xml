@@ -3,9 +3,9 @@
 	<text name="media_label">
 		媒體 URL：
 	</text>
-	<button label="確定" name="ok_btn"/>
-	<button label="取消" name="cancel_btn"/>
-	<button label="清除" name="clear_btn"/>
+	<button label="確定" name="ok_btn" />
+	<button label="取消" name="cancel_btn" />
+	<button label="清除" name="clear_btn" />
 	<text name="loading_label">
 		載入中...
 	</text>

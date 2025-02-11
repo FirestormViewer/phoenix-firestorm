@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_protected_folders" title="受保護的檔案夾">
+	<floater.string name="UnknownFolder">
+		（未知檔案夾）
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="篩選保護的檔案夾" name="filter_input" />
+		<button name="remove_btn" tool_tip="從受保護的檔案夾列表中移除檔案夾" />
+	</panel>
+	<panel name="panel_fs_protected_folders">
+		<scroll_list name="folder_list">
+			<scroll_list.columns label="名稱" name="name" />
+		</scroll_list>
+	</panel>
+</floater>

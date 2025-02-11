@@ -66,6 +66,7 @@
 		<menu_item_call label="Zdjęcie 360°" name="Capture 360"/>
 		<menu_item_call label="Śledzenie transakcji" name="money_tracker"/>
 		<menu_item_call label="Podest do pozowania" name="pose_stand"/>
+		<menu_item_check label="Pozer" name="Poser" />
 		<menu_item_call label="Ustawienia" name="Preferences"/>
 		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
 		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
@@ -95,6 +96,7 @@
 		<menu_item_check name="Conversation Log..." label="Dziennik rozmów..."/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
 		<menu_item_call label="Lista zablokowanych" name="Block List"/>
+		<menu_item_check label="Pokaż konsolę czatu" name="Show On-screen Console" />
 	</menu>
 	<menu label="Świat" name="World">
 		<menu_item_call label="Synchronizuj animacje" name="Resync Animations"/>
@@ -532,6 +534,7 @@
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
+			<menu_item_check label="Zbierz Vertex Buffer czcionek" name="Collect Font Vertex Buffers" />
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />
 			<menu_item_call label="Wyczyść pamięć podręczną modułu cieniującego" name="Shader Cache Clear" />
 		</menu>

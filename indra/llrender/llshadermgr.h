@@ -121,6 +121,7 @@ public:
         SKY_HDR_SCALE,                      //  "sky_hdr_scale"
         SKY_SUNLIGHT_SCALE,                 //  "sky_sunlight_scale"
         SKY_AMBIENT_SCALE,                  //  "sky_ambient_scale"
+        CLASSIC_MODE,                       //  "classic_mode"
         BLUE_HORIZON,                       //  "blue_horizon"
         BLUE_DENSITY,                       //  "blue_density"
         HAZE_HORIZON,                       //  "haze_horizon"
@@ -345,6 +346,19 @@ public:
 
         DEBUG_NORMAL_DRAW_LENGTH,           //  "debug_normal_draw_length"
 
+        SMAA_EDGE_TEX,                      //  "edgesTex"
+        SMAA_AREA_TEX,                      //  "areaTex"
+        SMAA_SEARCH_TEX,                    //  "searchTex"
+        SMAA_BLEND_TEX,                     //  "blendTex"
+
+        // <FS:Beq> Uniforms for snapshot frame
+        SNAPSHOT_BORDER_COLOR,              // "border_color"
+        SNAPSHOT_BORDER_THICKNESS,          // "border_thickness"
+        SNAPSHOT_GUIDE_COLOR,               // "guide_color"
+        SNAPSHOT_GUIDE_THICKNESS,           // "guide_thickness"
+        SNAPSHOT_GUIDE_STYLE,               // "guide_style"
+        SNAPSHOT_FRAME_RECT,                // "frame_rect"
+        // </FS:Beq>
         END_RESERVED_UNIFORMS
     } eGLSLReservedUniforms;
     // clang-format on

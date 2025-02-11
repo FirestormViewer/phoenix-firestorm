@@ -72,6 +72,7 @@
 		<menu_item_call label="360° Снимок" name="Capture 360"/>
 		<menu_item_call label="Отслеживание денег" name="money_tracker"/>
 		<menu_item_call label="Поза редактирования..." name="pose_stand"/>
+		<menu_item_check label="Позер" name="Poser"/>
 
 		<menu_item_call label="Настройки" name="Preferences"/>
 		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
@@ -106,6 +107,7 @@
 		<menu_item_check name="Conversation Log..." label="Журнал разговоров..."/>
 		<menu_item_check label="Ближайшие голоса" name="Nearby Voice"/>
 		<menu_item_call label="Список заблокированных" name="Block List"/>
+		<menu_item_check label="Показать экранную консоль чата" name="Show On-screen Console"/>
 	</menu>
 
 	<!-- World Menu -->
@@ -630,8 +632,9 @@
 			<menu_item_check label="Отладка клавиш" name="Debug Keys"/>
 			<menu_item_check label="Отладка окна процесса" name="Debug WindowProc"/>
 		</menu>
-		<menu label="XUI/XML" name="XUI">
-			<menu_item_call label="Перезагрузить цветовые установки" name="Reload Color Settings"/>
+		<menu label="XUI" name="XUI">
+			<menu_item_call label="Показать настройки цвета" name="Color Settings"/>
+			<menu_item_call label="Перезагрузить настройки цвета" name="Reload Color Settings"/>
 			<menu_item_call label="Показать проверку шрифтов" name="Show Font Test"/>
 			<menu_item_call label="Загрузить из XML" name="Load from XML"/>
 			<menu_item_call label="Сохранить в XML" name="Save to XML"/>

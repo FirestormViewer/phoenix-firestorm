@@ -44,6 +44,8 @@
 				<combo_box.item value="filter_type_snapshots" label="Снимки" />
 				<combo_box.item value="filter_type_materials" label="Материалы" />
 				<combo_box.item value="filter_type_settings" label="Настройки" />
+				<combo_box.item value="filter_type_folders" label="Папки" />
+				<combo_box.item value="filter_type_coalesced" label="Только объединенные"/>
 				<combo_box.item value="filter_type_custom" label="Другое..." />
 			</combo_box>
 		</layout_panel>
@@ -64,6 +66,9 @@
 		</panel>
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Дополнительное окно инвентаря"/>
+		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="Показывать фильтры - При выборе этого параметра отображается боковое меню фильтра. Становится выделенным при включении любого фильтра."/>
 		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="Переключение между видами"/>

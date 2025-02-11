@@ -738,6 +738,11 @@
         <combo_box.item value="filter_type_snapshots" label="Snapshots" />
         <combo_box.item value="filter_type_materials" label="Materials" />
         <combo_box.item value="filter_type_settings" label="Settings" />
+        <!-- [AS:Chanayane] Search folders only -->
+        <combo_box.item value="filter_type_folders" label="Folders" />
+        <!-- [/AS:Chanayane] -->
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_coalesced" label="Only Coalesced"/>
         <combo_box.item value="filter_separator" label="------------" enabled="false" />
         <combo_box.item value="filter_type_custom" label="Custom..." />
       </combo_box>

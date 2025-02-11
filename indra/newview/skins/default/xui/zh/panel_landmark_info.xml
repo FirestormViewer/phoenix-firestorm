@@ -1,52 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="landmark_info">
-	<string name="title_create_landmark" value="創造地標"/>
-	<string name="title_edit_landmark" value="編輯地標"/>
-	<string name="title_landmark" value="地標"/>
-	<string name="not_available" value="（不適用）"/>
-	<string name="unknown" value="（未知）"/>
-	<string name="public" value="（公開）"/>
+	<string name="title_create_landmark" value="創造地標" />
+	<string name="title_edit_landmark" value="編輯地標" />
+	<string name="title_landmark" value="地標" />
+	<string name="not_available" value="（不適用）" />
+	<string name="unknown" value="（未知）" />
+	<string name="public" value="（公開）" />
 	<string name="server_update_text">
 		地點資訊因無伺服器更新故無法提供。
 	</string>
 	<string name="server_error_text">
-		目前無法取得此位置的訊息，請稍候再試。
+		當前無法取得此位置的訊息，請稍候再試。
 	</string>
 	<string name="server_forbidden_text">
-		權限不足，無法取得此位置的資訊。  請向地段所有人查詢你的權限。
+		權限不足，無法取得此位置的資訊。  請向地塊所有者尋找你的權限。
 	</string>
 	<string name="acquired_date">
 		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
 	</string>
-
+	<string name="information_text">
+		流量：[TRAFFIC] 區域：[AREA] 平方公尺
+	</string>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
-
-	<button name="back_btn" tool_tip="返回"/>
-	<text name="title" value="地點檔案"/>
-
+			<button name="back_btn" tool_tip="傳回" />
+			<text name="title" value="地點檔案" />
 		</layout_panel>
 		<layout_panel name="place_info_content">
-
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
-			<text name="region_title" value="SampleRegion"/>
-			<text name="parcel_title" value="SampleParcel, Name Long (145, 228, 26)"/>
-			<expandable_text name="description" value="Du waltz die spritz"/>
-			<text name="maturity_value" value="未知"/>
+			<text name="parcel_title" value="未知" />
+			<text name="region_title">
+			區域：[REGIONAMEPOS]
+		</text>
+			<text name="maturity_value" value="未知" />
+			<text name="parcel_owner_label" value="所有者：" />
+			<text name="parcel_owner" value="未知" />
+			<panel name="description_panel">
+				<expandable_text name="description" value="(載入中...)" />
+			</panel>
 			<panel name="landmark_info_panel">
-				<text name="owner_label" value="所有人："/>
-				<text name="creator_label" value="創造者："/>
-				<text name="created_label" value="創造於："/>
+				<text name="owner_label" value="所有者：" />
+				<text name="creator_label" value="創造者：" />
+				<text name="created_label" value="創造於：" />
+				<text name="information_label" value="資訊：" />
 			</panel>
 			<panel name="landmark_edit_panel">
-				<text name="title_label" value="標題："/>
-				<text name="notes_label" value="我的記事："/>
-				<text name="folder_label" value="地標位置："/>
+				<text name="title_label" value="標題：" />
+				<text name="notes_label" value="備註：" />
+				<text name="folder_label" value="地標位置：" />
+				<button label="編輯" name="edit_btn" tool_tip="編輯地標資訊" />
 			</panel>
-		</panel>
-	</scroll_container>
-
 		</layout_panel>
-	</layout_stack> 
+	</layout_stack>
 </panel>

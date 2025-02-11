@@ -668,18 +668,7 @@ void LLUrlEntryAgent::callObservers(const std::string &id,
 void LLUrlEntryAgent::onAvatarNameCache(const LLUUID& id,
                                         const LLAvatarName& av_name)
 {
-    // <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-    //avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
-    //if (it != mAvatarNameCacheConnections.end())
-    //{
-    //  if (it->second.connected())
-    //  {
-    //      it->second.disconnect();
-    //  }
-    //  mAvatarNameCacheConnections.erase(it);
-    //}
-    std::pair<avatar_name_cache_connection_map_t::iterator, avatar_name_cache_connection_map_t::iterator> range;
-    range = mAvatarNameCacheConnections.equal_range(id);
+    auto range = mAvatarNameCacheConnections.equal_range(id);
     for (avatar_name_cache_connection_map_t::iterator it = range.first; it != range.second; ++it)
     {
         if (it->second.connected())
@@ -688,7 +677,6 @@ void LLUrlEntryAgent::onAvatarNameCache(const LLUUID& id,
         }
     }
     mAvatarNameCacheConnections.erase(range.first, range.second);
-    // </FS:Ansariel>
 
     std::string label = av_name.getCompleteName();
 
@@ -775,20 +763,8 @@ std::string LLUrlEntryAgent::getLabel(const std::string &url, const LLUrlLabelCa
     }
     else
     {
-        // <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-        //avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(agent_id);
-        //if (it != mAvatarNameCacheConnections.end())
-        //{
-        //  if (it->second.connected())
-        //  {
-        //      it->second.disconnect();
-        //  }
-        //  mAvatarNameCacheConnections.erase(it);
-        //}
-        //mAvatarNameCacheConnections[agent_id] = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
-        boost::signals2::connection connection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
-        mAvatarNameCacheConnections.insert(std::make_pair(agent_id, connection));
-        // </FS:Ansariel>
+        mAvatarNameCacheConnections.emplace(agent_id, LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2)));
+
         addObserver(agent_id_string, url, cb);
         return LLTrans::getString("AvatarNameWaiting");
     }
@@ -853,20 +829,9 @@ LLUrlEntryAgentName::LLUrlEntryAgentName()
 {}
 
 void LLUrlEntryAgentName::onAvatarNameCache(const LLUUID& id,
-                                        const LLAvatarName& av_name)
+                                            const LLAvatarName& av_name)
 {
-    // <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-    //avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
-    //if (it != mAvatarNameCacheConnections.end())
-    //{
-    //  if (it->second.connected())
-    //  {
-    //      it->second.disconnect();
-    //  }
-    //  mAvatarNameCacheConnections.erase(it);
-    //}
-    std::pair<avatar_name_cache_connection_map_t::iterator, avatar_name_cache_connection_map_t::iterator> range;
-    range = mAvatarNameCacheConnections.equal_range(id);
+    auto range = mAvatarNameCacheConnections.equal_range(id);
     for (avatar_name_cache_connection_map_t::iterator it = range.first; it != range.second; ++it)
     {
         if (it->second.connected())
@@ -875,7 +840,6 @@ void LLUrlEntryAgentName::onAvatarNameCache(const LLUUID& id,
         }
     }
     mAvatarNameCacheConnections.erase(range.first, range.second);
-    // </FS:Ansariel>
 
     std::string label = getName(av_name);
     // received the agent name from the server - tell our observers
@@ -910,20 +874,8 @@ std::string LLUrlEntryAgentName::getLabel(const std::string &url, const LLUrlLab
     }
     else
     {
-        // <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-        //avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(agent_id);
-        //if (it != mAvatarNameCacheConnections.end())
-        //{
-        //  if (it->second.connected())
-        //  {
-        //      it->second.disconnect();
-        //  }
-        //  mAvatarNameCacheConnections.erase(it);
-        //}
-        //mAvatarNameCacheConnections[agent_id] = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
-        boost::signals2::connection connection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
-        mAvatarNameCacheConnections.insert(std::make_pair(agent_id, connection));
-        // </FS:Ansariel>
+        mAvatarNameCacheConnections.emplace(agent_id, LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2)));
+
         addObserver(agent_id_string, url, cb);
         return LLTrans::getString("AvatarNameWaiting");
     }

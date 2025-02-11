@@ -10,7 +10,7 @@
 		封鎖的體驗：
 	</panel.string>
 	<panel.string name="panel_trusted">
-		金鑰體驗：
+		必要體驗：
 	</panel.string>
 	<panel.string name="no_results">
 		（空白）
@@ -19,9 +19,9 @@
 		體驗清單
 	</text>
 	<name_list name="experience_list">
-		<name_list.columns label="名稱" name="experience_name"/>
+		<name_list.columns label="名稱" name="experience_name" />
 	</name_list>
-	<button label="添加..." name="btn_add"/>
-	<button label="移除" name="btn_remove"/>
-	<button label="檔案..." name="btn_profile"/>
+	<button label="新增..." name="btn_add" />
+	<button label="移除" name="btn_remove" />
+	<button label="檔案..." name="btn_profile" />
 </panel>

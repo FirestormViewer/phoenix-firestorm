@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Display Name" title="變更顯示名稱">
+<floater name="Display Name" title="變更顯示名">
+	<floater.string name="LockOutDateFormat">
+		[month,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
 	<text name="info_text">
-		你為你的化身取的名字叫做「顯示名稱」。 一星期可以修改一次。
+		你為你的化身取的名字叫做「顯示名」。 一星期可以修改一次。
 	</text>
 	<text name="lockout_text">
-		你下次能再更改顯示名稱的時間為
-[TIME]。
+		你下次能再更改顯示名的時間為 [TIME]。
 	</text>
 	<text name="set_name_label">
-		新顯示名稱：
+		新顯示名：
 	</text>
 	<text name="name_confirm_label">
 		再次輸入你的新名稱以便確認：
 	</text>
-	<button label="儲存" name="save_btn" tool_tip="儲存你的新的顯示名稱"/>
-	<button label="重設" name="reset_btn" tool_tip="將顯示名稱設成和使用者名稱相同"/>
-	<button label="取消" name="cancel_btn"/>
+	<button label="儲存" name="save_btn" tool_tip="儲存你的新的顯示名" />
+	<button label="重設" name="reset_btn" tool_tip="將顯示名設成和使用者名稱相同" />
+	<button label="取消" name="cancel_btn" />
 </floater>

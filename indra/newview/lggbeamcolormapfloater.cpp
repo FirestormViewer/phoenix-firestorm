@@ -25,15 +25,15 @@
 #include "llviewermenufile.h"
 
 // Correction factors needed after porting from Phoenix
-const S32 CORRECTION_X = 0;
-const S32 CORRECTION_Y = -40;
+constexpr S32 CORRECTION_X = 0;
+constexpr S32 CORRECTION_Y = -40;
 
-F32 convertXToHue(S32 place)
+static F32 convertXToHue(S32 place)
 {
     return ((place - 6) / 396.0f) * 720.0f;
 }
 
-S32 convertHueToX(F32 place)
+static S32 convertHueToX(F32 place)
 {
     return ll_round((place / 720.0f) * 396.0f) + 6;
 }
@@ -42,11 +42,10 @@ lggBeamColorMapFloater::lggBeamColorMapFloater(const LLSD& seed) : LLFloater(see
     mContextConeOpacity(0.f),
     mContextConeInAlpha(CONTEXT_CONE_IN_ALPHA),
     mContextConeOutAlpha(CONTEXT_CONE_OUT_ALPHA),
-    mContextConeFadeTime(CONTEXT_CONE_FADE_TIME)
-{
-}
-
-lggBeamColorMapFloater::~lggBeamColorMapFloater()
+    mContextConeFadeTime(CONTEXT_CONE_FADE_TIME),
+    mFSPanel(nullptr),
+    mColorSlider(nullptr),
+    mBeamColorPreview(nullptr)
 {
 }
 
@@ -75,8 +74,11 @@ void lggBeamColorMapFloater::draw()
     LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(mData));
     mBeamColorPreview->set(bColor, true);
 
-    static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
-    drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("BeamColor_new"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+    if (mFSPanel)
+    {
+        static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+        drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("BeamColor_new"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+    }
 
     //Draw Base Stuff
     LLFloater::draw();
@@ -184,7 +186,7 @@ void lggBeamColorMapFloater::onClickSlider()
     fixOrder();
 }
 
-F32 lggBeamColorMapFloater::getHueFromLocation(S32 x, S32 y)
+F32 lggBeamColorMapFloater::getHueFromLocation(S32 x, S32 y) const
 {
     if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
     {
@@ -225,7 +227,7 @@ void lggBeamColorMapFloater::setData(FSPanelPrefs* data)
     }
 }
 
-LLSD lggBeamColorMapFloater::getDataSerialized()
+LLSD lggBeamColorMapFloater::getDataSerialized() const
 {
     return mData.toLLSD();
 }

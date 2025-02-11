@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="friends">
+	<layout_stack name="ls_friend_list" right="-90">
+		<layout_panel name="lp_search">
+			<filter_editor label="篩選好友" name="friend_filter_input" />
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="線上狀態" />
+				<fs_scroll_list.column label="使用者名稱" name="user_name" tool_tip="該好友的使用者名稱。" />
+				<fs_scroll_list.column label="顯示名" name="display_name" tool_tip="該好友的顯示名。" />
+				<fs_scroll_list.column label="姓名" name="full_name" tool_tip="該好友的姓名。" />
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="該好友可以看到您是否線上上。" />
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="該好友可以在地圖上看到您的位置。" />
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="該好友可以編輯、刪除或取得您的物件。" />
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="您可以在地圖上看到該好友的位置。" />
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="您可以編輯該好友的物件。" />
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<button label="私聊/通話" name="im_btn" tool_tip="打開私聊視窗" />
+	<button label="個人檔案" name="profile_btn" tool_tip="顯示相片、群組和其他資訊" />
+	<button label="傳送" name="offer_teleport_btn" tool_tip="向此好友提供到您當前位置的傳送" />
+	<button label="地圖" name="map_btn" tool_tip="在地圖上顯示此好友的位置" />
+	<button label="支付" name="pay_btn" tool_tip="向此好友支付林登幣 (L$)" />
+	<button label="移除" name="remove_btn" tool_tip="從您的好友列表中移除此人" />
+	<button label="新增" name="add_btn" tool_tip="將此居民新增為好友" />
+	<text name="friend_count" width="85">
+	 好友: [COUNT]
+	</text>
+</panel>

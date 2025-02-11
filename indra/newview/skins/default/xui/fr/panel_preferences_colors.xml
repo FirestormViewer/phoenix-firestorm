@@ -38,7 +38,7 @@
 			<text name="username_tag_label">Nom d'utilisateur</text>
 			<text name="bubble_chat">Étiquettes / Bulle de discussion :</text>
 			<color_swatch name="background" tool_tip="Sélectionnez la couleur des étiquettes"/>
-			<slider label="Transparence" name="bubble_chat_opacity" tool_tip="Sélectionnez la transparence des étiquettes"/>
+			<slider label="Opacité" name="bubble_chat_opacity" tool_tip="Ajustez l'opacité des étiquettes"/>
 			<slider label="Alignement vertical " name="FSNameTagZOffsetCorrection" tool_tip="Modifiez l'alignement vertical des tags des résidents. 0 par défaut"/>
 			<check_box name="FSTagShowDistance" label="Afficher la distance à côté de l'étiquette" tool_tip="Afficher la distance de l'avatar à côté de l'étiquette"/>
 			<check_box name="FSTagShowDistanceColors" label="Colorer les étiquettes selon la distance :"/>
@@ -73,8 +73,8 @@
 			</panel>
 		</panel>
 		<panel label="Minicarte" name="tab-minimap">
-			<slider label="Transparence de l'arrière-plan :" label_width="180" width="485" name="FSMiniMapOpacity"/>
-			<text name="netmap_pickradius_textbox">Transparence &amp; couleur du point :</text>
+			<slider label="Opacité de l'arrière-plan :" label_width="180" width="485" name="FSMiniMapOpacity"/>
+			<text name="netmap_pickradius_textbox">Opacité &amp; couleur du point :</text>
 			<text name="netmap_pickradius_color_textbox">Couleur du point :</text>
 			<color_swatch name="MapPickRadiusColor" tool_tip="Contrôle la couleur du point sur la minicarte. La taille du point peut être ajustée avec le paramètre Taille du point."/>
 			<text name="netmap_pickradius_opacity_textbox">Opacité:</text>
@@ -92,13 +92,14 @@
 		<panel label="Divers" name="tab-misc">
 			<text name="effects_color_textbox">Faisceau de sélection :</text>
 			<text left="240" name="ScriptDialogFgLabel" width="300">Avant et arrière-plan des dialogues de scripts :</text>
-			<text name="floater_opacity">Transparence des fenêtres :</text>
+			<text name="floater_opacity">Opacité des fenêtres :</text>
 			<slider label="Actives :" name="active"/>
 			<slider label="Inactives :" name="inactive"/>
 			<slider label="Caméra / Mouvement :" name="camera_movement"/>
-			<text name="console_opacity">Transparence de la console :</text>
+			<text name="console_opacity">Opacité de la console :</text>
 			<color_swatch name="console_background" tool_tip="Sélectionnez la couleur de la console"/>
-			<slider label="Transparence :" name="console_background_opacity" tool_tip="Sélectionnez la transparence de l'arrière-plan de la console"/>
+			<slider label="Opacité :" name="console_background_opacity" tool_tip="Ajustez l'opacité du fond de la console"/>
+			<slider label="Opacité du fond du texte flottant :" name="FSHudTextBackgroundOpacity" tool_tip="Ajustez l'opacité de l'arrière-plan du texte flottant"/>
 			<text name="preferences_search_label">Surlignage des préférences recherchées :</text>
 			<color_swatch name="preferences_search_color" tool_tip="Sélectionnez la couleur des préférences surlignées par les résultats de recherche"/>
 			<text name="area_search_beacon_color_label">Couleur de la balise de recherche zonière : </text>
@@ -124,11 +125,11 @@
 			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Couleur du texte sélectionné dans la notice"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Toujours afficher les dialogues de scripts sur un arrière-plan opaque"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Toujours afficher les notices de groupe avec un arrière-plan opaque"/>
-			<check_box name="override_pie_color_checkbox" label="Définir la couleur d'arrière-plan et la transparence des menus circulaires :"/>
+			<check_box name="override_pie_color_checkbox" label="Ajuster la couleur d'arrière-plan et l'opacité des menus circulaires :"/>
 			<panel name="tab-colorize">
 				<color_swatch name="pie_bg_color_override" tool_tip="Sélectionnez la couleur d'arrière-plan des menus circulaires"/>
 				<color_swatch name="pie_selected_color_override" tool_tip="Sélectionnez la couleur d'arrière-plan des menus circulaires"/>
-				<slider label="Transparence :" label_width="80" name="pie_menu_opacity" tool_tip="Sélectionnez la transparence des menus circulaires"/>
+				<slider label="Opacité :" label_width="80" name="pie_menu_opacity" tool_tip="Ajustez l'opacité des menus circulaires"/>
 				<slider label="Dégradé :" label_width="80" name="pie_menu_fade_out" tool_tip="Sélectionnez le niveau de dégradé de la couleur primaire des menus circulaires"/>
 			</panel>
 		</panel>

@@ -1615,7 +1615,7 @@
        layout="topleft"
        left="30"
        name="effects_color_textbox"
-       top_pad="15"
+       top_pad="5"
        width="200">
        Selection Effects (Particle Beam):
      </text>
@@ -1694,7 +1694,7 @@
        left="30"
        height="12"
        name="floater_opacity"
-       top_pad="15"
+       top_pad="10"
        width="220">
        Floating Window Opacity:
      </text>
@@ -1758,7 +1758,7 @@
        left="30"
        height="12"
        name="console_opacity"
-       top_pad="15"
+       top_pad="10"
        width="220">
        Console Opacity:
      </text>
@@ -1798,13 +1798,31 @@
      left_pad="10"
      width="378" />
 
+     <slider
+      control_name="FSHudTextBackgroundOpacity"
+      follows="left|top"
+      height="16"
+      increment="0.05"
+      initial_value="0.75"
+      label="Floating text background opacity:"
+      layout="topleft"
+      left_pad="10"
+      left="30"
+      max_val="1.00"
+      min_val="0.00"
+      label_width="182"
+      name="FSHudTextBackgroundOpacity"
+      tool_tip="Choose floating text background opacity"
+      top_pad="10"
+      width="443" />
+
      <text
        follows="left|top"
        layout="topleft"
        left="30"
        height="12"
        name="preferences_search_label"
-       top_pad="15"
+       top_pad="10"
        width="220">
        Preferences Search Highlight Color:
      </text>
@@ -1862,7 +1880,7 @@
        left="30"
        height="12"
        name="notecard_editor_color_label"
-       top_pad="15"
+       top_pad="10"
        width="400">
        Notecard Colors:
      </text>

@@ -65,6 +65,7 @@
 		<menu_item_call label="Photos 360°" name="Capture 360"/>
 		<menu_item_call label="Suivi des transactions" name="money_tracker"/>
 		<menu_item_call label="Stand de pose..." name="pose_stand"/>
+		<menu_item_check label="Poseur" name="Poser"/>
 		<menu_item_call label="Préférences..." name="Preferences"/>
 		<menu_item_call label="Boutons de la barre d'outils" name="Toolbar Buttons"/>
 		<menu_item_check label="Afficher les éléments HUD" name="Show HUD Attachments"/>
@@ -102,6 +103,7 @@
 		<menu_item_check label="Journal des conversations..." name="Conversation Log..."/>
 		<menu_item_check label="Chat vocal à proximité" name="Nearby Voice"/>
 		<menu_item_call label="Liste des ignorés" name="Block List"/>
+		<menu_item_check label="Afficher la console de conversation" name="Show On-screen Console"/>
 	</menu>
 	<menu label="Monde" name="World">
 		<menu_item_call label="Resynchroniser les animations" name="Resync Animations"/>
@@ -161,6 +163,11 @@
 		<menu_item_call label="Explorateur d'animations" name="Animation Explorer"/>
 		<menu_item_call label="Liste noire d'éléments" name="asset_blacklist"/>
 		<menu_item_call label="Paramètres d'affichage de l'avatar" name="Avatar Render Settings"/>
+		<menu label="Affichage des avatars" name="AvatarComplexityMode">
+			<menu_item_check label="Limiter par la complexité" name="complexity_limit_everone"/>
+			<menu_item_check label="Toujours afficher les amis" name="complexity_always_show_friends"/>
+			<menu_item_check label="N'afficher que les amis" name="complexity_only_show_friends"/>
+		</menu>
 		<menu_item_check label="N'afficher que les amis" name="Render Friends Only"/>
 	</menu>
 	<menu label="Construire" name="BuildTools">
@@ -494,6 +501,7 @@
 			<menu_item_check label="Textures pleine résolution" name="Rull Res Textures"/>
 			<menu_item_check label="Rendu des lumières jointes" name="Render Attached Lights"/>
 			<menu_item_check label="Rendu des particules jointes" name="Render Attached Particles"/>
+			<menu_item_check label="Collecter les buffers de vertex des polices" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Activer le cache des shaders" name="Enable Shader Cache"/>
 			<menu_item_call label="Vider le cache des shaders" name="Shader Cache Clear"/>
 			<menu_item_call label="Reconstruire le terrain" name="Rebuild Terrain"/>

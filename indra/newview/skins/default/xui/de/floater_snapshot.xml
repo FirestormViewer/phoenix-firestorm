@@ -59,6 +59,8 @@
 			<combo_box.item label="Tiefe" name="Depth"/>
 			<combo_box.item label="Tiefe (24 Bit)" name="Depth24"/>
 		</combo_box>
+		<check_box label="Aufnahmerahmen anzeigen" name="show_frame" tool_tip="Zeigt einen Rahmen um den Bereich der Aufnahme an. Teile der Szene, die außerhalb des Aufnahmebereichs liegen, werden entsättigt und leicht verschwommen dargestellt."/>
+		<check_box label="Aufnahme-Guide anzeigen" name="show_guides" tool_tip="Zeigt Aufnahme-Guide (Drittel-Regel) innerhalb des Aufnahmebereichs an."/>
 		<check_box label="Benutzeroberfläche" name="ui_check"/>
 		<check_box label="L$-Kontostand" name="currency_check"/>
 		<check_box label="HUDs" name="hud_check"/>

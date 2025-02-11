@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater" title="Controlli Fotocamera">
+	<floater.string name="rotate_tooltip">
+		Ruota la camera intorno all'inquadratura
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Avvicina la camera nell'inquadratura
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Muovi la camera su, giù, a sinistra e a destra
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Vista Oggetto
+	</floater.string>
+	<string name="inactive_combo_text">
+		Usa Preset
+	</string>
+	<panel name="controls">
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="Orbita la camera intorno al centro focale"/>
+			<button name="roll_left" tool_tip="Inclina la camera a sinistra" />
+			<button name="roll_right" tool_tip="Inclina la camera a destra" />
+			<slider_bar name="zoom_slider" tool_tip="Zoom verso il centro focale"/>
+			<joystick_track name="cam_track_stick" tool_tip="Muovi la camera su, giù, a sinistra e a destra"/>
+		</panel>
+	</panel>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="Vista Frontale"/>
+		<panel_camera_item name="group_view" tool_tip="Vista Laterale"/>
+		<panel_camera_item name="rear_view" tool_tip="Vista Posteriore"/>
+		<panel_camera_item name="object_view" tool_tip="Vista Oggetto"/>
+		<panel_camera_item name="mouselook_view" tool_tip="Vista Mouselook"/>
+		<panel_camera_item name="reset_view" tool_tip="Ripristina vista"/>
+	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="Usa Preset" name="Use preset" />
+	</combo_box>
+	<button name="gear_btn" tool_tip="Preset Camera" />
+	<button label="Posizione..." name="camera_position_btn" />
+	<button label="Salva" name="save_btn" />
+</floater>

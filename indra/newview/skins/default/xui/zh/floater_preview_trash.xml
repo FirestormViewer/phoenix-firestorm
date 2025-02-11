@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_preview_trash" title="垃圾桶">
+	<layout_stack name="button_panel_ls">
+		<layout_panel name="empty_btn_lp">
+			<button label="清空垃圾桶" name="empty_btn" />
+		</layout_panel>
+		<layout_panel name="share_btn_lp">
+			<button label="取消" name="cancel_btn" />
+		</layout_panel>
+	</layout_stack>
+</floater>

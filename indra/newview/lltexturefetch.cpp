@@ -560,7 +560,7 @@ private:
     F32 mImagePriority; // should map to max virtual size
     F32 mRequestedPriority;
     S32 mDesiredDiscard;
-    S32 mSimRequestedDiscard;
+    S32 mSimRequestedDiscard; // <FS:Ansariel> OpenSim compatibility
     S32 mRequestedDiscard;
     S32 mLoadedDiscard;
     S32 mDecodedDiscard;
@@ -912,7 +912,7 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
       mImagePriority(priority),
       mRequestedPriority(0.f),
       mDesiredDiscard(-1),
-      mSimRequestedDiscard(-1),
+      mSimRequestedDiscard(-1), // <FS:Ansariel> OpenSim compatibility
       mRequestedDiscard(-1),
       mLoadedDiscard(-1),
       mDecodedDiscard(-1),
@@ -1130,7 +1130,7 @@ void LLTextureFetchWorker::startWork(S32 param)
 // Threads:  Ttf
 bool LLTextureFetchWorker::doWork(S32 param)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE; // <FS:Beq/> Fix wrong category
     if (gNonInteractive)
     {
         return true;
@@ -1145,7 +1145,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
     {
         if (mState < DECODE_IMAGE)
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - state < decode");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - state < decode"); //<FS:Beq/> fix incorrect category
             return true; // abort
         }
     }
@@ -1157,7 +1157,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
         if (mState == INIT || mState == LOAD_FROM_NETWORK || mState == LOAD_FROM_SIMULATOR)
         // </FS:Ansariel>
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - priority < 0");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - priority < 0"); //<FS:Beq/> fix incorrect category
             LL_DEBUGS(LOG_TXT) << mID << " abort: mImagePriority < F_ALMOST_ZERO" << LL_ENDL;
             return true; // abort
         }
@@ -1179,7 +1179,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
     if(mState > CACHE_POST && !mCanUseNET && !mCanUseHTTP)
     // </FS:Ansariel>
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - state > cache_post");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - state > cache_post"); //<FS:Beq/> fix incorrect category
         //nowhere to get data, abort.
         LL_WARNS(LOG_TXT) << mID << " abort, nowhere to get data" << LL_ENDL;
         return true ;
@@ -1201,7 +1201,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == INIT)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - INIT");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - INIT"); //<FS:Beq/> fix incorrect category
 
         // <FS> Asset Blacklist
         if (FSAssetBlacklist::getInstance()->isBlacklisted(mID, LLAssetType::AT_TEXTURE))
@@ -1253,7 +1253,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == LOAD_FROM_TEXTURE_CACHE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - LOAD_FROM_TEXTURE_CACHE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - LOAD_FROM_TEXTURE_CACHE"); //<FS:Beq/> fix incorrect category
         if (mCacheReadHandle == LLTextureCache::nullHandle())
         {
             S32 offset = mFormattedImage.notNull() ? mFormattedImage->getDataSize() : 0;
@@ -1325,7 +1325,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == CACHE_POST)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - CACHE_POST");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - CACHE_POST"); //<FS:Beq/> fix incorrect category
         mCachedSize = mFormattedImage.notNull() ? mFormattedImage->getDataSize() : 0;
         // Successfully loaded
         if ((mCachedSize >= mDesiredSize) || mHaveAllData)
@@ -1367,7 +1367,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == LOAD_FROM_NETWORK)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - LOAD_FROM_NETWORK");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - LOAD_FROM_NETWORK"); //<FS:Beq/> fix incorrect category
         // Check for retries to previous server failures.
         F32 wait_seconds;
         if (mFetchRetryPolicy.shouldRetry(wait_seconds))
@@ -1470,7 +1470,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
     // <FS:Ansariel> OpenSim compatibility
     if (mState == LOAD_FROM_SIMULATOR)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - LOAD_FROM_SIMULATOR");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - LOAD_FROM_SIMULATOR"); //<FS:Beq/> fix incorrect category
         if (mFormattedImage.isNull())
         {
             mFormattedImage = new LLImageJ2C;
@@ -1522,7 +1522,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == WAIT_HTTP_RESOURCE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - WAIT_HTTP_RESOURCE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - WAIT_HTTP_RESOURCE"); //<FS:Beq/> fix incorrect category
         // NOTE:
         // control the number of the http requests issued for:
         // 1, not openning too many file descriptors at the same time;
@@ -1548,14 +1548,14 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == WAIT_HTTP_RESOURCE2)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - WAIT_HTTP_RESOURCE2");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - WAIT_HTTP_RESOURCE2"); //<FS:Beq/> fix incorrect category
         // Just idle it if we make it to the head...
         return false;
     }
 
     if (mState == SEND_HTTP_REQ)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - SEND_HTTP_REQ");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - SEND_HTTP_REQ"); //<FS:Beq/> fix incorrect category
         // Also used in llmeshrepository
         static LLCachedControl<bool> disable_range_req(gSavedSettings, "HttpRangeRequestsDisable", false);
 
@@ -1686,7 +1686,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == WAIT_HTTP_REQ)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - WAIT_HTTP_REQ");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - WAIT_HTTP_REQ"); //<FS:Beq/> fix incorrect category
         // *NOTE:  As stated above, all transitions out of this state should
         // call releaseHttpSemaphore().
         if (mLoaded)
@@ -1696,18 +1696,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
             {
                 if (http_not_found == mGetStatus)
                 {
-                    if (mFTType != FTT_MAP_TILE)
-                    {
-                        LL_WARNS(LOG_TXT) << "Texture missing from server (404): " << mUrl << LL_ENDL;
-                    }
-
                     if(mWriteToCacheState == NOT_WRITE) //map tiles or server bakes
                     {
                         setState(DONE);
                         releaseHttpSemaphore();
                         if (mFTType != FTT_MAP_TILE)
                         {
-                            LL_WARNS(LOG_TXT) << mID << " abort: WAIT_HTTP_REQ not found" << LL_ENDL;
+                            LL_WARNS(LOG_TXT) << mID << "NOT_WRITE texture missing from server (404), abort: " << mUrl << LL_ENDL;
                         }
                         return true;
                     }
@@ -1717,6 +1712,10 @@ bool LLTextureFetchWorker::doWork(S32 param)
                         LLViewerRegion* region = getRegion();
                         if (!region || mLastRegionId != region->getRegionID())
                         {
+                            if (mFTType != FTT_MAP_TILE)
+                            {
+                                LL_INFOS(LOG_TXT) << "Texture missing from server (404), retrying: " << mUrl << " mRetryAttempt " << mRetryAttempt << LL_ENDL;
+                            }
                             // cap failure? try on new region.
                             mUrl.clear();
                             ++mRetryAttempt;
@@ -1737,6 +1736,11 @@ bool LLTextureFetchWorker::doWork(S32 param)
                         return doWork(param);
                     }
                     // </FS:Ansariel>
+
+                    if (mFTType != FTT_MAP_TILE)
+                    {
+                        LL_WARNS(LOG_TXT) << "Texture missing from server (404): " << mUrl << LL_ENDL;
+                    }
                 }
                 else if (http_service_unavail == mGetStatus)
                 {
@@ -1922,7 +1926,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == DECODE_IMAGE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - DECODE_IMAGE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - DECODE_IMAGE"); //<FS:Beq/> fix incorrect category
         static LLCachedControl<bool> textures_decode_disabled(gSavedSettings, "TextureDecodeDisabled", false);
 
         if (textures_decode_disabled)
@@ -1962,7 +1966,10 @@ bool LLTextureFetchWorker::doWork(S32 param)
         mRawImage = NULL;
         mAuxImage = NULL;
         llassert_always(mFormattedImage.notNull());
-        S32 discard = mHaveAllData ? 0 : mLoadedDiscard;
+
+        // if we have the entire image data (and the image is not J2C), decode the full res image
+        // DO NOT decode a higher res j2c than was requested.  This is a waste of time and memory.
+        S32 discard = mHaveAllData && mFormattedImage->getCodec() != IMG_CODEC_J2C ? 0 : mLoadedDiscard;
         mDecoded  = false;
         setState(DECODE_IMAGE_UPDATE);
         LL_DEBUGS(LOG_TXT) << mID << ": Decoding. Bytes: " << mFormattedImage->getDataSize() << " Discard: " << discard
@@ -1988,7 +1995,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == DECODE_IMAGE_UPDATE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - DECODE_IMAGE_UPDATE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - DECODE_IMAGE_UPDATE"); //<FS:Beq/> fix incorrect category
         if (mDecoded)
         {
             mDecodeTime = mDecodeTimer.getElapsedTimeF32();
@@ -2029,7 +2036,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == WRITE_TO_CACHE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - WRITE_TO_CACHE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - WRITE_TO_CACHE"); //<FS:Beq/> fix incorrect category
         if (mWriteToCacheState != SHOULD_WRITE || mFormattedImage.isNull())
         {
             // If we're in a local cache or we didn't actually receive any new data,
@@ -2072,7 +2079,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == WAIT_ON_WRITE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - WAIT_ON_WRITE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - WAIT_ON_WRITE"); //<FS:Beq/> fix incorrect category
         if (writeToCacheComplete())
         {
             mCacheWriteTime = mCacheWriteTimer.getElapsedTimeF32();
@@ -2094,7 +2101,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
     if (mState == DONE)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - DONE");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - DONE"); //<FS:Beq/> fix incorrect category
         if (mDecodedDiscard >= 0 && mDesiredDiscard < mDecodedDiscard)
         {
             // More data was requested, return to INIT
@@ -2293,7 +2300,7 @@ bool LLTextureFetchWorker::deleteOK()
     // Allow any pending reads or writes to complete
     if (mCacheReadHandle != LLTextureCache::nullHandle())
     {
-        if (mFetcher->mTextureCache->readComplete(mCacheReadHandle, true))
+        if (!mFetcher->mTextureCache || mFetcher->mTextureCache->readComplete(mCacheReadHandle, true))
         {
             mCacheReadHandle = LLTextureCache::nullHandle();
         }
@@ -2304,7 +2311,7 @@ bool LLTextureFetchWorker::deleteOK()
     }
     if (mCacheWriteHandle != LLTextureCache::nullHandle())
     {
-        if (mFetcher->mTextureCache->writeComplete(mCacheWriteHandle))
+        if (!mFetcher->mTextureCache || mFetcher->mTextureCache->writeComplete(mCacheWriteHandle))
         {
             mCacheWriteHandle = LLTextureCache::nullHandle();
         }
@@ -2583,6 +2590,10 @@ void LLTextureFetchWorker::callbackDecoded(bool success, const std::string &erro
         mRawImage = raw;
         mAuxImage = aux;
         mDecodedDiscard = mFormattedImage->getDiscardLevel();
+        if (mDecodedDiscard < mDesiredDiscard)
+        {
+            LL_WARNS_ONCE(LOG_TXT) << "Decoded higher resolution than requested" << LL_ENDL;
+        }
         LL_DEBUGS(LOG_TXT) << mID << ": Decode Finished. Discard: " << mDecodedDiscard
                            << " Raw Image: " << llformat("%dx%d",mRawImage->getWidth(),mRawImage->getHeight()) << LL_ENDL;
     }
@@ -2748,7 +2759,7 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
     LL_PROFILE_ZONE_SCOPED;
     if (mDebugPause)
     {
-        return -1;
+        return CREATE_REQUEST_ERROR_DEFAULT;
     }
 
     if (f_type == FTT_SERVER_BAKE)
@@ -2764,7 +2775,7 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
                               << host << " != " << worker->mHost << LL_ENDL;
             removeRequest(worker, true);
             worker = NULL;
-            return -1;
+            return CREATE_REQUEST_ERROR_MHOSTS;
         }
     }
 
@@ -2817,13 +2828,13 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
     {
         if (worker->wasAborted())
         {
-            return -1; // need to wait for previous aborted request to complete
+            return CREATE_REQUEST_ERROR_ABORTED; // need to wait for previous aborted request to complete
         }
         worker->lockWorkMutex();                                        // +Mw
         if (worker->mState == LLTextureFetchWorker::DONE && worker->mDesiredSize == llmax(desired_size, TEXTURE_CACHE_ENTRY_SIZE) && worker->mDesiredDiscard == desired_discard) {
             worker->unlockWorkMutex();                                  // -Mw
 
-            return -1; // similar request has failed or is in a transitional state
+            return CREATE_REQUEST_ERROR_TRANSITION; // similar request has finished, failed or is in a transitional state
         }
         worker->mActiveCount++;
         worker->mNeedsAux = needs_aux;
@@ -3047,7 +3058,7 @@ LLTextureFetchWorker* LLTextureFetch::getWorker(const LLUUID& id)
 
 
 // Threads:  T*
-bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level,
+bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level, S32& worker_state,
                                         LLPointer<LLImageRaw>& raw, LLPointer<LLImageRaw>& aux,
                                         LLCore::HttpStatus& last_http_get_status)
 {
@@ -3056,6 +3067,7 @@ bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level,
     LLTextureFetchWorker* worker = getWorker(id);
     if (worker)
     {
+        worker_state = worker->mState;
         if (worker->wasAborted())
         {
             res = true;
@@ -3134,6 +3146,7 @@ bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level,
     }
     else
     {
+        worker_state = 0;
         res = true;
     }
     return res;
@@ -3844,6 +3857,43 @@ S32 LLTextureFetch::getFetchState(const LLUUID& id, F32& data_progress_p, F32& r
     fetch_dtime_p = fetch_dtime;
     request_dtime_p = request_dtime;
     return state;
+}
+
+// Threads:  T*
+S32 LLTextureFetch::getLastFetchState(const LLUUID& id, S32& requested_discard, S32& decoded_discard, bool& decoded)
+{
+    LL_PROFILE_ZONE_SCOPED;
+    S32 state = LLTextureFetchWorker::INVALID;
+
+    LLTextureFetchWorker* worker = getWorker(id);
+    if (worker) // Don't check haveWork, intent is to get whatever is in the worker
+    {
+        worker->lockWorkMutex();                                        // +Mw
+        state = worker->mState;
+        requested_discard = worker->mDesiredDiscard;
+        decoded_discard = worker->mDecodedDiscard;
+        decoded = worker->mDecoded;
+        worker->unlockWorkMutex();                                      // -Mw
+    }
+    return state;
+}
+
+// Threads:  T*
+S32 LLTextureFetch::getLastRawImage(const LLUUID& id,
+    LLPointer<LLImageRaw>& raw, LLPointer<LLImageRaw>& aux)
+{
+    LL_PROFILE_ZONE_SCOPED;
+    S32 decoded_discard = -1;
+    LLTextureFetchWorker* worker = getWorker(id);
+    if (worker && !worker->haveWork() && worker->mDecodedDiscard >= 0)
+    {
+            worker->lockWorkMutex();                                    // +Mw
+            raw = worker->mRawImage;
+            aux = worker->mAuxImage;
+            decoded_discard = worker->mDecodedDiscard;
+            worker->unlockWorkMutex();                                  // -Mw
+    }
+    return decoded_discard;
 }
 
 void LLTextureFetch::dump()

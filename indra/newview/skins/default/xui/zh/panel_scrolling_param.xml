@@ -6,5 +6,4 @@
 	<text name="Loading...2">
 		載入中...
 	</text>
-	<slider label="[DESC]" name="param slider"/>
 </panel>

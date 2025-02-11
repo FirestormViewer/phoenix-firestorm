@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Multi-Selected People Context Menu">
+	<menu_item_call label="加為朋友" name="Add Friends" />
+	<menu_item_call label="新增到聯絡人分組" name="Add to Set" />
+	<menu_item_call label="移除朋友" name="Remove Friend" />
+	<menu_item_call label="私聊" name="IM" />
+	<menu_item_call label="語音通話" name="Call" />
+	<menu name="MarkAvatar" label="標記">
+		<menu_item_call label="紅色" name="MarkRed" />
+		<menu_item_call label="綠色" name="MarkGreen" />
+		<menu_item_call label="藍色" name="MarkBlue" />
+		<menu_item_call label="紫色" name="MarkPurple" />
+		<menu_item_call label="黃色" name="MarkYellow" />
+		<menu_item_call label="清除標記" name="Clear Mark" />
+		<menu_item_call label="清除所有標記" name="Clear Marks" />
+	</menu>
+	<menu_item_call label="分享" name="Share" />
+	<menu_item_call label="支付" name="Pay" />
+	<menu_item_call label="傳送瞬間傳送邀請" name="teleport" />
+	<menu_item_call label="凍結" name="freeze" />
+	<menu_item_call label="從地塊踢出" name="eject" />
+	<menu_item_call label="從地產踢出" name="kick" />
+	<menu_item_call label="從地產傳送回家" name="teleport_home" />
+	<menu_item_call label="禁止進入地產" name="estate_ban" />
+	<menu_item_call label="隱藏" name="derender" />
+	<menu_item_call label="永久隱藏&amp;封鎖" name="derender_permanent" />
+	<menu label="彩現設定" name="render_settings">
+		<menu_item_call label="正常彩現" name="av_render_normal" />
+		<menu_item_call label="永不彩現" name="av_render_never" />
+		<menu_item_call label="始終完全綵現" name="av_render_always" />
+	</menu>
+</context_menu>

@@ -43,7 +43,8 @@
 				<combo_box.item value="filter_type_snapshots" label="Fotos" />
 				<combo_box.item value="filter_type_materials" label="Materialien" />
 				<combo_box.item value="filter_type_settings" label="Einstellungen" />
-				<combo_box.item value="filter_separator" label="------------" />
+				<combo_box.item value="filter_type_folders" label="Ordner" />
+				<combo_box.item value="filter_type_coalesced" label="Nur verbundene Objekte"/>
 				<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
 			</combo_box>
 			<menu_button name="options_visibility_btn" tool_tip="Sichtbarkeitseinstellungen für Suchergebnisse anzeigen"/>
@@ -66,6 +67,9 @@
 		</panel>
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Zusätzliches Inventar-Fenster"/>
+		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="Filter anzeigen - Zeigt Filter-Fenster wenn ausgewählt. Wird hervorgehoben, wenn ein Filter aktiv ist."/>
 		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="Zwischen Ansichten umschalten"/>

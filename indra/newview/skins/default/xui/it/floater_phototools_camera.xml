@@ -108,8 +108,8 @@
 					Sensibilità mouse
 				</text>
 				<button name="Reset_Mouse_Sensitivity" label="R" tool_tip="Ripristina valore"/>
-				<check_box label="Mostra avatar in mouselook" tool_tip="Mostra avatar e accessori dal collo in giù in modalità mouselook. Predefinito OFF" name="first_person_avatar_visible"/>
-				<check_box label="Addolcisce movimenti" tool_tip="Addolcisce i movimenti del mouse in modalità mouselook" name="MouseSmooth"/>
+				<check_box label="Mostra avatar in Mouselook" tool_tip="Mostra l'avatar e gli attachment dal collo in giù in modalità Mouselook (predefinito = off)." name="first_person_avatar_visible"/>
+				<check_box label="Addolcisci movimenti in Mouselook" tool_tip="Addolcisce i movimenti del mouse in modalità Mouselook." name="MouseSmooth"/>
 			</panel>
 			<panel name="P_Additional_Camera_Options">
 				<text name="T_Additional_Camera_Options">

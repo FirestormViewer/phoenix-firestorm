@@ -44,6 +44,8 @@
 				<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
 				<combo_box.item value="filter_type_materials" label="Materiały" />
 				<combo_box.item value="filter_type_settings" label="Otoczenia" />
+				<combo_box.item value="filter_type_folders" label="Foldery" />
+				<combo_box.item value="filter_type_coalesced" label="Tylko podniesione razem" />
 				<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 			</combo_box>
 			<menu_button tool_tip="Pokaż opcje widoczności wyszukiwania" name="options_visibility_btn" />
@@ -74,6 +76,9 @@
 			<button label="Rozwiń" name="expand_btn" tool_tip="Rozwiń wszystkie foldery" />
 		</panel>
 		<!-- / Used by StarLight skins -->
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="Pokaż filtry - Pokazuje menu boczne filtra po wybraniu. Podświetla się, gdy dowolny filtr jest aktywny." />
+		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="Przełącz między widokami" />
 		</panel>

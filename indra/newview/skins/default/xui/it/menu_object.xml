@@ -41,9 +41,9 @@
 	<menu_item_call label="De-rendi" name="Derender"/>
 	<menu_item_call label="De-rendi + lista nera" name="DerenderPermanent"/>
 	<menu_item_call label="Restituisci" name="Return..."/>
-	<context_menu label="Prendi oggetto" name="Take Submenu">
-		<menu_item_call label="Prendi" name="Pie Object Take" />
-		<menu_item_call label="Prendi copia" name="Take Copy" />
+	<menu_item_call label="Prendi" name="Pie Object Take" />
+	<menu_item_call label="Prendi copia" name="Take Copy" />
+	<context_menu label="Prendi più" name="Take Multiple">
 		<menu_item_call label="Prendi come multi-oggetto" name="Take combined" />
 		<menu_item_call label="Prendi copia come multi-oggetto" name="Take Copy combined" />
 		<menu_item_call label="Prendi come oggetti separati" name="Take Separate" />

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel">
+	<block_list name="blocked" tool_tip="當前被封鎖的居民列表" />
+	<text name="block_limit">
+		[COUNT] 個條目在您的封鎖列表中，限制為 [LIMIT]。
+	</text>
+	<layout_stack name="block_list_sidetray_main">
+		<layout_panel name="back_button_container">
+			<button tool_tip="傳回人群選單" name="back" />
+		</layout_panel>
+		<layout_panel name="block_list_blocklaypanels">
+			<layout_stack name="block_list_blocklaystack">
+				<layout_panel name="block_panels_btnsort">
+					<menu_button label="排序" name="view_btn" tool_tip="排序選項" />
+				</layout_panel>
+				<layout_panel name="block_panels_btnpersonobject">
+					<menu_button label="封鎖" name="plus_btn" tool_tip="選擇要封鎖的居民或物件" />
+				</layout_panel>
+				<layout_panel name="block_panels_btnunblock">
+					<button label="解除封鎖" name="unblock_btn" tool_tip="停止封鎖某個居民或物件" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

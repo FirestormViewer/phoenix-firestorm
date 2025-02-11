@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="庫存" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		正在取得庫存（[ITEM_COUNT] 項... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] 項 [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		已取得 [ITEM_COUNT] 項 [FILTER]
+	</panel.string>
+	<panel.string name="inventory_title">
+		庫存
+	</panel.string>
+	<menu_bar name="inventory_menu_bar">
+		<menu label="庫存" name="inventory_inventory_menu">
+			<menu_item_call name="inventory_open" label="打開" />
+			<menu_item_call name="inventory_share" label="分享" />
+			<menu_item_call name="replace_links" label="替換聯結" />
+			<menu_item_call name="inventory_new_window" label="新庫存視窗" />
+			<menu_item_check name="Protected Folders" label="受保護的檔案夾" />
+			<menu_item_check label="庫存設定..." name="inv_settings" />
+			<menu_item_check label="列表視圖" name="list_view" />
+			<menu_item_check label="圖片視圖" name="gallery_view" />
+			<menu_item_check label="組合視圖" name="combination_view" />
+			<menu_item_check name="add_inv_toggle" label="雙擊新增物件" />
+			<menu_item_check name="add_invclothing_toggle" label="雙擊新增服裝" />
+			<menu_item_call name="inventory_show_filters" label="顯示過濾器" />
+			<menu_item_call name="inventory_reset_filters" label="重設過濾器" />
+			<menu_item_call name="inventory_close_all_folders" label="摺疊所有檔案夾" />
+			<menu_item_call name="inventory_empty_trash" label="清空垃圾桶" />
+		</menu>
+		<menu label="建立" name="inventory_create_menu">
+			<menu_item_call name="inventory_new_folder" label="新檔案夾" />
+			<menu_item_call name="inventory_new_script" label="新指令碼" />
+			<menu_item_call name="inventory_new_note" label="新記事卡" />
+			<menu_item_call name="inventory_new_gesture" label="新手勢" />
+			<menu_item_call name="inventory_new_material" label="新材質" />
+			<menu name="inventory_new_clothes" label="新服裝">
+				<menu_item_call name="inventory_new_shirt" label="新襯衫" />
+				<menu_item_call name="inventory_new_pants" label="新褲子" />
+				<menu_item_call name="inventory_new_shoes" label="新鞋子" />
+				<menu_item_call name="inventory_new_socks" label="新襪子" />
+				<menu_item_call name="inventory_new_jacket" label="新外套" />
+				<menu_item_call name="inventory_new_skirt" label="新裙子" />
+				<menu_item_call name="inventory_new_gloves" label="新手套" />
+				<menu_item_call name="inventory_new_undershirt" label="新內衣" />
+				<menu_item_call name="inventory_new_underpants" label="新內褲" />
+				<menu_item_call name="inventory_new_tattoo" label="新刺青" />
+				<menu_item_call name="inventory_new_universal" label="新通用層" />
+				<menu_item_call name="inventory_new_alpha" label="新Alpha" />
+				<menu_item_call name="inventory_new_physics" label="新身體物理" />
+			</menu>
+			<menu name="inventory_new_body_parts" label="新身體部位">
+				<menu_item_call name="inventory_new_shape" label="新身形" />
+				<menu_item_call name="inventory_new_skin" label="新皮膚" />
+				<menu_item_call name="inventory_new_hair" label="新頭髮" />
+				<menu_item_call name="inventory_new_eyes" label="新眼睛" />
+			</menu>
+			<menu label="新環境設定" name="New Settings">
+				<menu_item_call label="新天空" name="New Sky" />
+				<menu_item_call label="新水文" name="New Water" />
+				<menu_item_call label="新晝夜循環" name="New Day Cycle" />
+			</menu>
+		</menu>
+		<!-- TODO: try to make these check items that actually reflect their state -Zi -->
+		<menu label="排序" name="inventory_sort_menu">
+			<menu_item_check name="inventory_sort_by_name" label="按名稱" />
+			<menu_item_check name="inventory_sort_by_date" label="按最新物件" />
+			<menu_item_check name="inventory_sort_folders_by_name" label="檔案夾始終按名稱排序" />
+			<menu_item_check name="inventory_sort_system_on_top" label="系統檔案夾置頂" />
+		</menu>
+		<menu label="搜尋" name="inventory_search_menu">
+			<menu_item_check name="inventory_search_by_name" label="按名稱" />
+			<menu_item_check name="inventory_search_by_creator" label="按創造者" />
+			<menu_item_check name="inventory_search_by_description" label="按描述" />
+			<menu_item_check name="inventory_search_by_uuid" label="按UUID" />
+			<menu_item_check name="inventory_search_by_all" label="全部搜尋" />
+			<menu_item_check name="inventory_filter_show_links" label="顯示聯結" />
+			<menu_item_check name="inventory_filter_only_links" label="僅顯示聯結" />
+			<menu_item_check name="inventory_filter_hide_links" label="隱藏聯結" />
+			<menu_item_check name="inventory_filter_only_modify" label="僅可修改" />
+			<menu_item_check name="inventory_filter_only_copy" label="僅可複製" />
+			<menu_item_check name="inventory_filter_only_transfer" label="僅可轉讓" />
+			<menu_item_check name="inventory_filter_coalesced_objects_only" label="僅合併物件" />
+		</menu>
+	</menu_bar>
+	<layout_stack name="top_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="後退" />
+			<button name="forward_btn" tool_tip="前進" />
+			<button name="up_btn" tool_tip="上一層" />
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="過濾庫存" name="inventory search editor" tool_tip="鍵入一個或多個用'+'分隔的單字進行搜尋" />
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="過濾器：" />
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="全部" />
+				<combo_box.item value="filter_type_animations" label="動畫" />
+				<combo_box.item value="filter_type_calling_cards" label="名片" />
+				<combo_box.item value="filter_type_clothing" label="服裝/身體部位" />
+				<combo_box.item value="filter_type_gestures" label="手勢" />
+				<combo_box.item value="filter_type_landmarks" label="地標" />
+				<combo_box.item value="filter_type_notecards" label="記事卡" />
+				<combo_box.item value="filter_type_objects" label="物件" />
+				<combo_box.item value="filter_type_scripts" label="指令碼" />
+				<combo_box.item value="filter_type_sounds" label="聲音" />
+				<combo_box.item value="filter_type_textures" label="紋理" />
+				<combo_box.item value="filter_type_snapshots" label="快照" />
+				<combo_box.item value="filter_type_materials" label="材質" />
+				<combo_box.item value="filter_type_settings" label="環境設定" />
+				<combo_box.item value="filter_type_folders" label="檔案夾" />
+				<combo_box.item value="filter_type_coalesced" label="僅合併物件"/>
+				<combo_box.item value="filter_type_custom" label="自訂..." />
+			</combo_box>
+			<menu_button name="options_visibility_btn" tool_tip="顯示搜尋結果的可見性設定" />
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="庫存" name="All Items"/>
+			<recent_inventory_panel label="最近" name="Recent Items" />
+			<worn_inventory_panel label="裝扮" name="Worn Items" />
+		</tab_container>
+	</panel>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button tool_tip="顯示額外選項" name="options_gear_btn" />
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="建立新檔案" />
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="新增庫存視窗" />
+		</panel>
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="切換視圖模式" />
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText" tool_tip="物件 [ITEMS]，檔案夾 [CATEGORIES]">
+				物件
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="刪除選定的物件" />
+		</panel>
+	</panel>
+</panel>

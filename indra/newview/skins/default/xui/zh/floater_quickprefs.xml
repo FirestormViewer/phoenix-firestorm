@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="quickprefs" title="快速設定" width="280">
+	<panel name="quickprefs" width="280">
+		<layout_stack name="options_stack" width="280" />
+		<layout_stack name="wl_options_stack" width="280">
+			<layout_panel name="wl_options_panel">
+				<text name="HoverHeightLabel" width="105" tool_tip="設定自己化身的懸浮高度。">
+					懸浮高度:
+				</text>
+				<slider name="HoverHeightSlider" />
+				<text name="Maximum bandwidth" width="105" tool_tip="設定網路使用的最大頻寬，單位為Kbps（千位元每秒）。">
+					最大頻寬:
+				</text>
+				<slider name="max_bandwidth" />
+				<text name="Maximum complexity" width="105" tool_tip="控制在何時下讓複雜化身渲染為「果凍娃娃」">
+					最大複雜度:
+				</text>
+				<slider name="IndirectMaxComplexity" right="-68" />
+				<text name="IndirectMaxComplexityText" width="60">
+					無限制
+				</text>
+				<text name="WL Sky" width="67" tool_tip="天空預設。">
+					天空:
+				</text>
+				<combo_box left_delta="77" name="WLPresetsCombo" />
+				<text name="WL Water" width="67" tool_tip="水面預設。">
+					水面:
+				</text>
+				<combo_box left_delta="77" name="WaterPresetsCombo" />
+				<text name="Day Cycle" width="67" tool_tip="晝夜循環預設。">
+					晝夜循環:
+				</text>
+				<combo_box left_delta="77" name="DCPresetsCombo" />
+				<button name="btn_personal_lighting" label="個人照明" width="227" />
+				<button name="ResetToRegionDefault" tool_tip="將環境設定重設為共享環境。" left="234" />
+				<button name="button_edit" tool_tip="設定快速設定" left="255" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="向上移動設定" />
+		<line_editor name="label_edit" tool_tip="顯示設定的文字" label="標籤:" width="205" />
+		<combo_box name="control_name_combo" tool_tip="從可用設定列表中選擇設定" width="245">
+			<combo_box.item label="== 選擇 ==" name="control_name_list_header" />
+		</combo_box>
+		<button name="move_down_button" tool_tip="向下移動設定" />
+		<button name="add_new_button" tool_tip="新增新設定" />
+		<text name="control_type_label">
+			類型:
+		</text>
+		<combo_box name="control_type_combo_box" tool_tip="確定用於此設定的控制項類型。" width="148">
+			<combo_box.item label="複選框" name="Checkbox" />
+			<combo_box.item label="文字" name="Text" />
+			<combo_box.item label="調節器" name="Spinner" />
+			<combo_box.item label="滾軸" name="Slider" />
+			<combo_box.item label="無線電鈕" name="Radio" />
+			<combo_box.item label="顏色3" name="Color 3" />
+			<combo_box.item label="顏色4" name="Color 4" />
+		</combo_box>
+		<check_box name="control_integer_checkbox" tool_tip="如果設定是整數值，即只有數字沒有小數點，則啟用" label="整數" />
+		<spinner name="control_min_edit" tool_tip="可以選擇的最小值" label="最小:" />
+		<spinner name="control_max_edit" tool_tip="可以選擇的最大值" label="最大:" />
+		<spinner name="control_increment_edit" tool_tip="點擊調節器的向上或向下箭頭時，值增加或減少的步長。" label="步長:" label_width="40" width="90" />
+		<button name="Restore_Btn" tool_tip="恢復預設設定" label="重設" />
+		<button name="button_close" tool_tip="結束編輯模式" />
+	</panel>
+</floater>

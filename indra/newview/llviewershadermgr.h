@@ -214,6 +214,7 @@ extern LLGLSLShader         gImpostorProgram;
 // Post Process Shaders
 extern LLGLSLShader         gPostScreenSpaceReflectionProgram;
 extern LLGLSLShader         gPostVignetteProgram;   // <FS:CR> Import Vignette from Exodus
+extern LLGLSLShader         gPostSnapshotFrameProgram;   // <FS:Beq/> Snapshot Frame overlay
 
 // Deferred rendering shaders
 extern LLGLSLShader         gDeferredImpostorProgram;
@@ -231,6 +232,7 @@ extern LLGLSLShader         gDeferredMultiLightProgram[LL_DEFERRED_MULTI_LIGHT_C
 extern LLGLSLShader         gDeferredSpotLightProgram;
 extern LLGLSLShader         gDeferredMultiSpotLightProgram;
 extern LLGLSLShader         gDeferredSunProgram;
+extern LLGLSLShader         gDeferredSunProbeProgram;
 extern LLGLSLShader         gHazeProgram;
 extern LLGLSLShader         gHazeWaterProgram;
 extern LLGLSLShader         gDeferredBlurLightProgram;
@@ -245,11 +247,17 @@ extern LLGLSLShader         gDeferredShadowFullbrightAlphaMaskProgram;
 extern LLGLSLShader         gDeferredPostProgram;
 extern LLGLSLShader         gDeferredCoFProgram;
 extern LLGLSLShader         gDeferredDoFCombineProgram;
-extern LLGLSLShader         gFXAAProgram;
+extern LLGLSLShader         gFXAAProgram[4];
+extern LLGLSLShader         gSMAAEdgeDetectProgram[4];
+extern LLGLSLShader         gSMAABlendWeightsProgram[4];
+extern LLGLSLShader         gSMAANeighborhoodBlendProgram[4];
+extern LLGLSLShader         gCASProgram;
 extern LLGLSLShader         gDeferredPostNoDoFProgram;
+extern LLGLSLShader         gDeferredPostNoDoFNoiseProgram;
 extern LLGLSLShader         gDeferredPostGammaCorrectProgram;
-extern LLGLSLShader         gNoPostGammaCorrectProgram;
 extern LLGLSLShader         gLegacyPostGammaCorrectProgram;
+extern LLGLSLShader         gDeferredPostTonemapProgram;
+extern LLGLSLShader         gNoPostTonemapProgram;
 extern LLGLSLShader         gExposureProgram;
 extern LLGLSLShader         gExposureProgramNoFade;
 extern LLGLSLShader         gLuminanceProgram;

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="庫存" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		正在取得庫存（[ITEM_COUNT] 項... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] 項 [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		已取得 [ITEM_COUNT] 項 [FILTER]
+	</panel.string>
+	<panel.string name="inventory_title">
+		庫存
+	</panel.string>
+	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="後退" />
+			<button name="forward_btn" tool_tip="前進" />
+			<button name="up_btn" tool_tip="上一層" />
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="過濾庫存" name="inventory search editor" tool_tip="鍵入一個或多個用'+'分隔的單字進行搜尋" />
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="collapse_expand_buttons">
+			<button name="collapse_btn" label="收起"/>
+			<button name="expand_btn" label="展開"/>
+		</layout_panel>
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="過濾器：" />
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="全部" />
+				<combo_box.item value="filter_type_animations" label="動畫" />
+				<combo_box.item value="filter_type_calling_cards" label="名片" />
+				<combo_box.item value="filter_type_clothing" label="服裝/身體部位" />
+				<combo_box.item value="filter_type_gestures" label="手勢" />
+				<combo_box.item value="filter_type_landmarks" label="地標" />
+				<combo_box.item value="filter_type_notecards" label="記事卡" />
+				<combo_box.item value="filter_type_objects" label="物件" />
+				<combo_box.item value="filter_type_scripts" label="指令碼" />
+				<combo_box.item value="filter_type_sounds" label="聲音" />
+				<combo_box.item value="filter_type_textures" label="紋理" />
+				<combo_box.item value="filter_type_snapshots" label="快照" />
+				<combo_box.item value="filter_type_materials" label="材質" />
+				<combo_box.item value="filter_type_settings" label="環境設定" />
+				<combo_box.item value="filter_type_folders" label="檔案夾" />
+				<combo_box.item value="filter_type_coalesced" label="僅合併物件"/>
+				<combo_box.item value="filter_type_custom" label="自訂..." />
+			</combo_box>
+			<menu_button name="options_visibility_btn" tool_tip="顯示搜尋結果的可見性設定" />
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="庫存" name="All Items"/>
+			<recent_inventory_panel label="最近" name="Recent Items" />
+			<worn_inventory_panel label="裝扮" name="Worn Items" />
+		</tab_container>
+	</panel>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button tool_tip="顯示額外選項" name="options_gear_btn" />
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="建立新檔案" />
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="新增庫存視窗" />
+		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="顯示過濾器 - 選取後會顯示過濾側邊選單。當啟用任何過濾器時會高亮顯示。"/>
+		</panel>
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="切換視圖模式" />
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText" tool_tip="物件 [ITEMS]，檔案夾 [CATEGORIES]">
+				物件
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="刪除選定的物件" />
+		</panel>
+	</panel>
+</panel>

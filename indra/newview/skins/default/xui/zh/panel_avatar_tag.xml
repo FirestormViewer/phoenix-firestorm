@@ -4,9 +4,8 @@
 		<text name="sender_tag_name">
 			Angela Tester
 		</text>
-		<text name="tag_time" value="23:30"/>
 	</panel>
 	<text_editor name="msg_text">
-		The quick brown fox jumps over the lazy dog.
+		棕色的靈活狐貍跳過懶惰的狗。
 	</text_editor>
 </panel>

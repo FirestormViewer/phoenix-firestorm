@@ -169,6 +169,7 @@
 //#include "llfloaterimnearbychat.h
 #include "fsfloaternearbychat.h"
 // <FS:Ansariel> [FS communication UI]
+#include "fsfloaterposer.h" // <FS:AR> [FIRE-30873]: Poser
 #include "llpanelblockedlist.h"
 #include "llpanelprofileclassifieds.h"
 #include "llpanelemojicomplete.h"
@@ -299,7 +300,7 @@ public:
                 "avatar_picker",
                 "camera",
                 "camera_presets",
-                "change_item_thumbnail"
+                "change_item_thumbnail",
                 "classified",
                 "add_landmark",
                 "delete_pref_preset",
@@ -635,6 +636,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("fs_posestand", "floater_fs_posestand.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoseStand>);
     LLFloaterReg::add("fs_partial_inventory", "floater_fs_partial_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPartialInventory>);
     LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
+    LLFloaterReg::add("fs_poser", "floater_fs_poser.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoser>); // <FS:AR> [FIRE-30873]: Poser
     LLFloaterReg::add("fs_protectedfolders", "floater_fs_protectedfolders.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterProtectedFolders>);
     LLFloaterReg::add("fs_radar", "floater_fs_radar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterRadar>);
     LLFloaterReg::add("fs_streamtitle", "floater_fs_streamtitle.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitle>);

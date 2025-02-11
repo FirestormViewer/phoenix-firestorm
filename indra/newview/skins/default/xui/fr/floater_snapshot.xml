@@ -25,6 +25,8 @@
 			<check_box label="Interface" name="ui_check"/>
 			<check_box label="Solde de L$" name="currency_check"/>
 			<check_box label="HUD" name="hud_check"/>
+			<check_box label="Afficher le cadre de la photo" tool_tip="Affiche un cadre à l'écran qui entoure la zones de la photo. Les parties de la scène qui se trouvent en dehors de la photo sont dé-saturées et légèrement floues." name="show_frame"/>
+			<check_box label="Afficher le guide de cadrage" tool_tip="Affiche le guide de cadrage (règle des tiers) à l'intérieur du cadre de la photo." name="show_guides"/>
 			<check_box label="Figer l'écran (plein écran)" name="freeze_frame_check"/>
 			<check_box label="Actualisation automatique" name="auto_snapshot_check"/>
 			<text name="filter_list_label">Filtre :</text>

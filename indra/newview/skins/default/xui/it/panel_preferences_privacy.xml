@@ -24,14 +24,15 @@
 			<check_box label="Mostra inviti per gruppi a cui ho già aderito" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="Chiudi il microfono automaticamente quando finisce la chiamata" name="auto_disengage_mic_check"/>
 			<check_box label="Permetti agli script di leggere la mia lingua" name="LanguageIsPublic"/>
-			<check_box label="Mostra i preferiti all&apos;accesso (nel menu &apos;Vai a&apos;)" name="favorites_on_login_check"/>
 			<check_box label="Accetta automaticamente oggetti nell&apos;inventario" name="Auto_Accept_New_Inventory"/>
 			<check_box label="Segnala oggetti accettati automaticamente nella chat locale" name="FSLogAutoAcceptInventoryToChat"/>
+			<check_box label="Mostra notifiche sui nuovi elementi anche con accettazione automatica" name="FSShowAutoAcceptInventoryInNotifications" />
 			<check_box label="Usa messaggi speciali per accettare/declinare" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se abilitato, il viewer invierà i messaggi accetta e declina solo dopo aver premuto il pulsante corrispondente. Se disattivato, la risposta &apos;Accettato&apos; verrà inviata automaticamente non appena l&apos;offerta d&apos;inventario è stata ricevuta. Questa opzione non ha effetto se le offerte d&apos;inventario sono accettate automaticamente."/>
 			<check_box label="Mostra automaticamente l&apos;oggetto ricevuto dopo averlo accettato" name="Show_In_Inventory"/>
 			<check_box label="Mostra automaticamente annotazioni, texture e segnaposto dopo averli accettati" name="Show_New_Inventory"/>
 			<check_box label="Mostra automaticamente le foto in inventario dopo lo scatto" name="FSOpenInventoryAfterSnapshot" />
 			<check_box label="Crea flusso di particelle quando si offre un&apos;oggetto ad un altro residente" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Mostra i preferiti all&apos;accesso (nel menu &apos;Vai a&apos;)" name="favorites_on_login_check"/>
 			<button label="Gestisci lista bloccati" name="block_list"/>
 		</panel>
 		<panel label="Log e Trascrizioni" name="tab-logging" >

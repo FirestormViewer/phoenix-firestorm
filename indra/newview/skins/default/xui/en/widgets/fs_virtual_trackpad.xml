@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<fs_virtual_trackball
+    name="virtualtrackpad"
+    width="150"
+    height="150"
+    pinch_mode="false"
+    image_sphere="VirtualTrackball_Sphere"
+    image_moon_back="VirtualTrackball_Moon_Back"
+    image_moon_front="VirtualTrackball_Moon_Front"
+    image_sun_back="VirtualTrackball_Sun_Back"
+    image_sun_front="VirtualTrackball_Sun_Front">
+
+    <fs_virtual_trackball.border
+        visible="true"/>
+
+</fs_virtual_trackball>
+

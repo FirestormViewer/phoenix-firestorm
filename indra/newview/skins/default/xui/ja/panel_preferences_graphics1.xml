@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="表示" name="Display panel">
-	<tab_container label="Graphics Prefs" name="tabs">
+	<tab_container label="グラフィック初期設定" name="tabs">
 		<!-- 一般 -->
 		<panel label="一般" name="General">
 			<text name="preset_label">

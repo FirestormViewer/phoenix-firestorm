@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<multi_floater name="script debug floater" title="腳本 警告/錯誤"/>
+<multi_floater name="script debug floater" title="指令碼 警告/錯誤" />

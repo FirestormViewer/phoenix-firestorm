@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="change_item_thumbnail" title="修改圖片">
+	<floater.string name="multiple_item_names">
+		已選擇多個檔案
+	</floater.string>
+	<floater.string name="title_item_thumbnail">
+		修改檔案圖片
+	</floater.string>
+	<floater.string name="title_folder_thumbnail">
+		修改檔案夾圖片
+	</floater.string>
+	<floater.string name="tooltip_upload_local">
+		從您的電腦上傳
+	</floater.string>
+	<floater.string name="tooltip_upload_snapshot">
+		拍攝相片
+	</floater.string>
+	<floater.string name="tooltip_use_texture">
+		選擇一個紋理
+	</floater.string>
+	<floater.string name="tooltip_copy_to_clipboard">
+		複製到剪貼簿
+	</floater.string>
+	<floater.string name="tooltip_paste_from_clipboard">
+		從剪貼簿黏貼
+	</floater.string>
+	<floater.string name="tooltip_remove_image">
+		刪除圖片
+	</floater.string>
+	<text name="multiple_lbl">
+		多個圖片
+	</text>
+	<text name="tooltip_text">
+		工具提示
+	</text>
+</floater>

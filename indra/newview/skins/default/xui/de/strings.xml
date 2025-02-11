@@ -1952,6 +1952,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Textures" value=" Texturen,"/>
 	<string name="Settings" value=" Einstellungen," />
 	<string name="Snapshots" value=" Fotos,"/>
+	<string name="Folders" value=" Ordner,"/>
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
 	<string name="Modifiable" value="Modifizierbar" />
@@ -6118,6 +6119,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Discord_Label">
 		Discord
 	</string>
+	<string name="Command_Poser_Label">
+		Poser
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6316,6 +6320,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Discord_Tooltip">
 		Discord
 	</string>
+	<string name="Command_Poser_Tooltip">
+		Eigenen Avatar und Animeshe posieren
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
 	</string>
@@ -6498,6 +6505,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Material Texture Name Header">
 		Vorhandene Texturen im Material:
+	</string>
+	<string name="material_selection_title">
+		Material-Auswahl
+	</string>
+	<string name="material_selection_text">
+		Material auswählen:
+	</string>
+	<string name="material_batch_import_text">
+		--- Alle hochladen ---
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Unterhaltungen werden nicht protokolliert. Um ein Protokoll zu starten, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Chat“.

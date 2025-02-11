@@ -551,9 +551,12 @@ public:
         static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
         if (debugShowMemory)
         {
+            auto rss = LLMemory::getCurrentRSS() / 1024;
             addText(xpos, ypos,
-                    STRINGIZE("Memory: " << (LLMemory::getCurrentRSS() / 1024) << " (KB)"));
+                    STRINGIZE("Memory: " << rss << " (KB)"));
             ypos += y_inc;
+            LL_PROFILE_PLOT("RSS", (int64_t)rss );
+            LL_PROFILE_PLOT("GL:", (int64_t)LLRenderTarget::sBytesAllocated );
         }
 
         if (gDisplayCameraPos)
@@ -2043,6 +2046,11 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     }
 
     LLFontManager::initClass();
+
+    // fonts use an GL_UNSIGNED_BYTE image format,
+    // so they need convertion, init buffers if needed
+    LLImageGL::allocateConversionBuffer();
+
     // Init font system, load default fonts and generate basic glyphs
     // currently it takes aprox. 0.5 sec and we would load these fonts anyway
     // before login screen.
@@ -4369,7 +4377,9 @@ void LLViewerWindow::updateKeyboardFocus()
     LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(gFocusMgr.getKeyboardFocus());
     if (cur_focus)
     {
-        if (!cur_focus->isInVisibleChain() || !cur_focus->isInEnabledChain())
+        bool is_in_visible_chain = cur_focus->isInVisibleChain();
+        bool is_in_enabled_chain = cur_focus->isInEnabledChain();
+        if (!is_in_visible_chain || !is_in_enabled_chain)
         {
             // don't release focus, just reassign so that if being given
             // to a sibling won't call onFocusLost on all the ancestors
@@ -4380,11 +4390,19 @@ void LLViewerWindow::updateKeyboardFocus()
             bool new_focus_found = false;
             while(parent)
             {
+                if (!is_in_visible_chain)
+                {
+                    is_in_visible_chain = parent->isInVisibleChain();
+                }
+                if (!is_in_enabled_chain)
+                {
+                    is_in_enabled_chain = parent->isInEnabledChain();
+                }
                 if (parent->isCtrl()
                     && (parent->hasTabStop() || parent == focus_root)
                     && !parent->getIsChrome()
-                    && parent->isInVisibleChain()
-                    && parent->isInEnabledChain())
+                    && is_in_visible_chain
+                    && is_in_enabled_chain)
                 {
                     if (!parent->focusFirstItem())
                     {
@@ -5131,7 +5149,7 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
                 // setup opengl common parameters before we iterate over each object
                 gGL.pushMatrix();
                 //Need to because crash on ATI 3800 (and similar cards) MAINT-5018
-                LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+                LLGLDisable multisample(LLPipeline::RenderFSAAType > 0 ? GL_MULTISAMPLE_ARB : 0);
                 LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
                 if (shader)
                 {
@@ -5347,15 +5365,15 @@ void LLViewerWindow::pickAsync( S32 x,
                                 bool pick_unselectable,
                                 bool pick_reflection_probes)
 {
+    static LLCachedControl<bool> select_invisible_objects(gSavedSettings, "SelectInvisibleObjects");
     // "Show Debug Alpha" means no object actually transparent
     bool in_build_mode = LLFloaterReg::instanceVisible("build");
-    if (LLDrawPoolAlpha::sShowDebugAlpha
-        || (in_build_mode && gSavedSettings.getBOOL("SelectInvisibleObjects")))
+    if (LLDrawPoolAlpha::sShowDebugAlpha || (in_build_mode && select_invisible_objects))
     {
         pick_transparent = true;
     }
 
-    LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, pick_rigged, false, pick_reflection_probes, pick_unselectable, true, callback);
+    LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, pick_rigged, false, pick_reflection_probes, true, pick_unselectable, callback);
     schedulePick(pick_info);
 }
 
@@ -5378,7 +5396,6 @@ void LLViewerWindow::schedulePick(LLPickInfo& pick_info)
     // until the pick triggered in handleMouseDown has been processed, for example
     mWindow->delayInputProcessing();
 }
-
 
 void LLViewerWindow::performPick()
 {
@@ -5413,8 +5430,9 @@ void LLViewerWindow::returnEmptyPicks()
 // Performs the GL object/land pick.
 LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot, bool pick_transparent, bool pick_rigged, bool pick_particle, bool pick_unselectable, bool pick_reflection_probe)
 {
+    static LLCachedControl<bool> select_invisible_objects(gSavedSettings, "SelectInvisibleObjects");
     bool in_build_mode = LLFloaterReg::instanceVisible("build");
-    if ((in_build_mode && gSavedSettings.getBOOL("SelectInvisibleObjects")) || LLDrawPoolAlpha::sShowDebugAlpha)
+    if ((in_build_mode && select_invisible_objects) || LLDrawPoolAlpha::sShowDebugAlpha)
     {
         // build mode allows interaction with all transparent objects
         // "Show Debug Alpha" means no object actually transparent
@@ -5422,7 +5440,7 @@ LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot, bool pick_transp
     }
 
     // shortcut queueing in mPicks and just update mLastPick in place
-    MASK    key_mask = gKeyboard->currentMask(true);
+    MASK key_mask = gKeyboard->currentMask(true);
     mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_rigged, pick_particle, pick_reflection_probe, true, false, NULL);
     mLastPick.fetchResults();
 
@@ -6558,8 +6576,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     LLViewerCamera* camera = LLViewerCamera::getInstance();
 
     LLViewerCamera saved_camera = LLViewerCamera::instance();
-    glh::matrix4f saved_proj = get_current_projection();
-    glh::matrix4f saved_mod = get_current_modelview();
+    glm::mat4 saved_proj = get_current_projection();
+    glm::mat4 saved_mod = get_current_modelview();
 
     camera->disconnectCameraAngleSignal();  // <FS:Zi> disconnect the "CameraAngle" changed signal
 
@@ -6577,6 +6595,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
         previousClipPlane = camera->getUserClipPlane();
         camera->setUserClipPlane(clipPlane);
     }
+
+    gPipeline.pushRenderTypeMask();
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT); // stencil buffer is deprecated | GL_STENCIL_BUFFER_BIT);
 
@@ -6666,16 +6686,7 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
         }
     }
 
-    if (!dynamic_render)
-    {
-        for (int i = 0; i < dynamic_render_type_count; ++i)
-        {
-            if (prev_dynamic_render_type[i])
-            {
-                gPipeline.toggleRenderType(dynamic_render_types[i]);
-            }
-        }
-    }
+    gPipeline.popRenderTypeMask();
 
     if (hide_hud)
     {
@@ -7370,14 +7381,14 @@ LLPickInfo::LLPickInfo(const LLCoordGL& mouse_pos,
     bool pick_rigged,
     bool pick_particle,
     bool pick_reflection_probe,
-    bool pick_uv_coords,
+    bool pick_surface_info,
     bool pick_unselectable,
     void (*pick_callback)(const LLPickInfo& pick_info))
     : mMousePt(mouse_pos),
     mKeyMask(keyboard_mask),
     mPickCallback(pick_callback),
     mPickType(PICK_INVALID),
-    mWantSurfaceInfo(pick_uv_coords),
+    mWantSurfaceInfo(pick_surface_info),
     mObjectFace(-1),
     mUVCoords(-1.f, -1.f),
     mSTCoords(-1.f, -1.f),

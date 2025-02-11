@@ -922,11 +922,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3f66914b7931a7e45b50c9f947eed3d1</string>
+              <string>ff3057e8763bdbe87a478a3d77067b5a</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.20-darwin64-240390127.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.26-darwin64-243641704.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -936,11 +936,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bbb978f21e690599aedcd44658dceeaf</string>
+              <string>41265f539399e365601a22d108287e91</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.20-linux64-240390132.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.26-linux64-243641703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -950,11 +950,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8672d21ae8382a5526f0e17358de8575</string>
+              <string>595e7aa51f2161b8d11c3afcc88e2197</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.20-windows64-240381643.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.26-windows64-243641704.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1817,9 +1817,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9f70048bed4c3fc487bee9e9f4276037</string>
+              <string>9520266bd701bddeaa1982c40f11220c</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.11371371972-darwin64-11371371972.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.12401597145-darwin64-12401597145.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1841,9 +1841,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>31daa8f133168cc9ab500aa3a235b63c</string>
+              <string>ab4b9d3ff7b6b53f1ab6d9d3bef012da</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.11371371972-windows64-11371371972.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.12401597145-windows64-12401597145.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2386,11 +2386,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c16deaf773cb2a5d001732122ee3ec74db1dceeb</string>
+              <string>76444e37be0cfccdbb5921370ba150ded2bf3c59</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.0.ea12248/openjpeg-2.5.0.ea12248-darwin64-ea12248.tar.zst</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.2-r1/openjpeg-2.5.2.10604495243-darwin64-10604495243.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2400,11 +2400,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8c277dde6076fb682cb07264dd70f6f2298b633f</string>
+              <string>6bd289a9c4564b80369ce40ecbb24a213c2732ff</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.0.ea12248/openjpeg-2.5.0.ea12248-linux64-ea12248.tar.zst</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.2-r1/openjpeg-2.5.2.10604495243-linux64-10604495243.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2414,11 +2414,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2abf9535adf21ebdf2295f8a680300432abe6280</string>
+              <string>5e6e0180adc01e07438cb98daec96543b5d85019</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.0.ea12248/openjpeg-2.5.0.ea12248-windows64-ea12248.tar.zst</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.2-r1/openjpeg-2.5.2.10604495243-windows64-10604495243.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2496,6 +2496,68 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>openssl</string>
         <key>description</key>
         <string>Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) Library</string>
+      </map>
+      <key>openxr</key>
+      <map>
+        <key>platforms</key>
+        <map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>3cccc3e3f3137066c286270b35abc00ee0c0bb0c</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/3p-openxr/releases/download/v1.1.40-r1/openxr-1.1.40-r1-windows64-10710818432.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f0ad0418a98fb8cb6e158fca3902c15ac1de9d2a</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/3p-openxr/releases/download/v1.1.40-r1/openxr-1.1.40-r1-linux64-10710818432.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a9bfabec63a987bd34bcfdc295b928bd0696e1d7</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/3p-openxr/releases/download/v1.1.40-r1/openxr-1.1.40-r1-darwin64-10710818432.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+        <key>license</key>
+        <string>Apache 2.0</string>
+        <key>license_file</key>
+        <string>LICENSES/openxr.txt</string>
+        <key>copyright</key>
+        <string>Copyright 2017-2024, The Khronos Group Inc.</string>
+        <key>version</key>
+        <string>1.1.40-r1</string>
+        <key>name</key>
+        <string>openxr</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-openxr</string>
+        <key>description</key>
+        <string>Generated headers and sources for OpenXR loader.</string>
       </map>
       <key>pcre</key>
       <map>
@@ -4131,7 +4193,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       <key>license_file</key>
       <string>docs/LICENSE-source.txt</string>
       <key>copyright</key>
-      <string>Copyright (c) 2024, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2025, The Phoenix Firestorm Project, Inc.</string>
       <key>version_file</key>
       <string>newview/viewer_version.txt</string>
       <key>name</key>

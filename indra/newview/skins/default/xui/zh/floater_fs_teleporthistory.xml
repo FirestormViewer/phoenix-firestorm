@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_tphistory" title="瞬間傳送列表">
+	<filter_editor label="過濾瞬間傳送列表" name="Filter" />
+	<menu_button tool_tip="顯示選項" name="options_gear_btn" />
+	<menu_button tool_tip="顯示排序選項" name="sorting_menu_btn" />
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="瞬間傳送" name="teleport_btn" tool_tip="瞬間傳送到所選位置" />
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="地圖" name="map_btn" tool_tip="在地圖上顯示相應位置" />
+					</layout_panel>
+					<layout_panel name="profile_btn_lp">
+						<button label="個人資料" name="profile_btn" tool_tip="顯示位置概要" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

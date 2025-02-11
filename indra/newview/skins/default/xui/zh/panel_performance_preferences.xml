@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">
+		傳回
+	</text>
+	<text name="settings_title">
+		圖形設定
+	</text>
+	<button label="打開進階設定" name="advanced_btn" />
+	<button label="重設為推薦設定" name="defaults_btn" />
+	<text name="best_quality_lbl">
+		品質/速度
+	</text>
+	<text name="fastest_lbl">
+		最快速度
+	</text>
+	<text name="quality_lbl">
+		最佳品質
+	</text>
+	<text name="quality_desc">
+		選擇快捷設定會重設所有手動調整。
+	</text>
+	<text name="distance_lbl">
+		距離可見性
+	</text>
+	<text name="faster_lbl">
+		更快
+	</text>
+	<text name="farther_lbl">
+		更遠
+	</text>
+	<text name="distance_desc1">
+		要在放大時看到更多地方，請拉大距離。
+	</text>
+	<text name="environment_lbl">
+		陰影
+	</text>
+	<text name="enhancements_desc">
+		陰影能大大提高視覺效果，但會降低速度。
+	</text>
+	<text name="RenderShadowDetailText">
+		陰影細節：
+	</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="無" name="0" />
+		<combo_box.item label="太陽/月亮" name="1" />
+		<combo_box.item label="太陽/月亮 + 投影機" name="2" />
+	</combo_box>
+	<text name="water_lbl">
+		水文
+	</text>
+	<text name="water_desc">
+		降低水文品質可以顯著提高影格率。
+	</text>
+	<check_box label="清澈透明的水" name="TransparentWater" />
+	<text name="photo_lbl">
+		攝影
+	</text>
+	<text name="photo_desc">
+		攝影需要高品質，但通常會犧牲效能。
+	</text>
+	<spinner label="距離細節:" name="render_volume_lod" />
+	<text name="photo_dist_det_desc">
+		(請輸入0.0到4.0之間的值)
+	</text>
+</panel>

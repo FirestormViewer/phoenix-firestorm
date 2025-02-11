@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="outgoing call" title="打電話">
+<floater name="outgoing call" title="呼叫">
 	<floater.string name="lifetime">
 		5
 	</floater.string>
@@ -16,13 +16,13 @@
 		已加入多方語音通話。
 	</floater.string>
 	<text name="connecting">
-		正在連通 [CALLEE_NAME]
+		正在連線 [CALLEE_NAME]
 	</text>
 	<text name="calling">
-		正在打給 [CALLEE_NAME]
+		正在呼叫 [CALLEE_NAME]
 	</text>
 	<text name="noanswer">
-		無人接聽。  請稍候再試一次。
+		無人接聽。請稍候再試一次。
 	</text>
 	<text name="nearby">
 		你的 [VOICE_CHANNEL_NAME] 通話已經中斷。  [RECONNECT_NEARBY]
@@ -31,10 +31,10 @@
 		你的通話已經結束。  [RECONNECT_NEARBY]
 	</text>
 	<text name="nearby_P2P_by_agent">
-		你已經結束通話。  [RECONNECT_NEARBY]
+		你已經掛斷。  [RECONNECT_NEARBY]
 	</text>
 	<text name="leaving">
 		離開 [CURRENT_CHAT]。
 	</text>
-	<button label="取消" label_selected="取消" name="Cancel"/>
+	<button label="取消" label_selected="取消" name="Cancel" />
 </floater>

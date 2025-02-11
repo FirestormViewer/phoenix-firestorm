@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview lsl text" title="腳本：旋轉腳本">
+<floater name="preview lsl text" title="指令碼：旋轉指令碼">
 	<floater.string name="Title">
-		腳本：[NAME]
+		指令碼：[NAME]
 	</floater.string>
+	<text name="path_txt" tool_tip="庫存位置: [PATH]">
+		庫存位置: [PATH]
+	</text>
 	<text name="desc txt">
 		描述：
 	</text>

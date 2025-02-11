@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_export_collada" title="另存為 Collada 格式...">
+	<floater.string name="texture_progress">
+		正在儲存 [OBJECT] 為 Collada 格式：正在儲存紋理（剩餘 [COUNT] 個）
+	</floater.string>
+	<floater.string name="floater_title">
+		正在儲存 [OBJECT] 為 Collada 格式...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="ObjectInfoText">
+				物件屬性
+			</text>
+			<text name="NameText">
+				名稱: [NAME]
+			</text>
+			<text name="exportable_prims">
+				可匯出的元素: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				可匯出的紋理: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				選項:
+			</text>
+			<check_box label="儲存紋理" name="export_textures_check" />
+			<check_box label="合併紋理" name="consolidate_check" />
+			<check_box label="跳過透明紋理" name="skip_transparent_check" />
+			<check_box label="應用紋理參數" name="texture_params_check" />
+			<check_box label="獨立 UV 對映" name="single_uv_map_check" />
+			<text name="TextureFormatText">
+				紋理格式：
+			</text>
+			<button label="另存為..." name="export_btn" />
+		</layout_panel>
+	</layout_stack>
+</floater>

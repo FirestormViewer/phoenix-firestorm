@@ -1876,6 +1876,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Textures" value=" Tekstury,"/>
 	<string name="Settings" value=" Otoczenia," />
 	<string name="Snapshots" value=" Zdjęcia,"/>
+	<string name="Folders" value=" Foldery,"/>
 	<string name="No Filters" value="Nie "/>
 	<string name="Since Logoff" value=" - od wylogowania"/>
 	<string name="Modifiable" value="Modyfikowalne" />
@@ -2836,7 +2837,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		należący do nieznanego właściciela
 	</string>
 	<string name="InvOfferGaveYou">
-		dał Ci
+		dał/a Ci
 	</string>
 	<string name="InvOfferYouDecline">
 		Odrzucono
@@ -2846,6 +2847,12 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="InvOfferFrom">
 		od
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		Obiekt o nazwie [OBJECT_NAME] dał Ci [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] dał/a Ci [OBJECT_TYPE]: [DESC]
 	</string>
 	<string name="GroupMoneyTotal">
 		Suma
@@ -5486,6 +5493,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Beacons_Label">
 		Emitery
 	</string>
+	<string name="Command_Poser_Label">
+		Pozer
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Ustaw swojego awatara oraz animowane obiekty
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Uchwyć równoprostokątny obraz 360°
 	</string>
@@ -5968,6 +5981,15 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Material Texture Name Header">
 		Tekstury przedstawiają materiał:
+	</string>
+	<string name="material_selection_title">
+		Wybór materiału
+	</string>
+	<string name="material_selection_text">
+		Wybierz materiał:
+	</string>
+	<string name="material_batch_import_text">
+		--- Prześlij zbiorczo ---
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.

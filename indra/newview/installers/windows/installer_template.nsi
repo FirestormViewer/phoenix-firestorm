@@ -63,7 +63,7 @@ Unicode true                # Enable unicode support
 ##!include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
 ##!include "%%SOURCE%%\installers\windows\lang_tr.nsi"
-##!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
+!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
 # *TODO: Move these into the language files themselves
 ##LangString LanguageCode ${LANG_DANISH}   "da"
@@ -77,7 +77,7 @@ LangString LanguageCode ${LANG_POLISH}   "pl"
 ##LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
 LangString LanguageCode ${LANG_RUSSIAN}  "ru"
 ##LangString LanguageCode ${LANG_TURKISH}  "tr"
-##LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
+LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
 
 # This placeholder is replaced by viewer_manifest.py
 %%INST_VARS%%
@@ -238,13 +238,21 @@ Function CheckCPUFlagsAVX2
     System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
     IntCmp $1 1 OK_AVX2
     ; AVX2 not supported
-    ; Prepare the URL by concatenating '-legacy-cpus' to $DL_URL
-    StrCpy $2 "${DL_URL}"
-    StrCpy $2 "-legacy-cpus" /APPEND    
     ; Replace %DLURL% in the language string with the URL
-    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "$2" "+*" $3
-    MessageBox MB_OK "$3"    
-    ${OpenURL} '$2'
+    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
+    MessageBox MB_OK "$3"
+    ${OpenURL} "${DL_URL}-legacy-cpus"
+
+    MessageBox MB_YESNO $(AVX2OverrideConfirmation) IDNO NoInstall
+    MessageBox MB_OKCANCEL $(AVX2OverrideNote) IDCANCEL NoInstall
+
+    ; User chose to proceed
+    Pop $3
+    Pop $2
+    Pop $1
+    Return
+
+  NoInstall:
     Quit
 
   OK_AVX2:
@@ -267,7 +275,7 @@ Function CheckCPUFlagsAVX2_Prompt
 
     MessageBox MB_YESNO $3 IDYES DownloadAVX2 IDNO ContinueInstall
     DownloadAVX2:
-      ${OpenURL} '$3'
+      ${OpenURL} '${DL_URL}'
       Quit
     ContinueInstall:
       Pop $3
@@ -582,7 +590,7 @@ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}
 # <FS:Ansariel> Separate install sizes for 32 and 64 bit
 #WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x0001D500"		# ~117 MB
 ${If} ${IS64BIT} == "1"
-  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00064000"		# 400 MB
+  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00098800"		# 610 MB
 ${Else}
   WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00061800"		# 390 MB
 ${EndIf}

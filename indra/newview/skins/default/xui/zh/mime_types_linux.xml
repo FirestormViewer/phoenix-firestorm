@@ -30,18 +30,18 @@
 			有一個圖像在此位置
 		</tooltip>
 		<playtip name="image_playtip">
-			察看這個位置的圖像
+			檢視這個位置的圖像
 		</playtip>
 	</widgetset>
 	<widgetset name="audio">
 		<label name="audio_label">
-			音頻
+			音訊
 		</label>
 		<tooltip name="audio_tooltip">
-			有一個音頻在此位置
+			有一個音訊在此位置
 		</tooltip>
 		<playtip name="audio_playtip">
-			播放這個位置的音頻
+			播放這個位置的音訊
 		</playtip>
 	</widgetset>
 	<widgetset name="none">
@@ -54,7 +54,7 @@
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
-			即時串流
+			流式傳輸
 		</label>
 	</scheme>
 	<mimetype name="blank">
@@ -69,7 +69,7 @@
 	</mimetype>
 	<mimetype name="audio/*">
 		<label name="audio2_label">
-			音頻
+			音訊
 		</label>
 	</mimetype>
 	<mimetype name="video/*">
@@ -84,27 +84,22 @@
 	</mimetype>
 	<mimetype name="video/vnd.secondlife.qt.legacy">
 		<label name="vnd.secondlife.qt.legacy_label">
-			視頻（QuickTime）
-		</label>
-	</mimetype>
-	<mimetype name="application/javascript">
-		<label name="application/javascript_label">
-			Javascript
+			影片（QuickTime）
 		</label>
 	</mimetype>
 	<mimetype name="application/ogg">
 		<label name="application/ogg_label">
-			Ogg 音頻/視頻
+			Ogg 音訊/影片
 		</label>
 	</mimetype>
 	<mimetype name="application/pdf">
 		<label name="application/pdf_label">
-			PDF 文件
+			PDF 檔案
 		</label>
 	</mimetype>
 	<mimetype name="application/postscript">
 		<label name="application/postscript_label">
-			Postscript 文件
+			Postscript 檔案
 		</label>
 	</mimetype>
 	<mimetype name="application/rtf">
@@ -127,24 +122,29 @@
 			Macromedia Director
 		</label>
 	</mimetype>
+	<mimetype name="application/octet-stream">
+		<label name="application/octet-stream_label">
+			流式傳輸
+		</label>
+	</mimetype>
 	<mimetype name="audio/mid">
 		<label name="audio/mid_label">
-			音頻（MIDI）
+			音訊（MIDI）
 		</label>
 	</mimetype>
 	<mimetype name="audio/mpeg">
 		<label name="audio/mpeg_label">
-			音頻（MP3）
+			音訊（MP3）
 		</label>
 	</mimetype>
 	<mimetype name="audio/x-aiff">
 		<label name="audio/x-aiff_label">
-			音頻（AIFF）
+			音訊（AIFF）
 		</label>
 	</mimetype>
 	<mimetype name="audio/x-wav">
 		<label name="audio/x-wav_label">
-			音頻（WAV）
+			音訊（WAV）
 		</label>
 	</mimetype>
 	<mimetype name="image/bmp">
@@ -187,39 +187,39 @@
 			文字
 		</label>
 	</mimetype>
-	<mimetype name="text/xml">
-		<label name="text/xml_label">
-			XML
-		</label>
-	</mimetype>
 	<mimetype name="video/mpeg">
 		<label name="video/mpeg_label">
-			視頻（MPEG）
+			影片（MPEG）
 		</label>
 	</mimetype>
 	<mimetype name="video/mp4">
 		<label name="video/mp4_label">
-			視頻（MP4）
+			影片（MP4）
+		</label>
+	</mimetype>
+	<mimetype name="video/x-flv">
+		<label name="video/x-flv_label">
+			影片 (flv)
 		</label>
 	</mimetype>
 	<mimetype name="video/quicktime">
 		<label name="video/quicktime_label">
-			視頻（QuickTime）
+			影片（QuickTime）
 		</label>
 	</mimetype>
 	<mimetype name="video/x-ms-asf">
 		<label name="video/x-ms-asf_label">
-			視頻（Windows Media ASF）
+			影片（Windows Media ASF）
 		</label>
 	</mimetype>
 	<mimetype name="video/x-ms-wmv">
 		<label name="video/x-ms-wmv_label">
-			視頻（Windows Media WMV）
+			影片（Windows Media WMV）
 		</label>
 	</mimetype>
 	<mimetype name="video/x-msvideo">
 		<label name="video/x-msvideo_label">
-			視頻（AVI）
+			影片（AVI）
 		</label>
 	</mimetype>
 </mimetypes>

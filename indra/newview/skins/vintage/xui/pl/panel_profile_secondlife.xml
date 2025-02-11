@@ -43,6 +43,16 @@ Urodziny: [REG_DATE]
 			<icon tool_tip="Znajomy nie może edytować moich obiektów" name="cant_edit_objects" />
 			<text_editor name="user_age" value="(ładowanie...)" />
 			<text name="label2" value="Konto:" />
+			<panel name="badge_layout">
+				<layout_stack name="badge_stacker">
+					<layout_panel name="top_badge_layout">
+						<icon name="top_badge_icon" tool_tip="Pracownik Linden Lab" />
+					</layout_panel>
+					<layout_panel name="bottom_badge_layout">
+						<icon name="bottom_badge_icon" tool_tip="Pracownik Linden Lab" />
+					</layout_panel>
+				</layout_stack>
+			</panel>
 		</layout_panel>
 	</layout_stack>
 	<text name="Groups:" value="Grupy:" />

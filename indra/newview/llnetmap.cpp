@@ -213,7 +213,6 @@ bool LLNetMap::postBuild()
     commitRegistrar.add("Minimap.StartTracking", boost::bind(&LLNetMap::handleStartTracking, this));
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
     commitRegistrar.add("Minimap.ShowProfile", boost::bind(&LLNetMap::handleShowProfile, this, _2));
-    commitRegistrar.add("Minimap.TextureType", boost::bind(&LLNetMap::handleTextureType, this, _2));
     commitRegistrar.add("Minimap.ToggleOverlay", boost::bind(&LLNetMap::handleOverlayToggle, this, _2));
 
     commitRegistrar.add("Minimap.AddFriend", boost::bind(&LLNetMap::handleAddFriend, this));
@@ -238,9 +237,6 @@ bool LLNetMap::postBuild()
     commitRegistrar.add("Minimap.EstateBan", boost::bind(&LLNetMap::handleEstateBan, this));
     commitRegistrar.add("Minimap.Derender", boost::bind(&LLNetMap::handleDerender, this, false));
     commitRegistrar.add("Minimap.DerenderPermanent", boost::bind(&LLNetMap::handleDerender, this, true));
-
-    enableRegistrar.add("Minimap.CheckTextureType", boost::bind(&LLNetMap::checkTextureType, this, _2));
-
     enableRegistrar.add("Minimap.CanAddFriend", boost::bind(&LLNetMap::canAddFriend, this));
     enableRegistrar.add("Minimap.CanRemoveFriend", boost::bind(&LLNetMap::canRemoveFriend, this));
     enableRegistrar.add("Minimap.CanCall", boost::bind(&LLNetMap::canCall, this));
@@ -458,98 +454,26 @@ void LLNetMap::draw()
                 gGL.color4f(1.f, 0.5f, 0.5f, 1.f);
             }
 
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
-            static LLCachedControl<bool> s_fUseWorldMapTextures(gSavedSettings, "MiniMapWorldMapTextures") ;
-            bool fRenderTerrain = true;
-
-            if (s_fUseWorldMapTextures)
+            // Draw using texture.
+            gGL.getTexUnit(0)->bind(regionp->getLand().getSTexture());
+            gGL.begin(LLRender::TRIANGLES);
             {
-                const LLViewerRegion::tex_matrix_t& tiles(regionp->getWorldMapTiles());
-                for (S32 i(0), scaled_width((S32)(real_width / region_width)), square_width(scaled_width * scaled_width);
-                    i < square_width; ++i)
-                {
-                    const F32 y = (F32)(i / scaled_width);
-                    const F32 x = (F32)(i - y * scaled_width);
-                    const F32 local_left(left + x * mScale);
-                    const F32 local_right(local_left + mScale);
-                    const F32 local_bottom(bottom + y * mScale);
-                    const F32 local_top(local_bottom + mScale);
-                    LLViewerTexture* pRegionImage = tiles[(U64)(x * scaled_width + y)];
-                    if (pRegionImage)
-                    {
-                        // Ansariel: Map texture ends up without GLTexture after a teleport.
-                        //           Simply calling createGLTexture() should be fine here
-                        //           because the same method is called in getSTexture() in
-                        //           the render terrain path if for some reason no
-                        //           GLTexture exists.
-                        if (!pRegionImage->hasGLTexture() && !pRegionImage->createGLTexture())
-                        {
-                            continue;
-                        }
+                gGL.texCoord2f(0.f, 1.f);
+                gGL.vertex2f(left, top);
+                gGL.texCoord2f(0.f, 0.f);
+                gGL.vertex2f(left, bottom);
+                gGL.texCoord2f(1.f, 0.f);
+                gGL.vertex2f(right, bottom);
 
-                        gGL.getTexUnit(0)->bind(pRegionImage);
-                        gGL.begin(LLRender::TRIANGLES);
-                        {
-                            gGL.texCoord2f(0.f, 1.f);
-                            gGL.vertex2f(local_left, local_top);
-                            gGL.texCoord2f(0.f, 0.f);
-                            gGL.vertex2f(local_left, local_bottom);
-                            gGL.texCoord2f(1.f, 0.f);
-                            gGL.vertex2f(local_right, local_bottom);
-
-                            gGL.texCoord2f(0.f, 1.f);
-                            gGL.vertex2f(local_left, local_top);
-                            gGL.texCoord2f(1.f, 0.f);
-                            gGL.vertex2f(local_right, local_bottom);
-                            gGL.texCoord2f(1.f, 1.f);
-                            gGL.vertex2f(local_right, local_top);
-                        }
-                        gGL.end();
-
-                        pRegionImage->setBoostLevel(LLViewerTexture::BOOST_MAP_VISIBLE);
-                        fRenderTerrain = false;
-                    }
-                }
+                gGL.texCoord2f(0.f, 1.f);
+                gGL.vertex2f(left, top);
+                gGL.texCoord2f(1.f, 0.f);
+                gGL.vertex2f(right, bottom);
+                gGL.texCoord2f(1.f, 1.f);
+                gGL.vertex2f(right, top);
             }
-// [/SL:KB]
+            gGL.end();
 
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
-            if (fRenderTerrain)
-            {
-// [/SL:KB]
-                // Draw using texture.
-                gGL.getTexUnit(0)->bind(regionp->getLand().getSTexture());
-                // <FS:Ansariel> Remove QUADS rendering mode
-                //gGL.begin(LLRender::QUADS);
-                //  gGL.texCoord2f(0.f, 1.f);
-                //  gGL.vertex2f(left, top);
-                //  gGL.texCoord2f(0.f, 0.f);
-                //  gGL.vertex2f(left, bottom);
-                //  gGL.texCoord2f(1.f, 0.f);
-                //  gGL.vertex2f(right, bottom);
-                //  gGL.texCoord2f(1.f, 1.f);
-                //  gGL.vertex2f(right, top);
-                //gGL.end();
-                gGL.begin(LLRender::TRIANGLES);
-                {
-                    gGL.texCoord2f(0.f, 1.f);
-                    gGL.vertex2f(left, top);
-                    gGL.texCoord2f(0.f, 0.f);
-                    gGL.vertex2f(left, bottom);
-                    gGL.texCoord2f(1.f, 0.f);
-                    gGL.vertex2f(right, bottom);
-
-                    gGL.texCoord2f(0.f, 1.f);
-                    gGL.vertex2f(left, top);
-                    gGL.texCoord2f(1.f, 0.f);
-                    gGL.vertex2f(right, bottom);
-                    gGL.texCoord2f(1.f, 1.f);
-                    gGL.vertex2f(right, top);
-                }
-                gGL.end();
-                // </FS:Ansariel>
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
-            }
             gGL.flush();
         }
 
@@ -636,18 +560,8 @@ void LLNetMap::draw()
             gGL.color4f(1.f, 1.f, 1.f, 1.f);
             gGL.getTexUnit(0)->bind(mObjectImagep);
 // [/SL:KB]
-            // <FS:Ansariel> Remove QUADS rendering mode
-            //gGL.begin(LLRender::QUADS);
-            //  gGL.texCoord2f(0.f, 1.f);
-            //  gGL.vertex2f(map_center_agent.mV[VX] - image_half_width, image_half_height + map_center_agent.mV[VY]);
-            //  gGL.texCoord2f(0.f, 0.f);
-            //  gGL.vertex2f(map_center_agent.mV[VX] - image_half_width, map_center_agent.mV[VY] - image_half_height);
-            //  gGL.texCoord2f(1.f, 0.f);
-            //  gGL.vertex2f(image_half_width + map_center_agent.mV[VX], map_center_agent.mV[VY] - image_half_height);
-            //  gGL.texCoord2f(1.f, 1.f);
-            //  gGL.vertex2f(image_half_width + map_center_agent.mV[VX], image_half_height + map_center_agent.mV[VY]);
-            //gGL.end();
             gGL.begin(LLRender::TRIANGLES);
+            {
                 gGL.texCoord2f(0.f, 1.f);
                 gGL.vertex2f(map_center_agent.mV[VX] - image_half_width, image_half_height + map_center_agent.mV[VY]);
                 gGL.texCoord2f(0.f, 0.f);
@@ -661,8 +575,8 @@ void LLNetMap::draw()
                 gGL.vertex2f(image_half_width + map_center_agent.mV[VX], map_center_agent.mV[VY] - image_half_height);
                 gGL.texCoord2f(1.f, 1.f);
                 gGL.vertex2f(image_half_width + map_center_agent.mV[VX], image_half_height + map_center_agent.mV[VY]);
+            }
             gGL.end();
-            // </FS:Ansariel>
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
         }
 // [/SL:KB]
@@ -1762,23 +1676,6 @@ void LLNetMap::handleShowProfile(const LLSD& sdParam) const
 
         FSFloaterPlaceDetails::showPlaceDetails(sdParams);
     }
-}
-
-bool LLNetMap::checkTextureType(const LLSD& sdParam) const
-{
-    const std::string strParam = sdParam.asString();
-
-    bool fWorldMapTextures = gSavedSettings.getBOOL("MiniMapWorldMapTextures");
-    if ("maptile" == strParam)
-        return fWorldMapTextures;
-    else if ("terrain" == strParam)
-        return !fWorldMapTextures;
-    return false;
-}
-
-void LLNetMap::handleTextureType(const LLSD& sdParam) const
-{
-    gSavedSettings.setBOOL("MiniMapWorldMapTextures", ("maptile" == sdParam.asString()));
 }
 // [/SL:KB]
 

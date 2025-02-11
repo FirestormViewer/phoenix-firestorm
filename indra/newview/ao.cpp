@@ -203,6 +203,16 @@ void FloaterAO::updateList()
     }
 }
 
+void FloaterAO::updateScrollListData()
+{
+    auto animationListData = mAnimationList->getAllData();
+    for (auto index = 0; index < mSelectedState->mAnimations.size(); ++index)
+    {
+        LLScrollListItem* item = animationListData[index];
+        item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
+    }
+}
+
 bool FloaterAO::postBuild()
 {
     LLPanel* aoPanel = getChild<LLPanel>("animation_overrider_outer_panel");
@@ -271,6 +281,10 @@ bool FloaterAO::postBuild()
     mMoreButton->setCommitCallback(boost::bind(&FloaterAO::onClickMore, this));
     mPreviousButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious, this));
     mNextButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickNext, this));
+
+// <AS:Chanayane> Double click on animation in AO
+    mAnimationList->setDoubleClickCallback(boost::bind(&FloaterAO::onDoubleClick, this));
+// </AS:Chanayane>
 
     updateSmart();
 
@@ -674,6 +688,7 @@ void FloaterAO::onClickMoveUp()
     if (AOEngine::instance().swapWithPrevious(mSelectedState, currentIndex))
     {
         mAnimationList->swapWithPrevious(currentIndex);
+        updateScrollListData();
     }
 }
 
@@ -699,6 +714,7 @@ void FloaterAO::onClickMoveDown()
     if (AOEngine::instance().swapWithNext(mSelectedState, currentIndex))
     {
         mAnimationList->swapWithNext(currentIndex);
+        updateScrollListData();
     }
 }
 
@@ -767,6 +783,40 @@ void FloaterAO::onClickNext()
 {
     AOEngine::instance().cycle(AOEngine::CycleNext);
 }
+
+// <AS:Chanayane> Double click on animation in AO
+void FloaterAO::onDoubleClick()
+{
+    LLScrollListItem* item = mAnimationList->getFirstSelected();
+    if (!item)
+    {
+        return;
+    }
+    LLUUID* animUUID = (LLUUID*)item->getUserdata();
+    if (!animUUID)
+    {
+        return;
+    }
+
+    // do nothing if animation is for a different state than the active state
+    if (mSelectedState != AOEngine::instance().getCurrentState())
+    {
+        return;
+    }
+
+    // activate AO set if necessary
+    if (AOEngine::instance().getCurrentSet() != mSelectedSet)
+    {
+        // sync small set selector with main set selector
+        mSetSelectorSmall->selectNthItem(mSetSelector->getCurrentIndex());
+
+        LL_DEBUGS("AOEngine") << "Set activated: " << mSetSelector->getSelectedItemLabel() << LL_ENDL;
+        AOEngine::instance().selectSet(mSelectedSet);
+    }
+
+    AOEngine::instance().playAnimation(*animUUID);
+}
+// </AS:Chanayane>
 
 void FloaterAO::onClickMore()
 {

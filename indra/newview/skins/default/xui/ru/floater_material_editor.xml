@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="material editor" title="[MATERIAL_NAME]">
+	<string name="no_upload_fee_string">плата за загрузку не взимается</string>
+	<string name="upload_fee_string">L$[FEE] плата за загрузку</string>
+	<string name="material_override_title">Редактирование материала</string>
+	<panel name="button_panel">
+		<text name="unsaved_changes" width="200">
+			Несохраненные изменения
+		</text>
+		<button label="Сохранить" name="save" width="120" />
+		<button label="Сохранить Как..." name="save_as" width="120" />
+		<text name="total_upload_fee" width="220">
+			Общая плата за загрузку: L$ [FEE]
+		</text>
+		<button label="Отмена" name="cancel" width="121" />
+	</panel>
+</floater>

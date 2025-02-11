@@ -573,7 +573,7 @@ void LLMotionController::updateMotionsByType(LLMotion::LLMotionBlendType anim_ty
     {
         motion_list_t::iterator curiter = iter++;
         LLMotion* motionp = *curiter;
-        if (motionp->getBlendType() != anim_type)
+        if (!motionp || motionp->getBlendType() != anim_type) // <FS:Beq/> FIRE-34767 - null pointer dereference
         {
             continue;
         }

@@ -605,8 +605,24 @@ void FSPanelFace::onMatTabChange()
         {
             last_mat = curr_mat;
             gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
-            objectp->markForUpdate();
-            objectp->faceMappingChanged();
+            // Iterate through the linkset and mark each object for update
+            for (LLObjectSelection::iterator iter = LLSelectMgr::getInstance()->getSelection()->begin();
+                 iter != LLSelectMgr::getInstance()->getSelection()->end(); ++iter)
+            {
+                LLSelectNode* select_node = *iter;
+                LLViewerObject* linked_objectp = select_node->getObject();
+                if (linked_objectp)
+                {
+                    linked_objectp->markForUpdate();
+                    linked_objectp->faceMappingChanged();
+
+                    // Ensure full rebuild of geometry
+                    if (linked_objectp->mDrawable.notNull())
+                    {
+                        linked_objectp->mDrawable->setState(LLDrawable::REBUILD_ALL);
+                    }
+                }
+            }
         }
     }
 }

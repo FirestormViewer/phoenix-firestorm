@@ -110,7 +110,7 @@ public:
 
     void onFilterEdit(const std::string& search_string );
 
-    void setFocusFilterEditor();
+    void setFocusOnFilterEditor();
 
     static LLFloaterSidePanelContainer* newWindow();
     static void newFolderWindow(LLUUID folder_id = LLUUID(), LLUUID item_to_select = LLUUID());
@@ -189,6 +189,12 @@ protected:
     bool isSortByChecked(const LLSD& userdata);
     // </FS:Zi> Sort By menu handlers
 
+    // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
+    // Callback method for the new Show Filter button on the bottom button panel of the main inventory.
+    // Stays highlighted if any filter is enabled.
+    bool isAnyFilterChecked(const LLSD& userdata);
+    // </FS:minerjr> [FIRE-35042]
+
     void saveTexture(const LLSD& userdata);
     bool isSaveTextureEnabled(const LLSD& userdata);
     void updateItemcountText();
@@ -208,6 +214,13 @@ protected:
     LLSidepanelInventory* getParentSidepanelInventory();
 
 private:
+    enum class EFetchState
+    {
+        Unknown,
+        Fetching,
+        Complete
+    };
+
     LLFloaterInventoryFinder* getFinder();
 
     LLFilterEditor*             mFilterEditor;
@@ -222,11 +235,13 @@ private:
     LLSaveFolderState*          mSavedFolderState;
     std::string                 mFilterText;
     std::string                 mFilterSubString;
-    S32                         mItemCount;
+    S32                         mItemCount = 0;
+    std::string                 mLastFilterText;
     std::string                 mItemCountString;
-    S32                         mCategoryCount;
+    S32                         mCategoryCount = 0;
     std::string                 mCategoryCountString;
     LLComboBox*                 mSearchTypeCombo;
+    EFetchState                 mLastFetchState{ EFetchState::Unknown };
 
     LLButton* mBackBtn;
     LLButton* mForwardBtn;

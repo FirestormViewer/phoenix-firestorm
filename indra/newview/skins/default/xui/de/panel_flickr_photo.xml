@@ -11,6 +11,8 @@
 	<text name="working_lbl">
 		Aktualisiere...
 	</text>
+	<check_box label="Rahmen anzeigen" name="show_frame" tool_tip="Zeigt einen Rahmen um den Bereich der Aufnahme an. Teile der Szene, die außerhalb des Aufnahmebereichs liegen, werden entsättigt und leicht verschwommen dargestellt."/>
+	<check_box label="Guide anzeigen" name="show_guides" tool_tip="Zeigt Aufnahme-Guide (Drittel-Regel) innerhalb des Aufnahmebereichs an."/>
 	<button label="Aktualisieren" name="new_snapshot_btn" tool_tip="Zum Aktualisieren klicken"/>
 	<button label="Vorschau" name="big_preview_btn" tool_tip="Klicken, um Vorschau ein-/auszuschalten"/>
 	<text name="title_label">

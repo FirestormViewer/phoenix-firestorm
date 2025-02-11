@@ -253,6 +253,7 @@ protected:
     virtual void overrideDetectedHardware(); // <FS:Beq/> Override VRAM (and others in future?) consistently.
     virtual bool initSLURLHandler();
     virtual bool sendURLToOtherInstance(const std::string& url);
+    virtual void bugsplatAddStaticAttributes(const LLSD& info) {/*empty*/}; // <FS:Beq/> create a NOOP base impl
 
     virtual bool initParseCommandLine(LLCommandLineParser& clp)
         { return true; } // Allow platforms to specify the command line args.
@@ -344,8 +345,6 @@ private:
     bool mQuitRequested;                // User wants to quit, may have modified documents open.
     bool mClosingFloaters;
     bool mLogoutRequestSent;            // Disconnect message sent to simulator, no longer safe to send messages to the sim.
-    U32 mLastAgentControlFlags;
-    F32 mLastAgentForceUpdate;
     struct SettingsFiles* mSettingsLocationList;
 
     LLWatchdogTimeout* mMainloopTimeout;
@@ -372,10 +371,6 @@ private:
     // <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
     virtual void startCachePurge() {}
 };
-
-// consts from viewer.h
-const S32 AGENT_UPDATES_PER_SECOND  = 125; // Value derived experimentally to avoid Input Delays with latest PBR-Capable Viewers when viewer FPS is highly volatile.
-const S32 AGENT_FORCE_UPDATES_PER_SECOND  = 1;
 
 // Globals with external linkage. From viewer.h
 // *NOTE:Mani - These will be removed as the Viewer App Cleanup project continues.

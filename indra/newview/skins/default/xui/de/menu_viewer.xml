@@ -71,6 +71,7 @@
 		<menu_item_call label="360° Foto" name="Capture 360"/>
 		<menu_item_call label="Money-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
+		<menu_item_check label="Poser" name="Poser"/>
 		<menu_item_call label="Einstellungen" name="Preferences"/>
 		<menu_item_call label="Symbolleistenschaltflächen" name="Toolbar Buttons"/>
 		<menu_item_check label="HUD-Anhänge anzeigen" name="Show HUD Attachments"/>
@@ -108,6 +109,7 @@
 		<menu_item_check label="Unterhaltungsprotokoll..." name="Conversation Log..."/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
 		<menu_item_call label="Blockierliste" name="Block List"/>
+		<menu_item_check label="Chat-Konsole anzeigen" name="Show On-screen Console"/>
 	</menu>
 	<menu label="Welt" name="World">
 		<menu_item_call label="Animationen synchronisieren" name="Resync Animations"/>
@@ -546,6 +548,7 @@
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
+			<menu_item_check label="Sammeln von Vertex Buffern für Schrift aktivieren" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
 		</menu>

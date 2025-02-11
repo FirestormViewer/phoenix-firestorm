@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="居民" name="panel_ls_people">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			搜尋條件：
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<fs_scroll_list name="search_results_people">
+			<columns label="使用者名稱" name="username" />
+		</fs_scroll_list>
+		<button label="上一頁" name="people_back" />
+		<button label="下一頁" name="people_next" />
+	</panel>
+</panel>

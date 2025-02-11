@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater title="攝影工具" name="phototools_camera_floater">
+	<floater.string name="rotate_tooltip">
+		圍繞焦點旋轉相機
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		相機縮放至焦點
+	</floater.string>
+	<floater.string name="move_tooltip">
+		相機上下左右移動
+	</floater.string>
+	<floater.string name="free_mode_title">
+		檢視物件
+	</floater.string>
+	<string name="inactive_combo_text">
+		預設...
+	</string>
+	<tab_container name="tabs">
+		<panel name="P_Cam_Controls_1" label="控制 1">
+			<panel name="cameracontrolspanel">
+				<panel name="controls1">
+					<panel name="preset_views_list">
+						<panel_camera_item name="front_view">
+							<panel_camera_item.text name="front_view_text">
+								正面視圖
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="group_view">
+							<panel_camera_item.text name="side_view_text">
+								側面視圖
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="rear_view">
+							<panel_camera_item.text name="rear_view_text">
+								後視圖
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="使用預設" name="Use preset" />
+						</combo_box>
+						<button name="gear_btn" tool_tip="相機預設" />
+						<button label="位置" name="camera_position_btn" />
+					</panel>
+					<panel name="camera_modes_list">
+						<panel_camera_item name="object_view">
+							<panel_camera_item.text name="object_view_text">
+								物件視圖
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="mouselook_view">
+							<panel_camera_item.text name="mouselook_view_text">
+								滑鼠視角
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="使用預設" name="Use preset" />
+						</combo_box>
+						<button name="gear_btn" tool_tip="相機預設" />
+						<button label="位置..." name="camera_position_btn" />
+					</panel>
+					<panel name="zoom">
+						<joystick_rotate name="cam_rotate_stick" tool_tip="環繞焦點旋轉相機" />
+						<button name="roll_left" tool_tip="向左捲動相機" />
+						<button name="roll_right" tool_tip="向右捲動相機" />
+						<slider_bar name="zoom_slider" tool_tip="透過此滾軸可以讓相機進行拉近和推遠。注意：這並不是真實世界中的縮放功能，它不會影響相機的視野。要實作真正的縮放效果，請使用「視角」滾軸！" />
+						<joystick_track name="cam_track_stick" tool_tip="相機上下左右移動" />
+					</panel>
+				</panel>
+				<panel name="buttons">
+					<button name="presets_btn" tool_tip="預定義視圖" />
+					<button name="pan_btn" tool_tip="旋轉、縮放、平移" />
+					<button name="avatarview_btn" tool_tip="相機模式" />
+					<button name="store_camera_view_btn" tool_tip="儲存當前相機視圖" />
+					<button name="load_camera_view_btn" tool_tip="載入儲存的相機視圖" />
+				</panel>
+			</panel>
+			<panel name="P_Cam_Mov_Settings">
+				<text name="T_Cam_Mov_Settings">
+					相機移動設定
+				</text>
+			</panel>
+			<panel name="P_Zoom">
+				<text name="T_Zoom" tool_tip="在現實世界中，這相當於一個縮放功能。它改變了觀察視窗內的視角。它的功能與按Ctrl-0或Ctrl-8相同。注意：如果啟用了飛行相機（三維控制器），此功能將不可用。">
+					視角
+				</text>
+				<button name="Reset_Camera_Angle" label="S" tool_tip="重設為預設值。" />
+				<text name="T_Zoom_Speed" tool_tip="設定相機縮放的快慢。較高的值會產生更慢更平滑的縮放效果。">
+					過渡時間
+				</text>
+				<button name="Reset_Zoom_Time" label="S" tool_tip="重設為預設值。" />
+				<text name="T_Camera_Lag" tool_tip="設定相機跟隨化身移動的延遲程度（0 = 無延遲，30 = 化身速度）。">
+					延遲
+				</text>
+				<button name="Reset_Camera_Lag" label="S" tool_tip="重設為預設值。" />
+				<text name="T_Camera_Offset" tool_tip="設定相機從標準位置的偏移距離。">
+					距離
+				</text>
+				<button name="Reset_Camera_Offset" label="S" tool_tip="重設為預設值。" />
+				<text name="T_Camera_Smoothing" tool_tip="設定相機啟動和停止的平滑度。較高的值意味著更平滑（因此更慢）的移動。">
+					平滑
+				</text>
+				<button name="Reset_Camera_Smoothing" label="S" tool_tip="重設為預設值。" />
+			</panel>
+		</panel>
+		<panel name="P_Cam_Controls_2" label="控制 2">
+			<panel name="P_Mouse_Movement">
+				<text name="T_Mouse_Movement">
+					滑鼠移動設定
+				</text>
+			</panel>
+			<panel name="P_Mouse_Movement_Settings">
+				<text name="T_Mouse_Sensitivity" tool_tip="設定滑鼠在滑鼠視角模式下的靈敏度。">
+					靈敏度
+				</text>
+				<button name="Reset_Mouse_Sensitivity" label="S" tool_tip="重設為預設值。" />
+				<check_box label="在滑鼠視角模式下顯示化身和附件" tool_tip="在滑鼠視角模式下顯示脖子下方的化身和附件。預設值為關閉。" name="first_person_avatar_visible" />
+				<check_box label="平滑滑鼠視角移動" tool_tip="在滑鼠視角模式下平滑滑鼠移動。" name="MouseSmooth" />
+			</panel>
+			<panel name="P_Additional_Camera_Options">
+				<text name="T_Additional_Camera_Options">
+					更多相機選項
+				</text>
+			</panel>
+			<panel name="P_Add_Cam_Opt_Settings">
+				<check_box label="點擊化身保持相機位置" name="clickonavatarkeepscamera" tool_tip="通常情況下，點擊化身會重設相機位置。此選項可以防止這種行為。" />
+				<check_box label="傳送後重設相機位置" name="FSResetCameraOnTP" tool_tip="通常情況下，傳送會重設相機位置。此選項可以防止這種行為。" />
+				<check_box label="允許相機穿過元素移動" name="ignorecameraconstraints" tool_tip="忽略相機不能穿過元素移動的限制。需要重新啟動！" />
+				<check_box label="化身移動時重設相機" name="resetcameraonmovement" tool_tip="化身移動時重設相機位置。" />
+			</panel>
+		</panel>
+		<panel name="P_3D_Mouse" label="3D滑鼠">
+			<panel name="P_3D_Mouse_Settings1">
+				<slider label="左/右" name="FlycamAxisScale1b" tool_tip="設定左右移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="上/下" name="FlycamAxisScale2b" tool_tip="設定上下移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="前/後" name="FlycamAxisScale0b" tool_tip="設定前後移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="傾斜" name="FlycamAxisScale4" tool_tip="設定傾斜移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="偏航" name="FlycamAxisScale5" tool_tip="設定偏航移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="滾轉" name="FlycamAxisScale3" tool_tip="設定滾轉移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="縮放" name="FlycamAxisScale6" tool_tip="設定縮放移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="減速" name="FlycamFeathering" tool_tip="如果將滾軸移至最右端，相機將變得僵硬，並且可以直接通過操縱桿控制。如果將滾軸移至最左端，相機將變得遲緩。" />
+			</panel>
+			<panel name="P_3D_Mouse_Settings2">
+				<spinner label="縮放軸對映" name="JoystickAxis6" tool_tip="設定哪個滑鼠軸用於縮放功能。" />
+				<check_box label="啟用3D滑鼠" tool_tip="此設定啟用3D滑鼠。" name="enable_joystick" />
+				<check_box name="CB_Zoom_Control" label="啟用縮放控制（詳見工具提示！）" tool_tip="要使縮放控制有效，必須將「縮放軸對映」設定為大於4的值。" />
+				<check_box name="CB_Auto_Leveling" label="自動水平（無相機捲動）" tool_tip="如果啟用，相機將自動對齊。" />
+				<check_box name="CB_3D_Mouse_Avatar" label="使用3D滑鼠控制化身" tool_tip="如果啟用，化身將通過滑鼠控制。" />
+				<check_box name="CB_3D_Mouse_Build" label="使用3D滑鼠移動物件" tool_tip="如果啟用，可以使用3D滑鼠在建造和編輯時移動物件。" />
+			</panel>
+		</panel>
+	</tab_container>
+</floater>

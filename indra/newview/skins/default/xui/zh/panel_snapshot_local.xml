@@ -4,29 +4,26 @@
 		硬碟
 	</text>
 	<combo_box label="解析度" name="local_size_combo">
-		<combo_box.item label="目前視窗" name="CurrentWindow"/>
-		<combo_box.item label="320x240" name="320x240"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="1280x1024" name="1280x1024"/>
-		<combo_box.item label="1600x1200" name="1600x1200"/>
-		<combo_box.item label="自訂" name="Custom"/>
+		<combo_box.item label="當前視窗" name="CurrentWindow" />
+		<combo_box.item label="自訂" name="Custom" />
 	</combo_box>
-	<spinner label="寬 x 高" name="local_snapshot_width"/>
-	<check_box label="鎖住比例" name="local_keep_aspect_check"/>
+	<spinner label="寬 x 高" name="local_snapshot_width" />
+	<check_box label="鎖定比例" name="local_keep_aspect_check" />
 	<text name="local_format_label">
 		格式
 	</text>
 	<combo_box label="格式" name="local_format_combo">
-		<combo_box.item label="PNG（零失真）" name="PNG"/>
-		<combo_box.item label="JPEG" name="JPEG"/>
-		<combo_box.item label="BMP（零失真）" name="BMP"/>
+		<combo_box.item label="PNG（零失真）" name="PNG" />
+		<combo_box.item label="JPEG" name="JPEG" />
+		<combo_box.item label="BMP（零失真）" name="BMP" />
 	</combo_box>
-	<slider label="清晰度：" name="image_quality_slider"/>
-	<button label="取消" name="cancel_btn"/>
+	<slider label="清晰度：" name="image_quality_slider" />
+	<text name="local_remember_location_sessions_text">
+		在對談之間儲存位置和檔案名
+	</text>
+	<button label="▶ 取消" name="cancel_btn" />
 	<flyout_button label="儲存" name="save_btn" tool_tip="儲存圖像到檔案">
-		<flyout_button.item label="儲存" name="save_item"/>
-		<flyout_button.item label="另存..." name="saveas_item"/>
+		<flyout_button.item label="儲存" name="save_item" />
+		<flyout_button.item label="另存..." name="saveas_item" />
 	</flyout_button>
 </panel>

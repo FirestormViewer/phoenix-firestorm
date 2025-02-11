@@ -478,16 +478,55 @@
                  visible="false"
                  auto_resize="false"
                  user_resize="false">
-                    <icon
-                     name="badge_icon"
-                     image_name="Profile_Badge_Linden"
-                     tool_tip="Linden Lab Employee"
+                    <layout_stack
+                     name="badge_stacker"
+                     animate="false"
+                     top="0"
+                     left="0"
+                     width="22"
+                     height="44"
+                     follows="top|left|right"
                      layout="topleft"
-                     follows="left|top"
-                     top="4"
-                     left="4"
-                     height="18"
-                     width="18"/>
+                     orientation="vertical">
+                        <layout_panel
+                         name="top_badge_layout"
+                         follows="all"
+                         layout="topleft"
+                         width="22"
+                         visible="false"
+                         auto_resize="true"
+                         user_resize="false">
+                            <icon
+                             name="top_badge_icon"
+                             image_name="Profile_Badge_Linden"
+                             tool_tip="Linden Lab Employee"
+                             layout="topleft"
+                             follows="left|top"
+                             top="2"
+                             left="4"
+                             height="18"
+                             width="18"/>
+                        </layout_panel>
+                        <layout_panel
+                         name="bottom_badge_layout"
+                         follows="all"
+                         layout="topleft"
+                         width="22"
+                         visible="false"
+                         auto_resize="true"
+                         user_resize="false">
+                            <icon
+                             name="bottom_badge_icon"
+                             image_name="Profile_Badge_Linden"
+                             tool_tip="Linden Lab Employee"
+                             layout="topleft"
+                             follows="left|top"
+                             top="2"
+                             left="4"
+                             height="18"
+                             width="18"/>
+                        </layout_panel>
+                    </layout_stack>
                 </layout_panel>
                 <layout_panel
                  name="accountinfo_layout"

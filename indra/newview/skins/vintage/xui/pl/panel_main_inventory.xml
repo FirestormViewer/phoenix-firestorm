@@ -27,7 +27,7 @@
 			<menu_item_check name="add_invclothing_toggle" label="Dodawaj ubrania po dwukliku" />
 			<menu_item_call name="inventory_show_filters" label="Pokaż filtry" />
 			<menu_item_call name="inventory_reset_filters" label="Resetuj filtry" />
-			<menu_item_call name="inventory_close_all_folders" label="Zamknij wszystkie foldery" />
+			<menu_item_call name="inventory_close_all_folders" label="Zwiń wszystkie foldery" />
 			<menu_item_call name="inventory_empty_trash" label="Opróżnij kosz" />
 		</menu>
 		<menu label="Stwórz" name="inventory_create_menu">
@@ -117,6 +117,8 @@
 		<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
 		<combo_box.item value="filter_type_materials" label="Materiały" />
 		<combo_box.item value="filter_type_settings" label="Otoczenia" />
+		<combo_box.item value="filter_type_folders" label="Foldery" />
+		<combo_box.item value="filter_type_coalesced" label="Tylko podniesione razem" />
 		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 	</combo_box>
 	<!-- <menu_button tool_tip="Pokaż opcje widoczności wyszukiwania" name="options_visibility_btn" /> -->

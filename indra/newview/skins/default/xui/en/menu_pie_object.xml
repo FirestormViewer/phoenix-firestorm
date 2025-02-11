@@ -165,6 +165,15 @@
         <pie_slice.on_enable
             function="Object.EnableWear" />
     </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Take Copy"
+        name="Take Copy">
+        <pie_slice.on_click
+            function="Tools.TakeCopy" />
+        <pie_slice.on_enable
+            function="Tools.EnableTakeCopy" />
+    </pie_slice>
     <pie_menu
         label="Attach HUD &gt;"
         name="Pie Object Attach HUD" />
@@ -339,7 +348,6 @@
         <pie_slice.on_enable
             function="Object.EnableReturn" />
     </pie_slice>
-
     <pie_menu
         label="More &gt;"
         name="Object Pie More 2">

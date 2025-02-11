@@ -26,6 +26,7 @@
 			<check_box label="Позволить скриптовым объектам видеть мою текущую настройку языка" name="LanguageIsPublic"/>
 			<check_box label="Автоматически принимать новые объекты инвентаря" name="Auto_Accept_New_Inventory"/>
 			<check_box label="Журнал автоматически принятых объектов в общем чате" name="FSLogAutoAcceptInventoryToChat" />
+			<check_box label="Показывать уведомление, даже если включен автоматический прием" name="FSShowAutoAcceptInventoryInNotifications" />
 			<check_box label="Использовать прежние сообщения инвентаря с предложением принять / отклонить" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Использовать прежние сообщения инвентаря с предложением принять / отклонить"/>
 			<check_box label="Автоматически показывать вновь принятые предметы в инвентаре" name="Show_In_Inventory"/>
 			<check_box label="Автоматически просматривать заметки, текстуры, закладки после принятия" name="Show_New_Inventory"/>

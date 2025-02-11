@@ -201,6 +201,21 @@
          width="80">
             seconds
         </text>
+	<!--<FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights -->
+	<!--Added new heading label for the Floating Text Options as there are now 4 -->
+        <text
+         type="string"
+         left="10"
+         top="130"
+         top_pad="15"
+         width="180"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         name="FSHudTextLabel">
+            Floating Text Options:
+        </text>
+        <!-- <FS:minerjr> Removed top="130" below as it was causing an issue with the new header text -->
         <slider
          control_name="FSHudTextFadeDistance"
          decimal_digits="2"
@@ -215,7 +230,7 @@
          min_val="0"
          max_val="64"
          name="FSHudTextFadeDistance"
-         top="130"
+
          width="481" />
         <slider
          control_name="FSHudTextFadeRange"
@@ -233,6 +248,53 @@
          name="FSHudTextFadeRange"
          top_pad="2"
          width="474" />
+	 <!-- Added new check box to disable the highlight floating text feature -->
+        <check_box
+        control_name="FSHudTextUseHoverHighlight"
+        name="FSHudTextUseHoverHighlight"
+        label="Hover over object to highlight floating text:"
+        tool_tip="When an object is being hovered over, highlight the floating text (hovertext) by moving the text to the foreground and disable its alpha"
+        layout="topleft"
+        top_pad="5"
+        left_delta="0"
+        height="16"
+        width="350" />
+        <text
+         type="string"
+         left="10"
+         top_pad="5"
+         width="180"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         name="FSHudTextShowBackgroundLabel">
+            Show floating text background:
+        </text>
+	<!-- Added combo box to control the background behavior for prims -->
+        <combo_box
+               control_name="FSHudTextShowBackground"
+               enabled_control="FSHudTextUseHoverHighlight"
+               height="23"
+               layout="topleft"
+               left_pad="10"
+               top_delta="-5"
+               name="FSHudTextShowBackgroundDropdown"
+               tool_tip="Displays a black/white background behind the floating text (hovertext) to make it more readable. The opacity can be changed under Colors > Miscellaneous"
+               width="180">
+            <combo_box.item
+             label="Off"
+             name="ScriptDialogOption_0"
+             value="0"/>
+            <combo_box.item
+             label="Only Highlighted Object"
+             name="ScriptDialogOption_1"
+             value="1"/>
+            <combo_box.item
+             label="All Objects"
+             name="ScriptDialogOption_2"
+             value="2"/>
+        </combo_box>
+	<!-- </FS:minerjr> [FIRE-35019] -->
     </panel>
 
     <!--2D Overlay-->

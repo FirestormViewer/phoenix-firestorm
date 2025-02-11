@@ -16,7 +16,7 @@
 		已加入多方語音通話。
 	</floater.string>
 	<floater.string name="VoiceInviteGroup">
-		剛加入 &apos;[GROUP]&apos; 語音頻道。
+		剛加入 '[GROUP]' 語音訊道。
 	</floater.string>
 	<floater.string name="VoiceInviteQuestionGroup">
 		是否離開 [CURRENT_CHAT] 並加入和「[GROUP]」通話？
@@ -25,9 +25,9 @@
 		是否離開 [CURRENT_CHAT] 並加入這個語音聊天？
 	</floater.string>
 	<text name="question">
-		如果接聽，你將切斷目前的語音交談。
+		如果接聽，你將切斷當前的語音聊天。
 	</text>
-	<button label="接聽" label_selected="接聽" name="Accept"/>
-	<button label="忽視" label_selected="忽視" name="Reject"/>
-	<button label="不接聽但開啟 IM" name="Start IM"/>
+	<button label="接聽" label_selected="接聽" name="Accept" />
+	<button label="忽視" label_selected="忽視" name="Reject" />
+	<button label="不接聽但開啟私聊" name="Start IM" />
 </floater>

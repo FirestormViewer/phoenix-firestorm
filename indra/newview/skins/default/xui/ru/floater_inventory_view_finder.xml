@@ -20,6 +20,12 @@
 	<check_box label="Коп." name="check_copy"/>
 	<check_box label="Пер." name="check_transfer"/>
 	<check_box label="Показывать папки" name="check_show_empty"/>
+	<check_box label="Объединенные" name="check_only_coalesced" width="110" />
+	<combo_box name="inventory_filter_show_links_combo" tool_tip="Фильтрует связанные объекты" width="145">
+		<combo_box.item name="show_links" label="Показывать ссылки"/>
+		<combo_box.item name="show_links_only" label="Только ссылки"/>
+		<combo_box.item name="hide_links" label="Скрывать ссылки"/>
+	</combo_box>
 	<check_box label="Создано мной" name="check_created_by_me"/>
 	<check_box label="Создано другими" name="check_created_by_others"/>
 	<check_box label="С момента выхода" name="check_since_logoff"/>

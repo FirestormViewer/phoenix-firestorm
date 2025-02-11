@@ -63,10 +63,12 @@
 #include "llresmgr.h"
 #include "llworld.h"
 #include "llstatgraph.h"
+#include "llurlaction.h"
 #include "llviewermedia.h"
 #include "llviewermenu.h"   // for gMenuBarView
 #include "llviewerparcelmgr.h"
 #include "llviewerthrottle.h"
+#include "llwindow.h"
 #include "lluictrlfactory.h"
 
 #include "lltoolmgr.h"
@@ -483,7 +485,11 @@ bool LLStatusBar::postBuild()
     mBalancePanel = getChild<LLPanel>("balance_bg");
     mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
 
+    // <FS:Beq> Make FPS a clickable button with contextual colour
+    // mFPSText = getChild<LLButton>("FPSText");
     mFPSText = getChild<LLTextBox>("FPSText");
+    mFPSText->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=limitframerate", true));
+    // </FS:Beq>
     mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 
     initParcelIcons();
@@ -598,8 +604,52 @@ void LLStatusBar::refresh()
     static LLCachedControl<bool> fsStatusBarShowFPS(gSavedSettings, "FSStatusBarShowFPS");
     if (fsStatusBarShowFPS && mFPSUpdateTimer.getElapsedTimeF32() > 1.f)
     {
+        static LLCachedControl<U32>  max_fps(gSavedSettings, "FramePerSecondLimit");
+        static LLCachedControl<bool> limit_fps_enabled(gSavedSettings, "FSLimitFramerate");
+        static LLCachedControl<bool> vsync_enabled(gSavedSettings, "RenderVSyncEnable");
+
+        static const auto fps_below_limit_color     = LLUIColorTable::instance().getColor("Yellow");
+        static const auto fps_limit_reached_color   = LLUIColorTable::instance().getColor("Green");
+        static const auto vsync_limit_reached_color = LLUIColorTable::instance().getColor("Green");
+        static const auto fps_uncapped_color        = LLUIColorTable::instance().getColor("White");
+        static const auto fps_unfocussed_color      = LLUIColorTable::instance().getColor("Gray");
+        static auto       current_fps_color         = fps_uncapped_color;
+
         mFPSUpdateTimer.reset();
-        mFPSText->setText(llformat("%.1f", LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS)));
+        const auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS);
+        mFPSText->setText(llformat("%.1f", fps));
+
+        // if background, go grey, else go white unless we have a cap (checked next)
+        auto fps_color{ fps_uncapped_color };
+        auto window = gViewerWindow ? gViewerWindow->getWindow() : nullptr;
+        if ((window && !window->getVisible()) || !gFocusMgr.getAppHasFocus())
+        {
+            fps_color = fps_unfocussed_color;
+        }
+        else
+        {
+            S32 vsync_freq{ -1 };
+            if (window)
+            {
+                vsync_freq = window->getRefreshRate();
+            }
+
+            if (limit_fps_enabled && max_fps > 0)
+            {
+                fps_color = (fps >= max_fps - 1) ? fps_limit_reached_color : fps_below_limit_color;
+            }
+            // use vsync if enabled and the freq is lower than the max_fps
+            if (vsync_enabled && vsync_freq > 0 && (!limit_fps_enabled || vsync_freq < (S32)max_fps))
+            {
+                fps_color = (fps >= vsync_freq - 1) ? vsync_limit_reached_color : fps_below_limit_color;
+            }
+        }
+
+        if (current_fps_color != fps_color)
+        {
+            mFPSText->setColor(fps_color);
+            current_fps_color = fps_color;
+        }
     }
     // </FS:Ansariel>
 

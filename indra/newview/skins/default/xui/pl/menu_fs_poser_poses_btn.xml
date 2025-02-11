@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Settings">
+	<menu_item_call label="Załaduj selektywnie" tool_tip="Ładuje tylko te stawy, które są wyłączone - i włącza je" name="load_selective" />
+	<menu_item_call label="Załaduj selektywnie - tylko obroty" tool_tip="Ładuje tylko obroty i tylko dla stawów, które są wyłączone - i włącza je" name="rotations_positions" />
+	<menu_item_call label="Załaduj - tylko obroty" tool_tip="Ładuje tylko obroty. Dobre dla poz zrobionych dla innych awatarów/kształtów" name="rotations" />
+	<menu_item_call label="Załaduj - wszystko" tool_tip="Ładuje obroty, pozycje i rozmiary" name="load_all" />
+</toggleable_menu>

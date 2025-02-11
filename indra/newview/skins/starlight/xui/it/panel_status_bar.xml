@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
-	<panel.string name="packet_loss_tooltip">Perdita di pacchetti</panel.string>
-	<panel.string name="bandwidth_tooltip">Larghezza di banda</panel.string>
-	<panel.string name="time">[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]</panel.string>
-	<panel.string name="timeTooltip">[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]</panel.string>
-	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
-	<panel name="balance_bg" left="-454">
-		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ??"/>
-		<button label="Compra L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Il lotto è in vendita"/>
+		<text tool_tip="Nome del lotto su cui ti trovi. Clicca per aprire le informazioni sul lotto." name="parcel_info_text" value="(caricamento...)"/>
 	</panel>
-	<panel name="time_and_media_bg" width="351">
-		<text name="TimeText" tool_tip="Orario attuale (Pacifico)" width="78">24:00:00 PST</text>
-		<button name="stream_toggle_btn" tool_tip="Attiva/Ferma musica nella parcella"/>
-		<button name="media_toggle_btn" tool_tip="Attiva/Ferma tutti i media (musica, video, pagine Web)"/>
-		<button name="volume_btn" tool_tip="Regolazione del volume globale"/>
+	<panel.string name="packet_loss_tooltip">
+		Perdita di pacchetti
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		Larghezza di banda
+	</panel.string>
+	<panel.string name="time">
+		[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+	<panel name="menu_search_panel" width="125">
+		<search_editor label="Cerca nei menu" name="search_menu_edit" tool_tip="Scrivi qui i termini di ricerca. Verranno visualizzate anche corrispondenze parziali con le voci di menu" />
+	</panel>
+	<panel name="balance_bg" left="-500" width="100">
+		<text name="balance" tool_tip="Clicca per aggiornare il saldo dei tuoi L$"/>
+		<button label="Acquista L$" name="buyL" tool_tip="Clicca per acquistare L$"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="Distanza di disegno"/>
+		<slider tool_tip="Distanza massima di disegno dalla camera (metri)" name="drawdistance"/>
+		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
+		<button name="stream_toggle_btn" tool_tip="Accendi / Spegni musica del lotto"/>
+		<button name="media_toggle_btn" tool_tip="Accendi / Spegni media del lotto"/>
+		<button name="volume_btn" tool_tip="Controlli del volume"/>
+		<text name="FPSText" tool_tip="Fotogrammi al secondo (FPS)" />
 	</panel>
 </panel>

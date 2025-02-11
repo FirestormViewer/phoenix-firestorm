@@ -9,14 +9,14 @@
 		<combo_box.item label="Dansk (Daniya dili) - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Alman dili)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (İspan dili) - Beta" name="Spanish"/>
-		<combo_box.item label="Français (Fransız dili) - Beta" name="French"/>
-		<combo_box.item label="Italiano (İtalyan dili) - Beta" name="Italian"/>
+		<combo_box.item label="Français (Fransız dili)" name="French"/>
+		<combo_box.item label="Italiano (İtalyan dili)" name="Italian"/>
 		<combo_box.item label="Polski (Polonya dili)" name="Polish"/>
 		<combo_box.item label="Português (Portugal dili) - Beta" name="Portugese"/>
 		<combo_box.item label="Русский (Rus dili)" name="Russian"/>
 		<combo_box.item label="Türkçe (Türkcə) - Beta" name="Turkish"/>
 		<combo_box.item label="日本語 (Yapon dili) - Beta" name="(Japanese)"/>
-		<combo_box.item label="正體中文 (Adəti Çin dili) - Beta" name="Traditional Chinese"/>
+		<combo_box.item label="正體中文 (Adəti Çin dili)" name="Traditional Chinese"/>
 	</combo_box>
 	<text name="language_textbox2" width="145">
 		(yenidən başlatma tələb olunur)

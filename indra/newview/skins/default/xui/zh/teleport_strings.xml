@@ -6,18 +6,18 @@
 如果你持續得到此訊息，請查閱 [SUPPORT_SITE]。
 		</message>
 		<message name="invalid_region_handoff">
-			處理你跨越地區動作時發生問題。 如果想要跨越地區，你可能需要重新登入。
+			處理你跨越區域操作時發生問題。 如果想要跨越區域，你可能需要重新登入。
 如果你持續得到此訊息，請查閱 [SUPPORT_SITE]。
 		</message>
 		<message name="blocked_tport">
-			抱歉，目前禁止瞬間傳送。 請稍後再試。
+			抱歉，當前禁止瞬間傳送。 請稍後再試。
 如果你仍無法進行瞬間傳送，請登出後重新入來解決此一問題。
 		</message>
 		<message name="nolandmark_tport">
 			抱歉，不過系統無法找到地標所在目的地。
 		</message>
 		<message name="timeout_tport">
-			抱歉，不過系統無法完成瞬間傳送的聯接。
+			抱歉，不過系統無法完成瞬間傳送的連線。
 請稍後再試。
 		</message>
 		<message name="NoHelpIslandTP">
@@ -28,28 +28,31 @@
 			抱歉，你並沒有權限進入要瞬間傳送的目的地。
 		</message>
 		<message name="missing_attach_tport">
-			你的附件尚未抵達。 請稍候一會兒，或請登出後重新登入，再嘗試瞬間傳送。
+			你的附件尚未抵達。 請稍候一會，或請登出後重新登入，再嘗試瞬間傳送。
 		</message>
 		<message name="too_many_uploads_tport">
-			該地區的資產查詢目前太過擁塞，因此你的瞬間傳送動作可能無法即時發生。 請稍候再試，或請前往較不擁塞的地區。
+			該區域的資源尋找當前太過擁塞，因此你的瞬間傳送操作可能無法即時發生。 請稍候再試，或請前往較不擁塞的區域。
 		</message>
 		<message name="expired_tport">
 			抱歉，系統無法即時完成為你瞬間傳送。 請稍待幾分鐘再試。
 		</message>
 		<message name="expired_region_handoff">
-			抱歉，系統無法即時讓你跨越地區。 請稍待幾分鐘再試。
+			抱歉，系統無法即時讓你跨越區域。 請稍待幾分鐘再試。
+		</message>
+		<message name="preexisting_tport">
+			系統無法執行您的瞬間傳送請求。請在幾分鐘後再試。
 		</message>
 		<message name="no_host">
 			找不到瞬間傳送的目的地。 目的地可能暫時不可用，或已不存在。 請稍待幾分鐘再試。
 		</message>
 		<message name="no_inventory_host">
-			收納區功能目前無法使用。
+			庫存功能當前無法使用。
 		</message>
 		<message name="MustGetAgeRegion">
-			你必須年滿 18 歲才可進入這地區。
+			你必須年滿 18 歲才可進入這區域。
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			無法進入地區。 &apos;[REGION_NAME]&apos; 是個「技巧性博奕」(Skill Gaming)地區，你必須符合一定條件才可進入。 欲知詳情，請參閱 [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life 技巧性博奕常見問題集]。
+			無法進入區域。 '[REGION_NAME]' 是個「技巧性博奕」(Skill Gaming)區域，你必須符合一定條件才可進入。 欲知詳情，請參閱 [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life 技巧性博奕常見問題集]。
 		</message>
 	</message_set>
 	<message_set name="progress">
@@ -63,22 +66,22 @@
 			接繼送往目的地。
 		</message>
 		<message name="sending_home">
-			送出家位置的要求。
+			傳送家位置的要求。
 		</message>
 		<message name="sending_landmark">
-			地標位置要求瞬間傳送中。
+			地標位置請求瞬間傳送中。
 		</message>
 		<message name="completing">
 			瞬間傳送完成。
 		</message>
 		<message name="completed_from">
-			由 [T_SLURL] 瞬間傳送完成。
+			從 [T_SLURL] 瞬間傳送完成。
 		</message>
 		<message name="resolving">
-			目的地解決中。
+			目的地解析中。
 		</message>
 		<message name="contacting">
-			聯繫到新的地區。
+			連線到新的區域。
 		</message>
 		<message name="arriving">
 			抵達中...

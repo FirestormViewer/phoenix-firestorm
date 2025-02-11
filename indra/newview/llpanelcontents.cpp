@@ -31,6 +31,7 @@
 
 // linden library includes
 #include "llerror.h"
+#include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llfontgl.h"
 #include "llinventorydefines.h"
@@ -90,7 +91,13 @@ bool LLPanelContents::postBuild()
     childSetAction("btn_reset_scripts", &LLPanelContents::onClickResetScripts, this); // <FS> Script reset in edit floater
     childSetAction("button refresh",&LLPanelContents::onClickRefresh, this);
 
+    mFilterEditor = getChild<LLFilterEditor>("contents_filter");
+    mFilterEditor->setCommitCallback([&](LLUICtrl*, const LLSD&) { onFilterEdit(); });
+
     mPanelInventoryObject = getChild<LLPanelObjectInventory>("contents_inventory");
+
+    // update permission filter once UI is fully initialized
+    mSavedFolderState.setApply(false);
 
     return true;
 }
@@ -167,6 +174,46 @@ void LLPanelContents::getState(LLViewerObject *objectp )
     mPanelInventoryObject->setEnabled(!objectp->isPermanentEnforced());
 }
 
+void LLPanelContents::onFilterEdit()
+{
+    const std::string& filter_substring = mFilterEditor->getText();
+    // <FS:Beq> FIRE-35010 Bugsplat crash with filter while loading contents
+    auto root_folder = mPanelInventoryObject->getRootFolder();
+    if (!root_folder)
+    {
+        mPanelInventoryObject->getFilter().setFilterSubString(filter_substring);
+        return;
+    }
+    // </FS:Beq>
+    if (filter_substring.empty())
+    {
+        if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
+        {
+            // The current filter and the new filter are empty, nothing to do
+            return;
+        }
+
+        mSavedFolderState.setApply(true);
+        root_folder->applyFunctorRecursively(mSavedFolderState); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
+
+        // Add a folder with the current item to the list of previously opened folders
+        LLOpenFoldersWithSelection opener;
+        root_folder->applyFunctorRecursively(opener); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
+        root_folder->scrollToShowSelection(); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
+    }
+    else if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
+    {
+        // The first letter in search term, save existing folder open state
+        if (!mPanelInventoryObject->getFilter().isNotDefault())
+        {
+            mSavedFolderState.setApply(false);
+            root_folder->applyFunctorRecursively(mSavedFolderState); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
+        }
+    }
+
+    mPanelInventoryObject->getFilter().setFilterSubString(filter_substring);
+}
+
 void LLPanelContents::refresh()
 {
     const bool children_ok = true;
@@ -186,7 +233,6 @@ void LLPanelContents::clearContents()
         mPanelInventoryObject->clearInventoryTask();
     }
 }
-
 
 //
 // Static functions
@@ -251,7 +297,6 @@ void LLPanelContents::onClickNewScript(void *userdata)
         // editing ASAP.
     }
 }
-
 
 // static
 void LLPanelContents::onClickPermissions(void *userdata)

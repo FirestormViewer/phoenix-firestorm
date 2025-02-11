@@ -80,9 +80,8 @@ LLVoiceChannel::~LLVoiceChannel()
     if (sCurrentVoiceChannel == this)
     {
         sCurrentVoiceChannel = NULL;
-        // Must check instance exists here, the singleton MAY have already been destroyed.
-        LLVoiceClient::removeObserver(this);
     }
+    LLVoiceClient::removeObserver(this);
 
     sVoiceChannelMap.erase(mSessionID);
 }
@@ -328,6 +327,16 @@ void LLVoiceChannel::setState(EState state)
 
 void LLVoiceChannel::doSetState(const EState& new_state)
 {
+    LL_DEBUGS("Voice") << "session '" << mSessionName << "' state " << mState << ", new_state " << new_state << ": "
+        << (new_state == STATE_ERROR ? "ERROR" :
+            new_state == STATE_HUNG_UP ? "HUNG_UP" :
+            new_state == STATE_READY ? "READY" :
+            new_state == STATE_CALL_STARTED ? "CALL_STARTED" :
+            new_state == STATE_RINGING ? "RINGING" :
+            new_state == STATE_CONNECTED ? "CONNECTED" :
+            "NO_INFO")
+        << LL_ENDL;
+
     EState old_state = mState;
     mState = new_state;
 

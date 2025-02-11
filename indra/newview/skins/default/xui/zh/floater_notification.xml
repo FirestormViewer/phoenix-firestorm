@@ -3,5 +3,5 @@
 	<text_editor name="payload">
 		載入中...
 	</text_editor>
-	<combo_box label="回應" name="response"/>
+	<combo_box label="回應" name="response" />
 </floater>

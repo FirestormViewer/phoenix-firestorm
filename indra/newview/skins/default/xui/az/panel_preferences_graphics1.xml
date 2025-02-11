@@ -100,10 +100,9 @@
 		</panel>
 		<panel label="Aparat seçimləri" name="Hardware Settings">
 			<check_box label="Anizotrop filtrləmə (aktiv olduqda yavaşladır)" name="ani" tool_tip = "Bu qutu anizotrop filtrləməni təmin edir. Bu, kamera mövqeyinə nisbətən nisbətən böyük bucaqlarla baxıldıqda teksturların keyfiyyətini artırmaq üçün bir texnikadır. Adətən teksturlar daha uzun məsafələrdə daha az bulanıq görünür."/>
-			<check_box label="VSync yandır" name="vsync" tool_tip="Daha hamar təcrübə üçün kadr sürətini monitorun yeniləmə tezliyi ilə sinxronlaşdırır."/>
 			<check_box label="Axın VBO-nu yandır" name="vbo_stream" tool_tip="Bunun söndürülməsi VBO aktivləşdirildikdə performansı yaxşılaşdıra bilər. Müşahidə göstərdi ki, söndürülməsi müxtəlif AMD və Intel qrafik kartlarında təkmilləşdirmələr təmin edib."/>
 			<check_box label="İtkili tekstura sıxılmasını aktivləşdirin (yenidən başlama tələb olunur)" name="texture compression" tool_tip="Video yaddaşda teksturanın sıxılması rəng keyfiyyətində müəyyən itkilər hesabına yüksək rezolyusiyaya malik teksturaların yüklənməsinə imkan verir."/>
-			<check_box label="HiDPI displey dəstəyini aktivləşdirin (yalnız Mac OSX; yenidən başladın tələb olunur)" name="use HiDPI" tool_tip="Yüksək nisbət ilə göstərmək üçün OpenGL-i aktiv edin."/>
+			<check_box label="HiDPI displey dəstəyini aktivləşdirin (yalnız macOS; yenidən başladın tələb olunur)" name="use HiDPI" tool_tip="Yüksək nisbət ilə göstərmək üçün OpenGL-i aktiv edin."/>
 			<text name="Antialiasing:" tool_tip = "Bu seçimin dəyişdirilməsi bəzi avadanlıqların yenidən başlamasını tələb edə bilər." width="290">
 				Hamarlaşdırma (yenidən başlatma tövsiyyə olunur):
 			</text>
@@ -127,6 +126,8 @@
 				Dünya yeniləməsi:
 			</text>
 			<check_box label="Dünya yeniləmələrini dondurun (hamısını dayandırın)" tool_tip="Serverdən bütün yeniləmələri dondurmaq üçün təyin edin - dünyadakı bütün fəaliyyəti dayandırır, lakin söhbətə və ya səsə təsir etmir" name="WorldPause"/>
+			<check_box label="Kadr dərəcəsi həddi" name="FSLimitFramerate"/>
+			<check_box label="VSync yandır" name="vsync" tool_tip="Daha hamar təcrübə üçün kadr sürətini monitorun yeniləmə tezliyi ilə sinxronlaşdırır."/>
 			<text name="Texture Rendering">
 				Teksturların çəkilişi:
 			</text>
@@ -150,7 +151,6 @@
 			<check_box label="İşıqsaçma çəkilişi" tool_tip="İşıqsaçma çəkilişi. Nəzərə alın ki, kölgələr işə salındıqda işıqsaçmanı söndürmək üçün gücü sıfıra təyin etmək lazımdır." name="RenderGlow"/>
 			<slider label="Güc:" tool_tip="Güc. Yüksək = geniş və bulanıq (susmaya görə 2) " name="glow_strength"/>
 			<check_box label="Natamam yüklənmiş avatarları göstərin" name="RenderUnloadedAvatars"/>
-			<check_box label="Kadr dərəcəsi həddi" name="FSLimitFramerate"/>
 			<check_box label="Skelet göstərmə rejimi" name="Wireframe"/>
 			<check_box label="Birləşdirilmiş İşıqlandırmanı aktivləşdirin" tool_tip="Bu seçim üz işıqlandırması kimi avatara əlavə edilmiş işığı işə salır. " name="Render Attached Lights"/>
 			<check_box label="Digər avatarların hissəciklərini göstərin" name="Render Attached Particles"/>

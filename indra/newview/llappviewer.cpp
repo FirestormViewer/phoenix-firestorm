@@ -117,6 +117,9 @@
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0)
 #include "llfloaterscriptrecover.h"
 // [/SL:KB]
+
+#include "llfloaternotificationstabbed.h"   // <FS:SimonLsAlt/> FIRE-35118 - Add idle() processing to delete notifications
+
 #include "llspellcheck.h"
 #include "llscenemonitor.h"
 #include "llavatarrenderinfoaccountant.h"
@@ -289,7 +292,7 @@ using namespace LL;
 
 #include "fsradar.h"
 #include "fsassetblacklist.h"
-
+#include "bugsplatattributes.h"
 // #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
 
 #if LL_LINUX && LL_GTK
@@ -713,8 +716,6 @@ LLAppViewer::LLAppViewer()
     mQuitRequested(false),
     mClosingFloaters(false),
     mLogoutRequestSent(false),
-    mLastAgentControlFlags(0),
-    mLastAgentForceUpdate(0),
     mMainloopTimeout(NULL),
     mAgentRegionLastAlive(false),
     mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", false)),
@@ -769,6 +770,9 @@ LLAppViewer::LLAppViewer()
     // MAINT-8917: don't create a dump directory just for the
     // static_debug_info.log file
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+    // <FS:Beq> Improve Bugsplat tracking by using attributes
+    BugSplatAttributes::setCrashContextFileName(logdir + "crash-context.xml");
+    // </FS:Beq>
 #   else // ! LL_BUGSPLAT
     // write Google Breakpad minidump files to a per-run dump directory to avoid multiple viewer issues.
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
@@ -1236,53 +1240,6 @@ bool LLAppViewer::init()
         }
     }
 
-#if LL_WINDOWS && ADDRESS_SIZE == 64
-    if (gGLManager.mIsIntel)
-    {
-        // Check intel driver's version
-        // Ex: "3.1.0 - Build 8.15.10.2559";
-        std::string version = ll_safe_string((const char *)glGetString(GL_VERSION));
-
-        const boost::regex is_intel_string("[0-9].[0-9].[0-9] - Build [0-9]{1,2}.[0-9]{2}.[0-9]{2}.[0-9]{4}");
-
-        if (boost::regex_search(version, is_intel_string))
-        {
-            // Valid string, extract driver version
-            std::size_t found = version.find("Build ");
-            std::string driver = version.substr(found + 6);
-            S32 v1, v2, v3, v4;
-            S32 count = sscanf(driver.c_str(), "%d.%d.%d.%d", &v1, &v2, &v3, &v4);
-            if (count > 0 && v1 <= 10)
-            {
-                LL_INFOS("AppInit") << "Detected obsolete intel driver: " << driver << LL_ENDL;
-
-                if (!gViewerWindow->getInitAlert().empty() // graphic initialization crashed on last run
-                    || LLVersionInfo::getInstance()->getChannelAndVersion() != gLastRunVersion // viewer was updated
-                    || mNumSessions % 20 == 0 //periodically remind user to update driver
-                    )
-                {
-                    LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedIntelDriver");
-                    std::string gpu_name = ll_safe_string((const char *)glGetString(GL_RENDERER));
-                    LL_INFOS("AppInit") << "Notifying user about obsolete intel driver for " << gpu_name << LL_ENDL;
-                    details.setArg("[VERSION]", driver);
-                    details.setArg("[GPUNAME]", gpu_name);
-                    S32 button = OSMessageBox(details.getString(),
-                        LLStringUtil::null,
-                        OSMB_YESNO);
-                    if (OSBTN_YES == button && gViewerWindow)
-                    {
-                        std::string url = LLWeb::escapeURL(LLTrans::getString("IntelDriverPage"));
-                        if (gViewerWindow->getWindow())
-                        {
-                            gViewerWindow->getWindow()->spawnWebBrowser(url, false);
-                        }
-                    }
-                }
-            }
-        }
-    }
-#endif
-
     // Obsolete? mExpectedGLVersion is always zero
 #if LL_WINDOWS
     if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
@@ -1515,12 +1472,12 @@ bool LLAppViewer::init()
 void LLAppViewer::overrideDetectedHardware()
 {
     // Override the VRAM Detection if FSOverrideVRAMDetection is set.
-    if ( gSavedSettings.getBOOL("FSOverrideVRAMDetection") )
+    if (gSavedSettings.getBOOL("FSOverrideVRAMDetection"))
     {
-        S32 forced_video_memory = gSavedSettings.getS32("FSForcedVideoMemory");
+        U32 forced_video_memory = gSavedSettings.getU32("FSForcedVideoMemory");
         // Note: 0 is allowed here, some systems detect VRAM as zero so override should support emulating them.
-        LL_INFOS("AppInit") << "Overriding VRAM to " << forced_video_memory*1024 << " MB" << LL_ENDL;
-        gGLManager.mVRAM = forced_video_memory*1024;
+        LL_INFOS("AppInit") << "Overriding VRAM to " << forced_video_memory * 1024U << " MB" << LL_ENDL;
+        gGLManager.mVRAM = forced_video_memory * 1024U;
     }
 }
 // </FS:Beq>
@@ -1719,7 +1676,7 @@ bool LLAppViewer::doFrame()
 
         if (!LLApp::isExiting())
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df MainLoop"); // <FS:Beq/> More appropriate name
             pingMainloopTimeout("Main:JoystickKeyboard");
 
             // Scan keyboard for movement keys.  Command keys and typing
@@ -1733,6 +1690,7 @@ bool LLAppViewer::doFrame()
                 && (gHeadlessClient || !gViewerWindow->getShowProgress())
                 && !gFocusMgr.focusLocked())
             {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard"); // <FS:Beq/> Move this to the right place
                 LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE);
                 joystick->scanJoystick();
                 gKeyboard->scanKeyboard();
@@ -2601,7 +2559,12 @@ bool LLAppViewer::initThreads()
 
     // get the number of concurrent threads that can run
     S32 cores = std::thread::hardware_concurrency();
-
+#if LL_DARWIN
+    if (!gGLManager.mIsApple)
+    {
+        cores /= 2;
+    }
+#endif
     U32 max_cores = gSavedSettings.getU32("EmulateCoreCount");
     if (max_cores != 0)
     {
@@ -3806,6 +3769,10 @@ bool LLAppViewer::waitForUpdater()
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
 #if LL_WINDOWS && LL_BUGSPLAT
+    // <FS:Beq> Improve Bugsplat tracking by using attributes for certain static data items.
+    const LLSD& info = getViewerInfo();
+    bugsplatAddStaticAttributes(info);
+    // </FS:Beq>
     // bugsplat does not create dump folder and debug logs are written directly
     // to logs folder, so it conflicts with main instance
     if (mSecondInstance)
@@ -3941,9 +3908,9 @@ LLSD LLAppViewer::getViewerInfo() const
             LLVector3d pos = gAgent.getPositionGlobal();
             info["POSITION"] = ll_sd_from_vector3d(pos);
             info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
-            info["REGION"] = gAgent.getRegion()->getName();
+            info["REGION"] = region->getName();
             boost::regex regex("\\.(secondlife|lindenlab)\\..*");
-            info["HOSTNAME"] = boost::regex_replace(gAgent.getRegion()->getSimHostName(), regex, "");
+            info["HOSTNAME"] = boost::regex_replace(region->getSimHostName(), regex, "");
             LLSLURL slurl;
             LLAgentUI::buildSLURL(slurl);
             info["SLURL"] = slurl.getSLURLString();
@@ -4014,10 +3981,17 @@ LLSD LLAppViewer::getViewerInfo() const
     info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
     info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
-
-    LLRect window_rect = gViewerWindow->getWindowRectRaw();
-    info["WINDOW_WIDTH"] = window_rect.getWidth();
-    info["WINDOW_HEIGHT"] = window_rect.getHeight();
+    // <FS:Beq> gViewerWindow can be null on shutdown. Crashes if bugsplatt uses the info
+    // LLRect window_rect = gViewerWindow->getWindowRectRaw();
+    // info["WINDOW_WIDTH"] = window_rect.getWidth();
+    // info["WINDOW_HEIGHT"] = window_rect.getHeight();
+    if(gViewerWindow)
+    {
+        LLRect window_rect = gViewerWindow->getWindowRectRaw();
+        info["WINDOW_WIDTH"] = window_rect.getWidth();
+        info["WINDOW_HEIGHT"] = window_rect.getHeight();
+    }
+    // </FS:Beq>
 
     // <FS> Custom sysinfo
     //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
@@ -4038,7 +4012,7 @@ LLSD LLAppViewer::getViewerInfo() const
     info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
     bool want_fullname = true;
     info["AUDIO_DRIVER_VERSION"] = gAudiop ? LLSD(gAudiop->getDriverName(want_fullname)) : "Undefined";
-    if(LLVoiceClient::getInstance()->voiceEnabled())
+    if(LLStartUp::getStartupState() == STATE_STARTED && LLVoiceClient::getInstance()->voiceEnabled()) // <FS:Beq/> Calling this too earli leads to a nasty crash loop
     {
         LLVoiceVersionInfo version = LLVoiceClient::getInstance()->getVersion();
         const std::string build_version = version.mBuildVersion;
@@ -4130,7 +4104,13 @@ LLSD LLAppViewer::getViewerInfo() const
     }
 
     // populate field for new local disk cache with some details
-    info["DISK_CACHE_INFO"] = LLDiskCache::getInstance()->getCacheInfo();
+    // <FS:Beq> only populate if the cache is available
+    // info["DISK_CACHE_INFO"] = LLDiskCache::getInstance()->getCacheInfo();
+    if (auto cache = LLDiskCache::getInstance(); cache)
+    {
+        info["DISK_CACHE_INFO"] = cache->getCacheInfo();
+    }
+    // </FS:Beq>
 
     // <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
     switch (gSavedSettings.getU32("RenderQualityPerformance"))
@@ -4171,8 +4151,9 @@ LLSD LLAppViewer::getViewerInfo() const
     // </FS:PP>
 
     // <FS:Ansariel> Include VRAM budget
-    if (auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget"); budget > 0)
+    if (gSavedSettings.getBOOL("FSLimitTextureVRAMUsage"))
     {
+        auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget");
         info["VRAM_BUDGET"] = std::to_string(budget) + " MB";
         info["VRAM_BUDGET_ENGLISH"] = std::to_string(budget) + " MB";
     }
@@ -5578,31 +5559,13 @@ void LLAppViewer::idle()
             gAgent.autoPilot(&yaw);
         }
 
-        static LLFrameTimer agent_update_timer;
+        send_agent_update(false);
 
-        // When appropriate, update agent location to the simulator.
-        F32 agent_update_time = agent_update_timer.getElapsedTimeF32();
-        F32 agent_force_update_time = mLastAgentForceUpdate + agent_update_time;
-        bool timed_out = agent_update_time > (1.0f / (F32)AGENT_UPDATES_PER_SECOND);
-        bool force_send =
-            // if there is something to send
-            (gAgent.controlFlagsDirty() && timed_out)
-            // if something changed
-            || (mLastAgentControlFlags != gAgent.getControlFlags())
-            // keep alive
-            || (agent_force_update_time > (1.0f / (F32) AGENT_FORCE_UPDATES_PER_SECOND));
-        // timing out doesn't warranty that an update will be sent,
-        // just that it will be checked.
-        if (force_send || timed_out)
-        {
-            LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
-            // Send avatar and camera info
-            mLastAgentControlFlags = gAgent.getControlFlags();
-            mLastAgentForceUpdate = force_send ? 0 : agent_force_update_time;
-            if(!gAgent.getPhantom())
-                send_agent_update(force_send);
-            agent_update_timer.reset();
-        }
+        // After calling send_agent_update() in the mainloop we always clear
+        // the agent's ephemeral ControlFlags (whether an AgentUpdate was
+        // actually sent or not) because these will be recomputed based on
+        // real-time key/controller input and resubmitted next frame.
+        gAgent.resetControlFlags();
     }
 
     //////////////////////////////////////
@@ -5703,6 +5666,12 @@ void LLAppViewer::idle()
         }
     }
 
+    // <FS:SimonLsAlt> Handle deferred notice deletions
+    if (auto* notificationsTabbed = LLFloaterReg::findTypedInstance<LLFloaterNotificationsTabbed>("notification_well_window"))
+    {
+        notificationsTabbed->idle();
+    }
+    // </FS:SimonLsAlt/>
 
     // Update layonts, handle mouse events, tooltips, e t c
     // updateUI() needs to be called even in case viewer disconected
@@ -6049,10 +6018,7 @@ void LLAppViewer::sendLogoutRequest()
         gLogoutMaxTime = LOGOUT_REQUEST_TIME;
         mLogoutRequestSent = true;
 
-        if(LLVoiceClient::instanceExists())
-        {
-            LLVoiceClient::getInstance()->setVoiceEnabled(false);
-        }
+        LLVoiceClient::setVoiceEnabled(false);
     }
 }
 
@@ -6239,11 +6205,6 @@ void LLAppViewer::idleNetwork()
             CheckMessagesMaxTime = CHECK_MESSAGES_DEFAULT_MAX_TIME;
         }
 #endif
-
-
-
-        // we want to clear the control after sending out all necessary agent updates
-        gAgent.resetControlFlags();
 
         // Decode enqueued messages...
         S32 remaining_possible_decodes = MESSAGE_MAX_PER_FRAME - total_decoded;

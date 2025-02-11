@@ -219,9 +219,9 @@ This will configure Firestorm to be built with all defaults and without third pa
 Available premade firestorm-specific build targets:
 
 ```
-ReleaseFS           (includes KDU, FMOD)
-ReleaseFS_open      (no KDU, no FMOD)
-RelWithDebInfo_open (no KDU, no FMOD)
+ReleaseFS             (includes KDU, FMOD)
+ReleaseFS_open        (no KDU, no FMOD)
+RelWithDebInfoFS_open (no KDU, no FMOD)
 ```
 
 > [!TIP]

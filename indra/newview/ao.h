@@ -55,6 +55,7 @@ class FloaterAO
         virtual void onOpen(const LLSD& key);
         virtual void onClose(bool app_quitting);
         void updateList();
+        void updateScrollListData();
         void updateSetParameters();
         void updateAnimationList();
 
@@ -89,6 +90,10 @@ class FloaterAO
 
         void onClickMore();
         void onClickLess();
+
+// <AS:Chanayane> Double click on animation in AO
+        void onDoubleClick();
+// </AS:Chanayane>
 
         void onAnimationChanged(const LLUUID& animation);
 

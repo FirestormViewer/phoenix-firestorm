@@ -102,8 +102,10 @@
 		<combo_box.item value="filter_type_sounds" label="Sounds" />
 		<combo_box.item value="filter_type_textures" label="Texturen" />
 		<combo_box.item value="filter_type_snapshots" label="Fotos" />
+		<combo_box.item value="filter_type_materials" label="Materialien" />
 		<combo_box.item value="filter_type_settings" label="Einstellungen" />
-		<combo_box.item value="filter_separator" label="------------" />
+		<combo_box.item value="filter_type_folders" label="Ordner" />
+		<combo_box.item value="filter_type_coalesced" label="Nur verbundene Objekte"/>
 		<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
 	</combo_box>
 	<menu_button name="options_visibility_btn" tool_tip="Sichtbarkeitseinstellungen für Suchergebnisse anzeigen"/>

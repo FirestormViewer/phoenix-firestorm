@@ -20,6 +20,12 @@
 	<check_box label="Trans." name="check_transfer" />
 	<check_box label="Zawsze pokaż foldery" name="check_show_empty" />
 	<check_box label="Twórca: ja" name="check_created_by_me" />
+	<check_box label="Tylko podn. razem" name="check_only_coalesced" width="117" />
+	<combo_box tool_tip="Filtruj połączone obiekty" name="inventory_filter_show_links_combo">
+		<combo_box.item name="show_links" label="Pokaż linki" />
+		<combo_box.item name="show_links_only" label="Pokaż tylko linki" />
+		<combo_box.item name="hide_links" label="Ukryj linki" />
+	</combo_box>
 	<check_box label="Twórca: inni" name="check_created_by_others" />
 	<check_box label="Od wylogowania" name="check_since_logoff" />
 	<text name="- OR -">
