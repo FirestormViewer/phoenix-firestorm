@@ -47,7 +47,7 @@
 						</row>
 						<row name="restore_global_row_quickprefs">
 							<column name="restore_global_files_label">
-								クイック設定
+								簡易設定
 							</column>
 						</row>
 						<row name="restore_global_row_favorites">

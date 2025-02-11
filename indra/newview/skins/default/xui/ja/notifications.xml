@@ -5036,11 +5036,6 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 		<tag>confirm</tag>
 		<usetemplate ignoretext="選択したオブジェクトをフレキシブルパスに変更する際にナビメッシュから削除されることの確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
-	<global name="UnsupportedIntelDriver">
-		インストールされているIntelグラフィックスドライバ[GPUNAME]（バージョン[VERSION]）は古いため、プログラムのクラッシュの原因になりえます。最新のIntelドライバーに更新することを強くお勧めします。
-
-Intelドライバーのウェブサイトを確認しますか？
-	</global>
 	<global name="UnsupportedCPUAmount">
 		796
 	</global>

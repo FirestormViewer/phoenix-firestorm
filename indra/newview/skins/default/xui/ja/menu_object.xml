@@ -47,14 +47,6 @@
 	<menu_item_call label="描画解除＋ブラックリスト" name="DerenderPermanent"/>
 	<!-- /Derender -->
 	<menu_item_call label="返却…" name="Return..."/>
-	<context_menu label="オブジェクトを取る" name="Take Submenu">
-		<menu_item_call label="取る" name="Pie Object Take"/>
-		<menu_item_call label="コピーを取る" name="Take Copy"/>
-		<menu_item_call label="複合アイテムとして取る" name="Take combined"/>
-		<menu_item_call label="複合アイテムとしてコピーする" name="Take Copy combined"/>
-		<menu_item_call label="分割アイテムとして取る" name="Take Separate"/>
-		<menu_item_call label="分割アイテムとしてコピーする" name="Take Copy Separate"/>
-	</context_menu>
 	<menu_item_separator/>
 	<menu_item_call label="取る" name="Pie Object Take"/>
 	<menu_item_call label="コピーを取る" name="Take Copy"/>

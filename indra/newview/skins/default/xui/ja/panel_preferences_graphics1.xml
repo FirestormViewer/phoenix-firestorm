@@ -149,13 +149,6 @@
 			<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレーム レートをモニターのリフレッシュレートに同期すると、スタッターや入力遅延が増加する可能性があります。"/>
 			<check_box label="テクスチャの不可逆圧縮（要再起動）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。"/>
 			<check_box label="HiDPI表示対応を有効にする（Mac OSXのみ。再起動が必要。）" name="use HiDPI" tool_tip="高解像度描画のためのOpenGLを有効にします"/>
-			<text name="Antialiasing:" tool_tip="ハードウェアによってはこの設定の変更を適用するには再起動が必要な場合があります。">
-        アンチエイリアス：
-			</text>
-			<combo_box label="アンチエイリアス" name="fsaa">
-				<combo_box.item label="使用しない" name="FSAADisabled"/>
-				<combo_box.item label="ＦＸＡＡ" name="FXAA"/>
-			</combo_box>
 			<text name="advanced_settings">
 				高度な設定（要再起動）：
 			</text>
@@ -197,9 +190,6 @@
 				<combo_box.item label="低（4）品質" name="4"/>
 				<combo_box.item label="テクスチャなし（5）" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				アルファマスクの描画：
-			</text>
 			<check_box label="「高度な光源モデル」が有効の時にアルファマスクを描画" tool_tip="影のオプションが選択されている時にここにチェックを入れると、アルファマスク（透明テクスチャ）が正確に描画されます。" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				その他の描画設定：
