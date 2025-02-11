@@ -6872,4 +6872,13 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
+	<notification name="WhitelistReminder">
+[APP_NAME]のパフォーマンスを向上させるには、ホワイトリストに登録してください。
+
+一部のウイルス対策プログラムでは、[APP_NAME]の一部を誤ってブロックし、パフォーマンスが低下したり、一部の機能が誤動作したりする場合があります。これらの問題を防ぐには、[APP_NAME]をウイルス対策プログラムのホワイトリスト (または除外リスト) に追加することを強くお勧めします。これにより、ビューアがスムーズに動作します。
+
+[APP_NAME]をホワイトリストに登録する方法 (除外するファイルとフォルダのリストを含む) の詳細については、次のガイドをご覧ください。
+
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</notification>
 </notifications>

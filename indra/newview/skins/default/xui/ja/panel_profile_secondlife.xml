@@ -80,7 +80,16 @@
 			<text name="label2" value="アカウント："/>
 			<view_border name="info_border_acc_status_text"/>
 			<layout_stack name="badgepositioner">
-				<layout_panel name="badge_layout"/>
+				<layout_panel name="badge_layout">
+					<layout_stack name="badge_stacker">
+						<layout_panel name="top_badge_layout">
+							<icon name="top_badge_icon" tool_tip="Linden Lab従業員" />
+						</layout_panel>
+						<layout_panel name="bottom_badge_layout">
+							<icon name="bottom_badge_icon" tool_tip="Linden Lab従業員"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
 				<layout_panel name="accountinfo_layout">
 					<text_editor name="account_info"/>
 				</layout_panel>

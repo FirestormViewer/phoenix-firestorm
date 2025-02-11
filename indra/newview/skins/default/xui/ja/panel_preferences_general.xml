@@ -3,6 +3,7 @@
 	<text name="language_textbox">言語：</text>
 	<combo_box name="language_combobox">
 		<combo_box.item label="English（英語）" name="English"/>
+		<combo_box.item label="Azərbaycanca（アゼルバイジャン語）" name="Azerbaijani"/>
 		<combo_box.item label="Deutsch （ドイツ語）" name="Deutsch(German)"/>
 		<combo_box.item label="Español（スペイン語）–ベータ" name="Spanish"/>
 		<combo_box.item label="Français（フランス語）" name="French"/>

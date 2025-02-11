@@ -69,6 +69,8 @@
 			<check_box label="インターフェース" name="ui_check"/>
 			<check_box label="L$残高" name="currency_check" />
 			<check_box label="ＨＵＤ" name="hud_check"/>
+			<check_box label="キャプチャフレームを表示" tool_tip="スナップショットの領域を囲むフレームを画面上に表示します。スナップショットの外側にあるシーンの部分は彩度が低くなり、わずかにぼやけます。" name="show_frame"/>
+			<check_box label="フレーミングガイドを表示する" tool_tip="スナップショットのフレーム内にフレーミングガイド（三分割法）を表示します。" name="show_guides" />
 			<check_box label="フレームをフリーズ（全画面）" name="freeze_frame_check"/>
 			<check_box label="自動リフレッシュ" name="auto_snapshot_check"/>
 			<check_box label="ポストプロセッシングなし" name="no_post_check"/>

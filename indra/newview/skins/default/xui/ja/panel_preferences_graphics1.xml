@@ -141,14 +141,32 @@
 			<button label="保存" name="PrefSaveButton"/>
 			<button label="読み込む" name="PrefLoadButton"/>
 			<button label="削除" name="PrefDeleteButton"/>
-			<button name="Defaults"/>
+			<button name="Defaults" tool_tip="デフォルトのグラフィック設定をリロードします。"/>
 		</panel>
 		<!-- ハードウェア設定 -->
 		<panel label="ハードウェア設定" name="Hardware Settings">
 			<check_box label="異方性フィルタリング（有効にすると速度が低下します）" name="ani" tool_tip="ここにチェックを入れると、異方性フィルタリングが有効になります。これは、自分のカメラの位置に対して、正面ではない角度で見えているテクスチャの品質を向上させるものです。通常、より遠くにある部分がぼやけて見えるのを防ぎます。"/>
-			<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレーム レートをモニターのリフレッシュレートに同期すると、スタッターや入力遅延が増加する可能性があります。"/>
 			<check_box label="テクスチャの不可逆圧縮（要再起動）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。"/>
-			<check_box label="HiDPI表示対応を有効にする（Mac OSXのみ。再起動が必要。）" name="use HiDPI" tool_tip="高解像度描画のためのOpenGLを有効にします"/>
+			<check_box label="ＨｉＤＰＩ表示対応を有効にする（Mac OSXのみ。再起動が必要。）" name="use HiDPI" tool_tip="高解像度描画のためのOpenGLを有効にします"/>
+			<text name="antialiasing label" tool_tip="この設定を変更すると、一部のハードウェアの再起動が必要になる場合があります。">
+				アンチエイリアス（要再起動）：
+			</text>
+			<text name="antialiasing quality label" tool_tip="この設定を変更すると、一部のハードウェアの再起動が必要になる場合があります。">
+				アンチエイリアスの品質：
+			</text>
+			<combo_box name="fsaa">
+				<combo_box.item label="無効" name="FSAADisabled"/>
+				<combo_box.item label="ＦＸＡＡ" name="FXAA"/>
+				<combo_box.item label="ＳＭＡＡ" name="SMAA"/>
+			</combo_box>
+			<combo_box name="fsaa quality">
+				<combo_box.item label="低" name="Low"/>
+				<combo_box.item label="中" name="Medium"/>
+				<combo_box.item label="高" name="High"/>
+				<combo_box.item label="ウルトラ" name="Ultra"/>
+			</combo_box>
+			<check_box label="ＶＲＡＭテクスチャ使用量の制限（㎆）" name="FSLimitTextureVRAMUsage" tool_tip="テクスチャに使用されるＶＲＡＭの量を制限します。他の要素もＶＲＡＭを使用するため、全体的な使用量は依然として高くなる可能性があります。" />
+			<slider name="RenderMaxVRAMBudget" tool_tip="テクスチャに使用されるＶＲＡＭの最大量（メガバイト単位）を指定します。" />
 			<text name="advanced_settings">
 				高度な設定（要再起動）：
 			</text>
@@ -157,14 +175,32 @@
 ＧＰＵで検出されたＶＲＡＭを上書きします。
 これには、システムＲＡＭの一部である「共有」ＶＲＡＭを含めないでください。
 違いがわからない場合は、このコントロールをそのままにしておいてください。"/>
+			<text name="automatic_texture_downscale_settings">
+				自動テクスチャダウンスケーリング：
+			</text>
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="アクティブウィンドウでない場合、選択した秒数後にテクスチャを縮小します。">
+				背面の時（0は無効）
+			</text>
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="アクティブウィンドウでない場合、選択した秒数後にテクスチャを縮小します。" />
+			<text name="TextureDiscardBackgroundedTime_seconds">
+				秒
+			</text>
+			<text name="TextureDiscardMinimizedTime_label" tool_tip="最小化されると、選択した秒数後にテクスチャを縮小します。">
+				最小化時（0は無効）
+			</text>
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="最小化されると、選択した秒数後にテクスチャを縮小します。" />
+			<text name="TextureDiscardMinimizedTime_seconds">
+				秒
+			</text>
 		</panel>
 		<!-- 描画 -->
 		<panel label="描画" name="Rendering">
 			<text name="World Updating">
-				インワールドの描画更新：
+				ワールドの更新：
 			</text>
 			<!-- world pauser -->
 			<check_box label="インワールドの描画更新を停止（全ての動きが停止します）" tool_tip="サーバから送られて来る更新情報を全て停止します。結果、インワールドの動作が全て停止します。但し、チャット、IM、ボイスへの影響はありません。" name="WorldPause"/>
+			<check_box label="フレームレート制限" name="FSLimitFramerate" tool_tip="フレームレートをユーザー定義の値に制限します。ＣＰＵ／ＧＰＵの電力消費と発熱を削減できます。"/>
 			<text name="Texture Rendering">
         テクスチャの描画：
 			</text>
@@ -194,11 +230,13 @@
 			<text name="Miscellaneous Rendering">
 				その他の描画設定：
 			</text>
+			<check_box label="ＨＤＲと放射" tool_tip="新しいマシンで、ＨＤＲやＰＢＲコンテンツの放射テクスチャなどの追加のレンダリングパイプライン機能を有効にします。." name="VintageMode"/>
 			<check_box label="グローを描画" tool_tip="グロー（輝き）を描画します。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow"/>
 			<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength"/>
 			<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars"/>
 			<check_box label="フレームレートを制限" name="FSLimitFramerate"/>
 			<slider label="ＦＰＳ：" name="MaxFPS"/>
+			<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期すると、スタッターや入力遅延が増加する可能性があります。"/>
 			<check_box label="風景をワイヤーフレームで表示" name="Wireframe"/>
 			<check_box label="装着している光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
 			<check_box label="装着しているパーティクルを描画する" name="Render Attached Particles"/>
@@ -207,7 +245,20 @@
 				秒
 			</text>
 			<slider label="影の品質" tool_tip="文字通り影の品質です。（1がデフォルト） " name="ShadowResolution"/>
-			<slider label="地面のテクスチャの精度（要再起動）" name="RenderTerrainScale" tool_tip="地面のテクスチャの精度を決定します。値が低いほどテクスチャの圧縮度が高まります。（要再起動）"/>
+			<slider label="地形テクスチャの精度（要再起動）" name="RenderTerrainScale" tool_tip="地面のテクスチャの精度を決定します。値が低いほどテクスチャの圧縮度が高まります。（要再起動）"/>
+			<!-- Sharpening Settings -->
+			<slider label="鮮明化：" name="RenderSharpness"/>
+			<!-- End of Sharpening Settings-->
+			<!-- Tone Mapping Settings -->
+			<text name="TonemapTypeText">
+				トーンマッパ：
+			</text>
+			<combo_box name="TonemapType">
+				<combo_box.item label="Khronosナチュラル" name="0"/>
+				<combo_box.item label="ＡＣＥＳ" name="1"/>
+			</combo_box>
+			<slider label="トーンマップ混合：" tool_tip="リニアカラーとトーンマップカラーの混合値を指定します。" name="TonemapMix"/>
+			<!-- End of Tone Mapping Settings-->
 		</panel>
 		<!-- 被写界深度 -->
 		<panel label="被写界深度（ＤＯＦ）" name="DOF panel">

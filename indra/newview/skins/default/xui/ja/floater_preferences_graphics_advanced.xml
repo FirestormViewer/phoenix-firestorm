@@ -54,12 +54,20 @@
 	<combo_box label="アンチエイリアシング" name="fsaa">
 		<combo_box.item label="無効" name="FSAADisabled"/>
 		<combo_box.item label="ＦＸＡＡ" name="FXAA"/>
+		<combo_box.item label="ＳＭＡＡ" name="SMAA"/>
 	</combo_box>
-	<text name="antialiasing restart">
-		（再起動後に反映）
+	<text name="antialiasing quality label">
+		アンチエイリアスの品質：
 	</text>
-	<view_border name="vert_border"/>
-	<text name="MeshText">メッシュ</text>
+	<combo_box label="アンチエイリアス" name="fsaa quality">
+		<combo_box.item label="低" name="Low"/>
+		<combo_box.item label="中" name="Medium"/>
+		<combo_box.item label="高" name="High"/>
+		<combo_box.item label="ウルトラ" name="Ultra"/>
+	</combo_box>
+	<text name="MeshText">
+		メッシュ
+	</text>
 	<slider label="地形のメッシュの詳細：" name="TerrainMeshDetail"/>
 	<text name="TerrainMeshDetailText">
 		低
@@ -76,6 +84,10 @@
 	<text name="FlexibleMeshDetailText">
 		低
 	</text>
+	<text name="antialiasing restart">
+		（再起動後に反映）
+	</text>
+	<view_border name="vert_border"/>
 	<text name="ShadersText">
 		シェーダー
 	</text>
@@ -86,6 +98,7 @@
 	</text>
 	<check_box label="アンビエントオクルージョン" name="UseSSAO"/>
 	<check_box label="被写界深度（ＤｏＦ）" name="UseDoF"/>
+	<check_box label="ＨＤＲと放射" name="VintageMode"/>
 	<text name="RenderShadowDetailText">
 		影：
 	</text>
@@ -134,6 +147,19 @@
 		<combo_box.item label="最高" name="0"/>
 	</combo_box>
 	<!-- End of mirror settings -->
+	<!-- Sharpening Settings -->
+	<slider label="鮮明化：" name="RenderSharpness"/>
+	<!-- End of Sharpening Settings-->
+	<!-- Tone Mapping Settings -->
+	<text name="TonemapTypeText">
+		トーンマッパ：
+	</text>
+	<combo_box name="TonemapType">
+		<combo_box.item label="Khronosナチュラル" name="0"/>
+		<combo_box.item label="ＡＣＥＳ" name="1"/>
+	</combo_box>
+	<slider label="トーンマップ混合：" tool_tip="リニアカラーとトーンマップカラーの混合値を指定します。" name="TonemapMix"/>
+	<!-- End of Tone Mapping Settings-->
 	<!-- End of Advanced Settings block -->
 	<view_border name="horiz_border"/>
 	<button label="推奨設定値にリセット" name="Defaults"/>

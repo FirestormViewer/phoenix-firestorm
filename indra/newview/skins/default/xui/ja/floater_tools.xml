@@ -578,6 +578,7 @@
 			<button label="権限" name="button permissions"/>
 			<button label="更新" name="button refresh"/>
 			<button label="スクリプトのリセット" name="btn_reset_scripts"/>
+			<filter_editor label="フィルタテキストを入力" name="contents_filter"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

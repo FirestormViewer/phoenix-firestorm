@@ -89,6 +89,9 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="新しいインベントリウィンドウを表示します。"/>
 		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="フィルターを表示‐選択するとフィルターサイドメニューが表示されます。フィルターが有効になっている場合は強調表示されます。"/>
+		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="表示モードを切り替えます。"/>
 		</panel>

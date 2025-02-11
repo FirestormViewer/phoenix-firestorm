@@ -1935,6 +1935,9 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="Textures" value="テクスチャ、"/>
 	<string name="Settings" value="自然環境の設定、"/>
 	<string name="Snapshots" value="スナップショット、"/>
+	<!-- [AS:Chanayane] Search folders only -->
+	<string name="Folders" value="フォルダ、" />
+	<!-- [/AS:Chanayane] -->
 	<string name="No Filters" value="なし"/>
 	<string name="Since Logoff" value="–ログオフ以来"/>
 	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
@@ -6098,6 +6101,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_RFO_Label">フレンドのみ表示</string>
 	<string name="Command_DAO_Label">アニメッシュの描画解除</string>
 	<string name="Command_Beacons_Label">ビーコン</string>
+	<string name="Command_Poser_Label">ポーザー</string>
+	<string name="Command_Poser_Tooltip">アバターとアニメーションオブジェクトにポーズをつけます。</string>
 
 	<string name="Command_360_Capture_Tooltip">
 		３６０度の正距円筒図法のスナップショット画像を撮影します。
@@ -6545,9 +6550,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		自然環境の設定
 	</string>
 	<!-- PBR Materials -->
-	<string name="Material Texture Name Header">
-		テクスチャはこのマテリアルを表しています：
-	</string>
+	<string name="Material Texture Name Header">テクスチャはこのマテリアルを表しています：</string>
+	<string name="material_selection_title">マテリアルの選択</string>
+	<string name="material_selection_text">マテリアル選択：</string>
+	<string name="material_batch_import_text">─全てを一括アップロード─</string>
+
 	<!-- Conversation log messages -->
 	<string name="logging_calls_disabled_log_empty">
 		会話はログに記録されていません。ログの記録を開始するには、「初期設定」＞「チャット」で「保存：ログのみ」または「保存：ログと会話のテキスト」を選択します。

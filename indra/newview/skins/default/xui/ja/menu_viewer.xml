@@ -70,6 +70,10 @@
 		<menu_item_call label="３６０度スナップショット" name="Capture 360"/>
 		<menu_item_call label="マネートラッカー" name="money_tracker"/>
 		<menu_item_call label="ポーズスタンド…" name="pose_stand"/>
+		<!-- FS:AR FIRE-30873 -->
+		<menu_item_check label="ポーザー" name="Poser"/>
+		<!-- /FS:AR FIRE-30873 -->
+		<menu_item_separator/>
 		<menu_item_call label="初期設定" name="Preferences"/>
 		<menu_item_call label="ツールバーボタン" name="Toolbar Buttons"/>
 		<menu_item_check label="ＨＵＤを表示" name="Show HUD Attachments"/>
@@ -103,6 +107,9 @@
 		<menu_item_check label="会話ログ…" name="Conversation Log..."/>
 		<menu_item_check label="近くのボイス" name="Nearby Voice"/>
 		<menu_item_call label="ブロックリスト" name="Block List"/>
+		<!-- <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console -->
+		<menu_item_check label="オンスクリーンチャットコンソールを表示" name="Show On-screen Console"/>
+		<!-- </FS:minerjr> [FIRE-35039] -->
 	</menu>
 	<menu label="ワールド" name="World">
 		<menu_item_call label="アニメーションの再同期" name="Resync Animations"/>
@@ -580,6 +587,7 @@
 			<menu_item_check label="フル解像度のテクスチャ（危険）" name="Full Res Textures"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>
 			<menu_item_check label="取り付けられたパーティクルを描画する" name="Render Attached Particles"/>
+			<menu_item_check label="フォント頂点バッファを収集する" name="Collect Font Vertex Buffers"/>
 			<menu_item_separator/>
 			<menu_item_check label="シェーダーキャッシュを有効化" name="Enable Shader Cache"/>
 			<menu_item_call label="シェーダーキャッシュをクリア" name="Shader Cache Clear"/>

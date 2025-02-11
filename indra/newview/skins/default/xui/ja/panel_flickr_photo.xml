@@ -2,12 +2,12 @@
 <panel name="panel_flickr_photo">
 	<combo_box name="resolution_combobox" tool_tip="画像解像度">
 		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>
-		<combo_box.item label="320x240" name="320x240"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="1280x1024" name="1280x1024"/>
-		<combo_box.item label="1600x1200" name="1600x1200"/>
+		<combo_box.item label="320×240" name="320x240"/>
+		<combo_box.item label="640×480" name="640x480"/>
+		<combo_box.item label="800×600" name="800x600"/>
+		<combo_box.item label="1024×768" name="1024x768"/>
+		<combo_box.item label="1280×1024" name="1280x1024"/>
+		<combo_box.item label="1600×1200" name="1600x1200"/>
 		<combo_box.item label="カスタム" name="Custom"/>
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="画像フィルター">
@@ -17,6 +17,9 @@
 	<text name="working_lbl">
 		更新しています…
 	</text>
+	<check_box label="フレームキャプチャを表示" tool_tip="スナップショットの領域を囲むフレームを画面上に表示します。スナップショットの外側にあるシーンの部分は彩度が低くなり、わずかにぼやけます。" name="show_frame"/>
+	<check_box label="フレーミングガイド" tool_tip="スナップショットのフレーム内にフレーミングガイド（三分割法）を表示します。" name="show_guides"/>
+	<view_border name="refresh_border"/>
 	<button label="更新" name="new_snapshot_btn" tool_tip="クリックして更新"/>
 	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックしてプレビューを切り替える"/>
 	<text name="title_label">

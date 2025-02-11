@@ -30,6 +30,7 @@
 			<check_box label="周辺チャット" name="show_timestamps_nearby_chat"/>
 			<check_box label="ＩＭ" name="show_timestamps_im"/>
 			<check_box label="会話テキスト" name="show_timestamps_transcripts"/>
+			<check_box label="オンスクリーンチャットコンソールを表示" tool_tip="会話ウィンドウが表示されていない場合に、チャットコンソールのテキストを表示／非表示します。" name="FSShowOnscreenConsole"/>
 			<check_box label="コンソール表示にクラシック描画モードを使用" name="FSConsoleClassicDrawMode" tool_tip="クラシック描画モードではコンソールの背景を一つの長方形で囲み、その幅は一番長い行のものとなります"/>
 			<check_box label="コンソールの幅は画面の幅いっぱいにする" name="ChatFullWidth"/>
 			<spinner label="チャットが消えるまで" name="fade_chat_time"/>

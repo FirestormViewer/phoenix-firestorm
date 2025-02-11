@@ -9,6 +9,8 @@
 			<check_box label="マウスを重ねるとヒントを表示（最初に設定）" name="ShowHoverTips" tool_tip="アバターやその他インワールドのものにマウスを重ねるとヒントが表示されるようにします。ヒントを使うにはまず最初にここにチェックを入れて下さい。"/>
 			<check_box label="全てのオブジェクトに表示" tool_tip="インワールドのオブジェクトについてのヒントを表示する場合にチェックして下さい。" name="ShowAllHoverTips"/>
 			<check_box label="土地に表示" tool_tip="土地についてのヒントを表示する場合にチェックして下さい。" name="ShowLandHoverTips"/>
+			<check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示する"/>
+			<check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示する"/>
 			<text name="tooltip_textbox">
 				ヒント表示までの時間：
 			</text>
@@ -24,10 +26,26 @@
 			<text name="ObjectInspectorTooltipDelay_text">
 				秒
 			</text>
-			<check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示"/>
-			<slider label="フローティングテキストのフェード開始距離 (m):" tool_tip="フローティングテキストが薄く消え始める距離をメートル単位で設定します" name="FSHudTextFadeDistance"/>
-			<slider label="フローティングテキストのフェード範囲 (m):" tool_tip="フローティングテキストがはっきりと見える状態から完全に見えなくなるまでの距離をメートル単位で設定します" name="FSHudTextFadeRange"/>
+			<!--<FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights -->
+			<!--Added new heading label for the Floating Text Options as there are now 4 -->
+			<text name="FSHudTextLabel">
+				フローティングテキストのオプション：
+			</text>
+			<!-- <FS:minerjr> Removed top="130" below as it was causing an issue with the new header text -->
+			<slider label="フローティングテキストのフェード開始距離（ｍ）：" tool_tip="フローティングテキストが薄く消え始める距離をメートル単位で設定します。" name="FSHudTextFadeDistance"/>
+			<slider label="フローティングテキストのフェード範囲（ｍ）：" tool_tip="フローティングテキストがはっきりと見える状態から完全に見えなくなるまでの距離をメートル単位で設定します。" name="FSHudTextFadeRange"/>
+			<!-- Added new check box to disable the highlight floating text feature -->
+			<check_box name="FSHudTextUseHoverHighlight" label="オブジェクトの上にマウスを置くとフローティングテキストを強調表示する：" tool_tip="オブジェクトにマウスを移動したときに、フローティングテキスト（ホバーテキスト）を前面に移動して強調表示し、アルファを無効にします。"/>
+			<text name="FSHudTextShowBackgroundLabel">
+				フローティングテキストに背景を表示する：
+			</text>
+			<!-- Added combo box to control the background behavior for prims -->
+			<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="フローティングテキスト（ホバーテキスト）の背後に黒／白の背景を表示して、読みやすくします。不透明度は、「カラー」＞「その他」で変更できます。">
+				<combo_box.item label="オフ" name="ScriptDialogOption_0"/>
+				<combo_box.item label="ハイライトされたオブジェクトのみ" name="ScriptDialogOption_1"/>
+				<combo_box.item label="全てのオブジェクト" name="ScriptDialogOption_2"/>
+			</combo_box>
+			<!-- </FS:minerjr> [FIRE-35019] -->
 		</panel>
 		<!-- 2D Overlay -->
 		<panel label="2D オーバーレイ" name="ui-2d-overlay">
