@@ -277,7 +277,8 @@ public:
     bool            selectItemBySubstring(const LLWString& target, bool case_sensitive = true);
     bool            selectItemByStringMatch(const LLWString& target, bool prefix_match, bool case_sensitive = true, S32 column = -1);
     // </FS:Ansariel>
-    LLScrollListItem* getItemByLabel(const std::string& item, bool case_sensitive = true, S32 column = 0);
+    LLScrollListItem* getItemByLabel(const std::string& label, bool case_sensitive = true, S32 column = 0);
+    LLScrollListItem* getItemByValue(const std::string& value);
     LLScrollListItem* getItemByIndex(S32 index);
     std::string     getSelectedItemLabel(S32 column = 0) const;
     LLSD            getSelectedValue();

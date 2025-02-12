@@ -9586,13 +9586,13 @@ class LLToolsSelectedScriptAction : public view_listener_t
     {
         // <FS> Script reset in edit floater
         //std::string action = userdata.asString();
-        //bool mono = false;
+        //std::string target = "lsl2";
         //std::string msg, name;
         //std::string title;
         //if (action == "compile mono")
         //{
         //  name = "compile_queue";
-        //  mono = true;
+        //  target = "mono";
         //  msg = "Recompile";
         //  title = LLTrans::getString("CompileQueueTitle");
         //}
@@ -9655,13 +9655,13 @@ void handle_selected_script_action(const std::string& action)
         }
 // [/RLVa:KB]
 
-    bool mono = false;
+    std::string target = "lsl2";
     std::string msg, name;
     std::string title;
     if (action == "compile mono")
     {
         name = "compile_queue";
-        mono = true;
+        std::string target = "mono";
         msg = "Recompile";
         title = LLTrans::getString("CompileQueueTitle");
     }
@@ -9702,7 +9702,7 @@ void handle_selected_script_action(const std::string& action)
     LLFloaterScriptQueue* queue = LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
     if (queue)
     {
-        queue->setMono(mono);
+        queue->setCompileTarget(target);
         if (queue_actions(queue, msg))
         {
             queue->setTitle(title);

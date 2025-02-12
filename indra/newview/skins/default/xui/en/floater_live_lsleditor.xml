@@ -7,7 +7,7 @@
   height="602"
   layout="topleft"
   min_height="271"
-  min_width="328"
+  min_width="420"
   name="script ed float"
   help_topic="preview_lsl_text"
   save_rect="true"
@@ -90,18 +90,41 @@
     label="Running"
     layout="topleft"
     name="running"
-    width="205" />
-  <check_box
-    left_delta="130"
-    enabled="true"
-    follows="left|bottom"
+    width="80" />
+  <text
     font="SansSerif"
-    height="18"
-    initial_value="true"
-    label="Mono"
     layout="topleft"
-    name="mono"
-    width="100" />
+    left_pad="10"
+    height="18"
+    name="compile_target_label"
+    follows="left|bottom"
+    width="80">
+     Compiler:
+  </text>
+  <combo_box
+    layout="topleft"
+    name="compile_target"
+    follows="left|bottom"
+    left_pad="5"
+    top_delta="-3"
+    width="140">
+    <combo_box.item
+      label="LSL: Legacy (LSO2)"
+      name="compile_target_lsl2"
+      value="lsl2" />
+    <combo_box.item
+      label="LSL: Mono"
+      name="compile_target_mono"
+      value="mono" />
+    <combo_box.item
+      label="Lua"
+      name="compile_target_luau"
+      value="luau" />
+    <combo_box.item
+      label="LSL/Luau"
+      name="compile_target_lsl_luau"
+      value="lsl_luau" />
+  </combo_box>
   <check_box width="130"
              height="21"
              enabled="false"

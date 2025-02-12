@@ -26,8 +26,10 @@
 	</floater.string>
 	<text name="obj_name">Ursprungsobjekt: [SOURCE_OBJECT]</text>
 	<button label="Zurücksetzen" label_selected="Zurücksetzen" name="Reset"/>
-	<check_box initial_value="true" label="Läuft" name="running"/>
-	<check_box initial_value="true" label="Mono" name="mono"/>
+	<check_box label="Läuft" name="running"/>
+	<text name="compile_target_label">
+		Compiler:
+	</text>
 	<check_box label="Erlebnis verwenden:" name="enable_xp"/>
 	<button label="&gt;" name="view_profile"/>
 </floater>
