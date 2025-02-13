@@ -1011,7 +1011,7 @@
           Antialiasing Quality:
         </text>
         <combo_box
-         control_name="RenderFSAASamples"
+         control_name="RenderFSAAType"
          height="22"
          initial_value="false"
          follows="left|top"
