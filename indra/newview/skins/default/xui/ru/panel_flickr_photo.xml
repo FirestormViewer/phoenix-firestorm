@@ -5,6 +5,7 @@
 		<combo_box.item label="640x480" name="640x480"/>
 		<combo_box.item label="800x600" name="800x600"/>
 		<combo_box.item label="1024x768" name="1024x768"/>
+		<combo_box.item label="Произвольный" name="Custom"/>
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="Фильтры изображений">
 		<combo_box.item label="Без фильтра" name="NoFilter"/>
@@ -13,6 +14,8 @@
 	<text name="working_lbl">
 		Обновление...
 	</text>
+	<check_box label="Показать кадр" tool_tip="Показать на экране рамку, окружающую области снимка. Части сцены, находящиеся за пределами снимка, будут обесцвечены и слегка размыты." name="show_frame" />
+	<check_box label="Кадрирование" tool_tip="Показать руководство по кадрированию (правило третей) внутри рамки снимка" name="show_guides" />
 	<button label="Обновить" name="new_snapshot_btn" tool_tip="Щелкните для обновления"/>
 	<button label="Просмотр" name="big_preview_btn" tool_tip="Щелкните для смены вида"/>
 	<text name="title_label">
