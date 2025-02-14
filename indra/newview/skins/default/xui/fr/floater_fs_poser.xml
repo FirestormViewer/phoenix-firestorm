@@ -268,7 +268,7 @@
 						<slider label="Point X :" name="Advanced_Position_X" />
 						<slider label="Point Y :" name="Advanced_Position_Y" />
 						<slider label="Point Z :" name="Advanced_Position_Z" />
-						<button label="Annuler reposition" name="undo_position_change" tool_tip="Annuler le dernier changement de position" />
+						<button label="Annuler pos." name="undo_position_change" tool_tip="Annuler le dernier changement de position" />
 						<button label="Repositionner" name="redo_position_change" tool_tip="Refaire le dernier changement de position" />
 						<button label="Réinit. position" name="reset_positions" tool_tip="Double-cliquez pour rétablir la position d'origine" />
 					</panel>
@@ -276,7 +276,7 @@
 						<slider label="Échelle X :" name="Advanced_Scale_X" />
 						<slider label="Échelle Y :" name="Advanced_Scale_Y" />
 						<slider label="Échelle Z :" name="Advanced_Scale_Z" />
-						<button label="Annuler le changement d'échelle" name="undo_scale_change" tool_tip="Annuler le dernier changement d'échelle" />
+						<button label="Annuler échelle" name="undo_scale_change" tool_tip="Annuler le dernier changement d'échelle" />
 						<button label="À l'échelle" name="redo_scale_change" tool_tip="Refaire le dernier changement d'échelle" />
 						<button label="Réinit. échelle" name="reset_scales" tool_tip="Double-cliquez pour rétablir l'échelle d'origine" />
 					</panel>

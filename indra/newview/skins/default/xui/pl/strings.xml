@@ -1876,6 +1876,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Textures" value=" Tekstury,"/>
 	<string name="Settings" value=" Otoczenia," />
 	<string name="Snapshots" value=" Zdjęcia,"/>
+	<string name="Folders" value=" Foldery,"/>
 	<string name="No Filters" value="Nie "/>
 	<string name="Since Logoff" value=" - od wylogowania"/>
 	<string name="Modifiable" value="Modyfikowalne" />
