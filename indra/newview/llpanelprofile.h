@@ -203,6 +203,9 @@ private:
     void onAvatarNameCacheSetName(const LLUUID& id, const LLAvatarName& av_name);
 
     void setDescriptionText(const std::string &text);
+    // <AS:Chanayane> Preview button
+    void reparseDescriptionText(const std::string& text);
+    // </AS:Chanayane>
     void onSetDescriptionDirty();
     void onShowInSearchCallback();
     void onHideAgeCallback();
@@ -369,6 +372,9 @@ protected:
     void onFirstLifePicChanged();   // <FS:Zi> Allow proper texture swatch handling
     void onCommitPhoto(const LLUUID& id);
     void setDescriptionText(const std::string &text);
+    // <AS:Chanayane> Preview button
+    void reparseDescriptionText(const std::string& text);
+    // </AS:Chanayane>
     void onSetDescriptionDirty();
     void onSaveDescriptionChanges();
     void onDiscardDescriptionChanges();
