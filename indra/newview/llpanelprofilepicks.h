@@ -173,6 +173,9 @@ public:
      */
     virtual void setSnapshotId(const LLUUID& id);
     virtual void setPickDesc(const std::string& desc);
+    // <AS:Chanayane> Preview button
+    virtual void reparseDescription(const std::string& desc);
+    // </AS:Chanayane>
     virtual void setPickLocation(const std::string& location);
 
     virtual void setPosGlobal(const LLVector3d& pos) { mPosGlobal = pos; }
@@ -264,7 +267,6 @@ protected:
     bool                mIsEditing;
 // <AS:Chanayane> Preview button
     bool                mPreview;
-    bool                mWasDirty;
     std::string         mOriginalPickText;
 // </AS:Chanayane>
 

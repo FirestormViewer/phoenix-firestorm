@@ -545,7 +545,6 @@ LLPanelProfilePick::LLPanelProfilePick()
  , mParcelCallbackConnection()
 // <AS:Chanayane> Preview button
  , mPreview(false)
- , mWasDirty(false)
 // </AS:Chanayane>
 {
 }
@@ -765,6 +764,13 @@ void LLPanelProfilePick::setPickDesc(const std::string& desc)
     mPickDescription->setValue(desc);
 }
 
+// <AS:Chanayane> Preview button
+void LLPanelProfilePick::reparseDescription(const std::string& desc)
+{
+    mPickDescription->reparseValue(desc);
+}
+// </AS:Chanayane>
+
 void LLPanelProfilePick::setPickLocation(const std::string& location)
 {
     getChild<LLUICtrl>("pick_location")->setValue(location);
@@ -865,27 +871,20 @@ void LLPanelProfilePick::onClickSetLocation()
 void LLPanelProfilePick::onClickPreview()
 {
     mPreview = !mPreview;
-    mWasDirty = isDirty();
 
-    if (mPreview) {
+    if (mPreview) { // Then we switch to preview mode
         mPreviewButton->setImageOverlay("Profile_Group_Visibility_Off");
         mOriginalPickText = mPickDescription->getValue().asString();
         mPickDescription->setEnabled(!mPreview);
         mPickDescription->setParseHTML(mPreview);
-        mPickDescription->setValue(mOriginalPickText);
+        reparseDescription(mOriginalPickText);
         enableSaveButton(false);
-        if (mWasDirty) {
-            mPickDescription->getViewModel()->setDirty();
-        }
-    } else {
+    } else { // we switch to edit mode, restoring the dirty state if necessary
         mPreviewButton->setImageOverlay("Profile_Group_Visibility_On");
         mPickDescription->setEnabled(!mPreview);
         mPickDescription->setParseHTML(mPreview);
-        mPickDescription->setValue(mOriginalPickText);
-        if (mWasDirty) {
-            mPickDescription->getViewModel()->setDirty();
-        }
-        enableSaveButton(isDirty());
+        reparseDescription(mOriginalPickText);
+        enableSaveButton(isDirty()); // re-check if whole pick is dirty
     }
 }
 // </AS:Chanayane>
