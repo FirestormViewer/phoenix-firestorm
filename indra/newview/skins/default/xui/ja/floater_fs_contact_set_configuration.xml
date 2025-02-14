@@ -21,9 +21,9 @@
 			オンライン状態の通知：
 		</text>
 		<check_box label="フレンドのログイン状態を全てトーストで通知する" name="ChatOnlineNotification"/>
-		<check_box label="フレンドのログイン状態を全て周辺チャットで通知する" name="OnlineOfflinetoNearbyChat"/>
+		<check_box label="フレンドのログイン状態を全て近くのチャットで通知する" name="OnlineOfflinetoNearbyChat"/>
 		<check_box label="指定したセットのメンバーのログイン状態をトーストで通知する" name="FSContactSetsNotificationToast"/>
-		<check_box label="指定したセットのメンバーのログイン状態を周辺チャットで通知する" name="FSContactSetsNotificationNearbyChat"/>
+		<check_box label="指定したセットのメンバーのログイン状態を近くのチャットで通知する" name="FSContactSetsNotificationNearbyChat"/>
 		<text name="label_colors">
 			色の設定
 		</text>

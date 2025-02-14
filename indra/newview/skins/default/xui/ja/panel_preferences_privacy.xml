@@ -51,7 +51,7 @@
 			<check_box label="近くのチャットの会話ログを保存する" name="LogNearbyChat" tool_tip="近くのチャットのメッセージテキストをハードドライブに記録します。"/>
 			<!--
 			<text name="log_location_label">
-				保存場所:
+				保存先：
 			</text>
 			<line_editor name="log_path_string"/>
 			-->
@@ -94,27 +94,27 @@
 				取り込みモード時の自動応答メッセージ：
 			</text>
 			<text_editor name="do_not_disturb_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 			<text name="autorespond_response_label">
 				誰にでも自動的に応答する時のメッセージ：
 			</text>
 			<text_editor name="autorespond_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 			<text name="autorespond_nf_response_label">
-				フレンドでないアバターへの自動応答メッセージ
+				フレンドでないアバターへの自動応答メッセージ：
 			</text>
 			<text_editor name="autorespond_nf_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 			<check_box label="退席している時に自動応答する:" name="send_away_av_response" tool_tip="退席している時に誰かがIMしたら次のメッセージを送ります。"/>
 			<text_editor name="away_avatar_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 			<check_box label="無視しているアバターに自動応答する" name="send_muted_av_response" tool_tip="無視している人からIMが来た時に自動的に以下のメッセージを送信します。"/>
 			<text_editor name="muted_avatar_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 		</panel>
 		<!--Autoresponse2-->
@@ -127,13 +127,13 @@
 			</text_editor>
 			<check_box label="フレンドリストに載っている人からのテレポートは拒否しない（返事もする）" name="FSDontRejectTeleportOffersFromFriends"/>
 			<text name="autorespond_rfr_response_label">
-				フレンド申請拒否モードの時に行う全てのアバターへの自動応答メッセージ:
+				フレンド申請拒否モードの時に行う全てのアバターへの自動応答メッセージ：
 			</text>
 			<text_editor name="autorespond_rfr_response">
 				変更するにはログインします
 			</text_editor>
 			<text name="autoresponse_item_label">
-				自動応答と一緒に送られるアイテム:
+				自動応答で一緒に送られるアイテム：
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="インベントリをここにドラッグ＆ドロップします。"/>
 			<button label="クリア" name="clear_autoresponse_item"/>

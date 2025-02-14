@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="UI-Pref" name="Display panel">
-	<tab_container label="Firestorm Prefs" name="tabs">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="ＵＩ初期設定" name="Display panel">
+	<tab_container label="Firestorm初期設定" name="tabs">
 		<!-- 3D World -->
-		<panel label="3D 世界" name="UI Prefs Panel">
+		<panel label="３Ｄワールド" name="UI Prefs Panel">
 			<text name="HoverTipText">
 				ヒント：
 			</text>
@@ -48,7 +48,7 @@
 			<!-- </FS:minerjr> [FIRE-35019] -->
 		</panel>
 		<!-- 2D Overlay -->
-		<panel label="2D オーバーレイ" name="ui-2d-overlay">
+		<panel label="２Ｄオーバーレイ" name="ui-2d-overlay">
 			<text name="UI Size:">
 				ＵＩサイズ：
 			</text>
@@ -72,10 +72,10 @@
 			</text>
 			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="スクリプトダイアログ（メニュー）を表示したい場所を選択して下さい。">
 				<combo_box.item label="ミニアイコンにドッキング" name="ScriptDialogPositionOption_1"/>
-				<combo_box.item label="左上" name="ScriptDialogPositionOption_2"/>
-				<combo_box.item label="右上" name="ScriptDialogPositionOption_3"/>
-				<combo_box.item label="左下" name="ScriptDialogPositionOption_4"/>
-				<combo_box.item label="右下" name="ScriptDialogPositionOption_5"/>
+				<combo_box.item label="左上　↖" name="ScriptDialogPositionOption_2"/>
+				<combo_box.item label="右上　↗" name="ScriptDialogPositionOption_3"/>
+				<combo_box.item label="左下　↙" name="ScriptDialogPositionOption_4"/>
+				<combo_box.item label="右下　↘" name="ScriptDialogPositionOption_5"/>
 			</combo_box>
 			<check_box label="スクリプトダイアログのアニメーションを再生" name="FSAnimatedScriptDialogs" tool_tip="ここにチェックを入れると、スクリプトダイアログが開く時にアニメーションが再生されます。（旧式の１系スタイル）ダイアログが上から下に開く時のみ有効になります。"/>
 			<slider label="スクリプトダイアログ当たりの表示行数：" name="FSRowsPerScriptDialog" tool_tip="同時に見ることのできるスクリプトダイアログの最大行数"/>
@@ -151,9 +151,9 @@
 		</panel>
 		<!-- Interface Windows -->
 		<panel label="インターフェイス" name="UI-interface-windows-tab">
-			<check_box label="名前をクリックするとアバターのプロフィールをすぐに表示" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Iここにチェックを入れると、名前の表示されているリンクをクリックすると Firestorm はそのアバターのプロフィールを表示します。"/>
+			<check_box label="名前クリックでアバターのプロフィールを表示する" name="FSInspectAvatarSlurlOpensProfile" tool_tip="ここにチェックを入れると、名前の表示されているリンクをクリックすると Firestormはそのアバターのプロフィールを表示します。"/>
 			<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックした時に、無視リストが自動的に開かないようにします。"/>
-			<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」を[SHORT_VIEWER_GENERATION]形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
+			<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」を[SHORT_VIEWER_GENERATION]形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人物」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
 			<check_box label="古いタイプのオブジェクトプロパティを使用" name="FSUseLegacyObjectProperties" tool_tip="ここにチェックを入れると、オブジェクトのプロパティを開く時に、古いタイプのオブジェクト・プロパティが使用されます。"/>
 			<check_box label="小さいカメラウィンドウを使用" name="FSUseSmallCameraFloater" tool_tip="ここにチェックを入れると、旧式の、プリセットコントロールのない小さなカメラウィンドウが利用できるようになります。"/>
 			<text name="standalone_textbox">
@@ -185,21 +185,21 @@
 				<radio_item label="表示名" name="displayname"/>
 			</radio_group>
 			<text name="textFriendListFullNameFormat">
-				フルネームの表示法：
+				フルネームの表示形式：
 			</text>
 			<radio_group name="FSFriendListFullNameFormat" tool_tip="">
 				<radio_item label="ユーザ名（表示名）" name="username_displayname"/>
 				<radio_item label="表示名（ユーザ名）" name="displayname_username"/>
 			</radio_group>
 			<check_box label="権限を表示" name="FSFriendListColumnShowPermissions" tool_tip="連絡先リストにあなたがこのアバターに与えた、またはこのアバターから与えられた権限を表示します。"/>
-			<check_box label="検索フィルターを表示" name="FSContactListShowSearch" tool_tip="連絡先リストに検索テキストボックスを表示し、リストをフィルターすることができるようになります">
+			<check_box label="検索フィルタを表示" name="FSContactListShowSearch" tool_tip="連絡先リストに検索テキストボックスを表示し、リストをフィルターすることができるようになります">
 			</check_box>
 			<text name="textInventoryOptions">
-				インベントリのオプション:
+				インベントリのオプション：
 			</text>
 			<check_box label="空のシステムフォルダをインベントリに表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、インベントリウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。"/>
-			<check_box label="受け取りアイテムフォルダを通常のインベントリ内に表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。"/>
-			<check_box label="受け取りアイテムボタンをインベントリの下に常に表示" name="FSAlwaysShowInboxButton" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。"/>
+			<check_box label="受け取ったアイテムのフォルダを通常のインベントリ内に表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。"/>
+			<check_box label="受け取ったアイテムのボタンをインベントリの下に常に表示" name="FSAlwaysShowInboxButton" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。"/>
 			<check_box label="インベントリのそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="こにチェックを入れると、インベントリのそれぞれのタブに異なる検索キーワードを入力することが可能になります。"/>
 		</panel>
 		<!-- トースト -->
@@ -211,31 +211,31 @@
 			<text name="ToastSpaceText">
 				ピクセル
 			</text>
-			<slider label="通知トースト表示時間：" tool_tip="通知のトーストがフェードアウトし始めるまでの表示時間を設定します。" name="ToastLifetime"/>
+			<slider label="通知のトースト表示時間：" tool_tip="通知のトーストがフェードアウトし始めるまでの表示時間を設定します。" name="ToastLifetime"/>
 			<text name="ToastLifetimeText">
 				秒
 			</text>
-			<slider label="ヒントトースト表示時間：" tool_tip="ヒントのトーストがフェードアウトし始めるまでの表示時間を設定します。" name="TipToastLifetime"/>
+			<slider label="ヒントのトースト表示時間：" tool_tip="ヒントのトーストがフェードアウトし始めるまでの表示時間を設定します。" name="TipToastLifetime"/>
 			<text name="TipToastLifetimeText">
 				秒
 			</text>
-			<slider label="周辺チャットトースト表示時間：" tool_tip="周辺チャットを表示するトーストがフェードアウトし始めるまでの表示時間を設定します。" name="NearbyToastLifetime"/>
+			<slider label="近くのチャットのトースト表示時間：" tool_tip="近くのチャットを表示するトーストがフェードアウトし始めるまでの表示時間を設定します。" name="NearbyToastLifetime"/>
 			<text name="NearbyToastLifetimeText">
 				秒
 			</text>
-			<slider label="周辺チャットトーストの高さ：" tool_tip="周辺チャットを表示するトーストの高さを設定します。" name="FSNearbyChatToastsOffset"/>
+			<slider label="近くのチャットのトーストの高さ：" tool_tip="近くのチャットを表示するトーストの高さを設定します。" name="FSNearbyChatToastsOffset"/>
 			<text name="FSNearbyChatToastsOffsetText">
 				ピクセル
 			</text>
-			<slider label="周辺チャットのフェードアウト時間：" tool_tip="周辺チャットを表示するトーストがフェードアウトを始めて完全に消えるまでの時間を設定します。" name="NearbyToastFadingTime"/>
+			<slider label="近くのチャットのフェードアウト時間：" tool_tip="近くのチャットを表示するトーストがフェードアウトを始めて完全に消えるまでの時間を設定します。" name="NearbyToastFadingTime"/>
 			<text name="NearbyToastFadingTimeText">
 				秒
 			</text>
-			<slider label="起動時トースト表示時間：" tool_tip="起動時に表示されるトーストがフェードアウトし始めるまでの表示時間を設定します。" name="StartupToastLifetime"/>
+			<slider label="起動時のトースト表示時間：" tool_tip="起動時に表示されるトーストがフェードアウトし始めるまでの表示時間を設定します。" name="StartupToastLifetime"/>
 			<text name="StartupToastLifetimeText">
 				秒
 			</text>
-			<slider label="標準トースト表示時間：" tool_tip="その他の一般的なトーストがフェードアウトし始めるまでの表示時間を設定します。" name="ToastFadingTime"/>
+			<slider label="通常のトーストの表示時間：" tool_tip="その他の一般的なトーストがフェードアウトし始めるまでの表示時間を設定します。" name="ToastFadingTime"/>
 			<text name="ToastFadingTimeText">
 				秒
 			</text>
@@ -247,12 +247,12 @@
 			<text name="OverflowToastHeightText">
 				ピクセル
 			</text>
-			<slider label="周辺チャットのトースト通知の幅：" tool_tip="周辺チャットを表示する幅を、画面に対するパーセントで設定します。" name="NearbyToastWidth"/>
+			<slider label="近くのチャットのトースト通知の幅：" tool_tip="近くのチャットを表示する幅を、画面に対するパーセントで設定します。" name="NearbyToastWidth"/>
 			<text name="NearbyToastWidthText">
 				％
 			</text>
-			<check_box label="トースト通知は必ず最前面に表示" name="FSShowToastsInFront"/>
-			<check_box label="新しいＳＩＭ再起動の通知方法を使用" name="FSUseNewRegionRestartNotification"/>
+			<check_box label="トースト通知は必ず最前面に表示する" name="FSShowToastsInFront"/>
+			<check_box label="新しいＳＩＭ再起動の通知方法を使用する" name="FSUseNewRegionRestartNotification"/>
 			<check_box label="ＳＩＭ再起動の警告メッセージが表示される時に画面を揺らさない" name="FSNoScreenShakeOnRegionRestart"/>
 			<check_box label="リージョンの再起動情報をチャンネルに送信します：" name="FSReportRegionRestartToChat"/>
 			<spinner name="FSRegionRestartAnnounceChannel"/>
@@ -260,7 +260,7 @@
 		<!-- フォント -->
 		<panel label="フォント" name="UI-font-tab">
 			<text name="tooltip_textbox1">
-				フォント種類：
+				フォントの種類：
 			</text>
 			<text name="tooltip_textbox2">
 				（要再起動）

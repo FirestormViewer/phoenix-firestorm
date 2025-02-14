@@ -39,7 +39,7 @@
 				所有者：
 			</text>
 			<text name="group_label">
-				グループ:
+				グループ：
 			</text>
 			<line_editor name="owner_search"/>
 			<line_editor name="group_search"/>
@@ -122,7 +122,7 @@
 			<check_box name="show_last_owner" label="最終所有者"/>
 		</panel>
 		<panel label="詳細" name="area_search_advanced_panel">
-			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触る"/>
+			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触れる"/>
 			<check_box name="double_click_buy" label="ダブルクリックでオブジェクトを買う"/>
 			<check_box name="double_click_sit" label="ダブルクリックでオブジェクトに座る"/>
 		</panel>

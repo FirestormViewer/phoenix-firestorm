@@ -4,13 +4,13 @@
 		<!-- 一般 -->
 		<panel label="一般" name="General">
 			<text name="preset_label">
-				使用中のプリセット:
+				使用中のプリセット：
 			</text>
 			<text name="preset_text">
 				（なし）
 			</text>
 			<text name="QualitySpeed">
-				クオリティとスピード:
+				品質と速度：
 			</text>
 			<text name="FasterText">
 				性能
@@ -226,7 +226,7 @@
 				<combo_box.item label="低（4）品質" name="4"/>
 				<combo_box.item label="テクスチャなし（5）" name="5"/>
 			</combo_box>
-			<check_box label="「高度な光源モデル」が有効の時にアルファマスクを描画" tool_tip="影のオプションが選択されている時にここにチェックを入れると、アルファマスク（透明テクスチャ）が正確に描画されます。" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="アルファマスクを描画" tool_tip="影のオプションが選択されている時にここにチェックを入れると、アルファマスク（透明テクスチャ）が正確に描画されます。" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				その他の描画設定：
 			</text>
@@ -240,7 +240,7 @@
 			<check_box label="風景をワイヤーフレームで表示" name="Wireframe"/>
 			<check_box label="装着している光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
 			<check_box label="装着しているパーティクルを描画する" name="Render Attached Particles"/>
-			<slider label="ワールドが表示される前のプレキャッシングを遅らせる時間" tool_tip="ワールドが見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay"/>
+			<slider label="ワールドを表示する前に事前キャッシュする間の遅延時間" tool_tip="ワールドが見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				秒
 			</text>

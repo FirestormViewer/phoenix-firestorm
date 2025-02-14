@@ -121,7 +121,7 @@
 			<button name="PhoenixBeamPrev_Phoenix" label=""/>
 			<slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。"/>
 			<text name="BridgeProtocols">
-				ＬＳＬクライアントブリッジによる外部プロトコルとの統合:
+				ＬＳＬクライアントブリッジによる外部プロトコルとの統合：
 			</text>
 			<check_box label="内蔵ＡＯを有効または無効にするのにOpenCollarプロトコルの使用を許可" name="BridgeIntegrationOC"/>
 			<check_box label="内蔵ＡＯを有効または無効にするのにLockMeisterプロトコルの使用を許可" name="BridgeIntegrationLM"/>
@@ -204,7 +204,7 @@
 			<check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても５０％、つまり中央に設定されています。" name="FSPivotPercToggle"/>
 			<button label="デフォルトの作成権限" name="fs_default_creation_permissions"/>
 			<text name="text_box_scripting_font">
-			スクリプトエディタのフォント:
+			スクリプトエディタのフォント：
 			</text>
 			<combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォント名を指定します。">
 				<combo_item name="Monospace" value="Monospace" label="Monospace"/>
@@ -235,19 +235,19 @@
 			<button label="参照" label_selected="参照" name="SetExternalEditor"/>
 		</panel>
 		<panel label="ビルド２" name="BuildTab2">
-			<check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="FSBuildPrefsRenderHighlight_toggle"/>
-			<check_box label="選択している土地の境界をハイライトする" name="RenderParcelSelection"/>
-			<check_box label="土地の境界をビルドできる最大の高さまで表示する" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+			<check_box label="選択したプリムのハイライトを有効にする" tool_tip="チェックを外すと、黄色／青のアウトライン効果は描画されず、多数のプリムが選択された場合のパフォーマンスが向上します。" name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="現在選択されている区画の境界をハイライトします" name="RenderParcelSelection"/>
+			<check_box label="最大ビルド高さまでの境界を表示" name="FSRenderParcelSelectionToMaxBuildHeight"/>
 			<check_box label="遠くのオブジェクトを選択しない" name="LimitSelectDistance"/>
-			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）[デフォルト: 128.000]"/>
+			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）[デフォルト 128.000]"/>
 			<check_box label="ドラッグできる距離を制限 (ｍ)：" name="LimitDragDistance"/>
-			<spinner name="MaxDragDistance" tool_tip="移動ツールの一回の操作で移動できる最大の距離を設定します。(開始位置からメートル単位で設定) [Default: 48.000]"/>
+			<spinner name="MaxDragDistance" tool_tip="移動ツールの 1 回の操作で許容される最大距離を入力します。（開始点からのメートル）［デフォルト：48.000］"/>
 			<text name="RotationStepText1">
-			「グリッドにスナップ」を使用していない時
+				「グリッドにスナップ」を使用していない時
 			</text>
-			<spinner name="RotationStep" tool_tip="回転ツールで回転できる範囲をここに設定した値の倍数に制限するようにします。 [Default: 1.0]"/>
+			<spinner name="RotationStep" tool_tip="回転ツールによるすべての回転はこの単位の倍数に制限されます。［デフォルト：1.0］"/>
 			<text name="RotationStepText2">
-				度の倍数に回転できる範囲を制限
+				度の倍数に回転できる範囲を制限する
 			</text>
 			<check_box label="リンク解除の際に警告メッセージを出すリンクセットのオブジェクト数：" name="FSUnlinkConfirmEnabled"/>
 			<text name="MinObjectsForUnlinkConfirmText2">

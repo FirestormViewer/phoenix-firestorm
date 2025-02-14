@@ -122,7 +122,7 @@
 				<layout_panel name="lp_restore_folders">
 					<scroll_list name="restore_global_folders_list">
 						<column name="restore_global_folders_check" value="true"/>
-						<column label="フォルダ:" name="restore_global_folders_label"/>
+						<column label="フォルダ：" name="restore_global_folders_label"/>
 						<column label="値" name="value"/>
 						<row name="restore_folders_row_beams">
 							<column name="restore_global_folders_label">

@@ -22,7 +22,7 @@
 	<menu_item_check label="距離で名前を色分け" name="radarColorNamesBasedOnDistance" />
 	<menu_item_separator/>
 	<context_menu label="通知方法" name="report_to_menu">
-		<menu_item_check label="周辺チャットで通知" name="radar_nearby_chat" />
+		<menu_item_check label="近くのチャットで通知" name="radar_nearby_chat" />
 		<menu_item_check label="トーストで通知" name="radar_nearby_chat" />
 	</context_menu>
 	<menu_item_check label="ミニマップにチャット範囲を表示" name="MiniMapChatRing" />

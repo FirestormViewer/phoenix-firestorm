@@ -96,7 +96,7 @@
 		<!-- Music -->
 		<panel label="音楽" name="Media Music Panel">
 			<check_box name="audio_auto_play_btn" tool_tip="チェックすると自動的にオーディオストリームの再生が始まります" label="オーディオの自動再生を許可"/>
-			<check_box name="FSFadeAudioStream" tool_tip="区画に流れている曲が変わる時にフェードイン／フェードアウトさせたい場合にここにチェックを入れて下さい。" label="区画音声のフェードを有効にする:"/>
+			<check_box name="FSFadeAudioStream" tool_tip="区画に流れている曲が変わる時にフェードイン／フェードアウトさせたい場合にここにチェックを入れて下さい。" label="区画音声のフェードを有効にする："/>
 			<slider label="フェードイン" name="FSAudioMusicFadeIn" tool_tip="区画に流れている音声のフェードインした時間を設定します。"/>
 			<text name="FSAudioMusicFadeInSeconds" left_delta="285">
 				秒
@@ -111,7 +111,7 @@
 			<radio_group name="show_stream_metadata">
 				<radio_item label="通知しない" name="radio_off"/>
 				<radio_item label="トースト" name="radio_toasts"/>
-				<radio_item label="周辺チャット" name="radio_chat"/>
+				<radio_item label="近くのチャット" name="radio_chat"/>
 			</radio_group>
 			<check_box label="曲名を次のチャンネルに送る" name="StreamMetadataAnnounceToChat"/>
 		</panel>
@@ -211,7 +211,7 @@
 			<button name="Prev_UISndMoneyChangeUp" label="P" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndMoneyChangeUp" label="D" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndMoneyChangeUp"/>
-			<text tool_tip="ＩＭを受信した時に再生するサウンドのＵＵＩＤです。この設定は「チャット」＞「通知」にある「IMを受信した時:」と共通になっています。" name="textFSNewIncomingIMSession">
+			<text tool_tip="ＩＭを受信した時に再生するサウンドのＵＵＩＤです。この設定は「チャット」＞「通知」にある「IMを受信した時」と共通になっています。" name="textFSNewIncomingIMSession">
 				ＩＭを受信した時：
 			</text>
 			<line_editor name="UISndNewIncomingIMSession"/>
@@ -514,7 +514,7 @@
 			<button name="Def_UISndRestart" label="D" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndRestart"/>
 			<text tool_tip="ＳＩＭ再起動の警告が表示される時に再生するサウンドのＵＵＩＤです。（OpenSim の場合）" name="textFSRestartOpenSim">
-				ＳＩＭ再起動 (OpenSim):
+				ＳＩＭ再起動（OpenSim）：
 			</text>
 			<line_editor name="UISndRestartOpenSim"/>
 			<button name="Prev_UISndRestartOpenSim" label="P" tool_tip="このサウンドをプレビューします。"/>
