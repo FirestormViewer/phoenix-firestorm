@@ -821,7 +821,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="10"
-				 tool_tip="Controls how far reflection probes &quot;see&quot; when updating, affecting reflection detail and performance. Higher values = further view distance, more detail, higher cost."
+			     tool_tip="Controls the visibility range for reflections, affecting reflection detail and performance across reflection probes, mirrors, and screen space reflections. Higher values increase the distance at which reflections are visible, enhancing detail but increasing performance cost."
 				 width="70">
 					Reflect. Dist.
 				</text>
