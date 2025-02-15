@@ -3376,8 +3376,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<tag>fail</tag>
 	</notification>
 	<notification name="EnableMediaFilter"> 
-		メディアや音楽を再生すると、[CURRENT_GRID]外のサイトにあなたの個人情報が公開される可能性があります。フィルターを有効にすると、メディアリクエストを受信するサイトを選択でき、プライバシーをより適切に管理できます。
-メディアフィルターを有効にしますか？
+		メディアや音楽を再生すると、[CURRENT_GRID]外のサイトにあなたの個人情報が公開される可能性があります。フィルタを有効にすると、メディアリクエストを受信するサイトを選択でき、プライバシーをより適切に管理できます。
+メディアフィルタを有効にしますか？
 （このオプションは、後で「初期設定」＞「サウンドとメディア」で変更できます。）
 		<form name="form">
 			<button name="Enable" text="有効"/>
@@ -4391,6 +4391,7 @@ Your L$ balance is shown in the upper-right.
 期限を延長・更新するには[[URL] ここ]をクリックしてください。
 
 プレミアム会員の方は、[[PREMIUM_URL] ここ]をクリックしてボイスモーフィング特典をお受け取りください。
+		<usetemplate ignoretext="ボイスモーフィングの有効期限が切れるときの警告" name="okignore" yestext="ＯＫ"/>
 		<tag>fail</tag>
 		<tag>voice</tag>
 	</notification>

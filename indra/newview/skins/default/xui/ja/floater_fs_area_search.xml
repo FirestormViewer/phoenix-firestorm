@@ -55,7 +55,7 @@
 			<button name="search" label="検索"/>
 			<button name="clear" label="クリア"/>
 		</panel>
-		<panel label="フィルター" name="area_search_filter_panel">
+		<panel label="フィルタ" name="area_search_filter_panel">
 			<text name="only_list">
 				以下の条件のオブジェクトのみ：
 			</text>
@@ -122,7 +122,7 @@
 			<check_box name="show_last_owner" label="最終所有者"/>
 		</panel>
 		<panel label="詳細" name="area_search_advanced_panel">
-			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触れる"/>
+			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触る"/>
 			<check_box name="double_click_buy" label="ダブルクリックでオブジェクトを買う"/>
 			<check_box name="double_click_sit" label="ダブルクリックでオブジェクトに座る"/>
 		</panel>

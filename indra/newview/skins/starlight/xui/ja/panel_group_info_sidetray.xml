@@ -46,7 +46,7 @@
 					<button name="btn_refresh" />
 					<layout_stack name="button_row_ls">
 						<layout_panel name="btn_activate_lp">
-							<button label="有効化" name="btn_activate"/>
+							<button label="アクティブ化" name="btn_activate"/>
 						</layout_panel>
 						<layout_panel name="btn_chat_lp">
 							<button label="チャット" name="btn_chat"/>

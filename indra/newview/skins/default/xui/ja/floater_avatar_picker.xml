@@ -44,9 +44,9 @@
 			<button name="RefreshFriends"/>
 			<scroll_list name="Friends"/>
 		</panel>
-		<panel label="近くにいる人" name="NearMePanel">
+		<panel label="近くにいる人物" name="NearMePanel">
 			<text name="InstructSelectResident">
-				近くにいる人を選択：
+				近くにいる人物を選択：
 			</text>
 			<slider label="範囲" name="near_me_range"/>
 			<text name="meters">

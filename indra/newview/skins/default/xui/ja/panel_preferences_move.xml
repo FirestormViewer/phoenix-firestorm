@@ -8,7 +8,7 @@
 			<slider label="ズーム遷移時間" name="camera_transition_time"/>
 			<slider label="スムージング" name="camera_position_smoothing"/>
 			<check_box label="カメラの制約を無効にする" name="DisableCameraConstraints" tool_tip="これを設定すると、カメラが通常の境界を超えて地面より下に移動します。カメラの移動が苦手な場合は、悪い角度で撮影されるショットが多くなります。"/>
-			<check_box label="カメラのズームレベルを制御するのめにマウスホイールを使用しない" name="FSDisableMouseWheelCameraZoom"/>
+			<check_box label="カメラのズームレベル制御にマウスホイールを使用しない" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
 				アバターを自動的にポーズさせる（１つ以上選択）：
 			</text>
@@ -62,10 +62,10 @@
 				<radio_item label="立ち止まる" name="move_stop"/>
 			</radio_group>
 			<text name="movelock_lbl">
-				内蔵のLSL Bridgeの移動ロックが有効になっている場合…
+				内蔵のＬＳＬブリッジの移動ロックが有効になっている場合…
 			</text>
-			<check_box label="リージョンを表示を移動したら常に位置を再ロックする" name="RelockMoveLockAfterRegionChange"/>
-			<check_box label="移動を停止または開始したら位置をロックまたはアンロックする" name="RelockMoveLockAfterMovement"/>
+			<check_box label="リージョン変更後は常に位置を再ロックする" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="停止または開始後の位置をロックおよびロック解除する" name="RelockMoveLockAfterMovement"/>
 			<text name="single_click_action_lbl">
 				地面をシングルクリック：
 			</text>

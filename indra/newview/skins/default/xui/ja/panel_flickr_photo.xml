@@ -10,8 +10,8 @@
 		<combo_box.item label="1600×1200" name="1600x1200"/>
 		<combo_box.item label="カスタム" name="Custom"/>
 	</combo_box>
-	<combo_box name="filters_combobox" tool_tip="画像フィルター">
-		<combo_box.item label="フィルターなし" name="NoFilter"/>
+	<combo_box name="filters_combobox" tool_tip="画像フィルタ">
+		<combo_box.item label="フィルタなし" name="NoFilter"/>
 	</combo_box>
 	<check_box label="縦横比を固定" name="keep_aspect_ratio"/>
 	<text name="working_lbl">

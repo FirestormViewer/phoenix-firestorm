@@ -8,7 +8,7 @@
 	</panel.string>
 	<panel.string name="help_text" />
 	<tab_container name="roles_tab_container">
-		<panel label="Members" name="members_sub_tab" tool_tip="Members">
+		<panel label="メンバー" name="members_sub_tab" tool_tip="メンバー">
 			<panel.string name="help_text">
 				ここからメンバーに役割を付与したり、削除することができます。
 Ctrlキーを押しながら、メンバー名をクリックすることで複数の人を選択できます。
