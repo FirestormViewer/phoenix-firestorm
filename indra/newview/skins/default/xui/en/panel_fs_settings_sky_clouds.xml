@@ -2,39 +2,21 @@
 <panel
 border="true"
 follows="all"
+height="390"
 label="Clouds"
 layout="topleft"
 left="0"
-help_topic="land_general_tab"
-name="panel_settings_sky_clouds"
-top="0"
->
-<!--layout_stack 
-name="main_ls"
-follows="all"
-layout="topleft"
-left="5"
-top="5"
-right="-5"
-bottom="-5"
-orientation="hoizontal">
-<layout_panel
-name="left_lp"
-border="true"
-bevel_style="in"
-auto_resize="true"
-user_resize="false"
-visible="true"
-height="75"-->
-
+help_topic="fs_skies"
+name="panel_fs_settings_sky_clouds"
+top="0">
 
 	<panel
 	name="P_Clouds_Header"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
+	top_pad="3"
 	left="0"
-	width="250"
+	width="288"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
@@ -55,12 +37,11 @@ height="75"-->
 	name="P_Atmos_Settings"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
+	top_pad="1"
+	left="3"
+	width="280"
 	height="35"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 
 		<text
@@ -70,8 +51,8 @@ height="75"-->
 		layout="topleft"
 		left="5"
 		top_pad="10"
-		width="50">
-		Color:
+		width="105">
+		Cloud Color:
 		</text>
 
 		<color_swatch
@@ -80,10 +61,10 @@ height="75"-->
 		height="25"
 		label_height="0"
 		layout="topleft"
-		left_delta="55"
+		left_pad="0"
 		name="cloud_color"
 		top_delta="-5"
-		width="185" /> 	
+		width="166" /> 	
 
 	</panel>
 
@@ -91,12 +72,11 @@ height="75"-->
 	name="P_Cloud_Density"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
-	height="60"
+	top_pad="1"
+	left="3"
+	width="280"
+	height="63"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 	
 	
@@ -106,8 +86,9 @@ height="75"-->
 		height="15"
 		layout="topleft"
 		left="5"
-		width="55">
-		Cover:
+		top_pad="7"
+		width="100">
+		Cloud Cover:
 		</text>
 	
 		<slider
@@ -117,12 +98,11 @@ height="75"-->
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		min_val="0"
 		max_val="1"
 		name="cloud_coverage"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 				
 		<text
@@ -131,8 +111,8 @@ height="75"-->
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		Scale:
+		width="100">
+		Cloud Scale:
 		</text>
 
 		<slider
@@ -142,12 +122,11 @@ height="75"-->
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		min_val="0"
 		max_val="3"
 		name="cloud_scale"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 
 		<text
@@ -156,8 +135,8 @@ height="75"-->
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		Variance:
+		width="100">
+		Cloud Variance:
 		</text>
 
 		<slider
@@ -167,12 +146,11 @@ height="75"-->
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		min_val="0"
 		max_val="1.0"
 		name="cloud_variance"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 		
 	</panel>
@@ -181,75 +159,97 @@ height="75"-->
 	name="P_Cloud_Density"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
-	height="80"
+	top_pad="1"
+	left="3"
+	width="280"
+	height="77"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 
 		<text
 		type="string"
 		length="1"
 		follows="left|top"
-		font="SansSerif"
 		height="16"
 		layout="topleft"
-		left="5"
+		left="3"
 		name="cloud_density_label"
 		top_pad="5"
-		tool_tip="Cloud XY/Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds."
-		width="240">
-		Cloud XY/Density
+		tool_tip="Cloud XY/Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds.">
+		Cloud Density:
+		</text>
+
+		<text
+		name="Cloud_XY_Density_X"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+	    top_pad="0"
+		width="15">
+		X:
 		</text>
 
 		<slider
-		label="X"
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="5"
+		left_pad="0"
 		min_val="0"
 		max_val="1"
 		name="cloud_density_x"
-		top_pad="2"
-		width="240"
+		width="255"
 		can_edit_text="true"/>
+		
+		<text
+		name="Cloud_XY_Density_Y"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="15">
+		Y:
+		</text>
 
 		<slider
-		label="Y"
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="5"
+		left_pad="0"
 		min_val="0"
 		max_val="1"
 		name="cloud_density_y"
-		top_pad="2"
-		width="240"
+		width="255"
 		can_edit_text="true"/>
 
+		<text
+		name="Cloud_XY_Density_D"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="15">
+		D:
+		</text>
+		
 		<slider
-		label="D"
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="5"
+		left_pad="0"
 		min_val="0"
 		max_val="3"
 		name="cloud_density_d"
-		top_delta="20"
-		width="240"
+		width="255"
 		can_edit_text="true"/>
 
 	</panel>
@@ -258,76 +258,98 @@ height="75"-->
 	name="P_Cloud_Detail"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
-	height="80"
+	top_pad="1"
+	left="3"
+	width="280"
+	height="77"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 
 		<text
 		type="string"
 		length="1"
 		follows="left|top"
-		font="SansSerif"
 		height="16"
 		layout="topleft"
-		left="5"
+		left="3"
 		name="cloud_detail_label"
 		top_pad="5"
-		tool_tip="Cloud XY/Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds."
+		tool_tip="Cloud Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds."
 		width="240">
-		Cloud XY/Detail
+		Cloud Detail:
 		</text>
 
-
+		<text
+		name="Cloud_XY_Detail_X"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		top_pad="0"
+		width="15">
+		X:
+		</text>
+		
 		<slider
-		label="X"
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="5"
+		left_pad="0"
 		min_val="0"
 		max_val="1"
 		name="cloud_detail_x"
-		top_pad="2"
-		width="240"
+		width="255"
 		can_edit_text="true"/>
+		
+		<text
+		name="Cloud_XY_Detail_Y"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="15">
+		Y:
+		</text>
 
 		<slider
-		label="Y"
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left_delta="0"
+		left_pad="0"
 		min_val="0"
 		max_val="1"
 		name="cloud_detail_y"
-		top_delta="20"
-		width="240"
+		width="255"
 		can_edit_text="true"/>
+		
+		<text
+		name="Cloud_XY_Detail_D"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="15">
+		D:
+		</text>
 
 		<slider
-		label="D"
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left_delta="0"
+		left_pad="0"
 		min_val="0"
 		max_val="1"
 		name="cloud_detail_d"
-		top_delta="20"
-		width="240"
+		width="255"
 		can_edit_text="true"/>	
 		
 	</panel>
@@ -336,12 +358,11 @@ height="75"-->
 	name="P_Cloud_Scroll"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
-	height="105"
+	top_pad="1"
+	left="3"
+	width="280"
+	height="103"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 	
 		<text
@@ -351,8 +372,8 @@ height="75"-->
 		layout="topleft"
 		left="5"
 		top_pad="5"
-		width="40">
-		Scroll:
+		width="134">
+		Cloud Scroll:
 		</text>
 
 		<text
@@ -360,16 +381,16 @@ height="75"-->
 		follows="left|top"
 		height="10"
 		layout="topleft"
-		left_pad="90"
+		left_pad="1"
 		top_delta="0"
-		width="50">
-		Image:
+		width="134">
+		Cloud Image:
 		</text>
 
 		<xy_vector
 		follows="left|top"
 		name="cloud_scroll_xy"
-		width="110"
+		width="80"
 		height="80"
 		visible="true"
 		left="5"
@@ -383,10 +404,10 @@ height="75"-->
 		<texture_picker
 		height="100"
 		layout="topleft"
-		left_pad="20"
+		left_pad="55"
 		name="cloud_map"
 		top_delta="0"
-		width="110"/>
+		width="80"/>
 	
 		
 <!--

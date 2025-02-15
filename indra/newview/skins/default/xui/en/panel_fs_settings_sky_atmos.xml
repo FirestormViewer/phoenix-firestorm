@@ -2,10 +2,12 @@
 <panel
 border="true"
 follows="all"
-label="Atmos"
+height="390"
+label="Atmosphere"
 layout="topleft"
 left="0"
-name="panel_settings_sky_atmos"
+help_topic="fs_skies"
+name="panel_fs_settings_sky_atmos"
 top="0">
 
 	<string name="hdr_string">HDR Scale:</string>
@@ -16,13 +18,12 @@ top="0">
 	name="P_Atmosphere_Header"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
+	top_pad="3"
 	left="0"
-	width="250"
+	width="288"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
-	border_thickness="1"
 	background_visible="true">
 	
 		<text
@@ -39,12 +40,11 @@ top="0">
 	name="P_Atmos_Settings"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
-	height="95"
+	top_pad="1"
+	left="3"
+	width="280"
+	height="87"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 
 		<text
@@ -54,8 +54,8 @@ top="0">
 		layout="topleft"
 		left="5"
 		top_pad="10"
-		width="55">
-		Ambient:
+		width="105">
+		Ambient Color:
 		</text>
 				
 		<color_swatch
@@ -64,10 +64,10 @@ top="0">
 		height="25"
 		label_height="0"
 		layout="topleft"
-		left_delta="55"
+		left_pad="0"
 		name="ambient_light"
 		top_delta="-5"
-		width="185" />
+		width="166" />
 				
 		<text
 		name="blue_horizon_label"
@@ -75,9 +75,9 @@ top="0">
 		height="10"
 		layout="topleft"
 		left="5"
-		top_pad="10"
-		width="55">
-		BluHrz:
+		top_pad="7"
+		width="105">
+		Blue Horizon:
 		</text>
 				
 		<color_swatch
@@ -86,10 +86,10 @@ top="0">
 		height="25"
 		label_height="0"
 		layout="topleft"
-		left_delta="55"
+		left_pad="0"
 		name="blue_horizon"
 		top_delta="-5"
-		width="185" />
+		width="166" />
 			
 		<text
 		name="blue_density_label"
@@ -97,9 +97,9 @@ top="0">
 		height="10"
 		layout="topleft"
 		left="5"
-		top_pad="10"
-		width="55">
-		Blue Den:
+		top_pad="7"
+		width="105">
+		Blue Density:
 		</text>
 				
 		<color_swatch
@@ -108,23 +108,22 @@ top="0">
 		height="25"
 		label_height="0"
 		layout="topleft"
-		left_delta="55"
+		left_pad="0"
 		name="blue_density"
 		top_delta="-5"
-		width="185" />
+		width="166" />
 	</panel>
 
 	<panel
 	name="P_Atmosphere_Header"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
+	top_pad="3"
 	left="0"
-	width="250"
+	width="288"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
-	border_thickness="1"
 	background_visible="true">
 	
 		<text
@@ -141,12 +140,11 @@ top="0">
 	name="P_Atmosphere_OtherSettings"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
-	left="0"
-	width="250"
-	height="140"
+	top_pad="1"
+	left="3"
+	width="280"
+	height="149"
 	border_visible="true"
-	bevel_style="in"
 	background_visible="true">
 
 		<text
@@ -155,9 +153,9 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		
-		width="50">
-		HazHoz:
+		top_pad="7"
+		width="100">
+		Haze Horizon:
 		</text>
 
 		<slider
@@ -167,12 +165,11 @@ top="0">
 		increment="0.001"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		min_val="0"
 		max_val="5"
 		name="haze_horizon"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -181,8 +178,8 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		HazDen:
+		width="100">
+		Haze Density:
 		</text>
 		
 		<slider
@@ -192,12 +189,11 @@ top="0">
 		increment="0.001"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		min_val="0"
 		max_val="5"
 		name="haze_density"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 
 		<text
@@ -206,8 +202,8 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		Density:
+		width="100">
+		Density Multiplier:
 		</text>
 		
 		<slider
@@ -217,12 +213,11 @@ top="0">
 		increment="0.0001"
 		initial_value="0"
 		layout="topleft"
-		left="55"
+		left_pad="0"
 		min_val="0"
 		max_val="2"
 		name="density_multip"
-		left_pad="50"
-		width="190"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -231,7 +226,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
+		width="100">
 		Distance Multiplier:
 		</text>
 		
@@ -242,12 +237,11 @@ top="0">
 		increment="0.01"
 		initial_value="0.8"
 		layout="topleft"
-		left="55"
 		min_val="0"
 		max_val="1000"
 		name="distance_multip"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -256,8 +250,8 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		MaxAlt:
+		width="100">
+		Maximum Altitide:
 		</text>
 		
 		<slider
@@ -267,12 +261,11 @@ top="0">
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		left="55"
+		left_pad="0"
 		min_val="0"
 		max_val="10000"
 		name="max_alt"
-		left_pad="50"
-		width="190"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -281,7 +274,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
+		width="100">
 		Brightness:
 		</text>
 		
@@ -292,11 +285,10 @@ top="0">
 		increment="0.1"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		max_val="100"
 		name="scene_gamma"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -306,7 +298,8 @@ top="0">
 		layout="topleft"
 		left="5"
 		tool_tip="Irradiance control.  When not zero, enables HDR lighting model."
-		width="50">
+		width="100"
+		word_wrap="true">
 		Reflection Probe Ambiance (HDR):
 		</text>
 		
@@ -317,11 +310,10 @@ top="0">
 		increment="0.5"
 		initial_value="0"
 		layout="topleft"
-		left="55"
 		max_val="100"
 		name="probe_ambiance"
-		left_pad="50"
-		width="190"
+		left_pad="0"
+		width="171"
 		can_edit_text="true"/>
 
 		
@@ -331,9 +323,9 @@ top="0">
 	name="P_Rainbow_Header"
 	follows="left|top"
 	layout="topleft"
-	top_pad="5"
+	top_pad="3"
 	left="0"
-	width="250"
+	width="288"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
@@ -356,12 +348,11 @@ top="0">
 		name="P_Rainbow_OtherSettings"
 		follows="left|top"
 		layout="topleft"
-		top_pad="5"
-		left="0"
-		width="250"
-		height="60"
+		top_pad="1"
+		left="3"
+		width="280"
+		height="63"
 		border_visible="true"
-		bevel_style="in"
 		background_visible="true">
 		
 		<text
@@ -370,8 +361,9 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		Moisture:
+		top_pad="7"
+		width="100">
+		Moisture Level:
 		</text>
 		
 		<slider
@@ -380,13 +372,12 @@ top="0">
 		height="16"
 		increment="0.001"
 		initial_value="0"
-		left="55"
-		left_pad="50"
+		left_pad="0"
 		layout="topleft"
 		min_val="0"
 		max_val="1"
 		name="moisture_level"
-		width="190"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -395,8 +386,8 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
-		Droplet:
+		width="100">
+		Droplet Radius:
 		</text>
 		
 		<slider
@@ -405,13 +396,12 @@ top="0">
 		height="16"
 		increment="0.001"
 		initial_value="0"
-		left="55"
-		left_pad="50"
+		left_pad="0"
 		layout="topleft"
 		min_val="0"
 		max_val="1000.0"
 		name="droplet_radius"
-		width="190"
+		width="171"
 		can_edit_text="true"/>
 		
 		<text
@@ -420,7 +410,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="50">
+		width="100">
 		Ice Level:
 		</text>
 		
@@ -430,13 +420,12 @@ top="0">
 		height="16"
 		increment="0.001"
 		initial_value="0"
-		left="55"
 		layout="topleft"
-		left_pad="50"
+		left_pad="0"
 		min_val="0"
 		max_val="1"
 		name="ice_level"
-		width="190"
+		width="171"
 		can_edit_text="true"/>
 	</panel>
 </panel>

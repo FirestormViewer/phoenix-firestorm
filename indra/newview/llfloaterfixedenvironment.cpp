@@ -482,8 +482,7 @@ LLFloaterFixedEnvironmentSky::LLFloaterFixedEnvironmentSky(const LLSD &key) :
     LLFloaterFixedEnvironment(key)
 {}
 
-bool LLFloaterFixedEnvironmentSky::postBuild()
-bool LLFloaterFixedEnvironmentSky::postBuild()
+bool LLFloaterFixedEnvironmentSky::postBuild() // <--- Corrected: Only one declaration now
 {
     if (!LLFloaterFixedEnvironment::postBuild())
         return false;
