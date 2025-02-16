@@ -23,7 +23,7 @@
 	</text>
 	<text name="maturity_desired_textbox"/>
 	<combo_box name="maturity_desired_combobox">
-		<combo_box.item label="General、Moderate、Adult" name="Desired_Adult"/>
+		<combo_box.item label="GeneralとModerate、Adult" name="Desired_Adult"/>
 		<combo_box.item label="GeneralとModerate" name="Desired_Mature"/>
 		<combo_box.item label="General" name="Desired_PG"/>
 	</combo_box>
@@ -36,7 +36,7 @@
 	</combo_box>
 	<check_box label="ログイン画面に表示する" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">
-		名前の表示：
+		名前タグの表示：
 	</text>
 	<radio_group name="Name_Tag_Preference">
 		<radio_item label="オフ" name="radio"/>
@@ -59,7 +59,7 @@
 	<check_box label="フレンドをハイライト表示" name="show_friends" tool_tip="フレンドの名前をハイライト表示します。"/>
 	<check_box label="古い形式の名前の時「Resident」を省略しない" name="legacy_trim_check" tool_tip="古い形式の名前の時「Resident」を省略しないようにします。"/>
 	<check_box label="古い形式の名前タグ位置" name="FSLegacyNametagPosition" tool_tip="ここにチェックを入れると、アニメーションでアバターの見かけの位置が動いた時、名前タグはアバターの頭の位置を追いかけることなく、アバターが立っている本来の位置に留まり続けます。"/>
-	<check_box label="アバター表示の複雑度を表示" name="FSTagShowARW" tool_tip="ここにチェックを入れると、名前タグに現在のアバター表示の複雑度が表示されます。"/>
+	<check_box label="アバターの複雑度を表示" name="FSTagShowARW" tool_tip="ここにチェックを入れると、名前タグに現在のアバター表示の複雑度が表示されます。"/>
 	<check_box label="複雑度が極めて高い場合のみ" name="FSTagShowTooComplexOnlyARW" tool_tip="ここにチェックを入れると、アバターが極めて複雑度ゼリー人形のように見える場合にのみネームタグにそのアバターの複雑さを表示します。"/>
 	<check_box label="自分のアバターの複雑度のみ" name="FSTagShowOwnARW" tool_tip="ここにチェックを入れると、名前タグにあなた自身の現在のアバターの複雑度が表示されます。"/>
 	<check_box label="名前タグに自動応答モードを表示" name="FSShowAutorespondInNameTag" tool_tip="ここにチェックを入れると、自分の名前タグに自動応答モードをオンにしているかどうかが表示されます。"/>

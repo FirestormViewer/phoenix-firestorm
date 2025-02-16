@@ -86,15 +86,15 @@
 		<!-- アバター -->
 		<panel label="アバター" name="firestorm_avatar">
 			<text name="HeadMovement">
-        マウスを追いかけるアバターの頭の動き（動かしたくない時は0に設定）：
+				マウスを追いかけるアバターの頭の動き（動かしたくない時は0に設定）：
 			</text>
 			<slider label="マウスを追いかける時に頭が縦に動く範囲：" tool_tip="マウスを追いかける時に頭が垂直方向（上下）に動く範囲を度で設定します。" name="PitchFromMousePositionSlider"/>
 			<text name="PitchFromMousePositionText">
-        度
+				度
 			</text>
 			<slider label="マウスを追いかける時に頭が横に動く範囲：" tool_tip="マウスを追いかける時に頭が水平方向（左右）に動く範囲を度で設定します。" name="YawFromMousePositionSlider"/>
 			<text name="YawFromMousePositionText">
-        度
+				度
 			</text>
 			<text name="note_lookat">
 				（アバターの視線に関する設定は「プライバシー」タブにあります。）
@@ -102,7 +102,7 @@
 			<check_box label="アバターのランダムな目の動きを抑止する" name="FSStaticEyes"/>
 			<!-- LGGカラービーム -->
 			<text name="BeamPrefs">
-        選択ビームのパーティクル効果
+				選択ビームのパーティクル効果
 			</text>
 			<view_border name="BeamDivisor"/>
 			<button name="BeamColor_delete" label="削除" tool_tip="現在の設定を削除します。"/>
@@ -197,7 +197,7 @@
 				回転の中心
 			</text>
 			<view_border name="PivotBorder"/>
-			<check_box label="ルートプリムに軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle"/>
+			<check_box label="ルートプリムの軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle"/>
 			<spinner label="Ｘ軸" name="X pos"/>
 			<spinner label="Ｙ軸" name="Y pos"/>
 			<spinner label="Ｚ軸" name="Z pos"/>
@@ -219,7 +219,7 @@
 				<combo_item name="Medium" label="中"/>
 				<combo_item name="Large" label="大"/>
 			</combo_box>
-			<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox"/>
+			<check_box label="ＬＳＬプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox"/>
 			<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox"/>
 			<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox"/>
 			<check_box label="簡単なリスト追加" tool_tip="ここにチェックを入れると、リストに値を追加する場合に簡単な方法を利用することができるようになります。" name="preproclazy_checkbox"/>

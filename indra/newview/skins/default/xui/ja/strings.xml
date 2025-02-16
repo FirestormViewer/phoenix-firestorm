@@ -79,17 +79,18 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_RELEASE_NOTES_URL]
 	</string>
 	<!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
-						Most PC users who know what these mean will be used to the English versions,
-						and this info sometimes gets sent to support. -->
+	Most PC users who know what these mean will be used to the English versions,
+	and this info sometimes gets sent to support. -->
 	<string name="AboutSystem">
-		ＣＰＵ：[CPU]
-メモリ：[MEMORY_MB]㎆
-ＯＳのバージョン：[OS_VERSION]
-グラフィックカード製造元：[GRAPHICS_CARD_VENDOR]
-グラフィックカード：[GRAPHICS_CARD]
-グラフィックカードのメモリ：[GRAPHICS_CARD_MEMORY]㎆
-グラフィックカードのメモリ（検知）：[GRAPHICS_CARD_MEMORY_DETECTED]㎆
-グラフィックカードのメモリ（割当）：[VRAM_BUDGET]
+CPU: [CPU]
+Memory: [MEMORY_MB] MB (Used: [USED_RAM] MB)
+Concurrency: [CONCURRENCY]
+OS Version: [OS_VERSION]
+Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
+Graphics Card: [GRAPHICS_CARD]
+Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
+Graphics Card Memory (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
+Graphics Card Memory (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windowsグラフィックドライババージョン：[GRAPHICS_DRIVER_VERSION]
@@ -97,13 +98,12 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutOGL">
 		OpenGLバージョン：[OPENGL_VERSION]</string>
 	<string name="AboutSettings">
-		ウィンドウサイズ:[WINDOW_WIDTH]x[WINDOW_HEIGHT]
-フォントサイズ調整：[FONT_SIZE_ADJUSTMENT]pt
-ＵＩフォント：[FONT_MAIN_OVERRIDE]
-等幅フォント：[FONT_MONO_OVERRIDE]
-チャットフォント：[FONT_CHAT_OVERRIDE]
-スクリプトフォント：[FONT_SCRIPT_OVERRIDE]
-ＵＩスケーリング：[UI_SCALE]
+		設定モード：[MODE]
+ビューアのスキン：[SKIN]（[THEME]）
+ウィンドウサイズ:[WINDOW_WIDTH]x[WINDOW_HEIGHT]px
+使用フォント：[FONT]（[FONT_SCREEN_DPI] dpi
+フォントサイズの調整：[FONT_SIZE] pt
+ＵＩスケーリング：[UI_SCALE_FACTOR]
 描画距離：[DRAW_DISTANCE]ｍ
 帯域幅：[NET_BANDWITH]kbit／秒
 ＬＯＤ係数：[LOD_FACTOR]

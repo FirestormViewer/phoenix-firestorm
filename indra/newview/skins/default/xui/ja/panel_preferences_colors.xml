@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="色" name="colors_panel">
-	<tab_container label="Color Prefs" name="tabs">
-		<panel label="チャットの文字の色" name="tab-chat">
+<panel label="カラー" name="colors_panel">
+	<tab_container label="カラーの初期設定" name="tabs">
+		<panel label="チャットの文字色" name="tab-chat">
 			<text name="font_colors">
-				チャットの文字の色：
+				チャットの文字色：
 			</text>
 			<color_swatch name="user"/>
 			<text name="user_label">
@@ -43,7 +43,7 @@
 			</text>
 			<color_swatch name="owner"/>
 			<text name="llownersay_label">
-				所有者通知
+				所有者の通知
 			</text>
 			<color_swatch name="links"/>
 			<text name="htmllink_label">
