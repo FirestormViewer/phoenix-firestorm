@@ -41,10 +41,12 @@
 				<combo_box.item value="filter_type_scripts" label="Script" />
 				<combo_box.item value="filter_type_sounds" label="Suoni" />
 				<combo_box.item value="filter_type_textures" label="Texture" />
-				<combo_box.item value="filter_type_snapshots" label="Fotografie" />
+				<combo_box.item value="filter_type_snapshots" label="Foto" />
 				<combo_box.item value="filter_type_meshes" label="Modelli mesh" />
 				<combo_box.item value="filter_type_materials" label="Materiali" />
 				<combo_box.item value="filter_type_settings" label="Ambienti" />
+				<combo_box.item value="filter_type_folders" label="Cartelle" />
+				<combo_box.item value="filter_type_coalesced" label="Solo multi-oggetto" />
 				<combo_box.item value="filter_type_custom" label="Personalizzato..." />
 			</combo_box>
 			<menu_button tool_tip="Mostra opzioni di visibilità per la ricerca" name="options_visibility_btn" />
@@ -75,6 +77,9 @@
 			<button label="Espandi" name="expand_btn" tool_tip="Apri tutte le cartelle" />
 		</panel>
 		<!-- / Used by StarLight skins -->
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="Mostra filtri - Quando selezionato, mostra il menu laterale dei filtri. Diventa evidenziato quando un filtro è abilitato" />
+		</panel>
 		<panel name="view_mode_panel">
 			<button name="view_mode_btn" tool_tip="Cambia modalità di visualizzazione" />
 		</panel>

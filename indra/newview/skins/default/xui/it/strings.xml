@@ -864,7 +864,7 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 		parte del corpo
 	</string>
 	<string name="snapshot">
-		fotografia
+		foto
 	</string>
 	<string name="lost and found">
 		oggetti smarriti
@@ -1853,9 +1853,15 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="Scripts" value=" Script,"/>
 	<string name="Sounds" value=" Suoni,"/>
 	<string name="Textures" value=" Texture,"/>
-	<string name="Snapshots" value=" Fotografie,"/>
+	<string name="Settings" value=" Ambienti," />
+	<string name="Snapshots" value=" Foto,"/>
+	<string name="Folders" value=" Cartelle,"/>
 	<string name="No Filters" value="No "/>
 	<string name="Since Logoff" value=" - Dall&apos;uscita"/>
+	<string name="Modifiable" value="Modificabile" />
+	<string name="Copyable" value="Copiabile" />
+	<string name="Transferable" value="Trasferibile" />
+	<string name="PermissionsFilter" value=" - Solo [PERMISSIONS]" />
 	<string name="InvFolder My Inventory">
 		Inventario
 	</string>
@@ -5712,7 +5718,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Apre la lista nera delle risorse de-renderizzate
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Strumenti per una fotografia accurata (Alt+P).
+		Strumenti per una foto accurata (Alt+P).
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Controlli avanzati per la cam (Ctrl+Maius+C)

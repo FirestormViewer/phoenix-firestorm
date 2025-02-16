@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toggleable_menu name="Settings">
-	<menu_item_call label="Carica solo rotazioni" name="rotations" />
-	<menu_item_call label="Carica solo posizioni" name="positions" />
-	<menu_item_call label="Carica solo dimensioni" name="scale" />
-	<menu_item_call label="Carica rotazioni e posizioni" name="rotations_positions" />
-	<menu_item_call label="Carica rotazioni e dimensioni" name="rotations_scales" />
-	<menu_item_call label="Carica posizioni e dimensioni" name="positions_scales" />
-	<menu_item_call label="Carica tutte" name="load_all" />
+	<menu_item_call label="Caricamento selettivo" tool_tip="Carica solo le giunture che sono disabilitate e le abilita" name="load_selective" />
+	<menu_item_call label="Caricamento selettivo - Solo rotazioni" tool_tip="Carica solo le rotazioni delle giunture che sono disabilitate e le abilita" name="rotations_positions" />
+	<menu_item_call label="Caricamento - Solo rotazioni" tool_tip="Carica solo le rotazioni. Adatto alle pose create per altri avatar/corpi" name="rotations" />
+	<menu_item_call label="Caricamento - Tutte" tool_tip="Carica rotazioni, posizioni e dimensioni" name="load_all" />
 </toggleable_menu>
