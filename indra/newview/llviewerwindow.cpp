@@ -1839,10 +1839,10 @@ bool LLViewerWindow::handleTimerEvent(LLWindow *window)
     return false;
 }
 
-bool LLViewerWindow::handleDeviceChange(LLWindow *window)
+bool LLViewerWindow::handleDeviceChange(LLWindow *window, bool deviceRemoved)
 {
     // give a chance to use a joystick after startup (hot-plugging)
-    if (!LLViewerJoystick::getInstance()->isJoystickInitialized() )
+    if (!deviceRemoved && !LLViewerJoystick::getInstance()->isJoystickInitialized())
     {
         LLViewerJoystick::getInstance()->init(true);
         return true;
