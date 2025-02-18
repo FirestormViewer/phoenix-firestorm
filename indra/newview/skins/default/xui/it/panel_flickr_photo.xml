@@ -11,6 +11,8 @@
 	<text name="working_lbl">
 		Caricamento...
 	</text>
+	<check_box label="Frame di cattura" tool_tip="Mostra una cornice sullo schermo che circonda le aree della foto. Le parti della scena che sono al di fuori della foto saranno desaturate e leggermente sfocate" name="show_frame" />
+	<check_box label="Guida inquadrat." tool_tip="Mostra la guida all'inquadratura (regola dei terzi) all'interno della cornice della foto" name="show_guides" />
 	<button label="Aggiorna" name="new_snapshot_btn" tool_tip="Fai clic per aggiornare"/>
 	<button label="Anteprima" name="big_preview_btn" tool_tip="Fai clic per alternare l&apos;anteprima"/>
 	<text name="title_label">

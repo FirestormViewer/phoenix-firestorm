@@ -215,6 +215,7 @@
 						<slider name="trackpad_sensitivity_slider" tool_tip="Regola sensibilità del trackball e della rotellina del mouse" />
 						<check_box name="stop_posing_on_close_checkbox" label="Stop Poser quando è chiuso" tool_tip="Non interrompere il Poser può essere utile per non perdere la posa accidentalmente" />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Reset rotaz. di base in Edit" tool_tip="Quando modifichi una rotazione per la prima volta, reimpostala su zero. Ciò significa che il tuo lavoro può salvare la posa (non la differenza, vedi caricamento/salvataggio). Accanto a ciascuna giuntura azzerata ed esportata, appare un segno di spunta verde" />
+						<check_box name="also_save_bvh_checkbox" label="Crea BVH al salvataggio**" tool_tip="Quando salvi una posa, crea anche un file BVH che può essere caricato tramite 'Costruisci > Carica > Animazione', così potrai mettere in posa te stesso o altri nel mondo. La 'base' delle giunture deve essere reimpostata a zero poiché il formato BVH richiede un lavoro originale" />
 					</panel>
 				</tab_container>
 			</panel>
@@ -227,7 +228,7 @@
 					<button name="undo_change" tool_tip="Annulla l'ultima modifica della rotazione" />
 					<button name="button_redo_change" tool_tip="Ripristina l'ultima modifica annullata" />
 					<button name="poser_joint_reset" tool_tip="Fai doppio clic per ripristinare tutte le parti del corpo selezionate al momento in cui hai iniziato a modificare la posa" />
-					<button name="delta_mode_toggle" tool_tip="Se si cambiano più giunture, ognuna cambia della stessa quantità, anziché ottenere la stessa rotazione per tutte" />
+					<button name="delta_mode_toggle" tool_tip="Se si cambiano più giunture, ognuna cambia della stessa quantità, anziché ottenere la stessa rotazione per tutte. Utilizzato anche per rimuovere il Gimbal Lock" />
 					<button label="Spec." name="button_toggleMirrorRotation" tool_tip="Cambia la giuntura opposta, come in uno specchio" />
 					<button label="Simp." name="button_toggleSympatheticRotation" tool_tip="Cambia la giuntura opposta, ma nello stesso modo" />
 				</panel>
@@ -253,7 +254,7 @@
 				<button name="toggleAdvancedPanel" tool_tip="Mostra / Nascondi le impostazioni avanzate" />
 				<button name="FlipPose_avatar" tool_tip="Capovolgi l'intera posa a sinistra / destra" />
 				<button name="FlipJoint_avatar" tool_tip="Specchia le parti del corpo selezionate a sinistra / destra" />
-				<button label="Ricatt." name="button_RecaptureParts" tool_tip="Se le parti del corpo selezionate sono disattivate, ricattura ciò che quelle parti del corpo stanno facendo in questo momento. Questo pulsante verrà disabilitato se attivi la posa a T" />
+				<button label="Ricatt." name="button_RecaptureParts" tool_tip="Se le parti del corpo selezionate sono disattivate, ricattura ciò che quelle parti del corpo stanno facendo in questo momento" />
 				<button label="Attiv./Dis. parti" name="toggle_PosingSelectedBones" tool_tip="Attiva / Disattiva il Poser per le parti del corpo selezionate. Quando è disattivata, quella parte del corpo si anima normalmente (con il tuo AO o una poseball)" />
 				<button label="Le mie pose" name="toggleLoadSavePanel" tool_tip="Carica, salva e gestisci le pose che crei" />
 				<button tool_tip="Apri la cartella con le tue pose" name="open_poseDir_button" />
@@ -268,7 +269,7 @@
 						<slider label="Posizione X:" name="Advanced_Position_X" />
 						<slider label="Posizione Y:" name="Advanced_Position_Y" />
 						<slider label="Posizione Z:" name="Advanced_Position_Z" />
-						<button label="Annulla modif. posiz." name="undo_position_change" tool_tip="Annulla l'ultima modifica della posizione" />
+						<button label="Annulla posiz." name="undo_position_change" tool_tip="Annulla l'ultima modifica della posizione" />
 						<button label="Rifai posizione" name="redo_position_change" tool_tip="Ripristina l'ultima modifica della posizione annullata" />
 						<button label="Reset posizione" name="reset_positions" tool_tip="Fai doppio clic per ripristinare la posizione originale" />
 					</panel>
@@ -276,7 +277,7 @@
 						<slider label="Dimens. X:" name="Advanced_Scale_X" />
 						<slider label="Dimens. Y:" name="Advanced_Scale_Y" />
 						<slider label="Dimens. Z:" name="Advanced_Scale_Z" />
-						<button label="Annulla modif. dimens." name="undo_scale_change" tool_tip="Annulla l'ultima modifica delle dimensioni" />
+						<button label="Annulla dimen." name="undo_scale_change" tool_tip="Annulla l'ultima modifica delle dimensioni" />
 						<button label="Rifai dimens." name="redo_scale_change" tool_tip="Ripristina l'ultima modifica delle dimensioni annullata" />
 						<button label="Reset dimens." name="reset_scales" tool_tip="Fai doppio clic per ripristinare le dimensioni originali" />
 					</panel>

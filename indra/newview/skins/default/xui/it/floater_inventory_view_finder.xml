@@ -11,7 +11,7 @@
 	<check_box label="Script" name="check_script"/>
 	<check_box label="Suoni" name="check_sound"/>
 	<check_box label="Texture" name="check_texture"/>
-	<check_box label="Fotografie" name="check_snapshot"/>
+	<check_box label="Foto" name="check_snapshot"/>
 	<check_box label="Ambienti" name="check_settings" />
 	<button label="Tutti" label_selected="Tutti" name="All"/>
 	<button label="Nessuno" label_selected="Nessuno" name="None"/>
@@ -19,6 +19,12 @@
 	<check_box label="Cop." name="check_copy" />
 	<check_box label="Trasf." name="check_transfer" />
 	<check_box label="Mostra sempre cartelle" name="check_show_empty"/>
+	<check_box label="Solo multi-oggetto" name="check_only_coalesced" width="125" />
+	<combo_box tool_tip="Filtra elementi linkati" name="inventory_filter_show_links_combo">
+		<combo_box.item name="show_links" label="Mostra i link" />
+		<combo_box.item name="show_links_only" label="Mostra solo i link" />
+		<combo_box.item name="hide_links" label="Nascondi i link" />
+	</combo_box>
 	<check_box label="Creati da me" name="check_created_by_me" />
 	<check_box label="Creati da altri" name="check_created_by_others" />
 	<check_box label="Dalla disconnessione" name="check_since_logoff"/>

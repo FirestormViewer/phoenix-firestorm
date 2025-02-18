@@ -1860,6 +1860,7 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 	<string name="Clothing" value=" Habits,"/>
 	<string name="Gestures" value=" Gestes,"/>
 	<string name="Landmarks" value=" Repères,"/>
+	<string name="Materials" value=" Matériaux," />
 	<string name="Notecards" value=" Notes,"/>
 	<string name="Objects" value=" Objets,"/>
 	<string name="Scripts" value=" Scripts,"/>
@@ -1867,6 +1868,7 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 	<string name="Textures" value=" Textures,"/>
 	<string name="Settings" value=" Paramètres," />
 	<string name="Snapshots" value=" Photos,"/>
+	<string name="Folders" value=" Dossiers," />
 	<string name="No Filters" value="Non "/>
 	<string name="Since Logoff" value="depuis la déconnexion"/>
 	<string name="Modifiable" value="Modifiable" />
