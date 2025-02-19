@@ -9,7 +9,6 @@ left="0"
 help_topic="fs_skies"
 name="panel_fs_settings_sky_hbodies"
 top="0">
-				
 		<panel
 		name="P_Sun_Color"
 		follows="left|top"
@@ -22,7 +21,6 @@ top="0">
 		border_visible="true"
 		border_thickness="1"
 		background_visible="true">
-		
 			<text
 			name="T_Sun_Header"
 			follows="left|top"
@@ -30,9 +28,8 @@ top="0">
 			left="5"
 			font="SansSerif"
 			value="Sun &amp; Moon Color"/>
-				
-		</panel>		
-		
+		</panel>
+
 		<panel
 		name="P_SM_Color"
 		follows="left|top"
@@ -43,28 +40,26 @@ top="0">
 		height="35"
 		border_visible="true"
 		background_visible="true">
-
-				 <text
-						name="color_label"
-						follows="left|top"
-						height="10"
-						layout="topleft"
-						left="5"
-						top_pad="10"
-						width="105">
-					Sun &amp; Moon Color:
-				</text>
-				<color_swatch
-						can_apply_immediately="true"
-						follows="left|top"
-						height="25"
-						label_height="0"
-						layout="topleft"
-						left_pad="0"
-						name="sun_moon_color"
-						top_delta="-5"
-						width="166" />
-						
+			<text
+			 name="color_label"
+			 follows="left|top"
+			 height="10"
+			 layout="topleft"
+			 left="5"
+			 top_pad="10"
+			 width="105">
+				Sun &amp; Moon Color:
+			</text>
+			<color_swatch
+			 can_apply_immediately="true"
+			 follows="left|top"
+			 height="25"
+			 label_height="0"
+			 layout="topleft"
+			 left_pad="0"
+			 name="sun_moon_color"
+			 top_delta="-5"
+			 right="-5" />
 		</panel>
 
 		<panel
@@ -79,7 +74,6 @@ top="0">
 		border_visible="true"
 		border_thickness="1"
 		background_visible="true">
-		
 			<text
 			name="T_Sun_Header"
 			follows="left|top"
@@ -87,8 +81,7 @@ top="0">
 			left="5"
 			font="SansSerif"
 			value="Sun &amp; Stars Settings"/>
-				
-		</panel>	
+		</panel>
 
 		<panel
 		name="P_Sun_Setting"
@@ -128,9 +121,8 @@ top="0">
 			left="5"
 			name="sun_image"
 			top_pad="0"
-
 			width="60"/>
-			
+
 			<text
 			name="glow_focus_label"
 			follows="left|top"
@@ -140,7 +132,7 @@ top="0">
 			top_delta="10"
 			width="85">
 			Glow Focus:
-			</text>		
+			</text>
 
 			<slider
 			decimal_digits="2"
@@ -202,8 +194,8 @@ top="0">
 			max_val="50000"
 			name="star_brightness"
 			width="120"
-			can_edit_text="true"/>  
-			
+			can_edit_text="true"/>
+
 			<text
 			name="sun_scale_label"
 			follows="left|top"
@@ -212,7 +204,7 @@ top="0">
 			left="5"
 			width="55">
 			Scale:
-			</text>	
+			</text>
 
 			<slider
 			decimal_digits="2"
@@ -276,7 +268,6 @@ top="0">
 			left_pad="0"
 			width="215"
 			can_edit_text="true"/>
-
 		</panel>
 
 		<panel
@@ -291,7 +282,6 @@ top="0">
 		border_visible="true"
 		border_thickness="1"
 		background_visible="true">
-
 			<text
 			name="T_Moon_Header"
 			follows="left|top"
@@ -299,9 +289,8 @@ top="0">
 			left="5"
 			font="SansSerif"
 			value="Moon Settings"/>
-				
 		</panel>
-						
+
 		<panel
 		name="P_Moon_Setting"
 		follows="left|top"
@@ -311,8 +300,8 @@ top="0">
 		width="280"
 		height="125"
 		border_visible="true"
-		background_visible="true">							
-								
+		background_visible="true">
+
 			<text
 			name="moon_image_label"
 			follows="left|top"
@@ -330,9 +319,9 @@ top="0">
 			height="16"
 			label="Show Beacon"
 			layout="topleft"
-			name="moonbeacon" 
+			name="moonbeacon"
 			top_delta="0"
-			left_pad="0"/>  
+			left_pad="0"/>
 
 			<texture_picker
 			height="83"
@@ -340,7 +329,7 @@ top="0">
 			left="5"
 			name="moon_image"
 			top_pad="0"
-			width="60"/>		
+			width="60"/>
 
 			<text
 			name="moon_scale_label"
@@ -367,7 +356,7 @@ top="0">
 			name="moon_scale"
 			width="145"
 			can_edit_text="true"/>
-						
+
 			<text
 			name="brightness_label"
 			follows="left|top"
@@ -377,7 +366,7 @@ top="0">
 			width="60">
 			Brightness:
 			</text>
-			
+
 			<slider
 			decimal_digits="2"
 			follows="left|top"
@@ -390,8 +379,8 @@ top="0">
 			name="moon_brightness"
 			left_pad="0"
 			width="145"
-			can_edit_text="true"/>     
-				
+			can_edit_text="true"/>
+
 			<text
 			name="moon_azimuth_label"
 			follows="left|top"
@@ -400,8 +389,8 @@ top="0">
 			left="5"
 			width="55">
 			Azimuth:
-			</text>			
-					  
+			</text>
+
 			<slider
 			decimal_digits="2"
 			follows="left|top"
@@ -415,7 +404,7 @@ top="0">
 			name="moon_azimuth"
 			width="215"
 			can_edit_text="true"/>
-			
+
 			<text
 			name="moon_elevation_label"
 			follows="left|top"
@@ -425,7 +414,7 @@ top="0">
 			width="55">
 			Elevation:
 			</text>
-			
+
 			<slider
 			decimal_digits="2"
 			follows="left|top"
@@ -439,6 +428,5 @@ top="0">
 			left_pad="0"
 			width="215"
 			can_edit_text="true"/>
-						
 		</panel>
-</panel>                
+</panel>

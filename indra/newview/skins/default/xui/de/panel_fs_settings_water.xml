@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Wasser" name="panel_fs_settings_water">
+	<panel name="P_Wave_Fog">
+		<text name="water_fog_label" tool_tip="Farbe Wasser-Nebel: Verändert die Farbe des Wasserkörpers. Ohne Nebel erscheint das Wasser klar und farblos.">
+			Farbe Wasser-Nebel
+		</text>
+		<text name="normal_map_label" tool_tip="Normal-Map: Bild, welches zur Bestimmung der Reflexionen und Lichtbrechung verdendet wird.">
+			Normal-Map
+		</text>
+	</panel>
+
+	<panel name="P_Wave_Fog" label="Nebel">
+		<text name="density_exponent_label">
+			Dichte-Exponent:
+		</text>
+		<text name="underwater_modifier_label">
+			Unterw.-Modifizierer:
+		</text>
+		<text name="FresnelScaleText">
+			Fresnel-Skalierung:
+		</text>
+		<text name="FresnelOffsetText">
+			Fresnel-Versatz:
+		</text>
+	</panel>
+
+	<panel name="P_Water_Wave">
+		<text name="large_wave_speed_label">
+			Geschw. große Welle:
+		</text>
+		<text name="small_wave_speed_label">
+			Geschw. kleine Welle:
+		</text>
+		<text name="reflection_wavelet_scale_label">
+			Skalierung Wellen-Reflexion:
+		</text>
+		<slider label="X:" name="water_normal_scale_x"/>
+		<slider label="Y:" name="water_normal_scale_y"/>
+		<slider label="Z:" name="water_normal_scale_z"/>
+	</panel>
+
+	<panel name="P_Water_Reflection">
+		<text name="refraction_scale_above_label" width="165">
+			Skali. Lichtbrechung (oberh.):
+		</text>
+		<slider name="water_scale_above" width="105"/>
+		<text name="refraction_scale_below_label" width="165">
+			Skali. Lichtbrechung (unterh.):
+		</text>
+		<slider name="water_scale_below" width="105"/>
+		<text name="blur_multiplier_label" width="165">
+			Unschärfe-Multiplikator:
+		</text>
+		<slider name="water_blur_multip" width="105"/>
+	</panel>
+</panel>

@@ -25,7 +25,6 @@ top="0">
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
 	background_visible="true">
-	
 		<text
 		name="T_Atmosphere_Header"
 		follows="left|top"
@@ -33,7 +32,6 @@ top="0">
 		left="5"
 		font="SansSerif"
 		value="Atmospheric Colors"/>
-			
 	</panel>
 
 	<panel
@@ -57,7 +55,7 @@ top="0">
 		width="105">
 		Ambient Color:
 		</text>
-				
+
 		<color_swatch
 		can_apply_immediately="true"
 		follows="left|top"
@@ -68,7 +66,7 @@ top="0">
 		name="ambient_light"
 		top_delta="-5"
 		width="166" />
-				
+
 		<text
 		name="blue_horizon_label"
 		follows="left|top"
@@ -79,7 +77,7 @@ top="0">
 		width="105">
 		Blue Horizon:
 		</text>
-				
+
 		<color_swatch
 		can_apply_immediately="true"
 		follows="left|top"
@@ -90,7 +88,7 @@ top="0">
 		name="blue_horizon"
 		top_delta="-5"
 		width="166" />
-			
+
 		<text
 		name="blue_density_label"
 		follows="left|top"
@@ -101,7 +99,7 @@ top="0">
 		width="105">
 		Blue Density:
 		</text>
-				
+
 		<color_swatch
 		can_apply_immediately="true"
 		follows="left|top"
@@ -125,7 +123,7 @@ top="0">
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
 	background_visible="true">
-	
+
 		<text
 		name="T_Atmosphere_Header"
 		follows="left|top"
@@ -133,7 +131,6 @@ top="0">
 		left="5"
 		font="SansSerif"
 		value="Atmosphere Settings"/>
-			
 	</panel>
 
 	<panel
@@ -171,7 +168,7 @@ top="0">
 		left_pad="0"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="haze_density_label"
 		follows="left|top"
@@ -181,7 +178,7 @@ top="0">
 		width="100">
 		Haze Density:
 		</text>
-		
+
 		<slider
 		decimal_digits="3"
 		follows="left|top"
@@ -205,7 +202,7 @@ top="0">
 		width="100">
 		Density Multiplier:
 		</text>
-		
+
 		<slider
 		decimal_digits="4"
 		follows="left|top"
@@ -219,7 +216,7 @@ top="0">
 		name="density_multip"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="distance_multiplier_label"
 		follows="left|top"
@@ -229,7 +226,7 @@ top="0">
 		width="100">
 		Distance Multiplier:
 		</text>
-		
+
 		<slider
 		decimal_digits="2"
 		follows="left|top"
@@ -243,7 +240,7 @@ top="0">
 		left_pad="0"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="maximum_altitude_label"
 		follows="left|top"
@@ -253,7 +250,7 @@ top="0">
 		width="100">
 		Maximum Altitide:
 		</text>
-		
+
 		<slider
 		decimal_digits="1"
 		follows="left|top"
@@ -267,7 +264,7 @@ top="0">
 		name="max_alt"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="scene_gamma_label"
 		follows="left|top"
@@ -277,7 +274,7 @@ top="0">
 		width="100">
 		Brightness:
 		</text>
-		
+
 		<slider
 		decimal_digits="2"
 		follows="left|top"
@@ -290,7 +287,7 @@ top="0">
 		left_pad="0"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="probe_ambiance_label"
 		follows="left|top"
@@ -302,7 +299,7 @@ top="0">
 		word_wrap="true">
 		Reflection Probe Ambiance (HDR):
 		</text>
-		
+
 		<slider
 		decimal_digits="2"
 		follows="left|top"
@@ -315,8 +312,6 @@ top="0">
 		left_pad="0"
 		width="171"
 		can_edit_text="true"/>
-
-		
 	</panel>
 
 	<panel
@@ -331,7 +326,7 @@ top="0">
 	border_visible="true"
 	border_thickness="1"
 	background_visible="true">
-	
+
 		<text
 		name="T_Rainbow_Header"
 		follows="left|top"
@@ -340,9 +335,7 @@ top="0">
 		font="SansSerif"
 		value="Rainbow and Halo Settings"
 		width="250"/>
-		
 	</panel>
-	
 
 	<panel
 		name="P_Rainbow_OtherSettings"
@@ -354,7 +347,7 @@ top="0">
 		height="63"
 		border_visible="true"
 		background_visible="true">
-		
+
 		<text
 		name="moisture_level_label"
 		follows="left|top"
@@ -365,7 +358,7 @@ top="0">
 		width="100">
 		Moisture Level:
 		</text>
-		
+
 		<slider
 		decimal_digits="3"
 		follows="left|top"
@@ -379,7 +372,7 @@ top="0">
 		name="moisture_level"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="droplet_radius_label"
 		follows="left|top"
@@ -389,7 +382,7 @@ top="0">
 		width="100">
 		Droplet Radius:
 		</text>
-		
+
 		<slider
 		decimal_digits="3"
 		follows="left|top"
@@ -403,7 +396,7 @@ top="0">
 		name="droplet_radius"
 		width="171"
 		can_edit_text="true"/>
-		
+
 		<text
 		name="ice_level_label"
 		follows="left|top"
@@ -413,7 +406,7 @@ top="0">
 		width="100">
 		Ice Level:
 		</text>
-		
+
 		<slider
 		decimal_digits="3"
 		follows="left|top"

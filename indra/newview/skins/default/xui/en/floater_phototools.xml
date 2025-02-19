@@ -30,7 +30,7 @@
 	 tab_max_width="47"
 	 top="0"
 	 width="288">
-	
+
 		<panel
 		 follows="all"
 		 name="EnvironmentTab"
@@ -204,7 +204,7 @@
 				 image_overlay="Arrow_Right_Off"
 				 scale_image="true"/>
 			</panel>
-	
+
 			<panel
 			 name="P_WL_Sky_Water_2"
 			 follows="top|left"
@@ -223,7 +223,7 @@
 				 follows="left|top"
 				 height="20"
 				 width="130"
-				 tool_tip="This opens the Personal Lighting window.The Personal Lighting floater is used to make temporary adjustments to the environment where you are. This is useful for photography or simply for changing something to suit your own preference. It is NOT for creating your own settings assets, and changes cannot be saved. "
+				 tool_tip="This opens the Personal Lighting window.The Personal Lighting window is used to make temporary adjustments to the environment where you are. This is useful for photography or simply for changing something to suit your own preference. It is NOT for creating your own settings assets, and changes cannot be saved. "
 				 top_pad="5"
 				 left="5"
 				 label="Personal Lighting">
@@ -231,21 +231,6 @@
 					 function="Floater.ToggleOrBringToFront"
 					 parameter="env_adjust_snapshot" />
 				</button>
-				<!--button
-				 name="ResetToRegionDefault"
-				 label=""
-				 tool_tip="Restore environment settings to the region's default configuration."
-				 enabled="true"
-				 top_delta="0"
-				 left_pad="0"
-				 height="20"
-				 width="20"
-				 follows="left|top"
-				 image_overlay="StopReload_Off"
-				 label_selected=""
-				 scale_image="true"
-				/-->
-							
 				<button
 				 follows="top|left|right"
 				 height="20"
@@ -372,7 +357,7 @@
 					 parameter="region"/>
 				</button>
 			</panel>
-			
+
 			<panel
 			 visible="true"
 			 name="P_WL_Presets"
@@ -418,22 +403,6 @@
 					 function="World.EnvPreset"
 					 parameter="new_sky"/>
 				</button>
-
-				<!--button
-				 follows="left|top"
-				 name="edit_sky_preset"
-				 height="20"
-				 label="Edit Sky Preset"
-				 layout="topleft"
-				 left="5"
-				 tool_tip="Edit the currently loaded sky settings."
-				 top_pad="2"
-				 width="130">
-					<button.commit_callback
-					 function="World.EnvPreset"
-					 parameter="edit_sky"/>
-				</button-->
-			
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
@@ -450,27 +419,13 @@
 				 label="New Water Preset"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Create new environment preset based on the currently loaded sky settings."
+				 tool_tip="Create new environment preset based on the currently loaded water settings."
 				 top_pad="10"
 				 width="130">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_water"/>
 				</button>
-				<!--button
-				 follows="left|top"
-				 name="edit_water_preset"
-				 height="20"
-				 label="Edit Water Preset"
-				 layout="topleft"
-				 left="5"
-				 tool_tip="Edit the currently loaded water settings."
-				 top_pad="2"
-				 width="130">
-					<button.commit_callback
-					 function="World.EnvPreset"
-					 parameter="edit_water"/>
-				</button-->
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
@@ -582,7 +537,7 @@
 				 width="280">
 				</check_box>
 			</panel>
-			
+
 			<panel
 			 name="P_R_Res_2"
 			 follows="top|left"
@@ -759,7 +714,7 @@
 				 height="15"
 				 layout="topleft"
 				 left="5"
-				 name="Probe_Resolution"				 
+				 name="Probe_Resolution"
 				 tool_tip="Defines the resolution of reflection probes. Higher resolutions provide more detailed reflections but may increase memory usage and require a viewer restart to apply. Settings above 128 can consume significant amounts of video RAM, potentially impacting performance on systems with limited GPU resources."
 				 top_pad="4"
 				 width="162">
@@ -813,15 +768,15 @@
 			 right="-5"
 			 height="46"
 			 border_visible="true"
-			 background_visible="true">			
-			
-			<text
+			 background_visible="true">
+
+				<text
 				 name="T_Reflection_Distance"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
 				 top_pad="10"
-			     tool_tip="Controls the visibility range for reflections, affecting reflection detail and performance across reflection probes, mirrors, and screen space reflections. Higher values increase the distance at which reflections are visible, enhancing detail but increasing performance cost."
+				 tool_tip="Controls the visibility range for reflections, affecting reflection detail and performance across reflection probes, mirrors, and screen space reflections. Higher values increase the distance at which reflections are visible, enhancing detail but increasing performance cost."
 				 width="70">
 					Reflect. Dist.
 				</text>
@@ -864,8 +819,6 @@
 					 parameter="RenderReflectionProbeDrawDistance"/>
 				</button>
 			</panel>
-			
-			
 		</panel>
 
 		<panel
@@ -1005,7 +958,6 @@
 			 height="205"
 			 border_visible="true"
 			 background_visible="true">
-			 
 			 	<text
 				 name="T_Local_Lights"
 				 follows="top|left"
@@ -1916,7 +1868,7 @@
 				name="FSFocusPointFollowsPointer"
 				tool_tip="Allows the DoF focus point to follow your mouse cursor, similar to flycam behavior. Useful when combined with DoF focus lock for dynamic focus adjustments."
 				top_pad="0"
-				width="256"/>	   
+				width="256"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
@@ -2311,7 +2263,7 @@
 					HDR Tone Mapping Settings
 				</text>
 			</panel>
-			
+
 			<panel
 			 name="P_Tone_Settings_2"
 			 follows="top|left"
@@ -2322,7 +2274,7 @@
 			 height="25"
 			 border_visible="true"
 			 background_visible="true">
-			 
+
 				<check_box
 				 control_name="RenderDisableVintageMode"
 				 height="16"
@@ -2335,7 +2287,7 @@
 				 width="240">
 				</check_box>
 			</panel>
-			
+
 			<panel
 			 name="P_Tone_Settings_3"
 			 follows="top|left"
@@ -2345,8 +2297,8 @@
 			 right="-3"
 			 height="50"
 			 border_visible="true"
-			 background_visible="true">			
-				
+			 background_visible="true">
+
 				<text
 				 name="T_Tonemap_Type"
 				 follows="left|top"
@@ -2431,7 +2383,7 @@
 					 function="ResetControl"
 					 parameter="RenderTonemapMix"/>
 				</button>
-			 </panel>
+			</panel>
 			<panel
 			 name="P_Glow_Settings"
 			 follows="top|left"
@@ -2466,7 +2418,7 @@
 			 height="38"
 			 border_visible="true"
 			 background_visible="true">
-				
+
 				<check_box
 				 control_name="RenderGlow"
 				 height="16"
@@ -2487,8 +2439,7 @@
 				 tool_tip="Enables High Dynamic Range (HDR) processing for the glow effect, allowing for more intense, vibrant glows with realistic brightness transitions. This enhances glow quality, especially in high-contrast scenes, by improving how light spreads from very bright areas. Useful when working with emissive textures and strong lighting effects."
 				 top_pad="0"
 				 width="240">
-				</check_box>	
-
+				</check_box>
 			</panel>
 
 			<panel
@@ -2650,104 +2601,6 @@
 					 parameter="RenderGlowStrength"/>
 				</button>
 
-				<!--text
-				 name="T_Luminance"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Minimum luminance intensity necessary to consider an object bright enough to automatically glow."
-				 width="80">
-					Luminance
-				</text>
-				<slider_bar
-				 name="SB_Luminance"
-				 control_name="RenderGlowMinLuminance"
-				 follows="left|top"
-				 height="16"
-				 increment="0.001"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="1"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Luminance"
-				 control_name="RenderGlowMinLuminance"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|left"
-				 max_val="1"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Luminance"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderGlowMinLuminance"/>
-				</button>
-
-				<text
-				 name="T_Warmth"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Amount of warmth extraction to use (versus luminance extraction). 0 = lum, 1.0 = warmth. OFTEN HAS LITTLE OR NO EFFECT!"
-				 width="80">
-					Warmth
-				</text>
-				<slider_bar
-				 name="SB_Warmth"
-				 control_name="RenderGlowWarmthAmount"
-				 follows="left|right"
-				 height="16"
-				 increment="0.001"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="30"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Warmth"
-				 control_name="RenderGlowWarmthAmount"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|left"
-				 max_val="30"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Warmth"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderGlowWarmthAmount"/>
-				</button-->
-
 				<text
 				 name="T_Glow_Width"
 				 follows="top|left"
@@ -2796,55 +2649,6 @@
 					 function="ResetControl"
 					 parameter="RenderGlowWidth"/>
 				</button>
-
-				<!--text
-				 name="T_Alpha"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Basically how bright the glow is allowed to get."
-				 width="80">
-					Alpha
-				</text>
-				<slider_bar
-				 name="SB_Alpha"
-				 control_name="RenderGlowMaxExtractAlpha"
-				 follows="left|right"
-				 height="16"
-				 increment="0.001"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="100"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Alpha"
-				 control_name="RenderGlowMaxExtractAlpha"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|left"
-				 max_val="1000"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Alpha"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderGlowMaxExtractAlpha"/>
-				</button-->
 			</panel>
 		</panel>
 
@@ -3033,7 +2837,7 @@
 					 function="ResetControl"
 					 parameter="RenderAvatarLODFactor"/>
 				</button>
-				
+
 				<text
 				 name="T_Avi_Physics"
 				 follows="top|left"
@@ -3523,158 +3327,6 @@
 				</button>
 			</panel>
 
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator4"
-			 top_pad="5"
-			 width="260"/-->
-			
-			<!--panel
-			 name="P_Vignetting"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="3"
-			 left="4"
-			 width="275"
-			 height="70"
-			 border_visible="true"
-			 border_thickness="1"
-			 background_visible="true">
-				<text
-				 name="T_VignetteX"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="10"
-				 tool_tip=""
-				 width="80">
-				 Vig. Amount
-				</text>
-				<slider_bar
-				 name="VignetteSliderX"
-				 follows="left|top"
-				 height="16"
-				 increment="0.05"
-				 layout="topleft"
-				 left_pad="-10"
-				 min_val="0.0"
-				 max_val="1.0"
-				 initial_value="0"
-				 top_delta="-2"
-				 width="117"/>
-				<spinner
-				 name="VignetteSpinnerX"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="left|top"
-				 max_val="1.0"
-				 min_val="0.0"
-				 width="53"
-				 increment="0.05"/>
-				<button
-				 follows="left|top"
-				 name="Reset_VignetteX"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value." />
-				<text
-				 name="T_VignetteY"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip=""
-				 width="80">
-				 Vig. Power
-				</text>
-				<slider_bar
-				 name="VignetteSliderY"
-				 follows="left|top"
-				 height="16"
-				 increment="0.1"
-				 layout="topleft"
-				 left_pad="-10"
-				 min_val="0.0"
-				 max_val="32.0"
-				 initial_value="1"
-				 top_delta="-2"
-				 width="117"/>
-				<spinner
-				 name="VignetteSpinnerY"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="2"
-				 follows="left|top"
-				 max_val="32.0"
-				 min_val="0.0"
-				 width="53"
-				 increment="0.1"/>
-				<button
-				 follows="left|top"
-				 name="Reset_VignetteY"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value." />
-				<text
-				 name="T_VignetteZ"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip=""
-				 width="80">
-				 Vig. Multiply
-				</text>
-				<slider_bar
-				 name="VignetteSliderZ"
-				 follows="left|top"
-				 height="16"
-				 increment="0.1"
-				 layout="topleft"
-				 left_pad="-10"
-				 min_val="0.0"
-				 max_val="8.0"
-				 initial_value="1"
-				 top_delta="-2"
-				 width="117"/>
-				<spinner
-				 name="VignetteSpinnerZ"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="left|top"
-				 max_val="8.0"
-				 min_val="0.0"
-				 width="53"
-				 increment="0.1"/>
-				<button
-				 follows="left|top"
-				 name="Reset_VignetteZ"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value." />
-			</panel-->
-
 			<panel
 			 name="P_Render"
 			 follows="top|left"
@@ -3746,28 +3398,7 @@
 					 function="Advanced.HandleAttachedLightParticles"
 					 parameter="RenderAttachedParticles"/>
 				</check_box>
-				<!--check_box
-				 control_name="RenderAutoMaskAlphaDeferred"
-				 height="16"
-				 initial_value="false"
-				 label="Render alpha masks"
-				 tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly"
-				 layout="topleft"
-				 left_delta="0"
-				 name="RenderAutoMaskAlphaDeferred"
-				 top_pad="0"
-				 width="256"/-->
 			</panel>
-
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator5"
-			 top_pad="5"
-			 width="260"/-->
 
 			<panel
 			 name="P_Anti-aliasing"
@@ -3979,8 +3610,6 @@
 				  <combo_box.commit_callback
 					function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-
-				
 			</panel>
 		</panel>
 
@@ -4012,7 +3641,7 @@
 					Interface Aids
 				</text>
 			</panel>
-			
+
 			<panel
 			 name="P_Aids_Settings"
 			 follows="top|left"
@@ -4022,7 +3651,7 @@
 			 right="-3"
 			 height="302"
 			 border_visible="true"
-			 background_visible="true">			
+			 background_visible="true">
 				<check_box
 				 follows="top|left"
 				 layout="topleft"

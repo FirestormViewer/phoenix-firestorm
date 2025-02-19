@@ -7,8 +7,7 @@ label="Water"
 layout="topleft"
 left="0"
 name="panel_fs_settings_water"
-top="0">    
-		
+top="0">
 	<panel
 	name="P_Wave_Fog"
 	label="Fog"
@@ -64,9 +63,6 @@ top="0">
 		width="100">
 		Normal Map
 		</text>
-
-
-
 	</panel>
 
 	<panel
@@ -79,7 +75,6 @@ top="0">
 	width="280"
 	height="80"
 	border_visible="true"
-
 	background_visible="true">
 
 		<text
@@ -105,7 +100,6 @@ top="0">
 		left_pad="0"
 		width="155"
 		can_edit_text="true"/>
-
 
 		<text
 		name="underwater_modifier_label"
@@ -163,7 +157,6 @@ top="0">
 		Fresnel Offset:
 		</text>
 
-
 		<slider
 		decimal_digits="2"
 		follows="left|top"
@@ -187,7 +180,7 @@ top="0">
 	width="280"
 	height="180"
 	border_visible="true"
-	background_visible="true">	 
+	background_visible="true">
 
 		<text
 		name="large_wave_speed_label"
@@ -293,8 +286,7 @@ top="0">
 		top_pad="5"
 		label="Z:"
 		width="270"
-		can_edit_text="true"/>                            
-
+		can_edit_text="true"/>
 	</panel>
 
 	<panel
@@ -307,9 +299,7 @@ top="0">
 	width="280"
 	height="60"
 	border_visible="true"
-
 	background_visible="true">
-					
 		<text
 		name="refraction_scale_above_label"
 		follows="left|top"
@@ -383,7 +373,5 @@ top="0">
 		left_pad="0"
 		width="115"
 		can_edit_text="true"/>
-
 	</panel>
-
-</panel>     
+</panel>
