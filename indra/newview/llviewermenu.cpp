@@ -8636,7 +8636,9 @@ class LLPromptShowURL : public view_listener_t
                 {
                     LLSD payload;
                     payload["url"] = url;
-                    LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+                    LLSD args;
+                    args["UNTRUSTED_URL"] = url;
+                    LLNotificationsUtil::add(alert, args, payload, callback_show_url);
                 }
                 // </FS:Ansariel>
             }
