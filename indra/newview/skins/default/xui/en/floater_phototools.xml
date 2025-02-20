@@ -1860,15 +1860,28 @@
 				 top_pad="5"
 				 width="280"/>
 				<check_box
-				control_name="FSFocusPointFollowsPointer"
-				enabled_control="RenderDepthOfField"
-				height="16"
-				label="Depth of Field focus follows pointer"
-				layout="topleft"
-				name="FSFocusPointFollowsPointer"
-				tool_tip="Allows the DoF focus point to follow your mouse cursor, similar to flycam behavior. Useful when combined with DoF focus lock for dynamic focus adjustments."
-				top_pad="0"
-				width="256"/>
+				 control_name="FSFocusPointFollowsPointer"
+				 enabled_control="RenderDepthOfField"
+				 height="16"
+				 label="Depth of Field focus follows pointer"
+				 layout="topleft"
+				 name="FSFocusPointFollowsPointer"
+				 tool_tip="Allows the DoF focus point to follow your mouse cursor, similar to flycam behavior. Useful when combined with DoF focus lock for dynamic focus adjustments."
+				 top_pad="0"
+				 width="256"/>
+          		<button
+				 follows="left|top"
+				 height="19"
+				 is_toggle="true"
+				 control_name="FSFocusPointRender"
+				 image_overlay="Profile_Group_Visibility_On"
+				 image_unselected="Profile_Group_Visibility_Off"
+				 layout="topleft"
+				 top_pad="-19"
+				 right="-5"
+				 name="FocusPointRenderToggle"
+				 tool_tip="Toggle the focus point crosshair display. The crosshair is yellow when free and red when locked."
+				 width="19"/>					
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
