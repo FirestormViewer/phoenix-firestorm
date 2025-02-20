@@ -4,7 +4,7 @@
  can_resize="false"
  can_close="true"
  can_minimize="true"
- height="540"
+ height="560"
  help_topic="phototools_menu_floater"
  layout="topleft"
  name="phototools"
@@ -18,7 +18,7 @@
 	<tab_container
 	 follows="all"
 	 halign="center"
-	 height="540"
+	 height="560"
 	 hide_scroll_arrows="true"
 	 layout="topleft"
 	 left="0"
@@ -213,7 +213,7 @@
 			 left="3"
 			 top_delta="-5"
 			 right="-5"
-			 height="28"
+			 height="48"
 			 border_visible="true"
 			 background_visible="true">	
 				 
@@ -230,7 +230,7 @@
 					<button.commit_callback
 					 function="Floater.ToggleOrBringToFront"
 					 parameter="env_adjust_snapshot" />
-				</button>
+				</button>				
 				<button
 				 follows="top|left|right"
 				 height="20"
@@ -251,6 +251,19 @@
 					<button.is_toggled_callback
 					 function="World.EnableEnvSettings" 
 					 parameter="pause_clouds" />
+				</button>
+				<button
+				 enabled="true"
+				 name="btn_personal_lighting_advanced"
+				 follows="top|right"
+				 height="20"
+				 top_pad="3"
+				 left="5"
+				 right="-5"
+				 label="Advanced Lighting...">
+					<button.commit_callback
+					 function="Floater.ToggleOrBringToFront"
+					 parameter="env_adjust_snapshot_advanced" />
 				</button>
 			</panel>
 
