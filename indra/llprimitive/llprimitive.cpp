@@ -40,6 +40,7 @@
 #include "llprimtexturelist.h"
 #include "llmaterialid.h"
 #include "llsdutil.h"
+#include "../newview/llviewercontrol.h" // <FS:WW> Feature: Fullbright Toggle - Include for gSavedSettings
 
 /**
  * exported constants
@@ -291,6 +292,8 @@ void LLPrimitive::setTE(const U8 index, const LLTextureEntry& te)
     {
         mNumBumpmapTEs++;
     }
+    //FS:WW - Fullbright Toggle - Copy original fullbright 
+    getTEref(index).setOriginalFullbright(te.getOriginalFullbright()); 
 }
 
 S32  LLPrimitive::setTETexture(const U8 index, const LLUUID &id)
@@ -767,6 +770,8 @@ void LLPrimitive::copyTEs(const LLPrimitive *primitivep)
     for (i = 0; i < num_tes; i++)
     {
         mTextureList.copyTexture(i, primitivep->getTEref(i));
+        //FS:WW - Fullbright Toggle - Copy original fullbright // ADD THESE TWO LINES
+        getTEref(i).setOriginalFullbright(primitivep->getTEref(i).getOriginalFullbright()); // ADD THIS LINE
     }
 }
 
@@ -1262,7 +1267,17 @@ bool LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
             offset_s[face_index] = (S16) ll_round((llclamp(te.mOffsetS,-1.0f,1.0f) * (F32)0x7FFF)) ;
             offset_t[face_index] = (S16) ll_round((llclamp(te.mOffsetT,-1.0f,1.0f) * (F32)0x7FFF)) ;
             image_rot[face_index] = (S16) ll_round(((fmod(te.mRotation, F_TWO_PI)/F_TWO_PI) * TEXTURE_ROTATION_PACK_FACTOR));
-            bump[face_index] = te.getBumpShinyFullbright();
+			bump[face_index] = te.getBumpShinyFullbright();
+			// <FS:WW> Feature: Fullbright Toggle - Conditionally use fullbright based on preference
+			if(!gSavedSettings.getBOOL("FSRenderEnableFullbright"))
+			{
+				bump[face_index] = te.getBumpShiny(); // Use non-fullbright attribute
+			}
+			else
+			{
+				bump[face_index] = te.getBumpShinyFullbright(); // Use fullbright attribute
+			}
+			// </FS:WW>
             media_flags[face_index] = te.getMediaTexGen();
             glow[face_index] = (U8) ll_round((llclamp(te.getGlow(), 0.0f, 1.0f) * (F32)0xFF));
 
@@ -1347,7 +1362,17 @@ bool LLPrimitive::packTEMessage(LLDataPacker &dp) const
             offset_s[face_index] = (S16) ll_round((llclamp(te.mOffsetS,-1.0f,1.0f) * (F32)0x7FFF)) ;
             offset_t[face_index] = (S16) ll_round((llclamp(te.mOffsetT,-1.0f,1.0f) * (F32)0x7FFF)) ;
             image_rot[face_index] = (S16) ll_round(((fmod(te.mRotation, F_TWO_PI)/F_TWO_PI) * TEXTURE_ROTATION_PACK_FACTOR));
-            bump[face_index] = te.getBumpShinyFullbright();
+			bump[face_index] = te.getBumpShinyFullbright();
+			// <FS:WW> Feature: Fullbright Toggle - Conditionally use fullbright based on preference
+			if(!gSavedSettings.getBOOL("FSRenderEnableFullbright"))
+			{
+				bump[face_index] = te.getBumpShiny(); // Use non-fullbright attribute
+			}
+			else
+			{
+				bump[face_index] = te.getBumpShinyFullbright(); // Use fullbright attribute
+			}
+			// </FS:WW>
             media_flags[face_index] = te.getMediaTexGen();
             glow[face_index] = (U8) ll_round((llclamp(te.getGlow(), 0.0f, 1.0f) * (F32)0xFF));
 
