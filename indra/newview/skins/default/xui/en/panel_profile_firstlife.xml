@@ -53,15 +53,6 @@
      width="120"
      follows="top|left"
      layout="topleft"/>
-    <!-- <button
-     name="fl_upload_image"
-     label="Upload Photo"
-     top="80"
-     left="285"
-     height="20"
-     width="120"
-     follows="top|left"
-     layout="topleft"/> -->
 <!-- [AS:chanayane] Preview button -->
     <button
      name="fl_change_image"

@@ -658,15 +658,6 @@
      follows="all"
      name="info_border_sl_description_edit"
      bevel_style="in"/>
-    <!-- <view_border
-     top_delta="-4"
-     left="59"
-     right="-5"
-     height="103"
-     layout="topleft"
-     follows="all"
-     name="info_border_sl_description_edit"
-     bevel_style="in"/> -->
 <!-- [/AS:chanayane] -->
     <text_editor
      name="sl_description_edit"

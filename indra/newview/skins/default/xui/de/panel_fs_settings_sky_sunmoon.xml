@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Sonne und Mond" name="panel_fs_settings_sky_hbodies">
+		<panel name="P_Sun_Color">
+			<text name="T_Sun_Header" value="Farbe Sonne und Mond"/>
+		</panel>
+
+		<panel name="P_SM_Color">
+			<text name="color_label" width="140">
+					Farbe Sonne und Mond:
+				</text>
+		</panel>
+
+		<panel name="P_Sun_Header">
+			<text name="T_Sun_Header" value="Einstellungen Sonne und Sterne"/>
+		</panel>
+
+		<panel name="P_Sun_Setting">
+			<text name="image_label" width="150">
+				Bild:
+			</text>
+			<check_box label="Beacon anzeigen" name="sunbeacon" />
+			<text name="glow_focus_label">
+				Leuchtfokus:
+			</text>
+			<text name="glow_size_label">
+				Leuchtgröße:
+			</text>
+			<text name="star_brightness_label">
+				Helligk. Sterne:
+			</text>
+			<text name="sun_scale_label">
+				Skalierung:
+			</text>	
+			<text name="sun_azimuth_label">
+				Azimut:
+			</text>
+			<text name="sun_elevation_label">
+				Höhenwinkel:
+			</text>
+		</panel>
+
+		<panel name="P_Moon_Header">
+			<text name="T_Moon_Header" value="Einstellungen Mond"/>
+		</panel>
+
+		<panel name="P_Moon_Setting">
+			<text name="moon_image_label" width="150">
+				Bild:
+			</text>
+			<check_box label="Beacon anzeigen" name="moonbeacon" />
+			<text name="moon_scale_label">
+				Skalierung:
+			</text>
+			<text name="brightness_label">
+				Helligkeit:
+			</text>
+			<text name="moon_azimuth_label">
+				Azimut:
+			</text>
+			<text name="moon_elevation_label">
+				Höhenwinkel:
+			</text>
+		</panel>
+</panel>

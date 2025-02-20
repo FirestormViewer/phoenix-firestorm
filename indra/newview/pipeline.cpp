@@ -354,6 +354,9 @@ bool    LLPipeline::sReflectionProbesEnabled = false;
 S32     LLPipeline::sVisibleLightCount = 0;
 bool    LLPipeline::sRenderingHUDs;
 F32     LLPipeline::sDistortionWaterClipPlaneMargin = 1.0125f;
+LLVector3 LLPipeline::sLastFocusPoint={};// <FS:Beq/> FIRE-16728 focus point lock & free focus DoF 
+bool    LLPipeline::sDoFEnabled = false;
+
 F32 LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
 
 bool    LLPipeline::sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
@@ -4445,6 +4448,48 @@ void LLPipeline::recordTrianglesDrawn()
     add(LLStatViewer::TRIANGLES_DRAWN, LLUnits::Triangles::fromValue(count));
 }
 
+// <FS:Beq> FIRE-32023 Focus Point Rendering
+void LLPipeline::renderFocusPoint()
+{
+
+    static LLCachedControl<bool> render_focus_point_crosshair(gSavedSettings, "FSFocusPointRender", false);
+    if ( sDoFEnabled && render_focus_point_crosshair && gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        gDebugProgram.bind();
+        LLVector3 focus_point = sLastFocusPoint;
+        F32 size = 0.02f;
+        LLGLDepthTest gls_depth(GL_FALSE);    
+        gGL.pushMatrix();
+        gGL.translatef(focus_point.mV[VX], focus_point.mV[VY], focus_point.mV[VZ]);
+           
+        gGL.begin(LLRender::LINES);
+        if (LLPipeline::FSFocusPointLocked)
+        {
+            gGL.color4f(1.0f, 0.0f, 0.0f, 0.5f);
+        }
+        else
+        {
+            gGL.color4f(1.0f, 1.0f, 0.0f, 0.5f);
+        }
+        gGL.vertex3f(-size, 0.0f, 0.0f);
+        gGL.vertex3f(size, 0.0f, 0.0f);
+    
+        // Y-axis (Green)
+        gGL.vertex3f(0.0f, -size, 0.0f);
+        gGL.vertex3f(0.0f, size, 0.0f);
+    
+        // Z-axis (Blue)
+        gGL.vertex3f(0.0f, 0.0f, -size);
+        gGL.vertex3f(0.0f, 0.0f, size);
+    
+        gGL.end();
+    
+        gGL.popMatrix();
+        gGL.flush();
+        gDebugProgram.unbind();
+    }      
+}
+// </FS:Beq>
 void LLPipeline::renderPhysicsDisplay()
 {
     if (!hasRenderDebugMask(LLPipeline::RENDER_DEBUG_PHYSICS_SHAPES))
@@ -8070,14 +8115,14 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
 void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
 {
     {
-        bool dof_enabled =
+        sDoFEnabled = // <FS:Beq/> // FIRE-32023 Render focus point
             (RenderDepthOfFieldInEditMode || !LLToolMgr::getInstance()->inBuildMode()) &&
             RenderDepthOfField &&
             !gCubeSnapshot;
 
         gViewerWindow->setup3DViewport();
 
-        if (dof_enabled)
+        if (sDoFEnabled) // <FS:Beq/> // FIRE-32023 Render focus point
         {
             LL_PROFILE_GPU_ZONE("dof");
             LLGLDisable blend(GL_BLEND);
@@ -8090,10 +8135,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
             LLVector3 focus_point;
 
             // <FS:Beq> FIRE-16728 focus point lock & free focus DoF - based on a feature developed by NiranV Dean
-            static LLVector3 last_focus_point{};
-            if (LLPipeline::FSFocusPointLocked && !last_focus_point.isExactlyZero())
+            
+            if (LLPipeline::FSFocusPointLocked && !sLastFocusPoint.isExactlyZero())
             {
-                focus_point = last_focus_point;
+                focus_point = sLastFocusPoint;
             }
             else
             {
@@ -8140,7 +8185,7 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
             }
 
             // <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
-            last_focus_point = focus_point;
+            sLastFocusPoint = focus_point;
             // </FS:Beq>
             LLVector3 eye = LLViewerCamera::getInstance()->getOrigin();
             F32 target_distance = 16.f;
@@ -8438,6 +8483,8 @@ void LLPipeline::renderFinalize()
     gDeferredPostNoDoFNoiseProgram.unbind();
 
     gGL.setSceneBlendType(LLRender::BT_ALPHA);
+    
+    renderFocusPoint(); // <FS:Beq/> FIRE-32023 render focus point
 
     if (hasRenderDebugMask(LLPipeline::RENDER_DEBUG_PHYSICS_SHAPES))
     {

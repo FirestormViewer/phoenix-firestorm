@@ -11,6 +11,7 @@
 			<text name="description_label">
 				Beschreibung:
 			</text>
+			<button name="btn_preview" tool_tip="Vorschau der Auswahl-Beschreibung umschalten"/>
 			<text name="location_label">
 				Standort:
 			</text>
