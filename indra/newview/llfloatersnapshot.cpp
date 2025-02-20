@@ -217,16 +217,19 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
     if (!mSkipReshaping && !floaterp->isMinimized())
     {
         LLView* controls_container = floaterp->getChild<LLView>("controls_container");
+        constexpr S32 THUMB_HEIGHT_LARGE = 420;
+        constexpr S32 THUMB_HEIGHT_SMALL = 124;
+        constexpr S32 THUMB_WIDTH_SMALL = 216;
         if (mAdvanced)
         {
             LLRect cc_rect = controls_container->getRect();
 
-            floaterp->reshape(floater_width, 483);
+            floaterp->reshape(floater_width, floaterp->getOriginalHeight());
 
             controls_container->setRect(cc_rect);
             controls_container->updateBoundingRect();
 
-            thumbnail_placeholder->reshape(panel_width, 420);
+            thumbnail_placeholder->reshape(panel_width, THUMB_HEIGHT_LARGE);
 
             LLRect tn_rect = thumbnail_placeholder->getRect();
             tn_rect.setLeftTopAndSize(215, floaterp->getRect().getHeight() - 30, tn_rect.getWidth(), tn_rect.getHeight());
@@ -240,15 +243,15 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
         {
             LLRect cc_rect = controls_container->getRect();
 
-            floaterp->reshape(floater_width, 613);
+            floaterp->reshape(floater_width,floaterp->getOriginalHeight()+THUMB_HEIGHT_SMALL);
 
             controls_container->setRect(cc_rect);
             controls_container->updateBoundingRect();
 
-            thumbnail_placeholder->reshape(216, 124);
+            thumbnail_placeholder->reshape(THUMB_WIDTH_SMALL, THUMB_HEIGHT_SMALL);
 
             LLRect tn_rect = thumbnail_placeholder->getRect();
-            tn_rect.setLeftTopAndSize(5, floaterp->getRect().getHeight() - 30, 216, 124);
+            tn_rect.setLeftTopAndSize(5, floaterp->getRect().getHeight() - 30, THUMB_WIDTH_SMALL, THUMB_HEIGHT_SMALL);
             thumbnail_placeholder->setRect(tn_rect);
             thumbnail_placeholder->updateBoundingRect();
 
@@ -1207,7 +1210,7 @@ bool LLFloaterSnapshot::postBuild()
     //getChild<LLComboBox>("local_size_combo")->selectNthItem(8);
     //getChild<LLComboBox>("local_format_combo")->selectNthItem(0);
     // </FS:Ansariel>
-
+    mOriginalHeight = getRect().getHeight();
     impl->mPreviewHandle = previewp->getHandle();
     previewp->setContainer(this);
     impl->updateControls(this);
