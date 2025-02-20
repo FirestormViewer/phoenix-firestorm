@@ -1869,7 +1869,7 @@
 				 tool_tip="Allows the DoF focus point to follow your mouse cursor, similar to flycam behavior. Useful when combined with DoF focus lock for dynamic focus adjustments."
 				 top_pad="0"
 				 width="256"/>
-          		<button
+				<button
 				 follows="left|top"
 				 height="19"
 				 is_toggle="true"
@@ -1881,7 +1881,7 @@
 				 right="-5"
 				 name="FocusPointRenderToggle"
 				 tool_tip="Toggle the focus point crosshair display. The crosshair is yellow when free and red when locked."
-				 width="19"/>					
+				 width="19"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
