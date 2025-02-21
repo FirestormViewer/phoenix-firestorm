@@ -1839,7 +1839,19 @@ bool LLViewerWindow::handleTimerEvent(LLWindow *window)
     return false;
 }
 
-bool LLViewerWindow::handleDeviceChange(LLWindow *window, bool deviceRemoved)
+// <FS:Dax> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
+// bool LLViewerWindow::handleDeviceChange(LLWindow* window)
+// {
+//     if (!LLViewerJoystick::getInstance()->isJoystickInitialized())
+//     {
+//         LLViewerJoystick::getInstance()->init(true);
+//         return true;
+//     }
+//     return false;
+// }
+// </FS>
+
+bool LLViewerWindow::handleDeviceChange(LLWindow *window, bool deviceRemoved) 
 {
     // give a chance to use a joystick after startup (hot-plugging)
     if (!deviceRemoved && !LLViewerJoystick::getInstance()->isJoystickInitialized())

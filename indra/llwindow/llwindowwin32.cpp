@@ -579,8 +579,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 
     // Make an instance of our window then define the window class
     mhInstance = GetModuleHandle(NULL);
-
-    // Get a notification filter setup for HID devices
+    // <FS:Dax> [FIRE-10419] Add notification filters for device notifcations for HID device handling
     DEV_BROADCAST_DEVICEINTERFACE notificationFilter;
 
     ZeroMemory(&notificationFilter, sizeof(notificationFilter));
@@ -588,7 +587,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
     notificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
 
     HDEVNOTIFY deviceNotification = RegisterDeviceNotification(mWindowHandle, &notificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE | DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
-
+    // </FS>
     // Init Direct Input - needed for joystick / Spacemouse
 
     LPDIRECTINPUT8 di8_interface;
@@ -2384,6 +2383,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             //    return 1;
             // }
 
+
             // Only bother initalizing when needed.
             if (deviceCLSIDWhitelist.empty())
             {
@@ -2410,6 +2410,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 }
             }
             break;
+            // </FS>
         }
 
         case WM_PAINT:
