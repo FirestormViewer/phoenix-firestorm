@@ -90,6 +90,9 @@ S32 LLViewerTexture::sRawCount = 0;
 S32 LLViewerTexture::sAuxCount = 0;
 LLFrameTimer LLViewerTexture::sEvaluationTimer;
 F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+F32 LLViewerTexture::sPrevDesiredDiscardBias = 0.f;
+// </FS:minerjr> [FIRE-35081]
 
 S32 LLViewerTexture::sMaxSculptRez = 128; //max sculpt image size
 constexpr S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64;
@@ -539,6 +542,10 @@ void LLViewerTexture::updateClass()
     static bool was_low = false;
     static bool was_sys_low = false;
 
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Store the previous desired discard bias to control the bias recovery
+    sPrevDesiredDiscardBias = sDesiredDiscardBias;
+    // </FS:minerjr> [FIRE-35081]
     if (is_low && !was_low)
     {
         // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
@@ -576,12 +583,17 @@ void LLViewerTexture::updateClass()
         // don't execute above until the slam to 1.5 has a chance to take effect
         sEvaluationTimer.reset();
 
-        // lower discard bias over time when free memory is available
-        if (sDesiredDiscardBias > 1.f && over_pct < 0.f)
+        // lower discard bias over time when at least 10% of budget is free
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        //if (sDesiredDiscardBias > 1.f && over_pct < 0.f)
+        const F32 FREE_PERCENTAGE_TRESHOLD = -0.1f; // Added code from Mainline LL for thier 'Fix'
+        if (sDesiredDiscardBias > 1.f && over_pct < FREE_PERCENTAGE_TRESHOLD) // Added code from Mainline LL for thier 'Fix'
         {
             static LLCachedControl<F32> high_mem_discard_decrement(gSavedSettings, "RenderHighMemMinDiscardDecrement", .1f);
 
-            F32 decrement = high_mem_discard_decrement - llmin(over_pct, 0.f);
+            //F32 decrement = high_mem_discard_decrement - llmin(over_pct, 0.1f);
+            F32 decrement = high_mem_discard_decrement - llmin(over_pct - FREE_PERCENTAGE_TRESHOLD, 0.f); // Added code from Mainline LL for thier 'Fix'
+        // </FS:minerjr> [FIRE-35081]
             sDesiredDiscardBias -= decrement * gFrameIntervalSeconds;
         }
     }
@@ -703,6 +715,10 @@ void LLViewerTexture::init(bool firstinit)
     mMaxVirtualSizeResetCounter = mMaxVirtualSizeResetInterval;
     mParcelMedia = NULL;
 
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Added default value fro the boost as it seemed that there were some instances boost was not being initalized.
+    mBoostLevel = LLGLTexture::BOOST_NONE;
+    // </FS:minerjr>
     memset(&mNumVolumes, 0, sizeof(U32)* LLRender::NUM_VOLUME_TEXTURE_CHANNELS);
     mVolumeList[LLRender::LIGHT_TEX].clear();
     mVolumeList[LLRender::SCULPT_TEX].clear();
@@ -748,7 +764,11 @@ void LLViewerTexture::dump()
             << LL_ENDL;
 }
 
-void LLViewerTexture::setBoostLevel(S32 level)
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+//void LLViewerTexture::setBoostLevel(S32 level)
+// Reduced the amount of data used for storing the boost level
+void LLViewerTexture::setBoostLevel(S8 level)
+// <FS:minejr>
 {
     if(mBoostLevel != level)
     {
@@ -1172,6 +1192,10 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mLastCallBackActiveTime = 0.f;
     mForceCallbackFetch = false;
 
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Added default for boost level
+    mBoostLevel = LLGLTexture::BOOST_NONE;
+    // </FS:minerjr>
     mFTType = FTT_UNKNOWN;
 }
 
@@ -1816,6 +1840,13 @@ void LLViewerFetchedTexture::processTextureStats()
             mFullyLoaded = false;
         }
     }
+
+    // selection manager will immediately reset BOOST_SELECTED but never unsets it
+    // unset it immediately after we consume it
+    if (getBoostLevel() == BOOST_SELECTED)
+    {
+        restoreBoostLevel();
+    }
 }
 
 //============================================================================
@@ -1854,7 +1885,7 @@ bool LLViewerFetchedTexture::isActiveFetching()
     return mFetchState > 8 && mFetchState < 11 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
 }
 
-void LLViewerFetchedTexture::setBoostLevel(S32 level)
+void LLViewerFetchedTexture::setBoostLevel(S8 level)
 {
     LLViewerTexture::setBoostLevel(level);
 
@@ -2997,6 +3028,10 @@ void LLViewerLODTexture::init(bool firstinit)
     mTexelsPerImage = 64*64;
     mDiscardVirtualSize = 0.f;
     mCalculatedDiscardLevel = -1.f;
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Added default value fro the boost as it seemed that there were some instances boost was not being initalized.
+    mBoostLevel = LLGLTexture::BOOST_NONE;
+    // </FS:minerjr>
 }
 
 //virtual
@@ -3131,7 +3166,7 @@ void LLViewerLODTexture::processTextureStats()
     // unset it immediately after we consume it
     if (getBoostLevel() == BOOST_SELECTED)
     {
-        setBoostLevel(BOOST_NONE);
+        restoreBoostLevel();
     }
 }
 
