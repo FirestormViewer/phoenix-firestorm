@@ -717,6 +717,7 @@ LLPanelProfileSecondLife::LLPanelProfileSecondLife()
     , mAllowPublish(false)
     , mHideAge(false)
     , mRlvBehaviorCallbackConnection() // <FS:Ansariel> RLVa support
+    , mPreview(false)                  // <AS:Chanayane> Preview button
 {
 }
 
@@ -785,6 +786,7 @@ bool LLPanelProfileSecondLife::postBuild()
     mIMButton = getChild<LLButton>("im");
     mOverflowButton = getChild<LLMenuButton>("overflow_btn");
     // </FS:Ansariel>
+    mPreviewButton = getChild<LLButton>("btn_preview"); // <AS:Chanayane> Preview button
 
     // <FS:Ansariel> Fix LL UI/UX design accident
     //mShowInSearchCombo->setCommitCallback([this](LLUICtrl*, void*) { onShowInSearchCallback(); }, nullptr);
@@ -802,6 +804,9 @@ bool LLPanelProfileSecondLife::postBuild()
     mPayButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("pay")); }, nullptr);
     mIMButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("im")); }, nullptr);
     // </FS:Ansariel>
+    // <AS:Chanayane> Preview button
+    mPreviewButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("preview")); }, nullptr);
+    // </AS:Chanayane>
     mGroupList->setDoubleClickCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { LLPanelProfileSecondLife::openGroupProfile(); });
     mGroupList->setReturnCallback([this](LLUICtrl*, const LLSD&) { LLPanelProfileSecondLife::openGroupProfile(); });
     mSaveDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
@@ -856,6 +861,7 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     mDiscardDescriptionChanges->setVisible(own_profile);
     mShowInSearchCheckbox->setVisible(own_profile);
     // </FS:Ansariel>
+    mPreviewButton->setVisible(own_profile); // <AS:Chanayane> Preview button
 
     if (own_profile)
     {
@@ -1785,6 +1791,7 @@ void LLPanelProfileSecondLife::setLoaded()
         //{
         //    mHideAgeCombo->setEnabled(true);
         mShowInSearchCheckbox->setEnabled(true);
+        mPreviewButton->setEnabled(true); // <AS:Chanayane> Preview button
         if (mHideAgeCheckbox->getVisible())
         {
             mHideAgeCheckbox->setEnabled(true);
@@ -1801,6 +1808,10 @@ void LLPanelProfileSecondLife::updateButtons()
     {
         mShowInSearchCheckbox->setVisible(true);
         mShowInSearchCheckbox->setEnabled(true);
+// <AS:Chanayane> Preview button
+        mPreviewButton->setVisible(true);
+        mPreviewButton->setEnabled(true);
+// </AS:Chanayane>
         mDescriptionEdit->setEnabled(true);
     }
     else
@@ -2104,6 +2115,32 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
         LLAvatarActions::report(agent_id);
     }
     // </FS:Ansariel>
+    // <AS:Chanayane> Preview button
+    else if (item_name == "preview")
+    {
+        mPreview = !mPreview;
+
+        mDescriptionEdit->setEnabled(!mPreview);
+        mDescriptionEdit->setParseHTML(mPreview);
+
+        if (mPreview) {
+            mPreviewButton->setImageOverlay("Profile_Group_Visibility_Off");
+            if (mHasUnsavedDescriptionChanges) {
+                mSaveDescriptionChanges->setEnabled(false);
+                mDiscardDescriptionChanges->setEnabled(false);
+            }
+            mOriginalDescriptionText = mDescriptionEdit->getValue().asString();
+            reparseDescriptionText(mOriginalDescriptionText);
+        } else {
+            mPreviewButton->setImageOverlay("Profile_Group_Visibility_On");
+            if (mHasUnsavedDescriptionChanges) {
+                mSaveDescriptionChanges->setEnabled(true);
+                mDiscardDescriptionChanges->setEnabled(true);
+            }
+            reparseDescriptionText(mOriginalDescriptionText);
+        }
+    }
+    // </AS:Chanayane>
 }
 
 bool LLPanelProfileSecondLife::onEnableMenu(const LLSD& userdata)
@@ -2221,6 +2258,13 @@ void LLPanelProfileSecondLife::setDescriptionText(const std::string &text)
     mDescriptionText = text;
     mDescriptionEdit->setValue(mDescriptionText);
 }
+
+// <AS:Chanayane> Preview button
+void LLPanelProfileSecondLife::reparseDescriptionText(const std::string &text)
+{
+    mDescriptionEdit->reparseValue(text);
+}
+// </AS:Chanayane>
 
 void LLPanelProfileSecondLife::onSetDescriptionDirty()
 {
@@ -2679,6 +2723,7 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 LLPanelProfileFirstLife::LLPanelProfileFirstLife()
  : LLPanelProfilePropertiesProcessorTab()
  , mHasUnsavedChanges(false)
+ , mPreview(false) // <AS:Chanayane> Preview button
 {
 }
 
@@ -2699,12 +2744,16 @@ bool LLPanelProfileFirstLife::postBuild()
     mRemovePhoto = getChild<LLButton>("fl_remove_image");
     mSaveChanges = getChild<LLButton>("fl_save_changes");
     mDiscardChanges = getChild<LLButton>("fl_discard_changes");
+    mPreviewButton = getChild<LLButton>("btn_preview"); // <AS:Chanayane> Preview button
 
     mUploadPhoto->setCommitCallback([this](LLUICtrl*, void*) { onUploadPhoto(); }, nullptr);
     mChangePhoto->setCommitCallback([this](LLUICtrl*, void*) { onChangePhoto(); }, nullptr);
     mRemovePhoto->setCommitCallback([this](LLUICtrl*, void*) { onRemovePhoto(); }, nullptr);
     mSaveChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
+    // <AS:Chanayane> Preview button
+    mPreviewButton->setCommitCallback([this](LLUICtrl*, void*) { onClickPreview(); }, nullptr);
+    // </AS:Chanayane>
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
     mPicture->setCommitCallback(boost::bind(&LLPanelProfileFirstLife::onFirstLifePicChanged, this));    // <FS:Zi> Allow proper texture swatch handling
 
@@ -2720,6 +2769,7 @@ void LLPanelProfileFirstLife::onOpen(const LLSD& key)
         // Otherwise as the only focusable element it will be selected
         mDescriptionEdit->setTabStop(false);
     }
+    mPreviewButton->setVisible(getSelfProfile()); // <AS:Chanayane> Preview button
 
     // <FS:Zi> Allow proper texture swatch handling
     mPicture->setEnabled(getSelfProfile());
@@ -2893,6 +2943,13 @@ void LLPanelProfileFirstLife::setDescriptionText(const std::string &text)
     mDescriptionEdit->setValue(mCurrentDescription);
 }
 
+// <AS:Chanayane> Preview button
+void LLPanelProfileFirstLife::reparseDescriptionText(const std::string &text)
+{
+    mDescriptionEdit->reparseValue(text);
+}
+// </AS:Chanayane>
+
 void LLPanelProfileFirstLife::onSetDescriptionDirty()
 {
     mSaveChanges->setEnabled(true);
@@ -2948,6 +3005,33 @@ void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
 {
     setDescriptionText(mCurrentDescription);
 }
+
+// <AS:Chanayane> Preview button
+void LLPanelProfileFirstLife::onClickPreview()
+{
+    mPreview = !mPreview;
+
+    mDescriptionEdit->setEnabled(!mPreview);
+    mDescriptionEdit->setParseHTML(mPreview);
+
+    if (mPreview) {
+        mPreviewButton->setImageOverlay("Profile_Group_Visibility_Off");
+        if (mHasUnsavedChanges) {
+            mSaveChanges->setEnabled(false);
+            mDiscardChanges->setEnabled(false);
+        }
+        mOriginalDescription = mDescriptionEdit->getValue().asString();
+        reparseDescriptionText(mOriginalDescription);
+    } else {
+        mPreviewButton->setImageOverlay("Profile_Group_Visibility_On");
+        if (mHasUnsavedChanges) {
+            mSaveChanges->setEnabled(true);
+            mDiscardChanges->setEnabled(true);
+        }
+        reparseDescriptionText(mOriginalDescription);
+    }
+}
+// </AS:Chanayane>
 
 void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorType type)
 {
@@ -3025,6 +3109,7 @@ void LLPanelProfileFirstLife::resetData()
 // </FS:Beq>
     mSaveChanges->setVisible(getSelfProfile());
     mDiscardChanges->setVisible(getSelfProfile());
+    mPreviewButton->setVisible(getSelfProfile()); // <AS:Chanayane> Preview button
 }
 
 void LLPanelProfileFirstLife::setLoaded()
@@ -3036,6 +3121,7 @@ void LLPanelProfileFirstLife::setLoaded()
         mDescriptionEdit->setEnabled(true);
         mPicture->setEnabled(true);
         mRemovePhoto->setEnabled(mImageId.notNull());
+        mPreviewButton->setEnabled(true);
     }
 }
 

@@ -543,6 +543,9 @@ LLPanelProfilePick::LLPanelProfilePick()
  , mIsEditing(false)
  , mRegionCallbackConnection()
  , mParcelCallbackConnection()
+// <AS:Chanayane> Preview button
+ , mPreview(false)
+// </AS:Chanayane>
 {
 }
 
@@ -622,6 +625,11 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
 
     resetDirty();
 
+// <AS:Chanayane> Preview button
+    mPreviewButton->setVisible(getSelfProfile());
+    mPreviewButton->setEnabled(getSelfProfile());
+// </AS:Chanayane>
+
     if (getSelfProfile())
     {
         mPickName->setEnabled(true);
@@ -645,6 +653,7 @@ bool LLPanelProfilePick::postBuild()
     mCreateButton = getChild<LLButton>("create_changes_btn");
     mCancelButton = getChild<LLButton>("cancel_changes_btn");
     mSetCurrentLocationButton = getChild<LLButton>("set_to_curr_location_btn"); // <FS:Ansariel> Keep set location button
+    mPreviewButton = getChild<LLButton>("btn_preview"); // <AS:Chanayane> Preview button
 
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
     mSnapshotCtrl->setCommitCallback(boost::bind(&LLPanelProfilePick::onSnapshotChanged, this));
@@ -658,6 +667,9 @@ bool LLPanelProfilePick::postBuild()
     mCreateButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCancelButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickCancel, this));
     mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this)); // <FS:Ansariel> Keep set location button
+    // <AS:Chanayane> Preview button
+    mPreviewButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickPreview, this));
+    // </AS:Chanayane>
 
     mPickName->setKeystrokeCallback(boost::bind(&LLPanelProfilePick::onPickChanged, this, _1), NULL);
     mPickName->setEnabled(false);
@@ -751,6 +763,13 @@ void LLPanelProfilePick::setPickDesc(const std::string& desc)
 {
     mPickDescription->setValue(desc);
 }
+
+// <AS:Chanayane> Preview button
+void LLPanelProfilePick::reparseDescription(const std::string& desc)
+{
+    mPickDescription->reparseValue(desc);
+}
+// </AS:Chanayane>
 
 void LLPanelProfilePick::setPickLocation(const std::string& location)
 {
@@ -847,6 +866,28 @@ void LLPanelProfilePick::onClickSetLocation()
     enableSaveButton(true);
 }
 // </FS:Ansariel>
+
+// <AS:Chanayane> Preview button
+void LLPanelProfilePick::onClickPreview()
+{
+    mPreview = !mPreview;
+
+    if (mPreview) { // Then we switch to preview mode
+        mPreviewButton->setImageOverlay("Profile_Group_Visibility_Off");
+        mOriginalPickText = mPickDescription->getValue().asString();
+        mPickDescription->setEnabled(!mPreview);
+        mPickDescription->setParseHTML(mPreview);
+        reparseDescription(mOriginalPickText);
+        enableSaveButton(false);
+    } else { // we switch to edit mode, restoring the dirty state if necessary
+        mPreviewButton->setImageOverlay("Profile_Group_Visibility_On");
+        mPickDescription->setEnabled(!mPreview);
+        mPickDescription->setParseHTML(mPreview);
+        reparseDescription(mOriginalPickText);
+        enableSaveButton(isDirty()); // re-check if whole pick is dirty
+    }
+}
+// </AS:Chanayane>
 
 void LLPanelProfilePick::onClickSave()
 {

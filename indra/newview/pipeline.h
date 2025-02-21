@@ -291,6 +291,7 @@ public:
     void renderGLTFObjects(U32 type, bool texture = true, bool rigged = false);
 
     void renderAlphaObjects(bool rigged = false);
+    void renderFocusPoint(); // <FS:Beq/> FIRE-32023 Add focus point rendering
     void renderMaskedObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
     void renderFullbrightMaskedObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
 
@@ -694,7 +695,8 @@ public:
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
     static bool             sRenderTextures;
 // [/SL:KB]
-
+    static LLVector3        sLastFocusPoint;// <FS:Beq/> FIRE-16728 focus point lock & free focus DoF 
+    static bool             sDoFEnabled;// <FS:Beq/> FIRE-32023 focus point render 
     static LLTrace::EventStatHandle<S64> sStatBatchSize;
 
     class RenderTargetPack

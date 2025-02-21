@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+border="true"
+follows="all"
+height="390"
+label="Sun &amp; Moon"
+layout="topleft"
+left="0"
+help_topic="fs_skies"
+name="panel_fs_settings_sky_hbodies"
+top="0">
+		<panel
+		name="P_Sun_Color"
+		follows="left|top"
+		layout="topleft"
+		top_pad="3"
+		left="0"
+		width="288"
+		height="22"
+		bg_alpha_color="EmphasisColor"
+		border_visible="true"
+		border_thickness="1"
+		background_visible="true">
+			<text
+			name="T_Sun_Header"
+			follows="left|top"
+			layout="topleft"
+			left="5"
+			font="SansSerif"
+			value="Sun &amp; Moon Color"/>
+		</panel>
+
+		<panel
+		name="P_SM_Color"
+		follows="left|top"
+		layout="topleft"
+		top_pad="5"
+		left="3"
+		width="280"
+		height="35"
+		border_visible="true"
+		background_visible="true">
+			<text
+			 name="color_label"
+			 follows="left|top"
+			 height="10"
+			 layout="topleft"
+			 left="5"
+			 top_pad="10"
+			 width="105">
+				Sun &amp; Moon Color:
+			</text>
+			<color_swatch
+			 can_apply_immediately="true"
+			 follows="left|top"
+			 height="25"
+			 label_height="0"
+			 layout="topleft"
+			 left_pad="0"
+			 name="sun_moon_color"
+			 top_delta="-5"
+			 right="-5" />
+		</panel>
+
+		<panel
+		name="P_Sun_Header"
+		follows="left|top"
+		layout="topleft"
+		top_pad="3"
+		left="0"
+		width="288"
+		height="22"
+		bg_alpha_color="EmphasisColor"
+		border_visible="true"
+		border_thickness="1"
+		background_visible="true">
+			<text
+			name="T_Sun_Header"
+			follows="left|top"
+			layout="topleft"
+			left="5"
+			font="SansSerif"
+			value="Sun &amp; Stars Settings"/>
+		</panel>
+
+		<panel
+		name="P_Sun_Setting"
+		follows="left|top"
+		layout="topleft"
+		top_pad="1"
+		left="3"
+		width="280"
+		height="145"
+		border_visible="true"
+		background_visible="true">
+
+			<text
+			name="image_label"
+			follows="left|top"
+			height="10"
+			layout="topleft"
+			left="5"
+			top_pad="5"
+			width="180">
+			Image:
+			</text>
+
+			<check_box
+			control_name="sunbeacon"
+			width="60"
+			height="16"
+			label="Show Beacon"
+			layout="topleft"
+			name="sunbeacon" 
+			top_delta="0"
+			left_pad="0"/> 
+
+			<texture_picker
+			height="83"
+			layout="topleft"
+			left="5"
+			name="sun_image"
+			top_pad="0"
+			width="60"/>
+
+			<text
+			name="glow_focus_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left_pad="5"
+			top_delta="10"
+			width="85">
+			Glow Focus:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			min_val="-2"
+			max_val="2"
+			name="glow_focus"
+			left_pad="0"
+			width="120"
+			can_edit_text="true"/>
+
+			<text
+			name="glow_size_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="70"
+			width="85">
+			Glow Size:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			left_pad="0"
+			min_val="0"
+			max_val="10"
+			name="glow_size"
+			width="120"
+			can_edit_text="true"/>
+
+			<text
+			name="star_brightness_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="70"
+			width="85">
+			Star Brightness:
+			</text>
+
+			<slider
+			decimal_digits="0"
+			follows="left|top"
+			height="16"
+			increment="1"
+			initial_value="0"
+			layout="topleft"
+			left_pad="0"
+			min_val="0"
+			max_val="50000"
+			name="star_brightness"
+			width="120"
+			can_edit_text="true"/>
+
+			<text
+			name="sun_scale_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="5"
+			width="55">
+			Scale:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			top_delta="0"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			left_pad="0"
+			min_val="0.0"
+			max_val="100"
+			name="sun_scale"
+			width="215"
+			can_edit_text="true"/>
+
+			<text
+			name="sun_azimuth_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="5"
+			width="55">
+			Azimuth:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			left_pad="0"
+			min_val="0"
+			max_val="359.99"
+			name="sun_azimuth"
+			width="215"
+			can_edit_text="true"/>
+
+			<text
+			name="sun_elevation_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="5"
+			width="55">
+			Elevation:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			min_val="-90"
+			max_val="90"
+			name="sun_elevation"
+			left_pad="0"
+			width="215"
+			can_edit_text="true"/>
+		</panel>
+
+		<panel
+		name="P_Moon_Header"
+		follows="left|top"
+		layout="topleft"
+		top_pad="3"
+		left="0"
+		width="288"
+		height="22"
+		bg_alpha_color="EmphasisColor"
+		border_visible="true"
+		border_thickness="1"
+		background_visible="true">
+			<text
+			name="T_Moon_Header"
+			follows="left|top"
+			layout="topleft"
+			left="5"
+			font="SansSerif"
+			value="Moon Settings"/>
+		</panel>
+
+		<panel
+		name="P_Moon_Setting"
+		follows="left|top"
+		layout="topleft"
+		top_pad="1"
+		left="3"
+		width="280"
+		height="125"
+		border_visible="true"
+		background_visible="true">
+
+			<text
+			name="moon_image_label"
+			follows="left|top"
+			height="10"
+			layout="topleft"
+			left="5"
+			top_pad="5"
+			width="180">
+			Image:
+			</text>
+
+			<check_box
+			control_name="moonbeacon"
+			width="60"
+			height="16"
+			label="Show Beacon"
+			layout="topleft"
+			name="moonbeacon"
+			top_delta="0"
+			left_pad="0"/>
+
+			<texture_picker
+			height="83"
+			layout="topleft"
+			left="5"
+			name="moon_image"
+			top_pad="0"
+			width="60"/>
+
+			<text
+			name="moon_scale_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left_pad="5"
+			top_delta="28"
+			width="60">
+			Scale:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			top_delta="0"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			left_pad="0"
+			min_val="0"
+			max_val="20"
+			name="moon_scale"
+			width="145"
+			can_edit_text="true"/>
+
+			<text
+			name="brightness_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="70"
+			width="60">
+			Brightness:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			min_val="0.0"
+			max_val="1.0"
+			name="moon_brightness"
+			left_pad="0"
+			width="145"
+			can_edit_text="true"/>
+
+			<text
+			name="moon_azimuth_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="5"
+			width="55">
+			Azimuth:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			left_pad="0"
+			min_val="0"
+			max_val="359.99"
+			name="moon_azimuth"
+			width="215"
+			can_edit_text="true"/>
+
+			<text
+			name="moon_elevation_label"
+			follows="left|top"
+			height="15"
+			layout="topleft"
+			left="5"
+			width="55">
+			Elevation:
+			</text>
+
+			<slider
+			decimal_digits="2"
+			follows="left|top"
+			height="16"
+			increment="0.01"
+			initial_value="0"
+			layout="topleft"
+			min_val="-90"
+			max_val="90"
+			name="moon_elevation"
+			left_pad="0"
+			width="215"
+			can_edit_text="true"/>
+		</panel>
+</panel>

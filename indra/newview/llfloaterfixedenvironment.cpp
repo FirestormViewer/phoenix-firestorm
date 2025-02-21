@@ -419,7 +419,10 @@ bool LLFloaterFixedEnvironmentWater::postBuild()
 
     LLPanelSettingsWater * panel;
     panel = new LLPanelSettingsWaterMainTab;
-    panel->buildFromFile("panel_settings_water.xml");
+    // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Water Settings 
+    // panel->buildFromFile("panel_settings_water.xml"); // Original LL line - using default panel XML
+    panel->buildFromFile("panel_fs_settings_water.xml"); // Using FS specific panel XML
+    // </FS:William_W:PanelFileReplace>
     panel->setWater(std::static_pointer_cast<LLSettingsWater>(mSettings));
     panel->setOnDirtyFlagChanged( [this] (LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
     mTab->addTabPanel(LLTabContainer::TabPanelParams().panel(panel).select_tab(true));
@@ -479,26 +482,35 @@ LLFloaterFixedEnvironmentSky::LLFloaterFixedEnvironmentSky(const LLSD &key) :
     LLFloaterFixedEnvironment(key)
 {}
 
-bool LLFloaterFixedEnvironmentSky::postBuild()
+bool LLFloaterFixedEnvironmentSky::postBuild() // <--- Corrected: Only one declaration now
 {
     if (!LLFloaterFixedEnvironment::postBuild())
         return false;
 
     LLPanelSettingsSky * panel;
     panel = new LLPanelSettingsSkyAtmosTab;
-    panel->buildFromFile("panel_settings_sky_atmos.xml");
+    // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Sky Atmosphere Settings
+    // panel->buildFromFile("panel_settings_sky_atmos.xml"); // Original LL line - using default panel XML
+    panel->buildFromFile("panel_fs_settings_sky_atmos.xml"); // Using FS specific panel XML
+    // </FS:William_W:PanelFileReplace>
     panel->setSky(std::static_pointer_cast<LLSettingsSky>(mSettings));
     panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
     mTab->addTabPanel(LLTabContainer::TabPanelParams().panel(panel).select_tab(true));
 
     panel = new LLPanelSettingsSkyCloudTab;
-    panel->buildFromFile("panel_settings_sky_clouds.xml");
+    // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Sky Cloud Settings
+    // panel->buildFromFile("panel_settings_sky_clouds.xml"); // Original LL line - using default panel XML
+    panel->buildFromFile("panel_fs_settings_sky_clouds.xml"); // Using FS specific panel XML
+    // </FS:William_W:PanelFileReplace>
     panel->setSky(std::static_pointer_cast<LLSettingsSky>(mSettings));
     panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
     mTab->addTabPanel(LLTabContainer::TabPanelParams().panel(panel).select_tab(false));
 
     panel = new LLPanelSettingsSkySunMoonTab;
-    panel->buildFromFile("panel_settings_sky_sunmoon.xml");
+    // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Sky Sun Moon Settings
+    // panel->buildFromFile("panel_settings_sky_sunmoon.xml"); // Original LL line - using default panel XML
+    panel->buildFromFile("panel_fs_settings_sky_sunmoon.xml"); // Using FS specific panel XML
+    // </FS:William_W:PanelFileReplace>
     panel->setSky(std::static_pointer_cast<LLSettingsSky>(mSettings));
     panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
     mTab->addTabPanel(LLTabContainer::TabPanelParams().panel(panel).select_tab(false));

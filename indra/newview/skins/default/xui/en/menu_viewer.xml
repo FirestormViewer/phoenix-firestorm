@@ -1575,6 +1575,17 @@
                function="ToggleControl"
                parameter="FSFocusPointLocked" />
             </menu_item_check>
+            <menu_item_check
+               label="Draw DoF Focus crosshair"
+               layout="topleft"
+               name="render_focus_point">
+            <menu_item_check.on_check
+               function="CheckControl"
+               parameter="FSFocusPointRender" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="FSFocusPointRender" />
+            </menu_item_check>
 		</menu>
       <menu_item_call
         label="Area Search"
