@@ -137,13 +137,8 @@ public:
     /*virtual*/ bool isActiveFetching();
 
     /*virtual*/ const LLUUID& getID() const { return mID; }
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    //virtual void setBoostLevel(S32 level);
-    //S32 getBoostLevel() { return mBoostLevel; }
-    // Updated to only use S8 instead of S32 to allow for extra S8 to store old boost level
-    virtual void setBoostLevel(S8 level);    
-    S8 getBoostLevel() { return mBoostLevel; }
-    // </FS:minerjr> [FIRE-35081]
+    virtual void setBoostLevel(S32 level);
+    S32  getBoostLevel() { return mBoostLevel; }
     void setTextureListType(S32 tex_type) { mTextureListType = tex_type; }
     S32 getTextureListType() { return mTextureListType; }
 
@@ -231,11 +226,6 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
-    // <FS:minerjr>
-    // Added a previous value for the desired discard value, as it can become stuck at a higher value and
-    // we wnat to reduce the nubmer of textures being processed at that state (IE steady state)
-    static F32 sPrevDesiredDiscardBias;
-    // </FS:minerjr> [FIRE-35081]
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;
@@ -376,11 +366,7 @@ public:
     S32  getDesiredDiscardLevel()            { return mDesiredDiscardLevel; }
     void setMinDiscardLevel(S32 discard)    { mMinDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel,(S8)discard); }
 
-    // <FS:minerjr>
-    //void setBoostLevel(S32 level) override;
-    // Updated to use only S8 value for boost level
-    void setBoostLevel(S8 level) override;
-    // </FS:minerjr> [FIRE-35081]
+    void setBoostLevel(S32 level) override;
     bool updateFetch();
 
     void clearFetchedResults(); //clear all fetched results, for debug use.

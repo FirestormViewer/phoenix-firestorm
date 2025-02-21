@@ -711,22 +711,19 @@ void LLGLTexMemBar::draw()
     //text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d ",
     text = llformat("Tex: %d Fetch: %d(%d) Pkts:%d(%d) CAC R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d FCA:%d ",
     // </FS:Ansariel>
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    // Fixed up the data alignment for 32bit/64bit values as well as re-added the packet count back
                     gTextureList.getNumImages(),
                     LLAppViewer::getTextureFetch()->getNumRequests(), LLAppViewer::getTextureFetch()->getNumDeletes(),
-                    LLAppViewer::getTextureFetch()->mPacketCount, LLAppViewer::getTextureFetch()->mBadPacketCount,
                     LLAppViewer::getTextureCache()->getNumReads(), LLAppViewer::getTextureCache()->getNumWrites(),
-                    (S32)LLLFSThread::sLocal->getPending(),
-                    (S32)LLImageRaw::sRawImageCount,
+                    LLLFSThread::sLocal->getPending(),
+                    LLImageRaw::sRawImageCount,
                     LLAppViewer::getTextureFetch()->getNumHTTPRequests(),
-                    (S32)LLAppViewer::getImageDecodeThread()->getPending(),
+                    LLAppViewer::getImageDecodeThread()->getPending(),
                     // <FS:Ansariel> Fast cache stats
                     //gTextureList.mCreateTextureList.size());
-                    (S32)gTextureList.mCreateTextureList.size(),
-                    (S32)gTextureList.mFastCacheList.size());
+                    gTextureList.mCreateTextureList.size(),
+                    gTextureList.mFastCacheList.size());
                     // </FS:Ansariel>
-    // </FS:minerjr>
+
     x_right = 550.0f;
     LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0.f, (F32)(v_offset + line_height*3),
                                              text_color, LLFontGL::LEFT, LLFontGL::TOP,

@@ -99,15 +99,8 @@ public:
 
     virtual const LLUUID& getID() const;
 
-    // <FS:minerjr>
-    //void setBoostLevel(S32 level);
-    //S32 getBoostLevel() { return mBoostLevel; }
-    // Updated to fix issue with BOOST_SELECTION forceing textures to BOOST_NONE after de-selection
-    void setBoostLevel(S8 level);
-    void restoreBoostLevel(); // Now restores the mBoostLevel with the mPrevBoostLevel
-    void storeBoostLevel(); // Stores the current mBoostLevel in mPrevBoostLevel
-    S8  getBoostLevel() { return mBoostLevel; }
-    // </FS:minerjr>
+    void setBoostLevel(S32 level);
+    S32  getBoostLevel() { return mBoostLevel; }
 
     S32 getFullWidth() const { return mFullWidth; }
     S32 getFullHeight() const { return mFullHeight; }
@@ -189,13 +182,7 @@ public:
     /*virtual*/ LLImageGL* getGLTexture() const ;
 
 protected:
-    // <FS:minerjr>
-    //S32 mBoostLevel;                // enum describing priority level
-    // Modified to store the previous boost level, as well, boost only go up to 30, so a 32 bit int is a waste and the extra bits
-    // can be used to store a previous value to allow for restoring the boost value after the BOOST_SELECTED is undone.
-    S8 mBoostLevel;                // enum describing priority level
-    S8 mPrevBoostLevel;            // enum describing priority level (Previous Value for BOOST_SELECTION restore)
-    // </FS:minerjr>
+    S32 mBoostLevel;                // enum describing priority level
     U32 mFullWidth;
     U32 mFullHeight;
     bool mUseMipMaps;

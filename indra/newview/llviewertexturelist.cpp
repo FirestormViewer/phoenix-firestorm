@@ -919,23 +919,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         // convert bias into a vsize scaler
         bias = (F32) llroundf(powf(4, bias - 1.f));
 
-        // <FS:minerjr>
-        // Added checks to not apply bias to non LOD textures
-        switch (imagep->getType())
-        {
-            case LLViewerTexture::LOCAL_TEXTURE:
-            case LLViewerTexture::MEDIA_TEXTURE:
-            case LLViewerTexture::DYNAMIC_TEXTURE:
-            case LLViewerTexture::FETCHED_TEXTURE:
-                bias = 1.00f;
-                break;                               
-        }
-        // Also don't bias textures what are close to the screen or recently close to the screen.
-        if (imagep->getDontDiscard() || imagep->getDiscardLevel() == 0 || imagep->getDiscardLevel() == 1)
-        {
-            bias = 1.00f;
-        }
-        // </FS:minerjr> [FIRE-35081]
         LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
         {
@@ -1003,12 +986,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         { // conditionally reset max virtual size for unboosted LOD_TEXTURES
           // this is an alternative to decaying mMaxVirtualSize over time
           // that keeps textures from continously downrezzing and uprezzing in the background
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-            //if (LLViewerTexture::sDesiredDiscardBias > 1.5f ||
-            //    (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f))
-            if ((LLViewerTexture::sDesiredDiscardBias > 1.5f || (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f))
-                 && !(imagep->getDontDiscard() || imagep->getDiscardLevel() == 0 || imagep->getDiscardLevel() == 1))// Added checks to not force scale down recently close to camera textures
-            // </FS:minerjr> [FIRE-35081]
+
+            if (LLViewerTexture::sDesiredDiscardBias > 1.5f ||
+                (!on_screen && LLViewerTexture::sDesiredDiscardBias > 1.f))
             {
                 imagep->mMaxVirtualSize = 0.f;
             }
@@ -1114,12 +1094,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         imagep->mCreatePending = false;
         mCreateTextureList.pop();
 
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-        //if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel())
-        // Added checks to only downscale LOD_TEXTUREs that are not boost_high to match the Decode Priority
-        // This saves a bunch of texture size contension.
-        if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel()
-            && imagep->getType() == LLViewerTexture::LOD_TEXTURE && imagep->getBoostLevel() < LLViewerTexture::BOOST_HIGH)
+        if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel())
         {
             // NOTE: this may happen if the desired discard reduces while a decode is in progress and does not
             // necessarily indicate a problem, but if log occurrences excede that of dsiplay_stats: FPS,
@@ -1239,11 +1214,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 
     //update MIN_UPDATE_COUNT or 5% of other textures, whichever is greater
     update_count = llmax((U32) MIN_UPDATE_COUNT, (U32) mUUIDMap.size()/20);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    //if (LLViewerTexture::sDesiredDiscardBias > 1.f)
-    // Prevent the steady state of the high discard from keep using a high number of textures to process
-    if (LLViewerTexture::sDesiredDiscardBias > 1.f && LLViewerTexture::sDesiredDiscardBias > LLViewerTexture::sPrevDesiredDiscardBias)
-    // </FS:minerjr> [FIRE-35081]
+    if (LLViewerTexture::sDesiredDiscardBias > 1.f)
     {
         // we are over memory target, update more agresively
         update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
