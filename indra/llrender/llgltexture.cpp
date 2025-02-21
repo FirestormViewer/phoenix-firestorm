@@ -63,10 +63,10 @@ LLGLTexture::~LLGLTexture()
 void LLGLTexture::init()
 {
     mBoostLevel = LLGLTexture::BOOST_NONE;
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
     // Added a previous boost level to allow for restorign boost after BOOST_SELECTED is applied
     mPrevBoostLevel = LLGLTexture::BOOST_NONE;
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35081]
 
     mFullWidth = 0;
     mFullHeight = 0;
@@ -95,11 +95,11 @@ void LLGLTexture::dump()
         mGLTexturep->dump();
     }
 }
-// <FS:minerjr>
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
 //void LLGLTexture::setBoostLevel(S32 level)
 // Changed Changed from S32 to S8, to give up space and use the difference for a previous value
 void LLGLTexture::setBoostLevel(S8 level)
-// </FS:minerjr>
+// </FS:minerjr> [FIRE-35081]
 {
     if(mBoostLevel != level)
     {
@@ -114,7 +114,7 @@ void LLGLTexture::setBoostLevel(S8 level)
     }
 }
 
-// <FS:minerjr>
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
 // Changes the current boost level to the previous value
 void LLGLTexture::restoreBoostLevel()
 {
@@ -125,7 +125,7 @@ void LLGLTexture::storeBoostLevel()
 {
     mPrevBoostLevel = mBoostLevel;
 }
-// </FS:minerjr>
+// </FS:minerjr> [FIRE-35081]
 void LLGLTexture::forceActive()
 {
     mTextureState = ACTIVE ;
