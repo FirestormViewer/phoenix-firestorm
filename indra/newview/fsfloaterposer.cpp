@@ -220,7 +220,7 @@ bool FSFloaterPoser::postBuild()
     mBtnJointRotate = getChild<LLButton>("button_joint_rotate_tool");
 
     mCommitCallbackRegistrar.add("Poser.SetRotateTool", 
-        [this](LLUICtrl*, const LLSD&)
+        [](LLUICtrl*, const LLSD&)
         {
             LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
             LLToolMgr::getInstance()->getCurrentToolset()->selectTool( (LLTool *) FSToolCompPose::getInstance());
