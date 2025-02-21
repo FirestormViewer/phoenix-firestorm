@@ -2,10 +2,8 @@
 
 #ifndef FS_MANIP_ROTATE_JOINT_H
 #define FS_MANIP_ROTATE_JOINT_H
-
-#include "llmath.h"
-#include "llmaniprotate.h"
 #include "llselectmgr.h"
+#include "llmaniprotate.h"
 class LLJoint;
 class LLVOAvatar;  // or LLVOAvatarSelf, etc.
 namespace {

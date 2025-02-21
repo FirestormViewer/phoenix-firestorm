@@ -25,7 +25,19 @@
  * $/LicenseInfo$
  */
 
-#include "fsmaniprotatejoint.h"
+ #include "llviewerprecompiledheaders.h"
+ 
+ #include "fsmaniprotatejoint.h"
+
+// library includes
+#include "llmath.h"
+#include "llgl.h"
+#include "llrender.h"
+#include "v4color.h"
+#include "llprimitive.h"
+#include "llview.h"
+#include "llfontgl.h"
+
 #include "llrendersphere.h"
 #include "llvoavatar.h"
 #include "lljoint.h"

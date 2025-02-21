@@ -27,6 +27,7 @@
 #include "fsfloaterposer.h"
 #include "fsposeranimator.h"
 #include "fsvirtualtrackpad.h"
+#include "v4color.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llcheckboxctrl.h"
