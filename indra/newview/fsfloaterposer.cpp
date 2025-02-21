@@ -42,6 +42,7 @@
 #include "llwindow.h"
 #include "llvoavatarself.h"
 #include "llinventoryfunctions.h"
+#include "lltoolcomp.h"
 
 namespace
 {
@@ -115,7 +116,7 @@ bool FSFloaterPoser::postBuild()
         {
             onJointTabSelect();
             setRotationChangeButtons(false, false);
-        });
+        });        
 
     mAvatarSelectionScrollList = getChild<LLScrollListCtrl>("avatarSelection_scroll");
     mAvatarSelectionScrollList->setCommitOnSelectionChange(true);
@@ -215,6 +216,20 @@ bool FSFloaterPoser::postBuild()
     mScaleYSpnr              = getChild<LLUICtrl>("adv_scaley_spinner");
     mScaleZSpnr              = getChild<LLUICtrl>("adv_scalez_spinner");
 
+    mBtnJointRotate = getChild<LLButton>("button_joint_rotate_tool");
+
+    mCommitCallbackRegistrar.add("Poser.SetRotateTool", 
+        [this](LLUICtrl*, const LLSD&)
+        {
+            LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
+            LLToolMgr::getInstance()->getCurrentToolset()->selectTool( (LLTool *) FSToolCompPose::getInstance());
+        }
+    );
+
+    LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
+    LLToolMgr::getInstance()->getCurrentToolset()->selectTool( (LLTool *) FSToolCompPose::getInstance());
+    FSToolCompPose::getInstance()->setAvatar( gAgentAvatarp);
+
     return true;
 }
 
@@ -226,7 +241,13 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     onJointTabSelect();
     refreshPoseScroll(mHandPresetsScrollList, POSE_PRESETS_HANDS_SUBDIRECTORY);
     startPosingSelf();
-
+    if (LLToolMgr::getInstance()->getCurrentToolset() != gCameraToolset)
+    {
+        mLastToolset = LLToolMgr::getInstance()->getCurrentToolset();
+    }
+    LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
+    LLToolMgr::getInstance()->getCurrentToolset()->selectTool(FSToolCompPose::getInstance());
+    FSToolCompPose::getInstance()->setAvatar( gAgentAvatarp);    
     LLFloater::onOpen(key);
 }
 
@@ -235,6 +256,11 @@ void FSFloaterPoser::onClose(bool app_quitting)
     if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
         stopPosingAllAvatars();
 
+    if (mLastToolset)
+    {
+        LLToolMgr::getInstance()->setCurrentToolset(mLastToolset);
+    }
+    FSToolCompPose::getInstance()->setAvatar(nullptr);
     LLFloater::onClose(app_quitting);
 }
 
@@ -545,6 +571,33 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
             continue;
 
         mPoserAnimator.recaptureJoint(avatar, *item, getJointTranslation(item->jointName()), getJointNegation(item->jointName()));
+    }
+
+    setSavePosesButtonText(true);
+    refreshRotationSlidersAndSpinners();
+    refreshTrackpadCursor();
+    refreshTextHighlightingOnJointScrollLists();
+}
+void FSFloaterPoser::updatePosedBones()
+{
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    LLVOAvatar *avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!mPoserAnimator.isPosingAvatar(avatar))
+        return;
+
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosing = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (!currentlyPosing)
+            continue;
+
+        mPoserAnimator.recaptureJointAsDelta(avatar, *item, getJointTranslation(item->jointName()), getJointNegation(item->jointName()));
     }
 
     setSavePosesButtonText(true);
@@ -1331,6 +1384,93 @@ void FSFloaterPoser::enableOrDisableRedoButton()
     mRedoChangeBtn->setEnabled(shouldEnableRedoButton);
 }
 
+void FSFloaterPoser::selectJointByName(const std::string& jointName)
+{
+    LLTabContainer* tabContainer = mJointsTabs;
+    std::vector<LLPanel*> panels = {
+        mPositionRotationPnl,
+        mBodyJointsPnl,
+        mFaceJointsPnl,
+        mHandsTabs,
+        mMiscJointsPnl,
+        mCollisionVolumesPnl
+    };
+    
+    std::vector<LLScrollListCtrl*> scrollLists = {
+        mEntireAvJointScroll,
+        mBodyJointsScrollList,
+        mFaceJointsScrollList,
+        mHandJointsScrollList,
+        mMiscJointsScrollList,
+        mCollisionVolumesScrollList
+    };
+
+    bool found = false;
+    for (S32 i = 0; i < tabContainer->getTabCount(); ++i)
+    {
+        LLPanel* panel = tabContainer->getPanelByIndex(i);
+        tabContainer->selectTabPanel(panel);
+
+        // Special handling for Hands tab
+        if (panel == mHandsTabs)
+        {
+            mHandsTabs->selectTabPanel(mHandsJointsPnl);
+        }
+
+        for (auto scrollList : scrollLists)
+        {
+            scrollList->deselectAllItems();
+        }
+
+        auto scrollList = getScrollListForTab(panel);
+
+        std::vector<LLScrollListItem*> items = scrollList->getAllData();
+        for (auto item : items)
+        {
+            auto* userData = static_cast<FSPoserAnimator::FSPoserJoint*>(item->getUserdata());
+            if (userData && userData->jointName() == jointName)
+            {
+                tabContainer->selectTab(i);
+                scrollList->selectNthItem(scrollList->getItemIndex(item));
+                scrollList->scrollToShowSelected();
+                getUiSelectedPoserJoints();
+                return; // Exit the loop once we've found and selected the joint
+            }
+        }
+    }
+    LL_WARNS() << "Joint not found: " << jointName << LL_ENDL;
+}
+
+LLScrollListCtrl* FSFloaterPoser::getScrollListForTab(LLPanel * tabPanel) const
+{
+    if (tabPanel == mPositionRotationPnl)
+    {
+        return mEntireAvJointScroll;
+    }
+    else if (tabPanel == mBodyJointsPnl)
+    {
+        return mBodyJointsScrollList;
+    }
+    else if (tabPanel == mFaceJointsPnl)
+    {
+        return mFaceJointsScrollList;
+    }
+    else if (tabPanel == mHandsTabs)
+    {
+        return mHandJointsScrollList;
+    }
+    else if (tabPanel == mMiscJointsPnl)
+    {
+        return mMiscJointsScrollList;
+    }
+    else if (tabPanel == mCollisionVolumesPnl)
+    {
+        return mCollisionVolumesScrollList;
+    }
+
+    LL_WARNS() << "Unknown tab panel: " << tabPanel << LL_ENDL;
+    return nullptr;
+}
 std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJoints() const
 {
     std::vector<FSPoserAnimator::FSPoserJoint*> joints;
@@ -1342,42 +1482,20 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
     }
 
     LLScrollListCtrl* scrollList{ nullptr };
-
+    
+    scrollList = getScrollListForTab(activeTab);
     if (activeTab == mPositionRotationPnl)
     {
         mEntireAvJointScroll->selectFirstItem();
-        scrollList = mEntireAvJointScroll;
     }
-    else if (activeTab == mBodyJointsPnl)
-    {
-        scrollList = mBodyJointsScrollList;
-    }
-    else if (activeTab == mFaceJointsPnl)
-    {
-        scrollList = mFaceJointsScrollList;
-    }
-    else if (activeTab == mHandsTabs)
+    else if (activeTab == mHandsTabs )
     {
         auto activeHandsSubTab = mHandsTabs->getCurrentPanel();
         if (!activeHandsSubTab)
         {
             return joints;
         }
-
-        if (activeHandsSubTab == mHandsJointsPnl)
-        {
-            scrollList = mHandJointsScrollList;
-        }
     }
-    else if (activeTab == mMiscJointsPnl)
-    {
-        scrollList = mMiscJointsScrollList;
-    }
-    else if (activeTab == mCollisionVolumesPnl)
-    {
-        scrollList = mCollisionVolumesScrollList;
-    }
-
     if (!scrollList)
     {
         return joints;
@@ -1391,7 +1509,18 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
             joints.push_back(userData);
         }
     }
-
+    auto avatarp = getUiSelectedAvatar();
+    if (avatarp)
+    {
+        if(joints.size() >= 1)
+        {
+            FSToolCompPose::getInstance()->setJoint( gAgentAvatarp->getJoint( JointKey::construct(joints[0]->jointName())) );
+        }
+        else
+        {
+            FSToolCompPose::getInstance()->setJoint( nullptr );
+        }
+    }
     return joints;
 }
 
@@ -1907,6 +2036,10 @@ S32 FSFloaterPoser::getJointNegation(const std::string& jointName) const
 void FSFloaterPoser::onAvatarSelect()
 {
     LLVOAvatar* avatar = getUiSelectedAvatar();
+    if(avatar)
+    {
+        FSToolCompPose::getInstance()->setAvatar(avatar);
+    }
     mStartStopPosingBtn->setEnabled(couldAnimateAvatar(avatar));
 
     bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);

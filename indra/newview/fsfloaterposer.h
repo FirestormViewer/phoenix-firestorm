@@ -29,6 +29,7 @@
 #define FS_FLOATER_POSER_H
 
 #include "llfloater.h"
+#include "lltoolmgr.h"
 #include "fsposeranimator.h"
 
 class FSVirtualTrackpad;
@@ -77,7 +78,9 @@ class FSFloaterPoser : public LLFloater
 {
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
-
+public:    
+    void updatePosedBones();
+    void selectJointByName(const std::string& jointName);
  private:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
@@ -176,7 +179,7 @@ class FSFloaterPoser : public LLFloater
     /// <param name="toFind">The avatar UUID to find on the avatars scroll list.</param>
     /// <returns>The scroll-list index for the supplied avatar, if found, otherwise -1.</returns>
     S32 getAvatarListIndexForUuid(const LLUUID& toFind) const;
-
+    
     /// <summary>
     /// There are several control-callbacks manipulating rotations etc, they all devolve to these.
     /// In these are the appeals to the posing business layer.
@@ -185,11 +188,10 @@ class FSFloaterPoser : public LLFloater
     /// Using a set, then a get does not guarantee the value you just set.
     /// There may be +/- PI difference two axes, because harmonics.
     /// Thus keep your UI synced with less gets.
-    /// </remarks>
+    /// </remarks>    
     void setSelectedJointsRotation(const LLVector3& absoluteRot, const LLVector3& deltaRot);
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
-
     /// <summary>
     /// Yeilds the rotation of the first selected joint (one may multi-select).
     /// </summary>
@@ -202,6 +204,7 @@ class FSFloaterPoser : public LLFloater
     LLVector3 getPositionOfFirstSelectedJoint() const;
     LLVector3 getScaleOfFirstSelectedJoint() const;
 
+    LLScrollListCtrl* getScrollListForTab(LLPanel * tabPanel) const;
     // Pose load/save
     void createUserPoseDirectoryIfNeeded();
     void onToggleLoadSavePanel();
@@ -435,7 +438,11 @@ class FSFloaterPoser : public LLFloater
     /// </remarks>
     static F32 unWrapScale(F32 scale);
 
+    LLToolset*  mLastToolset{ nullptr };
+    LLTool*     mJointRotTool{ nullptr };
+    
     LLVector3          mLastSliderRotation;
+
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
 
     LLSliderCtrl* mTrackpadSensitivitySlider{ nullptr };
@@ -476,6 +483,7 @@ class FSFloaterPoser : public LLFloater
     LLButton* mToggleDeltaModeBtn{ nullptr };
     LLButton* mRedoChangeBtn{ nullptr };
     LLButton* mSetToTposeButton{ nullptr };
+    LLButton* mBtnJointRotate{ nullptr };
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 

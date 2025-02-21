@@ -144,6 +144,18 @@ void FSJointPose::recaptureJoint()
     addStateToUndo(FSJointState(mCurrentState));
     mCurrentState = FSJointState(joint);
 }
+void FSJointPose::recaptureJointAsDelta()
+{
+    if (mIsCollisionVolume)
+        return;
+
+    LLJoint* joint = mJointState->getJoint();
+    if (!joint)
+        return;
+
+    addToUndo(mRotation, &mUndoneRotationIndex, &mLastSetRotationDeltas, &mTimeLastUpdatedRotation);
+    mRotation.updateRotation(joint->getRotation());
+}
 
 void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
 {

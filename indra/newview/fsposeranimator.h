@@ -509,12 +509,14 @@ public:
 
     /// <summary>
     /// Recaptures the rotation, position and scale state of the supplied joint for the supplied avatar.
+    /// AsDelta variant retians the original base and creates a delta relative to it.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
     /// <param name="joint">The joint to recapture.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
     /// <param name="negation">The style of negation to apply to the recapture.</param>
     void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
+    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.

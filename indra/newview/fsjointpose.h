@@ -143,6 +143,11 @@ class FSJointPose
     /// Resets the beginning properties of the joint this represents.
     /// </summary>
     void recaptureJoint();
+    /// <summary>
+    /// Recalculates the delta reltive to the base for a new rotation.
+    /// </summary>
+    void recaptureJointAsDelta();
+
 
     /// <summary>
     /// Reverts the position/rotation/scale to their values when the animation begun.
@@ -170,10 +175,17 @@ class FSJointPose
         }
 
         FSJointState() = default;
-
+        LLQuaternion mDeltaRotation;
         LLQuaternion getTargetRotation() const { return mRotation * mBaseRotation; }
         LLVector3    getTargetPosition() const { return mPosition + mBasePosition; }
         LLVector3    getTargetScale() const { return mScale + mBaseScale; }
+        void updateRotation(const LLQuaternion& newRotation)
+        { 
+            auto inv_base = mBaseRotation;
+            inv_base.conjugate();
+            mDeltaRotation = newRotation * inv_base; 
+        };
+        
 
         void reflectRotation()
         {
