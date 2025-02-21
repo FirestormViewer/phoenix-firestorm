@@ -4199,7 +4199,7 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
         {
             getTEImage(i)->storeBoostLevel();
         }
-        // </FS:minerjr> [FIRE-35081]
+        // </FS:minerjr>
         getTEImage(i)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
     }
 
@@ -4217,7 +4217,7 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
             sculptedTexture->storeBoostLevel();
         }        
         sculptedTexture->setBoostLevel(LLGLTexture::BOOST_SELECTED);
-		// </FS:minerjr> [FIRE-35081]
+		// </FS:minerjr>
     }
 
     if (boost_children)

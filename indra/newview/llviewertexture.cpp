@@ -718,7 +718,7 @@ void LLViewerTexture::init(bool firstinit)
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
     // Added default value fro the boost as it seemed that there were some instances boost was not being initalized.
     mBoostLevel = LLGLTexture::BOOST_NONE;
-    // </FS:minerjr> [FIRE-35081]
+    // </FS:minerjr>
     memset(&mNumVolumes, 0, sizeof(U32)* LLRender::NUM_VOLUME_TEXTURE_CHANNELS);
     mVolumeList[LLRender::LIGHT_TEX].clear();
     mVolumeList[LLRender::SCULPT_TEX].clear();
@@ -1195,7 +1195,7 @@ void LLViewerFetchedTexture::init(bool firstinit)
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
     // Added default for boost level
     mBoostLevel = LLGLTexture::BOOST_NONE;
-    // </FS:minerjr> [FIRE-35081]
+    // </FS:minerjr>
     mFTType = FTT_UNKNOWN;
 }
 
@@ -3031,7 +3031,7 @@ void LLViewerLODTexture::init(bool firstinit)
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
     // Added default value fro the boost as it seemed that there were some instances boost was not being initalized.
     mBoostLevel = LLGLTexture::BOOST_NONE;
-    // </FS:minerjr> [FIRE-35081]
+    // </FS:minerjr>
 }
 
 //virtual

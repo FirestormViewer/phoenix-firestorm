@@ -726,7 +726,7 @@ void LLGLTexMemBar::draw()
                     (S32)gTextureList.mCreateTextureList.size(),
                     (S32)gTextureList.mFastCacheList.size());
                     // </FS:Ansariel>
-    // </FS:minerjr> [FIRE-35081]
+    // </FS:minerjr>
     x_right = 550.0f;
     LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0.f, (F32)(v_offset + line_height*3),
                                              text_color, LLFontGL::LEFT, LLFontGL::TOP,
