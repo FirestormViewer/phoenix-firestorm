@@ -919,6 +919,26 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         // convert bias into a vsize scaler
         bias = (F32) llroundf(powf(4, bias - 1.f));
 
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // Apply new rules to bias discard, there are now 2 bias, off-screen and on-screen.
+        // On-screen Bias
+        // Only applied to LOD Textures and one that have Discard > 1 (0, 1 protected)
+        // 
+        // Off-screen Bias
+        // Will be using the old method of applying the mMaxVirtualSize, however
+        // only on LOD textures and fetched textures get bias applied.
+        // 
+        // Local (UI & Icons), Media and Dynamic textures should not have any discard applied to them.
+        // 
+        // Without this, textures will become blurry that are on screen, which is one of the #1
+        // user complaints.
+
+        // Store a seperate max on screen vsize without bias applied.
+        F32 max_on_screen_vsize = 0.0f;        
+        F32 on_screen_value = 0.0f;
+        F32 importance_to_camera = 0.0f;
+        // </FS:minerjr> [FIRE-35081]
+
         LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
         {
@@ -941,8 +961,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     }
 
                     F32 vsize = face->getPixelArea();
-
-                    on_screen = face->mInFrustum;
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    //on_screen = face->mInFrustum;
+                    bool current_on_screen = face->mInFrustum; // Create a new var to store the current on screen status
+                    on_screen = face->mInFrustum ? true : on_screen; // As we want to keep track of if we have an on screen image perminatly as the last face dictates if it scales or not.
+                    // </FS:minerjr> [FIRE-35081]
 
                     // Scale desired texture resolution higher or lower depending on texture scale
                     //
@@ -958,6 +981,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     min_scale = llclamp(min_scale * min_scale, texture_scale_min(), texture_scale_max());
                     vsize /= min_scale;
 
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    /*
                     // apply bias to offscreen faces all the time, but only to onscreen faces when bias is large
                     if (!face->mInFrustum || LLViewerTexture::sDesiredDiscardBias > 2.f)
                     {
@@ -972,6 +997,37 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     }
 
                     max_vsize = llmax(max_vsize, vsize);
+                    */
+                    // Store the vsize before the bias is applied
+                    F32 on_screen_vsize = vsize;
+
+                    // As we calculate both with and with-out bias, by doing this, you can skip the if statement in the middle of
+                    // expensive loop
+                    vsize /= bias;
+
+                    // boost resolution of textures that are important to the camera
+                    static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 8.f);
+                    //vsize *= llmax(face->mImportanceToCamera * texture_camera_boost, 1.f);
+                    // Use math to skip having to use a conditaional check
+                    // Bools are stored as 0 false, 1 true, use to cheat
+                    // Lerp instead of doing conditional input
+                    // If the image is import to the camera, even a little then make the on screen true
+                    on_screen = face->mImportanceToCamera > 0.0f ? true : on_screen; // This branching should be optimized away.
+                    importance_to_camera = llmax(face->mImportanceToCamera * texture_camera_boost, 1.f);
+                    on_screen_value = F32(current_on_screen);
+
+                    vsize = lerp(vsize, vsize * importance_to_camera, on_screen_value);
+
+                    // Apply the mImportanceToCamera to the on screen vsize
+                    // Bools are stored as 0 false, 1 true, use to cheat
+                    // Perform a LERP on the value between the on screen vsize and the importance * on screen vsize                    
+                    on_screen_vsize = lerp(on_screen_vsize, on_screen_vsize * importance_to_camera, on_screen_value);
+
+                    max_vsize = llmax(max_vsize, vsize);
+                    // <FS:minerjr>
+                    // Update the max on screen vsize based upon the on screen vsize
+                    max_on_screen_vsize = llmax(max_on_screen_vsize, on_screen_vsize);                    
+                    // </FS:minerjr> [FIRE-35081]
                 }
             }
         }
@@ -992,9 +1048,68 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             {
                 imagep->mMaxVirtualSize = 0.f;
             }
+        }        
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer        
+        //imagep->addTextureStats(max_vsize);
+        // Recaluclate the
+        on_screen_value = F32(on_screen);
+        // New logic block for the bias system
+        // Switch on the type of texture first
+        switch(imagep->getType())
+        {
+            // All dynamic or local textures block
+            case LLViewerTexture::DYNAMIC_TEXTURE:
+            case LLViewerTexture::LOCAL_TEXTURE:
+            case LLViewerTexture::MEDIA_TEXTURE:
+            {
+                // Only apply the max on screen virtual size to textures that should not be scaled
+                imagep->addTextureStats(max_on_screen_vsize);
+                break;
+            }
+            
+            // Fetched Textures (Non LOD normal textures)
+            case LLViewerTexture::FETCHED_TEXTURE:
+            {
+                // Only apply the bias when off screen, otherwise use the non bias caculated value
+                imagep->addTextureStats(lerp(max_vsize, max_on_screen_vsize, on_screen_value));
+                break;
+            }
+            // Handle the LOD texture
+            case LLViewerTexture::LOD_TEXTURE:            
+            {
+                // Switch on the get discard level
+                switch(imagep->getDiscardLevel())
+                {
+                    // We want the 2 best quality discards to always be good quality
+                    case 0:
+                    case 1:
+                    {
+                        // If the texture is really in screen, use the max on screen virtual size, otherwise the max virtual size (off-screen) use the Lerp to
+                        // instead of if statement
+                        imagep->addTextureStats(lerp(max_vsize, max_on_screen_vsize, on_screen_value));                       
+                        break;
+                    }
+                    // All other discard levels (2 to MAX_DISCARD_LEVEL)
+                    default:
+                    {
+                        // If the discard level is between 1 and 2
+                        if (LLViewerTexture::sDesiredDiscardBias >= 1.0f && LLViewerTexture::sDesiredDiscardBias < 2.0f)
+                        {
+                            // Only apply the bias when off screen, otherwise use the non bias caculated value
+                            imagep->addTextureStats(lerp(max_vsize, max_on_screen_vsize, on_screen_value));
+                        }
+                        else
+                        {
+                            // Apply the off screen texture max virtual size
+                            imagep->addTextureStats(max_vsize);
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
         }
-
-        imagep->addTextureStats(max_vsize);
+        // </FS:minerjr> [FIRE-35081]
     }
 
 #if 0
