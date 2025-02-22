@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater title="フォトツール" name="phototools">
 	<tab_container name="tabs">
 		<panel name="EnvironmentTab" label="自然環境">
@@ -14,18 +14,22 @@
 				<combo_box name="WLPresetsCombo"/>
 				<button name="WLPrevPreset"/>
 				<button name="WLNextPreset"/>
+
 				<text name="WL Water" tool_tip="水面のプリセットを選択して、反射と表面のプロパティを変更します。">
 					水面
 				</text>
 				<combo_box name="WaterPresetsCombo"/>
 				<button name="WWPrevPreset"/>
 				<button name="WWNextPreset"/>
+
 				<text name="Day Cycle" tool_tip="時間ベースの環境変化を制御するためにデイサイクルのプリセットを管理します。">
 					デイサイクル
 				</text>
 				<combo_box name="DCPresetsCombo"/>
 				<button name="DCPrevPreset"/>
 				<button name="DCNextPreset"/>
+			</panel>
+			<panel name="P_WL_Sky_Water_2">
 				<button name="btn_personal_lighting" label="個人的な光源…" tool_tip="これにより、個人的な光源ウィンドウが開きます。個人的な光源ウィンドウは、現在の環境を一時的に調整するために使用されます。これは、写真撮影や、自分の好みに合わせて何かを変更する場合に便利です。独自の設定アセットを作成するためのものではなく、変更を保存することはできません。"/>
 				<button label="雲を停止" name="PauseClouds" tool_tip="静的な空の構図のために、動的な雲の動きを一時停止します。"/>
 			</panel>
@@ -64,63 +68,64 @@
 				<check_box label="ミラーを有効化" name="Mirrors" tool_tip="リアルタイムのミラー反射を有効にします。オブジェクトやアバターなどの環境を正確に反映しますが、追加のレンダリング負荷によりパフォーマンスに大きな影響を与える可能性があります。"/>
 				<check_box label="反射プローブの選択を有効化" name="checkbox select probes" tool_tip="シーン内の反射プローブを選択して検査できるようにします。"/>
 			</panel>
-		</panel>
-		<panel name="P_R_Res_2">
-			<text name="ReflectionDetailText" tool_tip="反射の詳細レベルを決定します。「静的のみ」では動かないオブジェクトが反射され、設定を高くすると動的なオブジェクトとリアルタイムの反射が含まれます。">
-				反射の詳細
-			</text>
-			<combo_box name="ReflectionDetail">
-				<combo_box.item label="静的のみ" name="0" />
-				<combo_box.item label="静的＆動的" name="1" />
-				<combo_box.item label="リアリスティック" name="2" />
-			</combo_box>
-			<text name="ReflectionProbeText" tool_tip="反射によってカバーされるシーンの範囲を制御します。「手動のみ」では選択したオブジェクトが反射され、「フルシーン」ではビュー内のすべてのものが含まれます。">
-				反射範囲
-			</text>
-			<combo_box name="ReflectionLevel">
-				<combo_box.item label="なし" name="0" />
-				<combo_box.item label="手動のみ" name="1" />
-				<combo_box.item label="手動＆地形" name="2"/>
-				<combo_box.item label="フルシーン" name="3"/>
-			</combo_box>
-			<text name="MirrorResolutionText" tool_tip="ミラー反射の解像度を設定します。値が高いほど反射が鮮明になりますが、より多くの処理能力が必要になります。">
-				ミラーの解像度
-			</text>
-			<combo_box name="MirrorResolution">
-				<combo_box.item label="256" name="0" />
-				<combo_box.item label="512" name="1" />
-				<combo_box.item label="1024" name="2" />
-				<combo_box.item label="2048" name="3" />
-				<combo_box.item label="4096" name="4" />
-			</combo_box>
-			<text name="HeroProbeUpdateText" tool_tip="ミラー反射の更新頻度を調整します。設定を高くすると、リアルタイムの反射がよりスムーズになりますが、パフォーマンスに影響する可能性があります。">
-				ミラーの更新レート
-			</text>
-			<combo_box name="HeroProbeUpdateRate">
-				<combo_box.item label="低" name="6" />
-				<combo_box.item label="中" name="3" />
-				<combo_box.item label="高" name="1" />
-				<combo_box.item label="最高" name="0" />
-			</combo_box>
-			<text name="Probe_Resolution" tool_tip="反射プローブの解像度を細かく設定します。解像度を高くすると反射がより詳細になりますが、メモリ使用量が増加し、適用するにはビューアの再起動が必要になる場合があります。128 を超える設定では、大量のビデオＲＡＭが消費され、ＧＰＵリソースが限られているシステムのパフォーマンスに影響を及ぼす可能性があります。">
-				プローブ解像度（要再起動）
-			</text>
-			<combo_box name="Probe_Resolution_Combo">
-				<combo_box.item label="64" name="0"/>
-				<combo_box.item label="128" name="1"/>
-				<combo_box.item label="256" name="2"/>
-				<combo_box.item label="512" name="3"/>
-				<combo_box.item label="1024" name="4"/>
-				<combo_box.item label="2048" name="5"/>
-			</combo_box>
-		</panel>
-		<panel name="P_R_Res_3">
-			<text name="T_Reflection_Distance" tool_tip="更新時に反射プローブが「見る」距離を制御し、反射の詳細とパフォーマンスに影響します。値が高いほど、表示距離が長くなり、詳細が増え、計算コストが高くなります。">
-				反射距離
-			</text>
-			<slider_bar name="SB_Reflection_Distance"/>
-			<spinner name="S_Reflection_Distance"/>
-			<button name="Reset_Reflection_Distance" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
+
+			<panel name="P_R_Res_2">
+				<text name="ReflectionDetailText" tool_tip="反射の詳細レベルを決定します。「静的のみ」では動かないオブジェクトが反射され、設定を高くすると動的なオブジェクトとリアルタイムの反射が含まれます。">
+					反射の詳細
+				</text>
+				<combo_box name="ReflectionDetail">
+					<combo_box.item label="静的のみ" name="0" />
+					<combo_box.item label="静的＆動的" name="1" />
+					<combo_box.item label="リアリスティック" name="2" />
+				</combo_box>
+				<text name="ReflectionProbeText" tool_tip="反射によってカバーされるシーンの範囲を制御します。「手動のみ」では選択したオブジェクトが反射され、「フルシーン」ではビュー内のすべてのものが含まれます。">
+					反射範囲
+				</text>
+				<combo_box name="ReflectionLevel">
+					<combo_box.item label="なし" name="0" />
+					<combo_box.item label="手動のみ" name="1" />
+					<combo_box.item label="手動＆地形" name="2"/>
+					<combo_box.item label="フルシーン" name="3"/>
+				</combo_box>
+				<text name="MirrorResolutionText" tool_tip="ミラー反射の解像度を設定します。値が高いほど反射が鮮明になりますが、より多くの処理能力が必要になります。">
+					ミラーの解像度
+				</text>
+				<combo_box name="MirrorResolution">
+					<combo_box.item label="256" name="0" />
+					<combo_box.item label="512" name="1" />
+					<combo_box.item label="1024" name="2" />
+					<combo_box.item label="2048" name="3" />
+					<combo_box.item label="4096" name="4" />
+				</combo_box>
+				<text name="HeroProbeUpdateText" tool_tip="ミラー反射の更新頻度を調整します。設定を高くすると、リアルタイムの反射がよりスムーズになりますが、パフォーマンスに影響する可能性があります。">
+					ミラーの更新レート
+				</text>
+				<combo_box name="HeroProbeUpdateRate">
+					<combo_box.item label="低" name="6" />
+					<combo_box.item label="中" name="3" />
+					<combo_box.item label="高" name="1" />
+					<combo_box.item label="最高" name="0" />
+				</combo_box>
+				<text name="Probe_Resolution" tool_tip="反射プローブの解像度を細かく設定します。解像度を高くすると反射がより詳細になりますが、メモリ使用量が増加し、適用するにはビューアの再起動が必要になる場合があります。128 を超える設定では、大量のビデオＲＡＭが消費され、ＧＰＵリソースが限られているシステムのパフォーマンスに影響を及ぼす可能性があります。">
+					プローブ解像度（要再起動）
+				</text>
+				<combo_box name="Probe_Resolution_Combo">
+					<combo_box.item label="64" name="0"/>
+					<combo_box.item label="128" name="1"/>
+					<combo_box.item label="256" name="2"/>
+					<combo_box.item label="512" name="3"/>
+					<combo_box.item label="1024" name="4"/>
+					<combo_box.item label="2048" name="5"/>
+				</combo_box>
+			</panel>
+			<panel name="P_R_Res_3">
+				<text name="T_Reflection_Distance" tool_tip="更新時に反射プローブが「見る」距離を制御し、反射の詳細とパフォーマンスに影響します。値が高いほど、表示距離が長くなり、詳細が増え、計算コストが高くなります。">
+					反射距離
+				</text>
+				<slider_bar name="SB_Reflection_Distance"/>
+				<spinner name="S_Reflection_Distance"/>
+				<button name="Reset_Reflection_Distance" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
+			</panel>
 		</panel>
 
 		<panel name="P_Lighting" label="影">
@@ -368,17 +373,14 @@
 				<spinner name="S_Tonemap_Type"/>
 				<button name="Reset_Tonemap_Type" label="Ｄ" tool_tip="デフォルト値に戻します。"/>
 			</panel>
-		</panel>
 
-		<panel>
 			<panel name="P_Glow_Settings">
 				<text name="T_Glow_Settings">
 					グローの設定
 				</text>
 			</panel>
-
 			<panel name="P_Glow_Quality">
-				<check_box label="グロー硬化を有効化" name="UseGlow" tool_tip="グロー効果を有効にして、明るいオブジェクトと光源から柔らかいハローが放射され、ブルーム効果をシミュレートします。これにより、発光材料、反射、ハイライトの外観が向上し、照らされた領域に、よりダイナミックで鮮やかな外観が追加されます。このオプションを無効にすると、特に複雑な光源のあるシーンでパフォーマンスが向上します。"/>
+				<check_box label="グロー効果を有効化" name="UseGlow" tool_tip="グロー効果を有効にして、明るいオブジェクトと光源から柔らかいハローが放射され、ブルーム効果をシミュレートします。これにより、発光材料、反射、ハイライトの外観が向上し、照らされた領域に、よりダイナミックで鮮やかな外観が追加されます。このオプションを無効にすると、特に複雑な光源のあるシーンでパフォーマンスが向上します。"/>
 				<check_box label="グローマップのＨＤＲを有効にする" name="GlowHDR" tool_tip="グロー効果のハイダイナミックレンジ（ＨＤＲ） 処理を有効にして、より強烈で鮮やかなグローとリアルな明るさの変化を実現します。これにより、非常に明るい領域からの光が広がる様子が改善され、特にコントラストの高いシーンでのグロー品質が向上します。発光テクスチャや強い照明効果を扱うときに便利です。"/>
 			</panel>
 
@@ -413,7 +415,7 @@
 			</panel>
 		</panel>
 
-		<panel name="P_General" label="一般設定">
+		<panel name="P_General" label="一般">
 			<panel name="PT_General">
 				<text name="T_General">
 					一般的な描画設定
@@ -557,9 +559,9 @@
 					最大テクスチャ解像度
 				</text>
 				<combo_box name="MaxTextureResolutionSelection">
-					<combo_box.item label="512 px" name="512"/>
-					<combo_box.item label="1024 px" name="1024"/>
-					<combo_box.item label="2048 px" name="2048"/>
+					<combo_box.item label="512ピクセル" name="512"/>
+					<combo_box.item label="1024ピクセル" name="1024"/>
+					<combo_box.item label="2048ピクセル" name="2048"/>
 				</combo_box>
 
 				<text name="T_AvatarDisplay" tool_tip="複雑さと友達関係に基づいてアバターの表示方法を制御します。「複雑さによる制限」は、パフォーマンスを向上させるために、一定の複雑さを超えるアバターのレンダリングを制限します。「常にフレンドは表示」は、複雑さに関係なく友達が完全にレンダリングされるようにします。「フレンドのみを表示」は、混雑したエリアでのパフォーマンスを最適化するために、フレンドのみをレンダリングし、他のアバターを非表示にします。">
@@ -573,27 +575,28 @@
 			</panel>
 		</panel>
 
-		<panel name="P_Aids" label="支援ツール">
+		<panel name="P_Aids" label="支援">
 			<panel name="PT_Aids">
 				<text name="T_Aids">
 					支援インターフェイス
 				</text>
 			</panel>
-
-			<check_box tool_tip="シーン内のすべての光源の周囲にワイヤーフレーム ボックスを表示し、デバッグやシーンのセットアップ時にライトの配置と範囲を視覚化するのに役立ちます。" label="シーン内のすべてのライトの境界ボックスを表示" name="Lights"/>
-			<check_box tool_tip="選択した光源の有効半径を表示し、シーン内で光がどの程度届くかを確認できます。光源設定を微調整するのに役立ちます。" label="選択した光源の光源半径を表示" name="Show Light Radius for Selection"/>
-			<check_box tool_tip="シーン内のすべてのオブジェクトの周囲にワイヤーフレーム境界ボックスを有効にします。これにより、位置合わせ、スケーリング、またはレンダリングの問題のトラブルシューティングのためにオブジェクトの境界を識別するのに役立ちます。" label="シーン内のオブジェクトの境界ボックスを表示する" name="Bounding Boxes"/>
-			<check_box tool_tip="フレーム レート（ＦＰＳ）、ネットワークデータ、レンダリングメトリックなどのリアルタイムのパフォーマンス統計を表示します。ビューアのパフォーマンスを監視し、ボトルネックを特定するのに役立ちます。" label="統計バーを表示する" name="Statistics Bar"/>
-			<check_box tool_tip="シーン内のカメラの位置、方向、動きに関する詳細情報を表示します。写真撮影、マシニマ、または建築における正確なカメラワークに役立ちます。" label="詳細なカメラ位置データを表示" name="Camera"/>
-			<check_box tool_tip="テクスチャ コンソールを開き、テクスチャのサイズ、読み込み時間、メモリ使用量など、テクスチャの読み込み方法に関するリアルタイム情報を表示します。テクスチャ関連のパフォーマンスの問題の診断に役立ちます。" label="詳細なテクスチャ読み込み情報を表示" name="Texture Console"/>
-			<check_box tool_tip="カーソルの真下にあるピクセルの ＲＧＢ（赤、緑、青）と強度（Ｉ）の色の値を表示します。カラー マッチング、デザイン作業、または照明の問題のデバッグに役立ちます。" label="カーソル下のＲＧＢ－Ｉカラー値を表示" name="Show Color Under Cursor"/>
-			<check_box tool_tip="透明なオブジェクトを赤で強調表示して、識別しやすくします。これは、シーンの構築時やトラブルシューティング時に、非表示のプリムや非表示のオブジェクトを見つけるのに特に役立ちます。" label="透明なオブジェクトを赤で強調表示" name="Highlight Transparent"/>
-			<check_box tool_tip="シーン全体をワイヤフレームモードでレンダリングし、テクスチャやシェーディングなしでオブジェクトの基になるジオメトリを表示します。オブジェクトの構造、ＬＯＤ（詳細レベル）、メッシュトポロジを分析するのに役立ちます。" label="シーンをワイヤーフレーム表示する" name="Wireframe"/>
-			<check_box tool_tip="アバターが現在装着しているすべてのＨＵＤ（ヘッドアップディスプレイ）装着物を表示します。これを無効にするとＨＵＤが非表示になり、画面の乱雑さを軽減したりパフォーマンスを向上させたりするのに役立ちます。" label="アバターに装着されたＨＵＤを表示する" name="Show HUD Attachments"/>
-			<check_box label="スローアニメーション‐自分のアバターとビューアのみ" tool_tip="ビューアー内のアバターアニメーションを遅くして、動きを詳細に観察できるようにします。この設定は、他の人があなたのアバターをどのように見るかには影響しません。" name="Slow Motion Animations"/>
-			<button name="Rebake Texture" tool_tip="ビューアにアバターの外観テクスチャのリベイクまたは更新を強制します。これにより、肌がぼやけたり、衣服が適切に読み込まれなかったり、その他のテクスチャ関連の問題を修正できます。" label="外観の強制アップデート（リベイク）"/>
-			<button name="Set Window Size..." label="ビューアのウィンドウサイズを設定…" tool_tip="ビューア ウィンドウの正確な寸法を設定するためのダイアログを開きます。特定の解像度でスクリーンショットを作成したり、マシニマのウィンドウサイズ要件に一致させたりするのに役立ちます。" />
-			<button name="Debug Settings" label="デバッグ設定メニューを表示" tool_tip="デバッグ設定メニューを開き、標準の設定では利用できない高度なビューア設定にアクセスできるようにします。変更はパフォーマンスと安定性に影響を与える可能性があるため、注意して使用してください。"/>
+			<panel name="P_Aids_Settings">
+				<check_box tool_tip="シーン内のすべての光源の周囲にワイヤーフレーム ボックスを表示し、デバッグやシーンのセットアップ時にライトの配置と範囲を視覚化するのに役立ちます。" label="シーン内のすべてのライトの境界ボックスを表示" name="Lights"/>
+				<check_box tool_tip="選択した光源の有効半径を表示し、シーン内で光がどの程度届くかを確認できます。光源設定を微調整するのに役立ちます。" label="選択した光源の光源半径を表示" name="Show Light Radius for Selection"/>
+				<check_box tool_tip="シーン内のすべてのオブジェクトの周囲にワイヤーフレーム境界ボックスを有効にします。これにより、位置合わせ、スケーリング、またはレンダリングの問題のトラブルシューティングのためにオブジェクトの境界を識別するのに役立ちます。" label="シーン内のオブジェクトの境界ボックスを表示する" name="Bounding Boxes"/>
+				<check_box tool_tip="フレーム レート（ＦＰＳ）、ネットワークデータ、レンダリングメトリックなどのリアルタイムのパフォーマンス統計を表示します。ビューアのパフォーマンスを監視し、ボトルネックを特定するのに役立ちます。" label="統計バーを表示する" name="Statistics Bar"/>
+				<check_box tool_tip="シーン内のカメラの位置、方向、動きに関する詳細情報を表示します。写真撮影、マシニマ、または建築における正確なカメラワークに役立ちます。" label="詳細なカメラ位置データを表示" name="Camera"/>
+				<check_box tool_tip="テクスチャ コンソールを開き、テクスチャのサイズ、読み込み時間、メモリ使用量など、テクスチャの読み込み方法に関するリアルタイム情報を表示します。テクスチャ関連のパフォーマンスの問題の診断に役立ちます。" label="詳細なテクスチャ読み込み情報を表示" name="Texture Console"/>
+				<check_box tool_tip="カーソルの真下にあるピクセルの ＲＧＢ（赤、緑、青）と強度（Ｉ）の色の値を表示します。カラー マッチング、デザイン作業、または照明の問題のデバッグに役立ちます。" label="カーソル下のＲＧＢ－Ｉカラー値を表示" name="Show Color Under Cursor"/>
+				<check_box tool_tip="透明なオブジェクトを赤で強調表示して、識別しやすくします。これは、シーンの構築時やトラブルシューティング時に、非表示のプリムや非表示のオブジェクトを見つけるのに特に役立ちます。" label="透明なオブジェクトを赤で強調表示" name="Highlight Transparent"/>
+				<check_box tool_tip="シーン全体をワイヤフレームモードでレンダリングし、テクスチャやシェーディングなしでオブジェクトの基になるジオメトリを表示します。オブジェクトの構造、ＬＯＤ（詳細レベル）、メッシュトポロジを分析するのに役立ちます。" label="シーンをワイヤーフレーム表示する" name="Wireframe"/>
+				<check_box tool_tip="アバターが現在装着しているすべてのＨＵＤ（ヘッドアップディスプレイ）装着物を表示します。これを無効にするとＨＵＤが非表示になり、画面の乱雑さを軽減したりパフォーマンスを向上させたりするのに役立ちます。" label="アバターに装着されたＨＵＤを表示する" name="Show HUD Attachments"/>
+				<check_box label="スローアニメーション‐自分のアバターとビューアのみ" tool_tip="ビューアー内のアバターアニメーションを遅くして、動きを詳細に観察できるようにします。この設定は、他の人があなたのアバターをどのように見るかには影響しません。" name="Slow Motion Animations"/>
+				<button name="Rebake Texture" tool_tip="ビューアにアバターの外観テクスチャのリベイクまたは更新を強制します。これにより、肌がぼやけたり、衣服が適切に読み込まれなかったり、その他のテクスチャ関連の問題を修正できます。" label="外観の強制アップデート（リベイク）"/>
+				<button name="Set Window Size..." label="ビューアのウィンドウサイズを設定…" tool_tip="ビューア ウィンドウの正確な寸法を設定するためのダイアログを開きます。特定の解像度でスクリーンショットを作成したり、マシニマのウィンドウサイズ要件に一致させたりするのに役立ちます。" />
+				<button name="Debug Settings" label="デバッグ設定メニューを表示" tool_tip="デバッグ設定メニューを開き、標準の設定では利用できない高度なビューア設定にアクセスできるようにします。変更はパフォーマンスと安定性に影響を与える可能性があるため、注意して使用してください。"/>
+			</panel>
 
 			<panel name="P_Quick_Stats">
 				<text name="T_Quick_Stats" tool_tip="リアルタイムのシステムパフォーマンス統計を表示し、ビューアの効率を評価するのに役立ちます。ラベルをクリックすると、個々のメトリックを展開したり折りたたんだりできます。">
