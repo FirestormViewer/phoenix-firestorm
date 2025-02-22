@@ -166,6 +166,7 @@
 			<menu_item_call label="フォトツール" name="phototools_item_call"/>
 			<menu_item_call label="カメラツール" name="cameratools_item_call"/>
 			<menu_item_check label="ＤｏＦ焦点をロック" name="lock_focus_point"/>
+			<menu_item_check label="ＤｏＦ焦点にクロスヘアーを描画" name="render_focus_point"/>
 		</menu>
 		<menu_item_call label="エリアサーチ" name="area_search"/>
 		<menu_item_call label="サウンドエクスプローラー" name="Sound Explorer"/>

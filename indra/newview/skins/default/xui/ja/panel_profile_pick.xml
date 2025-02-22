@@ -13,6 +13,9 @@
 			<text name="description_label">
 				説明：
 			</text>
+			<!-- [AS:chanayane] Preview button -->
+			<button name="btn_preview" tool_tip="選択した説明のプレビューを切り替えます。"/>
+			<!-- [/AS:chanayane] -->
 			<text_editor name="pick_desc"/>
 			<text name="location_label">
 				場所：

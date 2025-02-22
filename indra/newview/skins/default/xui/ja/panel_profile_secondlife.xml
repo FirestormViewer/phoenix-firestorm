@@ -99,7 +99,11 @@
 			<text_editor name="partner_link"/>
 		</layout_panel>
 	</layout_stack>
-	<text name="About:" value="情報："/>
+	<text name="About:" value="概要："/>
+	<!-- [AS:chanayane] Preview button -->
+	<button name="btn_preview" tool_tip="プロフィールの「概要」セクションのプレビューを切り替えます。"/>
+	<view_border name="info_border_sl_description_edit"/>
+	<!-- [/AS:chanayane] -->
 	<view_border name="info_border_sl_description_edit"/>
 	<text_editor name="sl_description_edit"/>
 	<text name="Groups:" value="グループ："/>

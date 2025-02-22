@@ -201,6 +201,7 @@
 			<!-- world pauser -->
 			<check_box label="インワールドの描画更新を停止（全ての動きが停止します）" tool_tip="サーバーから送られて来る更新情報を全て停止します。結果、インワールドの動作が全て停止します。但し、チャット、IM、ボイスへの影響はありません。" name="WorldPause"/>
 			<check_box label="フレームレート制限" name="FSLimitFramerate" tool_tip="フレームレートをユーザー定義の値に制限します。ＣＰＵ／ＧＰＵの電力消費と発熱を削減できます。"/>
+			<slider label="ＦＰＳ：" name="MaxFPS"/>
 			<text name="Texture Rendering">
 				テクスチャの描画：
 			</text>
@@ -234,8 +235,6 @@
 			<check_box label="グローを描画" tool_tip="グロー（輝き）を描画します。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow"/>
 			<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength"/>
 			<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars"/>
-			<check_box label="フレームレートを制限" name="FSLimitFramerate"/>
-			<slider label="ＦＰＳ：" name="MaxFPS"/>
 			<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期すると、スタッターや入力遅延が増加する可能性があります。"/>
 			<check_box label="シーンをワイヤーフレームで表示" name="Wireframe"/>
 			<check_box label="装着光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>

@@ -67,7 +67,6 @@
 	<scroll_list name="lsl errors"/>
 	<combo_box label="挿入…" name="Insert..."/>
 	<text name="line_col" value="行0、列0"/>
-	<button label="編集…" name="Edit_btn"/>
 	<button label="編集…" name="edit_btn_2"/>
 	<button label="保存" label_selected="保存" name="save_btn_2"/>
 </panel>
