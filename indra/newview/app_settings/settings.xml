@@ -15212,7 +15212,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>8.0</real>
+      <real>7.0</real>
       <key>Backup</key>
       <integer>0</integer>
     </map>

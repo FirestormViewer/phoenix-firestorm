@@ -937,7 +937,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
         // Store a seperate max on screen vsize without bias applied.
         F32 max_on_screen_vsize = 0.0f;
-        F32 importance_to_camera = 0.0f;
         S32 on_screen_count = 0;
         // Moved all the variables outside of the loop
         bool current_on_screen = false;
@@ -1021,8 +1020,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     // Lerp instead of doing conditional input
                     // If the image is import to the camera, even a little then make the on screen true                    
                     on_screen_count += S32(important_to_camera * 1000.0f);
-                    importance_to_camera = 1.0f + important_to_camera * texture_camera_boost;// llmax(important_to_camera * texture_camera_boost, 1.f);
-                    vsize = vsize + (vsize * importance_to_camera - vsize) * F32(current_on_screen); //lerp(vsize, vsize * importance_to_camera, F32(current_on_screen));
+                    vsize = vsize + (vsize * (1.0f + important_to_camera * texture_camera_boost) - vsize) * F32(current_on_screen);
                                         
                     // Update the max on screen vsize based upon the on screen vsize
                     max_on_screen_vsize = llmax(max_on_screen_vsize, vsize);
