@@ -5,7 +5,7 @@
 			<layout_stack name="vertical_toolbar_stack">
 				<layout_panel name="left_toolbar_panel">
 					<toolbar fname="toolbar_left">
-						<icon layout="topleft" name="caret" />
+						<icon name="caret" />
 					</toolbar>
 				</layout_panel>
 				<layout_panel name="non_toolbar_panel">

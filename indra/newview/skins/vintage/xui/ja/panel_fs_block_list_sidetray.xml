@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="名前" />
@@ -6,7 +6,7 @@
 		<fs_scroll_list.columns name="item_mute_type" />
 	</fs_scroll_list>
 	<text name="block_limit">
-		ブロック件数；全[LIMIT]件中[COUNT]件
+		ブロック件数：全[LIMIT]件中[COUNT]件
 	</text>
 	<layout_stack name="block_list_sidetray_main">
 		<!-- will be shown or hidden in code, depending on whether this

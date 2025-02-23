@@ -9,13 +9,10 @@
 	<panel.string name="ItemcountUnknown">
 		[ITEM_COUNT]個のアイテムと[CATEGORY_COUNT]個のフォルダを取得しました。[FILTER]
 	</panel.string>
-	<panel.string name="inventory_title">インベントリ</panel.string>
-	<panel.string name="default_mode_btn">Multi_Folder_Mode</panel.string>
-	<panel.string name="single_folder_mode_btn">Single_Folder_Mode</panel.string>
-	<text name="ItemcountText">
-		アイテム数：
-	</text>
-	<layout_stack name="top_stack">
+	<panel.string name="inventory_title">
+		インベントリ
+	</panel.string>
+	<layout_stack name="nav_stack">
 		<layout_panel name="nav_buttons">
 			<button name="back_btn" tool_tip="戻ります。"/>
 			<button name="forward_btn" tool_tip="進みます。"/>
@@ -65,18 +62,6 @@
 			<recent_inventory_panel label="新着アイテム" name="Recent Items"/>
 			<worn_inventory_panel label="着用中" name="Worn Items"/>
 		</tab_container>
-	</panel>
-	<panel name="combination_view_inventory">
-		<layout_stack name="combination_view_stack">
-			<layout_panel name="comb_gallery_layout">
-				<panel name="comb_gallery_view_inv">
-				</panel>
-			</layout_panel>
-			<layout_panel name="comb_inventory_layout">
-				<single_folder_inventory_panel name="comb_single_folder_inv">
-				</single_folder_inventory_panel>
-			</layout_panel>
-		</layout_stack>
 	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">

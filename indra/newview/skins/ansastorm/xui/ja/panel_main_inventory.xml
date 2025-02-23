@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Things" name="main inventory panel">
+<panel label="もの" name="main inventory panel">
 	<panel.string name="Itemcount"/>
 	<panel.string name="ItemcountFetching">
 		[ITEM_COUNT]個のアイテムと[CATEGORY_COUNT]個のフォルダを取得しています…。[FILTER]

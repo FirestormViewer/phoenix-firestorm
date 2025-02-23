@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<icon name="voice_icon" />
@@ -42,7 +42,7 @@
 		<icon name="dd_icon" tool_tip="描画距離：" />
 		<slider tool_tip="Rezされるカメラからの最大距離（メートル）" name="drawdistance"/>
 		<text name="TimeText" tool_tip="現在時刻（太平洋時間）">
-			午前24：00：00 PST
+			午前　24：00：00　PST
 		</text>
 		<button name="presets_icon_camera"/>
 		<button name="presets_icon_graphic" />
