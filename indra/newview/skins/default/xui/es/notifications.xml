@@ -1648,6 +1648,7 @@ Haz clic en OK para instalar.
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		¿Quieres abrir tu navegador para ver este contenido?
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Abrir mi navegador para ver una página web" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
