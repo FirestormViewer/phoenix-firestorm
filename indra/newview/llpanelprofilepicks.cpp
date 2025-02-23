@@ -712,7 +712,10 @@ void LLPanelProfilePick::processProperties(void* data, EAvatarProcessorType type
 void LLPanelProfilePick::processProperties(const LLPickData* pick_info)
 {
     mIsEditing = false;
-    mPickDescription->setParseHTML(true);
+    // <AS:Chanayane> Fix FIRE-35185 (disables link rendering while editing picks or 1st life)
+    //mPickDescription->setParseHTML(true);
+    mPickDescription->setParseHTML(!getSelfProfile());
+    // </AS:Chanayane>
     mParcelId = pick_info->parcel_id;
     setSnapshotId(pick_info->snapshot_id);
     if (!getSelfProfile())

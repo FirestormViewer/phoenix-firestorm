@@ -2770,6 +2770,7 @@ void LLPanelProfileFirstLife::onOpen(const LLSD& key)
         mDescriptionEdit->setTabStop(false);
     }
     mPreviewButton->setVisible(getSelfProfile()); // <AS:Chanayane> Preview button
+    mDescriptionEdit->setParseHTML(!getSelfProfile()); // <AS:Chanayane> Fix FIRE-35185 (disables link rendering while editing picks or 1st life)
 
     // <FS:Zi> Allow proper texture swatch handling
     mPicture->setEnabled(getSelfProfile());
