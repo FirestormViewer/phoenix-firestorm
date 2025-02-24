@@ -981,7 +981,7 @@ void BDFloaterPoseCreator::onKeyframeRemove()
         {
             if (usage & LLJointState::ROT)
             {
-                usage &= !LLJointState::ROT;
+                usage &= !((S32)(LLJointState::ROT));
                 joint_state->setUsage(usage);
             }
         }
@@ -1005,7 +1005,7 @@ void BDFloaterPoseCreator::onKeyframeRemove()
         {
             if (usage & LLJointState::POS)
             {
-                usage &= !LLJointState::POS;
+                usage &= !((S32)(LLJointState::POS));
                 joint_state->setUsage(usage);
             }
         }
@@ -1029,7 +1029,7 @@ void BDFloaterPoseCreator::onKeyframeRemove()
         {
             if (usage & LLJointState::SCALE)
             {
-                usage &= !LLJointState::SCALE;
+                usage &= !((S32)(LLJointState::SCALE));
                 joint_state->setUsage(usage);
             }
         }
