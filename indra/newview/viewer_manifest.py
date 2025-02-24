@@ -1546,7 +1546,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path) :
-                    self.path("firestorm_icon.icns")
+                    self.path("ayanestorm_icon.icns")
 
                 self.path("Firestorm.nib")
                 # Translations

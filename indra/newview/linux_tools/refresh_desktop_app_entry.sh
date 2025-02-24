@@ -12,7 +12,7 @@ function install_desktop_entry()
 
     local desktop_entry="\
 [Desktop Entry]\n\
-Name=Firestorm Viewer\n\
+Name=AyaneStorm Viewer\n\
 Comment=Client for accessing 3D virtual worlds\n\
 Exec=${installation_prefix}/firestorm\n\
 Icon=${installation_prefix}/ayanestorm_icon.png\n\
