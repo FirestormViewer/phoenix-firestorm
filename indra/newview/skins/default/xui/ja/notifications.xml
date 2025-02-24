@@ -2213,7 +2213,8 @@ https://www.alchemyviewer.org/downloads.html
 		<usetemplate ignoretext="オブジェクトをグループに寄贈する前の確認" name="okcancelignore" notext="キャンセル" yestext="寄贈する"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
-		Webブラウザを開いてこのコンテンツを表示しますか？
+		Webブラウザでこのコンテンツを表示してもよろしいですか？
+ＵＲＬ：[UNTRUSTED_URL]
 		<tag>confirm</tag>
 		<usetemplate ignoretext="ブラウザを起動して、Webページを閲覧するとき" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
