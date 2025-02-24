@@ -1311,10 +1311,11 @@ void LLFlatListView::detachItems(std::vector<LLPanel*>& detached_items)
                 auto found_pos = std::find_if(mItemPairs.begin(), mItemPairs.end(), [detached_item](auto item_pair) { return item_pair->first == detached_item; });
                 if (found_pos != mItemPairs.end())
                 {
-                    mItemPairs.erase(found_pos);
+                    //mItemPairs.erase(found_pos); // <AS:Chanayane> Fixes pointer used after void operator delete
                     auto item_pair = *found_pos;
                     item_pair->first = nullptr;
                     delete item_pair;
+                    mItemPairs.erase(found_pos); // <AS:Chanayane> Fixes pointer used after void operator delete
                 }
             }
             rearrangeItems();
