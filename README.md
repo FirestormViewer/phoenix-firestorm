@@ -6,20 +6,31 @@
 
 ## Features (so far ; some features might get merged in official Firestorm)
 - Added poser from BlackDragon
-- Added experimental mouse look head scaling
-- Added camera roll/tilt buttons from Blackdragon (+ key bindings)
+- Added camera roll/tilt buttons from Blackdragon (+ key bindings) (merged in Firestorm)
 - Snapshots up to 11500x11500 resolution
-- AVX2 optimized build
-- Made the Animation Speed menu easily accessible: it is no longer in Developer > Avatar > Animation Speed, it is now directly accessible in World
+- AVX2 optimized build (now also in Firestorm)
+- Made the Animation Speed menu easily accessible: it is no longer in Developer > Avatar > Animation Speed, it is now directly accessible in AyaneStorm > animation
 - Added a "All Animations Slowed Down" menu that directly sets animations speed to the minimum (10%)
-- Added a "Freeze Animations" menu in World > Animation Speed, effectively freezing all animations.
+- Added a "Freeze Animations" menu in World > Animation Speed, effectively freezing all animations. Very useful for photographers!
 - No longer shows the stupid ":non-potable_water:" and "fleur-de-lys" emojis when typing ":-P" or ":-D" (use package located in https://github.com/AyaneStorm/3p-emoji-shortcodes)
-- Increased resolution limit to 2048x2048 for snapshot uploaded to inventory
-- Updated OpenJPEG to 2.5.2 (for Jpeg2000 format)
-- Fixed texture and snapshots poor upload quality with OpenJPEG
+- Increased resolution limit to 2048x2048 for snapshot uploaded to inventory (merged in Second-Life)
+- Updated OpenJPEG to 2.5.2 (for Jpeg2000 format) (Firestorm also updated to this version now)
+- Fixed texture and snapshots poor upload quality with OpenJPEG (merged in Firestorm)
 - Enabled "lossless" texture uploads
 - New icons
+- Custom login page
 - Added support for WebP format, like in Alchemy
+- Bigger camera controls
+- Can double-click on an animation in the AO to play it (merged in Firestorm)
+- Can preview profile, picks and 1st life as others would see it (merged in Firestorm)
+- Can see oneself in Nearby people list, so that the people count is correct, and you can double-click on yourself to focus camera on you
+- Bigger profile pictures!
+- Changed location of "Drop inventory item here" in profile to a more logical one
+- Additional advanced phototools by Kiss Spicoli
+- Added a slider on top to change the render distance, just like in Starlight UI
+- Includes latest updates from Firestorm
+- Windows, macOS and Linux builds
+- All builds with FMOD for audio and Kakadu for JPG2000 encoder/decoder
 
 ## Quick build instructions (for Windows):
 
