@@ -23,6 +23,14 @@
 		value="Premium Plus Lebenszeit" />
 	<string name="BadgeTeam"
 		value="[APP_NAME]-Mitglied" />
+    <!-- [AS:Chanayane] This is to avoid having Firestorm developers having the "AyaneStorm Developer" tag -->
+    <!-- <string
+     name="BadgeTeam"
+     value="[APP_NAME]-Mitglied" /> -->
+    <string
+     name="BadgeTeam"
+     value="Firestorm-Mitglied" />
+    <!-- [/AS:Chanayane] -->
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
 	</string>

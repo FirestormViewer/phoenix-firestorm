@@ -51,9 +51,14 @@
     <string
      name="BadgePremiumPlusLifetime"
      value="Premium Plus lifetime" />
+    <!-- [AS:Chanayane] This is to avoid having Firestorm developers having the "AyaneStorm Developer" tag -->
+    <!-- <string
+     name="BadgeTeam"
+     value="[APP_NAME] member" /> -->
     <string
      name="BadgeTeam"
-     value="[APP_NAME] member" />
+     value="Firestorm member" />
+    <!-- [/AS:Chanayane] -->
     <string
      name="payment_update_link_url"
     >
