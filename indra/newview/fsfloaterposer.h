@@ -386,8 +386,7 @@ class FSFloaterPoser : public LLFloater
     /// <param name="avatar">The avatar owning the supplied joint.</param>
     /// <param name="joint">The joint whose fragment should be written, and whose child(ren) will also be written.</param>
     /// <param name="tabStops">The number of tab-stops to include for formatting purpose.</param>
-    /// <returns>True if the fragment wrote successfully, otherwise false.</returns>
-    bool writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint, S32 tabStops);
+    void writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint, S32 tabStops);
 
     /// <summary>
     /// Writes a fragment of the 'single line' representing an animation frame within the BVH file respresenting the positions and/or
@@ -396,8 +395,15 @@ class FSFloaterPoser : public LLFloater
     /// <param name="fileStream">The stream to write the position and/or rotation to.</param>
     /// <param name="avatar">The avatar owning the supplied joint.</param>
     /// <param name="joint">The joint whose position and/or rotation should be written.</param>
-    /// <returns></returns>
-    bool writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint);
+    void writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint);
+
+    /// <summary>
+    /// Writes a fragment of the 'single line' representing the first animation frame within the BVH file respresenting the positions and/or
+    /// rotations.
+    /// </summary>
+    /// <param name="fileStream">The stream to write the position and/or rotation to.</param>
+    /// <param name="joint">The joint whose position and/or rotation should be written.</param>
+    void writeFirstFrameOfBvhMotion(llofstream* fileStream, const FSPoserAnimator::FSPoserJoint* joint);
 
     /// <summary>
     /// Generates a string with the supplied number of tab-chars.

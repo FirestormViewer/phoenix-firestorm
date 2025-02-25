@@ -1192,6 +1192,8 @@ LLSD FSFloaterPoser::createRowForJoint(const std::string& jointName, bool isHead
     std::string parameterName = (isHeaderRow ? XML_LIST_HEADER_STRING_PREFIX : XML_LIST_TITLE_STRING_PREFIX) + jointName;
     if (hasString(parameterName))
         jointValue = getString(parameterName);
+    else
+        return NULL;
 
     LLSD row;
     row["columns"][COL_ICON]["column"] = "icon";
@@ -2403,17 +2405,18 @@ bool FSFloaterPoser::writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar)
     *fileStream << "MOTION" << std::endl;
     *fileStream << "Frames:    2" << std::endl;
     *fileStream << "Frame Time: 1" << std::endl;
-    *fileStream << "0.000000 0.000000 0.000000 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" << std::endl;
+    writeFirstFrameOfBvhMotion(fileStream, startingJoint);
+    *fileStream << std::endl;
     writeBvhMotion(fileStream, avatar, startingJoint);
     *fileStream << std::endl;
 
     return true;
 }
 
-bool FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint, S32 tabStops)
+void FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint, S32 tabStops)
 {
     if (!joint)
-        return false;
+        return;
 
     auto position = mPoserAnimator.getJointPosition(avatar, *joint);
     auto saveAxis = getBvhJointTranslation(joint->jointName());
@@ -2475,32 +2478,44 @@ bool FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar
     }
     else
     {
+        // append the End Site offset
         *fileStream << getTabs(tabStops + 1) + "End Site" << std::endl;
         *fileStream << getTabs(tabStops + 1) + "{" << std::endl;
-
-        // append the 'end knot' magic number
-        if (strstr(joint->jointName().c_str(), "mHead"))
-            *fileStream << getTabs(tabStops + 2) + "OFFSET    0.000000 3.148289 0.000000" << std::endl;
-        if (strstr(joint->jointName().c_str(), "mWristLeft"))
-            *fileStream << getTabs(tabStops + 2) + "OFFSET    4.106464 0.000000 0.000000" << std::endl;
-        if (strstr(joint->jointName().c_str(), "mWristRight"))
-            *fileStream << getTabs(tabStops + 2) + "OFFSET    -4.106464 0.000000 0.000000" << std::endl;
-        if (strstr(joint->jointName().c_str(), "mAnkleLeft"))
-            *fileStream << getTabs(tabStops + 2) + "OFFSET    0.000000 -2.463878 4.653993" << std::endl;
-        if (strstr(joint->jointName().c_str(), "mAnkleRight"))
-            *fileStream << getTabs(tabStops + 2) + "OFFSET    0.000000 -2.463878 4.653993" << std::endl;
-
+        *fileStream << getTabs(tabStops + 2) + "OFFSET " + joint->bvhEndSite() << std::endl;
         *fileStream << getTabs(tabStops + 1) + "}" << std::endl;
     }
 
     *fileStream << getTabs(tabStops) + "}" << std::endl;
-    return true;
 }
 
-bool FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint)
+void FSFloaterPoser::writeFirstFrameOfBvhMotion(llofstream* fileStream, const FSPoserAnimator::FSPoserJoint* joint)
 {
     if (!joint)
-        return false;
+        return;
+
+    switch (joint->boneType())
+    {
+        case WHOLEAVATAR:
+            *fileStream << "0.000000 0.000000 0.000000 0.0 0.0 0.0";
+            break;
+
+        default:
+            *fileStream << "  0.0 0.0 0.0";
+            break;
+    }
+
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
+    for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
+    {
+        auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
+        writeFirstFrameOfBvhMotion(fileStream, nextJoint);
+    }
+}
+
+void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint)
+{
+    if (!joint)
+        return;
 
     auto rotation = mPoserAnimator.getJointRotation(avatar, *joint, SWAP_NOTHING, NEGATE_NOTHING);
     auto position = mPoserAnimator.getJointPosition(avatar, *joint);
@@ -2522,8 +2537,6 @@ bool FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, 
         auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
         writeBvhMotion(fileStream, avatar, nextJoint);
     }
-
-    return true;
 }
 
 std::string FSFloaterPoser::vec3ToXYZString(const LLVector3& val)
