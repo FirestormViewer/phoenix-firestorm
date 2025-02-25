@@ -1404,7 +1404,9 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         std::string text;
         if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA | FSData::GATEWAY))
         {
-            args["[FIRESTORM]"] = LLTrans::getString("APP_NAME");
+            // <AS:Chanayane> This is to avoid having Firestorm developers having the "AyaneStorm Developer" tag
+            //args["[FIRESTORM]"] = LLTrans::getString("APP_NAME");
+            args["[FIRESTORM]"] = "Firestorm";
         }
 
         if (flags & FSData::DEVELOPER)
