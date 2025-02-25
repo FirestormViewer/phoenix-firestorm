@@ -2955,10 +2955,7 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         gRlvSphereProgram.mFeatures.isDeferred = true;
         gRlvSphereProgram.mShaderFiles.clear();
         gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvV.glsl", GL_VERTEX_SHADER));
-        if (gGLManager.mGLVersion >= 4.5f)
-            gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER));
-        else
-            gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvFLegacy.glsl", GL_FRAGMENT_SHADER));
+        gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER));
         gRlvSphereProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
         success = gRlvSphereProgram.createShader();
     }

@@ -3511,7 +3511,7 @@
 						<combo_box.item
 						 label="Ultra"
 						 name="Ultra"
-						 value="2" />
+						 value="3" />
 				</combo_box>
 				<text
 				 name="T_Texture_Bumpiness"

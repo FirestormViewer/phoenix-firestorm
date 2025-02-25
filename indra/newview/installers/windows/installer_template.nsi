@@ -241,8 +241,7 @@ Function CheckCPUFlagsAVX2
     ; Replace %DLURL% in the language string with the URL
     ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
     MessageBox MB_OK "$3"
-    ${OpenURL} "${DL_URL}-legacy-cpus"
-
+    
     MessageBox MB_YESNO $(AVX2OverrideConfirmation) IDNO NoInstall
     MessageBox MB_OKCANCEL $(AVX2OverrideNote) IDCANCEL NoInstall
 
@@ -253,6 +252,7 @@ Function CheckCPUFlagsAVX2
     Return
 
   NoInstall:
+    ${OpenURL} "${DL_URL}-legacy-cpus"
     Quit
 
   OK_AVX2:

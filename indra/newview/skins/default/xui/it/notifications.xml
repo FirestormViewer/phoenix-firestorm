@@ -1663,6 +1663,7 @@ Se il messaggio si ripresenta, controllare su [SUPPORT_SITE].
 	<notification name="WebLaunchExternalTarget">
 		Vuoi aprire il browser per vedere questi contenuti?
 		L&apos;apertura di pagine da una sorgente sconosciuta può mettere a rischio il computer.
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Lancia il browser per consultare una pagina web" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="WebLaunchJoinNow">

@@ -21755,7 +21755,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>CefVerboseLog</key>
     <map>
       <key>Comment</key>
-      <string>Enable/disable CEF verbose loggingk</string>
+      <string>Enable/disable CEF verbose logging</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

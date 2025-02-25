@@ -67,8 +67,9 @@ public:
     class ImplBase;
     friend class ImplBase;
     ImplBase* impl;
-
+    S32 getOriginalHeight() const { return mOriginalHeight; }
 protected:
+    S32       mOriginalHeight;
     LLUICtrl* mThumbnailPlaceholder;
     LLUICtrl *mRefreshBtn, *mRefreshLabel;
     LLUICtrl *mSucceessLblPanel, *mFailureLblPanel;
