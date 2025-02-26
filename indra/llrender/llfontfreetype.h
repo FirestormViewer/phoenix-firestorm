@@ -166,7 +166,6 @@ public:
 
     void setStyle(U8 style);
     U8 getStyle() const;
-    S32 getAddedGlyphs() const { return mAddGlyphCount; }
 
 private:
     void resetBitmapCache();
@@ -206,7 +205,6 @@ private:
     mutable LLFontBitmapCache* mFontBitmapCachep;
 
     mutable S32 mRenderGlyphCount;
-    mutable S32 mAddGlyphCount;
 
     // <FS:ND> Save X-kerning data, so far only for all glyphs with index small than 256 (to not waste too much memory)
     // right now it is 256 slots with 256 glyphs each, maybe consider splitting it into smaller slices to use less memory if we
