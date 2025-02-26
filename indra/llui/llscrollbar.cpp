@@ -42,6 +42,12 @@
 #include "llrender.h"
 #include "lluictrlfactory.h"
 
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 static LLDefaultChildRegistry::Register<LLScrollbar> register_scrollbar("scroll_bar");
 
 LLScrollbar::Params::Params()

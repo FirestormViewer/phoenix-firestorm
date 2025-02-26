@@ -56,6 +56,12 @@
 
 #include "llcheckboxctrl.h"     // <FS:Zi> Add checkbox control toggle
 
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 static LLDefaultChildRegistry::Register<LLButton> r("button");
 
 // Compiler optimization, generate extern template

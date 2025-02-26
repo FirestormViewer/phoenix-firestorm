@@ -65,6 +65,13 @@
 
 #include <glm/gtx/transform2.hpp>
 
+
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 // Functions pulled from llviewerdisplay.cpp
 bool get_hud_matrices(glm::mat4 &proj, glm::mat4 &model);
 

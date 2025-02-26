@@ -21,6 +21,13 @@
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
 
+
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 // ============================================================================
 // LLTweenableValue class
 //
