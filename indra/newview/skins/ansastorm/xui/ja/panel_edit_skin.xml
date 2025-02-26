@@ -10,10 +10,7 @@
 		<panel name="skin_color_tab_holder" title="肌の色">
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="skin_color_accordion">
-				<accordion_tab name="skin_color_tab" title="肌の色">
-					<!-- Viewer will replace things here with tiled editing views -->
-					<scrolling_panel_list name="skin_color_param_list"/>
-				</accordion_tab>
+				<accordion_tab name="skin_color_tab" title="肌の色"/>
 			</accordion>
 		</panel>
 		<!-- End Skin Color Panel -->
@@ -21,10 +18,7 @@
 		<panel name="skin_face_tab_holder" title="顔の詳細">
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="skin_face_accordion">
-				<accordion_tab name="skin_face_tab" title="顔の詳細">
-					<!-- Viewer will replace things here with tiled editing views -->
-					<scrolling_panel_list name="skin_face_param_list"/>
-				</accordion_tab>
+				<accordion_tab name="skin_face_tab" title="顔の詳細"/>
 			</accordion>
 		</panel>
 		<!-- End Face Detail Panel -->
@@ -32,10 +26,7 @@
 		<panel name="skin_makeup_holder" title="メイクアップ">
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="skin_makeup_accordion">
-				<accordion_tab name="skin_makeup_tab" title="メイクアップ">
-					<!-- Viewer will replace things here with tiled editing views -->
-					<scrolling_panel_list name="skin_makeup_param_list"/>
-				</accordion_tab>
+				<accordion_tab name="skin_makeup_tab" title="メイクアップ"/>
 			</accordion>
 		</panel>
 		<!-- End Makeup Panel -->
@@ -43,10 +34,7 @@
 		<panel name="skin_body_holder" title="身体の詳細">
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="skin_body_accordion">
-				<accordion_tab name="skin_body_tab" title="身体の詳細">
-					<!-- Viewer will replace things here with tiled editing views -->
-					<scrolling_panel_list name="skin_body_param_list"/>
-				</accordion_tab>
+				<accordion_tab name="skin_body_tab" title="身体の詳細"/>
 			</accordion>
 		</panel>
 		<!-- End Body Detail Panel -->

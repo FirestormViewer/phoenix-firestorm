@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_add_payment_method">
-	<floater.string name="continue_url">
-		https://secondlife.com/my/lindex/buy.php?associate_for_viewer=1&amp;lang=ja-JP
+	<floater.string name="continue_url"> https://secondlife.com/my/lindex/buy.php?associate_for_viewer=1&amp;lang=ja-JP
 	</floater.string>
 	<panel label="wrapper_panel" name="wrapper_panel">
 		<text name="title_txt">
@@ -9,9 +8,6 @@
 		</text>
 		<button label="始めましょう" name="continue_btn"/>
 		<button label="また後で" name="close_btn"/>
-		<icon name="image_left"/>
-		<icon name="image_center"/>
-		<icon name="image_right"/>
 		<text name="image_left_desc">
 			お気に入りのアバターを作成しましょう。ストアやSecond Lifeマーケットプレイスにある何百万ものアイテムからお選びください。あなただけのスタイルがここにあります。
 		</text>

@@ -43,7 +43,7 @@
 			<button name="media_stop_btn" tool_tip="メディアを停止"/>
 		</layout_panel>
 		<layout_panel name="reload">
-			<button name="reload_btn" tool_tip="更新"/>
+			<button name="reload_btn" tool_tip="リロード"/>
 		</layout_panel>
 		<layout_panel name="stop">
 			<button name="stop_btn" tool_tip="読み込み停止"/>
@@ -55,7 +55,7 @@
 			<button name="pause_btn" tool_tip="メディアを一時停止"/>
 		</layout_panel>
 		<layout_panel name="media_address">
-			<line_editor name="media_address_url" tool_tip="メディア URL"/>
+			<line_editor name="media_address_url" tool_tip="メディアＵＲＬ"/>
 			<layout_stack name="media_address_url_icons">
 				<layout_panel name="media_address_url_icons_wl">
 					<icon name="media_whitelist_flag" tool_tip="ホワイトリスト有効"/>

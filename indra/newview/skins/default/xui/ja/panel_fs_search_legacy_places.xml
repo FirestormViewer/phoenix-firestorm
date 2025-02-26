@@ -4,14 +4,9 @@
 		<text name="search_text">
 			検索語句：
 		</text>
-		<search_combo_box name="places_edit"/>
-		<combo_box name="places_category"/>
 		<check_box label="" name="pg_all"/>
-		<icon name="rating_icon_general"/>
 		<check_box label="" name="mature_all"/>
-		<icon name="rating_icon_moderate"/>
 		<check_box label="" name="adult_all"/>
-		<icon name="rating_icon_adult"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">

@@ -11,10 +11,8 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		作業を簡素化するために、下のボックスにはビューアが使用しているフォルダが表示されます。
 上記のwikiページに示されているように、これらをアンチウィルスのフォルダの除外に追加してください。
 	</text>
-	<text_editor name="whitelist_folders_editor"/>
 	<text name="whitelist_exe_instruction">
 		次のボックスには、ビューア実行可能ファイルの名前とフルパスが表示されます。
-上記の wiki に示されているように、アンチウィルス実行可能ファイルの除外にフルパスを追加します。
+上記のwikiに示されているように、アンチウィルス実行可能ファイルの除外にフルパスを追加します。
 	</text>
-	<text_editor name="whitelist_exes_editor" />
 </floater>

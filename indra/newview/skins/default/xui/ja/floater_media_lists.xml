@@ -12,14 +12,14 @@
 				許可するドメイン：
 			</text>
 			<scroll_list name="whitelist">
-				<column label="Whitelist" name="list" />
+				<column label="ホワイトリスト" name="list"/>
 			</scroll_list>
 			<layout_stack name="whitelist_buttons_layout_stack">
 				<layout_panel name="whitelist_buttons_panel_add">
-					<button label="追加…" label_selected="追加…" name="add_whitelist" />
+					<button label="追加…" label_selected="追加…" name="add_whitelist"/>
 				</layout_panel>
 				<layout_panel name="whitelist_buttons_panel_remove">
-					<button label="削除" label_selected="削除" name="remove_whitelist" />
+					<button label="削除" label_selected="削除" name="remove_whitelist"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
@@ -28,14 +28,14 @@
 				拒否するドメイン：
 			</text>
 			<scroll_list name="blacklist">
-				<column label="Blacklist" name="list" />
+				<column label="ブラックリスト" name="list"/>
 			</scroll_list>
 			<layout_stack name="blacklist_buttons_layout_stack">
 				<layout_panel name="blacklist_buttons_panel_add">
-					<button label="追加…" label_selected="追加…" name="add_blacklist" />
+					<button label="追加…" label_selected="追加…" name="add_blacklist"/>
 				</layout_panel>
 				<layout_panel name="blacklist_buttons_panel_remove">
-					<button label="削除" label_selected="削除" name="remove_blacklist" />
+					<button label="削除" label_selected="削除" name="remove_blacklist"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

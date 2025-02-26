@@ -34,17 +34,8 @@
 		</layout_panel>
 		<layout_panel name="contents_panel">
 			<tab_container name="ls_tabs">
-				<panel label="オブジェクト" name="prims_panel">
-					<scroll_list name="selected_objects">
-						<columns name="icon" />
-						<columns name="name" />
-					</scroll_list>
-				</panel>
-				<panel label="テクスチャ" name="texture_panel">
-					<scroll_container name="selected_textures">
-						<panel name="textures_panel"/>
-					</scroll_container>
-				</panel>
+				<panel label="オブジェクト" name="prims_panel"/>
+				<panel label="テクスチャ" name="texture_panel"/>
 			</tab_container>
 		</layout_panel>
 	</layout_stack>

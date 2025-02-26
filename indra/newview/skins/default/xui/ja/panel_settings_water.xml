@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="水" name="panel_settings_water">
+<panel label="水面" name="panel_settings_water">
 	<layout_stack name="water_stack1">
 		<layout_panel name="lp_top">
 			<text name="water_fog_label">
@@ -8,23 +8,18 @@
 			<text name="color_label">
 				色：
 			</text>
-			<color_swatch name="water_fog_color"/>
 			<text name="density_exponent_label">
 				密度指数：
 			</text>
-			<slider name="water_fog_density"/>
 			<text name="underwater_modifier_label">
 				水中のモディファイア：
 			</text>
-			<slider name="water_underwater_mod"/>
 			<text name="FresnelScaleText">
 				フレネル係数：
 			</text>
-			<slider name="water_fresnel_scale"/>
 			<text name="FresnelOffsetText">
 				フレネルオフセット：
 			</text>
-			<slider name="water_fresnel_offset"/>
 		</layout_panel>
 		<layout_panel name="lp_bottom">
 			<layout_stack name="water_stack2">
@@ -32,15 +27,12 @@
 					<text name="normal_map_label">
 						ノーマル（法線）マップ
 					</text>
-					<texture_picker name="water_normal_map"/>
 					<text name="large_wave_speed_label">
 						大波の速度
 					</text>
-					<xy_vector name="water_wave1_xy"/>
 					<text name="small_wave_speed_label">
 						小波の速度
 					</text>
-					<xy_vector name="water_wave2_xy"/>
 					<text name="reflection_wavelet_scale_label">
 						さざ波の反射係数
 					</text>
@@ -55,15 +47,12 @@
 					<text name="refraction_scale_above_label">
 						反射係数（上）
 					</text>
-					<slider name="water_scale_above"/>
 					<text name="refraction_scale_below_label">
 						反射係数（下）
 					</text>
-					<slider name="water_scale_below"/>
 					<text name="blur_multiplier_label">
 						ブラー乗数
 					</text>
-					<slider name="water_blur_multip"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

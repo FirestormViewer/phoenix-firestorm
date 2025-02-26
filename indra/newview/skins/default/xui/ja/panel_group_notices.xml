@@ -71,15 +71,12 @@
 		<text name="lbl8">
 			件名：
 		</text>
-		<line_editor name="view_subject"/>
 		<text name="lbl9">
 			メッセージ：
 		</text>
-		<text_editor name="view_message"/>
 		<text name="lbl10">
 			添付物：
 		</text>
-		<line_editor name="view_inventory_name"/>
 		<button label="添付物を開く" name="open_attachment"/>
 	</panel>
 </panel>

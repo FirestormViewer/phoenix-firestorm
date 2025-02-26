@@ -21,12 +21,8 @@
 					<menu_button name="add_menu_btn" tool_tip="新しいランドマークかフォルダを追加します。"/>
 				</layout_panel>
 				<layout_panel name="trash_btn_panel" tool_tip="選択したランドマークまたはフォルダを削除します。">
-					<dnd_button name="trash_btn"/>
 				</layout_panel>
 			</layout_stack>
-			<tab_container name="Places Tabs"/>
-			<panel name="panel_place_profile"/>
-			<panel name="panel_landmark_info"/>
 		</layout_panel>
 		<!--*********************** Button wrappers ***********************-->
 		<layout_panel name="button_layout_panel">

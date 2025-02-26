@@ -17,28 +17,22 @@
 					<text name="ambient_lbl">
 						周辺：
 					</text>
-					<color_swatch name="ambient_light"/>
 					<text name="blue_horizon_lbl">
 						水平線の青：
 					</text>
-					<color_swatch name="blue_horizon"/>
 					<text name="blue_density_lbl">
 						青の濃度：
 					</text>
-					<color_swatch name="blue_density"/>
 					<button label="リセット" tool_tip="共有された環境にリセットします。" name="btn_reset"/>
 					<text name="sun_color_lbl">
 						太陽の色：
 					</text>
-					<color_swatch name="sun_color"/>
 					<text name="cloud_color_lbl">
 						雲の色：
 					</text>
-					<color_swatch name="cloud_color"/>
 					<text name="cloud_map_label">
 						雲の画像：
 					</text>
-					<texture_picker name="cloud_map"/>
 					<text name="water_map_label">
 						水面の画像：
 					</text>
@@ -56,11 +50,9 @@
 					<text name="cloud_coverage_label">
 						雲の量：
 					</text>
-					<slider name="cloud_coverage"/>
 					<text name="cloud_scale_label">
 						雲のスケール：
 					</text>
-					<slider name="cloud_scale"/>
 					<text name="reflection_probe_ambiance_label">
 						周辺環境の反射プローブ（ＨＤＲ）：
 					</text>
@@ -74,46 +66,36 @@
 					<text name="label">
 						太陽：
 					</text>
-					<sun_moon_trackball name="sun_rotation"/>
 					<text name="sun_azimuth_label">
 						方位角：
 					</text>
-					<slider name="sun_azimuth"/>
 					<text name="sun_elevation_label">
 						標高：
 					</text>
-					<slider name="sun_elevation"/>
 					<check_box label="ビーコンを表示" name="sunbeacon"/>
 					<text name="scale_label">
 						スケール：
 					</text>
-					<slider name="sun_scale"/>
 					<text name="glow_focus_label">
 						焦点のグローレベル：
 					</text>
-					<slider name="glow_focus"/>
 					<text name="glow_size_label">
 						グローサイズ：
 					</text>
-					<slider name="glow_size"/>
 					<text name="star_brightness_label">
 						星の輝度：
 					</text>
-					<slider name="star_brightness"/>
 				</layout_panel>
 				<layout_panel name="lp_4">
 					<text name="label">
 						月：
 					</text>
-					<sun_moon_trackball name="moon_rotation"/>
 					<text name="moon_azimuth_label">
 						方位角：
 					</text>
-					<slider name="moon_azimuth"/>
 					<text name="moon_elevation_label">
 						標高：
 					</text>
-					<slider name="moon_elevation"/>
 					<check_box label="ビーコンを表示" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>

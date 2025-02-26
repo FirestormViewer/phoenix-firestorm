@@ -146,17 +146,17 @@
 						</row>
 						<row name="restore_folders_row_daycycles">
 							<column name="restore_global_folders_label">
-								WindLightのデイサイクル
+								デイサイクル
 							</column>
 						</row>
 						<row name="restore_folders_row_skies">
 							<column name="restore_global_folders_label">
-								WindLightの空
+								空
 							</column>
 						</row>
 						<row name="restore_folders_row_waters">
 							<column name="restore_global_folders_label">
-								WindLightの水面
+								水面
 							</column>
 						</row>
 						<row name="restore_folders_row_presets">

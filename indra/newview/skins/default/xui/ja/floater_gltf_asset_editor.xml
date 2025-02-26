@@ -6,9 +6,6 @@
 	<floater.string name="mesh_title" value="メッシュ"/>
 	<floater.string name="skin_title" value="スキン"/>
 	<layout_stack name="main_layout">
-		<layout_panel name="top_lp">
-			<panel name="item_list_panel"/>
-		</layout_panel>
 		<layout_panel name="transforms_panel">
 			<menu_button name="clipboard_pos_btn" tool_tip="ペースト時のオプション"/>
 			<text name="label position" tool_tip="位置（メートル）">
@@ -26,12 +23,11 @@
 			<spinner label="Ｚ" name="Scale Z"/>
 			<menu_button name="clipboard_rot_btn" tool_tip="ペースト時のオプション"/>
 			<text name="label rotation" tool_tip="回転（度）">
-			回転（°）
+				回転（°）
 			</text>
 			<spinner label="Ｘ" name="Rot X"/>
 			<spinner label="Ｙ" name="Rot Y"/>
 			<spinner label="Ｚ" name="Rot Z"/>
 		</layout_panel>
-		<layout_panel name="blank_panel"/>
 	</layout_stack>
 </floater>

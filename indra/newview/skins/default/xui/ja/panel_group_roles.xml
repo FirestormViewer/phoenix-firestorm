@@ -118,11 +118,9 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 		<text name="role_name_label">
 			役割名
 		</text>
-		<line_editor name="role_name"/>
 		<text name="role_title_label">
 			役割のタイトル
 		</text>
-		<line_editor name="role_title"/>
 		<check_box label="明らかなメンバー" name="role_visible_in_list" tool_tip="グループ外の人が一般タブを見たときに、この役割のメンバーが表示されるかどうかを設定します。"/>
 		<text name="description_label">
 			説明
@@ -132,11 +130,10 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 			<text name="assigned_members_label">
 				割り当てられたメンバー
 			</text>
-			<name_list name="role_assigned_members"/>
 		</panel>
 		<panel name="group_roles_layout_panel2">
 			<text name="allowed_abilities_label">
-        許可された能力
+				許可された能力
 			</text>
 			<scroll_list name="role_allowed_actions" tool_tip="各能力の詳細は、能力のタブをご覧ください。">
 				<scroll_list.columns label="" name="icon"/>
@@ -156,6 +153,5 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 		<text name="action_members_label">
 			この能力を持つメンバー
 		</text>
-		<name_list name="action_members"/>
 	</panel>
 </panel>

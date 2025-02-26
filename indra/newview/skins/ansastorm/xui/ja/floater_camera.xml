@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater header_height="0" bg_opaque_image="Window_NoTitle_Foreground" bg_alpha_image="Window_NoTitle_Foreground" positioning="specified" right="-460" bottom="-50" follows="left|bottom" legacy_header_height="0" can_minimize="false" can_close="false" height="85" layout="topleft" name="camera_floater" help_topic="camera_floater" save_visibility="true" show_title="false" single_instance="true" title="Camera Controls" chrome="true" save_rect="true" width="340">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater" title="カメラ操作">
 	<floater.string name="rotate_tooltip">
 		焦点を中心にカメラを回転します。
 	</floater.string>
@@ -12,7 +12,7 @@
 	<floater.string name="free_mode_title">
 		オブジェクトを見る
 	</floater.string>
-	<string name="inactive_combo_text">Use preset</string>
+	<string name="inactive_combo_text">プリセットを使用</string>
 	<panel name="controls">
 		<!--TODO: replace + - images -->
 		<panel name="zoom">
@@ -21,9 +21,7 @@
 			<button name="roll_left" tool_tip="カメラを左に傾けます。"/>
 			<button name="roll_right" tool_tip="カメラを右に傾けます。"/>
 			<!-- </FS:Chanayane> -->
-			<button name="zoom_plus_btn"/>
 			<slider_bar name="zoom_slider" tool_tip="カメラを焦点に向けてズームします。"/>
-			<button name="zoom_minus_btn"/>
 			<joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。"/>
 		</panel>
 	</panel>
@@ -38,9 +36,7 @@
 	<combo_box name="preset_combo">
 		<combo_box.item label="プリセットを使用" name="Use preset"/>
 	</combo_box>
-	<button name="gear_btn" tool_tip="Camera Presets"/>
+	<button name="gear_btn" tool_tip="カメラのプリセット"/>
 	<button label="位置…" name="camera_position_btn"/>
 	<button label="保存" name="save_btn"/>
-	<panel name="viewer_camera_info"/>
-	<panel name="agent_camera_info"/>
 </floater>

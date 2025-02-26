@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Web" name="panel_profile_web">
 	<panel.string name="LoadTime" value="読み込み時間：[TIME]秒"/>
-	<web_browser name="profile_html"/>
-	<text name="status_text"/>
 </panel>

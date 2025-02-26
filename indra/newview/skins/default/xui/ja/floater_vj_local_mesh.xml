@@ -10,12 +10,8 @@
 				<column name="unit_id_HIDDEN" label="ＩＤ"/>
 			</fs_scroll_list>
 		</panel>
-		<panel name="logs_panel" label="ログ">
-			<view_border name="local_mesh_log_tab_border"/>
-			<text_editor name="local_mesh_log"/>
-		</panel>
+		<panel name="logs_panel" label="ログ"/>
 		<panel name="local_mesh_settings_panel" label="設定">
-			<view_border name="local_mesh_settings_tab_border"/>
 			<check_box name="local_mesh_scale_use_meters" label="スケールはメートル単位であると想定" tool_tip="Mayaなどのツールで使用される㎝スケール単位を無視します。" />
 			<text name="lod_suffix_label">
 				ＬＯＤサフィックス：
@@ -57,7 +53,6 @@
 		</panel>
 	</tab_container>
 	<button name="btn_apply" label="適用"/>
-	<combo_box name="object_apply_list"/>
 	<button name="btn_add" label="追加"/>
 	<button name="btn_remove" label="削除"/>
 	<button name="btn_reload" label="リロード"/>

@@ -24,7 +24,6 @@
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
 			<panel name="group_info_top">
-				<button name="back"/>
 				<text_editor name="group_name" value="（読み込んでいます…）"/>
 				<line_editor label="新しいグループ名を入力してください" name="group_name_editor"/>
 			</panel>

@@ -58,8 +58,7 @@
 				目標フレームレート（ｆｐｓ）
 			</text>
 			<spinner name="target_fps" tool_tip="目標ＦＰＳ‐希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。"/>
-			<button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。">
-			</button>
+			<button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。"/>
 			<check_box label="継続的に" name="AutoTuneContinuous" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。"/>
 			<button name="PrefSaveButton" tool_tip="将来使用するために、現在の設定をデフォルトとして保存します。"/>
 			<button name="PrefLoadButton" tool_tip="既存のプリセットを読み込みます。"/>
@@ -83,7 +82,6 @@
 			<text name="settings_desc">
 				距離や水、光源などの設定を選んでください。
 			</text>
-			<icon name="icon_arrow3"/>
 		</panel>
 		<panel name="nearby_subpanel">
 			<text name="avatars_nearby_lbl">
@@ -100,7 +98,6 @@
 			<text name="av_frame_stats">
 				00％
 			</text>
-			<icon name="icon_arrow2" />
 		</panel>
 		<panel name="complexity_subpanel">
 			<text name="complexity_lbl">
@@ -109,7 +106,6 @@
 			<text name="complexity_info">
 				良い市民は、自分のアバターが与える影響を管理します。
 			</text>
-			<icon name="icon_arrow4"/>
 		</panel>
 		<panel name="huds_subpanel">
 			<text name="huds_lbl">
@@ -126,12 +122,6 @@
 			<text name="huds_frame_stats">
 				00%
 			</text>
-			<icon name="icon_arrow4"/>
 		</panel>
 	</panel>
-	<panel name="panel_performance_nearby"/>
-	<panel name="panel_performance_complexity"/>
-	<panel name="panel_performance_preferences"/>
-	<panel name="panel_performance_huds"/>
-	<panel name="panel_performance_autotune"/>
 </floater>

@@ -2,20 +2,6 @@
 <floater name="worldmap" title="ワールドマップ">
 	<floater.string name="UnnamedParcel">（名前のない区画）</floater.string>
 	<layout_stack name="resizing_stack">
-		<layout_panel name="map_panel">
-			<panel name="objects_mapview" />
-			<panel name="layout_panel_6">
-				<icon name="zoom_icon" />
-				<slider name="zoom slider" />
-			</panel>
-		</layout_panel>
-		<!-- <FS:Zi> FIRE-31376: Splitter panel to show/hide map details -->
-		<layout_panel name="map_details_splitter">
-			<panel>
-				<button name="Show Map details"/>
-			</panel>
-		</layout_panel>
-		<!-- </FS:Zi> -->
 		<layout_panel name="map_details_panel">
 			<panel name="layout_panel_1">
 				<text name="events_label">
@@ -27,26 +13,18 @@
 				<text name="me_label">
 					自分
 				</text>
-				<check_box name="people_chk"/>
-				<icon name="person"/>
 				<text name="person_label">
 					人物
 				</text>
-				<check_box name="infohub_chk"/>
-				<icon name="infohub"/>
 				<text name="infohub_label">
 					情報ハブ
 				</text>
-				<check_box name="land_for_sale_chk"/>
-				<icon name="landforsale"/>
 				<text name="land_sale_label">
 					販売中
 				</text>
-				<icon name="square2_auction"/>
 				<text name="auction_label">
 					オークション中
 				</text>
-				<icon name="square2_owner"/>
 				<text name="by_owner_label">
 					所有者で
 				</text>
@@ -57,18 +35,12 @@
 				<text name="events_label">
 					イベント：
 				</text>
-				<check_box name="event_chk"/>
-				<icon name="event"/>
 				<text name="pg_label">
 					General
 				</text>
-				<check_box name="events_mature_chk"/>
-				<icon name="events_mature_icon"/>
 				<text name="events_mature_label">
 					Moderate
 				</text>
-				<check_box name="events_adult_chk"/>
-				<icon name="events_adult_icon"/>
 				<text name="events_adult_label">
 					Adult
 				</text>
@@ -98,9 +70,6 @@
 				<text name="events_label">
 					場所：
 				</text>
-				<spinner name="teleport_coordinate_x"/>
-				<spinner name="teleport_coordinate_y"/>
-				<spinner name="teleport_coordinate_z"/>
 				<button label="テレポート" name="Teleport" tool_tip="選択した場所にテレポートします。"/>
 				<button label="SLurlをコピー" name="copy_slurl" tool_tip="現在の場所をWebで使えるSLurlにしてコピーします。"/>
 				<button label="消去" name="Clear" tool_tip="トラッキングラインを消去し、マップをリセットします。"/>

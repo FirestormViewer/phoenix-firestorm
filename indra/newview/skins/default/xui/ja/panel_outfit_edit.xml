@@ -4,10 +4,6 @@
 	<string name="No Outfit" value="アウトフィットなし"/>
 	<string name="unsaved_changes" value="保存されていない変更"/>
 	<string name="now_editing" value="編集中"/>
-	<string name="folder_view_off" value="Hierarchy_View_Disabled" translate="false"/>
-	<string name="folder_view_on" value="Hierarchy_View_On" translate="false"/>
-	<string name="list_view_off" value="List_View_Disabled" translate="false"/>
-	<string name="list_view_on" value="List_View_On" translate="false"/>
 	<panel.string name="not_available">
 		（無し）
 	</panel.string>
@@ -21,15 +17,12 @@
 	<string name="Filter.Clothing" value="衣装"/>
 	<string name="Filter.Bodyparts" value="身体部位"/>
 	<string name="replace_body_part" value="クリックして既存のシェイプと置き換える"/>
-	<button name="back_btn"/>
 	<text name="title" value="アウトフィットのパーツを編集"/>
 	<!-- "HEADER WITH ICON, STATUS TEXT AND OUTFIT NAME" -->
 	<panel name="header_panel">
-		<icon name="outfit_icon"/>
 		<panel name="outfit_name_and_status">
 			<text name="status" value="編集中…"/>
 			<text name="curr_outfit_name" value="[現在のアウトフィット]"/>
-			<loading_indicator name="edit_outfit_loading_indicator"/>
 		</panel>
 	</panel>
 	<!-- LIST OF WEARABLES (CURRENT OUTFIT/ WEARABLES TO ADD) -->
@@ -44,9 +37,6 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 					<!-- List containing items from the COF and Base outfit -->
 					<panel name="cof_wearables_list"/>
 					<button name="show_add_wearables_btn" label="更に追加…" tool_tip="開く／閉じる"/>
-					<combo_box name="list_view_filter_combobox"/>
-					<combo_box name="folder_view_filter_combobox"/>
-					<button name="filter_button"/>
 				</layout_panel>
 				<layout_panel name="filter_panel">
 					<filter_editor label="インベントリを着用可能物でフィルタ" name="look_item_filter"/>
@@ -54,20 +44,11 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="add_wearables_panel">
-			<!-- this icon represent dragbar between layout panels.
-								This is a workaround implemented in EXT-7255 becouse of an issue with layout stack (EXT-7471) -->
-			<icon/>
-			<inventory_panel name="folder_view"/>
-			<panel name="filtered_wearables_panel">
-				<wearable_items_list name="list_view"/>
-			</panel>
 			<button label="アイテムを着用" name="plus_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<!-- BUTTON BAR -->
 	<panel name="no_add_wearables_button_bar">
-		<menu_button name="gear_menu_btn"/>
-		<icon name="dummy_right_icon"/>
 		<text name="avatar_complexity_label">
 			複雑度：[WEIGHT]
 		</text>
@@ -75,10 +56,6 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 	</panel>
 	<!-- BUTTON BAR - WEARABLES ADDING MODE -->
 	<panel name="add_wearables_button_bar">
-		<menu_button name="wearables_gear_menu_btn"/>
-		<button name="folder_view_btn"/>
-		<button name="list_view_btn"/>
-		<icon name="dummy_right_icon"/>
 		<text name="avatar_complexity_adding_label">
 			複雑度：[WEIGHT]
 		</text>

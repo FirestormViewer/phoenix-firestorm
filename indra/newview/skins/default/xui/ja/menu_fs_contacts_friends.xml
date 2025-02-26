@@ -11,24 +11,18 @@
 	<menu_item_call label="支払う" name="pay"/>
 	<menu_item_call label="フレンドを追跡" name="track_agent"/>
 	<menu_item_call label="フレンドを削除…" name="remove_friend"/>
-	<menu_item_separator/>
 	<menu_item_call label="名前をコピー" name="url_copy_label"/>
 	<menu_item_call label="ＵＲＬをコピー" name="url_copy"/>
-	<menu_item_separator/>
 	<menu name="options" label="オプション…">
 		<menu_item_check label="ユーザ名列を表示" name="show_username"/>
 		<menu_item_check label="表示名列を表示" name="show_displayname"/>
 		<menu_item_chec label="フルネーム列を表示" name="show_fullname"/>
 		<menu_item_check label="権限列を表示" name="show_permissions"/>
-		<menu_item_separator/>
 		<menu_item_check label="ユーザ名で並べ替え" name="sort_by_username"/>
 		<menu_item_check label="表示名で並べ替え" name="sort_by_displayname"/>
-		<menu_item_separator/>
 		<menu_item_check label="フルネーム形式をユーザ名（表示名）に" name="format_username_displayname"/>
 		<menu_item_check label="フルネーム形式を表示名（ユーザ名）に" name="format_displayname_username"/>
-		<menu_item_separator/>
 		<menu_item_check label="検索フィルタを表示" name="friend_filter"/>
 	</menu>
-	<menu_item_separator/>
 	<menu_item_check label="フレンドのログイン状況" name="GlobalOnlineStatusToggle"/>
 </context_menu>

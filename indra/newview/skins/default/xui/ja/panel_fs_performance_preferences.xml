@@ -7,24 +7,15 @@
 	<text name="settings_title">
 		グラフィック設定
 	</text>
-	<view_border name="border1"/>
 	<text name="quality_lbl">
 		品質か速度
 	</text>
 	<text name="FasterText">
 		速度優先
 	</text>
-	<icon name="LowGraphicsDivet"/>
-	<icon name="LowMidGraphicsDivet"/>
-	<icon name="MidGraphicsDivet"/>
-	<icon name="MidHighGraphicsDivet"/>
-	<icon name="HighGraphicsDivet"/>
-	<icon name="HighUltraGraphicsDivet"/>
-	<icon name="UltraGraphicsDivet"/>
 	<text name="BetterText">
 		品質有線
 	</text>
-	<slider name="quality_vs_perf_selection"/>
 	<text name="ShadersPrefText">
 		低
 	</text>
@@ -40,14 +31,12 @@
 	<text name="quality_desc">
 		プリセットを選択すると、手動で行った変更がすべてリセットされます。
 	</text>
-	<view_border name="border2"/>
 	<text name="distance_lbl">
 		表示距離
 	</text>
 	<text name="faster_lbl">
 		より速く
 	</text>
-	<slider name="draw_distance"/>
 	<text name="draw_distance_m">
 		ｍ
 	</text>
@@ -57,7 +46,6 @@
 	<text name="distance_desc1">
 		パフォーマンスを向上させるにはこの値を低く保ち、遠くまで見るにはこの値を上げます。
 	</text>
-	<view_border name="border3"/>
 	<text name="environment_lbl">
 		環境
 	</text>
@@ -92,7 +80,6 @@
 		<combo_box.item label="全てのアバターとオブジェクト" name="3"/>
 		<combo_box.item label="全て" name="4"/>
 	</combo_box>
-	<view_border name="border4"/>
 	<text name="photo_lbl">
 		フォトグラフィー
 	</text>

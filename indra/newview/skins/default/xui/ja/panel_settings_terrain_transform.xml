@@ -19,7 +19,6 @@
 	<spinner label="スケールｕ" name="terrain1ScaleU"/>
 	<spinner label="スケールｕ" name="terrain2ScaleU"/>
 	<spinner label="スケールｕ" name="terrain3ScaleU"/>
-	<view_border name="terrainScaleU_horizontal"/>
 	<text name="terrain0ScaleV_label">
 スケールｖ
 	</text>
@@ -27,7 +26,6 @@
 	<spinner label="スケールｕ" name="terrain1ScaleV"/>
 	<spinner label="スケールｕ" name="terrain2ScaleV"/>
 	<spinner label="スケールｕ" name="terrain3ScaleV"/>
-	<view_border name="terrainScaleV_horizontal"/>
 	<text name="terrain0Rotation_label">
 		回転
 	</text>
@@ -35,7 +33,6 @@
 	<spinner label="スケールｕ" name="terrain1Rotation"/>
 	<spinner label="スケールｕ" name="terrain2Rotation"/>
 	<spinner label="スケールｕ" name="terrain3Rotation"/>
-	<view_border name="terrainRotation_horizontal"/>
 	<text name="terrain0OffsetU_label">
 		オフセットｕ
 	</text>
@@ -43,7 +40,6 @@
 	<spinner label="スケールｕ" name="terrain1OffsetU"/>
 	<spinner label="スケールｕ" name="terrain2OffsetU"/>
 	<spinner label="スケールｕ" name="terrain3OffsetU"/>
-	<view_border name="terrainOffsetU_horizontal"/>
 	<text name="terrain0OffsetV_label">
 		オフセットｖ
 	</text>
@@ -51,5 +47,4 @@
 	<spinner label="スケールｕ" name="terrain1OffsetV"/>
 	<spinner label="スケールｕ" name="terrain2OffsetV"/>
 	<spinner label="スケールｕ" name="terrain3OffsetV"/>
-	<view_border name="terrainOffsetV_horizontal"/>
 </panel>

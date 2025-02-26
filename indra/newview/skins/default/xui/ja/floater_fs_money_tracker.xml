@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="money_tracker" title="マネートラッカー">
+<floater name="money_tracker" title="取引ログ">
 	<name_list name="payment_list">
 		<name_list.columns name="time" label="時間" />
 		<name_list.columns name="name" label="名前" />

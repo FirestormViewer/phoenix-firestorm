@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
-		<icon name="voice_icon" />
-		<icon name="fly_icon" />
-		<icon name="push_icon" />
-		<icon name="build_icon" />
-		<icon name="scripts_icon" />
-		<icon name="see_avs_icon" />
-		<icon name="pathfinding_dirty_icon" />
-		<icon name="pathfinding_disabled_icon" />
 		<button name="buy_land_btn" tool_tip="区画販売中です。"/>
-		<icon name="damage_icon" />
-		<text name="damage_text" />
-		<icon name="scriptout" />
 		<text tool_tip="あなたがいる土地の区画名です。土地情報についてはクリックしてください。" name="parcel_info_text" value="（読み込んでいます…）"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -39,13 +28,11 @@
 	</panel>
 	<panel name="time_and_media_bg">
 		<!-- Draw distance widget here -->
-		<icon name="dd_icon" tool_tip="描画距離：" />
+		<icon name="dd_icon" tool_tip="描画距離："/>
 		<slider tool_tip="Rezされるカメラからの最大距離（メートル）" name="drawdistance"/>
 		<text name="TimeText" tool_tip="現在時刻（太平洋時間）">
 			午前　24：00：00　PST
 		</text>
-		<button name="presets_icon_camera"/>
-		<button name="presets_icon_graphic" />
 		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
 		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Web ページ）を開始／停止します。"/>
 		<button name="volume_btn" tool_tip="グローバルボリュームコントロール"/>

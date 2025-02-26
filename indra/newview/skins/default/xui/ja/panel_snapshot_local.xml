@@ -24,7 +24,6 @@
 		<combo_box.item label="BMP（可逆圧縮）" name="BMP"/>
 	</combo_box>
 	<slider label="品質：" name="image_quality_slider"/>
-	<check_box name="local_remember_location_sessions"/>
 	<text name="local_remember_location_sessions_text">
 		セッション間の保存場所とファイル名
 	</text>

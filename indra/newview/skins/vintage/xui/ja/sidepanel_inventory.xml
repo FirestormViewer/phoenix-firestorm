@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Things" name="objects panel">
+<panel label="もの" name="objects panel">
 	<panel name="sidepanel_inventory_panel" label="">
 		<tab_container name="inventory_tab_container">
-			<panel label="インベントリ" name="panel_main_inventory" />
+			<panel label="インベントリ" name="panel_main_inventory"/>
 			<panel label="マーケットプレイス" name="marketplace_inbox">
 				<string name="InboxLabelWithArg">
 					受け取ったアイテム（[NUM]個）
@@ -10,12 +10,11 @@
 				<string name="InboxLabelNoArg">
 					受け取ったアイテム
 				</string>
-				<text value="受け取ったアイテム" name="inbox_label" />
+				<text value="受け取ったアイテム" name="inbox_label"/>
 				<!-- gets auto-hidden in preview editor, change name to view -->
 				<text name="inbox_fresh_new_count">
 					[NUM]個の新着アイテム
 				</text>
-				<view_border />
 				<panel name="inbox_inventory_placeholder_panel" tool_tip="アイテムを使用するには、そのアイテムをインベントリにドラッグアンドドロップしてください。">
 					<text name="inbox_inventory_placeholder">
 						マーケットプレイスから購入した商品はここに配達されます。
@@ -23,18 +22,6 @@
 				</panel>
 			</panel>
 		</tab_container>
-	</panel>
-
-	<!-- keep the buttons so the code doesn't complain about missing controls -Zi -->
-	<panel name="hide_buttons">
-		<button name="info_btn" />
-		<button name="share_btn" />
-		<button name="shop_btn" />
-		<button name="wear_btn" />
-		<button name="play_btn" />
-		<button name="teleport_btn" />
-		<button name="inbox_btn" />
-		<button name="outbox_btn" />
 	</panel>
 	<panel name="sidepanel__item_panel" label=""/>
 	<panel name="sidepanel__task_panel" label=""/>

@@ -12,11 +12,9 @@
 		<text name="base_color_tint_lbl">
 			色彩
 		</text>
-		<color_swatch name="base color"/>
 		<text name="base_color_transparency_lbl">
 			アルファ（透過）
 		</text>
-		<spinner name="transparency"/>
 		<text name="alpha_mode_lbl">
 			アルファモード
 		</text>
@@ -41,30 +39,25 @@
 		<text name="metallic_factor_lbl">
 			メタリック係数
 		</text>
-		<spinner name="metalness factor"/>
 		<text name="roughness_factor_lbl">
 			粗さの係数
 		</text>
-		<spinner name="roughness factor"/>
 	</panel>
 	<panel name="emissive_texture_pnl">
 		<text name="emissive_lbl">
 			放射（エミッシブ）：
 		</text>
-		<texture_picker name="emissive_texture"/>
 		<text name="emissive_upload_fee">
 			アップロード費用なし
 		</text>
 		<text name="emissive_tint_lbl">
 			色彩
 		</text>
-		<color_swatch name="emissive color"/>
 	</panel>
 	<panel name="normal_texture_pnl">
 		<text name="normal_lbl">
 			法線（ノーマル）：
-		</text>
-		<texture_picker name="normal_texture"/>
+		</text>W
 		<text name="normal_upload_fee">
 			アップロード費用なし
 		</text>

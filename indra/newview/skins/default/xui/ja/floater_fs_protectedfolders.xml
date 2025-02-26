@@ -5,9 +5,8 @@
 	</floater.string>
 	<panel name="buttons_panel">
 		<filter_editor label="保護されたフォルダを検索" name="filter_input"/>
-		<button name="remove_btn" tool_tip="フォルダを保護されたフォルダのリストから削除します。"/>
+		<button name="remove_btn" tool_tip="保護されたフォルダのリストからフォルダを削除します。"/>
 	</panel>
-
 	<panel name="panel_fs_protected_folders">
 		<scroll_list name="folder_list">
 			<scroll_list.columns label="名前" name="name"/>

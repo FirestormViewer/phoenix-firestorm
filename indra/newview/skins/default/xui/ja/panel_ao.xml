@@ -4,7 +4,6 @@
 	<panel name="animation_overrider_panel">
 		<combo_box name="ao_set_selection_combo" tool_tip="編集したいアニメーションを選択してください。"/>
 		<button name="ao_activate" tool_tip="このアニメーションを今すぐ有効化します。"/>
-		<icon/>
 		<check_box name="ao_default" label="デフォルト" tool_tip="このアニメーションセットを、ログイン時に再生されるデフォルトのセットにします。"/>
 		<button name="ao_add" tool_tip="新しいアニメーションセットを追加します。"/>
 		<button name="ao_remove" tool_tip="このアニメーションセットを削除します。"/>
@@ -12,10 +11,6 @@
 		<check_box name="ao_smart" label="スマートモード" tool_tip="スマートモードは、座るオーバーライドが、オブジェクト自体のアニメーションと衝突するかどうかを判断し、オーバーライダーを一時的に無効にします。"/>
 		<check_box name="ao_disable_stands_in_mouselook" label="立ったときにマウスルックを無効化" tool_tip="カスタムスタンドアニメーションをマウスルックで保持する必要がある場合は、このボックスをオンにします。"/>
 		<combo_box name="ao_state_selection_combo" tool_tip="編集するアニメーションの状態を選択します。"/>
-		<scroll_list name="ao_state_animation_list">
-			<scroll_list.columns name="icon"/>
-			<scroll_list.columns name="animation_name"/>
-		</scroll_list>
 		<panel name="ao_animation_move_trash_panel">
 			<button name="ao_move_up" tool_tip="選択したアニメーションをリストの上に移動します。"/>
 			<button name="ao_move_down" tool_tip="選択したアニメーションをリストの下に移動します。"/>
@@ -39,22 +34,12 @@
 	<!-- Reload Cover Panel -->
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">
-			<view_border name="ao_reload_view_border"/>
 			<text name="reload_label">
 				設定をリロードしています。
 			</text>
 			<text name="wait_label">
 				しばらくお待ち下さい。
 			</text>
-			<layout_stack name="ao_reload_indicator_layout_stack">
-				<layout_panel name="ao_reload_indicator_left_layout_panel">
-				</layout_panel>
-				<layout_panel name="ao_reload_indicator_layout_panel">
-					<loading_indicator name="ao_reload_indicator"/>
-				</layout_panel>
-				<layout_panel name="ao_reload_indicator_right_layout_panel">
-				</layout_panel>
-			</layout_stack>
 		</panel>
 	</panel>
 	<!-- Small Panel -->

@@ -64,20 +64,15 @@
 							<text name="day_length_label">
 								一日の長さ（時間）
 							</text>
-							<slider name="sld_day_length"/>
 							<text name="day_offset_label">
 								一日のオフセット（時間）
 							</text>
-							<slider name="sld_day_offset"/>
 							<text name="apparent_time_of_day_label">
 								見かけ上の時刻：
 							</text>
 							<text name="lbl_apparent_time">
 								[AP]　[HH]：[MM]（[PRC]％）
 							</text>
-						</layout_panel>
-						<layout_panel name="pnl_environment_buttons">
-							<!-- used to be buttons, but now spacer.-->
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>
@@ -116,20 +111,10 @@
 					<text name="sky_altitudes_label">
 						スカイの高度
 					</text>
-					<!-- Divider icons also should be under slider to not interfer with clicks-->
-					<icon name="mark0"/>
-					<icon name="mark1"/>
-					<icon name="mark2"/>
-					<multi_slider name="sld_altitudes">
-						<slider name="sld1" value="1000"/>
-						<slider name="sld2" value="2000"/>
-						<slider name="sld3" value="3000"/>
-					</multi_slider>
 					<panel name="pnl_ground">
 						<text name="txt_ground">
 							地表
 						</text>
-						<icon name="icon_ground"/>
 						<line_editor name="edt_invname_ground">
 							不明
 						</line_editor>

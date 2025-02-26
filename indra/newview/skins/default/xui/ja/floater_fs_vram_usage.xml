@@ -10,6 +10,5 @@
 		<column name="vram_usage" label="ＶＲＡＭ（テクスチャ）の㎅"/>
 		<column name="vram_usage_vbo" label="ＶＲＡＭ（ＶＢＯ）の㎅"/>
 	</scroll_list>
-	<button label="リフレッシュ" label_selected="リフレッシュ" name="refresh_button">
-	</button>
+	<button label="リフレッシュ" label_selected="リフレッシュ" name="refresh_button"/>
 </floater>

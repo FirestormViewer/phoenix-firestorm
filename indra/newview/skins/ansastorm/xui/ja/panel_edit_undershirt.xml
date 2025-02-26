@@ -8,10 +8,7 @@
 	<panel name="undershirt_main_tab_holder" title="下着（上半身）">
 		<!-- Viewer demands an accordion here, so we provide one -->
 		<accordion name="undershirt_main_accordion">
-			<accordion_tab name="undershirt_main_tab" title="下着（上半身）">
-				<!-- Viewer will replace things here with tiled editing views -->
-				<scrolling_panel_list name="undershirt_main_param_list"/>
-			</accordion_tab>
+			<accordion_tab name="undershirt_main_tab" title="下着（上半身）"/>
 		</accordion>
 	</panel>
 	<!-- End Undershirt Panel -->

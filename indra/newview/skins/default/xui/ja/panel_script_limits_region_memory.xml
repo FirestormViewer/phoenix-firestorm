@@ -3,8 +3,6 @@
 	<text name="script_memory">
 		区画スクリプトの使用メモリ
 	</text>
-	<text name="parcels_listed"/>
-	<text name="memory_used"/>
 	<text name="loading_text">
 		読み込んでいます…
 	</text>

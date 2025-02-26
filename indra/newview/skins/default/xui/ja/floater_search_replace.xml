@@ -11,6 +11,4 @@
 	<text name="txt2">
 		置き換え
 	</text>
-	<line_editor name="search_text"/>
-	<line_editor name="replace_text"/>
 </floater>

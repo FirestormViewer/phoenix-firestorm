@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="animation_explorer" title="アニメーションエクスプローラ">
-
 	<scroll_list name="animation_list">
 		<scroll_list.column label="再生者" name="played_by"/>
 		<scroll_list.column label="再生時間" name="played"/>
@@ -9,14 +8,10 @@
 		<scroll_list.column label="アニメーションＩＤ" name="animation_id"/>
 		<scroll_list.column label="オブジェクトＩＤ" name="object_id"/>
 	</scroll_list>
-
-	<view_border name="animation_preview"/>
-
 	<panel name="buttons_panel">
 		<button label="停止" name="stop_btn"/>
 		<button label="停止して取り消し" name="stop_and_revoke_btn"/>
 		<button label="ブラックリスト" name="blacklist_btn"/>
 		<check_box label="所有しているものは表示しない" name="no_owned_animations_check" tool_tip="ここにチェックを入れると、あなたのアバターが所有していいるアニメーション、例えばAOのアニメーションやシステム・デフォルトのアニメーションは表示されません。"/>
 	</panel>
-
 </floater>

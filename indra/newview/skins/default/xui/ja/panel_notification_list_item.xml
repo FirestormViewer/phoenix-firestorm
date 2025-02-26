@@ -48,12 +48,6 @@
 								</panel>
 							</panel>
 						</layout_panel>
-						<layout_panel name="layout_panel_right">
-							<panel name="close_expand_panel">
-								<button name="close_btn"/>
-								<button name="expand_btn"/>
-							</panel>
-						</layout_panel>
 					</layout_stack>
 				</panel>
 			</layout_panel>
@@ -97,12 +91,6 @@
 									<button name="decline_btn" label="却下"/>
 									<button name="info_btn" label="情報"/>
 								</panel>
-							</panel>
-						</layout_panel>
-						<layout_panel name="layout_panel_left_exp">
-							<panel name="close_expand_panel_exp">
-								<button name="close_expanded_btn"/>
-								<button name="condense_btn"/>
 							</panel>
 						</layout_panel>
 					</layout_stack>

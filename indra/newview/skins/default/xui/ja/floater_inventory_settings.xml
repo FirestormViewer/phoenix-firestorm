@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inventory_settings" title="インベントリ設定">
-	<icon name="multi_folder_icon"/>
 	<text name="multi_folder_txt">
 		マルチフォルダビューでフォルダをダブルクリック：
 	</text>
@@ -9,7 +8,6 @@
 		<radio_item label="新しいウィンドウで開く" name="1"/>
 		<radio_item label="ビューを切り替え" name="2"/>
 	</radio_group>
-	<icon name="single_folder_icon"/>
 	<text name="single_folder_txt">
 		単一フォルダビューでフォルダをダブルクリック：
 	</text>

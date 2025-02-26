@@ -20,9 +20,6 @@
 		<layout_stack name="radar_outer_ls">
 			<layout_panel name="radar_upper_layout">
 				<layout_stack name="radar_ls">
-					<layout_panel name="minimaplayout">
-						<net_map name="Net Map"/>
-					</layout_panel>
 					<layout_panel name="radarlayout">
 						<radar_list name="radar_list">
 							<radar_list.columns label="名前" name="name" tool_tip="[TOTAL]人のアバター（同じリージョンに[IN_REGION]人、チャットレンジ内に[IN_CHAT_RANGE]人）がいます。"/>

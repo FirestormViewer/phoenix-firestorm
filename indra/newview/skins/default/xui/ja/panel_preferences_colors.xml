@@ -5,73 +5,57 @@
 			<text name="font_colors">
 				チャットの文字色：
 			</text>
-			<color_swatch name="user"/>
 			<text name="user_label">
 				自分
 			</text>
-			<color_swatch name="agent"/>
 			<text name="others_label">
 				他人
 			</text>
-			<color_swatch name="objects"/>
 			<text name="text_box3">
 				オブジェクト
 			</text>
-			<color_swatch name="friends"/>
 			<text name="friends_label">
 				フレンド
 			</text>
-			<color_swatch name="lindens"/>
 			<text name="linden_label">
 				リンデン
 			</text>
-			<color_swatch name="muted"/>
 			<text name="muted_label">
 				無視対象
 			</text>
-			<color_swatch name="system"/>
 			<text name="system_label">
 				システム
 			</text>
-			<color_swatch name="script_error"/>
 			<text name="script_error_label">
 				エラー
 			</text>
-			<color_swatch name="ObjectIMColor"/>
 			<text name="object_im_label">
 				オブジェクトからのＩＭ
 			</text>
-			<color_swatch name="owner"/>
 			<text name="llownersay_label">
 				所有者の通知
 			</text>
-			<color_swatch name="links"/>
 			<text name="htmllink_label">
 				ＵＲＬ
 			</text>
-			<color_swatch name="UriQueryPartColor"/>
 			<text name="uriquerypart_label">
 				ＵＲＬのクエリ部分
 			</text>
-			<color_swatch name="direct"/>
 			<text name="direct_label">
 				直接
 			</text>
 			<text name="header_colors">
 				チャット見出し：
 			</text>
-			<color_swatch name="chat_header"/>
 			<text name="chat_name_label">
 				アバター
 			</text>
-			<color_swatch name="object_name_header"/>
 			<text name="object_name_header_label">
 				オブジェクト
 			</text>
 			<slider label="チャット範囲外低減係数：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="話している人が通常のチャット範囲の外に出た場合、チャットの色を薄くするのに使用する係数です。"/>
 			<check_box name="FSColorIMsDistinctly" label="コンソール上でＩＭとグループチャットとを色で区別する："/>
 			<panel label="" name="im_color_panel">
-				<color_swatch name="console_im"/>
 				<text name="console_im_label">
 					ＩＭ／グループ
 				</text>
@@ -81,33 +65,26 @@
 			<text name="nametag_colors">
 				名前タグの色：
 			</text>
-			<color_swatch name="self_tag"/>
 			<text name="self_tag_label">
 				自分
 			</text>
-			<color_swatch name="friend_tag"/>
 			<text name="friend_tag_label">
 				フレンド
 			</text>
-			<color_swatch name="muted_tag"/>
 			<text name="muted_tag_label">
 				無視対象
 			</text>
-			<color_swatch name="linden_tag"/>
 			<text name="linden_tag_label">
 				リンデン
 			</text>
-			<color_swatch name="match_tag"/>
 			<text name="match_tag_label">
 				一致する名前
 			</text>
-			<color_swatch name="mismatch_tag"/>
 			<text name="mismatch_tag_label">
 				一致しない名前
 			</text>
 			<check_box name="FSColorUsername" label="ユーザ名を別の色で識別" tool_tip="ユーザ名を別の色で表示します。"/>
 			<check_box name="NameTagShowFriends" label="フレンドのタグを別の色で識別" tool_tip="フレンドの名前タグを別の色で表示します。"/>
-			<color_swatch name="username_tag"/>
 			<text name="username_tag_label">
 				ユーザ名
 			</text>
@@ -120,19 +97,15 @@
 			<check_box name="FSTagShowDistance" label="名前タグに距離を表示" tool_tip="アバターの名前タグにそのアバターまでの距離を表示します。"/>
 			<check_box name="FSTagShowDistanceColors" label="距離に応じて名前タグの色を変える："/>
 			<panel label="" name="distance_panel">
-				<color_swatch name="chat_distance_tag"/>
 				<text name="chat_distance_tag_label">
 					チャット範囲
 				</text>
-				<color_swatch name="whisper_distance_tag"/>
 				<text name="whisper_distance_tag_label">
 					ささやきの範囲
 				</text>
-				<color_swatch name="shout_range_tag"/>
 				<text name="shout_tag_label">
 					シャウト範囲
 				</text>
-				<color_swatch name="beyond_shout_distance_tag"/>
 				<text name="beyond_shout_distance_tag_label">
 					シャウト範囲外
 				</text>
@@ -183,36 +156,28 @@
 			<text name="netmap_dots_textbox">
 				ミニマップの点：
 			</text>
-			<color_swatch name="MapAvatarSelfColor"/>
 			<text name="MapAvatarSelfColor_label">
 				自分
 			</text>
-			<color_swatch name="agent"/>
 			<text name="MapAvatarColor_label">
 				他の住人
 			</text>
-			<color_swatch name="objects"/>
 			<text name="MapAvatarFriendColor_label">
 				フレンド
 			</text>
-			<color_swatch name="MapAvatarLindenColor"/>
 			<text name="MapAvatarLindenColor_label">
 				リンデン
 			</text>
-			<color_swatch name="MapAvatarMutedColor"/>
 			<text name="MapAvatarMutedColor_label">
 				無視対象
 			</text>
 			<check_box name="MiniMapChatRing" label="ミニマップ上に、ささやき、発声、シャウトのチャット範囲を示すリングを表示："/>
-			<color_swatch name="netmap_chatring_color_swatch"/>
 			<text name="netmap_chatring_color_label">
 				チャット範囲
 			</text>
-			<color_swatch name="netmap_whisperring_color_swatch"/>
 			<text name="netmap_whisperring_color_label">
 				ささやきの範囲
 			</text>
-			<color_swatch name="netmap_shoutring_color_swatch"/>
 			<text name="netmap_shoutring_color_label">
 				シャウト範囲
 			</text>
@@ -225,9 +190,6 @@
 			<text name="ScriptDialogFgLabel">
 				スクリプト通知文字：
 			</text>
-			<color_swatch name="effect_color_swatch"/>
-			<color_swatch name="ScriptDialogFb"/>
-			<color_swatch name="ScriptDialog"/>
 			<text name="floater_opacity">
 				ウィンドウの透過度：
 			</text>

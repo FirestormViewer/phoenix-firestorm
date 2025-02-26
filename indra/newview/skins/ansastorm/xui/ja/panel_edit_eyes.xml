@@ -7,10 +7,7 @@
 	<panel name="eyes_main_tab_holder" title="目">
 		<!-- Viewer demands an accordion here, so we provide one -->
 		<accordion name="eyes_main_accordion">
-			<accordion_tab name="eyes_main_tab" title="目">
-				<!-- Viewer will replace things here with tiled editing views -->
-				<scrolling_panel_list name="eyes_main_param_list"/>
-			</accordion_tab>
+			<accordion_tab name="eyes_main_tab" title="目"/>
 		</accordion>
 	</panel>
 	<!-- End Eyes Panel -->

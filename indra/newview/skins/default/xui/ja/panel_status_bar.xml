@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
-		<icon name="voice_icon"/>
-		<icon name="fly_icon"/>
-		<icon name="push_icon"/>
-		<icon name="build_icon"/>
-		<icon name="scripts_icon"/>
-		<icon name="see_avs_icon"/>
-		<icon name="pathfinding_dirty_icon"/>
-		<icon name="pathfinding_disabled_icon"/>
 		<button name="buy_land_btn" tool_tip="区画販売中です。"/>
-		<icon name="damage_icon"/>
 		<text name="damage_text" value="100%"/>
-		<icon name="scriptout"/>
 		<!-- <FS:Zi> This text changes color when hovered over, implemented in llstatusbar.cpp
 									Colors are defined in colors.xml as ParcelNormalColor and ParcelHoverColor -->
 		<text tool_tip="あなたがいる土地の区画名です。土地情報についてはクリックしてください。" name="parcel_info_text" value="（読み込んでいます…）"/>
@@ -40,12 +30,9 @@
 		<button label="L$を購入" name="buyL" tool_tip="クリックしてL$を購入します。"/>
 	</panel>
 	<panel name="time_and_media_bg">
-		<text name="TimeText" tool_tip="現在時刻（太平洋時間）">午前24：00：00 PST</text>
-		<button name="presets_icon_camera"/>
-		<button name="presets_icon_graphic"/>
+		<text name="TimeText" tool_tip="現在時刻（太平洋時間）">午前24：00：00　PST</text>
 		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
-		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Web ページ）を開始／停止します。"/>
-		<button name="volume_btn"/>
+		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Webページ）を開始／停止します。"/>
 		<text name="FPSText" tool_tip="フレーム毎秒">
 			200.0
 		</text>

@@ -25,16 +25,13 @@
 		これは私のSecondLifeの説明であり、本当に素晴らしいと思います。しかし、どういうわけか、私の説明は非常に長くなっています。なぜなら、私はたくさん話すのが好きだからです。
 	</text>
 	<slider name="volume_slider" tool_tip="ボイス音量" value="0.5"/>
-	<avatar_icon name="avatar_icon"/>
 	<!-- Overlapping buttons for default actions
-    llinspectavatar.cpp makes visible the most likely default action 
--->
+  llinspectavatar.cpp makes visible the most likely default action 
+	-->
 	<button label="フレンドに追加" name="add_friend_btn"/>
 	<button label="ＩＭ" name="im_btn"/>
 	<button label="プロフィール" name="view_profile_btn"/>
 	<!--  gear buttons here -->
-	<menu_button name="gear_btn"/>
-	<menu_button name="gear_self_btn"/>
 	<panel name="moderator_panel">
 		<button name="disable_voice" label="ボイスを無効化"/>
 		<button name="enable_voice" label="ボイスを有効化"/>

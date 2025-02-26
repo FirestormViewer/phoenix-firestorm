@@ -9,10 +9,6 @@
 	<floater.string name="text_add_multiple">
 		[COUNT]人のアバターを追加するコンタクトセットを選択して下さい。
 	</floater.string>
-	<text name="textfield">
-	</text>
-	<combo_box name="contact_sets"/>
-	<button name="add_set_btn"/>
 	<button label="セットに追加" name="add_btn"/>
 	<button label="取り消し" name="cancel_btn"/>
 </floater>

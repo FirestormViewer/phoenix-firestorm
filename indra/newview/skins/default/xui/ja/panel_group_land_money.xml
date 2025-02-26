@@ -47,7 +47,6 @@
 	<text name="your_contribution_label">
 		あなたの貢献面積：
 	</text>
-	<line_editor name="your_contribution_line_editor"/>
 	<text name="your_contribution_units">
 		㎡
 	</text>

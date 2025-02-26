@@ -9,5 +9,4 @@
 	<floater.string name="title">
 		グループのプロフィール‐[NAME]
 	</floater.string>
-	<panel name="panel_group_info_sidetray"/>
 </floater>

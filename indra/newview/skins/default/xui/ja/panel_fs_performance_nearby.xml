@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_nearby">
-	<button name="back_btn"/>
 	<text name="back_lbl">
 		戻る
 	</text>
@@ -13,8 +12,7 @@
 	<text name="av_nearby_desc">
 		最も複雑なアバターを非表示にして速度を上げます。
 	</text>
-	<slider tool_tip="視覚的に複雑なアバターが、どの時点でインポスターとして描画されるかを制御します。" label="最大複雑度（Ｋ）" name="IndirectMaxComplexity">
-	</slider>
+	<slider tool_tip="視覚的に複雑なアバターが、どの時点でインポスターとして描画されるかを制御します。" label="最大複雑度（Ｋ）" name="IndirectMaxComplexity"/>
 	<text name="IndirectMaxComplexityText">
 		0
 	</text>
@@ -46,11 +44,8 @@
 		<combo_box.item label="フレンドは常に表示" name="complexity_always_show_friends"/>
 		<combo_box.item label="フレンドのみ表示" name="complexity_only_show_friends"/>
 	</combo_box>
-	<button label="例外…" name="exceptions_btn">
-	</button>
-	<view_border name="border"/>
-	<check_box label="アバターを完全に非表示する" name="hide_avatars">
-	</check_box>
+	<button label="例外…" name="exceptions_btn"/>
+	<check_box label="アバターを完全に非表示する" name="hide_avatars"/>
 	<text name="name_tags_textbox">
 		名前タグ：
 	</text>
@@ -59,5 +54,4 @@
 		<radio_item label="あり" name="radio2"/>
 		<radio_item label="簡易表示" name="radio3"/>
 	</radio_group>
-
 </panel>

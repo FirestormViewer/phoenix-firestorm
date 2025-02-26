@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="rlva_strings" title="ＲＬＶａ文章">
-	<combo_box name="string_list"/>
-	<text_editor name="string_descr"/>
-	<text_editor name="string_value"/>
 	<panel name="bottom_panel">
 		<button label="デフォルトに戻す" name="default_btn"/>
-		<icon name="dummy_icon"/>
 	</panel>
 </floater>

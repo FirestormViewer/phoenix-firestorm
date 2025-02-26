@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="もの" name="main inventory panel">
-	<panel.string name="Itemcount"/>
 	<panel.string name="ItemcountFetching">
 		[ITEM_COUNT]個のアイテムと[CATEGORY_COUNT]個のフォルダを取得しています…。[FILTER]
 	</panel.string>
@@ -18,22 +17,17 @@
 			<menu_item_call name="inventory_open" label="開く"/>
 			<menu_item_call name="inventory_share" label="共有"/>
 			<menu_item_call name="replace_links" label="リンクの置き換え"/>
-			<menu_item_separator/>
 			<menu_item_call name="inventory_new_window" label="新しいウィンドウ"/>
 			<menu_item_check label="保護フォルダ" name="Protected Folders"/>
 			<menu_item_check label="インベントリ設定…" name="inv_settings"/>
-			<menu_item_separator/>
 			<menu_item_check label="一覧表示" name="list_view"/>
 			<menu_item_check label="ギャラリー表示" name="gallery_view"/>
 			<menu_item_check label="複合表示" name="combination_view"/>
-			<menu_item_separator/>
 			<menu_item_check label="ダブルクリックでオブジェクトを追加" name="add_inv_toggle"/>
 			<menu_item_check label="ダブルクリックで衣装を追加" name="add_invclothing_toggle"/>
-			<menu_item_separator/>
 			<menu_item_call name="inventory_show_filters" label="フィルタを表示"/>
 			<menu_item_call name="inventory_reset_filters" label="フィルタをリセット"/>
 			<menu_item_call name="inventory_close_all_folders" label="全てのフォルダを折り畳む"/>
-			<menu_item_separator/>
 			<menu_item_call name="inventory_empty_trash" label="ゴミ箱を空に"/>
 		</menu>
 		<menu label="作成" name="inventory_create_menu">
@@ -73,7 +67,6 @@
 		<menu label="並べ替え" name="inventory_sort_menu">
 			<menu_item_check name="inventory_sort_by_name" label="名前で"/>
 			<menu_item_check name="inventory_sort_by_date" label="日付で"/>
-			<menu_item_separator/>
 			<menu_item_check name="inventory_sort_folders_by_name" label="フォルダは常に名前順に"/>
 			<menu_item_check name="inventory_sort_system_on_top" label="システムフォルダを上に"/>
 		</menu>
@@ -82,17 +75,13 @@
 			<menu_item_check name="inventory_search_by_creator" label="制作者で"/>
 			<menu_item_check name="inventory_search_by_description" label="説明で"/>
 			<menu_item_check name="inventory_search_by_uuid" label="ＵＵＩＤで"/>
-			<menu_item_separator/>
 			<menu_item_check name="inventory_search_by_all" label="すべてで"/>
-			<menu_item_separator/>
 			<menu_item_check name="inventory_filter_show_links" label="リンクを表示"/>
 			<menu_item_check name="inventory_filter_only_links" label="リンクのみ表示"/>
 			<menu_item_check name="inventory_filter_hide_links" label="リンクを隠す"/>
-			<menu_item_separator/>
 			<menu_item_check name="inventory_filter_only_modify" label="修正可能のみ"/>
 			<menu_item_check name="inventory_filter_only_copy" label="コピー可能のみ"/>
 			<menu_item_check name="inventory_filter_only_transfer" label="譲渡可能のみ"/>
-			<menu_item_separator/>
 			<menu_item_check name="inventory_filter_coalesced_objects_only" label="複合のみ"/>
 		</menu>
 	</menu_bar>
@@ -107,10 +96,6 @@
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ctrl_stack">
-		<layout_panel name="collapse_expand_buttons">
-			<button name="collapse_btn"/>
-			<button name="expand_btn"/>
-		</layout_panel>
 		<layout_panel name="filter_ctrls">
 			<text name="filter_label" width="50" value="フィルタ："/>
 			<combo_box name="filter_combo_box">
@@ -138,7 +123,6 @@
 				<combo_box.item value="filter_type_custom" label="カスタム…"/>
 			</combo_box>
 			<menu_button tool_tip="検索表示のオプションを表示します。" name="options_visibility_btn"/>
-			<button name="resetfilters_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<panel name="default_inventory_panel">
@@ -147,17 +131,6 @@
 			<recent_inventory_panel label="最近のアイテム" name="Recent Items"/>
 			<worn_inventory_panel label="着用中" name="Worn Items"/>
 		</tab_container>
-	</panel>
-	<panel name="combination_view_inventory">
-		<layout_stack name="combination_view_stack">
-			<layout_panel name="comb_gallery_layout">
-				<panel name="comb_gallery_view_inv">
-				</panel>
-			</layout_panel>
-			<layout_panel name="comb_inventory_layout">
-				<single_folder_inventory_panel name="comb_single_folder_inv"/>
-			</layout_panel>
-		</layout_stack>
 	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
@@ -176,7 +149,6 @@
 			<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダ" name="ItemcountText">
 				要素
 			</text>
-			<icon name="dummy_icon"/>
 		</panel>
 		<panel name="trash_btn_panel">
 			<dnd_button name="trash_btn" tool_tip="選択されたアイテムを削除します。"/>

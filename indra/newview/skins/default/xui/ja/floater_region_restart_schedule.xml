@@ -41,7 +41,6 @@
 	<text name="at_label">
 		at
 	</text>
-	<line_editor name="hours_edt"/>
 	<text name="separator_label">
 		：
 	</text>

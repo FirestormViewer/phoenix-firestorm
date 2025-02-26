@@ -7,7 +7,7 @@
 		インベントリにコピー
 	</floater.string>
 	<floater.string name="DateTime">
-		[year,datetime,slt]年[month,datetime,slt]月[day,datetime,slt]日（[weekday,datetime,slt]）　[hour24,datetime,slt]：[min,datetime,slt]：[second,datetime,slt] [timezone,datetime,slt]
+		[year,datetime,slt]年[month,datetime,slt]月[day,datetime,slt]日（[weekday,datetime,slt]）[hour24,datetime,slt]：[min,datetime,slt]：[second,datetime,slt] [timezone,datetime,slt]
 	</floater.string>
 	<floater.string name="UploaderDateTime">
 		[UPLOADER]が[DATE_TIME]にアップロード
@@ -15,8 +15,6 @@
 	<text name="desc txt">
 		説明：
 	</text>
-	<line_editor name="desc"/>
-	<text_editor name="uploader_date_time"/>
 	<button label="プロフィール" name="openprofile"/>
 	<panel name="dimensions_panel">
 		<text name="dimensions">
@@ -29,7 +27,6 @@
 		<combo_box name="combo_aspect_ratio" tool_tip="固定した縦横比でプレビューします。"/>
 	</panel>
 	<panel name="button_panel">
-		<button name="btn_refresh"/>
 		<button label="ＯＫ" name="Keep" />
 		<button label="破棄" name="Discard"/>
 		<flyout_button label="保存…" name="save_tex_btn">

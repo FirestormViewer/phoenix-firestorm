@@ -9,10 +9,7 @@
 	<panel name="jacket_main_tab_holder" title="ジャケット">
 		<!-- Viewer demands an accordion here, so we provide one -->
 		<accordion name="jacket_main_accordion">
-			<accordion_tab name="jacket_main_tab" title="ジャケット">
-				<!-- Viewer will replace things here with tiled editing views -->
-				<scrolling_panel_list name="jacket_main_param_list"/>
-			</accordion_tab>
+			<accordion_tab name="jacket_main_tab" title="ジャケット"/>
 		</accordion>
 	</panel>
 	<!-- End Jacket Panel -->

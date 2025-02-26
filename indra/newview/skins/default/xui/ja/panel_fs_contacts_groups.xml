@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="groups">
 	<filter_editor label="グループをフィルタ" name="group_filter_input"/>
-	<view_border name="info_border"/>
-	<group_list name="group_list"/>
 	<text name="groupcount">
 		あなたは[COUNT]個のグループに所属しています。（最大[MAX]個）
 	</text>

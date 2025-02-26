@@ -33,24 +33,18 @@
 			<text name="desc_label">
 				説明：
 			</text>
-			<line_editor name="name_search"/>
-			<line_editor name="description_search"/>
 			<text name="owner_label">
 				所有者：
 			</text>
 			<text name="group_label">
 				グループ：
 			</text>
-			<line_editor name="owner_search"/>
-			<line_editor name="group_search"/>
 			<text name="creator_label">
 				制作者：
 			</text>
 			<text name="last_owner_label">
 				最終所有者：
 			</text>
-			<line_editor name="creator_search"/>
-			<line_editor name="last_owner_search"/>
 			<check_box name="regular_expression" label="正規表現を使用"/>
 			<button name="search" label="検索"/>
 			<button name="clear" label="クリア"/>
@@ -90,11 +84,9 @@
 				<combo_box.item label="ズーム" name="click_zoom" value="zoom"/>
 			</combo_box>
 			<check_box name="filter_distance" label="距離の範囲"/>
-			<spinner name="min_distance"/>
 			<text name="and2">
 				〜
 			</text>
-			<spinner name="max_distance"/>
 			<check_box name="filter_agent_parcel_only" label="今いる区画のみ"/>
 			<text name="only_list">
 				次の条件のオブジェクトを除外：

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="General" name="general_tab">
+<panel label="一般" name="general_tab">
 	<panel.string name="help_text">
 		「一般」タブには、メンバー一覧、設定、メンバーのオプションなど、このグループに関する一般的な情報が記されています。
 
@@ -16,11 +16,10 @@
 		<text name="prepend_founded_by">
       創設者：
 		</text>
-		<text name="founder_name" />
 		<text name="join_cost_text">
       入会費はかかりません。
 		</text>
-		<button label="JOIN NOW!" name="btn_join"/>
+		<button label="加入します！" name="btn_join"/>
 	</panel>
 	<text_editor name="charter">
 		グループの理念、指針を記入してください
@@ -50,8 +49,8 @@
 		<check_box name="check_enrollment_fee" tool_tip="グループ加入に入会費が必要かどうかを設定します。" label="入会費がかかります。"/>
 		<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" label="L$"/>
 		<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
-			<combo_item name="select_mature" value="Select">
-						‐レーティング区分を指定‐
+			<combo_item name="select_mature" value="選択">
+				‐レーティング区分を指定‐
 			</combo_item>
 			<combo_box.item label="「Moderate」コンテンツ" name="mature" value="Mature"/>
 			<combo_box.item label="「General」コンテンツ" name="pg" value="Not Mature"/>
@@ -60,8 +59,8 @@
 		<text name="group_key_label">
 			グループのキー：
 		</text>
-		<button name="copy_name" label="グループ名をコピー" />
-		<text_editor name="group_key" label="グループＵＵＩＤ：" initial_value="（読み込んでいます…）" />
+		<button name="copy_name" label="グループ名をコピー"/>
+		<text_editor name="group_key" label="グループＵＵＩＤ：" initial_value="（読み込んでいます…）"/>
 		<button name="copy_uri" label="ＵＲＩをコピー"/>
 	</panel>
 </panel>

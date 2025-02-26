@@ -4,6 +4,4 @@
 		インベントリ：[FOLDERNAME]
 	</floater.string>
 	<filter_editor label="インベントリのフォルダでフィルタ" name="flt_search"/>
-	<panel name="pnl_inv_wrap">
-	</panel>
 </floater>

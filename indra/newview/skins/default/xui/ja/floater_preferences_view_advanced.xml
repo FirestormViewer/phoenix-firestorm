@@ -15,8 +15,6 @@
 	<text name="offset_scale_lbl">
 		カメラのオフセット倍率：
 	</text>
-	<slider name="offset_scale_sld"/>
-	<spinner name="offset_scale_ctrl"/>
 	<text name="offset_scale_lbl">
 		カメラの視野角：
 	</text>

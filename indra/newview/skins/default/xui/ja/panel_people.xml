@@ -44,10 +44,10 @@
 		エイリアス
 	</panel.string>
 	<panel.string name="AllFriendsTitle">
-    全て（[ALL]）
+		全て（[ALL]）
 	</panel.string>
 	<panel.string name="OnlineFriendsTitle">
-    オンライン（[ONLINE]）
+		オンライン（[ONLINE]）
 	</panel.string>
 	<tab_container name="tabs">
 		<!-- ================================= NEARBY tab =========================== -->
@@ -63,14 +63,6 @@
 			<text name="nearbycount">
 				[REGION]には[TOTAL]人中[COUNT]人のアバターがいます。
 			</text>
-			<layout_stack>
-				<layout_panel name="Net Map Panel">
-					<net_map name="Net Map"/>
-				</layout_panel>
-				<layout_panel>
-					<avatar_list name="avatar_list"/>
-				</layout_panel>
-			</layout_stack>
 			-->
 			<panel name="panel_radar"/>
 		</panel>
@@ -105,7 +97,6 @@
 			<text name="groupcount">
 				現在、[COUNT]件のグループに属しています。あと[REMAINING]件のグループに参加できます。
 			</text>
-			<group_list name="group_list"/>
 		</panel>
 		<!-- ================================= RECENT tab =========================== -->
 		<panel label="最新" name="recent_panel">
@@ -116,7 +107,6 @@
 				<button name="add_friend_btn" tool_tip="フレンド登録を申し込みます。"/>
 				<dnd_button name="recent_del_btn" tool_tip="選択されているフレンドを削除します。"/>
 			</panel>
-			<avatar_list name="avatar_list"/>
 		</panel>
 		<!-- ================================= BLOCKED tab ========================== -->
 		<panel label="ブロック" name="blocked_panel">

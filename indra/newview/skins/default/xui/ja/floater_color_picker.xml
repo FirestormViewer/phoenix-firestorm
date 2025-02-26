@@ -5,29 +5,23 @@
 			<text name="r_val_text">
 				赤：
 			</text>
-			<spinner name="rspin"/>
 			<text name="g_val_text">
 				緑：
 			</text>
-			<spinner name="gspin"/>
 			<text name="b_val_text">
 				青：
 			</text>
-			<spinner name="bspin"/>
 		</panel>
 		<panel name="LSL" label="LSL">
 			<text name="r_val_text_lsl">
 				赤：
 			</text>
-			<spinner name="rspin_lsl"/>
 			<text name="g_val_text_lsl">
 				緑：
 			</text>
-			<spinner name="gspin_lsl"/>
 			<text name="b_val_text_lsl">
 				青：
 			</text>
-			<spinner name="bspin_lsl"/>
 		</panel>
 		<panel name="Hex" label="Hex">
 			<text name="hex_text">
@@ -36,23 +30,18 @@
 			<text name="hex_hash_prefix">
 				＃
 			</text>
-			<line_editor name="hex_value"/>
 		</panel>
 	</tab_container>
 	<text name="h_val_text">
 		色相：
 	</text>
-	<spinner name="hspin"/>
 	<text name="s_val_text">
 		彩度：
 	</text>
-	<spinner name="sspin"/>
 	<text name="l_val_text">
 		輝度：
 	</text>
-	<spinner name="lspin"/>
 	<check_box label="すぐ反映" name="apply_immediate"/>
-	<button name="color_pipette"/>
 	<button label="ＬＳＬコピー" tool_tip="色の値を&lt;r, g, b&gt;の形式でＬＳＬ色ベクトルとしてコピーします。" name="copy_lsl_btn"/>
 	<button label="ＯＫ" label_selected="ＯＫ" name="select_btn"/>
 	<button label="キャンセル" label_selected="キャンセル" name="cancel_btn"/>
@@ -60,6 +49,6 @@
 		＾現在の色＾
 	</text>
 	<text name="(Drag below to save.)">
-		（下記にドラッグで保存します）
+		（下記にドラッグで保存できます。）
 	</text>
 </floater>

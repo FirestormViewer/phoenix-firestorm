@@ -8,10 +8,7 @@
 	<panel name="shoes_main_tab_holder" title="靴">
 		<!-- Viewer demands an accordion here, so we provide one -->
 		<accordion name="shoes_main_accordion">
-			<accordion_tab name="shoes_main_tab" title="靴">
-				<!-- Viewer will replace things here with tiled editing views -->
-				<scrolling_panel_list name="shoes_main_param_list"/>
-			</accordion_tab>
+			<accordion_tab name="shoes_main_tab" title="靴"/>
 		</accordion>
 	</panel>
 	<!-- End Shoes Panel -->

@@ -3,67 +3,51 @@
 	<text name="color_pickers_label">
 		希望の色を選択：
 	</text>
-	<color_swatch name="text"/>
 	<text name="text_label">
 		テキスト
 	</text>
-	<color_swatch name="cursor"/>
 	<text name="cursor_label">
 		カーソル
 	</text>
-	<color_swatch name="background"/>
 	<text name="background_label">
 		背景
 	</text>
-	<color_swatch name="section"/>
 	<text name="section_label">
 		セクション
 	</text>
-	<color_swatch name="datatype"/>
 	<text name="datatype_label">
 		データ型
 	</text>
-	<color_swatch name="event"/>
 	<text name="event_label">
 		イベント
 	</text>
-	<color_swatch name="comment"/>
 	<text name="comment_label">
 		コメント
 	</text>
-	<color_swatch name="function"/>
 	<text name="function_label">
 		関数
 	</text>
-	<color_swatch name="string_literal"/>
 	<text name="string_literal_label">
 		文字列リテラル
 	</text>
-	<color_swatch name="constant"/>
 	<text name="constant_label">
 		定数
 	</text>
-	<color_swatch name="i_constant"/>
 	<text name="i_constant_label">
 		Integer定数
 	</text>
-	<color_swatch name="s_constant"/>
 	<text name="s_constant_label">
 		String定数
 	</text>
-	<color_swatch name="f_constant"/>
 	<text name="f_constant_label">
 		Float定数
 	</text>
-	<color_swatch name="c_constant"/>
 	<text name="c_constant_label">
 		複合
 	</text>
-	<color_swatch name="flow_control"/>
 	<text name="flow_control_label">
 		フロー制御
 	</text>
-	<color_swatch name="preprocessor"/>
 	<text name="preprocessor_label">
 		プリプロセッサ
 	</text>

@@ -7,7 +7,6 @@
 		（このページは指定したホワイトリストをパスしません。）
 	</text>
 	<line_editor name="home_url" tool_tip="このメディアソースで指定されているホームページです。"/>
-	<web_browser name="preview_media"/>
 	<text name="preview_label">
 		プレビュー
 	</text>

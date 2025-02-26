@@ -8,10 +8,7 @@
 	<panel name="skirt_main_tab_holder" title="スカート">
 		<!-- Viewer demands an accordion here, so we provide one -->
 		<accordion name="skirt_main_accordion">
-			<accordion_tab name="skirt_main_tab" title="スカート">
-				<!-- Viewer will replace things here with tiled editing views -->
-				<scrolling_panel_list name="skirt_main_param_list"/>
-			</accordion_tab>
+			<accordion_tab name="skirt_main_tab" title="スカート"/>
 		</accordion>
 	</panel>
 	<!-- End Skirt Panel -->

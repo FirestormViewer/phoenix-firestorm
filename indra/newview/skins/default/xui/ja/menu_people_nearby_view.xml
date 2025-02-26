@@ -4,7 +4,6 @@
 	<menu_item_check label="名前で並べ替え" name="sort_name"/>
 	<menu_item_check label="距離で並べ替え" name="sort_distance"/>
 	<menu_item_check label="到着順で並べ替え" name="sort_arrival"/>
-	<menu_item_separator/>
 	<menu_item_check label="人物のアイコン表示" name="view_icons"/>
 	<menu_item_check label="マップを表示" name="view_map"/>
 </toggleable_menu>

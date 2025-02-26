@@ -27,18 +27,9 @@
 	<floater.string name="tooltip_remove_image">
 		画像を削除します。
 	</floater.string>
-	<icon name="item_type_icon"/>
-	<text name="item_name"/>
-	<thumbnail name="item_thumbnail"/>
 	<text name="multiple_lbl">
 		複数のサムネイル
 	</text>
-	<button name="upload_local"/>
-	<button name="upload_snapshot"/>
-	<button name="use_texture"/>
-	<button name="copy_to_clipboard"/>
-	<button name="paste_from_clipboard"/>
-	<button name="remove_image"/>
 	<text name="tooltip_text">
 		ツールチップ
 	</text>

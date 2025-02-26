@@ -57,7 +57,6 @@
 	<view name="controls_container">
 		<button label="リフレッシュ" name="new_snapshot_btn"/>
 		<panel name="advanced_options_panel">
-			<view_border name="advanced_options_hr" />
 			<text name="layer_type_label">
 				キャプチャ：
 			</text>
@@ -67,7 +66,7 @@
 				<combo_box.item label="色深度（２４ビット）" name="Depth24" value="depth24"/>
 			</combo_box>
 			<check_box label="インターフェース" name="ui_check"/>
-			<check_box label="L$残高" name="currency_check" />
+			<check_box label="L$残高" name="currency_check"/>
 			<check_box label="ＨＵＤ" name="hud_check"/>
 			<check_box label="キャプチャフレームを表示" tool_tip="スナップショットの領域を囲むフレームを画面上に表示します。スナップショットの外側にあるシーンの部分は彩度が低くなり、わずかにぼやけます。" name="show_frame"/>
 			<check_box label="フレーミングガイドを表示する" tool_tip="スナップショットのフレーム内にフレーミングガイド（三分割法）を表示します。" name="show_guides" />
@@ -80,16 +79,7 @@
 			<combo_box name="filters_combobox" tool_tip="画像フィルタ">
 				<combo_box.item label="フィルタなし" name="NoFilter" value="NoFilter"/>
 			</combo_box>
-			<view_border name="advanced_options_hr"/>
 		</panel>
-		<panel_container name="panel_container">
-			<panel name="panel_snapshot_options"/>
-			<panel name="panel_snapshot_profile"/>
-			<panel name="panel_snapshot_postcard"/>
-			<panel name="panel_snapshot_inventory"/>
-			<panel name="panel_snapshot_local"/>
-		</panel_container>
-		<view_border name="status_hr"/>
 		<panel name="succeeded_panel">
 			<text name="succeeded_lbl">
 				成功しました
@@ -100,7 +90,6 @@
 				失敗しました
 			</text>
 		</panel>
-		<loading_indicator name="working_indicator"/>
 		<text name="working_lbl">
 			処理しています
 		</text>
@@ -108,8 +97,6 @@
 			リフレッシュして保存
 		</text>
 	</view>
-	<ui_ctrl name="thumbnail_placeholder"/>
-	<view_border name="img_info_border"/>
 	<text name="image_res_text">
 		[WIDTH]px（幅）×[HEIGHT]px（高さ）
 	</text>

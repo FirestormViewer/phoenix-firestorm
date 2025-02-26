@@ -41,8 +41,6 @@
 			<text name="InstructSelectFriend">
 				人物を選択
 			</text>
-			<button name="RefreshFriends"/>
-			<scroll_list name="Friends"/>
 		</panel>
 		<panel label="近くにいる人物" name="NearMePanel">
 			<text name="InstructSelectResident">

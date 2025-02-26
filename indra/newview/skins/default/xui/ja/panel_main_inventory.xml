@@ -66,18 +66,6 @@
 			<worn_inventory_panel label="着用中" name="Worn Items"/>
 		</tab_container>
 	</panel>
-	<panel name="combination_view_inventory">
-		<layout_stack name="combination_view_stack">
-			<layout_panel name="comb_gallery_layout">
-				<panel name="comb_gallery_view_inv">
-				</panel>
-			</layout_panel>
-			<layout_panel name="comb_inventory_layout">
-				<single_folder_inventory_panel name="comb_single_folder_inv">
-				</single_folder_inventory_panel>
-			</layout_panel>
-		</layout_stack>
-	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
 			<menu_button tool_tip="追加のオプションを表示します。" name="options_gear_btn"/>
@@ -98,7 +86,6 @@
 			<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダ" name="ItemcountText">
 				要素
 			</text>
-			<icon name="dummy_icon"/>
 		</panel>
 		<panel name="trash_btn_panel">
 			<dnd_button name="trash_btn" tool_tip="選択されたアイテムを削除します。"/>

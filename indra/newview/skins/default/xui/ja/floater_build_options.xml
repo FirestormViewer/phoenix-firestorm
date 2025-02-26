@@ -8,5 +8,4 @@
 	<text name="grid_opacity_label" tool_tip="グリッドの不透明度">
 		不透明度：
 	</text>
-	<slider name="GridOpacity"/>
 </floater>

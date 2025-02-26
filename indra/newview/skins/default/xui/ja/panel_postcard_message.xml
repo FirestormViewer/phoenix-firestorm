@@ -9,7 +9,6 @@
 	<text name="subject_label">
 		件名：
 	</text>
-	<line_editor name="subject_form"/>
 	<text_editor name="msg_form">
 		メッセージをここに入力してください。
 	</text_editor>

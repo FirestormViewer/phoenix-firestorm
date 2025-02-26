@@ -21,12 +21,10 @@
 	<string name="title_teleport_history_item">
 		テレポート履歴の詳細情報：[NAME]
 	</string>
-	<panel filename="panel_landmark_info.xml" name="panel_landmark_info"/>
-	<panel filename="panel_place_profile.xml" name="panel_place_profile"/>
 	<panel name="button_panel">
-		<layout_stack name="bottom_bar_ls0" orientation="horizontal">
+		<layout_stack name="bottom_bar_ls0">
 			<layout_panel name="lp1">
-				<layout_stack name="bottom_bar_ls1" orientation="horizontal">
+				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
 						<button label="テレポート" name="teleport_btn" tool_tip="選択した地域にテレポートします。"/>
 					</layout_panel>
@@ -39,16 +37,16 @@
 				</layout_stack>
 			</layout_panel>
 		</layout_stack>
-		<layout_stack name="bottom_bar_ls1" orientation="horizontal">
+		<layout_stack name="bottom_bar_ls1">
 			<layout_panel name="lp2">
-				<layout_stack name="bottom_bar_close_ls3" orientation="horizontal">
+				<layout_stack name="bottom_bar_close_ls3">
 					<layout_panel name="close_btn_lp">
 						<button label="閉じる" name="close_btn"/>
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>
 		</layout_stack>
-		<layout_stack name="bottom_bar_ls2" orientation="horizontal">
+		<layout_stack name="bottom_bar_ls2">
 			<layout_panel name="save_btn_lp">
 				<button label="保存" name="save_btn"/>
 			</layout_panel>

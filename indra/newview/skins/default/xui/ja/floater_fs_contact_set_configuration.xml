@@ -7,7 +7,6 @@
 		<text name="set_label">
 			コンタクトセットの設定
 		</text>
-		<line_editor name="set_name_editor"/>
 		<button name="rename_btn" label="名称変更"/>
 		<color_swatch label="色の設定" name="set_swatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
 		<check_box label="オンライン状態を通知する" name="show_set_notifications"/>

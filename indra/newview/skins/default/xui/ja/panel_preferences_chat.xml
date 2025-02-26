@@ -37,7 +37,6 @@
 			<text name="text_box4">
 				（秒）
 			</text>
-			<spinner name="max_chat_count"/>
 			<text name="text_box5">
 				（行）
 			</text>
@@ -300,27 +299,22 @@
 			<text name="FSCmdLineCalc_txt">
 				式を計算（例：cmd SIN(2+2)）
 			</text>
-			<line_editor name="FSCmdLineCalc"/>
 			<!-- 描画距離 -->
 			<text name="FSCmdLineDrawDistance_txt">
 				描画距離を変更（使用法：cmd 数字（m））
 			</text>
-			<line_editor name="FSCmdLineDrawDistance"/>
 			<!-- 帯域幅 -->
 			<text name="FSCmdLineBandWidth_txt">
 				最大帯域幅を設定（使用法：cmd 数字（kbps））
 			</text>
-			<line_editor name="FSCmdLineBandWidth"/>
 			<!--cpcampos-->
 			<text name="FSCmdLineCopyCam_txt">
 				カメラの位置をクリップボードにコピー
 			</text>
-			<line_editor name="FSCmdLineCopyCam"/>
 			<!-- AOオン／オフ -->
 			<text name="FSCmdLineAO_txt">
 				ＡＯをオン／オフ（使用法：cmd on/off）
 			</text>
-			<line_editor name="FSCmdLineAO"/>
 			<!-- チャットクリア -->
 			<text name="FSCmdLineClearChat_txt">
 				チャット履歴を消去（使用法：cmd）
@@ -340,14 +334,11 @@
 			<text name="FSCmdLineRezPlatform_txt">
 				プラットフォームをRez（使用法：cmd 0〜64）
 			</text>
-			<line_editor name="FSCmdLineRezPlatform"/>
 			<slider name="FSCmdLinePlatformSize" label="幅" tool_tip="Rezするプラットフォームの幅を設定します。"/>
-			<view_border name="EmDivisor"/>
 			<!-- キーからアバター名取得 -->
 			<text name="FSCmdLineKeyToName_txt">
 				ＵＵＩＤからアバター名を取得（使用法：cmd UUID）
 			</text>
-			<line_editor name="FSCmdLineKeyToName"/>
 			<!--dice-->
 			<text name="FSCmdLineRollDice_txt">
 				サイコロを振る（使用法：cmd サイコロ番号 サイコロの面数 演算子 係数）
@@ -357,12 +348,10 @@
 			<text name="FSCmdLinePos_txt">
 				同じＳＩＭ内でテレポート（使用法：cmd x y z）
 			</text>
-			<line_editor name="FSCmdLinePos"/>
 			<!-- 地上にテレポート -->
 			<text name="FSCmdLineGround_txt">
 				地上にテレポート（使用法：cmd）
 			</text>
-			<line_editor name="FSCmdLineGround"/>
 			<!-- 指定高度にテレポート -->
 			<text name="FSCmdLineHeight_txt">
 				指定した高さにテレポート（使用法：cmd z）
@@ -372,12 +361,10 @@
 			<text name="FSCmdTeleportToCam_txt">
 				カメラ位置にテレポート（使用法：cmd）
 			</text>
-			<line_editor name="FSCmdTeleportToCam"/>
 			<!-- テレポートを送る -->
 			<text name="FSCmdLineOfferTp_txt">
 				アバターにテレポートを送る（使用法：cmd UUID）
 			</text>
-			<line_editor name="FSCmdLineOfferTp"/>
 			<!-- アバターにテレポート -->
 			<text name="FSCmdLineTP2_txt">
 				アバターのいる場所にテレポート（使用法：cmd アバター名）
@@ -387,12 +374,10 @@
 			<text name="FSCmdLineTeleportHome_txt">
 				ホームにテレポート（使用法：cmd）
 			</text>
-			<line_editor name="FSCmdLineTeleportHome"/>
 			<!-- 指定SIMに移動 -->
 			<text name="FSCmdLineMapTo_txt">
 				指定したＳＩＭに移動（使用法：cmd SIM名 | x y z）
 			</text>
-			<line_editor name="FSCmdLineMapTo"/>
 			<check_box label="目標ＳＩＭの同じ座標に移動" name="toggle"/>
 		</panel>
 	</tab_container>

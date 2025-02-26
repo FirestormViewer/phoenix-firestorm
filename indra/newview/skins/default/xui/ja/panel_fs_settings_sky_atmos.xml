@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="待機" name="panel_fs_settings_sky_atmos">
+<panel label="大気" name="panel_fs_settings_sky_atmos">
 	<string name="hdr_string">ＨＤＲスケール：</string>
 	<string name="brightness_string">輝度：</string>
 	<string name="hdr_tooltip">リアルに明るい空やダイナミックな露出などの照明効果の強度。1.0がデフォルト、0はオフ、0から1の間の値はアンビエントとＨＤＲを混合します。</string>
@@ -10,15 +10,12 @@
 		<text name="ambient_color_label">
 			周辺色：
 		</text>
-		<color_swatch name="ambient_light"/>
 		<text name="blue_horizon_label">
 			水平線の青：
 		</text>
-		<color_swatch name="blue_horizon"/>
 		<text name="blue_density_label">
 			青の濃度：
 		</text>
-		<color_swatch name="blue_density"/>
 	</panel>
 	<panel name="P_Atmosphere_Header">
 		<text name="T_Atmosphere_Header" value="大気の設定"/>
@@ -27,31 +24,24 @@
 		<text name="haze_horizon_label">
 			水平線の靄：
 		</text>
-		<slider name="haze_horizon"/>
 		<text name="haze_density_label">
 			靄の密度：
 		</text>
-		<slider name="haze_density"/>
 		<text name="density_multiplier_label">
 			密度乗数：
 		</text>
-		<slider name="density_multip"/>
 		<text name="distance_multiplier_label">
 			距離定数：
 		</text>
-		<slider name="distance_multip"/>
 		<text name="maximum_altitude_label">
 			最大高度：
 		</text>
-		<slider name="max_alt"/>
 		<text name="scene_gamma_label">
 			輝度：
 		</text>
-		<slider name="scene_gamma"/>
 		<text name="probe_ambiance_label" tool_tip="放射照度制御。ゼロ以外の場合、ＨＤＲ光源モデルが有効になります。">
 			周辺環境の反射プローブ（ＨＤＲ）：
 		</text>
-		<slider name="probe_ambiance"/>
 	</panel>
 	<panel name="P_Rainbow_Header">
 		<text name="T_Rainbow_Header" value="虹とハローの設定"/>
@@ -60,14 +50,11 @@
 		<text name="moisture_level_label">
 			湿度レベル：
 		</text>
-		<slider name="moisture_level"/>
 		<text name="droplet_radius_label">
 			液滴半径：
 		</text>
-		<slider name="droplet_radius"/>
 		<text name="ice_level_label">
 			氷レベル：
 		</text>
-		<slider name="ice_level"/>
 	</panel>
 </panel>

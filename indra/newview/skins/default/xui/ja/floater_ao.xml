@@ -9,5 +9,4 @@
 	<floater.string name="ao_dnd_only_on_full_interface">
 		アニメーション設定の書かれたノートカードをドラッグ＆ドロップできるのは、フルサイズのインターフェース時のみです。レンチ（🔧）アイコンをクリックして切り替えてください。
 	</floater.string>
-	<panel name="animation_overrider_outer_panel"/>
 </floater>

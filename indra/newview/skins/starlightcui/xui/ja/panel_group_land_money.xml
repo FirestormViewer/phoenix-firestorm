@@ -18,9 +18,10 @@
 	<panel.string name="land_contrib_error">
 		土地の貢献を設定することができません。
 	</panel.string>
-	<!-- <text name="group_land_heading">
-        Group Owned Land
-    </text> -->
+	<!--
+	<text name="group_land_heading">
+		グループ所有地
+  </text> -->
 	<panel name="layout_panel_landmoney">
 		<scroll_list name="group_parcel_list">
 			<scroll_list.columns label="区画" name="name"/>
@@ -50,7 +51,6 @@
 		<text name="your_contribution_label">
 			あなたの貢献面積：
 		</text>
-		<line_editor name="your_contribution_line_editor"/>
 		<text name="your_contribution_units">
 			㎡
 		</text>

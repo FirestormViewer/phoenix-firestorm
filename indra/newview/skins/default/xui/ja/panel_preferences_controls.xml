@@ -7,5 +7,4 @@
 		<combo_box.item label="着席時" name="sitting" value="3"/>
 	</combo_box>
 	<button label="デフォルトに戻す" tool_tip="すべての操作設定をデフォルト値に戻します。" name="restore_defaults"/>
-	<scroll_list name="controls_list"/>
 </panel>

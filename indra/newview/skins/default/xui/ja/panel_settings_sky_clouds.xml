@@ -5,27 +5,21 @@
 			<text name="cloud_color_label">
 				雲の色：
 			</text>
-			<color_swatch name="cloud_color"/>
 			<text name="cloud_coverage_label">
 				雲の量：
 			</text>
-			<slider name="cloud_coverage"/>
 			<text name="cloud_scale_label">
 				雲のスケール：
 			</text>
-			<slider name="cloud_scale"/>
 			<text name="cloud_variance_label">
 				雲の分散：
 			</text>
-			<slider name="cloud_variance"/>
 			<text name="cloud_scroll_label">
 				雲の移動：
 			</text>
-			<xy_vector name="cloud_scroll_xy"/>
 			<text name="cloud_image_label">
 				雲の画像：
 			</text>
-			<texture_picker name="cloud_map"/>
 		</layout_panel>
 		<layout_panel name="right_lp">
 			<text name="cloud_density_label">

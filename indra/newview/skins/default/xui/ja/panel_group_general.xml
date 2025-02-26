@@ -15,13 +15,11 @@
 		<text name="group_key_label">
 			グループのキー：
 		</text>
-		<view_border name="info_border"/>
 		<text_editor name="group_key" label="グループＵＵＩＤ："/>
 		<button name="copy_uri" label="ＵＲＩをコピー"/>
 		<text name="prepend_founded_by">
 			創設者：
 		</text>
-		<name_box name="founder_name"/>
 		<button name="copy_name" label="名前をコピー"/>
 		<texture_picker name="insignia" tool_tip="画像を拡大するにはクリックしてください。" label=""/>
 		<text_editor name="charter">
@@ -51,7 +49,6 @@
 				</text>
 				<combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。"/>
 			</layout_panel>
-			<layout_panel name="preferences_divider"/>
 			<layout_panel name="group_preferences_container">
 				<text name="group_settngs_label">
 					グループの設定

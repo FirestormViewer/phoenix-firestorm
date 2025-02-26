@@ -192,8 +192,7 @@
 				<radio_item label="表示名（ユーザ名）" name="displayname_username"/>
 			</radio_group>
 			<check_box label="権限を表示" name="FSFriendListColumnShowPermissions" tool_tip="連絡先リストにあなたがこのアバターに与えた、またはこのアバターから与えられた権限を表示します。"/>
-			<check_box label="検索フィルタを表示" name="FSContactListShowSearch" tool_tip="連絡先リストに検索テキストボックスを表示し、リストをフィルタすることができるようになります">
-			</check_box>
+			<check_box label="検索フィルタを表示" name="FSContactListShowSearch" tool_tip="連絡先リストに検索テキストボックスを表示し、リストをフィルタすることができるようになります"/>
 			<text name="textInventoryOptions">
 				インベントリのオプション：
 			</text>
@@ -255,7 +254,6 @@
 			<check_box label="新しいＳＩＭ再起動の通知方法を使用する" name="FSUseNewRegionRestartNotification"/>
 			<check_box label="ＳＩＭ再起動の警告メッセージが表示される時に画面を揺らさない" name="FSNoScreenShakeOnRegionRestart"/>
 			<check_box label="リージョンの再起動情報をチャンネルに送信します：" name="FSReportRegionRestartToChat"/>
-			<spinner name="FSRegionRestartAnnounceChannel"/>
 		</panel>
 		<!-- フォント -->
 		<panel label="フォント" name="UI-font-tab">
@@ -268,7 +266,6 @@
 			<text name="tooltip_textbox5">
 				フォントサイズ：
 			</text>
-			<spinner name="font_size_adj_slider"/>
 			<text name="tooltip_textbox6">
 				ポイント（要再起動）
 0がデフォルト。あまり大きいサイズはお勧めしません。
@@ -276,7 +273,6 @@
 			<text name="tooltip_textbox3">
 				チャットの行間：
 			</text>
-			<spinner name="chat_line_spacing_slider"/>
 			<text name="tooltip_textbox4">
 				ピクセル（要再起動）
 0が２／３系のデフォルト、2が１系のデフォルトです。
@@ -284,7 +280,6 @@
 			<text name="Label_FolderItemViewHeight">
 					フォルダ表示の高さ：
 			</text>
-			<spinner name="FSFolderViewItemHeight"/>
 			<text name="Label_FolderItemViewHeight_Scale">
 				ピクセル（要再起動）
 20が２／３系のデフォルト、18が１系のデフォルトです。

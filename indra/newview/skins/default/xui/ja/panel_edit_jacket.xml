@@ -8,9 +8,7 @@
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">
-			<accordion_tab name="jacket_main_tab" title="ジャケット">
-				<scrolling_panel_list name="jacket_main_param_list"/>
-			</accordion_tab>
+			<accordion_tab name="jacket_main_tab" title="ジャケット"/>
 		</accordion>
 	</panel>
 </panel>

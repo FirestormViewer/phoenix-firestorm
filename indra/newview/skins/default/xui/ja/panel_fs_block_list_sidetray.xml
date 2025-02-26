@@ -13,6 +13,5 @@
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="名前"/>
 		<fs_scroll_list.columns name="item_type" label="種類"/>
-		<fs_scroll_list.columns name="item_mute_type"/>
 	</fs_scroll_list>
 </panel>

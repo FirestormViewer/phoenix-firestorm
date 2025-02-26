@@ -19,47 +19,32 @@
 				<panel name="scrolling_panel">
 					<layout_stack name="ls1">
 						<layout_panel name="top panel">
-							<text name="grid_wide"/>
 							<button label="編集" name="edit_btn"/>
-						</layout_panel>
-						<layout_panel name="image_panel">
-							<texture_picker name="logo"/>
-						</layout_panel>
-						<layout_panel>
-							<text name="experience_title"/>
-						</layout_panel>
-						<layout_panel name="description panel">
-							<expandable_text name="experience_description"/>
 						</layout_panel>
 						<layout_panel name="maturity panel">
 							<text name="ContentRating">
 								レーティング区分：
 							</text>
-							<text name="ContentRatingText"/>
 						</layout_panel>
 						<layout_panel name="location panel">
 							<text name="Location">
 								場所：
 							</text>
-							<text name="LocationTextText"/>
 						</layout_panel>
 						<layout_panel name="marketplace panel">
 							<text name="Marketplace">
 								マーケットプレイスストア：
 							</text>
-							<text name="marketplace"/>
 						</layout_panel>
 						<layout_panel name="owner panel">
 							<text name="Owner">
 								所有者：
 							</text>
-							<text name="OwnerText"/>
 						</layout_panel>
 						<layout_panel name="group_panel">
 							<text name="Group">
 								グループ：
 							</text>
-							<text name="GroupText"/>
 						</layout_panel>
 						<layout_panel name="perm panel">
 							<button label="許可" name="allow_btn"/>
@@ -84,9 +69,9 @@
 						レーティング区分：
 					</text>
 					<icons_combo_box label="Moderate" name="edit_ContentRatingText" tool_tip="体験のレーティング区分を上げると、体験を許可したすべての住人の権限がリセットされます。">
-						<icons_combo_box.item label="Adult" name="Adult" value="42"/>
-						<icons_combo_box.item label="Moderate" name="Mature" value="21"/>
-						<icons_combo_box.item label="General" name="PG" value="13"/>
+						<icons_combo_box.item label="Adult" name="Adult"/>
+						<icons_combo_box.item label="Moderate" name="Mature"/>
+						<icons_combo_box.item label="General" name="PG"/>
 					</icons_combo_box>
 					<text name="edit_Location">
 						場所：

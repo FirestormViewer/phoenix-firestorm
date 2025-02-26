@@ -26,11 +26,6 @@ https://wiki.firestormviewer.org/fs_media
 
 この問題を解決する有効な手順を探してみて下さい。
 			</text>
-			<web_browser name="webbrowser" />
-		</layout_panel>
-		<layout_panel name="status_bar">
-			<text name="statusbartext" />
-			<progress_bar name="statusbarprogress" />
 		</layout_panel>
 	</layout_stack>
 </floater>

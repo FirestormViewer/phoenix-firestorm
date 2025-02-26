@@ -16,14 +16,6 @@
 		地形のマテリアル
 	</text>
 	<check_box label="地形のメタリック／粗さ" name="terrain_material_type" tool_tip="チェックすると、地形にＰＢＲメタリック／粗さマテリアルを使用します。それ以外の場合は、テクスチャを使用します。"/>
-	<texture_picker name="texture_detail_0"/>
-	<texture_picker name="texture_detail_1"/>
-	<texture_picker name="texture_detail_2"/>
-	<texture_picker name="texture_detail_3"/>
-	<texture_picker name="material_detail_0"/>
-	<texture_picker name="material_detail_1"/>
-	<texture_picker name="material_detail_2"/>
-	<texture_picker name="material_detail_3"/>
 	<text name="height_text_lbl">
 		１（低）
 	</text>

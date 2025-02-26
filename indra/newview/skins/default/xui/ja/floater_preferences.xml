@@ -21,9 +21,9 @@
 		<panel label="ＵＩ" name="ui"/>
 		<panel label="操作" name="controls"/>
 		<panel label="スキン" name="skins"/>
-		<panel label="クラッシュ報告" name="crashreports" />
-		<panel label="Firestorm" name="firestorm" />
-		<panel label="Opensim" name="opensim" />
-		<panel label="バックアップと復元" name="backup" />
+		<panel label="クラッシュ報告" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+		<panel label="Opensim" name="opensim"/>
+		<panel label="バックアップと復元" name="backup"/>
 	</tab_container>
 </floater>

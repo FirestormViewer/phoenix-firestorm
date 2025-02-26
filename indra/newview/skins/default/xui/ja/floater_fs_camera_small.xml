@@ -32,9 +32,7 @@
 				<!-- </FS:Chanayane> -->
 			</layout_panel>
 			<layout_panel name="camera_zoom_layout_panel">
-				<button name="zoom_plus_btn"/>
 				<slider_bar name="zoom_slider" tool_tip="対象にカメラをズームします。"/>
-				<button name="zoom_minus_btn"/>
 			</layout_panel>
 			<layout_panel name="panel_track">
 				<joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。"/>
@@ -75,6 +73,4 @@
 			</panel_camera_item.text>
 		</panel_camera_item>
 	</panel>
-	<panel name="viewer_camera_info"/>
-	<panel name="agent_camera_info"/>
 </floater>

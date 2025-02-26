@@ -15,51 +15,39 @@
 			<text name="Texture_Label">
 				テクスチャ：
 			</text>
-			<texture_picker name="texture_picker"/>
 			<text name="Burst_Rate_Label">
 				爆散頻度：
 			</text>
-			<spinner name="burst_rate_spinner"/>
 			<text name="Burst_Count_Label">
 				爆散回数：
 			</text>
-			<spinner name="burst_count_spinner"/>
 			<text name="Burst_Radius_Label">
 				爆散角度：
 			</text>
-			<spinner name="burst_radius_spinner"/>
 			<text name="Angle_Begin_Label">
 				開始角：
 			</text>
-			<spinner name="angle_begin_spinner"/>
 			<text name="Burst_Speed_Min_Label">
 				最小爆散速度：
 			</text>
-			<spinner name="burst_speed_min_spinner"/>
 			<text name="Angle_End_Label">
 				終了角：
 			</text>
-			<spinner name="angle_end_spinner"/>
 			<text name="Burst_Speed_Max_Label">
 				最大爆散角度：
 			</text>
-			<spinner name="burst_speed_max_spinner"/>
 			<text name="Source_Max_Age_Label">
 				ソースの最大寿命：
 			</text>
-			<spinner name="source_max_age_spinner"/>
 			<text name="Start_Alpha_Label">
 				開始アルファ：
 			</text>
-			<spinner name="start_alpha_spinner"/>
 			<text name="Particles_Max_Age_Label">
 				パーティクルの最大寿命：
 			</text>
-			<spinner name="particles_max_age_spinner"/>
 			<text name="End_Alpha_Label">
 				終了アルファ：
 			</text>
-			<spinner name="end_alpha_spinner"/>
 			<text name="Start_Glow_Label">
 				開始グロー：
 			</text>
@@ -77,7 +65,6 @@
 			<text name="End_Glow_Label">
 				終了グロー：
 			</text>
-			<spinner name="end_glow_spinner" />
 			<combo_box name="blend_func_dest_combo">
 				<combo_box.item label="ブレンド１" name="blend_one"/>
 				<combo_box.item label="ブレンド０" name="blend_zero"/>
@@ -91,13 +78,9 @@
 			<text name="Scale_Start_Label">
 				開始スケール：
 			</text>
-			<spinner name="scale_start_x_spinner"/>
-			<spinner name="scale_start_y_spinner"/>
 			<text name="End_Label">
 				終了：
 			</text>
-			<spinner name="scale_end_x_spinner"/>
-			<spinner name="scale_end_y_spinner"/>
 		</panel>
 		<panel name="top_right_panel">
 			<check_box name="bounce_checkbox" label="跳ねる"/>
@@ -117,25 +100,18 @@
 			<text name="Target_Key_Label">
 				ターゲットキー：
 			</text>
-			<line_editor name="target_key_input"/>
 			<button name="clear_target_button" tool_tip="目標のオブジェクトまたはアバターをクリアします。"/>
 			<button name="pick_target_button" tool_tip="ここをクリックして、パーティクルの目標オブジェクトまたはアバターを選択します。"/>
 			<text name="Acceleration_Label">
 				加速度：
 			</text>
-			<spinner name="acceleration_x_spinner"/>
-			<spinner name="acceleration_y_spinner"/>
-			<spinner name="acceleration_z_spinner"/>
 			<text name="Omega_Label">
 				オメガ：
 			</text>
-			<spinner name="omega_x_spinner" />
-			<spinner name="omega_y_spinner"/>
-			<spinner name="omega_z_spinner"/>
 		</panel>
 		<panel name="bottom_right_panel">
-			<color_swatch label="開始色" name="start_color_selector" />
-			<color_swatch label="終了色" name="end_color_selector" />
+			<color_swatch label="開始色" name="start_color_selector"/>
+			<color_swatch label="終了色" name="end_color_selector"/>
 		</panel>
 	</panel>
 </floater>

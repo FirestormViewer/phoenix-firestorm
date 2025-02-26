@@ -722,7 +722,7 @@ L$が不足しているので、このグループに参加することができ
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="DeleteOutfitsWithName">
-    アウトフィット「[NAME]」を削除してもよろしいですか？
+		アウトフィット「[NAME]」を削除してもよろしいですか？
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
@@ -2455,7 +2455,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<tag>fail</tag>
 	</notification>
 	<notification icon="notifytip.tga" name="DisplayNameUpdateRemoveAlias" type="notify">
-    [OLD_NAME]（[SLID]）は、[NEW_NAME]に変更されました。
+		[OLD_NAME]（[SLID]）は、[NEW_NAME]に変更されました。
 このエージェントには、[NEW_NAME]に代わるエイリアスが設定されています。
 削除しますか？
 		<form name="form">
@@ -3552,11 +3552,11 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	</notification>
 	<notification name="MissingMaterialCaps">
 		<tag>fail</tag>
-    マテリアル対応リージョンに接続されていません。
+		マテリアル対応リージョンに接続されていません。
 	</notification>
 	<notification name="CantSelectReflectionProbe">
 		<unique/>
-    反射プローブを設置しましたが、「反射プローブの選択」が無効になっています。反射プローブを選択できるようにするには、「ビルド」＞「オプション」＞「反射プローブを選択」にチェックを入れてください。
+		反射プローブを設置しましたが、「反射プローブの選択」が無効になっています。反射プローブを選択できるようにするには、「ビルド」＞「オプション」＞「反射プローブを選択」にチェックを入れてください。
 		<tag>confirm</tag>
 		<usetemplate ignoretext="次回から表示しない" name="okignore" yestext="はい"/>
 	</notification>
@@ -5167,11 +5167,11 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 	</notification>
 	<!-- fsdata -->
 	<notification name="BlockLoginInfo">
-    [REASON]
+		[REASON]
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="TestversionExpired">
-    [APP_NAME]は、テストバージョンにつき有効期限が切れているため、これ以上使用できません。
+		[APP_NAME]は、テストバージョンにつき有効期限が切れているため、これ以上使用できません。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="FireStormReqInfo">
@@ -5209,13 +5209,13 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 	<!-- Firestorm Phantom -->
 	<!-- Firestorm Reset Settings -->
 	<notification label="Reset all settings" name="FirestormClearSettingsPrompt">
-    問題が発生している場合は、すべての設定をリセットすると役立つ場合があります。ただし、デフォルト構成に対して行ったカスタマイズをやり直す必要があります。
+		問題が発生している場合は、すべての設定をリセットすると役立つ場合があります。ただし、デフォルト構成に対して行ったカスタマイズをやり直す必要があります。
 
 すべての設定をリセットしてもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="SettingsWillClear">
-    [APP_NAME]を再起動すると設定はクリアされます。
+		[APP_NAME]を再起動すると設定はクリアされます。
 	</notification>
 	<!-- Firestorm Reset Settings -->
 	<!-- AW: opensim -->
@@ -5322,7 +5322,7 @@ Phoenix/Firestormビューアサポートグループへようこそ!
 	</notification>
 	<!-- <FS:Zi> Viewer version popup -->
 	<notification name="ConfirmScriptModify">
-    選択したオブジェクトのスクリプトを変更してもよろしいですか？
+		選択したオブジェクトのスクリプトを変更してもよろしいですか？
 		<tag>confirm</tag>
 		<usetemplate ignoretext="選択範囲のスクリプトを変更する前に確認する" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
@@ -6562,18 +6562,18 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 	</notification>
 	<notification name="SnoozeDuration">
 		<unique/>
-    グループチャットをスヌーズする時間（秒）：
+		グループチャットをスヌーズする時間（秒）：
 		<tag>confirm</tag>
 		<form name="form">
 			<input name="duration" type="text" default="true">
-        [DURATION]
+				[DURATION]
 			</input>
 			<button name="OK" text="ＯＫ"/>
 			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
 	<notification name="SnoozeDurationInvalidInput">
-    スヌーズ期間に有効な数値を入力してください！
+		スヌーズ期間に有効な数値を入力してください！
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
@@ -6581,7 +6581,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
-    すでに最大数のピックが作成されているため、別のピックを作成することはできません。
+		すでに最大数のピックが作成されているため、別のピックを作成することはできません。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
@@ -6589,7 +6589,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<usetemplate ignoretext="オンラインステータスの表示の切り替えには時間がかかる場合があることの通知" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification name="RenderVolumeLODFactorWarning">
-    警告：詳細レベル（ＬＯＤ）係数が高く設定されています
+		警告：詳細レベル（ＬＯＤ）係数が高く設定されています
 
 日常使用では、ＬＯＤ係数は1～3の範囲で十分です。
 
@@ -6603,7 +6603,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="OverrideVRAMWarning">
-    警告：ＶＲＡＭ検出を無効にすると、不安定になる可能性があります。
+		警告：ＶＲＡＭ検出を無効にすると、不安定になる可能性があります。
 
 ほとんどのユーザーは、この設定を無効のままにして、ビューアとオペレーティング システムに正しい値を決定させる必要があります。
 
@@ -6722,7 +6722,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		</form>
 	</notification>
 	<notification label="二段階認証トークンプロンプト" name="PromptMFATokenWithSave">
-    [MESSAGE]
+		[MESSAGE]
 		<tag>confirm</tag>
 		<form name="form">
 			<input name="token" type="text"/>
@@ -6793,13 +6793,13 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 	</notification>
 	<notification label="フォルダのグループ解除" name="UngroupFolder">
 		<unique/>
-    「[FOLDER_NAME]」のグループを解除しますか？
+		「[FOLDER_NAME]」のグループを解除しますか？
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="Cancel" yestext="Okay"/>
 	</notification>
 	<!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
 	<notification label="空のアルファチャンネルが含まれた画像" name="ImageEmptyAlphaLayer">
-    アップロードしようとしている画像には、空またはほぼ空のアルファチャンネル（透明情報）が含まれています。これはほとんどの場合望ましくないため、削除する必要があります。画像にアルファチャンネルを追加すると、異なるカメラ角度でテクスチャが互いに反転し、描画が遅くなります。したがって、このテクスチャに空またはほぼ空のアルファチャンネルが本当に必要な場合を除き、削除することを検討してください。
+		アップロードしようとしている画像には、空またはほぼ空のアルファチャンネル（透明情報）が含まれています。これはほとんどの場合望ましくないため、削除する必要があります。画像にアルファチャンネルを追加すると、異なるカメラ角度でテクスチャが互いに反転し、描画が遅くなります。したがって、このテクスチャに空またはほぼ空のアルファチャンネルが本当に必要な場合を除き、削除することを検討してください。
 		<tag>confirm_strip</tag>
 		<form name="form">
 			<button name="strip" text="アルファチャンネルを削除"/>
@@ -6850,7 +6850,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="GLTFSaveFailed">
-    ＧＬＴＦファイルの保存に失敗しました。詳細についてはログを参照してください。
+		ＧＬＴＦファイルの保存に失敗しました。詳細についてはログを参照してください。
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>

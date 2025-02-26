@@ -52,12 +52,10 @@
 						<text name="labelGltfTextureScaleU_All">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureScaleU_All"/>
 						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
 						<text name="labelGltfTextureScaleV_All">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureScaleV_All"/>
 						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
 					</panel>
 					<!-- pbr_transforms_all_scale -->
@@ -68,18 +66,15 @@
 						<text name="labelGltfTextureOffsetU_All">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureOffsetU_All"/>
 						<text name="labelGltfTextureOffsetV_All">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureOffsetV_All"/>
 					</panel>
 					<!-- pbr_transforms_all_offset -->
 					<panel name="pbr_transforms_all_rotation">
 						<text name="pbr_transforms_all_rotation_label">
 							回転
 						</text>
-						<spinner name="gltfTextureRotation_All"/>
 					</panel>
 					<!-- pbr_transforms_all_rotation -->
 				</panel>
@@ -92,12 +87,10 @@
 						<text name="labelGltfTextureScaleU_Base">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureScaleU_Base"/>
 						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
 						<text name="labelGltfTextureScaleV_Base">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureScaleV_Base"/>
 						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
 					</panel>
 					<!-- pbr_transforms_base_color_scale -->
@@ -108,11 +101,9 @@
 						<text name="labelGltfTextureOffsetU_Base">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureOffsetU_Base"/>
 						<text name="labelGltfTextureOffsetV_Base">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureOffsetV_Base"/>
 					</panel>
 					<!-- pbr_transforms_base_color_offset -->
 					<panel name="pbr_transforms_base_color_rotation">
@@ -132,7 +123,6 @@
 						<text name="labelGltfTextureScaleU_Normal">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureScaleU_Normal"/>
 						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
 						<text name="labelGltfTextureScaleV_Normal">
 							Ｖ
@@ -148,7 +138,6 @@
 						<text name="labelGltfTextureOffsetU_Normal">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureOffsetU_Normal"/>
 						<text name="labelGltfTextureOffsetV_Normal">
 							Ｖ
 						</text>
@@ -159,7 +148,6 @@
 						<text name="pbr_transforms_normal_rotation_label">
 							回転
 						</text>
-						<spinner name="gltfTextureRotation_Normal"/>
 					</panel>
 					<!-- pbr_transforms_normal_rotation -->
 				</panel>
@@ -172,12 +160,10 @@
 						<text name="labelGltfTextureScaleU_Metallic">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureScaleU_Metallic"/>
 						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
 						<text name="labelGltfTextureScaleV_Metallic">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureScaleV_Metallic"/>
 						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
 					</panel>
 					<!-- pbr_transforms_orm_scale -->
@@ -188,18 +174,15 @@
 						<text name="labelGltfTextureOffsetU_Metallic">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureOffsetU_Metallic"/>
 						<text name="labelGltfTextureOffsetU_Metallic">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureOffsetV_Metallic"/>
 					</panel>
 					<!-- pbr_transforms_orm_offset -->
 					<panel name="pbr_transforms_orm_rotation">
 						<text name="pbr_transforms_orm_rotation_label">
 							回転
 						</text>
-						<spinner name="gltfTextureRotation_Metallic"/>
 					</panel>
 					<!-- pbr_transforms_orm_rotation -->
 				</panel>
@@ -212,12 +195,10 @@
 						<text name="labelGltfTextureScaleU_Emissive">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureScaleU_Emissive"/>
 						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
 						<text name="labelGltfTextureScaleV_Emissive">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureScaleV_Emissive"/>
 						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
 					</panel>
 					<!-- pbr_transforms_emissive_scale -->
@@ -228,18 +209,15 @@
 						<text name="labelGltfTextureOffsetU_Emissive">
 							Ｕ
 						</text>
-						<spinner name="gltfTextureOffsetU_Emissive"/>
 						<text name="labelGltfTextureOffsetV_Emissive">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureOffsetV_Emissive"/>
 					</panel>
 					<!-- pbr_transforms_emissive_offset -->
 					<panel name="pbr_transforms_emissive_rotation">
 						<text name="pbr_transforms_emissive_rotation_label">
 							回転
 						</text>
-						<spinner name="gltfTextureRotation_Emissive"/>
 					</panel>
 					<!-- pbr_transforms_emissive_rotation -->
 				</panel>
@@ -327,12 +305,10 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelTexScaleU">
 							Ｈ
 						</text>
-						<spinner name="TexScaleU"/>
 						<button name="flipTextureScaleU" tool_tip="反転します。"/>
 						<text name="labelTexScaleV">
 							Ｖ
 						</text>
-						<spinner name="TexScaleV"/>
 						<button name="flipTextureScaleV" tool_tip="反転します。"/>
 					</panel>
 					<!-- transforms_diffuse_scale -->
@@ -343,11 +319,9 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelTexOffsetU">
 							Ｈ
 						</text>
-						<spinner name="TexOffsetU"/>
 						<text name="labelTexOffsetV">
 							Ｖ
 						</text>
-						<spinner name="TexOffsetV"/>
 					</panel>
 					<!-- transforms_diffuse_offset -->
 					<panel name="transforms_diffuse_rotation">
@@ -367,12 +341,10 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelBumpyScaleU">
 							Ｈ
 						</text>
-						<spinner name="bumpyScaleU"/>
 						<button name="flipTextureScaleNU" tool_tip="反転します。"/>
 						<text name="labelBumpyScaleV">
 							Ｖ
 						</text>
-						<spinner name="bumpyScaleV"/>
 						<button name="flipTextureScaleNV" tool_tip="反転します。"/>
 					</panel>
 					<!-- transforms_normal_scale -->
@@ -383,11 +355,9 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelBumpyOffsetU">
 							Ｈ
 						</text>
-						<spinner name="bumpyOffsetU"/>
 						<text name="labelBumpyOffsetU">
 							Ｖ
 						</text>
-						<spinner name="bumpyOffsetV"/>
 					</panel>
 					<!-- transforms_normal_offset -->
 					<panel name="transforms_normal_rotation">
@@ -407,12 +377,10 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelShinyScaleU">
 							Ｈ
 						</text>
-						<spinner name="shinyScaleU"/>
 						<button name="flipTextureScaleSU" tool_tip="反転します。"/>
 						<text name="labelShinyScaleV">
 							Ｖ
 						</text>
-						<spinner name="shinyScaleV"/>
 						<button name="flipTextureScaleSV" tool_tip="反転します。"/>
 					</panel>
 					<!-- transforms_specular_scale -->
@@ -423,18 +391,15 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelShinyOffsetU">
 							Ｈ
 						</text>
-						<spinner name="shinyOffsetU"/>
 						<text name="labelShinyOffsetV">
 							Ｖ
 						</text>
-						<spinner name="shinyOffsetV"/>
 					</panel>
 					<!-- transforms_specular_offset -->
 					<panel name="transforms_specular_rotation">
 						<text name="transforms_specular_rotation_label">
 							回転
 						</text>
-						<spinner name="shinyRot"/>
 					</panel>
 					<!-- transforms_specular_rotation -->
 				</panel>
@@ -447,7 +412,6 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 			<text name="media_info">
 				選択したメディアのＵＲＬがある場合はここに入力します。
 			</text>
-			<web_browser name="title_media"/>
 			<button name="add_media" label="選択…" tool_tip="メディアを追加します。"/>
 			<button name="delete_media" label="削除" tool_tip="このメディアテクスチャを削除します。"/>
 			<button name="button align" label="揃える" label_selected="メディアを揃える" tool_tip="メディアテクスチャを揃えます。（最初に読み込む必要があります。）"/>

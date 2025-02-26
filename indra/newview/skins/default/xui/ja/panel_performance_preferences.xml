@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_preferences">
-	<button name="back_btn"/>
 	<text name="back_lbl">
 		戻る
 	</text>
@@ -9,7 +8,6 @@
 	</text>
 	<button label="高度な設定を開く" name="advanced_btn"/>
 	<button label="推奨設定にリセット" name="defaults_btn"/>
-	<view_border name="border0"/>
 	<text name="quality_lbl">
 		品質と速度
 	</text>
@@ -31,14 +29,12 @@
 	<text name="quality_desc">
 		ショートカットを選択すると、手動で行った変更がすべてリセットされます。
 	</text>
-	<view_border name="border2"/>
 	<text name="distance_lbl">
 		距離
 	</text>
 	<text name="faster_lbl">
 		速度
 	</text>
-	<slider name="draw_distance"/>
 	<text name="draw_distance_m">
 		ｍ
 	</text>
@@ -48,7 +44,6 @@
 	<text name="distance_desc1">
 		ズームアウト時に遠くまで見たい場合は、距離を長く設定してください。
 	</text>
-	<view_border name="border3"/>
 	<text name="environment_lbl">
 		影
 	</text>
@@ -63,7 +58,6 @@
 		<combo_box.item label="太陽／月" name="1" value="1"/>
 		<combo_box.item label="太陽／月＋プロジェクター" name="2" value="2"/>
 	</combo_box>
-	<view_border name="border3"/>
 	<text name="water_lbl">
 		水面
 	</text>
@@ -71,7 +65,6 @@
 		水面の透明効果を減らしたり切ると、フレームレートが向上するかもしれません。
 	</text>
 	<check_box label="透明な水" name="TransparentWater"/>
-	<view_border name="border4"/>
 	<text name="photo_lbl">
 		写真
 	</text>

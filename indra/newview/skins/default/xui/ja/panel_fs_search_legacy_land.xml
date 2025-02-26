@@ -2,11 +2,8 @@
 <panel label="土地販売" name="panel_ls_land">
 	<panel name="panel_ls_input">
 		<check_box label="" name="pg_all"/>
-		<icon name="rating_icon_general"/>
 		<check_box label="" name="mature_all"/>
-		<icon name="rating_icon_moderate"/>
 		<check_box label="" name="adult_all"/>
-		<icon name="rating_icon_adult"/>
 		<text name="search_text">
 			検索語句：
 		</text>
@@ -16,14 +13,12 @@
 			<combo_box.item label="メインランド販売" name="Mainland" value="Mainland"/>
 			<combo_box.item label="不動産販売" name="Estate" value="Estate"/>
 		</combo_box>
-		<check_box label="価格　＜" name="price_check"/>
-		<line_editor name="edit_price"/>
-		<check_box label="エリア　＞" name="area_check"/>
-		<line_editor name="edit_area"/>
+		<check_box label="価格＜" name="price_check"/>
+		<check_box label="エリア＞" name="area_check"/>
 		<text name="sort_text">
 			並べ替え順
 		</text>
-		<check_box label="Ascending" name="ascending_check"/>
+		<check_box label="昇順" name="ascending_check"/>
 		<combo_box name="land_sort_combo">
 			<combo_box.item label="名前" name="Name_item" value="Name"/>
 			<combo_box.item label="金額" name="Price_item" value="Price"/>
@@ -38,7 +33,7 @@
 			<columns label="" name="icon"/>
 			<columns label="名前" name="land_name"/>
 			<columns label="金額" name="price"/>
-			<columns label="エリア" name="area"/>
+			<columns label="面積" name="area"/>
 			<columns label="L$／ｍ" name="ppm"/>
 			<columns label="種別" name="land_type"/>
 		</scroll_list>

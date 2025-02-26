@@ -3,7 +3,6 @@
 	<menu_item_check label="レーダーを表示…" name="nearby_people"/>
 	<menu_item_check label="近くのボイスを表示…" name="nearby_voice"/>
 	<menu_item_check label="ブロックリストを表示…" name="block_list"/>
-	<menu_item_separator/>
 	<menu_item_check label="Ｖ１形式のチャットヘッダを使用" name="plain_text_chat_history"/>
 	<menu_item_check label="プロフィールアイコンをチャットヘッダーに表示" name="chat_header_icons"/>
 	<context_menu label="フォントサイズ…" name="font_size">
@@ -12,7 +11,6 @@
 		<menu_item_check label="大" name="font_size_large"/>
 		<menu_item_check label="特大" name="font_size_huge"/>
 	</context_menu>
-	<menu_item_separator/>
 	<menu_item_check label="相手が入力中であることを示す角かっこ（＞）を追加" name="typing_chevron"/>
 	<menu_item_check label="新規メッセージ通知を表示" name="new_message_notification"/>
 	<menu_item_check label="チャットバーを表示" name="show_chat_bar"/>

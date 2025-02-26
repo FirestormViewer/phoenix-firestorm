@@ -57,8 +57,6 @@
 		<text name="lbl4">
 			内容：
 		</text>
-		<text_editor name="view_message"/>
-		<line_editor name="view_inventory_name"/>
 		<button label="添付アイテムを開く" name="open_attachment"/>
 	</panel>
 </panel>

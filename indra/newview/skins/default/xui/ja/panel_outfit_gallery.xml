@@ -12,11 +12,8 @@
 	<text name="no_outfits_txt">
 		検索しています…
 	</text>
-	<scroll_container name="gallery_scroll_panel">
-	</scroll_container>
 	<panel name="bottom_panel">
 		<menu_button tool_tip="追加オプションを表示" name="options_gear_btn"/>
-		<icon name="dummy_icon"/>
 		<text name="OutfitcountText">
 			[COUNT]個
 		</text>

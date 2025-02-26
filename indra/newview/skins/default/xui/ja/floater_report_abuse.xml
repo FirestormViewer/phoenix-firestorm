@@ -7,7 +7,6 @@
 		時間：[MSG_TIME]
 説明：[MSG_DESCRIPTION]
 	</floater.string>
-	<texture_picker name="screenshot"/>
 	<button tool_tip="スクリーンショットをリフレッシュします。" name="refresh_screenshot"/>
 	<text name="reporter_title">
 		報告者：

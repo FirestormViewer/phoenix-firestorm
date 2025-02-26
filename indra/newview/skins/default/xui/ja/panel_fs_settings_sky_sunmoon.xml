@@ -7,7 +7,6 @@
 		<text name="color_label">
 			太陽と月の色
 		</text>
-		<color_swatch name="sun_moon_color"/>
 	</panel>
 	<panel name="P_Sun_Header">
 		<text name="T_Sun_Header" value="太陽と月の設定"/>
@@ -17,31 +16,24 @@
 			画像：
 		</text>
 		<check_box label="ビーコンを表示" name="sunbeacon" />
-		<texture_picker name="sun_image"/>
 		<text name="glow_focus_label">
 			グローフォーカス：
 		</text>
-		<slider name="glow_focus"/>
 		<text name="glow_size_label">
 			グローサイズ：
 		</text>
-		<slider name="glow_size"/>
 		<text name="star_brightness_label">
 			星の輝度：
 		</text>
-		<slider name="star_brightness"/>
 		<text name="sun_scale_label">
 			スケール：
 		</text>
-		<slider name="sun_scale"/>
 		<text name="sun_azimuth_label">
 			方位角：
 		</text>
-		<slider name="sun_azimuth"/>
 		<text name="sun_elevation_label">
 			標高：
 		</text>
-		<slider name="sun_elevation"/>
 	</panel>
 	<panel name="P_Moon_Header">
 		<text name="T_Moon_Header" value="月の設定"/>
@@ -51,22 +43,17 @@
 			画像：
 		</text>
 		<check_box label="ビーコンを表示" name="moonbeacon"/>
-		<texture_picker name="moon_image"/>
 		<text name="moon_scale_label">
 			スケール：
 		</text>
-		<slider name="moon_scale"/>
 		<text name="brightness_label">
 			輝度：
 		</text>
-		<slider name="moon_brightness"/>
 		<text name="moon_azimuth_label">
 			方位角：
 		</text>
-		<slider name="moon_azimuth"/>
 		<text name="moon_elevation_label">
 			標高：
 		</text>
-		<slider name="moon_elevation"/>
 	</panel>
 </panel>

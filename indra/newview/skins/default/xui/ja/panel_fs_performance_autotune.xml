@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_autotune">
-	<button name="back_btn"/>
 	<text name="back_lbl">
 		戻る
 	</text>
 	<text name="settings_title">
 		オートチューン設定
 	</text>
-	<view_border name="border1"/>
 	<text name="quality_lbl">
 		遠距離のアバター
 	</text>
@@ -18,7 +16,6 @@
 アバターが最適化されるカメラからの距離を設定します。
 注：この設定により、近くに誰もいない場合はMaxNonImpostorsが1に強制されます。
 	</text>
-	<view_border name="border2"/>
 	<text name="distance_lbl">
 		視認距離の調整限界
 	</text>
@@ -27,7 +24,6 @@
 	<text name="distance_desc1">
 		シーンパラメータを調整する場合、自動調整により最小描画距離と推奨描画距離の間の値が選択されます。
 	</text>
-	<view_border name="border2"/>
 	<text name="sundry_lbl">
 		各種設定
 	</text>

@@ -9,9 +9,6 @@
 	<string name="material_override_title">
 		マテリアルの編集
 	</string>
-	<scroll_container name="materials_scroll">
-		<panel name="panel_material"/>
-	</scroll_container>
 	<panel name="button_panel">
 		<text name="unsaved_changes">
 			保存されていない変更があります。

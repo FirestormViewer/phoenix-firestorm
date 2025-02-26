@@ -5,7 +5,7 @@
 		場所：[LOCATION]
 	</floater.string>
 	<floater.string name="string.traffic">
-		交通量：[DWELL]
+		トラフィック：[DWELL]
 	</floater.string>
 	<floater.string name="string.area">
 		面積：[AREA]
@@ -29,39 +29,36 @@
 		[SLURL]
 	</floater.string>
 	<floater.string name="string.duration">
-		上演時間：[DURATION]
+		期間：[DURATION]
 	</floater.string>
 	<floater.string name="string.covercharge">
 		サービス料：[COVERCHARGE]
 	</floater.string>
 	<!-- Tab time -->
 	<tab_container name="ls_tabs">
-		<panel label="Web検索" name="panel_ls_web" />
-		<panel label="人物" name="panel_ls_people" />
-		<panel label="グループ" name="panel_ls_groups" />
-		<panel label="場所" name="panel_ls_places" />
-		<panel label="不動産販売" name="panel_ls_land" />
-		<panel label="イベント" name="panel_ls_events" />
-		<panel label="クラシファイド" name="panel_ls_classifieds" />
+		<panel label="Web検索" name="panel_ls_web"/>
+		<panel label="人物" name="panel_ls_people"/>
+		<panel label="グループ" name="panel_ls_groups"/>
+		<panel label="場所" name="panel_ls_places"/>
+		<panel label="不動産販売" name="panel_ls_land"/>
+		<panel label="イベント" name="panel_ls_events"/>
+		<panel label="クラシファイド" name="panel_ls_classifieds"/>
 	</tab_container>
 	<!-- Details/Action Panes -->
 	<panel name="panel_ls_details">
-		<text_editor name="title" value="Undefined name" />
-		<texture_picker name="snapshot" />
+		<text_editor name="title" value="Undefined name"/>
 		<text_editor name="aux1" value="Auxilary info field 1"/>
 		<text_editor name="aux2" value="Auxilary info field 2"/>
-		<icon name="maturity_icon" />
 		<text_editor name="location" value="この場所の情報フィールド"/>
 		<text_editor name="desc" value="この扉の鍵は想像力の鍵で開けられます。その向こうには別の次元があります。音の次元、視覚の次元、精神の次元です。影と実体、物と思想の領域へと進んでいます。まさにトワイライトゾーンに足を踏み入れたのです。これから見るのは現実です。スクリーン上の訴訟当事者は俳優ではありません。彼らは本物の市民であり、実際の小額裁判所に訴訟を起こし、そこで訴訟を取り下げ、このフォーラム、人民裁判所で和解するよう説得されたのです。"/>
-		<button label="プロフィールを表示" name="people_profile_btn" />
-		<button label="メッセージを送る" name="people_message_btn" />
-		<button label="フレンド登録" name="people_friend_btn" />
-		<button label="グループ情報を表示" name="group_profile_btn" />
-		<button label="チャットに参加" name="group_message_btn" />
-		<button label="グループに参加" name="group_join_btn" />
-		<button label="テレポート" name="teleport_btn" />
-		<button label="ワールドマップ上に表示" name="map_btn" />
-		<button label="予定通知" name="event_reminder_btn" />
-		<loading_indicator name="loading" />
+		<button label="プロフィールを表示" name="people_profile_btn"/>
+		<button label="メッセージを送る" name="people_message_btn"/>
+		<button label="フレンド登録" name="people_friend_btn"/>
+		<button label="グループ情報を表示" name="group_profile_btn"/>
+		<button label="チャットに参加" name="group_message_btn"/>
+		<button label="グループに参加" name="group_join_btn"/>
+		<button label="テレポート" name="teleport_btn"/>
+		<button label="ワールドマップ上に表示" name="map_btn"/>
+		<button label="予定通知" name="event_reminder_btn"/>
 	</panel>
 </floater>

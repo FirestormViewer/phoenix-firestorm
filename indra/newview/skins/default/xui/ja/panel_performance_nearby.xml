@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_nearby">
-	<button name="back_btn"/>
 	<text name="back_lbl">
 		戻る
 	</text>
@@ -31,7 +30,6 @@
 		<combo_box.item label="フレンドは常に表示" name="1"/>
 		<combo_box.item label="フレンドのみ表示" name="2"/>
 	</combo_box>
-	<view_border name="border"/>
 	<check_box label="アバターを完全に非表示にする（風景写真に適しています）" name="hide_avatars"/>
 	<text name="name_tags_textbox">
 		名前タグ：

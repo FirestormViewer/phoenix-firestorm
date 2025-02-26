@@ -52,7 +52,7 @@
 	</text>
 	<button name="edit_selected_pbr" label="選択を編集"/>
 	<button name="save_selected_pbr" label="インベントリに保存"/>
-	<texture_picker label="ディフューズ" name="texture control" tool_tip="クリックで拡散（ディフューズ）マップのテクスチャを選択します。"/>
+	<texture_picker label="拡散" name="texture control" tool_tip="クリックで拡散（ディフューズ）マップのテクスチャを選択します。"/>
 	<text name="label alphamode">
 		アルファモード
 	</text>
@@ -117,7 +117,6 @@
 	<text name="label environment">
 		自然環境
 	</text>
-	<spinner name="environment"/>
 	<text name="label shinycolor">
 		光沢色
 	</text>
@@ -154,7 +153,6 @@
 	<spinner label="回転度" name="shinyRot"/>
 	<spinner label="水平オフセット" name="shinyOffsetU"/>
 	<spinner label="垂直オフセット" name="shinyOffsetV"/>
-	<web_browser name="title_media"/>
 	<!-- BEGIN PBR Material texture transform parameters -->
 	<spinner label="水平スケール" name="gltfTextureScaleU"/>
 	<spinner label="垂直スケール" name="gltfTextureScaleV"/>
@@ -165,8 +163,7 @@
 	<check_box label="平面を揃える" name="checkbox planar align" tool_tip="テクスチャを最後に選択された面を基準に揃えます。平面テクスチャのマッピングが必要です。"/>
 	<check_box label="マテリアルを同期" name="checkbox_sync_settings" tool_tip="全てのマップの繰り返しを同期させます。"/>
 	<button label="揃える" name="button align textures" tool_tip="現在のテクスチャレイヤーのオフセット値を基準に揃えます。"/>
-	<web_browser name="title_media"/>
-	<button label="全て検索" name="btn_select_same_diff" tool_tip="この面と同じディフューズ（拡散反射）マップを貼り付けた、すべての面を選択します。"/>
+	<button label="全て検索" name="btn_select_same_diff" tool_tip="この面と同じ拡散反射（ディフューズ）マップを貼り付けた、すべての面を選択します。"/>
 	<button label="全て検索" name="btn_select_same_norm" tool_tip="この面と同じ法線（ノーマル）マップを貼り付けた、すべての面を選択します。"/>
 	<button label="全て検索" name="btn_select_same_spec" tool_tip="この面と同じ鏡面反射（スペキュラ）マップを貼り付けた、すべての面を選択します。"/>
 </panel>

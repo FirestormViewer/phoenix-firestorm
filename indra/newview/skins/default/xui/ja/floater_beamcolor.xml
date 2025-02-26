@@ -6,7 +6,6 @@
 	<floater.string name="end_hue">
 		終了色
 	</floater.string>
-	<panel name="BeamColor_Picker"/>
 	<text name="beamcolor_text">
 		マウスを使用して、ビームカラーの開始と終了に使用する色を
 選択してください。

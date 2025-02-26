@@ -154,10 +154,8 @@
 			<text name="name_label">
 				モデル名：
 			</text>
-			<line_editor name="description_form"/>
 		</panel>
 		<tab_container name="import_tab">
-			<last_tab tab_top_image_flash="TabTop_Right_Flashing"/>
 			<!-- for log tab -->
 			<!-- LOD PANEL -->
 			<panel label="ＬｏＤ" name="lod_panel" title="詳細度">
@@ -173,18 +171,12 @@
 					<item name="MeshOptSloppy" label="簡易生成"/>
 					<item name="Generate" label="信頼性の高い生成"/>
 				</combo_box>
-				<line_editor name="lod_file_high" value=""/>
 				<button label="参照…" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
 					<item label="三角形の限度数" name="Triangle Limit"/>
 					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<spinner name="lod_triangle_limit_high"/>
-				<spinner name="lod_error_threshold_high"/>
-				<text name="high_triangles"/>
-				<text name="high_vertices"/>
 				<text name="high_status" value=""/>
-				<icon name="status_icon_high"/>
 				<text name="medium_label" value="中"/>
 				<combo_box name="lod_source_medium">
 					<item name="Load from file" label="ファイルから読み込む"/>
@@ -200,12 +192,7 @@
 					<item label="三角形の限度数" name="Triangle Limit"/>
 					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<spinner name="lod_triangle_limit_medium"/>
-				<spinner name="lod_error_threshold_medium"/>
-				<text name="medium_triangles"/>
-				<text name="medium_vertices"/>
 				<text name="medium_status" value=""/>
-				<icon name="status_icon_medium"/>
 				<text name="low_label" value="低"/>
 				<combo_box name="lod_source_low">
 					<item name="Load from file" label="ファイルから読み込む"/>
@@ -221,12 +208,7 @@
 					<item label="三角形の限度数" name="Triangle Limit"/>
 					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<spinner name="lod_triangle_limit_low"/>
-				<spinner name="lod_error_threshold_low"/>
-				<text name="low_triangles"/>
-				<text name="low_vertices"/>
 				<text name="low_status" value=""/>
-				<icon name="status_icon_low"/>
 				<text name="lowest_label" value="最低"/>
 				<combo_box name="lod_source_lowest">
 					<item name="Load from file" label="ファイルから読み込む"/>
@@ -242,18 +224,8 @@
 					<item name="Triangle Limit" label="三角形の限度数"/>
 					<item name="Error Threshold" label="エラーのしきい値"/>
 				</combo_box>
-				<spinner name="lod_triangle_limit_lowest"/>
-				<spinner name="lod_error_threshold_lowest"/>
-				<text name="lowest_triangles"/>
-				<text name="lowest_vertices"/>
-				<text name="lowest_status"/>
-				<icon name="status_icon_lowest"/>
-				<icon name="lod_status_message_icon"/>
-				<text name="lod_status_message_text"/>
-				<view_border name="lod_tab_border"/>
 				<check_box name="gen_normals" label="法線を生成"/>
 				<text name="crease_label" value="折り目の角度："/>
-				<spinner name="crease_angle"/>
 			</panel>
 			<!-- PHYSYCS PANEL -->
 			<panel label="物理効果" name="physics_panel">
@@ -295,7 +267,6 @@
 							ファイルから
 						</combo_item>
 					</combo_box>
-					<line_editor name="physics_file"/>
 					<button name="physics_browse" label="参照…"/>
 					<!--
 					<check_box name="physics_optimize" label="最適化"/>
@@ -356,10 +327,6 @@
 						凸包数：[HULLS]
 					</text>
 				</panel>
-				<panel name="physics message">
-					<icon name="physics_status_message_icon"/>
-					<text name="physics_status_message_text"/>
-				</panel>
 			</panel>
 			<!-- MODIFIERS PANEL -->
 			<panel label="アップロードオプション" name="modifiers_panel">
@@ -413,12 +380,9 @@
 			</panel>
 			<!-- Log -->
 			<panel label="ログ" name="logs_panel">
-				<view_border name="log_tab_border"/>
-				<text_editor name="log_text"/>
 				<check_box label="詳細ログを有効にする。（非常に遅くなる可能性があります）" name="verbose_logging"/>
 			</panel>
 			<panel label="プレビュー設定" name="mesh_preview_settings_panel">
-				<view_border name="mesh_preview_settings_tab_border"/>
 				<text name="mesh_upload_behaviour_label">
 					モデルアップロード動作設定：
 				</text>
@@ -562,7 +526,7 @@
 			<panel name="preview_controls_panel">
 				<panel name="preview_controls_inner_panel">
 					<text name="preview_controls_title">
-            プレビュー操作
+						プレビュー操作
 					</text>
 					<combo_box name="preview_lod_combo" tool_tip="LOD to view in preview render">
 						<combo_item name="high">
@@ -585,7 +549,7 @@
 				<check_box label="ＵＶガイド" name="show_uv_guide"/>
 				<check_box label="物理効果" name="show_physics"/>
 				<text name="exploder_label">
-          凸包を広げる
+					凸包を広げる
 				</text>
 				<slider name="physics_explode"/>
 				<check_box label="ウェイト" name="show_skin_weight"/>

@@ -3,6 +3,5 @@
 	<floater.string name="NoStream">
 		何もストリームは再生されていません。
 	</floater.string>
-	<text name="streamtitle" />
 	<button name="btn_history" label="履歴"/>
 </floater>

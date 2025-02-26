@@ -59,19 +59,10 @@
 	<icon tool_tip="フレンドは私のオブジェクトを編集できます。" name="can_edit_objects"/>
 	<icon tool_tip="フレンドは私のオブジェクトを編集できません。" name="cant_edit_objects"/>
 	<text name="Key:" value="キー："/>
-	<view_border name="info_border2"/>
 	<text_editor name="user_key" value="（読み込んでいます…）"/>
-	<text name="status"/>
-	<panel name="indicator_stack">
-		<loading_indicator name="progress_indicator"/>
-	</panel>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="image_action_panel">
 			<menu_button name="image_action_btn" tool_tip="プロフィール写真関連のアクションを実行します。"/>
-		</layout_panel>
-		<layout_panel name="image_panel">
-			<texture_picker name="2nd_life_pic"/>
-			<loading_indicator name="image_upload_indicator"/>
 		</layout_panel>
 		<layout_panel name="label_stack">
 			<text name="label" value="誕生日："/>
@@ -90,29 +81,19 @@
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>
-				<layout_panel name="accountinfo_layout">
-					<text_editor name="account_info"/>
-				</layout_panel>
 			</layout_stack>
 			<text name="partner_label" value="パートナー："/>
-			<view_border name="info_border_partner_text"/>
-			<text_editor name="partner_link"/>
 		</layout_panel>
 	</layout_stack>
 	<text name="About:" value="概要："/>
 	<!-- [AS:chanayane] Preview button -->
 	<button name="btn_preview" tool_tip="プロフィールの「概要」セクションのプレビューを切り替えます。"/>
-	<view_border name="info_border_sl_description_edit"/>
 	<!-- [/AS:chanayane] -->
-	<view_border name="info_border_sl_description_edit"/>
-	<text_editor name="sl_description_edit"/>
 	<text name="Groups:" value="グループ："/>
 	<button name="group_invite" label="＋" tool_tip="グループに招待する。" label_selected="＋"/>
-	<group_list name="group_list"/>
 	<text name="Give item:" value="共有："/>
-	<view_border name="drop_target_rect_vis"/>
 	<text name="Give inventory" tool_tip="この人物に渡したいインベントリアイテムをここにドロップしてください。">
-    インベントリアイテムをここにドロップ
+		インベントリアイテムをここにドロップ
 	</text>
 	<layout_stack name="buttonstack">
 		<layout_panel name="left_buttonstack">
@@ -128,12 +109,10 @@
 			<button name="remove_friend" label="フレンド削除" tool_tip="この住民とのフレンドシップを終了します。" label_selected="フレンド削除"/>
 			<button name="block" label="ブロック" tool_tip="この住民をブロックします。"/>
 			<button name="unblock" label="ブロック解除" tool_tip="この住民のブロックを解除します。"/>
-			<menu_button name="overflow_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<check_box name="show_in_search" label="検索に表示" tool_tip="検索結果に情報が表示されるようにします。"/>
 	<check_box name="hide_sl_age" label="完全な誕生日を表示" tool_tip="ＳＬ年齢を他の人に見せましょう"/>
 	<button name="save_description_changes" label="保存"/>
 	<button name="discard_description_changes" label="破棄"/>
-	<profile_drop_target name="drop_target"/>
 </panel>

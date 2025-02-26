@@ -15,7 +15,7 @@
 	<button label="L$ 20" label_selected="L$ 20" name="fastpay 20"/>
 	<line_editor name="amount"/>
 	<text name="amount text">
-    もしくは金額を選ぶ：
+		もしくは金額を選ぶ：
 	</text>
 	<line_editor name="amount"/>
 	<text name="payment_message_label">

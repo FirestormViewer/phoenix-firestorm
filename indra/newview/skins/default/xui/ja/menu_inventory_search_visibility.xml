@@ -3,6 +3,5 @@
 	<menu_item_check label="アウトフィットフォルダを検索" name="search_outfits"/>
 	<menu_item_check label="ゴミ箱を検索" name="search_trash"/>
 	<menu_item_check label="ライブラリを検索" name="search_library"/>
-	<menu_item_separator/>
 	<menu_item_check label="リンクを含む" name="include_links"/>
 </toggleable_menu>

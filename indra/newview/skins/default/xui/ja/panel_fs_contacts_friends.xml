@@ -28,6 +28,6 @@
 	<button label="削除…" name="remove_btn" tool_tip="この人物をフレンドリストから除外します。"/>
 	<button label="追加…" name="add_btn" tool_tip="住人にフレンドシップを申請します。"/>
 	<text name="friend_count">
-		フレンド数: [COUNT]
+		フレンド数：[COUNT]人
 	</text>
 </panel>

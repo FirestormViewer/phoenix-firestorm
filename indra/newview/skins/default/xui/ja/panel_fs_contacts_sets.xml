@@ -15,11 +15,9 @@
 	<panel.string name="non_friends">
 		フレンドでない人
 	</panel.string>
-	<combo_box name="combo_sets"/>
 	<button name="config_btn" tool_tip="選択したコンタクトセットの設定をします。"/>
 	<button name="add_set_btn" tool_tip="新しいコンタクトセットを追加します。"/>
 	<button name="remove_set_btn" tool_tip="選択したコンタクトセットを削除します。"/>
-	<avatar_list name="contact_list"/>
 	<!-- Action buttons -->
 	<button label="追加…" name="add_btn" tool_tip="アバターを現在のコンタクトセットに追加します。"/>
 	<button label="削除…" name="remove_btn" tool_tip="このアバターを現在のコンタクトセットから削除します。"/>

@@ -63,7 +63,7 @@
 		<combo_box.item label="低" name="Low"/>
 		<combo_box.item label="中" name="Medium"/>
 		<combo_box.item label="高" name="High"/>
-		<combo_box.item label="ウルトラ" name="Ultra"/>
+		<combo_box.item label="最高" name="Ultra"/>
 	</combo_box>
 	<text name="MeshText">
 		メッシュ

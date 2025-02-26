@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="人物" name="people_panel">
-	<string name="FlagsColumnType" />
-	<string name="FlagsColumnValue_0" />
-	<string name="FlagsColumnValue_1" />
-	<string name="FlagsColumnValue_2" />
 	<string name="no_recent_people" value="最近交流があった人物はいません。一緒に何かする仲間をお探しですか？[secondlife:///app/search/people 検索]か[secondlife:///app/worldmap ワールドマップ]をお試しください。"/>
 	<string name="no_filtered_recent_people" value="お探しの人物は見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。"/>
 	<string name="no_one_near" value="近くに誰もいません。一緒に何かする仲間をお探しですか？[secondlife:///app/search/people 検索]か[secondlife:///app/worldmap ワールドマップ]をお試しください。"/>
@@ -21,17 +17,17 @@
 	<string name="no_filtered_friends_msg">
 		お探しのものは見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。
 	</string>
-	<string name="people_filter_label" value="人物をフィルタ" />
-	<string name="groups_filter_label" value="グループをフィルタ" />
+	<string name="people_filter_label" value="人物をフィルタ"/>
+	<string name="groups_filter_label" value="グループをフィルタ"/>
 	<!--
 	*WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
 	They are not defined as translatable in VLT. See EXT-5931
 	-->
-	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/groups/[SEARCH_TERM] 検索]をお試しください。" />
-	<string name="no_groups_msg" value="グループをお探しですか？[secondlife:///app/search/groups 検索]をお試しください。" />
+	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/groups/[SEARCH_TERM] 検索]をお試しください。"/>
+	<string name="no_groups_msg" value="グループをお探しですか？[secondlife:///app/search/groups 検索]をお試しください。"/>
 	<string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開きます。Shift‐ドラッグで水平・垂直移動）"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動）"/>
-	<string name="avatar_name_count" value="名前 [[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]" />
+	<string name="avatar_name_count" value="名前 [[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]"/>
 	<panel.string name="empty_list">
 		コンタクトセットに何も登録がありません。
 	</panel.string>
@@ -47,7 +43,7 @@
 	<tab_container name="tabs">
 		<panel label="近く" name="nearby_panel">
 			<tab_container name="tabcont_radarpeople_main">
-				<panel name="panel_radar" label="リスト" />
+				<panel name="panel_radar" label="リスト"/>
 				<panel name="radarmap_options_panel" label="オプション">
 					<scroll_container label="オプション" name="radarmap_options_scroll_container">
 						<container_view name="radarmap_options_container_view" label="オプション">
@@ -59,84 +55,37 @@
 								<check_box label="チャット範囲に入ってきたら通知" name="RadarReportChatRangeEnter"/>
 								<check_box label="チャット範囲から去ったら通知" name="RadarReportChatRangeLeave"/>
 								<check_box label="同じリージョンに入ってきたら通知" name="RadarReportSimRangeEnter"/>
-								<check_box label="同じリージョン去ったら通知" name="RadarReportSimRangeLeave"/>
+								<check_box label="同じリージョンから去ったら通知" name="RadarReportSimRangeLeave"/>
 								<check_box label="入ってきた通知をスクリプトに表示" name="RadarEnterChannelAlert"/>
 								<check_box label="去った通知をスクリプトに表示" name="RadarLeaveChannelAlert"/>
 								<check_box label="ＬＳＬクライアントブリッジでレーダーを強化" tool_tip="チェックするとレーダーが高い場所にいるアバターを決定する機能がLSL-Client Bridgeの支援により高められます。特にそのアバターが描画範囲の外にいる場合に有効です。" name="FSRadarEnhanceByBridge"/>
 								<check_box label="距離に応じて名前タグの色を変える" name="FSRadarColorNamesByDistance"/>
 								<check_box label="範囲の制限：" tool_tip="表示する結果を指定した半径以内のものに絞ります。" name="LimitRadarByRange"/>
-								<slider name="NearMeRangeVintage"/>
-								<text name="radarmap_range_label" value="名前の表示形式：" />
+								<text name="radarmap_range_label" value="名前の表示形式："/>
 								<combo_box name="RadarNameFormat">
-									<combo_box.item name="RadarNameFormat_display" label="表示名のみ" />
-									<combo_box.item name="RadarNameFormat_user" label="ユーザ名のみ" />
-									<combo_box.item name="RadarNameFormat_displayuser" label="表示名（ユーザ名）" />
-									<combo_box.item name="RadarNameFormat_userdisplay" label="ユーザ名（表示名）" />
+									<combo_box.item name="RadarNameFormat_display" label="表示名のみ"/>
+									<combo_box.item name="RadarNameFormat_user" label="ユーザ名のみ"/>
+									<combo_box.item name="RadarNameFormat_displayuser" label="表示名（ユーザ名）"/>
+									<combo_box.item name="RadarNameFormat_userdisplay" label="ユーザ名（表示名）"/>
 								</combo_box>
-								<text name="columns_label" value="表示カラム：" />
-								<check_box label="ボイス" name="column_voice" />
-								<check_box label="表示時間" name="column_seen" />
-								<check_box label="年齢" name="column_age" />
-								<check_box label="同一ＳＩＭ" name="column_region" />
-								<check_box label="入力中" name="column_typing_status" />
-								<check_box label="着席中" name="column_sitting_status" />
-								<check_box label="支払情報" name="column_flags" />
-								<check_box label="メモ" name="notes_flags" />
+								<text name="columns_label" value="表示カラム："/>
+								<check_box label="ボイス" name="column_voice"/>
+								<check_box label="表示時間" name="column_seen"/>
+								<check_box label="年齢" name="column_age"/>
+								<check_box label="同一ＳＩＭ" name="column_region"/>
+								<check_box label="入力中" name="column_typing_status"/>
+								<check_box label="着席中" name="column_sitting_status"/>
+								<check_box label="支払情報" name="column_flags"/>
+								<check_box label="メモ" name="notes_flags"/>
 							</panel>
 						</container_view>
 					</scroll_container>
 				</panel>
 			</tab_container>
-			<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
-			<panel name="hide_controls">
-				<view name="NearMeRange" />
-				<view name="add_friend_btn_nearby" />
-				<avatar_list name="avatar_list" />
-			</panel>
-			<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
 		</panel>
 		<panel label="新着" name="recent_panel">
-			<avatar_list name="avatar_list" />
-			<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
-			<panel name="hide_controls">
-				<menu_button name="recent_viewsort_btn" />
-				<button name="add_friend_btn_recent" />
-			</panel>
+			<avatar_list name="avatar_list"/>
 		</panel>
-		<panel name="blocked_panel" label="ブロック" />
+		<panel name="blocked_panel" label="ブロック"/>
 	</tab_container>
-	<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
-	<panel name="hide_controls">
-		<avatar_list name="nearby_avatar_list" />
-		<button name="view_profile_btn" />
-		<button name="im_btn" />
-		<button name="call_btn" />
-		<button name="share_btn" />
-		<button name="teleport_btn" />
-		<button name="group_info_btn" />
-		<button name="chat_btn" />
-		<button name="group_call_btn" />
-		<group_list name="group_list" />
-		<panel name="groups_panel" />
-		<accordion_tab name="tab_all" />
-		<accordion_tab name="tab_online"/>
-		<menu_button name="nearby_view_sort_btn" />
-		<menu_button name="friends_viewsort_btn" />
-		<menu_button name="groups_viewsort_btn" />
-	</panel>
-	<panel name="friends_panel">
-		<avatar_list name="avatars_online" />
-		<avatar_list name="avatars_all" />
-	</panel>
-	<panel name="button_bar">
-		<button name="group_info_btn" />
-		<button name="chat_btn" />
-		<button name="view_profile_btn" />
-		<button name="im_btn" />
-		<button name="call_btn" />
-		<button name="group_call_btn" />
-		<button name="teleport_btn" />
-		<button name="share_btn" />
-	</panel>
-	<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
 </panel>

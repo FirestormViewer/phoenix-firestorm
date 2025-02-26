@@ -30,10 +30,7 @@
 		<panel name="hair_eyebrows_tab_holder" title="眉毛">
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="hair_eyebrows_accordion">
-				<accordion_tab name="hair_eyebrows_tab" title="眉毛">
-					<!-- Viewer will replace things here with tiled editing views -->
-					<scrolling_panel_list name="hair_eyebrows_param_list"/>
-				</accordion_tab>
+				<accordion_tab name="hair_eyebrows_tab" title="眉毛"/>
 			</accordion>
 		</panel>
 		<!-- End Eyebrows Panel -->
@@ -45,10 +42,7 @@
 			</text>
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="hair_facial_accordion">
-				<accordion_tab name="hair_facial_tab" title="フェイシャル">
-					<!-- Viewer will replace things here with tiled editing views -->
-					<scrolling_panel_list name="hair_facial_param_list"/>
-				</accordion_tab>
+				<accordion_tab name="hair_facial_tab" title="フェイシャル"/>
 			</accordion>
 		</panel>
 		<!-- End Facial Panel -->

@@ -39,7 +39,6 @@
 			<text name="label">
 				デイサイクル名：
 			</text>
-			<line_editor name="day_cycle_name"/>
 			<button label="インポート" name="btn_import" tool_tip="ディスクからレガシー設定をインポートする。"/>
 		</layout_panel>
 		<layout_panel name="content">
@@ -60,8 +59,6 @@
 						<text name="p2" value="50％[DSC]"/>
 						<text name="p3" value="75％[DSC]"/>
 						<text name="p4" value="100％[DSC]"/>
-						<multi_slider name="WLTimeSlider"/>
-						<multi_slider name="WLDayCycleFrames"/>
 						<text name="current_time" value="[PRCNT]％[DSC]"/>
 						<layout_stack name="track_options_ls">
 							<layout_panel name="track_options_lp">
@@ -73,12 +70,6 @@
 								<layout_stack name="progress_control">
 									<layout_panel name="skip_back">
 										<button name="skip_back_btn" tool_tip="前のステップ"/>
-									</layout_panel>
-									<layout_panel name="play_layout">
-										<button	name="play_btn"/>
-									</layout_panel>
-									<layout_panel name="pause_layout">
-										<button name="pause_btn"/>
 									</layout_panel>
 									<layout_panel name="skip_forward">
 										<button name="skip_forward_btn" tool_tip="次のステップ"/>

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Groups" name="panel_ls_groups">
+<panel label="グループ" name="panel_ls_groups">
 	<panel name="panel_ls_input">
 		<text name="search_text">
 			検索語句：
 		</text>
-		<search_combo_box name="groups_edit"/>
 		<check_box label="" name="pg_all"/>
-		<icon name="rating_icon_general"/>
 		<check_box label="" name="mature_all"/>
-		<icon name="rating_icon_moderate"/>
 		<check_box label="" name="adult_all"/>
-		<icon name="rating_icon_adult"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">

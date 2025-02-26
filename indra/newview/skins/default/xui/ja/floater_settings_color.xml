@@ -6,7 +6,7 @@
 		<scroll_list.columns label="色" name="color"/>
 	</scroll_list>
 	<text name="color_name_txt">
-    色名：
+		色名：
 	</text>
 	<color_swatch name="color_swatch"/>
 	<spinner label="アルファ" name="alpha_spinner"/>

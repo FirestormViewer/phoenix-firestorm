@@ -24,7 +24,7 @@
 						<check_box label="入会費" name="check_enrollment_fee" tool_tip="グループに入るのに入会費が必要かどうかを設定します。"/>
 						<spinner name="spin_enrollment_fee" label="L$" tool_tip="入会費にチェックされている場合、新しいメンバーはグループに加入するためにこの料金を支払う必要があります。"/>
 						<combo_box name="group_mature_check" tool_tip="レーティングは、グループで許可されるコンテンツと活動内容の種類を指定します。">
-							<combo_item name="select_mature" value="Select">
+							<combo_item name="select_mature" value="洗濯">
 								‐レーティングの選択‐
 							</combo_item>
 							<combo_box.item label="「Moderate」コンテンツ" name="mature"/>
@@ -35,8 +35,6 @@
 				<layout_panel name="create_info">
 					<text name="fee_information">グループを作成するための料金は、メンバーシップレベルに基づいています。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細]</text>
 					<scroll_list name="membership_list">
-						<scroll_list.columns name="clmn_name"/>
-						<scroll_list.columns name="clmn_price"/>
 						<scroll_list.rows name="basic" value="基本（プレースホルダ）"/>
 						<scroll_list.rows name="plc2" value=""/>
 						<scroll_list.rows name="premium" value="プレミアム（プレースホルダ）"/>
@@ -45,14 +43,8 @@
 				<layout_panel name="create_actions">
 					<layout_stack name="button_row_ls">
 						<layout_panel name="layout_crt">
-							<!-- placeholder to autoadjust buttons (since they are of different sizes)-->
-						</layout_panel>
-						<layout_panel name="layout_crt">
 							<button label="グループ作成：L$ [COST]" name="btn_create" tool_tip="新しいグループを作成します。"/>
 							<button name="back" label="キャンセル"/>
-						</layout_panel>
-						<layout_panel name="layout_crt">
-							<!-- placeholder to autoadjust buttons-->
 						</layout_panel>
 					</layout_stack>
 					<text name="info_deletion">

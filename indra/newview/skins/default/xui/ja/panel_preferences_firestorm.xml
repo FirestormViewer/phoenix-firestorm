@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Firestorm" name="firestorm">
 	<panel.string name="BeamsOffLabel">
 		＝＝オフ＝＝
@@ -15,7 +15,7 @@
 	<tab_container label="Firestorm初期設定" name="tabs">
 		<!-- Extras -->
 		<panel label="特殊機能" name="tab-extras">
-			<check_box name="checkMiscRLVa" label="他のビューアからのリモートコントロールを許可する。（RLVa機能）"/>
+			<check_box name="checkMiscRLVa" label="他のビューアからのリモートコントロールを許可（ＲＬＶａ機能）"/>
 			<text name="textMiscRLVaRestart">
 				（要再起動）
 			</text>
@@ -58,7 +58,6 @@
 				テクスチャ遅延保護（オブジェクトによっては表示がおかしくなります）：
 			</text>
 			<check_box label="広大なテクスチャ領域を有する巨大なオブジェクトを自動的に隠す　閾値：" name="RenderVolumeSAProtection" tool_tip="ここにチェックを入れることで、表面に広大なテクスチャ領域が広がっているようなオブジェクトを表示することでビューアがクラッシュするのを防ぎます。デフォルト値は5000平方メートルに設定してありますが、このオプションを有効にした時に、表示されないオブジェクトがある場合には、この値を上げる必要があるかもしれません。"/>
-			<spinner name="RenderVolumeSAFrameMax"/>
 			<check_box label="スパムからの保護" name="UseAntiSpam"/>
 			<!-- FS:TS FIRE-23138: Enable spam protection for user's objects -->
 			<check_box label="自分が所有するオブジェクトからのスパムからも保護する" name="FSUseAntiSpamMine" tool_tip="ここにチェックを入れると、自分が所有するオブジェクトからのスパムに対しても保護されるようになります。"/>
@@ -113,7 +112,6 @@
 			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
 			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
 			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャンネル9000に送信します。"/>
-			<view_border name="BeamDivisor2"/>
 			<combo_box name="FSBeamShape_combo" tool_tip="パーティクルビームの形を選択します。"/>
 			<button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。"/>
 			<button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形をカスタマイズします。"/>
@@ -137,9 +135,6 @@
 			<text name="text_box_objprams3">
 				テクスチャ
 			</text>
-			<view_border name="SizeBorder"/>
-			<view_border name="SettingBorder"/>
-			<view_border name="TextureBorder"/>
 			<spinner label="Ｘ方向" name="X size"/>
 			<spinner label="Ｙ方向" name="Y size"/>
 			<spinner label="Ｚ方向" name="Z size"/>
@@ -167,11 +162,9 @@
 				<combo_item name="High" label="高"/>
 			</combo_box>
 			<check_box name="FSBuildPrefs_EmbedItem" label="新規作成プリムにアイテムを埋め込む"/>
-			<view_border name="embed_item_drop_target_rect"/>
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="ここにインベントリをドロップします。">
 				ここにインベントリをドロップ
 			</fs_embedded_item_drop_target>
-			<view_border name="build_item_add_disp_rect"/>
 			<text name="build_item_add_disp_rect_txt" tool_tip="">
 				現在の設定：[ITEM]
 			</text>
@@ -272,23 +265,18 @@
 			<text name="title_images">
 				画像
 			</text>
-			<text name="upload_textures"/>
 			<text name="title_sounds">
 				サウンド
 			</text>
-			<text name="upload_sounds"/>
 			<text name="title_animations">
 				アニメーション
 			</text>
-			<text name="upload_animation"/>
 			<text name="title_models">
 				モデル
 			</text>
-			<text name="upload_models"/>
 			<text name="title_pbr">
 				ＰＢＲマテリアル
 			</text>
-			<text name="upload_pbr"/>
 			<text name="upload_help">
 				アップロード先のフォルダを変更するには、インベントリ上でそのフォルダを右クリックして
 メニューから「デフォルトのフォルダとして使用」を選択して下さい。

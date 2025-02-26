@@ -6,7 +6,6 @@
 	<button name="open_map" tool_tip="マップを開きます。"/>
 	<scroll_list name="region_list" tool_tip="エントリをダブルクリックすると、ワールドマップ上に表示します。">
 		<scroll_list.columns name="region_label" label="ラベル"/>
-		<scroll_list.columns name="region_maturity_icon"/>
 		<scroll_list.columns name="region_name" label="リージョン"/>
 		<scroll_list.columns name="region_agent_count" label="人数"/>
 	</scroll_list>

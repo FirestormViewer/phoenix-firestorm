@@ -6,11 +6,7 @@
 				<text name="marketplace_listings_inventory_placeholder_title">
 					読み込んでいます…
 				</text>
-				<text name="marketplace_listings_inventory_placeholder_text"/>
 			</panel>
-			<panel name="panel_marketplace_listing"/>
 		</panel>
-		<panel name="marketplace_panel_status"/>
-		<layout_stack name="initialization_progress_indicator"/>
 	</panel>
 </floater>

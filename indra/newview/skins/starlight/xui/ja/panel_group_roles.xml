@@ -6,7 +6,6 @@
 	<panel.string name="want_apply_text">
 		変更を保存してもよろしいですか？
 	</panel.string>
-	<panel.string name="help_text" />
 	<tab_container name="roles_tab_container">
 		<panel label="メンバー" name="members_sub_tab" tool_tip="メンバー">
 			<panel.string name="help_text">
@@ -74,7 +73,6 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 			<button label="住人をバンする" name="ban_create" tool_tip="グループから住人をバンします。"/>
 			<button label="バンの解除" name="ban_delete" tool_tip="選択した住人のバンを解除します。"/>
 			<button name="ban_refresh" tool_tip="バンリストをリフレッシュします。"/>
-			<text name="ban_count"/>
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
@@ -98,22 +96,15 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 		<text name="static">
 			役割名
 		</text>
-		<line_editor name="role_name">
-		</line_editor>
 		<text name="static3">
 			役割のタイトル
 		</text>
-		<line_editor name="role_title">
-		</line_editor>
 		<text name="static2">
 			説明
 		</text>
-		<text_editor name="role_description">
-		</text_editor>
 		<text name="static4">
 			割り当てられたメンバー
 		</text>
-		<name_list name="role_assigned_members"/>
 		<check_box label="明らかなメンバー" name="role_visible_in_list" tool_tip="グループ外の人が一般タブを見たときに、この役割のメンバーが表示されるかどうかを設定します。"/>
 		<text name="static5">
 			許可された能力
@@ -131,10 +122,8 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 		<text name="static2">
 			この能力を持つ役割
 		</text>
-		<scroll_list name="action_roles"/>
 		<text name="static3">
 			この能力を持つメンバー
 		</text>
-		<name_list name="action_members" />
 	</panel>
 </panel>

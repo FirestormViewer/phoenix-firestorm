@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_inventory">
-	<icon name="title_icon"/>
 	<text name="title">
 		インベントリに保存
 	</text>
-	<view_border name="hr"/>
 	<combo_box label="解像度" name="texture_size_combo">
 		<combo_box.item label="小（128×128）" name="Small(128x128)"/>
 		<combo_box.item label="中（256×256）" name="Medium(256x256)"/>

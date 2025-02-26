@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Events" name="panel_ls_events">
+<panel label="イベント" name="panel_ls_events">
 	<panel name="panel_ls_input">
 		<text name="search_text">
 			検索語句：
@@ -29,12 +29,6 @@
 			<combo_box.item label="チャリティー／サポートグループ" name="charity" value="28"/>
 			<combo_box.item label="その他" name="misc" value="29"/>
 		</combo_box>
-		<check_box label="" name="pg_all"/>
-		<icon name="rating_icon_general"/>
-		<check_box label="" name="mature_all"/>
-		<icon name="rating_icon_moderate"/>
-		<check_box label="" name="adult_all"/>
-		<icon name="rating_icon_adult"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">

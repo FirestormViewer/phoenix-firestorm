@@ -13,6 +13,5 @@
 		<menu_item_check name="Show Position" label="位置"/>
 		<menu_item_check name="Show Date" label="日付"/>
 	</menu>
-	<menu_item_separator/>
 	<menu_item_call label="テレポート履歴をクリア" name="Clear Teleport History"/>
 </menu>
