@@ -117,17 +117,13 @@ bool FSPosingMotion::onUpdate(F32 time, U8* joint_mask)
     return true;
 }
 
-void FSPosingMotion::onDeactivate() { revertChangesToPositionsScalesAndCollisionVolumes(); }
+void FSPosingMotion::onDeactivate() { revertJointsAndCollisionVolumes(); }
 
-void FSPosingMotion::revertChangesToPositionsScalesAndCollisionVolumes()
+void FSPosingMotion::revertJointsAndCollisionVolumes()
 {
     for (FSJointPose jointPose : mJointPoses)
     {
-        jointPose.revertJointScale();
-        jointPose.revertJointPosition();
-
-        if (jointPose.isCollisionVolume())
-            jointPose.revertCollisionVolume();
+        jointPose.revertJoint();
 
         LLJoint* joint = jointPose.getJointState()->getJoint();
         if (!joint)
@@ -170,11 +166,7 @@ void FSPosingMotion::removeJointFromState(FSJointPose* joint)
     if (!avJoint)
         return;
 
-    joint->revertJointScale();
-    joint->revertJointPosition();
-
-    if (joint->isCollisionVolume())
-        joint->revertCollisionVolume();
+    joint->revertJoint();
 
     setJointState(avJoint, 0);
 }

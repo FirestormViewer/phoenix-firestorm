@@ -10,18 +10,21 @@
 			</panel>
 
 			<panel name="P_WL_Sky_Water">
-				<text name="WL Sky" tool_tip="Voreinstellungen für den Himmel.">
+				<text name="WL Sky" tool_tip="Voreinstellungen für die atmosphärische auswählen und verwalten.">
 					Himmel
 				</text>
-				<text name="WL Water" tool_tip="Voreinstellungen für Wasser.">
+				<text name="WL Water" tool_tip="Voreinstellungen für Wasser auswählen, um Reflexionen und Oberflächen-Eigenschaften zu bearbeiten.">
 					Wasser
 				</text>
-				<text name="Day Cycle" tool_tip="Voreinstellungen für den Tageszyklus.">
+				<text name="Day Cycle" tool_tip="Voreinstellungen für den Tageszyklus verwalten, um zeitbasierte Umgebungsveränderungen zu kontrollieren.">
 					Tageszykl.
 				</text>
-				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..."/>
-				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück."/>
-				<button name="PauseClouds" label="Wolken pausieren" tool_tip="Pausiert die Wolken-Animation."/>
+			</panel>
+
+			<panel name="P_WL_Sky_Water_2">
+				<button name="btn_personal_lighting" label="Persönl. Beleuchtung" tool_tip="Öffnet das Fenster Persönliche Beleuchtung. Dort können temporäre Anpassung an die aktuelle Umgebung vorgenommen werden. Dies ist hilfreich für Fotografie oder um die Umgebung den eigenen Wünschen anzupassen. Es können KEINE eigenen Umgebungen erstellt noch die Änderungen gespeichert werden."/>
+				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die Standard-Umgebung der Region zurück."/>
+				<button name="PauseClouds" label="Wolken pausieren" tool_tip="Pausiert die Wolken-Animation für statische Kompositionen des Himmels."/>
 			</panel>
 
 			<panel name="P_Q_Windlights">
@@ -29,55 +32,89 @@
 					Standard-Umgebungen
 				</text>
 				<view_border name="horiz_separator1"/>
-				<button name="Sunrise" label="Sonnenaufgang"/>
-				<button name="Noon" label="Mittag"/>
-				<button name="Sunset" label="Sonnenuntergang"/>
-				<button name="Midnight" label="Mitternacht"/>
-				<button name="Revert to Region Default" label="Gemeinsame Umgebung"/>
+				<button name="Sunrise" label="Sonnenaufgang" tool_tip="Setzt die Beleuchtungsverhältnisse der Umgebung auf Sonnenaufgang."/>
+				<button name="Noon" label="Mittag" tool_tip="Beleuchtung anpassen, um die Helligkeit zur Mittagszeit zu simulieren."/>
+				<button name="Sunset" label="Sonnenuntergang" tool_tip="Beleuchtungsverhältnisse für Sonnenuntergang für warme, goldene Farbtöne setzen."/>
+				<button name="Midnight" label="Mitternacht" tool_tip="Auf Nacht-Einstellungen für Umgebung mit schwachen Lichtverhältnissen wechseln."/>
+				<button name="Revert to Region Default" label="Gemeinsame Umgebung" tool_tip=""/>
 			</panel>
 			
 			<panel name="P_WL_Presets">
 				<text name="T_WL_Presets" tool_tip="Einen der nachfolgenden Button klicken, um eine neue Voreinstellung zu erzeugen oder eine existierende zu bearbeiten.">
-					WL-Voreinstellungen
+					Umgebungseinstell.
 				</text>
-				<button name="new_sky_preset" label="Neuer Himmel"/>
-				<button name="edit_sky_preset" label="Himmel bearbeiten"/>
-				<button name="new_water_preset" label="Neues Wasser"/>
-				<button name="edit_water_preset" label="Wasser bearbeiten"/>
+				<button name="new_sky_preset" label="Neuer Himmel" tool_tip="Neue Voreinstellung basierend auf den aktuell geladenen Einstellungen für den Himmel erstellen."/>
+				<button name="new_water_preset" label="Neues Wasser" tool_tip="Neue Voreinstellung basierend auf den aktuell geladenen Einstellungen für das Wasser erstellen."/>
+				<button name="new_day_preset" label="Neuer Tag" tool_tip="Neue Voreinstellung basierend auf den aktuell geladenen Einstellungen für den Tag erstellen."/>
 			</panel>
 
 			<panel name="P_W_Reflections">
 				<text name="T_W_Reflections">
-					Einstellungen Wasser-Reflektionen
+					Reflexionseinstellungen
 				</text>
 			</panel>
 
-			<panel name="P_W_R_Types">
-				<text name="T_W_R_Types" tool_tip="Legt fest, was in den Wasser-Reflektionen sichtbar ist.">
-					Typ
+			<panel name="P_R_Res">
+				<check_box label="Transparentes Wasser" name="TransparentWater" tool_tip="Stellt Wasser transparent dar. Falls diese Einstellung deaktiert ist, wird Wasser undurchsichtig und mit einer einfachen Textur versehen dargestellt."/>
+				<check_box label="Screen Space Reflections aktivieren" name="ScreenSpaceReflections" tool_tip="Aktiviert Reflexionen basierend auf der aktuellen Ansicht. Erzeugt realistische Relexionen für Objekte innerhalb des Kamera-Sichtfelds, aber kann Details außerhalb versäumen. Kann die Performance abhängig von der Komplexität der Szene beeinflussen."/>
+				<check_box label="Spiegelung aktivieren" name="Mirrors" tool_tip="Aktiviert Spiegel-Reflexionen in Echtzeit. Spiegelt die Umgebung akkurat inklusive Objekte und Avatare, aber kann die Performance signifikant beinflussen."/>
+				<check_box label="Auswahl Reflexionstests aktivieren" name="checkbox select probes" tool_tip="Aktiviert das Auswählen und Inspizieren von Reflexionstests in der Szene."/>
+			</panel>
+
+			<panel name="P_R_Res_2">
+				<text name="ReflectionDetailText" tool_tip="Legt das Detaillevel in Reflexionen fest. „Nur statisch“ reflektiert nur nicht-bewegliche Objekte, während höhrere Einstellungen dynamische Objekte und Reflexionen in Echtzeit einschließen.">
+					Reflexionsdetail
 				</text>
-				<combo_box name="Reflections">
-					<combo_box.item label="Minimal" name="0"/>
-					<combo_box.item label="Terrain und Bäume" name="1"/>
-					<combo_box.item label="Alle statischen Objekte" name="2"/>
-					<combo_box.item label="Alle Avatare und Objekte" name="3"/>
-					<combo_box.item label="Alles" name="4"/>
+				<combo_box name="ReflectionDetail">
+					<combo_box.item label="Nur statisch" name="0"/>
+					<combo_box.item label="Statisch &amp; Dynamisch" name="1"/>
+					<combo_box.item label="Echtzeit" name="2"/>
+				</combo_box>
+				<text name="ReflectionProbeText" tool_tip="Legt fest, wieviel der Szene durch Reflexionen abgedeckt wird. „Nur manuelle“ reflektiert nur ausgewählte Objekte, während  „Komlette Szene“ alles in der aktuellen Ansicht einschließt.">
+					Reflexionsumfang:
+				</text>
+				<combo_box name="ReflectionLevel">
+					<combo_box.item label="Keiner" name="0"/>
+					<combo_box.item label="Nur manuelle" name="1"/>
+					<combo_box.item label="Manuelle &amp; Terrain" name="2"/>
+					<combo_box.item label="Komplette Szene" name="3"/>
+				</combo_box>
+				<text name="MirrorResolutionText" tool_tip="Legt die Auflösung für Spiegelungen fest. Höhere Werte erzeugen schärfere Reflexionen, benötigen aber mehr Rechenleistung.">
+					Spiegelungsauflösung:
+				</text>
+				<combo_box name="MirrorResolution">
+					<combo_box.item label="256" name="0"/>
+					<combo_box.item label="512" name="1"/>
+					<combo_box.item label="1024" name="2"/>
+					<combo_box.item label="2048" name="3"/>
+				</combo_box>
+				<text name="HeroProbeUpdateText" tool_tip="Legt fest, wie häufig Spiegel-Reflexionen aktualisiert werden. Höhere Einstellungen bieten gleichmäßigere Reflexionen, können aber die Performance beeinträchtigen.">
+					Aktualisierung Spiegelung:
+				</text>
+				<combo_box name="HeroProbeUpdateRate">
+					<combo_box.item label="Niedrig" name="6"/>
+					<combo_box.item label="Mittel" name="3"/>
+					<combo_box.item label="Hoch" name="1"/>
+					<combo_box.item label="Ultra" name="0"/>
+				</combo_box>
+				<text name="Probe_Resolution" tool_tip="Definiert die Auflösung von Reflexionstests. Höhere Auflösungen bieten detalliertere Reflexionen, könen aber den Speicherverbrauch erhöhen und benötigen einen Neustart, um wirksam zu werden. Werte über 128 können signifikant mehr Videospeicher verbrauchen und die Performance auf Systemen mit begrenzten GPU-Ressourcen beinträchtigen.">
+					Test-Auflösung (Neustart)
+				</text>
+				<combo_box name="Probe_Resolution_Combo">
+					<combo_box.item label="64" name="0"/>
+					<combo_box.item label="128" name="1"/>
+					<combo_box.item label="256" name="2"/>
+					<combo_box.item label="512" name="3"/>
+					<combo_box.item label="1024" name="4"/>
+					<combo_box.item label="2048" name="5"/>
 				</combo_box>
 			</panel>
-		
-			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Legt die Qualität der Wasserreflektionen fest.">
-					Qualität
+
+			<panel name="P_R_Res_3">
+				<text name="T_Reflection_Distance" tool_tip="Legt die Reichweite für die Sichtbarkeit von Reflexionen fest und beeinflusst das Reflexionsdetail und die Performance von Reflexionstests, Spiegelungen und Screen Space Reflections. Höhere Werte vergrößern die Distanz, in der Reflexionen sichtbar sind, verbessern das Detail, aber erhöhen die Performance-Kosten.">
+					Reflex.-Dist.
 				</text>
-				<combo_box name="ReflectionRescombo">
-					<combo_box.item label="Annehmbar" name="0"/>
-					<combo_box.item label="Gut" name="1"/>
-					<combo_box.item label="Sehr gut" name="2"/>
-					<combo_box.item label="Exzellent" name="3"/>
-					<combo_box.item label="Überragend" name="4"/>
-					<combo_box.item label="Lebensecht" name="5"/>
-				</combo_box>
-				<check_box label="Transparentes Wasser" name="TransparentWater" tool_tip="Stellt Wasser transparent dar. Falls diese Einstellung deaktiert ist, wird Wasser undurchsichtig und mit einer einfachen Textur versehen dargestellt."/>
+				<button name="Reset_Reflection_Distance" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 		</panel>
 
@@ -89,32 +126,42 @@
 			</panel>
 
 			<panel name="P_L_S_Settings">
-				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
-			</panel>
-
-			<panel name="P_Shadows">
-				<text name="T_Shadow_Types" tool_tip="Diese Einstellung hat nur Einfluss auf Schatten, die von Lichtquellen erzeugt werden. Die Lichter funktionieren ansonsten ganz normal. Punktuelle Beleuchtung (Lichter, die keine Projektion aktiviert haben) erzeugt immer eine Art von Schatten, werfen diesen aber auf keine Oberfläche. Es ist zu beachten, dass unabhängig von der gewählten Einstellung Texturen, die von Projektoren ausgehen, weiterhin aktiviert sind.">
-					Schatten- Typen
+				<text name="T_Shadow_Types" tool_tip="Kontrolliert den Schattentyp, der von Lichtquellen erzeugt wird. Punkt-Lichter ohne Projektionen erzeugen Lichteffekte, aber werfen keine Schatten. Projizierte Light-Texturen bleiben unabhängig von dieser Einstellung sichtbar.">
+					Schatten-Typen
 				</text>
 				<combo_box name="ShadowDetail">
 					<combo_box.item label="Keine" name="0"/>
 					<combo_box.item label="Sonne/Mond" name="1"/>
 					<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
 				</combo_box>
+				<text name="local lights_label" tool_tip="Legt die Anzahl an gleichzeitig dargestellten Lichtquellen fest. Ein Wert von 0 deaktiviert alle lokalen Lichtqzellen. Höhere Werte können die Performance in komplexen Szene beeinträchtigen. Erfordert Neustart.">
+					Punkt. Beleucht. (Neust.)
+				</text>
+				<combo_box name="LocalLightsDetail">
+					<combo_box.item label="Vollständig (Standard)" name="3"/>
+					<combo_box.item label="Reduziert" name="2"/>
+					<combo_box.item label="Nur Sonne/Mond" name="1"/>
+				</combo_box>
+				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
 			</panel>
 
 			<panel name="P_Shadow_Res">
-				<text name="T_Shadow_Res" tool_tip="Schatten-Qualität: Eine besonders wichtige Einstellung. Sie legt die Qualität der Schatten fest. Zudem ist sie sehr recheninstensiv und beansprucht den Computer dementsprechend. Sofern kein Shooting stattfindet, sollte dieser Wert möglichst klein sein. Während den Vorbereitungen zu einem Shooting empfiehlt sich, den Wert auf 1.0 zu setzen. Anschließend den Regler langsam nach rechts bewegen, um den Wert zu erhöhen. Dabei sollte die Framerate im Auge behalten werden. Es ist hilfreich, das Statistik-Fenster hierfür zu aktivieren. HINWEIS: Wird die Einstellung zu hoch gewählt oder zu schnell bewegt, kann dies zum Absturz des Viewers führen!">
-					Sch.Qual.
+				<text name="T_Local_Lights" tool_tip="Anzahl an lokalen Lichtquellen, die dargestellt werden sollen.">
+					Lok. Lichter
+				</text>
+				<button name="Reset_Local_Lights" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Shadow_Res" tool_tip="Legt die Qualität und Schärfe der Schatten fest. Höhere Werte erzeugen detailliertere Schatten, können die Performance aber signifikant beeinträchtigen, insbesondere in komplexen Szenen. Im normalen Betrieb sollte der Wert gering gehalten werden, um eine gleichmäßige Performance er ermöglichen. Während den Vorbereitungen zu einem Shooting empfiehlt sich, den Wert auf 1.0 zu setzen. Anschließend den Regler langsam nach rechts bewegen, um den Wert zu erhöhen. Dabei sollte die Framerate im Auge behalten werden. Es ist hilfreich, das Statistik-Fenster hierfür zu aktivieren. HINWEIS: Wird die Einstellung zu hoch gewählt oder zu schnell bewegt, kann dies zum Absturz des Viewers führen!">
+					Sch.Aufl.
 				</text>
 				<button name="Reset_Shadow_Res" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Shd_Clarity" tool_tip="Dies ist eine sehr wichtige Einstellung. Sie bestimmt, wie klar die Sonne oder der Mond dargestellt wird. Sie sollte zuerst gesetzt werden, bevor die unten folgenden Einstellungen angepasst werden. Bei einem Wert für „Sch.Qual.“ von größer 1.0 sollte der Wert für „Sch.Klarh.“ so verändert werden, bis die bestmögliche Schärfe erreicht wird. Hinweis: Die Klarheit von Schatten ist direkt abhängig von der Position der Kamera und der Sonne bzw. des Mondes. Jedes Mal, wenn die Kamera oder die Sonne oder der Mond bewegt wird, sollte die Einstellung daher angepasst werden. Um die Anpassung zu vereinfachen, sollte vorher der Wert für „Sch.Unsch.“ auf 0.0 gesetzt werden.">
+				<text name="T_Shd_Clarity" tool_tip="Legt fest, wie klar die Sonne oder der Mond dargestellt wird. Sie sollte erst gesetzt werden, nachdem die Schattenauflösung („Sch.Aufl.“) auf einen Wert um 1.0 gesetzt wurde, um optimale Ergebnisse zu erzielen. Anschließend langsam den Wert für Schattenklarheit erhöhen, bis die gewünschte Schärfe erreicht ist. Die Klarheit von Schatten ist direkt abhängig von der Position der Kamera und der Sonne bzw. des Mondes. Jedes Mal, wenn die Kamera oder die Sonne oder der Mond bewegt wird, sollte die Einstellung daher angepasst werden. Um die Anpassung zu vereinfachen, sollte vorher der Wert für „Sch.Unsch.“ temporär auf 0.0 gesetzt werden, um den Effekt der Anpassung besser erkennen zu können.">
 					Sch.Klarh.
 				</text>
 				<button name="Shd_Clarity_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Blur_Size" tool_tip="Je höher der Wert ist, desto weicher werden die Schattenränder. Ein Wert von 0 erzeugt die höchstmögliche Schärfe. Dieser Wert ist direkt mit der darunter verbunden. Sie erlaubt es, denn insgesamt möglichen Wert an Schattenunschärfe zu setzen. Bei einem Wert von 4.0 kann „Sch.Weich.“ dazu verwendet werden, die Schattenunschärfe unabhängig von der Ambient Occlusion angepasst werden. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
+				<text name="T_Blur_Size" tool_tip="Legt fest, wie weich Schattenränder dargestellt werden, und erlaubt es, entweder scharfe, gut-definierte Schatten oder weiche, unscharfe Schatten zu erzeugen. Ein höherer Wert erzeugt verschwommene Schatten-Kanten, während ein Wert von 0 die höchstmögliche Schärfe erzeugt. Dieser Wert arbeitet in Verbindung mit Schatten-Weichzeichnung („Sch.Weich.“), die ein zusätzliches Feintuning von Schatten-Weichheit ermöglicht, insbesondere wenn Schatten-Unschärfe auf einen höheren Wert gesetzt ist (z.B. um 4.0). Für präzise Anpassungen sollte sollte Schattenunschärfe zunächst temporär auf 0.0 gesetzt werden, um Änderungen in der Klarheit beim Anpassen erkennen zu können. Hinweis: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
 					Sch.Unsch.
 				</text>
 				<button name="Blur_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
@@ -124,15 +171,20 @@
 				</text>
 				<button name="Shd_Soften_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Blur_Dist" tool_tip="Legt den Punkt fest, ab dem Schatten relativ zur Kamera zu verschwimmen beginnen. Je kleiner der Wert, desto näher an der Kamera beginnen die Schatten unscharf zu werden. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
+				<text name="T_Blur_Dist" tool_tip="Legt den Punkt fest, ab dem Schatten relativ zur Kamera zu verschwimmen beginnen. Je kleiner der Wert, desto näher an der Kamera beginnen die Schatten unscharf zu werden. „Ambient Occlusion“ muss hierfür aktiviert sein.">
 					Unsch.Dist.
 				</text>
 				<button name="Blur_Dist_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_FOV_Cutoff" tool_tip="Legt den Punkt im Sichtbereich fest, an dem der Viewer zwischen orthogonaler und perspektivischer Projektion wechselt. Falls Schatten zackig und zerklüftet aussehen, sollte diese Einstellung justiert werden. Zusätzlich kann das justieren der XYZ-Werte für die Debug-Einstellung „RenderShadowSplitExponent“ äußerst hilfreich sein.">
+				<text name="T_FOV_Cutoff" tool_tip="Legt den Punkt im Sichtbereich fest, an dem der Viewer zwischen orthogonaler und perspektivischer Projektion wechselt. Anpassen, um zackige und zerklüftete Schatten zu reduzieren.">
 					FOV Cutoff
 				</text>
 				<button name="FOV_Cutoff_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Spot_Cutoff" tool_tip="Legt den Versatz von Schatten fest, die von Scheinwerfern erzeugt werden, um Artefakte wie Schatten-Akne oder unerwünschte Linien auf Oberflächen zu reduzieren.">
+					Sch.Vers.
+				</text>
+				<button name="Spot_Cutoff_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
 				<text name="T_Shd_Bias">
 					Sch. Bias
@@ -147,38 +199,48 @@
 			</panel>
 
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="UseSSAO" tool_tip="Ambient Occlusion fügt Schattierungen zu allen Objekten hinzu. Es ist am effektivsten, wenn die Effekt- und Weichzeinungs-Einstellungen genutzt werden und kann zum Bild ein hohes Maß an Realismus hinzufügen. Dies trifft besonders dann zu, wenn Bilder mit einer Auflösung von 2048 Pixel oder mehr erzeugt werden."/>
+				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="UseSSAO" tool_tip="Ambient Occlusion simuliert weiche Schatten, die in Falten, Ecken und wo Objekte dicht beieinander sind auftreten, verbessert die Tiefe und Realismus, indem nachgeahmt wird, die Umgebungslicht natürlich überdeckt wird. Während Ambient Occlusion alleine bereits effektiv arbeitet, können die Einstellungen 'Effekt' und 'AO Weich.' helfen, die Intensität und Weichheit der Schattierung zu optimieren. Ambient Occlusion trägt zu realistischeren Bildern in jeder Auflösung bei, die feinen Details sind jedoch erst bei höheren Auflösung wie 2048 Pixel und höher deutlicher zu erkennen."/>
 			</panel>
 
 			<panel name="P_Scale">
-				<text name="T_Scale" tool_tip="Legt die Sampling-Region fest, wobei größere Region genauer sind. Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
+				<text name="T_Scale" tool_tip="Legt die Größe der Sampling-Region für Ambient Occlusion fest. Größere Regionen erhöhen die Schatten-Genauigkeit, können aber die Performance beeinträchtigen. Wird am besten zusammen mit Schattenunschärfe verwendet, um den Effekt abzumildern.">
 					Skalierung
 				</text>
 				<button name="Reset_Scale" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Max_Scale" tool_tip="Legt den maximalen Bildschirmradius fest, von dem das Sample genommen wird, um Cache-Fehler der Grafikkarte und Performance-Einbußen zu verhindern. Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
+				<text name="T_Max_Scale" tool_tip="Legt die maximale Distanz fest, aus der Proben für Amibient Occlusion genommen werden. Höhere Werte verbessen Schattentiefe in großen Szenen, können jedoch die Performance verringern. Wird am besten zusammen mit Skalierung verwendet, um den Effekt abzumildern.">
 					Max. Skal.
 				</text>
 				<button name="Reset_Max_Scale" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Scaling_Factor" tool_tip="Skalierungsfaktor für den Effekt (höherer Wert = dunkler). Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
+				<text name="T_Scaling_Factor" tool_tip="Legt die Stärke des Effekts von Ambient Occlusion fest. Höhere Werte erzeugen dunklere, betontere Schatten in Falten und Ecken. Mit Vorsicht verwenden, um unnatürliche Verdunkelung zu vermeiden.">
 					Faktor
 				</text>
 				<button name="Reset_Scaling_Factor" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Effect" tool_tip="Kontrolliert den Verdunkelungeffekt von Ambient Occlusion. Der Standardwert von 0.8 erzeugt einen kaum wahrnehmbaren Effekt. Werte von 0.0 oder weniger erzeugen realistischere Ergebnisse. Hinweis: Ambient Occlusion erzeugt ein Bildrauschen, das über die Einstellung „AO Weich.“ vermindert werden kann. Zusätzlich kann der Standard Avatar-Mesh weniger gut mit hohen Effekt-Werten aussehen aufgrund der geringen Qualität der Geometrie der Avatare. Hinweis: Der kleinste Wert, der mit dem Schieber gesetzt werden kann, ist 0, während die Eingabebox negative Werte bis -10000 erlaubt.">
+				<text name="T_I_Max" tool_tip="Legt das maximale Helligkeitslimit für die Strahlungsstärke in Berechnungen für Ambient Occlusion fest. Dient als obere Begrenzung, um zu verhindern, dass besonders helle Bereiche den Effekt dominieren.">
+					Stärk.Max
+				</text>
+				<button name="Reset_I_Max" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_I_Scaling" tool_tip="Legt die Skalierung von Strahlungsstärke innerhalb von Ambient Occlusion fest und beinflusst die Lichtintensität auf die Dunkelheit von Schatten. Anpassen, um ausbalancierte Beleuchtung in hellen Szenen zu erreichen.">
+					Stärk.Max
+				</text>
+				<button name="Reset_I_Scaling" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Effect" tool_tip="Kontrolliert die Intensität des Verdunkelungeffekts von Ambient Occlusion, der feine Schatten in Falten, Ecken und wo sich Objekte berühren erzeugt, um Tiefe und Realismus zu erhöhen. Niedrige Werte erzeugen weichere, natürlichere Schatten, die sich nahtlos in die Umgebung einfügen und ein realistisches Aussehen erzeugen. Höhere Werte erzeugen stärkeren, dramatischeren Kontrast, wodurch ein stärkerer Effekt von Ambient Occlusion erzeugt wird, aber unnatürlich in einigen Lichtverhältnissen erscheinen kann. Diese Einstellung sollte vorsichtig angepasst werden, um übermäßig dunkle oder raue Schatten zu erzeugen, die die natürliche Beleuchtung einer Szene stören können. Für kreative oder experimentelle Effekte können negative Werte verwendet werden, um die Schattierung umzukehren und ungewöhnliche Lichteffekte zu erzeugen. Diese Einstellung wird am besten zusammen mit „AO Weich“ verwendet, um die Balance zwischen Schärfe und Weichheit zu kontrollieren.">
 					Effekt
 				</text>
 				<button name="Reset_Effect" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_AO_Soften" tool_tip="Legt die Weichzeichnung des Ambient-Occlusion-Effekts fest. Eine einfache Möglichkeit, diesen Wert für die spezifische Anforderung zu bestimmen, liegt daran, zunächst den Wert für „Sch.Unsch.“ auf ca. 4.0 zu setzen. Anschließend kann der Wert für die Weichzeichnung den eigenen Wünschen angepasst werden. Hinweis: Ein Wert von 0.0 deaktiviert effektiv Ambient Occlusion.">
+				<text name="T_AO_Soften" tool_tip="Legt die Weichzeichnung des Ambient-Occlusion-Effekts fest, um raue Kanten und Rauschen zu reduzieren. Wird am besten zusammen mit einem Wert für „Sch.Unsch.“ von ca. 4.0 für ausbalancierte Weichheit verwendet.">
 					AO Weich.
 				</text>
 				<button name="Reset_AO_Soften" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 		</panel>
 
-		<panel name="P_DoF_Glow" label="DoF/Ltn">
+		<panel name="P_DoF_Glow" label="VFX">
 			<panel name="PT_DoF_Glow">
 				<text name="T_DoF">
 					Einstellungen Schärfentiefe (DoF)
@@ -188,6 +250,7 @@
 			<panel name="P_DoF_Settings">
 				<check_box label="Schärfentiefe aktivieren" name="UseDepthofField" tool_tip="Diese Einstellung aktiviert die Schärfentiefe, die die Ausdehnung des Bildausschnitts festlegt, der noch scharf dargestellt wird. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu erhöhen. Falls diese Funktion nicht aktiviert werden kann oder kein Effekt sichtbar ist, muss „Erweitertes Beleuchtungsmodell“ auf dem Reiter „Licht“ aktiviert werden."/>
 				<check_box label="Schärfentiefe-Fokus folgt Mauszeiger" name="FSFocusPointFollowsPointer" tool_tip="Der Fokus der Schärfentiefe folgt der Maus, ähnlich dem Verhalten bei der Verwendung einer Flycam. In Verbindung mit fixiertem Schärfentiefe-Fokus verwenden."/>
+				<button name="FocusPointRenderToggle" tool_tip="Anzeige von Fokuspunkt-Fadenkreuz umschalten. Das Fadenkreuz ist gelb falls frei, und rot falls fixiert."/>
 				<check_box label="Aktuelles Kamera-Sichtfeld (FOV) anzeigen" name="MIC_Show_FOV" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
 			</panel>
 
@@ -233,6 +296,30 @@
 				<button name="Reset_Aspect_Ratio" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 
+			<panel name="P_Tone_Settings">
+				<text name="T_Tone_Settings">
+					HDR-Tone-Mapping-Einstellungen
+				</text>
+			</panel>
+
+			<panel name="P_Tone_Settings_2">
+				<check_box label="HDR und Emissive aktivieren" name="Disable_Vintage_Mode" tool_tip="Aktiviert zusätzliche Features der Rendering-Pipeline auf neueren Maschinen, wie HDR und Emissive-Texturen auf PBR-Materialien."/>
+			</panel>
+
+			<panel name="P_Tone_Settings_3">
+				<text tool_tip="Legt den Algorithmus fest, der für HDR Tone-Mapping verwendet wird, der beinflusst, die helle und dunkle Bereiche ausbalanciert werden. Khronos Neutral erzeugt ein natürliches, neutrales Aussehen mit wenig Kontrast und minimaler Farb-Manipulation. ACES (Academy Color Encoding System) bietet reichere Farben und höheren Kontrast.">
+					HDR-Tonemaper-Typ
+				</text>
+				<combo_box name="CB_Tonemap_Type">
+					<combo_box.item label="Khronos Neutral" name="0"/>
+					<combo_box.item label="ACES" name="1"/>
+				</combo_box>
+				<text name="T_Tonemap_Type" tool_tip="Mix zwischen linearen und tone-gemappten Farben">
+					Tone-Mix
+				</text>
+				<button name="Reset_Tonemap_Type" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			 </panel>
+
 			<panel name="P_Glow_Settings">
 				<text name="T_Glow_Settings">
 					Einstellungen „Leuchten“
@@ -240,13 +327,16 @@
 			</panel>
 
 			<panel name="P_Glow_Quality">
+				<check_box label="Leucht-Effekt aktivieren" name="UseGlow" tool_tip="Stellt Leuchteffekte dar. Stärke muss auf 0 gesetzt werden, um Leuchteffekte zu deaktiveren, falls Schatten aktiviert sind."/>
+				<check_box label="HDR für Leucht-Effekt aktivieren" name="GlowHDR" tool_tip="Aktiviert HDR für die Verarbeitung des Leucht-Effekts."/>
+			</panel>
+
+			<panel name="P_Glow_Iterations">
 				<text name="T_Glow_Quality" tool_tip="Legt die Qualität von Leucht-Effekt fest, wobei ein höherer Wert eine höhere Qualität bedeutet. Zwischen 8 und 10 gibt es kaum sichtbare Unterschiede.">
 					Qualität
 				</text>
 				<button name="Reset_Glow_Quality" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-			</panel>
 
-			<panel name="P_Glow_Iterations">
 				<text name="T_Glow_Iterations" tool_tip="Anzahl an Iterationen/Wiederholungen des Leuchtens (Höherer Wert = ausgedehnter, weicher und etwas langsamer).">
 					Iterationen
 				</text>
@@ -257,25 +347,10 @@
 				</text>
 				<button name="Reset_Glow_Strength" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Luminance" tool_tip="Minimale Leuchtkraft-Intensität, die notwendig ist, damit ein Objekt als hell genug angesehen wird um zu leuchten.">
-					Leuchtkraft
-				</text>
-				<button name="Reset_Luminance" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-
-				<text name="T_Warmth" tool_tip="Menge an Wärme-Extraktion, die verwendet werden soll (im Vergleich zur Leuchtkraft-Extraktion). 0 = Kälte, 1.0 = Wärme. HAT OFTMALS WENIG ODER KEINEN EFFEKT!">
-					Wärme
-				</text>
-				<button name="Reset_Warmth" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-
 				<text name="T_Glow_Width" tool_tip="Größe des Leucht-Samples. Höherer Wert = breiteres und sanfteres Leuchten, aber eventuell pixeliger.">
 					Breite
 				</text>
 				<button name="Reset_Glow_Width" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-
-				<text name="T_Alpha" tool_tip="Maximale Helligkeit, die das Leuchten annehmen darf.">
-					Alpha
-				</text>
-				<button name="Reset_Alpha" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 		</panel>
 
@@ -341,23 +416,16 @@
 					Him-Det.
 				</text>
 				<button name="Reset_Sky_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-			</panel>
 
-			<panel name="P_Vignetting">
-				<text name="T_VignetteX" tool_tip="Legt die Höhe des Vignette-Effekts fest.">
-					Vig.-Höhe
+				<text name="T_Sharpening" tool_tip="Legt die schärfe des Gesamtbilds mit Hilfe von Contrast-Adaptive Sharpening (CAS) fest.">
+					Schärfung
 				</text>
-				<button name="Reset_VignetteX" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+				<button name="Reset_Sharpening" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_VignetteY" tool_tip="Legt die Stärke des Vignette-Effekts fest.">
-					Vig.-Stärke
+				<text name="T_Exposure" tool_tip="Kontrolliert die Helligkeit der Szene, indem Belichtungseinstellungen einer Kamera simuliert werden.">
+					Belichtung
 				</text>
-				<button name="Reset_VignetteY" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-
-				<text name="T_VignetteZ" tool_tip="Legt den Multiplikator-Faktor des Vignette-Effekts fest.">
-					Vig.-Multipl.
-				</text>
-				<button name="Reset_VignetteZ" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+				<button name="Reset_Exposure" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 
 			<panel name="P_Render">
@@ -369,15 +437,22 @@
 			</panel>
 
 			<panel name="P_Anti-aliasing">
+				<text name="T_Antialiasing_Type" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
+					Anti-Aliasing-Typ:
+				</text>
+				<combo_box name="fsaa">
+					<combo_box.item label="Deaktiviert" name="FSAADisabled"/>
+					<combo_box.item label="FXAA" name="FXAA"/>
+					<combo_box.item label="SMAA" name="SMAA"/>
+				</combo_box>
 				<text name="T_Anti-aliasing" tool_tip="Legt fest, wie scharf und weich die Kanten von Objekten dargestellt werden. Auf High-End-Grafikkarten haben höhere Werte praktisch KEINEN Einfluss auf die Performance, auf Low-End-Grafikkarten kann ein höherer Wert die Performance verschlechtern.">
 					Anti-Aliasing
 				</text>
 				<combo_box name="fsaa">
-					<combo_box.item label="Deaktiviert (Rauere Kanten)" name="FSAADisabled"/>
-					<combo_box.item label="2x (Weiche Kanten)" name="2x"/>
-					<combo_box.item label="4x (Weichere Kanten)" name="4x"/>
-					<combo_box.item label="8x (Noch weicher)" name="8x"/>
-					<combo_box.item label="16x (Am weichsten)" name="16x"/>
+					<combo_box.item label="Niedrig" name="Low"/>
+					<combo_box.item label="Mittel" name="Medium"/>
+					<combo_box.item label="Hoch" name="High"/>
+					<combo_box.item label="Ultra" name="Ultra"/>
 				</combo_box>
 				<text name="T_Texture_Bumpiness" tool_tip="Legt die Stärke und Qualität von Normal- und Bump-Maps fest.">
 					Textur-Holprigkeit
@@ -390,6 +465,17 @@
 					<combo_box.item label="Rau (stärker)" name="4"/>
 					<combo_box.item label="Rauer (sehr stark)" name="5"/>
 				</combo_box>
+				<text name="T_RestrictMaxTexture" tool_tip="Legt die maximale Auflösung fest, in der Texturen dargestellt werden.">
+					Max. Textur-Auflösung
+				</text>
+				<text name="T_AvatarDisplay" tool_tip="Legt fest, wie Avatar basierend auf Komplexität und Freundschaftsstatus dargestellt werden.">
+					Avatar-Anzeige:
+				</text>
+				<combo_box name="AvatarComplexityModeSelection">
+					<combo_box.item label="Komplexitätsbegrenzung" name="0"/>
+					<combo_box.item label="Freunde immer anzeigen" name="1"/>
+					<combo_box.item label="Nur Freunde anzeigen" name="2"/>
+				</combo_box>
 			</panel>
 		</panel>
 
@@ -400,20 +486,22 @@
 				</text>
 			</panel>
 
-			<check_box label="Bounding Boxes für Lichtquellen anzeigen" name="Lights"/>
-			<check_box label="Lichtradius für ausgewählte Lichter anzeigen" name="Show Light Radius for Selection"/>
-			<check_box label="Bounding Boxes für Objekte anzeigen" name="Bounding Boxes"/>
-			<check_box label="Statistiken-Fenster anzeigen" name="Statistics Bar"/>
-			<check_box label="Detaillierte Kamerapositionsdaten anzeigen" name="Camera"/>
-			<check_box label="Detaillierte Texturlade-Informationen anzeig." name="Texture Console"/>
-			<check_box label="RGB-I-Farbwerte unter Mauszeiger anzeigen" name="Show Color Under Cursor"/>
-			<check_box label="Transparente Objekte in rot hervorheben" name="Highlight Transparent"/>
-			<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
-			<check_box label="Angehängte HUD-Objekte anzeigen" name="Show HUD Attachments"/>
-			<check_box label="Avatar verlangsamen (nur in eigenem Viewer)" name="Slow Motion Animations"/>
-			<button label="Aussehen aktualisieren (Rebake)" name="Rebake Texture"/>
-			<button label="Viewer-Fenstergröße festlegen..." name="Set Window Size..."/>
-			<button label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
+			<panel name="P_Aids_Settings">
+				<check_box label="Bounding Boxes für Lichtquellen anzeigen" name="Lights"/>
+				<check_box label="Lichtradius für ausgewählte Lichter anzeigen" name="Show Light Radius for Selection"/>
+				<check_box label="Bounding Boxes für Objekte anzeigen" name="Bounding Boxes"/>
+				<check_box label="Statistiken-Fenster anzeigen" name="Statistics Bar"/>
+				<check_box label="Detaillierte Kamerapositionsdaten anzeigen" name="Camera"/>
+				<check_box label="Detaillierte Texturlade-Informationen anzeig." name="Texture Console"/>
+				<check_box label="RGB-I-Farbwerte unter Mauszeiger anzeigen" name="Show Color Under Cursor"/>
+				<check_box label="Transparente Objekte in rot hervorheben" name="Highlight Transparent"/>
+				<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
+				<check_box label="Angehängte HUD-Objekte anzeigen" name="Show HUD Attachments"/>
+				<check_box label="Avatar verlangsamen (nur in eigenem Viewer)" name="Slow Motion Animations"/>
+				<button label="Aussehen aktualisieren (Rebake)" name="Rebake Texture"/>
+				<button label="Viewer-Fenstergröße festlegen..." name="Set Window Size..."/>
+				<button label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
+			</panel>
 
 			<panel name="P_Quick_Stats">
 				<text name="T_Quick_Stats"
@@ -421,7 +509,7 @@
 					Statistiken
 				</text>
 			</panel>
-			
+
 			<scroll_container name="statistics_scroll">
 				<container_view name="statistics_view">
 					<stat_view name="basic">

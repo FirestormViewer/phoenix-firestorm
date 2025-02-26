@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Fixed Environment" title="Festgelegte Umgebung">
+	<string name="edit_sky">
+		Himmel bearbeiten:
+	</string>
+	<string name="edit_water">
+		Wasser bearbeiten:
+	</string>
+	<layout_stack name="floater_stack">
+		<layout_panel name="info_panel">
+			<text name="info_panel_label">
+				Name:
+			</text>
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<layout_stack name="button_bar_ls">
+				<layout_panel name="load_btn_lp">
+						<button label="Laden" name="btn_load" width="60" tool_tip="Einstellungen aus dem Inventar laden"/>
+						<button label="Import." name="btn_import" width="60" tool_tip="Alte Einstellungen von Datenträger importieren."/>
+						<button label="Speichern" name="btn_commit" width="70"/>
+					<button label="Abbrechen" name="btn_cancel" tool_tip="Zur zuletzt gespeicherten Version zurückkehren"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -34,7 +34,9 @@
 				<combo_box.item value="filter_type_sounds" label="Sons"/>
 				<combo_box.item value="filter_type_textures" label="Textures"/>
 				<combo_box.item value="filter_type_snapshots" label="Photos"/>
+				<combo_box.item value="filter_type_materials" label="Matériaux" />
 				<combo_box.item value="filter_type_settings" label="Paramètres" />
+				<combo_box.item value="filter_type_folders" label="Dossiers" />
 				<combo_box.item value="filter_type_coalesced" label="Uniquement les objets groupés"/>
 				<combo_box.item value="filter_type_custom" label="Personnalisé..."/>
 			</combo_box>

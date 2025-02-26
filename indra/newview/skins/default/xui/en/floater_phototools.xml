@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 <floater
- positioning="right"
  can_resize="false"
- can_dock="false"
  can_close="true"
  can_minimize="true"
- height="547"
- width="285"
+ height="540"
+ help_topic="phototools_menu_floater"
  layout="topleft"
+ name="phototools"
+ positioning="topright"
  save_rect="true"
+ save_dock_state="true"
  single_instance="true"
  title="Phototools"
- name="phototools"
- help_topic="phototools_menu_floater">
+ width="288">
 
 	<tab_container
 	 follows="all"
 	 halign="center"
-	 name="tabs"
+	 height="540"
+	 hide_scroll_arrows="true"
 	 layout="topleft"
-	 height="547"
-	 width="285"
-	 top="0"
 	 left="0"
+	 name="tabs"
+	 tab_allow_rearrange="false"
 	 tab_group="0"
-	 tab_width="41"
-	 tab_position="top">
-	
+	 tab_position="top"
+	 tab_min_width="47"
+	 tab_max_width="47"
+	 top="0"
+	 width="288">
+
 		<panel
 		 follows="all"
 		 name="EnvironmentTab"
-		 layout="topleft"
-		 width="285"
-		 top="0"
 		 label="Env"
-		 left="0">
+		 layout="topleft">
 
 			<panel
 			 name="PT_WL_Settings"
-			 follows="top|left"
+			 follows="left|right|top"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
-			 border_visible="true"
-			 border_thickness="1"
+			 border_visible="false"
+			 border_thickness="0"
 			 background_visible="true">
 				<text
 				 name="T_WL_Settings" 
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="200">
+				 width="280">
 					Environment Settings
 				</text>
 			</panel>
@@ -65,10 +65,11 @@
 			 name="P_WL_Sky_Water"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="135"
+			 top_pad="1"
+			 left="3"
+			 right="-5"
+			 height="70"
+			 border_thickness="1"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -79,18 +80,17 @@
 				 layout="topleft"
 				 left="5"
 				 name="WL Sky"
-				 tool_tip="Presets for your sky."
-				 mouse_opaque="false"
+				 tool_tip="Select and manage sky presets to adjust the atmospheric lighting."
 				 top_pad="10"
-				 width="90">
+				 width="65">
 					Sky
 				</text>
 				<combo_box
 				 allow_text_entry="true"
 				 max_chars="50"
-				 height="23"
+				 height="20"
 				 layout="topleft"
-				 left_delta="58"
+				 left_pad="0"
 				 follows="top|left"
 				 name="WLPresetsCombo"
 				 top_delta="-5"
@@ -99,7 +99,7 @@
 				 enabled="true"
 				 name="WLPrevPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
@@ -109,7 +109,7 @@
 				 enabled="true"
 				 name="WLNextPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
@@ -123,19 +123,19 @@
 				 layout="topleft"
 				 left="5"
 				 name="WL Water"
-				 tool_tip="Presets for your water."
+				 tool_tip="Choose water presets to modify reflections and surface properties."
 				 mouse_opaque="false"
-				 top_pad="8"
-				 width="90">
+				 top_pad="5"
+				 width="65">
 					Water
 				</text>
 				<combo_box
 				 allow_text_entry="true"
 				 max_chars="50"
-				 height="23"
+				 height="20"
 				 follows="top|left"
 				 layout="topleft"
-				 left_delta="58"
+				 left_pad="0"
 				 name="WaterPresetsCombo"
 				 top_delta="-4"
 				 width="170"/>
@@ -143,7 +143,7 @@
 				 enabled="true"
 				 name="WWPrevPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
@@ -153,7 +153,7 @@
 				 enabled="true"
 				 name="WWNextPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
@@ -167,19 +167,19 @@
 				 layout="topleft"
 				 left="5"
 				 name="Day Cycle"
-				 tool_tip="Presets for your day cycle."
+				 tool_tip="Manage day cycle presets to control time-based environmental changes."
 				 mouse_opaque="false"
-				 top_pad="8"
-				 width="90">
+				 top_pad="5"
+				 width="65">
 					Day Cycle
 				</text>
 				<combo_box
 				 allow_text_entry="true"
 				 max_chars="50"
-				 height="23"
+				 height="20"
 				 follows="top|left"
 				 layout="topleft"
-				 left_delta="58"
+				 left_pad="0"
 				 name="DCPresetsCombo"
 				 top_delta="-4"
 				 width="170"/>
@@ -187,7 +187,7 @@
 				 enabled="true"
 				 name="DCPrevPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
@@ -197,41 +197,40 @@
 				 enabled="true"
 				 name="DCNextPreset"
 				 follows="top|left"
-				 height="23"
+				 height="20"
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
 				 image_overlay="Arrow_Right_Off"
 				 scale_image="true"/>
+			</panel>
+
+			<panel
+			 name="P_WL_Sky_Water_2"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 top_delta="-5"
+			 right="-5"
+			 height="28"
+			 border_visible="true"
+			 background_visible="true">	
+				 
 				<button
 				 enabled="true"
 				 name="btn_personal_lighting"
 				 follows="left|top"
 				 height="20"
-				 width="245"
+				 width="130"
+				 tool_tip="This opens the Personal Lighting window.The Personal Lighting window is used to make temporary adjustments to the environment where you are. This is useful for photography or simply for changing something to suit your own preference. It is NOT for creating your own settings assets, and changes cannot be saved. "
 				 top_pad="5"
 				 left="5"
-				 label="Personal Lighting...">
+				 label="Personal Lighting">
 					<button.commit_callback
 					 function="Floater.ToggleOrBringToFront"
 					 parameter="env_adjust_snapshot" />
 				</button>
-				<button
-				 name="ResetToRegionDefault"
-				 label=""
-				 tool_tip="Reset the environment options to shared environment."
-				 enabled="true"
-				 top_delta="0"
-				 left_pad="0"
-				 height="20"
-				 width="20"
-				 follows="left|top"
-				 image_overlay="StopReload_Off"
-				 label_selected=""
-				 scale_image="true"
-				/>
-				
-				
 				<button
 				 follows="top|left|right"
 				 height="20"
@@ -243,10 +242,9 @@
 				 image_pressed_selected="PushButton_Selected_Press"
 				 layout="topleft"
 				 name="PauseClouds"
-				 tool_tip="Pauses cloud animations"
-				 top_pad="3"
-				 left="5"
-				 right="-5">
+				 tool_tip="Pause dynamic cloud movement for static sky compositions."
+				 left_pad="9"
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="pause_clouds" />
@@ -261,21 +259,22 @@
 			 name="P_Q_Windlights"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="135"
+			 top_pad="1"
+			 left="3"
+			 width="140"
+			 height="134"
 			 border_visible="true"
 			 background_visible="true">
 				<text
+				 halign="left"
 				 name="T_Q_Windlights"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
-				 width="155">
+				 width="130">
 					Quick Environments
 				</text>
 				<view_border
@@ -283,19 +282,20 @@
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 name="horiz_separator1"
 				 top_pad="-7"
-				 width="255"/>
+				 width="130"/>
 				<button
 				 follows="left|top"
 				 name="Sunrise"
 				 height="20"
 				 label="Sunrise"
 				 layout="topleft"
-				 left="10"
+				 left="5"
+				 tool_tip="Set the environment to sunrise lighting conditions."
 				 top_pad="5"
-				 width="255">
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunrise"/>
@@ -306,9 +306,10 @@
 				 height="20"
 				 label="Noon"
 				 layout="topleft"
-				 left="10"
+				 left="5"
+				 tool_tip="Adjust lighting to simulate the brightness of midday."
 				 top_pad="2"
-				 width="255">
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="noon"/>
@@ -319,9 +320,10 @@
 				 height="20"
 				 label="Sunset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
+				 tool_tip="Apply sunset lighting for warm, golden hues."
 				 top_pad="2"
-				 width="255">
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunset"/>
@@ -332,9 +334,10 @@
 				 height="20"
 				 label="Midnight"
 				 layout="topleft"
-				 left="10"
+				 left="5"
+				 tool_tip="Switch to nighttime settings for low-light environments."
 				 top_pad="2"
-				 width="255">
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="midnight"/>
@@ -345,74 +348,61 @@
 				 height="20"
 				 label="Shared Environment"
 				 layout="topleft"
-				 left="10"
+				 left="5"
+				 tool_tip="Revert to the region's shared environment settings."
 				 top_pad="2"
-				 width="255">
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="region"/>
 				</button>
 			</panel>
-			
+
 			<panel
-			 visible="false"
+			 visible="true"
 			 name="P_WL_Presets"
 			 follows="top|left"
 			 layout="topleft"
 			 top_delta="0"
-			 left_pad="5"
-			 width="135"
-			 height="135"
+			 left_pad="0"
+			 width="140"
+			 height="133"
 			 border_visible="true"
 			 background_visible="true">
 				<text
 				 name="T_WL_Presets"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
-				 tool_tip="Click an item below to create new preset or modify an existing one."
-				 width="150">
-					Windlight Presets
+				 width="130">
+					Environment Presets
 				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 name="horiz_separator2"
 				 top_pad="-7"
-				 width="120"/>
+				 width="130"/>
 				<button
-				 follows="left|top"
-				 name="new_sky_preset"
-				 height="20"
-				 label="New Sky Preset"
-				 layout="topleft"
-				 left="10"
-				 top_pad="5"
-				 width="120">
+					follows="left|top"
+					name="new_sky_preset"
+					height="20"
+					label="New Sky Preset"
+					layout="topleft"
+					left="5"
+					tool_tip="Create new environment preset based on the currently loaded sky settings."
+					top_pad="5"
+					width="130">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_sky"/>
 				</button>
-				<button
-				 follows="left|top"
-				 name="edit_sky_preset"
-				 height="20"
-				 label="Edit Sky Preset"
-				 layout="topleft"
-				 left="10"
-				 top_pad="2"
-				 width="120">
-					<button.commit_callback
-					 function="World.EnvPreset"
-					 parameter="edit_sky"/>
-				</button>
-			
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
@@ -421,32 +411,43 @@
 				 left="5"
 				 name="horiz_separator3"
 				 top_pad="10"
-				 width="125"/>
+				 width="130"/>
 				<button
 				 follows="left|top"
 				 name="new_water_preset"
 				 height="20"
 				 label="New Water Preset"
 				 layout="topleft"
-				 left="10"
+				 left="5"
+				 tool_tip="Create new environment preset based on the currently loaded water settings."
 				 top_pad="10"
-				 width="120">
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_water"/>
 				</button>
-				<button
+				<view_border
+				 bevel_style="none"
 				 follows="left|top"
-				 name="edit_water_preset"
-				 height="20"
-				 label="Edit Water Preset"
+				 height="0"
 				 layout="topleft"
-				 left="10"
-				 top_pad="2"
-				 width="120">
+				 left="5"
+				 name="horiz_separator4"
+				 top_pad="10"
+				 width="130"/>
+				 <button
+				 follows="left|top"
+				 name="new_day_preset"
+				 height="20"
+				 label="New Day Preset"
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Create new environment preset based on the currently loaded day settings."
+				 top_pad="10"
+				 width="130">
 					<button.commit_callback
 					 function="World.EnvPreset"
-					 parameter="edit_water"/>
+					 parameter="new_day_cycle"/>
 				</button>
 			</panel>
 
@@ -454,9 +455,9 @@
 			 name="P_W_Reflections"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="1"
 			 left="0"
-			 width="285"
+			 right="-1"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -466,11 +467,11 @@
 				 name="T_W_Reflections"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
-					Water Reflection Settings
+				 width="280">
+					Reflection Settings
 				</text>
 			</panel>
 
@@ -478,70 +479,345 @@
 			 name="P_R_Res"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="54"
+			 top_pad="1"
+			 left="3"
+			 right="-5"
+			 height="77"
 			 border_visible="true"
 			 background_visible="true">
+			 	<check_box
+				 control_name="RenderTransparentWater"
+				 height="16"
+				 label="Enable Transparent Water"
+				 layout="topleft"
+				 left="3"
+				 name="TransparentWater"
+				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
+				 top_pad="7"
+				 width="240">
+				</check_box>
+				<check_box
+				 control_name="RenderScreenSpaceReflections"
+				 height="16"
+				 initial_value="true"
+				 label="Enable Screen Space Reflections"
+				 layout="topleft"
+				 left_delta="0"
+				 name="ScreenSpaceReflections"
+				 tool_tip="Enables reflections based on the screen's current view. Provides realistic reflections for objects within the camera's field of view, but may miss details outside the screen. Can impact performance depending on the complexity of the scene."
+				 top_pad="1"
+				 width="256">
+				 <check_box.commit_callback
+				  function="Pref.RenderOptionUpdate" />
+				</check_box>
+				<check_box
+				 control_name="RenderMirrors"
+				 height="16"
+				 initial_value="false"
+				 label="Enable Mirrors"
+				 layout="topleft"
+				 left_delta="0"
+				 name="Mirrors"
+				 tool_tip="Enables real-time mirror reflections. Accurately reflects the environment, including objects and avatars, but may significantly affect performance due to the additional rendering load."
+				 top_pad="1"
+				 width="280">
+				  <check_box.commit_callback
+				   function="Pref.RenderOptionUpdate" />
+				</check_box>
+				<check_box
+				 control_name="SelectReflectionProbes"
+				 height="16"
+				 initial_value="false"
+				 label="Enable Reflection Probe Selection"
+				 layout="topleft"
+				 left_delta="0"
+				 name="checkbox select probes"
+				 tool_tip="Enable to select and inspect reflection probes in the scene."
+				 top_pad="1"
+				 width="280">
+				</check_box>
+			</panel>
+
+			<panel
+			 name="P_R_Res_2"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-5"
+			 height="105"
+			 border_visible="true"
+			 background_visible="true">
+
 				<text
-				 name="T_R_Res"
+				 type="string"
+				 length="1"
 				 follows="left|top"
 				 height="15"
-				 left="10" 
-				 top_pad="13"
-				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines the resolution/quality of water reflections.">
-					Resolution
+				 left="5"
+				 name="ReflectionDetailText"
+				 text_readonly_color="LabelDisabledColor"
+				 tool_tip="Determines the level of detail in reflections. 'Static Only' reflects non-moving objects, while higher settings include dynamic objects and real-time reflections."
+				 top_pad="9"
+				 width="162">
+				  Reflection Detail
 				</text>
 				<combo_box
-				 control_name="RenderWaterRefResolution"
-				 height="22"
+				 control_name="RenderReflectionProbeDetail"
+				 height="20"
 				 layout="topleft"
-				 left_pad="65"
+				 left_pad="0"
 				 top_delta="-5"
+				 name="ReflectionDetail"
+				 right="-5">
+				  <combo_box.item
+				   label="Static Only"
+				   name="0"
+				   value="0"/>
+				  <combo_box.item
+				   label="Static &amp; Dynamic"
+				   name="1"
+				   value="1"/>
+				  <combo_box.item
+				   label="Realtime"
+				   name="2"
+				   value="2"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
 				 follows="left|top"
-				 name="ReflectionRescombo"
-				 width="115">
+				 height="15"
+				 layout="topleft"
+				 left="5"
+				 name="ReflectionProbeText"
+				 text_readonly_color="LabelDisabledColor"
+				 tool_tip="Controls how much of the scene is covered by reflections. 'Manual Only' reflects selected objects, while 'Full Scene' includes everything in view."
+				 top_pad="4"
+				 width="162">
+				  Reflection Coverage
+				</text>
+				<combo_box
+				 control_name="RenderReflectionProbeLevel"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="-5"
+				 name="ReflectionLevel"
+				 right="-5">
+				  <combo_box.item
+				   label="None"
+				   name="0"
+				   value="0"/>
+				  <combo_box.item
+				   label="Manual only"
+				   name="1"
+				   value="1"/>
+				  <combo_box.item
+				   label="Manual &amp; terrain"
+				   name="2"
+				   value="2"/>
+				  <combo_box.item
+				   label="Full scene"
+				   name="3"
+				   value="3"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="5"
+				 name="MirrorResolutionText"
+				 text_readonly_color="LabelDisabledColor"
+				 tool_tip="Sets the resolution for mirror reflections. Higher values produce sharper reflections but require more processing power."
+				 top_pad="4"
+				 width="162">
+				  Mirror Resolution
+				</text>
+				<combo_box
+				 control_name="RenderHeroProbeResolution"
+				 enabled_control="RenderMirrors"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="-5"
+				 name="MirrorResolution"
+				 right="-5">
+				  <combo_box.item
+				   label="256"
+				   name="0"
+				   value="256"/>
+				  <combo_box.item
+				   label="512"
+				   name="1"
+				   value="512"/>
+				  <combo_box.item
+				   label="1024"
+				   name="2"
+				   value="1024"/>
+				  <combo_box.item
+				   label="2048"
+				   name="3"
+				   value="2048"/>
+				   <combo_box.item
+				   label="4096"
+				   name="4"
+				   value="4096"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="5"
+				 name="HeroProbeUpdateText"
+				 text_readonly_color="LabelDisabledColor"
+				 tool_tip="Adjusts how frequently mirror reflections are updated. Higher settings offer smoother real-time reflections but can impact performance."
+				 top_pad="4"
+				 width="162">
+				  Mirror Update Rate
+				</text>
+				<combo_box
+				 control_name="RenderHeroProbeUpdateRate"
+				 enabled_control="RenderMirrors"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="-5"
+				 name="HeroProbeUpdateRate"
+				 right="-5">
+				  <combo_box.item
+				   label="Low"
+				   name="6"
+				   value="6"/>
+				  <combo_box.item
+				   label="Medium"
+				   name="3"
+				   value="3"/>
+				  <combo_box.item
+				   label="High"
+				   name="1"
+				   value="2"/>
+				  <combo_box.item
+				   label="Ultra"
+				   name="0"
+				   value="1"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="5"
+				 name="Probe_Resolution"
+				 tool_tip="Defines the resolution of reflection probes. Higher resolutions provide more detailed reflections but may increase memory usage and require a viewer restart to apply. Settings above 128 can consume significant amounts of video RAM, potentially impacting performance on systems with limited GPU resources."
+				 top_pad="4"
+				 width="162">
+					Probe Resolution (Restart)
+				</text>
+				<combo_box
+				 control_name="RenderReflectionProbeResolution"
+				 enabled_control="VertexShaderEnable"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="-5"
+				 right="-5"
+				 follows="left|top"
+				 name="Probe_Resolution_Combo">
 					<combo_box.item
-					 label="Decent"
+					 label="64"
 					 name="0"
+					 value="64"/>
+					<combo_box.item
+					 label="128"
+					 name="1"
+					 value="128"/>
+					<combo_box.item
+					 label="256"
+					 name="2"
 					 value="256"/>
 					<combo_box.item
-					 label="Good"
-					 name="1"
+					 label="512"
+					 name="3"
 					 value="512"/>
 					<combo_box.item
-					 label="Very Good"
-					 name="2"
+					 label="1024"
+					 name="4"
 					 value="1024"/>
 					<combo_box.item
-					 label="Excellent"
-					 name="3"
-					 value="1536"/>
-					<combo_box.item
-					 label="Outstanding"
-					 name="4"
-					 value="2048"/>
-					<combo_box.item
-					 label="Life-Like"
+					 label="2048"
 					 name="5"
-					 value="4096"/>
+					 value="2048"/>
 					<combo_box.commit_callback
 					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-				<check_box
-				 control_name="RenderTransparentWater"
-				 height="16"
-				 label="Transparent Water"
+			</panel>
+
+			<panel
+			 name="P_R_Res_3"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-5"
+			 height="46"
+			 border_visible="true"
+			 background_visible="true">
+
+				<text
+				 name="T_Reflection_Distance"
+				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 name="TransparentWater"
-				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
-				 top_pad="5"
-				 width="240">
-				</check_box>
+				 top_pad="10"
+				 tool_tip="Controls the visibility range for reflections, affecting reflection detail and performance across reflection probes, mirrors, and screen space reflections. Higher values increase the distance at which reflections are visible, enhancing detail but increasing performance cost."
+				 width="70">
+					Reflect. Dist.
+				</text>
+				<slider_bar
+				 name="SB_Reflection_Distance"
+				 control_name="RenderReflectionProbeDrawDistance"
+				 follows="top|left"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="4096"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Reflection_Distance"
+				 control_name="RenderReflectionProbeDrawDistance"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="0"
+				 follows="top|left"
+				 max_val="4096"
+				 min_val="1"
+				 width="53"
+				 increment="1"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Reflection_Distance"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderReflectionProbeDrawDistance"/>
+				</button>
 			</panel>
 		</panel>
 
@@ -549,17 +825,14 @@
 		 name="P_Lighting" 
 		 follows="all"
 		 layout="topleft"
-		 width="267"
-		 top="0"
-		 label="Light"
-		 left="0">
+		 label="Shdw">
 			<panel
 			 name="PT_Light_Shadows"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -569,10 +842,10 @@
 				 name="T_Light_Shadows"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="280">
 					Lights and Shadows Settings
 				</text>
 			</panel>
@@ -581,17 +854,87 @@
 			 name="P_L_S_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="28"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="68"
 			 border_visible="true"
 			 background_visible="true">
+			     <text
+				 name="T_Shadow_Types"
+				 follows="left|top"
+				 height="16"
+				 left="5" 
+				 top_pad="7"
+				 width="135"
+				 word_wrap="false"
+				 layout="topleft"
+				 tool_tip="Controls the types of shadows rendered from light sources. Point lights without projection features create lighting effects but do not cast shadows. Projected light textures remain visible regardless of this setting.">
+					Shadow Types
+				</text>
+				<combo_box
+				 control_name="RenderShadowDetail"
+				 enabled_control="RenderDeferred"
+				 follows="left|right"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="-2"
+				 name="ShadowDetail"
+				 right="-5">
+					<combo_box.item
+					 label="None"
+					 name="0"
+					 value="0"/>
+					<combo_box.item
+					 label="Sun/Moon"
+					 name="1"
+					 value="1"/>
+					<combo_box.item
+					 label="Sun/Moon + Projectors"
+					 name="2"
+					 value="2"/>
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 top_pad="5"
+				 follows="top|left"
+				 height="16"
+				 width="135"
+				 word_wrap="false"
+				 layout="topleft"
+				 left="5"
+				 name="local lights_label"
+				 tool_tip="Defines how many local light sources are rendered simultaneously. Setting this to 0 turns off all local lights. Higher values may impact performance in complex scenes.">
+				  Point Lighting (Restart)
+				</text>
+				<combo_box
+				 control_name="RenderShaderLightingMaxLevel"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta=""
+				 name="LocalLightsDetail"
+				 right="-5">
+				  <combo_box.item
+				   label="Full (default)"
+				   name="3"
+				   value="3"/>
+				  <combo_box.item
+				   label="Reduced"
+				   name="2"
+				   value="2"/>
+				  <combo_box.item
+				   label="Sun/Moon Only"
+				   name="1"
+				   value="1"/>
+				</combo_box>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
-				 left="5"
-				 top_pad="9"
+				 left="3"
+				 top_pad="5"
 				 height="16"
 				 label="Enable Attached Lights (Face Lights)"
 				 tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
@@ -606,96 +949,107 @@
 			</panel>
 
 			<panel
-			 name="P_Shadows"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="40"
-			 border_visible="true"
-			 background_visible="true">
-				<text
-				 name="T_Shadow_Types"
-				 follows="left|top"
-				 height="16"
-				 left="5" 
-				 top_pad="8"
-				 width="50"
-				 word_wrap="true"
-				 layout="topleft"
-				 tool_tip="This setting only affects the shadows that are rendered from light sources, the lights will still function normally otherwise. Point light (lights that do not have the projection feature enabled) will always create a sense of shadows, yet they will not cast them upon any surface. It is important to note that regardless of the setting you choose here, textures projected from projection lights will still be enabled.">
-					Shadow Types
-				</text>
-				<combo_box
-				 control_name="RenderShadowDetail"
-				 enabled_control="RenderDeferred"
-				 follows="left|right"
-				 height="20"
-				 layout="topleft"
-				 left_pad="10"
-				 top_delta="3"
-				 name="ShadowDetail"
-				 width="200">
-					<combo_box.item
-					 label="None"
-					 name="0"
-					 value="0"/>
-					<combo_box.item
-					 label="Sun/Moon"
-					 name="1"
-					 value="1"/>
-					<combo_box.item
-					 label="Sun/Moon + Projectors"
-					 name="2"
-					 value="2"/>
-				</combo_box>
-			</panel>
-
-			<panel
 			 name="P_Shadow_Res"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="165"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="205"
 			 border_visible="true"
 			 background_visible="true">
+			 	<text
+				 name="T_Local_Lights"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="10"
+				 tool_tip="Number of local lights to render."
+				 width="70">
+					Loc Lights
+				</text>
+				<slider_bar
+				 name="SB_Local_Lights"
+				 can_edit_text="true"
+				 control_name="RenderLocalLightCount"
+				 follows="left|right"
+				 height="16"
+				 decimal_digits="0"
+				 increment="1"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="8192"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Local_Lights"
+				 can_edit_text="true"
+				 control_name="RenderLocalLightCount"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="0"
+				 follows="top|left"
+				 max_val="10000"
+				 min_val="0"
+				 width="53"
+				 increment="1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Local_Lights"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 right="-5"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderLocalLightCount"/>
+				</button>
 				<text
 				 name="T_Shadow_Res"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
-				 tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under 'Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
-				 width="80">
+				 top_pad="5"
+				 tool_tip="Adjusts the quality and sharpness of shadows. Higher values produce more detailed shadows but can significantly impact performance, especially in complex scenes. For general use, keep this setting low to maintain smooth performance. When preparing for high-quality snapshots, set it around 1.0, then gradually increase while monitoring your framerate. Using the Statistics Bar (found under 'Aids' in 'Interface Aids') can help you find the optimal balance for your system. Caution: Increasing this setting too quickly or setting it too high may cause viewer instability or crashes."
+				 width="70">
 					Shd. Res
 				</text>
 				<slider_bar
-				 name="SB_Shadow_Res"
-				 control_name="RenderShadowResolutionScale"
-				 follows="left|right"
-				 height="16"
-				 increment="0.01"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="4"
-				 top_delta="-2"
-				 width="127"/>
+					name="SB_Shadow_Res"
+					control_name="RenderShadowResolutionScale"
+					follows="left|right"
+					height="16"
+					increment="0.5"
+					layout="topleft"
+					left_pad="0"
+					min_val="0"
+					max_val="5"
+					top_delta="-2"
+					width="127">
+					<slider_bar.commit_callback
+						function="Advanced.ClearShaderCache" />
+				</slider_bar>
 				<spinner
 				 name="S_Shadow_Res"
 				 control_name="RenderShadowResolutionScale"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
-				 follows="top|left"
+				 follows="left|right"
 				 max_val="7"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"/>
+				 increment="0.5">
+				    <spinner.commit_callback
+						function="Advanced.ClearShaderCache" />
+				</spinner>
 				<button
 				 follows="left|top"
 				 name="Reset_Shadow_Res"
@@ -704,7 +1058,7 @@
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
-				 width="20"
+				 right="-5"
 				 tool_tip="Reset to the default value.">
 					<button.commit_callback
 					 function="ResetControl"
@@ -718,27 +1072,27 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="This is a VERY important setting. It essentially determines how clear the Sun/Moon shadows are drawn overall. This setting should be set first before adjusting the setting below. With the value of 'Shd. Res' above set to 1.0, slide the value for 'Shd. Clarity' until the sharpest possible result is achieved. Please note, the clarity of shadows is directly related to the position of the camera and Sun/Moon. Every time you move either the camera or the Sun/Moon, it is best to adjust this value again. In addition, in order to make adjusting this value easier, it is helpful to set 'Shd. Blur' to 0.0 first."
-				 width="80">
-					Shd Clarity
+				 tool_tip="This setting controls how sharp and defined the Sun/Moon shadows appear. It’s recommended to adjust this setting after setting the Shadow Resolution to around 1.0 for optimal results. Gradually increase the Shadow Clarity value until the shadows reach the desired sharpness. Keep in mind that shadow clarity is influenced by both the camera angle and the position of the Sun/Moon, so any changes to lighting or camera placement may require readjustments. For easier fine-tuning, temporarily set 'Shadow Blur' to 0.0 to clearly see the effects of this adjustment before reapplying blur if needed."
+				 width="70">
+					Shd. Clarity
 				</text>
 				<slider_bar
 				 name="SB_Shd_Clarity"
 				 follows="left|right"
 				 height="16"
-				 increment="0.001"
+				 increment="0.025"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val="65"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
 				 name="S_Shd_Clarity"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="4"
+				 left_pad="0"
+				 decimal_digits="3"
 				 follows="top|right"
 				 max_val="1000"
 				 min_val="0"
@@ -761,8 +1115,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible. This setting is directly related to the one below it as well. It allows you to set the overall possible amount of shadow blur. If set to 4.00, you can use Shadows Soften to adjust the shadow blur independent of the ambient occlusion. PLEASE NOTE: Ambient Occlusion must be enabled for this setting to work."
-				 width="80">
+				 tool_tip="This setting controls the softness of shadow edges, allowing you to create either sharp, well-defined shadows or softer, more diffused ones. Increasing the value results in blurrier shadow edges, while setting it to 0 produces the sharpest shadows possible. Shadow Blur works in conjunction with the 'Shadow Soften' setting, which allows for additional fine-tuning of shadow softness, especially when Shadow Blur is set to higher values (e.g., around 4.0). For precise adjustments, consider setting Shadow Blur to 0.0 temporarily to observe changes in clarity before reapplying blur. Note: Ambient Occlusion must be enabled for this setting to function properly, as it relies on depth-based lighting calculations."
+				 width="70">
 					Shd. Blur
 				</text>
 				<slider_bar
@@ -772,7 +1126,7 @@
 				 height="16"
 				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0.00"
 				 max_val="4"
 				 top_delta="-2"
@@ -782,7 +1136,7 @@
 				 control_name="RenderShadowBlurSize"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
 				 follows="top|left"
 				 max_val="1000"
@@ -811,8 +1165,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 3.0. Then the slider here to soften the AO to your liking. Please note, a value of 0.0 will effectively turn off all Sun/Moon shadows. In addition, this has no effect of shadows the caused by projector lights"
-				 width="80">
+				 tool_tip="Controls the softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 3.0. Then the slider here to soften the Sun/Moon shadows to your liking. Please note, a value of 0.0 will effectively turn off all Sun/Moon shadows. In addition, this has no effect of shadows the caused by projector lights"
+				 width="70">
 					Shd. Soften
 				</text>
 				<slider_bar
@@ -821,16 +1175,16 @@
 				 height="16"
 				 increment="0.001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0.001"
-				 max_val="3"
+				 max_val="5"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
 				 name="S_Shd_Soften"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|right"
 				 max_val="10000"
@@ -854,9 +1208,9 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="This will determine the point at which the shadows will begin to blur relative to the camera. The lower the value the closer the point of shadow blur will begin. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
-				 width="80">
-					Blur. Dist.
+				 tool_tip="Determines the distance from the camera where shadows begin to blur. Lower values apply blur closer to the viewer. Requires Ambient Occlusion to be enabled."
+				 width="70">
+					Blur Dist.
 				</text>
 				<slider_bar
 				 name="SB_Blur_Dist"
@@ -865,7 +1219,7 @@
 				 height="16"
 				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0.00"
 				 max_val="1"
 				 top_delta="-2"
@@ -875,7 +1229,7 @@
 				 control_name="RenderShadowBlurDistFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
 				 follows="top|left"
 				 max_val="2"
@@ -903,8 +1257,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
-				 width="80">
+				tool_tip="Sets the Field of View (FOV) threshold where the viewer switches from perspective to orthographic shadow rendering. Adjust to reduce jagged shadow artifacts."
+				 width="70">
 					FOV Cutoff
 				</text>
 				<slider_bar
@@ -914,7 +1268,7 @@
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="100"
 				 top_delta="-2"
@@ -924,7 +1278,7 @@
 				 control_name="RenderShadowFOVCutoff"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="1"
 				 follows="top|right"
 				 max_val="100"
@@ -947,39 +1301,96 @@
 				</button>
 
 				<text
+				 name="T_Spot_Cutoff"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Adjusts the offset of shadows cast by spotlights to minimize artifacts like shadow 'acne' or unwanted lines on surfaces."
+				 width="70">
+					Spot Offset
+				</text>
+				<slider_bar
+				 name="SB_Spot_Cutoff"
+				 can_edit_text="true"
+				 control_name="RenderSpotShadowOffset"
+				 follows="left|right"
+				 height="16"
+				 increment="0.0001"
+				 decimal_digits="4"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val=".04"
+				 top_delta="-2"
+				 width="123"/>
+				<spinner
+				 name="S_Spot_Cutoff"
+				 can_edit_text="true"
+				 control_name="RenderSpotShadowOffset"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="4"
+				 follows="top|right"
+				 max_val="100"
+				 min_val="0"
+				 width="57"
+				 increment="0.001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Spot_Cutoff_Reset"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSpotShadowOffset"/>
+				</button>
+
+				<text
 				 name="T_Shd_Bias"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip=""
-				 width="80">
+				 tool_tip="Controls the depth bias applied to shadows to prevent self-shadowing artifacts (known as 'shadow acne'). Lower values create more accurate shadows, while slightly higher values can help reduce flickering or overlapping shadow issues. Adjusting this setting can also help correct shadows that appear to float above surfaces or do not touch the edges of objects properly. Adjust gradually to balance shadow accuracy and artifact prevention."
+				 width="70">
 					Shd. Bias
 				</text>
 				<slider_bar
 				 name="SB_Shd_Bias"
+				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 follows="left|right"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.000001"
+				 decimal_digits="6"
 				 layout="topleft"
-				 left_pad="-20"
-				 min_val="-.008"
-				 max_val="0"
+				 left_pad="0"
+				 min_val="-0.002"
+				 max_val="0.001"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Shd_Bias"
+				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="4"
+				 left_pad="0"
+				 decimal_digits="6"
 				 follows="top|right"
 				 max_val="5"
 				 min_val="-5"
-				 width="53"
-				 increment="0.0001"/>
+				 width="73"
+				 increment="0.000001"
+				 border_visible="false"/>
 				<button
 				 follows="left|top"
 				 name="Shd_Bias_Reset"
@@ -1000,9 +1411,9 @@
 			 name="P_Ambient_Occlusion"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -1012,10 +1423,10 @@
 				 name="T_Ambient_Occlusion"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="250">
+				 width="280">
 					Ambient Occlusion Settings
 				</text>
 			</panel>
@@ -1024,10 +1435,10 @@
 			 name="P_Amb_Occ_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="35"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="25"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -1036,10 +1447,10 @@
 				 height="16"
 				 label="Enable Ambient Occlusion (Depth Perception)"
 				 layout="topleft"
-				 left="5"
+				 left="3"
 				 name="UseSSAO"
-				 tool_tip="Ambient Occlusion adds shading to all objects. It is most effective when the Effect and AO Soften settings below are used. It can add a high level of realism to the image. This is especially true when images are made at resolutions of 2048 pixels or above."
-				 top_pad="12"
+				 tool_tip="Ambient Occlusion (AO) simulates the soft shadows that occur in creases, corners, and where objects are close together, enhancing depth and realism by mimicking how ambient light is naturally occluded. While AO works effectively on its own, the 'Effect' and 'AO Soften' settings help fine-tune the intensity and smoothness of the shading. AO contributes to a more realistic image at any resolution, though its subtle details are more noticeable at higher resolutions, such as 2048 pixels and above."
+				 top_pad="7"
 				 width="230">
 				</check_box>
 			</panel>
@@ -1048,10 +1459,10 @@
 			 name="P_Scale"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="120"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="161"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1060,8 +1471,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="10"
-				 tool_tip="Controls sampling region; larger regions are more accurate. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-				 width="80">
+				 tool_tip="Controls the size of the sampling area used for Ambient Occlusion. Larger values increase shadow accuracy and detail but may impact performance. Best used with shadow blur adjustments to achieve softer shading effects."
+				 width="70">
 					Scale
 				</text>
 				<slider_bar
@@ -1071,7 +1482,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10000"
 				 top_delta="-2"
@@ -1081,7 +1492,7 @@
 				 control_name="RenderSSAOScale"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|right"
 				 max_val="10000000"
@@ -1109,8 +1520,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls maximum screen radius from which to sample from, to avoid graphics card cache misses and associated large performance penalty. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-				 width="80">
+				 tool_tip="Defines the maximum distance over which Ambient Occlusion samples are taken. Higher values improve depth shading across large scenes but may reduce performance. Adjust in conjunction with 'Scale' for optimal results."
+				 width="70">
 					Max Scale
 				</text>
 				<slider_bar
@@ -1120,7 +1531,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10000"
 				 top_delta="-2"
@@ -1130,7 +1541,7 @@
 				 control_name="RenderSSAOMaxScale"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|right"
 				 max_val="100000"
@@ -1158,8 +1569,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Scaling factor for the effect (larger is darker). It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-				 width="80">
+				 tool_tip="Adjusts the overall strength of the Ambient Occlusion effect. Higher values create darker, more pronounced shadows in creases and corners. Use with caution to avoid unnatural over-darkening."
+				 width="70">
 					Factor
 				</text>
 				<slider_bar
@@ -1169,7 +1580,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="250"
 				 top_delta="-2"
@@ -1179,8 +1590,8 @@
 				 control_name="RenderSSAOFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="2"
+				 left_pad="0"
+				 decimal_digits="0"
 				 follows="top|right"
 				 max_val="100000"
 				 min_val="0"
@@ -1201,6 +1612,112 @@
 					 parameter="RenderSSAOFactor"/>
 				</button>
 
+				<text
+				 name="T_I_Max" 
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Sets the maximum brightness limit for irradiance in Ambient Occlusion calculations. Acts as an upper cap to prevent overly bright areas from dominating the AO effect."
+				 width="70">
+					Irrad. Max
+				</text>
+				<slider_bar
+				 name="SB_I_Max"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceMax"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 decimal_digits="0"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="10000"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_I_Max"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceMax"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="0"
+				 follows="top|right"
+				 max_val="10000000"
+				 min_val="0"
+				 width="53"
+				 increment="1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_I_Max"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOIrradianceMax"/>
+				</button>
+
+				<text
+				 name="T_I_Scaling"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Controls the scaling of light irradiance within Ambient Occlusion, affecting how light intensity influences shadow darkness. Adjust for balanced lighting in bright scenes. "
+				 width="70">
+					Irrad. Scale
+				</text>
+				<slider_bar
+				 name="SB_I_Scaling"
+				 decimal_digits="2"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceScale"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="100"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_I_Scaling"
+				 can_edit_text="true"
+				 control_name="RenderSSAOIrradianceScale"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="1"
+				 follows="top|right"
+				 max_val="100000"
+				 min_val="0"
+				 width="53"
+				 increment="0.5"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_I_Scaling"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOIrradianceScale"/>
+				</button>
+
 				<!-- RenderSSAOEffect X component -->
 				<text
 				 name="T_Effect" 
@@ -1208,18 +1725,18 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the overall darkening effect of Ambient Occlusion. The default value of 0.8 produces an almost imperceptible effect. Values of 0.0 and below provide a more realistic result. Please note that the Ambient Occlusion produces a noise like effect and this can be softened using the 'AO Soften' controls below. In addition, the standard mesh avatar can look less than appealing with high Effect values due to the low quality geometry of the avatar. Please Note: The lowest value you can set in the slider is 0, while in the spinner you can enter negative values of up to -10000."
-				 width="80">
+				 tool_tip="Controls the intensity of the Ambient Occlusion (AO) darkening effect, which adds subtle shadows in creases, corners, and where objects meet to enhance depth and realism. Lower values create softer, more natural shading that blends seamlessly with the environment, resulting in a realistic look. Higher values produce stronger, more dramatic contrast, which can make the AO effect appear more pronounced but may look unnatural in some lighting conditions. Adjust this setting carefully to avoid overly dark or harsh shadows that can distort the scene's natural lighting. For creative or experimental effects, negative values can be used to invert the shading, creating unusual lighting results. This setting works best when fine-tuned alongside the 'AO Soften' control to balance sharpness and smoothness of the shadows."
+				 width="70">
 					Effect
 				</text>
 				<slider_bar
 				 name="SB_Effect"
 				 follows="left|right"
 				 height="16"
-				 increment="0.001"
+				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
+				 left_pad="0"
+				 min_val="-1"
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
@@ -1227,7 +1744,7 @@
 				 name="S_Effect"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|right"
 				 max_val="100000"
@@ -1245,6 +1762,7 @@
 				 width="20"
 				 tool_tip="Reset to the default value."/>
 
+
 				<!-- RenderShadowGaussian Y component -->
 				<text
 				 name="T_AO_Soften" 
@@ -1252,8 +1770,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the softening of the Ambient Occlusion effect. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 4.0. Then the slider here to soften the AO to your liking. Please note, a value of 0.0 will effectively turn off Ambient Occlusion rendering."
-				 width="80">
+				 tool_tip="Adjusts the smoothness of the Ambient Occlusion effect, reducing harsh edges and noise. Works best when combined with 'Shd. Blur' set around 4.0 for balanced softness."
+				 width="70">
 					AO Soften
 				</text>
 				<slider_bar
@@ -1262,7 +1780,7 @@
 				 height="16"
 				 increment="0.001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0.001"
 				 max_val="3"
 				 top_delta="-2"
@@ -1271,7 +1789,7 @@
 				 name="S_AO_Soften"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|right"
 				 max_val="100000"
@@ -1295,16 +1813,14 @@
 		 name="P_DoF_Glow"
 		 follows="top|left"
 		 layout="topleft"
-		 top_pad="0"
-		 label="DoF/Glow"
-		 left="0">
+		 label="VFX">
 			<panel
 			 name="PT_DoF_Glow"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -1314,10 +1830,10 @@
 				 name="T_DoF"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="280">
 					Depth of Field Settings
 				</text>
 			</panel>
@@ -1326,10 +1842,10 @@
 			 name="P_DoF_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="66"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="55"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -1338,29 +1854,42 @@
 				 height="16"
 				 label="Enable Depth of Field (DoF)"
 				 layout="topleft"
-				 left="5"
+				 left="3"
 				 name="UseDepthofField"
-				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Advanced Lighting Model' in tab 'Light'."
-				 top_pad="10"
-				 width="230"/>
+				 tool_tip="Enables Depth of Field (DoF), which simulates camera focus by blurring objects outside the focal plane, creating a realistic photographic effect. Turning this off can improve performance."
+				 top_pad="5"
+				 width="280"/>
 				<check_box
-				control_name="FSFocusPointFollowsPointer"
-				enabled_control="RenderDepthOfField"
-				height="16"
-				label="Depth of Field focus follows pointer"
-				layout="topleft"
-				name="FSFocusPointFollowsPointer"
-				tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
-				top_pad="4"
-				width="256"/>	   
+				 control_name="FSFocusPointFollowsPointer"
+				 enabled_control="RenderDepthOfField"
+				 height="16"
+				 label="Depth of Field focus follows pointer"
+				 layout="topleft"
+				 name="FSFocusPointFollowsPointer"
+				 tool_tip="Allows the DoF focus point to follow your mouse cursor, similar to flycam behavior. Useful when combined with DoF focus lock for dynamic focus adjustments."
+				 top_pad="0"
+				 width="256"/>
+				<button
+				 follows="left|top"
+				 height="19"
+				 is_toggle="true"
+				 control_name="FSFocusPointRender"
+				 image_overlay="Profile_Group_Visibility_On"
+				 image_unselected="Profile_Group_Visibility_Off"
+				 layout="topleft"
+				 top_pad="-19"
+				 right="-5"
+				 name="FocusPointRenderToggle"
+				 tool_tip="Toggle the focus point crosshair display. The crosshair is yellow when free and red when locked."
+				 width="19"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
-				 left="5"
-				 top_pad="3"
+				 left="3"
+				 top_pad="0"
 				 height="16"
 				 label="Show the Current FOV of Viewer Screen"
-				 tool_tip="This will show you the vertical field of view for the camera. Within the viewer it is possible to change the lens length just like in real life. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'http://en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
+				 tool_tip="Displays an on-screen overlay showing the current vertical Field of View (FOV) of the camera, helping you visualize how different FOV settings affect composition and perspective. A smaller FOV simulates a longer focal length, similar to zooming in with a telephoto lens—for example, a standard 50mm lens corresponds to an vertical FOV of approximately 27°, creating a narrower view with background compression. A larger FOV mimics wide-angle lenses, capturing more of the scene while exaggerating spatial relationships. You can adjust the FOV using the zoom slider below to fine-tune your framing. For more details on the relationship between vertical FOV and focal length, refer to this table."
 				 name="MIC_Show_FOV">
 					<check_box.on_check
 					 function="Advanced.CheckHUDInfo"
@@ -1375,10 +1904,10 @@
 			 name="P_Zoom"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="175"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="161"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1386,9 +1915,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="15"
-				 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
-				 width="80">
+				 top_pad="10"
+				 tool_tip="Adjusts the camera's view angle, effectively zooming in or out. Functions similarly to Ctrl + 0 (zoom in) and Ctrl + 8 (zoom out). This setting is disabled when flycam (3D SpaceNavigator) is active."
+				 width="70">
 					View angle
 				</text>
 				<slider_bar
@@ -1398,7 +1927,7 @@
 				 height="16"
 				 increment="0.002"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0.08"
 				 max_val="3.06"
 				 top_delta="-2"
@@ -1408,7 +1937,7 @@
 				 control_name="CameraAngle"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="left|top"
 				 max_val="3.06"
@@ -1436,8 +1965,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Field of View: This tells the viewer what FOV you would like to simulate for the DOF effect. It is best to set this to the current FOV of the viewer."
-				 width="80">
+				 tool_tip="Defines the camera's Field of View (FOV) for simulating lens perspectives. Adjust to match the current viewer FOV for consistent Depth of Field effects."
+				 width="70">
 					FOV
 				</text>
 				<slider_bar
@@ -1447,7 +1976,7 @@
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val=".1"
 				 max_val="180"
 				 top_delta="-2"
@@ -1457,7 +1986,7 @@
 				 control_name="CameraFieldOfView"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="1"
 				 follows="left|top"
 				 max_val="360"
@@ -1485,8 +2014,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="In real world terms this is the aperture setting for the lens and the lower the value the shorter the depth of field will be. The same applies to SL."
-				 width="80">
+				 tool_tip="Represents the camera’s aperture setting. Lower values create a shallower depth of field (more blur), while higher values increase depth of field, making more of the scene appear in focus."
+				 width="70">
 					f-number
 				</text>
 				<slider_bar
@@ -1496,7 +2025,7 @@
 				 height="16"
 				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val=".01"
 				 max_val="22"
 				 top_delta="-2"
@@ -1506,7 +2035,7 @@
 				 control_name="CameraFNumber"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
 				 follows="top|left"
 				 max_val="128"
@@ -1534,8 +2063,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Focal Length (mm): This tells the viewer what Focal Length/Lens Length to simulate for the DOF effect. Higher numbers produce a narrower depth of field."
-				 width="80">
+				 tool_tip="Simulates the focal length of a camera lens. Higher values produce a narrower depth of field and magnify distant objects, mimicking telephoto lenses."
+				 width="70">
 					Foc Length
 				</text>
 				<slider_bar
@@ -1545,7 +2074,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="1"
 				 max_val="300"
 				 top_delta="-2"
@@ -1555,7 +2084,7 @@
 				 control_name="CameraFocalLength"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="10000"
@@ -1583,8 +2112,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Focus Transition Time: This sets the time in seconds it take to the viewer to change focus from one object."
-				 width="80">
+				 tool_tip="Focal time controls how quickly the camera shifts focus between objects. A higher value results in a slower, smoother transition, enhancing cinematic effects."
+				 width="70">
 					Foc Time
 				</text>
 				<slider_bar
@@ -1594,7 +2123,7 @@
 				 height="16"
 				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
@@ -1604,7 +2133,7 @@
 				 control_name="CameraFocusTransitionTime"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="100"
@@ -1632,8 +2161,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Circle of Confusion: This is a VERY IMPORTANT SETTING. It determines the strength of the blur itself. It does not change the depth of field, it adjusts how much those objects outside of it will be blurry. Also you can access negative values for interesting effects in the spinner text box."
-				 width="80">
+				 tool_tip="Circle of Confusion (CoC) determines the intensity of the blur outside the depth of field. It doesn’t affect the depth range itself but controls how strongly out-of-focus areas are blurred. Negative values in the spinner can create unique visual effects."
+				 width="70">
 					CoC
 				</text>
 				<slider_bar
@@ -1643,7 +2172,7 @@
 				 height="16"
 				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="150"
 				 top_delta="-2"
@@ -1653,7 +2182,7 @@
 				 control_name="CameraMaxCoF"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
 				 follows="top|left"
 				 max_val="150"
@@ -1681,8 +2210,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Resolution: This determines the quality of the DOF Effect. For non-photography uses '.25' is good. For setting up shots '.50' or '.70' is very nice. For shooting quality images '1.00' is best. High values will slow down your FPS! Also you can access negative values for interesting effects in the spinner text box."
-				 width="80">
+				 tool_tip="Adjusts the rendering resolution of the Depth of Field (DoF) effect, impacting both its visual quality and performance. Higher values (up to 1.00) create sharper, more detailed blur transitions, ideal for high-quality snapshots. Medium settings (0.50–0.70) offer a good balance for setting up shots, while lower values (around 0.25) reduce quality but improve performance, suitable for regular use. Note: Higher settings can significantly impact frame rates, especially on less powerful systems. The spinner allows negative values for creative, experimental effects."
+				 width="70">
 					Resolution
 				</text>
 				<slider_bar
@@ -1692,7 +2221,7 @@
 				 height="16"
 				 increment="0.01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
@@ -1702,7 +2231,7 @@
 				 control_name="CameraDoFResScale"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
 				 follows="top|left"
 				 max_val="100"
@@ -1724,14 +2253,157 @@
 					 parameter="CameraDoFResScale"/>
 				</button>
 			</panel>
+			<panel
+			 name="P_Tone_Settings"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="0"
+			 width="288"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Tone_Settings"
+				 follows="left|top"
+				 layout="topleft"
+				 left="7"
+				 font="SansSerif"
+				 height="17"
+				 width="280">
+					HDR Tone Mapping Settings
+				</text>
+			</panel>
 
+			<panel
+			 name="P_Tone_Settings_2"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="25"
+			 border_visible="true"
+			 background_visible="true">
+
+				<check_box
+				 control_name="RenderDisableVintageMode"
+				 height="16"
+				 label="Enable HDR and Emissive"
+				 layout="topleft"
+				 left="3"
+				 name="Disable_Vintage_Mode"
+				 tool_tip="Enables High Dynamic Range (HDR) and emissive effects, enhancing color vibrancy, dynamic lighting, and the glow from emissive materials. This setting improves the overall realism of lighting in scenes, especially with PBR (Physically Based Rendering) textured objects. Disabling this option reverts to a 'vintage' lighting mode with less contrast and glow, and it also removes emissive light from PBR-textured objects, making them appear flat or less illuminated."
+				 top_pad="6"
+				 width="240">
+				</check_box>
+			</panel>
+
+			<panel
+			 name="P_Tone_Settings_3"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="50"
+			 border_visible="true"
+			 background_visible="true">
+
+				<text
+				 name="T_Tonemap_Type"
+				 follows="left|top"
+				 height="15"
+				 left="5" 
+				 tool_tip="Controls the algorithm used for High Dynamic Range (HDR) tone mapping, which affects how bright and dark areas are balanced. Khronos Neutral provides a natural, neutral look with less contrast and minimal color manipulation, maintaining the original lighting as intended. ACES (Academy Color Encoding System) is designed to mimic film-like dynamic range, offering richer colors, higher contrast, and more cinematic highlights. Changing this setting may alter overall brightness and color balance, depending on the scene."
+				 top_pad="7"
+				 width="162"
+				 layout="topleft">
+					HDR Tonemap Type
+				</text>
+				<combo_box
+				 control_name="RenderTonemapType"
+				 enabled_control="VertexShaderEnable"
+				 height="20"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="-3"
+				 follows="left|top"
+				 name="CB_Tonemap_Type"
+				 right="-5">
+					<combo_box.item
+					 label="Khronos Neutral"
+					 name="0"
+					 value="0"/>
+					<combo_box.item
+					 label="ACES"
+					 name="1"
+					 value="1"/>
+					<combo_box.commit_callback
+					 function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+				<text
+				 name="T_Tonemap_Type"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Blends between the selected HDR tonemapping style and raw linear lighting. A value of 1.0 applies the full effect of the chosen tonemap (either Khronos Neutral or ACES). A value of 0.0 disables tonemapping, showing raw linear lighting without post-processing adjustments. Adjust this slider to fine-tune the balance between natural realism and cinematic contrast. Higher values emphasize the tonemapping effect, while lower values produce a flatter, unprocessed look."
+				 top_pad="5"
+				 width="70">
+					Tone Mix
+				</text>
+				<slider_bar
+				 name="SB_Tonemap_Type"
+				 can_edit_text="true"
+				 control_name="RenderTonemapMix"
+				 follows="left|right"
+				 height="16"
+				 decimal_digits="2"
+				 increment="0.05"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="1"
+				 top_delta="0"
+				 width="127"/>
+				<spinner
+				 name="S_Tonemap_Type"
+				 can_edit_text="true"
+				 control_name="RenderTonemapMix"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="3"
+				 follows="top|left"
+				 max_val="1"
+				 min_val="0"
+				 width="53"
+				 increment="0.001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Tonemap_Type"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderTonemapMix"/>
+				</button>
+			</panel>
 			<panel
 			 name="P_Glow_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -1741,10 +2413,10 @@
 				 name="T_Glow_Settings"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="7"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="280">
 					Glow Settings
 				</text>
 			</panel>
@@ -1753,35 +2425,59 @@
 			 name="P_Glow_Quality"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="30"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="38"
 			 border_visible="true"
 			 background_visible="true">
-				<!--
+
 				<check_box
 				 control_name="RenderGlow"
 				 height="16"
-				 label="Enable Glow Effect (please read the tool tip)"
+				 label="Enable Glow Effect"
 				 layout="topleft"
-				 left="5"
+				 left="3"
 				 name="UseGlow"
-				 top_pad="10"
-				 width="110"
-				 tool_tip="If Shadows are turned on, you must set the Strength to 0.0 to turn off this effect as the check box will not work."/>
-				-->
+				 tool_tip="Activates the glow effect, causing bright objects and light sources to emit a soft halo, simulating a bloom effect. This enhances the appearance of emissive materials, reflections, and highlights, adding a more dynamic and vibrant look to illuminated areas. Disabling this option can improve performance, especially in scenes with complex lighting."
+				 top_pad="5"
+				 width="110"/>
+				 <check_box
+				 control_name="RenderGlowHDR"
+				 height="16"
+				 label="Enable HDR for Glow Map"
+				 layout="topleft"
+				 left="3"
+				 name="GlowHDR"
+				 tool_tip="Enables High Dynamic Range (HDR) processing for the glow effect, allowing for more intense, vibrant glows with realistic brightness transitions. This enhances glow quality, especially in high-contrast scenes, by improving how light spreads from very bright areas. Useful when working with emissive textures and strong lighting effects."
+				 top_pad="0"
+				 width="240">
+				</check_box>
+			</panel>
+
+			<panel
+			 name="P_Glow_Iterations"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="103"
+			 border_visible="true"
+			 background_visible="true">
+
+			
 				<text
 				 name="T_Glow_Quality" 
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
 				 top_pad="10"
-				 tool_tip="This will determine the quality of the glow effect, higher is better. There is little visual difference between 8 and 10."
-				 width="80">
+				 tool_tip="Controls the resolution at which the glow effect is rendered. Higher values (closer to 10) produce sharper, more defined glows, while lower values (closer to 8) are more performance-friendly but may appear slightly softer. The difference between settings 8 and 10 is subtle, but higher values can impact performance on less powerful systems."
+				 width="70">
 					Quality
 				</text>
-				<!--slider_bar
+				<slider_bar
 				 name="SB_Glow_Quality"
 				 control_name="RenderGlowResolutionPow"
 				 follows="top|left"
@@ -1789,17 +2485,17 @@
 				 decimal_digits="0"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="8"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127" /-->
+				 width="127" />
 				<spinner
 				 name="S_Glow_Quality"
 				 control_name="RenderGlowResolutionPow"
 				 top_delta="-5"
 				 label_width="0"
-				 left_pad="110"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="10"
@@ -1820,26 +2516,15 @@
 					 function="ResetControl"
 					 parameter="RenderGlowResolutionPow"/>
 				</button>
-			</panel>
-
-			<panel
-			 name="P_Glow_Iterations"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="145"
-			 border_visible="true"
-			 background_visible="true">
+			 
 				<text
 				 name="T_Glow_Iterations"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
-				 tool_tip="Number of times to iterate/repeat the glow (higher = wider and smoother and a bit slower)."
-				 width="80">
+				 top_pad="5"
+				 tool_tip="Determines how many times the glow effect is processed to create smoothness and spread. Lower values result in tighter, sharper glows with minimal blur, while higher values create wider, softer glow halos with a more diffused appearance. Increasing the number of iterations can enhance glow quality but may reduce performance."
+				 width="70">
 					Iterations
 				</text>
 				<slider_bar
@@ -1849,7 +2534,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="200"
 				 top_delta="-2"
@@ -1859,7 +2544,7 @@
 				 control_name="RenderGlowIterations"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="500"
@@ -1886,8 +2571,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Additive strength of glow. Very low values are needed to see this effect. Start low!"
-				 width="80">
+				 tool_tip="Controls the intensity of the glow effect. Low values (around 0.01 to 0.05) provide subtle, natural-looking glows. Higher values make objects appear intensely bright, but excessive settings can cause unrealistic blooming or overpower the scene. Adjust this setting gradually, as small changes can significantly affect the final look."
+				 width="70">
 					Strength
 				</text>
 				<slider_bar
@@ -1897,7 +2582,7 @@
 				 height="16"
 				 increment=".001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
@@ -1907,7 +2592,7 @@
 				 control_name="RenderGlowStrength"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="5"
 				 follows="top|left"
 				 max_val="10"
@@ -1930,111 +2615,13 @@
 				</button>
 
 				<text
-				 name="T_Luminance"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Minimum luminance intensity necessary to consider an object bright enough to automatically glow."
-				 width="80">
-					Luminance
-				</text>
-				<slider_bar
-				 name="SB_Luminance"
-				 control_name="RenderGlowMinLuminance"
-				 follows="left|top"
-				 height="16"
-				 increment="0.001"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="1"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Luminance"
-				 control_name="RenderGlowMinLuminance"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|left"
-				 max_val="1"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Luminance"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderGlowMinLuminance"/>
-				</button>
-
-				<text
-				 name="T_Warmth"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Amount of warmth extraction to use (versus luminance extraction). 0 = lum, 1.0 = warmth. OFTEN HAS LITTLE OR NO EFFECT!"
-				 width="80">
-					Warmth
-				</text>
-				<slider_bar
-				 name="SB_Warmth"
-				 control_name="RenderGlowWarmthAmount"
-				 follows="left|right"
-				 height="16"
-				 increment="0.001"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="30"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Warmth"
-				 control_name="RenderGlowWarmthAmount"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|left"
-				 max_val="30"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Warmth"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderGlowWarmthAmount"/>
-				</button>
-
-				<text
 				 name="T_Glow_Width"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Glow sample size. Higher = wider and softer glow, but eventually it will become more pixelated."
+				 tool_tip="Controls the width of the glow effect, determining how far the glow spreads from light-emitting objects. Higher values create a wider, softer glow that covers a larger area, enhancing the bloom effect. However, increasing the width too much can cause the glow to appear pixelated or lose detail. Lower values produce a tighter, more focused glow around the source. Adjust this setting gradually to find a balance between a natural, soft glow and maintaining visual clarity."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					Width
 				</text>
 				<slider_bar
@@ -2044,7 +2631,7 @@
 				 height="16"
 				 increment="0.001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="50"
 				 top_delta="-2"
@@ -2054,7 +2641,7 @@
 				 control_name="RenderGlowWidth"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="5000"
@@ -2075,55 +2662,6 @@
 					 function="ResetControl"
 					 parameter="RenderGlowWidth"/>
 				</button>
-
-				<text
-				 name="T_Alpha"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Basically how bright the glow is allowed to get."
-				 width="80">
-					Alpha
-				</text>
-				<slider_bar
-				 name="SB_Alpha"
-				 control_name="RenderGlowMaxExtractAlpha"
-				 follows="left|right"
-				 height="16"
-				 increment="0.001"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="100"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Alpha"
-				 control_name="RenderGlowMaxExtractAlpha"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|left"
-				 max_val="1000"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Alpha"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderGlowMaxExtractAlpha"/>
-				</button>
 			</panel>
 		</panel>
 
@@ -2131,16 +2669,14 @@
 		 name="P_General"
 		 follows="left|top"
 		 layout="topleft"
-		 top_pad="0"
-		 label="Gen"
-		 left="0">
+		 label="Gen">
 			<panel
 			 name="PT_General"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -2150,10 +2686,10 @@
 				 name="T_General"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="280">
 					General Render Settings
 				</text>
 			</panel>
@@ -2162,10 +2698,10 @@
 			 name="P_General_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="3"
-			 left="4"
-			 width="275"
-			 height="250"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="293"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -2174,8 +2710,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="10"
-				 tool_tip="This sets the furthest distance the viewer will draw anything. High values will slow your FPS!"
-				 width="80">
+				 tool_tip="Sets the maximum distance at which objects are rendered in the scene. Increasing this value allows you to see farther into the environment, enhancing detail in large landscapes or distant objects. However, higher values significantly impact performance, reducing FPS, especially in complex areas. For better performance, use lower values in crowded regions or when using older hardware."
+				 width="70">
 					Draw Dist.
 				</text>
 				<slider_bar
@@ -2185,9 +2721,9 @@
 				 height="16"
 				 increment="8"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="32"
-				 max_val="1024"
+				 max_val="4096"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2195,7 +2731,7 @@
 				 control_name="RenderFarClip"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="1024"
@@ -2223,8 +2759,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Maximum number of other avatars to render in a scene. Very helpful for situations where many avatars are slowing your FPS."
-				 width="80">
+				 tool_tip="Controls the maximum number of avatars rendered in the scene. Limiting this number improves performance, especially in crowded events or busy locations. Lower values reduce visual clutter and increase FPS, while higher values allow more avatars to be visible but may slow performance in large gatherings."
+				 width="70">
 					Avi Count
 				</text>
 				<slider_bar
@@ -2234,8 +2770,8 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
-				 min_val="1"
+				 left_pad="0"
+				 min_val="0"
 				 max_val="66"
 				 top_delta="-2"
 				 width="127"/>
@@ -2244,7 +2780,7 @@
 				 control_name="IndirectMaxNonImpostors"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="66"
@@ -2263,7 +2799,7 @@
 				 tool_tip="Reset to the default value.">
 					<button.commit_callback
 					 function="ResetControl"
-					 parameter="RenderAvatarMaxVisible"/>
+					 parameter="IndirectMaxNonImpostors"/>
 				</button>
 
 				<text
@@ -2272,8 +2808,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Sets the render quality of the avatars. Higher is better!"
-				 width="80">
+				 tool_tip="Adjusts the level of detail (LOD) for avatars. Higher values improve visual quality, making legacy avatars appear more detailed even at greater distances. Lower values reduce detail to improve performance, which is useful in high-density areas or on lower-end systems. This setting primarily affects legacy (system) avatars. Mesh avatars are less affected by this setting as their detail levels are controlled by their own LOD settings within the mesh and further influenced by the Avatar Complexity settings found in the Graphics panel of the Preferences floater."
+				 width="70">
 					Avi Detail
 				</text>
 				<slider_bar
@@ -2283,7 +2819,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
@@ -2293,7 +2829,7 @@
 				 control_name="RenderAvatarLODFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="10"
@@ -2321,8 +2857,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls level of detail of avatar physics (such as chest physics). Higher is better."
-				 width="80">
+				 tool_tip="Controls the level of detail for avatar physics effects, such as breast physics and other mesh deformation behaviors. Higher values provide smoother, more realistic motion at the cost of performance. Lower values reduce the complexity of physics calculations, improving performance in crowded areas."
+				 width="70">
 					Avi Physics
 				</text>
 				<slider_bar
@@ -2330,11 +2866,11 @@
 				 control_name="RenderAvatarPhysicsLODFactor"
 				 follows="left|top"
 				 height="16"
-				 increment="1"
+				 increment=".01"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val="10"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2342,13 +2878,13 @@
 				 control_name="RenderAvatarPhysicsLODFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="0"
+				 left_pad="0"
+				 decimal_digits="2"
 				 follows="top|right"
 				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment="1"/>
+				 increment=".01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Avi_Physics"
@@ -2370,8 +2906,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Sets the maximum number of particles to render."
-				 width="80">
+				 tool_tip="Sets the maximum number of particles the viewer will render at once. This affects effects like smoke, fire, magic spells, ropes, chains and particle-based animations. Higher values allow more particles for detailed visual effects but may reduce performance in particle-heavy environments."
+				 width="70">
 					Particle Cnt.
 				</text>
 				<slider_bar
@@ -2381,9 +2917,9 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val="10000"
+				 max_val="8192"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2391,7 +2927,7 @@
 				 control_name="RenderMaxPartCount"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="top|left"
 				 max_val="10000"
@@ -2419,9 +2955,9 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Sets the quality of the default ground (terrain) texture."
-				 width="80">
-					Terr. Scale
+				 tool_tip="Determines the scaling factor for the default ground (terrain) texture, affecting how stretched or detailed the terrain appears. Higher values create finer, more detailed textures, while lower values reduce detail but can improve performance."
+				 width="70">
+					Terrain Scale
 				</text>
 				<slider_bar
 				 name="SB_Terrain_Scale"
@@ -2430,7 +2966,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="24"
 				 top_delta="-2"
@@ -2440,7 +2976,7 @@
 				 control_name="RenderTerrainScale"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="left|top"
 				 max_val="24"
@@ -2468,9 +3004,9 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Sets the quality of terrain. High numbers mean more detailed terrain in the distance."
-				 width="80">
-					Terrain Qal
+				 tool_tip="Controls the level of detail (LOD) factor for terrain rendering. Higher values provide more detailed terrain, especially at greater distances, enhancing realism. Lower values simplify terrain detail for better performance in large regions."
+				 width="70">
+					Terrain Qual.
 				</text>
 				<slider_bar
 				 name="SB_Terrain_Quality"
@@ -2479,9 +3015,9 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val="15"
+				 max_val="8"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2489,7 +3025,7 @@
 				 control_name="RenderTerrainLODFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="left|top"
 				 max_val="15"
@@ -2517,18 +3053,18 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls when lower-detail objects can be used to reduce rendering cost. Higher values cause lag, use with care."
-				 width="80">
-					Obj. Detail
+				 tool_tip="Adjusts the level of detail (LOD) for in-world objects. Higher values maintain high-quality object details even at greater distances but may reduce performance, especially in complex environments. Lower values trigger simpler object models (LODs) sooner, improving FPS but potentially reducing visual fidelity. A value of 4 provides a good balance between performance and visual quality, maintaining detailed objects without excessive resource usage. Values below 4, such as 2, will cause mesh objects to deform noticeably, making them unsuitable for photography or situations where visual accuracy is important."
+				 width="70">
+					Object Detail
 				</text>
 				<slider_bar
 				 name="SB_Object_Detail"
 				 control_name="RenderVolumeLODFactor"
 				 follows="left|top"
 				 height="16"
-				 increment="0.125"
+				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="8.0"
 				 top_delta="-2"
@@ -2538,13 +3074,13 @@
 				 control_name="RenderVolumeLODFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
+				 left_pad="0"
+				 decimal_digits="0"
 				 follows="left|top"
 				 max_val="8.0"
 				 min_val="0"
 				 width="53"
-				 increment="0.125"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Object_Detail"
@@ -2566,8 +3102,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls level of detail of flexible objects. Higher means more detail."
-				 width="80">
+				 tool_tip="Controls the level of detail for flexible (flexi) objects like flowing hair, flags, and ropes. Higher values produce smoother, more realistic motion but may affect performance. Lower values simplify movement calculations for faster rendering."
+				 width="70">
 					Flexiprims
 				</text>
 				<slider_bar
@@ -2577,7 +3113,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
@@ -2587,10 +3123,10 @@
 				 control_name="RenderFlexTimeFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="left|top"
-				 max_val="10"
+				 max_val="1"
 				 min_val="0"
 				 width="53"
 				 increment="1"/>
@@ -2615,8 +3151,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls level of detail of vegetation. Higher numbers produce greater detail."
-				 width="80">
+				 tool_tip="Sets the level of detail (LOD) for trees and other vegetation. Higher values result in more complex, detailed foliage, while lower values simplify tree geometry for improved performance, especially in densely vegetated regions. This setting applies specifically to system (legacy) trees and does not affect non-system or mesh-based trees, which manage their detail through their own LOD settings."
+				 width="70">
 					Tree Detail
 				</text>
 				<slider_bar
@@ -2626,9 +3162,9 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val="15"
+				 max_val="8"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2636,7 +3172,7 @@
 				 control_name="RenderTreeLODFactor"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="left|top"
 				 max_val="15"
@@ -2664,8 +3200,8 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls vertex detail on the WindLight sky. Lower numbers will give better performance and less than lovely skies."
-				 width="80">
+				 tool_tip="Controls the vertex detail of the Enviroment sky, affecting the smoothness of gradients, cloud shapes, and atmospheric effects. Higher values enhance sky realism but may reduce performance. Lower values improve FPS but may make the sky appear blocky or less detailed."
+				 width="70">
 					Sky Detail
 				</text>
 				<slider_bar
@@ -2675,7 +3211,7 @@
 				 height="16"
 				 increment="1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="4"
 				 max_val="512"
 				 top_delta="-2"
@@ -2685,7 +3221,7 @@
 				 control_name="WLSkyDetail"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="0"
 				 follows="left|top"
 				 max_val="512"
@@ -2706,168 +3242,112 @@
 					 function="ResetControl"
 					 parameter="WLSkyDetail"/>
 				</button>
-			</panel>
-
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator4"
-			 top_pad="5"
-			 width="260"/-->
-			
-			<panel
-			 name="P_Vignetting"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="3"
-			 left="4"
-			 width="275"
-			 height="70"
-			 border_visible="true"
-			 border_thickness="1"
-			 background_visible="true">
 				<text
-				 name="T_VignetteX"
+				 name="T_Sharpening"
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
-				 tool_tip=""
-				 width="80">
-				 Vig. Amount
+				 tool_tip="Adjusts the sharpness of the overall image using Contrast-Adaptive Sharpening (CAS). Higher values enhance image clarity by increasing contrast around edges, which can improve visual detail. Excessive sharpening may introduce artifacts or make the image look harsh."
+				 top_pad="5"
+				 width="70">
+					Sharpening
 				</text>
 				<slider_bar
-				 name="VignetteSliderX"
+				 name="SB_Sharpening"
+				 control_name="RenderCASSharpness"
 				 follows="left|top"
 				 height="16"
-				 increment="0.05"
+				 increment=".001"
 				 layout="topleft"
-				 left_pad="-10"
-				 min_val="0.0"
-				 max_val="1.0"
-				 initial_value="0"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="1"
 				 top_delta="-2"
-				 width="117"/>
+				 width="127"/>
 				<spinner
-				 name="VignetteSpinnerX"
+				 name="S_Sharpening"
+				 control_name="RenderCASSharpness"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="left|top"
 				 max_val="1.0"
 				 min_val="0.0"
 				 width="53"
-				 increment="0.05"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
-				 name="Reset_VignetteX"
+				 name="Reset_Sharpening"
 				 height="22"
 				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Reset to the default value." />
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderCASSharpness"/>
+				</button>
 				<text
-				 name="T_VignetteY"
+				 name="T_Exposure"
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
+				 tool_tip="Controls the overall brightness of the scene, simulating camera exposure settings. Higher values make the image brighter, useful for dark environments, while lower values darken the scene, enhancing contrast in bright areas. Adjust carefully to prevent washed-out highlights or overly dark shadows."
 				 top_pad="5"
-				 tool_tip=""
-				 width="80">
-				 Vig. Power
+				 width="70">
+					Exposure
 				</text>
 				<slider_bar
-				 name="VignetteSliderY"
+				 name="SB_Exposure"
+				 control_name="RenderExposure"
 				 follows="left|top"
 				 height="16"
-				 increment="0.1"
+				 increment=".25"
 				 layout="topleft"
-				 left_pad="-10"
-				 min_val="0.0"
-				 max_val="32.0"
-				 initial_value="1"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="10"
 				 top_delta="-2"
-				 width="117"/>
+				 width="127"/>
 				<spinner
-				 name="VignetteSpinnerY"
+				 name="S_Exposure"
+				 control_name="RenderExposure"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="2"
 				 follows="left|top"
-				 max_val="32.0"
+				 max_val="10.0"
 				 min_val="0.0"
 				 width="53"
-				 increment="0.1"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
-				 name="Reset_VignetteY"
+				 name="Reset_Exposure"
 				 height="22"
 				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Reset to the default value." />
-				<text
-				 name="T_VignetteZ"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip=""
-				 width="80">
-				 Vig. Multiply
-				</text>
-				<slider_bar
-				 name="VignetteSliderZ"
-				 follows="left|top"
-				 height="16"
-				 increment="0.1"
-				 layout="topleft"
-				 left_pad="-10"
-				 min_val="0.0"
-				 max_val="8.0"
-				 initial_value="1"
-				 top_delta="-2"
-				 width="117"/>
-				<spinner
-				 name="VignetteSpinnerZ"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="left|top"
-				 max_val="8.0"
-				 min_val="0.0"
-				 width="53"
-				 increment="0.1"/>
-				<button
-				 follows="left|top"
-				 name="Reset_VignetteZ"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value." />
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderExposure"/>
+				</button>
 			</panel>
 
 			<panel
 			 name="P_Render"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="3"
-			 left="4"
-			 width="275"
-			 height="98"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="87"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2877,10 +3357,10 @@
 				 height="16"
 				 label="Enable Draw Distance"
 				 layout="topleft"
-				 top_pad="10" 
-				 left="5"
+				 top_pad="5" 
+				 left="3"
 				 name="UseFarClip"
-				 tool_tip="Enable Draw Distance, if you disable this feature the Viewer will render past your set draw distance."
+				 tool_tip="Enables the draw distance limit, restricting how far the viewer will render objects based on the set draw distance. Disabling this will cause the viewer to render objects beyond the defined distance, which can significantly decrease performance in large, detailed environments."
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -2888,10 +3368,10 @@
 				 height="16"
 				 label="Dynamically adjust level of detail"
 				 layout="topleft"
-				 left="5"
+				 left="3"
 				 name="RednerLod1"
-				 tool_tip="This enables the feature that allows the viewer to dynamically adjust the level of detail in scene as you move further away from objects. It helps improve performance, it also can reduce the quality of the objects in the scene."
-				 top_pad="2"
+				 tool_tip="Allows the viewer to automatically adjust the level of detail (LOD) for objects based on your distance from them. This improves performance by reducing detail for distant objects while maintaining high detail for nearby ones. However, it may cause noticeable reductions in object quality when moving quickly or in large scenes."
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -2899,10 +3379,10 @@
 				 height="16"
 				 label="Render only Objects visible to the Camera"
 				 layout="topleft"
-				 left="5"
-				 tool_tip="This allows the viewer only to process/draw those objects that are within the camera field of view and not hidden behind anything else. Usually this is a performance booster. Sometimes it can actually reduce performance especially when the scene/sim has few objects. Toggle to see if it helps or not!"
+				 left="3"
+				 tool_tip="Enables occlusion culling, which optimizes performance by rendering only objects within the camera’s field of view and not hidden behind other objects. This can boost performance in complex scenes but may occasionally reduce performance in sparsely populated areas. Toggle this setting to see if it improves performance in your specific environment."
 				 name="UssOcclusion1"
-				 top_pad="2"
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -2910,19 +3390,19 @@
 				 height="16"
 				 label="Anisotropic Filtering (texture crispness)"
 				 layout="topleft"
-				 left="5"
-				 tool_tip="This enables higher texture crispness."
+				 left="3"
+				 tool_tip="Improves the sharpness and clarity of textures viewed at angles, making surfaces like floors, roads, and walls appear crisper. While enhancing visual quality, enabling anisotropic filtering may slightly impact performance, especially on lower-end graphics hardware."
 				 name="Anisotropic"
-				 top_pad="2"
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
-				 left="5"
-				 top_pad="2"
+				 left="3"
+				 top_pad="0"
 				 height="16"
 				 label="Render Particles Attached to other Avatars"
-				 tool_tip="Enables the viewer to render any and all particles attached to/coming from other avatars."
+				 tool_tip="Enables the rendering of particle effects that are attached to or emitted from other avatars, such as glow effects, particle trails, or avatar-based visual effects. This also includes particles attached to furniture or objects that avatars are sitting on. Disabling this can improve performance in crowded areas but will hide these particle effects from view."
 				 name="Render Attached Particle">
 					<check_box.on_check
 					 function="CheckControl"
@@ -2933,99 +3413,123 @@
 				</check_box>
 			</panel>
 
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator5"
-			 top_pad="5"
-			 width="260"/-->
-
 			<panel
 			 name="P_Anti-aliasing"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="3"
-			 left="4"
-			 width="275"
-			 height="60"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="105"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
-				<text
+			 
+			 	<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="15"
+				 layout="topleft"
+				 left="5"
+				 name="T_Antialiasing_Type"
+				 top_pad="5"
+				 width="185"
+				 tool_tip="Selects the type of antialiasing used to smooth jagged edges on objects. FXAA (Fast Approximate Antialiasing) is a fast method with moderate quality. SMAA (Subpixel Morphological Antialiasing) offers better edge smoothing with slightly higher performance cost. Changes to this setting may require a viewer restart to take effect on some hardware.">
+				  Antialiasing Type (Restart)
+				</text>
+					<combo_box
+					 control_name="RenderFSAAType"
+					 height="20"
+					 initial_value="false"
+					 follows="left|top"
+					 layout="topleft"
+					 left_pad="0"
+					 name="CB_Antialiasing_Type"
+					 top_delta="-3"
+					 right="-5">
+						<combo_box.item
+						 label="Disabled"
+						 name="FSAADisabled"
+						 value="0" />
+						<combo_box.item
+						 label="FXAA"
+						 name="FXAA"
+						 value="1" />
+						<combo_box.item
+						 label="SMAA"
+						 name="SMAA"
+						 value="2" />
+					</combo_box>
+			 	<text
+				 type="string"
+				 length="1"
 				 name="T_Anti-aliasing"
 				 follows="left|top"
-				 height="18"
-				 left="10" 
-				 top_pad="12"
-				 width="80"
+				 height="15"
+				 left="5" 
+				 top_pad="5"
+				 width="185"
 				 layout="topleft"
-				 tool_tip="Determines how sharp and smooth the edges of objects will be. On top level graphics cards, higher values have virtually NO performance impact. On lower graphics cards, higher values can slow performance.">
-					Anti-aliasing
+				 tool_tip="Determines the quality of antialiasing, which smooths the edges of objects. Higher settings reduce jagged edges, providing a cleaner look. On high-end graphics cards, higher values have minimal performance impact. On lower-end systems, higher settings can reduce performance.">
+					Antialiasing Quality
 				</text>
 				<combo_box
 				 control_name="RenderFSAASamples"
-				 height="22"						
-				 label="Antialiasing"
+				 height="20"
 				 layout="topleft"
 				 follows="left|top"
 				 left_pad="0"
 				 name="fsaa"
 				 top_delta="-5"
-				 width="180">
-					<combo_box.item
-					 label="Disabled (Rougher Edges)"
-					 name="FSAADisabled"
-					 value="0"/>
-					<combo_box.item
-					 label="2x (Smooth Edges)"
-					 name="2x"
-					 value="2"/>
-					<combo_box.item
-					 label="4x (Smoother Edges)"
-					 name="4x"
-					 value="4"/>
-					<combo_box.item
-					 label="8x (Even Smoother)"
-					 name="8x"
-					 value="8"/>
-					<combo_box.item
-					 label="16x (Smoothest)"
-					 name="16x"
-					 value="16"/>
+				 width="85">
+						<combo_box.item
+						 label="Low"
+						 name="Low"
+						 value="0" />
+						<combo_box.item
+						 label="Medium"
+						 name="Medium"
+						 value="1" />
+						<combo_box.item
+						 label="High"
+						 name="High"
+						 value="2" />
+						<combo_box.item
+						 label="Ultra"
+						 name="Ultra"
+						 value="3" />
 				</combo_box>
 				<text
 				 name="T_Texture_Bumpiness"
 				 follows="left|top"
 				 height="15"
-				 left="10" 
-				 top_pad="12"
-				 width="110"
+				 left="5" 
+				 top_pad="5"
+				 width="185"
 				 layout="topleft"
-				 tool_tip="Controls the strength and resolution of normal and bump maps.">
+				 tool_tip="Controls the strength and resolution of normal and bump maps, which add texture detail to surfaces without increasing polygon count. Higher settings enhance surface detail, while lower settings improve performance by reducing visual complexity.">
 					Texture Bumpiness
 				</text>
 				<combo_box
 				 control_name="RenderNormalMapScale"
-				 height="22"
+				 height="20"
 				 layout="topleft"
 				 left_pad="0"	
 				 follows="left|top"
 				 top_delta="-5"
 				 name="BumpStrengthSelection"
-				 width="150">
+				 width="85">
 					<combo_box.item
-					 label="Very fine (very weak)"
+					 label="Very fine"
 					 name="0"
 					 value="1024"/>
 					<combo_box.item
-					 label="Finer (weaker)"
+					 label="Finer"
 					 name="1"
 					 value="512"/>
 					<combo_box.item
-					 label="Fine (weak)"
+					 label="Fine"
 					 name="2"
 					 value="256"/>
 					<combo_box.item
@@ -3033,15 +3537,91 @@
 					 name="3"
 					 value="64"/>
 					<combo_box.item
-					 label="Rough (stronger)"
+					 label="Rough"
 					 name="4"
 					 value="32"/>
 					<combo_box.item
-					 label="Rougher (very strong)"
+					 label="Rougher"
 					 name="5"
 					 value="16"/>
 					<combo_box.commit_callback
 					 function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+				<text
+				  name="T_RestrictMaxTexture"
+				  follows="left|top"
+				  height="15"
+				  left="5" 
+				  top_pad="5"
+				  width="185"
+				  layout="topleft"
+				  tool_tip="Sets the maximum resolution for textures displayed in-world. Higher resolutions (like 2048 px) provide sharper, more detailed images but use more video memory, which can affect performance. Lower settings help conserve memory, reducing the chance of blurry textures due to memory limits.">
+				  Max Texture Resolution
+				</text>
+
+				<combo_box
+				  control_name="RenderMaxTextureResolution"
+				  height="20"
+				  layout="topleft"
+				  left_pad="0"	
+				  follows="left|top"
+				  top_delta="-5"
+				  name="MaxTextureResolutionSelection"
+				  width="85">
+				  <combo_box.item
+					label="512 px"
+					name="512"
+					value="512"/>
+				  <combo_box.item
+					label="1024 px"
+					name="1024"
+					value="1024"/>
+				  <combo_box.item
+					label="2048 px"
+					name="2048"
+					value="2048"/>
+				  <combo_box.commit_callback
+					function="Quickprefs.ShaderChanged"/>
+				</combo_box>
+				<text
+				  name="T_AvatarDisplay"
+				  follows="left|top"
+				  height="15"
+				  left="5" 
+				  top_pad="5"
+				  width="140"
+				  layout="topleft"
+				  tool_tip="Controls how avatars are displayed based on complexity and friendship status. 'Limit by Complexity' restricts rendering of avatars above a certain complexity to improve performance. 'Always Show Friends' ensures friends are fully rendered regardless of their complexity. 'Only Show Friends' renders only your friends, hiding other avatars to optimize performance in crowded areas.">
+				  Avatar Display
+				</text>
+
+				<combo_box
+				  control_name="RenderAvatarComplexityMode"
+				  height="20"
+				  layout="topleft"
+				  left_pad="0"	
+				  follows="left|top"
+				  top_delta="-5"
+				  name="AvatarComplexityModeSelection"
+				  width="130">
+				  
+				  <combo_box.item
+					label="Limit by Complexity"
+					name="0"
+					value="0"/>
+					
+				  <combo_box.item
+					label="Always Show Friends"
+					name="1"
+					value="1"/>
+					
+				  <combo_box.item
+					label="Only Show Friends"
+					name="2"
+					value="2"/>
+					
+				  <combo_box.commit_callback
+					function="Quickprefs.ShaderChanged"/>
 				</combo_box>
 			</panel>
 		</panel>
@@ -3050,16 +3630,14 @@
 		 name="P_Aids"
 		 follows="left|top"
 		 layout="topleft"
-		 top_pad="0"
-		 label="Aids"
-		 left="0">
+		 label="Aids">
 			<panel
 			 name="PT_Aids"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -3069,216 +3647,240 @@
 				 name="T_Aids"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="280">
 					Interface Aids
 				</text>
 			</panel>
-			
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="5"
-			 height="16"
-			 label="Show Bounding Boxes for All Lights in Scene"
-			 name="Lights">
-				<check_box.on_check
-				 function="Advanced.CheckInfoDisplay"
-				 parameter="lights"/>
-				<check_box.check_button.commit_callback
-				 function="Advanced.ToggleInfoDisplay"
-				 parameter="lights"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="5"
-			 height="16"
-			 label="Show Light Radius for Selected Light(s)"
-			 name="Show Light Radius for Selection">
-				<check_box.on_check
-				 function="CheckControl"
-				 parameter="RenderLightRadius"/>
-				<check_box.check_button.commit_callback
-				 function="Tools.ShowSelectionLightRadius"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show Bounding Boxes for Objects in Scene"
-			 name="Bounding Boxes">
-				<check_box.on_check
-				 function="Advanced.CheckInfoDisplay"
-				 parameter="bboxes"/>
-				<check_box.check_button.commit_callback
-				 function="Advanced.ToggleInfoDisplay"
-				 parameter="bboxes"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show the Statistics Bar"
-			 name="Statistics Bar">
-				<check_box.on_check
-				 function="Floater.Visible"
-				 parameter="stats"/>
-				<check_box.check_button.commit_callback
-				 function="Floater.Toggle"
-				 parameter="stats"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show Detailed Camera Position Data"
-			 name="Camera">
-				<check_box.on_check
-				 function="Advanced.CheckHUDInfo"
-				 parameter="camera"/>
-				<check_box.check_button.commit_callback
-				 function="Advanced.ToggleHUDInfo"
-				 parameter="camera"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show Detailed Texture Loading Information"
-			 name="Texture Console">
-				<check_box.on_check
-				 function="Advanced.CheckConsole"
-				 parameter="texture"/>
-				<check_box.check_button.commit_callback
-				 function="Advanced.ToggleConsole"
-				 parameter="texture"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show RGB-I Color Values Under Cursor"
-			 name="Show Color Under Cursor">
-				<check_box.on_check
-				 function="Advanced.CheckShowColor"/>
-				<check_box.check_button.commit_callback
-				 function="Advanced.ToggleShowColor"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Highlight Transparent Objects in Red"
-			 name="Highlight Transparent">
-				<check_box.on_check
-				 function="View.CheckHighlightTransparent"/>
-				<check_box.check_button.commit_callback
-				 function="View.HighlightTransparent"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show the Scene as Wireframe"
-			 name="Wireframe">
-				<check_box.on_check
-				 function="Advanced.CheckWireframe"
-				 parameter="Wireframe"/>
-				<check_box.check_button.commit_callback
-				 function="Advanced.ToggleWireframe"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Show the HUD attached to Your Avatar"
-			 name="Show HUD Attachments">
-				<check_box.on_check
-				 function="View.CheckHUDAttachments"/>
-				<check_box.check_button.commit_callback
-				 function="View.ShowHUDAttachments"/>
-			</check_box>
-			<check_box
-			 follows="top|left"
-			 layout="topleft"
-			 left="7"
-			 top_pad="10"
-			 label="Slow-mo Your Avatar (in your viewer only)"
-			 name="Slow Motion Animations">
-				<check_box.on_check
-				 function="CheckControl"
-				 parameter="SlowMotionAnimation"/>
-				<check_box.check_button.commit_callback
-				 function="ToggleControl"
-				 parameter="SlowMotionAnimation"/>
-			</check_box>
-			<button
-			 follows="left|top"
-			 name="Rebake Texture"
-			 height="22"
-			 label="Force Appearance Update (Rebake)"
-			 layout="topleft"
-			 left="7"
-			 top_pad="4"
-			 width="270">
-				<button.commit_callback
-				 function="Advanced.RebakeTextures"/>
-			</button>
-			<button
-			 follows="left|top"
-			 name="Set Window Size..."
-			 height="22"
-			 label="Set Window Viewer Size..."
-			 layout="topleft"
-			 left="7"
-			 top_pad="4"
-			 width="270">
-				<button.commit_callback
-				 function="Floater.Show"
-				 parameter="window_size"/>
-			</button>
-			<button
-			 follows="left|top"
-			 name="Debug Settings"
-			 height="22"
-			 label="Show Debug Settings Menu"
-			 layout="topleft"
-			 left="7"
-			 top_pad="4"
-			 width="270">
-				<button.commit_callback
-				 function="Advanced.ShowDebugSettings"
-				 parameter="all"/>
-			</button>
-			
-			<!--view_border
-			 bevel_style="none"
-			 follows="left|top"
-			 height="0"
-			 layout="topleft"
-			 left="10"
-			 name="horiz_separator6"
-			 top_pad="265"
-			 width="260"/-->
 
+			<panel
+			 name="P_Aids_Settings"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="302"
+			 border_visible="true"
+			 background_visible="true">
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Displays wireframe boxes around all light sources in the scene, helping to visualize the placement and range of lights for debugging or scene setup."
+				 top_pad="5"
+				 height="16"
+				 label="Show Bounding Boxes for All Lights in Scene"
+				 name="Lights">
+					<check_box.on_check
+					 function="Advanced.CheckInfoDisplay"
+					 parameter="lights"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleInfoDisplay"
+					 parameter="lights"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Displays the effective radius of selected light sources, allowing you to see how far the light reaches in the scene. Useful for fine-tuning lighting setups."
+				 top_pad="5"
+				 height="16"
+				 label="Show Light Radius for Selected Light(s)"
+				 name="Show Light Radius for Selection">
+					<check_box.on_check
+					 function="CheckControl"
+					 parameter="RenderLightRadius"/>
+					<check_box.check_button.commit_callback
+					 function="Tools.ShowSelectionLightRadius"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Enables wireframe bounding boxes around all objects in the scene. This aids in identifying object boundaries for alignment, scaling, or troubleshooting rendering issues."
+				 top_pad="10"
+				 label="Show Bounding Boxes for Objects in Scene"
+				 name="Bounding Boxes">
+					<check_box.on_check
+					 function="Advanced.CheckInfoDisplay"
+					 parameter="bboxes"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleInfoDisplay"
+					 parameter="bboxes"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Displays real-time performance statistics, including frame rate (FPS), network data, and rendering metrics. Useful for monitoring viewer performance and identifying bottlenecks."
+				 top_pad="10"
+				 label="Show the Statistics Bar"
+				 name="Statistics Bar">
+					<check_box.on_check
+					 function="Floater.Visible"
+					 parameter="stats"/>
+					<check_box.check_button.commit_callback
+					 function="Floater.Toggle"
+					 parameter="stats"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Displays detailed information about the camera's position, orientation, and movement in the scene. Useful for precise camera work in photography, machinima, or building."
+				 top_pad="10"
+				 label="Show Detailed Camera Position Data"
+				 name="Camera">
+					<check_box.on_check
+					 function="Advanced.CheckHUDInfo"
+					 parameter="camera"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleHUDInfo"
+					 parameter="camera"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Opens the texture console, showing real-time information on how textures are loaded, including their sizes, load times, and memory usage. Helps diagnose texture-related performance issues."
+				 top_pad="10"
+				 label="Show Detailed Texture Loading Information"
+				 name="Texture Console">
+					<check_box.on_check
+					 function="Advanced.CheckConsole"
+					 parameter="texture"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleConsole"
+					 parameter="texture"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Displays the RGB (Red, Green, Blue) and intensity (I) color values of the pixel directly under your cursor. Useful for color matching, design work, or debugging lighting issues."
+				 top_pad="10"
+				 label="Show RGB-I Color Values Under Cursor"
+				 name="Show Color Under Cursor">
+					<check_box.on_check
+					 function="Advanced.CheckShowColor"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleShowColor"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Highlights transparent objects in red, making them easier to identify. This is especially helpful for locating invisible prims or hidden objects when building or troubleshooting scenes."
+				 top_pad="10"
+				 label="Highlight Transparent Objects in Red"
+				 name="Highlight Transparent">
+					<check_box.on_check
+					 function="View.CheckHighlightTransparent"/>
+					<check_box.check_button.commit_callback
+					 function="View.HighlightTransparent"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Renders the entire scene in wireframe mode, displaying the underlying geometry of objects without textures or shading. Useful for analyzing object structure, LOD (level of detail), and mesh topology."
+				 top_pad="10"
+				 label="Show the Scene as Wireframe"
+				 name="Wireframe">
+					<check_box.on_check
+					 function="Advanced.CheckWireframe"
+					 parameter="Wireframe"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleWireframe"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="3"
+				 tool_tip="Displays all HUD (Heads-Up Display) attachments currently worn by your avatar. Disabling this hides HUDs, which can be useful for reducing screen clutter or improving performance."
+				 top_pad="10"
+				 label="Show the HUD attached to Your Avatar"
+				 name="Show HUD Attachments">
+					<check_box.on_check
+					 function="View.CheckHUDAttachments"/>
+					<check_box.check_button.commit_callback
+					 function="View.ShowHUDAttachments"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 label="Slop-mo Animation - Your Avatar and Viewer"
+				 layout="topleft"
+				 left="3"
+				 top_pad="10"
+				 tool_tip="Slows down avatar animations in your viewer, allowing you to observe movement in detail. This setting does not affect how others see your avatar."
+				 name="Slow Motion Animations">
+					<check_box.on_check
+					 function="CheckControl"
+					 parameter="SlowMotionAnimation"/>
+					<check_box.check_button.commit_callback
+					 function="ToggleControl"
+					 parameter="SlowMotionAnimation"/>
+				</check_box>
+				<button
+				 follows="left|top"
+				 name="Rebake Texture"
+				 height="22"
+				 tool_tip="Forces the viewer to rebake or refresh your avatar's appearance textures. This can fix issues like blurry skins, clothing not loading properly, or other texture-related problems."
+				 label="Force Appearance Update (Rebake)"
+				 layout="topleft"
+				 left="5"
+				 top_pad="4"
+				 right="-5">
+					<button.commit_callback
+					 function="Advanced.RebakeTextures"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Set Window Size..."
+				 height="22"
+				 label="Set Window Viewer Size..."
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Opens a dialog to set the exact dimensions of your viewer window. Useful for creating screenshots at specific resolutions or for matching window size requirements in machinima."
+				 top_pad="4"
+				 right="-5">
+					<button.commit_callback
+					 function="Floater.Show"
+					 parameter="window_size"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Debug Settings"
+				 height="22"
+				 label="Show Debug Settings Menu"
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Opens the debug settings menu, allowing access to advanced viewer settings not available in the standard preferences. Use with caution, as changes can affect performance and stability."
+				 top_pad="4"
+				 right="-5">
+					<button.commit_callback
+					 function="Advanced.ShowDebugSettings"
+					 parameter="all"/>
+				</button>
+				
+				<!--view_border
+				 bevel_style="none"
+				 follows="left|top"
+				 height="0"
+				 layout="topleft"
+				 left="10"
+				 name="horiz_separator6"
+				 top_pad="265"
+				 width="260"/-->
+			</panel>
 			<panel
 			 name="P_Quick_Stats"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="8"
+			 top_pad="3"
 			 left="0"
 			 width="285"
 			 height="22"
@@ -3289,35 +3891,35 @@
 				<text
 				 name="T_Quick_Stats"
 				 follows="left|top"
+				 height="17"
 				 layout="topleft"
-				 left="10"
+				 left="7"
 				 font="SansSerif"
-				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking their labels."
-				 width="230">
+				 tool_tip="Displays real-time system performance statistics to help you gauge the viewer's efficiency. You can expand or collapse individual metrics by clicking their labels."
+				 width="270">
 					Quick Stats
 				</text>
 			</panel>
 			
 			<scroll_container
 			 follows="top|left"
-			 height="150"
+			 height="158"
 			 layout="topleft"
-			 left="10"
+			 left="3"
 			 name="statistics_scroll"
 			 reserve_scroll_corner="false"
-			 top_pad="10"
+			 top_pad="1"
 			 opaque="false"
 			 color="DkGray_66"
 			 border_visible="false"
-			 width="265">
+			 right="-4">
 				<container_view
 				follows="top|left"
-				height="378"
 				layout="topleft"
 				left_pad="0"
 				name="statistics_view"
 				top_pad="0"
-				width="245">
+				width="265">
 					<stat_view
 					 follows="left|top"
 					 name="basic"
@@ -3336,7 +3938,7 @@
 						 decimal_digits="1"
 						 show_bar="true"
 						 show_history="true"
-						 tool_tip="FPS: The number of times per second your computer is redrawing (or refreshing) what's on the screen. Higher numbers are better. A framerate between 12 to 15 is common for animations, 24 is the standard for motion pictures, and 25 (PAL)/30 (NTSC) frames per second (FPS) is the rate for broadcast television."
+						 tool_tip="Shows how many times per second the screen is refreshed. Higher FPS indicates smoother performance. Typical rates are 12-15 FPS for basic animations, 24 FPS for movies, and 25-30 FPS for television."
 						 setting="DebugStatModePTFPS">
 						</stat_bar>
 						<stat_bar
@@ -3349,7 +3951,7 @@
 						 decimal_digits="1"
 						 show_bar="true"
 						 show_history="false"
-						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Virtual World. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0 Kbps, something may be wrong (you may be partially disconnected)."
+						 tool_tip="Displays the current data transfer rate between your computer and the virtual world. Higher values indicate active data flow. A consistent 0 Kbps may signal a partial disconnection."
 						 setting="DebugStatModePTBandwidth">
 						</stat_bar>
 						<stat_bar
@@ -3362,7 +3964,7 @@
 						 tick_spacing="1000"
 						 decimal_digits="0"
 						 show_bar="false"
-						 tool_tip="KTris Drawn: (per frame) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles, or 'tris', in each frame of the current scene."
+						 tool_tip="Represents the number of triangles (the basic 3D building block) drawn per frame. A higher count suggests more detailed 3D models are being rendered."
 						 setting="DebugStatModePTKTrisDrawnFr">
 						</stat_bar>
 						<stat_bar
@@ -3375,7 +3977,7 @@
 						 tick_spacing="25000"
 						 decimal_digits="0"
 						 show_bar="false"
-						 tool_tip="KTris Drawn: (per second) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles ('tris') drawn every second."
+						 tool_tip="Indicates the total number of triangles drawn every second. This helps measure the overall complexity of the scene being rendered."
 						 setting="DebugStatModePTKTrisDrawnSec">
 						</stat_bar>
 						<stat_bar
@@ -3387,7 +3989,7 @@
 						 tick_spacing="5000"
 						 decimal_digits="0"
 						 show_bar="false"
-						 tool_tip="Total Objs: The number of objects currently in view, which includes: Prims, Avatars, Terrain patches, Trees, Particle groups, and Water patches."
+						 tool_tip="Shows the total number of objects currently visible in the scene, including avatars, prims, terrain patches, and other entities."
 						 setting="DebugStatModePTTotalObjs">
 						</stat_bar>
 						<stat_bar
@@ -3399,7 +4001,7 @@
 						 bar_max="2000"
 						 tick_spacing="200"
 						 show_bar="false"
-						 tool_tip="New Objs: The number of objects being downloaded per second."
+						 tool_tip="Displays how many new objects are being loaded into the scene per second, reflecting asset streaming activity."
 						 setting="DebugStatModePTNewObjs">
 						</stat_bar>
 						<stat_bar
@@ -3410,7 +4012,7 @@
 						 bar_max="8000.f" 
 						 tick_spacing="2000.f"
 						 show_bar="false"
-						 tool_tip="Count: The number of unique textures loaded by the viewer."
+						 tool_tip="Indicates the total number of unique textures currently loaded in the viewer, which impacts video memory usage."
 						 setting="DebugStatModePTTextureCount">
 						</stat_bar>
 					</stat_view>
@@ -3422,16 +4024,14 @@
 		 name="P_Cam"
 		 follows="left|top"
 		 layout="topleft"
-		 top_pad="0"
-		 label="Cam"
-		 left="0">
+		 label="Cam">
 			<panel
 			 name="PT_Cam"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -3441,10 +4041,10 @@
 				 name="T_Cam"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="280">
 					3D Mouse (Joystick) Settings
 				</text>
 			</panel>
@@ -3453,9 +4053,9 @@
 			 name="P_Cam_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
 			 height="184"
 			 border_visible="true"
 			 background_visible="true">
@@ -3464,9 +4064,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the Left/Right movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Adjusts the sensitivity for horizontal camera movement. Lower values allow for finer control, while higher values increase movement speed."
 				 top_pad="10"
-				 width="80">
+				 width="70">
 					Left/Right
 				</text>
 				<slider_bar
@@ -3476,7 +4076,7 @@
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
@@ -3486,7 +4086,7 @@
 				 control_name="FlycamAxisScale1"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="1024"
@@ -3513,9 +4113,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the Up/Down movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Adjusts the sensitivity for vertical camera movement. Reducing this setting improves precision for small adjustments."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					Up/Down
 				</text>
 				<slider_bar
@@ -3525,7 +4125,7 @@
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
@@ -3535,7 +4135,7 @@
 				 control_name="FlycamAxisScale2"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="1024"
@@ -3562,9 +4162,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the In/Out movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Controls the sensitivity of forward and backward camera movement, similar to dollying in and out in real-world cinematography. This moves the entire camera closer to or farther from the subject, changing perspective rather than adjusting the Field of View (FOV) like a zoom would. Lower values provide more precise control for smooth, gradual dolly movements, while higher values increase movement speed for quicker adjustments."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					In/Out
 				</text>
 				<slider_bar
@@ -3574,7 +4174,7 @@
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
@@ -3584,7 +4184,7 @@
 				 control_name="FlycamAxisScale0"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="1024"
@@ -3611,9 +4211,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the Pitch movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Adjusts the responsiveness of the pitch (tilting up and down) movement. Reducing this setting makes camera tilting more gradual."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					Pitch
 				</text>
 				<slider_bar
@@ -3623,7 +4223,7 @@
 				 height="16"
 				 increment="0.00001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
@@ -3633,7 +4233,7 @@
 				 control_name="FlycamAxisScale4"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="1024"
@@ -3660,9 +4260,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the Yaw movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Modifies the sensitivity for yaw (rotational movement left and right). Lower settings slow rotation, useful for precise framing."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					Yaw
 				</text>
 				<slider_bar
@@ -3672,7 +4272,7 @@
 				 height="16"
 				 increment="0.00001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
@@ -3682,7 +4282,7 @@
 				 control_name="FlycamAxisScale5"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="1024"
@@ -3709,9 +4309,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the Roll movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Adjusts the sensitivity of the roll movement, which tilts the camera sideways, similar to rotating your head left or right. Lower values provide finer control for precise adjustments, while higher values make the roll more responsive. Note: This setting will not have any effect if 'Enable Auto Leveling' is enabled, as auto leveling keeps the camera horizon perfectly level, preventing any roll movement."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					Roll
 				</text>
 				<slider_bar
@@ -3721,7 +4321,7 @@
 				 height="16"
 				 increment="0.0001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
@@ -3731,7 +4331,7 @@
 				 control_name="FlycamAxisScale3"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
 				 max_val="1024"
@@ -3758,32 +4358,32 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Adjusts the sensitivity of the Zoom speed. If you find it difficult to zoom with precision, use lower scale values."
+				 tool_tip="Controls the method for zooming in and out by adjusting the camera’s focal length or vertical Field of View (FOV), similar to changing the lens on a real camera. This affects how much of the scene is visible and how 'zoomed in' the view appears. To activate zoom functionality, set the Zoom Axis Mapping to '4'. This setting does not affect the smoothness of the zoom but rather determines the range of FOV adjustment, allowing for precise control over the camera’s zoom level. "
 				 top_pad="5"
-				 width="80">
-					Zoom Spd
+				 width="70">
+					Zoom
 				</text>
 				<slider_bar
 				 name="SB_Zoom_Speed"
-				 control_name="FlycamAxisScale6"
+				 control_name="FlycamAxisDeadZone6"
 				 follows="left|right"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.001"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val=".05"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
 				 name="S_Zoom_Speed"
-				 control_name="FlycamAxisScale6"
+				 control_name="FlycamAxisDeadZone6"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
+				 left_pad="0"
 				 decimal_digits="3"
 				 follows="top|left"
-				 max_val="1024"
+				 max_val="1"
 				 min_val="0"
 				 width="53"
 				 increment=".0001"/>
@@ -3799,7 +4399,7 @@
 				 tool_tip="Reset to the default value.">
 					<button.commit_callback
 					 function="ResetControl"
-					 parameter="FlycamAxisScale6"/>
+					 parameter="FlycamAxisDeadZone6"/>
 				</button>
 
 				<text
@@ -3807,9 +4407,9 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Setting the slider all the way to the right will make the camera very rigid, giving complete control to the joystick. Setting the slider all the way to the left will make the camera very fluid like the camera weighs a lot; good for fly-by shots, not good for framing."
+				 tool_tip="Controls the fluidity of camera movements. Moving the slider to the right makes the camera rigid and responsive to joystick input. Moving it left makes the camera behave more like it has inertia, ideal for cinematic fly-by shots."
 				 top_pad="5"
-				 width="80">
+				 width="70">
 					Feathering
 				</text>
 				<slider_bar
@@ -3817,11 +4417,11 @@
 				 control_name="FlycamFeathering"
 				 follows="left|right"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.5"
 				 layout="topleft"
-				 left_pad="-20"
+				 left_pad="0"
 				 min_val="0"
-				 max_val="3"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -3829,8 +4429,8 @@
 				 control_name="FlycamFeathering"
 				 top_delta="-3"
 				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
+				 left_pad="0"
+				 decimal_digits="1"
 				 follows="top|left"
 				 max_val="100"
 				 min_val="0"
@@ -3856,9 +4456,9 @@
 			 name="P_Axis_Mapping"
 			 follows="left|top"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
 			 height="143"
 			 border_visible="true"
 			 background_visible="true">
@@ -3870,21 +4470,21 @@
 				 label="Zoom Axis Mapping"
 				 label_width="200"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 max_val="5"
 				 min_val="-1"
 				 name="JoystickAxis6"
-				 tool_tip="Controls which mouse axis the zooming function is mapped to (set to work with)."
+				 tool_tip="Determines which joystick or mouse axis controls the zoom function. Set this to '4' to enable zoom via the joystick."
 				 top_pad="5"
-				 width="255"/>
+				 width="269"/>
 				<check_box
 				 top_pad="15"
 				 control_name="JoystickEnabled"
 				 halign="left"
 				 label="Enable 3D Mouse"
 				 layout="topleft"
-				 left="6"
-				 tool_tip="This turns on the 3D Mouse."
+				 left="3"
+				 tool_tip="Enables or disables joystick/3D mouse support for controlling the camera."
 				 name="enable_joystick"
 				 width="230"/>
 				<check_box
@@ -3892,44 +4492,44 @@
 				 control_name="ZoomDirect"
 				 label="Enable Zoom Control (See Tool Tip!)"
 				 layout="topleft"
-				 left="6"
+				 left="3"
 				 top_pad="7"
-				 tool_tip="In order for the zooming control to work, you must set the 'Zoom Axis Mapping' above to '4'."
+				 tool_tip="Activates zoom control with the 3D mouse. Ensure the 'Zoom Axis Mapping' is set to '4' for proper functionality."
 				 width="230"/>
 				<check_box
 				 name="CB_AutoLeveling"
 				 control_name="AutoLeveling"
 				 label="Enable Auto Leveling (Prevents Camera Roll)"
 				 layout="topleft"
-				 left="6"
+				 left="3"
 				 top_pad="7"
-				 tool_tip="When enabled the camera will always remain level."
+				 tool_tip="Keeps the camera level, preventing unintended roll. This is useful for maintaining a stable horizon while moving."
 				 width="230"/>
 				<check_box
 				 name="CB_Move_Avatar"
 				 control_name="JoystickAvatarEnabled"
 				 label="Use the 3D Mouse to move the avatar"
 				 layout="topleft"
-				 left="6"
+				 left="3"
 				 top_pad="7"
-				 tool_tip="When enabled the mouse will move your avatar."
+				 tool_tip="Allows the 3D mouse to control avatar movement instead of just the camera."
 				 width="230"/>
 				<check_box
 				 name="CB_Move_Objects"
 				 control_name="JoystickBuildEnabled"
 				 label="Use the 3D Mouse to move objects (building)"
-				 tool_tip="Uses the 3D mouse to move objects when building and editing."
+				 tool_tip="Enables the 3D mouse for object manipulation during building and editing."
 				 layout="topleft"
-				 left="6"
+				 left="3"
 				 top_pad="7"
 				 width="230"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
-				 left="6"
+				 left="3"
 				 top_pad="7"
 				 label="Show the Current FOV of Viewer Screen"
-				 tool_tip="This will show you the vertical field of view for the camera. Within the viewer it is possible to change the lens length just like in real life. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'http://en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
+				 tool_tip="Displays the current vertical field of view (FOV) overlay. Adjust the FOV using the zoom slider."
 				 name="CAM_Show_FOV">
 					<check_box.on_check
 					 function="Advanced.CheckHUDInfo"
@@ -3941,7 +4541,8 @@
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
-				 left="6"
+				 left="3"
+				 tool_tip="Displays detailed information about the camera’s position, orientation, and movement. Useful for photography, machinima, or precise editing."
 				 top_pad="7"
 				 label="Show Detailed Camera Position Data"
 				 name="Camera">
@@ -3958,9 +4559,9 @@
 			 name="P_Viewer_Cam_Menu"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="0"
-			 width="285"
+			 width="288"
 			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
@@ -3970,10 +4571,10 @@
 				 name="PT_Viewer_Cam_Menu"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="7"
 				 font="SansSerif"
 				 height="17"
-				 width="230">
+				 width="270">
 					Viewer Camera Menu Settings
 				</text>
 			</panel>
@@ -3982,10 +4583,10 @@
 			 name="P_Viewer_Cam_Menu_Settings"
 			 follows="left|top"
 			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="120"
+			 top_pad="3"
+			 left="3"
+			 right="-3"
+			 height="131"
 			 border_visible="true"
 			 background_visible="true">
 				<tab_container
@@ -3994,18 +4595,18 @@
 				 halign="center"
 				 layout="topleft"
 				 height="120"
-				 width="285"
-				 top="0"
+				 width="277"
+				 top="3"
 				 left="0"
 				 tab_height="20"
 				 tab_group="0"
-				 tab_width="65"
+				 tab_width="66"
 				 tab_position="top">
 					<panel
 					 follows="all"
 					 name="CamMov"
 					 layout="topleft"
-					 width="285"
+					 width="282"
 					 top="0"
 					 label="Camera Movement"
 					 left="0">
@@ -4013,7 +4614,7 @@
 						 name="P_Cam2"
 						 follows="left|top"
 						 layout="topleft"
-						 top_pad="0"
+						 top_pad="3"
 						 left="0"
 						 width="275"
 						 height="110"
@@ -4022,7 +4623,7 @@
 							<text
 							 name="T_Zoom2"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 top_pad="7"
 							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
 							 width="100">
@@ -4036,11 +4637,11 @@
 							 height="16"
 							 increment="0.002"
 							 layout="topleft"
-							 left_delta="100"
+							 left_pad="0"
 							 min_val="0.08"
 							 max_val="3.06"
 							 top_delta="-2"
-							 width="135"/>
+							 width="147"/>
 							<!--spinner
 							 name="S_Zoom2"
 							 control_name="CameraAngle"
@@ -4059,7 +4660,7 @@
 							 height="16"
 							 label="D"
 							 layout="topleft"
-							 left="245"
+							 left_pad="0"
 							 top_delta="0"
 							 width="20"
 							 tool_tip="Reset to the default value.">
@@ -4071,7 +4672,7 @@
 							<text
 							 name="T_Zoom_Speed2"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 top_pad="5"
 							 tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smoother zoom."
 							 width="100">
@@ -4085,18 +4686,18 @@
 							 height="16"
 							 increment=".1"
 							 layout="topleft"
-							 left_delta="100"
+							 left_pad="0"
 							 min_val="0"
 							 max_val="30"
 							 top_delta="-2"
-							 width="135"/>
+							 width="147"/>
 							<button
 							 follows="right"
 							 name="Reset_Zoom_Speed2"
 							 height="16"
 							 label="D"
 							 layout="topleft"
-							 left="245"
+							 left_pad="0"
 							 top_delta="0"
 							 width="20"
 							 tool_tip="Reset to the default value.">
@@ -4108,7 +4709,7 @@
 							<text
 							 name="T_Camera_Lag"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 top_pad="5"
 							 tool_tip="Amount camera lags behind avatar motion (0 = none, 30 = avatar velocity)."
 							 width="100">
@@ -4122,18 +4723,18 @@
 							 height="16"
 							 increment=".1"
 							 layout="topleft"
-							 left_delta="100"
+							 left_pad="0"
 							 min_val="0"
 							 max_val="30"
 							 top_delta="-2"
-							 width="135"/>
+							 width="147"/>
 							<button
 							 follows="right"
 							 name="Reset_Camera_Lag"
 							 height="16"
 							 label="D"
 							 layout="topleft"
-							 left="245"
+							 left_pad="0"
 							 top_delta="0"
 							 width="20"
 							 tool_tip="Reset to the default value.">
@@ -4145,7 +4746,7 @@
 							<text
 							 name="T_Camera_Offset"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 top_pad="5"
 							 tool_tip="Controls how far the camera is offset/distance from the default point of view."
 							 width="100">
@@ -4159,18 +4760,18 @@
 							 height="16"
 							 increment=".001"
 							 layout="topleft"
-							 left_delta="100"
+							 left_pad="0"
 							 min_val=".001"
 							 max_val="25"
 							 top_delta="-2"
-							 width="135"/>
+							 width="147"/>
 							<button
 							 follows="right"
 							 name="Reset_Camera_Offset"
 							 height="16"
 							 label="D"
 							 layout="topleft"
-							 left="245"
+							 left_pad="0"
 							 top_delta="0"
 							 width="20"
 							 tool_tip="Reset to the default value.">
@@ -4182,7 +4783,7 @@
 							<text
 							 name="T_Cam_Smoothing"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 top_pad="5"
 							 tool_tip="Controls how smoothly the camera starts and stops. Higher values produce smoother (and somewhat slower) movement."
 							 width="100">
@@ -4196,18 +4797,18 @@
 							 height="16"
 							 increment=".01"
 							 layout="topleft"
-							 left_delta="100"
+							 left_pad="0"
 							 min_val="0"
 							 max_val="300"
 							 top_delta="-2"
-							 width="135"/>
+							 width="147"/>
 							<button
 							 follows="right"
 							 name="Reset_Cam_Smoothing"
 							 height="16"
 							 label="D"
 							 layout="topleft"
-							 left="245"
+							 left_pad="0"
 							 top_delta="0"
 							 width="20"
 							 tool_tip="Reset to the default value.">
@@ -4222,7 +4823,7 @@
 					 follows="all"
 					 name="P_Mouse"
 					 layout="topleft"
-					 width="285"
+					 width="282"
 					 top="0"
 					 label="Mouse"
 					 left="0">
@@ -4240,8 +4841,8 @@
 							 name="T_Mouse_Sens"
 							 follows="left|top"
 							 layout="topleft"
-							 left="10"
-							 top_pad="15"
+							 left="5"
+							 top_pad="7"
 							 tool_tip="Controls responsiveness of mouse when in mouselook mode."
 							 width="100">
 								Mouse Sensitivity
@@ -4254,18 +4855,18 @@
 							 height="16"
 							 increment=".1"
 							 layout="topleft"
-							 left_delta="100"
+							 left_pad="0"
 							 min_val="0"
 							 max_val="15"
 							 top_delta="-2"
-							 width="135"/>
+							 width="147"/>
 							<button
 							 follows="right"
 							 name="Reset_Mouse_Sens"
 							 height="16"
 							 label="D"
 							 layout="topleft"
-							 left="245"
+							 left_pad="0"
 							 top_delta="0"
 							 width="20"
 							 tool_tip="Reset to the default value.">
@@ -4279,7 +4880,7 @@
 							 height="16"
 							 label="Display avatar &amp; attachments in mouselook"
 							 layout="topleft"
-							 left="5"
+							 left="3"
 							 tool_tip="Displays avatar and attachments below neck while in mouselook. Default is OFF."
 							 name="first_person_avatar_visible"
 							 top_pad="10"
@@ -4290,7 +4891,7 @@
 							 height="16"
 							 label="Smooth Mouselook Movements"
 							 layout="topleft"
-							 left="5"
+							 left="3"
 							 tool_tip="Smooths out motion of mouse when in mouselook mode."
 							 name="MouseSmooth"
 							 top_pad="2"
@@ -4302,7 +4903,7 @@
 					 follows="all"
 					 name="P_Misc"
 					 layout="topleft"
-					 width="285"
+					 width="282"
 					 top="0"
 					 label="Misc Settings"
 					 left="0">
@@ -4322,7 +4923,7 @@
 							 height="16"
 							 label="Clicking your avatar keeps camera position"
 							 layout="topleft"
-							 left="10"
+							 left="3"
 							 name="clickonavatarkeepscamera"
 							 width="250"
 							 control_name="ClickOnAvatarKeepsCamera"
@@ -4333,7 +4934,7 @@
 							 height="16"
 							 label="Reset camera position after teleport"
 							 layout="topleft"
-							 left="10"
+							 left="3"
 							 name="FSResetCameraOnTP"
 							 width="250"
 							 control_name="FSResetCameraOnTP"
@@ -4344,7 +4945,7 @@
 							 height="16"
 							 label="Allow the camera to move w/o constraints"
 							 layout="topleft"
-							 left="10"
+							 left="3"
 							 name="ignorecameraconstraints"
 							 width="250"
 							 control_name="FSIgnoreSimulatorCameraConstraints"
@@ -4355,7 +4956,7 @@
 							 height="16"
 							 label="Reset camera position on avatar movement"
 							 layout="topleft"
-							 left="10"
+							 left="3"
 							 name="resetcamerapositiononmovement"
 							 width="250"
 							 control_name="FSResetCameraOnMovement"

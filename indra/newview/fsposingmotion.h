@@ -173,7 +173,7 @@ private:
     /// Because changes to positions, scales and collision volumes do not end when the animation stops,
     /// this is required to revert them manually.
     /// </summary>
-    void revertChangesToPositionsScalesAndCollisionVolumes();
+    void revertJointsAndCollisionVolumes();
 
     /// <summary>
     /// Queries whether the supplied joint is being animated.
