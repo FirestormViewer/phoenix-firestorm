@@ -1769,6 +1769,7 @@
 	<notification name="WebLaunchExternalTarget">
 		Открыть браузер для просмотра этого контента?
 Открытие сайтов от неизвестных источников может нанести вред вашему компьютеру
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Запустить браузер для просмотра веб-страницы" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

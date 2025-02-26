@@ -630,6 +630,7 @@ Du skal genstarte [APP_NAME] for at installere denne opdatering.
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		Ønsker du at åbne din web browser for at se dette indhold?
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Start min browser for at se hjemmesider" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

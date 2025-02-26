@@ -1822,6 +1822,8 @@ Fortfahren?
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		Möchten Sie Ihren Internetbrowser öffnen, um diesen Inhalt anzuzeigen?
+Öffnen von Webseiten aus unsicherer Quelle kann Ihren Computer gefährden.
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Meinen Browser starten, um eine Webseite anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

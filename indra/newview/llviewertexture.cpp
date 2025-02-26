@@ -3134,7 +3134,10 @@ void LLViewerLODTexture::processTextureStats()
     // unset it immediately after we consume it
     if (getBoostLevel() == BOOST_SELECTED)
     {
-        setBoostLevel(BOOST_NONE);
+        // <FS:minerjr>
+        //setBoostLevel(BOOST_NONE);
+        restoreBoostLevel();
+        // </FS:minerjr>
     }
 }
 

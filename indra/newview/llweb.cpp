@@ -103,7 +103,9 @@ void LLWeb::loadURLExternal(const std::string& url, bool async, const std::strin
 
     LLSD payload;
     payload["url"] = url;
-    LLNotificationsUtil::add( "WebLaunchExternalTarget", LLSD(), payload, boost::bind(on_load_url_external_response, _1, _2, async));
+    LLSD args;
+    args["UNTRUSTED_URL"] = url;
+    LLNotificationsUtil::add( "WebLaunchExternalTarget", args, payload, boost::bind(on_load_url_external_response, _1, _2, async));
 }
 
 // static

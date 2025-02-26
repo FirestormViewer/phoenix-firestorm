@@ -1828,6 +1828,7 @@ SHA1指紋：[MD5_DIGEST]
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		你確定要開啟網頁瀏覽器去檢視這個內容？
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="啟用我的網頁瀏覽器去檢視網頁" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
