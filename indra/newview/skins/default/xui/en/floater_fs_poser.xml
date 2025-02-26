@@ -38,6 +38,8 @@ width="403">
 	<string	name="joint_transform_mHipRight" translate="false">NEGATE_PITCH</string>
 	<string	name="joint_transform_mKneeRight" translate="false">NEGATE_PITCH NEGATE_ROLL</string>
 	<string	name="joint_transform_mAnkleRight" translate="false">NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceTeethLower" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string	name="joint_transform_mFaceTeethUpper" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipCornerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string	name="joint_transform_mFaceLipUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -139,7 +141,8 @@ width="403">
 	<string	name="header_mWingsRoot">Wings</string>
 	<string	name="header_mFaceEar1Left">Ears/Nose</string>
 
-	<!-- These are names to appear on the UI for the joints/bones/thingos -->
+	<!-- These are names to appear on the UI for the joints -->
+	<!-- If a name is not here, it does not appear -->
 	<string	name="title_mPelvis">Whole Avatar</string>
 	<string	name="title_mTorso">Torso</string>
 	<string	name="title_mChest">Chest</string>

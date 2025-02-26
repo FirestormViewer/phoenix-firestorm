@@ -2244,6 +2244,12 @@ void LLFloaterPreference::refreshEnabledState()
     max_texmem->setMinValue(MIN_VRAM_BUDGET);
     max_texmem->setMaxValue((F32)gGLManager.mVRAM);
     // </FS:Ansariel>
+    // <FS:minerjr> [FIRE-35198] Limit VRAM texture usage UI control reverts to default value
+    static LLCachedControl<U32> max_vram_budget(gSavedSettings, "RenderMaxVRAMBudget", 0); // Get the same VRAM value that is used for the Bias calcuation
+    // Set the value of the UI element on after loggin in. (The value was correct and applied correctly, just the Graphics Settings slider defaulted backe to 4096
+    // instead of the last set value by the user.
+    max_texmem->setValue((F32)max_vram_budget, false);
+    // </FS:minerjr> [FIRE-35198]
 }
 
 // <FS:Zi> Support preferences search SLURLs
