@@ -579,7 +579,15 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 
     // Make an instance of our window then define the window class
     mhInstance = GetModuleHandle(NULL);
+    // <FS:Dax> [FIRE-10419] Add notification filters for device notifcations for HID device handling
+    DEV_BROADCAST_DEVICEINTERFACE notificationFilter;
 
+    ZeroMemory(&notificationFilter, sizeof(notificationFilter));
+    notificationFilter.dbcc_size       = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
+    notificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+
+    HDEVNOTIFY deviceNotification = RegisterDeviceNotification(mWindowHandle, &notificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE | DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
+    // </FS>
     // Init Direct Input - needed for joystick / Spacemouse
 
     LPDIRECTINPUT8 di8_interface;
@@ -2291,6 +2299,24 @@ void LLWindowWin32::gatherInput()
     updateCursor();
 }
 
+// Define device classID for filtering
+constexpr std::array<const wchar_t*, 3> classIDStrings = {
+    L"{745a17a0-74d3-11d0-b6fe-00a0c90f57da}", // Modern HID
+    L"{4d36e96c-e325-11ce-bfc1-08002be10318}", // Legacy/Serial
+    L"{a5dcbf10-6530-11d2-901f-00c04fb951ed}"  // SpaceNavigator/Xbox
+};
+
+std::array<GUID, classIDStrings.size()> deviceCLSIDWhitelist;
+
+// Convert to CLSID to make it easier
+void initializeDeviceCLSIDArray()
+{
+    for (size_t i = 0; i < classIDStrings.size(); ++i)
+    {
+        CLSIDFromString(classIDStrings[i], &deviceCLSIDWhitelist[i]);
+    }
+}
+
 static LLTrace::BlockTimerStatHandle FTM_KEYHANDLER("Handle Keyboard");
 static LLTrace::BlockTimerStatHandle FTM_MOUSEHANDLER("Handle Mouse");
 
@@ -2349,13 +2375,42 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DEVICECHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DEVICECHANGE");
-            if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
-            {
-                WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
 
-                return 1;
+            // <FS> [FIRE-10419] Prevent all devices from being scanned on each change
+            // if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
+            // {
+            //    WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
+            //    return 1;
+            // }
+
+
+            // Only bother initalizing when needed.
+            if (deviceCLSIDWhitelist.empty())
+            {
+                initializeDeviceCLSIDArray();
+            }
+            
+            if (w_param == DBT_DEVICEARRIVAL || w_param == DBT_DEVICEREMOVECOMPLETE)
+            {
+                DEV_BROADCAST_HDR* dtype = (DEV_BROADCAST_HDR*)l_param;
+                if (dtype->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+                {
+                    DEV_BROADCAST_DEVICEINTERFACE* iface = (DEV_BROADCAST_DEVICEINTERFACE*)l_param;
+
+                    // Iterate through the CLSID whitelist for comparison and only fire if it's a useful device
+                    for (const auto& guid : deviceCLSIDWhitelist)
+                    {
+                        if (memcmp(&iface->dbcc_classguid, &guid, sizeof(GUID)) == 0)
+                        {
+                            bool deviceRemoved = (w_param == DBT_DEVICEREMOVECOMPLETE);
+                            WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, deviceRemoved));
+                            break; 
+                        }
+                    }
+                }
             }
             break;
+            // </FS>
         }
 
         case WM_PAINT:
