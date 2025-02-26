@@ -6557,6 +6557,27 @@ void LLAppViewer::forceErrorDriverCrash()
 //}
 // </FS:Ansariel>
 
+void LLAppViewer::forceErrorCoroprocedureCrash()
+{
+    LL_WARNS() << "Forcing a crash in LLCoprocedureManager" << LL_ENDL;
+    LLCoprocedureManager::instance().enqueueCoprocedure("Upload", "DeliberateCrash",
+        [](LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t&, const LLUUID&)
+    {
+        LL_WARNS() << "Forcing a deliberate bad memory access from LLCoprocedureManager" << LL_ENDL;
+        S32* crash = NULL;
+        *crash = 0xDEADBEEF;
+    });
+}
+
+void LLAppViewer::forceErrorWorkQueueCrash()
+{
+    LL::WorkQueue::ptr_t workqueue = LL::WorkQueue::getInstance("General");
+    if (workqueue)
+    {
+        workqueue->post([]() { throw LLException("This is a deliberate crash from General Queue"); });
+    }
+}
+
 void LLAppViewer::forceErrorThreadCrash()
 {
     class LLCrashTestThread : public LLThread

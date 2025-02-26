@@ -173,6 +173,8 @@ public:
     virtual void forceErrorDriverCrash();
     // <FS:Ansariel> Wrongly merged back in by LL
     //virtual void forceErrorCoroutineCrash();
+    virtual void forceErrorCoroprocedureCrash();
+    virtual void forceErrorWorkQueueCrash();
     virtual void forceErrorThreadCrash();
 
     // The list is found in app_settings/settings_files.xml
