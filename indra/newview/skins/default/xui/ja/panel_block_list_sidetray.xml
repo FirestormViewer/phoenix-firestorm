@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
-	<panel name="blocked_buttons_panel">
-         <filter_editor label="フィルター" name="blocked_filter_input" />
-         <menu_button name="blocked_gear_btn" tool_tip="選択した人またはオブジェクトに対するアクション" />
-         <menu_button name="view_btn" tool_tip="並べ替えのオプション" />
-         <menu_button name="plus_btn" tool_tip="ブロックしたい住人またはオブジェクトを選択します。" />
-          <button name="unblock_btn" tool_tip="ブロックリストから住人またはオブジェクトを削除" />
-    </panel>
-    <block_list name="blocked" tool_tip="現在ブロックされている住人一覧" />
+	<panel label="bottom_panel" name="blocked_buttons_panel">
+		<filter_editor label="フィルタ" name="blocked_filter_input"/>
+		<menu_button name="blocked_gear_btn" tool_tip="選択した住人・オブジェクトに対する操作を実行します。"/>
+		<menu_button name="view_btn" tool_tip="オプションで並べ替えます。"/>
+		<menu_button name="plus_btn" tool_tip="ブロックする住人・オブジェクトを選択します。"/>
+		<button name="unblock_btn" tool_tip="ブロックリストから住人・オブジェクトを削除します。"/>
+	</panel>
+	<text name="block_limit">
+		全[LIMIT]件中、[COUNT]件のエントリがブロックされています。
+	</text>
+	<block_list name="blocked" tool_tip="現在ブロックされている住人とオブジェクト一覧です。"/>
 </panel>

@@ -1,24 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="スキン" name="skin_panel">
-    <text name="skin_textbox">
-        スキン：
-    </text>
-    <text name="skin_textbox1">
-		（再起動が必要）
-    </text>
-
-    <text name="theme_textbox">
+	<text name="skin_textbox">
+		スキン：
+	</text>
+	<text name="skin_textbox1">
+		（要再起動）
+	</text>
+	<text name="theme_textbox">
 		テーマの色：
-    </text>
-    <text name="theme_textbox2">
-		（再起動が必要）
-    </text>
-	
-	<check_box label="ツールバーの配置をスキンの初期設定に戻す" name="reset_toolbar_settings" />
-	<check_box label="ログインモード変更時にログインモードに最適化された設定にツールバーをリセット" tool_tip="ここにチェックを入れると、ログインモードを変更した時に、それぞれのモードに最適化されたツールバーボタンのレイアウトが選択され、あなたがカスタマイズしたボタンの設定は全て上書きされます" name="FSToolbarsResetOnModeChange" />
-
-	<check_box label="V1スタイルのカーソルを使用" name="use_legacy_cursors"/>
-    <text name="theme_textbox3">
-		（再起動が必要）
-    </text>
+	</text>
+	<text name="theme_textbox2">
+		（要再起動）
+	</text>
+	<check_box label="ツールバーの配置をスキンの初期設定に戻す" tool_tip="このオプションを有効にすると、スキンの設計されたツールバーボタンのレイアウトが保持され、スキンを変更するときに選択したボタンのカスタマイズが上書きされます。" name="reset_toolbar_settings"/>
+	<check_box label="ログインモード変更時にログインモードに最適化された設定にツールバーをリセット" tool_tip="ここにチェックを入れると、ログインモードを変更した時に、それぞれのモードに最適化されたツールバーボタンのレイアウトが選択され、あなたがカスタマイズしたボタンの設定は全て上書きされます" name="FSToolbarsResetOnModeChange"/>
+	<check_box label="Ｖ１スタイルのカーソルを使用" name="use_legacy_cursors"/>
+	<text name="theme_textbox3">
+		（要再起動）
+	</text>
 </panel>

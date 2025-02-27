@@ -4,20 +4,20 @@
 		ボイス設定
 	</string>
 	<string name="title_group">
-		[GROUP] とグループコール
+		グループ「[GROUP]」からのコール
 	</string>
 	<string name="title_adhoc">
-		コンファレンスコール
+		会話のコール
 	</string>
 	<string name="title_peer_2_peer">
-		[NAME] とコール
+		[NAME]からのコール
 	</string>
 	<string name="no_one_near">
 		近くにボイスを有効にしている人はいません。
 	</string>
 	<layout_stack name="my_call_stack">
 		<layout_panel name="my_panel">
-			<text name="user_text" value="マイ アバター："/>
+			<text name="user_text" value="自分のアバター："/>
 		</layout_panel>
 		<layout_panel name="leave_call_panel">
 			<layout_stack name="voice_effect_and_leave_call_stack">

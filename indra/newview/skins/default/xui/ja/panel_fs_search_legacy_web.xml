@@ -1,4 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="ウェブ検索" name="panel_ls_web">
-	<web_browser name="search_browser" />
-</panel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Web検索" name="panel_ls_web"/>
