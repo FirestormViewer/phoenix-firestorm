@@ -196,29 +196,8 @@ void FSJointPose::mirrorRotationFrom(FSJointPose* fromJoint)
                                            mRotation.deltaRotation.mQ[VW]);
 }
 
-void FSJointPose::revertJointScale()
+void FSJointPose::revertJoint()
 {
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return;
-
-    joint->setScale(mBeginningScale);
-}
-
-void FSJointPose::revertJointPosition()
-{
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return;
-
-    joint->setPosition(mBeginningPosition);
-}
-
-void FSJointPose::revertCollisionVolume()
-{
-    if (!mIsCollisionVolume)
-        return;
-
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
         return;
