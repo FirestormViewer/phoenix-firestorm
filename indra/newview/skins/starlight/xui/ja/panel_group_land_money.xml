@@ -50,14 +50,12 @@
 		<text name="your_contribution_label">
 			あなたの貢献面積：
 		</text>
-		<line_editor name="your_contribution_line_editor"/>
 		<text name="your_contribution_units">
 			㎡
 		</text>
 		<text name="your_contribution_max_value">
 			（最大[AMOUNT]㎡）
 		</text>
-		<icon name="group_over_limit_icon"/>
 		<text name="group_over_limit_text">
 			使用中の土地をサポートするには、より多くの土地クレジットが必要です。
 		</text>

@@ -57,10 +57,10 @@
 		</menu>
 		<!-- TODO: try to make these check items that actually reflect their state -Zi -->
 		<menu label="並べ替え" name="inventory_sort_menu">
-			<menu_item_check name="inventory_sort_by_name" label="名前で並べ替え"/>
-			<menu_item_check name="inventory_sort_by_date" label="日付で並べ替え"/>
-			<menu_item_check name="inventory_sort_folders_by_name" label="フォルダを常に名前順に並べる"/>
-			<menu_item_check name="inventory_sort_system_on_top" label="システムフォルダを上にソートする"/>
+			<menu_item_check name="inventory_sort_by_name" label="名前順で並べ替え"/>
+			<menu_item_check name="inventory_sort_by_date" label="日付順で並べ替え"/>
+			<menu_item_check name="inventory_sort_folders_by_name" label="フォルダを常に名前順で並べ替え"/>
+			<menu_item_check name="inventory_sort_system_on_top" label="システムフォルダを上に並べ替え"/>
 		</menu>
 		<menu label="検索" name="inventory_search_menu">
 			<menu_item_check name="inventory_search_by_name" label="名前"/>

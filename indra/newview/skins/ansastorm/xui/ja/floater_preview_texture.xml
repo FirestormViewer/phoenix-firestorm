@@ -9,24 +9,19 @@
 	<floater.string name="DateTime">
 		[year,datetime,slt]年[month,datetime,slt]月[day,datetime,slt]日（[weekday,datetime,slt]）　[ampm,datetime,slt]　[hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]
 	</floater.string>
-	<floater.string name="UploaderDateTime"/>
 	<text name="desc txt">
 		説明：
 	</text>
-	<line_editor name="desc"/>
 	<text name="uploader_label">
 		アップロード者：
 	</text>
-	<line_editor name="uploader"/>
 	<button label="プロフィール" name="openprofile"/>
 	<text name="upload_time_label">
 		日付：
 	</text>
-	<line_editor name="upload_time"/>
 	<text name="uuid_label">
 		ＵＵＩＤ：
 	</text>
-	<line_editor name="uuid"/>
 	<button label="コピー" name="copyuuid"/>
 	<panel name="dimensions_panel">
 		<text name="dimensions">

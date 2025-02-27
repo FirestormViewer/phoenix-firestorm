@@ -14,10 +14,10 @@
 	<panel name="group_info_top">
 		<texture_picker label="" name="insignia" tool_tip="画像を拡大するにはクリックしてください。" />
 		<text name="prepend_founded_by">
-		創設者：
+			創設者：
 		</text>
 		<text name="join_cost_text">
-		無料
+			無料
 		</text>
 		<button label="加入します！" name="btn_join" />
 	</panel>

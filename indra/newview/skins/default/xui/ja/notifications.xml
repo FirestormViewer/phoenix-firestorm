@@ -4212,7 +4212,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<footer>[FOOTERTEXT]</footer>
 	</notification>
 	<notification name="ScriptDialog">
-		[NAME]の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」（チャンネル[CHANNEL]）
+		[NAME]の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
 [MESSAGE]
 		<form name="form">
 			<button name="Client_Side_Mute" text="ブロック"/>
@@ -4701,7 +4701,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 			<input name="message" type="text">
 				[DESC]
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="ＯＫ"/>
 			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
@@ -4775,7 +4775,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 「スピーカー」ボタンを非表示にすると、ボイス機能も無効になります。
 		<unique/>
 	</notification>
-	<notification label="世界を探検" name="HintDestinationGuide">
+	<notification label="ワールドを探検" name="HintDestinationGuide">
 		行き先ガイドには数多くの探索場所が含まれます。どこか行きたい場所をみつけたら、テレポートして探索に出かけましょう。
 		<unique/>
 	</notification>

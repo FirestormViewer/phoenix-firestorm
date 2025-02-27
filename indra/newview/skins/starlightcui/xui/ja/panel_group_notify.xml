@@ -4,7 +4,6 @@
 	<string name="subject_font" value="SANSSERIF_BIG"/>
 	<string name="date_font" value="SANSSERIF"/>
 	<panel label="ヘッダ" name="header">
-		<group_icon name="group_icon"/>
 		<text name="title" value="送信者／グループ名"/>
 	</panel>
 	<simple_text_editor name="message" value="メッセージ"/>

@@ -83,9 +83,7 @@
 				</panel>
 			</tab_container>
 		</panel>
-		<panel label="新着" name="recent_panel">
-			<avatar_list name="avatar_list"/>
-		</panel>
+		<panel label="新着" name="recent_panel"/>
 		<panel name="blocked_panel" label="ブロック"/>
 	</tab_container>
 </panel>

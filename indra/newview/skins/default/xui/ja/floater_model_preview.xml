@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="モデルのアップロード">
+	<!-- widthの値を削除したり変更しないこと。-->
 	<string name="no_havok">
-		物理といっしょにメッシュをアップロードします。
+		物理と一緒にメッシュをアップロードします。
 	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">

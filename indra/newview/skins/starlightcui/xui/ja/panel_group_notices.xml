@@ -40,7 +40,6 @@
 		<text name="drag_and_drop_help">
 			添付したいアイテムをここにドラッグアンドドロップしてください：
 		</text>
-		<icon name="drop_icon"/>
 		<button label="インベントリ" name="open_inventory" tool_tip="インベントリを開きます。"/>
 		<button name="remove_attachment" tool_tip="あなたの通知から添付されたアイテムを削除します。"/>
 		<button label="送信" label_selected="送信" name="send_notice"/>

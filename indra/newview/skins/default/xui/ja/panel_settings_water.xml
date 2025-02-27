@@ -25,7 +25,7 @@
 			<layout_stack name="water_stack2">
 				<layout_panel name="lp_left">
 					<text name="normal_map_label">
-						ノーマル（法線）マップ
+						法線（ノーマル）マップ
 					</text>
 					<text name="large_wave_speed_label">
 						大波の速度

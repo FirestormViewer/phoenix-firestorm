@@ -48,7 +48,6 @@
 	<text name="name_label" value="名前："/>
 	<button name="set_name" label="名前：" tool_tip="表示名をセットします。"/>
 	<panel name="name_holder">
-		<view_border name="info_border"/>
 		<text_editor name="complete_name" value="（読み込んでいます…）"/>
 		<menu_button name="copy_btn" tool_tip="コピー時のオプションを選択します。"/>
 	</panel>
@@ -58,7 +57,6 @@
 			<menu_button name="image_action_btn" tool_tip="プロフィール写真関連のアクションを実行します。"/>
 		</layout_panel>
 		<layout_panel name="label_stack">
-			<text name="status"/>
 			<icon tool_tip="フレンドは私のオンラインステータスを見ることができます。" name="can_see_online"/>
 			<icon tool_tip="フレンドは私のオンラインステータスを見ることができません。" name="cant_see_online"/>
 			<icon tool_tip="フレンドはマップ上で私を見ることができます。" name="can_see_on_map"/>
@@ -97,14 +95,14 @@
 			<button name="im" label="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" label_selected="インスタントメッセージ"/>
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
-			<button name="add_friend" label="フレンドに追加" tool_tip="この住民にフレンドシップの申込みをします。" label_selected="フレンド追加"/>
-			<button name="remove_friend" label="フレンド削除" tool_tip="この住民とのフレンドシップを終了します。" label_selected="フレンド削除"/>
+			<button name="add_friend" label="フレンドに追加" tool_tip="この住民にフレンドシップの申込みをします。" label_selected="フレンドに追加"/>
+			<button name="remove_friend" label="フレンドを削除" tool_tip="この住民とのフレンドシップを終了します。" label_selected="フレンドを削除"/>
 			<button name="block" label="ブロック" tool_tip="この住民をブロックします。"/>
 			<button name="unblock" label="ブロック解除" tool_tip="この住民のブロックを解除します。"/>
 		</layout_panel>
 	</layout_stack>
 	<check_box name="show_in_search" label="検索に表示" tool_tip="検索結果に情報が表示されるようにします。"/>
-	<check_box name="hide_sl_age" label="完全な誕生日を表示" tool_tip="ＳＬ年齢を他の人に見せましょう"/>
+	<check_box name="hide_sl_age" label="完全な誕生日を表示" tool_tip="ＳＬ年齢を他の人に見せましょう。"/>
 	<button name="save_description_changes" label="保存"/>
 	<button name="discard_description_changes" label="破棄"/>
 </panel>

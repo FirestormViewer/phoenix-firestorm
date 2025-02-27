@@ -8,7 +8,7 @@
 	<menu_item_call label="コール" name="Call"/>
 	<menu_item_call label="ワールドマップ" name="Map"/>
 	<menu_item_call label="追跡する" name="Track"/>
-	<menu name="MarkAvatar" label="マーク...">
+	<menu name="MarkAvatar" label="マーク…">
 		<menu_item_call label="赤" name="MarkRed"/>
 		<menu_item_call label="緑" name="MarkGreen"/>
 		<menu_item_call label="青" name="MarkBlue"/>
