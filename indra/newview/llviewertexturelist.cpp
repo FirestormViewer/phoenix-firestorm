@@ -944,6 +944,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         F32 cos_angle_to_view_dir; // Moved outside the loop to save reallocation every loop
         F32 vsize = 0.0f; // Moved outside the loop to save reallocation every loop
         F32 important_to_camera = 0.0f;
+        F64 animated = 0; // U64 used to track if a pointer is set for the animations. (The texture matrix of the face is null if no animation assigned to the texture)
+                           // So if you keep adding and the final result is 0, there is no animation
         // </FS:minerjr> [FIRE-35081]
         // boost resolution of textures that are important to the camera
         // Can instead of using max for a min of 1.0, just subtract 1 from the boost and just do a 1 + (TextureCameraBoost - 1) * importanceToCamera)
@@ -981,6 +983,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     current_on_screen = face->mInFrustum; // Create a new var to store the current on screen status                    
                     on_screen_count += current_on_screen; // Count the number of on sceen faces instead of using brach
                     important_to_camera = face->mImportanceToCamera; // Store so we don't have to do 2 indirects later on
+                    // If the face/texture is animated, then set the boost level to high, so that it will ways be the best quality
+                    animated += S64(face->mTextureMatrix);
+
                     // </FS:minerjr> [FIRE-35081]
 
                     // Scale desired texture resolution higher or lower depending on texture scale
@@ -1030,13 +1035,15 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             }
         }
 
-        // <FS:minerjr>
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
         // Replaced all the checks for this bool to be only in this 1 place instead of in the loop.
         // If the on screen counter is greater then 0, then there was at least 1 on screen texture
-        on_screen = bool(on_screen_count);
-        // <FS:minerjr>
+        on_screen = bool(on_screen_count);        
 
-        if (face_count > 1024)
+        //if (face_count > 1024)
+        // Add check for if the image is animated to boost to high as well
+        if (face_count > 1024 || animated != 0)
+        // </FS:minerjr> [FIRE-35081]
         { // this texture is used in so many places we should just boost it and not bother checking its vsize
             // this is especially important because the above is not time sliced and can hit multiple ms for a single texture
             imagep->setBoostLevel(LLViewerFetchedTexture::BOOST_HIGH);
@@ -1053,27 +1060,28 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                 imagep->mMaxVirtualSize = 0.f;
             }
         }
+
+        imagep->addTextureStats(max_vsize);
+
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer        
-        //imagep->addTextureStats(max_vsize);
         // New logic block for the bias system
-        // Fetched Textures (Non LOD normal textures) Or LOD Textures with a discard level of 0 or 1 or have a Bias < 2.0
-        if (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE || (imagep->getType() == LLViewerTexture::LOD_TEXTURE && (imagep->getDiscardLevel() < 2 || LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        // All textures begin at the max_vsize with bias applied.
+        // Then depending on the type of texture, the higher resolution on_screen_max_vsize is applied.
+        // On Screen (Without Bias applied:
+        //      LOD/Fetch Texture: Discard Levels 0, 1
+        //      Fetch Texture 2, 3, 5 with bias < 2.0
+        //      BoostLevel = Boost_High
+        //      Local, Media, Dynamic Texture        
+        // If the textures are on screen and either 1 are the first 2 levels of discard and are either fetched or LOD textures
+        if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
         {
-            // Perform Lerp without function call
-            max_vsize = max_vsize + (max_on_screen_vsize - max_vsize) * F32(on_screen);
-            // Only apply the bias when off screen, otherwise use the non bias caculated value
-            imagep->addTextureStats(max_vsize);
+            // Always use the best quality of the texture
+            imagep->addTextureStats(max_on_screen_vsize);
         }
-        // All other LOD texture textures
-        else if (imagep->getType() == LLViewerTexture::LOD_TEXTURE)
+        // If the boost level just became high, or the texture is (Local, Media Dynamic)
+        else if (imagep->getBoostLevel() == LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE)
         {
-            // Apply the off screen texture max virtual size
-            imagep->addTextureStats(max_vsize);
-        }
-        // All dynamic or local textures block
-        else
-        {
-            // Only apply the max on screen virtual size to textures that should not be scaled
+            // Always use the best quality of the texture
             imagep->addTextureStats(max_on_screen_vsize);
         }
         // </FS:minerjr> [FIRE-35081]
@@ -1186,7 +1194,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
             imagep->scaleDown();
         }
 
-        if (create_timer.getElapsedTimeF32() > max_time)
+        if (create_timer.getElapsedTimeF32() > max_time * 0.5f)
         {
             break;
         }
@@ -1210,7 +1218,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         // freeze.
         S32 min_count = (S32)mCreateTextureList.size() / 20 + 5;
 
-        create_timer.reset();
+        //create_timer.reset();
         while (!mDownScaleQueue.empty())
         {
             LLViewerFetchedTexture* image = mDownScaleQueue.front();
@@ -1324,7 +1332,11 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
                 iter = mUUIDMap.begin();
             }
 
-            if (iter->second->getGLTexture())
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            //if (iter->second->getGLTexture())
+            // Can skip processing TEX_LIST_SCALED as they are UI elements and should not be discarded
+            if (iter->second->getGLTexture() && get_element_type(iter->second->getBoostLevel()) == TEX_LIST_STANDARD)
+            // </FS:minerjr> [FIRE-35081]
             {
                 entries.push_back(iter->second);
             }
