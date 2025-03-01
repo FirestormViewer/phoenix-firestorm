@@ -66,7 +66,7 @@ top="0">
 	</panel>
 
 	<panel
-	name="P_Wave_Fog"
+	name="P_Wave_Fog_2"
 	label="Fog"
 	follows="left|top"
 	layout="topleft"

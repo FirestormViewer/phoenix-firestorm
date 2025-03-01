@@ -8,7 +8,7 @@
 			Mapa normalnych
 		</text>
 	</panel>
-	<panel name="P_Wave_Fog" label="Mgła">
+	<panel name="P_Wave_Fog_2" label="Mgła">
 		<text name="density_exponent_label">
 			Wykładnik gęstości:
 		</text>
