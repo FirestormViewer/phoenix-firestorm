@@ -71,7 +71,7 @@ jobs:
             echo "build_run_number=${{ github.event.inputs.build_run_number  }}"  >> "$GITHUB_OUTPUT"
           fi
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v8
+        uses: dawidd6/action-download-artifact@v9
         id: download_build_info
         with:
           workflow: build_viewer.yml
