@@ -315,7 +315,7 @@
 					Jakość podł.
 				</text>
 				<button name="Reset_Terrain_Quality" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Object_Detail" tool_tip="Dostosowuje poziom szczegółowości (LOD) obiektów w świecie. Wyższe wartości pozwalają zachować wysoką jakość szczegółów obiektów nawet przy większych odległościach, ale mogą obniżyć wydajność, zwłaszcza w złożonych scenach. Niższe wartości szybciej uruchamiają prostsze modele obiektów (LOD), poprawiając liczbę klatek na sekundę, ale potencjalnie zmniejszając wierność wizualną. Wartość 4 zapewnia dobrą równowagę między wydajnością, a jakością wizualną, wyświetlając szczegółowe obiekty bez nadmiernego wykorzystania zasobów. Wartości poniżej 4, np. 2, spowodują zauważalną deformację obiektów siatkowych, przez co nie będą się nadawały do fotografii lub sytuacji, w których ważna jest dokładność wizualna.">
+				<text name="T_Object_Detail" tool_tip="Dostosowuje poziom szczegółowości (LOD) obiektów w świecie. Wyższe wartości pozwalają zachować wysoką jakość szczegółów obiektów nawet przy większych odległościach, ale mogą obniżyć wydajność, zwłaszcza w złożonych scenach. Niższe wartości szybciej uruchamiają prostsze modele obiektów (LOD), poprawiając liczbę klatek na sekundę, ale potencjalnie zmniejszając wierność wizualną.">
 					Det. obktw
 				</text>
 				<button name="Reset_Object_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
