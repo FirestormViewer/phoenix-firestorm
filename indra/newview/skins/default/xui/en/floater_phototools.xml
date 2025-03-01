@@ -3053,7 +3053,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Adjusts the level of detail (LOD) for in-world objects. Higher values maintain high-quality object details even at greater distances but may reduce performance, especially in complex environments. Lower values trigger simpler object models (LODs) sooner, improving FPS but potentially reducing visual fidelity. A value of 4 provides a good balance between performance and visual quality, maintaining detailed objects without excessive resource usage. Values below 4, such as 2, will cause mesh objects to deform noticeably, making them unsuitable for photography or situations where visual accuracy is important."
+				 tool_tip="Adjusts the level of detail (LOD) for in-world objects. Higher values maintain high-quality object details even at greater distances but may reduce performance, especially in complex environments. Lower values trigger simpler object models (LODs) sooner, improving FPS but potentially reducing visual fidelity."
 				 width="70">
 					Object Detail
 				</text>
