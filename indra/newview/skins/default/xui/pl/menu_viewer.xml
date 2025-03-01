@@ -166,6 +166,7 @@
 			<menu_item_call label="Narzędzia fotograficzne" name="phototools_item_call"/>
 			<menu_item_call label="Fotograf: kamera" name="cameratools_item_call"/>
 			<menu_item_check label="Blokada głębi ostrości dla skupienia" name="lock_focus_point" />
+			<menu_item_check label="Celownik myszki w głębi ostrości" name="render_focus_point" />
 		</menu>
 		<menu_item_call label="Przeszukiwanie obszaru" name="area_search"/>
 		<menu_item_call label="Eksplorator dźwięków" name="Sound Explorer"/>
@@ -173,7 +174,7 @@
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
 		<menu label="Render awatarów" name="AvatarComplexityMode">
-			<menu_item_check label="Ogranicz po złożonośći" name="complexity_limit_everone" />
+			<menu_item_check label="Ogranicz po złożoności" name="complexity_limit_everone" />
 			<menu_item_check label="Zawsze pokazuj znajomych" name="complexity_always_show_friends" />
 			<menu_item_check label="Pokazuj tylko znajomych" name="complexity_only_show_friends" />
 		</menu>
