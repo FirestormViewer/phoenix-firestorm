@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Słońce i Księżyc" name="panel_fs_settings_sky_hbodies">
+	<panel name="P_Sun_Color">
+		<text name="T_Sun_Header" value="Kolor Słońca i Księżyca" />
+	</panel>
+	<panel name="P_SM_Color">
+		<text name="color_label">
+			Kolor Słońca i Księżyca:
+		</text>
+	</panel>
+	<panel name="P_Sun_Header">
+		<text name="T_Sun_Header" value="Słońce i gwiazdy" />
+	</panel>
+	<panel name="P_Sun_Setting">
+		<text name="image_label">
+			Obraz:
+		</text>
+		<check_box label="Pokaż emiter" name="sunbeacon" />
+		<text name="glow_focus_label">
+			Ostrość blasku:
+		</text>
+		<text name="glow_size_label">
+			Skala blasku:
+		</text>
+		<text name="star_brightness_label">
+			Jasność gwiazd:
+		</text>
+		<text name="sun_scale_label">
+			Skala:
+		</text>
+		<text name="sun_azimuth_label">
+			Azymut:
+		</text>
+		<text name="sun_elevation_label">
+			Elewacja:
+		</text>
+	</panel>
+	<panel name="P_Moon_Header">
+		<text name="T_Moon_Header" value="Księżyc" />
+	</panel>
+	<panel name="P_Moon_Setting">
+		<text name="moon_image_label">
+			Obraz:
+		</text>
+		<check_box label="Pokaż emiter" name="moonbeacon" />
+		<text name="moon_scale_label">
+			Skala:
+		</text>
+		<text name="brightness_label">
+			Jasność:
+		</text>
+		<text name="moon_azimuth_label">
+			Azymut:
+		</text>
+		<text name="moon_elevation_label">
+			Elewacja:
+		</text>
+	</panel>
+</panel>
