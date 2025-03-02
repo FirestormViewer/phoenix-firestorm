@@ -566,7 +566,12 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
     if ( !force_resize )
     {
         if ( mMaxWidth >= 0.0f
-         &&  mMaxWidth < screen_width )
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        //&&  mMaxWidth < screen_width)
+        // If viewer window was made as small as possible with the console enabled, it would cause an assert error
+        // as the line below can go as small as -38
+        &&  mMaxWidth < screen_width || screen_width <= 30)
+        // </FS:minerjr> [FIRE-35081]
         {
             return;                 //No resize required.
         }

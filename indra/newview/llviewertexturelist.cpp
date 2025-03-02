@@ -980,6 +980,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     //F32 vsize = face->getPixelArea();
                     //on_screen = face->mInFrustum;
                     vsize = face->getPixelArea();
+                    // Apply the Aspect ratio and field of view to the vsize, this allows the texture to be in the same space as the face, IE the face has
+                    // based around LLCamera::calculateFrustumPlanes
+                    vsize = vsize * mAspectRatioFOVRemove;
                     current_on_screen = face->mInFrustum; // Create a new var to store the current on screen status                    
                     on_screen_count += current_on_screen; // Count the number of on sceen faces instead of using brach
                     important_to_camera = face->mImportanceToCamera; // Store so we don't have to do 2 indirects later on
@@ -1295,7 +1298,13 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 
     typedef std::vector<LLPointer<LLViewerFetchedTexture> > entries_list_t;
     entries_list_t entries;
-
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Pre-calculate current aspect ratio and FOV so we can use to remove from the Faces used for updating the textures
+    // This is used per face per texture, so it can cave a bunch of divisions as well as acessing the values from
+    // the camera singleton.
+    LLViewerCamera* camera = LLViewerCamera::getInstance(); // Store the 
+    mAspectRatioFOVRemove = 1.0f / (camera->getAspect() * ((F32)tanf(0.5f * camera->getView())));
+    // </FS:minerjr> [FIRE-35081]
     // update N textures at beginning of mImageList
     U32 update_count = 0;
     static const S32 MIN_UPDATE_COUNT = gSavedSettings.getS32("TextureFetchUpdateMinCount");       // default: 32

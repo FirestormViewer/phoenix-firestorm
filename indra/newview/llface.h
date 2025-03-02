@@ -52,7 +52,11 @@ class LLDrawInfo;
 class LLMeshSkinInfo;
 
 const F32 MIN_ALPHA_SIZE = 1024.f;
-const F32 MIN_TEX_ANIM_SIZE = 512.f;
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+//const F32 MIN_TEX_ANIM_SIZE = 512.f;
+// Change the min size to 
+const F32 MIN_TEX_ANIM_SIZE = 64.f;
+// </FS:minerjr> [FIRE-35081]
 const U8 FACE_DO_NOT_BATCH_TEXTURES = 255;
 
 class alignas(16) LLFace

@@ -2754,12 +2754,19 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
             LL_DEBUGS("Avatar") << avString() << "get old-bake image from host " << uuid << LL_ENDL;
             LLHost host = getObjectHost();
             result = LLViewerTextureManager::getFetchedTexture(
-                uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                //uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+                uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+                // <FS:minerjr> [FIRE-35081]
             // </FS:Ansariel> [Legacy Bake]
         }
         LL_DEBUGS("Avatar") << avString() << "get server-bake image from URL " << url << LL_ENDL;
         result = LLViewerTextureManager::getFetchedTextureFromUrl(
-            url, FTT_SERVER_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, uuid);
+            // <FS:minerjr>
+            //url, FTT_SERVER_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, uuid);
+            // Change the texture from LOD to AVATAR_BAKED.
+            url, FTT_SERVER_BAKE, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE, 0, 0, uuid);
+            // </FS:minerjr> [FIRE-35081]
         if (result->isMissingAsset())
         {
             result->setIsMissingAsset(false);
