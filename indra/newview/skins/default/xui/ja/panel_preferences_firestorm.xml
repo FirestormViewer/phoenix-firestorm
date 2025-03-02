@@ -112,9 +112,9 @@
 			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
 			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
 			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャンネル9000に送信します。"/>
-			<combo_box name="FSBeamShape_combo" tool_tip="パーティクルビームの形を選択します。"/>
+			<combo_box name="FSBeamShape_combo" tool_tip="ビームのパーティクルの形状を選択します。"/>
 			<button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。"/>
-			<button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形をカスタマイズします。"/>
+			<button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形状をカスタマイズします。"/>
 			<button name="refresh_beams" label="リスト更新" tool_tip="ビームのリストを更新します。"/>
 			<button name="PhoenixBeamPrev_Phoenix" label=""/>
 			<slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。"/>
@@ -168,26 +168,8 @@
 			<text name="build_item_add_disp_rect_txt" tool_tip="">
 				現在の設定：[ITEM]
 			</text>
-			<!--
-			<text name="text_box_permissions">
-				権限
-			</text>
-			<view_border name="PermissionsBorder"/>
-			<text name="text_box_permnextowner">
-				次の所有者：
-			</text>
-			<check_box label="修正を許可" name="next_owner_modify" tool_tip="修正権限を付与します。"/>
-			<check_box label="コピーを許可" tool_tip="コピー権限を付与します。" name="next_owner_copy"/>
-			<check_box label="転送を許可" tool_tip="転送権限を付与します。" name="next_owner_transfer"/>
-			<text name="text_box_permnote1">
-				この設定は新規アップ
-			</text>
-			<text name="text_box_permnote2">
-				ロードにも適用されます
-			</text>
-			-->
 			<text name="text_box_pivotpoint">
-				回転の中心
+				中心軸のポイント
 			</text>
 			<view_border name="PivotBorder"/>
 			<check_box label="ルートプリムの軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle"/>
@@ -200,12 +182,12 @@
 			スクリプトエディタのフォント：
 			</text>
 			<combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォント名を指定します。">
-				<combo_item name="Monospace" value="Monospace" label="Monospace"/>
-				<combo_item name="Scripting" value="Scripting" label="Scripting"/>
-				<combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
+				<combo_item name="Monospace" label="等幅"/>
+				<combo_item name="Scripting" label="Scripting"/>
+				<combo_item name="Cascadia" label="Cascadia Code"/>
 			</combo_box>
 			<combo_box name="FSScriptingFontSize" tool_tip="ＬＳＬスクリプトエディタで使用するフォントの大きさを指定します。">
-				<combo_item name="Monospace" label="Monospace"/>
+				<combo_item name="Monospace" label="等幅"/>
 				<combo_item name="Scripting" label="Scripting"/>
 				<combo_item name="Cascadia" label="Cascadia Code"/>
 				<combo_item name="Small" label="小"/>
@@ -229,12 +211,12 @@
 		</panel>
 		<panel label="ビルド２" name="BuildTab2">
 			<check_box label="選択したプリムのハイライトを有効にする" tool_tip="チェックを外すと、黄色／青のアウトライン効果は描画されず、多数のプリムが選択された場合のパフォーマンスが向上します。" name="FSBuildPrefsRenderHighlight_toggle"/>
-			<check_box label="現在選択されている区画の境界をハイライトします" name="RenderParcelSelection"/>
-			<check_box label="最大ビルド高さまでの境界を表示" name="FSRenderParcelSelectionToMaxBuildHeight"/>
-			<check_box label="遠くのオブジェクトを選択しない" name="LimitSelectDistance"/>
-			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）[デフォルト 128.000]"/>
-			<check_box label="ドラッグできる距離を制限 (ｍ)：" name="LimitDragDistance"/>
-			<spinner name="MaxDragDistance" tool_tip="移動ツールの 1 回の操作で許容される最大距離を入力します。（開始点からのメートル）［デフォルト：48.000］"/>
+			<check_box label="選択中の区画の境界をハイライトする" name="RenderParcelSelection"/>
+			<check_box label="ビルドできる最大高度の境界を表示する" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+			<check_box label="遠くにあるオブジェクトを選択しない" name="LimitSelectDistance"/>
+			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）［デフォルト：128.000］"/>
+			<check_box label="ドラッグできる制限距離（ｍ）：" name="LimitDragDistance"/>
+			<spinner name="MaxDragDistance" tool_tip="移動ツールで１度に移動できる最大距離を入力します。（開始点からのメートル指定）［デフォルト：48.000］"/>
 			<text name="RotationStepText1">
 				「グリッドにスナップ」を使用していない時
 			</text>
@@ -255,7 +237,7 @@
 			<check_box label="アニメーションプレビューの詳細情報は常に展開する" tool_tip="アニメーションプレビューフローターの詳細なアニメーション情報をデフォルトで展開します。" name="FSAnimationPreviewExpanded"/>
 			<check_box label="拡張スクリプト情報の詳細を有効にする" tool_tip="有効にすると、ビルダーに役立つさまざまな詳細を含む基本的なスクリプト情報機能が拡張されます。" name="FSScriptInfoExtended"/>
 			<check_box label="「装着先」メニューの装着スポットをアルファベット順に並べ替える（要再起動）" tool_tip="有効にすると、「装着先」メニューの装着物のスポットのリストがアルファベット順に並び替えられます。" name="FSSortAttachmentSpotsAlphabetically"/>
-			<check_box label="ツールフローターで新しいFirestormテクスチャパネルを使用する（再起動が必要です）" tool_tip="有効にすると、テクスチャ編集ツールは改良されたＦＳワークフローを使用し、BlinnPhongの編集が可能になります。" name="FSUseNewTexturePanel"/>
+			<check_box label="ツールフローターで新式の[APP_NAME]テクスチャパネルを使用する（要再起動）" tool_tip="有効にすると、テクスチャ編集ツールは改良されたＦＳワークフローを使用し、BlinnPhongの編集が可能になります。（要再起動）" name="FSUseNewTexturePanel"/>
 		</panel>
 		<!--Uploads-->
 		<panel label="アップロード" name="UploadsTab">

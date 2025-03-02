@@ -8,7 +8,7 @@
 			法線マップ
 		</text>
 	</panel>
-	<panel name="P_Wave_Fog" label="フォグ">
+	<panel name="P_Wave_Fog_2" label="フォグ">
 		<text name="density_exponent_label">
 			密度指数：
 		</text>

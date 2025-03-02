@@ -33,7 +33,7 @@
 		<text name="TimeText" tool_tip="現在時刻（太平洋時間）">午前　24：00：00　PST</text>
 		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
 		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Webページ）を開始／停止します。"/>
-		<text name="FPSText" tool_tip="フレーム毎秒">
+		<text name="FPSText" tool_tip="フレーム毎秒（クリックで上限を調整できます。）">
 			200.0
 		</text>
 	</panel>

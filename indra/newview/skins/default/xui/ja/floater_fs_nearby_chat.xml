@@ -20,12 +20,10 @@
 	<layout_stack name="ls_chat">
 		<layout_panel name="panel_im_control_lp">
 			<layout_stack name="im_panels">
-				<layout_panel name="chat_holder">
-					<layout_panel name="unread_messages_holder">
-						<text name="unread_messages_text">
-							未読のメッセージ：[NUM]件
-						</text>
-					</layout_panel>
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						未読のメッセージ：[NUM]件
+					</text>
 				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">

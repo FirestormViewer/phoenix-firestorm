@@ -4,10 +4,10 @@
 		[ITEM_COUNT]個のアイテムを取得しています…。[FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT]個のアイテム　[FILTER]
+		[ITEM_COUNT]個のアイテムの取得が完了しました。[FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
-		[ITEM_COUNT]個のアイテムを取得しました　[FILTER]
+		[ITEM_COUNT]個のアイテムを取得しました。[FILTER]
 	</panel.string>
 	<menu_bar name="inventory_menu_bar">
 		<menu label="インベントリ" name="inventory_inventory_menu">
