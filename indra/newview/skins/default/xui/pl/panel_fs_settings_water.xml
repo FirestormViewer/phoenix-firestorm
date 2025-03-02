@@ -4,11 +4,11 @@
 		<text name="water_fog_label" tool_tip="Kolor mgły wodnej - Zmienia kolor objętościowego odcienia wody, zasadniczo definiując kolor samej wody. Jeśli Twoja woda nie ma mgły, będzie wydawała się krystalicznie czysta i bezbarwna.">
 			Kolor mgły wody
 		</text>
-		<text name="normal_map_label" tool_tip="Mapa normalnych - Obraz używany do określania odbić i refrakcji. Do tego ustawienia można użyć dowolnej tekstury - ale prawdziwe mapy normalne działają najlepiej. Wypróbuj skórę węża, kafelki lub dowolną inną mapę normalną, aby uzyskać zwariowane efekty!">
+		<text name="normal_map_label" tool_tip="Mapa normalnych - Obraz używany do określania odbić i refrakcji. Do tego ustawienia można użyć dowolnej tekstury - ale prawdziwe mapy normalne działają najlepiej.">
 			Mapa normalnych
 		</text>
 	</panel>
-	<panel name="P_Wave_Fog" label="Mgła">
+	<panel name="P_Wave_Fog_2" label="Mgła">
 		<text name="density_exponent_label">
 			Wykładnik gęstości:
 		</text>
