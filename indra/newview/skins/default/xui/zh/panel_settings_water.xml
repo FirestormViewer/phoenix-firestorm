@@ -45,10 +45,10 @@
 						折射和模糊
 					</text>
 					<text name="refraction_scale_above_label">
-						折射尺度（上方）：
+						光折射等級（上方）：
 					</text>
 					<text name="refraction_scale_below_label">
-						折射尺度（下方）：
+						光折射等級（下方）：
 					</text>
 					<text name="blur_multiplier_label">
 						模糊倍數：

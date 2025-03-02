@@ -26,7 +26,7 @@
 			</panel>
 			<panel name="panel_material_parameters">
 				<check_box label="雙面" name="double sided" />
-				<spinner label="透明度" name="transparency" />
+				<spinner label="不透明度" name="transparency" />
 				<text name="blend mode label">
 					模式
 				</text>
@@ -283,5 +283,5 @@
 	</panel>
 	<button name="copy_face_btn" tool_tip="將紋理參數複製到剪貼簿" />
 	<button name="paste_face_btn" tool_tip="從剪貼簿黏貼紋理參數" />
-	<spinner label="發光" name="glow" />
+	<spinner label="光暈" name="glow" />
 </panel>

@@ -58,7 +58,7 @@
 			<menu_item_call label="更新附件" name="Refresh Attachments" />
 			<menu_item_call label="重設為預設男性化身" name="ResetDefaultAvM" />
 			<menu_item_call label="重設為預設女性化身" name="ResetDefaultAvF" />
-			<menu_item_check label="顯示化身複雜性資訊" name="Avatar Draw Info" />
+			<menu_item_check label="顯示化身複雜度資訊" name="Avatar Draw Info" />
 			<menu_item_call label="指令碼" name="MyScripts" />
 			<menu_item_call label="延遲測試" name="Lag Meter" />
 			<menu_item_call label="重建LSL橋" name="Recreate LSL Bridge" />
@@ -142,8 +142,8 @@
 			<menu_item_check label="午夜" name="Midnight" />
 			<menu_item_check label="使用共享環境" name="Use Shared Environment" />
 			<menu_item_call label="我的環境" name="my_environs" />
-			<menu_item_call label="個人照明" name="adjustment_tool" />
-			<menu_item_check label="凍結雲彩" name="pause_clouds" />
+			<menu_item_call label="個人光照" name="adjustment_tool" />
+			<menu_item_check label="凍結雲層" name="pause_clouds" />
 			<menu label="批次匯入" name="WL Bulk Import">
 				<menu_item_call label="時間..." name="WL Bulk Import Days" />
 				<menu_item_call label="天空..." name="WL Bulk Import Skies" />
@@ -154,6 +154,7 @@
 			<menu_item_call label="相片工具" name="phototools_item_call" />
 			<menu_item_call label="相機工具" name="cameratools_item_call" />
 			<menu_item_check label="景深對焦鎖定" name="lock_focus_point" />
+			<menu_item_check label="顯示景深焦點的十字準線" name="render_focus_point"/>
 		</menu>
 		<menu_item_call label="區域搜尋" name="area_search" />
 		<menu_item_call label="聲音瀏覽器" name="Sound Explorer" />
@@ -222,7 +223,7 @@
 			<menu_item_check label="只選擇抽取式的物件" name="Select Only Movable Objects" />
 			<menu_item_check label="只選擇鎖定的物件" name="Select Only Locked Objects" />
 			<menu_item_check label="只選擇可複製的物件" name="Select Only Copyable Objects" />
-			<menu_item_check label="選擇不可見物體" name="Select Invisible Objects" />
+			<menu_item_check label="選擇不可見物件" name="Select Invisible Objects" />
 			<menu_item_check label="選擇反射探針" name="Select Reflection Probes" />
 			<menu_item_check label="按周圍環境選擇" name="Select By Surrounding" />
 			<menu_item_check label="包括屬於群組的物件" name="Include Group-Owned Objects" />
@@ -318,7 +319,7 @@
 			<menu_item_check label="統計欄" name="Statistics Bar" />
 			<menu_item_check label="場景載入統計" name="Scene Load Statistics" />
 			<menu_item_check label="提高圖形效能" name="Performance" />
-			<menu_item_check label="顯示化身複雜性資訊" name="Avatar Draw Info" />
+			<menu_item_check label="顯示化身複雜度資訊" name="Avatar Draw Info" />
 		</menu>
 		<menu label="高亮顯示與可見度" name="Highlighting and Visibility">
 			<menu_item_check label="醒目信標" name="Cheesy Beacon" />
@@ -347,7 +348,7 @@
 			<menu_item_check label="水文" name="Rendering Type Water" />
 			<menu_item_check label="體積" name="Rendering Type Volume" />
 			<menu_item_check label="草地" name="Rendering Type Grass" />
-			<menu_item_check label="雲彩" name="Rendering Type Clouds" />
+			<menu_item_check label="雲層" name="Rendering Type Clouds" />
 			<menu_item_check label="粒子效果" name="Rendering Type Particles" />
 			<menu_item_check label="碰撞" name="Rendering Type Bump" />
 			<menu_item_check label="PBR" name="Rendering Type PBR" />

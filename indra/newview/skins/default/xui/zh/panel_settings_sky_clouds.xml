@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="雲彩" name="panel_settings_sky_clouds">
+<panel label="雲層" name="panel_settings_sky_clouds">
 	<layout_stack name="main_ls">
 		<layout_panel name="left_lp">
 			<text name="cloud_coverage_label" width="110">
@@ -15,15 +15,15 @@
 				雲層捲動：
 			</text>
 			<text name="cloud_image_label">
-				雲彩圖像：
+				雲層圖像：
 			</text>
 			<text name="cloud_color_label">
 				雲層色彩：
 			</text>
 		</layout_panel>
 		<layout_panel name="right_lp">
-			<text name="cloud_density_label">
-				雲層密度：
+			<text name="cloud_density_label" tool_tip="云层 XY/密度 - 使用 X 和 Y 滑块更改天空中所有云的水平位置。D 滑块影响单个云的整体密度；在较低设置下，您会看到稀薄、飘逸的云，而在较高设置下，您会看到更厚、更实的云。">
+				云层密度：
 			</text>
 			<slider label="X" name="cloud_density_x" />
 			<slider label="Y" name="cloud_density_y" />

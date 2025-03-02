@@ -49,7 +49,8 @@
 			<text name="partner_label" value="搭檔:" />
 		</layout_panel>
 	</layout_stack>
-	<text name="About:" value="資訊:" />
+	<text name="About:" value="關於我:" />
+	<button name="btn_preview" tool_tip="切換預覽你個人檔案的「關於我」部分"/>
 	<text name="Groups:" value="群組:" />
 	<button name="group_invite" tool_tip="邀請加入群組" />
 	<text name="Give item:" value="分享:" />
