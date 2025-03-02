@@ -1521,7 +1521,7 @@
 新顯示卡：„[THIS_GPU]「
 	</notification>
 	<notification name="DisplaySetToRecommendedFeatureChange">
-		由於渲染子系統有所變更，已將顯示設定設為推薦的設定。
+		由於彩現子系統有所變更，已將顯示設定設為推薦的設定。
 	</notification>
 	<notification name="ErrorMessage">
 		[ERROR_MESSAGE]
@@ -1686,7 +1686,7 @@ SHA1指紋：[MD5_DIGEST]
 
 如果紋理 [TEXTURE_NUM] 是不透明的,請等待紋理完全載入後再次點擊"應用"。
 
-透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
+不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
 	<notification name="InvalidTerrainAlpha">
 無法設定區域紋理:
@@ -1694,7 +1694,7 @@ SHA1指紋：[MD5_DIGEST]
 
 請將紋理 [TEXTURE_NUM] 替換為不透明的RGB圖像,然後再次點擊"應用"。
 
-透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
+不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
 	<notification name="InvalidTerrainMaterialNotLoaded">
 無法設定區域材質:
@@ -1828,7 +1828,8 @@ SHA1指紋：[MD5_DIGEST]
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		你確定要開啟網頁瀏覽器去檢視這個內容？
-URL: [UNTRUSTED_URL]
+開啟來歷不明的網頁可能會危及您的電腦。
+URL:[UNTRUSTED_URL]
 		<usetemplate ignoretext="啟用我的網頁瀏覽器去檢視網頁" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
@@ -2800,7 +2801,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="DayCycleTooManyKeyframes">
-		你無法新增更多的關鍵幀到這個日循環。  [SCOPE] 範圍的日循環最多允許 [MAX] 個關鍵幀。
+		你無法新增更多的關鍵影格到這個日循環。  [SCOPE] 範圍的日循環最多允許 [MAX] 個關鍵影格。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="EnvUpdateRate">
@@ -5688,7 +5689,7 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="EnableAutoFPSWarning">
-		你即將啟用自動幀率。所有未儲存的圖形設定將會丟失。
+		你即將啟用自動影格率。所有未儲存的圖形設定將會丟失。
 
 你想先儲存它們嗎？
 		<usetemplate name="okcancelbuttons" notext="否" yestext="是"/>
@@ -5724,7 +5725,7 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="好的"/>
 	</notification>
 	<notification label="紋理包含空的 Alpha 通道" name="ImageEmptyAlphaLayer">
-您要上傳的紋理包含一個空的或幾乎為空的 Alpha 通道（透明度資訊）。 這應該總是不正確的，應該移除該通道。新增 Alpha 通道可能會導致重疊紋理在不同相機角度下閃爍。 此外，它還會降低渲染速度。除非這個紋理確實需要一個（幾乎）空的 Alpha 通道，否則應該儘可能地移除它。
+您要上傳的紋理包含一個空的或幾乎為空的 Alpha 通道（透明度資訊）。 這應該總是不正確的，應該移除該通道。新增 Alpha 通道可能會導致重疊紋理在不同相機角度下閃爍。 此外，它還會降低彩現速度。除非這個紋理確實需要一個（幾乎）空的 Alpha 通道，否則應該儘可能地移除它。
 		<form name="form">
 			<button name="strip" text="刪除 Alpha"/>
 			<button name="use_as_is" text="按原樣使用"/>

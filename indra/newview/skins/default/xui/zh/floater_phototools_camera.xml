@@ -133,10 +133,10 @@
 				<slider label="左/右" name="FlycamAxisScale1b" tool_tip="設定左右移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
 				<slider label="上/下" name="FlycamAxisScale2b" tool_tip="設定上下移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
 				<slider label="前/後" name="FlycamAxisScale0b" tool_tip="設定前後移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
-				<slider label="傾斜" name="FlycamAxisScale4" tool_tip="設定傾斜移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
-				<slider label="偏航" name="FlycamAxisScale5" tool_tip="設定偏航移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
-				<slider label="滾轉" name="FlycamAxisScale3" tool_tip="設定滾轉移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
-				<slider label="縮放" name="FlycamAxisScale6" tool_tip="設定縮放移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="俯仰" name="FlycamAxisScale4" tool_tip="設定上下俯仰的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="旋轉" name="FlycamAxisScale5" tool_tip="設定左右移動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="滾動" name="FlycamAxisScale3" tool_tip="設定左右滾動的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
+				<slider label="縮放" name="FlycamAxisScale6" tool_tip="設定縮放變焦的靈敏度。如果在精確控制上有困難，應使用較小的值。" />
 				<slider label="減速" name="FlycamFeathering" tool_tip="如果將滾軸移至最右端，相機將變得僵硬，並且可以直接通過操縱桿控制。如果將滾軸移至最左端，相機將變得遲緩。" />
 			</panel>
 			<panel name="P_3D_Mouse_Settings2">

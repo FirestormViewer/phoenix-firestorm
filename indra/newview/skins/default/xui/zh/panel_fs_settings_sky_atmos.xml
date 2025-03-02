@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="大氣與照明" name="panel_fs_settings_sky_atmos">
+	<string name="hdr_string">
+		HDR比例：
+	</string>
+	<string name="brightness_string">
+		亮度：
+	</string>
+	<string name="hdr_tooltip">
+		照明效果的強度，如逼真明亮天空和動態曝光等。1.0 為預設值，0 為關閉，0 和 1 之間的值為環境光與 HDR 的混合。
+	</string>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="大氣色彩"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="ambient_color_label">
+			環境色彩：
+		</text>
+		<text name="blue_horizon_label">
+			天空色彩：
+		</text>
+		<text name="blue_density_label">
+			天空飽和度：
+		</text>
+	</panel>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="大氣設定"/>
+	</panel>
+	<panel name="P_Atmosphere_OtherSettings">
+		<text name="haze_horizon_label">
+			地平線霧高度：
+		</text>
+		<text name="haze_density_label">
+			霧密度：
+		</text>
+		<text name="density_multiplier_label">
+			密度倍數：
+		</text>
+		<text name="distance_multiplier_label">
+			距離倍數：
+		</text>
+		<text name="maximum_altitude_label">
+			最大海拔：
+		</text>
+		<text name="scene_gamma_label">
+			亮度：
+		</text>
+		<text name="probe_ambiance_label" tool_tip="輻照度控制。當非0時，啟用HDR照明模型。">
+			反射探測環境（HDR）：
+		</text>
+		<slider name="probe_ambiance" tool_tip="基於環境的間接照明的強度。為0時，HDR比例變為亮度"/>
+	</panel>
+	<panel name="P_Rainbow_Header">
+		<text name="T_Rainbow_Header" value="彩虹和光暈設置"/>
+	</panel>
+	<panel name="P_Rainbow_OtherSettings">
+		<text name="moisture_level_label">
+			濕度等級：
+		</text>
+		<text name="droplet_radius_label">
+			液滴半徑：
+		</text>
+		<text name="ice_level_label">
+			冰等級：
+		</text>
+	</panel>
+</panel>

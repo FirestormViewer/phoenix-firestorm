@@ -12,7 +12,7 @@
 	<text name="av_nearby_desc">
 		隱藏複雜化身以提高速度
 	</text>
-	<slider tool_tip="定義化身被精簡顯示的複雜性門檻值" label="最大複雜度（K）" name="IndirectMaxComplexity" />
+	<slider tool_tip="定義化身被精簡顯示的複雜度門檻值" label="最大複雜度（K）" name="IndirectMaxComplexity" />
 	<slider tool_tip="定義化身因太複雜而無法彩現的時間門檻值" label="最大彩現時間（微秒）" name="FSRenderAvatarMaxART" />
 	<text name="FSRenderAvatarMaxARTText">
 		無限制

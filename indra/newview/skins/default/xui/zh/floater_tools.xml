@@ -482,14 +482,14 @@
 			<spinner label="Z軸力" name="FlexForceZ" />
 			<check_box label="光源" name="Light Checkbox Ctrl" tool_tip="導致物件發光" />
 			<color_swatch name="colorswatch" tool_tip="點擊以開啟顏色挑選器" />
-			<texture_picker name="light texture control" tool_tip="點擊投影圖像（只在啟用延遲渲染時生效）" />
+			<texture_picker name="light texture control" tool_tip="點擊投影圖像（只在啟用延遲彩現時生效）" />
 			<spinner label="強度" name="Light Intensity" />
 			<spinner label="視角" name="Light FOV" />
 			<spinner label="半徑" name="Light Radius" />
 			<spinner label="焦點" name="Light Focus" />
 			<spinner label="衰減" name="Light Falloff" />
 			<spinner label="環境" name="Light Ambiance" />
-			<check_box label="反射探針" name="Reflection Probe" tool_tip="啟用 PBR 時，調整此體積內物體接收反射的方式" />
+			<check_box label="反射探針" name="Reflection Probe" tool_tip="啟用 PBR 時，調整此體積內物件接收反射的方式" />
 			<combo_box label="探測體積類型" name="Probe Volume Type" tool_tip="選擇探測影響體積">
 				<combo_box.item label="球體" name="Sphere" />
 				<combo_box.item label="盒子" name="Box" />
