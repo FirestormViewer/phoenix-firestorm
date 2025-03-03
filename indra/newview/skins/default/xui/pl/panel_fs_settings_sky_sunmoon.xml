@@ -5,7 +5,7 @@
 	</panel>
 	<panel name="P_SM_Color">
 		<text name="color_label">
-			Kolor Słońca i Księżyca:
+			Kolor:
 		</text>
 	</panel>
 	<panel name="P_Sun_Header">

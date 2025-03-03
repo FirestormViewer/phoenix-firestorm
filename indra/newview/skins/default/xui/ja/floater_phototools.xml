@@ -12,10 +12,6 @@
 				</text>
 			</panel>
 
-			<panel name="P_WL_Settings">
-				<check_box label="環境（大気）シェーダー（WindLight）を有効にする" name="WindLightUseAtmosShaders" tool_tip="ここにチェックを入れるとWindLightの機能（環境シェーダー）をフルに利用できます。もしこの機能を有効にできない時は、「基本シェーダー」が有効になっているか確認して下さい。" />
-			</panel>
-
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="空の事前設定です。">
 					空
@@ -36,7 +32,6 @@
 				<button name="DCPrevPreset" />
 				<button name="DCNextPreset" />
 				<button name="btn_personal_lighting" label="個人環境設定..." />
-				<button name="ResetToRegionDefault" label="" tool_tip="自然環境の設定を共有された環境にリセットします。" />
 				<button label="雲を停止" name="PauseClouds" tool_tip="雲のアニメーションを停止します。" />
 			</panel>
 			
@@ -44,7 +39,6 @@
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="その日の時間を変更します。※注意！　この設定は通常、WindLightの事前設定を初期設定に戻します。特定の事前設定で太陽の位置を変更したい場合は、下のメニューにある「新しい空の事前設定」または「空の事前設定を編集」を選択して下さい。" />
 				<multi_slider name="WLSunPos" tool_tip="この機能は必ずしも正確に機能しない場合があります。もし調整が難しいようでしたら、「新しい空の事前設定」または「空の事前設定を編集」をご利用下さい。" />
-				<button name="ResetToRegionDefault" tool_tip="WindLightのオプションを地域のデフォルトにリセットします。" />
 			</panel>
 			-->
 
