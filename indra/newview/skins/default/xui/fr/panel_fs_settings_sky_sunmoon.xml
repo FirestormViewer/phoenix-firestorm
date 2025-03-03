@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Słońce i Księżyc" name="panel_fs_settings_sky_hbodies">
+<panel label="Soleil &amp; Lune" name="panel_fs_settings_sky_hbodies">
 	<panel name="P_Sun_Color">
-		<text name="T_Sun_Header" value="Kolor Słońca i Księżyca" />
+		<text name="T_Sun_Header" value="Couleur du Soleil &amp; de la Lune"/>
 	</panel>
 	<panel name="P_SM_Color">
 		<text name="color_label">
-			Kolor:
+			Couleur Soleil/Lune :
 		</text>
 	</panel>
 	<panel name="P_Sun_Header">
-		<text name="T_Sun_Header" value="Słońce i gwiazdy" />
+		<text name="T_Sun_Header" value="Réglages du Soleil &amp; des étoiles"/>
 	</panel>
 	<panel name="P_Sun_Setting">
 		<text name="image_label">
-			Obraz:
+			Image :
 		</text>
-		<check_box label="Pokaż emiter" name="sunbeacon" />
+		<check_box label="Afficher balise" name="sunbeacon"/>
 		<text name="glow_focus_label">
-			Ostrość blasku:
+			Foyer lumineux :
 		</text>
 		<text name="glow_size_label">
-			Skala blasku:
+			Taille de l'éclat :
 		</text>
 		<text name="star_brightness_label">
-			Jasność gwiazd:
+			Lum. étoiles :
 		</text>
 		<text name="sun_scale_label">
-			Skala:
+			Échelle :
 		</text>
 		<text name="sun_azimuth_label">
-			Azymut:
+			Azimuth :
 		</text>
 		<text name="sun_elevation_label">
-			Elewacja:
+			Élévation:
 		</text>
 	</panel>
 	<panel name="P_Moon_Header">
-		<text name="T_Moon_Header" value="Księżyc" />
+		<text name="T_Moon_Header" value="Réglages de la lune"/>
 	</panel>
 	<panel name="P_Moon_Setting">
 		<text name="moon_image_label">
-			Obraz:
+			Image :
 		</text>
-		<check_box label="Pokaż emiter" name="moonbeacon" />
+		<check_box label="Afficher balise" name="moonbeacon"/>
 		<text name="moon_scale_label">
-			Skala:
+			Échelle :
 		</text>
 		<text name="brightness_label">
-			Jasność:
+			Lum. :
 		</text>
 		<text name="moon_azimuth_label">
-			Azymut:
+			Azimuth:
 		</text>
 		<text name="moon_elevation_label">
-			Elewacja:
+			Elevation:
 		</text>
 	</panel>
 </panel>
