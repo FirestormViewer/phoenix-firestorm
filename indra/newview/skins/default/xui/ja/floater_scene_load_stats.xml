@@ -2,12 +2,12 @@
 <floater name="Scene Load Statistics" title="シーン読み込みの統計情報">
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
-			<stat_view name="basic" label="基本">
+			<stat_view name="basic" label="基本統計">
 				<stat_bar label="フレームごとのピクセル差" name="frame difference" unit_label="％"/>
-				<stat_bar label="ＵＤＰデータの受信量" name="bandwidth" unit_label="kbps"/>
+				<stat_bar label="ＵＤＰデータの受信量" name="bandwidth"/>
 				<stat_bar label="パケットロス" name="packet_loss" unit_label="％"/>
 			</stat_view>
-			<stat_view name="advanced" label="拡張">
+			<stat_view name="advanced" label="高度な統計">
 				<stat_view name="render" label="描画">
 					<stat_bar name="objs" label="オブジェクト合計"/>
 					<stat_bar name="newobjs" label="新しいオブジェクト" unit_label="／秒"/>
@@ -27,7 +27,7 @@
 					<stat_bar name="packetsinstat" label="受信パケット量" unit_label="／秒"/>
 					<stat_bar name="packetsoutstat" label="送信パケット量" unit_label="／秒"/>
 					<stat_bar name="objectdatareceived" label="オブジェクト" unit_label="kbps"/>
-					<stat_bar name="texturedatareceived" label="テスクチャ" unit_label="kbps"/>
+					<stat_bar name="texturedatareceived" label="テクスチャ" unit_label="kbps"/>
 					<stat_bar name="assetudpdatareceived" label="アセット" unit_label="kbps"/>
 					<stat_bar name="layersdatareceived" label="レイヤー" unit_label="kbps"/>
 					<stat_bar name="messagedatain" label="実効受信量" unit_label="kbps"/>

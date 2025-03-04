@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="もの" name="Outfits">
+<panel name="Outfits" label="モノ">
 	<panel.string name="wear_outfit_tooltip">
-		選択したアウトフィットを着用する
+		選択したアウトフィットに着替えます。
 	</panel.string>
 	<panel.string name="wear_items_tooltip">
-		選択したアイテムを着用
+		選択したアイテムを着用します。
 	</panel.string>
 	<panel.string name="cof_tab_label">
-		装着中 ([COUNT]/[MAX])
+		着用中（全[MAX]個中[COUNT]個）
 	</panel.string>
 	<tab_container name="appearance_tabs">
 		<panel label="アウトフィットギャラリー" name="outfit_gallery_tab"/>
-		<panel label="マイ アウトフィット" name="outfitslist_tab"/>
+		<panel label="自分のアウトフィット" name="outfitslist_tab"/>
 		<panel label="着用中" name="cof_tab"/>
 	</tab_container>
 	<panel name="bottom_panel">
@@ -20,10 +20,10 @@
 				<button label="変更を保存" name="save_btn"/>
 			</layout_panel>
 			<layout_panel name="save_as_btn_lp">
-				<button label="別名で保存..." name="save_as_btn" />
+				<button label="別名で保存…" name="save_as_btn"/>
 			</layout_panel>
 			<layout_panel name="wear_btn_lp">
-				<button label="装着" name="wear_btn"/>
+				<button label="着用" name="wear_btn"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>
