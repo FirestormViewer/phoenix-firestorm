@@ -46,11 +46,9 @@
 				<combo_box.item value="filter_type_materials" label="マテリアル"/>
 				<combo_box.item value="filter_type_settings" label="自然環境の設定"/>
 				<!-- [AS:Chanayane] Search folders only -->
-				<combo_box.item value="filter_type_folders" label="フォルダ" />
+				<combo_box.item value="filter_type_folders" label="フォルダ"/>
 				<!-- [/AS:Chanayane] -->
-				<combo_box.item value="filter_separator" label="──────"/>
 				<combo_box.item value="filter_type_coalesced" label="複合のみ"/>
-				<combo_box.item value="filter_separator" label="──────"/>
 				<combo_box.item value="filter_type_custom" label="カスタム…"/>
 			</combo_box>
 			<menu_button tool_tip="検索表示のオプションを表示します。" name="options_visibility_btn"/>
@@ -59,7 +57,7 @@
 	<panel name="default_inventory_panel">
 		<tab_container name="inventory filter tabs">
 			<inventory_panel label="インベントリ" name="All Items"/>
-			<recent_inventory_panel label="最近のアイテム" name="Recent Items"/>
+			<recent_inventory_panel label="新着アイテム" name="Recent Items"/>
 			<worn_inventory_panel label="着用中" name="Worn Items"/>
 		</tab_container>
 	</panel>
@@ -80,7 +78,7 @@
 			<button name="view_mode_btn" tool_tip="表示モードを切り替えます。"/>
 		</panel>
 		<panel name="dummy_panel">
-			<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダ" name="ItemcountText">
+			<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダがあります。" name="ItemcountText">
 				要素
 			</text>
 		</panel>
