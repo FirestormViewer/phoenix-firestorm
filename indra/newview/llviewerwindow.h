@@ -143,8 +143,15 @@ private:
 
 };
 
-static const U32 MAX_SNAPSHOT_IMAGE_SIZE = 7680; // max snapshot image size 7680 * 7680 UHDTV2
+      
+      
+// <FS:WWeaver/> increase max snapshot image size to 16384 for higher resolution snapshots
+// static const U32 MAX_SNAPSHOT_IMAGE_SIZE = 7680; // max snapshot image size 7680 * 7680 UHDTV2
+static const U32 MAX_SNAPSHOT_IMAGE_SIZE = 16384; // max snapshot image size 16384 * 16384
 
+    
+
+    
 class LLViewerWindow : public LLWindowCallbacks
 {
 public:

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-
+<!-- FS:WW: Increased height of <floater> tag from 540 to 560. -->
 <floater
  can_resize="false"
  can_close="true"
  can_minimize="true"
- height="540"
+ height="560"
  help_topic="phototools_menu_floater"
  layout="topleft"
  name="phototools"
@@ -14,11 +14,11 @@
  single_instance="true"
  title="Phototools"
  width="288">
-
+<!-- FS:WW: Increased height of <tab_container> tag from 540 to 560 to match floater height. -->
 	<tab_container
 	 follows="all"
 	 halign="center"
-	 height="540"
+	 height="560"
 	 hide_scroll_arrows="true"
 	 layout="topleft"
 	 left="0"
@@ -26,8 +26,8 @@
 	 tab_allow_rearrange="false"
 	 tab_group="0"
 	 tab_position="top"
-	 tab_min_width="47"
-	 tab_max_width="47"
+	 tab_min_width="46"
+	 tab_max_width="46"
 	 top="0"
 	 width="288">
 
@@ -758,7 +758,7 @@
 					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
 			</panel>
-
+			<!-- FS:WW: Increased height of P_R_Res_3 panel from 46 to 66 to accommodate content. -->
 			<panel
 			 name="P_R_Res_3"
 			 follows="top|left"
@@ -766,7 +766,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-5"
-			 height="46"
+			 height="66"
 			 border_visible="true"
 			 background_visible="true">
 
@@ -780,6 +780,7 @@
 				 width="70">
 					Reflect. Dist.
 				</text>
+				<!-- FS:WW: Changed min_val of SB_Reflection_Distance slider from 0 to 1 to prevent potential issues with 0 value. -->
 				<slider_bar
 				 name="SB_Reflection_Distance"
 				 control_name="RenderReflectionProbeDrawDistance"
@@ -788,7 +789,7 @@
 				 increment="1"
 				 layout="topleft"
 				 left_pad="0"
-				 min_val="0"
+				 min_val="1"
 				 max_val="4096"
 				 top_delta="-2"
 				 width="127"/>
@@ -947,7 +948,8 @@
 					 parameter="RenderAttachedLights"/>
 				</check_box>
 			</panel>
-
+			
+			<!-- FS:WW: Decreased height of P_Shadow_Res panel from 205 to 185 to adjust layout. -->
 			<panel
 			 name="P_Shadow_Res"
 			 follows="top|left"
@@ -955,7 +957,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="205"
+			 height="185"
 			 border_visible="true"
 			 background_visible="true">
 			 	<text
@@ -1020,21 +1022,21 @@
 				 width="70">
 					Shd. Res
 				</text>
+				
+				<!-- FS:WW: Removed slider_bar.commit_callback and spinner.commit_callback from SB_Shadow_Res and S_Shadow_Res, and increased max_val of S_Shadow_Res spinner to 10. Commit callbacks are now redundant, max_val increase aligns with user needs. -->6777
+
 				<slider_bar
-					name="SB_Shadow_Res"
-					control_name="RenderShadowResolutionScale"
-					follows="left|right"
-					height="16"
-					increment="0.5"
-					layout="topleft"
-					left_pad="0"
-					min_val="0"
-					max_val="5"
-					top_delta="-2"
-					width="127">
-					<slider_bar.commit_callback
-						function="Advanced.ClearShaderCache" />
-				</slider_bar>
+				 name="SB_Shadow_Res"
+				 control_name="RenderShadowResolutionScale"
+				 follows="left|right"
+				 height="16"
+				 increment="0.5"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="4"
+				 top_delta="-2"
+				 width="127"/>
 				<spinner
 				 name="S_Shadow_Res"
 				 control_name="RenderShadowResolutionScale"
@@ -1043,13 +1045,10 @@
 				 left_pad="0"
 				 decimal_digits="2"
 				 follows="left|right"
-				 max_val="7"
+				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment="0.5">
-				    <spinner.commit_callback
-						function="Advanced.ClearShaderCache" />
-				</spinner>
+				 increment="0.5"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Shadow_Res"
@@ -1252,55 +1251,6 @@
 				</button>
 
 				<text
-				 name="T_FOV_Cutoff"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				tool_tip="Sets the Field of View (FOV) threshold where the viewer switches from perspective to orthographic shadow rendering. Adjust to reduce jagged shadow artifacts."
-				 width="70">
-					FOV Cutoff
-				</text>
-				<slider_bar
-				 name="SB_FOV_Cutoff"
-				 control_name="RenderShadowFOVCutoff"
-				 follows="left|right"
-				 height="16"
-				 increment="0.1"
-				 layout="topleft"
-				 left_pad="0"
-				 min_val="0"
-				 max_val="100"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_FOV_Cutoff"
-				 control_name="RenderShadowFOVCutoff"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="0"
-				 decimal_digits="1"
-				 follows="top|right"
-				 max_val="100"
-				 min_val="0"
-				 width="53"
-				 increment="0.1"/>
-				<button
-				 follows="left|top"
-				 name="FOV_Cutoff_Reset"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderShadowFOVCutoff"/>
-				</button>
-
-				<text
 				 name="T_Spot_Cutoff"
 				 follows="top|left"
 				 layout="topleft"
@@ -1352,7 +1302,9 @@
 					 function="ResetControl"
 					 parameter="RenderSpotShadowOffset"/>
 				</button>
-
+				
+				<!-- FS:WW: Removed entire "FOV Cutoff" section (T_FOV_Cutoff text, SB_FOV_Cutoff slider_bar, S_FOV_Cutoff spinner, FOV_Cutoff_Reset button). This section was deemed unnecessary or redundant for Phototools functionality. -->
+				
 				<text
 				 name="T_Shd_Bias"
 				 follows="top|left"
@@ -1455,22 +1407,73 @@
 				</check_box>
 			</panel>
 		
+			<!-- FS:WW: Increased height of SB_Samples panel from 161 to 201 to accommodate content. -->
 			<panel
-			 name="P_Scale"
+			 name="SB_Samples"
 			 follows="top|left"
 			 layout="topleft"
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="161"
+			 height="201"
 			 border_visible="true"
 			 background_visible="true">
+				<text
+				 name="T_Samples"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="10"
+				 tool_tip="Controls the number of samples used for Screen Space Ambient Occlusion (SSAO). Higher values improve quality but reduce performance."
+				 width="70">
+					Samples
+				</text>
+				<slider_bar
+				 name="SB_Samples"
+				 control_name="FSRenderSSAOSampleCount"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="1024"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Samples"
+				 control_name="FSRenderSSAOSampleCount"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="0"
+				 follows="top|right"
+				 max_val="1024"
+				 min_val="-0"
+				 width="53"
+				 increment="1"/>
+				<button
+				 follows="left|top"
+				 name="Reset_Samples"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FSRenderSSAOSampleCount"/>
+				</button>
+
+				<!-- FS:WW: Changed increment of SB_Scale slider to 0.01 and decimal_digits of S_Scale spinner to 2 for finer control over SSAO Scale. -->
 				<text
 				 name="T_Scale"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="10"
+				 top_pad="5"
 				 tool_tip="Controls the size of the sampling area used for Ambient Occlusion. Larger values increase shadow accuracy and detail but may impact performance. Best used with shadow blur adjustments to achieve softer shading effects."
 				 width="70">
 					Scale
@@ -1480,11 +1483,11 @@
 				 control_name="RenderSSAOScale"
 				 follows="left|right"
 				 height="16"
-				 increment="1"
+				 increment=".01"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="0"
-				 max_val="10000"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1493,7 +1496,7 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="0"
-				 decimal_digits="0"
+				 decimal_digits="2"
 				 follows="top|right"
 				 max_val="10000000"
 				 min_val="-1000000"
@@ -1533,7 +1536,7 @@
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="0"
-				 max_val="10000"
+				 max_val="5"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1628,12 +1631,12 @@
 				 control_name="RenderSSAOIrradianceMax"
 				 follows="left|right"
 				 height="16"
-				 increment="1"
+				 increment=".01"
 				 decimal_digits="0"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="0"
-				 max_val="10000"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1643,7 +1646,7 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="0"
-				 decimal_digits="0"
+				 decimal_digits="2"
 				 follows="top|right"
 				 max_val="10000000"
 				 min_val="0"
@@ -1682,11 +1685,11 @@
 				 control_name="RenderSSAOIrradianceScale"
 				 follows="left|right"
 				 height="16"
-				 increment="1"
+				 increment=".01"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="0"
-				 max_val="100"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1696,7 +1699,7 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="0"
-				 decimal_digits="1"
+				 decimal_digits="2"
 				 follows="top|right"
 				 max_val="100000"
 				 min_val="0"
@@ -2455,6 +2458,7 @@
 				</check_box>
 			</panel>
 
+			<!-- FS:WW: Increased height of P_Glow_Iterations panel from 103 to 123 to accommodate content. -->
 			<panel
 			 name="P_Glow_Iterations"
 			 follows="top|left"
@@ -2462,7 +2466,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="103"
+			 height="123"
 			 border_visible="true"
 			 background_visible="true">
 
@@ -2694,6 +2698,7 @@
 				</text>
 			</panel>
 
+			<!-- FS:WW: Decreased height of P_General_Settings panel from 313 to 293 to accommodate content. -->
 			<panel
 			 name="P_General_Settings"
 			 follows="top|left"
@@ -2802,6 +2807,7 @@
 					 parameter="IndirectMaxNonImpostors"/>
 				</button>
 
+				<!-- <FS:WW> Removed "Avi Detail" section as it is less relevant with mesh avatars and Avatar Complexity settings are more prominent. This section included T_Avi_Detail text, SB_Avi_Detail slider_bar, S_Avi_Detail spinner, and Reset_Avi_Detail button. 
 				<text
 				 name="T_Avi_Detail"
 				 follows="top|left"
@@ -2850,7 +2856,8 @@
 					 function="ResetControl"
 					 parameter="RenderAvatarLODFactor"/>
 				</button>
-
+				</FS:WW> -->
+				
 				<text
 				 name="T_Avi_Physics"
 				 follows="top|left"
@@ -3338,8 +3345,62 @@
 					 function="ResetControl"
 					 parameter="RenderExposure"/>
 				</button>
+				
+								<text
+				 name="T_Animation_Speed"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Adjust animation speed factor (1.0 = normal)"
+				 width="70">
+					Anim Speed
+				</text>
+				<slider_bar
+				 name="animationspeed_slider_name"
+				 follows="top|left"
+				 height="16"
+				 increment=".05"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="5"
+				 top_delta="-2"
+				 width="127">
+				     <slider_bar.commit_callback
+                      function="Quickprefs.AnimationSpeedChanged"/>
+				</slider_bar>
+				<spinner
+				 name="animationspeed_spinner_name"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="2"
+				 follows="top|left"
+				 max_val="100"
+				 min_val="0"
+				 width="53"
+				 increment=".01">
+				    <spinner.commit_callback
+                       function="Quickprefs.AnimationSpeedChanged"/>
+			    </spinner>
+				<button
+				 follows="left|top"
+				 name="Reset_animation_speed"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="Quickprefs.ResetAnimationSpeed"/>
+				</button>
+				
 			</panel>
 
+			<!-- FS:WW: Increased height of P_Render panel from 87 to 107 to accommodate content. -->
 			<panel
 			 name="P_Render"
 			 follows="top|left"
@@ -3347,20 +3408,32 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="87"
+			 height="104"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
+				<!-- <FS:WW> Add checkbox to toggle fullbright rendering -->
+				<check_box
+				 follows="left|top"
+				 control_name="FSRenderEnableFullbright"
+				 height="16"
+				 label="Enable Fullbright Textures"
+				 layout="topleft"
+				 top_pad="5" 
+				 left="3"
+				 name="EnableFullbright"
+				 tool_tip="Enable/disable fullbright effect"
+				 width="240"/>
 				<check_box
 				 follows="left|top"
 				 control_name="RenderUseFarClip"
 				 height="16"
 				 label="Enable Draw Distance"
 				 layout="topleft"
-				 top_pad="5" 
 				 left="3"
 				 name="UseFarClip"
 				 tool_tip="Enables the draw distance limit, restricting how far the viewer will render objects based on the set draw distance. Disabling this will cause the viewer to render objects beyond the defined distance, which can significantly decrease performance in large, detailed environments."
+				 top_pad="0"
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -3413,6 +3486,7 @@
 				</check_box>
 			</panel>
 
+			<!-- FS:WW: Increased height of P_Anti-aliasing panel from 105 to 125 to accommodate content. -->
 			<panel
 			 name="P_Anti-aliasing"
 			 follows="top|left"
@@ -3420,7 +3494,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="105"
+			 height="108"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3655,6 +3729,7 @@
 				</text>
 			</panel>
 
+			<!-- FS:WW: Increased height of P_Aids_Settings panel from 282 to 302 to accommodate content. -->																					`1
 			<panel
 			 name="P_Aids_Settings"
 			 follows="top|left"
@@ -3901,9 +3976,10 @@
 				</text>
 			</panel>
 			
+			<!-- FS:WW: Increased height of statistics_scroll scroll_container from 158 to 178 to accommodate content. -->
 			<scroll_container
 			 follows="top|left"
-			 height="158"
+			 height="179"
 			 layout="topleft"
 			 left="3"
 			 name="statistics_scroll"
@@ -4049,6 +4125,7 @@
 				</text>
 			</panel>
 
+			<!-- FS:WW: Increased height of P_Cam_Settings panel from 131 to 151 to accommodate content. -->
 			<panel
 			 name="P_Cam_Settings"
 			 follows="top|left"
@@ -4579,6 +4656,7 @@
 				</text>
 			</panel>
 
+			<!-- FS:WW: UI for Animation Speed widgets - Controls global animation speed -->
 			<panel
 			 name="P_Viewer_Cam_Menu_Settings"
 			 follows="left|top"
@@ -4586,7 +4664,7 @@
 			 top_pad="3"
 			 left="3"
 			 right="-3"
-			 height="131"
+			 height="151"
 			 border_visible="true"
 			 background_visible="true">
 				<tab_container
