@@ -81,6 +81,7 @@ public:
     static LLTrace::CountStatHandle<>* getVelocityStat()           {return &sVelocityStat; }
     static LLTrace::CountStatHandle<>* getAngularVelocityStat()  {return &sAngularVelocityStat; }
     F32     getCosHalfFov() {return mCosHalfCameraFOV;}
+    F32     getCosFov() {return mCosCameraFOV;}
     F32     getAverageSpeed() {return mAverageSpeed ;}
     F32     getAverageAngularSpeed() {return mAverageAngularSpeed;}
 
@@ -120,6 +121,10 @@ protected:
     F32                 mCameraFOVDefault;
     F32                 mPrevCameraFOVDefault;
     F32                 mCosHalfCameraFOV;
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Store the Cos of the full FOV
+    F32                 mCosCameraFOV;
+    // </FS:minerjr> [FIRE-35081]
     LLVector3           mLastPointOfInterest;
     F32                 mPixelMeterRatio; // Divide by distance from camera to get pixels per meter at that distance.
     S32                 mScreenPixelArea; // Pixel area of entire window
