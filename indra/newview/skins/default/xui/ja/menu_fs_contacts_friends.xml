@@ -1,34 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Friends Popup">
-	<menu_item_call label="プロフィール" name="show_agent" />
-	<menu_item_call label="IM..." name="send_im" />
-	<menu_item_call label="会話履歴を見る..." name="chat_history" />
-	<menu_item_call label="セットに追加..." name="Add to Set" />
-	<menu_item_call label="ズームイン" name="zoom_agent" />
-	<menu_item_call label="フレンドの場所にテレポート" name="teleportto_agent" />
-	<menu_item_call label="テレポートを送る" name="offer_teleport" />
-	<menu_item_call label="テレポートを要求する" name="request_teleport" />
-	<menu_item_call label="支払い" name="pay" />
-	<menu_item_call label="フレンドを追跡" name="track_agent" />
-	<menu_item_call label="フレンドを削除..." name="remove_friend" />
-	<menu_item_separator />
-	<menu_item_call label="名前をクリップボードにコピー" name="url_copy_label" />
-	<menu_item_call label="URLをクリップボードにコピー" name="url_copy" />
-	<menu_item_separator/>
-	<menu name="options" label="オプション...">
-		<menu_item_check label="ユーザ名欄を表示" name="show_username" />
-		<menu_item_check label="表示名欄を表示" name="show_displayname" />
-		<menu_item_chec label="フルネーム欄を表示" name="show_fullname" />
-		<menu_item_check label="権限欄を表示" name="show_permissions" />
-		<menu_item_separator/>
-		<menu_item_check label="ユーザ名で並べ替え" />
-		<menu_item_check label="表示名で並べ替え" name="sort_by_displayname" />
-		<menu_item_separator/>
-		<menu_item_check label="フルネームはユーザ名 (表示名)" name="format_username_displayname" />
-		<menu_item_check label="フルネームは表示名 (ユーザ名)" name="format_displayname_username" />
-		<menu_item_separator/>
-		<menu_item_check label="検索フィルターを表示" name="friend_filter" />
+	<menu_item_call label="プロフィール" name="show_agent"/>
+	<menu_item_call label="ＩＭ…" name="send_im"/>
+	<menu_item_call label="会話履歴を見る…" name="chat_history"/>
+	<menu_item_call label="コンタクトセットに追加…" name="Add to Set"/>
+	<menu_item_call label="ズームイン" name="zoom_agent"/>
+	<menu_item_call label="フレンドの場所にテレポート" name="teleportto_agent"/>
+	<menu_item_call label="テレポートを送る" name="offer_teleport"/>
+	<menu_item_call label="テレポートを要求する" name="request_teleport"/>
+	<menu_item_call label="支払う" name="pay"/>
+	<menu_item_call label="フレンドを追跡" name="track_agent"/>
+	<menu_item_call label="フレンドを削除…" name="remove_friend"/>
+	<menu_item_call label="名前をコピー" name="url_copy_label"/>
+	<menu_item_call label="ＵＲＬをコピー" name="url_copy"/>
+	<menu name="options" label="オプション…">
+		<menu_item_check label="ユーザ名列を表示" name="show_username"/>
+		<menu_item_check label="表示名列を表示" name="show_displayname"/>
+		<menu_item_chec label="フルネーム列を表示" name="show_fullname"/>
+		<menu_item_check label="権限列を表示" name="show_permissions"/>
+		<menu_item_check label="ユーザ名で並べ替え" name="sort_by_username"/>
+		<menu_item_check label="表示名で並べ替え" name="sort_by_displayname"/>
+		<menu_item_check label="フルネーム形式をユーザ名（表示名）に" name="format_username_displayname"/>
+		<menu_item_check label="フルネーム形式を表示名（ユーザ名）に" name="format_displayname_username"/>
+		<menu_item_check label="検索フィルタを表示" name="friend_filter"/>
 	</menu>
-	<menu_item_separator/>
-	<menu_item_check label="フレンドのログイン状態" name="GlobalOnlineStatusToggle" />
+	<menu_item_check label="フレンドのログイン状況" name="GlobalOnlineStatusToggle"/>
 </context_menu>

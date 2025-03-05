@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_fs_protected_folders" title="保護フォルダ">
 	<floater.string name="UnknownFolder">
-		(不明なフォルダ)
+		（不明なフォルダ）
 	</floater.string>
 	<panel name="buttons_panel">
-		<filter_editor label="保護されたフォルダを検索" name="filter_input" />
-		<button name="remove_btn" tool_tip="フォルダを保護されたフォルダのリストから削除します" />
+		<filter_editor label="保護されたフォルダを検索" name="filter_input"/>
+		<button name="remove_btn" tool_tip="保護されたフォルダのリストからフォルダを削除します。"/>
 	</panel>
-
 	<panel name="panel_fs_protected_folders">
 		<scroll_list name="folder_list">
-			<scroll_list.columns label="名前" name="name" />
+			<scroll_list.columns label="名前" name="name"/>
 		</scroll_list>
 	</panel>
 </floater>

@@ -2,7 +2,7 @@
 <panel name="edit_skirt_panel">
 	<panel name="avatar_skirt_color_panel">
 		<texture_picker label="テクスチャ" name="Fabric" tool_tip="クリックして写真を選択"/>
-		<color_swatch label="色・色彩配合" name="Color/Tint" tool_tip="クリックしてカラーピッカーを開きます"/>
+		<color_swatch label="色／明暗" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
 	</panel>
 	<panel name="skirt_main_tab_holder">
 		<accordion name="skirt_main_accordion">

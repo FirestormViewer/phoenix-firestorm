@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="contact_sets_panel">
 	<panel.string name="empty_list">
-		連絡先セットに何も登録がありません。
+		コンタクトセットに何も登録がありません。
 	</panel.string>
 	<panel.string name="no_sets">
 		セット未登録
@@ -15,21 +15,19 @@
 	<panel.string name="non_friends">
 		フレンドでない人
 	</panel.string>
-	<combo_box name="combo_sets" />
-	<button name="config_btn" tool_tip="選択した連絡先セットの設定をします。" />
-	<button name="add_set_btn" tool_tip="新しい連絡先セットを追加します。" />
-	<button name="remove_set_btn" tool_tip="選択した連絡先セットを削除します。" />
-	<avatar_list name="contact_list" />
-    <!-- Action buttons -->
-	<button label="追加..." name="add_btn" tool_tip="アバターを現在の連絡先セットに追加します。" />
-	<button label="削除..." name="remove_btn" tool_tip="このアバターを現在の連絡先セットから削除します。" />
-	<button label="プロフィール..." name="profile_btn" tool_tip="このアバターのプロフィールを開きます。" />
-	<button label="IM..." name="start_im_btn" tool_tip="IMを開始します。" />
-	<button label="テレポート..." name="offer_teleport_btn" tool_tip="あなたが現在いる場所にテレポートで呼びます。" width="80" />
-	<button label="ニックネーム設定..." name="set_pseudonym_btn" tool_tip="このアバターのニックネームを設定します。" />
-	<button label="ニックネーム解除..." name="remove_pseudonym_btn" tool_tip="アバターのニックネームを削除します" />
-	<button label="表示名削除..." name="remove_displayname_btn" tool_tip="アバターの表示名を削除します。" />
+	<button name="config_btn" tool_tip="選択したコンタクトセットの設定をします。"/>
+	<button name="add_set_btn" tool_tip="新しいコンタクトセットを追加します。"/>
+	<button name="remove_set_btn" tool_tip="選択したコンタクトセットを削除します。"/>
+	<!-- Action buttons -->
+	<button label="追加…" name="add_btn" tool_tip="アバターを現在のコンタクトセットに追加します。"/>
+	<button label="削除…" name="remove_btn" tool_tip="このアバターを現在のコンタクトセットから削除します。"/>
+	<button label="プロフィール…" name="profile_btn" tool_tip="このアバターのプロフィールを開きます。"/>
+	<button label="ＩＭ…" name="start_im_btn" tool_tip="ＩＭを開始します。"/>
+	<button label="テレポート…" name="offer_teleport_btn" tool_tip="あなたが現在いる場所にテレポートで呼びます。"/>
+	<button label="ニックネーム設定…" name="set_pseudonym_btn" tool_tip="アバターのニックネームを設定します。"/>
+	<button label="ニックネーム解除…" name="remove_pseudonym_btn" tool_tip="アバターのニックネームを削除します"/>
+	<button label="表示名削除…" name="remove_displayname_btn" tool_tip="アバターの表示名を削除します。"/>
 	<text name="member_count">
-		メンバー数: [COUNT]
+		メンバー：[COUNT]人
 	</text>
 </panel>
