@@ -5981,7 +5981,13 @@ void LLAppViewer::idle()
     // objects and camera should be in sync, do LOD calculations now
     {
         LL_RECORD_BLOCK_TIME(FTM_LOD_UPDATE);
-        gObjectList.updateApparentAngles(gAgent);
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // Added a max time limit to the object list updates as these updates do affect the texture system
+        //gObjectList.updateApparentAngles(gAgent);
+        F32 max_update_apparent_angles = 0.0020f * gFrameIntervalSeconds.value(); // 20 ms/second decode time
+        max_update_apparent_angles = llclamp(max_update_apparent_angles, 0.00005f, 0.0002f);  // min 2ms/frame, max 5ms/frame)
+        gObjectList.updateApparentAngles(gAgent, max_update_apparent_angles);
+        // </FS:minerjr> [FIRE-35081]
     }
 
     // Update AV render info
