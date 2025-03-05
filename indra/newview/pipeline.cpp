@@ -202,6 +202,7 @@ F32 LLPipeline::RenderShadowBlurSize;
 F32 LLPipeline::RenderSSAOScale;
 U32 LLPipeline::RenderSSAOMaxScale;
 F32 LLPipeline::RenderSSAOFactor;
+F32 LLPipeline::FSRenderSSAOSampleCount; // <FS:WW> Default SSAO sample count
 LLVector3 LLPipeline::RenderSSAOEffect;
 F32 LLPipeline::RenderShadowOffsetError;
 F32 LLPipeline::RenderShadowBiasError;
@@ -620,6 +621,7 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderSSAOMaxScale");
     connectRefreshCachedSettingsSafe("RenderSSAOFactor");
     connectRefreshCachedSettingsSafe("RenderSSAOEffect");
+	connectRefreshCachedSettingsSafe("FSRenderSSAOSampleCount");
     connectRefreshCachedSettingsSafe("RenderShadowOffsetError");
     connectRefreshCachedSettingsSafe("RenderShadowBiasError");
     connectRefreshCachedSettingsSafe("RenderShadowOffset");
@@ -1217,6 +1219,7 @@ void LLPipeline::refreshCachedSettings()
     RenderSSAOMaxScale = gSavedSettings.getU32("RenderSSAOMaxScale");
     RenderSSAOFactor = gSavedSettings.getF32("RenderSSAOFactor");
     RenderSSAOEffect = gSavedSettings.getVector3("RenderSSAOEffect");
+    FSRenderSSAOSampleCount = gSavedSettings.getF32("FSRenderSSAOSampleCount"); // <FS:WWeaver> Load SSAO sample count setting from gSavedSettings
     RenderShadowOffsetError = gSavedSettings.getF32("RenderShadowOffsetError");
     RenderShadowBiasError = gSavedSettings.getF32("RenderShadowBiasError");
     RenderShadowOffset = gSavedSettings.getF32("RenderShadowOffset");
@@ -1411,7 +1414,8 @@ void LLPipeline::createGLBuffers()
 
     if (!mNoiseMap)
     {
-        const U32 noiseRes = 128;
+		// <FS:WW/> Increase noise resolution to 1024 within mNoiseMap initialization for higher quality noise
+		const U32 noiseRes = 128;
         LLVector3 noise[noiseRes*noiseRes];
 
         F32 scaler = gSavedSettings.getF32("RenderDeferredNoise")/100.f;
@@ -1431,6 +1435,7 @@ void LLPipeline::createGLBuffers()
 
     if (!mTrueNoiseMap)
     {
+		// <FS:WW/> Increase noise resolution to 1024 within mTrueNoiseMap initialization for higher quality noise
         const U32 noiseRes = 128;
         F32 noise[noiseRes*noiseRes*3];
         for (U32 i = 0; i < noiseRes*noiseRes*3; i++)
@@ -8751,8 +8756,10 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     F32 ssao_factor = RenderSSAOFactor;
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR, ssao_factor);
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR_INV, 1.0f/ssao_factor);
-
-    LLVector3 ssao_effect = RenderSSAOEffect;
+    
+	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_SAMPLE_COUNT, FSRenderSSAOSampleCount); // <FS:WWeaver> Set SSAO sample count uniform
+    
+	LLVector3 ssao_effect = RenderSSAOEffect;
     F32 matrix_diag = (ssao_effect[0] + 2.0f*ssao_effect[1])/3.0f;
     F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0f;
     // This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by

@@ -152,6 +152,11 @@ public:
 
     U8   getBumpmap() const { return mBump & TEM_BUMP_MASK; }
     U8   getFullbright() const { return (mBump>>TEM_FULLBRIGHT_SHIFT) & TEM_FULLBRIGHT_MASK; }
+	// <FS:WW> Feature: Fullbright Toggle - Add helper function
+    bool getFullbrightFlag() const { return (mBump >> TEM_FULLBRIGHT_SHIFT) & TEM_FULLBRIGHT_MASK; }
+    void setOriginalFullbright(U8 fullbright) { mOriginalFullbright = fullbright; } 
+    U8 getOriginalFullbright() const { return mOriginalFullbright; }             
+    // </FS:WW>
     U8   getShiny() const { return (mBump>>TEM_SHINY_SHIFT) & TEM_SHINY_MASK; }
     U8   getBumpShiny() const { return mBump & TEM_BUMP_SHINY_MASK; }
     U8   getBumpShinyFullbright() const { return mBump; }
@@ -233,7 +238,8 @@ protected:
     LLColor4            mColor;
     U8                  mBump;                  // Bump map, shiny, and fullbright
     U8                  mMediaFlags;            // replace with web page, movie, etc.
-    F32                 mGlow;
+    U8					mOriginalFullbright;    // FS:WW - Store original fullbright value
+	F32                 mGlow;
     bool                mMaterialUpdatePending;
     LLMaterialID        mMaterialID;
     LLMaterialPtr       mMaterial;

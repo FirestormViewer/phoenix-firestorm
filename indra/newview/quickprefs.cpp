@@ -112,7 +112,9 @@ FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
     mEnvChangedConnection(),
     mRegionChangedSlot()
 {
-    // For Phototools
+        // <FS:WW> // Add registration for Animation Speed Reset Button Callback (Add this line):
+        mCommitCallbackRegistrar.add("Quickprefs.ResetAnimationSpeed", boost::bind(&FloaterQuickPrefs::onClickResetAnimationSpeed, this, _1, _2));
+        // </FS:WW>
     mCommitCallbackRegistrar.add("Quickprefs.ShaderChanged", boost::bind(&handleSetShaderChanged, LLSD()));
 
     if (!getIsPhototools() && !FSCommon::isLegacySkin())
@@ -615,7 +617,31 @@ bool FloaterQuickPrefs::postBuild()
         mSliderRenderSSAOEffectX = getChild<LLSlider>("SB_Effect");
         mSpinnerRenderSSAOEffectX = getChild<LLSpinCtrl>("S_Effect");
 
-        refreshSettings();
+		// <FS:WW> // Animation Speed UI controls 
+		mAnimationSpeedSlider = getChild<LLSlider>("animationspeed_slider_name");
+		if (mAnimationSpeedSlider)
+		{
+		    mAnimationSpeedSlider->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAnimationSpeedChanged, this, _1, _2));
+
+		    // **Add this line to initialize slider value at startup:**
+		    F32 initialSpeedFactor = LLMotionController::getCurrentTimeFactor(); 
+		    mAnimationSpeedSlider->setValue(initialSpeedFactor);             
+		}
+
+		mAnimationSpeedSpinner = getChild<LLUICtrl>("animationspeed_spinner_name");
+		if (mAnimationSpeedSpinner)
+		{
+		    mAnimationSpeedSpinner->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAnimationSpeedChanged, this, _1, _2));
+
+		    // **Add these lines to initialize spinner value at startup:**
+		    F32 initialSpeedFactor = LLMotionController::getCurrentTimeFactor(); 
+		    mAnimationSpeedSpinner->setValue(initialSpeedFactor);             
+		}
+
+		// **Move refreshSettings() to the VERY END of the if block:**
+		refreshSettings(); 
+		// </FS:WW>
+
     }
     else
     {
@@ -1873,6 +1899,73 @@ void FloaterQuickPrefs::onClose(bool app_quitting)
     // close edit mode and save settings
     gSavedSettings.setBOOL("QuickPrefsEditMode", false);
 }
+
+// <FS:WW>
+void FloaterQuickPrefs::onAnimationSpeedChanged(LLUICtrl* control, const LLSD& data)
+{
+    F32 newSpeedFactor = 1.0f; // Default value in case of error
+
+    if (control == mAnimationSpeedSlider)
+    {
+        newSpeedFactor = mAnimationSpeedSlider->getValueF32();
+		// **Add this line to update the spinner when slider changes:**
+        mAnimationSpeedSpinner->setValue(newSpeedFactor); // **<-- Update spinner value from slider**
+    }
+    else if (control == mAnimationSpeedSpinner)
+    {
+        newSpeedFactor = (F32)mAnimationSpeedSpinner->getValue().asReal();
+		// **Optionally, add this line to update the slider when spinner changes (if desired - see note below):**
+        mAnimationSpeedSlider->setValue(newSpeedFactor); // Update slider value from spinner (optional - see note)
+    }
+
+    // Clamp the speed factor to reasonable limits (optional, adjust as needed)
+    newSpeedFactor = llclamp(newSpeedFactor, 0.0f, 100.0f); // Example: 0% to 1000% speed
+
+    // 1. Update the preference in settings.xml
+    gSavedSettings.setF32("FSAnimationTimeFactor", newSpeedFactor);
+
+    for (LLCharacter* character : LLCharacter::sInstances)
+    {
+        character->setAnimTimeFactor(newSpeedFactor);
+    }
+
+    // 3. Apply to running animations
+    // set_all_animation_time_factors(newSpeedFactor);
+
+    // Optionally update the UI elements to reflect the clamped value if clamping was done.
+    //if (control == mAnimationSpeedSlider)
+    //{
+    //    mAnimationSpeedSlider->setValue(newSpeedFactor);
+    //}
+    //else if (control == mAnimationSpeedSpinner)
+    //{
+    //    mAnimationSpeedSpinner->setValue(newSpeedFactor);
+    //}
+}
+// </FS:WW>
+
+// <FS:WW>
+void FloaterQuickPrefs::onClickResetAnimationSpeed(LLUICtrl* control, const LLSD& data)
+{
+    F32 defaultSpeedFactor = 1.0f; // Normal speed is 1.0
+
+    // 1. Update the preference in settings.xml to the default value (1.0)
+    gSavedSettings.setF32("FSAnimationTimeFactor", defaultSpeedFactor);
+    //gSavedSettings.saveToFile(); // Or gSavedSettings.save(); if that's what works for you
+
+    // 2. Update LLMotionController::sCurrentTimeFactor (or use character loop - choose ONE method consistently)
+    // LLMotionController::sCurrentTimeFactor = defaultSpeedFactor; // Option 1: Set global time factor
+    for (LLCharacter* character : LLCharacter::sInstances) // Option 2: Update each character directly (Let's use this for consistency)
+    {
+        character->setAnimTimeFactor(defaultSpeedFactor);
+    }
+
+    // 3. Update the UI controls to reflect the reset value (1.0)
+    mAnimationSpeedSlider->setValue(defaultSpeedFactor);
+    mAnimationSpeedSpinner->setValue(defaultSpeedFactor);
+}
+// </FS:WW>
+
 // </FS:Zi>
 
 // <FS:CR> FIRE-9630 - Vignette UI callbacks

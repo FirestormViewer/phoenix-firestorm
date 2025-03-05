@@ -183,6 +183,12 @@ private:
     void loadSavedSettingsFromFile(const std::string& settings_path);
     void callbackRestoreDefaults(const LLSD& notification, const LLSD& response);
 
+	// <FS:WW> // **Insert onAnimationSpeedChanged declaration HERE:**
+	void onAnimationSpeedChanged(LLUICtrl* control, const LLSD& data);  // </FS:WW>
+	
+	// <FS:WW> // Animation Speed Reset Button Callback:
+	void onClickResetAnimationSpeed(LLUICtrl* control, const LLSD& data); // </FS:WW>
+
     void onAvatarZOffsetSliderMoved();
     void onAvatarZOffsetFinalCommit();
     void updateAvatarZOffsetEditEnabled();
@@ -192,6 +198,10 @@ private:
     void updateMaxNonImpostors(const LLSD& newvalue);
     void updateMaxComplexity();
     void updateMaxComplexityLabel(const LLSD& newvalue);
+		
+	// <FS:WW> // Animation Speed UI Elements (Add these lines):
+	LLSlider* mAnimationSpeedSlider;
+	LLUICtrl*     mAnimationSpeedSpinner; // </FS:WW>
 
     boost::signals2::connection mRegionChangedSlot;
 
