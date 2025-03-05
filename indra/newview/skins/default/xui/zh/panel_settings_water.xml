@@ -36,9 +36,6 @@
 					<text name="reflection_wavelet_scale_label">
 						波紋反射尺度：
 					</text>
-					<slider label="X:" name="water_normal_scale_x" />
-					<slider label="Y:" name="water_normal_scale_y" />
-					<slider label="Z:" name="water_normal_scale_z" />
 				</layout_panel>
 				<layout_panel name="lp_right">
 					<text name="refraction_and_blur_label">

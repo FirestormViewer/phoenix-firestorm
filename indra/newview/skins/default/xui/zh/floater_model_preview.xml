@@ -384,9 +384,6 @@
 				</text>
 				<scroll_list name="pos_overrides_list">
 					<scroll_list.columns label="模型" name="model_name" />
-					<scroll_list.columns label="X" name="axis_x" />
-					<scroll_list.columns label="Y" name="axis_y" />
-					<scroll_list.columns label="Z" name="axis_z" />
 				</scroll_list>
 			</panel>
 			<panel label="日誌" name="logs_panel">

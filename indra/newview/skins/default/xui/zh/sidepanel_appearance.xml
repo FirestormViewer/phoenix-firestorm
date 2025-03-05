@@ -5,8 +5,6 @@
 	<string name="Now Wearing" value="現在穿上..." />
 	<string name="Changing outfits" value="變更裝扮" />
 	<panel name="panel_currentlook">
-		<button label="E" name="editappearance_btn" />
-		<button label="O" name="openoutfit_btn" />
 		<text name="currentlook_status">
 			（狀態）
 		</text>

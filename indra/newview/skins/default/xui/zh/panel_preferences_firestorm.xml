@@ -82,9 +82,6 @@
 			<text name="text_box_objprams">預設尺寸</text>
 			<text name="text_box_objprams2">參數</text>
 			<text name="text_box_objprams3">紋理</text>
-			<spinner label="X" name="X size" />
-			<spinner label="Y" name="Y size" />
-			<spinner label="Z" name="Z size" />
 			<check_box label="幻影" name="FSBuildPrefs_PhantomToggle" />
 			<check_box label="物理" name="FSBuildPrefs_PhysicalToggle" />
 			<check_box label="臨時" name="FSBuildPrefs_TemporaryToggle" />
