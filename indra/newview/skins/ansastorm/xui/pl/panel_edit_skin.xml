@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_skin_panel">
 	<panel name="avatar_skin_color_panel">
-		<texture_picker label="Głowa" name="Head" tool_tip="Kliknij aby wybrać teksturę"/>
+		<texture_picker label="Głowa" name="Head" tool_tip="Kliknij, aby wybrać teksturę"/>
 		<texture_picker label="Górne ciało" name="Upper Body" tool_tip="Kliknij aby wybrać teksturę"/>
 		<texture_picker label="Dolne ciało" name="Lower Body" tool_tip="Kliknij aby wybrać teksturę"/>
 	</panel>
