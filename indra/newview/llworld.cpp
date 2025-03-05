@@ -1234,6 +1234,7 @@ void LLWorld::updateNetStats()
     S32 packets_in = gMessageSystem->mPacketsIn - mLastPacketsIn;
     S32 packets_out = gMessageSystem->mPacketsOut - mLastPacketsOut;
     S32 packets_lost = gMessageSystem->mDroppedPackets - mLastPacketsLost;
+    S32 ring_packets_dropped = gMessageSystem->mPacketRing.getNumDroppedPackets();
 
     F64Bits actual_in_bits(gMessageSystem->mPacketRing.getAndResetActualInBits());
     F64Bits actual_out_bits(gMessageSystem->mPacketRing.getAndResetActualOutBits());
@@ -1244,6 +1245,7 @@ void LLWorld::updateNetStats()
     add(LLStatViewer::PACKETS_IN, packets_in);
     add(LLStatViewer::PACKETS_OUT, packets_out);
     add(LLStatViewer::PACKETS_LOST, packets_lost);
+    add(LLStatViewer::PACKETS_DROPPED, ring_packets_dropped);
 
     F32 total_packets_in = (F32)LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
     if (total_packets_in > 0.f)
@@ -1277,6 +1279,7 @@ void LLWorld::printPacketsLost()
                     << " packets lost: " << cdp->getPacketsLost() << LL_ENDL;
         }
     }
+    LL_INFOS() << "Packets dropped by Packet Ring: " << gMessageSystem->mPacketRing.getNumDroppedPackets() << LL_ENDL;
 }
 
 void LLWorld::processCoarseUpdate(LLMessageSystem* msg, void** user_data)

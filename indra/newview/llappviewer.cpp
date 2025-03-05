@@ -1661,6 +1661,8 @@ bool LLAppViewer::doFrame()
                 LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df suspend");
                 // give listeners a chance to run
                 llcoro::suspend();
+                // if one of our coroutines threw an uncaught exception, rethrow it now
+                LLCoros::instance().rethrow();
             }
         }
 
@@ -4096,6 +4098,7 @@ LLSD LLAppViewer::getViewerInfo() const
         info["PACKETS_LOST"] = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_LOST);
         info["PACKETS_IN"] = packets_in;
         info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
+        info["PACKETS_DROPPED"] = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_DROPPED);
     }
 
     if (mServerReleaseNotesURL.empty())

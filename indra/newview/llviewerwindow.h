@@ -134,6 +134,7 @@ public:
     bool            mPickParticle;
     bool            mPickUnselectable;
     bool            mPickReflectionProbe = false;
+    bool            mPickHUD{ false };
     void            getSurfaceInfo();
 
 private:

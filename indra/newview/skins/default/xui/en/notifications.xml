@@ -14517,6 +14517,18 @@ This will replace the items in the selected outfit with the items you are wearin
 
   <notification
    icon="alertmodal.tga"
+   name="WaterExclusionSurfacesWarning"
+   type="alertmodal">
+    Checking the hide water box will overwrite the texture, bumpiness, and shininess choices.
+    <tag>confirm</tag>
+    <usetemplate
+      name="okcancelbuttons"
+      notext="Cancel"
+      yestext="Continue"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="EnableAutoFPSWarning"
    type="alertmodal">
 You are about to enable AutoFPS. All unsaved graphics settings will be lost.
