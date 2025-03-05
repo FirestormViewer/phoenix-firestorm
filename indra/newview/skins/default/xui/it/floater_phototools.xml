@@ -7,9 +7,6 @@
 					Impostazioni Ambiente
 				</text>
 			</panel>
-			<panel name="P_WL_Settings">
-				<check_box label="Abilita Effetti Grafici Atmosferici" name="WindLightUseAtmosShaders" tool_tip="Questa opzione abilita la piena funzionalità del sistema EEP."/>
-			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Impostazioni per il cielo.">
 					Cielo
@@ -21,7 +18,6 @@
 				 	Giornata
 				</text>
 				<button name="btn_personal_lighting" label="Illuminazione Personalizzata" />
-				<button name="ResetToRegionDefault" tool_tip="Ripristina le impostazioni dell'ambiente condiviso." />
 				<button label="Nuvole in pausa" name="PauseClouds" tool_tip="Sospendi l'animazione delle nuvole." />
 			</panel>
 			<panel name="P_Q_Windlights">

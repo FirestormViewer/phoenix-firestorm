@@ -25,7 +25,7 @@
 		<combo_box.item label="優先示好友" name="1" />
 		<combo_box.item label="僅顯示好友" name="2" />
 	</combo_box>
-	<slider label="最大複雜度：" name="IndirectMaxComplexity" tool_tip="控制在何時下讓複雜化身渲染為「果凍娃娃」" />
+	<slider label="最大複雜度：" name="IndirectMaxComplexity" tool_tip="控制在何時下讓複雜化身彩現為「果凍娃娃」" />
 	<text name="IndirectMaxComplexityText">
 		0
 	</text>

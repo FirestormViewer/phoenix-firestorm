@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Atmosfera" name="panel_fs_settings_sky_atmos">
+	<string name="hdr_string">
+		Skala HDR:
+	</string>
+	<string name="brightness_string">
+		Jasność:
+	</string>
+	<string name="hdr_tooltip">
+		Intensywność efektów świetlnych, takich jak realistycznie jasne niebo i dynamiczna ekspozycja. Wartość domyślna to 1.0, wartość 0 jest wyłączona, wartości od 0 do 1 mieszają tryb otoczenia z HDR.
+	</string>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Kolory atmosfery" />
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="ambient_color_label">
+			Kolor otoczenia:
+		</text>
+		<text name="blue_horizon_label">
+			Horyzont błękitu:
+		</text>
+		<text name="blue_density_label">
+			Gęstość błękitu:
+		</text>
+	</panel>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Ustawienia atmosfery" />
+	</panel>
+	<panel name="P_Atmosphere_OtherSettings">
+		<text name="haze_horizon_label">
+			Horyzont mgły:
+		</text>
+		<text name="haze_density_label">
+			Gęstość mgły:
+		</text>
+		<text name="density_multiplier_label">
+			Mnożnik gęstości:
+		</text>
+		<text name="distance_multiplier_label">
+			Mnożnik odległ.:
+		</text>
+		<text name="maximum_altitude_label">
+			Maksymalna wys.:
+		</text>
+		<text name="scene_gamma_label">
+			Jasność:
+		</text>
+		<text name="probe_ambiance_label" tool_tip="Kontrola natężenia promieniowania. Jeśli nie jest zerem, włącza model oświetlenia HDR.">
+			Nastrój sondy refleksyjnej (HDR):
+		</text>
+	</panel>
+	<panel name="P_Rainbow_Header">
+		<text name="T_Rainbow_Header" value="Ustawienia tęczy i halo" />
+	</panel>
+	<panel name="P_Rainbow_OtherSettings">
+		<text name="moisture_level_label">
+			Poziom wilgoci:
+		</text>
+		<text name="droplet_radius_label">
+			Promień kropli:
+		</text>
+		<text name="ice_level_label">
+			Poziom lodu:
+		</text>
+	</panel>
+</panel>

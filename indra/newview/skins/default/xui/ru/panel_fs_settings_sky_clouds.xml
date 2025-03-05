@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Облака" name="panel_fs_settings_sky_clouds">
+	<panel name="P_Clouds_Header">
+		<text name="T_Clouds_Header" value="Настройки облака"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="cloud_color_label">Цвет облака:</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_coverage_label">Покров:</text>
+		<text name="cloud_scale_label">Масштаб:</text>
+		<text name="cloud_variance_label">Различие:</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_density_label" tool_tip="Плотность облаков - используйте ползунки X и Y, чтобы изменить горизонтальное положение всех облаков на небе. Ползунок D влияет на общую плотность отдельных облаков; при низких настройках вы увидите тонкие, дымчатые облака, а при более высоких настройках - более плотные облака.">Плотность облаков:</text>
+	</panel>
+	<panel name="P_Cloud_Detail">
+		<text name="cloud_detail_label">Детализация облака:</text>
+	</panel>
+	<panel name="P_Cloud_Scroll">
+		<text name="cloud_scroll_label">Прокрутка облака:</text>
+		<text name="cloud_image_label">Изображение облака:</text>
+	</panel>
+</panel>

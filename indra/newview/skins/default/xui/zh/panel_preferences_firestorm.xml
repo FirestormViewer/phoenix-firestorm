@@ -100,7 +100,7 @@
 			<texture_picker label="紋理" name="texture control" tool_tip="點擊選擇圖像" />
 			<color_swatch label="顏色" name="colorswatch" tool_tip="點擊打開顏色選擇器" />
 			<spinner label="透明度" name="alpha" />
-			<spinner label="發光" name="glow" />
+			<spinner label="光暈" name="glow" />
 			<check_box label="最大亮度" name="EmFBToggle" />
 			<combo_box name="combobox shininess" tool_tip="設定物件髮光亮度">
 				<combo_item name="None" label="無" />

@@ -193,14 +193,14 @@
 				<combo_box.item label="無紋理" name="5" />
 			</combo_box>
 			<text name="Miscellaneous Rendering">雜項彩現：</text>
-			<check_box label="HDR與自發光" tool_tip="在較新設備上啟用額外渲染管線功能，例如HDR與在PBR內容中使用的自發光纹理。" name="VintageMode"/>
+			<check_box label="HDR與自發光" tool_tip="在較新設備上啟用額外彩現管線功能，例如HDR與在PBR內容中使用的自發光纹理。" name="VintageMode"/>
 			<text name="Alpha Mask Rendering">Alpha遮色片彩現：</text>
 			<check_box label="啟用Alpha遮色片" tool_tip="勾選此項可以使Alpha遮色片（透明部分）正確彩現" name="RenderAutoMaskAlphaDeferred" />
 			<check_box label="光暈" tool_tip="啟用光暈。請注意，如果陰影被啟用，強度必須設為0才能禁用光暈。" name="RenderGlow" />
 			<slider label="強度：" tool_tip="光暈的強度。較高的值會使其更散射和更柔和（預設為2）" name="glow_strength" />
 			<check_box label="顯示尚未載入完成的化身" name="RenderUnloadedAvatars" />
 			<check_box label="以線框模式檢視" name="Wireframe" />
-			<check_box label="啟用附著的光源 (臉部光照)" tool_tip="此選項將啟用所有附著的光源，例如 '臉部光照'。" name="Render Attached Lights" />
+			<check_box label="啟用附著的光源 (臉部光源)" tool_tip="此選項將啟用所有附著的光源，例如 '臉部光源'。" name="Render Attached Lights" />
 			<check_box label="彩現附著的粒子" name="Render Attached Particles" />
 			<slider label="世界快取預載入延遲" tool_tip="在連線之前需要世界快取的延遲時間（預設為6秒）" name="PrecachingDelay" />
 			<text name="PrecachingDelayText">秒</text>

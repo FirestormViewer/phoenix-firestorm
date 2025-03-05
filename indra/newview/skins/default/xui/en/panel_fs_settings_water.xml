@@ -59,14 +59,14 @@ top="0">
 		left_pad="30"
 		name="normal_map_label"
 		top_delta="0"
-		tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best. Try snake skin, tiles, or any other normal map for some wacky effects!"
+		tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best."
 		width="100">
 		Normal Map
 		</text>
 	</panel>
 
 	<panel
-	name="P_Wave_Fog"
+	name="P_Wave_Fog_2"
 	label="Fog"
 	follows="left|top"
 	layout="topleft"

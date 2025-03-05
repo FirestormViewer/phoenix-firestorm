@@ -184,7 +184,7 @@ bool LLWindowCallbacks::handleTimerEvent(LLWindow *window)
     return false;
 }
 
-bool LLWindowCallbacks::handleDeviceChange(LLWindow *window)
+bool LLWindowCallbacks::handleDeviceChange(LLWindow *window, bool deviceRemoved) // <FS:Dax/> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
 {
     return false;
 }

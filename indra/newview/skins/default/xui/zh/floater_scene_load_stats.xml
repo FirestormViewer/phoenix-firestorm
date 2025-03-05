@@ -9,7 +9,7 @@
 				<stat_bar label="封包損失" name="packet_loss" />
 			</stat_view>
 			<stat_view label="進階" name="advanced">
-				<stat_view label="渲染" name="render">
+				<stat_view label="彩現" name="render">
 					<stat_bar label="物件總計" name="objs" />
 					<stat_bar label="新物件" name="newobjs" />
 					<stat_bar label="物件快取讀取率" name="object_cache_hits" />

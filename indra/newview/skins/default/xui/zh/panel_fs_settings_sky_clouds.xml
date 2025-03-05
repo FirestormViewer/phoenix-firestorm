@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="雲層" name="panel_fs_settings_sky_clouds">
+	<panel name="P_Clouds_Header">
+		<text name="T_Clouds_Header" value="雲層設定"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="cloud_color_label">
+			雲層色彩：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_coverage_label">
+			雲層覆蓋範圍：
+		</text>
+		<text name="cloud_scale_label">
+			雲層尺寸：
+		</text>
+		<text name="cloud_variance_label">
+			雲層變換：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_density_label" tool_tip="雲層XY/密度 - X和Y滑塊改變所有雲層的水平位置。D滑塊調整密度。">
+			雲層密度：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Detail">
+		<text name="cloud_detail_label">
+			雲層細節：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Scroll">
+		<text name="cloud_scroll_label">
+			雲層捲動：
+		</text>
+		<text name="cloud_image_label">
+			雲層圖像：
+		</text>
+	</panel>
+</panel>

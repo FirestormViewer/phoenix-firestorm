@@ -157,6 +157,7 @@
 			<menu_item_call label="Outils de prise de vue" name="phototools_item_call"/>
 			<menu_item_call label="Contrôle de la caméra" name="cameratools_item_call"/>
 			<menu_item_check label="Verrouillage de la mise au point de la PdC" name="lock_focus_point"/>
+			<menu_item_check label="Tracer le réticule de mise au point de la PdC" name="render_focus_point"/>
 		</menu>
 		<menu_item_call label="Recherche dans la région" name="area_search"/>
 		<menu_item_call label="Explorateur de sons" name="Sound Explorer"/>
