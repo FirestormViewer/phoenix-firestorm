@@ -742,7 +742,10 @@ void LLVOVolume::animateTextures()
             {
                 LLFace* facep = mDrawable->getFace(i);
                 if (!facep) continue;
-                if(facep->getVirtualSize() <= MIN_TEX_ANIM_SIZE && facep->mTextureMatrix) continue;
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // Removed check for turning off animations
+                //if(facep->getVirtualSize() <= MIN_TEX_ANIM_SIZE && facep->mTextureMatrix) continue;
+                // </FS:minerjr> [FIRE-35081]
 
                 const LLTextureEntry* te = facep->getTextureEntry();
 
@@ -767,7 +770,10 @@ void LLVOVolume::animateTextures()
                 if (!facep->mTextureMatrix)
                 {
                     facep->mTextureMatrix = new LLMatrix4();
-                    if (facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    // Removed check for turning off animations
+                    //if (facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+                    // </FS:minerjr> [FIRE-35081]                    
                     {
                         // Fix the one edge case missed in
                         // LLVOVolume::updateTextureVirtualSize when the
@@ -5438,7 +5444,10 @@ bool can_batch_texture(LLFace* facep)
         return false;
     }
 
-    if (facep->isState(LLFace::TEXTURE_ANIM) && facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Removed check for turning off animations
+    if (facep->isState(LLFace::TEXTURE_ANIM))//&& facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // </FS:minerjr> [FIRE-35081] 
     { //texture animation breaks batches
         return false;
     }
@@ -5585,7 +5594,10 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
     }
 
     const LLMatrix4* tex_mat = NULL;
-    if (facep->isState(LLFace::TEXTURE_ANIM) && facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Removed check for turning off animations
+    if (facep->isState(LLFace::TEXTURE_ANIM)) //&& facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // </FS:minerjr> [FIRE-35081]
     {
         tex_mat = facep->mTextureMatrix;
     }

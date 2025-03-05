@@ -1679,7 +1679,10 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
                     xforms = XFORM_NONE;
                 }
 
-                if (getVirtualSize() >= MIN_TEX_ANIM_SIZE) // || isState(LLFace::RIGGED))
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // Removed check for turning off animations
+                //if (getVirtualSize() >= MIN_TEX_ANIM_SIZE) // || isState(LLFace::RIGGED))
+                // </FS:minerjr> [FIRE-35081]
                 { //don't override texture transform during tc bake
                     tex_mode = 0;
                 }
@@ -2280,10 +2283,16 @@ F32 LLFace::getTextureVirtualSize()
 
     F32 radius;
     F32 cos_angle_to_view_dir;
-    bool in_frustum = calcPixelArea(cos_angle_to_view_dir, radius);
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    //bool in_frustum = calcPixelArea(cos_angle_to_view_dir, radius);
+    // The mInFrustum value is now updated in calcPixelArea, so no longer need to accss the value
+    calcPixelArea(cos_angle_to_view_dir, radius);
 
 
-    if (mPixelArea < F_ALMOST_ZERO || !in_frustum)
+    //if (mPixelArea < F_ALMOST_ZERO || !in_frustum)
+    // Use the stored value from calcPixelArea
+    if (mPixelArea < F_ALMOST_ZERO || !mInFrustum)
+    // </FS:minerjr> [FIRE-35081]
     {
         setVirtualSize(0.f) ;
         return 0.f;
@@ -2320,6 +2329,11 @@ F32 LLFace::getTextureVirtualSize()
         }
     }
 
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Remove the aspect ratio and FOV from the area of the face to remove the changes to the window size from affecting the calculations.
+    // So that textures are in the same space as the face.
+    face_area = face_area * LLViewerCamera::getInstance()->getInverseAspect();
+    // </FS:minerjr> [FIRE-35081]
     setVirtualSize(face_area) ;
 
     return face_area;
@@ -2405,6 +2419,10 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
             // no rigged extents, zero out bounding box and skip update
             mRiggedExtents[0] = mRiggedExtents[1] = LLVector4a(0.f, 0.f, 0.f);
 
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // Set the face to be out of the frustum as the object is invalid
+            mInFrustum = false;
+            // </FS:minerjr> [FIRE-35081]
             return false;
         }
 
@@ -2451,6 +2469,10 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     LLVector4a x_axis;
     x_axis.load3(camera->getXAxis().mV);
     cos_angle_to_view_dir = lookAt.dot3(x_axis).getF32();
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Added real in frustum check value. Previous was only false for media textures off screen and invalid rig objects
+    mInFrustum = cos_angle_to_view_dir > camera->getCosHalfFov() && cos_angle_to_view_dir < camera->getCosHalfFov() * 2.0f;
+    // </FS:minerjr> [FIRE-35081]
 
     //if has media, check if the face is out of the view frustum.
     if(hasMedia())
@@ -2458,6 +2480,10 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
         if(!camera->AABBInFrustum(center, size))
         {
             mImportanceToCamera = 0.f ;
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // Added real in frustum check value. Previous was only false for media textures off screen and invalid rig objects
+            mInFrustum = false;
+            // </FS:minerjr> [FIRE-35081]
             return false ;
         }
         if(cos_angle_to_view_dir > camera->getCosHalfFov()) //the center is within the view frustum

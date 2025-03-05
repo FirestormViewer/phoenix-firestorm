@@ -235,11 +235,6 @@ public:
     // <FS:Ansariel> Fast cache stats
     static U32 sNumFastCacheReads;
 
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    // Store the camera's aspect ratio and fov
-    F32 mAspectRatioFOVRemove;
-    // </FS:minerjr> [FIRE-35081]
-
 private:
     typedef std::map< LLTextureKey, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
     uuid_map_t mUUIDMap;

@@ -919,7 +919,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         // convert bias into a vsize scaler
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
         //bias = (F32) llroundf(powf(4, bias - 1.f));
-        // Pre-divied the bias so you can just use multiiply in the loop
+        // Pre-divide the bias so you can just use multiply in the loop
         bias = (F32) 1.0f / llroundf(powf(4, bias - 1.f));
 
         // Apply new rules to bias discard, there are now 2 bias, off-screen and on-screen.
@@ -940,8 +940,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         S32 on_screen_count = 0;
         // Moved all the variables outside of the loop
         bool current_on_screen = false;
-        F32 radius; // Moved outside the loop to save reallocation every loop
-        F32 cos_angle_to_view_dir; // Moved outside the loop to save reallocation every loop
         F32 vsize = 0.0f; // Moved outside the loop to save reallocation every loop
         F32 important_to_camera = 0.0f;
         F64 animated = 0; // U64 used to track if a pointer is set for the animations. (The texture matrix of the face is null if no animation assigned to the texture)
@@ -961,7 +959,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                 {
                     ++face_count;
                     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-                    // Moved outside the loop to stop createing new memory every loop
+                    // No longer needed as we no longer re-calculate the face's virtual texture size, we use it directly from the face
                     //F32 radius;
                     //F32 cos_angle_to_view_dir;
                     // </FS:minerjr> [FIRE-35081]
@@ -970,27 +968,28 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     { // only call calcPixelArea at most once every 10 frames for a given face
                         // this helps eliminate redundant calls to calcPixelArea for faces that have multiple textures
                         // assigned to them, such as is the case with GLTF materials or Blinn-Phong materials
-                        face->mInFrustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
+
+                        //face->calcPixelArea(cos_angle_to_view_dir, radius);
+                        // The face already has a function to calculate the Texture Virtual Size, which already calls the calcPixelArea method
+                        // so just call this instead. This can be called from outside this loop by LLVolume objects
+                        face->getTextureVirtualSize();
                         face->mLastTextureUpdate = gFrameCount;
                     }
-
-                    
+                                        
                     // Also moved allocation outside the loop
                     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
                     //F32 vsize = face->getPixelArea();
-                    //on_screen = face->mInFrustum;
-                    vsize = face->getPixelArea();
-                    // Apply the Aspect ratio and field of view to the vsize, this allows the texture to be in the same space as the face, IE the face has
-                    // based around LLCamera::calculateFrustumPlanes
-                    vsize = vsize * mAspectRatioFOVRemove;
+                    // Get the already calculated face's virtual size, instead of re-calculating it
+                    vsize = face->getVirtualSize();
+                    
                     current_on_screen = face->mInFrustum; // Create a new var to store the current on screen status                    
                     on_screen_count += current_on_screen; // Count the number of on sceen faces instead of using brach
                     important_to_camera = face->mImportanceToCamera; // Store so we don't have to do 2 indirects later on
                     // If the face/texture is animated, then set the boost level to high, so that it will ways be the best quality
                     animated += S64(face->mTextureMatrix);
 
-                    // </FS:minerjr> [FIRE-35081]
-
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer (It is)
+                    /*
                     // Scale desired texture resolution higher or lower depending on texture scale
                     //
                     // Minimum usage examples: a 1024x1024 texture with aplhabet, runing string
@@ -998,6 +997,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     //
                     // Maximum usage examples: huge chunk of terrain repeats texture
                     // TODO: make this work with the GLTF texture transforms
+                    
                     S32 te_offset = face->getTEOffset();  // offset is -1 if not inited
                     LLViewerObject* objp = face->getViewerObject();
                     const LLTextureEntry* te = (te_offset < 0 || te_offset >= objp->getNumTEs()) ? nullptr : objp->getTE(te_offset);
@@ -1005,8 +1005,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     min_scale = llclamp(min_scale * min_scale, texture_scale_min(), texture_scale_max());
                     vsize /= min_scale;
 
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-                    /*
                     // apply bias to offscreen faces all the time, but only to onscreen faces when bias is large
                     if (!face->mInFrustum || LLViewerTexture::sDesiredDiscardBias > 2.f)
                     {
@@ -1064,11 +1062,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             }
         }
 
-        imagep->addTextureStats(max_vsize);
-
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer        
-        // New logic block for the bias system
-        // All textures begin at the max_vsize with bias applied.
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        //imagep->addTextureStats(max_vsize);
+        // New logic block for the bias system        
         // Then depending on the type of texture, the higher resolution on_screen_max_vsize is applied.
         // On Screen (Without Bias applied:
         //      LOD/Fetch Texture: Discard Levels 0, 1
@@ -1086,6 +1082,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         {
             // Always use the best quality of the texture
             imagep->addTextureStats(max_on_screen_vsize);
+        }
+        // All other texture cases will use max_vsize with bias applied.
+        else
+        {            
+            imagep->addTextureStats(max_vsize);
         }
         // </FS:minerjr> [FIRE-35081]
     }
@@ -1298,13 +1299,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 
     typedef std::vector<LLPointer<LLViewerFetchedTexture> > entries_list_t;
     entries_list_t entries;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    // Pre-calculate current aspect ratio and FOV so we can use to remove from the Faces used for updating the textures
-    // This is used per face per texture, so it can cave a bunch of divisions as well as acessing the values from
-    // the camera singleton.
-    LLViewerCamera* camera = LLViewerCamera::getInstance(); // Store the 
-    mAspectRatioFOVRemove = 1.0f / (camera->getAspect() * ((F32)tanf(0.5f * camera->getView())));
-    // </FS:minerjr> [FIRE-35081]
+
     // update N textures at beginning of mImageList
     U32 update_count = 0;
     static const S32 MIN_UPDATE_COUNT = gSavedSettings.getS32("TextureFetchUpdateMinCount");       // default: 32
