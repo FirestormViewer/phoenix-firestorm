@@ -279,7 +279,7 @@
 		<menu_item_call label="Firestorm X" name="Firestorm Twitter"/>
 		<menu_item_call label="Firestorm Plurk" name="Firestorm Plurk"/>
 		<!-- added Mar.15, 2015 -->
-		<menu_item_call label="今日のメッセージ" name="Firestorm MoTD"/>
+		<menu_item_call label="本日のメッセージ" name="Firestorm MoTD"/>
 		<!-- added Mar.15, 2015 -->
 	</menu>
 	<menu label="ヘルプ" name="Help">
@@ -320,7 +320,7 @@
 		<menu_item_check label="リダイレクトされた長文チャット分割" name="Split Long Redirected Chat"/>
 		<menu_item_check label="一時的な装着物を許可" name="Allow Temporary Attachments"/>
 		<menu_item_check label="#RLVへの受け渡しを禁止" name="Forbid Give to #RLV"/>
-		<menu_item_check label="衣装の交換をアンロック" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="着用物の交換をアンロック" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="コンソール…" name="Console"/>
 		<menu_item_check label="制限…" name="Restrictions"/>
 		<menu_item_check label="文章…" name="Strings"/>
@@ -353,7 +353,7 @@
 				<menu_item_check label="すべてのオブジェクトのツールチップを表示" name="Tips On All Objects"/>
 			</menu>
 		</menu>
-		<menu label="描画種別" name="Rendering Types">
+		<menu label="レンダリング種別" name="Rendering Types">
 			<menu_item_check label="シンプル" name="Rendering Type Simple"/>
 			<menu_item_check label="マテリアル" name="Rendering Type Materials"/>
 			<menu_item_check label="アルファマスク" name="Rendering Type Alpha Mask"/>
@@ -378,7 +378,7 @@
 			<menu_item_call label="ストリームリストのＸＭＬをインポート…" name="media_stream_import"/>
 			<menu_item_call label="ストリームリストのＸＭＬをエクスポート…" name="media_stream_export"/>
 		</menu>
-		<menu label="描画機能" name="Rendering Features">
+		<menu label="レンダリング機能" name="Rendering Features">
 			<menu_item_check label="ＵＩ" name="ToggleUI"/>
 			<menu_item_check label="選択済" name="Selected"/>
 			<menu_item_check label="ハイライト" name="Highlighted"/>
@@ -525,7 +525,7 @@
 				<menu_item_check label="全て" name="Full"/>
 			</menu>
 		</menu>
-		<menu label="描画" name="Rendering">
+		<menu label="レンダリング" name="Rendering">
 			<menu_item_check label="軸" name="Axes"/>
 			<menu_item_check label="接線基準" name="Tangent Basis"/>
 			<menu_item_call label="選択されたテクスチャ情報基準" name="Selected Texture Info Basis"/>

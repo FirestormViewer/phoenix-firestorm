@@ -404,7 +404,7 @@
 						ゲームエンジン標準（最低＝ＬｏＤ３）
 					</combo_item>
 					<combo_item name="suff_descriptive">
-						ワード（高、中…）
+						文言（高、中…）
 					</combo_item>
 				</combo_box>
 				<text name="suf_lowest_lab">
@@ -529,7 +529,7 @@
 					<text name="preview_controls_title">
 						プレビュー操作
 					</text>
-					<combo_box name="preview_lod_combo" tool_tip="LOD to view in preview render">
+					<combo_box name="preview_lod_combo" tool_tip="プレビューレンダリングで表示したいＬｏＤを選びます。">
 						<combo_item name="high">
 							高
 						</combo_item>

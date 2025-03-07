@@ -108,7 +108,7 @@
 				<combo_box.item label="フレンドは常に表示" name="1"/>
 				<combo_box.item label="フレンドのみ表示" name="2"/>
 			</combo_box>
-			<slider tool_tip="複雑度の高いアバターをJerryDoll表示し始める値を設定します。" label="複雑度の最大値" name="IndirectMaxComplexity"/>
+			<slider tool_tip="複雑度の高いアバターをJerryDollとして表示し始める値を設定します。" label="最大複雑度" name="IndirectMaxComplexity"/>
 			<text name="IndirectMaxComplexityText">
 				0
 			</text>
@@ -121,18 +121,15 @@
 				低
 			</text>
 			<slider label="近くの最大光源数" name="MaxLights"/>
-			<slider label="Windlightの空の詳細" name="SkyMeshDetail"/>
+			<slider label="空の詳細" name="SkyMeshDetail"/>
 			<text name="MeshDetailText">
 				メッシュ詳細：
 			</text>
-			<slider label="　オブジェクトとスカルプのＬＯＤ：" name="ObjectMeshDetail" tool_tip="レンダリグコストを下げるためにオブジェクトに低い詳細度を適用できる場合に使用します。高い値を設定するとラグが発生しますので、使用に当たっては注意が必要です。"/>
+			<slider label="　オブジェクトとスカルプのＬｏＤ：" name="ObjectMeshDetail" tool_tip="レンダリグコストを下げるためにオブジェクトに低い詳細度を適用できる場合に使用します。高い値を設定するとラグが発生しますので、使用に当たっては注意が必要です。"/>
 			<slider label="　フレキシプリム：" name="FlexibleMeshDetail"/>
 			<slider label="　樹木：" name="TreeMeshDetail"/>
 			<slider label="　アバター：" name="AvatarMeshDetail"/>
 			<slider label="　地形：" name="TerrainMeshDetail"/>
-			<!-- Deleted Aug.22, 2012
-			<slider label="　空：" name="SkyMeshDetail"/>
-			-->
 			<slider label="　アバターの物理作用：" name="AvatarPhysicsDetail"/>
 			<slider label="露光" name="RenderExposure"/>
 			<text name="Presets_Label">
@@ -163,10 +160,10 @@
 				<combo_box.item label="低" name="Low"/>
 				<combo_box.item label="中" name="Medium"/>
 				<combo_box.item label="高" name="High"/>
-				<combo_box.item label="ウルトラ" name="Ultra"/>
+				<combo_box.item label="最高" name="Ultra"/>
 			</combo_box>
-			<check_box label="ＶＲＡＭテクスチャ使用量の制限（㎆）" name="FSLimitTextureVRAMUsage" tool_tip="テクスチャに使用されるＶＲＡＭの量を制限します。他の要素もＶＲＡＭを使用するため、全体的な使用量は依然として高くなる可能性があります。" />
-			<slider name="RenderMaxVRAMBudget" tool_tip="テクスチャに使用されるＶＲＡＭの最大量（メガバイト単位）を指定します。" />
+			<check_box label="ＶＲＡＭテクスチャ使用量の制限（㎆）" name="FSLimitTextureVRAMUsage" tool_tip="テクスチャに使用されるＶＲＡＭの量を制限します。他の要素もＶＲＡＭを使用するため、全体的な使用量は依然として高くなる可能性があります。"/>
+			<slider name="RenderMaxVRAMBudget" tool_tip="テクスチャに使用されるＶＲＡＭの最大量（メガバイト単位）を指定します。"/>
 			<text name="advanced_settings">
 				高度な設定（要再起動）：
 			</text>
@@ -178,23 +175,23 @@
 			<text name="automatic_texture_downscale_settings">
 				自動テクスチャダウンスケーリング：
 			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="アクティブウィンドウでない場合、選択した秒数後にテクスチャを縮小します。">
-				背面の時（0は無効）
+			<text name="TextureDiscardBackgroundedTime_label" tool_tip="ウィンドウがアクティブでない場合、選択した秒数後にテクスチャを縮小します。">
+				非アクティブ時（0は無効）
 			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="アクティブウィンドウでない場合、選択した秒数後にテクスチャを縮小します。" />
+			<spinner name="TextureDiscardBackgroundedTime" tool_tip="ウィンドウがアクティブでない場合、選択した秒数後にテクスチャを縮小します。"/>
 			<text name="TextureDiscardBackgroundedTime_seconds">
 				秒
 			</text>
 			<text name="TextureDiscardMinimizedTime_label" tool_tip="最小化されると、選択した秒数後にテクスチャを縮小します。">
 				最小化時（0は無効）
 			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="最小化されると、選択した秒数後にテクスチャを縮小します。" />
+			<spinner name="TextureDiscardMinimizedTime" tool_tip="最小化時に、選択した秒数後にテクスチャを縮小します。"/>
 			<text name="TextureDiscardMinimizedTime_seconds">
 				秒
 			</text>
 		</panel>
 		<!-- 描画 -->
-		<panel label="描画" name="Rendering">
+		<panel label="レンダリング" name="Rendering">
 			<text name="World Updating">
 				ワールドの更新：
 			</text>
@@ -203,9 +200,9 @@
 			<check_box label="フレームレート制限" name="FSLimitFramerate" tool_tip="フレームレートをユーザー定義の値に制限します。ＣＰＵ／ＧＰＵの電力消費と発熱を削減できます。"/>
 			<slider label="ＦＰＳ：" name="MaxFPS"/>
 			<text name="Texture Rendering">
-				テクスチャの描画：
+				テクスチャのレンダリング：
 			</text>
-			<check_box label="最大テクスチャ解像度の制限：" tool_tip="これを設定すると、インワールドテクスチャの最大表示解像度が制限されます。これにより、使用可能なテクスチャメモリを超過してぼやけたテクスチャが表示される前に、より多くのテクスチャを表示できるようになります。" name="FSRestrictMaxTextureSize"/>
+			<check_box label="テクスチャの最大解像度の制限：" tool_tip="これを設定すると、インワールドテクスチャの最大表示解像度が制限されます。これにより、使用可能なテクスチャメモリを超過してぼやけたテクスチャが表示される前に、より多くのテクスチャを表示できるようになります。" name="FSRestrictMaxTextureSize"/>
 			<combo_box name="FSRestrictMaxTexturePixels">
 				<combo_box.item label="512ピクセル" name="512"/>
 				<combo_box.item label="1024ピクセル" name="1024"/>
@@ -229,17 +226,17 @@
 			</combo_box>
 			<check_box label="アルファマスクを描画" tool_tip="影のオプションが選択されている時にここにチェックを入れると、アルファマスク（透明テクスチャ）が正確に描画されます。" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
-				その他の描画設定：
+				その他のレンダリング設定：
 			</text>
-			<check_box label="ＨＤＲと放射" tool_tip="新しいマシンで、ＨＤＲやＰＢＲコンテンツの放射テクスチャなどの追加のレンダリングパイプライン機能を有効にします。." name="VintageMode"/>
+			<check_box label="ＨＤＲと放射" tool_tip="新しいマシンで、ＨＤＲやＰＢＲコンテンツの放射（エミッシブ）テクスチャなどの追加のレンダリングパイプライン機能を有効にします。" name="VintageMode"/>
 			<check_box label="グローを描画" tool_tip="グロー（輝き）を描画します。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow"/>
 			<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength"/>
-			<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars"/>
+			<check_box label="読み込みの終わっていないアバターを描画する" name="RenderUnloadedAvatars"/>
 			<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期すると、スタッターや入力遅延が増加する可能性があります。"/>
 			<check_box label="シーンをワイヤーフレームで表示" name="Wireframe"/>
-			<check_box label="装着光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
-			<check_box label="装着パーティクルを描画する" name="Render Attached Particles"/>
-			<slider label="ワールドを表示する前に事前キャッシュする間の遅延時間" tool_tip="ワールドが見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay"/>
+			<check_box label="装着光源（フェイスライト）を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
+			<check_box label="装着されたパーティクルを描画する" name="Render Attached Particles"/>
+			<slider label="ワールドに表示される前の事前キャッシュの遅延時間" tool_tip="ワールドが見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間を指定します。（6秒がデフォルト）" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				秒
 			</text>
