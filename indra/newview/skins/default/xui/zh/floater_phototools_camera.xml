@@ -83,23 +83,23 @@
 				<text name="T_Zoom" tool_tip="在現實世界中，這相當於一個縮放功能。它改變了觀察視窗內的視角。它的功能與按Ctrl-0或Ctrl-8相同。注意：如果啟用了飛行相機（三維控制器），此功能將不可用。">
 					視角
 				</text>
-				<button name="Reset_Camera_Angle" label="S" tool_tip="重設為預設值。" />
+				<button name="Reset_Camera_Angle" tool_tip="重設為預設值。" />
 				<text name="T_Zoom_Speed" tool_tip="設定相機縮放的快慢。較高的值會產生更慢更平滑的縮放效果。">
 					過渡時間
 				</text>
-				<button name="Reset_Zoom_Time" label="S" tool_tip="重設為預設值。" />
+				<button name="Reset_Zoom_Time" tool_tip="重設為預設值。" />
 				<text name="T_Camera_Lag" tool_tip="設定相機跟隨化身移動的延遲程度（0 = 無延遲，30 = 化身速度）。">
 					延遲
 				</text>
-				<button name="Reset_Camera_Lag" label="S" tool_tip="重設為預設值。" />
+				<button name="Reset_Camera_Lag" tool_tip="重設為預設值。" />
 				<text name="T_Camera_Offset" tool_tip="設定相機從標準位置的偏移距離。">
 					距離
 				</text>
-				<button name="Reset_Camera_Offset" label="S" tool_tip="重設為預設值。" />
+				<button name="Reset_Camera_Offset" tool_tip="重設為預設值。" />
 				<text name="T_Camera_Smoothing" tool_tip="設定相機啟動和停止的平滑度。較高的值意味著更平滑（因此更慢）的移動。">
 					平滑
 				</text>
-				<button name="Reset_Camera_Smoothing" label="S" tool_tip="重設為預設值。" />
+				<button name="Reset_Camera_Smoothing" tool_tip="重設為預設值。" />
 			</panel>
 		</panel>
 		<panel name="P_Cam_Controls_2" label="控制 2">
@@ -112,7 +112,7 @@
 				<text name="T_Mouse_Sensitivity" tool_tip="設定滑鼠在滑鼠視角模式下的靈敏度。">
 					靈敏度
 				</text>
-				<button name="Reset_Mouse_Sensitivity" label="S" tool_tip="重設為預設值。" />
+				<button name="Reset_Mouse_Sensitivity" tool_tip="重設為預設值。" />
 				<check_box label="在滑鼠視角模式下顯示化身和附件" tool_tip="在滑鼠視角模式下顯示脖子下方的化身和附件。預設值為關閉。" name="first_person_avatar_visible" />
 				<check_box label="平滑滑鼠視角移動" tool_tip="在滑鼠視角模式下平滑滑鼠移動。" name="MouseSmooth" />
 			</panel>

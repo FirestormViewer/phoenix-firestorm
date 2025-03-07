@@ -25,15 +25,9 @@
 			<text name="cloud_density_label" tool_tip="云层 XY/密度 - 使用 X 和 Y 滑块更改天空中所有云的水平位置。D 滑块影响单个云的整体密度；在较低设置下，您会看到稀薄、飘逸的云，而在较高设置下，您会看到更厚、更实的云。">
 				云层密度：
 			</text>
-			<slider label="X" name="cloud_density_x" />
-			<slider label="Y" name="cloud_density_y" />
-			<slider label="D" name="cloud_density_d" />
 			<text name="cloud_detail_label">
 				雲層細節:
 			</text>
-			<slider label="X" name="cloud_detail_x" />
-			<slider label="Y" name="cloud_detail_y" />
-			<slider label="D" name="cloud_detail_d" />
 		</layout_panel>
 	</layout_stack>
 </panel>
