@@ -193,6 +193,7 @@
 			<menu_item_call label="Инструменты фото" name="phototools_item_call"/>
 			<menu_item_call label="Инструменты камеры" name="cameratools_item_call"/>
 			<menu_item_check label="Блокировка фокуса Глубины резкости" name="lock_focus_point"/>
+			<menu_item_check label="Рисовать перекрестие фокуса Глубины резкости" name="render_focus_point"/>
 		</menu>
 		<menu_item_call label="Поиск вокруг" name="area_search"/>
 		<menu_item_call label="Проводник звуков" name="Sound Explorer"/>

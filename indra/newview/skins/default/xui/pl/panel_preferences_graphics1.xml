@@ -85,7 +85,7 @@
 				Render awatarów
 			</text>
 			<combo_box name="AvatarComplexityMode">
-				<combo_box.item label="Ogranicz po złożonośći" name="0" />
+				<combo_box.item label="Ogranicz po złożoności" name="0" />
 				<combo_box.item label="Zawsze pokazuj znajomych" name="1" />
 				<combo_box.item label="Pokazuj tylko znajomych" name="2" />
 			</combo_box>

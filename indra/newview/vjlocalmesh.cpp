@@ -27,6 +27,7 @@
 // linden headers
 #include "llviewerprecompiledheaders.h"
 #include "llcallbacklist.h"
+#include "llsdutil.h"
 #include "llviewerobjectlist.h"
 #include "llvovolume.h"
 #include "llmeshrepository.h"
@@ -150,7 +151,7 @@ void LLLocalMeshObject::logObjectInfo() const
     LL_DEBUGS("LocalMesh") << "  mVolumeParams: " << mVolumeParams << LL_ENDL;
     LL_DEBUGS("LocalMesh") << "  mObjectTranslation: " << mObjectTranslation << LL_ENDL;
     LL_DEBUGS("LocalMesh") << "  mMeshSkinInfo: " << std::hex << std::showbase << (void *)mMeshSkinInfoPtr << LL_ENDL;
-    LL_DEBUGS("LocalMesh") << "    asLLSD: " << mMeshSkinInfoPtr->asLLSD(true, true) << LL_ENDL;
+    LL_DEBUGS("LocalMesh") << ll_pretty_print_sd(mMeshSkinInfoPtr->asLLSD(true, true)) << LL_ENDL;
     LL_DEBUGS("LocalMesh") << "  mFaceBoundingBox: [" << mObjectBoundingBox.first << "," << mObjectBoundingBox.second << LL_ENDL;
     LL_DEBUGS("LocalMesh") << "  mObjectSize: " << mObjectSize << LL_ENDL;
     LL_DEBUGS("LocalMesh") << "  mObjectScale: " << mObjectScale << LL_ENDL;

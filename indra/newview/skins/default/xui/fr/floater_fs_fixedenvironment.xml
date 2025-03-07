@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Fixed Environment" title="Environnement fixe">
+	<string name="edit_sky">Modifier le ciel :</string>
+	<string name="edit_water">Modifier l'eau :</string>
+	<layout_stack name="floater_stack">
+		<layout_panel name="info_panel">
+			<text name="info_panel_label">
+				Nom :
+			</text>
+			<!--
+			<button label="Charger" name="btn_load" tool_tip="Charger une configuration de l'inventaire"/>
+			<button label="Importer" name="btn_import" tool_tip="Importer les versions de paramètres paramètres à partir du disque."/>
+			-->
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<layout_stack name="button_bar_ls">
+				<layout_panel name="load_btn_lp"> 
+					<button label="Charger" name="btn_load" tool_tip="Charger une configuration de l'inventaire"/>
+					<button label="Importer" name="btn_import" tool_tip="Importer les anciennes versions de paramètres à partir du disque."/>
+					<button label="Sauver" name="btn_commit"/>
+					<button label="Annuler" name="btn_cancel" tool_tip="Revenir à la dernière version enregistrée"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

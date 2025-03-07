@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="水文" name="panel_fs_settings_water">
+	<panel name="P_Wave_Fog">
+		<text name="water_fog_label" tool_tip="水霧顏色 - 這改變了水體體積色調的顏色，實際上定義了水本身的顏色。如果您的水沒有霧，它會顯得清澈無色。">
+			水霧顏色
+		</text>
+		<text name="normal_map_label" tool_tip="法線貼圖 - 用於確定反射和折射的圖像。任何紋理都可以用於此設置，但真正的法線貼圖效果最佳。">
+			法線圖
+		</text>
+	</panel>
+	<panel name="P_Wave_Fog_2" label="水霧">
+		<text name="density_exponent_label">
+			密度指數：
+		</text>
+		<text name="underwater_modifier_label">
+			水下修飾：
+		</text>
+		<text name="FresnelScaleText">
+			菲涅耳尺度
+		</text>
+		<text name="FresnelOffsetText">
+			菲涅耳偏移：
+		</text>
+	</panel>
+	<panel name="P_Water_Wave">
+		<text name="large_wave_speed_label">
+			大波紋速度：
+		</text>
+		<text name="small_wave_speed_label">
+			小波紋速度：
+		</text>
+		<text name="reflection_wavelet_scale_label">
+			波紋反射尺度：
+		</text>
+	</panel>
+	<panel name="P_Water_Reflection">
+		<text name="refraction_scale_above_label">
+			光折射等級（上方）：
+		</text>
+		<text name="refraction_scale_below_label">
+			光折射等級（下方）：
+		</text>
+		<text name="blur_multiplier_label">
+			模糊倍數：
+		</text>
+	</panel>
+</panel>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Fixed Environment" title="Stałe otoczenie">
+	<string name="edit_sky">
+		Edytuj niebo:
+	</string>
+	<string name="edit_water">
+		Edytuj wodę:
+	</string>
+	<layout_stack name="floater_stack">
+		<layout_panel name="info_panel">
+			<text name="info_panel_label">
+				Nazwa:
+			</text>
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<layout_stack name="button_bar_ls">
+				<layout_panel name="load_btn_lp"> 
+					<button label="Wczytaj" name="btn_load" tool_tip="Wczytaj ustawienia z szafy" />
+					<button label="Importuj" name="btn_import" tool_tip="Zaimportuj starsze ustawienia z dysku." />
+					<button label="Zapisz" name="btn_commit" />
+					<button label="Anuluj" name="btn_cancel" tool_tip="Przywróć ostatnią zapisaną wersję" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>
