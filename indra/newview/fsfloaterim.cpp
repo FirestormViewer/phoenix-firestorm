@@ -1600,7 +1600,8 @@ void FSFloaterIM::updateMessages()
                 chat.mText = message;
             }
 
-            mChatHistory->appendMessage(chat, chat_args);
+            static const LLStyle::Params input_append_params = LLStyle::Params();
+            mChatHistory->appendMessage(chat, chat_args, input_append_params);
             mLastMessageIndex = msg["index"].asInteger();
 
             // if it is a notification - next message is a notification history log, so skip it

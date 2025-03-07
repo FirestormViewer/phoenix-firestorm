@@ -15248,7 +15248,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>8.0</real>
+      <real>7.0</real>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -16910,7 +16910,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>UpdaterWillingToTest</key>
     <map>
       <key>Comment</key>
-      <string>Whether or not the updater should offer test candidate upgrades.</string>
+      <string>Whether or not the updater should offer Beta upgrades.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -25768,28 +25768,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>FSRestrictMaxTextureSize</key>
-    <map>
-      <key>Comment</key>
-      <string>If enabled, the maximum resolution for fetched textures will be restricted to FSRestrictMaxTexturePixels pixels (64bit versions only; requires restart)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>FSRestrictMaxTexturePixels</key>
-    <map>
-      <key>Comment</key>
-      <string>Maximum texture resolution when FSRestrictMaxTextureSize is enabled. Must be a power of 2 and at least 512 pixels.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>512</integer>
     </map>
     <key>FSScriptInfoExtended</key>
     <map>

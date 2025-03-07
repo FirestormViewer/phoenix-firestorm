@@ -778,7 +778,7 @@ public:
                 ypos += y_inc;
 
                 // <FS:Ansariel> Mesh debugging
-                addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests));
+                addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests.load()));
                 ypos += y_inc;
                 // </FS:Ansariel>
 
@@ -1437,7 +1437,7 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
                                 // Check the whitelist, if there's media (otherwise just show it)
                                 if (te->getMediaData() == NULL || te->getMediaData()->checkCandidateUrl(url))
                                 {
-                                    if ( obj != mDragHoveredObject)
+                                    if ( obj != mDragHoveredObject.get())
                                     {
                                         // Highlight the dragged object
                                         LLSelectMgr::getInstance()->unhighlightObjectOnly(mDragHoveredObject);
@@ -1864,6 +1864,7 @@ bool LLViewerWindow::handleDeviceChange(LLWindow *window, bool deviceRemoved)
 
 bool LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
 {
+    LLFontGL::sResolutionGeneration++;
     if (ui_scale_factor >= MIN_UI_SCALE && ui_scale_factor <= MAX_UI_SCALE)
     {
         LLViewerWindow::reshape(window_width, window_height);
@@ -1875,6 +1876,12 @@ bool LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32
         LL_WARNS() << "DPI change caused UI scale to go out of bounds: " << ui_scale_factor << LL_ENDL;
         return false;
     }
+}
+
+bool LLViewerWindow::handleDisplayChanged()
+{
+    LLFontGL::sResolutionGeneration++;
+    return false;
 }
 
 bool LLViewerWindow::handleWindowDidChangeScreen(LLWindow *window)
@@ -2049,6 +2056,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     mDisplayScale.setVec(llmax(1.f / mWindow->getPixelAspectRatio(), 1.f), llmax(mWindow->getPixelAspectRatio(), 1.f));
     mDisplayScale *= ui_scale_factor;
     LLUI::setScaleFactor(mDisplayScale);
+    LLFontGL::sResolutionGeneration++;
 
     {
         LLCoordWindow size;
@@ -2106,33 +2114,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         LLFeatureManager::getInstance()->setGraphicsLevel(0, false);
         gSavedSettings.setU32("RenderQualityPerformance", 0);
     }
-
-    // <FS:Ansariel> Max texture resolution / Zi: changed this to accept pixel values so we are independent from maximum texture size
-    if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
-    {
-        // fallback value if no matching pixel size is found (i.e. someone fiddled with the debugs)
-        DESIRED_NORMAL_TEXTURE_SIZE = 512;
-
-        // clamp pixels between 512 and half the current maximum texture size
-        U32 pixels = llclamp(gSavedSettings.getU32("FSRestrictMaxTexturePixels"), 512, (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2);
-
-        // check pixel value against powers of 2 up to (not including) current maximum texture size
-        U32 pow_of_2 =  512;
-        while(pow_of_2 < (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT)
-        {
-            // power of 2 matches, save it
-            if (pixels == pow_of_2)
-            {
-                DESIRED_NORMAL_TEXTURE_SIZE = pixels;
-                break;
-            }
-
-            // next power of 2
-            pow_of_2 <<= 1;
-        }
-    }
-    LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_TEXTURE_SIZE << "px" << LL_ENDL;
-    // </FS:Ansariel>
 
     // Init the image list.  Must happen after GL is initialized and before the images that
     // LLViewerWindow needs are requested, as well as before LLViewerMedia starts updating images.
@@ -2797,6 +2778,7 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 
         bool display_scale_changed = mDisplayScale != LLUI::getScaleFactor();
         LLUI::setScaleFactor(mDisplayScale);
+        LLFontGL::sResolutionGeneration++;
 
         // update our window rectangle
         mWindowRectScaled.mRight = mWindowRectScaled.mLeft + ll_round((F32)width / mDisplayScale.mV[VX]);

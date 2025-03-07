@@ -95,7 +95,11 @@ public:
     void processObjectUpdate(LLMessageSystem *mesgsys, void **user_data, EObjectUpdateType update_type, bool compressed=false);
     void processCompressedObjectUpdate(LLMessageSystem *mesgsys, void **user_data, EObjectUpdateType update_type);
     void processCachedObjectUpdate(LLMessageSystem *mesgsys, void **user_data, EObjectUpdateType update_type);
-    void updateApparentAngles(LLAgent &agent);
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    //void updateApparentAngles(LLAgent &agent);
+    // Added time limit on processing of objects as they affect the texture system
+    void updateApparentAngles(LLAgent &agent, F32 max_time);
+    // </FS:minerjr> [FIRE-35081]
     void update(LLAgent &agent);
 
     void fetchObjectCosts();
@@ -197,9 +201,10 @@ public:
     void setUUIDAndLocal(const LLUUID &id,
                                 const U32 local_id,
                                 const U32 ip,
-                                const U32 port); // Requires knowledge of message system info!
+                                const U32 port,
+                                LLViewerObject* objectp); // Requires knowledge of message system info!
 
-    bool removeFromLocalIDTable(const LLViewerObject* objectp);
+    bool removeFromLocalIDTable(LLViewerObject* objectp);
     // Used ONLY by the orphaned object code.
     U64 getIndex(const U32 local_id, const U32 ip, const U32 port);
 
