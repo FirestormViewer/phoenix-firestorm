@@ -914,7 +914,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
     if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH)  // don't bother checking face list for boosted textures
     {
-        static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.04f);
+        static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.0095f);
         static LLCachedControl<F32> texture_scale_max(gSavedSettings, "TextureScaleMaxAreaFactor", 25.f);
 
         F32 max_vsize = 0.f;
@@ -923,7 +923,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         U32 face_count = 0;
 
         // get adjusted bias based on image resolution
-        F32 max_discard = F32(imagep->getMaxDiscardLevel());
+        LLImageGL* img = imagep->getGLTexture();
+        F32 max_discard = F32(img ? img->getMaxDiscardLevel() : MAX_DISCARD_LEVEL);
         F32 bias = llclamp(max_discard - 2.f, 1.f, LLViewerTexture::sDesiredDiscardBias);
 
         // convert bias into a vsize scaler
@@ -1000,8 +1001,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
                     // Scale desired texture resolution higher or lower depending on texture scale
                     //
-                    // Minimum usage examples: a 1024x1024 texture with aplhabet, runing string
-                    // shows one letter at a time
+                    // Minimum usage examples: a 1024x1024 texture with aplhabet (texture atlas),
+                    // runing string shows one letter at a time. If texture has ten 100px symbols
+                    // per side, minimal scale is (100/1024)^2 = 0.0095
                     //
                     // Maximum usage examples: huge chunk of terrain repeats texture
                     // TODO: make this work with the GLTF texture transforms

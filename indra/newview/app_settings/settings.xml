@@ -11232,6 +11232,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>768</integer>
   </map>
+  <key>RenderTextureVRAMDivisor</key>
+  <map>
+      <key>Comment</key>
+      <string>Divisor for maximum amount of VRAM the viewer will use for textures. 1 = all the VRAM.  Used in conjunction with RenderMaxVRAMBudget.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>2</integer>
+  </map>
   <key>RenderMinFreeMainMemoryThreshold</key>
   <map>
     <key>Comment</key>
@@ -15428,7 +15439,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Type</key>
         <string>F32</string>
         <key>Value</key>
-        <real>0.04</real>
+        <real>0.0095</real>
     </map>
     <key>TextureScaleMaxAreaFactor</key>
     <map>

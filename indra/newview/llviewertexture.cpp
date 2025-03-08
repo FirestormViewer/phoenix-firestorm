@@ -507,7 +507,12 @@ void LLViewerTexture::updateClass()
     }
 
     LLViewerMediaTexture::updateClass();
-
+    // This is a divisor used to determine how much VRAM from our overall VRAM budget to use.
+    // This is **cumulative** on whatever the detected or manually set VRAM budget is.
+    // If we detect 2048MB of VRAM, this will, by default, only use 1024.
+    // If you set 1024MB of VRAM, this will, by default, use 512.
+    // -Geenz 2025-03-03
+    static LLCachedControl<U32> tex_vram_divisor(gSavedSettings, "RenderTextureVRAMDivisor", 2);
     static LLCachedControl<U32> max_vram_budget(gSavedSettings, "RenderMaxVRAMBudget", 0);
     static LLCachedControl<bool> max_vram_budget_enabled(gSavedSettings, "FSLimitTextureVRAMUsage"); // <FS:Ansariel> Expose max texture VRAM setting
 
@@ -521,6 +526,7 @@ void LLViewerTexture::updateClass()
     // <FS:Ansariel> Expose max texture VRAM setting
     //F32 budget = max_vram_budget == 0 ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
     F32 budget = !max_vram_budget_enabled ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
+    budget /= tex_vram_divisor;
 
     // Try to leave at least half a GB for everyone else and for bias,
     // but keep at least 768MB for ourselves
