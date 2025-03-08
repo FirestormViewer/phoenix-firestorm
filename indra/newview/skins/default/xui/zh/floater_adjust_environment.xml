@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="env_adjust_snapshot" title="個人照明">
+<floater name="env_adjust_snapshot" title="個人光照">
 	<string name="hdr_string">HDR 比例:</string>
 	<string name="brightness_string">亮度:</string>
 	<string name="hdr_tooltip">照明效果的強度，如逼真明亮天空和動態曝光等。1.0 為預設值，0 為關閉，0 和 1 之間的值為環境光與 HDR 的混合。</string>
@@ -24,7 +24,7 @@
 						雲層色彩：
 					</text>
 					<text name="cloud_map_label">
-						雲彩圖像：
+						雲層圖像：
 					</text>
 					<text name="water_map_label">
 						水圖像:

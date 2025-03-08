@@ -223,7 +223,7 @@
 				 follows="left|top"
 				 height="20"
 				 width="130"
-				 tool_tip="This opens the Personal Lighting window.The Personal Lighting window is used to make temporary adjustments to the environment where you are. This is useful for photography or simply for changing something to suit your own preference. It is NOT for creating your own settings assets, and changes cannot be saved. "
+				 tool_tip="This opens the Personal Lighting window. The Personal Lighting window is used to make temporary adjustments to the environment where you are. This is useful for photography or simply for changing something to suit your own preference. It is NOT for creating your own settings assets, and changes cannot be saved."
 				 top_pad="5"
 				 left="5"
 				 label="Personal Lighting">
@@ -1684,7 +1684,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the scaling of light irradiance within Ambient Occlusion, affecting how light intensity influences shadow darkness. Adjust for balanced lighting in bright scenes. "
+				 tool_tip="Controls the scaling of light irradiance within Ambient Occlusion, affecting how light intensity influences shadow darkness. Adjust for balanced lighting in bright scenes."
 				 width="70">
 					Irrad. Scale
 				</text>
@@ -3066,7 +3066,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Adjusts the level of detail (LOD) for in-world objects. Higher values maintain high-quality object details even at greater distances but may reduce performance, especially in complex environments. Lower values trigger simpler object models (LODs) sooner, improving FPS but potentially reducing visual fidelity. A value of 4 provides a good balance between performance and visual quality, maintaining detailed objects without excessive resource usage. Values below 4, such as 2, will cause mesh objects to deform noticeably, making them unsuitable for photography or situations where visual accuracy is important."
+				 tool_tip="Adjusts the level of detail (LOD) for in-world objects. Higher values maintain high-quality object details even at greater distances but may reduce performance, especially in complex environments. Lower values trigger simpler object models (LODs) sooner, improving FPS but potentially reducing visual fidelity."
 				 width="70">
 					Object Detail
 				</text>
@@ -4371,7 +4371,7 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Controls the method for zooming in and out by adjusting the camera’s focal length or vertical Field of View (FOV), similar to changing the lens on a real camera. This affects how much of the scene is visible and how 'zoomed in' the view appears. To activate zoom functionality, set the Zoom Axis Mapping to '4'. This setting does not affect the smoothness of the zoom but rather determines the range of FOV adjustment, allowing for precise control over the camera’s zoom level. "
+				 tool_tip="Controls the method for zooming in and out by adjusting the camera’s focal length or vertical Field of View (FOV), similar to changing the lens on a real camera. This affects how much of the scene is visible and how 'zoomed in' the view appears. To activate zoom functionality, set the Zoom Axis Mapping to '4'. This setting does not affect the smoothness of the zoom but rather determines the range of FOV adjustment, allowing for precise control over the camera’s zoom level."
 				 top_pad="5"
 				 width="70">
 					Zoom

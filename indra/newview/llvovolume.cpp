@@ -773,8 +773,12 @@ void LLVOVolume::animateTextures()
                         // LLVOVolume::updateTextureVirtualSize when the
                         // mTextureMatrix is not yet present
                         gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_TCOORD);
-                        mDrawable->getSpatialGroup()->dirtyGeom();
-                        gPipeline.markRebuild(mDrawable->getSpatialGroup());
+                        LLSpatialGroup* group = mDrawable->getSpatialGroup();
+                        if (group)
+                        {
+                            group->dirtyGeom();
+                            gPipeline.markRebuild(group);
+                        }
                     }
                 }
 
@@ -6062,21 +6066,24 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     continue;
                 }
-                // <FS:Beq> FIRE-34589 - OpenSim crashes due to null facep. Only opensim, not sure why.
-                // LLFetchedGLTFMaterial *gltf_mat = (LLFetchedGLTFMaterial*) facep->getTextureEntry()->getGLTFRenderMaterial();
-                auto te = facep->getTextureEntry();
-                LLFetchedGLTFMaterial *gltf_mat = nullptr;
+
+                LLFetchedGLTFMaterial* gltf_mat = nullptr;
+                const LLTextureEntry* te = facep->getTextureEntry();
                 if (te)
                 {
                     gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
-                }
-                // </FS:Beq>
+                } // if not te, continue?
                 bool is_pbr = gltf_mat != nullptr;
 
                 if (is_pbr)
                 {
                     // tell texture streaming system to ignore blinn-phong textures
-                    facep->setTexture(LLRender::DIFFUSE_MAP, nullptr);
+                    // except the special case of the diffuse map containing a
+                    // media texture that will be reused for swapping on to the pbr face
+                    if (!facep->hasMedia())
+                    {
+                        facep->setTexture(LLRender::DIFFUSE_MAP, nullptr);
+                    }
                     facep->setTexture(LLRender::NORMAL_MAP, nullptr);
                     facep->setTexture(LLRender::SPECULAR_MAP, nullptr);
 
@@ -6132,13 +6139,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     cur_total += facep->getGeomCount();
 
-                    const LLTextureEntry* te = facep->getTextureEntry();
                     LLViewerTexture* tex = facep->getTexture();
 
-                    // <FS:ND> More crash avoding ...
-                    // if (te->getGlow() > 0.f)
                     if (te && te->getGlow() > 0.f)
-                    // </FS:ND>
                     {
                         emissive = true;
                     }
@@ -6237,11 +6240,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                             facep->mLastUpdateTime = gFrameTimeSeconds;
                         }
 
+                        if (te)
                         {
-                            // <FS> Skip if no te entry
-                            if (!te)
-                                continue;
-
                             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
                             if (gltf_mat != nullptr || (te->getMaterialParams().notNull()))
@@ -6304,6 +6304,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                                 facep->setState(LLFace::FULLBRIGHT);
                                 add_face(sFullbrightFaces, fullbright_count, facep);
                             }
+                        }
+                        else // no texture entry
+                        {
+                            facep->setState(LLFace::FULLBRIGHT);
+                            add_face(sFullbrightFaces, fullbright_count, facep);
                         }
                     }
                 }
@@ -7073,8 +7078,11 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             { //shiny
                 if (tex && tex->getPrimaryFormat() == GL_ALPHA) // <FS:Beq/> [FIRE-34534] guard additional cases of tex == null
                 { //invisiprim+shiny
-                    registerFace(group, facep, LLRenderPass::PASS_INVISI_SHINY);
-                    registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    if (!facep->getViewerObject()->isAttachment() && !facep->getViewerObject()->isRiggedMesh())
+                    {
+                        registerFace(group, facep, LLRenderPass::PASS_INVISI_SHINY);
+                        registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    }
                 }
                 else if (!hud_group)
                 { //deferred rendering
@@ -7110,7 +7118,10 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             { //not alpha and not shiny
                 if (!is_alpha && tex && tex->getPrimaryFormat() == GL_ALPHA) // <FS:Beq/> FIRE-34540 bugsplat crash caused by tex==nullptr. This stops the crash, but should we continue and leave the face unregistered instead of falling through?
                 { //invisiprim
-                    registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    if (!facep->getViewerObject()->isAttachment() && !facep->getViewerObject()->isRiggedMesh())
+                    {
+                        registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    }
                 }
                 else if (fullbright || bake_sunlight)
                 { //fullbright

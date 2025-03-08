@@ -14,10 +14,6 @@
 			<combo_box.item label="關" name="FALSE" />
 		</combo_box>
 		<color_swatch label="顏色" name="val_color_swatch" />
-		<spinner label="x" name="val_spinner_1" />
-		<spinner label="x" name="val_spinner_2" />
-		<spinner label="x" name="val_spinner_3" />
-		<spinner label="x" name="val_spinner_4" />
 		<button name="sanity_warning_btn" tool_tip="這個設定未通過合理性檢查 - 值超出了推薦範圍。" />
 		<button label="複製" name="copy_btn" tool_tip="複製設定名稱到剪貼簿。" />
 		<button label="預設值" name="default_btn" tool_tip="將這個設定的值重設為預設值。" />

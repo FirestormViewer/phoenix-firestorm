@@ -32,6 +32,12 @@
 #include "llmotion.h"
 #include "llcriticaldamp.h"
 
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // LLMotion class

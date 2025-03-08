@@ -72,6 +72,8 @@ protected:
     void getState(LLViewerObject *object);
     void onFilterEdit();
 
+    bool mDirtyFilter { false };
+
 public:
     class LLFilterEditor* mFilterEditor;
     LLSaveFolderState mSavedFolderState;

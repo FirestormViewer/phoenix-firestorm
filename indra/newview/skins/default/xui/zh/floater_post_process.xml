@@ -15,10 +15,6 @@
 			<text name="wmiColorFilterBaseText">
 				對比度基色
 			</text>
-			<slider label="R" name="wmiColorFilterBaseR" />
-			<slider label="G" name="wmiColorFilterBaseG" />
-			<slider label="B" name="wmiColorFilterBaseB" />
-			<slider label="I" name="wmiColorFilterBaseI" />
 		</panel>
 		<panel label="夜視" name="wmiNightVisionPanel">
 			<check_box label="開啟" name="wmiNightVisionToggle" />

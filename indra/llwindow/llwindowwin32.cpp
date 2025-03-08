@@ -44,6 +44,7 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llsdutil.h"
+#include "llsys.h"
 #include "llglslshader.h"
 #include "llthreadsafequeue.h"
 #include "stringize.h"
@@ -79,10 +80,6 @@ const S32   MAX_MESSAGE_PER_UPDATE = 20;
 const S32   BITS_PER_PIXEL = 32;
 const S32   MAX_NUM_RESOLUTIONS = 32;
 const F32   ICON_FLASH_TIME = 0.5f;
-
-#ifndef WM_DPICHANGED
-#define WM_DPICHANGED 0x02E0
-#endif
 
 #ifndef USER_DEFAULT_SCREEN_DPI
 #define USER_DEFAULT_SCREEN_DPI 96 // Win7
@@ -579,7 +576,15 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 
     // Make an instance of our window then define the window class
     mhInstance = GetModuleHandle(NULL);
+    // <FS:Dax> [FIRE-10419] Add notification filters for device notifcations for HID device handling
+    DEV_BROADCAST_DEVICEINTERFACE notificationFilter;
 
+    ZeroMemory(&notificationFilter, sizeof(notificationFilter));
+    notificationFilter.dbcc_size       = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
+    notificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+
+    HDEVNOTIFY deviceNotification = RegisterDeviceNotification(mWindowHandle, &notificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE | DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
+    // </FS>
     // Init Direct Input - needed for joystick / Spacemouse
 
     LPDIRECTINPUT8 di8_interface;
@@ -1319,8 +1324,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
     catch (...)
     {
         LOG_UNHANDLED_EXCEPTION("ChoosePixelFormat");
-        OSMessageBox(mCallbacks->translateString("MBPixelFmtErr"),
-            mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1331,8 +1335,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
     if (!DescribePixelFormat(mhDC, pixel_format, sizeof(PIXELFORMATDESCRIPTOR),
         &pfd))
     {
-        OSMessageBox(mCallbacks->translateString("MBPixelFmtDescErr"),
-            mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtDescErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1370,8 +1373,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
 
     if (!SetPixelFormat(mhDC, pixel_format, &pfd))
     {
-        OSMessageBox(mCallbacks->translateString("MBPixelFmtSetErr"),
-            mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtSetErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1379,16 +1381,14 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
 
     if (!(mhRC = SafeCreateContext(mhDC)))
     {
-        OSMessageBox(mCallbacks->translateString("MBGLContextErr"),
-            mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
 
     if (!wglMakeCurrent(mhDC, mhRC))
     {
-        OSMessageBox(mCallbacks->translateString("MBGLContextActErr"),
-            mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextActErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1594,15 +1594,14 @@ const   S32   max_format  = (S32)num_formats - 1;
 
         if (!mhDC)
         {
-            OSMessageBox(mCallbacks->translateString("MBDevContextErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+            LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBDevContextErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
             close();
             return false;
         }
 
         if (!SetPixelFormat(mhDC, pixel_format, &pfd))
         {
-            OSMessageBox(mCallbacks->translateString("MBPixelFmtSetErr"),
-                mCallbacks->translateString("MBError"), OSMB_OK);
+            LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtSetErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
             close();
             return false;
         }
@@ -1634,7 +1633,7 @@ const   S32   max_format  = (S32)num_formats - 1;
     {
         LL_WARNS("Window") << "No wgl_ARB_pixel_format extension!" << LL_ENDL;
         // cannot proceed without wgl_ARB_pixel_format extension, shutdown same as any other gGLManager.initGL() failure
-        OSMessageBox(mCallbacks->translateString("MBVideoDrvErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1643,7 +1642,7 @@ const   S32   max_format  = (S32)num_formats - 1;
     if (!DescribePixelFormat(mhDC, pixel_format, sizeof(PIXELFORMATDESCRIPTOR),
         &pfd))
     {
-        OSMessageBox(mCallbacks->translateString("MBPixelFmtDescErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtDescErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1665,14 +1664,14 @@ const   S32   max_format  = (S32)num_formats - 1;
 
     if (!wglMakeCurrent(mhDC, mhRC))
     {
-        OSMessageBox(mCallbacks->translateString("MBGLContextActErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextActErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
 
     if (!gGLManager.initGL())
     {
-        OSMessageBox(mCallbacks->translateString("MBVideoDrvErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
         close();
         return false;
     }
@@ -1876,7 +1875,7 @@ void* LLWindowWin32::createSharedContext()
     if (!rc && !(rc = wglCreateContext(mhDC)))
     {
         close();
-        OSMessageBox(mCallbacks->translateString("MBGLContextErr"), mCallbacks->translateString("MBError"), OSMB_OK);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
     }
 
     return rc;
@@ -2291,6 +2290,24 @@ void LLWindowWin32::gatherInput()
     updateCursor();
 }
 
+// Define device classID for filtering
+constexpr std::array<const wchar_t*, 3> classIDStrings = {
+    L"{745a17a0-74d3-11d0-b6fe-00a0c90f57da}", // Modern HID
+    L"{4d36e96c-e325-11ce-bfc1-08002be10318}", // Legacy/Serial
+    L"{a5dcbf10-6530-11d2-901f-00c04fb951ed}"  // SpaceNavigator/Xbox
+};
+
+std::array<GUID, classIDStrings.size()> deviceCLSIDWhitelist;
+
+// Convert to CLSID to make it easier
+void initializeDeviceCLSIDArray()
+{
+    for (size_t i = 0; i < classIDStrings.size(); ++i)
+    {
+        CLSIDFromString(classIDStrings[i], &deviceCLSIDWhitelist[i]);
+    }
+}
+
 static LLTrace::BlockTimerStatHandle FTM_KEYHANDLER("Handle Keyboard");
 static LLTrace::BlockTimerStatHandle FTM_MOUSEHANDLER("Handle Mouse");
 
@@ -2349,13 +2366,42 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DEVICECHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DEVICECHANGE");
-            if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
-            {
-                WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
 
-                return 1;
+            // <FS> [FIRE-10419] Prevent all devices from being scanned on each change
+            // if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
+            // {
+            //    WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
+            //    return 1;
+            // }
+
+
+            // Only bother initalizing when needed.
+            if (deviceCLSIDWhitelist.empty())
+            {
+                initializeDeviceCLSIDArray();
+            }
+            
+            if (w_param == DBT_DEVICEARRIVAL || w_param == DBT_DEVICEREMOVECOMPLETE)
+            {
+                DEV_BROADCAST_HDR* dtype = (DEV_BROADCAST_HDR*)l_param;
+                if (dtype->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+                {
+                    DEV_BROADCAST_DEVICEINTERFACE* iface = (DEV_BROADCAST_DEVICEINTERFACE*)l_param;
+
+                    // Iterate through the CLSID whitelist for comparison and only fire if it's a useful device
+                    for (const auto& guid : deviceCLSIDWhitelist)
+                    {
+                        if (memcmp(&iface->dbcc_classguid, &guid, sizeof(GUID)) == 0)
+                        {
+                            bool deviceRemoved = (w_param == DBT_DEVICEREMOVECOMPLETE);
+                            WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, deviceRemoved));
+                            break; 
+                        }
+                    }
+                }
             }
             break;
+            // </FS>
         }
 
         case WM_PAINT:
@@ -3008,6 +3054,11 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 SWP_NOZORDER | SWP_NOACTIVATE);
 
             return 0;
+        }
+
+        case WM_DISPLAYCHANGE:
+        {
+            WINDOW_IMP_POST(window_imp->mCallbacks->handleDisplayChanged());
         }
 
         case WM_SETFOCUS:
@@ -4800,6 +4851,23 @@ void LLWindowWin32::LLWindowWin32Thread::checkDXMem()
 
                     // Alternatively use GetDesc from below to get adapter's memory
                     UINT64 budget_mb = info.Budget / (1024 * 1024);
+                    if (gGLManager.mIsIntel)
+                    {
+                        U32Megabytes phys_mb = gSysMemory.getPhysicalMemoryKB();
+                        LL_WARNS() << "Physical memory: " << phys_mb << " MB" << LL_ENDL;
+
+                        if (phys_mb > 0)
+                        {
+                            // Intel uses 'shared' vram, cap it to 25% of total memory
+                            // Todo: consider caping all adapters at least to 50% ram
+                            budget_mb = llmin(budget_mb, (UINT64)(phys_mb * 0.25));
+                        }
+                        else
+                        {
+                            // if no data available, cap to 2Gb
+                            budget_mb = llmin(budget_mb, (UINT64)2048);
+                        }
+                    }
                     if (gGLManager.mVRAM < (S32)budget_mb)
                     {
                         gGLManager.mVRAM = (S32)budget_mb;

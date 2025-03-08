@@ -882,6 +882,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
             if (weights_source)
             {
                 vertex_weights = weights_source->getFloat_array();
+                break; // Stop on the first valid weight input.
             }
         }
     }
@@ -902,6 +903,15 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
     std::map<LLVector4, std::vector<LLModel::JointWeight> > skinweight_data;
 
     size_t joint_weight_strider = 0;
+    if (vtx_influence_count.getCount() > transformed_positions.size())
+    {
+        pushLog("DAE Importer", "WARNING: More weight entries (" 
+            + std::to_string(vtx_influence_count.getCount()) 
+            + ") than positions (" 
+            + std::to_string(transformed_positions.size()) 
+            + ").");
+        LL_WARNS("LocalMesh") << "More weight entries(" << vtx_influence_count.getCount() << ") than positions("<< transformed_positions.size() << ")." << LL_ENDL;
+    }
     for (size_t joint_idx = 0; joint_idx < vtx_influence_count.getCount(); ++joint_idx)
     {
         auto influences_count = vtx_influence_count[joint_idx];
@@ -937,7 +947,8 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
                 total += weight_list[i].mWeight;
             }
         }
-
+        LL_DEBUGS("LocalMesh") << "Vertex " << joint_idx
+                            << " has total weight of " << total << LL_ENDL;
         F32 scale = 1.f / total;
         if (scale != 1.f)
         { //normalize weights
@@ -946,17 +957,24 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
                 sorted_weight_list[i].mWeight *= scale;
             }
         }
-        // log the weights for this joint_idx
-        LL_DEBUGS("LocalMesh")  << "Vertex "
-                                << joint_idx
-                                << " has " << sorted_weight_list.size() << " weights (" <<
-                                sorted_weight_list[0].mJointIdx << "=" <<
-                                sorted_weight_list[0].mWeight << ", " <<
-                                sorted_weight_list[1].mJointIdx << "=" <<
-                                sorted_weight_list[1].mWeight << ", " <<
-                                sorted_weight_list[2].mJointIdx << "=" <<
-                                sorted_weight_list[3].mWeight << ")"
-                                << LL_ENDL;
+        // Log the sorted weight influences for this vertex
+        LL_DEBUGS("LocalMesh") << "Vertex " << joint_idx
+                            << " has " << sorted_weight_list.size() << " weight(s): ";
+
+        for (size_t i = 0; i < sorted_weight_list.size() && i < 4; ++i)
+        {
+            // Print a comma before subsequent influences
+            if (i > 0)
+            {
+                LL_CONT << ", ";
+            }
+
+            LL_CONT << sorted_weight_list[i].mJointIdx
+                    << "=" << sorted_weight_list[i].mWeight;
+        }
+
+        LL_CONT << LL_ENDL;
+
         skinweight_data[transformed_positions[joint_idx]] = sorted_weight_list;
     }
 
@@ -1051,9 +1069,16 @@ bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<
 {
     // safety checks & name check
     const auto node_name = current_node->getName();
+    
     if (!node_name)
     {
         LL_WARNS("LocalMesh") << "nameless node, can't process" << LL_ENDL;
+        return false;
+    }
+
+    if ( current_node->getType() != NODETYPE_JOINT)
+    {
+        LL_DEBUGS("LocalMesh") << "non-joint node: " << node_name << LL_ENDL;
         return false;
     }
 

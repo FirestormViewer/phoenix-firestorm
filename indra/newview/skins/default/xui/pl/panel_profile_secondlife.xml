@@ -53,6 +53,7 @@
 		</layout_panel>
 	</layout_stack>
 	<text name="About:" value="Info:" />
+	<button name="btn_preview" tool_tip="Przełącz podgląd sekcji 'info'" />
 	<text name="Groups:" value="Grupy:" />
 	<button name="group_invite" tool_tip="Zaproś do grupy" />
 	<text name="Give item:" value="Podaruj:" />

@@ -193,6 +193,7 @@
 			<menu_item_call label="Инструменты фото" name="phototools_item_call"/>
 			<menu_item_call label="Инструменты камеры" name="cameratools_item_call"/>
 			<menu_item_check label="Блокировка фокуса Глубины резкости" name="lock_focus_point"/>
+			<menu_item_check label="Рисовать перекрестие фокуса Глубины резкости" name="render_focus_point"/>
 		</menu>
 		<menu_item_call label="Поиск вокруг" name="area_search"/>
 		<menu_item_call label="Проводник звуков" name="Sound Explorer"/>
@@ -333,7 +334,6 @@
 		<menu_item_call label="Wiki" name="Wiki"/>
 		<menu_item_call label="Community Forums" name="Community Forums"/>
 		<menu_item_call label="Support portal" name="Support portal"/>
-		<menu_item_call label="[SECOND_LIFE] News" name="Second Life News"/>
 		<menu_item_call label="[SECOND_LIFE] Blogs" name="Second Life Blogs"/> -->
 		<menu_item_call name="whitelist_folders" label="Советник Белого Списка"/>
 		<menu_item_call label="Проверка статуса сети (Grid Status)" name="Grid Status"/>

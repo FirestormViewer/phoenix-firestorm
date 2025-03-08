@@ -22,7 +22,7 @@
 		7. 可見資料總量：[SIZE1] KB，解碼資料量：[SIZE2] KB
 	</text>
 	<text name="total_fetched_rendered_data_label">
-		8. 總渲染資料量：[SIZE1] KB，解碼資料量：[SIZE2] KB，[PIXEL] 百萬畫素
+		8. 總彩現資料量：[SIZE1] KB，解碼資料量：[SIZE2] KB，[PIXEL] 百萬畫素
 	</text>
 	<text name="total_time_cache_read_label">
 		9. 快取讀取總時間：[TIME] 秒

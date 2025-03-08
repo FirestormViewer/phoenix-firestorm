@@ -9,7 +9,7 @@
 		</text>
 	</panel>
 
-	<panel name="P_Wave_Fog" label="Nebel">
+	<panel name="P_Wave_Fog_2" label="Nebel">
 		<text name="density_exponent_label">
 			Dichte-Exponent:
 		</text>

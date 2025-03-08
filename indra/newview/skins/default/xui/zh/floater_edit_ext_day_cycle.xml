@@ -93,7 +93,7 @@
 				<layout_panel name="frame_settings_sky">
 					<tab_container name="sky_tabs">
 						<panel label="大氣與照明" name="atmosphere_panel" />
-						<panel label="雲彩" name="clouds_panel" />
+						<panel label="雲層" name="clouds_panel" />
 						<panel label="日與月" name="moon_panel" />
 					</tab_container>
 				</layout_panel>

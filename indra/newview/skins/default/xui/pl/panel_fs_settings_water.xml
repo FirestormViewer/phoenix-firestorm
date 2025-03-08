@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Woda" name="panel_fs_settings_water">
+	<panel name="P_Wave_Fog" label="Mgła">
+		<text name="water_fog_label" tool_tip="Kolor mgły wodnej - Zmienia kolor objętościowego odcienia wody, zasadniczo definiując kolor samej wody. Jeśli Twoja woda nie ma mgły, będzie wydawała się krystalicznie czysta i bezbarwna.">
+			Kolor mgły wody
+		</text>
+		<text name="normal_map_label" tool_tip="Mapa normalnych - Obraz używany do określania odbić i refrakcji. Do tego ustawienia można użyć dowolnej tekstury - ale prawdziwe mapy normalne działają najlepiej.">
+			Mapa normalnych
+		</text>
+	</panel>
+	<panel name="P_Wave_Fog_2" label="Mgła">
+		<text name="density_exponent_label">
+			Wykładnik gęstości:
+		</text>
+		<text name="underwater_modifier_label">
+			Modyfikator pod wodą:
+		</text>
+		<text name="FresnelScaleText">
+			Skala Fresnela:
+		</text>
+		<text name="FresnelOffsetText">
+			Przesun. Fresnela:
+		</text>
+	</panel>
+	<panel name="P_Water_Wave" label="Fala">
+		<text name="large_wave_speed_label">
+			Prędkość dużej fali
+		</text>
+		<text name="small_wave_speed_label">
+			Prędkość małej fali
+		</text>
+		<text name="reflection_wavelet_scale_label">
+			Skala odbicia falkowego
+		</text>
+	</panel>
+	<panel name="P_Water_Reflection" label="Refrakcja">
+		<text name="refraction_scale_above_label">
+			Skala refrakcji (powyżej):
+		</text>
+		<text name="refraction_scale_below_label">
+			Skala refrakcji (poniżej):
+		</text>
+		<text name="blur_multiplier_label">
+			Mnożnik rozmycia:
+		</text>
+	</panel>
+</panel>

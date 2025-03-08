@@ -57,6 +57,12 @@
 
 #include "meshoptimizer/meshoptimizer.h"
 
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 #define DEBUG_SILHOUETTE_BINORMALS 0
 #define DEBUG_SILHOUETTE_NORMALS 0 // TomY: Use this to display normals using the silhouette
 #define DEBUG_SILHOUETTE_EDGE_MAP 0 // DaveP: Use this to display edge map using the silhouette

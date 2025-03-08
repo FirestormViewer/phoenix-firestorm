@@ -66,6 +66,14 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
+
 const S32 NUM_AXES = 3;
 const S32 MOUSE_DRAG_SLOP = 2;       // pixels
 const F32 SELECTED_ARROW_SCALE = 1.3f;

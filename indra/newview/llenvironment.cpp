@@ -70,6 +70,12 @@
 #include "fscommon.h"
 #include "llviewernetwork.h"
 
+// <FS:Beq> use std::lerp for C++20
+#if __cplusplus >= 202002L
+using std::lerp;
+#endif
+// </FS:Beq>
+
 //=========================================================================
 namespace
 {
