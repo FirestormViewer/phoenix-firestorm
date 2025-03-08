@@ -13,6 +13,10 @@
 		低
 	</text>
 	<slider label="最大鄰近光源數：" name="MaxLights" />
+	<text name="MaxTextureResolutionLabel">
+		最大細節層次解析度：
+	</text>
+	<combo_box name="MaxTextureResolution" tool_tip="“細節層次(LOD)”紋理的最大解析度"/>
 	<check_box label="啟用垂直同步" tool_tip="將影格速率與顯示器的更新率同步，可能會導致更多的卡頓和輸入延遲。" name="vsync" />
 	<text name="AvatarText">
 		化身
