@@ -394,6 +394,9 @@ public:
 
     bool            isPositioning(LLFloaterEnums::EOpenPositioning p) const { return (p == mPositioning); }
 
+    void            setAutoFocus(bool focus) { mAutoFocus = focus; } // whether to automatically take focus when opened
+    bool            getAutoFocus() const { return mAutoFocus; }
+
     // <COLOSI opensim multi-currency support>
     // update currency symbols in titles (if there) and force update of display
     void            updateCurrencySymbols() { mTitle.updateCurrencySymbols(); mShortTitle.updateCurrencySymbols(); applyTitle(); }
@@ -422,8 +425,6 @@ protected:
     void            setExpandedRect(const LLRect& rect) { mExpandedRect = rect; } // size when not minimized
     const LLRect&   getExpandedRect() const { return mExpandedRect; }
 
-    void            setAutoFocus(bool focus) { mAutoFocus = focus; } // whether to automatically take focus when opened
-    bool            getAutoFocus() const { return mAutoFocus; }
     LLDragHandle*   getDragHandle() const { return mDragHandle; }
 
     void            destroy(); // Don't call this directly.  You probably want to call closeFloater()

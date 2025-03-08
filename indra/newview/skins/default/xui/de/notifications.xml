@@ -4254,6 +4254,9 @@ Versuch abgebrochen.
 	<notification name="NowOwnObject">
 		Sie sind jetzt Eigentümer des Objekts [OBJECT_NAME]
 	</notification>
+	<notification name="NowOwnObjectInv">
+		Sie sind jetzt Eigentümer des Objekts [OBJECT_NAME] und es wurde Ihrem Inventar hinzugefügt.
+	</notification>
 	<notification name="CantRezOnLand">
 		Objekt kann nicht an [OBJECT_POS] gerezzt werden, da der Landeigentümer dies nicht zulässt.  Machen Sie den Landeigentümer mit dem Landwerkzeug ausfindig.
 	</notification>
