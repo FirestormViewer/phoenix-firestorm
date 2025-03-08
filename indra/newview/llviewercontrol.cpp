@@ -1264,9 +1264,27 @@ void setting_setup_signal_listener(LLControlGroup& group, const std::string& set
     });
 }
 
+// <FS:WW> Feature: Fullbright Toggle - Handle preference change
+static bool handleFullbrightChanged(const LLSD& newvalue)
+{
+    BOOL enabled = gSavedSettings.getBOOL("FSRenderEnableFullbright");
+
+    if (!enabled)
+    {
+        gObjectList.killAllFullbrights();
+    }
+    else
+    {
+        gObjectList.restoreAllFullbrights(); 
+    }
+    return true;
+}
+// </FS:WW>
 void settings_setup_listeners()
 {
-    setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
+       
+    setting_setup_signal_listener(gSavedSettings, "FSRenderEnableFullbright", handleFullbrightChanged); // <FS:WW> Feature: Fullbright Toggle - Add listener for preference changes 
+	setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderTerrainScale", handleTerrainScaleChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRScale", handlePBRTerrainScaleChanged);
@@ -1286,7 +1304,10 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAnisotropic", handleAnisotropicChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
+    // <FS:WW> Ensure shader update on shadow resolution scale change for correct shadow rendering.
+    // setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
+    setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleSetShaderChanged);
+    // </FS>
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);

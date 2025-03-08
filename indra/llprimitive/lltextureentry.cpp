@@ -63,6 +63,9 @@ LLTextureEntry::LLTextureEntry()
   : mMediaEntry(NULL)
   , mSelected(false)
   , mMaterialUpdatePending(false)
+  // <FS:WW> Add mOriginalFullbright initialization
+  , mOriginalFullbright(0)
+  // </FS:WW>
 {
     init(LLUUID::null,1.f,1.f,0.f,0.f,0.f,DEFAULT_BUMP_CODE);
 }
@@ -79,6 +82,9 @@ LLTextureEntry::LLTextureEntry(const LLTextureEntry &rhs)
   : mMediaEntry(NULL)
   , mSelected(false)
   , mMaterialUpdatePending(false)
+  // <FS:WW> Add mOriginalFullbright copy constructor initialization
+  , mOriginalFullbright(rhs.mOriginalFullbright)
+  // </FS:WW>
 {
     *this = rhs;
 }
@@ -130,6 +136,9 @@ LLTextureEntry &LLTextureEntry::operator=(const LLTextureEntry &rhs)
         {
             mGLTFMaterialOverrides = nullptr;
         }
+		// <FS:WW> Add mOriginalFullbright assignment operator initialization
+		mOriginalFullbright = rhs.mOriginalFullbright;
+		// </FS:WW>
     }
 
     return *this;

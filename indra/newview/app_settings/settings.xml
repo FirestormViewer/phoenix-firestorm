@@ -13,6 +13,20 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <!-- <FS:WW> -->
+  <!-- Add FSAnimationTimeFactor for Animation Speed Slider in Gen tab of Phototools-->
+  <key>FSAnimationTimeFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls the animation speed factor. 1.0 is normal speed, 0.0 is frozen, greater than 1.0 is faster, greater then 1.0 but less than 0.0 is slower.</string>
+    <key>Persist</key>
+    <integer>0</integer>  
+    <key>Type</key>
+    <string>F32</string> 
+    <key>Value</key>
+    <real>1.0</real>    
+  </map>
+  <!-- </FS:WW> -->
   <key>FSEnforceStrictObjectCheck</key>
   <map>
     <key>Comment</key>
@@ -10872,7 +10886,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Comment</key>
     <string>Scaling factor for irradiance input to SSAO</string>
     <key>Persist</key>
-    <integer>0</integer>
+    <integer>1</integer>
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
@@ -10883,7 +10897,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Comment</key>
     <string>Max factor for irradiance input to SSAO</string>
     <key>Persist</key>
-    <integer>0</integer>
+    <integer>1</integer>
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
@@ -10931,6 +10945,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     </array>
     <key>Backup</key>
     <integer>0</integer>
+  </map>
+  <key>FSRenderSSAOSampleCount</key>  
+  <map>                                 
+    <key>Comment</key>             
+    <string>Controls the number of samples used for Screen Space Ambient Occlusion (SSAO). Higher values improve quality but reduce performance.</string> 
+    <key>Persist</key>           
+    <integer>0</integer>         
+    <key>Type</key>             
+    <string>F32</string>        
+    <key>Value</key>               
+    <integer>8</integer>          
   </map>
   <key>RenderMirrors</key>
   <map>
@@ -22754,6 +22779,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+<!-- <FS:WW> Setting to enable or disable fullbright rendering-->
+    <key>FSRenderEnableFullbright</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable Fullbright Rendering</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <real>1</real>
+    </map>
+<!-- </FS:WW> -->
     <key>FSRenderFarClipStepping</key>
     <map>
       <key>Comment</key>

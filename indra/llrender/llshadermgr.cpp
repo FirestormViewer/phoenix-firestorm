@@ -1332,6 +1332,7 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("ssao_factor");
     mReservedUniforms.push_back("ssao_factor_inv");
     mReservedUniforms.push_back("ssao_effect_mat");
+    mReservedUniforms.push_back("ssao_sample_count"); // <FS:WWeaver> Add SSAO sample count uniform name
     mReservedUniforms.push_back("screen_res");
     mReservedUniforms.push_back("near_clip");
     mReservedUniforms.push_back("shadow_offset");

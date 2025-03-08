@@ -79,6 +79,12 @@ public:
 
     void killObjects(LLViewerRegion *regionp); // Kill all objects owned by a particular region.
     void killAllObjects();
+    // <FS:WW> Feature: Fullbright Toggle - Immediately disable fullbright on all objects
+    void killAllFullbrights();
+    
+    void restoreAllFullbrights();
+   
+    // </FS:WW>
 
     void cleanDeadObjects(const bool use_timer = true); // Clean up the dead object list.
 

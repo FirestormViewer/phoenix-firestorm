@@ -168,6 +168,7 @@ public:
         DEFERRED_SSAO_FACTOR,               //  "ssao_factor"
         DEFERRED_SSAO_FACTOR_INV,           //  "ssao_factor_inv"
         DEFERRED_SSAO_EFFECT_MAT,           //  "ssao_effect_mat"
+        DEFERRED_SSAO_SAMPLE_COUNT,         //  "ssao_sample_count" <FS:WWeaver> New enum for SSAO sample count uniform 
         DEFERRED_SCREEN_RES,                //  "screen_res"
         DEFERRED_NEAR_CLIP,                 //  "near_clip"
         DEFERRED_SHADOW_OFFSET,             //  "shadow_offset"
