@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_wearable_favorites">
-	<menu_item_check label="名前で並べ替え..." name="sort_by_name" />
-	<menu_item_check label="新しい順に並べ替え..." name="sort_by_most_recent" />
-	<menu_item_check label="種類で並べ替え..." name="sort_by_type_name" />
+	<menu_item_check label="名前で並べ替え…" name="sort_by_name"/>
+	<menu_item_check label="新しい順に並べ替え…" name="sort_by_most_recent"/>
+	<menu_item_check label="種類で並べ替え…" name="sort_by_type_name"/>
 </toggleable_menu>
