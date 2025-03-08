@@ -5,14 +5,9 @@
 			<layout_stack name="vertical_centering1">
 				<layout_panel name="panel4">
 					<layout_stack name="vertical_centering2">
-						<layout_panel name="panel_login">
-							<text name="login_text">
-								Anmeldung...
-							</text>
-						</layout_panel>
 						<layout_panel name="panel_icons">
 							<text name="logos_lbl">
-								[APP_NAME] verwendet
+								Second Life verwendet
 							</text>
 						</layout_panel>
 					</layout_stack>
