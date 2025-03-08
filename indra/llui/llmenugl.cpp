@@ -62,13 +62,6 @@
 #include <boost/tokenizer.hpp>
 
 #include "llclipboard.h" // <FS:ND/ To let someone copy a menus text + accelerator to clipboard
-
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 // static
 LLMenuHolderGL *LLMenuGL::sMenuContainer = NULL;
 view_listener_t::listener_map_t view_listener_t::sListeners;

@@ -57,13 +57,6 @@
 #include "llworld.h"
 #include <boost/filesystem.hpp>
 
-
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 constexpr F32 AUTO_SNAPSHOT_TIME_DELAY = 1.f;
 
 constexpr F32 SHINE_TIME = 0.5f;

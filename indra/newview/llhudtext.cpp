@@ -51,13 +51,6 @@
 #include "rlvcommon.h"
 // [/RLVa:KB]
 #include <boost/tokenizer.hpp>
-
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 const F32 HORIZONTAL_PADDING = 15.f;
 const F32 VERTICAL_PADDING = 12.f;
 const F32 BUFFER_SIZE = 2.f;

@@ -33,12 +33,6 @@
 #include "llsdserialize.h"
 #include <boost/bind.hpp>
 
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 //=========================================================================
 namespace
 {

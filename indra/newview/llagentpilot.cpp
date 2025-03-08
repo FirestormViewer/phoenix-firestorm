@@ -38,12 +38,6 @@
 #include "llsdserialize.h"
 #include "llsdutil_math.h"
 
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 LLAgentPilot gAgentPilot;
 
 LLAgentPilot::LLAgentPilot() :
