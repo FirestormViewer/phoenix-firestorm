@@ -294,30 +294,21 @@
 			<text name="label position">
 				位置（米）
 			</text>
-			<spinner label="X" name="Pos X" />
-			<spinner label="Y" name="Pos Y" />
-			<spinner label="Z" name="Pos Z" />
-			<button label="C" name="copy_rot_btn" tool_tip="複製旋轉" />
-			<button label="P" name="paste_rot_btn" tool_tip="貼上旋轉" />
-			<button label="p" name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
+			<button name="copy_rot_btn" tool_tip="複製旋轉" />
+			<button name="paste_rot_btn" tool_tip="貼上旋轉" />
+			<button name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
 			<text name="label size">
 				尺寸（米）
 			</text>
-			<spinner label="X" name="Scale X" />
-			<spinner label="Y" name="Scale Y" />
-			<spinner label="Z" name="Scale Z" />
-			<button label="C" name="copy_rot_btn" tool_tip="複製尺寸" />
-			<button label="P" name="paste_rot_btn" tool_tip="貼上尺寸" />
-			<button label="p" name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上尺寸" />
+			<button name="copy_rot_btn" tool_tip="複製尺寸" />
+			<button name="paste_rot_btn" tool_tip="貼上尺寸" />
+			<button name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上尺寸" />
 			<text name="label rotation">
 				旋轉（角度）
 			</text>
-			<spinner label="X" name="Rot X" />
-			<spinner label="Y" name="Rot Y" />
-			<spinner label="Z" name="Rot Z" />
-			<button label="C" name="copy_rot_btn" tool_tip="複製旋轉" />
-			<button label="P" name="paste_rot_btn" tool_tip="貼上旋轉" />
-			<button label="p" name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
+			<button name="copy_rot_btn" tool_tip="複製旋轉" />
+			<button name="paste_rot_btn" tool_tip="貼上旋轉" />
+			<button name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
 			<button name="copy_params_btn" tool_tip="複製物件參數到剪貼簿" />
 			<button name="paste_params_btn" tool_tip="從剪貼簿黏貼物件參數" />
 			<combo_box name="comboBaseType">
@@ -347,8 +338,6 @@
 			<text name="text cut">
 				路徑切斷（開始 / 結束）
 			</text>
-			<spinner label="B" name="cut begin" />
-			<spinner label="E" name="cut end" />
 			<text name="text hollow">
 				中空
 			</text>
@@ -367,21 +356,15 @@
 			<text name="text twist">
 				扭曲（開始 / 結束）
 			</text>
-			<spinner label="B" name="Twist Begin" />
-			<spinner label="E" name="Twist End" />
 			<text name="scale_taper">
 				錐化
 			</text>
 			<text name="scale_hole">
 				開口尺寸
 			</text>
-			<spinner label="X" name="Taper Scale X" />
-			<spinner label="Y" name="Taper Scale Y" />
 			<text name="text topshear">
 				頂部斜變
 			</text>
-			<spinner label="X" name="Shear X" />
-			<spinner label="Y" name="Shear Y" />
 			<text name="advanced_cut">
 				側面切斷（開始 / 結束）
 			</text>
@@ -391,13 +374,9 @@
 			<text name="advanced_slice">
 				切割（開始/結束）
 			</text>
-			<spinner label="B" name="Path Limit Begin" />
-			<spinner label="E" name="Path Limit End" />
 			<text name="text taper2" tool_tip="不適用於所有基本類型">
 				錐化
 			</text>
-			<spinner label="X" name="Taper X" />
-			<spinner label="Y" name="Taper Y" />
 			<text name="text radius delta">
 				半徑
 			</text>
