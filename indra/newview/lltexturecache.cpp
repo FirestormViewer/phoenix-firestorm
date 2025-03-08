@@ -2082,6 +2082,28 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
     }
     LLPointer<LLImageRaw> raw = new LLImageRaw(data, head[0], head[1], head[2], true);
 
+    // <FS:minerjr>
+    // This fixes the invalid discard values from being created which cause the decoder code to fail when trying to handle 6 and 7's which are above the MAX_DISCARD_LEVEL of 5
+    // especially on load
+    // We will expand the 16x16 texture to the actual MAX_DISCARD_LEVEL texture size, it may be blurry until the user gets closer but 5 discard value should be objects far from the camera.
+    // So a 1024x1024 texture with a dicard of 6 will become 32x32 and a 2048x2048 texture with a discard of 7 will become a 64x64 texture.
+    if (discardlevel > MAX_DISCARD_LEVEL)
+    {
+        S32 w = head[0]; // Get the current width from the header (16)
+        S32 h = head[1]; // Get the current height from the header (16)
+
+        // Expand the width and height by teh difference between the discard and MAX_DISCARD_LEVEL bit shifted to the left. (Expand power of 2 textures)
+        w <<= MAX_DISCARD_LEVEL - discardlevel;
+        h <<= MAX_DISCARD_LEVEL - discardlevel;
+
+        // Set the discard level to the MAX_DISCARD_LEVEL
+        discardlevel = MAX_DISCARD_LEVEL;
+
+        // Scale up the texture and scale the actual data, as we just created it above, it should be fine.
+        raw->scale(w, h, true);
+    }
+    // </FS:minerjr>
+
     return raw;
 }
 

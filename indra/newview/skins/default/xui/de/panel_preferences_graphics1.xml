@@ -199,22 +199,19 @@
 		</text>
 		<check_box label="Minimale Texturen laden" tool_tip="Diese Einstellung setzt den 'TextureDisable'-Parameter - lädt Texturen extrem langsam, eventuell nützlich für Computer mit langsamer GPU" name="TexturesLoaded"/>
 		<check_box label="HTTP für Laden von Texturen verwenden" tool_tip="Aktiviert das Laden von Texturen über das HTTP-Protokoll - deaktivieren wenn es Probleme mit schlecht oder nicht korrekt ladenden Texturen gibt und das veraltete UDP-Protokoll verwendet werden soll." name="TexturesHTTP"/>
-		<check_box label="Maximale Auflösung für Texturen:" tool_tip="Beschränkt die maximale Auflösung für Inworld-Texturen. Dies erlaubt die Darstellung von mehreren Texturen bevor der vorhandene Texturspeicher aufgebraucht ist und unscharfe Texturen dargestellt werden." name="FSRestrictMaxTextureSize"/>
-		<combo_box name="FSRestrictMaxTexturePixels">
+		<text name="FSRestrictMaxTextureSize">
+			Maximale Auflösung für Texturen:
+		</text>
+		<combo_box tool_tip="Beschränkt die maximale Auflösung für Inworld-Texturen. Dies erlaubt die Darstellung von mehreren Texturen bevor der vorhandene Texturspeicher aufgebraucht ist und unscharfe Texturen dargestellt werden." name="FSRestrictMaxTexturePixels">
 			<combo_box.item label="512 Pixel" name="512"/>
 			<combo_box.item label="1024 Pixel" name="1024"/>
-			<!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
 			<combo_box.item label="2048 Pixel" name="2048"/>
-			-->
 		</combo_box>
-		<text name="FSRestrictMaxTextureSizeRestartText">
-			(erfordert Neustart)
-		</text>
 		<slider label="Max. Anzahl gleichzeitiger HTTP-GET-Anfragen" name="HTTPFetchMaxRequests"/>
-		<text name="TextureDetailLabel" width="215" tool_tip="Qualitätslevel, auf das Texturen geladen werden. Beeinflusst die Einstellung TextureDiscardLevel">
+		<text name="TextureDetailLabel" width="215">
 			Maximales Qualitätslevel für Texturen:
 		</text>
-		<combo_box name="TextureDetail">
+		<combo_box tool_tip="Qualitätslevel, auf das Texturen geladen werden. Beeinflusst die Einstellung TextureDiscardLevel" name="TextureDetail">
 			<combo_box.item label="Normale (0) Qualität" name="0"/>
 			<combo_box.item label="Mittlere (3) Qualität" name="3"/>
 			<combo_box.item label="Geringe (4) Qualität" name="4"/>
