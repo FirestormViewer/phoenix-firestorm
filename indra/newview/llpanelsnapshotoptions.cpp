@@ -32,6 +32,7 @@
 #include "llfloatersnapshot.h" // FIXME: create a snapshot model
 #include "llfloaterreg.h"
 #include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
+#include "fsfloaterprimfeed.h" // <FS:Beq> Share to Primfeed
 
 /**
  * Provides several ways to save a snapshot.
@@ -53,6 +54,7 @@ private:
     void onSaveToInventory();
     void onSaveToComputer();
     void onSendToFlickr(); // <FS:Ansariel> Share to Flickr
+    void onSendToPrimfeed(); // <FS:Beq/> Share to Primfeed
 
     LLFloaterSnapshotBase* mSnapshotFloater;
 };
@@ -66,6 +68,7 @@ LLPanelSnapshotOptions::LLPanelSnapshotOptions()
     mCommitCallbackRegistrar.add("Snapshot.SaveToInventory",    boost::bind(&LLPanelSnapshotOptions::onSaveToInventory, this));
     mCommitCallbackRegistrar.add("Snapshot.SaveToComputer",     boost::bind(&LLPanelSnapshotOptions::onSaveToComputer,  this));
     mCommitCallbackRegistrar.add("Snapshot.SendToFlickr",       boost::bind(&LLPanelSnapshotOptions::onSendToFlickr, this)); // <FS:Ansariel> Share to Flickr
+    mCommitCallbackRegistrar.add("Snapshot.SendToPrimfeed",     boost::bind(&LLPanelSnapshotOptions::onSendToPrimfeed, this)); // <FS:Beq/> Share to Primfeed
 }
 
 // virtual
@@ -122,3 +125,17 @@ void LLPanelSnapshotOptions::onSendToFlickr()
     LLFloaterReg::showInstance("flickr");
 }
 // </FS:Ansariel>
+
+// <FS:Beq> Share to Primfeed
+void LLPanelSnapshotOptions::onSendToPrimfeed()
+{
+    LLFloaterReg::hideInstance("snapshot");
+
+    auto* primfeed_floater = dynamic_cast<FSFloaterPrimfeed*>(LLFloaterReg::getInstance("primfeed"));
+    if (primfeed_floater)
+    {
+        primfeed_floater->showPhotoPanel();
+    }
+    LLFloaterReg::showInstance("primfeed");
+}
+// </FS:Beq>

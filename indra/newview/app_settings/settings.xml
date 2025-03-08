@@ -153,6 +153,17 @@
     <key>Value</key>
     <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
   </map>
+  <key>FSPrimfeedViewerApiKey</key>
+  <map>
+    <key>Comment</key>
+    <string>Viewer key for API login.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>xAcXYt8SBius3Lor4wHle8L96PDHYlAZuWYXIYQUdW4b09mjhQUAwiqmWp5UNYXLpq5GSUtuKHuDYLwaueACPkew93l6MRY8jfBKSH09kv0zyGglpky07X7X7Sp4Rzin</string>
+  </map>
   <key>FSGridBuilderURL</key>
   <map>
     <key>Comment</key>
@@ -18542,6 +18553,7 @@ Change of this parameter will affect the layout of buttons in notification toast
           <string>world_map</string>
           <string>preferences</string>
           <string>flickr</string>
+          <string>primfeed</string>
       </array>
       <key>Backup</key>
       <integer>0</integer>
@@ -24722,6 +24734,39 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>At what resolution should snapshots be posted on Flickr. 0=Current Window, 1=320x240, 2=640x480, 3=800x600, 4=1024x768, 5=1280x1024, 6=1600x1200, 7=Custom</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>4</integer>
+    </map>
+    <key>FSLastSnapshotToPrimfeedHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>The height of the last Primfeed snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>768</integer>
+    </map>
+    <key>FSLastSnapshotToPrimfeedWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The width of the last Primfeed snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1024</integer>
+    </map>
+    <key>FSLastSnapshotToPrimfeedResolution</key>
+    <map>
+      <key>Comment</key>
+      <string>At what resolution should snapshots be posted on Primfeed. 0=Current Window, 1=320x240, 2=640x480, 3=800x600, 4=1024x768, 5=1280x1024, 6=1600x1200, 7=Custom</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

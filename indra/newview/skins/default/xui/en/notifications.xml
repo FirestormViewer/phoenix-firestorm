@@ -7911,6 +7911,13 @@ Please select at least one type of content to search (General, Moderate, or Adul
    type="notifytip">
    [MESSAGE]
   </notification>
+  
+  <notification
+   icon="notify.tga"
+  name="PrimfeedConnect"
+   type="notifytip">
+   [MESSAGE]
+  </notification>
 
   <notification
    icon="notify.tga"
@@ -13963,6 +13970,12 @@ Flickr verification failed. Please try again, and be sure to double check the ve
    type="notifytip">
 Your snapshot can now be viewed [https://www.flickr.com/photos/me/[ID] here].
   </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSPrimfeedUploadComplete"
+   type="notifytip">
+Your primfeed post can now be viewed [[PF_POSTURL] here].
+  </notification>
   <!-- </FS:TS> FIRE-5453 -->
 
   <notification
@@ -14676,4 +14689,60 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
      yestext="Okay"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedLoginRequestFailed"
+   persist="false"
+   log_to_im="true"   
+   type="notify">
+Login request denied by Primfeed.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedAuthorisationFailed"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Primfeed authorisation failed. The authorisation sequence was not completed.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedAuthorisationAlreadyInProgress"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Primfeed authorisation is already in progress. Please complete the primfeed authorisation in your web browser before trying again.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedAuthorisationSuccessful"
+   persist="false"
+   tag="success"
+   type="alertmodal">
+Primfeed authorisation completed. You may now post images to Primfeed.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedValidateFailed"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Primfeed user validation failed. Primfeed did not recognise this account, or the login failed.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedAlreadyAuthorized"
+   persist="false"
+   tag="success"
+   type="alertmodal">
+You have already linked this account to Primfeed. Use the reset button if you wish to start over.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="PrimfeedUserStatusFailed"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Primfeed user login successful, but status checks have failed. Please check the Primfeed is working.
+  </notification>
 </notifications>

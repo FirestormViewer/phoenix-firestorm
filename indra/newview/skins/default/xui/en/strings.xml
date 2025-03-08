@@ -238,6 +238,10 @@ If you feel this is an error, please contact support@secondlife.com</string>
   <string name="SocialFlickrErrorConnecting">Problem connecting to Flickr</string>
   <string name="SocialFlickrErrorPosting">Problem posting to Flickr</string>
   <string name="SocialFlickrErrorDisconnecting">Problem disconnecting from Flickr</string>
+  <string name="SocialPrimfeedConnecting">Connecting to Primfeed...</string>
+  <string name="SocialPrimfeedNotAuthorized">Not Authorized...</string>
+  <string name="SocialPrimfeedPosting">Posting...</string>
+  <string name="SocialPrimfeedErrorPosting">Problem posting to Primfeed</string>
   
 	<!-- SLShare: User Friendly Filter Names Translation -->
     <string name="BlackAndWhite">Black &amp; White</string>
@@ -2767,6 +2771,8 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Beacons_Label">Beacons</string>
   <string name="Command_Poser_Label">Poser</string>
   <string name="Command_Poser_Tooltip">Pose your avatar and animated objects</string>
+  <string name="Command_Primfeed_Label">Primfeed</string>
+  <string name="Command_Primfeed_Tooltip">Post directly to your Primfeed account.</string>
 
   <string 
 name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>

@@ -111,6 +111,7 @@
 #include "llfloatertools.h"
 #include "llfloatersnapshot.h" // <FS:Beq/> for snapshotFrame
 #include "llfloaterflickr.h" // <FS:Beq/> for snapshotFrame
+#include "fsfloaterprimfeed.h" // <FS:Beq/> for snapshotFrame
 #include "llsnapshotlivepreview.h" // <FS:Beq/> for snapshotFrame
 // #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 #include "llpathfindingpathtool.h"
@@ -8047,12 +8048,12 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     }
     const bool simple_snapshot_visible = LLFloaterReg::instanceVisible("simple_snapshot");
     const bool flickr_snapshot_visible = LLFloaterReg::instanceVisible("flickr");
+    const bool primfeed_snapshot_visible = LLFloaterReg::instanceVisible("primfeed"); // <FS:Beq/> Primfeed integration
     const bool snapshot_visible = LLFloaterReg::instanceVisible("snapshot");
-    const bool any_snapshot_visible = simple_snapshot_visible || flickr_snapshot_visible || snapshot_visible;
+    const bool any_snapshot_visible = simple_snapshot_visible || flickr_snapshot_visible || primfeed_snapshot_visible || snapshot_visible; // <FS:Beq/> Primfeed integration
     if (!show_frame || !any_snapshot_visible || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
     {
         return false;
-
     }
     LLSnapshotLivePreview * previewView = nullptr;
     if (snapshot_visible)
@@ -8066,6 +8067,13 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
         auto * floater = dynamic_cast<LLFloaterFlickr*>(LLFloaterReg::findInstance("flickr"));
         previewView = floater->getPreviewView();
     }
+     // <FS:Beq> Primfeed integration
+    if (primfeed_snapshot_visible && !previewView)
+    {
+        auto * floater = dynamic_cast<FSFloaterPrimfeed*>(LLFloaterReg::findInstance("primfeed"));
+        previewView = floater->getPreviewView();
+    }
+    // </FS:Beq>
     if(!previewView)
     {
         return false;
