@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="サウンド" name="Preference Media panel">
+	<!-- label_widthと、widthを削除しないこと -->
 	<panel.string name="middle_mouse">
 		マウスボタン中央
 	</panel.string>
@@ -9,7 +10,6 @@
 	<panel.string name="button5_mouse">
 		マウスボタン５
 	</panel.string>
-
 	<tab_container label="Firestorm初期設定" name="tabs">
 		<!-- Sounds -->
 		<panel label="サウンド" name="Media Sounds Panel">
@@ -94,11 +94,11 @@
 		<panel label="音楽" name="Media Music Panel">
 			<check_box name="audio_auto_play_btn" tool_tip="チェックすると自動的にオーディオストリームの再生が始まります" label="オーディオの自動再生を許可"/>
 			<check_box name="FSFadeAudioStream" tool_tip="区画に流れている曲が変わる時にフェードイン／フェードアウトさせたい場合にここにチェックを入れて下さい。" label="区画音声のフェードを有効にする："/>
-			<slider label="フェードイン" name="FSAudioMusicFadeIn" tool_tip="区画に流れている音声のフェードインした時間を設定します。"/>
+			<slider label="フェードイン" name="FSAudioMusicFadeIn" tool_tip="区画に流れている音声のフェードインした時間を設定します。" width="280" label_width="80"/>
 			<text name="FSAudioMusicFadeInSeconds">
 				秒
 			</text>
-			<slider label="フェードアウト" name="FSAudioMusicFadeOut" tool_tip="区画に流れている音声のフェードアウトした時間を設定します。"/>
+			<slider label="フェードアウト" name="FSAudioMusicFadeOut" tool_tip="区画に流れている音声のフェードアウトした時間を設定します。" width="280" label_width="80"/>
 			<text name="FSAudioMusicFadeOutSeconds">
 				秒
 			</text>
@@ -114,7 +114,7 @@
 		</panel>
 		<!-- ボイス -->
 		<panel label="ボイス" name="Media Voice tab">
-			<check_box label="ボイスチャットを有効にする" name="enable_voice_check"/>
+			<check_box label="ボイスチャットを有効にする" name="enable_voice_check" width="155"/>
 			<button tool_tip="ボイスをリセットします。" name="reset_voice_button"/>
 			<radio_group name="ear_location">
 				<radio_item label="カメラの位置から聞く" name="0"/>
@@ -149,7 +149,7 @@
 		<!-- UI Sounds 1 -->
 		<panel label="ＵＩサウンド１" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">
-				ここで（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイス・サウンドを変更したり、
+				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
 			<text tool_tip="Firestormが通知／警告した時に再生するデフォルトのサウンドＵＵＩＤです。" name="textFSSndAlert">
@@ -279,7 +279,7 @@
 		<!-- UI Sounds 2 -->
 		<panel label="ＵＩサウンド２" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
-				ここで（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
+				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
 			<text tool_tip="パイメニューを表示した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuAppear">
@@ -394,7 +394,7 @@
 		<!-- UI Sounds 3 -->
 		<panel label="ＵＩサウンド３" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
-			ここで（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイス・サウンドを変更したり、
+				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
 			<text tool_tip="インベントリに物が送られて来た時に再生するサウンドのＵＵＩＤです。" name="textFSInventoryOffer">

@@ -2628,7 +2628,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="EstateParcelAccessOverride">
-		このオプションのチェックを外すと、グリーティングの防止、プライバシーの維持、成人向けコンテンツから未成年の居住者を保護するために区画所有者が追加した制限が削除される場合があります。必要に応じて土地所有者と相談してください。
+		このオプションのチェックを外すと、グリーティングの防止、プライバシーの維持、Adult向けコンテンツから未成年の居住者を保護するために区画所有者が追加した制限が削除される場合があります。必要に応じて土地所有者と相談してください。
 		<tag>confirm</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
@@ -2659,7 +2659,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<tag>fail</tag>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_NotifyAdultsOnly">
-		訪問しようとしているリージョンには、成人のみアクセスできる[REGIONMATURITY] コンテンツが含まれています。
+		訪問しようとしているリージョンには、成人のみアクセスできる[REGIONMATURITY]コンテンツが含まれています。
 		<tag>fail</tag>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Change">
@@ -2761,7 +2761,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
-		この土地を購入できるのは、成人だけです。
+		この土地を購入できるのは成人のみです。
 		<tag>fail</tag>
 		<url name="url">https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/%E3%83%AC%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E5%8C%BA%E5%88%86-r323/</url>
 		<usetemplate ignoretext="土地を購入：成人のみアクセスできるコンテンツが含まれているときの警告" name="okcancelignore" notext="閉じる" yestext="ナレッジベースを開く"/>
@@ -3175,7 +3175,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 選択されたオブジェクトと置き換えますか？
 		<tag>confirm</tag>
 		<form name="form">
-			<ignore name="ignore" save_option="true" text="装着しているアイテムと選択したアイテムの置き換え"/>
+			<ignore name="ignore" text="装着しているアイテムと選択したアイテムの置き換え"/>
 			<button ignore="自動的に差し替える" name="Yes" text="ＯＫ"/>
 			<button ignore="差し替えない" name="No" text="キャンセル"/>
 		</form>
@@ -3421,8 +3421,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="AudioAlert"> 
 		この区画には以下の音楽が提供されます：
 
-ドメイン：[AUDIODOMAIN]
-ＵＲＬ：[AUDIOURL]
+ドメイン： [AUDIODOMAIN]
+ＵＲＬ： [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="許可"/>
 			<button name="Deny" text="拒否"/>
@@ -3442,8 +3442,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="AudioAlertSingle"> 
 選択内容を記憶し、[LCONDITION]からのソースの音楽を許可しますか？
 
-ドメイン：[AUDIODOMAIN]
-ＵＲＬ：[AUDIOURL]
+ドメイン： [AUDIODOMAIN]
+ＵＲＬ： [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="許可"/>
 			<button name="Deny" text="拒否"/>
@@ -3747,7 +3747,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		このエリアでのプッシュは禁止されています。
 土地所有者以外は他人をプッシュすることはできません。
 	</notification>
-	<notification name="NoVoice">このエリアでのボイスチャットは無効になっています。
+	<notification name="NoVoice">
+		このエリアでのボイスチャットは無効になっています。
 音声で誰かと話ことはできません。
 		<tag>voice</tag>
 	</notification>
@@ -3893,7 +3894,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 &lt;nolink&gt;[ITEM_SLURL]&lt;/nolink&gt;
 		<form name="form">
 			<button name="Keep" text="受け取る"/>
-			<button name="Discard" text="破棄"/>
+			<button name="Discard" text="処分する"/>
 			<button name="Mute" text="所有者をブロック"/>
 		</form>
 	</notification>
@@ -3902,7 +3903,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 
 &lt;nolink&gt;[ITEM_SLURL]&lt;/nolink&gt;
 		<form name="form">
-			<button name="Keep" text="キープ"/>
+			<button name="Keep" text="受け取る"/>
 			<button name="Discard" text="処分する"/>
 		</form>
 	</notification>
@@ -3911,7 +3912,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="表示"/>
-			<button name="Discard" text="破棄"/>
+			<button name="Keep" text="受け取る"/>
+			<button name="Discard" text="処分する"/>
 			<button name="Mute" text="ブロック"/>
 		</form>
 	</notification>
@@ -3921,11 +3923,11 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 そのままにしておきますか？「ミュート」にすると、[NAME_SLURL]からの今後のオファーやメッセージはすべてブロックされます。
 		<form name="form">
 			<button name="Show" text="表示"/>
-			<button name="Accept" text="了解"/>
-			<button name="Discard" text="破棄"/>
+			<button name="Accept" text="受け取る"/>
+			<button name="Discard" text="処分する"/>
 			<button name="ShowSilent" text="（表示）"/>
-			<button name="AcceptSilent" text="（了解）"/>
-			<button name="DiscardSilent" text="（破棄）"/>
+			<button name="AcceptSilent" text="（受け取る）"/>
+			<button name="DiscardSilent" text="（処分する）"/>
 			<button name="Mute" text="送信者をミュート"/>
 		</form>
 	</notification>
@@ -4078,7 +4080,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<tag>friendship</tag>
 		<form name="form">
 			<button name="Accept" text="受け入れる"/>
-			<button name="Decline" text="辞退"/>
+			<button name="Decline" text="辞退する"/>
 		</form>
 	</notification>
 	<notification name="RegionRestartMinutes">
@@ -4090,11 +4092,11 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 このまま、このリージョンに留まっているとログアウトされます。
 	</notification>
 	<notification name="RegionRestartMinutesToast">
-このリージョン「[NAME]」は、[MINUTES]分後に再起動されます。
+		このリージョン「[NAME]」は、[MINUTES]分後に再起動されます。
 このまま、このリージョンに留まっているとログアウトされます。
 	</notification>
 	<notification name="RegionRestartSecondsToast">
-このリージョン「[NAME]」は、[SECONDS]秒後に再起動されます。
+		このリージョン「[NAME]」は、[SECONDS]秒後に再起動されます。
 このまま、このリージョンに留まっているとログアウトされます。
 	</notification>
 	<notification name="LoadWebPage">Webページ[URL] を開きますか？
@@ -4614,10 +4616,10 @@ Your L$ balance is shown in the upper-right.
 	</notification>
 	<notification name="AvatarRezCloudNotification">
 		（[EXISTENCE]秒）
-アバター「[NAME]」、クラウドになります。
+アバター「[NAME]」は、クラウドになります。
 	</notification>
 	<notification name="AvatarRezSelfBakeForceUpdateNotification">
-		ビューアは、あなたがクラウドのように見えることを検知し、自動的に修正しようとしています。
+		ビューアは、あなたがクラウドのように見えていることを検知し、自動的に修正しようとしています。
 	</notification>
 	<notification name="AvatarRezArrivedNotification">
 		（[EXISTENCE]秒）

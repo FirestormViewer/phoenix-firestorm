@@ -33,7 +33,6 @@
 	<text name="label_restart_delay">
 		秒：
 	</text>
-	<spinner name="restart_delay"/>
 	<button label="再起動をキャンセル" name="cancel_restart_btn" tool_tip="リージョンの再起動を取り消します。"/>
 	<button label="デバッグコンソール" name="region_debug_console_btn" tool_tip="リージョンデバッグコンソールを開きます。"/>
 </panel>

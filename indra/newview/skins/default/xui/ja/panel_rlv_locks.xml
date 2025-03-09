@@ -8,6 +8,5 @@
 	</scroll_list>
 	<panel name="bottom_panel" label="ボトムパネル">
 		<button label="リフレッシュ" name="refresh_btn"/>
-		<icon name="dummy_icon"/>
 	</panel>
 </panel>

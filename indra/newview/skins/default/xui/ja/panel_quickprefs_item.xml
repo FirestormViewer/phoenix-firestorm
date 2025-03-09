@@ -9,13 +9,12 @@
 			</layout_panel>
 			<layout_panel name="text_panel">
 				<text name="option_label">
-					コントロールラベル：
+					コントロールのラベル名：
 				</text>
 			</layout_panel>
 			<layout_panel name="option_panel">
 				<!-- one of these controls will be chosen by the user, all others remain hidden -->
 				<check_box name="option_checkbox_control" label=""/>
-				<line_editor name="option_text_control"/>
 				<spinner name="option_spinner_control" label=""/>
 				<slider name="option_slider_control" label=""/>
 				<radio_group name="option_radio_control" label="">

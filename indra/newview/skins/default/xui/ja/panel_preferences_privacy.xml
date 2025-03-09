@@ -108,11 +108,11 @@
 			<text_editor name="autorespond_nf_response">
 				変更するにはログインしてください。
 			</text_editor>
-			<check_box label="退席している時に自動応答する:" name="send_away_av_response" tool_tip="退席している時に誰かがIMしたら次のメッセージを送ります。"/>
+			<check_box label="退席している時に自動応答する：" name="send_away_av_response" tool_tip="退席している最中に誰かがＩＭしてきたら以下のメッセージを送ります。"/>
 			<text_editor name="away_avatar_response">
 				変更するにはログインしてください。
 			</text_editor>
-			<check_box label="無視しているアバターに自動応答する" name="send_muted_av_response" tool_tip="無視している人からIMが来た時に自動的に以下のメッセージを送信します。"/>
+			<check_box label="無視しているアバターに自動応答する：" name="send_muted_av_response" tool_tip="無視している人からＩＭが来た時に自動的に以下のメッセージを送信します。"/>
 			<text_editor name="muted_avatar_response">
 				変更するにはログインしてください。
 			</text_editor>
@@ -120,20 +120,20 @@
 		<!--Autoresponse2-->
 		<panel label="自動応答２" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
-				テレポート拒否モードの時に行う全てのアバターへの自動応答メッセージ:
+				テレポート拒否モードの時に行う全てのアバターへの自動応答メッセージ：
 			</text>
 			<text_editor name="autorespond_rto_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 			<check_box label="フレンドリストに載っている人からのテレポートは拒否しない（返事もする）" name="FSDontRejectTeleportOffersFromFriends"/>
 			<text name="autorespond_rfr_response_label">
 				フレンド申請拒否モードの時に行う全てのアバターへの自動応答メッセージ：
 			</text>
 			<text_editor name="autorespond_rfr_response">
-				変更するにはログインします
+				変更するにはログインしてください。
 			</text_editor>
 			<text name="autoresponse_item_label">
-				自動応答で一緒に送られるアイテム：
+				自動応答時に送るアイテム：
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="インベントリをここにドラッグ＆ドロップします。"/>
 			<button label="クリア" name="clear_autoresponse_item"/>

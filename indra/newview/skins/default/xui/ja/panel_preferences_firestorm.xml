@@ -16,7 +16,8 @@
 		<!-- Extras -->
 		<panel label="特殊機能" name="tab-extras">
 			<check_box name="checkMiscRLVa" label="他のビューアからのリモートコントロールを許可（ＲＬＶａ機能）"/>
-			<text name="textMiscRLVaRestart">
+			<!-- left_padを削除しないこと -->
+			<text name="textMiscRLVaRestart" left_pad="50">
 				（要再起動）
 			</text>
 			<check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>

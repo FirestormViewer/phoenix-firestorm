@@ -18,10 +18,9 @@
 					<menu_button tool_tip="並べ替えオプションを表示します。" name="sorting_menu_btn"/>
 				</layout_panel>
 				<layout_panel name="add_btn_panel">
-					<menu_button name="add_menu_btn" tool_tip="新しいランドマークかフォルダを追加します。"/>
+					<menu_button name="add_menu_btn" tool_tip="新しいランドマークまたはフォルダを追加します。"/>
 				</layout_panel>
-				<layout_panel name="trash_btn_panel" tool_tip="選択したランドマークまたはフォルダを削除します。">
-				</layout_panel>
+				<layout_panel name="trash_btn_panel" tool_tip="選択したランドマークまたはフォルダを削除します。"/>
 			</layout_stack>
 		</layout_panel>
 		<!--*********************** Button wrappers ***********************-->

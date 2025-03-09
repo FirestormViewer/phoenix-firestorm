@@ -41,9 +41,6 @@
 				</layout_panel>
 			</layout_stack>
 			<layout_stack name="button_row_ls">
-				<layout_panel name="btn_refresh_lp">
-					<button name="btn_refresh"/>
-				</layout_panel>
 				<layout_panel name="btn_activate_lp">
 					<button label="アクティブ化" name="btn_activate"/>
 				</layout_panel>

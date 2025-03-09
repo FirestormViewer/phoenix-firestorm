@@ -101,12 +101,12 @@ Graphics Card Memory (Budget): [VRAM_BUDGET]
 		設定モード：[MODE]
 ビューアのスキン：[SKIN]（[THEME]）
 ウィンドウサイズ:[WINDOW_WIDTH]x[WINDOW_HEIGHT]px
-使用フォント：[FONT]（[FONT_SCREEN_DPI] dpi
-フォントサイズの調整：[FONT_SIZE] pt
+使用フォント：[FONT]（[FONT_SCREEN_DPI]dpi）
+フォントサイズの調整：[FONT_SIZE]pt
 ＵＩスケーリング：[UI_SCALE_FACTOR]
 描画距離：[DRAW_DISTANCE]ｍ
-帯域幅：[NET_BANDWITH]kbit／秒
-ＬＯＤ係数：[LOD_FACTOR]
+帯域幅：[BANDWITH]kbit／秒
+ＬＯＤ係数：[LOD]
 描画の質：[RENDERQUALITY]
 	</string>
 	<string name="AboutCache">
@@ -3170,7 +3170,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		Linden所在地
 	</string>
 	<string name="Adult">
-		成人向け
+		Adult向け
 	</string>
 	<string name="Arts and Culture">
 		芸術と文化
@@ -6724,13 +6724,13 @@ Rez時間：[OBJECT_REZ_TIME]
 	<!-- <FS:Zi> Quick preferences default options -->
 	<string name="QP Draw Distance">描画距離</string>
 	<string name="QP Max Particles">最大パーティクル</string>
-	<string name="QP Avatar Physics LOD">アバター物理効果のＬＯＤ</string>
+	<string name="QP Avatar Physics LOD">アバター物理効果ＬＯＤ</string>
 	<string name="QP LOD Factor">ＬＯＤ係数</string>
 	<string name="QP Max Avatars">最大アバター数</string>
-	<string name="QP Tags Offset">タグオフセット</string>
-	<string name="QP Name Tags">名前タグ</string>
-	<string name="QP LookAt Target">視線ターゲット</string>
-	<string name="QP Color Under Cursor">カーソルの下の色</string>
+	<string name="QP Tags Offset">名前タグのオフセット位置</string>
+	<string name="QP Name Tags">名前タグの表示</string>
+	<string name="QP LookAt Target">視線のターゲット</string>
+	<string name="QP Color Under Cursor">カーソルの下のカラー</string>
 
 	<!-- <FS:Ansariel> Posestand animation names -->
 	<string name="PS_T_Pose">Ｔポーズ</string>
@@ -6930,7 +6930,7 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Pie_av_render_fully">完全</string>
 
 	<string name="Nametag_Complexity_Label">複雑度：[COMPLEXITY]</string>
-	<string name="Nametag_Texture_Area_Label">テクスチャエリア：[TEXTURE_AREA]㎡</string>
+	<string name="Nametag_Texture_Area_Label">テクスチャ面積：[TEXTURE_AREA]㎡</string>
 
 	<string name="font_unknown">不明なフォント</string>
 	<string name="font_fonts.xml">Deja Vu</string>

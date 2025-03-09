@@ -14,7 +14,7 @@
 			<combo_box.item label="不動産販売" name="Estate" value="Estate"/>
 		</combo_box>
 		<check_box label="価格＜" name="price_check"/>
-		<check_box label="エリア＞" name="area_check"/>
+		<check_box label="面積＞" name="area_check"/>
 		<text name="sort_text">
 			並べ替え順
 		</text>
@@ -23,7 +23,7 @@
 			<combo_box.item label="名前" name="Name_item" value="Name"/>
 			<combo_box.item label="金額" name="Price_item" value="Price"/>
 			<combo_box.item label="ｍあたりの単価" name="PPM_item" value="PPM"/>
-			<combo_box.item label="エリア" name="Area_item" value="Area"/>
+			<combo_box.item label="面積" name="Area_item" value="Area"/>
 		</combo_box>
 		<button label="検索" name="land_find"/>
 	</panel>

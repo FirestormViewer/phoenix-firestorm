@@ -33,12 +33,12 @@
 		<radio_item label="このログインセッションのみ" name="one_session_lock"/>
 		<radio_item label="今後のログインセッションから" name="next_session_lock"/>
 	</radio_group>
-	<check_box name="vsync" label="VSyncを有効化" tool_tip="垂直同期を有効にして、画面のティアリングや途切れを軽減します。"/>
+	<check_box name="vsync" label="垂直同期を有効化" tool_tip="垂直同期を有効にして、画面のティアリングや途切れを軽減します。"/>
 	<text name="vsync_desc">
 		モニターのリフレッシュレートをフレームレートと同期させます。
 	</text>
 	<text name="vsync_desc_limit">
-		注意：VSyncをオンにすると、フレームレートが[FPS_LIMIT]fpsに制限されます。
+		注意：垂直同期をオンにすると、フレームレートが[FPS_LIMIT]fpsに制限されます。
 	</text>
 	<text name="simplify_dist_desc">
 		遠くにいるアバターの表示の詳細度を減らすと、グラフィックスの速度が向上します。

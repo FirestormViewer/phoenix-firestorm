@@ -16,7 +16,7 @@
 					<button label="受け取ったアイテム" name="inbox_btn"/>
 					<button name="reload_received_items_btn" tool_tip="受け取ったアイテムリストをリロードします。" />
 					<text name="inbox_fresh_new_count">
-						[NUM]個の新アイテム
+						[NUM]個の新着アイテム
 					</text>
 					<panel name="inbox_inventory_placeholder_panel" tool_tip="アイテムを使用するには、そのアイテムをインベントリにドラッグアンドドロップしてください。">
 						<text name="inbox_inventory_placeholder">
