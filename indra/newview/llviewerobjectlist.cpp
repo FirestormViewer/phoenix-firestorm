@@ -1653,6 +1653,65 @@ void LLViewerObjectList::killAllObjects()
     }
 }
 
+// <FS:WW> Feature: Fullbright Toggle - Immediately disable fullbright on all objects
+void LLViewerObjectList::killAllFullbrights()
+{
+    
+    LLViewerObject *objectp;
+    for (vobj_list_t::iterator iter = mObjects.begin(); iter != mObjects.end(); ++iter)
+    {
+        objectp = *iter;
+        if (objectp)
+        {
+            for (S32 i = 0; i < objectp->getNumTEs(); i++)
+            {
+                LLTextureEntry* te = objectp->getTE(i);
+                if (te) 
+                {
+                    
+                    te->setOriginalFullbright(te->getFullbright()); 
+
+                    if (te->getFullbrightFlag()) 
+                    {
+                        if (objectp != gAgentAvatarp)
+                        {
+                            objectp->setTEFullbright(i, 0); 
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+void LLViewerObjectList::restoreAllFullbrights()
+{
+
+    LLViewerObject *objectp;
+    for (vobj_list_t::iterator iter = mObjects.begin(); iter != mObjects.end(); ++iter)
+    {
+        objectp = *iter;
+        for (S32 i = 0; i < objectp->getNumTEs(); i++)
+        {
+            LLTextureEntry* te = objectp->getTE(i);
+            if (!te) continue; 
+            U8 original_fullbright = te->getOriginalFullbright();
+
+            if (!te->getFullbrightFlag() && original_fullbright)
+            {
+                if (objectp != gAgentAvatarp)
+                {
+                    objectp->setTEFullbright(i, original_fullbright);
+                }
+            }
+
+        }
+    }
+}
+
+// </FS:WW>
+
 void LLViewerObjectList::cleanDeadObjects(bool use_timer)
 {
     // <FS:Beq/> FIRE-30694 DeadObject Spam
