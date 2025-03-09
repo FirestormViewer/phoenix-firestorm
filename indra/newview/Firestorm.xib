@@ -14,11 +14,11 @@
         <customObject id="-3" userLabel="Application"/>
         <menu title="Main Menu" systemMenu="main" id="29" userLabel="Main Menu">
             <items>
-                <menuItem title="Firestorm" id="56">
+                <menuItem title="AyaneStorm" id="56">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Firestorm" systemMenu="apple" id="57">
+                    <menu key="submenu" title="AyaneStorm" systemMenu="apple" id="57">
                         <items>
-                            <menuItem title="About Firestorm" id="58">
+                            <menuItem title="About AyaneStorm" id="58">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="orderFrontStandardAboutPanel:" target="-2" id="142"/>
@@ -32,7 +32,7 @@
                                 <menu key="submenu" title="Services" systemMenu="services" id="130"/>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="144"/>
-                            <menuItem title="Hide Firestorm" keyEquivalent="h" id="134">
+                            <menuItem title="Hide AyaneStorm" keyEquivalent="h" id="134">
                                 <connections>
                                     <action selector="hide:" target="-1" id="369"/>
                                 </connections>
@@ -50,7 +50,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="149"/>
-                            <menuItem title="Quit Firestorm" keyEquivalent="q" id="136">
+                            <menuItem title="Quit AyaneStorm" keyEquivalent="q" id="136">
                                 <connections>
                                     <action selector="terminate:" target="-3" id="823"/>
                                 </connections>
@@ -135,7 +135,7 @@
                 <outlet property="window" destination="828" id="850"/>
             </connections>
         </customObject>
-        <window title="Firestorm" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="Firestorm" animationBehavior="default" id="828" customClass="LLNSWindow">
+        <window title="AyaneStorm" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="AyaneStorm" animationBehavior="default" id="828" customClass="LLNSWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="196" y="240" width="1024" height="600"/>

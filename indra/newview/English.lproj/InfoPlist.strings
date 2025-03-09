@@ -1,6 +1,6 @@
 /* Localized versions of Info.plist keys */
 
-CFBundleName = "Firestorm";
+CFBundleName = "AyaneStorm";
 
-CFBundleShortVersionString = "Firestorm version %%VERSION%%";
-CFBundleGetInfoString = "Firestorm version %%VERSION%%, Copyright 2010-2025 The Phoenix Firestorm Project, Inc.";
+CFBundleShortVersionString = "AyaneStorm version %%VERSION%%";
+CFBundleGetInfoString = "AyaneStorm version %%VERSION%%, Copyright 2010-2025 The Phoenix Firestorm Project, Inc.";
