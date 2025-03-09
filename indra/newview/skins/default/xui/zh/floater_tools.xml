@@ -294,15 +294,15 @@
 			<text name="label position">
 				位置（米）
 			</text>
-			<button name="copy_rot_btn" tool_tip="複製旋轉" />
-			<button name="paste_rot_btn" tool_tip="貼上旋轉" />
-			<button name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
+			<button name="copy_pos_btn" tool_tip="複製旋轉" />
+			<button name="paste_pos_btn" tool_tip="貼上旋轉" />
+			<button name="paste_pos_clip_btn" tool_tip="嘗試從剪貼簿貼上旋轉" />
 			<text name="label size">
 				尺寸（米）
 			</text>
-			<button name="copy_rot_btn" tool_tip="複製尺寸" />
-			<button name="paste_rot_btn" tool_tip="貼上尺寸" />
-			<button name="paste_rot_clip_btn" tool_tip="嘗試從剪貼簿貼上尺寸" />
+			<button name="copy_size_btn" tool_tip="複製尺寸" />
+			<button name="paste_size_btn" tool_tip="貼上尺寸" />
+			<button name="paste_size_clip_btn" tool_tip="嘗試從剪貼簿貼上尺寸" />
 			<text name="label rotation">
 				旋轉（角度）
 			</text>
