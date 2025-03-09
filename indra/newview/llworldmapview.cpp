@@ -69,12 +69,6 @@
 
 #include "llglheaders.h"
 
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 // # Constants
 static constexpr F32 MAP_DEFAULT_SCALE = 128.f;
 static constexpr F32 MAP_ITERP_TIME_CONSTANT = 0.75f;

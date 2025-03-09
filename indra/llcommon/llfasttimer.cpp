@@ -325,37 +325,14 @@ void BlockTimer::processTimes()
 #endif
 }
 
-// Define a static empty vector that will be used for the root's children.
-static std::vector<BlockTimerStatHandle*> sEmptyChildren;
-
 std::vector<BlockTimerStatHandle*>::iterator BlockTimerStatHandle::beginChildren()
-{
-    // If this is the root node, return an iterator over an empty container.
-    if (this == &BlockTimer::getRootTimeBlock())
-    {
-        return sEmptyChildren.begin();
-    }
-    auto it = getTreeNode().mChildren.begin();
-    while (it != getTreeNode().mChildren.end() && *it == nullptr)
-    {
-        ++it;
-    }
-    return it;
-}
+        {
+    return getTreeNode().mChildren.begin();
+        }
 
 std::vector<BlockTimerStatHandle*>::iterator BlockTimerStatHandle::endChildren()
-{
-    // For the root node, return the end iterator of the empty container.
-    if (this == &BlockTimer::getRootTimeBlock())
-    {
-        return sEmptyChildren.end();
-    }
-    auto it = getTreeNode().mChildren.end();
-    while (it != getTreeNode().mChildren.begin() && *(it - 1) == nullptr)
-    {
-        --it;
-    }
-    return it;
+        {
+    return getTreeNode().mChildren.end();
 }
 
 std::vector<BlockTimerStatHandle*>& BlockTimerStatHandle::getChildren()
@@ -420,13 +397,6 @@ void BlockTimer::dumpCurTimes()
 {
     LLTrace::PeriodicRecording& frame_recording = LLTrace::get_frame_recording();
     LLTrace::Recording& last_frame_recording = frame_recording.getLastRecording();
-
-    // If the root timer's children container is empty,
-    // there's nothing to traverse so we simply return.
-    if ( BlockTimer::getRootTimeBlock().getTreeNode().mChildren.empty() )
-    {
-        return;
-    }    
 
     // walk over timers in depth order and output timings
     for(block_timer_tree_df_iterator_t it = begin_timer_tree(BlockTimer::getRootTimeBlock());

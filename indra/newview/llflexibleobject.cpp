@@ -43,12 +43,6 @@
 #include "llworld.h"
 #include "llvoavatar.h"
 
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 static const F32 SEC_PER_FLEXI_FRAME = 1.f / 60.f; // 60 flexi updates per second
 /*static*/ F32 LLVolumeImplFlexible::sUpdateFactor = 1.0f;
 std::vector<LLVolumeImplFlexible*> LLVolumeImplFlexible::sInstanceList;

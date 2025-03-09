@@ -65,13 +65,6 @@
 
 #include <glm/gtx/transform2.hpp>
 
-
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 // Functions pulled from llviewerdisplay.cpp
 bool get_hud_matrices(glm::mat4 &proj, glm::mat4 &model);
 
@@ -786,7 +779,7 @@ void LLPanelPrimMediaControls::draw()
     else if(mFadeTimer.getStarted())
     {
         F32 time = mFadeTimer.getElapsedTimeF32();
-        alpha *= llmax(lerp(1.0, 0.0, time / mControlFadeTime), 0.0f);
+        alpha *= llmax(lerp(1.0f, 0.0f, time / mControlFadeTime), 0.0f);
 
         if(time >= mControlFadeTime)
         {

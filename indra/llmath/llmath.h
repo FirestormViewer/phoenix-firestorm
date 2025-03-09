@@ -358,12 +358,13 @@ inline F32 snap_to_sig_figs(F32 foo, S32 sig_figs)
     return new_foo;
 }
 
-#if __cplusplus < 202002L
-inline F32 lerp(F32 a, F32 b, F32 u)
-{
-    return a + ((b - a) * u);
-}
-#endif
+// <FS:Ansariel> std::lerp fix from previous develop branch
+//inline F32 lerp(F32 a, F32 b, F32 u)
+//{
+//    return a + ((b - a) * u);
+//}
+using std::lerp;
+// </FS:Ansariel>
 
 inline F32 lerp2d(F32 x00, F32 x01, F32 x10, F32 x11, F32 u, F32 v)
 {
@@ -380,7 +381,7 @@ inline F32 ramp(F32 x, F32 a, F32 b)
 
 inline F32 rescale(F32 x, F32 x1, F32 x2, F32 y1, F32 y2)
 {
-    return std::lerp(y1, y2, ramp(x, x1, x2));
+    return lerp(y1, y2, ramp(x, x1, x2));
 }
 
 inline F32 clamp_rescale(F32 x, F32 x1, F32 x2, F32 y1, F32 y2)

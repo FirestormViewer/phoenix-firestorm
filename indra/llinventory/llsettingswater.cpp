@@ -33,12 +33,6 @@
 #include "indra_constants.h"
 #include <boost/bind.hpp>
 
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 const std::string LLSettingsWater::SETTING_BLUR_MULTIPLIER("blur_multiplier");
 const std::string LLSettingsWater::SETTING_FOG_COLOR("water_fog_color");
 const std::string LLSettingsWater::SETTING_FOG_DENSITY("water_fog_density");

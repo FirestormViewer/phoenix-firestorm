@@ -104,13 +104,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
 

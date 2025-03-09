@@ -42,12 +42,6 @@
 #include <iostream>
 #include "lltrans.h"
 
-// <FS:Beq> use std::lerp for C++20
-#if __cplusplus >= 202002L
-using std::lerp;
-#endif
-// </FS:Beq>
-
 // rate at which to update display of value that is rapidly changing
 const F32 MEAN_VALUE_UPDATE_TIME = 1.f / 4.f;
 // time between value changes that qualifies as a "rapid change"
