@@ -67,7 +67,7 @@ showUsage()
     echo
     echo "  --clean                  : Remove past builds & configuration"
     echo "  --config                 : Generate a new architecture-specific config"
-    echo "  --build                  : Build Firestorm"
+    echo "  --build                  : Build AyaneStorm"
     echo "  --version                : Update version number"
     echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
@@ -391,7 +391,7 @@ if [ -z $CHANNEL ] ; then
 else
     CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
 fi
-CHANNEL="Firestorm-$CHANNEL"
+CHANNEL="AyaneStorm-$CHANNEL"
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     echo "Cleaning $TARGET_PLATFORM...."
