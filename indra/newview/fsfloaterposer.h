@@ -220,25 +220,19 @@ class FSFloaterPoser : public LLFloater
     void onAvatarsRefresh();
     void onAvatarSelect();
     void onJointTabSelect();
-    void onToggleAdvancedPanel();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
     void setRotationChangeButtons(bool mirror, bool sympathetic);
-    void onUndoLastRotation();
-    void onRedoLastRotation();
-    void onUndoLastPosition();
-    void onRedoLastPosition();
-    void onUndoLastScale();
-    void onRedoLastScale();
-    void onResetPosition();
-    void onResetScale();
+    void onUndoLastChange();
+    void onRedoLastChange();
+    void onResetJoint(const LLSD data);
     void onSetAvatarToTpose();
     void enableOrDisableRedoButton();
     void onPoseStartStop();
     void startPosingSelf();
     void stopPosingAllAvatars();
     void onLimbTrackballChanged();
-    void onYawPitchRollSliderChanged();
+    void onYawPitchRollChanged();
     void onAvatarPositionSet();
     void onAdvancedPositionSet();
     void onAdvancedScaleSet();
@@ -246,22 +240,20 @@ class FSFloaterPoser : public LLFloater
     void onClickRecaptureSelectedBones();
     void onClickFlipPose();
     void onClickFlipSelectedJoints();
-    void onPoseJointsReset();
-    void onOpenSetAdvancedPanel();
     void onAdjustTrackpadSensitivity();
     void onClickLoadLeftHandPose();
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
-    //void onCommitSpinner(LLUICtrl* spinner);
     void onCommitSpinner(LLUICtrl* spinner, S32 ID);
+    void onClickSymmetrize(S32 ID);
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();
     void refreshAvatarPositionSlidersAndSpinners();
     void refreshTrackpadCursor();
-    void refreshAdvancedPositionSlidersAndSpinners();
-    void refreshAdvancedScaleSlidersAndSpinners();
+    void refreshPositionSlidersAndSpinners();
+    void refreshScaleSlidersAndSpinners();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
@@ -447,9 +439,6 @@ class FSFloaterPoser : public LLFloater
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
 
     LLSliderCtrl* mTrackpadSensitivitySlider{ nullptr };
-    LLSliderCtrl* mLimbYawSlider{ nullptr };
-    LLSliderCtrl* mLimbPitchSlider{ nullptr }; // pointing your nose up or down
-    LLSliderCtrl* mLimbRollSlider{ nullptr }; // your ear touches your shoulder
     LLSliderCtrl* mPosXSlider{ nullptr };
     LLSliderCtrl* mPosYSlider{ nullptr };
     LLSliderCtrl* mPosZSlider{ nullptr };
@@ -473,7 +462,6 @@ class FSFloaterPoser : public LLFloater
     LLScrollListCtrl* mPosesScrollList{ nullptr };
     LLScrollListCtrl* mHandPresetsScrollList{ nullptr };
 
-    LLButton* mToggleAdvancedPanelBtn{ nullptr };
     LLButton* mStartStopPosingBtn{ nullptr };
     LLButton* mToggleLoadSavePanelBtn{ nullptr };
     LLButton* mBrowserFolderBtn{ nullptr };
@@ -491,7 +479,6 @@ class FSFloaterPoser : public LLFloater
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
-    LLPanel* mAdvancedParentPnl{ nullptr };
     LLPanel* mJointsParentPnl{ nullptr };
     LLPanel* mTrackballPnl{ nullptr };
     LLPanel* mPositionRotationPnl{ nullptr };
