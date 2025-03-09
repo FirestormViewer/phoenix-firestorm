@@ -328,7 +328,7 @@ def gather_build_info(build_type_info, config):
                 file_URI = f"{download_root}/{platform_folder}/{base_name}"
                 md5 = get_md5(full_file)
                 
-                if "FirestormOS-" in base_name:
+                if "AyaneStormOS-" in base_name:
                     grid = "OS"
                 else:
                     grid = "SL"
