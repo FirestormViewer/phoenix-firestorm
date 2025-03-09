@@ -344,6 +344,8 @@ static bool handleDisableVintageMode(const LLSD& newvalue)
 
 static bool handleEnableHDR(const LLSD& newvalue)
 {
+    gPipeline.mReflectionMapManager.reset();
+    gPipeline.mHeroProbeManager.reset();
     return handleReleaseGLBufferChanged(newvalue) && handleSetShaderChanged(newvalue);
 }
 
@@ -575,11 +577,11 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
     if (gPipeline.isInit())
     {
         LLPipeline::refreshCachedSettings();
+        gPipeline.mReflectionMapManager.reset();
+        gPipeline.mHeroProbeManager.reset();
         gPipeline.releaseGLBuffers();
         gPipeline.createGLBuffers();
         LLViewerShaderMgr::instance()->setShaders();
-        gPipeline.mReflectionMapManager.reset();
-        gPipeline.mHeroProbeManager.reset();
     }
     return true;
 }
@@ -1239,9 +1241,9 @@ LLPointer<LLControlVariable> setting_get_control(LLControlGroup& group, const st
     LLPointer<LLControlVariable> cntrl_ptr = group.getControl(setting);
     if (cntrl_ptr.isNull())
     {
+        LLError::LLUserWarningMsg::showMissingFiles();
         LL_ERRS() << "Unable to set up setting listener for " << setting
-            << ". Please reinstall viewer from  https://www.firestormviewer.org/choose-your-platform/ and contact https://www.firestormviewer.org/support if issue persists after reinstall."
-            << LL_ENDL;
+            << "." << LL_ENDL;
     }
     return cntrl_ptr;
 }
@@ -1284,7 +1286,10 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAnisotropic", handleAnisotropicChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
+    // <FS:WW> Ensure shader update on shadow resolution scale change for correct shadow rendering.
+    // setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
+    setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleSetShaderChanged);
+    // </FS>
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);

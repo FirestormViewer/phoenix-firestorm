@@ -168,20 +168,18 @@
 			<check_box label="暫停世界更新 (使所有內容暫停)" tool_tip="勾選此項可暫停來自世界的所有更新- 這將暫停所有視覺操作，但不會影響書面或語音聊天" name="WorldPause" />
 			<check_box label="限制影格率" name="FSLimitFramerate" />
 			<slider label="FPS：" name="MaxFPS" />
-			<check_box label="啟用垂直同步" name="vsync" tool_tip="將影格速率與顯示器更新率同步，可能會導致延遲增加和圖像卡頓。" />
+			<check_box label="將影格率限制為顯示器頻率（垂直同步）" name="vsync" tool_tip="將影格速率與顯示器更新率同步，可能會導致延遲增加和圖像卡頓。" />
 			<text name="Texture Rendering">紋理彩現：</text>
 			<check_box label="載入最小紋理" tool_tip="設定「紋理禁用」參數-紋理載入速度極慢，可能對GPU較慢的電腦有用" name="TexturesLoaded" />
 			<check_box label="使用HTTP載入紋理" tool_tip="啟用通過HTTP協定載入紋理-如果出現紋理載入緩慢或不正確的問題，並且要使用過時的UDP協定，則禁用此選項。" name="TexturesHTTP" />
-			<check_box label="將紋理的最大解析度限制為：（需要重新啟動）" tool_tip="將紋理的最大解析度限制為指定的畫素。這允許在現有紋理記憶體用盡之前顯示多個紋理，並且不會顯示模糊的紋理。" name="FSRestrictMaxTextureSize" />
-			<combo_box name="FSRestrictMaxTexturePixels">
+			<text name="FSRestrictMaxTextureSize">
+				將紋理的最大解析度限制為：
+			</text>
+			<combo_box name="FSRestrictMaxTexturePixels" tool_tip="將紋理的最大解析度限制為指定的畫素。這允許在現有紋理記憶體用盡之前顯示多個紋理，並且不會顯示模糊的紋理。">
 				<combo_box.item label="512畫素" name="512" />
 				<combo_box.item label="1024畫素" name="1024" />
-				<!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
-				<combo_box.item label="2048畫素" name="2048"/>-->
+				<combo_box.item label="2048畫素" name="2048"/>
 			</combo_box>
-			<text name="FSRestrictMaxTextureSizeRestartText">
-				(需要重新啟動)
-			</text>
 			<slider label="最大同時HTTP請求數" name="HTTPFetchMaxRequests" />
 			<text name="TextureDetailLabel" tool_tip="載入紋理的品質級別。影響紋理丟棄設定">
 				最大紋理品質：

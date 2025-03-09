@@ -243,10 +243,11 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
     chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
     chat_args["show_time"] = show_timestamps_nearby_chat;
     chat_args["is_local"] = true;
-    mChatHistoryMuted->appendMessage(chat, chat_args);
+    static const LLStyle::Params input_append_params = LLStyle::Params();
+    mChatHistoryMuted->appendMessage(chat, chat_args, input_append_params);
     if (!chat.mMuted)
     {
-        mChatHistory->appendMessage(chat, chat_args);
+        mChatHistory->appendMessage(chat, chat_args, input_append_params);
     }
 
     if (archive)
