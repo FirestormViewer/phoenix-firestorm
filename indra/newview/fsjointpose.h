@@ -189,6 +189,20 @@ class FSJointPose
             mRotation.set(otherState.mRotation);
         }
 
+        bool baseRotationIsZero() const { return mBaseRotation == LLQuaternion::DEFAULT; }
+
+        void zeroBaseRotation() { mBaseRotation = LLQuaternion::DEFAULT; }
+
+        void revertJointToBase(LLJoint* joint) const
+        {
+            if (!joint)
+                return;
+
+            joint->setRotation(mBaseRotation);
+            joint->setPosition(mBasePosition);
+            joint->setScale(mBaseScale);
+        }
+
       private:
         FSJointState(FSJointState* state)
         {
@@ -227,7 +241,6 @@ class FSJointPose
     std::chrono::system_clock::time_point mTimeLastUpdatedCurrentState = std::chrono::system_clock::now();
 
     FSJointState mCurrentState;
-    FSJointState mBeginningState;
 
     void addStateToUndo(FSJointState stateToAddToUndo);
     FSJointState undoLastStateChange(FSJointState currentState);

@@ -704,7 +704,7 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
     loadPoseFromXml(avatar, poseName, loadType);
     onJointTabSelect();
     refreshJointScrollListMembers();
-    setSavePosesButtonText(mPoserAnimator.allBaseRotationsAreZero(avatar));
+    setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
 }
 
 bool FSFloaterPoser::notDoubleClicked()
@@ -892,6 +892,9 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 if (name == "version")
                     version = (S32)control_map["value"].asInteger();
             }
+
+            if (startFromZeroRot)
+                mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
 
             bool loadPositionsAndScalesAsDeltas = false;
             if (version > 3)

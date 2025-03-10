@@ -49,7 +49,6 @@ FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
     mIsCollisionVolume = isCollisionVolume;
 
     mCurrentState   = FSJointState(joint);
-    mBeginningState = FSJointState(joint);
 }
 
 void FSJointPose::setPublicPosition(const LLVector3& pos)
@@ -178,13 +177,7 @@ void FSJointPose::mirrorRotationFrom(FSJointPose* fromJoint)
 
 void FSJointPose::revertJoint()
 {
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return;
-
-    joint->setRotation(mBeginningState.getTargetRotation());
-    joint->setPosition(mBeginningState.getTargetPosition());
-    joint->setScale(mBeginningState.getTargetScale());
+    mCurrentState.revertJointToBase(mJointState->getJoint());
 }
 
 void FSJointPose::reflectRotation()
@@ -200,7 +193,7 @@ void FSJointPose::zeroBaseRotation()
     if (mIsCollisionVolume)
         return;
 
-    mBeginningState.mRotation = LLQuaternion::DEFAULT;
+    mCurrentState.zeroBaseRotation();
 }
 
 bool FSJointPose::isBaseRotationZero() const
@@ -208,5 +201,5 @@ bool FSJointPose::isBaseRotationZero() const
     if (mIsCollisionVolume)
         return true;
 
-    return mBeginningState.mRotation == LLQuaternion::DEFAULT;
+    return mCurrentState.baseRotationIsZero();
 }
