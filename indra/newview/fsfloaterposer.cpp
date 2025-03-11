@@ -390,7 +390,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
     {
         bool savingDiff = !mPoserAnimator.allBaseRotationsAreZero(avatar);
         LLSD record;
-        record["version"]["value"] = (S32)5;
+        record["version"]["value"] = (S32)6;
         record["startFromTeePose"]["value"] = !savingDiff;
 
         LLVector3 rotation, position, scale, zeroVector;
@@ -893,7 +893,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                     version = (S32)control_map["value"].asInteger();
             }
 
-            if (startFromZeroRot)
+            if (version > 5 && startFromZeroRot)
                 mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
 
             bool loadPositionsAndScalesAsDeltas = false;
