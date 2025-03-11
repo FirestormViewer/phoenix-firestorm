@@ -69,7 +69,6 @@ LLViewerCamera::LLViewerCamera() : LLCamera()
     mCameraFOVDefault = DEFAULT_FIELD_OF_VIEW;
     mPrevCameraFOVDefault = DEFAULT_FIELD_OF_VIEW;
     mCosHalfCameraFOV = cosf(mCameraFOVDefault * 0.5f);
-    mCosCameraFOV = cosf(mCameraFOVDefault);
     mPixelMeterRatio = 0.f;
     mScreenPixelArea = 0;
     mZoomFactor = 1.f;
@@ -144,10 +143,6 @@ void LLViewerCamera::updateCameraLocation(const LLVector3 &center, const LLVecto
     mAverageSpeed = (F32)LLTrace::get_frame_recording().getPeriodMeanPerSec(sVelocityStat, 50);
     mAverageAngularSpeed = (F32)LLTrace::get_frame_recording().getPeriodMeanPerSec(sAngularVelocityStat);
     mCosHalfCameraFOV = cosf(0.5f * getView() * llmax(1.0f, getAspect()));
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    // Store the full Cos FOV value
-    mCosCameraFOV = cosf(getView() * llmax(1.0f, getAspect()));
-    // </FS:minerjr> [FIRE-35081]
 
     // update pixel meter ratio using default fov, not modified one
     mPixelMeterRatio = (F32)(getViewHeightInPixels()/ (2.f*tanf(mCameraFOVDefault*0.5f)));
@@ -827,9 +822,6 @@ void LLViewerCamera::setDefaultFOV(F32 vertical_fov_rads)
     setView(vertical_fov_rads);
     mCameraFOVDefault = vertical_fov_rads;
     mCosHalfCameraFOV = cosf(mCameraFOVDefault * 0.5f);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    mCosCameraFOV = cosf(mCameraFOVDefault);
-    // </FS:minerjr> [FIRE-35081]
 }
 
 bool LLViewerCamera::isDefaultFOVChanged()
