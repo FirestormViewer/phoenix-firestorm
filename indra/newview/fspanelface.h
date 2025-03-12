@@ -137,6 +137,8 @@ protected:
     void updateMediaSettings();
     void updateMediaTitle();
 
+    bool isMediaTexSelected();
+
     void getState();
 
     void sendTexture();         // applies and sends texture
@@ -159,6 +161,7 @@ protected:
     // common controls and parameters for Blinn-Phong and PBR
     void onCopyFaces();     // <FS> Extended copy & paste buttons
     void onPasteFaces();
+    void onCommitHideWater();
     void onCommitGlow();
     void onCommitRepeatsPerMeter();
 
@@ -410,9 +413,9 @@ private:
     LLComboBox*         mComboAlphaMode;
     LLSpinCtrl*         mCtrlMaskCutoff;
     LLCheckBoxCtrl*     mCheckFullbright;
+    LLCheckBoxCtrl*     mCheckHideWater;
 
     // private Blinn-Phong texture transforms and controls
-    LLView*             mLabelTexGen;
     LLView*             mLabelBumpiness;
     LLComboBox*         mComboBumpiness;
     LLView*             mLabelShininess;
@@ -636,6 +639,7 @@ private:
     void setMaterialOverridesFromSelection();
 
     bool mIsAlpha;
+    bool mExcludeWater;
 
     LLSD mClipboardParams;
 
