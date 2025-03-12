@@ -180,6 +180,9 @@ void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
     mFaceColor = LLColor4(1,0,0,1);
 
     mImportanceToCamera = 0.f ;
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    mCloseToCamera = 0.0f;
+    // </FS:minerjr> [FIRE-35081]
     mBoundingSphereRadius = 0.0f ;
 
     mTexExtents[0].set(0, 0);
@@ -2517,7 +2520,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
         mImportanceToCamera = 1.0f ;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
         mInFrustum = true; // If the face is important to the camera, it is in the frustum
-        mCloseToCamera = true;
+        mCloseToCamera = 1.0f;
         // </FS:minerjr> [FIRE-35081]
     }
     else
