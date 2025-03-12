@@ -7,7 +7,7 @@
 					<layout_stack name="vertical_centering2">
 						<layout_panel name="panel_icons">
 							<text name="logos_lbl">
-								[APP_NAME] utilise
+								Second Life utilise
 							</text>
 						</layout_panel>
 					</layout_stack>
