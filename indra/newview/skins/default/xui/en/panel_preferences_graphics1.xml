@@ -1250,7 +1250,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="World Updating"
-         top_pad="5"
+         top_pad="2"
          width="308">
             World Updating:
         </text>
@@ -1263,7 +1263,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="5"
          name="WorldPause"
-         top_pad="6"
+         top_pad="4"
          width="256"/>
 
          <check_box
@@ -1327,7 +1327,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="10"
          name="FSRestrictMaxTextureSize"
-         top_pad="4"
+         top_pad="2"
          width="250">
             Restrict maximum texture resolution to:
         </text>
@@ -1359,7 +1359,7 @@ If you do not understand the distinction then leave this control alone."
         <text
          type="string"
          length="1"
-         top_pad="10"
+         top_pad="3"
          follows="top|left"
          height="18"
          width="150"
@@ -1533,7 +1533,7 @@ If you do not understand the distinction then leave this control alone."
          min_val="1"
          name="PrecachingDelay"
          left="10"
-         top_pad="10"
+         top_pad="5"
          width="405" />
         <text
          type="string"
@@ -1599,6 +1599,22 @@ If you do not understand the distinction then leave this control alone."
          width="405">
         </slider>
         <!-- End of Sharpening Settings-->
+        <slider
+         control_name="RenderReflectionProbeCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="256"
+         label="Max. Reflection Probes:"
+         label_width="300"
+         layout="topleft"
+         left="10"
+         min_val="1"
+         max_val="256"
+         name="MaxProbes"
+         top_pad="0"
+         width="405" />
         <!-- Tone Mapping Settings -->
         <text
          type="string"

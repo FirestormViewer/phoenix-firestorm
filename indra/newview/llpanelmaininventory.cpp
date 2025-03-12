@@ -2616,14 +2616,11 @@ void LLPanelMainInventory::onVisibilityChange( bool new_visibility )
         {
             menu->setVisible(false);
         }
-        // <FS:Ansariel> FIRE-20109: Crash at start using Vintage skin
-        //getActivePanel()->getRootFolder()->finishRenamingItem();
-        LLInventoryPanel* panel = getActivePanel();
-        if (panel)
+        LLFolderView* root_folder = mActivePanel ? mActivePanel->getRootFolder() : nullptr;
+        if (root_folder)
         {
-            panel->getRootFolder()->finishRenamingItem();
+            root_folder->finishRenamingItem();
         }
-        // </FS:Ansariel>
     }
 }
 
