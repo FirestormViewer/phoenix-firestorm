@@ -131,6 +131,10 @@
 
 #include "SMAAAreaTex.h"
 #include "SMAASearchTex.h"
+    
+// <FS:WW>
+#include "llerror.h"
+// </FS:WW>
 
 #ifndef LL_WINDOWS
 #define A_GCC 1
@@ -789,6 +793,43 @@ void LLPipeline::requestResizeShadowTexture()
 
 void LLPipeline::resizeShadowTexture()
 {
+
+    // <FS:WW> Add frame skip counter and logging for shadow texture resizing.
+    // A static counter to keep track of skipped frames
+    static int sSkippedFrameCount = 0;
+
+    if (!mRT || mRT->width == 0 || mRT->height == 0)
+    {
+        // Log warning about invalid render target dimensions.
+        sSkippedFrameCount++;
+        // Include skipped frame count in the log message.
+        // Indicate the number of frames skipped so far.
+        // Use LL_WARNS for warning log level.
+        // Add "Render" category to the log message.
+        LL_WARNS("Render") << "Shadow texture resizing aborted: render target dimensions invalid. Skipped "
+                           << sSkippedFrameCount << " frame(s) so far." << LL_ENDL;
+        return;
+    }
+
+    // If there were skipped frames before mRT became valid, log that information.
+    if (sSkippedFrameCount > 0)
+    {
+        // Log info message when render target becomes valid after skips.
+        // Indicate the number of frames skipped previously.
+        // Use LL_INFOS for info log level.
+        // Add "Render" category to the log message.
+        LL_INFOS("Render") << "Render target now valid after "
+                           << sSkippedFrameCount << " skipped frame(s)." << LL_ENDL;
+        sSkippedFrameCount = 0;
+    }
+
+    // Add verbose logging for shadow texture resizing.
+    LL_WARNS() << "LLPipeline::resizeShadowTexture() called." << LL_ENDL;
+    LL_INFOS() << "Resizing shadow texture. mRT->width = "
+               << mRT->width << " mRT->height = " << mRT->height << LL_ENDL;
+
+    // </FS:WW>
+
     releaseSunShadowTargets();
     releaseSpotShadowTargets();
     allocateShadowBuffer(mRT->width, mRT->height);
