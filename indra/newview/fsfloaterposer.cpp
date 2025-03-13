@@ -239,6 +239,19 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     LLFloater::onOpen(key);
 }
 
+
+void FSFloaterPoser::onFocusReceived()
+{
+    LLEditMenuHandler::gEditMenuHandler = this;
+}
+
+void FSFloaterPoser::onFocusLost()
+{
+    if( LLEditMenuHandler::gEditMenuHandler == this )
+    {
+        LLEditMenuHandler::gEditMenuHandler = nullptr;
+    }
+}
 void FSFloaterPoser::enableVisualManipulators()
 {
     if (LLToolMgr::getInstance()->getCurrentToolset() != gCameraToolset)

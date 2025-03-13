@@ -74,18 +74,23 @@ typedef enum E_Columns
 /// A class containing the UI fiddling for the Poser Floater.
 /// Please don't do LLJoint stuff here, fsposingmotion (the LLMotion derivative) is the class for that.
 /// </summary>
-class FSFloaterPoser : public LLFloater
+class FSFloaterPoser : public LLFloater, public LLEditMenuHandler
 {
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
 public:    
     void updatePosedBones();
     void selectJointByName(const std::string& jointName);
+    void  undo() override { onUndoLastChange(); };
+    bool  canUndo() const  override { return true; }
+    void  redo() override { onRedoLastChange(); };
+    bool  canRedo() const override { return true; }    
  private:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
-
+    void onFocusReceived() override;
+    void onFocusLost() override;
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>

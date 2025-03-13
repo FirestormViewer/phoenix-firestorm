@@ -932,14 +932,15 @@ bool FSManipRotateJoint::handleMouseDown(S32 x, S32 y, MASK mask)
  */
 bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
 {
+    auto * poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
     // Determine which ring (axis) is under the mouse, also highlights selectable joints.
     highlightManipulators(x, y);
     // For joint manipulation, require both a valid joint and avatar.
-    if (!mJoint || !mAvatar)
+    if (!mJoint || !mAvatar || !poser)
     {
         return false;
     }
-
+    poser->setFocus(true);
     S32 hit_part = mHighlightedPart;
 
     // Save the joint’s current world rotation as the basis for the drag.

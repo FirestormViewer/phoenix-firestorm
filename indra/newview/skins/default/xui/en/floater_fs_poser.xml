@@ -937,7 +937,7 @@ width="430">
 				 tool_tip="Toggle the visual manipulators on and off"
 				 height="50"
 				 width="50"
-				 left="2"
+				 left="5"
 				 bottom_delta="5"
 				 >
 					<button.commit_callback
