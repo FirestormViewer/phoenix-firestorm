@@ -72,7 +72,7 @@
 				区画が選択されていません。
 			</panel.string>
 			<panel.string name="time_stamp_template">
-				[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]
+				[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[hour,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
 			</panel.string>
 			<panel.string name="error_resolving_uuid">
 				区画ＩＤを解決できませんでした。
