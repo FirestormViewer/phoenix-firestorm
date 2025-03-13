@@ -21,7 +21,7 @@
 			創設者：
 		</text>
 		<button name="copy_name" label="名前をコピー"/>
-		<texture_picker name="insignia" tool_tip="画像を拡大するにはクリックしてください。" label=""/>
+		<texture_picker name="insignia" tool_tip="画像を拡大するにはクリックしてください。"/>
 		<text_editor name="charter">
 			グループの理念、指針を記入してください
 		</text_editor>
@@ -34,7 +34,7 @@
 			<name_list.columns label="タイトル" name="title"/>
 			<name_list.columns label="ログイン" name="status"/>
 		</name_list>
-		<layout_stack name="group_preferences_layout" orientation="horizontal">
+		<layout_stack name="group_preferences_layout">
 			<layout_panel name="user_preferences_container">
 				<text name="my_group_settngs_label">
 					個人設定
@@ -58,11 +58,11 @@
 				<check_box name="check_enrollment_fee" tool_tip="グループ加入に入会費が必要かどうかを設定します。" label="入会費がかかります。"/>
 				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" label="L$"/>
 				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
-					<combo_item name="select_mature" value="Select">
+					<combo_item name="select_mature">
 						‐レーティング区分を指定‐
 					</combo_item>
-					<combo_box.item label="「Moderate」コンテンツ" name="mature" value="Mature"/>
-					<combo_box.item label="「General」コンテンツ" name="pg" value="Not Mature"/>
+					<combo_box.item label="「Moderate」コンテンツ" name="mature"/>
+					<combo_box.item label="「General」コンテンツ" name="pg"/>
 				</combo_box>
 			</layout_panel>
 		</layout_stack>

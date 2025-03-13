@@ -80,8 +80,7 @@
 					<!-- Three movable panels first so that they will be 'below' slider-->
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
-							スカイ[INDEX]
-[ALTITUDE]ｍ
+							スカイ[INDEX]&#xA;[ALTITUDE]ｍ
 						</text>
 						<line_editor name="edt_invname_alt1">
 							不明
@@ -90,8 +89,7 @@
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
-							スカイ[INDEX]
-[ALTITUDE]ｍ
+							スカイ[INDEX]&#xA;[ALTITUDE]ｍ
 						</text>
 						<line_editor name="edt_invname_alt2">
 							不明
@@ -100,8 +98,7 @@
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
-							スカイ[INDEX]
-[ALTITUDE]ｍ
+							スカイ[INDEX]&#xA;[ALTITUDE]ｍ
 						</text>
 						<line_editor name="edt_invname_alt3">
 							不明

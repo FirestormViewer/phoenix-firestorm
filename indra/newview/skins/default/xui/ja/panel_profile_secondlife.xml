@@ -9,11 +9,6 @@
 	<string name="status_unknown">
 		不明
 	</string>
-	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-[PAYMENTINFO]
-[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
-	</string>
 	<!--Badges-->
 	<string name="BadgeBeta" value="オリジナルβテスター"/>
 	<string name="BadgeBetaLifetime" value="β会員"/>
@@ -27,18 +22,9 @@
 	<string name="my_account_link_url" value="https://secondlife.com/my/account/?lang=ja-JP"/>
 	<string name="no_partner_text" value="None"/>
 	<string name="no_group_text" value="None"/>
-	<string name="age_format_short">
-		[REG_DATE]
-	</string>
 	<string name="age_format_full">
 		[REG_DATE]
 （[AGE]）
-	</string>
-	<string name="name_text_args">
-		[NAME]
-	</string>
-	<string name="display_name_text_args">
-		[DISPLAY_NAME]
 	</string>
 	<string name="FSDev" value="開発者"/>
 	<string name="FSSupp" value="サポート"/>
