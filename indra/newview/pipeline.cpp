@@ -8837,14 +8837,20 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     shader.uniform1f(LLShaderMgr::DEFERRED_SHADOW_NOISE, RenderShadowNoise);
     shader.uniform1f(LLShaderMgr::DEFERRED_BLUR_SIZE, RenderShadowBlurSize);
 
-    shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale);
-    shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, (GLfloat)RenderSSAOMaxScale);
+// <FS:WW> Compute scale factor to match AO appearance between view and snapshot.
+	F32 screen_to_target_scale_factor = (F32)gViewerWindow->getWindowHeightRaw() / deferred_target->getHeight();
+	//shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale);
+	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale / screen_to_target_scale_factor);
+	//shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, (GLfloat)RenderSSAOMaxScale);
+	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, RenderSSAOMaxScale / screen_to_target_scale_factor);
+	// </FS:WW>
 
     F32 ssao_factor = RenderSSAOFactor;
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR, ssao_factor);
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR_INV, 1.0f/ssao_factor);
 
     LLVector3 ssao_effect = RenderSSAOEffect;
+
     F32 matrix_diag = (ssao_effect[0] + 2.0f*ssao_effect[1])/3.0f;
     F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0f;
     // This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by
