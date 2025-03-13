@@ -40,14 +40,8 @@
 	<floater.string name="objects">
 		オブジェクト
 	</floater.string>
-	<text name="filename_text">
-		[FILENAME]
-	</text>
 	<text name="creation_date_text">
 		[DATE_STRING]に作成
-	</text>
-	<text name="author_text">
-		by [AUTHOR] [GRID]
 	</text>
 	<text name="client_text">
 		クライアント：[CLIENT] v.[VERSION]

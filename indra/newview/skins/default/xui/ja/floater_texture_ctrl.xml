@@ -39,23 +39,11 @@
 	<button label="削除" label_selected="削除" name="l_rem_btn"/>
 	<button label="アップロード" label_selected="アップロード" name="l_upl_btn"/>
 	<scroll_list name="l_name_list">
-		<column name="icon" label=""/>
 		<column name="unit_name" label="名前"/>
 	</scroll_list>
 	<!-- middle: bake mode -->
 	<combo_box name="l_bake_use_texture_combo_box" tool_tip="ベイクするテクスチャを選択">
 		<combo_box.item label="なし" name="None"/>
-		<combo_box.item label="BAKED_HEAD" name="BAKED_HEAD"/>
-		<combo_box.item label="BAKED_UPPER" name="BAKED_UPPER"/>
-		<combo_box.item label="BAKED_LOWER" name="BAKED_LOWER"/>
-		<combo_box.item label="BAKED_EYES" name="BAKED_EYES"/>
-		<combo_box.item label="BAKED_SKIRT" name="BAKED_SKIRT"/>
-		<combo_box.item label="BAKED_HAIR" name="BAKED_HAIR"/>
-		<combo_box.item label="BAKED_LEFTARM" name="BAKED_LEFTARM"/>
-		<combo_box.item label="BAKED_LEFTLEG" name="BAKED_LEFTLEG"/>
-		<combo_box.item label="BAKED_AUX1" name="BAKED_AUX1"/>
-		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
-		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
 	</combo_box>
 	<!-- bottom static -->
 	<line_editor name="TextureKey" label="00000000-0000-0000-0000-000000000000" tool_tip="テクスチャのキー"/>

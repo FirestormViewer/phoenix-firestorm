@@ -4,7 +4,6 @@
 	<string name="no_havok">
 		物理と一緒にメッシュをアップロードします。
 	</string>
-	<string name="status_idle"/>
 	<string name="status_parse_error">
 		エラー：DAEファイルに問題が見つかりました。‐詳細につきましてはログをご確認ください。
 	</string>
@@ -177,7 +176,6 @@
 					<item label="三角形の限度数" name="Triangle Limit"/>
 					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<text name="high_status" value=""/>
 				<text name="medium_label" value="中"/>
 				<combo_box name="lod_source_medium">
 					<item name="Load from file" label="ファイルから読み込む"/>
@@ -187,13 +185,11 @@
 					<item name="Generate" label="信頼性の高い生成"/>
 					<item name="Use LoD above" label="上記のＬｏＤ設定を使用"/>
 				</combo_box>
-				<line_editor name="lod_file_medium" value=""/>
 				<button label="参照…" name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
 					<item label="三角形の限度数" name="Triangle Limit"/>
 					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<text name="medium_status" value=""/>
 				<text name="low_label" value="低"/>
 				<combo_box name="lod_source_low">
 					<item name="Load from file" label="ファイルから読み込む"/>
@@ -203,13 +199,11 @@
 					<item name="Generate" label="信頼性の高い生成"/>
 					<item name="Use LoD above" label="上記のＬｏＤ設定を使用"/>
 				</combo_box>
-				<line_editor name="lod_file_low" value=""/>
 				<button label="参照…" name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
 					<item label="三角形の限度数" name="Triangle Limit"/>
 					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<text name="low_status" value=""/>
 				<text name="lowest_label" value="最低"/>
 				<combo_box name="lod_source_lowest">
 					<item name="Load from file" label="ファイルから読み込む"/>
@@ -219,7 +213,6 @@
 					<item name="Generate" label="信頼性の高い生成"/>
 					<item name="Use LoD above" label="上記のＬｏＤ設定を使用"/>
 				</combo_box>
-				<line_editor name="lod_file_lowest"/>
 				<button label="参照…" name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
 					<item name="Triangle Limit" label="三角形の限度数"/>
@@ -231,7 +224,6 @@
 			<!-- PHYSYCS PANEL -->
 			<panel label="物理効果" name="physics_panel">
 				<!-- ==== STEP 1: Level of Detail ==== -->
-				<view_border name="physics_tab_border"/>
 				<panel name="physics geometry">
 					<text name="first_step_name">
 						ステップ１：描画詳細度
@@ -309,7 +301,6 @@
 					<text name="Retain%_label">
 						維持率：
 					</text>
-					<combo_box name="Combine Quality" value="1"/>
 					<button label="簡素化" name="Simplify"/>
 					<button label="キャンセル" name="simplify_cancel"/>
 				</panel>
@@ -334,7 +325,6 @@
 				<text name="scale_label" width="160">
 					スケール（1＝拡大縮小なし）：
 				</text>
-				<spinner name="import_scale" value="1.0"/>
 				<text name="dimensions_label">
 					サイズ：
 				</text>
@@ -345,17 +335,14 @@
 				<text name="pelvis_offset_label">
 					Ｚオフセット（アバターの上下調整）：
 				</text>
-				<spinner name="pelvis_offset" value="0.0"/>
 			</panel>
 			<panel label="オーバーライド" name="rigging_panel" title="リグ">
-				<view_border name="avatar_tab_border"/>
 				<check_box label="スキンのウエイトを含める" name="upload_skin"/>
 				<check_box label="ジョイント位置を含める" name="upload_joints"/>
 				<check_box label="スケールをロック" name="lock_scale_if_joint_position"/>
 				<text name="pelvis_offset_label">
 					Ｚオフセット（アバターの上下調整）：
 				</text>
-				<spinner name="pelvis_offset" value="0.0"/>
 				<text name="skin_too_many_joints">
 					スキンされたジョイントが多すぎます。
 				</text>
@@ -544,7 +531,6 @@
 						</combo_item>
 					</combo_box>
 				</panel>
-				<view_border name="preview_controls_border"/>
 				<check_box label="縁" name="show_edges"/>
 				<check_box label="テクスチャ" name="show_textures"/>
 				<check_box label="ＵＶガイド" name="show_uv_guide"/>
@@ -552,7 +538,6 @@
 				<text name="exploder_label">
 					凸包を広げる
 				</text>
-				<slider name="physics_explode"/>
 				<check_box label="ウェイト" name="show_skin_weight"/>
 				<check_box label="関節の位置" name="show_joint_positions" />
 				<check_box label="関節の位置の上書き" name="show_joint_overrides">

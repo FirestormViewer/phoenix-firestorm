@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map" title="ミニマップ">
 	<!-- RLVa shows the anonymized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) -->
-	<floater.string name="ToolTipMsg">
-		[AGENT][PARCEL_NAME_MSG][PARCEL_SALE_PRICE_MSG][PARCEL_SALE_AREA_MSG][PARCEL_OWNER_MSG][REGION_NAME_MSG][TOOL_TIP_HINT_MSG]
-	</floater.string>
 	<floater.string name="ParcelNameMsg">
 		[PARCEL_NAME]
 	</floater.string>

@@ -22,7 +22,8 @@
 		何も見つかりませんでした。
 	</floater.string>
 	<floater.string name="URLs">
-		ＵＲＬ</floater.string>
+		ＵＲＬ
+	</floater.string>
 	<floater.string name="memory">
 		メモリ（㎅）
 	</floater.string>

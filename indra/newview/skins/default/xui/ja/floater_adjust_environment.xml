@@ -36,7 +36,6 @@
 					<text name="water_map_label">
 						水面の画像：
 					</text>
-					<texture_picker name="water_normal_map"/>
 				</layout_panel>
 				<layout_panel name="lp_2">
 					<text name="haze_horizon_label">
@@ -60,7 +59,6 @@
 					<text name="scene_gamma_label">
 						輝度：
 					</text>
-					<slider name="scene_gamma"/>
 				</layout_panel>
 				<layout_panel name="lp_3">
 					<text name="label">

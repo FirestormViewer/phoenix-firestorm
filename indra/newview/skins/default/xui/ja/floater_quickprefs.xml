@@ -20,18 +20,12 @@
 				<text name="WL Sky" tool_tip="WindLightの空のプリセットです。">
 					空：
 				</text>
-				<button name="WLPrevPreset" label=""/>
-				<button name="WLNextPreset" label=""/>
 				<text name="WL Water" tool_tip="WindLightの水面のプリセットです。">
 					水面：
 				</text>
-				<button name="WWPrevPreset" label_selected=""/>
-				<button name="WWNextPreset" label=""/>
 				<text name="Day Cycle" tool_tip="WindLightのデイサイクルのプリセットです。">
 					デイサイクル：
 				</text>
-				<button name="DCPrevPreset" label=""/>
-				<button name="DCNextPreset" label=""/>
 				<button name="btn_personal_lighting" label="個人的光源…"/>
 				<button name="ResetToRegionDefault" tool_tip="自然環境のオプションを共有された環境にリセットします。"/>
 				<!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->

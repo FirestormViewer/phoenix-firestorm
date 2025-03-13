@@ -2,13 +2,11 @@
 <floater name="settings_color" title="色設定">
 	<filter_editor label="検索語句" name="filter_input"/>
 	<scroll_list name="setting_list">
-		<scroll_list.columns name="changed_color"/>
 		<scroll_list.columns label="色" name="color"/>
 	</scroll_list>
 	<text name="color_name_txt">
 		色名：
 	</text>
-	<color_swatch name="color_swatch"/>
 	<spinner label="アルファ" name="alpha_spinner"/>
 	<button label="デフォルトにリセット" name="default_btn"/>
 	<check_box label="変更した色のみ表示" name="hide_default">

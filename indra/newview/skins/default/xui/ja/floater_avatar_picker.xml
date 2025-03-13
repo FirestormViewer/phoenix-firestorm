@@ -30,7 +30,6 @@
 			<text name="InstructSearchResidentName">
 				名前の一部を入力：
 			</text>
-			<line_editor name="Edit"/>
 			<button label="実行" label_selected="実行" name="Find"/>
 			<scroll_list name="SearchResults">
 				<columns label="名前" name="name"/>

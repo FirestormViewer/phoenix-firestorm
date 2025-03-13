@@ -33,9 +33,7 @@
 				<!-- </FS:Chanayane> -->
 			</layout_panel>
 			<layout_panel name="camera_zoom_layout_panel">
-				<button name="zoom_plus_btn"/>
 				<slider_bar name="zoom_slider" tool_tip="カメラを焦点に向けてズームします。"/>
-				<butto name="zoom_minus_btn"/>
 			</layout_panel>
 			<layout_panel name="panel_track">
 				<joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。"/>
@@ -50,6 +48,4 @@
 		</combo_box>
 		<button name="gear_btn" tool_tip="カメラのプリセット一覧を開きます。"/>
 	</panel>
-	<panel name="viewer_camera_info"/>
-	<panel name="agent_camera_info"/>
 </floater>
