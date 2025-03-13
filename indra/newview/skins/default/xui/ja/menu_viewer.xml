@@ -450,7 +450,7 @@
 			<menu_item_check label="メモリを表示" name="Show Memory"/>
 			<menu_item_check label="オブジェクトの更新を表示する" name="Show Updates"/>
 		</menu>
-		<menu create_jump_keys="true" label="プロファイリング／テレメトリ" name="Enable / Disable telemetry capture">
+		<menu label="プロファイリング／テレメトリ" name="Enable / Disable telemetry capture">
 			<menu_item_check label="プロファイリング" name="Profiling"/>
 			<menu_item_check label="接続時に開始" name="Start when telemetry client connects"/>
 		</menu>

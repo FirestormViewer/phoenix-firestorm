@@ -17,7 +17,7 @@
 		<pie_slice label="動けなくする" name="Freeze..."/>
 		<pie_slice label="コーリングカードを渡す" name="Give Calling Card"/>
 		<pie_slice label="グループに招待" name="Group Invite..."/>
-		<pie_slice label="追放Collada" name="Eject..."/>
+		<pie_slice label="追放する…" name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="詳細　＞">
 			<!-- ## Zi: Is this the right thing to use for avatar textures? -->
 			<pie_slice label="テクスチャ" name="Debug..."/>

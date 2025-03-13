@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Url Popup">
 	<menu_item_call label="グループ情報を表示" name="show_group"/>
-	<menu_item_separator/>
 	<!-- <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu -->
 	<!-- menu entry to call internal request for group data - this will make sure the rest of the functions can actually do something once the data is loaded -->
 	<menu_item_call label="グループデータを取得しています。もう一度お試しください！" name="waiting_for_group_data"/>
