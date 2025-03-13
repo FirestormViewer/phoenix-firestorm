@@ -925,6 +925,24 @@ width="430">
 						 width="134" />
 					</panel>
 				</tab_container>
+				<button
+				 follows="bottom|left"
+				 layout="bottomleft"
+				 is_toggle="true"
+				 image_overlay="Poser_Visual_On"
+				 image_hover_unselected="Toolbar_Middle_Over"
+				 image_selected="Toolbar_Middle_Selected"
+				 image_unselected="Toolbar_Middle_Off"
+				 name="toggleVisualManipulators"
+				 tool_tip="Toggle the visual manipulators on and off"
+				 height="50"
+				 width="50"
+				 left="2"
+				 bottom_delta="5"
+				 >
+					<button.commit_callback
+					 function="Poser.ToggleVisualManipulators"/>
+				</button>				
 			</panel>
 			<panel
 			 follows="left|top|bottom"

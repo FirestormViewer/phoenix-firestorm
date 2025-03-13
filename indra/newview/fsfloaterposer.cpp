@@ -75,6 +75,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.RefreshAvatars", [this](LLUICtrl*, const LLSD&) { onAvatarsRefresh(); });
     mCommitCallbackRegistrar.add("Poser.StartStopAnimating", [this](LLUICtrl*, const LLSD&) { onPoseStartStop(); });
     mCommitCallbackRegistrar.add("Poser.ToggleLoadSavePanel", [this](LLUICtrl*, const LLSD&) { onToggleLoadSavePanel(); });
+    mCommitCallbackRegistrar.add("Poser.ToggleVisualManipulators", [this](LLUICtrl*, const LLSD&) { onToggleVisualManipulators(); });
 
     mCommitCallbackRegistrar.add("Poser.UndoLastRotation", [this](LLUICtrl*, const LLSD&) { onUndoLastChange(); });
     mCommitCallbackRegistrar.add("Poser.RedoLastRotation", [this](LLUICtrl*, const LLSD&) { onRedoLastChange(); });
@@ -149,6 +150,9 @@ bool FSFloaterPoser::postBuild()
     mPosesScrollList->setCommitOnSelectionChange(true);
     mPosesScrollList->setCommitCallback([this](LLUICtrl *, const LLSD &) { onPoseFileSelect(); });
 
+    mToggleVisualManipulators = getChild<LLButton>("toggleVisualManipulators");
+    mToggleVisualManipulators->setToggleState(true);
+
     mTrackpadSensitivitySlider = getChild<LLSliderCtrl>("trackpad_sensitivity_slider");
 
     mPoseSaveNameEditor = getChild<LLLineEditor>("pose_save_name");
@@ -219,18 +223,6 @@ bool FSFloaterPoser::postBuild()
 
     mBtnJointRotate = getChild<LLButton>("button_joint_rotate_tool");
 
-    mCommitCallbackRegistrar.add("Poser.SetRotateTool", 
-        [](LLUICtrl*, const LLSD&)
-        {
-            LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
-            LLToolMgr::getInstance()->getCurrentToolset()->selectTool( (LLTool *) FSToolCompPose::getInstance());
-        }
-    );
-
-    LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
-    LLToolMgr::getInstance()->getCurrentToolset()->selectTool( (LLTool *) FSToolCompPose::getInstance());
-    FSToolCompPose::getInstance()->setAvatar( gAgentAvatarp);
-
     return true;
 }
 
@@ -242,6 +234,13 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     onJointTabSelect();
     refreshPoseScroll(mHandPresetsScrollList, POSE_PRESETS_HANDS_SUBDIRECTORY);
     startPosingSelf();
+
+    enableVisualManipulators();
+    LLFloater::onOpen(key);
+}
+
+void FSFloaterPoser::enableVisualManipulators()
+{
     if (LLToolMgr::getInstance()->getCurrentToolset() != gCameraToolset)
     {
         mLastToolset = LLToolMgr::getInstance()->getCurrentToolset();
@@ -249,19 +248,25 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
     LLToolMgr::getInstance()->getCurrentToolset()->selectTool(FSToolCompPose::getInstance());
     FSToolCompPose::getInstance()->setAvatar( gAgentAvatarp);    
-    LLFloater::onOpen(key);
 }
 
-void FSFloaterPoser::onClose(bool app_quitting)
+void FSFloaterPoser::disableVisualManipulators()
 {
-    if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
-        stopPosingAllAvatars();
-
     if (mLastToolset)
     {
         LLToolMgr::getInstance()->setCurrentToolset(mLastToolset);
     }
     FSToolCompPose::getInstance()->setAvatar(nullptr);
+}
+
+void FSFloaterPoser::onClose(bool app_quitting)
+{
+    if (gSavedSettings.getBOOL(POSER_STOPPOSINGWHENCLOSED_SAVE_KEY))
+    {
+        stopPosingAllAvatars();
+    }
+
+    disableVisualManipulators();
     LLFloater::onClose(app_quitting);
 }
 
@@ -1383,6 +1388,20 @@ void FSFloaterPoser::enableOrDisableRedoButton()
     }
 
     mRedoChangeBtn->setEnabled(shouldEnableRedoButton);
+}
+
+void FSFloaterPoser::onToggleVisualManipulators()
+{
+    bool tools_enabled = mToggleVisualManipulators->getValue().asBoolean();
+
+    if (tools_enabled)
+    {
+        enableVisualManipulators();
+    }
+    else
+    {
+        disableVisualManipulators();
+    }
 }
 
 void FSFloaterPoser::selectJointByName(const std::string& jointName)

@@ -218,6 +218,9 @@ public:
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
+    // visual manipulators control
+    void enableVisualManipulators();
+    void disableVisualManipulators();
 
     // UI Event Handlers:
     void onAvatarsRefresh();
@@ -225,6 +228,7 @@ public:
     void onJointTabSelect();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
+    void onToggleVisualManipulators();    
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastChange();
     void onRedoLastChange();
@@ -469,6 +473,7 @@ public:
     LLScrollListCtrl* mPosesScrollList{ nullptr };
     LLScrollListCtrl* mHandPresetsScrollList{ nullptr };
 
+    LLButton* mToggleVisualManipulators{ nullptr };
     LLButton* mStartStopPosingBtn{ nullptr };
     LLButton* mToggleLoadSavePanelBtn{ nullptr };
     LLButton* mBrowserFolderBtn{ nullptr };

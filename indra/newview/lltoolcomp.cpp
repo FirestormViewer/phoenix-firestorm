@@ -997,7 +997,7 @@ void FSToolCompPose::pickCallback(const LLPickInfo& pick_info)
     else
     {
         // If no ring is highlighted, reset interaction or do nothing
-        LL_INFOS("FSToolCompPose") << "No manipulator ring selected" << LL_ENDL;
+        LL_DEBUGS("FSToolCompPose") << "No manipulator ring selected" << LL_ENDL;
     }
 }
 
