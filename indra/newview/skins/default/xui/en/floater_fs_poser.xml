@@ -884,7 +884,7 @@ width="430">
 						</spinner>
 						<check_box
 						 control_name="FSManipRotateJointUseNaturalDirection"
-						 name="natural_direction_chackbox"
+						 name="natural_direction_checkbox"
 						 height="16"
 						 label="Use natural alignment"
 						 follows="left|top"
@@ -1205,7 +1205,7 @@ width="430">
 						</spinner>
 						<text
 						follows="left|top"
-						name="pos_x_label"
+						name="scale_x_label"
 						height="10"
 						layout="topleft"
 						left="5"
@@ -1248,7 +1248,7 @@ width="430">
 						</spinner>
 						<text
 						follows="left|top"
-						name="pos_y_label"
+						name="scale_y_label"
 						height="10"
 						layout="topleft"
 						left="5"
@@ -1291,7 +1291,7 @@ width="430">
 						</spinner>
 						<text
 						follows="left|top"
-						name="pos_z_label"
+						name="scale_z_label"
 						height="10"
 						layout="topleft"
 						left="5"
@@ -1446,7 +1446,7 @@ width="430">
 					follows="left|top"
 					height="21"
 					layout="topleft"
-					label="Copy L > R"
+					label="Copy L &gt; R"
 					name="button_symmetrize_left_to_right"
 					tool_tip="Double click to copy change from left side to right side."
 					left="14"
@@ -1459,7 +1459,7 @@ width="430">
 					follows="left|top"
 					height="21"
 					layout="topleft"
-					label="Copy R > L"
+					label="Copy R &gt; L"
 					name="button_symmetrize_right_to_left"
 					tool_tip="Double click to copy change from right side to left side."
 					left_pad="23"
