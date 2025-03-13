@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
-positioning="centered"
-height="310"
+positioning="None"
+save_rect="true"
+height="330"
 layout="topleft"
 name="floater_poser"
 title="Avatar and Animesh Poser"
-width="403">
+width="430">
 	<string	name="icon_category" translate="false">Inv_BodyShape</string>
 	<string	name="icon_bone" translate="false"></string>
 	<string	name="icon_object" translate="false">Inv_Object</string>
@@ -283,7 +284,7 @@ width="403">
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack
 	 follows="top|left|right"
-	 height="425"
+	 height="435"
 	 layout="topleft"
 	 left="3"
 	 border_size="-4"
@@ -293,17 +294,17 @@ width="403">
 	 name="poser_stack"
 	 orientation="vertical"
 	 top="0"
-	 width="607">
+	 width="700">
 		<layout_panel
 		 follows="top|left"
 		 layout="topleft"
 		 auto_resize="false"
 		 name="regular_controls_layout"
-		 height="290"
-		 width="607">
+		 height="310"
+		 width="700">
 			<panel
 			 follows="left"
-			 height="290"
+			 height="300"
 			 background_visible="false"
 			 layout="topleft"
 			 mouse_opaque="false"
@@ -314,7 +315,7 @@ width="403">
 				<tab_container
 				 follows="all"
 				 halign="center"
-				 height="285"
+				 height="295"
 				 layout="topleft"
 				 left="0"
 				 name="joints_tabs"
@@ -882,6 +883,16 @@ width="403">
                              parameter="3"/>
 						</spinner>
 						<check_box
+						 control_name="FSManipRotateJointUseNaturalDirection"
+						 name="natural_direction_chackbox"
+						 height="16"
+						 label="Use natural alignment"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="The SL skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
+						 top_pad="10"
+						 width="134" />
+						<check_box
 						 control_name="FSPoserStopPosingWhenClosed"
 						 name="stop_posing_on_close_checkbox"
 						 height="16"
@@ -914,267 +925,551 @@ width="403">
 						 width="134" />
 					</panel>
 				</tab_container>
+				<button
+				 follows="bottom|left"
+				 layout="bottomleft"
+				 is_toggle="true"
+				 image_overlay="Poser_Visual_On"
+				 image_hover_unselected="Toolbar_Middle_Over"
+				 image_selected="Toolbar_Middle_Selected"
+				 image_unselected="Toolbar_Middle_Off"
+				 name="toggleVisualManipulators"
+				 tool_tip="Toggle the visual manipulators on and off"
+				 height="50"
+				 width="50"
+				 left="5"
+				 bottom_delta="5"
+				 >
+					<button.commit_callback
+					 function="Poser.ToggleVisualManipulators"/>
+				</button>				
 			</panel>
 			<panel
 			 follows="left|top|bottom"
-			 height="290"
 			 background_visible="false"
 			 layout="topleft"
 			 mouse_opaque="false"
-			 name="trackball_panel"
-			 enabled="false"
+			 name="joint_manipulation_panel"
+			 enabled="true"
 			 top="0"
-			 width="160"
-			 left_pad="2">
-				<text
-				 follows="top|left"
-				 font="SansSerifBold"
-				 height="10"
+			 width="215"
+			 left_pad="0">
+				<tab_container
+				 follows="all"
+				 halign="center"
+				 height="235"
 				 layout="topleft"
-				 name="rotation_label"
-				 left="5"
-				 top="2"
-				 width="105">
-					Rotation:
-				</text>
-				<fs_virtual_trackpad
-				 name="limb_rotation"
-				 follows="left|top"
-				 left_delta="0"
-				 top_delta="15"
-				 height="153"
-				 width="153"
-				 tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel to adjust the 3rd axis. Use Shift or Alt to swap which rotations change"
-				 pinch_mode="false"
-				 infinite_scroll_mode="true"/>
+				 name="modifier_tabs"
+				 tab_height="20"
+				 tab_width="90"
+				 tab_group="1"
+				 tab_position="top"
+				 top_pad="0"
+				 width="215">
+					<panel
+					follows="left|right|top|bottom"
+					height="290"
+					background_visible="false"
+					layout="topleft"
+					mouse_opaque="false"
+					label="Rotate"
+					name="trackball_panel"
+					enabled="false"
+					top="0"
+					width="215"
+					left="0">
+						<fs_virtual_trackpad
+						name="limb_rotation"
+						follows="left|right|top"
+						top="2"
+						height="170"
+						width="170"
+						left="10"
+						tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel to adjust the 3rd axis. Use Shift or Alt to swap which rotations change"
+						pinch_mode="false"
+						infinite_scroll_mode="true"/>
+						<text
+						follows="left|top"
+						name="limb_pitch_label"
+						height="10"
+						layout="topleft"
+						left="2"
+						top_pad="2"
+						width="57">
+							Up/Down:
+						</text>
+						<text
+						follows="left|top"
+						name="limb_yaw_label"
+						height="10"
+						layout="topleft"
+						left_pad="5"
+						top_pad="-10"
+						width="57">
+							Left/Right:
+						</text>
+						<text
+						follows="left|top"
+						name="limb_roll_label"
+						height="10"
+						layout="topleft"
+						left_pad="5"
+						top_pad="-10"
+						width="200">
+							Roll:
+						</text>
+						<spinner
+						height="16"
+						decimal_digits="2"
+						follows="left|top"
+						increment="0.1"
+						left="2"
+						top_pad="5"
+						name="limb_pitch_spinner"
+						min_val="-180"
+						max_val="180"
+						width="57">
+							<spinner.commit_callback
+							function="Poser.CommitSpinner"
+							parameter="4"/>
+						</spinner>
+						<spinner
+						height="16"
+						decimal_digits="2"
+						follows="left|top"
+						increment="0.1"
+						top_pad="-16"
+						left_pad="5"
+						name="limb_yaw_spinner"
+						min_val="-180"
+						max_val="180"
+						width="57">
+							<spinner.commit_callback
+							function="Poser.CommitSpinner"
+							parameter="5"/>
+						</spinner>
+						<spinner
+						height="16"
+						decimal_digits="2"
+						follows="left|top"
+						increment="0.1"
+						top_pad="-16"
+						left_pad="5"
+						name="limb_roll_spinner"
+						min_val="-180"
+						max_val="180"
+						width="57">
+							<spinner.commit_callback
+							function="Poser.CommitSpinner"
+							parameter="6"/>
+						</spinner>
+					</panel>
+					<panel
+					 follows="all"
+					 background_visible="false"
+					 height="99"
+					 layout="topleft"
+					 left="0"
+					 title="Move / Scale"
+					 name="position_panel"
+					 top="0"
+					 width="170">
+						<text
+						follows="left|top"
+						name="pos_x_label"
+						height="10"
+						layout="topleft"
+						left="5"
+						top_pad="2"
+						width="200">
+							Position X:
+						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.001"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 max_val="1.5"
+						 min_val="-1.5"
+						 name="Advanced_Position_X"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.Advanced.PositionSet"/>
+						</slider>
+						<spinner
+						 height="20"
+						 decimal_digits="2"
+						 follows="left|top"
+						 increment="0.01"
+						 top_pad="-19"
+						 left_pad="2"
+						 name="adv_posx_spinner"
+						 min_val="-1.5"
+						 max_val="1.5"
+						 width="47">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="7"/>
+						</spinner>
+						<text
+						follows="left|top"
+						name="pos_y_label"
+						height="10"
+						layout="topleft"
+						left="5"
+						top_pad="2"
+						width="200">
+							Position Y:
+						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.001"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 max_val="1.5"
+						 min_val="-1.5"
+						 name="Advanced_Position_Y"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.Advanced.PositionSet"/>
+						</slider>
+						<spinner
+						 height="20"
+						 decimal_digits="2"
+						 follows="left|top"
+						 increment="0.01"
+						 top_pad="-19"
+						 left_pad="2"
+						 name="adv_posy_spinner"
+						 min_val="-1.5"
+						 max_val="1.5"
+						 width="47">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="8"/>
+						</spinner>
+						<text
+						follows="left|top"
+						name="pos_z_label"
+						height="10"
+						layout="topleft"
+						left="5"
+						top_pad="2"
+						width="200">
+							Position Z:
+						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.001"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 max_val="1.5"
+						 min_val="-1.5"
+						 name="Advanced_Position_Z"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.Advanced.PositionSet"/>
+						</slider>
+						<spinner
+						 height="20"
+						 decimal_digits="2"
+						 follows="left|top"
+						 increment="0.01"
+						 top_pad="-19"
+						 left_pad="2"
+						 name="adv_posz_spinner"
+						 min_val="-1.5"
+						 max_val="1.5"
+						 width="47">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="9"/>
+						</spinner>
+						<text
+						follows="left|top"
+						name="pos_x_label"
+						height="10"
+						layout="topleft"
+						left="5"
+						top_pad="15"
+						width="200">
+							Scale X:
+						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.001"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 max_val="1.5"
+						 min_val="-1.5"
+						 name="Advanced_Scale_X"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.Advanced.ScaleSet"/>
+						</slider>
+						<spinner
+						 height="20"
+						 decimal_digits="3"
+						 follows="left|top"
+						 increment="0.001"
+						 top_pad="-19"
+						 left_pad="0"
+						 name="adv_scalex_spinner"
+						 min_val="-1.5"
+						 max_val="1.5"
+						 width="53">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="10"/>
+						</spinner>
+						<text
+						follows="left|top"
+						name="pos_y_label"
+						height="10"
+						layout="topleft"
+						left="5"
+						top_pad="2"
+						width="200">
+							Scale Y:
+						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.001"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 max_val="1.5"
+						 min_val="-1.5"
+						 name="Advanced_Scale_Y"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.Advanced.ScaleSet"/>
+						</slider>
+						<spinner
+						 height="20"
+						 decimal_digits="3"
+						 follows="left|top"
+						 increment="0.001"
+						 top_pad="-19"
+						 left_pad="0"
+						 name="adv_scaley_spinner"
+						 min_val="-1.5"
+						 max_val="1.5"
+						 width="53">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="11"/>
+						</spinner>
+						<text
+						follows="left|top"
+						name="pos_z_label"
+						height="10"
+						layout="topleft"
+						left="5"
+						top_pad="2"
+						width="200">
+							Scale Z:
+						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.001"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 max_val="1.5"
+						 min_val="-1.5"
+						 name="Advanced_Scale_Z"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.Advanced.ScaleSet"/>
+						</slider>
+						<spinner
+						 height="20"
+						 decimal_digits="3"
+						 follows="left|top"
+						 increment="0.001"
+						 top_pad="-19"
+						 left_pad="0"
+						 name="adv_scalez_spinner"
+						 min_val="-1.5"
+						 max_val="1.5"
+						 width="53">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="12"/>
+						</spinner>
+					</panel>
+				</tab_container>
 				<panel
-				 follows="left|top|bottom"
-				 height="22"
-				 background_visible="false"
-				 layout="topleft"
-				 mouse_opaque="false"
-				 left="0"
-				 top_pad="2"
-				 name="trackball_button_panel"
-				 width="232">
+				follows="left|top|bottom"
+				height="44"
+				background_visible="false"
+				layout="topleft"
+				mouse_opaque="false"
+				left="0"
+				top_pad="2"
+				name="trackball_button_panel"
+				width="232">
 					<button
-					 height="21"
-					 follows="top|left"
-					 layout="topleft"
-					 image_overlay="Script_Undo"
-					 image_unselected="Toolbar_Middle_Off"
-					 name="undo_change"
-					 tool_tip="Undo the last rotation change"
-					 width="18"
-					 top_pad="0"
-					 left="4">
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					image_overlay="Script_Undo"
+					image_unselected="Toolbar_Middle_Off"
+					name="undo_change"
+					tool_tip="Undo the last change"
+					width="18"
+					top_pad="0"
+					left="4">
 						<button.commit_callback
-						 function="Poser.UndoLastRotation"/>
+						function="Poser.UndoLastRotation"/>
 					</button>
 					<button
-					 height="21"
-					 follows="top|left"
-					 layout="topleft"
-					 image_overlay="Script_Redo"
-					 image_unselected="Toolbar_Middle_Off"
-					 name="button_redo_change"
-					 tool_tip="Re-do the last Undo change"
-					 enabled="false"
-					 width="18"
-					 top_delta="0"
-					 left_pad="1">
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					image_overlay="Script_Redo"
+					image_unselected="Toolbar_Middle_Off"
+					name="button_redo_change"
+					tool_tip="Re-do the last change"
+					enabled="false"
+					width="18"
+					top_delta="0"
+					left_pad="1">
 						<button.commit_callback
-						 function="Poser.RedoLastRotation"/>
+						function="Poser.RedoLastRotation"/>
 					</button>
 					<button
-					 height="21"
-					 follows="top|left"
-					 layout="topleft"
-					 image_overlay="Inv_TrashOpen"
-					 image_unselected="Toolbar_Middle_Off"
-					 name="poser_joint_reset"
-					 tool_tip="Double click to reset all selected body parts to when you first started posing"
-					 width="18"
-					 top_delta="0"
-					 left_pad="1">
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					image_overlay="Inv_TrashOpen"
+					image_unselected="Toolbar_Middle_Off"
+					name="poser_joint_reset"
+					tool_tip="Double click to reset the selected body part(s) to when you first started posing"
+					width="18"
+					top_delta="0"
+					left_pad="1">
 						<button.commit_callback
-						 function="Poser.PoseJointsReset"/>
+						function="Poser.ResetJoint"/>
 					</button>
 					<button
-					 height="21"
-					 follows="top|left"
-					 layout="topleft"
-					 is_toggle="true"
-					 image_overlay="Inv_Mesh"
-					 image_unselected="Toolbar_Middle_Off"
-					 name="delta_mode_toggle"
-					 tool_tip="If changing multiple joints each changes by the same amount, rather than all of them getting the same rotation. Also used for breaking Gimbal Lock."
-					 width="18"
-					 top_delta="0"
-					 left_pad="1">
+					height="21"
+					follows="top|left"
+					layout="topleft"
+					is_toggle="true"
+					image_overlay="Inv_Mesh"
+					image_unselected="Toolbar_Middle_Off"
+					name="delta_mode_toggle"
+					tool_tip="If changing multiple joints, each changes by the same amount instead of getting the same change. Also used for breaking Gimbal Lock."
+					width="18"
+					top_delta="0"
+					left_pad="1">
 					</button>
 					<button
-					 follows="left|top"
-					 height="21"
-					 is_toggle="true"
-					 layout="topleft"
-					 label="Mirr."
-					 image_hover_unselected="Toolbar_Middle_Over"
-					 image_selected="Toolbar_Middle_Selected"
-					 image_unselected="Toolbar_Middle_Off"
-					 button_flash_enable="true"
-					 flash_color="0.7 0.7 1 1"
-					 button_flash_count="64"
-					 button_flash_rate="0.5"
-					 name="button_toggleMirrorRotation"
-					 tool_tip="Change the opposite joint, like in a mirror."
-					 left_pad="1"
-					 top_delta="0"
-					 width="38" >
+					follows="left|top"
+					height="21"
+					is_toggle="true"
+					layout="topleft"
+					label="Mirror"
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
+					name="button_toggleMirrorRotation"
+					tool_tip="Mirror changes to the opposite joint."
+					left_pad="1"
+					top_delta="0"
+					width="52" >
 						<button.commit_callback
-						 function="Poser.ToggleMirrorChanges"/>
+						function="Poser.ToggleMirrorChanges"/>
 					</button>
 					<button
-					 follows="left|top"
-					 height="21"
-					 is_toggle="true"
-					 layout="topleft"
-					 label="Sym."
-					 image_hover_unselected="Toolbar_Middle_Over"
-					 image_selected="Toolbar_Middle_Selected"
-					 image_unselected="Toolbar_Middle_Off"
-					 button_flash_enable="true"
-					 flash_color="0.7 0.7 1 1"
-					 button_flash_count="64"
-					 button_flash_rate="0.5"
-					 name="button_toggleSympatheticRotation"
-					 tool_tip="Change the opposite joint, but in the same way."
-					 left_pad="1"
-					 top_delta="0"
-					 width="38" >
+					follows="left|top"
+					height="21"
+					is_toggle="true"
+					layout="topleft"
+					label="Copy"
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
+					name="button_toggleSympatheticRotation"
+					tool_tip="Copy changes to the opposite joint."
+					left_pad="1"
+					top_delta="0"
+					width="52" >
 						<button.commit_callback
-						 function="Poser.ToggleSympatheticChanges"/>
+						function="Poser.ToggleSympatheticChanges"/>
+					</button>
+					<button
+					follows="left|top"
+					height="21"
+					layout="topleft"
+					label="Copy L > R"
+					name="button_symmetrize_left_to_right"
+					tool_tip="Double click to copy change from left side to right side."
+					left="14"
+					width="70" >
+						<button.commit_callback
+						function="Poser.Symmetrize"
+						parameter="1"/>
+					</button>
+					<button
+					follows="left|top"
+					height="21"
+					layout="topleft"
+					label="Copy R > L"
+					name="button_symmetrize_right_to_left"
+					tool_tip="Double click to copy change from right side to left side."
+					left_pad="23"
+					top_delta="0"
+					width="70" >
+						<button.commit_callback
+						function="Poser.Symmetrize"
+						parameter="2"/>
 					</button>
 				</panel>
-				<text
-				 follows="left|top"
-				 name="limb_pitch_label"
-				 height="10"
-				 layout="topleft"
-				 left="0"
-				 top_pad="2"
-				 width="200">
-					Up/Down:
-				</text>
-				<slider
-				 decimal_digits="1"
-				 follows="left|top"
-				 height="16"
-				 increment="0.1"
-				 initial_value="0"
-				 layout="topleft"
-				 left_delta="5"
-				 min_val="-180"
-				 max_val="180"
-				 name="limb_pitch"
-				 show_text="false"
-				 top_pad="2"
-				 width="98"/>
-				<spinner
-				 height="16"
-				 decimal_digits="2"
-				 follows="left|top"
-				 increment="0.1"
-				 top_pad="-19"
-				 left_pad="0"
-				 name="limb_pitch_spinner"
-				 min_val="-180"
-				 max_val="180"
-				 width="57">
-					<spinner.commit_callback
-					 function="Poser.CommitSpinner"
-                     parameter="4"/>
-				</spinner>
-				<text
-				 follows="left|top"
-				 name="limb_yaw_label"
-				 height="10"
-				 layout="topleft"
-				 left="0"
-				 top_pad="2"
-				 width="200">
-					Left/Right:
-				</text>
-				<slider
-				 decimal_digits="1"
-				 follows="left|top"
-				 height="16"
-				 increment="0.1"
-				 initial_value="0"
-				 layout="topleft"
-				 left_delta="5"
-				 min_val="-180"
-				 max_val="180"
-				 name="limb_yaw"
-				 show_text="false"
-				 top_pad="0"
-				 width="98"
-				 can_edit_text="true"/>
-				<spinner
-				 height="16"
-				 decimal_digits="2"
-				 follows="left|top"
-				 increment="0.1"
-				 top_pad="-19"
-				 left_pad="0"
-				 name="limb_yaw_spinner"
-				 min_val="-180"
-				 max_val="180"
-				 width="57">
-					<spinner.commit_callback
-					 function="Poser.CommitSpinner"
-                     parameter="5"/>
-				</spinner>
-				<text
-				 follows="left|top"
-				 name="limb_roll_label"
-				 height="10"
-				 layout="topleft"
-				 left="0"
-				 top_pad="2"
-				 width="200">
-					Roll:
-				</text>
-				<slider
-				 decimal_digits="1"
-				 follows="left|top"
-				 height="16"
-				 increment="0.1"
-				 initial_value="0"
-				 layout="topleft"
-				 show_text="false"
-				 left_delta="5"
-				 min_val="-180"
-				 max_val="180"
-				 name="limb_roll"
-				 top_pad="-1"
-				 width="98"
-				 can_edit_text="true"/>
-				<spinner
-				 height="16"
-				 decimal_digits="2"
-				 follows="left|top"
-				 increment="0.1"
-				 top_pad="-18"
-				 left_pad="0"
-				 name="limb_roll_spinner"
-				 min_val="-180"
-				 max_val="180"
-				 width="57">
-					<spinner.commit_callback
-					 function="Poser.CommitSpinner"
-                     parameter="6"/>
-				</spinner>
 			</panel>
 			<panel
 			 follows="top|left|bottom"
@@ -1182,14 +1477,14 @@ width="403">
 			 background_visible="false"
 			 layout="topleft"
 			 mouse_opaque="false"
-			 left_pad="2"
+			 left_pad="-26"
 			 visible="false"
 			 name="poses_loadSave"
 			 top="0"
 			 width="225">
 				<scroll_list
 				 column_padding="0"
-				 height="268"
+				 height="280"
 				 follows="left|top|right"
 				 layout="topleft"
 				 tool_tip="Load a pose for who you are animating."
@@ -1229,23 +1524,6 @@ width="403">
 			 left="0"
 			 name="button_controls_panel"
 			 width="800">
-				<button
-				 height="21"
-				 follows="top|left"
-				 layout="topleft"
-				 is_toggle="true"
-				 image_overlay="Script_Config"
-				 image_hover_unselected="Toolbar_Middle_Over"
-				 image_selected="Toolbar_Middle_Selected"
-				 image_unselected="Toolbar_Middle_Off"
-				 name="toggleAdvancedPanel"
-				 tool_tip="Toggle the Advanced Settings area"
-				 width="20"
-				 top_pad="-1"
-				 left="2">
-					<button.commit_callback
-					 function="Poser.ToggleAdvancedPanel"/>
-				</button>
 				<panel
 				 follows="left|top|bottom"
 				 height="22"
@@ -1255,7 +1533,9 @@ width="403">
 				 left_pad="0"
 				 top_delta="0"
 				 name="advbutton_spacer_panel"
-				 width="36"/>
+				 width="56"
+				 top_pad="-1"
+				 left="2"/>
 				<button
 				 height="21"
 				 follows="top|left"
@@ -1329,7 +1609,7 @@ width="403">
 				 left_pad="0"
 				 top_delta="0"
 				 name="button_spacer_panel"
-				 width="58"/>
+				 width="80"/>
 				<button
 				 follows="left|top"
 				 height="21"
@@ -1366,9 +1646,9 @@ width="403">
 				 image_selected="Toolbar_Middle_Selected"
 				 image_unselected="Toolbar_Middle_Off"
 				 name="open_poseDir_button"
-				 width="30"
+				 width="33"
 				 top_delta="0"
-				 left_pad="1">
+				 left_pad="5">
 					<button.commit_callback
 					 function="Poser.BrowseCache"/>
 				</button>
@@ -1390,7 +1670,7 @@ width="403">
 				 name="load_poses_button"
 				 left_pad="1"
 				 top_delta="0"
-				 width="97"/>
+				 width="95"/>
 				<button
 				 height="21"
 				 follows="top|left"
@@ -1405,7 +1685,7 @@ width="403">
 				 image_selected="Toolbar_Middle_Selected"
 				 image_unselected="Toolbar_Middle_Off"
 				 name="save_poses_button"
-				 width="97"
+				 width="95"
 				 top_delta="0"
 				 left_pad="1">
 					<button.commit_callback
@@ -1431,340 +1711,6 @@ width="403">
 			 visible="false"
 			 name="advanced_parent_panel"
 			 width="555">
-				<tab_container
-				 follows="all"
-				 halign="center"
-				 height="99"
-				 layout="topleft"
-				 name="modifier_tabs"
-				 tab_height="20"
-				 tab_group="1"
-				 tab_position="top"
-				 top_pad="0"
-				 width="555">
-					<panel
-					 follows="all"
-					 background_visible="false"
-					 height="99"
-					 layout="topleft"
-					 left="0"
-					 title="Body Part Position"
-					 name="position_panel"
-					 top="0"
-					 width="555">
-						<slider
-						 label="Position X:"
-						 label_width="60"
-						 follows="left|top"
-						 height="14"
-						 increment="0.001"
-						 initial_value="0"
-						 layout="topleft"
-						 show_text="false"
-						 left="3"
-						 max_val="1.5"
-						 min_val="-1.5"
-						 name="Advanced_Position_X"
-						 top_pad="2"
-						 width="342" >
-							<slider.commit_callback
-							 function="Poser.Advanced.PositionSet"/>
-						</slider>
-						<spinner
-						 height="0"
-						 decimal_digits="2"
-						 follows="left|top"
-						 increment="0.01"
-						 top_pad="-19"
-						 left_pad="2"
-						 name="adv_posx_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
-						 width="47">
-							<spinner.commit_callback
-							 function="Poser.CommitSpinner"
-                             parameter="7"/>
-						</spinner>
-						<slider
-						 label="Position Y:"
-						 label_width="60"
-						 follows="left|top"
-						 height="14"
-						 top_pad="24"
-						 increment="0.001"
-						 initial_value="0"
-						 show_text="false"
-						 layout="topleft"
-						 max_val="1.5"
-						 min_val="-1.5"
-						 name="Advanced_Position_Y"
-						 left="3"
-						 width="342" >
-							<slider.commit_callback
-							 function="Poser.Advanced.PositionSet"/>
-						</slider>
-						<spinner
-						 height="0"
-						 decimal_digits="2"
-						 follows="left|top"
-						 increment="0.01"
-						 top_pad="-17"
-						 left_pad="2"
-						 name="adv_posy_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
-						 width="47">
-							<spinner.commit_callback
-							 function="Poser.CommitSpinner"
-                             parameter="8"/>
-						</spinner>
-						<slider
-						 label="Position Z:"
-						 label_width="60"
-						 show_text="false"
-						 follows="left|top"
-						 height="14"
-						 top_pad="22"
-						 increment="0.001"
-						 initial_value="0"
-						 layout="topleft"
-						 max_val="1.5"
-						 min_val="-1.5"
-						 name="Advanced_Position_Z"
-						 left="3"
-						 width="342" >
-							<slider.commit_callback
-							 function="Poser.Advanced.PositionSet"/>
-						</slider>
-						<spinner
-						 height="12"
-						 decimal_digits="2"
-						 follows="left|top"
-						 increment="0.01"
-						 top_pad="-15"
-						 left_pad="2"
-						 name="adv_posz_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
-						 width="47">
-							<spinner.commit_callback
-							 function="Poser.CommitSpinner"
-                             parameter="9"/>
-						</spinner>
-						<button
-						 height="21"
-						 follows="left|top"
-						 layout="topleft"
-						 label="Undo Position"
-						 image_overlay="Script_Undo"
-						 image_overlay_alignment="left"
-						 image_unselected="Toolbar_Middle_Off"
-						 name="undo_position_change"
-						 tool_tip="Undo the last position change"
-						 width="109"
-						 left="3"
-						 top_pad="5">
-							<button.commit_callback
-							 function="Poser.UndoLastPosition"/>
-						</button>
-						<button
-						 height="21"
-						 follows="left|top"
-						 layout="topleft"
-						 label="Redo Position"
-						 image_overlay="Script_Redo"
-						 image_overlay_alignment="left"
-						 image_unselected="Toolbar_Middle_Off"
-						 name="redo_position_change"
-						 tool_tip="Redo the last position change"
-						 width="108"
-						 top_delta="0"
-						 left_pad="4">
-							<button.commit_callback
-							 function="Poser.RedoLastPosition"/>
-						</button>
-						<button
-						 height="21"
-						 follows="left|top"
-						 layout="topleft"
-						 label="Reset Position"
-						 image_overlay="Inv_TrashOpen"
-						 image_overlay_alignment="left"
-						 image_unselected="Toolbar_Middle_Off"
-						 name="reset_positions"
-						 tool_tip="Double click to reset position back to original"
-						 width="109"
-						 top_delta="0"
-						 left_pad="4">
-							<button.commit_callback
-							 function="Poser.ResetPosition"/>
-						</button>
-					</panel>
-					<panel
-					 follows="all"
-					 background_visible="false"
-					 height="99"
-					 layout="topleft"
-					 left="0"
-					 title="Body Part Scale"
-					 name="scale_panel"
-					 top="0"
-					 width="607">
-						<slider
-						 decimal_digits="3"
-						 can_edit_text="true"
-						 show_text="false"
-						 follows="left|top"
-						 height="14"
-						 increment="0.001"
-						 initial_value="0"
-						 label="Scale X:"
-						 label_width="43"
-						 layout="topleft"
-						 left="3"
-						 max_val="2"
-						 min_val="-2"
-						 name="Advanced_Scale_X"
-						 top_pad="2"
-						 width="342" >
-							<slider.commit_callback
-							 function="Poser.Advanced.ScaleSet"/>
-						</slider>
-						<spinner
-						 height="0"
-						 decimal_digits="2"
-						 follows="left|top"
-						 increment="0.01"
-						 top_pad="-19"
-						 left_pad="2"
-						 name="adv_scalex_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
-						 width="47">
-							<spinner.commit_callback
-							 function="Poser.CommitSpinner"
-                             parameter="10"/>
-						</spinner>
-						<slider
-						 decimal_digits="3"
-						 can_edit_text="true"
-						 show_text="false"
-						 follows="left|top"
-						 height="14"
-						 top_pad="24"
-						 increment="0.001"
-						 initial_value="0"
-						 label="Scale Y:"
-						 label_width="43"
-						 layout="topleft"
-						 left="3"
-						 max_val="2"
-						 min_val="-2"
-						 name="Advanced_Scale_Y"
-						 width="342" >
-							<slider.commit_callback
-							 function="Poser.Advanced.ScaleSet"/>
-						</slider>
-						<spinner
-						 height="0"
-						 decimal_digits="2"
-						 follows="left|top"
-						 increment="0.01"
-						 top_pad="-17"
-						 left_pad="2"
-						 name="adv_scaley_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
-						 width="47">
-							<spinner.commit_callback
-							 function="Poser.CommitSpinner"
-                                    parameter="11"/>
-						</spinner>
-						<slider
-						 decimal_digits="3"
-						 can_edit_text="true"
-						 show_text="false"
-						 follows="left|top"
-						 height="14"
-						 top_pad="22"
-						 increment="0.001"
-						 initial_value="0"
-						 label="Scale Z:"
-						 label_width="43"
-						 layout="topleft"
-						 left="3"
-						 max_val="2"
-						 min_val="-2"
-						 name="Advanced_Scale_Z"
-						 width="342" >
-							<slider.commit_callback
-							 function="Poser.Advanced.ScaleSet"/>
-						</slider>
-						<spinner
-						 height="12"
-						 decimal_digits="2"
-						 follows="left|top"
-						 increment="0.01"
-						 top_pad="-15"
-						 left_pad="2"
-						 name="adv_scalez_spinner"
-						 min_val="-1.5"
-						 max_val="1.5"
-						 width="47">
-							<spinner.commit_callback
-							 function="Poser.CommitSpinner"
-                             parameter="12"/>
-						</spinner>
-						<button
-						 height="21"
-						 follows="left|top"
-						 layout="topleft"
-						 label="Undo Scale"
-						 image_overlay="Script_Undo"
-						 image_overlay_alignment="left"
-						 image_unselected="Toolbar_Middle_Off"
-						 name="undo_scale_change"
-						 tool_tip="Undo the last scale change"
-						 width="109"
-						 left="3"
-						 top_pad="5">
-							<button.commit_callback
-							 function="Poser.UndoLastScale"/>
-						</button>
-						<button
-						 height="21"
-						 follows="left|top"
-						 layout="topleft"
-						 label="Redo Scale"
-						 image_overlay="Script_Redo"
-						 image_overlay_alignment="left"
-						 image_unselected="Toolbar_Middle_Off"
-						 name="redo_scale_change"
-						 tool_tip="Redo the last scale change"
-						 width="108"
-						 top_delta="0"
-						 left_pad="4">
-							<button.commit_callback
-							 function="Poser.RedoLastScale"/>
-						</button>
-						<button
-						 height="21"
-						 follows="left|top"
-						 layout="topleft"
-						 label="Reset Scale"
-						 image_overlay="Inv_TrashOpen"
-						 image_overlay_alignment="left"
-						 image_unselected="Toolbar_Middle_Off"
-						 name="reset_scales"
-						 tool_tip="Double click to reset scale back to original"
-						 width="109"
-						 top_delta="0"
-						 left_pad="4">
-							<button.commit_callback
-							 function="Poser.ResetScale"/>
-						</button>
-					</panel>
-				</tab_container>
 			</panel>
 		</layout_panel>
 	</layout_stack>
