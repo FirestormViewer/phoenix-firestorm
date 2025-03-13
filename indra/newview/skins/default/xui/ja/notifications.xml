@@ -86,11 +86,11 @@
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME]のアップデート時にエラーが発生しました。[https://alchemyviewer.org/downloads 最新バージョンのビューアをダウンロード]してください。
+		[APP_NAME]のアップデート時にエラーが発生しました。[https://www.firestormviewer.org/downloads 最新バージョンのビューアをダウンロード]してください。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		[SECOND_LIFE_GRID]に接続できませんでした。
+		[CURRENT_GRID]に接続できませんでした。
 [DIAGNOSTIC]
 
 インターネット接続が正常かご確認ください。
@@ -888,7 +888,7 @@ L$が不足しているので、このグループに参加することができ
 	<notification name="UnknownGPU">
 		お使いのシステムには、[APP_NAME]が認識できないグラフィックカードが搭載されています。[APP_NAME]でまだテストされていない最新ハードウェアのためだと考えられます。
 問題ないとは思いますが、グラフィックの設定を調整する必要があるかもしれません。
-（「私」＞「初期設定」＞「グラフィック」）
+（「アバター」＞「初期設定」＞「グラフィック」）
 		<tag>fail</tag>
 		<form name="form">
 			<ignore name="ignore" text="使用中のグラフックカードが認識されないとき"/>
@@ -1945,7 +1945,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		<usetemplate name="okcancelbuttons" notext="続行" yestext="アカウントを作成…"/>
 	</notification>
 	<notification name="LoginCantRemoveUsername">
-		すでに記憶されているユーザーは「私」メニューの「初期設定」＞「高度な設定」＞「記憶されたユーザー名」から削除することができます。
+		すでに記憶されているユーザーは「アバター」メニューの「初期設定」＞「高度な設定」＞「記憶されたユーザー名」から削除することができます。
 		<tag>fail</tag>
 	</notification>
 	<notification name="LoginCantRemoveCurUsername">
@@ -1954,11 +1954,11 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="Confirm and log out"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		接続に時間がかかっております。お使いのインターネット接続か、[SECOND_LIFE_GRID]の問題と考えられます。
+		接続に時間がかかっております。お使いのインターネット接続か、[CURRENT_GRID]の問題と考えられます。
 
 インターネット接続を確認してから数分後に再接続するか、ヘルプをクリックして [SUPPORT_SITE]をご覧になるか、テレポートをクリックしてホームに移動してみてください。
 		<tag>fail</tag>
-		<url name="url">https://github.com/AlchemyViewer/Alchemy/issues</url>
+		<url name="url">https://www.firestormviewer.org/support/</url>
 		<form name="form">
 			<button name="OK" text="ＯＫ"/>
 			<button name="Help" text="ヘルプ"/>
@@ -1967,11 +1967,11 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	</notification>
 	<notification name="LoginPacketNeverReceivedNoTP">
 		<tag>fail</tag>
-			接続に問題があります。お使いのインターネット接続か、[SECOND_LIFE_GRID]の問題と考えられます。
+			接続に問題があります。お使いのインターネット接続か、[CURRENT_GRID]の問題と考えられます。
 
 インターネット接続を確認してから数分後に再接続するか、ヘルプをクリックして [SUPPORT_SITE]をご覧になるか、テレポートをクリックしてホームに移動してみてください。
 		<url option="1" name="url">
-			https://git.alchemyviewer.org/alchemy/alchemy-next/issues
+			https://www.firestormviewer.org/support/
 		</url>
 		<form name="form">
 			<button name="OK" text="ＯＫ"/>
@@ -2171,7 +2171,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	<notification name="RequiredUpdate">
 		ログインするには、バージョン[VERSION]が必要です。
 下記アドレスから最新バージョンをダウンロードしてください。
-https://www.alchemyviewer.org/downloads.html
+https://secondlife.com/support/downloads/
 		<tag>confirm</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
@@ -2639,7 +2639,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		訪問しようとしているリージョンには、現在の初期設定を超えるレーティングのコンテンツが含まれています。「私」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
+		訪問しようとしているリージョンには、現在の初期設定を超えるレーティングのコンテンツが含まれています。「アバター」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
 
 レーティング制限に関する詳細情報は、[https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/%E3%83%AC%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E5%8C%BA%E5%88%86-r323/ こちら]をご覧になってください。
 		<tag>confirm</tag>
@@ -2678,7 +2678,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		訪問しようとしているリージョンには現在の初期設定を超えるコンテンツが含まれています。「私」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
+		訪問しようとしているリージョンには現在の初期設定を超えるコンテンツが含まれています。「アバター」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
@@ -2746,17 +2746,17 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
-		今後、[RATING]コンテンツ付きのリージョンを訪問しようとしているという通知を受け取りません。後でメニューバーの「私」＞「初期設定」＞「一般」を使用して、コンテンツの初期設定を変更できます。
+		今後、[RATING]コンテンツ付きのリージョンを訪問しようとしているという通知を受け取りません。後でメニューバーの「アバタ－」＞「初期設定」＞「一般」を使用して、コンテンツの初期設定を変更できます。
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="MaturityChangeError">
-		現在、[PREFERRED_MATURITY]コンテンツを表示するように初期設定を変更できませんでした。あなたの初期設定は、[ACTUAL_MATURITY]コンテンツを表示するようにリセットされました。メニューバーの「私」＞「初期設定」＞「一般」を使用して、もう一度初期設定を変更できます。
+		現在、[PREFERRED_MATURITY]コンテンツを表示するように初期設定を変更できませんでした。あなたの初期設定は、[ACTUAL_MATURITY]コンテンツを表示するようにリセットされました。メニューバーの「アバター」＞「初期設定」＞「一般」を使用して、もう一度初期設定を変更できます。
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		取得しようとしている土地には、現在の初期設定を超えるレーティング区分が含まれています。「私」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
+		取得しようとしている土地には、現在の初期設定を超えるレーティング区分が含まれています。「アバター」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
@@ -2785,7 +2785,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 		</form>
 	</notification>
 	<notification name="LandBuyAccessBlocked">
-		購入しようとしている土地には、現在の初期設定を超えるレーティング区分が含まれています。「私」＞「初期設定」＞「一般」から設定を変更できます。
+		購入しようとしている土地には、現在の初期設定を超えるレーティング区分が含まれています。「アバター」＞「初期設定」＞「一般」から設定を変更できます。
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
@@ -3794,7 +3794,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<tag>fail</tag>
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		訪問しようとしているリージョンには現在の初期設定を超えるコンテンツが含まれています。「私」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
+		訪問しようとしているリージョンには現在の初期設定を超えるコンテンツが含まれています。「アバター」＞「初期設定」＞「一般」を選択して、初期設定を変更できます。
 		<tag>fail</tag>
 	</notification>
 	<notification name="URBannedFromRegion">
@@ -4545,12 +4545,12 @@ Your L$ balance is shown in the upper-right.
 	<notification name="MeshUploadErrorDetails">
 		[LABEL]をアップロードできませんでした：[MESSAGE]
 [DETAILS]
-詳しくは、Alchemy.logをご覧ください。
+詳しくは、Firestorm.logをご覧ください。
 	</notification>
 	<notification name="MeshUploadError">
 		[LABEL]をアップロードできませんでした：[MESSAGE]
 
-詳しくは、Alchemy.logをご覧ください。
+詳しくは、Firestorm.logをご覧ください。
 	</notification>
 	<notification name="MeshUploadPermError">
 		メッシュのアップロード許可をリクエスト時にエラーが発生しました。
