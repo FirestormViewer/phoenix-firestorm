@@ -35,14 +35,14 @@
 		</panel>
 		<!-- End Eyebrows Panel -->
 		<!-- Begin Facial Panel -->
-		<panel name="hair_facial_tab_holder" title="フェイシャル">
+		<panel name="hair_facial_tab_holder" title="顔面">
 			<text name="hair_facial_not_available">
 				顔のオプションは男性アバターに
 のみ利用可能です。
 			</text>
 			<!-- Viewer demands an accordion here, so we provide one -->
 			<accordion name="hair_facial_accordion">
-				<accordion_tab name="hair_facial_tab" title="フェイシャル"/>
+				<accordion_tab name="hair_facial_tab" title="顔面"/>
 			</accordion>
 		</panel>
 		<!-- End Facial Panel -->

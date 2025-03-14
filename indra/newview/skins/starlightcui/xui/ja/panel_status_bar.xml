@@ -29,14 +29,14 @@
 	<panel name="time_and_media_bg">
 		<!-- Draw distance widget here -->
 		<icon name="dd_icon" tool_tip="描画距離："/>
-		<slider tool_tip="Rezされるカメラからの最大距離（メートル）" name="drawdistance"/>
-		<text name="TimeText" tool_tip="現在時刻（太平洋時間）">
+		<slider tool_tip="カメラからRezされる最大距離（メートル）を指定します。" name="drawdistance"/>
+		<text name="TimeText" tool_tip="現在時刻（太平洋時間）です。">
 			午前　24：00：00　PST
 		</text>
 		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
 		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Web ページ）を開始／停止します。"/>
-		<button name="volume_btn" tool_tip="グローバルボリュームコントロール"/>
-		<text name="FPSText" tool_tip="フレーム毎秒">
+		<button name="volume_btn" tool_tip="全体のボリュームを調整します。"/>
+		<text name="FPSText" tool_tip="フレーム毎秒です。">
 			200.0
 		</text>
 	</panel>

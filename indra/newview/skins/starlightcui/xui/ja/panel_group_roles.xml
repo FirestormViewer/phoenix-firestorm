@@ -53,11 +53,7 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 多種多様な能力が指定可能です。
 			</panel.string>
 			<filter_editor label="能力でフィルタ" name="filter_input"/>
-			<scroll_list name="action_list" tool_tip="能力を選択して詳細を表示します。">
-				<scroll_list.columns label="" name="icon"/>
-				<scroll_list.columns label="" name="checkbox"/>
-				<scroll_list.columns label="" name="action"/>
-			</scroll_list>
+			<scroll_list name="action_list" tool_tip="能力を選択して詳細を表示します。"/>
 		</panel>
 		<panel label="バンされた住民" name="banlist_sub_tab" tool_tip="このグループからバンされた住人を表示します。">
 			<panel.string name="help_text">
@@ -80,18 +76,10 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 		<text name="assigned_roles_label">
 			割当られた役割
 		</text>
-		<scroll_list name="member_assigned_roles">
-			<scroll_list.columns label="" name="checkbox"/>
-			<scroll_list.columns label="" name="role"/>
-		</scroll_list>
 		<text name="static2">
 			許可されたアクション
 		</text>
-		<scroll_list name="member_allowed_actions" tool_tip="各能力の詳細は、能力のタブをご覧ください。">
-			<scroll_list.columns label="" name="icon"/>
-			<scroll_list.columns label="" name="checkbox"/>
-			<scroll_list.columns label="" name="action"/>
-		</scroll_list>
+		<scroll_list name="member_allowed_actions" tool_tip="各能力の詳細は、能力のタブをご覧ください。"/>
 	</panel>
 	<panel name="roles_footer">
 		<text name="static">
@@ -110,11 +98,7 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 		<text name="static5">
 			許可された能力
 		</text>
-		<scroll_list name="role_allowed_actions" tool_tip="各能力の詳細は、能力のタブをご覧ください。">
-			<scroll_list.columns label="" name="icon"/>
-			<scroll_list.columns label="" name="checkbox"/>
-			<scroll_list.columns label="" name="action"/>
-		</scroll_list>
+		<scroll_list name="role_allowed_actions" tool_tip="各能力の詳細は、能力のタブをご覧ください。"/>
 	</panel>
 	<panel name="actions_footer">
 		<text_editor name="action_description">

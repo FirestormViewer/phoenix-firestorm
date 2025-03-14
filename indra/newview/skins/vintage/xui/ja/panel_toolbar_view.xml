@@ -1,50 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toolbar_view name="toolbar view">
 	<layout_stack name="bottom_toolbar_stack">
-		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
 		<layout_panel name="bottom_chat_bar_panel">
-			<!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
 			<layout_stack name="chat_bar_utility_bar_stack">
-				<!-- Chat panel -->
 				<layout_panel name="chat_panel">
-					<!-- Layout stack to make showing and hiding easy -->
 					<layout_stack name="bottom_chat_stack">
-						<!-- Stand Up/Flycam panel, resting on top of the chat bar
-						Also takes up the space when chat bar panel gets hidden -->
-						<!-- Panel to house the chat bar in, will be set visible/invisible in code
-						as parent of the chat control -->
 						<layout_panel name="bottom_chat_bar_panel">
 							<button name="local_chat_button" tool_tip="近くのチャットウィンドウを表示または非表示にします。（CTRL＋H）" label="近くのチャット"/>
 							<fs_nearby_chat_control name="default_chat_bar" label="近くのチャットへ"/>
 						</layout_panel>
-						<!-- Panel to house the chat bar in, will be set visible/invisible in code
-						as parent of the chat control -->
 					</layout_stack>
-					<!-- Layout stack to make showing and hiding easy -->
 				</layout_panel>
-				<!-- Chat panel -->
-				<!-- Utility Bar layout panel -->
 				<layout_panel name="utility_bar_layout_panel">
-					<!-- Utility Bar panel -->
 					<panel name="utility_bar_panel">
-						<!-- Parcel Stream controls -->
 						<button name="utility_parcel_audio_stream_button" tool_tip="区画の音声ストリームを再生／一時停止します。" label=""/>
-						<!-- Parcel Stream controls -->
-						<!-- Parcel Media controls -->
 						<button name="utility_parcel_media_button" tool_tip="区画のメディアを再生／一時停止します。" label=""/>
-						<!-- Parcel Media controls -->
-						<!-- Volume controls -->
 						<slider name="System Volume" tool_tip="システムの音量を調整します。"/>
 						<button name="mute_audio" tool_tip="システムの音声をミュートします。" label=""/>
 						<button name="show_volume_controls_button" tool_tip="音量コントロールを表示します。" label=""/>
-						<!-- Volume controls -->
 					</panel>
-					<!-- Utility Bar panel -->
 				</layout_panel>
-				<!-- Utility Bar layout panel -->
-				<!-- Voice Chat layout panel -->
 				<layout_panel name="voice_chat_controls_layout_panel">
-					<!-- Voice Chat panel -->
 					<panel name="voice_chat_controls_panel">
 						<button name="show_voice_controls_button" tool_tip="近くにいるボイスで会話している人とボイスコントロールを表示します。" label=""/>
 						<button name="utility_talk_button" tool_tip="このボタンを押してボイスで会話します。鍵をクリックしてプッシュ・トゥ・トークモードのオンとオフを切り替えます。" label="話す"/>
@@ -55,25 +31,16 @@
 						<button name="utility_show_voice_channel_button" tool_tip="(TODO) Shows current voice channel" label=""/>
 						-->
 					</panel>
-					<!-- Voice Chat panel -->
 				</layout_panel>
-				<!-- Voice Chat layout panel -->
-				<!-- Quick Preferences Button layout panel -->
 				<layout_panel name="quick_preferences_button_layout_panel">
-					<!-- Quick Preferences Button panel -->
 					<panel name="quick_preferences_button_panel">
 						<button name="enable_disable_ao_button" tool_tip="クライアントＡＯを有効／無効にします。" label=""/>
 						<button name="show_ao_interface_button" tool_tip="クライアントＡＯの画面を表示／非表示にします。" label=""/>
-						<!-- Tooltip text defined in commands.xml - buttons can't use tool_tip_ref yet -->
 						<button name="show_quick_prefs_button" tool_tip="頻繁に使用する設定を変更できる簡易設定です。" label=""/>
 					</panel>
-					<!-- Quick Preferences Button panel -->
 				</layout_panel>
-				<!-- Quick Preferences Button layout panel -->
 			</layout_stack>
-			<!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
 		</layout_panel>
-		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
 		<layout_panel name="bottom_toolbar_panel">
 			<button name="open_chat_bar_button" tool_tip="チャットバーを表示します。（Enter）" label=""/>
 		</layout_panel>

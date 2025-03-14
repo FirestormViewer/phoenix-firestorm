@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="もの" name="objects panel">
 	<panel name="sidepanel_inventory_panel" label="">
 		<tab_container name="inventory_tab_container">
@@ -23,6 +23,4 @@
 			</panel>
 		</tab_container>
 	</panel>
-	<panel name="sidepanel__item_panel" label=""/>
-	<panel name="sidepanel__task_panel" label=""/>
 </panel>

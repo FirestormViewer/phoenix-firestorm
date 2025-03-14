@@ -1,60 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- <FS:Zi> top="19" starts right below the status bar (menu bar) -->
-<!-- <FS:Zi> visible="false" to hide the panel on the login screen -->
 <panel name="navigation_bar">
-	<!-- Navigation and Favorites Bar visibility stack -->
 	<layout_stack name="navigation_favorites_bar_visibility_stack">
-		<!-- Navigation Bar visibility panel -->
 		<layout_panel name="navigation_bar_visibility_panel">
-			<!-- This panel takes up the right click menu, so it only shows when clicking
-			inactive parts. Will be bound to right click in code, so keep the name intact. -->
-			<panel name="navigation_bar_context_menu_panel"/>
-			<!-- Layout stack for buttons, location input and search field -->
 			<layout_stack name="location_search_layout">
-				<!-- Contains the navigation buttons -->
 				<layout_panel name="navigation_buttons_visibility_panel">
 					<pull_button name="back_btn" tool_tip="前の場所へ移動します。"/>
 					<pull_button name="forward_btn" tool_tip="次の場所へ移動します。"/>
 					<button name="home_btn" tool_tip="「ホーム」へテレポートします。"/>
-					<!-- About Land Button here -->
 					<button name="About_Land" tool_tip="土地情報のウィンドウを開きます。"/>
-					<!-- end of About Land Button -->
-					<!-- Windlight Button here -->
 					<button name="PersonalLighting" tool_tip="個人的光源エディタを開きます。"/>
-					<!-- end of Windlight Button -->
 				</layout_panel>
-				<!-- Contains the navigation buttons -->
-				<!-- Contains the location bar -->
 				<layout_panel name="location_bar_visibility_panel">
 					<location_input label="場所" name="location_combo">
 					</location_input>
 				</layout_panel>
-				<!-- Contains the location bar -->
-				<!-- Contains the search bar, can be hidden by control values -->
-				<!-- Contains the search bar, can be hidden by code -->
 				<layout_panel name="search_bar_visibility_panel">
 					<search_combo_box label="検索" name="search_combo_box" tool_tip="検索">
 						<combo_editor label="メタバースを検索" name="search_combo_editor"/>
 					</search_combo_box>
 				</layout_panel>
-				<!-- Contains the search bar, can be hidden by control values -->
 			</layout_stack>
-			<!-- Layout stack for buttons, location input and search field -->
 		</layout_panel>
-		<!-- Navigation Bar visibility panel -->
-		<!-- Favorites Bar visibility panel -->
 		<layout_panel name="favorites_bar_visibility_panel">
 			<favorites_bar name="favorite" tool_tip="ランドマークをここにドラッグすると、お気に入りの場所にすばやくアクセスできます。">
-				<!-- More button actually is a text box. -->
-				<!-- FS:Ansariel: This widget has a different name because it is a more_button.
-				Default skin uses a chevron_button and using the same name
-				would result in the more button not being shown! -->
 				<more_button name="more_btn_stl" tool_tip="お気に入りをもっと見る。">
-					もっと▼
+					より多く▼
 				</more_button>
 			</favorites_bar>
 		</layout_panel>
-		<!-- Favorites Bar visibility panel -->
 	</layout_stack>
-	<!-- Navigation and Favorites Bar visibility stack -->
 </panel>

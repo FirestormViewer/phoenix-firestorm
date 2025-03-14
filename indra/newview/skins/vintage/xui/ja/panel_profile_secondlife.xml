@@ -9,11 +9,6 @@
 	<string name="status_unknown">
 		不明
 	</string>
-	<string name="CaptionTextAcctInfo">
-    [ACCTTYPE]
-[PAYMENTINFO]
-[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
-	</string>
 	<!--Badges-->
 	<string name="BadgeBeta" value="オリジナルβテスター"/>
 	<string name="BadgeBetaLifetime" value="β会員"/>

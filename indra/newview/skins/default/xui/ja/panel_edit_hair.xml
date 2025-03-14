@@ -8,7 +8,7 @@
 			<accordion_tab name="hair_color_tab" title="色"/>
 			<accordion_tab name="hair_style_tab" title="スタイル"/>
 			<accordion_tab name="hair_eyebrows_tab" title="眉毛"/>
-			<accordion_tab name="hair_facial_tab" title="フェイシャル"/>
+			<accordion_tab name="hair_facial_tab" title="顔面"/>
 		</accordion>
 	</panel>
 </panel>

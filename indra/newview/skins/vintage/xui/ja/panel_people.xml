@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="人物" name="people_panel">
 	<string name="no_recent_people" value="最近交流があった人物はいません。一緒に何かする仲間をお探しですか？[secondlife:///app/search/people 検索]か[secondlife:///app/worldmap ワールドマップ]をお試しください。"/>
 	<string name="no_filtered_recent_people" value="お探しの人物は見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。"/>
@@ -58,7 +58,7 @@
 								<check_box label="同じリージョンから去ったら通知" name="RadarReportSimRangeLeave"/>
 								<check_box label="入ってきた通知をスクリプトに表示" name="RadarEnterChannelAlert"/>
 								<check_box label="去った通知をスクリプトに表示" name="RadarLeaveChannelAlert"/>
-								<check_box label="ＬＳＬクライアントブリッジでレーダーを強化" tool_tip="チェックするとレーダーが高い場所にいるアバターを決定する機能がLSL-Client Bridgeの支援により高められます。特にそのアバターが描画範囲の外にいる場合に有効です。" name="FSRadarEnhanceByBridge"/>
+								<check_box label="ＬＳＬクライアントブリッジでレーダーを強化" tool_tip="チェックするとレーダーの高い場所にいるアバターを検知する機能がLSL-Client Bridgeの支援により高められます。特にそのアバターが描画範囲の外にいる場合に有効です。" name="FSRadarEnhanceByBridge"/>
 								<check_box label="距離に応じて名前タグの色を変える" name="FSRadarColorNamesByDistance"/>
 								<check_box label="範囲の制限：" tool_tip="表示する結果を指定した半径以内のものに絞ります。" name="LimitRadarByRange"/>
 								<text name="radarmap_range_label" value="名前の表示形式："/>

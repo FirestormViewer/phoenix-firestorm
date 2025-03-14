@@ -48,9 +48,7 @@
 				<!-- [AS:Chanayane] Search folders only -->
 				<combo_box.item value="filter_type_folders" label="フォルダ" />
 				<!-- [/AS:Chanayane] -->
-				<combo_box.item value="filter_separator" label="──────"/>
 				<combo_box.item value="filter_type_coalesced" label="複合のみ"/>
-				<combo_box.item value="filter_separator" label="──────"/>
 				<combo_box.item value="filter_type_custom" label="カスタム…"/>
 			</combo_box>
 			<menu_button tool_tip="検索表示のオプションを表示します。" name="options_visibility_btn"/>

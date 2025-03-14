@@ -2,21 +2,21 @@
 <panel name="panel_radar">
 	<string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでワールドマップを開きます。Shift‐ドラッグで水平・垂直移動します。）"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。）"/>
-	<string name="avatar_name_count" value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<string name="avatar_name_count" value="名前[[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<panel name="nearby_panel">
 		<layout_stack name="radar_ls">
 			<layout_panel name="radarlayout">
 				<radar_list name="radar_list">
 					<radar_list.columns label="名前" name="name" tool_tip="[TOTAL]人のアバター（同じリージョンに[IN_REGION]人、チャットレンジ内に[IN_CHAT_RANGE]人）"/>
-					<radar_list.columns label="" name="voice_level" tool_tip="ボイスで会話しています。"/>
+					<radar_list.columns name="voice_level" tool_tip="ボイスで会話しています。"/>
 					<radar_list.columns label="距離" name="range"/>
 					<radar_list.columns label="表示時間" name="seen"/>
 					<radar_list.columns label="年齢" name="age"/>
-					<radar_list.columns label="" name="in_region" tool_tip="同じリージョンにいます。"/>
-					<radar_list.columns label="" name="typing_status" tool_tip="入力しています。"/>
-					<radar_list.columns label="" name="sitting_status" tool_tip="座っています。"/>
-					<radar_list.columns label="" name="flags" tool_tip="支払情報"/>
-					<radar_list.columns label="" name="has_notes" tool_tip="このアバターのメモがあります。"/>
+					<radar_list.columns name="in_region" tool_tip="同じリージョンにいます。"/>
+					<radar_list.columns name="typing_status" tool_tip="入力しています。"/>
+					<radar_list.columns name="sitting_status" tool_tip="座っています。"/>
+					<radar_list.columns name="flags" tool_tip="支払情報"/>
+					<radar_list.columns name="has_notes" tool_tip="このアバターのメモがあります。"/>
 				</radar_list>
 			</layout_panel>
 		</layout_stack>

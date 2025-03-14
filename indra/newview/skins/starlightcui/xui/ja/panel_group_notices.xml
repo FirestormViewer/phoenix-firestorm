@@ -13,11 +13,9 @@
 １日に送信できる通知は２００件までです。
 	</text>
 	<scroll_list name="notice_list">
-		<scroll_list.columns label="" name="icon"/>
 		<scroll_list.columns label="件名" name="subject"/>
 		<scroll_list.columns label="送信者" name="from"/>
 		<scroll_list.columns label="日付" name="date"/>
-		<scroll_list.columns name="sort"/>
 	</scroll_list>
 	<text name="notice_list_none_found">
 		見つかりませんでした。

@@ -13,7 +13,7 @@
 			<texture_picker label="予備１のタトゥ" name="Aux1 Tattoo" tool_tip="クリックで画像を選択します。"/>
 			<texture_picker label="予備２のタトゥ" name="Aux2 Tattoo" tool_tip="クリックで画像を選択します。"/>
 			<texture_picker label="予備３のタトゥ" name="Aux3 Tattoo" tool_tip="クリックで画像を選択します。"/>
-			<color_swatch label="色／明暗" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
+			<color_swatch label="色／色彩" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
 		</panel>
 	</scroll_container>
 </panel>
