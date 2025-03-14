@@ -889,7 +889,7 @@ width="430">
 						 label="Use natural alignment"
 						 follows="left|top"
 						 left="5"
-						 tool_tip="The SL skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
+						 tool_tip="The skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
 						 top_pad="10"
 						 width="134" />
 						<check_box
