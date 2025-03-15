@@ -155,10 +155,10 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			<check_box label="Limiter les images par secondes" name="FSLimitFramerate" tool_tip="Limite le taux de rafraîchissement à une valeur définie par l'utilisateur. Peut réduire la consommation d'énergie et la chaleur du GPU/CPU."/>
 			<check_box label="Limiter le taux de rafraîchissement à la fréquence du moniteur (VSync)" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
 			<text name="Texture Rendering">Rendu des textures :</text>
-			<check_box width="270" label="Limiter le résolution maximale des textures à :" tool_tip="Activée, cette option limite la résomution maximale d'affichage des textures dans Second Life. Cela permet d'afficher plus de textures avant de dépasser la limite de mémoire disponible et évite de voir des textures floues." name="FSRestrictMaxTextureSize"/>
-			<text name="FSRestrictMaxTextureSizeRestartText">
-				(Redémarrage requis)
+			<text name="FSRestrictMaxTextureSize">
+				Limiter le résolution maximale des textures à :
 			</text>
+			<combo_box tool_tip="Définit la résolution maximale d'affichage des textures dans le monde. Cela permet d'afficher plus de textures avant de dépasser la mémoire de texture disponible et obtenir des textures floues." name="FSRestrictMaxTexturePixels"/>
 			<text name="TextureDetailLabel">
 				Qualité max. des textures :
 			</text>
@@ -168,9 +168,9 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 				<combo_box.item label="Basse" name="4"/>
 				<combo_box.item label="Pas de textures" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">Rendu des masques alphas :</text>
-			<check_box label="Activer les masques alpha" tool_tip="Si cette option est cochée, le rendu des masques Alpha (bits transparents) est correct." name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">Divers :</text>
+			<check_box label="HDR et émissivité" tool_tip="Permet des fonctionnalités supplémentaires du pipeline de rendu sur les machines plus récentes, telles que le HDR et les textures émissives sur le contenu PBR." name="VintageMode"/>
+			<check_box label="Activer les masques alpha" tool_tip="Si cette option est cochée, le rendu des masques Alpha (bits transparents) est correct." name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Éclat lumineux" tool_tip="Activer l'éclat lumineux. Noter que la force doit être définie sur 0 pour désactiver l'éclat lumineux lorsque les ombres sont activées." name="RenderGlow"/>
 			<slider label="Force :" tool_tip="Force de l'éclat lumineux. Une valeur plus élevée le rends plus diffus et plus doux (2 par défaut)" name="glow_strength"/>
 			<check_box label="Afficher les avatars qui n'ont pas fini de charger" name="RenderUnloadedAvatars"/>

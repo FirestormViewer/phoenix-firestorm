@@ -141,6 +141,8 @@
 	<string	name="title_BELLY">Brzuch</string>
 	<string	name="title_LEFT_PEC">Lewa pierś</string>
 	<string	name="title_RIGHT_PEC">Prawa pierś</string>
+	<string name="LoadPoseLabel">Ładuj pozę</string>
+	<string name="LoadDiffLabel">Ładuj różn.</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
