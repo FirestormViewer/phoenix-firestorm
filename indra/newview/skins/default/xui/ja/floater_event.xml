@@ -6,6 +6,4 @@
 	<floater.string name="done_text">
 		完了
 	</floater.string>
-	<web_browser name="browser"/>
-	<text name="status_text"/>
 </floater>

@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <clothing_list_item name="wearable_item">
-    <lock_panel name="btn_lock" tool_tip="編集権限がありません"/>
-    <edit_btn name="btn_edit" tool_tip="この装着物を編集します"/>
+	<item_name name="item_name" value="…"/>
+	<lock_panel name="btn_lock" tool_tip="編集権限がありません。"/>
+	<edit_btn name="btn_edit" tool_tip="この衣装を編集"/>
 </clothing_list_item>

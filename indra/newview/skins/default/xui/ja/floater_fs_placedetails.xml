@@ -7,68 +7,51 @@
 		土地の詳細情報
 	</string>
 	<string name="title_remote_place_detail">
-		土地の詳細情報: [NAME]
+		土地の詳細情報：[NAME]
 	</string>
 	<string name="title_landmark">
 		ランドマーク
 	</string>
 	<string name="title_landmark_detail">
-		ランドマーク: [NAME]
+		ランドマーク：[NAME]
 	</string>
 	<string name="title_create_landmark">
 		ランドマークを作成
 	</string>
 	<string name="title_teleport_history_item">
-		テレポート履歴の詳細情報: [NAME]
+		テレポート履歴の詳細情報：[NAME]
 	</string>
-	<panel filename="panel_landmark_info.xml" name="panel_landmark_info" />
-	<panel filename="panel_place_profile.xml" name="panel_place_profile" />
-
 	<panel name="button_panel">
-		<layout_stack name="bottom_bar_ls0" orientation="horizontal">
-
+		<layout_stack name="bottom_bar_ls0">
 			<layout_panel name="lp1">
-
-				<layout_stack name="bottom_bar_ls1" orientation="horizontal">
+				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
-						<button label="テレポート" name="teleport_btn" tool_tip="選択した地域にテレポートします。" />
+						<button label="テレポート" name="teleport_btn" tool_tip="選択したリージョンにテレポートします。"/>
 					</layout_panel>
-
 					<layout_panel name="map_btn_lp">
-						<button label="地図" name="map_btn" tool_tip="該当する地域を世界地図上に表示します。" />
+						<button label="マップ" name="map_btn" tool_tip="該当するリージョンをワールドマップ上に表示します。"/>
 					</layout_panel>
-
-					<layout_panel name="edit_btn_lp">
-						<button label="編集" name="edit_btn" tool_tip="このランドマークを編集します。" />
-					</layout_panel>
-
 					<layout_panel name="overflow_btn_lp">
 						<menu_button name="overflow_btn" tool_tip="追加オプションを表示します。"/>
 					</layout_panel>
 				</layout_stack>
-			</layout_panel>	
+			</layout_panel>
 		</layout_stack>
-
-		<layout_stack name="bottom_bar_ls1" orientation="horizontal">
+		<layout_stack name="bottom_bar_ls1">
 			<layout_panel name="lp2">
-
-				<layout_stack name="bottom_bar_close_ls3" orientation="horizontal">
+				<layout_stack name="bottom_bar_close_ls3">
 					<layout_panel name="close_btn_lp">
-						<button label="閉じる" name="close_btn" />
+						<button label="閉じる" name="close_btn"/>
 					</layout_panel>
 				</layout_stack>
-
 			</layout_panel>
-		</layout_stack>	
-	 
-		<layout_stack name="bottom_bar_ls2" orientation="horizontal">
-
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls2">
 			<layout_panel name="save_btn_lp">
-				<button label="保存" name="save_btn" />
+				<button label="保存" name="save_btn"/>
 			</layout_panel>
-
 			<layout_panel name="cancel_btn_lp">
-				<button label="キャンセル" name="cancel_btn" />
+				<button label="キャンセル" name="cancel_btn"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

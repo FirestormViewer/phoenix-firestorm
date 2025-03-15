@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="オブジェクトのバックアップ…">
+	<floater.string name="title_floater">
+		[OBJECT]をハードディスクにバックアップ…
+	</floater.string>
+	<floater.string name="title_working">
+		[OBJECT]のバックアップ‐情報を集めています…
+	</floater.string>
+	<floater.string name="title_inventory">
+		[OBJECT]のバックアップ‐インベントリを取得しています…
+	</floater.string>
+	<floater.string name="title_assets">
+		[OBJECT]のバックアップ‐アセットを取得しています…
+	</floater.string>
+	<floater.string name="title_textures">
+		[OBJECT]のバックアップ‐テクスチャを取得しています…
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				選択情報
+			</text>
+			<text name="exportable_prims">
+				エクスポート可能なプリム数：全[TOTAL]個中[COUNT]個
+			</text>
+			<text name="exportable_textures">
+				エクスポート可能なテクスチャ数：全[TOTAL]個中[COUNT]個
+			</text>
+			<text name="OptionsText">
+				オプション：
+			</text>
+			<check_box label="オブジェクトをディスクにバックアップ" name="contents_check"/>
+			<button label="名前をつけて保存…" name="export_btn"/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="オブジェクト" name="prims_panel"/>
+				<panel label="テクスチャ" name="texture_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

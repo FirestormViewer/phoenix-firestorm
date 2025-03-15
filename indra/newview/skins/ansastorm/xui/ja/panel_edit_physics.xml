@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="胸の弾み">
+			<text name="physics_breast_updown_not_available">
+				胸の弾みは女性アバターのみで
+利用可能です。
+			</text>
+			<accordion name="physics_breast_updown_accordion">
+				<accordion_tab name="physics_breasts_updown_tab" title="胸の弾み"/>
+			</accordion>
+		</panel>
+		<panel name="physics_breast_inout_tab_holder" title="胸の谷間">
+			<text name="physics_breast_inout_not_available">
+				胸の谷間は女性アバターのみで
+利用可能です。
+			</text>
+			<accordion name="physics_breast_inout_accordion">
+				<accordion_tab name="physics_breasts_inout_tab" title="胸の谷間"/>
+			</accordion>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="胸の揺れ">
+			<text name="physics_breast_leftright_not_available">
+				胸の揺れは女性アバターのみで
+利用可能です。
+			</text>
+			<accordion name="physics_breast_leftright_accordion">
+				<accordion_tab name="physics_breasts_leftright_tab" title="胸の揺れ"/>
+			</accordion>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="腹部の弾み">
+			<accordion name="physics_belly_accordion">
+				<accordion_tab name="physics_belly_tab" title="腹部の弾み"/>
+			</accordion>
+		</panel>
+		<panel name="physics_butt_tab_holder" title="尻の弾み">
+			<accordion name="physics_butt_accordion">
+				<accordion_tab name="physics_butt_tab" title="尻の弾み"/>
+			</accordion>
+		</panel>
+		<panel name="physics_butt_leftright_tab_holder" title="尻の揺れ">
+			<accordion name="physics_butt_leftright_accordion">
+				<accordion_tab name="physics_butt_leftright_tab" title="尻の揺れ"/>
+			</accordion>
+		</panel>
+		<panel name="physics_advanced_tab_holder" title="高度なパラメータ">
+			<accordion name="physics_advanced_accordion">
+				<accordion_tab name="physics_advanced_tab" title="高度なパラメータ"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

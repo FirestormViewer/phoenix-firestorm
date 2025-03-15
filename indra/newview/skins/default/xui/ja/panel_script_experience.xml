@@ -1,30 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="script_experience" title="体験">
-	<button label="体験" name="Expand Experience"/>
+	<!-- 
+	<floater.string name="EXPERIENCE">体験！！！！</floater.string>
+	<floater.string name="Script:">スクリプト：</floater.string>
+	<floater.string name="Associated with:">関連付けられたもの：</floater.string>
+	<floater.string name="You can contribute:">貢献できるもの：</floater.string>
+	<floater.string name="Associate with:">関連付けるもの：</floater.string>
+	<floater.string name="Yes">はい</floater.string>
+	<floater.string name="No">いいえ</floater.string>
+	<floater.string name="(none)"></floater.string>
+	<floater.string name="体験を選択…">Choose Experience...</floater.string>
+	<floater.string name="You are not a contributor to any experiences.">あなたは、いかなる経験にも貢献していません。</floater.string>
+	-->
+	<button name="Expand Experience" label="体験"/>
 	<check_box label="体験を使用" name="enable_xp"/>
 	<layout_stack name="xp_details">
-		<layout_panel  width="120">
-			<text >
+		<layout_panel name="xp_layout_panel">
+			<text name="lbl_script">
 				スクリプト：
 			</text>
-			<text>
-				関連する体験：
+			<text name="lbl_associated">
+				関連付けられたもの：
 			</text>
-			<text>
-				あなたの貢献
+			<text name="lbl_contribute">
+				貢献できるもの：
 			</text>
-			<text>
-				関連させる体験
+			<text name="lbl_associate">
+				関連付けるもの：
 			</text>
 		</layout_panel>
-		<layout_panel>
-			<text bottom_delta="25">
+		<layout_panel name="xp_choose_panel">
+			<text>
+				EasySitアニメーター1.2.4
+			</text>
+			<text >
+				カイルのスーパーヒーローＲＰＧ
+			</text>
+			<text>
 				はい
 			</text>
-			<combo_box label="体験を選択..." name="Experiences..."/>
+			<combo_box label="体験を選択…" name="Experiences..."/>
 		</layout_panel>
 	</layout_stack>
 	<text name="No Experiences">
-		体験の貢献者ではありません。
+		あなたは、いかなる経験にも貢献していません。
 	</text>
 </panel>
