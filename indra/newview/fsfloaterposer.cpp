@@ -348,9 +348,9 @@ void FSFloaterPoser::onPoseFileSelect()
 
     bool isDeltaSave = !poseFileStartsFromTeePose(name);
     if (isDeltaSave)
-        mLoadPosesBtn->setLabel("Load Diff");
+        mLoadPosesBtn->setLabel(getString("LoadDiffLabel"));
     else
-        mLoadPosesBtn->setLabel("Load Pose");
+        mLoadPosesBtn->setLabel(getString("LoadPoseLabel"));
 }
 
 void FSFloaterPoser::onClickPoseSave()
@@ -406,7 +406,7 @@ void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
             return;
 
         auto posesToCopy = gDirUtilp->getFilesInDir(sourcePresetPath);
-        for (auto pose : posesToCopy)
+        for (const auto& pose : posesToCopy)
         {
             std::string source      = sourcePresetPath + gDirUtilp->getDirDelimiter() + pose;
             std::string destination = userHandPresetsPath + gDirUtilp->getDirDelimiter() + pose;
