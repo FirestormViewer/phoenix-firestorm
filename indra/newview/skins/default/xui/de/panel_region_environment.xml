@@ -80,8 +80,7 @@
 				<layout_panel name="pnl_environment_altitudes">
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
-							Himmel [INDEX]
-                            [ALTITUDE]m
+							Himmel [INDEX]&#xA;[ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt1">
 							Unbekannt
@@ -90,8 +89,7 @@
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
-							Himmel [INDEX]
-                            [ALTITUDE]m
+							Himmel [INDEX]&#xA;[ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt2">
 							Unbekannt
@@ -100,8 +98,7 @@
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
-							Himmel [INDEX]
-                            [ALTITUDE]m
+							Himmel [INDEX]&#xA;[ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt3">
 							Unbekannt
