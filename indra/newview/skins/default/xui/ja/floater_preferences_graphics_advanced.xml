@@ -14,6 +14,10 @@
 		低
 	</text>
 	<slider label="近くの最大光源数：" name="MaxLights"/>
+	<text name="MaxTextureResolutionLabel">
+		最大ＬｏＤ解像度：
+	</text>
+	<combo_box name="MaxTextureResolution" tool_tip="「詳細レベル」テクスチャの最大解像度を指定します。"/>
 	<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期させ、スムーズなパフォーマンスを実現します。"/>
 	<text name="AvatarText">
 		アバター

@@ -206,9 +206,7 @@
 			<combo_box name="FSRestrictMaxTexturePixels">
 				<combo_box.item label="512ピクセル" name="512"/>
 				<combo_box.item label="1024ピクセル" name="1024"/>
-				<!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
 				<combo_box.item label="2048ピクセル" name="2048"/>
-				-->
 			</combo_box>
 			<text name="FSRestrictMaxTextureSizeRestartText">
 				（要再起動）

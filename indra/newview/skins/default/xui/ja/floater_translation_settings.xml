@@ -45,7 +45,7 @@
 		翻訳サービスを選択してください：
 	</text>
 	<radio_group name="translation_service_rg">
-		<radio_item label="Azure翻訳" name="bing"/>
+		<radio_item label="Azure翻訳" name="azure"/>
 		<radio_item label="Google翻訳" name="google"/>
 		<radio_item label="DeepL翻訳" name="deepl"/>
 	</radio_group>

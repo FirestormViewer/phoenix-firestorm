@@ -164,6 +164,10 @@
 	<string name="title_mFaceEar1Right">右付け根</string>
 	<string name="title_mFaceEar2Left">左先端</string>
 	<string name="title_mFaceEar2Right">右先端</string>
+
+	<string name="LoadPoseLabel">ポーズを読み込む</string>
+	<string name="LoadDiffLabel">差分を読み込む</string>
+
 	<!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
@@ -239,20 +243,22 @@
 						</scroll_list>
 						<button label="" name="refresh_avatars" tool_tip="アバターとアニメッシュのリストを更新します。" />
 						<button label="ポージング開始" label_selected="ポージング停止" tool_tip="許可されている場合は、選択したアバターまたはアニメシュのポーズを開始します。" name="start_stop_posing_button"/>
-						<button label="Ｔポーズにセット" name="set_t_pose_button" tool_tip="ダブルクリックすると、選択したアバターが「Tポーズ」に設定されます。" />
+						<button label="Ｔポーズにセット" name="set_t_pose_button" tool_tip="ダブルクリックすると、選択したアバターが「Ｔポーズ」に設定されます。" />
 					</panel>
 					<panel title="設定" name="settings_panel">
 						<text name="trackpad_sensitivity_label">
 							トラックパッドの感度：
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="トラックボールの感度を調整します。" />
+						<check_box name="natural_direction_checkbox" label="自然な配置を使用する" tool_tip="デフォルトでは、スケルトンの関節の回転は不自然です。これにより、ポーズが複雑になります。チェックすると、関節がより自然に回転します。"/>
 						<check_box name="stop_posing_on_close_checkbox" label="閉じたらポーズを止める" tool_tip="ポーズを止めないことは、多くの作業を行っていて、誤ってポーズを失いたくない場合に役に立ちます。" />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="編集時にベース回転をリセット" tool_tip="回転を初めて編集するときは、ゼロにリセットします。これにより、作業でポーズを保存できます。（差分ではなく、読み込み／保存を参照）ゼロにエクスポートした各ジョイントの横に緑色のチェックマークが表示されます。" />
 						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む**" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。" />
 					</panel>
 				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="視覚マニピュレータのオン／オフを切り替えます。"/>
 			</panel>
-			<panel name="trackball_panel">
+			<panel label="回転" name="trackball_panel">
 				<text name="rotation_label">
 					回転：
 				</text>
@@ -264,6 +270,8 @@
 					<button name="delta_mode_toggle" tool_tip="複数のジョイントを変更する場合、すべてのジョイントが同じ回転になるのではなく、それぞれが同じ量だけ変更されます。ジンバルロックを解除するためにも使用されます。"/>
 					<button label="ミラー" name="button_toggleMirrorRotation" tool_tip="鏡のように反対側の関節を変えます。"/>
 					<button label="対称" name="button_toggleSympatheticRotation" tool_tip="反対側のジョイントも同様に変更します。" />
+					<button label="左＞右にコピー" name="button_symmetrize_left_to_right" tool_tip="ダブルクリックすると、左側から右側に変更がコピーされます。"/>
+					<button label="右＞左にコピー" name="button_symmetrize_right_to_left" tool_tip="ダブルクリックすると、右側から左側に変更がコピーされます。"/>
 				</panel>
 				<text name="limb_pitch_label">
 					上／下：
@@ -298,18 +306,30 @@
 		<layout_panel name="advanced_controls_layout">
 			<panel name="advanced_parent_panel">
 				<tab_container name="modifier_tabs">
-					<panel title="身体部位の位置" name="position_panel">
-						<slider label="位置Ｘ：" name="Advanced_Position_X"/>
-						<slider label="位置Ｙ：" name="Advanced_Position_Y"/>
-						<slider label="位置Ｚ：" name="Advanced_Position_Z"/>
+					<panel title="移動／スケール" name="position_panel">
+						<text name="pos_x_label">
+							位置Ｘ：
+						</text>
+						<text name="pos_y_label">
+							位置Ｙ：
+						</text>
+						<text name="pos_z_label">
+							位置Ｚ：
+						</text>
 						<button label="位置を取り消し" name="undo_position_change" tool_tip="最後の位置変更を元に戻します。"/>
 						<button label="位置をやり直し" name="redo_position_change" tool_tip="最後の位置変更をやり直します。"/>
 						<button label="位置をリセット" name="reset_positions" tool_tip="ダブルクリックすると元の位置に戻ります。"/>
 					</panel>
 					<panel title="身体部位のスケール" name="scale_panel">
-						<slider label="スケールＸ：" name="Advanced_Scale_X"/>
-						<slider label="スケールＹ：" name="Advanced_Scale_Y"/>
-						<slider label="スケールＺ：" name="Advanced_Scale_Z"/>
+						<text name="scale_x_label">
+							スケールＸ：
+						</text>
+						<text name="scale_y_label">
+							スケールＹ：
+						</text>
+						<text name="scale_z_label">
+							スケールＺ：
+						</text>
 						<button label="スケールを取り消し" name="undo_scale_change" tool_tip="最後のスケール変更を元に戻します。"/>
 						<button label="スケールをやり直し" name="redo_scale_change" tool_tip="最後のスケール変更をやり直します。"/>
 						<button label="スケールをリセット" name="reset_scales" tool_tip="ダブルクリックするとスケールが元に戻ります。" />
