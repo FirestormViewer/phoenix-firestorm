@@ -789,6 +789,12 @@ void LLPipeline::requestResizeShadowTexture()
 
 void LLPipeline::resizeShadowTexture()
 {
+    // <FS:Beq> [FIRE-33200] changing shadowres requires reload - original fix by William Weaver (paperwork)
+    if(mRT->width == 0 || mRT->height == 0)
+    {
+        return;
+    }
+    // </FS:Beq>
     releaseSunShadowTargets();
     releaseSpotShadowTargets();
     allocateShadowBuffer(mRT->width, mRT->height);
@@ -8082,7 +8088,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     {
         float frame_width = w;
         float frame_height = frame_width / snapshot_aspect;
-        // Centre this box in [0..1]×[0..1]
+        // Centre this box in [0..1]x[0..1]
         float y_offset = 0.5f * (h - frame_height);
         left   = 0.f;
         top    = y_offset / h;
@@ -8093,7 +8099,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     {
         float frame_height = h;
         float frame_width = h * snapshot_aspect;
-        // Centre this box in [0..1]×[0..1]
+        // Centre this box in [0..1]x[0..1]
         float x_offset = 0.5f * (w - frame_width);
         left   = x_offset / w;
         top    = 0.f;

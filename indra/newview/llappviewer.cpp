@@ -771,7 +771,7 @@ LLAppViewer::LLAppViewer()
     // static_debug_info.log file
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
     // <FS:Beq> Improve Bugsplat tracking by using attributes
-    BugSplatAttributes::setCrashContextFileName(logdir + "crash-context.xml");
+    BugSplatAttributes::setCrashContextFileName(logdir + "CrashContext.xml");
     // </FS:Beq>
 #   else // ! LL_BUGSPLAT
     // write Google Breakpad minidump files to a per-run dump directory to avoid multiple viewer issues.
