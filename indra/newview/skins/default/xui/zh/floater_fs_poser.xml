@@ -144,10 +144,6 @@
 	<string name="title_BELLY">腹部</string>
 	<string name="title_LEFT_PEC">左胸肌</string>
 	<string name="title_RIGHT_PEC">右胸肌</string>
-	<string name="title_mFaceEar1Left">左耳根</string>
-	<string name="title_mFaceEar1Right">右耳根</string>
-	<string name="title_mFaceEar2Left">左耳尖</string>
-	<string name="title_mFaceEar2Right">右耳尖</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack name="poser_stack">

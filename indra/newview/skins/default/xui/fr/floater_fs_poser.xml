@@ -141,10 +141,6 @@
 	<string	name="title_BELLY">Ventre</string>
 	<string	name="title_LEFT_PEC">Sein gauche</string>
 	<string	name="title_RIGHT_PEC">Sein droit</string>
-	<string	name="title_mFaceEar1Left">Base gauche</string>
-	<string	name="title_mFaceEar1Right">Base droite</string>
-	<string	name="title_mFaceEar2Left">Pointe gauche</string>
-	<string	name="title_mFaceEar2Right">Pointe droite</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
