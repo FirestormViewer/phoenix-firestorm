@@ -259,9 +259,6 @@
 				<button name="toggleVisualManipulators" tool_tip="視覚マニピュレータのオン／オフを切り替えます。"/>
 			</panel>
 			<panel label="回転" name="trackball_panel">
-				<text name="rotation_label">
-					回転：
-				</text>
 				<fs_virtual_trackpad name="limb_rotation" tool_tip="現在選択されている身体部位の回転を変更します。Ctrlキーを押したままにするとゆっくり動きます。ホイールを回して３番目の軸を調整します。ShiftキーまたはAltキーを使用して、変更する回転を入れ替えます。" />
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="最後の回転の変更を元に戻します。"/>
@@ -292,7 +289,6 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="toggleAdvancedPanel" tool_tip="詳細設定エリアを切り替えます。"/>
 				<button name="FlipPose_avatar" tool_tip="ポーズ全体を左右反転します。"/>
 				<button name="FlipJoint_avatar" tool_tip="選択した身体部位を左右に反転します。" />
 				<button label="要約" name="button_RecaptureParts" tool_tip="選択した身体部位がオフになっている場合、これにより、その身体部位に現在行っている動作が再現されます。" />
@@ -316,11 +312,6 @@
 						<text name="pos_z_label">
 							位置Ｚ：
 						</text>
-						<button label="位置を取り消し" name="undo_position_change" tool_tip="最後の位置変更を元に戻します。"/>
-						<button label="位置をやり直し" name="redo_position_change" tool_tip="最後の位置変更をやり直します。"/>
-						<button label="位置をリセット" name="reset_positions" tool_tip="ダブルクリックすると元の位置に戻ります。"/>
-					</panel>
-					<panel title="身体部位のスケール" name="scale_panel">
 						<text name="scale_x_label">
 							スケールＸ：
 						</text>
@@ -330,9 +321,6 @@
 						<text name="scale_z_label">
 							スケールＺ：
 						</text>
-						<button label="スケールを取り消し" name="undo_scale_change" tool_tip="最後のスケール変更を元に戻します。"/>
-						<button label="スケールをやり直し" name="redo_scale_change" tool_tip="最後のスケール変更をやり直します。"/>
-						<button label="スケールをリセット" name="reset_scales" tool_tip="ダブルクリックするとスケールが元に戻ります。" />
 					</panel>
 				</tab_container>
 			</panel>

@@ -202,15 +202,14 @@
 			<text name="Texture Rendering">
 				テクスチャのレンダリング：
 			</text>
-			<check_box label="テクスチャの最大解像度の制限：" tool_tip="これを設定すると、インワールドテクスチャの最大表示解像度が制限されます。これにより、使用可能なテクスチャメモリを超過してぼやけたテクスチャが表示される前に、より多くのテクスチャを表示できるようになります。" name="FSRestrictMaxTextureSize"/>
-			<combo_box name="FSRestrictMaxTexturePixels">
+			<text name="FSRestrictMaxTextureSize">
+				テクスチャの最大解像度の制限：
+			</text>
+			<combo_box name="FSRestrictMaxTexturePixels" tool_tip="インワールド テクスチャの最大表示解像度を設定します。これにより、使用可能なテクスチャ メモリを超過してぼやけたテクスチャが表示される前に、より多くのテクスチャを表示できるようになります。">
 				<combo_box.item label="512ピクセル" name="512"/>
 				<combo_box.item label="1024ピクセル" name="1024"/>
 				<combo_box.item label="2048ピクセル" name="2048"/>
 			</combo_box>
-			<text name="FSRestrictMaxTextureSizeRestartText">
-				（要再起動）
-			</text>
 			<!-- New Texture detail 5 is lowest, 0 is highest -->
 			<text name="TextureDetailLabel">
 				テクスチャの読み込み精度
