@@ -272,10 +272,6 @@ width="430">
 	<string name="title_BELLY">Belly</string>
 	<string name="title_LEFT_PEC">Left Pec</string>
 	<string name="title_RIGHT_PEC">Right Pec</string>
-	<string name="title_mFaceEar1Left">Left Base</string>
-	<string name="title_mFaceEar1Right">Right Base</string>
-	<string name="title_mFaceEar2Left">Left Tip</string>
-	<string name="title_mFaceEar2Right">Right Tip</string>
 
 	<!-- Just to demonstrate there is provision for axis-swapping/Negation per joint for BVH saving. -->
 	<!-- A default of SWAP_X2Y_Y2Z_Z2X is used, which is overridden if anything (even blank) is provided here. -->
