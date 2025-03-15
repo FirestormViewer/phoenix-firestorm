@@ -43,17 +43,16 @@
 #include "lljoint.h"
 #include "llagent.h"          // for gAgent, etc.
 #include "llagentcamera.h"
+#include "llappviewer.h"
 #include "llcontrol.h"
+#include "llfloaterreg.h"
 #include "llresmgr.h" // for LLLocale
 #include "llviewerwindow.h"
 #include "llviewercamera.h"
+#include "llviewercontrol.h"
 #include "llviewershadermgr.h"
-#include "llfloaterreg.h"
 #include "fsfloaterposer.h"
 // -------------------------------------
-
-extern U64MicrosecondsImplicit   gFrameTime; 
-extern LLControlGroup gSavedSettings;
 
 
 /**
@@ -69,7 +68,7 @@ extern LLControlGroup gSavedSettings;
  * @return void
  *
  */
-void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& color=LLColor4(1.f, 1.f, 1.f, 1.f))
+static void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(1.f, 1.f, 1.f, 1.f))
 {
     constexpr float MAX_SPHERE_RADIUS = 0.05f;      // Base radius in agent-space units.
     constexpr float PULSE_AMPLITUDE = 0.01f;         // Additional radius variation.
@@ -79,7 +78,7 @@ void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& 
     // Get the current time (in seconds) from the global timer.
     const U64 timeMicrosec = gFrameTime; 
     // Convert microseconds to seconds
-    const F64 timeSec = std::fmod( static_cast<F64>(timeMicrosec) / 1000000.0, PULSE_TIME_DOMAIN );    
+    const F64 timeSec = std::fmod(static_cast<F64>(timeMicrosec) / 1000000.0, PULSE_TIME_DOMAIN);
     // Compute the pulse factor using a sine wave. This value oscillates between 0 and 1.
     float pulseFactor = 0.75f + 0.25f * std::sin(PULSE_FREQUENCY * 2.f * F_PI * static_cast<F32>(timeSec));
 
@@ -131,7 +130,7 @@ void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& 
 }
 
 
-bool isMouseOverJoint(S32 mouseX, S32 mouseY, const LLVector3& jointWorldPos, F32 jointRadius, F32& outDistanceFromCamera)
+static bool isMouseOverJoint(S32 mouseX, S32 mouseY, const LLVector3& jointWorldPos, F32 jointRadius, F32& outDistanceFromCamera)
 {
     LLViewerCamera* camera = LLViewerCamera::getInstance();
 
@@ -201,7 +200,7 @@ const std::unordered_map<FSManipRotateJoint::e_manip_part, FSManipRotateJoint::R
 // Helper function: Builds an alignment quaternion from the computed bone axes.
 // This quaternion rotates from the default coordinate system (assumed to be
 // X = (1,0,0), Y = (0,1,0), Z = (0,0,1)) into the bone’s natural coordinate system.
-LLQuaternion FSManipRotateJoint::computeAlignmentQuat( const BoneAxes& boneAxes ) const
+LLQuaternion FSManipRotateJoint::computeAlignmentQuat(const BoneAxes& boneAxes) const
 {
     LLQuaternion alignmentQuat(boneAxes.naturalX, boneAxes.naturalY, boneAxes.naturalZ);
     alignmentQuat.normalize();
@@ -289,7 +288,8 @@ void FSManipRotateJoint::highlightHoverSpheres(S32 mouseX, S32 mouseY)
     for (const auto& entry : getSelectableJoints())
     {
         LLJoint* joint = mAvatar->getJoint(std::string(entry));  
-        if (!joint) continue;
+        if (!joint)
+            continue;
 
         // Update the joint's world matrix to ensure its position is current.
         joint->updateWorldMatrixParent();
@@ -386,7 +386,7 @@ bool FSManipRotateJoint::updateVisiblity()
 
     const auto * viewer_camera = LLViewerCamera::getInstance();
     visible = viewer_camera->projectPosAgentToScreen(agent_space_center, mCenterScreen );
-    if( visible )
+    if (visible)
     {
         mCenterToCam = gAgentCamera.getCameraPositionAgent() - agent_space_center;
         mCenterToCamNorm = mCenterToCam;
@@ -415,7 +415,7 @@ bool FSManipRotateJoint::updateVisiblity()
 
     mCamEdgeOn = false;
     F32 axis_onto_cam = mManipPart >= LL_ROT_X ? llabs( getConstraintAxis() * mCenterToCamNorm ) : 0.f;
-    if( axis_onto_cam < AXIS_ONTO_CAM_TOLERANCE )
+    if (axis_onto_cam < AXIS_ONTO_CAM_TOLERANCE)
     {
         mCamEdgeOn = true;
     }
@@ -500,12 +500,12 @@ void FSManipRotateJoint::renderManipulatorRings(const LLVector3& agent_space_cen
         LLMatrix4 rot_mat(rotation);
         gGL.multMatrix((GLfloat*)rot_mat.mMatrix);
 
-        for ( int pass = 0; pass < 2; ++pass)
+        for (int pass = 0; pass < 2; ++pass)
         {
             if( mManipPart == LL_NO_PART || mManipPart == LL_ROT_ROLL || mHighlightedPart == LL_ROT_ROLL)
             {
                 renderCenterSphere( mRadiusMeters);
-                for (auto & ring_params : sRingParams)
+                for (auto& ring_params : sRingParams)
                 {
                     const auto part = ring_params.first;
                     const auto& params = ring_params.second;
@@ -545,14 +545,14 @@ void FSManipRotateJoint::renderManipulatorRings(const LLVector3& agent_space_cen
     gUIProgram.bind();
 }
 
-void FSManipRotateJoint::renderCenterCircle(const F32 radius, const LLColor4 normal_color, const LLColor4 highlight_color)
+void FSManipRotateJoint::renderCenterCircle(const F32 radius, const LLColor4& normal_color, const LLColor4& highlight_color)
 {
     gGL.pushMatrix();
     {
         LLGLEnable cull_face(GL_CULL_FACE);
         LLGLDepthTest gls_depth(GL_FALSE);
 
-        const int segments = 64;
+        constexpr int segments = 64;
         glLineWidth(6.0f); // Set the desired line thickness
 
         // Compute a scale factor that already factors in the radius.
@@ -573,7 +573,7 @@ void FSManipRotateJoint::renderCenterCircle(const F32 radius, const LLColor4 nor
 
         if (rotationAxis.magVec() > 0.001f)
         {
-            gGL.rotatef(angle, rotationAxis.mV[0], rotationAxis.mV[1], rotationAxis.mV[2]);
+            gGL.rotatef(angle, rotationAxis.mV[VX], rotationAxis.mV[VY], rotationAxis.mV[VZ]);
         }
 
         // Draw a unit circle in the XY plane (which is now rotated correctly).
@@ -592,14 +592,14 @@ void FSManipRotateJoint::renderCenterCircle(const F32 radius, const LLColor4 nor
     gGL.popMatrix();
 }
 
-void FSManipRotateJoint::renderCenterSphere(const F32 radius, const LLColor4 normal_color, const LLColor4 highlight_color)
+void FSManipRotateJoint::renderCenterSphere(const F32 radius, const LLColor4& normal_color, const LLColor4& highlight_color)
 {
     gGL.pushMatrix();
     {
         LLGLEnable cull_face(GL_CULL_FACE);
         LLGLDepthTest gls_depth(GL_FALSE);
         
-        float scale = radius*0.8f;
+        float scale = radius * 0.8f;
         
         if (mManipPart == LL_ROT_GENERAL || mHighlightedPart == LL_ROT_GENERAL)
         {
@@ -690,8 +690,6 @@ void FSManipRotateJoint::render()
 
     const LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(mRotationCenter);
 
-    
-    
     LLCachedControl<bool> use_natural_direction(gSavedSettings, "FSManipRotateJointUseNaturalDirection", true);    
     LLQuaternion active_rotation = use_natural_direction? final_world_alignment : joint_world_rotation;
     // Render the manipulator rings in a separate function.
@@ -808,7 +806,7 @@ std::string FSManipRotateJoint::getManipPartString(EManipPart part)
  */
 void FSManipRotateJoint::renderNameXYZ(const LLVector3 &vec)
 {
-    const S32 PAD = 10;
+    constexpr S32 PAD = 10;
     S32 window_center_x = gViewerWindow->getWorldViewRectScaled().getWidth() / 2;
     S32 window_center_y = gViewerWindow->getWorldViewRectScaled().getHeight() / 2;
     S32 vertical_offset = window_center_y - VERTICAL_OFFSET;
@@ -962,9 +960,9 @@ bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
     {
         // Constrained rotation.
         LLVector3 axis = setConstraintAxis(); // set the axis based on the manipulator part
-        F32 axis_onto_cam = llabs( axis * mCenterToCamNorm );
-        const F32 AXIS_ONTO_CAM_TOL = cos( 85.f * DEG_TO_RAD );
-        if( axis_onto_cam < AXIS_ONTO_CAM_TOL )
+        F32 axis_onto_cam = llabs(axis * mCenterToCamNorm);
+        const F32 AXIS_ONTO_CAM_TOL = cos(85.f * DEG_TO_RAD);
+        if (axis_onto_cam < AXIS_ONTO_CAM_TOL)
         {
             LLVector3 up_from_axis = mCenterToCamNorm % axis;
             up_from_axis.normalize();
@@ -1035,7 +1033,6 @@ bool FSManipRotateJoint::handleMouseUp(S32 x, S32 y, MASK mask)
     }
     return false;
 }
-
 
 
 /**
@@ -1314,6 +1311,7 @@ LLQuaternion FSManipRotateJoint::dragConstrained(S32 x, S32 y)
     mLastAngle = angle;
     return LLQuaternion(angle, constraint_axis);
 }
+
 void FSManipRotateJoint::drag(S32 x, S32 y)
 {
     if (!updateVisiblity() || !mJoint) return;
@@ -1363,7 +1361,7 @@ LLVector3 FSManipRotateJoint::setConstraintAxis()
             if (use_natural_direction)
             {            
                 // Get the joint's current local rotation.
-                LLQuaternion currentLocalRot = mJoint->getRotation();            
+                LLQuaternion currentLocalRot = mJoint->getRotation();
                 const LLQuaternion parentWorldRot = (mJoint->getParent()) ? mJoint->getParent()->getWorldRotation() : LLQuaternion::DEFAULT;
                 LLQuaternion rotatedNaturalAlignment = mNaturalAlignmentQuat * currentLocalRot;
                 rotatedNaturalAlignment.normalize();

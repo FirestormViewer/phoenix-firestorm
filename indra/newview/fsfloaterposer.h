@@ -1,5 +1,5 @@
 /**
- * @file fsfloaterposer.cpp
+ * @file fsfloaterposer.h
  * @brief View Model for posing your (and other) avatar(s).
  *
  * $LicenseInfo:firstyear=2024&license=viewerlgpl$
