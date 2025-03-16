@@ -369,7 +369,8 @@ width="430">
 							 tool_tip="Move the selected avatar up or down"
 							 can_edit_text="true">
 								<slider.commit_callback
-								 function="Poser.PositionSet"/>
+								 function="Poser.CommitSlider"
+								 parameter="0"/>
 							</slider>
 							<spinner
 							 height="16"
@@ -413,7 +414,8 @@ width="430">
 							 tool_tip="Move the selected avatar left or right"
 							 can_edit_text="true">
 								<slider.commit_callback
-								 function="Poser.PositionSet"/>
+								 function="Poser.CommitSlider"
+								 parameter="1"/>
 							</slider>
 							<spinner
 							 height="16"
@@ -457,7 +459,8 @@ width="430">
 							 tool_tip="Move the selected avatar in or out"
 							 can_edit_text="true">
 								<slider.commit_callback
-								 function="Poser.PositionSet"/>
+								 function="Poser.CommitSlider"
+								 parameter="2"/>
 							</slider>
 							<spinner
 							 height="16"
@@ -1099,7 +1102,8 @@ width="430">
 						 top_pad="2"
 						 width="130" >
 							<slider.commit_callback
-							 function="Poser.Advanced.PositionSet"/>
+							 function="Poser.CommitSlider"
+							 parameter="7"/>
 						</slider>
 						<spinner
 						 height="20"
@@ -1142,7 +1146,8 @@ width="430">
 						 top_pad="2"
 						 width="130" >
 							<slider.commit_callback
-							 function="Poser.Advanced.PositionSet"/>
+							 function="Poser.CommitSlider"
+                             parameter="8"/>
 						</slider>
 						<spinner
 						 height="20"
@@ -1185,7 +1190,8 @@ width="430">
 						 top_pad="2"
 						 width="130" >
 							<slider.commit_callback
-							 function="Poser.Advanced.PositionSet"/>
+							 function="Poser.CommitSlider"
+                             parameter="9"/>
 						</slider>
 						<spinner
 						 height="20"
@@ -1228,7 +1234,8 @@ width="430">
 						 top_pad="2"
 						 width="130" >
 							<slider.commit_callback
-							 function="Poser.Advanced.ScaleSet"/>
+							 function="Poser.CommitSlider"
+                             parameter="10"/>
 						</slider>
 						<spinner
 						 height="20"
@@ -1271,7 +1278,8 @@ width="430">
 						 top_pad="2"
 						 width="130" >
 							<slider.commit_callback
-							 function="Poser.Advanced.ScaleSet"/>
+							 function="Poser.CommitSlider"
+                             parameter="11"/>
 						</slider>
 						<spinner
 						 height="20"
@@ -1314,7 +1322,8 @@ width="430">
 						 top_pad="2"
 						 width="130" >
 							<slider.commit_callback
-							 function="Poser.Advanced.ScaleSet"/>
+							 function="Poser.CommitSlider"
+                             parameter="12"/>
 						</slider>
 						<spinner
 						 height="20"

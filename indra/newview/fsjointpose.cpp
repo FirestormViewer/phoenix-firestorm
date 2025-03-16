@@ -144,21 +144,15 @@ void FSJointPose::recaptureJoint()
     addStateToUndo(FSJointState(mCurrentState));
     mCurrentState = FSJointState(joint);
 }
+
 void FSJointPose::recaptureJointAsDelta()
 {
-    if (mIsCollisionVolume)
-    {
-        return;
-    }
-    
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
-    {
         return;
-    }
-    
-    addStateToUndo(mCurrentState);
-    mCurrentState = FSJointState(joint);
+
+    addStateToUndo(FSJointState(mCurrentState));
+    mCurrentState.updateFromJoint(joint);
 }
 
 void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
@@ -209,6 +203,9 @@ void FSJointPose::zeroBaseRotation()
     if (mIsCollisionVolume)
         return;
 
+    if (!isBaseRotationZero())
+        purgeUndoQueue();
+
     mCurrentState.zeroBaseRotation();
 }
 
@@ -218,4 +215,23 @@ bool FSJointPose::isBaseRotationZero() const
         return true;
 
     return mCurrentState.baseRotationIsZero();
+}
+
+void FSJointPose::purgeUndoQueue()
+{
+    mUndoneJointStatesIndex = 0;
+    mLastSetJointStates.clear();
+}
+
+bool FSJointPose::canPerformUndo() const
+{
+    switch (mLastSetJointStates.size())
+    {
+        case 0: // nothing to undo
+            return false;
+        case 1: // there is only one change
+            return true;
+        default: // current state is not the bottom of the deque
+            return mUndoneJointStatesIndex != (mLastSetJointStates.size() - 1);
+    }
 }

@@ -78,13 +78,13 @@ class FSFloaterPoser : public LLFloater, public LLEditMenuHandler
 {
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
-public:    
-    void updatePosedBones();
+public:
+    void updatePosedBones(const std::string& jointName);
     void selectJointByName(const std::string& jointName);
-    void  undo() override { onUndoLastChange(); };
-    bool  canUndo() const  override { return true; }
-    void  redo() override { onRedoLastChange(); };
-    bool  canRedo() const override { return true; }    
+    void undo() override { onUndoLastChange(); };
+    bool canUndo() const override { return true; }
+    void redo() override { onRedoLastChange(); };
+    bool canRedo() const override { return true; }
  private:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
@@ -223,31 +223,29 @@ public:
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
+    void startPosingSelf();
+    void stopPosingAllAvatars();
     // visual manipulators control
     void enableVisualManipulators();
     void disableVisualManipulators();
 
-    // UI Event Handlers:
+    // UI Event Handlers
     void onAvatarsRefresh();
     void onAvatarSelect();
     void onJointTabSelect();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
-    void onToggleVisualManipulators();    
+    void onToggleVisualManipulators();
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastChange();
     void onRedoLastChange();
     void onResetJoint(const LLSD data);
     void onSetAvatarToTpose();
-    void enableOrDisableRedoButton();
     void onPoseStartStop();
-    void startPosingSelf();
-    void stopPosingAllAvatars();
-    void onLimbTrackballChanged();
+    void onTrackballChanged();
     void onYawPitchRollChanged();
-    void onAvatarPositionSet();
-    void onAdvancedPositionSet();
-    void onAdvancedScaleSet();
+    void onPositionSet();
+    void onScaleSet();
     void onClickToggleSelectedBoneEnabled();
     void onClickRecaptureSelectedBones();
     void onClickFlipPose();
@@ -257,15 +255,16 @@ public:
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
-    void onCommitSpinner(LLUICtrl* spinner, S32 ID);
-    void onClickSymmetrize(S32 ID);
+    void onCommitSpinner(const LLUICtrl* spinner, const S32 ID);
+    void onCommitSlider(const LLUICtrl* slider, const S32 id);
+    void onClickSymmetrize(const S32 ID);
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();
-    void refreshAvatarPositionSlidersAndSpinners();
-    void refreshTrackpadCursor();
     void refreshPositionSlidersAndSpinners();
     void refreshScaleSlidersAndSpinners();
+    void refreshTrackpadCursor();
+    void enableOrDisableRedoAndUndoButton();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
@@ -492,6 +491,7 @@ public:
     LLButton* mToggleSympatheticRotationBtn{ nullptr };
     LLButton* mToggleDeltaModeBtn{ nullptr };
     LLButton* mRedoChangeBtn{ nullptr };
+    LLButton* mUndoChangeBtn{ nullptr };
     LLButton* mSetToTposeButton{ nullptr };
     LLButton* mBtnJointRotate{ nullptr };
 

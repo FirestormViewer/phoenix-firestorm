@@ -417,8 +417,9 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint to query.</param>
-    /// <returns>True if a redo action is available, otherwise false.</returns>
-    bool canRedoJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint);
+    /// <param name="canUndo">Supply true to query if we can perform an Undo, otherwise query redo.</param>
+    /// <returns>True if an undo or redo action is available, otherwise false.</returns>
+    bool canRedoOrUndoJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint, bool canUndo = false);
 
     /// <summary>
     /// Re-does the last undone change (rotation, position or scale) to the supplied PoserJoint.
@@ -516,7 +517,14 @@ public:
     /// <param name="translation">The axial translation form the supplied joint.</param>
     /// <param name="negation">The style of negation to apply to the recapture.</param>
     void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
-    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
+
+    /// <summary>
+    /// Recaptures any change in joint state.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
+    /// <param name="joint">The joint to recapture.</param>
+    /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
+    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
