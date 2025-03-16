@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="Viewer" name="File">
+	<menu label="Visionneuse" name="File">
 		<menu_item_call label="Préférences..." name="Preferences..."/>
 		<menu_item_call label="Quitter [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Aide" name="Help">
 		<menu_item_call label="Wiki Firestorm" name="Firestorm Wiki"/>
 		<menu_item_call label="Dépannage" name="Troubleshooting"/>
+		<menu_item_call label="Guide" name="How To"/>
 		<menu_item_call label="Signaler un problème" name="Report Bug"/>
 		<menu_item_call label="À propos de [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Aide [CURRENT_GRID]" name="current_grid_help_login"/>
@@ -15,6 +16,7 @@
 	<menu_item_check label="Afficher le menu débogage" name="Show Debug Menu"/>
 	<menu label="Débogage" name="Debug">
 		<menu_item_call label="Afficher les paramètres de débogage" name="Debug Settings"/>
+		<menu_item_call label="Afficher les paramètres de couleur" name="Color Settings"/>
 		<menu_item_call label="Outil de prévisualisation XUI" name="UI Preview Tool"/>
 		<menu label="Polices" name="Fonts">
 			<menu_item_call label="Afficher le test de police" name="Show Font Test"/>

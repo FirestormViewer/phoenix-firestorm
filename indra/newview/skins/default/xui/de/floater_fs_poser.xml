@@ -144,10 +144,6 @@
 	<string name="title_BELLY">Bauch</string>
 	<string name="title_LEFT_PEC">Linke Brustmuskeln</string>
 	<string name="title_RIGHT_PEC">Rechte Brustmuskeln</string>
-	<string name="title_mFaceEar1Left">Linke Basis</string>
-	<string name="title_mFaceEar1Right">Rechte Basis</string>
-	<string name="title_mFaceEar2Left">Linke Spitze</string>
-	<string name="title_mFaceEar2Right">Rechte Spitze</string>
 	<string name="LoadPoseLabel">Pose laden</string>
 	<string name="LoadDiffLabel">Diff. laden</string>
 

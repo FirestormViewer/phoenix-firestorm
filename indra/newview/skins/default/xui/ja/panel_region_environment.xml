@@ -85,7 +85,7 @@
 						<line_editor name="edt_invname_alt1">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_alt1" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在の空として選択します。"/>
+						<settings_drop_target name="sdt_alt1" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。"/>
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
@@ -94,7 +94,7 @@
 						<line_editor name="edt_invname_alt2">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_alt2" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在の空として選択します。"/>
+						<settings_drop_target name="sdt_alt2" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。"/>
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
@@ -103,7 +103,7 @@
 						<line_editor name="edt_invname_alt3">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_alt3" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在の空として選択します。"/>
+						<settings_drop_target name="sdt_alt3" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。"/>
 					</panel>
 					<text name="sky_altitudes_label">
 						スカイの高度

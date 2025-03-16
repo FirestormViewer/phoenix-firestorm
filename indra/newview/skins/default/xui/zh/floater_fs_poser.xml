@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_poser" title="化身與動畫模型的姿勢">
-	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
-	<string	name="header_mHead">身體</string>
-	<string	name="header_mFaceForeheadLeft">額頭/眉毛</string>
-	<string	name="header_mEyeLeft">眼睛/眼瞼</string>
-	<string	name="header_mFaceCheekUpperLeft">臉頰/嘴唇</string>
-	<string	name="header_mHandThumb1Left">左手</string>
-	<string	name="header_mCollarLeft">左臂</string>
-	<string	name="header_mHandThumb1Right">右手</string>
-	<string	name="header_mCollarRight">右臂</string>
-	<string	name="header_mHipLeft">腿</string>
-	<string	name="header_mTail1">尾巴</string>
-	<string	name="header_mHindLimbsRoot">後肢</string>
-	<string	name="header_mWingsRoot">翼</string>
-	<string	name="header_mFaceEar1Left">耳朵/鼻子</string>
-
-	<!-- These are names to appear on the UI for the joints/bones/thingos -->
-	<string	name="title_mPelvis">化身整體</string>
-	<string	name="title_mTorso">軀幹</string>
-	<string	name="title_mChest">胸部</string>
-	<string	name="title_mNeck">頸部</string>
-	<string	name="title_mHead">頭顱</string>
+	<string name="header_mHead">身體</string>
+	<string name="header_mFaceForeheadLeft">額頭/眉毛</string>
+	<string name="header_mEyeLeft">眼睛/眼瞼</string>
+	<string name="header_mFaceCheekUpperLeft">臉頰/嘴唇</string>
+	<string name="header_mHandThumb1Left">左手</string>
+	<string name="header_mCollarLeft">左臂</string>
+	<string name="header_mHandThumb1Right">右手</string>
+	<string name="header_mCollarRight">右臂</string>
+	<string name="header_mHipLeft">腿</string>
+	<string name="header_mTail1">尾巴</string>
+	<string name="header_mHindLimbsRoot">後肢</string>
+	<string name="header_mWingsRoot">翼</string>
+	<string name="header_mFaceEar1Left">耳朵/鼻子</string>
+	<string name="title_mPelvis">化身整體</string>
+	<string name="title_mTorso">軀幹</string>
+	<string name="title_mChest">胸部</string>
+	<string name="title_mNeck">頸部</string>
+	<string name="title_mHead">頭顱</string>
 	<string name="title_mEyeRight">右眼</string>
 	<string name="title_mEyeLeft">左眼</string>
 	<string name="title_mFaceForeheadLeft">左額頭角</string>
@@ -144,12 +141,8 @@
 	<string name="title_BELLY">腹部</string>
 	<string name="title_LEFT_PEC">左胸肌</string>
 	<string name="title_RIGHT_PEC">右胸肌</string>
-	<string name="title_mFaceEar1Left">左耳根</string>
-	<string name="title_mFaceEar1Right">右耳根</string>
-	<string name="title_mFaceEar2Left">左耳尖</string>
-	<string name="title_mFaceEar2Right">右耳尖</string>
-
-<!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
+	<string name="LoadPoseLabel">載入姿勢</string>
+	<string name="LoadDiffLabel">載入差異</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -165,7 +158,7 @@
 							</text>
 							<slider name="av_position_leftright" tool_tip="左右移動選中的化身"/>
 							<text name="av_position_inout_label">
-								進/出：
+								前/後：
 							</text>
 							<slider name="av_position_inout" tool_tip="前後移動選中的化身"/>
 							<scroll_list name="entireAv_joint_scroll">
@@ -208,10 +201,10 @@
 						</scroll_list>
 					</panel>
 					<panel title="模型" name="avatarSelection_panel">
-						<scroll_list tool_tip="選擇要動畫的角色或動漫角色。" name="avatarSelection_scroll">
+						<scroll_list tool_tip="選擇要製作姿勢的化身或動畫物件。" name="avatarSelection_scroll">
 							<scroll_list.columns label="選擇..." name="name"/>
 						</scroll_list>
-						<button name="refresh_avatars" tool_tip="更新頭像和動漫角色的列表"/>
+						<button name="refresh_avatars" tool_tip="更新化身和動畫物件的列表"/>
 						<button label="開始姿勢" label_selected="停止姿勢" tool_tip="若有許可權，開始/停止選定的化身或動畫物件的姿勢" name="start_stop_posing_button"/>
 						<button label="設為T姿勢" tool_tip="雙擊將選定的化身設為T姿勢" name="set_t_pose_button"/>
 					</panel>
@@ -220,34 +213,59 @@
 							觸控板敏感度：
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="設定觸控板的敏感度"/>
+						<check_box name="natural_direction_checkbox" label="使用自然對齊" tool_tip="骨骼預設具有不自然的關節旋轉，這可能會讓姿勢調整變得更複雜。選取此選項後，關節將以更自然的方式旋轉。" />
 						<check_box name="stop_posing_on_close_checkbox" label="關閉時停止" tool_tip="關閉時不停止姿勢可有助於保留目前工作。"/>
 						<check_box name="also_save_bvh_checkbox" label="儲存時也儲存BHV" tool_tip="當姿勢被儲存時，將同時創建一個BHV檔案，該檔案可以透過建造 > 上傳 > 動畫上傳，並用於自己或其他化身的姿勢。為了實現此功能，關節的基礎位置必須設為零，因為BHV無法從其他姿勢推導出來。"/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="編輯時重設基礎旋轉" tool_tip="首次編輯旋轉時，將其重設為零。這意味著可以保存完整的姿勢（而不僅僅是差異，請參閱載入/保存）。每個以零為基準匯出的關節旁都會顯示綠色勾選標誌。" />
 					</panel>
 				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="啟用 / 停用可視操控器。" />
 			</panel>
-			<panel name="trackball_panel">
-				<text name="rotation_label">
-					旋轉：
-				</text>
-				<fs_virtual_trackpad name="limb_rotation" tool_tip="改變目前選定身體部位的旋轉。按住CTRL緩慢改變。滾動滑鼠滾輪調整第三軸。切換或使用ALT以切換旋轉軸。"/>
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="旋轉" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="調整當前選取的身體部位旋轉。按住 Ctrl 以緩慢移動，滾動滑鼠滾輪可調整三軸。使用 Shift 或 Alt 切換旋轉軸的調整方式。" />
+						<text name="limb_pitch_label">
+							上/下：
+						</text>
+						<text name="limb_yaw_label">
+							左/右：
+						</text>
+						<text name="limb_roll_label">
+							旋轉：
+						</text>
+					</panel>
+					<panel title="移動 / 縮放" name="position_panel">
+						<text name="pos_x_label">
+							位置 X：
+						</text>
+						<text name="pos_y_label">
+							位置 Y：
+						</text>
+						<text name="pos_z_label">
+							位置 Z：
+						</text>
+						<text name="scale_x_label">
+							縮放 X：
+						</text>
+						<text name="scale_y_label">
+							縮放 Y：
+						</text>
+						<text name="scale_z_label">
+							縮放 Z：
+						</text>
+					</panel>
+				</tab_container>
 				<panel name="trackball_button_panel">
-					<button name="undo_change" tool_tip="撤銷最後一次旋轉變化"/>
-					<button name="button_redo_change" tool_tip="重做最後一次旋轉變化"/>
-					<button name="poser_joint_reset" tool_tip="雙擊將所有選定身體部位重設為原始值。"/>
+					<button name="undo_change" tool_tip="撤銷上一次變更" />
+					<button name="button_redo_change" tool_tip="重做上一次變更"/>
+					<button name="poser_joint_reset" tool_tip="雙擊以將選取的身體部位重設為最初開始調整姿勢時的狀態。"/>
 					<button name="delta_mode_toggle" tool_tip="如果改變多個關節，則改變它們相同的值而不是相同的角度。這也用於解決萬向節鎖定的問題。"/>
-					<button label="映象" name="button_toggleMirrorRotation" tool_tip="映象對稱關節的變化。"/>
-					<button label="同步" name="button_toggleSympatheticRotation" tool_tip="同步調整對稱關節。"/>
+					<button label="鏡像" name="button_toggleMirrorRotation" tool_tip="將變更鏡像到對側關節。"/>
+					<button label="複製" name="button_toggleSympatheticRotation" tool_tip="將變更複製到對側關節。"/>
+					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="雙擊以將變更從左側複製到右側。" />
+					<button label="複製右側&gt;左" name="button_symmetrize_right_to_left" tool_tip="雙擊以將變更從右側複製到左側。" />
 				</panel>
-				<text name="limb_pitch_label">
-					上/下：
-				</text>
-				<text name="limb_yaw_label">
-					左/右：
-				</text>
-				<text name="limb_roll_label">
-					滾轉：
-				</text>
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="為選定的化身載入姿勢。" name="poses_scroll">
@@ -258,37 +276,14 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="toggleAdvancedPanel" tool_tip="啟用/禁用高級設定"/>
 				<button name="FlipPose_avatar" tool_tip="左右翻轉整個姿勢"/>
-				<button name="FlipJoint_avatar" tool_tip="映象翻轉選定的身體部位"/>
+				<button name="FlipJoint_avatar" tool_tip="鏡像翻轉選定的身體部位"/>
 				<button label="重捕" name="button_RecaptureParts" tool_tip="如果選擇的身體部位已關閉，這將重新捕捉這些身體部位當前的姿勢。"/>
 				<button label="啟用/禁用部位" name="toggle_PosingSelectedBones" tool_tip="啟用或禁用選定身體部位的姿勢。如果禁用，這些部位將正常動畫化。"/>
 				<button label="自定義姿勢" name="toggleLoadSavePanel" tool_tip="載入、儲存並管理自定義建立的姿勢"/>
 				<button tool_tip="管理姿勢目錄" name="open_poseDir_button"/>
 				<menu_button label="載入姿勢" tool_tip="載入目前選定的姿勢。" name="load_poses_button"/>
 				<button label="儲存差異" tool_tip="儲存與現有姿勢的差異。從T姿勢開始以建立新作品。" name="save_poses_button"/>
-			</panel>
-		</layout_panel>
-		<layout_panel name="advanced_controls_layout">
-			<panel name="advanced_parent_panel">
-				<tab_container name="modifier_tabs">
-					<panel title="身體部位位置" name="position_panel">
-						<slider label="位置 X：" name="Advanced_Position_X"/>
-						<slider label="位置 Y：" name="Advanced_Position_Y"/>
-						<slider label="位置 Z：" name="Advanced_Position_Z"/>
-						<button label="撤銷位置" name="undo_position_change" tool_tip="撤銷最後一次位置變化"/>
-						<button label="重做位置" name="redo_position_change" tool_tip="重做最後一次位置變化"/>
-						<button label="重設位置" name="reset_positions" tool_tip="雙擊重設位置為原始值"/>
-					</panel>
-					<panel title="身體部位縮放" name="scale_panel">
-						<slider label="縮放 X：" name="Advanced_Scale_X"/>
-						<slider label="縮放 Y：" name="Advanced_Scale_Y"/>
-						<slider label="縮放 Z：" name="Advanced_Scale_Z"/>
-						<button label="撤銷縮放" name="undo_scale_change" tool_tip="撤銷最後一次縮放變化"/>
-						<button label="重做縮放" name="redo_scale_change" tool_tip="重做最後一次縮放變化"/>
-						<button label="重設縮放" name="reset_scales" tool_tip="雙擊重設縮放為原始值"/>
-					</panel>
-				</tab_container>
 			</panel>
 		</layout_panel>
 	</layout_stack>
