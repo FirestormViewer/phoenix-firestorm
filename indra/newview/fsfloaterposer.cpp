@@ -253,15 +253,23 @@ void FSFloaterPoser::onFocusLost()
         LLEditMenuHandler::gEditMenuHandler = nullptr;
     }
 }
+
 void FSFloaterPoser::enableVisualManipulators()
 {
+    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+    {
+        mToggleVisualManipulators->setToggleState(false);
+        return;
+    }
+
     if (LLToolMgr::getInstance()->getCurrentToolset() != gCameraToolset)
     {
         mLastToolset = LLToolMgr::getInstance()->getCurrentToolset();
     }
+
     LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
     LLToolMgr::getInstance()->getCurrentToolset()->selectTool(FSToolCompPose::getInstance());
-    FSToolCompPose::getInstance()->setAvatar( gAgentAvatarp);    
+    FSToolCompPose::getInstance()->setAvatar(gAgentAvatarp);
 }
 
 void FSFloaterPoser::disableVisualManipulators()
@@ -1537,6 +1545,7 @@ LLScrollListCtrl* FSFloaterPoser::getScrollListForTab(LLPanel * tabPanel) const
     LL_WARNS() << "Unknown tab panel: " << tabPanel << LL_ENDL;
     return nullptr;
 }
+
 std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJoints() const
 {
     std::vector<FSPoserAnimator::FSPoserJoint*> joints;
@@ -1575,19 +1584,21 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
             joints.push_back(userData);
         }
     }
-    auto avatarp = getUiSelectedAvatar();
-    if (avatarp)
-    {
-        if(joints.size() >= 1)
-        {
-            FSToolCompPose::getInstance()->setJoint( gAgentAvatarp->getJoint( JointKey::construct(joints[0]->jointName())) );
-        }
-        else
-        {
-            FSToolCompPose::getInstance()->setJoint( nullptr );
-        }
-    }
+
+    updateManipWithFirstSelectedJoint(joints);
+
     return joints;
+}
+
+void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints)
+{
+    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+        return;
+
+    if (joints.size() >= 1)
+        FSToolCompPose::getInstance()->setJoint(gAgentAvatarp->getJoint(JointKey::construct(joints[0]->jointName())));
+    else
+        FSToolCompPose::getInstance()->setJoint(nullptr);
 }
 
 E_RotationStyle FSFloaterPoser::getUiSelectedBoneRotationStyle(const std::string& jointName) const

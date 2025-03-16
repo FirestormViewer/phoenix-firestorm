@@ -133,6 +133,12 @@ public:
     std::vector<FSPoserAnimator::FSPoserJoint*> getUiSelectedPoserJoints() const;
 
     /// <summary>
+    /// Updates the visual with the first selected joint from the supplied collection, if any.
+    /// </summary>
+    /// <param name="joints">The collection of selected joints.</param>
+    static void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints);
+
+    /// <summary>
     /// Gets a detectable avatar by its UUID.
     /// </summary>
     /// <param name="avatarToFind">The ID of the avatar to find.</param>
