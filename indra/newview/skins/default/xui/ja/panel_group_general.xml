@@ -15,7 +15,7 @@
 		<text name="group_key_label">
 			グループのキー：
 		</text>
-		<text_editor name="group_key" label="グループＵＵＩＤ："/>
+		<text_editor name="group_key" label="グループＵＵＩＤ：" initial_value="（読み込んでいます…）"/>
 		<button name="copy_uri" label="ＵＲＩをコピー"/>
 		<text name="prepend_founded_by">
 			創設者：

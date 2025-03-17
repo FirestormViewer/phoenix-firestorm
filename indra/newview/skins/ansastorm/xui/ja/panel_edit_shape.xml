@@ -9,7 +9,6 @@
 	<string name="height">
 		身長：
 	</string>
-	<text name="avatar_height"/>
 	<tab_container name="wearable_accordion">
 		<!-- Begin Body Panel -->
 		<panel name="shape_body_tab_holder" title="身体">

@@ -23,17 +23,11 @@
 	<string name="no_partner_text" value="なし"/>
 	<string name="no_group_text" value="なし"/>
 	<string name="age_format_short">
-    誕生日：[REG_DATE]
+		誕生日：[REG_DATE]
 	</string>
 	<string name="age_format_full">
-    誕生日：[REG_DATE]
+		誕生日：[REG_DATE]
 （[AGE]）
-	</string>
-	<string name="name_text_args">
-    [NAME]
-	</string>
-	<string name="display_name_text_args">
-    [DISPLAY_NAME]
 	</string>
 	<string name="FSDev" value="開発者"/>
 	<string name="FSSupp" value="サポート"/>

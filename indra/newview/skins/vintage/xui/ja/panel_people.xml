@@ -49,7 +49,7 @@
 						<container_view name="radarmap_options_container_view" label="オプション">
 							<panel name="radarmap_options_scrolled_panel">
 								<check_box label="ミニマップにチャットレンジを表示" name="ShowRadarMinimap"/>
-								<check_box label="Show muted and blacklisted Avatars" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="ミュートかブラックリストのアバターを表示" name="FSRadarShowMutedAndDerendered"/>
 								<check_box label="描画範囲に入ってきたら通知" name="RadarReportDrawRangeEnter"/>
 								<check_box label="描画範囲から去ったら通知" name="RadarReportDrawRangeLeaving"/>
 								<check_box label="チャット範囲に入ってきたら通知" name="RadarReportChatRangeEnter"/>
