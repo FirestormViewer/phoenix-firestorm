@@ -2275,7 +2275,6 @@ F32 LLPipeline::calcPixelArea(LLVector3 center, LLVector3 size, LLCamera &camera
 
     //ramp down distance for nearby objects
     //shrink dist by dist/16.
-    /*
     if (dist < 16.f)
     {
         dist /= 16.f;
