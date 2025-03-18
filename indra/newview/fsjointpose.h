@@ -58,34 +58,39 @@ class FSJointPose
     bool isCollisionVolume() const { return mIsCollisionVolume; }
 
     /// <summary>
-    /// Gets the position change the animator wishes the joint to have.
+    /// Gets the 'public' position of the joint.
     /// </summary>
-    LLVector3 getPositionDelta() const { return mPositionDelta; }
+    LLVector3 getPublicPosition() const { return mCurrentState.mPosition; }
 
     /// <summary>
-    /// Sets the position the animator wishes the joint to be in.
+    /// Sets the 'public' position of the joint.
     /// </summary>
-    void setPositionDelta(const LLVector3& pos);
-
-    /// <summary>
-    /// Undoes the last position set, if any.
-    /// </summary>
-    void undoLastPositionChange();
+    void setPublicPosition(const LLVector3& pos);
 
     /// <summary>
     /// Undoes the last position set, if any.
     /// </summary>
-    void redoLastPositionChange();
+    void undoLastChange();
 
     /// <summary>
-    /// Gets the rotation the animator wishes the joint to be in.
+    /// Undoes the last position set, if any.
     /// </summary>
-    LLQuaternion getRotationDelta() const { return mRotation.deltaRotation; }
+    void redoLastChange();
 
     /// <summary>
-    /// Sets the rotation the animator wishes the joint to be in.
+    /// Gets the 'public' rotation of the joint.
     /// </summary>
-    void setRotationDelta(const LLQuaternion& rot);
+    LLQuaternion getPublicRotation() const { return mCurrentState.mRotation; }
+
+    /// <summary>
+    /// Sets the 'public' rotation of the joint.
+    /// </summary>
+    /// <remarks>
+    /// 'Public rotation' is the amount of rotation the user has added to the initial state.
+    /// Public rotation is what a user may save to an external format (such as BVH).
+    /// This distinguishes 'private' rotation, which is the state inherited from something like a pose in-world.
+    /// </remarks>
+    void setPublicRotation(const LLQuaternion& rot);
 
     /// <summary>
     /// Reflects the base and delta rotation of the represented joint left-right.
@@ -93,7 +98,7 @@ class FSJointPose
     void reflectRotation();
 
     /// <summary>
-    /// Sets the base rotation of the represented joint to zero.
+    /// Sets the private rotation of the represented joint to zero.
     /// </summary>
     void zeroBaseRotation();
 
@@ -104,43 +109,20 @@ class FSJointPose
     bool isBaseRotationZero() const;
 
     /// <summary>
-    /// Undoes the last rotation set, if any.
-    /// Ordinarily the queue does not contain the current rotation, because we rely on time to add, and not button-up.
-    /// When we undo, if we are at the top of the queue, we need to add the current rotation so we can redo back to it.
-    /// Thus when we start undoing, mUndoneRotationIndex points at the current rotation.
+    /// Gets whether a redo of this joint may be performed.
     /// </summary>
-    void undoLastRotationChange();
+    /// <returns>true if the joint may have a redo applied, otherwise false.</returns>
+    bool canPerformRedo() const { return mUndoneJointStatesIndex > 0; }
 
     /// <summary>
-    /// Redoes the last rotation set, if any.
+    /// Gets the 'public' scale of the joint.
     /// </summary>
-    void redoLastRotationChange();
+    LLVector3 getPublicScale() const { return mCurrentState.mScale; }
 
     /// <summary>
-    /// Gets whether a redo of this joints rotation may be performed.
+    /// Sets the 'public' scale of the joint.
     /// </summary>
-    /// <returns>true if the joint can have a redo applied, otherwise false.</returns>
-    bool canRedoRotation() const { return mUndoneRotationIndex > 0; }
-
-    /// <summary>
-    /// Gets the scale the animator wishes the joint to have.
-    /// </summary>
-    LLVector3 getScaleDelta() const { return mScaleDelta; }
-
-    /// <summary>
-    /// Sets the scale the animator wishes the joint to have.
-    /// </summary>
-    void setScaleDelta(const LLVector3& scale);
-
-    /// <summary>
-    /// Undoes the last scale set, if any.
-    /// </summary>
-    void undoLastScaleChange();
-
-    /// <summary>
-    /// Redoes the last scale set, if any.
-    /// </summary>
-    void redoLastScaleChange();
+    void setPublicScale(const LLVector3& scale);
 
     /// <summary>
     /// Exchanges the rotations between two joints.
@@ -161,6 +143,11 @@ class FSJointPose
     /// Resets the beginning properties of the joint this represents.
     /// </summary>
     void recaptureJoint();
+    /// <summary>
+    /// Recalculates the delta reltive to the base for a new rotation.
+    /// </summary>
+    void recaptureJointAsDelta();
+
 
     /// <summary>
     /// Reverts the position/rotation/scale to their values when the animation begun.
@@ -168,52 +155,90 @@ class FSJointPose
     /// </summary>
     void revertJoint();
 
-    LLVector3 getTargetPosition() const { return mPositionDelta + mBeginningPosition; }
-    LLQuaternion getTargetRotation() const { return mRotation.getTargetRotation(); }
-    LLVector3 getTargetScale() const { return mScaleDelta + mBeginningScale; }
+    LLQuaternion getTargetRotation() const { return mCurrentState.getTargetRotation(); }
+    LLVector3    getTargetPosition() const { return mCurrentState.getTargetPosition(); }
+    LLVector3    getTargetScale() const { return mCurrentState.getTargetScale(); }
 
     /// <summary>
     /// Gets the pointer to the jointstate for the joint this represents.
     /// </summary>
     LLPointer<LLJointState> getJointState() const { return mJointState; }
 
-    /// <summary>
-    /// A class wrapping base and delta rotation, attempting to keep baseRotation as secret as possible.
-    /// Among other things, facilitates easy undo/redo through the joint-recapture process.
-    /// </summary>
-    class FSJointRotation
+    class FSJointState
     {
       public:
-        FSJointRotation(LLQuaternion base) { baseRotation.set(base); }
-
-        FSJointRotation(LLQuaternion base, LLQuaternion delta)
+        FSJointState(LLJoint* joint)
         {
-            baseRotation.set(base);
-            deltaRotation.set(delta);
+            mBaseRotation.set(joint->getRotation());
+            mBasePosition.set(joint->getPosition());
+            mBaseScale.set(joint->getScale());
         }
 
-        FSJointRotation() = default;
-
-        LLQuaternion baseRotation;
-        LLQuaternion deltaRotation;
-        LLQuaternion getTargetRotation() const { return deltaRotation * baseRotation; }
+        FSJointState() = default;
+        LLQuaternion mDeltaRotation;
+        LLQuaternion getTargetRotation() const { return mRotation * mBaseRotation; }
+        LLVector3    getTargetPosition() const { return mPosition + mBasePosition; }
+        LLVector3    getTargetScale() const { return mScale + mBaseScale; }
+        void updateRotation(const LLQuaternion& newRotation)
+        { 
+            auto inv_base = mBaseRotation;
+            inv_base.conjugate();
+            mDeltaRotation = newRotation * inv_base; 
+        };
+        
 
         void reflectRotation()
         {
-            baseRotation.mQ[VX] *= -1;
-            baseRotation.mQ[VZ] *= -1;
-            deltaRotation.mQ[VX] *= -1;
-            deltaRotation.mQ[VZ] *= -1;
+            mBaseRotation.mQ[VX] *= -1;
+            mBaseRotation.mQ[VZ] *= -1;
+            mRotation.mQ[VX] *= -1;
+            mRotation.mQ[VZ] *= -1;
         }
 
-        void set(const FSJointRotation& jRot)
+        void cloneRotationFrom(FSJointState otherState)
         {
-            baseRotation.set(jRot.baseRotation);
-            deltaRotation.set(jRot.deltaRotation);
+            mBaseRotation.set(otherState.mBaseRotation);
+            mRotation.set(otherState.mRotation);
         }
+
+        bool baseRotationIsZero() const { return mBaseRotation == LLQuaternion::DEFAULT; }
+
+        void zeroBaseRotation() { mBaseRotation = LLQuaternion::DEFAULT; }
+
+        void revertJointToBase(LLJoint* joint) const
+        {
+            if (!joint)
+                return;
+
+            joint->setRotation(mBaseRotation);
+            joint->setPosition(mBasePosition);
+            joint->setScale(mBaseScale);
+        }
+
+      private:
+        FSJointState(FSJointState* state)
+        {
+            mBaseRotation.set(state->mBaseRotation);
+            mBasePosition.set(state->mBasePosition);
+            mBaseScale.set(state->mBaseScale);
+
+            mRotation.set(state->mRotation);
+            mPosition.set(state->mPosition);
+            mScale.set(state->mScale);
+        }
+
+      public:
+        LLQuaternion mRotation;
+        LLVector3    mPosition;
+        LLVector3    mScale;
+
+      private:
+        LLQuaternion mBaseRotation;
+        LLVector3    mBasePosition;
+        LLVector3    mBaseScale;
     };
 
-private:
+  private:
     std::string             mJointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
     LLPointer<LLJointState> mJointState{ nullptr };
 
@@ -223,32 +248,15 @@ private:
     /// </summary>
     bool mIsCollisionVolume{ false };
 
-    FSJointRotation                       mRotation;
-    std::deque<FSJointRotation>           mLastSetRotationDeltas;
-    size_t                                mUndoneRotationIndex     = 0;
-    std::chrono::system_clock::time_point mTimeLastUpdatedRotation = std::chrono::system_clock::now();
+    std::deque<FSJointState>              mLastSetJointStates;
+    size_t                                mUndoneJointStatesIndex      = 0;
+    std::chrono::system_clock::time_point mTimeLastUpdatedCurrentState = std::chrono::system_clock::now();
 
-    LLVector3                             mPositionDelta;
-    LLVector3                             mBeginningPosition;
-    std::deque<LLVector3>                 mLastSetPositionDeltas;
-    size_t                                mUndonePositionIndex     = 0;
-    std::chrono::system_clock::time_point mTimeLastUpdatedPosition = std::chrono::system_clock::now();
+    FSJointState mCurrentState;
 
-    /// <summary>
-    /// Joint scales require special treatment, as they do not revert when we stop animating an avatar.
-    /// </summary>
-    LLVector3                             mScaleDelta;
-    LLVector3                             mBeginningScale;
-    std::deque<LLVector3>                 mLastSetScaleDeltas;
-    size_t                                mUndoneScaleIndex     = 0;
-    std::chrono::system_clock::time_point mTimeLastUpdatedScale = std::chrono::system_clock::now();
-
-    template <typename T>
-    void addToUndo(T delta, size_t* undoIndex, std::deque<T>* dequeue, std::chrono::system_clock::time_point* timeLastUpdated);
-
-    template <typename T> T undoLastChange(T thingToSet, size_t* undoIndex, std::deque<T>* dequeue);
-
-    template <typename T> T redoLastChange(T thingToSet, size_t* undoIndex, std::deque<T>* dequeue);
+    void addStateToUndo(FSJointState stateToAddToUndo);
+    FSJointState undoLastStateChange(FSJointState currentState);
+    FSJointState redoLastStateChange(FSJointState currentState);
 };
 
 #endif // FS_JOINTPPOSE_H

@@ -40,6 +40,7 @@ class LLColor4;
 
 class LLManipRotate : public LLManip
 {
+    friend class FSManipRotateJoint;
 public:
     class ManipulatorHandle
     {
@@ -67,13 +68,13 @@ public:
 private:
     void            updateHoverView();
 
-    void            drag( S32 x, S32 y );
+    virtual void            drag( S32 x, S32 y );
     LLVector3       projectToSphere( F32 x, F32 y, bool* on_sphere );
 
     void            renderSnapGuides();
     void            renderActiveRing(F32 radius, F32 width, const LLColor4& center_color, const LLColor4& side_color);
 
-    bool            updateVisiblity();
+    virtual bool            updateVisiblity();
     LLVector3       findNearestPointOnRing( S32 x, S32 y, const LLVector3& center, const LLVector3& axis );
 
     LLQuaternion    dragUnconstrained( S32 x, S32 y );

@@ -30,7 +30,7 @@
 				<button name="Noon" label="Południe" tool_tip="Dostosuj oświetlenie tak, aby symulowało jasność południa." />
 				<button name="Sunset" label="Zachód" tool_tip="Zastosuj oświetlenie zachodzącego słońca, aby uzyskać ciepłe, złote odcienie." />
 				<button name="Midnight" label="Północ" tool_tip="Przełącz na ustawienia nocne w przypadku miejsc o słabym oświetleniu." />
-				<button name="Revert to Region Default" label="Otoczenie współdzielone" tool_tip="Przywróć ustawienia współdzielonego środowiska regionu." />
+				<button name="Revert to Region Default" label="Otocz. współdzielone" tool_tip="Przywróć ustawienia współdzielonego środowiska regionu." />
 			</panel>
 			<panel name="P_WL_Presets">
 				<text name="T_WL_Presets">
@@ -107,7 +107,7 @@
 					<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
 				</combo_box>
 				<text name="local lights_label" tool_tip="Definiuje, ile lokalnych źródeł światła jest renderowanych jednocześnie. Ustawienie tej wartości na 0 powoduje wyłączenie wszystkich lokalnych świateł. Wyższe wartości mogą mieć wpływ na wydajność w złożonych scenach.">
-					Oświetl. punktowe (restart)
+					Światła (restart)
 				</text>
 				<combo_box name="LocalLightsDetail">
 					<combo_box.item label="Pełne (domyślne)" name="3" />
@@ -146,7 +146,7 @@
 				</text>
 				<button name="FOV_Cutoff_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Spot_Cutoff" tool_tip="Dostosowuje przesunięcie cieni rzucanych przez reflektory, aby zminimalizować artefakty lub niepożądane linie na powierzchniach.">
-					Przesun. pnkt.
+					Przesn. pnkt.
 				</text>
 				<button name="Spot_Cutoff_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Shd_Bias" tool_tip="Steruje korekcją głębi stosowaną do cieni, aby zapobiec artefaktom związanym z samocieniem (tzw. 'shadow acne'). Niższe wartości tworzą dokładniejsze cienie, podczas gdy nieco wyższe wartości mogą pomóc zmniejszyć migotanie lub problemy z nakładaniem się cieni. Dostosowanie tego ustawienia może również pomóc w korygowaniu cieni, które wydają się unosić nad powierzchniami lub nie dotykają prawidłowo krawędzi obiektów. Reguluj stopniowo, aby zrównoważyć dokładność cieni i zapobieganie artefaktom.">
