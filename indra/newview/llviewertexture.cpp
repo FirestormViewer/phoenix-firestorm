@@ -762,6 +762,12 @@ void LLViewerTexture::setBoostLevel(S32 level)
         mBoostLevel = level;
         if(mBoostLevel != LLViewerTexture::BOOST_NONE &&
             mBoostLevel != LLViewerTexture::BOOST_SELECTED &&
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // Added the new boost levels
+            mBoostLevel != LLViewerTexture::BOOST_GRASS &&
+            mBoostLevel != LLViewerTexture::BOOST_LIGHT &&
+            mBoostLevel != LLViewerTexture::BOOST_TREE &&
+            // </FS:minerjr> [FIRE-35081]
             mBoostLevel != LLViewerTexture::BOOST_ICON &&
             mBoostLevel != LLViewerTexture::BOOST_THUMBNAIL)
         {
@@ -773,6 +779,13 @@ void LLViewerTexture::setBoostLevel(S32 level)
     if (mBoostLevel >= LLViewerTexture::BOOST_HIGH)
     {
         mMaxVirtualSize = 2048.f * 2048.f;
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // Add additional for the important to camera and in frustum
+        static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
+        mMaxVirtualSize = mMaxVirtualSize + (mMaxVirtualSize * 1.0f * texture_camera_boost);
+        // Apply second boost based upon if the texture is close to the camera (< 16.1 meters * draw distance multiplier)
+        mMaxVirtualSize = mMaxVirtualSize + (mMaxVirtualSize * 1.0f * texture_camera_boost);
+        // </FS:minerjr> [FIRE-35081]
     }
 }
 
@@ -1179,7 +1192,7 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mLastCallBackActiveTime = 0.f;
     mForceCallbackFetch = false;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    mCloseToCamera = 0.0f; // Store if the camera is close to the camera (0.0f or 1.0f)
+    mCloseToCamera = 1.0f; // Store if the camera is close to the camera (0.0f or 1.0f)
     // </FS:minerjr> [FIRE-35081]
 
     mFTType = FTT_UNKNOWN;
@@ -3062,6 +3075,17 @@ void LLViewerLODTexture::processTextureStats()
         mDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel, (S8)(MAX_DISCARD_LEVEL));
         // </FS:minerjr> [FIRE-35081]
         mDesiredDiscardLevel = llmin(mDesiredDiscardLevel, (S32)mLoadedCallbackDesiredDiscardLevel);
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // Add scale down here as the textures off screen were not getting scaled down properly
+        S32 current_discard = getDiscardLevel();
+        if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
+        {
+            if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            { // should scale down
+                scaleDown();
+            }
+        }
+        // </FS:minerjr> [FIRE-35081]
     }
     else if (!mFullWidth  || !mFullHeight)
     {
@@ -3415,11 +3439,23 @@ void LLViewerMediaTexture::initVirtualSize()
     {
         return;
     }
-
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // Add camera importance to the media textures as well
+    static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
+    F32 vsize = 0.0f;
+    // </FS:minerjr> [FIRE-35081]
     findFaces();
     for(std::list< LLFace* >::iterator iter = mMediaFaceList.begin(); iter!= mMediaFaceList.end(); ++iter)
     {
-        addTextureStats((*iter)->getVirtualSize());
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        //addTextureStats((*iter)->getVirtualSize());
+        // Add camera importance to the media textures as well
+        vsize = (*iter)->getVirtualSize();
+        vsize = vsize + (vsize * (*iter)->getImportanceToCamera() * texture_camera_boost);
+        // Apply second boost based upon if the texture is close to the camera (< 16.1 meters * draw distance multiplier)
+        vsize = vsize + (vsize * (*iter)->getCloseToCamera() * texture_camera_boost);
+        addTextureStats(vsize);
+        // </FS:minerjr> [FIRE-35081]
     }
 }
 
@@ -3479,6 +3515,10 @@ void LLViewerMediaTexture::addFace(U32 ch, LLFace* facep)
             }
 // [/SL:KB]
 
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // Try to set the boost level to MEDIA to try to force the media to high quality
+            tex->setBoostLevel(LLViewerTexture::MEDIA);
+            // </FS:minerjr> [FIRE-35081]
             mTextureList.push_back(tex);//increase the reference number by one for tex to avoid deleting it.
             return;
         }
@@ -3720,7 +3760,10 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
     {
         addTextureStats(0.f, false);//reset
     }
-
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
+    F32 vsize = 0.0f;
+    // </FS:minerjr> [FIRE-35081]
     if(mIsPlaying) //media is playing
     {
         for (U32 ch = 0; ch < LLRender::NUM_TEXTURE_CHANNELS; ++ch)
@@ -3730,8 +3773,16 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
             {
                 LLFace* facep = mFaceList[ch][i];
             if(facep->getDrawable()->isRecentlyVisible())
-            {
-                addTextureStats(facep->getVirtualSize());
+            {                
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                //addTextureStats(facep->getVirtualSize());
+                // Add the importance to camera and close to camera to the media texture
+                vsize = facep->getVirtualSize();
+                vsize = vsize + (vsize * facep->getImportanceToCamera() * texture_camera_boost);
+                // Apply second boost based upon if the texture is close to the camera (< 16.1 meters * draw distance multiplier)
+                vsize = vsize + (vsize * facep->getCloseToCamera() * texture_camera_boost);
+                addTextureStats(vsize);
+                // </FS:minerjr> [FIRE-35081]
             }
         }
     }
@@ -3747,7 +3798,15 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
                 LLFace* facep = *iter;
                 if(facep->getDrawable()->isRecentlyVisible())
                 {
-                    addTextureStats(facep->getVirtualSize());
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    //addTextureStats(facep->getVirtualSize());
+                    // Add the importance to camera and close to camera to the media texture 
+                    vsize = facep->getVirtualSize();
+                    vsize = vsize + (vsize * facep->getImportanceToCamera() * texture_camera_boost);
+                    // Apply second boost based upon if the texture is close to the camera (< 16.1 meters * draw distance multiplier)
+                    vsize = vsize + (vsize * facep->getCloseToCamera() * texture_camera_boost);
+                    addTextureStats(vsize);
+                    // </FS:minerjr> [FIRE-35081]
                 }
             }
         }

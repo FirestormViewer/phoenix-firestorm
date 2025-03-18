@@ -396,6 +396,19 @@ void LLViewerTextureList::dump()
     for (image_list_t::iterator it = mImageList.begin(); it != mImageList.end(); ++it)
     {
         LLViewerFetchedTexture* image = *it;
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        std::string face_counts = "";
+        std::string volume_counts = "";
+        for (S32 index = 0; index < LLRender::NUM_TEXTURE_CHANNELS; index++)
+        {
+            face_counts += std::to_string(image->getNumFaces(index)) + " ";           
+        }
+
+        for (S32 index = 0; index < LLRender::NUM_VOLUME_TEXTURE_CHANNELS; index++)
+        {            
+            volume_counts += std::to_string(image->getNumVolumes(index)) + " ";
+        }
+        // </FS:minerjr> [FIRE-35081]
 
         LL_INFOS() << "priority " << image->getMaxVirtualSize()
         << " boost " << image->getBoostLevel()
@@ -405,7 +418,10 @@ void LLViewerTextureList::dump()
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
         << " close to camera " << (image->getCloseToCamera() > 0.0f ? "Y" : "N") // Display the close to camera flag
         << " FFType " << fttype_to_string(image->getFTType()) // Display the FFType of the camera
-        << " Type " << (S32)image->getType() // Display the type of the image (LOCAL_TEXTURE = 0, MEDIA_TEXTURE = 1, DYNAMIC_TEXTURE = 2, FETCHED_TEXTURE = 3,LOD_TEXTURE = 4)
+        << " Type " << (S32)image->getType() // Display the type of the image (LOCAL_TEXTURE = 0, MEDIA_TEXTURE = 1, DYNAMIC_TEXTURE = 2, FETCHED_TEXTURE = 3,LOD_TEXTURE = 4)        
+        << " Sculpted " << (image->forSculpt() ? "Y" : "N")
+        << " # of Faces " << face_counts
+        << " # of Volumes " << volume_counts
         // </FS:minerjr> [FIRE-35081]
         << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
         << LL_ENDL;
@@ -1024,6 +1040,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     important_to_camera = face->mImportanceToCamera; // Store so we don't have to do 2 indirects later on
                     // If the face/texture is animated, then set the boost level to high, so that it will ways be the best quality
                     animated += S64(face->mTextureMatrix);
+                    animated += S64(face->hasMedia()); // Add has media for both local and parcel media
+                    animated += S64(imagep->hasParcelMedia());
 
                     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer (It is)
                     /*
@@ -1070,7 +1088,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     vsize = vsize + (vsize * face->mCloseToCamera * texture_camera_boost);
                     // Update the max on screen vsize based upon the on screen vsize
                     close_to_camera += face->mCloseToCamera;
-                    LL_DEBUGS() << "" << imagep->getID() << " " << imagep->getNumFaces(i) << " OS Vsize: " << vsize << " Vsize: " << (vsize * bias) << " CTC: " << face->mCloseToCamera << LL_ENDL;
+                    LL_DEBUGS() << face->getViewerObject()->getID() << " TID " << imagep->getID() << " #F " << imagep->getNumFaces(i) << " OS Vsize: " << vsize << " Vsize: " << (vsize * bias) << " CTC: " << face->mCloseToCamera << " Channel " << i << " Face Index " << fi << LL_ENDL;
                     max_on_screen_vsize = llmax(max_on_screen_vsize, vsize);
                     max_vsize = llmax(max_vsize, vsize * bias);
                     // </FS:minerjr> [FIRE-35081]
@@ -1121,7 +1139,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             imagep->addTextureStats(max_on_screen_vsize);
         }
         // If the boost level just became high, or the texture is (Local, Media Dynamic)
-        else if (imagep->getBoostLevel() == LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || close_to_camera)
+        else if (imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || close_to_camera)
         {
             // Always use the best quality of the texture
             imagep->addTextureStats(max_on_screen_vsize);
@@ -1130,15 +1148,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         else
         {
             imagep->addTextureStats(max_vsize);
-        }
-        U32 max_tex_res = LLGLTexture::MAX_IMAGE_SIZE_DEFAULT;
-        if (imagep->getBoostLevel() < LLGLTexture::BOOST_HIGH)
-        {
-            // restrict texture resolution to download based on RenderMaxTextureResolution
-            static LLCachedControl<U32> max_texture_resolution(gSavedSettings, "RenderMaxTextureResolution", 2048);
-            // sanity clamp debug setting to avoid settings hack shenanigans
-            max_tex_res = (U32)llclamp((U32)max_texture_resolution, 512, LLGLTexture::MAX_IMAGE_SIZE_DEFAULT);
-            imagep->mMaxVirtualSize = llmin(imagep->mMaxVirtualSize, (F32)(max_tex_res * max_tex_res));
         }
         // </FS:minerjr> [FIRE-35081]
     }
@@ -1241,7 +1250,11 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         mCreateTextureList.pop();
 
         if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel() &&
-           (imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
+           // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+           //(imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
+           // Add additional restrictions on scaling down (only BOOST_NONE LOD Textures (Also skip media)
+           (imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL) && imagep->getBoostLevel() == LLViewerTexture::BOOST_NONE && imagep->getType() == LLViewerTexture::LOD_TEXTURE && !imagep->hasParcelMedia() && !imagep->isViewerMediaTexture())
+           // </FS:minerjr> [FIRE-35081]
         {
             // NOTE: this may happen if the desired discard reduces while a decode is in progress and does not
             // necessarily indicate a problem, but if log occurrences excede that of dsiplay_stats: FPS,
