@@ -1,5 +1,5 @@
 /**
- * @file fsfloaterposer.cpp
+ * @file fsfloaterposer.h
  * @brief View Model for posing your (and other) avatar(s).
  *
  * $LicenseInfo:firstyear=2024&license=viewerlgpl$
@@ -29,6 +29,7 @@
 #define FS_FLOATER_POSER_H
 
 #include "llfloater.h"
+#include "lltoolmgr.h"
 #include "fsposeranimator.h"
 
 class FSVirtualTrackpad;
@@ -73,16 +74,23 @@ typedef enum E_Columns
 /// A class containing the UI fiddling for the Poser Floater.
 /// Please don't do LLJoint stuff here, fsposingmotion (the LLMotion derivative) is the class for that.
 /// </summary>
-class FSFloaterPoser : public LLFloater
+class FSFloaterPoser : public LLFloater, public LLEditMenuHandler
 {
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
-
+public:    
+    void updatePosedBones();
+    void selectJointByName(const std::string& jointName);
+    void  undo() override { onUndoLastChange(); };
+    bool  canUndo() const  override { return true; }
+    void  redo() override { onRedoLastChange(); };
+    bool  canRedo() const override { return true; }    
  private:
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
-
+    void onFocusReceived() override;
+    void onFocusLost() override;
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
@@ -176,7 +184,7 @@ class FSFloaterPoser : public LLFloater
     /// <param name="toFind">The avatar UUID to find on the avatars scroll list.</param>
     /// <returns>The scroll-list index for the supplied avatar, if found, otherwise -1.</returns>
     S32 getAvatarListIndexForUuid(const LLUUID& toFind) const;
-
+    
     /// <summary>
     /// There are several control-callbacks manipulating rotations etc, they all devolve to these.
     /// In these are the appeals to the posing business layer.
@@ -185,11 +193,10 @@ class FSFloaterPoser : public LLFloater
     /// Using a set, then a get does not guarantee the value you just set.
     /// There may be +/- PI difference two axes, because harmonics.
     /// Thus keep your UI synced with less gets.
-    /// </remarks>
+    /// </remarks>    
     void setSelectedJointsRotation(const LLVector3& absoluteRot, const LLVector3& deltaRot);
     void setSelectedJointsPosition(F32 x, F32 y, F32 z);
     void setSelectedJointsScale(F32 x, F32 y, F32 z);
-
     /// <summary>
     /// Yeilds the rotation of the first selected joint (one may multi-select).
     /// </summary>
@@ -202,6 +209,7 @@ class FSFloaterPoser : public LLFloater
     LLVector3 getPositionOfFirstSelectedJoint() const;
     LLVector3 getScaleOfFirstSelectedJoint() const;
 
+    LLScrollListCtrl* getScrollListForTab(LLPanel * tabPanel) const;
     // Pose load/save
     void createUserPoseDirectoryIfNeeded();
     void onToggleLoadSavePanel();
@@ -215,30 +223,28 @@ class FSFloaterPoser : public LLFloater
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
+    // visual manipulators control
+    void enableVisualManipulators();
+    void disableVisualManipulators();
 
     // UI Event Handlers:
     void onAvatarsRefresh();
     void onAvatarSelect();
     void onJointTabSelect();
-    void onToggleAdvancedPanel();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
+    void onToggleVisualManipulators();    
     void setRotationChangeButtons(bool mirror, bool sympathetic);
-    void onUndoLastRotation();
-    void onRedoLastRotation();
-    void onUndoLastPosition();
-    void onRedoLastPosition();
-    void onUndoLastScale();
-    void onRedoLastScale();
-    void onResetPosition();
-    void onResetScale();
+    void onUndoLastChange();
+    void onRedoLastChange();
+    void onResetJoint(const LLSD data);
     void onSetAvatarToTpose();
     void enableOrDisableRedoButton();
     void onPoseStartStop();
     void startPosingSelf();
     void stopPosingAllAvatars();
     void onLimbTrackballChanged();
-    void onYawPitchRollSliderChanged();
+    void onYawPitchRollChanged();
     void onAvatarPositionSet();
     void onAdvancedPositionSet();
     void onAdvancedScaleSet();
@@ -246,22 +252,20 @@ class FSFloaterPoser : public LLFloater
     void onClickRecaptureSelectedBones();
     void onClickFlipPose();
     void onClickFlipSelectedJoints();
-    void onPoseJointsReset();
-    void onOpenSetAdvancedPanel();
     void onAdjustTrackpadSensitivity();
     void onClickLoadLeftHandPose();
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
     void onClickSetBaseRotZero();
-    //void onCommitSpinner(LLUICtrl* spinner);
     void onCommitSpinner(LLUICtrl* spinner, S32 ID);
+    void onClickSymmetrize(S32 ID);
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();
     void refreshAvatarPositionSlidersAndSpinners();
     void refreshTrackpadCursor();
-    void refreshAdvancedPositionSlidersAndSpinners();
-    void refreshAdvancedScaleSlidersAndSpinners();
+    void refreshPositionSlidersAndSpinners();
+    void refreshScaleSlidersAndSpinners();
 
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
@@ -443,13 +447,14 @@ class FSFloaterPoser : public LLFloater
     /// </remarks>
     static F32 unWrapScale(F32 scale);
 
+    LLToolset*  mLastToolset{ nullptr };
+    LLTool*     mJointRotTool{ nullptr };
+    
     LLVector3          mLastSliderRotation;
+
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
 
     LLSliderCtrl* mTrackpadSensitivitySlider{ nullptr };
-    LLSliderCtrl* mLimbYawSlider{ nullptr };
-    LLSliderCtrl* mLimbPitchSlider{ nullptr }; // pointing your nose up or down
-    LLSliderCtrl* mLimbRollSlider{ nullptr }; // your ear touches your shoulder
     LLSliderCtrl* mPosXSlider{ nullptr };
     LLSliderCtrl* mPosYSlider{ nullptr };
     LLSliderCtrl* mPosZSlider{ nullptr };
@@ -473,7 +478,7 @@ class FSFloaterPoser : public LLFloater
     LLScrollListCtrl* mPosesScrollList{ nullptr };
     LLScrollListCtrl* mHandPresetsScrollList{ nullptr };
 
-    LLButton* mToggleAdvancedPanelBtn{ nullptr };
+    LLButton* mToggleVisualManipulators{ nullptr };
     LLButton* mStartStopPosingBtn{ nullptr };
     LLButton* mToggleLoadSavePanelBtn{ nullptr };
     LLButton* mBrowserFolderBtn{ nullptr };
@@ -488,10 +493,10 @@ class FSFloaterPoser : public LLFloater
     LLButton* mToggleDeltaModeBtn{ nullptr };
     LLButton* mRedoChangeBtn{ nullptr };
     LLButton* mSetToTposeButton{ nullptr };
+    LLButton* mBtnJointRotate{ nullptr };
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
-    LLPanel* mAdvancedParentPnl{ nullptr };
     LLPanel* mJointsParentPnl{ nullptr };
     LLPanel* mTrackballPnl{ nullptr };
     LLPanel* mPositionRotationPnl{ nullptr };

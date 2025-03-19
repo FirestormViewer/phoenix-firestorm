@@ -57,8 +57,7 @@
 				<layout_panel name="pnl_environment_altitudes">
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
-							Gökyüzü [INDEX]
-                            [ALTITUDE] m
+							Gökyüzü [INDEX]&#xA;[ALTITUDE] m
 						</text>
 						<line_editor name="edt_invname_alt1">
 							Bilinmiyor
@@ -67,8 +66,7 @@
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
-							Gökyüzü [INDEX]
-                            [ALTITUDE] m
+							Gökyüzü [INDEX]&#xA;[ALTITUDE] m
 						</text>
 						<line_editor name="edt_invname_alt2">
 							Bilinmiyor
@@ -77,8 +75,7 @@
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
-							Gökyüzü [INDEX]
-                            [ALTITUDE] m
+							Gökyüzü [INDEX]&#xA;[ALTITUDE] m
 						</text>
 						<line_editor name="edt_invname_alt3">
 							Bilinmiyor
