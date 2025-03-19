@@ -1168,6 +1168,11 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mNeedsCreateTexture = false;
 
     mIsRawImageValid = false;
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    mRawImages.fill(nullptr); // Fill the array of raw images with null pointers for now
+    mAuxRawImages.fill(nullptr); // Fill the array of aux raw images with null pointers for now
+    mLastRawImageAccess = 0.0f; // Set the last raw image access to 0.0f (when set to 0.0f, tryToClearRawImages does not trigger)
+    // </FS:minerjr> [FIRE-35011]
     mRawDiscardLevel = INVALID_DISCARD_LEVEL;
     mMinDiscardLevel = 0;
 
@@ -1208,6 +1213,14 @@ LLViewerFetchedTexture::~LLViewerFetchedTexture()
     {
         LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
     }
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    // Clear the 2 arrays of raw textures
+    for (int index = 0; index < mRawImages.size(); index++)
+    {
+        mRawImages[index] = nullptr;
+        mAuxRawImages[index] = nullptr;
+    }
+    // </FS:minerjr> [FIRE-35011]
     cleanup();
 }
 
@@ -1306,6 +1319,30 @@ void LLViewerFetchedTexture::loadFromFastCache()
 
             mRequestedDiscardLevel = mDesiredDiscardLevel + 1;
             mIsRawImageValid = true;
+            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+            // Make sure that the raw discard is valid
+
+            // If the raw is OK, but not the same as what is requried, still save it
+            // Track the last time the raw images were updated
+            mLastRawImageAccess = sCurrentTime;
+            // If there is not current saved raw and there is a decoded one
+            if (mRawImages[mRawDiscardLevel].isNull() && mRawImage.notNull())
+            {
+                // Increase the raw count by 1 as we are keeping it in RAM
+                sRawCount++;
+                // Store the generated fetch raw data        
+                mRawImages[mRawDiscardLevel] = mRawImage;
+            }
+            // If there is aux raw image and there is no saved Aux texture, then
+            if (mHasAux && mAuxRawImages[mRawDiscardLevel].isNull() && mAuxRawImage.notNull())
+            {
+                // Increase the count of Aux Raw image by 1
+                sAuxCount++;
+                // And store the decoded Aux texture
+                mAuxRawImages[mRawDiscardLevel] = mAuxRawImage;
+            }
+            
+            // <FS:minerjr> [FIRE-35011]
             addToCreateTexture();
         }
     }
@@ -1429,6 +1466,31 @@ void LLViewerFetchedTexture::addToCreateTexture()
     }
     else if(!force_update && getDiscardLevel() > -1 && getDiscardLevel() <= mRawDiscardLevel)
     {
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+        // Make sure that the raw discard is valid
+        if (mRawDiscardLevel <= MAX_DISCARD_LEVEL)
+        {
+            // If the raw is OK, but not the same as what is requried, still save it
+            // Track the last time the raw images were updated
+            mLastRawImageAccess = sCurrentTime;
+            // If there is not current saved raw and there is a decoded one
+            if (mRawImages[mRawDiscardLevel].isNull() && mRawImage.notNull())
+            {
+                // Increase the raw count by 1 as we are keeping it in RAM
+                sRawCount++;
+                // Store the generated fetch raw data        
+                mRawImages[mRawDiscardLevel] = mRawImage;	
+            }			
+            // If there is aux raw image and there is no saved Aux texture, then
+            if (mHasAux && mAuxRawImages[mRawDiscardLevel].isNull() && mAuxRawImage.notNull())
+            {
+                // Increase the count of Aux Raw image by 1
+                sAuxCount++;
+                // And store the decoded Aux texture
+                mAuxRawImages[mRawDiscardLevel] = mAuxRawImage;
+            }				
+        }
+        // </FS:minerjr> [FIRE-35011]      
         mNeedsCreateTexture = false;
         destroyRawImage();
     }
@@ -1959,11 +2021,61 @@ bool LLViewerFetchedTexture::processFetchResults(S32& desired_discard, S32 curre
                     mRawImage = mRawImage->scaled(expected_width, expected_height);
                 }
             }
+            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+            // Make sure that the raw discard is valid
+            if (mIsRawImageValid == true)
+            {
+                // If the raw is OK, but not the same as what is requried, still save it
+                // Track the last time the raw images were updated
+                mLastRawImageAccess = sCurrentTime;
+                // If there is not current saved raw and there is a decoded one
+                if (mRawImages[mRawDiscardLevel].isNull() && mRawImage.notNull())
+                {
+                    // Increase the raw count by 1 as we are keeping it in RAM
+                    sRawCount++;
+                    // Store the generated fetch raw data        
+                    mRawImages[mRawDiscardLevel] = mRawImage;
+                }
+                // If there is aux raw image and there is no saved Aux texture, then
+                if (mHasAux && mAuxRawImages[mRawDiscardLevel].isNull() && mAuxRawImage.notNull())
+                {
+                    // Increase the count of Aux Raw image by 1
+                    sAuxCount++;
+                    // And store the decoded Aux texture
+                    mAuxRawImages[mRawDiscardLevel] = mAuxRawImage;
+                }
+            }
+            // <FS:minerjr> [FIRE-35011]
 
             return true;
         }
         else
         {
+            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+            // If there is data, and the raw discard level is valid, maybe we should store it just in case
+            if (mRawImage->getDataSize() > 0 && mRawDiscardLevel >= 0 && mRawDiscardLevel < mRawImages.size())
+            {
+                // If the raw is OK, but not the same as what is requried, still save it
+                // Track the last time the raw images were updated
+                mLastRawImageAccess = sCurrentTime;
+                // If there is not current saved raw and there is a decoded one
+                if (mRawImages[mRawDiscardLevel].isNull() && mRawImage.notNull())
+                {
+                    // Increase the raw count by 1 as we are keeping it in RAM
+                    sRawCount++;
+                    // Store the generated fetch raw data        
+                    mRawImages[mRawDiscardLevel] = mRawImage;
+                }
+                // If there is aux raw image and there is no saved Aux texture, then
+                if (mHasAux && mAuxRawImages[mRawDiscardLevel].isNull() && mAuxRawImage.notNull())
+                {
+                    // Increase the count of Aux Raw image by 1
+                    sAuxCount++;
+                    // And store the decoded Aux texture
+                    mAuxRawImages[mRawDiscardLevel] = mAuxRawImage;
+                }              
+            }
+            // </FS:minerjr> [FIRE-35011]
             LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - data not needed");
             // Data is ready but we don't need it
             // (received it already while fetcher was writing to disk)
@@ -2169,6 +2281,41 @@ bool LLViewerFetchedTexture::updateFetch()
                 make_request = false;
             }
         }
+
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+        // Track if we need to do a fetch
+        // Check if we have the desired texture on the raw iamge list
+        if (make_request && desired_discard < mRawImages.size() && mRawImages[desired_discard].notNull() && getType() != LLViewerTexture::MEDIA_TEXTURE)
+        {
+            // If we do, and the current request does not need an aux, or if there is a need for
+            // and aux texture and we have it, then 
+            if (!needsAux() || (needsAux() && mAuxRawImages[desired_discard].notNull()))
+            {
+                // Track the last time the raw images were updated
+                mLastRawImageAccess = sCurrentTime;
+                // Decrase the number of raw textures
+                if (mRawImage.notNull()) sRawCount--;
+                if (mAuxRawImage.notNull()) sAuxCount--;
+                mRawImage = mRawImages[desired_discard];
+                mAuxRawImage = mAuxRawImages[desired_discard];
+                if (mRawImage.notNull())
+                {
+                    sRawCount++;
+                    // Use the size of the texture as the decode priority (mMaxVirtualSize)
+                    decode_priority = (F32)(mRawImages[desired_discard]->getWidth() * mRawImages[desired_discard]->getHeight());
+                }
+                if (mAuxRawImage.notNull())
+                {
+                    mHasAux = true;
+                    sAuxCount++;
+                }
+                // Reprocess the fetch results with the restored raw data
+                processFetchResults(desired_discard, current_discard, desired_discard, decode_priority);
+                // Decode the raw texture instead of creating a new request
+                make_request = false;
+            }
+        }
+        // </FS:minerjr> [FIRE-35011] 
     }
 
     if (make_request)
@@ -2209,6 +2356,7 @@ bool LLViewerFetchedTexture::updateFetch()
             mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
                                                        mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
         }
+        /*
         else if (fetch_request_response == LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - processing transition error");
@@ -2236,6 +2384,52 @@ bool LLViewerFetchedTexture::updateFetch()
                 processFetchResults(desired_discard, current_discard, decoded_discard, decode_priority);
             }
         }
+        */
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+        //else if (fetch_request_response == LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION)
+        // We cheated a bit here. In the getTextureFetch code above, we decrease by the decoded discard value
+        // with the negative value for the response. The reponse for this case is -4 and the most negative value
+        // so to as long as the number is equal or less then the error on transtion, we can use it.
+        else if (fetch_request_response <= LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION)
+        {
+            // Track the last time the raw images were updated
+            mLastRawImageAccess = sCurrentTime;
+
+            // Our little cheat of storing the previous dropped decode discard in the return value
+            // so take the value and subtract the fetch request resonse, which is negative,
+            // which will give us our decoded discard.
+            // (LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION - (LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION - decoded_discard) =
+            // (LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION - fetch_request_response) =                    
+            // (-4 - (-4 - (0 to 5(MAX_DISCARD)) = 
+            // (-4 - (-4 - 0) =
+            // (-4 - (-4) =
+            // (-4 + 4) = 0
+            S32 decoded_discard = (LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION - fetch_request_response);
+
+            if (mRawImage.notNull()) sRawCount--;
+            if (mAuxRawImage.notNull()) sAuxCount--;
+            if (decoded_discard >= 0 && decoded_discard <= MAX_DISCARD_LEVEL)
+            {
+                mRawImage = mRawImages[decoded_discard];
+                mAuxRawImage = mAuxRawImages[decoded_discard];
+            }
+            if (mRawImage.notNull())
+            {
+                sRawCount++;
+                // Create a new decode priority as a value of 0.0f will cause the system to not decode.
+                // This is playing nice with the existing code, but we should be short cut it and manually create
+                // the image and bypass everything...
+                decode_priority = (F32)(mRawImages[decoded_discard]->getWidth() * mRawImages[decoded_discard]->getHeight());
+            }
+            if (mAuxRawImage.notNull())
+            {
+                mHasAux = true;
+                sAuxCount++;
+            }
+
+            if (mRawImage.notNull()) processFetchResults(desired_discard, current_discard, decoded_discard, decode_priority);
+        }
+        // </FS:minerjr> [FIRE-35011]
 
         // If createRequest() failed, that means one of two things:
         // 1. We're finishing up a request for this UUID, so we
@@ -2622,7 +2816,29 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
         // Do this by forcing the best aux discard to be 0.
         best_aux_discard = 0;
     }
-
+    
+    // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+    // Search if we have a better raw image already
+    S32 foundRawIndex = 0;
+    // Loop while the current index is below the limit
+    for (; foundRawIndex <= MAX_DISCARD_LEVEL; foundRawIndex++)
+    {
+        // Break out of the loop at the first image we find
+        if (mRawImages[foundRawIndex].notNull()) break;
+    }
+    // If the raw is not valid or is the raw is valid, and is not as good a quality 
+    if ((!mIsRawImageValid || foundRawIndex <= mRawDiscardLevel) && foundRawIndex >= 0 && foundRawIndex <= MAX_DISCARD_LEVEL)
+    {
+        current_raw_discard = foundRawIndex;
+        best_raw_discard = llmin(best_raw_discard, foundRawIndex);
+        best_aux_discard = llmin(best_aux_discard, foundRawIndex);
+        current_aux_discard = llmin(current_aux_discard, best_aux_discard);
+        // Track the last time the raw images were updated
+        mLastRawImageAccess = sCurrentTime;
+		mRawImage = mRawImages[best_raw_discard];
+		mAuxRawImage = mAuxRawImages[best_raw_discard];
+    }
+    // </FS:minerjr> [FIRE-35011]
 
     //
     // See if any of the callbacks would actually run using the data that we can provide,
@@ -2921,6 +3137,53 @@ void LLViewerFetchedTexture::forceToSaveRawImage(S32 desired_discard, F32 kept_t
         mDesiredSavedRawDiscardLevel = desired_discard;
     }
 }
+
+// <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+bool LLViewerFetchedTexture::tryToClearRawImages()
+{
+    // When the last raw image access is set to 0.0, that means there are no raw images
+    // in the array. If there is more then 30 seconds since the raw images were
+    // accessed, then they can be cleared. This 30.0f should be made a value the user can set.
+    if (mLastRawImageAccess != 0.0f && sCurrentTime - mLastRawImageAccess > 120.0f && getType() != LLViewerTexture::MEDIA_TEXTURE)
+    {
+        // Loop over all of the images and set them to null.
+        for (S32 index = 0; index <= MAX_DISCARD_LEVEL; index++)
+        {
+            // Could do validation of the number of raw images
+            if (mRawImages[index].notNull())
+            {
+                sRawCount--;
+                mRawImages[index] = nullptr;
+            }
+            if (mAuxRawImages[index].notNull())
+            {
+                sAuxCount--;
+                mAuxRawImages[index] = nullptr;
+            }
+        }
+        // Reset the last raw iamge access to 0.0, so this code is not triggered every update
+        mLastRawImageAccess = 0.0f;
+        return true;
+    }
+    return false;
+}
+
+// Tries to use the cached raw images instead of downscaling the LLGLImage
+bool LLViewerFetchedTexture::tryToUseRawImagesToScaleDown(S32 desiredDiscardLevel)
+{
+    // Store the result of the attempt
+    bool result = false;
+    // If the desired discard level is within the range of the possible values and the raw image at that scale is not null, then
+    if (desiredDiscardLevel >= 0 && desiredDiscardLevel <= MAX_DISCARD_LEVEL && mRawImages[desiredDiscardLevel].notNull())
+    {
+        // Use the existing RAW texture
+        result = mGLTexturep->createGLTexture(desiredDiscardLevel, mRawImages[desiredDiscardLevel], 0, true, mBoostLevel);
+        
+    }
+    return result;
+}
+
+// </FS:minerjr> [FIRE-35011]
 
 void LLViewerFetchedTexture::readbackRawImage()
 {

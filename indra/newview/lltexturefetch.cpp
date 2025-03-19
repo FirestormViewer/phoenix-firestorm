@@ -2835,6 +2835,13 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
         if (worker->mState == LLTextureFetchWorker::DONE && worker->mDesiredSize == llmax(desired_size, TEXTURE_CACHE_ENTRY_SIZE) && worker->mDesiredDiscard == desired_discard) {
             worker->unlockWorkMutex();                                  // -Mw
 
+            // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+            if (worker->mDesiredDiscard >= 0 && worker->mDesiredDiscard <= MAX_DISCARD_LEVEL)
+            {
+                return CREATE_REQUEST_ERROR_TRANSITION - desired_discard; // similar request has finished, failed or is in a transitional state
+            }
+            else
+            // </FS:minerjr> [FIRE-35011]
             return CREATE_REQUEST_ERROR_TRANSITION; // similar request has finished, failed or is in a transitional state
         }
         worker->mActiveCount++;

@@ -1192,6 +1192,10 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         // still referenced outside of image list, reset timer
         imagep->getLastReferencedTimer()->reset();
 
+        // <FS:minerjr> [FIRE-35011] Weird patterned extreme CPU usage when using more than 6gb vram on 10g card
+        // Try to clear the raw images that were built up
+        imagep->tryToClearRawImages();
+        // </FS:minerjr> [FIRE-35011] 
         if (imagep->hasSavedRawImage())
         {
             if (imagep->getElapsedLastReferencedSavedRawImageTime() > max_inactive_time)
