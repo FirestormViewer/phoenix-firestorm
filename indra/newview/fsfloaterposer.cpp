@@ -669,9 +669,20 @@ void FSFloaterPoser::onCommitSpinner(const LLUICtrl* spinner, const S32 id)
     switch (id)
     {
         case 0: // av_position_updown_spinner
+        {
+            mAdvPosZSpnr->setValue(value);
+            onPositionSet();
+            break;
+        }
         case 1: // av_position_leftright
+        {
+            mAdvPosYSpnr->setValue(value);
+            onPositionSet();
+            break;
+        }
         case 2: // av_position_inout_spinner
         {
+            mAdvPosXSpnr->setValue(value);
             onPositionSet();
             break;
         }
@@ -681,20 +692,9 @@ void FSFloaterPoser::onCommitSpinner(const LLUICtrl* spinner, const S32 id)
             break;
         }
         case 7: // adv_posx_spinner
-        {
-            mInOutSpnr->setValue(value);
-            onPositionSet();
-            break;
-        }
         case 8: // adv_posy_spinner
-        {
-            mLeftRightSpnr->setValue(value);
-            onPositionSet();
-            break;
-        }
         case 9: // adv_posz_spinner
         {
-            mUpDownSpnr->setValue(value);
             onPositionSet();
             break;
         }
@@ -724,7 +724,7 @@ void FSFloaterPoser::onCommitSlider(const LLUICtrl* slider, const S32 id)
         case 0: // av_position_updown
         case 9: // Advanced_Position_Z
         {
-            mUpDownSpnr->setValue(value);
+            mAdvPosZSpnr->setValue(value);
             onPositionSet();
             break;
         }
@@ -732,7 +732,7 @@ void FSFloaterPoser::onCommitSlider(const LLUICtrl* slider, const S32 id)
         case 1: // av_position_leftright
         case 8: // Advanced_Position_Y
         {
-            mLeftRightSpnr->setValue(value);
+            mAdvPosYSpnr->setValue(value);
             onPositionSet();
             break;
         }
@@ -740,7 +740,7 @@ void FSFloaterPoser::onCommitSlider(const LLUICtrl* slider, const S32 id)
         case 2: // av_position_inout
         case 7: // Advanced_Position_X
         {
-            mInOutSpnr->setValue(value);
+            mAdvPosXSpnr->setValue(value);
             onPositionSet();
             break;
         }
@@ -1709,13 +1709,13 @@ LLVOAvatar* FSFloaterPoser::getAvatarByUuid(const LLUUID& avatarToFind) const
 
 void FSFloaterPoser::onPositionSet()
 {
-    F32 posX = (F32)mInOutSpnr->getValue().asReal();
-    F32 posY = (F32)mLeftRightSpnr->getValue().asReal();
-    F32 posZ = (F32)mUpDownSpnr->getValue().asReal();
-
-    mAdvPosXSpnr->setValue(posX);
-    mAdvPosYSpnr->setValue(posY);
-    mAdvPosZSpnr->setValue(posZ);
+    F32 posX = (F32)mAdvPosXSpnr->getValue().asReal();
+    F32 posY = (F32)mAdvPosYSpnr->getValue().asReal();
+    F32 posZ = (F32)mAdvPosZSpnr->getValue().asReal();
+    
+    mInOutSpnr->setValue(posX);
+    mLeftRightSpnr->setValue(posY);
+    mUpDownSpnr->setValue(posZ);
     mAdvPosXSlider->setValue(posX);
     mAdvPosYSlider->setValue(posY);
     mAdvPosZSlider->setValue(posZ);

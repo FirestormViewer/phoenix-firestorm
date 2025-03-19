@@ -233,8 +233,8 @@ class FSJointPose
             LLQuaternion invRot = mBaseRotation;
             invRot.conjugate();
             mRotation = joint->getRotation() * invRot;
-            mPosition.set(mBasePosition - joint->getPosition());
-            mScale.set(mBaseScale - joint->getScale());
+            mPosition.set(joint->getPosition() - mBasePosition);
+            mScale.set(joint->getScale() - mBaseScale);
         }
 
       private:
