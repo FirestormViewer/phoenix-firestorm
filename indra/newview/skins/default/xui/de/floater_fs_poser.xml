@@ -1,153 +1,151 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_poser" title="Poser für Avatar und Animesh">
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
-	<string	name="header_mHead">Körper</string>
-	<string	name="header_mFaceForeheadLeft">Stirn/Augenbrauen</string>
-	<string	name="header_mEyeLeft">Augen/Augenlider</string>
-	<string	name="header_mFaceCheekUpperLeft">Wangen/Lippen</string>
-	<string	name="header_mHandThumb1Left">Linke Hand</string>
-	<string	name="header_mCollarLeft">Linker Arm</string>
-	<string	name="header_mHandThumb1Right">Rechte Hand</string>
-	<string	name="header_mCollarRight">Rechter Arm</string>
-	<string	name="header_mHipLeft">Beine</string>
-	<string	name="header_mTail1">Schwanz</string>
-	<string	name="header_mHindLimbsRoot">Hintere Glieder</string>
-	<string	name="header_mWingsRoot">Flügel</string>
-	<string	name="header_mFaceEar1Left">Ohren/Nase</string>
+	<string name="header_mHead">Körper</string>
+	<string name="header_mFaceForeheadLeft">Stirn/Augenbrauen</string>
+	<string name="header_mEyeLeft">Augen/Augenlider</string>
+	<string name="header_mFaceCheekUpperLeft">Wangen/Lippen</string>
+	<string name="header_mHandThumb1Left">Linke Hand</string>
+	<string name="header_mCollarLeft">Linker Arm</string>
+	<string name="header_mHandThumb1Right">Rechte Hand</string>
+	<string name="header_mCollarRight">Rechter Arm</string>
+	<string name="header_mHipLeft">Beine</string>
+	<string name="header_mTail1">Schwanz</string>
+	<string name="header_mHindLimbsRoot">Hintere Glieder</string>
+	<string name="header_mWingsRoot">Flügel</string>
+	<string name="header_mFaceEar1Left">Ohren/Nase</string>
 
 	<!-- These are names to appear on the UI for the joints/bones/thingos -->
-	<string	name="title_mPelvis">Ganzer Avatar</string>
-	<string	name="title_mTorso">Oberkörper</string>
-	<string	name="title_mChest">Brust</string>
-	<string	name="title_mNeck">Hals</string>
-	<string	name="title_mHead">Kopf</string>
-	<string	name="title_mEyeRight">Rechtes Auge</string>
-	<string	name="title_mEyeLeft">Linkes Auge</string>
-	<string	name="title_mFaceForeheadLeft">Linker Stirnwinkel</string>
-	<string	name="title_mFaceForeheadRight">Rechter Stirnwinkel</string>
-	<string	name="title_mFaceEyebrowOuterLeft">Äuß. linke Augenbraue</string>
-	<string	name="title_mFaceEyebrowCenterLeft">Mit. linke Augenbraue</string>
-	<string	name="title_mFaceEyebrowInnerLeft">In. linke Augenbraue</string>
-	<string	name="title_mFaceEyebrowOuterRight">Äuß. rechte Augenbraue</string>
-	<string	name="title_mFaceEyebrowCenterRight">Mit. rechte Augenbraue</string>
-	<string	name="title_mFaceEyebrowInnerRight">In. rechte Augenbraue</string>
-	<string	name="title_mFaceEyeLidUpperLeft">Linkes oberes Augenlid</string>
-	<string	name="title_mFaceEyeLidLowerLeft">Linkes unteres Augenlid</string>
-	<string	name="title_mFaceEyeLidUpperRight">Rechtes oberes Augenlid</string>
-	<string	name="title_mFaceEyeLidLowerRight">Rechtes unteres Augenlid</string>
-	<string	name="title_mFaceEar1Left">Linkes oberes Ohr</string>
-	<string	name="title_mFaceEar2Left">Linkes unteres Ohr</string>
-	<string	name="title_mFaceEar1Right">Rechtes oberes Ohr</string>
-	<string	name="title_mFaceEar2Right">Rechtes unteres Ohr</string>
-	<string	name="title_mFaceNoseLeft">Nase links</string>
-	<string	name="title_mFaceNoseCenter">Nase Mitte</string>
-	<string	name="title_mFaceNoseRight">Nase rechts</string>
-	<string	name="title_mFaceCheekLowerLeft">Linke obere Wange</string>
-	<string	name="title_mFaceCheekUpperLeft">Linke untere Wange</string>
-	<string	name="title_mFaceCheekLowerRight">Rechte oberes Wange</string>
-	<string	name="title_mFaceCheekUpperRight">Rechte untere Wange</string>
-	<string	name="title_mFaceJaw">Kiefer</string>
-	<string	name="title_mFaceTeethLower">Zähne unten</string>
-	<string	name="title_mFaceLipLowerLeft">Linke untere Lippe</string>
-	<string	name="title_mFaceLipLowerRight">Rechte untere Lippe</string>
-	<string	name="title_mFaceLipLowerCenter">Mittlere untere Lippe</string>
-	<string	name="title_mFaceTongueBase">Zunge Basis</string>
-	<string	name="title_mFaceTongueTip">Zungenspite</string>
-	<string	name="title_mFaceJawShaper">Kieferform</string>
-	<string	name="title_mFaceForeheadCenter">Stirn Mitte</string>
-	<string	name="title_mFaceNoseBase">Nase Basis</string>
-	<string	name="title_mFaceTeethUpper">Obere Zähne</string>
-	<string	name="title_mFaceLipUpperLeft">Linke obere Lippe</string>
-	<string	name="title_mFaceLipUpperRight">Rechte obere Lippe</string>
-	<string	name="title_mFaceLipCornerLeft">Linker Mundwinkel</string>
-	<string	name="title_mFaceLipCornerRight">Rechter Mundwinkel</string>
-	<string	name="title_mFaceLipUpperCenter">Mittlere obere Lippe</string>
-	<string	name="title_mFaceEyecornerInnerLeft">In. linker Augenwinkel</string>
-	<string	name="title_mFaceEyecornerInnerRight">In. rechter Augenwinkel</string>
-	<string	name="title_mFaceNoseBridge">Nasenbrücke</string>
-	<string	name="title_mCollarLeft">Kragen</string>
-	<string	name="title_mShoulderLeft">Ganzer Arm</string>
-	<string	name="title_mElbowLeft">Unterarm</string>
-	<string	name="title_mWristLeft">Handgelenk</string>
-	<string	name="title_mHandMiddle1Left">Basis Mittelfinger</string>
-	<string	name="title_mHandMiddle2Left">Mitte Mittelfinger</string>
-	<string	name="title_mHandMiddle3Left">Spitze Mittelfinger</string>
-	<string	name="title_mHandIndex1Left">Basis Zeigefinger</string>
-	<string	name="title_mHandIndex2Left">Mitte Zeigefinger</string>
-	<string	name="title_mHandIndex3Left">Spitze Zeigefinger</string>
-	<string	name="title_mHandRing1Left">Basis Ringfinger</string>
-	<string	name="title_mHandRing2Left">Mitte Ringfinger</string>
-	<string	name="title_mHandRing3Left">Spitze Ringfinger</string>
-	<string	name="title_mHandPinky1Left">Basis kleiner Finger</string>
-	<string	name="title_mHandPinky2Left">Mitte kleiner Finger</string>
-	<string	name="title_mHandPinky3Left">Spitze kleiner Finger</string>
-	<string	name="title_mHandThumb1Left">Basis Daumen</string>
-	<string	name="title_mHandThumb2Left">Mitte Daumen</string>
-	<string	name="title_mHandThumb3Left">Spitze Daumen</string>
-	<string	name="title_mCollarRight">Kragen</string>
-	<string	name="title_mShoulderRight">Ganzer Arm</string>
-	<string	name="title_mElbowRight">Unterarm</string>
-	<string	name="title_mWristRight">Handgelenk</string>
-	<string	name="title_mHandMiddle1Right">Basis Mittelfinger</string>
-	<string	name="title_mHandMiddle2Right">Mitte Mittelfinger</string>
-	<string	name="title_mHandMiddle3Right">Spitze Mittelfinger</string>
-	<string	name="title_mHandIndex1Right">Basis Zeigefinger</string>
-	<string	name="title_mHandIndex2Right">Mitte Zeigefinger</string>
-	<string	name="title_mHandIndex3Right">Spitze Zeigefinger</string>
-	<string	name="title_mHandRing1Right">Basis Ringfinger</string>
-	<string	name="title_mHandRing2Right">Mitte Ringfinger</string>
-	<string	name="title_mHandRing3Right">Spitze Ringfinger</string>
-	<string	name="title_mHandPinky1Right">Basis kleiner Finger</string>
-	<string	name="title_mHandPinky2Right">Mitte kleiner Finger</string>
-	<string	name="title_mHandPinky3Right">Spitze kleiner Finger</string>
-	<string	name="title_mHandThumb1Right">Basis Daumen</string>
-	<string	name="title_mHandThumb2Right">Mitte Daumen</string>
-	<string	name="title_mHandThumb3Right">Spitze Daumen</string>
-	<string	name="title_mWingsRoot">Wurzel</string>
-	<string	name="title_mWing1Left">Links 1</string>
-	<string	name="title_mWing2Left">Links 2</string>
-	<string	name="title_mWing3Left">Links 3</string>
-	<string	name="title_mWing4Left">Links 4</string>
-	<string	name="title_mWing4FanLeft">Linker Fächer</string>
-	<string	name="title_mWing1Right">Rechts 1</string>
-	<string	name="title_mWing2Right">Rechts 2</string>
-	<string	name="title_mWing3Right">Rechts 3</string>
-	<string	name="title_mWing4Right">Rechts 4</string>
-	<string	name="title_mWing4FanRight">Rechter Fächer</string>
-	<string	name="title_mHipRight">Rechtes Bein</string>
-	<string	name="title_mKneeRight">Rechtes Knie</string>
-	<string	name="title_mAnkleRight">Rechter Knöchel</string>
-	<string	name="title_mFootRight">Rechter Fuß</string>
-	<string	name="title_mToeRight">Rechter Zeh</string>
-	<string	name="title_mHipLeft">Linkes Bein</string>
-	<string	name="title_mKneeLeft">Linkes Knie</string>
-	<string	name="title_mAnkleLeft">Linker Knöchel</string>
-	<string	name="title_mFootLeft">Linker Fuß</string>
-	<string	name="title_mToeLeft">Linker Zeh</string>
-	<string	name="title_mTail1">Basis Schwanz</string>
-	<string	name="title_mTail2">Schwanz 2</string>
-	<string	name="title_mTail3">Schwanz 3</string>
-	<string	name="title_mTail4">Schwanz 4</string>
-	<string	name="title_mTail5">Schwanz 5</string>
-	<string	name="title_mTail6">Schwanz-Spitze</string>
-	<string	name="title_mGroin">Leiste</string>
-	<string	name="title_mHindLimbsRoot">Wurzel</string>
-	<string	name="title_mHindLimb1Left">Linke Basis</string>
-	<string	name="title_mHindLimb2Left">Links 2</string>
-	<string	name="title_mHindLimb3Left">Links 3</string>
-	<string	name="title_mHindLimb4Left">Links 4</string>
-	<string	name="title_mHindLimb1Right">Rechte Basis</string>
-	<string	name="title_mHindLimb2Right">Rechts 2</string>
-	<string	name="title_mHindLimb3Right">Rechts 3</string>
-	<string	name="title_mHindLimb4Right">Rechts 4</string>
-	<string	name="title_BUTT">Hintern</string>
-	<string	name="title_BELLY">Bauch</string>
-	<string	name="title_LEFT_PEC">Linke Brustmuskeln</string>
-	<string	name="title_RIGHT_PEC">Rechte Brustmuskeln</string>
-	<string	name="title_mFaceEar1Left">Linke Basis</string>
-	<string	name="title_mFaceEar1Right">Rechte Basis</string>
-	<string	name="title_mFaceEar2Left">Linke Spitze</string>
-	<string	name="title_mFaceEar2Right">Rechte Spitze</string>
+	<string name="title_mPelvis">Ganzer Avatar</string>
+	<string name="title_mTorso">Oberkörper</string>
+	<string name="title_mChest">Brust</string>
+	<string name="title_mNeck">Hals</string>
+	<string name="title_mHead">Kopf</string>
+	<string name="title_mEyeRight">Rechtes Auge</string>
+	<string name="title_mEyeLeft">Linkes Auge</string>
+	<string name="title_mFaceForeheadLeft">Linker Stirnwinkel</string>
+	<string name="title_mFaceForeheadRight">Rechter Stirnwinkel</string>
+	<string name="title_mFaceEyebrowOuterLeft">Äuß. linke Augenbraue</string>
+	<string name="title_mFaceEyebrowCenterLeft">Mit. linke Augenbraue</string>
+	<string name="title_mFaceEyebrowInnerLeft">In. linke Augenbraue</string>
+	<string name="title_mFaceEyebrowOuterRight">Äuß. rechte Augenbraue</string>
+	<string name="title_mFaceEyebrowCenterRight">Mit. rechte Augenbraue</string>
+	<string name="title_mFaceEyebrowInnerRight">In. rechte Augenbraue</string>
+	<string name="title_mFaceEyeLidUpperLeft">Linkes oberes Augenlid</string>
+	<string name="title_mFaceEyeLidLowerLeft">Linkes unteres Augenlid</string>
+	<string name="title_mFaceEyeLidUpperRight">Rechtes oberes Augenlid</string>
+	<string name="title_mFaceEyeLidLowerRight">Rechtes unteres Augenlid</string>
+	<string name="title_mFaceEar1Left">Linkes oberes Ohr</string>
+	<string name="title_mFaceEar2Left">Linkes unteres Ohr</string>
+	<string name="title_mFaceEar1Right">Rechtes oberes Ohr</string>
+	<string name="title_mFaceEar2Right">Rechtes unteres Ohr</string>
+	<string name="title_mFaceNoseLeft">Nase links</string>
+	<string name="title_mFaceNoseCenter">Nase Mitte</string>
+	<string name="title_mFaceNoseRight">Nase rechts</string>
+	<string name="title_mFaceCheekLowerLeft">Linke obere Wange</string>
+	<string name="title_mFaceCheekUpperLeft">Linke untere Wange</string>
+	<string name="title_mFaceCheekLowerRight">Rechte oberes Wange</string>
+	<string name="title_mFaceCheekUpperRight">Rechte untere Wange</string>
+	<string name="title_mFaceJaw">Kiefer</string>
+	<string name="title_mFaceTeethLower">Zähne unten</string>
+	<string name="title_mFaceLipLowerLeft">Linke untere Lippe</string>
+	<string name="title_mFaceLipLowerRight">Rechte untere Lippe</string>
+	<string name="title_mFaceLipLowerCenter">Mittlere untere Lippe</string>
+	<string name="title_mFaceTongueBase">Zunge Basis</string>
+	<string name="title_mFaceTongueTip">Zungenspite</string>
+	<string name="title_mFaceJawShaper">Kieferform</string>
+	<string name="title_mFaceForeheadCenter">Stirn Mitte</string>
+	<string name="title_mFaceNoseBase">Nase Basis</string>
+	<string name="title_mFaceTeethUpper">Obere Zähne</string>
+	<string name="title_mFaceLipUpperLeft">Linke obere Lippe</string>
+	<string name="title_mFaceLipUpperRight">Rechte obere Lippe</string>
+	<string name="title_mFaceLipCornerLeft">Linker Mundwinkel</string>
+	<string name="title_mFaceLipCornerRight">Rechter Mundwinkel</string>
+	<string name="title_mFaceLipUpperCenter">Mittlere obere Lippe</string>
+	<string name="title_mFaceEyecornerInnerLeft">In. linker Augenwinkel</string>
+	<string name="title_mFaceEyecornerInnerRight">In. rechter Augenwinkel</string>
+	<string name="title_mFaceNoseBridge">Nasenbrücke</string>
+	<string name="title_mCollarLeft">Kragen</string>
+	<string name="title_mShoulderLeft">Ganzer Arm</string>
+	<string name="title_mElbowLeft">Unterarm</string>
+	<string name="title_mWristLeft">Handgelenk</string>
+	<string name="title_mHandMiddle1Left">Basis Mittelfinger</string>
+	<string name="title_mHandMiddle2Left">Mitte Mittelfinger</string>
+	<string name="title_mHandMiddle3Left">Spitze Mittelfinger</string>
+	<string name="title_mHandIndex1Left">Basis Zeigefinger</string>
+	<string name="title_mHandIndex2Left">Mitte Zeigefinger</string>
+	<string name="title_mHandIndex3Left">Spitze Zeigefinger</string>
+	<string name="title_mHandRing1Left">Basis Ringfinger</string>
+	<string name="title_mHandRing2Left">Mitte Ringfinger</string>
+	<string name="title_mHandRing3Left">Spitze Ringfinger</string>
+	<string name="title_mHandPinky1Left">Basis kleiner Finger</string>
+	<string name="title_mHandPinky2Left">Mitte kleiner Finger</string>
+	<string name="title_mHandPinky3Left">Spitze kleiner Finger</string>
+	<string name="title_mHandThumb1Left">Basis Daumen</string>
+	<string name="title_mHandThumb2Left">Mitte Daumen</string>
+	<string name="title_mHandThumb3Left">Spitze Daumen</string>
+	<string name="title_mCollarRight">Kragen</string>
+	<string name="title_mShoulderRight">Ganzer Arm</string>
+	<string name="title_mElbowRight">Unterarm</string>
+	<string name="title_mWristRight">Handgelenk</string>
+	<string name="title_mHandMiddle1Right">Basis Mittelfinger</string>
+	<string name="title_mHandMiddle2Right">Mitte Mittelfinger</string>
+	<string name="title_mHandMiddle3Right">Spitze Mittelfinger</string>
+	<string name="title_mHandIndex1Right">Basis Zeigefinger</string>
+	<string name="title_mHandIndex2Right">Mitte Zeigefinger</string>
+	<string name="title_mHandIndex3Right">Spitze Zeigefinger</string>
+	<string name="title_mHandRing1Right">Basis Ringfinger</string>
+	<string name="title_mHandRing2Right">Mitte Ringfinger</string>
+	<string name="title_mHandRing3Right">Spitze Ringfinger</string>
+	<string name="title_mHandPinky1Right">Basis kleiner Finger</string>
+	<string name="title_mHandPinky2Right">Mitte kleiner Finger</string>
+	<string name="title_mHandPinky3Right">Spitze kleiner Finger</string>
+	<string name="title_mHandThumb1Right">Basis Daumen</string>
+	<string name="title_mHandThumb2Right">Mitte Daumen</string>
+	<string name="title_mHandThumb3Right">Spitze Daumen</string>
+	<string name="title_mWingsRoot">Wurzel</string>
+	<string name="title_mWing1Left">Links 1</string>
+	<string name="title_mWing2Left">Links 2</string>
+	<string name="title_mWing3Left">Links 3</string>
+	<string name="title_mWing4Left">Links 4</string>
+	<string name="title_mWing4FanLeft">Linker Fächer</string>
+	<string name="title_mWing1Right">Rechts 1</string>
+	<string name="title_mWing2Right">Rechts 2</string>
+	<string name="title_mWing3Right">Rechts 3</string>
+	<string name="title_mWing4Right">Rechts 4</string>
+	<string name="title_mWing4FanRight">Rechter Fächer</string>
+	<string name="title_mHipRight">Rechtes Bein</string>
+	<string name="title_mKneeRight">Rechtes Knie</string>
+	<string name="title_mAnkleRight">Rechter Knöchel</string>
+	<string name="title_mFootRight">Rechter Fuß</string>
+	<string name="title_mToeRight">Rechter Zeh</string>
+	<string name="title_mHipLeft">Linkes Bein</string>
+	<string name="title_mKneeLeft">Linkes Knie</string>
+	<string name="title_mAnkleLeft">Linker Knöchel</string>
+	<string name="title_mFootLeft">Linker Fuß</string>
+	<string name="title_mToeLeft">Linker Zeh</string>
+	<string name="title_mTail1">Basis Schwanz</string>
+	<string name="title_mTail2">Schwanz 2</string>
+	<string name="title_mTail3">Schwanz 3</string>
+	<string name="title_mTail4">Schwanz 4</string>
+	<string name="title_mTail5">Schwanz 5</string>
+	<string name="title_mTail6">Schwanz-Spitze</string>
+	<string name="title_mGroin">Leiste</string>
+	<string name="title_mHindLimbsRoot">Wurzel</string>
+	<string name="title_mHindLimb1Left">Linke Basis</string>
+	<string name="title_mHindLimb2Left">Links 2</string>
+	<string name="title_mHindLimb3Left">Links 3</string>
+	<string name="title_mHindLimb4Left">Links 4</string>
+	<string name="title_mHindLimb1Right">Rechte Basis</string>
+	<string name="title_mHindLimb2Right">Rechts 2</string>
+	<string name="title_mHindLimb3Right">Rechts 3</string>
+	<string name="title_mHindLimb4Right">Rechts 4</string>
+	<string name="title_BUTT">Hintern</string>
+	<string name="title_BELLY">Bauch</string>
+	<string name="title_LEFT_PEC">Linke Brustmuskeln</string>
+	<string name="title_RIGHT_PEC">Rechte Brustmuskeln</string>
+	<string name="LoadPoseLabel">Pose laden</string>
+	<string name="LoadDiffLabel">Diff. laden</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack name="poser_stack">
@@ -221,34 +219,59 @@
 							Steuerkugel-Sensitivität:
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Stellt die Sensitivität der Steuerkugel ein"/>
+						<check_box name="natural_direction_checkbox" label="Natürl. Ausrichtung verw." tool_tip="Das Skelett besitzt standardmäßig unnatürliche Gelenk-Rotationen, was das Posieren erschwert. Falls aktiviert, werden die Gelenke in eine natürlichere Rotation versetzt."/>
 						<check_box name="stop_posing_on_close_checkbox" label="Beim Schließen stoppen" tool_tip="Die Pose beim Schließen nicht zu stoppen kann hilfreich sein, um die bisher getätigte Arbeit nicht zu verlieren."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Basis-Rot. beim Edit. zurück." tool_tip="Wenn das erste Mal eine Pose bearbeitet wird, diese auf Null zurücksetzen. Hierdurch eine eine komplette Pose und nicht nur die Differenz gespeichert werden. Ein grüner Haken erscheint neben jedem Gelenk, dass auf Null-basierend exportiert wurde."/>
 						<check_box name="also_save_bvh_checkbox" label="BHV beim Speichern erst." tool_tip="Wenn die Pose gespeichert wird, wird ebenfalls eine BHV-Datei erstellt, die via Bauen > Hochladen > Animation hochgeladen und zum Posieren vom eigenen Avatar oder anderen Avataren verwendet werden kann. Hierzu muss die Basis der Gelenke auf Null gesetzt werden, da BHV nicht von anderen Posen abgeleitet wird."/>
 					</panel>
 				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="Visuelle Manipulatoren an-/ausschalten" />
 			</panel>
-			<panel name="trackball_panel">
-				<text name="rotation_label">
-					Rotation:
-					</text>
-				<fs_virtual_trackpad name="limb_rotation" tool_tip="Ändert die Rotation der aktuell ausgewählten Körperteile. STRG gedrückt halten, um langsam zu ändern. Mausrad drehen, um 3. Achse zu justieren. Umschalten oder Alt benutzen, um zwischen Rotationsachsen zu wechseln."/>
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="Rotation" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="Ändert die Rotation der aktuell ausgewählten Körperteile. STRG gedrückt halten, um langsam zu ändern. Mausrad drehen, um 3. Achse zu justieren. Umschalten oder Alt benutzen, um zwischen Rotationsachsen zu wechseln."/>
+						<text name="limb_pitch_label">
+							Auf/Ab:
+						</text>
+						<text name="limb_yaw_label">
+							Links/Re.:
+						</text>
+						<text name="limb_roll_label">
+							Rollen:
+						</text>
+					</panel>
+					<panel title="Pos. / Skal." name="position_panel">
+						<text name="pos_x_label">
+							Position X:
+						</text>
+						<text name="pos_y_label">
+							Position Y:
+						</text>
+						<text name="pos_z_label">
+							Position Z:
+						</text>
+						<text name="scale_x_label">
+							Skala X:
+						</text>
+						<text name="scale_y_label">
+							Skala Y:
+						</text>
+						<text name="scale_z_label">
+							Skala Z:
+						</text>
+					</panel>
+				</tab_container>
 				<panel name="trackball_button_panel">
-					<button name="undo_change" tool_tip="Letzte Rotationsänderung rückgängig machen"/>
+					<button name="undo_change" tool_tip="Letzte Änderung rückgängig machen"/>
 					<button name="button_redo_change" tool_tip="Letzte Rotationsänderung wiederherstellen"/>
 					<button name="poser_joint_reset" tool_tip="Doppelklicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
 					<button name="delta_mode_toggle" tool_tip="Falls mehrere Gelenke geändert werden, diese um denselben Wert ändern anstatt in dieselbe Rotation zu versetzen. Wird auch zur Verhinderung von Gimbal Lock verwendet."/>
 					<button label="Spieg." name="button_toggleMirrorRotation" tool_tip="Änderungen an gegenüberliegendem Gelenk spiegeln."/>
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Gegenüberliegendes Gelenk gleichermaßen anpassen."/>
+					<button label="Kopie L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Doppelklicken, um Änderung von linker Seite zur rechten Seite zu kopieren." />
+					<button label="Kopie P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Doppelklicken, um Änderung von rechter Seite zur linken Seite zu kopieren." />
 				</panel>
-				<text name="limb_pitch_label">
-					Hoch/Runter:
-				</text>
-				<text name="limb_yaw_label">
-					Links/Rechts:
-				</text>
-				<text name="limb_roll_label">
-					Rollen:
-				</text>
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Pose für ausgewählten Avatar laden." name="poses_scroll">
@@ -259,7 +282,6 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="toggleAdvancedPanel" tool_tip="Erweiterte Einstellungen aktivieren/deaktivieren"/>
 				<button name="FlipPose_avatar" tool_tip="Komplette Pose links/rechts umschalten"/>
 				<button name="FlipJoint_avatar" tool_tip="Ausgewählte Körperteile links/rechts spiegeln"/>
 				<button label="Ausw." name="button_RecaptureParts" tool_tip="Falls ausgewählte Körperteile nicht posiert werden, werden die Werte der aktuellen Pose erfasst."/>
@@ -268,28 +290,6 @@
 				<button tool_tip="Posen-Verzeichnis verwalten" name="open_poseDir_button"/>
 				<menu_button label="Pose laden" tool_tip="Lädt die aktuell ausgewählte Pose." name="load_poses_button"/>
 				<button label="Diff. speich." tool_tip="Speichert die Differenz zu einer bestehenden Pose. Aus einer T-Pose heraus starten, um ein neues Werk zu beginnen." name="save_poses_button"/>
-			</panel>
-		</layout_panel>
-		<layout_panel name="advanced_controls_layout">
-			<panel name="advanced_parent_panel">
-				<tab_container name="modifier_tabs">
-					<panel title="Körperteil-Position" name="position_panel">
-						<slider label="Position X:" name="Advanced_Position_X"/>
-						<slider label="Position Y:" name="Advanced_Position_Y"/>
-						<slider label="Position Z:" name="Advanced_Position_Z"/>
-						<button label="Positionsänd. zurücks." name="undo_position_change" tool_tip="Macht die letzte Positionsänderung rückgängig"/>
-						<button label="Pos. wiederh." name="redo_position_change" tool_tip="Stellt die letzte Positionsänderung wieder her"/>
-						<button label="Pos. zurücks." name="reset_positions" tool_tip="Doppelklicken, um Position auf Originalwert zurückzusetzen"/>
-					</panel>
-					<panel title="Körperteil-Skalierung" name="scale_panel">
-						<slider label="Skalierung X:" name="Advanced_Scale_X"/>
-						<slider label="Skalierung Y:" name="Advanced_Scale_Y"/>
-						<slider label="Skalierung Z:" name="Advanced_Scale_Z"/>
-						<button label="Skal.-Änd. zurücks." name="undo_scale_change" tool_tip="Macht die letzte Änderung der Skalierung rückgängig"/>
-						<button label="Skal. wiederh." name="redo_scale_change" tool_tip="Stellt die letzte Änderung der Skalierung wieder her"/>
-						<button label="Skal. zurücks." name="reset_scales" tool_tip="Doppelklicken, um Skalierung auf Originalwert zurückzusetzen"/>
-					</panel>
-				</tab_container>
 			</panel>
 		</layout_panel>
 	</layout_stack>
