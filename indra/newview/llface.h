@@ -52,7 +52,11 @@ class LLDrawInfo;
 class LLMeshSkinInfo;
 
 const F32 MIN_ALPHA_SIZE = 1024.f;
-const F32 MIN_TEX_ANIM_SIZE = 512.f;
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+//const F32 MIN_TEX_ANIM_SIZE = 512.f;
+// Change the min size to 
+const F32 MIN_TEX_ANIM_SIZE = 10.f;
+// </FS:minerjr> [FIRE-35081]
 const U8 FACE_DO_NOT_BATCH_TEXTURES = 255;
 
 class alignas(16) LLFace
@@ -123,6 +127,8 @@ public:
     void            setPixelArea(F32 area)  { mPixelArea = area; }
     F32             getVirtualSize() const { return mVSize; }
     F32             getPixelArea() const { return mPixelArea; }
+    F32             getImportanceToCamera() const { return mImportanceToCamera; }
+    F32             getCloseToCamera() const { return mCloseToCamera; }
 
     S32             getIndexInTex(U32 ch) const      { llassert(ch < LLRender::NUM_TEXTURE_CHANNELS); return mIndexInTex[ch]; }
     void            setIndexInTex(U32 ch, S32 index) { llassert(ch < LLRender::NUM_TEXTURE_CHANNELS); mIndexInTex[ch] = index; }
@@ -329,6 +335,7 @@ private:
     //1.0: the most important.
     //based on the distance from the face to the view point and the angle from the face center to the view direction.
     F32         mImportanceToCamera ;
+    F32         mCloseToCamera;
     F32         mBoundingSphereRadius ;
     bool        mHasMedia ;
     bool        mIsMediaAllowed;

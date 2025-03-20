@@ -3113,6 +3113,7 @@ LLViewerMediaTexture* LLViewerMediaImpl::updateMediaImage()
 
         int discard_level = 0;
         media_tex->createGLTexture(discard_level, raw);
+        //media_tex->setBoostLevel(LLViewerTexture::BOOST_HIGH);
 
         // MEDIAOPT: set this dynamically on play/stop
         // FIXME
