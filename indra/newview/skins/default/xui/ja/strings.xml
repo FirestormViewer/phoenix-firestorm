@@ -96,7 +96,8 @@ Graphics Card Memory (Budget): [VRAM_BUDGET]
 		Windowsグラフィックドライババージョン：[GRAPHICS_DRIVER_VERSION]
 	</string>
 	<string name="AboutOGL">
-		OpenGLバージョン：[OPENGL_VERSION]</string>
+		OpenGLバージョン：[OPENGL_VERSION]
+	</string>
 	<string name="AboutSettings">
 		設定モード：[MODE]
 ビューアのスキン：[SKIN]（[THEME]）
@@ -752,8 +753,6 @@ https://secondlife.com/viewer-access-faq
 	<string name="ReleaseNotes">
 		リリースノート
 	</string>
-	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
-	<string name="RELEASE_NOTES_BASE_URL" translate="false">https://wiki.firestormviewer.org/changelog:firestorm_change_log_</string>
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">
 		読み込んでいます…
@@ -823,7 +822,7 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="AssetUploadRequestInvalid">
 		アップロードリクエスト中にエラーが発生しました。問題を解決するには、サポート
-		（ https://support.secondlife.com/ ）にお問い合わせください。
+（ https://support.secondlife.com/ ）にお問い合わせください。
 	</string>
 	<!-- Settings errors -->
 	<string name="SettingValidationError">
@@ -1508,7 +1507,7 @@ https://secondlife.com/viewer-access-faq
 		空
 	</string>
 	<string name="water">
-		水
+		水面
 	</string>
 	<string name="day">
 		デイサイクル
@@ -1941,10 +1940,10 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="No Filters" value="なし"/>
 	<string name="Since Logoff" value="–ログオフ以来"/>
 	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
-	<string name="Modifiable" value="修正可" />
-	<string name="Copyable" value="コピー可" />
-	<string name="Transferable" value="再販可" />
-	<string name="PermissionsFilter" value=" - [PERMISSIONS] のみ" />
+	<string name="Modifiable" value="修正可"/>
+	<string name="Copyable" value="コピー可"/>
+	<string name="Transferable" value="再販可"/>
+	<string name="PermissionsFilter" value="‐[PERMISSIONS]のみ"/>
 	<!-- </FS:Zi> -->
 	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">
@@ -2146,7 +2145,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		口
 	</string>
 	<string name="Chin">
-		あご
+		顎
 	</string>
 	<string name="Left Ear">
 		左耳
@@ -2677,7 +2676,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		口
 	</string>
 	<string name="ATTACH_CHIN">
-		あご
+		顎
 	</string>
 	<string name="ATTACH_LEAR">
 		左耳
@@ -3038,7 +3037,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<string name="UnknownFileExtension">
 		不明な拡張子：%s
-		使用可能な拡張子：.wav，.tga，.bmp，.jpg，.jpeg，.bvh
+使用可能な拡張子：.wav，.tga，.bmp，.jpg，.jpeg，.bvh
 	</string>
 	<string name="MuteObject2">
 		オブジェクトのブロック
@@ -3199,7 +3198,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<!--
 	<string name="Shopping">
-	ショッピング
+		ショッピング
 	</string>
 	-->
 	<string name="Stage">
@@ -3356,12 +3355,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="MBOutOfMemoryErr">
 		[APP_NAME]は、メモリの確保に失敗しました。実行に必要なメモリを確保できないため終了します。
 		
-		コンピュータのＲＡＭが少ない場合は、Second Lifeを実行する前に重いアプリケーションを終了し、ページファイルを割り当てるか、描画距離などのグラフィック設定を軽くしてください。
+コンピュータのＲＡＭが少ない場合は、Second Lifeを実行する前に重いアプリケーションを終了し、ページファイルを割り当てるか、描画距離などのグラフィック設定を軽くしてください。
 	</string>
 	<string name="MBMissingFile">
 		[APP_NAME]は、実行に必要なファイルの一部にアクセスできないか、ファイルが見つからなかったため閉じられます。
 		
-		[DOWNLOAD_URL] からビューアを再インストールてください。再インストール後も問題が解決しない場合は[SUPPORT_SITE] に連絡してください。
+[DOWNLOAD_URL] からビューアを再インストールてください。再インストール後も問題が解決しない場合は[SUPPORT_SITE] に連絡してください。
 	</string>
 	<!-- Avatar Shape Information -->
 	<string name="5 O'Clock Shadow">
@@ -5583,7 +5582,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="ExternalEditorNotFound">
 		指定された外部エディターが見つかりません。
-		エディターへのパスを二重引用符で囲んでみてください。（例："/path to my/editor" "%s"）
+エディターへのパスを二重引用符で囲んでみてください。（例："/path to my/editor" "%s"）
 	</string>
 	<string name="ExternalEditorCommandParseError">
 		外部エディターのコマンドの解析中にエラーが見つかりました。

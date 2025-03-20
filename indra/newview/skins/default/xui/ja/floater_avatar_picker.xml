@@ -31,15 +31,19 @@
 				名前の一部を入力：
 			</text>
 			<button label="実行" label_selected="実行" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_scroll_list name="SearchResults">
 				<columns label="名前" name="name"/>
 				<columns label="ユーザ名" name="username"/>
-			</scroll_list>
+			</fs_scroll_list>
 		</panel>
 		<panel label="フレンド" name="FriendsPanel">
 			<text name="InstructSelectFriend">
-				人物を選択
+				人物を選択：
 			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="名前" name="name"/>
+				<columns label="ユーザ名" name="username"/>
+			</fs_scroll_list>
 		</panel>
 		<panel label="近くにいる人物" name="NearMePanel">
 			<text name="InstructSelectResident">
@@ -49,17 +53,15 @@
 			<text name="meters">
 				メートル
 			</text>
-			<button name="Refresh"/>
-			<scroll_list name="NearMe">
+			<fs_scroll_list name="NearMe">
 				<columns label="名前" name="name"/>
 				<columns label="ユーザ名" name="username"/>
-			</scroll_list>
+			</fs_scroll_list>
 		</panel>
 		<panel label="ＵＵＩＤで検索" name="SearchPanelUUID">
 			<text name="SearchByUUIDLabel">
 				人物のＵＵＩＤを入力：
 			</text>
-			<line_editor name="EditUUID"/>
 			<button label="実行" label_selected="実行" name="FindUUID" />
 			<fs_scroll_list name="SearchResultsUUID">
 				<columns label="名前" name="nameUUID"/>

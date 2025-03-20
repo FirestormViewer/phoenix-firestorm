@@ -427,7 +427,7 @@ L$が不足しているので、このグループに参加することができ
 ４８時間以内にメンバーを勧誘し、入会してもらってください。
 		<tag>group</tag>
 		<tag>funds</tag>
-		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="L$ 100でグループを作成"/>
+		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="グループを作成"/>
 	</notification>
 	<notification name="JoinGroupInaccessible">
 		あなたはグループに参加することはできません。
@@ -524,7 +524,7 @@ L$が不足しているので、このグループに参加することができ
 	</notification>
 	<notification name="ReturnObjectsNotOwnedBySelf">
 		この土地区画内にある、あなた以外が所有するすべてのオブジェクトを、それぞれの所有者のインベントリに戻そうとしています。このまま操作を続行してもよろしいですか？
-		グループに寄贈された「再販・譲渡可」のオブジェクトは、以前の所有者に返却されます。
+グループに寄贈された「再販・譲渡可」のオブジェクトは、以前の所有者に返却されます。
 
 *警告*
 
@@ -857,7 +857,7 @@ L$が不足しているので、このグループに参加することができ
 		ファイルをダウンロードできません。
 		<tag>fail</tag>
 	</notification>
-	<notification label="" name="MediaFileDownloadUnsupported">
+	<notification name="MediaFileDownloadUnsupported">
 		ダウンロードをリクエストしたファイルは、[APP_NAME]ではサポートされていません。
 		<unique/>
 		<tag>confirm</tag>
@@ -1239,9 +1239,8 @@ L$が不足しているので、このグループに参加することができ
 フォルダ名を入力してください：
 		<tag>confirm</tag>
 		<form name="form">
-			<input name="message" type="text"/>
-			<button index="0" name="OK" text="ＯＫ"/>
-			<button index="1" name="Cancel" text="キャンセル"/>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
@@ -1354,7 +1353,7 @@ L$が不足しているので、このグループに参加することができ
 	</notification>
 	<notification name="no_host">
 		テレポート目的地を見つけられません。目的地が一時的に利用できない状態か、すでに消滅している可能性があります。
-  数分後にやり直してください。
+数分後にやり直してください。
 		<tag>fail</tag>
 	</notification>
 	<notification name="no_inventory_host">
@@ -1717,8 +1716,8 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		<tag>confirm</tag>
 		<form name="form">
 			<input name="new_name" type="text">[NAME]</input>
-			<button default="true" index="0" name="OK" text="ＯＫ"/>
-			<button index="1" name="Cancel" text="キャンセル"/>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
@@ -1951,7 +1950,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	<notification name="LoginCantRemoveCurUsername">
 		ログインしているユーザーを忘れた場合は、ログアウトする必要があります。
 		<tag>confirm</tag>
-		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="Confirm and log out"/>
+		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="確認しログアウト"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
 		接続に時間がかかっております。お使いのインターネット接続か、[CURRENT_GRID]の問題と考えられます。
@@ -2330,7 +2329,7 @@ https://secondlife.com/support/downloads/
 	</notification>
 
 	<notification name="AutorespondNonFriendsModeSet">
-フレンド以外からの自動応答モードがオンになっています。
+		フレンド以外からの自動応答モードがオンになっています。
 フレンド以外からのインスタントメッセージの受信には、設定した自動応答で応答するようになります。
 		<usetemplate ignoretext="フレンド以外の人に対してステータスを自動返信モードに変更したとき" name="okignore" yestext="ＯＫ"/>
 	</notification>
@@ -2357,12 +2356,12 @@ https://secondlife.com/support/downloads/
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
-	<notification name="GroupLimitInfo"> ベーシック会員の住民は、最大[MAX_BASIC]個のグループまで参加することができます。プレミアム会員は最大[MAX_PREMIUM]個まで参加可能です。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細またはアップグレード]
+	<notification name="GroupLimitInfo">ベーシック会員の住民は、最大[MAX_BASIC]個のグループまで参加することができます。プレミアム会員は最大[MAX_PREMIUM]個まで参加可能です。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細またはアップグレード]
 		<tag>group</tag>
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="閉じる"/>
 	</notification>
-	<notification name="GroupLimitInfoPlus"> ベーシック会員の住人は、最大[MAX_BASIC]個までグループに参加できます。プレミアム会員は最大[MAX_PREMIUM]個まで参加可能です。プレミアム・プラス会員は最大[MAX_PREMIUM_PLUS]個です。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細またはアップグレード]
+	<notification name="GroupLimitInfoPlus">ベーシック会員の住人は、最大[MAX_BASIC]個までグループに参加できます。プレミアム会員は最大[MAX_PREMIUM]個まで参加可能です。プレミアム・プラス会員は最大[MAX_PREMIUM_PLUS]個です。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細またはアップグレード]
 		<tag>group</tag>
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="閉じる"/>
@@ -2424,7 +2423,8 @@ https://secondlife.com/support/downloads/
 	<notification name="SetDisplayNameFailedGeneric">
 		申し訳ありませんが、表示名を設定できませんでした。あとでもう一度お試しください。
 	</notification>
-	<notification name="SetDisplayNameMismatch">入力した表示名が一致しません。もう一度入力してください。
+	<notification name="SetDisplayNameMismatch">
+		入力した表示名が一致しません。もう一度入力してください。
 		<tag>fail</tag>
 	</notification>
 	<!-- *NOTE: This should never happen -->
@@ -3472,7 +3472,8 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="GroupNotice">件名：[SUBJECT]　メッセージ：[MESSAGE]
 		<tag>group</tag>
 	</notification>
-	<notification name="FriendOnlineOffline">&lt;nolink&gt;[NAME]&lt;/nolink&gt;は、[STATUS]です。
+	<notification name="FriendOnlineOffline">
+		&lt;nolink&gt;[NAME]&lt;/nolink&gt;は、[STATUS]です。
 		<tag>friendship</tag>
 	</notification>
 	<notification name="AddSelfFriend">
@@ -4055,7 +4056,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<tag>friendship</tag>
 		<form name="form">
 			<button name="Accept" text="受け入れる"/>
-			<button name="Decline" text="断る"/>
+			<button name="Decline" text="辞退する"/>
 		</form>
 	</notification>
 	<notification name="FriendshipAccepted">
@@ -4335,21 +4336,24 @@ Your L$ balance is shown in the upper-right.
 		<tag>fail</tag>
 		<tag>voice</tag>
 	</notification>
-	<notification name="VoiceChannelDisconnected">[VOICE_CHANNEL_NAME]への接続が切れました。
+	<notification name="VoiceChannelDisconnected">
+		[VOICE_CHANNEL_NAME]への接続が切れました。
 「近くのボイスチャット」に再接続されます。
 		<tag>voice</tag>
 		<unique>
 			<context>VOICE_CHANNEL_NAME</context>
 		</unique>
 	</notification>
-	<notification name="VoiceChannelDisconnectedP2P">[VOICE_CHANNEL_NAME]がコールを終了しました。
+	<notification name="VoiceChannelDisconnectedP2P">
+		[VOICE_CHANNEL_NAME]がコールを終了しました。
 「近くのボイスチャット」に再接続されます。
 		<tag>voice</tag>
 		<unique>
 			<context>VOICE_CHANNEL_NAME</context>
 		</unique>
 	</notification>
-	<notification name="P2PCallDeclined">[VOICE_CHANNEL_NAME]があなたのコールを拒否しました。
+	<notification name="P2PCallDeclined">
+		[VOICE_CHANNEL_NAME]があなたのコールを拒否しました。
 「近くのボイスチャット」に再接続されます。
 		<tag>voice</tag>
 		<tag>fail</tag>
@@ -4357,7 +4361,8 @@ Your L$ balance is shown in the upper-right.
 			<context>VOICE_CHANNEL_NAME</context>
 		</unique>
 	</notification>
-	<notification name="P2PCallNoAnswer">[VOICE_CHANNEL_NAME]はあなたのコールを受けることができません。
+	<notification name="P2PCallNoAnswer">
+		[VOICE_CHANNEL_NAME]はあなたのコールを受けることができません。
 「近くのボイスチャット」に再接続されます。
 		<tag>fail</tag>
 		<tag>voice</tag>
@@ -4365,7 +4370,8 @@ Your L$ balance is shown in the upper-right.
 			<context>VOICE_CHANNEL_NAME</context>
 		</unique>
 	</notification>
-	<notification name="VoiceChannelJoinFailed">[VOICE_CHANNEL_NAME]への接続に失敗しました。あとで再度お試しください。
+	<notification name="VoiceChannelJoinFailed">
+		[VOICE_CHANNEL_NAME]への接続に失敗しました。あとで再度お試しください。
 「近くのボイスチャット」に再接続されます。
 		<tag>fail</tag>
 		<tag>voice</tag>
@@ -4527,7 +4533,7 @@ Your L$ balance is shown in the upper-right.
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		このアップロードは L$ [PRICE]の費用がかかります。このままアップロードを続けてもよろしいですか？
+		このアップロードには、L$ [PRICE]の費用がかかります。このままアップロードを続けてもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="アップロード"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -4789,7 +4795,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 		歩行や走行は、「移動」パネルを開き、矢印コントロールによって操作します。この操作はキーボードの矢印キーで実行することも可能です。
 		<unique/>
 	</notification>
-	<notification label="" name="HintMoveClick">
+	<notification name="HintMoveClick">
 		１，クリックで移動
 地表をクリックすると、その場所まで歩きます。
 
@@ -4891,84 +4897,84 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 			<button name="cancel" text="キャンセル"/>
 		</form>
 	</notification>
-	<notification label="" name="NoClassifieds">
+	<notification name="NoClassifieds">
 		クラシファイド広告の作成と編集は、高度な操作モードでのみ利用できます。終了してモードを変更しますか？モードはログイン画面で選択できます。
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoGroupInfo">
+	<notification name="NoGroupInfo">
 		グループの作成と編集は高度な操作モードでのみ利用できます。終了してモードを変更しますか？モードはログイン画面で選択できます。
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoPlaceInfo">
+	<notification name="NoPlaceInfo">
 		場所のプロフィールの表示は高度な操作モードでのみ利用できます。終了してモードを変更しますか？モードはログイン画面で選択できます。
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoPicks">
+	<notification name="NoPicks">
 		ピックの作成と編集は高度な操作モードでのみ利用できます。終了してモードを変更しますか？モードはログイン画面で選択できます。
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoWorldMap">
+	<notification name="NoWorldMap">
 		ワールドマップの表示は高度な操作モードでのみ利用できます。終了してモードを変更しますか？モードはログイン画面で選択できます。
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoVoiceCall">
+	<notification name="NoVoiceCall">
 		ボイスコールは高度な操作モードでのみ利用できます。ログアウトしてモードを変更しますか？
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoAvatarShare">
+	<notification name="NoAvatarShare">
 		共有は高度な操作モードでのみ利用できます。ログアウトしてモードを変更しますか？
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoAvatarPay">他
+	<notification name="NoAvatarPay">他
 		の住人への支払いは高度な操作モードでのみ利用できます。ログアウトしてモードを変更しますか？
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoInventory">
+	<notification name="NoInventory">
 		インベントリの表示は高度な操作モードでのみ利用できます。ログアウトしてモードを変更しますか？
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoAppearance">
+	<notification name="NoAppearance">
 		容姿エディタは高度な操作モードでのみ利用できます。ログアウトしてモードを変更しますか？
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="NoSearch">
+	<notification name="NoSearch">
 		検索は高度な操作モードでのみ利用できます。ログアウトしてモードを変更しますか？
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
 		<usetemplate name="okcancelbuttons" notext="終了しない" yestext="終了"/>
 	</notification>
-	<notification label="" name="ConfirmHideUI">
+	<notification name="ConfirmHideUI">
 		この操作により、全てのメニュー項目とボタンが非表示になります。再び表示するには、[SHORTCUT]をもう一度クリックしてください。
 		<unique/>
 		<tag>confirm</tag>
@@ -5093,9 +5099,9 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 		新しいＡＯセットの名前を指定します。
 （名前には、「:」または「|」を除く任意のアスキー文字を含めることができます。）
 		<form name="form">
-			<input name="message" type="text" default="true">新しいＡＯセット</input>
-			<button default="true" index="0" name="OK" text="ＯＫ"/>
-			<button index="1" name="Cancel" text="キャンセル"/>
+			<input name="message">新しいＡＯセット</input>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
 	<notification name="NewAOCantContainNonASCII">
@@ -5162,7 +5168,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 	</notification>
 	<!-- ## Zi: Animation Overrider -->
 	<notification name="SendSysinfoToIM">
-これにより、現在のＩＭセッションに次の情報が送信されます：
+		これにより、現在のＩＭセッションに次の情報が送信されます：
 
 [SYSINFO]
 		<usetemplate name="okcancelbuttons" yestext="送信" notext="キャンセル" />
@@ -5177,8 +5183,8 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="FireStormReqInfo">
-[NAME]は、[APP_NAME]の設定に関する情報を送信するようリクエストしています。
-（これは、「ヘルプ」→「[APP_NAME]について」で確認できる情報と同じです）
+		[NAME]は、[APP_NAME]の設定に関する情報を送信するようリクエストしています。
+（これは、「ヘルプ」＞「[APP_NAME]について」で確認できる情報と同じです）
 [REASON]
 この情報を送信してもよろしいですか？
 		<form name="form">
@@ -5210,7 +5216,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 	</notification>
 	<!-- Firestorm Phantom -->
 	<!-- Firestorm Reset Settings -->
-	<notification label="Reset all settings" name="FirestormClearSettingsPrompt">
+	<notification label="すべての設定をリセット" name="FirestormClearSettingsPrompt">
 		問題が発生している場合は、すべての設定をリセットすると役立つ場合があります。ただし、デフォルト構成に対して行ったカスタマイズをやり直す必要があります。
 
 すべての設定をリセットしてもよろしいですか？
@@ -5270,7 +5276,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 		</form>
 	</notification>
 	<notification name="SanityCheck">
-[APP_NAME]は設定に問題がある可能性を検出しました：
+		[APP_NAME]は設定に問題がある可能性を検出しました：
 
 [SANITY_MESSAGE]
 
@@ -5287,7 +5293,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 	<!-- <FS:Sei> LSL Default label missing FIRE-17710 -->
 	<notification name="DefaultLabelMissing">
 		<usetemplate ignoretext="ＬＳＬスクリプトにデフォルトラベルのないswitch文がある" name="notifyignore"/>
-デフォルトケースのない switch()ステートメントの動作は以前は間違っていましたが、修正されました。
+		デフォルトケースのない switch()ステートメントの動作は以前は間違っていましたが、修正されました。
 詳細については、FIRE-17710を参照してください。
 	</notification>
 	<!-- </FS:Sei> -->
@@ -5308,14 +5314,13 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 	</notification>
 	<!-- <FS:Zi> Viewer version popup -->
 	<notification name="FirstJoinSupportGroup2">
-Phoenix/Firestormビューアサポートグループへようこそ!
+		Phoenix/Firestormビューアサポートグループへようこそ!
 
 サポートを容易にするために、ビューアのバージョンをグループに通知することをお勧めします。この情報には、現在のビューアのバージョン、ビューアのスキン、オペレーティング システム、ＲＬＶａステータスが含まれます。グループに送信するチャットの前にビューアのバージョンを表示するように選択できます。サポートメンバーが、使用しているビューアのバージョンを知っていれば、より有意義なアドバイスをすぐに提供できます。
 
 グループチャットフローターのチェックボックスを使用して、この機能をいつでも有効または無効にできます。
 
 ビューアバージョンの自動表示を有効にしますか?
-
 		<form name="form">
 			<button name="OK_okcancelignore" text="はい"/>
 			<button name="Cancel_okcancelignore" text="いいえ"/>
@@ -6252,7 +6257,7 @@ Phoenix/Firestormビューアサポートグループへようこそ!
 	</notification>
 	<notification name="InventoryValidationFailed" label="インベントリー検証エラー">
 		<usetemplate ignoretext="インベントリ検証エラーが検出された場合の警告" name="okignore" yestext="ＯＫ"/>
-インベントリに破損が見つかりました。
+		インベントリに破損が見つかりました。
 次の問題のリストを添えて[HELP]にお問い合わせください。
 http://opensimulator.org/wiki/inventory を使用して問題を修正できます。
 
@@ -6579,7 +6584,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
-	<notification name="PickLimitReached" label="">
+	<notification name="PickLimitReached">
 		<unique/>
 		<tag>fail</tag>
 		<tag>confirm</tag>
@@ -6613,7 +6618,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">
-このリージョンでは、サードパーティの通貨ポータルを指定することを選択しました。
+		このリージョンでは、サードパーティの通貨ポータルを指定することを選択しました。
 Firestorm Viewer を通じて行われる通貨の購入は、お客様（ユーザー）と通貨の提供者または販売者との間の取引であることにご注意ください。
 Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチームは、そのような取引から直接的または間接的に生じる費用または損害について一切責任を負いません。
 これらの利用規約に同意しない場合は、このビューアを使用して金融取引を行うことはできません。
@@ -6649,7 +6654,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		</form>
 	</notification>
 	<notification name="WLImportFail">
-		過去のウィンドライトの設定[NAME]を[FILE]からインポートできませんでした。
+		過去のWindLight設定[NAME]を[FILE]からインポートできませんでした。
 
 [REASONS]
 		<tag>fail</tag>
@@ -6729,8 +6734,8 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		<form name="form">
 			<input name="token" type="text"/>
 			<ignore name="ignore" text="このコンピューターを３０日間記録する"/>
-			<button default="true" index="0" name="continue" text="続ける"/>
-			<button index="1" name="cancel" text="キャンセル"/>
+			<button name="continue" text="続ける"/>
+			<button name="cancel" text="キャンセル"/>
 		</form>
 	</notification>
 	<notification label="サブフォルダの作成" name="CreateSubfolder">
@@ -6877,7 +6882,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="WhitelistReminder">
-[APP_NAME]のパフォーマンスを向上させるには、ホワイトリストに登録してください。
+		[APP_NAME]のパフォーマンスを向上させるには、ホワイトリストに登録してください。
 
 一部のウイルス対策プログラムでは、[APP_NAME]の一部を誤ってブロックし、パフォーマンスが低下したり、一部の機能が誤動作したりする場合があります。これらの問題を防ぐには、[APP_NAME]をウイルス対策プログラムのホワイトリスト (または除外リスト) に追加することを強くお勧めします。これにより、ビューアがスムーズに動作します。
 

@@ -484,7 +484,7 @@
 				（不動産所有者が、このオプションに制約を与えている場合があります）
 			</text>
 			<panel name="Allowed_layout_panel">
-				<text label="Always Allow" name="AllowedText">
+				<text label="常に許可" name="AllowedText">
 					常に許可（全[MAX]人中[COUNT]人）
 				</text>
 				<name_list name="AccessList" tool_tip="（[LISTED]人登録されています。最大[MAX]人です。）"/>
@@ -492,7 +492,7 @@
 				<button label="削除" label_selected="Remove" name="remove_allowed" />
 			</panel>
 			<panel name="Banned_layout_panel">
-				<text label="Ban" name="BanCheck">
+				<text label="バン" name="BanCheck">
 					バンされた人（全[MAX]人中[COUNT]人）
 				</text>
 				<name_list name="BannedList" tool_tip="（[LISTED]人登録されています。最大[MAX]人です。）">
