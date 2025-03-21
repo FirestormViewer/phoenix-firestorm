@@ -159,7 +159,6 @@
 			<!-- for log tab -->
 			<!-- LOD PANEL -->
 			<panel label="ＬｏＤ" name="lod_panel" title="詳細度">
-				<view_border name="lod_tab_border"/>
 				<text name="source" value="ソース"/>
 				<text name="triangles" value="三角形数"/>
 				<text name="vertices" value="頂点数"/>
@@ -352,7 +351,6 @@
 				<text name="joints_descr">
 					ジョイント数：
 				</text>
-				<scroll_list name="joints_list"/>
 				<text name="conflicts_description" width="230">
 					[JOINTS_COUNT]個のジョイントに[CONFLICTS]箇所の競合があります。
 				</text>
@@ -418,8 +416,7 @@
 					ユーザー定義の物理プリセット：
 				</text>
 				<line_editor name="ud_physics" tool_tip="物理効果で使用するシンプルなColladaメッシュ定義への完全なシステムパスを指定します。"/>
-				<button label="参照" label_selected="参照" name="set_user_def_phys">
-				</button>
+				<button label="参照" label_selected="参照" name="set_user_def_phys"/>
 				<text name="mesh_preview_colors_label">
 					モデルアップロードプレビューの色：
 				</text>
@@ -467,7 +464,6 @@
 				<text name="price_breakdown_title">
 					費用の内訳
 				</text>
-				<view_border name="price_breakdown_border"/>
 				<text name="price_breakdown_labels" width="100">
 					ダウンロード：
 物理効果数：
@@ -500,7 +496,6 @@
 				<text name="physics_breakdown_title">
 					物理効果の費用
 				</text>
-				<view_border name="price_breakdown_border"/>
 				<text name="physics_breakdown_labels">
 					基準の殻：
 メッシュ：

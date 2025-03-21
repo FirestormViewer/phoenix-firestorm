@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map" title="ミニマップ">
 	<!-- RLVa shows the anonymized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) -->
-	<floater.string name="ParcelNameMsg">
-		[PARCEL_NAME]
-	</floater.string>
 	<floater.string name="ParcelSalePriceMsg">
 		価格：L$ [PRICE]（L$[PRICE_PER_SQM]／㎡）
 	</floater.string>
@@ -25,7 +22,6 @@
 	<floater.string name="mini_map_caption">
 		ミニマップ
 	</floater.string>
-	<net_map name="Net Map"/>
 	<text label="北" name="floater_map_north">
 		北
 	</text>

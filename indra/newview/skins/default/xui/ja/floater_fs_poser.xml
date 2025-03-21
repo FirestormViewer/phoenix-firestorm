@@ -160,10 +160,6 @@
 	<string name="title_BELLY">腹</string>
 	<string name="title_LEFT_PEC">左胸筋</string>
 	<string name="title_RIGHT_PEC">右胸筋</string>
-	<string name="title_mFaceEar1Left">左付け根</string>
-	<string name="title_mFaceEar1Right">右付け根</string>
-	<string name="title_mFaceEar2Left">左先端</string>
-	<string name="title_mFaceEar2Right">右先端</string>
 
 	<string name="LoadPoseLabel">ポーズを読み込む</string>
 	<string name="LoadDiffLabel">差分を読み込む</string>

@@ -116,18 +116,18 @@
 		反射の詳細：
 	</text>
 	<combo_box name="ReflectionDetail">
-		<combo_box.item label="静的のみ" name="0" value="0"/>
-		<combo_box.item label="静的＋動的" name="1" value="1"/>
-		<combo_box.item label="リアルタイム" name="2" value="2"/>
+		<combo_box.item label="静的のみ" name="0"/>
+		<combo_box.item label="静的＋動的" name="1"/>
+		<combo_box.item label="リアルタイム" name="2"/>
 	</combo_box>
 	<text name="ReflectionProbeText">
 		反射範囲：
 	</text>
 	<combo_box name="ReflectionLevel">
-		<combo_box.item label="なし" name="0" value="0"/>
-		<combo_box.item label="マニュアルのみ" name="1" value="1"/>
-		<combo_box.item label="マニュアル＋地形" name="2" value="2"/>
-		<combo_box.item label="全てのシーン" name="3" value="3"/>
+		<combo_box.item label="なし" name="0"/>
+		<combo_box.item label="マニュアルのみ" name="1"/>
+		<combo_box.item label="マニュアル＋地形" name="2"/>
+		<combo_box.item label="全てのシーン" name="3"/>
 	</combo_box>
 	<slider label="露光：" name="RenderExposure"/>
 	<!-- Mirror settings. -->
