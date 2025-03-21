@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="region_tracker" title="地域別アバター数">
-	<icon name="dummy_icon"/>
-	<text name="region_label_text" value="世界地図を開いて地域を追加" />
-	<button name="refresh" tool_tip="更新" />
-	<button name="remove" tool_tip="地域を削除" />
-	<button name="open_map" tool_tip="世界地図を開く" />
-	<scroll_list name="region_list" tool_tip="項目をダブルクリックすると世界地図が開きます。">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="region_tracker" title="リージョントラッカー">
+	<text name="region_label_text" value="情報を追跡したいリージョンを追加"/>
+	<button name="refresh" tool_tip="リフレッシュします。"/>
+	<button name="remove" tool_tip="リージョンを削除します。"/>
+	<button name="open_map" tool_tip="マップを開きます。"/>
+	<scroll_list name="region_list" tool_tip="エントリをダブルクリックすると、ワールドマップ上に表示します。">
 		<scroll_list.columns name="region_label" label="ラベル"/>
-		<scroll_list.columns name="region_maturity_icon" />
-		<scroll_list.columns name="region_name" label="地域"/>
-		<scroll_list.columns name="region_agent_count" label="人数" />
+		<scroll_list.columns name="region_name" label="リージョン"/>
+		<scroll_list.columns name="region_agent_count" label="人数"/>
 	</scroll_list>
- </floater>
+</floater>
