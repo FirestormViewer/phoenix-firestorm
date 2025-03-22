@@ -85,7 +85,7 @@ namespace {
     const F32 VOLUME_SCALE_WEBRTC = 0.01f;
     const F32 LEVEL_SCALE_WEBRTC  = 0.008f;
 
-    const F32 SPEAKING_AUDIO_LEVEL = 0.30;
+    const F32 SPEAKING_AUDIO_LEVEL = 0.30f; // <FS:minerjr> add missing f for float
 
     const uint32_t PEER_GAIN_CONVERSION_FACTOR = 220;
 
