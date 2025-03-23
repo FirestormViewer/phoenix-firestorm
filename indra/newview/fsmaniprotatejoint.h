@@ -132,8 +132,8 @@ private:
     void renderActiveRing( F32 radius, F32 width, const LLColor4& front_color, const LLColor4& back_color);
     void renderManipulatorRings(const LLVector3& center, const LLQuaternion& finalAlignment);
 
-    void renderCenterCircle(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7,0.7f,0.2), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3));
-    void renderCenterSphere(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7,0.7f,0.2), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3));
+    void renderCenterCircle(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7f,0.7f,0.2f), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3f)); // <FS:minerjr> add missing f for float
+    void renderCenterSphere(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7f,0.7f,0.2f), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3f)); // <FS:minerjr> add missing f for float
     void renderRingPass(const RingRenderParams& params, float radius, float width, int pass);
     void renderAxes(const LLVector3& center, F32 size, const LLQuaternion& rotation);
 
