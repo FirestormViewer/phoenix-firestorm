@@ -37,6 +37,8 @@
 #include "llviewerregion.h"
 // </FS:Ansariel>
 
+constexpr S32 MAX_OPENSIM_PICKS = S32_MAX; // <FS/> [FIRE-35276] Fix for client freeze in OpenSim getting picks limit
+
 LLAgentBenefits::LLAgentBenefits():
     m_initalized(false),
     m_animated_object_limit(-1),
@@ -213,7 +215,7 @@ S32 LLAgentBenefits::getPicksLimit() const
 {
     // <FS:Ansariel> OpenSim legacy economy
     //return m_picks_limit;
-    return LLGridManager::instance().isInSecondLife() ? m_picks_limit : LLAgentPicksInfo::instance().getMaxNumberOfPicks();
+    return LLGridManager::instance().isInSecondLife() ? m_picks_limit : MAX_OPENSIM_PICKS;
     // </FS:Ansariel>
 }
 
