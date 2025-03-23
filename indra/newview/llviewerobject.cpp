@@ -5001,6 +5001,18 @@ void LLViewerObject::setPositionParent(const LLVector3 &pos_parent, bool damped)
     else
     {
         setPositionRegion(pos_parent, damped);
+
+        // #1964 mark reflection probe in the linkset to update position after moving via script
+        for (LLViewerObject* child : mChildList)
+        {
+            if (child && child->isReflectionProbe())
+            {
+                if (LLDrawable* drawablep = child->mDrawable)
+                {
+                    gPipeline.markMoved(drawablep);
+                }
+            }
+        }
     }
 }
 

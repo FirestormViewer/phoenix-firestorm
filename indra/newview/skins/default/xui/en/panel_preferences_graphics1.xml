@@ -1599,22 +1599,6 @@ If you do not understand the distinction then leave this control alone."
          width="405">
         </slider>
         <!-- End of Sharpening Settings-->
-        <slider
-         control_name="RenderReflectionProbeCount"
-         decimal_digits="0"
-         follows="left|top"
-         height="16"
-         increment="1"
-         initial_value="256"
-         label="Max. Reflection Probes:"
-         label_width="300"
-         layout="topleft"
-         left="10"
-         min_val="1"
-         max_val="256"
-         name="MaxProbes"
-         top_pad="0"
-         width="405" />
         <!-- Tone Mapping Settings -->
         <text
          type="string"

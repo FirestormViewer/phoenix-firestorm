@@ -1085,7 +1085,13 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
-<!-- Color Changed -->
+    <color
+     name="SearchableControlHighlightFontColor"
+     value="0.036 0.349 1 1" />
+    <color
+     name="SearchableControlHighlightBgColor"
+     value="0.036 0.349 0.651 1" />
+    <!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
      reference="SL-MidBlue" />
@@ -1374,9 +1380,6 @@
   <color
       name="MapPickRadiusColor"
       reference="EmphasisColor_35" />
-  <color
-      name="SearchableControlHighlightColor"
-      value="0.036 0.349 0.651 1" />
   <color
       name="Slidermark"
       reference="EmphasisColor" />

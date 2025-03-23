@@ -3185,6 +3185,8 @@ void LLPanelFace::onCommitHideWater()
     {
         // reset texture to default plywood
         LLSelectMgr::getInstance()->selectionSetImage(DEFAULT_OBJECT_TEXTURE);
+        // reset texture repeats, that might be altered by invisiprim script from wiki
+        LLSelectMgr::getInstance()->selectionTexScaleAutofit(2.f);
     }
 }
 

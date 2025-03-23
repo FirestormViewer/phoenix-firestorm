@@ -524,9 +524,11 @@ void LLViewerTexture::updateClass()
     F32 used = (F32)ll_round(texture_bytes_alloc + vertex_bytes_alloc);
 
     // <FS:Ansariel> Expose max texture VRAM setting
-    //F32 budget = max_vram_budget == 0 ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
-    F32 budget = !max_vram_budget_enabled ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
-    budget /= tex_vram_divisor;
+    // But when manual control is not enabled, use the VRAM divisor.
+    // While we're at it, assume we have 1024 to play with at minimum when the divisor is in use.  Works more elegantly with the logic below this.
+    // -Geenz 2025-03-21
+    // F32 budget = max_vram_budget == 0 ? llmax(1024, (F32)gGLManager.mVRAM / tex_vram_divisor) : (F32)max_vram_budget;
+    F32 budget = !max_vram_budget_enabled ? llmax(1024, (F32)gGLManager.mVRAM / (tex_vram_divisor() > 0.f ? tex_vram_divisor() : 1.f)) : (F32)max_vram_budget;
 
     // Try to leave at least half a GB for everyone else and for bias,
     // but keep at least 768MB for ourselves
@@ -540,7 +542,6 @@ void LLViewerTexture::updateClass()
 
     bool is_sys_low = isSystemMemoryLow();
     bool is_low = is_sys_low || over_pct > 0.f;
-    F32 discard_bias = sDesiredDiscardBias;
 
     static bool was_low = false;
     static bool was_sys_low = false;
@@ -595,6 +596,7 @@ void LLViewerTexture::updateClass()
 
     // set to max discard bias if the window has been backgrounded for a while
     static F32 last_desired_discard_bias = 1.f;
+    static F32 last_texture_update_count_bias = 1.f;
     static bool was_backgrounded = false;
     static LLFrameTimer backgrounded_timer;
     static LLCachedControl<F32> minimized_discard_time(gSavedSettings, "TextureDiscardMinimizedTime", 1.f);
@@ -630,11 +632,20 @@ void LLViewerTexture::updateClass()
     }
 
     sDesiredDiscardBias = llclamp(sDesiredDiscardBias, 1.f, 4.f);
-    if (discard_bias != sDesiredDiscardBias)
+    if (last_texture_update_count_bias < sDesiredDiscardBias)
     {
-        // bias changed, reset texture update counter to
+        // bias increased, reset texture update counter to
         // let updates happen at an increased rate.
+        last_texture_update_count_bias = sDesiredDiscardBias;
         sBiasTexturesUpdated = 0;
+    }
+    else if (last_texture_update_count_bias > sDesiredDiscardBias + 0.1f)
+    {
+        // bias decreased, 0.1f is there to filter out small fluctuations
+        // and not reset sBiasTexturesUpdated too often.
+        // Bias jumps to 1.5 at low memory, so getting stuck at 1.1 is not
+        // a problem.
+        last_texture_update_count_bias = sDesiredDiscardBias;
     }
 
     LLViewerTexture::sFreezeImageUpdates = false;
