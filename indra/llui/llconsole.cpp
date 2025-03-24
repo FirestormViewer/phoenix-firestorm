@@ -159,8 +159,8 @@ void LLConsole::draw()
     // <FS>
     //static const F32 padding_horizontal = 10;
     //static const F32 padding_vertical = 3;
-    static const F32 padding_horizontal = 15;
-    static const F32 padding_vertical = 8;
+    constexpr F32 padding_horizontal = 15;
+    constexpr F32 padding_vertical = 8;
     // </FS>
     LLGLSUIDefault gls_ui;
 
@@ -177,7 +177,7 @@ void LLConsole::draw()
 
     // <FS:minerjr> [FIRE-35039] Add flag to show/hide the on-screen console   
     // Get the Show On-screen Console flag from the Comm menu
-    static LLCachedControl<bool> showOnscreenConsole(*LLUI::getInstance()->mSettingGroups["config"], "FSShowOnscreenConsole");    
+    static LLUICachedControl<bool> showOnscreenConsole("FSShowOnscreenConsole");
     // If the Show On-screen Console flag is disabled and the current console is the global console
     // (Not a debug console), then don't try to draw
     if (!showOnscreenConsole && this == gConsole)
