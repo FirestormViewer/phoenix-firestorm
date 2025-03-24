@@ -66,12 +66,11 @@
 		</menu>
 		<menu_item_call label="スナップショット" name="Take Snapshot"/>
 		<menu_item_call label="３６０度スナップショット" name="Capture 360"/>
-		<menu_item_call label="マネートラッカー" name="money_tracker"/>
+		<menu_item_call label="取引ログ" name="money_tracker"/>
 		<menu_item_call label="ポーズスタンド…" name="pose_stand"/>
 		<!-- FS:AR FIRE-30873 -->
 		<menu_item_check label="ポーザー" name="Poser"/>
 		<!-- /FS:AR FIRE-30873 -->
-
 		<menu_item_call label="初期設定" name="Preferences"/>
 		<menu_item_call label="ツールバーボタン" name="Toolbar Buttons"/>
 		<menu_item_check label="ＨＵＤを表示" name="Show HUD Attachments"/>
@@ -683,7 +682,7 @@
 		<menu_item_call label="管理者ステータス解除" name="Leave Admin Options"/>
 		<menu_item_check label="管理者メニューを表示する" name="View Admin Options"/>
 		<menu label="ダンプ" name="Dump">
-			<menu_item_call label="LLViewerTexturelist" name="LLViewerTexturelist"/>
+			<menu_item_call label="LLViewerTexturelistを実行" name="LLViewerTexturelist"/>
 		</menu>
 	</menu>
 	<menu label="管理" name="Admin">

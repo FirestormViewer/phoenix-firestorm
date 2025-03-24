@@ -9,6 +9,7 @@
 	<menu_item_check label="所持金を表示" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="メディア操作を表示" name="FSEnableVolumeControls"/>
 	<menu_item_check label="ＦＰＳを表示" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="ＦＰＳのカラーインジケーターを表示" name="FSStatusBarShowFPSColors"/>
 	<menu_item_check label="トラフィックインジケーターを表示" name="ShowNetStats"/>
 	<menu_item_check label="座標を表示" name="Coordinates"/>
 	<menu_item_check label="区画の権限を表示" name="Parcel Properties"/>
