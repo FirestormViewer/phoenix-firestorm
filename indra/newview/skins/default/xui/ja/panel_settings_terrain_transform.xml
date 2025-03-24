@@ -13,14 +13,14 @@
 		４
 	</text>
 	<text name="terrain0ScaleU_label">
-スケールｕ
+		スケールｕ
 	</text>
 	<spinner label="スケールｕ" name="terrain0ScaleU"/>
 	<spinner label="スケールｕ" name="terrain1ScaleU"/>
 	<spinner label="スケールｕ" name="terrain2ScaleU"/>
 	<spinner label="スケールｕ" name="terrain3ScaleU"/>
 	<text name="terrain0ScaleV_label">
-スケールｖ
+		スケールｖ
 	</text>
 	<spinner label="スケールｖ" name="terrain0ScaleV"/>
 	<spinner label="スケールｕ" name="terrain1ScaleV"/>

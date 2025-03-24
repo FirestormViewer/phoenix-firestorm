@@ -36,7 +36,7 @@
 	<button name="permission_edit_mine_btn" tool_tip="このフレンドはあなたのオブジェクトを編集、削除、取得できます。"/>
 	<button tool_tip="このフレンドは、マップ上であなたの位置を特定できます。" name="permission_map_btn"/>
 	<button name="permission_online_btn" tool_tip="このフレンドは、あなたがオンラインになっているかどうかを確認できます。"/>
-	<slider name="volume_slider" tool_tip="ボイスボリュームです。" value="0.5"/>
+	<slider name="volume_slider" tool_tip="ボイスボリュームです。"/>
 	<button name="info_btn" tool_tip="詳細を表示します。"/>
 	<button name="profile_btn" tool_tip="プロフィールを閲覧します。"/>
 	<output_monitor name="speaking_indicator" tool_tip="ボイスのボリュームを調整します。"/>

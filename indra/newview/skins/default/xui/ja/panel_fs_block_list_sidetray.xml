@@ -8,7 +8,7 @@
 		<button name="unblock_btn" tool_tip="住人やオブジェクトをブロックリストから除外します。"/>
 	</panel>
 	<text name="block_limit">
-		ブロック件数：[COUNT]件（最大[LIMIT]件）
+		ブロック件数：全[LIMIT]件中[COUNT]件
 	</text>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="名前"/>

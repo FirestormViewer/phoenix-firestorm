@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="土地販売" name="panel_ls_land">
 	<panel name="panel_ls_input">
-		<check_box label="" name="pg_all"/>
-		<check_box label="" name="mature_all"/>
-		<check_box label="" name="adult_all"/>
 		<text name="search_text">
 			検索語句：
 		</text>
@@ -30,7 +27,6 @@
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_land">
-			<columns label="" name="icon"/>
 			<columns label="名前" name="land_name"/>
 			<columns label="金額" name="price"/>
 			<columns label="面積" name="area"/>

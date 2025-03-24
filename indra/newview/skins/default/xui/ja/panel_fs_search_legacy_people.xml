@@ -8,7 +8,6 @@
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_people">
-			<columns label="" name="icon"/>
 			<columns label="名前" name="username"/>
 		</scroll_list>
 		<button label="前へ" name="people_back"/>

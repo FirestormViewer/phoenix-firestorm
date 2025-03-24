@@ -29,9 +29,6 @@
 					<text name="ContentRating">
 						レーティング：
 					</text>
-					<text name="ContentRatingText">
-						Adult
-					</text>
 					<text name="Owner">
 						所有者：
 					</text>
@@ -39,20 +36,6 @@
 						カイル
 					</text>
 					<button label="編集" name="edit_btn"/>
-					<!--
-					<expandable_text name="pick_name" value="これは体験です。"/>
-					<text follows="left|top" height="16" layout="topleft" left="10" top_pad="10" value="成熟レベル："/>
-					<icon name="maturity_icon"/>
-					<text name="maturity_value" value="不明"/>
-					<panel name="location_panel">
-						<text follows="left|top|right" height="16" layout="topleft" left="00" top="0" value="場所："/>
-						<text follows="left|top|right" height="16" layout="topleft" left="0" top_pad="10" value="場所："/>
-					</panel>
-					<panel name="location_panel">
-						<text follows="left|top|right" height="16" layout="topleft" left="00" top="0" value="場所："/>
-						<text follows="left|top|right" height="16" layout="topleft" left="0" top_pad="10" value="場所："/>
-					</panel>
-					-->
 				</layout_panel>
 			</layout_stack>
 		</panel>

@@ -65,11 +65,11 @@
 					<!-- </FS:Beq> -->
 				</panel>
 				<panel name="buttons">
-					<button label="" name="presets_btn" tool_tip="プリセットビューにします。"/>
-					<button label="" name="pan_btn" tool_tip="軌道、ズーム、パン"/>
-					<button label="" name="avatarview_btn" tool_tip="カメラモードを切り替えます。"/>
-					<button label="" name="store_camera_view_btn" tool_tip="現在のカメラビューを保存します。"/>
-					<button label="" name="load_camera_view_btn" tool_tip="保存したカメラビューを読み込みます。"/>
+					<button name="presets_btn" tool_tip="プリセットビューにします。"/>
+					<button name="pan_btn" tool_tip="軌道、ズーム、パン"/>
+					<button name="avatarview_btn" tool_tip="カメラモードを切り替えます。"/>
+					<button name="store_camera_view_btn" tool_tip="現在のカメラビューを保存します。"/>
+					<button name="load_camera_view_btn" tool_tip="保存したカメラビューを読み込みます。"/>
 				</panel>
 			</panel>
 			<panel name="P_Cam_Mov_Settings">

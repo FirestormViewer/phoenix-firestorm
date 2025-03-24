@@ -16,7 +16,7 @@
 		色
 	</text>
 	<!-- label is blank because control places it below the box -->
-	<color_swatch label="" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+	<color_swatch name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
 	<text name="color trans">
 		透過度
 	</text>
@@ -121,7 +121,7 @@
 		光沢色
 	</text>
 	<!-- label is blank because control places it below the box -->
-	<color_swatch label="" name="shinycolorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+	<color_swatch name="shinycolorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
 	<text name="media_info">
 		ここに選択したメディアのＵＲＬを入力します。
 	</text>

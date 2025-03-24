@@ -12,7 +12,7 @@
 			<text name="username_text">
 				ユーザ名：
 			</text>
-			<button tool_tip="このユーザ名を削除する。" label="" name="remove_user_btn"/>
+			<button tool_tip="このユーザ名を削除する。" name="remove_user_btn"/>
 			<combo_box name="username_combo" tool_tip="登録時に自分で選んだユーザ名（例：bobsmith12、Steller Sunshineなど）"/>
 			<text name="password_text">
 				パスワード：
@@ -54,8 +54,6 @@
 				モード選択
 			</text>
 			<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
-				<combo_box.item label="Firestorm" name="Firestorm"/>
-				<combo_box.item label="Phoenix" name="Phoenix"/>
 				<combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
 				<combo_box.item label="ハイブリッド" name="Hybrid"/>
 				<combo_box.item label="テキスト" name="Text"/>

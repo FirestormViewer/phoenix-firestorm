@@ -4,14 +4,10 @@
 		<text name="search_text">
 			検索語句：
 		</text>
-		<check_box label="" name="pg_all"/>
-		<check_box label="" name="mature_all"/>
-		<check_box label="" name="adult_all"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_groups">
-			<columns label="" name="icon"/>
 			<columns label="グループ名" name="group_name"/>
 			<columns label="人数" name="members"/>
 			<columns label="スコア" name="score"/>

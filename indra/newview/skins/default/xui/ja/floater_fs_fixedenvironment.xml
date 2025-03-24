@@ -18,7 +18,6 @@
 					<button label="読み込む" name="btn_load" tool_tip="インベントリから設定を読み込みます。" />
 					<button label="インポート" name="btn_import" tool_tip="ディスクからレガシー設定をインポートします。" />
 					<button label="保存" name="btn_commit" />
-					<button name="btn_flyout" label="" />
 					<button label="キャンセル" name="btn_cancel" tool_tip="最後に保存したバージョンに戻します。"/>
 				</layout_panel>
 			</layout_stack>

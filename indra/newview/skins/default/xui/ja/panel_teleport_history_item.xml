@@ -7,9 +7,6 @@
 		<layout_panel name="lp_region">
 			<text name="region" value="…"/>
 		</layout_panel>
-		<layout_panel name="lp_position">
-			<text name="position" value="0, 0, 0"/>
-		</layout_panel>
 		<layout_panel name="lp_date">
 			<text name="timestamp" value="2000年01月01日　午後12：00"/>
 		</layout_panel>

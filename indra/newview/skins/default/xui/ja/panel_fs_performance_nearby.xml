@@ -22,11 +22,11 @@
 		制限なし
 	</text>
 	<name_list name="nearby_list">
-		<name_list.columns label="" tool_tip="現在の描画にかかった時間（自動調整を含む）で最も時間がかかっている％として示す棒グラフです。" name="art_visual"/>
+		<name_list.columns tool_tip="現在の描画にかかった時間（自動調整を含む）で最も時間がかかっている％として示す棒グラフです。" name="art_visual"/>
 		<name_list.columns label="時間（㎲）" tool_tip="アバターの描画にかかった時間。自動調整する前にこのアバターを描画するのにかかる実際の時間です。（マイクロ秒単位）" name="art_value"/>
 		<name_list.columns label="調整済み時間（㎲）" tool_tip="アバターの描画にかかった時間。自動調整する前にこのアバターを描画するのにかかる実際の時間です。（マイクロ秒単位）" name="adj_art_value"/>
 		<name_list.columns label="ＡＲＣ" tool_tip="標準ルールに基づく複雑さ（ＡＲＣ）です。" name="complex_value"/>
-		<name_list.columns label="" tool_tip="チューニングを表示します。I=インポスター、S=影なし" name="state"/>
+		<name_list.columns tool_tip="チューニングを表示します。I=インポスター、S=影なし" name="state"/>
 		<name_list.columns label="名前" name="name"/>
 		<name_list.columns label="ブレイクダウン" tool_tip="描画時間に費やされる場所（ジオメトリ／シェード／その他）" name="breakdown"/>
 	</name_list>

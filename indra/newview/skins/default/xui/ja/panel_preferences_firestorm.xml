@@ -104,12 +104,10 @@
 			<text name="BeamPrefs">
 				選択ビームのパーティクル効果
 			</text>
-			<view_border name="BeamDivisor"/>
 			<button name="BeamColor_delete" label="削除" tool_tip="現在の設定を削除します。"/>
 			<combo_box name="BeamColor_combo" tool_tip="選択ビームの色設定を選択します。"/>
 			<button name="BeamColor_new" label="新規作成" tool_tip="色設定を新規作成します"/>
 			<button name="BeamColor_refresh" label="リスト更新" tool_tip="色設定のリストを更新します。"/>
-			<button name="PhoenixBeamPrev_rainbow" label=""/>
 			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
 			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
 			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャンネル9000に送信します。"/>
@@ -117,7 +115,6 @@
 			<button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。"/>
 			<button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形状をカスタマイズします。"/>
 			<button name="refresh_beams" label="リスト更新" tool_tip="ビームのリストを更新します。"/>
-			<button name="PhoenixBeamPrev_Phoenix" label=""/>
 			<slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。"/>
 			<text name="BridgeProtocols">
 				ＬＳＬクライアントブリッジによる外部プロトコルとの統合：
@@ -166,13 +163,12 @@
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="ここにインベントリをドロップします。">
 				ここにインベントリをドロップ
 			</fs_embedded_item_drop_target>
-			<text name="build_item_add_disp_rect_txt" tool_tip="">
+			<text name="build_item_add_disp_rect_txt">
 				現在の設定：[ITEM]
 			</text>
 			<text name="text_box_pivotpoint">
 				中心軸のポイント
 			</text>
-			<view_border name="PivotBorder"/>
 			<check_box label="ルートプリムの軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle"/>
 			<spinner label="Ｘ軸" name="X pos"/>
 			<spinner label="Ｙ軸" name="Y pos"/>
@@ -184,13 +180,9 @@
 			</text>
 			<combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォント名を指定します。">
 				<combo_item name="Monospace" label="等幅"/>
-				<combo_item name="Scripting" label="Scripting"/>
-				<combo_item name="Cascadia" label="Cascadia Code"/>
 			</combo_box>
 			<combo_box name="FSScriptingFontSize" tool_tip="ＬＳＬスクリプトエディタで使用するフォントの大きさを指定します。">
 				<combo_item name="Monospace" label="等幅"/>
-				<combo_item name="Scripting" label="Scripting"/>
-				<combo_item name="Cascadia" label="Cascadia Code"/>
 				<combo_item name="Small" label="小"/>
 				<combo_item name="Medium" label="中"/>
 				<combo_item name="Large" label="大"/>
@@ -203,7 +195,6 @@
 			<text name="lslpreprocinclude_textbox">
 				#includeで使用するファイルのパス：
 			</text>
-			<line_editor name="preprocinclude_location"/>
 			<button label="参照" label_selected="参照" name="SetPreprocInclude"/>
 			<text name="externaleditor_textbox">
 				外部エディタ：

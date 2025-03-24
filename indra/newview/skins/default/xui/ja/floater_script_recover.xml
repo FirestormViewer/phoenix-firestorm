@@ -6,7 +6,6 @@
 これらのスクリプトを復元することを選択した場合、スクリプトはインベントリの「遺失物」フォルダに配置されます。
 	</text>
 	<scroll_list name="script_list">
-		<scroll_list.columns label="" name="script_check"/>
 		<scroll_list.columns label="スクリプト名" name="script_name"/>
 	</scroll_list>
 	<button label="復元" name="recover_btn"/>

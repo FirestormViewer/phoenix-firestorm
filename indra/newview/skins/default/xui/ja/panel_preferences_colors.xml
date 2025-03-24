@@ -55,7 +55,7 @@
 			</text>
 			<slider label="チャット範囲外低減係数：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="話している人が通常のチャット範囲の外に出た場合、チャットの色を薄くするのに使用する係数です。"/>
 			<check_box name="FSColorIMsDistinctly" label="コンソール上でＩＭとグループチャットとを色で区別する："/>
-			<panel label="" name="im_color_panel">
+			<panel name="im_color_panel">
 				<text name="console_im_label">
 					ＩＭ／グループ
 				</text>
@@ -96,7 +96,7 @@
 			<slider label="名前タグのＺオフセット：" name="FSNameTagZOffsetCorrection" tool_tip="アバターの名前タグを表示する高さを調整します。デフォルトは０です。"/>
 			<check_box name="FSTagShowDistance" label="名前タグに距離を表示" tool_tip="アバターの名前タグにそのアバターまでの距離を表示します。"/>
 			<check_box name="FSTagShowDistanceColors" label="距離に応じて名前タグの色を変える："/>
-			<panel label="" name="distance_panel">
+			<panel name="distance_panel">
 				<text name="chat_distance_tag_label">
 					チャット範囲
 				</text>
@@ -233,7 +233,7 @@
 			<check_box name="FSGroupNotifyNoTransparency" label="グループ通知の背景は常に不透明にする"/>
 			<!-- ## Zi: Pie menu -->
 			<check_box name="override_pie_color_checkbox" label="パイメニュー背景色と透過度の設定："/>
-			<panel label="" name="tab-colorize">
+			<panel name="tab-colorize">
 				<color_swatch name="pie_bg_color_override" tool_tip="パイメニューの背景色を選択します。"/>
 				<color_swatch name="pie_selected_color_override" tool_tip="パイメニューで選択した時の色を選択します。"/>
 				<slider label="透過度：" name="pie_menu_opacity" tool_tip="パイメニューの透過度を設定します。"/>

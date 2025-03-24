@@ -12,7 +12,7 @@
 左クリックで開始位置を変更します。
 右クリックで終了位置を変更します。
 	</text>
-	<color_swatch label="" name="BeamColor_Preview" tool_tip="クリックでカラーピッカーを開きます。"/>
+	<color_swatch name="BeamColor_Preview" tool_tip="クリックでカラーピッカーを開きます。"/>
 	<text name="beamcolor_text2">
 		プレビュー
 	</text>

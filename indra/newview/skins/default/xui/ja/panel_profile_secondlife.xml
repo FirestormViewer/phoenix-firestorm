@@ -20,8 +20,8 @@
 	<string name="payment_update_link_url">https://accounts.secondlife.com/billing_information/?lang=ja-JP</string>
 	<string name="partner_edit_link_url">https://www.secondlife.com/my/partners.php?lang=ja-JP</string>
 	<string name="my_account_link_url" value="https://secondlife.com/my/account/?lang=ja-JP"/>
-	<string name="no_partner_text" value="None"/>
-	<string name="no_group_text" value="None"/>
+	<string name="no_partner_text" value="なし"/>
+	<string name="no_group_text" value="なし"/>
 	<string name="age_format_full">
 		[REG_DATE]
 （[AGE]）
@@ -33,7 +33,6 @@
 	<string name="texture_picker_label" value="プロフィール画像"/>
 	<text name="name_label" value="名前："/>
 	<panel name="name_holder">
-		<view_border name="info_border"/>
 		<text_editor name="complete_name" value="（読み込んでいます…）"/>
 		<menu_button name="copy_btn" tool_tip="コピーするときのオプションです。"/>
 	</panel>

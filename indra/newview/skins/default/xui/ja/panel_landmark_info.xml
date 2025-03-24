@@ -21,9 +21,6 @@
 	<string name="information_text">
 		トラフィック：[TRAFFIC]　面積：[AREA]㎡
 	</string>
-	<string name="icon_PG" value="Parcel_PG_Dark"/>
-	<string name="icon_M" value="Parcel_M_Dark"/>
-	<string name="icon_R" value="Parcel_R_Dark"/>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
 			<button name="back_btn" tool_tip="戻る"/>

@@ -5,17 +5,6 @@
 			<text name="Maximum bandwidth">
 				最大帯域幅（[https://wiki.firestormviewer.org/fs_speedtest 適正な値を設定するには？]）：
 			</text>
-			<icon name="NetworkLowGraphicsDivet"/>
-			<icon name="NetworkMidGraphicsDivet"/>
-			<icon name="NetworkHighGraphicsDivet"/>
-			<icon name="NetworkLimitGraphicsDivet"/>
-			<icon name="NetworkScaleEndGraphicsDivet"/>
-			<text name="text_box2">
-				Kbps
-			</text>
-			<text name="NetworkPrefText1">
-				Wi-Fi
-			</text>
 			<text name="NetworkPrefText2">
 				ＤＳＬ
 			</text>
@@ -79,7 +68,6 @@
 			<text name="Sound Cache location">
 				サウンドキャッシュの場所：
 			</text>
-			<line_editor name="FSSoundCacheLocation"/>
 			<button label="開く" label_selected="開く" name="open_sound_cache"/>
 			<button label="設定" label_selected="設定" name="set_sound_cache"/>
 			<button label="初期化" label_selected="初期化" name="reset_sound_cache"/>

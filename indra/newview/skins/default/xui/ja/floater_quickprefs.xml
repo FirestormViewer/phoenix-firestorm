@@ -17,19 +17,19 @@
 					無制限
 				</text>
 				<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-				<text name="WL Sky" tool_tip="WindLightの空のプリセットです。">
+				<text name="WL Sky" tool_tip="空のプリセットです。">
 					空：
 				</text>
-				<text name="WL Water" tool_tip="WindLightの水面のプリセットです。">
+				<text name="WL Water" tool_tip="水面のプリセットです。">
 					水面：
 				</text>
-				<text name="Day Cycle" tool_tip="WindLightのデイサイクルのプリセットです。">
+				<text name="Day Cycle" tool_tip="デイサイクルのプリセットです。">
 					デイサイクル：
 				</text>
 				<button name="btn_personal_lighting" label="個人的光源…"/>
 				<button name="ResetToRegionDefault" tool_tip="自然環境のオプションを共有された環境にリセットします。"/>
 				<!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
-				<button name="button_edit" tool_tip="ここをクリックして簡易設定のコントロールを調整します。" label=""/>
+				<button name="button_edit" tool_tip="ここをクリックして簡易設定のコントロールを調整します。" />
 				<!-- </FS:Zi> -->
 			</layout_panel>
 		</layout_stack>

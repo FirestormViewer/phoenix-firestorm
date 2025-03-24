@@ -16,7 +16,7 @@
 						</layout_panel>
 						<!-- login -->
 						<layout_panel name="delete_container">
-							<button tool_tip="このユーザ名を削除" label="" name="remove_user_btn"/>
+							<button tool_tip="このユーザ名を削除" name="remove_user_btn"/>
 						</layout_panel>
 						<!-- delete_container -->
 						<layout_panel name="password_container">
@@ -55,8 +55,6 @@
 								モード選択：
 							</text>
 							<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
-								<combo_box.item label="Firestorm" name="Firestorm"/>
-								<combo_box.item label="Phoenix" name="Phoenix"/>
 								<combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
 								<combo_box.item label="ハイブリッド" name="Hybrid"/>
 								<combo_box.item label="テキスト" name="Text"/>

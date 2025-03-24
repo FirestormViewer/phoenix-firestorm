@@ -42,17 +42,17 @@
 	</menu_bar>
 	<layout_stack name="script_editor_button_bar">
 		<layout_panel name="script_editor_buttons_panel">
-			<button tool_tip="スクリプトを保存します。" label="" name="save_btn" />
-			<button tool_tip="外部エディタを起動します。" label="" name="Edit_btn"/>
-			<button tool_tip="ハードディスクからスクリプトを読み込みます。" label="" name="load_disk_btn"/>
-			<button tool_tip="ハードディスクにスクリプトを保存します。" label="" name="save_disk_btn"/>
-			<button tool_tip="カット" label="" name="cut_btn"/>
-			<button tool_tip="コピー" label="" name="copy_btn"/>
-			<button tool_tip="ペースト" label="" name="paste_btn"/>
-			<button tool_tip="元に戻す" label="" name="undo_btn"/>
-			<button tool_tip="やり直し" label="" name="redo_btn"/>
-			<button tool_tip="検索／置換" label="" name="search_btn"/>
-			<button tool_tip="スクリプトエディタ初期設定を開きます。" label="" name="prefs_btn"/>
+			<button tool_tip="スクリプトを保存します。" name="save_btn" />
+			<button tool_tip="外部エディタを起動します。" name="Edit_btn"/>
+			<button tool_tip="ハードディスクからスクリプトを読み込みます。" name="load_disk_btn"/>
+			<button tool_tip="ハードディスクにスクリプトを保存します。" name="save_disk_btn"/>
+			<button tool_tip="カット" name="cut_btn"/>
+			<button tool_tip="コピー" name="copy_btn"/>
+			<button tool_tip="ペースト" name="paste_btn"/>
+			<button tool_tip="元に戻す" name="undo_btn"/>
+			<button tool_tip="やり直し" name="redo_btn"/>
+			<button tool_tip="検索／置換" name="search_btn"/>
+			<button tool_tip="スクリプトエディタ初期設定を開きます。" name="prefs_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<script_editor name="Script Editor">

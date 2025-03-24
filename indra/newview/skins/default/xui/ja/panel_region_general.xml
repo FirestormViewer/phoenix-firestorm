@@ -46,11 +46,6 @@
 	<text label="レーティング" name="access_text">
 		区分：
 	</text>
-	<icons_combo_box label="Moderate" name="access_combo">
-		<icons_combo_box.item label="Adult" name="Adult"/>
-		<icons_combo_box.item label="Moderate" name="Mature"/>
-		<icons_combo_box.item label="General" name="PG"/>
-	</icons_combo_box>
 	<button label="適用" name="apply_btn"/>
 	<button label="住人１名をホームにテレポート…" name="kick_btn"/>
 	<button label="住人全員をホームにテレポート…" name="kick_all_btn"/>

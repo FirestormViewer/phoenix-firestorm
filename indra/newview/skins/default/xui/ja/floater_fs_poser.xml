@@ -185,27 +185,23 @@
 							<slider name="av_position_inout" tool_tip="選択したアバターを内側または外側に移動します。" />
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
 							<scroll_list name="entireAv_joint_scroll">
-								<scroll_list.columns label="" name="icon" />
 								<scroll_list.columns label="身体部位" name="joint" />
 							</scroll_list>
 						</panel>
 					</panel>
 					<panel title="体" name="body_joints_panel">
 						<scroll_list name="body_joints_scroll">
-							<scroll_list.columns label="" name="icon" />
 							<scroll_list.columns label="身体部位" name="joint" />
 						</scroll_list>
 					</panel>
 					<panel title="顔" name="face_joints_panel">
 						<scroll_list name="face_joints_scroll">
-							<scroll_list.columns label="" name="icon" />
 							<scroll_list.columns label="身体部位" name="joint" />
 						</scroll_list>
 					</panel>
 					<tab_container title="手" name="hands_tabs">
 						<panel title="調整" name="hands_joints_panel">
 							<scroll_list name="hand_joints_scroll">
-								<scroll_list.columns label="" name="icon" />
 								<scroll_list.columns label="身体部位" name="joint" />
 							</scroll_list>
 						</panel>
@@ -219,25 +215,22 @@
 					</tab_container>
 					<panel title="その他" name="misc_joints_panel">
 						<scroll_list name="misc_joints_scroll">
-							<scroll_list.columns label="" name="icon" />
 							<scroll_list.columns label="身体部位" name="joint" />
 						</scroll_list>
 					</panel>
 					<panel title="物理" name="collision_volumes_panel">
 						<scroll_list name="collision_volumes_scroll">
-							<scroll_list.columns label="" name="icon" />
 							<scroll_list.columns label="物理" name="joint" />
 						</scroll_list>
 					</panel>
 					<panel title="モデル" name="avatarSelection_panel">
 						<avatar_list name="avatars_online" />
 						<scroll_list tool_tip="アニメーション化するアバターまたはアニメッシュを選択します。" name="avatarSelection_scroll">
-							<scroll_list.columns label="" name="icon" />
 							<scroll_list.columns label="ポーズをとる人を選択…" name="name" />
 							<scroll_list.columns label="ＵＵＩＤ" name="uuid" />
 							<scroll_list.columns label="保存ファイル名" name="saveFileName" />
 						</scroll_list>
-						<button label="" name="refresh_avatars" tool_tip="アバターとアニメッシュのリストを更新します。" />
+						<button name="refresh_avatars" tool_tip="アバターとアニメッシュのリストを更新します。" />
 						<button label="ポージング開始" label_selected="ポージング停止" tool_tip="許可されている場合は、選択したアバターまたはアニメシュのポーズを開始します。" name="start_stop_posing_button"/>
 						<button label="Ｔポーズにセット" name="set_t_pose_button" tool_tip="ダブルクリックすると、選択したアバターが「Ｔポーズ」に設定されます。" />
 					</panel>

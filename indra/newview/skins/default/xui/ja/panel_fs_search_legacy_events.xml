@@ -14,7 +14,7 @@
 		<search_combo_box name="events_edit"/>
 		<combo_box name="events_category">
 			<combo_box.item label="全カテゴリ" name="any" value="0"/>
-			<combo_box.item label="" value="filter_separator" enabled="false"/>
+			<combo_box.item value="filter_separator" enabled="false"/>
 			<combo_box.item label="討論" name="discussion" value="18"/>
 			<combo_box.item label="スポーツ" name="sports" value="19"/>
 			<combo_box.item label="ライブＤＪ" name="dj" value="30"/>
@@ -33,7 +33,6 @@
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_events">
-			<columns label="" name="icon"/>
 			<columns label="イベント名" name="name"/>
 			<columns label="日付／時刻" name="date"/>
 			<columns label="時間" name="time"/>

@@ -17,48 +17,38 @@
 			</scroll_list>
 			<button label="更新" name="refresh_grid"/>
 			<button label="削除" name="remove_grid"/>
-			<panel label="" name="advanced_grid_panel">
+			<panel name="advanced_grid_panel">
 				<text name="grid_name_text">
 					グリッド名称：
 				</text>
 				<line_editor name="name_edit"/>
-				<check_box label="" name="enable_lock"/>
 				<text name="grid_uri_text">
 					グリッドのＵＲＩ：
 				</text>
-				<line_editor name="grid_uri_edit"/>
 				<text name="login_page_text">
 					ログインページ：
 				</text>
-				<line_editor name="login_page_edit"/>
 				<text name="helper_uri_text">
 					ヘルパーＵＲＩ：
 				</text>
-				<line_editor name="helper_uri_edit"/>
 				<text name="website_text">
 					グリッドのWebサイト：
 				</text>
-				<line_editor name="website_edit"/>
 				<text name="support_text">
 					グリッドのサポート：
 				</text>
-				<line_editor name="support_edit"/>
 				<text name="register_text">
 					グリッドの登録：
 				</text>
-				<line_editor name="register_edit"/>
 				<text name="password_text">
 					グリッドパスワードのＵＲＩ：
 				</text>
-				<line_editor name="password_edit"/>
 				<text name="search_text">
 					グリッド検索：
 				</text>
-				<line_editor name="search_edit"/>
 				<text name="message_text">
 					グリッド・メッセージのＵＲＩ：
 				</text>
-				<line_editor name="message_edit"/>
 			</panel>
 		</panel>
 		<panel label="その他" name="opensim_misc_panel">
@@ -66,7 +56,6 @@
 			<text name="search_url_debug_text">
 				現在の検索ＵＲＬを上書きする（空欄の場合上書きされない）：
 			</text>
-			<line_editor name="search_url_debug"/>
 			<button label="クリア" label_selected="クリア" name="clear_search_url_debug"/>
 			<button label="選択" name="pick_current_search_url"/>
 		</panel>

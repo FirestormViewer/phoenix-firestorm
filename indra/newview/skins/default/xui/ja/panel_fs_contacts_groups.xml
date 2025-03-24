@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="groups">
 	<filter_editor label="グループをフィルタ" name="group_filter_input"/>
-	<text name="groupcount">
-		あなたは[COUNT]個のグループに所属しています。（最大[MAX]個）
-	</text>
 	<button label="ＩＭ／コール" name="chat_btn" tool_tip="インスタントメッセージのセッションを開きます。"/>
 	<button label="情報" name="info_btn"/>
 	<button label="タイトル" name="titles_btn"/>
-	<button label="アクティブ" name="activate_btn"/>
+	<button label="アクティブ化" name="activate_btn"/>
 	<button label="脱退する" name="leave_btn"/>
 	<button label="作成…" name="create_btn"/>
 	<button label="検索…" name="search_btn"/>

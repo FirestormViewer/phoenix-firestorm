@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="friends">
-	<panel.string name="FontName" value="SANSSERIF"/>
 	<layout_stack name="ls_friend_list">
 		<layout_panel name="lp_search">
 			<filter_editor label="フレンドをフィルタ" name="friend_filter_input"/>

@@ -34,7 +34,7 @@
 				<combo_box name="alpha mode">
 					<combo_box.item label="不透明" name="None"/>
 					<combo_box.item label="ブレンド" name="Alpha blending"/>
-					<combo_box.item label="マスク"/>
+					<combo_box.item label="マスク" name="Alpha masking"/>
 				</combo_box>
 				<spinner label="カットオフ" name="alpha cutoff"/>
 				<spinner label="メタリック" name="metalness factor"/>
@@ -127,7 +127,6 @@
 						<text name="labelGltfTextureScaleV_Normal">
 							Ｖ
 						</text>
-						<spinner name="gltfTextureScaleV_Normal"/>
 						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
 					</panel>
 					<!-- pbr_transforms_normal_scale -->

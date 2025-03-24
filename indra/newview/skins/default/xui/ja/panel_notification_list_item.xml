@@ -13,15 +13,6 @@
 	<panel.string name="group_fee_text">
 		費用：[GROUP_FEE]
 	</panel.string>
-	<panel.string name="item_condensed_height">
-		50
-	</panel.string>
-	<panel.string name="item_expanded_height">
-		87
-	</panel.string>
-	<panel.string name="expanded_height_resize_for_attachment">
-		27
-	</panel.string>
 	<panel name="panel_total_view">
 		<layout_stack name="item_vertical_stack">
 			<layout_panel name="layout_panel_condensed_view">

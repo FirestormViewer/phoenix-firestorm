@@ -28,11 +28,11 @@
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
 						<layout_panel name="emoji_button_layout_panel">
-							<button label="" name="emoji_picker_toggle_btn" tool_tip="絵文字パネルを表示します。"/>
+							<button name="emoji_picker_toggle_btn" tool_tip="絵文字パネルを表示します。"/>
 							<button name="emoji_recent_panel_toggle_btn" tool_tip="最近使用した絵文字を表示／非表示します。"/>
 						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
-							<spinner label="" name="ChatChannel" tool_tip="チャットを表示するチャンネルを選択します。初期設定＞チャット＞Firestorm＞「チャットバーにチャンネル選択を表示」で有効化できます。"/>
+							<spinner name="ChatChannel" tool_tip="チャットを表示するチャンネルを選択します。初期設定＞チャット＞Firestorm＞「チャットバーにチャンネル選択を表示」で有効化できます。"/>
 						</layout_panel>
 						<layout_panel name="chat_type_layout_panel">
 							<!-- Makeshift split button since LLSplitButton is broken -->

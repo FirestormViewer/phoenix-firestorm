@@ -5,7 +5,6 @@
 		<column label="リージョン" name="location"/>
 		<column label="種類" name="type"/>
 		<column label="面積" name="area"/>
-		<column label="" name="hidden"/>
 	</scroll_list>
 	<button label="テレポート" label_selected="テレポート" name="Teleport" tool_tip="この土地の中心にテレポートします。"/>
 	<button label="マップ" label_selected="マップ" name="Show on Map" tool_tip="この土地をワールドマップ上に表示します。"/>

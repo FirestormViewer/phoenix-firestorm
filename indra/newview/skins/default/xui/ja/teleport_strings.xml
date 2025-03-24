@@ -53,7 +53,7 @@
 			このリージョンに入るには１８歳以上である必要があります。
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			リージョンに入ることができません。「[REGION_NAME]」はスキルゲーミング リージョンであり、あなたはこのリージョンに入るための特定の基準を満たす必要があります。詳しくは、[https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ スキル ゲーミングのよくある質問]を参照してください。
+			リージョンに入ることができません。「[REGION_NAME]」はスキルゲーミングリージョンであり、あなたはこのリージョンに入るための特定の基準を満たす必要があります。詳しくは、[https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ スキルゲーミングのよくある質問]を参照してください。
 		</message>
 	</message_set>
 	<message_set name="progress">
@@ -76,7 +76,7 @@
 			テレポートを完了します。
 		</message>
 		<message name="completed_from">
-			[T_SLURL] からのテレポートが完了しました
+			[T_SLURL] からのテレポートが完了しました。
 		</message>
 		<message name="resolving">
 			目的地を解決しています。

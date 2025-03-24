@@ -6,5 +6,4 @@
 	<text name="Loading...2">
 		読み込んでいます…
 	</text>
-	<slider label="[DESC]" name="param slider"/>
 </panel>
