@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <contents>
-	<rows name="camera_actions" value="">
+	<rows name="camera_actions">
 		<columns label="カメラ" name="lst_action"/>
 	</rows>
 	<rows name="look_up" value="look_up">

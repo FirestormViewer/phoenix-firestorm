@@ -180,14 +180,14 @@
 			<text name="textFriendListSortOrder">
 				並び順：
 			</text>
-			<radio_group name="FSFriendListSortOrder" tool_tip="">
+			<radio_group name="FSFriendListSortOrder">
 				<radio_item label="ユーザ名" name="username"/>
 				<radio_item label="表示名" name="displayname"/>
 			</radio_group>
 			<text name="textFriendListFullNameFormat">
 				フルネームの表示形式：
 			</text>
-			<radio_group name="FSFriendListFullNameFormat" tool_tip="">
+			<radio_group name="FSFriendListFullNameFormat">
 				<radio_item label="ユーザ名（表示名）" name="username_displayname"/>
 				<radio_item label="表示名（ユーザ名）" name="displayname_username"/>
 			</radio_group>
