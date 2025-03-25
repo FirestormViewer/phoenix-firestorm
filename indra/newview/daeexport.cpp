@@ -428,6 +428,8 @@ void ColladaExportFloater::CacheReadResponder::completed(bool success)
             // For other formats we need to decode first
             if (mFormattedImage->updateData() && ( (mFormattedImage->getWidth() * mFormattedImage->getHeight() * mFormattedImage->getComponents()) != 0 ) )
             {
+                mFormattedImage->setDiscardLevel(0); // <FS/> [FIRE-35292] Fix for textures getting downscaled and compressed
+
                 LLPointer<LLImageRaw> raw = new LLImageRaw;
                 raw->resize(mFormattedImage->getWidth(), mFormattedImage->getHeight(),  mFormattedImage->getComponents());
 
