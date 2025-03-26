@@ -2581,11 +2581,14 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         F32 camera_moving_speed = camera->getAverageSpeed() ;
         F32 camera_angular_speed = camera->getAverageAngularSpeed();
 
-        if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
+        // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+        // This will cause textures to be scaled down when moving and turning.
+        /*if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
         {
             //if camera moves or rotates too fast, ignore the importance factor
             return 0.f ;
-        }
+        }*/
+        // </FS:minerjr> [FIRE-34977]
 
         S32 i = 0 ;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
@@ -2593,11 +2596,13 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         for(i = 0; i < FACE_IMPORTANCE_LEVEL && dist > FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][0] * camera->getDrawDistanceMultiplier(); ++i);
         // </FS:minerjr> [FIRE-35081]
         i = llmin(i, FACE_IMPORTANCE_LEVEL - 1) ;
-        F32 dist_factor = FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][1] ;
-
-        for(i = 0; i < FACE_IMPORTANCE_LEVEL && cos_angle_to_view_dir < FACE_IMPORTANCE_TO_CAMERA_OVER_ANGLE[i][0] ; ++i) ;
-        i = llmin(i, FACE_IMPORTANCE_LEVEL - 1) ;
-        importance = dist_factor * FACE_IMPORTANCE_TO_CAMERA_OVER_ANGLE[i][1] ;
+        // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+        //F32 dist_factor = FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][1] ;
+        importance = FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][1] ;
+        //for(i = 0; i < FACE_IMPORTANCE_LEVEL && cos_angle_to_view_dir < FACE_IMPORTANCE_TO_CAMERA_OVER_ANGLE[i][0] ; ++i) ;
+        //i = llmin(i, FACE_IMPORTANCE_LEVEL - 1) ;        
+        //importance = dist_factor * FACE_IMPORTANCE_TO_CAMERA_OVER_ANGLE[i][1] ;
+        // </FS:minerjr> [FIRE-34977]
     }
 
     return importance ;

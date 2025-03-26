@@ -422,6 +422,8 @@ void LLViewerTextureList::dump()
         << " Sculpted " << (image->forSculpt() ? "Y" : "N")
         << " # of Faces " << face_counts
         << " # of Volumes " << volume_counts
+        << " Saved Raw Level " << image->getSavedRawImageLevel()
+        << " Save Raw Time Left " << image->getKeptSavedRawImageTime()
         // </FS:minerjr> [FIRE-35081]
         << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
         << LL_ENDL;
@@ -1104,7 +1106,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
         //if (face_count > 1024)
         // Add check for if the image is animated to boost to high as well
-        if (face_count > 1024 || animated != 0)
+        if (face_count > 1024 || animated != 0.0f)
         // </FS:minerjr> [FIRE-35081]
         { // this texture is used in so many places we should just boost it and not bother checking its vsize
             // this is especially important because the above is not time sliced and can hit multiple ms for a single texture
@@ -1215,6 +1217,15 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         return; //wait for loading from the fast cache.
     }
 
+    // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+    // If the image is currently fetching, skip the process texture stats step as it would either possibly change the size up/down
+    // and cancel the existing fetch which causes performance issues.
+    if (imagep->hasFetcher())
+    {
+        return;
+    }
+    // </FS:minerjr> [FIRE-34977]
+
     imagep->processTextureStats();
 }
 
@@ -1248,8 +1259,11 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         imagep->postCreateTexture();
         imagep->mCreatePending = false;
         mCreateTextureList.pop();
-
-        if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel() &&
+        
+        // <FS:minerjr>
+        // No longer scale down a texture just after loading it, let the FSTextureSDDelay determine when to down scale the texture in the
+        // textures processTextureStats() method.
+        /*if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel() &&
            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
            //(imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
            // Add additional restrictions on scaling down (only BOOST_NONE LOD Textures (Also skip media)
@@ -1261,7 +1275,8 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
             // something has probably gone wrong.
             LL_WARNS_ONCE("Texture") << "Texture will be downscaled immediately after loading." << LL_ENDL;
             imagep->scaleDown();
-        }
+        }*/
+        // </FS:minerjr>
 
         if (create_timer.getElapsedTimeF32() > max_time * 0.5f)
         {

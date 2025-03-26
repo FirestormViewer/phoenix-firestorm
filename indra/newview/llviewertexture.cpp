@@ -89,8 +89,14 @@ S32 LLViewerTexture::sImageCount = 0;
 S32 LLViewerTexture::sRawCount = 0;
 S32 LLViewerTexture::sAuxCount = 0;
 LLFrameTimer LLViewerTexture::sEvaluationTimer;
-F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
+// <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+//F32 LLViewerTexture::sDesiredDiscardBias = 0.f;
+F32 LLViewerTexture::sDesiredDiscardBias = 1.f; // With a value of 0.0, loaded textures would fetch lowest quality on loadup.
 U32 LLViewerTexture::sBiasTexturesUpdated = 0;
+
+F32 LLViewerTexture::sTextureScaleDownDelayDefault = 30.0f; // Set to the default value of 30 seconds (will be changed by user choice)
+bool LLViewerTexture::sUseTextureScaleDownDelay = true; // Flag that the delay is used
+// <FS:minerjr> [FIRE-34977]
 
 S32 LLViewerTexture::sMaxSculptRez = 128; //max sculpt image size
 constexpr S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64;
@@ -506,6 +512,17 @@ void LLViewerTexture::updateClass()
         tester->update();
     }
 
+    // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+    // Get the stored texture scale down delay from the saved settings, exposing the value
+    // so users can change it in the Preferences->Graphics if they want.
+    static LLCachedControl<F32> texture_scale_down_delay(gSavedSettings, "FSTextureSDDelay", 30.0f);
+    sTextureScaleDownDelayDefault = texture_scale_down_delay;
+    sUseTextureScaleDownDelay = bool(sTextureScaleDownDelayDefault);
+    // Flag to detemine if the texture bias is applied to the size of the virtual texture
+    static LLCachedControl<bool> use_texture_bias(gSavedSettings, "FSUseTextureBias", true);
+    if (!use_texture_bias) sDesiredDiscardBias = 1.0f;
+    // </FS:minerjr> [FIRE-34977]
+
     LLViewerMediaTexture::updateClass();
 
     static LLCachedControl<U32> max_vram_budget(gSavedSettings, "RenderMaxVRAMBudget", 0);
@@ -538,7 +555,8 @@ void LLViewerTexture::updateClass()
 
     static bool was_low = false;
     static bool was_sys_low = false;
-
+    if (use_texture_bias)
+    {
     if (is_low && !was_low)
     {
         // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
@@ -586,7 +604,7 @@ void LLViewerTexture::updateClass()
             sDesiredDiscardBias -= decrement * gFrameIntervalSeconds;
         }
     }
-
+    }
     // set to max discard bias if the window has been backgrounded for a while
     static F32 last_desired_discard_bias = 1.f;
     static bool was_backgrounded = false;
@@ -1193,6 +1211,9 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mForceCallbackFetch = false;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
     mCloseToCamera = 1.0f; // Store if the camera is close to the camera (0.0f or 1.0f)
+    // Delay for down scaling textures (0.0f is not active, > 0.0f there is a delay)
+    // Value calculated by current frame time + default scale down delay (30 seconds) which is user configurable in Preferences->Graphics
+    mTextureScaleDownDelay = 0.0f;
     // </FS:minerjr> [FIRE-35081]
 
     mFTType = FTT_UNKNOWN;
@@ -1877,7 +1898,10 @@ bool LLViewerFetchedTexture::isActiveFetching()
 
     // <FS:Ansariel> OpenSim compatibility
     //return mFetchState > 7 && mFetchState < 10 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
-    return mFetchState > 8 && mFetchState < 11 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
+    // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+    //return mFetchState > 8 && mFetchState < 11 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
+    return mFetchState > 8 && mFetchState < 11;//&& monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
+    // </FS:minerjr> [FIRE-34977]
 }
 
 void LLViewerFetchedTexture::setBoostLevel(S32 level)
@@ -3060,7 +3084,7 @@ void LLViewerLODTexture::processTextureStats()
         mDesiredDiscardLevel = 0;
     }
     // Generate the request priority and render priority
-    else if (mDontDiscard || !mUseMipMaps)
+    else if (mDontDiscard || !mUseMipMaps || mBoostLevel == LLGLTexture::BOOST_SCULPTED)
     {
         mDesiredDiscardLevel = 0;
         if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
@@ -3080,10 +3104,47 @@ void LLViewerLODTexture::processTextureStats()
         S32 current_discard = getDiscardLevel();
         if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
         {
-            if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
-            { // should scale down
-                scaleDown();
+            // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+            //if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            //{ // should scale down
+            //    scaleDown();
+            //}
+            if (current_discard >= 0 && mDesiredDiscardLevel >= 0 && current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            {
+                // If the texture scale down delay is enabled (not 0), then
+                if (sUseTextureScaleDownDelay)
+                {
+                    // If we don't currently have a delay setup, then set the delay to current frame time plus the delay default value
+                    if (mTextureScaleDownDelay == 0.0f)
+                    {
+                        mTextureScaleDownDelay = gFrameTimeSeconds + sTextureScaleDownDelayDefault + ll_frand();
+                    }
+                    // If the difference in the delay and the current time is less then 0.0f, then we want to downscale.
+                    if ((mTextureScaleDownDelay - gFrameTimeSeconds) <= 0.0f)
+                    {
+                        scaleDown();
+                        mTextureScaleDownDelay = 0.0f; // Reset the delay down scale to 0.0f
+                    }
+                    // Else, we want to prevent the code for scaling the texture down or trying to do any sort of fetch,
+                    // so reset the desired discard level back to the current level
+                    else
+                    {
+                        mDesiredDiscardLevel = current_discard;
+                    }
+                }
+                //Else, just do a normal scale down
+                else
+                {
+                    scaleDown();
+                    mTextureScaleDownDelay = 0.0f; // Reset the delay down scale to 0.0f
+                }
             }
+            // Else, we want to reset the delay as we now want the higher texture so no need to scale down
+            else
+            {
+                mTextureScaleDownDelay = 0.0f; // Reset the delay down scale to 0.0f
+            }
+            // </FS:minerjr> [FIRE-34977]
         }
         // </FS:minerjr> [FIRE-35081]
     }
@@ -3160,10 +3221,48 @@ void LLViewerLODTexture::processTextureStats()
         S32 current_discard = getDiscardLevel();
         if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
         {
-            if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
-            { // should scale down
-                scaleDown();
+            // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+            //if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            //{ // should scale down
+            //    scaleDown();
+            //}
+            
+            if (current_discard >= 0 && mDesiredDiscardLevel >= 0 && current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            {
+                // If the texture scale down delay is enabled (not 0), then
+                if (sUseTextureScaleDownDelay)
+                {
+                    // If we don't currently have a delay setup, then set the delay to current frame time plus the delay default value
+                    if (mTextureScaleDownDelay == 0.0f)
+                    {
+                        mTextureScaleDownDelay = gFrameTimeSeconds + sTextureScaleDownDelayDefault + ll_frand();
+                    }
+                    // If the difference in the delay and the current time is less then 0.0f, then we want to downscale.
+                    if ((mTextureScaleDownDelay - gFrameTimeSeconds) <= 0.0f)
+                    {
+                        scaleDown();
+                        mTextureScaleDownDelay = 0.0f; // Reset the delay down scale to 0.0f
+                    }
+                    // Else, we want to prevent the code for scaling the texture down or trying to do any sort of fetch,
+                    // so reset the desired discard level back to the current level
+                    else
+                    {
+                        mDesiredDiscardLevel = current_discard;
+                    }
+                }
+                //Else, just do a normal scale down
+                else
+                {
+                    scaleDown();
+                    mTextureScaleDownDelay = 0.0f; // Reset the delay down scale to 0.0f
+                }                
             }
+            // Else, we want to reset the delay as we now want the higher texture so no need to scale down
+            else
+            {
+                mTextureScaleDownDelay = 0.0f; // Reset the delay down scale to 0.0f
+            }
+            // </FS:minerjr> [FIRE-34977]
         }
 
         if (isUpdateFrozen() // we are out of memory and nearing max allowed bias

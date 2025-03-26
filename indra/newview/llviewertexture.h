@@ -233,6 +233,10 @@ public:
     static F32  sCurrentTime ;
     static LLUUID sInvisiprimTexture1 ;
     static LLUUID sInvisiprimTexture2 ;
+    // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+    static F32 sTextureScaleDownDelayDefault; // Amount of time to delay a scale down of a texture. (User changeable in Preferences->Graphics)
+    static bool sUseTextureScaleDownDelay; // Flag to track if the texture scale down delay should be used
+    // </FS:minerjr> [FIRE-34977]
 
     // estimated free memory for textures, by bias calculation
     static F32 sFreeVRAMMegabytes;
@@ -440,6 +444,7 @@ public:
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
     F32         getCloseToCamera() const {return mCloseToCamera ;} // Get close to camera value
     void        setCloseToCamera(F32 value) {mCloseToCamera = value ;} // Set the close to camera value (0.0f or 1.0f)
+    F32         getKeptSavedRawImageTime() const { return mKeptSavedRawImageTime; } // Get the time to keep the raw image time
     // </FS:minerjr> [FIRE-35081]
 
     /*virtual*/bool  isActiveFetching() override; //is actively in fetching by the fetching pipeline.
@@ -448,6 +453,9 @@ public:
 
     bool mCreatePending = false;    // if true, this is in gTextureList.mCreateTextureList
     mutable bool mDownScalePending = false; // if true, this is in gTextureList.mDownScaleQueue
+    // <FS:minerjr> [FIRE-34977] - With 7.1.12.77180 early access update Firestorm has many freezes
+    F32 mTextureScaleDownDelay; // Texture scale down delay value (0.0f delay not used, > 0.0f value being used)
+    // </FS:minerjr> [FIRE-34977]
 
     // <FS:Techwolf Lupindo> texture comment decoder
     std::map<std::string,std::string> mComment;
