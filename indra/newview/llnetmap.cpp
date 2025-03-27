@@ -477,32 +477,27 @@ void LLNetMap::draw()
                         if (pRegionImage.isNull())
                             continue;
 
-                        if (!pRegionImage->hasGLTexture())
+                        if (pRegionImage->hasGLTexture())
                         {
-                            // Workaround that eventually forces the image to load if it has no GLTexture (such as when changing grid)
-                            // I'm not exactly sure why this works, but at least it fixes the minimap when you go to a new grid.
-                            pRegionImage->setBoostLevel(LLViewerTexture::BOOST_MAP_VISIBLE);
-                            continue;
-                        }
+                            gGL.getTexUnit(0)->bind(pRegionImage);
+                            gGL.begin(LLRender::TRIANGLES);
+                            {
+                                gGL.texCoord2f(0.f, 1.f);
+                                gGL.vertex2f(local_left, local_top);
+                                gGL.texCoord2f(0.f, 0.f);
+                                gGL.vertex2f(local_left, local_bottom);
+                                gGL.texCoord2f(1.f, 0.f);
+                                gGL.vertex2f(local_right, local_bottom);
 
-                        gGL.getTexUnit(0)->bind(pRegionImage);
-                        gGL.begin(LLRender::TRIANGLES);
-                        {
-                            gGL.texCoord2f(0.f, 1.f);
-                            gGL.vertex2f(local_left, local_top);
-                            gGL.texCoord2f(0.f, 0.f);
-                            gGL.vertex2f(local_left, local_bottom);
-                            gGL.texCoord2f(1.f, 0.f);
-                            gGL.vertex2f(local_right, local_bottom);
-
-                            gGL.texCoord2f(0.f, 1.f);
-                            gGL.vertex2f(local_left, local_top);
-                            gGL.texCoord2f(1.f, 0.f);
-                            gGL.vertex2f(local_right, local_bottom);
-                            gGL.texCoord2f(1.f, 1.f);
-                            gGL.vertex2f(local_right, local_top);
+                                gGL.texCoord2f(0.f, 1.f);
+                                gGL.vertex2f(local_left, local_top);
+                                gGL.texCoord2f(1.f, 0.f);
+                                gGL.vertex2f(local_right, local_bottom);
+                                gGL.texCoord2f(1.f, 1.f);
+                                gGL.vertex2f(local_right, local_top);
+                            }
+                            gGL.end();
                         }
-                        gGL.end();
                         pRegionImage->setBoostLevel(LLViewerTexture::BOOST_MAP_VISIBLE);
                     }
                 }
