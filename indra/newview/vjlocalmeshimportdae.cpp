@@ -753,34 +753,36 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
             }
         }
     }
-
-    int jointname_idx = 0;
-    for (auto jointname_iterator = skininfop->mJointNames.begin(); jointname_iterator != skininfop->mJointNames.end(); ++jointname_iterator, ++jointname_idx)
+    static LLCachedControl<bool> apply_joint_offsets(gSavedSettings, "FSLocalMeshApplyJointOffsets");
+    if (apply_joint_offsets)
     {
-        std::string name_lookup = jointname_iterator->mName;
-        if (joint_map.find(name_lookup) == joint_map.end())
+        int jointname_idx = 0;
+        for (auto jointname_iterator = skininfop->mJointNames.begin(); 
+                jointname_iterator != skininfop->mJointNames.end(); 
+                ++jointname_iterator, ++jointname_idx)
         {
-            pushLog("DAE Importer", "WARNING: Unknown joint named " + name_lookup + " found, skipping over it.");
-            continue;
+            std::string name_lookup = jointname_iterator->mName;
+            if (joint_map.find(name_lookup) == joint_map.end())
+            {
+                pushLog("DAE Importer", "WARNING: Unknown joint named " + name_lookup + " found, skipping over it.");
+                continue;
+            }
+            else
+            {
+                LL_DEBUGS("LocalMesh") << "Calc invBindMat for joint name: " << name_lookup << LL_ENDL;
+            }
+            if (skininfop->mInvBindMatrix.size() <= jointname_idx)
+            {
+                pushLog("DAE Importer", "WARNING: Requesting out of bounds joint named " + name_lookup);
+                break;
+            }
+            LLMatrix4 newinverse = LLMatrix4(skininfop->mInvBindMatrix[jointname_idx].getF32ptr());
+            const auto& joint_translation = joint_transforms[name_lookup].getTranslation();
+            newinverse.setTranslation(joint_translation);
+            skininfop->mAlternateBindMatrix.push_back(LLMatrix4a(newinverse));
         }
-        else
-        {
-            LL_DEBUGS("LocalMesh") << "Calc invBindMat for joint name: " << name_lookup << LL_ENDL;
-        }
-
-        if (skininfop->mInvBindMatrix.size() <= jointname_idx)
-        {
-            // doesn't seem like a critical fail that should invalidate the entire skin, just break and move on?
-            pushLog("DAE Importer", "WARNING: Requesting out of bounds joint named  " + name_lookup);
-            break;
-        }
-
-        LLMatrix4 newinverse = LLMatrix4(skininfop->mInvBindMatrix[jointname_idx].getF32ptr());
-        const auto& joint_translation = joint_transforms[name_lookup].getTranslation();
-        newinverse.setTranslation(joint_translation);
-        skininfop->mAlternateBindMatrix.push_back( LLMatrix4a(newinverse) );
     }
-
+    
     size_t bind_count = skininfop->mAlternateBindMatrix.size();
     if ((bind_count > 0) && (bind_count != skininfop->mJointNames.size()))
     {

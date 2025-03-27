@@ -386,11 +386,6 @@ void LLFace::switchTexture(U32 ch, LLViewerTexture* new_texture)
         return;
     }
 
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-    // Need to update the new textures to the old textures boost and max virtual size, so they won't 
-    new_texture->setBoostLevel(mTexture[ch]->getBoostLevel());
-    new_texture->addTextureStats(mTexture[ch]->getMaxVirtualSize());
-    // </FS:minerjr> [FIRE-35081]
     if (ch == LLRender::DIFFUSE_MAP)
     {
         if (getViewerObject())
