@@ -13,6 +13,7 @@
 		<panel name="logs_panel" label="ログ"/>
 		<panel name="local_mesh_settings_panel" label="設定">
 			<check_box name="local_mesh_scale_use_meters" label="スケールはメートル単位であると想定" tool_tip="Mayaなどのツールで使用される㎝スケール単位を無視します。" />
+			<check_box name="local_mesh_scale_use_meters" label="ジョイントオフセットを適用" tool_tip="メッシュ内のジョイントオフセットを適用します。デフォルトではこれらは無視されます。" />
 			<text name="lod_suffix_label">
 				ＬＯＤサフィックス：
 			</text>
