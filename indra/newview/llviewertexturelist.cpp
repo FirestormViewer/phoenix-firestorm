@@ -1414,11 +1414,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
                 iter = mUUIDMap.begin();
             }
 
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-            //if (iter->second->getGLTexture())
-            // Can skip processing TEX_LIST_SCALED as they are UI elements and should not be discarded
-            if (iter->second->getGLTexture() && get_element_type(iter->second->getBoostLevel()) == TEX_LIST_STANDARD)
-            // </FS:minerjr> [FIRE-35081]
+            if (iter->second->getGLTexture())
             {
                 entries.push_back(iter->second);
             }

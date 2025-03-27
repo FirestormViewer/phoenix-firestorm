@@ -10,6 +10,7 @@
 	<menu_item_check label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Mediensteuerung anzeigen" name="FSEnableVolumeControls"/>
 	<menu_item_check label="Bilder pro Sekunde anzeigen" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Farb-Indikator für Bilder pro Sekunde anzeigen" name="FSStatusBarShowFPSColors"/>
 	<menu_item_check label="Datentransfer-Indikator anzeigen" name="ShowNetStats"/>
 	<menu_item_check label="Koordinaten anzeigen" name="Coordinates"/>
 	<menu_item_check label="Parzelleneigenschaften anzeigen" name="Parcel Properties"/>

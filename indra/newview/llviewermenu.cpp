@@ -5166,6 +5166,13 @@ class FSSelfCheckMoveLock : public view_listener_t
         if (LLGridManager::getInstance()->isInSecondLife())
         {
             new_value = gSavedPerAccountSettings.getBOOL("UseMoveLock");
+            // <FS:Chanayane> prevents having Move Lock activated but disabled when for some reason the LSL Bridge is not worn or not ready
+            if (new_value && !enable_bridge_function())
+            {
+                gSavedPerAccountSettings.setBOOL("UseMoveLock", false);
+                new_value = false;
+            }
+            // </FS:Chanayane>
         }
 #ifdef OPENSIM
         else
