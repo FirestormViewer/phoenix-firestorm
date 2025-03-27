@@ -52,8 +52,8 @@
 			<combo_item name="select_mature" value="選択">
 				‐レーティング区分を指定‐
 			</combo_item>
-			<combo_box.item label="「Moderate」コンテンツ" name="mature" value="Mature"/>
-			<combo_box.item label="「General」コンテンツ" name="pg" value="Not Mature"/>
+			<combo_box.item label="「Moderate」コンテンツ" name="mature"/>
+			<combo_box.item label="「General」コンテンツ" name="pg"/>
 		</combo_box>
 		<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます。" label="検索結果に表示"/>
 		<text name="group_key_label">
