@@ -11,6 +11,7 @@
 		</panel>
 		<panel name="local_mesh_settings_panel" label="Paramètres">
 			<check_box name="local_mesh_scale_use_meters" label="Suppose que l'échelle est en mètres." tool_tip="Ignore les unités d'échelle en cm utilisées par des outils tels que Maya." />
+			<check_box name="checkbox_apply_joint_offsets" label="Appliquer les décalages de jointures." tool_tip="Appliquer les éventuels décalages de jointures dans le maillage ; par défaut, ces décalages sont ignorés." />
 			<text name="lod_suffix_label">
 				Suffixes LOD :
 			</text>

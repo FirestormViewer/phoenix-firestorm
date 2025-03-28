@@ -33,7 +33,7 @@
 		<button name="stream_toggle_btn" tool_tip="啟動/停止地塊音訊串流" />
 		<button name="media_toggle_btn" tool_tip="啟動/停止所有媒體（音樂，影片，網站）" />
 		<button name="volume_btn" tool_tip="總音量控制" />
-		<text name="FPSText" tool_tip="每秒影格數">
+		<text name="FPSText" tool_tip="每秒影格數（點擊調整限制）">
 			200.0
 		</text>
 	</panel>

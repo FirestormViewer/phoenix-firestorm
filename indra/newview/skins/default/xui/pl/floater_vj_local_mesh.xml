@@ -10,6 +10,7 @@
 		</panel>
 		<panel name="local_mesh_settings_panel" label="Opcje">
 			<check_box name="local_mesh_scale_use_meters" label="Załóż, że rozmiar jest w metrach" tool_tip="Zignoruj jednostki skali w cm używane przez narzędzia takie jak Maya." />
+			<check_box name="checkbox_apply_joint_offsets" label="Przesunięcia stawów" tool_tip="Zastosuj wszelkie przesunięcia (offsety) stawów w meszu, domyślnie są one ignorowane." />
 			<text name="lod_suffix_label">
 				Sufiksy LOD:
 			</text>
