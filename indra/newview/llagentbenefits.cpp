@@ -37,6 +37,7 @@
 #include "llviewerregion.h"
 // </FS:Ansariel>
 
+
 LLAgentBenefits::LLAgentBenefits():
     m_initalized(false),
     m_animated_object_limit(-1),
@@ -213,7 +214,27 @@ S32 LLAgentBenefits::getPicksLimit() const
 {
     // <FS:Ansariel> OpenSim legacy economy
     //return m_picks_limit;
-    return LLGridManager::instance().isInSecondLife() ? m_picks_limit : LLAgentPicksInfo::instance().getMaxNumberOfPicks();
+    if (LLGridManager::instance().isInSecondLife())
+    {
+        return m_picks_limit;
+    }
+    else
+    {
+        constexpr S32 MAX_OPENSIM_PICKS_FALLBACK = 20; // [FIRE-35276] Freeze on OpenSim (default agreed with Ubit Umarov) (originally by Hecklezz)
+
+        S32 max_profile_picks = MAX_OPENSIM_PICKS_FALLBACK;
+
+        if (gAgent.getRegion())
+        {
+            LLSD features;
+            gAgent.getRegion()->getSimulatorFeatures(features);
+            if (features.has("MaxProfilePicks"))
+            {
+                max_profile_picks = features["MaxProfilePicks"].asInteger();
+            }
+        }
+        return max_profile_picks;
+    }
     // </FS:Ansariel>
 }
 

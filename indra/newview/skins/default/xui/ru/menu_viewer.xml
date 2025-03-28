@@ -497,14 +497,26 @@
 		</menu>
 		<menu label="Принудительно вызвать ошибку" name="Force Errors">
 			<menu_item_call label="Точка остановки (breakpoint)" name="Force Breakpoint"/>
-			<menu_item_call label="Вызов ошибки LL и сбой" name="Force LLError And Crash"/>
+			<menu_item_call label="Ошибка LL и сбой" name="Force LLError And Crash"/>
+			<menu_item_call label="Ошибка LL, Сообщение и Сбой" name="Force LLError Message And Crash"/>
 			<menu_item_call label="Неправильный доступ к памяти" name="Force Bad Memory Access"/>
+			<menu_item_call label="Неправильной доступ к памяти в сопрограмме" name="Force Bad Memory Access in Coroutine"/>
 			<menu_item_call label="Бесконечный цикл" name="Force Infinite Loop"/>
 			<menu_item_call label="Сбой драйвера" name="Force Driver Carsh"/>
-			<menu_item_call label="Исключение программы" name="Force Software Exception"/>
+			<menu_item_call label="Исключение в программе" name="Force Software Exception"/>
+			<menu_item_call label="Исключение в операционной системе" name="Force OS Exception"/>
+			<menu_item_call label="Исключение программного обеспечения в сопрограмме" name="Force Software Exception in Coroutine"/>
+			<menu_item_call label="Вызвать сбой в потоке" name="Force a Crash in a Thread"/>
 			<menu_item_call label="Отключение клиента" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Имитировать утечку памяти" name="Memory Leaking Simulation"/>
 		</menu>
+		<menu label="GLTF" name="GLTF">
+			<menu_item_call label="Открыть..." name="Open..."/>
+			<menu_item_call label="Сохранить как..." name="Save As..."/>
+			<menu_item_call label="Загрузить..." name="Upload..."/>
+			<menu_item_call label="Редактировать..." name="Edit..."/>
+		</menu>
+		<menu label="Видео" name="Video"/>
 		<menu label="Тестирование прорисовки" name="Render Tests">
 			<menu_item_check label="Смещение камеры" name="Camera Offset"/>
 			<menu_item_check label="Случайная частота кадров" name="Randomize Framerate"/>
@@ -534,6 +546,8 @@
 			<menu_item_check label="Счетчик Треугольников" name="Triangle Count"/>
 			<menu_item_check label="Строительство очереди" name="Build Queue"/>
 			<menu_item_check label="Освещение" name="Lights"/>
+			<menu_item_check label="Датчики отражений" name="Reflection Probes"/>
+			<menu_item_check label="Обновления датчиков" name="Probe Updates"/>
 			<menu_item_check label="Частицы" name="Particles"/>
 			<menu_item_check label="Каркас столкновений" name="Collision Skeleton"/>
 			<menu_item_check label="Стыки" name="Joints"/>
@@ -573,6 +587,7 @@
 			<menu_item_check label="Текстуры в полном разрешении (ОПАСНО)" name="Full Res Textures"/>
 			<menu_item_check label="Прорисовка присоединенных источников света" name="Render Attached Lights"/>
 			<menu_item_check label="Прорисовка присоединенных частиц" name="Render Attached Particles"/>
+			<menu_item_check label="Сбор буферов вершин шрифтов" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Включить кэш шейдеров" name="Enable Shader Cache"/>
 			<menu_item_call label="Очистить кэш шейдеров" name="Shader Cache Clear"/>
 			<menu_item_call label="Восстановить местность" name="Rebuild Terrain"/>
@@ -603,8 +618,15 @@
 			<menu_item_check label="Перекрытие солнца в симуляторе" name="Sim Sun Override"/>
 			<menu_item_check label="Фиксированная погода" name="Fixed Weather"/>
 			<menu_item_call label="Дамп кэша объектов региона" name="Dump Region Object Cache"/>
-			<menu_item_check label="Список интересов: полное обновление" name="Interest List: Full Update"/>
+			<menu_item_check label="Записывать статистику в файл" name="Stats Recorder File"/>
+			<menu_item_check label="Списки интересов в режиме 360" name="Interest List: 360 Mode"/>
+			<menu_item_call label="Сброс списков интересов" name="Reset Interest Lists"/>
 			<menu_item_call label="Дамп возможностей симулятора в общий чат" name="DumpSimFeaturesToChat"/>
+		</menu>
+		<menu label="Местность" name="DevelopTerrain">
+			<menu_item_call label="Перестроить местность" name="Rebuild Terrain"/>
+			<menu_item_call label="Создать локальный рисунок карты" name="Create Local Paintmap"/>
+			<menu_item_call label="Удалить локальный рисунок карты" name="Delete Local Paintmap"/>
 		</menu>
 		<menu label="Интерфейс пользователя" name="UI">
 			<menu_item_call label="Тест браузера для просмотра медиа" name="Web Browser Test"/>
@@ -697,6 +719,7 @@
 		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
 		<menu_item_call label="Выход из статуса администратора" name="Leave Admin Options"/>
 		<menu_item_check label="Показать меню администратора" name="View Admin Options"/>
+		<menu label="Дамп" name="Dump" />
 	</menu>
 	<menu label="Администратор" name="Admin">
 		<menu label="Объект" name="AdminObject">

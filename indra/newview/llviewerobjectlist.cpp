@@ -889,7 +889,7 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
     max_value = (S32)mObjects.size();
     LLTimer timer;
     // If the number of objects since last being in here has changed (IE objects deleted, then reset the lazy update index)
-    if (mCurLazyUpdateIndex > max_value)
+    if (mCurLazyUpdateIndex >= max_value)
     {
         mCurLazyUpdateIndex = 0;
     }
@@ -898,6 +898,12 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
     // loop over number of objects in the BIN (128), or below until we run out of time
     while(num_updates < NUM_BINS)
     {
+        // Moved to the first to fix up the issue of access violation if the object list chaanges size during processing.
+        if (i >= (S32)mObjects.size())
+        {
+            // Reset the index if we go over the max value
+            i = 0;
+        }
         objectp = mObjects[i];
         if (objectp != nullptr && !objectp->isDead())
         {
@@ -906,12 +912,7 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
             objectp->setPixelAreaAndAngle(agent); // Also sets the approx. pixel area
             objectp->updateTextures();  // Update the image levels of textures for this object.
         }
-        i++;
-        // Reset the index if we go over the max value
-        if (i == max_value)
-        {
-            i = 0;
-        }
+        i++;    
 
         num_updates++;
         // Escape either if we run out of time, or loop back onto ourselves.

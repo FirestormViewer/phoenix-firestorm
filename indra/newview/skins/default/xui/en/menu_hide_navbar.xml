@@ -119,6 +119,19 @@
              parameter="FSStatusBarShowFPS" />
     </menu_item_check>
     <menu_item_check
+         label="Show Color Indicator for Frames per Second"
+         name="FSStatusBarShowFPSColors">
+        <on_click
+             function="ToggleControl"
+             parameter="FSStatusBarShowFPSColors" />
+        <on_check
+             function="CheckControl"
+             parameter="FSStatusBarShowFPSColors" />
+        <on_enable
+             function="CheckControl"
+             parameter="FSStatusBarShowFPS" />
+    </menu_item_check>
+    <menu_item_check
          label="Show Traffic Indicator"
          name="ShowNetStats">
            <on_click
