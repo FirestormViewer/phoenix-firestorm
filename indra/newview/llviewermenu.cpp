@@ -128,6 +128,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
 #include "llviewerstatsrecorder.h"
+#include "llviewertexturelist.h"
 #include "llvlcomposition.h"
 #include "llvoavatarself.h"
 #include "llvoicevivox.h"
@@ -5295,6 +5296,13 @@ class FSSelfCheckMoveLock : public view_listener_t
         if (LLGridManager::getInstance()->isInSecondLife())
         {
             new_value = gSavedPerAccountSettings.getBOOL("UseMoveLock");
+            // <FS:Chanayane> prevents having Move Lock activated but disabled when for some reason the LSL Bridge is not worn or not ready
+            if (new_value && !enable_bridge_function())
+            {
+                gSavedPerAccountSettings.setBOOL("UseMoveLock", false);
+                new_value = false;
+            }
+            // </FS:Chanayane>
         }
 #ifdef OPENSIM
         else
@@ -12944,6 +12952,9 @@ void initialize_menus()
     // Develop (Fonts debugging)
     commit.add("Develop.Fonts.Dump", boost::bind(&LLFontGL::dumpFonts));
     commit.add("Develop.Fonts.DumpTextures", boost::bind(&LLFontGL::dumpFontTextures));
+    
+    //Develop (dump data)
+    commit.add("Develop.TextureList.Dump", boost::bind(&LLViewerTextureList::dumpTexturelist));
 
     // <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
     view_listener_t::addMenu(new FSProfilerToggle(), "Develop.ToggleProfiling");

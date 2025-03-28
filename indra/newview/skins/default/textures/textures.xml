@@ -597,6 +597,11 @@ with the same filename but different name
   <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
   <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
 
+<!-- FS:Beq: Poser icons -->
+	<texture name="Poser_Visual_On"			file_name="icons/visual_pose_enabled.png" />
+	<texture name="Poser_Visual_Off"		file_name="icons/visual_pose_disabled.png" />
+
+
 <!-- FS:Ansariel: Icon for script errors in V1 status bar -->
   <texture name="Statusbar_Script_Error" file_name="icons/status_script_debug.tga" preload="false" />
 

@@ -35,7 +35,7 @@
 		<button name="stream_toggle_btn" tool_tip="Audiostream der Parzelle starten/stoppen"/>
 		<button name="media_toggle_btn" tool_tip="Alle Medien starten/stoppen (Musik, Video, Webseiten)"/>
 		<button name="volume_btn" tool_tip="Steuerung der Gesamtlautstärke"/>
-		<text name="FPSText" tool_tip="Bilder pro Sekunde">
+		<text name="FPSText" tool_tip="Bilder pro Sekunde (klicken, um Begrenzung anzupassen)">
 			200.0
 		</text>
 	</panel>

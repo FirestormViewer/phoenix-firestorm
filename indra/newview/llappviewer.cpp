@@ -771,7 +771,7 @@ LLAppViewer::LLAppViewer()
     // static_debug_info.log file
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
     // <FS:Beq> Improve Bugsplat tracking by using attributes
-    BugSplatAttributes::setCrashContextFileName(logdir + "crash-context.xml");
+    BugSplatAttributes::setCrashContextFileName(logdir + "CrashContext.xml");
     // </FS:Beq>
 #   else // ! LL_BUGSPLAT
     // write Google Breakpad minidump files to a per-run dump directory to avoid multiple viewer issues.
@@ -5988,8 +5988,8 @@ void LLAppViewer::idle()
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
         // Added a max time limit to the object list updates as these updates do affect the texture system
         //gObjectList.updateApparentAngles(gAgent);
-        F32 max_update_apparent_angles = 0.0020f * gFrameIntervalSeconds.value(); // 20 ms/second decode time
-        max_update_apparent_angles = llclamp(max_update_apparent_angles, 0.00005f, 0.0002f);  // min 2ms/frame, max 5ms/frame)
+        F32 max_update_apparent_angles = 0.025f * gFrameIntervalSeconds.value(); // 20 ms/second decode time
+        max_update_apparent_angles = llclamp(max_update_apparent_angles, 0.002f, 0.005f);  // min 2ms/frame, max 5ms/frame)
         gObjectList.updateApparentAngles(gAgent, max_update_apparent_angles);
         // </FS:minerjr> [FIRE-35081]
     }

@@ -5782,6 +5782,20 @@
             <menu_item_check.on_click
              function="Advanced.ToggleViewAdminOptions" />
         </menu_item_check>
+
+        <menu_item_separator/>
+        <menu
+         create_jump_keys="true"
+         label="Dump"
+         name="Dump"
+         tear_off="true">
+            <menu_item_call
+             label="LLViewerTexturelist"
+             name="LLViewerTexturelist">
+                <menu_item_call.on_click
+                 function="Develop.TextureList.Dump" />
+            </menu_item_call>
+        </menu>        
     </menu>
     <menu
      create_jump_keys="true"

@@ -1045,8 +1045,6 @@
 					max_val="5"
 					top_delta="-2"
 					width="127">
-					<slider_bar.commit_callback
-						function="Advanced.ClearShaderCache" />
 				</slider_bar>
 				<spinner
 				 name="S_Shadow_Res"
@@ -1060,8 +1058,6 @@
 				 min_val="0"
 				 width="53"
 				 increment="0.5">
-				    <spinner.commit_callback
-						function="Advanced.ClearShaderCache" />
 				</spinner>
 				<button
 				 follows="left|top"

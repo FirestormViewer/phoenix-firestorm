@@ -3149,10 +3149,10 @@ void LLPanelProfileNotes::updateData()
 #ifdef OPENSIM
     if (LLGridManager::instance().isInOpenSim() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
-    LLUUID avatar_id = getAvatarId();
-        if (!getStarted() && avatar_id.notNull() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && !getSelfProfile())
-    {
-        setIsLoading();
+        LLUUID avatar_id = getAvatarId();
+        if (!getStarted() && avatar_id.notNull())
+        {
+            setIsLoading();
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);
         }
     }

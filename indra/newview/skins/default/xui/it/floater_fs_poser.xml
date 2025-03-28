@@ -141,10 +141,6 @@
 	<string	name="title_BELLY">Pancia</string>
 	<string	name="title_LEFT_PEC">Pettorale sinistro</string>
 	<string	name="title_RIGHT_PEC">Pettorale destro</string>
-	<string	name="title_mFaceEar1Left">Orecchio sx: superiore</string>  <!-- duplicate -->
-	<string	name="title_mFaceEar1Right">Orecchio dx: superiore</string>  <!-- duplicate -->
-	<string	name="title_mFaceEar2Left">Orecchio sx: inferiore</string>  <!-- duplicate -->
-	<string	name="title_mFaceEar2Right">Orecchio dx: inferiore</string>  <!-- duplicate -->
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">

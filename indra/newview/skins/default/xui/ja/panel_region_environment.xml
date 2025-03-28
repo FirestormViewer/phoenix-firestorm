@@ -71,8 +71,7 @@
 				<layout_panel name="pnl_environment_altitudes">
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
-							空 [INDEX]
-                            [ALTITUDE]m
+							空 [INDEX]&#xA;[ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt1">
 							不明
@@ -81,8 +80,7 @@
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
-							空 [INDEX]
-                            [ALTITUDE]m
+							空 [INDEX]&#xA;[ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt2">
 							不明
@@ -91,8 +89,7 @@
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
-							空 [INDEX]
-                            [ALTITUDE]m
+							空 [INDEX]&#xA;[ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt3">
 							不明

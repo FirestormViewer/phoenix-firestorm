@@ -5096,6 +5096,13 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
         // Call this once and only once
         LLSelectMgr::getInstance()->updateSilhouettes();
     }
+    // <FS:Beq> render the poser manipulator guides
+    // if we have something selected those toosl should override
+    if ( (!for_hud) && (selection->isEmpty()) && (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPose::getInstance()) )
+    {
+        FSToolCompPose::getInstance()->render();
+    }
+    // </FS:Beq>
 
     // Draw fence around land selections
     if (for_gl_pick)

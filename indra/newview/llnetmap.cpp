@@ -91,6 +91,8 @@
 #include "fscommon.h"
 #include "llstartup.h"
 
+#include "llviewernetwork.h" // <FS/> Access to GridManager
+
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
 constexpr F32 LLNetMap::MAP_SCALE_MIN = 32;
@@ -454,26 +456,75 @@ void LLNetMap::draw()
                 gGL.color4f(1.f, 0.5f, 0.5f, 1.f);
             }
 
-            // Draw using texture.
-            gGL.getTexUnit(0)->bind(regionp->getLand().getSTexture());
-            gGL.begin(LLRender::TRIANGLES);
+            // <FS> [FIRE-35147] OpenSim regions can be greater than 256x256 and need to be accounted for
+            if (!LLGridManager::getInstance()->isInSecondLife())
             {
-                gGL.texCoord2f(0.f, 1.f);
-                gGL.vertex2f(left, top);
-                gGL.texCoord2f(0.f, 0.f);
-                gGL.vertex2f(left, bottom);
-                gGL.texCoord2f(1.f, 0.f);
-                gGL.vertex2f(right, bottom);
+                // Fixes OpenSim race condition on grid change not having updated Grid Info yet
+                bool isAgentTeleporting = gAgent.getTeleportState() != LLAgent::TELEPORT_NONE;
+                if (!isAgentTeleporting)
+                {
+                    const LLViewerRegion::tex_matrix_t& tiles(regionp->getWorldMapTiles());
+                    for (S32 i(0), scaled_width((S32)(real_width / region_width)), square_width(scaled_width * scaled_width);
+                         i < square_width; ++i)
+                    {
+                        const F32                  y = (F32)(i / scaled_width);
+                        const F32                  x = (F32)(i - y * scaled_width);
+                        const F32                  local_left(left + x * mScale);
+                        const F32                  local_right(local_left + mScale);
+                        const F32                  local_bottom(bottom + y * mScale);
+                        const F32                  local_top(local_bottom + mScale);
+                        LLPointer<LLViewerTexture> pRegionImage = tiles[(U64)(x * scaled_width + y)];
+                        if (pRegionImage.isNull())
+                            continue;
 
-                gGL.texCoord2f(0.f, 1.f);
-                gGL.vertex2f(left, top);
-                gGL.texCoord2f(1.f, 0.f);
-                gGL.vertex2f(right, bottom);
-                gGL.texCoord2f(1.f, 1.f);
-                gGL.vertex2f(right, top);
+                        if (pRegionImage->hasGLTexture())
+                        {
+                            gGL.getTexUnit(0)->bind(pRegionImage);
+                            gGL.begin(LLRender::TRIANGLES);
+                            {
+                                gGL.texCoord2f(0.f, 1.f);
+                                gGL.vertex2f(local_left, local_top);
+                                gGL.texCoord2f(0.f, 0.f);
+                                gGL.vertex2f(local_left, local_bottom);
+                                gGL.texCoord2f(1.f, 0.f);
+                                gGL.vertex2f(local_right, local_bottom);
+
+                                gGL.texCoord2f(0.f, 1.f);
+                                gGL.vertex2f(local_left, local_top);
+                                gGL.texCoord2f(1.f, 0.f);
+                                gGL.vertex2f(local_right, local_bottom);
+                                gGL.texCoord2f(1.f, 1.f);
+                                gGL.vertex2f(local_right, local_top);
+                            }
+                            gGL.end();
+                        }
+                        pRegionImage->setBoostLevel(LLViewerTexture::BOOST_MAP_VISIBLE);
+                    }
+                }
             }
-            gGL.end();
+            // </FS>
+            else
+            {
+                // Draw using texture.
+                gGL.getTexUnit(0)->bind(regionp->getLand().getSTexture());
+                gGL.begin(LLRender::TRIANGLES);
+                {
+                    gGL.texCoord2f(0.f, 1.f);
+                    gGL.vertex2f(left, top);
+                    gGL.texCoord2f(0.f, 0.f);
+                    gGL.vertex2f(left, bottom);
+                    gGL.texCoord2f(1.f, 0.f);
+                    gGL.vertex2f(right, bottom);
 
+                    gGL.texCoord2f(0.f, 1.f);
+                    gGL.vertex2f(left, top);
+                    gGL.texCoord2f(1.f, 0.f);
+                    gGL.vertex2f(right, bottom);
+                    gGL.texCoord2f(1.f, 1.f);
+                    gGL.vertex2f(right, top);
+                }
+                gGL.end();
+            }
             gGL.flush();
         }
 

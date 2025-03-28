@@ -1948,6 +1948,227 @@ void LLVOAvatar::renderBones(const std::string &selected_joint)
     }
 }
 
+void LLVOAvatar::renderOnlySelectedBones(const std::vector<std::string> &selected_joints)
+{
+    LLGLEnable blend(GL_BLEND);
+
+    avatar_joint_list_t::iterator iter = mSkeleton.begin();
+    avatar_joint_list_t::iterator end = mSkeleton.end();
+
+    // For selected joints
+    static LLVector3 SELECTED_COLOR_OCCLUDED(1.0f, 1.0f, 0.0f);
+    static LLVector3 SELECTED_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    // For bones with position overrides defined
+    static LLVector3 OVERRIDE_COLOR_OCCLUDED(1.0f, 0.0f, 0.0f);
+    static LLVector3 OVERRIDE_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    // For bones which are rigged to by at least one attachment
+    static LLVector3 RIGGED_COLOR_OCCLUDED(0.0f, 1.0f, 1.0f);
+    static LLVector3 RIGGED_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    // For bones not otherwise colored
+    static LLVector3 OTHER_COLOR_OCCLUDED(0.0f, 1.0f, 0.0f);
+    static LLVector3 OTHER_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+
+    static F32 SPHERE_SCALEF = 0.001f;
+
+    for (; iter != end; ++iter)
+    {
+        LLJoint* jointp = *iter;
+        if (!jointp)
+        {
+            continue;
+        }
+        if (std::find(selected_joints.begin(), selected_joints.end(), jointp->getName()) == selected_joints.end())
+        {
+            continue;
+        }
+        jointp->updateWorldMatrix();
+
+        LLVector3 occ_color, visible_color;
+
+        occ_color = SELECTED_COLOR_OCCLUDED;
+        visible_color = SELECTED_COLOR_VISIBLE;
+
+        gGL.pushMatrix();
+        gGL.multMatrix( &jointp->getXform()->getWorldMatrix().mMatrix[0][0] );
+
+        gGL.diffuseColor3f( 1.f, 0.f, 1.f );
+
+        gGL.begin(LLRender::LINES);
+
+        LLVector3 v[] =
+        {
+            LLVector3(1,0,0),
+            LLVector3(-1,0,0),
+            LLVector3(0,1,0),
+            LLVector3(0,-1,0),
+
+            LLVector3(0,0,-1),
+            LLVector3(0,0,1),
+        };
+
+        //sides
+        gGL.vertex3fv(v[0].mV);
+        gGL.vertex3fv(v[2].mV);
+
+        gGL.vertex3fv(v[0].mV);
+        gGL.vertex3fv(v[3].mV);
+
+        gGL.vertex3fv(v[1].mV);
+        gGL.vertex3fv(v[2].mV);
+
+        gGL.vertex3fv(v[1].mV);
+        gGL.vertex3fv(v[3].mV);
+
+
+        //top
+        gGL.vertex3fv(v[0].mV);
+        gGL.vertex3fv(v[4].mV);
+
+        gGL.vertex3fv(v[1].mV);
+        gGL.vertex3fv(v[4].mV);
+
+        gGL.vertex3fv(v[2].mV);
+        gGL.vertex3fv(v[4].mV);
+
+        gGL.vertex3fv(v[3].mV);
+        gGL.vertex3fv(v[4].mV);
+
+
+        //bottom
+        gGL.vertex3fv(v[0].mV);
+        gGL.vertex3fv(v[5].mV);
+
+        gGL.vertex3fv(v[1].mV);
+        gGL.vertex3fv(v[5].mV);
+
+        gGL.vertex3fv(v[2].mV);
+        gGL.vertex3fv(v[5].mV);
+
+        gGL.vertex3fv(v[3].mV);
+        gGL.vertex3fv(v[5].mV);
+
+        gGL.end();
+
+        gGL.popMatrix();
+
+        
+        // renderBoxAroundJointAttachments( jointp );
+
+    }
+
+
+    // // draw joint space bounding boxes of rigged attachments in yellow
+    // gGL.color3f(1.f, 1.f, 0.f);
+    // for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
+    // {
+    //     LLJoint* joint = getJoint(joint_num);
+    //     LLJointRiggingInfo* rig_info = NULL;
+    //     if (joint_num < mJointRiggingInfoTab.size())
+    //     {
+    //         rig_info = &mJointRiggingInfoTab[joint_num];
+    //     }
+
+    //     if (joint && rig_info && rig_info->isRiggedTo())
+    //     {
+    //         LLViewerJointAttachment* as_joint_attach = dynamic_cast<LLViewerJointAttachment*>(joint);
+    //         if (as_joint_attach && as_joint_attach->getIsHUDAttachment())
+    //         {
+    //             // Ignore bounding box of HUD joints
+    //             continue;
+    //         }
+    //         gGL.pushMatrix();
+    //         gGL.multMatrix(&joint->getXform()->getWorldMatrix().mMatrix[0][0]);
+
+    //         LLVector4a pos;
+    //         LLVector4a size;
+
+    //         const LLVector4a* extents = rig_info->getRiggedExtents();
+
+    //         pos.setAdd(extents[0], extents[1]);
+    //         pos.mul(0.5f);
+    //         size.setSub(extents[1], extents[0]);
+    //         size.mul(0.5f);
+
+    //         drawBoxOutline(pos, size);
+
+    //         gGL.popMatrix();
+    //     }
+    // }
+
+    // draw world space attachment rigged bounding boxes in cyan
+    // gGL.color3f(0.f, 1.f, 1.f);
+    // for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+    //      iter != mAttachmentPoints.end();
+    //      ++iter)
+    // {
+    //     LLViewerJointAttachment* attachment = iter->second;
+
+    //     if (attachment->getValid())
+    //     {
+    //         for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+    //              attachment_iter != attachment->mAttachedObjects.end();
+    //              ++attachment_iter)
+    //         {
+    //             LLViewerObject* attached_object = attachment_iter->get();
+    //             if (attached_object && !attached_object->isHUDAttachment())
+    //             {
+    //                 LLDrawable* drawable = attached_object->mDrawable;
+    //                 if (drawable && drawable->isState(LLDrawable::RIGGED | LLDrawable::RIGGED_CHILD))
+    //                 {
+    //                     // get face rigged extents
+    //                     for (S32 i = 0; i < drawable->getNumFaces(); ++i)
+    //                     {
+    //                         LLFace* facep = drawable->getFace(i);
+    //                         if (facep && facep->isState(LLFace::RIGGED))
+    //                         {
+    //                             LLVector4a center, size;
+
+    //                             LLVector4a* extents = facep->mRiggedExtents;
+
+    //                             center.setAdd(extents[0], extents[1]);
+    //                             center.mul(0.5f);
+    //                             size.setSub(extents[1], extents[0]);
+    //                             size.mul(0.5f);
+    //                             drawBoxOutline(center, size);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+}
+void LLVOAvatar::renderBoxAroundJointAttachments(LLJoint * joint)
+{
+    LLJointRiggingInfo* rig_info = NULL;
+    
+    if (joint->getJointNum() < mJointRiggingInfoTab.size())
+    {
+        rig_info = &mJointRiggingInfoTab[joint->getJointNum()];
+    }
+
+    if (joint && rig_info && rig_info->isRiggedTo())
+    {
+        LLViewerJointAttachment* as_joint_attach = dynamic_cast<LLViewerJointAttachment*>(joint);
+        gGL.pushMatrix();
+        gGL.multMatrix(&joint->getXform()->getWorldMatrix().mMatrix[0][0]);
+
+        LLVector4a pos;
+        LLVector4a size;
+
+        const LLVector4a* extents = rig_info->getRiggedExtents();
+
+        pos.setAdd(extents[0], extents[1]);
+        pos.mul(0.5f);
+        size.setSub(extents[1], extents[0]);
+        size.mul(0.5f);
+
+        drawBoxOutline(pos, size);
+
+        gGL.popMatrix();
+    }
+}
+
 
 void LLVOAvatar::renderJoints()
 {
@@ -2776,12 +2997,19 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
             LL_DEBUGS("Avatar") << avString() << "get old-bake image from host " << uuid << LL_ENDL;
             LLHost host = getObjectHost();
             result = LLViewerTextureManager::getFetchedTexture(
-                uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                //uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+                uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+                // <FS:minerjr> [FIRE-35081]
             // </FS:Ansariel> [Legacy Bake]
         }
         LL_DEBUGS("Avatar") << avString() << "get server-bake image from URL " << url << LL_ENDL;
         result = LLViewerTextureManager::getFetchedTextureFromUrl(
-            url, FTT_SERVER_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, uuid);
+            // <FS:minerjr>
+            //url, FTT_SERVER_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, uuid);
+            // Change the texture from LOD to AVATAR_BAKED.
+            url, FTT_SERVER_BAKE, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE, 0, 0, uuid);
+            // </FS:minerjr> [FIRE-35081]
         if (result->isMissingAsset())
         {
             result->setIsMissingAsset(false);
@@ -10769,7 +10997,11 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
             //LL_DEBUGS("Avatar") << avString() << " baked_index " << (S32) baked_index << " using mLastTextureID " << mBakedTextureDatas[baked_index].mLastTextureID << LL_ENDL;
             LL_DEBUGS("Avatar") << avString() << "sb " << (S32) isUsingServerBakes() << " baked_index " << (S32) baked_index << " using mLastTextureID " << mBakedTextureDatas[baked_index].mLastTextureID << LL_ENDL;
             setTEImage(mBakedTextureDatas[baked_index].mTextureIndex,
-                LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                //LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
+                //Texture will use baked textures, so it should also use that for the boost.
+                LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE));
+                // <FS:minerjr> [FIRE-35081]
         }
         else
         {
