@@ -220,7 +220,7 @@ S32 LLAgentBenefits::getPicksLimit() const
     }
     else
     {
-        constexpr S32 MAX_OPENSIM_PICKS_FALLBACK = 20; // [FIRE-35276] Freeze on OpenSim (default agreed with Ubit Umarov) (originally by Haklezz)
+        constexpr S32 MAX_OPENSIM_PICKS_FALLBACK = 20; // [FIRE-35276] Freeze on OpenSim (default agreed with Ubit Umarov) (originally by Hecklezz)
 
         S32 max_profile_picks = MAX_OPENSIM_PICKS_FALLBACK;
 
@@ -234,7 +234,7 @@ S32 LLAgentBenefits::getPicksLimit() const
             }
         }
         return max_profile_picks;
-    }    
+    }
     // </FS:Ansariel>
 }
 
