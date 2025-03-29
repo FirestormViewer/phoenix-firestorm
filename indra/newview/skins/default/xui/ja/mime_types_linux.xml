@@ -65,12 +65,12 @@
 	</scheme>
 	<mimetype name="blank">
 		<label name="blank_label">
-			─なし─
+			‐なし‐
 		</label>
 	</mimetype>
 	<mimetype name="none/none">
 		<label name="none/none_label">
-			─なし─
+			‐なし‐
 		</label>
 	</mimetype>
 	<mimetype name="audio/*">
@@ -131,6 +131,11 @@
 	<mimetype name="application/x-director">
 		<label name="application/x-director_label">
 			Macromedia Director
+		</label>
+	</mimetype>
+	<mimetype name="application/octet-stream">
+		<label name="application/octet-stream_label">
+			ストリーム
 		</label>
 	</mimetype>
 	<mimetype name="audio/mid">
@@ -206,6 +211,11 @@
 	<mimetype name="video/mp4">
 		<label name="video/mp4_label">
 			ムービー（MP4）
+		</label>
+	</mimetype>
+	<mimetype name="video/x-flv">
+		<label name="video/x-flv_label">
+			ムービー（flv）
 		</label>
 	</mimetype>
 	<mimetype name="video/quicktime">

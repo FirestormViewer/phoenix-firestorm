@@ -1,34 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="friends">
-	<panel.string name="FontName" value="SANSSERIF"/>
 	<layout_stack name="ls_friend_list">
 		<layout_panel name="lp_search">
-			<filter_editor label="フレンドをフィルター" name="friend_filter_input" />
+			<filter_editor label="フレンドをフィルタ" name="friend_filter_input"/>
 		</layout_panel>
 		<layout_panel name="lp_friend_list">
-			<view_border name="info_border" />
 			<fs_scroll_list name="friend_list">
-				<fs_scroll_list.column name="icon_online_status" tool_tip="オンライン・ステータス" />
+				<fs_scroll_list.column name="icon_online_status" tool_tip="オンライン状況"/>
 				<fs_scroll_list.column label="ユーザー名" name="user_name" tool_tip="この連絡先のユーザー名です。"/>
 				<fs_scroll_list.column label="表示名" name="display_name" tool_tip="この連絡先の表示名です。"/>
-				<fs_scroll_list.column label="名前" name="full_name" tool_tip="この連絡先が選択した名前の表示です。" />
-				<fs_scroll_list.column name="icon_visible_online" tool_tip="フレンドは、あなたがオンラインかどうか確認することができます。" />
-				<fs_scroll_list.column name="icon_visible_map" tool_tip="フレンドは、地図であなたの居場所を見つけることができます。" />
-				<fs_scroll_list.column name="icon_edit_mine" tool_tip="フレンドは、オブジェクトを編集、削除、または取得することができます。" />
-				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="あなたは、地図でフレンドの居場所を見つけることができます。" />
-				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="あなたは、このフレンドのオブジェクトを編集することができます。" />
-				<fs_scroll_list.column name="friend_last_update_generation" />
+				<fs_scroll_list.column label="名前" name="full_name" tool_tip="この連絡先が選択した名前の表示です。"/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="フレンドは、あなたがオンラインかどうか確認することができます。"/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="フレンドは、マップ上であなたのいる場所を見つけることができます。"/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="フレンドは、オブジェクトを編集、削除、または取得することができます。"/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="あなたは、マップ上でフレンドがいる場所を見つけることができます。"/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="あなたは、このフレンドのオブジェクトを編集することができます。"/>
 			</fs_scroll_list>
 		</layout_panel>
 	</layout_stack>
-	<button label="IM/コール" name="im_btn" tool_tip="インスタントメッセージ・セッションを開く" />
-	<button label="プロフィール" name="profile_btn" tool_tip="写真、グループ、およびその他の情報を表示します。" />
-	<button label="テレポート..." name="offer_teleport_btn" tool_tip="このフレンドに、あなたの現在のロケーションまでのテレポートを送ります。" />
-	<button label="地図..." name="map_btn" tool_tip="このフレンドの現在の居場所を世界地図に表示します。" width="80" />
-	<button label="支払う..." name="pay_btn" tool_tip="リンデンドル (L$) をこのフレンドに送金します。" />
-	<button label="削除..." name="remove_btn" tool_tip="この人物をフレンドリストから除外します。" />
-	<button label="追加..." name="add_btn" tool_tip="住人にフレンドシップを申請します。" />
+	<button label="ＩＭ／コール" name="im_btn" tool_tip="インスタントメッセージのセッションを開く"/>
+	<button label="プロフィール" name="profile_btn" tool_tip="画像、グループ、およびその他の情報を表示します。"/>
+	<button label="テレポート…" name="offer_teleport_btn" tool_tip="このフレンドに、あなたの現在のロケーションまでのテレポートを送ります。"/>
+	<button label="マップ…" name="map_btn" tool_tip="このフレンドの現在の居場所をワールドマップ上に表示します。"/>
+	<button label="支払う…" name="pay_btn" tool_tip="リンデンドル（L$）をこのフレンドに送金します。"/>
+	<button label="削除…" name="remove_btn" tool_tip="この人物をフレンドリストから除外します。"/>
+	<button label="追加…" name="add_btn" tool_tip="住人にフレンドシップを申請します。"/>
 	<text name="friend_count">
-		フレンド数: [COUNT]
+		フレンド数：[COUNT]人
 	</text>
 </panel>
