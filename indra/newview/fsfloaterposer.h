@@ -220,6 +220,7 @@ public:
     void createUserPoseDirectoryIfNeeded();
     void onToggleLoadSavePanel();
     void onClickPoseSave();
+    void onMouseLeaveSavePoseBtn();
     void onPoseFileSelect();
     bool savePoseToXml(LLVOAvatar* avatar, const std::string& posePath);
     bool savePoseToBvh(LLVOAvatar* avatar, const std::string& posePath);
@@ -229,6 +230,7 @@ public:
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
+    bool confirmFileOverwrite(std::string fileName);
     void startPosingSelf();
     void stopPosingAllAvatars();
     // visual manipulators control

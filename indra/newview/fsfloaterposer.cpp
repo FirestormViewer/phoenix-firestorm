@@ -61,6 +61,7 @@ constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpa
 constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPosingWhenClosed";
 constexpr std::string_view POSER_RESETBASEROTONEDIT_SAVE_KEY   = "FSPoserResetBaseRotationOnEdit";
 constexpr std::string_view POSER_SAVEEXTERNALFORMAT_SAVE_KEY   = "FSPoserSaveExternalFileAlso";
+constexpr std::string_view POSER_SAVECONFIRMREQUIRED_SAVE_KEY   = "FSPoserOnSaveConfirmOverwrite";
 }  // namespace
 
 /// <summary>
@@ -178,6 +179,7 @@ bool FSFloaterPoser::postBuild()
     mBrowserFolderBtn = getChild<LLButton>("open_poseDir_button");
     mLoadPosesBtn = getChild<LLButton>("load_poses_button");
     mSavePosesBtn = getChild<LLButton>("save_poses_button");
+    mSavePosesBtn->setMouseLeaveCallback([this](LLUICtrl*, const LLSD&) { onMouseLeaveSavePoseBtn(); });
 
     mFlipPoseBtn = getChild<LLButton>("FlipPose_avatar");
     mFlipJointBtn = getChild<LLButton>("FlipJoint_avatar");
@@ -356,16 +358,22 @@ void FSFloaterPoser::onPoseFileSelect()
     mPoseSaveNameEditor->setText(name);
 
     bool isDeltaSave = !poseFileStartsFromTeePose(name);
-    if (isDeltaSave)
+    if (isDeltaSave && hasString("LoadDiffLabel"))
         mLoadPosesBtn->setLabel(getString("LoadDiffLabel"));
-    else
+    else if (hasString("LoadPoseLabel"))
         mLoadPosesBtn->setLabel(getString("LoadPoseLabel"));
 }
 
 void FSFloaterPoser::onClickPoseSave()
 {
     std::string filename = mPoseSaveNameEditor->getValue().asString();
-    if (filename.empty())
+    if (filename.empty() && hasString("icon_save_failed_button"))
+    {
+        mSavePosesBtn->setImageOverlay(getString("icon_save_failed_button"), mSavePosesBtn->getImageOverlayHAlign());
+        return;
+    }
+
+    if (confirmFileOverwrite(filename))
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
@@ -381,8 +389,49 @@ void FSFloaterPoser::onClickPoseSave()
         if (getSavingToBvh())
             savePoseToBvh(avatar, filename);
 
-        // TODO: provide feedback for save
+        if (hasString("icon_rotation_is_own_work"))
+            mSavePosesBtn->setImageOverlay(getString("icon_rotation_is_own_work"), mSavePosesBtn->getImageOverlayHAlign());
+
+        setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
     }
+    else
+    {
+        if (hasString("icon_save_failed_button"))
+            mSavePosesBtn->setImageOverlay(getString("icon_save_failed_button"), mSavePosesBtn->getImageOverlayHAlign());
+    }
+}
+
+bool FSFloaterPoser::confirmFileOverwrite(std::string fileName)
+{
+    if (fileName.empty())
+        return false;
+
+    if (!gSavedSettings.getBOOL(POSER_SAVECONFIRMREQUIRED_SAVE_KEY))
+        return false;
+
+    if (!hasString("icon_save_query"))
+        return false;
+
+    if (mSavePosesBtn->getImageOverlay().notNull() && mSavePosesBtn->getImageOverlay()->getName() == getString("icon_save_query"))
+        return false;
+
+    std::string fullSavePath =
+        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, fileName + POSE_INTERNAL_FORMAT_FILE_EXT);
+
+    if (!gDirUtilp->fileExists(fullSavePath))
+        return false;
+
+    mSavePosesBtn->setImageOverlay(getString("icon_save_query"), mSavePosesBtn->getImageOverlayHAlign());
+    if (hasString("OverWriteLabel"))
+        mSavePosesBtn->setLabel(getString("OverWriteLabel"));
+
+    return true;
+}
+
+void FSFloaterPoser::onMouseLeaveSavePoseBtn()
+{
+    if (hasString("icon_save_button"))
+        mSavePosesBtn->setImageOverlay(getString("icon_save_button"), mSavePosesBtn->getImageOverlayHAlign());
 }
 
 void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
@@ -2305,7 +2354,8 @@ void FSFloaterPoser::refreshTextHighlightingOnJointScrollLists()
 
 void FSFloaterPoser::setSavePosesButtonText(bool setAsSaveDiff)
 {
-    setAsSaveDiff ? mSavePosesBtn->setLabel("Save Diff") : mSavePosesBtn->setLabel("Save Pose");
+    if (hasString("SavePoseLabel") && hasString("SaveDiffLabel"))
+        setAsSaveDiff ? mSavePosesBtn->setLabel(getString("SaveDiffLabel")) : mSavePosesBtn->setLabel(getString("SavePoseLabel"));
 }
 
 void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar)
@@ -2600,8 +2650,8 @@ S32 FSFloaterPoser::getBvhJointNegation(const std::string& jointName) const
     return result;
 }
 
-
 bool FSFloaterPoser::getWhetherToResetBaseRotationOnEdit() { return gSavedSettings.getBOOL(POSER_RESETBASEROTONEDIT_SAVE_KEY); }
+
 void FSFloaterPoser::onClickSetBaseRotZero() { mAlsoSaveBvhCbx->setEnabled(getWhetherToResetBaseRotationOnEdit()); }
 
 bool FSFloaterPoser::getSavingToBvh()

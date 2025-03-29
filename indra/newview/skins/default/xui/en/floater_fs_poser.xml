@@ -11,6 +11,9 @@ width="430">
 	<string name="icon_bone" translate="false"></string>
 	<string name="icon_object" translate="false">Inv_Object</string>
 	<string name="icon_rotation_is_own_work" translate="false">Check_Mark</string>
+	<string name="icon_save_button" translate="false">Icon_Dock_Foreground</string>
+	<string name="icon_save_failed_button" translate="false">Parcel_Exp_Color</string>
+	<string name="icon_save_query" translate="false">Info</string>
 
 	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
 	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
@@ -278,7 +281,10 @@ width="430">
 	<string name="bvh_joint_transform_mHead" translate="false">SWAP_X2Y_Y2Z_Z2X</string>
 
 	<string name="LoadPoseLabel">Load Pose</string>
+	<string name="SavePoseLabel">Save Pose</string>
 	<string name="LoadDiffLabel">Load Diff</string>
+	<string name="SaveDiffLabel">Save Diff</string>
+	<string name="OverWriteLabel">Overwrite?</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack
@@ -924,6 +930,16 @@ width="430">
 						 left="15"
 						 tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
 						 top_pad="2"
+						 width="134" />
+						<check_box
+						 control_name="FSPoserOnSaveConfirmOverwrite"
+						 name="confirm_overwrite_on_save_checkbox"
+						 height="16"
+						 label="Confirm Overwrite"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="When you save a pose, if the file already exists, you need to click the save button again to confirm you are sure you want to overwrite."
+						 top_pad="5"
 						 width="134" />
 					</panel>
 				</tab_container>
