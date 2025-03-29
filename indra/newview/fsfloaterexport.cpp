@@ -690,7 +690,14 @@ void FSFloaterObjectExport::fetchTextureFromCache(LLViewerFetchedTexture* src_vi
     const LLUUID& texture_id = src_vi->getID();
     LLImageJ2C* mFormattedImage = new LLImageJ2C;
     FSFloaterObjectExport::FSExportCacheReadResponder* responder = new FSFloaterObjectExport::FSExportCacheReadResponder(texture_id, mFormattedImage, this);
-    LLAppViewer::getTextureCache()->readFromCache(texture_id, 0, 999999, responder);
+    // <FS:minerjr> [FIRE-35292] Fix for textures getting downscaled and compressed
+    //LLAppViewer::getTextureCache()->readFromCache(id, 0, 999999, responder);
+    // The above line hard coded the size of data to read from the cached version of the texture as 999999,
+    // where now we will calcuate the correct value based upon the texture's full width, height and # of components (3=RGB, 4=RGBA) and
+    // the discard level (0)). There is a choice to change the rate, but we seem to use the value of 1/8 compression level
+    S32 texture_size = LLImageJ2C::calcDataSizeJ2C(src_vi->getFullWidth(), src_vi->getFullHeight(), src_vi->getComponents(), 0);// , F32 rate) rate = const F32 DEFAULT_COMPRESSION_RATE = 1.f/8.f;
+    // Use calculated texture_size (from LLTextureFetch::createRequest see "else if (w*h*c > 0)" statement for more info)
+    LLAppViewer::getTextureCache()->readFromCache(texture_id, 0, texture_size, responder);
     LL_DEBUGS("export") << "Fetching " << texture_id << " from the TextureCache" << LL_ENDL;
 }
 
