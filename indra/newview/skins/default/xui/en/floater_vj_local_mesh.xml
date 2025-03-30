@@ -114,7 +114,7 @@
         width="300"
         label="Assume scale is in meters."
         tool_tip="Ignore the cm scale units used by tools such as Maya" />
-      <check_box name="local_mesh_scale_use_meters"
+      <check_box name="checkbox_apply_joint_offsets"
         height="15"
         control_name="FSLocalMeshApplyJointOffsets"
         follows="top|left"

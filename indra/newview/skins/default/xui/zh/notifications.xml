@@ -4353,7 +4353,7 @@ https://wiki.firestormviewer.org/fs_voice
 		記事卡的第[LINE]行沒有有效的「[」狀態字首。
 	</notification>
 	<notification name="AOImportNoValidDelimiter">
-		記事卡的第[LINE]行沒有有效的「[」狀態字尾。
+		記事卡的第[LINE]行沒有有效的「[」狀態後綴。
 	</notification>
 	<notification name="AOImportStateNameNotFound">
 		狀態[NAME]不存在。
