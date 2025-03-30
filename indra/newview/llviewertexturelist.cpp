@@ -954,6 +954,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 {
     llassert(!gCubeSnapshot);
 
+    constexpr F32 BIAS_TRS_OUT_OF_SCREEN = 1.5f;
+    constexpr F32 BIAS_TRS_ON_SCREEN = 1.f;
+
+    static LLCachedControl<S32> use_low_VRAM_support(gSavedSettings, "FSUseLowVRAMSupport", 0);
+
     if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH)  // don't bother checking face list for boosted textures
     {
         static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.04f);
@@ -1138,8 +1143,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         //if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
         // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
         // Dropped LOD textures for just any on screen, but close the camera still fall under the next statement below
-        //if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
-        if (on_screen && ((imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        //if (on_screen && ((imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
         // <FS:minerjr> [FIRE-35184]
         {
             // Always use the best quality of the texture
@@ -1315,8 +1320,9 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
             LLImageGL* img = image->getGLTexture();
             if (img && img->getHasGLTexture())
             {
+                S32 fetch_state = mFetchStates[image->getID()].load(std::memory_order_relaxed);
                 // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
-                if (!image->isDeleted() && !image->hasFetcher() && img->getDiscardLevel() < image->getDesiredDiscardLevel())
+                if (!image->isDeleted() && !image->hasFetcher() && img->getDiscardLevel() < image->getDesiredDiscardLevel() && fetch_state == 0)
                 // </FS:minerjr> [FIRE-35184]
                 img->scaleDown(image->getDesiredDiscardLevel());
             }

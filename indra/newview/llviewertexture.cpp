@@ -2036,7 +2036,8 @@ bool LLViewerFetchedTexture::updateFetch()
     }
     // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
     // If the current texture has a fetch assigned to it and is not in the DONE state (see LLTextureFetchWorker::e_state::DONE)
-    if (hasFetcher() && gTextureList.mFetchStates[getID()].load() != 14)
+    S32 fetch_state = gTextureList.mFetchStates[getID()].load(std::memory_order_relaxed);
+    if (hasFetcher() && fetch_state != 14)
     {
         // Exit out early, this saves the texture from hitting the fetch threads with update requests when still working. (Stops stalls and spin locks)
         return false;
@@ -2113,8 +2114,12 @@ bool LLViewerFetchedTexture::updateFetch()
         }
         else
         {
-            mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
-                                                                        mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
+            // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+            //mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
+            //                                                            mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
+            // We can use the value from the new atomic fetch state
+            mFetchState = gTextureList.mFetchStates[mID].load(std::memory_order_relaxed);
+            // <FS:minerjr> [FIRE-35184]
         }
 
         if (!processFetchResults(desired_discard, current_discard, fetch_discard, decode_priority))
@@ -2214,8 +2219,12 @@ bool LLViewerFetchedTexture::updateFetch()
             // in some cases createRequest can modify discard, as an example
             // bake textures are always at discard 0
             mRequestedDiscardLevel = llmin(desired_discard, fetch_request_response);
-            mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
-                                                       mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
+            // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+            //mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
+            //                                           mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
+            // We can use the value from the new atomic fetch state
+            mFetchState = gTextureList.mFetchStates[mID].load(std::memory_order_relaxed);
+            // <FS:minerjr> [FIRE-35184]
         }
         // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
         // Disable this code as it causes threads to stall as it is not safe to get a Raw Texture, if it is being decoded
@@ -2267,6 +2276,10 @@ bool LLViewerFetchedTexture::updateFetch()
             LL_DEBUGS("Texture") << "exceeded idle time " << FETCH_IDLE_TIME << ", deleting request: " << getID() << LL_ENDL;
             LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
             mHasFetcher = false;
+            // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+            // Added reset for the fetch state
+            gTextureList.mFetchStates[getID()].store(0, std::memory_order_relaxed);
+            // </FS:minerjr> [FIRE-35184]
         }
     }
 
@@ -2298,6 +2311,10 @@ void LLViewerFetchedTexture::forceToDeleteRequest()
     {
         mHasFetcher = false;
         mIsFetching = false;
+        // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+        // Added reset for the fetch state
+        gTextureList.mFetchStates[getID()].store(0, std::memory_order_relaxed);
+        // </FS:minerjr> [FIRE-35184]
     }
 
     resetTextureStats();
@@ -2332,6 +2349,10 @@ void LLViewerFetchedTexture::setIsMissingAsset(bool is_missing)
             LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
             mHasFetcher = false;
             mIsFetching = false;
+            // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+            // Added reset for the fetch state
+            gTextureList.mFetchStates[getID()].store(0, std::memory_order_relaxed);
+            // </FS:minerjr> [FIRE-35184]
             mLastPacketTimer.reset();
             mFetchState = 0;
             mFetchPriority = 0;

@@ -976,7 +976,7 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
 
     // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
     // Atomicly store the current state in the global texture fetch map
-    gTextureList.mFetchStates[mID].store((S32)INIT);
+    gTextureList.mFetchStates[mID].store((S32)INIT, std::memory_order_relaxed);
     // </FS:minerjr> [FIRE-35184]
 }
 
@@ -1216,7 +1216,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
             mState = DONE;
             // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
             // Atomicly store the current state in the global texture fetch map
-            gTextureList.mFetchStates[mID].store((S32)DONE);
+            gTextureList.mFetchStates[mID].store((S32)DONE, std::memory_order_relaxed);
             // </FS:minerjr> [FIRE-35184]
             return true;
         }
@@ -3639,7 +3639,7 @@ void LLTextureFetchWorker::setState(e_state new_state)
     
     // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
     // Atomicly store the current state in the global texture fetch map
-    gTextureList.mFetchStates[mID].store((S32)mState);
+    gTextureList.mFetchStates[mID].store((S32)mState, std::memory_order_relaxed);
     // </FS:minerjr> [FIRE-35184]
 
 }

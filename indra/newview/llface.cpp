@@ -2362,6 +2362,8 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
+    static LLCachedControl<S32> use_low_VRAM_support(gSavedSettings, "FSUseLowVRAMSupport", 0);
+
     //get area of circle around face
     LLVector4a center;
     LLVector4a size;
@@ -2488,7 +2490,21 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     mInFrustum = (dist >= 0 && dist <= camera->getFar() && cos_angle_to_view_dir > 0.0f);
     // Only apply if the in the frustum and use positive distance to the camera and apply the multiplier based upon the texture scaled for increase in the default draw distance
     // <FS:minerjr> [FIRE-35184]
-    mCloseToCamera = (mInFrustum && dist >= 0.0f && dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
+    bool use_in_frustum = LLViewerTexture::sDesiredDiscardBias > 1.5f ? mInFrustum : true;
+    switch (use_low_VRAM_support)
+    {
+    case 0: // automatic
+        mInFrustum = use_in_frustum;
+        mCloseToCamera = (use_in_frustum && dist >= 0.0f && dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
+        break;
+    case 1: // on
+        mCloseToCamera = (mInFrustum && dist >= 0.0f && dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
+        break;
+    case 2: // off
+        mInFrustum = true;
+        mCloseToCamera = (dist >= 0.0f && dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
+        break;
+    }
 
     // </FS:minerjr> [FIRE-35081] [FIRE-35184]
 

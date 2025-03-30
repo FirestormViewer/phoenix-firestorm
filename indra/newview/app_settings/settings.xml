@@ -2,6 +2,17 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+  <key>FSUseLowVRAMSupport</key>
+  <map>
+    <key>Comment</key>
+    <string>Support for Low VRAM preferences. (0 - automatic, 1 - On, 2 - Off)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>    
   <key>FSLandmarkCreatedNotification</key>
   <map>
     <key>Comment</key>
