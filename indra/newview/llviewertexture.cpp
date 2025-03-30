@@ -2034,6 +2034,14 @@ bool LLViewerFetchedTexture::updateFetch()
     {
         return false;
     }
+    // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+    // If the current texture has a fetch assigned to it and is not in the DONE state (see LLTextureFetchWorker::e_state::DONE)
+    if (hasFetcher() && gTextureList.mFetchStates[getID()].load() != 14)
+    {
+        // Exit out early, this saves the texture from hitting the fetch threads with update requests when still working. (Stops stalls and spin locks)
+        return false;
+    }
+    // </FS:minerjr> [FIRE-35184]
 
     mFetchState = 0;
     mFetchPriority = 0;
@@ -2209,6 +2217,10 @@ bool LLViewerFetchedTexture::updateFetch()
             mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
                                                        mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
         }
+        // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+        // Disable this code as it causes threads to stall as it is not safe to get a Raw Texture, if it is being decoded
+        // the KDU library is given a raw pointer and not a smart pointer, which can cause access violation errors
+        /*
         else if (fetch_request_response == LLTextureFetch::CREATE_REQUEST_ERROR_TRANSITION)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - processing transition error");
@@ -2236,7 +2248,8 @@ bool LLViewerFetchedTexture::updateFetch()
                 processFetchResults(desired_discard, current_discard, decoded_discard, decode_priority);
             }
         }
-
+        */
+        // </FS:minerjr> [FIRE-35184]
         // If createRequest() failed, that means one of two things:
         // 1. We're finishing up a request for this UUID, so we
         //    should wait for it to complete

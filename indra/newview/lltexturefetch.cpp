@@ -973,6 +973,11 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
         addWork(0);
     }
     setDesiredDiscard(discard, size);
+
+    // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+    // Atomicly store the current state in the global texture fetch map
+    gTextureList.mFetchStates[mID].store((S32)INIT);
+    // </FS:minerjr> [FIRE-35184]
 }
 
 LLTextureFetchWorker::~LLTextureFetchWorker()
@@ -1209,6 +1214,10 @@ bool LLTextureFetchWorker::doWork(S32 param)
         {
             LL_INFOS() << "Blacklisted texture asset blocked." << LL_ENDL;
             mState = DONE;
+            // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+            // Atomicly store the current state in the global texture fetch map
+            gTextureList.mFetchStates[mID].store((S32)DONE);
+            // </FS:minerjr> [FIRE-35184]
             return true;
         }
         // </FS> Asset Blacklist
@@ -3627,6 +3636,12 @@ void LLTextureFetchWorker::setState(e_state new_state)
 
     mStateTimer.reset();
     mState = new_state;
+    
+    // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+    // Atomicly store the current state in the global texture fetch map
+    gTextureList.mFetchStates[mID].store((S32)mState);
+    // </FS:minerjr> [FIRE-35184]
+
 }
 
 LLViewerRegion* LLTextureFetchWorker::getRegion()

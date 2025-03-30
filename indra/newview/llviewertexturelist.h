@@ -238,6 +238,13 @@ public:
     // <FS:Ansariel> Fast cache stats
     static U32 sNumFastCacheReads;
 
+    // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+    // image_states_t is an atomic map of all the textures, paired with an atomic used to sharing the state of the worker thread with the acutal texture
+    typedef std::unordered_map<LLUUID, std::atomic<S32>> image_states_t;
+    // ONLY USE .load and .store and don't use = as it can assign a new value to the map and break the refernces
+    image_states_t mFetchStates;
+    // </FS:minerjr> [FIRE-35184]
+
 private:
     typedef std::map< LLTextureKey, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
     uuid_map_t mUUIDMap;
