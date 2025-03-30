@@ -2115,10 +2115,10 @@ bool LLViewerFetchedTexture::updateFetch()
         else
         {
             // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
-            //mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
-            //                                                            mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
+            mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
+                                                                        mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
             // We can use the value from the new atomic fetch state
-            mFetchState = gTextureList.mFetchStates[mID].load(std::memory_order_relaxed);
+            //mFetchState = gTextureList.mFetchStates[mID].load(std::memory_order_relaxed);
             // <FS:minerjr> [FIRE-35184]
         }
 
@@ -2220,10 +2220,10 @@ bool LLViewerFetchedTexture::updateFetch()
             // bake textures are always at discard 0
             mRequestedDiscardLevel = llmin(desired_discard, fetch_request_response);
             // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
-            //mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
-            //                                           mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
+            mFetchState = LLAppViewer::getTextureFetch()->getFetchState(mID, mDownloadProgress, mRequestedDownloadPriority,
+                                                       mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
             // We can use the value from the new atomic fetch state
-            mFetchState = gTextureList.mFetchStates[mID].load(std::memory_order_relaxed);
+            //mFetchState = gTextureList.mFetchStates[mID].load(std::memory_order_relaxed);
             // <FS:minerjr> [FIRE-35184]
         }
         // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
