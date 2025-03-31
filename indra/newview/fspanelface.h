@@ -378,6 +378,7 @@ private:
     S32     getCurrentMaterialType() const;
     LLRender::eTexIndex getCurrentMatChannel() const;
     LLRender::eTexIndex getCurrentPBRChannel() const;
+    LLGLTFMaterial::TextureInfo getCurrentPBRType(LLRender::eTexIndex pbr_channel) const;
 
     void    selectMaterialType(S32 material_type);
     void    selectMatChannel(LLRender::eTexIndex mat_channel);

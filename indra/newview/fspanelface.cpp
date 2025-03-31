@@ -154,6 +154,33 @@ void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& v
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&select_func, value, has_tolerance, tolerance);
 }
 
+void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical)
+{
+    // The All channel should read base color values
+    if (channel == LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_COUNT)
+        channel = LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR;
+
+    struct LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor : public LLSelectedTEGetFunctor<F32>
+    {
+        LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor(LLGLTFMaterial::TextureInfo channel) : mChannel(channel) {}
+        virtual ~LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor() {};
+        F32 get(LLViewerObject* object, S32 face) override
+        {
+            const LLTextureEntry* tep = object->getTE(face);
+            const LLGLTFMaterial* render_material = tep->getGLTFRenderMaterial();
+            if (!render_material)
+                return 0.f;
+
+            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[VX];
+            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[VY];
+            return llmax(repeats_u, repeats_v);
+        }
+
+        LLGLTFMaterial::TextureInfo mChannel;
+    } max_repeats_func(channel);
+    identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&max_repeats_func, repeats);
+}
+
 //
 // keep LLRenderMaterialFunctor in sync with llmaterialeditor.cpp - Would be nice if we
 // had this in its own file so we could include it from both sides ... -Zi
@@ -2005,13 +2032,19 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             F32 repeats_norm = 1.f;
             F32 repeats_spec = 1.f;
 
+            F32 repeats_pbr_basecolor = 1.f;
+            F32 repeats_pbr_metallic_roughness = 1.f;
+            F32 repeats_pbr_normal = 1.f;
+            F32 repeats_pbr_emissive = 1.f;
+
             bool identical_diff_repeats = false;
             bool identical_norm_repeats = false;
             bool identical_spec_repeats = false;
 
-            LLSelectedTE::getMaxDiffuseRepeats(repeats_diff, identical_diff_repeats);
-            LLSelectedTEMaterial::getMaxNormalRepeats(repeats_norm, identical_norm_repeats);
-            LLSelectedTEMaterial::getMaxSpecularRepeats(repeats_spec, identical_spec_repeats);
+            bool identical_pbr_basecolor_repeats = false;
+            bool identical_pbr_metallic_roughness_repeats = false;
+            bool identical_pbr_normal_repeats = false;
+            bool identical_pbr_emissive_repeats = false;
 
             S32 index = mComboTexGen->getCurrentIndex();
             bool enabled = editable && (index != 1);
@@ -2021,15 +2054,26 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             F32 repeats = 1.0f;
 
             LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
-            if (material_selection == MATMEDIA_MATERIAL)
+            if (material_selection != MATMEDIA_PBR)
             {
                 material_channel = getCurrentMatChannel();
+                LLSelectedTE::getMaxDiffuseRepeats(repeats_diff, identical_diff_repeats);
+                LLSelectedTEMaterial::getMaxNormalRepeats(repeats_norm, identical_norm_repeats);
+                LLSelectedTEMaterial::getMaxSpecularRepeats(repeats_spec, identical_spec_repeats);
             }
-            // TODO: check if repeats per meter even apply to PBR materials -Zi
             else if (material_selection == MATMEDIA_PBR)
             {
                 enabled = editable;
                 material_channel = getCurrentPBRChannel();
+
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR,
+                                                  repeats_pbr_basecolor, identical_pbr_basecolor_repeats);
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS,
+                                                  repeats_pbr_metallic_roughness, identical_pbr_metallic_roughness_repeats);
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_NORMAL,
+                                                  repeats_pbr_normal, identical_pbr_normal_repeats);
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_EMISSIVE,
+                                                  repeats_pbr_emissive, identical_pbr_emissive_repeats);
             }
 
             switch (material_channel)
@@ -2067,6 +2111,35 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
                     }
                     identical_repeats = identical_norm_repeats;
                     repeats = repeats_norm;
+                }
+                break;
+
+                case LLRender::NUM_TEXTURE_CHANNELS:
+                case LLRender::BASECOLOR_MAP:
+                {
+                    identical_repeats = identical_pbr_basecolor_repeats;
+                    repeats = repeats_pbr_basecolor;
+                }
+                break;
+
+                case LLRender::METALLIC_ROUGHNESS_MAP:
+                {
+                    identical_repeats = identical_pbr_metallic_roughness_repeats;
+                    repeats = repeats_pbr_metallic_roughness;
+                }
+                break;
+
+                case LLRender::GLTF_NORMAL_MAP:
+                {
+                    identical_repeats = identical_pbr_normal_repeats;
+                    repeats = repeats_pbr_normal;
+                }
+                break;
+
+                case LLRender::EMISSIVE_MAP:
+                {
+                    identical_repeats = identical_pbr_emissive_repeats;
+                    repeats = repeats_pbr_emissive;
                 }
                 break;
             }
@@ -3262,6 +3335,13 @@ void FSPanelFace::onSelectShinyColor()
 
 void FSPanelFace::updateVisibility(LLViewerObject* objectp /* = nullptr */)
 {
+    S32 materials_media = getCurrentMaterialType();
+    bool show_media = materials_media == MATMEDIA_MEDIA;
+    bool show_material = materials_media == MATMEDIA_MATERIAL;
+
+    // Shared material controls
+    mCheckSyncMaterials->setVisible(show_material || show_media);
+
     updateAlphaControls();
     // TODO: is this still needed? -Zi
     updateShinyControls();
@@ -4113,10 +4193,12 @@ void FSPanelFace::onCommitRepeatsPerMeter()
 {
     S32 materials_media = getCurrentMaterialType();
     LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
-    // TODO: check if repeats per meter is even used for PBR -Zi
+    LLGLTFMaterial::TextureInfo material_type = LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
+
     if (materials_media == MATMEDIA_PBR)
     {
         material_channel = getCurrentPBRChannel();
+        material_type    = getCurrentPBRType(material_channel);
     }
 
     if (materials_media == MATMEDIA_MATERIAL)
@@ -4135,7 +4217,7 @@ void FSPanelFace::onCommitRepeatsPerMeter()
     LLSelectedTE::getObjectScaleS(obj_scale_s, identical_scale_s);
     LLSelectedTE::getObjectScaleS(obj_scale_t, identical_scale_t);
 
-    if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+    if (mCheckSyncMaterials->isAvailable() && gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         LLSelectMgr::getInstance()->selectionTexScaleAutofit(repeats_per_meter);
 
@@ -4178,6 +4260,20 @@ void FSPanelFace::onCommitRepeatsPerMeter()
 
                 LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
                 LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+            }
+            break;
+
+            case LLRender::BASECOLOR_MAP:
+            case LLRender::METALLIC_ROUGHNESS_MAP:
+            case LLRender::GLTF_NORMAL_MAP:
+            case LLRender::EMISSIVE_MAP:
+            case LLRender::NUM_TEXTURE_CHANNELS:
+            {
+                updateGLTFTextureTransform(material_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
+                {
+                    new_transform->mScale.mV[VX] = obj_scale_s * repeats_per_meter;
+                    new_transform->mScale.mV[VY] = obj_scale_t * repeats_per_meter;
+                });
             }
             break;
 
@@ -6000,6 +6096,23 @@ LLRender::eTexIndex FSPanelFace::getCurrentPBRChannel() const
         return LLRender::EMISSIVE_MAP;
     }
     return LLRender::NUM_TEXTURE_CHANNELS;
+}
+
+LLGLTFMaterial::TextureInfo FSPanelFace::getCurrentPBRType(LLRender::eTexIndex pbr_channel) const
+{
+    switch (pbr_channel)
+    {
+        case LLRender::GLTF_NORMAL_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL;
+        case LLRender::BASECOLOR_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
+        case LLRender::METALLIC_ROUGHNESS_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS;
+        case LLRender::EMISSIVE_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE;
+        default:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT;
+    }
 }
 
 void FSPanelFace::selectMaterialType(S32 material_type)
