@@ -5294,7 +5294,7 @@ void FSPanelFace::updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo t
 void FSPanelFace::setMaterialOverridesFromSelection()
 {
     // TODO: move to .h -Zi
-    std::map<LLGLTFMaterial::TextureInfo, std::string> spinner_suffixes{
+    static std::map<LLGLTFMaterial::TextureInfo, std::string> spinner_suffixes{
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR, "_Base" },
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_NORMAL, "_Normal" },
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS, "_Metallic" },
@@ -5479,7 +5479,7 @@ bool FSPanelFace::Selection::compareSelection()
 void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data)
 {
     // TODO: put into .h -Zi
-    std::map<std::string, LLGLTFMaterial::TextureInfo> types =
+    static std::map<std::string, LLGLTFMaterial::TextureInfo> types =
     {
         { "all",        LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT },
         { "base",       LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR },
