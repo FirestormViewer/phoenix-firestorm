@@ -399,6 +399,7 @@ private:
     // private Tab controls
     LLTabContainer*     mTabsPBRMatMedia;
     LLTabContainer*     mTabsPBRChannel;
+    bool                mSetChannelTab = false;
 
     // common controls and parameters for Blinn-Phong and PBR
     LLButton*           mBtnCopyFaces;

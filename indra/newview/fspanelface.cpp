@@ -664,8 +664,10 @@ void FSPanelFace::onMatChannelTabChange()
     if (auto curr_channel = getCurrentMatChannel(); curr_channel != last_channel)
     {
         last_channel = curr_channel;
-        updateUI(true);
+        if (!mSetChannelTab)
+            updateUI(true);
     }
+    mSetChannelTab = false;
 }
 
 void FSPanelFace::onPBRChannelTabChange()
@@ -675,8 +677,10 @@ void FSPanelFace::onPBRChannelTabChange()
     if (auto curr_channel = getCurrentPBRChannel(); curr_channel != last_channel)
     {
         last_channel = curr_channel;
-        updateUI(true);
+        if (!mSetChannelTab)
+            updateUI(true);
     }
+    mSetChannelTab = false;
 }
 
 bool FSPanelFace::postBuild()
@@ -779,6 +783,7 @@ bool FSPanelFace::postBuild()
     mTabsPBRMatMedia->setCommitCallback(boost::bind(&FSPanelFace::onMatTabChange, this));
     mTabsMatChannel->setCommitCallback(boost::bind(&FSPanelFace::onMatChannelTabChange, this));
     mTabsPBRChannel->setCommitCallback(boost::bind(&FSPanelFace::onPBRChannelTabChange, this));
+
     // common controls and parameters for Blinn-Phong and PBR
     mBtnCopyFaces->setCommitCallback(boost::bind(&FSPanelFace::onCopyFaces, this));
     mBtnPasteFaces->setCommitCallback(boost::bind(&FSPanelFace::onPasteFaces, this));
@@ -6186,6 +6191,7 @@ void FSPanelFace::selectMaterialType(S32 material_type)
 
 void FSPanelFace::selectMatChannel(LLRender::eTexIndex mat_channel)
 {
+    mSetChannelTab = true;
     if (mat_channel == LLRender::NORMAL_MAP)
     {
         mTabsMatChannel->selectTabByName("panel_blinn_phong_normal");
@@ -6202,6 +6208,7 @@ void FSPanelFace::selectMatChannel(LLRender::eTexIndex mat_channel)
 
 void FSPanelFace::selectPBRChannel(LLRender::eTexIndex pbr_channel)
 {
+    mSetChannelTab = true;
     if (pbr_channel == LLRender::GLTF_NORMAL_MAP)
     {
         mTabsPBRChannel->selectTabByName("panel_pbr_transforms_normal");
