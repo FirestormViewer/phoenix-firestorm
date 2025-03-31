@@ -5481,7 +5481,7 @@ bool FSPanelFace::Selection::compareSelection()
     return selection_changed;
 }
 
-void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data)
+void FSPanelFace::onCommitGLTFUVSpinner(LLUICtrl* ctrl, const LLSD& user_data)
 {
     // TODO: put into .h -Zi
     static std::map<std::string, LLGLTFMaterial::TextureInfo> types =
@@ -5505,6 +5505,7 @@ void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_d
 
     const std::string& spinner_name = ctrl->getName();
     const float value = (F32)ctrl->getValue().asReal();
+    ctrl->setFocus(true);
 
     if (LLStringUtil::startsWith(spinner_name, "gltfTextureScaleU"))
     {

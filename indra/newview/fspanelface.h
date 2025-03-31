@@ -284,7 +284,7 @@ protected:
     static void syncMaterialRot(FSPanelFace* self, F32 rot, int te = -1);
 
     // unify all GLTF spinners with no switching around required -Zi
-    void onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data);
+    void onCommitGLTFUVSpinner(LLUICtrl* ctrl, const LLSD& user_data);
 
     void onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& user_data);  // Find all faces with same texture
     void onShowFindAllButton(LLUICtrl* ctrl, const LLSD& user_data);    // Find all faces with same texture
