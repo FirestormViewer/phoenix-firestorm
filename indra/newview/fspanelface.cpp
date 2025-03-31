@@ -626,6 +626,9 @@ void FSPanelFace::onMatTabChange()
     static S32 last_mat = -1;
     if( auto curr_mat = getCurrentMaterialType(); curr_mat != last_mat )
     {
+        // Fixes some UI desync
+        updateUI(true);
+
         LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
         LLViewerObject* objectp = node ? node->getObject() : NULL;
         if(objectp)
@@ -651,6 +654,28 @@ void FSPanelFace::onMatTabChange()
                 }
             }
         }
+    }
+}
+
+void FSPanelFace::onMatChannelTabChange()
+{
+    // Fixes some UI desync
+    static S32 last_channel = -1;
+    if (auto curr_channel = getCurrentMatChannel(); curr_channel != last_channel)
+    {
+        last_channel = curr_channel;
+        updateUI(true);
+    }
+}
+
+void FSPanelFace::onPBRChannelTabChange()
+{
+    // Fixes some UI desync
+    static S32 last_channel = -1;
+    if (auto curr_channel = getCurrentPBRChannel(); curr_channel != last_channel)
+    {
+        last_channel = curr_channel;
+        updateUI(true);
     }
 }
 
@@ -752,6 +777,8 @@ bool FSPanelFace::postBuild()
     // hook up callbacks and do setup of all relevant UI elements here
     //
     mTabsPBRMatMedia->setCommitCallback(boost::bind(&FSPanelFace::onMatTabChange, this));
+    mTabsMatChannel->setCommitCallback(boost::bind(&FSPanelFace::onMatChannelTabChange, this));
+    mTabsPBRChannel->setCommitCallback(boost::bind(&FSPanelFace::onPBRChannelTabChange, this));
     // common controls and parameters for Blinn-Phong and PBR
     mBtnCopyFaces->setCommitCallback(boost::bind(&FSPanelFace::onCopyFaces, this));
     mBtnPasteFaces->setCommitCallback(boost::bind(&FSPanelFace::onPasteFaces, this));
@@ -912,9 +939,9 @@ bool FSPanelFace::postBuild()
 
     changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 
-    selectMaterialType(MATMEDIA_PBR);                 // TODO: add tab switching signal
-    selectMatChannel(LLRender::DIFFUSE_MAP);          // TODO: add tab switching signal
-    selectPBRChannel(LLRender::NUM_TEXTURE_CHANNELS); // TODO: add tab switching signal
+    selectMaterialType(MATMEDIA_PBR);
+    selectMatChannel(LLRender::DIFFUSE_MAP);
+    selectPBRChannel(LLRender::NUM_TEXTURE_CHANNELS);
 
     return true;
 }

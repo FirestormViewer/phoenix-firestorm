@@ -341,6 +341,8 @@ public:
     // public to give functors access -Zi
     LLTabContainer* mTabsMatChannel;
     void onMatTabChange();
+    void onMatChannelTabChange();
+    void onPBRChannelTabChange();
 
 private:
     bool isAlpha() { return mIsAlpha; }
