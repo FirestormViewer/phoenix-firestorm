@@ -3335,6 +3335,7 @@ void FSPanelFace::onCommitShinyColor()
 
 void FSPanelFace::onCommitAlpha()
 {
+    mCtrlColorTransp->setFocus(true);
     sendAlpha();
 }
 
@@ -3491,6 +3492,7 @@ void FSPanelFace::onCommitFullbright()
 
 void FSPanelFace::onCommitGlow()
 {
+    mCtrlGlow->setFocus(true);
     sendGlow();
 }
 
@@ -3602,6 +3604,7 @@ void FSPanelFace::onCommitPbr(const LLUICtrl* pbr_ctrl)
     }
     else if (pbr_ctrl == mAlphaPBR)
     {
+        mAlphaPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_BASE_COLOR_DIRTY;
     }
     else if (pbr_ctrl == mAlphaModePBR)
@@ -3610,14 +3613,17 @@ void FSPanelFace::onCommitPbr(const LLUICtrl* pbr_ctrl)
     }
     else if (pbr_ctrl == mMaskCutoffPBR)
     {
+        mMaskCutoffPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_ALPHA_CUTOFF_DIRTY;
     }
     else if (pbr_ctrl == mMetallicFactorPBR)
     {
+        mMetallicFactorPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_METALLIC_ROUGHTNESS_METALNESS_DIRTY;
     }
     else if (pbr_ctrl == mRoughnessFactorPBR)
     {
+        mRoughnessFactorPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_METALLIC_ROUGHTNESS_ROUGHNESS_DIRTY;
     }
 }
@@ -3930,6 +3936,7 @@ void FSPanelFace::syncOffsetY(FSPanelFace* self, F32 offsetV)
 
 void FSPanelFace::onCommitMaterialBumpyOffsetX()
 {
+    mCtrlBumpyOffsetU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetX(this, getCurrentBumpyOffsetU());
@@ -3942,6 +3949,7 @@ void FSPanelFace::onCommitMaterialBumpyOffsetX()
 
 void FSPanelFace::onCommitMaterialBumpyOffsetY()
 {
+    mCtrlBumpyOffsetV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetY(this, getCurrentBumpyOffsetV());
@@ -3954,6 +3962,7 @@ void FSPanelFace::onCommitMaterialBumpyOffsetY()
 
 void FSPanelFace::onCommitMaterialShinyOffsetX()
 {
+    mCtrlShinyOffsetU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetX(this, getCurrentShinyOffsetU());
@@ -3966,6 +3975,7 @@ void FSPanelFace::onCommitMaterialShinyOffsetX()
 
 void FSPanelFace::onCommitMaterialShinyOffsetY()
 {
+    mCtrlShinyOffsetV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetY(this, getCurrentShinyOffsetV());
@@ -3994,6 +4004,7 @@ void FSPanelFace::syncRepeatY(FSPanelFace* self, F32 scaleV)
 
 void FSPanelFace::onCommitMaterialBumpyScaleX()
 {
+    mCtrlBumpyScaleU->setFocus(true);
     F32 bumpy_scale_u = getCurrentBumpyScaleU();
     if (isIdenticalPlanarTexgen())
     {
@@ -4013,6 +4024,7 @@ void FSPanelFace::onCommitMaterialBumpyScaleX()
 
 void FSPanelFace::onCommitMaterialBumpyScaleY()
 {
+    mCtrlBumpyScaleV->setFocus(true);
     F32 bumpy_scale_v = getCurrentBumpyScaleV();
     if (isIdenticalPlanarTexgen())
     {
@@ -4032,6 +4044,7 @@ void FSPanelFace::onCommitMaterialBumpyScaleY()
 
 void FSPanelFace::onCommitMaterialShinyScaleX()
 {
+    mCtrlShinyScaleU->setFocus(true);
     F32 shiny_scale_u = getCurrentShinyScaleU();
     if (isIdenticalPlanarTexgen())
     {
@@ -4051,6 +4064,7 @@ void FSPanelFace::onCommitMaterialShinyScaleX()
 
 void FSPanelFace::onCommitMaterialShinyScaleY()
 {
+    mCtrlShinyScaleV->setFocus(true);
     F32 shiny_scale_v = getCurrentShinyScaleV();
     if (isIdenticalPlanarTexgen())
     {
@@ -4078,6 +4092,7 @@ void FSPanelFace::syncMaterialRot(FSPanelFace* self, F32 rot, int te)
 
 void FSPanelFace::onCommitMaterialBumpyRot()
 {
+    mCtrlBumpyRot->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         mCtrlTexRot->forceSetValue(LLSD(getCurrentBumpyRot()));
@@ -4102,6 +4117,7 @@ void FSPanelFace::onCommitMaterialBumpyRot()
 
 void FSPanelFace::onCommitMaterialShinyRot()
 {
+    mCtrlShinyRot->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         mCtrlTexRot->forceSetValue(LLSD(getCurrentShinyRot()));
@@ -4126,21 +4142,25 @@ void FSPanelFace::onCommitMaterialShinyRot()
 
 void FSPanelFace::onCommitMaterialGloss()
 {
+    mCtrlGlossiness->setFocus(true);
     LLSelectedTEMaterial::setSpecularLightExponent(this, getCurrentGlossiness());
 }
 
 void FSPanelFace::onCommitMaterialEnv()
 {
+    mCtrlEnvironment->setFocus(true);
     LLSelectedTEMaterial::setEnvironmentIntensity(this, getCurrentEnvIntensity());
 }
 
 void FSPanelFace::onCommitMaterialMaskCutoff()
 {
+    mCtrlMaskCutoff->setFocus(true);
     LLSelectedTEMaterial::setAlphaMaskCutoff(this, getCurrentAlphaMaskCutoff());
 }
 
 void FSPanelFace::onCommitTextureScaleX()
 {
+    mCtrlTexScaleU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         F32 bumpy_scale_u = (F32)mCtrlTexScaleU->getValue().asReal();
@@ -4159,6 +4179,7 @@ void FSPanelFace::onCommitTextureScaleX()
 
 void FSPanelFace::onCommitTextureScaleY()
 {
+    mCtrlTexScaleV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         F32 bumpy_scale_v = (F32)mCtrlTexScaleV->getValue().asReal();
@@ -4177,6 +4198,7 @@ void FSPanelFace::onCommitTextureScaleY()
 
 void FSPanelFace::onCommitTextureRot()
 {
+    mCtrlTexRot->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncMaterialRot(this, (F32)mCtrlTexRot->getValue().asReal());
@@ -4191,6 +4213,7 @@ void FSPanelFace::onCommitTextureRot()
 
 void FSPanelFace::onCommitTextureOffsetX()
 {
+    mCtrlTexOffsetU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetX(this, (F32)mCtrlTexOffsetU->getValue().asReal());
@@ -4204,6 +4227,7 @@ void FSPanelFace::onCommitTextureOffsetX()
 
 void FSPanelFace::onCommitTextureOffsetY()
 {
+    mCtrlTexOffsetV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetY(this, (F32)mCtrlTexOffsetV->getValue().asReal());
@@ -4218,6 +4242,7 @@ void FSPanelFace::onCommitTextureOffsetY()
 // Commit the number of repeats per meter
 void FSPanelFace::onCommitRepeatsPerMeter()
 {
+    mCtrlRpt->setFocus(true);
     S32 materials_media = getCurrentMaterialType();
     LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
     LLGLTFMaterial::TextureInfo material_type = LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
