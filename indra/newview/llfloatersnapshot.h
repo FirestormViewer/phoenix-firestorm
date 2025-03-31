@@ -104,8 +104,7 @@ public:
     static void onClickAutoSnap(LLUICtrl *ctrl, void* data);
     static void onClickNoPost(LLUICtrl *ctrl, void* data);
     static void onClickFilter(LLUICtrl *ctrl, void* data);
-    static void onClickUICheck(LLUICtrl *ctrl, void* data);
-    static void onClickHUDCheck(LLUICtrl *ctrl, void* data);
+    static void onClickDisplaySetting(LLUICtrl *ctrl, void* data);
     // <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
     static void onClickCurrencyCheck(LLUICtrl *ctrl, void* data);
     static void onCommitFreezeFrame(LLUICtrl* ctrl, void* data);

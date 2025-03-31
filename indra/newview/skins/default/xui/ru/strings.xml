@@ -4856,6 +4856,10 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="inventory_item_offered_rlv">
 		Предложен элемент инвентаря [NAME]
 	</string>
+	<string name="bot_warning">
+Вы общаетесь с ботом [NAME]. Не передавайте личные данные.
+Подробнее на https://second.life/scripted-agents.
+	</string>
 	<string name="share_alert">
 		Перетащите элементы из инвентаря сюда
 	</string>

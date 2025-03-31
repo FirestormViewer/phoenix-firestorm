@@ -5415,6 +5415,7 @@ void LLAppViewer::saveFinalSnapshot()
                                     false,
                                     gSavedSettings.getBOOL("RenderHUDInSnapshot"),
                                     true,
+                                    false,
                                     LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
                                     LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
         mSavedFinalSnapshot = true;

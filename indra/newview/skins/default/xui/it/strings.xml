@@ -4756,6 +4756,10 @@ Reinstallare il browser da [DOWNLOAD_URL] e contattare [SUPPORT_SITE] se il prob
 	<string name="inventory_folder_offered-im">
 		Offerta cartella &apos;[ITEM_NAME]&apos; da inventario
 	</string>
+	<string name="bot_warning">
+		Stai parlando con un bot, [NAME]. Non condividere informazioni personali.
+Scopri di più su https://second.life/scripted-agents.
+	</string>
 	<string name="inventory_item_offered_rlv">
 		Offerto oggetto da inventario a [NAME]
 	</string>

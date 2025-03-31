@@ -5091,6 +5091,10 @@ support@secondlife.com.
 	<string name="inventory_item_offered_rlv">
 		庫存物件已傳送給 [NAME]
 	</string>
+	<string name="bot_warning">
+您正在与人工智能机器人 [NAME] 聊天。请勿分享任何个人信息。
+了解更多：https://second.life/scripted-agents。
+	</string>
 	<string name="share_alert">
 		將庫存物件拖拽到這裡
 	</string>

@@ -6351,6 +6351,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
                                         false, //UI
                                         gSavedSettings.getBOOL("RenderHUDInSnapshot"),
                                         false,
+                                        false,
                                         LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
                                         LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
         }
@@ -6408,23 +6409,6 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
             return true;
         }
         // </FS:Ansariel>
-// <FS:CR> FIRE-9696 - Moved detection of HomePositionSet Alert hack to here where it's actually found now
-        if (notificationID == "HomePositionSet")
-        {
-            // save the home location image to disk
-            std::string snap_filename = gDirUtilp->getLindenUserDir();
-            snap_filename += gDirUtilp->getDirDelimiter();
-            snap_filename += LLStartUp::getScreenHomeFilename();
-            if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), false, gSavedSettings.getBOOL("RenderHUDInSnapshot"), false, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG))
-            {
-                LL_INFOS() << LLStartUp::getScreenHomeFilename() << " saved successfully." << LL_ENDL;
-            }
-            else
-            {
-                LL_WARNS() << LLStartUp::getScreenHomeFilename() << " could not be saved." << LL_ENDL;
-            }
-        }
-// </FS:CR>
 
         // Special Marketplace update notification
         if (notificationID == "SLM_UPDATE_FOLDER")
@@ -6492,6 +6476,7 @@ static void process_special_alert_messages(const std::string & message)
                                     gViewerWindow->getWindowHeightRaw(),
                                     false,
                                     gSavedSettings.getBOOL("RenderHUDInSnapshot"),
+                                    false,
                                     false,
                                     LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
                                     LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
@@ -8423,7 +8408,6 @@ void process_initiate_download(LLMessageSystem* msg, void**)
         (void**)new std::string(viewer_filename));
 }
 
-
 void process_script_teleport_request(LLMessageSystem* msg, void**)
 {
     if (!gSavedSettings.getBOOL("ScriptsCanShowUI")) return;
@@ -8437,6 +8421,11 @@ void process_script_teleport_request(LLMessageSystem* msg, void**)
     msg->getString("Data", "SimName", sim_name);
     msg->getVector3("Data", "SimPosition", pos);
     msg->getVector3("Data", "LookAt", look_at);
+    U32 flags = (BEACON_SHOW_MAP | BEACON_FOCUS_MAP);
+    if (msg->has("Options"))
+    {
+        msg->getU32("Options", "Flags", flags);
+    }
 
     LLFloaterWorldMap* instance = LLFloaterWorldMap::getInstance();
     if(instance)
@@ -8447,7 +8436,13 @@ void process_script_teleport_request(LLMessageSystem* msg, void**)
             << LL_ENDL;
 
         instance->trackURL(sim_name, (S32)pos.mV[VX], (S32)pos.mV[VY], (S32)pos.mV[VZ]);
-        LLFloaterReg::showInstance("world_map", "center");
+        if (flags & BEACON_SHOW_MAP)
+        {
+            bool old_auto_focus = instance->getAutoFocus();
+            instance->setAutoFocus(flags & BEACON_FOCUS_MAP);
+            instance->openFloater("center");
+            instance->setAutoFocus(old_auto_focus);
+        }
     }
 
     // remove above two lines and replace with below line
