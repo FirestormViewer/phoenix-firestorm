@@ -171,8 +171,11 @@ void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32&
             if (!render_material)
                 return 0.f;
 
-            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[VX];
-            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[VY];
+            U32 s_axis = VX;
+            U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
+            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[s_axis];
+            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[t_axis];
             return llmax(repeats_u, repeats_v);
         }
 
