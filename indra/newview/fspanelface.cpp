@@ -2181,7 +2181,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 
             bool repeats_tentative = !identical_repeats;
 
-            if (force_set_values)
+            if (force_set_values || material_selection == MATMEDIA_PBR)
             {
                 //onCommit, previosly edited element updates related ones
                 mCtrlRpt->forceSetValue(editable ? repeats : 1.0f);
@@ -5405,6 +5405,16 @@ void FSPanelFace::setMaterialOverridesFromSelection()
     gltfCtrlTextureRotation->setTentative(!rotation_same);
     gltfCtrlTextureOffsetU->setTentative(!offset_u_same);
     gltfCtrlTextureOffsetV->setTentative(!offset_v_same);
+
+    // Fixes some UI desync
+    if (getCurrentMaterialType() == MATMEDIA_PBR)
+    {
+        F32 repeats = 1.f;
+        bool identical = false;
+        getSelectedGLTFMaterialMaxRepeats(getPBRDropChannel(), repeats, identical);
+        mCtrlRpt->forceSetValue(repeats);
+        mCtrlRpt->setTentative(!identical);
+    }
 }
 
 void FSPanelFace::Selection::connect()
