@@ -691,9 +691,6 @@ void FSFloaterPoser::onClickBrowsePoseCache()
 
 void FSFloaterPoser::onClickSymmetrize(const S32 ID)
 {
-    if (notDoubleClicked())
-        return;
-
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
@@ -861,27 +858,13 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
     setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
 }
 
-bool FSFloaterPoser::notDoubleClicked()
-{
-    auto timeIntervalSinceLastExecution = std::chrono::system_clock::now() - mTimeLastExecutedDoubleClickMethod;
-    mTimeLastExecutedDoubleClickMethod  = std::chrono::system_clock::now();
-
-    return timeIntervalSinceLastExecution > mDoubleClickInterval;
-}
-
 void FSFloaterPoser::onClickLoadLeftHandPose()
 {
-    if (notDoubleClicked())
-        return;
-
     onClickLoadHandPose(false);
 }
 
 void FSFloaterPoser::onClickLoadRightHandPose()
 {
-    if (notDoubleClicked())
-        return;
-
     onClickLoadHandPose(true);
 }
 
@@ -1386,9 +1369,6 @@ void FSFloaterPoser::onUndoLastChange()
 
 void FSFloaterPoser::onSetAvatarToTpose()
 {
-    if (notDoubleClicked())
-        return;
-
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
@@ -1401,9 +1381,6 @@ void FSFloaterPoser::onSetAvatarToTpose()
 
 void FSFloaterPoser::onResetJoint(const LLSD data)
 {
-    if (notDoubleClicked())
-        return;
-
     int resetType = data.asInteger();
 
     LLVOAvatar* avatar = getUiSelectedAvatar();

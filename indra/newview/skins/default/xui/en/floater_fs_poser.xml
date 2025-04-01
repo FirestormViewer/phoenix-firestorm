@@ -646,7 +646,7 @@ width="430">
 							 layout="topleft"
 							 label="Set Left"
 							 name="button_loadHandPoseLeft"
-							 tool_tip="Double click to set your left hand to the selected preset"
+							 tool_tip="Click to set your left hand to the selected preset"
 							 top_delta="238"
 							 left_pad="1"
 							 left="2"
@@ -660,7 +660,7 @@ width="430">
 							 layout="topleft"
 							 label="Set Right"
 							 name="button_loadHandPoseRight"
-							 tool_tip="Double click to set your right hand to the selected preset"
+							 tool_tip="Click to set your right hand to the selected preset"
 							 left_pad="2"
 							 top_delta="0"
 							 width="85" >
@@ -828,7 +828,7 @@ width="430">
 						 label="Set to T-Pose"
 						 image_unselected="Toolbar_Middle_Off"
 						 name="set_t_pose_button"
-						 tool_tip="Double-click to set the selected avatar to a 'T-Pose'"
+						 tool_tip="Click to set the selected avatar to a 'T-Pose'"
 						 width="172">
 							<button.commit_callback
 							 function="Poser.SetToTPose"/>
@@ -1123,15 +1123,15 @@ width="430">
 						</slider>
 						<spinner
 						 height="20"
-						 decimal_digits="2"
+						 decimal_digits="3"
 						 follows="left|top"
-						 increment="0.01"
+						 increment="0.001"
 						 top_pad="-19"
-						 left_pad="2"
+						 left_pad="0"
 						 name="adv_posx_spinner"
 						 min_val="-1.5"
 						 max_val="1.5"
-						 width="47">
+						 width="53">
 							<spinner.commit_callback
 							 function="Poser.CommitSpinner"
                              parameter="7"/>
@@ -1167,15 +1167,15 @@ width="430">
 						</slider>
 						<spinner
 						 height="20"
-						 decimal_digits="2"
+						 decimal_digits="3"
 						 follows="left|top"
-						 increment="0.01"
+						 increment="0.001"
 						 top_pad="-19"
-						 left_pad="2"
+						 left_pad="0"
 						 name="adv_posy_spinner"
 						 min_val="-1.5"
 						 max_val="1.5"
-						 width="47">
+						 width="53">
 							<spinner.commit_callback
 							 function="Poser.CommitSpinner"
                              parameter="8"/>
@@ -1211,15 +1211,15 @@ width="430">
 						</slider>
 						<spinner
 						 height="20"
-						 decimal_digits="2"
+						 decimal_digits="3"
 						 follows="left|top"
-						 increment="0.01"
+						 increment="0.001"
 						 top_pad="-19"
-						 left_pad="2"
+						 left_pad="0"
 						 name="adv_posz_spinner"
 						 min_val="-1.5"
 						 max_val="1.5"
-						 width="47">
+						 width="53">
 							<spinner.commit_callback
 							 function="Poser.CommitSpinner"
                              parameter="9"/>
@@ -1404,7 +1404,7 @@ width="430">
 					image_overlay="Inv_TrashOpen"
 					image_unselected="Toolbar_Middle_Off"
 					name="poser_joint_reset"
-					tool_tip="Double click to reset the selected body part(s) to when you first started posing"
+					tool_tip="Click to reset the selected body part(s) to when you first started posing"
 					width="18"
 					top_delta="0"
 					left_pad="1">
@@ -1472,7 +1472,7 @@ width="430">
 					layout="topleft"
 					label="Copy L &gt; R"
 					name="button_symmetrize_left_to_right"
-					tool_tip="Double click to copy change from left side to right side."
+					tool_tip="Click to copy change from left side to right side."
 					left="14"
 					width="70" >
 						<button.commit_callback
@@ -1485,7 +1485,7 @@ width="430">
 					layout="topleft"
 					label="Copy R &gt; L"
 					name="button_symmetrize_right_to_left"
-					tool_tip="Double click to copy change from right side to left side."
+					tool_tip="Click to copy change from right side to left side."
 					left_pad="23"
 					top_delta="0"
 					width="70" >

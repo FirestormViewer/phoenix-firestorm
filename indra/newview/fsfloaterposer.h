@@ -349,12 +349,6 @@ public:
     void addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar);
 
     /// <summary>
-    /// Determines if the user has run this method twice within mDoubleClickInterval.
-    /// </summary>
-    /// <returns>true if this method has executed since mDoubleClickInterval seconds ago, otherwise false.</returns>
-    bool notDoubleClicked();
-
-    /// <summary>
     /// Gets whether the user wishes to reset the base-rotation to zero when they start editing a joint.
     /// </summary>
     /// <remarks>
@@ -431,17 +425,6 @@ public:
     /// Transforms the supplied vector into a string of three numbers, format suiting to writing into a BVH file.
     /// </summary>
     std::string static vec3ToXYZString(const LLVector3& val);
-
-    /// <summary>
-    /// The time when the last click of a button was made.
-    /// Utilized for controls needing a 'double click do' function.
-    /// </summary>
-    std::chrono::system_clock::time_point mTimeLastExecutedDoubleClickMethod = std::chrono::system_clock::now();
-
-    /// <summary>
-    /// The constant time interval, in seconds, a user must execute the notDoubleClicked twice to successfully 'double-click' a button.
-    /// </summary>
-    std::chrono::duration<double> const mDoubleClickInterval = std::chrono::duration<double>(0.3);
 
     /// <summary>
     /// Unwraps a normalized value from the trackball to a slider value.
