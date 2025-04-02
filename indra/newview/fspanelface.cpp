@@ -134,6 +134,36 @@ void FSPanelFace::updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*
     LLSelectMgr::getInstance()->getSelection()->applyToTEs(&select_func);
 }
 
+void FSPanelFace::updateSelectedGLTFMaterialsWithScale(std::function<void(LLGLTFMaterial*, const F32, const F32)> func)
+{
+    struct LLSelectedTEGLTFMaterialFunctor : public LLSelectedTEFunctor
+    {
+        LLSelectedTEGLTFMaterialFunctor(std::function<void(LLGLTFMaterial*, const F32, const F32)> func) : mFunc(func) {}
+        virtual ~LLSelectedTEGLTFMaterialFunctor() {};
+        bool apply(LLViewerObject* object, S32 face) override
+        {
+            LLGLTFMaterial new_override;
+            const LLTextureEntry* tep = object->getTE(face);
+            if (tep->getGLTFMaterialOverride())
+            {
+                new_override = *tep->getGLTFMaterialOverride();
+            }
+
+            U32 s_axis = VX;
+            U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
+            mFunc(&new_override, object->getScale().mV[s_axis], object->getScale().mV[t_axis]);
+            LLGLTFMaterialList::queueModify(object, face, &new_override);
+
+            return true;
+        }
+
+        std::function<void(LLGLTFMaterial*, const F32, const F32)> mFunc;
+    } select_func(func);
+
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&select_func);
+}
+
 template<typename T>
 void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& value, bool& identical, bool has_tolerance, T tolerance)
 {
@@ -4284,14 +4314,12 @@ void FSPanelFace::onCommitRepeatsPerMeter()
         mCtrlBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
         mCtrlBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-        LLSelectedTEMaterial::setNormalRepeatX(this, obj_scale_s * repeats_per_meter);
-        LLSelectedTEMaterial::setNormalRepeatY(this, obj_scale_t * repeats_per_meter);
+        LLSelectedTEMaterial::selectionNormalScaleAutofit(this, repeats_per_meter);
 
         mCtrlShinyScaleU->setValue(obj_scale_s * repeats_per_meter);
         mCtrlShinyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-        LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
-        LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+        LLSelectedTEMaterial::selectionSpecularScaleAutofit(this, repeats_per_meter);
     }
     else
     {
@@ -4308,8 +4336,7 @@ void FSPanelFace::onCommitRepeatsPerMeter()
                 mCtrlBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
                 mCtrlBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-                LLSelectedTEMaterial::setNormalRepeatX(this, obj_scale_s * repeats_per_meter);
-                LLSelectedTEMaterial::setNormalRepeatY(this, obj_scale_t * repeats_per_meter);
+                LLSelectedTEMaterial::selectionNormalScaleAutofit(this, repeats_per_meter);
             }
             break;
 
@@ -4318,8 +4345,7 @@ void FSPanelFace::onCommitRepeatsPerMeter()
                 mCtrlShinyScaleU->setValue(obj_scale_s * repeats_per_meter);
                 mCtrlShinyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-                LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
-                LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+                LLSelectedTEMaterial::selectionSpecularScaleAutofit(this, repeats_per_meter);
             }
             break;
 
@@ -4329,10 +4355,10 @@ void FSPanelFace::onCommitRepeatsPerMeter()
             case LLRender::EMISSIVE_MAP:
             case LLRender::NUM_TEXTURE_CHANNELS:
             {
-                updateGLTFTextureTransform(material_type, [&](LLGLTFMaterial::TextureTransform* new_transform)
+                updateGLTFTextureTransformWithScale(material_type, [&](LLGLTFMaterial::TextureTransform* new_transform, F32 scale_s, F32 scale_t)
                 {
-                    new_transform->mScale.mV[VX] = obj_scale_s * repeats_per_meter;
-                    new_transform->mScale.mV[VY] = obj_scale_t * repeats_per_meter;
+                    new_transform->mScale.mV[VX] = scale_s * repeats_per_meter;
+                    new_transform->mScale.mV[VY] = scale_t * repeats_per_meter;
                 });
             }
             break;
@@ -5299,6 +5325,29 @@ void FSPanelFace::updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo t
     }
 }
 
+void FSPanelFace::updateGLTFTextureTransformWithScale(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*, const F32, const F32)> edit)
+{
+    if (texture_info == LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT)
+    {
+        updateSelectedGLTFMaterialsWithScale([&](LLGLTFMaterial* new_override, const F32 scale_s, const F32 scale_t)
+        {
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+            {
+                LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[(LLGLTFMaterial::TextureInfo)i];
+                edit(&new_transform, scale_s, scale_t);
+            }
+        });
+    }
+    else
+    {
+        updateSelectedGLTFMaterialsWithScale([&](LLGLTFMaterial* new_override, const F32 scale_s, const F32 scale_t)
+        {
+            LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[texture_info];
+            edit(&new_transform, scale_s, scale_t);
+        });
+    }
+}
+
 void FSPanelFace::setMaterialOverridesFromSelection()
 {
     // TODO: move to .h -Zi
@@ -5836,6 +5885,62 @@ void FSPanelFace::LLSelectedTEMaterial::getCurrentDiffuseAlphaMode(U8& diffuse_a
     } get_diff_mode(diffuse_texture_has_alpha);
 
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &get_diff_mode, diffuse_alpha_mode);
+}
+
+void FSPanelFace::LLSelectedTEMaterial::selectionNormalScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter)
+{
+    struct f : public LLSelectedTEFunctor
+    {
+        FSPanelFace* mFacePanel;
+        F32 mRepeatsPerMeter;
+        f(FSPanelFace* face_panel, const F32& repeats_per_meter) : mFacePanel(face_panel), mRepeatsPerMeter(repeats_per_meter) {}
+        bool apply(LLViewerObject* object, S32 te)
+        {
+            if (object->permModify())
+            {
+                // Compute S,T to axis mapping
+                U32 s_axis, t_axis;
+                if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+                    return true;
+
+                F32 new_s = object->getScale().mV[s_axis] * mRepeatsPerMeter;
+                F32 new_t = object->getScale().mV[t_axis] * mRepeatsPerMeter;
+
+                setNormalRepeatX(mFacePanel, new_s, te);
+                setNormalRepeatY(mFacePanel, new_t, te);
+            }
+            return true;
+        }
+    } setfunc(panel_face, repeats_per_meter);
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
+}
+
+void FSPanelFace::LLSelectedTEMaterial::selectionSpecularScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter)
+{
+    struct f : public LLSelectedTEFunctor
+    {
+        FSPanelFace* mFacePanel;
+        F32 mRepeatsPerMeter;
+        f(FSPanelFace* face_panel, const F32& repeats_per_meter) : mFacePanel(face_panel), mRepeatsPerMeter(repeats_per_meter) {}
+        bool apply(LLViewerObject* object, S32 te)
+        {
+            if (object->permModify())
+            {
+                // Compute S,T to axis mapping
+                U32 s_axis, t_axis;
+                if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+                    return true;
+
+                F32 new_s = object->getScale().mV[s_axis] * mRepeatsPerMeter;
+                F32 new_t = object->getScale().mV[t_axis] * mRepeatsPerMeter;
+
+                setSpecularRepeatX(mFacePanel, new_s, te);
+                setSpecularRepeatY(mFacePanel, new_t, te);
+            }
+            return true;
+        }
+    } setfunc(panel_face, repeats_per_meter);
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
 }
 
 void FSPanelFace::LLSelectedTE::getObjectScaleS(F32& scale_s, bool& identical)

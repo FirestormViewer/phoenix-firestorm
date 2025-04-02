@@ -635,7 +635,9 @@ private:
     void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool& has_faces_without_pbr, bool force_set_values);
 
     void updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*)> func);
+    void updateSelectedGLTFMaterialsWithScale(std::function<void(LLGLTFMaterial*, const F32, const F32)> func);
     void updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*)> edit);
+    void updateGLTFTextureTransformWithScale(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*, const F32, const F32)> edit);
 
     void setMaterialOverridesFromSelection();
 
@@ -726,6 +728,8 @@ public:
         static void getMaxSpecularRepeats(F32& repeats, bool& identical);
         static void getMaxNormalRepeats(F32& repeats, bool& identical);
         static void getCurrentDiffuseAlphaMode(U8& diffuse_alpha_mode, bool& identical, bool diffuse_texture_has_alpha);
+        static void selectionNormalScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter);
+        static void selectionSpecularScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter);
 
         FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getNormalID,LLUUID::null, false, LLUUID::null);
         FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getSpecularID,LLUUID::null, false, LLUUID::null);
