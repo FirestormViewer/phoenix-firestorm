@@ -397,7 +397,7 @@
 				</combo_box>
 			</panel>
 		</panel>
-		<panel name="P_Aids" label="輔助工具">
+		<panel name="P_Aids" label="輔助">
 			<panel name="PT_Aids">
 				<text name="T_Aids">
 					使用者界面輔助
