@@ -1771,56 +1771,28 @@ void FSFloaterPoser::onScaleSet()
 
 void FSFloaterPoser::onTrackballChanged()
 {
-    LLVector3 trackPadPos, trackPadDeltaPos;
-    LLSD      position      = mAvatarTrackball->getValue();
+    LLVector3 trackPadDeltaPos;
     LLSD      deltaPosition = mAvatarTrackball->getValueDelta();
 
-    if (position.isArray() && position.size() == 3 && deltaPosition.isArray() && deltaPosition.size() == 3)
-    {
-        trackPadPos.setValue(position);
+    if (deltaPosition.isArray() && deltaPosition.size() == 3)
         trackPadDeltaPos.setValue(deltaPosition);
-    }
     else
         return;
 
     F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
 
-    trackPadPos.mV[VX] *= trackPadSensitivity;
-    trackPadPos.mV[VY] *= trackPadSensitivity;
+    trackPadDeltaPos[VX] *= NormalTrackpadRangeInRads * trackPadSensitivity * RAD_TO_DEG;
+    trackPadDeltaPos[VY] *= NormalTrackpadRangeInRads * trackPadSensitivity * RAD_TO_DEG;
+    trackPadDeltaPos[VZ] *= NormalTrackpadRangeInRads * RAD_TO_DEG;
 
-    trackPadPos.mV[VX] = unWrapScale(trackPadPos.mV[VX]) * NormalTrackpadRangeInRads;
-    trackPadPos.mV[VY] = unWrapScale(trackPadPos.mV[VY]) * NormalTrackpadRangeInRads;
-    trackPadPos.mV[VZ] = unWrapScale(trackPadPos.mV[VZ]) * NormalTrackpadRangeInRads;
+    F32 axis1 = (F32)mYawSpnr->getValue().asReal();
+    F32 axis2 = (F32)mPitchSpnr->getValue().asReal();
+    F32 axis3 = (F32)mRollSpnr->getValue().asReal();
+    mYawSpnr->setValue(axis1 + trackPadDeltaPos[VX]);
+    mPitchSpnr->setValue(axis2 + trackPadDeltaPos[VY]);
+    mRollSpnr->setValue(axis3 + trackPadDeltaPos[VZ]);
 
-    trackPadDeltaPos[VX] *= NormalTrackpadRangeInRads * trackPadSensitivity;
-    trackPadDeltaPos[VY] *= NormalTrackpadRangeInRads * trackPadSensitivity;
-    trackPadDeltaPos[VZ] *= NormalTrackpadRangeInRads;
-
-    setSelectedJointsRotation(trackPadPos, trackPadDeltaPos);
-
-    // WARNING!
-    // as tempting as it is to refactor the following to refreshRotationSliders(), don't.
-    // getRotationOfFirstSelectedJoint/setSelectedJointsRotation are
-    // not necessarily symmetric functions (see their remarks).
-    mYawSpnr->setValue(trackPadPos.mV[VX] *= RAD_TO_DEG);
-    mPitchSpnr->setValue(trackPadPos.mV[VY] *= RAD_TO_DEG);
-    mRollSpnr->setValue(trackPadPos.mV[VZ] *= RAD_TO_DEG);
-
-    enableOrDisableRedoAndUndoButton();
-}
-
-F32 FSFloaterPoser::unWrapScale(F32 scale)
-{
-    if (scale > -1.f && scale < 1.f)
-        return scale;
-
-    F32 result = fmodf(scale, 100.f);  // to avoid time consuming while loops
-    while (result > 1)
-        result -= 2;
-    while (result < -1)
-        result += 2;
-
-    return result;
+    onYawPitchRollChanged();
 }
 
 void FSFloaterPoser::onYawPitchRollChanged()
@@ -1834,21 +1806,7 @@ void FSFloaterPoser::onYawPitchRollChanged()
     mLastSliderRotation = absoluteRotation;
 
     setSelectedJointsRotation(absoluteRotation, deltaRotation);
-
-    // WARNING!
-    // as tempting as it is to refactor the following to refreshTrackpadCursor(), don't.
-    // getRotationOfFirstSelectedJoint/setSelectedJointsRotation are
-    // not necessarily symmetric functions (see their remarks).
-    F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
-    absoluteRotation.mV[VX] /= trackPadSensitivity;
-    absoluteRotation.mV[VY] /= trackPadSensitivity;
-
-    absoluteRotation.mV[VX] /= NormalTrackpadRangeInRads;
-    absoluteRotation.mV[VY] /= NormalTrackpadRangeInRads;
-    absoluteRotation.mV[VZ] /= NormalTrackpadRangeInRads;
-
-    mAvatarTrackball->setValue(absoluteRotation.getValue());
-
+    refreshTrackpadCursor();
     enableOrDisableRedoAndUndoButton();
 }
 
