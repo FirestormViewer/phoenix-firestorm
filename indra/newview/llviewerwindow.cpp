@@ -520,9 +520,8 @@ public:
 
         clearText();
 
-        //if (gSavedSettings.getBOOL("DebugShowTime"))
-        static LLCachedControl<bool> debugShowTime(gSavedSettings, "DebugShowTime");
-        if (debugShowTime)
+        static LLCachedControl<bool> debug_show_time(gSavedSettings, "DebugShowTime", false);
+        if (debug_show_time())
         {
             // <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
             {
@@ -538,9 +537,8 @@ public:
             addText(xpos, ypos, llformat("Time: %d:%02d:%02d", hours,mins,secs)); ypos += y_inc;
         }
 
-        //if (gSavedSettings.getBOOL("DebugShowMemory"))
-        static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
-        if (debugShowMemory)
+        static LLCachedControl<bool> debug_show_memory(gSavedSettings, "DebugShowMemory", false);
+        if (debug_show_memory())
         {
             auto rss = LLMemory::getCurrentRSS() / 1024;
             addText(xpos, ypos,
@@ -640,9 +638,8 @@ public:
             ypos += y_inc;
         }*/
 
-        //if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
-        static LLCachedControl<bool> debugShowRenderInfo(gSavedSettings, "DebugShowRenderInfo");
-        if (debugShowRenderInfo)
+        static LLCachedControl<bool> debug_show_render_info(gSavedSettings, "DebugShowRenderInfo", false);
+        if (debug_show_render_info())
         {
             LLTrace::Recording& last_frame_recording = LLTrace::get_frame_recording().getLastRecording();
 
@@ -793,8 +790,8 @@ public:
             // </FS:Beq>
             gPipeline.mNumVisibleNodes = LLPipeline::sVisibleLightCount = 0;
         }
-        static LLCachedControl<bool> sDebugShowAvatarRenderInfo(gSavedSettings, "DebugShowAvatarRenderInfo");
-        if (sDebugShowAvatarRenderInfo)
+        static LLCachedControl<bool> debug_show_avatar_render_info(gSavedSettings, "DebugShowAvatarRenderInfo", false);
+        if (debug_show_avatar_render_info())
         {
             std::map<std::string, LLVOAvatar*> sorted_avs;
             {
@@ -827,10 +824,8 @@ public:
                 av_iter++;
             }
         }
-
-        //if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
-        static LLCachedControl<bool> debugShowRenderMatrices(gSavedSettings, "DebugShowRenderMatrices");
-        if (debugShowRenderMatrices)
+        static LLCachedControl<bool> debug_show_render_matrices(gSavedSettings, "DebugShowRenderMatrices", false);
+        if (debug_show_render_matrices())
         {
             char camera_lines[8][32];
             memset(camera_lines, ' ', sizeof(camera_lines));
@@ -856,11 +851,8 @@ public:
             ypos += y_inc;
         }
         // disable use of glReadPixels which messes up nVidia nSight graphics debugging
-        //<FS:AO improve use of controls with radiogroups>
-        //if (gSavedSettings.getBOOL("DebugShowColor") && !LLRender::sNsightDebugSupport)
-        static LLCachedControl<S32> debugShowColor(gSavedSettings, "DebugShowColor");
-        //</FS:AO>
-        if (debugShowColor && !LLRender::sNsightDebugSupport)
+        static LLCachedControl<bool> debug_show_color(gSavedSettings, "DebugShowColor", false);
+        if (debug_show_color() && !LLRender::sNsightDebugSupport)
         {
             U8 color[4];
             LLCoordGL coord = gViewerWindow->getCurrentMouse();
@@ -977,9 +969,8 @@ public:
             }
         }
 
-        //if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
-        static LLCachedControl<bool> debugShowTextureInfo(gSavedSettings, "DebugShowTextureInfo");
-        if (debugShowTextureInfo)
+        static LLCachedControl<bool> debug_show_texture_info(gSavedSettings, "DebugShowTextureInfo", false);
+        if (debug_show_texture_info())
         {
             LLViewerObject* objectp = NULL ;
 
@@ -1555,10 +1546,13 @@ void LLViewerWindow::handleMouseLeave(LLWindow *window)
 
 bool LLViewerWindow::handleCloseRequest(LLWindow *window)
 {
-    // User has indicated they want to close, but we may need to ask
-    // about modified documents.
-    LLAppViewer::instance()->userQuit();
-    // Don't quit immediately
+    if (!LLApp::isExiting() && !LLApp::isStopped())
+    {
+        // User has indicated they want to close, but we may need to ask
+        // about modified documents.
+        LLAppViewer::instance()->userQuit();
+        // Don't quit immediately
+    }
     return false;
 }
 
@@ -1702,7 +1696,8 @@ bool LLViewerWindow::handleActivate(LLWindow *window, bool activated)
         mActive = false;
 
         // if the user has chosen to go Away automatically after some time, then go Away when minimizing
-        if (gSavedSettings.getS32("AFKTimeout"))
+        static LLCachedControl<S32> afk_time(gSavedSettings, "AFKTimeout", 300);
+        if (afk_time())
         {
             gAgent.setAFK();
         }

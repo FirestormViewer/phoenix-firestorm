@@ -649,6 +649,9 @@
 		<menu_item_call label="要求管理員狀態" name="Request Admin Options" />
 		<menu_item_call label="離開管理員狀態" name="Leave Admin Options" />
 		<menu_item_check label="顯示管理員選項" name="View Admin Options" />
+		<menu label="轉儲" name="Dump">
+			<menu_item_call label="林登查看器紋理清單" name="LLViewerTexturelist"/>
+		</menu>
 	</menu>
 	<menu label="管理員" name="Admin">
 		<menu label="物件" name="AdminObject">

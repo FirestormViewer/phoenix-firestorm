@@ -133,7 +133,7 @@ private:
     /// This takes advantage of how the actual vector migrates to equality with the target vector.
     /// Certain physics settings (bouncing whatnots) account for some longer term work, but as this is applied per joint, it tends to reduce a lot of work.
     /// </remarks>
-    const F32 closeEnough = 1e-6;
+    const F32 closeEnough = 1e-6f; // <FS:minerjr> add missing f for float
 
     /// <summary>
     /// The kind of joint state this animation is concerned with changing.

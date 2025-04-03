@@ -85,7 +85,7 @@ namespace {
     const F32 VOLUME_SCALE_WEBRTC = 0.01f;
     const F32 LEVEL_SCALE_WEBRTC  = 0.008f;
 
-    const F32 SPEAKING_AUDIO_LEVEL = 0.30;
+    const F32 SPEAKING_AUDIO_LEVEL = 0.30f; // <FS:minerjr> add missing f for float
 
     const uint32_t PEER_GAIN_CONVERSION_FACTOR = 220;
 
@@ -3026,7 +3026,7 @@ void LLVoiceWebRTCConnection::OnDataReceivedImpl(const std::string &data, bool b
         {
             root["ug"] = user_gain;
         }
-        if (root.size() > 0)
+        if (root.size() > 0 && mWebRTCDataInterface)
         {
             std::string json_data = boost::json::serialize(root);
             mWebRTCDataInterface->sendData(json_data, false);
@@ -3069,7 +3069,10 @@ void LLVoiceWebRTCConnection::OnDataChannelReady(llwebrtc::LLWebRTCDataInterface
 void LLVoiceWebRTCConnection::sendJoin()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOICE;
-
+    if (!mWebRTCDataInterface)
+    {
+        return;
+    }
 
     boost::json::object root;
     boost::json::object join_obj;

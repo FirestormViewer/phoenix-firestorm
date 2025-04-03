@@ -397,7 +397,7 @@
 				<check_box label="預設使用'可靠'的細節層次" tool_tip="預設使用'可靠'的方法（GLOD）" name="mesh_upload_default_to_reliable" />
 				<check_box label="自動預覽權重" tool_tip="自動在預覽中顯示包含綁定資訊的網格的權重" name="mesh_preview_auto_show_weights" />
 				<text name="lod_suffix_label">
-					細節層次字尾：
+					細節層次後綴：
 				</text>
 				<combo_box name="lod_suffix_combo" tool_tip="選擇預設或自訂">
 					<combo_item name="choose_one">選擇標準或手動編輯...</combo_item>
@@ -408,23 +408,23 @@
 				<text name="suf_lowest_lab">
 					最低：
 				</text>
-				<line_editor name="suf_lowest" tool_tip="標識檔案名中或檔案內模型的最低細節層次的字尾。" />
+				<line_editor name="suf_lowest" tool_tip="標識檔案名中或檔案內模型的最低細節層次的後綴。" />
 				<text name="suf_low_lab">
 					較低：
 				</text>
-				<line_editor name="suf_low" tool_tip="標識檔案名中或檔案內模型的較低細節層次的字尾。" />
+				<line_editor name="suf_low" tool_tip="標識檔案名中或檔案內模型的較低細節層次的後綴。" />
 				<text name="suf_medium_lab" width="45">
 					中等：
 				</text>
-				<line_editor name="suf_medium" tool_tip="標識檔案名中或檔案內模型的中等細節層次的字尾。" />
+				<line_editor name="suf_medium" tool_tip="標識檔案名中或檔案內模型的中等細節層次的後綴。" />
 				<text name="suf_high_lab">
 					高：
 				</text>
-				<line_editor name="suf_high" tool_tip="標識檔案名中或檔案內模型的高細節層次的字尾。" />
+				<line_editor name="suf_high" tool_tip="標識檔案名中或檔案內模型的高細節層次的後綴。" />
 				<text name="suf_physics_lab">
 					物理：
 				</text>
-				<line_editor name="suf_physics" tool_tip="標識檔案名中或檔案內模型的物理相關部分的字尾。" />
+				<line_editor name="suf_physics" tool_tip="標識檔案名中或檔案內模型的物理相關部分的後綴。" />
 				<text name="mesh_preview_ud_preset_label" width="190">
 					使用者自訂物理設定：
 				</text>
