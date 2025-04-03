@@ -150,15 +150,20 @@ void FSJointPose::recaptureJointAsDelta()
     {
         return;
     }
-    
+
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
     {
         return;
     }
-    
+
     addStateToUndo(mCurrentState);
-    mCurrentState = FSJointState(joint);
+    FSJointState newState = FSJointState(joint);
+
+    // Fixes issue when using the visual manipulators after setting Move/Scale values
+    newState.restorePublicState(mCurrentState);
+
+    mCurrentState = newState;
 }
 
 void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
