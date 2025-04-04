@@ -49,7 +49,8 @@ LLScriptEditor::Params::Params()
 LLScriptEditor::LLScriptEditor(const Params& p)
 :   LLTextEditor(p)
 ,   mShowLineNumbers(p.show_line_numbers),
-    mUseDefaultFontSize(p.default_font_size)
+    mUseDefaultFontSize(p.default_font_size),
+    mLuauLanguage(false)
 {
     if (mShowLineNumbers)
     {
@@ -149,22 +150,26 @@ void LLScriptEditor::drawLineNumbers()
     }
 }
 
-void LLScriptEditor::initKeywords()
+void LLScriptEditor::initKeywords(bool luau_language)
 {
-    mKeywords.initialize(LLSyntaxIdLSL::getInstance()->getKeywordsXML());
+    mKeywordsLua.initialize(LLSyntaxLua::getInstance()->getKeywordsXML(), true);
+    mKeywordsLSL.initialize(LLSyntaxIdLSL::getInstance()->getKeywordsXML(), false);
+
+    mLuauLanguage = luau_language;
+
 }
 
 void LLScriptEditor::loadKeywords()
 {
     LL_PROFILE_ZONE_SCOPED;
-    mKeywords.processTokens();
+    getKeywords().processTokens();
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
     //LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getScriptFont()).color(mDefaultColor.get()));
     LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
 
     segment_vec_t segment_list;
-    mKeywords.findSegments(&segment_list, getWText(), *this, style);
+    getKeywords().findSegments(&segment_list, getWText(), *this, style);
 
     mSegments.clear();
     segment_set_t::iterator insert_it = mSegments.begin();
@@ -181,17 +186,17 @@ void LLScriptEditor::loadKeywords(const std::string& filename,
                                 const LLColor3& color)
 {
     LL_PROFILE_ZONE_SCOPED;
-    if (mKeywords.loadFromLegacyFile(filename))
+    if (mKeywordsLSL.loadFromLegacyFile(filename))
     {
         auto count = llmin(funcs.size(), tooltips.size());
         for (size_t i = 0; i < count; i++)
         {
             std::string name = utf8str_trim(funcs[i]);
-            mKeywords.addToken(LLKeywordToken::TT_WORD, name, LLUIColor(color), tooltips[i] );
+            mKeywordsLSL.addToken(LLKeywordToken::TT_WORD, name, LLUIColor(color), tooltips[i] );
         }
         segment_vec_t segment_list;
         LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
-        mKeywords.findSegments(&segment_list, getWText(), *this, style);
+        mKeywordsLSL.findSegments(&segment_list, getWText(), *this, style);
 
         mSegments.clear();
         segment_set_t::iterator insert_it = mSegments.begin();
@@ -205,7 +210,7 @@ void LLScriptEditor::loadKeywords(const std::string& filename,
 
 void LLScriptEditor::updateSegments()
 {
-    if (mReflowIndex < S32_MAX && mKeywords.isLoaded() && mParseOnTheFly)
+    if (mReflowIndex < S32_MAX && getKeywords().isLoaded() && mParseOnTheFly)
     {
         LL_PROFILE_ZONE_SCOPED;
 
@@ -215,7 +220,7 @@ void LLScriptEditor::updateSegments()
 
         // HACK:  No non-ascii keywords for now
         segment_vec_t segment_list;
-        mKeywords.findSegments(&segment_list, getWText(), *this, style);
+        getKeywords().findSegments(&segment_list, getWText(), *this, style);
 
         clearSegments();
         for (segment_vec_t::iterator list_it = segment_list.begin(); list_it != segment_list.end(); ++list_it)
@@ -233,6 +238,21 @@ void LLScriptEditor::clearSegments()
     {
         mSegments.clear();
     }
+}
+
+LLKeywords::keyword_iterator_t LLScriptEditor::keywordsBegin()
+{
+    return getKeywords().begin();
+}
+
+LLKeywords::keyword_iterator_t LLScriptEditor::keywordsEnd()
+{
+    return getKeywords().end();
+}
+
+LLKeywords& LLScriptEditor::getKeywords()
+{
+    return mLuauLanguage ? mKeywordsLua : mKeywordsLSL;
 }
 
 // Most of this is shamelessly copied from LLTextBase
@@ -259,7 +279,6 @@ void LLScriptEditor::drawSelectionBackground()
              ++rect_it)
         {
             LLRect selection_rect = *rect_it;
-            selection_rect = *rect_it;
             selection_rect.translate(mVisibleTextRect.mLeft - content_display_rect.mLeft, mVisibleTextRect.mBottom - content_display_rect.mBottom);
             gl_rect_2d(selection_rect, selection_color);
         }

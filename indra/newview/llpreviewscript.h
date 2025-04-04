@@ -93,18 +93,21 @@ class LLScriptEdCore : public LLPanel
     friend class FSLSLPreprocessor;
     // NaCl End
 
+public:
+    typedef boost::function<void(void*)> script_ed_callback_t;
+    // <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+    //typedef boost::function<void(void*, bool)> save_callback_t;
+    typedef boost::function<void(void*, bool, bool)> save_callback_t;
+
 protected:
     // Supposed to be invoked only by the container.
     LLScriptEdCore(
         LLScriptEdContainer* container,
         const std::string& sample,
         const LLHandle<LLFloater>& floater_handle,
-        void (*load_callback)(void* userdata),
-        // <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-        //void (*save_callback)(void* userdata, bool close_after_save),
-        void (*save_callback)(void* userdata, bool close_after_save, bool sync),
-        // </FS:Ansariel>
-        void (*search_replace_callback)(void* userdata),
+        script_ed_callback_t load_callback,
+        save_callback_t save_callback,
+        script_ed_callback_t search_replace_callback,
         void* userdata,
         bool live,
         S32 bottom_pad = 0);    // pad below bottom row of buttons
@@ -113,6 +116,7 @@ public:
 
     void            initMenu();
     void            processKeywords();
+    void            processKeywords(bool luau_language);
 
     virtual void    draw();
     /*virtual*/ bool    postBuild();
@@ -160,11 +164,11 @@ public:
     LLUUID          getAssociatedExperience()const;
     void            setAssociatedExperience( const LLUUID& experience_id );
 
-    void            setScriptName(const std::string& name){mScriptName = name;};
+    void            setScriptName(const std::string& name) { mScriptName = name; }
 
-    void            setItemRemoved(bool script_removed){mScriptRemoved = script_removed;};
+    void            setItemRemoved(bool script_removed) { mScriptRemoved = script_removed; }
 
-    void            setAssetID( const LLUUID& asset_id){ mAssetID = asset_id; };
+    void            setAssetID(const LLUUID& asset_id) { mAssetID = asset_id; }
     LLUUID          getAssetID() { return mAssetID; }
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
@@ -174,6 +178,9 @@ public:
 
     virtual bool handleKeyHere(KEY key, MASK mask);
     void selectAll() { mEditor->selectAll(); }
+
+    void            enableSave(bool b) { mEnableSave = b; }
+    bool            hasChanged();
 
   private:
     // NaCl - LSL Preprocessor
@@ -190,11 +197,7 @@ public: // <FS:Ansariel> Show keyword help on F1
 private: // <FS:Ansariel> Show keyword help on F1
     void        onBtnUndoChanges();
 
-    bool        hasChanged();
-
     void selectFirstError();
-
-    void enableSave(bool b) {mEnableSave = b;}
 
 // <FS:CR> Advanced Script Editor
     void    initButtonBar();
@@ -224,12 +227,9 @@ private:
     std::string     mSampleText;
     std::string     mScriptName;
     LLScriptEditor* mEditor;
-    void            (*mLoadCallback)(void* userdata);
-    // <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-    //void          (*mSaveCallback)(void* userdata, bool close_after_save);
-    void            (*mSaveCallback)(void* userdata, bool close_after_save, bool sync);
-    // </FS:Ansariel>
-    void            (*mSearchReplaceCallback) (void* userdata);
+    script_ed_callback_t mLoadCallback;
+    save_callback_t      mSaveCallback;
+    script_ed_callback_t mSearchReplaceCallback;
     void*           mUserdata;
     LLComboBox      *mFunctions;
     bool            mForceClose;
@@ -242,13 +242,13 @@ private:
     S32             mLiveHelpHistorySize;
     bool            mEnableSave;
     bool            mHasScriptData;
-    LLLiveLSLFile*  mLiveFile;
     LLUUID          mAssociatedExperience;
     bool            mScriptRemoved;
     bool            mSaveDialogShown;
     LLUUID          mAssetID;
     LLTextBox*      mLineCol = nullptr;
     LLButton*       mSaveBtn = nullptr;
+    LLComboBox*     mCompileTarget = nullptr;
 
 // <FS:CR> Advanced Script Editor
     LLButton*       mSaveBtn2;  //  // <FS:Zi> support extra save button
@@ -273,7 +273,6 @@ private:
 
 public:
     boost::signals2::connection mSyntaxIDConnection;
-
 };
 
 class LLScriptEdContainer : public LLPreview
@@ -282,10 +281,8 @@ class LLScriptEdContainer : public LLPreview
 
 public:
     LLScriptEdContainer(const LLSD& key);
-    LLScriptEdContainer(const LLSD& key, const bool live);
+    virtual ~LLScriptEdContainer();
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
-    /*virtual*/ ~LLScriptEdContainer();
-
     /*virtual*/ void refreshFromItem();
 // [/SL:KB]
 
@@ -296,6 +293,7 @@ public:
 
 protected:
     std::string     getTmpFileName(const std::string& script_name);
+    std::string     getErrorLogFileName(const std::string& script_path);
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
     virtual std::string getBackupFileName() const;
     bool            onBackupTimer();
@@ -303,8 +301,12 @@ protected:
 
     bool            onExternalChange(const std::string& filename);
     virtual void    saveIfNeeded(bool sync = true) = 0;
+    bool            logErrorsToFile(const LLSD& compile_errors);
+    bool            isOpenInExternalEditor() const { return mLiveFile != nullptr; }
 
     LLScriptEdCore*     mScriptEd;
+    LLLiveLSLFile*      mLiveFile = nullptr;
+    LLLiveLSLFile*      mLiveLogFile = nullptr;
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
     std::string         mBackupFilename;
     LLEventTimer*       mBackupTimer;
@@ -338,6 +340,7 @@ protected:
 
     virtual void loadAsset();
     /*virtual*/ void saveIfNeeded(bool sync = true);
+    void onCompileTargetChanged();
 
     static void onSearchReplace(void* userdata);
     static void onLoad(void* userdata);
@@ -361,9 +364,7 @@ protected:
     S32 mPendingUploads;
 
     LLScriptMovedObserver* mItemObserver;
-
 };
-
 
 // Used to view and edit an LSL script that is attached to an object.
 class LLLiveLSLEditor : public LLScriptEdContainer
@@ -371,7 +372,6 @@ class LLLiveLSLEditor : public LLScriptEdContainer
     friend class LLLiveLSLFile;
 public:
     LLLiveLSLEditor(const LLSD& key);
-
 
     static void processScriptRunningReply(LLMessageSystem* msg, void**);
 
@@ -449,7 +449,6 @@ private:
 
     LLButton*           mResetButton       { nullptr };
     LLCheckBoxCtrl*     mRunningCheckbox   { nullptr };
-    LLComboBox*         mCompileTarget     { nullptr };
     LLComboBox*         mExperiences       { nullptr };
     LLCheckBoxCtrl*     mExperienceEnabled { nullptr };
     LLButton*           mViewProfileButton { nullptr };

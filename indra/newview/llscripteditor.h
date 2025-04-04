@@ -51,11 +51,14 @@ public:
     // LLTextBase override
     virtual void    startOfLine();
 
-    void    initKeywords();
+    void    initKeywords(bool luau_language = false);
     void    loadKeywords();
     /* virtual */ void  clearSegments();
-    LLKeywords::keyword_iterator_t keywordsBegin()  { return mKeywords.begin(); }
-    LLKeywords::keyword_iterator_t keywordsEnd()    { return mKeywords.end(); }
+    LLKeywords::keyword_iterator_t keywordsBegin();
+    LLKeywords::keyword_iterator_t keywordsEnd();
+    LLKeywords& getKeywords();
+    bool    getIsLuauLanguage() { return mLuauLanguage; }
+    void    setLuauLanguage(bool luau_language) { mLuauLanguage = luau_language; }
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
     //static std::string getScriptFontSize();
@@ -78,14 +81,14 @@ private:
     void    drawLineNumbers();
     /* virtual */ void  updateSegments();
     /* virtual */ void  drawSelectionBackground();
-    // <FS:Ansariel> Doesn't exist
-    //void  loadKeywords(const std::string& filename_keywords,
-    //                   const std::string& filename_colors);
 
     // <FS:Ansariel> Show keyword help on F1
     /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
 
-    LLKeywords  mKeywords;
+    LLKeywords  mKeywordsLua;
+    LLKeywords  mKeywordsLSL;
+    bool        mLuauLanguage;
+
     bool        mShowLineNumbers;
     bool mUseDefaultFontSize;
 };
