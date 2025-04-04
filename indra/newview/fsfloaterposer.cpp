@@ -432,6 +432,12 @@ void FSFloaterPoser::onMouseLeaveSavePoseBtn()
 {
     if (hasString("icon_save_button"))
         mSavePosesBtn->setImageOverlay(getString("icon_save_button"), mSavePosesBtn->getImageOverlayHAlign());
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
 }
 
 void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
@@ -1785,17 +1791,29 @@ void FSFloaterPoser::onTrackballChanged()
     trackPadDeltaPos[VY] *= NormalTrackpadRangeInRads * trackPadSensitivity * RAD_TO_DEG;
     trackPadDeltaPos[VZ] *= NormalTrackpadRangeInRads * RAD_TO_DEG;
 
-    F32 axis1 = (F32)mYawSpnr->getValue().asReal();
-    F32 axis2 = (F32)mPitchSpnr->getValue().asReal();
-    F32 axis3 = (F32)mRollSpnr->getValue().asReal();
-    mYawSpnr->setValue(axis1 + trackPadDeltaPos[VX]);
-    mPitchSpnr->setValue(axis2 + trackPadDeltaPos[VY]);
-    mRollSpnr->setValue(axis3 + trackPadDeltaPos[VZ]);
+    F32 axis1 = clipRange((F32)mYawSpnr->getValue().asReal() + trackPadDeltaPos[VX]);
+    F32 axis2 = (F32)mPitchSpnr->getValue().asReal() + trackPadDeltaPos[VY];
+    F32 axis3 = (F32)mRollSpnr->getValue().asReal() + trackPadDeltaPos[VZ];
 
-    onYawPitchRollChanged();
+    mYawSpnr->setValue(axis1);
+    mPitchSpnr->setValue(axis2);
+    mRollSpnr->setValue(axis3);
+
+    onYawPitchRollChanged(true);
 }
 
-void FSFloaterPoser::onYawPitchRollChanged()
+F32 FSFloaterPoser::clipRange(F32 value)
+{
+    F32 result = fmodf(value, 3600.f); // to avoid time consuming while loops
+    while (result > 180.f)
+        result -= 360.f;
+    while (result < -180.f)
+        result += 360.f;
+
+    return result;
+}
+
+void FSFloaterPoser::onYawPitchRollChanged(bool skipUpdateTrackpad)
 {
     LLVector3 absoluteRotation, deltaRotation;
     absoluteRotation.mV[VX] = (F32)mYawSpnr->getValue().asReal() * DEG_TO_RAD;
@@ -1806,8 +1824,10 @@ void FSFloaterPoser::onYawPitchRollChanged()
     mLastSliderRotation = absoluteRotation;
 
     setSelectedJointsRotation(absoluteRotation, deltaRotation);
-    refreshTrackpadCursor();
     enableOrDisableRedoAndUndoButton();
+
+    if (!skipUpdateTrackpad)
+        refreshTrackpadCursor();
 }
 
 void FSFloaterPoser::onAdjustTrackpadSensitivity()
@@ -1817,13 +1837,10 @@ void FSFloaterPoser::onAdjustTrackpadSensitivity()
 
 void FSFloaterPoser::refreshTrackpadCursor()
 {
-    F32 axis1 = (F32)mYawSpnr->getValue().asReal() * DEG_TO_RAD / NormalTrackpadRangeInRads;
-    F32 axis2 = (F32)mPitchSpnr->getValue().asReal() * DEG_TO_RAD / NormalTrackpadRangeInRads;
-    F32 axis3 = (F32)mRollSpnr->getValue().asReal() * DEG_TO_RAD / NormalTrackpadRangeInRads;
-
     F32 trackPadSensitivity = llmax(gSavedSettings.getF32(POSER_TRACKPAD_SENSITIVITY_SAVE_KEY), 0.0001f);
-    axis1 /= trackPadSensitivity;
-    axis2 /= trackPadSensitivity;
+    F32 axis1 = (F32)mYawSpnr->getValue().asReal() * DEG_TO_RAD / NormalTrackpadRangeInRads / trackPadSensitivity;
+    F32 axis2 = (F32)mPitchSpnr->getValue().asReal() * DEG_TO_RAD / NormalTrackpadRangeInRads / trackPadSensitivity;
+    F32 axis3 = (F32)mRollSpnr->getValue().asReal() * DEG_TO_RAD / NormalTrackpadRangeInRads;
 
     mAvatarTrackball->setValue(axis1, axis2, axis3);
 }

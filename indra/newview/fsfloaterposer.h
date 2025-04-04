@@ -251,7 +251,7 @@ public:
     void onSetAvatarToTpose();
     void onPoseStartStop();
     void onTrackballChanged();
-    void onYawPitchRollChanged();
+    void onYawPitchRollChanged(bool skipUpdateTrackpad = false);
     void onPositionSet();
     void onScaleSet();
     void onClickToggleSelectedBoneEnabled();
@@ -427,15 +427,15 @@ public:
     std::string static vec3ToXYZString(const LLVector3& val);
 
     /// <summary>
-    /// Unwraps a normalized value from the trackball to a slider value.
+    /// Performs an angle module of the supplied value to between -180 & 180 (degrees).
     /// </summary>
-    /// <param name="scale">The scale value from the trackball.</param>
-    /// <returns>A value appropriate for fitting a slider.</returns>
+    /// <param name="value">The value to modulo.</param>
+    /// <returns>The modulo value.</returns>
     /// <remarks>
-    /// If the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the sliders.
-    /// This method ensures whatever value the trackpad produces, they work with the sliders.
+    /// If the trackpad is in 'infinite scroll' mode, it can produce normalized-values outside the range of the spinners.
+    /// This method ensures whatever value the trackpad produces, they work with the spinners.
     /// </remarks>
-    static F32 unWrapScale(F32 scale);
+    static F32 clipRange(F32 value);
 
     LLToolset*  mLastToolset{ nullptr };
     LLTool*     mJointRotTool{ nullptr };
