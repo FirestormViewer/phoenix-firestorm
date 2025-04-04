@@ -31,6 +31,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
+#include "llappearancelistener.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llcommandhandler.h"
@@ -74,6 +75,8 @@
 // [/RLVa:KB]
 
 #include "fslslbridge.h"
+
+LLAppearanceListener sAppearanceListener;
 
 namespace
 {
@@ -5225,6 +5228,11 @@ bool wear_category(const LLSD& query_map, bool append)
     }
 
     return false;
+}
+
+bool LLAppearanceMgr::wearOutfit(const LLSD& query_map, bool append)
+{
+    return wear_category(query_map, append);
 }
 
 class LLWearFolderHandler : public LLCommandHandler
