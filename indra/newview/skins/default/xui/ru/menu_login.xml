@@ -10,13 +10,13 @@
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
 		<menu_item_call label="Решение проблем" name="Troubleshooting"/>
 		<menu_item_call label="Обучение" name="How To"/>
-		<!-- <menu_item_call label="Быстрый старт" name="Quickstart"/>
+		<!--
 		<menu_item_call label="База знаний" name="Knowledge Base"/>
 		<menu_item_call label="Wiki Second Life" name="Wiki"/>
 		<menu_item_call label="Forum сообщества" name="Community Forums"/>
 		<menu_item_call label="Портал поддержки" name="Support portal"/>
-		<menu_item_call label="Новости: [SECOND_LIFE]" name="Second Life News"/>
-		<menu_item_call label="Блоги: [SECOND_LIFE]" name="Second Life Blogs"/> -->
+		<menu_item_call label="Блоги: [SECOND_LIFE]" name="Second Life Blogs"/>
+		 -->
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
 		<menu_item_call label="Информация о [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Помощь для [CURRENT_GRID]" name="current_grid_help_login"/>

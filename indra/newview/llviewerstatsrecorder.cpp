@@ -41,7 +41,7 @@ LLViewerStatsRecorder::LLViewerStatsRecorder() :
     mLastSnapshotTime(0.0),
     mEnableStatsRecording(false),
     mEnableStatsLogging(false),
-    mInterval(0.2),
+    mInterval(0.2f), // <FS:minerjr> add missing f for float
     mMaxDuration(300.f),
     mSkipSaveIfZeros(false)
 {

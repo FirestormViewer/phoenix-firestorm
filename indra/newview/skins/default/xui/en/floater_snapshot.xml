@@ -5,7 +5,7 @@
  can_minimize="true"
  can_resize="false"
  can_close="true"
- height="480"
+ height="510"
  layout="topleft"
  name="Snapshot"
  single_instance="true"
@@ -91,7 +91,7 @@
      left="10"
 	 label="Refresh"
      name="new_snapshot_btn"
-     top_pad="0"
+     top_pad="10"
      width="167" />
 	<button
        follows="left|top"

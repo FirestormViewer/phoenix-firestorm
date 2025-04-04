@@ -1410,4 +1410,19 @@
   <color
      name="NotecardCursorColor"
      reference="TextCursorColor" />
+  <color
+     name="FpsDisplayUncappedColor"
+     reference="LabelTextColor" />
+  <color
+     name="FpsDisplayUnfocussedColor"
+     reference="Gray" />
+  <color
+     name="FpsDisplayBelowLimitColor"
+     reference="Yellow" />
+  <color
+     name="FpsDisplayFpsLimitReachedColor"
+     reference="Green" />
+  <color
+     name="FpsDisplayVSyncLimitReachedColor"
+     reference="Green" />
 </colors>

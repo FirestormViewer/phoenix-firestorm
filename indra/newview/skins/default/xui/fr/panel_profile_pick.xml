@@ -11,6 +11,7 @@
 			<text name="description_label">
 				Description :
 			</text>
+			<button name="btn_preview" tool_tip="Prévisualisation de la description de votre favori"/>
 			<text name="location_label">
 				Lieu :
 			</text>

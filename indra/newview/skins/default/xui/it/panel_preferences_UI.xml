@@ -25,8 +25,20 @@
 		<text name="ObjectInspectorTooltipDelay_text">
 			secondi
 		</text>
-		<slider label="Inizio sparizione testo sopra (in m):" tool_tip="Distanza a cui il testo sopra agli oggetti inizia a sbiadire" name="FSHudTextFadeDistance"/>
-		<slider label="Distanza sparizione testo (in m):" tool_tip="Imposta la distanza a cui il testo sopra agli oggetti diventa totalmente invisibile" name="FSHudTextFadeRange"/>
+		<text name="FSHudTextLabel">
+			Opzioni testo fluttuante:
+		</text>
+		<slider label="Il testo inizia a sbiadire a (metri):" tool_tip="Imposta la distanza alla quale il testo fluttuante sopra agli oggetti inizia a sbiadire" name="FSHudTextFadeDistance"/>
+		<slider label="Il testo scompare dopo (metri):" tool_tip="Imposta la distanza alla quale il testo fluttuante sopra agli oggetti diventerà completamente invisibile dopo aver iniziato a sbiadire" name="FSHudTextFadeRange"/>
+		<check_box name="FSHudTextUseHoverHighlight" label="Passa il mouse su un oggetto per evidenziare il testo fluttuante:" tool_tip="Quando passi il mouse su un oggetto, se presente, evidenzia il testo fluttuante (hovertext) portandolo in primo piano senza la trasparenza" />
+		<text name="FSHudTextShowBackgroundLabel">
+			Mostra sfondo testo fluttuante:
+		</text>
+		<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Visualizza uno sfondo bianco o nero dietro al testo fluttuante per renderlo più leggibile. La trasparenza può essere modificata in Preferenze > Colori > Varie">
+			<combo_box.item label="Disattivato" name="ScriptDialogOption_0" />
+			<combo_box.item label="Solo sugli oggetti evidenziati" name="ScriptDialogOption_1" />
+			<combo_box.item label="Su tutti gli oggetti" name="ScriptDialogOption_2" />
+		</combo_box>
 	</panel>
 	<panel label="Sovrapposiz. 2D" name="ui-2d-overlay">
 		<text name="UI Size:" width="95">

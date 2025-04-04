@@ -8,11 +8,6 @@
 				</text>
 			</panel>
 
-			<panel name="P_WL_Settings">
-				<check_box name="WindLightUseAtmosShaders" label="Atmosfer şeyderləri"
-				 tool_tip="Bu sizə Qabaqcıl Mühitin (Atmosfer şeyderləri) tam funksionallığından istifadə etməyə imkan verəcək."/>
-			</panel>
-
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Mühitiniz üçün öncədən təyin edilmiş səma.">
 					Səma
@@ -24,7 +19,6 @@
 					Gün dövrü
 				</text>
 				<button name="btn_personal_lighting" label="Şəxsi işıqlandırma..."/>
-				<button name="ResetToRegionDefault" tool_tip="Seçimlərin region standartlarına sıfırlanması."/>
 				<button label="Buludları dayandır" name="PauseClouds" tool_tip="Buludların animasiyasını dayandırır"/>
 			</panel>
 

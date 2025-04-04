@@ -1698,6 +1698,7 @@ Davam edilsin?
 	<notification name="WebLaunchExternalTarget">
 		Bu məzmuna baxmaq üçün brauzer açılsın?
 Naməlum mənbələrdən veb saytların açılması kompüterinizə zərər verə bilər
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Veb səhifəyə baxmaq üçün brauzeri işə salın" name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

@@ -84,7 +84,7 @@
 				調整完全綵現的化身。
 			</text>
 			<text name="avatars_frme_pct_lbl">
-化身渲染
+化身彩現
 所需時間
 			</text>
 		</panel>
@@ -104,7 +104,7 @@
 				移除 HUD 可以提升速度。
 			</text>
 			<text name="huds_frme_pct_lbl">
-HUD渲染
+HUD彩現
 所需時間
 			</text>
 		</panel>

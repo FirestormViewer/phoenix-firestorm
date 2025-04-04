@@ -111,6 +111,9 @@ public:
     static void receiveImageHeader(LLMessageSystem *msg, void **user_data);
     static void receiveImagePacket(LLMessageSystem *msg, void **user_data);
     // </FS:Ansariel>
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    static void dumpTexturelist(); // Added code to handle dumping texture information
+    // </FS:minerjr> [FIRE-35081]
 
 public:
     LLViewerTextureList();

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Atmosphère" name="panel_fs_settings_sky_atmos">
+	<string name="hdr_string">Échelle HDR :</string>
+	<string name="brightness_string">Luminosité :</string>
+	<string name="hdr_tooltip">Intensité des effets d'éclairage tels que les ciels lumineux réalistes et l'exposition dynamique. 1.0 est la valeur par défaut, 0 est désactivé, les valeurs entre 0 et 1 mélangent les effets ambiants et HDR.</string>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Couleurs atmosphériques"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="ambient_color_label">
+			Couleur ambiante :
+		</text>
+		<text name="blue_horizon_label">
+			Horizon bleu :
+		</text>
+		<text name="blue_density_label">
+			Densité du bleu :
+		</text>
+	</panel>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Réglages de l'atmosphère"/>
+	</panel>
+	<panel name="P_Atmosphere_OtherSettings">
+		<text name="haze_horizon_label">
+			Horizon brumeux :
+		</text>
+		<text name="haze_density_label">
+			Densité de brume :
+		</text>
+		<text name="density_multiplier_label">
+			Facteur de densité :
+		</text>
+		<text name="distance_multiplier_label">
+			Facteur de dist. :
+		</text>
+		<text name="maximum_altitude_label">
+			Altitude maximale :
+		</text>
+		<text name="scene_gamma_label">
+			Luminosité :
+		</text>
+		<text name="probe_ambiance_label" tool_tip="Contrôle de l'irradiance.  Si différent de zéro, active le modèle d'éclairage HDR.">
+			Ambiance sonde de réflexion (HDR):
+		</text>
+	</panel>
+	<panel name="P_Rainbow_Header">
+		<text name="T_Rainbow_Header" value="Réglages de l'arc-en-ciel et du halo"/>
+	</panel>
+	<panel name="P_Rainbow_OtherSettings">
+		<text name="moisture_level_label">
+			Niveau d'humidité :
+		</text>
+		<text name="droplet_radius_label">
+			Rayon des gouttes :
+		</text>
+		<text name="ice_level_label">
+			Niveau de la glace :
+		</text>
+	</panel>
+</panel>

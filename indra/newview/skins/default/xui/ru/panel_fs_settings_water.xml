@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Вода" name="panel_fs_settings_water">
+	<panel name="P_Wave_Fog" label="Туман">
+		<text name="water_fog_label" tool_tip="Цвет водяного тумана - изменяет цвет объемного оттенка воды, по сути, определяя цвет самой воды. Если в вашей воде нет тумана, она будет казаться кристально чистой и бесцветной.">Цвет тумана</text>
+		<text name="normal_map_label" tool_tip="Карта нормалей - изображение, используемое для определения отражений и преломлений. Для этой настройки можно использовать любую текстуру, но лучше всего подходят настоящие карты нормалей.">Карта нормалей</text>
+	</panel>
+	<panel name="P_Wave_Fog_2" label="Туман">
+		<text name="density_exponent_label">Плотность:</text>
+		<text name="underwater_modifier_label">Подводный модиф:</text>
+		<text name="FresnelScaleText">Шкала Френеля:</text>
+		<text name="FresnelOffsetText">Смещение Френеля:</text>
+ 	</panel>
+	<panel name="P_Water_Wave">
+		<text name="large_wave_speed_label">Большая волна</text>
+		<text name="small_wave_speed_label">Малая волна</text>
+		<text name="reflection_wavelet_scale_label">Размер отражений волны</text>
+	</panel>
+	<panel name="P_Water_Reflection" label="Преломление">
+		<text name="refraction_scale_above_label">Размер преломлений (Выше):</text>
+		<text name="refraction_scale_below_label">Размер преломлений (Ниже):</text>
+		<text name="blur_multiplier_label">Множитель размытия:</text>
+	</panel>
+</panel>

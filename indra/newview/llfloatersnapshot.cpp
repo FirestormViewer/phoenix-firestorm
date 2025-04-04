@@ -67,6 +67,10 @@ LLPanelSnapshot* LLFloaterSnapshot::Impl::getActivePanel(LLFloaterSnapshotBase* 
 {
     LLSideTrayPanelContainer* panel_container = floater->getChild<LLSideTrayPanelContainer>("panel_container");
     LLPanelSnapshot* active_panel = dynamic_cast<LLPanelSnapshot*>(panel_container->getCurrentPanel());
+    if (!active_panel)
+    {
+        LL_WARNS() << "No snapshot active panel, current panel index: " << panel_container->getCurrentPanelIndex() << LL_ENDL;
+    }
     if (!ok_if_not_found)
     {
         llassert_always(active_panel != NULL);
@@ -217,16 +221,19 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
     if (!mSkipReshaping && !floaterp->isMinimized())
     {
         LLView* controls_container = floaterp->getChild<LLView>("controls_container");
+        constexpr S32 THUMB_HEIGHT_LARGE = 420;
+        constexpr S32 THUMB_HEIGHT_SMALL = 124;
+        constexpr S32 THUMB_WIDTH_SMALL = 216;
         if (mAdvanced)
         {
             LLRect cc_rect = controls_container->getRect();
 
-            floaterp->reshape(floater_width, 483);
+            floaterp->reshape(floater_width, floaterp->getOriginalHeight());
 
             controls_container->setRect(cc_rect);
             controls_container->updateBoundingRect();
 
-            thumbnail_placeholder->reshape(panel_width, 420);
+            thumbnail_placeholder->reshape(panel_width, THUMB_HEIGHT_LARGE);
 
             LLRect tn_rect = thumbnail_placeholder->getRect();
             tn_rect.setLeftTopAndSize(215, floaterp->getRect().getHeight() - 30, tn_rect.getWidth(), tn_rect.getHeight());
@@ -240,15 +247,15 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
         {
             LLRect cc_rect = controls_container->getRect();
 
-            floaterp->reshape(floater_width, 613);
+            floaterp->reshape(floater_width,floaterp->getOriginalHeight()+THUMB_HEIGHT_SMALL);
 
             controls_container->setRect(cc_rect);
             controls_container->updateBoundingRect();
 
-            thumbnail_placeholder->reshape(216, 124);
+            thumbnail_placeholder->reshape(THUMB_WIDTH_SMALL, THUMB_HEIGHT_SMALL);
 
             LLRect tn_rect = thumbnail_placeholder->getRect();
-            tn_rect.setLeftTopAndSize(5, floaterp->getRect().getHeight() - 30, 216, 124);
+            tn_rect.setLeftTopAndSize(5, floaterp->getRect().getHeight() - 30, THUMB_WIDTH_SMALL, THUMB_HEIGHT_SMALL);
             thumbnail_placeholder->setRect(tn_rect);
             thumbnail_placeholder->updateBoundingRect();
 
@@ -746,20 +753,18 @@ void LLFloaterSnapshotBase::ImplBase::setWorking(bool working)
     working_lbl->setVisible(working);
     mFloater->getChild<LLUICtrl>("working_indicator")->setVisible(working);
 
-    if (working)
-    {
-        const std::string panel_name = getActivePanel(mFloater, false)->getName();
-        const std::string prefix = panel_name.substr(getSnapshotPanelPrefix().size());
-        std::string progress_text = mFloater->getString(prefix + "_" + "progress_str");
-        working_lbl->setValue(progress_text);
-    }
-
     // All controls should be disabled while posting.
     mFloater->setCtrlsEnabled(!working);
-    LLPanelSnapshot* active_panel = getActivePanel(mFloater);
-    if (active_panel)
+    if (LLPanelSnapshot* active_panel = getActivePanel(mFloater))
     {
         active_panel->enableControls(!working);
+        if (working)
+        {
+            const std::string panel_name = active_panel->getName();
+            const std::string prefix = panel_name.substr(getSnapshotPanelPrefix().size());
+            std::string progress_text = mFloater->getString(prefix + "_" + "progress_str");
+            working_lbl->setValue(progress_text);
+        }
     }
 }
 
@@ -1207,7 +1212,7 @@ bool LLFloaterSnapshot::postBuild()
     //getChild<LLComboBox>("local_size_combo")->selectNthItem(8);
     //getChild<LLComboBox>("local_format_combo")->selectNthItem(0);
     // </FS:Ansariel>
-
+    mOriginalHeight = getRect().getHeight();
     impl->mPreviewHandle = previewp->getHandle();
     previewp->setContainer(this);
     impl->updateControls(this);

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
-	<menu_item_check label="Pokaż pasek nawigacji i wyszukiwarki" name="ShowNavbarNavigationPanel"/>
-	<menu_item_check label="Pokaż pasek wyszukiwarki" name="ShowSearchTopBar"/>
-	<menu_item_check label="Pokaż pasek ulubionych" name="ShowNavbarFavoritesPanel"/>
-	<menu_item_check label="Pokaż lokalizację" name="ShowMenuBarLocation"/>
-	<menu_item_check label="Pokaż wersję symulatora" name="FSStatusbarShowSimulatorVersion"/>
-	<menu_item_check label="Pokaż wyszukiwarkę pozycji w menu" name="FSMenuSearch"/>
-	<menu_item_check label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar"/>
-	<menu_item_check label="Pokaż kontrolki mediów" name="FSEnableVolumeControls"/>
-	<menu_item_check label="Pokaż klatki na sekundę (FPS)" name="FSStatusBarShowFPS"/>
-	<menu_item_check label="Pokaż wskaźnik ruchu sieciowego" name="ShowNetStats"/>
-	<menu_item_check label="Pokaż współrzędne" name="Coordinates"/>
-	<menu_item_check label="Pokaż właściwości działki" name="Parcel Properties"/>
+	<menu_item_check label="Pasek nawigacji i wyszukiwarki" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Pasek wyszukiwarki" name="ShowSearchTopBar"/>
+	<menu_item_check label="Pasek ulubionych" name="ShowNavbarFavoritesPanel"/>
+	<menu_item_check label="Lokalizacja" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Wersja symulatora" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Wyszukiwarka pozycji w menu" name="FSMenuSearch"/>
+	<menu_item_check label="Stan konta" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Kontrolki mediów" name="FSEnableVolumeControls"/>
+	<menu_item_check label="Klatki na sekundę (FPS)" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Wskaźnik koloru dla klatek na sekundę" name="FSStatusBarShowFPSColors" />
+	<menu_item_check label="Wskaźnik ruchu sieciowego" name="ShowNetStats"/>
+	<menu_item_check label="Współrzędne" name="Coordinates"/>
+	<menu_item_check label="Właściwości działki" name="Parcel Properties"/>
 </menu>

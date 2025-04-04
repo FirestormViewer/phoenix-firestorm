@@ -428,6 +428,8 @@ void ColladaExportFloater::CacheReadResponder::completed(bool success)
             // For other formats we need to decode first
             if (mFormattedImage->updateData() && ( (mFormattedImage->getWidth() * mFormattedImage->getHeight() * mFormattedImage->getComponents()) != 0 ) )
             {
+                mFormattedImage->setDiscardLevel(0); // <FS/> [FIRE-35292] Fix for textures getting downscaled and compressed
+
                 LLPointer<LLImageRaw> raw = new LLImageRaw;
                 raw->resize(mFormattedImage->getWidth(), mFormattedImage->getHeight(),  mFormattedImage->getComponents());
 
@@ -503,7 +505,15 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
             std::string name = gDirUtilp->getDirName(me->mFilename);
             name += gDirUtilp->getDirDelimiter() + me->mTexturesToSave[id];
             CacheReadResponder* responder = new CacheReadResponder(id, img, name, img_type);
-            LLAppViewer::getTextureCache()->readFromCache(id, 0, 999999, responder);
+            // <FS:minerjr> [FIRE-35292] Fix for textures getting downscaled and compressed
+            //LLAppViewer::getTextureCache()->readFromCache(id, 0, 999999, responder);
+            // The above line hard coded the size of data to read from the cached version of the texture as 999999,
+            // where now we will calcuate the correct value based upon the texture's full width, height and # of components (3=RGB, 4=RGBA) and
+            // the discard level (0)). There is a choice to change the rate, but we seem to use the value of 1/8 compression level
+            S32 texture_size = LLImageJ2C::calcDataSizeJ2C(imagep->getFullWidth(), imagep->getFullHeight(), imagep->getComponents(), 0);// , F32 rate) rate = const F32 DEFAULT_COMPRESSION_RATE = 1.f/8.f;
+            // Use calculated texture_size (from LLTextureFetch::createRequest see "else if (w*h*c > 0)" statement for more info)
+            LLAppViewer::getTextureCache()->readFromCache(id, 0, texture_size, responder);
+            // </FS:minerjr> [FIRE-35292]
             me->mTexturesToSave.erase(id);
             me->updateTitleProgress();
             me->mTimer.reset();

@@ -12,7 +12,7 @@
 					最大頻寬:
 				</text>
 				<slider name="max_bandwidth" />
-				<text name="Maximum complexity" width="105" tool_tip="控制在何時下讓複雜化身渲染為「果凍娃娃」">
+				<text name="Maximum complexity" width="105" tool_tip="控制在何時下讓複雜化身彩現為「果凍娃娃」">
 					最大複雜度:
 				</text>
 				<slider name="IndirectMaxComplexity" right="-68" />
@@ -31,7 +31,7 @@
 					晝夜循環:
 				</text>
 				<combo_box left_delta="77" name="DCPresetsCombo" />
-				<button name="btn_personal_lighting" label="個人照明" width="227" />
+				<button name="btn_personal_lighting" label="個人光照" width="227" />
 				<button name="ResetToRegionDefault" tool_tip="將環境設定重設為共享環境。" left="234" />
 				<button name="button_edit" tool_tip="設定快速設定" left="255" />
 			</layout_panel>

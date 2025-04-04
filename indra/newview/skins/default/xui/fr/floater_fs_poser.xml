@@ -1,150 +1,148 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_poser" title="Poseur d'avatars et d'animesh">
-	<string	name="header_mHead">Corps</string>
-	<string	name="header_mFaceForeheadLeft">Front/sourcils</string>
-	<string	name="header_mEyeLeft">Yeux/Paupières</string>
-	<string	name="header_mFaceCheekUpperLeft">Joues/Lèvres</string>
-	<string	name="header_mHandThumb1Left">Main gauche</string>
-	<string	name="header_mCollarLeft">Bras gauche</string>
-	<string	name="header_mHandThumb1Right">Main droite</string>
-	<string	name="header_mCollarRight">Bras droit</string>
-	<string	name="header_mHipLeft">Jambes</string>
-	<string	name="header_mTail1">Queue</string>
-	<string	name="header_mHindLimbsRoot">Membres postérieurs</string>
-	<string	name="header_mWingsRoot">Ailes</string>
-	<string	name="header_mFaceEar1Left">Oreilles/nez</string>
-	<string	name="title_mPelvis">Tout l'avatar</string>
-	<string	name="title_mTorso">Torse</string>
-	<string	name="title_mChest">Poitrine</string>
-	<string	name="title_mNeck">Cou</string>
-	<string	name="title_mHead">Tête</string>
-	<string	name="title_mEyeRight">Oeil droit</string>
-	<string	name="title_mEyeLeft">Oeil gauche</string>
-	<string	name="title_mFaceForeheadLeft">Front, côté gauche</string>
-	<string	name="title_mFaceForeheadRight">Front, côté droit</string>
-	<string	name="title_mFaceEyebrowOuterLeft">Sourcil, extérieur gauche</string>
-	<string	name="title_mFaceEyebrowCenterLeft">Sourcil, milieu gauche</string>
-	<string	name="title_mFaceEyebrowInnerLeft">Sourcil, intérieur gauche</string>
-	<string	name="title_mFaceEyebrowOuterRight">Sourcil, extérieur droit</string>
-	<string	name="title_mFaceEyebrowCenterRight">Sourcil, milieu droit</string>
-	<string	name="title_mFaceEyebrowInnerRight">Sourcil, intérieur droit</string>
-	<string	name="title_mFaceEyeLidUpperLeft">Paupière, en haut à gauche</string>
-	<string	name="title_mFaceEyeLidLowerLeft">Paupière, en bas à gauche</string>
-	<string	name="title_mFaceEyeLidUpperRight">Paupière, en haut à droite</string>
-	<string	name="title_mFaceEyeLidLowerRight">Paupière en bas à droite</string>
-	<string	name="title_mFaceEar1Left">Oreille en haut à gauche</string>
-	<string	name="title_mFaceEar2Left">Oreille en bas à gauche</string>
-	<string	name="title_mFaceEar1Right">Oreille en haut à droite</string>
-	<string	name="title_mFaceEar2Right">Oreille en bas à droite</string>
-	<string	name="title_mFaceNoseLeft">Nez à gauche</string>
-	<string	name="title_mFaceNoseCenter">Nez au milieu</string>
-	<string	name="title_mFaceNoseRight">Nez à droite</string>
-	<string	name="title_mFaceCheekLowerLeft">Bas de la joue gauche</string>
-	<string	name="title_mFaceCheekUpperLeft">Haut de la joue gauche</string>
-	<string	name="title_mFaceCheekLowerRight">Bas de la joue droite</string>
-	<string	name="title_mFaceCheekUpperRight">Haut de la joue droite</string>
-	<string	name="title_mFaceJaw">Mâchoire</string>
-	<string	name="title_mFaceTeethLower">Dents du bas</string>
-	<string	name="title_mFaceLipLowerLeft">Lèvre du bas à gauche</string>
-	<string	name="title_mFaceLipLowerRight">Lèvre du bas à droite</string>
-	<string	name="title_mFaceLipLowerCenter">Lèvre du bas au milieu</string>
-	<string	name="title_mFaceTongueBase">Base de la langue</string>
-	<string	name="title_mFaceTongueTip">Extrémité de la langue</string>
-	<string	name="title_mFaceJawShaper">Forme de la mâchoire</string>
-	<string	name="title_mFaceForeheadCenter">Milieu du front</string>
-	<string	name="title_mFaceNoseBase">Base du nez</string>
-	<string	name="title_mFaceTeethUpper">Dents du haut</string>
-	<string	name="title_mFaceLipUpperLeft">Lèvre supérieure à gauche</string>
-	<string	name="title_mFaceLipUpperRight">Lèvre supérieure à droite</string>
-	<string	name="title_mFaceLipCornerLeft">Coin gauche de la bouche</string>
-	<string	name="title_mFaceLipCornerRight">Coin droit de la bouche</string>
-	<string	name="title_mFaceLipUpperCenter">Milieu de la lèvre supérieure</string>
-	<string	name="title_mFaceEyecornerInnerLeft">Coin interne gauche de l'œil</string>
-	<string	name="title_mFaceEyecornerInnerRight">Coin interne droit de l'œil</string>
-	<string	name="title_mFaceNoseBridge">Arête du nez</string>
-	<string	name="title_mCollarLeft">Col</string>
-	<string	name="title_mShoulderLeft">Bras entier</string>
-	<string	name="title_mElbowLeft">Avant-bras</string>
-	<string	name="title_mWristLeft">Poignet</string>
-	<string	name="title_mHandMiddle1Left">Base du majeur</string>
-	<string	name="title_mHandMiddle2Left">Milieu du majeur</string>
-	<string	name="title_mHandMiddle3Left">Extrémité du majeur</string>
-	<string	name="title_mHandIndex1Left">Base de l'index</string>
-	<string	name="title_mHandIndex2Left">Milieu de l'index</string>
-	<string	name="title_mHandIndex3Left">Extrémité de l'index</string>
-	<string	name="title_mHandRing1Left">Base de l'annulaire</string>
-	<string	name="title_mHandRing2Left">Milieu de l'annulaire</string>
-	<string	name="title_mHandRing3Left">Extrémité de l'annulaire</string>
-	<string	name="title_mHandPinky1Left">Base de l'auriculaire</string>
-	<string	name="title_mHandPinky2Left">Milieu de l'auriculaire</string>
-	<string	name="title_mHandPinky3Left">Extrémité de l'auriculaire</string>
-	<string	name="title_mHandThumb1Left">Base du pouce</string>
-	<string	name="title_mHandThumb2Left">Milieu du pouce</string>
-	<string	name="title_mHandThumb3Left">Extrémité du pouce</string>
-	<string	name="title_mCollarRight">Col</string>
-	<string	name="title_mShoulderRight">Bras entier</string>
-	<string	name="title_mElbowRight">Avant-bras</string>
-	<string	name="title_mWristRight">Poignet</string>
-	<string	name="title_mHandMiddle1Right">Base du majeur</string>
-	<string	name="title_mHandMiddle2Right">Milieu du majeur</string>
-	<string	name="title_mHandMiddle3Right">Extrémité du majeur</string>
-	<string	name="title_mHandIndex1Right">Base de l'index</string>
-	<string	name="title_mHandIndex2Right">Milieu de l'index</string>
-	<string	name="title_mHandIndex3Right">Extrémité de l'index</string>
-	<string	name="title_mHandRing1Right">Base de l'annulaire</string>
-	<string	name="title_mHandRing2Right">Milieu de l'annulaire</string>
-	<string	name="title_mHandRing3Right">Extrémité de l'annulaire</string>
-	<string	name="title_mHandPinky1Right">Base de l'auriculaire</string>
-	<string	name="title_mHandPinky2Right">Milieu de l'auriculaire</string>
-	<string	name="title_mHandPinky3Right">Extrémité de l'auriculaire</string>
-	<string	name="title_mHandThumb1Right">Base du pouce</string>
-	<string	name="title_mHandThumb2Right">Milieu du pouce</string>
-	<string	name="title_mHandThumb3Right">Extrémité du pouce</string>
-	<string	name="title_mWingsRoot">Articulations</string>
-	<string	name="title_mWing1Left">Gauche 1</string>
-	<string	name="title_mWing2Left">Gauche 2</string>
-	<string	name="title_mWing3Left">Gauche 3</string>
-	<string	name="title_mWing4Left">Gauche 4</string>
-	<string	name="title_mWing4FanLeft">Pale gauche</string>
-	<string	name="title_mWing1Right">Droite 1</string>
-	<string	name="title_mWing2Right">Droite 2</string>
-	<string	name="title_mWing3Right">Droite 3</string>
-	<string	name="title_mWing4Right">Droite 4</string>
-	<string	name="title_mWing4FanRight">Pale droit</string>
-	<string	name="title_mHipRight">Jambe droite</string>
-	<string	name="title_mKneeRight">Genou droit</string>
-	<string	name="title_mAnkleRight">Cheville droite</string>
-	<string	name="title_mFootRight">Pied droit</string>
-	<string	name="title_mToeRight">Orteil droit</string>
-	<string	name="title_mHipLeft">Jambe gauche</string>
-	<string	name="title_mKneeLeft">Genou gauche</string>
-	<string	name="title_mAnkleLeft">Cheville gauche</string>
-	<string	name="title_mFootLeft">Pied gauche</string>
-	<string	name="title_mToeLeft">Orteil gauche</string>
-	<string	name="title_mTail1">Base de la queue</string>
-	<string	name="title_mTail2">Queue 2</string>
-	<string	name="title_mTail3">Queue 3</string>
-	<string	name="title_mTail4">Queue 4</string>
-	<string	name="title_mTail5">Queue 5</string>
-	<string	name="title_mTail6">Extrémité de la queue</string>
-	<string	name="title_mGroin">Entrejambe</string>
-	<string	name="title_mHindLimbsRoot">Membres postérieurs</string>
-	<string	name="title_mHindLimb1Left">Pied gauche</string>
-	<string	name="title_mHindLimb2Left">Gauche 2</string>
-	<string	name="title_mHindLimb3Left">Gauche 3</string>
-	<string	name="title_mHindLimb4Left">Gauche 4</string>
-	<string	name="title_mHindLimb1Right">Pied droit</string>
-	<string	name="title_mHindLimb2Right">Droite 2</string>
-	<string	name="title_mHindLimb3Right">Droite 3</string>
-	<string	name="title_mHindLimb4Right">Droite 4</string>
-	<string	name="title_BUTT">Fesses</string>
-	<string	name="title_BELLY">Ventre</string>
-	<string	name="title_LEFT_PEC">Sein gauche</string>
-	<string	name="title_RIGHT_PEC">Sein droit</string>
-	<string	name="title_mFaceEar1Left">Base gauche</string>
-	<string	name="title_mFaceEar1Right">Base droite</string>
-	<string	name="title_mFaceEar2Left">Pointe gauche</string>
-	<string	name="title_mFaceEar2Right">Pointe droite</string>
+	<string name="header_mHead">Corps</string>
+	<string name="header_mFaceForeheadLeft">Front/sourcils</string>
+	<string name="header_mEyeLeft">Yeux/Paupières</string>
+	<string name="header_mFaceCheekUpperLeft">Joues/Lèvres</string>
+	<string name="header_mHandThumb1Left">Main gauche</string>
+	<string name="header_mCollarLeft">Bras gauche</string>
+	<string name="header_mHandThumb1Right">Main droite</string>
+	<string name="header_mCollarRight">Bras droit</string>
+	<string name="header_mHipLeft">Jambes</string>
+	<string name="header_mTail1">Queue</string>
+	<string name="header_mHindLimbsRoot">Membres postérieurs</string>
+	<string name="header_mWingsRoot">Ailes</string>
+	<string name="header_mFaceEar1Left">Oreilles/nez</string>
+	<string name="title_mPelvis">Tout l'avatar</string>
+	<string name="title_mTorso">Torse</string>
+	<string name="title_mChest">Poitrine</string>
+	<string name="title_mNeck">Cou</string>
+	<string name="title_mHead">Tête</string>
+	<string name="title_mEyeRight">Oeil droit</string>
+	<string name="title_mEyeLeft">Oeil gauche</string>
+	<string name="title_mFaceForeheadLeft">Front, côté gauche</string>
+	<string name="title_mFaceForeheadRight">Front, côté droit</string>
+	<string name="title_mFaceEyebrowOuterLeft">Sourcil, extérieur gauche</string>
+	<string name="title_mFaceEyebrowCenterLeft">Sourcil, milieu gauche</string>
+	<string name="title_mFaceEyebrowInnerLeft">Sourcil, intérieur gauche</string>
+	<string name="title_mFaceEyebrowOuterRight">Sourcil, extérieur droit</string>
+	<string name="title_mFaceEyebrowCenterRight">Sourcil, milieu droit</string>
+	<string name="title_mFaceEyebrowInnerRight">Sourcil, intérieur droit</string>
+	<string name="title_mFaceEyeLidUpperLeft">Paupière, en haut à gauche</string>
+	<string name="title_mFaceEyeLidLowerLeft">Paupière, en bas à gauche</string>
+	<string name="title_mFaceEyeLidUpperRight">Paupière, en haut à droite</string>
+	<string name="title_mFaceEyeLidLowerRight">Paupière en bas à droite</string>
+	<string name="title_mFaceEar1Left">Oreille en haut à gauche</string>
+	<string name="title_mFaceEar2Left">Oreille en bas à gauche</string>
+	<string name="title_mFaceEar1Right">Oreille en haut à droite</string>
+	<string name="title_mFaceEar2Right">Oreille en bas à droite</string>
+	<string name="title_mFaceNoseLeft">Nez à gauche</string>
+	<string name="title_mFaceNoseCenter">Nez au milieu</string>
+	<string name="title_mFaceNoseRight">Nez à droite</string>
+	<string name="title_mFaceCheekLowerLeft">Bas de la joue gauche</string>
+	<string name="title_mFaceCheekUpperLeft">Haut de la joue gauche</string>
+	<string name="title_mFaceCheekLowerRight">Bas de la joue droite</string>
+	<string name="title_mFaceCheekUpperRight">Haut de la joue droite</string>
+	<string name="title_mFaceJaw">Mâchoire</string>
+	<string name="title_mFaceTeethLower">Dents du bas</string>
+	<string name="title_mFaceLipLowerLeft">Lèvre du bas à gauche</string>
+	<string name="title_mFaceLipLowerRight">Lèvre du bas à droite</string>
+	<string name="title_mFaceLipLowerCenter">Lèvre du bas au milieu</string>
+	<string name="title_mFaceTongueBase">Base de la langue</string>
+	<string name="title_mFaceTongueTip">Extrémité de la langue</string>
+	<string name="title_mFaceJawShaper">Forme de la mâchoire</string>
+	<string name="title_mFaceForeheadCenter">Milieu du front</string>
+	<string name="title_mFaceNoseBase">Base du nez</string>
+	<string name="title_mFaceTeethUpper">Dents du haut</string>
+	<string name="title_mFaceLipUpperLeft">Lèvre supérieure à gauche</string>
+	<string name="title_mFaceLipUpperRight">Lèvre supérieure à droite</string>
+	<string name="title_mFaceLipCornerLeft">Coin gauche de la bouche</string>
+	<string name="title_mFaceLipCornerRight">Coin droit de la bouche</string>
+	<string name="title_mFaceLipUpperCenter">Milieu de la lèvre supérieure</string>
+	<string name="title_mFaceEyecornerInnerLeft">Coin interne gauche de l'œil</string>
+	<string name="title_mFaceEyecornerInnerRight">Coin interne droit de l'œil</string>
+	<string name="title_mFaceNoseBridge">Arête du nez</string>
+	<string name="title_mCollarLeft">Col</string>
+	<string name="title_mShoulderLeft">Bras entier</string>
+	<string name="title_mElbowLeft">Avant-bras</string>
+	<string name="title_mWristLeft">Poignet</string>
+	<string name="title_mHandMiddle1Left">Base du majeur</string>
+	<string name="title_mHandMiddle2Left">Milieu du majeur</string>
+	<string name="title_mHandMiddle3Left">Extrémité du majeur</string>
+	<string name="title_mHandIndex1Left">Base de l'index</string>
+	<string name="title_mHandIndex2Left">Milieu de l'index</string>
+	<string name="title_mHandIndex3Left">Extrémité de l'index</string>
+	<string name="title_mHandRing1Left">Base de l'annulaire</string>
+	<string name="title_mHandRing2Left">Milieu de l'annulaire</string>
+	<string name="title_mHandRing3Left">Extrémité de l'annulaire</string>
+	<string name="title_mHandPinky1Left">Base de l'auriculaire</string>
+	<string name="title_mHandPinky2Left">Milieu de l'auriculaire</string>
+	<string name="title_mHandPinky3Left">Extrémité de l'auriculaire</string>
+	<string name="title_mHandThumb1Left">Base du pouce</string>
+	<string name="title_mHandThumb2Left">Milieu du pouce</string>
+	<string name="title_mHandThumb3Left">Extrémité du pouce</string>
+	<string name="title_mCollarRight">Col</string>
+	<string name="title_mShoulderRight">Bras entier</string>
+	<string name="title_mElbowRight">Avant-bras</string>
+	<string name="title_mWristRight">Poignet</string>
+	<string name="title_mHandMiddle1Right">Base du majeur</string>
+	<string name="title_mHandMiddle2Right">Milieu du majeur</string>
+	<string name="title_mHandMiddle3Right">Extrémité du majeur</string>
+	<string name="title_mHandIndex1Right">Base de l'index</string>
+	<string name="title_mHandIndex2Right">Milieu de l'index</string>
+	<string name="title_mHandIndex3Right">Extrémité de l'index</string>
+	<string name="title_mHandRing1Right">Base de l'annulaire</string>
+	<string name="title_mHandRing2Right">Milieu de l'annulaire</string>
+	<string name="title_mHandRing3Right">Extrémité de l'annulaire</string>
+	<string name="title_mHandPinky1Right">Base de l'auriculaire</string>
+	<string name="title_mHandPinky2Right">Milieu de l'auriculaire</string>
+	<string name="title_mHandPinky3Right">Extrémité de l'auriculaire</string>
+	<string name="title_mHandThumb1Right">Base du pouce</string>
+	<string name="title_mHandThumb2Right">Milieu du pouce</string>
+	<string name="title_mHandThumb3Right">Extrémité du pouce</string>
+	<string name="title_mWingsRoot">Articulations</string>
+	<string name="title_mWing1Left">Gauche 1</string>
+	<string name="title_mWing2Left">Gauche 2</string>
+	<string name="title_mWing3Left">Gauche 3</string>
+	<string name="title_mWing4Left">Gauche 4</string>
+	<string name="title_mWing4FanLeft">Pale gauche</string>
+	<string name="title_mWing1Right">Droite 1</string>
+	<string name="title_mWing2Right">Droite 2</string>
+	<string name="title_mWing3Right">Droite 3</string>
+	<string name="title_mWing4Right">Droite 4</string>
+	<string name="title_mWing4FanRight">Pale droit</string>
+	<string name="title_mHipRight">Jambe droite</string>
+	<string name="title_mKneeRight">Genou droit</string>
+	<string name="title_mAnkleRight">Cheville droite</string>
+	<string name="title_mFootRight">Pied droit</string>
+	<string name="title_mToeRight">Orteil droit</string>
+	<string name="title_mHipLeft">Jambe gauche</string>
+	<string name="title_mKneeLeft">Genou gauche</string>
+	<string name="title_mAnkleLeft">Cheville gauche</string>
+	<string name="title_mFootLeft">Pied gauche</string>
+	<string name="title_mToeLeft">Orteil gauche</string>
+	<string name="title_mTail1">Base de la queue</string>
+	<string name="title_mTail2">Queue 2</string>
+	<string name="title_mTail3">Queue 3</string>
+	<string name="title_mTail4">Queue 4</string>
+	<string name="title_mTail5">Queue 5</string>
+	<string name="title_mTail6">Extrémité de la queue</string>
+	<string name="title_mGroin">Entrejambe</string>
+	<string name="title_mHindLimbsRoot">Membres postérieurs</string>
+	<string name="title_mHindLimb1Left">Pied gauche</string>
+	<string name="title_mHindLimb2Left">Gauche 2</string>
+	<string name="title_mHindLimb3Left">Gauche 3</string>
+	<string name="title_mHindLimb4Left">Gauche 4</string>
+	<string name="title_mHindLimb1Right">Pied droit</string>
+	<string name="title_mHindLimb2Right">Droite 2</string>
+	<string name="title_mHindLimb3Right">Droite 3</string>
+	<string name="title_mHindLimb4Right">Droite 4</string>
+	<string name="title_BUTT">Fesses</string>
+	<string name="title_BELLY">Ventre</string>
+	<string name="title_LEFT_PEC">Sein gauche</string>
+	<string name="title_RIGHT_PEC">Sein droit</string>
+	<string name="LoadPoseLabel">Charger pose</string>
+	<string name="LoadDiffLabel">Charger diff</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -212,34 +210,59 @@
 							Sensibilité du trackpad :
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Règle la sensibilité du trackpad"/>
+						<check_box name="natural_direction_checkbox" label="Utiliser l'alignement naturel" tool_tip="Le squelette a des rotations d'articulations non naturelles par défaut. Cela complique la pose. Si cette option est cochée, les articulations tourneront de manière plus naturelle."/>
 						<check_box name="stop_posing_on_close_checkbox" label="Arrêt pose si fermeture" tool_tip="Ne pas arrêter votre pose peut être utile si vous travaillez beaucoup et que vous ne voulez pas la perdre accidentellement."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Réinitialisation de la rotation" tool_tip="Lorsque vous modifiez une rotation pour la première fois, la remet à zéro. Cela signifie que votre travail peut enregistrer une pose (et non une différence - voir charger/enregistrer). Une coche verte apparaît à côté de chaque articulation dont l'exportation a été remise à zéro."/>
-						<check_box name="also_save_bvh_checkbox" label="Ajouter BVH en enregistrant**" tool_tip="Lorsque vous enregistrez votre pose, écrivez également un fichier BVH, qui peut être téléchargé via 'Construire > Charger > Animation' pour poser vous-même ou d'autres personnes dans le monde. Pour ce faire, les articulations doivent remettre leur « base » à zéro, car le BVH nécessite que l'on travaille sur l'original."/>
+						<check_box name="also_save_bvh_checkbox" label="Ajouter BVH à l'enregis.**" tool_tip="Lorsque vous enregistrez votre pose, écrivez également un fichier BVH, qui peut être téléchargé via 'Construire > Charger > Animation' pour poser vous-même ou d'autres personnes dans le monde. Pour ce faire, les articulations doivent remettre leur « base » à zéro, car le BVH nécessite que l'on travaille sur l'original."/>
 					</panel>
 				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="Activer et désactiver les manipulateurs visuels"/>
 			</panel>
-			<panel name="trackball_panel">
-				<text name="rotation_label">
-					Rotation :
-				</text>
-				<fs_virtual_trackpad name="limb_rotation" tool_tip="Modifie la rotation de la partie du corps sélectionnée. Maintenir la touche Ctrl enfoncée pour se déplacer lentement. Tournez la roue pour ajuster le troisième axe. Utilisez Shift ou Alt pour échanger les changements de rotation." />
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="Rotation" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="Modifie la rotation de la ou des parties du corps actuellement sélectionnées. Maintenez la touche Ctrl enfoncée pour un déplacement lent. Faites rouler la roue pour ajuster le troisième axe. Utilisez Shift ou Alt pour permuter les rotations qui changent."/>
+						<text name="limb_pitch_label">
+							Haut/Bas :
+						</text>
+						<text name="limb_yaw_label">
+							Gche/drte :
+						</text>
+						<text name="limb_roll_label">
+							Roulement :
+						</text>
+					</panel>
+					<panel title="Dépl. / Éch." name="position_panel">
+						<text name="pos_x_label">
+							Position X :
+						</text>
+						<text name="pos_y_label">
+							Position Y :
+						</text>
+						<text name="pos_z_label">
+							Position Z :
+						</text>
+						<text name="scale_x_label">
+							Échelle X :
+						</text>
+						<text name="scale_y_label">
+							Échelle Y :
+						</text>
+						<text name="scale_z_label">
+							Échelle Z :
+						</text>
+					</panel>
+				</tab_container>
 				<panel name="trackball_button_panel">
-					<button name="undo_change" tool_tip="Annuler la dernière rotation" />
+					<button name="undo_change" tool_tip="Annuler la dernière modification" />
 					<button name="button_redo_change" tool_tip="Rétablir la dernière modification annulée" />
 					<button name="poser_joint_reset" tool_tip="Double-cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
 					<button name="delta_mode_toggle" tool_tip="Si vous modifiez plusieurs articulations, chacune d'entre elles sera modifiée de la même manière, au lieu de toutes les modifier du même coup. Sert également à déverrouiller le Gimbal Lock." />
 					<button label="Miroir" name="button_toggleMirrorRotation" tool_tip="Changer l'articulation opposée, comme dans un miroir." />
-					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Modifier l'articulation opposée, mais de la même manière." />
+					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Copier les modifications sur l'articulation opposée." />
+					<button label="Cop. G &gt; D" name="button_symmetrize_left_to_right" tool_tip="Double-cliquez pour copier la modification du côté gauche vers le côté droit."/>
+					<button label="Cop. D &gt; G" name="button_symmetrize_right_to_left" tool_tip="Double-cliquez pour copier la modification du côté droit vers le côté gauche."/>
 				</panel>
-				<text name="limb_pitch_label">
-					Haut/Bas :
-				</text>
-				<text name="limb_yaw_label">
-					Gauche/droite :
-				</text>
-				<text name="limb_roll_label">
-					Roulement :
-				</text>
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Charge une pose pour le personnage animé." name="poses_scroll">
@@ -250,7 +273,6 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="toggleAdvancedPanel" tool_tip="Passer à la section des paramètres avancés"/>
 				<button name="FlipPose_avatar" tool_tip="Inverser toute la pose vers la gauche/droite" />
 				<button name="FlipJoint_avatar" tool_tip="Miroir des parties du corps sélectionnées gauche/droite" />
 				<button label="Capter" name="button_RecaptureParts" tool_tip="Si les parties du corps sélectionnées sont désactivées, cette option permet de capturer à nouveau ce que ces parties du corps font actuellement."/>
@@ -259,28 +281,6 @@
 				<button tool_tip="Gérer le catalogue des poses" name="open_poseDir_button" />
 				<menu_button label="Charger pose" tool_tip="Charger la pose sélectionnée." name="load_poses_button" />
 				<button label="Enr. diff." tool_tip="Un diff est simplement une modification apportée à une pose existante. Commencez à partir d'une pose T pour sauvegarder un nouveau travail." name="save_poses_button" />
-			</panel>
-		</layout_panel>
-		<layout_panel name="advanced_controls_layout">
-			<panel name="advanced_parent_panel">
-				<tab_container name="modifier_tabs">
-					<panel title="Pos. des parties du corps" name="position_panel">
-						<slider label="Point X :" name="Advanced_Position_X" />
-						<slider label="Point Y :" name="Advanced_Position_Y" />
-						<slider label="Point Z :" name="Advanced_Position_Z" />
-						<button label="Annuler pos." name="undo_position_change" tool_tip="Annuler le dernier changement de position" />
-						<button label="Repositionner" name="redo_position_change" tool_tip="Refaire le dernier changement de position" />
-						<button label="Réinit. position" name="reset_positions" tool_tip="Double-cliquez pour rétablir la position d'origine" />
-					</panel>
-					<panel title="Échelle des parties du corps" name="scale_panel">
-						<slider label="Échelle X :" name="Advanced_Scale_X" />
-						<slider label="Échelle Y :" name="Advanced_Scale_Y" />
-						<slider label="Échelle Z :" name="Advanced_Scale_Z" />
-						<button label="Annuler échelle" name="undo_scale_change" tool_tip="Annuler le dernier changement d'échelle" />
-						<button label="À l'échelle" name="redo_scale_change" tool_tip="Refaire le dernier changement d'échelle" />
-						<button label="Réinit. échelle" name="reset_scales" tool_tip="Double-cliquez pour rétablir l'échelle d'origine" />
-					</panel>
-				</tab_container>
 			</panel>
 		</layout_panel>
 	</layout_stack>

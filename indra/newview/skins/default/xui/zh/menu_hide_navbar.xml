@@ -8,7 +8,8 @@
 	<menu_item_check label="在選單中顯示搜尋" name="FSMenuSearch" />
 	<menu_item_check label="顯示貨幣餘額" name="FSShowCurrencyBalanceInStatusbar" />
 	<menu_item_check label="顯示音量控制" name="FSEnableVolumeControls" />
-	<menu_item_check label="顯示每秒圖像數量" name="FSStatusBarShowFPS" />
+	<menu_item_check label="顯示每秒影格數" name="FSStatusBarShowFPS" />
+	<menu_item_check label="每秒影格數的顯示顏色" name="FSStatusBarShowFPSColors"/>
 	<menu_item_check label="顯示網路統計資訊" name="ShowNetStats" />
 	<menu_item_check label="顯示坐標" name="Coordinates" />
 	<menu_item_check label="顯示地塊權限" name="Parcel Properties" />

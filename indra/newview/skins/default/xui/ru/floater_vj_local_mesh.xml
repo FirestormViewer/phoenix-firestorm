@@ -17,6 +17,9 @@
       <check_box name="local_mesh_scale_use_meters"
         label="Предположим, что масштаб указан в метрах."
         tool_tip="Игнорируйте единицы измерения масштаба в сантиметрах, используемые такими инструментами, как Maya" />
+      <check_box name="checkbox_apply_joint_offsets"
+        label="Применить смещения стыков."
+        tool_tip="Применить любые смещения стыков в меше, по умолчанию они игнорируются."/>
       <text name="lod_suffix_label">
         Суффиксы LOD:
       </text>

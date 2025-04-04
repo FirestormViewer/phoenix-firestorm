@@ -475,7 +475,7 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
     if (gResizeShadowTexture)
     { //skip render on frames where window has been resized
         gPipeline.resizeShadowTexture();
-        gResizeShadowTexture = false;
+        // gResizeShadowTexture = false; // <FS:Beq/> This prevents the deferred resize from working properly.
     }
 
     gSnapshot = for_snapshot;

@@ -1777,6 +1777,7 @@ Continuer ?
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		Voulez-vous ouvrir votre navigateur web système pour afficher ce contenu ?
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Ouvrir mon navigateur pour consulter une page web" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

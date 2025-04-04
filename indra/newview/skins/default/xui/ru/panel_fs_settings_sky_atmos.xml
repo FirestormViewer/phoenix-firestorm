@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Атмосфера" name="panel_fs_settings_sky_atmos">
+	<string name="hdr_string">HDR масштаб:</string>
+	<string name="brightness_string">Яркость:</string>
+	<string name="hdr_tooltip">Интенсивность световых эффектов, таких как реалистично яркое небо и динамическая экспозиция. По умолчанию 1.0, значение 0 выключено, значения от 0 до 1 соответствуют смешиванию окружающей среды с HDR.</string>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Атмосферные цвета"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="ambient_color_label">Окружение цвет:</text>
+		<text name="blue_horizon_label">Горизонт:</text>
+		<text name="blue_density_label">Плотность синего:</text>
+	</panel>
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Атмосферные условия"/>
+	</panel>
+	<panel name="P_Atmosphere_OtherSettings">
+		<text name="haze_horizon_label">Дымка горизонт:</text>
+		<text name="haze_density_label">Плотность дымки:</text>
+		<text name="density_multiplier_label">Множ. плотности:</text>
+		<text name="distance_multiplier_label">Множ. дальности:</text>
+		<text name="maximum_altitude_label">Макс. высота:</text>
+		<text name="scene_gamma_label">Яркость:</text>
+		<text name="probe_ambiance_label" tool_tip="Регулировка освещенности. Если значение не равно нулю, включается модель освещения HDR.">Атмосфера отражения (HDR):</text>
+	</panel>
+	<panel name="P_Rainbow_Header">
+		<text name="T_Rainbow_Header" value="Настройки радуги и ореола"/>
+	</panel>
+	<panel name="P_Rainbow_OtherSettings">
+		<text name="moisture_level_label">Уровень влаги:</text>
+		<text name="droplet_radius_label">Радиус капли:</text>
+		<text name="ice_level_label">Уровень льда:</text>
+	</panel>
+</panel>

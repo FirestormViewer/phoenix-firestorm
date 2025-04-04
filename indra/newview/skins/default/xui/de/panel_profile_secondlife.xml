@@ -69,6 +69,7 @@
 		</layout_panel>
 	</layout_stack>
 	<text name="About:" value="Info:"/>
+	<button name="btn_preview" tool_tip="Vorschau der Über-Mich-Beschreibung umschalten"/>
 	<text name="Groups:" value="Gruppen:"/>
 	<button label="+" label_selected="+" name="group_invite" tool_tip="In Gruppe einladen"/>
 	<text name="Give item:" value="Teilen:"/>

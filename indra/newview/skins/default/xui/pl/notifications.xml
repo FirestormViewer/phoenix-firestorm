@@ -1735,6 +1735,7 @@ Jeśli ciągle widzisz tą wiadomość sprawdź [SUPPORT_SITE].
 	<notification name="WebLaunchExternalTarget">
 		Czy chcesz otworzyć swoją przeglądarkę internetową by zobaczyć zawartość?
 Otwieranie stron internetowych z nieznanego źródła może narazić Twój komputer na niebezpieczeństwo.
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć stronę" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="WebLaunchJoinNow">

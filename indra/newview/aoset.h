@@ -85,7 +85,7 @@ class AOSet
             LLUUID mRemapID;
             bool mCycle;
             bool mRandom;
-            S32 mCycleTime;
+            F32 mCycleTime;
             std::vector<AOAnimation> mAnimations;
             U32 mCurrentAnimation;
             LLUUID mCurrentAnimationID;

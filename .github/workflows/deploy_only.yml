@@ -45,7 +45,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v8
+        uses: dawidd6/action-download-artifact@v9
         id: download
         with:
           workflow: build_viewer.yml

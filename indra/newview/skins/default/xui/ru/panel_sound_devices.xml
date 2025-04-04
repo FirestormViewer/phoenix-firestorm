@@ -22,4 +22,8 @@
 	<text name="wait_text">
 		Подождите
 	</text>
+	<text name="disabled_text">
+		Отключен
+	</text>
+	<button name="unmute_btn" label="Включить"/>
 </panel>

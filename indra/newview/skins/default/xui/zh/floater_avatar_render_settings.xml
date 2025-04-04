@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_avatar_render_settings" title="化身渲染設定">
+<floater name="floater_avatar_render_settings" title="化身彩現設定">
 	<string name="av_never_render" value="絕不" />
 	<string name="av_always_render" value="始終" />
 	<name_list name="render_settings_list">
 		<name_list.columns label="名稱" name="name" />
-		<name_list.columns label="渲染設定" name="setting" />
+		<name_list.columns label="彩現設定" name="setting" />
 	</name_list>
 	<panel name="add_subpanel">
 		<menu_button name="plus_btn" label="新增.." tool_tip="對選定的人採取行動" />

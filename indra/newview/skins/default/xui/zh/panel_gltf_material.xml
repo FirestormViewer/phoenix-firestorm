@@ -5,7 +5,7 @@
 		<text name="base_color_lbl">
 			基礎顏色:
 		</text>
-		<texture_picker name="base_color_texture" tool_tip="基礎顏色貼圖。 alpha 通道可選，用於透明度。" />
+		<texture_picker name="base_color_texture" tool_tip="基礎顏色貼圖。 alpha通道可選，用於不透明度。" />
 		<text name="base_color_upload_fee">
 			無上傳費用
 		</text>
@@ -13,7 +13,7 @@
 			色調
 		</text>
 		<text name="base_color_transparency_lbl">
-			Alpha透明度
+			不透明度
 		</text>
 		<text name="alpha_mode_lbl">
 			Alpha模式

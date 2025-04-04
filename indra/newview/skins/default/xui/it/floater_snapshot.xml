@@ -53,6 +53,8 @@
 			<check_box label="Interfaccia" name="ui_check"/>
 			<check_box label="Credito L$" name="currency_check" />
 			<check_box label="HUD" name="hud_check" />
+			<check_box label="Mostra frame di cattura" tool_tip="Mostra una cornice sullo schermo che circonda le aree della foto. Le parti della scena che sono al di fuori della foto saranno desaturate e leggermente sfocate" name="show_frame" />
+			<check_box label="Mostra guida all'inquadratura" tool_tip="Mostra la guida all'inquadratura (regola dei terzi) all'interno della cornice della foto" name="show_guides" />
 			<check_box label="Fermo immagine (tutto schermo)" name="freeze_frame_check"/>
 			<check_box label="Aggiornamento automatico" name="auto_snapshot_check"/>
 			<check_box label="Nessuna post-elaborazione" name="no_post_check" />

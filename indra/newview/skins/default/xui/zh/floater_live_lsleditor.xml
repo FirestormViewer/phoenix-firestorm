@@ -25,7 +25,7 @@
 		載入中…
 	</floater.string>
 	<text name="obj_name">
-		來自物體: [SOURCE_OBJECT]
+		來自物件: [SOURCE_OBJECT]
 	</text>
 	<button label="重設" label_selected="重設" name="Reset" />
 	<check_box initial_value="true" label="運行中" name="running" />

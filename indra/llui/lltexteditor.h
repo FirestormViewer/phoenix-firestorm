@@ -187,6 +187,11 @@ public:
     // Non-undoable
     void            setText(const LLStringExplicit &utf8str, const LLStyle::Params& input_params = LLStyle::Params());
 
+    // <AS:Chanayane> Preview button
+    void            reparseText(const LLStringExplicit &utf8str, const LLStyle::Params& input_params = LLStyle::Params());
+    void            reparseValue(const LLSD& value);
+    // </AS:Chanayane>
+
 
     // Removes text from the end of document
     // Does not change highlight or cursor position.

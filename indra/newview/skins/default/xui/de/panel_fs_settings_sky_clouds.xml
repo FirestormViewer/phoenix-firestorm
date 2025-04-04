@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Wolken" name="panel_fs_settings_sky_clouds">
+	<panel name="P_Clouds_Header">
+		<text name="T_Clouds_Header" value="Wolken-Einstellungen"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="cloud_color_label">
+			Wolkenfarbe:
+		</text>
+	</panel>
+
+	<panel name="P_Cloud_Density">
+		<text name="cloud_coverage_label" width="110">
+			Wolkenbedeckung:
+		</text>
+		<slider name="cloud_coverage" width="161"/>
+		<text name="cloud_scale_label" width="110">
+			Wolken-Skalierung:
+		</text>
+		<slider name="cloud_scale" width="161"/>
+		<text name="cloud_variance_label" width="110">
+			Wolken-Varianz:
+		</text>
+		<slider name="cloud_variance" width="161"/>
+	</panel>
+
+	<panel name="P_Cloud_Density">
+		<text name="cloud_density_label" tool_tip="Wolken-XY/Dichte - Die X- und Y-Schieber verändern die horizontale Position aller Wolken. Mit dem D-Schieber wird die Dichte angepasst.">
+			Wolkendichte:
+		</text>
+		<text name="Cloud_XY_Density_X">
+			X:
+		</text>
+		<text name="Cloud_XY_Density_Y">
+			Y:
+		</text>
+		<text name="Cloud_XY_Density_D">
+			D:
+		</text>
+	</panel>
+
+	<panel name="P_Cloud_Detail">
+		<text name="cloud_detail_label">
+			Wolkendetail:
+		</text>
+
+		<text name="Cloud_XY_Detail_X">
+			X:
+		</text>
+		<text name="Cloud_XY_Detail_Y">
+			Y:
+		</text>
+		<text name="Cloud_XY_Detail_D">
+			D:
+		</text>
+	</panel>
+
+	<panel name="P_Cloud_Scroll">
+		<text name="cloud_scroll_label">
+			Wolken-Bewegung:
+		</text>
+		<text name="cloud_image_label">
+			Wolken-Bild:
+		</text>
+	</panel>
+</panel>

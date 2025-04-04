@@ -70,6 +70,7 @@ LLToolset*      gCameraToolset      = NULL;
 //LLToolset*        gLandToolset        = NULL;
 LLToolset*      gMouselookToolset   = NULL;
 LLToolset*      gFaceEditToolset    = NULL;
+LLToolset*      gPoserToolset    = nullptr;
 
 /////////////////////////////////////////////////////
 // LLToolMgr
@@ -99,6 +100,8 @@ LLToolMgr::LLToolMgr()
 //  gLandToolset        = new LLToolset();
     gMouselookToolset   = new LLToolset();
     gFaceEditToolset    = new LLToolset();
+    gPoserToolset       = new LLToolset();
+    gPoserToolset->setShowFloaterTools(false);
     gMouselookToolset->setShowFloaterTools(false);
     gFaceEditToolset->setShowFloaterTools(false);
 }
@@ -121,6 +124,7 @@ void LLToolMgr::initTools()
     gMouselookToolset->addTool( LLToolCompGun::getInstance() );
     gBasicToolset->addTool( LLToolCompInspect::getInstance() );
     gFaceEditToolset->addTool( LLToolCamera::getInstance() );
+    gPoserToolset->addTool( FSToolCompPose::getInstance() );
 
     // On startup, use "select" tool
     setCurrentToolset(gBasicToolset);

@@ -177,40 +177,60 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 void LLPanelContents::onFilterEdit()
 {
     const std::string& filter_substring = mFilterEditor->getText();
-    // <FS:Beq> FIRE-35010 Bugsplat crash with filter while loading contents
-    auto root_folder = mPanelInventoryObject->getRootFolder();
-    if (!root_folder)
+    if (!mPanelInventoryObject->hasInventory())
     {
-        mPanelInventoryObject->getFilter().setFilterSubString(filter_substring);
-        return;
+        mDirtyFilter = true;
     }
-    // </FS:Beq>
-    if (filter_substring.empty())
+    else
     {
-        if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
+        LLFolderView* root_folder = mPanelInventoryObject->getRootFolder();
+        if (filter_substring.empty())
         {
-            // The current filter and the new filter are empty, nothing to do
-            return;
+            if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
+            {
+                // The current filter and the new filter are empty, nothing to do
+                return;
+            }
+
+            if (mDirtyFilter && !mSavedFolderState.hasOpenFolders())
+            {
+                if (root_folder)
+                {
+                    root_folder->setOpenArrangeRecursively(true, LLFolderViewFolder::ERecurseType::RECURSE_DOWN);
+                }
+            }
+            else
+            {
+                mSavedFolderState.setApply(true);
+                if (root_folder)
+                {
+                    root_folder->applyFunctorRecursively(mSavedFolderState);
+                }
+            }
+            mDirtyFilter = false;
+
+            // Add a folder with the current item to the list of previously opened folders
+            if (root_folder)
+            {
+                LLOpenFoldersWithSelection opener;
+                root_folder->applyFunctorRecursively(opener);
+                root_folder->scrollToShowSelection();
+            }
         }
-
-        mSavedFolderState.setApply(true);
-        root_folder->applyFunctorRecursively(mSavedFolderState); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
-
-        // Add a folder with the current item to the list of previously opened folders
-        LLOpenFoldersWithSelection opener;
-        root_folder->applyFunctorRecursively(opener); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
-        root_folder->scrollToShowSelection(); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
-    }
-    else if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
-    {
-        // The first letter in search term, save existing folder open state
-        if (!mPanelInventoryObject->getFilter().isNotDefault())
+        else if (mPanelInventoryObject->getFilter().getFilterSubString().empty())
         {
-            mSavedFolderState.setApply(false);
-            root_folder->applyFunctorRecursively(mSavedFolderState); // <FS:Beq/> FIRE-35010 Bugsplat crash with filter while loading contents
+            // The first letter in search term, save existing folder open state
+            if (!mPanelInventoryObject->getFilter().isNotDefault())
+            {
+                mSavedFolderState.setApply(false);
+                if (root_folder)
+                {
+                    root_folder->applyFunctorRecursively(mSavedFolderState);
+                }
+                mDirtyFilter = false;
+            }
         }
     }
-
     mPanelInventoryObject->getFilter().setFilterSubString(filter_substring);
 }
 

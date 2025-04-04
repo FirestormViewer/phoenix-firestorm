@@ -9,6 +9,7 @@
 	<menu_item_check label="Показать Денежки" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Показать Управление Медиа" name="FSEnableVolumeControls"/>
 	<menu_item_check label="Показать FPS" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Показать цветной индикатор количества кадров в секунду" name="FSStatusBarShowFPSColors"/>
 	<menu_item_check label="Показать Индикатор трафика" name="ShowNetStats"/>
 	<menu_item_check label="Показать Координаты" name="Coordinates"/>
 	<menu_item_check label="Показать Разрешения Участка" name="Parcel Properties"/>

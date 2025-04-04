@@ -29,6 +29,7 @@
 			<check_box label="Afficher le guide de cadrage" tool_tip="Affiche le guide de cadrage (règle des tiers) à l'intérieur du cadre de la photo." name="show_guides"/>
 			<check_box label="Figer l'écran (plein écran)" name="freeze_frame_check"/>
 			<check_box label="Actualisation automatique" name="auto_snapshot_check"/>
+			<check_box label="Pas de post-traitement" name="no_post_check"/>
 			<text name="filter_list_label">Filtre :</text>
 			<combo_box name="filters_combobox" tool_tip="Filtres pour l'image">
 				<combo_box.item label="Pas de filtre" name="NoFilter"/>

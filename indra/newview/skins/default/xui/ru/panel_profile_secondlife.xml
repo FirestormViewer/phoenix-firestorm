@@ -54,6 +54,7 @@
 		</layout_panel>
 	</layout_stack>
 	<text name="About:" value="О себе:"/>
+	<button name="btn_preview" tool_tip="Переключить предварительный просмотр раздела 'О себе' вашего профиля"/>
 	<text name="Groups:" value="Группы:"/>
 	<button name="group_invite" tool_tip="Пригласить в группу"/>
 	<text name="Give item:" value="Дать:"/>

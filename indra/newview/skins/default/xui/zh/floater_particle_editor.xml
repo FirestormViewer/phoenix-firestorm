@@ -49,7 +49,7 @@
 				結束透明度：
 			</text>
 			<text name="Start_Glow_Label">
-				初始發光：
+				初始光暈：
 			</text>
 			<combo_box name="blend_func_src_combo">
 				<combo_box.item label="混合一" name="blend_one" />
@@ -62,7 +62,7 @@
 				<combo_box.item label="混合 1 - 源透明度" name="blend_one_minus_src_alpha" />
 			</combo_box>
 			<text name="End_Glow_Label">
-				結束發光：
+				結束光暈：
 			</text>
 			<combo_box name="blend_func_dest_combo">
 				<combo_box.item label="混合一" name="blend_one" />

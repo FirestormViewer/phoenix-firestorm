@@ -12,6 +12,10 @@
 	<text name="PostProcessText">
 		Низкое
 	</text>
+	<text name="MaxTextureResolutionLabel">
+		Макс. разрешение LOD:
+	</text>
+	<combo_box name="MaxTextureResolution" tool_tip="Максимальное разрешение для текстур с'высоким уровнем детализации'"/>
 	<slider label="Макс. источн.света рядом:" label_width="185" name="MaxLights" width="336" />
 	<check_box label="Включить VSync" name="vsync" tool_tip="Синхронизирует частоту кадров с частотой обновления монитора, что обеспечивает плавную работу."/>
 	<text name="AvatarText">

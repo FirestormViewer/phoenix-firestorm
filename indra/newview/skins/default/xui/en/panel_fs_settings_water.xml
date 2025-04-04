@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+border="true"
+follows="all"
+height="390"
+label="Water"
+layout="topleft"
+left="0"
+name="panel_fs_settings_water"
+top="0">
+	<panel
+	name="P_Wave_Fog"
+	label="Fog"
+	follows="left|top"
+	layout="topleft"
+	top_pad="0"
+	left="0"
+	width="280"
+	height="65"
+	border_visible="true"
+	background_visible="true">
+
+		<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="40"
+		label_height="0"
+		layout="topleft"
+		left="20"
+		name="water_fog_color"
+		top_pad="5"
+		width="90"/>
+
+		<texture_picker
+		height="60"
+		layout="topleft"
+		left_pad="60"
+		name="water_normal_map"
+		top_delta="0"
+		width="40"/>
+
+		<text
+		follows="top|left"
+		font="SansSerifSmall"
+		layout="topleft"
+		left="20"
+		name="water_fog_label"
+		top_pad="-16"
+		width="110"
+		tool_tip="Water Fog Color - This changes the color of the volume tint of the water, essentially defining the color of the water itself. If your water has no fog, it will appear crystal clear and colorless."
+		word_wrap="true">
+		Water Fog Color
+		</text>
+
+		<text
+		follows="left|top|right"
+		font="SansSerifSmall"
+		layout="topleft"
+		left_pad="30"
+		name="normal_map_label"
+		top_delta="0"
+		tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best."
+		width="100">
+		Normal Map
+		</text>
+	</panel>
+
+	<panel
+	name="P_Wave_Fog_2"
+	label="Fog"
+	follows="left|top"
+	layout="topleft"
+	top_pad="0"
+	left="0"
+	width="280"
+	height="80"
+	border_visible="true"
+	background_visible="true">
+
+		<text
+		name="density_exponent_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="115">
+		Density Exponent:
+		</text>
+
+		<slider
+		decimal_digits="1"
+		follows="left|top"
+		height="16"
+		increment="0.01"
+		initial_value="0"
+		layout="topleft"
+		min_val="-10"
+		max_val="10"
+		name="water_fog_density"
+		left_pad="0"
+		width="155"
+		can_edit_text="true"/>
+
+		<text
+		name="underwater_modifier_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="115">
+		Underwater Modifier:
+		</text>
+
+		<slider
+		decimal_digits="2"
+		follows="left|top"
+		height="16"
+		increment="0.01"
+		initial_value="0"
+		layout="topleft"
+		left_pad="0"
+		min_val="0.0"
+		max_val="20.0"
+		name="water_underwater_mod"
+		width="155"
+		can_edit_text="true"/>
+
+		<text
+		name="FresnelScaleText"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="115">
+		Fresel Scale:
+		</text>
+
+		<slider
+		decimal_digits="2"
+		follows="left|top"
+		height="16"
+		increment="0.01"
+		initial_value="0.7"
+		layout="topleft"
+		name="water_fresnel_scale"
+		left_pad="0"
+		width="155"
+		can_edit_text="true"/>
+
+		<text
+		name="FresnelOffsetText"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="115">
+		Fresnel Offset:
+		</text>
+
+		<slider
+		decimal_digits="2"
+		follows="left|top"
+		increment="0.01"
+		initial_value="0.7"
+		height="16"
+		layout="topleft"
+		left_pad="0"
+		name="water_fresnel_offset"
+		width="155"
+		can_edit_text="true"/>
+ 	</panel>
+ 
+	<panel
+	name="P_Water_Wave"
+	follows="left|top"
+	label="Wave"
+	layout="topleft"
+	top_pad="0"
+	left="0"
+	width="280"
+	height="180"
+	border_visible="true"
+	background_visible="true">
+
+		<text
+		name="large_wave_speed_label"
+		follows="left|top"
+		height="16"
+		width="130"
+		layout="topleft"
+		top_pad="5"
+		left="5">
+		Large Wave Speed
+		</text>
+
+		<text
+		name="small_wave_speed_label"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		top_delta="0"
+		left_pad="10">
+		Small Wave Speed
+		</text>
+
+		<xy_vector
+		follows="top|left"
+		name="water_wave1_xy"
+		width="130"
+		height="75"
+		visible="true"
+		left="5"
+		top_pad="0"
+		min_val_x="-20"
+		max_val_x="20"
+		increment_x="0.01f"
+		min_val_y="-20"
+		max_val_y="20"
+		increment_y="0.01f"
+		arrow_color="white"/>
+
+		<xy_vector
+		follows="top|left"
+		name="water_wave2_xy"
+		width="130"
+		height="75"
+		visible="true"
+		left_pad="10"
+		top_delta="0"
+		min_val_x="-20"
+		max_val_x="20"
+		min_val_y="-20"
+		max_val_y="20" 
+		increment_x="0.01f"
+		increment_y="0.01f"
+		arrow_color="white"/>
+
+		<text
+		name="reflection_wavelet_scale_label"
+		follows="left|top|right"
+		height="16"
+		layout="topleft"
+		left="5"
+		top_pad="5"
+		width="215">
+		Reflection Wavelet Scale
+		</text>
+		<slider
+		decimal_digits="1"
+		follows="left|top"
+		increment="0.01"
+		height="16"
+		initial_value="0.7"
+		layout="topleft"
+		label="X:"
+		left="5"
+		max_val="10"
+		name="water_normal_scale_x"
+		top_pad="0"
+		width="270"
+		can_edit_text="true"/>
+		<slider
+		decimal_digits="1"
+		follows="left|top"
+		increment="0.01"
+		initial_value="0.7"
+		height="16"
+		layout="topleft"
+		left="5"
+		max_val="10"
+		name="water_normal_scale_y"
+		top_pad="5"
+		label="Y:"
+		width="270"
+		can_edit_text="true"/>
+		<slider
+		decimal_digits="1"
+		follows="left|top"
+		increment="0.01"
+		initial_value="0.7"
+		height="16"
+		layout="topleft"
+		left="5"
+		max_val="10"
+		name="water_normal_scale_z"
+		top_pad="5"
+		label="Z:"
+		width="270"
+		can_edit_text="true"/>
+	</panel>
+
+	<panel
+	name="P_Water_Reflection"
+	label="Refraction"
+	follows="left|top"
+	layout="topleft"
+	top_pad="0"
+	left="0"
+	width="280"
+	height="60"
+	border_visible="true"
+	background_visible="true">
+		<text
+		name="refraction_scale_above_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="155">
+		Refract Above Scale (Above):
+		</text>
+
+		<slider
+		control_name="water_scale_above"
+		decimal_digits="2"
+		follows="left|top"
+		increment="0.01"
+		initial_value="0.1"
+		height="16"
+		layout="topleft"
+		min_val="0"
+		max_val="3"
+		name="water_scale_above"
+		left_pad="0"
+		width="115"
+		can_edit_text="true" />
+
+		<text
+		name="refraction_scale_below_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="155">
+		Refract Scale (Below):
+		</text>
+
+		<slider
+		control_name="water_scale_below"
+		decimal_digits="2"
+		follows="left|top"
+		height="16"
+		increment="0.01"
+		initial_value="0"
+		layout="topleft"
+		left_pad="0"
+		min_val="0"
+		max_val="3"
+		name="water_scale_below"
+		width="115"
+		can_edit_text="true"/>
+
+		<text
+		name="blur_multiplier_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="155">
+		Blur Multiplier:
+		</text>
+
+		<slider
+		control_name="water_blur_multip"
+		follows="left|top"
+		height="16"
+		increment="0.001"
+		initial_value="0"
+		layout="topleft"
+		min_val="-0.5"
+		max_val="0.5"
+		name="water_blur_multip"
+		left_pad="0"
+		width="115"
+		can_edit_text="true"/>
+	</panel>
+</panel>

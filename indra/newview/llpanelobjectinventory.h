@@ -88,6 +88,8 @@ public:
 
     static void idle(void* user_data);
 
+    bool hasInventory(){ return mHaveInventory; };
+
 protected:
     void reset();
     /*virtual*/ void inventoryChanged(LLViewerObject* object,

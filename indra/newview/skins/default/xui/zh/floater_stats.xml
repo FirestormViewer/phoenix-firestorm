@@ -12,7 +12,7 @@
 				<stat_bar label="類比主機延遲" name="ping" />
 			</stat_view>
 			<stat_view label="進階" name="advanced">
-				<stat_view label="渲染" name="render">
+				<stat_view label="彩現" name="render">
 					<stat_bar label="KTris（每影格）" name="ktrisframe" />
 					<stat_bar label="KTris（每秒）" name="ktrissec" />
 					<stat_bar label="物件總計" name="objs" />

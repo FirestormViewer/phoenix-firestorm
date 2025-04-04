@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Atmosphäre &amp; Beleuchtung" name="panel_fs_settings_sky_atmos">
+	<string name="hdr_string">
+		HDR-Skalierung:
+	</string>
+	<string name="brightness_string">
+		Helligkeit:
+	</string>
+	<string name="hdr_tooltip">
+		Intensität von von Belichtungseffekten wie realistischer strahlender Himmel und dynamische Belichtung. 1.0 ist Standard, 0 ist aus, Werte zwuschen 0 und 1 mischen Umgebung mit HDR.
+	</string>
+
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Atmosphärische Farben"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="ambient_color_label">
+			Farbe Umgebung:
+		</text>
+		<text name="blue_horizon_label">
+			Blauer Horizont:
+		</text>
+		<text name="blue_density_label">
+			Blau-Dichte:
+		</text>
+	</panel>
+
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Einstellungen Atmosphäre"/>
+	</panel>
+	<panel name="P_Atmosphere_OtherSettings">
+		<text name="haze_horizon_label" width="120">
+			Dunst-Horizont:
+		</text>
+		<slider name="haze_horizon" width="151"/>
+		<text name="haze_density_label" width="120">
+			Dunst-Dichte:
+		</text>
+		<slider name="haze_density" width="151"/>
+		<text name="density_multiplier_label" width="120">
+			Dichte-Multiplikator:
+		</text>
+		<slider name="density_multip" width="151"/>
+		<text name="distance_multiplier_label" width="120">
+			Distanz-Multiplikator:
+		</text>
+		<slider name="distance_multip" width="151"/>
+		<text name="maximum_altitude_label" width="120">
+			Maximale Höhe:
+		</text>
+		<slider name="max_alt" width="151"/>
+		<text name="scene_gamma_label" width="120">
+			Helligkeit:
+		</text>
+		<slider name="scene_gamma" width="151"/>
+		<text name="probe_ambiance_label" tool_tip="Strahlungsintensität. Aktiviert HDR-Beleuchtungsmodell, falls nicht 0." width="120">
+			Umgebung Reflexionstest (HDR):
+		</text>
+		<slider name="probe_ambiance" tool_tip="Intensität von umgebungsbasierter indirekter Beleuchtung. Bei 0 HDR wird die Skala zu Helligkeit." width="151"/>
+	</panel>
+
+	<panel name="P_Rainbow_Header">
+		<text name="T_Rainbow_Header" value="Einstellungen Regenbogen und Halo"/>
+	</panel>
+	<panel name="P_Rainbow_OtherSettings">
+		<text name="moisture_level_label" width="120">
+			Feuchtigkeitslevel:
+		</text>
+		<slider name="moisture_level" width="151"/>
+		<text name="droplet_radius_label" width="120">
+			Tröpfchen-Radius:
+		</text>
+		<slider name="droplet_radius" width="151"/>
+		<text name="ice_level_label" width="120">
+			Eis-Level:
+		</text>
+		<slider name="ice_level" width="151"/>
+	</panel>
+</panel>

@@ -492,7 +492,7 @@ support@secondlife.com.
 		變暗
 	</string>
 	<string name="Edges">
-		邊緣發光
+		邊緣光暈
 	</string>
 	<string name="Focus">
 		中心對焦
@@ -6464,7 +6464,7 @@ support@secondlife.com.
 		在檢視器中只顯示你的好友，其他化身都將被隱藏。一旦使用瞬間傳送就會恢復其他人的顯示。
 	</string>
 	<string name="Command_DAO_Tooltip">
-		取消動畫彩現（又名網格動畫）-臨時取消彩現當前所有可見（已使用或未使用）的動畫網格。瞬間傳送後自動恢復動畫網格。
+		取消動畫物件（Animesh）-臨時取消彩現當前所有可見（已附著或自由行動）的動畫物件。瞬間傳送後自動恢復動畫物件。
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		顯示信標

@@ -8,7 +8,7 @@
 	<check_box label="顯示進階選單（使用時需自擔風險！）" name="show_advanced_menu_check" />
 	<check_box label="顯示開發者選單（使用時需自擔風險！）" name="show_develop_menu_check" />
 	<check_box label="在Windows系統上禁用WMI分析檢測視訊記憶體" name="FSDisableWMIProbing" />
-	<!--<check_box tool_tip="此設定將減少遠端渲染的載入，但可能導致這些遠端渲染的動畫不正確" label="啟用動畫時間步長（實驗性）" name="UseAnimationTimeSteps"/>-->
+	<!--<check_box tool_tip="此設定將減少遠端彩現的載入，但可能導致這些遠端彩現的動畫不正確" label="啟用動畫時間步長（實驗性）" name="UseAnimationTimeSteps"/>-->
 	<text name="BackgroundYieldTimeText">
 		當[APP_NAME]不在前臺時，每影格的延遲時間（預設為40毫秒）：
 	</text>

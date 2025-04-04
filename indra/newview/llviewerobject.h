@@ -748,6 +748,9 @@ public:
     // index into LLViewerObjectList::mActiveObjects or -1 if not in list
     S32             mListIndex;
 
+    // last index data for mIndexAndLocalIDToUUID
+    U32             mRegionIndex;
+
     LLPointer<LLViewerTexture> *mTEImages;
     LLPointer<LLViewerTexture> *mTENormalMaps;
     LLPointer<LLViewerTexture> *mTESpecularMaps;
@@ -776,6 +779,7 @@ public:
 
     // Associated GLTF Asset
     std::shared_ptr<LL::GLTF::Asset> mGLTFAsset;
+    bool mIsGLTFAssetMissing = false;
 
     // Pipeline classes
     LLPointer<LLDrawable> mDrawable;

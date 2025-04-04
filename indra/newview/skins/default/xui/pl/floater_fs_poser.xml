@@ -141,10 +141,8 @@
 	<string	name="title_BELLY">Brzuch</string>
 	<string	name="title_LEFT_PEC">Lewa pierś</string>
 	<string	name="title_RIGHT_PEC">Prawa pierś</string>
-	<string	name="title_mFaceEar1Left">Lewa podstawa</string>
-	<string	name="title_mFaceEar1Right">Prawa podstawa</string>
-	<string	name="title_mFaceEar2Left">Lewy czubek</string>
-	<string	name="title_mFaceEar2Right">Prawy czubek</string>
+	<string name="LoadPoseLabel">Ładuj pozę</string>
+	<string name="LoadDiffLabel">Ładuj różn.</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -213,34 +211,59 @@
 					<panel title="Inne" name="settings_panel">
 						<text name="trackpad_sensitivity_label">Czułość trackpada:</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Dostosowuje czułość trackballa / kółka" />
+						<check_box name="natural_direction_checkbox" label="Naturalne wyrównanie" tool_tip="Szkielet ma domyślnie nienaturalne rotacje stawów. To utrudnia pozowanie. Po zaznaczeniu stawy będą się obracać w bardziej naturalny sposób." />
 						<check_box name="stop_posing_on_close_checkbox" label="Stop pozy po zamknięciu" tool_tip="Brak zatrzymywania pozy może być pomocny, jeśli nie chcesz jej przypadkowo stracić." />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Reset bazy rotacji na edycji" tool_tip="Gdy po raz pierwszy edytujesz obrót, zresetuj go do zera. Oznacza to, że Twoja praca może zapisać pozę (a nie różnicę, patrz ładowanie / zapisywanie). Zielony 'ptaszek' pojawia się obok każdego wyzerowanego tak, wyeksportowanego stawu." />
 						<check_box name="also_save_bvh_checkbox" label="Twórz BVH podczas zapisu**" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
 					</panel>
 				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="Włącz / wyłącz manipulatory wizualne." />
 			</panel>
-			<panel name="trackball_panel">
-				<text name="rotation_label">
-					Obrót:
-				</text>
-				<fs_virtual_trackpad name="limb_rotation" tool_tip="Zmień obrót aktualnie wybranej części ciała. Przytrzymaj Ctrl, aby poruszać powoli. Obróć kółkiem, aby dostosować trzecią oś. Użyj Shift lub Alt, aby zamienić, które obroty się zmieniają" />
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="Obrót" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="Zmień obrót aktualnie wybranej części ciała. Przytrzymaj Ctrl, aby poruszać powoli. Obróć kółkiem, aby dostosować trzecią oś. Użyj Shift lub Alt, aby zamienić, które obroty się zmieniają" />
+						<text name="limb_pitch_label">
+							Góra/Dół:
+						</text>
+						<text name="limb_yaw_label">
+							Lwo/Prw:
+						</text>
+						<text name="limb_roll_label">
+							Zawijanie:
+						</text>
+					</panel>
+					<panel title="Ruch / Rozmiar" name="position_panel">
+						<text name="pos_x_label">
+							Pozycja X:
+						</text>
+						<text name="pos_y_label">
+							Pozycja Y:
+						</text>
+						<text name="pos_z_label">
+							Pozycja Z:
+						</text>
+						<text name="scale_x_label">
+							Skala X:
+						</text>
+						<text name="scale_y_label">
+							Skala Y:
+						</text>
+						<text name="scale_z_label">
+							Skala Z:
+						</text>
+					</panel>
+				</tab_container>
 				<panel name="trackball_button_panel">
-					<button name="undo_change" tool_tip="Cofnij ostatnią zmianę obrotu" />
+					<button name="undo_change" tool_tip="Cofnij ostatnią zmianę" />
 					<button name="button_redo_change" tool_tip="Ponów ostatnią cofniętą zmianę" />
 					<button name="poser_joint_reset" tool_tip="Kliknij dwukrotnie, aby zresetować wszystkie wybrane części ciała do stanu z momentu, w którym po raz pierwszy zacząłeś/aś pozować" />
 					<button name="delta_mode_toggle" tool_tip="Jeśli zmienisz wiele stawów, każdy z nich zmieni się o tę samą wartość, zamiast wszystkie o taki sam obrót. Stosowany również do pozbywania się blokady Gimbala." />
 					<button label="Odbij" name="button_toggleMirrorRotation" tool_tip="Zmień przeciwległy staw, jak w lustrze." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Zmień przeciwległy staw, ale w ten sam sposób." />
+					<button label="Kopia L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Kliknij dwukrotnie, aby skopiować zmiany z lewej strony na prawą." />
+					<button label="Kopia P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Kliknij dwukrotnie, aby skopiować zmiany z prawej strony na lewą." />
 				</panel>
-				<text name="limb_pitch_label">
-					Góra/Dół:
-				</text>
-				<text name="limb_yaw_label">
-					Lewo/Prawo:
-				</text>
-				<text name="limb_roll_label">
-					Rolowanie:
-				</text>
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Załaduj pozę dla animowanej postaci." name="poses_scroll">
@@ -251,37 +274,14 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="toggleAdvancedPanel" tool_tip="Przełącz obszar ustawień zaawansowanych" />
 				<button name="FlipPose_avatar" tool_tip="Przerzuć całą pozę na lewo/prawo" />
 				<button name="FlipJoint_avatar" tool_tip="Odbij lustrzanie wybrane części ciała w lewo/prawo" />
 				<button label="Złap" name="button_RecaptureParts" tool_tip="Jeśli wybrane części ciała są WYŁĄCZONE, to ta opcja ponownie przechwytuje to, co te części ciała robią teraz." />
-				<button label="Wł/Wył część" name="toggle_PosingSelectedBones" tool_tip="Włącz lub wyłącz Pozer dla wybranych części ciała. Po wyłączeniu ta część ciała animuje się jak zwykle (jak z AO lub z kulką itp.)" />
+				<button label="Wł/Wył część" name="toggle_PosingSelectedBones" tool_tip="Włącz lub wyłącz Pozera dla wybranych części ciała. Po wyłączeniu ta część ciała animuje się jak zwykle (jak z AO lub z kulką itp.)" />
 				<button label="Moje pozy" name="toggleLoadSavePanel" tool_tip="Wczytaj, zapisz i zarządzaj pozami, które tworzysz" />
 				<button tool_tip="Zarządzaj katalogiem poz" name="open_poseDir_button" />
 				<menu_button label="Wczytaj pozę" tool_tip="Wczytaj aktualnie wybraną pozę." name="load_poses_button" />
 				<button label="Zapis różnic" tool_tip="Zapisz Twoje zmiany w istniejącej Pozie. Zacznij od T-Pozy, aby zapisać nową pracę." name="save_poses_button" />
-			</panel>
-		</layout_panel>
-		<layout_panel name="advanced_controls_layout">
-			<panel name="advanced_parent_panel">
-				<tab_container name="modifier_tabs">
-					<panel title="Pozycja części ciała" name="position_panel">
-						<slider label="Pozycja X:" name="Advanced_Position_X" />
-						<slider label="Pozycja Y:" name="Advanced_Position_Y" />
-						<slider label="Pozycja Z:" name="Advanced_Position_Z" />
-						<button label="Cofnij pozycję" name="undo_position_change" tool_tip="Cofnij ostatnią zmianę pozycji" />
-						<button label="Ponów pozycję" name="redo_position_change" tool_tip="Ponownie wykonaj ostatnią zmianę pozycji" />
-						<button label="Reset pozycji" name="reset_positions" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną pozycję" />
-					</panel>
-					<panel title="Skala części ciała" name="scale_panel">
-						<slider label="Skala X:" name="Advanced_Scale_X" />
-						<slider label="Skala Y:" name="Advanced_Scale_Y" />
-						<slider label="Skala Z:" name="Advanced_Scale_Z" />
-						<button label="Cofnij skalę" name="undo_scale_change" tool_tip="Cofnij ostatnią zmianę skali" />
-						<button label="Ponów skalę" name="redo_scale_change" tool_tip="Ponownie wykonaj ostatnią zmianę skali" />
-						<button label="Reset skali" name="reset_scales" tool_tip="Kliknij dwukrotnie, aby przywrócić pierwotną skalę" />
-					</panel>
-				</tab_container>
 			</panel>
 		</layout_panel>
 	</layout_stack>

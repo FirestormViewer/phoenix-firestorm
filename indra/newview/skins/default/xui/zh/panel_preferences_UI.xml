@@ -31,7 +31,7 @@
 			</text>
 			<slider label_width="230" label="懸停文字淡出距離（單位：米）：" tool_tip="設定懸停文字淡出的距離。" name="FSHudTextFadeDistance" />
 			<slider label_width="230" label="懸停文字淡出範圍（單位：米）：" tool_tip="設定懸停文字從完全可見到完全不可見的淡出範圍。" name="FSHudTextFadeRange" />
-			<check_box name="FSHudTextUseHoverHighlight" label="突出顯示物件的懸停文字：" tool_tip="當滑鼠懸停於物件上時，物件的懸停文字（若存在）將被突出顯示，文字會置於前景，並停用透明背景。"/>
+			<check_box name="FSHudTextUseHoverHighlight" label="突出顯示物件的懸停文字：" tool_tip="當滑鼠懸停於物件上時，物件的懸停文字（若存在）將被突出顯示，文字會置於前景，並停用懸停文字的透明度。"/>
 			<text name="FSHudTextShowBackgroundLabel">
 				顯示懸停文字背景：
 			</text>

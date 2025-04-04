@@ -114,9 +114,11 @@
 		<combo_box.item value="filter_type_scripts" label="Script" />
 		<combo_box.item value="filter_type_sounds" label="Suoni" />
 		<combo_box.item value="filter_type_textures" label="Texture" />
-		<combo_box.item value="filter_type_snapshots" label="Fotografie" />
+		<combo_box.item value="filter_type_snapshots" label="Foto" />
 		<combo_box.item value="filter_type_materials" label="Materiali" />
 		<combo_box.item value="filter_type_settings" label="Ambienti" />
+		<combo_box.item value="filter_type_folders" label="Cartelle" />
+		<combo_box.item value="filter_type_coalesced" label="Solo multi-oggetto" />
 		<combo_box.item value="filter_type_custom" label="Personalizzato..." />
 	</combo_box>
 	<panel name="default_inventory_panel">

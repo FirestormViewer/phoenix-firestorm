@@ -1650,6 +1650,7 @@ Devam edilsin mi?
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		Bu içeriği görüntülemek için Web tarayıcınızı açmak istiyor musunuz?
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Bir web sayfasını görüntülemek için tarayıcımı başlat" name="okcancelignore" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

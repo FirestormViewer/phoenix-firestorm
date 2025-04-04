@@ -604,44 +604,48 @@ void LLStatusBar::refresh()
     static LLCachedControl<bool> fsStatusBarShowFPS(gSavedSettings, "FSStatusBarShowFPS");
     if (fsStatusBarShowFPS && mFPSUpdateTimer.getElapsedTimeF32() > 1.f)
     {
+        static LLCachedControl<bool> fsStatusBarShowFPSColors(gSavedSettings, "FSStatusBarShowFPSColors");
         static LLCachedControl<U32>  max_fps(gSavedSettings, "FramePerSecondLimit");
         static LLCachedControl<bool> limit_fps_enabled(gSavedSettings, "FSLimitFramerate");
         static LLCachedControl<bool> vsync_enabled(gSavedSettings, "RenderVSyncEnable");
 
-        static const auto fps_below_limit_color     = LLUIColorTable::instance().getColor("Yellow");
-        static const auto fps_limit_reached_color   = LLUIColorTable::instance().getColor("Green");
-        static const auto vsync_limit_reached_color = LLUIColorTable::instance().getColor("Green");
-        static const auto fps_uncapped_color        = LLUIColorTable::instance().getColor("White");
-        static const auto fps_unfocussed_color      = LLUIColorTable::instance().getColor("Gray");
+        static const auto fps_below_limit_color     = LLUIColorTable::instance().getColor("FpsDisplayBelowLimitColor");
+        static const auto fps_limit_reached_color   = LLUIColorTable::instance().getColor("FpsDisplayFpsLimitReachedColor");
+        static const auto vsync_limit_reached_color = LLUIColorTable::instance().getColor("FpsDisplayVSyncLimitReachedColor");
+        static const auto fps_uncapped_color        = LLUIColorTable::instance().getColor("FpsDisplayUncappedColor");
+        static const auto fps_unfocussed_color      = LLUIColorTable::instance().getColor("FpsDisplayUnfocussedColor");
         static auto       current_fps_color         = fps_uncapped_color;
 
         mFPSUpdateTimer.reset();
         const auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS);
         mFPSText->setText(llformat("%.1f", fps));
 
-        // if background, go grey, else go white unless we have a cap (checked next)
         auto fps_color{ fps_uncapped_color };
-        auto window = gViewerWindow ? gViewerWindow->getWindow() : nullptr;
-        if ((window && !window->getVisible()) || !gFocusMgr.getAppHasFocus())
+        if (fsStatusBarShowFPSColors)
         {
-            fps_color = fps_unfocussed_color;
-        }
-        else
-        {
-            S32 vsync_freq{ -1 };
-            if (window)
+            // if background, go grey, else go white unless we have a cap (checked next)
+            auto window = gViewerWindow ? gViewerWindow->getWindow() : nullptr;
+            if ((window && !window->getVisible()) || !gFocusMgr.getAppHasFocus())
             {
-                vsync_freq = window->getRefreshRate();
+                fps_color = fps_unfocussed_color;
             }
+            else
+            {
+                S32 vsync_freq{ -1 };
+                if (window)
+                {
+                    vsync_freq = window->getRefreshRate();
+                }
 
-            if (limit_fps_enabled && max_fps > 0)
-            {
-                fps_color = (fps >= max_fps - 1) ? fps_limit_reached_color : fps_below_limit_color;
-            }
-            // use vsync if enabled and the freq is lower than the max_fps
-            if (vsync_enabled && vsync_freq > 0 && (!limit_fps_enabled || vsync_freq < (S32)max_fps))
-            {
-                fps_color = (fps >= vsync_freq - 1) ? vsync_limit_reached_color : fps_below_limit_color;
+                if (limit_fps_enabled && max_fps > 0)
+                {
+                    fps_color = (fps >= max_fps - 1) ? fps_limit_reached_color : fps_below_limit_color;
+                }
+                // use vsync if enabled and the freq is lower than the max_fps
+                if (vsync_enabled && vsync_freq > 0 && (!limit_fps_enabled || vsync_freq < (S32)max_fps))
+                {
+                    fps_color = (fps >= vsync_freq - 1) ? vsync_limit_reached_color : fps_below_limit_color;
+                }
             }
         }
 

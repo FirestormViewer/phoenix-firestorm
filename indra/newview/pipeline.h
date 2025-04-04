@@ -291,6 +291,7 @@ public:
     void renderGLTFObjects(U32 type, bool texture = true, bool rigged = false);
 
     void renderAlphaObjects(bool rigged = false);
+    void renderFocusPoint(); // <FS:Beq/> FIRE-32023 Add focus point rendering
     void renderMaskedObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
     void renderFullbrightMaskedObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
 
@@ -336,6 +337,9 @@ public:
     // apply water haze based on contents of color and depth buffer
     // should be called just before rendering pre-water alpha objects
     void doWaterHaze();
+
+    // Generate the water exclusion surface mask.
+    void doWaterExclusionMask();
 
     void postDeferredGammaCorrect(LLRenderTarget* screen_target);
 
@@ -506,6 +510,7 @@ public:
         RENDER_TYPE_AVATAR                      = LLDrawPool::POOL_AVATAR,
         RENDER_TYPE_CONTROL_AV                  = LLDrawPool::POOL_CONTROL_AV, // Animesh
         RENDER_TYPE_TREE                        = LLDrawPool::POOL_TREE,
+        RENDER_TYPE_WATEREXCLUSION              = LLDrawPool::POOL_WATEREXCLUSION,
         RENDER_TYPE_VOIDWATER                   = LLDrawPool::POOL_VOIDWATER,
         RENDER_TYPE_WATER                       = LLDrawPool::POOL_WATER,
         RENDER_TYPE_GLTF_PBR                    = LLDrawPool::POOL_GLTF_PBR,
@@ -694,7 +699,8 @@ public:
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
     static bool             sRenderTextures;
 // [/SL:KB]
-
+    static LLVector3        sLastFocusPoint;// <FS:Beq/> FIRE-16728 focus point lock & free focus DoF 
+    static bool             sDoFEnabled;// <FS:Beq/> FIRE-32023 focus point render 
     static LLTrace::EventStatHandle<S64> sStatBatchSize;
 
     class RenderTargetPack
@@ -733,6 +739,7 @@ public:
     LLRenderTarget          mSpotShadow[2];
 
     LLRenderTarget          mPbrBrdfLut;
+    LLRenderTarget          mWaterExclusionMask;
 
     // copy of the color/depth buffer just before gamma correction
     // for use by SSR
@@ -979,6 +986,7 @@ protected:
     LLDrawPool*                 mWLSkyPool = nullptr;
     LLDrawPool*                 mPBROpaquePool = nullptr;
     LLDrawPool*                 mPBRAlphaMaskPool = nullptr;
+    LLDrawPool*                 mWaterExclusionPool      = nullptr;
 
     // Note: no need to keep an quick-lookup to avatar pools, since there's only one per avatar
 

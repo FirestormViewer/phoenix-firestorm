@@ -46,7 +46,7 @@
 					<text name="maximum_altitude_label">
 						最大海拔：
 					</text>
-					<text name="probe_ambiance_label" tool_tip="輻射度控制。當非0時，啟用HDR照明模型。">
+					<text name="probe_ambiance_label" tool_tip="輻照度控制。當非0時，啟用HDR照明模型。">
 						反射探測環境（HDR）：
 					</text>
 					<slider name="probe_ambiance" tool_tip="基於環境的間接照明的強度。為0時，HDR比例變為亮度" />

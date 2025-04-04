@@ -4543,6 +4543,7 @@ Deeding this object will cause the group to:
    type="alertmodal">
 Do you want to open your Web browser to view this content?
 Opening webpages from an unknown source may place your computer at risk.
+URL: [UNTRUSTED_URL]
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to view a web page"

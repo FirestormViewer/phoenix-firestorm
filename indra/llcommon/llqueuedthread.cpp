@@ -146,7 +146,7 @@ size_t LLQueuedThread::updateQueue(F32 max_time_ms)
         // schedule a call to threadedUpdate for every call to updateQueue
         if (!isQuitting())
         {
-            mRequestQueue.post([=]()
+            mRequestQueue.post([=, this]()
                 {
                     LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("qt - update");
                     mIdleThread = false;
@@ -497,7 +497,7 @@ void LLQueuedThread::processRequest(LLQueuedThread::QueuedRequest* req)
 #else
                 using namespace std::chrono_literals;
                 // <FS:Beq> improve retry behaviour
-                // mRequestQueue.post([=]
+                // mRequestQueue.post([=, this]
                 //     {
                 //         LL_PROFILE_ZONE_NAMED("processRequest - retry");
                 //         if (LL::WorkQueue::TimePoint::clock::now() < retry_time)

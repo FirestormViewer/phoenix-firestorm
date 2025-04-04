@@ -1805,6 +1805,7 @@ https://secondlife.com/support/downloads/ からダウンロードしてくだ�
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		Web ブラウザを開いてこのコンテンツを表示しますか？
+URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="ブラウザを起動して Web ページを見るとき" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">

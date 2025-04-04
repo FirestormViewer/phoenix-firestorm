@@ -13,6 +13,7 @@
 	<string	name="header_mTail1">Хвост</string>
 	<string	name="header_mHindLimbsRoot">Задние конечности</string>
 	<string	name="header_mWingsRoot">Крылья</string>
+	<string	name="header_mFaceEar1Left">Уши/Нос</string>
 
 	<string	name="title_mPelvis">Весь аватар</string>
 	<string	name="title_mTorso">Торс</string>
@@ -142,10 +143,6 @@
 	<string	name="title_BELLY">Живот</string>
 	<string	name="title_LEFT_PEC">Левая грудь</string>
 	<string	name="title_RIGHT_PEC">Правая грудь</string>
-	<string	name="title_mFaceEar1Left">Левая основа</string>
-	<string	name="title_mFaceEar1Right">Правая основа</string>
-	<string	name="title_mFaceEar2Left">Левый кончик</string>
-	<string	name="title_mFaceEar2Right">Правый кончик</string>
 
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
@@ -210,28 +207,45 @@
 					<panel title="Настр." name="settings_panel">
 						<text name="trackpad_sensitivity_label">Чувствительность трекпада:</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Регулирует чувствительность трекбола"/>
+						<check_box name="natural_direction_checkbox" label="Используйте естественное выравнивание" tool_tip="Скелет имеет неестественные вращения суставов по умолчанию. Это усложняет позирование. Если отмечено, суставы будут вращаться более естественно." />
 						<check_box name="stop_posing_on_close_checkbox" label="Стоп позы по закрытию" tool_tip="Не прерывать позу может быть полезно, если вы много работаете и не хотите случайно потерять ее."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Сброс базовый поворот" tool_tip="При первом редактировании поворота обнулите его значение. Это означает, что в вашей работе можно сохранить позу (а не разницу, см. раздел Загрузка/сохранение). Рядом с каждым суставом, экспорт которого вы обнулили, появляется зеленая галочка."/>
+						<check_box name="also_save_bvh_checkbox" label="Запись BVH при сохранении**" tool_tip="Когда вы сохраняете свою позу, также запишется файл BVH, который можно загрузить через 'Build > Upload > Animation', чтобы позировать себя или других в мире. Это требует, чтобы суставы сбросили свою 'базу' на ноль, потому что BVH требует оригинальной работы."/>
 					</panel>
 				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="Включать и выключать визуальные манипуляторы"/>
 			</panel>
-			<panel name="trackball_panel">
-				<text name="rotation_label">Вращение:</text>
-				<fs_virtual_trackpad name="limb_rotation" tool_tip="Измените поворот выбранной в данный момент части(ей) тела. Удерживайте нажатой клавишу Ctrl для замедления перемещения. Поверните колесо, чтобы отрегулировать 3-ю ось. Используйте Shift или Alt, чтобы изменить направление вращения."/>
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="Вращать" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation"
+						tool_tip="Измените вращение выбранной части тела. Удерживайте Ctrl, чтобы двигать медленно. Вращайте колесо, чтобы настроить 3-ю ось. Используйте Shift или Alt, чтобы изменить направление вращения"/>
+						<text name="limb_pitch_label">Вверх/Вниз:</text>
+						<text name="limb_yaw_label">Лево/Право:</text>
+						<text name="limb_roll_label">Крен:</text>
+					</panel>
+					<panel title="Сдвиг / Размер" name="position_panel">
+						<text name="pos_x_label">Позиция X:</text>
+						<text name="pos_y_label">Позиция Y:</text>
+						<text name="pos_z_label">Позиция Z:</text>
+						<text name="scale_x_label">Размер X:</text>
+						<text name="scale_y_label">Размер Y:</text>
+						<text name="scale_z_label">Размер Z:</text>
+					</panel>
+				</tab_container>
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Отмените последнее изменение поворота"/>
 					<button name="button_redo_change" tool_tip="Повторить последнее отмененное изменение"/>
 					<button name="poser_joint_reset" tool_tip="Двойной клик чтобы восстановить все выбранные части тела на тот момент, когда вы впервые начали изменения"/>
 					<button name="delta_mode_toggle" tool_tip="При изменении нескольких суставов каждый из них изменяется на одинаковую величину, а не все они получают одинаковое вращение."/>
-					<button label="Зерк." name="button_toggleMirrorRotation" tool_tip="Изменять положение противоположного сустава как в зеркале."/>
-					<button label="Симм." name="button_toggleSympatheticRotation" tool_tip="Изменять положение противоположного сустав таким же образом."/>
+					<button label="Зерк." name="button_toggleMirrorRotation" tool_tip="Изменять положение противоположного сустава зеркально."/>
+					<button label="Копия" name="button_toggleSympatheticRotation" tool_tip="Скопировать изменения в противоположный сустав."/>
+					<button label="Копия Л&gt;П" name="button_symmetrize_left_to_right" tool_tip="Дважды щелкните, чтобы скопировать изменения из левой стороны в правую."/>
+					<button label="Копия П&gt;Л" name="button_symmetrize_right_to_left" tool_tip="Дважды щелкните, чтобы скопировать изменения с правой стороны на левую."/>
 				</panel>
-				<text name="limb_pitch_label">Вверх/Вниз:</text>
-				<text name="limb_yaw_label">Влево/Вправо:</text>
-				<text name="limb_roll_label">Крен:</text>
 			</panel>
 			<panel name="poses_loadSave">
-				<scroll_list name="poses_scroll" tool_tip="Загрузите позу для того, кого вы анимируете.">
+				<scroll_list name="poses_scroll" tool_tip="Загрузить позу для того, кого вы анимируете.">
 					<scroll_list.columns label="Имя Позы" name="name"/>
 				</scroll_list>
 				<line_editor label="Введите название для сохранения..." name="pose_save_name"/>
@@ -239,7 +253,6 @@
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
-				<button name="toggleAdvancedPanel" tool_tip="Переключить область дополнительных настроек"/>
 				<button name="FlipPose_avatar" tool_tip="Перевернуть всю позу влево/вправо"/>
 				<button name="FlipJoint_avatar" tool_tip="Зеркально отобразить выбранные части тела влево/вправо"/>
 				<button label="Recap" name="button_RecaptureParts" tool_tip="Если выбранная часть тела включена/выключены, это возвращает то, что эти части тела делают прямо сейчас"/>
@@ -247,29 +260,7 @@
 				<button label="Свои позы" name="toggleLoadSavePanel" tool_tip="Загружайте, сохраняйте и управляйте позами, которые вы создаете"/>
 				<button tool_tip="Управляйте своим каталогом поз" name="open_poseDir_button"/>
 				<menu_button label="Загрузить" tool_tip="Загрузить текущую выбранную позу." name="load_poses_button"/>
-				<button label="Сохранить" tool_tip="Сохранить текущую позу." name="save_poses_button"/>
-			</panel>
-		</layout_panel>
-		<layout_panel name="advanced_controls_layout">
-			<panel name="advanced_parent_panel">
-				<tab_container name="modifier_tabs">
-					<panel title="Часть тела Позиция" name="position_panel">
-						<slider label="Позиция X:" name="Advanced_Position_X"/>
-						<slider label="Позиция Y:" name="Advanced_Position_Y"/>
-						<slider label="Позиция Z:" name="Advanced_Position_Z"/>
-						<button label="Отмена" name="undo_position_change" tool_tip="Отменить последнее изменение позиции"/>
-						<button label="Повторить" name="redo_position_change" tool_tip="Повторить последнее изменение позиции"/>
-						<button label="Сброс" name="reset_positions" tool_tip="Дважды щелкните, чтобы вернуть исходное положение."/>
-					</panel>
-					<panel title="Часть тела Размер" name="scale_panel">
-						<slider label="Размер X:" name="Advanced_Scale_X"/>
-						<slider label="Размер Y:" name="Advanced_Scale_Y"/>
-						<slider label="Размер Z:" name="Advanced_Scale_Z"/>
-						<button label="Отмена" name="undo_scale_change" tool_tip="Отменить последнее изменение размера"/>
-						<button label="Повторить" name="redo_scale_change" tool_tip="Повторить последнее изменение размера"/>
-						<button label="Сброс" name="reset_scales" tool_tip="Дважды щелкните, чтобы сбросить размер до исходного."/>
-					</panel>
-				</tab_container>
+				<button label="Сохр. Diff" tool_tip="Diff — это просто ваши изменения в существующей позе. Начните с T-Позы, чтобы сохранить новую работу." name="save_poses_button"/>
 			</panel>
 		</layout_panel>
 	</layout_stack>

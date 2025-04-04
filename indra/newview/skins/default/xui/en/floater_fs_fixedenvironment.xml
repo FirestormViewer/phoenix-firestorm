@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+        can_tear_off="false"
+        can_resize="false"
+        can_drag_on_left="false"
+        can_close="true"
+        can_dock="false"
+        bevel_style="in"
+        height="463"
+        layout="topleft"
+        name="Fixed Environment"
+        save_rect="true"
+        title="Fixed Environment"
+        save_visibility="false"
+        help_topic="fs_fixed_environment"
+        single_instance="true" 
+        width="288">
+    <string name="edit_sky">Edit Sky:</string>
+    <string name="edit_water">Edit Water:</string>
+    <layout_stack name="floater_stack"
+            left="0"
+            top="0"
+            right="-1"
+            bottom="-1"
+            follows="left|top|right|bottom"
+            orientation="vertical">
+		<layout_panel name="info_panel"
+                auto_resize="false"
+                user_resize="false"
+                height="23"
+				width="288">
+            <text
+                    follows="left|top"
+                    top="5"
+                    left="0"
+                    width="40"
+                    height="15"
+                    name="info_panel_label"
+                    font="SansSerif">
+                Name:
+            </text>
+            <line_editor
+                    follows="left|top"
+                    top_delta="-2"
+                    left_pad="3"
+                    width="235"
+                    name="settings_name"
+                    prevalidator="ascii"
+                    max_length_chars="63"
+                    height="20"/>
+			<!--
+            <button
+                    height="23"
+                    label="Load"
+                    follows="left|top"
+                    left_delta="260"
+                    font="SansSerif"
+                    top_delta="-2"
+                    name="btn_load"
+                    tool_tip="Load a settings from inventory" 
+                    width="96" />
+            <button
+                    height="23"
+                    label="Import"
+                    follows="right|top"
+                    right="-10"
+                    font="SansSerif"
+                    top_delta="0"
+                    name="btn_import"
+                    tool_tip="Import legacy settings from disk." 
+                    width="96" />
+			-->
+        </layout_panel>     
+        <layout_panel name="tab_area"
+                auto_resize="true"
+                user_resize="false"
+                height="11"
+                min_height="0"
+                visible="true">
+            <tab_container
+                    follows="all"
+                    halign="center"
+					layout="topleft"
+                    left="0"
+                    name="tab_settings"
+                    tab_position="top"
+                    tab_max_width="93"
+					tab_width="90"
+					top_pad="0">
+                <!-- Tabs inserted here in code -->
+            </tab_container>
+        </layout_panel>
+        <layout_panel name="button_panel"
+                follows="left|top|right|bottom"
+                auto_resize="false"
+                user_resize="false"
+                height="23"
+                visible="true">
+            <layout_stack
+                    follows="all"
+                    height="23"
+                    layout="topleft"
+                    mouse_opaque="false"
+                    name="button_bar_ls"
+                    left="0"
+                    orientation="horizontal"
+                    top="0"
+                    width="288">
+                <layout_panel  
+                        follows="bottom|left|right"
+                        height="25"
+                        layout="topleft"
+                        left="0"
+                        mouse_opaque="false"
+                        name="load_btn_lp"
+                        width="288"> 
+
+						<button
+						 height="23"
+						 label="Load"
+						 follows="left|top"
+						 left="5"
+						 layout="topleft"
+						 name="btn_load"
+						 top="0"
+						 width="70"
+						 tool_tip="Load a settings from inventory"/>
+						<button
+						 height="23"
+						 label="Import"
+						 follows="left|top"
+						 left_pad="0"
+						 layout="topleft"
+						 name="btn_import"
+						 top_delta="0"
+						 width="70"
+						 tool_tip="Import legacy settings from disk."/>
+						<button
+						 height="23"
+						 label="Save"
+						 follows="left|top"
+						 left_pad="0"
+						 layout="topleft"
+						 name="btn_commit"
+						 top="0"
+						 width="50" />
+						<button
+						 follows="right|top"
+						 height="23"
+						 name="btn_flyout"
+						 label=""
+						 layout="topleft"
+						 top="0"
+						 left_pad="0"
+						 tab_stop="false"
+						 image_selected="SegmentedBtn_Right_Selected_Press"
+						 image_unselected="SegmentedBtn_Right_Off"
+						 image_pressed="SegmentedBtn_Right_Press"
+						 image_pressed_selected="SegmentedBtn_Right_Selected_Press"
+						 image_overlay="Arrow_Small_Up"
+						 width="20"/>
+						<button
+						 height="23"
+						 label="Cancel"
+						 follows="right|top"
+						 left_pad="0"
+						 layout="topleft"
+						 name="btn_cancel"
+						 top="0"
+						 tool_tip="Revert to last saved version"
+						 width="70"/>
+                </layout_panel>
+	
+            </layout_stack>
+        </layout_panel>
+    </layout_stack>
+</floater>

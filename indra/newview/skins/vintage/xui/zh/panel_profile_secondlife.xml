@@ -56,7 +56,7 @@
 			</panel>
 		</layout_panel>
 	</layout_stack>
-	<text name="About:" value="資訊:" />
+	<text name="About:" value="關於我:" />
 	<text name="Groups:" value="群組:" />
 	<button name="group_invite" tool_tip="邀請加入群組" />
 	<text name="Give item:" value="分享:" />

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Солнце и Луна" name="panel_fs_settings_sky_hbodies">
+	<panel name="P_Sun_Color">
+		<text name="T_Sun_Header" value="Цвет Солнца и Луны"/>
+	</panel>
+	<panel name="P_SM_Color">
+		<text name="color_label">Цвет:</text>
+	</panel>
+	<panel name="P_Sun_Header">
+		<text name="T_Sun_Header" value="Настройки солнца и звезд"/>
+	</panel>
+	<panel name="P_Sun_Setting">
+		<text name="image_label">Изображение:</text>
+		<check_box label="Показ. маяк" name="sunbeacon"/>
+		<text name="glow_focus_label">Фокус света:</text>
+		<text name="glow_size_label">Размер света:</text>
+		<text name="star_brightness_label">Яркость звезд:</text>
+		<text name="sun_scale_label">Размер:</text>
+		<text name="sun_azimuth_label">Азимут:</text>
+		<text name="sun_elevation_label">Высота:</text>
+	</panel>
+	<panel name="P_Moon_Header">
+		<text name="T_Moon_Header" value="Настройки Луны"/>
+	</panel>
+	<panel name="P_Moon_Setting">
+		<text name="moon_image_label">Изображение:</text>
+		<check_box label="Показ. маяк" name="moonbeacon"/>
+		<text name="moon_scale_label">Размер:</text>
+		<text name="brightness_label">Яркость:</text>
+		<text name="moon_azimuth_label">Азимут:</text>
+		<text name="moon_elevation_label">Высота:</text>
+	</panel>
+</panel>

@@ -221,7 +221,7 @@
 			left_pad="8"
 			height="16"
 			right="-1"
-			decimal_digits="0"
+			decimal_digits="2"
 			initial_value="0"
 			min_val="0"
 			max_val="999"

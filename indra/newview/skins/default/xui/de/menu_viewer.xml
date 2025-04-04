@@ -164,6 +164,7 @@
 			<menu_item_call label="Fototools" name="phototools_item_call"/>
 			<menu_item_call label="Kameratools" name="cameratools_item_call"/>
 			<menu_item_check label="Schärfentiefe-Fokus fixieren" name="lock_focus_point"/>
+			<menu_item_check label="Fadenkreuz für Schärfentiefe-Fokus anzeigen" name="render_focus_point"/>
 		</menu>
 		<menu_item_call label="Umgebungssuche" name="area_search"/>
 		<menu_item_call label="Sound-Explorer" name="Sound Explorer"/>

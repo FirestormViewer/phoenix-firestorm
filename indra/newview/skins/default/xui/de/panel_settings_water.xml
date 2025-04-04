@@ -34,7 +34,7 @@
 						Geschw. kleine Welle:
 					</text>
 					<text name="reflection_wavelet_scale_label">
-						Skalierung Wellen-Reflektion:
+						Skalierung Wellen-Reflexion:
 					</text>
 					<slider label="X:" name="water_normal_scale_x"/>
 					<slider label="Y:" name="water_normal_scale_y"/>
@@ -45,7 +45,7 @@
 						Lichtbrechung und Unschärfe
 					</text>
 					<text name="refraction_scale_above_label">
-						Skalierung Lichtbrechung (obenrhalb):
+						Skalierung Lichtbrechung (oberhalb):
 					</text>
 					<text name="refraction_scale_below_label">
 						Skalierung Lichtbrechung (unterhalb):

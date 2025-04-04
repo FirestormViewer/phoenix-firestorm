@@ -10,6 +10,10 @@
 		Niska
 	</text>
 	<slider label="Maks. świateł:" name="MaxLights" />
+	<text name="MaxTextureResolutionLabel">
+		Maks. rozdzielcz. LOD:
+	</text>
+	<combo_box name="MaxTextureResolution" tool_tip="Maksymalna rozdzielczość 'poziomu szczegółowości' tekstur" />
 	<check_box label="Włącz VSync" name="vsync" tool_tip="Synchronizuje liczbę klatek na sekundę z częstotliwością odświeżania monitora, może skutkować zmniejszeniem widocznej płynności i opóźnieniami." />
 	<text name="AvatarText">
 		Awatar
@@ -18,7 +22,7 @@
 		Render awatarów:
 	</text>
 	<combo_box name="AvatarComplexityMode">
-		<combo_box.item label="Ogranicz po złożonośći" name="0" />
+		<combo_box.item label="Ogranicz po złożoności" name="0" />
 		<combo_box.item label="Zawsze pokazuj znajomych" name="1" />
 		<combo_box.item label="Pokazuj tylko znajomych" name="2" />
 	</combo_box>

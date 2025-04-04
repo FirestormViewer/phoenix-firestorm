@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="日與月" name="panel_fs_settings_sky_hbodies">
+	<panel name="P_Sun_Color">
+		<text name="T_Sun_Header" value="日與月顏色"/>
+	</panel>
+	<panel name="P_SM_Color">
+		<text name="color_label">
+			日與月顏色：
+		</text>
+	</panel>
+	<panel name="P_Sun_Header">
+		<text name="T_Sun_Header" value="太陽和星星設置"/>
+	</panel>
+	<panel name="P_Sun_Setting">
+		<text name="image_label">
+			圖像：
+		</text>
+		<check_box label="顯示太陽信標" name="sunbeacon" />
+		<text name="glow_focus_label">
+			光暈焦點：
+		</text>
+		<text name="glow_size_label">
+			光暈強度：
+		</text>
+		<text name="star_brightness_label">
+			星星亮度：
+		</text>
+		<text name="sun_scale_label">
+			縮放：
+		</text>	
+		<text name="sun_azimuth_label">
+			方位角：
+		</text>
+		<text name="sun_elevation_label">
+			高度角：
+		</text>
+	</panel>
+	<panel name="P_Moon_Header">
+		<text name="T_Moon_Header" value="月亮設置"/>
+	</panel>
+	<panel name="P_Moon_Setting">
+		<text name="moon_image_label">
+			圖像：
+		</text>
+		<check_box label="顯示月信標" name="moonbeacon" />
+		<text name="moon_scale_label">
+			縮放：
+		</text>
+		<text name="brightness_label">
+			亮度：
+		</text>
+		<text name="moon_azimuth_label">
+			方位角：
+		</text>
+		<text name="moon_elevation_label">
+			高度角：
+		</text>
+	</panel>
+</panel>

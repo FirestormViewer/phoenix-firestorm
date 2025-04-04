@@ -354,6 +354,9 @@ bool    LLPipeline::sReflectionProbesEnabled = false;
 S32     LLPipeline::sVisibleLightCount = 0;
 bool    LLPipeline::sRenderingHUDs;
 F32     LLPipeline::sDistortionWaterClipPlaneMargin = 1.0125f;
+LLVector3 LLPipeline::sLastFocusPoint={};// <FS:Beq/> FIRE-16728 focus point lock & free focus DoF 
+bool    LLPipeline::sDoFEnabled = false;
+
 F32 LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
 
 bool    LLPipeline::sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
@@ -473,6 +476,7 @@ void LLPipeline::init()
     stop_glerror();
 
     //create render pass pools
+    getPool(LLDrawPool::POOL_WATEREXCLUSION);
     getPool(LLDrawPool::POOL_ALPHA_PRE_WATER);
     getPool(LLDrawPool::POOL_ALPHA_POST_WATER);
     getPool(LLDrawPool::POOL_SIMPLE);
@@ -732,6 +736,8 @@ void LLPipeline::cleanup()
     // don't delete wl sky pool it was handled above in the for loop
     //delete mWLSkyPool;
     mWLSkyPool = NULL;
+    delete mWaterExclusionPool;
+    mWaterExclusionPool = nullptr;
 
     releaseGLBuffers();
 
@@ -783,6 +789,12 @@ void LLPipeline::requestResizeShadowTexture()
 
 void LLPipeline::resizeShadowTexture()
 {
+    // <FS:Beq> [FIRE-33200] changing shadowres requires reload - original fix by William Weaver (paperwork)
+    if(mRT->width == 0 || mRT->height == 0)
+    {
+        return;
+    }
+    // </FS:Beq>
     releaseSunShadowTargets();
     releaseSpotShadowTargets();
     allocateShadowBuffer(mRT->width, mRT->height);
@@ -1013,6 +1025,15 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
         {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("mPostMapBuffer"); // <FS:Beq/> improve Tracy scoping 
         mPostMap.allocate(resX, resY, screenFormat);
         } // <FS:Beq/> improve Tracy scoping 
+        // The water exclusion mask needs its own depth buffer so we can take care of the problem of multiple water planes.
+        // Should we ever make water not just a plane, it also aids with that as well as the water planes will be rendered into the mask.
+        // Why do we do this? Because it saves us some janky logic in the exclusion shader when we generate the mask.
+        // Regardless, this should always only be an R8 texture unless we choose to start having multiple kinds of exclusion that 8 bits can't handle.
+        // - Geenz 2025-02-06
+        bool success = mWaterExclusionMask.allocate(resX, resY, GL_R8, true);
+
+        assert(success);
+
         // used to scale down textures
         // See LLViwerTextureList::updateImagesCreateTextures and LLImageGL::scaleDown
         {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("DownResBuffer");// <FS:Beq/> create an independent preview screen target
@@ -1293,6 +1314,8 @@ void LLPipeline::releaseGLBuffers()
     mWaterDis.release();
 
     mSceneMap.release();
+
+    mWaterExclusionMask.release();
 
     mPostMap.release();
 
@@ -1804,6 +1827,10 @@ LLDrawPool *LLPipeline::findPool(const U32 type, LLViewerTexture *tex0)
         break;
     case LLDrawPool::POOL_GLTF_PBR_ALPHA_MASK:
         poolp = mPBRAlphaMaskPool;
+        break;
+
+    case LLDrawPool::POOL_WATEREXCLUSION:
+        poolp = mWaterExclusionPool;
         break;
 
     default:
@@ -4025,7 +4052,12 @@ void LLPipeline::renderSelectedFaces(const LLColor4& color)
 
         for (auto facep : mSelectedFaces)
         {
-            if (!facep || facep->getDrawable()->isDead())
+            if (!facep || !facep->getViewerObject())
+            {
+                LLSelectMgr::getInstance()->clearSelections();
+                return;
+            }
+            if (!facep->getDrawable() || facep->getDrawable()->isDead())
             {
                 LL_ERRS() << "Bad face on selection" << LL_ENDL;
                 return;
@@ -4233,6 +4265,8 @@ void LLPipeline::renderGeomDeferred(LLCamera& camera, bool do_occlusion)
     }
 }
 
+// Render all of our geometry that's required after our deferred pass.
+// This is gonna be stuff like alpha, water, etc.
 void LLPipeline::renderGeomPostDeferred(LLCamera& camera)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
@@ -4249,6 +4283,10 @@ void LLPipeline::renderGeomPostDeferred(LLCamera& camera)
 
     bool done_atmospherics = LLPipeline::sRenderingHUDs; //skip atmospherics on huds
     bool done_water_haze = done_atmospherics;
+    bool done_water_exclusion = false;
+
+    // do water exclusion just before water pass.
+    U32 water_exclusion_pass = LLDrawPool::POOL_WATEREXCLUSION;
 
     // do atmospheric haze just before post water alpha
     U32 atmospherics_pass = LLDrawPool::POOL_ALPHA_POST_WATER;
@@ -4286,6 +4324,12 @@ void LLPipeline::renderGeomPostDeferred(LLCamera& camera)
         LLDrawPool *poolp = *iter1;
 
         cur_type = poolp->getType();
+
+        if (cur_type >= water_exclusion_pass && !done_water_exclusion)
+        { // do water exclusion against depth buffer before rendering alpha
+            doWaterExclusionMask();
+            done_water_exclusion = true;
+        }
 
         if (cur_type >= atmospherics_pass && !done_atmospherics)
         { // do atmospherics against depth buffer before rendering alpha
@@ -4445,6 +4489,48 @@ void LLPipeline::recordTrianglesDrawn()
     add(LLStatViewer::TRIANGLES_DRAWN, LLUnits::Triangles::fromValue(count));
 }
 
+// <FS:Beq> FIRE-32023 Focus Point Rendering
+void LLPipeline::renderFocusPoint()
+{
+
+    static LLCachedControl<bool> render_focus_point_crosshair(gSavedSettings, "FSFocusPointRender", false);
+    if ( sDoFEnabled && render_focus_point_crosshair && gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        gDebugProgram.bind();
+        LLVector3 focus_point = sLastFocusPoint;
+        F32 size = 0.02f;
+        LLGLDepthTest gls_depth(GL_FALSE);    
+        gGL.pushMatrix();
+        gGL.translatef(focus_point.mV[VX], focus_point.mV[VY], focus_point.mV[VZ]);
+           
+        gGL.begin(LLRender::LINES);
+        if (LLPipeline::FSFocusPointLocked)
+        {
+            gGL.color4f(1.0f, 0.0f, 0.0f, 0.5f);
+        }
+        else
+        {
+            gGL.color4f(1.0f, 1.0f, 0.0f, 0.5f);
+        }
+        gGL.vertex3f(-size, 0.0f, 0.0f);
+        gGL.vertex3f(size, 0.0f, 0.0f);
+    
+        // Y-axis (Green)
+        gGL.vertex3f(0.0f, -size, 0.0f);
+        gGL.vertex3f(0.0f, size, 0.0f);
+    
+        // Z-axis (Blue)
+        gGL.vertex3f(0.0f, 0.0f, -size);
+        gGL.vertex3f(0.0f, 0.0f, size);
+    
+        gGL.end();
+    
+        gGL.popMatrix();
+        gGL.flush();
+        gDebugProgram.unbind();
+    }      
+}
+// </FS:Beq>
 void LLPipeline::renderPhysicsDisplay()
 {
     if (!hasRenderDebugMask(LLPipeline::RENDER_DEBUG_PHYSICS_SHAPES))
@@ -5366,6 +5452,17 @@ void LLPipeline::addToQuickLookup( LLDrawPool* new_poolp )
         }
         break;
 
+    case LLDrawPool::POOL_WATEREXCLUSION:
+        if (mWaterExclusionPool)
+        {
+            llassert(0);
+            LL_WARNS() << "LLPipeline::addPool(): Ignoring duplicate Water Exclusion Pool" << LL_ENDL;
+        }
+        else
+        {
+            mWaterExclusionPool = new_poolp;
+        }
+        break;
 
     default:
         llassert(0);
@@ -5486,6 +5583,11 @@ void LLPipeline::removeFromQuickLookup( LLDrawPool* poolp )
     case LLDrawPool::POOL_GLTF_PBR_ALPHA_MASK:
         llassert(poolp == mPBRAlphaMaskPool);
         mPBRAlphaMaskPool = NULL;
+        break;
+
+    case LLDrawPool::POOL_WATEREXCLUSION:
+        llassert(poolp == mWaterExclusionPool);
+        mWaterExclusionPool = nullptr;
         break;
 
     default:
@@ -7246,7 +7348,7 @@ void LLPipeline::generateExposure(LLRenderTarget* src, LLRenderTarget* dst, bool
 
         LLSettingsSky::ptr_t sky = LLEnvironment::instance().getCurrentSky();
 
-        F32 probe_ambiance = LLEnvironment::instance().getCurrentSky()->getReflectionProbeAmbiance(should_auto_adjust);
+        F32 probe_ambiance = LLEnvironment::instance().getCurrentSky()->getReflectionProbeAmbiance(should_auto_adjust());
 
         F32 exp_min = 1.f;
         F32 exp_max = 1.f;
@@ -7257,13 +7359,13 @@ void LLPipeline::generateExposure(LLRenderTarget* src, LLRenderTarget* dst, bool
         {
             if (dynamic_exposure_enabled)
             {
-                exp_min = sky->getHDROffset() - sky->getHDRMin();
-                exp_max = sky->getHDROffset() + sky->getHDRMax();
+                exp_min = sky->getHDROffset(should_auto_adjust()) - sky->getHDRMin(should_auto_adjust());
+                exp_max = sky->getHDROffset(should_auto_adjust()) + sky->getHDRMax(should_auto_adjust());
             }
             else
             {
-                exp_min = sky->getHDROffset();
-                exp_max = sky->getHDROffset();
+                exp_min = sky->getHDROffset(should_auto_adjust());
+                exp_max = sky->getHDROffset(should_auto_adjust());
             }
         }
         else if (dynamic_exposure_enabled)
@@ -7283,7 +7385,7 @@ void LLPipeline::generateExposure(LLRenderTarget* src, LLRenderTarget* dst, bool
         shader->uniform1f(dt, gFrameIntervalSeconds);
         shader->uniform2f(noiseVec, ll_frand() * 2.0f - 1.0f, ll_frand() * 2.0f - 1.0f);
         shader->uniform4f(dynamic_exposure_params, dynamic_exposure_coefficient, exp_min, exp_max, dynamic_exposure_speed_error);
-        shader->uniform4f(dynamic_exposure_params2, sky->getHDROffset(), exp_min, exp_max, dynamic_exposure_speed_target);
+        shader->uniform4f(dynamic_exposure_params2, sky->getHDROffset(should_auto_adjust()), exp_min, exp_max, dynamic_exposure_speed_target);
 
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
@@ -7341,7 +7443,7 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst)
 
         static LLCachedControl<U32> tonemap_type_setting(gSavedSettings, "RenderTonemapType", 0U);
         shader.uniform1i(tonemap_type, tonemap_type_setting);
-        shader.uniform1f(tonemap_mix, psky->getTonemapMix());
+        shader.uniform1f(tonemap_mix, psky->getTonemapMix(should_auto_adjust()));
 
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
@@ -7986,7 +8088,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     {
         float frame_width = w;
         float frame_height = frame_width / snapshot_aspect;
-        // Centre this box in [0..1]×[0..1]
+        // Centre this box in [0..1]x[0..1]
         float y_offset = 0.5f * (h - frame_height);
         left   = 0.f;
         top    = y_offset / h;
@@ -7997,7 +8099,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     {
         float frame_height = h;
         float frame_width = h * snapshot_aspect;
-        // Centre this box in [0..1]×[0..1]
+        // Centre this box in [0..1]x[0..1]
         float x_offset = 0.5f * (w - frame_width);
         left   = x_offset / w;
         top    = 0.f;
@@ -8070,14 +8172,14 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
 void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
 {
     {
-        bool dof_enabled =
+        sDoFEnabled = // <FS:Beq/> // FIRE-32023 Render focus point
             (RenderDepthOfFieldInEditMode || !LLToolMgr::getInstance()->inBuildMode()) &&
             RenderDepthOfField &&
             !gCubeSnapshot;
 
         gViewerWindow->setup3DViewport();
 
-        if (dof_enabled)
+        if (sDoFEnabled) // <FS:Beq/> // FIRE-32023 Render focus point
         {
             LL_PROFILE_GPU_ZONE("dof");
             LLGLDisable blend(GL_BLEND);
@@ -8090,10 +8192,10 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
             LLVector3 focus_point;
 
             // <FS:Beq> FIRE-16728 focus point lock & free focus DoF - based on a feature developed by NiranV Dean
-            static LLVector3 last_focus_point{};
-            if (LLPipeline::FSFocusPointLocked && !last_focus_point.isExactlyZero())
+            
+            if (LLPipeline::FSFocusPointLocked && !sLastFocusPoint.isExactlyZero())
             {
-                focus_point = last_focus_point;
+                focus_point = sLastFocusPoint;
             }
             else
             {
@@ -8140,7 +8242,7 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
             }
 
             // <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
-            last_focus_point = focus_point;
+            sLastFocusPoint = focus_point;
             // </FS:Beq>
             LLVector3 eye = LLViewerCamera::getInstance()->getOrigin();
             F32 target_distance = 16.f;
@@ -8438,6 +8540,8 @@ void LLPipeline::renderFinalize()
     gDeferredPostNoDoFNoiseProgram.unbind();
 
     gGL.setSceneBlendType(LLRender::BT_ALPHA);
+    
+    renderFocusPoint(); // <FS:Beq/> FIRE-32023 render focus point
 
     if (hasRenderDebugMask(LLPipeline::RENDER_DEBUG_PHYSICS_SHAPES))
     {
@@ -8698,14 +8802,20 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     shader.uniform1f(LLShaderMgr::DEFERRED_SHADOW_NOISE, RenderShadowNoise);
     shader.uniform1f(LLShaderMgr::DEFERRED_BLUR_SIZE, RenderShadowBlurSize);
 
-    shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale);
-    shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, (GLfloat)RenderSSAOMaxScale);
+// <FS:WW> Compute scale factor to match AO appearance between view and snapshot.
+	F32 screen_to_target_scale_factor = (F32)gViewerWindow->getWindowHeightRaw() / deferred_target->getHeight();
+	//shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale);
+	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale / screen_to_target_scale_factor);
+	//shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, (GLfloat)RenderSSAOMaxScale);
+	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, RenderSSAOMaxScale / screen_to_target_scale_factor);
+	// </FS:WW>
 
     F32 ssao_factor = RenderSSAOFactor;
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR, ssao_factor);
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR_INV, 1.0f/ssao_factor);
 
     LLVector3 ssao_effect = RenderSSAOEffect;
+
     F32 matrix_diag = (ssao_effect[0] + 2.0f*ssao_effect[1])/3.0f;
     F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0f;
     // This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by
@@ -8819,13 +8929,13 @@ void LLPipeline::renderDeferredLighting()
 
         setupHWLights();  // to set mSun/MoonDir;
 
-        glm::vec4 tc(glm::make_vec4(mSunDir.mV));
+        glm::vec4 tc(mSunDir);
         tc = mat * tc;
-        mTransformedSunDir.set(glm::value_ptr(tc));
+        mTransformedSunDir.set(tc);
 
-        glm::vec4 tc_moon(glm::make_vec4(mMoonDir.mV));
+        glm::vec4 tc_moon(mMoonDir);
         tc_moon = mat * tc_moon;
-        mTransformedMoonDir.set(glm::value_ptr(tc_moon));
+        mTransformedMoonDir.set(tc_moon);
 
         if ((RenderDeferredSSAO && !gCubeSnapshot) || RenderShadowDetail > 0)
         {
@@ -9084,7 +9194,7 @@ void LLPipeline::renderDeferredLighting()
                             continue;
                         }
 
-                        glm::vec3 tc(glm::make_vec3(c));
+                        glm::vec3 tc(center);
                         tc = mul_mat4_vec3(mat, tc);
 
                         fullscreen_lights.push_back(LLVector4(tc.x, tc.y, tc.z, s));
@@ -9191,13 +9301,12 @@ void LLPipeline::renderDeferredLighting()
                     LLDrawable* drawablep = *iter;
                     LLVOVolume* volume = drawablep->getVOVolume();
                     LLVector3   center = drawablep->getPositionAgent();
-                    F32* c = center.mV;
                     F32         light_size_final = volume->getLightRadius() * 1.5f;
                     F32         light_falloff_final = volume->getLightFalloff(DEFERRED_LIGHT_FALLOFF);
 
                     sVisibleLightCount++;
 
-                    glm::vec3 tc(glm::make_vec3(c));
+                    glm::vec3 tc(center);
                     tc = mul_mat4_vec3(mat, tc);
 
                     setupSpotLight(gDeferredMultiSpotLightProgram, drawablep);
@@ -9254,6 +9363,7 @@ void LLPipeline::renderDeferredLighting()
                           LLPipeline::RENDER_TYPE_FULLBRIGHT_ALPHA_MASK,
                           LLPipeline::RENDER_TYPE_TERRAIN,
                           LLPipeline::RENDER_TYPE_WATER,
+                          LLPipeline::RENDER_TYPE_WATEREXCLUSION,
                           END_RENDER_TYPES);
 
         renderGeomPostDeferred(*LLViewerCamera::getInstance());
@@ -9392,6 +9502,8 @@ void LLPipeline::doWaterHaze()
         static LLStaticHashedString above_water_str("above_water");
         haze_shader.uniform1i(above_water_str, sUnderWaterRender ? -1 : 1);
 
+        haze_shader.bindTexture(LLShaderMgr::WATER_EXCLUSIONTEX, &mWaterExclusionMask);
+
         if (LLPipeline::sUnderWaterRender)
         {
             LLGLDepthTest depth(GL_FALSE);
@@ -9420,6 +9532,17 @@ void LLPipeline::doWaterHaze()
 
         gGL.setSceneBlendType(LLRender::BT_ALPHA);
     }
+}
+
+void LLPipeline::doWaterExclusionMask()
+{
+    mWaterExclusionMask.bindTarget();
+    glClearColor(1, 1, 1, 1);
+    mWaterExclusionMask.clear();
+    mWaterExclusionPool->render();
+
+    mWaterExclusionMask.flush();
+    glClearColor(0, 0, 0, 0);
 }
 
 void LLPipeline::setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep)
@@ -10332,10 +10455,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
     LLVector3 lightDir = -caster_dir;
     lightDir.normVec();
 
-    glm::vec3 light_dir(glm::make_vec3(lightDir.mV));
-
     //create light space camera matrix
-
     LLVector3 at = lightDir;
 
     LLVector3 up = camera.getAtAxis();
@@ -10387,9 +10507,9 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
         //get good split distances for frustum
         for (U32 i = 0; i < fp.size(); ++i)
         {
-            glm::vec3 v(glm::make_vec3(fp[i].mV));
+            glm::vec3 v(fp[i]);
             v = mul_mat4_vec3(saved_view, v);
-            fp[i].setVec(glm::value_ptr(v));
+            fp[i] = LLVector3(v);
         }
 
         min = fp[0];
@@ -10538,9 +10658,9 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
             for (U32 i = 0; i < fp.size(); i++)
             {
-                glm::vec3 p = glm::make_vec3(fp[i].mV);
+                glm::vec3 p(fp[i]);
                 p = mul_mat4_vec3(view[j], p);
-                wpf.push_back(LLVector3(glm::value_ptr(p)));
+                wpf.push_back(LLVector3(p));
             }
 
             min = wpf[0];
@@ -10741,19 +10861,19 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
                         view[j] = glm::inverse(view[j]);
                         //llassert(origin.isFinite());
 
-                        glm::vec3 origin_agent(glm::make_vec3(origin.mV));
+                        glm::vec3 origin_agent(origin);
 
                         //translate view to origin
                         origin_agent = mul_mat4_vec3(view[j], origin_agent);
 
-                        eye = LLVector3(glm::value_ptr(origin_agent));
+                        eye = LLVector3(origin_agent);
                         //llassert(eye.isFinite());
                         if (!hasRenderDebugMask(LLPipeline::RENDER_DEBUG_SHADOW_FRUSTA) && !gCubeSnapshot)
                         {
                             mShadowFrustOrigin[j] = eye;
                         }
 
-                        view[j] = look(LLVector3(glm::value_ptr(origin_agent)), lightDir, -up);
+                        view[j] = look(LLVector3(origin_agent), lightDir, -up);
 
                         F32 fx = 1.f/tanf(fovx);
                         F32 fz = 1.f/tanf(fovz);

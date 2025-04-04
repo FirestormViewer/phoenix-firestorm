@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Eau" name="panel_fs_settings_water">
+	<panel name="P_Wave_Fog" label="Brouillard">
+		<text name="water_fog_label" tool_tip="Couleur du brouillard de l'eau - Cette option modifie la couleur de la teinte du volume de l'eau, définissant essentiellement la couleur de l'eau elle-même. Si votre eau n'a pas de brouillard, elle apparaîtra claire comme du cristal et incolore.">
+			Coul. brouillard eau
+		</text>
+		<text name="normal_map_label" tool_tip="Carte normale - Image utilisée pour déterminer les réflexions et réfractions. N'importe quelle texture peut être utilisée pour ce paramètre, mais les vraies cartes normales sont les plus efficaces.">
+			Carte normale
+		</text>
+	</panel>
+	<panel name="P_Wave_Fog_2" label="Brouillard">
+		<text name="density_exponent_label">
+			Exposant de densité :
+		</text>
+		<text name="underwater_modifier_label">
+			Modif. sous-marin :
+		</text>
+		<text name="FresnelScaleText">
+			Échelle Fresel :
+		</text>
+		<text name="FresnelOffsetText">
+			Décalage de Fresnel :
+		</text>
+ 	</panel>
+	<panel name="P_Water_Wave" label="Wave">
+		<text name="large_wave_speed_label">
+			Vitesse grandes vagues
+		</text>
+		<text name="small_wave_speed_label">
+			Vitesse petites vagues
+		</text>
+		<text name="reflection_wavelet_scale_label">
+			Échelle d'ondelettes de réflexion
+		</text>
+	</panel>
+	<panel name="P_Water_Reflection" label="Refraction">
+		<text name="refraction_scale_above_label">
+			Éch. réfraction (au dessus) :
+		</text>
+		<text name="refraction_scale_below_label">
+			Éch. réfraction (au dessous) :
+		</text>
+		<text name="blur_multiplier_label">
+			Multiplicateur de flou :
+		</text>
+	</panel>
+</panel>

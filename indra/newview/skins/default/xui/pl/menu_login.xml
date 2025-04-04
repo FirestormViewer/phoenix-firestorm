@@ -14,7 +14,6 @@
 		<menu_item_call label="Wiki Second Life" name="Wiki"/>
 		<menu_item_call label="Forum społecznościowe" name="Community Forums"/>
 		<menu_item_call label="Portal wsparcia" name="Support portal"/>
-		<menu_item_call label="Newsy: [SECOND_LIFE]" name="Second Life News"/>
 		<menu_item_call label="Blogi: [SECOND_LIFE]" name="Second Life Blogs"/> -->
 		<menu_item_call label="Zgłoś problem" name="Report Bug"/>
 		<menu_item_call label="Informacje o [APP_NAME]" name="About Second Life"/>
