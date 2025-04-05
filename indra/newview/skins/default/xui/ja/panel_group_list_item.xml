@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="group_list_item">
 	<text name="group_name" value="不明"/>
-	<button name="info_btn" tool_tip="詳細情報" />
-	<button name="profile_btn" tool_tip="プロフィールの表示"/>
+	<button name="notices_btn" tool_tip="グループからの通知を表示します。"/>
+	<button name="info_btn" tool_tip="詳細情報を表示します。"/>
+	<!--*TODO: Should only appear on rollover-->
+	<button name="profile_btn" tool_tip="プロフィールを表示します。"/>
 </panel>
