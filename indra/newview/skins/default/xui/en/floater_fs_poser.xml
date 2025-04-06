@@ -975,7 +975,7 @@ width="430">
 				<tab_container
 				 follows="all"
 				 halign="center"
-				 height="235"
+				 height="263"
 				 layout="topleft"
 				 name="modifier_tabs"
 				 tab_height="20"
@@ -986,7 +986,7 @@ width="430">
 				 width="215">
 					<panel
 					follows="left|right|top|bottom"
-					height="290"
+					height="265"
 					background_visible="false"
 					layout="topleft"
 					mouse_opaque="false"
@@ -1000,9 +1000,9 @@ width="430">
 						name="limb_rotation"
 						follows="left|right|top"
 						top="2"
-						height="170"
-						width="170"
-						left="10"
+						height="160"
+						width="160"
+						left="15"
 						tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel to adjust the 3rd axis. Use Shift or Alt to swap which rotations change"
 						pinch_mode="false"
 						infinite_scroll_mode="true"/>
@@ -1011,75 +1011,132 @@ width="430">
 						name="limb_pitch_label"
 						height="10"
 						layout="topleft"
-						left="2"
+						left="5"
 						top_pad="2"
-						width="57">
+						width="200">
 							Up/Down:
 						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.1"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 min_val="-180"
+						 max_val="180"
+						 name="limb_pitch_slider"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.CommitSlider"
+							 parameter="4"/>
+						</slider>
+						<spinner
+						 height="16"
+						 decimal_digits="2"
+						 follows="left|top"
+						 increment="0.01"
+						 top_pad="-19"
+						 left_pad="0"
+						 name="limb_pitch_spinner"
+						 min_val="-180"
+						 max_val="180"
+						 width="53">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="4"/>
+						</spinner>
 						<text
 						follows="left|top"
 						name="limb_yaw_label"
 						height="10"
 						layout="topleft"
-						left_pad="5"
-						top_pad="-10"
-						width="57">
+						left="5"
+						top_pad="2"
+						width="200">
 							Left/Right:
 						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.1"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 min_val="-180"
+						 max_val="180"
+						 name="limb_yaw_slider"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.CommitSlider"
+                             parameter="5"/>
+						</slider>
+						<spinner
+						 height="16"
+						 decimal_digits="2"
+						 follows="left|top"
+						 increment="0.01"
+						 top_pad="-19"
+						 left_pad="0"
+						 name="limb_yaw_spinner"
+						 min_val="-180"
+						 max_val="180"
+						 width="53">
+							<spinner.commit_callback
+							 function="Poser.CommitSpinner"
+                             parameter="5"/>
+						</spinner>
 						<text
 						follows="left|top"
 						name="limb_roll_label"
 						height="10"
 						layout="topleft"
-						left_pad="5"
-						top_pad="-10"
+						left="5"
+						top_pad="2"
 						width="200">
 							Roll:
 						</text>
+						<slider
+						 label=""
+						 label_width="0"
+						 follows="left|top"
+						 height="14"
+						 increment="0.1"
+						 initial_value="0"
+						 layout="topleft"
+						 show_text="false"
+						 left="3"
+						 min_val="-180"
+						 max_val="180"
+						 name="limb_roll_slider"
+						 top_pad="2"
+						 width="130" >
+							<slider.commit_callback
+							 function="Poser.CommitSlider"
+                             parameter="6"/>
+						</slider>
 						<spinner
-						height="16"
-						decimal_digits="2"
-						follows="left|top"
-						increment="0.1"
-						left="2"
-						top_pad="5"
-						name="limb_pitch_spinner"
-						min_val="-180"
-						max_val="180"
-						width="57">
+						 height="16"
+						 decimal_digits="2"
+						 follows="left|top"
+						 increment="0.01"
+						 top_pad="-19"
+						 left_pad="0"
+						 name="limb_roll_spinner"
+						 min_val="-180"
+						 max_val="180"
+						 width="53">
 							<spinner.commit_callback
-							function="Poser.CommitSpinner"
-							parameter="4"/>
-						</spinner>
-						<spinner
-						height="16"
-						decimal_digits="2"
-						follows="left|top"
-						increment="0.1"
-						top_pad="-16"
-						left_pad="5"
-						name="limb_yaw_spinner"
-						min_val="-180"
-						max_val="180"
-						width="57">
-							<spinner.commit_callback
-							function="Poser.CommitSpinner"
-							parameter="5"/>
-						</spinner>
-						<spinner
-						height="16"
-						decimal_digits="2"
-						follows="left|top"
-						increment="0.1"
-						top_pad="-16"
-						left_pad="5"
-						name="limb_roll_spinner"
-						min_val="-180"
-						max_val="180"
-						width="57">
-							<spinner.commit_callback
-							function="Poser.CommitSpinner"
-							parameter="6"/>
+							 function="Poser.CommitSpinner"
+                             parameter="6"/>
 						</spinner>
 					</panel>
 					<panel
@@ -1468,12 +1525,13 @@ width="430">
 					</button>
 					<button
 					follows="left|top"
-					height="21"
+					height="18"
 					layout="topleft"
 					label="Copy L &gt; R"
 					name="button_symmetrize_left_to_right"
 					tool_tip="Click to copy change from left side to right side."
 					left="14"
+					top_pad="0"
 					width="70" >
 						<button.commit_callback
 						function="Poser.Symmetrize"
@@ -1481,7 +1539,7 @@ width="430">
 					</button>
 					<button
 					follows="left|top"
-					height="21"
+					height="19"
 					layout="topleft"
 					label="Copy R &gt; L"
 					name="button_symmetrize_right_to_left"

@@ -448,6 +448,9 @@ public:
     LLSliderCtrl* mPosXSlider{ nullptr };
     LLSliderCtrl* mPosYSlider{ nullptr };
     LLSliderCtrl* mPosZSlider{ nullptr };
+    LLSliderCtrl* mAdvRotXSlider{ nullptr };
+    LLSliderCtrl* mAdvRotYSlider{ nullptr };
+    LLSliderCtrl* mAdvRotZSlider{ nullptr };
     LLSliderCtrl* mAdvPosXSlider{ nullptr };
     LLSliderCtrl* mAdvPosYSlider{ nullptr };
     LLSliderCtrl* mAdvPosZSlider{ nullptr };

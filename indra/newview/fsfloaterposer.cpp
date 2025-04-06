@@ -165,6 +165,10 @@ bool FSFloaterPoser::postBuild()
     mPosYSlider = getChild<LLSliderCtrl>("av_position_leftright");
     mPosZSlider = getChild<LLSliderCtrl>("av_position_updown");
 
+    mAdvRotXSlider = getChild<LLSliderCtrl>("limb_pitch_slider");
+    mAdvRotYSlider = getChild<LLSliderCtrl>("limb_yaw_slider");
+    mAdvRotZSlider = getChild<LLSliderCtrl>("limb_roll_slider");
+
     mAdvPosXSlider = getChild<LLSliderCtrl>("Advanced_Position_X");
     mAdvPosYSlider = getChild<LLSliderCtrl>("Advanced_Position_Y");
     mAdvPosZSlider = getChild<LLSliderCtrl>("Advanced_Position_Z");
@@ -794,6 +798,25 @@ void FSFloaterPoser::onCommitSlider(const LLUICtrl* slider, const S32 id)
         {
             mAdvPosXSpnr->setValue(value);
             onPositionSet();
+            break;
+        }
+
+        case 4: // limb_pitch_slider
+        {
+            mPitchSpnr->setValue(value);
+            onYawPitchRollChanged();
+            break;
+        }
+        case 5: // limb_yaw_slider
+        {
+            mYawSpnr->setValue(value);
+            onYawPitchRollChanged();
+            break;
+        }
+        case 6: // limb_roll_slider
+        {
+            mRollSpnr->setValue(value);
+            onYawPitchRollChanged();
             break;
         }
 
@@ -1816,10 +1839,15 @@ F32 FSFloaterPoser::clipRange(F32 value)
 void FSFloaterPoser::onYawPitchRollChanged(bool skipUpdateTrackpad)
 {
     LLVector3 absoluteRotation, deltaRotation;
-    absoluteRotation.mV[VX] = (F32)mYawSpnr->getValue().asReal() * DEG_TO_RAD;
-    absoluteRotation.mV[VY] = (F32)mPitchSpnr->getValue().asReal() * DEG_TO_RAD;
-    absoluteRotation.mV[VZ] = (F32)mRollSpnr->getValue().asReal() * DEG_TO_RAD;
+    absoluteRotation.mV[VX] = (F32)mYawSpnr->getValue().asReal();
+    absoluteRotation.mV[VY] = (F32)mPitchSpnr->getValue().asReal();
+    absoluteRotation.mV[VZ] = (F32)mRollSpnr->getValue().asReal();
 
+    mAdvRotXSlider->setValue(absoluteRotation.mV[VY]);
+    mAdvRotYSlider->setValue(absoluteRotation.mV[VX]);
+    mAdvRotZSlider->setValue(absoluteRotation.mV[VZ]);
+
+    absoluteRotation *= DEG_TO_RAD;
     deltaRotation = absoluteRotation - mLastSliderRotation;
     mLastSliderRotation = absoluteRotation;
 
@@ -1853,6 +1881,9 @@ void FSFloaterPoser::refreshRotationSlidersAndSpinners()
     mYawSpnr->setValue(rotation.mV[VX] *= RAD_TO_DEG);
     mPitchSpnr->setValue(rotation.mV[VY] *= RAD_TO_DEG);
     mRollSpnr->setValue(rotation.mV[VZ] *= RAD_TO_DEG);
+    mAdvRotXSlider->setValue(rotation.mV[VY]);
+    mAdvRotYSlider->setValue(rotation.mV[VX]);
+    mAdvRotZSlider->setValue(rotation.mV[VZ]);
 }
 
 void FSFloaterPoser::refreshPositionSlidersAndSpinners()
