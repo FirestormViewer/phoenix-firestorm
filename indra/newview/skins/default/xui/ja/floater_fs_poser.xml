@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_poser" title="アバターとアニメッシュのポーザー">
-	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
-	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
-			SWAP_NOTHING, SWAP_YAW_AND_ROLL, SWAP_YAW_AND_PITCH , SWAP_ROLL_AND_PITCH, SWAP_X2Y_Y2Z_Z2X, SWAP_X2Z_Y2X_Z2Y -->
-	<!-- You may also add any number of NEGATE_YAW NEGATE_PITCH NEGATE_ROLL and/or NEGATE_ALL to 'flip' the behaviour of the axes (so the trackpad up is down left is right etc.)-->
-
-	<!-- For the joints/bones/thingos that are apt to Gimbal Lock, we may instead apply rotations as deltas by default, which never lock -->
-	<string name="joint_delta_rotate_mHipLeft">true</string>
-	<string name="joint_delta_rotate_mHipRight">true</string>
-	<string name="joint_delta_rotate_mKneeLeft">true</string>
-	<string name="joint_delta_rotate_mKneeRight">true</string>
-	<string name="joint_delta_rotate_mElbowLeft">true</string>
-	<string name="joint_delta_rotate_mElbowRight">true</string>
-	<string name="joint_delta_rotate_mWristLeft">true</string>
-	<string name="joint_delta_rotate_mWristRight">true</string>
-
 	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
 	<string name="header_mHead">体</string>
 	<string name="header_mFaceForeheadLeft">額／眉</string>
@@ -30,8 +15,7 @@
 	<string name="header_mWingsRoot">羽</string>
 	<string name="header_mFaceEar1Left">耳／鼻</string>
 
-	<!-- These are names to appear on the UI for the joints -->
-	<!-- If a name is not here, it does not appear -->
+	<!-- These are names to appear on the UI for the joints/bones/thingos -->
 	<string name="title_mPelvis">アバター全体</string>
 	<string name="title_mTorso">胴体</string>
 	<string name="title_mChest">胸部</string>
@@ -273,7 +257,7 @@
 				<scroll_list tool_tip="アニメーション化する人物のポーズを読み込みます。" name="poses_scroll">
 					<scroll_list.columns label="ポーズ名" name="name"/>
 				</scroll_list>
-				<line_editor label="保存するにはポーズ名を入力してください…" name="pose_save_name" />
+				<line_editor label="保存したいポーズ名を入力してください…" name="pose_save_name" />
 			</panel>
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
@@ -286,32 +270,6 @@
 				<button tool_tip="自分のポーズディレクトリを管理します。" name="open_poseDir_button"/>
 				<menu_button label="ポーズを読み込む" tool_tip="現在選択されているポーズを読み込みます。" name="load_poses_button" />
 				<button label="差分を保存" tool_tip="差分は既存のポーズに対する変更です。新しい作業を保存するには、Ｔポーズから開始します。" name="save_poses_button"/>
-			</panel>
-		</layout_panel>
-		<layout_panel name="advanced_controls_layout">
-			<panel name="advanced_parent_panel">
-				<tab_container name="modifier_tabs">
-					<panel title="移動／スケール" name="position_panel">
-						<text name="pos_x_label">
-							位置Ｘ：
-						</text>
-						<text name="pos_y_label">
-							位置Ｙ：
-						</text>
-						<text name="pos_z_label">
-							位置Ｚ：
-						</text>
-						<text name="scale_x_label">
-							スケールＸ：
-						</text>
-						<text name="scale_y_label">
-							スケールＹ：
-						</text>
-						<text name="scale_z_label">
-							スケールＺ：
-						</text>
-					</panel>
-				</tab_container>
 			</panel>
 		</layout_panel>
 	</layout_stack>
