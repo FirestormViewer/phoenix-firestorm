@@ -162,113 +162,138 @@
 							<text name="av_position_leftright_label">
 								左／右：
 							</text>
-							<slider name="av_position_leftright" tool_tip="選択したアバターを左または右に移動します。" />
+							<slider name="av_position_leftright" tool_tip="選択したアバターを左または右に移動します。"/>
 							<text name="av_position_inout_label">
 								入／出：
 							</text>
-							<slider name="av_position_inout" tool_tip="選択したアバターを内側または外側に移動します。" />
+							<slider name="av_position_inout" tool_tip="選択したアバターを内側または外側に移動します。"/>
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
 							<scroll_list name="entireAv_joint_scroll">
-								<scroll_list.columns label="身体部位" name="joint" />
+								<scroll_list.columns label="身体部位" name="joint"/>
 							</scroll_list>
 						</panel>
 					</panel>
 					<panel title="体" name="body_joints_panel">
 						<scroll_list name="body_joints_scroll">
-							<scroll_list.columns label="身体部位" name="joint" />
+							<scroll_list.columns label="身体部位" name="joint"/>
 						</scroll_list>
 					</panel>
 					<panel title="顔" name="face_joints_panel">
 						<scroll_list name="face_joints_scroll">
-							<scroll_list.columns label="身体部位" name="joint" />
+							<scroll_list.columns label="身体部位" name="joint"/>
 						</scroll_list>
 					</panel>
 					<tab_container title="手" name="hands_tabs">
 						<panel title="調整" name="hands_joints_panel">
 							<scroll_list name="hand_joints_scroll">
-								<scroll_list.columns label="身体部位" name="joint" />
+								<scroll_list.columns label="身体部位" name="joint"/>
 							</scroll_list>
 						</panel>
 						<panel title="プリセット" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
-								<scroll_list.columns label="プリセット名" name="name" />
+								<scroll_list.columns label="プリセット名" name="name"/>
 							</scroll_list>
-							<button label="左にセット" name="button_loadHandPoseLeft" tool_tip="ダブルクリックして左手を選択したプリセットに設定します。" />
-							<button label="右にセット" name="button_loadHandPoseRight" tool_tip="ダブルクリックして右手を選択したプリセットに設定します。" />
+							<button label="左にセット" name="button_loadHandPoseLeft" tool_tip="ダブルクリックして左手を選択したプリセットに設定します。"/>
+							<button label="右にセット" name="button_loadHandPoseRight" tool_tip="ダブルクリックして右手を選択したプリセットに設定します。"/>
 						</panel>
 					</tab_container>
 					<panel title="その他" name="misc_joints_panel">
 						<scroll_list name="misc_joints_scroll">
-							<scroll_list.columns label="身体部位" name="joint" />
+							<scroll_list.columns label="身体部位" name="joint"/>
 						</scroll_list>
 					</panel>
 					<panel title="物理" name="collision_volumes_panel">
 						<scroll_list name="collision_volumes_scroll">
-							<scroll_list.columns label="物理" name="joint" />
+							<scroll_list.columns label="物理" name="joint"/>
 						</scroll_list>
 					</panel>
 					<panel title="モデル" name="avatarSelection_panel">
-						<avatar_list name="avatars_online" />
+						<avatar_list name="avatars_online"/>
 						<scroll_list tool_tip="アニメーション化するアバターまたはアニメッシュを選択します。" name="avatarSelection_scroll">
-							<scroll_list.columns label="ポーズをとる人を選択…" name="name" />
-							<scroll_list.columns label="ＵＵＩＤ" name="uuid" />
-							<scroll_list.columns label="保存ファイル名" name="saveFileName" />
+							<scroll_list.columns label="ポーズをとる人を選択…" name="name"/>
+							<scroll_list.columns label="ＵＵＩＤ" name="uuid"/>
+							<scroll_list.columns label="保存ファイル名" name="saveFileName"/>
 						</scroll_list>
-						<button name="refresh_avatars" tool_tip="アバターとアニメッシュのリストを更新します。" />
+						<button name="refresh_avatars" tool_tip="アバターとアニメッシュのリストを更新します。"/>
 						<button label="ポージング開始" label_selected="ポージング停止" tool_tip="許可されている場合は、選択したアバターまたはアニメシュのポーズを開始します。" name="start_stop_posing_button"/>
-						<button label="Ｔポーズにセット" name="set_t_pose_button" tool_tip="ダブルクリックすると、選択したアバターが「Ｔポーズ」に設定されます。" />
+						<button label="Ｔポーズにセット" name="set_t_pose_button" tool_tip="ダブルクリックすると、選択したアバターが「Ｔポーズ」に設定されます。"/>
 					</panel>
 					<panel title="設定" name="settings_panel">
 						<text name="trackpad_sensitivity_label">
 							トラックパッドの感度：
 						</text>
-						<slider name="trackpad_sensitivity_slider" tool_tip="トラックボールの感度を調整します。" />
+						<slider name="trackpad_sensitivity_slider" tool_tip="トラックボールの感度を調整します。"/>
 						<check_box name="natural_direction_checkbox" label="自然な配置を使用する" tool_tip="デフォルトでは、スケルトンの関節の回転は不自然です。これにより、ポーズが複雑になります。チェックすると、関節がより自然に回転します。"/>
-						<check_box name="stop_posing_on_close_checkbox" label="閉じたらポーズを止める" tool_tip="ポーズを止めないことは、多くの作業を行っていて、誤ってポーズを失いたくない場合に役に立ちます。" />
-						<check_box name="reset_base_rotation_on_edit_checkbox" label="編集時にベース回転をリセット" tool_tip="回転を初めて編集するときは、ゼロにリセットします。これにより、作業でポーズを保存できます。（差分ではなく、読み込み／保存を参照）ゼロにエクスポートした各ジョイントの横に緑色のチェックマークが表示されます。" />
-						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む**" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。" />
+						<check_box name="stop_posing_on_close_checkbox" label="閉じたらポーズを止める" tool_tip="ポーズを止めないことは、多くの作業を行っていて、誤ってポーズを失いたくない場合に役に立ちます。"/>
+						<check_box name="reset_base_rotation_on_edit_checkbox" label="編集時にベース回転をリセット" tool_tip="回転を初めて編集するときは、ゼロにリセットします。これにより、作業でポーズを保存できます。（差分ではなく、読み込み／保存を参照）ゼロにエクスポートした各ジョイントの横に緑色のチェックマークが表示されます。"/>
+						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む**" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。"/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="視覚マニピュレータのオン／オフを切り替えます。"/>
 			</panel>
-			<panel label="回転" name="trackball_panel">
-				<fs_virtual_trackpad name="limb_rotation" tool_tip="現在選択されている身体部位の回転を変更します。Ctrlキーを押したままにするとゆっくり動きます。ホイールを回して３番目の軸を調整します。ShiftキーまたはAltキーを使用して、変更する回転を入れ替えます。" />
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="回転" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="現在選択されている身体部位の回転を変更します。Ctrlキーを押したままにするとゆっくり動きます。ホイールを回して３番目の軸を調整します。ShiftキーまたはAltキーを使用して、変更する回転を入れ替えます。"/>
+						<text name="limb_pitch_label">
+							上／下：
+						</text>
+						<text name="limb_yaw_label">
+							左／右：
+						</text>
+						<text name="limb_roll_label">
+							ロール：
+						</text>
+					</panel>
+					<panel title="位置／スケール" name="position_panel">
+						<text name="pos_x_label">
+							位置Ｘ：
+						</text>
+						<text name="pos_y_label">
+							位置Ｙ：
+						</text>
+						<text name="pos_z_label">
+							位置Ｚ：
+						</text>
+						<text name="scale_x_label">
+							スケールＸ：
+						</text>
+						<text name="scale_y_label">
+							スケールＹ：
+						</text>
+						<text name="scale_z_label">
+							スケールＺ：
+						</text>
+					</panel>
+				</tab_container>
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="最後の回転の変更を元に戻します。"/>
 					<button name="button_redo_change" tool_tip="最後に元に戻した変更をやり直します。"/>
-					<button name="poser_joint_reset" tool_tip="ダブルクリックすると、選択したすべての身体部位が最初にポーズを開始したときの状態に戻ります。" />
+					<button name="poser_joint_reset" tool_tip="ダブルクリックすると、選択したすべての身体部位が最初にポーズを開始したときの状態に戻ります。"/>
 					<button name="delta_mode_toggle" tool_tip="複数のジョイントを変更する場合、すべてのジョイントが同じ回転になるのではなく、それぞれが同じ量だけ変更されます。ジンバルロックを解除するためにも使用されます。"/>
 					<button label="ミラー" name="button_toggleMirrorRotation" tool_tip="鏡のように反対側の関節を変えます。"/>
-					<button label="対称" name="button_toggleSympatheticRotation" tool_tip="反対側のジョイントも同様に変更します。" />
-					<button label="左＞右にコピー" name="button_symmetrize_left_to_right" tool_tip="ダブルクリックすると、左側から右側に変更がコピーされます。"/>
-					<button label="右＞左にコピー" name="button_symmetrize_right_to_left" tool_tip="ダブルクリックすると、右側から左側に変更がコピーされます。"/>
+					<button label="対称" name="button_toggleSympatheticRotation" tool_tip="反対側のジョイントも同様に変更します。"/>
+					<!-- leftとleft_padは削除しないこと -->
+					<button label="左→右にコピー" name="button_symmetrize_left_to_right" tool_tip="ダブルクリックすると、左側から右側に変更がコピーされます。" width="80"/>
+					<button label="右→左にコピー" name="button_symmetrize_right_to_left" tool_tip="ダブルクリックすると、右側から左側に変更がコピーされます。" left_pad="13" width="80"/>
 				</panel>
-				<text name="limb_pitch_label">
-					上／下：
-				</text>
-				<text name="limb_yaw_label">
-					左／右：
-				</text>
-				<text name="limb_roll_label">
-					ロール：
-				</text>
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="アニメーション化する人物のポーズを読み込みます。" name="poses_scroll">
 					<scroll_list.columns label="ポーズ名" name="name"/>
 				</scroll_list>
-				<line_editor label="保存したいポーズ名を入力してください…" name="pose_save_name" />
+				<line_editor label="保存したいポーズ名を入力してください…" name="pose_save_name"/>
 			</panel>
 		</layout_panel>
 		<layout_panel name="button_controls_layout">
 			<panel name="button_controls_panel">
 				<button name="FlipPose_avatar" tool_tip="ポーズ全体を左右反転します。"/>
-				<button name="FlipJoint_avatar" tool_tip="選択した身体部位を左右に反転します。" />
-				<button label="要約" name="button_RecaptureParts" tool_tip="選択した身体部位がオフになっている場合、これにより、その身体部位に現在行っている動作が再現されます。" />
-				<button label="部位のオン／オフ" name="toggle_PosingSelectedBones" tool_tip="選択した身体部位のポーザーをオンまたはオフにします。オフにすると、その身体部位は通常どおりにアニメーションします。（ＡＯまたはポーズボールなどを使用）" />
-				<button label="自分のポーズ" name="toggleLoadSavePanel" tool_tip="作成したポーズを読み込み、保存し、管理します。" />
+				<button name="FlipJoint_avatar" tool_tip="選択した身体部位を左右に反転します。"/>
+				<button label="要約" name="button_RecaptureParts" tool_tip="選択した身体部位がオフになっている場合、これにより、その身体部位に現在行っている動作が再現されます。"/>
+				<button label="部位オン／オフ" name="toggle_PosingSelectedBones" tool_tip="選択した身体部位のポーザーをオンまたはオフにします。オフにすると、その身体部位は通常どおりにアニメーションします。（ＡＯまたはポーズボールなどを使用）"/>
+				<button label="自分のポーズ" name="toggleLoadSavePanel" tool_tip="作成したポーズを読み込み、保存し、管理します。"/>
 				<button tool_tip="自分のポーズディレクトリを管理します。" name="open_poseDir_button"/>
-				<menu_button label="ポーズを読み込む" tool_tip="現在選択されているポーズを読み込みます。" name="load_poses_button" />
+				<menu_button label="ポーズ読み込み" tool_tip="現在選択されているポーズを読み込みます。" name="load_poses_button"/>
 				<button label="差分を保存" tool_tip="差分は既存のポーズに対する変更です。新しい作業を保存するには、Ｔポーズから開始します。" name="save_poses_button"/>
 			</panel>
 		</layout_panel>
