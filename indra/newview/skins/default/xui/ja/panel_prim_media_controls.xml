@@ -30,8 +30,10 @@
 		<layout_panel name="pause">
 			<button name="pause_btn" tool_tip="メディアを一時停止"/>
 		</layout_panel>
+		<!-- media URL entry  -->
 		<layout_panel name="media_address">
-			<line_editor name="media_address_url" tool_tip="メディアＵＲＬ"/>
+			<line_editor name="media_address_url" tool_tip="メディアのＵＲＬ"/>
+			<icon name="media_secure_lock_flag" tool_tip="セキュアブラウジング"/>
 			<layout_stack name="media_address_url_icons">
 				<layout_panel name="media_address_url_icons_wl">
 					<icon name="media_whitelist_flag" tool_tip="ホワイトリスト有効"/>
@@ -39,13 +41,13 @@
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="media_play_position">
-			<slider_bar name="media_play_slider" tool_tip="ムービー再生進行"/>
+			<slider_bar name="media_play_slider" tool_tip="ムービーの再生進捗"/>
 		</layout_panel>
 		<layout_panel name="skip_back">
-			<button name="skip_back_btn" tool_tip="前にステップ"/>
+			<button name="skip_back_btn" tool_tip="前のステップ"/>
 		</layout_panel>
 		<layout_panel name="skip_forward">
-			<button name="skip_forward_btn" tool_tip="次にステップ"/>
+			<button name="skip_forward_btn" tool_tip="次のステップ"/>
 		</layout_panel>
 		<layout_panel name="media_volume">
 			<button name="media_mute_button" tool_tip="ミュート"/>
@@ -58,8 +60,7 @@
 			<button name="close_btn" tool_tip="ズームバック"/>
 		</layout_panel>
 		<layout_panel name="new_window">
-			<button name="new_window_btn" tool_tip="ＵＲＬをブラウザで開く"/>
+			<button name="new_window_btn" tool_tip="ブラウザでＵＲＬを開く"/>
 		</layout_panel>
 	</layout_stack>
-	<icon name="media_secure_lock_flag" tool_tip="安全なブラウジング"/>
 </panel>
