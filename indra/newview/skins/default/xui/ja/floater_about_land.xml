@@ -487,20 +487,20 @@
 				<text label="常に許可" name="AllowedText">
 					常に許可（全[MAX]人中[COUNT]人）
 				</text>
-				<name_list name="AccessList" tool_tip="（[LISTED]人登録されています。最大[MAX]人です。）"/>
+				<name_list name="AccessList" tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）"/>
 				<button label="追加" name="add_allowed"/>
-				<button label="削除" label_selected="Remove" name="remove_allowed" />
+				<button label="削除" label_selected="削除" name="remove_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="バン" name="BanCheck">
 					バンされた人（全[MAX]人中[COUNT]人）
 				</text>
-				<name_list name="BannedList" tool_tip="（[LISTED]人登録されています。最大[MAX]人です。）">
+				<name_list name="BannedList" tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）">
 					<columns label="名前" name="name"/>
 					<columns label="期間" name="duration"/>
 				</name_list>
 				<button label="追加" name="add_banned"/>
-				<button label="削除" label_selected="Remove" name="remove_banned" />
+				<button label="削除" label_selected="削除" name="remove_banned"/>
 			</panel>
 		</panel>
 		<panel label="体験" name="land_experiences_panel"/>
