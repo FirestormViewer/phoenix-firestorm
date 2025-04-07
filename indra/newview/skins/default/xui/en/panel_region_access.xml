@@ -56,14 +56,14 @@
     <view_border
      bevel_style="none"
      follows="top|left"
-     height="400"
+     height="437"
      layout="topleft"
      left="10"
      top_pad="-5"
      width="453" />
     <name_list
      follows="left|top"
-     height="400"
+     height="437"
      layout="topleft"
      left_delta="0"
      multi_select="true"
@@ -157,14 +157,14 @@
     <view_border
      bevel_style="none"
      follows="top|left"
-     height="370"
+     height="410"
      layout="topleft"
      left="10"
      top_pad="-5"
      width="453" />
     <name_list
      follows="left|top"
-     height="370"
+     height="410"
      layout="topleft"
      left_delta="0"
      multi_select="true"
@@ -256,14 +256,14 @@
     <view_border
      bevel_style="none"
      follows="top|left"
-     height="370"
+     height="410"
      layout="topleft"
      left="10"
      top_pad="-5"
      width="453" />
     <name_list
      follows="left|top"
-     height="370"
+     height="410"
      layout="topleft"
      left_delta="0"
      multi_select="true"
@@ -356,14 +356,14 @@
     <view_border
      bevel_style="none"
      follows="top|left"
-     height="370"
+     height="410"
      layout="topleft"
      left="10"
      top_pad="-5"
      width="453" />
       <name_list
        follows="left|top"
-       height="370"
+       height="410"
        layout="topleft"
        left_delta="0"
        multi_select="true"

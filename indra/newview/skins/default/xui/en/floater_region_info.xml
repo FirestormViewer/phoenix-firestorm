@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
  legacy_header_height="18"
- height="535"
+ height="575"
  help_topic="regioninfo"
  layout="topleft"
  name="regioninfo"
@@ -9,7 +9,7 @@
  title="Region / Estate"
  width="485">
     <tab_container
-     bottom="535"
+     bottom="575"
      follows="left|right|top|bottom"
      layout="topleft"
      left="1"
