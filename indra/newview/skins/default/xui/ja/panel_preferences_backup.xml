@@ -64,7 +64,6 @@
 				</layout_panel>
 				<layout_panel name="lp_restore_per_account_files">
 					<scroll_list name="restore_per_account_files_list">
-						<column name="restore_per_account_files_check" value="true"/>
 						<column label="アカウント固有ファイル：" name="restore_per_account_files_label"/>
 						<column label="値" name="value"/>
 						<row name="restore_per_account_row_blacklist">
@@ -121,7 +120,6 @@
 				</layout_panel>
 				<layout_panel name="lp_restore_folders">
 					<scroll_list name="restore_global_folders_list">
-						<column name="restore_global_folders_check" value="true"/>
 						<column label="フォルダ：" name="restore_global_folders_label"/>
 						<column label="値" name="value"/>
 						<row name="restore_folders_row_beams">
@@ -141,7 +139,7 @@
 						</row>
 						<row name="restore_folders_row_windlight">
 							<column name="restore_global_folders_label">
-								WindLight（必須）
+								Windlight（必須）
 							</column>
 						</row>
 						<row name="restore_folders_row_daycycles">
