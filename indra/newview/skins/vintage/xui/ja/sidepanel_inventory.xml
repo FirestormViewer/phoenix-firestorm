@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="もの" name="objects panel">
-	<panel name="sidepanel_inventory_panel" label="">
+	<panel name="sidepanel_inventory_panel">
 		<tab_container name="inventory_tab_container">
 			<panel label="インベントリ" name="panel_main_inventory"/>
 			<panel label="マーケットプレイス" name="marketplace_inbox">

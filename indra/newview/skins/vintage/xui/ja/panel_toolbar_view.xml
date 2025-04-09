@@ -6,43 +6,43 @@
 				<layout_panel name="chat_panel">
 					<layout_stack name="bottom_chat_stack">
 						<layout_panel name="bottom_chat_bar_panel">
-							<button name="local_chat_button" tool_tip="近くのチャットウィンドウを表示または非表示にします。（CTRL＋H）" label="近くのチャット"/>
+							<button name="local_chat_button" tool_tip="近くのチャットウィンドウを表示／非表示にします。（CTRL＋H）" label="近くのチャット"/>
 							<fs_nearby_chat_control name="default_chat_bar" label="近くのチャットへ"/>
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>
 				<layout_panel name="utility_bar_layout_panel">
 					<panel name="utility_bar_panel">
-						<button name="utility_parcel_audio_stream_button" tool_tip="区画の音声ストリームを再生／一時停止します。" label=""/>
-						<button name="utility_parcel_media_button" tool_tip="区画のメディアを再生／一時停止します。" label=""/>
+						<button name="utility_parcel_audio_stream_button" tool_tip="区画の音声ストリームを再生／一時停止します。"/>
+						<button name="utility_parcel_media_button" tool_tip="区画のメディアを再生／一時停止します。"/>
 						<slider name="System Volume" tool_tip="システムの音量を調整します。"/>
-						<button name="mute_audio" tool_tip="システムの音声をミュートします。" label=""/>
-						<button name="show_volume_controls_button" tool_tip="音量コントロールを表示します。" label=""/>
+						<button name="mute_audio" tool_tip="システムの音声をミュートします。"/>
+						<button name="show_volume_controls_button" tool_tip="音量コントロールを表示します。"/>
 					</panel>
 				</layout_panel>
 				<layout_panel name="voice_chat_controls_layout_panel">
 					<panel name="voice_chat_controls_panel">
-						<button name="show_voice_controls_button" tool_tip="近くにいるボイスで会話している人とボイスコントロールを表示します。" label=""/>
-						<button name="utility_talk_button" tool_tip="このボタンを押してボイスで会話します。鍵をクリックしてプッシュ・トゥ・トークモードのオンとオフを切り替えます。" label="話す"/>
-						<button name="utility_push_to_talk_lock_button" tool_tip="プッシュ・トゥ・トーク機能を切り替えます。" label=""/>
+						<button name="show_voice_controls_button" tool_tip="近くにいるボイスで会話している人とボイスコントロールを表示します。"/>
+						<button name="utility_talk_button" tool_tip="このボタンを押してボイスで会話します。鍵をクリックしてプッシュ・トゥ・トークモードのオン／オフを切り替えます。" label="話す"/>
+						<button name="utility_push_to_talk_lock_button" tool_tip="プッシュ・トゥ・トーク機能を切り替えます。"/>
 						<nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="現在のボイスチャンネルの活動モニタです。"/>
 						<!-- Do we need this button? -Zi -->
 						<!--
-						<button name="utility_show_voice_channel_button" tool_tip="(TODO) Shows current voice channel" label=""/>
+						<button name="utility_show_voice_channel_button" tool_tip="(TODO) Shows current voice channel"/>
 						-->
 					</panel>
 				</layout_panel>
 				<layout_panel name="quick_preferences_button_layout_panel">
 					<panel name="quick_preferences_button_panel">
-						<button name="enable_disable_ao_button" tool_tip="クライアントＡＯを有効／無効にします。" label=""/>
-						<button name="show_ao_interface_button" tool_tip="クライアントＡＯの画面を表示／非表示にします。" label=""/>
-						<button name="show_quick_prefs_button" tool_tip="頻繁に使用する設定を変更できる簡易設定です。" label=""/>
+						<button name="enable_disable_ao_button" tool_tip="クライアントＡＯを有効／無効にします。"/>
+						<button name="show_ao_interface_button" tool_tip="クライアントＡＯの画面を表示／非表示にします。"/>
+						<button name="show_quick_prefs_button" tool_tip="頻繁に使用する設定を変更できる簡易設定です。"/>
 					</panel>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="bottom_toolbar_panel">
-			<button name="open_chat_bar_button" tool_tip="チャットバーを表示します。（Enter）" label=""/>
+			<button name="open_chat_bar_button" tool_tip="チャットバーを表示します。（Enter）"/>
 		</layout_panel>
 	</layout_stack>
 </toolbar_view>
