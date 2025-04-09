@@ -12,16 +12,16 @@
 		プレビュー：
 	</text>
 	<combo_box label="衣装の種類" name="clothing_type_combo">
-		<item label="画像" name="Image" value="画像"/>
-		<item label="髪型" name="Hair" value="髪型"/>
-		<item label="女性の頭" name="FemaleHead" value="女性の頭"/>
-		<item label="女性の上半身" name="FemaleUpperBody" value="女性の上半身"/>
-		<item label="女性の下半身" name="FemaleLowerBody" value="女性の下半身"/>
-		<item label="男性の頭" name="MaleHead" value="男性の頭"/>
-		<item label="男性の上半身" name="MaleUpperBody" value="男性の上半身"/>
-		<item label="男性の下半身" name="MaleLowerBody" value="男性の下半身"/>
-		<item label="スカート" name="Skirt" value="スカート"/>
-		<item label="スカルプトプリム" name="SculptedPrim" value="スカルプトプリム"/>
+		<item label="画像" name="Image"/>
+		<item label="髪型" name="Hair"/>
+		<item label="女性の頭" name="FemaleHead"/>
+		<item label="女性の上半身" name="FemaleUpperBody"/>
+		<item label="女性の下半身" name="FemaleLowerBody"/>
+		<item label="男性の頭" name="MaleHead"/>
+		<item label="男性の上半身" name="MaleUpperBody"/>
+		<item label="男性の下半身" name="MaleLowerBody"/>
+		<item label="スカート" name="Skirt"/>
+		<item label="スカルプトプリム" name="SculptedPrim"/>
 	</combo_box>
 	<panel name="image_alpha_warning">
 		<check_box label="空白のアルファチャンネルは削除する" name="strip_alpha_check"/>

@@ -17,9 +17,9 @@
 	</text>
 	<!-- mode selector -->
 	<combo_box name="mode_selection">
-		<combo_box.item label="インベントリ" name="inventory" value="0"/>
-		<combo_box.item label="ローカル" name="local" value="1"/>
-		<combo_box.item label="ベイク" name="bake" value="2"/>
+		<combo_box.item label="インベントリ" name="inventory"/>
+		<combo_box.item label="ローカル" name="local"/>
+		<combo_box.item label="ベイク" name="bake"/>
 	</combo_box>
 	<text name="size_lbl">
 		[DIMENSIONS]

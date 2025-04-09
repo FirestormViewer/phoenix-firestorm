@@ -13,7 +13,6 @@
 	<string name="none_text" value="（なし）"/>
 	<string name="sale_pending_text" value="（販売処理中）"/>
 	<string name="group_owned_text" value="（グループ所有）"/>
-	<string name="price_text" value="L$"/>
 	<string name="area_text" value="㎡"/>
 	<string name="all_residents_text" value="すべての住人"/>
 	<string name="group_text" value="グループ"/>
@@ -87,7 +86,7 @@
 						<text name="region_type_label" value="種類："/>
 						<text name="region_type" value="ムース"/>
 						<text name="region_rating_label" value="レーティング："/>
-						<text name="region_rating" value="Adult"/>
+
 						<text name="region_owner_label" value="所有者："/>
 						<text name="region_owner" value="ムース・ヴァン・ムース エクストラ・ロング・ネーム・ムース"/>
 						<text name="region_group_label" value="グループ："/>

@@ -37,8 +37,8 @@
 						<layout_panel name="chat_type_layout_panel">
 							<!-- Makeshift split button since LLSplitButton is broken -->
 							<combo_box name="chat_type" tool_tip="ささやき＝10ｍ、通常＝20ｍ、シャウト＝100ｍ">
-								<combo_box.item name="chat_type_whisper" value="whisper" label="ささやき"/>
-								<combo_box.item name="chat_type_say" value="say" label="通常"/>
+								<combo_box.item name="chat_type_whisper" label="ささやき"/>
+								<combo_box.item name="chat_type_say" label="通常"/>
 								<combo_box.item name="chat_type_shout" label="シャウト"/>
 							</combo_box>
 							<!-- pad_bottom used to move the button text away so it's invisible under the combo box -->

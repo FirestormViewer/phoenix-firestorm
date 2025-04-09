@@ -4,9 +4,6 @@
 	<string name="max_text" value="（最大）"/>
 	<panel name="panel_top">
 		<panel name="fps_subpanel">
-			<text name="fps_value">
-				167
-			</text>
 			<text name="fps_lbl">
 				フレーム／秒
 			</text>

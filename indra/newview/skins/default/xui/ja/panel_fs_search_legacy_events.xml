@@ -5,29 +5,28 @@
 			検索語句：
 		</text>
 		<radio_group name="events_search_mode">
-			<radio_item label="進行中および今後の予定" name="current" value="current"/>
-			<radio_item label="日付で" name="date" value="date"/>
+			<radio_item label="進行中および今後の予定" name="current"/>
+			<radio_item label="日付で" name="date"/>
 		</radio_group>
 		<text name="events_date">
 			4/20
 		</text>
 		<search_combo_box name="events_edit"/>
 		<combo_box name="events_category">
-			<combo_box.item label="全カテゴリ" name="any" value="0"/>
-			<combo_box.item value="filter_separator" enabled="false"/>
-			<combo_box.item label="討論" name="discussion" value="18"/>
-			<combo_box.item label="スポーツ" name="sports" value="19"/>
-			<combo_box.item label="ライブＤＪ" name="dj" value="30"/>
-			<combo_box.item label="ライブミュージック" name="music" value="20"/>
-			<!-- <combo_box.item label="???" name="mystery_category" value="21"/> -->
-			<combo_box.item label="商用" name="commercial" value="22"/>
-			<combo_box.item label="夜の生活／エンターティメント" name="nightlife" value="23"/>
-			<combo_box.item label="ゲーム／コンテンスト" name="games" value="24"/>
-			<combo_box.item label="野外劇" name="pageants" value="25"/>
-			<combo_box.item label="教育" name="education" value="26"/>
-			<combo_box.item label="芸術と文化" name="arts" value="27"/>
-			<combo_box.item label="チャリティー／サポートグループ" name="charity" value="28"/>
-			<combo_box.item label="その他" name="misc" value="29"/>
+			<combo_box.item label="全カテゴリ" name="any"/>
+			<combo_box.item label="討論" name="discussion"/>
+			<combo_box.item label="スポーツ" name="sports"/>
+			<combo_box.item label="ライブＤＪ" name="dj"/>
+			<combo_box.item label="ライブミュージック" name="music"/>
+			<!-- <combo_box.item label="???" name="mystery_category"/> -->
+			<combo_box.item label="商用" name="commercial"/>
+			<combo_box.item label="夜の生活／エンターティメント" name="nightlife"/>
+			<combo_box.item label="ゲーム／コンテンスト" name="games"/>
+			<combo_box.item label="野外劇" name="pageants"/>
+			<combo_box.item label="教育" name="education"/>
+			<combo_box.item label="芸術と文化" name="arts"/>
+			<combo_box.item label="チャリティー／サポートグループ" name="charity"/>
+			<combo_box.item label="その他" name="misc"/>
 		</combo_box>
 	</panel>
 	<!-- Search Pane -->

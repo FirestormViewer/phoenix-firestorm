@@ -49,7 +49,7 @@
 						</layout_panel>
 						<layout_panel name="clickthrough_layout_panel">
 							<text name="click_through_label" value="クリック数："/>
-							<text_editor name="click_through_text" tool_tip="クリックされた回数です。" value="[clicks]"/>
+							<text_editor name="click_through_text" tool_tip="クリックされた回数です。" value="［クリック回数］"/>
 						</layout_panel>
 						<layout_panel name="auto_renew_layout_panel">
 							<text name="auto_renew_label" value="自動更新："/>
@@ -57,7 +57,7 @@
 						</layout_panel>
 						<layout_panel name="descr_layout_panel">
 							<text name="classified_desc_label" value="説明："/>
-							<text_editor name="classified_desc" value="[description]"/>
+							<text_editor name="classified_desc" value="［説明］"/>
 						</layout_panel>
 					</layout_stack>
 					<panel name="edit_panel">
@@ -77,8 +77,8 @@
 						<text name="category_label" value="カテゴリ："/>
 						<text name="content_type_label" value="コンテンツの種類："/>
 						<icons_combo_box label="General コンテンツ" name="content_type_edit">
-							<icons_combo_box.item label="Moderateコンテンツ" name="mature_ci" value="Mature"/>
-							<icons_combo_box.item label="Generalコンテンツ" name="pg_ci" value="PG"/>
+							<icons_combo_box.item label="Moderateコンテンツ" name="mature_ci"/>
+							<icons_combo_box.item label="Generalコンテンツ" name="pg_ci"/>
 						</icons_combo_box>
 						<check_box label="毎週自動更新" name="auto_renew_edit"/>
 					</panel>

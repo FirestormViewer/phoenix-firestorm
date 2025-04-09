@@ -83,9 +83,9 @@
 	<button label="リンク" name="link_btn"/>
 	<button label="リンク解除" name="unlink_btn"/>
 	<combo_box name="combobox grid mode" tool_tip="オブジェクトを配置するグリッドルーラーを選択します。">
-		<combo_box.item label="ワールドグリッド" name="World" value="World"/>
-		<combo_box.item label="ローカルグリッド" name="Local" value="Local"/>
-		<combo_box.item label="リファレンスグリッド" name="Reference" value="Reference"/>
+		<combo_box.item label="ワールドグリッド" name="World"/>
+		<combo_box.item label="ローカルグリッド" name="Local"/>
+		<combo_box.item label="リファレンスグリッド" name="Reference"/>
 	</combo_box>
 	<check_box label="両側を引き伸ばす" name="checkbox uniform"/>
 	<check_box label="テクスチャを引き延ばす" name="checkbox stretch textures"/>
@@ -348,20 +348,20 @@
 				<combo_box.item label="円筒（チューブ）" name="Tube"/>
 				<combo_box.item label="輪（リング）" name="Ring"/>
 				<combo_box.item label="スカルプト" name="Sculpted"/>
-				<combo_item name="PathLineProfileHalfCircle" value="PathLineProfileHalfCircle" label="線→半円"/>
-				<combo_item name="PathCircleProfileHalfCircle" value="PathCircleProfileHalfCircle" label="円→半円"/>
-				<combo_item name="PathCircle2ProfileSquare" value="PathCircle2ProfileSquare" label="円２→正方形"/>
-				<combo_item name="PathCircle2ProfileTriangle" value="PathCircle2ProfileTriangle" label="円２→三角形"/>
-				<combo_item name="PathCircle2ProfileCircle" value="PathCircle2ProfileCircle" label="円２→円"/>
-				<combo_item name="PathCircle2ProfileHalfCircle" value="PathCircle2ProfileHalfCircle" label="円２→半円"/>
-				<combo_item name="PathTestProfileSquare" value="PathTestProfileSquare" label="テスト→正方形"/>
-				<combo_item name="PathTestProfileTriangle" value="PathTestProfileTriangle" label="テスト→三角形"/>
-				<combo_item name="PathTestProfileCircle" value="PathTestProfileCircle" label="テスト→円"/>
-				<combo_item name="PathTestProfileHalfCircle" value="PathTestProfileHalfCircle" label="テスト→半円"/>
-				<combo_item name="Path33Profile0" value="Path33Profile0" label="３３→円"/>
-				<combo_item name="Path33Profile1" value="Path33Profile1" label="３３→正方形"/>
-				<combo_item name="Path33Profile2" value="Path33Profile2" label="３３→三角形"/>
-				<combo_item name="Path33Profile5" value="Path33Profile5" label="３３→半円"/>
+				<combo_item name="PathLineProfileHalfCircle" label="線→半円"/>
+				<combo_item name="PathCircleProfileHalfCircle" label="円→半円"/>
+				<combo_item name="PathCircle2ProfileSquare" label="円２→正方形"/>
+				<combo_item name="PathCircle2ProfileTriangle" label="円２→三角形"/>
+				<combo_item name="PathCircle2ProfileCircle" label="円２→円"/>
+				<combo_item name="PathCircle2ProfileHalfCircle" label="円２→半円"/>
+				<combo_item name="PathTestProfileSquare" label="テスト→正方形"/>
+				<combo_item name="PathTestProfileTriangle" label="テスト→三角形"/>
+				<combo_item name="PathTestProfileCircle" label="テスト→円"/>
+				<combo_item name="PathTestProfileHalfCircle" label="テスト→半円"/>
+				<combo_item name="Path33Profile0" label="３３→円"/>
+				<combo_item name="Path33Profile1" label="３３→正方形"/>
+				<combo_item name="Path33Profile2" label="３３→三角形"/>
+				<combo_item name="Path33Profile5" label="３３→半円"/>
 			</combo_box>
 			<text name="text cut">
 				パスカット（始点と終点）
@@ -462,7 +462,7 @@
 			</combo_box>
 			<text name="ObjectLODbehaviourLabel" value="ＬｏＤの動き:"/>
 			<text name="object_radius" value="オブジェクトの半径:"/>
-			<text name="object_radius_value" value="--"/>
+			<text name="object_radius_value" value="─"/>
 			<text name="LOD_swap_factors_label" value="ＬｏＤの要素"/>
 			<text name="LOD_swap_defaults_label" value="デフォルト" tool_tip="ほとんどのビューアで適用されているデフォルトのＬｏＤ要素設定です。"/>
 			<text name="LOD_swap_usr_label" tool_tip="RenderVolumeLODFactorから取得した現在の設定値" value="現在の設定"/>
@@ -486,8 +486,8 @@
 [MED2LOW]
 [LOW2LOWEST]
 			</string>
-			<text name="LOD_swap_fs_values" value="--"/>
-			<text name="LOD_swap_usr_values" value="--"/>
+			<text name="LOD_swap_fs_values" value="─"/>
+			<text name="LOD_swap_usr_values" value="─"/>
 			<text name="LODSwapTableDscriptionsText" tool_tip="ベスト・プラクティス：制作者はどのビューアからでもデフォルトの設定でＬｏＤの動きが最適になるようにすべきです。">
 				このテーブルはＬｏＤが変わる境界をカメラからのメートル単位の距離で表示します。
 			</text>
@@ -531,8 +531,8 @@
 			<spinner label="周辺環境光" name="Light Ambiance"/>
 			<check_box label="反射プローブ" name="Reflection Probe" tool_tip="ＰＢＲが有効な場合に、この範囲内のオブジェクトが光の反射をどのように受け取るかを調整します。"/>
 			<combo_box name="Probe Volume Type" tool_tip="プローブの影響量を選択してください。">
-				<combo_box.item label="球状（スフィア）" name="Sphere" value="Sphere"/>
-				<combo_box.item label="箱状（ボックス）" name="Box" value="Box"/>
+				<combo_box.item label="球状（スフィア）" name="Sphere"/>
+				<combo_box.item label="箱状（ボックス）" name="Box"/>
 			</combo_box>
 			<check_box label="動的" name="Probe Dynamic" tool_tip="有効にすると、アバターはこのプローブ範囲内の反射に影響されて表示されます。"/>
 			<text name="Probe Update Label">

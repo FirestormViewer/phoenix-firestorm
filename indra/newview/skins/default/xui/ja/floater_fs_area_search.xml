@@ -72,16 +72,16 @@
 				マウスクリック時の動作
 			</text>
 			<combo_box name="click_action" tool_tip="オブジェクトをクリックした時の動作です。">
-				<combo_box.item label=" " name="click_blank" value="blank"/>
-				<combo_box.item label="すべて" name="click_any" value="any"/>
-				<combo_box.item label="触る" name="click_touch" value="touch"/>
-				<combo_box.item label="座る" name="click_sit" value="sit"/>
-				<combo_box.item label="買う" name="click_buy" value="buy"/>
-				<combo_box.item label="支払う" name="click_pay" value="pay"/>
-				<combo_box.item label="開く" name="click_open" value="open"/>
-				<combo_box.item label="再生する" name="click_play" value="play"/>
-				<combo_box.item label="メディアを開く" name="click_open_media" value="open_media"/>
-				<combo_box.item label="ズーム" name="click_zoom" value="zoom"/>
+				<combo_box.item label="　" name="click_blank"/>
+				<combo_box.item label="すべて" name="click_any"/>
+				<combo_box.item label="触る" name="click_touch"/>
+				<combo_box.item label="座る" name="click_sit"/>
+				<combo_box.item label="買う" name="click_buy"/>
+				<combo_box.item label="支払う" name="click_pay"/>
+				<combo_box.item label="開く" name="click_open"/>
+				<combo_box.item label="再生する" name="click_play"/>
+				<combo_box.item label="メディアを開く" name="click_open_media"/>
+				<combo_box.item label="ズーム" name="click_zoom"/>
 			</combo_box>
 			<check_box name="filter_distance" label="距離の範囲"/>
 			<text name="and2">

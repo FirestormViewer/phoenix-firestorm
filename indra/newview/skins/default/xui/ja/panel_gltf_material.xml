@@ -19,9 +19,9 @@
 			アルファモード
 		</text>
 		<combo_box name="alpha mode">
-			<combo_box.item label="不透明" name="None" value="OPAQUE"/>
-			<combo_box.item label="ブレンド" name="Alpha blending" value="BLEND"/>
-			<combo_box.item label="マスク" name="Alpha masking" value="MASK"/>
+			<combo_box.item label="不透明" name="None"/>
+			<combo_box.item label="ブレンド" name="Alpha blending"/>
+			<combo_box.item label="マスク" name="Alpha masking"/>
 		</combo_box>
 		<text name="alpha_cutoff_lbl">
 			アルファのカットオフ

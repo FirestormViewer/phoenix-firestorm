@@ -54,9 +54,9 @@
 		影の詳細：
 	</text>
 	<combo_box name="ShadowDetail">
-		<combo_box.item label="なし" name="0" value="0"/>
-		<combo_box.item label="太陽／月" name="1" value="1"/>
-		<combo_box.item label="太陽／月＋プロジェクター" name="2" value="2"/>
+		<combo_box.item label="なし" name="0"/>
+		<combo_box.item label="太陽／月" name="1"/>
+		<combo_box.item label="太陽／月＋プロジェクター" name="2"/>
 	</combo_box>
 	<text name="water_lbl">
 		水面
@@ -76,24 +76,24 @@
 		（0.0～4.0の値を入れてください）
 	</text>
 	<text name="1_lbl">
-		1
+		１
 	</text>
 	<text name="2_lbl">
-		2
+		２
 	</text>
 	<text name="3_lbl">
-		3
+		３
 	</text>
 	<text name="4_lbl">
-		4
+		４
 	</text>
 	<text name="5_lbl">
-		5
+		５
 	</text>
 	<text name="6_lbl">
-		6
+		６
 	</text>
 	<text name="7_lbl">
-		7
+		７
 	</text>
 </panel>

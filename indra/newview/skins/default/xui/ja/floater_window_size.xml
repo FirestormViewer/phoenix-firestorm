@@ -22,7 +22,7 @@
 		<combo_box.item label="1920×1080（16:9 FHD）" name="item12"/>
 		<combo_box.item label="1920×1200（16:10 WUXGA）" name="item13"/>
 		<combo_box.item label="2560×1440（6:9 QHD）" name="item14"/>
-		<combo_box.item label="3840×2160（16:9 4K UHD）" name="item15" value="3840 x 2160"/>
+		<combo_box.item label="3840×2160（16:9 4K UHD）" name="item15"/>
 	</combo_box>
 	<button label="設定" name="set_btn"/>
 	<button label="キャンセル" name="cancel_btn"/>

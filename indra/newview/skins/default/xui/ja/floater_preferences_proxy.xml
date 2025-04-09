@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Proxy Settings Floater" title="プロキシ設定">
-	<check_box initial_value="false" label="ウェブページにＨＴＴＰプロキシを使う" name="web_proxy_enabled"/>
+	<check_box label="ウェブページにＨＴＴＰプロキシを使う" name="web_proxy_enabled"/>
 	<text name="http_proxy_label">
 		ＨＴＴＰプロキシ：
 	</text>
@@ -16,7 +16,7 @@
 		ＳＯＣＫＳ認証：
 	</text>
 	<radio_group name="socks5_auth_type">
-		<radio_item label="認証なし" name="Socks5NoAuth" tool_tip="Socks 5 プロキシは認証の必要がありません。" value="なし"/>
+		<radio_item label="認証なし" name="Socks5NoAuth" tool_tip="Socks 5 プロキシは認証の必要がありません。"/>
 		<radio_item label="ユーザー名/パスワード" name="Socks5UserPass" tool_tip="ＳＯＣＫＳ　５プロキシはユーザー名／パスワードの認証が必要です。" value="UserPass"/>
 	</radio_group>
 	<text name="socks5_username_label">

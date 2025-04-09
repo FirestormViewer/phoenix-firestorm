@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_flickr_account">
-	<string name="flickr_connected" value="次のユーザでFlickrに接続:"/>
+	<string name="flickr_connected" value="次のユーザでFlickrに接続："/>
 	<string name="flickr_disconnected" value="Flickrに接続していない"/>
 	<text name="account_caption_label">
 		Flickrに接続していません。

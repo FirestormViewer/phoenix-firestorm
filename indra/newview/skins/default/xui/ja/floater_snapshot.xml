@@ -61,9 +61,9 @@
 				キャプチャ：
 			</text>
 			<combo_box label="画像レイヤー" name="layer_types">
-				<combo_box.item label="カラー" name="Colors" value="colors"/>
-				<combo_box.item label="色深度" name="Depth" value="depth"/>
-				<combo_box.item label="色深度（２４ビット）" name="Depth24" value="depth24"/>
+				<combo_box.item label="カラー" name="Colors"/>
+				<combo_box.item label="色深度" name="Depth"/>
+				<combo_box.item label="色深度（２４ビット）" name="Depth24"/>
 			</combo_box>
 			<check_box label="インターフェース" name="ui_check"/>
 			<check_box label="L$残高" name="currency_check"/>
@@ -77,7 +77,7 @@
 				フィルタ：
 			</text>
 			<combo_box name="filters_combobox" tool_tip="画像フィルタ">
-				<combo_box.item label="フィルタなし" name="NoFilter" value="NoFilter"/>
+				<combo_box.item label="フィルタなし" name="NoFilter"/>
 			</combo_box>
 		</panel>
 		<panel name="succeeded_panel">

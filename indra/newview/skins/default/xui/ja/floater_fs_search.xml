@@ -46,9 +46,9 @@
 	</tab_container>
 	<!-- Details/Action Panes -->
 	<panel name="panel_ls_details">
-		<text_editor name="title" value="Undefined name"/>
-		<text_editor name="aux1" value="Auxilary info field 1"/>
-		<text_editor name="aux2" value="Auxilary info field 2"/>
+		<text_editor name="title" value="未定義の名前"/>
+		<text_editor name="aux1" value="補助情報フィールド１"/>
+		<text_editor name="aux2" value="補助情報フィールド２"/>
 		<text_editor name="location" value="この場所の情報フィールド"/>
 		<text_editor name="desc" value="この扉の鍵は想像力の鍵で開けられます。その向こうには別の次元があります。音の次元、視覚の次元、精神の次元です。影と実体、物と思想の領域へと進んでいます。まさにトワイライトゾーンに足を踏み入れたのです。これから見るのは現実です。スクリーン上の訴訟当事者は俳優ではありません。彼らは本物の市民であり、実際の小額裁判所に訴訟を起こし、そこで訴訟を取り下げ、このフォーラム、人民裁判所で和解するよう説得されたのです。"/>
 		<button label="プロフィールを表示" name="people_profile_btn"/>

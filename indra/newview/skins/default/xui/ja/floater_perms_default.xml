@@ -34,7 +34,7 @@
 		<text name="label_11" tool_tip="ジェスチャーを作成したときのデフォルトの権限を設定します。">
 			ジェスチャー
 		</text>
-		<text name="label_12" tool_tip="衣衣装またはボディパーツを作成したときのデフォルトの権限を設定します。">
+		<text name="label_12" tool_tip="衣装または身体部位を作成したときのデフォルトの権限を設定します。">
 			装着物
 		</text>
 		<text name="label_13" tool_tip="自然環境の設定を作成したときのデフォルトの権限を設定します。">
@@ -43,7 +43,6 @@
 		<text name="label_14" tool_tip="マテリアルを作成したときのデフォルトの権限を設定します。">
 			マテリアル
 		</text>
-		<check_box name="env_settings_c" value="true"/>
 	</panel>
 	<button label="ＯＫ" label_selected="ＯＫ" name="ok"/>
 	<button label="キャンセル" label_selected="キャンセル" name="cancel"/>

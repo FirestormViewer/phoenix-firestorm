@@ -24,17 +24,17 @@
 	<text name="title" value="クラシファイド広告情報"/>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
-			<text_editor name="classified_name" value="[name]"/>
+			<text_editor name="classified_name" value="［名前］"/>
 			<text name="classified_location_label" value="場所："/>
-			<text_editor name="classified_location" value="[loading...]"/>
+			<text_editor name="classified_location" value="［読み込んでいます…］"/>
 			<text name="content_type_label" value="内容の種類："/>
-			<text_editor name="content_type" value="[content type]"/>
+			<text_editor name="content_type" value="［コンテンツタイプ］"/>
 			<text name="category_label" value="カテゴリ："/>
 			<text_editor name="category" value="[category]"/>
 			<text name="creation_date_label" value="制作日："/>
-			<text_editor name="creation_date" tool_tip="制作日" value="[date]"/>
+			<text_editor name="creation_date" tool_tip="制作日" value="［日付］"/>
 			<text name="price_for_listing_label" value="掲載価格："/>
-			<text_editor name="price_for_listing" tool_tip="掲載価格" value="[price]"/>
+			<text_editor name="price_for_listing" tool_tip="掲載価格" value="［価格］"/>
 			<layout_stack name="descr_stack">
 				<layout_panel name="clickthrough_layout_panel">
 					<text name="click_through_label" value="クリック数："/>
@@ -46,7 +46,7 @@
 				</layout_panel>
 				<layout_panel name="descr_layout_panel">
 					<text name="classified_desc_label" value="説明："/>
-					<text_editor name="classified_desc" value="[description]"/>
+					<text_editor name="classified_desc" value="［説明］"/>
 				</layout_panel>
 			</layout_stack>
 		</panel>

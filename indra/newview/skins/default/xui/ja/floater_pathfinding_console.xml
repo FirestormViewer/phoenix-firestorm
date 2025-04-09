@@ -114,7 +114,6 @@
 			<text name="character_width_label">
 				キャラクターの幅
 			</text>
-			<slider name="character_width" value="1"/>
 			<text name="character_width_unit_label">ｍ</text>
 			<text name="character_type_label">
 				キャラクターの種類

@@ -24,7 +24,7 @@
 	<text name="user_details">
 		これは私のSecondLifeの説明であり、本当に素晴らしいと思います。しかし、どういうわけか、私の説明は非常に長くなっています。なぜなら、私はたくさん話すのが好きだからです。
 	</text>
-	<slider name="volume_slider" tool_tip="ボイス音量" value="0.5"/>
+	<slider name="volume_slider" tool_tip="ボイス音量"/>
 	<!-- Overlapping buttons for default actions
   llinspectavatar.cpp makes visible the most likely default action 
 	-->

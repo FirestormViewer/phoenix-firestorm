@@ -5,10 +5,10 @@
 			検索語句：
 		</text>
 		<combo_box name="land_category">
-			<combo_box.item label="全てのカテゴリ" name="All" value="All"/>
-			<combo_box.item label="オークション" name="Auction" value="Auction"/>
-			<combo_box.item label="メインランド販売" name="Mainland" value="Mainland"/>
-			<combo_box.item label="不動産販売" name="Estate" value="Estate"/>
+			<combo_box.item label="全てのカテゴリ" name="All"/>
+			<combo_box.item label="オークション" name="Auction"/>
+			<combo_box.item label="メインランド販売" name="Mainland"/>
+			<combo_box.item label="不動産販売" name="Estate"/>
 		</combo_box>
 		<check_box label="価格＜" name="price_check"/>
 		<check_box label="面積＞" name="area_check"/>
@@ -17,10 +17,10 @@
 		</text>
 		<check_box label="昇順" name="ascending_check"/>
 		<combo_box name="land_sort_combo">
-			<combo_box.item label="名前" name="Name_item" value="Name"/>
-			<combo_box.item label="金額" name="Price_item" value="Price"/>
-			<combo_box.item label="ｍあたりの単価" name="PPM_item" value="PPM"/>
-			<combo_box.item label="面積" name="Area_item" value="Area"/>
+			<combo_box.item label="名前" name="Name_item"/>
+			<combo_box.item label="金額" name="Price_item"/>
+			<combo_box.item label="ｍあたりの単価" name="PPM_item"/>
+			<combo_box.item label="面積" name="Area_item"/>
 		</combo_box>
 		<button label="検索" name="land_find"/>
 	</panel>

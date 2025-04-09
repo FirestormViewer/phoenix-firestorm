@@ -52,10 +52,10 @@
 			</panel>
 			<panel name="layout_panel_4">
 				<combo_box label="オンラインのフレンド" name="friend combo" tool_tip="マップにフレンドを表示します。">
-					<combo_box.item label="オンラインのフレンド" name="item1" value="None"/>
+					<combo_box.item label="オンラインのフレンド" name="item1"/>
 				</combo_box>
 				<combo_box label="ランドマーク" name="landmark combo" tool_tip="マップにランドマークを表示します。">
-					<combo_box.item label="ランドマーク" name="item1" value="None"/>
+					<combo_box.item label="ランドマーク" name="item1"/>
 				</combo_box>
 				<search_editor label="リージョン名で" name="location" tool_tip="リージョン名を入力してください。"/>
 				<button label="探す" name="DoSearch" tool_tip="リージョンを検索します。"/>
