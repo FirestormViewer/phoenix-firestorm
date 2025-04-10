@@ -245,9 +245,16 @@ private:
     LLUICtrl*               mLocationIcon = nullptr;
 
     LLSearchEditor*         mLocationEditor = nullptr;
+    // <FS> [FIRE-35333] OpenSim needs to be able to adjust the minValue
+    /*
     LLUICtrl*               mTeleportCoordSpinX = nullptr;
     LLUICtrl*               mTeleportCoordSpinY = nullptr;
     LLUICtrl*               mTeleportCoordSpinZ = nullptr;
+    */
+    LLSpinCtrl*             mTeleportCoordSpinX = nullptr;
+    LLSpinCtrl*             mTeleportCoordSpinY = nullptr;
+    LLSpinCtrl*             mTeleportCoordSpinZ = nullptr;
+    // </FS>
 
     LLSliderCtrl*           mZoomSlider = nullptr;
 
