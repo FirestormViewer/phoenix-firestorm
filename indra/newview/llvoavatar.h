@@ -569,10 +569,9 @@ public:
     U32         renderTransparent(bool first_pass);
     void        renderCollisionVolumes();
     void        renderBones(const std::string &selected_joint = std::string());
+    virtual void renderJoints();
     void        renderOnlySelectedBones(const std::vector<std::string> &selected_joints);
     void        renderBoxAroundJointAttachments(LLJoint * joint);
-
-    void        renderJoints();
     static void deleteCachedImages(bool clearAll=true);
     static void destroyGL();
     static void restoreGL();
