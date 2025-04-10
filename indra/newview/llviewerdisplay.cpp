@@ -227,9 +227,12 @@ void display_update_camera()
         final_far = gSavedSettings.getF32("RenderReflectionProbeDrawDistance");
     }
     else if (CAMERA_MODE_CUSTOMIZE_AVATAR == gAgentCamera.getCameraMode())
-
     {
         final_far *= 0.5f;
+    }
+    else if (LLViewerTexture::sDesiredDiscardBias > 2.f)
+    {
+        final_far = llmax(32.f, final_far / (LLViewerTexture::sDesiredDiscardBias - 1.f));
     }
 // <FS:CR> Aurora sim
     if(LLWorld::getInstance()->getLockedDrawDistance())
@@ -239,6 +242,7 @@ void display_update_camera()
     }
 // </FS:CR> Aurora sim
     LLViewerCamera::getInstance()->setFar(final_far);
+    LLVOAvatar::sRenderDistance = llclamp(final_far, 16.f, 256.f);
     gViewerWindow->setup3DRender();
 
     if (!gCubeSnapshot)

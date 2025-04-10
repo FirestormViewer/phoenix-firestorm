@@ -10,9 +10,6 @@
 	<string name="SUPPORT_SITE">
 		Firestorm Support-Portal
 	</string>
-	<string name="StartupDetectingHardware">
-		Hardware wird erfasst...
-	</string>
 	<string name="StartupLoading">
 		[APP_NAME] wird geladen...
 	</string>

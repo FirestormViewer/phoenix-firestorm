@@ -18,7 +18,6 @@
 	<string name="APP_NAME_ABBR">FS</string>
 
 	<!-- starting up -->
-	<string name="StartupDetectingHardware">Detecting hardware...</string>
 	<string name="StartupLoading">Loading [APP_NAME]...</string>
 	<string name="StartupClearingCache">Clearing cache...</string>
 	<string name="StartupClearingTextureCache">Clearing texture cache...</string>

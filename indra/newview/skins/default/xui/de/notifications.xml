@@ -954,6 +954,11 @@ Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung oder Quali
 
 Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung zu verringern oder versuchen Sie es erneut.
 	</notification>
+	<notification name="CannotOpenFileTooBig">
+		Datei kann nicht geöffnet werden.
+
+Dem Viewer ist beim Öffnen der Datei der Speicher ausgegangen. Die Datei ist vermutlich zu groß.
+	</notification>
 	<notification name="LandmarkCreated">
 		„[LANDMARK_NAME]“ wurde zum Ordner „[FOLDER_NAME]“ hinzugefügt.
 	</notification>
