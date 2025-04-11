@@ -1,40 +1,100 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="env_adjust_snapshot" title="個人的な照明">
+<floater name="env_adjust_snapshot" title="個人的な光源">
+	<string name="hdr_string">
+		ＨＤＲスケール：
+	</string>
+	<string name="brightness_string">
+		輝度：
+	</string>
+	<string name="hdr_tooltip">
+		リアルで明るい空やダイナミックな露出などの光源効果の強さを指定します。1.0がデフォルトで、0はオフとなり、0～1の間の値は周辺光源とＨＤＲの混合となります。
+	</string>
 	<layout_stack name="outer_stack">
+		<!-- If I put in a timeline it would go here -->
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
 				<layout_panel name="lp_1">
-					<text name="ambient_lbl">環境の色：</text>
-					<text name="blue_horizon_lbl">空の配色：</text>
-					<text name="blue_density_lbl">空の濃度：</text>
-					<button label="リセット" name="btn_reset" tool_tip="画面を閉じて共有された環境にリセットします"/>
-					<text name="sun_color_lbl">太陽の色：</text>
-					<text name="cloud_color_lbl">雲の色：</text>
-					<text name="cloud_map_label">雲の画像：</text>
-					<text name="water_map_label">水の画像：</text>
+					<text name="ambient_lbl">
+						周辺：
+					</text>
+					<text name="blue_horizon_lbl">
+						水平線の青：
+					</text>
+					<text name="blue_density_lbl">
+						青の濃度：
+					</text>
+					<button label="リセット" tool_tip="共有された環境にリセットします。" name="btn_reset"/>
+					<text name="sun_color_lbl">
+						太陽の色：
+					</text>
+					<text name="cloud_color_lbl">
+						雲の色：
+					</text>
+					<text name="cloud_map_label">
+						雲の画像：
+					</text>
+					<text name="water_map_label">
+						水面の画像：
+					</text>
 				</layout_panel>
 				<layout_panel name="lp_2">
-					<text name="haze_horizon_label">遠景露光：</text>
-					<text name="haze_density_label">不透明度：</text>
-					<text name="cloud_coverage_label">雲の量：</text>
-					<text name="cloud_scale_label">雲のサイズ：</text>
-					<text name="scene_gamma_label">風景ガンマ：</text>
+					<text name="haze_horizon_label">
+						水平線の靄：
+					</text>
+					<slider name="haze_horizon"/>
+					<text name="haze_density_label">
+						靄の濃度：
+					</text>
+					<slider name="haze_density"/>
+					<text name="cloud_coverage_label">
+						雲の量：
+					</text>
+					<text name="cloud_scale_label">
+						雲のスケール：
+					</text>
+					<text name="reflection_probe_ambiance_label">
+						周辺環境の反射プローブ（ＨＤＲ）：
+					</text>
+					<slider name="probe_ambiance" tool_tip="環境ベースの間接照明の強度を指定します。 0の場合、ＨＤＲスケールは輝度パラメータになります。"/>
+					<text name="scene_gamma_label">
+						輝度：
+					</text>
 				</layout_panel>
 				<layout_panel name="lp_3">
-					<text name="label">太陽：</text>
-					<text name="sun_azimuth_label">方位角：</text>
-					<text name="sun_elevation_label">標高：</text>
-					<check_box label="ビーコンを表示" name="sunbeacon" />
-					<text name="scale_label">量：</text>
-					<text name="glow_focus_label">焦点：</text>
-					<text name="glow_size_label">サイズ：</text>
-					<text name="star_brightness_label">星の輝き：</text>
+					<text name="label">
+						太陽：
+					</text>
+					<text name="sun_azimuth_label">
+						方位角：
+					</text>
+					<text name="sun_elevation_label">
+						標高：
+					</text>
+					<check_box label="ビーコンを表示" name="sunbeacon"/>
+					<text name="scale_label">
+						スケール：
+					</text>
+					<text name="glow_focus_label">
+						焦点のグローレベル：
+					</text>
+					<text name="glow_size_label">
+						グローサイズ：
+					</text>
+					<text name="star_brightness_label">
+						星の輝度：
+					</text>
 				</layout_panel>
 				<layout_panel name="lp_4">
-					<text name="label">月：</text>
-					<text name="moon_azimuth_label">方位角：</text>
-					<text name="moon_elevation_label">標高：</text>
-					<check_box label="ビーコンを表示" name="moonbeacon" />
+					<text name="label">
+						月：
+					</text>
+					<text name="moon_azimuth_label">
+						方位角：
+					</text>
+					<text name="moon_elevation_label">
+						標高：
+					</text>
+					<check_box label="ビーコンを表示" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

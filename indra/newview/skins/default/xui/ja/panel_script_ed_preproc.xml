@@ -1,74 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="script panel">
-    <panel.string name="loading">
-        ロード中...
-    </panel.string>
-    <panel.string name="can_not_view">
-        このスクリプトの内容を見たり、編集することはできません。権限に制限がかけられているためです。オブジェクト内のスクリプトを見たり編集したりするには、フル・パーミッションが与えられている必要があります。
-    </panel.string>
-    <panel.string name="public_objects_can_not_run">
-        パブリックのオブジェクトでスクリプトを実行することはできません。
-    </panel.string>
-    <panel.string name="script_running">
-        実行中
-    </panel.string>
-    <panel.string name="Title">
-        スクリプト：[NAME]
-    </panel.string>
-    <menu_bar name="script_menu">
-        <menu label="ファイル" name="File">
-            <menu_item_call label="保存" name="Save" />
-            <menu_item_call label="全ての変更を戻す" name="Revert All Changes" />
-            <menu_item_call label="ファイルから読み込む..." name="LoadFromFile" />
-            <menu_item_call label="ファイルに保存..." name="SaveToFile" />
-            <menu_item_call label="スクリプトエディタの環境設定..." name="ScriptPrefs" />
-        </menu>
-        <menu label="編集" name="Edit">
-            <menu_item_call label="元に戻す" name="Undo" />
-            <menu_item_call label="やり直す" name="Redo" />
-            <menu_item_call label="切り取り" name="Cut" />
-            <menu_item_call label="コピー" name="Copy" />
-            <menu_item_call label="貼り付け" name="Paste" />
-            <menu_item_call label="すべて選択" name="Select All" />
-            <menu_item_call label="選択解除" name="Deselect" />
-            <menu_item_call label="検索／置換..." name="Search / Replace..." />
-            <menu_item_call label="指定行に移動..." name="Go to line..." />
-        </menu>
-        <menu label="ヘルプ" name="Help">
-            <menu_item_call label="ヘルプ..." name="Help..." />
-            <menu_item_call label="キーワードヘルプ..." name="Keyword Help..." />
-            <menu_item_call label="スクリプトライブラリ..." name="Script Library" />
-        </menu>
-    </menu_bar>
-    <layout_stack name="script_editor_button_bar">
-        <layout_panel name="script_editor_buttons_panel">
-            <button tool_tip="スクリプトを保存します" label="" name="save_btn" />
-            <button tool_tip="外部スクリプトエディタ" label="" name="Edit_btn" />
-            <button tool_tip="スクリプトをハードディスクから読み込みます" label="" name="load_disk_btn" />
-            <button tool_tip="スクリプトをハードディスクに保存します" label="" name="save_disk_btn" />
-            <button tool_tip="切り取り" label="" name="cut_btn" />
-            <button tool_tip="コピー" label="" name="copy_btn" />
-            <button tool_tip="貼り付け" label="" name="paste_btn" />
-            <button tool_tip="元に戻す" label="" name="undo_btn" />
-            <button tool_tip="やり直す" label="" name="redo_btn" />
-            <button tool_tip="検索／置換" label="" name="search_btn" />
-            <button tool_tip="スクリプトエディタの環境設定" label="" name="prefs_btn" />
-        </layout_panel>
-    </layout_stack>
-    <tab_container name="Tabset">
-        <panel name="Script" label="スクリプト">
-            <script_editor name="Script Editor">
-                ロード中...
-            </script_editor>
-        </panel>
-        <panel name="Preprocessed" label="プリプロセス">
-            <fs_lsl_preproc_viewer name="Post Editor">
-                ロード中...
-            </fs_lsl_preproc_viewer>
-        </panel>
-    </tab_container>
-    <scroll_list name="lsl errors" />
-    <combo_box label="挿入..." name="Insert..." />
-    <button label="編集..." name="edit_btn_2" />
-    <button label="保存" label_selected="保存" name="save_btn_2" />
+	<panel.string name="loading">
+		読み込んでいます…
+	</panel.string>
+	<panel.string name="can_not_view">
+		このスクリプトは「コピーなし」に設定されているため、表示または編集できません。
+オブジェクト内のスクリプトを表示または編集するには、完全な権限が必要です。
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		公共オブジェクトはスクリプトを実行できません。
+	</panel.string>
+	<panel.string name="script_running">
+		実行中
+	</panel.string>
+	<panel.string name="Title">
+		スクリプト名：[NAME]
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu label="ファイル" name="File">
+			<menu_item_call label="保存" name="Save"/>
+			<menu_item_call label="復帰" name="Revert All Changes"/>
+			<menu_item_call label="ファイルから読み込む…" name="LoadFromFile"/>
+			<menu_item_call label="ファイルに保存…" name="SaveToFile"/>
+			<menu_item_call label="スクリプトエディタ初期設定…" name="ScriptPrefs"/>
+		</menu>
+		<menu label="編集" name="Edit">
+			<menu_item_call label="取り消し" name="Undo"/>
+			<menu_item_call label="やり直し" name="Redo"/>
+			<menu_item_call label="カット" name="Cut"/>
+			<menu_item_call label="コピー" name="Copy"/>
+			<menu_item_call label="ペースト" name="Paste"/>
+			<menu_item_call label="すべてを選択" name="Select All"/>
+			<menu_item_call label="選択解除" name="Deselect"/>
+			<menu_item_call label="検索／置換…" name="Search / Replace..."/>
+			<menu_item_call label="指定行に移動…" name="Go to line..."/>
+		</menu>
+		<menu label="ＬＳＬリファレンス" name="Help">
+			<menu_item_call label="ヘルプ…" name="Help..."/>
+			<menu_item_call label="キーワードヘルプ…" name="Keyword Help..."/>
+			<menu_item_call label="スクリプトライブラリ…" name="Script Library"/>
+		</menu>
+	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="スクリプトを保存" name="save_btn"/>
+			<button tool_tip="外部エディタを起動します。" name="Edit_btn"/>
+			<button tool_tip="ハードディスクからスクリプトを読み込みます。" name="load_disk_btn"/>
+			<button tool_tip="ハードディスクにスクリプトを保存します。" name="save_disk_btn"/>
+			<button tool_tip="カット" name="cut_btn"/>
+			<button tool_tip="コピー" name="copy_btn"/>
+			<button tool_tip="ペースト" name="paste_btn"/>
+			<button tool_tip="元に戻す" name="undo_btn"/>
+			<button tool_tip="やり直し" name="redo_btn"/>
+			<button tool_tip="検索／置換" name="search_btn"/>
+			<button tool_tip="スクリプトエディタ初期設定" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<tab_container name="Tabset">
+		<panel name="Script" label="スクリプト">
+			<script_editor name="Script Editor">
+				読み込んでいます…
+			</script_editor>
+		</panel>
+		<panel name="Preprocessed" label="プリプロセス済み">
+			<lsl_preproc_viewer name="Post Editor">
+				読み込んでいます…
+			</lsl_preproc_viewer>
+		</panel>
+	</tab_container>
+	<combo_box label="挿入…" name="Insert..."/>
+	<text name="line_col" value="行0、列0"/>
+	<button label="編集…" name="edit_btn_2"/>
+	<button label="保存" label_selected="保存" name="save_btn_2"/>
 </panel>

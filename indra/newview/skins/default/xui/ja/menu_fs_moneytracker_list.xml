@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Money Tracker List Context Menu">
-	<menu_item_call label="CSV形式でコピー" name="Copy" />
+	<menu_item_call label="ＣＳＶ形式でコピー" name="Copy" />
 	<menu_item_call label="削除" name="Delete" />
 </context_menu>
