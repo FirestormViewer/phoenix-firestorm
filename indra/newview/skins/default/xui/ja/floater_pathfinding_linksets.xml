@@ -40,13 +40,13 @@
 		‐
 	</floater.string>
 	<floater.string name="linkset_owner_loading">
-		[Loading]
+		［読み込んでいます］
 	</floater.string>
 	<floater.string name="linkset_owner_unknown">
-		[Unknown]
+		［不明］
 	</floater.string>
 	<floater.string name="linkset_owner_group">
-		[group]
+		［グループ］
 	</floater.string>
 	<floater.string name="linkset_is_scripted">
 		はい
@@ -76,16 +76,16 @@
 		可動ボリューム
 	</floater.string>
 	<floater.string name="linkset_is_terrain">
-		[unmodifiable]
+		［修正不能］
 	</floater.string>
 	<floater.string name="linkset_is_restricted_state">
-		[restricted]
+		［制限付き］
 	</floater.string>
 	<floater.string name="linkset_is_non_volume_state">
-		[concave]
+		［凹面］
 	</floater.string>
 	<floater.string name="linkset_is_restricted_non_volume_state">
-		[restricted,concave]
+		［制限付き、凹面］
 	</floater.string>
 	<floater.string name="linkset_choose_use">
 		リンクセットの用途を選択…

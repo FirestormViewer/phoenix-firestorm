@@ -57,7 +57,7 @@
 	<panel name="normal_texture_pnl">
 		<text name="normal_lbl">
 			法線（ノーマル）：
-		</text>W
+		</text>
 		<text name="normal_upload_fee">
 			アップロード費用なし
 		</text>

@@ -5,7 +5,7 @@
 			<fs_scroll_list name="l_name_list">
 				<column name="unit_status" label="状況"/>
 				<column name="unit_name" label="名前"/>
-				<column name="unit_lods" label="ＬＯＤ"/>
+				<column name="unit_lods" label="ＬｏＤ"/>
 				<column name="unit_objects" label="オブジェクト"/>
 				<column name="unit_id_HIDDEN" label="ＩＤ"/>
 			</fs_scroll_list>
@@ -28,7 +28,7 @@
 					ゲームエンジン標準
 				</combo_item>
 				<combo_item name="suff_descriptive">
-					ＬＯＤ名
+					ＬｏＤ名
 				</combo_item>
 			</combo_box>
 			<text name="suf_lowest_lab">

@@ -75,7 +75,6 @@
 		<combo_box.item label="そのもの" name="Original"/>
 	</combo_box>
 	<spinner label="価格：" name="Edit Cost"/>
-	<text name="CurrencySymbol">L$</text>
 	<text name="BaseMaskDebug">
 		Ｂ：
 	</text>

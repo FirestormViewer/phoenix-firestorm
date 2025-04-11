@@ -22,7 +22,7 @@
 	<panel name="header_panel">
 		<panel name="outfit_name_and_status">
 			<text name="status" value="編集中…"/>
-			<text name="curr_outfit_name" value="[現在のアウトフィット]"/>
+			<text name="curr_outfit_name" value="［現在のアウトフィット］"/>
 		</panel>
 	</panel>
 	<!-- LIST OF WEARABLES (CURRENT OUTFIT/ WEARABLES TO ADD) -->

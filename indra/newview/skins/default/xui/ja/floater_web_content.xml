@@ -7,7 +7,7 @@
 			<button name="stop" tool_tip="ナビゲーションを停止"/>
 			<button name="reload" tool_tip="ページを更新"/>
 			<combo_box name="address" tool_tip="ここにＵＲＬを入力"/>
-			<icon name="media_secure_lock_flag" tool_tip="安全な閲覧"/>
+			<icon name="media_secure_lock_flag" tool_tip="セキュアブラウジング"/>
 			<button name="popexternal" tool_tip="このＵＲＬをブラウザで開く"/>
 		</layout_panel>
 		<layout_panel name="debug_controls">
@@ -15,8 +15,10 @@
 		</layout_panel>
 		<layout_panel name="external_controls">
 			<text name="plugin_fail_text">
-Webブラウザのプラグインが開くのに時間がかかっています。
-プラグインが全く読み込まれないようであれば、次のページを参考にしてみて下さい。
+Webブラウザプラグインの起動に時間がかかっているようです。
+プラグインが読み込まれない場合は、次のサイトをご覧ください。
+
+この問題を解決するための可能な手順については、
 
 https://wiki.firestormviewer.org/fs_search_issues
 
@@ -24,7 +26,7 @@ https://wiki.firestormviewer.org/fs_search_issues
 
 https://wiki.firestormviewer.org/fs_media
 
-この問題を解決する有効な手順を探してみて下さい。
+をご覧ください。
 			</text>
 		</layout_panel>
 	</layout_stack>

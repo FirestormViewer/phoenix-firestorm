@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="土地情報">
-	<floater.string name="maturity_icon_general">
-		"Parcel_PG_Dark"
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		"Parcel_M_Dark"
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		"Parcel_R_Dark"
-	</floater.string>
 	<floater.string name="Hours">
 		[HOURS]時間
 	</floater.string>

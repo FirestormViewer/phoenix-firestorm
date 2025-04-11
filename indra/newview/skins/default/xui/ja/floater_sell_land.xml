@@ -18,22 +18,16 @@
 				この区画を販売：
 			</text>
 			<text name="price_label">
-				１．価格の設定：
+				⒈価格の設定：
 			</text>
 			<text name="price_text">
 				適正と思われる価格を入力してください。
 			</text>
-			<text name="price_ld">
-				L$
-			</text>
-			<line_editor name="price">
-				0
-			</line_editor>
 			<text name="price_per_m">
 				（1㎡あたりL$ [PER_METER]）
 			</text>
 			<text name="sell_to_label">
-				２．特定の人物に販売：
+				⒉特定の人物に販売：
 			</text>
 			<text name="sell_to_text">
 				販売先を特定の人物に限定するか、しないかを選択してください。
@@ -45,7 +39,7 @@
 			</combo_box>
 			<button label="選択" name="sell_to_select_agent"/>
 			<text name="sell_objects_label">
-				３．オブジェクトと土地を一緒に販売しますか？
+				⒊オブジェクトと土地を一緒に販売しますか？
 			</text>
 			<text name="sell_objects_text">
 				区画上の土地所有者の譲渡可能なオブジェクトは、所有権が変更されます。

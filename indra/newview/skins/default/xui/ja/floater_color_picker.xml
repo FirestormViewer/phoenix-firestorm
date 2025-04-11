@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="カラーピッカー">
 	<tab_container name="scale_type_container">
-		<panel name="RGB" label="ＲＧＢ">
+		<panel name="RGB">
 			<text name="r_val_text">
 				赤：
 			</text>
@@ -12,7 +12,7 @@
 				青：
 			</text>
 		</panel>
-		<panel name="LSL" label="LSL">
+		<panel name="LSL">
 			<text name="r_val_text_lsl">
 				赤：
 			</text>
@@ -23,7 +23,7 @@
 				青：
 			</text>
 		</panel>
-		<panel name="Hex" label="Hex">
+		<panel name="Hex">
 			<text name="hex_text">
 				ＨＥＸコード（#rrggbb）：
 			</text>

@@ -9,9 +9,6 @@
 	<text name="price_text">
 		広告掲載料：
 	</text>
-	<text name="price_symbol">
-		L$
-	</text>
 	<button label="ＯＫ" name="set_price_btn"/>
 	<button label="キャンセル" name="cancel_btn"/>
 </floater>

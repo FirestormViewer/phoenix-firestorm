@@ -31,13 +31,7 @@
 		<combo_box.item label="フレンドのみ表示" name="2"/>
 	</combo_box>
 	<slider tool_tip="複雑なアバターがどの時点でJellyDollとして描画されるかを制御します。" label="最大複雑度：" name="IndirectMaxComplexity"/>
-	<text name="IndirectMaxComplexityText">
-		0
-	</text>
 	<slider label="簡略化せずに描画する最大数：" name="IndirectMaxNonImpostors"/>
-	<text name="IndirectMaxNonImpostorsText">
-		0
-	</text>
 	<slider label="詳細：" name="AvatarMeshDetail"/>
 	<text name="AvatarMeshDetailText">
 		低
@@ -165,12 +159,7 @@
 	<slider label="トーンマップ混合：" tool_tip="リニアカラーとトーンマップカラーの混合値を指定します。" name="TonemapMix"/>
 	<!-- End of Tone Mapping Settings-->
 	<!-- End of Advanced Settings block -->
-	<view_border name="horiz_border"/>
 	<button label="推奨設定値にリセット" name="Defaults"/>
 	<button label="ＯＫ" label_selected="ＯＫ" name="OK"/>
 	<button label="キャンセル" label_selected="キャンセル" name="Cancel"/>
-	<!-- These two check boxes are dummies and will never be displayed.
-	They are here so the control variables are saved in a preset file. -->
-	<check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxComplexity"/>
-	<check_box label="RenderAvatarMaxNonImpostors" name="RenderAvatarMaxNonImpostors"/>
 </floater>

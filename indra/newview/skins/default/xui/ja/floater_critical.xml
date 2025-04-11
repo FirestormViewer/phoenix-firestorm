@@ -4,7 +4,4 @@
 	<text name="tos_heading">
 		次のメッセージを注意してよくお読みください。
 	</text>
-	<text_editor name="tos_text">
-		TOS_TEXT
-	</text_editor>
 </floater>

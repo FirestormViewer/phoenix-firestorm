@@ -12,15 +12,6 @@
 	<floater.string name="Type_Avatar">
 		アバター
 	</floater.string>
-	<floater.string name="Type_llTriggerSound">
-		llTriggerSound
-	</floater.string>
-	<floater.string name="Type_llLoopSound">
-		llLoopSound
-	</floater.string>
-	<floater.string name="Type_llPlaySound">
-		llPlaySound
-	</floater.string>
 	<check_box name="avatars_chk" label="アバター"/>
 	<check_box name="objects_chk" label="オブジェクト"/>
 	<check_box left_delta="96" name="collision_chk" label="既定の衝突音"/>

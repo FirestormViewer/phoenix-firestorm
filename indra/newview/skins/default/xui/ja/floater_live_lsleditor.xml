@@ -29,7 +29,7 @@
 	</text>
 	<button label="リセット" label_selected="リセット" name="Reset"/>
 	<check_box label="実行中" name="running"/>
-	<check_box label="Mono" name="mono"/>
+	<check_box label="Ｍｏｎｏ" name="mono"/>
 	<check_box label="体験を使用：" name="enable_xp"/>
 	<button label="＞" name="view_profile"/>
 </floater>

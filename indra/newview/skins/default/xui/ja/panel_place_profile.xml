@@ -86,7 +86,6 @@
 						<text name="region_type_label" value="種類："/>
 						<text name="region_type" value="ムース"/>
 						<text name="region_rating_label" value="レーティング："/>
-
 						<text name="region_owner_label" value="所有者："/>
 						<text name="region_owner" value="ムース・ヴァン・ムース エクストラ・ロング・ネーム・ムース"/>
 						<text name="region_group_label" value="グループ："/>

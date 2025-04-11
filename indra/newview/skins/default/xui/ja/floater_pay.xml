@@ -9,10 +9,6 @@
 	<text name="payee_name">
 		非常に長い名前が途中で切れていないかをテストして確認
 	</text>
-	<button label="L$ 1" label_selected="L$ 1" name="fastpay 1"/>
-	<button label="L$ 5" label_selected="L$ 5" name="fastpay 5"/>
-	<button label="L$ 10" label_selected="L$ 10" name="fastpay 10"/>
-	<button label="L$ 20" label_selected="L$ 20" name="fastpay 20"/>
 	<line_editor name="amount"/>
 	<text name="amount text">
 		もしくは金額を選ぶ：

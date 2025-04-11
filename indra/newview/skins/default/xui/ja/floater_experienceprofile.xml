@@ -3,15 +3,6 @@
 	<floater.string name="empty_slurl">
 		（なし）
 	</floater.string>
-	<floater.string name="maturity_icon_general">
-		"Parcel_PG_Light"
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		"Parcel_M_Light"
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		"Parcel_R_Light"
-	</floater.string>
 	<text name="edit_title" value="体験プロフィール"/>
 	<tab_container name="tab_container">
 		<panel name="panel_experience_info">
@@ -68,11 +59,7 @@
 					<text name="edit_ContentRating">
 						レーティング区分：
 					</text>
-					<icons_combo_box label="Moderate" name="edit_ContentRatingText" tool_tip="体験のレーティング区分を上げると、体験を許可したすべての住人の権限がリセットされます。">
-						<icons_combo_box.item label="Adult" name="Adult"/>
-						<icons_combo_box.item label="Moderate" name="Mature"/>
-						<icons_combo_box.item label="General" name="PG"/>
-					</icons_combo_box>
+					<icons_combo_box name="edit_ContentRatingText" tool_tip="体験のレーティング区分を上げると、体験を許可したすべての住人の権限がリセットされます。"/>
 					<text name="edit_Location">
 						場所：
 					</text>

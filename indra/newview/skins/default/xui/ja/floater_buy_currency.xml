@@ -6,9 +6,6 @@
 	<floater.string name="info_cannot_buy">
 		購入できません。
 	</floater.string>
-	<floater.string name="estimated_zero">
-		US$ 0.00
-	</floater.string>
 	<icon name="normal_background"/>
 	<layout_stack name="outer_stack">
 		<layout_panel name="layout_panel_title">
@@ -24,24 +21,15 @@
 			<text name="target_price_label">
 				必要な金額
 			</text>
-			<text name="target_price">
-				L$ [AMT]
-			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_balance">
 			<text name="balance_label">
 				所持金
 			</text>
-			<text name="balance_amount">
-				L$ [AMT]
-			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_required">
 			<text name="required_label">
 				必要最低金額
-			</text>
-			<text name="required_amount">
-				L$ [AMT]
 			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_action">
@@ -49,12 +37,6 @@
 			<text name="currency_action">
 				購入金額を選択
 			</text>
-			<text name="currency_label">
-				L$
-			</text>
-			<line_editor label="L$" name="currency_amt">
-				1234
-			</line_editor>
 			<text name="currency_est">
 				平均[LOCALAMOUNT]
 			</text>
@@ -63,9 +45,6 @@
 			</text>
 			<text name="total_label">
 				購入後の残高
-			</text>
-			<text name="total_amount">
-				L$ [AMT]
 			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">

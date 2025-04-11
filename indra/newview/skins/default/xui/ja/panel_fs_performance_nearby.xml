@@ -13,9 +13,6 @@
 		最も複雑なアバターを非表示にして速度を上げます。
 	</text>
 	<slider tool_tip="視覚的に複雑なアバターが、どの時点でインポスターとして描画されるかを制御します。" label="最大複雑度（Ｋ）" name="IndirectMaxComplexity"/>
-	<text name="IndirectMaxComplexityText">
-		0
-	</text>
 	<slider tool_tip="視覚的に複雑なアバターが、描画に時間がかかりすぎると判断されるタイミングを制御します。（単位：マイクロ秒）" label="最大描画時間（㎲）" name="FSRenderAvatarMaxART">
 	</slider>
 	<text name="FSRenderAvatarMaxARTText">

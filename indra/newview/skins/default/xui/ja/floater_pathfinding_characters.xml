@@ -19,13 +19,13 @@
 		[CPU_TIME]㎲
 	</floater.string>
 	<floater.string name="character_owner_loading">
-		[Loading]
+		［読み込んでいます…］
 	</floater.string>
 	<floater.string name="character_owner_unknown">
-		[Unknown]
+		［不明］
 	</floater.string>
 	<floater.string name="character_owner_group">
-		[group]
+		［グループ］
 	</floater.string>
 	<panel name="pathfinding_chars_main">
 		<scroll_list name="objects_scroll_list">

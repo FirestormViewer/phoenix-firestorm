@@ -23,9 +23,6 @@
 	<text name="pos_title">
 		位置：
 	</text>
-	<text name="pos_field">
-		{128.1, 128.1, 15.4}
-	</text>
 	<text name="select_object_label">
 		ボタンをクリックしてから、悪意のあるオブジェクトをクリック：
 	</text>
@@ -40,7 +37,7 @@
 		所有者：
 	</text>
 	<text name="owner_name">
-		Hendrerit Vulputate Kamawashi Longname
+		ヘンドレリット・ヴルプターテ、かまわしの長い名前
 	</text>
 	<combo_box name="category_combo" tool_tip="カテゴリ‐この報告に最も適したカテゴリを選択してください">
 		<combo_box.item label="カテゴリを選択してください" name="Select_category"/>

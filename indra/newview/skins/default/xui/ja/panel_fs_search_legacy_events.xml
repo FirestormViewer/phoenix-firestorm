@@ -8,9 +8,6 @@
 			<radio_item label="進行中および今後の予定" name="current"/>
 			<radio_item label="日付で" name="date"/>
 		</radio_group>
-		<text name="events_date">
-			4/20
-		</text>
 		<search_combo_box name="events_edit"/>
 		<combo_box name="events_category">
 			<combo_box.item label="全カテゴリ" name="any"/>

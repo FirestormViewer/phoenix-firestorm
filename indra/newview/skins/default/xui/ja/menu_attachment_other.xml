@@ -35,6 +35,6 @@
 	<menu_item_call label="テクスチャをリフレッシュ" name="Texture Refresh"/>
 	<context_menu label="名前をつけて保存" name="Export Menu">
 		<menu_item_call label="バックアップ" name="Backup"/>
-		<menu_item_call label="Collada" name="Collada"/>
+		<menu_item_call label="Collada形式" name="Collada"/>
 	</context_menu>
 </context_menu>

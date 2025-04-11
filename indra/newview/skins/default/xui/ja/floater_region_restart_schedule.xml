@@ -38,16 +38,10 @@
 	<text name="sa_label">
 		土
 	</text>
-	<text name="at_label">
-		at
-	</text>
 	<text name="separator_label">
 		：
 	</text>
 	<button name="am_pm_btn" label="午前"/>
-	<text name="utc_label">
-		UTC
-	</text>
 	<button name="save_btn" label="保存"/>
 	<button name="cancel_btn" label="キャンセル"/>
 </floater>

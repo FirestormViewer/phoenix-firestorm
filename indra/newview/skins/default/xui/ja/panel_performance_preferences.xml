@@ -14,15 +14,6 @@
 	<text name="fastest_lbl">
 		距離と速度
 	</text>
-	<radio_group name="graphics_quality">
-		<radio_item name="0"/>
-		<radio_item name="1"/>
-		<radio_item name="2"/>
-		<radio_item name="3"/>
-		<radio_item name="4"/>
-		<radio_item name="5"/>
-		<radio_item name="6"/>
-	</radio_group>
 	<text name="best_quality_lbl">
 		最高品位
 	</text>

@@ -31,11 +31,6 @@
 			<text name="TextureFormatText">
 				テクスチャの形式：
 			</text>
-			<combo_box name="texture_type_combo">
-				<combo_box.item label="TARGA" name="tga"/>
-				<combo_box.item label="PNG" name="png"/>
-				<combo_box.item label="JPEG2000" name="j2c"/>
-			</combo_box>
 			<button label="名前をつけて保存…" name="export_btn"/>
 		</layout_panel>
 	</layout_stack>

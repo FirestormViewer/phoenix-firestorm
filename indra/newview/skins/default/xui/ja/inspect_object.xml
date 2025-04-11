@@ -19,13 +19,6 @@
 	<string name="Sit">
 		座る
 	</string>
-	<text name="object_creator">
-		by secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
-owner secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
-	</text>
-	<text name="price_text">
-		L$ 30,000
-	</text>
 	<text name="object_description">
 		これは、オブジェクトがどのようなものであるかについての非常に長い説明であり、少なくとも８０文字は含まれます。
 長さなどですが、この時点ではおそらく１２０くらいです。本当のところは、誰にも分かりません。
