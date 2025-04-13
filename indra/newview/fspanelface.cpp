@@ -3892,6 +3892,85 @@ void FSPanelFace::onCancelPbr(const LLUICtrl* map_ctrl)
 void FSPanelFace::onSelectPbr(const LLUICtrl* map_ctrl)
 {
     onCommitPbr(map_ctrl);
+
+    struct f : public LLSelectedNodeFunctor
+    {
+        f(const LLUICtrl* ctrl, S32 dirty_flag) : mCtrl(ctrl), mDirtyFlag(dirty_flag)
+        {
+        }
+
+        virtual bool apply(LLSelectNode* nodep)
+        {
+            LLViewerObject* objectp = nodep->getObject();
+            if (!objectp)
+            {
+                return false;
+            }
+            S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces()); // avatars have TEs but no faces
+            for (S32 te = 0; te < num_tes; ++te)
+            {
+                if (nodep->isTESelected(te) && nodep->mSavedGLTFOverrideMaterials.size() > te)
+                {
+                    if (nodep->mSavedGLTFOverrideMaterials[te].isNull())
+                    {
+                        // populate with default values, default values basically mean 'not in use'
+                        nodep->mSavedGLTFOverrideMaterials[te] = new LLGLTFMaterial();
+                    }
+
+                    switch (mDirtyFlag)
+                    {
+                    //Textures
+                    case MATERIAL_BASE_COLOR_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setBaseColorId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    case MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setOcclusionRoughnessMetallicId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    case MATERIAL_EMISIVE_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setEmissiveId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    case MATERIAL_NORMAL_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setNormalId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    // Colors
+                    case MATERIAL_BASE_COLOR_DIRTY:
+                    {
+                        LLColor4 ret = linearColor4(LLColor4(mCtrl->getValue()));
+                        // except transparency
+                        ret.mV[3] = nodep->mSavedGLTFOverrideMaterials[te]->mBaseColor.mV[3];
+                        nodep->mSavedGLTFOverrideMaterials[te]->setBaseColorFactor(ret, true);
+                        break;
+                    }
+                    case MATERIAL_EMISIVE_COLOR_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setEmissiveColorFactor(LLColor3(mCtrl->getValue()), true);
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+
+        const LLUICtrl* mCtrl;
+        S32 mDirtyFlag;
+    } func(map_ctrl, mUnsavedChanges);
+
+    LLSelectMgr::getInstance()->getSelection()->applyToNodes(&func);
 }
 
 bool FSPanelFace::onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item)
