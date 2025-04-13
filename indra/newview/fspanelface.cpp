@@ -220,10 +220,10 @@ void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32&
 //
 
 // local preview of material changes
-class LLRenderMaterialFunctor : public LLSelectedTEFunctor
+class FSRenderMaterialFunctor : public LLSelectedTEFunctor
 {
 public:
-    LLRenderMaterialFunctor(const LLUUID &id)
+    FSRenderMaterialFunctor(const LLUUID &id)
         : mMatId(id)
     {
     }
@@ -249,10 +249,10 @@ private:
 // TODO: look at how to handle local textures, especially when saving materials
 // - Would be nice if we had this in its own file so we could include it from both sides ... -Zi
 //
-class LLRenderMaterialOverrideFunctor : public LLSelectedNodeFunctor
+class FSRenderMaterialOverrideFunctor : public LLSelectedNodeFunctor
 {
 public:
-    LLRenderMaterialOverrideFunctor(
+    FSRenderMaterialOverrideFunctor(
         LLGLTFMaterial* material_to_apply,
         U32 unsaved_changes
     )
@@ -1100,7 +1100,7 @@ void FSPanelFace::draw()
         getGLTFMaterial(mat);
 
         LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
-        LLRenderMaterialOverrideFunctor override_func(mat, mUnsavedChanges);
+        FSRenderMaterialOverrideFunctor override_func(mat, mUnsavedChanges);
         selected_objects->applyToNodes(&override_func);
 
         LLGLTFMaterialList::flushUpdates();
