@@ -667,6 +667,9 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="TooltipCantCreateOutfit">
 		Ein oder mehrere Objekte können nicht innerhalb von „Outfits“ verwendet werden.
 	</string>
+	<string name="TooltipCantMoveOutfitIntoOutfit">
+		Outfit kann nicht in ein anderes Outfit verschoben werden.
+	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Sie können einen Ordner nicht in einen seiner untergeordneten Ordner verschieben
 	</string>

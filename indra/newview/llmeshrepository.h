@@ -531,6 +531,8 @@ public:
     ~LLMeshRepoThread();
 
     virtual void run();
+    void cleanup();
+    bool isShuttingDown() { return mShuttingDown; }
 
     void lockAndLoadMeshLOD(const LLVolumeParams& mesh_params, S32 lod);
     void loadMeshLOD(const LLVolumeParams& mesh_params, S32 lod);
@@ -611,6 +613,7 @@ private:
     U8* getDiskCacheBuffer(S32 size);
     S32 mDiskCacheBufferSize = 0;
     U8* mDiskCacheBuffer = nullptr;
+    bool mShuttingDown = false;
 };
 
 

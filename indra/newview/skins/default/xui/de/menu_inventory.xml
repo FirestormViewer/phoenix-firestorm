@@ -19,6 +19,7 @@
 	<menu_item_call label="Fundstücke ausleeren" name="Empty Lost And Found"/>
 	<menu_item_call label="Neuer Ordner" name="New Folder"/>
 	<menu_item_call label="Neuer Ordner" name="New Listing Folder"/>
+	<menu_item_call label="Neuer Ordner" name="New Outfit Folder"/>
 	<menu_item_call label="Neues Outfit" name="New Outfit"/>
 	<menu_item_call label="Neues Skript" name="New Script"/>
 	<menu_item_call label="Neue Notizkarte" name="New Note"/>

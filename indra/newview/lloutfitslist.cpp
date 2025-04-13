@@ -890,6 +890,50 @@ void LLOutfitListBase::observerCallback(const LLUUID& category_id)
     refreshList(category_id);
 }
 
+class LLIsOutfitListFolder : public LLInventoryCollectFunctor
+{
+public:
+    LLIsOutfitListFolder()
+    {
+        mOutfitsId = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
+    }
+    virtual ~LLIsOutfitListFolder() {}
+
+    bool operator()(LLInventoryCategory* cat, LLInventoryItem* item) override
+    {
+        if (cat)
+        {
+            if (cat->getPreferredType() == LLFolderType::FT_OUTFIT)
+            {
+                return true;
+            }
+            if (cat->getPreferredType() == LLFolderType::FT_NONE
+                && cat->getParentUUID() == mOutfitsId)
+            {
+                LLViewerInventoryCategory* inv_cat = dynamic_cast<LLViewerInventoryCategory*>(cat);
+                if (inv_cat && inv_cat->getDescendentCount() > 3)
+                {
+                    LLInventoryModel::cat_array_t* cats;
+                    LLInventoryModel::item_array_t* items;
+                    gInventory.getDirectDescendentsOf(inv_cat->getUUID(), cats, items);
+                    if (cats->empty() // protection against outfits inside
+                        && items->size() > 3) // eyes, skin, hair and shape are required
+                    {
+                        // For now assume this to be an old style outfit, not a subfolder
+                        // but ideally no such 'outfits' should be left in My Outfits
+                        // Todo: stop counting FT_NONE as outfits,
+                        // convert obvious outfits into FT_OUTFIT
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+protected:
+    LLUUID mOutfitsId;
+};
+
 void LLOutfitListBase::refreshList(const LLUUID& category_id)
 {
     bool wasNull = mRefreshListState.CategoryUUID.isNull();
@@ -899,36 +943,13 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
     LLInventoryModel::item_array_t item_array;
 
     // Collect all sub-categories of a given category.
-    // <FS:ND> FIRE-6958/VWR-2862; Make sure to only collect folders of type FT_OUTFIT
-    class ndOutfitsCollector: public LLIsType
-    {
-    public:
-        ndOutfitsCollector()
-            : LLIsType( LLAssetType::AT_CATEGORY )
-        { }
-
-        virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-        {
-            if( !LLIsType::operator()( cat, item ) )
-                return false;
-
-            if( cat && LLFolderType::FT_OUTFIT == cat->getPreferredType() )
-                return true;
-
-            return false;
-        }
-    };
-
-    //  LLIsType is_category(LLAssetType::AT_CATEGORY);
-    ndOutfitsCollector is_category;
-    // </FS:ND>
-
+    LLIsOutfitListFolder is_outfit;
     gInventory.collectDescendentsIf(
         category_id,
         cat_array,
         item_array,
         LLInventoryModel::EXCLUDE_TRASH,
-        is_category);
+        is_outfit);
 
     // Memorize item names for each UUID
     std::map<LLUUID, std::string> names;
