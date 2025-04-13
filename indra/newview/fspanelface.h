@@ -485,6 +485,7 @@ private:
 
     // Dirty flags - taken from llmaterialeditor.cpp ... LL please put this in a .h! -Zi
     U32 mUnsavedChanges; // flags to indicate individual changed parameters
+    U32 mRevertedChanges; // flags to indicate individual reverted parameters
 
     // Hey look everyone, a type-safe alternative to copy and paste! :)
     //

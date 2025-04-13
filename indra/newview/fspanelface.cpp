@@ -243,9 +243,9 @@ private:
 };
 
 //
-// keep LLRenderMaterialOverrideFunctor in sync with llmaterialeditor.cpp just take
-// out the reverting functionality as it makes no real sense with all the texture
-// controls visible for the material at all times.
+// keep LLRenderMaterialOverrideFunctor in sync with llmaterialeditor.cpp just take out the
+// reverting functionality of non texture and color related GLTF settings as it makes no
+// real sense with all the texture controls visible for the material at all times.
 // TODO: look at how to handle local textures, especially when saving materials
 // - Would be nice if we had this in its own file so we could include it from both sides ... -Zi
 //
@@ -254,10 +254,12 @@ class FSRenderMaterialOverrideFunctor : public LLSelectedNodeFunctor
 public:
     FSRenderMaterialOverrideFunctor(
         LLGLTFMaterial* material_to_apply,
-        U32 unsaved_changes
+        U32 unsaved_changes,
+        U32 reverted_changes
     )
     : mMaterialToApply(material_to_apply)
     , mUnsavedChanges(unsaved_changes)
+    , mRevertedChanges(reverted_changes)
     {
     }
 
@@ -314,17 +316,48 @@ public:
                 material = new LLGLTFMaterial(*material);
             }
 
+            LLPointer<LLGLTFMaterial> revert_mat;
+            if (nodep->mSavedGLTFOverrideMaterials.size() > te)
+            {
+                if (nodep->mSavedGLTFOverrideMaterials[te].notNull())
+                {
+                    revert_mat = nodep->mSavedGLTFOverrideMaterials[te];
+                }
+                else
+                {
+                    // mSavedGLTFOverrideMaterials[te] being present but null
+                    // means we need to use a default value
+                    revert_mat = new LLGLTFMaterial();
+                }
+            }
+            // else can not revert at all
+
             // Override object's values with values from editor where appropriate
             if (mUnsavedChanges & MATERIAL_BASE_COLOR_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_BASE_COLOR_DIRTY" << LL_ENDL;
                 material->setBaseColorFactor(mMaterialToApply->mBaseColor, true);
             }
+            else if ((mRevertedChanges & MATERIAL_BASE_COLOR_DIRTY) && revert_mat.notNull())
+            {
+                material->setBaseColorFactor(revert_mat->mBaseColor, false);
+            }
 
             if (mUnsavedChanges & MATERIAL_BASE_COLOR_TEX_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_BASE_COLOR_TEX_DIRTY" << LL_ENDL;
                 material->setBaseColorId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR], true);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_BASE_COLOR_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
+            else if ((mRevertedChanges & MATERIAL_BASE_COLOR_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setBaseColorId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR], false);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_BASE_COLOR_TEX_DIRTY);
                 if (tracking_id.notNull())
@@ -346,11 +379,33 @@ public:
                 }
                 */
             }
+            else if ((mRevertedChanges & MATERIAL_NORMAL_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setNormalId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL], false);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_NORMAL_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
 
             if (mUnsavedChanges & MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY" << LL_ENDL;
                 material->setOcclusionRoughnessMetallicId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS], true);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
+            else if ((mRevertedChanges & MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setOcclusionRoughnessMetallicId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS], false);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY);
                 if (tracking_id.notNull())
@@ -377,11 +432,26 @@ public:
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_EMISIVE_COLOR_DIRTY" << LL_ENDL;
                 material->setEmissiveColorFactor(LLColor3(mMaterialToApply->mEmissiveColor), true);
             }
+            else if ((mRevertedChanges & MATERIAL_EMISIVE_COLOR_DIRTY) && revert_mat.notNull())
+            {
+                material->setEmissiveColorFactor(revert_mat->mEmissiveColor, false);
+            }
 
             if (mUnsavedChanges & MATERIAL_EMISIVE_TEX_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_EMISIVE_TEX_DIRTY" << LL_ENDL;
                 material->setEmissiveId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE], true);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_EMISIVE_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
+            else if ((mRevertedChanges & MATERIAL_EMISIVE_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setEmissiveId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE], false);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_EMISIVE_TEX_DIRTY);
                 if (tracking_id.notNull())
@@ -418,6 +488,7 @@ public:
 private:
     LLGLTFMaterial* mMaterialToApply;
     U32 mUnsavedChanges;
+    U32 mRevertedChanges;
 };
 
 //
@@ -621,6 +692,7 @@ FSPanelFace::FSPanelFace() :
     LLPanel(),
     mNeedMediaTitle(true),
     mUnsavedChanges(0),
+    mRevertedChanges(0),
     mExcludeWater(false)
 {
     // register callbacks before buildFromFile() or they won't work!
@@ -1092,7 +1164,7 @@ void FSPanelFace::draw()
     // not sure if there isn't a better place for this, but for the time being this seems to work,
     // and trying other places always failed in some way or other -Zi
     static U64MicrosecondsImplicit next_update_time = 0LL;
-    if (mUnsavedChanges && gFrameTime > next_update_time)
+    if ((mUnsavedChanges || mRevertedChanges) && gFrameTime > next_update_time)
     {
         LL_DEBUGS("APPLY_GLTF_CHANGES") << "detected unsaved changes: " << mUnsavedChanges << LL_ENDL;
 
@@ -1100,12 +1172,13 @@ void FSPanelFace::draw()
         getGLTFMaterial(mat);
 
         LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
-        FSRenderMaterialOverrideFunctor override_func(mat, mUnsavedChanges);
+        FSRenderMaterialOverrideFunctor override_func(mat, mUnsavedChanges, mRevertedChanges);
         selected_objects->applyToNodes(&override_func);
 
         LLGLTFMaterialList::flushUpdates();
 
         mUnsavedChanges = 0;
+        mRevertedChanges = 0;
 
         next_update_time = gFrameTime + 100000LL;   // 100 ms
 
@@ -3790,7 +3863,30 @@ void FSPanelFace::updatePBROverrideDisplay()
 
 void FSPanelFace::onCancelPbr(const LLUICtrl* map_ctrl)
 {
-    // TODO -Zi
+    if (map_ctrl == mBaseTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_BASE_COLOR_TEX_DIRTY;
+    }
+    else if (map_ctrl == mNormalTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_NORMAL_TEX_DIRTY;
+    }
+    else if (map_ctrl == mEmissiveTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_EMISIVE_TEX_DIRTY;
+    }
+    else if (map_ctrl == mORMTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY;
+    }
+    else if (map_ctrl == mBaseTintPBR)
+    {
+        mRevertedChanges |= MATERIAL_BASE_COLOR_DIRTY;
+    }
+    else if (map_ctrl == mEmissiveTintPBR)
+    {
+        mRevertedChanges |= MATERIAL_EMISIVE_COLOR_DIRTY;
+    }
 }
 
 void FSPanelFace::onSelectPbr(const LLUICtrl* map_ctrl)
