@@ -1028,6 +1028,12 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
+    <color
+     name="SearchableControlHighlightFontColor"
+     reference="Red" />
+    <color
+     name="SearchableControlHighlightBgColor"
+     reference="Red" />
 <!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
@@ -1334,9 +1340,6 @@
   <color
       name="MapPickRadiusColor"
       reference="MapFrustumColor" />
-  <color
-      name="SearchableControlHighlightColor"
-      reference="Red" />
   <color
       name="Slidermark"
       reference="DkGray" />

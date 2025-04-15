@@ -620,7 +620,8 @@ std::string USE_TEXTURE_LABEL;      // subtly different (and more clear) name fr
 FSPanelFace::FSPanelFace() :
     LLPanel(),
     mNeedMediaTitle(true),
-    mUnsavedChanges(0)
+    mUnsavedChanges(0),
+    mExcludeWater(false)
 {
     // register callbacks before buildFromFile() or they won't work!
     mCommitCallbackRegistrar.add("BuildTool.Flip",              boost::bind(&FSPanelFace::onCommitFlip, this, _2));
@@ -740,9 +741,9 @@ bool FSPanelFace::postBuild()
     SKIN_CHECK(mComboAlphaMode = findChild<LLComboBox>("combobox alphamode"));
     SKIN_CHECK(mCtrlMaskCutoff = findChild<LLSpinCtrl>("maskcutoff"));
     SKIN_CHECK(mCheckFullbright = findChild<LLCheckBoxCtrl>("checkbox fullbright"));
+    SKIN_CHECK(mCheckHideWater = findChild<LLCheckBoxCtrl>("checkbox_hide_water"));
 
     // Blinn-Phong texture transforms and controls
-    SKIN_CHECK(mLabelTexGen = findChild<LLView>("tex gen"));
     SKIN_CHECK(mComboTexGen = findChild<LLComboBox>("combobox texgen"));
     SKIN_CHECK(mCheckPlanarAlign = findChild<LLCheckBoxCtrl>("checkbox planar align"));
     SKIN_CHECK(mLabelBumpiness = findChild<LLView>("label bumpiness"));
@@ -828,6 +829,7 @@ bool FSPanelFace::postBuild()
     mComboAlphaMode->setCommitCallback(boost::bind(&FSPanelFace::onCommitAlphaMode, this));
     mCtrlMaskCutoff->setCommitCallback(boost::bind(&FSPanelFace::onCommitMaterialMaskCutoff, this));
     mCheckFullbright->setCommitCallback(boost::bind(&FSPanelFace::onCommitFullbright, this));
+    mCheckHideWater->setCommitCallback(boost::bind(&FSPanelFace::onCommitHideWater, this));
 
     // Blinn-Phong texture transforms and controls
     mComboTexGen->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexGen, this));
@@ -1657,6 +1659,21 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
         mCtrlColorTransp->setEnabled(editable );
         mColorTransPercent->setMouseOpaque(editable );
 
+        // Water exclusion
+        mExcludeWater = (id == IMG_ALPHA_GRAD) && normmap_id.isNull() && specmap_id.isNull() && (transparency == 0);
+        {
+            mCheckHideWater->setEnabled(editable && !has_pbr_material && !isMediaTexSelected());
+            mCheckHideWater->set(mExcludeWater);
+            editable &= !mExcludeWater;
+
+            // disable controls for water exclusion face after updateVisibility, so the whole panel is not hidden
+            // TODO
+            // mComboMatMedia->setEnabled(editable);
+            // mRadioMaterialType->setEnabled(editable);
+            // mRadioPbrType->setEnabled(editable);
+            // mCheckSyncSettings->setEnabled(editable);
+        }
+
         // Shiny
         U8 shiny = 0;
         {
@@ -2077,7 +2094,6 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 
             mComboTexGen->setEnabled(editable);
             mComboTexGen->setTentative(!identical);
-            mLabelTexGen->setEnabled(editable);
         }
 
         {
@@ -2582,7 +2598,9 @@ void FSPanelFace::updateCopyTexButton()
     mBtnCopyFaces->setEnabled(objectp && objectp->getPCode() == LL_PCODE_VOLUME && objectp->permModify()
         && !objectp->isPermanentEnforced() && !objectp->isInventoryPending()
         && (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)
-        && LLMaterialEditor::canClipboardObjectsMaterial());
+        && LLMaterialEditor::canClipboardObjectsMaterial()
+        && !mExcludeWater
+    );
     std::string tooltip = (objectp && objectp->isInventoryPending()) ? LLTrans::getString("LoadingContents") : getString("paste_options");
     mBtnCopyFaces->setToolTip(tooltip);
 }
@@ -3526,6 +3544,37 @@ void FSPanelFace::onCommitAlphaMode()
 void FSPanelFace::onCommitFullbright()
 {
     sendFullbright();
+}
+
+void FSPanelFace::onCommitHideWater()
+{
+    if (mCheckHideWater->get())
+    {
+        LLHandle<LLPanel> handle = getHandle();
+        LLNotificationsUtil::add("WaterExclusionSurfacesWarning", LLSD(), LLSD(),
+            [handle](const LLSD& notification, const LLSD& response)
+        {
+            if(FSPanelFace* panel = (FSPanelFace*)handle.get())
+            {
+                if (LLNotificationsUtil::getSelectedOption(notification, response) == 1)
+                {
+                    panel->mCheckHideWater->setValue(false);
+                    return;
+                }
+                // apply invisiprim texture and reset related params to set water exclusion surface
+                panel->sendBump(0);
+                panel->sendShiny(0);
+                LLSelectMgr::getInstance()->selectionSetAlphaOnly(1.f);
+                LLSelectMgr::getInstance()->selectionSetImage(IMG_ALPHA_GRAD);
+                LLSelectedTEMaterial::setDiffuseAlphaMode(panel, LLMaterial::DIFFUSE_ALPHA_MODE_BLEND);
+            }
+        });
+    }
+    else
+    {
+        // reset texture to default plywood
+        LLSelectMgr::getInstance()->selectionSetImage(DEFAULT_OBJECT_TEXTURE);
+    }
 }
 
 void FSPanelFace::onCommitGlow()
@@ -5684,6 +5733,26 @@ bool FSPanelFace::isIdenticalPlanarTexgen()
     bool identical_texgen = false;
     LLSelectedTE::getTexGen(selected_texgen, identical_texgen);
     return (identical_texgen && (selected_texgen == LLTextureEntry::TEX_GEN_PLANAR));
+}
+
+bool FSPanelFace::isMediaTexSelected()
+{
+    LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+    if (LLViewerObject* objectp = node->getObject())
+    {
+        S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces());
+        for (S32 te = 0; te < num_tes; ++te)
+        {
+            if (node->isTESelected(te))
+            {
+                if (objectp->getTE(te) && objectp->getTE(te)->hasMedia())
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void FSPanelFace::LLSelectedTE::getFace(LLFace*& face_to_return, bool& identical_face)

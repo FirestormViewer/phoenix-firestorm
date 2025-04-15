@@ -96,6 +96,8 @@ public:
     /*virtual*/ LLJoint*    getJoint( const JointKey &name );
 // </FS:ND>
 
+    /*virtual*/ void renderJoints();
+
     // <FS:Ansariel> [Legacy Bake]
     ///*virtual*/ bool setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
     ///*virtual*/ bool setVisualParamWeight(const char* param_name, F32 weight);
@@ -121,6 +123,8 @@ private:
     // <FS:Ansariel> [Legacy Bake]
     //bool setParamWeight(const LLViewerVisualParam *param, F32 weight);
     bool setParamWeight(const LLViewerVisualParam *param, F32 weight, bool upload_bake = false);
+
+    std::mutex          mJointMapMutex; // getJoint gets used from mesh thread
 
 /********************************************************************************
  **                                                                            **

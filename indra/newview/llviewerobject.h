@@ -412,6 +412,8 @@ public:
     LLViewerTexture     *getTENormalMap(const U8 te) const;
     LLViewerTexture     *getTESpecularMap(const U8 te) const;
 
+    void clearTEWaterExclusion(const U8 te);
+
     bool                        isImageAlphaBlended(const U8 te) const;
 
     void fitFaceTexture(const U8 face);
@@ -709,6 +711,7 @@ private:
     // forms task inventory request after some time passed, marks request as pending
     void fetchInventoryDelayed(const F64 &time_seconds);
     static void fetchInventoryDelayedCoro(const LLUUID task_inv, const F64 time_seconds);
+    static void fetchInventoryFromCapCoro(const LLUUID task_inv);
 
 public:
     //
@@ -850,6 +853,7 @@ protected:
 
     static void processTaskInvFile(void** user_data, S32 error_code, LLExtStat ext_status);
     bool loadTaskInvFile(const std::string& filename);
+    void loadTaskInvLLSD(const LLSD &inv_result);
     void doInventoryCallback();
 
     bool isOnMap();
