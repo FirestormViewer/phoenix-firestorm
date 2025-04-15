@@ -103,11 +103,19 @@
              width="70" />
             <check_box
              height="19"
-             label="Full Bright"
+             label="Full bright"
              layout="topleft"
              left="7"
              name="checkbox fullbright"
              top_pad="4"
+             width="81" />
+            <check_box
+             height="19"
+             label="Hide water"
+             layout="topleft"
+             left="172"
+             name="checkbox_hide_water"
+             top_delta="0"
              width="81" />
             <button
              follows="top|right"

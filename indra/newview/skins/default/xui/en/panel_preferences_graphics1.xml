@@ -1250,7 +1250,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="World Updating"
-         top_pad="5"
+         top_pad="2"
          width="308">
             World Updating:
         </text>
@@ -1263,7 +1263,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="5"
          name="WorldPause"
-         top_pad="6"
+         top_pad="4"
          width="256"/>
 
          <check_box
@@ -1327,7 +1327,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="10"
          name="FSRestrictMaxTextureSize"
-         top_pad="4"
+         top_pad="2"
          width="250">
             Restrict maximum texture resolution to:
         </text>
@@ -1359,7 +1359,7 @@ If you do not understand the distinction then leave this control alone."
         <text
          type="string"
          length="1"
-         top_pad="10"
+         top_pad="3"
          follows="top|left"
          height="18"
          width="150"
@@ -1533,7 +1533,7 @@ If you do not understand the distinction then leave this control alone."
          min_val="1"
          name="PrecachingDelay"
          left="10"
-         top_pad="10"
+         top_pad="5"
          width="405" />
         <text
          type="string"
@@ -1599,6 +1599,47 @@ If you do not understand the distinction then leave this control alone."
          width="405">
         </slider>
         <!-- End of Sharpening Settings-->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="ReflectionProbeCount"
+         top_pad="2"
+         width="150">
+            Max. Reflection Probes:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeCount"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-2"
+         name="ProbeCount"
+         width="150">
+         <combo_box.item
+          label="None"
+          name="1"
+          value="1"/>
+         <combo_box.item
+          label="Low"
+          name="32"
+          value="32"/>
+         <combo_box.item
+          label="Medium"
+          name="64"
+          value="64"/>
+         <combo_box.item
+          label="High"
+          name="128"
+          value="128"/>
+         <combo_box.item
+          label="Ultra"
+          name="256"
+          value="256"/>
+        </combo_box>
         <!-- Tone Mapping Settings -->
         <text
          type="string"
@@ -1608,7 +1649,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="10"
          name="TonemapTypeText"
-         top_pad="8"
+         top_pad="6"
          width="150">
             Tone Mapper:
         </text>

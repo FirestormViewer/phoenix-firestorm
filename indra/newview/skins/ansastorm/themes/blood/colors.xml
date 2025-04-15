@@ -1032,6 +1032,12 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
+    <color
+     name="SearchableControlHighlightFontColor"
+     reference="Red" />
+    <color
+     name="SearchableControlHighlightBgColor"
+     reference="Red" />
 <!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
@@ -1163,9 +1169,6 @@
   <color
       name="MapPickRadiusColor"
       reference="EmphasisColor_35" />
-  <color
-      name="SearchableControlHighlightColor"
-      reference="Red" />
   <color
     name="OutfitGalleryItemSelected"
     reference="EmphasisColor" />

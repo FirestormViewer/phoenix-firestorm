@@ -679,6 +679,14 @@
          parameter="copy_uuid" />
     </menu_item_call>
     <menu_item_call
+     label="Copy UUID"
+     layout="topleft"
+     name="Copy UUID">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="copy_folder_uuid" />
+    </menu_item_call>
+    <menu_item_call
      label="Restore to Last Position"
      layout="topleft"
      name="Restore to Last Position">

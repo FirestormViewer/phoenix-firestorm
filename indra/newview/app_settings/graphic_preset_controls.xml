@@ -93,6 +93,7 @@
 		<string>RenderTerrainPBRPlanarSampleCount</string>
 		<string>RenderTerrainPBRTriplanarBlendFactor</string>
 		<string>RenderTerrainScale</string>
+		<string>RenderTextureVRAMDivisor</string>
 		<string>RenderTonemapMix</string>
 		<string>RenderTonemapType</string>
 		<string>RenderTreeLODFactor</string>
