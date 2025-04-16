@@ -236,9 +236,9 @@
                     can_edit_text="true"/>                    
         </layout_panel>
         <layout_panel
-                name="moon_layout"
                 border="true"
                 bevel_style="in"
+                name="moon_layout"
                 auto_resize="true"
                 user_resize="false"
                 visible="true"

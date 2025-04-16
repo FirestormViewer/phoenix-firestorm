@@ -11,5 +11,7 @@
 	<menu_item_call label="Ausziehen" name="take_off"/>
 	<menu_item_call label="Bearbeiten" name="edit"/>
 	<menu_item_call label="Objektprofil" name="object_profile"/>
+	<menu_item_call label="Zu Favoriten hinzufügen" name="favorites_add"/>
+	<menu_item_call label="Aus Favoriten entfernen" name="favorites_remove"/>
 	<menu_item_call label="Original anzeigen" name="show_original"/>
 </context_menu>

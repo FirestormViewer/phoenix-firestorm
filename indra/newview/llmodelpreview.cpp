@@ -3228,7 +3228,7 @@ void LLModelPreview::updateStatusMessages()
 
         if (lod != lod_high)
         {
-            if (total_submeshes[lod] && total_submeshes[lod] != total_submeshes[lod_high])
+            if (total_submeshes[lod] && total_submeshes[lod] > total_submeshes[lod_high])
             { //number of submeshes is different
                 message = "mesh_status_submesh_mismatch";
                 upload_status[lod] = 2;
@@ -4431,7 +4431,6 @@ bool LLModelPreview::render()
             fmp->setViewOptionEnabled("show_skin_weight", show_skin_weight);
         }
     }
-    //if (this) return TRUE;
 
     if (upload_skin && !has_skin_weights)
     { //can't upload skin weights if model has no skin weights

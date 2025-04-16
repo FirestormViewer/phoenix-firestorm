@@ -85,8 +85,8 @@ constexpr F32 ALPHA_EMPTY_THRESHOLD_RATIO = 0.999f;
 //-----------------------------------------------------------------------------
 // LLFloaterImagePreview()
 //-----------------------------------------------------------------------------
-LLFloaterImagePreview::LLFloaterImagePreview(const std::string& filename) :
-    LLFloaterNameDesc(filename),
+LLFloaterImagePreview::LLFloaterImagePreview(const LLSD& args) :
+    LLFloaterNameDesc(args),
 
     mAvatarPreview(NULL),
     mSculptedPreview(NULL),

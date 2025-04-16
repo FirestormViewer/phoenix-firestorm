@@ -1294,6 +1294,15 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 			<button name="SetName" text="Neuen Namen verwenden"/>
 		</form>
 	</notification>
+	<notification label="Automatische Ersetzungsliste umbenennen" name="RemoveAutoReplaceList">
+		„[LIST_NAME]“ enthält [MAP_SIZE] Einträge.
+
+Sind Sie sicher, dass Sie diese Liste löschen möchten?
+		<form name="form">
+			<button name="DeleteList" text="Löschen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="InvalidAutoReplaceEntry">
 		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein.
 	</notification>

@@ -634,7 +634,7 @@ void LLInventoryGallery::removeFromLastRow(LLInventoryGalleryItem* item)
     mItemPanels.pop_back();
 }
 
-LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, time_t creation_date, bool is_link, bool is_worn)
+LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, time_t creation_date, bool is_link, bool is_worn, bool is_favorite)
 {
     LLInventoryGalleryItem::Params giparams;
     giparams.visible = true;
@@ -645,6 +645,7 @@ LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, L
     gitem->setUUID(item_id);
     gitem->setGallery(this);
     gitem->setType(type, inventory_type, flags, is_link);
+    gitem->setFavorite(is_favorite);
     gitem->setLoadImmediately(mLoadThumbnailsImmediately);
     gitem->setThumbnail(thumbnail_id);
     gitem->setWorn(is_worn);
@@ -937,8 +938,19 @@ bool LLInventoryGallery::updateAddedItem(LLUUID item_id)
     }
 
     bool res = false;
+    bool is_favorite = get_is_favorite(obj);
 
-    LLInventoryGalleryItem* item = buildGalleryItem(name, item_id, obj->getType(), thumbnail_id, inventory_type, misc_flags, obj->getCreationDate(), obj->getIsLinkType(), is_worn);
+    LLInventoryGalleryItem* item = buildGalleryItem(
+        name,
+        item_id,
+        obj->getType(),
+        thumbnail_id,
+        inventory_type,
+        misc_flags,
+        obj->getCreationDate(),
+        obj->getIsLinkType(),
+        is_worn,
+        is_favorite);
     mItemMap.insert(LLInventoryGallery::gallery_item_map_t::value_type(item_id, item));
     if (mGalleryCreated)
     {
@@ -975,7 +987,7 @@ void LLInventoryGallery::updateRemovedItem(LLUUID item_id)
     mItemBuildQuery.erase(item_id);
 }
 
-void LLInventoryGallery::updateChangedItemName(LLUUID item_id, std::string name)
+void LLInventoryGallery::updateChangedItemData(LLUUID item_id, std::string name, bool is_favorite)
 {
     gallery_item_map_t::iterator iter = mItemMap.find(item_id);
     if (iter != mItemMap.end())
@@ -984,6 +996,7 @@ void LLInventoryGallery::updateChangedItemName(LLUUID item_id, std::string name)
         if (item)
         {
             item->setItemName(name);
+            item->setFavorite(is_favorite);
         }
     }
 }
@@ -2339,7 +2352,7 @@ void LLInventoryGallery::refreshList(const LLUUID& category_id)
             return;
         }
 
-        updateChangedItemName(*items_iter, obj->getName());
+        updateChangedItemData(*items_iter, obj->getName(), get_is_favorite(obj));
         mNeedsArrange = true;
     }
 
@@ -2853,6 +2866,14 @@ void LLInventoryGalleryItem::setType(LLAssetType::EType type, LLInventoryType::E
 
     getChild<LLIconCtrl>("item_type")->setValue(icon_name);
     getChild<LLIconCtrl>("link_overlay")->setVisible(is_link);
+}
+
+void LLInventoryGalleryItem::setFavorite(bool is_favorite)
+{
+    getChild<LLIconCtrl>("fav_icon")->setVisible(is_favorite);
+    static const LLUIColor text_color = LLUIColorTable::instance().getColor("LabelTextColor", LLColor4::white);
+    static const LLUIColor favorite_color = LLUIColorTable::instance().getColor("InventoryFavoriteColor", LLColor4::white);
+    mNameText->setReadOnlyColor(is_favorite ? favorite_color : text_color);
 }
 
 void LLInventoryGalleryItem::setThumbnail(LLUUID id)

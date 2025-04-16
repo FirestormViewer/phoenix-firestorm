@@ -120,11 +120,11 @@ void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin
         if (!avatar->getJoint(skin->mJointNames[j]))
         {
             //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-            //LL_DEBUGS("Avatar") << avatar->getFullname() << " mesh rigged to invalid joint " << skin->mJointNames[j] << LL_ENDL;
-            //LL_WARNS_ONCE("Avatar") << avatar->getFullname() << " mesh rigged to invalid joint" << skin->mJointNames[j] << LL_ENDL;
+            //LL_DEBUGS("Avatar") << avatar->getDebugName() << " mesh rigged to invalid joint " << skin->mJointNames[j] << LL_ENDL;
+            //LL_WARNS_ONCE("Avatar") << avatar->getDebugName() << " mesh rigged to invalid joint" << skin->mJointNames[j] << LL_ENDL;
             //skin->mJointNames[j] = "mPelvis";
-            LL_DEBUGS("Avatar") << avatar->getFullname() << " mesh rigged to invalid joint " << skin->mJointNames[j].mName << LL_ENDL;
-            LL_WARNS_ONCE("Avatar") << avatar->getFullname() << " mesh rigged to invalid joint" << skin->mJointNames[j].mName << LL_ENDL;
+            LL_DEBUGS("Avatar") << avatar->getDebugName() << " mesh rigged to invalid joint " << skin->mJointNames[j].mName << LL_ENDL;
+            LL_WARNS_ONCE("Avatar") << avatar->getDebugName() << " mesh rigged to invalid joint" << skin->mJointNames[j].mName << LL_ENDL;
             skin->mJointNames[j] = JointKey::construct("mPelvis");
             //</FS:ND>
             skin->mJointNumsInitialized = false; // force update after names change.

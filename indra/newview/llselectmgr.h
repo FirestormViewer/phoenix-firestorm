@@ -1013,6 +1013,7 @@ private:
     bool                    mForceSelection;
 
     std::vector<LLAnimPauseRequest> mPauseRequests;
+    boost::signals2::connection mSlectionLodModChangedConnection;
 
 // <FS:KC> show/hide build highlight
     EFSShowHideHighlight    mFSShowHideHighlight;

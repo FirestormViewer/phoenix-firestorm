@@ -38,6 +38,20 @@
         <on_click
          function="Wearing.TakeOffDetach" />
     </menu_item_call>
+    <menu_item_call
+     label="Add to Favorites"
+     layout="topleft"
+     name="favorites_add">
+       <on_click
+        function="Wearing.Favorite" />
+    </menu_item_call>
+    <menu_item_call
+     label="Remove from Favorites"
+     layout="topleft"
+     name="favorites_remove">
+       <on_click
+        function="Wearing.Favorite" />
+    </menu_item_call>
     <menu_item_separator
      layout="topleft"
      name="edit_outfit_separator" />

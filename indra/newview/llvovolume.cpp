@@ -1670,6 +1670,7 @@ bool LLVOVolume::calcLOD()
             const LLVector3* box = avatar->getLastAnimExtents();
             LLVector3 diag = box[1] - box[0];
             radius = diag.magVec() * 0.5f;
+            LL_DEBUGS("DynamicBox") << avatar->getDebugName() << " diag " << diag << " radius " << radius << LL_ENDL;
         }
         else
         {
@@ -1680,6 +1681,7 @@ bool LLVOVolume::calcLOD()
             const LLVector3* box = avatar->getLastAnimExtents();
             LLVector3 diag = box[1] - box[0];
             radius = diag.magVec(); // preserve old BinRadius behavior - 2x off
+            LL_DEBUGS("DynamicBox") << avatar->getDebugName() << " diag " << diag << " radius " << radius << LL_ENDL;
         }
         if (distance <= 0.f || radius <= 0.f)
         {
@@ -1744,10 +1746,15 @@ bool LLVOVolume::calcLOD()
 
     mLODAdjustedDistance = distance;
 
+    static LLCachedControl<S32> debug_selection_lods(gSavedSettings, "DebugSelectionLODs", 0);
     if (isHUDAttachment())
     {
         // HUDs always show at highest detail
         cur_detail = 3;
+    }
+    else if (isSelected() && debug_selection_lods() >= 0)
+    {
+        cur_detail = llmin(debug_selection_lods(), 3);
     }
     else
     {
