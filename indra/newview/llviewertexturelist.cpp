@@ -391,6 +391,7 @@ void LLViewerTextureList::dump()
     std::array<S32, MAX_DISCARD_LEVEL * 2 + 2> image_counts{0}; // Double the size for higher discards from textures < 1024 (2048 can make a 7 and 4096 could make an 8)
     std::array<S32, 12 * 12> size_counts{0}; // Track the 12 possible sizes (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048)
     std::array<S32, (MAX_DISCARD_LEVEL * 2 + 2) * 12> discard_counts{0}; // Also need to an 1 additional as -1 is a valid discard level (not loaded by reported as a 1x1 texture)
+    std::array<S32, LLViewerTexture::BOOST_MAX_LEVEL * 12> boost_counts{0}; // Track the # of textures at boost levels by 12 possible sizes
     // Don't Init the buffers with 0's like it's the the 1980's...
     
     // </FS:minerjr> [FIRE-35081]
@@ -432,7 +433,9 @@ void LLViewerTextureList::dump()
         S32 y_index = (S32)log2(image->getHeight()); // Convert the height into a 0 based index by taking the Log2 of the size to get the exponent of the size. (1 = 2^0, 2 = 2^1, 4 = 2^2...)
         size_counts[x_index + y_index * 12] += 1; // Add this texture's dimensions to the size count
         // Onlyuse the largest size for the texture's discard level(for non-square textures)
-        discard_counts[(image->getDiscardLevel() + 1) + (y_index > x_index ? y_index : x_index) * (MAX_DISCARD_LEVEL * 2 + 2)] += 1;
+        S32 max_dimension = (y_index > x_index ? y_index : x_index);
+        discard_counts[(image->getDiscardLevel() + 1) + max_dimension * (MAX_DISCARD_LEVEL * 2 + 2)] += 1;
+        boost_counts[image->getBoostLevel() + max_dimension * (LLViewerTexture::BOOST_MAX_LEVEL)] += 1;
         texture_count++;
         textures_close_to_camera += S32(image->getCloseToCamera());
         // </FS:minerjr> [FIRE-35081]
@@ -510,6 +513,12 @@ void LLViewerTextureList::dump()
         }
     }
 
+    header_break = "";
+    for (S32 x = 0; x < header.length(); x++)
+    {
+        header_break += "-";
+    }
+
     LL_INFOS() << header_break << LL_ENDL;
     LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts header
     LL_INFOS() << header_break << LL_ENDL;
@@ -538,6 +547,54 @@ void LLViewerTextureList::dump()
     LL_INFOS() << header_break << LL_ENDL;
     LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts footer
     LL_INFOS() << header_break << LL_ENDL;
+
+    // This is the Boost Level Vs Size counts table
+    header = "Boost:   ";
+    for (S32 x = 0; x < LLViewerTexture::BOOST_MAX_LEVEL; x++)
+    {
+        std::string newValue = std::to_string(x);
+        header +=  newValue;
+        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
+        {
+            header += " ";
+        }
+    }
+
+    header_break = "";
+    for (S32 x = 0; x < header.length(); x++)
+    {
+        header_break += "-";
+    }
+
+    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << header << LL_ENDL; // Boost Level Vs Size counts header
+    LL_INFOS() << header_break << LL_ENDL;
+
+    // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
+    for (S32 y = 0; y < 12; y++)
+    {
+        std::string newValue = std::to_string((S32)pow(2, y));
+        std::string boost_count_string = "" + newValue;
+        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
+        {
+            boost_count_string += " ";
+        }
+        // X Axis is the boost level starging from BOOST_NONE up to BOOST_MAX_LEVEL
+        for (S32 x = 0; x < (LLViewerTexture::BOOST_MAX_LEVEL); x++)
+        {
+            std::string newValue = std::to_string(boost_counts[x + y * (LLViewerTexture::BOOST_MAX_LEVEL)]);
+            boost_count_string += newValue;
+            for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
+            {
+                boost_count_string += " ";
+            }
+        }
+        LL_INFOS() << boost_count_string << LL_ENDL;
+    }
+    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << header << LL_ENDL; // Boost Level Vs Size counts footer
+    LL_INFOS() << header_break << LL_ENDL;
+
     // </FS:minerjr> [FIRE-35081]
 }
 
@@ -1065,6 +1122,27 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     constexpr F32 BIAS_TRS_OUT_OF_SCREEN = 1.5f;
     constexpr F32 BIAS_TRS_ON_SCREEN = 1.f;
 
+    static LLCachedControl<S32> use_low_VRAM_support(gSavedSettings, "FSUseLowVRAMSupport", 0);
+
+    if (imagep->getBoostLevel() == LLViewerFetchedTexture::BOOST_HIGH)
+    {
+        // Find the face count of the current BOOST_HIGH texture
+        S32 face_count = 0;
+        for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
+        {
+            face_count += imagep->getNumFaces(i);
+        }
+        // If the face count goes below 1/2 the 1024, then it is no longer need of boost protection
+        if (face_count < 512)
+        {
+            // Turn off BOOST_HIGH back to BOOST_NONE
+            imagep->setBoostLevel(LLViewerFetchedTexture::BOOST_NONE);
+            // Force the no delete off, so the memory can be freed.
+            imagep->forceActive();
+            LL_INFOS() << "Texture: " << imagep->getID() << " Was shifted from BOOST_HIGH to BOOST_NONE due to new face count: " << face_count << LL_ENDL;
+        }
+    }
+
     if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH)  // don't bother checking face list for boosted textures
     {
         static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.0095f);
@@ -1235,7 +1313,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
         //if (face_count > 1024)
         // Add check for if the image is animated to boost to high as well
-        if (face_count > 1024 || animated != 0)
+        // Removed for now
+        if (face_count > 1024)// || animated != 0)
         // </FS:minerjr> [FIRE-35081]
         { // this texture is used in so many places we should just boost it and not bother checking its vsize
             // this is especially important because the above is not time sliced and can hit multiple ms for a single texture
@@ -1260,12 +1339,23 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         // New logic block for the bias system        
         // Then depending on the type of texture, the higher resolution on_screen_max_vsize is applied.
         // On Screen (Without Bias applied:
-        //      LOD/Fetch Texture: Discard Levels 0, 1
+        //      Fetch Texture: Discard Levels 0, 1
         //      Fetch Texture 2, 3, 5 with bias < 2.0
         //      BoostLevel = Boost_High
+        //      Any texture close to the screen (16m * (draw distance / 64)
         //      Local, Media, Dynamic Texture        
         // If the textures are on screen and either 1 are the first 2 levels of discard and are either fetched or LOD textures
-        if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        //if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+        // Dropped LOD textures for just any on screen, but close the camera still fall under the next statement below
+        // If the user wants to save as much VRAM/System Memory and the texture is not on screen and not close to the camera
+        if (!on_screen && (use_low_VRAM_support == 0 && LLViewerTexture::sDesiredDiscardBias >= 4.0f) || use_low_VRAM_support == 1)
+        {
+            imagep->addTextureStats(max_vsize);
+        }
+        else if (on_screen && ((imagep->getDiscardLevel() < 1 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        //if (on_screen && ((imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
+        // <FS:minerjr> [FIRE-35184]
         {
             // Always use the best quality of the texture
             imagep->addTextureStats(max_on_screen_vsize);
@@ -1281,7 +1371,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         {
             imagep->addTextureStats(max_vsize);
         }
-        // </FS:minerjr> [FIRE-35081]
+        // </FS:minerjr> [FIRE-35081] [FIRE-35184]
     }
 
 #if 0
@@ -1347,6 +1437,14 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         return; //wait for loading from the fast cache.
     }
 
+    // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+    // If the texture is fetching, 
+    if (imagep->hasFetcher())
+    {
+        return;
+    }
+    // </FS:minerjr> [FIRE-35184]
+
     imagep->processTextureStats();
 }
 
@@ -1380,7 +1478,10 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         imagep->postCreateTexture();
         imagep->mCreatePending = false;
         mCreateTextureList.pop();
-
+        // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+        // Drop the retrienve the raw from the old worker, as the worker may be working on another update
+        // or the raw may be still used by the decoder as KDU only has a raw non smart pointer to the raw
+        /*
         if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel() &&
            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
            //(imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
@@ -1394,7 +1495,8 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
             LL_WARNS_ONCE("Texture") << "Texture will be downscaled immediately after loading." << LL_ENDL;
             imagep->scaleDown();
         }
-
+        */
+        // </FS:minerjr> [FIRE-35184]
         if (create_timer.getElapsedTimeF32() > max_time * 0.5f)
         {
             break;
@@ -1428,6 +1530,10 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
             LLImageGL* img = image->getGLTexture();
             if (img && img->getHasGLTexture())
             {
+                S32 fetch_state = mFetchStates[image->getID()].load(std::memory_order_relaxed);
+                // <FS:minerjr> [FIRE-35184] - Atomic texture fetch states added and eased texture memory usage
+                if (!image->isDeleted() && !image->hasFetcher() && img->getDiscardLevel() < image->getDesiredDiscardLevel() && fetch_state == 0)
+                // </FS:minerjr> [FIRE-35184]
                 img->scaleDown(image->getDesiredDiscardLevel());
             }
 
@@ -1486,6 +1592,7 @@ void LLViewerTextureList::forceImmediateUpdate(LLViewerFetchedTexture* imagep)
     }
 
     imagep->processTextureStats();
+    imagep->updateFetch(); // <FS:minerjr> [FIRE-35184] - Allows textures to actually load when forced
 
     return ;
 }

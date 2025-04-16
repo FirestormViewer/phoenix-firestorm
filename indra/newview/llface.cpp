@@ -2517,6 +2517,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
             // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
             // Added real in frustum check value. Previous was only false for media textures off screen and invalid rig objects
             mInFrustum = false;
+            mCloseToCamera = 0.0f;
             // </FS:minerjr> [FIRE-35081]
             return false ;
         }
