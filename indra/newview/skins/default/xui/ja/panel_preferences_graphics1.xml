@@ -242,6 +242,16 @@
 			<!-- Sharpening Settings -->
 			<slider label="鮮明化：" name="RenderSharpness"/>
 			<!-- End of Sharpening Settings-->
+			<text name="ReflectionProbeCount">
+				最大反射プローブ数：
+			</text>
+			<combo_box name="ProbeCount">
+				<combo_box.item label="なし" name="1"/>
+				<combo_box.item label="低" name="32"/>
+				<combo_box.item label="中" name="64"/>
+				<combo_box.item label="高" name="128"/>
+				<combo_box.item label="最高" name="256"/>
+			</combo_box>
 			<!-- Tone Mapping Settings -->
 			<text name="TonemapTypeText">
 				トーンマッパ：

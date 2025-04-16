@@ -123,6 +123,16 @@
 		<combo_box.item label="マニュアル＋地形" name="2"/>
 		<combo_box.item label="全てのシーン" name="3"/>
 	</combo_box>
+	<text name="ReflectionProbeCount">
+		最大反射プローブ数：
+	</text>
+	<combo_box label="最大反射プローブ数：" name="ProbeCount">
+		<combo_box.item label="なし" name="1"/>
+		<combo_box.item label="低" name="32"/>
+		<combo_box.item label="中" name="64"/>
+		<combo_box.item label="高" name="128" />
+		<combo_box.item label="最高" name="256"/>
+	</combo_box>
 	<slider label="露光：" name="RenderExposure"/>
 	<!-- Mirror settings. -->
 	<check_box label="ミラー" name="Mirrors"/>

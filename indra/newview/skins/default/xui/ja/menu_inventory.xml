@@ -82,6 +82,7 @@
 	<menu_item_call label="プロパティ" name="Properties"/>
 	<menu_item_call label="名前を変更" name="Rename"/>
 	<menu_item_call label="アセットのＵＵＩＤをコピー" name="Copy Asset UUID"/>
+	<menu_item_call label="ＵＵＩＤをコピー" name="Copy UUID"/>
 	<menu_item_call label="メインパネルで表示" name="Show in Main Panel"/>
 	<menu_item_call label="新しいウィンドウで表示" name="Show in new Window"/>
 	<menu_item_call label="開く" name="open_in_current_window"/>

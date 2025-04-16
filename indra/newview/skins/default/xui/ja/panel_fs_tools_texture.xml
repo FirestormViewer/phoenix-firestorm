@@ -423,9 +423,7 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 		<spinner name="rptctrl" label="メートルごとの繰り返し"/>
 		<check_box label="マテリアルを同期" name="checkbox_sync_settings" tool_tip="テクスチャマップパラメータを同期します。"/>
 		<check_box label="平面を揃える" name="checkbox planar align" tool_tip="選択したすべての面のテクスチャを最後に選択した面と揃えます。平面テクスチャマッピングが必要です。"/>
-		<text name="tex gen">
-			マッピング
-		</text>
+		<check_box label="水面を隠す" name="checkbox_hide_water" />
 		<combo_box name="combobox texgen">
 			<combo_box.item label="デフォルト" name="Default"/>
 			<combo_box.item label="平面" name="Planar"/>
