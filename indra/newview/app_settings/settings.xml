@@ -8080,17 +8080,6 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>FSPoserAdvancedWindowState</key>
-  <map>
-    <key>Comment</key>
-    <string>Whether the 'advanced' pane is shown when opening the Avatar/Animesh Poser.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
   <key>FSPoserSaveExternalFileAlso</key>
   <map>
     <key>Comment</key>
@@ -8106,6 +8095,17 @@
   <map>
     <key>Comment</key>
     <string>Whether to reset the base-rotation of a joint to zero when a user edits it.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSPoserOnSaveConfirmOverwrite</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to confirm overwriting a save file.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
