@@ -215,6 +215,21 @@ class FSJointPose
             joint->setScale(mBaseScale);
         }
 
+        void restorePublicState(FSJointState previousState)
+        {
+            const LLVector3& previousPosition = previousState.mPosition;
+            const LLVector3& previousScale = previousState.mScale;
+            const LLQuaternion& previousRotation = previousState.mRotation;
+
+            mBasePosition -= previousPosition;
+            mPosition = previousPosition;
+            mBaseScale -= previousScale;
+            mScale = previousScale;
+            mBaseRotation = ~previousRotation * mBaseRotation;
+            mBaseRotation.normalize();
+            mRotation = previousRotation;
+        }
+
       private:
         FSJointState(FSJointState* state)
         {
