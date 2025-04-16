@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="emojipicker" title="Emoji auswählen">
-	<floater.string name="title_for_recently_used" value="Zuletzt verwendet"/>
 	<floater.string name="title_for_frequently_used" value="Häufig verwendet"/>
 	<line_editor name="Filter" label="Nach Emoji filtern"/>
 	<text name="Dummy">Keine Emoji ausgewählt</text>

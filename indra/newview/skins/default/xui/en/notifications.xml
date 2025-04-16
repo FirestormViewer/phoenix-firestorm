@@ -2503,6 +2503,16 @@ Unable to upload snapshot.
 File might be too big, try reducing resolution or try again later.
   <tag>fail</tag>
   </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="CannotOpenFileTooBig"
+   type="alertmodal">
+Unable to open file.
+
+Viewer ran out of memory while opening file. File might be too big.
+  <tag>fail</tag>
+  </notification>
 
   <notification
    icon="notifytip.tga"
@@ -14513,6 +14523,18 @@ This will replace the items in the selected outfit with the items you are wearin
      <usetemplate
        name="okbutton"
        yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="WaterExclusionSurfacesWarning"
+   type="alertmodal">
+    Checking the hide water box will overwrite the texture, bumpiness, and shininess choices.
+    <tag>confirm</tag>
+    <usetemplate
+      name="okcancelbuttons"
+      notext="Cancel"
+      yestext="Continue"/>
   </notification>
 
   <notification

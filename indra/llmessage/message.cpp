@@ -659,8 +659,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
 
             // UseCircuitCode is allowed in even from an invalid circuit, so that
             // we can toss circuits around.
-            if(
-                valid_packet &&
+            else if (
                 !cdp &&
                 (mTemplateMessageReader->getMessageName() !=
                  _PREHASH_UseCircuitCode))
@@ -670,8 +669,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
                 valid_packet = false;
             }
 
-            if(
-                valid_packet &&
+            if ( valid_packet &&
                 cdp &&
                 !cdp->getTrusted() &&
                 mTemplateMessageReader->isTrusted())
@@ -683,7 +681,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
                 valid_packet = false;
             }
 
-            if( valid_packet )
+            if ( valid_packet )
             {
                 logValidMsg(cdp, host, recv_reliable, recv_resent, acks>0 );
 
@@ -737,6 +735,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
     // Check to see if we need to print debug info
     if ((mt_sec - mCircuitPrintTime) > mCircuitPrintFreq)
     {
+        mPacketRing.dumpPacketRingStats();
         dumpCircuitInfo();
         mCircuitPrintTime = mt_sec;
     }
@@ -830,6 +829,11 @@ void LLMessageSystem::processAcks(LockMessageChecker&, F32 collect_time)
         mResendDumpTime = mt_sec;
         mCircuitInfo.dumpResends();
     }
+}
+
+S32 LLMessageSystem::drainUdpSocket()
+{
+    return mPacketRing.drainSocket(mSocket);
 }
 
 void LLMessageSystem::copyMessageReceivedToSend()

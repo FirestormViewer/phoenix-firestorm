@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="emojipicker">
-	<floater.string name="title_for_recently_used" value="最近" />
 	<floater.string name="text_no_emoji_for_filter" value="未找到'[FILTER]'表情符號" />
 	<floater.string name="title_for_frequently_used" value="常用" />
 	<text name="Dummy">未選擇表情符號</text>

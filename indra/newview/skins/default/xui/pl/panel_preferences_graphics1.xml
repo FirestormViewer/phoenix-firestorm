@@ -204,6 +204,15 @@
 			<slider label="Jakość cieni" tool_tip="Określa jakość cieni (domyślnie 1)" name="ShadowResolution"/>
 			<slider label="Wielkość tekstur terenu (wymaga restartu)" name="RenderTerrainScale" tool_tip="Określa wielkość tekstur terenu - mniej oznacza: bardziej skompresowane (wymaga restartu)."/>
 			<slider label="Wyostrzanie:" name="RenderSharpness" />
+			<text name="ReflectionProbeCount">
+				Il. sond refleksyjnych:
+			</text>
+			<combo_box name="ProbeCount">
+				<combo_box.item label="Brak" name="1" />
+				<combo_box.item label="Mało" name="32" />
+				<combo_box.item label="Średnio" name="64" />
+				<combo_box.item label="Dużo" name="128" />
+			</combo_box>
 			<text name="TonemapTypeText">
 				Tone mapping:
 			</text>

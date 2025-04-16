@@ -3009,20 +3009,16 @@
    tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
 />
 
-<text
+<check_box
    follows="right|top"
    layout="topleft"
-   top="0"
+   top="2"
    width="80"
    right="-1"
    height="16"
-   halign="center"
-   type="string"
-   length="1"
-   name="tex gen"
->
-   Mapping
-</text>
+   label="Hide water"
+   name="checkbox_hide_water"
+/>
 
 <combo_box
    follows="right|top"
@@ -3047,7 +3043,7 @@
 <button
    follows="right|top"
    layout="topleft"
-   top_pad="4"
+   top_pad="3"
    width="76"
    height="23"
    label="Align"
