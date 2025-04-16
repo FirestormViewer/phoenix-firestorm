@@ -588,12 +588,13 @@ bool LLToolDragAndDrop::handleKey(KEY key, MASK mask)
 
 bool LLToolDragAndDrop::handleToolTip(S32 x, S32 y, MASK mask)
 {
+    const F32 DRAG_N_DROP_TOOLTIP_DELAY = 0.1f;
     if (!mToolTipMsg.empty())
     {
         LLToolTipMgr::instance().unblockToolTips();
         LLToolTipMgr::instance().show(LLToolTip::Params()
             .message(mToolTipMsg)
-            .delay_time(gSavedSettings.getF32( "DragAndDropToolTipDelay" )));
+            .delay_time(DRAG_N_DROP_TOOLTIP_DELAY));
         return true;
     }
     return false;
@@ -1267,6 +1268,7 @@ void LLToolDragAndDrop::dropMaterial(LLViewerObject* hit_obj,
         // If user dropped a material onto face it implies
         // applying texture now without cancel, save to selection
         if (nodep
+            && gFloaterTools
             && gFloaterTools->getVisible()
             && nodep->mSavedGLTFMaterialIds.size() > hit_face)
         {
@@ -1443,11 +1445,14 @@ void LLToolDragAndDrop::dropTexture(LLViewerObject* hit_obj,
 
         // If user dropped a texture onto face it implies
         // applying texture now without cancel, save to selection
-        // LLPanelFace* panel_face = gFloaterTools->getPanelFace();  // <FS:Zi> switchable edit texture/materials panel
+        //LLPanelFace* panel_face = gFloaterTools ? gFloaterTools->getPanelFace() : nullptr;  // <FS:Zi> switchable edit texture/materials panel
         if (nodep
+            // <FS:Zi> switchable edit texture/materials panel
+            //&& panel_face 
+            && gFloaterTools
+            // <FS:Zi>
             && gFloaterTools->getVisible()
             // <FS:Zi> switchable edit texture/materials panel
-            // && panel_face
             // && panel_face->getTextureDropChannel() == 0 /*texture*/
             && gFloaterTools->getTextureDropChannel() == 0 /*texture*/
             // <FS:Zi>
@@ -1506,12 +1511,12 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
         {
             LLGLTFMaterial::TextureInfo drop_channel = LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
             // <FS:Zi> switchable edit texture/materials panel
-            // LLPanelFace* panel_face = gFloaterTools->getPanelFace();
-            // if (gFloaterTools->getVisible() && panel_face)
+            // LLPanelFace* panel_face = gFloaterTools ? gFloaterTools->getPanelFace() : nullptr;
+            // if (panel_face && gFloaterTools->getVisible())
             // {
             //     drop_channel = panel_face->getPBRDropChannel();
             // }
-            if (gFloaterTools->getVisible())
+            if (gFloaterTools && gFloaterTools->getVisible() && gFloaterTools->getPBRDropChannel() != LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT)
             {
                 drop_channel = gFloaterTools->getPBRDropChannel();
             }
@@ -1544,10 +1549,10 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
     LLTextureEntry* tep = hit_obj->getTE(hit_face);
 
     // <FS:Zi> switchable edit texture/materials panel
-    // LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+    // LLPanelFace* panel_face = gFloaterTools ? gFloaterTools->getPanelFace() : nullptr;
 
-    // if (gFloaterTools->getVisible() && panel_face)
-    if (gFloaterTools->getVisible())
+    // if (panel_face && gFloaterTools->getVisible())
+    if (gFloaterTools && gFloaterTools->getVisible() && gFloaterTools->getTextureDropChannel() != LLRender::NUM_TEXTURE_CHANNELS)
     // </FS:Zi>
     {
         // <FS:Zi> switchable edit texture/materials panel
@@ -1649,7 +1654,10 @@ void LLToolDragAndDrop::dropScript(LLViewerObject* hit_obj,
             }
         }
         hit_obj->saveScript(new_script, active, true);
-        gFloaterTools->dirty();
+        if (gFloaterTools)
+        {
+            gFloaterTools->dirty();
+        }
 
         // VEFFECT: SetScript
         LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, true);
@@ -1896,7 +1904,10 @@ void LLToolDragAndDrop::dropInventory(LLViewerObject* hit_obj,
     effectp->setTargetObject(hit_obj);
     effectp->setDuration(LL_HUD_DUR_SHORT);
     effectp->setColor(LLColor4U(gAgent.getEffectColor()));
-    gFloaterTools->dirty();
+    if (gFloaterTools)
+    {
+        gFloaterTools->dirty();
+    }
 }
 
 // accessor that looks at permissions, copyability, and names of

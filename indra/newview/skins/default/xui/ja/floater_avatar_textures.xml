@@ -8,7 +8,7 @@
 			<text name="composite_label">合成
 テクスチャ</text>
 			<button label="ID をコンソールにダンプ" label_selected="ダンプ" name="Dump"/>
-			<panel name="scroll_content_panel">
+			<panel name="scroll_content_panel2">
 				<texture_picker label="髪" name="hair-baked"/>
 				<texture_picker label="髪" name="hair_grain"/>
 				<texture_picker label="髪のアルファ" name="hair_alpha"/>

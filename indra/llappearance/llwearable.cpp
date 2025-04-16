@@ -652,9 +652,10 @@ void LLWearable::addVisualParam(LLVisualParam *param)
 //void LLWearable::setVisualParamWeight(S32 param_index, F32 value)
 void LLWearable::setVisualParamWeight(S32 param_index, F32 value, bool upload_bake)
 {
-    if( is_in_map(mVisualParamIndexMap, param_index ) )
+    visual_param_index_map_t::iterator found = mVisualParamIndexMap.find(param_index);
+    if(found != mVisualParamIndexMap.end())
     {
-        LLVisualParam *wearable_param = mVisualParamIndexMap[param_index];
+        LLVisualParam *wearable_param = found->second;
         // <FS:Ansariel> [Legacy Bake]
         //wearable_param->setWeight(value);
         wearable_param->setWeight(value, upload_bake);
@@ -667,10 +668,10 @@ void LLWearable::setVisualParamWeight(S32 param_index, F32 value, bool upload_ba
 
 F32 LLWearable::getVisualParamWeight(S32 param_index) const
 {
-    if( is_in_map(mVisualParamIndexMap, param_index ) )
+    visual_param_index_map_t::const_iterator found = mVisualParamIndexMap.find(param_index);
+    if(found != mVisualParamIndexMap.end())
     {
-        const LLVisualParam *wearable_param = mVisualParamIndexMap.find(param_index)->second;
-        return wearable_param->getWeight();
+        return found->second->getWeight();
     }
     else
     {
@@ -743,7 +744,7 @@ void LLWearable::writeToAvatar(LLAvatarAppearance* avatarp)
     if (!avatarp) return;
 
     // Pull params
-    for( LLVisualParam* param = avatarp->getFirstVisualParam(); param; param = avatarp->getNextVisualParam() )
+    for( const LLVisualParam* param = avatarp->getFirstVisualParam(); param; param = avatarp->getNextVisualParam() )
     {
         // cross-wearable parameters are not authoritative, as they are driven by a different wearable. So don't copy the values to the
         // avatar object if cross wearable. Cross wearable params get their values from the avatar, they shouldn't write the other way.

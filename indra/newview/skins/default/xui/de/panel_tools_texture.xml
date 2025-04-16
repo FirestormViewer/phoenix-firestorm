@@ -29,6 +29,7 @@
 		Leuchten
 	</text>
 	<check_box label="Ganz hell" name="checkbox fullbright"/>
+	<check_box label="Wasser verstecken" name="checkbox_hide_water" left="135"/>
 	<button name="copy_face_btn" tool_tip="Textur-Parameter in Zwischenablage kopieren"/>
 	<button name="paste_face_btn" tool_tip="Textur-Parameter aus Zwischenablage einfügen"/>
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>

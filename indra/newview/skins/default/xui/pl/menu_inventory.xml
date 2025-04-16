@@ -89,6 +89,7 @@
 	<menu_item_call label="Nie chroń" name="UnprotectFolder" />
 	<menu_item_call label="Przeładuj folder" name="ReloadFolder" />
 	<menu_item_call label="Kopiuj identyfikator UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Kopiuj UUID" name="Copy UUID" />
 	<menu_item_call label="Przywróć na ostatnią pozycję" name="Restore to Last Position" />
 	<menu_item_call label="Znajdź w widoku ogólnym" name="Show in Main Panel"/>
 	<menu_item_call label="Pokaż w nowym oknie" name="Show in new Window" />

@@ -190,7 +190,7 @@ LLAudioChannelOpenAL::~LLAudioChannelOpenAL()
 void LLAudioChannelOpenAL::cleanup()
 {
     alSourceStop(mALSource);
-    alSourcei(mALSource, AL_BUFFER, 0); // <ND/> need to unset buffer too, or  alDeleteBuffers will fail.
+    alSourcei(mALSource, AL_BUFFER, AL_NONE);
 
     mCurrentBufferp = NULL;
 }

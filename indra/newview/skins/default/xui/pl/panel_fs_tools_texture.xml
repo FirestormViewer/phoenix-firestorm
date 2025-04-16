@@ -272,9 +272,7 @@
 		<spinner name="rptctrl" label="Powtórzenia / metr" />
 		<check_box label="Synchronizuj materiały" name="checkbox_sync_settings" tool_tip="Synchronizuj parametry map tekstur" />
 		<check_box label="Równaj powierzchnie planarne" name="checkbox planar align" tool_tip="Wyrównuj tekstury na wszystkich wybranych powierzchniach z powierzchnią wybraną jako ostatnia. Wymaga planarnego mapowania tekstur." />
-		<text name="tex gen">
-			Mapowanie
-		</text>
+		<check_box label="Ukryj wodę" name="checkbox_hide_water" />
 		<combo_box name="combobox texgen">
 			<combo_box.item label="Domyślne" name="Default" />
 			<combo_box.item label="Planarne" name="Planar" />

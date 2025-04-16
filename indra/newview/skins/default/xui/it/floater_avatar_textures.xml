@@ -14,7 +14,7 @@ bake
 composite
 			</text>
 			<button label="Dump degli ID in console" label_selected="Dump" name="Dump"/>
-			<panel name="scroll_content_panel">
+			<panel name="scroll_content_panel2">
 				<texture_picker label="Capelli" name="hair-baked"/>
 				<texture_picker label="Capelli" name="hair_grain"/>
 				<texture_picker label="Alfa capelli" name="hair_alpha"/>

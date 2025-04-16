@@ -82,7 +82,7 @@ protected:
 
     void capsRecvForRegion(const LLUUID& region_id, std::string pumpname);
 
-    void assetRequestCoro(LLViewerAssetRequest *req,
+    void assetRequestCoro(LLViewerAssetRequest *req, // <FS:Ansariel> [UDP Assets] Need request for UDP assets
                           const LLUUID uuid,
                           LLAssetType::EType atype,
                           LLGetAssetCallback callback,

@@ -114,13 +114,9 @@ void LLDrawPoolTree::beginShadowPass(S32 pass)
 {
     LL_PROFILE_ZONE_SCOPED;
 
-    // <FS:PP> Attempt to speed up things a little
-    // glPolygonOffset(gSavedSettings.getF32("RenderDeferredTreeShadowOffset"),
-    //              gSavedSettings.getF32("RenderDeferredTreeShadowBias"));
-    static LLCachedControl<F32> RenderDeferredTreeShadowOffset(gSavedSettings, "RenderDeferredTreeShadowOffset");
-    static LLCachedControl<F32> RenderDeferredTreeShadowBias(gSavedSettings, "RenderDeferredTreeShadowBias");
-    glPolygonOffset(RenderDeferredTreeShadowOffset, RenderDeferredTreeShadowBias);
-    // </FS:PP>
+    static LLCachedControl<F32> shadow_offset(gSavedSettings, "RenderDeferredTreeShadowOffset");
+    static LLCachedControl<F32> shadow_bias(gSavedSettings, "RenderDeferredTreeShadowBias");
+    glPolygonOffset(shadow_offset(), shadow_bias());
 
     LLEnvironment& environment = LLEnvironment::instance();
 

@@ -4183,18 +4183,15 @@ void LLWindowWin32::fillCompositionLogfont(LOGFONT *logfont)
         break;
     }
 
-    // <FS:Beq> FIRE-34906 (BugSplat) crash when mPreEditor is NULL. (affects at least version 6.6.17->7.1.11)
-    // logfont->lfHeight = mPreeditor->getPreeditFontSize();
-    if(mPreeditor)
+    if (mPreeditor)
     {
         logfont->lfHeight = mPreeditor->getPreeditFontSize();
     }
     else
     {
-        // In the absence of other options, use the default font height for monospace.
-        logfont->lfHeight = LLFontGL::getFontMonospace()->getLineHeight();
+        // todo: extract from some font * LLUI::getScaleFactor() intead
+        logfont->lfHeight = 10;
     }
-    // </FS:Beq>
     logfont->lfWeight = FW_NORMAL;
 }
 

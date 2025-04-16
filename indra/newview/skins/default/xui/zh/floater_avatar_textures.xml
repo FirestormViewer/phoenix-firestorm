@@ -12,7 +12,7 @@
 				混合紋理
 			</text>
 			<button label="轉儲 ID 到控制台" label_selected="轉儲" name="Dump" />
-			<panel name="scroll_content_panel">
+			<panel name="scroll_content_panel2">
 				<texture_picker label="頭髮" name="hair-baked" />
 				<texture_picker label="頭髮" name="hair_grain" />
 				<texture_picker label="頭髮Alpha" name="hair_alpha" />

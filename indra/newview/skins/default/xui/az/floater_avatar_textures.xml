@@ -14,7 +14,7 @@ Teksturlar
 Teksturlar
 			</text>
 			<button label="ID-lərin konsola çıxarışı" label_selected="Çıxarış" name="Dump"/>
-			<panel name="scroll_content_panel">
+			<panel name="scroll_content_panel2">
 				<texture_picker label="Saçlar" name="hair-baked"/>
 				<texture_picker label="Saçlar" name="hair_grain"/>
 				<texture_picker label="Saç alfası" name="hair_alpha"/>

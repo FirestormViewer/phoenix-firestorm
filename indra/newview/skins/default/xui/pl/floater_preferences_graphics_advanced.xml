@@ -27,7 +27,7 @@
 		<combo_box.item label="Pokazuj tylko znajomych" name="2" />
 	</combo_box>
 	<slider tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" label="Maks. szczegółowość awatarów:" name="IndirectMaxComplexity" />
-	<slider label="Maks. il. wyświetlanych awatarów:" name="IndirectMaxNonImpostors" />
+	<slider label="Maks. il. animowanych awatarów:" name="IndirectMaxNonImpostors" />
 	<slider label="Detale:" name="AvatarMeshDetail" />
 	<text name="AvatarMeshDetailText">
 		Mało
@@ -115,6 +115,15 @@
 		<combo_box.item label="Tylko ręczne" name="1" />
 		<combo_box.item label="Ręczne + podłoże" name="2" />
 		<combo_box.item label="Pełna scena" name="3" />
+	</combo_box>
+	<text name="ReflectionProbeCount">
+		Il. sond refleksyjnych:
+	</text>
+	<combo_box label="Il. sond refleksyjnych:" name="ProbeCount">
+		<combo_box.item label="Brak" name="1" />
+		<combo_box.item label="Mało" name="32" />
+		<combo_box.item label="Średnio" name="64" />
+		<combo_box.item label="Dużo" name="128" />
 	</combo_box>
 	<slider label="Ekspozycja:" name="RenderExposure" />
 	<check_box label="Lustra" name="Mirrors" />
