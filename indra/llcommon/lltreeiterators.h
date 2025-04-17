@@ -372,8 +372,31 @@ private:
         // reset flag after each step
         mSkipChildren = false;
     }
+
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    // <FS:Error-LP0> Possible null warning in mPending.
+    // bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+       // Check if both mPending lists are of the same size
+       if (this->mPending.size() != that.mPending.size())
+       {
+           return false;
+       }
+   
+       // Compare each element in mPending safely
+       for (size_t i = 0; i < this->mPending.size(); ++i)
+       {
+           if (this->mPending[i] != that.mPending[i])
+           {
+               return false;
+           }
+       }
+   
+       return true;
+    }
+    // <FS:Error-LP0> [END] Possible null warning in mPending.
+
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.back()); }
 
