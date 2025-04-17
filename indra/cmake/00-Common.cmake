@@ -107,7 +107,7 @@ if (WINDOWS)
           /Oy-
           /Oi
           /Ot
-          /fp:fast
+          /fp:precise
           /MP
           /permissive-
       )
