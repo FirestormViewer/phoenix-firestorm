@@ -2184,29 +2184,38 @@ bool LLPanelRegionTerrainInfo::sendUpdate()
     return true;
 }
 
+// <FS:Error-LP0> Quieting lambda compiling warning: No-op function to consume cancel events
+static void onCancelCallback(LLUICtrl* /*ctrl*/, const LLSD& /*param*/)
+{
+    // Do nothing
+}
+
 void LLPanelRegionTerrainInfo::initMaterialCtrl(LLTextureCtrl*& ctrl, const std::string& name, S32 index)
 {
     ctrl = findChild<LLTextureCtrl>(name, true);
     if (!ctrl) return;
 
     // consume cancel events, otherwise they will trigger commit callbacks
-    ctrl->setOnCancelCallback([](LLUICtrl* ctrl, const LLSD& param) {});
+    // ctrl->setOnCancelCallback([](LLUICtrl* ctrl, const LLSD& param) {});  
+    ctrl->setOnCancelCallback(boost::bind(&onCancelCallback, _1, _2));
+// <FS:Error-LP0> [END] Quieting lambda compiling warning: No-op function to consume cancel events
+
     ctrl->setCommitCallback(
         [this, index](LLUICtrl* ctrl, const LLSD& param)
-    {
-        if (!mMaterialScaleUCtrl[index]
-            || !mMaterialScaleVCtrl[index]
-            || !mMaterialRotationCtrl[index]
-            || !mMaterialOffsetUCtrl[index]
-            || !mMaterialOffsetVCtrl[index]) return;
+        {
+            if (!mMaterialScaleUCtrl[index]
+                || !mMaterialScaleVCtrl[index]
+                || !mMaterialRotationCtrl[index]
+                || !mMaterialOffsetUCtrl[index]
+                || !mMaterialOffsetVCtrl[index]) return;
 
-        mMaterialScaleUCtrl[index]->setValue(1.f);
-        mMaterialScaleVCtrl[index]->setValue(1.f);
-        mMaterialRotationCtrl[index]->setValue(0.f);
-        mMaterialOffsetUCtrl[index]->setValue(0.f);
-        mMaterialOffsetVCtrl[index]->setValue(0.f);
-        onChangeAnything();
-    });
+            mMaterialScaleUCtrl[index]->setValue(1.f);
+            mMaterialScaleVCtrl[index]->setValue(1.f);
+            mMaterialRotationCtrl[index]->setValue(0.f);
+            mMaterialOffsetUCtrl[index]->setValue(0.f);
+            mMaterialOffsetVCtrl[index]->setValue(0.f);
+            onChangeAnything();
+        });
 }
 
 bool LLPanelRegionTerrainInfo::callbackTextureHeights(const LLSD& notification, const LLSD& response)
