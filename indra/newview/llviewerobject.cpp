@@ -7887,6 +7887,39 @@ void LLViewerObject::setRenderMaterialIDs(const LLUUID& id)
     setRenderMaterialID(-1, id);
 }
 
+// <FS> [FIRE-35138] Helpers for GLTF Materials since we support PBR and BP at same time
+void LLViewerObject::saveGLTFMaterials()
+{
+    if (!mSavedGLTFMaterialIds.empty())
+    {
+        // Already saved, no need to do it again
+        return;
+    }
+
+    for (S32 te = 0; te < getNumTEs(); ++te)
+    {
+        mSavedGLTFMaterialIds.emplace_back(getRenderMaterialID(te));
+
+        LLPointer<LLGLTFMaterial> old_override = getTE(te)->getGLTFMaterialOverride();
+        if (old_override.notNull())
+        {
+            LLGLTFMaterial* copy = new LLGLTFMaterial(*old_override);
+            mSavedGLTFOverrideMaterials.emplace_back(copy);
+        }
+        else
+        {
+            mSavedGLTFOverrideMaterials.emplace_back(nullptr);
+        }
+    }
+}
+
+void LLViewerObject::clearSavedGLTFMaterials()
+{
+    mSavedGLTFMaterialIds.clear();
+    mSavedGLTFOverrideMaterials.clear();
+}
+// </FS>
+
 void LLViewerObject::setRenderMaterialIDs(const LLRenderMaterialParams* material_params, bool local_origin)
 {
     if (!local_origin)

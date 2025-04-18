@@ -3142,25 +3142,25 @@ void LLViewerLODTexture::processTextureStats()
         F32 min_discard = 0.f;
         */
 
+        // Use a S32 instead of a float
+        S32 min_discard = 0;
+        if (mFullWidth > max_tex_res || mFullHeight > max_tex_res)
+            min_discard = 1;
+
         // Use a S32 value for the discard level
-        S32 discard_level = 0;
-        // Find the best discard that covers the entire mMaxVirtualSize of the on screen texture
-        for (; discard_level <= MAX_DISCARD_LEVEL; discard_level++)
+        S32 discard_level = min_discard;
+        // Find the best discard that covers the entire mMaxVirtualSize of the on screen texture (Use MAX_DISCARD_LEVEL as a max discard instead of MAX_DISCARD_LEVEL+1)
+        for (; discard_level < MAX_DISCARD_LEVEL; discard_level++) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
         {
-            // If the max virtual size is greater then the current discard level, then break out of the loop and use the current discard level
-            if (mMaxVirtualSize > getWidth(discard_level) * getHeight(discard_level))
+            // If the max virtual size is greater then or equal to the current discard level, then break out of the loop and use the current discard level
+            if (mMaxVirtualSize >= getWidth(discard_level) * getHeight(discard_level)) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
             {
                 break;
             }
         }
 
-        // Use a S32 instead of a float
-        S32 min_discard = 0;  
-        if (mFullWidth > max_tex_res || mFullHeight > max_tex_res)
-            min_discard = 1;
 
         //discard_level = llclamp(discard_level, min_discard, (F32)MAX_DISCARD_LEVEL);
-        discard_level = llclamp(discard_level, min_discard, MAX_DISCARD_LEVEL); // Don't convert to float and back again
         // </FS:minerjr> [FIRE-35081]
 
         // Can't go higher than the max discard level
