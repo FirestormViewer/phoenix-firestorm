@@ -732,9 +732,6 @@ void FSPanelFace::onMatTabChange()
     static S32 last_mat = -1;
     if( auto curr_mat = getCurrentMaterialType(); curr_mat != last_mat )
     {
-        // Fixes some UI desync
-        updateUI(true);
-
         LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
         LLViewerObject* objectp = node ? node->getObject() : NULL;
         if(objectp)
@@ -760,6 +757,16 @@ void FSPanelFace::onMatTabChange()
                 }
             }
         }
+
+        // Since we allow both PBR and BP textures to be applied at the same time,
+        // we need to hide or show the GLTF material only locally based on the current tab.
+        if (curr_mat != MATMEDIA_PBR)
+            LLSelectMgr::getInstance()->hideGLTFMaterial();
+        else
+            LLSelectMgr::getInstance()->showGLTFMaterial();
+
+        // Fixes some UI desync
+        updateUI(true);
     }
 }
 
