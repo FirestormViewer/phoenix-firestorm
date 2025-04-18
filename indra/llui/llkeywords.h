@@ -115,8 +115,8 @@ public:
     ~LLKeywords();
 
     void        clearLoaded() { mLoaded = false; }
-    LLUIColor    getColorGroup(std::string_view key_in);
-    bool        isLoaded() const    { return mLoaded; }
+    LLUIColor    getColorGroup(std::string_view key_in) const;
+    bool        isLoaded() const { return mLoaded; }
     // <FS:Ansariel> Re-add support for Cinder's legacy file format
     bool        loadFromLegacyFile(const std::string& filename);
 
