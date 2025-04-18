@@ -417,8 +417,9 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint to query.</param>
-    /// <returns>True if a redo action is available, otherwise false.</returns>
-    bool canRedoJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint);
+    /// <param name="canUndo">Supply true to query if we can perform an Undo, otherwise query redo.</param>
+    /// <returns>True if an undo or redo action is available, otherwise false.</returns>
+    bool canRedoOrUndoJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint, bool canUndo = false);
 
     /// <summary>
     /// Re-does the last undone change (rotation, position or scale) to the supplied PoserJoint.
@@ -503,20 +504,27 @@ public:
     /// <summary>
     /// Symmetrizes the rotations of the joints from one side of the supplied avatar to the other.
     /// </summary>
-    /// <param name="avatar">The avatar whose joints to symmetrizet.</param>
+    /// <param name="avatar">The avatar to symmetrize.</param>
     /// <param name="rightToLeft">Whether to symmetrize rotations from right to left, otherwise symmetrize left to right.</param>
     void symmetrizeLeftToRightOrRightToLeft(LLVOAvatar* avatar, bool rightToLeft);
 
     /// <summary>
     /// Recaptures the rotation, position and scale state of the supplied joint for the supplied avatar.
-    /// AsDelta variant retians the original base and creates a delta relative to it.
+    /// AsDelta variant retains the original base and creates a delta relative to it.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
     /// <param name="joint">The joint to recapture.</param>
     /// <param name="translation">The axial translation form the supplied joint.</param>
     /// <param name="negation">The style of negation to apply to the recapture.</param>
     void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
-    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
+
+    /// <summary>
+    /// Recaptures any change in joint state.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
+    /// <param name="joint">The joint to recapture.</param>
+    /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
+    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
@@ -525,14 +533,11 @@ public:
     void setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar);
 
     /// <summary>
-    /// Determines if the kind of save to perform should be a 'delta' save, or a complete save.
+    /// Determines if the supplied joint has a base rotation of zero.
     /// </summary>
-    /// <param name="avatar">The avatar whose pose-rotations are being considered for saving.</param>
-    /// <returns>True if the save should save only 'deltas' to the rotation, otherwise false.</returns>
-    /// <remarks>
-    /// A save of the rotation 'deltas' facilitates a user saving their changes to an existing animation.
-    /// Thus the save represents 'nothing other than the changes the user made', to some other pose which they may have limited rights to.
-    /// </remarks>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <returns>True if the supplied joint has a 'base' rotation of zero (thus user-supplied change only), otherwise false.</returns>
     bool baseRotationIsZero(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
 
     /// <summary>

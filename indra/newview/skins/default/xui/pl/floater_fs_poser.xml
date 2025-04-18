@@ -142,7 +142,10 @@
 	<string	name="title_LEFT_PEC">Lewa pierś</string>
 	<string	name="title_RIGHT_PEC">Prawa pierś</string>
 	<string name="LoadPoseLabel">Ładuj pozę</string>
+	<string name="SavePoseLabel">Zapis pozy</string>
 	<string name="LoadDiffLabel">Ładuj różn.</string>
+	<string name="SaveDiffLabel">Zapis różn.</string>
+	<string name="OverWriteLabel">Nadpisać?</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -186,8 +189,8 @@
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Ustawienie" name="name" />
 							</scroll_list>
-							<button label="Ustaw: Lewa" name="button_loadHandPoseLeft" tool_tip="Kliknij dwukrotnie, aby ustawić lewą rękę na wybranym ustawieniu" />
-							<button label="Ustaw: Prawa" name="button_loadHandPoseRight" tool_tip="Kliknij dwukrotnie, aby ustawić prawą rękę na wybranym ustawieniu" />
+							<button label="Ustaw: Lewa" name="button_loadHandPoseLeft" tool_tip="Kliknij, aby ustawić lewą rękę na wybranym ustawieniu" />
+							<button label="Ustaw: Prawa" name="button_loadHandPoseRight" tool_tip="Kliknij, aby ustawić prawą rękę na wybranym ustawieniu" />
 						</panel>
 					</tab_container>
 					<panel title="Różne" name="misc_joints_panel">
@@ -206,7 +209,7 @@
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="Odśwież listę awatarów i animeszy" />
 						<button label="Zacznij pozować" label_selected="Przestań pozować" tool_tip="Rozpocznij pozowanie wybranego awatara lub animesza, jeśli masz na to prawa" name="start_stop_posing_button" />
-						<button label="Ustaw na T-Pozę" name="set_t_pose_button" tool_tip="Kliknij dwukrotnie, aby ustawić wybrany awatar w pozycji 'T'." />
+						<button label="Ustaw na T-Pozę" name="set_t_pose_button" tool_tip="Kliknij, aby ustawić wybranego awatara w pozycji 'T'." />
 					</panel>
 					<panel title="Inne" name="settings_panel">
 						<text name="trackpad_sensitivity_label">Czułość trackpada:</text>
@@ -215,6 +218,7 @@
 						<check_box name="stop_posing_on_close_checkbox" label="Stop pozy po zamknięciu" tool_tip="Brak zatrzymywania pozy może być pomocny, jeśli nie chcesz jej przypadkowo stracić." />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Reset bazy rotacji na edycji" tool_tip="Gdy po raz pierwszy edytujesz obrót, zresetuj go do zera. Oznacza to, że Twoja praca może zapisać pozę (a nie różnicę, patrz ładowanie / zapisywanie). Zielony 'ptaszek' pojawia się obok każdego wyzerowanego tak, wyeksportowanego stawu." />
 						<check_box name="also_save_bvh_checkbox" label="Twórz BVH podczas zapisu**" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
+						<check_box name="confirm_overwrite_on_save_checkbox" label="Potwierdź nadpisanie" tool_tip="Gdy zapisujesz pozę, a plik już istnieje, musisz kliknąć przycisk zapisu ponownie, aby potwierdzić, że na pewno chcesz ją nadpisać." />
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Włącz / wyłącz manipulatory wizualne." />
@@ -257,12 +261,12 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Cofnij ostatnią zmianę" />
 					<button name="button_redo_change" tool_tip="Ponów ostatnią cofniętą zmianę" />
-					<button name="poser_joint_reset" tool_tip="Kliknij dwukrotnie, aby zresetować wszystkie wybrane części ciała do stanu z momentu, w którym po raz pierwszy zacząłeś/aś pozować" />
+					<button name="poser_joint_reset" tool_tip="Kliknij, aby zresetować wszystkie wybrane części ciała do stanu z momentu, w którym po raz pierwszy zacząłeś/aś pozować" />
 					<button name="delta_mode_toggle" tool_tip="Jeśli zmienisz wiele stawów, każdy z nich zmieni się o tę samą wartość, zamiast wszystkie o taki sam obrót. Stosowany również do pozbywania się blokady Gimbala." />
 					<button label="Odbij" name="button_toggleMirrorRotation" tool_tip="Zmień przeciwległy staw, jak w lustrze." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Zmień przeciwległy staw, ale w ten sam sposób." />
-					<button label="Kopia L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Kliknij dwukrotnie, aby skopiować zmiany z lewej strony na prawą." />
-					<button label="Kopia P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Kliknij dwukrotnie, aby skopiować zmiany z prawej strony na lewą." />
+					<button label="Kopia L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Kliknij, aby skopiować zmiany z lewej strony na prawą." />
+					<button label="Kopia P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Kliknij, aby skopiować zmiany z prawej strony na lewą." />
 				</panel>
 			</panel>
 			<panel name="poses_loadSave">

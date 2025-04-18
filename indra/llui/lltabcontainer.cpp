@@ -1511,17 +1511,17 @@ LLPanel* LLTabContainer::getCurrentPanel()
     return NULL;
 }
 
-S32 LLTabContainer::getCurrentPanelIndex()
+S32 LLTabContainer::getCurrentPanelIndex() const
 {
     return mCurrentTabIdx;
 }
 
-S32 LLTabContainer::getTabCount()
+S32 LLTabContainer::getTabCount() const
 {
     return static_cast<S32>(mTabList.size());
 }
 
-LLPanel* LLTabContainer::getPanelByIndex(S32 index)
+LLPanel* LLTabContainer::getPanelByIndex(S32 index) const
 {
     if (index >= 0 && index < (S32)mTabList.size())
     {
@@ -1530,7 +1530,7 @@ LLPanel* LLTabContainer::getPanelByIndex(S32 index)
     return NULL;
 }
 
-S32 LLTabContainer::getIndexForPanel(LLPanel* panel)
+S32 LLTabContainer::getIndexForPanel(LLPanel* panel) const
 {
     for (S32 index = 0; index < (S32)mTabList.size(); index++)
     {
@@ -1542,7 +1542,7 @@ S32 LLTabContainer::getIndexForPanel(LLPanel* panel)
     return -1;
 }
 
-S32 LLTabContainer::getPanelIndexByTitle(std::string_view title)
+S32 LLTabContainer::getPanelIndexByTitle(std::string_view title) const
 {
     for (S32 index = 0 ; index < (S32)mTabList.size(); index++)
     {

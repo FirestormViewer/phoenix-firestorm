@@ -131,7 +131,7 @@
 
 #include "SMAAAreaTex.h"
 #include "SMAASearchTex.h"
-
+#include "llerror.h"
 #ifndef LL_WINDOWS
 #define A_GCC 1
 #pragma GCC diagnostic ignored "-Wunused-function"
@@ -652,7 +652,6 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderMirrors");
     connectRefreshCachedSettingsSafe("RenderHeroProbeUpdateRate");
     connectRefreshCachedSettingsSafe("RenderHeroProbeConservativeUpdateMultiplier");
-    connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
     connectRefreshCachedSettingsSafe("FSRenderVignette");   // <FS:CR> Import Vignette from Exodus
     // <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
     connectRefreshCachedSettingsSafe("RenderAttachedLights");
@@ -1042,7 +1041,7 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 
         // <FS:Beq> create an independent preview screen target
         {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("PreviewScreenBuffer");
-        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA); 
+        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA, true); 
         } // </FS:Beq>
         {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("BakeMapBuffer");// <FS:Beq/> create an independent preview screen target
         mBakeMap.allocate(LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH, LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT, GL_RGBA);
@@ -1425,8 +1424,11 @@ void LLPipeline::createGLBuffers()
     }
 
     allocateScreenBuffer(resX, resY);
-    mRT->width = 0;
-    mRT->height = 0;
+    // Do not zero out mRT dimensions here. allocateScreenBuffer() above
+    // already sets the correct dimensions. Zeroing them caused resizeShadowTexture()
+    // to fail if called immediately after createGLBuffers (e.g., post graphics change).
+    // mRT->width = 0;
+    // mRT->height = 0;
 
 
     if (!mNoiseMap)

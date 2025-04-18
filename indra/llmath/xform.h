@@ -126,7 +126,7 @@ public:
     void        clearChanged(U32 bits)                      { mChanged &= ~bits; }
 
     void        setScaleChildOffset(bool scale)             { mScaleChildOffset = scale; }
-    bool        getScaleChildOffset()                       { return mScaleChildOffset; }
+    bool        getScaleChildOffset() const                 { return mScaleChildOffset; }
 
     LLXform* getParent() const { return mParent; }
     LLXform* getRoot() const;

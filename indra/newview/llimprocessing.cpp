@@ -651,6 +651,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     U8 *binary_bucket,
     S32 binary_bucket_size,
     LLHost &sender,
+    LLSD metadata,
     LLUUID aux_id)
 {
     LLChat chat;
@@ -706,6 +707,28 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
     bool is_afk = gAgent.getAFK();
     // </FS:PP>
+
+    /***
+    * The simulator may have flagged this sender as a bot, if the viewer would like to display
+    * the chat text in a different color or font, the below code is how the viewer can
+    * tell if the sender is a bot.
+    *-----------------------------------------------------
+    bool is_bot = false;
+    if (metadata.has("sender"))
+    {   // The server has identified this sender as a bot.
+        is_bot = metadata["sender"]["bot"].asBoolean();
+    }
+    *-----------------------------------------------------
+    */
+
+    std::string notice_name;
+    LLSD notice_args;
+    if (metadata.has("notice"))
+    {   // The server has injected a notice into the IM conversation.
+        // These will be things like bot notifications, etc.
+        notice_name = metadata["notice"]["id"].asString();
+        notice_args = metadata["notice"]["data"];
+    }
 
     chat.mMuted = is_muted;
     chat.mFromID = from_id;
@@ -886,6 +909,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     position,
                     false,
                     timestamp,
+                    LLUUID::null,
+                    "",
                     false,
                     keyword_alert_performed);
 
@@ -918,6 +943,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                         position,
                         false,
                         0,
+                        LLUUID::null,
+                        "",
                         true
                         );
                     // </FS:LO>
@@ -942,6 +969,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                                     position,
                                     false,
                                     0,
+                                    LLUUID::null,
+                                    "",
                                     true);
                             LLGiveInventory::doGiveInventoryItem(from_id, item, session_id);
                         }
@@ -963,7 +992,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             }
             else
             {
-                // standard message, not from system
+                // standard message, server may have injected a notice into the conversation.
                 std::string saved;
                 if (offline == IM_OFFLINE)
                 {
@@ -1026,8 +1055,17 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                             region_message = true;
                         }
                     }
-                    gIMMgr->addMessage(
-                        session_id,
+
+                    std::string real_name;
+
+                    if (!notice_name.empty())
+                    {   // The simulator has injected some sort of notice into the conversation.
+                        // findString will only replace the contents of buffer if the notice_id is found.
+                        LLTrans::findString(buffer, notice_name, notice_args);
+                        real_name = SYSTEM_FROM;
+                    }
+
+                    gIMMgr->addMessage(session_id,
                         from_id,
                         name,
                         buffer,
@@ -1039,6 +1077,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                         position,
                         region_message,
                         timestamp,
+                        LLUUID::null,
+                        real_name,
                         false,
                         keyword_alert_performed);
                 }
@@ -1748,6 +1788,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     position,
                     false,
                     timestamp,
+                    LLUUID::null,
+                    "",
                     false,
                     keyword_alert_performed);
             }
@@ -2371,6 +2413,12 @@ void LLIMProcessing::requestOfflineMessagesCoro(std::string url)
             from_group = message_data["from_group"].asString() == "Y";
         }
 
+        LLSD metadata;
+        if (message_data.has("metadata"))
+        {
+            metadata = message_data["metadata"];
+        }
+
         EInstantMessage dialog = static_cast<EInstantMessage>(message_data["dialog"].asInteger());
         LLUUID session_id = message_data["transaction-id"].asUUID();
         if (session_id.isNull() && dialog == IM_FROM_TASK)
@@ -2398,6 +2446,7 @@ void LLIMProcessing::requestOfflineMessagesCoro(std::string url)
                     local_bin_bucket.data(),
                     S32(local_bin_bucket.size()),
                     local_sender,
+                    metadata,
                     message_data["asset_id"].asUUID());
             });
 
