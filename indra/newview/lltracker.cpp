@@ -546,7 +546,12 @@ void LLTracker::drawBeacon(LLVector3 pos_agent, std::string direction, LLColor4 
         height = pos_agent.mV[2];
     }
 
-    nRows = (U32)ceil((BEACON_ROWS * height) / MAX_HEIGHT);
+    // <FS> [FIRE-35333] OpenSim allows Z coordinates to be negative based on MinSimHeight
+    if (height < 0.f)
+        nRows = 0;
+    else
+        nRows = (U32)ceil((BEACON_ROWS * height) / MAX_HEIGHT);
+    // </FS>
     if(nRows<2) nRows=2;
     rowHeight = height / nRows;
 
@@ -557,7 +562,10 @@ void LLTracker::drawBeacon(LLVector3 pos_agent, std::string direction, LLColor4 
 
     F32 x = x_axis.mV[0];
     F32 y = x_axis.mV[1];
-    F32 z = 0.f;
+    // <FS> [FIRE-35333] OpenSim allows Z coordinates to be negative based on MinSimHeight
+    //F32 z = 0.f;
+    F32 z = llmin(height, 0.f);
+    // </FS>
     F32 z_next;
 
     F32 a,an;
