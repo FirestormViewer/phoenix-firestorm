@@ -100,8 +100,7 @@ typedef void (*inventory_callback)(LLViewerObject*,
                                    S32 serial_num,
                                    void*);
 
-// <FS> [FIRE-35138] typedef for saved GLTF override materials
-typedef std::vector<LLPointer<LLGLTFMaterial> > gltf_materials_vec_t;
+typedef std::vector<LLPointer<LLGLTFMaterial> > gltf_materials_vec_t; // <FS/> [FIRE-35138] typedef for saved GLTF override materials
 
 // for exporting textured materials from SL
 struct LLMaterialExportInfo
