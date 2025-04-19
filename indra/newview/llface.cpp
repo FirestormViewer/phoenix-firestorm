@@ -1462,13 +1462,6 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
     // LLMaterial* mat = tep->getMaterialParams().get();
     LLMaterial* mat = tep ? tep->getMaterialParams().get() : 0;
     // </FS:ND>
-    // <FS:Beq> show legacy when editing the fallback materials.
-    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
-    if( gltf_mat && getViewerObject()->isSelected() && showSelectedinBP )
-    {
-        gltf_mat = nullptr;
-    }
-    // </FS:Beq>
 
     F32 r = 0, os = 0, ot = 0, ms = 0, mt = 0, cos_ang = 0, sin_ang = 0;
 
