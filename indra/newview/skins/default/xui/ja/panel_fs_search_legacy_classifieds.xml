@@ -1,29 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="クラシファイド広告" name="panel_ls_classifieds">
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="クラシファイド" name="panel_ls_classifieds">
 	<panel name="panel_ls_input">
 		<text name="search_text">
-			検索キーワードを入力して下さい:
+			検索語句を入力：
 		</text>
-		<search_combo_box name="classifieds_edit" />
-		<combo_box name="classifieds_category" />
-		<check_box label="" name="pg_all" />
-		<icon name="rating_icon_general" />
-		<check_box label="" name="mature_all" />
-		<icon name="rating_icon_moderate"/>
-		<check_box label="" name="adult_all" />
-		<icon name="rating_icon_adult" />
 	</panel>
-	
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_classifieds">
-			<columns name="icon" />
-			<columns label="名前" name="classified_name" />
-			<columns label="表示価格" name="price" />
+			<columns label="名前" name="classified_name"/>
+			<columns label="掲載料" name="price"/>
 		</scroll_list>
-		<button label="戻る" name="classifieds_back" />
-		<button label="次へ" name="classifieds_next" />
+		<button label="前へ" name="classifieds_back"/>
+		<button label="次へ" name="classifieds_next"/>
 	</panel>
-	
 </panel>

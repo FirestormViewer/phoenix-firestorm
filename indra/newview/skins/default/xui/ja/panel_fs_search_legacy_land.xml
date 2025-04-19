@@ -1,51 +1,39 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="不動産販売" name="panel_ls_land">
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="土地販売" name="panel_ls_land">
 	<panel name="panel_ls_input">
-		<check_box label="" name="pg_all" />
-		<icon name="rating_icon_general" />
-		<check_box label="" name="mature_all" />
-		<icon name="rating_icon_moderate" />
-		<check_box label="" name="adult_all" />
-		<icon name="rating_icon_adult" />
 		<text name="search_text">
-			検索キーワードを入力して下さい:
+			検索語句：
 		</text>
 		<combo_box name="land_category">
-			<combo_box.item label="すべてのカテゴリ" name="All" value="All"/>
-			<combo_box.item label="オークション" name="Auction" value="Auction"/>
-			<combo_box.item label="メインランド" name="Mainland" value="Mainland"/>
-			<combo_box.item label="個人の土地" name="Estate" value="Estate"/>
+			<combo_box.item label="全てのカテゴリ" name="All"/>
+			<combo_box.item label="オークション" name="Auction"/>
+			<combo_box.item label="メインランド販売" name="Mainland"/>
+			<combo_box.item label="不動産販売" name="Estate"/>
 		</combo_box>
-		<check_box label="価格＜" name="price_check" />
-		<line_editor name="edit_price" />
-		<check_box label="面積 ＞" name="area_check" />
-		<line_editor name="edit_area" />
+		<check_box label="価格＜" name="price_check"/>
+		<check_box label="面積＞" name="area_check"/>
 		<text name="sort_text">
-			検索結果を並べ替え:
+			並べ替え順
 		</text>
-		<check_box label="昇順" name="ascending_check" />
+		<check_box label="昇順" name="ascending_check"/>
 		<combo_box name="land_sort_combo">
-			<combo_box.item label="名称" name="Name_item" value="Name"/>
-			<combo_box.item label="価格" name="Price_item" value="Price"/>
-			<combo_box.item label="１平米当たりの価格" name="PPM_item" value="PPM"/>
-			<combo_box.item label="面積" name="Area_item" value="Area"/>
+			<combo_box.item label="名前" name="Name_item"/>
+			<combo_box.item label="金額" name="Price_item"/>
+			<combo_box.item label="ｍあたりの単価" name="PPM_item"/>
+			<combo_box.item label="面積" name="Area_item"/>
 		</combo_box>
-		<button label="検索" name="land_find" />
+		<button label="検索" name="land_find"/>
 	</panel>
-	
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_land">
-			<columns label="" name="icon" />
-			<columns label="名称" name="land_name" />
-			<columns label="価格" name="price" />
-			<columns label="面積" name="area" />
-			<columns label="L$/m" name="ppm" />
-			<columns label="種類" name="land_type" />
+			<columns label="名前" name="land_name"/>
+			<columns label="金額" name="price"/>
+			<columns label="面積" name="area"/>
+			<columns label="L$／ｍ" name="ppm"/>
+			<columns label="種別" name="land_type"/>
 		</scroll_list>
-		<button label="戻る" name="land_back" />
-		<button label="次へ" name="land_next" />
+		<button label="前へ" name="land_back"/>
+		<button label="次へ" name="land_next"/>
 	</panel>
-	
 </panel>

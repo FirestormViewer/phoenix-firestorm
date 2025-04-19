@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="conversation_log_list_item">
-    <icon name="voice_session_icon" tool_tip="ボイス会話を含める" />
-    <icon name="unread_ims_icon" tool_tip="ログアウト中に届いたメッセージ" />
-    <button name="delete_btn" tool_tip="この項目を削除" />
+	<icon name="voice_session_icon" tool_tip="ボイスチャット"/>
+	<icon name="unread_ims_icon" tool_tip="ログアウト時に表示されるメッセージ"/>
+	<button name="delete_btn" tool_tip="このエントリーを削除します。"/>
 </panel>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_complexity">
-	<button name="back_btn"/>
 	<text name="back_lbl">
 		戻る
 	</text>
 	<text name="attachments_title">
 		現在のアバターの複雑度
+	</text>
+	<text name="tot_att_count">
+		総計：50（120000.10㎲）
 	</text>
 	<text name="attachments_desc1">
 		装着物を付けるとアバターがより複雑になります。アバターの複雑度が高い場合、
@@ -17,8 +19,8 @@
 		不要な重い装着物を削除すると解決することがあります。
 	</text>
 	<name_list name="obj_list">
-		<name_list.columns label="" name="complex_visual"/>
-		<name_list.columns label="" name="complex_value"/>
-		<name_list.columns label="" name="name"/>
+		<name_list.columns label="時間（㎲）" name="art_value" tool_tip="この装着物の描画にかかった時間（マイクロ秒）です。"/>
+		<name_list.columns label="ＡＲＣ" name="complex_value" tool_tip="アイテムの複雑度（ＡＲＣ）です。"/>
+		<name_list.columns label="装着物の名前" tool_tip="「✕」ボタンで取り外せます。" name="name"/>
 	</name_list>
 </panel>

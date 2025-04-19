@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="perms default" title="デフォルトの作成権限">
 	<panel label="デフォルト権限" name="default permissions">
-		<view_border /> 
 		<text name="label_1">
 			次の所有者：
 		</text>
@@ -12,71 +11,39 @@
 			修正
 		</text>
 		<text name="label_4">
-			再販・プレゼント
+			再販・譲渡
 		</text>
 		<text name="label_5">
-			グループ共有
+			グループで共同管理
 		</text>
 		<text name="label_6">
-			全員にコピー許可
+			誰でもコピー可能
 		</text>
-		<text name="label_7" tool_tip="オブジェクトを作成する時の権限を初期設定します">
+		<text name="label_7" tool_tip="オブジェクトを作成したときのデフォルトの権限を設定します。">
 			オブジェクト
 		</text>
-		<check_box name="objects_c" />
-		<check_box name="objects_m" />
-		<check_box name="objects_t" />
-		<check_box name="objects_s" />
-		<check_box name="objects_e" />
-		<text name="label_8" tool_tip="アップロードしたアイテムの権限を初期設定します">
+		<text name="label_8" tool_tip="アップロードしたアイテムのデフォルトの権限を設定します。">
 			アップロード
 		</text>
-		<check_box name="uploads_c" />
-		<check_box name="uploads_m" />
-		<check_box name="uploads_t" />
-		<check_box name="uploads_s" />
-		<check_box name="uploads_e" />
-		<text name="label_9" tool_tip="スクリプトを作成する時の権限を初期設定します">
+		<text name="label_9" tool_tip="スクリプトを作成したときのデフォルトの権限を設定します。">
 			スクリプト
 		</text>
-		<check_box name="scripts_c" />
-		<check_box name="scripts_m" />
-		<check_box name="scripts_t" />
-		<check_box name="scripts_s" />
-		<check_box name="scripts_e" />
-		<text name="label_10" tool_tip="ノートカードを作成する時の権限を初期設定します">
+		<text name="label_10" tool_tip="ノートカードを作成したときのデフォルトの権限を設定します。">
 			ノートカード
 		</text>
-		<check_box name="notecards_c" />
-		<check_box name="notecards_m" />
-		<check_box name="notecards_t" />
-		<check_box name="notecards_s" />
-		<check_box name="notecards_e" />
-		<text name="label_11" tool_tip="ジェスチャーを作成する時の権限を初期設定します">
+		<text name="label_11" tool_tip="ジェスチャーを作成したときのデフォルトの権限を設定します。">
 			ジェスチャー
 		</text>
-		<check_box name="gestures_c" />
-		<check_box name="gestures_m" />
-		<check_box name="gestures_t" />
-		<check_box name="gestures_s" />
-		<check_box name="gestures_a" />
-		<text name="label_12" tool_tip="衣類や身体部位を作成する時の権限を初期設定します">
-			衣類・身体部位
+		<text name="label_12" tool_tip="衣装または身体部位を作成したときのデフォルトの権限を設定します。">
+			装着物
 		</text>
-		<check_box name="wearables_c" />
-		<check_box name="wearables_m" />
-		<check_box name="wearables_t" />
-		<check_box name="wearables_s" />
-		<check_box name="wearables_e" />
-		<text name="label_13" tool_tip="自然環境設定を作成する時の権限を初期設定します">
-			自然環境設定
+		<text name="label_13" tool_tip="自然環境の設定を作成したときのデフォルトの権限を設定します。">
+			自然環境の設定
 		</text>
-		<check_box name="env_settings_c" />
-		<check_box name="env_settings_m" />
-		<check_box name="env_settings_t" />
-		<check_box name="env_settings_s" />
-		<check_box name="env_settings_e" />
+		<text name="label_14" tool_tip="マテリアルを作成したときのデフォルトの権限を設定します。">
+			マテリアル
+		</text>
 	</panel>
-	<button label="OK" label_selected="OK" name="ok"/>
-	<button label="取り消し" label_selected="取り消し" name="cancel"/>
+	<button label="ＯＫ" label_selected="ＯＫ" name="ok"/>
+	<button label="キャンセル" label_selected="キャンセル" name="cancel"/>
 </floater>

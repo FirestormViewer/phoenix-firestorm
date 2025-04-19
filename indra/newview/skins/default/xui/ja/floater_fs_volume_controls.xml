@@ -1,5 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="volume_controls" title="音量設定">
-
-	<panel name="global_volume_controls_panel" filename="panel_volume_pulldown.xml" />
-</floater>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="volume_controls" title="ボリューム設定"/>

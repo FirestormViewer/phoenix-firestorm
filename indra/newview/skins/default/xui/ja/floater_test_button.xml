@@ -11,6 +11,4 @@
 	<button label="無効" label_selected="選択済み" name="label_color_disabled_button"/>
 	<button label="ハイライト" name="highlight_color_button"/>
 	<button label="ホーバーでグローさせない" name="hover_glow_amount_button"/>
-	<button name="image_button"/>
-	<button name="image_color_button"/>
 </floater>

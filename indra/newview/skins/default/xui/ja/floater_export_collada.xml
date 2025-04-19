@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_export_collada" title="Collada 形式で保存...">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_export_collada" title="Collada形式で保存…">
 	<floater.string name="texture_progress">
-		[OBJECT] Collada を保存：テクスチャ保存中 (あと [COUNT])
+		[OBJECT]Colladaを保存：テクスチャを保存しています（残り[COUNT]枚）
 	</floater.string>
 	<floater.string name="floater_title">
-		[OBJECT] を Collada 形式で保存...
+		[OBJECT]をCollada形式で保存しています…
 	</floater.string>
 	<layout_stack name="resizing_stack">
 		<layout_panel name="control_panel">
@@ -15,28 +15,23 @@
 				名前：[NAME]
 			</text>
 			<text name="exportable_prims">
-				エクスポート可能なプリム数：[COUNT]/[TOTAL]
+				エクスポート可能なプリム数：全[TOTAL]個中[COUNT]個
 			</text>
 			<text name="exportable_textures">
-				エクスポート可能なテクスチャ数：[COUNT]/[TOTAL]
+				エクスポート可能なテクスチャ数：全[TOTAL]枚中[COUNT]枚
 			</text>
 			<text name="OptionsText">
 				オプション：
 			</text>
-			<check_box label="テクスチャを保存" name="export_textures_check" />
-			<check_box label="テクスチャを統合" name="consolidate_check" />
-			<check_box label="透明なものはスキップ" name="skip_transparent_check" />
-			<check_box label="テクスチャのパラメータを摘要" name="texture_params_check" />
-			<check_box label="単一の UV マップ" name="single_uv_map_check" />
+			<check_box label="テクスチャを保存する" name="export_textures_check"/>
+			<check_box label="テクスチャを統合する" name="consolidate_check"/>
+			<check_box label="透明なものはスキップする" name="skip_transparent_check"/>
+			<check_box label="テクスチャのパラメータを適応する" name="texture_params_check"/>
+			<check_box label="単一のＵＶマップとする" name="single_uv_map_check"/>
 			<text name="TextureFormatText">
 				テクスチャの形式：
 			</text>
-			<combo_box name="texture_type_combo">
-				<combo_box.item label="TARGA" name="tga" />
-				<combo_box.item label="PNG" name="png" />
-				<combo_box.item label="JPEG2000" name="j2c" />
-			</combo_box>
-			<button label="別名で保存..." name="export_btn" />
+			<button label="名前をつけて保存…" name="export_btn"/>
 		</layout_panel>
 	</layout_stack>
 </floater>

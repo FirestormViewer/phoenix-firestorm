@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">
+		戻る
+	</text>
+	<text name="av_nearby_title">
+		近くのアバター
+	</text>
+	<text name="tot_av_count">
+		総計：50（120000.10㎲）
+	</text>
+	<text name="av_nearby_desc">
+		最も複雑なアバターを非表示にして速度を上げます。
+	</text>
+	<slider tool_tip="視覚的に複雑なアバターが、どの時点でインポスターとして描画されるかを制御します。" label="最大複雑度（Ｋ）" name="IndirectMaxComplexity"/>
+	<slider tool_tip="視覚的に複雑なアバターが、描画に時間がかかりすぎると判断されるタイミングを制御します。（単位：マイクロ秒）" label="最大描画時間（㎲）" name="FSRenderAvatarMaxART">
+	</slider>
+	<text name="FSRenderAvatarMaxARTText">
+		制限なし
+	</text>
+	<name_list name="nearby_list">
+		<name_list.columns tool_tip="現在の描画にかかった時間（自動調整を含む）で最も時間がかかっている％として示す棒グラフです。" name="art_visual"/>
+		<name_list.columns label="時間（㎲）" tool_tip="アバターの描画にかかった時間。自動調整する前にこのアバターを描画するのにかかる実際の時間です。（マイクロ秒単位）" name="art_value"/>
+		<name_list.columns label="調整済み時間（㎲）" tool_tip="アバターの描画にかかった時間。自動調整する前にこのアバターを描画するのにかかる実際の時間です。（マイクロ秒単位）" name="adj_art_value"/>
+		<name_list.columns label="ＡＲＣ" tool_tip="標準ルールに基づく複雑さ（ＡＲＣ）です。" name="complex_value"/>
+		<name_list.columns tool_tip="チューニングを表示します。I=インポスター、S=影なし" name="state"/>
+		<name_list.columns label="名前" name="name"/>
+		<name_list.columns label="ブレイクダウン" tool_tip="描画時間に費やされる場所（ジオメトリ／シェード／その他）" name="breakdown"/>
+	</name_list>
+	<text name="av_nearby_desc2">
+		ワールド内のアバターを右クリックして表示を制御することもできます。
+	</text>
+	<text name="av_nearby_desc3">
+		注意: 自分のアバターにはビューアのオーバーヘッドが含まれます。装着物タブを使用して、他の人にどのような影響を与えるかを確認します。
+	</text>
+	<text name="AvatarComplexityMode_Label">
+		アバターの表示：
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="複雑度で制限" name="complexity_limit_everone"/>
+		<combo_box.item label="フレンドは常に表示" name="complexity_always_show_friends"/>
+		<combo_box.item label="フレンドのみ表示" name="complexity_only_show_friends"/>
+	</combo_box>
+	<button label="例外…" name="exceptions_btn"/>
+	<check_box label="アバターを完全に非表示する" name="hide_avatars"/>
+	<text name="name_tags_textbox">
+		名前タグ：
+	</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="なし" name="radio"/>
+		<radio_item label="あり" name="radio2"/>
+		<radio_item label="簡易表示" name="radio3"/>
+	</radio_group>
+</panel>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_inventory">
 	<text name="title">
-		インベントリ
+		インベントリに保存
 	</text>
-	<view_border  name="hr" />
 	<combo_box label="解像度" name="texture_size_combo">
-		<combo_box.item label="小（128x128）" name="Small(128x128)"/>
-		<combo_box.item label="中（256x256）" name="Medium(256x256)"/>
-		<combo_box.item label="大（512x512）" name="Large(512x512)"/>
-		<combo_box.item label="現在のウィンドウ" name="CurrentWindow" />
+		<combo_box.item label="小（128×128）" name="Small(128x128)"/>
+		<combo_box.item label="中（256×256）" name="Medium(256x256)"/>
+		<combo_box.item label="大（512×512）" name="Large(512x512)"/>
+		<combo_box.item label="特大（1024×1024）" name="Very Large(1024x1024)"/>
+		<combo_box.item label="巨大（2048×2048）" name="Huge(2048x2048)"/>
+		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>
 		<combo_box.item label="カスタム" name="Custom"/>
 	</combo_box>
-	<spinner label="幅 x 高さ" name="inventory_snapshot_width"/>
-	<spinner label="" name="inventory_snapshot_height"/>
+	<spinner label="横幅×高さ" name="inventory_snapshot_width"/>
 	<check_box label="縦横比の固定" name="inventory_keep_aspect_check"/>
-	<check_box label="仮アップロード" name="inventory_temp_upload" />
+	<check_box label="一時アップロード" name="inventory_temp_upload"/>
 	<text name="hint_lbl">
-		画像をテクスチャとして保存するには正方形の形式から 1 つを選択してください。
+		画像をテクスチャとして保存する場合は、いずれかの正方形を選択してください。
 
-Upload cost: L$ [UPLOAD_COST]
+アップロード費用：L$ [UPLOAD_COST]
 	</text>
-	<button label="取り消し" name="cancel_btn"/>
+	<button label="キャンセル" name="cancel_btn"/>
 	<button label="保存" name="save_btn"/>
 </panel>

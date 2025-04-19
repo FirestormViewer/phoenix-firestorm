@@ -1,32 +1,25 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
-	<block_list name="blocked" tool_tip="現在ブロックされている住人一覧" />
+	<block_list name="blocked" tool_tip="現在ブロックされている住人一覧"/>
 	<layout_stack name="block_list_sidetray_main">
-	<!-- will be shown or hidden in code, depending on whether this
-	     is a sub tab or standalone panel -Zi -->
-	<!-- probably unused now so set visible to false initially -->
+		<!-- will be shown or hidden in code, depending on whether this
+		is a sub tab or standalone panel -Zi -->
+		<!-- probably unused now so set visible to false initially -->
 		<layout_panel name="back_button_container">
-			<button tool_tip="「人」の画面に戻ります。" name="back" />
+			<button tool_tip="「人物」の画面に戻ります。" name="back"/>
 		</layout_panel>
 		<layout_panel name="block_list_blocklaypanels">
 			<layout_stack name="block_list_blocklaystack">
 				<layout_panel name="block_panels_btnsort">
-					<menu_button name="view_btn" tool_tip="並べ替えのオプション" />
+					<menu_button name="view_btn" tool_tip="並べ替えのオプション"/>
 				</layout_panel>
 				<layout_panel name="block_panels_btnpersonobject">
-					<menu_button label="ブロックリスト追加..." name="plus_btn" tool_tip="ブロックしたい住人またはオブジェクトを選択します。" />
+					<menu_button label="ブロックリスト追加…" name="plus_btn" tool_tip="ブロックしたい住人またはオブジェクトを選択します。"/>
 				</layout_panel>
 				<layout_panel name="block_panels_btnunblock">
-					<button label="ブロック解除" name="unblock_btn" tool_tip="ブロックリストから住人またはオブジェクトを削除" />
+					<button label="ブロック解除" name="unblock_btn" tool_tip="ブロックリストから住人またはオブジェクトを削除します。"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>
-
-	<!-- keep these controls so the code doesn't complain about missing controls -Zi -->
-	<panel name="hide_controls">
-		<text name="title_text" />
-		<menu_button	 name="blocked_gear_btn" />
-		<filter_editor name="blocked_filter_input" />
-	</panel>
 </panel>
