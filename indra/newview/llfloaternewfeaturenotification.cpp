@@ -45,10 +45,16 @@ bool LLFloaterNewFeatureNotification::postBuild()
 
     const std::string title_txt = "title_txt";
     const std::string dsc_txt = "description_txt";
-    std::string feature = "_" + getKey().asString();
-
-    getChild<LLUICtrl>(title_txt)->setValue(getString(title_txt + feature));
-    getChild<LLUICtrl>(dsc_txt)->setValue(getString(dsc_txt + feature));
+    // <FS:Beq> FIRE-35393 stop crashing just cos whirly does something daft and blames Atlas for it
+    std::string feature = getKey().asString();
+    if(feature.empty())
+    {
+        return true;
+    }
+    // </FS:Beq>
+    
+    getChild<LLUICtrl>(title_txt)->setValue(getString(title_txt + "_" + feature));
+    getChild<LLUICtrl>(dsc_txt)->setValue(getString(dsc_txt + "_" + feature));
 
     if (getKey().asString() == "gltf")
     {
