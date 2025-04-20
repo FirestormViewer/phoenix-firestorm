@@ -391,6 +391,7 @@ void LLViewerTextureList::dump()
     std::array<S32, MAX_DISCARD_LEVEL * 2 + 2> image_counts{0}; // Double the size for higher discards from textures < 1024 (2048 can make a 7 and 4096 could make an 8)
     std::array<S32, 12 * 12> size_counts{0}; // Track the 12 possible sizes (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048)
     std::array<S32, (MAX_DISCARD_LEVEL * 2 + 2) * 12> discard_counts{0}; // Also need to an 1 additional as -1 is a valid discard level (not loaded by reported as a 1x1 texture)
+    std::array<S32, (MAX_DISCARD_LEVEL * 2 + 2) * 12> fullsize_discard_counts{0}; // Also need to an 1 additional as -1 is a valid discard level (not loaded by reported as a 1x1 texture)
     std::array<S32, LLViewerTexture::BOOST_MAX_LEVEL * 12> boost_counts{0}; // Track the # of textures at boost levels by 12 possible sizes
     // Don't Init the buffers with 0's like it's the the 1980's...
     
@@ -436,6 +437,10 @@ void LLViewerTextureList::dump()
         S32 max_dimension = (y_index > x_index ? y_index : x_index);
         discard_counts[(image->getDiscardLevel() + 1) + max_dimension * (MAX_DISCARD_LEVEL * 2 + 2)] += 1;
         boost_counts[image->getBoostLevel() + max_dimension * (LLViewerTexture::BOOST_MAX_LEVEL)] += 1;
+        S32 full_x_index = (S32)log2(image->getFullWidth());
+        S32 full_y_index = (S32)log2(image->getFullHeight());
+        S32 full_max_dimension = (full_y_index > full_x_index ? full_y_index : full_x_index);
+        fullsize_discard_counts[(image->getDiscardLevel() + 1) + full_max_dimension * (MAX_DISCARD_LEVEL * 2 + 2)] += 1;
         texture_count++;
         textures_close_to_camera += S32(image->getCloseToCamera());
         // </FS:minerjr> [FIRE-35081]
@@ -469,6 +474,8 @@ void LLViewerTextureList::dump()
         header_break += "-";
     }
 
+    LL_INFOS() << "Size vs Size" << LL_ENDL;
+
     LL_INFOS() << header_break << LL_ENDL;
     LL_INFOS() << header << LL_ENDL; // Size vs Size counts header
     LL_INFOS() << header_break << LL_ENDL;
@@ -499,7 +506,7 @@ void LLViewerTextureList::dump()
     LL_INFOS() << header << LL_ENDL; // Size vs Size counts footer
     LL_INFOS() << header_break << LL_ENDL;
 
-    LL_INFOS() << "" << LL_ENDL;
+    LL_INFOS() << "Discard Level Vs Size" << LL_ENDL;
 
     // This is the Discard Level Vs Size counts table
     header = "Discard: ";
@@ -547,6 +554,57 @@ void LLViewerTextureList::dump()
     LL_INFOS() << header_break << LL_ENDL;
     LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts footer
     LL_INFOS() << header_break << LL_ENDL;
+
+    LL_INFOS() << "Discard Level Vs Full Size" << LL_ENDL;
+
+    // This is the Discard Level Vs Full Size counts table
+    header = "Discard: ";
+    for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
+    {
+        std::string newValue = std::to_string(x - 1);
+        header +=  newValue;
+        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
+        {
+            header += " ";
+        }
+    }
+
+    header_break = "";
+    for (S32 x = 0; x < header.length(); x++)
+    {
+        header_break += "-";
+    }
+
+    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts header
+    LL_INFOS() << header_break << LL_ENDL;
+
+    // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
+    for (S32 y = 0; y < 12; y++)
+    {
+        std::string newValue = std::to_string((S32)pow(2, y));
+        std::string discard_count_string = "" + newValue;
+        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
+        {
+            discard_count_string += " ";
+        }
+        // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
+        for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
+        {
+            std::string newValue = std::to_string(fullsize_discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
+            discard_count_string += newValue;
+            for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
+            {
+                discard_count_string += " ";
+            }
+        }
+        LL_INFOS() << discard_count_string << LL_ENDL;
+    }
+    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << header << LL_ENDL; // Discard Level Vs Full Size counts footer
+    LL_INFOS() << header_break << LL_ENDL;
+
+    LL_INFOS() << "Boost Level Vs Size" << LL_ENDL;
 
     // This is the Boost Level Vs Size counts table
     header = "Boost:   ";
