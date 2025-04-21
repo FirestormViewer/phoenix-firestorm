@@ -399,20 +399,6 @@ void LLViewerTextureList::dump()
     for (image_list_t::iterator it = mImageList.begin(); it != mImageList.end(); ++it)
     {
         LLViewerFetchedTexture* image = *it;
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
-        std::string face_counts = "";
-        std::string volume_counts = "";
-        for (S32 index = 0; index < LLRender::NUM_TEXTURE_CHANNELS; index++)
-        {
-            face_counts += std::to_string(image->getNumFaces(index)) + " ";
-        }
-
-        for (S32 index = 0; index < LLRender::NUM_VOLUME_TEXTURE_CHANNELS; index++)
-        {
-            volume_counts += std::to_string(image->getNumVolumes(index)) + " ";
-        }
-        // </FS:minerjr> [FIRE-35081]
-
         LL_INFOS() << "priority " << image->getMaxVirtualSize()
         << " boost " << image->getBoostLevel()
         << " size " << image->getWidth() << "x" << image->getHeight()
@@ -423,10 +409,18 @@ void LLViewerTextureList::dump()
         << " FFType " << fttype_to_string(image->getFTType()) // Display the FFType of the camera
         << " Type " << (S32)image->getType() // Display the type of the image (LOCAL_TEXTURE = 0, MEDIA_TEXTURE = 1, DYNAMIC_TEXTURE = 2, FETCHED_TEXTURE = 3,LOD_TEXTURE = 4)        
         << " Sculpted " << (image->forSculpt() ? "Y" : "N")
-        << " # of Faces " << face_counts
-        << " # of Volumes " << volume_counts
+        << " # of Faces ";
+        for (S32 index = 0; index < LLRender::NUM_TEXTURE_CHANNELS; index++)
+        {
+            LL_CONT << image->getNumFaces(index) << " ";
+        }        
+        LL_CONT << " # of Volumes ";
+        for (S32 index = 0; index < LLRender::NUM_VOLUME_TEXTURE_CHANNELS; index++)
+        {
+            LL_CONT << image->getNumVolumes(index) + " ";
+        }
         // </FS:minerjr> [FIRE-35081]
-        << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
+        LL_CONT << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
         << LL_ENDL;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
         image_counts[(image->getDiscardLevel() + 1)] += 1; // Need to add +1 to make up for -1 being a possible value
@@ -455,203 +449,108 @@ void LLViewerTextureList::dump()
         LL_INFOS() << " Discard Level: " << (index - 1) << " Number of Textures: " << image_counts[index] << LL_ENDL;
     }
 
-    // Create a header that for the Sizes
-    std::string header = "Size     ";
-    for (S32 x = 0; x < 12; x++)
-    {
-        std::string newValue = std::to_string((S32)pow(2, x));
-        header += newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            header += " ";
-        }
-    }
-
     // Create a line to break up the header from the content of the table
-    std::string header_break = "";
-    for (S32 x = 0; x < header.length(); x++)
-    {
-        header_break += "-";
-    }
+    std::string header_break(13 * 8, '-');
 
     LL_INFOS() << "Size vs Size" << LL_ENDL;
-
     LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Size vs Size counts header
+    // Create a header that for the Sizes
+    LL_INFOS() << std::format("{:<8}", "Size");
+    for (S32 x = 1; x <= 2048; x <<= 1)
+    {
+        LL_CONT << std::format("{:<8}", x);
+    }
+    LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
 
     // Y Axis is the size of the height of the texture
     for (S32 y = 0; y < 12; y++)
     {
-        std::string newValue = std::to_string((S32)pow(2, y));
-        std::string size_count_string = "" + newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            size_count_string += " ";
-        }
-
+        LL_INFOS() << std::format("{:<8}", (1 << y));
         //X Axis is the size of the width of the texture
         for (S32 x = 0; x < 12; x++)
         {
-            newValue = std::to_string(size_counts[x + y * 12]);
-            size_count_string += newValue;
-            for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-            {
-                size_count_string += " ";
-            }
-        }
-        LL_INFOS() << size_count_string << LL_ENDL;
-    }
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Size vs Size counts footer
-    LL_INFOS() << header_break << LL_ENDL;
+            LL_CONT << std::format("{:<8}", size_counts[x + y * 12]);
 
-    LL_INFOS() << "Discard Level Vs Size" << LL_ENDL;
+        }
+        LL_CONT << LL_ENDL;
+    }
+    LL_INFOS() << LL_ENDL;
 
     // This is the Discard Level Vs Size counts table
-    header = "Discard: ";
+    LL_INFOS() << "Discard Level Vs Size" << LL_ENDL;
+    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << std::format("{:<8}", "Discard");
     for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
     {
-        std::string newValue = std::to_string(x - 1);
-        header +=  newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            header += " ";
-        }
+        LL_CONT << std::format("{:<8}", (x - 1));
     }
-
-    header_break = "";
-    for (S32 x = 0; x < header.length(); x++)
-    {
-        header_break += "-";
-    }
-
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts header
+    LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
 
     // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
     for (S32 y = 0; y < 12; y++)
     {
-        std::string newValue = std::to_string((S32)pow(2, y));
-        std::string discard_count_string = "" + newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            discard_count_string += " ";
-        }
+        LL_INFOS() << std::format("{:<8}", (1 << y));
         // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
         for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
         {
-            std::string newValue = std::to_string(discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
-            discard_count_string += newValue;
-            for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-            {
-                discard_count_string += " ";
-            }
+            LL_CONT << std::format("{:<8}", discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
         }
-        LL_INFOS() << discard_count_string << LL_ENDL;
+        LL_CONT << LL_ENDL;
     }
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts footer
-    LL_INFOS() << header_break << LL_ENDL;
-
-    LL_INFOS() << "Discard Level Vs Full Size" << LL_ENDL;
+    LL_INFOS() << LL_ENDL;
+    
 
     // This is the Discard Level Vs Full Size counts table
-    header = "Discard: ";
+    LL_INFOS() << "Discard Level Vs Full Size" << LL_ENDL;
+    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << std::format("{:<8}", "Discard");
     for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
     {
-        std::string newValue = std::to_string(x - 1);
-        header +=  newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            header += " ";
-        }
+        LL_CONT << std::format("{:<8}", (x - 1));
     }
-
-    header_break = "";
-    for (S32 x = 0; x < header.length(); x++)
-    {
-        header_break += "-";
-    }
-
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Discard Level Vs Size counts header
+    LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
 
     // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
     for (S32 y = 0; y < 12; y++)
     {
-        std::string newValue = std::to_string((S32)pow(2, y));
-        std::string discard_count_string = "" + newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            discard_count_string += " ";
-        }
+        LL_INFOS() << std::format("{:<8}", (1 << y));
         // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
         for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
         {
-            std::string newValue = std::to_string(fullsize_discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
-            discard_count_string += newValue;
-            for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-            {
-                discard_count_string += " ";
-            }
+            LL_CONT << std::format("{:<8}", fullsize_discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
         }
-        LL_INFOS() << discard_count_string << LL_ENDL;
+        LL_CONT << LL_ENDL;
     }
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Discard Level Vs Full Size counts footer
-    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << LL_ENDL;
 
-    LL_INFOS() << "Boost Level Vs Size" << LL_ENDL;
 
     // This is the Boost Level Vs Size counts table
-    header = "Boost:   ";
+    LL_INFOS() << "Boost Level Vs Size" << LL_ENDL;
+    header_break.append((LLViewerTexture::BOOST_MAX_LEVEL * 8) - (12 * 8), '-');
+    LL_INFOS() << header_break << LL_ENDL;    
+    LL_INFOS() << std::format("{:<8}", "Discard");
     for (S32 x = 0; x < LLViewerTexture::BOOST_MAX_LEVEL; x++)
     {
-        std::string newValue = std::to_string(x);
-        header +=  newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            header += " ";
-        }
+        LL_CONT << std::format("{:<8}", x);
     }
-
-    header_break = "";
-    for (S32 x = 0; x < header.length(); x++)
-    {
-        header_break += "-";
-    }
-
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Boost Level Vs Size counts header
+    LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
 
     // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
     for (S32 y = 0; y < 12; y++)
     {
-        std::string newValue = std::to_string((S32)pow(2, y));
-        std::string boost_count_string = "" + newValue;
-        for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-        {
-            boost_count_string += " ";
-        }
+        LL_INFOS() << std::format("{:<8}", (1 << y));
         // X Axis is the boost level starging from BOOST_NONE up to BOOST_MAX_LEVEL
         for (S32 x = 0; x < (LLViewerTexture::BOOST_MAX_LEVEL); x++)
         {
-            std::string newValue = std::to_string(boost_counts[x + y * (LLViewerTexture::BOOST_MAX_LEVEL)]);
-            boost_count_string += newValue;
-            for (S32 tab = 0; tab <= 8 - newValue.length(); tab++)
-            {
-                boost_count_string += " ";
-            }
+            LL_CONT << std::format("{:<8}", boost_counts[x + y * (LLViewerTexture::BOOST_MAX_LEVEL)]);
         }
-        LL_INFOS() << boost_count_string << LL_ENDL;
+        LL_CONT << LL_ENDL;
     }
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << header << LL_ENDL; // Boost Level Vs Size counts footer
-    LL_INFOS() << header_break << LL_ENDL;
+    LL_INFOS() << LL_ENDL;
 
     // </FS:minerjr> [FIRE-35081]
 }
