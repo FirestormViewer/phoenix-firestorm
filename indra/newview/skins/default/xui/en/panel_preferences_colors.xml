@@ -1839,10 +1839,10 @@
      width="44">
         <color_swatch.init_callback
         function="Pref.getUIColor"
-        parameter="SearchableControlHighlightColor" />
+        parameter="SearchableControlHighlightBgColor" />
         <color_swatch.commit_callback
         function="Pref.applyUIColor"
-        parameter="SearchableControlHighlightColor" />
+        parameter="SearchableControlHighlightBgColor" />
      </color_swatch>
 
      <text
