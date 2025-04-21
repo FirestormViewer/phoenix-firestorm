@@ -272,6 +272,8 @@ void LLVOAvatarSelf::initInstance()
     doPeriodically(check_for_unsupported_baked_appearance, 120.0);
     doPeriodically(boost::bind(&LLVOAvatarSelf::checkStuckAppearance, this), 30.0);
 
+    initAllJoints(); // mesh thread uses LLVOAvatarSelf as a joint source
+
     mInitFlags |= 1<<2;
 }
 
