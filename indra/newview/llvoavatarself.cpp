@@ -1030,8 +1030,8 @@ void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 
 // virtual
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//LLJoint *LLVOAvatarSelf::getJoint( const std::string &name )
-LLJoint *LLVOAvatarSelf::getJoint( const JointKey &name )
+//LLJoint *LLVOAvatarSelf::getJoint(const std::string &name)
+LLJoint *LLVOAvatarSelf::getJoint(const JointKey& name)
 // </FS:ND>
 {
     std::lock_guard lock(mJointMapMutex);

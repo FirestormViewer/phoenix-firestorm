@@ -205,9 +205,9 @@ public:
     void                    dumpAnimationState();
 
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-    //virtual LLJoint*      getJoint( const std::string &name );
-    virtual LLJoint*        getJoint( const JointKey &name );
-    LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
+    //virtual LLJoint*      getJoint(const std::string &name);
+    virtual LLJoint*        getJoint(const JointKey& name);
+    LLJoint*                getJoint(const std::string& name) { return getJoint(JointKey::construct(name)); }
 // </FS:ND>
     LLJoint*                getJoint(S32 num);
     void                    initAllJoints();

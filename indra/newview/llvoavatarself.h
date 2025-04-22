@@ -92,8 +92,8 @@ public:
     /*virtual*/ void        requestStopMotion(LLMotion* motion);
 
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//  /*virtual*/ LLJoint*    getJoint( const std::string &name );
-    /*virtual*/ LLJoint*    getJoint( const JointKey &name );
+//  /*virtual*/ LLJoint*    getJoint(const std::string &name);
+    /*virtual*/ LLJoint*    getJoint(const JointKey& name);
 // </FS:ND>
 
     /*virtual*/ void renderJoints();
