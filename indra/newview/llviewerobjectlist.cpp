@@ -835,7 +835,7 @@ void LLViewerObjectList::setAllObjectDefaultTextures(U32 nChannel, bool fShowDef
     }
 }
 // [/SL:KB]
-// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
 //void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 // Added time limit on processing of objects as they affect the texture system (They also calcuate mMaxVirtualSize and mPixelArea)
 void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
@@ -845,7 +845,7 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
     LLViewerObject *objectp;
 
     S32 num_updates, max_value;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Remove the old code as it worked on fixed number of updates (Total # of Object / 128) per frame
     // and some objects had nothing to do while others were avatars or volumes and could t
     /*

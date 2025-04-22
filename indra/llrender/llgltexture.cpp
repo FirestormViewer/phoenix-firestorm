@@ -104,7 +104,7 @@ void LLGLTexture::setBoostLevel(S32 level)
         if(mBoostLevel != LLGLTexture::BOOST_NONE
            && mBoostLevel != LLGLTexture::BOOST_ICON
            && mBoostLevel != LLGLTexture::BOOST_THUMBNAIL
-           // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+           // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
            // Add the new grass, light and tree boosts
            && mBoostLevel != LLGLTexture::BOOST_GRASS
            && mBoostLevel != LLGLTexture::BOOST_LIGHT
