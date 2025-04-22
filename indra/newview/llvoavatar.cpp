@@ -7268,8 +7268,8 @@ const LLUUID& LLVOAvatar::getID() const
 //-----------------------------------------------------------------------------
 // RN: avatar joints are multi-rooted to include screen-based attachments
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//LLJoint *LLVOAvatar::getJoint( const std::string &name )
-LLJoint *LLVOAvatar::getJoint( const JointKey &name )
+//LLJoint *LLVOAvatar::getJoint(const std::string &name)
+LLJoint *LLVOAvatar::getJoint(const JointKey &name)
 // </FS:ND>
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
@@ -7368,6 +7368,23 @@ LLJoint *LLVOAvatar::getJoint( S32 joint_num )
 
     llassert(!pJoint || pJoint->getJointNum() == joint_num);
     return pJoint;
+}
+
+void LLVOAvatar::initAllJoints()
+{
+    getJointAliases();
+    // <FS:Ansariel> Lookup performance changes
+    //for (auto& alias : mJointAliasMap)
+    //{
+    //    mJointMap[alias.first] = mRoot->findJoint(alias.second);
+    //    mJointMap[JointKey::construct(alias.first).mKey] = mRoot->findJoint(alias.second);
+    //}
+    for (const auto& alias : mJointAliasMap)
+    {
+        mJointMap[JointKey::construct(alias.first).mKey] = mRoot->findJoint(alias.second);
+    }
+    // </FS:Ansariel>
+    // ignore mScreen and mRoot
 }
 
 //-----------------------------------------------------------------------------
