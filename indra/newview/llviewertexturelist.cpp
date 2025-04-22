@@ -455,10 +455,10 @@ void LLViewerTextureList::dump()
     LL_INFOS() << "Size vs Size" << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
     // Create a header that for the Sizes
-    LL_INFOS() << std::format("{:<8}", "Size");
+    LL_INFOS() << std::setw(8) << "Size";
     for (S32 x = 1; x <= 2048; x <<= 1)
     {
-        LL_CONT << std::format("{:<8}", x);
+        LL_CONT << std::setw(8) << x;
     }
     LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
@@ -466,11 +466,11 @@ void LLViewerTextureList::dump()
     // Y Axis is the size of the height of the texture
     for (S32 y = 0; y < 12; y++)
     {
-        LL_INFOS() << std::format("{:<8}", (1 << y));
+        LL_INFOS() << std::setw(8) << (1 << y);
         //X Axis is the size of the width of the texture
         for (S32 x = 0; x < 12; x++)
         {
-            LL_CONT << std::format("{:<8}", size_counts[x + y * 12]);
+            LL_CONT << std::setw(8) << size_counts[x + y * 12];
 
         }
         LL_CONT << LL_ENDL;
@@ -480,10 +480,10 @@ void LLViewerTextureList::dump()
     // This is the Discard Level Vs Size counts table
     LL_INFOS() << "Discard Level Vs Size" << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << std::format("{:<8}", "Discard");
+    LL_INFOS() << std::setw(8) << "Discard";
     for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
     {
-        LL_CONT << std::format("{:<8}", (x - 1));
+        LL_CONT << std::setw(8) << (x - 1);
     }
     LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
@@ -491,11 +491,11 @@ void LLViewerTextureList::dump()
     // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
     for (S32 y = 0; y < 12; y++)
     {
-        LL_INFOS() << std::format("{:<8}", (1 << y));
+        LL_INFOS() << std::setw(8) << (1 << y);
         // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
         for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
         {
-            LL_CONT << std::format("{:<8}", discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
+            LL_CONT << std::setw(8) << discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)];
         }
         LL_CONT << LL_ENDL;
     }
@@ -505,10 +505,10 @@ void LLViewerTextureList::dump()
     // This is the Discard Level Vs Full Size counts table
     LL_INFOS() << "Discard Level Vs Full Size" << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << std::format("{:<8}", "Discard");
+    LL_INFOS() << std::setw(8) << "Discard";
     for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
     {
-        LL_CONT << std::format("{:<8}", (x - 1));
+        LL_CONT << std::setw(8) << (x - 1);
     }
     LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
@@ -516,11 +516,11 @@ void LLViewerTextureList::dump()
     // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
     for (S32 y = 0; y < 12; y++)
     {
-        LL_INFOS() << std::format("{:<8}", (1 << y));
+        LL_INFOS() << std::setw(8) << (1 << y);
         // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
         for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
         {
-            LL_CONT << std::format("{:<8}", fullsize_discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)]);
+            LL_CONT << std::setw(8) << fullsize_discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)];
         }
         LL_CONT << LL_ENDL;
     }
@@ -531,10 +531,10 @@ void LLViewerTextureList::dump()
     LL_INFOS() << "Boost Level Vs Size" << LL_ENDL;
     header_break.append((LLViewerTexture::BOOST_MAX_LEVEL * 8) - (12 * 8), '-');
     LL_INFOS() << header_break << LL_ENDL;    
-    LL_INFOS() << std::format("{:<8}", "Discard");
+    LL_INFOS() << std::setw(8) << "Discard";
     for (S32 x = 0; x < LLViewerTexture::BOOST_MAX_LEVEL; x++)
     {
-        LL_CONT << std::format("{:<8}", x);
+        LL_CONT << std::setw(8) << x;
     }
     LL_CONT << LL_ENDL;
     LL_INFOS() << header_break << LL_ENDL;
@@ -542,11 +542,11 @@ void LLViewerTextureList::dump()
     // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
     for (S32 y = 0; y < 12; y++)
     {
-        LL_INFOS() << std::format("{:<8}", (1 << y));
+        LL_INFOS() << std::setw(8) << (1 << y);
         // X Axis is the boost level starging from BOOST_NONE up to BOOST_MAX_LEVEL
         for (S32 x = 0; x < (LLViewerTexture::BOOST_MAX_LEVEL); x++)
         {
-            LL_CONT << std::format("{:<8}", boost_counts[x + y * (LLViewerTexture::BOOST_MAX_LEVEL)]);
+            LL_CONT << std::setw(8) << boost_counts[x + y * (LLViewerTexture::BOOST_MAX_LEVEL)];
         }
         LL_CONT << LL_ENDL;
     }
