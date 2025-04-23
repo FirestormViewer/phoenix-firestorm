@@ -545,7 +545,7 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("List");
                 F32 max_image_decode_time = 0.050f * gFrameIntervalSeconds.value();          // 50 ms/second decode time
-                max_image_decode_time     = llclamp(max_image_decode_time, 0.002f, 0.005f);  // min 2ms/frame, max 5ms/frame)
+                max_image_decode_time     = llclamp(max_image_decode_time, 0.004f, 0.010f);  // min 2ms/frame, max 5ms/frame)
                 gTextureList.updateImages(max_image_decode_time);
             }
 
@@ -959,7 +959,7 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("List");
                 F32 max_image_decode_time = 0.050f*gFrameIntervalSeconds.value(); // 50 ms/second decode time
-                max_image_decode_time = llclamp(max_image_decode_time, 0.002f, 0.005f ); // min 2ms/frame, max 5ms/frame)
+                max_image_decode_time = llclamp(max_image_decode_time, 0.004f, 0.010f ); // min 2ms/frame, max 5ms/frame)
                 gTextureList.updateImages(max_image_decode_time);
             }
 

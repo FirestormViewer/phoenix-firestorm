@@ -980,7 +980,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // If the new area is changed from the old area, then accept it.
-        if (mPixelArea != old_area)
+        if (std::isnormal(mPixelArea) && std::isnormal(old_area) && mPixelArea != old_area)
         {
             changed = true;
         }

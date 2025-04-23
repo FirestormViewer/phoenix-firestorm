@@ -34,21 +34,29 @@
 #include "llmath.h"
 #include <boost/algorithm/string.hpp>
 
+#include "llmutex.h"
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 #include <unordered_map>
 
 std::unordered_map<std::string, U32> mpStringToKeys;
+std::shared_mutex mpStringToKeysMutex;
 
 JointKey JointKey::construct(const std::string& aName)
 {
+    {
+    std::shared_lock lock(mpStringToKeysMutex);
     if (const auto itr = mpStringToKeys.find(aName); itr != mpStringToKeys.end())
     {
         return { aName, itr->second };
     }
+    }
 
+    {
+    std::unique_lock lock(mpStringToKeysMutex);
     U32 size = static_cast<U32>(mpStringToKeys.size()) + 1;
     mpStringToKeys.try_emplace(aName, size);
     return { aName, size };
+    }
 }
 // </FS:ND>
 

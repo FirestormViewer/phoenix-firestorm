@@ -516,8 +516,8 @@ void LLViewerTexture::updateClass()
     static LLCachedControl<U32> max_vram_budget(gSavedSettings, "RenderMaxVRAMBudget", 0);
     static LLCachedControl<bool> max_vram_budget_enabled(gSavedSettings, "FSLimitTextureVRAMUsage"); // <FS:Ansariel> Expose max texture VRAM setting
 
-    F64 texture_bytes_alloc = LLImageGL::getTextureBytesAllocated() / 1024.0 / 512.0;
-    F64 vertex_bytes_alloc = LLVertexBuffer::getBytesAllocated() / 1024.0 / 512.0;
+    F64 texture_bytes_alloc = LLImageGL::getTextureBytesAllocated() / 1024.0 / 1024.0;
+    F64 vertex_bytes_alloc = LLVertexBuffer::getBytesAllocated() / 1024.0 / 1024.0;
 
     // get an estimate of how much video memory we're using
     // NOTE: our metrics miss about half the vram we use, so this biases high but turns out to typically be within 5% of the real number
@@ -1161,8 +1161,8 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mRequestedDownloadPriority = 0.f;
     mFullyLoaded = false;
     mCanUseHTTP = true;
-    mDesiredDiscardLevel = MAX_DISCARD_LEVEL + 1;
-    mMinDesiredDiscardLevel = MAX_DISCARD_LEVEL + 1;
+    mDesiredDiscardLevel = MAX_DISCARD_LEVEL;
+    mMinDesiredDiscardLevel = MAX_DISCARD_LEVEL;
 
     mDecodingAux = false;
 
@@ -1209,7 +1209,9 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mLastCallBackActiveTime = 0.f;
     mForceCallbackFetch = false;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    mCloseToCamera = 1.0f; // Store if the camera is close to the camera (0.0f or 1.0f)
+    mCloseToCamera = false; // Store if the texture is close to the camera (true or false)
+    mBias = 1.0f;
+    mImportanceToCamera = 1.0f;
     // </FS:minerjr> [FIRE-35081]
 
     mFTType = FTT_UNKNOWN;
@@ -1789,6 +1791,11 @@ void LLViewerFetchedTexture::processTextureStats()
     else
     {
         updateVirtualSize();
+
+        if (hasFetcher())
+        {
+            return;
+        }
 
         static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes", false);
 
@@ -3058,10 +3065,15 @@ void LLViewerLODTexture::processTextureStats()
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     updateVirtualSize();
 
+    if (hasFetcher())
+    {
+        return;
+    }
+
     bool did_downscale = false;
 
     static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes", false);
-
+    S8 prevDesiredDiscardLevel = mDesiredDiscardLevel;
     F32 max_tex_res = MAX_IMAGE_SIZE_DEFAULT;
     if (mBoostLevel < LLGLTexture::BOOST_HIGH)
     {
@@ -3095,9 +3107,9 @@ void LLViewerLODTexture::processTextureStats()
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Add scale down here as the textures off screen were not getting scaled down properly
         S32 current_discard = getDiscardLevel();
-        if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
+        //if (mBoostLevel == LLGLTexture::BOOST_NONE)
         {
-            if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            if (current_discard >= 0 && current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
             { // should scale down
                 scaleDown();
             }
@@ -3153,18 +3165,21 @@ void LLViewerLODTexture::processTextureStats()
         for (; discard_level < MAX_DISCARD_LEVEL; discard_level++) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
         {
             // If the max virtual size is greater then or equal to the current discard level, then break out of the loop and use the current discard level
-            if (mMaxVirtualSize >= getWidth(discard_level) * getHeight(discard_level)) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
+            if (mMaxVirtualSize * mBias >= getWidth(discard_level) * getHeight(discard_level)) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
             {
                 break;
             }
+            else if (mMaxVirtualSize * mBias >= getWidth(discard_level + 1) * getHeight(discard_level + 1))
+            {
+                break;
+            }            
         }
-
 
         //discard_level = llclamp(discard_level, min_discard, (F32)MAX_DISCARD_LEVEL);
         // </FS:minerjr> [FIRE-35081]
 
         // Can't go higher than the max discard level
-        mDesiredDiscardLevel = llmin(getMaxDiscardLevel() + 1, (S32)discard_level);
+        mDesiredDiscardLevel = llmin(getMaxDiscardLevel(), (S32)discard_level);
         // Clamp to min desired discard
         mDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel, mDesiredDiscardLevel);
 
@@ -3177,7 +3192,7 @@ void LLViewerLODTexture::processTextureStats()
         S32 current_discard = getDiscardLevel();
         if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
         {
-            if (current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
+            if (current_discard >= 0 && current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
             { // should scale down
                 scaleDown();
             }
