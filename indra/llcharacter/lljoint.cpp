@@ -34,21 +34,29 @@
 #include "llmath.h"
 #include <boost/algorithm/string.hpp>
 
+#include "llmutex.h" // <FS:minerjr> [FIRE-35382] Add share_mutex to fix JointKey::construct lockup
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 #include <unordered_map>
 
 std::unordered_map<std::string, U32> mpStringToKeys;
+std::shared_mutex mpStringToKeysMutex; // <FS:minerjr> [FIRE-35382] Add share_mutex to fix JointKey::construct lockup
 
 JointKey JointKey::construct(const std::string& aName)
 {
+    {// <FS:minerjr> [FIRE-35382] Add share_mutex to fix JointKey::construct lockup
+    std::shared_lock lock(mpStringToKeysMutex); // </FS:minerjr> [FIRE-35382] Added a shared lock for reading the mpStringToKeys unordered_map.
     if (const auto itr = mpStringToKeys.find(aName); itr != mpStringToKeys.end())
     {
         return { aName, itr->second };
     }
+    }// <FS:minerjr> [FIRE-35382] Add share_mutex to fix JointKey::construct lockup
 
+    { // Add a unique lock for writing to the mpStringToKeys unordered_map.
+    std::unique_lock lock(mpStringToKeysMutex);// </FS:minerjr> [FIRE-35382] 
     U32 size = static_cast<U32>(mpStringToKeys.size()) + 1;
     mpStringToKeys.try_emplace(aName, size);
     return { aName, size };
+    } // <FS:minerjr> [FIRE-35382] Add share_mutex to fix JointKey::construct lockup
 }
 // </FS:ND>
 
