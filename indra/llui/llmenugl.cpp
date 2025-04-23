@@ -529,10 +529,7 @@ void LLMenuItemGL::draw( void )
 
     // Highlight if needed
     if( ll::ui::SearchableControl::getHighlighted() )
-        // <FS> [FIRE-35405] Fix for search highlight color until font color picker is added
-        //color = ll::ui::SearchableControl::getHighlightFontColor();
-        color = ll::ui::SearchableControl::getHighlightBgColor();
-        // </FS>
+        color = ll::ui::SearchableControl::getHighlightFontColor();
 
     // Draw the text on top.
     if (mBriefItem)

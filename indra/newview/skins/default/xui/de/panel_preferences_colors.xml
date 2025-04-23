@@ -201,10 +201,17 @@
 			<slider name="console_background_opacity" label="Deckkraft:" tool_tip="Deckkraft für Konsole auswählen"/>
 			<slider label="Deckkraft für Schwebe-Text:" name="FSHudTextBackgroundOpacity" tool_tip="Deckkraft für Hintergrund von Schwebe-Text festlegen"/>
 			<text name="preferences_search_label">
-				Farbe für Einstellungssuche:
-			</text>
-			<color_swatch name="preferences_search_color" tool_tip="Farbe für die Hervorhebung der Einstellungssuche"/>
-			<text name="area_search_beacon_color_label">
+                Farben für Einstellungssuche:
+            </text>
+			<text name="preferences_search_bg_label" width ="75">
+                Hintergrund:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Hintergrundfarbe für die Hervorhebung der Einstellungssuche"/>
+			<text name="preferences_search_font_label" width="60">
+                Schriftart:
+            </text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Schriftfarbe für die Hervorhebung der Einstellungssuche"/>
+			<text name="area_search_beacon_color_label" left="300">
 				Farbe für Markierung der Umgebungssuche:
 			</text>
 			

@@ -901,10 +901,7 @@ void LLButton::draw()
 
     // Highlight if needed
     if( ll::ui::SearchableControl::getHighlighted() )
-        // <FS> [FIRE-35405] Fix for search highlight color until font color picker is added
-        //label_color = ll::ui::SearchableControl::getHighlightFontColor();
-        label_color = ll::ui::SearchableControl::getHighlightBgColor();
-        // </FS>
+        label_color = ll::ui::SearchableControl::getHighlightFontColor();
 
     // overlay with keyboard focus border
     if (hasFocus())
