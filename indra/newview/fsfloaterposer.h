@@ -136,7 +136,7 @@ public:
     /// Updates the visual with the first selected joint from the supplied collection, if any.
     /// </summary>
     /// <param name="joints">The collection of selected joints.</param>
-    static void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints);
+    void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints) const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.
