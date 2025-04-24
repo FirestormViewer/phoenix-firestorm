@@ -308,7 +308,7 @@
 					化身物理
 				</text>
 				<button name="Reset_Avi_Physics" tool_tip="重設為預設值。" />
-				<text name="T_Particle_Cnt" tool_tip="設置查看器一次將彩現的最大粒子數。這會影響煙霧、火焰、魔法咒語、繩索、鏈條和基於粒子的動畫等效果。較高的值允許更多粒子用於詳細的視覺效果，但可能會在粒子密集的環境中降低效能。">
+				<text name="T_Particle_Cnt" tool_tip="設置檢視器一次將彩現的最大粒子數。這會影響煙霧、火焰、魔法咒語、繩索、鏈條和基於粒子的動畫等效果。較高的值允許更多粒子用於詳細的視覺效果，但可能會在粒子密集的環境中降低效能。">
 					最大粒子數
 				</text>
 				<button name="Reset_Particle_Cnt" tool_tip="重設為預設值。" />
@@ -346,14 +346,14 @@
 			<button name="Reset_Exposure" tool_tip="重設為預設值。"/>
 			</panel>
 			<panel name="P_Render">
-				<check_box label="啟用繪製距離" name="UseFarClip" tool_tip="啟用繪製距離限制，根據設定的繪製距離限制查看器彩現物件的距離。禁用此選項將導致查看器彩現超出定義距離的物件，這在大型、詳細環境中會顯著降低效能。"/>
-				<check_box label="動態調整細節級別" name="RednerLod1" tool_tip="允許查看器根據您與物件的距離自動調整物件的細節層次（LOD）。這通過減少遠處物件的細節來提高效能，同時保持近處物件的高細節。然而，在快速移動或大型場景中，這可能會導致物件顯示質量明顯下降。"/>
+				<check_box label="啟用繪製距離" name="UseFarClip" tool_tip="啟用繪製距離限制，根據設定的繪製距離限制檢視器彩現物件的距離。禁用此選項將導致檢視器彩現超出定義距離的物件，這在大型、詳細環境中會顯著降低效能。"/>
+				<check_box label="動態調整細節級別" name="RednerLod1" tool_tip="允許檢視器根據您與物件的距離自動調整物件的細節層次（LOD）。這通過減少遠處物件的細節來提高效能，同時保持近處物件的高細節。然而，在快速移動或大型場景中，這可能會導致物件顯示質量明顯下降。"/>
 				<check_box label="僅彩現相機視野內的物件" name="UssOcclusion1" tool_tip="啟用遮擋剔除，通過只彩現相機視野內的物件而非隱藏在其他物件後的物件來優化效能。這可以在複雜場景中提升效能，但在稀疏區域可能偶爾會降低效能。切換此設置以查看是否能在您的特定環境中提升效能。"/>
 				<check_box label="各向異性過濾" name="Anisotropic" tool_tip="提高在角度觀察時紋理的銳度和清晰度，使地面、道路和牆壁等表面看起來更加清晰。雖然增強了視覺質量，但啟用各向異性過濾可能會略微影響效能，尤其是在低端圖形硬體上。"/>
 				<check_box label="顯示其他化身的粒子" name="Render Attached Particle" tool_tip="啟用附著到其他化身或從其他化身發射的粒子效果的彩現，例如光暈效果、粒子軌跡或基於化身的視覺效果。這還包括附著到家具或化身坐著的物件上的粒子。禁用此選項可以在擁擠區域提高效能，但會隱藏這些粒子效果。"/>
 			</panel>
 			<panel name="P_Anti-aliasing">
-				<text name="T_Antialiasing_Type" tool_tip="選擇用於平滑物件邊緣的反鋸齒類型。FXAA（快速近似反鋸齒）是一種速度快但質量中等的方法。SMAA（子像素形態反鋸齒）提供更好的邊緣平滑效果，但性能開銷略高。更改此設置可能需要重啟查看器才能在某些硬體上生效。">
+				<text name="T_Antialiasing_Type" tool_tip="選擇用於平滑物件邊緣的反鋸齒類型。FXAA（快速近似反鋸齒）是一種速度快但質量中等的方法。SMAA（子像素形態反鋸齒）提供更好的邊緣平滑效果，但性能開銷略高。更改此設置可能需要重啟檢視器才能在某些硬體上生效。">
 					反鋸齒類型（需要重啟）
 				</text>
 				<combo_box name="CB_Antialiasing_Type">
@@ -407,20 +407,20 @@
 				<check_box tool_tip="顯示場景中所有光源周圍的線框邊界框，幫助可視化光源的位置和範圍，便於調試或場景設置。" label="顯示場景中所有光源的邊界框" name="Lights"/>
 				<check_box tool_tip="顯示選定光源的有效半徑，允許您查看光在場景中的照射範圍。對於精細調整照明設置非常有用。" label="顯示選定光源的光照半徑" name="Show Light Radius for Selection"/>
 				<check_box tool_tip="啟用場景中所有物件的線框邊界框。這有助於識別物件邊界，用於對齊、縮放或排除彩現問題。" label="顯示場景中物件的邊界框" name="Bounding Boxes"/>
-				<check_box tool_tip="顯示實時性能統計，包括影格率、網絡數據和彩現指標。用於監控查看器性能和識別瓶頸。" label="顯示統計信息窗口" name="Statistics Bar"/>
+				<check_box tool_tip="顯示實時性能統計，包括影格率、網絡數據和彩現指標。用於監控檢視器性能和識別瓶頸。" label="顯示統計信息窗口" name="Statistics Bar"/>
 				<check_box tool_tip="顯示相機在場景中的位置、方向和移動的詳細信息。用於攝影、電影製作或建築中的精確攝像工作。" label="顯示詳細的相機位置數據" name="Camera"/>
 				<check_box tool_tip="打開紋理控制台，顯示紋理加載的實時信息，包括其大小、加載時間和記憶體使用情況。幫助診斷與紋理相關的性能問題。" label="顯示詳細的紋理加載信息" name="Texture Console"/>
 				<check_box tool_tip="顯示光標下像素的RGB（紅、綠、藍）和強度（I）顏色值。用於顏色匹配、設計工作或調試照明問題。" label="顯示光標下的RGB-I顏色值" name="Show Color Under Cursor"/>
 				<check_box tool_tip="將透明物件以紅色高亮顯示，使其更容易識別。這在構建或排除場景故障時特別有用，以定位不可見的物件或隱藏的物件。" label="以紅色高亮顯示透明物件" name="Highlight Transparent"/>
 				<check_box tool_tip="以線框模式彩現整個場景，顯示物件的基礎幾何結構，而不顯示紋理或陰影。用於分析物件結構、細節級別（LOD）和網格拓撲。" label="以線框模式顯示場景" name="Wireframe"/>
 				<check_box tool_tip="顯示當前附著到您化身的所有HUD附件。禁用此選項可以隱藏HUD，這對於減少屏幕雜亂或提高性能非常有用。" label="顯示附著到您化身的HUD" name="Show HUD Attachments"/>
-				<check_box label="慢動作動畫 - 僅在您的化身和查看器" tool_tip="減慢查看器中的化身動畫速度，允許您詳細觀察動作。此設置不會影響其他人看到的您的化身。" name="Slow Motion Animations"/>
-				<button name="Rebake Texture" tool_tip="強制查看器重新烘焙或刷新您化身的外觀紋理。這可以解決諸如皮膚模糊、衣服加載不正確或其他與紋理相關的問題。" label="強制外觀更新（重新烘焙）"/>
-				<button name="Set Window Size..." label="設置查看器窗口大小..." tool_tip="打開一個對話框，以設置查看器窗口的精確尺寸。用於以特定解析度創建屏幕截圖或匹配電影製作中的窗口大小要求。"/>
-				<button name="Debug Settings" label="顯示調試設置" tool_tip="打開調試設置菜單，允許訪問標準首選項中不可用的高級查看器設置。請謹慎使用，因為更改可能會影響性能和穩定性。"/>
+				<check_box label="慢動作動畫 - 僅在您的化身和檢視器" tool_tip="減慢檢視器中的化身動畫速度，允許您詳細觀察動作。此設置不會影響其他人看到的您的化身。" name="Slow Motion Animations"/>
+				<button name="Rebake Texture" tool_tip="強制檢視器重新烘焙或刷新您化身的外觀紋理。這可以解決諸如皮膚模糊、衣服加載不正確或其他與紋理相關的問題。" label="強制外觀更新（重新烘焙）"/>
+				<button name="Set Window Size..." label="設置檢視器窗口大小..." tool_tip="打開一個對話框，以設置檢視器窗口的精確尺寸。用於以特定解析度創建屏幕截圖或匹配電影製作中的窗口大小要求。"/>
+				<button name="Debug Settings" label="顯示調試設置" tool_tip="打開調試設置菜單，允許訪問標準首選項中不可用的高級檢視器設置。請謹慎使用，因為更改可能會影響性能和穩定性。"/>
 			</panel>
 			<panel name="P_Quick_Stats">
-				<text name="T_Quick_Stats" tool_tip="显示实时系统性能统计，帮助您评估查看器的效率。您可以通过点击标签来展开或折叠各个指标。">
+				<text name="T_Quick_Stats" tool_tip="显示实时系统性能统计，帮助您评估檢視器的效率。您可以通过点击标签来展开或折叠各个指标。">
 					統計資訊
 				</text>
 			</panel>
@@ -433,7 +433,7 @@
 						<stat_bar name="ktrissec" label="每秒繪製的千三角形" tool_tip="表示每秒繪製的三角形總數。這有助於衡量正在渲染的場景的整體複雜性。" />
 						<stat_bar name="objs" label="物件數量" tool_tip="顯示當前場景中可見的物件總數，包括化身、元素、地形塊和其他實體。" />
 						<stat_bar name="newobjs" label="新物件" tool_tip="顯示每秒加載到場景中的新物件數量，反映資產流傳輸活動。"/>
-						<stat_bar name="numimagesstat" label="紋理數量" tool_tip="表示當前查看器中加載的不同紋理總數，這會影響視訊記憶體的使用。" />
+						<stat_bar name="numimagesstat" label="紋理數量" tool_tip="表示當前檢視器中加載的不同紋理總數，這會影響視訊記憶體的使用。" />
 					</stat_view>
 				</container_view>
 			</scroll_container>

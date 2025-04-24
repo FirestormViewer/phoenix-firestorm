@@ -87,7 +87,8 @@
 	<menu_item_call label="Protéger" name="ProtectFolder"/>
 	<menu_item_call label="Déprotéger" name="UnprotectFolder"/>
 	<menu_item_call label="Recharger le dossier" name="ReloadFolder"/>
-	<menu_item_call label="Copier l&apos;UUID (identifiant universel unique)" name="Copy Asset UUID"/>
+	<menu_item_call label="Copier l&apos;UUID de l'objet" name="Copy Asset UUID"/>
+	<menu_item_call label="Copier l'UUID" name="Copy UUID"/>
 	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>
 	<menu_item_call label="Affiche le Panneau principal" name="Show in Main Panel"/>
 	<menu_item_call label="Afficher dans une nouvelle fenêtre" name="Show in new Window"/>
