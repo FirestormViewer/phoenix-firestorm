@@ -2102,7 +2102,7 @@ bool LLViewerFetchedTexture::updateFetch()
 
     S32 current_discard = getCurrentDiscardLevelForFetching();
     S32 desired_discard = getDesiredDiscardLevel();
-    F32 decode_priority = mMaxVirtualSize;
+    F32 decode_priority = mMaxVirtualSize + (mMaxVirtualSize * getBoostLevel());
 
     if (mIsFetching)
     {
