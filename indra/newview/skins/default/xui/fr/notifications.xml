@@ -3063,7 +3063,7 @@ Voulez-vous autoriser [APP_NAME] à poster sur votre compte Flickr?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Votre photo est visible maintenant [http://www.flickr.com/photos/upload/edit/?ids=[ID] ici].
+		Votre photo est visible maintenant [https://www.flickr.com/photos/me/[ID] ici].
 	</notification>
 	<notification name="EventNotification">
 		Avis d&apos;événement :
