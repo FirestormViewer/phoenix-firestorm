@@ -1090,6 +1090,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         F32 max_vsize = 0.f;
         bool on_screen = false;
 
+        static F32 prev_desired_discard_bias = LLViewerTexture::sDesiredDiscardBias;
+
         U32 face_count = 0;
 
         // get adjusted bias based on image resolution
@@ -1234,7 +1236,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     max_on_screen_vsize = llmax(max_on_screen_vsize, vsize);
 
                     // addTextureStats limits size to sMaxVirtualSize
-                    if (max_on_screen_vsize >= LLViewerFetchedTexture::sMaxVirtualSize
+                    if (max_on_screen_vsize >= LLViewerFetchedTexture::sMaxVirtualSize * 0.25f
                         && (on_screen || LLViewerTexture::sDesiredDiscardBias <= BIAS_TRS_ON_SCREEN))
                     {
                         break;
@@ -1245,11 +1247,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             }
 
             // <FS> [FIRE-35081] Blurry prims not changing with graphics settings
-            //if (max_vsize >= LLViewerFetchedTexture::sMaxVirtualSize
-            //    && (on_screen || LLViewerTexture::sDesiredDiscardBias <= BIAS_TRS_ON_SCREEN))
-            //{
-            //    break;
-            //}
+            if (max_on_screen_vsize >= LLViewerFetchedTexture::sMaxVirtualSize * 0.25f
+                && (on_screen || LLViewerTexture::sDesiredDiscardBias <= BIAS_TRS_ON_SCREEN))
+            {
+                break;
+            }
             // </FS>
         }
 
@@ -1273,8 +1275,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
           // this is an alternative to decaying mMaxVirtualSize over time
           // that keeps textures from continously downrezzing and uprezzing in the background
 
-            //if (LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_OUT_OF_SCREEN ||
-            //    (!on_screen && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN))
+            if (LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_OUT_OF_SCREEN || // Possibly comment out to make overall VRAM much lower, but at cost of more processing loads
+                (!on_screen && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN))
             {
                 imagep->mMaxVirtualSize = 0.f;
             }
@@ -1299,7 +1301,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             imagep->setBias(1.0f);
         }
         // If the boost level just became high, or the texture is (Local, Media Dynamic)
-        else if (imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || (close_to_camera && LLViewerTexture::sDesiredDiscardBias == 1.0f))
+        else if (imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || close_to_camera)
         {
             // Always use the best quality of the texture
             //imagep->addTextureStats(max_on_screen_vsize);
@@ -1310,25 +1312,24 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         {
             //imagep->addTextureStats(max_on_screen_vsize);
             
-            if (on_screen && important_to_camera < imagep->getImportanceToCamera() && important_to_camera < LEAST_IMPORTANCE_FOR_LARGE_IMAGE && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN)
+            if (on_screen && important_to_camera < imagep->getImportanceToCamera() && important_to_camera < LEAST_IMPORTANCE_FOR_LARGE_IMAGE &&
+                LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN && prev_desired_discard_bias <= LLViewerTexture::sDesiredDiscardBias)
             {
                 imagep->setBias(bias);
             }
-            else if (!on_screen && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN)
+            else if (!on_screen && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN && prev_desired_discard_bias <= LLViewerTexture::sDesiredDiscardBias)
             {
                 imagep->setBias(bias);
             }
+            // Once the bias is back to 1.00, then if the texture is 
             else if (on_screen && LLViewerTexture::sDesiredDiscardBias == 1.0f && important_to_camera >= LEAST_IMPORTANCE_FOR_LARGE_IMAGE)
             {
                 imagep->setBias(1.0f);
             }            
         }
         imagep->setImportanceToCamera(important_to_camera);
+        prev_desired_discard_bias = LLViewerTexture::sDesiredDiscardBias;
         // </FS:minerjr> [FIRE-35081]
-    }
-    else
-    {
-
     }
 
 #if 0
