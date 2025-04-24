@@ -17,9 +17,7 @@
 		<combo_box.item label="BMP (senza perdite)" name="BMP"/>
 	</combo_box>
 	<slider label="Qualità:" name="image_quality_slider"/>
-	<text name="local_remember_location_sessions_text">
-		Ricorda luogo e nome file tra le sessioni
-	</text>
+	<check_box name="local_remember_location_sessions" label="Ricorda luogo e nome file tra le sessioni"/>
 	<button label="&#x25B6; Seleziona" name="cancel_btn"/>
 	<flyout_button label="Salva" name="save_btn" tool_tip="Salva immagine come file">
 		<flyout_button.item label="Salva" name="save_item"/>
