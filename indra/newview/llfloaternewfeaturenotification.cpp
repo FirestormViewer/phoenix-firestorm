@@ -47,9 +47,20 @@ bool LLFloaterNewFeatureNotification::postBuild()
     const std::string dsc_txt = "description_txt";
     // <FS:Beq> FIRE-35393 stop crashing just cos whirly does something daft and blames Atlas for it
     std::string feature = getKey().asString();
-    if(feature.empty())
+    if(feature.empty() )
     {
-        return true;
+        LL_WARNS("FloaterNewFeature") << "Unexpected failure - No feature name NewFeatureNotification." << LL_ENDL;
+        return false;
+    }
+    if (!hasString( title_txt + "_" + feature ) )
+    {
+        LL_WARNS("FloaterNewFeature") << "No string for " << title_txt + "_" + feature << LL_ENDL;
+        return false;
+    }
+    if (!hasString( dsc_txt + "_" + feature ) )
+    {
+        LL_WARNS("FloaterNewFeature") << "No string for " << dsc_txt + "_" + feature << LL_ENDL;
+        return false;
     }
     // </FS:Beq>
     

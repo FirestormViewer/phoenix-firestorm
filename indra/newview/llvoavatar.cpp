@@ -2975,7 +2975,7 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
             LL_DEBUGS("Avatar") << avString() << "get old-bake image from host " << uuid << LL_ENDL;
             LLHost host = getObjectHost();
             result = LLViewerTextureManager::getFetchedTexture(
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 //uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
                 uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
                 // <FS:minerjr> [FIRE-35081]
@@ -11012,7 +11012,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
             //LL_DEBUGS("Avatar") << avString() << " baked_index " << (S32) baked_index << " using mLastTextureID " << mBakedTextureDatas[baked_index].mLastTextureID << LL_ENDL;
             LL_DEBUGS("Avatar") << avString() << "sb " << (S32) isUsingServerBakes() << " baked_index " << (S32) baked_index << " using mLastTextureID " << mBakedTextureDatas[baked_index].mLastTextureID << LL_ENDL;
             setTEImage(mBakedTextureDatas[baked_index].mTextureIndex,
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 //LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
                 //Texture will use baked textures, so it should also use that for the boost.
                 LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE));

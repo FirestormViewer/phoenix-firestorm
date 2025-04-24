@@ -6577,8 +6577,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<tag>fail</tag>
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
-	<notification name="ExodusFlickrUploadComplete"> スナップショットは[http://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]で閲覧できます。
-	</notification>
+	<notification name="ExodusFlickrUploadComplete">スナップショットは[http://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]から閲覧できます。</notification>
 	<!-- </FS:TS> FIRE-5453 -->
 	<notification name="RegionTrackerAdd">
 		リージョン「[REGION]」にどのラベルを使用しますか?

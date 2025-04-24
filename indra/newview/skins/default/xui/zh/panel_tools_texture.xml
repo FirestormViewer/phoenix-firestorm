@@ -29,6 +29,7 @@
 		光暈
 	</text>
 	<check_box label="全亮" name="checkbox fullbright" />
+	<check_box label="隱藏水" name="checkbox_hide_water" />
 	<button name="copy_face_btn" tool_tip="將紋理參數複製到剪貼簿" />
 	<button name="paste_face_btn" tool_tip="從剪貼簿黏貼紋理參數" />
 	<text name="label_matmedia">

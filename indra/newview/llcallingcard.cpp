@@ -516,7 +516,7 @@ void LLAvatarTracker::idleNotifyObservers()
 
 void LLAvatarTracker::notifyObservers()
 {
-    if (mIsNotifyObservers || (LLStartUp::getStartupState() <= STATE_INVENTORY_CALLBACKS))
+    if (mIsNotifyObservers || (LLStartUp::getStartupState() <= STATE_INVENTORY_SEND2))
     {
         // Don't allow multiple calls.
         // new masks and ids will be processed later from idle.
@@ -835,7 +835,7 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
         mModifyMask |= LLFriendObserver::ONLINE;
         instance().notifyObservers();
         // Skip if we had received the friends list before the inventory callbacks were properly initialized
-        if (LLStartUp::getStartupState() > STATE_INVENTORY_CALLBACKS)
+        if (LLStartUp::getStartupState() > STATE_INVENTORY_SEND2)
         {
             gInventory.notifyObservers();
         }

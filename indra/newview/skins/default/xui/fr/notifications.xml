@@ -948,6 +948,21 @@ Assurez-vous que le fichier a l&apos;extension correcte.
 		Impossible de charger [FILE] suite au problème suivant : [REASON]
 Veuillez réessayer ultérieurement.
 	</notification>
+	<notification name="CannotUploadSnapshotEmailTooBig">
+		Impossible de transférer l'image [FICHIER] pour la raison suivante : [MOTIF].
+
+Le fichier est peut-être trop lourd, essayez de réduire la résolution, la qualité ou réessayez plus tard.
+	</notification>
+	<notification name="CannotUploadSnapshotWebTooBig">
+		Impossible de transférer l'image.
+
+Le fichier est peut-être trop lourd, essayez de réduire la résolution, la qualité ou réessayez plus tard.
+	</notification>
+	<notification name="CannotOpenFileTooBig">
+		Impossible d'ouvrir le fichier.
+
+La visionneuse a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est peut-être trop lourd.
+	</notification>
 	<notification name="LandmarkCreated">
 		Vous avez ajouté [LANDMARK_NAME] à votre dossier [FOLDER_NAME].
 	</notification>
@@ -3048,7 +3063,7 @@ Voulez-vous autoriser [APP_NAME] à poster sur votre compte Flickr?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Votre photo est visible maintenant [http://www.flickr.com/photos/upload/edit/?ids=[ID] ici].
+		Votre photo est visible maintenant [https://www.flickr.com/photos/me/[ID] ici].
 	</notification>
 	<notification name="EventNotification">
 		Avis d&apos;événement :
@@ -5561,6 +5576,10 @@ Voulez-vous continuer ?
 	</notification>
 	<notification name="NoSupportGLTFShader">
 		Les scènes GLTF ne sont pas encore prises en charge par votre matériel graphique.
+	</notification>
+	<notification name="WaterExclusionSurfacesWarning">
+		Si vous cochez la case « cacher l'eau », les choix de texture, d'aspérités et de brillance seront écrasés.
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Continuer"/>
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Vous êtes sur le point d'activer l'AutoFPS. Tous les paramètres graphiques non sauvegardés seront perdus.

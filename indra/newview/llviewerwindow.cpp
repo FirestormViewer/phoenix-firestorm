@@ -5936,8 +5936,15 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         filepath = sSnapshotDir;
         filepath += gDirUtilp->getDirDelimiter();
         filepath += sSnapshotBaseName;
-        filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
-        filepath += llformat("%.2d", i);
+// <FS:Beq> FIRE-35391 - Restore ability for snapshots saving with simple index number        
+// filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
+// filepath += llformat("%.2d", i);
+        if (gSavedSettings.getBOOL("FSSnapshotLocalNamesWithTimestamps"))
+        {
+            filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
+        }
+        filepath += llformat("_%.3d", i);
+// </FS:Beq>
         filepath += extension;
 
         llstat stat_info;

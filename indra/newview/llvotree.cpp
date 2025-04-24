@@ -330,7 +330,7 @@ U32 LLVOTree::processUpdateMessage(LLMessageSystem *mesgsys,
     //  Load Species-Specific data
     //
     static const S32 MAX_TREE_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL = 32 ; //frames.
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     //mTreeImagep = LLViewerTextureManager::getFetchedTexture(sSpeciesTable[mSpecies]->mTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
     // Set boost level for Tree as it overrides the normal texture sizes
     mTreeImagep = LLViewerTextureManager::getFetchedTexture(sSpeciesTable[mSpecies]->mTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_TREE, LLViewerTexture::LOD_TEXTURE);
