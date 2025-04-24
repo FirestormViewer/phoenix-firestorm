@@ -419,7 +419,7 @@ void LLViewerTextureList::dump()
         LL_CONT << " # of Volumes ";
         for (S32 index = 0; index < LLRender::NUM_VOLUME_TEXTURE_CHANNELS; index++)
         {
-            LL_CONT << image->getNumVolumes(index) + " ";
+            LL_CONT << image->getNumVolumes(index) << " ";
         }
         // </FS:minerjr> [FIRE-35081]
         LL_CONT << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"

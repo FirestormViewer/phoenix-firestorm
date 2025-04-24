@@ -1652,7 +1652,7 @@ void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimat
         return;
 
     if (joints.size() >= 1)
-        FSToolCompPose::getInstance()->setJoint(avatarp->getJoint(JointKey::construct(joints[0]->jointName())));
+        FSToolCompPose::getInstance()->setJoint(avatarp->getJoint(joints[0]->jointName()));
     else
         FSToolCompPose::getInstance()->setJoint(nullptr);
 }

@@ -6282,6 +6282,12 @@ support@secondlife.com.
 	<string name="Command_Beacons_Label">
 		信標
 	</string>
+	<string name="Command_Poser_Label">
+		姿勢編輯器
+	</string>
+	<string name="Command_Poser_Tooltip">
+		編輯你的化身與動畫物件的姿勢
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		拍攝360°旋轉圖像
 	</string>

@@ -142,7 +142,10 @@
 	<string name="title_LEFT_PEC">左胸肌</string>
 	<string name="title_RIGHT_PEC">右胸肌</string>
 	<string name="LoadPoseLabel">載入姿勢</string>
+	<string name="SavePoseLabel">儲存姿勢</string>
 	<string name="LoadDiffLabel">載入差異</string>
+	<string name="SaveDiffLabel">儲存差異</string>
+	<string name="OverWriteLabel">覆蓋？</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -186,8 +189,8 @@
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="預設名稱" name="name"/>
 							</scroll_list>
-							<button label="設定左手" name="button_loadHandPoseLeft" tool_tip="雙擊以將左手設定為選定的預設"/>
-							<button label="設定右手" name="button_loadHandPoseRight" tool_tip="雙擊以將右手設定為選定的預設"/>
+							<button label="設定左手" name="button_loadHandPoseLeft" tool_tip="點選將左手設定為選定的預設"/>
+							<button label="設定右手" name="button_loadHandPoseRight" tool_tip="點選將右手設定為選定的預設"/>
 						</panel>
 					</tab_container>
 					<panel title="其他" name="misc_joints_panel">
@@ -206,7 +209,7 @@
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="更新化身和動畫物件的列表"/>
 						<button label="開始姿勢" label_selected="停止姿勢" tool_tip="若有許可權，開始/停止選定的化身或動畫物件的姿勢" name="start_stop_posing_button"/>
-						<button label="設為T姿勢" tool_tip="雙擊將選定的化身設為T姿勢" name="set_t_pose_button"/>
+						<button label="設為T姿勢" tool_tip="點選將選定的化身設為T姿勢" name="set_t_pose_button"/>
 					</panel>
 					<panel title="設定" name="settings_panel">
 						<text name="trackpad_sensitivity_label">
@@ -216,6 +219,7 @@
 						<check_box name="natural_direction_checkbox" label="使用自然對齊" tool_tip="骨骼預設具有不自然的關節旋轉，這可能會讓姿勢調整變得更複雜。選取此選項後，關節將以更自然的方式旋轉。" />
 						<check_box name="stop_posing_on_close_checkbox" label="關閉時停止" tool_tip="關閉時不停止姿勢可有助於保留目前工作。"/>
 						<check_box name="also_save_bvh_checkbox" label="儲存時也儲存BHV" tool_tip="當姿勢被儲存時，將同時創建一個BHV檔案，該檔案可以透過建造 > 上傳 > 動畫上傳，並用於自己或其他化身的姿勢。為了實現此功能，關節的基礎位置必須設為零，因為BHV無法從其他姿勢推導出來。"/>
+						<check_box name="confirm_overwrite_on_save_checkbox" label="確認覆蓋" tool_tip="儲存姿勢時，如果檔案已存在，您需要再次點擊保存按鈕以確認覆蓋。" />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="編輯時重設基礎旋轉" tool_tip="首次編輯旋轉時，將其重設為零。這意味著可以保存完整的姿勢（而不僅僅是差異，請參閱載入/保存）。每個以零為基準匯出的關節旁都會顯示綠色勾選標誌。" />
 					</panel>
 				</tab_container>
@@ -259,12 +263,12 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="撤銷上一次變更" />
 					<button name="button_redo_change" tool_tip="重做上一次變更"/>
-					<button name="poser_joint_reset" tool_tip="雙擊以將選取的身體部位重設為最初開始調整姿勢時的狀態。"/>
+					<button name="poser_joint_reset" tool_tip="點選將選取的身體部位重設為最初開始調整姿勢時的狀態。"/>
 					<button name="delta_mode_toggle" tool_tip="如果改變多個關節，則改變它們相同的值而不是相同的角度。這也用於解決萬向節鎖定的問題。"/>
 					<button label="鏡像" name="button_toggleMirrorRotation" tool_tip="將變更鏡像到對側關節。"/>
 					<button label="複製" name="button_toggleSympatheticRotation" tool_tip="將變更複製到對側關節。"/>
-					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="雙擊以將變更從左側複製到右側。" />
-					<button label="複製右側&gt;左" name="button_symmetrize_right_to_left" tool_tip="雙擊以將變更從右側複製到左側。" />
+					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="點選將變更從左側複製到右側。" />
+					<button label="複製右側&gt;左" name="button_symmetrize_right_to_left" tool_tip="點選將變更從右側複製到左側。" />
 				</panel>
 			</panel>
 			<panel name="poses_loadSave">

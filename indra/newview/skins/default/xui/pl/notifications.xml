@@ -5224,7 +5224,7 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 		Autoryzacja Flickr nie powiodła się. Spróbuj ponownie i sprawdź dokładnie kod weryfikacyjny.
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
+		Możesz znaleźć swoje zdjęcie [https://www.flickr.com/photos/me/[ID] tutaj].
 	</notification>
 	<notification name="RegionTrackerAdd">
 		Jaką etykietę chcesz nadać regionowi

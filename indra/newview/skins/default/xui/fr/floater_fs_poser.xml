@@ -142,7 +142,10 @@
 	<string name="title_LEFT_PEC">Sein gauche</string>
 	<string name="title_RIGHT_PEC">Sein droit</string>
 	<string name="LoadPoseLabel">Charger pose</string>
+	<string name="SavePoseLabel">Enr. pose</string>
 	<string name="LoadDiffLabel">Charger diff</string>
+	<string name="SaveDiffLabel">Enr. diff</string>
+	<string name="OverWriteLabel">Écraser ?</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -181,8 +184,8 @@
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Param." name="name" />
 							</scroll_list>
-							<button label="Gauche" name="button_loadHandPoseLeft" tool_tip="Double-cliquez pour placer la main gauche sur la valeur souhaitée." />
-							<button label="Droite" name="button_loadHandPoseRight" tool_tip="Double-cliquez pour placer la main droite sur la valeur souhaitée." />
+							<button label="Gauche" name="button_loadHandPoseLeft" tool_tip="Cliquez pour placer la main gauche sur la valeur souhaitée." />
+							<button label="Droite" name="button_loadHandPoseRight" tool_tip="Cliquez pour placer la main droite sur la valeur souhaitée." />
 						</panel>
 					</tab_container>
 					<panel title="Divers" name="misc_joints_panel">
@@ -203,7 +206,7 @@
 						</scroll_list>
 						<button label="" name="refresh_avatars" tool_tip="Actualiser la liste des avatars et des animeshes"/>
 						<button label="Commencer pose" label_selected="Arrêter pose" tool_tip="Commencez à faire poser l'avatar ou l'animesh sélectionné, si vous y êtes autorisé." name="start_stop_posing_button"/>
-						<button label="Mettre en pose T" name="set_t_pose_button" tool_tip="Double-cliquez sur l'avatar sélectionné pour lui faire prendre la pose en « T »."/>
+						<button label="Mettre en pose T" name="set_t_pose_button" tool_tip="Cliquez sur l'avatar sélectionné pour lui faire prendre la pose en « T »."/>
 					</panel>
 					<panel title="Param." name="settings_panel">
 						<text name="trackpad_sensitivity_label">
@@ -214,6 +217,7 @@
 						<check_box name="stop_posing_on_close_checkbox" label="Arrêt pose si fermeture" tool_tip="Ne pas arrêter votre pose peut être utile si vous travaillez beaucoup et que vous ne voulez pas la perdre accidentellement."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Réinitialisation de la rotation" tool_tip="Lorsque vous modifiez une rotation pour la première fois, la remet à zéro. Cela signifie que votre travail peut enregistrer une pose (et non une différence - voir charger/enregistrer). Une coche verte apparaît à côté de chaque articulation dont l'exportation a été remise à zéro."/>
 						<check_box name="also_save_bvh_checkbox" label="Ajouter BVH à l'enregis.**" tool_tip="Lorsque vous enregistrez votre pose, écrivez également un fichier BVH, qui peut être téléchargé via 'Construire > Charger > Animation' pour poser vous-même ou d'autres personnes dans le monde. Pour ce faire, les articulations doivent remettre leur « base » à zéro, car le BVH nécessite que l'on travaille sur l'original."/>
+						<check_box name="confirm_overwrite_on_save_checkbox" label="Confirmer l'écrasement" tool_tip="Lorsque vous enregistrez une pose, si le fichier existe déjà, vous devez cliquer à nouveau sur le bouton d'enregistrement pour confirmer que vous êtes sûr de vouloir l'écraser."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Activer et désactiver les manipulateurs visuels"/>
@@ -256,12 +260,12 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Annuler la dernière modification" />
 					<button name="button_redo_change" tool_tip="Rétablir la dernière modification annulée" />
-					<button name="poser_joint_reset" tool_tip="Double-cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
+					<button name="poser_joint_reset" tool_tip="Cliquez pour remettre toutes les parties du corps sélectionnées dans l'état où elles se trouvaient lorsque vous avez commencé à poser." />
 					<button name="delta_mode_toggle" tool_tip="Si vous modifiez plusieurs articulations, chacune d'entre elles sera modifiée de la même manière, au lieu de toutes les modifier du même coup. Sert également à déverrouiller le Gimbal Lock." />
 					<button label="Miroir" name="button_toggleMirrorRotation" tool_tip="Changer l'articulation opposée, comme dans un miroir." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Copier les modifications sur l'articulation opposée." />
-					<button label="Cop. G &gt; D" name="button_symmetrize_left_to_right" tool_tip="Double-cliquez pour copier la modification du côté gauche vers le côté droit."/>
-					<button label="Cop. D &gt; G" name="button_symmetrize_right_to_left" tool_tip="Double-cliquez pour copier la modification du côté droit vers le côté gauche."/>
+					<button label="Cop. G &gt; D" name="button_symmetrize_left_to_right" tool_tip="Cliquez pour copier la modification du côté gauche vers le côté droit."/>
+					<button label="Cop. D &gt; G" name="button_symmetrize_right_to_left" tool_tip="Cliquez pour copier la modification du côté droit vers le côté gauche."/>
 				</panel>
 			</panel>
 			<panel name="poses_loadSave">

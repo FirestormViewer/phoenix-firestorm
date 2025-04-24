@@ -5329,7 +5329,7 @@ https://wiki.firestormviewer.org/fs_voice
 		Flickr проверка не удалась. Пожалуйста, попробуйте еще раз, и проверьте код подтверждения.
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Ваш снимок теперь может быть просмотрен [http://www.flickr.com/photos/upload/edit/?ids=[ID] тут].
+		Ваш снимок теперь может быть просмотрен [https://www.flickr.com/photos/me/[ID] тут].
 	</notification>
 	<notification name="RegionTrackerAdd">
 		Какую бы метку вы хотели использовать

@@ -673,7 +673,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
         {
             LL_DEBUGS("LocalMesh") << "Found internal joint name: " << joint_name << LL_ENDL;
             joint_name = joint_map[joint_name];
-            skininfo.mJointNames.push_back(JointKey::construct(joint_name));
+            skininfo.mJointNames.push_back(joint_name);
             skininfo.mJointNums.push_back(-1);
         }
     };
@@ -761,7 +761,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
                 jointname_iterator != skininfop->mJointNames.end(); 
                 ++jointname_iterator, ++jointname_idx)
         {
-            std::string name_lookup = jointname_iterator->mName;
+            const std::string& name_lookup = *jointname_iterator;
             if (joint_map.find(name_lookup) == joint_map.end())
             {
                 pushLog("DAE Importer", "WARNING: Unknown joint named " + name_lookup + " found, skipping over it.");
