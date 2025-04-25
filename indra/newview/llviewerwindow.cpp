@@ -5430,6 +5430,14 @@ LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot, bool pick_transp
         pick_transparent = true;
     }
 
+    // <FS:Sek> Pick from center of screen in mouselook
+    if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
+    {
+        x = gViewerWindow->getWorldViewRectScaled().getWidth() / 2;
+        y_from_bot = gViewerWindow->getWorldViewRectScaled().getHeight() / 2;
+    }
+    // </FS:Sek>
+
     // shortcut queueing in mPicks and just update mLastPick in place
     MASK key_mask = gKeyboard->currentMask(true);
     mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_rigged, pick_particle, pick_reflection_probe, true, false, NULL);
@@ -5928,8 +5936,15 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         filepath = sSnapshotDir;
         filepath += gDirUtilp->getDirDelimiter();
         filepath += sSnapshotBaseName;
-        filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
-        filepath += llformat("%.2d", i);
+// <FS:Beq> FIRE-35391 - Restore ability for snapshots saving with simple index number        
+// filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
+// filepath += llformat("%.2d", i);
+        if (gSavedSettings.getBOOL("FSSnapshotLocalNamesWithTimestamps"))
+        {
+            filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
+        }
+        filepath += llformat("_%.3d", i);
+// </FS:Beq>
         filepath += extension;
 
         llstat stat_info;

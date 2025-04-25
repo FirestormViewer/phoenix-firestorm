@@ -1085,9 +1085,9 @@ void LLFloaterWorldMap::updateLocation()
             // mSLURL = LLSLURL(sim_name, pos_global);
             // <FS> [FIRE-35268] OpenSim support for when on other grids
             if (LLGridManager::getInstance()->isInSecondLife())
-                mSLURL = LLSLURL(sim_info->getName(), gAgent.getPositionAgent());
+                mSLURL = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), pos_global);
             else
-                mSLURL = LLSLURL(LFSimFeatureHandler::instance().hyperGridURL(), sim_info->getName(), gAgent.getPositionAgent());
+                mSLURL = LLSLURL(LFSimFeatureHandler::instance().hyperGridURL(), sim_info->getName(), sim_info->getGlobalOrigin(), pos_global);
             // </FS>
         }
 // </FS:Beq pp Oren>

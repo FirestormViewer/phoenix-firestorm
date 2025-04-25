@@ -5782,7 +5782,7 @@ Flickr-Verifikation fehlgeschlagen. Bitte erneut versuchen sowie den eingegebene
 	</notification>
 
 	<notification name="ExodusFlickrUploadComplete">
-Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] betrachtet werden.
+Das Foto kann jetzt [https://www.flickr.com/photos/me/[ID] hier] betrachtet werden.
 	</notification>
 <!-- </FS:TS> FIRE-5453 -->
 	<notification name="RegionTrackerAdd">

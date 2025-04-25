@@ -2976,7 +2976,7 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
             LL_DEBUGS("Avatar") << avString() << "get old-bake image from host " << uuid << LL_ENDL;
             LLHost host = getObjectHost();
             result = LLViewerTextureManager::getFetchedTexture(
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 //uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
                 uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
                 // <FS:minerjr> [FIRE-35081]
@@ -7268,69 +7268,44 @@ const LLUUID& LLVOAvatar::getID() const
 // getJoint()
 //-----------------------------------------------------------------------------
 // RN: avatar joints are multi-rooted to include screen-based attachments
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//LLJoint *LLVOAvatar::getJoint( const std::string &name )
-LLJoint *LLVOAvatar::getJoint( const JointKey &name )
-// </FS:ND>
+//<FS:Ansariel> Joint-lookup improvements
+//LLJoint *LLVOAvatar::getJoint(const std::string &name)
+LLJoint *LLVOAvatar::getJoint(std::string_view name)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+    //<FS:Ansariel> Joint-lookup improvements
     //joint_map_t::iterator iter = mJointMap.find( name );
-
-    //LLJoint* jointp = NULL;
-
-    //if( iter == mJointMap.end() || iter->second == NULL )
-    //{ //search for joint and cache found joint in lookup table
-    //  if (mJointAliasMap.empty())
-    //  {
-    //      getJointAliases();
-    //  }
-    //  joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name);
-    //  std::string canonical_name;
-    //  if (alias_iter != mJointAliasMap.end())
-    //  {
-    //      canonical_name = alias_iter->second;
-    //  }
-    //  else
-    //  {
-    //      canonical_name = name;
-    //  }
-    //  jointp = mRoot->findJoint(canonical_name);
-    //  mJointMap[name] = jointp;
-    //}
-    //else
-    //{ //return cached pointer
-    //  jointp = iter->second;
-    //}
-
-    joint_map_t::iterator iter = mJointMap.find( name.mKey );
+    joint_map_t::iterator iter = mJointMap.find(name.data());
 
     LLJoint* jointp = NULL;
 
-    if (iter == mJointMap.end() || iter->second == NULL)
-    {   //search for joint and cache found joint in lookup table
-        if (mJointAliasMap.empty())
-        {
-            getJointAliases();
-        }
-        joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name.mName);
-        std::string canonical_name;
-        if (alias_iter != mJointAliasMap.end())
-        {
-            canonical_name = alias_iter->second;
-        }
-        else
-        {
-            canonical_name = name.mName;
-        }
-        jointp = mRoot->findJoint(canonical_name);
-        mJointMap[name.mKey] = jointp;
+    if( iter == mJointMap.end() || iter->second == NULL )
+    { //search for joint and cache found joint in lookup table
+      if (mJointAliasMap.empty())
+      {
+          getJointAliases();
+      }
+      //<FS:Ansariel> Joint-lookup improvements
+      //joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name);
+      joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(std::string(name));
+      std::string canonical_name;
+      if (alias_iter != mJointAliasMap.end())
+      {
+          canonical_name = alias_iter->second;
+      }
+      else
+      {
+          canonical_name = name;
+      }
+      jointp = mRoot->findJoint(canonical_name);
+      //<FS:Ansariel> Joint-lookup improvements
+      //mJointMap[name] = jointp;
+      mJointMap[std::string(name)] = jointp;
     }
     else
-    {   //return cached pointer
-        jointp = iter->second;
+    { //return cached pointer
+      jointp = iter->second;
     }
-// </FS:ND>
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
     if (jointp && jointp->getName()!="mScreen" && jointp->getName()!="mRoot")
@@ -7369,6 +7344,16 @@ LLJoint *LLVOAvatar::getJoint( S32 joint_num )
 
     llassert(!pJoint || pJoint->getJointNum() == joint_num);
     return pJoint;
+}
+
+void LLVOAvatar::initAllJoints()
+{
+    getJointAliases();
+    for (auto& alias : mJointAliasMap)
+    {
+        mJointMap[alias.first] = mRoot->findJoint(alias.second);
+    }
+    // ignore mScreen and mRoot
 }
 
 //-----------------------------------------------------------------------------
@@ -7696,11 +7681,7 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
             {
                 for (unsigned int i = 0; i < jointCnt; ++i)
                 {
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//                  std::string lookingForJoint = pSkinData->mJointNames[ i ].c_str();
-                    JointKey lookingForJoint  = pSkinData->mJointNames[ i ];
-// </FS:ND>
-
+                    std::string lookingForJoint = pSkinData->mJointNames[i].c_str();
                     LLJoint* pJoint = getJoint( lookingForJoint );
                     if (pJoint)
                     {
@@ -7713,10 +7694,7 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
                             if (override_changed)
                             {
                                 //If joint is a pelvis then handle old/new pelvis to foot values
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//                              if( lookingForJoint == "mPelvis" )
-                                if( lookingForJoint.mName == "mPelvis" )
-// </FS:ND>
+                                if( lookingForJoint == "mPelvis" )
                                 {
                                     pelvisGotSet = true;
                                 }
@@ -7907,10 +7885,7 @@ void LLVOAvatar::removeAttachmentOverridesForObject(LLViewerObject *vo)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
 {
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//  LLJoint* pJointPelvis = getJoint( "mPelvis" );
-    LLJoint* pJointPelvis = getJoint( JointKey::construct( "mPelvis" ) );
-// </FS:ND>
+    LLJoint* pJointPelvis = getJoint( "mPelvis" );
 
     const std::string av_string = avString();
     for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
@@ -8098,10 +8073,7 @@ void LLVOAvatar::initAttachmentPoints(bool ignore_hud_joints)
 
         attachment->setName(info->mName);
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//      LLJoint *parent_joint = getJoint(info->mJointName);
-        LLJoint *parent_joint = getJoint( JointKey::construct( info->mJointName ) );
-// </FS:ND>
+        LLJoint *parent_joint = getJoint(info->mJointName);
 
         if (!parent_joint)
         {
@@ -10996,7 +10968,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
             //LL_DEBUGS("Avatar") << avString() << " baked_index " << (S32) baked_index << " using mLastTextureID " << mBakedTextureDatas[baked_index].mLastTextureID << LL_ENDL;
             LL_DEBUGS("Avatar") << avString() << "sb " << (S32) isUsingServerBakes() << " baked_index " << (S32) baked_index << " using mLastTextureID " << mBakedTextureDatas[baked_index].mLastTextureID << LL_ENDL;
             setTEImage(mBakedTextureDatas[baked_index].mTextureIndex,
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 //LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
                 //Texture will use baked textures, so it should also use that for the boost.
                 LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[baked_index].mLastTextureID, FTT_DEFAULT, true, LLGLTexture::BOOST_AVATAR_BAKED, LLViewerTexture::LOD_TEXTURE));

@@ -1645,13 +1645,14 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
     return joints;
 }
 
-void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints)
+void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints) const
 {
-    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+    auto avatarp = getUiSelectedAvatar();
+    if (!avatarp)
         return;
 
     if (joints.size() >= 1)
-        FSToolCompPose::getInstance()->setJoint(gAgentAvatarp->getJoint(JointKey::construct(joints[0]->jointName())));
+        FSToolCompPose::getInstance()->setJoint(avatarp->getJoint(joints[0]->jointName()));
     else
         FSToolCompPose::getInstance()->setJoint(nullptr);
 }

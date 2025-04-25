@@ -145,7 +145,10 @@
 	<string name="title_LEFT_PEC">Linke Brustmuskeln</string>
 	<string name="title_RIGHT_PEC">Rechte Brustmuskeln</string>
 	<string name="LoadPoseLabel">Pose laden</string>
+	<string name="SavePoseLabel">Pose speichern</string>
 	<string name="LoadDiffLabel">Diff. laden</string>
+	<string name="SaveDiffLabel">Diff. speichern</string>
+	<string name="OverWriteLabel">Überschreiben?</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack name="poser_stack">
@@ -192,8 +195,8 @@
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Name Vorauswahl" name="name"/>
 							</scroll_list>
-							<button label="Links setzen" name="button_loadHandPoseLeft" tool_tip="Doppelklicken um linke Hand auf ausgewählte Vorauswahl zu setzen"/>
-							<button label="Rechts setzen" name="button_loadHandPoseRight" tool_tip="Doppelklicken um rechte Hand auf ausgewählte Vorauswahl zu setzen"/>
+							<button label="Links setzen" name="button_loadHandPoseLeft" tool_tip="Klicken um linke Hand auf ausgewählte Vorauswahl zu setzen"/>
+							<button label="Rechts setzen" name="button_loadHandPoseRight" tool_tip="Klicken um rechte Hand auf ausgewählte Vorauswahl zu setzen"/>
 						</panel>
 					</tab_container>
 					<panel title="Sonst." name="misc_joints_panel">
@@ -212,7 +215,7 @@
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="Liste der Avatar und Animeshe aktualisieren"/>
 						<button label="Posieren starten" label_selected="Posieren stoppen" tool_tip="Posieren des ausgewählten Avatar oder Animesh starten sofern berechtigt" name="start_stop_posing_button"/>
-						<button label="Auf T-Pose setzen" tool_tip="Doppelklicken, um den ausgewählten Avatar auf eine T-Pose zu setzen" name="set_t_pose_button"/>
+						<button label="Auf T-Pose setzen" tool_tip="Klicken, um den ausgewählten Avatar auf eine T-Pose zu setzen" name="set_t_pose_button"/>
 					</panel>
 					<panel title="Einst." name="settings_panel">
 						<text name="trackpad_sensitivity_label">
@@ -223,6 +226,7 @@
 						<check_box name="stop_posing_on_close_checkbox" label="Beim Schließen stoppen" tool_tip="Die Pose beim Schließen nicht zu stoppen kann hilfreich sein, um die bisher getätigte Arbeit nicht zu verlieren."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Basis-Rot. beim Edit. zurück." tool_tip="Wenn das erste Mal eine Pose bearbeitet wird, diese auf Null zurücksetzen. Hierdurch eine eine komplette Pose und nicht nur die Differenz gespeichert werden. Ein grüner Haken erscheint neben jedem Gelenk, dass auf Null-basierend exportiert wurde."/>
 						<check_box name="also_save_bvh_checkbox" label="BHV beim Speichern erst." tool_tip="Wenn die Pose gespeichert wird, wird ebenfalls eine BHV-Datei erstellt, die via Bauen > Hochladen > Animation hochgeladen und zum Posieren vom eigenen Avatar oder anderen Avataren verwendet werden kann. Hierzu muss die Basis der Gelenke auf Null gesetzt werden, da BHV nicht von anderen Posen abgeleitet wird."/>
+						<check_box name="confirm_overwrite_on_save_checkbox" label="Überschreiben bestätigen" tool_tip="Wenn die Pose gespeichert wird und die Datei bereits existiert, muss der Speichern-Button erneut geklickt werden um zu bestätigen, dass Sie die Datei überschreiben möchten."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Visuelle Manipulatoren an-/ausschalten" />
@@ -265,12 +269,12 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="Letzte Änderung rückgängig machen"/>
 					<button name="button_redo_change" tool_tip="Letzte Rotationsänderung wiederherstellen"/>
-					<button name="poser_joint_reset" tool_tip="Doppelklicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
+					<button name="poser_joint_reset" tool_tip="Klicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
 					<button name="delta_mode_toggle" tool_tip="Falls mehrere Gelenke geändert werden, diese um denselben Wert ändern anstatt in dieselbe Rotation zu versetzen. Wird auch zur Verhinderung von Gimbal Lock verwendet."/>
 					<button label="Spieg." name="button_toggleMirrorRotation" tool_tip="Änderungen an gegenüberliegendem Gelenk spiegeln."/>
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Gegenüberliegendes Gelenk gleichermaßen anpassen."/>
-					<button label="Kopie L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Doppelklicken, um Änderung von linker Seite zur rechten Seite zu kopieren." />
-					<button label="Kopie P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Doppelklicken, um Änderung von rechter Seite zur linken Seite zu kopieren." />
+					<button label="Kopie L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Klicken, um Änderung von linker Seite zur rechten Seite zu kopieren." />
+					<button label="Kopie P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Klicken, um Änderung von rechter Seite zur linken Seite zu kopieren." />
 				</panel>
 			</panel>
 			<panel name="poses_loadSave">

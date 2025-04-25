@@ -24,9 +24,8 @@
 		<combo_box.item label="BMP (verlustfrei)" name="BMP"/>
 	</combo_box>
 	<slider label="Qualität:" name="image_quality_slider"/>
-	<text name="local_remember_location_sessions_text">
-		Ort und Dateiname zwischen Sitzungen speichern
-	</text>
+	<combo_box name="local_remember_location_sessions" label="Ort und Dateiname merken"/>
+	<combo_box name="local_use_timestamp" label="Datum/Zeit in Dateiname verw."/>
 	<button label="&#x25B6; Auswahl" name="cancel_btn"/>
 	<flyout_button label="Speichern" name="save_btn" tool_tip="Bild als Datei speichern">
 		<flyout_button.item label="Speichern" name="save_item"/>
