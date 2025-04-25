@@ -1496,10 +1496,7 @@ void LLMeshSkinInfo::fromLLSD(LLSD& skin)
     {
         for (U32 i = 0; i < skin["joint_names"].size(); ++i)
         {
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//          mJointNames.push_back( skin[ "joint_names" ][ i ] );
-            mJointNames.push_back( JointKey::construct( skin[ "joint_names" ][ i ] ) );
-// </FS>ND>
+            mJointNames.push_back( skin[ "joint_names" ][ i ] );
             mJointNums.push_back(-1);
         }
     }
@@ -1589,10 +1586,7 @@ LLSD LLMeshSkinInfo::asLLSD(bool include_joints, bool lock_scale_if_joint_positi
 
     for (U32 i = 0; i < mJointNames.size(); ++i)
     {
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//      ret[ "joint_names" ][ i ] = mJointNames[ i ];
-        ret[ "joint_names" ][ i ] = mJointNames[ i ].mName;
-// </FS:ND>
+        ret[ "joint_names" ][ i ] = mJointNames[ i ];
 
         for (U32 j = 0; j < 4; j++)
         {
@@ -1643,9 +1637,7 @@ void LLMeshSkinInfo::updateHash()
     //mJointNames
     for (auto& name : mJointNames)
     {
-        // <FS:Ansariel> Joint lookup speedup
-        //hash.update(name);
-        hash.update(name.mName);
+        hash.update(name);
     }
 
     //mJointNums
@@ -1671,10 +1663,7 @@ U32 LLMeshSkinInfo::sizeBytes() const
     res += sizeof(std::vector<std::string>) + sizeof(std::string) * static_cast<U32>(mJointNames.size());
     for (U32 i = 0; i < mJointNames.size(); ++i)
     {
-        // <FS> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-        //res += static_cast<U32>(mJointNames[i].size()); // actual size, not capacity
-        res += static_cast<U32>(mJointNames[i].mName.size()); // actual size, not capacity
-        // </FS>
+        res += static_cast<U32>(mJointNames[i].size()); // actual size, not capacity
     }
 
     res += sizeof(std::vector<S32>) + sizeof(S32) * static_cast<U32>(mJointNums.size());
