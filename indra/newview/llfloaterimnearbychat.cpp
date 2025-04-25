@@ -596,7 +596,7 @@ void LLFloaterIMNearbyChat::sendChat( EChatType type )
 {
     if (mInputEditor)
     {
-        LLWString text = mInputEditor->getWText();
+        LLWString text = mInputEditor->getConvertedText();
         LLWStringUtil::trim(text);
         LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
         if (!text.empty())

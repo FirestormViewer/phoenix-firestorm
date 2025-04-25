@@ -127,6 +127,8 @@ private:
     void initEmojiRecentPanel();
     void onRecentEmojiPicked(const LLSD& value);
 
+    void onFocusReceived();
+
     FSChatHistory*      mChatHistory;
     FSChatHistory*      mChatHistoryMuted;
     LLChatEntry*        mInputEditor;

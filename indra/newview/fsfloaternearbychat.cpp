@@ -50,6 +50,7 @@
 #include "llcommandhandler.h"
 #include "llconsole.h"
 #include "lldraghandle.h"
+#include "llfloaterchatmentionpicker.h"
 #include "llfloateremojipicker.h"
 #include "llfloaterreg.h"
 #include "llfloatersearchreplace.h"
@@ -796,7 +797,7 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 {
     if (mInputEditor)
     {
-        LLWString text = mInputEditor->getWText();
+        LLWString text = mInputEditor->getConvertedText();
         LLWStringUtil::trim(text);
         LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
         if (!text.empty())
@@ -1035,4 +1036,12 @@ void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked()
 {
     mInputEditor->setFocus(true);
     mInputEditor->showEmojiHelper();
+}
+
+
+void FSFloaterNearbyChat::onFocusReceived()
+{
+    LLFloaterChatMentionPicker::updateSessionID(LLUUID::null);
+
+    LLFloater::onFocusReceived();
 }

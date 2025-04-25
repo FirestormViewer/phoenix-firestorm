@@ -2711,7 +2711,6 @@ void LLEnvironment::setSharedEnvironment()
 {
     clearEnvironment(LLEnvironment::ENV_LOCAL);
     setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-    updateEnvironment();
 }
 
 void LLEnvironment::setExperienceEnvironment(LLUUID experience_id, LLUUID asset_id, F32 transition_time)

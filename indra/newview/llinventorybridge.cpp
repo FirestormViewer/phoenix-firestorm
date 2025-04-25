@@ -3010,7 +3010,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
                     is_movable = false;
                     tooltip_msg = LLTrans::getString("TooltipCantMoveOutfitIntoOutfit");
                 }
-                else if ((dest_res == MY_OUTFITS_OUTFIT || dest_res == MY_OUTFITS_SUBOUTFIT) && inv_res == MY_OUTFITS_SUBFOLDER)
+                else if (dest_res == MY_OUTFITS_OUTFIT || dest_res == MY_OUTFITS_SUBOUTFIT)
                 {
                     is_movable = false;
                     tooltip_msg = LLTrans::getString("TooltipCantCreateOutfit");
@@ -4906,7 +4906,6 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
             if (cat->getPreferredType() == LLFolderType::FT_OUTFIT)
             {
                 // Want some but not all of the items from getClipboardEntries for outfits.
-                //items.push_back(std::string("New Outfit Folder")); // <FS:Ansariel> Normal subfolder underneath an outfit folder makes no sense
                 items.push_back(std::string("Rename"));
                 items.push_back(std::string("thumbnail"));
 
@@ -4939,9 +4938,8 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     {
                         // Not inside an outfit, but inside 'my outfits'
                         items.push_back(std::string("New Outfit"));
+                        items.push_back(std::string("New Outfit Folder"));
                     }
-
-                    items.push_back(std::string("New Outfit Folder"));
                     items.push_back(std::string("Rename"));
                     items.push_back(std::string("thumbnail"));
 

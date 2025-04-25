@@ -53,6 +53,7 @@
 #include "llconsole.h"
 #include "llfloaterabout.h"     // for sysinfo button -Zi
 #include "llfloateravatarpicker.h"
+#include "llfloaterchatmentionpicker.h"
 #include "llfloateremojipicker.h"
 #include "llfloaterreg.h"
 #include "llfloatersearchreplace.h"
@@ -205,6 +206,8 @@ void FSFloaterIM::onFocusLost()
     LLIMModel::getInstance()->resetActiveSessionID();
 
     LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
+
+    LLTransientDockableFloater::onFocusLost();
 }
 
 void FSFloaterIM::onFocusReceived()
@@ -217,6 +220,10 @@ void FSFloaterIM::onFocusReceived()
     {
         LLIMModel::instance().sendNoUnreadMessages(mSessionID);
     }
+
+    LLFloaterChatMentionPicker::updateSessionID(mSessionID);
+
+    LLTransientDockableFloater::onFocusReceived();
 }
 
 // virtual
@@ -369,7 +376,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 
         if (mInputEditor)
         {
-            LLWString text = mInputEditor->getWText();
+            LLWString text = mInputEditor->getConvertedText();
             LLWStringUtil::trim(text);
             LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
             if (!text.empty())

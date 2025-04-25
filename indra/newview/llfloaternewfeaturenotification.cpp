@@ -43,29 +43,28 @@ bool LLFloaterNewFeatureNotification::postBuild()
     setCanDrag(false);
     getChild<LLButton>("close_btn")->setCommitCallback(boost::bind(&LLFloaterNewFeatureNotification::onCloseBtn, this));
 
-    const std::string title_txt = "title_txt";
-    const std::string dsc_txt = "description_txt";
-    // <FS:Beq> FIRE-35393 stop crashing just cos whirly does something daft and blames Atlas for it
-    std::string feature = getKey().asString();
-    if(feature.empty() )
+    if (getKey().isString())
     {
-        LL_WARNS("FloaterNewFeature") << "Unexpected failure - No feature name NewFeatureNotification." << LL_ENDL;
-        return false;
+        const std::string title_txt = "title_txt";
+        const std::string dsc_txt = "description_txt";
+
+        std::string feature = "_" + getKey().asString();
+        if (hasString(title_txt + feature))
+        {
+            getChild<LLUICtrl>(title_txt)->setValue(getString(title_txt + feature));
+            getChild<LLUICtrl>(dsc_txt)->setValue(getString(dsc_txt + feature));
+        }
+        else
+        {
+            // Show blank
+            LL_WARNS() << "Feature \"" << getKey().asString() <<  "\" not found for feature notification" << LL_ENDL;
+        }
     }
-    if (!hasString( title_txt + "_" + feature ) )
+    else
     {
-        LL_WARNS("FloaterNewFeature") << "No string for " << title_txt + "_" + feature << LL_ENDL;
-        return false;
+        // Show blank
+        LL_WARNS() << "Feature notification without a feature" << LL_ENDL;
     }
-    if (!hasString( dsc_txt + "_" + feature ) )
-    {
-        LL_WARNS("FloaterNewFeature") << "No string for " << dsc_txt + "_" + feature << LL_ENDL;
-        return false;
-    }
-    // </FS:Beq>
-    
-    getChild<LLUICtrl>(title_txt)->setValue(getString(title_txt + "_" + feature));
-    getChild<LLUICtrl>(dsc_txt)->setValue(getString(dsc_txt + "_" + feature));
 
     if (getKey().asString() == "gltf")
     {

@@ -116,7 +116,7 @@ public:
     void setShowPermissions(bool show);
     void showLastInteractionTime(bool show);
     void setAvatarIconVisible(bool visible);
-    void setShowCompleteName(bool show) { mShowCompleteName = show;};
+    void setShowCompleteName(bool show, bool force = false) { mShowCompleteName = show; mForceCompleteName = force;};
 // [RLVa:KB] - Checked: RLVa-1.2.0
     void setRlvCheckShowNames(bool fRlvCheckShowNames);
     void updateRlvRestrictions();
@@ -265,6 +265,7 @@ private:
     bool mHovered;
 
     bool mShowCompleteName;
+    bool mForceCompleteName;
     std::string mGreyOutUsername;
 
     void fetchAvatarName();
