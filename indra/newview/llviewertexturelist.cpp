@@ -808,6 +808,14 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
         imagep->setExplicitFormat(internal_format, primary_format);
     }
 
+    // <FS:minerjr> [FIRE-35428] - Mega prim issue - fix compressed sculpted textures
+    // Sculpted textures use the RGBA data for coodinates, so any compression can cause artifacts.
+    if (boost_priority == LLViewerFetchedTexture::BOOST_SCULPTED)
+    {
+        // Disable the compression of BOOST_SCULPTED textures
+        if (imagep->getGLTexture())imagep->getGLTexture()->setAllowCompression(false);
+    }
+    // </FS:minerjr> [FIRE-35428]
     addImage(imagep, get_element_type(boost_priority));
 
     if (boost_priority != 0)
@@ -835,7 +843,11 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
     }
 
     // <FS:Ansariel> Keep Fast Cache option
-    if(fast_cache_fetching_enabled)
+    // <FS:minerjr> [FIRE-35428] - Mega prim issue - fix compressed sculpted textures
+    //if(fast_cache_fetching_enabled)
+    // If the texture is Sculpted, don't allow it to be added to fast cache as it can affect the texture.
+    if(fast_cache_fetching_enabled && boost_priority != LLViewerFetchedTexture::BOOST_SCULPTED)
+    // </FS:minerjr> [FIRE-35428]
     {
         mFastCacheList.insert(imagep);
         imagep->setInFastCacheList(true);
