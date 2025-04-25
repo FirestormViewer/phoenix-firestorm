@@ -33,6 +33,7 @@
 
 #include "llfloater.h"
 #include "llviewerchat.h"
+#include "fschatparticipants.h"
 
 class FSChatHistory;
 class LLChatEntry;
@@ -44,7 +45,7 @@ class LLResizeBar;
 class LLTextBox;
 
 
-class FSFloaterNearbyChat: public LLFloater
+class FSFloaterNearbyChat: public LLFloater, FSChatParticipants
 {
 public:
     FSFloaterNearbyChat(const LLSD& key);
@@ -103,6 +104,8 @@ public:
 
     void onEmojiPickerToggleBtnClicked();
 
+    uuid_vec_t getSessionParticipants() const;
+
 protected:
     void onChatBoxKeystroke();
     void onChatBoxFocusLost();
@@ -127,6 +130,7 @@ private:
     void initEmojiRecentPanel();
     void onRecentEmojiPicked(const LLSD& value);
 
+    void onFocusLost();
     void onFocusReceived();
 
     FSChatHistory*      mChatHistory;

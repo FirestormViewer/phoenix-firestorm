@@ -29,6 +29,7 @@
 #include "llfloater.h"
 
 class LLAvatarList;
+class FSChatParticipants;
 
 class LLFloaterChatMentionPicker : public LLFloater
 {
@@ -44,6 +45,10 @@ public:
     static void updateSessionID(LLUUID session_id);
     static void updateAvatarList(uuid_vec_t& avatar_ids);
 
+    // <FS:Ansariel> [FS communication UI]
+    static void updateParticipantSource(FSChatParticipants* source);
+    static void removeParticipantSource(FSChatParticipants* source);
+
 private:
 
     void onOpen(const LLSD& key) override;
@@ -53,6 +58,9 @@ private:
 
     static LLUUID sSessionID;
     LLAvatarList* mAvatarList;
+
+    // <FS:Ansariel> [FS communication UI]
+    static FSChatParticipants* sParticipantSource;
 };
 
 #endif

@@ -79,6 +79,7 @@
 // <FS:TS> FIRE-23123: Don't log newline spam even from own objects
 #include "NACLantispam.h"
 // </FS:TS> FIRE-23123
+#include "lfsimfeaturehandler.h"
 
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
@@ -109,6 +110,8 @@ FSFloaterNearbyChat::~FSFloaterNearbyChat()
     {
         mRecentEmojisUpdatedCallbackConnection.disconnect();
     }
+
+    LLFloaterChatMentionPicker::removeParticipantSource(this);
 }
 
 void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
@@ -1038,10 +1041,28 @@ void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked()
     mInputEditor->showEmojiHelper();
 }
 
+void FSFloaterNearbyChat::onFocusLost()
+{
+    LLFloaterChatMentionPicker::removeParticipantSource(this);
+
+    LLFloater::onFocusLost();
+}
 
 void FSFloaterNearbyChat::onFocusReceived()
 {
-    LLFloaterChatMentionPicker::updateSessionID(LLUUID::null);
+    LLFloaterChatMentionPicker::updateParticipantSource(this);
 
     LLFloater::onFocusReceived();
+}
+
+uuid_vec_t FSFloaterNearbyChat::getSessionParticipants() const
+{
+    if (!isAgentAvatarValid() || !LLWorld::instanceExists() || !LFSimFeatureHandler::instanceExists())
+        return{};
+
+    // Copy LL behavior and limit to avatars in say range
+    uuid_vec_t avatarIds;
+    LLWorld::instance().getAvatars(&avatarIds, nullptr, gAgent.getPositionGlobal(), (F32)LFSimFeatureHandler::instance().sayRange());
+
+    return avatarIds;
 }

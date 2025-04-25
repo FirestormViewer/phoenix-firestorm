@@ -207,6 +207,8 @@ void FSFloaterIM::onFocusLost()
 
     LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
 
+    LLFloaterChatMentionPicker::removeParticipantSource(this);
+
     LLTransientDockableFloater::onFocusLost();
 }
 
@@ -221,7 +223,7 @@ void FSFloaterIM::onFocusReceived()
         LLIMModel::instance().sendNoUnreadMessages(mSessionID);
     }
 
-    LLFloaterChatMentionPicker::updateSessionID(mSessionID);
+    LLFloaterChatMentionPicker::updateParticipantSource(this);
 
     LLTransientDockableFloater::onFocusReceived();
 }
@@ -646,6 +648,8 @@ FSFloaterIM::~FSFloaterIM()
     {
         mRecentEmojisUpdatedCallbackConnection.disconnect();
     }
+
+    LLFloaterChatMentionPicker::removeParticipantSource(this);
 }
 
 void FSFloaterIM::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
@@ -2572,4 +2576,12 @@ void FSFloaterIM::onEmojiPickerToggleBtnClicked()
 {
     mInputEditor->setFocus(true);
     mInputEditor->showEmojiHelper();
+}
+
+uuid_vec_t FSFloaterIM::getSessionParticipants() const
+{
+    if (!mControlPanel)
+        return{};
+
+    return mControlPanel->getParticipants();
 }

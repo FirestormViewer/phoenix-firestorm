@@ -32,7 +32,12 @@
 #include "llchatmentionhelper.h"
 #include "llparticipantlist.h"
 
+#include "fschatparticipants.h" // <FS:Ansariel> [FS communication UI]
+
 LLUUID LLFloaterChatMentionPicker::sSessionID(LLUUID::null);
+
+// <FS:Ansariel> [FS communication UI]
+FSChatParticipants* LLFloaterChatMentionPicker::sParticipantSource(nullptr);
 
 LLFloaterChatMentionPicker::LLFloaterChatMentionPicker(const LLSD& key)
 : LLFloater(key), mAvatarList(NULL)
@@ -76,29 +81,36 @@ void LLFloaterChatMentionPicker::onOpen(const LLSD& key)
 
 uuid_vec_t LLFloaterChatMentionPicker::getParticipantIds()
 {
-    /*
-    LLParticipantList* item = dynamic_cast<LLParticipantList*>(LLFloaterIMContainer::getInstance()->getSessionModel(sSessionID));
-    if (!item)
+    // <FS:Ansariel> [FS communication UI]
+    //LLParticipantList* item = dynamic_cast<LLParticipantList*>(LLFloaterIMContainer::getInstance()->getSessionModel(sSessionID));
+    //if (!item)
+    //{
+    //    LL_WARNS() << "Participant list is missing" << LL_ENDL;
+    //    return {};
+    //}
+
+    //uuid_vec_t avatar_ids;
+    //LLFolderViewModelItemCommon::child_list_t::const_iterator current_participant_model = item->getChildrenBegin();
+    //LLFolderViewModelItemCommon::child_list_t::const_iterator end_participant_model = item->getChildrenEnd();
+    //while (current_participant_model != end_participant_model)
+    //{
+    //    LLConversationItem* participant_model = dynamic_cast<LLConversationItem*>(*current_participant_model);
+    //    if (participant_model)
+    //    {
+    //        avatar_ids.push_back(participant_model->getUUID());
+    //    }
+    //    current_participant_model++;
+    //}
+    //return avatar_ids;
+
+    if (!sParticipantSource)
     {
         LL_WARNS() << "Participant list is missing" << LL_ENDL;
         return {};
     }
 
-    uuid_vec_t avatar_ids;
-    LLFolderViewModelItemCommon::child_list_t::const_iterator current_participant_model = item->getChildrenBegin();
-    LLFolderViewModelItemCommon::child_list_t::const_iterator end_participant_model = item->getChildrenEnd();
-    while (current_participant_model != end_participant_model)
-    {
-        LLConversationItem* participant_model = dynamic_cast<LLConversationItem*>(*current_participant_model);
-        if (participant_model)
-        {
-            avatar_ids.push_back(participant_model->getUUID());
-        }
-        current_participant_model++;
-    }
-    return avatar_ids;
-    */
-    return{};
+    return sParticipantSource->getSessionParticipants();
+    // </FS:Ansariel> [FS communication UI]
 }
 
 void LLFloaterChatMentionPicker::buildAvatarList()
@@ -160,19 +172,19 @@ void LLFloaterChatMentionPicker::goneFromFront()
 
 void LLFloaterChatMentionPicker::updateSessionID(LLUUID session_id)
 {
-    sSessionID = session_id;
+    // <FS:Ansariel> [FS communication UI]
+    //sSessionID = session_id;
 
-    /*
-    LLParticipantList* item = dynamic_cast<LLParticipantList*>(LLFloaterIMContainer::getInstance()->getSessionModel(sSessionID));
-    if (!item)
-    {
-        LL_WARNS() << "Participant list is missing" << LL_ENDL;
-        return;
-    }
-    */
+    //LLParticipantList* item = dynamic_cast<LLParticipantList*>(LLFloaterIMContainer::getInstance()->getSessionModel(sSessionID));
+    //if (!item)
+    //{
+    //    LL_WARNS() << "Participant list is missing" << LL_ENDL;
+    //    return;
+    //}
 
-    uuid_vec_t avatar_ids = getParticipantIds();
-    updateAvatarList(avatar_ids);
+    //uuid_vec_t avatar_ids = getParticipantIds();
+    //updateAvatarList(avatar_ids);
+    // </FS:Ansariel> [FS communication UI]
 }
 
 void LLFloaterChatMentionPicker::updateAvatarList(uuid_vec_t& avatar_ids)
@@ -187,3 +199,25 @@ void LLFloaterChatMentionPicker::updateAvatarList(uuid_vec_t& avatar_ids)
     }
     LLChatMentionHelper::instance().updateAvatarList(av_names);
 }
+
+// <FS:Ansariel> [FS communication UI]
+void LLFloaterChatMentionPicker::updateParticipantSource(FSChatParticipants* source)
+{
+    sParticipantSource = source;
+
+    if (!sParticipantSource)
+    {
+        LL_WARNS() << "Participant list is missing" << LL_ENDL;
+        return;
+    }
+
+    uuid_vec_t avatar_ids = sParticipantSource->getSessionParticipants();
+    updateAvatarList(avatar_ids);
+}
+
+void LLFloaterChatMentionPicker::removeParticipantSource(FSChatParticipants* source)
+{
+    if (sParticipantSource == source)
+        sParticipantSource = nullptr;
+}
+// </FS:Ansariel> [FS communication UI]

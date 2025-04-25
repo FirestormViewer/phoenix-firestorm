@@ -31,6 +31,7 @@
 #include "fspanelimcontrolpanel.h"
 
 #include "fsparticipantlist.h"
+#include "llagent.h"
 #include "llimview.h"
 #include "llspeakers.h"
 
@@ -40,15 +41,26 @@ void FSPanelChatControlPanel::setSessionId(const LLUUID& session_id)
     mSessionId = session_id;
 }
 
+uuid_vec_t FSPanelChatControlPanel::getParticipants() const
+{
+    LLIMModel::LLIMSession* im_session = LLIMModel::instance().findIMSession(mSessionId);
+    if (im_session && im_session->isP2PSessionType())
+    {
+        return { im_session->mOtherParticipantID, gAgentID };
+    }
+
+    return {};
+}
+
 FSPanelGroupControlPanel::FSPanelGroupControlPanel(const LLUUID& session_id):
-mParticipantList(NULL)
+mParticipantList(nullptr)
 {
 }
 
 FSPanelGroupControlPanel::~FSPanelGroupControlPanel()
 {
     delete mParticipantList;
-    mParticipantList = NULL;
+    mParticipantList = nullptr;
 }
 
 // virtual
@@ -69,13 +81,19 @@ void FSPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
     mGroupID = session_id;
 
     // for group and Ad-hoc chat we need to include agent into list
-    if(!mParticipantList)
+    if (!mParticipantList)
     {
         LLSpeakerMgr* speaker_manager = LLIMModel::getInstance()->getSpeakerManager(session_id);
-        // <FS:Beq/> potential crash avoidance. getSpeakerManager can return NULL, the constructor does not check
-        if ( speaker_manager == nullptr ){ return;}
+        if (!speaker_manager)
+            return;
+
         mParticipantList = new FSParticipantList(speaker_manager, getChild<LLAvatarList>("grp_speakers_list"), true,false);
     }
+}
+
+uuid_vec_t FSPanelGroupControlPanel::getParticipants() const
+{
+    return mParticipantList->getAvatarIds();
 }
 
 FSPanelAdHocControlPanel::FSPanelAdHocControlPanel(const LLUUID& session_id)

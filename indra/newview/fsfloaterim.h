@@ -36,6 +36,7 @@
 #include "lltooldraganddrop.h"
 #include "lltransientdockablefloater.h"
 #include "llvoicechannel.h"
+#include "fschatparticipants.h"
 
 class FSChatHistory;
 class FSFloaterIMTimer;
@@ -57,7 +58,7 @@ typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_s
  * Individual IM window that appears at the bottom of the screen,
  * optionally "docked" to the bottom tray.
  */
-class FSFloaterIM : public LLTransientDockableFloater, LLVoiceClientStatusObserver, LLFriendObserver, LLEventTimer
+class FSFloaterIM : public LLTransientDockableFloater, LLVoiceClientStatusObserver, LLFriendObserver, LLEventTimer, FSChatParticipants
 {
     LOG_CLASS(FSFloaterIM);
 public:
@@ -162,6 +163,8 @@ public:
     void timedUpdate();
 
     void onEmojiPickerToggleBtnClicked();
+
+    uuid_vec_t getSessionParticipants() const;
 
 protected:
     /* virtual */

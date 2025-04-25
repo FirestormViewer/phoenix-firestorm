@@ -97,6 +97,8 @@ public:
 
     EConversationType const getType() const { return mConvType; }
 
+    uuid_vec_t getAvatarIds() const;
+
 protected:
     /**
      * LLSpeakerMgr event handlers
