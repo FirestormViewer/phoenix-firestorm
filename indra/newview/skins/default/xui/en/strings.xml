@@ -2232,6 +2232,10 @@ Please reinstall viewer from [DOWNLOAD_URL] and contact [SUPPORT_SITE] if issue 
   <string name="inventory_item_offered_rlv">
     Inventory item offered to [NAME]
   </string>
+  <string name="bot_warning">
+  You are chatting with a bot, [NAME]. Do not share any personal information.
+Learn more at https://second.life/scripted-agents.
+  </string>
   <string name="share_alert">
     Drag items from inventory here
   </string>

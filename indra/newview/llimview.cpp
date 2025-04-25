@@ -3446,11 +3446,18 @@ void LLIMMgr::addMessage(
     const LLUUID& region_id,
     const LLVector3& position,
     bool is_region_msg,
-    U32 timestamp,      // May be zero
+    U32 timestamp,  // May be zero
+    LLUUID display_id,
+    std::string_view display_name,
     bool is_announcement, // <FS:Ansariel> Special parameter indicating announcements
     bool keyword_alert_performed) // <FS:Ansariel> Pass info if keyword alert has been performed
 {
     LLUUID other_participant_id = target_id;
+    std::string message_display_name = (display_name.empty()) ? from : std::string(display_name);
+    if (display_id.isNull() && (display_name.empty()))
+    {
+        display_id = other_participant_id;
+    }
 
     LLUUID new_session_id = session_id;
     if (new_session_id.isNull())
@@ -3603,7 +3610,7 @@ void LLIMMgr::addMessage(
 
             // <FS:PP> Configurable IM sounds
             // //Play sound for new conversations
-            // if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
+            // if (!skip_message && !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
 
             // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
             static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
@@ -3712,8 +3719,8 @@ void LLIMMgr::addMessage(
     if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
     {
         // <FS:Ansariel> Added is_announcement parameter
-        //LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_region_msg, timestamp);
-        LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_region_msg, timestamp, is_announcement, keyword_alert_performed);
+        //LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp);
+        LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp, is_announcement, keyword_alert_performed);
     }
 
     // Open conversation floater if offline messages are present
@@ -4608,6 +4615,8 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
             LLVector3::zero,
             false,
             0,
+            LLUUID::null,
+            "",
             true
             );
     }
@@ -4681,6 +4690,8 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
             LLVector3::zero,
             false,
             0,
+            LLUUID::null,
+            "",
             true
             );
 
@@ -4704,6 +4715,8 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
                         LLVector3::zero,
                         false,
                         0,
+                        LLUUID::null,
+                        "",
                         true);
                 LLGiveInventory::doGiveInventoryItem(av_id, item, session_id);
             }

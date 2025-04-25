@@ -145,7 +145,6 @@ public:
     /*virtual*/ void                setStyle(LLStyleConstSP style)  { mStyle = style; }
     /*virtual*/ void                setToken( LLKeywordToken* token )   { mToken = token; }
     /*virtual*/ LLKeywordToken*     getToken() const                    { return mToken; }
-    /*virtual*/ bool                getToolTip( std::string& msg ) const;
     /*virtual*/ void                setToolTip(const std::string& tooltip);
     /*virtual*/ void                dump() const;
 
@@ -477,7 +476,7 @@ public:
     virtual void            setText(const LLStringExplicit &utf8str , const LLStyle::Params& input_params = LLStyle::Params()); // uses default style
     /*virtual*/ const std::string& getText() const override;
     void                    setMaxTextLength(S32 length) { mMaxTextByteLength = length; }
-    S32                     getMaxTextLength() { return mMaxTextByteLength; }
+    S32                     getMaxTextLength() const { return mMaxTextByteLength; }
 
     // wide-char versions
     void                    setWText(const LLWString& text);
@@ -516,10 +515,10 @@ public:
     LLRect                  getTextBoundingRect();
     LLRect                  getVisibleDocumentRect() const;
 
-    S32                     getVPad() { return mVPad; }
-    S32                     getHPad() { return mHPad; }
-    F32                     getLineSpacingMult() { return mLineSpacingMult; }
-    S32                     getLineSpacingPixels() { return mLineSpacingPixels; } // only for multiline
+    S32                     getVPad() const { return mVPad; }
+    S32                     getHPad() const { return mHPad; }
+    F32                     getLineSpacingMult() const { return mLineSpacingMult; }
+    S32                     getLineSpacingPixels() const { return mLineSpacingPixels; } // only for multiline
 
     S32                     getDocIndexFromLocalCoord( S32 local_x, S32 local_y, bool round, bool hit_past_end_of_line = true) const;
     LLRect                  getLocalRectFromDocIndex(S32 pos) const;
@@ -529,7 +528,7 @@ public:
     bool                    getReadOnly() const { return mReadOnly; }
 
     void                    setSkipLinkUnderline(bool skip_link_underline) { mSkipLinkUnderline = skip_link_underline; }
-    bool                    getSkipLinkUnderline() { return mSkipLinkUnderline;  }
+    bool                    getSkipLinkUnderline() const { return mSkipLinkUnderline;  }
 
     void                    setParseURLs(bool parse_urls) { mParseHTML = parse_urls; }
 
@@ -539,15 +538,15 @@ public:
     // cursor manipulation
     bool                    setCursor(S32 row, S32 column);
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
-    S32                     getCursorPos() { return mCursorPos; }
+    S32                     getCursorPos() const { return mCursorPos; }
 // [/SL:KB
     bool                    setCursorPos(S32 cursor_pos, bool keep_cursor_offset = false);
     virtual void            startOfLine(); // <FS> Added virtual modifier
     void                    endOfLine();
     void                    startOfDoc();
     void                    endOfDoc();
-    void                    changePage( S32 delta );
-    void                    changeLine( S32 delta );
+    void                    changePage(S32 delta);
+    void                    changeLine(S32 delta);
 
     bool                    scrolledToStart();
     bool                    scrolledToEnd();
@@ -571,9 +570,6 @@ public:
 
     void                    setWordWrap(bool wrap);
     LLScrollContainer*      getScrollContainer() const { return mScroller; }
-
-    // <FS:Ansariel> Getter for line spacing (pixels)
-    S32                     getLineSpacingPixels() const { return mLineSpacingPixels; }
 
 protected:
     // protected member variables
@@ -722,7 +718,6 @@ protected:
 
     void                            appendTextImpl(const std::string &new_text, const LLStyle::Params& input_params = LLStyle::Params());
     void                            appendAndHighlightTextImpl(const std::string &new_text, S32 highlight_part, const LLStyle::Params& style_params, bool underline_on_hover_only = false);
-    S32 normalizeUri(std::string& uri);
 
 protected:
     // virtual

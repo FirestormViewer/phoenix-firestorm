@@ -165,7 +165,7 @@ public:
     void            setItemRemoved(bool script_removed){mScriptRemoved = script_removed;};
 
     void            setAssetID( const LLUUID& asset_id){ mAssetID = asset_id; };
-    LLUUID          getAssetID() { return mAssetID; }
+    LLUUID          getAssetID() const { return mAssetID; }
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
     //bool isFontSizeChecked(const LLSD &userdata);
@@ -190,7 +190,7 @@ public: // <FS:Ansariel> Show keyword help on F1
 private: // <FS:Ansariel> Show keyword help on F1
     void        onBtnUndoChanges();
 
-    bool        hasChanged();
+    bool        hasChanged() const;
 
     void selectFirstError();
 
@@ -282,7 +282,6 @@ class LLScriptEdContainer : public LLPreview
 
 public:
     LLScriptEdContainer(const LLSD& key);
-    LLScriptEdContainer(const LLSD& key, const bool live);
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
     /*virtual*/ ~LLScriptEdContainer();
 

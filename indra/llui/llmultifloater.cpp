@@ -430,7 +430,7 @@ LLFloater* LLMultiFloater::getActiveFloater()
     return (LLFloater*)mTabContainer->getCurrentPanel();
 }
 
-S32 LLMultiFloater::getFloaterCount()
+S32 LLMultiFloater::getFloaterCount() const
 {
     return mTabContainer->getTabCount();
 }
