@@ -187,10 +187,10 @@ void LLFloaterChatMentionPicker::updateSessionID(LLUUID session_id)
     // </FS:Ansariel> [FS communication UI]
 }
 
-void LLFloaterChatMentionPicker::updateAvatarList(uuid_vec_t& avatar_ids)
+void LLFloaterChatMentionPicker::updateAvatarList(const uuid_vec_t& avatar_ids)
 {
     std::vector<std::string> av_names;
-    for (auto& id : avatar_ids)
+    for (const auto& id : avatar_ids)
     {
         LLAvatarName av_name;
         LLAvatarNameCache::get(id, &av_name);

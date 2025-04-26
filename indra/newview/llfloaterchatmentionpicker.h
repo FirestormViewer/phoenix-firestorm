@@ -43,7 +43,7 @@ public:
 
     static uuid_vec_t getParticipantIds();
     static void updateSessionID(LLUUID session_id);
-    static void updateAvatarList(uuid_vec_t& avatar_ids);
+    static void updateAvatarList(const uuid_vec_t& avatar_ids);
 
     // <FS:Ansariel> [FS communication UI]
     static void updateParticipantSource(FSChatParticipants* source);
