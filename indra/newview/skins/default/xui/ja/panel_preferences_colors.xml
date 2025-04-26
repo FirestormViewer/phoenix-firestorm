@@ -171,7 +171,7 @@
 			<text name="MapAvatarMutedColor_label">
 				無視対象
 			</text>
-			<check_box name="MiniMapChatRing" label="ミニマップ上に、ささやき、発声、シャウトのチャット範囲を示すリングを表示："/>
+			<check_box name="MiniMapChatRing" label="ミニマップ上に、ささやき、発言、シャウトのチャット範囲を示すリングを表示："/>
 			<text name="netmap_chatring_color_label">
 				チャット範囲
 			</text>
@@ -201,11 +201,18 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="コンソールの色を選択します。"/>
 			<slider label="透過度：" name="console_background_opacity" tool_tip="チャットコンソールの背景の透過度を選択します。"/>
-			<slider label="フローティングテキストの背景の透過度：" name="FSHudTextBackgroundOpacity" tool_tip="フローティングテキストの背景の不透明度を選んでください。" />
+			<slider label="フローティングテキストの背景の透過度：" name="FSHudTextBackgroundOpacity" tool_tip="フローティングテキストの背景の不透明度を選んでください。"/>
 			<text name="preferences_search_label">
 				検索結果のハイライト色：
 			</text>
-			<color_swatch name="preferences_search_color" tool_tip="検索結果を強調する色を選択します。"/>
+			<text name="preferences_search_bg_label">
+				背景：
+			</text>
+			<color_swatch name="preferences_search_color" tool_tip="初期設定の検索結果のハイライトの背景色を選択します。"/>
+			<text name="preferences_search_font_label">
+				フォント：
+			</text>
+			<color_swatch name="preferences_search_font_color" tool_tip="初期設定の検索結果のハイライトの文字色を選択します。"/>
 			<text name="area_search_beacon_color_label">
 				エリアサーチのビーコンの色：
 			</text>

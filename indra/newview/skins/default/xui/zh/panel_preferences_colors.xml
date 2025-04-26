@@ -101,7 +101,10 @@
 			<slider label="透明度：" name="console_background_opacity" tool_tip="選擇控制台背景的透明度" />
 			<slider label="懸停文字背景透明度：" name="FSHudTextBackgroundOpacity" tool_tip="設定懸停文字背景的透明度"/>
 			<text name="preferences_search_label">突出顯示搜尋偏好設定：</text>
-			<color_swatch name="preferences_search_color" tool_tip="選擇搜尋結果突出顯示的偏好設定的顏色" />
+			<text name="preferences_search_bg_label" width="35">背景：</text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="選擇搜尋結果突出顯示的偏好設定的背景顏色" />
+			<text name="preferences_search_font_label" width="35">字体：</text>
+			<color_swatch name="preferences_search_font_color" tool_tip="選擇搜尋結果突出顯示的偏好設定的字體顏色" />
 			<text name="area_search_beacon_color_label">區域搜尋標記顏色：</text>
 			<color_swatch name="area_search_beacon_color" tool_tip="選擇區域搜尋標記的顏色" />
 			<text name="notecard_editor_color_label">
