@@ -1398,8 +1398,8 @@
      reference="Green" />
   <color
     name="ChatMentionHighlight"
-    value="0.82 0.91 0.98 0.15" />
+    value="0.064 0.282 0.470 1" />
   <color
     name="ChatSelfMentionHighlight"
-    value="0.85 0.75 0.40 0.5" />
+    value="0.561 0.361 0.251 1" />
 </colors>

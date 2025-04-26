@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
     name="chat_mention_picker"
-    title="CHOOSE RESIDENT"
+    title="Choose Resident"
     single_instance="true"
     can_minimize="false"
     can_tear_off="false"
