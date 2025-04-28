@@ -66,7 +66,8 @@ void BDAnimator::update()
                 }
             }
 
-            joint = gAgentAvatarp->getJoint(JointKey::construct("HEAD"));
+            //joint = gAgentAvatarp->getJoint(JointKey::construct("HEAD"));
+            joint = gAgentAvatarp->getJoint("HEAD");
             if (joint)
                 joint->setScale(LLVector3::zero);
         }

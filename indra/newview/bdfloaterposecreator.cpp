@@ -316,7 +316,8 @@ void BDFloaterPoseCreator::onKeyframeResetAll()
         if (!joint_motion)
             continue;
 
-        LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(joint_motion->mJointName));
+        //LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(joint_motion->mJointName));
+        LLJoint* joint = gAgentAvatarp->getJoint(joint_motion->mJointName);
         if (!joint)
             continue;
 
@@ -1336,7 +1337,8 @@ void BDFloaterPoseCreator::onPoseReapply()
 
     for (auto& joint_motion : joint_list->mJointMotionArray)
     {
-        LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(joint_motion->mJointName));
+        //LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(joint_motion->mJointName));
+        LLJoint* joint = gAgentAvatarp->getJoint(joint_motion->mJointName);
         if (joint)
         {
             LLKeyframeMotion::RotationCurve rot_curve = joint_motion->mRotationCurve;
@@ -1588,7 +1590,8 @@ void BDFloaterPoseCreator::onJointRefresh()
     //BD - Collision Volumes
     for (auto name : cv_names)
     {
-        joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        //joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        joint = gAgentAvatarp->getJoint(name);
         //BD - Nothing? Invalid? Skip, when we hit the end we'll break out anyway.
         if (!joint) continue;
 
@@ -1638,7 +1641,8 @@ void BDFloaterPoseCreator::onJointRefresh()
     //BD - Attachment Bones
     for (auto name : attach_names)
     {
-        joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        //joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        joint = gAgentAvatarp->getJoint(name);
         //BD - Nothing? Invalid? Skip, when we hit the end we'll break out anyway.
         if (!joint) continue;
 
@@ -3073,7 +3077,8 @@ void BDFloaterPoseCreator::onCollectDefaults()
 
     for (auto name : joint_names)
     {
-        joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        //joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        joint = gAgentAvatarp->getJoint(name);
         //BD - Nothing? Invalid? Skip, when we hit the end we'll break out anyway.
         if (!joint) continue;
 
@@ -3096,7 +3101,8 @@ void BDFloaterPoseCreator::onCollectDefaults()
     //BD - Collision Volumes
     for (auto name : cv_names)
     {
-        LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        //LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        LLJoint* joint = gAgentAvatarp->getJoint(name);
         //BD - Nothing? Invalid? Skip, when we hit the end we'll break out anyway.
         if (!joint) continue;
 
@@ -3111,7 +3117,8 @@ void BDFloaterPoseCreator::onCollectDefaults()
     //BD - Attachment Bones
     for (auto name : attach_names)
     {
-        LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        //LLJoint* joint = gAgentAvatarp->getJoint(JointKey::construct(name));
+        LLJoint* joint = gAgentAvatarp->getJoint(name);
         //BD - Nothing? Invalid? Skip, when we hit the end we'll break out anyway.
         if (!joint) continue;
 
