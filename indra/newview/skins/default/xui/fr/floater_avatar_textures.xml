@@ -10,7 +10,7 @@
 				Textures composites
 			</text>
 			<button label="Sauvegarder les IDs dans la console" label_selected="Sauvegarder" name="Dump"/>
-			<panel name="scroll_content_panel">
+			<panel name="scroll_content_panel2">
 				<texture_picker label="Cheveux" name="hair-baked"/>
 				<texture_picker label="Cheveux" name="hair_grain"/>
 				<texture_picker label="Alpha cheveux" name="hair_alpha"/>

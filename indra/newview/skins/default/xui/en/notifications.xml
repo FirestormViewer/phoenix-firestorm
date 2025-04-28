@@ -2503,6 +2503,16 @@ Unable to upload snapshot.
 File might be too big, try reducing resolution or try again later.
   <tag>fail</tag>
   </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="CannotOpenFileTooBig"
+   type="alertmodal">
+Unable to open file.
+
+Viewer ran out of memory while opening file. File might be too big.
+  <tag>fail</tag>
+  </notification>
 
   <notification
    icon="notifytip.tga"
@@ -13973,7 +13983,7 @@ Flickr verification failed. Please try again, and be sure to double check the ve
    icon="notifytip.tga"
    name="ExodusFlickrUploadComplete"
    type="notifytip">
-Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[ID] here].
+Your snapshot can now be viewed [https://www.flickr.com/photos/me/[ID] here].
   </notification>
    <!-- </FS:TS> FIRE-5453 -->
 
@@ -14535,6 +14545,18 @@ This will replace the items in the selected outfit with the items you are wearin
      <usetemplate
        name="okbutton"
        yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="WaterExclusionSurfacesWarning"
+   type="alertmodal">
+    Checking the hide water box will overwrite the texture, bumpiness, and shininess choices.
+    <tag>confirm</tag>
+    <usetemplate
+      name="okcancelbuttons"
+      notext="Cancel"
+      yestext="Continue"/>
   </notification>
 
   <notification

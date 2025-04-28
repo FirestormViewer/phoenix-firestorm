@@ -91,10 +91,11 @@ public:
     /*virtual*/ void        stopMotionFromSource(const LLUUID& source_id);
     /*virtual*/ void        requestStopMotion(LLMotion* motion);
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//  /*virtual*/ LLJoint*    getJoint( const std::string &name );
-    /*virtual*/ LLJoint*    getJoint( const JointKey &name );
-// </FS:ND>
+    //<FS:Ansariel> Joint-lookup improvements
+//  /*virtual*/ LLJoint*    getJoint(const std::string &name);
+    /*virtual*/ LLJoint*    getJoint(std::string_view name);
+
+    /*virtual*/ void renderJoints();
 
     // <FS:Ansariel> [Legacy Bake]
     ///*virtual*/ bool setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
@@ -121,6 +122,8 @@ private:
     // <FS:Ansariel> [Legacy Bake]
     //bool setParamWeight(const LLViewerVisualParam *param, F32 weight);
     bool setParamWeight(const LLViewerVisualParam *param, F32 weight, bool upload_bake = false);
+
+    std::mutex          mJointMapMutex; // getJoint gets used from mesh thread
 
 /********************************************************************************
  **                                                                            **

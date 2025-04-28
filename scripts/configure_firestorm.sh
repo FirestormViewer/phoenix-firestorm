@@ -309,38 +309,38 @@ if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
 
-echo -e "configure_firestorm.sh" > $LOG
-echo -e "       PLATFORM: $TARGET_PLATFORM"                                    | tee -a $LOG
-echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a $LOG
-echo -e "     FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`"                             | tee -a $LOG
-echo -e "         OPENAL: `b2a $WANTS_OPENAL`"                                 | tee -a $LOG
-echo -e "        OPENSIM: `b2a $WANTS_OPENSIM`"                                | tee -a $LOG
+echo -e "configure_firestorm.sh" > "$LOG"
+echo -e "       PLATFORM: $TARGET_PLATFORM"                                    | tee -a "$LOG"
+echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a "$LOG"
+echo -e "     FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`"                             | tee -a "$LOG"
+echo -e "         OPENAL: `b2a $WANTS_OPENAL`"                                 | tee -a "$LOG"
+echo -e "        OPENSIM: `b2a $WANTS_OPENSIM`"                                | tee -a "$LOG"
 if [ $WANTS_SINGLEGRID -eq $TRUE ] ; then
-    echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID` ($SINGLEGRID_URI)"       | tee -a $LOG
+    echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID` ($SINGLEGRID_URI)"       | tee -a "$LOG"
 else
-    echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID`"                         | tee -a $LOG
+    echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID`"                         | tee -a "$LOG"
 fi
-echo -e "          HAVOK: `b2a $WANTS_HAVOK`"                                  | tee -a $LOG
-echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a $LOG
-echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a $LOG
-echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a $LOG
-echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a $LOG
+echo -e "          HAVOK: `b2a $WANTS_HAVOK`"                                  | tee -a "$LOG"
+echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a "$LOG"
+echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a "$LOG"
+echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a "$LOG"
+echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a "$LOG"
 if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
-    echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD` ($TESTBUILD_PERIOD days)" | tee -a $LOG
+    echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD` ($TESTBUILD_PERIOD days)" | tee -a "$LOG"
 else
-    echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD`"                          | tee -a $LOG
+    echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD`"                          | tee -a "$LOG"
 fi
-echo -e "        PACKAGE: `b2a $WANTS_PACKAGE`"                                | tee -a $LOG
-echo -e "          CLEAN: `b2a $WANTS_CLEAN`"                                  | tee -a $LOG
-echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  | tee -a $LOG
-echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a $LOG
-echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  | tee -a $LOG
-echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 | tee -a $LOG
-echo -e " COMPILER CACHE: `b2a $WANTS_CACHE`"                                  | tee -a $LOG
-echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a $LOG
-echo -e "          BTYPE: $BTYPE"                                              | tee -a $LOG
+echo -e "        PACKAGE: `b2a $WANTS_PACKAGE`"                                | tee -a "$LOG"
+echo -e "          CLEAN: `b2a $WANTS_CLEAN`"                                  | tee -a "$LOG"
+echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  | tee -a "$LOG"
+echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a "$LOG"
+echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  | tee -a "$LOG"
+echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 | tee -a "$LOG"
+echo -e " COMPILER CACHE: `b2a $WANTS_CACHE`"                                  | tee -a "$LOG"
+echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a "$LOG"
+echo -e "          BTYPE: $BTYPE"                                              | tee -a "$LOG"
 if [ $TARGET_PLATFORM == "linux" -o $TARGET_PLATFORM == "darwin" ] ; then
-    echo -e "           JOBS: $JOBS"                                           | tee -a $LOG
+    echo -e "           JOBS: $JOBS"                                           | tee -a "$LOG"
 fi
 echo -e "       Logging to $LOG"
 
@@ -590,7 +590,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
-          $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
+          $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
 
     if [ $TARGET_PLATFORM == "windows" -a $USE_VSTOOL -eq $TRUE ] ; then
         echo "Setting startup project via vstool"
@@ -610,16 +610,16 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         else
             JOBS="-jobs $JOBS"
         fi
-        xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a $LOG
+        xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a "$LOG"
     elif [ $TARGET_PLATFORM == "linux" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
             echo $JOBS
         fi
         if [ $WANTS_NINJA -eq $TRUE ] ; then
-            ninja -j $JOBS | tee -a $LOG
+            ninja -j $JOBS | tee -a "$LOG"
         else
-            make -j $JOBS | tee -a $LOG
+            make -j $JOBS | tee -a "$LOG"
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
         msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \

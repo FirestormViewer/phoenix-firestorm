@@ -1347,7 +1347,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 #endif
                 //clear cost and linkset cost
                 setObjectCostStale();
-                if (isSelected())
+                if (isSelected() && gFloaterTools)
                 {
                     gFloaterTools->dirty();
                 }
@@ -1792,7 +1792,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 #endif
                 setObjectCostStale();
 
-                if (isSelected())
+                if (isSelected() && gFloaterTools)
                 {
                     gFloaterTools->dirty();
                 }
@@ -3037,6 +3037,17 @@ void LLViewerObject::fetchInventoryFromServer()
         delete mInventory;
         mInventory = NULL;
 
+        // This will get reset by doInventoryCallback or processTaskInv
+        mInvRequestState = INVENTORY_REQUEST_PENDING;
+
+        if (mRegionp && !mRegionp->getCapability("RequestTaskInventory").empty())
+        {
+            LLCoros::instance().launch("LLViewerObject::fetchInventoryFromCapCoro()",
+                                       boost::bind(&LLViewerObject::fetchInventoryFromCapCoro, mID));
+        }
+        else
+        {
+            LL_WARNS() << "Using old task inventory path!" << LL_ENDL;
         // Results in processTaskInv
         LLMessageSystem* msg = gMessageSystem;
         msg->newMessageFast(_PREHASH_RequestTaskInventory);
@@ -3046,15 +3057,13 @@ void LLViewerObject::fetchInventoryFromServer()
         msg->nextBlockFast(_PREHASH_InventoryData);
         msg->addU32Fast(_PREHASH_LocalID, mLocalID);
         msg->sendReliable(mRegionp->getHost());
-
-        // This will get reset by doInventoryCallback or processTaskInv
-        mInvRequestState = INVENTORY_REQUEST_PENDING;
+        }
     }
 }
 
 void LLViewerObject::fetchInventoryDelayed(const F64 &time_seconds)
 {
-    // unless already waiting, drop previous request and shedule an update
+    // unless already waiting, drop previous request and schedule an update
     if (mInvRequestState != INVENTORY_REQUEST_WAIT)
     {
         if (mInvRequestXFerId != 0)
@@ -3082,6 +3091,80 @@ void LLViewerObject::fetchInventoryDelayedCoro(const LLUUID task_inv, const F64 
         // drop waiting state to unlock isInventoryPending()
         obj->mInvRequestState = INVENTORY_REQUEST_STOPPED;
         obj->fetchInventoryFromServer();
+    }
+}
+
+//static
+void LLViewerObject::fetchInventoryFromCapCoro(const LLUUID task_inv)
+{
+    LLViewerObject *obj = gObjectList.findObject(task_inv);
+    if (obj)
+    {
+        LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+        LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+                                   httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("TaskInventoryRequest", httpPolicy));
+        LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        std::string url = obj->mRegionp->getCapability("RequestTaskInventory") + "?task_id=" + obj->mID.asString();
+        // If we already have a copy of the inventory then add it so the server won't re-send something we already have.
+        // We expect this case to crop up in the case of failed inventory mutations, but it might happen otherwise as well.
+        if (obj->mInventorySerialNum && obj->mInventory)
+            url += "&inventory_serial=" + std::to_string(obj->mInventorySerialNum);
+
+        obj->mInvRequestState = INVENTORY_XFER;
+        LLSD result = httpAdapter->getAndSuspend(httpRequest, url);
+
+        LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+        // Object may have gone away while we were suspended, double-check that it still exists
+        obj = gObjectList.findObject(task_inv);
+        if (!obj)
+        {
+            LL_WARNS() << "Object " << task_inv << " went away while fetching inventory, dropping result" << LL_ENDL;
+            return;
+        }
+
+        bool potentially_stale = false;
+        if (status)
+        {
+            // Dealing with inventory serials is kind of funky. They're monotonically increasing and 16 bits,
+            // so we expect them to overflow, but we can use inv serial < expected serial as a signal that we may
+            // have mutated the task inventory since we kicked off the request, and those mutations may have not
+            // been taken into account yet. Of course, those mutations may have actually failed which would result
+            // in the inv serial never increasing.
+            //
+            // When we detect this case, set the expected inv serial to the inventory serial we actually received
+            // and kick off a re-request after a slight delay.
+            S16 serial = (S16)result["inventory_serial"].asInteger();
+            potentially_stale = serial < obj->mExpectedInventorySerialNum;
+            LL_INFOS() << "Inventory loaded for " << task_inv << LL_ENDL;
+            obj->mInventorySerialNum = serial;
+            obj->mExpectedInventorySerialNum = serial;
+            obj->loadTaskInvLLSD(result);
+        }
+        else if (status.getType() == 304)
+        {
+            LL_INFOS() << "Inventory wasn't changed on server!" << LL_ENDL;
+            obj->mInvRequestState = INVENTORY_REQUEST_STOPPED;
+            // Even though it wasn't necessary to send a response, we still may have mutated
+            // the inventory since we kicked off the request, check for that case.
+            potentially_stale = obj->mInventorySerialNum < obj->mExpectedInventorySerialNum;
+            // Set this to what we already have so that we don't re-request a second time.
+            obj->mExpectedInventorySerialNum = obj->mInventorySerialNum;
+        }
+        else
+        {
+            // Not sure that there's anything sensible we can do to recover here, retrying in a loop would be bad.
+            LL_WARNS() << "Error status while requesting task inventory: " << status.toString() << LL_ENDL;
+            obj->mInvRequestState = INVENTORY_REQUEST_STOPPED;
+        }
+
+        if (potentially_stale)
+        {
+            // Stale? I guess we can use what we got for now, but we'll have to re-request
+            LL_WARNS() << "Stale inv_serial? Re-requesting." << LL_ENDL;
+            obj->fetchInventoryDelayed(INVENTORY_UPDATE_WAIT_TIME_OUTDATED);
+        }
     }
 }
 
@@ -3272,6 +3355,20 @@ void LLViewerObject::processTaskInv(LLMessageSystem* msg, void** user_data)
     // we can receive multiple task updates simultaneously, make sure we will not rewrite newer with older update
     S16 serial = 0;
     msg->getS16Fast(_PREHASH_InventoryData, _PREHASH_Serial, serial);
+
+    if (object->mRegionp && !object->mRegionp->getCapability("RequestTaskInventory").empty())
+    {
+        // It seems that simulator may ask us to re-download the task inventory if an update to the inventory
+        // happened out-of-band while we had the object selected (like if a script is saved.)
+        //
+        // If we're meant to use the HTTP capability, ignore the contents of the UDP message and fetch the
+        // inventory via the CAP so that we don't flow down the UDP inventory request path unconditionally here.
+        // We shouldn't need to wait, as any updates should already be ready to fetch by this point.
+        LL_INFOS() << "Handling unsolicited ReplyTaskInventory for " << task_id << LL_ENDL;
+        object->mExpectedInventorySerialNum = serial;
+        object->fetchInventoryFromServer();
+        return;
+    }
 
     if (serial == object->mInventorySerialNum
         && serial < object->mExpectedInventorySerialNum)
@@ -3490,6 +3587,47 @@ bool LLViewerObject::loadTaskInvFile(const std::string& filename)
     doInventoryCallback();
 
     return true;
+}
+
+void LLViewerObject::loadTaskInvLLSD(const LLSD& inv_result)
+{
+    if (inv_result.has("contents"))
+    {
+        if(mInventory)
+        {
+            mInventory->clear(); // will deref and delete it
+        }
+        else
+        {
+            mInventory = new LLInventoryObject::object_list_t;
+        }
+
+        // Synthesize the "Contents" category, the viewer expects it, but it isn't sent.
+        LLPointer<LLInventoryObject> inv = new LLInventoryObject(mID, LLUUID::null, LLAssetType::AT_CATEGORY, "Contents");
+        mInventory->push_front(inv);
+
+        const LLSD& inventory = inv_result["contents"];
+        for (const auto& inv_entry : llsd::inArray(inventory))
+        {
+            if (inv_entry.has("item_id"))
+            {
+                LLPointer<LLViewerInventoryItem> inv = new LLViewerInventoryItem;
+                inv->unpackMessage(inv_entry);
+                mInventory->push_front(inv);
+            }
+            else
+            {
+                LL_WARNS_ONCE() << "Unknown inventory entry while reading from inventory file. Entry: '"
+                                << inv_entry << "'" << LL_ENDL;
+            }
+        }
+    }
+    else
+    {
+        LL_WARNS() << "unable to load task inventory: " << inv_result << LL_ENDL;
+        return;
+    }
+    doInventoryCallback();
 }
 
 void LLViewerObject::doInventoryCallback()
@@ -3905,7 +4043,7 @@ void LLViewerObject::setObjectCost(F32 cost)
     mObjectCost = cost;
     mCostStale = false;
 
-    if (isSelected())
+    if (isSelected() && gFloaterTools)
     {
         gFloaterTools->dirty();
     }
@@ -3925,7 +4063,7 @@ void LLViewerObject::setLinksetCost(F32 cost)
         iter++;
     }
 
-    if (needs_refresh)
+    if (needs_refresh && gFloaterTools)
     {
         gFloaterTools->dirty();
     }
@@ -3936,7 +4074,7 @@ void LLViewerObject::setPhysicsCost(F32 cost)
     mPhysicsCost = cost;
     mCostStale = false;
 
-    if (isSelected())
+    if (isSelected() && gFloaterTools)
     {
         gFloaterTools->dirty();
     }
@@ -3947,7 +4085,7 @@ void LLViewerObject::setLinksetPhysicsCost(F32 cost)
     mLinksetPhysicsCost = cost;
     mCostStale = false;
 
-    if (isSelected())
+    if (isSelected() && gFloaterTools)
     {
         gFloaterTools->dirty();
     }
@@ -4863,6 +5001,18 @@ void LLViewerObject::setPositionParent(const LLVector3 &pos_parent, bool damped)
     else
     {
         setPositionRegion(pos_parent, damped);
+
+        // #1964 mark reflection probe in the linkset to update position after moving via script
+        for (LLViewerObject* child : mChildList)
+        {
+            if (child && child->isReflectionProbe())
+            {
+                if (LLDrawable* drawablep = child->mDrawable)
+                {
+                    gPipeline.markMoved(drawablep);
+                }
+            }
+        }
     }
 }
 
@@ -7731,6 +7881,39 @@ void LLViewerObject::setRenderMaterialIDs(const LLUUID& id)
     setRenderMaterialID(-1, id);
 }
 
+// <FS> [FIRE-35138] Helpers for GLTF Materials since we support PBR and BP at same time
+void LLViewerObject::saveGLTFMaterials()
+{
+    if (!mSavedGLTFMaterialIds.empty())
+    {
+        // Already saved, no need to do it again
+        return;
+    }
+
+    for (S32 te = 0; te < getNumTEs(); ++te)
+    {
+        mSavedGLTFMaterialIds.emplace_back(getRenderMaterialID(te));
+
+        LLPointer<LLGLTFMaterial> old_override = getTE(te)->getGLTFMaterialOverride();
+        if (old_override.notNull())
+        {
+            LLGLTFMaterial* copy = new LLGLTFMaterial(*old_override);
+            mSavedGLTFOverrideMaterials.emplace_back(copy);
+        }
+        else
+        {
+            mSavedGLTFOverrideMaterials.emplace_back(nullptr);
+        }
+    }
+}
+
+void LLViewerObject::clearSavedGLTFMaterials()
+{
+    mSavedGLTFMaterialIds.clear();
+    mSavedGLTFOverrideMaterials.clear();
+}
+// </FS>
+
 void LLViewerObject::setRenderMaterialIDs(const LLRenderMaterialParams* material_params, bool local_origin)
 {
     if (!local_origin)
@@ -7773,6 +7956,31 @@ void LLViewerObject::setGLTFAsset(const LLUUID& id)
     updateVolume(volume_params);
 }
 
+void LLViewerObject::clearTEWaterExclusion(const U8 te)
+{
+    if (permModify())
+    {
+        LLViewerTexture* image = getTEImage(te);
+        if (image && (IMG_ALPHA_GRAD == image->getID()))
+        {
+            // reset texture to default plywood
+            setTEImage(te, LLViewerTextureManager::getFetchedTexture(DEFAULT_OBJECT_TEXTURE, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
+
+            // reset texture repeats, that might be altered by invisiprim script from wiki
+            U32 s_axis, t_axis;
+            if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+            {
+                return;
+            }
+            F32 DEFAULT_REPEATS = 2.f;
+            F32 new_s = getScale().mV[s_axis] * DEFAULT_REPEATS;
+            F32 new_t = getScale().mV[t_axis] * DEFAULT_REPEATS;
+
+            setTEScale(te, new_s, new_t);
+            sendTEUpdate();
+        }
+    }
+}
 
 class ObjectPhysicsProperties : public LLHTTPNode
 {

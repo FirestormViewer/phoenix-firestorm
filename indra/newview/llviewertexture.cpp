@@ -507,7 +507,12 @@ void LLViewerTexture::updateClass()
     }
 
     LLViewerMediaTexture::updateClass();
-
+    // This is a divisor used to determine how much VRAM from our overall VRAM budget to use.
+    // This is **cumulative** on whatever the detected or manually set VRAM budget is.
+    // If we detect 2048MB of VRAM, this will, by default, only use 1024.
+    // If you set 1024MB of VRAM, this will, by default, use 512.
+    // -Geenz 2025-03-03
+    static LLCachedControl<U32> tex_vram_divisor(gSavedSettings, "RenderTextureVRAMDivisor", 2);
     static LLCachedControl<U32> max_vram_budget(gSavedSettings, "RenderMaxVRAMBudget", 0);
     static LLCachedControl<bool> max_vram_budget_enabled(gSavedSettings, "FSLimitTextureVRAMUsage"); // <FS:Ansariel> Expose max texture VRAM setting
 
@@ -519,8 +524,11 @@ void LLViewerTexture::updateClass()
     F32 used = (F32)ll_round(texture_bytes_alloc + vertex_bytes_alloc);
 
     // <FS:Ansariel> Expose max texture VRAM setting
-    //F32 budget = max_vram_budget == 0 ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
-    F32 budget = !max_vram_budget_enabled ? (F32)gGLManager.mVRAM : (F32)max_vram_budget;
+    // But when manual control is not enabled, use the VRAM divisor.
+    // While we're at it, assume we have 1024 to play with at minimum when the divisor is in use.  Works more elegantly with the logic below this.
+    // -Geenz 2025-03-21
+    // F32 budget = max_vram_budget == 0 ? llmax(1024, (F32)gGLManager.mVRAM / tex_vram_divisor) : (F32)max_vram_budget;
+    F32 budget = !max_vram_budget_enabled ? llmax(1024, (F32)gGLManager.mVRAM / (tex_vram_divisor() > 0.f ? tex_vram_divisor() : 1.f)) : (F32)max_vram_budget;
 
     // Try to leave at least half a GB for everyone else and for bias,
     // but keep at least 768MB for ourselves
@@ -534,7 +542,6 @@ void LLViewerTexture::updateClass()
 
     bool is_sys_low = isSystemMemoryLow();
     bool is_low = is_sys_low || over_pct > 0.f;
-    F32 discard_bias = sDesiredDiscardBias;
 
     static bool was_low = false;
     static bool was_sys_low = false;
@@ -589,6 +596,7 @@ void LLViewerTexture::updateClass()
 
     // set to max discard bias if the window has been backgrounded for a while
     static F32 last_desired_discard_bias = 1.f;
+    static F32 last_texture_update_count_bias = 1.f;
     static bool was_backgrounded = false;
     static LLFrameTimer backgrounded_timer;
     static LLCachedControl<F32> minimized_discard_time(gSavedSettings, "TextureDiscardMinimizedTime", 1.f);
@@ -624,11 +632,20 @@ void LLViewerTexture::updateClass()
     }
 
     sDesiredDiscardBias = llclamp(sDesiredDiscardBias, 1.f, 4.f);
-    if (discard_bias != sDesiredDiscardBias)
+    if (last_texture_update_count_bias < sDesiredDiscardBias)
     {
-        // bias changed, reset texture update counter to
+        // bias increased, reset texture update counter to
         // let updates happen at an increased rate.
+        last_texture_update_count_bias = sDesiredDiscardBias;
         sBiasTexturesUpdated = 0;
+    }
+    else if (last_texture_update_count_bias > sDesiredDiscardBias + 0.1f)
+    {
+        // bias decreased, 0.1f is there to filter out small fluctuations
+        // and not reset sBiasTexturesUpdated too often.
+        // Bias jumps to 1.5 at low memory, so getting stuck at 1.1 is not
+        // a problem.
+        last_texture_update_count_bias = sDesiredDiscardBias;
     }
 
     LLViewerTexture::sFreezeImageUpdates = false;
@@ -762,7 +779,7 @@ void LLViewerTexture::setBoostLevel(S32 level)
         mBoostLevel = level;
         if(mBoostLevel != LLViewerTexture::BOOST_NONE &&
             mBoostLevel != LLViewerTexture::BOOST_SELECTED &&
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
             // Added the new boost levels
             mBoostLevel != LLViewerTexture::BOOST_GRASS &&
             mBoostLevel != LLViewerTexture::BOOST_LIGHT &&
@@ -779,7 +796,7 @@ void LLViewerTexture::setBoostLevel(S32 level)
     if (mBoostLevel >= LLViewerTexture::BOOST_HIGH)
     {
         mMaxVirtualSize = 2048.f * 2048.f;
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Add additional for the important to camera and in frustum
         static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
         mMaxVirtualSize = mMaxVirtualSize + (mMaxVirtualSize * 1.0f * texture_camera_boost);
@@ -1191,7 +1208,7 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mKeptSavedRawImageTime = 0.f;
     mLastCallBackActiveTime = 0.f;
     mForceCallbackFetch = false;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     mCloseToCamera = 1.0f; // Store if the camera is close to the camera (0.0f or 1.0f)
     // </FS:minerjr> [FIRE-35081]
 
@@ -3069,13 +3086,13 @@ void LLViewerLODTexture::processTextureStats()
     else if (mBoostLevel < LLGLTexture::BOOST_HIGH && mMaxVirtualSize <= 10.f)
     {
         // If the image has not been significantly visible in a while, we don't want it
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         //mDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel, (S8)(MAX_DISCARD_LEVEL + 1));
         // Off screen textures at 6 would not downscale.
         mDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel, (S8)(MAX_DISCARD_LEVEL));
         // </FS:minerjr> [FIRE-35081]
         mDesiredDiscardLevel = llmin(mDesiredDiscardLevel, (S32)mLoadedCallbackDesiredDiscardLevel);
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Add scale down here as the textures off screen were not getting scaled down properly
         S32 current_discard = getDiscardLevel();
         if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
@@ -3094,7 +3111,7 @@ void LLViewerLODTexture::processTextureStats()
     }
     else
     {
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         /*
         //static const F64 log_2 = log(2.0);
         static const F64 log_4 = log(4.0);
@@ -3125,25 +3142,25 @@ void LLViewerLODTexture::processTextureStats()
         F32 min_discard = 0.f;
         */
 
+        // Use a S32 instead of a float
+        S32 min_discard = 0;
+        if (mFullWidth > max_tex_res || mFullHeight > max_tex_res)
+            min_discard = 1;
+
         // Use a S32 value for the discard level
-        S32 discard_level = 0;
-        // Find the best discard that covers the entire mMaxVirtualSize of the on screen texture
-        for (; discard_level <= MAX_DISCARD_LEVEL; discard_level++)
+        S32 discard_level = min_discard;
+        // Find the best discard that covers the entire mMaxVirtualSize of the on screen texture (Use MAX_DISCARD_LEVEL as a max discard instead of MAX_DISCARD_LEVEL+1)
+        for (; discard_level < MAX_DISCARD_LEVEL; discard_level++) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
         {
-            // If the max virtual size is greater then the current discard level, then break out of the loop and use the current discard level
-            if (mMaxVirtualSize > getWidth(discard_level) * getHeight(discard_level))
+            // If the max virtual size is greater then or equal to the current discard level, then break out of the loop and use the current discard level
+            if (mMaxVirtualSize >= getWidth(discard_level) * getHeight(discard_level)) // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
             {
                 break;
             }
         }
 
-        // Use a S32 instead of a float
-        S32 min_discard = 0;  
-        if (mFullWidth > max_tex_res || mFullHeight > max_tex_res)
-            min_discard = 1;
 
         //discard_level = llclamp(discard_level, min_discard, (F32)MAX_DISCARD_LEVEL);
-        discard_level = llclamp(discard_level, min_discard, MAX_DISCARD_LEVEL); // Don't convert to float and back again
         // </FS:minerjr> [FIRE-35081]
 
         // Can't go higher than the max discard level
@@ -3439,7 +3456,7 @@ void LLViewerMediaTexture::initVirtualSize()
     {
         return;
     }
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Add camera importance to the media textures as well
     static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
     F32 vsize = 0.0f;
@@ -3447,7 +3464,7 @@ void LLViewerMediaTexture::initVirtualSize()
     findFaces();
     for(std::list< LLFace* >::iterator iter = mMediaFaceList.begin(); iter!= mMediaFaceList.end(); ++iter)
     {
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         //addTextureStats((*iter)->getVirtualSize());
         // Add camera importance to the media textures as well
         vsize = (*iter)->getVirtualSize();
@@ -3515,7 +3532,7 @@ void LLViewerMediaTexture::addFace(U32 ch, LLFace* facep)
             }
 // [/SL:KB]
 
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
             // Try to set the boost level to MEDIA to try to force the media to high quality
             tex->setBoostLevel(LLViewerTexture::MEDIA);
             // </FS:minerjr> [FIRE-35081]
@@ -3760,7 +3777,7 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
     {
         addTextureStats(0.f, false);//reset
     }
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
     F32 vsize = 0.0f;
     // </FS:minerjr> [FIRE-35081]
@@ -3774,7 +3791,7 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
                 LLFace* facep = mFaceList[ch][i];
             if(facep->getDrawable()->isRecentlyVisible())
             {                
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 //addTextureStats(facep->getVirtualSize());
                 // Add the importance to camera and close to camera to the media texture
                 vsize = facep->getVirtualSize();
@@ -3798,7 +3815,7 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
                 LLFace* facep = *iter;
                 if(facep->getDrawable()->isRecentlyVisible())
                 {
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                     //addTextureStats(facep->getVirtualSize());
                     // Add the importance to camera and close to camera to the media texture 
                     vsize = facep->getVirtualSize();

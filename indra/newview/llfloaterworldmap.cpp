@@ -57,6 +57,8 @@
 #include "llnotificationsutil.h"
 #include "llregionhandle.h"
 #include "llscrolllistctrl.h"
+#include "llviewernetwork.h" // <FS/> Access to GridManager
+#include "lfsimfeaturehandler.h" // <FS/> hyperGridURL()
 #include "llslurl.h"
 #include "lltextbox.h"
 #include "lltoolbarview.h"
@@ -77,6 +79,7 @@
 #include "llmapimagetype.h"
 #include "llweb.h"
 #include "llsliderctrl.h"
+#include "llspinctrl.h" // <FS/> setMinValue
 #include "message.h"
 #include "llwindow.h"           // copyTextToClipboard()
 #include <algorithm>
@@ -396,9 +399,16 @@ bool LLFloaterWorldMap::postBuild()
     mLandmarkIcon = getChild<LLUICtrl>("landmark_icon");
     mLocationIcon = getChild<LLUICtrl>("location_icon");
 
+    // <FS> [FIRE-35333] OpenSim needs to be able to adjust the minValue
+    /*
     mTeleportCoordSpinX = getChild<LLUICtrl>("teleport_coordinate_x");
     mTeleportCoordSpinY = getChild<LLUICtrl>("teleport_coordinate_y");
     mTeleportCoordSpinZ = getChild<LLUICtrl>("teleport_coordinate_z");
+    */
+    mTeleportCoordSpinX = getChild<LLSpinCtrl>("teleport_coordinate_x");
+    mTeleportCoordSpinY = getChild<LLSpinCtrl>("teleport_coordinate_y");
+    mTeleportCoordSpinZ = getChild<LLSpinCtrl>("teleport_coordinate_z");
+    // </FS>
 
     LLComboBox *avatar_combo = getChild<LLComboBox>("friend combo");
     avatar_combo->selectFirstItem();
@@ -518,6 +528,15 @@ void LLFloaterWorldMap::onOpen(const LLSD& key)
     {
         centerOnTarget(false);
     }
+
+    // <FS> [FIRE-35333] OpenSim allows Z coordinates to be negative based on MinSimHeight
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        LLViewerRegion* regionp = gAgent.getRegion();
+        F32 min_sim_height = regionp ? regionp->getMinSimHeight() : 0.f;
+        mTeleportCoordSpinZ->setMinValue(min_sim_height);
+    }
+    // </FS>
 }
 
 // static
@@ -1003,7 +1022,12 @@ void LLFloaterWorldMap::updateLocation()
                 // Set the current SLURL
 // <FS:CR> Aurora-sim var region teleports
                 //mSLURL = LLSLURL(agent_sim_name, gAgent.getPositionGlobal());
-                mSLURL = LLSLURL(agent_sim_name, gAgent.getPositionAgent());
+                // <FS> [FIRE-35268] OpenSim support for when on other grids
+                if (LLGridManager::getInstance()->isInSecondLife())
+                    mSLURL = LLSLURL(agent_sim_name, gAgent.getPositionAgent());
+                else
+                    mSLURL = LLSLURL(LFSimFeatureHandler::instance().hyperGridURL(), agent_sim_name, gAgent.getPositionAgent());
+                // </FS>
 // </FS:CR>
             }
         }
@@ -1056,7 +1080,12 @@ void LLFloaterWorldMap::updateLocation()
 //      if ( gotSimName )
         {
             // mSLURL = LLSLURL(sim_name, pos_global);
-            mSLURL = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), pos_global);
+            // <FS> [FIRE-35268] OpenSim support for when on other grids
+            if (LLGridManager::getInstance()->isInSecondLife())
+                mSLURL = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), pos_global);
+            else
+                mSLURL = LLSLURL(LFSimFeatureHandler::instance().hyperGridURL(), sim_info->getName(), sim_info->getGlobalOrigin(), pos_global);
+            // </FS>
         }
 // </FS:Beq pp Oren>
         else
@@ -1079,7 +1108,18 @@ void LLFloaterWorldMap::updateLocation()
 void LLFloaterWorldMap::trackURL(const std::string& region_name, S32 x_coord, S32 y_coord, S32 z_coord)
 {
     LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromName(region_name);
-    z_coord = llclamp(z_coord, 0, 4096);
+    // <FS> [FIRE-35333] OpenSim allows Z coordinates to be negative based on MinSimHeight
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        LLViewerRegion* regionp = gAgent.getRegion();
+        F32 min_sim_height = regionp ? regionp->getMinSimHeight() : 0.f;
+        z_coord = llclamp(z_coord, min_sim_height, 4096);
+    }
+    else
+    {
+        z_coord = llclamp(z_coord, 0, 4096);
+    }
+    // </FS>
     if (sim_info)
     {
         LLVector3 local_pos;

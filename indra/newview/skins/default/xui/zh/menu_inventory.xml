@@ -91,6 +91,7 @@
 	<menu_item_call label="解鎖檔案夾" name="UnprotectFolder" />
 	<menu_item_call label="更新檔案夾" name="ReloadFolder" />
 	<menu_item_call label="複製資源UUID" name="Copy Asset UUID" />
+	<menu_item_call label="複製UUID" name="Copy UUID" />
 	<menu_item_call label="還原至之前的位置" name="Restore to Last Position" />
 	<menu_item_call label="剪下" name="Cut" />
 	<menu_item_call label="複製" name="Copy" />

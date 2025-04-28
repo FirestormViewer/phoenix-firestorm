@@ -1467,10 +1467,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                             {
                                 name = mJointMap[name];
                             }
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//                          model->mSkinInfo.mJointNames.push_back( name );
-                            model->mSkinInfo.mJointNames.push_back( JointKey::construct( name ) );
-// </FS:ND>
+                            model->mSkinInfo.mJointNames.push_back(name);
                             model->mSkinInfo.mJointNums.push_back(-1);
                         }
                     }
@@ -1488,10 +1485,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                                 {
                                     name = mJointMap[name];
                                 }
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//                              model->mSkinInfo.mJointNames.push_back( name );
-                                model->mSkinInfo.mJointNames.push_back( JointKey::construct( name ) );
-// </FS:ND>
+                                model->mSkinInfo.mJointNames.push_back(name);
                                 model->mSkinInfo.mJointNums.push_back(-1);
                             }
                         }
@@ -1533,10 +1527,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
         //but does not use the skeleton).
         buildJointToNodeMappingFromScene( root );
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//      critiqueRigForUploadApplicability( model->mSkinInfo.mJointNames );
-        critiqueRigForUploadApplicability( toStringVector( model->mSkinInfo.mJointNames ) );
-// </FS:ND>
+        critiqueRigForUploadApplicability( model->mSkinInfo.mJointNames );
 
         if ( !missingSkeletonOrScene )
         {
@@ -1589,11 +1580,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
         //with the skeleton are not stored in the same order as they are in the exported joint buffer.
         //This remaps the skeletal joints to be in the same order as the joints stored in the model.
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-        //      std::vector<std::string> ::const_iterator jointIt = model->mSkinInfo.mJointNames.begin();
-        std::vector< std::string > jointNames = toStringVector( model->mSkinInfo.mJointNames );
-        std::vector<std::string> ::const_iterator jointIt = jointNames.begin();
-// </FS:ND>
+        std::vector<std::string> ::const_iterator jointIt = model->mSkinInfo.mJointNames.begin();
 
         const int jointCnt = static_cast<int>(model->mSkinInfo.mJointNames.size());
         for ( int i=0; i<jointCnt; ++i, ++jointIt )

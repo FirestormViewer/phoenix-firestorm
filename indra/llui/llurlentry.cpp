@@ -1249,7 +1249,7 @@ void LLUrlEntryParcel::processParcelInfo(const LLParcelData& parcel_data)
 //
 LLUrlEntryPlace::LLUrlEntryPlace()
 {
-    mPattern = boost::regex("((hop://[-\\w\\.\\:\\@]+/)|((x-grid-location-info://[-\\w\\.]+/region/)|(secondlife://)))\\S+/?(\\d+/\\d+/\\d+|\\d+/\\d+)/?", // <AW: hop:// protocol>
+    mPattern = boost::regex("((hop://[-\\w\\.\\:\\@]+/[^/]+/?)|((hop://[-\\w\\.\\:\\@]+/)|((x-grid-location-info://[-\\w\\.]+/region/)|(secondlife://)))\\S+/?(\\d+/\\d+/-?\\d+|\\d+/-?\\d+)/?)$", // <AW: hop:// protocol>
                             boost::regex::perl|boost::regex::icase);
     mMenuName = "menu_url_slurl.xml";
     mTooltip = LLTrans::getString("TooltipSLURL");

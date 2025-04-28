@@ -134,6 +134,36 @@ void FSPanelFace::updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*
     LLSelectMgr::getInstance()->getSelection()->applyToTEs(&select_func);
 }
 
+void FSPanelFace::updateSelectedGLTFMaterialsWithScale(std::function<void(LLGLTFMaterial*, const F32, const F32)> func)
+{
+    struct LLSelectedTEGLTFMaterialFunctor : public LLSelectedTEFunctor
+    {
+        LLSelectedTEGLTFMaterialFunctor(std::function<void(LLGLTFMaterial*, const F32, const F32)> func) : mFunc(func) {}
+        virtual ~LLSelectedTEGLTFMaterialFunctor() {};
+        bool apply(LLViewerObject* object, S32 face) override
+        {
+            LLGLTFMaterial new_override;
+            const LLTextureEntry* tep = object->getTE(face);
+            if (tep->getGLTFMaterialOverride())
+            {
+                new_override = *tep->getGLTFMaterialOverride();
+            }
+
+            U32 s_axis = VX;
+            U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
+            mFunc(&new_override, object->getScale().mV[s_axis], object->getScale().mV[t_axis]);
+            LLGLTFMaterialList::queueModify(object, face, &new_override);
+
+            return true;
+        }
+
+        std::function<void(LLGLTFMaterial*, const F32, const F32)> mFunc;
+    } select_func(func);
+
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&select_func);
+}
+
 template<typename T>
 void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& value, bool& identical, bool has_tolerance, T tolerance)
 {
@@ -154,16 +184,46 @@ void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& v
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&select_func, value, has_tolerance, tolerance);
 }
 
+void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical)
+{
+    // The All channel should read base color values
+    if (channel == LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_COUNT)
+        channel = LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR;
+
+    struct LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor : public LLSelectedTEGetFunctor<F32>
+    {
+        LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor(LLGLTFMaterial::TextureInfo channel) : mChannel(channel) {}
+        virtual ~LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor() {};
+        F32 get(LLViewerObject* object, S32 face) override
+        {
+            const LLTextureEntry* tep = object->getTE(face);
+            const LLGLTFMaterial* render_material = tep->getGLTFRenderMaterial();
+            if (!render_material)
+                return 0.f;
+
+            U32 s_axis = VX;
+            U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
+            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[s_axis];
+            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[t_axis];
+            return llmax(repeats_u, repeats_v);
+        }
+
+        LLGLTFMaterial::TextureInfo mChannel;
+    } max_repeats_func(channel);
+    identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&max_repeats_func, repeats);
+}
+
 //
 // keep LLRenderMaterialFunctor in sync with llmaterialeditor.cpp - Would be nice if we
 // had this in its own file so we could include it from both sides ... -Zi
 //
 
 // local preview of material changes
-class LLRenderMaterialFunctor : public LLSelectedTEFunctor
+class FSRenderMaterialFunctor : public LLSelectedTEFunctor
 {
 public:
-    LLRenderMaterialFunctor(const LLUUID &id)
+    FSRenderMaterialFunctor(const LLUUID &id)
         : mMatId(id)
     {
     }
@@ -183,21 +243,23 @@ private:
 };
 
 //
-// keep LLRenderMaterialOverrideFunctor in sync with llmaterialeditor.cpp just take
-// out the reverting functionality as it makes no real sense with all the texture
-// controls visible for the material at all times.
+// keep LLRenderMaterialOverrideFunctor in sync with llmaterialeditor.cpp just take out the
+// reverting functionality of non texture and color related GLTF settings as it makes no
+// real sense with all the texture controls visible for the material at all times.
 // TODO: look at how to handle local textures, especially when saving materials
 // - Would be nice if we had this in its own file so we could include it from both sides ... -Zi
 //
-class LLRenderMaterialOverrideFunctor : public LLSelectedNodeFunctor
+class FSRenderMaterialOverrideFunctor : public LLSelectedNodeFunctor
 {
 public:
-    LLRenderMaterialOverrideFunctor(
+    FSRenderMaterialOverrideFunctor(
         LLGLTFMaterial* material_to_apply,
-        U32 unsaved_changes
+        U32 unsaved_changes,
+        U32 reverted_changes
     )
     : mMaterialToApply(material_to_apply)
     , mUnsavedChanges(unsaved_changes)
+    , mRevertedChanges(reverted_changes)
     {
     }
 
@@ -254,17 +316,48 @@ public:
                 material = new LLGLTFMaterial(*material);
             }
 
+            LLPointer<LLGLTFMaterial> revert_mat;
+            if (nodep->mSavedGLTFOverrideMaterials.size() > te)
+            {
+                if (nodep->mSavedGLTFOverrideMaterials[te].notNull())
+                {
+                    revert_mat = nodep->mSavedGLTFOverrideMaterials[te];
+                }
+                else
+                {
+                    // mSavedGLTFOverrideMaterials[te] being present but null
+                    // means we need to use a default value
+                    revert_mat = new LLGLTFMaterial();
+                }
+            }
+            // else can not revert at all
+
             // Override object's values with values from editor where appropriate
             if (mUnsavedChanges & MATERIAL_BASE_COLOR_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_BASE_COLOR_DIRTY" << LL_ENDL;
                 material->setBaseColorFactor(mMaterialToApply->mBaseColor, true);
             }
+            else if ((mRevertedChanges & MATERIAL_BASE_COLOR_DIRTY) && revert_mat.notNull())
+            {
+                material->setBaseColorFactor(revert_mat->mBaseColor, false);
+            }
 
             if (mUnsavedChanges & MATERIAL_BASE_COLOR_TEX_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_BASE_COLOR_TEX_DIRTY" << LL_ENDL;
                 material->setBaseColorId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR], true);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_BASE_COLOR_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
+            else if ((mRevertedChanges & MATERIAL_BASE_COLOR_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setBaseColorId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR], false);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_BASE_COLOR_TEX_DIRTY);
                 if (tracking_id.notNull())
@@ -286,11 +379,33 @@ public:
                 }
                 */
             }
+            else if ((mRevertedChanges & MATERIAL_NORMAL_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setNormalId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL], false);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_NORMAL_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
 
             if (mUnsavedChanges & MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY" << LL_ENDL;
                 material->setOcclusionRoughnessMetallicId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS], true);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
+            else if ((mRevertedChanges & MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setOcclusionRoughnessMetallicId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS], false);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY);
                 if (tracking_id.notNull())
@@ -317,11 +432,26 @@ public:
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_EMISIVE_COLOR_DIRTY" << LL_ENDL;
                 material->setEmissiveColorFactor(LLColor3(mMaterialToApply->mEmissiveColor), true);
             }
+            else if ((mRevertedChanges & MATERIAL_EMISIVE_COLOR_DIRTY) && revert_mat.notNull())
+            {
+                material->setEmissiveColorFactor(revert_mat->mEmissiveColor, false);
+            }
 
             if (mUnsavedChanges & MATERIAL_EMISIVE_TEX_DIRTY)
             {
                 LL_DEBUGS("APPLY_GLTF_CHANGES") << "applying MATERIAL_EMISIVE_TEX_DIRTY" << LL_ENDL;
                 material->setEmissiveId(mMaterialToApply->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE], true);
+                /*
+                LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_EMISIVE_TEX_DIRTY);
+                if (tracking_id.notNull())
+                {
+                    LLLocalBitmapMgr::getInstance()->associateGLTFMaterial(tracking_id, material);
+                }
+                */
+            }
+            else if ((mRevertedChanges & MATERIAL_EMISIVE_TEX_DIRTY) && revert_mat.notNull())
+            {
+                material->setEmissiveId(revert_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE], false);
                 /*
                 LLUUID tracking_id = mEditor->getLocalTextureTrackingIdFromFlag(MATERIAL_EMISIVE_TEX_DIRTY);
                 if (tracking_id.notNull())
@@ -358,6 +488,7 @@ public:
 private:
     LLGLTFMaterial* mMaterialToApply;
     U32 mUnsavedChanges;
+    U32 mRevertedChanges;
 };
 
 //
@@ -560,7 +691,9 @@ std::string USE_TEXTURE_LABEL;      // subtly different (and more clear) name fr
 FSPanelFace::FSPanelFace() :
     LLPanel(),
     mNeedMediaTitle(true),
-    mUnsavedChanges(0)
+    mUnsavedChanges(0),
+    mRevertedChanges(0),
+    mExcludeWater(false)
 {
     // register callbacks before buildFromFile() or they won't work!
     mCommitCallbackRegistrar.add("BuildTool.Flip",              boost::bind(&FSPanelFace::onCommitFlip, this, _2));
@@ -624,7 +757,43 @@ void FSPanelFace::onMatTabChange()
                 }
             }
         }
+
+        // Since we allow both PBR and BP textures to be applied at the same time,
+        // we need to hide or show the GLTF material only locally based on the current tab.
+        if (curr_mat != MATMEDIA_PBR)
+            LLSelectMgr::getInstance()->hideGLTFMaterial();
+        else
+            LLSelectMgr::getInstance()->showGLTFMaterial();
+
+        // Fixes some UI desync
+        updateUI(true);
     }
+}
+
+void FSPanelFace::onMatChannelTabChange()
+{
+    // Fixes some UI desync
+    static S32 last_channel = -1;
+    if (auto curr_channel = getCurrentMatChannel(); curr_channel != last_channel)
+    {
+        last_channel = curr_channel;
+        if (!mSetChannelTab)
+            updateUI(true);
+    }
+    mSetChannelTab = false;
+}
+
+void FSPanelFace::onPBRChannelTabChange()
+{
+    // Fixes some UI desync
+    static S32 last_channel = -1;
+    if (auto curr_channel = getCurrentPBRChannel(); curr_channel != last_channel)
+    {
+        last_channel = curr_channel;
+        if (!mSetChannelTab)
+            updateUI(true);
+    }
+    mSetChannelTab = false;
 }
 
 bool FSPanelFace::postBuild()
@@ -651,9 +820,9 @@ bool FSPanelFace::postBuild()
     SKIN_CHECK(mComboAlphaMode = findChild<LLComboBox>("combobox alphamode"));
     SKIN_CHECK(mCtrlMaskCutoff = findChild<LLSpinCtrl>("maskcutoff"));
     SKIN_CHECK(mCheckFullbright = findChild<LLCheckBoxCtrl>("checkbox fullbright"));
+    SKIN_CHECK(mCheckHideWater = findChild<LLCheckBoxCtrl>("checkbox_hide_water"));
 
     // Blinn-Phong texture transforms and controls
-    SKIN_CHECK(mLabelTexGen = findChild<LLView>("tex gen"));
     SKIN_CHECK(mComboTexGen = findChild<LLComboBox>("combobox texgen"));
     SKIN_CHECK(mCheckPlanarAlign = findChild<LLCheckBoxCtrl>("checkbox planar align"));
     SKIN_CHECK(mLabelBumpiness = findChild<LLView>("label bumpiness"));
@@ -725,6 +894,9 @@ bool FSPanelFace::postBuild()
     // hook up callbacks and do setup of all relevant UI elements here
     //
     mTabsPBRMatMedia->setCommitCallback(boost::bind(&FSPanelFace::onMatTabChange, this));
+    mTabsMatChannel->setCommitCallback(boost::bind(&FSPanelFace::onMatChannelTabChange, this));
+    mTabsPBRChannel->setCommitCallback(boost::bind(&FSPanelFace::onPBRChannelTabChange, this));
+
     // common controls and parameters for Blinn-Phong and PBR
     mBtnCopyFaces->setCommitCallback(boost::bind(&FSPanelFace::onCopyFaces, this));
     mBtnPasteFaces->setCommitCallback(boost::bind(&FSPanelFace::onPasteFaces, this));
@@ -736,6 +908,7 @@ bool FSPanelFace::postBuild()
     mComboAlphaMode->setCommitCallback(boost::bind(&FSPanelFace::onCommitAlphaMode, this));
     mCtrlMaskCutoff->setCommitCallback(boost::bind(&FSPanelFace::onCommitMaterialMaskCutoff, this));
     mCheckFullbright->setCommitCallback(boost::bind(&FSPanelFace::onCommitFullbright, this));
+    mCheckHideWater->setCommitCallback(boost::bind(&FSPanelFace::onCommitHideWater, this));
 
     // Blinn-Phong texture transforms and controls
     mComboTexGen->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexGen, this));
@@ -885,9 +1058,9 @@ bool FSPanelFace::postBuild()
 
     changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 
-    selectMaterialType(MATMEDIA_PBR);                 // TODO: add tab switching signal
-    selectMatChannel(LLRender::DIFFUSE_MAP);          // TODO: add tab switching signal
-    selectPBRChannel(LLRender::NUM_TEXTURE_CHANNELS); // TODO: add tab switching signal
+    selectMaterialType(MATMEDIA_PBR);
+    selectMatChannel(LLRender::DIFFUSE_MAP);
+    selectPBRChannel(LLRender::NUM_TEXTURE_CHANNELS);
 
     return true;
 }
@@ -998,7 +1171,7 @@ void FSPanelFace::draw()
     // not sure if there isn't a better place for this, but for the time being this seems to work,
     // and trying other places always failed in some way or other -Zi
     static U64MicrosecondsImplicit next_update_time = 0LL;
-    if (mUnsavedChanges && gFrameTime > next_update_time)
+    if ((mUnsavedChanges || mRevertedChanges) && gFrameTime > next_update_time)
     {
         LL_DEBUGS("APPLY_GLTF_CHANGES") << "detected unsaved changes: " << mUnsavedChanges << LL_ENDL;
 
@@ -1006,12 +1179,13 @@ void FSPanelFace::draw()
         getGLTFMaterial(mat);
 
         LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
-        LLRenderMaterialOverrideFunctor override_func(mat, mUnsavedChanges);
+        FSRenderMaterialOverrideFunctor override_func(mat, mUnsavedChanges, mRevertedChanges);
         selected_objects->applyToNodes(&override_func);
 
         LLGLTFMaterialList::flushUpdates();
 
         mUnsavedChanges = 0;
+        mRevertedChanges = 0;
 
         next_update_time = gFrameTime + 100000LL;   // 100 ms
 
@@ -1565,6 +1739,21 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
         mCtrlColorTransp->setEnabled(editable );
         mColorTransPercent->setMouseOpaque(editable );
 
+        // Water exclusion
+        mExcludeWater = (id == IMG_ALPHA_GRAD) && normmap_id.isNull() && specmap_id.isNull() && (transparency == 0);
+        {
+            mCheckHideWater->setEnabled(editable && !has_pbr_material && !isMediaTexSelected());
+            mCheckHideWater->set(mExcludeWater);
+            editable &= !mExcludeWater;
+
+            // disable controls for water exclusion face after updateVisibility, so the whole panel is not hidden
+            // TODO
+            // mComboMatMedia->setEnabled(editable);
+            // mRadioMaterialType->setEnabled(editable);
+            // mRadioPbrType->setEnabled(editable);
+            // mCheckSyncSettings->setEnabled(editable);
+        }
+
         // Shiny
         U8 shiny = 0;
         {
@@ -1985,7 +2174,6 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 
             mComboTexGen->setEnabled(editable);
             mComboTexGen->setTentative(!identical);
-            mLabelTexGen->setEnabled(editable);
         }
 
         {
@@ -2005,13 +2193,19 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             F32 repeats_norm = 1.f;
             F32 repeats_spec = 1.f;
 
+            F32 repeats_pbr_basecolor = 1.f;
+            F32 repeats_pbr_metallic_roughness = 1.f;
+            F32 repeats_pbr_normal = 1.f;
+            F32 repeats_pbr_emissive = 1.f;
+
             bool identical_diff_repeats = false;
             bool identical_norm_repeats = false;
             bool identical_spec_repeats = false;
 
-            LLSelectedTE::getMaxDiffuseRepeats(repeats_diff, identical_diff_repeats);
-            LLSelectedTEMaterial::getMaxNormalRepeats(repeats_norm, identical_norm_repeats);
-            LLSelectedTEMaterial::getMaxSpecularRepeats(repeats_spec, identical_spec_repeats);
+            bool identical_pbr_basecolor_repeats = false;
+            bool identical_pbr_metallic_roughness_repeats = false;
+            bool identical_pbr_normal_repeats = false;
+            bool identical_pbr_emissive_repeats = false;
 
             S32 index = mComboTexGen->getCurrentIndex();
             bool enabled = editable && (index != 1);
@@ -2021,15 +2215,26 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
             F32 repeats = 1.0f;
 
             LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
-            if (material_selection == MATMEDIA_MATERIAL)
+            if (material_selection != MATMEDIA_PBR)
             {
                 material_channel = getCurrentMatChannel();
+                LLSelectedTE::getMaxDiffuseRepeats(repeats_diff, identical_diff_repeats);
+                LLSelectedTEMaterial::getMaxNormalRepeats(repeats_norm, identical_norm_repeats);
+                LLSelectedTEMaterial::getMaxSpecularRepeats(repeats_spec, identical_spec_repeats);
             }
-            // TODO: check if repeats per meter even apply to PBR materials -Zi
             else if (material_selection == MATMEDIA_PBR)
             {
                 enabled = editable;
                 material_channel = getCurrentPBRChannel();
+
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR,
+                                                  repeats_pbr_basecolor, identical_pbr_basecolor_repeats);
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS,
+                                                  repeats_pbr_metallic_roughness, identical_pbr_metallic_roughness_repeats);
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_NORMAL,
+                                                  repeats_pbr_normal, identical_pbr_normal_repeats);
+                getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_EMISSIVE,
+                                                  repeats_pbr_emissive, identical_pbr_emissive_repeats);
             }
 
             switch (material_channel)
@@ -2069,11 +2274,40 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
                     repeats = repeats_norm;
                 }
                 break;
+
+                case LLRender::NUM_TEXTURE_CHANNELS:
+                case LLRender::BASECOLOR_MAP:
+                {
+                    identical_repeats = identical_pbr_basecolor_repeats;
+                    repeats = repeats_pbr_basecolor;
+                }
+                break;
+
+                case LLRender::METALLIC_ROUGHNESS_MAP:
+                {
+                    identical_repeats = identical_pbr_metallic_roughness_repeats;
+                    repeats = repeats_pbr_metallic_roughness;
+                }
+                break;
+
+                case LLRender::GLTF_NORMAL_MAP:
+                {
+                    identical_repeats = identical_pbr_normal_repeats;
+                    repeats = repeats_pbr_normal;
+                }
+                break;
+
+                case LLRender::EMISSIVE_MAP:
+                {
+                    identical_repeats = identical_pbr_emissive_repeats;
+                    repeats = repeats_pbr_emissive;
+                }
+                break;
             }
 
             bool repeats_tentative = !identical_repeats;
 
-            if (force_set_values)
+            if (force_set_values || material_selection == MATMEDIA_PBR)
             {
                 //onCommit, previosly edited element updates related ones
                 mCtrlRpt->forceSetValue(editable ? repeats : 1.0f);
@@ -2444,7 +2678,9 @@ void FSPanelFace::updateCopyTexButton()
     mBtnCopyFaces->setEnabled(objectp && objectp->getPCode() == LL_PCODE_VOLUME && objectp->permModify()
         && !objectp->isPermanentEnforced() && !objectp->isInventoryPending()
         && (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)
-        && LLMaterialEditor::canClipboardObjectsMaterial());
+        && LLMaterialEditor::canClipboardObjectsMaterial()
+        && !mExcludeWater
+    );
     std::string tooltip = (objectp && objectp->isInventoryPending()) ? LLTrans::getString("LoadingContents") : getString("paste_options");
     mBtnCopyFaces->setToolTip(tooltip);
 }
@@ -3235,6 +3471,7 @@ void FSPanelFace::onCommitShinyColor()
 
 void FSPanelFace::onCommitAlpha()
 {
+    mCtrlColorTransp->setFocus(true);
     sendAlpha();
 }
 
@@ -3262,6 +3499,13 @@ void FSPanelFace::onSelectShinyColor()
 
 void FSPanelFace::updateVisibility(LLViewerObject* objectp /* = nullptr */)
 {
+    S32 materials_media = getCurrentMaterialType();
+    bool show_media = materials_media == MATMEDIA_MEDIA;
+    bool show_material = materials_media == MATMEDIA_MATERIAL;
+
+    // Shared material controls
+    mCheckSyncMaterials->setVisible(show_material || show_media);
+
     updateAlphaControls();
     // TODO: is this still needed? -Zi
     updateShinyControls();
@@ -3382,8 +3626,40 @@ void FSPanelFace::onCommitFullbright()
     sendFullbright();
 }
 
+void FSPanelFace::onCommitHideWater()
+{
+    if (mCheckHideWater->get())
+    {
+        LLHandle<LLPanel> handle = getHandle();
+        LLNotificationsUtil::add("WaterExclusionSurfacesWarning", LLSD(), LLSD(),
+            [handle](const LLSD& notification, const LLSD& response)
+        {
+            if(FSPanelFace* panel = (FSPanelFace*)handle.get())
+            {
+                if (LLNotificationsUtil::getSelectedOption(notification, response) == 1)
+                {
+                    panel->mCheckHideWater->setValue(false);
+                    return;
+                }
+                // apply invisiprim texture and reset related params to set water exclusion surface
+                panel->sendBump(0);
+                panel->sendShiny(0);
+                LLSelectMgr::getInstance()->selectionSetAlphaOnly(1.f);
+                LLSelectMgr::getInstance()->selectionSetImage(IMG_ALPHA_GRAD);
+                LLSelectedTEMaterial::setDiffuseAlphaMode(panel, LLMaterial::DIFFUSE_ALPHA_MODE_BLEND);
+            }
+        });
+    }
+    else
+    {
+        // reset texture to default plywood
+        LLSelectMgr::getInstance()->selectionSetImage(DEFAULT_OBJECT_TEXTURE);
+    }
+}
+
 void FSPanelFace::onCommitGlow()
 {
+    mCtrlGlow->setFocus(true);
     sendGlow();
 }
 
@@ -3495,6 +3771,7 @@ void FSPanelFace::onCommitPbr(const LLUICtrl* pbr_ctrl)
     }
     else if (pbr_ctrl == mAlphaPBR)
     {
+        mAlphaPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_BASE_COLOR_DIRTY;
     }
     else if (pbr_ctrl == mAlphaModePBR)
@@ -3503,14 +3780,17 @@ void FSPanelFace::onCommitPbr(const LLUICtrl* pbr_ctrl)
     }
     else if (pbr_ctrl == mMaskCutoffPBR)
     {
+        mMaskCutoffPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_ALPHA_CUTOFF_DIRTY;
     }
     else if (pbr_ctrl == mMetallicFactorPBR)
     {
+        mMetallicFactorPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_METALLIC_ROUGHTNESS_METALNESS_DIRTY;
     }
     else if (pbr_ctrl == mRoughnessFactorPBR)
     {
+        mRoughnessFactorPBR->setFocus(true);
         mUnsavedChanges |= MATERIAL_METALLIC_ROUGHTNESS_ROUGHNESS_DIRTY;
     }
 }
@@ -3590,12 +3870,114 @@ void FSPanelFace::updatePBROverrideDisplay()
 
 void FSPanelFace::onCancelPbr(const LLUICtrl* map_ctrl)
 {
-    // TODO -Zi
+    if (map_ctrl == mBaseTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_BASE_COLOR_TEX_DIRTY;
+    }
+    else if (map_ctrl == mNormalTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_NORMAL_TEX_DIRTY;
+    }
+    else if (map_ctrl == mEmissiveTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_EMISIVE_TEX_DIRTY;
+    }
+    else if (map_ctrl == mORMTexturePBR)
+    {
+        mRevertedChanges |= MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY;
+    }
+    else if (map_ctrl == mBaseTintPBR)
+    {
+        mRevertedChanges |= MATERIAL_BASE_COLOR_DIRTY;
+    }
+    else if (map_ctrl == mEmissiveTintPBR)
+    {
+        mRevertedChanges |= MATERIAL_EMISIVE_COLOR_DIRTY;
+    }
 }
 
 void FSPanelFace::onSelectPbr(const LLUICtrl* map_ctrl)
 {
     onCommitPbr(map_ctrl);
+
+    struct f : public LLSelectedNodeFunctor
+    {
+        f(const LLUICtrl* ctrl, S32 dirty_flag) : mCtrl(ctrl), mDirtyFlag(dirty_flag)
+        {
+        }
+
+        virtual bool apply(LLSelectNode* nodep)
+        {
+            LLViewerObject* objectp = nodep->getObject();
+            if (!objectp)
+            {
+                return false;
+            }
+            S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces()); // avatars have TEs but no faces
+            for (S32 te = 0; te < num_tes; ++te)
+            {
+                if (nodep->isTESelected(te) && nodep->mSavedGLTFOverrideMaterials.size() > te)
+                {
+                    if (nodep->mSavedGLTFOverrideMaterials[te].isNull())
+                    {
+                        // populate with default values, default values basically mean 'not in use'
+                        nodep->mSavedGLTFOverrideMaterials[te] = new LLGLTFMaterial();
+                    }
+
+                    switch (mDirtyFlag)
+                    {
+                    //Textures
+                    case MATERIAL_BASE_COLOR_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setBaseColorId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    case MATERIAL_METALLIC_ROUGHTNESS_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setOcclusionRoughnessMetallicId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    case MATERIAL_EMISIVE_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setEmissiveId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    case MATERIAL_NORMAL_TEX_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setNormalId(mCtrl->getValue().asUUID(), true);
+                        //update_local_texture(mCtrl, nodep->mSavedGLTFOverrideMaterials[te].get());
+                        break;
+                    }
+                    // Colors
+                    case MATERIAL_BASE_COLOR_DIRTY:
+                    {
+                        LLColor4 ret = linearColor4(LLColor4(mCtrl->getValue()));
+                        // except transparency
+                        ret.mV[3] = nodep->mSavedGLTFOverrideMaterials[te]->mBaseColor.mV[3];
+                        nodep->mSavedGLTFOverrideMaterials[te]->setBaseColorFactor(ret, true);
+                        break;
+                    }
+                    case MATERIAL_EMISIVE_COLOR_DIRTY:
+                    {
+                        nodep->mSavedGLTFOverrideMaterials[te]->setEmissiveColorFactor(LLColor3(mCtrl->getValue()), true);
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+
+        const LLUICtrl* mCtrl;
+        S32 mDirtyFlag;
+    } func(map_ctrl, mUnsavedChanges);
+
+    LLSelectMgr::getInstance()->getSelection()->applyToNodes(&func);
 }
 
 bool FSPanelFace::onDragTexture(const LLUICtrl* texture_ctrl, LLInventoryItem* item)
@@ -3823,6 +4205,7 @@ void FSPanelFace::syncOffsetY(FSPanelFace* self, F32 offsetV)
 
 void FSPanelFace::onCommitMaterialBumpyOffsetX()
 {
+    mCtrlBumpyOffsetU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetX(this, getCurrentBumpyOffsetU());
@@ -3835,6 +4218,7 @@ void FSPanelFace::onCommitMaterialBumpyOffsetX()
 
 void FSPanelFace::onCommitMaterialBumpyOffsetY()
 {
+    mCtrlBumpyOffsetV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetY(this, getCurrentBumpyOffsetV());
@@ -3847,6 +4231,7 @@ void FSPanelFace::onCommitMaterialBumpyOffsetY()
 
 void FSPanelFace::onCommitMaterialShinyOffsetX()
 {
+    mCtrlShinyOffsetU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetX(this, getCurrentShinyOffsetU());
@@ -3859,6 +4244,7 @@ void FSPanelFace::onCommitMaterialShinyOffsetX()
 
 void FSPanelFace::onCommitMaterialShinyOffsetY()
 {
+    mCtrlShinyOffsetV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetY(this, getCurrentShinyOffsetV());
@@ -3887,6 +4273,7 @@ void FSPanelFace::syncRepeatY(FSPanelFace* self, F32 scaleV)
 
 void FSPanelFace::onCommitMaterialBumpyScaleX()
 {
+    mCtrlBumpyScaleU->setFocus(true);
     F32 bumpy_scale_u = getCurrentBumpyScaleU();
     if (isIdenticalPlanarTexgen())
     {
@@ -3906,6 +4293,7 @@ void FSPanelFace::onCommitMaterialBumpyScaleX()
 
 void FSPanelFace::onCommitMaterialBumpyScaleY()
 {
+    mCtrlBumpyScaleV->setFocus(true);
     F32 bumpy_scale_v = getCurrentBumpyScaleV();
     if (isIdenticalPlanarTexgen())
     {
@@ -3925,6 +4313,7 @@ void FSPanelFace::onCommitMaterialBumpyScaleY()
 
 void FSPanelFace::onCommitMaterialShinyScaleX()
 {
+    mCtrlShinyScaleU->setFocus(true);
     F32 shiny_scale_u = getCurrentShinyScaleU();
     if (isIdenticalPlanarTexgen())
     {
@@ -3944,6 +4333,7 @@ void FSPanelFace::onCommitMaterialShinyScaleX()
 
 void FSPanelFace::onCommitMaterialShinyScaleY()
 {
+    mCtrlShinyScaleV->setFocus(true);
     F32 shiny_scale_v = getCurrentShinyScaleV();
     if (isIdenticalPlanarTexgen())
     {
@@ -3971,6 +4361,7 @@ void FSPanelFace::syncMaterialRot(FSPanelFace* self, F32 rot, int te)
 
 void FSPanelFace::onCommitMaterialBumpyRot()
 {
+    mCtrlBumpyRot->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         mCtrlTexRot->forceSetValue(LLSD(getCurrentBumpyRot()));
@@ -3995,6 +4386,7 @@ void FSPanelFace::onCommitMaterialBumpyRot()
 
 void FSPanelFace::onCommitMaterialShinyRot()
 {
+    mCtrlShinyRot->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         mCtrlTexRot->forceSetValue(LLSD(getCurrentShinyRot()));
@@ -4019,21 +4411,25 @@ void FSPanelFace::onCommitMaterialShinyRot()
 
 void FSPanelFace::onCommitMaterialGloss()
 {
+    mCtrlGlossiness->setFocus(true);
     LLSelectedTEMaterial::setSpecularLightExponent(this, getCurrentGlossiness());
 }
 
 void FSPanelFace::onCommitMaterialEnv()
 {
+    mCtrlEnvironment->setFocus(true);
     LLSelectedTEMaterial::setEnvironmentIntensity(this, getCurrentEnvIntensity());
 }
 
 void FSPanelFace::onCommitMaterialMaskCutoff()
 {
+    mCtrlMaskCutoff->setFocus(true);
     LLSelectedTEMaterial::setAlphaMaskCutoff(this, getCurrentAlphaMaskCutoff());
 }
 
 void FSPanelFace::onCommitTextureScaleX()
 {
+    mCtrlTexScaleU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         F32 bumpy_scale_u = (F32)mCtrlTexScaleU->getValue().asReal();
@@ -4052,6 +4448,7 @@ void FSPanelFace::onCommitTextureScaleX()
 
 void FSPanelFace::onCommitTextureScaleY()
 {
+    mCtrlTexScaleV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         F32 bumpy_scale_v = (F32)mCtrlTexScaleV->getValue().asReal();
@@ -4070,6 +4467,7 @@ void FSPanelFace::onCommitTextureScaleY()
 
 void FSPanelFace::onCommitTextureRot()
 {
+    mCtrlTexRot->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncMaterialRot(this, (F32)mCtrlTexRot->getValue().asReal());
@@ -4084,6 +4482,7 @@ void FSPanelFace::onCommitTextureRot()
 
 void FSPanelFace::onCommitTextureOffsetX()
 {
+    mCtrlTexOffsetU->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetX(this, (F32)mCtrlTexOffsetU->getValue().asReal());
@@ -4097,6 +4496,7 @@ void FSPanelFace::onCommitTextureOffsetX()
 
 void FSPanelFace::onCommitTextureOffsetY()
 {
+    mCtrlTexOffsetV->setFocus(true);
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         syncOffsetY(this, (F32)mCtrlTexOffsetV->getValue().asReal());
@@ -4111,12 +4511,15 @@ void FSPanelFace::onCommitTextureOffsetY()
 // Commit the number of repeats per meter
 void FSPanelFace::onCommitRepeatsPerMeter()
 {
+    mCtrlRpt->setFocus(true);
     S32 materials_media = getCurrentMaterialType();
     LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
-    // TODO: check if repeats per meter is even used for PBR -Zi
+    LLGLTFMaterial::TextureInfo material_type = LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
+
     if (materials_media == MATMEDIA_PBR)
     {
         material_channel = getCurrentPBRChannel();
+        material_type    = getCurrentPBRType(material_channel);
     }
 
     if (materials_media == MATMEDIA_MATERIAL)
@@ -4133,23 +4536,21 @@ void FSPanelFace::onCommitRepeatsPerMeter()
     bool identical_scale_t = false;
 
     LLSelectedTE::getObjectScaleS(obj_scale_s, identical_scale_s);
-    LLSelectedTE::getObjectScaleS(obj_scale_t, identical_scale_t);
+    LLSelectedTE::getObjectScaleT(obj_scale_t, identical_scale_t);
 
-    if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+    if (mCheckSyncMaterials->isAvailable() && gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         LLSelectMgr::getInstance()->selectionTexScaleAutofit(repeats_per_meter);
 
         mCtrlBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
         mCtrlBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-        LLSelectedTEMaterial::setNormalRepeatX(this, obj_scale_s * repeats_per_meter);
-        LLSelectedTEMaterial::setNormalRepeatY(this, obj_scale_t * repeats_per_meter);
+        LLSelectedTEMaterial::selectionNormalScaleAutofit(this, repeats_per_meter);
 
         mCtrlShinyScaleU->setValue(obj_scale_s * repeats_per_meter);
         mCtrlShinyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-        LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
-        LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+        LLSelectedTEMaterial::selectionSpecularScaleAutofit(this, repeats_per_meter);
     }
     else
     {
@@ -4166,8 +4567,7 @@ void FSPanelFace::onCommitRepeatsPerMeter()
                 mCtrlBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
                 mCtrlBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-                LLSelectedTEMaterial::setNormalRepeatX(this, obj_scale_s * repeats_per_meter);
-                LLSelectedTEMaterial::setNormalRepeatY(this, obj_scale_t * repeats_per_meter);
+                LLSelectedTEMaterial::selectionNormalScaleAutofit(this, repeats_per_meter);
             }
             break;
 
@@ -4176,8 +4576,21 @@ void FSPanelFace::onCommitRepeatsPerMeter()
                 mCtrlShinyScaleU->setValue(obj_scale_s * repeats_per_meter);
                 mCtrlShinyScaleV->setValue(obj_scale_t * repeats_per_meter);
 
-                LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
-                LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+                LLSelectedTEMaterial::selectionSpecularScaleAutofit(this, repeats_per_meter);
+            }
+            break;
+
+            case LLRender::BASECOLOR_MAP:
+            case LLRender::METALLIC_ROUGHNESS_MAP:
+            case LLRender::GLTF_NORMAL_MAP:
+            case LLRender::EMISSIVE_MAP:
+            case LLRender::NUM_TEXTURE_CHANNELS:
+            {
+                updateGLTFTextureTransformWithScale(material_type, [&](LLGLTFMaterial::TextureTransform* new_transform, F32 scale_s, F32 scale_t)
+                {
+                    new_transform->mScale.mV[VX] = scale_s * repeats_per_meter;
+                    new_transform->mScale.mV[VY] = scale_t * repeats_per_meter;
+                });
             }
             break;
 
@@ -5143,10 +5556,33 @@ void FSPanelFace::updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo t
     }
 }
 
+void FSPanelFace::updateGLTFTextureTransformWithScale(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*, const F32, const F32)> edit)
+{
+    if (texture_info == LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT)
+    {
+        updateSelectedGLTFMaterialsWithScale([&](LLGLTFMaterial* new_override, const F32 scale_s, const F32 scale_t)
+        {
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+            {
+                LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[(LLGLTFMaterial::TextureInfo)i];
+                edit(&new_transform, scale_s, scale_t);
+            }
+        });
+    }
+    else
+    {
+        updateSelectedGLTFMaterialsWithScale([&](LLGLTFMaterial* new_override, const F32 scale_s, const F32 scale_t)
+        {
+            LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[texture_info];
+            edit(&new_transform, scale_s, scale_t);
+        });
+    }
+}
+
 void FSPanelFace::setMaterialOverridesFromSelection()
 {
     // TODO: move to .h -Zi
-    std::map<LLGLTFMaterial::TextureInfo, std::string> spinner_suffixes{
+    static std::map<LLGLTFMaterial::TextureInfo, std::string> spinner_suffixes{
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR, "_Base" },
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_NORMAL, "_Normal" },
         { LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS, "_Metallic" },
@@ -5249,6 +5685,16 @@ void FSPanelFace::setMaterialOverridesFromSelection()
     gltfCtrlTextureRotation->setTentative(!rotation_same);
     gltfCtrlTextureOffsetU->setTentative(!offset_u_same);
     gltfCtrlTextureOffsetV->setTentative(!offset_v_same);
+
+    // Fixes some UI desync
+    if (getCurrentMaterialType() == MATMEDIA_PBR)
+    {
+        F32 repeats = 1.f;
+        bool identical = false;
+        getSelectedGLTFMaterialMaxRepeats(getPBRDropChannel(), repeats, identical);
+        mCtrlRpt->forceSetValue(repeats);
+        mCtrlRpt->setTentative(!identical);
+    }
 }
 
 void FSPanelFace::Selection::connect()
@@ -5328,10 +5774,10 @@ bool FSPanelFace::Selection::compareSelection()
     return selection_changed;
 }
 
-void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data)
+void FSPanelFace::onCommitGLTFUVSpinner(LLUICtrl* ctrl, const LLSD& user_data)
 {
     // TODO: put into .h -Zi
-    std::map<std::string, LLGLTFMaterial::TextureInfo> types =
+    static std::map<std::string, LLGLTFMaterial::TextureInfo> types =
     {
         { "all",        LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT },
         { "base",       LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR },
@@ -5352,6 +5798,7 @@ void FSPanelFace::onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_d
 
     const std::string& spinner_name = ctrl->getName();
     const float value = (F32)ctrl->getValue().asReal();
+    ctrl->setFocus(true);
 
     if (LLStringUtil::startsWith(spinner_name, "gltfTextureScaleU"))
     {
@@ -5468,6 +5915,26 @@ bool FSPanelFace::isIdenticalPlanarTexgen()
     bool identical_texgen = false;
     LLSelectedTE::getTexGen(selected_texgen, identical_texgen);
     return (identical_texgen && (selected_texgen == LLTextureEntry::TEX_GEN_PLANAR));
+}
+
+bool FSPanelFace::isMediaTexSelected()
+{
+    LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+    if (LLViewerObject* objectp = node->getObject())
+    {
+        S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces());
+        for (S32 te = 0; te < num_tes; ++te)
+        {
+            if (node->isTESelected(te))
+            {
+                if (objectp->getTE(te) && objectp->getTE(te)->hasMedia())
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void FSPanelFace::LLSelectedTE::getFace(LLFace*& face_to_return, bool& identical_face)
@@ -5597,6 +6064,7 @@ void FSPanelFace::LLSelectedTEMaterial::getMaxSpecularRepeats(F32& repeats, bool
             LLMaterial* mat = object->getTEref(face).getMaterialParams().get();
             U32 s_axis = VX;
             U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
             F32 repeats_s = 1.0f;
             F32 repeats_t = 1.0f;
             if (mat)
@@ -5622,6 +6090,7 @@ void FSPanelFace::LLSelectedTEMaterial::getMaxNormalRepeats(F32& repeats, bool& 
             LLMaterial* mat = object->getTEref(face).getMaterialParams().get();
             U32 s_axis = VX;
             U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
             F32 repeats_s = 1.0f;
             F32 repeats_t = 1.0f;
             if (mat)
@@ -5667,6 +6136,62 @@ void FSPanelFace::LLSelectedTEMaterial::getCurrentDiffuseAlphaMode(U8& diffuse_a
     } get_diff_mode(diffuse_texture_has_alpha);
 
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &get_diff_mode, diffuse_alpha_mode);
+}
+
+void FSPanelFace::LLSelectedTEMaterial::selectionNormalScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter)
+{
+    struct f : public LLSelectedTEFunctor
+    {
+        FSPanelFace* mFacePanel;
+        F32 mRepeatsPerMeter;
+        f(FSPanelFace* face_panel, const F32& repeats_per_meter) : mFacePanel(face_panel), mRepeatsPerMeter(repeats_per_meter) {}
+        bool apply(LLViewerObject* object, S32 te)
+        {
+            if (object->permModify())
+            {
+                // Compute S,T to axis mapping
+                U32 s_axis, t_axis;
+                if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+                    return true;
+
+                F32 new_s = object->getScale().mV[s_axis] * mRepeatsPerMeter;
+                F32 new_t = object->getScale().mV[t_axis] * mRepeatsPerMeter;
+
+                setNormalRepeatX(mFacePanel, new_s, te);
+                setNormalRepeatY(mFacePanel, new_t, te);
+            }
+            return true;
+        }
+    } setfunc(panel_face, repeats_per_meter);
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
+}
+
+void FSPanelFace::LLSelectedTEMaterial::selectionSpecularScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter)
+{
+    struct f : public LLSelectedTEFunctor
+    {
+        FSPanelFace* mFacePanel;
+        F32 mRepeatsPerMeter;
+        f(FSPanelFace* face_panel, const F32& repeats_per_meter) : mFacePanel(face_panel), mRepeatsPerMeter(repeats_per_meter) {}
+        bool apply(LLViewerObject* object, S32 te)
+        {
+            if (object->permModify())
+            {
+                // Compute S,T to axis mapping
+                U32 s_axis, t_axis;
+                if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+                    return true;
+
+                F32 new_s = object->getScale().mV[s_axis] * mRepeatsPerMeter;
+                F32 new_t = object->getScale().mV[t_axis] * mRepeatsPerMeter;
+
+                setSpecularRepeatX(mFacePanel, new_s, te);
+                setSpecularRepeatY(mFacePanel, new_t, te);
+            }
+            return true;
+        }
+    } setfunc(panel_face, repeats_per_meter);
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
 }
 
 void FSPanelFace::LLSelectedTE::getObjectScaleS(F32& scale_s, bool& identical)
@@ -6002,6 +6527,23 @@ LLRender::eTexIndex FSPanelFace::getCurrentPBRChannel() const
     return LLRender::NUM_TEXTURE_CHANNELS;
 }
 
+LLGLTFMaterial::TextureInfo FSPanelFace::getCurrentPBRType(LLRender::eTexIndex pbr_channel) const
+{
+    switch (pbr_channel)
+    {
+        case LLRender::GLTF_NORMAL_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL;
+        case LLRender::BASECOLOR_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
+        case LLRender::METALLIC_ROUGHNESS_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS;
+        case LLRender::EMISSIVE_MAP:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE;
+        default:
+            return LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT;
+    }
+}
+
 void FSPanelFace::selectMaterialType(S32 material_type)
 {
     if (material_type == MATMEDIA_PBR)
@@ -6021,6 +6563,7 @@ void FSPanelFace::selectMaterialType(S32 material_type)
 
 void FSPanelFace::selectMatChannel(LLRender::eTexIndex mat_channel)
 {
+    mSetChannelTab = true;
     if (mat_channel == LLRender::NORMAL_MAP)
     {
         mTabsMatChannel->selectTabByName("panel_blinn_phong_normal");
@@ -6037,6 +6580,7 @@ void FSPanelFace::selectMatChannel(LLRender::eTexIndex mat_channel)
 
 void FSPanelFace::selectPBRChannel(LLRender::eTexIndex pbr_channel)
 {
+    mSetChannelTab = true;
     if (pbr_channel == LLRender::GLTF_NORMAL_MAP)
     {
         mTabsPBRChannel->selectTabByName("panel_pbr_transforms_normal");

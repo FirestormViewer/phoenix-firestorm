@@ -954,6 +954,11 @@ Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung oder Quali
 
 Die Datei ist möglicherweise zu groß. Versuchen Sie, die Auflösung zu verringern oder versuchen Sie es erneut.
 	</notification>
+	<notification name="CannotOpenFileTooBig">
+		Datei kann nicht geöffnet werden.
+
+Dem Viewer ist beim Öffnen der Datei der Speicher ausgegangen. Die Datei ist vermutlich zu groß.
+	</notification>
 	<notification name="LandmarkCreated">
 		„[LANDMARK_NAME]“ wurde zum Ordner „[FOLDER_NAME]“ hinzugefügt.
 	</notification>
@@ -5125,6 +5130,10 @@ Möchten Sie fortfahren?
 		GLTF-Szenen werden auf Ihrer Hardware momentan noch nicht unterstützt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="WaterExclusionSurfacesWarning">
+		Aktivieren von „Wasser versecken“ überschreibt die Auswahl für Textur, Holprigkeit und Glänzen.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
 	<notification name="TextureDiscardBackgrounded">
 		Um die Systemleistung zu verbessern hat [APP_NAME] die Nutzung von Textur-Speicher nach [DELAY] Sekunden im Hintergrund reduziert. Es kann einen Moment dauern, bis die Textur-Qualität wieder den normalen Standard erreicht.
 		<usetemplate ignoretext="Über Nutzung von Textur-Speicher im Hintergrund hinweisen" name="okcancelignore" yestext="OK" notext="Deaktivieren"/>
@@ -5770,7 +5779,7 @@ Flickr-Verifikation fehlgeschlagen. Bitte erneut versuchen sowie den eingegebene
 	</notification>
 
 	<notification name="ExodusFlickrUploadComplete">
-Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] betrachtet werden.
+Das Foto kann jetzt [https://www.flickr.com/photos/me/[ID] hier] betrachtet werden.
 	</notification>
 <!-- </FS:TS> FIRE-5453 -->
 	<notification name="RegionTrackerAdd">

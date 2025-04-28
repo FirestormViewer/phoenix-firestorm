@@ -5419,7 +5419,7 @@ Flickrの認証に失敗しました。もう一度試してみて下さい。�
 	</notification>
 
 	<notification name="ExodusFlickrUploadComplete">
-あなたのスナップショットは次のURLでみることができるようになりました。 [http://www.flickr.com/photos/upload/edit/?ids=[ID] here]
+あなたのスナップショットは次のURLでみることができるようになりました。 [https://www.flickr.com/photos/me/[ID] here]
 	</notification>
 	<!-- </FS:TS> FIRE-5453 -->
 

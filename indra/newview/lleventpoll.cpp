@@ -116,18 +116,27 @@ namespace Details
     void LLEventPollImpl::handleMessage(const LLSD& content)
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
-        std::string msg_name = content["message"];
+        std::string msg_name = content["message"].asString();
         LLSD message;
-        message["sender"] = mSenderIp;
-        // <FS:ND> Guard against messages with no "body"
+        try
+        {
+            message["sender"] = mSenderIp;
+            // <FS:ND> Guard against messages with no "body"
 
-        // message["body"] = content["body"];
+            // message["body"] = content["body"];
 
-        if( content.has( "body" ) )
-            message["body"] = content["body"];
-        else
-            LL_WARNS() << "Malformed content? " << ll_pretty_print_sd( content ) << LL_ENDL;
-        // <FS:ND>
+            if( content.has( "body" ) )
+                message["body"] = content["body"];
+            else
+                LL_WARNS() << "Malformed content? " << ll_pretty_print_sd( content ) << LL_ENDL;
+            // <FS:ND>
+        }
+        catch (std::bad_alloc&)
+        {
+            LLError::LLUserWarningMsg::showOutOfMemory();
+            LL_ERRS("LLCoros") << "Bad memory allocation on message: " << msg_name << LL_ENDL;
+        }
+
         LLMessageSystem::dispatch(msg_name, message);
     }
 

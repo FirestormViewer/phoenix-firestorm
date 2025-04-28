@@ -208,12 +208,11 @@ public:
     void                    startDefaultMotions();
     void                    dumpAnimationState();
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-    //virtual LLJoint*      getJoint( const std::string &name );
-    virtual LLJoint*        getJoint( const JointKey &name );
-    LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
-// </FS:ND>
+    //<FS:Ansariel> Joint-lookup improvements
+    //virtual LLJoint*      getJoint(const std::string &name);
+    virtual LLJoint*        getJoint(std::string_view name);
     LLJoint*                getJoint(S32 num);
+    void                    initAllJoints();
 
     //if you KNOW joint_num is a valid animated joint index, use getSkeletonJoint for efficiency
     inline LLJoint* getSkeletonJoint(S32 joint_num) { return mSkeleton[joint_num]; }
@@ -407,6 +406,7 @@ public:
     //--------------------------------------------------------------------
 public:
     bool            isFullyLoaded() const;
+    bool            hasFirstFullAttachmentData() const;
     F32             getFirstDecloudTime() const {return mFirstDecloudTime;}
 
     // check and return current state relative to limits
@@ -572,10 +572,9 @@ public:
     U32         renderTransparent(bool first_pass);
     void        renderCollisionVolumes();
     void        renderBones(const std::string &selected_joint = std::string());
+    virtual void renderJoints();
     void        renderOnlySelectedBones(const std::vector<std::string> &selected_joints);
     void        renderBoxAroundJointAttachments(LLJoint * joint);
-
-    void        renderJoints();
     static void deleteCachedImages(bool clearAll=true);
     static void destroyGL();
     static void restoreGL();

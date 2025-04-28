@@ -742,7 +742,7 @@ void LLVOVolume::animateTextures()
             {
                 LLFace* facep = mDrawable->getFace(i);
                 if (!facep) continue;
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 // Removed check for turning off animations
                 //if(facep->getVirtualSize() <= MIN_TEX_ANIM_SIZE && facep->mTextureMatrix) continue;
                 // </FS:minerjr> [FIRE-35081]
@@ -770,7 +770,7 @@ void LLVOVolume::animateTextures()
                 if (!facep->mTextureMatrix)
                 {
                     facep->mTextureMatrix = new LLMatrix4();
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                     // Removed check for turning off animations
                     //if (facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
                     // </FS:minerjr> [FIRE-35081]                    
@@ -926,7 +926,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
     F32 min_vsize=999999999.f, max_vsize=0.f;
     LLViewerCamera* camera = LLViewerCamera::getInstance();
     std::stringstream debug_text;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Use this flag to indicate that there was a legit change to 0.0 for the mPixelArea (All faces off screen)
     bool changed = false;
     // </FS:minerjr> [FIRE-35081]
@@ -978,7 +978,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 
         mPixelArea = llmax(mPixelArea, face->getPixelArea());
 
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // If the new area is changed from the old area, then accept it.
         if (mPixelArea != old_area)
         {
@@ -1073,7 +1073,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
     {
         LLLightImageParams* params = (LLLightImageParams*) getParameterEntry(LLNetworkData::PARAMS_LIGHT_IMAGE);
         LLUUID id = params->getLightTexture();
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Light textures should be treaded not the same as normal LOD textures
         mLightTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, true, LLGLTexture::BOOST_LIGHT);
         // </FS:minerjr> [FIRE-35081]
@@ -1126,7 +1126,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
         setDebugText(output);
     }
 
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     //if (mPixelArea == 0)
     // If there is a legit change to 0.0, don't dismiss it.
     if (mPixelArea == 0 && !changed)
@@ -5462,7 +5462,7 @@ bool can_batch_texture(LLFace* facep)
         return false;
     }
 
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Removed check for turning off animations
     if (facep->isState(LLFace::TEXTURE_ANIM))//&& facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
     // </FS:minerjr> [FIRE-35081] 
@@ -5612,7 +5612,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
     }
 
     const LLMatrix4* tex_mat = NULL;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Removed check for turning off animations
     if (facep->isState(LLFace::TEXTURE_ANIM)) //&& facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
     // </FS:minerjr> [FIRE-35081]
@@ -5662,14 +5662,6 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
     auto* gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
     llassert(gltf_mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(te->getGLTFRenderMaterial()) != nullptr);
-
-    // <FS:Beq> show legacy when editing the fallback materials.
-    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
-    if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
-    {
-        gltf_mat = nullptr;
-    }
-    // </FS:Beq>
 
     if (gltf_mat != nullptr)
     {
@@ -6880,14 +6872,6 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
             const LLTextureEntry* te = facep->getTextureEntry();
             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
-
-            // <FS:Beq> show legacy when editing the fallback materials.
-            static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
-            if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
-            {
-                gltf_mat = nullptr;
-            }
-            // </FS:Beq>
 
             if (hud_group && gltf_mat == nullptr)
             { //all hud attachments are fullbright

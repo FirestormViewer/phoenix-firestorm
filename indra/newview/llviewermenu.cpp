@@ -353,6 +353,8 @@ void force_error_software_exception();
 void force_error_os_exception();
 void force_error_driver_crash();
 void force_error_coroutine_crash();
+void force_error_coroprocedure_crash();
+void force_error_work_queue_crash();
 void force_error_thread_crash();
 
 void handle_force_delete();
@@ -2992,6 +2994,24 @@ class LLAdvancedForceErrorDriverCrash : public view_listener_t
 //};
 // </FS:Ansariel>
 
+class LLAdvancedForceErrorCoroprocedureCrash : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_error_coroprocedure_crash();
+        return true;
+    }
+};
+
+class LLAdvancedForceErrorWorkQueueCrash : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_error_work_queue_crash();
+        return true;
+    }
+};
+
 class LLAdvancedForceErrorThreadCrash : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -3988,7 +4008,11 @@ void handle_object_edit()
     LLFloaterReg::showInstance("build");
 
     LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
-    gFloaterTools->setEditTool( LLToolCompTranslate::getInstance() );
+
+    if (gFloaterTools)
+    {
+        gFloaterTools->setEditTool( LLToolCompTranslate::getInstance() );
+    }
 
     LLViewerJoystick::getInstance()->moveObjects(true);
     LLViewerJoystick::getInstance()->setNeedsReset(true);
@@ -11201,6 +11225,16 @@ void force_error_driver_crash()
 //}
 // </FS:Ansariel>
 
+void force_error_coroprocedure_crash()
+{
+    LLAppViewer::instance()->forceErrorCoroprocedureCrash();
+}
+
+void force_error_work_queue_crash()
+{
+    LLAppViewer::instance()->forceErrorWorkQueueCrash();
+}
+
 void force_error_thread_crash()
 {
     LLAppViewer::instance()->forceErrorThreadCrash();
@@ -12925,6 +12959,8 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedForceErrorDriverCrash(), "Advanced.ForceErrorDriverCrash");
     // <FS:Ansariel> Wrongly merged back in by LL
     //view_listener_t::addMenu(new LLAdvancedForceErrorCoroutineCrash(), "Advanced.ForceErrorCoroutineCrash");
+    view_listener_t::addMenu(new LLAdvancedForceErrorCoroprocedureCrash(), "Advanced.ForceErrorCoroprocedureCrash");
+    view_listener_t::addMenu(new LLAdvancedForceErrorWorkQueueCrash(), "Advanced.ForceErrorWorkQueueCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorThreadCrash(), "Advanced.ForceErrorThreadCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorDisconnectViewer(), "Advanced.ForceErrorDisconnectViewer");
 
