@@ -159,6 +159,8 @@ class LLDiskCache :
         void setLowWaterPercentage(F32 LowPct) { mLowPercent = llclamp(LowPct, 0.0, mHighPercent);  };
         // </FS:Beq>
 
+        void createSubFolders(S32 max_level, S32 current_level, const std::string& parent_dir);
+
     private:
         /**
          * Utility function to gather the total size the files in a given

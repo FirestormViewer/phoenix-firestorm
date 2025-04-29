@@ -119,6 +119,7 @@ public:
     void setReadOnly(bool read_only) ;
     S64 initCache(ELLPath location, S64 maxsize, bool texture_cache_mismatch);
 
+    void createSubFolders(int max_level, int current_level, const std::string& parent_dir);
     handle_t readFromCache(const std::string& local_filename, const LLUUID& id, S32 offset, S32 size,
                            ReadResponder* responder);
 

@@ -54,6 +54,20 @@ std::string LLDiskCache::sCacheDir;
 // <FS:Ansariel> Optimize asset simple disk cache
 static const char* subdirs = "0123456789abcdef";
 
+void LLDiskCache::createSubFolders(S32 max_level, S32 current_level, const std::string &parent_dir)
+{
+    //const char* subdirs = "0123456789abcdef";
+    for (S32 i=0; i<16; i++)
+    {
+        std::string dirname = parent_dir + gDirUtilp->getDirDelimiter() + subdirs[i];
+        LLFile::mkdir(dirname);
+        if (current_level < max_level)
+        {
+            createSubFolders(max_level, current_level + 1, dirname);
+        }
+    }
+}
+
 LLDiskCache::LLDiskCache(const std::string& cache_dir,
                          const uintmax_t max_size_bytes,
                          const bool enable_cache_debug_info
@@ -69,11 +83,12 @@ LLDiskCache::LLDiskCache(const std::string& cache_dir,
     LLFile::mkdir(cache_dir);
 
     // <FS:Ansariel> Optimize asset simple disk cache
-    for (S32 i = 0; i < 16; i++)
+    /*for (S32 i = 0; i < 16; i++)
     {
         std::string dirname = cache_dir + gDirUtilp->getDirDelimiter() + subdirs[i];
         LLFile::mkdir(dirname);
-    }
+    }*/
+    createSubFolders(1, 0, cache_dir);
     // </FS:Ansariel>
     // <FS:Beq> add static assets into the new cache after clear.
     // Only missing entries are copied on init, skiplist is setup
@@ -328,7 +343,8 @@ void LLDiskCache::purge()
 
 const std::string LLDiskCache::metaDataToFilepath(const LLUUID& id, LLAssetType::EType at)
 {
-    return llformat("%s%s%s_%s_0.asset", sCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), CACHE_FILENAME_PREFIX.c_str(), id.asString().c_str());
+    const char *strID = id.asString().c_str();
+    return llformat("%s%s%c%s%c%s%s_%s_0.asset", sCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), strID[0], gDirUtilp->getDirDelimiter().c_str(), strID[1], gDirUtilp->getDirDelimiter().c_str(), CACHE_FILENAME_PREFIX.c_str(), strID);
 }
 
 const std::string LLDiskCache::getCacheInfo()

@@ -868,7 +868,7 @@ std::string LLTextureCache::getTextureFileName(const LLUUID& id)
 {
     std::string idstr = id.asString();
     std::string delem = gDirUtilp->getDirDelimiter();
-    std::string filename = mTexturesDirName + delem + idstr[0] + delem + idstr + ".texture";
+    std::string filename = mTexturesDirName + delem + idstr[0] + delem + idstr[1] + delem + idstr + ".texture";
     return filename;
 }
 
@@ -988,6 +988,20 @@ void LLTextureCache::setReadOnly(bool read_only)
     mReadOnly = read_only ;
 }
 
+void LLTextureCache::createSubFolders(S32 max_level, S32 current_level, const std::string &parent_dir)
+{
+    const char* subdirs = "0123456789abcdef";
+    for (S32 i=0; i<16; i++)
+    {
+        std::string dirname = parent_dir + gDirUtilp->getDirDelimiter() + subdirs[i];
+        LLFile::mkdir(dirname);
+        if (current_level < max_level)
+        {
+            createSubFolders(max_level, current_level + 1, dirname);
+        }
+    }
+}
+
 // Called in the main thread.
 // Returns the unused amount of max_size if any
 S64 LLTextureCache::initCache(ELLPath location, S64 max_size, bool texture_cache_mismatch)
@@ -1030,12 +1044,13 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, bool texture_cache
                 }
         LLFile::mkdir(mTexturesDirName);
 
-        const char* subdirs = "0123456789abcdef";
+        /*const char* subdirs = "0123456789abcdef";
         for (S32 i=0; i<16; i++)
         {
             std::string dirname = mTexturesDirName + gDirUtilp->getDirDelimiter() + subdirs[i];
             LLFile::mkdir(dirname);
-        }
+        }*/
+        createSubFolders(1, 0, mTexturesDirName);
     }
     readHeaderCache();
     purgeTextures(true); // calc mTexturesSize and make some room in the texture cache if we need it
@@ -1567,12 +1582,13 @@ void LLTextureCache::clearCorruptedCache()
     {
         LLFile::mkdir(mTexturesDirName);
 
-        const char* subdirs = "0123456789abcdef";
+        createSubFolders(1, 0, mTexturesDirName);
+        /*const char* subdirs = "0123456789abcdef";
         for (S32 i=0; i<16; i++)
         {
             std::string dirname = mTexturesDirName + gDirUtilp->getDirDelimiter() + subdirs[i];
             LLFile::mkdir(dirname);
-        }
+        }*/
     }
 
     return ;
