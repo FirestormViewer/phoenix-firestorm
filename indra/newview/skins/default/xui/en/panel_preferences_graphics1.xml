@@ -1230,6 +1230,64 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="texture_downscale_controls"
+         top_pad="10"
+         width="308">
+            Downscaling Controls:
+        </text>
+        <check_box
+          control_name="FSSaveVRAMAutoDnScOST"
+          height="16"
+          label="Auto-Downscale Off-Screen Textures (OST)"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSSaveVRAMAutoDnScOST"
+          tool_tip="Force off-screen textures to have bias applied."
+          width="275"
+        />
+        <check_box
+          control_name="FSSaveVRAMVisLODDS"
+          height="16"
+          label="Visible LOD Texture Size Match"
+          follows="left|top"
+          layout="topleft"
+          left_pad="10"          
+          name="FSSaveVRAMVisLODDS"
+          tool_tip="On-screen LOD textures always downscale to match only amount of texture required."
+          width="275"
+        />
+        <check_box
+          control_name="FSSaveVRAMOSTClToCam"
+          height="16"
+          label="Bias Protection: OST Close to Camera"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSSaveVRAMOSTClToCam"
+          tool_tip="Off-screen textures close to camera are protected from auto-bias."
+          width="275"
+        />
+        <check_box
+          control_name="FSSaveVRAMClToCamInFst"
+          height="16"
+          label="Close To Camera: Force in frustrum"
+          layout="topleft"
+          left_pad="10"
+          name="FSSaveVRAMClToCamInFst"
+          tool_tip="All textures close to camera treated as in frustrum. (Helps force mesh off screen to load)"
+          width="275"
+        />
+
+
     </panel>
 
 <!--Rendering-->

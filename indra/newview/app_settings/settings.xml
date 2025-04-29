@@ -2,6 +2,50 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+  <key>FSSaveVRAMVisLODDS</key>
+  <map>
+    <key>Comment</key>
+    <string>On-screen LOD textures always downscale to match only amount of texture required.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+    <key>FSSaveVRAMClToCamInFst</key>
+    <map>
+        <key>Comment</key>
+        <string>Off-screen textures close to camera treated as in frustrum. (Helps force mesh off screen to load)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
+    <key>FSSaveVRAMOSTClToCam</key>
+    <map>
+        <key>Comment</key>
+        <string>Off-screen textures close to camera are protected from auto-bias.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
+    <key>FSSaveVRAMAutoDnScOST</key>
+    <map>
+        <key>Comment</key>
+        <string>Off screen textures always biased.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
   <key>FSLandmarkCreatedNotification</key>
   <map>
     <key>Comment</key>
@@ -15509,7 +15553,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <map>
         <key>General</key>
-        <integer>1</integer>
+        <integer>4</integer>
         <key>ImageDecode</key>
         <integer>9</integer>
       </map>

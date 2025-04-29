@@ -1210,6 +1210,7 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mForceCallbackFetch = false;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     mCloseToCamera = false; // Store if the texture is close to the camera (true or false)
+    mInFrustum = false; // Store if the texture is in frustrum (true or false)
     mBias = 1.0f;
     mImportanceToCamera = 1.0f;
     // </FS:minerjr> [FIRE-35081]
@@ -1813,7 +1814,7 @@ void LLViewerFetchedTexture::processTextureStats()
         {
             mDesiredDiscardLevel = 0;
         }
-        else if (mDontDiscard && (mBoostLevel == LLGLTexture::BOOST_ICON || mBoostLevel == LLGLTexture::BOOST_THUMBNAIL))
+        else if ((mDontDiscard && (mBoostLevel == LLGLTexture::BOOST_ICON || mBoostLevel == LLGLTexture::BOOST_THUMBNAIL)) || mForSculpt)
         {
             if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
             {
@@ -3047,6 +3048,7 @@ LLViewerLODTexture::LLViewerLODTexture(const std::string& url, FTType f_type, co
 void LLViewerLODTexture::init(bool firstinit)
 {
     mTexelsPerImage = 64*64;
+    mScaleDownCount = 3;
 }
 
 //virtual
@@ -3091,7 +3093,7 @@ void LLViewerLODTexture::processTextureStats()
         mDesiredDiscardLevel = 0;
     }
     // Generate the request priority and render priority
-    else if (mDontDiscard || !mUseMipMaps)
+    else if (mDontDiscard || !mUseMipMaps || isForSculptOnly())
     {
         mDesiredDiscardLevel = 0;
         if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
@@ -3109,13 +3111,19 @@ void LLViewerLODTexture::processTextureStats()
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Add scale down here as the textures off screen were not getting scaled down properly
         S32 current_discard = getDiscardLevel();
-        //if (mBoostLevel == LLGLTexture::BOOST_NONE)
-        {
             if (current_discard >= 0 && current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
             { // should scale down
+                if (mScaleDownCount-- == 0)
+                {
                 scaleDown();
+                mScaleDownCount = 3;
+                }
             }
-        }
+            else
+            {
+                mScaleDownCount = 3;
+            }
+        
         // </FS:minerjr> [FIRE-35081]
     }
     else if (!mFullWidth  || !mFullHeight)
@@ -3196,7 +3204,15 @@ void LLViewerLODTexture::processTextureStats()
         {
             if (current_discard >= 0 && current_discard < mDesiredDiscardLevel && !mForceToSaveRawImage)
             { // should scale down
+                if (mScaleDownCount-- == 0)
+                {
                 scaleDown();
+                mScaleDownCount = 3;
+                }
+            }
+            else
+            {
+                mScaleDownCount = 3;                
             }
         }
 

@@ -407,6 +407,7 @@ void LLViewerTextureList::dump()
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         << " close to camera " << (image->getCloseToCamera() ? "Y" : "N") // Display the close to camera flag
         << " importance to camera " << (image->getImportanceToCamera()) // Display the close to camera flag
+        << " in frustum " << (image->getInFrustum() ? "Y" : "N") // Display the in frustum flag
         << " bias " << (image->getBias()) // Display the close to camera flag
         << " FFType " << fttype_to_string(image->getFTType()) // Display the FFType of the camera
         << " Type " << (S32)image->getType() // Display the type of the image (LOCAL_TEXTURE = 0, MEDIA_TEXTURE = 1, DYNAMIC_TEXTURE = 2, FETCHED_TEXTURE = 3,LOD_TEXTURE = 4)        
@@ -810,6 +811,17 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
         imagep->setExplicitFormat(internal_format, primary_format);
     }
 
+    // <FS:minerjr> [FIRE-35428] - Mega prim issue - fix compressed sculpted textures
+    // Sculpted textures use the RGBA data for coodinates, so any compression can cause artifacts.
+    if (boost_priority == LLViewerFetchedTexture::BOOST_SCULPTED)
+    {
+        // Disable the compression of BOOST_SCULPTED textures
+        if (imagep->getGLTexture())imagep->getGLTexture()->setAllowCompression(false);
+        imagep->dontDiscard();
+        imagep->forceActive();
+        imagep->setForSculpt();
+    }
+    // </FS:minerjr> [FIRE-35428]
     addImage(imagep, get_element_type(boost_priority));
 
     if (boost_priority != 0)
@@ -837,7 +849,11 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
     }
 
     // <FS:Ansariel> Keep Fast Cache option
-    if(fast_cache_fetching_enabled)
+    // <FS:minerjr> [FIRE-35428] - Mega prim issue - fix compressed sculpted textures
+    //if(fast_cache_fetching_enabled)
+    // If the texture is Sculpted, don't allow it to be added to fast cache as it can affect the texture.
+    if(fast_cache_fetching_enabled && boost_priority != LLViewerFetchedTexture::BOOST_SCULPTED)
+        // </FS:minerjr> [FIRE-35428]
     {
         mFastCacheList.insert(imagep);
         imagep->setInFastCacheList(true);
@@ -1086,6 +1102,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     {
         static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.0095f);
         static LLCachedControl<F32> texture_scale_max(gSavedSettings, "TextureScaleMaxAreaFactor", 25.f);
+        static LLCachedControl<bool> save_VRAM_onscreen_downscale(gSavedSettings, "FSSaveVRAMVisLODDS", true);
+        static LLCachedControl<bool> save_VRAM_offscreen_use_bias(gSavedSettings, "FSSaveVRAMAutoDnScOST", false);
 
         F32 max_vsize = 0.f;
         bool on_screen = false;
@@ -1231,7 +1249,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     //vsize = vsize + (vsize * face->mCloseToCamera * texture_camera_boost);
                     // Update the max on screen vsize based upon the on screen vsize
                     //close_to_camera += face->mCloseToCamera;
-                    close_to_camera |= face->mCloseToCamera;                    
+                    close_to_camera |= face->mCloseToCamera;
                     //LL_DEBUGS() << face->getViewerObject()->getID() << " TID " << imagep->getID() << " #F " << imagep->getNumFaces(i) << " OS Vsize: " << vsize << " Vsize: " << (vsize * bias) << " CTC: " << face->mCloseToCamera << " Channel " << i << " Face Index " << fi << LL_ENDL;
                     max_on_screen_vsize = llmax(max_on_screen_vsize, vsize);
 
@@ -1259,7 +1277,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         // Replaced all the checks for this bool to be only in this 1 place instead of in the loop.
         // If the on screen counter is greater then 0, then there was at least 1 on screen texture
         //on_screen = bool(on_screen_count);
-        imagep->setCloseToCamera(close_to_camera);
+        
         //if (face_count > 1024)
         // Add check for if the image is animated to boost to high as well
         if (face_count > 1024)// || animated)
@@ -1275,7 +1293,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
           // this is an alternative to decaying mMaxVirtualSize over time
           // that keeps textures from continously downrezzing and uprezzing in the background
 
-            if (LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_OUT_OF_SCREEN || // Possibly comment out to make overall VRAM much lower, but at cost of more processing loads
+            if (save_VRAM_onscreen_downscale || LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_OUT_OF_SCREEN || // Possibly comment out to make overall VRAM much lower, but at cost of more processing loads
                 (!on_screen && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN))
             {
                 imagep->mMaxVirtualSize = 0.f;
@@ -1301,7 +1319,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             imagep->setBias(1.0f);
         }
         // If the boost level just became high, or the texture is (Local, Media Dynamic)
-        else if (imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || close_to_camera)
+        //else if ((!save_VRAM && close_to_camera) || imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE)
+        else if (close_to_camera || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH)
         {
             // Always use the best quality of the texture
             //imagep->addTextureStats(max_on_screen_vsize);
@@ -1313,7 +1332,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             //imagep->addTextureStats(max_on_screen_vsize);
             
             if (on_screen && important_to_camera < imagep->getImportanceToCamera() && important_to_camera < LEAST_IMPORTANCE_FOR_LARGE_IMAGE &&
-                LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN && prev_desired_discard_bias <= LLViewerTexture::sDesiredDiscardBias)
+                LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_OUT_OF_SCREEN && prev_desired_discard_bias <= LLViewerTexture::sDesiredDiscardBias)
             {
                 imagep->setBias(bias);
             }
@@ -1321,13 +1340,19 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             {
                 imagep->setBias(bias);
             }
+            else if (save_VRAM_offscreen_use_bias && !on_screen)
+            {
+                imagep->setBias(bias);
+            }
             // Once the bias is back to 1.00, then if the texture is 
             else if (on_screen && LLViewerTexture::sDesiredDiscardBias == 1.0f && important_to_camera >= LEAST_IMPORTANCE_FOR_LARGE_IMAGE)
             {
                 imagep->setBias(1.0f);
-            }            
+            }
         }
         imagep->setImportanceToCamera(important_to_camera);
+        imagep->setInFrustum(on_screen);
+        imagep->setCloseToCamera(close_to_camera);
         prev_desired_discard_bias = LLViewerTexture::sDesiredDiscardBias;
         // </FS:minerjr> [FIRE-35081]
     }

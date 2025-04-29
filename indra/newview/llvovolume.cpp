@@ -1123,7 +1123,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
                 }
             }
         }
-        setDebugText(output);
+        setDebugText(output, max_vsize == 0.0f ? LLColor4::white : LLColor4::yellow);
     }
 
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings

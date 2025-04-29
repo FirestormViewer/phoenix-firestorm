@@ -125,8 +125,8 @@ public:
     bool            isState(U32 state)  const   { return (mState & state) != 0; }
     void            setVirtualSize(F32 size) { mVSize = size; }
     void            setPixelArea(F32 area)  { mPixelArea = area; }
-    F32             getVirtualSize() const { return mVSize; }
-    F32             getPixelArea() const { return mPixelArea; }
+    F32             getVirtualSize() const;
+    F32             getPixelArea() const;
     F32             getImportanceToCamera() const { return mImportanceToCamera; }
     bool            getCloseToCamera() const { return mCloseToCamera; }
 
