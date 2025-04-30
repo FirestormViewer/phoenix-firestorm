@@ -15,8 +15,9 @@
 		<combo_box.item label="BMP (Sans pertes)" name="BMP"/>
 	</combo_box>
 	<slider label="Qualité :" name="image_quality_slider"/>
+	<check_box name="local_remember_location_sessions" label="Cons. emplacement/nom du fichier"/>
+	<check_box label="Incl. date/heure au nom de fichier" name="local_use_timestamp"/>
 	<button label="&#x25B6; Sélection" name="cancel_btn"/>
-	<check_box name="local_remember_location_sessions" label="Enregistrer L'emplacement et le nom du fichier entre les sessions"/>
 	<flyout_button label="Enregistrer" name="save_btn" tool_tip="Enregistrer l'image en tant que fichier">
 		<flyout_button.item label="Enregistrer" name="save_item"/>
 		<flyout_button.item label="Enregistrer sous..." name="saveas_item"/>
