@@ -2477,9 +2477,9 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     // Added close to camera (based upon the mImportanceToCamera) where any object that is within the FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE (16.1f)
     // gets an extra texture scaling up.
     // Use positive distance to the camera and apply the multiplier based upon the texture scaled for increase in the default draw distance
-    mCloseToCamera = (dist >= 0.0f && dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
+    mCloseToCamera = (dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
     // Check if the object is positive distance to the far plane and positive cos angle is in frustum
-    mInFrustum = (dist >= 0 && dist <= camera->getFar() && cos_angle_to_view_dir > 0.0f);
+    mInFrustum = (dist <= camera->getFar() && cos_angle_to_view_dir > camera->getCosHalfFov());
     // </FS:minerjr> [FIRE-35081]
 
     //if has media, check if the face is out of the view frustum.
@@ -2574,10 +2574,10 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         F32 camera_moving_speed = camera->getAverageSpeed() ;
         F32 camera_angular_speed = camera->getAverageAngularSpeed();
 
-        if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
+        //if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
         {
             //if camera moves or rotates too fast, ignore the importance factor
-            return 0.f ;
+            //return 0.f ;
         }
 
         S32 i = 0 ;

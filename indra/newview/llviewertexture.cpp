@@ -1790,6 +1790,11 @@ void LLViewerFetchedTexture::processTextureStats()
     {
         updateVirtualSize();
 
+        if (hasFetcher())
+        {
+            return;
+        }
+
         static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes", false);
 
         U32 max_tex_res = MAX_IMAGE_SIZE_DEFAULT;
@@ -2100,6 +2105,12 @@ bool LLViewerFetchedTexture::updateFetch()
     if (mIsFetching)
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - is fetching");
+        if (LLAppViewer::getTextureFetch()->getFetchState(getID()) != 14)
+        {
+            LL_INFOS() << "Still fetching: " << getID()  << LL_ENDL;
+            return false;
+        }
+
         // Sets mRawDiscardLevel, mRawImage, mAuxRawImage
         S32 fetch_discard = current_discard;
 
@@ -2268,7 +2279,7 @@ bool LLViewerFetchedTexture::updateFetch()
         const F32 FETCH_IDLE_TIME = 0.1f;
         if (mLastPacketTimer.getElapsedTimeF32() > FETCH_IDLE_TIME)
         {
-            LL_DEBUGS("Texture") << "exceeded idle time " << FETCH_IDLE_TIME << ", deleting request: " << getID() << LL_ENDL;
+            //LL_DEBUGS("Texture") << "exceeded idle time " << FETCH_IDLE_TIME << ", deleting request: " << getID() << LL_ENDL;
             LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
             mHasFetcher = false;
         }
@@ -3057,6 +3068,11 @@ void LLViewerLODTexture::processTextureStats()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     updateVirtualSize();
+
+    if (hasFetcher())
+    {
+        return;
+    }
 
     bool did_downscale = false;
 

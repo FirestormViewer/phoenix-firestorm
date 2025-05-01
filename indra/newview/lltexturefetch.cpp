@@ -2860,9 +2860,12 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
     else
     {
         worker = new LLTextureFetchWorker(this, f_type, url, id, host, priority, desired_discard, desired_size);
-        lockQueue();                                                    // +Mfq
-        mRequestMap[id] = worker;
-        unlockQueue();                                                  // -Mfq
+        //lockQueue();                                                    // +Mfq
+        {
+            std::unique_lock<std::shared_mutex> lock(mQueueMutex);
+            mRequestMap[id] = worker;
+        }
+        //unlockQueue();                                                  // -Mfq
 
         worker->lockWorkMutex();                                        // +Mw
         worker->mActiveCount++;
@@ -2884,9 +2887,13 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
 void LLTextureFetch::addToNetworkQueue(LLTextureFetchWorker* worker)
 {
     LL_PROFILE_ZONE_SCOPED;
-    lockQueue();                                                        // +Mfq
-    bool in_request_map = (mRequestMap.find(worker->mID) != mRequestMap.end()) ;
-    unlockQueue();                                                      // -Mfq
+    //lockQueue();                                                        // +Mfq
+    bool in_request_map = false;
+    {
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
+        in_request_map = (mRequestMap.find(worker->mID) != mRequestMap.end());
+    }
+    //unlockQueue();                                                      // -Mfq
 
     LLMutexLock lock(&mNetworkQueueMutex);                              // +Mfnq
     if (in_request_map)
@@ -2943,14 +2950,19 @@ void LLTextureFetch::removeFromHTTPQueue(const LLUUID& id, S32Bytes received_siz
 void LLTextureFetch::deleteRequest(const LLUUID& id, bool cancel)
 {
     LL_PROFILE_ZONE_SCOPED;
-    lockQueue();                                                        // +Mfq
+    //lockQueue();                                                        // +Mfq
     LLTextureFetchWorker* worker = getWorkerAfterLock(id);
     if (worker)
     {
-        size_t erased_1 = mRequestMap.erase(worker->mID);
-        unlockQueue();                                                  // -Mfq
+        //LL_INFOS() << "Worker state: " << worker->mState << " ID: " << worker->mID << LL_ENDL;
+        {
+            std::unique_lock<std::shared_mutex> lock(mQueueMutex);
+            size_t erased_1 = mRequestMap.erase(worker->mID);
+            llassert_always(erased_1 > 0) ;
+        }
+        //unlockQueue();                                                  // -Mfq
 
-        llassert_always(erased_1 > 0) ;
+        
         removeFromNetworkQueue(worker, cancel); // <FS:Ansariel> OpenSim compatibility
         llassert_always(!(worker->getFlags(LLWorkerClass::WCF_DELETE_REQUESTED))) ;
 
@@ -2958,7 +2970,7 @@ void LLTextureFetch::deleteRequest(const LLUUID& id, bool cancel)
     }
     else
     {
-        unlockQueue();                                                  // -Mfq
+        //unlockQueue();                                                  // -Mfq
     }
 }
 
@@ -2975,11 +2987,15 @@ void LLTextureFetch::removeRequest(LLTextureFetchWorker* worker, bool cancel)
         return;
     }
 
-    lockQueue();                                                        // +Mfq
-    size_t erased_1 = mRequestMap.erase(worker->mID);
-    unlockQueue();                                                      // -Mfq
+    {
+        //lockQueue();                                                        // +Mfq
+        std::unique_lock<std::shared_mutex> lock(mQueueMutex);
+        size_t erased_1 = mRequestMap.erase(worker->mID);
+        llassert_always(erased_1 > 0) ;
+        //unlockQueue();                                                      // -Mfq
+    }
 
-    llassert_always(erased_1 > 0) ;
+    
     removeFromNetworkQueue(worker, cancel); // <FS:Ansariel> OpenSim compatibility
     llassert_always(!(worker->getFlags(LLWorkerClass::WCF_DELETE_REQUESTED))) ;
 
@@ -2988,17 +3004,21 @@ void LLTextureFetch::removeRequest(LLTextureFetchWorker* worker, bool cancel)
 
 void LLTextureFetch::deleteAllRequests()
 {
-    while(1)
+    while (1)
     {
-        lockQueue();
-        if(mRequestMap.empty())
+        //lockQueue();
+        LLTextureFetchWorker* worker = NULL;
         {
-            unlockQueue() ;
-            break;
-        }
+            std::shared_lock<std::shared_mutex> lock(mQueueMutex);
+            if (mRequestMap.empty())
+            {
+                //unlockQueue() ;
+                break;
+            }
 
-        LLTextureFetchWorker* worker = mRequestMap.begin()->second;
-        unlockQueue() ;
+            worker = mRequestMap.begin()->second;
+        }
+        //unlockQueue() ;
 
         removeRequest(worker, true);
     }
@@ -3007,9 +3027,13 @@ void LLTextureFetch::deleteAllRequests()
 // Threads:  T*
 S32 LLTextureFetch::getNumRequests()
 {
-    lockQueue();                                                        // +Mfq
-    S32 size = (S32)mRequestMap.size();
-    unlockQueue();                                                      // -Mfq
+    //lockQueue();                                                        // +Mfq
+    S32 size = 0;
+    {
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
+        size = (S32)mRequestMap.size();
+    }
+    //unlockQueue();                                                      // -Mfq
 
     return size;
 }
@@ -3041,10 +3065,13 @@ LLTextureFetchWorker* LLTextureFetch::getWorkerAfterLock(const LLUUID& id)
 {
     LL_PROFILE_ZONE_SCOPED;
     LLTextureFetchWorker* res = NULL;
-    map_t::iterator iter = mRequestMap.find(id);
-    if (iter != mRequestMap.end())
     {
-        res = iter->second;
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
+        map_t::iterator iter = mRequestMap.find(id);
+        if (iter != mRequestMap.end())
+        {
+            res = iter->second;
+        }
     }
     return res;
 }
@@ -3052,8 +3079,7 @@ LLTextureFetchWorker* LLTextureFetch::getWorkerAfterLock(const LLUUID& id)
 // Threads:  T*
 LLTextureFetchWorker* LLTextureFetch::getWorker(const LLUUID& id)
 {
-    LLMutexLock lock(&mQueueMutex);                                     // +Mfq
-
+    //LLMutexLock lock(&mQueueMutex);                                     // +Mfq    
     return getWorkerAfterLock(id);
 }                                                                       // -Mfq
 
@@ -3189,7 +3215,8 @@ size_t LLTextureFetch::getPending()
     size_t res;
     lockData();                                                         // +Ct
     {
-        LLMutexLock lock(&mQueueMutex);                                 // +Mfq
+        //LLMutexLock lock(&mQueueMutex);                                 // +Mfq
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
 
         res = mRequestQueue.size();
         res += mCommands.size();
@@ -3213,7 +3240,8 @@ bool LLTextureFetch::runCondition()
 
     bool have_no_commands(false);
     {
-        LLMutexLock lock(&mQueueMutex);                                 // +Mfq
+        //LLMutexLock lock(&mQueueMutex);                                 // +Mfq
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
 
         have_no_commands = mCommands.empty();
     }                                                                   // -Mfq
@@ -4089,8 +4117,8 @@ int LLTextureFetch::getHttpWaitersCount()
 // Threads:  T*
 void LLTextureFetch::updateStateStats(U32 cache_read, U32 cache_write, U32 res_wait)
 {
-    LLMutexLock lock(&mQueueMutex);                                     // +Mfq
-
+    //LLMutexLock lock(&mQueueMutex);                                     // +Mfq
+    std::unique_lock<std::shared_mutex> lock(mQueueMutex);
     mTotalCacheReadCount += cache_read;
     mTotalCacheWriteCount += cache_write;
     mTotalResourceWaitCount += res_wait;
@@ -4103,7 +4131,8 @@ void LLTextureFetch::getStateStats(U32 * cache_read, U32 * cache_write, U32 * re
     U32 ret1(0U), ret2(0U), ret3(0U);
 
     {
-        LLMutexLock lock(&mQueueMutex);                                 // +Mfq
+        //LLMutexLock lock(&mQueueMutex);                                 // +Mfq
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
         ret1 = mTotalCacheReadCount;
         ret2 = mTotalCacheWriteCount;
         ret3 = mTotalResourceWaitCount;
@@ -4152,9 +4181,12 @@ void LLTextureFetch::commandDataBreak()
 void LLTextureFetch::cmdEnqueue(TFRequest * req)
 {
     LL_PROFILE_ZONE_SCOPED;
-    lockQueue();                                                        // +Mfq
-    mCommands.push_back(req);
-    unlockQueue();                                                      // -Mfq
+    //lockQueue();                                                        // +Mfq
+    {
+        std::unique_lock<std::shared_mutex> lock(mQueueMutex);
+        mCommands.push_back(req);
+    }    
+    //unlockQueue();                                                      // -Mfq
 
     unpause();
 }
@@ -4165,13 +4197,19 @@ LLTextureFetch::TFRequest * LLTextureFetch::cmdDequeue()
     LL_PROFILE_ZONE_SCOPED;
     TFRequest * ret = 0;
 
-    lockQueue();                                                        // +Mfq
+    //lockQueue();                                                        // +Mfq
+    bool empty = false;
+    {
+        std::shared_lock<std::shared_mutex> lock(mQueueMutex);
+        empty = !mCommands.empty();
+    }
     if (! mCommands.empty())
     {
+        std::unique_lock<std::shared_mutex> lock(mQueueMutex);
         ret = mCommands.front();
         mCommands.erase(mCommands.begin());
     }
-    unlockQueue();                                                      // -Mfq
+    //unlockQueue();                                                      // -Mfq
 
     return ret;
 }

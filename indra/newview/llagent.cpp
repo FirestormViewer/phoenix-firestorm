@@ -118,6 +118,8 @@
 #include "llpresetsmanager.h"
 #include "NACLantispam.h"
 
+#include "llviewertexturelist.h"
+
 using namespace LLAvatarAppearanceDefines;
 
 extern LLMenuBarGL* gMenuBarView;
@@ -1187,7 +1189,7 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             // NaCl - Antispam Registry clear anti-spam queues when changing regions
             NACLAntiSpamRegistry::instance().purgeAllQueues();
             // NaCl End
-
+            //gTextureList.clearFetchingRequests();
             // We've changed regions, we're now going to change our agent coordinate frame.
             mAgentOriginGlobal = regionp->getOriginGlobal();
             LLVector3d agent_offset_global = mRegionp->getOriginGlobal();

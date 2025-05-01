@@ -344,7 +344,7 @@ public:
     static LLTrace::EventStatHandle<LLUnit<F32, LLUnits::Percent> > sCacheHitRate;
 
 private:
-    LLMutex mQueueMutex;        //to protect mRequestMap and mCommands only
+    std::shared_mutex mQueueMutex;        //to protect mRequestMap and mCommands only
     LLMutex mNetworkQueueMutex; //to protect mNetworkQueue, mHTTPTextureQueue and mCancelQueue. // <FS:Ansariel> OpenSim compatibility
 
     LLTextureCache* mTextureCache;
