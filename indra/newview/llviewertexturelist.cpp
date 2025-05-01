@@ -1519,7 +1519,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
     // Deletion rules check ref count, so be careful not to hold any LLPointer references to the textures here other than the one in entries.
 
     //update MIN_UPDATE_COUNT or 5% of other textures, whichever is greater
-    update_count = llmax((U32) MIN_UPDATE_COUNT, (U32) mUUIDMap.size()/20);
+    update_count = llmax((U32)MIN_UPDATE_COUNT, (U32)mUUIDMap.size() / 20);
     if (LLViewerTexture::sDesiredDiscardBias > 1.f
         && LLViewerTexture::sBiasTexturesUpdated < (U32)mUUIDMap.size())
     {
@@ -1532,13 +1532,15 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
         // at bias = 4 with 4 times the rate permanently.
         LLViewerTexture::sBiasTexturesUpdated += update_count;
     }
-    update_count = llmin(update_count, (U32) mUUIDMap.size());
+    update_count = llmin(update_count, (U32)mUUIDMap.size());
 
     { // copy entries out of UUID map to avoid iterator invalidation from deletion inside updateImageDecodeProiroty or updateFetch below
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vtluift - copy");
 
         // copy entries out of UUID map for updating
         entries.reserve(update_count);
+        // Add items that are part of the
+
         uuid_map_t::iterator iter = mUUIDMap.upper_bound(mLastUpdateKey);
         while (update_count-- > 0)
         {
@@ -1547,7 +1549,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
                 iter = mUUIDMap.begin();
             }
 
-            if (iter->second->getGLTexture())
+            if (iter->second->getGLTexture() && !iter->second->isFetching())
             {
                 entries.push_back(iter->second);
             }
@@ -1555,7 +1557,28 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
         }
     }
 
+    F32 half_time = max_time * 0.5f;
+
     LLTimer timer;
+
+    auto key = mFetchList.begin();
+    while (key != mFetchList.end())
+    {
+        uuid_map_t::iterator iter = mUUIDMap.find(*key);
+        if (iter != mUUIDMap.end() && iter->second->getNumRefs() > 1)
+        {
+            updateImageDecodePriority(iter->second);
+            if (!iter->second->updateFetch())
+            {
+                key = mFetchList.erase(key);
+            }
+        }        
+        if (timer.getElapsedTimeF32() > half_time)
+        {
+            break;
+        }
+        key++;
+    }
 
     for (auto& imagep : entries)
     {
@@ -1564,7 +1587,10 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
         if (imagep->getNumRefs() > 1) // make sure this image hasn't been deleted before attempting to update (may happen as a side effect of some other image updating)
         {
             updateImageDecodePriority(imagep);
-            imagep->updateFetch();
+            if (imagep->updateFetch())
+            {
+                mFetchList.push_back(mLastUpdateKey);
+            }
         }
 
         if (timer.getElapsedTimeF32() > max_time)

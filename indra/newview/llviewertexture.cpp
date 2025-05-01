@@ -2107,8 +2107,8 @@ bool LLViewerFetchedTexture::updateFetch()
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - is fetching");
         if (LLAppViewer::getTextureFetch()->getFetchState(getID()) != 14)
         {
-            LL_INFOS() << "Still fetching: " << getID()  << LL_ENDL;
-            return false;
+            //LL_INFOS() << "Still fetching: " << getID()  << LL_ENDL;
+            return mIsFetching;
         }
 
         // Sets mRawDiscardLevel, mRawImage, mAuxRawImage

@@ -250,7 +250,8 @@ private:
 
     bool mInitialized ;
     LLFrameTimer mForceDecodeTimer;
-
+    std::list<LLTextureKey> mFetchList;
+    
 private:
     static S32 sNumImages;
     static void (*sUUIDCallback)(void**, const LLUUID &);
