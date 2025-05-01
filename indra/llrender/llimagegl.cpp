@@ -616,7 +616,7 @@ bool LLImageGL::checkSize(S32 width, S32 height)
 
 bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_level)
 {
-    if (width != mWidth || height != mHeight || ncomponents != mComponents)
+    if (width - mWidth + height - mHeight + ncomponents - mComponents != 0)
     {
         // Check if dimensions are a power of two!
         if (!checkSize(width, height))
@@ -630,22 +630,19 @@ bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
         mComponents = ncomponents;
         if (ncomponents > 0)
         {
-            mMaxDiscardLevel = 0;
-            while (width > 1 && height > 1 && mMaxDiscardLevel < MAX_DISCARD_LEVEL)
+            if (discard_level < 0)
             {
-                mMaxDiscardLevel++;
-                width >>= 1;
-                height >>= 1;
+                discard_level = MAX_DISCARD_LEVEL;
             }
 
-            if(discard_level > 0)
+            constexpr const U64 discard_compare_mask = (1ULL << 48) | (1ULL << 32) | (1ULL << 16) | 1ULL;
+            U64 extract_discard = (static_cast<U64>(width) << 48) | (static_cast<U64>(height) << 32) | (1ULL << (16 + MAX_DISCARD_LEVEL)) | (1ULL << (discard_level));
+
+            mMaxDiscardLevel = 0;
+            while (((extract_discard ^ discard_compare_mask) & discard_compare_mask) == discard_compare_mask)
             {
-                mMaxDiscardLevel = llmax(mMaxDiscardLevel, (S8)discard_level);
-                // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
-                // 2K textures could set the mMaxDiscardLevel above MAX_DISCARD_LEVEL, which would
-                // cause them to not be down-scaled so they would get stuck at 0 discard all the time.
-                mMaxDiscardLevel = llmax(mMaxDiscardLevel, (S8)MAX_DISCARD_LEVEL);
-                // </FS:minerjr> [FIRE-35361]
+                extract_discard >>= 1;
+                mMaxDiscardLevel++;
             }
         }
         else
