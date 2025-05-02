@@ -538,6 +538,11 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
         {
             gSavedSettings.setString("PresetGraphicActive", name);
 
+            // <FS> [FIRE-35390] Old viewer presets have these as true and 0.7, whereas the equivalent on modern viewers is false and 1.0
+            gSavedSettings.setBOOL("RenderSkyAutoAdjustLegacy", false);
+            gSavedSettings.setF32("RenderSkyAmbientScale", 1.0);
+            // </FS>
+
             // <FS:Ansariel> Update indirect controls
             LLAvatarComplexityControls::setIndirectControls();
 
