@@ -24,12 +24,8 @@
 		<combo_box.item label="BMP（可逆圧縮）" name="BMP"/>
 	</combo_box>
 	<slider label="品質：" name="image_quality_slider"/>
-	<text name="local_remember_location_sessions_text">
-		場所とファイル名を保持する
-	</text>
-	<text name="local_use_timestamp_text">
-		ファイル名に日時を含める
-	</text>
+	<check_box label="場所とファイル名を保持する" name="local_remember_location_sessions"/>
+	<check_box label="ファイル名に日時を含める" name="local_use_timestamp"/>
 	<button label="▶　選択" name="cancel_btn"/>
 	<flyout_button label="保存" name="save_btn" tool_tip="画像をファイルとして保存">
 		<flyout_button.item label="保存" name="save_item"/>
