@@ -1,12 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<floater name="save_camera_preset" title="カメラの事前設定保存">
-    <string name="btn_label_save">保存</string>
-    <string name="btn_label_replace">置換</string>
-    <radio_group name="radio_save_preset">
-        <radio_item label="新しい事前設定を保存" name="new_preset" />
-        <radio_item label="事前設定を置換" name="replace_preset" />
-    </radio_group>
-    <button label="保存" name="save" />
-    <button label="取り消しl" name="cancel" />
-<!-- *HACK to correctly draw drop-down list over the buttons-->
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="save_camera_preset" title="カメラプリセットの保存">
+	<string name="btn_label_save">
+		保存
+	</string>
+	<string name="btn_label_replace">
+		置き換え
+	</string>
+	<radio_group name="radio_save_preset">
+		<radio_item label="新しいプリセットとして保存" name="new_preset"/>
+		<radio_item label="プリセットを置き換え" name="replace_preset"/>
+	</radio_group>
+	<button label="保存" name="save"/>
+	<button label="キャンセル" name="cancel"/>
 </floater>

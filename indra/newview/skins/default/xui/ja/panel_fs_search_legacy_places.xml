@@ -1,29 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="場所" name="panel_ls_places">
 	<panel name="panel_ls_input">
 		<text name="search_text">
-			検索キーワードを入力して下さい:
+			検索語句：
 		</text>
-		<search_combo_box name="places_edit">
-		</search_combo_box>
-		<combo_box name="places_category" />
-		<check_box label="" name="pg_all" />
-		<icon name="rating_icon_general" />
-		<check_box label="" name="mature_all" />
-		<icon name="rating_icon_moderate" />
-		<check_box label="" name="adult_all" />
-		<icon name="rating_icon_adult" />
 	</panel>
-	
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_places">
-			<columns label="" name="icon" />
-			<columns label="名称" name="place_name" />
-			<columns label="交通量" name="dwell" />
+			<columns label="名前" name="place_name"/>
+			<columns label="トラフィック" name="dwell"/>
 		</scroll_list>
-		<button label="戻る" name="places_back" />
-		<button label="次へ" name="places_next" />
+		<button label="前へ" name="places_back"/>
+		<button label="次へ" name="places_next"/>
 	</panel>
-	
 </panel>

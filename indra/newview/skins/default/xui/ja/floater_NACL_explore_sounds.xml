@@ -1,40 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="sound_explorer" title="サウンド">
 	<floater.string name="Playing">
 		再生中
 	</floater.string>
 	<floater.string name="NotPlaying">
-		[TIME] 分前
+		[TIME]分前
 	</floater.string>
 	<floater.string name="Type_UI">
-		UI
+		ＵＩ
 	</floater.string>
 	<floater.string name="Type_Avatar">
 		アバター
 	</floater.string>
-	<floater.string name="Type_llTriggerSound">
-		llTriggerSound
-	</floater.string>
-	<floater.string name="Type_llLoopSound">
-		llLoopSound
-	</floater.string>
-	<floater.string name="Type_llPlaySound">
-		llPlaySound
-	</floater.string>
-	<check_box name="avatars_chk" label="アバター" />
-	<check_box name="objects_chk" label="オブジェクト" />
-	<check_box left_delta="96" name="collision_chk" label="既定の衝突音" />
-	<check_box left_delta="128" name="repeated_asset_chk" label="繰り返し再生" />
-	<check_box name="pause_chk" label="ログ取得一時停止" />
-	<scroll_list  name="sound_list">
-		<columns label="再生中" name="playing" />
-		<columns label="種類" name="type" />
-		<columns label="オーナー" name="owner" />
-		<columns label="サウンド" name="sound" />
+	<check_box name="avatars_chk" label="アバター"/>
+	<check_box name="objects_chk" label="オブジェクト"/>
+	<check_box left_delta="96" name="collision_chk" label="既定の衝突音"/>
+	<check_box left_delta="128" name="repeated_asset_chk" label="繰り返し再生"/>
+	<check_box name="pause_chk" label="ログ取得一時停止"/>
+	<scroll_list name="sound_list">
+		<columns label="再生中" name="playing"/>
+		<columns label="種類" name="type"/>
+		<columns label="所有者" name="owner"/>
+		<columns label="サウンド" name="sound"/>
 	</scroll_list>
-	<button label="ローカルで再生" name="play_locally_btn" />
-	<button label="ローカルで停止" name="stop_locally_btn" />
-	<button label="カメラを近づける" name="look_at_btn" />
-	<button label="停止" name="stop_btn" />
-	<button label="非表示リスト" name="bl_btn" />
+	<button label="ローカルで再生" name="play_locally_btn"/>
+	<button label="ローカルで停止" name="stop_locally_btn"/>
+	<button label="カメラを近づける" name="look_at_btn"/>
+	<button label="停止" name="stop_btn"/>
+	<button label="非表示リスト" name="bl_btn"/>
 </floater>

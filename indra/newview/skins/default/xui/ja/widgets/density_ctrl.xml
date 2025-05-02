@@ -1,9 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<densityctrl label="濃度" name="density_ctrl">
-    <text name="exponential_term_label">指数項</text>
-    <text name="exponential_scale_factor_label">指数尺度要素</text>
-    <text name="linear_term_label">線形項</text>
-    <text name="constant_term_label">定数項</text>
-    <text name="max_altitude_label">最大高度</text>
-    <text name="aniso_factor_label">不等要素</text>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<densityctrl label="密度" name="density_ctrl">
+	<text name="exponential_term_label">
+		指数項
+	</text>
+	<text name="exponential_scale_factor_label">
+		指数尺度係数
+	</text>
+	<text name="linear_term_label">
+		線形項
+	</text>
+	<text name="constant_term_label">
+		定数項
+	</text>
+	<text name="max_altitude_label">
+		最大高度
+	</text>
+	<text name="aniso_factor_label">
+		異方性係数
+	</text>
 </densityctrl>
