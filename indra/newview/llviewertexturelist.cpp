@@ -1626,10 +1626,13 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
         uuid_map_t::iterator iter = mUUIDMap.find(*key);
         if (iter != mUUIDMap.end() && iter->second->getNumRefs() > 1)
         {
-            updateImageDecodePriority(iter->second);
-            if (!iter->second->updateFetch())
+            if (iter->second.notNull())
             {
-                key = mFetchList.erase(key);
+                updateImageDecodePriority(iter->second);
+                if (iter->second.notNull() && !iter->second->updateFetch())
+                {
+                    key = mFetchList.erase(key);
+                }
             }
         }        
         if (timer.getElapsedTimeF32() > half_time)
