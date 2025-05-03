@@ -16,7 +16,7 @@
 		この位置の情報は、アクセス制限のためご利用いただけません。許可については区画所有者にお問い合わせください。
 	</string>
 	<string name="acquired_date">
-		[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]
+		[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）[hour,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
 	</string>
 	<string name="information_text">
 		トラフィック：[TRAFFIC]　面積：[AREA]㎡

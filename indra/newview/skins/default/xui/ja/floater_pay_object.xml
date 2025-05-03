@@ -19,7 +19,6 @@
 	<text name="amount text">
 		もしくは金額を選ぶ：
 	</text>
-	<line_editor name="amount"/>
 	<button label="支払う" label_selected="支払う" name="pay btn"/>
 	<button label="キャンセル" label_selected="キャンセル" name="cancel btn"/>
 </floater>

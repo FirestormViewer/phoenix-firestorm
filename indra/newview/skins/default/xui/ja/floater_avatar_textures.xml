@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="avatar_texture_debug" title="アバターのテクスチャ">
-	<floater.string name="InvalidAvatar">無効なアバター</floater.string>
+	<floater.string name="InvalidAvatar">
+		無効なアバター
+	</floater.string>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
-			<text name="label">ベークド
-テクスチャ</text>
-			<text name="composite_label">合成
-テクスチャ</text>
+			<text name="label">
+				ベークド
+テクスチャ
+			</text>
+			<text name="composite_label">
+				合成
+テクスチャ
+			</text>
 			<button label="ＩＤをコンソールにダンプ" label_selected="ダンプ" name="Dump"/>
 			<panel name="scroll_content_panel">
 				<texture_picker label="髪" name="hair-baked"/>

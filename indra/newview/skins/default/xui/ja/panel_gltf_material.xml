@@ -26,7 +26,6 @@
 		<text name="alpha_cutoff_lbl">
 			アルファのカットオフ
 		</text>
-		<spinner name="alpha cutoff"/>
 	</panel>
 	<panel name="metallic_texture_pnl">
 		<text name="metallic_roughness_lbl">

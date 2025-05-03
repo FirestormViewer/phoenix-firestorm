@@ -6,7 +6,6 @@
 	<floater.string name="info_cannot_buy">
 		購入できません。
 	</floater.string>
-	<icon name="normal_background"/>
 	<layout_stack name="outer_stack">
 		<layout_panel name="layout_panel_title">
 			<text name="info_need_more">
@@ -15,7 +14,6 @@
 			<text name="info_buying">
 				L$を購入
 			</text>
-			<view_border name="text_border"/>
 		</layout_panel>
 		<layout_panel name="layout_panel_price">
 			<text name="target_price_label">
@@ -33,7 +31,6 @@
 			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_action">
-			<view_border name="text_border_2"/>
 			<text name="currency_action">
 				購入金額を選択
 			</text>
@@ -48,7 +45,6 @@
 			</text>
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
-			<view_border name="text_border_3"/>
 			<text name="currency_links">
 				[https://accounts.secondlife.com/billing_information/ 支払い情報]｜[https://www.secondlife.com/my/lindex/buy.php L$の購入]
 			</text>

@@ -75,7 +75,6 @@ default
 	<text name="lslpreprocinclude_textbox">
 		プリプロセッサのインクルードパス：
 	</text>
-	<line_editor name="preprocinclude_location"/>
 	<button label="…" label_selected="参照" name="SetPreprocInclude"/>
 	<text name="advanced_label">
 		高度なオプション：

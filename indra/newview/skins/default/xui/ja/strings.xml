@@ -1,41 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!--
-This file contains strings that used to be hardcoded in the source.
-It is only for those strings which do not belong in a floater.
-For example, the strings used in avatar chat bubbles, and strings
-that are returned from one component and may appear in many places
--->
 <strings>
-	<!-- Default Args - these arguments will be replaced in all strings -->
-	<string name="SECOND_LIFE">
-		[CURRENT_GRID]
-	</string>
-	<string name="APP_NAME">
-		Firestorm
-	</string>
-	<string name="CAPITALIZED_APP_NAME">
-		FIRESTORM
-	</string>
-	<string name="SECOND_LIFE_GRID">
-		Second Life Grid
-	</string>
 	<string name="SUPPORT_SITE">
 		Firestormサポートポータル
 	</string>
-	<string name="DOWNLOAD_URL">
-		https://www.firestormviewer.org/choose-your-platform/
-	</string>
-	<!-- Default Args set in LLViewerNetwork -->
-	<string name="VIEWER_GENERATION">
-		Viewer [VERSION]
-	</string>
-	<string name="SHORT_VIEWER_GENERATION">
-		V[VERSION]
-	</string>
-	<string name="APP_NAME_ABBR">
-		FS
-	</string>
-	<!-- starting up -->
 	<string name="StartupDetectingHardware">
 		ハードウェアを検出しています…
 	</string>
@@ -53,11 +20,6 @@ that are returned from one component and may appear in many places
 	</string>
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
-	</string>
-	<!-- about dialog/support string-->
-	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
 		コンパイラのバージョン：[COMPILER] [COMPILER_VERSION]
@@ -77,20 +39,6 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		あなたは、[REGION]にいます。
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
-	</string>
-	<!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
-	Most PC users who know what these mean will be used to the English versions,
-	and this info sometimes gets sent to support. -->
-	<string name="AboutSystem">
-CPU: [CPU]
-Memory: [MEMORY_MB] MB (Used: [USED_RAM] MB)
-Concurrency: [CONCURRENCY]
-OS Version: [OS_VERSION]
-Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
-Graphics Card: [GRAPHICS_CARD]
-Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
-Graphics Card Memory (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
-Graphics Card Memory (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windowsグラフィックドライババージョン：[GRAPHICS_DRIVER_VERSION]
@@ -249,14 +197,8 @@ LibVLCのバージョン：[LIBVLC_VERSION]
 	<string name="Quit">
 		終了
 	</string>
-	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
-	</string>
 	<string name="AgniGridLabel">Second Lifeメイングリッド（Agni）</string>
 	<string name="AditiGridLabel">Second Lifeベータテストグリッド（Aditi）</string>
-	<string name="ViewerDownloadURL">
-		https://www.firestormviewer.org/choose-your-platform/
-	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューアでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアをダウンロードしてください：
 https://www.firestormviewer.org/choose-your-platform/
@@ -285,11 +227,13 @@ https://secondlife.com/viewer-access-faq
 ・２段階認証（使用している場合）
 また、Caps Lockが入っていないこともご確認ください。
 	</string>
-	<string name="LoginFailedPasswordChanged"> セキュリティ上の理由により、あなたのパスワードは変更されました。 アカウントページ（https://secondlife.com/my/account/request.php?lang=ja-JP）へ移動し、
+	<string name="LoginFailedPasswordChanged">
+		セキュリティ上の理由により、あなたのパスワードは変更されました。 アカウントページ（https://secondlife.com/my/account/request.php?lang=ja-JP）へ移動し、
 秘密の質問に答えて、パスワードをリセットしてください。
 ご迷惑をおかけして申し訳ございません。
 	</string>
-	<string name="LoginFailedPasswordReset"> 弊社はシステムを若干変更しました。お手数ですが、パスワードのリセットをお願いします。 アカウントページ（https://secondlife.com/my/account/request.php?lang=ja-JP ）に移動し、
+	<string name="LoginFailedPasswordReset">
+		弊社はシステムを若干変更しました。お手数ですが、パスワードのリセットをお願いします。 アカウントページ（https://secondlife.com/my/account/request.php?lang=ja-JP ）に移動し、
 秘密の質問に答えて、パスワードをリセットしてください。
 ご迷惑をおかけして申し訳ございません。
 	</string>
@@ -1301,16 +1245,6 @@ https://secondlife.com/viewer-access-faq
 	<string name="UnknownScriptPermission">
 		（不明）！
 	</string>
-	<!-- Sim Access labels -->
-	<string name="SIM_ACCESS_PG">
-		General
-	</string>
-	<string name="SIM_ACCESS_MATURE">
-		Moderate
-	</string>
-	<string name="SIM_ACCESS_ADULT">
-		Adult
-	</string>
 	<string name="SIM_ACCESS_DOWN">
 		オフライン
 	</string>
@@ -1744,14 +1678,12 @@ https://secondlife.com/viewer-access-faq
 	<string name="InventoryOutboxNotMerchantTitle">
 		マーケットプレイスでは誰でもアイテムを売ることができます。
 	</string>
-	<string name="InventoryOutboxNotMerchantTooltip"/>
 	<string name="InventoryOutboxNotMerchant">
 		販売者になりたい方は、[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイスストアを作成]する必要があります。
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		アウトボックスは空です。
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
 		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグし、「マーケットプレイスに送信」をクリックします。
 	</string>
@@ -1873,7 +1805,9 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="MarketplaceUpdating">
 		アップデート中…
 	</string>
-	<string name="UploadFeeInfo">料金はサブスクリプションのレベルにより異なります。レベルが高いほど、料金が下がります。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細]</string>
+	<string name="UploadFeeInfo">
+		料金はサブスクリプションのレベルにより異なります。レベルが高いほど、料金が下がります。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細]
+	</string>
 	<string name="Open landmarks">
 		ランドマークを開く
 	</string>
@@ -2263,22 +2197,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<string name="ATTACHMENT_NOT_ATTACHED">
 		エラー：オブジェクトは現在のアウトフィットにありますが、装着されていません。
-	</string>
-	<!-- Avatar age computation, see LLDateUtil::ageFromDate -->
-	<string name="YearsMonthsOld">
-		[AGEYEARS][AGEMONTHS]
-	</string>
-	<string name="YearsOld">
-		[AGEYEARS]
-	</string>
-	<string name="MonthsOld">
-		[AGEMONTHS]
-	</string>
-	<string name="WeeksOld">
-		[AGEWEEKS]
-	</string>
-	<string name="DaysOld">
-		[AGEDAYS]
 	</string>
 	<string name="TodayOld">
 		本日参加
@@ -2816,7 +2734,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		[COUNT]件見つかりました
 	</string>
 	<string name="PanelDirTimeStr">
-		[ampm,datetime,utc]　[hour12,datetime,utc]：[min,datetime,utc]
+		[ampm,datetime,slt]　[hour12,datetime,slt]：[min,datetime,slt]
 	</string>
 	<!-- panel dir events -->
 	<string name="PanelDirEventsDateText">
@@ -2981,7 +2899,9 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="InvOfferDecline">
 		[NAME]からの[DESC]を却下しました。
 	</string>
-	<string name="InvOfferYouDecline">あなたは却下しました</string>
+	<string name="InvOfferYouDecline">
+		あなたは却下しました
+	</string>
 	<string name="InvOfferFrom">
 		からの
 	</string>
@@ -3037,7 +2957,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<string name="UnknownFileExtension">
 		不明な拡張子：%s
-使用可能な拡張子：.wav，.tga，.bmp，.jpg，.jpeg，.bvh
+使用可能な拡張子：.wav，.tga，.bmp，.jpg，.jpeg，.anim
 	</string>
 	<string name="MuteObject2">
 		オブジェクトのブロック
@@ -3226,9 +3146,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="...">
 		…
 	</string>
-	<string name="***">
-		***
-	</string>
 	<string name="(">
 		（
 	</string>
@@ -3354,12 +3271,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="MBOutOfMemoryErr">
 		[APP_NAME]は、メモリの確保に失敗しました。実行に必要なメモリを確保できないため終了します。
-		
+
 コンピュータのＲＡＭが少ない場合は、Second Lifeを実行する前に重いアプリケーションを終了し、ページファイルを割り当てるか、描画距離などのグラフィック設定を軽くしてください。
 	</string>
 	<string name="MBMissingFile">
 		[APP_NAME]は、実行に必要なファイルの一部にアクセスできないか、ファイルが見つからなかったため閉じられます。
-		
+
 [DOWNLOAD_URL] からビューアを再インストールてください。再インストール後も問題が解決しない場合は[SUPPORT_SITE] に連絡してください。
 	</string>
 	<!-- Avatar Shape Information -->
@@ -5065,15 +4982,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Home position set.">
 		ホーム配置を設定しました。
 	</string>
-	<string name="voice_morphing_url">
-		https://secondlife.com/destination/voice-island
-	</string>
-	<string name="premium_voice_morphing_url">
-		https://secondlife.com/destination/voice-morphing-premium
-	</string>
-	<string name="no_voice_morphing_faq_url">
-		https://lindenlab.freshdesk.com/support/solutions/articles/31000173560-webrtc-update-for-voice-chat-faq/
-	</string>
 	<string name="lindenhomes_get_home_url">https://secondlife.com/land/lindenhomes/member.php?lang=ja-JP</string>
 	<string name="lindenhomes_my_home_url">https://secondlife.com/ja-JP/land/lindenhomes</string>
 	<string name="membership_url">https://accounts.secondlife.com/change_membership/?lang=ja-JP</string>
@@ -5170,7 +5078,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="uploading_abuse_report">
 		アップロードしています…
-		
+
 		嫌がらせの報告
 	</string>
 	<string name="New Shape">
@@ -5352,7 +5260,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		女性‐わぁ
 	</string>
 	<!-- settings -->
-	<string name="New Day">新しいデイサイクル</string>
+	<string name="New Day">
+		新しいデイサイクル
+	</string>
 	<string name="New Water">
 		新しい水面
 	</string>
@@ -5447,9 +5357,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="AvatarBirthDateFormat_legacy">
 		[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日
 	</string>
-	<string name="DefaultMimeType">
-		none/none
-	</string>
 	<string name="texture_load_dimensions_error">
 		[WIDTH]×[HEIGHT]以上の画像は読み込めません。
 	</string>
@@ -5489,9 +5396,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="dateTimeMonthShortNames">
 		㋀:㋁:㋂:㋃:㋄:㋅:㋆:㋇:㋈:㋉:㋊:㋋
-	</string>
-	<string name="dateTimeDayFormat">
-		[MDAY]
 	</string>
 	<string name="dateTimeAM">
 		午前
@@ -5598,39 +5502,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		翻訳の応答にエラーが発生しました。
 	</string>
 	<!-- Key names begin -->
-	<string name="Esc">
-		Esc
-	</string>
-	<string name="Space">
-		Space
-	</string>
-	<string name="Enter">
-		Enter
-	</string>
-	<string name="Tab">
-		Tab
-	</string>
-	<string name="Ins">
-		Ins
-	</string>
-	<string name="Del">
-		Del
-	</string>
-	<string name="Backsp">
-		BackSp
-	</string>
-	<string name="Shift">
-		Shift
-	</string>
-	<string name="Ctrl">
-		Ctrl
-	</string>
-	<string name="Alt">
-		Alt
-	</string>
-	<string name="CapsLock">
-		CapsLock
-	</string>
 	<string name="Left">
 		←
 	</string>
@@ -5642,54 +5513,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Down">
 		↓
-	</string>
-	<string name="Home">
-		Home
-	</string>
-	<string name="End">
-		End
-	</string>
-	<string name="PgUp">
-		PgUp
-	</string>
-	<string name="PgDn">
-		PgDn
-	</string>
-	<string name="F1">
-		F1
-	</string>
-	<string name="F2">
-		F2
-	</string>
-	<string name="F3">
-		F3
-	</string>
-	<string name="F4">
-		F4
-	</string>
-	<string name="F5">
-		F5
-	</string>
-	<string name="F6">
-		F6
-	</string>
-	<string name="F7">
-		F7
-	</string>
-	<string name="F8">
-		F8
-	</string>
-	<string name="F9">
-		F9
-	</string>
-	<string name="F10">
-		F10
-	</string>
-	<string name="F11">
-		F11
-	</string>
-	<string name="F12">
-		F12
 	</string>
 	<string name="Add">
 		追加
@@ -5703,220 +5526,17 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Divide">
 		除算
 	</string>
-	<string name="PAD_DIVIDE">
-		PAD_DIVIDE
-	</string>
-	<string name="PAD_LEFT">
-		PAD_LEFT
-	</string>
-	<string name="PAD_RIGHT">
-		PAD_RIGHT
-	</string>
-	<string name="PAD_DOWN">
-		PAD_DOWN
-	</string>
-	<string name="PAD_UP">
-		PAD_UP
-	</string>
-	<string name="PAD_HOME">
-		PAD_HOME
-	</string>
-	<string name="PAD_END">
-		PAD_END
-	</string>
-	<string name="PAD_PGUP">
-		PAD_PGUP
-	</string>
-	<string name="PAD_PGDN">
-		PAD_PGDN
-	</string>
-	<string name="PAD_CENTER">
-		PAD_CENTER
-	</string>
-	<string name="PAD_INS">
-		PAD_INS
-	</string>
-	<string name="PAD_DEL">
-		PAD_DEL
-	</string>
-	<string name="PAD_Enter">
-		PAD_Enter
-	</string>
-	<string name="PAD_BUTTON0">
-		PAD_BUTTON0
-	</string>
-	<string name="PAD_BUTTON1">
-		PAD_BUTTON1
-	</string>
-	<string name="PAD_BUTTON2">
-		PAD_BUTTON2
-	</string>
-	<string name="PAD_BUTTON3">
-		PAD_BUTTON3
-	</string>
-	<string name="PAD_BUTTON4">
-		PAD_BUTTON4
-	</string>
-	<string name="PAD_BUTTON5">
-		PAD_BUTTON5
-	</string>
-	<string name="PAD_BUTTON6">
-		PAD_BUTTON6
-	</string>
-	<string name="PAD_BUTTON7">
-		PAD_BUTTON7
-	</string>
-	<string name="PAD_BUTTON8">
-		PAD_BUTTON8
-	</string>
-	<string name="PAD_BUTTON9">
-		PAD_BUTTON9
-	</string>
-	<string name="PAD_BUTTON10">
-		PAD_BUTTON10
-	</string>
-	<string name="PAD_BUTTON11">
-		PAD_BUTTON11
-	</string>
-	<string name="PAD_BUTTON12">
-		PAD_BUTTON12
-	</string>
-	<string name="PAD_BUTTON13">
-		PAD_BUTTON13
-	</string>
-	<string name="PAD_BUTTON14">
-		PAD_BUTTON14
-	</string>
-	<string name="PAD_BUTTON15">
-		PAD_BUTTON15
-	</string>
 	<string name="-">
 		-
 	</string>
-	<string name="="> =
+	<string name="=">
+		=
 	</string>
 	<string name="`">
 		`
 	</string>
 	<string name=";">
 		;
-	</string>
-	<string name="[">
-		[
-	</string>
-	<string name="]">
-		]
-	</string>
-	<string name="\">
-		\
-	</string>
-	<string name="0">
-		0
-	</string>
-	<string name="1">
-		1
-	</string>
-	<string name="2">
-		2
-	</string>
-	<string name="3">
-		3
-	</string>
-	<string name="4">
-		4
-	</string>
-	<string name="5">
-		5
-	</string>
-	<string name="6">
-		6
-	</string>
-	<string name="7">
-		7
-	</string>
-	<string name="8">
-		8
-	</string>
-	<string name="9">
-		9
-	</string>
-	<string name="A">
-		A
-	</string>
-	<string name="B">
-		B
-	</string>
-	<string name="C">
-		C
-	</string>
-	<string name="D">
-		D
-	</string>
-	<string name="E">
-		E
-	</string>
-	<string name="F">
-		F
-	</string>
-	<string name="G">
-		G
-	</string>
-	<string name="H">
-		H
-	</string>
-	<string name="I">
-		I
-	</string>
-	<string name="J">
-		J
-	</string>
-	<string name="K">
-		K
-	</string>
-	<string name="L">
-		L
-	</string>
-	<string name="M">
-		M
-	</string>
-	<string name="N">
-		N
-	</string>
-	<string name="O">
-		O
-	</string>
-	<string name="P">
-		P
-	</string>
-	<string name="Q">
-		Q
-	</string>
-	<string name="R">
-		R
-	</string>
-	<string name="S">
-		S
-	</string>
-	<string name="T">
-		T
-	</string>
-	<string name="U">
-		U
-	</string>
-	<string name="V">
-		V
-	</string>
-	<string name="W">
-		W
-	</string>
-	<string name="X">
-		X
-	</string>
-	<string name="Y">
-		Y
-	</string>
-	<string name="Z">
-		Z
 	</string>
 	<!-- Key names end -->
 	<!-- Mouse button names (short) begin -->
@@ -6102,7 +5722,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Beacons_Label">ビーコン</string>
 	<string name="Command_Poser_Label">ポーザー</string>
 	<string name="Command_Poser_Tooltip">アバターとアニメーションオブジェクトにポーズをつけます。</string>
-
 	<string name="Command_360_Capture_Tooltip">
 		３６０度の正距円筒図法のスナップショット画像を撮影します。
 	</string>
@@ -6253,12 +5872,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Stop_Animations_Tooltip">
 		自分のアニメーションを停止する
 	</string>
-	<string name="Command_Discord_Label">
-		Discord
-	</string>
-	<string name="Command_Discord_Tooltip">
-		Discord
-	</string>
 	<!-- Mesh UI terms -->
 	<string name="Retain%">
 		維持率
@@ -6285,9 +5898,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		通常
 	</string>
 	<!-- Pathfinding -->
-	<string name="Pathfinding_Wiki_URL">
-		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
-	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		なし
 	</string>
@@ -6433,10 +6043,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="TeleportMaturityExceeded">
 		住人はこのリージョンを訪問できません。
 	</string>
-	<!-- Spell check settings floater -->
-	<string name="UserDictionary">
-		[User]
-	</string>
 	<!-- RLVa -->
 	<string name="RLVaPendingRestart">
 		（再起動待ち）
@@ -6453,7 +6059,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="RLVaToggleDisabled">
 		無効
 	</string>
-	<string name="RLVaStatusDisabled">（無効）</string>
+	<string name="RLVaStatusDisabled">
+		（無効）
+	</string>
 	<!-- Experience Tools strings -->
 	<string name="experience_tools_experience">
 		体験

@@ -8,6 +8,6 @@
 	</text>
 	<!-- 名前には、非ASCII文字が使えないため翻訳しない -->
 	<line_editor name="name ed">
-		[DESC] (NEW)
+		[DESC] (新着)
 	</line_editor>
 </floater>

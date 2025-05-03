@@ -53,7 +53,6 @@
 			<text name="log_location_label">
 				保存先：
 			</text>
-			<line_editor name="log_path_string"/>
 			-->
 			<check_box label="会話テキストの保存には古い形式のファイル名を使用" name="UseLegacyIMLogNames" tool_tip="ここにチェックを入れると会話テキストの古い形式のユーザ名でファイルが作成され、入れない場合は新しいユーザ名の形式でファイルが作成されます。"/>
 			<check_box label="会話ログのファイル名に日付スタンプを付加する" name="LogFileNamewithDate" tool_tip="チャットとＩＭのログに日付スタンプを付けます。チャットの場合は、「chat-YYYY-MM-DD」、ＩＭの場合は「ＩＭのファイル名-YYYY-MM」の形式になります。"/>

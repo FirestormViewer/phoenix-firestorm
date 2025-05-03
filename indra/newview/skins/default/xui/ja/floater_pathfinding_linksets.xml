@@ -21,9 +21,6 @@
 	<floater.string name="messaging_not_enabled">
 		このリージョンは経路探索に対応していません。
 	</floater.string>
-	<floater.string name="linkset_terrain_name">
-		[Terrain]
-	</floater.string>
 	<floater.string name="linkset_terrain_description">
 		‐
 	</floater.string>

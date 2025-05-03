@@ -37,7 +37,6 @@
 				<pie_slice name="AlwaysRenderFully" label="常に描画"/>
 			</pie_menu>
 		</pie_menu>
-		<pie_separator/>
 		<pie_menu label="描画解除　＞" name="DerenderMenu">
 			<pie_slice label="描画解除リストに追加" name="DerenderPermanent"/>
 			<pie_slice label="描画解除" name="Derender"/>

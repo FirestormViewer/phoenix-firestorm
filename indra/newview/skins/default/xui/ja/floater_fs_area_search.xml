@@ -63,11 +63,9 @@
 			<check_box name="filter_perm_modify" label="修正"/>
 			<check_box name="filter_perm_transfer" label="再販・譲渡"/>
 			<check_box name="filter_for_sale" label="次の価格帯で販売"/>
-			<spinner name="min_price"/>
 			<text name="and">
 				〜
 			</text>
-			<spinner name="max_price"/>
 			<text name="mouse_text">
 				マウスクリック時の動作
 			</text>

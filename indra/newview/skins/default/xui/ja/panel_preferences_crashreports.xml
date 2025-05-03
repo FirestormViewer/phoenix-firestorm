@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="クラッシュ報告" name="crash_reports">
-	<panel.string name="PrivacyPolicyUrl">
-		https://www.firestormviewer.org/privacy-policy
-	</panel.string>
 	<check_box label="クラッシュレポートをfirestormviewer.orgに送る" name="checkSendCrashReports"/>
 	<check_box label="送信前に必ず確認する" name="checkSendCrashReportsAlwaysAsk"/>
 	<check_box label="settings.xmlファイルを含める" name="checkSendSettings"/>
