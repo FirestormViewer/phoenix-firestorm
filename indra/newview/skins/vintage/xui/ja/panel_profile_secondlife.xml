@@ -72,7 +72,7 @@
 	<text name="About:" value="概要："/>
 	<text name="Give item:" value="共有："/>
 	<text name="Give inventory" tool_tip="この人物に渡したいインベントリアイテムをここにドロップしてください。">
-    インベントリアイテムをここにドロップ
+		インベントリアイテムをここにドロップ
 	</text>
 	<layout_stack name="buttonstack">
 		<layout_panel name="left_buttonstack">

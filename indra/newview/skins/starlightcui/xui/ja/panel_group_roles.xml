@@ -69,7 +69,6 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
 			<button label="住人をバンする" name="ban_create" tool_tip="グループから住人をバンします。"/>
 			<button label="バンの解除" name="ban_delete" tool_tip="選択した住人のバンを解除します。"/>
 			<button name="ban_refresh" tool_tip="バンリストをリフレッシュします。"/>
-			<text name="ban_count"/>
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
