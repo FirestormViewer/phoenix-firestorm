@@ -5542,6 +5542,11 @@ void LLPanelFace::changePrecision(S32 decimal_precision)
     mBumpyRotate->setPrecision(decimal_precision);
     mShinyRotate->setPrecision(decimal_precision);
     mTexRepeat->setPrecision(decimal_precision);
+    mPBRScaleU->setPrecision(decimal_precision);
+    mPBRScaleV->setPrecision(decimal_precision);
+    mPBRRotate->setPrecision(decimal_precision);
+    mPBROffsetU->setPrecision(decimal_precision);
+    mPBROffsetV->setPrecision(decimal_precision);
 }
 // </FS:CR>
 
