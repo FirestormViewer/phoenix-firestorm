@@ -1,21 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="人" name="panel_ls_people">
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="人物" name="panel_ls_people">
 	<panel name="panel_ls_input">
 		<text name="search_text">
-			検索キーワードを入力して下さい:
+			検索語句：
 		</text>
-		<search_combo_box name="people_edit" />
 	</panel>
-	
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
-		<fs_scroll_list name="search_results_people">
-			<columns label="" name="icon" />
-			<columns label="名前" name="username" />
-		</fs_scroll_list>
-		<button label="戻る" name="people_back" />
-		<button label="次へ" name="people_next" />
+		<scroll_list name="search_results_people">
+			<columns label="名前" name="username"/>
+		</scroll_list>
+		<button label="前へ" name="people_back"/>
+		<button label="次へ" name="people_next"/>
 	</panel>
-	
 </panel>

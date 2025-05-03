@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="RegionSettings" label="リージョン設定">
+	<spinner label="デフォルトの描画距離" name="draw_distance" tool_tip="デフォルトのリージョンの描画距離に戻します。"/>
+	<check_box label="描画距離を強制する" name="force_draw_distance" tool_tip="このリージョン内のすべてのエージェントの描画距離をロックします。注意：パフォーマンスの低いコンピューターを使用している場合、遅延が発生する可能性があります。（デフォルト：オフ）"/>
+	<spinner label="最大ドラッグ距離" name="max_drag_distance" tool_tip="このリージョンでプリムをドラッグできる最大距離を指定します。"/>
+	<spinner label="プリムの最大スケール" name="max_prim_scale" tool_tip="このリージョンでプリムを作成できる最大サイズを指定します。"/>
+	<spinner label="プリムの最小スケール" name="min_prim_scale" tool_tip="このリージョンでプリムを作成できる最小サイズを指定します。"/>
+	<spinner label="物理プリムの最大スケール" name="max_phys_prim_scale" tool_tip="このリージョンで作成できる物理プリムの最大サイズを指定します。"/>
+	<spinner label="中空の最大サイズ" name="max_hollow_size" tool_tip="このリージョンで作成されたプリムに開けられる穴の最​​大サイズを指定します。"/>
+	<spinner label="穴の最小サイズ" name="min_hole_size" tool_tip="このリージョンで作成されたプリムに開けられる穴の最​小サイズを指定します。"/>
+	<spinner label="最大リンク数" name="max_link_count" tool_tip="このリージョンの非物理リンクセットにリンクできるオブジェクトの最大数を指定します。"/>
+	<spinner label="最大物理リンク数" name="max_link_count_phys" tool_tip="このリージョンの物理リンクセットにリンクできるオブジェクトの最大数を指定します。"/>
+	<spinner label="転送できる最大インベントリアイテム数" name="max_inventory_items_transfer" tool_tip="クライアント間で一度に転送できるオブジェクトの数。-1を指定すると、オブジェクトの数が無制限になります。（デフォルト：-1）"/>
+	<spinner label="地形詳細スケール" name="terrain_detail_scale" tool_tip="リージョンの地形の詳細スケールです。"/>
+	<spinner label="タグを表示" name="show_tags" tool_tip="このリージョンの名前タグモード（名前タグを表示＝2、名前タグを短時間表示＝1、名前タグをブロックする＝0）"/>
+	<spinner label="最大グループ数" name="max_groups" tool_tip="エージェントが加入できるグループ数を指定します。-1はグループ数を無制限に設定します。（デフォルト：-1）"/>
+	<check_box label="水を描画" name="render_water" tool_tip="このリージョンで水の描画を有効にします（デフォルト：オン）"/>
+	<check_box label="ミニマップを許可する" name="allow_minimap" tool_tip="このリージョンでミニマップを許可します。（デフォルト：オン）"/>
+	<check_box label="物理プリムを許可する" name="allow_physical_prims" tool_tip="このリージョンで物理プリムの作成を許可します。（デフォルト：オン）"/>
+	<check_box label="最大ビルド制約の強制する" name="enforce_max_build" tool_tip="このリージョンでの最大のビルド制約を適用します。（デフォルト：オン）"/>
+	<check_box label="区画のWindLightを許可する" name="allow_parcel_windlight" tool_tip="このリージョンの区画に対してWindLightを有効にします。（デフォルト：オン）"/>
+	<button label="適用" name="apply_ors_btn"/>
+</panel>

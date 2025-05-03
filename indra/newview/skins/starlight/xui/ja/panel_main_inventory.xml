@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="もの" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		[ITEM_COUNT]個のアイテムを取得しています…。[FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT]個のアイテムの取得が完了しました。[FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		[ITEM_COUNT]個のアイテムを取得しました。[FILTER]
+	</panel.string>
+	<panel.string name="inventory_title">
+		インベントリ
+	</panel.string>
+	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="戻ります。"/>
+			<button name="forward_btn" tool_tip="進みます。"/>
+			<button name="up_btn" tool_tip="上の階層に移動します。"/>
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="インベントリをフィルタ" name="inventory search editor" tool_tip="検索する単語を１つ以上入力し、「+」で区切ってください。"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="collapse_expand_buttons">
+			<button name="collapse_btn" label="折り畳む"/>
+			<button name="expand_btn" label="拡げる"/>
+		</layout_panel>
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" width="50" value="フィルタ："/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="すべての種類"/>
+				<combo_box.item value="filter_separator" label="──────"/>
+				<combo_box.item value="filter_type_animations" label="アニメーション"/>
+				<combo_box.item value="filter_type_calling_cards" label="コーリングカード"/>
+				<combo_box.item value="filter_type_clothing" label="衣装／身体部位"/>
+				<combo_box.item value="filter_type_gestures" label="ジェスチャー"/>
+				<combo_box.item value="filter_type_landmarks" label="ランドマーク"/>
+				<combo_box.item value="filter_type_notecards" label="ノートカード"/>
+				<combo_box.item value="filter_type_objects" label="オブジェクト"/>
+				<combo_box.item value="filter_type_scripts" label="スクリプト"/>
+				<combo_box.item value="filter_type_sounds" label="サウンド"/>
+				<combo_box.item value="filter_type_textures" label="テクスチャ"/>
+				<combo_box.item value="filter_type_snapshots" label="スナップショット"/>
+				<combo_box.item value="filter_type_materials" label="マテリアル"/>
+				<combo_box.item value="filter_type_settings" label="自然環境の設定"/>
+				<!-- [AS:Chanayane] Search folders only -->
+				<combo_box.item value="filter_type_folders" label="フォルダ" />
+				<!-- [/AS:Chanayane] -->
+				<combo_box.item value="filter_type_coalesced" label="複合のみ"/>
+				<combo_box.item value="filter_type_custom" label="カスタム…"/>
+			</combo_box>
+			<menu_button tool_tip="検索表示のオプションを表示します。" name="options_visibility_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="インベントリ" name="All Items"/>
+			<recent_inventory_panel label="新着アイテム" name="Recent Items"/>
+			<worn_inventory_panel label="着用中" name="Worn Items"/>
+		</tab_container>
+	</panel>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button tool_tip="追加のオプションを表示します。" name="options_gear_btn"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="新しいアイテムを作成します。"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="新しいインベントリウィンドウを表示します。"/>
+		</panel>
+		<panel name="show_filters_panel">
+			<button name="show_filters_inv_btn" tool_tip="フィルタを表示‐選択するとフィルタサイドメニューが表示されます。フィルタが有効になっている場合は強調表示されます。"/>
+		</panel>
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="表示モードを切り替えます。"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダ" name="ItemcountText">
+				要素
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="選択されたアイテムを削除します。"/>
+		</panel>
+	</panel>
+</panel>

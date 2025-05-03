@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="リストを作成" name="Marketplace Create Listing"/>
-	<menu_item_call label="リストを関連付け" name="Marketplace Associate Listing"/>
-	<menu_item_call label="リストを取得 (更新)" name="Marketplace Get Listing"/>
+	<menu_item_call label="出品リストを作成" name="Marketplace Create Listing"/>
+	<menu_item_call label="出品リストを関連付け" name="Marketplace Associate Listing"/>
+	<menu_item_call label="出品リストを取得 (更新)" name="Marketplace Get Listing"/>
 	<menu_item_call label="エラーを確認" name="Marketplace Check Listing"/>
-	<menu_item_call label="リストを編集" name="Marketplace Edit Listing"/>
-	<menu_item_call label="リスト" name="Marketplace List"/>
-	<menu_item_call label="リストから取り除く" name="Marketplace Unlist"/>
-	<menu_item_call label="有効にする" name="Marketplace Activate"/>
-	<menu_item_call label="無効にする" name="Marketplace Deactivate"/>
+	<menu_item_call label="出品リストを編集" name="Marketplace Edit Listing"/>
+	<menu_item_call label="出品リスト" name="Marketplace List"/>
+	<menu_item_call label="出品リストから取り除く" name="Marketplace Unlist"/>
+	<menu_item_call label="有効化" name="Marketplace Activate"/>
+	<menu_item_call label="無効化" name="Marketplace Deactivate"/>
 	<menu_item_call label="共有" name="Share"/>
 	<menu_item_call label="開く" name="Task Open"/>
 	<menu_item_call label="再生" name="Task Play"/>
 	<menu_item_call label="プロパティ" name="Task Properties"/>
 	<menu_item_call label="名前の変更" name="Task Rename"/>
 	<menu_item_call label="削除" name="Task Remove"/>
-	<menu_item_call label="ごみ箱を空にする" name="Empty Trash"/>
-	<menu_item_call label="紛失物フォルダを空にする" name="Empty Lost And Found"/>
+	<menu_item_call label="ごみ箱を空に" name="Empty Trash"/>
+	<menu_item_call label="遺失物フォルダを空に" name="Empty Lost And Found"/>
 	<menu_item_call label="新しいフォルダ" name="New Folder"/>
-	<menu_item_call label="新しいアウトフィット" name="New Outfit" />
+	<menu_item_call label="新しいフォルダ" name="New Listing Folder"/>
+	<menu_item_call label="新しいアウトフィット" name="New Outfit"/>
 	<menu_item_call label="新しいスクリプト" name="New Script"/>
 	<menu_item_call label="新しいノートカード" name="New Note"/>
 	<menu_item_call label="新しいジェスチャー" name="New Gesture"/>
-	<menu label="新しい衣類" name="New Clothes">
+	<menu_item_call label="新しいマテリアル" name="New Material"/>
+	<menu label="新しい衣装" name="New Clothes">
 		<menu_item_call label="新しいシャツ" name="New Shirt"/>
 		<menu_item_call label="新しいズボン" name="New Pants"/>
 		<menu_item_call label="新しい靴" name="New Shoes"/>
@@ -30,29 +32,23 @@
 		<menu_item_call label="新しいジャケット" name="New Jacket"/>
 		<menu_item_call label="新しいスカート" name="New Skirt"/>
 		<menu_item_call label="新しい手袋" name="New Gloves"/>
-		<menu_item_call label="新しい下着" name="New Undershirt"/>
-		<menu_item_call label="新しいパンツ" name="New Underpants"/>
-		<menu_item_call label="新しいアルファマスク" name="New Alpha Mask"/>
+		<menu_item_call label="新しい下着（上半身）" name="New Undershirt"/>
+		<menu_item_call label="新しい下着（下半身）" name="New Underpants"/>
+		<menu_item_call label="新しいアルファ" name="New Alpha Mask"/>
 		<menu_item_call label="新しいタトゥ" name="New Tattoo"/>
 		<menu_item_call label="新しいユニバーサル" name="New Universal"/>
-		<menu_item_call label="新規の物理作用" name="New Physics"/>
+		<menu_item_call label="新しい物理作用" name="New Physics"/>
 	</menu>
 	<menu label="新しい身体部位" name="New Body Parts">
-		<menu_item_call label="新しいシェイプ(体型)" name="New Shape"/>
+		<menu_item_call label="新しいシェイプ（体型）" name="New Shape"/>
 		<menu_item_call label="新しいスキン" name="New Skin"/>
 		<menu_item_call label="新しい髪" name="New Hair"/>
-		<menu_item_call label="新しい眼" name="New Eyes"/>
+		<menu_item_call label="新しい目" name="New Eyes"/>
 	</menu>
-	<menu label="新しい自然環境設定" name="New Settings">
-		<menu_item_call label="新しい空" name="New Sky" />
-		<menu_item_call label="新しい水" name="New Water" />
-		<menu_item_call label="新しいデイサイクル" name="New Day Cycle" />
-	</menu>
-	<menu label="デフォルトのフォルダとして使用" name="upload_def">
-		<menu_item_call label="画像のアップロード用" name="Image uploads" />
-		<menu_item_call label="サウンドのアップロード用" name="Sound uploads" />
-		<menu_item_call label="アニメーションのアップロード用" name="Animation uploads" />
-		<menu_item_call label="モデルのアップロード用" name="Model uploads" />
+	<menu label="新しい自然環境の設定" name="New Settings">
+		<menu_item_call label="新しい空" name="New Sky"/>
+		<menu_item_call label="新しい水面" name="New Water"/>
+		<menu_item_call label="新しいデイサイクル" name="New Day Cycle"/>
 	</menu>
 	<menu label="種類を変更" name="Change Type">
 		<menu_item_call label="デフォルト" name="Default"/>
@@ -63,66 +59,84 @@
 		<menu_item_call label="靴" name="Shoes"/>
 		<menu_item_call label="シャツ" name="Shirt"/>
 		<menu_item_call label="スカート" name="Skirt"/>
-		<menu_item_call label="パンツ" name="Underpants"/>
-		<menu_item_call label="下着" name="Undershirt"/>
+		<menu_item_call label="下着（上半身）" name="Underpants"/>
+		<menu_item_call label="下着（下半身）" name="Undershirt"/>
 	</menu>
 	<menu_item_call label="テレポート" name="Landmark Open"/>
 	<menu_item_call label="開く" name="Animation Open"/>
 	<menu_item_call label="開く" name="Sound Open"/>
-	<menu_item_call label="着用中のアウトフィットを入れ替える" name="Replace Outfit"/>
-	<menu_item_call label="着用中のアウトフィットに追加する" name="Add To Outfit"/>
-	<menu_item_call label="アイテムを装着" name="Wear Items" />
-	<menu_item_call label="着用中のアウトフィットから取り除く" name="Remove From Outfit"/>
-	<menu_item_call label="アウトフィットリストをクリップボードにコピー" name="Copy outfit list to clipboard" />
+	<menu_item_call label="現在のアウトフィットと置き換え" name="Replace Outfit"/>
+	<menu_item_call label="アイテムを追加" name="Add To Outfit"/>
+	<menu_item_call label="アイテムを着用" name="Wear Items"/>
+	<menu_item_call label="アイテムを脱ぐ" name="Remove From Outfit"/>
+	<menu_item_call label="アウトフィットリストをクリップボードにコピー" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="オリジナルを探す" name="Find Original"/>
-	<menu_item_call label="アイテムを除外する" name="Purge Item"/>
-	<menu_item_call label="アイテムを復元する" name="Restore Item"/>
+	<menu_item_call label="アイテムを削除" name="Purge Item"/>
+	<menu_item_call label="アイテムを復元" name="Restore Item"/>
 	<menu_item_call label="開く" name="Open"/>
+	<menu_item_call label="画像…" name="thumbnail"/>
+	<menu_item_call label="保護" name="ProtectFolder"/>
+	<menu_item_call label="保護解除" name="UnprotectFolder"/>
+	<menu_item_call label="フォルダのリロード" name="ReloadFolder"/>
 	<menu_item_call label="オリジナルを開く" name="Open Original"/>
 	<menu_item_call label="プロパティ" name="Properties"/>
-	<menu_item_call label="名前を変更する" name="Rename"/>
-	<menu_item_call label="保護する" name="ProtectFolder" />
-	<menu_item_call label="保護を解除する" name="UnprotectFolder" />
-	<menu_item_call label="UUID をコピーする" name="Copy Asset UUID"/>
-	<menu_item_call label="メインビューに表示" name="Show in Main Panel" />
-	<menu_item_call label="最後に置いた場所に復元" name="Restore to Last Position" />
-	<menu_item_call label="コピー" name="Copy"/>
+	<menu_item_call label="名前を変更" name="Rename"/>
+	<menu_item_call label="アセットのＵＵＩＤをコピー" name="Copy Asset UUID"/>
+	<menu_item_call label="ＵＵＩＤをコピー" name="Copy UUID"/>
+	<menu_item_call label="メインパネルで表示" name="Show in Main Panel"/>
+	<menu_item_call label="新しいウィンドウで表示" name="Show in new Window"/>
+	<menu_item_call label="開く" name="open_in_current_window"/>
+	<menu_item_call label="新しいウィンドウで開く" name="open_in_new_window"/>
+	<menu_item_call label="名前変更" name="Rename"/>
 	<menu_item_call label="カット" name="Cut"/>
-	<menu_item_call label="貼り付け" name="Paste"/>
-	<menu_item_call label="リンクを貼り付ける" name="Paste As Link"/>
-	<menu_item_call label="すべてのリンクを表示" name="Find Links"/>
-	<menu_item_call label="リンクを修正" name="Replace Links" />
+	<menu_item_call label="コピー" name="Copy"/>
+	<menu_item_call label="ペースト" name="Paste"/>
+	<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
+	<menu_item_call label="すべてのリンクを探す" name="Find Links"/>
+	<menu_item_call label="リンクを置き換える" name="Replace Links"/>
+	<menu_item_call label="最後の位置に復元" name="Restore to Last Position"/>
 	<menu_item_call label="削除" name="Delete"/>
-	<menu_item_call label="無効なリンクを削除" name="Cleanup broken Links" />
-	<menu_item_call label="デフォルトのフォルダに移動" name="Move to Default Folder" />
-	<menu_item_call label="紛失物フォルダに移動" name="Move to Lost And Found" />
-	<menu_item_call label="システムフォルダを削除する" name="Delete System Folder"/>
-	<menu_item_call label="カンファレンスチャットを開始する" name="Conference Chat Folder"/>
-	<menu_item_call label="再生する" name="Sound Play"/>
-	<menu_item_call label="SLURL をコピー" name="url_copy"/>
+	<menu_item_call label="破損したリンクをクリーンアップ" name="Cleanup broken Links"/>
+	<menu_item_call label="デフォルトのフォルダに移動" name="Move to Default Folder"/>
+	<menu_item_call label="遺失物に移動" name="Move to Lost And Found"/>
+	<menu_item_call label="システムフォルダを削除" name="Delete System Folder"/>
+	<menu_item_call label="会話チャットを開始" name="Conference Chat Folder"/>
+	<menu_item_call label="再生" name="Sound Play"/>
+	<menu_item_call label="SLurlをコピー" name="url_copy"/>
 	<menu_item_call label="ランドマークの情報" name="About Landmark"/>
-	<menu_item_call label="地図に表示" name="show_on_map"/>
-	<menu_item_call label="インワールドで再生する" name="Animation Play"/>
-	<menu_item_call label="ローカルで再生する" name="Animation Audition"/>
-	<menu_item_call label="インスタントメッセージを送信する" name="Send Instant Message"/>
-	<menu_item_call label="テレポートを送る..." name="Offer Teleport..."/>
-	<menu_item_call label="テレポートを要求する..." name="Request Teleport..." />
-	<menu_item_call label="カンファレンスチャットを開始する" name="Conference Chat"/>
-	<menu_item_call label="アクティブ化" name="Activate"/>
-	<menu_item_call label="非アクティブ化" name="Deactivate"/>
-	<menu_item_call label="別名で保存する" name="Save As"/>
+	<menu_item_call label="マップに表示" name="show_on_map"/>
+	<menu_item_call label="インワールドで再生" name="Animation Play"/>
+	<menu_item_call label="ローカルで再生" name="Animation Audition"/>
+	<menu_item_call label="インスタントメッセージを送信" name="Send Instant Message"/>
+	<menu_item_call label="テレポートをオファー…" name="Offer Teleport..."/>
+	<menu_item_call label="テレポートをリクエスト…" name="Request Teleport..."/>
+	<menu_item_call label="会話チャットを開始" name="Conference Chat"/>
+	<menu_item_call label="再生" name="PlayGesture"/>
+	<menu_item_call label="有効化" name="Activate"/>
+	<menu_item_call label="無効化" name="Deactivate"/>
+	<menu_item_call label="別名で保存" name="Save As"/>
+	<menu_item_call label="選択を別名で保存" name="Save Selected As"/>
 	<menu_item_call label="装着" name="Wearable And Object Wear"/>
 	<menu_item_call label="追加" name="Wearable Add"/>
-	<menu label="装着先" name="Attach To" />
-	<menu label="HUD 装着先" name="Attach To HUD" />
-	<menu_item_call label="触る" name="Attachment Touch" />
+	<menu label="装着先" name="Attach To"/>
+	<menu label="ＨＵＤ装着先" name="Attach To HUD"/>
+	<menu_item_call label="触る" name="Attachment Touch"/>
 	<menu_item_call label="編集" name="Wearable Edit"/>
-	<menu_item_call label="テクスチャの更新" name="Texture Refresh Attachment" />
-	<menu_item_call label="取り外す" name="Take Off"/>
-	<menu_item_call label="自分から取り外す" name="Detach From Yourself" />
-	<menu_item_call name="Settings Apply Local" label="自然環境をローカルに適用" />
-	<menu_item_call name="Settings Apply Parcel" label="自然環境を区画に適用l" />
-	<menu_item_call label="マーケットプレイスのリストにコピー" name="Marketplace Copy"/>
-	<menu_item_call label="マーケットプレイスのリストに移動" name="Marketplace Move"/>
-	<menu_item_call label="－－オプションなし－－" name="--no options--"/>
+	<menu_item_call label="テクスチャをリフレッシュ" name="Texture Refresh Attachment"/>
+	<menu_item_call label="取り外す" name="Detach From Yourself"/>
+	<menu_item_call label="脱ぐ" name="Take Off"/>
+	<menu_item_call label="自分にのみ適用" name="Settings Apply Local"/>
+	<menu_item_call label="区画に適用" name="Settings Apply Parcel"/>
+	<menu_item_call label="選択したもので新しいフォルダを作る" name="New folder from selected"/>
+	<menu_item_call label="フォルダの項目のグループ解除" name="Ungroup folder items"/>
+	<menu label="以下のデフォルトとして使用" name="upload_def">
+		<menu_item_call label="画像のアップロード" name="Image uploads"/>
+		<menu_item_call label="サウンドのアップロード" name="Sound uploads"/>
+		<menu_item_call label="アニメーションのアップロード" name="Animation uploads"/>
+		<menu_item_call label="モデルのアップロード" name="Model uploads"/>
+		<menu_item_call label="ＰＢＲマテリアルのアップロード" name="PBR uploads"/>
+	</menu>
+	<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
+	<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
+	<menu_item_call label="‐オプション無し‐" name="--no options--"/>
 </menu>

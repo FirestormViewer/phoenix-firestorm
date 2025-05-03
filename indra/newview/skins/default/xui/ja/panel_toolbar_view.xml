@@ -1,67 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toolbar_view name="toolbar view">
 	<layout_stack name="bottom_toolbar_stack">
-		<layout_panel name="vertical_toolbar_panel">
-			<layout_stack name="vertical_toolbar_stack">
-				<layout_panel name="left_toolbar_panel">
-					<!-- FS:Ansariel: Special vertical toolbar -->
-					<toolbar_vertical name="toolbar_left">
-						<icon layout="topleft" name="caret" />
-					</toolbar_vertical>
-					<!-- FS:Ansariel: Special vertical toolbar -->
-				</layout_panel>
-				<layout_panel name="non_toolbar_panel">
-					<view top="0" name="floater_snap_region" />
-					<view top="0" name="minimized_floaters_region" />
-					<panel name="chiclet_container">
-					</panel>
-					<!-- FS:Ansariel: For chiclets and notices at bottom -->
-					<panel name="chiclet_container_bottom">
-					</panel>
-					<!-- END FS:Ansariel: For chiclets and notices at bottom -->
-				</layout_panel>
-				<layout_panel name="right_toolbar_panel">
-					<!-- FS:Ansariel: Special vertical toolbar -->
-					<toolbar_vertical name="toolbar_right">
-						<icon layout="topleft" name="caret" />
-					</toolbar_vertical>
-					<!-- FS:Ansariel: Special vertical toolbar -->
-				</layout_panel>
-			</layout_stack>
-		</layout_panel>
-		<!-- Panel to take up the chat bar / tool bar layout stack -->
 		<layout_panel name="bottom_toolbar_panel">
-			<!-- Horizontal panel to take up the chat bar and the tool bar -->
 			<layout_stack name="chat_bar_stack">
-				<!-- The chat bar / stand fly stack container -->
 				<layout_panel name="chat_bar_stand_fly_container_panel">
-					<!-- Vertical stack to house the stand fly buttons and the chat bar below -->
 					<layout_stack name="chat_bar_stand_fly_stack">
-
-						<!-- Panel to house the stand fly buttons, will expand down if chatbar is hidden -->
-						<layout_panel name="stand_fly_layout_panel">
-							<panel name="state_management_buttons_container" />
-						</layout_panel>
-						<!-- Panel to house the stand fly buttons, will expand down if chatbar is hidden -->
-						<!-- The chat bar itself -->
 						<layout_panel name="chat_bar_layout_panel">
-							<button name="local_chat_button" tool_tip="周辺チャットウィンドウを表示または非表示にします。 (CTRL+H)" label="周辺チャット" />
+							<button name="local_chat_button" tool_tip="近くのチャットウィンドウを表示／非表示にします。（CTRL＋H）" label="近くのチャット"/>
 						</layout_panel>
-						<!-- The chat bar itself -->
 					</layout_stack>
-					<!-- Vertical stack to house the stand fly buttons and the chat bar below -->
 				</layout_panel>
-				<!-- The chat bar / stand fly stack container -->
-				<!-- The toolbar itself -->
-				<layout_panel name="toolbar_panel">
-					<toolbar name="toolbar_bottom">
-						<icon name="caret" />
-					</toolbar>
-				</layout_panel>
-				<!-- The toolbar itself -->
 			</layout_stack>
-			<!-- Horizontal panel to take up the chat bar and the tool bar -->
 		</layout_panel>
-		<!-- Panel to take up the chat bar / tool bar layout stack -->
 	</layout_stack>
 </toolbar_view>
