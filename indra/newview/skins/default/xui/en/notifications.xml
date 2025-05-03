@@ -14546,6 +14546,15 @@ This will replace the items in the selected outfit with the items you are wearin
   </notification>
 
   <notification
+   icon="notify.tga"
+   name="WaterExclusionNoMaterial"
+   persist="true"
+   type="notify">
+    Unable to apply material to the water exclusion surface.
+    <tag>fail</tag>
+  </notification>
+
+  <notification
    icon="alertmodal.tga"
    name="EnableAutoFPSWarning"
    type="alertmodal">
