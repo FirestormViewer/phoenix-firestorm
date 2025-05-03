@@ -183,6 +183,16 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			<slider width="480" label_width="340" label="Qualité des ombres :" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>
 			<slider width="480" label_width="340" label="Taille de rendu des textures du terrain (Redémarrage requis) :" name="RenderTerrainScale" tool_tip="Détermine la taille de rendu des textures du terrain - une valeur plus basse est plus compressée (nécessite un redémarrage)"/>
 			<slider label="Amélioration de la netteté :" name="RenderSharpness"/>
+			<text name="ReflectionProbeCount">
+				Max. sondes de réflexion :
+			</text>
+			<combo_box name="ProbeCount">
+				<combo_box.item label="Aucune" name="1"/>
+				<combo_box.item label="Bas" name="32"/>
+				<combo_box.item label="Moyen" name="64"/>
+				<combo_box.item label="Élevé" name="128"/>
+				<combo_box.item label="Ultra" name="256"/>
+			</combo_box>
 			<text name="TonemapTypeText">
 				Mappage de tons :
 			</text>

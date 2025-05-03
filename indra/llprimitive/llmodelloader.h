@@ -196,18 +196,6 @@ public:
     void clearLog() { mWarningsArray.clear(); }
 
 protected:
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-    std::vector< std::string > toStringVector( std::vector< JointKey > const &aIn ) const
-    {
-        std::vector< std::string > out;
-
-        for( std::vector< JointKey >::const_iterator itr = aIn.begin(); itr != aIn.end(); ++itr )
-            out.push_back( itr->mName );
-
-        return out;
-    }
-// </FS:ND>
-
     LLModelLoader::load_callback_t      mLoadCallback;
     LLModelLoader::joint_lookup_func_t  mJointLookupFunc;
     LLModelLoader::texture_load_func_t  mTextureLoadFunc;

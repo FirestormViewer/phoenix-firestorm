@@ -13969,7 +13969,7 @@ Flickr verification failed. Please try again, and be sure to double check the ve
    icon="notifytip.tga"
    name="ExodusFlickrUploadComplete"
    type="notifytip">
-Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[ID] here].
+Your snapshot can now be viewed [https://www.flickr.com/photos/me/[ID] here].
   </notification>
   <!-- </FS:TS> FIRE-5453 -->
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="太陽＆月" name="panel_fs_settings_sky_hbodies">
+	<panel name="P_Sun_Color">
+		<text name="T_Sun_Header" value="太陽と月の色"/>
+	</panel>
+	<panel name="P_SM_Color">
+		<text name="color_label">
+			太陽と月の色
+		</text>
+	</panel>
+	<panel name="P_Sun_Header">
+		<text name="T_Sun_Header" value="太陽と月の設定"/>
+	</panel>
+	<panel name="P_Sun_Setting">
+		<text name="image_label">
+			画像：
+		</text>
+		<check_box label="ビーコンを表示" name="sunbeacon" />
+		<text name="glow_focus_label">
+			グローフォーカス：
+		</text>
+		<text name="glow_size_label">
+			グローサイズ：
+		</text>
+		<text name="star_brightness_label">
+			星の輝度：
+		</text>
+		<text name="sun_scale_label">
+			スケール：
+		</text>
+		<text name="sun_azimuth_label">
+			方位角：
+		</text>
+		<text name="sun_elevation_label">
+			標高：
+		</text>
+	</panel>
+	<panel name="P_Moon_Header">
+		<text name="T_Moon_Header" value="月の設定"/>
+	</panel>
+	<panel name="P_Moon_Setting">
+		<text name="moon_image_label">
+			画像：
+		</text>
+		<check_box label="ビーコンを表示" name="moonbeacon"/>
+		<text name="moon_scale_label">
+			スケール：
+		</text>
+		<text name="brightness_label">
+			輝度：
+		</text>
+		<text name="moon_azimuth_label">
+			方位角：
+		</text>
+		<text name="moon_elevation_label">
+			標高：
+		</text>
+	</panel>
+</panel>

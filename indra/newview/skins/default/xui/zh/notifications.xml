@@ -955,18 +955,23 @@
 		[APP_NAME] 當前尚不支援 BVH 格式的動畫檔案批次上傳。
 	</notification>
 	<notification name="CannotUploadReason">
-無法上傳 [FILE]，原因：[REASON]
+		無法上傳 [FILE]，原因：[REASON]
 請稍候再試一次。
 	</notification>
 	<notification name="CannotUploadSnapshotEmailTooBig">
-無法上傳快照 [FILE]，原因如下：[REASON]
+		無法上傳快照 [FILE]，原因如下：[REASON]
 
 檔案可能太大，請嘗試降低解析度、降低品質或稍後重試。
 	</notification>
 	<notification name="CannotUploadSnapshotWebTooBig">
-無法上傳快照。
+		無法上傳快照。
 
 檔案可能太大，請嘗試降低解析度或稍後重試。
+	</notification>
+	<notification name="CannotOpenFileTooBig">
+		無法打開檔案。
+
+檢視器在打開檔案時記憶體不足。檔案可能過大。
 	</notification>
 	<notification name="LandmarkCreated">
 		你已新增「[LANDMARK_NAME]」到你的 [FOLDER_NAME] 檔案夾。
@@ -5467,7 +5472,7 @@ Flickr 驗證失敗。請重試並檢查輸入的程式碼。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-現在可以在這裡 [http://www.flickr.com/photos/upload/edit/?ids=[ID] 檢視相片。
+現在可以在這裡 https://www.flickr.com/photos/me/[ID] 檢視相片。
 	</notification>
 	<notification name="RegionTrackerAdd">
 應該為區域「[REGION]」
@@ -5687,6 +5692,10 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 	<notification name="NoSupportGLTFShader">
 		您的圖形硬體尚不支援GLTF場景。
 		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="WaterExclusionSurfacesWarning">
+		選中“隱藏水”複選框將覆蓋所選的紋理、凹凸和光澤圖選項。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續" />
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		你即將啟用自動影格率。所有未儲存的圖形設定將會丟失。

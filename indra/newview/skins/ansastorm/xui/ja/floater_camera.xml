@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater" title="カメラ操作">
+	<floater.string name="rotate_tooltip">
+		焦点を中心にカメラを回転します。
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		焦点に向けてカメラをズームします。
+	</floater.string>
+	<floater.string name="move_tooltip">
+		カメラを上下左右に移動させます。
+	</floater.string>
+	<floater.string name="free_mode_title">
+		オブジェクトを見る
+	</floater.string>
+	<string name="inactive_combo_text">プリセットを使用</string>
+	<panel name="controls">
+		<!--TODO: replace + - images -->
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="焦点を中心にカメラを回転させます。"/>
+			<!-- <FS:Chanayane> Camera roll (from Alchemy) -->
+			<button name="roll_left" tool_tip="カメラを左に傾けます。"/>
+			<button name="roll_right" tool_tip="カメラを右に傾けます。"/>
+			<!-- </FS:Chanayane> -->
+			<slider_bar name="zoom_slider" tool_tip="カメラを焦点に向けてズームします。"/>
+			<joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。"/>
+		</panel>
+	</panel>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="前面ビューにします。"/>
+		<panel_camera_item name="group_view" tool_tip="サイドビューにします。"/>
+		<panel_camera_item name="rear_view" tool_tip="後方ビューにします。"/>
+		<panel_camera_item name="object_view" tool_tip="オブジェクトビューにします。"/>
+		<panel_camera_item name="mouselook_view" tool_tip="マウスルックビューにします。"/>
+		<panel_camera_item name="reset_view" tool_tip="視野をリセットします。"/>
+	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="プリセットを使用" name="Use preset"/>
+	</combo_box>
+	<button name="gear_btn" tool_tip="カメラのプリセット"/>
+	<button label="位置…" name="camera_position_btn"/>
+	<button label="保存" name="save_btn"/>
+</floater>

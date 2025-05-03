@@ -439,6 +439,8 @@
 			<menu_item_call label="強制軟體異常" name="Force Software Exception" />
 			<menu_item_call label="強製作業系統異常" name="Force OS Exception" />
 			<menu_item_call label="強制協程中軟體異常" name="Force Software Exception in Coroutine" />
+			<menu_item_call label="強制協程崩潰" name="Force a Crash in a Coroprocedure" />
+			<menu_item_call label="強制工作隊列崩潰" name="Force a Crash in a Work Queue" />
 			<menu_item_call label="強製程式崩潰" name="Force a Crash in a Thread" />
 			<menu_item_call label="強制瀏覽器斷線" name="Force Disconnect Viewer" />
 			<menu_item_call label="類比記憶體不足" name="Memory Leaking Simulation" />
@@ -650,7 +652,7 @@
 		<menu_item_call label="離開管理員狀態" name="Leave Admin Options" />
 		<menu_item_check label="顯示管理員選項" name="View Admin Options" />
 		<menu label="轉儲" name="Dump">
-			<menu_item_call label="林登查看器紋理清單" name="LLViewerTexturelist"/>
+			<menu_item_call label="林登檢視器紋理清單" name="LLViewerTexturelist"/>
 		</menu>
 	</menu>
 	<menu label="管理員" name="Admin">

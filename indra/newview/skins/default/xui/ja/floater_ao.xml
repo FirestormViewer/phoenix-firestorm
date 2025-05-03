@@ -1,17 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="animation_overrider" title="AO">
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_overrider" title="アニメーションオーバーライド">
 	<floater.string name="ao_no_sets_loaded">
-		セットが読み込まれていません
+		セットが読み込まれていません。
 	</floater.string>
-
 	<floater.string name="ao_no_animations_loaded">
-		アニメーションが読み込まれていません
+		アニメーションが読み込まれていません。
 	</floater.string>
 	<floater.string name="ao_dnd_only_on_full_interface">
-		ウィンドウを拡大した時のみアニメーションのノートをドラッグ＆ドロップできます。工具のアイコンをクリックして画面を開いて下さい。
+		アニメーション設定の書かれたノートカードをドラッグ＆ドロップできるのは、フルサイズのインターフェース時のみです。レンチ（🔧）アイコンをクリックして切り替えてください。
 	</floater.string>
-
-	<panel name="animation_overrider_outer_panel" filename="panel_ao.xml">
-	</panel>
 </floater>

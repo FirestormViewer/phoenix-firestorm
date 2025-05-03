@@ -1,41 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
 	<fs_scroll_list name="block_list">
-		<fs_scroll_list.columns name="item_name" label="名前" />
-		<fs_scroll_list.columns name="item_type" label="種類" />
-		<fs_scroll_list.columns name="item_mute_type" />
+		<fs_scroll_list.columns name="item_name" label="名前"/>
+		<fs_scroll_list.columns name="item_type" label="種類"/>
 	</fs_scroll_list>
-	
 	<text name="block_limit">
-		ブロック件数: [COUNT] (最大 [LIMIT])
+		ブロック件数：全[LIMIT]件中[COUNT]件
 	</text>
-
 	<layout_stack name="block_list_sidetray_main">
-	<!-- will be shown or hidden in code, depending on whether this
-	     is a sub tab or standalone panel -Zi -->
-	<!-- probably unused now so set visible to false initially -->
+		<!-- will be shown or hidden in code, depending on whether this
+		is a sub tab or standalone panel -Zi -->
+		<!-- probably unused now so set visible to false initially -->
 		<layout_panel name="back_button_container">
-			<button tool_tip="「人」の画面に戻ります。" name="back" />
+			<button tool_tip="「人物」の画面に戻ります。" name="back"/>
 		</layout_panel>
 		<layout_panel name="block_list_blocklaypanels">
 			<layout_stack name="block_list_blocklaystack">
 				<layout_panel name="block_panels_btnsort">
-					<menu_button label="並べ替え..." name="view_btn" tool_tip="並べ替えのオプション" />
+					<menu_button label="並べ替え…" name="view_btn" tool_tip="並べ替えのオプション"/>
 				</layout_panel>
 				<layout_panel name="block_panels_btnpersonobject">
-					<menu_button label="ブロックリストに追加..." name="plus_btn" tool_tip="ブロックしたい住人またはオブジェクトを選択します。" />
+					<menu_button label="ブロックリストに追加…" name="plus_btn" tool_tip="ブロックしたい住人またはオブジェクトを選択します。"/>
 				</layout_panel>
 				<layout_panel name="block_panels_btnunblock">
-					<button label="ブロック解除" name="unblock_btn" tool_tip="ブロックリストから住人またはオブジェクトを削除" />
+					<button label="ブロック解除" name="unblock_btn" tool_tip="ブロックリストから住人またはオブジェクトを削除"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>
-
-	<!-- keep these controls so the code doesn't complain about missing controls -Zi -->
-	<panel name="hide_controls">
-		<text name="title_text" />
-		<menu_button	 name="blocked_gear_btn" />
-		<filter_editor name="blocked_filter_input" />
-	</panel>
 </panel>

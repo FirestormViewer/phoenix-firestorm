@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+Not can_close / no title to avoid window chrome
+Single instance - only have one at a time, recycle it each spawn
+-->
 <floater name="inspect_remote_object">
 	<text name="object_name">
 		非常に長いテスト オブジェクト名
@@ -7,10 +11,7 @@
 		所有者：
 	</text>
 	<text name="object_owner">
-		Longavatarname Johnsonlongstonnammer
-	</text>
-	<text name="object_slurl_label">
-		位置：
+		長いアバター名 ジョンソンロングストロングネーマー
 	</text>
 	<text name="object_slurl">
 		http://slurl.com/Ahern/50/50/50
