@@ -56,35 +56,20 @@ public:
     LLWatchdogTimeout();
     virtual ~LLWatchdogTimeout();
 
-    /* virtual */ bool isAlive() const;
-    /* virtual */ void reset();
-    /* virtual */ void start() { start(""); }
-    /* virtual */ void stop();
+    bool isAlive() const override;
+    void reset() override;
+    void start() override { start(""); }
+    void stop() override;
 
-    // <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
-
-    // void start(const std::string& state);
-    // void setTimeout(F32 d);
-    // void ping(const std::string& state);
-    // const std::string& getState() {return mPingState; }
-
-    void start( char const *state);
+    void start(std::string_view state);
     void setTimeout(F32 d);
-    void ping( char const *state );
-    std::string getState() {return mPingState; }
-
-    // </FS:ND>
+    void ping(std::string_view state);
+    const std::string& getState() {return mPingState; }
 
 private:
     LLTimer mTimer;
     F32 mTimeout;
-
-    // <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
-
-    // std::string mPingState;
-    char const *mPingState;
-
-    // </FS:ND>
+    std::string mPingState;
 };
 
 class LLWatchdogTimerThread; // Defined in the cpp

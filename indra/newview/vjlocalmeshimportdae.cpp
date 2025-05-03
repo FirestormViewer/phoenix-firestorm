@@ -471,7 +471,7 @@ bool LLLocalMeshImportDAE::processObject(domMesh* current_mesh, LLLocalMeshObjec
 }
 
 // Function to load the JointMap
-JointMap loadJointMap()
+static JointMap loadJointMap()
 {
     JointMap joint_map = gAgentAvatarp->getJointAliases();
 
@@ -483,7 +483,7 @@ JointMap loadJointMap()
     extra_names.insert(extra_names.end(), more_extra_names.begin(), more_extra_names.end());
 
     // add the extras to jointmap
-    for (auto extra_name : extra_names)
+    for (const auto& extra_name : extra_names)
     {
         joint_map[extra_name] = extra_name;
     }
@@ -1067,7 +1067,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
     return true;
 }
 
-bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children)
+bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string, std::less<>>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children)
 {
     // safety checks & name check
     const auto node_name = current_node->getName();

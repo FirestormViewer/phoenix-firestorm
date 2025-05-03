@@ -184,35 +184,7 @@ void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& v
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&select_func, value, has_tolerance, tolerance);
 }
 
-void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical)
-{
-    // The All channel should read base color values
-    if (channel == LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_COUNT)
-        channel = LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR;
-
-    struct LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor : public LLSelectedTEGetFunctor<F32>
-    {
-        LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor(LLGLTFMaterial::TextureInfo channel) : mChannel(channel) {}
-        virtual ~LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor() {};
-        F32 get(LLViewerObject* object, S32 face) override
-        {
-            const LLTextureEntry* tep = object->getTE(face);
-            const LLGLTFMaterial* render_material = tep->getGLTFRenderMaterial();
-            if (!render_material)
-                return 0.f;
-
-            U32 s_axis = VX;
-            U32 t_axis = VY;
-            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
-            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[s_axis];
-            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[t_axis];
-            return llmax(repeats_u, repeats_v);
-        }
-
-        LLGLTFMaterial::TextureInfo mChannel;
-    } max_repeats_func(channel);
-    identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&max_repeats_func, repeats);
-}
+void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical); // Defined in llpanelface.cpp
 
 //
 // keep LLRenderMaterialFunctor in sync with llmaterialeditor.cpp - Would be nice if we

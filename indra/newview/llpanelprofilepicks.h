@@ -148,7 +148,7 @@ public:
     LLUUID getParcelID() const { return mParcelId; }
     void setErrorStatus(S32 status, const std::string& reason) override {};
 
-    void addLocationChangedCallbacks(); // <FS:Ansariel> Keep set location button
+    void addLocationChangedCallbacks();
 
   protected:
 
@@ -214,12 +214,10 @@ public:
      */
     void resetDirty() override;
 
-    // <FS:Ansariel> Keep set location button
     /**
      * Callback for "Set Location" button click
      */
     void onClickSetLocation();
-    // <FS:Ansariel>
 
     // <AS:Chanayane> Preview button
     /**
@@ -250,7 +248,7 @@ protected:
     LLTextureCtrl*      mSnapshotCtrl;
     LLLineEditor*       mPickName;
     LLTextEditor*       mPickDescription;
-    LLButton*           mSetCurrentLocationButton; // <FS:Ansariel> Keep set location button
+    LLButton*           mSetCurrentLocationButton;
     LLButton*           mSaveButton;
     LLButton*           mCreateButton;
     LLButton*           mCancelButton;
@@ -269,7 +267,7 @@ protected:
 
     bool mLocationChanged;
     bool mNewPick;
-    bool                mIsEditing;
+    bool mIsEditing;
 // <AS:Chanayane> Preview button
     bool                mPreview;
     std::string         mOriginalPickText;

@@ -140,10 +140,7 @@ public:
     LLVector3           mHeadOffset{}; // current head position
     LLAvatarJoint*      mRoot{ nullptr };
 
-    //<FS:Ansariel> Joint-lookup improvements
-    // typedef std::map<std::string, LLJoint*> joint_map_t;
     typedef std::map<std::string, LLJoint*, std::less<>> joint_map_t;
-
     joint_map_t         mJointMap;
 
     typedef std::map<std::string, LLVector3> joint_state_map_t;
@@ -156,7 +153,7 @@ public:
 public:
     typedef std::vector<LLAvatarJoint*> avatar_joint_list_t;
     const avatar_joint_list_t& getSkeleton() { return mSkeleton; }
-    typedef std::map<std::string, std::string> joint_alias_map_t;
+    typedef std::map<std::string, std::string, std::less<>> joint_alias_map_t;
     const joint_alias_map_t& getJointAliases();
 
 

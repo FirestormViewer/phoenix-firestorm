@@ -7267,39 +7267,33 @@ const LLUUID& LLVOAvatar::getID() const
 // getJoint()
 //-----------------------------------------------------------------------------
 // RN: avatar joints are multi-rooted to include screen-based attachments
-//<FS:Ansariel> Joint-lookup improvements
-//LLJoint *LLVOAvatar::getJoint(const std::string &name)
-LLJoint *LLVOAvatar::getJoint(std::string_view name)
+LLJoint* LLVOAvatar::getJoint(std::string_view name)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
     //<FS:Ansariel> Joint-lookup improvements
     //joint_map_t::iterator iter = mJointMap.find( name );
     joint_map_t::iterator iter = mJointMap.find(name.data());
 
-    LLJoint* jointp = NULL;
+    LLJoint* jointp = nullptr;
 
-    if( iter == mJointMap.end() || iter->second == NULL )
-    { //search for joint and cache found joint in lookup table
-      if (mJointAliasMap.empty())
-      {
-          getJointAliases();
-      }
-      //<FS:Ansariel> Joint-lookup improvements
-      //joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name);
-      joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(std::string(name));
-      std::string canonical_name;
-      if (alias_iter != mJointAliasMap.end())
-      {
-          canonical_name = alias_iter->second;
-      }
-      else
-      {
-          canonical_name = name;
-      }
-      jointp = mRoot->findJoint(canonical_name);
-      //<FS:Ansariel> Joint-lookup improvements
-      //mJointMap[name] = jointp;
-      mJointMap[std::string(name)] = jointp;
+    if (iter == mJointMap.end() || iter->second == nullptr)
+    {   //search for joint and cache found joint in lookup table
+        if (mJointAliasMap.empty())
+        {
+            getJointAliases();
+        }
+        joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name);
+        std::string canonical_name;
+        if (alias_iter != mJointAliasMap.end())
+        {
+            canonical_name = alias_iter->second;
+        }
+        else
+        {
+            canonical_name = name;
+        }
+        jointp = mRoot->findJoint(canonical_name);
+        mJointMap[std::string(name)] = jointp;
     }
     else
     { //return cached pointer
