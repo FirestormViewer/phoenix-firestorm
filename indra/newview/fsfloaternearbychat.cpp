@@ -50,6 +50,7 @@
 #include "llcommandhandler.h"
 #include "llconsole.h"
 #include "lldraghandle.h"
+#include "llemojihelper.h"
 #include "llfloaterchatmentionpicker.h"
 #include "llfloateremojipicker.h"
 #include "llfloaterreg.h"
@@ -110,6 +111,8 @@ FSFloaterNearbyChat::~FSFloaterNearbyChat()
     {
         mRecentEmojisUpdatedCallbackConnection.disconnect();
     }
+
+    mEmojiCloseConn.disconnect();
 
     LLFloaterChatMentionPicker::removeParticipantSource(this);
 }
@@ -181,6 +184,8 @@ bool FSFloaterNearbyChat::postBuild()
         mEmojiPickerToggleBtn->setImageOverlay("Emoji_Picker_Icon");
     }
     mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(); });
+    mEmojiPickerToggleBtn->setMouseDownCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnDown(); });
+    mEmojiCloseConn = LLEmojiHelper::instance().setCloseCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerClosed(); });
 
     mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
 
@@ -997,6 +1002,7 @@ void FSFloaterNearbyChat::onEmojiRecentPanelToggleBtnClicked()
     }
 
     mEmojiRecentPanel->setVisible(show);
+    mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
     mInputEditor->setFocus(true);
 }
 
@@ -1037,8 +1043,43 @@ void FSFloaterNearbyChat::onRecentEmojiPicked(const LLSD& value)
 
 void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked()
 {
-    mInputEditor->setFocus(true);
-    mInputEditor->showEmojiHelper();
+    if (!mEmojiPickerToggleBtn->getToggleState())
+    {
+        mInputEditor->hideEmojiHelper();
+        mInputEditor->setFocus(true);
+        mInputEditor->showEmojiHelper();
+        mEmojiPickerToggleBtn->setToggleState(true); // in case hideEmojiHelper closed a visible instance
+    }
+    else
+    {
+        mInputEditor->hideEmojiHelper();
+        mEmojiPickerToggleBtn->setToggleState(false);
+    }
+}
+
+void FSFloaterNearbyChat::onEmojiPickerToggleBtnDown()
+{
+    if (mEmojiHelperLastCallbackFrame == LLFrameTimer::getFrameCount())
+    {
+        // Helper gets closed by focus lost event on Down before before onEmojiPickerShowBtnDown
+        // triggers.
+        // If this condition is true, user pressed button and it was 'toggled' during press,
+        // restore 'toggled' state so that button will not reopen helper.
+        mEmojiPickerToggleBtn->setToggleState(true);
+    }
+}
+
+void FSFloaterNearbyChat::onEmojiPickerClosed()
+{
+    if (mEmojiPickerToggleBtn->getToggleState())
+    {
+        mEmojiPickerToggleBtn->setToggleState(false);
+        // Helper gets closed by focus lost event on Down before onEmojiPickerShowBtnDown
+        // triggers. If mEmojiHelperLastCallbackFrame is set and matches Down, means close
+        // was triggered by user's press.
+        // A bit hacky, but I can't think of a better way to handle this without rewriting helper.
+        mEmojiHelperLastCallbackFrame = LLFrameTimer::getFrameCount();
+    }
 }
 
 void FSFloaterNearbyChat::onFocusLost()
