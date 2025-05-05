@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_fs_search" title="Firestorm検索">
-	<!-- Strings -->
 	<floater.string name="string.location">
 		場所：[LOCATION]
 	</floater.string>
@@ -25,16 +24,12 @@
 	<floater.string name="string.listing_price">
 		表示価格：[LISTING_PRICE]
 	</floater.string>
-	<floater.string name="string.slurl">
-		[SLURL]
-	</floater.string>
 	<floater.string name="string.duration">
 		期間：[DURATION]
 	</floater.string>
 	<floater.string name="string.covercharge">
 		サービス料：[COVERCHARGE]
 	</floater.string>
-	<!-- Tab time -->
 	<tab_container name="ls_tabs">
 		<panel label="Web検索" name="panel_ls_web"/>
 		<panel label="人物" name="panel_ls_people"/>
@@ -44,7 +39,6 @@
 		<panel label="イベント" name="panel_ls_events"/>
 		<panel label="クラシファイド" name="panel_ls_classifieds"/>
 	</tab_container>
-	<!-- Details/Action Panes -->
 	<panel name="panel_ls_details">
 		<text_editor name="title" value="未定義の名前"/>
 		<text_editor name="aux1" value="補助情報フィールド１"/>

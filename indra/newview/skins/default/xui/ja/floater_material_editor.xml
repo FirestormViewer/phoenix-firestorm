@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="material editor" title="[MATERIAL_NAME]">
+<floater name="material editor">
 	<string name="no_upload_fee_string">
 		アップロード費用無し
 	</string>
@@ -18,7 +18,6 @@
 		<text name="total_upload_fee">
 			アップロード費用：L$ [FEE]
 		</text>
-		<view_border name="button_border"/>
 		<button label="キャンセル" name="cancel"/>
 	</panel>
 </floater>

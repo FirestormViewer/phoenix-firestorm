@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="モデルのアップロード">
-	<!-- widthの値を削除したり変更しないこと。-->
 	<string name="no_havok">
 		物理と一緒にメッシュをアップロードします。
 	</string>
@@ -469,15 +468,17 @@
 物理効果数：
 インスタンス数：
 テクスチャ数：
-モデル：</text>
+モデル：
+</text>
 				<text name="price_breakdown">
 					[STREAMING]
 [PHYSICS]箇所
 [INSTANCES]個
 [TEXTURES]枚
-[MODEL]個</text>
+[MODEL]個
+</text>
 			</panel>
-			<!-- 
+<!-- 
 			Streaming breakdown numbers are available but not fully understood
 			uncommenting the following sections will display the numbers for debugging purposes
 			<text name="streaming_breakdown_labels">
@@ -486,12 +487,7 @@
 通常：
 低：
 最低：</text>
-			<text name="streaming_breakdown">
-				[STR_TOTAL]
-[STR_HIGH]
-[STR_MED]
-[STR_LOW]
-[STR_LOWEST]</text>-->
+-->
 			<panel name="physics_costs_panel">
 				<text name="physics_breakdown_title">
 					物理効果の費用
@@ -499,11 +495,8 @@
 				<text name="physics_breakdown_labels">
 					基準の殻：
 メッシュ：
-分析済み：</text>
-				<text name="physics_breakdown">
-					[PCH]
-[PM]
-[PHU]</text>
+分析済み：
+				</text>
 			</panel>
 			<!-- FS:Beq relocate the preview controls to be sensible -->
 			<panel name="preview_controls_panel">
@@ -535,18 +528,13 @@
 				</text>
 				<check_box label="ウェイト" name="show_skin_weight"/>
 				<check_box label="関節の位置" name="show_joint_positions" />
-				<check_box label="関節の位置の上書き" name="show_joint_overrides">
-				</check_box>
+				<check_box label="関節の位置の上書き" name="show_joint_overrides" />
 			</panel>
-			<!-- ========== NOTE MESSAGE ========== -->
 			<text name="warning_title">
 				ご注意：
 			</text>
 			<text name="warning_message">
 				メッシュモデルをアップロードする権利がありません。権利の取得方法については[[VURL]]こちらを参照してください。
-			</text>
-			<text name="status">
-				[STATUS]
 			</text>
 		</panel>
 	</panel>

@@ -37,10 +37,8 @@
 		<menu_item_call label="描画解除" name="derender"/>
 		<menu_item_call label="描画解除＋ブラックリスト" name="derender_permanent"/>
 	</menu>
-	<menu_item_separator name="Profile Separator"/>
 	<menu_item_call label="追跡開始" name="Start Tracking"/>
 	<menu_item_call label="追跡停止" name="Stop Tracking"/>
-	<menu_item_separator name="Stop Tracking Separator" />
 	<menu label="ズーム" name="Minimap Zoom">
 		<menu_item_check label="かなり近く" name="Zoom very close"/>
 		<menu_item_check label="近く" name="Zoom close"/>
@@ -55,7 +53,6 @@
 		<menu_item_check label="物件のライン" name="Property Lines"/>
 		<menu_item_check label="販売中の区画" name="Parcels for Sale"/>
 	</menu>
-
 	<menu_item_check label="北を上に" name="North at top"/>
 	<menu_item_check label="カメラの向きを上に" name="Camera at top"/>
 	<menu_item_check label="マップの自動センター" name="Auto-center map"/>

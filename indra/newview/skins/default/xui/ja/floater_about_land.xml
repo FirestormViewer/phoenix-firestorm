@@ -71,7 +71,6 @@
 			<text name="Name:">
 				名前：
 			</text>
-			<line_editor name="Name"/>
 			<text name="UUID:">
 				区画ＩＤ：
 			</text>
@@ -269,7 +268,6 @@
 			<text name="Autoreturn">
 				他者のオブジェクトの自動返却（分単位、0で自動返却なし）：
 			</text>
-			<line_editor name="clean other time"/>
 			<text name="Object Owners:">
 				オブジェクトの所有者：
 			</text>

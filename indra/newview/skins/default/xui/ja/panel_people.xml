@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Side tray panel -->
 <panel label="人物" name="people_panel">
 	<string name="no_recent_people" value="最近交流があった人物はいません。一緒に何かする仲間をお探しですか？[secondlife:///app/search/people 検索]か[secondlife:///app/worldmap ワールドマップ]をお試しください。"/>
 	<string name="no_filtered_recent_people" value="お探しの人物は見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。"/>
@@ -18,10 +17,6 @@
 	<string name="no_filtered_friends_msg">
 		お探しのものは見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。
 	</string>
-	<!--
-	*WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
-	They are not defined as translatable in VLT. See EXT-5931
-	-->
 	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/groups/[SEARCH_TERM] 検索]をお試しください。"/>
 	<string name="no_groups_msg">
 		あなたはどのグループにも属していません。
@@ -52,7 +47,6 @@
 	<tab_container name="tabs">
 		<!-- ================================= NEARBY tab =========================== -->
 		<panel label="近く" name="nearby_panel">
-			<!-- FS:Ansariel: Firestorm radar
 			<panel name="nearby_buttons_panel">
 				<filter_editor label="人物をフィルタ" name="nearby_filter_input"/>
 				<button name="gear_btn" tool_tip="選択した人物に対するアクションを表示します。"/>
@@ -63,8 +57,6 @@
 			<text name="nearbycount">
 				[REGION]には[TOTAL]人中[COUNT]人のアバターがいます。
 			</text>
-			-->
-			<panel name="panel_radar"/>
 		</panel>
 		<!-- ================================= FRIENDS tab ========================== -->
 		<panel label="フレンド" name="friends_panel">
@@ -83,10 +75,6 @@
 		</panel>
 		<!-- ================================= GROUPS tab =========================== -->
 		<panel label="グループ" name="groups_panel">
-			<!--
-			*NOTE: no_groups_msg & group_list attributes are not defined as translatable in VLT. See EXT-5931
-			Values are set from appropriate strings at the top of file via LLPeoplePanel::postBuild()
-			-->
 			<panel label="bottom_panel" name="groups_buttons_panel">
 				<filter_editor label="グループをフィルタ" name="groups_filter_input"/>
 				<menu_button name="groups_gear_btn" tool_tip="選択したグループに対するアクションを表示します。"/>

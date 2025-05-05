@@ -216,9 +216,6 @@
 	<text name="currency_action">
 		追加でL$の購入
 	</text>
-	<line_editor name="currency_amt">
-		1000
-	</line_editor>
 	<text name="currency_est">
 		約[LOCAL_AMOUNT]
 	</text>

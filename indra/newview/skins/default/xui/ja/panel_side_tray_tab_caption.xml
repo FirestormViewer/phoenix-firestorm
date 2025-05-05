@@ -4,9 +4,4 @@
 	<button name="undock" tool_tip="切り離します。"/>
 	<button name="dock" tool_tip="ドッキングします。"/>
 	<button name="minimize" tool_tip="折り畳む"/>
-	<!--
-	What does this do here? It seems to be left over from somewhere.
-		<button.commit_callback function="Button.ShowHelp"/>
-	</button>
-//-->
 </panel>

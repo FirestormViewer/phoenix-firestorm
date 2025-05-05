@@ -3,7 +3,6 @@
 	<spinner label="水面の高さ" name="water_height_spin"/>
 	<spinner label="地形の隆起制限" name="terrain_raise_spin"/>
 	<spinner label="地形の下限" name="terrain_lower_spin"/>
-	<view_border/>
 	<text name="height_text_lbl5">
 		テクスチャの標高範囲
 	</text>

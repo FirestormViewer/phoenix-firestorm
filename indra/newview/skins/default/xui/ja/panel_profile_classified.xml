@@ -100,9 +100,6 @@
 		</layout_panel>
 		<layout_panel name="publish_layout_panel">
 			<layout_stack name="publish_stack">
-				<layout_panel name="save_btn_lp">
-					<button name="save_changes_btn" label="[LABEL]"/>
-				</layout_panel>
 				<layout_panel name="cancel_btn_lp">
 					<button label="キャンセル" name="cancel_btn"/>
 				</layout_panel>

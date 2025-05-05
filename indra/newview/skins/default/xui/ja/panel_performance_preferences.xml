@@ -66,25 +66,4 @@
 	<text name="photo_dist_det_desc">
 		（0.0～4.0の値を入れてください）
 	</text>
-	<text name="1_lbl">
-		１
-	</text>
-	<text name="2_lbl">
-		２
-	</text>
-	<text name="3_lbl">
-		３
-	</text>
-	<text name="4_lbl">
-		４
-	</text>
-	<text name="5_lbl">
-		５
-	</text>
-	<text name="6_lbl">
-		６
-	</text>
-	<text name="7_lbl">
-		７
-	</text>
 </panel>
