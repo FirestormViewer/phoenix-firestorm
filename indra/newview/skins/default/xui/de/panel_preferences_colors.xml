@@ -56,6 +56,9 @@
 			<text name="mention_colors">
 				Chat-Erwähnungen:
 			</text>
+			<text name="font_mention_label">
+				Schrift
+			</text>
 			<text name="resident_mention_label">
 				Einwohner
 			</text>

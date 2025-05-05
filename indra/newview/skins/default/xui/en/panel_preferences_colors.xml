@@ -537,24 +537,55 @@
      width="120">
      Chat mentions:
     </text>
-     <color_swatch
-       can_apply_immediately="true"
-       color="ChatMentionHighlight"
-       follows="left|top"
-       height="24"
-       label_height="0"
-       layout="topleft"
-       left="40"
-       name="resident_mention"
-       top_pad="8"
-       width="44" >
-       <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="ChatMentionHighlight" />
-       <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="ChatMentionHighlight" />
-     </color_swatch>
+    <color_swatch
+     can_apply_immediately="true"
+     color="ChatMentionFont"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     name="font_mention"
+     top_pad="8"
+     width="44" >
+     <color_swatch.init_callback
+     function="Pref.getUIColor"
+     parameter="ChatMentionFont" />
+     <color_swatch.commit_callback
+     function="Pref.applyUIColor"
+     parameter="ChatMentionFont" />
+    </color_swatch>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="font_mention_label"
+     top_delta="5"
+     width="110">
+     Font
+    </text>
+    <color_swatch
+     can_apply_immediately="true"
+     color="ChatMentionHighlight"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="190"
+     name="resident_mention"
+     top_pad="-15"
+     width="44" >
+     <color_swatch.init_callback
+     function="Pref.getUIColor"
+     parameter="ChatMentionHighlight" />
+     <color_swatch.commit_callback
+     function="Pref.applyUIColor"
+     parameter="ChatMentionHighlight" />
+    </color_swatch>
     <text
      type="string"
      length="1"
@@ -575,7 +606,7 @@
      height="24"
      label_height="0"
      layout="topleft"
-     left="190"
+     left="360"
      name="self_mention"
      top_pad="-15"
      width="44" >
