@@ -433,10 +433,13 @@ bool LLFloaterWorldMap::postBuild()
     F32 slider_zoom = mMapView->getZoom();
     mZoomSlider->setValue(slider_zoom);
 
+    mTrackCtrlsPanel = getChild<LLPanel>("layout_panel_4");
+    mSearchButton = getChild<LLButton>("DoSearch");
+
     // <FS:Ansariel> Use own expand/collapse function
     //getChild<LLPanel>("expand_btn_panel")->setMouseDownCallback(boost::bind(&LLFloaterWorldMap::onExpandCollapseBtn, this));
 
-    setDefaultBtn(NULL);
+    mTrackCtrlsPanel->setDefaultBtn(nullptr);
 
     onChangeMaturity();
 
@@ -781,7 +784,7 @@ void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string&
     {
         LLTracker::stopTracking(false);
     }
-    setDefaultBtn("Teleport");
+    mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
 }
 
 void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
@@ -826,7 +829,7 @@ void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
     {
         LLTracker::stopTracking(false);
     }
-    setDefaultBtn("Teleport");
+    mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
 }
 
 
@@ -835,7 +838,7 @@ void LLFloaterWorldMap::trackEvent(const LLItemInfo &event_info)
     mShowParcelInfo = false;
     mTrackedStatus = LLTracker::TRACKING_LOCATION;
     LLTracker::trackLocation(event_info.getGlobalPosition(), event_info.getName(), event_info.getToolTip(), LLTracker::LOCATION_EVENT);
-    setDefaultBtn("Teleport");
+    mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
 }
 
 void LLFloaterWorldMap::trackGenericItem(const LLItemInfo &item)
@@ -843,7 +846,7 @@ void LLFloaterWorldMap::trackGenericItem(const LLItemInfo &item)
     mShowParcelInfo = false;
     mTrackedStatus = LLTracker::TRACKING_LOCATION;
     LLTracker::trackLocation(item.getGlobalPosition(), item.getName(), item.getToolTip(), LLTracker::LOCATION_ITEM);
-    setDefaultBtn("Teleport");
+    mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
 }
 
 void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
@@ -857,7 +860,7 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
         S32 world_x = S32(pos_global.mdV[0] / 256);
         S32 world_y = S32(pos_global.mdV[1] / 256);
         LLWorldMapMessage::getInstance()->sendMapBlockRequest(world_x, world_y, world_x, world_y, true);
-        setDefaultBtn("");
+        mTrackCtrlsPanel->setDefaultBtn(nullptr);
 
         // clicked on a non-region - turn off coord display
         enableTeleportCoordsDisplay( false );
@@ -871,7 +874,7 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
         LLTracker::stopTracking(false);
         LLWorldMap::getInstance()->setTracking(pos_global);
         LLWorldMap::getInstance()->setTrackingInvalid();
-        setDefaultBtn("");
+        mTrackCtrlsPanel->setDefaultBtn(nullptr);
 
         // clicked on a down region - turn off coord display
         enableTeleportCoordsDisplay( false );
@@ -922,7 +925,7 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
     // we have a valid region - turn on coord display
     enableTeleportCoordsDisplay( true );
 
-    setDefaultBtn("Teleport");
+    mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
 }
 
 // enable/disable teleport destination coordinates
@@ -1128,7 +1131,7 @@ void LLFloaterWorldMap::trackURL(const std::string& region_name, S32 x_coord, S3
         local_pos.mV[VZ] = (F32)z_coord;
         LLVector3d global_pos = sim_info->getGlobalPos(local_pos);
         trackLocation(global_pos);
-        setDefaultBtn("Teleport");
+        mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
     }
     else
     {
@@ -1566,11 +1569,11 @@ void LLFloaterWorldMap::updateSearchEnabled()
     if (childHasKeyboardFocus("location") &&
         mLocationEditor->getValue().asString().length() > 0)
     {
-        setDefaultBtn("DoSearch");
+        mTrackCtrlsPanel->setDefaultBtn(mSearchButton);
     }
     else
     {
-        setDefaultBtn(NULL);
+        mTrackCtrlsPanel->setDefaultBtn(nullptr);
     }
 }
 
@@ -2030,7 +2033,7 @@ void LLFloaterWorldMap::onCommitSearchResult()
 
             mLocationEditor->setValue(sim_name);
             trackLocation(pos_global);
-            setDefaultBtn("Teleport");
+            mTrackCtrlsPanel->setDefaultBtn(mTeleportButton);
             break;
         }
     }
