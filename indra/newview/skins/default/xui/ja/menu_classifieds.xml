@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Classifieds">
+	<menu_item_call label="情報" name="classified_info"/>
+	<menu_item_call label="編集" name="classified_edit"/>
+	<menu_item_call label="テレポート" name="classified_teleport"/>
+	<menu_item_call label="マップ" name="classified_map"/>
+	<menu_item_call label="削除" name="classified_delete"/>
+</context_menu>

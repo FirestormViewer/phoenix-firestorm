@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="preview_conversation" title="会話:">
-    <floater.string name="Title">
-        会話: [NAME]
-    </floater.string>
-    <fs_chat_history name="chat_history" />
-    <text name="page_label" value="ページ" />
-    <spinner name="history_page_spin" />
-    <text name="page_num_label" />
-    <button tool_tip="チャット履歴を別ウィンドウで開きます。" name="open_external_btn" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_conversation" title="会話：">
+	<floater.string name="Title">
+		会話：[NAME]
+	</floater.string>
+	<text name="page_label" value="ページ" />
+	<button tool_tip="チャット履歴を別ウィンドウで開きます。" name="open_external_btn" />
+	<button tool_tip="この履歴を検索します。" name="search_btn"/>
 </floater>

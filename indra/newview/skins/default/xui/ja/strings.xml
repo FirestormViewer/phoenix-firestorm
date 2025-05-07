@@ -1,142 +1,192 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- This file contains strings that used to be hardcoded in the source.
-     It is only for those strings which do not belong in a floater.
-     For example, the strings used in avatar chat bubbles, and strings
-     that are returned from one component and may appear in many places-->
 <strings>
-	<string name="SECOND_LIFE_GRID">
-		Second Life Grid
-	</string>
 	<string name="SUPPORT_SITE">
-		Firestorm サポートポータル
+		Firestormサポートポータル
 	</string>
 	<string name="StartupDetectingHardware">
-		ハードウェアの検出中です...
+		ハードウェアを検出しています…
 	</string>
 	<string name="StartupLoading">
-		[APP_NAME] をインストール中です...
+		[APP_NAME]をインストールしています…
 	</string>
 	<string name="StartupClearingCache">
-		キャッシュをクリア中です...
+		キャッシュを消去しています…
+	</string>
+	<string name="StartupClearingTextureCache">
+		テクスチャキャッシュを消去しています…
 	</string>
 	<string name="StartupInitializingTextureCache">
-		テクスチャキャッシュを初期化中です...
+		テクスチャキャッシュを初期化しています…
 	</string>
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
-	
-	<!-- about dialog/support string-->
+	<string name="AboutCompiler">
+		コンパイラのバージョン：[COMPILER] [COMPILER_VERSION]
+	</string>
+	<string name="BuildConfig">
+		ビルド構成：[BUILD_CONFIG]
+	</string>
+	<string name="AboutPosition">
+		あなたは、現在[REGION]の[POSITION_LOCAL_0,number,1]，[POSITION_LOCAL_1,number,1]，[POSITION_LOCAL_2,number,1]にいます。
+位置は、&lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;です。
+SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
+（グローバル座標は、[POSITION_0,number,1]，[POSITION_1,number,1]，[POSITION_2,number,1]です。）
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutPositionRLVShowLoc">
+		あなたは、[REGION]にいます。
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutDriver">
+		Windowsグラフィックドライババージョン：[GRAPHICS_DRIVER_VERSION]
+	</string>
+	<string name="AboutOGL">
+		OpenGLバージョン：[OPENGL_VERSION]
+	</string>
+	<string name="AboutSettings">
+		設定モード：[MODE]
+ビューアのスキン：[SKIN]（[THEME]）
+ウィンドウサイズ:[WINDOW_WIDTH]x[WINDOW_HEIGHT]px
+使用フォント：[FONT]（[FONT_SCREEN_DPI]dpi）
+フォントサイズの調整：[FONT_SIZE]pt
+ＵＩスケーリング：[UI_SCALE_FACTOR]
+描画距離：[DRAW_DISTANCE]ｍ
+帯域幅：[BANDWITH]kbit／秒
+ＬＯＤ係数：[LOD]
+描画の質：[RENDERQUALITY]
+	</string>
+	<string name="AboutCache">
+		ディスクキャッシュ：[DISK_CACHE_INFO]
+	</string>
 	<string name="AboutOSXHiDPI">
-		HiDPI 表示モード: [HIDPI]
+		高ＤＰＩ表示モード：[HIDPI]
+	</string>
+	<string name="AboutLibs">
+		RestrainedLove API：[RLV_VERSION]
+libcurlのバージョン：[LIBCURL_VERSION]
+J2Cデコーダーのバージョン：[J2C_VERSION]
+オーディオドライバのバージョン：[AUDIO_DRIVER_VERSION]
+[LIBCEF_VERSION]
+LibVLCのバージョン：[LIBVLC_VERSION]
+ボイスサーバーのバージョン：[VOICE_VERSION]
+	</string>
+	<string name="AboutTraffic">
+		パケット損失：[PACKETS_LOST,number,0]／[PACKETS_IN,number,0]（[PACKETS_PCT,number,1]％）
 	</string>
 	<string name="AboutTime">
-		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
+		[year, datetime, slt]年[month, datetime, slt]月[day, datetime, slt]日　[hour, datetime, slt]：[min,datetime, slt]：[second,datetime,slt]
+	</string>
+	<string name="LocalTime">
+		[year, datetime, local]年[month, datetime, local]月[day, datetime, local]日　[hour, datetime, local]：[min, datetime, local]：[second,datetime, local]
+	</string>
+	<string name="ErrorFetchingServerReleaseNotesURL">
+		サーバーのリリースノートのＵＲＬ取得時にエラーが発生しました。
 	</string>
 	<string name="BuildConfiguration">
 		ビルド構成
 	</string>
-	
 	<!--  progress -->
 	<string name="ProgressRestoring">
-		復元中です...
+		修復しています…
 	</string>
 	<string name="ProgressChangingResolution">
-		解像度を変更中です...
+		解像度を変更しています…
 	</string>
-	
 	<!-- Legacy strings, almost never used -->
 	<string name="Fullbright">
 		明るさ全開（レガシー）
 	</string>
-	
+	<!-- used in the Build > materials dropdown-->
 	<!-- Login -->
 	<string name="LoginInProgress">
-		ログイン中です。[APP_NAME]の表示がフリーズする場合があります。  しばらくお待ちください。
+		ログインしています。[APP_NAME]の表示がフリーズする場合があります。しばらくお待ちください。
 	</string>
 	<string name="LoginInProgressNoFrozen">
-		ログイン中です...
+		ログインしています…
 	</string>
 	<string name="LoginAuthenticating">
-		認証しています...
+		認証しています…
 	</string>
 	<string name="LoginMaintenance">
-		アカウントのメンテナンスを実行しています...
+		アカウントのメンテナンスを実行しています…
 	</string>
 	<string name="LoginAttempt">
-		前回のログインに失敗しました。 ログイン中です（[NUMBER] 回目）
+		前回のログインに失敗しました。ログインしています（[NUMBER]回目）
 	</string>
 	<string name="LoginPrecaching">
-		ワールドを読み込んでいます...
+		ワールドを読み込んでいます…
 	</string>
 	<string name="LoginInitializingBrowser">
-		内蔵 Web ブラウザを初期化しています...
+		内蔵Webブラウザを初期化しています…
 	</string>
 	<string name="LoginInitializingMultimedia">
-		マルチメディアを初期化しています...
+		マルチメディアを初期化しています…
 	</string>
 	<string name="LoginInitializingFonts">
-		フォントをローディング中...
+		すべての読みやすいフォントを読み込んでいます…
 	</string>
 	<string name="LoginVerifyingCache">
-		キャッシュファイルを検証しています（所要時間は 60 ～ 90 秒）...
+		キャッシュファイルを検証しています（所要時間は60～90秒）…
 	</string>
 	<string name="LoginProcessingResponse">
-		対応を処理中です...
+		レスポンスを処理しています…
 	</string>
 	<string name="LoginInitializingWorld">
-		ワールドを初期化中です...
+		ワールドを初期化しています…
 	</string>
 	<string name="LoginDecodingImages">
-		画像をデコードしています...
+		画像をハンドクラフトしています…
 	</string>
 	<string name="LoginInitializingQuicktime">
-		QuickTime を初期化しています...
+		QuickTimeを初期化しています…
 	</string>
 	<string name="LoginQuicktimeNotFound">
-		QuickTime が見つかりません。初期化に失敗しました。
+		QuickTimeが見つかりません。初期化に失敗しました。
 	</string>
 	<string name="LoginQuicktimeOK">
-		QuickTime が正常に初期化されました。
+		QuickTimeが正常に初期化されました。
 	</string>
 	<string name="LoginRequestSeedCapGrant">
-		リージョンの機能をリクエストしています...
+		リージョンの機能をリクエストしています…
 	</string>
 	<string name="LoginRetrySeedCapGrant">
-		リージョンの機能をリクエスト、試行 [NUMBER] 回....
+		リージョンの機能をリクエストしています…（試行[NUMBER]回目）
 	</string>
 	<string name="LoginWaitingForRegionHandshake">
-		リージョンのハンドシェイクを待っています...
+		リージョンのハンドシェイクを待っています…
 	</string>
 	<string name="LoginConnectingToRegion">
-		リージョンに接続しています...
+		リージョンに接続しています…
 	</string>
 	<string name="LoginDownloadingClothing">
-		衣類をダウンロードしています...
+		衣装をダウンロードしています…
 	</string>
 	<string name="InvalidCertificate">
-		証明書が無効または壊れています。 グリッド管理者にご連絡ください。
+		証明書が無効であるか、壊れています。グリッド管理者にご連絡ください。
 	</string>
 	<string name="CertInvalidHostname">
-		無効なホストネームがサーバーにアクセスしていました。SLURL かグリッドのホストネームをご確認ください。
+		無効なホストネームがサーバーにアクセスしようとしています。SLUrlかグリッドのホストネームをご確認ください。
 	</string>
 	<string name="CertExpired">
-		グリッドが返した証明書は有効期限が終了していると考えられます。お使いのシステムクロックを確認するか、グリッドの管理者にお問い合わせください。
+		グリッドが返した証明書は、有効期限が過ぎていると考えられます。お使いのシステムクロックを確認するか、グリッドの管理者にお問い合わせください。
 	</string>
 	<string name="CertKeyUsage">
-		SSL 証明書のエラーが発生しました。  グリッド管理者にご連絡ください。
+		SSL証明書のエラーが発生しました。グリッド管理者にご連絡ください。
 	</string>
 	<string name="CertBasicConstraints">
-		サーバーの証明書チェーンに証明書が多すぎます。  グリッド管理者にご連絡ください。
+		サーバーの証明書チェーンに証明書が多すぎます。グリッド管理者にご連絡ください。
 	</string>
 	<string name="CertInvalid">
-		証明書を読み込めませんでした。グリッド管理者にご連絡ください。
+		証明書が読み込めませんでした。グリッド管理者に連絡してください。
 	</string>
 	<string name="CertInvalidSignature">
-		グリッドサーバーが返した証明書の署名を認証できませんでした。グリッドの管理者にお問い合わせください。
+		グリッドが返したサーバー証明書の署名を認証できませんでした。グリッドの管理者にお問い合わせください。
 	</string>
 	<string name="CertAllocationFailure">
-		証明書に OpenSSL のメモリを割り当てるのに失敗しました。
+		証明書にOpenSSLメモリを割り当てることができませんでした。
 	</string>
 	<string name="LoginFailedNoNetwork">
 		ネットワークエラー：接続を確立できませんでした。お使いのネットワーク接続をご確認ください。
@@ -147,122 +197,121 @@
 	<string name="Quit">
 		終了
 	</string>
-	<string name="create_account_url">
-		https://www.firestormviewer.org/join-secondlife/
-	</string>
-	<string name="ViewerDownloadURL">
-		https://www.firestormviewer.org/choose-your-platform/
-	</string>
+	<string name="AgniGridLabel">Second Lifeメイングリッド（Agni）</string>
+	<string name="AditiGridLabel">Second Lifeベータテストグリッド（Aditi）</string>
 	<string name="LoginFailedViewerNotPermitted">
-		お使いの古いビューワでは Second Life にアクセスできません。以下のページから新しいビューワをダウンロードしてください：
+		お使いの古いビューアでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアをダウンロードしてください：
 https://www.firestormviewer.org/choose-your-platform/
 
-詳細については、FAQ を参照してください：
-http://secondlife.com/viewer-access-faq
+詳細については、ＦＡＱを参照してください：
+https://secondlife.com/viewer-access-faq
+	</string>
+	<string name="LoginFailed">
+		システムの問題により、ログイン処理が完了しませんでした。数分後にもう一度試してください。
+これがエラーであると思われる場合は、サポートにお問い合わせください。
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
-		ビューワアップデート（オプション）があります： [VERSION]
+		ビューアの更新（オプション）があります：[VERSION]
 	</string>
 	<string name="LoginFailedRequiredUpdate">
-		ビューワアップデート（必須）： [VERSION]
+		ビューアの更新（必須）：[VERSION]
 	</string>
 	<string name="LoginFailedAlreadyLoggedIn">
-		このエージェントは既にログインされています。
+		このエージェントは既にログインしています。
 	</string>
 	<string name="LoginFailedAuthenticationFailed">
 		申し訳ありませんが、ログインできませんでした。
 以下の情報が正しく入力されたことを確認してください：
-* ユーザー名（bobsmith12 または steller.sunshine など）
-* パスワード
-また、Caps Lock キーが有効になっていないこともお確かめください。
+・ユーザー名（bobsmith12またはsteller.sunshineなど）
+・パスワード
+・２段階認証（使用している場合）
+また、Caps Lockが入っていないこともご確認ください。
 	</string>
 	<string name="LoginFailedPasswordChanged">
-		セキュリティ上の理由により、あなたのパスワードは変更されました。
-アカウントページ（http://secondlife.com/password）に移動し、
+		セキュリティ上の理由により、あなたのパスワードは変更されました。 アカウントページ（https://secondlife.com/my/account/request.php?lang=ja-JP）へ移動し、
 秘密の質問に答えて、パスワードをリセットしてください。
 ご迷惑をおかけして申し訳ございません。
 	</string>
 	<string name="LoginFailedPasswordReset">
-		弊社はシステムを若干変更しました。お手数ですが、パスワードのリセットをお願いします。
-アカウントページ（http://secondlife.com/password）に移動し、
+		弊社はシステムを若干変更しました。お手数ですが、パスワードのリセットをお願いします。 アカウントページ（https://secondlife.com/my/account/request.php?lang=ja-JP ）に移動し、
 秘密の質問に答えて、パスワードをリセットしてください。
 ご迷惑をおかけして申し訳ございません。
 	</string>
 	<string name="LoginFailedEmployeesOnly">
-		Second Life はメンテナンスのため、一時的にご利用いただけません。
-従業員以外にはログインをご遠慮いただいています。
-最新の状況については www.secondlife.com/status でお確かめください。
+		[CURRENT_GRID]はメンテナンスのため一時的に閉鎖されています。
+ログインは現在[GRID_ADMIN]の従業員のみに制限されています。
 	</string>
 	<string name="LoginFailedPremiumOnly">
-		既にログインしているユーザーに最上のインワールド体験を提供するため、Second Life へのログインは一時的に制限されています。
-
-申し訳ございませんが、有料アカウントのユーザーを優先するため、現在のところ無料アカウントのユーザーには Second Life へのアクセスをご遠慮いただいています。
+		[CURRENT_GRID]へのログインは、インワールドの人々が可能な限り最高の体験をできるようにするため、一時的に制限されています。
 	</string>
 	<string name="LoginFailedComputerProhibited">
-		このパソコンからは Second Life にアクセスできません。
-システムのエラーだと思われる場合は、
-support@secondlife.com にお問い合わせください。
+		このコンピュータから[CURRENT_GRID]にアクセスできません。
+エラーと思われる場合は、サポートまでご連絡ください。
 	</string>
 	<string name="LoginFailedAcountSuspended">
-		あなたのアカウントは
-太平洋時間の [TIME] までご利用いただけません。
+		あなたのアカウントは、下記時間までアクセスできません：
+[TIME]
+エラーと思われる場合は、[CURRENT_GRID]のサポートにお問い合わせください。
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		現在リクエストを完了することができません。
-Second Life のサポート（http://secondlife.com/support）にお問い合わせください。
-パスワードを変更できない場合には、(866) 476-9763 に電話でお問い合わせください。
+[CURRENT_GRID]のサポートにお問い合わせください。
 	</string>
 	<string name="LoginFailedTransformError">
 		ログイン時にデータの不一致が見つかりました。
-support@secondlife.com にお問い合わせください。
+[CURRENT_GRID]のサポートまでお問い合わせください。
+	</string>
+	<!--'Pacific time' placeholder for [TIME] in case time from server can't be decoded-->
+	<string name="PacificTime">
+		太平洋時間
 	</string>
 	<string name="LoginFailedAccountMaintenance">
-		現在アカウントのメインテナンスが行われています。
-あなたのアカウントは
-太平洋時間の [TIME] までご利用いただけません。
-システムのエラーだと思われる場合は、support@secondlife.com にお問い合わせください。
+		現在アカウントのメンテナンスが行われています。
+あなたのアカウントは、
+太平洋時間の[TIME]までご利用いただけません。
+エラーと思われる場合は、[CURRENT_GRID]のサポートにお問い合わせください。
 	</string>
 	<string name="LoginFailedPendingLogoutFault">
-		ログアウトをリスクエストしたら、シミュレーターから「fault」が返されました。
+		ログアウトのリスクエスト時に、シミュレーターから「fault」が返されました。
 	</string>
 	<string name="LoginFailedPendingLogout">
 		システムによるログアウトが実行されました。
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
-		有効なセッションを生成できません。
+		有効なセッションを生成できませんでした。
 	</string>
 	<string name="LoginFailedUnableToConnectToSimulator">
 		シミュレーターに接続できませんでした。
 	</string>
 	<string name="LoginFailedRestrictedHours">
-		あなたの Second Life アカウントにアクセスできるのは、
-太平洋時間の [START] ～ [END] の間に限られます。
+		あなたのアカウントにアクセスできるのは、
+太平洋時間の[START]～[END]の間に限られます。
 有効な時間帯に再度お試しください。
-システムのエラーだと思われる場合は、support@secondlife.com にお問い合わせください。
+エラーと思われる場合は、support@secondlife.comにお問い合わせください。
 	</string>
 	<string name="LoginFailedIncorrectParameters">
 		パラメーターが正しくありません。
-システムのエラーだと思われる場合は、support@secondlife.com にお問い合わせください。
+エラーと思われる場合は、support@secondlife.comにお問い合わせください。
 	</string>
 	<string name="LoginFailedFirstNameNotAlphanumeric">
 		ファーストネームのパラメーターは英数字です。
-システムのエラーだと思われる場合は、support@secondlife.com にお問い合わせください。
+エラーと思われる場合は、support@secondlife.comにお問い合わせください。
 	</string>
 	<string name="LoginFailedLastNameNotAlphanumeric">
 		ラストネームのパラメーターは英数字です。
-システムのエラーだと思われる場合は、support@secondlife.com にお問い合わせください。
+エラーと思われる場合は、support@secondlife.comにお問い合わせください。
 	</string>
 	<string name="LogoutFailedRegionGoingOffline">
-		リージョンはオフライン中です。
+		リージョンは、現在オフラインです。
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LogoutFailedAgentNotInRegion">
-		エージェントがリージョンに不在です。
-しばらくしてから再度お試しください。
+		エージェントはリージョンにいません。
+しばらくしてからもう一度ログインし直してください。
 	</string>
 	<string name="LogoutFailedPendingLogin">
-		このリージョンでは別のセッションがログインされていました。
+		このリージョンでは、別のセッションでログインされていました。
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LogoutFailedLoggingOut">
@@ -274,28 +323,33 @@ support@secondlife.com にお問い合わせください。
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LogoutSucceeded">
-		リージョンでは前のセッションがログアウトされました。
+		リージョンでは、前のセッションがログアウトされました。
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LogoutFailedLogoutBegun">
-		リージョンではログアウトプロセスが開始されました。
+		このリージョンでは、ログアウトプロセスが開始されています。
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LoginFailedLoggingOutSession">
 		あなたの前のセッションはシステムによってログアウトされています。
 しばらくしてから再度お試しください。
 	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		ログインするには二段階認証アプリから新しいトークンを入力する必要があります。
+それでもこのエラーが発生する場合は、support@secondlife.comにお問い合わせください。
+	</string>
+	<!-- Disconnection -->
 	<string name="AgentLostConnection">
-		このリージョンに不都合が発生している可能性があります。  ご使用のインターネット接続をご確認ください。
+		これは恥ずべきことだ。このリージョンではトラブルが発生している可能性があります。インターネットへの接続を確認してください。
 	</string>
 	<string name="SavingSettings">
-		設定を保存中です...
+		設定を保存しています…
 	</string>
 	<string name="LoggingOut">
-		ログアウト中です...
+		ログアウトしています…
 	</string>
 	<string name="ShuttingDown">
-		シャットダウン中です...
+		シャットダウンしています…
 	</string>
 	<string name="YouHaveBeenDisconnected">
 		あなたがいたリージョンへの接続が切れました。
@@ -304,67 +358,32 @@ support@secondlife.com にお問い合わせください。
 		無効なリージョンにテレポートされました。
 	</string>
 	<string name="TestingDisconnect">
-		ビューワの接続を切るテスト中
+		ビューアの接続を切るテストをしています。
 	</string>
-	<string name="SocialFacebookConnecting">
-		Facebook に接続中...
-	</string>
-	<string name="SocialFacebookPosting">
-		投稿中...
-	</string>
-	<string name="SocialFacebookDisconnecting">
-		Facebook から切断中...
-	</string>
-	<string name="SocialFacebookErrorConnecting">
-		Facebook への接続時のエラー
-	</string>
-	<string name="SocialFacebookErrorPosting">
-		Facebook への投稿時のエラー
-	</string>
-	<string name="SocialFacebookErrorDisconnecting">
-		Facebook からの切断時のエラー
-	</string>
+	<!-- SLShare: User Friendly Filter Names Translation -->
 	<string name="SocialFlickrConnecting">
-		Flickr に接続中...
+		Flickrに接続しています…
 	</string>
 	<string name="SocialFlickrPosting">
-		投稿中...
+		投稿しています…
 	</string>
 	<string name="SocialFlickrDisconnecting">
-		Flickr から切断中...
+		Flickrから切断しています…
 	</string>
 	<string name="SocialFlickrErrorConnecting">
-		Flickr への接続時のエラー
+		Flickrへの接続時にエラーが発生
 	</string>
 	<string name="SocialFlickrErrorPosting">
-		Flickr への投稿時のエラー
+		Flickrへの投稿時にエラーが発生
 	</string>
 	<string name="SocialFlickrErrorDisconnecting">
-		Flickr からの切断時のエラー
-	</string>
-	<string name="SocialTwitterConnecting">
-		Twitter に接続中...
-	</string>
-	<string name="SocialTwitterPosting">
-		投稿中...
-	</string>
-	<string name="SocialTwitterDisconnecting">
-		Twitter から切断中...
-	</string>
-	<string name="SocialTwitterErrorConnecting">
-		Twitter への接続時のエラー
-	</string>
-	<string name="SocialTwitterErrorPosting">
-		Twitter への投稿時のエラー
-	</string>
-	<string name="SocialTwitterErrorDisconnecting">
-		Twitter からの切断時のエラー
+		Flickrからの切断時にエラーが発生
 	</string>
 	<string name="BlackAndWhite">
 		白黒
 	</string>
 	<string name="Colors1970">
-		1970 年代のカラー
+		１９７０年代のカラー
 	</string>
 	<string name="Intense">
 		強調
@@ -391,16 +410,36 @@ support@secondlife.com にお問い合わせください。
 		ミニチュア
 	</string>
 	<string name="Toycamera">
-		おもちゃのカメラ
+		トイカメラ
 	</string>
+	<string name="Antique">アンティーク</string>
+	<string name="Badtrip">バッドトリップ</string>
+	<string name="Blownhighlights">吹き飛ばされたハイライト</string>
+	<string name="Softfocus">ソフトフォーカス</string>
+	<string name="Brighten">明るく</string>
+	<string name="Cartoon">カートゥーン</string>
+	<string name="Darken">暗く</string>
+	<string name="Edges">輝くエッジ</string>
+	<string name="Focus">集中</string>
+	<string name="Heatwave">ヒートウェーブ</string>
+	<string name="Julesverne">ジュール・ヴェルヌ</string>
+	<string name="Lightleak">ライトリーク</string>
+	<string name="Linearize">リニアライズ</string>
+	<string name="Negative">ネガティブ</string>
+	<string name="Overcast">オーバーキャスト</string>
+	<string name="Posterize">ポスタライズ</string>
+	<string name="Rotatecolors180">カラーシフト</string>
+	<string name="Sharpen">鋭く</string>
+	<string name="Thematrix">マトリックス</string>
+	<!-- Tooltip -->
 	<string name="TooltipPerson">
-		人
+		人物
 	</string>
 	<string name="TooltipNoName">
 		（名前なし）
 	</string>
 	<string name="TooltipOwner">
-		所有者:
+		所有者：
 	</string>
 	<string name="TooltipPublic">
 		公共
@@ -409,13 +448,16 @@ support@secondlife.com にお問い合わせください。
 		（グループ）
 	</string>
 	<string name="TooltipForSaleL$">
-		売り出し中:L$ [AMOUNT]
+		売り出し中：L$[AMOUNT]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		グループ作成
 	</string>
 	<string name="TooltipFlagNoBuild">
-		作成禁止
+		ビルド禁止
+	</string>
+	<string name="TooltipFlagNoEdit">
+		編集禁止
 	</string>
 	<string name="TooltipFlagNoEdit">
 		グループ作成
@@ -433,133 +475,153 @@ support@secondlife.com にお問い合わせください。
 		スクリプトなし
 	</string>
 	<string name="TooltipLand">
-		土地:
+		土地：
 	</string>
 	<string name="TooltipMustSingleDrop">
-		アイテムは 1 つだけここにドラッグできます
+		アイテムは１つだけここにドラッグできます。
 	</string>
 	<string name="TooltipTooManyWearables">
-		[AMOUNT] 以上のアイテムを含むフォルダを装着できません。「詳細設定」 &gt; 「デバッグ設定を表示」 &gt; 「WearFolderLimit」でこの制限を変更できます。
+		[AMOUNT]個以上のアイテムを含むフォルダを装着できません。「高度な操作」＞「デバッグ設定を表示」＞「WearFolderLimit」でこの制限を変更できます。
 	</string>
-	<string name="TooltipPrice" value="L$[AMOUNT]："/>
+	<string name="TooltipPrice" value="L$ [AMOUNT]："/>
+	<string name="TooltipSLIcon">
+		これは、SecondLife.com または LindenLab.com の公式ドメイン上のページにリンクします。
+	</string>
+	<string name="TooltipFlagScript">スクリプト</string>
+	<string name="TooltipFlagPhysics">物理効果</string>
+	<string name="TooltipFlagTouch">触る</string>
+	<string name="TooltipFlagL$">L$</string>
+	<string name="TooltipFlagDropInventory">インベントリを下ろす</string>
+	<string name="TooltipFlagPhantom">ファントム</string>
+	<string name="TooltipFlagTemporary">一時的</string>
+	<string name="TooltipPrimCount">プリム：[COUNT]個</string>
+	<string name="TooltipPrimEquivalent">、ランドインパクト：[PEWEIGHT]</string>
+	<string name="TooltipPrimEquivalentLoading">、ランドインパクトを読み込んでいます…</string>
+	<string name="TooltipDistance">距離：[DISTANCE]ｍ</string>
+	<string name="TooltipPosition">位置：[POSITION]</string>
 	<string name="TooltipOutboxDragToWorld">
-		マーケットプレイスのリストフォルダからアイテムを Rez できません
+		マーケットプレイスの出品リストフォルダから、直接アイテムをRezすることはできません。
 	</string>
 	<string name="TooltipOutboxWorn">
-		着ているアイテムをマーケットプレイスのリストフォルダに置くことはできません
+		着用しているアイテムをマーケットプレイスの出品リストフォルダに置くことはできません。
 	</string>
 	<string name="TooltipOutboxFolderLevels">
-		ネスト入りフォルダの深さが [AMOUNT] 階層を超えています必要に応じてアイテムを箱に入れ、フォルダの階層を減らします。
+		フォルダの階層の深さが、[AMOUNT]階層を超えています。必要に応じてアイテムをボックスに入れるなどをして、フォルダの階層数を減らしてください。
 	</string>
 	<string name="TooltipOutboxTooManyFolders">
-		サブフォルダ数が [AMOUNT] 個を超えています。必要に応じてアイテムを箱に入れ、リストのフォルダ階層を減らします。
+		サブフォルダの数が、[AMOUNT]個を超えています。必要に応じてアイテムをボックスに入れ、出品リストのフォルダ階層を減らしてください。
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
-		アイテム数が [AMOUNT] 個を超えています。1 つのリスト内で [AMOUNT] 個を超えるアイテムを販売するためには、いくつかのアイテムを箱に入れる必要があります。
+		アイテムの数が、[AMOUNT]個を超えています。１つの出品リスト内で[AMOUNT]個を超えるアイテムを販売するためには、いくつかのアイテムをボックスに入れる必要があります。
 	</string>
 	<string name="TooltipOutboxTooManyStockItems">
-		在庫アイテム数が [AMOUNT] 個を超えています。
+		在庫アイテム数が[AMOUNT]個を超えています。
 	</string>
 	<string name="TooltipOutboxCannotDropOnRoot">
-		アイテムまたはフォルダは「すべて」タブによってのみドロップできます。このタブを選択してから、もう一度アイテムまたはフォルダを選択してください。
+		アイテムまたはフォルダは、「すべて」または「関連付けされていない」タブによってのみドロップできます。これらのタブのいずれかを選択してから、もう一度アイテムまたはフォルダを選択してください。
 	</string>
 	<string name="TooltipOutboxNoTransfer">
-		これらのオブジェクトの 1 つまたは複数は売り渡したり譲渡したりできないものです
+		これらのオブジェクトは、再販したり譲渡することができません。
 	</string>
 	<string name="TooltipOutboxNotInInventory">
-		アイテムはインベントリからマーケットプレイスへの移動のみできます
+		アイテムは、インベントリからマーケットプレイスへの移動のみできます。
 	</string>
 	<string name="TooltipOutboxLinked">
-		リンクされた相手またはフォルダをマーケットプレイスに置くことはできません
+		リンクされた相手またはフォルダは、マーケットプレイスに置くことはできません。
 	</string>
 	<string name="TooltipOutboxCallingCard">
-		コーリングカードをマーケットプレイスに置くことはできません
+		コーリングカードは、マーケットプレイスに置くことはできません。
 	</string>
 	<string name="TooltipOutboxDragActive">
-		表示されているリストを移動できません
+		表示されている出品リストを移動できません。
 	</string>
 	<string name="TooltipOutboxCannotMoveRoot">
-		ルートフォルダをリストに表示するマーケットプレイスを移動できません
+		ルートフォルダを出品リストに表示するマーケットプレイスを移動できません。
 	</string>
 	<string name="TooltipOutboxMixedStock">
-		在庫フォルダ内のアイテムはすべて同じ種類と権限でなければなりません
-	</string>
-	<string name="TooltipOutfitNotInInventory">
-		「アウトフィット」に入れることが出来るのは、ご自分の持ち物にあるアイテムやアウトフィットに限られます
+		在庫フォルダ内のアイテムは、すべて同じ種類と権限でなければなりません。
 	</string>
 	<string name="TooltipCantCreateOutfit">
-		１つ以上のアイテムが「アウトフィット」として利用することができません
+		１つ以上のアイテムが 「アウトフィット」内で使用できません。
+	</string>
+	<string name="TooltipOutfitNotInInventory">
+		「アウトフィット」に入れることができるのは、自分のインベントリにあるアイテムや衣装のみです。
 	</string>
 	<string name="TooltipDragOntoOwnChild">
-		フォルダをその子フォルダに移動することはできません
+		フォルダをその子フォルダに移動することはできません。
 	</string>
 	<string name="TooltipDragOntoSelf">
-		フォルダをそのフォルダ自身に移動することはできません
+		フォルダをそのフォルダ自身に移動することはできません。
 	</string>
+	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">
-		クリックしてこの Web ページを見ます
+		クリックしてこのWebページを開きます。
 	</string>
 	<string name="TooltipSLURL">
-		クリックしてこの場所の情報を見ます
+		クリックしてこの場所の情報を閲覧します。
 	</string>
 	<string name="TooltipAgentUrl">
-		クリックしてこの住人のプロフィールを見ます
+		クリックしてこの住人のプロフィールを閲覧します。
 	</string>
 	<string name="TooltipAgentInspect">
-		この住人の詳細を参照
+		この住人の詳細を参照します。
 	</string>
 	<string name="TooltipAgentMute">
-		クリックしてこの住人に対して無視設定をします
+		クリックしてこの住人に対して無視設定をします。
 	</string>
 	<string name="TooltipAgentUnmute">
-		クリックしてこの住人に対する無視設定を解除します
+		クリックしてこの住人に対する無視設定を解除します。
 	</string>
 	<string name="TooltipAgentIM">
-		クリックしてこの住人に IM を送ります
+		クリックしてこの住人にＩＭを送ります。
 	</string>
 	<string name="TooltipAgentPay">
-		クリックしてこの住人に支払います
+		クリックしてこの住人に支払います。
 	</string>
 	<string name="TooltipAgentOfferTeleport">
-		クリックしてこの住人にテレポートのリクエストを送ります
+		クリックしてこの住人にテレポートのオファーを送ります。
 	</string>
 	<string name="TooltipAgentRequestFriend">
-		クリックしてこの住人にフレンド登録リクエストを送ります
+		クリックしてこの住人にフレンド登録リクエストを送ります。
 	</string>
 	<string name="TooltipGroupUrl">
-		クリックしてこのグループの説明文を見ます
+		クリックしてこのグループの説明文を閲覧します。
 	</string>
 	<string name="TooltipEventUrl">
-		クリックしてこのグループの説明文を見ます
+		クリックしてこのグループの説明文を閲覧します。
 	</string>
 	<string name="TooltipClassifiedUrl">
-		クリックしてこのクラシファイド広告を見ます
+		クリックしてこのクラシファイド広告を見ます。
 	</string>
 	<string name="TooltipParcelUrl">
-		クリックしてこの区画の説明文を見ます
+		クリックしてこの区画の説明文を見ます。
 	</string>
 	<string name="TooltipTeleportUrl">
-		クリックしてこの場所にテレポートします
+		クリックしてこの場所にテレポートします。
 	</string>
 	<string name="TooltipObjectIMUrl">
-		クリックしてこのオブジェクトの説明文を見ます
+		クリックしてこのオブジェクトの説明文を見ます。
 	</string>
 	<string name="TooltipMapUrl">
-		クリックしてこの場所を地図に表示します
+		クリックしてこの場所をマップに表示します。
 	</string>
 	<string name="TooltipSLAPP">
-		クリックして secondlife:// コマンドを出します
+		クリックしてsecondlife://コマンドを出します。
 	</string>
-	<string name="CurrentURL" value=" 現在の URL： [CurrentURL]"/>
+	<string name="TooltipFSHelpDebugSLUrl">クリックするとこの設定のデバッグ設定ウィンドウが開きます。</string>
+	<string name="TooltipFSUrlEntryWear">クリックするとインベントリフォルダの内容が表示されます。</string>
+	<string name="CurrentURL" value="現在のＵＲＬ：[CurrentURL]"/>
 	<string name="TooltipEmail">
-		クリックしてメールを作成します
+		クリックしてＥメールを作成します。
 	</string>
+	<!-- text for SLＵＲＬlabels -->
 	<string name="SLurlLabelTeleport">
 		テレポート
 	</string>
 	<string name="SLurlLabelShowOnMap">
-		地図に表示
+		マップ上に表示
 	</string>
+	<!-- label strings for secondlife:///app/agent SLapps -->
 	<string name="SLappAgentMute">
 		無視
 	</string>
@@ -567,13 +629,13 @@ support@secondlife.com にお問い合わせください。
 		ミュート解除
 	</string>
 	<string name="SLappAgentIM">
-		IM
+		ＩＭ
 	</string>
 	<string name="SLappAgentPay">
-		支払う
+		支払い
 	</string>
 	<string name="SLappAgentOfferTeleport">
-		次の場所にテレポートを送ります：
+		次の場所へのテレポートのオファーを送ります：
 	</string>
 	<string name="SLappAgentRequestFriend">
 		フレンド登録リクエスト
@@ -581,11 +643,12 @@ support@secondlife.com にお問い合わせください。
 	<string name="SLappAgentRemoveFriend">
 		フレンドの削除
 	</string>
+	<!-- ButtonToolTips, llfloater.cpp -->
 	<string name="BUTTON_CLOSE_DARWIN">
-		閉じる （⌘W）
+		閉じる（⌘W）
 	</string>
 	<string name="BUTTON_CLOSE_WIN">
-		閉じる （Ctrl+W）
+		閉じる（Ctrl＋W）
 	</string>
 	<string name="BUTTON_CLOSE_CHROME">
 		閉じる
@@ -594,7 +657,7 @@ support@secondlife.com にお問い合わせください。
 		復元
 	</string>
 	<string name="BUTTON_MINIMIZE">
-		元に戻す（縮小）
+		最小化
 	</string>
 	<string name="BUTTON_TEAR_OFF">
 		別ウィンドウで開く
@@ -605,96 +668,121 @@ support@secondlife.com にお問い合わせください。
 	<string name="BUTTON_HELP">
 		ヘルプを表示
 	</string>
-	<string name="BUTTON_SNOOZE">居眠り</string>
-	
+	<string name="BUTTON_SNOOZE">スヌーズ</string>
 	<!-- ToolTips for notecards -->
 	<string name="TooltipNotecardNotAllowedTypeDrop">
-この地域ではこの種類のアイテムは
-ノートカードに添付できません。
+		このタイプのアイテムは、このリージョンのノートカードに添付することができません。
 	</string>
 	<string name="TooltipNotecardOwnerRestrictedDrop">
-「次のオーナー」の権限に
-制限のないノートカードのみ
-添付することが可能です。
+		「次の所有者」に制限のない
+権限のノートカードのみが
+添付できます。
 	</string>
-	
+	<string name="TooltipTextureRestrictedDrop">
+		無制限のコピーおよび
+譲渡権限を持つテクスチャのみが
+許可されます。
+	</string>
 	<!-- searching - generic -->
 	<string name="Searching">
-		検索中...
+		検索しています…
 	</string>
 	<string name="NoneFound">
 		見つかりませんでした。
 	</string>
+	<!-- Indicates that an avatar name or other similar datum is being retrieved. General usage. -->
 	<string name="RetrievingData">
-		取得中...
+		取得しています…
 	</string>
 	<string name="ReleaseNotes">
 		リリースノート
 	</string>
+	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">
-		ローディング...
+		読み込んでいます…
 	</string>
+	<!-- Indicates a locked Inventory folder. ## Zi: Animation Overrider -->
+	<string name="LockedFolder">ロック</string>
+	<string name="ProtectedFolder">保護</string>
+	<!-- namecache -->
+	<!-- Avatar name: text shown for LLUUID::null -->
 	<string name="AvatarNameNobody">
 		（なし）
 	</string>
+	<!-- Avatar name: text shown while fetching name -->
 	<string name="AvatarNameWaiting">
-		（ローディング...）
+		（待機中）
 	</string>
+	<!-- Avatar name: More than one avatar is selected/used here -->
 	<string name="AvatarNameMultiple">
 		（複数）
 	</string>
 	<string name="GroupNameNone">
 		（なし）
 	</string>
+	<!-- Asset errors. Used in llassetstorage.cpp, translation from error code to error message. -->
 	<string name="AssetErrorNone">
 		エラーなし
 	</string>
 	<string name="AssetErrorRequestFailed">
-		アセットリクエスト： 失敗
+		アセットリクエスト：失敗
 	</string>
 	<string name="AssetErrorNonexistentFile">
-		アセットリクエスト： 存在しないファイル
+		アセットリクエスト：存在しないファイル
 	</string>
 	<string name="AssetErrorNotInDatabase">
-		アセットリクエスト： データベースに見つかりませんでした
+		アセットリクエスト：データベースに見つかりませんでした。
 	</string>
 	<string name="AssetErrorEOF">
 		終了
 	</string>
 	<string name="AssetErrorCannotOpenFile">
-		ファイルを開けません
+		ファイルが開けません
 	</string>
 	<string name="AssetErrorFileNotFound">
 		ファイルが見つかりません
 	</string>
 	<string name="AssetErrorTCPTimeout">
-		ファイルの転送タイムアウト
+		ファイル転送がタイムアウトしました
 	</string>
 	<string name="AssetErrorCircuitGone">
 		サーキットエラー
 	</string>
 	<string name="AssetErrorPriceMismatch">
-		ビューワとサーバーの価格が一致していません
+		ビューアとサーバー上の値段が一致していません。
 	</string>
 	<string name="AssetErrorUnknownStatus">
 		不明のステータス
 	</string>
-	
 	<!-- Asset upload errors. -->
-	<string name="AssetUploadServerUnreacheble">サービスが利用できません。.</string>
-	<string name="AssetUploadServerDifficulties">サーバに予期しない障害が発生しています。</string>
-	<string name="AssetUploadServerUnavaliable">サービスが利用できないか、アップロードのタイムアウト上限に達しています。</string>
-	<string name="AssetUploadRequestInvalid">
-アップロードの要求中にエラーが発生しました。この問題を解決するには、次のページを参照して下さい。
-https://www.firestormviewer.org/support
+	<string name="AssetUploadServerUnreacheble">
+		現在、サービスをご利用いただけません。
 	</string>
-	
+	<string name="AssetUploadServerDifficulties">
+		サーバーで予期せぬ問題が発生しました。
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		サービスがご利用いただけないか、アップロードがタイムアウトしました。
+	</string>
+	<string name="AssetUploadRequestInvalid">
+		アップロードリクエスト中にエラーが発生しました。問題を解決するには、サポート
+（ https://support.secondlife.com/ ）にお問い合わせください。
+	</string>
 	<!-- Settings errors -->
-	<string name="SettingValidationError">自然環境設定 [NAME] のインポート検証に失敗しました</string>
-	<string name="SettingImportFileError">ファイル [FILE] を開けません</string>
-	<string name="SettingParseFileError">ファイル [FILE] を開けません</string>
-	<string name="SettingTranslateError">古い形式の Windlight [NAME] を変換できません</string>
-	
+	<string name="SettingValidationError">
+		インポートする設定[NAME]の検証に失敗しました。
+	</string>
+	<string name="SettingImportFileError">
+		ファイル[FILE]を開くことができません。
+	</string>
+	<string name="SettingParseFileError">
+		ファイル[FILE]を開くことができません。
+	</string>
+	<string name="SettingTranslateError">
+		過去のウインドライト[NAME]を変換できません。
+	</string>
+	<!-- Asset Type human readable names:  these will replace variable [TYPE] in notification FailedToFindWearable* -->
+	<!-- Will also replace [OBJECTTYPE] in notifications: UserGiveItem, ObjectGiveItem -->
 	<string name="texture">
 		テクスチャ
 	</string>
@@ -711,7 +799,7 @@ https://www.firestormviewer.org/support
 		レガシースクリプト
 	</string>
 	<string name="clothing">
-		衣類
+		衣装
 	</string>
 	<string name="object">
 		オブジェクト
@@ -726,13 +814,13 @@ https://www.firestormviewer.org/support
 		ルート
 	</string>
 	<string name="lsl2 script">
-		LSL2 スクリプト
+		ＬＳＬ２スクリプト
 	</string>
 	<string name="lsl bytecode">
-		LSL バイトコード
+		ＬＳＬバイトコード
 	</string>
 	<string name="tga texture">
-		tga テクスチャ
+		tgaテクスチャ
 	</string>
 	<string name="body part">
 		身体部位
@@ -741,16 +829,16 @@ https://www.firestormviewer.org/support
 		スナップショット
 	</string>
 	<string name="lost and found">
-		紛失物
+		遺失物
 	</string>
 	<string name="targa image">
-		targa 画像
+		targa画像
 	</string>
 	<string name="trash">
 		ごみ箱
 	</string>
 	<string name="jpeg image">
-		jpeg 画像
+		jpeg画像
 	</string>
 	<string name="animation">
 		アニメーション
@@ -771,16 +859,17 @@ https://www.firestormviewer.org/support
 		フォルダのリンク
 	</string>
 	<string name="settings blob">
-		自然環境設定
+		自然環境の設定
+	</string>
+	<string name="render material">
+		マテリアル
 	</string>
 	<string name="mesh">
 		メッシュ
 	</string>
-    <string name="settings">
-        設定
-    </string>
+	<!-- llvoavatar. Displayed in the avatar chat bubble -->
 	<string name="AvatarEditingAppearance">
-		（容姿の編集中）
+		（容姿を編集中）
 	</string>
 	<string name="AvatarAway">
 		一時退席中
@@ -797,6 +886,7 @@ https://www.firestormviewer.org/support
 	<string name="AvatarTyping">
 		入力中
 	</string>
+	<!-- animations -->
 	<string name="anim_express_afraid">
 		怖れ
 	</string>
@@ -834,28 +924,28 @@ https://www.firestormviewer.org/support
 		泣く
 	</string>
 	<string name="anim_dance1">
-		ダンス 1
+		ダンス１
 	</string>
 	<string name="anim_dance2">
-		ダンス 2
+		ダンス２
 	</string>
 	<string name="anim_dance3">
-		ダンス 3
+		ダンス３
 	</string>
 	<string name="anim_dance4">
-		ダンス 4
+		ダンス４
 	</string>
 	<string name="anim_dance5">
-		ダンス 5
+		ダンス５
 	</string>
 	<string name="anim_dance6">
-		ダンス 6
+		ダンス６
 	</string>
 	<string name="anim_dance7">
-		ダンス 7
+		ダンス７
 	</string>
 	<string name="anim_dance8">
-		ダンス 8
+		ダンス８
 	</string>
 	<string name="anim_express_disdain">
 		侮蔑
@@ -993,7 +1083,7 @@ https://www.firestormviewer.org/support
 		ウィンク
 	</string>
 	<string name="anim_wink_hollywood">
-		ウィンク(ハリウッド)
+		ウィンク（ハリウッド）
 	</string>
 	<string name="anim_express_worry">
 		心配する
@@ -1004,6 +1094,7 @@ https://www.firestormviewer.org/support
 	<string name="anim_yes_head">
 		頷く
 	</string>
+	<!-- build floater -->
 	<string name="multiple_textures">
 		複数
 	</string>
@@ -1016,71 +1107,75 @@ https://www.firestormviewer.org/support
 	<string name="manip_hint2">
 		グリッドにスナップ
 	</string>
+	<!-- world map -->
 	<string name="texture_loading">
-		ローディング...
+		読み込んでいます…
 	</string>
 	<string name="worldmap_offline">
 		オフライン
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] 平方メートル L$[PRICE]
+		[AREA]㎡　L$ [PRICE]（[SQMPRICE] L$／㎡）
 	</string>
 	<string name="worldmap_results_none_found">
-		見つかりませんでした。
+		何も見つかりませんでした。
 	</string>
 	<string name="worldmap_agent_position">
-		あなたが現在いる場所
+		現在地
 	</string>
-	<string name="minimap_distance">
-		(距離: [DISTANCE] m)
-	</string>
+	<!-- mini map -->
+	<string name="minimap_distance">（距離：[DISTANCE]ｍ）</string>
+	<string name="minimap_no_focus">ユーザが描画距離外にいるため、カメラはこのユーザに焦点を合わせることができません。</string>
+	<!-- animations uploading status codes -->
 	<string name="Ok">
-		OK
+		ＯＫ
 	</string>
 	<string name="Premature end of file">
 		不完全なファイル
 	</string>
 	<string name="ST_NO_JOINT">
-		ROOT または JOINT が見つかりません
+		ROOTまたはJOINTが見つかりません
 	</string>
+	<!-- Chat -->
+	<string name="no_name_object">（名前なし）</string>
 	<string name="NearbyChatTitle">
-		周辺チャット
+		近くのチャット
 	</string>
 	<string name="NearbyChatLabel">
-		(周辺チャット)
+		（近くのチャット）
 	</string>
 	<string name="whisper">
-		のささやき:
+		のささやき：
 	</string>
 	<string name="shout">
-		の叫び:
+		のシャウト：
 	</string>
 	<string name="ringing">
-		インワールドボイスチャットに接続中...
+		インワールドボイスチャットに接続しています…
 	</string>
 	<string name="connected">
 		接続しました
 	</string>
 	<string name="unavailable">
-		現在地では、ボイスを利用できません。
+		現在の場所では、ボイスを利用できません。
 	</string>
 	<string name="hang_up">
-		インワールドボイスチャットの通話が切断されました
+		インワールドボイスチャットの通信が切断されました。
 	</string>
 	<string name="reconnect_nearby">
-		「近くのボイスチャット」に再接続されます
+		「近くのボイスチャット」に再接続されます。
 	</string>
 	<string name="ScriptQuestionCautionChatGranted">
-		[REGIONNAME] の [REGIONPOS] という場所にある、「 [OWNERNAME] 」が所有する「 [OBJECTNAME] 」というオブジェクトは、次の権限を許可しました： [PERMISSIONS]
+		リージョン「[REGIONNAME]」の「[REGIONPOS]」という場所にある、「[OWNERNAME]」が所有する「[OBJECTNAME]」というオブジェクトは、以下の権限を許可しました：[PERMISSIONS]
 	</string>
 	<string name="ScriptQuestionCautionChatDenied">
-		[REGIONNAME] の [REGIONPOS] という場所にある、「 [OWNERNAME] 」が所有する「 [OBJECTNAME] 」というオブジェクトは、次の権限を拒否しました： [PERMISSIONS]
+		リージョン「[REGIONNAME]」の「[REGIONPOS]」という場所にある、「[OWNERNAME]」が所有する「[OBJECTNAME]」というオブジェクトは、以下の権限を拒否しました：[PERMISSIONS]
 	</string>
 	<string name="AdditionalPermissionsRequestHeader">
 		あなたのアカウントへのアクセスを許可すると、このオブジェクトには次の操作も許可されます：
 	</string>
 	<string name="ScriptTakeMoney">
-		リンデンドル（L$）を支払う
+		リンデンドル（L$）のお支払い
 	</string>
 	<string name="ActOnControlInputs">
 		制御入力に基づいて行動
@@ -1095,7 +1190,7 @@ https://www.firestormviewer.org/support
 		アバターに装着
 	</string>
 	<string name="ReleaseOwnership">
-		所有権を解放し公のものとする
+		所有権を解放し公共物とする
 	</string>
 	<string name="LinkAndDelink">
 		他のオブジェクトのリンクとリンク解除
@@ -1110,16 +1205,22 @@ https://www.firestormviewer.org/support
 		カメラ追従
 	</string>
 	<string name="ControlYourCamera">
-		カメラのコントロール
+		カメラ操作
 	</string>
 	<string name="TeleportYourAgent">
 		あなたをテレポート
+	</string>
+	<string name="ManageEstateSilently">
+		不動産のサイレント管理
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		デフォルトのアニメーション変更
 	</string>
 	<string name="ForceSitAvatar">
 		アバターを強制的に座らせる
 	</string>
 	<string name="ChangeEnvSettings">
-		自分の自然環境設定を変更
+		自然環境の設定を変更する
 	</string>
 	<string name="SnapshotSavedToDisk">
 		スナップショットを保存しました：[FILENAME]
@@ -1127,9 +1228,11 @@ https://www.firestormviewer.org/support
 	<string name="NotConnected">
 		接続されていません
 	</string>
+	<!-- Substitution for agent name -->
 	<string name="AgentNameSubst">
-		(あなた)
+		（あなた）
 	</string>
+	<!-- intentionally blank -->
 	<string name="SilentlyManageEstateAccess">
 		土地のアクセスリストを管理するときにアラートを表示しない
 	</string>
@@ -1140,16 +1243,7 @@ https://www.firestormviewer.org/support
 		あなたの代わりにオブジェクトを返却
 	</string>
 	<string name="UnknownScriptPermission">
-		(不明)!
-	</string>
-	<string name="SIM_ACCESS_PG">
-		General
-	</string>
-	<string name="SIM_ACCESS_MATURE">
-		Moderate
-	</string>
-	<string name="SIM_ACCESS_ADULT">
-		Adult
+		（不明）！
 	</string>
 	<string name="SIM_ACCESS_DOWN">
 		オフライン
@@ -1157,25 +1251,26 @@ https://www.firestormviewer.org/support
 	<string name="SIM_ACCESS_MIN">
 		不明
 	</string>
+	<!-- For use when we do not have land type back from the server -->
 	<string name="land_type_unknown">
 		（不明）
 	</string>
+	<!-- For land type back from the simulator -->
 	<string name="Estate / Full Region">
-		不動産 / フルリージョン
+		不動産／フルリージョン
 	</string>
 	<string name="Estate / Homestead">
-		エステート/ホームステッド
+		不動産／入植地
 	</string>
 	<string name="Mainland / Homestead">
-		メインランド/ホームステッド
+		メインランド／入植地
 	</string>
 	<string name="Mainland / Full Region">
-		メインランド / フルリージョン
+		メインランド／フルリージョン
 	</string>
 	<string name="Linden Homes / Full Region">
-		リンデンホーム / フルリージョン
+		リンデンホーム／フルリージョン
 	</string>
-	
 	<!-- File load/save dialogs -->
 	<string name="all_files">
 		全てのファイル
@@ -1196,28 +1291,31 @@ https://www.firestormviewer.org/support
 		ロード
 	</string>
 	<string name="targa_image_files">
-		Targa 画像
+		Targa画像
 	</string>
 	<string name="bitmap_image_files">
 		ビットマップ画像
 	</string>
 	<string name="png_image_files">
-		PNG 画像
+		PNG画像
 	</string>
 	<string name="save_texture_image_files">
-		Targa または PNG 画像
+		TargaまたはPNG画像
 	</string>
 	<string name="avi_movie_file">
-		AVI ムービーファイル
+		AVIムービーファイル
 	</string>
 	<string name="xaf_animation_file">
-		XAF アニメーションファイル
+		XAFアニメーションファイル
 	</string>
 	<string name="xml_file">
-		XML ファイル
+		XMLファイル
+	</string>
+	<string name="csv_files">
+		CSVファイル
 	</string>
 	<string name="raw_file">
-		RAW ファイル
+		RAWファイル
 	</string>
 	<string name="compressed_image_files">
 		圧縮画像
@@ -1234,25 +1332,53 @@ https://www.firestormviewer.org/support
 	<string name="dictionary_files">
 		辞書
 	</string>
-	<string name="backup_files">
-		オブジェクトのバックアップ
-	</string>
-	<string name="collada_files">
-		COLLADA モデル
-	</string>
-	<string name="csv_files">
-		CSV
-	</string>
+	<string name="backup_files">オブジェクトのバックアップ</string>
+	<string name="collada_files">COLLADAモデル</string>
+	<string name="csv_files">カンマ区切り値</string>
 	<string name="recompile_script_verb">
-		リコンパイル
+		再コンパイル
 	</string>
-	
+	<!-- FS:Zi: add missing file picker translations -->
+	<string name="jpeg_image_files">ＪＰＥＧ画像</string>
+	<string name="executable_files">実行可能プログラムファイル</string>
 	<!-- LSL Usage Hover Tips -->
-	<string name="LSLTipSleepTime">
-		スクリプトを [SLEEP_TIME] 秒間スリープ
+	<!-- Text validator error messages -->
+	<string name="Validator_InvalidNumericString">
+		無効な数字の文字列です：『[STR]』
 	</string>
-	<!-- (FS:CR) LSL Hover Tips have been moved into scriptlibrary_*.xml so they can be dynamically updated -->
-	
+	<string name="Validator_ShouldNotBeMinus">
+		無効な先頭文字です：「[CH]」（マイナスでは使用できません）
+	</string>
+	<string name="Validator_ShouldNotBeMinusOrZero">
+		無効な先頭文字です：「[CH]」（マイナスまたはゼロは使用できません）
+	</string>
+	<string name="Validator_ShouldBeDigit">
+		無効な文字[NR]です：「[CH]」（数字のみにする必要があります）
+	</string>
+	<string name="Validator_ShouldBeDigitOrDot">
+		無効な文字[NR]です：「[CH]」（数字または小数点のみを指定してください）
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlpha">
+		無効な文字[NR]です：「[CH]」（数字または英数字のアスキー文字のみを使用してください）
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">
+		無効な文字[NR]です：「[CH]」（数字、英数字のアスキー文字、またはスペースのみを使用してください）
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">
+		無効な文字[NR]です：「[CH]」（数字、英数字のアスキー文字、または句読点のみを使用してください）
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">
+		無効な文字[NR]です：「[CH]」（数字、英数字のアスキー文字、またはスペースを含まない句読点のみを使用してください）
+	</string>
+	<string name="Validator_ShouldBeDigitNotSpace">
+		無効な文字[NR]です：「[CH]」（スペースを含まない数字のみにする必要があります）
+	</string>
+	<string name="Validator_ShouldBeASCII">
+		無効な文字[NR]です：「[CH]」（アスキー文字のみを使用してください）
+	</string>
+	<string name="Validator_ShouldBeNewLineOrASCII">
+		無効な文字[NR]です：「[CH]」（アスキー文字または改行のみを使用してください）
+	</string>
 	<!-- Wearable Types -->
 	<string name="shape">
 		シェイプ
@@ -1270,7 +1396,7 @@ https://www.firestormviewer.org/support
 		シャツ
 	</string>
 	<string name="pants">
-		パンツ
+		ズボン
 	</string>
 	<string name="shoes">
 		靴
@@ -1285,10 +1411,10 @@ https://www.firestormviewer.org/support
 		手袋
 	</string>
 	<string name="undershirt">
-		下着シャツ
+		下着（上半身）
 	</string>
 	<string name="underpants">
-		下着パンツ
+		下着（下半身）
 	</string>
 	<string name="skirt">
 		スカート
@@ -1315,18 +1441,16 @@ https://www.firestormviewer.org/support
 		空
 	</string>
 	<string name="water">
-		水
+		水面
 	</string>
 	<string name="day">
 		デイサイクル
 	</string>
-	
-	<!-- Not Worn Wearable Types -->
 	<string name="shirt_not_worn">
 		シャツ未着用
 	</string>
 	<string name="pants_not_worn">
-		パンツ未着用
+		ズボン未着用
 	</string>
 	<string name="shoes_not_worn">
 		靴未着用
@@ -1341,11 +1465,12 @@ https://www.firestormviewer.org/support
 		手袋未着用
 	</string>
 	<string name="undershirt_not_worn">
-		下着（上）未着用
+		下着（上半身）未着用
 	</string>
 	<string name="underpants_not_worn">
-		下着（下）未着用
+		下着（下半身）未着用
 	</string>
+	<!-- Not Worn Wearable Types -->
 	<string name="skirt_not_worn">
 		スカート未着用
 	</string>
@@ -1353,10 +1478,10 @@ https://www.firestormviewer.org/support
 		アルファ未着用
 	</string>
 	<string name="tattoo_not_worn">
-		タトゥー未着用
+		タトゥ未着用
 	</string>
 	<string name="universal_not_worn">
-		ユニバーサル未着用
+		ユニバーサルなし
 	</string>
 	<string name="physics_not_worn">
 		物理作用なし
@@ -1364,7 +1489,6 @@ https://www.firestormviewer.org/support
 	<string name="invalid_not_worn">
 		無効
 	</string>
-	
 	<!-- Create new wearable of the specified type -->
 	<string name="create_new_shape">
 		新しいシェイプを作成
@@ -1382,7 +1506,7 @@ https://www.firestormviewer.org/support
 		新しいシャツを作成
 	</string>
 	<string name="create_new_pants">
-		新しいパンツを作成
+		新しいズボンを作成
 	</string>
 	<string name="create_new_shoes">
 		新しい靴を作成
@@ -1391,16 +1515,16 @@ https://www.firestormviewer.org/support
 		新しい靴下を作成
 	</string>
 	<string name="create_new_jacket">
-		新しい上着を作成
+		新しいジャケットを作成
 	</string>
 	<string name="create_new_gloves">
 		新しい手袋を作成
 	</string>
 	<string name="create_new_undershirt">
-		新しい下着シャツを作成
+		新しい下着（上半身）を作成
 	</string>
 	<string name="create_new_underpants">
-		新しい下着パンツを作成
+		新しい下着（下半身）を作成
 	</string>
 	<string name="create_new_skirt">
 		新しいスカートを作成
@@ -1417,22 +1541,20 @@ https://www.firestormviewer.org/support
 	<string name="create_new_physics">
 		新しい物理作用を作成
 	</string>
+	<!-- Wearable List-->
 	<string name="create_new_invalid">
 		無効
 	</string>
-	
-	<!-- Wearable List-->
 	<string name="NewWearable">
-		新しい [WEARABLE_ITEM]
+		新しい[WEARABLE_ITEM]
 	</string>
-	
 	<!-- LLGroupNotify -->
 	<!-- used in the construction of a Group Notice blue dialog box, buttons, tooltip etc. Seems to be no longer utilized by code in Viewer 2.0 -->
 	<string name="next">
 		次へ
 	</string>
 	<string name="ok">
-		OK
+		ＯＫ
 	</string>
 	<string name="GroupNotifyGroupNotice">
 		グループ通知
@@ -1456,19 +1578,20 @@ https://www.firestormviewer.org/support
 		添付アイテムを保存
 	</string>
 	<string name="GroupNotifySender">
-		送信者：[SENDER], [GROUPNAME]
+		送信者：[SENDER]，[GROUPNAME]
 	</string>
-	
+	<!-- start-up toast's string-->
 	<string name="TeleportOffer">
-		テレポートを送る
+		テレポートのオファー
 	</string>
+	<!-- overflow toast's string-->
 	<string name="StartUpNotifications">
 		不在中に新しい通知が届きました。
 	</string>
+	<!-- body parts -->
 	<string name="OverflowInfoChannelString">
-		あなたにはさらに %d 通の通知があります
+		あなたにはさらに%d件の通知があります
 	</string>
-	
 	<!-- body parts -->
 	<string name="BodyPartsRightArm">
 		右腕
@@ -1491,7 +1614,6 @@ https://www.firestormviewer.org/support
 	<string name="BodyPartsEnhancedSkeleton">
 		拡張スケルトン
 	</string>
-	
 	<!-- slider -->
 	<string name="GraphicsQualityLow">
 		低
@@ -1502,27 +1624,34 @@ https://www.firestormviewer.org/support
 	<string name="GraphicsQualityHigh">
 		高
 	</string>
-	
 	<!-- mouselook -->
 	<string name="LeaveMouselook">
-		ESC キーを押してワールドビューに戻ります
+		ESCキーを押してワールドビューに戻ります
 	</string>
-	
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">
-		お探しのものは見つかりましたか？ [secondlife:///app/search/all/[SEARCH_TERM] 検索] をお試しください。
+		お探しのものは見つかりましたか？[secondlife:///app/search/all/[SEARCH_TERM] 検索]をお試しください。
+	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		お探しのものは見つかりましたか？[secondlife:///app/inventory/filters フィルタを表示]をお試しください。
 	</string>
 	<string name="PlacesNoMatchingItems">
-		お探しのものは見つかりましたか？ [secondlife:///app/search/places/[SEARCH_TERM] 検索] をお試しください。
+		お探しのものは見つかりましたか？[secondlife:///app/search/places/[SEARCH_TERM] 検索]をお試しください。
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		ここにランドマークをドラッグしてお気に入りに追加します。
 	</string>
 	<string name="MarketplaceNoListing">
-		まだ商品リストがありません。
+		まだ何も出品していません。
 	</string>
 	<string name="MarketplaceNoMatchingItems">
 		アイテムが見つかりませんでした。検索文字列のスペルを確認して、もう一度やり直してください。
+	</string>
+	<string name="InventorySingleFolderEmpty">
+		フォルダは空です。
+	</string>
+	<string name="InventorySingleFolderNoMatches">
+		一致するものはありませんでした。
 	</string>
 	<string name="InventoryNoTexture">
 		インベントリ内にこのテクスチャのコピーがありません
@@ -1530,110 +1659,112 @@ https://www.firestormviewer.org/support
 	<string name="InventoryInboxNoItems">
 		マーケットプレイスで購入した商品はここに表示されます。その後、アイテムをインベントリにドラッグすれば、それらのアイテムを使用できます。
 	</string>
-	<string name="MarketplaceURL">
-		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
-	</string>
+	<string name="MarketplaceURL">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/?lang=ja-JP</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/%E3%83%9E%E3%83%BC%E3%82%B1%E3%83%83%E3%83%88%E3%83%97%E3%83%AC%E3%82%A4%E3%82%B9%E3%81%A7%E8%B2%A9%E5%A3%B2%E3%81%99%E3%82%8B-r769/
 	</string>
-	<string name="MarketplaceURL_Dashboard">
-		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
-	</string>
-	<string name="MarketplaceURL_Imports">
-		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/imports
-	</string>
-	<string name="MarketplaceURL_LearnMore">
-		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
-	</string>
+	<string name="MarketplaceURL_Dashboard">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard?lang=ja-JP</string>
+	<string name="MarketplaceURL_Imports">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/imports?lang=ja-JP</string>
+	<string name="MarketplaceURL_LearnMore">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more?lang=ja-JP</string>
 	<string name="InventoryPlayAnimationTooltip">
-		[再生] オプションでウィンドウを開ける。
+		「再生」オプションでウィンドウを開きます。
 	</string>
 	<string name="InventoryPlayGestureTooltip">
-		インワールドで選択済みのジェスチャーを実行する。
+		インワールドで選択済みのジェスチャーを実行します。
 	</string>
 	<string name="InventoryPlaySoundTooltip">
-		[再生] オプションでウィンドウを開ける。
+		「再生」オプションでウィンドウを開きます。
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		マーケットプレイスでは誰でもアイテムを売ることができます。
 	</string>
-	<string name="InventoryOutboxNotMerchantTooltip"/>
 	<string name="InventoryOutboxNotMerchant">
-		マーチャントになりたい方は、[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイスストアを作成]する必要があります。
+		販売者になりたい方は、[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイスストアを作成]する必要があります。
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		アウトボックスは空です。
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
 		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグし、「マーケットプレイスに送信」をクリックします。
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
-		マーケットプレイスの初期化。
+		マーケットプレイスの出品リストを初期化しています。
 	</string>
 	<string name="InventoryOutboxInitializing">
-		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイス ストア] のアカウントにアクセスしています。
+		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイスストア]のアカウントにアクセスしています。
 	</string>
 	<string name="InventoryOutboxErrorTitle">
-		マーケットプレイス エラー。
+		マーケットプレイスの出品時にエラーが発生しました。
 	</string>
 	<string name="InventoryOutboxError">
-		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイス ストア] がエラーを返しています。
+		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイスストア]がエラーを返しています。
 	</string>
 	<string name="InventoryMarketplaceError">
-		マーケットプレイスのリストを開く際にエラーが発生しました。
-もしこのメッセージが出続けるようであれば、セカンドライフのサポートに連絡してみて下さい。 http://support.secondlife.com
+		マーケットプレイスの出品リストを開くときにエラーが発生しました。引き続きこのメッセージを受信するには、Second Lifeのサポート（http://support.secondlife.com）にお問い合わせください
+	</string>
+	<string name="InventoryMarketplaceConnectionError">
+		マーケットプレイス出品時の接続に失敗しました。
+このメッセージが続けて表示される場合は、
+https://support.secondlife.com よりSecond Lifeのサポートまでお問い合わせください。
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+		マーケットプレイス出品時の接続に失敗しました：[REASON]
+このメッセージが続けて表示される場合は、
+https://support.secondlife.com よりSecond Lifeのサポートまでお問い合わせください。
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
-		マーケットプレイスのリストフォルダが空です。
+		マーケットプレイスの出品リストフォルダが空です。
 	</string>
 	<string name="InventoryMarketplaceListingsNoItems">
-		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグします。
+		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを出品するには、フォルダをこのエリアにドラッグします。
+	</string>
+	<string name="InventoryFolderDebug">
+		（Ｆ：[FOLDER_COUNT]　Ｉ：[ITEMS_COUNT]　Ｖ：[VERSION]　ＤＣ：[VIEWER_DESCENDANT_COUNT]／[SERVER_DESCENDANT_COUNT]）
 	</string>
 	<string name="InventoryItemsCount">
-		（[ITEMS]/[CATEGORIES] 個のアイテム）
+		（[ITEMS]個／[CATEGORIES]個のフォルダ）
 	</string>
 	<string name="Marketplace Validation Warning Stock">
-		バージョンフォルダに在庫フォルダが含まれなければなりません
+		バージョンフォルダには、在庫フォルダが含まれなければなりません。
 	</string>
 	<string name="Marketplace Validation Error Mixed Stock">
-		: エラー：在庫フォルダ内のすべてのアイテムはコピー不可で同じ種類でなければなりません
+		エラー：在庫フォルダ内のすべてのアイテムは、コピー不可で同じ種類でなければなりません。
 	</string>
 	<string name="Marketplace Validation Error Subfolder In Stock">
-		: エラー：在庫フォルダにサブフォルダを含めることはできません
+		エラー：在庫フォルダにサブフォルダを含めることはできません。
 	</string>
 	<string name="Marketplace Validation Warning Empty">
-		: 警告：フォルダにアイテムが含まれていません
+		警告：フォルダにアイテムが含まれていません。
 	</string>
 	<string name="Marketplace Validation Warning Create Stock">
-		: 警告：在庫フォルダを作成しています
+		警告：在庫フォルダを作成しています。
 	</string>
 	<string name="Marketplace Validation Warning Create Version">
-		: 警告：バージョンフォルダ作成中
+		警告：バージョンフォルダを作成しています。
 	</string>
 	<string name="Marketplace Validation Warning Move">
-		: 警告：アイテム移動中
+		：警告：アイテムを移動しています。
 	</string>
 	<string name="Marketplace Validation Warning Delete">
-		: 警告：フォルダの中身が在庫フォルダに移されました。空のフォルダを削除します
+		：警告：フォルダの中身が在庫フォルダに移されました。空のフォルダを削除します。
 	</string>
 	<string name="Marketplace Validation Error Stock Item">
-		: エラー：在庫フォルダにコピー不可アイテムを含める必要があります
+		：エラー：在庫フォルダには、コピー不可アイテムを含める必要があります。
 	</string>
 	<string name="Marketplace Validation Warning Unwrapped Item">
-		: 警告：バージョンフォルダにアイテムが含まれていなければなりません
+		：警告：バージョンフォルダには、アイテムが含まれていなければなりません。
 	</string>
 	<string name="Marketplace Validation Error">
-		: エラー：
+		エラー：
 	</string>
 	<string name="Marketplace Validation Warning">
-		: 警告：
+		警告：
 	</string>
 	<string name="Marketplace Validation Error Empty Version">
-		: 警告：バージョンフォルダには、最低 1 アイテムが含まれなければなりません
+		警告：バージョンフォルダには、最低１アイテムが含まれなければなりません
 	</string>
 	<string name="Marketplace Validation Error Empty Stock">
-		: 警告：在庫フォルダには、最低 1 アイテムが含まれていなければなりません
+		警告：在庫フォルダには、最低１アイテムが含まれていなければなりません
 	</string>
 	<string name="Marketplace Validation No Error">
 		報告するエラーまたは警告はありません
@@ -1657,7 +1788,7 @@ https://www.firestormviewer.org/support
 		Mkt ID なし
 	</string>
 	<string name="MarketplaceLive">
-		リスト掲載済み
+		出品リスト掲載済み
 	</string>
 	<string name="MarketplaceActive">
 		有効
@@ -1672,73 +1803,82 @@ https://www.firestormviewer.org/support
 		在庫なし
 	</string>
 	<string name="MarketplaceUpdating">
-		アップデート中...
+		アップデート中…
 	</string>
 	<string name="UploadFeeInfo">
-		料金はサブスクリプションのレベルにより異なります。レベルが高いほど、料金が下がります。[https://secondlife.com/my/account/membership.php? 詳細]
+		料金はサブスクリプションのレベルにより異なります。レベルが高いほど、料金が下がります。[https://accounts.secondlife.com/change_membership/?lang=ja-JP 詳細]
 	</string>
 	<string name="Open landmarks">
-		オープン ランドマーク
+		ランドマークを開く
 	</string>
 	<string name="Unconstrained">
 		アンコンストレインド（制約なし）
 	</string>
-	<string name="no_transfer" value=" （再販・プレゼント不可）"/>
+	<!-- use value="" because they have preceding spaces -->
+	<string name="active" value="（アクティブ）"/>
+	<string name="no_transfer" value=" （再販・譲渡不可）"/>
 	<string name="no_modify" value=" （編集不可）"/>
 	<string name="no_copy" value=" （コピー不可）"/>
 	<string name="worn" value=" （着用中）"/>
-	<string name="link" value=" （リンク）"/>
-	<string name="broken_link" value=" （壊れたリンク）"/>
+	<string name="link" value=" 　リンク"/>
+	<string name="broken_link" value=" 　壊れたリンク"/>
+	<string name="no_transfer_lbl" value="　再販・譲渡不可"/>
+	<string name="no_modify_lbl" value="　編集不可"/>
+	<string name="no_copy_lbl" value="　コピー不可"/>
 	<string name="LoadingContents">
-		コンテンツをロード中です...
+		コンテンツを読み込んでいます…
 	</string>
 	<string name="NoContents">
 		コンテンツなし
 	</string>
-	<string name="WornOnAttachmentPoint" value=" （[ATTACHMENT_POINT] に装着中）"/>
-	<string name="AttachmentErrorMessage" value="([ATTACHMENT_ERROR])"/>
-	<string name="ActiveGesture" value="[GESLABEL] （アクティブ）"/>
+	<string name="WornOnAttachmentPoint" value=" （[ATTACHMENT_POINT]に装着中）"/>
+	<string name="AttachmentErrorMessage" value="（[ATTACHMENT_ERROR]）"/>
+	<string name="ActiveGesture" value="[GESLABEL]（アクティブ）"/>
+	<!-- Inventory permissions -->
 	<string name="PermYes">
 		はい
 	</string>
 	<string name="PermNo">
 		いいえ
 	</string>
-	
 	<!-- Gestures labels -->
-	<string name="Chat Message" value="チャット："/>
-	<string name="Sound" value=" サウンド："/>
-	<string name="Wait" value=" --- 待機：:"/>
-	<string name="AnimFlagStop" value=" アニメーションを停止："/>
-	<string name="AnimFlagStart" value=" アニメーションを開始："/>
-	<string name="Wave" value=" 手を振る"/>
+	<!-- use value="" because they have preceding spaces -->
+	<string name="Chat Message" value="　チャット："/>
+	<string name="Sound" value="　サウンド："/>
+	<string name="Wait" value="‐　待機："/>
+	<string name="AnimFlagStop" value="　アニメーションを停止："/>
+	<string name="AnimFlagStart" value="　アニメーションを開始："/>
+	<string name="Wave" value="　手を振る"/>
 	<string name="GestureActionNone" value="なし"/>
-	<string name="HelloAvatar" value=" やあ、アバター！"/>
-	<string name="ViewAllGestures" value="  すべて表示 &gt;&gt;"/>
-	<string name="GetMoreGestures" value="ショッピング &gt;&gt;"/>
-	
+	<string name="HelloAvatar" value="　やあ、アバター！"/>
+	<string name="ViewAllGestures" value="　すべて表示　≫"/>
+	<string name="GetMoreGestures" value="　ショッピング　≫"/>
 	<!-- inventory filter -->
+	<!-- use value="" because they have preceding spaces -->
 	<string name="Animations" value="アニメーション、"/>
 	<string name="Calling Cards" value="コーリングカード、"/>
-	<string name="Clothing" value="衣類、"/>
+	<string name="Clothing" value="衣装、"/>
 	<string name="Gestures" value="ジェスチャー、"/>
 	<string name="Landmarks" value="ランドマーク、"/>
+	<string name="Materials" value=" マテリアル、"/>
 	<string name="Notecards" value="ノートカード、"/>
 	<string name="Objects" value="オブジェクト、"/>
 	<string name="Scripts" value="スクリプト、"/>
 	<string name="Sounds" value="サウンド、"/>
 	<string name="Textures" value="テクスチャ、"/>
-	<string name="Settings" value=" 自然環境設定、" />
+	<string name="Settings" value="自然環境の設定、"/>
 	<string name="Snapshots" value="スナップショット、"/>
-	<string name="No Filters" value="いいえ "/>
-	<string name="Since Logoff" value=" - ログオフ以来"/>
+	<!-- [AS:Chanayane] Search folders only -->
+	<string name="Folders" value="フォルダ、" />
+	<!-- [/AS:Chanayane] -->
+	<string name="No Filters" value="なし"/>
+	<string name="Since Logoff" value="–ログオフ以来"/>
 	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
-	<string name="Modifiable" value="修正可" />
-	<string name="Copyable" value="コピー可" />
-	<string name="Transferable" value="再販可" />
-	<string name="PermissionsFilter" value=" - [PERMISSIONS] のみ" />
+	<string name="Modifiable" value="修正可"/>
+	<string name="Copyable" value="コピー可"/>
+	<string name="Transferable" value="再販可"/>
+	<string name="PermissionsFilter" value="‐[PERMISSIONS]のみ"/>
 	<!-- </FS:Zi> -->
-	
 	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">
 		インベントリ
@@ -1762,7 +1902,7 @@ https://www.firestormviewer.org/support
 		スクリプト
 	</string>
 	<string name="InvFolder Clothing">
-		衣類
+		衣装
 	</string>
 	<string name="InvFolder Objects">
 		オブジェクト
@@ -1789,7 +1929,7 @@ https://www.firestormviewer.org/support
 		フォトアルバム
 	</string>
 	<string name="InvFolder Lost And Found">
-		紛失物
+		遺失物
 	</string>
 	<string name="InvFolder Uncompressed Sounds">
 		圧縮されていないサウンド
@@ -1800,10 +1940,13 @@ https://www.firestormviewer.org/support
 	<string name="InvFolder Gestures">
 		ジェスチャー
 	</string>
-	<string name="InvFolder favorite">
+	<string name="InvFolder Favorites">
 		お気に入り
 	</string>
-	<string name="InvFolder Favorites">
+	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
+      Also, it can be written as "Favorite" or "Favorites".
+  We should localize all variants of them with the same value -->
+	<string name="InvFolder favorite">
 		お気に入り
 	</string>
 	<string name="InvFolder favorites">
@@ -1816,7 +1959,7 @@ https://www.firestormviewer.org/support
 		最初のアウトフィット
 	</string>
 	<string name="InvFolder My Outfits">
-		マイ アウトフィット
+		アウトフィット
 	</string>
 	<string name="InvFolder Accessories">
 		アクセサリ
@@ -1828,32 +1971,44 @@ https://www.firestormviewer.org/support
 		受け取った商品
 	</string>
 	<string name="InvFolder Merchant Outbox">
-		マーチャントのアウトボックス
+		販売品ボックス
 	</string>
 	<string name="InvFolder Settings">
-		自然環境設定
+		自然環境の設定
 	</string>
+	<string name="InvFolder Material">
+		マテリアル
+	</string>
+	<string name="InvFolder Materials">
+		マテリアル
+	</string>
+	<string name="InvFolder Settings">
+		自然環境の設定
+	</string>
+	<!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
 	<string name="InvFolder Friends">
 		フレンド
 	</string>
 	<string name="InvFolder All">
 		全員
 	</string>
+	<!-- Virtual Firestorm system folders -->
+	<string name="InvFolder #Firestorm">#Firestorm</string>
+	<string name="InvFolder #Phoenix">#Phoenix</string>
+	<string name="InvFolder #RLV">#RLV</string>
 	<string name="InvFolder My Suitcase">
-		自分のスーツケース
+		スーツケース
 	</string>
-	
 	<string name="no_attachments">
-		着用しているアタッチメントはありません
+		着用している装着物はありません
 	</string>
 	<string name="Attachments remain">
-		アタッチメント（残りのスロット数：[COUNT]）
+		装着物（残りのスロット数：[COUNT]ヶ所）
 	</string>
-	
 	<!-- inventory FVBridge -->
-	<!--  This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->
+	<!-- This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->
 	<string name="Buy">
-		買う
+		購入
 	</string>
 	<string name="BuyforL$">
 		L$ で購入
@@ -1871,7 +2026,7 @@ https://www.firestormviewer.org/support
 		木
 	</string>
 	<string name="Flesh">
-		肌
+		肉
 	</string>
 	<string name="Plastic">
 		プラスチック
@@ -1882,12 +2037,14 @@ https://www.firestormviewer.org/support
 	<string name="Light">
 		ライト
 	</string>
+	<!-- keyboard -->
 	<string name="KBShift">
 		Shift
 	</string>
 	<string name="KBCtrl">
 		Ctrl
 	</string>
+	<!-- Avatar Skeleton -->
 	<string name="Chest">
 		胸部
 	</string>
@@ -1922,7 +2079,7 @@ https://www.firestormviewer.org/support
 		口
 	</string>
 	<string name="Chin">
-		あご
+		顎
 	</string>
 	<string name="Left Ear">
 		左耳
@@ -2033,117 +2190,107 @@ https://www.firestormviewer.org/support
 		装着先が正しくありません
 	</string>
 	<string name="ATTACHMENT_MISSING_ITEM">
-		エラー：アイテムが見つかりません
+		エラー：アイテムが見つかりません。
 	</string>
 	<string name="ATTACHMENT_MISSING_BASE_ITEM">
-		エラー：ベースアイテムが見つかりません
+		エラー：ベースアイテムが見つかりません。
 	</string>
 	<string name="ATTACHMENT_NOT_ATTACHED">
-		エラー：オブジェクトは現在のアウトフィット内にありますが、添付されていません
-	</string>
-	
-	<!-- Avatar age computation, see LLDateUtil::ageFromDate -->
-	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS]
-	</string>
-	<string name="YearsOld">
-		[AGEYEARS] 歳
-	</string>
-	<string name="MonthsOld">
-		[AGEMONTHS] か月
-	</string>
-	<string name="WeeksOld">
-		[AGEWEEKS] 週
-	</string>
-	<string name="DaysOld">
-		[AGEDAYS] 日
+		エラー：オブジェクトは現在のアウトフィットにありますが、装着されていません。
 	</string>
 	<string name="TodayOld">
-		今日参加
+		本日参加
 	</string>
-	
 	<!-- Avatar complexity rendering messages, see llavatarrendernotifier. -->
 	<string name="av_render_everyone_now">
-		あなたは今、周りのみんなから見えます。
+		あなたは、全員から見えるようになりました。
 	</string>
 	<string name="av_render_not_everyone">
-		周りのみんながあなたを表示できているとは限りません。
+		あなたは、周囲にいる一部の人から見えていない可能性があります。
 	</string>
 	<string name="av_render_over_half">
-		あなたの周りの半数はあなたを表示できていない可能性があります。
+		あなたは、周囲にいる半分以上の人から見えていない可能性があります。
 	</string>
 	<string name="av_render_most_of">
-		あなたの周りの殆どの人があなたを表示できていない可能性があります。
+		あなたは、周囲にいるほとんどの人から見えていない可能性があります。
 	</string>
 	<string name="av_render_anyone">
-		周りの誰もがあなたを表示できるとは限りません。
+		あなたは、周囲の誰からも見えていない可能性があります。
 	</string>
+	<!-- HUD complexity rendering messages, see llavatarrendernotifier. -->
 	<string name="hud_description_total">
-		ご利用の HUD
+		利用中のＨＵＤ
 	</string>
 	<string name="hud_name_with_joint">
-		[OBJ_NAME]（[JNT_NAME] に装着中）
+		[OBJ_NAME]（[JNT_NAME]に装着中）
 	</string>
 	<string name="hud_render_memory_warning">
-		[HUD_DETAILS] はたくさんのテクスチャメモリを使用します
+		[HUD_DETAILS]は、大量のテクスチャメモリを使用しています。
 	</string>
 	<string name="hud_render_cost_warning">
-		[HUD_DETAILS] には高価なオブジェクトやテクスチャがたくさん含まれています
+		[HUD_DETAILS]は、計算コストが高いオブジェクトやテクスチャがたくさん含まれています。
 	</string>
 	<string name="hud_render_heavy_textures_warning">
-		[HUD_DETAILS] は大きなテクスチャがたくさん含まれています
+		[HUD_DETAILS]には、容量が多いテクスチャが使用されています。
 	</string>
 	<string name="hud_render_cramped_warning">
-		[HUD_DETAILS] に含まれるオブジェクトが多すぎます
+		[HUD_DETAILS]は、使用されているオブジェクトが多すぎます。
 	</string>
 	<string name="hud_render_textures_warning">
-		[HUD_DETAILS] に含まれるテクスチャが多すぎます
+		[HUD_DETAILS]は、使用されているテクスチャが多すぎます。
 	</string>
+	<!-- AgeYearsA = singular,
+						AgeYearsB = plural,
+						AgeYearsC = plural for non-English languages like Russian
+						For example, LLTrans::getCountString("AgeYears", 3) is plural form B
+						in English and form C in Russian -->
 	<string name="AgeYearsA">
-		[COUNT] 年
+		[COUNT]年
 	</string>
 	<string name="AgeYearsB">
-		[COUNT] 年
+		[COUNT]年
 	</string>
 	<string name="AgeYearsC">
-		[COUNT] 年
+		[COUNT]年
 	</string>
 	<string name="AgeMonthsA">
-		[COUNT] ヶ月
+		[COUNT]ヶ月
 	</string>
 	<string name="AgeMonthsB">
-		[COUNT] ヶ月
+		[COUNT]ヶ月
 	</string>
 	<string name="AgeMonthsC">
-		[COUNT] ヶ月
+		[COUNT]ヶ月
 	</string>
 	<string name="AgeWeeksA">
-		[COUNT] 週間
+		[COUNT]週間
 	</string>
 	<string name="AgeWeeksB">
-		[COUNT] 週間
+		[COUNT]週間
 	</string>
 	<string name="AgeWeeksC">
-		[COUNT] 週間
+		[COUNT]週間
 	</string>
 	<string name="AgeDaysA">
-		[COUNT] 日間
+		[COUNT]日間
 	</string>
 	<string name="AgeDaysB">
-		[COUNT] 日間
+		[COUNT]日間
 	</string>
 	<string name="AgeDaysC">
-		[COUNT] 日間
+		[COUNT]日間
 	</string>
+	<!-- Group member counts -->
 	<string name="GroupMembersA">
-		[COUNT] 人
+		[COUNT]人
 	</string>
 	<string name="GroupMembersB">
-		[COUNT] 人
+		[COUNT]人
 	</string>
 	<string name="GroupMembersC">
-		[COUNT] 人
+		[COUNT]人
 	</string>
+	<!-- Account types, see LLAvatarPropertiesProcessor -->
 	<string name="AcctTypeResident">
 		住人
 	</string>
@@ -2154,7 +2301,7 @@ https://www.firestormviewer.org/support
 		創立メンバー
 	</string>
 	<string name="AcctTypeEmployee">
-		Linden Lab 従業員
+		Linden Lab従業員
 	</string>
 	<string name="PaymentInfoUsed">
 		支払情報使用履歴あり
@@ -2171,56 +2318,67 @@ https://www.firestormviewer.org/support
 	<string name="NotAgeVerified">
 		年齢未確認
 	</string>
+	<!-- HUD Position -->
 	<string name="Center 2">
-		中心 2
+		中央２
 	</string>
 	<string name="Top Right">
-		右上
+		右上　↗
 	</string>
 	<string name="Top">
-		上部
+		上部　↑
 	</string>
 	<string name="Top Left">
-		左上
+		左上　↖
 	</string>
 	<string name="Center">
-		中心
+		中央
 	</string>
 	<string name="Bottom Left">
-		左下
+		左下　↙
 	</string>
 	<string name="Bottom">
-		下部
+		下部　↓
 	</string>
 	<string name="Bottom Right">
-		右下
+		右下　↘
 	</string>
+	<!-- compile queue-->
 	<string name="CompileQueueDownloadedCompiling">
-		ダウンロード完了、コンパイル中
+		ダウンロードが完了しました。コンパイルしています。
 	</string>
 	<string name="CompileQueueServiceUnavailable">
-		スクリプト コンパイル サービスを利用できません
+		スクリプトのコンパイルサービスを利用できません
 	</string>
 	<string name="CompileQueueScriptNotFound">
 		サーバー上にスクリプトが見つかりません。
 	</string>
 	<string name="CompileQueueProblemDownloading">
-		ダウンロードに問題があります
+		ダウンロードに問題があります。
 	</string>
 	<string name="CompileQueueInsufficientPermDownload">
-		権限不足のためスクリプトをダウンロードできません。
+		権限が不足しているためスクリプトをダウンロードできません。
 	</string>
 	<string name="CompileQueueInsufficientPermFor">
-		権限不足：
+		以下の操作を実行する権限が不足しています：
 	</string>
 	<string name="CompileQueueUnknownFailure">
-		原因不明の失敗によりダウンロードができません
+		ダウンロード時に不明なエラーが発生しました。
+	</string>
+	<string name="CompileNoExperiencePerm">
+		[EXPERIENCE]体験による[SCRIPT]スクリプトをスキップします。
 	</string>
 	<string name="CompileQueueTitle">
-		リコンパイル進行
+		再コンパイルしています。
 	</string>
 	<string name="CompileQueueStart">
-		リコンパイル
+		再コンパイル
+	</string>
+	<string name="CompileQueuePreprocessing">
+		スクリプト「[SCRIPT]」のプリプロセッシング
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		スクリプト「[SCRIPT]」のプリプロセッシングが完了しました。
 	</string>
 	<string name="ResetQueueTitle">
 		進行をリセット
@@ -2240,17 +2398,25 @@ https://www.firestormviewer.org/support
 	<string name="NotRunQueueStart">
 		実行停止に設定
 	</string>
+	<string name="DeleteQueueTitle">
+		削除中
+	</string>
+	<string name="DeleteQueueStart">
+		削除
+	</string>
+	<!-- compile comment text-->
+	<string name="Compiling">[NAME]をコンパイルしています。</string>
 	<string name="CompileSuccessful">
 		コンパイルが完了しました！
 	</string>
 	<string name="CompileSuccessfulSaving">
-		コンパイル完了、保存中です...
+		コンパイルが完了しました。保存しています…
 	</string>
 	<string name="SaveComplete">
-		保存完了。
+		保存しました。
 	</string>
 	<string name="UploadFailed">
-		ファイルアップロード失敗：[REASON]
+		ファイルのアップロードに失敗しました：
 	</string>
 	<string name="ObjectOutOfRange">
 		スクリプト（オブジェクトが範囲外にあります）
@@ -2258,26 +2424,25 @@ https://www.firestormviewer.org/support
 	<string name="ScriptWasDeleted">
 		スクリプト（インベントリから削除済み）
 	</string>
+	<!-- god tools -->
 	<string name="GodToolsObjectOwnedBy">
-		[OWNER] 所有のオブジェクト「[OBJECT]」
+		[OWNER]が所有している「[OBJECT]」というオブジェクト
 	</string>
+	<!-- groups -->
 	<string name="GroupsNone">
 		なし
 	</string>
-	<string name="CompileNoExperiencePerm">
-		[EXPERIENCE] 体験による [SCRIPT] スクリプトのスキップ。
-	</string>
-	<string name="Group" value=" （グループ）"/>
+	<string name="Group" value="（グループ）"/>
 	<string name="Unknown">
 		（不明）
 	</string>
 	<string name="SummaryForTheWeek" value="今週のまとめ。開始日は"/>
 	<string name="NextStipendDay" value="です。次回のお小遣い支給日："/>
 	<string name="GroupPlanningDate">
-		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc]
+		[year,datetime,utc]年[mthnum,datetime,utc]月[day,datetime,utc]日
 	</string>
-	<string name="GroupIndividualShare" value="                      グループ       個人の割り当て"/>
-	<string name="GroupColumn" value="グループの設定"/>
+	<string name="GroupIndividualShare" value="　　　　　　　　　　　グループ　　　　個人の割り当て"/>
+	<string name="GroupColumn" value="　　　　　　　　　　　グループの設定"/>
 	<string name="Balance">
 		残高
 	</string>
@@ -2291,13 +2456,15 @@ https://www.firestormviewer.org/support
 		合計
 	</string>
 	<string name="NoGroupDataFound">
-		グループのデータが見つかりませんでした
+		グループのデータが見つかりませんでした：
 	</string>
 	<string name="AlreadyInGroup">
-		既にこのグループに所属しています
+		すでにグループに入っています：
 	</string>
+	<!-- floater IM bonus_info: When a Linden with Admin/god status receives a new IM this displays the estate (Mainland vs. teen grid) of the source avatar.
+						This is to help Lindens when answering questions. -->
 	<string name="IMParentEstate">
-		parent estate
+		親の不動産
 	</string>
 	<string name="IMMainland">
 		メインランド
@@ -2305,37 +2472,41 @@ https://www.firestormviewer.org/support
 	<string name="IMTeen">
 		ティーン
 	</string>
+	<!-- floater about land -->
 	<string name="Anyone">
 		全員
 	</string>
+	<!-- floater region info -->
+	<!-- The following will replace variable [ALL_ESTATES] in notifications EstateAllowed*, EstateBanned*, EstateManager* -->
 	<string name="RegionInfoError">
 		エラー
 	</string>
 	<string name="RegionInfoAllEstatesOwnedBy">
-		[OWNER] が所有するすべての不動産
+		[OWNER]が所有するすべての不動産
 	</string>
 	<string name="RegionInfoAllEstatesYouOwn">
 		あなたが所有するすべての不動産
 	</string>
 	<string name="RegionInfoAllEstatesYouManage">
-		あなたが [OWNER] のために管理するすべての不動産
+		あなたが[OWNER]のために管理するすべての不動産
 	</string>
 	<string name="RegionInfoAllowedResidents">
-		常に許可されている人： （[ALLOWEDAGENTS] 人、最大 [MAXACCESS] 人）
+		常時許可：（全[MAXACCESS]人中[ALLOWEDAGENTS]人）
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		常に許可されているグループ： （[ALLOWEDGROUPS]、最大 [MAXACCESS] ）
+		常に許可するグループ：（全[MAXACCESS]グループ中[ALLOWEDGROUPS]グループ）
 	</string>
 	<string name="RegionInfoEstateManagers">
-		不動産管理者：([ESTATEMANAGERS]人、最大 [MAXMANAGERS]) 人
+		不動産マネージャー数：（全[MAXMANAGERS]人中[ESTATEMANAGERS]人）
 	</string>
 	<string name="RegionInfoBannedResidents">
-		常にバンされている人：([BANNEDAGENTS] 人、最大 [MAXBANNED] 人)</string>
+		常時バン：（全[MAXBANNED]人中[BANNEDAGENTS]人）
+	</string>
 	<string name="RegionInfoListTypeAllowedAgents">
-		常に許可されている住人
+		常時許可
 	</string>
 	<string name="RegionInfoListTypeBannedAgents">
-		常にバンさんれている住人
+		常時バン
 	</string>
 	<string name="RegionInfoAllEstates">
 		すべての不動産
@@ -2347,28 +2518,29 @@ https://www.firestormviewer.org/support
 		この不動産
 	</string>
 	<string name="AndNMore">
-		および [EXTRA_COUNT] つの不動産
+		および[EXTRA_COUNT]個の不動産
 	</string>
+	<!-- script limits floater -->
 	<string name="ScriptLimitsParcelScriptMemory">
 		区画スクリプトメモリ
 	</string>
 	<string name="ScriptLimitsParcelsOwned">
-		区画一覧： [PARCELS]
+		区画一覧：[PARCELS]個
 	</string>
 	<string name="ScriptLimitsMemoryUsed">
-		使用されたメモリ： [MAX] kb 中 [COUNT] kb：[AVAILABLE] kb 利用可
+		使用されたメモリ：全[MAX]㎅中[COUNT]㎅使用（残り[AVAILABLE]㎅利用可）
 	</string>
 	<string name="ScriptLimitsMemoryUsedSimple">
-		使用されたメモリ： [COUNT] kb
+		使用されたメモリ：[COUNT]㎅
 	</string>
 	<string name="ScriptLimitsParcelScriptURLs">
-		区画のスクリプトURL
+		区画のスクリプトＵＲＬ
 	</string>
 	<string name="ScriptLimitsURLsUsed">
-		使用された URL： [MAX] 中 [COUNT] ：[AVAILABLE] 利用可
+		使用されたＵＲＬ：全[MAX]件中[COUNT]件使用（残り[AVAILABLE]件利用可）
 	</string>
 	<string name="ScriptLimitsURLsUsedSimple">
-		使用された URL： [COUNT]
+		使用されたＵＲＬ：[COUNT]件
 	</string>
 	<string name="ScriptLimitsRequestError">
 		情報のリクエスト中にエラーが発生しました
@@ -2377,10 +2549,10 @@ https://www.firestormviewer.org/support
 		区画が選択されていません。
 	</string>
 	<string name="ScriptLimitsRequestWrongRegion">
-		エラー： スクリプト情報は現在地のみ取得できます
+		エラー：スクリプト情報は現在地のみ取得できます
 	</string>
 	<string name="ScriptLimitsRequestWaiting">
-		情報を取得中...
+		情報を取得中…
 	</string>
 	<string name="ScriptLimitsRequestDontOwnParcel">
 		この区画を調査する権限がありません。
@@ -2392,7 +2564,7 @@ https://www.firestormviewer.org/support
 		胸部
 	</string>
 	<string name="ATTACH_HEAD">
-		頭蓋
+		頭頂部
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		左肩
@@ -2422,7 +2594,7 @@ https://www.firestormviewer.org/support
 		口
 	</string>
 	<string name="ATTACH_CHIN">
-		あご
+		顎
 	</string>
 	<string name="ATTACH_LEAR">
 		左耳
@@ -2440,13 +2612,13 @@ https://www.firestormviewer.org/support
 		鼻
 	</string>
 	<string name="ATTACH_RUARM">
-		右腕（上）
+		右上腕
 	</string>
 	<string name="ATTACH_RLARM">
 		右前腕
 	</string>
 	<string name="ATTACH_LUARM">
-		左腕（上）
+		左上腕
 	</string>
 	<string name="ATTACH_LLARM">
 		左前腕
@@ -2479,28 +2651,28 @@ https://www.firestormviewer.org/support
 		右胸筋
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
-		HUD（中央 2）
+		ＨＵＤ（中央２）
 	</string>
 	<string name="ATTACH_HUD_TOP_RIGHT">
-		HUD（右上）
+		ＨＵＤ（右上）↗
 	</string>
 	<string name="ATTACH_HUD_TOP_CENTER">
-		HUD（上・中央）
+		ＨＵＤ（上）↑
 	</string>
 	<string name="ATTACH_HUD_TOP_LEFT">
-		HUD（左上）
+		ＨＵＤ（左上）↖
 	</string>
 	<string name="ATTACH_HUD_CENTER_1">
-		HUD（中央 1）
+		ＨＵＤ（中央１）
 	</string>
 	<string name="ATTACH_HUD_BOTTOM_LEFT">
-		HUD（左下）
+		ＨＵＤ（左下）↙
 	</string>
 	<string name="ATTACH_HUD_BOTTOM">
-		HUD（下）
+		ＨＵＤ（下）↓
 	</string>
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
-		HUD（右下）
+		ＨＵＤ（右下）↘
 	</string>
 	<string name="ATTACH_NECK">
 		首
@@ -2553,53 +2725,50 @@ https://www.firestormviewer.org/support
 	<string name="ATTACH_HIND_RFOOT">
 		右後足
 	</string>
-	
 	<!-- script editor -->
 	<string name="CursorPos">
-		[LINE] 行目、[COLUMN] 列目
+		[LINE]行目、[COLUMN]列目
 	</string>
+	<!-- panel dir browser -->
 	<string name="PanelDirCountFound">
-		[COUNT] 件見つかりました
+		[COUNT]件見つかりました
 	</string>
 	<string name="PanelDirTimeStr">
-		[hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc]
+		[ampm,datetime,slt]　[hour12,datetime,slt]：[min,datetime,slt]
 	</string>
+	<!-- panel dir events -->
 	<string name="PanelDirEventsDateText">
-		[mthnum,datetime,slt]/[day,datetime,slt]
+		[mthnum,datetime,slt]／[day,datetime,slt]
 	</string>
+	<!-- panel contents -->
 	<string name="PanelContentsTooltip">
 		オブジェクトの中身
 	</string>
 	<string name="PanelContentsNewScript">
-		新規スクリプト
+		新しいスクリプト
 	</string>
-	
 	<!-- panel preferences general -->
 	<string name="DoNotDisturbModeResponseDefault">
-		メッセージを送った住人は、誰にも邪魔をされたくないため現在「取り込み中」モードです。  あなたのメッセージは、あとで確認できるように IM パネルに表示されます。
+		この住民が「取り込み中」をオンにすると、あなたのメッセージが後で表示されるようになります。
 	</string>
 	<string name="AutoResponseModeDefault">
-		メッセージを送った住人は、[APP_NAME] ビューワの「自動応答モード」を起動しています。これは、その住人が今は誰にも邪魔をされたくないことを意味しています。あなたのメッセージはあとで確認できるように IM パネルに表示されます。
+		あなたがメッセージを送った住人は、[APP_NAME]ビューアの「自動応答モード」を有効にしており、邪魔されないよう要求しています。あなたのメッセージは、後で閲覧できるように住人のＩＭパネルに表示されます。
 	</string>
 	<string name="AutoResponseModeNonFriendsDefault">
-		メッセージを送った住人は、[APP_NAME] ビューワの「自動応答モード」を起動しています。これは、その住人が今は誰にも邪魔をされたくないことを意味しています。あなたのメッセージはあとで確認できるように IM パネルに表示されます。
-	</string>
-	<string name="RejectTeleportOffersResponseDefault">
-		メッセージを送った住人は、[APP_NAME] ビューワの「全てのテレポートを拒否モード」を起動しています。これは、その住人が今はテレポートを受け入れたり、テレポートを送ったりして誰にも邪魔をされたくないことを意味しています。IM を送ること自体は可能です。
+		あなたがメッセージを送った住人は、[APP_NAME]ビューアの「自動応答モード」を有効にしており、邪魔されないよう要求しています。あなたのメッセージは、後で閲覧できるように住人のＩＭパネルに表示されます。
 	</string>
 	<string name="RejectFriendshipRequestsResponseDefault">
-		メッセージを送った住人は、[APP_NAME] ビューワの「フレンド申請拒否モード」を起動しています。これは、その住人が今はフレンド申請を受け付けることで誰にも邪魔をされたくないことを意味しています。IM を送ること自体は可能です。
+		あなたがメッセージを送った住民は、[APP_NAME]ビューアの「フレンドシップのリクエストをすべて拒否する」モードを有効にしています。これは、フレンドシップのリクエストに邪魔されないよう要求したことを意味します。ＩＭは手動で送信することもできます。
 	</string>
-	<string name="MutedAvatarsResponseDefault">
-		メッセージを送った住人は、あなたがどのようなメッセージを送ることに対してもブロックしています。
+	<string name="MutedAvatarsResponseDefault">あなたがメッセージを送った住人は、あなたからのメッセージの送信をブロックしています。</string>
+	<string name="AwayAvatarResponseDefault">メッセージを送信した居住者は現在キーボードから離れています。メッセージは後で表示できるように居住者のＩＭパネルに表示されます。</string>
+	<!-- panel preferences chat-->
+	<string name="RejectTeleportOffersResponseDefault">
+		あなたがメッセージを送った住民は、[APP_NAME]ビューアの「すべてのテレポートのオファーとリクエストを拒否するモード」を有効にしました。これは、テレポートのオファーやリクエストに邪魔されないように要求したことを意味します。ＩＭは手動で送信することもできます。
 	</string>
-	<string name="AwayAvatarResponseDefault">
-		メッセージを送った住人は現在 AFK（離席中）です。あなたのメッセージはあとで確認できるように IM パネルに表示されます。.
-	</string>
-	
 	<!-- Mute -->
 	<string name="MuteByName">
-		（名称別）
+		（名前で）
 	</string>
 	<string name="MuteAgent">
 		（住人）
@@ -2613,35 +2782,32 @@ https://www.firestormviewer.org/support
 	<string name="MuteExternal">
 		（外部）
 	</string>
+	<!-- Region/Estate Covenant -->
 	<string name="RegionNoCovenant">
 		この不動産には約款がありません。
 	</string>
-	
-	<!-- Region/Estate Covenant -->
 	<string name="RegionNoCovenantOtherOwner">
-		この不動産には約款がありません。 この不動産上の土地は不動産所有者により販売され、Linden Lab は販売しません。  販売に関するお問い合わせは、不動産所有者までお願い致します。
+		この不動産には約款がありません。この不動産上の土地は不動産所有者により販売され、Linden Labは販売しません。販売に関するお問い合わせは、不動産所有者までお願い致します。
 	</string>
-	<string name="covenant_last_modified" value="最終修正日："/>
-	<string name="none_text" value=" （なし） "/>
-	<string name="never_text" value=" （無） "/>
-	
+	<string name="covenant_last_modified" value="最終更新日："/>
+	<string name="none_text" value="（なし）"/>
+	<string name="never_text" value="（無）"/>
 	<!--Region Details-->
 	<string name="GroupOwned">
 		グループ所有
 	</string>
 	<string name="Public">
-		パブリック
+		公共
 	</string>
-	
 	<!-- Environment settings -->
 	<string name="LocalSettings">
 		ローカル設定
 	</string>
 	<string name="RegionSettings">
-		リージョン（地域）の設定
+		リージョンの設定
 	</string>
 	<string name="NoEnvironmentSettings">
-		この地域では自然環境設定を行うことはできません
+		このリージョンは自然環境の設定をサポートしていません。
 	</string>
 	<string name="EnvironmentSun">
 		太陽
@@ -2653,32 +2819,30 @@ https://www.firestormviewer.org/support
 		ブルーム
 	</string>
 	<string name="EnvironmentCloudNoise">
-		雲のノイズ
+		雲の音
 	</string>
 	<string name="EnvironmentNormalMap">
-		通常マッピング
+		法線（ノーマル）マップ
 	</string>
 	<string name="EnvironmentTransparent">
-		透明
+		透過
 	</string>
-	
 	<!-- panel classified -->
 	<string name="ClassifiedClicksTxt">
-		クリック数： [TELEPORT] テレポート、 [MAP] 地図、 [PROFILE] プロフィール
+		クリック回数：[TELEPORT]テレポート、[MAP]マップ、[PROFILE]プロフィール
 	</string>
 	<string name="ClassifiedUpdateAfterPublish">
-		（掲載後更新）
+		（掲載後に更新）
 	</string>
-	
 	<!-- panel picks -->
 	<string name="NoPicksClassifiedsText">
-		ピックやクラシファイド広告を作成していません。 作成するには、下にある「プラス」ボタンをクリックします。
+		ピックやクラシファイド広告を作成していません。作成するには、下にある「＋」ボタンをクリックします。
 	</string>
 	<string name="NoPicksText">
-		ピックを作成していません。[新規] ボタンをクリックしてピックを作成する。
+		ピックを作成していません。「新規」ボタンをクリックしてピックを作成できます。
 	</string>
 	<string name="NoClassifiedsText">
-		クラシファイド広告を作成していません。[新規] ボタンをクリックしてクラシファイド広告を作成する。
+		クラシファイド広告を作成していません。「新規」ボタンをクリックしてクラシファイド広告を作成できます。
 	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		ピック、またはクラシファイド広告がありません
@@ -2690,15 +2854,21 @@ https://www.firestormviewer.org/support
 		クラシファイド広告がありません
 	</string>
 	<string name="PicksClassifiedsLoadingText">
-		ローディング...
+		読み込んでいます…
 	</string>
-	
 	<!-- FS:KC legacy profiles -->
-	<string name="NoPicksText">ピックを作成していません。</string>
-	<string name="NoAvatarPicksText">このユーザーにはピックがありません。</string>
-	<string name="NoClassifiedsText">クラシファイド広告を作成していません。作成するには、下にある「プラス」ボタンをクリックします。</string>
-	<string name="NoAvatarClassifiedsText">このユーザーにはクラシファイド広告がありません。</string>
-  
+	<string name="NoPicksText">
+		ピックを作成していません。
+	</string>
+	<string name="NoAvatarPicksText">
+		このユーザーにはピックがありません。
+	</string>
+	<string name="NoClassifiedsText">
+		クラシファイド広告を作成していません。作成するには、下にある「＋」ボタンをクリックします。
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		このユーザーにはクラシファイド広告がありません。
+	</string>
 	<!-- Multi Preview Floater -->
 	<string name="MultiPreviewTitle">
 		プレビュー
@@ -2706,33 +2876,41 @@ https://www.firestormviewer.org/support
 	<string name="MultiPropertiesTitle">
 		プロパティ
 	</string>
-	
 	<!-- inventory offer -->
 	<string name="InvOfferAnObjectNamed">
 		オブジェクト名
 	</string>
 	<string name="InvOfferOwnedByGroup">
-		所有グループ
+		グループの所有する
 	</string>
 	<string name="InvOfferOwnedByUnknownGroup">
-		不明なグループ所有
+		不明なグループの所有する
 	</string>
 	<string name="InvOfferOwnedBy">
-		所有者
+		を所有する
 	</string>
 	<string name="InvOfferOwnedByUnknownUser">
-		不明なユーザー所有
+		不明なユーザーの所有する
 	</string>
 	<string name="InvOfferGaveYou">
-		が渡しました
+		から以下のアイテムが渡されました：
 	</string>
+	<!-- FS:Ansariel: Removed nolink-tags for console -->
 	<string name="InvOfferDecline">
-		[NAME] からの [DESC] を拒否しました。
+		[NAME]からの[DESC]を却下しました。
 	</string>
-	<string name="InvOfferFrom">からの</string>
-	<string name="InvOfferAutoAcceptObject">[OBJECT_NAME] というオブジェクトがあなたにこの [OBJECT_TYPE] を渡しました：[DESC]</string>
-	<string name="InvOfferAutoAcceptUser">[USER_NAME] があなたにこの [OBJECT_TYPE] を渡しました：[DESC]</string>
-	
+	<string name="InvOfferYouDecline">
+		あなたは却下しました
+	</string>
+	<string name="InvOfferFrom">
+		からの
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		[OBJECT_NAME] というオブジェクトがあなたに[OBJECT_TYPE]を渡してきました：[DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME]があなたに[OBJECT_TYPE]を渡してきました：[DESC]
+	</string>
 	<!-- group money -->
 	<string name="GroupMoneyTotal">
 		合計
@@ -2744,16 +2922,16 @@ https://www.firestormviewer.org/support
 		あなたに支払い：
 	</string>
 	<string name="GroupMoneyPaidInto">
-		paid into
+		支払情報
 	</string>
 	<string name="GroupMoneyBoughtPassTo">
 		入場許可を購入：
 	</string>
 	<string name="GroupMoneyPaidFeeForEvent">
-		がイベント用の費用を支払いました
+		が、イベントの費用を支払いました。
 	</string>
 	<string name="GroupMoneyPaidPrizeForEvent">
-		がイベント用の賞金を支払いました
+		が、イベントの賞金を支払いました。
 	</string>
 	<string name="GroupMoneyBalance">
 		残高
@@ -2764,13 +2942,9 @@ https://www.firestormviewer.org/support
 	<string name="GroupMoneyDebits">
 		支出
 	</string>
-	<string name="GroupMoneyDate">
-		[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日[weekday,datetime,utc]
+	<string name="GroupMoneyStartDate">
+		[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日　[weekday,datetime,utc]から取引開始
 	</string>
-	<string name="ViewerObjectContents">
-		内容
-	</string>
-	
 	<!-- Viewer menu -->
 	<string name="AcquiredItems">
 		取得アイテム
@@ -2779,33 +2953,34 @@ https://www.firestormviewer.org/support
 		キャンセル
 	</string>
 	<string name="UploadingCosts">
-		[NAME] のアップロード料金は L$[AMOUNT] です
+		[NAME]のアップロード料金は L$ [AMOUNT]です。
 	</string>
 	<string name="UnknownFileExtension">
-		不明の拡張子： %s
-使用可能な拡張子： .wav, .tga, .bmp, .jpg, .jpeg, or .anim
+		不明な拡張子：%s
+使用可能な拡張子：.wav，.tga，.bmp，.jpg，.jpeg，.anim
 	</string>
 	<string name="MuteObject2">
-		ブロック
+		オブジェクトのブロック
 	</string>
 	<string name="MuteAvatar">
-		ブロック
+		アバターのブロック
 	</string>
 	<string name="UnmuteObject">
-		ブロック解除
+		オブジェクトのブロック解除
 	</string>
 	<string name="UnmuteAvatar">
-		ブロック解除
+		アバターのブロック解除
 	</string>
 	<string name="AddLandmarkNavBarMenu">
-		マイ ランドマークに追加...
+		ランドマークに追加…
 	</string>
 	<string name="EditLandmarkNavBarMenu">
-		マイ ランドマークを編集...
+		ランドマークを編集…
 	</string>
 	<string name="accel-mac-control">
 		⌃
 	</string>
+	<!-- menu accelerators -->
 	<string name="accel-mac-command">
 		⌘
 	</string>
@@ -2816,25 +2991,27 @@ https://www.firestormviewer.org/support
 		⇧
 	</string>
 	<string name="accel-win-control">
-		Ctrl+
+		Ctrl＋
 	</string>
 	<string name="accel-win-alt">
-		Alt+
+		Alt＋
 	</string>
 	<string name="accel-win-shift">
-		Shift+
+		Shift＋
 	</string>
+	<!-- Previews -->
 	<string name="FileSaved">
-		ファイルが保存されました
+		ファイルが保存されました。
 	</string>
 	<string name="Receiving">
-		取得中
+		取得しています。
 	</string>
+	<!-- status bar , Time -->
 	<string name="AM">
-		AM
+		午前
 	</string>
 	<string name="PM">
-		PM
+		午後
 	</string>
 	<string name="PST">
 		太平洋標準時
@@ -2842,6 +3019,7 @@ https://www.firestormviewer.org/support
 	<string name="PDT">
 		太平洋夏時間
 	</string>
+	<!-- Directions, HUD -->
 	<string name="Direction_Forward">
 		前
 	</string>
@@ -2852,7 +3030,7 @@ https://www.firestormviewer.org/support
 		右
 	</string>
 	<string name="Direction_Back">
-		戻る
+		後
 	</string>
 	<string name="Direction_North">
 		北
@@ -2872,6 +3050,7 @@ https://www.firestormviewer.org/support
 	<string name="Direction_Down">
 		下
 	</string>
+	<!-- Search Category Strings -->
 	<string name="Any Category">
 		全カテゴリ
 	</string>
@@ -2882,10 +3061,10 @@ https://www.firestormviewer.org/support
 		土地のレンタル
 	</string>
 	<string name="Property Rental">
-		プロパティのレンタル
+		財産のレンタル
 	</string>
 	<string name="Special Attraction">
-		特別アトラクション
+		特別なアトラクション
 	</string>
 	<string name="New Products">
 		新製品
@@ -2899,6 +3078,7 @@ https://www.firestormviewer.org/support
 	<string name="Service">
 		サービス
 	</string>
+	<!-- PARCEL_CATEGORY_UI_STRING -->
 	<string name="Personal">
 		パーソナル
 	</string>
@@ -2906,20 +3086,19 @@ https://www.firestormviewer.org/support
 		なし
 	</string>
 	<string name="Linden Location">
-		Linden 所在地
+		Linden所在地
 	</string>
 	<string name="Adult">
-		Adult
+		Adult向け
 	</string>
-	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
 	<string name="Arts and Culture">
-		アートとカルチャー
+		芸術と文化
 	</string>
 	<string name="Business">
 		ビジネス
 	</string>
 	<string name="Educational">
-		教育的
+		教育
 	</string>
 	<string name="Gaming">
 		ゲーム
@@ -2928,7 +3107,7 @@ https://www.firestormviewer.org/support
 		たまり場
 	</string>
 	<string name="Newcomer Friendly">
-		新住人に優しい
+		新規住民歓迎
 	</string>
 	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
 	<string name="Parks and Nature">
@@ -2937,6 +3116,11 @@ https://www.firestormviewer.org/support
 	<string name="Residential">
 		住宅用
 	</string>
+	<!--
+	<string name="Shopping">
+		ショッピング
+	</string>
+	-->
 	<string name="Stage">
 		ステージ
 	</string>
@@ -2952,84 +3136,86 @@ https://www.firestormviewer.org/support
 	<string name="You">
 		あなた
 	</string>
+	<!-- punctuations -->
 	<string name=":">
-		:
+		：
 	</string>
 	<string name=",">
-		,
+		、
 	</string>
 	<string name="...">
-		...
-	</string>
-	<string name="***">
-		***
+		…
 	</string>
 	<string name="(">
-		(
+		（
 	</string>
 	<string name=")">
-		)
+		）
 	</string>
 	<string name=".">
-		.
+		。
 	</string>
-	<string name="&apos;">
-		&apos;
+	<string name="'">
+		'
 	</string>
 	<string name="---">
-		---
+		─
 	</string>
+	<!-- media -->
 	<string name="Multiple Media">
 		複数のメディア
 	</string>
 	<string name="Play Media">
-		メディアを再生/一時停止
+		メディアの再生／一時停止
 	</string>
-	<string name="IntelDriverPage">
-		http://www.intel.com/p/en_US/support/detect/graphics
-	</string>
-	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=en-us
-	</string>
-	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
-	</string>
+	<string name="StreamtitleNowPlaying">再生中：</string>
+	<!-- Drivers support/update pages -->
+	<string name="IntelDriverPage">https://www.intel.co.jp/content/www/jp/ja/support/detect.html</string>
+	<string name="NvidiaDriverPage">https://www.nvidia.com/Download/index.aspx?lang=ja-jp</string>
+	<string name="AMDDriverPage">https://www.amd.com/ja/support</string>
+	<!-- OSMessageBox messages -->
 	<string name="MBCmdLineError">
 		コマンドラインにエラーが見つかりました。
-リンク先を参照してください： http://wiki.secondlife.com/wiki/Client_parameters
+リンク先を参照してください：https://wiki.secondlife.com/wiki/%E3%83%93%E3%83%A5%E3%83%BC%E3%83%AF%E5%BC%95%E6%95%B0
 エラー：
 	</string>
 	<string name="MBCmdLineUsg">
-		[APP_NAME] コマンドライン使用：
+		[APP_NAME]コマンドライン使用：
 	</string>
 	<string name="MBUnableToAccessFile">
-		[APP_NAME] は必要なファイルにアクセスできません。
+		[APP_NAME]は必要なファイルにアクセスできません。
 
 複数のコピーを実行中か、ファイルが既に開いているとあなたのシステムが誤認識している可能性があります。
 このメッセージが何度も出る場合は、コンピューターを再起動してもう一度お試しください。
-それでも問題が続く場合、[APP_NAME] を完全にアンインストールして、再インストールをしてください。
+それでも問題が続く場合、[APP_NAME]を完全にアンインストールして、再インストールをしてください。
 	</string>
 	<string name="MBFatalError">
 		致命的なエラー
 	</string>
+	<string name="MBApplicationError">アプリケーションエラー‐慌てないでください</string>
+	<string name="MBApplicationErrorDetails">申し訳ございませんが、[APP_NAME]はクラッシュしたため、終了する必要があります。この問題が繰り返し発生する場合は、サポートチームに連絡して次のメッセージを送信してください：
+
+[ERROR_DETAILS]
+	</string>
 	<string name="MBRequiresAltiVec">
-		[APP_NAME] は、AltiVec搭載のプロセッサが必要です。（G4 以降）
+		[APP_NAME]は、AltiVec搭載のプロセッサが必要です。（G4 以降）
 	</string>
 	<string name="MBAlreadyRunning">
-		[APP_NAME] はすでに実行中です。
+		[APP_NAME]はすでに実行中です。
 最小化されたプログラムのコピーをタスクバーで確認してください。
 このメッセージが何度も出る場合はコンピューターを再起動してください。
 	</string>
 	<string name="MBFrozenCrashed">
-		[APP_NAME] は前回の実行時にフリーズしています。
+		[APP_NAME]は前回の実行時にフリーズしています。
 クラッシュ報告を送信しますか？
 	</string>
 	<string name="MBAlert">
 		通知
 	</string>
 	<string name="MBNoDirectX">
-		[APP_NAME] は DirectX 9.0b 及びそれ以降のバージョンを検出することができませんでした。
-[APP_NAME] は DirectX を使用して安定性の問題、低パフォーマンス、クラッシュ等悪影響を与えるハードウェアや古いドライバを検出します。  DirectX 9.0b がなくても [APP_NAME] を実行できますが、DirectX 9.0bとのご使用を強く推奨します。
+		[APP_NAME]は、DirectX 9.0b及びそれ以降のバージョンを検出することができませんでした。
+[APP_NAME]は DirectX を使用して安定性の問題、低パフォーマンス、クラッシュ等悪影響を与えるハードウェアや古いドライバを検出します。DirectX 9.0b がなくても
+[APP_NAME]を実行できますが、DirectX 9.0bとのご使用を強く推奨します。
 
 続けますか？
 	</string>
@@ -3047,7 +3233,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		エラー
 	</string>
 	<string name="MBFullScreenErr">
-		[WIDTH] x [HEIGHT] では全画面で実行することができません。
+		[WIDTH]×[HEIGHT]では全画面で実行することができません。
 ウィンドウモードで実行中です。
 	</string>
 	<string name="MBDestroyWinFailed">
@@ -3057,7 +3243,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		シャットダウンエラー
 	</string>
 	<string name="MBDevContextErr">
-		GL ディバイスコンテキストが作れません
+		ＧＬデバイスのコンテキストが作れません
 	</string>
 	<string name="MBPixelFmtErr">
 		適切なピクセル形式が見つかりません
@@ -3065,32 +3251,37 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="MBPixelFmtDescErr">
 		ピクセル形式情報が見つかりません
 	</string>
-	<string name="MBTrueColorWindow">
-		[APP_NAME] を実行するには、True Color （32ビット）が必要です。
-お使いのコンピューターの「コントロールパネル」＞「画面」＞「設定」に行き、「最高 （32 ビット)」に設定してください。
-	</string>
-	<string name="MBAlpha">
-		[APP_NAME] は 8 ビットのアルファチャンネルを取得できないため実行できません。  通常ビデオカードのドライバの問題で起こります。
-お使いのコンピューターに最新のビデオカードドライバがインストールされているかご確認ください。
-また、「コントロールパネル」＞「画面」＞「設定」内で、モニターが「最高 （32 ビット）」に設定されていることもご確認ください。
-このメッセージが何度も出る場合は、[SUPPORT_SITE] へご連絡ください。
-	</string>
 	<string name="MBPixelFmtSetErr">
-		ピクセル形式が設定できません
+		ピクセル形式が設定できません。
 	</string>
 	<string name="MBGLContextErr">
-		GL レンダーコンテキストが作れません
+		ＧＬレンダーコンテキストが作れません
 	</string>
 	<string name="MBGLContextActErr">
-		GL レンダーコンテキストをアクティベートできません
+		ＧＬレンダーコンテキストを有効化できません。
 	</string>
 	<string name="MBVideoDrvErr">
-		お使いのコンピューターのビデオカードドライバが正常にインストールできなかった、または古いかサポート対象外のため、[APP_NAME]  は実行できません。 最新のビデオカードドライバがインストールされているのを確認し、されている場合は再インストールをお試しください。
+		お使いのコンピューターのビデオカードのドライバが正常にインストールされていないか、古いまたはサポート対象外のため、[APP_NAME]を実行することができませんでした。
+最新のビデオカードドライバがインストールされているのを確認し、されている場合は再インストールをお試しください。
 
-このメッセージが何度も出る場合は、[SUPPORT_SITE] へご連絡ください。
+このメッセージが何度も出る場合は、[SUPPORT_SITE]へご連絡ください。
 	</string>
+	<string name="MBOutOfMemoryTitle">
+		メモリが超過
+	</string>
+	<string name="MBOutOfMemoryErr">
+		[APP_NAME]は、メモリの確保に失敗しました。実行に必要なメモリを確保できないため終了します。
+
+コンピュータのＲＡＭが少ない場合は、Second Lifeを実行する前に重いアプリケーションを終了し、ページファイルを割り当てるか、描画距離などのグラフィック設定を軽くしてください。
+	</string>
+	<string name="MBMissingFile">
+		[APP_NAME]は、実行に必要なファイルの一部にアクセスできないか、ファイルが見つからなかったため閉じられます。
+
+[DOWNLOAD_URL] からビューアを再インストールてください。再インストール後も問題が解決しない場合は[SUPPORT_SITE] に連絡してください。
+	</string>
+	<!-- Avatar Shape Information -->
 	<string name="5 O'Clock Shadow">
-		うっすらとしたヒゲ
+		不精ひげ
 	</string>
 	<string name="All White">
 		真っ白
@@ -3126,25 +3317,25 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		お腹の大きさ
 	</string>
 	<string name="Big">
-		大
+		大きい
 	</string>
 	<string name="Big Butt">
-		大
+		大きく
 	</string>
 	<string name="Big Hair Back">
-		髪の大部分： 後ろ
+		髪の大部分：後ろ
 	</string>
 	<string name="Big Hair Front">
-		髪の大部分： 前
+		髪の大部分：前
 	</string>
 	<string name="Big Hair Top">
-		髪の大部分： 上部
+		髪の大部分：上部
 	</string>
 	<string name="Big Head">
-		大
+		大きく
 	</string>
 	<string name="Big Pectorals">
-		大
+		大きく
 	</string>
 	<string name="Big Spikes">
 		とげあり
@@ -3159,19 +3350,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ブロンドの髪
 	</string>
 	<string name="Blush">
-		チーク
+		頬紅
 	</string>
 	<string name="Blush Color">
-		チークカラー
+		頬の色
 	</string>
 	<string name="Blush Opacity">
-		チークの濃さ
+		頬の濃さ
 	</string>
 	<string name="Body Definition">
 		体の精細度
 	</string>
 	<string name="Body Fat">
-		体脂肪
+		太った
 	</string>
 	<string name="Body Freckles">
 		体のしみ・そばかす
@@ -3183,13 +3374,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		体の厚み
 	</string>
 	<string name="Body Thin">
-		細め
+		痩せた
 	</string>
 	<string name="Bow Legged">
-		外股
+		股
 	</string>
 	<string name="Breast Buoyancy">
-		胸の重力
+		胸の弾み
 	</string>
 	<string name="Breast Cleavage">
 		胸の谷間
@@ -3201,13 +3392,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		両目の間の幅
 	</string>
 	<string name="Broad">
-		広
+		広く
 	</string>
 	<string name="Brow Size">
 		眉毛上の隆起
 	</string>
 	<string name="Bug Eyes">
-		Bug Eyes
+		丸い目
 	</string>
 	<string name="Bugged Eyes">
 		突き出た目
@@ -3219,16 +3410,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		だんご鼻
 	</string>
 	<string name="Breast Physics Mass">
-		胸の豊かさ
+		胸の動きの大きさ
 	</string>
 	<string name="Breast Physics Smoothing">
-		胸の平滑化
+		胸の動きの滑らかさ
 	</string>
 	<string name="Breast Physics Gravity">
 		胸の垂れ具合
 	</string>
 	<string name="Breast Physics Drag">
-		胸の空気抵抗
+		胸の揺れ具合
 	</string>
 	<string name="Breast Physics InOut Max Effect">
 		最大エフェクト数
@@ -3255,7 +3446,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		減衰
 	</string>
 	<string name="Breast Physics LeftRight Max Effect">
-		最大エフェクト数
+		最大効果数
 	</string>
 	<string name="Breast Physics LeftRight Spring">
 		振動速度
@@ -3267,19 +3458,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		減衰
 	</string>
 	<string name="Belly Physics Mass">
-		お腹の豊かさ
+		腹部の動きの大きさ
 	</string>
 	<string name="Belly Physics Smoothing">
-		お腹の平滑化
+		腹部の動きの滑らかさ
 	</string>
 	<string name="Belly Physics Gravity">
-		お腹の垂れ具合
+		腹部の垂れ具合
 	</string>
 	<string name="Belly Physics Drag">
-		お腹の空気抵抗
+		腹部の揺れ具合
 	</string>
 	<string name="Belly Physics UpDown Max Effect">
-		最大エフェクト数
+		最大効果数
 	</string>
 	<string name="Belly Physics UpDown Spring">
 		振動速度
@@ -3291,52 +3482,52 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		減衰
 	</string>
 	<string name="Butt Physics Mass">
-		お尻の豊かさ
+		尻の動きの大きさ
 	</string>
 	<string name="Butt Physics Smoothing">
-		お尻の平滑化
+		尻の動きの滑らかさ
 	</string>
 	<string name="Butt Physics Gravity">
-		お尻の垂れ具合
+		尻の垂れ具合
 	</string>
 	<string name="Butt Physics Drag">
-		お尻の空気抵抗
+		尻の揺れ具合
 	</string>
 	<string name="Butt Physics UpDown Max Effect">
-		最大エフェクト数
+		上下の最大効果数
 	</string>
 	<string name="Butt Physics UpDown Spring">
-		振動速度
+		上下の振動速度
 	</string>
 	<string name="Butt Physics UpDown Gain">
-		増加率
+		上下の増加率
 	</string>
 	<string name="Butt Physics UpDown Damping">
-		減衰
+		上下の減衰
 	</string>
 	<string name="Butt Physics LeftRight Max Effect">
-		最大エフェクト数
+		左右の最大効果数
 	</string>
 	<string name="Butt Physics LeftRight Spring">
-		振動速度
+		左右の振動速度
 	</string>
 	<string name="Butt Physics LeftRight Gain">
-		増加率
+		左右の増加率
 	</string>
 	<string name="Butt Physics LeftRight Damping">
-		減衰
+		左右の減衰
 	</string>
 	<string name="Bushy Eyebrows">
-		太
+		太く
 	</string>
 	<string name="Bushy Hair">
 		ぼさぼさヘア
 	</string>
 	<string name="Butt Size">
-		お尻の大きさ
+		尻の大きさ
 	</string>
 	<string name="Butt Gravity">
-		お尻の垂れ具合
+		尻の垂れ具合
 	</string>
 	<string name="bustle skirt">
 		後ろの膨らみ
@@ -3351,34 +3542,34 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		チャップリン
 	</string>
 	<string name="Cheek Bones">
-		ほお骨
+		頬骨
 	</string>
 	<string name="Chest Size">
-		胸部の大きさ
+		胸の大きさ
 	</string>
 	<string name="Chin Angle">
-		あごの角度
+		顎の角度
 	</string>
 	<string name="Chin Cleft">
-		あごの先の割れ
+		顎先の割れ
 	</string>
 	<string name="Chin Curtains">
-		あごに沿ったひげ
+		顎髭
 	</string>
 	<string name="Chin Depth">
-		あごの長さ
+		顎の長さ
 	</string>
 	<string name="Chin Heavy">
-		あごを強調
+		顎を強調
 	</string>
 	<string name="Chin In">
-		ひいたあご
+		ひいた顎
 	</string>
 	<string name="Chin Out">
-		突き出たあご
+		突き出た顎
 	</string>
 	<string name="Chin-Neck">
-		あごと首
+		顎と首
 	</string>
 	<string name="Clear">
 		クリア
@@ -3390,28 +3581,28 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		顔の中心寄りの目
 	</string>
 	<string name="Closed">
-		クローズ
+		閉じた
 	</string>
 	<string name="Closed Back">
-		後ろとじ
+		後ろ閉じ
 	</string>
 	<string name="Closed Front">
-		前とじ
+		前閉じ
 	</string>
 	<string name="Closed Left">
-		左とじ
+		左閉じ
 	</string>
 	<string name="Closed Right">
-		右とじ
+		右閉じ
 	</string>
 	<string name="Coin Purse">
 		コイン入れ
 	</string>
 	<string name="Collar Back">
-		後ろえり
+		後ろ襟
 	</string>
 	<string name="Collar Front">
-		前えり
+		前襟
 	</string>
 	<string name="Corner Down">
 		ダウン
@@ -3426,7 +3617,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		曲がった鼻
 	</string>
 	<string name="Cuff Flare">
-		袖口のフレア
+		袖の広がり
 	</string>
 	<string name="Dark">
 		ダーク
@@ -3441,10 +3632,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		尖った
 	</string>
 	<string name="Default Heels">
-		デフォルトのかかと
+		デフォルトの踵
 	</string>
 	<string name="Dense">
-		濃
+		濃さ
 	</string>
 	<string name="Double Chin">
 		二重あご
@@ -3528,7 +3719,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		離れた目
 	</string>
 	<string name="Fat Lips">
-		大
+		厚く
 	</string>
 	<string name="Female">
 		女性
@@ -3543,28 +3734,28 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		広がった袖口
 	</string>
 	<string name="Flat">
-		平ら
+		平坦
 	</string>
 	<string name="Flat Butt">
-		小
+		平坦に
 	</string>
 	<string name="Flat Head">
-		絶壁頭
+		平坦な頭
 	</string>
 	<string name="Flat Toe">
-		フラット
+		扁平足
 	</string>
 	<string name="Foot Size">
 		足の大きさ
 	</string>
 	<string name="Forehead Angle">
-		ひたいの角度
+		額の角度
 	</string>
 	<string name="Forehead Heavy">
-		ひたいを強調
+		額の重さ
 	</string>
 	<string name="Freckles">
-		しみ・そばかす
+		そばかす
 	</string>
 	<string name="Front Fringe">
 		前髪の毛先
@@ -3579,7 +3770,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		刈られていない髪
 	</string>
 	<string name="Full Hair Sides">
-		サイドの髪
+		横髪
 	</string>
 	<string name="Full Sides">
 		生え揃ったサイド
@@ -3597,13 +3788,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		髪
 	</string>
 	<string name="Hair Back">
-		髪： 後ろ
+		髪：後ろ
 	</string>
 	<string name="Hair Front">
-		髪： 前
+		髪：前
 	</string>
 	<string name="Hair Sides">
-		髪： サイド
+		髪：横
 	</string>
 	<string name="Hair Sweep">
 		流す
@@ -3624,7 +3815,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		右向き
 	</string>
 	<string name="Hair Volume">
-		髪： ボリューム
+		髪：ボリューム
 	</string>
 	<string name="Hand Size">
 		手の大きさ
@@ -3654,13 +3845,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		身長
 	</string>
 	<string name="High">
-		高
+		高く
 	</string>
 	<string name="High Heels">
 		ハイヒール
 	</string>
 	<string name="High Jaw">
-		高
+		長く
 	</string>
 	<string name="High Platforms">
 		厚底
@@ -3669,7 +3860,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		高めでタイト
 	</string>
 	<string name="Higher">
-		高
+		高く
 	</string>
 	<string name="Hip Length">
 		腰の長さ
@@ -3699,19 +3890,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		内側のシャドウ
 	</string>
 	<string name="Jacket Length">
-		ジャケット丈
+		ジャケットの丈
 	</string>
 	<string name="Jacket Wrinkles">
-		ジャケットのしわ
+		ジャケットの皺
 	</string>
 	<string name="Jaw Angle">
-		あごの角度
+		顎の角度
 	</string>
 	<string name="Jaw Jut">
-		あごの突出
+		顎の突出
 	</string>
 	<string name="Jaw Shape">
-		あごの形
+		顎の形
 	</string>
 	<string name="Join">
 		寄せた胸
@@ -3726,10 +3917,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		内股
 	</string>
 	<string name="Large">
-		大
+		広く
 	</string>
 	<string name="Large Hands">
-		大
+		大きく
 	</string>
 	<string name="Left Part">
 		左分け
@@ -3741,31 +3932,31 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		脚の筋肉
 	</string>
 	<string name="Less">
-		小
+		少なく
 	</string>
 	<string name="Less Body Fat">
-		少なめ
+		痩せた
 	</string>
 	<string name="Less Curtains">
-		少なめ
+		少なく
 	</string>
 	<string name="Less Freckles">
-		少なめ
+		少なく
 	</string>
 	<string name="Less Full">
-		薄い
+		薄く
 	</string>
 	<string name="Less Gravity">
-		少
+		軽く
 	</string>
 	<string name="Less Love">
-		少
+		愛らしくない
 	</string>
 	<string name="Less Muscles">
-		少なめ
+		少なく
 	</string>
 	<string name="Less Muscular">
-		少なめ
+		少なく
 	</string>
 	<string name="Less Rosy">
 		少な目
@@ -3774,25 +3965,25 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		丸み少な目
 	</string>
 	<string name="Less Saddle">
-		小
+		少なく
 	</string>
 	<string name="Less Square">
-		小
+		角を少なく
 	</string>
 	<string name="Less Volume">
 		ボリューム少な目
 	</string>
 	<string name="Less soul">
-		小
+		小さく
 	</string>
 	<string name="Lighter">
-		ライト
+		軽く
 	</string>
 	<string name="Lip Cleft">
-		唇の山
+		唇の裂け目
 	</string>
 	<string name="Lip Cleft Depth">
-		唇の山の高さ
+		唇の裂け目の深さ
 	</string>
 	<string name="Lip Fullness">
 		唇の厚み
@@ -3807,7 +3998,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		唇の前後幅
 	</string>
 	<string name="Lip Width">
-		口の大きさ
+		口の幅
 	</string>
 	<string name="Lipgloss">
 		リップグロス
@@ -3819,67 +4010,67 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		口紅の色
 	</string>
 	<string name="Long">
-		ロング
+		長さ
 	</string>
 	<string name="Long Head">
 		前後幅が広い頭
 	</string>
 	<string name="Long Hips">
-		長
+		長く
 	</string>
 	<string name="Long Legs">
-		長
+		長く
 	</string>
 	<string name="Long Neck">
-		長
+		長く
 	</string>
 	<string name="Long Pigtails">
-		長
+		長く
 	</string>
 	<string name="Long Ponytail">
-		長
+		長く
 	</string>
 	<string name="Long Torso">
-		長
+		長く
 	</string>
 	<string name="Long arms">
-		長
+		長く
 	</string>
 	<string name="Loose Pants">
-		ゆったり
+		ゆるく
 	</string>
 	<string name="Loose Shirt">
-		ゆるめ
+		ゆるく
 	</string>
 	<string name="Loose Sleeves">
-		ゆるめ
+		ゆるく
 	</string>
 	<string name="Love Handles">
 		ウエスト周り
 	</string>
 	<string name="Low">
-		低
+		低く
 	</string>
 	<string name="Low Heels">
 		ローヒール
 	</string>
 	<string name="Low Jaw">
-		低
+		短く
 	</string>
 	<string name="Low Platforms">
-		低め
+		低く
 	</string>
 	<string name="Low and Loose">
 		低めでゆったり
 	</string>
 	<string name="Lower">
-		低
+		低く
 	</string>
 	<string name="Lower Bridge">
 		鼻筋
 	</string>
 	<string name="Lower Cheeks">
-		ほおの下部
+		下頬
 	</string>
 	<string name="Male">
 		男性
@@ -3888,70 +4079,70 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		真ん中分け
 	</string>
 	<string name="More">
-		大
+		より多く
 	</string>
 	<string name="More Blush">
 		きつめ
 	</string>
 	<string name="More Body Fat">
-		多め
+		太く
 	</string>
 	<string name="More Curtains">
-		多め
+		多く
 	</string>
 	<string name="More Eyeshadow">
-		あり
+		多く
 	</string>
 	<string name="More Freckles">
-		多め
+		多く
 	</string>
 	<string name="More Full">
-		厚い
+		厚く
 	</string>
 	<string name="More Gravity">
-		大
+		重く
 	</string>
 	<string name="More Lipstick">
 		あり
 	</string>
 	<string name="More Love">
-		大
+		愛らしく
 	</string>
 	<string name="More Lower Lip">
-		大
+		下唇
 	</string>
 	<string name="More Muscles">
-		多め
+		多く
 	</string>
 	<string name="More Muscular">
-		筋骨隆々
+		筋肉質に
 	</string>
 	<string name="More Rosy">
 		多め
 	</string>
 	<string name="More Round">
-		まる
+		丸顔
 	</string>
 	<string name="More Saddle">
-		大
+		広く
 	</string>
 	<string name="More Sloped">
 		なだらか
 	</string>
 	<string name="More Square">
-		四角
+		角顔
 	</string>
 	<string name="More Upper Lip">
-		大
+		上唇
 	</string>
 	<string name="More Vertical">
-		垂直
+		垂直に
 	</string>
 	<string name="More Volume">
-		大
+		多く
 	</string>
 	<string name="More soul">
-		大
+		多く
 	</string>
 	<string name="Moustache">
 		口ひげ
@@ -3966,7 +4157,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		モヒカン
 	</string>
 	<string name="Muscular">
-		筋骨たくましい
+		筋骨隆々
 	</string>
 	<string name="Mutton Chops">
 		マトンチョップス
@@ -3978,19 +4169,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		マニキュアの色
 	</string>
 	<string name="Narrow">
-		狭
+		狭く
 	</string>
 	<string name="Narrow Back">
-		狭
+		狭く
 	</string>
 	<string name="Narrow Front">
-		狭
+		狭く
 	</string>
 	<string name="Narrow Lips">
 		おちょぼ口
 	</string>
 	<string name="Natural">
-		ナチュラル
+		自然に
 	</string>
 	<string name="Neck Length">
 		首の長さ
@@ -4059,7 +4250,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		鼻の幅
 	</string>
 	<string name="Nostril Division">
-		鼻の穴の高さ
+		鼻の穴の位置
 	</string>
 	<string name="Nostril Width">
 		鼻の穴の幅
@@ -4071,16 +4262,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		オープン
 	</string>
 	<string name="Open Back">
-		後ろあき
+		後開き
 	</string>
 	<string name="Open Front">
-		前あき
+		前開き
 	</string>
 	<string name="Open Left">
-		左あき
+		左開き
 	</string>
 	<string name="Open Right">
-		右あき
+		右開き
 	</string>
 	<string name="Orange">
 		オレンジ
@@ -4113,22 +4304,22 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		あり
 	</string>
 	<string name="Pale">
-		悪い
+		血相
 	</string>
 	<string name="Pants Crotch">
-		パンツの股
+		ズボンの股
 	</string>
 	<string name="Pants Fit">
-		パンツのフィット感
+		ズボンのフィット感
 	</string>
 	<string name="Pants Length">
-		パンツ丈
+		ズボン丈
 	</string>
 	<string name="Pants Waist">
 		ウエスト
 	</string>
 	<string name="Pants Wrinkles">
-		パンツのしわ
+		ズボンの皺
 	</string>
 	<string name="Part">
 		あり
@@ -4149,7 +4340,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ピンク
 	</string>
 	<string name="Pinker">
-		ピンク
+		ピンクに
 	</string>
 	<string name="Platform Height">
 		靴底の高さ
@@ -4161,7 +4352,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		尖った
 	</string>
 	<string name="Pointy Heels">
-		幅狭
+		尖ったヒール
 	</string>
 	<string name="Ponytail">
 		ポニーテール
@@ -4194,16 +4385,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		右分け
 	</string>
 	<string name="Rosy Complexion">
-		ほおの赤らみ
+		頬紅
 	</string>
 	<string name="Round">
 		まるっこい
 	</string>
 	<string name="Ruddiness">
-		血色
+		血色の良さ
 	</string>
 	<string name="Ruddy">
-		良い
+		血色
 	</string>
 	<string name="Rumpled Hair">
 		くしゃくしゃヘア
@@ -4257,58 +4448,58 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		シャツのフィット感
 	</string>
 	<string name="Shirt Wrinkles">
-		シャツのしわ
+		シャツの皺
 	</string>
 	<string name="Shoe Height">
-		靴の長さ
+		靴の高さ
 	</string>
 	<string name="Short">
-		ショート
+		短く
 	</string>
 	<string name="Short Arms">
-		短
+		短く
 	</string>
 	<string name="Short Legs">
-		短
+		短く
 	</string>
 	<string name="Short Neck">
-		短
+		短く
 	</string>
 	<string name="Short Pigtails">
-		短
+		短く
 	</string>
 	<string name="Short Ponytail">
-		短
+		短く
 	</string>
 	<string name="Short Sideburns">
-		短め
+		短く
 	</string>
 	<string name="Short Torso">
-		短
+		短く
 	</string>
 	<string name="Short hips">
-		短
+		短く
 	</string>
 	<string name="Shoulders">
-		肩
+		肩幅
 	</string>
 	<string name="Side Fringe">
-		サイドの毛先
+		横髪の毛先
 	</string>
 	<string name="Sideburns">
 		もみあげ
 	</string>
 	<string name="Sides Hair">
-		サイドの髪
+		横髪
 	</string>
 	<string name="Sides Hair Down">
-		ダウン
+		伸ばす
 	</string>
 	<string name="Sides Hair Up">
-		アップ
+		刈り上げる
 	</string>
 	<string name="Skinny Neck">
-		細
+		細い首
 	</string>
 	<string name="Skirt Fit">
 		スカートのフィット感
@@ -4326,25 +4517,25 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		袖のフィット感
 	</string>
 	<string name="Slit Back">
-		スリット： 後ろ
+		スリット：後ろ
 	</string>
 	<string name="Slit Front">
-		スリット： 前
+		スリット：前
 	</string>
 	<string name="Slit Left">
-		スリット： 左
+		スリット：左
 	</string>
 	<string name="Slit Right">
-		スリット： 右
+		スリット：右
 	</string>
 	<string name="Small">
-		小
+		小さい
 	</string>
 	<string name="Small Hands">
-		小
+		小さく
 	</string>
 	<string name="Small Head">
-		小
+		小さく
 	</string>
 	<string name="Smooth">
 		滑らか
@@ -4359,7 +4550,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ソウルパッチ
 	</string>
 	<string name="Sparse">
-		薄
+		まばら
 	</string>
 	<string name="Spiked Hair">
 		とげとげヘア
@@ -4368,7 +4559,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		角張った
 	</string>
 	<string name="Square Toe">
-		スクエアトゥ
+		つま先が四角い
 	</string>
 	<string name="Squash Head">
 		カボチャ型
@@ -4377,10 +4568,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		縦長
 	</string>
 	<string name="Sunken">
-		こけたほお
+		痩けた頬
 	</string>
 	<string name="Sunken Chest">
-		小
+		平坦に
 	</string>
 	<string name="Sunken Eyes">
 		くぼんだ目
@@ -4392,7 +4583,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		前へ
 	</string>
 	<string name="Tall">
-		トール
+		高さ
 	</string>
 	<string name="Taper Back">
 		後ろに先細
@@ -4404,25 +4595,25 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		幅広
 	</string>
 	<string name="Thick Neck">
-		太
+		太く
 	</string>
 	<string name="Thick Toe">
-		厚め
+		厚く
 	</string>
 	<string name="Thin">
 		薄い
 	</string>
 	<string name="Thin Eyebrows">
-		細
+		細く
 	</string>
 	<string name="Thin Lips">
-		小
+		細く
 	</string>
 	<string name="Thin Nose">
-		細い鼻
+		細く
 	</string>
 	<string name="Tight Chin">
-		ひきしまったあご
+		引き締まった顎
 	</string>
 	<string name="Tight Cuffs">
 		タイト
@@ -4470,10 +4661,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		両目のあいだ
 	</string>
 	<string name="Upper Cheeks">
-		ほおの上部
+		上頬
 	</string>
 	<string name="Upper Chin Cleft">
-		あご上部の割れ
+		上顎の割れ
 	</string>
 	<string name="Upper Eyelid Fold">
 		二重の幅
@@ -4488,55 +4679,57 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ウエストの高さ
 	</string>
 	<string name="Well-Fed">
-		つまったほお
+		太った
 	</string>
 	<string name="White Hair">
 		白髪
 	</string>
 	<string name="Wide">
-		広
+		広く
 	</string>
 	<string name="Wide Back">
-		広
+		背面を広く
 	</string>
 	<string name="Wide Front">
-		広
+		前面を広く
 	</string>
 	<string name="Wide Lips">
-		大きい口
+		広く
 	</string>
 	<string name="Wild">
 		ワイルド
 	</string>
 	<string name="Wrinkles">
-		しわ
+		皺
 	</string>
+	<!-- Navigation bar location input control.
+						Strings are here because widget xml is not localizable -->
 	<string name="LocationCtrlAddLandmarkTooltip">
-		マイ ランドマークに追加
+		ランドマークに追加
 	</string>
 	<string name="LocationCtrlEditLandmarkTooltip">
-		マイ ランドマークを編集
+		ランドマークを編集
 	</string>
 	<string name="LocationCtrlInfoBtnTooltip">
 		現在地の詳細を見る
 	</string>
 	<string name="LocationCtrlComboBtnTooltip">
-		マイ ロケーション履歴
+		ロケーション履歴
 	</string>
 	<string name="LocationCtrlForSaleTooltip">
-		この土地を購入
+		この土地を購入する
 	</string>
 	<string name="LocationCtrlVoiceTooltip">
-		ここではボイスの利用ができません
+		ここではボイスを利用できません。
 	</string>
 	<string name="LocationCtrlFlyTooltip">
-		飛行は禁止されています
+		飛行は禁止されています。
 	</string>
 	<string name="LocationCtrlPushTooltip">
 		プッシュ禁止
 	</string>
 	<string name="LocationCtrlBuildTooltip">
-		オブジェクトの制作・ドロップは禁止されています
+		オブジェクトのビルドや設置は禁止されています。
 	</string>
 	<string name="LocationCtrlScriptsTooltip">
 		スクリプト不可
@@ -4545,70 +4738,73 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		体力
 	</string>
 	<string name="LocationCtrlAdultIconTooltip">
-		Adult リージョン
+		Adultリージョン
 	</string>
 	<string name="LocationCtrlModerateIconTooltip">
-		Moderate リージョン
+		Moderateリージョン
 	</string>
 	<string name="LocationCtrlGeneralIconTooltip">
-		General リージョン
+		Generalリージョン
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		この区画外にいるアバターからは中にいるアバターが見えず、会話も聞こえないようにする
+		この区画内のアバターは、この区画の外にいるアバターからは見ることも聞くこともできません。
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
-		地域（リージョン）が再構築されるまで、移動するオブジェクトは正しく動作しない可能性があります。
+		リージョンが再構築されるまで、移動するオブジェクトは正しく動作しない可能性があります。
 	</string>
 	<string name="LocationCtrlPathfindingDisabledTooltip">
-		この地域（リージョン）でダイナミックパスファインディングが有効になっていません。
+		このリージョンでは、動的経路探索が有効になっていません。
 	</string>
+	<!-- Strings used by the (currently Linux) auto-updater app -->
 	<string name="UpdaterWindowTitle">
-		[APP_NAME] アップデート
+		[APP_NAME]の更新
 	</string>
 	<string name="UpdaterNowUpdating">
-		只今 [APP_NAME] をアップデート中です...
+		只今[APP_NAME]を更新しています…
 	</string>
 	<string name="UpdaterNowInstalling">
-		[APP_NAME] をインストール中です...
+		[APP_NAME]をインストールしています…
 	</string>
 	<string name="UpdaterUpdatingDescriptive">
-		お使いの [APP_NAME] ビューワが最新バージョンにアップデートされています。  数分かかることがありますのでしばらくお待ちください。
+		お使いの[APP_NAME]ビューアを最新バージョンに更新しています。数分かかることがありますのでしばらくお待ちください。
 	</string>
 	<string name="UpdaterProgressBarTextWithEllipses">
-		アップデートをダウンロード中です...
+		更新をダウンロードしています…
 	</string>
 	<string name="UpdaterProgressBarText">
-		アップデートをダウンロード中
+		更新をダウンロードしています…
 	</string>
 	<string name="UpdaterFailDownloadTitle">
-		アップデートのダウンロードに失敗しました
+		更新のダウンロードに失敗しました。
 	</string>
 	<string name="UpdaterFailUpdateDescriptive">
-		[APP_NAME] をアップデート中にエラーが発生しました。 www.secondlife.com から最新バージョンをダウンロードしてください。
+		[APP_NAME]の更新時にエラーが発生しました。www.secondlife.comから最新バージョンをダウンロードしてください。
 	</string>
 	<string name="UpdaterFailInstallTitle">
-		アップデートのインストールに失敗しました
+		更新のインストールに失敗しました。
 	</string>
 	<string name="UpdaterFailStartTitle">
-		ビューワの起動に失敗しました
+		ビューアの起動に失敗しました。
 	</string>
+	<!-- System Messages -->
 	<string name="ItemsComingInTooFastFrom">
-		[APP_NAME] ： アイテムが [FROM_NAME] から同時にたくさん読み込まれているため、自動プレビューが [TIME] 秒間無効となります。
+		[APP_NAME]：アイテムが[FROM_NAME]から同時にたくさん読み込まれているため、自動プレビューが[TIME]秒間無効となります。
 	</string>
 	<string name="ItemsComingInTooFast">
-		[APP_NAME] ： アイテムが同時にたくさん読み込まれているため、自動プレビューが [TIME] 秒間無効となります。
+		[APP_NAME]：アイテムが同時にたくさん読み込まれているため、自動プレビューが[TIME]秒間無効となります。
 	</string>
+	<!-- IM system messages -->
 	<string name="IM_logging_string">
-		-- インスタントメッセージの保存開始 --
+		‐インスタントメッセージの保存開始‐
 	</string>
 	<string name="IM_typing_start_string">
-		[NAME] は入力中です...
+		[NAME]は入力しています…
 	</string>
 	<string name="Unnamed">
 		（名前なし）
 	</string>
 	<string name="IM_moderated_chat_label">
-		（モデレート： デフォルトでボイスはオフ）
+		（モデレート：デフォルトでボイスはオフ）
 	</string>
 	<string name="IM_unavailable_text_label">
 		このコールでは文字チャットが利用できません。
@@ -4629,7 +4825,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		（保存日時：[LONG_TIMESTAMP]）
 	</string>
 	<string name="IM_unblock_only_groups_friends">
-		このメッセージを表示するには、「環境設定」の「プライバシー」で「フレンドとグループ以外からはコールと IM を受信しない」チェックボックスをオフにします。
+		このメッセージを表示するには、「初期設定」の「プライバシー」で「フレンドとグループ以外からはコールとＩＭを受信しない」チェックボックスをオフにします。
 	</string>
 	<string name="OnlineStatus">
 		オンライン
@@ -4638,82 +4834,84 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		オフライン
 	</string>
 	<string name="not_online_msg">
-		ユーザーがオンラインでありません - メッセージは保存され、後で配信されます。
+		ユーザーがオンラインでありません‐メッセージは保存され、後で配信されます。
 	</string>
 	<string name="not_online_inventory">
-		ユーザーがオンラインでありません - インベントリが保存されました。
+		ユーザーがオンラインでありません‐インベントリに保存されました。
 	</string>
+	<!-- Additional IM messages -->
+	<string name="IM_announce_incoming">[NAME]からメッセージが届いています</string>
+	<string name="IM_autoresponse_sent">自動応答が送られました：[MESSAGE]</string>
+	<string name="IM_autoresponse_item_sent">自動応答でアイテムが送られました：[ITEM_NAME]</string>
+	<!-- voice calls -->
 	<string name="answered_call">
-		相手がコールを受けました
+		相手がコールを受けました。
 	</string>
 	<string name="you_started_call">
-		ボイスコールを開始します
+		ボイスコールを開始します。
 	</string>
 	<string name="you_joined_call">
-		ボイスコールに参加しました
+		ボイスコールに参加しました。
 	</string>
 	<string name="you_auto_rejected_call-im">
-		「取り込み中」モード中のボイスコールは自動的に拒否しました。
+		「通知を受けない」がオンのときに、自動的にボイスコールを拒否しました。
 	</string>
 	<string name="name_started_call">
-		[NAME] はボイスコールを開始します
+		[NAME]はボイスコールを開始します
 	</string>
 	<string name="ringing-im">
-		ボイスコールに参加...
+		ボイスコールに参加…
 	</string>
 	<string name="connected-im">
-		接続しました。コール終了をクリックして切ります
+		接続しました。「通話終了」をクリックして切断します。
 	</string>
 	<string name="hang_up-im">
 		ボイスコールから退席しました
 	</string>
 	<string name="answering-im">
-		接続中...
+		接続中…
 	</string>
 	<string name="conference-title">
-		複数同時チャット
+		複数人チャット
 	</string>
 	<string name="conference-title-incoming">
-		[AGENT_NAME] とコンファレンスする
+		[AGENT_NAME]と会話する
 	</string>
 	<string name="inventory_item_offered-im">
-		インベントリアイテム '[ITEM_NAME]' を送りました
+		アイテム「[ITEM_NAME]」がインベントリに送られてきました。
 	</string>
 	<string name="inventory_folder_offered-im">
-		インベントリフォルダー '[ITEM_NAME]' を送りました
-  </string>
-	<string name="share_alert">
-		インベントリからここにアイテムをドラッグします
+		フォルダ「[ITEM_NAME]」がインベントリに送られてきました。
 	</string>
-	<string name="facebook_post_success">
-		Facebook に投稿しました。
+	<string name="inventory_item_offered_rlv">
+		[NAME]からのインベントリのオファーです。
+	</string>
+	<string name="share_alert">
+		インベントリからここにアイテムをドラッグします。
 	</string>
 	<string name="flickr_post_success">
-		Flickr に投稿しました。
-	</string>
-	<string name="twitter_post_success">
-		Twitter に投稿しました。
+		Flickrに投稿しました。
 	</string>
 	<string name="no_session_message">
-		（IM セッションが存在しません）
+		（ＩＭセッションが存在しません）
 	</string>
 	<string name="only_user_message">
 		このセッションにいるユーザーはあなただけです。
 	</string>
 	<string name="offline_message">
-		[NAME] はオフライン中です。
+		[NAME]はオフラインです。
 	</string>
 	<string name="invite_message">
-		このボイスチャットに応答・接続する場合は、[BUTTON NAME] をクリックしてください。
+		このボイスチャットに応答・接続する場合は、[BUTTON NAME]をクリックしてください。
 	</string>
 	<string name="muted_message">
-		この住人をブロックしています。 メッセージを送ると、ブロックが自動的に解除されます。
+		この住人をブロックしています。メッセージを送ると、ブロックが自動的に解除されます。
 	</string>
 	<string name="generic">
-		会話ウィンドウを一度閉じて開き直して下さい。またはリログしてもう一度お試しください。
+		リクエスト中にエラーが発生しました。お手数ですが、もう一度やり直してください。
 	</string>
 	<string name="generic_request_error">
-		会話ウィンドウを一度閉じて開き直して下さい。またはリログしてもう一度お試しください。
+		要求中にエラーが発生しました。お手数ですが、もう一度やり直してください。
 	</string>
 	<string name="insufficient_perms_error">
 		あなたには充分な権限がありません。
@@ -4728,135 +4926,143 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		あなたにはその能力がありません。
 	</string>
 	<string name="not_a_mod_error">
-		あなたはセッションモデレータではありません。
+		あなたは、セッションモデレータではありません。
 	</string>
+	<!--Some times string name is getting from the body of server response.
+	For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
+	In case of the EXT-3562 issue 'muted' is passed into the gIMMgr::showSessionStartError as a string name.
+	So, let add string with name="muted" with the same value as "muted_error" -->
 	<string name="muted">
 		グループのモデレーターが、あなたのテキストチャットを禁止しました。
 	</string>
 	<string name="muted_error">
-		グループモデレータがあなたのテキストチャットを無効化しました
+		グループモデレータが、あなたのテキストチャットを無効化しました。
 	</string>
 	<string name="add_session_event">
-		[RECIPIENT] とのチャットセッションにユーザーを追加することができません
+		[RECIPIENT]とのチャットセッションにユーザーを追加することができません。
 	</string>
+	<!--Some times string name is getting from the body of server response.
+	For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
+	In case of the EXT-3562 issue 'message' is passed into the gIMMgr::showSessionStartError as a string name.
+	So, let add string with name="message" with the same value as "message_session_event" -->
 	<string name="message">
-		[RECIPIENT] とのチャットセッションに、メッセージを送信することができません。
+		[RECIPIENT]とのチャットセッションに、メッセージを送信することができません。
 	</string>
 	<string name="message_session_event">
-		[RECIPIENT] とのチャットセッションにメッセージを送ることができません
+		[RECIPIENT]とのチャットセッションにメッセージを送ることができません。
 	</string>
 	<string name="mute">
 		モデレート中にエラーが発生しました。
 	</string>
+	<!--Some times string name is getting from the body of server response.
+	For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
+	In case of the EXT-3459 issue 'removed' is passed into the gIMMgr::showSessionStartError as a string name.
+	So, let add string with name="removed" with the same value as "removed_from_group" -->
 	<string name="removed">
 		グループから脱退しました。
 	</string>
 	<string name="removed_from_group">
-		あなたはグループから削除されました。
+		あなたは、グループから削除されました。
 	</string>
 	<string name="close_on_no_ability">
-		このチャットセッションを継続することはできません
+		このチャットセッションを継続することはできません。
 	</string>
 	<string name="unread_chat_single">
-		[SOURCES] は何か新しいことを言いました。
+		[SOURCES]は、何か新しいことを言いました。
 	</string>
 	<string name="unread_chat_multiple">
-		[SOURCES] は何か新しいことを言いました。
+		[SOURCES]は、何か新しいことを言いました。
 	</string>
 	<string name="teleport_preamble_compact_chat">
-		あなたは今、
+		現在地：
 	</string>
 	<string name="session_initialization_timed_out_error">
-		セッションの初期化がタイムアウトしました
+		セッションの初期化がタイムアウトしました。
 	</string>
 	<string name="Home position set.">
-		ホームポジションが設定されました。
+		ホーム配置を設定しました。
 	</string>
-	<string name="voice_morphing_url">
-		https://secondlife.com/destination/voice-island
-	</string>
-	<string name="premium_voice_morphing_url">
-		https://secondlife.com/destination/voice-morphing-premium
-	</string>
-	
+	<string name="lindenhomes_get_home_url">https://secondlife.com/land/lindenhomes/member.php?lang=ja-JP</string>
+	<string name="lindenhomes_my_home_url">https://secondlife.com/ja-JP/land/lindenhomes</string>
+	<string name="membership_url">https://accounts.secondlife.com/change_membership/?lang=ja-JP</string>
 	<!-- Financial operations strings -->
 	<string name="paid_you_ldollars">
-		[NAME] は [REASON] のために L$[AMOUNT] を支払いました。
+		[NAME]は、[REASON]費用のL$ [AMOUNT]を支払いました。
 	</string>
 	<string name="paid_you_ldollars_gift">
-		[NAME] は L$[AMOUNT] 支払いました：[REASON]
+		[NAME]は、[REASON]費用のL$ [AMOUNT]支払いました。
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] は L$[AMOUNT] を支払いました。
+		[NAME]は、L$ [AMOUNT]を支払いました。
 	</string>
 	<string name="you_paid_ldollars">
-		[NAME] に [REASON] のために L$ [AMOUNT] を支払いました。
+		[NAME]に[REASON]費用のL$ [AMOUNT]を支払いました。
 	</string>
 	<string name="you_paid_ldollars_gift">
-		[NAME] に L$[AMOUNT] を支払いました：[REASON]
+		[NAME]に[REASON]費用のL$ [AMOUNT]を支払いました。
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		L$ [AMOUNT] を支払いました。
+		L$ [AMOUNT]を支払いました。
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		[NAME] に L$ [AMOUNT] を支払いました。
+		[NAME]にL$ [AMOUNT]を支払いました。
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		L$ [AMOUNT] を支払いました：[REASON]
+		[REASON]費用のL$ [AMOUNT]を支払いました。
 	</string>
 	<string name="you_paid_failure_ldollars">
-		[NAME] に [REASON] の代金 L$ [AMOUNT] を支払えませんでした。
+		[NAME]に[REASON]費用L$ [AMOUNT]を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_gift">
-		[NAME] に L$ [AMOUNT] を支払えませんでした：[REASON]
+		[NAME]に[REASON]費用のL$ [AMOUNT]を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		L$ [AMOUNT] を支払えませんでした。
+		L$ [AMOUNT]を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		[NAME] に L$ [AMOUNT] を支払えませんでした。
+		[NAME]にL$ [AMOUNT]を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		[REASON] の 代金 L$ [AMOUNT] を支払えませんでした。
+		[REASON]費用L$ [AMOUNT]を支払えませんでした。
 	</string>
 	<string name="for item">
-		[ITEM] 向け
+		[ITEM]
 	</string>
 	<string name="for a parcel of land">
-		土地区画のため
+		土地区画
 	</string>
 	<string name="for a land access pass">
-		土地の入場許可を得るため
+		土地への入場許可
 	</string>
 	<string name="for deeding land">
-		土地を譲渡するため
+		土地を寄贈
 	</string>
 	<string name="to create a group">
-		グループを作成するため
+		グループ作成
 	</string>
 	<string name="to join a group">
-		グループに参加するため
+		グループ参加
 	</string>
 	<string name="to upload">
-		アップロードするため
+		アップロード
 	</string>
 	<string name="to publish a classified ad">
-		クラシファイド広告を掲載する
+		クラシファイド広告掲載
 	</string>
 	<string name="uploading_costs">
-		アップロード料金は L$[AMOUNT] です
+		アップロード費用はL$ [AMOUNT]です。
 	</string>
 	<string name="this_costs">
-		料金は L$[AMOUNT] です
+		費用はL$ [AMOUNT]です。
 	</string>
 	<string name="buying_selected_land">
-		この土地の費用
+		選択した土地をL$ [AMOUNT]で購入します。
 	</string>
 	<string name="this_object_costs">
-		このアイテムの費用
+		このオブジェクトの費用は、L$ [AMOUNT]です。
 	</string>
 	<string name="giving">
-		支払おうとしています
+		L$ [AMOUNT]を渡します。
 	</string>
 	<string name="group_role_everyone">
 		全員
@@ -4865,18 +5071,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		オフィサー
 	</string>
 	<string name="group_role_owners">
-		オーナー
+		所有者
 	</string>
 	<string name="group_member_status_online">
 		オンライン
 	</string>
 	<string name="uploading_abuse_report">
-		アップロード中...
+		アップロードしています…
 
-嫌がらせの報告
+		嫌がらせの報告
 	</string>
-	
-	<!-- names for new inventory items-->
 	<string name="New Shape">
 		新しいシェイプ
 	</string>
@@ -4893,7 +5097,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		新しいシャツ
 	</string>
 	<string name="New Pants">
-		新しいパンツ
+		新しいズボン
 	</string>
 	<string name="New Shoes">
 		新しい靴
@@ -4908,10 +5112,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		新しい手袋
 	</string>
 	<string name="New Undershirt">
-		新しい下着（上）
+		新しい下着（上半身）
 	</string>
 	<string name="New Underpants">
-		新しい下着（下）
+		新しい下着（下半身）
 	</string>
 	<string name="New Skirt">
 		新しいスカート
@@ -4922,8 +5126,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="New Tattoo">
 		新しいタトゥ
 	</string>
+	<string name="New Universal">
+		新しいユニバーサル
+	</string>
 	<string name="New Physics">
-		新規の物理作用
+		新しいの物理作用
 	</string>
 	<string name="Invalid Wearable">
 		無効な着用物
@@ -4931,14 +5138,17 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="New Gesture">
 		ジェスチャー
 	</string>
+	<string name="New Material">
+		新しいマテリアル
+	</string>
 	<string name="New Script">
-		新規スクリプト
+		新しいスクリプト
 	</string>
 	<string name="New Note">
 		ノート
 	</string>
 	<string name="New Folder">
-		新規フォルダ
+		新しいフォルダ
 	</string>
 	<string name="Contents">
 		コンテンツ
@@ -4961,102 +5171,107 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Common Gestures">
 		一般的ジェスチャー
 	</string>
-	
 	<!-- gestures -->
 	<string name="Male - Excuse me">
-		男性 - すみません
+		男性‐すみません
 	</string>
 	<string name="Male - Get lost">
-		男性 - Get lost
+		男性‐あっち行けよ
 	</string>
 	<string name="Male - Blow kiss">
-		男性 - 投げキッス
+		男性‐投げキッス
 	</string>
 	<string name="Male - Boo">
-		男性 - Boo
+		男性‐ぶー
 	</string>
 	<string name="Male - Bored">
-		男性 - 退屈
+		男性‐退屈
 	</string>
 	<string name="Male - Hey">
-		男性 - Hey
+		男性‐やぁ
 	</string>
 	<string name="Male - Laugh">
-		男性 - 笑う
+		男性‐笑う
 	</string>
 	<string name="Male - Repulsed">
-		男性 - 拒絶
+		男性‐拒絶
 	</string>
 	<string name="Male - Shrug">
-		男性 - 肩をすくめる
+		男性‐肩をすくめる
 	</string>
 	<string name="Male - Stick tougue out">
-		男性 - 舌を出す
+		男性‐舌を出す
 	</string>
 	<string name="Male - Wow">
-		男性 - Wow
+		男性‐わぁ
 	</string>
 	<string name="Female - Chuckle">
-		女性 – クスクス
+		女性‐クスクス
 	</string>
 	<string name="Female - Cry">
-		女性 – 泣く
+		女性‐泣く
 	</string>
 	<string name="Female - Embarrassed">
-		女性 – 恥ずかしい
+		女性‐恥ずかしい
 	</string>
 	<string name="Female - Excuse me">
-		女性 – すみません
+		女性‐すみません
 	</string>
 	<string name="Female - Get lost">
-		女性 – あっち行ってよ
+		女性‐あっち行ってよ
 	</string>
 	<string name="Female - Blow kiss">
-		女性 - 投げキッス
+		女性‐投げキッス
 	</string>
 	<string name="Female - Boo">
-		女性 – ワッ！
+		女性‐ぶー
 	</string>
 	<string name="Female - Bored">
-		女性 - 退屈
+		女性‐退屈
 	</string>
 	<string name="Female - Hey">
-		女性 - Hey
+		女性‐やぁ
 	</string>
 	<string name="Female - Hey baby">
-		女性 – ヘイ、ベィビー！
+		女性‐ヘイ、ベィビー！
 	</string>
 	<string name="Female - Laugh">
-		女性 - 笑う
+		女性‐笑う
 	</string>
 	<string name="Female - Looking good">
-		女性 – いい感じ
+		女性‐いい感じ
 	</string>
 	<string name="Female - Over here">
-		女性 – こっちよ
+		女性‐こっちよ
 	</string>
 	<string name="Female - Please">
-		女性 – プリーズ
+		女性‐プリーズ
 	</string>
 	<string name="Female - Repulsed">
-		女性 - 拒絶
+		女性‐拒絶
 	</string>
 	<string name="Female - Shrug">
-		女性 - 肩をすくめる
+		女性‐肩をすくめる
 	</string>
 	<string name="Female - Stick tougue out">
-		女性 - 舌を出す
+		女性‐舌を出す
 	</string>
 	<string name="Female - Wow">
-		女性 - Wow
+		女性‐わぁ
 	</string>
-
 	<!-- settings -->
-	<string name="New Day">新しいデイサイクル</string>
-	<string name="New Water">新しい水</string>
-	<string name="New Sky">新しい空</string>
-	<string name="New Settings">新しい自然環境設定</string>
-
+	<string name="New Day">
+		新しいデイサイクル
+	</string>
+	<string name="New Water">
+		新しい水面
+	</string>
+	<string name="New Sky">
+		新しい空
+	</string>
+	<string name="New Settings">
+		新しい自然環境の設定
+	</string>
 	<string name="/bow">
 		/おじぎする
 	</string>
@@ -5115,95 +5330,86 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		一時退席中
 	</string>
 	<string name="dance1">
-		ダンス1
+		ダンス１
 	</string>
 	<string name="dance2">
-		ダンス2
+		ダンス２
 	</string>
 	<string name="dance3">
-		ダンス3
+		ダンス３
 	</string>
 	<string name="dance4">
-		ダンス4
+		ダンス４
 	</string>
 	<string name="dance5">
-		ダンス5
+		ダンス５
 	</string>
 	<string name="dance6">
-		ダンス6
+		ダンス６
 	</string>
 	<string name="dance7">
-		ダンス7
+		ダンス７
 	</string>
 	<string name="dance8">
-		ダンス8
+		ダンス８
 	</string>
-	
 	<!-- birth date format shared by avatar inspector and profile panels -->
-	<string name="AvatarBirthDateFormat">
-		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc]
-	</string>
 	<string name="AvatarBirthDateFormat_legacy">
-		[year,datetime,slt]/[mthnum,datetime,slt]/[day,datetime,slt]
-	</string>
-	<string name="DefaultMimeType">
-		なし/なし
+		[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日
 	</string>
 	<string name="texture_load_dimensions_error">
-		[WIDTH]*[HEIGHT] 以上の画像は読み込めません
+		[WIDTH]×[HEIGHT]以上の画像は読み込めません。
+	</string>
+	<string name="texture_load_format_error">
+		無効な画像ファイル形式です。
+	</string>
+	<string name="texture_load_empty_file">
+		ファイルが空です。
 	</string>
 	<string name="outfit_photo_load_dimensions_error">
-		アウトフィット写真の最大サイズは [WIDTH]*[HEIGHT] です。サイズを変更するか、他の画像を使用して下さい。
+		アウトフィット画像の最大サイズは、[WIDTH]×[HEIGHT]です。画像のサイズを調整するか、別の画像を使用してください。
 	</string>
 	<string name="outfit_photo_select_dimensions_error">
-		アウトフィット写真の最大サイズは [WIDTH]*[HEIGHT] です。他のテクスチャを使用して下さい。
+		アウトフィット画像の最大サイズは、[WIDTH]×[HEIGHT]です。別のテクスチャを選択してください。
 	</string>
 	<string name="outfit_photo_verify_dimensions_error">
-		写真の大きさが検証できません。写真サイズがピッカーに表示されるまでお待ち下さい。
+		画像の寸法を確認できません。画像サイズがピッカーに表示されるまでお待ちください。
 	</string>
-	
 	<!-- language specific white-space characters, delimiters, spacers, item separation symbols -->
-	<string name="words_separator" value=","/>
+	<string name="sentences_separator" value="　"/>
+	<string name="words_separator" value="、"/>
 	<string name="server_is_down">
 		大変申し訳ございませんが、予期しない問題が発生しました。
-
-	サービスに関する既知の問題については、https://secondlife-status.statuspage.io をご覧ください。
+サービスに関する既知の問題については、https://status.secondlifegrid.net/ をご覧ください。
 問題が引き続き発生する場合は、お使いのネットワークやファイアウォールの設定を調べてください。
 	</string>
-	
-	<!-- overriding datetime formating.
-	didn't translate if this is not needed for current localization
-	-->
 	<string name="dateTimeWeekdaysNames">
 		日曜日:月曜日:火曜日:水曜日:木曜日:金曜日:土曜日
 	</string>
 	<string name="dateTimeWeekdaysShortNames">
 		日:月:火:水:木:金:土
 	</string>
+	<!-- overriding datetime formating.
+						didn't translate if this is not needed for current localization -->
 	<string name="dateTimeMonthNames">
-		1月:2月:3月:4月:5月:6月:7月:8月:9月:10月:11月:12月
+		1:2:3:4:5:6:7:8:9:10:11:12
 	</string>
 	<string name="dateTimeMonthShortNames">
-		1月:2月:3月:4月:5月:6月:7月:8月:9月:10月:11月:12月
-	</string>
-	<string name="dateTimeDayFormat">
-		[MDAY]
+		㋀:㋁:㋂:㋃:㋄:㋅:㋆:㋇:㋈:㋉:㋊:㋋
 	</string>
 	<string name="dateTimeAM">
-		AM
+		午前
 	</string>
 	<string name="dateTimePM">
-		PM
+		午後
 	</string>
-	
 	<!--  currency formatting -->
 	<string name="LocalEstimateUSD">
-		US$ [AMOUNT]
+		[AMOUNT]米ドル
 	</string>
-	
 	<!-- Group Profile roles and powers -->
 	<string name="Group Ban">
-		グループへの立入禁止
+		グループからバン
 	</string>
 	<string name="Membership">
 		会員
@@ -5241,46 +5447,46 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Notices">
 		通知
 	</string>
-	<string name="Chat" value=" チャット：">
+	<string name="Chat">
 		チャット
 	</string>
-	
 	<!-- SL Membership -->
 	<string name="BaseMembership">
-		無料会員
+		ベース
 	</string>
 	<string name="PremiumMembership">
-		プレミアム会員
+		プレミアム
 	</string>
 	<string name="Premium_PlusMembership">
-		プレミアムプラス会員
+		プレミアム・プラス
+	</string>
+	<!-- No need to translate -->
+	<string name="InternalMembership">
+		Internal
 	</string>
 	<string name="MembershipUpgradeText">
-		プレミアム会員にアップグレード
+		メンバーシッププランの変更…
 	</string>
 	<string name="MembershipPremiumText">
-		プレミアム会員資格
+		プレミアムメンバーシップ
 	</string>
-	
 	<!-- Question strings for delete items notifications -->
 	<string name="DeleteItems">
-		選択したアイテムを削除しますか
+		選択したアイテムを削除しますか？
 	</string>
 	<string name="DeleteItem">
-		選択したアイテムを削除しますか
+		選択したアイテムを削除しますか？
 	</string>
 	<string name="EmptyOutfitText">
-		このアウトフィットにはアイテムがありません
+		このアウトフィットにはアイテムがありません。
 	</string>
-	
 	<!-- External editor status codes -->
 	<string name="ExternalEditorNotSet">
-		環境変数 LL_SCRIPT_EDITOR を設定するか、ExternalEditor 設定を使ってエディターを選択します。
+		ExternalEditor 設定を使ってエディターを選択します。
 	</string>
 	<string name="ExternalEditorNotFound">
 		指定された外部エディターが見つかりません。
-エディターへのパスを二重引用符で囲んでみてください。
-（例：&quot;/path to my/editor&quot; &quot;%s&quot;）
+エディターへのパスを二重引用符で囲んでみてください。（例："/path to my/editor" "%s"）
 	</string>
 	<string name="ExternalEditorCommandParseError">
 		外部エディターのコマンドの解析中にエラーが見つかりました。
@@ -5288,7 +5494,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExternalEditorFailedToRun">
 		外部エディターを実行できませんでした。
 	</string>
-	
 	<!--  Machine translation of chat messahes -->
 	<string name="TranslationFailed">
 		翻訳できませんでした：[REASON]
@@ -5296,88 +5501,18 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="TranslationResponseParseError">
 		翻訳の応答にエラーが発生しました。
 	</string>
-	
 	<!-- Key names begin -->
-	<string name="Esc">
-		Esc
+	<string name="Left">
+		←
 	</string>
-	<string name="Space">
-		Space
+	<string name="Right">
+		→
 	</string>
-	<string name="Enter">
-		Enter
+	<string name="Up">
+		↑
 	</string>
-	<string name="Tab">
-		Tab
-	</string>
-	<string name="Ins">
-		Ins
-	</string>
-	<string name="Del">
-		Del
-	</string>
-	<string name="Backsp">
-		Backsp
-	</string>
-	<string name="Shift">
-		Shift
-	</string>
-	<string name="Ctrl">
-		Ctrl
-	</string>
-	<string name="Alt">
-		Alt
-	</string>
-	<string name="CapsLock">
-		CapsLock
-	</string>
-	<string name="Home">
-		ホーム
-	</string>
-	<string name="End">
-		End
-	</string>
-	<string name="PgUp">
-		PgUp
-	</string>
-	<string name="PgDn">
-		PgDn
-	</string>
-	<string name="F1">
-		F1
-	</string>
-	<string name="F2">
-		F2
-	</string>
-	<string name="F3">
-		F3
-	</string>
-	<string name="F4">
-		F4
-	</string>
-	<string name="F5">
-		F5
-	</string>
-	<string name="F6">
-		F6
-	</string>
-	<string name="F7">
-		F7
-	</string>
-	<string name="F8">
-		F8
-	</string>
-	<string name="F9">
-		F9
-	</string>
-	<string name="F10">
-		F10
-	</string>
-	<string name="F11">
-		F11
-	</string>
-	<string name="F12">
-		F12
+	<string name="Down">
+		↓
 	</string>
 	<string name="Add">
 		追加
@@ -5391,93 +5526,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Divide">
 		除算
 	</string>
-	<string name="PAD_DIVIDE">
-		PAD_DIVIDE
-	</string>
-	<string name="PAD_LEFT">
-		PAD_LEFT
-	</string>
-	<string name="PAD_RIGHT">
-		PAD_RIGHT
-	</string>
-	<string name="PAD_DOWN">
-		PAD_DOWN
-	</string>
-	<string name="PAD_UP">
-		PAD_UP
-	</string>
-	<string name="PAD_HOME">
-		PAD_HOME
-	</string>
-	<string name="PAD_END">
-		PAD_END
-	</string>
-	<string name="PAD_PGUP">
-		PAD_PGUP
-	</string>
-	<string name="PAD_PGDN">
-		PAD_PGDN
-	</string>
-	<string name="PAD_CENTER">
-		PAD_CENTER
-	</string>
-	<string name="PAD_INS">
-		PAD_INS
-	</string>
-	<string name="PAD_DEL">
-		PAD_DEL
-	</string>
-	<string name="PAD_Enter">
-		PAD_Enter
-	</string>
-	<string name="PAD_BUTTON0">
-		PAD_BUTTON0
-	</string>
-	<string name="PAD_BUTTON1">
-		PAD_BUTTON1
-	</string>
-	<string name="PAD_BUTTON2">
-		PAD_BUTTON2
-	</string>
-	<string name="PAD_BUTTON3">
-		PAD_BUTTON3
-	</string>
-	<string name="PAD_BUTTON4">
-		PAD_BUTTON4
-	</string>
-	<string name="PAD_BUTTON5">
-		PAD_BUTTON5
-	</string>
-	<string name="PAD_BUTTON6">
-		PAD_BUTTON6
-	</string>
-	<string name="PAD_BUTTON7">
-		PAD_BUTTON7
-	</string>
-	<string name="PAD_BUTTON8">
-		PAD_BUTTON8
-	</string>
-	<string name="PAD_BUTTON9">
-		PAD_BUTTON9
-	</string>
-	<string name="PAD_BUTTON10">
-		PAD_BUTTON10
-	</string>
-	<string name="PAD_BUTTON11">
-		PAD_BUTTON11
-	</string>
-	<string name="PAD_BUTTON12">
-		PAD_BUTTON12
-	</string>
-	<string name="PAD_BUTTON13">
-		PAD_BUTTON13
-	</string>
-	<string name="PAD_BUTTON14">
-		PAD_BUTTON14
-	</string>
-	<string name="PAD_BUTTON15">
-		PAD_BUTTON15
-	</string>
 	<string name="-">
 		-
 	</string>
@@ -5490,171 +5538,71 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name=";">
 		;
 	</string>
-	<string name="[">
-		[
-	</string>
-	<string name="]">
-		]
-	</string>
-	<string name="\">
-		\
-	</string>
-	<string name="0">
-		0
-	</string>
-	<string name="1">
-		1
-	</string>
-	<string name="2">
-		2
-	</string>
-	<string name="3">
-		3
-	</string>
-	<string name="4">
-		4
-	</string>
-	<string name="5">
-		5
-	</string>
-	<string name="6">
-		6
-	</string>
-	<string name="7">
-		7
-	</string>
-	<string name="8">
-		8
-	</string>
-	<string name="9">
-		9
-	</string>
-	<string name="A">
-		A
-	</string>
-	<string name="B">
-		B
-	</string>
-	<string name="C">
-		C
-	</string>
-	<string name="D">
-		D
-	</string>
-	<string name="E">
-		E
-	</string>
-	<string name="F">
-		F
-	</string>
-	<string name="G">
-		G
-	</string>
-	<string name="H">
-		H
-	</string>
-	<string name="I">
-		I
-	</string>
-	<string name="J">
-		J
-	</string>
-	<string name="K">
-		K
-	</string>
-	<string name="L">
-		L
-	</string>
-	<string name="M">
-		M
-	</string>
-	<string name="N">
-		N
-	</string>
-	<string name="O">
-		O
-	</string>
-	<string name="P">
-		P
-	</string>
-	<string name="Q">
-		Q
-	</string>
-	<string name="R">
-		R
-	</string>
-	<string name="S">
-		S
-	</string>
-	<string name="T">
-		T
-	</string>
-	<string name="U">
-		U
-	</string>
-	<string name="V">
-		V
-	</string>
-	<string name="W">
-		W
-	</string>
-	<string name="X">
-		X
-	</string>
-	<string name="Y">
-		Y
-	</string>
-	<string name="Z">
-		Z
-	</string>
-	
+	<!-- Key names end -->
 	<!-- Mouse button names (short) begin -->
-	<string name="LMB">LMB</string>
-	<string name="MMB">MMB</string>
-	<string name="RMB">RMB</string>
-	<string name="MB4">MB4</string>
-	<string name="MB5">MB5</string>
-	<string name="Double LMB">Double LMB</string>
-	
+	<string name="LMB">
+		左クリック
+	</string>
+	<string name="MMB">
+		ホイールクリック
+	</string>
+	<string name="RMB">
+		右クリック
+	</string>
+	<string name="MB4">
+		進むボタン
+	</string>
+	<string name="MB5">
+		戻るボタン
+	</string>
+	<string name="Double LMB">
+		左ダブルクリック
+	</string>
+	<!-- Mouse button names end -->
 	<!-- llviewerwindow -->
 	<string name="BeaconParticle">
-		パーティクル源ビーコン（青）を表示中
+		パーティクル源ビーコン（青）を表示しています。
 	</string>
 	<string name="BeaconPhysical">
-		物理的オブジェクトのビーコン（緑）を表示中
+		物理的オブジェクトのビーコン（緑）を表示しています。
 	</string>
 	<string name="BeaconScripted">
-		スクリプトのオブジェクトのビーコン（赤）を表示中
+		スクリプトのオブジェクトのビーコン（赤）を表示しています。
 	</string>
 	<string name="BeaconScriptedTouch">
-		タッチ機能のビーコンが付いたスクリプトのオブジェクト（赤）を表示中
+		タッチ機能のビーコンが付いたスクリプトのオブジェクト（赤）を表示しています。
 	</string>
 	<string name="BeaconSound">
-		サウンドビーコン（黄）を表示中
+		サウンドビーコン（黄）を表示しています。
 	</string>
 	<string name="BeaconMedia">
-		メディアビーコン（白）を表示中
+		メディアビーコン（白）を表示しています。
 	</string>
 	<string name="BeaconSun">
-		太陽の方向のビーコンを表示（オレンジ）
+		太陽の方角ビーコン（橙）を表示しています。
 	</string>
 	<string name="BeaconMoon">
-		月の方向のビーコンを表示（紫）
+		月の方角ビーコン（紫）を表示しています。
 	</string>
 	<string name="ParticleHiding">
-		パーティクルを非表示
+		パーティクルを非表示にします。
+	</string>
+	<!-- commands -->
+	<!-- 「360度スナップショット」だと文字が切れてしまうため -->
+	<string name="Command_360_Capture_Label">
+		３６０度Ｓショット
 	</string>
 	<string name="Command_AboutLand_Label">
 		土地情報
 	</string>
 	<string name="Command_Appearance_Label">
-		容姿
+		アウトフィット
 	</string>
 	<string name="Command_Avatar_Label">
-		アバター
+		アバター一式
 	</string>
 	<string name="Command_Build_Label">
-		制作
+		ビルド
 	</string>
 	<string name="Command_Chat_Label">
 		チャット
@@ -5669,7 +5617,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		行き先
 	</string>
 	<string name="Command_Environments_Label">
-		自然環境
+		自然環境の設定
 	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
@@ -5678,7 +5626,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ジェスチャー
 	</string>
 	<string name="Command_Grid_Status_Label">
-		グリッド・ステータス
+		グリッド状況
 	</string>
 	<string name="Command_HowTo_Label">
 		ハウツー
@@ -5687,25 +5635,25 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		インベントリ
 	</string>
 	<string name="Command_Map_Label">
-		地図
+		マップ
 	</string>
 	<string name="Command_Marketplace_Label">
 		マーケットプレイス
 	</string>
 	<string name="Command_MarketplaceListings_Label">
-		マーケットプレイス
+		マーケットプレイスに出品
 	</string>
 	<string name="Command_MiniMap_Label">
 		ミニマップ
 	</string>
 	<string name="Command_Move_Label">
-		歩行 / 走行 / 飛行
-	</string>
-	<string name="Command_Outbox_Label">
-		マーチャントアウトボックス
+		歩行／走行／飛行
 	</string>
 	<string name="Command_People_Label">
-		人
+		人物
+	</string>
+	<string name="Command_Performance_Label">
+		グラフィック最適化
 	</string>
 	<string name="Command_Picks_Label">
 		ピック
@@ -5714,13 +5662,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		場所
 	</string>
 	<string name="Command_Preferences_Label">
-		環境設定
+		初期設定
 	</string>
 	<string name="Command_Profile_Label">
 		プロフィール
 	</string>
+	<string name="Command_RegionTracker_Label">
+		リージョントラッカー
+	</string>
 	<string name="Command_Report_Abuse_Label">
-		嫌がらせを報告
+		嫌がらせの報告
 	</string>
 	<string name="Command_Search_Label">
 		検索
@@ -5729,251 +5680,187 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		スナップショット
 	</string>
 	<string name="Command_Speak_Label">
-		話す
-	</string>
-	<string name="Command_Twitter_Label">
-		Twitter
+		ボイスチャット
 	</string>
 	<string name="Command_View_Label">
-		カメラコントロール
+		カメラ操作
 	</string>
-	<string name="Command_Voice_Label">
-		ボイス設定
-	</string>
-	
-	<!-- Added Aug.25, 2012 -->
-	<string name="Command_Quickprefs_Label">クイック設定</string>
-	<string name="Command_AO_Label">AO</string>
+	<!-- Ansariel: Renamed for FS (FIRE-5019)
+  <string name="Command_Voice_Label">Voice settings</string>-->
+	<string name="Command_Voice_Label">近くのボイス</string>
+	<!-- Firestorm commands -->
+	<string name="Command_Quickprefs_Label">簡易設定</string>
+	<string name="Command_AO_Label">アニメーションオーバーライド</string>
 	<string name="Command_Webbrowser_Label">Webブラウザ</string>
 	<string name="Command_Default_Chat_Bar_Label">チャット</string>
 	<string name="Command_Areasearch_Label">エリアサーチ</string>
 	<string name="Command_Settings_Debug_Label">デバッグ設定</string>
 	<string name="Command_Statistics_Label">統計</string>
-	<string name="Command_Region_Label">地域／不動産</string>
+	<string name="Command_Region_Label">リージョン／不動産</string>
 	<string name="Command_Fly_Label">飛行</string>
-	<!-- Added Aug.25, 2012 -->
-	
-	<!-- Added Jun.30, 2013 -->
 	<string name="Command_Groundsit_Label">地面に座る</string>
-	<string name="Command_Sound_Explorer_Label">サウンドエクスプローラ</string>
-	<string name="Command_Asset_Blacklist_Label">不動産のブロックリスト</string>
+	<string name="Command_Sound_Explorer_Label">サウンドエクスプローラー</string>
+	<string name="Command_Asset_Blacklist_Label">アセットのブロックリスト</string>
 	<string name="Command_Phototools_Label">フォトツール</string>
 	<string name="Command_Phototools_View_Label">フォトツールのカメラ設定</string>
-	<string name="Command_Contact_Sets_Label">連絡先のセット</string>
+	<string name="Command_Contact_Sets_Label">コンタクトセット</string>
 	<string name="Command_Mouselook_Label">マウスルック</string>
-	<string name="Command_Landmark_Here_Label">ランドマークを作成</string>
+	<string name="Command_Landmark_Here_Label">ランドマーク作成</string>
 	<string name="Command_Teleport_History_Label">テレポート履歴</string>
 	<string name="Command_Pose_Stand_Label">ポーズスタンド</string>
-	<string name="Command_Snapshot_To_Disk_Label">スナップショットをディスクに保存</string>
+	<string name="Command_Snapshot_To_Disk_Label">Ｓショットを保存</string>
 	<string name="Command_Radar_Label">レーダー</string>
-	<!-- Added Jun.30, 2013 -->
-	
 	<string name="Command_Conversation_Log_Label">会話ログ</string>
-	<string name="Command_Move_Lock_Label">ムーブメントロック</string>
-  <string name="Command_Blocklist_Label">ブロックリスト</string>
-  <string name="Command_ResyncAnimations_Label">アニメーションの再同期</string>
-	<string name="Command_RegionTracker_Label">地域別アバター数</string>
-	<string name="Command_Group_Titles_Label">グループ肩書き</string>
-	<string name="Command_Wearable_Favorites_Label">お気に入りの服やHUD</string>
+	<string name="Command_Move_Lock_Label">移動ロック</string>
+	<string name="Command_Blocklist_Label">ブロックリスト</string>
+	<string name="Command_ResyncAnimations_Label">アニメーション再同期</string>
+	<string name="Command_RegionTracker_Label">リージョントラッカー</string>
+	<string name="Command_Group_Titles_Label">グループのタイトル</string>
+	<string name="Command_Wearable_Favorites_Label">お気に入りの着用物やＨＵＤ</string>
 	<string name="Command_RFO_Label">フレンドのみ表示</string>
+	<string name="Command_DAO_Label">アニメッシュの描画解除</string>
 	<string name="Command_Beacons_Label">ビーコン</string>
-	
+	<string name="Command_Poser_Label">ポーザー</string>
+	<string name="Command_Poser_Tooltip">アバターとアニメーションオブジェクトにポーズをつけます。</string>
+	<string name="Command_360_Capture_Tooltip">
+		３６０度の正距円筒図法のスナップショット画像を撮影します。
+	</string>
 	<string name="Command_AboutLand_Tooltip">
-		訪問先に関する情報
+		訪問先に関する情報を表示します。
 	</string>
 	<string name="Command_Appearance_Tooltip">
-		アバターを変更
+		アバターの容姿を変更します。
 	</string>
 	<string name="Command_Avatar_Tooltip">
-		アバター一式を選択
+		アバター一式を選択します。
 	</string>
 	<string name="Command_Build_Tooltip">
-		オブジェクトの制作と地形の変形
+		オブジェクトのビルドや地形の変形をします。
 	</string>
 	<string name="Command_Chat_Tooltip">
-		近くの人と文字チャットする
+		近くにいる人物とテキストチャットします。
 	</string>
 	<string name="Command_Conversations_Tooltip">
-		みんなと会話する
+		全員との会話を表示します。
 	</string>
 	<string name="Command_Compass_Tooltip">
-		コンパス
+		コンパスを表示します。
 	</string>
 	<string name="Command_Destinations_Tooltip">
-		行ってみたい場所
+		行ってみたい場所を表示します。
 	</string>
 	<string name="Command_Environments_Tooltip">
-		自然環境
+		自分の自然環境の設定を表示します。
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Flickr にアップロード
 	</string>
 	<string name="Command_Gestures_Tooltip">
-		アバターのジェスチャー
+		アバターのジェスチャーを表示します。
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
-		現在のグリッド・ステータスを表示
+		現在のグリッドステータスを表示します。
 	</string>
 	<string name="Command_HowTo_Tooltip">
-		一般的タスクの実行方法
+		一般的タスクの実行方法を表示します。
 	</string>
 	<string name="Command_Inventory_Tooltip">
-		インベントリを表示・使用
+		インベントリの内容を表示したり使用したりします。
 	</string>
 	<string name="Command_Map_Tooltip">
-		世界地図
+		ワールドマップを表示します。
 	</string>
 	<string name="Command_Marketplace_Tooltip">
-		ショッピングに出掛ける
+		ショッピングに出掛けます。
 	</string>
 	<string name="Command_MarketplaceListings_Tooltip">
-		創作アイテムを販売します
+		あなたが制作したアイテムを販売します。
 	</string>
 	<string name="Command_MiniMap_Tooltip">
-		近くの人を表示する
+		近くの人を表示します。
 	</string>
 	<string name="Command_Move_Tooltip">
-		アバターの移動
-	</string>
-	<string name="Command_Outbox_Tooltip">
-		販売用にアイテムをマーケットプレイスに転送
+		アバターの移動操作をします。
 	</string>
 	<string name="Command_People_Tooltip">
-		フレンド、グループ、近くの人
+		フレンド、グループ、近くの人物を表示します。
+	</string>
+	<string name="Command_Performance_Tooltip">
+		グラフィック性能を向上させます。
 	</string>
 	<string name="Command_Picks_Tooltip">
-		プロフィールで紹介するお気に入りの場所
+		プロフィールで紹介しているお気に入りの場所を表示します。
 	</string>
 	<string name="Command_Places_Tooltip">
-		保存済みの場所
+		保存済みの場所を表示します。
 	</string>
 	<string name="Command_Preferences_Tooltip">
-		環境設定
+		初期設定を表示します。
 	</string>
 	<string name="Command_Profile_Tooltip">
-		プロフィールを編集・表示
-	</string>
-	<string name="Command_Report_Abuse_Tooltip">
-		嫌がらせの報告
-	</string>
-	<string name="Command_Search_Tooltip">
-		場所、イベント、人を検索
-	</string>
-	<string name="Command_Snapshot_Tooltip">
-		ピクチャを撮る
-	</string>
-	<string name="Command_Speak_Tooltip">
-		マイクを使って近くの人と話す
-	</string>
-	<string name="Command_Twitter_Tooltip">
-		Twitter
-	</string>
-	<string name="Command_View_Tooltip">
-		カメラの角度を変更
-	</string>
-	<string name="Command_Voice_Tooltip">
-		インワールドでのコールや近くにいる人の音量調整
-	</string>
-	
-<!-- Firestorm commands added Jun.30, 2013 -->
-	<string name="Command_Quickprefs_Tooltip">
-		よく使う設定を変更する場合のクィック設定
-	</string>
-	<string name="Command_AO_Tooltip">
-		アニメーションのオーバーライド
-	</string>
-	<string name="Command_Webbrowser_Tooltip">
-		内蔵ウェブブラウザを開く (CTRL+SHIFT+Z)
-	</string>
-	<string name="Command_Default_Chat_Bar_Tooltip">
-		デフォルトでチャットバーを表示するまたは隠す
-	</string>
-	<string name="Command_Areasearch_Tooltip">
-		このエリアのオブジェクトを検索する
-	</string>
-	<string name="Command_Settings_Debug_Tooltip">
-		ビューワの基本設定を変更する (CTRL+ALT+SHIFT+S)
-		
-	</string>
-	<string name="Command_Statistics_Tooltip">
-		ビューワの状態統計を表示する (CTRL+SHIFT+1)
-	</string>
-	<string name="Command_Region_Tooltip">
-		地域／不動産ツールを開く (ALT+R)
-	</string>
-	<string name="Command_Groundsit_Tooltip">
-		地面に座る、またはその状態から立ち上がる (CTRL+ALT+S)
-	</string>
-	<string name="Command_Sound_Explorer_Tooltip">
-		サウンドエクスプローラを開く
-	</string>
-	<string name="Command_Asset_Blacklist_Tooltip">
-		ブロックリストに入れた全ての項目を表示する</string>
-	<string name="Command_Phototools_Tooltip">
-		高機能画像処理ツール
-	</string>
-	<string name="Command_Phototools_View_Tooltip">
-		フォトツール内の高度なカメラ設定
-	</string>
-	<string name="Command_Contact_Sets_Tooltip">
-		連絡先のセットを開く (CTRL+ALT+SHIFT+C)
-	</string>
-	<string name="Command_Mouselook_Tooltip">
-		マウスルックモードにする (M)
-	</string>
-	<string name="Command_Landmark_Here_Tooltip">
-		現在いる場所のランドマークを作成する
-	</string>
-	<string name="Command_Teleport_History_Tooltip">
-		テレポート履歴を開く
-	</string>
-	<string name="Command_Pose_Stand_Tooltip">
-		装着物を調整するめのポーズスタンド
-	</string>
-	<string name="Command_Snapshot_To_Disk_Tooltip">
-		素早くスナップショットを撮ってハードディスクに保存する
-	</string>
-	<string name="Command_Radar_Tooltip">
-		レーダーを開いて近くにいるアバターを表示する
-	</string>
-<!-- Firestorm commands added Jun.30, 2013 -->
-
-	<string name="Command_Conversation_Log_Tooltip">
-		会話ログを開いて過去に交わしたチャットをテキストで確認します。
-	</string>
-	<string name="Command_Move_Lock_Tooltip">
-		アバターを今いる場所に固定します (CTRL+ALT+P)
-	</string>
-	<string name="Command_Blocklist_Tooltip">
-		ブロック／無視リストを開きます
-	</string>
-	<string name="Command_ResyncAnimations_Tooltip">
-		アバターのアニメーションを再同期します
+		自分のプロフィールの表示や編集を行います。
 	</string>
 	<string name="Command_RegionTracker_Tooltip">
-		複数の地域のステータス（アバター数）を確認します
+		様々なリージョンの状況を追跡します。
 	</string>
-	<string name="Command_Group_Titles_Tooltip">
-		アクティブなグループタグを変更します
+	<string name="Command_Report_Abuse_Tooltip">
+		嫌がらせを報告します。
 	</string>
-	<string name="Command_Wearable_Favorites_Tooltip">
-		お気に入りの服やHUDの一覧を開きます</string>
-	<string name="Command_RFO_Tooltip">
-		ビューワにフレンドのみ表示し、他のアバターは見えなくなります。一度この機能を有効にすると、他の人も見えるように戻すにはテレポートが必要になります。
+	<string name="Command_Search_Tooltip">
+		場所、イベント、人物を検索します。
 	</string>
-	<string name="Command_Beacons_Tooltip">
-		ビーコンを表示
+	<string name="Command_Snapshot_Tooltip">
+		スナップショット画像を撮ります。
 	</string>
- 	<string name="Toolbar_Bottom_Tooltip">
-		現在、下のツールバーにあります
+	<string name="Command_Speak_Tooltip">
+		マイクを使って近くの人と話します。
+	</string>
+	<string name="Command_View_Tooltip">
+		カメラアングルを調整します。
+	</string>
+	<string name="Command_Voice_Tooltip">
+		インワールドでのコールや近くにいる人物の音量調整します。
+	</string>
+	<!-- Firestorm commands -->
+	<string name="Command_Quickprefs_Tooltip">よく使用する設定を変更するための簡易設定を開きます。</string>
+	<string name="Command_AO_Tooltip">アニメーションオーバーライド</string>
+	<string name="Command_Webbrowser_Tooltip">内部ブラウザを開きます。（CTRL＋SHIFT＋Z）</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">デフォルトのチャットバーを表示または非表示にします。</string>
+	<string name="Command_Areasearch_Tooltip">エリアのオブジェクトを検索します。</string>
+	<string name="Command_Settings_Debug_Tooltip">ビューアの設定を変更します。（CTRL＋ALT＋SHIFT＋S）</string>
+	<string name="Command_Statistics_Tooltip">ビューアの統計情報を表示します。（CTRL＋SHIFT＋1）</string>
+	<string name="Command_Region_Tooltip">リージョン／不動産ツールを開きます。（ALT＋R）</string>
+	<string name="Command_Groundsit_Tooltip">地面に座るモードのオン／オフを切り替えます。（CTRL＋ALT＋S）</string>
+	<string name="Command_Sound_Explorer_Tooltip">サウンドエクスプローラーを開きます。</string>
+	<string name="Command_Asset_Blacklist_Tooltip">ブラックリストに登録したすべてのアイテムのリストを開きます。</string>
+	<string name="Command_Phototools_Tooltip">フル機能の画像作成ツールを開きます。（ALT＋P）</string>
+	<string name="Command_Phototools_View_Tooltip">高度なフォトツールカメラコントロールを開きます（CTRL＋SHIFT＋C）</string>
+	<string name="Command_Contact_Sets_Tooltip">コンタクトセットを開きます。（CTRL＋ALT＋SHIFT＋C）</string>
+	<string name="Command_Mouselook_Tooltip">マウスルックモードに入ります。（M）</string>
+	<string name="Command_Landmark_Here_Tooltip">現在いる場所のランドマークを作成します。</string>
+	<string name="Command_Teleport_History_Tooltip">テレポート履歴を開きます。（ALT＋H）</string>
+	<string name="Command_Pose_Stand_Tooltip">アバターポーズ調整用スタンドを出します。</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">スナップショットを撮ってハードディスクに保存します。</string>
+	<string name="Command_Radar_Tooltip">近くのアバターのレーダーを開きます。</string>
+	<string name="Command_Conversation_Log_Tooltip">会話ログを開いて過去のチャットの記録を表示します。</string>
+	<string name="Command_Move_Lock_Tooltip">アバターを現在の位置に固定します。（CTRL＋ALT＋P）</string>
+	<string name="Command_Blocklist_Tooltip">ブロック／ミュートリストを開きます。</string>
+	<string name="Command_ResyncAnimations_Tooltip">アバターアニメーションを同期します。</string>
+	<string name="Command_RegionTracker_Tooltip">さまざまなリージョンの状況を追跡します。</string>
+	<string name="Command_Group_Titles_Tooltip">アクティブなグループタグを変更します。</string>
+	<string name="Command_Wearable_Favorites_Tooltip">お気に入りの着用物のリストを開きます。</string>
+	<string name="Command_RFO_Tooltip">ビューアにはフレンドのアバターのみが表示され、他のすべてのアバターは削除されます。有効にすると、他のユーザを見えるようにするＴＰが必要になります。</string>
+	<string name="Command_DAO_Tooltip">アニメーションオブジェクトの描画解除（別名アニメッシュ）‐現在表示されているすべてのアニメッシュ（アタッチされているもの、フリーローミングのもの）を一時的に描画解除します。描画解除されたアニメッシュは、ＴＰ後に再び表示されます。</string>
+	<string name="Command_Beacons_Tooltip">ビーコンを表示します。</string>
+	<string name="Toolbar_Bottom_Tooltip">
+		現在、下部のツールバー（↓）にあります。
 	</string>
 	<string name="Toolbar_Left_Tooltip">
-		現在、左のツールバーにあります
+		現在、左部のツールバー（←）にあります。
 	</string>
 	<string name="Toolbar_Right_Tooltip">
-		現在、右のツールバーにあります
+		現在、右部のツールバー（→）にあります。
 	</string>
-	
 	<!-- added Jun.30, 2013 -->
 	<string name="Command_Fly_Tooltip">
 		飛行モードを開始、または停止する
@@ -5985,15 +5872,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Stop_Animations_Tooltip">
 		自分のアニメーションを停止する
 	</string>
-	
-	<string name="Command_Discord_Label">
-		Discord
-	</string>
-	<string name="Command_Discord_Tooltip">
-		Discord
-	</string>
-	
- <!-- Mesh UI terms -->
+	<!-- Mesh UI terms -->
 	<string name="Retain%">
 		維持率
 	</string>
@@ -6001,7 +5880,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		詳細
 	</string>
 	<string name="Better Detail">
-		もっと詳しく
+		より詳細
 	</string>
 	<string name="Surface">
 		表面
@@ -6016,11 +5895,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		プレビュー
 	</string>
 	<string name="Normal">
-		普通
+		通常
 	</string>
-	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
-	</string>
+	<!-- Pathfinding -->
 	<string name="Pathfinding_Object_Attr_None">
 		なし
 	</string>
@@ -6033,8 +5910,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Pathfinding_Object_Attr_MultiSelect">
 		（複数）
 	</string>
+	<!-- Snapshot image quality levels -->
 	<string name="snapshot_quality_very_low">
-		非常に低い
+		最低
 	</string>
 	<string name="snapshot_quality_low">
 		低
@@ -6046,12 +5924,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		高
 	</string>
 	<string name="snapshot_quality_very_high">
-		非常に高い
+		最高
 	</string>
-	<string name="IMPrefix">
-		IM: 
-	</string>
-	
+	<string name="IMPrefix">ＩＭ：</string>
 	<!-- Settings sanity checks -->
 	<string name="SanityCheckEquals">
 		設定コントロール「[CONTROL_NAME]」は [VALUE_1] であるべきです。
@@ -6077,97 +5952,116 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="SanityCheckNotBetween">
 		設定コントロール「[CONTROL_NAME]」は [VALUE_1] と [VALUE_2] の間の値であってはいけません。
 	</string>
-	
 	<!-- Media filter options -->
-	<string name="MediaFilterActionAllow">許可</string>
-	<string name="MediaFilterActionDeny">拒否</string>
-	<string name="MediaFilterConditionAlways">常に</string>
-	<string name="MediaFilterConditionAlwaysLower">常に</string>
-	<string name="MediaFilterConditionNever">常に不</string>
-	<string name="MediaFilterConditionNeverLower">常に不</string>
+	<string name="MediaFilterActionAllow">
+		許可
+	</string>
+	<string name="MediaFilterActionDeny">
+		拒否
+	</string>
+	<string name="MediaFilterConditionAlways">
+		常に
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		常に
+	</string>
+	<string name="MediaFilterConditionNever">
+		常に不
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		常に不
+	</string>
 	<string name="MediaFilterMediaContentBlocked">
-		ドメイン [DOMAIN] のメディアはブロックされました。
+		ドメイン[DOMAIN]のメディアはブロックされました。
 	</string>
 	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
-		ドメイン [DOMAIN] のメディアは常に再生されます。
+		ドメイン[DOMAIN]のメディアは常に再生されます。
 	</string>
 	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
-		ドメイン [DOMAIN] のメディアは絶対に再生されません。</string>
+		ドメイン[DOMAIN]のメディアは絶対に再生されません。
+	</string>
 	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
-		URL [MEDIAURL] のメディアは常に再生されます。
+		ＵＲＬ[MEDIAURL]のメディアは常に再生されます。
 	</string>
 	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
-		URL [MEDIAURL] のメディアは絶対に再生されません。
+		ＵＲＬ[MEDIAURL]のメディアは絶対に再生されません。
 	</string>
-  
 	<string name="MediaFilterAudioContentBlocked">
-		ドメイン [DOMAIN] の音声はブロックされました。
+		ドメイン[DOMAIN]の音声はブロックされました。
 	</string>
 	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
-		ドメイン [DOMAIN] の音声は常に再生されます。
+		ドメイン[DOMAIN]の音声は常に再生されます。
 	</string>
 	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
-		ドメイン [DOMAIN] の音声は絶対に再生されません。
+		ドメイン[DOMAIN]の音声は絶対に再生されません。
 	</string>
 	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
-		URL [MEDIAURL] の音声は常に再生されます。
+		ＵＲＬ[MEDIAURL]の音声は常に再生されます。
 	</string>
 	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
-		URL [MEDIAURL] の音声は絶対に再生されません。</string>
-
-	<string name="MediaFilterBlacklist">ブラックリスト</string>
-	<string name="MediaFilterWhitelist">ホワイトリスト</string>
-  
+		ＵＲＬ[MEDIAURL]の音声は絶対に再生されません。
+	</string>
+	<string name="MediaFilterBlacklist">
+		ブラックリスト
+	</string>
+	<string name="MediaFilterWhitelist">
+		ホワイトリスト
+	</string>
 	<!-- Replacement for hardcoded UI strings -->
-	<string name="UnknownRegion">（不明な地域）</string>
-	<string name="UnknownPosition">（不明な位置）</string>
-
-	<!-- NetMap double click action tooltip messages -->
-	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
-		[AGENT][REGION](ダブルクリックで世界地図を開きます。Shift‐ドラッグで水平・垂直移動します。)
+	<string name="UnknownRegion">
+		（不明なリージョン）
 	</string>
-	<string name="NetMapDoubleClickTeleportToolTipMsg">
-		[REGION](ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。)
+	<string name="UnknownPosition">
+		（不明な位置）
 	</string>
-	<string name="NetMapDoubleClickNoActionToolTipMsg">
-		[REGION]
-	</string>
-	
 	<!-- Nearby Chat Collision Messages -->
 	<string name="Collision_Bump">
-		[NAME] がぶつかりました。
+		[NAME]がぶつかりました。
 	</string>
 	<string name="Collision_PushObject">
-		[NAME] がスクリプトであなたを押しました。
+		[NAME]がスクリプトであなたを押しました。
 	</string>
 	<string name="Collision_ObjectCollide">
-		[NAME] がオブジェクトであなたを撃ちました。
+		[NAME]がオブジェクトであなたを撃ちました。
 	</string>
 	<string name="Collision_ScriptedObject">
-		[NAME] がスクリプト入りのオブジェクトであなたを撃ちました。
+		[NAME]がスクリプト入りのオブジェクトであなたを撃ちました。
 	</string>
 	<string name="Collision_PhysicalObject">
-		[NAME] が物理オブジェクトであなたを撃ちました。
+		[NAME]が物理オブジェクトであなたを撃ちました。
 	</string>
-  <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
-
-	<string name="MovelockEnabled">「アバター」＞「ムーブメント」＞「ムーブメントをロック」が有効になりました</string>
-
+	<string name="Collision_UnknownType">
+		[NAME] caused a collision of unknown type.
+	</string>
+	<string name="MovelockEnabled">
+		「アバター」＞「移動」＞「移動ロック」が有効になりました。
+	</string>
 	<string name="BusyResponse">
 		取り込み時の自動応答
 	</string>
-	
+	<!-- Experience Tools strings -->
 	<string name="TeleportMaturityExceeded">
-		住人はこの地域（リージョン）を訪問できません。
+		住人はこのリージョンを訪問できません。
 	</string>
-	
-	<!-- Spell check settings floater -->
-	<string name="UserDictionary">
-		[User]
-	</string>
-	
 	<!-- RLVa -->
-	
+	<string name="RLVaPendingRestart">
+		（再起動待ち）
+	</string>
+	<string name="RLVaToggleMessageLogin">
+		ＲＬＶａは[STATE]です。（再起動する必要はありません）
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		ＲＬＶａは再起動後に[STATE]になります。
+	</string>
+	<string name="RLVaToggleEnabled">
+		有効
+	</string>
+	<string name="RLVaToggleDisabled">
+		無効
+	</string>
+	<string name="RLVaStatusDisabled">
+		（無効）
+	</string>
 	<!-- Experience Tools strings -->
 	<string name="experience_tools_experience">
 		体験
@@ -6176,7 +6070,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		（体験なし）
 	</string>
 	<string name="ExperienceNameUntitled">
-		(タイトルのない体験)
+		（タイトルのない体験）
 	</string>
 	<string name="Land-Scope">
 		ランドスコープ
@@ -6188,7 +6082,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		許可
 	</string>
 	<string name="Blocked_Experiences_Tab">
-		停止
+		ブロック
 	</string>
 	<string name="Contrib_Experiences_Tab">
 		貢献者
@@ -6203,7 +6097,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		所有
 	</string>
 	<string name="ExperiencesCounter">
-		([EXPERIENCES], max [MAXEXPERIENCES])
+		（全[MAXEXPERIENCES]件中[EXPERIENCES]件）
 	</string>
 	<string name="ExperiencePermission1">
 		コントロールを引き継ぐ
@@ -6227,13 +6121,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		体験の権限を自動的に承諾
 	</string>
 	<string name="ExperiencePermission16">
-		自分のアバターを強制的に座らせる
+		あなたのアバターを強制的に座らせる
 	</string>
 	<string name="ExperiencePermission17">
-		自分の自然環境設定を変更する
+		自然環境の設定を変更する
 	</string>
 	<string name="ExperiencePermissionShortUnknown">
-		が不明な操作を実行しました: [Permission]
+		が、不明な操作を実行しました：[Permission]
 	</string>
 	<string name="ExperiencePermissionShort1">
 		コントロールする
@@ -6256,26 +6150,38 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExperiencePermissionShort12">
 		権限
 	</string>
-	
+	<string name="ExperiencePermissionShort16">
+		座る
+	</string>
+	<string name="ExperiencePermissionShort17">
+		自然環境の設定
+	</string>
+	<!-- PBR Materials -->
+	<string name="Material Texture Name Header">テクスチャはこのマテリアルを表しています：</string>
+	<string name="material_selection_title">マテリアルの選択</string>
+	<string name="material_selection_text">マテリアル選択：</string>
+	<string name="material_batch_import_text">─全てを一括アップロード─</string>
+
 	<!-- Conversation log messages -->
 	<string name="logging_calls_disabled_log_empty">
-		会話はログに記録されていません。ログの記録を開始するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+		会話はログに記録されていません。ログの記録を開始するには、「初期設定」＞「チャット」で「保存：ログのみ」または「保存：ログと会話のテキスト」を選択します。
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		これ以上の会話は記録されません。ログの記録を再開するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+		これ以上の会話は記録されません。ログの記録を再開するには、「初期設定」＞「チャット」で「保存：ログのみ」または「保存：ログと会話のテキスト」を選択します。
 	</string>
 	<string name="logging_calls_enabled_log_empty">
-		ログイン時の会話はありません。誰かにご連絡した後、または誰かがあなたに連絡した後、ログエントリがここに表示されます。
+		ログイン時の会話はありません。誰かと話した後や、誰かがあなたに話しかけた後に、そのときのログがここに記載されます。
 	</string>
 	<string name="loading_chat_logs">
-		ロード中...
+		読み込んでいます…
 	</string>
-	
 	<!-- Statistics -->
-	
 	<!-- Presets graphic/camera -->
+	<string name="na">
+		該当なし
+	</string>
 	<string name="preset_combo_label">
-		- リストなし -
+		‐空のリスト‐
 	</string>
 	<string name="Default">
 		デフォルト
@@ -6286,266 +6192,389 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="no_limit">
 		無制限
 	</string>
-	
 	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
-		この物理シェイプに含まれる三角形は小さすぎます。物理モデルを簡略化して下さい。
+		物理形状に小さすぎる三角形が含まれています。物理モデルを簡略化してください。
 	</string>
-	
 	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
-		この物理シェイプにはよくない確認データが含まれています。物理モデルを修正して下さい。
+		物理形状に不正な確認データがあります。物理モデルを修正してください。
 	</string>
-
+	<string name="Mav_Details_MAV_BLOCK_MISSING">
+		データがありません。高ＬｏＤが存在し、有効であることを確認してください。設定されていない場合は、物理モデルを設定します。
+	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
-		この物理シェイプは正しいバージョンではありません。物理モデルに正しいバージョンを設定して下さい。
+		物理形状のバージョンが正しくありません。物理モデルに正しいバージョンを設定してください。
 	</string>
 	<string name="couldnt_resolve_host">
-		DNS がホスト名 ([HOSTNAME]) を解決できませんでした。
+		ＤＮＳがホスト名 ([HOSTNAME]) を解決できませんでした。
 www.secondlife.com のウェブサイトに接続できるかご確認ください。
-接続できても、このエラーが継続的に起こる場合は、
-サポートセクションから問題を報告してください。
+接続できても、このエラーが継続的に起こる場合は、サポートセクションから問題を報告してください。
 	</string>
 	<string name="ssl_peer_certificate">
-		ログインサーバーが SSL 経由で確認できませんでした。
-このエラーが継続的に起こる場合は、
-Secondlife.com のサポートセクションから
-問題を報告してください。
+		ログインサーバーがＳＳＬ経由で確認できませんでした。
+このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから問題を報告してください。
 	</string>
 	<string name="ssl_connect_error">
 		この問題の多くは、お使いのコンピュータの時計が正しく設定されていないために起こります。
-コントロールパネルから時刻と日付が正しく設定されているかご確認ください。
-お使いのネットワークとファイアウォールも正しく設定されているかお確かめください。
-このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから
-問題を報告してください。
+コントロールパネルから、時刻と日付が正しく設定されている事をご確認してください。
+また、お使いのネットワークとファイアウォールが正しく設定されている事もお確かめください。
+このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから問題を報告してください。
+[https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%A8%E3%83%A9%E3%83%BC-r1283/ ナレッジベース]
+	</string>
+	<string name="LoadCameraPositionNoneSaved">カメラビューはまだ保存されていません。</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">カメラの位置が描画距離を超えているため、カメラビューを復元できません。</string>
 
-[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 ナレッジベース]
-	</string>
-	
-	<string name="LoadCameraPositionNoneSaved">
-		カメラ視界は保存されていません。
-	</string>
-	<string name="LoadCameraPositionOutsideDrawDistance">
-		カメラの位置が描画距離を超えているため、カメラ視界を復元できませんでした。
-	</string>
+	<string name="DrawDistanceSteppingGestureObsolete">コードの変更により、このジェスチャーを使用する必要がなくなりました。プログレッシブ描画距離ステップが有効になりました。</string>
+	<string name="FSCameraPositionCopied">カメラ位置[POS]がクリップボードにコピーされました。</string>
 
-	<string name="DrawDistanceSteppingGestureObsolete">
-		コードが変更になったため、このジェスチャーを使用する必要がなくなりました。プログレッシブ距離別段階描画が有効になりました。</string>
-	<string name="FSCameraPositionCopied">カメラ位置 [POS] がクリップボードにコピーされました。</string>
-
-	<string name="FSCmdLineDrawDistanceSet">
-		描画距離が [DISTANCE]m に設定されました。
-	</string>
+	<string name="FSCmdLineDrawDistanceSet">描画距離が[DISTANCE]ｍに設定されました。</string>
+	<string name="FSCmdLineRollDiceTotal">[DICE]d[FACES][MODIFIER]の合計結果：[RESULT]</string>
+	<string name="FSCmdLineRollDiceLimits">サイコロ（最大100）と面（最大1000）には正の値を指定する必要があります。</string>
+	<string name="FSCmdLineRollDiceModifiersInvalid">修飾子を使用する場合は、有効な修飾子番号と修飾子の種類を指定する必要があります。修飾子は-1000～1000の範囲でなければなりません。有効な修飾子の種類は、「+」(ボーナス)、「-」(ペナルティ)、「&gt;」、「&lt;」(成功)、「r&gt;」、「r&lt;」、「r」(再ロール)、「!p&gt;」、「!p&lt;」、「!p」(貫通)、「!&gt;」、「!&lt;」、および「!」(爆発)です。ロールごとに１つの修飾子の種類のみ使用できます。例："[COMMAND] 1 20 + 5"、"[COMMAND] 5 40 &gt; 15"、"[COMMAND] 10 25 ! 25"、"[COMMAND] 15 25 !&lt; 10"</string>
+	<string name="FSCmdLineRollDiceExploded">爆発した</string>
+	<string name="FSCmdLineRollDicePenetrated">侵入した</string>
+	<string name="FSCmdLineRollDiceSuccess">成功</string>
+	<string name="FSCmdLineRollDiceReroll">再ロール</string>
+	<string name="FSCmdLineRollDiceFreezeGuard">ビューアが無限ローリングループでフリーズするため、この操作を完了できません。条件を変更してください。</string>
+	<string name="FSCmdLineCalcRandError">「[RAND]」は RAND(min,max)の有効な式ではありません。MAXはMINより大きく、両方とも-10000から10000の範囲でなければなりません。</string>
+	<string name="FSCmdLineRSP">最大帯域幅が[VALUE]Kbps に設定されました。</string>
+	<string name="FSCmdLineTpOffered">[NAME]へのテレポートのオファーをしました。</string>
 
 	<!-- Build types for about floater -->
-	<string name="FSWithHavok">Havok 対応</string>
-	<string name="FSWithOpensim">OpenSim 対応</string>
+	<string name="FSWithHavok">Havokサポート</string>
+	<string name="FSWithOpensim">OpenSimulatorサポート</string>
 
 	<!-- Firestorm search -->
-  <string name="not_found">&apos;[TEXT]&apos; は見つかりません</string>
-  <string name="no_results">該当なし</string>
-  <string name="searching">検索中...</string>
-  <string name="all_categories">全てのカテゴリ</string>
-  <string name="search_banned">コミュニティ規則に明記されている制約により、あなたが検索に使用した言葉のいくつかは対象から除外されました。</string>
-  <string name="search_short">検索キーワードが短すぎたため、検索が実行されませんでした。</string>
-  <string name="search_disabled">この地域では旧タイプの検索は実行できないようになっています。</string>
-  
-	<string name="render_quality_low">
-		低 (1/7)
+	<string name="not_found">
+		「[TEXT]」は見つかりませんでした。
 	</string>
-	<string name="render_quality_mediumlow">
-		中低 (2/7)
+	<string name="no_results">
+		検索結果なし
 	</string>
-	<string name="render_quality_medium">
-		中 (3/7)
+	<string name="searching">
+		検索しています…
 	</string>
-	<string name="render_quality_mediumhigh">
-		中高 (4/7)
+	<string name="all_categories">
+		全てのカテゴリ
 	</string>
-	<string name="render_quality_high">
-		高 (5/7)
+	<string name="search_banned">
+		コミュニティスタンダードに明記されているコンテンツ制限により、検索クエリ内の一部の語句は除外されました。
 	</string>
-	<string name="render_quality_highultra">
-		高超高a (6/7)
+	<string name="search_short">
+		検索語が短すぎるため、検索は実行されませんでした。
 	</string>
-	<string name="render_quality_ultra">
-		超高 (7/7)
+	<string name="search_disabled">
+		レガシー検索はこのリージョンでは無効化されています。
 	</string>
-	<string name="render_quality_unknown">
-		不明：通常の範囲を超えています。デバッグ設定で「RenderQualityPerformance」を確認して下さい。
-	</string>
-	
-	<string name="fsbridge_cant_create_disabled">
-		環境設定で「LSL クライアントブリッジ」が無効化されていると、[APP_NAME] は LSL ブリッジを作成できません。</string>
-	<string name="fsbridge_no_library">
-		[APP_NAME] は LSL ブリッジを作成できませんでした。ライブラリを有効にしてリログして下さい。
-	</string>
-	<string name="fsbridge_already_creating">
-		現在ブリッジを作成中ですので、別のインスタンスを開始することはできません。２，３分待ってからもう一度お試し下さい。
-	</string>
-	<string name="fsbridge_creating">
-		現在ブリッジを作成中です。この処理には時間がかかることがあります。お待ち下さい。
-	</string>
-	<string name="fsbridge_failure_creation_bad_name">
-		ブリッジは作成されませんでした。ブリッジの名前が正しくありません。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
-	</string>
-	<string name="fsbridge_failure_creation_null">
-		ブリッジは作成されませんでした。ブリッジがインベントリにみつかりません。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
-	</string>
-	<string name="fsbridge_failure_attach_wrong_object">
-		ブリッジを装着できませんでした。このブリッジは現行バージョンのものではありません。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
-	</string>
-	<string name="fsbridge_failure_attach_wrong_location">
-		ブリッジを装着できませんでした。ブリッジがインベントリ内の正しい場所にみつかりませんでした。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
-	</string>
-	<string name="fsbridge_failure_attach_point_in_use">
-	ブリッジを装着できませんでした。何か別のものがブリッジの装着ポイントを使用しています。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
-	</string>
-	<string name="fsbridge_failure_not_found">
-		ブリッジのオブジェクトがみつかりませんでした。作成処理を進めることができませんので中止します。
-	</string>
-	<string name="fsbridge_warning_unexpected_items">
-		ブリッジのインベントリに想定外のアイテムが入っています。
-	</string>
-	<string name="fsbridge_warning_not_finished">
-		ブリッジの作成が完了していません。ブリッジを使用するには、[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行う必要があるかもしれません。
-	</string>
-	<string name="fsbridge_detached">ブリッジが外されました。</string>
+
+	<string name="render_quality_low">低（１／７）</string>
+	<string name="render_quality_mediumlow">中低（２／７）</string>
+	<string name="render_quality_medium">中（３／７）</string>
+	<string name="render_quality_mediumhigh">中高（４／７）</string>
+	<string name="render_quality_high">高（５／７）</string>
+	<string name="render_quality_highultra">高ウルトラ（６／７）</string>
+	<string name="render_quality_ultra">ウルトラ（７／７）</string>
+	<string name="render_quality_unknown">不明、正常範囲外、RenderQualityPerformance デバッグ設定を確認してください。</string>
+
+	<string name="fsbridge_cant_create_disabled">初期設定で「LSLクライアントブリッジを有効にする」が無効になっている場合、[APP_NAME]はＬＳＬブリッジを作成できません。</string>
+	<string name="fsbridge_no_library">[APP_NAME]はＬＳＬブリッジを作成できませんでした。ライブラリを有効にして再度ログインしてください。</string>
+	<string name="fsbridge_already_creating">ブリッジの作成中なので、別のブリッジを開始できません。数分待ってから再試行してください。</string>
+	<string name="fsbridge_creating">ブリッジを作成しています。しばらく時間がかかる場合がありますので、お待ちください。</string>
+	<string name="fsbridge_failure_creation_create_script">ブリッジは作成されませんでした。ブリッジスクリプトを作成できませんでした。</string>
+	<string name="fsbridge_failure_creation_bad_name">ブリッジは作成されませんでした。ブリッジの名前が正しくありません。[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用してブリッジを再作成してください。</string>
+	<string name="fsbridge_failure_creation_null">ブリッジは作成されていません。インベントリにブリッジが見つかりませんでした。[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用してブリッジを再作成してください。</string>
+	<string name="fsbridge_failure_attach_wrong_object">ブリッジの接続に失敗しました。これは現在のブリッジバージョンではありません。[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニュー オプションを使用してブリッジを再作成してください。</string>
+	<string name="fsbridge_failure_attach_wrong_location">ブリッジの接続に失敗しました。ブリッジが適切なインベントリの場所に見つかりませんでした。[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用してブリッジを再作成してください。</string>
+	<string name="fsbridge_failure_attach_point_in_use">ブリッジの接続に失敗しました。ブリッジの接続ポイントは他の何かによって使用されていました。[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用してブリッジを再作成してください。</string>
+	<string name="fsbridge_failure_not_found">ブリッジ オブジェクトが見つかりませんでした。作成を続行できません。終了します。</string>
+	<string name="fsbridge_warning_unexpected_items">ブリッジインベントリに予期しないアイテムが含まれています。</string>
+	<string name="fsbridge_warning_not_finished">ブリッジの作成が完了していないため、使用する前に[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用してブリッジを再作成する必要がある場合があります。</string>
+	<string name="fsbridge_detached">ブリッジが取り外されました。</string>
 	<string name="fsbridge_created">ブリッジが作成されました。</string>
-	
+	<string name="fsbridge_script_info">スクリプト情報：'[OBJECT_NAME]'：[[OBJECT_TOTAL_SCRIPT_COUNT]件中[OBJECT_RUNNING_SCRIPT_COUNT]件]のスクリプトが動作中です。許容メモリサイズ制限は[OBJECT_SCRIPT_MEMORY]㎅で、消費されたＣＰＵ時間[OBJECT_SCRIPT_TIME]㎳です。[PATHFINDING_TEXT]</string>
+	<string name="fsbridge_script_info_pf">経路探索ナビゲーションで使用された平均ＣＰＵ時間：[OBJECT_CHARACTER_TIME]㎳</string>
+	<string name="fsbridge_script_info_ext">
+オブジェクトＩＤ：[INSPECTING_KEY]
+説明：[OBJECT_DESC]
+ルートプリム：[OBJECT_ROOT]
+プリム個数：[OBJECT_PRIM_COUNT]個
+ランドインパクト：[OBJECT_PRIM_EQUIVALENCE]
+インベントリアイテム：[OBJECT_TOTAL_INVENTORY_COUNT]個
+速度：[OBJECT_VELOCITY]
+位置：[OBJECT_POS]
+回転：[OBJECT_ROT]
+角速度：[OBJECT_OMEGA]（ラジアン毎秒）
+制作者：[OBJECT_CREATOR]
+所有者：[OBJECT_OWNER]
+前の所有者：[OBJECT_LAST_OWNER_ID]
+Rezした人：[OBJECT_REZZER_KEY]
+グループ：[OBJECT_GROUP]
+作成日時：[OBJECT_CREATION_TIME]
+Rez時間：[OBJECT_REZ_TIME]
+経路探索種別：[OBJECT_PATHFINDING_TYPE]
+装着ポイント：[OBJECT_ATTACHED_POINT]
+一時的に装着：[OBJECT_TEMP_ATTACHED]
+現在地：[AVATAR_POS]
+	</string>
+	<string name="fsbridge_error_scriptinfonotfound">スクリプト情報：チェックするオブジェクトが無効または範囲外です。</string>
+	<string name="fsbridge_error_scriptinfomalformed">スクリプト情報：ブリッジから不正な応答を受信しました。もう一度お試しください。</string>
+	<string name="fsbridge_error_injection">注意：１つ以上のスクリプトが [APP_NAME] ブリッジに追加されました。このメッセージが表示されることを予期していなかった場合は、[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用して、今すぐブリッジを再作成してください。</string>
+	<string name="fsbridge_error_wrongvm">注意：ブリッジスクリプトは、新しいＭｏｎｏ（64㎅のメモリ制限）仮想マシンではなく、古いＬＳＯ（16㎅のメモリ制限）を使用しているため、メモリ不足によりスタックヒープコリジョンやブリッジ障害が発生する可能性が高くなります。ブリッジを再作成するには、[APP_NAME]の「アバター／アバターヘルス／ブリッジの再作成」メニューオプションを使用してださい。このメッセージが再度表示される場合は、別のリージョンでもう一度お試しください。</string>
+
 	<!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
-	<string name="FSAOEnabled">[APP_NAME] の AO が有効化されました。</string>
-	<string name="FSAODisabled">[APP_NAME] の AO が無効化されました。</string>
-	<string name="FSAOPausedScript">スクリプト入りの装着物により停止されました。</string>
-	<string name="FSAOResumedScript">スクリプト入りの装着物により復帰しました。</string>
-	<string name="FSAOStandsPausedScript">スクリプト入りの装着物により、Stand のアニメーションが停止されました。</string>
-	<string name="FSAOStandsResumedScript">スクリプト入りの装着物により、Stand のアニメーションが復帰しました。</string>
-  
-  <!-- <FS:Zi> Quick preferences default options -->
-  <string name="QP Draw Distance">描画距離</string>
-  <string name="QP Max Particles">最大パーティクル数</string>
-  <string name="QP Avatar Physics LOD">アバター物理強度</string>
-  <string name="QP LOD Factor">プリム詳細</string>
-  <string name="QP Max Avatars">最大アバター数</string>
-  <string name="QP Tags Offset">タグの高さ</string>
-  <string name="QP Name Tags">名前タグ</string>
-  <string name="QP LookAt Target">視線表示</string>
-  <string name="QP Color Under Cursor">カーソル位置の色情報</string>
+	<string name="FSAOEnabled">[APP_NAME]のアニメーションオーバーライドが有効になりました。</string>
+	<string name="FSAODisabled">[APP_NAME]のアニメーションオーバーライドが無効になりました。</string>
+	<string name="FSAOPausedScript">スクリプト化された装着物で一時停止されました。</string>
+	<string name="FSAOResumedScript">スクリプト化された装着物で再開されました。</string>
+	<string name="FSAOStandsPausedScript">起立時のアニメーションは、スクリプト化された装着物で一時停止されました。</string>
+	<string name="FSAOStandsResumedScript">起立時のアニメーションは、スクリプト化された装着物で再開されました。</string>
 
-  <!-- <FS:Ansariel> Posestand animation names -->
-  <string name="PS_T_Pose">Tの字（腕を横に、足を揃える）</string>
-  <string name="PS_Arms_Down_Legs_together">腕を下に、足を揃える</string>
-  <string name="PS_Arms_down_sitting">腕を下にして座る</string>
-  <string name="PS_Arms_downward_Legs_together">腕を斜め下に、足を揃える</string>
-  <string name="PS_Arms_downward_Legs_apart">腕を斜め下に、足を開く</string>
-  <string name="PS_Arms_forward_Legs_apart">腕を前に、足を開く</string>
-  <string name="PS_Arms_forward_Legs_together">腕を前に、足を揃える</string>
-  <string name="PS_Arms_straight_Legs_apart">腕を横に、足を開く</string>
-  <string name="PS_Arms_straight_sitting">腕を横にして座る</string>
-  <string name="PS_Arms_upward_Legs_apart">腕を斜め上に、足を開く</string>
-  <string name="PS_Arms_upward_Legs_together">腕を斜め上に、足を揃える</string>
-  
-  <string name="QP_WL_Region_Default">共有された環境</string>
-  <string name="QP_WL_Day_Cycle_Based">デイサイクル</string>
-  <string name="QP_WL_None">なし</string>
+	<!-- <FS:Zi> Quick preferences default options -->
+	<string name="QP Draw Distance">描画距離</string>
+	<string name="QP Max Particles">最大パーティクル</string>
+	<string name="QP Avatar Physics LOD">アバター物理効果ＬＯＤ</string>
+	<string name="QP LOD Factor">ＬＯＤ係数</string>
+	<string name="QP Max Avatars">最大アバター数</string>
+	<string name="QP Tags Offset">名前タグのオフセット位置</string>
+	<string name="QP Name Tags">名前タグの表示</string>
+	<string name="QP LookAt Target">視線のターゲット</string>
+	<string name="QP Color Under Cursor">カーソルの下のカラー</string>
 
-  <string name="GroupChatMuteNotice">[NAME] からのグループチャットをミュートしています</string>
-  <string name="IgnoredAdHocSession">あなたは [AVATAR_NAME] からのカンファレンスに招待されていますが、設定内容に従ってビューワは自動的にこれを無視しました</string>
-  
-  <!-- <FS:Ansariel> Radar notifications -->
-  <string name="camera_no_focus">ユーザー [AVATARNAME] は設定した描画距離の外にいるためにカメラが焦点を当てることができません。</string>
-  <string name="entering_draw_distance">が描画距離内に入りました。([DISTANCE] m)</string>
-  <string name="leaving_draw_distance">は描画距離から外れました。</string>
-  <string name="entering_chat_range">がチャットレンジ内に入りました。([DISTANCE] m)</string>
-  <string name="leaving_chat_range">がチャットレンジから外れました。</string>
-  <string name="entering_region">がこの地域に入りました。</string>
-  <string name="entering_region_distance">がこの地域に入りました。([DISTANCE] m)</string>
-  <string name="leaving_region">がこの地域を離れました。</string>
-  <string name="avatar_age_alert">は年齢警告対象です。年齢：[AGE] 日</string>
+	<!-- <FS:Ansariel> Posestand animation names -->
+	<string name="PS_T_Pose">Ｔポーズ</string>
+	<string name="PS_Arms_Down_Legs_together">腕を下ろし、足を揃える</string>
+	<string name="PS_Arms_down_sitting">腕を下げて座る</string>
+	<string name="PS_Arms_downward_Legs_together">腕を下ろし、足を揃える</string>
+	<string name="PS_Arms_downward_Legs_apart">腕を下に、足を広げる</string>
+	<string name="PS_Arms_forward_Legs_apart">腕を前に出し、足を広げる</string>
+	<string name="PS_Arms_forward_Legs_together">腕を前に出し、足を揃える</string>
+	<string name="PS_Arms_straight_Legs_apart">腕をまっすぐ伸ばし、足を広げる</string>
+	<string name="PS_Arms_straight_sitting">腕を伸ばして座る</string>
+	<string name="PS_Arms_upward_Legs_apart">腕を上に上げ、足を広げる</string>
+	<string name="PS_Arms_upward_Legs_together">腕を上に上げ、足を揃える</string>
 
-	<!--
-	<string name="export_fail_no_mesh">メッシュのエクスポートには現在対応していません。エクスポート処理を中止しました。</string>
-	-->
-  <string name="TotalScriptCountChangeIncrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に急増しました。([DIFFERENCE])</string>
-  <string name="TotalScriptCountChangeDecrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に激減しました。([DIFFERENCE])</string>
-  <string name="preproc_toggle_warning">このエディタを一旦閉じて開き直すまでプリプロセッサの切り替えは有効になりません。</string>
-	
+	<string name="QP_WL_Region_Default">共有された環境</string>
+	<string name="QP_WL_Day_Cycle_Based">デイサイクル基準</string>
+	<string name="QP_WL_None">なし</string>
+
+	<string name="GroupChatMuteNotice">[NAME]からのグループチャットをミュートしています。</string>
+	<string name="IgnoredAdHocSession">[AVATAR_NAME]から会議（アドホック）チャットに招待されましたが、設定によりビューアによって自動的に無視されました。</string>
+
+	<!-- <FS:Ansariel> Radar notifications -->
+	<string name="camera_no_focus">カメラは描画距離外にいるため、ユーザ[AVATARNAME]にフォーカスできません。</string>
+	<string name="entering_draw_distance">描画距離内（[DISTANCE]ｍ）に入りました。</string>
+	<string name="leaving_draw_distance">描画距離内から抜けました。</string>
+	<string name="entering_chat_range">チャット範囲（[DISTANCE]ｍ）に入りました。</string>
+	<string name="leaving_chat_range">チャット範囲から外れました。</string>
+	<string name="entering_region">リージョンに入りました。</string>
+	<string name="entering_region_distance">リージョン（[DISTANCE]ｍ）に入りました。</string>
+	<string name="leaving_region">リージョンから去りました。</string>
+	<string name="avatar_age_alert">年齢アラートがトリガーされました。年齢：[AGE]日目</string>
+	<string name="avatar_age_not_available">なし</string>
+	<string name="TotalScriptCountChangeIncrease">リージョン内のスクリプトの合計数が[OLD_VALUE]から[NEW_VALUE]（[DIFFERENCE]）に増加しました。</string>
+	<string name="TotalScriptCountChangeDecrease">リージョン内のスクリプトの合計数が[OLD_VALUE]から[NEW_VALUE]（[DIFFERENCE]）に減少しました。</string>
+	<string name="preproc_toggle_warning">プリプロセッサを切り替えても、このエディターを閉じて再度開くまで完全には有効になりません。</string>
 	<!-- <FS:Cron> FIRE-9335 -->
 	<!-- <LSL Preprocessor -->
-	
+	<string name="preproc_toggle_warning">
+		プリプロセッサの切り替えは、このエディタを閉じて再度開くまで完全には有効になりません。
+	</string>
+	<string name="fs_preprocessor_starting">
+		[APP_NAME]プリプロセッサを開始しています…
+	</string>
+	<string name="fs_preprocessor_not_supported">
+		警告：このビルドではプリプロセッサをサポートしていません。（[WHERE]）
+	</string>
+	<string name="fs_preprocessor_disabled_by_script_marker">
+		[APP_NAME]プリプロセッサは、[LINENUMBER]行目の命令で無効化されています。
+	</string>
+	<string name="fs_preprocessor_settings_list_prefix">
+		設定：
+	</string>
+	<string name="fs_preprocessor_cpp_exception">
+		[ERR_NAME]（[LINENUMBER]）：[ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_lexing_exception">
+		[SEVERITY]：[ERR_NAME]（[LINENUMBER]）：[ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_exception">
+		[ERR_NAME]（[LINENUMBER]）：以下の例外が発生しました：[ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_error">
+		[ERR_NAME]（[LINENUMBER]）：予期しない例外がキャッチされました。
+	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		ＬＳＬ２としてコンパイルするディレクティブの優先設定が検出されました。
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Ｍｏｎｏとしてコンパイルするディレクティブの優先設定が検出されました。
+	</string>
+	<!-- LSL Optimizer -->
+	<string name="fs_preprocessor_optimizer_start">
+		参照されていないユーザー定義関数とグローバル変数を最適化します。
+	</string>
+	<string name="fs_preprocessor_optimizer_regex_err">
+		有効な正規表現ではありません：「[WHAT]」；ＬＳＬ最適化はスキップされました。
+	</string>
+	<string name="fs_preprocessor_optimizer_exception">
+		例外をキャッチしました：「[WHAT]」；ＬＳＬ最適化はスキップされました。
+	</string>
+	<string name="fs_preprocessor_optimizer_unexpected_exception">
+		ＬＳＬ最適化時に予期しない例外が発生しました。適用されていません。
+	</string>
+	<!-- LSL Compressor -->
+	<string name="fs_preprocessor_compress_start">
+		不要なスペースを削除してスクリプトテキストを圧縮します。
+	</string>
+	<string name="fs_preprocessor_compress_regex_err">
+		有効な正規表現ではありません：「[WHAT]」；ＬＳＬ圧縮はスキップされました。
+	</string>
+	<string name="fs_preprocessor_compress_exception">
+		例外をキャッチしました：「[WHAT]」；ＬＳＬ圧縮はスキップされました。
+	</string>
+	<string name="fs_preprocessor_compress_unexpected_exception">
+		ＬＳＬ圧縮時に予期しない例外が発生しました。適用されていません。
+	</string>
+	<!-- LSL Lazy lists -->
+	<string name="fs_preprocessor_lazylist_start">
+		遅延リスト変換を適用します。
+	</string>
+	<string name="fs_preprocessor_lazylist_regex_err">
+		有効な正規表現ではありません：「[WHAT]」；ＬＳＬ遅延リスト変換はスキップされました。
+	</string>
+	<string name="fs_preprocessor_lazylist_exception">
+		例外をキャッチしました：「[WHAT]」；ＬＳＬ遅延リスト変換されました。
+	</string>
+	<string name="fs_preprocessor_lazylist_unexpected_exception">
+		ＬＳＬ遅延リスト変換時に予期しない例外が発生しました。適用されていません。
+	</string>
+	<!-- LSL switch statement -->
+	<string name="fs_preprocessor_switchstatement_start">
+		Switch文変換を適用します。
+	</string>
+	<string name="fs_preprocessor_switchstatement_regex_err">
+		有効な正規表現ではありません：「[WHAT]」；Swicth文変換はスキップされました。
+	</string>
+	<string name="fs_preprocessor_switchstatement_exception">
+		例外をキャッチしました：'[WHAT]'; Swicth文変換はスキップされました。
+	</string>
+	<string name="fs_preprocessor_switchstatement_unexpected_exception">
+		Switch文変換時に予期しない例外が発生しました。適用されていません。
+	</string>
+	<!-- LSL Cache -->
+	<string name="fs_preprocessor_cache_miss">
+		キャッシュされたインクルードファイル：「[FILENAME]」
+	</string>
+	<string name="fs_preprocessor_cache_invalidated">
+		インクルードされたファイル「[FILENAME]」に変更がありました。再キャッシュしています。
+	</string>
+	<string name="fs_preprocessor_cache_completed">
+		コンパイルされた「[FILENAME]」をキャッシュしています。
+	</string>
+	<string name="fs_preprocessor_cache_unsafe">
+		エラー：「[FILENAME]」という名前のスクリプトをファイルシステムにコピーするのは安全ではありません。このインクルードは失敗します。
+	</string>
+	<string name="fs_preprocessor_caching_err">
+		エラー：インクルードされた「[FILENAME]」というファイルをキャッシュできませんでした。
+	</string>
+	<string name="fs_preprocessor_truncated">
+		警告：スクリプトのテキストサイズが大きすぎるため、プリプロセッサの出力が切り詰められました。このスクリプトはおそらく機能しません。
+	</string>
 	<!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
-	<string name="skin_defaults_starlight_location">Starlight スキンの初期設定により、メニューバーには現在いる場所が表示されません。</string>
-	<string name="skin_defaults_starlight_navbar">Starlight スキンの初期設定により、ナビゲーションバーが表示されます。</string>
-	
+	<string name="skin_defaults_starlight_location">Starlightスキンシリーズでは、メニュー バーに現在位置を表示する機能がデフォルトで無効になっていました。</string>
+	<string name="skin_defaults_starlight_navbar">Starlightスキンシリーズでは、ナビゲーションバーの表示がデフォルトで有効になりました。</string>
+
 	<!-- Animation Explorer -->
-	<string name="animation_explorer_seconds_ago">[SECONDS] 秒前</string>
-	<string name="animation_explorer_still_playing">実行中のアニメーション：</string>
+	<string name="animation_explorer_seconds_ago">[SECONDS]秒前</string>
+	<string name="animation_explorer_still_playing">再生中</string>
 	<string name="animation_explorer_unknown_priority">不明</string>
-	
+
 	<string name="FriendOnlineNotification">はオンラインです。</string>
 	<string name="FriendOfflineNotification">はオフラインです。</string>
-	
-	<string name="Inbox_Folderview_New">新規</string>
-	
-	<string name="Mouselook_Unknown_Avatar">不明なアバター</string>
 
-    <string name="groupcountstring">あなたは [COUNT] グループに所属しています。 (残 [REMAINING]).</string>
-  <string name="groupcountunlimitedstring">あなたは [COUNT] グループに所属しています</string>
-	
-	<string name="SLGridStatusInvalidMsg">SL Grid Status のエラー：無効なメッセージ形式です。あとでもう一度試してみて下さい。</string>
-	<string name="SLGridStatusTimedOut">SL Grid Status のエラー：要求がタイムアウトしました。</string>
-	<string name="SLGridStatusOtherError">SL Grid Status のエラー：[STATUS] ( https://en.wikipedia.org/wiki/List_of_HTTP_status_codes ).</string>
-	
-	<string name="DoubleClickTeleportEnabled">ダブルクリック・テレポートが有効になりました。</string>
-	<string name="DoubleClickTeleportDisabled">ダブルクリック・テレポートが無効になりました。</string>
-	
-	<string name="AlwaysRunEnabled">「常に走る」が有効になりました。</string>
-	<string name="AlwaysRunDisabled">「常に走る」が解除されました。</string>
-	
-	<string name="FSRegionRestartInLocalChat">今いる地域は間もなく再起動します。このままこの地域にいるとログアウトされます。</string>
-	
-  <string name="Mute_Add">'[NAME]' は無視リストに追加されました</string>
-  <string name="Mute_Remove">'[NAME]' は無視リストの対象から外されました</string>
-	<string name="Reqsysinfo_Chat_NoReason">あなたのシステム設定に関する情報を要求しています。</string>
-	<string name="Reqsysinfo_Chat_Reason">次の理由であなたのシステム設定に関する情報を要求しています：[REASON]</string>
-	<string name="Reqsysinfo_Chat_Information_sent">情報が送信されました。：[DATA]</string>
-	<string name="Reqsysinfo_Chat_Request_Denied">要求は拒否されました。</string>
-	<string name="Reqsysinfo_Reason">理由：[REASON]</string>
-	
+	<string name="Inbox_Folderview_New">新着</string>
+
+	<string name="Mouselook_Unknown_Avatar">不明なエージェント</string>
+
+	<string name="groupcountstring">あなたは[COUNT]個のグループに所属しています。（残り[REMAINING]個）</string>
+	<string name="groupcountunlimitedstring">あなたは[COUNT]個のグループに所属しています。</string>
+
+	<string name="SLGridStatusInvalidMsg">ＳＬグリッドステータスエラー：無効なメッセージ形式です。しばらくしてからもう一度お試しください。</string>
+	<string name="SLGridStatusTimedOut">ＳＬグリッドステータスエラー：要求がタイムアウトしました。</string>
+	<string name="SLGridStatusOtherError">ＳＬグリッドステータスエラー：[STATUS](https://ja.wikipedia.org/wiki/HTTP%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89).</string>
+
+	<string name="DoubleClickTeleportEnabled">ダブルクリックでテレポートが有効になりました。</string>
+	<string name="DoubleClickTeleportDisabled">ダブルクリックでテレポートが無効になりました。</string>
+
+	<string name="AlwaysRunEnabled">常時走行が有効になりました。</string>
+	<string name="AlwaysRunDisabled">常時走行が無効になりました。</string>
+
+	<string name="FSRegionRestartInLocalChat">現在いるリージョンは再起動しようとしています。このままこのリージョンに留まるとログアウトされます。</string>
+
+	<string name="Mute_Add">「[NAME]」はブロックリストに追加されました。</string>
+	<string name="Mute_Remove">「[NAME]」はブロックリストから削除されました。</string>
+	<string name="Reqsysinfo_Chat_NoReason">システム設定に関する情報を要求します。</string>
+	<string name="Reqsysinfo_Chat_Reason">システム設定に関する情報を要求する理由は次の通りです：[REASON]</string>
+	<string name="Reqsysinfo_Chat_Information_sent">情報が送られました：[DATA]</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">供給は拒否されました。</string>
+	<string name="Reqsysinfo_Reason">提示された理由：[REASON]</string>
+
 	<!-- Titles for inventory finder floater -->
-	<string name="All Items">すべて</string>
-	<string name="Recent Items">最新</string>
-	<string name="Worn Items">装着中</string>
+	<string name="All Items">全てのアイテム</string>
+	<string name="Recent Items">最近のアイテム</string>
+	<string name="Worn Items">着用中</string>
 
-	<string name="InvOfferGroupNoticeName">グループメンバー [NAME]</string>
+	<string name="InvOfferGroupNoticeName">[NAME]というグループメンバー名</string>
 	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
-	
-	<string name="Pie_av_render_normally">通常表示</string>
-	<string name="Pie_av_render_never">表示しない</string>
-	<string name="Pie_av_render_fully">完全表示</string>
 
-	<string name="Nametag_Complexity_Label">表示の複雑さ：[COMPLEXITY]</string>
-	<string name="Nametag_Texture_Area_Label">テクスチャの範囲； [TEXTURE_AREA] m²</string>
-	
+	<string name="GroupNoticesPanelDateString">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</string>
+	<string name="GroupNoticesToastDateString">[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[ampm,datetime,slt][hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]</string>
+	<string name="NotificationItemDateStringLocal">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]</string>
+	<string name="NotificationItemDateStringUTC">[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日　[hour,datetime,utc]：[min,datetime,utc]　[timezone,datetime,utc]</string>
+	<string name="NotificationItemDateStringSLT">[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日　[hour,datetime,slt]：[min,datetime,slt]　[timezone,datetime,slt]</string>
+
+	<string name="Pie_av_render_normally">通常</string>
+	<string name="Pie_av_render_never">しない</string>
+	<string name="Pie_av_render_fully">完全</string>
+
+	<string name="Nametag_Complexity_Label">複雑度：[COMPLEXITY]</string>
+	<string name="Nametag_Texture_Area_Label">テクスチャ面積：[TEXTURE_AREA]㎡</string>
+
 	<string name="font_unknown">不明なフォント</string>
+	<string name="font_fonts.xml">Deja Vu</string>
+	<string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
+	<string name="font_fonts_liberation.xml">Liberation</string>
+	<string name="font_fonts_droid.xml">Droid Sans</string>
+	<string name="font_fonts_mobi.xml">Mobi Sans</string>
+	<string name="font_fonts_roboto.xml">Roboto</string>
+	<string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+	<string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
+	<string name="font_fonts_noto.xml">Noto Sans</string>
+	<string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
+	<string name="font_fonts_cascadia_code.xml">Cascadia Code</string>
 	<string name="mode_unknown">不明なモード</string>
+	<string name="mode_settings_firestorm.xml">[APP_NAME]</string>
+	<string name="mode_settings_phoenix.xml">Phoenix</string>
+	<string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
 	<string name="mode_settings_hybrid.xml">ハイブリッド</string>
 	<string name="mode_settings_text.xml">テキスト</string>
-	
-	
-	<string name="Asset_Uploading">アップロード中...
+
+	<string name="Asset_Uploading">
+		アップロードしています…
 [ASSET_NAME]
 	</string>
 	<string name="Yes">はい</string>
 	<string name="No">いいえ</string>
-	<string name="FSUrlEntryWearLabel">持ち物フォルダを装着</string>
-	<string name="TexturePickerOutfitHeader">アウトフィットの写真</string>
-	<string name="unknown_script">（不明のスクリプト）</string>
-	<string name="FSAreaSearch_Cost_Label">L$[COST]</string>
-	
-	<string name="ImportingWindlightBulk">Windlight をインポート中...</string>
-	
+	<string name="FSUrlEntryWearLabel">インベントリフォルダを着用</string>
+	<string name="TexturePickerOutfitHeader">アイテムのスナップショット</string>
+	<string name="unknown_script">（不明なスクリプト）</string>
+	<string name="FSAreaSearch_Cost_Label">L$ [COST]</string>
+
+	<string name="ImportingWindlightBulk">Windlightsをインポートしています…。</string>
+
 	<!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
-	<string name="FSObjectInventoryNoElements">アイテムなし</string>
-	<string name="FSObjectInventoryOneElement">1 個のアイテム</string>
-	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] 個のアイテム</string>
-	
+	<string name="FSObjectInventoryNoElements">要素がありません。</string>
+	<string name="FSObjectInventoryOneElement">1件の要素</string>
+	<string name="FSObjectInventoryElements">[NUM_ELEMENTS]件の要素</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">グリッドオペレータのサポートチーム</string>
+	<string name="Unlimited">無制限</string>
 </strings>

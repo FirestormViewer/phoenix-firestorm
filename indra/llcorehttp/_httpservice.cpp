@@ -292,7 +292,7 @@ void HttpService::threadRun(LLCoreInt::HttpThread * thread)
     ELoopSpeed loop(REQUEST_SLEEP);
     while (! mExitRequested)
     {
-        LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
+        // LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK; // <FS:Beq/> remove pointless profiling
         try
         {
             loop = processRequestQueue(loop);

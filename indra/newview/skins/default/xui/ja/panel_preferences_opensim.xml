@@ -1,76 +1,62 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Opensim" name="opensim_panel">
 	<tab_container label="Opensim" name="tabs">
 		<panel label="グリッド管理" name="grid_management_panel">
 			<text name="add_grid_text">
 				グリッドを追加
 			</text>
-			<line_editor name="add_grid" label="ログインURI入力" />
-			<button label="クリア" name="clear_grid" />
-			<button label="適用" name="apply_new_grid" />
+			<line_editor name="add_grid" label="ログインＵＲＩ入力"/>
+			<button label="クリア" label_selected="クリア" name="clear_grid"/>
+			<button label="適用" name="apply_new_grid"/>
 			<text name="add_grid_text">
 				グリッド一覧
 			</text>
 			<scroll_list name="grid_list">
-				<scroll_list.columns label="グリッド名称" name="grid_label" />
-				<scroll_list.columns label="ログインURI" name="login_uri" />
+				<scroll_list.columns label="グリッド名称" name="grid_label"/>
+				<scroll_list.columns label="ログインＵＲＩ" name="login_uri"/>
 			</scroll_list>
-			<button label="更新" name="refresh_grid" />
-			<button label="削除" name="remove_grid" />
-			<panel label="" name="advanced_grid_panel">
+			<button label="更新" name="refresh_grid"/>
+			<button label="削除" name="remove_grid"/>
+			<panel name="advanced_grid_panel">
 				<text name="grid_name_text">
 					グリッド名称：
 				</text>
-				<line_editor name="name_edit" />
-				<check_box label="" name="enable_lock" />
 				<text name="grid_uri_text">
-					グリッドURI：
+					グリッドのＵＲＩ：
 				</text>
-				<line_editor name="grid_uri_edit" />
 				<text name="login_page_text">
 					ログインページ：
 				</text>
-				<line_editor name="login_page_edit" />
-				<button label="保存" name="save_grid" />
 				<text name="helper_uri_text">
-					ヘルパーURI：
+					ヘルパーＵＲＩ：
 				</text>
-				<line_editor name="helper_uri_edit" />
 				<text name="website_text">
 					グリッドのWebサイト：
 				</text>
-				<line_editor name="website_edit" />
 				<text name="support_text">
 					グリッドのサポート：
 				</text>
-				<line_editor name="support_edit" />
 				<text name="register_text">
 					グリッドの登録：
 				</text>
-				<line_editor name="register_edit" />
 				<text name="password_text">
-					グリッドパスワードのURI：
+					グリッドパスワードのＵＲＩ：
 				</text>
-				<line_editor name="password_edit" />
 				<text name="search_text">
 					グリッド検索：
 				</text>
-				<line_editor name="search_edit" />
 				<text name="message_text">
-					グリッド・メッセージのURI：
+					グリッド・メッセージのＵＲＩ：
 				</text>
-				<line_editor name="message_edit" />
 			</panel>
 		</panel>
-
 		<panel label="その他" name="opensim_misc_panel">
-			<check_box label="デバッグ検索" name="DebugSearch" />
+			<check_box label="デバッグ検索" name="DebugSearch"/>
 			<text name="search_url_debug_text">
-				現在の検索URLを上書きする（空欄の場合上書きされない）：
+				現在の検索ＵＲＬを上書きする（空欄の場合上書きされない）：
 			</text>
-			<line_editor name="search_url_debug" />
-			<button label="クリア" name="clear_search_url_debug" />
-			<button label="選択" name="pick_current_search_url" />
+			<button label="クリア" label_selected="クリア" name="clear_search_url_debug"/>
+			<button label="選択" name="pick_current_search_url"/>
 		</panel>
 	</tab_container>
 </panel>

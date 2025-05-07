@@ -1,71 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="チャット設定" name="im">
+	<string name="AutoresponseItemNotSet">
+		アイテムがセットされていません
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		アイテムは利用可能ではありません
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		ログインしていません
+	</string>
 	<tab_container label="プライバシー" name="tabs">
-	
-	
 		<!-- 一般 -->
-		
 		<panel label="一般" name="tab-general">
-		<panel.string name="log_in_to_change">
-			ログインして変更
-		</panel.string>
-		
+			<panel.string name="log_in_to_change">
+				ログインして変更
+			</panel.string>
 			<button label="履歴を消去" name="clear_webcache" tool_tip="ログイン画像、最後にいた場所、テレポート履歴、Web、テクスチャキャッシュを削除します"/>
 			<text name="cache_size_label">
 				（位置、画像、web、検索履歴）
 			</text>
 			<check_box label="プロフィールを検索結果に表示" name="online_searchresults"/>
-			<check_box label="私のオンライン状態を確認できるのは、フレンドとグループだけ" name="online_visibility"/>
-			<check_box label="私にコールしたりIMできるのは、フレンドとグループだけ" name="voice_call_friends_only_check" />
-			<check_box label="既に参加しているグループへの招待も表示する" name="FSShowJoinedGroupInvitations" />
+			<check_box label="自分のオンライン状態を確認できるのは、フレンドとグループのみに限定する" name="online_visibility"/>
+			<check_box label="自分にコールやＩＭができるのをフレンドとグループのみに限定する" name="voice_call_friends_only_check"/>
+			<check_box label="既に参加しているグループへの招待も表示する" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="コールが終了したら自動的にマイクのスイッチを切る" name="auto_disengage_mic_check"/>
-			<check_box label="スクリプトの入ったオブジェクトは現在の私の言語設定を確認できる" name="LanguageIsPublic" />
+			<check_box label="スクリプトの入ったオブジェクトは現在の自分の言語設定を確認できるようにする" name="LanguageIsPublic"/>
 			<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>
-			<check_box label="新しく持ち物に送られて来たものを自動的に受け取る" name="Auto_Accept_New_Inventory" />
-			<check_box label="自動的に受け取ったインベントリ・アイテムを周辺チャットにログとして表示する" name="FSLogAutoAcceptInventoryToChat" />
-			<check_box label="V1形式の持ち物の受け取り／拒否のメッセージを使用する" name="FSUseLegacyInventoryAcceptMessages" tool_tip="このオプションをオンにした場合、ビューワは受け取りまたは拒否のボタンを押したあとに受け取り／拒否のメッセ時を送信します。オフの場合は、送られて来たものを受け取るとすぐに受け取りましたというメッセージが自動的に送信されます。このオプションは、送られてきたものを自動的に受領するかどうかには全く影響しません。" />
-			<check_box label="新しくものを受け取ると、自動的に持ち物フォルダを開いて表示する" name="Show_In_Inventory" />
-			<check_box label="ノートカード、画像、ランドマークは、受け取ったらすぐに表示する" name="Show_New_Inventory" />
-			<check_box label="スナップショットをアップロードしたら自動的に持ち物に表示する" name="FSOpenInventoryAfterSnapshot" />
-			<check_box label="他のアバターにものを送った時にはパーティクル効果が出る" name="FSCreateGiveInventoryParticleEffect" />
+			<check_box label="新しくインベントリに送られて来たものを自動的に受け取る" name="Auto_Accept_New_Inventory"/>
+			<check_box label="自動的に受け取ったインベントリアイテムを近くのチャットにログ出力する" name="FSLogAutoAcceptInventoryToChat"/>
+			<check_box label="自動承認が有効になっている場合でも、新しいインベントリ通知を表示する" name="FSShowAutoAcceptInventoryInNotifications"/>
+			<check_box label="Ｖ１形式のインベントリの受け取り／拒否のメッセージを使用する" name="FSUseLegacyInventoryAcceptMessages" tool_tip="このオプションをオンにした場合、ビューアは受け取りまたは拒否のボタンを押したあとに受け取り／拒否のメッセ時を送信します。オフの場合は、送られて来たものを受け取るとすぐに受け取りましたというメッセージが自動的に送信されます。このオプションは、送られてきたものを自動的に受領するかどうかには全く影響しません。"/>
+			<check_box label="新しくものを受け取ると、自動的にインベントリフォルダを開いて表示する" name="Show_In_Inventory"/>
+			<check_box label="ノートカード、画像、ランドマークは、受け取ったらすぐに表示する" name="Show_New_Inventory"/>
+			<check_box label="スナップショットをアップロードしたら自動的にインベントリに表示する" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="他のアバターにものを送った時にはパーティクル効果を出す" name="FSCreateGiveInventoryParticleEffect"/>
 			<button label="ブロック／無視リスト管理" name="block_list"/>
-			
 		</panel>
-
 		<!-- Logging -->
-
-	<panel label="会話の記録とテキスト" name="tab-logging" >
+		<panel label="会話の記録とテキスト" name="tab-logging">
 			<text name="logging_label">
 				保存：
 			</text>
-			<combo_box ool_tip="会話の記録（会話ログ）とは、あなたか他の人が開始した会話の日時を記したリストです。会話テキストとは、画面に表示された実際の会話テキストで、従来「チャットログ」と呼ばれていたものはこちらになります。" name="conversation_log_combo">
-				<item name="log_and_transcripts" label="会話の記録と会話テキストを保存"/>
-				<item name="log_only" label="会話の記録のみ"/>
-				<item name="no_log_or_transcript" label="会話の記録も会話テキストも保存しない"/>
-				</combo_box>
-				<button label="記録をクリア..." name="clear_log" />
-				<button label="会話テキストを削除..." name="delete_transcripts" />
-				<check_box label="周辺チャットの会話テキストを保存する" name="LogNearbyChat" tool_tip="周辺チャットのメッセージテキストをハードドライブに記録します。" />
-				<!--
-				<text name="log_location_label">
-					保存場所:
-				</text>
-				<line_editor name="log_path_string" />
-				-->
-				<check_box label="会話テキストの保存には古い形式のファイル名を使用" name="UseLegacyIMLogNames" tool_tip="ここにチェックを入れると会話テキストの古い形式のユーザー名でファイルが作成され、入れない場合は新しいユーザー名の形式でファイルが作成されます。" />
-				<check_box label="会話ログのファイル名に日付スタンプを付加する" name="LogFileNamewithDate" tool_tip="チャットとIMのログに日付スタンプを付けます。チャットの場合は、「chat-YYYY-MM-DD」、IMの場合は「IMのファイル名-YYYY-MM」の形式になります。" />
-				<check_box label="内蔵のログビューワを使用する" name="FSUseBuiltInHistory"
-     tool_tip="会話ログを見るのに内蔵のログビューワを使用します。チェックを入れていない場合は、ログを見るのにご使用のOSで設定されているテキストエディタが起動して見ることになります。" />
-
+			<combo_box tool_tip="ログ（会話ログ）：自分または他のユーザーが開始したチャット会話のリストです。会話履歴：画面に表示された実際のテキストです。" name="conversation_log_combo">
+				<item name="log_and_transcripts" label="ログと会話履歴"/>
+				<item name="log_only" label="ログのみ"/>
+				<item name="no_log_or_transcript" label="ログや会話履歴なし"/>
+			</combo_box>
+			<button label="ログをクリア…" name="clear_log"/>
+			<button label="会話履歴を削除…" name="delete_transcripts"/>
+			<check_box label="近くのチャットの会話ログを保存する" name="LogNearbyChat" tool_tip="近くのチャットのメッセージテキストをハードドライブに記録します。"/>
+			<!--
+			<text name="log_location_label">
+				保存先：
+			</text>
+			-->
+			<check_box label="会話テキストの保存には古い形式のファイル名を使用" name="UseLegacyIMLogNames" tool_tip="ここにチェックを入れると会話テキストの古い形式のユーザ名でファイルが作成され、入れない場合は新しいユーザ名の形式でファイルが作成されます。"/>
+			<check_box label="会話ログのファイル名に日付スタンプを付加する" name="LogFileNamewithDate" tool_tip="チャットとＩＭのログに日付スタンプを付けます。チャットの場合は、「chat-YYYY-MM-DD」、ＩＭの場合は「ＩＭのファイル名-YYYY-MM」の形式になります。"/>
+			<check_box label="内蔵のログビューアを使用する" name="FSUseBuiltInHistory" tool_tip="会話ログを見るのに内蔵のログビューアを使用します。チェックを入れていない場合は、ログを見るのにご使用のOSで設定されているテキストエディタが起動して見ることになります。"/>
 		</panel>
-		
-
 		<!--LookAt-->
-
-		<panel label="視線" name="tab-lookat" >
-     
-			<check_box label="視線を表示する" name="showlookat" tool_tip="人の視線の先に十字の印を表示します。"/>
-			<text name="lookatshownames" tool_tip="視線の十字にアバター名を表示するか選択します。">
+		<panel label="視線" name="tab-lookat">
+			<check_box label="ターゲットに視線を表示する：" name="showlookat" tool_tip="視線ポイントはアニメーションのヒントであり、視聴者はこれを使用して、目、頭、胴体をどの方向に向けるかを把握します。また、アバターのカメラのアンカーポイントを決定するためにも使用できます。"/>
+			<text name="lookatshownames" tool_tip="ターゲットのアバター名を表示する名前の形式を指定します。">
 				視線を当てているアバターの名前を表示
 			</text>
 			<combo_box name="lookatshownames_combobox">
@@ -73,66 +69,73 @@
 				<combo_box.item label="フル表示" name="Complete_Name"/>
 				<combo_box.item label="表示名" name="Display_Name"/>
 				<combo_box.item label="古い形式" name="Legacy_Name"/>
-				<combo_box.item label="ユーザー名" name="User_Name"/>
+				<combo_box.item label="ユーザ名" name="User_Name"/>
 			</combo_box>
-
 			<text name="mylookat">
 				自分の視線
 			</text>
-			<check_box label="自分の視線を表示しない" name="LookAtHideOwn" tool_tip="カメラの焦点を表す十字を表示しない" />
-			<check_box label="焦点までの視線を表示する" name="ExodusLookAtLines" tool_tip="アバターから十字で示されるその人のカメラの焦点までの視線を表示します。" />
-			<check_box label="自分のカメラの焦点がどこにあるか他人には知らせない" name="privatelookat" tool_tip="他人があなたのカメラの焦点がどこにあるか知るのを防ぎます。" />
-			<check_box label="自分の画面上でもカメラの焦点がどこにあるかわからないようにする" name="privateLocalLookat" tool_tip="通常、カメラの焦点が当たっている方向にアバターの頭が向くように自分の画面では表示されています。この頭の動きは、このオプションのオン／オフに関わりなく、必ずしも他人に見えるものではありません。" />
-			<check_box label="自分が選択しているものを他人には知らせない" name="privatepointat" tool_tip="他人があなたが選択しているものが何かを知るのを防ぎます。" />
-			<check_box label="頭部からの距離を制限" name="LimitLookAt" tool_tip="視線の先を自分の頭部の周りだけに固定するようにします" />
-
+			<check_box label="自分の視線を表示しない" name="LookAtHideOwn" tool_tip="カメラの焦点を表す十字を表示しない"/>
+			<check_box label="焦点までの視線を表示する" name="ExodusLookAtLines" tool_tip="アバターから十字で示されるその人のカメラの焦点までの視線を表示します。"/>
+			<check_box label="自分のカメラの焦点がどこにあるか他人には知らせない" name="privatelookat" tool_tip="他人があなたのカメラの焦点がどこにあるか知るのを防ぎます。"/>
+			<check_box label="自分の画面上でもカメラの焦点がどこにあるかわからないようにする" name="privateLocalLookat" tool_tip="通常、カメラの焦点が当たっている方向にアバターの頭が向くように自分の画面では表示されています。この頭の動きは、このオプションのオン／オフに関わりなく、必ずしも他人に見えるものではありません。"/>
+			<check_box label="自分が選択しているものを他人には知らせない" name="privatepointat" tool_tip="他人があなたが選択しているものが何かを知るのを防ぎます。"/>
+			<check_box label="頭部からの距離を制限" name="LimitLookAt" tool_tip="視線の先を自分の頭部の周りだけに固定するようにします。"/>
+			<text name="LimitLookAtDistanceMeterText">
+				ｍ
+			</text>
 		</panel>
-
-
 		<!--Autoresponse1-->
-	
-		<panel label="自動応答 1" name="tab-autoresponse-1" >
-		
+		<panel label="自動応答１" name="tab-autoresponse-1">
 			<text name="autorespond_toggle_location_tip">
 				注意：自動応答メッセージを有効にするには、「コミュニケーション」メニューの「ログイン状態」で適切なログイン状態を選択して下さい。
 			</text>
 			<text name="text_box3">
 				取り込みモード時の自動応答メッセージ：
 			</text>
-
+			<text_editor name="do_not_disturb_response">
+				変更するにはログインしてください。
+			</text_editor>
 			<text name="autorespond_response_label">
 				誰にでも自動的に応答する時のメッセージ：
 			</text>
-
+			<text_editor name="autorespond_response">
+				変更するにはログインしてください。
+			</text_editor>
 			<text name="autorespond_nf_response_label">
-				フレンドでないアバターへの自動応答メッセージ
+				フレンドでないアバターへの自動応答メッセージ：
 			</text>
-
-			<check_box label="退席している時に自動応答する:" name="send_away_av_response" tool_tip="退席している時に誰かがIMしたら次のメッセージを送ります。" />
-			<check_box label="無視しているアバターに自動応答する" name="send_muted_av_response" tool_tip="無視している人からIMが来た時に自動的に以下のメッセージを送信します。"/>
-
+			<text_editor name="autorespond_nf_response">
+				変更するにはログインしてください。
+			</text_editor>
+			<check_box label="退席している時に自動応答する：" name="send_away_av_response" tool_tip="退席している最中に誰かがＩＭしてきたら以下のメッセージを送ります。"/>
+			<text_editor name="away_avatar_response">
+				変更するにはログインしてください。
+			</text_editor>
+			<check_box label="無視しているアバターに自動応答する：" name="send_muted_av_response" tool_tip="無視している人からＩＭが来た時に自動的に以下のメッセージを送信します。"/>
+			<text_editor name="muted_avatar_response">
+				変更するにはログインしてください。
+			</text_editor>
 		</panel>
-
 		<!--Autoresponse2-->
-	
-		<panel label="自動応答 2" name="tab-autoresponse-2" >
-     
+		<panel label="自動応答２" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
-				テレポート拒否モードの時に行う全てのアバターへの自動応答メッセージ:
+				テレポート拒否モードの時に行う全てのアバターへの自動応答メッセージ：
 			</text>
-			<check_box label="フレンドリストに載っている人からのテレポートは拒否しない（返事もする）" name="FSDontRejectTeleportOffersFromFriends" />
+			<text_editor name="autorespond_rto_response">
+				変更するにはログインしてください。
+			</text_editor>
+			<check_box label="フレンドリストに載っている人からのテレポートは拒否しない（返事もする）" name="FSDontRejectTeleportOffersFromFriends"/>
 			<text name="autorespond_rfr_response_label">
-				フレンド申請拒否モードの時に行う全てのアバターへの自動応答メッセージ:
+				フレンド申請拒否モードの時に行う全てのアバターへの自動応答メッセージ：
 			</text>
-
+			<text_editor name="autorespond_rfr_response">
+				変更するにはログインしてください。
+			</text_editor>
 			<text name="autoresponse_item_label">
-				自動応答と一緒に送られるアイテム:
+				自動応答時に送るアイテム：
 			</text>
-			<fs_copytrans_inventory_drop_target name="autoresponse_item"
- tool_tip="持ち物をここにドラッグ＆ドロップします。" />
-			<button label="クリア" name="clear_autoresponse_item" />
-			
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="インベントリをここにドラッグ＆ドロップします。"/>
+			<button label="クリア" name="clear_autoresponse_item"/>
 		</panel>
-
 	</tab_container>
 </panel>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_poser" title="アバターとアニメッシュのポーザー">
+	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
+	<string name="header_mHead">体</string>
+	<string name="header_mFaceForeheadLeft">額／眉</string>
+	<string name="header_mEyeLeft">目／瞼</string>
+	<string name="header_mFaceCheekUpperLeft">頬／唇</string>
+	<string name="header_mHandThumb1Left">左手</string>
+	<string name="header_mCollarLeft">左腕</string>
+	<string name="header_mHandThumb1Right">右手</string>
+	<string name="header_mCollarRight">右腕</string>
+	<string name="header_mHipLeft">脚</string>
+	<string name="header_mTail1">尻尾</string>
+	<string name="header_mHindLimbsRoot">後ろ足</string>
+	<string name="header_mWingsRoot">羽</string>
+	<string name="header_mFaceEar1Left">耳／鼻</string>
+
+	<!-- These are names to appear on the UI for the joints/bones/thingos -->
+	<string name="title_mPelvis">アバター全体</string>
+	<string name="title_mTorso">胴体</string>
+	<string name="title_mChest">胸部</string>
+	<string name="title_mNeck">首</string>
+	<string name="title_mHead">頭</string>
+	<string name="title_mEyeRight">右目</string>
+	<string name="title_mEyeLeft">左目</string>
+	<string name="title_mFaceForeheadLeft">額の左側</string>
+	<string name="title_mFaceForeheadRight">額の右側</string>
+	<string name="title_mFaceEyebrowOuterLeft">左眉毛の外側</string>
+	<string name="title_mFaceEyebrowCenterLeft">左眉毛の中側</string>
+	<string name="title_mFaceEyebrowInnerLeft">左眉毛の内側</string>
+	<string name="title_mFaceEyebrowOuterRight">右眉毛の外側</string>
+	<string name="title_mFaceEyebrowCenterRight">右眉毛の中側</string>
+	<string name="title_mFaceEyebrowInnerRight">右眉毛の内側</string>
+	<string name="title_mFaceEyeLidUpperLeft">左の上瞼</string>
+	<string name="title_mFaceEyeLidLowerLeft">右の下瞼</string>
+	<string name="title_mFaceEyeLidUpperRight">左の上瞼</string>
+	<string name="title_mFaceEyeLidLowerRight">右の下瞼</string>
+	<string name="title_mFaceEar1Left">左耳の上</string>
+	<string name="title_mFaceEar2Left">左耳の下</string>
+	<string name="title_mFaceEar1Right">右耳の上</string>
+	<string name="title_mFaceEar2Right">右耳の下</string>
+	<string name="title_mFaceNoseLeft">鼻の左側</string>
+	<string name="title_mFaceNoseCenter">鼻の真ん中</string>
+	<string name="title_mFaceNoseRight">鼻の右側</string>
+	<string name="title_mFaceCheekLowerLeft">左頬の下</string>
+	<string name="title_mFaceCheekUpperLeft">左頬の上</string>
+	<string name="title_mFaceCheekLowerRight">右頬の下</string>
+	<string name="title_mFaceCheekUpperRight">右頬の上</string>
+	<string name="title_mFaceJaw">顎</string>
+	<string name="title_mFaceTeethLower">下歯</string>
+	<string name="title_mFaceLipLowerLeft">唇の左下</string>
+	<string name="title_mFaceLipLowerRight">唇の右下</string>
+	<string name="title_mFaceLipLowerCenter">唇の中央下</string>
+	<string name="title_mFaceTongueBase">舌の付け根</string>
+	<string name="title_mFaceTongueTip">舌先</string>
+	<string name="title_mFaceJawShaper">顎の形</string>
+	<string name="title_mFaceForeheadCenter">額の中央</string>
+	<string name="title_mFaceNoseBase">鼻の付け根</string>
+	<string name="title_mFaceTeethUpper">上歯</string>
+	<string name="title_mFaceLipUpperLeft">唇の左上</string>
+	<string name="title_mFaceLipUpperRight">唇の右上</string>
+	<string name="title_mFaceLipCornerLeft">唇の角左</string>
+	<string name="title_mFaceLipCornerRight">唇の角右</string>
+	<string name="title_mFaceLipUpperCenter">唇の角中央</string>
+	<string name="title_mFaceEyecornerInnerLeft">左目尻の内側</string>
+	<string name="title_mFaceEyecornerInnerRight">右目尻の内側</string>
+	<string name="title_mFaceNoseBridge">鼻橋</string>
+	<string name="title_mCollarLeft">襟</string>
+	<string name="title_mShoulderLeft">腕全体</string>
+	<string name="title_mElbowLeft">前腕</string>
+	<string name="title_mWristLeft">手首</string>
+	<string name="title_mHandMiddle1Left">中指の付け根</string>
+	<string name="title_mHandMiddle2Left">中指の真ん中</string>
+	<string name="title_mHandMiddle3Left">中指の先</string>
+	<string name="title_mHandIndex1Left">人差し指の付け根</string>
+	<string name="title_mHandIndex2Left">人差し指の真ん中</string>
+	<string name="title_mHandIndex3Left">人差し指の先</string>
+	<string name="title_mHandRing1Left">薬指の付け根</string>
+	<string name="title_mHandRing2Left">薬指の真ん中</string>
+	<string name="title_mHandRing3Left">薬指の先</string>
+	<string name="title_mHandPinky1Left">小指の付け根</string>
+	<string name="title_mHandPinky2Left">小指の真ん中</string>
+	<string name="title_mHandPinky3Left">小指の先</string>
+	<string name="title_mHandThumb1Left">親指の付け根</string>
+	<string name="title_mHandThumb2Left">親指の真ん中</string>
+	<string name="title_mHandThumb3Left">親指の先</string>
+	<string name="title_mCollarRight">襟</string>
+	<string name="title_mShoulderRight">腕全体</string>
+	<string name="title_mElbowRight">前腕</string>
+	<string name="title_mWristRight">手首</string>
+	<string name="title_mHandMiddle1Right">中指の付け根</string>
+	<string name="title_mHandMiddle2Right">中指の真ん中</string>
+	<string name="title_mHandMiddle3Right">中指の先</string>
+	<string name="title_mHandIndex1Right">人差し指の付け根</string>
+	<string name="title_mHandIndex2Right">人差し指の真ん中</string>
+	<string name="title_mHandIndex3Right">人差し指の先</string>
+	<string name="title_mHandRing1Right">薬指の付け根</string>
+	<string name="title_mHandRing2Right">薬指の真ん中</string>
+	<string name="title_mHandRing3Right">薬指の先</string>
+	<string name="title_mHandPinky1Right">小指の付け根</string>
+	<string name="title_mHandPinky2Right">小指の真ん中</string>
+	<string name="title_mHandPinky3Right">小指の先</string>
+	<string name="title_mHandThumb1Right">親指の付け根</string>
+	<string name="title_mHandThumb2Right">親指の真ん中</string>
+	<string name="title_mHandThumb3Right">親指の先</string>
+	<string name="title_mWingsRoot">付け根</string>
+	<string name="title_mWing1Left">左１</string>
+	<string name="title_mWing2Left">左２</string>
+	<string name="title_mWing3Left">左３</string>
+	<string name="title_mWing4Left">左４</string>
+	<string name="title_mWing4FanLeft">左のファン</string>
+	<string name="title_mWing1Right">右１</string>
+	<string name="title_mWing2Right">右２</string>
+	<string name="title_mWing3Right">右３</string>
+	<string name="title_mWing4Right">右４</string>
+	<string name="title_mWing4FanRight">右のファン</string>
+	<string name="title_mHipRight">右脚全体</string>
+	<string name="title_mKneeRight">右膝</string>
+	<string name="title_mAnkleRight">右足首</string>
+	<string name="title_mFootRight">右足</string>
+	<string name="title_mToeRight">右つま先</string>
+	<string name="title_mHipLeft">左脚全体</string>
+	<string name="title_mKneeLeft">左膝</string>
+	<string name="title_mAnkleLeft">左足首</string>
+	<string name="title_mFootLeft">左足</string>
+	<string name="title_mToeLeft">左つま先</string>
+	<string name="title_mTail1">尻尾の付け根</string>
+	<string name="title_mTail2">尻尾２</string>
+	<string name="title_mTail3">尻尾３</string>
+	<string name="title_mTail4">尻尾４</string>
+	<string name="title_mTail5">尻尾５</string>
+	<string name="title_mTail6">尻尾の先</string>
+	<string name="title_mGroin">鼠径部</string>
+	<string name="title_mHindLimbsRoot">付け根</string>
+	<string name="title_mHindLimb1Left">左の付け根</string>
+	<string name="title_mHindLimb2Left">左２</string>
+	<string name="title_mHindLimb3Left">左３</string>
+	<string name="title_mHindLimb4Left">左４</string>
+	<string name="title_mHindLimb1Right">右の付け根</string>
+	<string name="title_mHindLimb2Right">右２</string>
+	<string name="title_mHindLimb3Right">右３</string>
+	<string name="title_mHindLimb4Right">右４</string>
+	<string name="title_BUTT">お尻</string>
+	<string name="title_BELLY">腹</string>
+	<string name="title_LEFT_PEC">左胸筋</string>
+	<string name="title_RIGHT_PEC">右胸筋</string>
+
+	<string name="LoadPoseLabel">ポーズを読み込む</string>
+	<string name="SavePoseLabel">ポーズを保存</string>
+	<string name="LoadDiffLabel">差分を読み込む</string>
+	<string name="SaveDiffLabel">差分を保存</string>
+	<string name="OverWriteLabel">上書きしますか？</string>
+
+	<!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
+	<layout_stack name="poser_stack">
+		<layout_panel name="regular_controls_layout">
+			<panel name="joints_parent_panel">
+				<tab_container name="joints_tabs">
+					<panel title="移動" name="positionRotation_panel">
+						<panel name="title">
+							<text name="av_position_updown_label">
+								上／下：
+							</text>
+							<slider name="av_position_updown" tool_tip="選択したアバターを上または下に移動します。"/>
+							<text name="av_position_leftright_label">
+								左／右：
+							</text>
+							<slider name="av_position_leftright" tool_tip="選択したアバターを左または右に移動します。"/>
+							<text name="av_position_inout_label">
+								入／出：
+							</text>
+							<slider name="av_position_inout" tool_tip="選択したアバターを内側または外側に移動します。"/>
+							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
+							<scroll_list name="entireAv_joint_scroll">
+								<scroll_list.columns label="身体部位" name="joint"/>
+							</scroll_list>
+						</panel>
+					</panel>
+					<panel title="体" name="body_joints_panel">
+						<scroll_list name="body_joints_scroll">
+							<scroll_list.columns label="身体部位" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="顔" name="face_joints_panel">
+						<scroll_list name="face_joints_scroll">
+							<scroll_list.columns label="身体部位" name="joint"/>
+						</scroll_list>
+					</panel>
+					<tab_container title="手" name="hands_tabs">
+						<panel title="調整" name="hands_joints_panel">
+							<scroll_list name="hand_joints_scroll">
+								<scroll_list.columns label="身体部位" name="joint"/>
+							</scroll_list>
+						</panel>
+						<panel title="プリセット" name="hands_presets_panel">
+							<scroll_list name="hand_presets_scroll">
+								<scroll_list.columns label="プリセット名" name="name"/>
+							</scroll_list>
+							<button label="左にセット" name="button_loadHandPoseLeft" tool_tip="ダブルクリックして左手を選択したプリセットに設定します。"/>
+							<button label="右にセット" name="button_loadHandPoseRight" tool_tip="ダブルクリックして右手を選択したプリセットに設定します。"/>
+						</panel>
+					</tab_container>
+					<panel title="その他" name="misc_joints_panel">
+						<scroll_list name="misc_joints_scroll">
+							<scroll_list.columns label="身体部位" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="物理" name="collision_volumes_panel">
+						<scroll_list name="collision_volumes_scroll">
+							<scroll_list.columns label="物理" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="モデル" name="avatarSelection_panel">
+						<avatar_list name="avatars_online"/>
+						<scroll_list tool_tip="アニメーション化するアバターまたはアニメッシュを選択します。" name="avatarSelection_scroll">
+							<scroll_list.columns label="ポーズをとる人を選択…" name="name"/>
+							<scroll_list.columns label="ＵＵＩＤ" name="uuid"/>
+							<scroll_list.columns label="保存ファイル名" name="saveFileName"/>
+						</scroll_list>
+						<button name="refresh_avatars" tool_tip="アバターとアニメッシュのリストを更新します。"/>
+						<button label="ポージング開始" label_selected="ポージング停止" tool_tip="許可されている場合は、選択したアバターまたはアニメシュのポーズを開始します。" name="start_stop_posing_button"/>
+						<button label="Ｔポーズにセット" name="set_t_pose_button" tool_tip="ダブルクリックすると、選択したアバターが「Ｔポーズ」に設定されます。"/>
+					</panel>
+					<panel title="設定" name="settings_panel">
+						<text name="trackpad_sensitivity_label">
+							トラックパッドの感度：
+						</text>
+						<slider name="trackpad_sensitivity_slider" tool_tip="トラックボールの感度を調整します。"/>
+						<check_box name="natural_direction_checkbox" label="自然な配置を使用する" tool_tip="デフォルトでは、スケルトンの関節の回転は不自然です。これにより、ポーズが複雑になります。チェックすると、関節がより自然に回転します。"/>
+						<check_box name="stop_posing_on_close_checkbox" label="閉じたらポーズを止める" tool_tip="ポーズを止めないことは、多くの作業を行っていて、誤ってポーズを失いたくない場合に役に立ちます。"/>
+						<check_box name="reset_base_rotation_on_edit_checkbox" label="編集時にベース回転をリセット" tool_tip="回転を初めて編集するときは、ゼロにリセットします。これにより、作業でポーズを保存できます。（差分ではなく、読み込み／保存を参照）ゼロにエクスポートした各ジョイントの横に緑色のチェックマークが表示されます。"/>
+						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む**" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。"/>
+						<check_box name="confirm_overwrite_on_save_checkbox" label="上書きを確認" tool_tip="ポーズを保存するときに、ファイルがすでに存在する場合は、上書きすることを確認するために、もう一度保存ボタンをクリックする必要があります。"/>
+					</panel>
+				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="視覚マニピュレータのオン／オフを切り替えます。"/>
+			</panel>
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="回転" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="現在選択されている身体部位の回転を変更します。Ctrlキーを押したままにするとゆっくり動きます。ホイールを回して３番目の軸を調整します。ShiftキーまたはAltキーを使用して、変更する回転を入れ替えます。"/>
+						<text name="limb_pitch_label">
+							上／下：
+						</text>
+						<text name="limb_yaw_label">
+							左／右：
+						</text>
+						<text name="limb_roll_label">
+							ロール：
+						</text>
+					</panel>
+					<panel title="位置／スケール" name="position_panel">
+						<text name="pos_x_label">
+							位置Ｘ：
+						</text>
+						<text name="pos_y_label">
+							位置Ｙ：
+						</text>
+						<text name="pos_z_label">
+							位置Ｚ：
+						</text>
+						<text name="scale_x_label">
+							スケールＸ：
+						</text>
+						<text name="scale_y_label">
+							スケールＹ：
+						</text>
+						<text name="scale_z_label">
+							スケールＺ：
+						</text>
+					</panel>
+				</tab_container>
+				<panel name="trackball_button_panel">
+					<button name="undo_change" tool_tip="最後の回転の変更を元に戻します。"/>
+					<button name="button_redo_change" tool_tip="最後に元に戻した変更をやり直します。"/>
+					<button name="poser_joint_reset" tool_tip="ダブルクリックすると、選択したすべての身体部位が最初にポーズを開始したときの状態に戻ります。"/>
+					<button name="delta_mode_toggle" tool_tip="複数のジョイントを変更する場合、すべてのジョイントが同じ回転になるのではなく、それぞれが同じ量だけ変更されます。ジンバルロックを解除するためにも使用されます。"/>
+					<button label="ミラー" name="button_toggleMirrorRotation" tool_tip="鏡のように反対側の関節を変えます。"/>
+					<button label="対称" name="button_toggleSympatheticRotation" tool_tip="反対側のジョイントも同様に変更します。"/>
+					<!-- leftとleft_padは削除しないこと -->
+					<button label="左→右にコピー" name="button_symmetrize_left_to_right" tool_tip="ダブルクリックすると、左側から右側に変更がコピーされます。" width="80"/>
+					<button label="右→左にコピー" name="button_symmetrize_right_to_left" tool_tip="ダブルクリックすると、右側から左側に変更がコピーされます。" left_pad="13" width="80"/>
+				</panel>
+			</panel>
+			<panel name="poses_loadSave">
+				<scroll_list tool_tip="アニメーション化する人物のポーズを読み込みます。" name="poses_scroll">
+					<scroll_list.columns label="ポーズ名" name="name"/>
+				</scroll_list>
+				<line_editor label="保存したいポーズ名を入力してください…" name="pose_save_name"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="button_controls_layout">
+			<panel name="button_controls_panel">
+				<button name="FlipPose_avatar" tool_tip="ポーズ全体を左右反転します。"/>
+				<button name="FlipJoint_avatar" tool_tip="選択した身体部位を左右に反転します。"/>
+				<button label="要約" name="button_RecaptureParts" tool_tip="選択した身体部位がオフになっている場合、これにより、その身体部位に現在行っている動作が再現されます。"/>
+				<button label="部位オン／オフ" name="toggle_PosingSelectedBones" tool_tip="選択した身体部位のポーザーをオンまたはオフにします。オフにすると、その身体部位は通常どおりにアニメーションします。（ＡＯまたはポーズボールなどを使用）"/>
+				<button label="自分のポーズ" name="toggleLoadSavePanel" tool_tip="作成したポーズを読み込み、保存し、管理します。"/>
+				<button tool_tip="自分のポーズディレクトリを管理します。" name="open_poseDir_button"/>
+				<menu_button label="ポーズ読み込み" tool_tip="現在選択されているポーズを読み込みます。" name="load_poses_button"/>
+				<button label="差分を保存" tool_tip="差分は既存のポーズに対する変更です。新しい作業を保存するには、Ｔポーズから開始します。" name="save_poses_button"/>
+			</panel>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -14,10 +14,4 @@
 	<button name="group_btn" label="グループ"/>
 	<button name="place_btn" label="場所"/>
 	<button name="event_btn" label="イベント"/>
-	<text name="slurl">
-		secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect
-	</text>
-	<text name="slurl_group">
-		secondlife:///app/group/00000000-0000-0000-0000-000000000000/inspect
-	</text>
 </floater>

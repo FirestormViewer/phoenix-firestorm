@@ -74,13 +74,11 @@
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>
-		<string>RenderSkyAmbientScale</string>
 		<string>RenderSkyAutoAdjustAmbientScale</string>
 		<string>RenderSkyAutoAdjustBlueDensityScale</string>
 		<string>RenderSkyAutoAdjustBlueHorizonScale</string>
 		<string>RenderSkyAutoAdjustSunColorScale</string>
 		<string>RenderSkyAutoAdjustHDRScale</string>
-		<string>RenderSkyAutoAdjustLegacy</string>
 		<string>RenderSkyAutoAdjustProbeAmbiance</string>
 		<string>RenderSkySunlightScale</string>
 		<string>RenderSSAOIrradianceScale</string>

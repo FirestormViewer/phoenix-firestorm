@@ -1,74 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=ja
-	</panel.string>
+	<panel.string name="forgot_password_url">https://secondlife.com/my/account/request.php?lang=ja-JP</panel.string>
 	<string name="ServerComboTooltip">
-		既存のグリッドまたは URI
+		既存のグリッドまたはＵＲＩ
 	</string>
 	<layout_stack name="ui_stack">
-		<layout_panel name="ui_elastic_pad_left" />
 		<layout_panel name="ui_container">
-			<icon name="sl_logo_small" />
 			<layout_stack name="vert_stack_left">
 				<layout_panel name="1st_row">
 					<layout_stack name="1st_row_stack">
 						<layout_panel name="login">
-							<combo_box label="ユーザーネーム" tool_tip="登録時に自分で選んだユーザー名（例：bobsmith12、Steller Sunshineなど）" name="username_combo" />
-							<check_box label="ユーザーネームを記憶" name="remember_username_check" />
-						</layout_panel> <!-- login -->
+							<combo_box label="ユーザ名" tool_tip="登録時に自分で選んだユーザ名（例：bobsmith12、Steller Sunshineなど）" name="username_combo"/>
+							<check_box label="ユーザ名を記憶" name="remember_username_check"/>
+						</layout_panel>
+						<!-- login -->
 						<layout_panel name="delete_container">
-							<button tool_tip="このユーザーネームを消去" label="" name="remove_user_btn" />
-						</layout_panel> <!-- delete_container -->
+							<button tool_tip="このユーザ名を削除" name="remove_user_btn"/>
+						</layout_panel>
+						<!-- delete_container -->
 						<layout_panel name="password_container">
 							<!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
-							<line_editor name="password_edit" label="パスワード" />
-							<check_box label="パスワードを記憶" name="remember_check" />
-						</layout_panel> <!-- password_container -->
+							<line_editor name="password_edit" label="パスワード"/>
+							<check_box label="パスワードを記憶" name="remember_check"/>
+							<button name="password_show_btn" tool_tip="パスワードテキストを表示する。"/>
+							<button name="password_hide_btn" tool_tip="パスワードテキストを隠す。"/>
+						</layout_panel>
+						<!-- password_container -->
 						<layout_panel name="start_location_panel">
 							<combo_box label="開始地点" name="start_location_combo">
-								<combo_box.item label="最後にログアウトした場所" name="MyLastLocation" />
-								<combo_box.item label="ホーム" name="MyHome" />
-								<combo_box.item label="＜地域名を入力＞" name="Typeregionname" />
+								<combo_box.item label="最後にログアウトした場所" name="MyLastLocation"/>
+								<combo_box.item label="ホーム" name="MyHome"/>
+								<combo_box.item label="＜リージョン名を入力＞" name="Typeregionname"/>
 							</combo_box>
-						</layout_panel> <!-- start_location_panel -->
-					</layout_stack> <!-- 1st_row_stack -->
-				</layout_panel> <!-- 1st_row -->
-
+						</layout_panel>
+						<!-- start_location_panel -->
+					</layout_stack>
+					<!-- 1st_row_stack -->
+				</layout_panel>
+				<!-- 1st_row -->
 				<layout_panel name="2nd_row">
 					<layout_stack name="2nd_row_stack">
 						<layout_panel name="grid_panel">
-							<text name="grid_login_text" width="95">
-								グリッド選択:
+							<text name="grid_login_text">
+								グリッド選択：
 							</text>
-							<combo_box name="server_combo" />
-
+							<text name="grid_builder_text">
+								＋をクリックしてグリッドを追加
+							</text>
 						</layout_panel>
-
 						<layout_panel name="mode_selection">
 							<text name="mode_selection_text">
-								モード選択:
+								モード選択：
 							</text>
-							<combo_box tool_tip="基本設定を適切に行うために、一番慣れているビューワのタイプを選択して下さい。" name="mode_combo">
-								<combo_box.item label="Firestorm" name="Firestorm" />
-								<combo_box.item label="Phoenix" name="Phoenix" />
-								<combo_box.item label="ハイブリッド" name="Hybrid" />
-								<combo_box.item label="Latency" name="Latency" />
-								<combo_box.item label="テキスト" name="Text" />
+							<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
+								<combo_box.item label="ハイブリッド" name="Hybrid"/>
+								<combo_box.item label="テキスト" name="Text"/>
 							</combo_box>
 						</layout_panel>
-
-					</layout_stack> <!-- 2nd_row_stack -->
-				</layout_panel>  <!-- 2nd_row -->
-			</layout_stack> <!-- vert_stack -->
-			<button label="ログイン" name="connect_btn" />
+					</layout_stack>
+					<!-- 2nd_row_stack -->
+				</layout_panel>
+				<!-- 2nd_row -->
+			</layout_stack>
+			<!-- vert_stack -->
+			<button label="ログイン" name="connect_btn"/>
 			<text name="create_new_account_text">
-				アカウント作成
+				アカウントを作成
 			</text>
 			<text name="forgot_password_text">
-				パスワードをお忘れ？
+				パスワードを忘れましたか？
 			</text>
 		</layout_panel>
-		<layout_panel name="ui_elastic_pad_right" />
 	</layout_stack>
 </panel>
