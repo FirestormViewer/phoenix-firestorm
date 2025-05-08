@@ -591,10 +591,7 @@
      name="location"
      select_on_focus="true"
      tool_tip="Type the name of a region"
-     width="134">
-               <search_editor.commit_callback
-                function="WMap.Location" />
-    </search_editor>
+     width="134"/>
     <button
      follows="top|right"
      height="23"

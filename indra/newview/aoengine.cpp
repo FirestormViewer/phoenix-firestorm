@@ -999,6 +999,13 @@ void AOEngine::playAnimation(const LLUUID& animation)
     }
 
     LLViewerInventoryItem* item = gInventory.getItem(animation);
+
+    if (!item)
+    {
+        LL_WARNS("AOEngine") << "Inventory item for animation " << animation << " not found." << LL_ENDL;
+        return;
+    }
+
     AOSet::AOAnimation anim;
     anim.mName = item->LLInventoryItem::getName();
     anim.mInventoryUUID = item->getUUID();
