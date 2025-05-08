@@ -92,7 +92,7 @@ public:
 
     virtual void refresh();
 
-    /*virtual*/ void setFlashState(bool flash_state);
+    /*virtual*/ void setFlashState(bool flash_state, bool alternate_color = false);
     void setHighlightState(bool hihglight_state);
 
     LLFloater* getSessionFloater();
@@ -113,6 +113,7 @@ private:
     LLFlashTimer*           mFlashTimer;
     bool                    mFlashStateOn;
     bool                    mFlashStarted;
+    bool                    mIsAltFlashColor;
 
     bool                    mCollapsedMode;
     bool                    mHasArrow;

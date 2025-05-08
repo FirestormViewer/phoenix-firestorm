@@ -78,6 +78,7 @@
 #include "llviewerregion.h"
 #include "llcorehttputil.h"
 #include "lluiusage.h"
+#include "llurlregistry.h"
 // [RLVa:KB] - Checked: 2013-05-10 (RLVa-1.4.9)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -236,6 +237,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::getConversation(session_id);
     bool store_dnd_message = false; // flag storage of a dnd message
     bool is_session_focused = session_floater->isTornOff() && session_floater->hasFocus();
+    bool contains_mention = LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString());
     if (!LLFloater::isVisible(im_box) || im_box->isMinimized())
     {
         conversations_floater_status = CLOSED;
@@ -362,7 +364,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     if ("openconversations" == user_preferences
             || ON_TOP == conversations_floater_status
             || ("toast" == user_preferences && ON_TOP != conversations_floater_status)
-        || ("flash" == user_preferences && (CLOSED == conversations_floater_status
+        || (("flash" == user_preferences || contains_mention) && (CLOSED == conversations_floater_status
                                         || NOT_ON_TOP == conversations_floater_status))
         || is_dnd_msg)
     {
@@ -382,7 +384,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
                 }
                 else
                 {
-            im_box->flashConversationItemWidget(session_id, true);
+            im_box->flashConversationItemWidget(session_id, true, contains_mention);
         }
     }
         }
@@ -3730,7 +3732,7 @@ void LLIMMgr::addMessage(
     {
     //    LLFloaterReg::showInstance("im_container");
     //    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
-    //          flashConversationItemWidget(new_session_id, true);
+    //          flashConversationItemWidget(new_session_id, true, LLUrlRegistry::getInstance()->containsAgentMention(msg));
         LLFloaterReg::showInstance("fs_im_container");
     // </FS:CR>
     }
