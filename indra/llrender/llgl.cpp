@@ -1074,6 +1074,7 @@ void LLGLManager::initWGL()
 // return false if unable (or unwilling due to old drivers) to init GL
 bool LLGLManager::initGL()
 {
+    LL_INFOS("RenderInit") << "Initializing OpenGL" << LL_ENDL; // <FS:Beq/> Extra logging to confirm usage on Linux
     if (mInited)
     {
         LL_ERRS("RenderInit") << "Calling init on LLGLManager after already initialized!" << LL_ENDL;
@@ -1514,6 +1515,11 @@ void LLGLManager::initExtensions()
     mHasATIMemInfo = ExtensionExists("GL_ATI_meminfo", gGLHExts.mSysExts); //Basic AMD method, also see mHasAMDAssociations
 
     LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
+// FIRE-34655 - VRAM detection failing on Linux. Load all the GL functions we need.
+#if LL_LINUX && !LL_MESA_HEADLESS    
+    mHasNVXGpuMemoryInfo = ExtensionExists("GL_NVX_gpu_memory_info", gGLHExts.mSysExts);
+    mHasAMDAssociations = ExtensionExists("WGL_AMD_gpu_association", gGLHExts.mSysExts);
+#endif
 
 #if LL_WINDOWS
 // </FS:Zi>
