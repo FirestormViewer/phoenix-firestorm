@@ -468,7 +468,6 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
             && gSavedSettings.getBOOL("FSNotifyNearbyChatFlash"))
         {
             im_container->addFlashingSession(session_id);
-            gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
         }
         return;
     }
@@ -492,7 +491,6 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         && gSavedSettings.getBOOL("FSNotifyIMFlash"))
     {
         im_container->addFlashingSession(session_id);
-        gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
     }
 
         // <FS:Ansariel> (Group-)IMs in chat console

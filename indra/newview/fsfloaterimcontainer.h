@@ -63,7 +63,7 @@ public:
     virtual void setVisible(bool b);
     /*virtual*/ void setMinimized(bool b);
 
-    void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
+    void onNewMessageReceived(const LLSD& msg); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 
     virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg);
     virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {};
@@ -77,6 +77,8 @@ public:
     void addFlashingSession(const LLUUID& session_id);
 
     void tabOpen(LLFloater* opened_floater, bool from_click);
+
+    void startFlashingTab(LLFloater* floater, const std::string& message);
 
 private:
     enum eVoiceState
@@ -104,6 +106,8 @@ private:
     uuid_vec_t  mFlashingSessions;
 
     bool        mIsAddingNewSession;
+
+    std::map<LLFloater*, bool> mFlashingTabStates;
 
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
 protected:

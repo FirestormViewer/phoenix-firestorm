@@ -276,11 +276,11 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
     // AO: IF tab mode active, flash our tab
     if (isChatMultiTab())
     {
-        LLMultiFloater* hostp = getHost();
         // KC: Don't flash tab on system messages
-        if (!isInVisibleChain() && hostp && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
+        if (FSFloaterIMContainer* container = dynamic_cast<FSFloaterIMContainer*>(getHost());
+            !isInVisibleChain() && container && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
         {
-            hostp->setFloaterFlashing(this, true);
+            container->startFlashingTab(this, chat.mText);
         }
     }
 

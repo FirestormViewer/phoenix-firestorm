@@ -1178,4 +1178,7 @@
   <color
      name="NotecardCursorColor"
      reference="TextCursorColor" />
+  <color
+    name="MentionFlashBgColor"
+    reference="EmphasisColor" />
 </colors>

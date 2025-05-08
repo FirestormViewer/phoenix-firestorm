@@ -97,6 +97,7 @@ LLButton::Params::Params()
     image_overlay_disabled_color("image_overlay_disabled_color", LLColor4::white % 0.3f),
     image_overlay_selected_color("image_overlay_selected_color", LLColor4::white),
     flash_color("flash_color"),
+    flash_alt_color("flash_alt_color"), // <FS:Ansariel> [FS communication UI]
     pad_right("pad_right", LLBUTTON_H_PAD),
     pad_left("pad_left", LLBUTTON_H_PAD),
     pad_bottom("pad_bottom"),
@@ -134,6 +135,7 @@ LLButton::LLButton(const LLButton::Params& p)
     mMouseDownFrame(0),
     mMouseHeldDownCount(0),
     mFlashing( false ),
+    mIsAltFlashColor(false), // <FS:Ansariel> [FS communication UI]
     mCurGlowStrength(0.f),
     mNeedsHighlight(false),
     mUnselectedLabel(p.label()),
@@ -156,6 +158,7 @@ LLButton::LLButton(const LLButton::Params& p)
     mDisabledSelectedLabelColor(p.label_color_disabled_selected()),
     mImageColor(p.image_color()),
     mFlashBgColor(p.flash_color()),
+    mFlashAltBgColor(p.flash_alt_color()), // <FS:Ansariel> [FS communication UI]
     mDisabledImageColor(p.image_color_disabled()),
     mImageOverlay(p.image_overlay()),
     mImageOverlayColor(p.image_overlay_color()),
@@ -840,7 +843,10 @@ void LLButton::draw()
         // provide fade-in and fade-out via flash_color
         if (mFlashingTimer)
         {
-            LLColor4 flash_color = mFlashBgColor.get();
+            // <FS:Ansariel> [FS communication UI]
+            //LLColor4 flash_color = mFlashBgColor.get();
+            LLColor4 flash_color = mIsAltFlashColor ? mFlashAltBgColor.get() : mFlashBgColor.get();
+            // </FS:Ansariel> [FS communication UI]
             use_glow_effect = true;
             glow_type = LLRender::BT_ALPHA; // blend the glow
 
@@ -1118,7 +1124,10 @@ void LLButton::setToggleState(bool b)
     }
 }
 
-void LLButton::setFlashing(bool b, bool force_flashing/* = false */)
+// <FS:Ansariel> [FS communication UI]
+//void LLButton::setFlashing(bool b, bool force_flashing/* = false */)
+void LLButton::setFlashing(bool b, bool force_flashing/* = false */, bool alternate_color/*= false */)
+// </FS:Ansariel> [FS communication UI]
 {
     mForceFlashing = force_flashing;
     if (mFlashingTimer)
@@ -1131,6 +1140,9 @@ void LLButton::setFlashing(bool b, bool force_flashing/* = false */)
         mFlashing = b;
         mFrameTimer.reset();
     }
+
+    // <FS:Ansariel> [FS communication UI]
+    mIsAltFlashColor = alternate_color;
 }
 
 bool LLButton::toggleState()

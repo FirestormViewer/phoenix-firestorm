@@ -1806,12 +1806,18 @@ bool LLTabContainer::getTabPanelFlashing(LLPanel *child)
     return false;
 }
 
-void LLTabContainer::setTabPanelFlashing(LLPanel* child, bool state )
+// <FS:Ansariel> [FS communication UI]
+//void LLTabContainer::setTabPanelFlashing(LLPanel* child, bool state )
+void LLTabContainer::setTabPanelFlashing(LLPanel* child, bool state, bool alternate_color)
+// </FS:Ansariel> [FS communication UI]
 {
     LLTabTuple* tuple = getTabByPanel(child);
     if( tuple )
     {
-        tuple->mButton->setFlashing( state );
+        // <FS:Ansariel> [FS communication UI]
+        //tuple->mButton->setFlashing( state );
+        tuple->mButton->setFlashing(state, false, alternate_color);
+        // </FS:Ansariel> [FS communication UI]
     }
 }
 
