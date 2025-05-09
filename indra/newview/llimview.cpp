@@ -480,7 +480,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         }
 
         static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
-        if (play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT) && LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString()))
+        if (!gAgent.isDoNotDisturb() && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT) && LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString()))
         {
             make_ui_sound("UISndChatMention");
         }
@@ -3734,7 +3734,7 @@ void LLIMMgr::addMessage(
     }
     // </FS:WoLf>
 
-    if (play_snd_mention)
+    if (!gAgent.isDoNotDisturb() && play_snd_mention)
     {
         make_ui_sound("UISndChatMention");
     }
