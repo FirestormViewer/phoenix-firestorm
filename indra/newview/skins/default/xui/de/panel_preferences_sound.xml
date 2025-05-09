@@ -254,6 +254,13 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndStartIM" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndStartIM"/>
 
+		<text tool_tip="UUID des Klangs bei einer Erwähnung im Chat." name="textChatMention">
+			Chat-Erwähnung:
+		</text>
+		<button label="V" name="Prev_UISndChatMention" tool_tip="Vorschau zu diesem Klang."/>
+		<button label="S" name="Def_UISndChatMention" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndChatMention"/>
+
 		<text tool_tip="UUID des Klangs beim Erzeugen eines neuen Objektes." name="textFSObjectCreate">
 			Objekterstellung:
 		</text>
@@ -288,15 +295,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndSnapshot" tool_tip="Vorschau zu diesem Klang."/>
 		<button label="S" name="Def_UISndSnapshot" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Stummschalten" name="QuietSnapshotsToDiskCheckBox"/>
-
-		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSTeleportOut">
-			Teleportieren:
-		</text>
-		<button label="V" name="Prev_UISndTeleportOut" tool_tip="Vorschau zu diesem Klang."/>
-		<button label="S" name="Def_UISndTeleportOut" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="PlayModeUISndTeleportOut"/>
-
-    </panel>
+	</panel>
 
 	<!-- UI Sounds 2 -->
 	<panel label="UI-Klänge 2" name="UI Sounds tab 2">
@@ -304,6 +303,13 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			Hier können die Klänge der Benutzeroberfläche geändert, aktiviert oder deaktiviert werden.
 Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		</text>
+
+		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSTeleportOut">
+			Teleportieren:
+		</text>
+		<button label="V" name="Prev_UISndTeleportOut" tool_tip="Vorschau zu diesem Klang."/>
+		<button label="S" name="Def_UISndTeleportOut" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndTeleportOut"/>
 
 		<text tool_tip="UUID des Klangs beim Öffnen des Pie-Menüs." name="textFSPieMenuAppear">
 			Öffnen Pie-Menü:
@@ -423,13 +429,6 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndFriendshipOffer" tool_tip="Vorschau zu diesem Klang."/>
 		<button label="S" name="Def_UISndFriendshipOffer" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndFriendshipOffer"/>
-
-		<text tool_tip="UUID des Klangs für Teleport-Angebote." name="textFSTeleportOffer">
-			Teleport-Angebote:
-		</text>
-		<button label="V" name="Prev_UISndTeleportOffer" tool_tip="Vorschau zu diesem Klang."/>
-		<button label="S" name="Def_UISndTeleportOffer" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="PlayModeUISndTeleportOffer"/>
 	</panel>
 
 	<!-- UI Sounds 3 -->
@@ -438,6 +437,13 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			Hier können die Klänge der Benutzeroberfläche geändert, aktiviert oder deaktiviert werden.
 Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		</text>
+
+		<text tool_tip="UUID des Klangs für Teleport-Angebote." name="textFSTeleportOffer">
+			Teleport-Angebote:
+		</text>
+		<button label="V" name="Prev_UISndTeleportOffer" tool_tip="Vorschau zu diesem Klang."/>
+		<button label="S" name="Def_UISndTeleportOffer" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndTeleportOffer"/>
 
 		<text tool_tip="UUID des Klangs für Inventarangebote" name="textFSInventoryOffer">
 			Inventarangebote:
