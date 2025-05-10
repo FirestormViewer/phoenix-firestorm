@@ -141,6 +141,7 @@ public:
     void setFilterPhantom(bool b) { mFilterPhantom = b; }
     void setFilterAttachment(bool b) { mFilterAttachment = b; }
     void setFilterMoaP(bool b) { mFilterMoaP = b; }
+    void setFilterReflectionProbe(bool b) { mFilterReflectionProbe = b; }
 
     void setRegexSearch(bool b) { mRegexSearch = b; }
     void setBeacons(bool b) { mBeacons = b; }
@@ -240,6 +241,7 @@ private:
     bool mFilterPhantom;
     bool mFilterAttachment;
     bool mFilterMoaP;
+    bool mFilterReflectionProbe;
 
     bool mFilterForSale;
     S32 mFilterForSaleMin;
@@ -382,6 +384,7 @@ private:
     LLCheckBoxCtrl* mCheckboxLocked;
     LLCheckBoxCtrl* mCheckboxPhantom;
     LLCheckBoxCtrl* mCheckboxMoaP;
+    LLCheckBoxCtrl* mCheckboxReflectionProbe;
     LLCheckBoxCtrl* mCheckboxDistance;
     LLSpinCtrl* mSpinDistanceMinValue;
     LLSpinCtrl* mSpinDistanceMaxValue;
