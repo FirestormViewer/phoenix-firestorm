@@ -23,7 +23,6 @@
 
 			<panel name="P_WL_Sky_Water_2">
 				<button name="btn_personal_lighting" label="Persönl. Beleuchtung" tool_tip="Öffnet das Fenster Persönliche Beleuchtung. Dort können temporäre Anpassung an die aktuelle Umgebung vorgenommen werden. Dies ist hilfreich für Fotografie oder um die Umgebung den eigenen Wünschen anzupassen. Es können KEINE eigenen Umgebungen erstellt noch die Änderungen gespeichert werden."/>
-				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die Standard-Umgebung der Region zurück."/>
 				<button name="PauseClouds" label="Wolken pausieren" tool_tip="Pausiert die Wolken-Animation für statische Kompositionen des Himmels."/>
 			</panel>
 

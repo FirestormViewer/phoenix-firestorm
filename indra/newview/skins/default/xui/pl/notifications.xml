@@ -882,6 +882,11 @@ Plik może być za duży. Spróbuj zmniejszyć rozdzielczość, jakość lub spr
 
 Plik może być za duży. Spróbuj zmniejszyć rozdzielczość, jakość lub spróbować ponownie później.
 	</notification>
+	<notification name="CannotOpenFileTooBig">
+		Nie można otworzyć pliku.
+
+Podczas otwierania pliku w przeglądarce zabrakło pamięci. Plik może być za duży.
+	</notification>
 	<notification name="LandmarkCreated">
 		Dodano "[LANDMARK_NAME]" do folderu [FOLDER_NAME].
 	</notification>
@@ -5219,7 +5224,7 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 		Autoryzacja Flickr nie powiodła się. Spróbuj ponownie i sprawdź dokładnie kod weryfikacyjny.
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
+		Możesz znaleźć swoje zdjęcie [https://www.flickr.com/photos/me/[ID] tutaj].
 	</notification>
 	<notification name="RegionTrackerAdd">
 		Jaką etykietę chcesz nadać regionowi
@@ -5423,6 +5428,10 @@ Czy chcesz kontynuować?
 	</notification>
 	<notification name="NoSupportGLTFShader">
 		Sceny GLTF nie są jeszcze obsługiwane przez Twoją kartę graficzną.
+	</notification>
+	<notification name="WaterExclusionSurfacesWarning">
+		Zaznaczenie pola wyboru "ukryj wodę" spowoduje nadpisanie wybranych opcji tekstury, powierzchni i połysku.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Kontynuuj" />
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.

@@ -11,6 +11,7 @@
 			<text name="description_label">
 				描述:
 			</text>
+			<button name="btn_preview" tool_tip="切換預覽精選地點描述"/>
 			<text name="location_label">
 				位置:
 			</text>

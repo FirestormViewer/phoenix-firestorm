@@ -63,6 +63,10 @@ LLGLTexture::~LLGLTexture()
 void LLGLTexture::init()
 {
     mBoostLevel = LLGLTexture::BOOST_NONE;
+    // <FS:minerjr>
+    // Added a previous boost level to allow for restorign boost after BOOST_SELECTED is applied
+    mPrevBoostLevel = LLGLTexture::BOOST_NONE;
+    // </FS:minerjr>
 
     mFullWidth = 0;
     mFullHeight = 0;
@@ -100,6 +104,12 @@ void LLGLTexture::setBoostLevel(S32 level)
         if(mBoostLevel != LLGLTexture::BOOST_NONE
            && mBoostLevel != LLGLTexture::BOOST_ICON
            && mBoostLevel != LLGLTexture::BOOST_THUMBNAIL
+           // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+           // Add the new grass, light and tree boosts
+           && mBoostLevel != LLGLTexture::BOOST_GRASS
+           && mBoostLevel != LLGLTexture::BOOST_LIGHT
+           && mBoostLevel != LLGLTexture::BOOST_TREE
+           // <FS:minerjr> [FIRE-35081]
            && mBoostLevel != LLGLTexture::BOOST_TERRAIN)
         {
             setNoDelete() ;
@@ -107,6 +117,18 @@ void LLGLTexture::setBoostLevel(S32 level)
     }
 }
 
+// <FS:minerjr>
+// Changes the current boost level to the previous value
+void LLGLTexture::restoreBoostLevel()
+{
+    mBoostLevel = mPrevBoostLevel;
+}
+// Stores the current boost level in a the previous boost.
+void LLGLTexture::storeBoostLevel()
+{
+    mPrevBoostLevel = mBoostLevel;
+}
+// </FS:minerjr>
 void LLGLTexture::forceActive()
 {
     mTextureState = ACTIVE ;

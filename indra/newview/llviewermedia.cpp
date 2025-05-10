@@ -695,7 +695,7 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
     static LLCachedControl<U32> max_instances(gSavedSettings, "PluginInstancesTotal", 8);
     static LLCachedControl<U32> max_normal(gSavedSettings, "PluginInstancesNormal", 2);
     static LLCachedControl<U32> max_low(gSavedSettings, "PluginInstancesLow", 4);
-    static LLCachedControl<F32> max_cpu(gSavedSettings, "PluginInstancesCPULimit", 0.9);
+    static LLCachedControl<F32> max_cpu(gSavedSettings, "PluginInstancesCPULimit", 0.9f); // <FS:minerjr> add missing f for float
     // Setting max_cpu to 0.0 disables CPU usage checking.
     bool check_cpu_usage = (max_cpu != 0.0f);
 
@@ -1755,8 +1755,6 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
         std::string user_data_path_cache = gDirUtilp->getCacheDir(false);
         user_data_path_cache += gDirUtilp->getDirDelimiter();
 
-        std::string user_data_path_cef_log = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef_log.txt");
-
         // See if the plugin executable exists
         llstat s;
         if(LLFile::stat(launcher_name, &s))
@@ -1773,6 +1771,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
         {
             media_source = new LLPluginClassMedia(owner);
             media_source->setSize(default_width, default_height);
+            std::string user_data_path_cef_log = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef.log");
             media_source->setUserDataPath(user_data_path_cache, gDirUtilp->getUserName(), user_data_path_cef_log);
             media_source->setLanguageCode(LLUI::getLanguage());
             media_source->setZoomFactor(zoom_factor);
@@ -2947,14 +2946,14 @@ void LLViewerMediaImpl::update()
             media_tex->ref();
             main_queue->postTo(
                 mTexUpdateQueue, // Worker thread queue
-                [=]() // work done on update worker thread
+                [=, this]() // work done on update worker thread
                 {
 #if LL_IMAGEGL_THREAD_CHECK
                     media_tex->getGLTexture()->mActiveThread = LLThread::currentID();
 #endif
                     doMediaTexUpdate(media_tex, data, data_width, data_height, x_pos, y_pos, width, height, true);
                 },
-                [=]() // callback to main thread
+                [=, this]() // callback to main thread
                 {
 #if LL_IMAGEGL_THREAD_CHECK
                     media_tex->getGLTexture()->mActiveThread = LLThread::currentID();
@@ -3113,6 +3112,7 @@ LLViewerMediaTexture* LLViewerMediaImpl::updateMediaImage()
 
         int discard_level = 0;
         media_tex->createGLTexture(discard_level, raw);
+        //media_tex->setBoostLevel(LLViewerTexture::BOOST_HIGH);
 
         // MEDIAOPT: set this dynamically on play/stop
         // FIXME

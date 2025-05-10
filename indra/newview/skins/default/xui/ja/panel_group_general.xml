@@ -11,67 +11,58 @@
 	<panel.string name="incomplete_member_data_str">
 		メンバーのデータを検索
 	</panel.string>
-
 	<panel name="group_general_panel">
-
 		<text name="group_key_label">
-			Group Key:
+			グループのキー：
 		</text>
-		<view_border name="info_border" />
-		<text_editor name="group_key" label="グループUUID:" />
-		<button name="copy_uri" label="URIをコピー" />
+		<text_editor name="group_key" label="グループＵＵＩＤ：" initial_value="（読み込んでいます…）"/>
+		<button name="copy_uri" label="ＵＲＩをコピー"/>
 		<text name="prepend_founded_by">
-			創設者:
+			創設者：
 		</text>
-		<text name="founder_name" initial_value="（取得中...）" />
-		<button name="copy_name" label="名前をコピー" />
-		<texture_picker name="insignia" tool_tip="クリックして写真を選択します" label="" />
+		<button name="copy_name" label="名前をコピー"/>
+		<texture_picker name="insignia" tool_tip="画像を拡大するにはクリックしてください。"/>
 		<text_editor name="charter">
 			グループの理念、指針を記入してください
 		</text_editor>
 		<text name="join_cost_text">
-			参加費用 (L$00000)
+			入会費はかかりません。
 		</text>
-		<button name="btn_join" label="参加します！" />
+		<button label="加入する" name="btn_join"/>
 		<name_list name="visible_members">
-			<name_list.columns label="メンバー" name="name" />
-			<name_list.columns label="肩書き" name="title" />
-			<name_list.columns label="ログイン" name="status" />
+			<name_list.columns label="メンバー" name="name"/>
+			<name_list.columns label="タイトル" name="title"/>
+			<name_list.columns label="ログイン" name="status"/>
 		</name_list>
-
-		<layout_stack name="group_preferences_layout" orientation="horizontal">
+		<layout_stack name="group_preferences_layout">
 			<layout_panel name="user_preferences_container">
 				<text name="my_group_settngs_label">
-					個人の設定
+					個人設定
 				</text>
-				<check_box label="プロフィールに表示" name="list_groups_in_profile" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。" />
-				<check_box label="グループ通知を受信" name="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合はこのボックスのチェックを外してください。" />
-				<!-- <exodus> -->
-				<check_box label="グループIMを受信" name="receive_chat" tool_tip="このグループのグループチャットに参加するかどうかの設定を行います。" />
-				<!-- </exodus> -->
+				<check_box label="プロフィールに表示" name="list_groups_in_profile" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。"/>
+				<check_box label="グループ通知を受信" name="receive_notices" tool_tip="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合はこのボックスのチェックを外してください。"/>
+				<check_box label="グループＩＭを受信" name="receive_chat" tool_tip="このグループのグループチャットに参加するかどうかの設定を行います。"/>
 				<text name="active_title_label">
-					私の肩書き:
+					タイトル：
 				</text>
-				<combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。" />
+				<combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。"/>
 			</layout_panel>
-			<layout_panel name="preferences_divider" />
 			<layout_panel name="group_preferences_container">
 				<text name="group_settngs_label">
 					グループの設定
 				</text>
-				<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます" label="検索結果に表示" />
-				<check_box name="open_enrollement" label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。" />
-				<check_box name="check_enrollment_fee" tool_tip="入会費が必要かどうかを設定します。" label="入会費がかかります" />
-				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" label="L$" />
-				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです">
-					<combo_item name="select_mature" value="Select">
-						- レーティング区分を指定 -
+				<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます。" label="検索結果に表示"/>
+				<check_box name="open_enrollement" label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。"/>
+				<check_box name="check_enrollment_fee" tool_tip="グループ加入に入会費が必要かどうかを設定します。" label="入会費がかかります。"/>
+				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" />
+				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
+					<combo_item name="select_mature">
+						‐レーティング区分を指定‐
 					</combo_item>
-					<combo_box.item label="「Moderate」コンテンツ" name="mature" value="Mature" />
-					<combo_box.item label="「General」コンテンツ" name="pg" value="Not Mature" />
+					<combo_box.item label="「Moderate」コンテンツ" name="mature"/>
+					<combo_box.item label="「General」コンテンツ" name="pg"/>
 				</combo_box>
 			</layout_panel>
 		</layout_stack>
 	</panel>
-
 </panel>

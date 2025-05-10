@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Settings">
+	<menu_item_call label="選択的に読み込む" tool_tip="オフになっているジョイントのみを読み込み、オンにします。" name="load_selective"/>
+	<menu_item_call label="選択的に読み込む‐回転のみ" tool_tip="回転のみをオフになっているジョイントにのみ読み込み、オンにします" name="rotations_positions"/>
+	<menu_item_call label="読み込む‐回転のみ" tool_tip="回転のみを読み込みます。他のアバター／シェイプ用に作成されたポーズに適しています。" name="rotations"/>
+	<menu_item_call label="読み込む" tool_tip="回転、位置、スケールを読み込みます。" name="load_all"/>
+</toggleable_menu>

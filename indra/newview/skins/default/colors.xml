@@ -1028,6 +1028,12 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
+    <color
+     name="SearchableControlHighlightFontColor"
+     reference="Red" />
+    <color
+     name="SearchableControlHighlightBgColor"
+     reference="Red" />
 <!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
@@ -1335,9 +1341,6 @@
       name="MapPickRadiusColor"
       reference="MapFrustumColor" />
   <color
-      name="SearchableControlHighlightColor"
-      reference="Red" />
-  <color
       name="Slidermark"
       reference="DkGray" />
   <color
@@ -1378,4 +1381,19 @@
   <color
      name="NotecardCursorColor"
      reference="TextCursorColor" />
+  <color
+     name="FpsDisplayUncappedColor"
+     reference="LabelTextColor" />
+  <color
+     name="FpsDisplayUnfocussedColor"
+     reference="Gray" />
+  <color
+     name="FpsDisplayBelowLimitColor"
+     reference="Yellow" />
+  <color
+     name="FpsDisplayFpsLimitReachedColor"
+     reference="Green" />
+  <color
+     name="FpsDisplayVSyncLimitReachedColor"
+     reference="Green" />
 </colors>

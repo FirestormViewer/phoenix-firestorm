@@ -39,18 +39,8 @@
 // llcommon depend on llmath.
 #include "is_approx_equal_fraction.h"
 
-// work around for Windows & older gcc non-standard function names.
-#if LL_WINDOWS
-#include <float.h>
-#define llisnan(val)    _isnan(val)
-#define llfinite(val)   _finite(val)
-#elif (LL_LINUX && __GNUC__ <= 2)
-#define llisnan(val)    isnan(val)
-#define llfinite(val)   isfinite(val)
-#else
-#define llisnan(val)    std::isnan(val)
-#define llfinite(val)   std::isfinite(val)
-#endif
+#define llisnan(val)  std::isnan(val)
+#define llfinite(val) std::isfinite(val)
 
 // Single Precision Floating Point Routines
 // (There used to be more defined here, but they appeared to be redundant and
@@ -358,10 +348,13 @@ inline F32 snap_to_sig_figs(F32 foo, S32 sig_figs)
     return new_foo;
 }
 
-inline F32 lerp(F32 a, F32 b, F32 u)
-{
-    return a + ((b - a) * u);
-}
+// <FS:Ansariel> std::lerp fix from previous develop branch
+//inline F32 lerp(F32 a, F32 b, F32 u)
+//{
+//    return a + ((b - a) * u);
+//}
+using std::lerp;
+// </FS:Ansariel>
 
 inline F32 lerp2d(F32 x00, F32 x01, F32 x10, F32 x11, F32 u, F32 v)
 {

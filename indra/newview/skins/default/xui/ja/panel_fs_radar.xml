@@ -1,51 +1,36 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_radar">
-	<string name="FlagsColumnType" value="text"/>
-	<string name="FlagsColumnValue_0" value=""/>
-	<string name="FlagsColumnValue_1" value="$"/>
-	<string name="FlagsColumnValue_2" value="$$"/>
-	<string
-	 name="MiniMapToolTipMsg"
-	 value="[REGION] (ダブルクリックで世界地図を開きます。Shift‐ドラッグで水平・垂直移動します。)"/>
-	<string
-	 name="AltMiniMapToolTipMsg"
-	 value="[REGION] (ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。)"/>
-	<string
-	 name="avatar_name_count"
-	 value="名前 [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (ダブルクリックでワールドマップを開きます。Shift‐ドラッグで水平・垂直移動します。)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。)"/>
+	<string name="avatar_name_count" value="名前　[[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]"/>
 	<panel name="nearby_panel">
 		<panel label="bottom_panel" name="nearby_buttons_panel">
-			<filter_editor name="nearby_filter_input" />
-			<button name="gear_btn" tool_tip="選択した人に対するアクションです。" />
-			<menu_button name="options_btn" tool_tip="レーダーのオプション" />
-			<button name="add_friend_btn" tool_tip="この住人にフレンドシップを申し出ます。" />
+			<filter_editor label="人物をフィルタ" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="選択した人に対するアクションです。"/>
+			<menu_button name="options_btn" tool_tip="レーダーのオプションです。"/>
+			<button name="add_friend_btn" tool_tip="この住人にフレンドシップを申し込みます。"/>
 		</panel>
 		<layout_stack name="radar_outer_ls">
 			<layout_panel name="radar_upper_layout">
 				<layout_stack name="radar_ls">
-					<layout_panel name="minimaplayout">
-						<net_map name="Net Map" />
-					</layout_panel>
-
 					<layout_panel name="radarlayout">
 						<radar_list name="radar_list">
-							<radar_list.columns label="名前" name="name" tool_tip="[TOTAL]人のアバター（同じ地域に[IN_REGION]人、チャットレンジ内に[IN_CHAT_RANGE]人）" />
-							<radar_list.columns label="" name="voice_level" tool_tip="ボイスで会話しています" />
-							<radar_list.columns label="" name="in_region" tool_tip="同じ地域にいる（緑）か同じ土地にいます（緑・黄色）" />
-							<radar_list.columns label="" name="typing_status" tool_tip="入力しています" />
-							<radar_list.columns label="" name="sitting_status" tool_tip="座っています" />
-							<radar_list.columns label="" name="flags" tool_tip="支払情報" />
-							<radar_list.columns label="" name="has_notes" tool_tip="ノートがあります" />
-							<radar_list.columns label="年齢" name="age" />
-							<radar_list.columns label="表示時間" name="seen" />
-							<radar_list.columns label="距離" name="range" />
+							<radar_list.columns label="名前" name="name" tool_tip="[TOTAL]人のアバター（同じリージョンに[IN_REGION]人、チャットレンジ内に[IN_CHAT_RANGE]人）がいます。"/>
+							<radar_list.columns name="voice_level" tool_tip="ボイスで会話しています。"/>
+							<radar_list.columns name="in_region" tool_tip="同じリージョンにいる（緑）か同じ土地（緑・黄色）にいます。"/>
+							<radar_list.columns name="typing_status" tool_tip="入力しています。"/>
+							<radar_list.columns name="sitting_status" tool_tip="座っています。"/>
+							<radar_list.columns name="flags" tool_tip="支払情報"/>
+							<radar_list.columns name="has_notes" tool_tip="ノートがあります。"/>
+							<radar_list.columns label="年齢" name="age"/>
+							<radar_list.columns label="表示時間" name="seen"/>
+							<radar_list.columns label="距離" name="range"/>
 						</radar_list>
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>
-			
 			<layout_panel name="radar_lower_layout">
-				<slider label="範囲 (m):" name="NearMeRange" />
+				<slider label="範囲（ｍ）：" name="NearMeRange"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

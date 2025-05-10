@@ -955,18 +955,23 @@
 		[APP_NAME] 當前尚不支援 BVH 格式的動畫檔案批次上傳。
 	</notification>
 	<notification name="CannotUploadReason">
-無法上傳 [FILE]，原因：[REASON]
+		無法上傳 [FILE]，原因：[REASON]
 請稍候再試一次。
 	</notification>
 	<notification name="CannotUploadSnapshotEmailTooBig">
-無法上傳快照 [FILE]，原因如下：[REASON]
+		無法上傳快照 [FILE]，原因如下：[REASON]
 
 檔案可能太大，請嘗試降低解析度、降低品質或稍後重試。
 	</notification>
 	<notification name="CannotUploadSnapshotWebTooBig">
-無法上傳快照。
+		無法上傳快照。
 
 檔案可能太大，請嘗試降低解析度或稍後重試。
+	</notification>
+	<notification name="CannotOpenFileTooBig">
+		無法打開檔案。
+
+檢視器在打開檔案時記憶體不足。檔案可能過大。
 	</notification>
 	<notification name="LandmarkCreated">
 		你已新增「[LANDMARK_NAME]」到你的 [FOLDER_NAME] 檔案夾。
@@ -1521,7 +1526,7 @@
 新顯示卡：„[THIS_GPU]「
 	</notification>
 	<notification name="DisplaySetToRecommendedFeatureChange">
-		由於渲染子系統有所變更，已將顯示設定設為推薦的設定。
+		由於彩現子系統有所變更，已將顯示設定設為推薦的設定。
 	</notification>
 	<notification name="ErrorMessage">
 		[ERROR_MESSAGE]
@@ -1686,7 +1691,7 @@ SHA1指紋：[MD5_DIGEST]
 
 如果紋理 [TEXTURE_NUM] 是不透明的,請等待紋理完全載入後再次點擊"應用"。
 
-透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
+不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
 	<notification name="InvalidTerrainAlpha">
 無法設定區域紋理:
@@ -1694,7 +1699,7 @@ SHA1指紋：[MD5_DIGEST]
 
 請將紋理 [TEXTURE_NUM] 替換為不透明的RGB圖像,然後再次點擊"應用"。
 
-透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
+不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
 	<notification name="InvalidTerrainMaterialNotLoaded">
 無法設定區域材質:
@@ -1828,7 +1833,8 @@ SHA1指紋：[MD5_DIGEST]
 	</notification>
 	<notification name="WebLaunchExternalTarget">
 		你確定要開啟網頁瀏覽器去檢視這個內容？
-URL: [UNTRUSTED_URL]
+開啟來歷不明的網頁可能會危及您的電腦。
+URL:[UNTRUSTED_URL]
 		<usetemplate ignoretext="啟用我的網頁瀏覽器去檢視網頁" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
@@ -2800,7 +2806,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="DayCycleTooManyKeyframes">
-		你無法新增更多的關鍵幀到這個日循環。  [SCOPE] 範圍的日循環最多允許 [MAX] 個關鍵幀。
+		你無法新增更多的關鍵影格到這個日循環。  [SCOPE] 範圍的日循環最多允許 [MAX] 個關鍵影格。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="EnvUpdateRate">
@@ -4352,7 +4358,7 @@ https://wiki.firestormviewer.org/fs_voice
 		記事卡的第[LINE]行沒有有效的「[」狀態字首。
 	</notification>
 	<notification name="AOImportNoValidDelimiter">
-		記事卡的第[LINE]行沒有有效的「[」狀態字尾。
+		記事卡的第[LINE]行沒有有效的「[」狀態後綴。
 	</notification>
 	<notification name="AOImportStateNameNotFound">
 		狀態[NAME]不存在。
@@ -5466,7 +5472,7 @@ Flickr 驗證失敗。請重試並檢查輸入的程式碼。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-現在可以在這裡 [http://www.flickr.com/photos/upload/edit/?ids=[ID] 檢視相片。
+現在可以在這裡 https://www.flickr.com/photos/me/[ID] 檢視相片。
 	</notification>
 	<notification name="RegionTrackerAdd">
 應該為區域「[REGION]」
@@ -5687,8 +5693,12 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		您的圖形硬體尚不支援GLTF場景。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="WaterExclusionSurfacesWarning">
+		選中“隱藏水”複選框將覆蓋所選的紋理、凹凸和光澤圖選項。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續" />
+	</notification>
 	<notification name="EnableAutoFPSWarning">
-		你即將啟用自動幀率。所有未儲存的圖形設定將會丟失。
+		你即將啟用自動影格率。所有未儲存的圖形設定將會丟失。
 
 你想先儲存它們嗎？
 		<usetemplate name="okcancelbuttons" notext="否" yestext="是"/>
@@ -5724,7 +5734,7 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="好的"/>
 	</notification>
 	<notification label="紋理包含空的 Alpha 通道" name="ImageEmptyAlphaLayer">
-您要上傳的紋理包含一個空的或幾乎為空的 Alpha 通道（透明度資訊）。 這應該總是不正確的，應該移除該通道。新增 Alpha 通道可能會導致重疊紋理在不同相機角度下閃爍。 此外，它還會降低渲染速度。除非這個紋理確實需要一個（幾乎）空的 Alpha 通道，否則應該儘可能地移除它。
+您要上傳的紋理包含一個空的或幾乎為空的 Alpha 通道（透明度資訊）。 這應該總是不正確的，應該移除該通道。新增 Alpha 通道可能會導致重疊紋理在不同相機角度下閃爍。 此外，它還會降低彩現速度。除非這個紋理確實需要一個（幾乎）空的 Alpha 通道，否則應該儘可能地移除它。
 		<form name="form">
 			<button name="strip" text="刪除 Alpha"/>
 			<button name="use_as_is" text="按原樣使用"/>

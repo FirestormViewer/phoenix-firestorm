@@ -10,7 +10,7 @@
 		天空 [INDEX]([ALTITUDE]m)
 	</string>
 	<string name="str_no_parcel">
-		未選擇地塊。 環境設定已停用。
+		未選擇地塊。環境設定已停用。
 	</string>
 	<string name="str_cross_region">
 		跨越區域不提供環境設定。
@@ -74,14 +74,12 @@
 								[HH]:[MM][AP] ([PRC]%)
 							</text>
 						</layout_panel>
-						<layout_panel name="pnl_environment_buttons" />
 					</layout_stack>
 				</layout_panel>
 				<layout_panel name="pnl_environment_altitudes">
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
-							天空[INDEX]
-[ALTITUDE]米
+							天空[INDEX]&#xA;[ALTITUDE]米
 						</text>
 						<line_editor name="edt_invname_alt1">
 							未知
@@ -90,8 +88,7 @@
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
-							天空[INDEX]
-[ALTITUDE]米
+							天空[INDEX]&#xA;[ALTITUDE]米
 						</text>
 						<line_editor name="edt_invname_alt2">
 							未知
@@ -100,8 +97,7 @@
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
-							天空[INDEX]
-[ALTITUDE]米
+							天空[INDEX]&#xA;[ALTITUDE]米
 						</text>
 						<line_editor name="edt_invname_alt3">
 							未知
@@ -111,11 +107,6 @@
 					<text name="sky_altitudes_label">
 						天空高度
 					</text>
-					<multi_slider initial_value="0" name="sld_altitudes">
-						<slider name="sld1" value="1000" />
-						<slider name="sld2" value="2000" />
-						<slider name="sld3" value="3000" />
-					</multi_slider>
 					<panel name="pnl_ground">
 						<text name="txt_ground">
 							地面

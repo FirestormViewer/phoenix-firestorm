@@ -1074,6 +1074,7 @@ void LLGLManager::initWGL()
 // return false if unable (or unwilling due to old drivers) to init GL
 bool LLGLManager::initGL()
 {
+    LL_INFOS("RenderInit") << "Initializing OpenGL" << LL_ENDL; // <FS:Beq/> Extra logging to confirm usage on Linux
     if (mInited)
     {
         LL_ERRS("RenderInit") << "Calling init on LLGLManager after already initialized!" << LL_ENDL;
@@ -1514,6 +1515,11 @@ void LLGLManager::initExtensions()
     mHasATIMemInfo = ExtensionExists("GL_ATI_meminfo", gGLHExts.mSysExts); //Basic AMD method, also see mHasAMDAssociations
 
     LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
+// FIRE-34655 - VRAM detection failing on Linux. Load all the GL functions we need.
+#if LL_LINUX && !LL_MESA_HEADLESS    
+    mHasNVXGpuMemoryInfo = ExtensionExists("GL_NVX_gpu_memory_info", gGLHExts.mSysExts);
+    mHasAMDAssociations = ExtensionExists("WGL_AMD_gpu_association", gGLHExts.mSysExts);
+#endif
 
 #if LL_WINDOWS
 // </FS:Zi>
@@ -2536,12 +2542,15 @@ void LLGLState::checkStates(GLboolean writeAlpha)
         return;
     }
 
-    GLint src;
-    GLint dst;
-    glGetIntegerv(GL_BLEND_SRC, &src);
-    glGetIntegerv(GL_BLEND_DST, &dst);
-    llassert_always(src == GL_SRC_ALPHA);
-    llassert_always(dst == GL_ONE_MINUS_SRC_ALPHA);
+    GLint srcRGB, dstRGB, srcAlpha, dstAlpha;
+    glGetIntegerv(GL_BLEND_SRC_RGB, &srcRGB);
+    glGetIntegerv(GL_BLEND_DST_RGB, &dstRGB);
+    glGetIntegerv(GL_BLEND_SRC_ALPHA, &srcAlpha);
+    glGetIntegerv(GL_BLEND_DST_ALPHA, &dstAlpha);
+    llassert_always(srcRGB == GL_SRC_ALPHA);
+    llassert_always(srcAlpha == GL_SRC_ALPHA);
+    llassert_always(dstRGB == GL_ONE_MINUS_SRC_ALPHA);
+    llassert_always(dstAlpha == GL_ONE_MINUS_SRC_ALPHA);
 
     // disable for now until usage is consistent
     //GLboolean colorMask[4];

@@ -5128,7 +5128,7 @@ Bu əməliyyatı geri qaytara bilməzsiniz.
 		Flickr doğrulaması alınmadı. Zəhmət olmasa, yenidən cəhd edin və doğrulama kodunu iki dəfə yoxladığınızdan əmin olun.
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Şəkiliniz indi [http://www.flickr.com/photos/upload/edit/?ids=[ID] burada] baxıla bilər.
+		Şəkiliniz indi [https://www.flickr.com/photos/me/[ID] burada] baxıla bilər.
 	</notification>
 	<notification name="RegionTrackerAdd">
 		&quot;[REGION]&quot; üçün

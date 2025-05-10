@@ -908,6 +908,7 @@ public:
     void getAgentHUDZoom(F32 &target_zoom, F32 &current_zoom) const;
 
     void updatePointAt();
+    void clearWaterExclusion();
 
     // Internal list maintenance functions. TODO: Make these private!
     void remove(std::vector<LLViewerObject*>& objects);
@@ -1023,6 +1024,8 @@ public:
     // (edit linked parts, select face)
     bool selectGetNoIndividual();
 // </FS:Zi>
+    void showGLTFMaterial(); // <FS/> [FIRE-35138] Show the GLTF Material since we are no longer in BP
+    void hideGLTFMaterial(); // <FS/> [FIRE-35138] Hide the GLTF Material since we are currently in BP
 };
 
 // *DEPRECATED: For callbacks or observers, use

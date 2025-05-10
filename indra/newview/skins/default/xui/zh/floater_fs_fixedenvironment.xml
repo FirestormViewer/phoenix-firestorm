@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Fixed Environment" title="固定環境">
+	<string name="edit_sky">編輯天空：</string>
+	<string name="edit_water">編輯水面：</string>
+	<layout_stack name="floater_stack">
+		<layout_panel name="info_panel">
+			<text name="info_panel_label">
+				名稱：
+			</text>
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<layout_stack name="button_bar_ls">
+				<layout_panel name="load_btn_lp"> 
+					<button label="載入" name="btn_load" tool_tip="從庫存中載入設定"/>
+					<button label="匯入" name="btn_import" tool_tip="從磁碟匯入舊版設定"/>
+					<button label="儲存" name="btn_commit"/>
+					<button label="取消" name="btn_cancel" tool_tip="恢復至最後儲存的版本"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

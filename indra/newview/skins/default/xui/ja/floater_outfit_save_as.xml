@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container" title="アウトフィットを保存する">
+<floater name="modal container" title="アウトフィットの保存">
 	<button label="保存" label_selected="保存" name="Save"/>
 	<button label="キャンセル" label_selected="キャンセル" name="Cancel"/>
+	<!-- 字数制限のため「着用中のアウトフィットを別名で保存：」ではない-->
 	<text name="Save item as:">
-		名前をつけて保存：
+		別名で保存：
 	</text>
+	<!-- 名前には、非ASCII文字が使えないため翻訳しない -->
 	<line_editor name="name ed">
-		[DESC] (NEW)
+		[DESC] (新着)
 	</line_editor>
 </floater>

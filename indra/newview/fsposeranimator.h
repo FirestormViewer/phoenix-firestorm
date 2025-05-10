@@ -398,75 +398,35 @@ public:
     void setPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, bool shouldPose);
 
     /// <summary>
-    /// Resets the supplied PoserJoint to its position/rotation/scale it was when poser was started.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint to be reset.</param>
-    void resetAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint);
-
-    /// <summary>
-    /// Undoes the last applied rotation to the supplied PoserJoint.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint with the rotation to undo.</param>
-    void undoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
-
-    /// <summary>
-    /// Undoes the last applied position to the supplied PoserJoint.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint with the position to undo.</param>
-    void undoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
-
-    /// <summary>
-    /// Undoes the last applied scale to the supplied PoserJoint.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint with the scale to undo.</param>
-    void undoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
-
-    /// <summary>
-    /// Resets the position of the supplied PoserJoint.
+    /// Resets the supplied PoserJoint to the position it had when poser was started.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint with the position to reset.</param>
-    void resetJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
+    /// <param name="style">The style to apply the reset with; if a style that support more than one joint, more that one joint will be reset.</param>
+    void resetJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
 
     /// <summary>
-    /// Resets the scale of the supplied joint to initial values.
+    /// Undoes the last applied change (rotation, position or scale) to the supplied PoserJoint.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint with the scale to reset.</param>
-    void resetJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
+    /// <param name="joint">The joint with the rotation to undo.</param>
+    void undoLastJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Determines if a redo action is currently permitted for the supplied joint.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint to query.</param>
-    /// <returns>True if a redo action is available, otherwise false.</returns>
-    bool canRedoJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint);
+    /// <param name="canUndo">Supply true to query if we can perform an Undo, otherwise query redo.</param>
+    /// <returns>True if an undo or redo action is available, otherwise false.</returns>
+    bool canRedoOrUndoJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint, bool canUndo = false);
 
     /// <summary>
-    /// Re-does the last undone rotation to the supplied PoserJoint.
+    /// Re-does the last undone change (rotation, position or scale) to the supplied PoserJoint.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
     /// <param name="joint">The joint with the rotation to redo.</param>
-    void redoLastJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
-
-    /// <summary>
-    /// Re-does the last undone position to the supplied PoserJoint.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint with the position to redo.</param>
-    void redoLastJointPosition(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
-
-    /// <summary>
-    /// Re-does the last undone scale to the supplied PoserJoint.
-    /// </summary>
-    /// <param name="avatar">The avatar having the joint to which we refer.</param>
-    /// <param name="joint">The joint with the scale to redo.</param>
-    void redoLastJointScale(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
+    void redoLastJointChange(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Gets the position of a joint for the supplied avatar.
@@ -542,7 +502,15 @@ public:
     void flipEntirePose(LLVOAvatar* avatar);
 
     /// <summary>
+    /// Symmetrizes the rotations of the joints from one side of the supplied avatar to the other.
+    /// </summary>
+    /// <param name="avatar">The avatar to symmetrize.</param>
+    /// <param name="rightToLeft">Whether to symmetrize rotations from right to left, otherwise symmetrize left to right.</param>
+    void symmetrizeLeftToRightOrRightToLeft(LLVOAvatar* avatar, bool rightToLeft);
+
+    /// <summary>
     /// Recaptures the rotation, position and scale state of the supplied joint for the supplied avatar.
+    /// AsDelta variant retains the original base and creates a delta relative to it.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
     /// <param name="joint">The joint to recapture.</param>
@@ -551,20 +519,25 @@ public:
     void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
 
     /// <summary>
+    /// Recaptures any change in joint state.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
+    /// <param name="joint">The joint to recapture.</param>
+    /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
+    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, E_BoneDeflectionStyles style);
+
+    /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
     /// </summary>
     /// <param name="avatar">The avatar whose joint rotations should be set to zero.</param>
     void setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar);
 
     /// <summary>
-    /// Determines if the kind of save to perform should be a 'delta' save, or a complete save.
+    /// Determines if the supplied joint has a base rotation of zero.
     /// </summary>
-    /// <param name="avatar">The avatar whose pose-rotations are being considered for saving.</param>
-    /// <returns>True if the save should save only 'deltas' to the rotation, otherwise false.</returns>
-    /// <remarks>
-    /// A save of the rotation 'deltas' facilitates a user saving their changes to an existing animation.
-    /// Thus the save represents 'nothing other than the changes the user made', to some other pose which they may have limited rights to.
-    /// </remarks>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <returns>True if the supplied joint has a 'base' rotation of zero (thus user-supplied change only), otherwise false.</returns>
     bool baseRotationIsZero(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
 
     /// <summary>

@@ -56,10 +56,7 @@ public:
     U32 sizeBytes() const;
 
     LLUUID mMeshID;
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//  std::vector<std::string> mJointNames;
-    std::vector< JointKey > mJointNames;
-// </FS:ND>
+    std::vector<std::string> mJointNames;
     mutable std::vector<S32> mJointNums;
     typedef std::vector<LLMatrix4a> matrix_list_t;
     matrix_list_t mInvBindMatrix;

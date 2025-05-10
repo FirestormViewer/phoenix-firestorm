@@ -11,6 +11,7 @@
 			<text name="description_label">
 				Opis:
 			</text>
+			<button name="btn_preview" tool_tip="Przełącz podgląd opisu miejsca" />
 			<text name="location_label">
 				Lokalizacja:
 			</text>

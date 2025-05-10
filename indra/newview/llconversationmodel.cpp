@@ -359,8 +359,9 @@ void LLConversationItemSession::clearParticipants()
 
 void LLConversationItemSession::clearAndDeparentModels()
 {
-    for (LLFolderViewModelItem* child : mChildren)
+    for (child_list_t::iterator it = mChildren.begin(); it != mChildren.end();)
     {
+        LLFolderViewModelItem* child = *it;
         if (child->getNumRefs() == 0)
         {
             // LLConversationItemParticipant can be created but not assigned to any view,
@@ -372,8 +373,8 @@ void LLConversationItemSession::clearAndDeparentModels()
             // Model is still assigned to some view/widget
             child->setParent(NULL);
         }
+        it = mChildren.erase(it);
     }
-    mChildren.clear();
 }
 
 LLConversationItemParticipant* LLConversationItemSession::findParticipant(const LLUUID& participant_id)

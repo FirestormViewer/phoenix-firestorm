@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Chmury" name="panel_fs_settings_sky_clouds">
+	<panel name="P_Clouds_Header">
+		<text name="T_Clouds_Header" value="Ustawienia chmur" />
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="cloud_color_label">
+			Kolor:
+		</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_coverage_label">
+			Zachmurzenie:
+		</text>
+		<text name="cloud_scale_label">
+			Rozmiar:
+		</text>
+		<text name="cloud_variance_label">
+			Zmienność:
+		</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_density_label" tool_tip="Gęstość XY chmur - Użyj suwaków X i Y, aby zmienić poziomą pozycję wszystkich chmur na niebie. Suwak D wpływa na ogólną gęstość poszczególnych chmur; przy niskich ustawieniach zobaczysz cienkie, delikatne chmury, a przy wyższych - grubsze, bardziej zwarte chmury.">
+			Gęstość:
+		</text>
+	</panel>
+	<panel name="P_Cloud_Detail">
+		<text name="cloud_detail_label">
+			Detale:
+		</text>
+	</panel>
+	<panel name="P_Cloud_Scroll">
+		<text name="cloud_scroll_label">
+			Przewijanie:
+		</text>
+		<text name="cloud_image_label">
+			Obraz:
+		</text>
+	</panel>
+</panel>

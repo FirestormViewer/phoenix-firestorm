@@ -5,7 +5,7 @@
   can_resize="true"
   can_dock="false"
   can_close="true"
-  height="300"
+  height="305"
   width="505"
   min_width="505"
   min_height="300"
@@ -21,7 +21,7 @@
     follows="top|left|right|bottom"
     top="20"
     left="0"
-    height="223"
+    height="233"
     width="500"
     tab_position="top"
     enable_tabs_flashing="true"
@@ -114,6 +114,15 @@
         width="300"
         label="Assume scale is in meters."
         tool_tip="Ignore the cm scale units used by tools such as Maya" />
+      <check_box name="checkbox_apply_joint_offsets"
+        height="15"
+        control_name="FSLocalMeshApplyJointOffsets"
+        follows="top|left"
+        top_pad="5"
+        left="8"
+        width="300"
+        label="Apply joint offsets."
+        tool_tip="Apply any joint offsets in the mesh, by default these are ignored." />
       <text name="lod_suffix_label"
         follows="left|top"
         layout="topleft"
@@ -256,7 +265,6 @@
     label="Apply"
     layout="topleft"
     left="10"
-    top="253"
     width="90"
     visible="true" />
   <combo_box name="object_apply_list"
@@ -264,7 +272,7 @@
     layout="topleft"
     follows="bottom"
     left="105"
-    top="253"
+    top_delta="0"
     width="315"
     visible="true" />
   <button name="btn_add"
@@ -272,7 +280,6 @@
     label="Add"
     layout="topleft"
     left="10"
-    top="275"
     width="90"
     visible="true" />
   <button name="btn_remove"
@@ -280,7 +287,7 @@
     label="Remove"
     layout="topleft"
     left="105"
-    top="275"
+    top_delta="0"
     width="90"
     visible="true" />
   <button name="btn_reload"
@@ -288,7 +295,7 @@
     label="Reload"
     layout="topleft"
     left="200"
-    top="275"
+    top_delta="0"
     width="90"
     visible="true" />
   <button name="btn_clear"
@@ -296,7 +303,7 @@
     label="Clear"
     layout="topleft"
     left="295"
-    top="275"
+    top_delta="0"
     width="90"
     visible="true" />
   <button name="btn_rez"
@@ -305,7 +312,7 @@
     tool_tip="Create a donor mesh inworld and populate with selected local mesh. This creates an empty object in-world."
     layout="topleft"
     left="390"
-    top="275"
+    top_delta="0"
     width="90"
     visible="true" />
 </floater>

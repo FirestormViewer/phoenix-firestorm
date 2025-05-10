@@ -891,7 +891,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
             disabled_items.push_back(std::string("Copy"));
         }
 
-        if (isAgentInventory() && !single_folder_root)
+        if (isAgentInventory() && !single_folder_root && !isMarketplaceListingsFolder())
         {
             items.push_back(std::string("New folder from selected"));
             items.push_back(std::string("Subfolder Separator"));
@@ -3920,6 +3920,13 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
         const LLUUID &marketplacelistings_id = model->findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
         move_folder_to_marketplacelistings(cat, marketplacelistings_id, ("move_to_marketplace_listings" != action), (("copy_or_move_to_marketplace_listings" == action)));
     }
+    else if ("copy_folder_uuid" == action)
+    {
+        LLInventoryCategory* cat = gInventory.getCategory(mUUID);
+        if (!cat) return;
+        gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(mUUID.asString()));
+        return;
+    }
     // <FS:Ansariel> FIRE-29342: Protect folder option
     else if ("protect_folder" == action)
     {
@@ -4638,14 +4645,9 @@ void LLFolderBridge::staticFolderOptionsMenu()
 
 bool LLFolderBridge::checkFolderForContentsOfType(LLInventoryModel* model, LLInventoryCollectFunctor& is_type)
 {
-    LLInventoryModel::cat_array_t cat_array;
-    LLInventoryModel::item_array_t item_array;
-    model->collectDescendentsIf(mUUID,
-                                cat_array,
-                                item_array,
+    return model->hasMatchingDescendents(mUUID,
                                 LLInventoryModel::EXCLUDE_TRASH,
                                 is_type);
-    return !item_array.empty();
 }
 
 void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items, menuentry_vec_t& disabled_items)
@@ -4866,21 +4868,26 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
         //Added by aura to force inventory pull on right-click to display folder options correctly. 07-17-06
         mCallingCards = mWearables = false;
 
-        LLIsType is_callingcard(LLAssetType::AT_CALLINGCARD);
-        if (checkFolderForContentsOfType(model, is_callingcard))
+        if (gInventory.getRootFolderID() != mUUID)
         {
-            mCallingCards=true;
+            LLIsType is_callingcard(LLAssetType::AT_CALLINGCARD);
+            if (checkFolderForContentsOfType(model, is_callingcard))
+            {
+                mCallingCards = true;
+            }
+
+            const std::vector<LLAssetType::EType> types = { LLAssetType::AT_CLOTHING, LLAssetType::AT_BODYPART, LLAssetType::AT_OBJECT, LLAssetType::AT_GESTURE };
+            LLIsOneOfTypes is_wearable(types);
+
+            if (checkFolderForContentsOfType(model, is_wearable))
+            {
+                mWearables = true;
+            }
         }
-
-        LLFindWearables is_wearable;
-        LLIsType is_object( LLAssetType::AT_OBJECT );
-        LLIsType is_gesture( LLAssetType::AT_GESTURE );
-
-        if (checkFolderForContentsOfType(model, is_wearable) ||
-            checkFolderForContentsOfType(model, is_object)   ||
-            checkFolderForContentsOfType(model, is_gesture)    )
+        else
         {
-            mWearables=true;
+            // Assume that there are wearables in the root folder
+            mWearables = true;
         }
     }
 // [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
@@ -4901,13 +4908,10 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
         LLFolderType::EType type = category->getPreferredType();
         const bool is_system_folder = LLFolderType::lookupIsProtectedType(type);
 
-        LLFindWearables is_wearable;
-        LLIsType is_object(LLAssetType::AT_OBJECT);
-        LLIsType is_gesture(LLAssetType::AT_GESTURE);
+        const std::vector<LLAssetType::EType> types = { LLAssetType::AT_CLOTHING, LLAssetType::AT_BODYPART, LLAssetType::AT_OBJECT, LLAssetType::AT_GESTURE };
+        LLIsOneOfTypes is_wearable(types);
 
-        if (checkFolderForContentsOfType(model, is_wearable) ||
-            checkFolderForContentsOfType(model, is_object) ||
-            checkFolderForContentsOfType(model, is_gesture))
+        if (checkFolderForContentsOfType(model, is_wearable))
         {
             mWearables = true;
         }
@@ -4927,6 +4931,14 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     if ((flags & FIRST_SELECTED_ITEM) == 0)
     {
         disabled_items.push_back(std::string("Delete System Folder"));
+    }
+    else
+    {
+        static LLCachedControl<bool> show_copy_id(gSavedSettings, "InventoryExposeFolderID", false);
+        if (show_copy_id())
+        {
+            items.push_back(std::string("Copy UUID"));
+        }
     }
 
     // <FS:AH/SJ> Don't offer sharing of trash folder (FIRE-1642, FIRE-6547)
@@ -5071,14 +5083,11 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 
     // wearables related functionality for folders.
     //is_wearable
-    LLFindWearables is_wearable;
-    LLIsType is_object( LLAssetType::AT_OBJECT );
-    LLIsType is_gesture( LLAssetType::AT_GESTURE );
+    const std::vector<LLAssetType::EType> types = { LLAssetType::AT_CLOTHING, LLAssetType::AT_BODYPART, LLAssetType::AT_OBJECT, LLAssetType::AT_GESTURE };
+    LLIsOneOfTypes is_wearable(types);
 
     if (mWearables ||
-        checkFolderForContentsOfType(model, is_wearable)  ||
-        checkFolderForContentsOfType(model, is_object) ||
-        checkFolderForContentsOfType(model, is_gesture) )
+        checkFolderForContentsOfType(model, is_wearable))
     {
         // Only enable add/replace outfit for non-system folders.
         if (!is_system_folder)
@@ -5900,7 +5909,7 @@ void LLFolderBridge::dropToMyOutfits(LLInventoryCategory* inv_cat, LLPointer<LLI
 
     // Note: creation will take time, so passing folder id to callback is slightly unreliable,
     // but so is collecting and passing descendants' ids
-    inventory_func_type func = boost::bind(&LLFolderBridge::outfitFolderCreatedCallback, this, inv_cat->getUUID(), _1, cb);
+    inventory_func_type func = boost::bind(outfitFolderCreatedCallback, inv_cat->getUUID(), _1, cb, mInventoryPanel);
     gInventory.createNewCategory(dest_id,
                                  LLFolderType::FT_OUTFIT,
                                  inv_cat->getName(),
@@ -5908,11 +5917,25 @@ void LLFolderBridge::dropToMyOutfits(LLInventoryCategory* inv_cat, LLPointer<LLI
                                  inv_cat->getThumbnailUUID());
 }
 
-void LLFolderBridge::outfitFolderCreatedCallback(LLUUID cat_source_id, LLUUID cat_dest_id, LLPointer<LLInventoryCallback> cb)
+void LLFolderBridge::outfitFolderCreatedCallback(LLUUID cat_source_id,
+                                                 LLUUID cat_dest_id,
+                                                 LLPointer<LLInventoryCallback> cb,
+                                                 LLHandle<LLInventoryPanel> inventory_panel)
 {
     LLInventoryModel::cat_array_t* categories;
     LLInventoryModel::item_array_t* items;
-    getInventoryModel()->getDirectDescendentsOf(cat_source_id, categories, items);
+
+    LLInventoryPanel* panel = inventory_panel.get();
+    if (!panel)
+    {
+        return;
+    }
+    LLInventoryModel*  model = panel->getModel();
+    if (!model)
+    {
+        return;
+    }
+    model->getDirectDescendentsOf(cat_source_id, categories, items);
 
     LLInventoryObject::const_object_list_t link_array;
 

@@ -3478,6 +3478,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
     capabilityNames.append("FetchInventory2");
     capabilityNames.append("FetchInventoryDescendents2");
     capabilityNames.append("IncrementCOFVersion");
+    capabilityNames.append("RequestTaskInventory");
     AISAPI::getCapNames(capabilityNames);
     } //</FS:Ansariel>
 
@@ -3984,6 +3985,13 @@ bool LLViewerRegion::bakesOnMeshEnabled() const
 
 bool LLViewerRegion::meshRezEnabled() const
 {
+    // <FS:Beq> FIRE-35602 and many similar reports - Mesh not appearing after TP/login
+    if(!mSimulatorFeaturesReceived)
+    {
+        LL_INFOS("MeshRez") << "MeshRezEnabled: SimulatorFeatures not received yet. Defaulting to true" << LL_ENDL;
+        return true;
+    }
+    // </FS:Beq>
     return (mSimulatorFeatures.has("MeshRezEnabled") &&
                 mSimulatorFeatures["MeshRezEnabled"].asBoolean());
 }

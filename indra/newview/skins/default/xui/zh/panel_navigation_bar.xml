@@ -8,7 +8,7 @@
 					<pull_button name="forward_btn" tool_tip="前往下一個位置" />
 					<button name="home_btn" tool_tip="傳送回我的家" />
 					<button name="About_Land" label="土地" tool_tip="打開土地資訊視窗" />
-					<button name="PersonalLighting" label="光照" tool_tip="打開個人照明視窗" />
+					<button name="PersonalLighting" label="光照" tool_tip="打開個人光照視窗" />
 				</layout_panel>
 				<layout_panel name="location_bar_visibility_panel">
 					<location_input label="位置" name="location_combo" />

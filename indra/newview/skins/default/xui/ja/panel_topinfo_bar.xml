@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="topinfo_bar">
+	<text name="parcel_info_text" value="（読み込んでいます…）"/>
+</panel>

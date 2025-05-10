@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings picker" title="自然環境設定を選択">
+<floater name="settings picker" title="選択：自然環境の設定">
 	<floater.string name="pick title">
 		選択：
 	</floater.string>
@@ -7,24 +7,24 @@
 		トラックを選択
 	</floater.string>
 	<floater.string name="pick_settings">
-		設定を選択
+		自然環境の設定を選択
 	</floater.string>
 	<floater.string name="track_water">
-		水
+		水面
 	</floater.string>
 	<floater.string name="track_ground">
-		地面
+		地表
 	</floater.string>
 	<floater.string name="track_sky">
-		空 [NUM]
+		スカイ[NUM]
 	</floater.string>
 	<layout_stack name="test_stack">
 		<layout_panel name="inv_list">
-			<filter_editor label="自然環境設定をフィルター" name="flt_inventory_search"/>
+			<filter_editor label="自然環境の設定をフィルタ" name="flt_inventory_search"/>
 		</layout_panel>
 		<layout_panel name="temp">
-			<button label="OK" label_selected="OK" name="btn_select"/>
-			<button label="取り消し" label_selected="取り消し" name="btn_cancel"/>
+			<button label="ＯＫ" label_selected="ＯＫ" name="btn_select"/>
+			<button label="キャンセル" label_selected="キャンセル" name="btn_cancel"/>
 		</layout_panel>
 	</layout_stack>
 </floater>

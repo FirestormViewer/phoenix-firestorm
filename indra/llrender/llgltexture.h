@@ -53,6 +53,11 @@ public:
         BOOST_AVATAR_BAKED  ,
         BOOST_TERRAIN       , // Needed for minimap generation for now. Lower than BOOST_HIGH so the texture stats don't get forced, i.e. texture stats are manually managed by minimap/terrain instead.
 
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+        BOOST_GRASS         , // Grass has a alternative calculation for virtual and face sizes.
+        BOOST_TREE          , // Tree has a alternative calculation for virtual and face sizes. 
+        BOOST_LIGHT         , // Light textures has a alternative calculation for virtual and face sizes.
+        // </FS:minerjr> [FIRE-35081]
         BOOST_HIGH          = 10,
         BOOST_SCULPTED      ,
         BOOST_BUMP          ,
@@ -101,6 +106,10 @@ public:
 
     void setBoostLevel(S32 level);
     S32  getBoostLevel() { return mBoostLevel; }
+    // <FS:minerjr>
+    void restoreBoostLevel(); // Now restores the mBoostLevel with the mPrevBoostLevel
+    void storeBoostLevel(); // Stores the current mBoostLevel in mPrevBoostLevel
+    // </FS:minerjr>
 
     S32 getFullWidth() const { return mFullWidth; }
     S32 getFullHeight() const { return mFullHeight; }
@@ -183,6 +192,10 @@ public:
 
 protected:
     S32 mBoostLevel;                // enum describing priority level
+    // <FS:minerjr>
+    // Added previous value to allow for restoring of BOOST_SELECTED overriding current state
+    S32 mPrevBoostLevel;            // enum describing priority level (Previous Value for BOOST_SELECTION restore)
+    // </FS:minerjr>
     U32 mFullWidth;
     U32 mFullHeight;
     bool mUseMipMaps;

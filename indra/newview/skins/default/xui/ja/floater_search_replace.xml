@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="search replace" title="検索／置き換え">
+	<check_box label="大文字と小文字を区別しない" name="case_text"/>
+	<check_box label="上に向かって検索" name="find_previous"/>
+	<button label="検索" label_selected="検索" name="search_btn"/>
+	<button label="置き換え" label_selected="置き換え" name="replace_btn"/>
+	<button label="すべて置き換え" label_selected="すべて置き換え" name="replace_all_btn"/>
+	<text name="txt">
+		検索
+	</text>
+	<text name="txt2">
+		置き換え
+	</text>
+</floater>

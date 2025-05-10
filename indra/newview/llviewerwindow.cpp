@@ -71,6 +71,7 @@
 #include "llchatentry.h"
 #include "indra_constants.h"
 #include "llassetstorage.h"
+#include "lldate.h"
 #include "llerrorcontrol.h"
 #include "llfontgl.h"
 #include "llmousehandler.h"
@@ -84,7 +85,6 @@
 #include "message.h"
 #include "object_flags.h"
 #include "lltimer.h"
-#include "llviewermenu.h"
 #include "lltooltip.h"
 #include "llmediaentry.h"
 #include "llurldispatcher.h"
@@ -92,7 +92,6 @@
 
 // newview includes
 #include "fscommon.h"
-#include "llagent.h"
 #include "llbox.h"
 #include "llchicletbar.h"
 #include "llconsole.h"
@@ -124,7 +123,6 @@
 #include "llfontfreetype.h"
 #include "llgesturemgr.h"
 #include "llglheaders.h"
-#include "lltooltip.h"
 #include "llhudmanager.h"
 #include "llhudobject.h"
 #include "llhudview.h"
@@ -140,7 +138,6 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h"
-#include "llnotificationhandler.h"
 // <FS:Zi> We don't use the mini location panel in Firestorm
 // #include "llpaneltopinfobar.h"
 #include "llpopupview.h"
@@ -174,17 +171,13 @@
 #include "lltoolselectland.h"
 #include "lltrans.h"
 #include "lluictrlfactory.h"
-#include "llurldispatcher.h"        // SLURL from other app instance
 #include "llversioninfo.h"
 #include "llvieweraudio.h"
-#include "llviewercamera.h"
 #include "llviewergesture.h"
 #include "llviewertexturelist.h"
 #include "llviewerinventory.h"
-#include "llviewerinput.h"
 #include "llviewermedia.h"
 #include "llviewermediafocus.h"
-#include "llviewermenu.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
@@ -224,8 +217,6 @@
 // </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
-// <FS:Zi> We don't use the mini location panel in Firestorm
-// #include "llpaneltopinfobar.h"
 #include "llcleanup.h"
 #include "llimview.h"
 #include "llviewermenufile.h"
@@ -529,9 +520,8 @@ public:
 
         clearText();
 
-        //if (gSavedSettings.getBOOL("DebugShowTime"))
-        static LLCachedControl<bool> debugShowTime(gSavedSettings, "DebugShowTime");
-        if (debugShowTime)
+        static LLCachedControl<bool> debug_show_time(gSavedSettings, "DebugShowTime", false);
+        if (debug_show_time())
         {
             // <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
             {
@@ -547,9 +537,8 @@ public:
             addText(xpos, ypos, llformat("Time: %d:%02d:%02d", hours,mins,secs)); ypos += y_inc;
         }
 
-        //if (gSavedSettings.getBOOL("DebugShowMemory"))
-        static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
-        if (debugShowMemory)
+        static LLCachedControl<bool> debug_show_memory(gSavedSettings, "DebugShowMemory", false);
+        if (debug_show_memory())
         {
             auto rss = LLMemory::getCurrentRSS() / 1024;
             addText(xpos, ypos,
@@ -649,9 +638,8 @@ public:
             ypos += y_inc;
         }*/
 
-        //if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
-        static LLCachedControl<bool> debugShowRenderInfo(gSavedSettings, "DebugShowRenderInfo");
-        if (debugShowRenderInfo)
+        static LLCachedControl<bool> debug_show_render_info(gSavedSettings, "DebugShowRenderInfo", false);
+        if (debug_show_render_info())
         {
             LLTrace::Recording& last_frame_recording = LLTrace::get_frame_recording().getLastRecording();
 
@@ -778,7 +766,7 @@ public:
                 ypos += y_inc;
 
                 // <FS:Ansariel> Mesh debugging
-                addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests));
+                addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests.load()));
                 ypos += y_inc;
                 // </FS:Ansariel>
 
@@ -802,8 +790,8 @@ public:
             // </FS:Beq>
             gPipeline.mNumVisibleNodes = LLPipeline::sVisibleLightCount = 0;
         }
-        static LLCachedControl<bool> sDebugShowAvatarRenderInfo(gSavedSettings, "DebugShowAvatarRenderInfo");
-        if (sDebugShowAvatarRenderInfo)
+        static LLCachedControl<bool> debug_show_avatar_render_info(gSavedSettings, "DebugShowAvatarRenderInfo", false);
+        if (debug_show_avatar_render_info())
         {
             std::map<std::string, LLVOAvatar*> sorted_avs;
             {
@@ -836,10 +824,8 @@ public:
                 av_iter++;
             }
         }
-
-        //if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
-        static LLCachedControl<bool> debugShowRenderMatrices(gSavedSettings, "DebugShowRenderMatrices");
-        if (debugShowRenderMatrices)
+        static LLCachedControl<bool> debug_show_render_matrices(gSavedSettings, "DebugShowRenderMatrices", false);
+        if (debug_show_render_matrices())
         {
             char camera_lines[8][32];
             memset(camera_lines, ' ', sizeof(camera_lines));
@@ -865,11 +851,12 @@ public:
             ypos += y_inc;
         }
         // disable use of glReadPixels which messes up nVidia nSight graphics debugging
-        //<FS:AO improve use of controls with radiogroups>
-        //if (gSavedSettings.getBOOL("DebugShowColor") && !LLRender::sNsightDebugSupport)
-        static LLCachedControl<S32> debugShowColor(gSavedSettings, "DebugShowColor");
-        //</FS:AO>
-        if (debugShowColor && !LLRender::sNsightDebugSupport)
+        // <FS:minerjr>
+        //static LLCachedControl<bool> debug_show_color(gSavedSettings, "DebugShowColor", false);
+        //if (debug_show_color() && !LLRender::sNsightDebugSupport)
+        static LLCachedControl<S32> debug_show_color(gSavedSettings, "DebugShowColor", 0); // <FS:minerjr> The value is stored as a S32 and not a Bool
+        if (debug_show_color == 1 && !LLRender::sNsightDebugSupport) // <FS:minerjr> Which causes an exception when in RelWithDebug
+        // </FS:minerjr>
         {
             U8 color[4];
             LLCoordGL coord = gViewerWindow->getCurrentMouse();
@@ -986,9 +973,8 @@ public:
             }
         }
 
-        //if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
-        static LLCachedControl<bool> debugShowTextureInfo(gSavedSettings, "DebugShowTextureInfo");
-        if (debugShowTextureInfo)
+        static LLCachedControl<bool> debug_show_texture_info(gSavedSettings, "DebugShowTextureInfo", false);
+        if (debug_show_texture_info())
         {
             LLViewerObject* objectp = NULL ;
 
@@ -1437,7 +1423,7 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
                                 // Check the whitelist, if there's media (otherwise just show it)
                                 if (te->getMediaData() == NULL || te->getMediaData()->checkCandidateUrl(url))
                                 {
-                                    if ( obj != mDragHoveredObject)
+                                    if ( obj != mDragHoveredObject.get())
                                     {
                                         // Highlight the dragged object
                                         LLSelectMgr::getInstance()->unhighlightObjectOnly(mDragHoveredObject);
@@ -1564,10 +1550,13 @@ void LLViewerWindow::handleMouseLeave(LLWindow *window)
 
 bool LLViewerWindow::handleCloseRequest(LLWindow *window)
 {
-    // User has indicated they want to close, but we may need to ask
-    // about modified documents.
-    LLAppViewer::instance()->userQuit();
-    // Don't quit immediately
+    if (!LLApp::isExiting() && !LLApp::isStopped())
+    {
+        // User has indicated they want to close, but we may need to ask
+        // about modified documents.
+        LLAppViewer::instance()->userQuit();
+        // Don't quit immediately
+    }
     return false;
 }
 
@@ -1711,7 +1700,8 @@ bool LLViewerWindow::handleActivate(LLWindow *window, bool activated)
         mActive = false;
 
         // if the user has chosen to go Away automatically after some time, then go Away when minimizing
-        if (gSavedSettings.getS32("AFKTimeout"))
+        static LLCachedControl<S32> afk_time(gSavedSettings, "AFKTimeout", 300);
+        if (afk_time())
         {
             gAgent.setAFK();
         }
@@ -1839,10 +1829,22 @@ bool LLViewerWindow::handleTimerEvent(LLWindow *window)
     return false;
 }
 
-bool LLViewerWindow::handleDeviceChange(LLWindow *window)
+// <FS:Dax> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
+// bool LLViewerWindow::handleDeviceChange(LLWindow* window)
+// {
+//     if (!LLViewerJoystick::getInstance()->isJoystickInitialized())
+//     {
+//         LLViewerJoystick::getInstance()->init(true);
+//         return true;
+//     }
+//     return false;
+// }
+// </FS>
+
+bool LLViewerWindow::handleDeviceChange(LLWindow *window, bool deviceRemoved) 
 {
     // give a chance to use a joystick after startup (hot-plugging)
-    if (!LLViewerJoystick::getInstance()->isJoystickInitialized() )
+    if (!deviceRemoved && !LLViewerJoystick::getInstance()->isJoystickInitialized())
     {
         LLViewerJoystick::getInstance()->init(true);
         return true;
@@ -1852,6 +1854,7 @@ bool LLViewerWindow::handleDeviceChange(LLWindow *window)
 
 bool LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
 {
+    LLFontGL::sResolutionGeneration++;
     if (ui_scale_factor >= MIN_UI_SCALE && ui_scale_factor <= MAX_UI_SCALE)
     {
         LLViewerWindow::reshape(window_width, window_height);
@@ -1863,6 +1866,12 @@ bool LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32
         LL_WARNS() << "DPI change caused UI scale to go out of bounds: " << ui_scale_factor << LL_ENDL;
         return false;
     }
+}
+
+bool LLViewerWindow::handleDisplayChanged()
+{
+    LLFontGL::sResolutionGeneration++;
+    return false;
 }
 
 bool LLViewerWindow::handleWindowDidChangeScreen(LLWindow *window)
@@ -2037,6 +2046,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     mDisplayScale.setVec(llmax(1.f / mWindow->getPixelAspectRatio(), 1.f), llmax(mWindow->getPixelAspectRatio(), 1.f));
     mDisplayScale *= ui_scale_factor;
     LLUI::setScaleFactor(mDisplayScale);
+    LLFontGL::sResolutionGeneration++;
 
     {
         LLCoordWindow size;
@@ -2094,33 +2104,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         LLFeatureManager::getInstance()->setGraphicsLevel(0, false);
         gSavedSettings.setU32("RenderQualityPerformance", 0);
     }
-
-    // <FS:Ansariel> Max texture resolution / Zi: changed this to accept pixel values so we are independent from maximum texture size
-    if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
-    {
-        // fallback value if no matching pixel size is found (i.e. someone fiddled with the debugs)
-        DESIRED_NORMAL_TEXTURE_SIZE = 512;
-
-        // clamp pixels between 512 and half the current maximum texture size
-        U32 pixels = llclamp(gSavedSettings.getU32("FSRestrictMaxTexturePixels"), 512, (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2);
-
-        // check pixel value against powers of 2 up to (not including) current maximum texture size
-        U32 pow_of_2 =  512;
-        while(pow_of_2 < (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT)
-        {
-            // power of 2 matches, save it
-            if (pixels == pow_of_2)
-            {
-                DESIRED_NORMAL_TEXTURE_SIZE = pixels;
-                break;
-            }
-
-            // next power of 2
-            pow_of_2 <<= 1;
-        }
-    }
-    LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_TEXTURE_SIZE << "px" << LL_ENDL;
-    // </FS:Ansariel>
 
     // Init the image list.  Must happen after GL is initialized and before the images that
     // LLViewerWindow needs are requested, as well as before LLViewerMedia starts updating images.
@@ -2785,6 +2768,7 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 
         bool display_scale_changed = mDisplayScale != LLUI::getScaleFactor();
         LLUI::setScaleFactor(mDisplayScale);
+        LLFontGL::sResolutionGeneration++;
 
         // update our window rectangle
         mWindowRectScaled.mRight = mWindowRectScaled.mLeft + ll_round((F32)width / mDisplayScale.mV[VX]);
@@ -5102,6 +5086,13 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
         // Call this once and only once
         LLSelectMgr::getInstance()->updateSilhouettes();
     }
+    // <FS:Beq> render the poser manipulator guides
+    // if we have something selected those toosl should override
+    if ( (!for_hud) && (selection->isEmpty()) && (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPose::getInstance()) )
+    {
+        FSToolCompPose::getInstance()->render();
+    }
+    // </FS:Beq>
 
     // Draw fence around land selections
     if (for_gl_pick)
@@ -5926,26 +5917,30 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
     }
 
     // Look for an unused file name
-    bool is_snapshot_name_loc_set = isSnapshotLocSet();
+    auto is_snapshot_name_loc_set = isSnapshotLocSet();
     std::string filepath;
-    S32 i = 1;
-    S32 err = 0;
-    std::string extension("." + image->getExtension());
+    auto i = 1;
+    auto err = 0;
+    auto extension("." + image->getExtension());
+    auto now = LLDate::now();
     do
     {
         filepath = sSnapshotDir;
         filepath += gDirUtilp->getDirDelimiter();
         filepath += sSnapshotBaseName;
-
-        if (is_snapshot_name_loc_set)
+// <FS:Beq> FIRE-35391 - Restore ability for snapshots saving with simple index number        
+// filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
+// filepath += llformat("%.2d", i);
+        if (gSavedSettings.getBOOL("FSSnapshotLocalNamesWithTimestamps"))
         {
-            filepath += llformat("_%.3d",i);
+            filepath += now.toLocalDateString("_%Y-%m-%d_%H%M%S");
         }
-
+        filepath += llformat("_%.3d", i);
+// </FS:Beq>
         filepath += extension;
 
         llstat stat_info;
-        err = LLFile::stat( filepath, &stat_info );
+        err = LLFile::stat(filepath, &stat_info);
         i++;
     }
     while( -1 != err  // Search until the file is not found (i.e., stat() gives an error).
@@ -7517,7 +7512,7 @@ void LLPickInfo::fetchResults()
             mObjectOffset = gAgentCamera.calcFocusOffset(objectp, v_intersection, mPickPt.mX, mPickPt.mY);
             mObjectID = objectp->mID;
             mObjectFace = (te_offset == NO_FACE) ? -1 : (S32)te_offset;
-
+            mPickHUD = objectp->isHUDAttachment();
 
 
             mPosGlobal = gAgent.getPosGlobalFromAgent(v_intersection);

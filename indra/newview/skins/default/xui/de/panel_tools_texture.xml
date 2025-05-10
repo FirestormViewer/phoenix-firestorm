@@ -29,12 +29,13 @@
 		Leuchten
 	</text>
 	<check_box label="Ganz hell" name="checkbox fullbright"/>
+	<check_box label="Wasser verst." name="checkbox_hide_water"/>
 	<button name="copy_face_btn" tool_tip="Textur-Parameter in Zwischenablage kopieren"/>
 	<button name="paste_face_btn" tool_tip="Textur-Parameter aus Zwischenablage einfügen"/>
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>
-	<text name="label_matmedia">
+	<!-- <text name="label_matmedia">
 		Material
-	</text>
+	</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Texturen" name="Materials"/>
 		<combo_box.item label="PBR metallische Unebenheit" name="PBR"/>
@@ -46,9 +47,11 @@
 		<radio_item label="Glanz (specular)" name="Shininess (specular)"/>
 	</radio_group>
 	<radio_group name="radio_pbr_type">
-		<radio_item label="Farbe/ausstrahlend" name="Color/emissive"/>
-		<radio_item label="Normal" name="Normal"/>
+		<radio_item label="Komplettes Material" name="Complete material"/>
+		<radio_item label="Basis-Farbe" name="Base color"/>
 		<radio_item label="Metallisch/Unenbenheit" name="Metallic/roughness"/>
+		<radio_item label="Ausstrahlend" name="Emissive"/>
+		<radio_item label="Normal" name="Normal"/>
 	</radio_group>
 	<texture_picker label="Material" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
 	<!-- <button name="pbr_from_inventory" label="Aus Inventory wählen"/> -->

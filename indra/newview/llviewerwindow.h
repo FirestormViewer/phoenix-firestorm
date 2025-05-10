@@ -134,6 +134,7 @@ public:
     bool            mPickParticle;
     bool            mPickUnselectable;
     bool            mPickReflectionProbe = false;
+    bool            mPickHUD{ false };
     void            getSurfaceInfo();
 
 private:
@@ -225,8 +226,9 @@ public:
     /*virtual*/ void handleWindowUnblock(LLWindow *window);
     /*virtual*/ void handleDataCopy(LLWindow *window, S32 data_type, void *data);
     /*virtual*/ bool handleTimerEvent(LLWindow *window);
-    /*virtual*/ bool handleDeviceChange(LLWindow *window);
+    /*virtual*/ bool handleDeviceChange(LLWindow *window, bool deviceRemoved); // <FS:Dax/> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
     /*virtual*/ bool handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height);
+    /*virtual*/ bool handleDisplayChanged();
     /*virtual*/ bool handleWindowDidChangeScreen(LLWindow *window);
 
     /*virtual*/ void handlePingWatchdog(LLWindow *window, const char * msg);

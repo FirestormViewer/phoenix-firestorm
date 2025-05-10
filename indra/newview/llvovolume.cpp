@@ -742,7 +742,10 @@ void LLVOVolume::animateTextures()
             {
                 LLFace* facep = mDrawable->getFace(i);
                 if (!facep) continue;
-                if(facep->getVirtualSize() <= MIN_TEX_ANIM_SIZE && facep->mTextureMatrix) continue;
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+                // Removed check for turning off animations
+                //if(facep->getVirtualSize() <= MIN_TEX_ANIM_SIZE && facep->mTextureMatrix) continue;
+                // </FS:minerjr> [FIRE-35081]
 
                 const LLTextureEntry* te = facep->getTextureEntry();
 
@@ -767,14 +770,21 @@ void LLVOVolume::animateTextures()
                 if (!facep->mTextureMatrix)
                 {
                     facep->mTextureMatrix = new LLMatrix4();
-                    if (facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+                    // Removed check for turning off animations
+                    //if (facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+                    // </FS:minerjr> [FIRE-35081]                    
                     {
                         // Fix the one edge case missed in
                         // LLVOVolume::updateTextureVirtualSize when the
                         // mTextureMatrix is not yet present
                         gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_TCOORD);
-                        mDrawable->getSpatialGroup()->dirtyGeom();
-                        gPipeline.markRebuild(mDrawable->getSpatialGroup());
+                        LLSpatialGroup* group = mDrawable->getSpatialGroup();
+                        if (group)
+                        {
+                            group->dirtyGeom();
+                            gPipeline.markRebuild(group);
+                        }
                     }
                 }
 
@@ -916,6 +926,10 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
     F32 min_vsize=999999999.f, max_vsize=0.f;
     LLViewerCamera* camera = LLViewerCamera::getInstance();
     std::stringstream debug_text;
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+    // Use this flag to indicate that there was a legit change to 0.0 for the mPixelArea (All faces off screen)
+    bool changed = false;
+    // </FS:minerjr> [FIRE-35081]
     for (S32 i = 0; i < num_faces; i++)
     {
         LLFace* face = mDrawable->getFace(i);
@@ -964,6 +978,13 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 
         mPixelArea = llmax(mPixelArea, face->getPixelArea());
 
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+        // If the new area is changed from the old area, then accept it.
+        if (mPixelArea != old_area)
+        {
+            changed = true;
+        }
+        // </FS:minerjr> [FIRE-35081]
         // if the face has gotten small enough to turn off texture animation and texture
         // animation is running, rebuild the render batch for this face to turn off
         // texture animation
@@ -1052,7 +1073,10 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
     {
         LLLightImageParams* params = (LLLightImageParams*) getParameterEntry(LLNetworkData::PARAMS_LIGHT_IMAGE);
         LLUUID id = params->getLightTexture();
-        mLightTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE);
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+        // Light textures should be treaded not the same as normal LOD textures
+        mLightTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, true, LLGLTexture::BOOST_LIGHT);
+        // </FS:minerjr> [FIRE-35081]
         if (mLightTexture.notNull())
         {
             F32 rad = getLightRadius();
@@ -1102,7 +1126,11 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
         setDebugText(output);
     }
 
-    if (mPixelArea == 0)
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+    //if (mPixelArea == 0)
+    // If there is a legit change to 0.0, don't dismiss it.
+    if (mPixelArea == 0 && !changed)
+    // </FS:minerjr> [FIRE-35081]
     { //flexi phasing issues make this happen
         mPixelArea = old_area;
     }
@@ -2636,10 +2664,11 @@ S32 LLVOVolume::setTEMaterialID(const U8 te, const LLMaterialID& pMaterialID)
 S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams)
 {
     S32 res = LLViewerObject::setTEMaterialParams(te, pMaterialParams);
-
-    LL_DEBUGS("MaterialTEs") << "te " << (S32)te << " material " << ((pMaterialParams) ? pMaterialParams->asLLSD() : LLSD("null")) << " res " << res
-                             << ( LLSelectMgr::getInstance()->getSelection()->contains(const_cast<LLVOVolume*>(this), te) ? " selected" : " not selected" )
-                             << LL_ENDL;
+    // <FS:Beq> Remove debug logging that is more expensive than the call itself even when disabled
+    // LL_DEBUGS("MaterialTEs") << "te " << (S32)te << " material " << ((pMaterialParams) ? pMaterialParams->asLLSD() : LLSD("null")) << " res " << res
+    //                          << ( LLSelectMgr::getInstance()->getSelection()->contains(const_cast<LLVOVolume*>(this), te) ? " selected" : " not selected" )
+    //                          << LL_ENDL;
+    // </FS:Beq>
     setChanged(ALL_CHANGED);
     if (!mDrawable.isNull())
     {
@@ -5434,7 +5463,10 @@ bool can_batch_texture(LLFace* facep)
         return false;
     }
 
-    if (facep->isState(LLFace::TEXTURE_ANIM) && facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+    // Removed check for turning off animations
+    if (facep->isState(LLFace::TEXTURE_ANIM))//&& facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // </FS:minerjr> [FIRE-35081] 
     { //texture animation breaks batches
         return false;
     }
@@ -5581,7 +5613,10 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
     }
 
     const LLMatrix4* tex_mat = NULL;
-    if (facep->isState(LLFace::TEXTURE_ANIM) && facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
+    // Removed check for turning off animations
+    if (facep->isState(LLFace::TEXTURE_ANIM)) //&& facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
+    // </FS:minerjr> [FIRE-35081]
     {
         tex_mat = facep->mTextureMatrix;
     }
@@ -5628,14 +5663,6 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
     auto* gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
     llassert(gltf_mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(te->getGLTFRenderMaterial()) != nullptr);
-
-    // <FS:Beq> show legacy when editing the fallback materials.
-    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
-    if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
-    {
-        gltf_mat = nullptr;
-    }
-    // </FS:Beq>
 
     if (gltf_mat != nullptr)
     {
@@ -6062,21 +6089,24 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     continue;
                 }
-                // <FS:Beq> FIRE-34589 - OpenSim crashes due to null facep. Only opensim, not sure why.
-                // LLFetchedGLTFMaterial *gltf_mat = (LLFetchedGLTFMaterial*) facep->getTextureEntry()->getGLTFRenderMaterial();
-                auto te = facep->getTextureEntry();
-                LLFetchedGLTFMaterial *gltf_mat = nullptr;
+
+                LLFetchedGLTFMaterial* gltf_mat = nullptr;
+                const LLTextureEntry* te = facep->getTextureEntry();
                 if (te)
                 {
                     gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
-                }
-                // </FS:Beq>
+                } // if not te, continue?
                 bool is_pbr = gltf_mat != nullptr;
 
                 if (is_pbr)
                 {
                     // tell texture streaming system to ignore blinn-phong textures
-                    facep->setTexture(LLRender::DIFFUSE_MAP, nullptr);
+                    // except the special case of the diffuse map containing a
+                    // media texture that will be reused for swapping on to the pbr face
+                    if (!facep->hasMedia())
+                    {
+                        facep->setTexture(LLRender::DIFFUSE_MAP, nullptr);
+                    }
                     facep->setTexture(LLRender::NORMAL_MAP, nullptr);
                     facep->setTexture(LLRender::SPECULAR_MAP, nullptr);
 
@@ -6132,13 +6162,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 {
                     cur_total += facep->getGeomCount();
 
-                    const LLTextureEntry* te = facep->getTextureEntry();
                     LLViewerTexture* tex = facep->getTexture();
 
-                    // <FS:ND> More crash avoding ...
-                    // if (te->getGlow() > 0.f)
                     if (te && te->getGlow() > 0.f)
-                    // </FS:ND>
                     {
                         emissive = true;
                     }
@@ -6237,11 +6263,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                             facep->mLastUpdateTime = gFrameTimeSeconds;
                         }
 
+                        if (te)
                         {
-                            // <FS> Skip if no te entry
-                            if (!te)
-                                continue;
-
                             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
                             if (gltf_mat != nullptr || (te->getMaterialParams().notNull()))
@@ -6304,6 +6327,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                                 facep->setState(LLFace::FULLBRIGHT);
                                 add_face(sFullbrightFaces, fullbright_count, facep);
                             }
+                        }
+                        else // no texture entry
+                        {
+                            facep->setState(LLFace::FULLBRIGHT);
+                            add_face(sFullbrightFaces, fullbright_count, facep);
                         }
                     }
                 }
@@ -6846,14 +6874,6 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             const LLTextureEntry* te = facep->getTextureEntry();
             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
-            // <FS:Beq> show legacy when editing the fallback materials.
-            static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
-            if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
-            {
-                gltf_mat = nullptr;
-            }
-            // </FS:Beq>
-
             if (hud_group && gltf_mat == nullptr)
             { //all hud attachments are fullbright
                 fullbright = true;
@@ -7073,8 +7093,11 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             { //shiny
                 if (tex && tex->getPrimaryFormat() == GL_ALPHA) // <FS:Beq/> [FIRE-34534] guard additional cases of tex == null
                 { //invisiprim+shiny
-                    registerFace(group, facep, LLRenderPass::PASS_INVISI_SHINY);
-                    registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    if (!facep->getViewerObject()->isAttachment() && !facep->getViewerObject()->isRiggedMesh())
+                    {
+                        registerFace(group, facep, LLRenderPass::PASS_INVISI_SHINY);
+                        registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    }
                 }
                 else if (!hud_group)
                 { //deferred rendering
@@ -7110,7 +7133,10 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             { //not alpha and not shiny
                 if (!is_alpha && tex && tex->getPrimaryFormat() == GL_ALPHA) // <FS:Beq/> FIRE-34540 bugsplat crash caused by tex==nullptr. This stops the crash, but should we continue and leave the face unregistered instead of falling through?
                 { //invisiprim
-                    registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    if (!facep->getViewerObject()->isAttachment() && !facep->getViewerObject()->isRiggedMesh())
+                    {
+                        registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
+                    }
                 }
                 else if (fullbright || bake_sunlight)
                 { //fullbright

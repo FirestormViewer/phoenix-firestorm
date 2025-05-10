@@ -7,9 +7,6 @@
 					Configuración Windlight
 				</text>
 			</panel>
-			<panel name="P_WL_Settings">
-				<check_box label="Activar efectos atmosféricos (Windlight)" name="WindLightUseAtmosShaders" tool_tip="Esto activa la funcionalidad completa de Windlight (efectos atmosféricos). Si no puedes activar esta característica, asegúrate de que los efectos básicos están activados."/>
-			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Configuraciones Windlight para el cielo">
 					Cielo WL
@@ -24,7 +21,6 @@
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="Cambia la hora del día. NOTA: ¡ESTO SUELE RESTABLECER WINDLIGHT A LA CONFIGURACIÓN POR DEFECTO! Para cambiar la posición del sol para una configuración Windlight específica, selecciona 'Nueva configuración de cielo' o 'Editar configuración de cielo' del menú de abajo."/>
 				<multi_slider name="WLSunPos" tool_tip="Esto podría no funcionar correctamente. Usa 'Nueva configuración de cielo' o 'Editar configuración de cielo' si encuentras dificultades."/>
-				<button name="ResetToRegionDefault" tool_tip="Restablece Windlight a las opciones por defecto de la región."/>
 			</panel>
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">

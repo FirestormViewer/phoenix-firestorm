@@ -330,6 +330,7 @@ S32 LLImageGL::dataFormatBits(S32 dataformat)
     case GL_RGB:                                    return 24;
     case GL_SRGB:                                   return 24;
     case GL_RGB8:                                   return 24;
+    case GL_R11F_G11F_B10F:                         return 32;
     case GL_RGBA:                                   return 32;
     case GL_RGBA8:                                  return 32;
     case GL_RGB10_A2:                               return 32;
@@ -640,6 +641,11 @@ bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
             if(discard_level > 0)
             {
                 mMaxDiscardLevel = llmax(mMaxDiscardLevel, (S8)discard_level);
+                // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
+                // 2K textures could set the mMaxDiscardLevel above MAX_DISCARD_LEVEL, which would
+                // cause them to not be down-scaled so they would get stuck at 0 discard all the time.
+                mMaxDiscardLevel = llmax(mMaxDiscardLevel, (S8)MAX_DISCARD_LEVEL);
+                // </FS:minerjr> [FIRE-35361]
             }
         }
         else
@@ -1773,7 +1779,7 @@ void LLImageGL::syncToMainThread(LLGLuint new_tex_name)
     ref();
     LL::WorkQueue::postMaybe(
         mMainQueue,
-        [=]()
+        [=, this]()
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - delete callback");
             syncTexName(new_tex_name);
