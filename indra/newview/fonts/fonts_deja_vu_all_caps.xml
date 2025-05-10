@@ -7,7 +7,6 @@
     <file functor="is_emoji_use_bw">NotoEmoji-Regular.ttf</file>
     <os name="Windows">
       <file load_collection="true">YuGothM.ttc</file>
-      <file>Seguiemj.ttf</file>
       <file>meiryo.TTC</file>
       <file>MSGOTHIC.TTC</file>
       <file>gulim.ttc</file>

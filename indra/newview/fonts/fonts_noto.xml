@@ -8,7 +8,6 @@
     <file load_collection="true">NotoSansCJK-Regular.ttc</file>
     <os name="Windows">
       <file load_collection="true">YuGothM.ttc</file>
-      <file>Seguiemj.ttf</file>
       <file>meiryo.TTC</file>
       <file>MSGOTHIC.TTC</file>
       <file>gulim.ttc</file>
