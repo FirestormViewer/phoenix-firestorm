@@ -5863,4 +5863,8 @@ Detaillierte Instruktionen zum whitelisten von [APP_NAME] - inklusive einer List
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ConfirmPoserOverwrite">
+		Bestehende Pose „[POSE_NAME]“ überschreiben?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
+	</notification>
 </notifications>
