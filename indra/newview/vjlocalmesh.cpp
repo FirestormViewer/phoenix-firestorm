@@ -26,6 +26,7 @@
 
 // linden headers
 #include "llviewerprecompiledheaders.h"
+
 #include "llcallbacklist.h"
 #include "llsdutil.h"
 #include "llviewerobjectlist.h"
@@ -56,7 +57,7 @@
 /*  values for indices, bounding box and    */
 /*  vtx pos, normals, uv coords, weights.   */
 /*==========================================*/
-void LLLocalMeshFace::setFaceBoundingBox(LLVector4 data_in, bool initial_values)
+void LLLocalMeshFace::setFaceBoundingBox(const LLVector4& data_in, bool initial_values)
 {
     if (initial_values)
     {
@@ -113,7 +114,7 @@ void LLLocalMeshFace::logFaceInfo() const
     }
     ss_norm << "]";
     LL_DEBUGS("LocalMesh") << "  mFaceNormals: " << ss_norm.str() << LL_ENDL;
-    int i = 0;
+    S32 i = 0;
     for (const auto& skinUnit : mSkin)
     {
         // log the mJointIncdices and mJointWeights as "num: idx = weight" for each entry in th skinUnit vector
@@ -166,8 +167,6 @@ void LLLocalMeshObject::logObjectInfo() const
     // }
 }
 
-
-
 void LLLocalMeshObject::computeObjectBoundingBox()
 {
     // for the purposes of a bounding box, we only care for LOD3
@@ -195,14 +194,12 @@ void LLLocalMeshObject::computeObjectBoundingBox()
     {
         const auto& [current_bbox_min, current_bbox_max] = lod3_faces[face_iter]->getFaceBoundingBox();
 
-
         for (size_t array_iter = 0; array_iter < 4; ++array_iter)
         {
             mObjectBoundingBox.first.mV[array_iter] = std::min(mObjectBoundingBox.first.mV[array_iter], current_bbox_min.mV[array_iter]);
             mObjectBoundingBox.second.mV[array_iter] = std::max(mObjectBoundingBox.second.mV[array_iter], current_bbox_max.mV[array_iter]);
         }
     }
-
 }
 
 void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
@@ -219,7 +216,7 @@ void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
     mObjectSize = mObjectBoundingBox.second - mObjectBoundingBox.first;
 
     // make sure all axes of mObjectSize are non zero (don't adjust the 4th dim)
-    for ( int i=0; i <3; i++ )
+    for (S32 i = 0; i < 3; i++)
     {
         auto& axis_size = mObjectSize[i];
         // set size of 1.0 if < F_APPROXIMATELY_ZERO
@@ -228,9 +225,10 @@ void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
             axis_size = 1.0f;
         }
     }
+
     // object scale is the inverse of the object size
     mObjectScale.set(1.f, 1.f, 1.f,1.f);
-    for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
+    for (S32 vec_iter = 0; vec_iter < 4; ++vec_iter)
     {
         mObjectScale[vec_iter] /= mObjectSize[vec_iter];
     }
@@ -258,7 +256,7 @@ void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
         current_submesh_bbox.second += mObjectTranslation;
 
         LL_INFOS("LocalMesh") << "before squish:" << current_submesh_bbox.first << " " << current_submesh_bbox.second << LL_ENDL;
-        for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
+        for (S32 vec_iter = 0; vec_iter < 4; ++vec_iter)
         {
             current_submesh_bbox.first.mV[vec_iter] *= mObjectScale.mV[vec_iter];
             current_submesh_bbox.second.mV[vec_iter] *= mObjectScale.mV[vec_iter];
@@ -270,7 +268,7 @@ void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
         for (auto& current_position : current_face_positions)
         {
             current_position += mObjectTranslation;
-            for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
+            for (S32 vec_iter = 0; vec_iter < 4; ++vec_iter)
             {
                 current_position.mV[vec_iter] *= mObjectScale.mV[vec_iter];
             }
@@ -455,7 +453,8 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
     pushLog("LLLocalMeshFile", "Initializing with base filename: " + base_lod_filename);
 
     // check if main filename exists, just in case
-    if (!boost::filesystem::exists(filename))
+    boost::system::error_code ec;
+    if (!boost::filesystem::exists(filename, ec) || ec.failed())
     {
         // filename provided doesn't exist, just stop.
         mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
@@ -468,8 +467,7 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 
     // check if we have a valid extension, can't switch with string can we?
     auto path = boost::filesystem::path(filename);
-    if (std::string exten_str = path.extension().string();
-    boost::iequals(exten_str, ".dae") )
+    if (std::string exten_str = path.extension().string(); boost::iequals(exten_str, ".dae"))
     {
         mExtension = LLLocalMeshFileExtension::EXTEN_DAE;
         pushLog("LLLocalMeshFile", "Extension found: COLLADA");
@@ -522,9 +520,11 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
     mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_LOADING;
     mLocalMeshFileNeedsUIUpdate = true;
 
+    boost::system::error_code ec;
+
     // another recheck that mFilenames[3] main file is present,
     // in case the file got deleted and the user hits reload - it'll error out here.
-    if (!boost::filesystem::exists(mFilenames[LOCAL_LOD_HIGH]))
+    if (!boost::filesystem::exists(mFilenames[LOCAL_LOD_HIGH]) || ec.failed())
     {
         // filename provided doesn't exist, just stop.
         mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
@@ -547,8 +547,8 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
                 auto lod_suffix { getLodSuffix(lodfile_iter) };
                 auto extension { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).extension() };
 
-                boost::filesystem::path current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
-                if ( boost::filesystem::exists( current_lod_filename ) )
+                boost::filesystem::path   current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
+                if (boost::filesystem::exists(current_lod_filename, ec) && !ec.failed())
                 {
                     pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename.string() + " found, adding.");
                     mFilenames[lodfile_iter] = current_lod_filename.string();
@@ -729,14 +729,14 @@ bool LLLocalMeshFile::updateLastModified(LLLocalMeshFileLOD lod)
     LLSD current_last_modified = mLastModified[lod];
     std::string current_filename = mFilenames[lod];
 
+    boost::system::error_code ec;
     #ifndef LL_WINDOWS
-        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(current_filename));
+        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(current_filename), ec);
     #else
-        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(utf8str_to_utf16str(current_filename)));
+        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(utf8str_to_utf16str(current_filename)), ec);
     #endif
 
-
-    if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString())
+    if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString() && !ec.failed())
     {
         file_updated = true;
         mLastModified[lod] = new_last_modified;
@@ -771,11 +771,10 @@ LLLocalMeshFile::LLLocalMeshFileInfo LLLocalMeshFile::getFileInfo()
     if (mLocalMeshFileStatus == LLLocalMeshFileStatus::STATUS_ACTIVE)
     {
         // fill object list
-        auto& vector_objects = getObjectVector();
-        for (auto& current_object : vector_objects)
+        const auto& vector_objects = getObjectVector();
+        for (const auto& current_object : vector_objects)
         {
-            std::string object_name = current_object->getObjectName();
-            result.mObjectList.push_back(object_name);
+            result.mObjectList.emplace_back(current_object->getObjectName());
         }
     }
 
@@ -925,7 +924,7 @@ void LLLocalMeshSystem::addFile(const std::string& filename, bool try_lods)
     triggerCheckFileAsyncStatus();
 }
 
-void LLLocalMeshSystem::deleteFile(LLUUID local_file_id)
+void LLLocalMeshSystem::deleteFile(const LLUUID& local_file_id)
 {
     bool delete_done = false;
     for(auto iterator = mLoadedFileList.begin(); iterator != mLoadedFileList.end();)
@@ -959,7 +958,7 @@ void LLLocalMeshSystem::deleteFile(LLUUID local_file_id)
     }
 }
 
-void LLLocalMeshSystem::reloadFile(LLUUID local_file_id)
+void LLLocalMeshSystem::reloadFile(const LLUUID& local_file_id)
 {
     bool reload_started = false;
     for (auto iterator = mLoadedFileList.begin(); iterator != mLoadedFileList.end(); ++iterator)
@@ -988,7 +987,7 @@ void LLLocalMeshSystem::reloadFile(LLUUID local_file_id)
     }
 }
 
-void LLLocalMeshSystem::applyVObject(LLUUID viewer_object_id, LLUUID local_file_id, int object_index, bool use_scale)
+void LLLocalMeshSystem::applyVObject(const LLUUID& viewer_object_id, const LLUUID& local_file_id, int object_index, bool use_scale)
 {
     for (auto& loaded_file : mLoadedFileList)
     {
@@ -1000,7 +999,7 @@ void LLLocalMeshSystem::applyVObject(LLUUID viewer_object_id, LLUUID local_file_
     }
 }
 
-void LLLocalMeshSystem::clearVObject(LLUUID viewer_object_id)
+void LLLocalMeshSystem::clearVObject(const LLUUID& viewer_object_id)
 {
     auto target_object = (LLVOVolume*)gObjectList.findObject(viewer_object_id);
     if (!target_object)
@@ -1099,27 +1098,24 @@ std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> LLLocalMeshSystem::getFileInfo
 {
     std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> result;
 
-    for (auto& current_file : mLoadedFileList)
+    for (const auto& current_file : mLoadedFileList)
     {
-        result.push_back(current_file->getFileInfo());
+        result.emplace_back(current_file->getFileInfo());
     }
 
     return result;
 }
 
-std::vector<std::string> LLLocalMeshSystem::getFileLog(LLUUID local_file_id) const
+std::vector<std::string> LLLocalMeshSystem::getFileLog(const LLUUID& local_file_id) const
 {
-    std::vector<std::string> result;
-
-    for (auto& current_file : mLoadedFileList)
+    for (const auto& current_file : mLoadedFileList)
     {
         if (current_file->getFileID() == local_file_id)
         {
-            result = current_file->getFileLog();
-            break;
+            return current_file->getFileLog();
         }
     }
 
-    return result;
+    return {};
 }
 
