@@ -91,6 +91,7 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
         }
 
         // Write out all other categories
+        // BugSplat chaanged the XML format and there is no strict category support now. For now we'll prefix the category to each attribute
         for (const auto& cat_pair : mAttributes)
         {
             const std::string& category = cat_pair.first;
@@ -101,14 +102,12 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
                 continue;
             }
 
-            ofs << "    <" << category << ">\n";
             for (const auto& kv : cat_pair.second)
             {
                 const std::string& key = kv.first;
                 const std::string& val = kv.second;
-                ofs << "        <" << key << ">" << val << "</" << key << ">\n";
+                ofs << "    <" << category << "-" << key << ">" << val << "</" << category << "-" << key << ">\n";
             }
-            ofs << "    </" << category << ">\n";
         }
 
         ofs << "</XmlCrashContext>\n";
