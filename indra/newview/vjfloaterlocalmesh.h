@@ -27,10 +27,12 @@
 #pragma once
 
 #include "llfloater.h"
+#include "llselectmgr.h"
 #include "lltabcontainer.h"
 
-class LLObjectSelection;
 class LLFloaterLocalMeshFilePicker;
+class LLScrollListCtrl;
+class LLTextEditor;
 
 class LLFloaterLocalMesh : public LLFloater
 {

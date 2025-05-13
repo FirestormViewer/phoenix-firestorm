@@ -35,7 +35,6 @@
 #include "llcheckboxctrl.h"
 #include "llviewertexteditor.h"
 #include "llcombobox.h"
-#include "llselectmgr.h"
 #include "lltoolmgr.h"
 #include "lltoolcomp.h"
 #include "llmodelpreview.h"
