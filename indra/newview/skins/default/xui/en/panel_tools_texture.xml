@@ -110,12 +110,12 @@
              top_pad="4"
              width="81" />
             <check_box
-             height="19"
+             height="17"
              label="Hide water"
              layout="topleft"
-             left="172"
+             left="7"
              name="checkbox_hide_water"
-             top_delta="0"
+             top_pad="0"
              width="81" />
             <button
              follows="top|right"
@@ -144,6 +144,7 @@
              top_pad="5"
              width="25">
             </button>
+            <!-- FS:Ansariel: Removed to make enough room
             <text
              type="string"
              length="1"
@@ -156,6 +157,7 @@
              width="90">
                 Material
             </text>
+            -->
             <combo_box
              height="23"
              layout="topleft"
@@ -973,7 +975,7 @@
              height="19"
              initial_value="1"
              label="Scale u"
-             label_width="205"
+             label_width="195"
              layout="topleft"
              left="10"
              min_val="-100"
@@ -986,7 +988,7 @@
              height="19"
              initial_value="1"
              label="Scale v"
-             label_width="205"
+             label_width="195"
              layout="topleft"
              left="10"
              min_val="-100"
@@ -998,7 +1000,7 @@
              height="19"
              initial_value="0"
              label="Rotation"
-             label_width="205"
+             label_width="195"
              layout="topleft"
              left="10"
              min_val="-360"
@@ -1011,7 +1013,7 @@
              height="19"
              initial_value="0"
              label="Offset u"
-             label_width="205"
+             label_width="195"
              layout="topleft"
              left="10"
              min_val="-999"
@@ -1023,7 +1025,7 @@
              height="19"
              initial_value="0"
              label="Offset v"
-             label_width="205"
+             label_width="195"
              layout="topleft"
              left="10"
              min_val="-999"

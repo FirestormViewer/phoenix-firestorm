@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="preview_anim">
 	<floater.string name="Title">
-		アニメーション： [NAME]
+		アニメーション：[NAME]
 	</floater.string>
+	<!-- <FS:Zi> panel that holds the basic animation info and gives size hints to the code -->
 	<panel name="basic_info_panel">
 		<text name="desc txt">
 			説明：
 		</text>
-		<button label="インワールドで再生" label_selected="停止" name="Inworld" tool_tip="他人に見えるように再生"/>
-		<button label="ローカル再生" label_selected="停止" name="Locally" tool_tip="自分だけが見えるように再生"/>
+		<button label="インワールドで再生" label_selected="停止" name="Inworld" tool_tip="他人から見えるように再生します。"/>
+		<button label="ローカルで再生" label_selected="停止" name="Locally" tool_tip="自分だけが見えるように再生します。"/>
+		<button name="btn_expand" tool_tip="このアニメーションの詳細情報を表示するには展開してください・"/>
+	</panel>
+	<!-- <FS:Zi> panel that holds the (optional) advanced animation info and gives size hints to the code -->
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
+優先度：[PRIORITY]
+長さ：[DURATION]秒
+ループ：[IS_LOOP]
+		</text>
+		<text name="AdvancedStatsRight">
+イースイン：[EASE_IN]秒
+イースアウト：[EASE_OUT]秒
+ジョイント数：[NUM_JOINTS]
+		</text>
 	</panel>
 </floater>

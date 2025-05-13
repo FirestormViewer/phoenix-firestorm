@@ -2,7 +2,7 @@
 <panel name="avatar_tag_notification">
 	<panel name="msg_caption">
 		<text name="sender_tag_name">
-			Angela Tester
+			アンジェラ・テスター
 		</text>
 		<text name="tag_time" value="23：30"/>
 	</panel>

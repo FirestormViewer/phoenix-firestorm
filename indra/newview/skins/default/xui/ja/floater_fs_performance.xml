@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="グラフィックの最適化">
+	<floater.string name="frame_stats">
+		フレーム：[TOT_FRAME_TIME]㎳‐背景：[SCENERY_FRAME_PCT]％　アバター：[AV_FRAME_PCT]％　ＵＩ[UI_FRAME_PCT]％　ＨＵＤ：[HUDS_FRAME_PCT]％　スワップ：[SWAP_FRAME_PCT]％　タスク：[IDLE_FRAME_PCT]％
+	</floater.string>
+	<floater.string name="limit_fps">
+		ユーザによる制限＠[FPSCAP]ＦＰＳ
+	</floater.string>
+	<floater.string name="tuning_fps">
+		目標[FPSTARGET]ＦＰＳ
+	</floater.string>
+	<floater.string name="av_frame_pct">
+		[AV_FRAME_PCT]％
+	</floater.string>
+	<floater.string name="huds_frame_pct">
+		[HUDS_FRAME_PCT]％
+	</floater.string>
+	<floater.string name="focus_fps">
+		バックグラウンド時
+	</floater.string>
+	<floater.string name="info_waitforit">
+		変更が完全に反映されるまで５～１０秒程度かかります。
+	</floater.string>
+	<floater.string name="info_frozen">
+		ＦＰＳ制限時やバックグラウンド時は、統計は一時停止します。
+	</floater.string>
+	<floater.string name="tot_av_template">
+		総計：[TOT_AV]（[TOT_AV_TIME]㎲）
+	</floater.string>
+	<floater.string name="tot_att_template">
+		総計：[TOT_ATT]（[TOT_ATT_TIME]㎲）
+	</floater.string>
+	<flaoter.string name="fps_text" value="フレーム／秒"/>
+	<floater.string name="max_fps" value="垂直同期＠[VSYNCFREQ]ＦＰＳ"/>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				フレーム／秒
+			</text>
+			<text name="fps_warning">
+				ユーザによる制限＠[FPSCAP]ＦＰＳ
+			</text>
+			<text name="fps_desc1_lbl">
+				ＦＰＳ制限時やバックグラウンド時は、統計は一時停止します。
+			</text>
+			<text name="frame_breakdown">
+				［─────────フレームの内訳がここに表示されます。─────────］
+			</text>
+		</panel>
+		<panel name="target_subpanel">
+			<text name="settings_lbl" tool_tip="ＦＰＳを維持するために設定を自動的に調整します。目標を希望のフレームレートに設定すると、ビューアは設定を動的に変更してこれに一致させようとします。">
+				自動調整：
+			</text>
+			<text name="targetfps_desc">
+				目標フレームレート（ｆｐｓ）
+			</text>
+			<spinner name="target_fps" tool_tip="目標ＦＰＳ‐希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。"/>
+			<button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。"/>
+			<check_box label="継続的に" name="AutoTuneContinuous" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。"/>
+			<button name="PrefSaveButton" tool_tip="将来使用するために、現在の設定をデフォルトとして保存します。"/>
+			<button name="PrefLoadButton" tool_tip="既存のプリセットを読み込みます。"/>
+			<!--Reset Button-->
+			<button tool_tip="お使いのハードウェアのデフォルトのグラフィック設定でリロードします。" name="Defaults"/>
+			<text name="settings_desc">
+				チューニング戦略
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="アバターのみ" name="av_only"/>
+				<combo_box.item label="アバターとシーン" name="av_and_scene" />
+			</combo_box>
+			<button name="target_btn" tool_tip="チューニング戦略の動作を変更します。"/>
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				グラフィック設定
+			</text>
+			<text name="settings_desc">
+				距離や水、光源などの設定を選んでください。
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				近くのアバター
+			</text>
+			<text name="avatars_nearby_desc">
+				近くにいるアバターのうち、どのタイプのアバターを完全に表示するかを管理します。
+			</text>
+			<text name="avatars_frme_pct_lbl">
+				アバターの
+描画に
+かかった時間
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				アバターの複雑度
+			</text>
+			<text name="complexity_info">
+				良い市民は、自分のアバターが与える影響を管理します。
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				アクティブなＨＵＤ
+			</text>
+			<text name="huds_desc">
+				使用していないＨＵＤを外すと、速度が向上する可能性があります。
+			</text>
+			<text name="huds_frme_pct_lbl">
+				ＨＵＤの
+描画に
+かかった時間
+			</text>
+		</panel>
+	</panel>
+</floater>

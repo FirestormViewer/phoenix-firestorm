@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater min_width="450" name="inspect" title="オブジェクトのチェック">
+<floater name="inspect" title="オブジェクトの調査">
 	<floater.string name="timeStamp">
-		[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+		[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）[hour,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
+	</floater.string>
+	<floater.string name="Group">
+		（グループ）
 	</floater.string>
 	<floater.string name="stats_list">
-        全体の東経:
+		統計情報：
 
-[NUM_OBJECTS] オブジェクト, [NUM_PRIMS] プリム
+[NUM_OBJECTS]個のオブジェクト、[NUM_PRIMS]個のプリム
 
-面: [NUM_FACES]
-可視面: [NUM_VISIBLE_FACES]
-頂点: [NUM_VERTICES]
-三角形: [NUM_TRIANGLES]
-複雑さ: [COMPLEXITY]
+面数：[NUM_FACES]面
+表示面：[NUM_VISIBLE_FACES]面
+頂点数：[NUM_VERTICES]個
+三角形の数：[NUM_TRIANGLES]個
+複雑度：[COMPLEXITY]
 
-テクスチャ: [NUM_TEXTURES]
-テクスメモリ: [TEXTURE_MEMORY] KB
-VRAM: [VRAM_USAGE] KB
+テクスチャ：[NUM_TEXTURES]枚
+ＴＭｅｍ：[TEXTURE_MEMORY]㎅
+ＶＲＡＭ：[VRAM_USAGE]㎅
 	</floater.string>
-	<scroll_list name="object_list" tool_tip="リストからオブジェクトを選択し、インワールドで強調表示します。">
-		<scroll_list.columns label="名前" name="object_name"/>
-		<scroll_list.columns label="説明" name="description" />
-		<scroll_list.columns label="所有者名" name="owner_name"/>
-		<scroll_list.columns label="制作者名" name="creator_name"/>
-		<scroll_list.columns label="面数" name="facecount" />
-		<scroll_list.columns label="頂点数" name="vertexcount" />
-		<scroll_list.columns label="三角形数" name="trianglecount" />
-		<scroll_list.columns label="テクスメモリ" name="tramcount" />
-		<scroll_list.columns label="VRAM" name="vramcount" />
-		<scroll_list.columns label="作成日" name="creation_date"/>
+	<text_editor name="linksetstats_text" value="（読み込んでいます…）"/>
+	<scroll_list name="object_list" tool_tip="このリストからオブジェクトを選択して、インワールドでハイライトします。">
+		<scroll_list.columns label="オブジェクト名" name="object_name"/>
+		<scroll_list.columns label="説明" name="description"/>
+		<scroll_list.columns label="所有者" name="owner_name"/>
+		<scroll_list.columns label="制作者" name="creator_name"/>
+		<scroll_list.columns label="面数" name="facecount"/>
+		<scroll_list.columns label="頂点数" name="vertexcount"/>
+		<scroll_list.columns label="三角形の数" name="trianglecount"/>
+		<scroll_list.columns label="ＴＭｅｍ" name="tramcount"/>
+		<scroll_list.columns label="ＶＲＡＭ" name="vramcount"/>
+		<scroll_list.columns label="制作日" name="creation_date"/>
 	</scroll_list>
-	<button label="所有者のプロフィールを表示..." name="button owner" tool_tip="選択したオブジェクトの所有者のプロフィールを表示します" width="180"/>
-	<button label="制作者のプロフィールを表示..." name="button creator" tool_tip="選択したオブジェクトの制作者のプロフィールを表示します" width="180"/>
-	<menu_button name="options_btn" tool_tip="オプション" />
+	<menu_button name="options_btn" tool_tip="オプションを表示します。"/>
+	<button label="所有者のプロフィール…" name="button owner" tool_tip="ハイライトされたオブジェクトの所有者のプロフィールを見る。"/>
+	<button label="制作者のプロフィール…" name="button creator" tool_tip="ハイライトされたオブジェクトの作成者のプロフィールを見る。"/>
 </floater>

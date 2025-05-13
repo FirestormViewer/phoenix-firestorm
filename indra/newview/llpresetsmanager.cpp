@@ -538,17 +538,22 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
         {
             gSavedSettings.setString("PresetGraphicActive", name);
 
+            // <FS> [FIRE-35390] Old viewer presets have these as true and 0.7, whereas the equivalent on modern viewers is false and 1.0
+            if (auto control = gSavedSettings.getControl("RenderSkyAutoAdjustLegacy"))
+                control->resetToDefault(true);
+            if (auto control = gSavedSettings.getControl("RenderSkyAmbientScale"))
+                control->resetToDefault(true);
+            // </FS>
+
             // <FS:Ansariel> Update indirect controls
             LLAvatarComplexityControls::setIndirectControls();
 
-            LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-            if (instance)
+            if (LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences"))
             {
                 instance->refreshEnabledGraphics();
             }
             // <FS:Ansariel> Graphic preset controls independent from XUI
-            FloaterQuickPrefs* phototools = LLFloaterReg::findTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
-            if (phototools)
+            if (FloaterQuickPrefs* phototools = LLFloaterReg::findTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER))
             {
                 phototools->refreshSettings();
             }

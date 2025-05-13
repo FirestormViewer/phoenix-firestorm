@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Side tray panel -->
-<panel label="人" name="people_panel">
-	<string name="no_recent_people" value="最近交流した人はいません。"/>
-	<string name="no_filtered_recent_people" value="お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。"/>
-	<string name="no_one_near" value="近くに誰もいません。 一緒に何かする仲間をお探しですか？ [secondlife:///app/search/people 検索] か [secondlife:///app/worldmap 世界地図] をお試しください。"/>
-	<string name="no_one_filtered_near" value="お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。"/>
-	<string name="no_friends_online" value="オンラインのフレンドはいません"/>
-	<string name="no_friends" value="フレンドはいません"/>
+<panel label="人物" name="people_panel">
+	<string name="no_recent_people" value="最近交流があった人物はいません。一緒に何かする仲間をお探しですか？[secondlife:///app/search/people 検索]か[secondlife:///app/worldmap ワールドマップ]をお試しください。"/>
+	<string name="no_filtered_recent_people" value="お探しの人物は見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。"/>
+	<string name="no_one_near" value="近くに誰もいません。一緒に何かする仲間をお探しですか？[secondlife:///app/search/people 検索]か[secondlife:///app/worldmap ワールドマップ]をお試しください。"/>
+	<string name="no_one_filtered_near" value="お探しの人物は見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。"/>
+	<string name="no_friends_online" value="オンラインのフレンドはいません。"/>
+	<string name="no_friends" value="フレンドはいません。"/>
 	<string name="no_friends_msg">
-		誰かを友だちとして追加するには、対象のアバターかその名前を右クリックしてください。
-もっと人のいる場所をお探しですか？ [secondlife:///app/floater/destinations 行き先ガイド] にはグリッドのオペレータスタッフが選んだ場所が掲載されています。
-[secondlife:///app/search/ Search] では、キーワードに一致した場所をグリッド全体から検索できます。
+		フレンドに追加するには、相手のアバターまたは名前を右クリックします。
+
+より多くの人が集まる場所をお探しですか？
+
+[secondlife:///app/floater/destinations 行き先ガイド]にはSecond Lifeスタッフが選んだ場所があります。
+[secondlife:///app/search/ 検索]では、特定のキーワードでSecond Life全体を検索できます。
 	</string>
 	<string name="no_filtered_friends_msg">
-		お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。
+		お探しのものは見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。
 	</string>
-	<!-- Deleted Aug.03, 2013
-	<string name="people_filter_label" value="人をフィルター"/>
-	<string name="groups_filter_label" value="グループをフィルター"/>
-	-->
-	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。"/>
+	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/groups/[SEARCH_TERM] 検索]をお試しください。"/>
 	<string name="no_groups_msg">
-		あなたはどこのグループにも属していません。
-		[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ グループ] でグループを探してみて下さい。
+		あなたはどのグループにも属していません。
+
+[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ Second Lifeのグループ]について学びましょう。
 	</string>
-	<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
-	<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
-	<string name="GroupCountWithInfo" value="あなたは[COUNT]グループに属しているので、まだ[REMAINING]参加できます。 [secondlife:/// もっと必要ですか？]"/>
+	<string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開き、Shiftキーを押しながらドラッグして移動します。）"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポート、Shiftキーを押しながらドラッグでパンします。）"/>
+	<string name="GroupCountWithInfo" value="あなたは現在、[COUNT]グループに属しています。あと[REMAINING]グループに参加することができます。[secondlife:/// 上限を増やす]"/>
 	<panel.string name="empty_list">
-		連絡先セットに何も登録がありません。
+		コンタクトセットに何も登録がありません。
 	</panel.string>
 	<panel.string name="no_sets">
 		セット未登録
@@ -37,107 +36,73 @@
 		全てのセット
 	</panel.string>
 	<panel.string name="pseudonyms">
-		ニックネーム
+		エイリアス
 	</panel.string>
 	<panel.string name="AllFriendsTitle">
-		全員 ([ALL])
+		全て（[ALL]）
 	</panel.string>
- 	<panel.string name="OnlineFriendsTitle">
+	<panel.string name="OnlineFriendsTitle">
 		オンライン（[ONLINE]）
 	</panel.string>
-
 	<tab_container name="tabs">
-	
-	<!--  NEARBY tab  -->
-	
+		<!-- ================================= NEARBY tab =========================== -->
 		<panel label="近く" name="nearby_panel">
-		<!-- FS:Ansariel: Firestorm radar
-            <panel name="nearby_buttons_panel">
-                <filter_editor label="Filter People" name="nearby_filter_input" />
-                <button name="gear_btn" tool_tip="Actions on selected person" />
-                <menu_button name="nearby_view_btn" tool_tip="View/sort options" />
-                <button name="add_friend_btn" tool_tip="Offer friendship to a resident />
-                <dnd_button name="nearby_del_btn" tool_tip="Remove selected person as a friend" />
-            </panel>
-			<layout_stack>
-				<layout_panel name="Net Map Panel">
-					<net_map name="Net Map" />
-				</layout_panel>
-				<layout_panel>
-					<avatar_list name="avatar_list" />
-				</layout_panel>
-			</layout_stack>
-		-->
-		
-		<panel name="panel_radar" />
-		</panel>
-
-		<!-- FRIENDS tab -->
-		
-		<panel label="フレンド" name="friends_panel">
-            <panel name="friends_buttons_panel">
-                <filter_editor label="人をフィルター" name="friends_filter_input" />
-                <button name="gear_btn" tool_tip="選択した人に対するアクションです。" />
-                <menu_button name="friends_view_btn" tool_tip="表示／並べ替えのオプションです。" />
-                <button name="friends_add_btn" tool_tip="住人にフレンド登録を申し出ます。" />
-                <button name="GlobalOnlineStatusToggle" tool_tip="ログイン状態がわかるようにするかを切り替えます。" />
-                <dnd_button name="friends_del_btn" tool_tip="選択した人をフレンドリストから削除します。" />
-            </panel>
-			<tab_container name="friends_accordion">
-				<panel name="tab_online" title="オンライン">
-                        <avatar_list name="avatars_online" />
-                </panel>
-                <panel name="tab_all" title="全員">
-                        <avatar_list name="avatars_all" />
-                </panel>
-            </tab_container>
-		</panel>
-		
-		<!-- GROUPS tab -->
-
-        <panel label="グループ" name="groups_panel">
-		<!--
-		*NOTE: no_groups_msg & group_list attributes are not defined as translatable in VLT. See EXT-5931
-		Values are set from appropriate strings at the top of file via LLPeoplePanel::postBuild()
-		-->
-			<panel name="groups_buttons_panel">
-                <filter_editor label="グループをフィルター" name="groups_filter_input" />
-                <menu_button name="groups_gear_btn" tool_tip="選択したグループに対するアクションです。" />
-                <menu_button name="groups_view_btn" tool_tip="表示／並べ替えのオプションです。" />
-                <menu_button name="plus_btn" tool_tip="グループに参加または新規グループを作成します。" />
-                <dnd_button name="minus_btn" tool_tip="選択したグループを脱退します。" />
-            </panel>
-            <group_list name="group_list" />
-			<text name="groupcount">
-				あなたは現在、[COUNT] グループに属しています。あと [REMAINING] グループに参加することができます。
+			<panel name="nearby_buttons_panel">
+				<filter_editor label="人物をフィルタ" name="nearby_filter_input"/>
+				<button name="gear_btn" tool_tip="選択した人物に対するアクションを表示します。"/>
+				<menu_button name="nearby_view_btn" tool_tip="表示／並べ替えオプションを表示します。"/>
+				<button name="add_friend_btn" tool_tip="フレンド登録を申し込みます。"/>
+				<dnd_button name="nearby_del_btn" tool_tip="フレンドとして選択されている人物を削除します。"/>
+			</panel>
+			<text name="nearbycount">
+				[REGION]には[TOTAL]人中[COUNT]人のアバターがいます。
 			</text>
-        </panel>
-		
-		<!-- RECENT tab -->
-
-        <panel label="最新" name="recent_panel">
-            <panel name="recent_buttons_panel">
-                <filter_editor label="人をフィルター" name="recent_filter_input" />
-                <button name="gear_btn" tool_tip="選択した人に対するアクションです。" />
-                <menu_button name="recent_view_btn" tool_tip="表示／並べ替えのオプションです。" />
-                <button name="add_friend_btn" tool_tip="住人にフレンド登録を申し出ます。" />
-                <dnd_button name="recent_del_btn" tool_tip="選択した人をフレンドリストから削除します。" />
-            </panel>
-            <avatar_list name="avatar_list" />
-        </panel>
-		
-		<!-- BLOCKED tab -->
-
+		</panel>
+		<!-- ================================= FRIENDS tab ========================== -->
+		<panel label="フレンド" name="friends_panel">
+			<panel label="bottom_panel" name="friends_buttons_panel">
+				<filter_editor label="人物をフィルタ" name="friends_filter_input"/>
+				<button name="gear_btn" tool_tip="選択した人物に対するアクションを表示します。"/>
+				<menu_button name="friends_view_btn" tool_tip="表示／並べ替えオプションを表示します。"/>
+				<button name="friends_add_btn" tool_tip="フレンド登録を申し込みます。"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="グローバルオンライン状況の表示を切り替えます。"/>
+				<dnd_button name="friends_del_btn" tool_tip="フレンドとして選択されている人物を削除します。"/>
+			</panel>
+			<accordion name="friends_accordion">
+				<accordion_tab name="tab_online" title="オンライン"/>
+				<accordion_tab name="tab_all" title="全員"/>
+			</accordion>
+		</panel>
+		<!-- ================================= GROUPS tab =========================== -->
+		<panel label="グループ" name="groups_panel">
+			<panel label="bottom_panel" name="groups_buttons_panel">
+				<filter_editor label="グループをフィルタ" name="groups_filter_input"/>
+				<menu_button name="groups_gear_btn" tool_tip="選択したグループに対するアクションを表示します。"/>
+				<menu_button name="groups_view_btn" tool_tip="表示／並べ替えのオプションを表示します。"/>
+				<menu_button name="plus_btn" tool_tip="グループに参加／新規グループを作成します。"/>
+				<dnd_button name="minus_btn" tool_tip="選択したグループから脱退します。"/>
+			</panel>
+			<text name="groupcount">
+				現在、[COUNT]件のグループに属しています。あと[REMAINING]件のグループに参加できます。
+			</text>
+		</panel>
+		<!-- ================================= RECENT tab =========================== -->
+		<panel label="最新" name="recent_panel">
+			<panel label="bottom_panel" name="recent_buttons_panel">
+				<filter_editor label="人物をフィルタ" name="recent_filter_input"/>
+				<button name="gear_btn" tool_tip="選択した人物に対するアクションを表示します。"/>
+				<menu_button name="recent_view_btn" tool_tip="表示／並べ替えのオプションを表示します。"/>
+				<button name="add_friend_btn" tool_tip="フレンド登録を申し込みます。"/>
+				<dnd_button name="recent_del_btn" tool_tip="選択されているフレンドを削除します。"/>
+			</panel>
+		</panel>
+		<!-- ================================= BLOCKED tab ========================== -->
 		<panel label="ブロック" name="blocked_panel">
-			<panel name="panel_block_list_sidetray" label="ブロックした住人とオブジェクト" />
+			<panel label="ブロックされた人物とオブジェクト" name="panel_block_list_sidetray"/>
 		</panel>
-		
-		<!-- CONTACT SETS tab -->
-		
-		<panel label="連絡先セット" name="contact_sets_panel">
-			<panel name="panel_people_contacts_sidetray" label="連絡先セット" />
+		<!-- ================================= CONTACT SETS tab ====================== -->
+		<panel label="コンタクトセット" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="コンタクトセット"/>
 		</panel>
-		
 	</tab_container>
-	
 </panel>

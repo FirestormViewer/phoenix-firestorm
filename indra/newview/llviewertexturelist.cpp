@@ -817,9 +817,6 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
     {
         // Disable the compression of BOOST_SCULPTED textures
         if (imagep->getGLTexture())imagep->getGLTexture()->setAllowCompression(false);
-        imagep->dontDiscard();
-        imagep->forceActive();
-        imagep->setForSculpt();
     }
     // </FS:minerjr> [FIRE-35428]
     addImage(imagep, get_element_type(boost_priority));
@@ -853,7 +850,7 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
     //if(fast_cache_fetching_enabled)
     // If the texture is Sculpted, don't allow it to be added to fast cache as it can affect the texture.
     if(fast_cache_fetching_enabled && boost_priority != LLViewerFetchedTexture::BOOST_SCULPTED)
-        // </FS:minerjr> [FIRE-35428]
+    // </FS:minerjr> [FIRE-35428]
     {
         mFastCacheList.insert(imagep);
         imagep->setInFastCacheList(true);

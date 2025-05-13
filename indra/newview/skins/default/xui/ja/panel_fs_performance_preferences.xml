@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">
+		戻る
+	</text>
+	<text name="settings_title">
+		グラフィック設定
+	</text>
+	<text name="quality_lbl">
+		品質か速度
+	</text>
+	<text name="FasterText">
+		速度優先
+	</text>
+	<text name="BetterText">
+		品質有線
+	</text>
+	<text name="ShadersPrefText">
+		低
+	</text>
+	<text name="ShadersPrefText2">
+		中
+	</text>
+	<text name="ShadersPrefText3">
+		高
+	</text>
+	<text name="ShadersPrefText4">
+		最高
+	</text>
+	<text name="quality_desc">
+		プリセットを選択すると、手動で行った変更がすべてリセットされます。
+	</text>
+	<text name="distance_lbl">
+		表示距離
+	</text>
+	<text name="faster_lbl">
+		より速く
+	</text>
+	<text name="draw_distance_m">
+		ｍ
+	</text>
+	<text name="farther_lbl">
+		さらに
+	</text>
+	<text name="distance_desc1">
+		パフォーマンスを向上させるにはこの値を低く保ち、遠くまで見るにはこの値を上げます。
+	</text>
+	<text name="environment_lbl">
+		環境
+	</text>
+	<text name="enhancements_desc">
+		影を減らしたり、なくしたりするとＦＰＳは向上しますが、
+シーンの雰囲気や外観に影響します。
+	</text>
+	<text name="RenderShadowDetailText">
+		影の元：
+	</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="なし" name="0"/>
+		<combo_box.item label="太陽／月" name="1"/>
+		<combo_box.item label="太陽／月＋プロジェクター" name="2"/>
+	</combo_box>
+	<text name="water_lbl">
+		水面
+	</text>
+	<text name="water_desc">
+		水面の効果の品質を下げると、フレーム レートが大幅に向上します。
+	</text>
+	<text name="ReflectionsText">
+		水面の反射：
+	</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="なし；不透明" name="-2"/>
+		<combo_box.item label="なし；透明" name="-1"/>
+		<combo_box.item label="最小限" name="0"/>
+		<combo_box.item label="地形と樹木" name="1"/>
+		<combo_box.item label="すべての静的なオブジェクト" name="2"/>
+		<combo_box.item label="全てのアバターとオブジェクト" name="3"/>
+		<combo_box.item label="全て" name="4"/>
+	</combo_box>
+	<text name="photo_lbl">
+		フォトグラフィー
+	</text>
+	<text name="photo_desc">
+		フォトグラフィーは高品質を求めていますが、フレームレートが
+犠牲になることがよくあります。[APP_NAME]フォトツールは
+適切なバランスを見つけるのに役立ちます。
+	</text>
+	<button name="open_phototools" label="フォトツール" tool_tip="高度なフォト設定を行うには、専用のフォトツールを開きます。"/>
+</panel>

@@ -5430,14 +5430,6 @@ LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot, bool pick_transp
         pick_transparent = true;
     }
 
-    // <FS:Sek> Pick from center of screen in mouselook
-    if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
-    {
-        x = gViewerWindow->getWorldViewRectScaled().getWidth() / 2;
-        y_from_bot = gViewerWindow->getWorldViewRectScaled().getHeight() / 2;
-    }
-    // </FS:Sek>
-
     // shortcut queueing in mPicks and just update mLastPick in place
     MASK key_mask = gKeyboard->currentMask(true);
     mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_rigged, pick_particle, pick_reflection_probe, true, false, NULL);
