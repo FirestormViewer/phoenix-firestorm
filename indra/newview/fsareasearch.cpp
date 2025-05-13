@@ -167,6 +167,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
     mBeacons(false),
     mExcludeAttachment(true),
     mExcludeTemporary(true),
+    mExcludeReflectionProbe(false),
     mExcludePhysics(true),
     mExcludeChildPrims(true),
     mExcludeNeighborRegions(true),
@@ -542,6 +543,11 @@ bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* o
     }
 
     if (mExcludeTemporary && objectp->flagTemporaryOnRez())
+    {
+        return false;
+    }
+
+    if (mExcludeReflectionProbe && objectp->mReflectionProbe.notNull())
     {
         return false;
     }
@@ -2223,6 +2229,10 @@ bool FSPanelAreaSearchFilter::postBuild()
     mCheckboxExcludetemporary->set(true);
     mCheckboxExcludetemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
+    mCheckboxExcludeReflectionProbes = getChild<LLCheckBoxCtrl>("exclude_reflection_probes");
+    mCheckboxExcludeReflectionProbes->set(false);
+    mCheckboxExcludeReflectionProbes->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+
     mCheckboxExcludeChildPrim = getChild<LLCheckBoxCtrl>("exclude_childprim");
     mCheckboxExcludeChildPrim->set(true);
     mCheckboxExcludeChildPrim->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
@@ -2300,6 +2310,19 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
         mFSAreaSearch->setExcludetemporary(false);
     }
     mFSAreaSearch->setFilterTemporary(mCheckboxTemporary->get());
+
+    if (mCheckboxExcludeReflectionProbes->get())
+    {
+        mFSAreaSearch->setFilterReflectionProbe(false);
+        mCheckboxReflectionProbe->set(false);
+        mCheckboxReflectionProbe->setEnabled(false);
+        mFSAreaSearch->setExcludeReflectionProbe(true);
+    }
+    else
+    {
+        mCheckboxReflectionProbe->setEnabled(true);
+        mFSAreaSearch->setExcludeReflectionProbe(false);
+    }
 
     if (mCheckboxExcludeAttachment->get())
     {

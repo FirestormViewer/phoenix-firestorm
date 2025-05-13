@@ -148,6 +148,7 @@ public:
 
     void setExcludeAttachment(bool b) { mExcludeAttachment = b; }
     void setExcludetemporary(bool b) { mExcludeTemporary = b; }
+    void setExcludeReflectionProbe(bool b) { mExcludeReflectionProbe = b; }
     void setExcludePhysics(bool b) { mExcludePhysics = b; }
     void setExcludeChildPrims(bool b) { mExcludeChildPrims = b; }
     void setExcludeNeighborRegions(bool b) { mExcludeNeighborRegions = b; }
@@ -231,6 +232,7 @@ private:
 
     bool mExcludeAttachment;
     bool mExcludeTemporary;
+    bool mExcludeReflectionProbe;
     bool mExcludePhysics;
     bool mExcludeChildPrims;
     bool mExcludeNeighborRegions;
@@ -396,6 +398,7 @@ private:
     LLCheckBoxCtrl* mCheckboxExcludeAttachment;
     LLCheckBoxCtrl* mCheckboxExcludePhysics;
     LLCheckBoxCtrl* mCheckboxExcludetemporary;
+    LLCheckBoxCtrl* mCheckboxExcludeReflectionProbes;
     LLCheckBoxCtrl* mCheckboxExcludeChildPrim;
     LLCheckBoxCtrl* mCheckboxExcludeNeighborRegions;
     LLCheckBoxCtrl* mCheckboxPermCopy;

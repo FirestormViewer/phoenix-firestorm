@@ -579,6 +579,14 @@
 			 name="exclude_temporary"
 			 label="Temporary"
 			 width="80"/>
+            <check_box
+			 follows="top|left"
+			 top_pad="10"
+			 layout="topleft"
+			 left="10"
+			 name="exclude_reflection_probes"
+			 label="Reflection Probes"
+			 width="80"/>
 			<check_box
 			 follows="top|left"
 			 top_pad="10"
