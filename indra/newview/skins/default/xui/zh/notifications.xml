@@ -5749,4 +5749,8 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ConfirmPoserOverwrite">
+		是否覆蓋現有的姿勢「[POSE_NAME]」？
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
+	</notification>
 </notifications>
