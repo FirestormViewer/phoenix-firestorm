@@ -218,6 +218,17 @@
          left="10"
          width="500"
          tool_tip="Restores the current environment settings after next login."/>
+        <check_box
+         top_pad="5"
+         control_name="FSRepeatedEnvTogglesShared"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         name="FSRepeatedEnvTogglesShared"
+         label="Repeated environment keybinds revert to shared environment"
+         left="10"
+         width="500"
+         tool_tip="Causes repeated keybinds (e.g. ctrl+shift+y) to alternate between the requested preset &amp; shared environment"/>
     </panel>
 
 
