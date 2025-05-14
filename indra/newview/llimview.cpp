@@ -3626,10 +3626,6 @@ void LLIMMgr::addMessage(
                 }
             }
 
-            // <FS:PP> Configurable IM sounds
-            // //Play sound for new conversations
-            // if (!skip_message && !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
-
             // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
             static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
             if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && ignoreAdHocSessions && !from_linden)
@@ -3641,7 +3637,6 @@ void LLIMMgr::addMessage(
                     //<FS:Beq> [FIRE-21385] Add inviter name/UUID to ad-hoc ignored messages
                     LLSD args;
                     args["AVATAR_NAME"] = LLSLURL("agent", other_participant_id, "about").getSLURLString();
-//                  LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
                     LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << args["AVATAR_NAME"] << LL_ENDL;
                     if (!gIMMgr->leaveSession(new_session_id))
                     {
@@ -3649,7 +3644,6 @@ void LLIMMgr::addMessage(
                     }
                     else if (reportIgnoredAdHocSession)
                     {
-//                      report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession"));
                         FSCommon::report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession", args));
                     }
                     //</FS:Beq>
@@ -3658,18 +3652,32 @@ void LLIMMgr::addMessage(
             }
             // </FS:PP>
 
-            if(!do_not_disturb && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL && !play_snd_mention)
+            // <FS:PP> Configurable IM sounds
+            ////Play sound for new conversations
+            //if (!skip_message && !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
+            //{
+            //    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+            //    if (!play_snd_mention_pref || !LLUrlRegistry::getInstance()->containsAgentMention(msg))
+            //    {
+            //        make_ui_sound("UISndNewIncomingIMSession");
+            //    }
+            //}
+            if (!do_not_disturb && !play_snd_mention)
             {
-                make_ui_sound("UISndNewIncomingIMSession");
+                if (PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+                {
+                    make_ui_sound("UISndNewIncomingIMSession");
+                }
+                else if (PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
+                {
+                    make_ui_sound("UISndNewIncomingGroupIMSession");
+                }
+                else if (PlayModeUISndNewIncomingConfIMSession != 0 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
+                {
+                    make_ui_sound("UISndNewIncomingConfIMSession");
+                }
             }
-            else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL && is_group_chat && !play_snd_mention)
-            {
-                make_ui_sound("UISndNewIncomingGroupIMSession");
-            }
-            else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession != 0 && dialog != IM_NOTHING_SPECIAL && !is_group_chat && !play_snd_mention)
-            {
-                make_ui_sound("UISndNewIncomingConfIMSession");
-            }
+            // </FS:PP>
         }
         else
         {
