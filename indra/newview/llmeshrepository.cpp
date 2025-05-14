@@ -6207,13 +6207,7 @@ bool LLMeshRepository::meshUploadEnabled()
 bool LLMeshRepository::meshRezEnabled()
 {
     static LLCachedControl<bool> mesh_enabled(gSavedSettings, "MeshEnabled");
-    LLViewerRegion *region = gAgent.getRegion();
-    if(mesh_enabled &&
-       region)
-    {
-        return region->meshRezEnabled();
-    }
-    return false;
+    return mesh_enabled;
 }
 
 // Threading:  main thread only
