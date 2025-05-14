@@ -1014,12 +1014,21 @@ void AOEngine::playAnimation(const LLUUID& animation)
 
     // if we can find the original animation already right here, save its asset ID, otherwise this will
     // be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
+    LLUUID newAnimation;
     if (item->getLinkedItem())
     {
-        anim.mAssetUUID = item->getAssetUUID();
+        newAnimation = item->getAssetUUID();
+        //anim.mAssetUUID = item->getAssetUUID();
     }
 
-    LLUUID newAnimation = anim.mAssetUUID;
+    if (newAnimation.isNull())
+    {
+        LL_WARNS("AOEngine") << "New animation UUID is null for animation " << animation << LL_ENDL;
+        return;
+    }
+    anim.mAssetUUID = newAnimation;
+
+    //LLUUID newAnimation = anim.mAssetUUID;
     LLUUID oldAnimation = state->mCurrentAnimationID;
 
     // don't do anything if the animation didn't change
@@ -1031,7 +1040,7 @@ void AOEngine::playAnimation(const LLUUID& animation)
     mAnimationChangedSignal(LLUUID::null);
 
     // Searches for the index of the animation
-    U32 idx = -1;
+    S32 idx = -1;
     for (U32 i = 0; i < state->mAnimations.size(); i++)
     {
         if (state->mAnimations[i].mAssetUUID == newAnimation)
@@ -1040,18 +1049,22 @@ void AOEngine::playAnimation(const LLUUID& animation)
             break;
         }
     }
-    if (idx < 0)
+    if (idx == -1)
     {
-        idx = 0;
+        LL_WARNS("AOEngine") << "Animation index not found for animation " << animation << LL_ENDL;
+        return;
     }
 
-    state->mCurrentAnimation = idx;
+    state->mCurrentAnimation = static_cast<U32>(idx);
     state->mCurrentAnimationID = newAnimation;
     if (newAnimation.notNull())
     {
         LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(mLastMotion) << ": " << newAnimation << LL_ENDL;
         gAgent.sendAnimationRequest(newAnimation, ANIM_REQUEST_START);
-        mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+        if (state->mCurrentAnimation < state->mAnimations.size())
+        {
+            mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+        }
     }
     else
     {

@@ -123,7 +123,7 @@ public:
     // </FS:Sei>
 private:
     void setAnimCallbacks() ;
-    std::map <std::string, std::string> getJointAliases();
+    std::map <std::string, std::string, std::less<>> getJointAliases();
 
     // <FS> Reload animation from disk
     bool loadBVH();

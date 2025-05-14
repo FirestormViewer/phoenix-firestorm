@@ -489,6 +489,10 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                             {
                                 str_version_tag = "Release";
                             }
+                            else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::STREAMING_VIEWER )
+                            {
+                                str_version_tag = "Streaming";
+                            }
                             else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
                             {
                                 str_version_tag = "Unofficial";
@@ -511,6 +515,10 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                             if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
                             {
                                 str_version_tag = "Unofficial";
+                            }
+                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::STREAMING_VIEWER )
+                            {
+                                str_version_tag = "Streaming";
                             }
                             else if( viewer_maturity != LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
                             {
