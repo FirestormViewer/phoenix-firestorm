@@ -567,7 +567,7 @@ void LLViewerTexture::updateClass()
     if (is_low)
     {
         // ramp up discard bias over time to free memory
-        LL_DEBUGS("TextureMemory") << "System memory is low, use more aggressive discard bias." << LL_ENDL;
+        //LL_DEBUGS("TextureMemory") << "System memory is low, use more aggressive discard bias." << LL_ENDL;
         if (sEvaluationTimer.getElapsedTimeF32() > MEMORY_CHECK_WAIT_TIME)
         {
             static LLCachedControl<F32> low_mem_min_discard_increment(gSavedSettings, "RenderLowMemMinDiscardIncrement", .1f);
@@ -578,7 +578,7 @@ void LLViewerTexture::updateClass()
     }
     else
     {
-        LL_DEBUGS("TextureMemory") << "System memory is plentiful, act normally." << LL_ENDL;
+        //LL_DEBUGS("TextureMemory") << "System memory is plentiful, act normally." << LL_ENDL;
 
         // don't execute above until the slam to 1.5 has a chance to take effect
         sEvaluationTimer.reset();
@@ -1555,7 +1555,7 @@ bool LLViewerFetchedTexture::preCreateTexture(S32 usename/*= 0*/)
     S32 discard_level = mRawDiscardLevel;
     if (mRawDiscardLevel < 0)
     {
-        LL_DEBUGS() << "Negative raw discard level when creating image: " << mRawDiscardLevel << LL_ENDL;
+        //LL_DEBUGS() << "Negative raw discard level when creating image: " << mRawDiscardLevel << LL_ENDL;
         discard_level = 0;
     }
 
@@ -2278,7 +2278,7 @@ bool LLViewerFetchedTexture::updateFetch()
         const F32 FETCH_IDLE_TIME = 0.1f;
         if (mLastPacketTimer.getElapsedTimeF32() > FETCH_IDLE_TIME)
         {
-            LL_DEBUGS("Texture") << "exceeded idle time " << FETCH_IDLE_TIME << ", deleting request: " << getID() << LL_ENDL;
+            //LL_DEBUGS("Texture") << "exceeded idle time " << FETCH_IDLE_TIME << ", deleting request: " << getID() << LL_ENDL;
             LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
             mHasFetcher = false;
         }
@@ -3182,7 +3182,7 @@ void LLViewerLODTexture::processTextureStats()
             else if (mMaxVirtualSize * mBias >= getWidth(discard_level + 1) * getHeight(discard_level + 1))
             {
                 break;
-            }            
+            }
         }
 
         //discard_level = llclamp(discard_level, min_discard, (F32)MAX_DISCARD_LEVEL);
@@ -3212,7 +3212,7 @@ void LLViewerLODTexture::processTextureStats()
             }
             else
             {
-                mScaleDownCount = 3;                
+                mScaleDownCount = 3;
             }
         }
 

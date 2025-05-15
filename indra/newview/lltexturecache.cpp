@@ -516,7 +516,7 @@ bool LLTextureCacheRemoteWorker::doRead()
         {
             // No body, we're done.
             mDataSize = llmax(TEXTURE_CACHE_ENTRY_SIZE - mOffset, 0);
-            LL_DEBUGS() << "No body file for: " << filename << LL_ENDL;
+            //LL_DEBUGS() << "No body file for: " << filename << LL_ENDL;
         }
         // Nothing else to do at that point...
         done = true;
@@ -1713,7 +1713,7 @@ void LLTextureCache::purgeTexturesLazy(F32 time_limit_sec)
                 break;
             }
         }
-        LL_DEBUGS("TextureCache") << "Formed Purge list of " << mPurgeEntryList.size() << " entries" << LL_ENDL;
+        //LL_DEBUGS("TextureCache") << "Formed Purge list of " << mPurgeEntryList.size() << " entries" << LL_ENDL;
     }
     else
     {
@@ -1790,7 +1790,7 @@ void LLTextureCache::purgeTextures(bool validate)
         validate_idx = gSavedSettings.getU32("CacheValidateCounter");
         U32 next_idx = (validate_idx + 1) % 256;
         gSavedSettings.setU32("CacheValidateCounter", next_idx);
-        LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Validating: " << validate_idx << LL_ENDL;
+        //LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Validating: " << validate_idx << LL_ENDL;
     }
 
     S64 cache_size = mTexturesSizeTotal;
@@ -1813,7 +1813,7 @@ void LLTextureCache::purgeTextures(bool validate)
             if (uuididx == validate_idx)
             {
                 std::string filename = getTextureFileName(entries[idx].mID);
-                LL_DEBUGS("TextureCache") << "Validating: " << filename << "Size: " << entries[idx].mBodySize << LL_ENDL;
+                //LL_DEBUGS("TextureCache") << "Validating: " << filename << "Size: " << entries[idx].mBodySize << LL_ENDL;
                 // mHeaderAPRFilePoolp because this is under header mutex in main thread
                 S32 bodysize = LLAPRFile::size(filename, mHeaderAPRFilePoolp);
                 if (bodysize != entries[idx].mBodySize)
@@ -1832,13 +1832,13 @@ void LLTextureCache::purgeTextures(bool validate)
         {
             purge_count++;
             std::string filename = getTextureFileName(entries[idx].mID);
-            LL_DEBUGS("TextureCache") << "PURGING: " << filename << LL_ENDL;
+            //LL_DEBUGS("TextureCache") << "PURGING: " << filename << LL_ENDL;
             cache_size -= entries[idx].mBodySize;
             removeEntry(idx, entries[idx], filename) ;
         }
     }
 
-    LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Writing Entries: " << num_entries << LL_ENDL;
+    //LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Writing Entries: " << num_entries << LL_ENDL;
 
     writeEntriesAndClose(entries);
 

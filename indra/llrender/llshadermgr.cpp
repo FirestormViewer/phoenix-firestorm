@@ -1118,7 +1118,7 @@ bool LLShaderMgr::loadCachedProgramBinary(LLGLSLShader* shader)
                     if (error == GL_NO_ERROR && success == GL_TRUE)
                     {
                         binary_iter->second.mLastUsedTime = (F32)LLTimer::getTotalSeconds();
-                        LL_INFOS() << "Loaded cached binary for shader: " << shader->mName << LL_ENDL;
+                        //LL_INFOS() << "Loaded cached binary for shader: " << shader->mName << LL_ENDL;
                         return true;
                     }
                 }

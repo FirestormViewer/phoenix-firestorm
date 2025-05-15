@@ -113,7 +113,7 @@ void LLViewerTextureList::init()
 void LLViewerTextureList::doPreloadImages()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    LL_DEBUGS("ViewerImages") << "Preloading images..." << LL_ENDL;
+    //LL_DEBUGS("ViewerImages") << "Preloading images..." << LL_ENDL;
 
     llassert_always(mInitialized) ;
     llassert_always(mImageList.empty()) ;
@@ -283,7 +283,7 @@ void LLViewerTextureList::doPrefetchImages()
             }
         }
     }
-    LL_DEBUGS() << "fetched " << texture_count << " images from " << filename << LL_ENDL;
+    //LL_DEBUGS() << "fetched " << texture_count << " images from " << filename << LL_ENDL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -349,7 +349,7 @@ void LLViewerTextureList::shutdown()
         std::string filename = get_texture_list_name();
         llofstream file;
         file.open(filename.c_str());
-        LL_DEBUGS() << "saving " << imagelist.size() << " image list entries" << LL_ENDL;
+        //LL_DEBUGS() << "saving " << imagelist.size() << " image list entries" << LL_ENDL;
         LLSDSerialize::toPrettyXML(imagelist, file);
     }
 
@@ -636,6 +636,7 @@ LLViewerFetchedTexture* LLViewerTextureList::getImageFromUrl(const std::string& 
         {
             LL_WARNS() << "Requested texture " << new_id << " already exists but does not have a URL" << LL_ENDL;
         }
+        /*
         else if (texture->getUrl() != url)
         {
             // This is not an error as long as the images really match -
@@ -644,7 +645,7 @@ LLViewerFetchedTexture* LLViewerTextureList::getImageFromUrl(const std::string& 
                                 << " already exists with a different url, requested: " << url
                                 << " current: " << texture->getUrl() << LL_ENDL;
         }
-
+        */
     }
     if (imagep.isNull())
     {
@@ -1095,7 +1096,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
     constexpr F32 BIAS_TRS_OUT_OF_SCREEN = 1.5f;
     constexpr F32 BIAS_TRS_ON_SCREEN = 1.f;
 
-    if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH)  // don't bother checking face list for boosted textures
+    if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH && (imagep->getBoostLevel() != LLViewerFetchedTexture::BOOST_AVATAR || imagep->getBoostLevel() != LLViewerFetchedTexture::BOOST_AVATAR_BAKED))  // don't bother checking face list for boosted textures
     {
         static LLCachedControl<F32> texture_scale_min(gSavedSettings, "TextureScaleMinAreaFactor", 0.0095f);
         static LLCachedControl<F32> texture_scale_max(gSavedSettings, "TextureScaleMaxAreaFactor", 25.f);
@@ -1188,9 +1189,9 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     //on_screen_count += current_on_screen; // Count the number of on sceen faces instead of using brach
                     important_to_camera = llmax(important_to_camera, face->mImportanceToCamera); // Store so we don't have to do 2 indirects later on
                     // If the face/texture is animated, then set the boost level to high, so that it will ways be the best quality
-                    animated |= (face->mTextureMatrix != nullptr);
-                    animated |= face->hasMedia(); // Add has media for both local and parcel media
-                    animated |= imagep->hasParcelMedia();
+                    //animated |= (face->mTextureMatrix != nullptr);
+                    //animated |= face->hasMedia(); // Add has media for both local and parcel media
+                    //animated |= imagep->hasParcelMedia();
 
                     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                     /*
@@ -1713,11 +1714,11 @@ void LLViewerTextureList::decodeAllImages(F32 max_time)
     max_time -= timer.getElapsedTimeF32();
     max_time = llmax(max_time, .001f);
     F32 create_time = updateImagesCreateTextures(max_time);
-
-    LL_DEBUGS("ViewerImages") << "decodeAllImages() took " << timer.getElapsedTimeF32() << " seconds. "
+    
+    /*LL_DEBUGS("ViewerImages") << "decodeAllImages() took " << timer.getElapsedTimeF32() << " seconds. "
     << " fetch_pending " << fetch_pending
     << " create_time " << create_time
-    << LL_ENDL;
+    << LL_ENDL;*/
 }
 
 bool LLViewerTextureList::createUploadFile(LLPointer<LLImageRaw> raw_image,
