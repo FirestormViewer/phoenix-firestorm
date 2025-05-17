@@ -378,6 +378,15 @@
 			 name="filter_perm_transfer"
 			 label="Transfer"
 			 width="100"/>
+            <check_box
+			 follows="top|left"
+             top_pad="10"
+			 layout="topleft"
+			 left="10"
+			 name="filter_reflection_probe"
+			 label="Reflection Probes"
+             tool_tip="Includes manual probes only, not auto-probes. Only includes mirror probes if mirrors are enabled in graphics preferences. If reflection coverage is set to none, or the probe is not baked, objects may not be identified."
+			 width="100"/>
 			<check_box
 			 follows="top|left"
 			 height="20"
@@ -416,7 +425,7 @@
 			 layout="topleft"
 			 left_pad="5"
 			 max_val="999999999"
-			 min_val="0"  
+			 min_val="0"
 			 name="max_price"
 			 top_delta="-4"
 			 width="80"/>
@@ -525,7 +534,7 @@
 			 layout="topleft"
 			 left_pad="5"
 			 max_val="999999999"
-			 min_val="0"  
+			 min_val="0"
 			 name="max_distance"
 			 top_delta="-4"
 			 width="80"/>
@@ -569,6 +578,14 @@
 			 left="10"
 			 name="exclude_temporary"
 			 label="Temporary"
+			 width="80"/>
+            <check_box
+			 follows="top|left"
+			 top_pad="10"
+			 layout="topleft"
+			 left="10"
+			 name="exclude_reflection_probes"
+			 label="Reflection Probes"
 			 width="80"/>
 			<check_box
 			 follows="top|left"

@@ -156,6 +156,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
     mFilterPhantom(false),
     mFilterAttachment(false),
     mFilterMoaP(false),
+    mFilterReflectionProbe(false),
     mFilterDistance(false),
     mFilterDistanceMin(0),
     mFilterDistanceMax(999999),
@@ -166,6 +167,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
     mBeacons(false),
     mExcludeAttachment(true),
     mExcludeTemporary(true),
+    mExcludeReflectionProbe(false),
     mExcludePhysics(true),
     mExcludeChildPrims(true),
     mExcludeNeighborRegions(true),
@@ -545,6 +547,11 @@ bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* o
         return false;
     }
 
+    if (mExcludeReflectionProbe && objectp->mReflectionProbe.notNull())
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -904,6 +911,11 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
     }
 
     if (mFilterPermTransfer && !(details.owner_mask & PERM_TRANSFER))
+    {
+        return;
+    }
+
+    if (mFilterReflectionProbe && !objectp->mReflectionProbe.notNull())
     {
         return;
     }
@@ -2217,6 +2229,10 @@ bool FSPanelAreaSearchFilter::postBuild()
     mCheckboxExcludetemporary->set(true);
     mCheckboxExcludetemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
+    mCheckboxExcludeReflectionProbes = getChild<LLCheckBoxCtrl>("exclude_reflection_probes");
+    mCheckboxExcludeReflectionProbes->set(false);
+    mCheckboxExcludeReflectionProbes->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+
     mCheckboxExcludeChildPrim = getChild<LLCheckBoxCtrl>("exclude_childprim");
     mCheckboxExcludeChildPrim->set(true);
     mCheckboxExcludeChildPrim->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
@@ -2240,6 +2256,9 @@ bool FSPanelAreaSearchFilter::postBuild()
     mCheckboxMoaP = getChild<LLCheckBoxCtrl>("filter_moap");
     mCheckboxMoaP->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
+    mCheckboxReflectionProbe = getChild<LLCheckBoxCtrl>("filter_reflection_probe");
+    mCheckboxReflectionProbe->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+
     mCheckboxPermCopy = getChild<LLCheckBoxCtrl>("filter_perm_copy");
     mCheckboxPermCopy->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
@@ -2262,6 +2281,7 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
     mFSAreaSearch->setFilterForSale(mCheckboxForSale->get());
     mFSAreaSearch->setFilterDistance(mCheckboxDistance->get());
     mFSAreaSearch->setFilterMoaP(mCheckboxMoaP->get());
+    mFSAreaSearch->setFilterReflectionProbe(mCheckboxReflectionProbe->get());
 
     if (mCheckboxExcludePhysics->get())
     {
@@ -2290,6 +2310,19 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
         mFSAreaSearch->setExcludetemporary(false);
     }
     mFSAreaSearch->setFilterTemporary(mCheckboxTemporary->get());
+
+    if (mCheckboxExcludeReflectionProbes->get())
+    {
+        mFSAreaSearch->setFilterReflectionProbe(false);
+        mCheckboxReflectionProbe->set(false);
+        mCheckboxReflectionProbe->setEnabled(false);
+        mFSAreaSearch->setExcludeReflectionProbe(true);
+    }
+    else
+    {
+        mCheckboxReflectionProbe->setEnabled(true);
+        mFSAreaSearch->setExcludeReflectionProbe(false);
+    }
 
     if (mCheckboxExcludeAttachment->get())
     {
