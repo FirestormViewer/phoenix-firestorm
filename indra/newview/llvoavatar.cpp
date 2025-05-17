@@ -867,7 +867,7 @@ void LLVOAvatar::debugAvatarRezTime(std::string notification_name, std::string c
         // avString() might crash due to a dead sAvatarDictionary
         return;
     }
-
+    if (gSavedSettings.getBOOL("DebugAvatarRezTime"))
     LL_INFOS("Avatar") << "REZTIME: [ " << (U32)mDebugExistenceTimer.getElapsedTimeF32()
                        << "sec ]"
                        << avString()
