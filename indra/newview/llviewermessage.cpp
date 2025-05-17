@@ -6671,6 +6671,7 @@ void process_alert_core(const std::string& message, bool modal)
         if (text.substr(0, restart_cancelled.length()) == restart_cancelled)
         {
             LLFloaterRegionRestarting::close();
+            fs_report_region_restart_to_channel(-1); // <FS:Darl> Announce region restart to a defined chat channel
         }
 
             std::string new_msg =LLNotifications::instance().getGlobalString(text);
@@ -8729,7 +8730,14 @@ void fs_report_region_restart_to_channel(S32 seconds)
         msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
         msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
         msg->nextBlockFast(_PREHASH_ChatData);
-        msg->addStringFast(_PREHASH_Message, "region_restart_in:" + llformat("%d", seconds));
+        if(seconds >= 0)
+        {
+            msg->addStringFast(_PREHASH_Message, "region_restart_in:" + llformat("%d", seconds));
+        }
+        else // Input is a negative number
+        {
+            msg->addStringFast(_PREHASH_Message, "region_restart_cancelled");
+        }
         msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_WHISPER);
         msg->addS32("Channel", channel);
         gAgent.sendReliableMessage();
