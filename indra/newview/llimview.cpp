@@ -3904,15 +3904,55 @@ LLUUID LLIMMgr::addSession(
 
     //works only for outgoing ad-hoc sessions
     if (new_session &&
-        ((IM_NOTHING_SPECIAL == dialog) || (IM_SESSION_P2P_INVITE == dialog) || (IM_SESSION_CONFERENCE_START == dialog)) &&
-        ids.size())
+        // <AS:chanayane> fix unable to open an IM with someone who started a group chat
+        //((IM_NOTHING_SPECIAL == dialog) || (IM_SESSION_P2P_INVITE == dialog) || (IM_SESSION_CONFERENCE_START == dialog)) &&
+        //ids.size())
+        ((IM_NOTHING_SPECIAL == dialog) || (IM_SESSION_P2P_INVITE == dialog)) &&        
+        !ids.empty())
+        // </AS:chanayane>
     {
         session = LLIMModel::getInstance()->findAdHocIMSession(ids);
         if (session)
         {
-            new_session = false;
-            session_id = session->mSessionID;
+// <AS:chanayane> fix unable to open an IM with someone who started a group chat
+            // new_session = false;
+            // session_id = session->mSessionID;
+
+            // Protect against wrong session type reuse (e.g., conference reused for IM)
+            if (session->mType != dialog)
+            {
+                LL_WARNS("IMVIEW") << "Discarding mismatched session type reuse: expected " 
+                   << dialog << " but found " << session->mType 
+                   << " for session " << session->mSessionID 
+                   << ". This may indicate improper reuse of a session object." << LL_ENDL;
+                session = nullptr;
+                new_session = true;
+                session_id = computeSessionID(dialog, other_participant_id);
+            }
+            else
+            {
+                new_session = false;
+                session_id = session->mSessionID;
+            }
         }
+    }
+
+    if (session && session->mType != dialog)
+    {
+        // Prevent reusing a session of the wrong type
+        session = nullptr;
+        new_session = true;
+
+        // Recompute session ID depending on dialog type
+        if (dialog == IM_SESSION_CONFERENCE_START)
+        {
+            session_id.generate();
+        }
+        else
+        {
+            session_id = computeSessionID(dialog, other_participant_id);
+        }
+// </AS:chanayane>
     }
 
     //Notify observers that a session was added
