@@ -2627,10 +2627,10 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         F32 camera_moving_speed = camera->getAverageSpeed() ;
         F32 camera_angular_speed = camera->getAverageAngularSpeed();
 
-        //if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
+        if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
         {
             //if camera moves or rotates too fast, ignore the importance factor
-            //return 0.f ;
+            return 0.f ;
         }
 
         S32 i = 0 ;
