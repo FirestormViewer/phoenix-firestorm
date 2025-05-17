@@ -3135,7 +3135,7 @@ bool LLTextureFetch::getRequestFinished(const LLUUID& id, S32& discard_level, S3
             worker->lockWorkMutex();                                    // +Mw
             if ((worker->mDecodedDiscard >= 0) &&
                 (worker->mDecodedDiscard < discard_level || discard_level < 0) &&
-                (worker->mState >= LLTextureFetchWorker::WAIT_ON_WRITE))
+                (worker->mState >= LLTextureFetchWorker::DONE))
             {
                 // Not finished, but data is ready
                 discard_level = worker->mDecodedDiscard;

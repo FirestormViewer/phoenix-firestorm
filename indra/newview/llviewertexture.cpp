@@ -2687,7 +2687,7 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
                 else if (entryp->mLastUsedDiscard > best_raw_discard)
                 {
                     // We can readback data, and then run the callbacks
-                    need_readback = true;
+                    //need_readback = true;
                     run_raw_callbacks = true;
                 }
             }

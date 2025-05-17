@@ -122,7 +122,7 @@
             initial_value="500"
             layout="topleft"
             left_pad="5"
-            max_val="3000"
+            max_val="1000000"
             min_val="50"
             name="max_bandwidth"
             top_delta="-2"

@@ -663,7 +663,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 S32 band_width;
                 if (i >> band_width)
                 {
-                    band_width = llclamp(band_width, 50, 3000);
+                    band_width = llclamp(band_width, 50, 1000000);
                     gSavedSettings.setF32("ThrottleBandwidthKBPS", (F32)band_width);
                     LLStringUtil::format_map_t args;
                     std::string bw_cmd_respond;

@@ -1343,7 +1343,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                 imagep->setBias(bias);
             }
             // Once the bias is back to 1.00, then if the texture is 
-            else if (on_screen && LLViewerTexture::sDesiredDiscardBias == 1.0f && important_to_camera >= LEAST_IMPORTANCE_FOR_LARGE_IMAGE)
+            else if (on_screen && LLViewerTexture::sDesiredDiscardBias == 1.0f)// && important_to_camera >= LEAST_IMPORTANCE_FOR_LARGE_IMAGE)
             {
                 imagep->setBias(1.0f);
             }

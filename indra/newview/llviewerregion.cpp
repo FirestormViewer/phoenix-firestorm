@@ -2553,6 +2553,7 @@ void LLViewerRegion::getInfo(LLSD& info)
 
 void LLViewerRegion::requestSimulatorFeatures()
 {
+    LL_PROFILE_ZONE_NAMED("requestSimulatorFeatures");
     LL_DEBUGS("SimulatorFeatures") << "region " << getName() << " ptr " << this
                                    << " trying to request SimulatorFeatures" << LL_ENDL;
     // kick off a request for simulator features
@@ -2604,8 +2605,8 @@ void LLViewerRegion::getSimulatorFeatures(LLSD& sim_features) const
 
 void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 {
+    LL_PROFILE_ZONE_NAMED("setSimulatorFeatures");
     std::stringstream str;
-
     LLSDSerialize::toPrettyXML(sim_features, str);
     LL_INFOS() << "region " << getName() << " "  << str.str() << LL_ENDL;
     mSimulatorFeatures = sim_features;

@@ -99,7 +99,7 @@
 		 increment="50"
 		 initial_value="500"
 		 layout="topleft"
-		 max_val="3000"
+		 max_val="1000000"
 		 min_val="50"
 		 top="35"
 		 name="max_bandwidth"
