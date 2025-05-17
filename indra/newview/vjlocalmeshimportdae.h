@@ -26,25 +26,15 @@
 
 #pragma once
 
- // linden headers
-#include "llviewerprecompiledheaders.h"
+#include "vjlocalmesh.h"
+
+ // collada dom magic
+#include <dom/domMesh.h>
 
 // formal declarations
 class LLLocalMeshObject;
 class LLLocalMeshFace;
 class LLLocalMeshFileData;
-
-// collada dom magic
-#if LL_MSVC
-#pragma warning (disable : 4263)
-#pragma warning (disable : 4264)
-#endif
-#include "dom/domMesh.h"
-#if LL_MSVC
-#pragma warning (default : 4263)
-#pragma warning (default : 4264)
-#endif
-
 
 /*
     NOTE: basically everything here is just a refactor of lldaeloader
@@ -71,7 +61,7 @@ public:
     loadFile_return loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod);
     bool processObject(domMesh* current_mesh, LLLocalMeshObject* current_object);
     bool processSkin(daeDatabase* collada_db, daeElement* collada_document_root, domMesh* current_mesh, domSkin* current_skin, std::unique_ptr<LLLocalMeshObject>& current_object);
-    bool processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children=false);
+    bool processSkeletonJoint(domNode* current_node, std::map<std::string, std::string, std::less<>>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children = false);
 
     bool readMesh_CommonElements(const domInputLocalOffset_Array& inputs,
         int& offset_position, int& offset_normals, int& offset_uvmap, int& index_stride,
@@ -84,8 +74,6 @@ public:
     bool readMesh_Triangle(LLLocalMeshFace* data_out, const domTrianglesRef& data_in);
     bool readMesh_Polylist(LLLocalMeshFace* data_out, const domPolylistRef& data_in);
 
-    // NOTE: polygon schema
-    //bool readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in);
     void pushLog(const std::string& who, const std::string& what, bool is_error=false);
 
 private:

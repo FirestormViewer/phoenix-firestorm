@@ -234,6 +234,7 @@
 #include "llfloaterreg.h"
 #include "llfloatersimplesnapshot.h"
 #include "llfloatersnapshot.h"
+#include "llfloaterflickr.h"
 #include "llsidepanelinventory.h"
 #include "llatmosphere.h"
 
@@ -1749,6 +1750,7 @@ bool LLAppViewer::doFrame()
                     gPipeline.mReflectionMapManager.update();
                     LLFloaterSnapshot::update(); // take snapshots
                     LLFloaterSimpleSnapshot::update();
+                    LLFloaterFlickr::update(); // <FS:Beq/> FIRE-35002 - Flickr preview not updating whne opened directly from tool tray icon
                     gGLActive = false;
                 }
 

@@ -14684,4 +14684,18 @@ For detailed instructions on how to whitelist [APP_NAME] - including a list of f
 https://wiki.firestormviewer.org/antivirus_whitelisting
   </notification>
 
+   <notification
+   icon="alertmodal.tga"
+   label="Confirm Pose Overwrite"
+   name="ConfirmPoserOverwrite"
+   type="alertmodal">
+    <unique/>
+    Overwrite existing pose “[POSE_NAME]”?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Okay"/>
+  </notification>
+
 </notifications>

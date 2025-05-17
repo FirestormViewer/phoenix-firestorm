@@ -2198,9 +2198,13 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="ATTACHMENT_NOT_ATTACHED">
 		エラー：オブジェクトは現在のアウトフィットにありますが、装着されていません。
 	</string>
-	<string name="TodayOld">
-		本日参加
-	</string>
+	<string name="YearsMonthsOld">[AGEYEARS]　[AGEMONTHS]</string>
+	<string name="YearsOld">[AGEYEARS]前</string>
+	<string name="MonthsOld">[AGEMONTHS]前</string>
+	<string name="WeeksOld">[AGEWEEKS]前</string>
+	<string name="DaysOld">[AGEDAYS]前</string>
+	<string name="TodayOld">本日参加</string>
+	<string name="TotalDaysOld">；[AGEDAYSTOTAL]</string>
 	<!-- Avatar complexity rendering messages, see llavatarrendernotifier. -->
 	<string name="av_render_everyone_now">
 		あなたは、全員から見えるようになりました。
@@ -2272,13 +2276,13 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		[COUNT]週間
 	</string>
 	<string name="AgeDaysA">
-		[COUNT]日間
+		[COUNT]日
 	</string>
 	<string name="AgeDaysB">
-		[COUNT]日間
+		[COUNT]日
 	</string>
 	<string name="AgeDaysC">
-		[COUNT]日間
+		[COUNT]日
 	</string>
 	<!-- Group member counts -->
 	<string name="GroupMembersA">

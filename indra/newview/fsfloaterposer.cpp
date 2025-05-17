@@ -33,6 +33,7 @@
 #include "llcheckboxctrl.h"
 #include "llcommonutils.h"
 #include "llcontrolavatar.h"
+#include "llnotificationsutil.h"
 #include "lldiriterator.h"
 #include "llsdserialize.h"
 #include "llscrolllistctrl.h"
@@ -61,7 +62,10 @@ constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpa
 constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPosingWhenClosed";
 constexpr std::string_view POSER_RESETBASEROTONEDIT_SAVE_KEY   = "FSPoserResetBaseRotationOnEdit";
 constexpr std::string_view POSER_SAVEEXTERNALFORMAT_SAVE_KEY   = "FSPoserSaveExternalFileAlso";
-constexpr std::string_view POSER_SAVECONFIRMREQUIRED_SAVE_KEY   = "FSPoserOnSaveConfirmOverwrite";
+constexpr std::string_view POSER_SAVECONFIRMREQUIRED_SAVE_KEY  = "FSPoserOnSaveConfirmOverwrite";
+constexpr char             ICON_SAVE_OK[]                      = "icon_rotation_is_own_work";
+constexpr char             ICON_SAVE_FAILED[]                  = "icon_save_failed_button";
+
 }  // namespace
 
 /// <summary>
@@ -368,19 +372,8 @@ void FSFloaterPoser::onPoseFileSelect()
         mLoadPosesBtn->setLabel(getString("LoadPoseLabel"));
 }
 
-void FSFloaterPoser::onClickPoseSave()
+void FSFloaterPoser::doPoseSave(LLVOAvatar* avatar, const std::string& filename)
 {
-    std::string filename = mPoseSaveNameEditor->getValue().asString();
-    if (filename.empty() && hasString("icon_save_failed_button"))
-    {
-        mSavePosesBtn->setImageOverlay(getString("icon_save_failed_button"), mSavePosesBtn->getImageOverlayHAlign());
-        return;
-    }
-
-    if (confirmFileOverwrite(filename))
-        return;
-
-    LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
@@ -393,43 +386,60 @@ void FSFloaterPoser::onClickPoseSave()
         if (getSavingToBvh())
             savePoseToBvh(avatar, filename);
 
-        if (hasString("icon_rotation_is_own_work"))
-            mSavePosesBtn->setImageOverlay(getString("icon_rotation_is_own_work"), mSavePosesBtn->getImageOverlayHAlign());
+        if (hasString(ICON_SAVE_OK))
+            mSavePosesBtn->setImageOverlay(getString(ICON_SAVE_OK), mSavePosesBtn->getImageOverlayHAlign());
 
         setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
     }
     else
     {
-        if (hasString("icon_save_failed_button"))
-            mSavePosesBtn->setImageOverlay(getString("icon_save_failed_button"), mSavePosesBtn->getImageOverlayHAlign());
-    }
+        if (hasString(ICON_SAVE_FAILED))
+            mSavePosesBtn->setImageOverlay(getString(ICON_SAVE_FAILED), mSavePosesBtn->getImageOverlayHAlign());
+    }    
 }
 
-bool FSFloaterPoser::confirmFileOverwrite(std::string fileName)
+void FSFloaterPoser::onClickPoseSave()
 {
-    if (fileName.empty())
-        return false;
+    std::string filename = mPoseSaveNameEditor->getValue().asString();
+    if (filename.empty() && hasString(ICON_SAVE_FAILED))
+    {
+        mSavePosesBtn->setImageOverlay(getString(ICON_SAVE_FAILED), mSavePosesBtn->getImageOverlayHAlign());
+        return;
+    }
+    
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+    return;
+  
+    // if prompts are disabled or file doesn't exist, do the save immediately:
+    const bool prompt = gSavedSettings.getBOOL(POSER_SAVECONFIRMREQUIRED_SAVE_KEY);
 
-    if (!gSavedSettings.getBOOL(POSER_SAVECONFIRMREQUIRED_SAVE_KEY))
-        return false;
+    std::string fullPath = gDirUtilp->getExpandedFilename(
+        LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, filename + POSE_INTERNAL_FORMAT_FILE_EXT);
+    const bool exists = gDirUtilp->fileExists(fullPath);
 
-    if (!hasString("icon_save_query"))
-        return false;
-
-    if (mSavePosesBtn->getImageOverlay().notNull() && mSavePosesBtn->getImageOverlay()->getName() == getString("icon_save_query"))
-        return false;
-
-    std::string fullSavePath =
-        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, fileName + POSE_INTERNAL_FORMAT_FILE_EXT);
-
-    if (!gDirUtilp->fileExists(fullSavePath))
-        return false;
-
-    mSavePosesBtn->setImageOverlay(getString("icon_save_query"), mSavePosesBtn->getImageOverlayHAlign());
-    if (hasString("OverWriteLabel"))
-        mSavePosesBtn->setLabel(getString("OverWriteLabel"));
-
-    return true;
+    if (!prompt || !exists)
+    {
+        // new file or no overwrite guard
+        doPoseSave(avatar, filename);
+    }
+    else
+    {
+        // show a modal dialog, passing the pose name along
+        LLSD args;
+        args["POSE_NAME"] = filename;
+       
+        LLNotificationsUtil::add("ConfirmPoserOverwrite", args, LLSD(), // no payload
+            [this, avatar, filename](const LLSD& notification, const LLSD& response)
+            {
+                if (LLNotificationsUtil::getSelectedOption(notification, response) == 0)
+                {
+                    // user clicked “Yes”
+                    doPoseSave(avatar, filename);
+                }
+                // else do nothing (cancel)
+            });
+    }
 }
 
 void FSFloaterPoser::onMouseLeaveSavePoseBtn()

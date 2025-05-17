@@ -3985,6 +3985,13 @@ bool LLViewerRegion::bakesOnMeshEnabled() const
 
 bool LLViewerRegion::meshRezEnabled() const
 {
+    // <FS:Beq> FIRE-35602 and many similar reports - Mesh not appearing after TP/login
+    if(!mSimulatorFeaturesReceived)
+    {
+        LL_DEBUGS("MeshRez") << "MeshRezEnabled: SimulatorFeatures not received yet. Defaulting to true" << LL_ENDL;
+        return true;
+    }
+    // </FS:Beq>
     return (mSimulatorFeatures.has("MeshRezEnabled") &&
                 mSimulatorFeatures["MeshRezEnabled"].asBoolean());
 }

@@ -28,7 +28,6 @@
 #include "llviewerprecompiledheaders.h"
 
 /* own header */
-#include "vjlocalmesh.h"
 #include "vjlocalmeshimportdae.h"
 
 /* linden headers */
@@ -41,7 +40,6 @@
 /* dae headers*/
 #include <dae.h>
 #include <dom/domConstants.h>
-#include <dom/domMesh.h>
 #include <dom/domSkin.h>
 #include <dom/domGeometry.h>
 #include <dom/domInstance_controller.h>
@@ -471,7 +469,7 @@ bool LLLocalMeshImportDAE::processObject(domMesh* current_mesh, LLLocalMeshObjec
 }
 
 // Function to load the JointMap
-JointMap loadJointMap()
+static JointMap loadJointMap()
 {
     JointMap joint_map = gAgentAvatarp->getJointAliases();
 
@@ -483,7 +481,7 @@ JointMap loadJointMap()
     extra_names.insert(extra_names.end(), more_extra_names.begin(), more_extra_names.end());
 
     // add the extras to jointmap
-    for (auto extra_name : extra_names)
+    for (const auto& extra_name : extra_names)
     {
         joint_map[extra_name] = extra_name;
     }
@@ -1067,7 +1065,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
     return true;
 }
 
-bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children)
+bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string, std::less<>>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children)
 {
     // safety checks & name check
     const auto node_name = current_node->getName();
@@ -1822,16 +1820,3 @@ void LLLocalMeshImportDAE::pushLog(const std::string& who, const std::string& wh
     mLoadingLog.push_back(log_msg);
     LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
 }
-
-//bool LLLocalMeshImportDAE::readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in)
-//{
-    /*
-        i couldn't find any collada files of this type to test on
-        this type may have been deprecated?
-    */
-
-    // ok so.. in here vcount should be a number of polys, EACH poly should have it's own P (array of vtx indices)
-
-    // return false // gotta return a thing
-
-//}

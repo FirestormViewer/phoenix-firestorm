@@ -119,6 +119,7 @@ public:
         BETA_VIEWER,
         NIGHTLY_VIEWER,
         RELEASE_VIEWER,
+        STREAMING_VIEWER,
     };
     FSViewerMaturity getFSViewerMaturity() const;
 // </FS:Beq>

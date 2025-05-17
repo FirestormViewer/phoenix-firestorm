@@ -689,7 +689,7 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
     #if LL_DARWIN
         bugSplatMap.setAttribute("HiDPI", info["HIDPI"].asBoolean() ? "Enabled" : "Disabled");
     #endif
-        bugSplatMap.setAttribute("Max Texture Size", gSavedSettings.getString("RenderMaxTextureResolution"));
+        bugSplatMap.setAttribute("Max Texture Size", gSavedSettings.getU32("RenderMaxTextureResolution"));
     }
 
     // These attributes are potentially dynamic

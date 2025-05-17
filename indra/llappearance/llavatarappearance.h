@@ -156,7 +156,7 @@ public:
 public:
     typedef std::vector<LLAvatarJoint*> avatar_joint_list_t;
     const avatar_joint_list_t& getSkeleton() { return mSkeleton; }
-    typedef std::map<std::string, std::string> joint_alias_map_t;
+    typedef std::map<std::string, std::string, std::less<>> joint_alias_map_t;
     const joint_alias_map_t& getJointAliases();
 
 

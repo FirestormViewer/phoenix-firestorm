@@ -5485,4 +5485,8 @@ Aby uzyskać szczegółowe instrukcje dotyczące umieszczania [APP_NAME]a na bia
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification label="Potwierdź nadpisanie pozy" name="ConfirmPoserOverwrite">
+		Nadpisać istniejącą pozę “[POSE_NAME]”?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK" />
+	</notification>
 </notifications>

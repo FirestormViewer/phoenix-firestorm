@@ -50,6 +50,8 @@ public:
     /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& key);
 
+    void draw(); // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+
     void onSearchEdit(const std::string& string);
     void onSave();
     void saveOutfit(bool as_new = false);
@@ -82,6 +84,10 @@ private:
     // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
     LLInventoryCategoriesObserver* mCategoriesObserver;
     void onCOFChanged();
+
+    U32 mCurrentTempAttachmentCount{ 0 };
+
+    LLFrameTimer mTempAttachmentUpdateTimer;
     // </FS:Ansariel>
 
     //////////////////////////////////////////////////////////////////////////////////
