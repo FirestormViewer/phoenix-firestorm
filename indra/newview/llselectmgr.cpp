@@ -7969,19 +7969,20 @@ bool LLSelectMgr::canSelectObject(LLViewerObject* object, bool ignore_select_own
             // only select my own objects
             return false;
         }
+
+        // <FS:Ansariel> FIRE-14593: Option to select only copyable objects
+        if (!object->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
+        {
+            return false;
+        }
+        // </FS:Ansariel>
+        // <FS:Ansariel> FIRE-17696: Option to select only locked objects
+        if (gSavedSettings.getBOOL("FSSelectLockedOnly") && object->permMove() && !object->isPermanentEnforced())
+        {
+            return false;
+        }
+        // </FS:Ansariel>// Can't select objects that are not owned by you or group
     }
-    // <FS:Ansariel> FIRE-14593: Option to select only copyable objects
-    if (!object->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
-    {
-        return false;
-    }
-    // </FS:Ansariel>
-    // <FS:Ansariel> FIRE-17696: Option to select only locked objects
-    if (gSavedSettings.getBOOL("FSSelectLockedOnly") && object->permMove() && !object->isPermanentEnforced())
-    {
-        return false;
-    }
-    // </FS:Ansariel>
 
     // Can't select orphans
     if (object->isOrphaned()) return false;
