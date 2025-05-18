@@ -2705,7 +2705,7 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
 
     if (need_readback)
     {
-        readbackRawImage();
+        //readbackRawImage();
     }
 
     //
