@@ -2613,6 +2613,7 @@ F32 LLFace::adjustPartialOverlapPixelArea(F32 cos_angle_to_view_dir, F32 radius 
 F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
+    static LLCachedControl<bool> save_VRAM_move_load_quality_low(gSavedSettings, "FSSaveVRAMMVLDQL", true);
     F32 importance = 0.f ;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Move camera out to use for the inital check for the distance to the face importance with the multiplier
@@ -2627,7 +2628,7 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         F32 camera_moving_speed = camera->getAverageSpeed() ;
         F32 camera_angular_speed = camera->getAverageAngularSpeed();
 
-        if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
+        if((save_VRAM_move_load_quality_low) && (camera_moving_speed > 10.0f || camera_angular_speed > 1.0f))
         {
             //if camera moves or rotates too fast, ignore the importance factor
             return 0.f ;

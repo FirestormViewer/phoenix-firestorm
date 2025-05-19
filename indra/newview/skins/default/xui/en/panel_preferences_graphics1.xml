@@ -1286,7 +1286,17 @@ If you do not understand the distinction then leave this control alone."
           tool_tip="All textures close to camera treated as in frustrum. (Helps force mesh off screen to load)"
           width="275"
         />
-
+        <check_box
+          control_name="FSSaveVRAMMVLDQL"
+          height="16"
+          label="Moving/Turning Fast: New textures loaded at reduced quality (Faster)"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSSaveVRAMClToCamInFst"
+          tool_tip="When moving or turning fast, new textures are loaded at a capped quality, which can help with moving faster and reduce lag/stuttering. This can cause a reduction in visual quality until the camera stops moving which can cause a surge of loading. If want better quality when turning, then turn off."
+          width="275"
+        />
 
     </panel>
 
