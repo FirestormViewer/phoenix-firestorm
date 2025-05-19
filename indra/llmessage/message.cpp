@@ -113,10 +113,11 @@ class LLMessageHandlerBridge : public LLHTTPNode
 void LLMessageHandlerBridge::post(LLHTTPNode::ResponsePtr response,
                             const LLSD& context, const LLSD& input) const
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;    
     std::string name = context[CONTEXT_REQUEST][CONTEXT_WILDCARD]["message-name"];
     char* namePtr = LLMessageStringTable::getInstance()->getString(name.c_str());
 
-    LL_DEBUGS() << "Setting mLastSender " << input["sender"].asString() << LL_ENDL;
+    LL_DEBUGS("Messaging") << "Setting mLastSender " << input["sender"].asString() << LL_ENDL;
     gMessageSystem->mLastSender = LLHost(input["sender"].asString());
     gMessageSystem->mPacketsIn += 1;
     gMessageSystem->mLLSDMessageReader->setMessage(namePtr, input["body"]);
@@ -2050,6 +2051,7 @@ void LLMessageSystem::dispatch(
     const std::string& msg_name,
     const LLSD& message)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLPointer<LLSimpleResponse> responsep = LLSimpleResponse::create();
     dispatch(msg_name, message, responsep);
 }
@@ -2060,6 +2062,7 @@ void LLMessageSystem::dispatch(
     const LLSD& message,
     LLHTTPNode::ResponsePtr responsep)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if ((gMessageSystem->mMessageTemplates.find
             (LLMessageStringTable::getInstance()->getString(msg_name.c_str())) ==
                 gMessageSystem->mMessageTemplates.end()) &&

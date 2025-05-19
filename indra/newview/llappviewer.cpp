@@ -3795,6 +3795,7 @@ bool LLAppViewer::waitForUpdater()
 
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING; // <FS:Beq/> improve instrumentation 
 #if LL_WINDOWS && LL_BUGSPLAT
     // <FS:Beq> Improve Bugsplat tracking by using attributes for certain static data items.
     const LLSD& info = getViewerInfo();
@@ -3823,6 +3824,7 @@ void LLAppViewer::writeDebugInfo(bool isStatic)
 
 LLSD LLAppViewer::getViewerInfo() const
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING; // <FS:Beq/> improve instrumentation
     // The point of having one method build an LLSD info block and the other
     // construct the user-visible About string is to ensure that the same info
     // is available to a getInfo() caller as to the user opening
@@ -4135,6 +4137,7 @@ LLSD LLAppViewer::getViewerInfo() const
     // info["DISK_CACHE_INFO"] = LLDiskCache::getInstance()->getCacheInfo();
     if (auto cache = LLDiskCache::getInstance(); cache)
     {
+        LL_PROFILE_ZONE_NAMED("gvi-getCacheInfo"); // <FS:Beq/> improve instrumentation
         info["DISK_CACHE_INFO"] = cache->getCacheInfo();
     }
     // </FS:Beq>
