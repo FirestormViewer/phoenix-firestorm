@@ -7756,6 +7756,16 @@ void LLViewerObject::setRenderMaterialID(S32 te_in, const LLUUID& id, bool updat
     start_idx = llmax(start_idx, 0);
     end_idx = llmin(end_idx, (S32) getNumTEs());
 
+    // <FS> [FIRE-35138] If we are hiding the GLTF material, call the function again but with a null material id
+    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+    bool hiding_gltf_material = showSelectedinBP && isSelected();
+    if (hiding_gltf_material && id.notNull())
+    {
+        setRenderMaterialID(te_in, LLUUID::null, update_server, local_origin);
+        return;
+    }
+    // </FS>
+
     LLRenderMaterialParams* param_block = (LLRenderMaterialParams*)getParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL);
     if (!param_block && id.notNull())
     { // block doesn't exist, but it will need to
@@ -7792,43 +7802,53 @@ void LLViewerObject::setRenderMaterialID(S32 te_in, const LLUUID& id, bool updat
             }
         }
 
-        if (update_server || material_changed)
-        {
-            tep->setGLTFRenderMaterial(nullptr);
-        }
-
-        if (new_material != tep->getGLTFMaterial())
-        {
-            tep->setGLTFMaterial(new_material, !update_server);
-        }
-
-        if (material_changed && new_material)
-        {
-            // Sometimes, the material may change out from underneath the overrides.
-            // This is usually due to the server sending a new material ID, but
-            // the overrides have not changed due to being only texture
-            // transforms. Re-apply the overrides to the render material here,
-            // if present.
-            const LLGLTFMaterial* override_material = tep->getGLTFMaterialOverride();
-            if (override_material)
+        // <FS> [FIRE-35138] Only set GLTF material if not hiding it
+        if (!hiding_gltf_material)
+        { // </FS>
+            if (update_server || material_changed)
             {
-                new_material->onMaterialComplete([obj_id = getID(), te]()
-                    {
-                        LLViewerObject* obj = gObjectList.findObject(obj_id);
-                        if (!obj) { return; }
-                        LLTextureEntry* tep = obj->getTE(te);
-                        if (!tep) { return; }
-                        const LLGLTFMaterial* new_material = tep->getGLTFMaterial();
-                        if (!new_material) { return; }
-                        const LLGLTFMaterial* override_material = tep->getGLTFMaterialOverride();
-                        if (!override_material) { return; }
-                        LLGLTFMaterial* render_material = new LLFetchedGLTFMaterial();
-                        *render_material = *new_material;
-                        render_material->applyOverride(*override_material);
-                        tep->setGLTFRenderMaterial(render_material);
-                    });
+                tep->setGLTFRenderMaterial(nullptr);
             }
-        }
+
+            if (new_material != tep->getGLTFMaterial())
+            {
+                tep->setGLTFMaterial(new_material, !update_server);
+            }
+
+            if (material_changed && new_material)
+            {
+                // Sometimes, the material may change out from underneath the overrides.
+                // This is usually due to the server sending a new material ID, but
+                // the overrides have not changed due to being only texture
+                // transforms. Re-apply the overrides to the render material here,
+                // if present.
+                const LLGLTFMaterial* override_material = tep->getGLTFMaterialOverride();
+                if (override_material)
+                {
+                    new_material->onMaterialComplete([obj_id = getID(), te]()
+                        {
+                            LLViewerObject* obj = gObjectList.findObject(obj_id);
+                            if (!obj) { return; }
+                            LLTextureEntry* tep = obj->getTE(te);
+                            if (!tep) { return; }
+                            const LLGLTFMaterial* new_material = tep->getGLTFMaterial();
+                            if (!new_material) { return; }
+                            const LLGLTFMaterial* override_material = tep->getGLTFMaterialOverride();
+                            if (!override_material) { return; }
+                            LLGLTFMaterial* render_material = new LLFetchedGLTFMaterial();
+                            *render_material = *new_material;
+                            render_material->applyOverride(*override_material);
+                            tep->setGLTFRenderMaterial(render_material);
+                        });
+                }
+            }
+
+            // <FS> [FIRE-35138] Update the saved GLTF material since we got an update
+            if (material_changed)
+            {
+                updateSavedGLTFMaterial(te);
+            }
+        } // </FS>
     }
 
     // signal to render pipe that render batches must be rebuilt for this object
@@ -7904,6 +7924,28 @@ void LLViewerObject::saveGLTFMaterials()
         {
             mSavedGLTFOverrideMaterials.emplace_back(nullptr);
         }
+    }
+}
+
+void LLViewerObject::updateSavedGLTFMaterial(S32 te)
+{
+    if (te >= mSavedGLTFMaterialIds.size())
+    {
+        // Nothing is saved, so don't need to update anything
+        return;
+    }
+
+    mSavedGLTFMaterialIds[te] = getRenderMaterialID(te);
+
+    LLPointer<LLGLTFMaterial> old_override = getTE(te)->getGLTFMaterialOverride();
+    if (old_override.notNull())
+    {
+        LLGLTFMaterial* copy = new LLGLTFMaterial(*old_override);
+        mSavedGLTFOverrideMaterials[te] = copy;
+    }
+    else
+    {
+        mSavedGLTFOverrideMaterials[te] = nullptr;
     }
 }
 
