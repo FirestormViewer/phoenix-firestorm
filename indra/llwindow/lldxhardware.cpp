@@ -266,7 +266,15 @@ U32 LLDXHardware::getMBVideoMemoryViaWMI()
 //Getting the version of graphics controller driver via WMI
 std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
 {
-    std::string mDriverVersion;
+    // <FS:Beq> Add caching for WMI query results
+    LL_PROFILE_ZONE_SCOPED;
+    static auto driver_version = std::string();
+
+    if (!driver_version.empty())
+    {
+        return driver_version; // Return cached version
+    }
+    // </FS:Beq>
     HRESULT hres;
     CoInitializeEx(0, COINIT_APARTMENTTHREADED);
     IWbemLocator *pLoc = NULL;
@@ -435,11 +443,11 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
         std::string str = ll_convert_wide_to_string(ws);
         LL_INFOS("AppInit") << " DriverVersion : " << str << LL_ENDL;
 
-        if (mDriverVersion.empty())
+        if (driver_version.empty()) // <FS:Beq/> caching version (also make the varname not stupid)
         {
-            mDriverVersion = str;
+            driver_version = str; // <FS:Beq/> caching version (also make the varname not stupid)
         }
-        else if (mDriverVersion != str)
+        else if (driver_version != str) // <FS:Beq/> caching version (also make the varname not stupid)
         {
             if (vendor == GPU_ANY)
             {
@@ -475,7 +483,7 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
     // supposed to always call CoUninitialize even if init returned false
     CoUninitialize();
 
-    return mDriverVersion;
+    return driver_version; // <FS:Beq/> caching version of driver query 
 }
 
 void get_wstring(IDxDiagContainer* containerp, const WCHAR* wszPropName, WCHAR* wszPropValue, int outputSize)
