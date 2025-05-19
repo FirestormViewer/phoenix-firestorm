@@ -355,7 +355,11 @@ public:
     U8 getCentralBakeVersion() { return mCentralBakeVersion; }
 
     void getInfo(LLSD& info);
-
+// <FS:Beq> FIRE-35602 etc - Mesh not appearing after TP/login (opensim only)    
+#ifdef OPENSIM
+    bool meshRezEnabled() const;
+#endif // OPENSIM
+// </FS:Beq>
     bool meshUploadEnabled() const;
 
     bool bakesOnMeshEnabled() const;
