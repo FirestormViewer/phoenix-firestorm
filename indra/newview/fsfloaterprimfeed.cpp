@@ -875,6 +875,11 @@ void FSFloaterPrimfeed::draw()
                     mStatusErrorText->setValue(status_text);
                     break;                  
                 }
+                default:
+                {
+                    LL_WARNS("Prmfeed") << "unexpected state" << connection_state << LL_ENDL;
+                    break;
+                }
             }
         }
         else if (FSPrimfeedAuth::isPendingAuth())
