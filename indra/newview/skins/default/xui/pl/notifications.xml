@@ -5496,13 +5496,13 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		Żądanie logowania odrzucone przez Primfeed.
 	</notification>
 	<notification name="PrimfeedAuthorizationFailed">
-		Autoryzacja a Primfeed nie powiodła się. Sekwencja autoryzacji nie została ukończona.
+		Autoryzacja w Primfeed nie powiodła się. Sekwencja autoryzacji nie została ukończona.
 	</notification>
 	<notification name="PrimfeedAuthorizationAlreadyInProgress">
 		Autoryzacja z Primfeed jest już w toku. Przed ponowną próbą należy ukończyć autoryzację Primfeed w przeglądarce internetowej.
 	</notification>
 	<notification name="PrimfeedAuthorizationSuccessful">
-		Autoryzacja a Primfeed została ukończona. Teraz możesz publikować obrazy w Primfeed.
+		Autoryzacja w Primfeed została ukończona. Teraz możesz publikować obrazy w Primfeed.
 	</notification>
 	<notification name="PrimfeedValidateFailed">
 		Weryfikacja użytkownika w Primfeed nie powiodła się. Primfeed nie rozpoznał tego konta lub logowanie nie powiodło się.
