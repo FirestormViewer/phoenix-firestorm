@@ -6218,7 +6218,6 @@ bool LLMeshRepository::meshRezEnabled()
             return region->meshRezEnabled();
         }
     }
-    else
 #endif // OPENSIM
 // </FS:Beq>
     return mesh_enabled;
