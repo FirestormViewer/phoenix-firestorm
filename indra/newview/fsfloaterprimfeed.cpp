@@ -69,19 +69,19 @@ static LLPanelInjector<FSPrimfeedAccountPanel> t_panel_account("fsprimfeedaccoun
 FSPrimfeedPhotoPanel::FSPrimfeedPhotoPanel() :
     mResolutionComboBox(nullptr),
     mRefreshBtn(nullptr),
-    mBtnPreview(nullptr),
     mWorkingLabel(nullptr),
     mThumbnailPlaceholder(nullptr),
     mDescriptionTextBox(nullptr),
     mLocationCheckbox(nullptr),
     mRatingComboBox(nullptr),
-    mBigPreviewFloater(nullptr),
-    mPostButton(nullptr)
+    mPostButton(nullptr),
+    mBtnPreview(nullptr),
+    mBigPreviewFloater(nullptr)
 {
-    mCommitCallbackRegistrar.add("SocialSharing.SendPhoto", [this](LLUICtrl* ctrl, const LLSD& data) { onSend(); });
-    mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", [this](LLUICtrl* ctrl, const LLSD& data) { onClickNewSnapshot(); });
-    mCommitCallbackRegistrar.add("SocialSharing.BigPreview", [this](LLUICtrl* ctrl, const LLSD& data) { onClickBigPreview(); });
-    mCommitCallbackRegistrar.add("Primfeed.Info", [this](LLUICtrl* ctrl, const LLSD& param) { 
+    mCommitCallbackRegistrar.add("SocialSharing.SendPhoto", [this](LLUICtrl* , const LLSD& ) { onSend(); });
+    mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", [this](LLUICtrl* , const LLSD& ) { onClickNewSnapshot(); });
+    mCommitCallbackRegistrar.add("SocialSharing.BigPreview", [this](LLUICtrl* , const LLSD& ) { onClickBigPreview(); });
+    mCommitCallbackRegistrar.add("Primfeed.Info", [](LLUICtrl* , const LLSD& param) { 
         const std::string url = param.asString();
         LL_DEBUGS("primfeed") << "Info button clicked, opening " << url << LL_ENDL;
         LLWeb::loadURLExternal(url);
@@ -104,7 +104,7 @@ FSPrimfeedPhotoPanel::~FSPrimfeedPhotoPanel()
 
 bool FSPrimfeedPhotoPanel::postBuild()
 {
-    setVisibleCallback([this](LLUICtrl * unused, bool visible) {
+    setVisibleCallback([this](LLUICtrl * , bool visible) {
         onVisibilityChange(visible);
     });
 
@@ -136,10 +136,10 @@ bool FSPrimfeedPhotoPanel::postBuild()
 
     // Update filter list
     std::vector<std::string> filter_list = LLImageFiltersManager::getInstance()->getFiltersList();
-    LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
-    for (U32 i = 0; i < filter_list.size(); i++)
+    auto * filterbox = static_cast<LLComboBox *>(mFilterComboBox);
+    for (const std::string& filter : filter_list)
     {
-        filterbox->add(filter_list[i]);
+        filterbox->add(filter);
     }
 
     return LLPanel::postBuild();
@@ -171,8 +171,9 @@ S32 FSPrimfeedPhotoPanel::notify(const LLSD& info)
 
         // The refresh button is initially hidden. We show it after the first update,
         // i.e. after snapshot is taken
-        LLUICtrl * refresh_button = getRefreshBtn();
-        if (!refresh_button->getVisible())
+        
+        if (LLUICtrl * refresh_button = getRefreshBtn();
+            !refresh_button->getVisible())
         {
             refresh_button->setVisible(true);
         }
@@ -184,7 +185,7 @@ S32 FSPrimfeedPhotoPanel::notify(const LLSD& info)
 
 void FSPrimfeedPhotoPanel::draw()
 {
-    LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
+    auto previewp = static_cast<const LLSnapshotLivePreview *>(mPreviewHandle.get());
 
     // Enable interaction only if no transaction with the service is on-going (prevent duplicated posts)
     auto can_post = !(FSPrimfeedConnect::instance().isTransactionOngoing()) && FSPrimfeedAuth::isAuthorized();
@@ -242,7 +243,7 @@ void FSPrimfeedPhotoPanel::draw()
 
 LLSnapshotLivePreview* FSPrimfeedPhotoPanel::getPreviewView()
 {
-    LLSnapshotLivePreview* previewp = (LLSnapshotLivePreview*)mPreviewHandle.get();
+    auto previewp = (LLSnapshotLivePreview*)mPreviewHandle.get();
     return previewp;
 }
 
@@ -264,7 +265,7 @@ void FSPrimfeedPhotoPanel::onVisibilityChange(bool visible)
             LLRect full_screen_rect = getRootView()->getRect();
             LLSnapshotLivePreview::Params p;
             p.rect(full_screen_rect);
-            LLSnapshotLivePreview* previewp = new LLSnapshotLivePreview(p);
+            auto previewp = new LLSnapshotLivePreview(p);
             mPreviewHandle = previewp->getHandle();
 
             previewp->setContainer(this);
@@ -303,7 +304,7 @@ void FSPrimfeedPhotoPanel::onClickBigPreview()
     }
 }
 
-bool FSPrimfeedPhotoPanel::isPreviewVisible()
+bool FSPrimfeedPhotoPanel::isPreviewVisible() const
 {
     return (mBigPreviewFloater && mBigPreviewFloater->getVisible());
 }
@@ -323,7 +324,7 @@ void FSPrimfeedPhotoPanel::onSend()
     sendPhoto();
 }
 
-bool FSPrimfeedPhotoPanel::onPrimfeedConnectStateChange(const LLSD& data)
+bool FSPrimfeedPhotoPanel::onPrimfeedConnectStateChange(const LLSD& /*data*/)
 {
     if (FSPrimfeedAuth::isAuthorized())
     {
@@ -342,7 +343,7 @@ void FSPrimfeedPhotoPanel::sendPhoto()
         "adult_plus"   // 4
     };    
 
-    auto ratingToString = [&](int rating) -> std::string {
+    auto ratingToString = [&](int rating) {
         // clamp into [1,4]
         int idx = llclamp(rating, 1, 4) - 1;
         return RATING_NAMES[idx];
@@ -366,8 +367,9 @@ void FSPrimfeedPhotoPanel::sendPhoto()
     params["is_commercial"] = commercial_content;
     params["post_to_public_gallery"] = post_to_public_gallery;
     // Add the location if required
-    bool add_location = mLocationCheckbox->getValue().asBoolean();
-    if (add_location)
+    
+    if (bool add_location = mLocationCheckbox->getValue().asBoolean();
+        add_location)
     {
         // Get the SLURL for the location
         LLSLURL slurl;
@@ -383,8 +385,8 @@ void FSPrimfeedPhotoPanel::sendPhoto()
             if (success)
             {
                 FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_POSTED);
-                static LLCachedControl<bool> open_url_on_post(gSavedPerAccountSettings, "FSPrimfeedOpenURLOnPost", true);
-                if (open_url_on_post)
+                if (static LLCachedControl<bool> open_url_on_post(gSavedPerAccountSettings, "FSPrimfeedOpenURLOnPost", true); 
+                    open_url_on_post)
                 {
                     LLWeb::loadURLExternal(url);
                 }
@@ -419,16 +421,14 @@ void FSPrimfeedPhotoPanel::clearAndClose()
 
 void FSPrimfeedPhotoPanel::updateControls()
 {
-    LLSnapshotLivePreview* previewp = getPreviewView();
-    bool got_snap = previewp && previewp->getSnapshotUpToDate();
-
+    // LLSnapshotLivePreview* previewp = getPreviewView();
     updateResolution(false);
 }
 
 void FSPrimfeedPhotoPanel::updateResolution(bool do_update)
 {
-    LLComboBox* combobox  = static_cast<LLComboBox *>(mResolutionComboBox);
-    LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
+    auto combobox  = static_cast<LLComboBox *>(mResolutionComboBox);
+    auto filterbox = static_cast<LLComboBox *>(mFilterComboBox);
 
     std::string sdstring = combobox->getSelectedValue();
     LLSD sdres;
@@ -441,12 +441,13 @@ void FSPrimfeedPhotoPanel::updateResolution(bool do_update)
     // Note : index 0 of the filter drop down is assumed to be "No filter" in whichever locale
     std::string filter_name = (filterbox->getCurrentIndex() ? filterbox->getSimple() : "");
 
-    LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
-    if (previewp && combobox->getCurrentIndex() >= 0)
+    if (auto previewp = static_cast<LLSnapshotLivePreview*>(mPreviewHandle.get()); 
+        previewp && combobox->getCurrentIndex() >= 0)
     {
         checkAspectRatio(width);
 
-        S32 original_width = 0 , original_height = 0 ;
+        S32 original_width = 0;
+        S32 original_height = 0 ;
         previewp->getSize(original_width, original_height) ;
 
         if (width == 0 || height == 0)
@@ -591,16 +592,16 @@ bool FSPrimfeedPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& 
         }
 
         //aspect ratio of the current window
-        F32 aspect_ratio = (F32)gViewerWindow->getWindowWidthRaw() / gViewerWindow->getWindowHeightRaw() ;
+        F32 aspect_ratio = static_cast<F32>(gViewerWindow->getWindowWidthRaw()) / static_cast<F32>(gViewerWindow->getWindowHeightRaw());
 
         //change another value proportionally
         if(isWidthChanged)
         {
-            height = ll_round(width / aspect_ratio) ;
+            height = ll_round(static_cast<F32>(width) / aspect_ratio) ;
         }
         else
         {
-            width = ll_round(height * aspect_ratio) ;
+            width = ll_round(static_cast<F32>(height) * aspect_ratio) ;
         }
 
         //bound w/h by the max_value
@@ -609,12 +610,12 @@ bool FSPrimfeedPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& 
             if(width > height)
             {
                 width = max_value ;
-                height = (S32)(width / aspect_ratio) ;
+                height = ll_round(static_cast<F32>(width) / aspect_ratio) ;
             }
             else
             {
                 height = max_value ;
-                width = (S32)(height * aspect_ratio) ;
+                width = ll_round(static_cast<F32>(height) * aspect_ratio) ;
             }
         }
     }
@@ -634,11 +635,11 @@ mPanelButtons(nullptr),
 mConnectButton(nullptr),
 mDisconnectButton(nullptr)
 {
-    mCommitCallbackRegistrar.add("SocialSharing.Connect", [this](LLUICtrl* ctrl, const LLSD& data) { onConnect(); });
-    mCommitCallbackRegistrar.add("SocialSharing.Disconnect", [this](LLUICtrl* ctrl, const LLSD& data) { onDisconnect(); });    
+    mCommitCallbackRegistrar.add("SocialSharing.Connect", [this](LLUICtrl* , const LLSD& ) { onConnect(); });
+    mCommitCallbackRegistrar.add("SocialSharing.Disconnect", [this](LLUICtrl* , const LLSD& ) { onDisconnect(); });    
 
     FSPrimfeedAuth::sPrimfeedAuthPump->listen("FSPrimfeedAccountPanel", 
-        [this](const LLSD& data) -> bool
+        [this](const LLSD& data)
         {
             bool success = data["success"].asBoolean();
             this->primfeedAuthResponse(success, data);
@@ -646,7 +647,7 @@ mDisconnectButton(nullptr)
         }
     );
 
-    setVisibleCallback([this](LLUICtrl *unused, bool visible) {
+    setVisibleCallback([this](LLUICtrl *, bool visible) {
         onVisibilityChange(visible);
     });
 }
@@ -709,7 +710,7 @@ void FSPrimfeedAccountPanel::onVisibilityChange(bool visible)
     }
 }
 
-bool FSPrimfeedAccountPanel::onPrimfeedConnectStateChange(const LLSD& data)
+bool FSPrimfeedAccountPanel::onPrimfeedConnectStateChange(const LLSD& )
 {
     if (FSPrimfeedAuth::isAuthorized())
     {
@@ -795,13 +796,13 @@ FSFloaterPrimfeed::FSFloaterPrimfeed(const LLSD& key) : LLFloater(key),
     mStatusLoadingText(nullptr),
     mStatusLoadingIndicator(nullptr)
 {
-    mCommitCallbackRegistrar.add("SocialSharing.Cancel", [this](LLUICtrl* ctrl, const LLSD& data) { onCancel(); });
+    mCommitCallbackRegistrar.add("SocialSharing.Cancel", [this](LLUICtrl* , const LLSD& ) { onCancel(); });
 }
 
 void FSFloaterPrimfeed::onClose(bool app_quitting)
-{
-    LLFloaterBigPreview* big_preview_floater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
-    if (big_preview_floater)
+{    
+    if (auto big_preview_floater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+        big_preview_floater)
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);
     }
@@ -810,8 +811,8 @@ void FSFloaterPrimfeed::onClose(bool app_quitting)
 
 void FSFloaterPrimfeed::onCancel()
 {
-    LLFloaterBigPreview* big_preview_floater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
-    if (big_preview_floater)
+    if (auto big_preview_floater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+        big_preview_floater)
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);
     }
@@ -833,8 +834,9 @@ bool FSFloaterPrimfeed::postBuild()
 
 void FSFloaterPrimfeed::showPhotoPanel()
 {
-    LLTabContainer* parent = dynamic_cast<LLTabContainer*>(mPrimfeedPhotoPanel->getParent());
-    if (!parent)
+    auto parent = dynamic_cast<LLTabContainer*>(mPrimfeedPhotoPanel->getParent());
+    if (
+        !parent)
     {
         LL_WARNS() << "Cannot find panel container" << LL_ENDL;
         return;

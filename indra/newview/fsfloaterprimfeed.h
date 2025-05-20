@@ -73,7 +73,7 @@ public:
     void uploadCallback(bool success, const LLSD& response);
 
 private:
-    bool isPreviewVisible();
+    bool isPreviewVisible() const;
     void attachPreview();
 
     bool checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value);
@@ -131,7 +131,7 @@ private:
 class FSFloaterPrimfeed : public LLFloater
 {
 public:
-    FSFloaterPrimfeed(const LLSD& key);
+    explicit FSFloaterPrimfeed(const LLSD& key);
     static void update();    
     bool postBuild();
     void draw();
