@@ -22,9 +22,14 @@ width="430">
 	<!-- These values are all CaSe SeNsiTiVe!! (use all caps plz or you get default behaviour) Whitespace is ignored, that's just for you non-robots-->
 	<string name="joint_transform_mPelvis" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mTorso" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
+	<string name="joint_transform_mSpine1" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
+	<string name="joint_transform_mSpine2" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mChest" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
+	<string name="joint_transform_mSpine3" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
+	<string name="joint_transform_mSpine4" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mNeck" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mHead" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
+	<string name="joint_transform_mSkull" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mCollarLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mCollarRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mShoulderLeft" translate="false">SWAP_ROLL_AND_PITCH NEGATE_ROLL NEGATE_PITCH</string>
@@ -39,9 +44,11 @@ width="430">
 	<string name="joint_transform_mHipLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mKneeLeft" translate="false">NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mAnkleLeft" translate="false">NEGATE_PITCH</string>
+	<string name="joint_transform_mToeLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mHipRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mKneeRight" translate="false">NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mAnkleRight" translate="false">NEGATE_PITCH</string>
+	<string name="joint_transform_mToeRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceTeethLower" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceTeethUpper" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -54,6 +61,8 @@ width="430">
 	<string name="joint_transform_mFaceLipLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEyeLidUpperLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEyeLidUpperRight" translate="false">NEGATE_PITCH</string>
+	<string name="joint_transform_mFaceEyecornerInnerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_mFaceEyecornerInnerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEyeLidLowerLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEyeLidLowerRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEyebrowOuterLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -100,7 +109,28 @@ width="430">
 	<string name="joint_transform_mHandPinky3Right" translate="false">SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH</string>
 	<string name="joint_transform_LEFT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_RIGHT_PEC" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_HEAD" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_NECK" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_BELLY" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_CHEST" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_PELVIS" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_UPPER_BACK" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_L_CLAVICLE" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_R_CLAVICLE" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_LEFT_HANDLE" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_RIGHT_HANDLE" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_L_UPPER_ARM" translate="false">SWAP_X2Y_Y2Z_Z2X NEGATE_PITCH NEGATE_YAW</string>
+	<string name="joint_transform_R_UPPER_ARM" translate="false">SWAP_X2Y_Y2Z_Z2X</string>
+	<string name="joint_transform_L_LOWER_ARM" translate="false">SWAP_ROLL_AND_PITCH</string>
+	<string name="joint_transform_R_LOWER_ARM" translate="false">SWAP_ROLL_AND_PITCH</string>
+	<string name="joint_transform_L_HAND" translate="false">SWAP_ROLL_AND_PITCH</string>
+	<string name="joint_transform_R_HAND" translate="false">SWAP_X2Z_Y2X_Z2Y</string>
+	<string name="joint_transform_L_UPPER_LEG" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_R_UPPER_LEG" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_L_LOWER_LEG" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_R_LOWER_LEG" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_L_FOOT" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_R_FOOT" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mTail1" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mTail2" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mTail3" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -113,6 +143,8 @@ width="430">
 	<string name="joint_transform_mFaceEar2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEar1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceEar2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_mFaceNoseBase" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
+	<string name="joint_transform_mFaceNoseBridge" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceNoseLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceNoseCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceNoseRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
@@ -144,14 +176,23 @@ width="430">
 	<string name="header_mHindLimbsRoot">Hind Limbs</string>
 	<string name="header_mWingsRoot">Wings</string>
 	<string name="header_mFaceEar1Left">Ears/Nose</string>
+	<string name="header_mSkull">Body</string>
+	<string name="header_HEAD">Body</string>
+	<string name="header_L_UPPER_ARM">Arms</string>
+	<string name="header_L_UPPER_LEG">Legs</string>
 
 	<!-- These are names to appear on the UI for the joints -->
 	<!-- If a name is not here, it does not appear -->
 	<string name="title_mPelvis">Whole Avatar</string>
 	<string name="title_mTorso">Torso</string>
+	<string name="title_mSpine1">Spine 1</string>
+	<string name="title_mSpine2">Spine 2</string>
+	<string name="title_mSpine3">Spine 3</string>
+	<string name="title_mSpine4">Spine 4</string>
 	<string name="title_mChest">Chest</string>
 	<string name="title_mNeck">Neck</string>
 	<string name="title_mHead">Head</string>
+	<string name="title_mSkull">Skull</string>
 	<string name="title_mEyeRight">Right Eye</string>
 	<string name="title_mEyeLeft">Left Eye</string>
 	<string name="title_mFaceForeheadLeft">Forehead Left Side</string>
@@ -163,13 +204,17 @@ width="430">
 	<string name="title_mFaceEyebrowCenterRight">Eyebrow Middle Right</string>
 	<string name="title_mFaceEyebrowInnerRight">Eyebrow Inner Right</string>
 	<string name="title_mFaceEyeLidUpperLeft">EyeLid Upper Left</string>
+	<string name="title_mFaceEyecornerInnerLeft">Eye Inner Corner Left</string>
 	<string name="title_mFaceEyeLidLowerLeft">EyeLid Lower Left</string>
 	<string name="title_mFaceEyeLidUpperRight">EyeLid Upper Right</string>
+	<string name="title_mFaceEyecornerInnerRight">Eye Inner Corner Right</string>
 	<string name="title_mFaceEyeLidLowerRight">EyeLid Lower Right</string>
 	<string name="title_mFaceEar1Left">Ear Upper Left</string>
 	<string name="title_mFaceEar2Left">Ear Lower Left</string>
 	<string name="title_mFaceEar1Right">Ear Upper Right</string>
 	<string name="title_mFaceEar2Right">Ear Lower Right</string>
+	<string name="title_mFaceNoseBase">Nose Base</string>
+	<string name="title_mFaceNoseBridge">Nose Bridge</string>
 	<string name="title_mFaceNoseLeft">Nose Left</string>
 	<string name="title_mFaceNoseCenter">Nose Middle</string>
 	<string name="title_mFaceNoseRight">Nose Right</string>
@@ -193,8 +238,6 @@ width="430">
 	<string name="title_mFaceLipCornerLeft">Lip Corner Left</string>
 	<string name="title_mFaceLipCornerRight">Lip Corner Right</string>
 	<string name="title_mFaceLipUpperCenter">Lip Upper Middle</string>
-	<string name="title_mFaceEyecornerInnerLeft">Eye corner Inner Left</string>
-	<string name="title_mFaceEyecornerInnerRight">Eye corner Inner Right</string>
 	<string name="title_mFaceNoseBridge">Nose Bridge</string>
 	<string name="title_mCollarLeft">Collar</string>
 	<string name="title_mShoulderLeft">Whole Arm</string>
@@ -271,10 +314,31 @@ width="430">
 	<string name="title_mHindLimb2Right">Right 2</string>
 	<string name="title_mHindLimb3Right">Right 3</string>
 	<string name="title_mHindLimb4Right">Right 4</string>
+	<string name="title_HEAD">Head</string>
+	<string name="title_NECK">Neck</string>
+	<string name="title_CHEST">Chest</string>
 	<string name="title_BUTT">Bottom</string>
 	<string name="title_BELLY">Belly</string>
 	<string name="title_LEFT_PEC">Left Pec</string>
 	<string name="title_RIGHT_PEC">Right Pec</string>
+	<string name="title_L_CLAVICLE">Left Clavicle</string>
+	<string name="title_R_CLAVICLE">Right Clavicle</string>
+	<string name="title_L_UPPER_ARM">Left Upper Arm</string>
+	<string name="title_R_UPPER_ARM">Right Upper Arm</string>
+	<string name="title_L_LOWER_ARM">Left Lower Arm</string>
+	<string name="title_R_LOWER_ARM">Right Lower Arm</string>
+	<string name="title_L_HAND">Left Hand</string>
+	<string name="title_R_HAND">Right Hand</string>
+	<string name="title_UPPER_BACK">Upper Back</string>
+	<string name="title_LEFT_HANDLE">Left Waist</string>
+	<string name="title_RIGHT_HANDLE">Right Waist</string>
+	<string name="title_PELVIS">Pelvis</string>
+	<string name="title_L_UPPER_LEG">Left Upper Leg</string>
+	<string name="title_R_UPPER_LEG">Right Upper Leg</string>
+	<string name="title_L_LOWER_LEG">Left Lower Leg</string>
+	<string name="title_R_LOWER_LEG">Right Lower Leg</string>
+	<string name="title_L_FOOT">Left Foot</string>
+	<string name="title_R_FOOT">Right Foot</string>
 
 	<!-- Just to demonstrate there is provision for axis-swapping/Negation per joint for BVH saving. -->
 	<!-- A default of SWAP_X2Y_Y2Z_Z2X is used, which is overridden if anything (even blank) is provided here. -->
