@@ -41,7 +41,7 @@
        class="fsprimfeedaccountpanel"
        follows="all"
        label="Account"
-       name="panel_primfeed_account"/>     
+       name="panel_primfeed_account"/>
     </tab_container>
     <panel
      name="connection_status_panel"

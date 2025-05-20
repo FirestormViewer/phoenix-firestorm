@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <panel
     height="540"
     width="272"
@@ -240,17 +241,17 @@
       top_pad="8" />
     <button
      follows="top|left"
-     layout="topleft"    
+     layout="topleft"
      height="16"
      image_pressed="Info_Press"
      image_unselected="Info_Over"
      name="info_btn_pub_gallery"
      right="-3"
      top_delta="-2"
-     width="16" 
+     width="16"
      commit_callback.function="Primfeed.Info"
      commit_callback.parameter="https://docs.primfeed.com/featured-content/public-gallery"
-     />    
+     />
      <check_box
      enabled_control="FSPrimfeedAddToPublicGallery"
      follows="top|left"
@@ -263,17 +264,17 @@
      top_pad="8" />
      <button
       follows="top|left"
-      layout="topleft"    
+      layout="topleft"
       height="16"
       image_pressed="Info_Press"
       image_unselected="Info_Over"
       right="-3"
       top_delta="-2"
       name="info_btn_commercial_content"
-      width="16" 
+      width="16"
       commit_callback.function="Primfeed.Info"
       commit_callback.parameter="https://docs.primfeed.com/legal/terms-of-service#commercial-content"
-      />      
+      />
   <combo_box
       control_name="FSPrimfeedPhotoRating"
       follows="left|top"
@@ -303,17 +304,17 @@
   </combo_box>
   <button
      follows="top|left"
-     layout="topleft"    
+     layout="topleft"
      height="16"
      image_pressed="Info_Press"
      image_unselected="Info_Over"
      right="-3"
      name="info_btn_ratings"
      top_delta="0"
-     width="16" 
+     width="16"
      commit_callback.function="Primfeed.Info"
      commit_callback.parameter="https://docs.primfeed.com/help-and-faq/maturity-ratings"
-     />      
+     />
   <check_box
      control_name="FSPrimfeedOpenURLOnPost"
      follows="top|left"
