@@ -3988,19 +3988,11 @@ bool LLViewerRegion::bakesOnMeshEnabled() const
 #ifdef OPENSIM
 bool LLViewerRegion::meshRezEnabled() const
 {
-    if (LLGridManager::getInstance()->isInOpenSim())
-    {
-        if(!mSimulatorFeaturesReceived)
-        {
-            LL_DEBUGS("MeshRez") << "MeshRezEnabled: SimulatorFeatures not received yet. Defaulting to true" << LL_ENDL;
-            return true;
-        }
-    }
-    return (mSimulatorFeatures.has("MeshRezEnabled") &&
-    mSimulatorFeatures["MeshRezEnabled"].asBoolean());
+    return (mSimulatorFeatures.has("MeshRezEnabled") && mSimulatorFeatures["MeshRezEnabled"].asBoolean());
 }
 #endif
 // </FS:Beq>
+
 bool LLViewerRegion::dynamicPathfindingEnabled() const
 {
     return ( mSimulatorFeatures.has("DynamicPathfindingEnabled") &&
