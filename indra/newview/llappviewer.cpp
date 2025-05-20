@@ -235,6 +235,7 @@
 #include "llfloatersimplesnapshot.h"
 #include "llfloatersnapshot.h"
 #include "llfloaterflickr.h"
+#include "fsfloaterprimfeed.h" // <FS:Beq/> Primfeed Floater
 #include "llsidepanelinventory.h"
 #include "llatmosphere.h"
 
@@ -1751,6 +1752,7 @@ bool LLAppViewer::doFrame()
                     LLFloaterSnapshot::update(); // take snapshots
                     LLFloaterSimpleSnapshot::update();
                     LLFloaterFlickr::update(); // <FS:Beq/> FIRE-35002 - Flickr preview not updating whne opened directly from tool tray icon
+                    FSFloaterPrimfeed::update(); // <FS:Beq/> Primfeed support
                     gGLActive = false;
                 }
 
@@ -3795,6 +3797,7 @@ bool LLAppViewer::waitForUpdater()
 
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING; // <FS:Beq/> improve instrumentation 
 #if LL_WINDOWS && LL_BUGSPLAT
     // <FS:Beq> Improve Bugsplat tracking by using attributes for certain static data items.
     const LLSD& info = getViewerInfo();
@@ -3823,6 +3826,7 @@ void LLAppViewer::writeDebugInfo(bool isStatic)
 
 LLSD LLAppViewer::getViewerInfo() const
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING; // <FS:Beq/> improve instrumentation
     // The point of having one method build an LLSD info block and the other
     // construct the user-visible About string is to ensure that the same info
     // is available to a getInfo() caller as to the user opening
@@ -4135,6 +4139,7 @@ LLSD LLAppViewer::getViewerInfo() const
     // info["DISK_CACHE_INFO"] = LLDiskCache::getInstance()->getCacheInfo();
     if (auto cache = LLDiskCache::getInstance(); cache)
     {
+        LL_PROFILE_ZONE_NAMED("gvi-getCacheInfo"); // <FS:Beq/> improve instrumentation
         info["DISK_CACHE_INFO"] = cache->getCacheInfo();
     }
     // </FS:Beq>

@@ -5632,4 +5632,8 @@ Pour obtenir des instructions détaillées sur la manière de mettre [APP_NAME] 
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification label="Confirmer le remplacement de la pose" name="ConfirmPoserOverwrite">
+		Remplacer la pose “[POSE_NAME]”?
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
+	</notification>
 </notifications>

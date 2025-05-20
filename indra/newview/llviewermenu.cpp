@@ -2757,6 +2757,28 @@ class LLAdvancedCompressFileTest : public view_listener_t
     }
 };
 
+// <FS:Beq> Primfeed integration test functions (can be removed when the feature is stable)
+///////////////////
+// PRIMFEED AUTH //
+///////////////////
+#include "fsprimfeedauth.h"
+class LLAdvancedPrimfeedAuth : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        FSPrimfeedAuth::initiateAuthRequest();
+        return true;
+    }
+};
+class LLAdvancedPrimfeedAuthReset : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        FSPrimfeedAuth::resetAuthStatus();
+        return true;
+    }
+};
+// </FS:Beq>
 
 /////////////////////////
 // SHOW DEBUG SETTINGS //
@@ -12809,6 +12831,8 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedCheckShowObjectUpdates(), "Advanced.CheckShowObjectUpdates");
     view_listener_t::addMenu(new LLAdvancedCompressImage(), "Advanced.CompressImage");
     view_listener_t::addMenu(new LLAdvancedCompressFileTest(), "Advanced.CompressFileTest");
+    view_listener_t::addMenu(new LLAdvancedPrimfeedAuth(), "Advanced.PrimfeedAuth");
+    view_listener_t::addMenu(new LLAdvancedPrimfeedAuthReset(), "Advanced.PrimfeedAuthReset");
     view_listener_t::addMenu(new LLAdvancedShowDebugSettings(), "Advanced.ShowDebugSettings");
     view_listener_t::addMenu(new LLAdvancedEnableViewAdminOptions(), "Advanced.EnableViewAdminOptions");
     view_listener_t::addMenu(new LLAdvancedToggleViewAdminOptions(), "Advanced.ToggleViewAdminOptions");

@@ -5669,6 +5669,18 @@
         <menu_item_call.on_click
          function="Advanced.CompressFileTest" />
       </menu_item_call>
+      <menu_item_call
+       label="PrimFeed Auth Test"
+       name="primfeed_auth_test">
+        <menu_item_call.on_click
+         function="Advanced.PrimfeedAuth" />
+      </menu_item_call>
+      <menu_item_call
+       label="PrimFeed Auth Reset"
+       name="primfeed_auth_clear">
+        <menu_item_call.on_click
+         function="Advanced.PrimfeedAuthReset" />
+      </menu_item_call>
 
       <menu_item_call
          label="Enable Visual Leak Detector"

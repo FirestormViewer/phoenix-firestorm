@@ -121,6 +121,7 @@ namespace
 
 void newRegionEntry(LLViewerRegion& region)
 {
+    LL_PROFILE_ZONE_SCOPED; // <FS:Beq/> improve instrumentation
     LL_INFOS("LLViewerRegion") << "Entering region [" << region.getName() << "]" << LL_ENDL;
     gDebugInfo["CurrentRegion"] = region.getName();
     LLAppViewer::instance()->writeDebugInfo();
@@ -3984,19 +3985,23 @@ bool LLViewerRegion::bakesOnMeshEnabled() const
         mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean());
 }
 
+// <FS:Beq> FIRE-35602 etc - Mesh not appearing after TP/login (opensim only)
+#ifdef OPENSIM
 bool LLViewerRegion::meshRezEnabled() const
 {
-    // <FS:Beq> FIRE-35602 and many similar reports - Mesh not appearing after TP/login
-    if(!mSimulatorFeaturesReceived)
+    if (LLGridManager::getInstance()->isInOpenSim())
     {
-        LL_DEBUGS("MeshRez") << "MeshRezEnabled: SimulatorFeatures not received yet. Defaulting to true" << LL_ENDL;
-        return true;
+        if(!mSimulatorFeaturesReceived)
+        {
+            LL_DEBUGS("MeshRez") << "MeshRezEnabled: SimulatorFeatures not received yet. Defaulting to true" << LL_ENDL;
+            return true;
+        }
     }
-    // </FS:Beq>
     return (mSimulatorFeatures.has("MeshRezEnabled") &&
-                mSimulatorFeatures["MeshRezEnabled"].asBoolean());
+    mSimulatorFeatures["MeshRezEnabled"].asBoolean());
 }
-
+#endif
+// </FS:Beq>
 bool LLViewerRegion::dynamicPathfindingEnabled() const
 {
     return ( mSimulatorFeatures.has("DynamicPathfindingEnabled") &&

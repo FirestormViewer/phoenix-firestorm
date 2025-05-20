@@ -644,11 +644,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 // <FS:Beq> Use the Attributes API on Windows to enhance crash metadata
 void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING;
 #ifdef LL_BUGSPLAT
     auto& bugSplatMap = BugSplatAttributes::instance();
     static bool write_once_after_startup = false;
     if (!write_once_after_startup )
     {
+        LL_PROFILE_ZONE_NAMED("bs-st-att-once")
         // Only write the attributes that are fixed once after we've started.
         // note we might update them more than once and some/many may be empty during startup as we want to catch early crashes
         // once we're started we can assume they don't change for this run.
