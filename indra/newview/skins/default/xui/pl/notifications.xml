@@ -5226,6 +5226,9 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 	<notification name="ExodusFlickrUploadComplete">
 		Możesz znaleźć swoje zdjęcie [https://www.flickr.com/photos/me/[ID] tutaj].
 	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+		Możesz znaleźć swój post [[PF_POSTURL] tutaj].
+	</notification>
 	<notification name="RegionTrackerAdd">
 		Jaką etykietę chcesz nadać regionowi
 &quot;[REGION]&quot;?
@@ -5488,5 +5491,26 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification label="Potwierdź nadpisanie pozy" name="ConfirmPoserOverwrite">
 		Nadpisać istniejącą pozę “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK" />
+	</notification>
+	<notification name="PrimfeedLoginRequestFailed">
+		Żądanie logowania odrzucone przez Primfeed.
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		Autoryzacja a Primfeed nie powiodła się. Sekwencja autoryzacji nie została ukończona.
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		Autoryzacja z Primfeed jest już w toku. Przed ponowną próbą należy ukończyć autoryzację Primfeed w przeglądarce internetowej.
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Autoryzacja a Primfeed została ukończona. Teraz możesz publikować obrazy w Primfeed.
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		Weryfikacja użytkownika w Primfeed nie powiodła się. Primfeed nie rozpoznał tego konta lub logowanie nie powiodło się.
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		Połączyłeś/aś już to konto z Primfeed. Użyj przycisku resetowania, jeśli chcesz zacząć od nowa.
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		Zalogowanie użytkownika w Primfeed powiodło się, ale sprawdzenie statusu już nie. Sprawdź, czy Primfeed działa.
 	</notification>
 </notifications>

@@ -13974,7 +13974,7 @@ Your snapshot can now be viewed [https://www.flickr.com/photos/me/[ID] here].
    icon="notifytip.tga"
    name="FSPrimfeedUploadComplete"
    type="notifytip">
-Your primfeed post can now be viewed [[PF_POSTURL] here].
+Your Primfeed post can now be viewed [[PF_POSTURL] here].
   </notification>
   <!-- </FS:TS> FIRE-5453 -->
 
@@ -14699,27 +14699,27 @@ Login request denied by Primfeed.
   </notification>
   <notification
    icon="alertmodal.tga"
-   name="PrimfeedAuthorisationFailed"
+   name="PrimfeedAuthorizationFailed"
    persist="false"
    tag="fail"
    type="alertmodal">
-Primfeed authorisation failed. The authorisation sequence was not completed.
+Primfeed authorization failed. The authorization sequence was not completed.
   </notification>
   <notification
    icon="alertmodal.tga"
-   name="PrimfeedAuthorisationAlreadyInProgress"
+   name="PrimfeedAuthorizationAlreadyInProgress"
    persist="false"
    tag="fail"
    type="alertmodal">
-Primfeed authorisation is already in progress. Please complete the primfeed authorisation in your web browser before trying again.
+Primfeed authorization is already in progress. Please complete the Primfeed authorization in your web browser before trying again.
   </notification>
   <notification
    icon="alertmodal.tga"
-   name="PrimfeedAuthorisationSuccessful"
+   name="PrimfeedAuthorizationSuccessful"
    persist="false"
    tag="success"
    type="alertmodal">
-Primfeed authorisation completed. You may now post images to Primfeed.
+Primfeed authorization completed. You may now post images to Primfeed.
   </notification>
   <notification
    icon="alertmodal.tga"

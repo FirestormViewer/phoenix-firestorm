@@ -117,8 +117,7 @@ void LLPanelSnapshotOptions::onSendToFlickr()
 {
     LLFloaterReg::hideInstance("snapshot");
 
-    LLFloaterFlickr* flickr_floater = dynamic_cast<LLFloaterFlickr*>(LLFloaterReg::getInstance("flickr"));
-    if (flickr_floater)
+    if (auto flickr_floater = LLFloaterReg::getTypedInstance<LLFloaterFlickr>("flickr"))
     {
         flickr_floater->showPhotoPanel();
     }
@@ -131,8 +130,7 @@ void LLPanelSnapshotOptions::onSendToPrimfeed()
 {
     LLFloaterReg::hideInstance("snapshot");
 
-    auto* primfeed_floater = dynamic_cast<FSFloaterPrimfeed*>(LLFloaterReg::getInstance("primfeed"));
-    if (primfeed_floater)
+    if (auto primfeed_floater = LLFloaterReg::getTypedInstance<FSFloaterPrimfeed>("primfeed"))
     {
         primfeed_floater->showPhotoPanel();
     }

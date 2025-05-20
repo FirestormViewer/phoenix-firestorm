@@ -392,6 +392,18 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	<string name="SocialFlickrErrorDisconnecting">
 		Problem z rozłączaniem z Flickr
 	</string>
+	<string name="SocialPrimfeedConnecting">
+		Łączenie z Primfeed...
+	</string>
+	<string name="SocialPrimfeedNotAuthorized">
+		Brak uprawnień...
+	</string>
+	<string name="SocialPrimfeedPosting">
+		Wysyłanie...
+	</string>
+	<string name="SocialPrimfeedErrorPosting">
+		Problem z wysyłaniem na Primfeed
+	</string>
 	<string name="BlackAndWhite">
 		Czerń i biel
 	</string>
@@ -5498,6 +5510,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Poser_Tooltip">
 		Ustaw swojego awatara oraz animowane obiekty
+	</string>
+	<string name="Command_Primfeed_Tooltip">
+		Publikuj bezpośrednio na swoim koncie Primfeed.
 	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Uchwyć równoprostokątny obraz 360°

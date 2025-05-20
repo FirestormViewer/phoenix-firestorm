@@ -117,7 +117,7 @@ void FSPrimfeedAuth::initiateAuthRequest()
     {
         if (sPrimfeedAuth)
         {
-            LLNotificationsUtil::add("PrimfeedAuthorisationAlreadyInProgress");
+            LLNotificationsUtil::add("PrimfeedAuthorizationAlreadyInProgress");
             return;
         }
         // If no token stored, begin the login request; otherwise check user status.

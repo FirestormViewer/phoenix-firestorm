@@ -13,6 +13,9 @@
 		<layout_panel name="lp_flickr">
 			<button label="Wrzuć na Flickr" name="send_to_flickr_btn" />
 		</layout_panel>
+		<layout_panel name="lp_primfeed">
+			<button label="Wrzuć na Primfeed" name="send_to_primfeed_btn" />
+		</layout_panel>
 		<layout_panel name="lp_email">
 			<button label="Wyślij przez e-mail" name="save_to_email_btn" />
 		</layout_panel>
