@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" height="610" title="Acerca de [APP_NAME]">
+<floater name="floater_about" title="Acerca de [APP_NAME]">
 	<floater.string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] Notas de la versión]
@@ -42,7 +42,7 @@ Calidad de dibujo (Render quality): [RENDERQUALITY]
 	<floater.string name="ErrorFetchingServerReleaseNotesURL">
 		Error obteniendo las notas de la versión de servidor.
 	</floater.string>
-	<tab_container name="about_tab" height="575">
+	<tab_container name="about_tab">
 		<panel label="Información" name="support_panel">
 			<text name="support_intro">    
 				Para obtener la información más reciente acerca de Firestorm, visita
@@ -58,10 +58,10 @@ Los Linden son,
 con contribuciones de código de:
 			</text>
 		</panel>
-		<panel label="Créditos de Firestorm" name="fs_credits_panel" height="920">
+		<panel label="Créditos de Firestorm" name="fs_credits_panel">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
-					<text name="firestorm_intro" height="120">
+					<text name="firestorm_intro">
 						Firestorm es un proyecto de desarrollo de la comunidad para mejorar la experiencia de uso del Visor de SecondLife(tm). Compilamos contribuciones de varios desarrolladores de la comunidad junto con el código de Linden lab y el nuestro propio para brindarte un visor de calidad, enriquecido con nuevas características y respaldado por un amplio equipo de voluntarios para darte soporte. Firestorm llega a ti a través de The Phoenix Firestorm Project, Inc., una organización sin ánimo de lucro.
 
 Forman el Equipo de Desarrollo de Firestorm:

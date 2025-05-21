@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater" title="Configurações da câmera">
+	<floater.string name="rotate_tooltip">
+		Girar a câmera em torno do foco
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Zoom da câmera em direção ao foco
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Mover a câmera para cima, para baixo, esquerda e direita
+	</floater.string>
+    <floater.string name="free_mode_title">
+		Visualizar Objeto
+    </floater.string>
+	<string name="inactive_combo_text">
+		Use a predefinição
+	</string>
+	<panel name="controls">
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="Girar câmera ao redor do foco"/>
+			<button name="roll_left" tool_tip="Girar câmera para esquerda"/>
+			<button name="roll_right" tool_tip="Girar câmera para direita"/>
+			<slider_bar name="zoom_slider" tool_tip="Zoom da câmera para focalizar"/>
+			<joystick_track name="cam_track_stick" tool_tip="Mover a câmera para cima, para baixo, esquerda e direita"/>
+		</panel>
+	</panel>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="Vista frontal"/>
+		<panel_camera_item name="group_view" tool_tip="Visualização de grupo"/>
+		<panel_camera_item name="rear_view" tool_tip="Visão trazeira"/>
+		<panel_camera_item name="object_view" tool_tip="Visualização do objeto"/>
+		<panel_camera_item name="mouselook_view" tool_tip="Visão em primeira pessoa"/>
+		<panel_camera_item name="reset_view" tool_tip="Redefinir visão"/>
+	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="Aplicar predefinição" name="Use preset" />
+	</combo_box>
+	<button name="gear_btn" tool_tip="Predefinições da câmera" />
+	<button label="Posição da câmera" name="camera_position_btn" />
+	<button label="Salvar" name="save_btn" />
+</floater>
