@@ -29,6 +29,7 @@
 			<check_box label="Общем чате" name="show_timestamps_nearby_chat" width="95"/>
 			<check_box label="ЛС" name="show_timestamps_im" width="75"/>
 			<check_box label="Историях чата и ЛС" name="show_timestamps_transcripts"/>
+			<check_box label="Показать экранную консоль чата" tool_tip="Показывать/скрывать текст в консоли чата, когда окно 'Беседы' не отображается" name="FSShowOnscreenConsole"/>
 			<check_box name="FSConsoleClassicDrawMode" label="Использовать классическую консоль" tool_tip="Этот вариант отображает фон консоли как один большой блок под всеми линиями текста, по ширине самой длинной из них."/>
 			<check_box name="ChatFullWidth" label="Использовать всю ширину экрана"/>
 			<spinner label="Затухание после:" name="fade_chat_time" label_width="100" width="140"/>
