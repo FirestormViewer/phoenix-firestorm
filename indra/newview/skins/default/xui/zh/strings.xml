@@ -436,7 +436,18 @@ support@secondlife.com.
 	<string name="SocialFlickrErrorDisconnecting">
 		斷開與Flickr的連線時發生錯誤
 	</string>
-	<!-- SLShare: User Friendly Filter Names Translation -->
+	<string name="SocialPrimfeedConnecting">
+		正在連接到Primfeed...
+	</string>
+	<string name="SocialPrimfeedNotAuthorized">
+		未經授權...
+	</string>
+	<string name="SocialPrimfeedPosting">
+		正在發布...
+	</string>
+	<string name="SocialPrimfeedErrorPosting">
+		發布到Primfeed時出現問題
+	</string>
 	<string name="BlackAndWhite">
 		黑 &amp; 白
 	</string>
@@ -6287,6 +6298,12 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Poser_Tooltip">
 		編輯你的化身與動畫物件的姿勢
+	</string>
+	<string name="Command_Primfeed_Label">
+		Primfeed
+	</string>
+	<string name="Command_Primfeed_Tooltip">
+		直接發佈到您的Primfeed賬戶。
 	</string>
 	<string name="Command_360_Capture_Tooltip">
 		拍攝360°旋轉圖像
