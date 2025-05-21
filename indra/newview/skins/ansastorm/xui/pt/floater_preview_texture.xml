@@ -9,7 +9,6 @@
 	<floater.string name="DateTime">
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</floater.string>
-	<floater.string name="UploaderDateTime"/>
 	<text name="desc txt">
 		Descrição:
 	</text>
@@ -30,7 +29,7 @@
 				Sem restrição
 			</combo_item>
 			<combo_item name="1:1" tool_tip="Emblema de grupo ou informação adicional de perfil"/>
-			<combo_item name="4:3" tool_tip="Perfil  [CURRENT_GRID]"/>
+			<combo_item name="4:3" tool_tip="Perfil [CURRENT_GRID]"/>
 			<combo_item name="10:7" tool_tip="Classificados e listas de pesquisa, marcos"/>
 			<combo_item name="3:2" tool_tip="Sobre o terreno"/>
 			<combo_item name="16:9" tool_tip="Destacados"/>
