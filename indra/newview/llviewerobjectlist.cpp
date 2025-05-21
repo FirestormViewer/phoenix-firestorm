@@ -1618,9 +1618,46 @@ void LLViewerObjectList::killObjects(LLViewerRegion *regionp)
             killObject(objectp);
         }
     }
+    /*for (vobj_list_t::iterator iter = mObjects.begin(); iter != mObjects.end();)
+    {
+        objectp = *iter;
+
+        if (objectp == NULL)
+        { //we caught up to the dead tail
+            break;
+        }
+
+        if (objectp->mRegionp == regionp)
+        {
+            if (killObject(objectp))
+            {
+                auto delete_me = mDeadObjects.find(objectp->mID);
+                if( delete_me !=mDeadObjects.end() )
+                {
+                    mDeadObjects.erase( delete_me );
+                }
+                else
+                {7
+                    LL_WARNS() << "Attempt to delete object " << objectp->mID << " but object not in dead list" << LL_ENDL;
+                }
+
+                mNumDeadObjects--;
+                iter = mObjects.erase(iter);
+
+            }
+            else
+            {
+                ++iter;
+            }
+        }
+        else
+        {
+            ++iter;
+        }
+    }*/
 
     // Have to clean right away because the region is becoming invalid.
-    cleanDeadObjects(false);
+    //cleanDeadObjects(false);
 }
 
 void LLViewerObjectList::killAllObjects()
@@ -1673,7 +1710,8 @@ void LLViewerObjectList::cleanDeadObjects(bool use_timer)
     LLViewerObject *objectp;
 
     // <FS:Ansariel> Use timer for cleaning up dead objects
-    static const F64 max_time = 0.01; // Let's try 10ms per frame
+    //static const F64 max_time = 0.01; // Let's try 10ms per frame
+    static const F64 max_time = 0.001; // Let's try 1ms per frame
     LLTimer timer;
     // </FS:Ansariel>
 
