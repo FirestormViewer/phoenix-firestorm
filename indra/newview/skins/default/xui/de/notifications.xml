@@ -3017,13 +3017,10 @@ Wählen Sie eine kleinere Landfläche.
 	<notification name="SystemMessage">
 		[MESSAGE]
 	</notification>
-	<notification name="FacebookConnect">
-		[MESSAGE]
-	</notification>
 	<notification name="FlickrConnect">
 		[MESSAGE]
 	</notification>
-	<notification name="TwitterConnect">
+	<notification name="PrimfeedConnect">
 		[MESSAGE]
 	</notification>
 	<notification name="PaymentReceived">
@@ -5773,6 +5770,9 @@ Flickr-Verifikation fehlgeschlagen. Bitte erneut versuchen sowie den eingegebene
 	<notification name="ExodusFlickrUploadComplete">
 Das Foto kann jetzt [https://www.flickr.com/photos/me/[ID] hier] betrachtet werden.
 	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+Der Primfeed-Post kann jetzt [[PF_POSTURL] hier] betrachtet werden.
+	</notification>
 <!-- </FS:TS> FIRE-5453 -->
 	<notification name="RegionTrackerAdd">
 Welche Bezeichnung soll für die Region
@@ -5866,5 +5866,26 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="ConfirmPoserOverwrite">
 		Bestehende Pose „[POSE_NAME]“ überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
+	</notification>
+	<notification name="PrimfeedLoginRequestFailed">
+		Login-Anfrage wurde von Primfeed abgelehnt.
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		Primfeed-Autorisierung fehlgeschlagen. Die Autorisierungssequenz war nicht vollständig.
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		Primfeed-Autorisierung läuft bereits. Bitte schließen Sie die Primfeed-Autorisierung in Ihrem Webbrowser ab, bevor Sie es erneut versuchen.
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Primfeed-Autorisierung abgschlossen. Sie können jetzt Fotos auf Primfeed posten.
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		Primfeed-Benutzervalidierung fehlgeschlagen. Primfeed ist dieser Account unbekannt oder das Anmelden ist fehlgeschlagen.
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		Sie haben dieses Konto bereits mit Primfeed verknüpft. Bitte benutzen Sie den Rücksetzen-Button, um neu zu beginnen.
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		Primfeed-Benutzeranmeldung erfolgreich, allerdings ist die Statusprüfung fehlgeschlagen. Bitte prüfen Sie, ob Primfeed korrekt funktioniert.
 	</notification>
 </notifications>
