@@ -121,6 +121,13 @@ void LLTeleportHistory::goToItem(int idx)
                     slurl = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
                 }
 
+                if (mRequestedItem != -1)
+                {
+                    return; // We already have a request in progress and don't want to spam the server
+                }
+
+                mRequestedItem = idx;
+
                 LLWorldMapMessage::getInstance()->sendNamedRegionRequest(
                     slurl.getRegion(),
                     boost::bind(&LLTeleportHistory::regionNameCallback, this, idx, _1, _2, _3, _4),
@@ -344,7 +351,7 @@ void LLTeleportHistory::dump() const
 // <FS> [FIRE-35355] Callback for OpenSim so we can teleport to the correct global position on another grid
 void LLTeleportHistory::regionNameCallback(int idx, U64 region_handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport)
 {
-    if (slurl.getType() == LLSLURL::LOCATION)
+    if (region_handle)
     {
         // Sanity checks again just in case since time has passed since the request was made
         if (idx < 0 || idx >= (int)mItems.size())
@@ -364,11 +371,11 @@ void LLTeleportHistory::regionNameCallback(int idx, U64 region_handle, const LLS
 
         // Attempt to teleport to the target grids region
         gAgent.teleportViaLocation(global_pos);
-        mRequestedItem = idx;
     }
     else
     {
-        LL_WARNS() << "Invalid teleport history slurl type: " << slurl.getType() << LL_ENDL;
+        LL_WARNS() << "Invalid teleport history region handle" << LL_ENDL;
+        onTeleportFailed();
     }
 }
 // </FS>
