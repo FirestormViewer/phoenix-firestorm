@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_options">
 	<layout_stack name="option_buttons">
-		<layout_panel name="lp_download"><button label="Sur le disque" name="save_to_computer_btn"/></layout_panel>
-		<layout_panel name="lp_inventory"><button label="Dans l'inventaire" name="save_to_inventory_btn"/></layout_panel>
-		<layout_panel name="lp_profile"><button label="En ligne sur mon profil" name="save_to_profile_btn"/></layout_panel>
-		<layout_panel name="lp_facebook"><button label="En ligne sur Facebook" name="send_to_facebook_btn"/></layout_panel>
-		<layout_panel name="lp_twitter"><button label="En ligne sur Twitter" name="send_to_twitter_btn"/></layout_panel>
-		<layout_panel name="lp_flickr"><button label="En ligne sur Flickr" name="send_to_flickr_btn"/></layout_panel>
-		<layout_panel name="lp_email"><button label="Envoyer par E-mail" name="save_to_email_btn"/></layout_panel>
+		<layout_panel name="lp_download">
+			<button label="Sur le disque" name="save_to_computer_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_inventory">
+			<button label="Dans l'inventaire" name="save_to_inventory_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_profile">
+			<button label="En ligne sur mon profil" name="save_to_profile_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_facebook">
+			<button label="En ligne sur Facebook" name="send_to_facebook_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_twitter">
+			<button label="En ligne sur Twitter" name="send_to_twitter_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_flickr">
+			<button label="En ligne sur Flickr" name="send_to_flickr_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_email">
+			<button label="Envoyer par E-mail" name="save_to_email_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_primfeed">
+			<button label="Partager sur Primfeed" name="send_to_primfeed_btn"/>
+		</layout_panel>
 	</layout_stack>
 	<text name="fee_hint_lbl">
 		Les frais sont basés sur votre niveau d'abonnement. Plus haut est ce niveau, plus bas sont les frais.
