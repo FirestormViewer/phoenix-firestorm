@@ -197,6 +197,8 @@ void FSPrimfeedPhotoPanel::draw()
     mRefreshBtn->setEnabled(can_post);
     mBtnPreview->setEnabled(can_post);
     mLocationCheckbox->setEnabled(can_post);
+    mPublicGalleryCheckbox->setEnabled(can_post);
+    mCommercialCheckbox->setEnabled(can_post);
 
     // Reassign the preview floater if we have the focus and the preview exists
     if (hasFocus() && isPreviewVisible())
@@ -867,7 +869,7 @@ void FSFloaterPrimfeed::draw()
                 }
                 default:
                 {
-                    LL_WARNS("Prmfeed") << "unexpected state" << connection_state << LL_ENDL;
+                    // LL_WARNS("Prmfeed") << "unexpected state" << connection_state << LL_ENDL;
                     break;
                 }
             }
