@@ -1424,17 +1424,6 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
-     <key>FSPrimfeedAddToPublicGallery</key>
-        <map>
-        <key>Comment</key>
-            <string>Should this post go to the public gallery?</string>
-        <key>Persist</key>
-            <integer>0</integer>
-        <key>Type</key>
-            <string>Boolean</string>
-        <key>Value</key>
-            <integer>0</integer>
-        </map>
      <key>FSPrimfeedOpenURLOnPost</key>
         <map>
         <key>Comment</key>
@@ -1461,6 +1450,39 @@
         <map>
         <key>Comment</key>
             <string>Content rating to be shared with Primfeed.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Integer</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
+     <key>FSPrimfeedPhotoResolution</key>
+        <map>
+        <key>Comment</key>
+            <string>Last used resolution for Primfeed photos.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <array/>
+        </map>
+     <key>FlickrPhotoResolution</key>
+        <map>
+        <key>Comment</key>
+            <string>Last used resolution for Primfeed photos.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <array/>
+        </map>
+     <key>FlickrPhotoRating</key>
+        <map>
+        <key>Comment</key>
+            <string>Content rating to be shared with Flickr.</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>

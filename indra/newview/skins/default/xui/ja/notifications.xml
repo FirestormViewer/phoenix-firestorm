@@ -5357,6 +5357,9 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 	<notification name="ExodusFlickrUploadComplete">
 		スナップショットは[http://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]から閲覧できます。
 	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+		あなたのPrimfeedへの投稿は[[PF_POSTURL] ここ]から閲覧できます。
+	</notification>
 	<!-- </FS:TS> FIRE-5453 -->
 	<notification name="RegionTrackerAdd">
 		リージョン「[REGION]」にどのラベルを使用しますか?
@@ -5644,5 +5647,26 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification label="ポーズ上書きの確認" name="ConfirmPoserOverwrite">
 		「[POSE_NAME]」を上書きしてもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="はい"/>
+	</notification>
+	<notification name="PrimfeedLoginRequestFailed">
+		Primfeedへのログインリクエストが拒否されました。
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		Primfeed認証に失敗しました。認証シーケンスが完了していません。
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		すでにPrimfeed認証が進行中です。ブラウザでPrimfeed認証を完了してから、もう一度お試しください。
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Primfeed認証が成功しました。Primfeedに画像を投稿できるようになりました。
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		Primfeedユーザーの検証に失敗しました。Primfeedはこのアカウントを認識しなかったか、ログインに失敗しました。
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		あなたはすでにPrimfeedにリンクされています。リセットボタンを押すことで、最初からやり直すことができます。
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		Primfeedへのユーザログインは成功しましたが、ステータスチェックに失敗しました。Primfeedが機能しているかどうかを確認してください。
 	</notification>
 </notifications>

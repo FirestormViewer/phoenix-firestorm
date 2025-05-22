@@ -379,6 +379,10 @@ https://secondlife.com/viewer-access-faq
 	<string name="SocialFlickrErrorDisconnecting">
 		Flickrからの切断時にエラーが発生
 	</string>
+	<string name="SocialPrimfeedConnecting">Primfeedに接続しています…</string>
+	<string name="SocialPrimfeedNotAuthorized">認証されていません…</string>
+	<string name="SocialPrimfeedPosting">投稿しています…</string>
+	<string name="SocialPrimfeedErrorPosting">Primfeedへの投稿時に問題が発生しました。</string>
 	<string name="BlackAndWhite">
 		白黒
 	</string>
@@ -5726,6 +5730,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Beacons_Label">ビーコン</string>
 	<string name="Command_Poser_Label">ポーザー</string>
 	<string name="Command_Poser_Tooltip">アバターとアニメーションオブジェクトにポーズをつけます。</string>
+	<string name="Command_Primfeed_Tooltip">Primfeedに直接投稿します。</string>
 	<string name="Command_360_Capture_Tooltip">
 		３６０度の正距円筒図法のスナップショット画像を撮影します。
 	</string>

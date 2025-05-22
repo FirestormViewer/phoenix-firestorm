@@ -9,7 +9,7 @@
   animate="false"
   name="option_buttons"
   orientation="vertical"
-  height="152"
+  height="157"
   width="208"
   left="0"
   top="9"
@@ -170,7 +170,7 @@
    left="10"
    length="1"
    name="fee_hint_lbl"
-   top_pad="7"
+   top_pad="2"
    width="200"
    type="string"
    word_wrap="true">

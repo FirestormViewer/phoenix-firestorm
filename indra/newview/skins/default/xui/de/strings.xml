@@ -390,24 +390,6 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="TestingDisconnect">
 		Verbindungsabbruch wird getestet
 	</string>
-	<string name="SocialFacebookConnecting">
-		Mit Facebook verbinden...
-	</string>
-	<string name="SocialFacebookPosting">
-		Posten...
-	</string>
-	<string name="SocialFacebookDisconnecting">
-		Facebook-Verbindung trennen...
-	</string>
-	<string name="SocialFacebookErrorConnecting">
-		Problem beim Verbinden mit Facebook
-	</string>
-	<string name="SocialFacebookErrorPosting">
-		Problem beim Posten auf Facebook
-	</string>
-	<string name="SocialFacebookErrorDisconnecting">
-		Problem beim Trennen der Facebook-Verbindung
-	</string>
 	<string name="SocialFlickrConnecting">
 		Verbinden mit Flickr...
 	</string>
@@ -426,23 +408,17 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="SocialFlickrErrorDisconnecting">
 		Problem beim Trennen der Flickr-Verbindung
 	</string>
-	<string name="SocialTwitterConnecting">
-		Verbinden mit Twitter...
+	<string name="SocialPrimfeedConnecting">
+		Verbinden mit Primfeed...
 	</string>
-	<string name="SocialTwitterPosting">
-		Posten...
+	<string name="SocialPrimfeedNotAuthorized">
+		Nicht autorisiert...
 	</string>
-	<string name="SocialTwitterDisconnecting">
-		Twitter-Verbindung wird getrennt...
+	<string name="SocialPrimfeedPosting">
+		Teilen...
 	</string>
-	<string name="SocialTwitterErrorConnecting">
-		Problem beim Verbinden mit Twitter
-	</string>
-	<string name="SocialTwitterErrorPosting">
-		Problem beim Posten auf Twitter
-	</string>
-	<string name="SocialTwitterErrorDisconnecting">
-		Problem beim Trennen der Twitter-Verbindung
+	<string name="SocialPrimfeedErrorPosting">
+		Problem beim Posten auf Primfeed
 	</string>
 	<string name="BlackAndWhite">
 		Schwarzweiß
@@ -6122,6 +6098,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Poser_Label">
 		Poser
 	</string>
+	<string name="Command_Primfeed_Label">
+		Primfeed
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6322,6 +6301,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Poser_Tooltip">
 		Eigenen Avatar und Animeshe posieren
+	</string>
+	<string name="Command_Primfeed_Tooltip">
+		Auf Primfeed posten
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
