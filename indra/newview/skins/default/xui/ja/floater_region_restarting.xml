@@ -3,7 +3,8 @@
 	<string name="RegionName">
 		現在あなたがいるリージョン「[NAME]」は再起動しようとしています。
 
-このまま、この場所にいるとログアウトされます。</string>
+このまま、この場所にいるとログアウトされます。
+	</string>
 	<string name="RestartSeconds">
 		再起動まであと
 [SECONDS]秒
@@ -12,7 +13,8 @@
 		<text name="region_name">
 			現在あなたがいるリージョン「‐最長リージョン名‐」は再起動しようとしています。
 
-このまま、この場所にいるとログアウトされます。</text>
+このまま、この場所にいるとログアウトされます。
+		</text>
 		<text name="restart_seconds">
 			再起動まであと
 32767秒

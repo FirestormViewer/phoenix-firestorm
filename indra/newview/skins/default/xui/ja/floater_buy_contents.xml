@@ -3,7 +3,6 @@
 	<text name="contains_text">
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt;に含まれるもの：
 	</text>
-	<scroll_list name="item_list"/>
 	<text name="buy_text">
 		[NAME]から、L$ [AMOUNT]で購入しますか？
 	</text>

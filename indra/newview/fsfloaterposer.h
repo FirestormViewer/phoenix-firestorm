@@ -86,6 +86,8 @@ public:
     void redo() override { onRedoLastChange(); };
     bool canRedo() const override { return true; }
  private:
+    // Helper function to encapsualte save logic
+    void doPoseSave(LLVOAvatar* avatar, const std::string& filename);
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;

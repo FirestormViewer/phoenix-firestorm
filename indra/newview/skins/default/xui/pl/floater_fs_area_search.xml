@@ -62,6 +62,7 @@
 			<check_box name="filter_perm_copy" label="Kopiowalne"/>
 			<check_box name="filter_perm_modify" label="Modyfikowalne"/>
 			<check_box name="filter_perm_transfer" label="Transferowalne"/>
+			<check_box name="filter_reflection_probe" label="Sondy refleksyjne" tool_tip="Obejmuje tylko sondy ręczne, nie sondy automatyczne. Obejmuje tylko sondy lustrzane, jeśli lustra są włączone w preferencjach graficznych. Jeśli zasięg odbić jest ustawiony na 'brak' lub sonda nie jest załadowana, to obiekty mogą nie zostać zidentyfikowane." />
 			<check_box name="filter_for_sale" label="Do kupienia między" width="135"/>
 			<text name="and" width="30">
 				oraz
@@ -91,6 +92,7 @@
 			<check_box name="exclude_attachment" label="Dodatkami"/>
 			<check_box name="exclude_physical" label="Fizyczne"/>
 			<check_box name="exclude_temporary" label="Tymczasowe"/>
+			<check_box name="exclude_reflection_probes" label="Sondy refleksyjne" />
 			<check_box name="exclude_childprim" label="Primami podrzędnymi / potomkami primy głównej"/>
 			<check_box name="exclude_neighbor_region" label="W sąsiadujących regionach"/>
 			<button name="apply" label="Zastosuj"/>

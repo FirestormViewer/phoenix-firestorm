@@ -85,7 +85,6 @@
 	<text name="antialiasing restart">
 		（再起動後に反映）
 	</text>
-	<view_border name="vert_border"/>
 	<text name="ShadersText">
 		シェーダー
 	</text>
@@ -139,12 +138,6 @@
 	<text name="MirrorResolutionText">
 		ミラーの解像度：
 	</text>
-	<combo_box name="MirrorResolution">
-		<combo_box.item label="256" name="0"/>
-		<combo_box.item label="512" name="1"/>
-		<combo_box.item label="1024" name="2"/>
-		<combo_box.item label="2048" name="3"/>
-	</combo_box>
 	<text name="HeroProbeUpdateText">
 		ミラーの更新頻度：
 	</text>

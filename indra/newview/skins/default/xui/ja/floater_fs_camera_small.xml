@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- header_height="0"-->
 <floater name="fs_camera_floater_small">
 	<floater.string name="rotate_tooltip">
 		対象を中心にカメラを回す

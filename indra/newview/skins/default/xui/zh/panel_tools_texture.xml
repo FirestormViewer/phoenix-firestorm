@@ -32,9 +32,9 @@
 	<check_box label="隱藏水" name="checkbox_hide_water" />
 	<button name="copy_face_btn" tool_tip="將紋理參數複製到剪貼簿" />
 	<button name="paste_face_btn" tool_tip="從剪貼簿黏貼紋理參數" />
-	<text name="label_matmedia">
+	<!-- <text name="label_matmedia">
 		材質
-	</text>
+	</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="紋理" name="Materials" />
 		<combo_box.item label="PBR金屬粗糙度" name="PBR" />

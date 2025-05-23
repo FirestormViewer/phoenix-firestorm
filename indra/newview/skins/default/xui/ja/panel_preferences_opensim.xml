@@ -21,7 +21,6 @@
 				<text name="grid_name_text">
 					グリッド名称：
 				</text>
-				<line_editor name="name_edit"/>
 				<text name="grid_uri_text">
 					グリッドのＵＲＩ：
 				</text>

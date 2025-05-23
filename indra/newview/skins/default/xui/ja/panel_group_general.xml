@@ -41,9 +41,7 @@
 				</text>
 				<check_box label="プロフィールに表示" name="list_groups_in_profile" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。"/>
 				<check_box label="グループ通知を受信" name="receive_notices" tool_tip="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合はこのボックスのチェックを外してください。"/>
-				<!-- <exodus> -->
 				<check_box label="グループＩＭを受信" name="receive_chat" tool_tip="このグループのグループチャットに参加するかどうかの設定を行います。"/>
-				<!-- </exodus> -->
 				<text name="active_title_label">
 					タイトル：
 				</text>
@@ -56,7 +54,7 @@
 				<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます。" label="検索結果に表示"/>
 				<check_box name="open_enrollement" label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。"/>
 				<check_box name="check_enrollment_fee" tool_tip="グループ加入に入会費が必要かどうかを設定します。" label="入会費がかかります。"/>
-				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" label="L$"/>
+				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" />
 				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
 					<combo_item name="select_mature">
 						‐レーティング区分を指定‐

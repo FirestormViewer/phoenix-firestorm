@@ -6,7 +6,6 @@
 	</string>
 	<layout_stack name="ui_stack">
 		<layout_panel name="ui_container">
-			<icon name="sl_logo_small"/>
 			<layout_stack name="vert_stack_left">
 				<layout_panel name="1st_row">
 					<layout_stack name="1st_row_stack">
@@ -45,7 +44,6 @@
 							<text name="grid_login_text">
 								グリッド選択：
 							</text>
-							<combo_box name="server_combo"/>
 							<text name="grid_builder_text">
 								＋をクリックしてグリッドを追加
 							</text>
@@ -55,7 +53,6 @@
 								モード選択：
 							</text>
 							<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
-								<combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
 								<combo_box.item label="ハイブリッド" name="Hybrid"/>
 								<combo_box.item label="テキスト" name="Text"/>
 							</combo_box>

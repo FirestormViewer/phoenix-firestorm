@@ -6207,13 +6207,20 @@ bool LLMeshRepository::meshUploadEnabled()
 bool LLMeshRepository::meshRezEnabled()
 {
     static LLCachedControl<bool> mesh_enabled(gSavedSettings, "MeshEnabled");
-    LLViewerRegion *region = gAgent.getRegion();
-    if(mesh_enabled &&
-       region)
+// <FS:Beq> FIRE-35602 etc - Mesh not appearing after TP/login (opensim only)
+// For OpenSim there is still an outside chance that mesh rezzing is disabled on the sim/region
+// restore the old behaviour but keep the bias to mesh_enabled == true in the underlying checks.
+#ifdef OPENSIM
+    if (LLGridManager::instance().isInOpenSim())
     {
-        return region->meshRezEnabled();
+        if (LLViewerRegion* region = gAgent.getRegion(); mesh_enabled && region)
+        {
+            return region->meshRezEnabled();
+        }
     }
-    return false;
+#endif // OPENSIM
+// </FS:Beq>
+    return mesh_enabled;
 }
 
 // Threading:  main thread only

@@ -9,11 +9,9 @@
 	<text name="payee_name">
 		非常に長い名前が途中で切れていないかをテストして確認
 	</text>
-	<line_editor name="amount"/>
 	<text name="amount text">
 		もしくは金額を選ぶ：
 	</text>
-	<line_editor name="amount"/>
 	<text name="payment_message_label">
 		説明（任意項目）：
 	</text>

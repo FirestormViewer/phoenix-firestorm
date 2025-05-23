@@ -14,7 +14,7 @@
 		<scroll_list.columns label="チャット" name="trigger"/>
 		<scroll_list.columns label="キー" name="shortcut"/>
 	</scroll_list>
-	<panel label="bottom_panel" name="bottom_panel">
+	<panel name="bottom_panel">
 		<menu_button name="gear_btn" tool_tip="詳細オプションを表示します。"/>
 		<button name="new_gesture_btn" tool_tip="新しいジェスチャーを作成します。"/>
 		<button name="activate_btn" tool_tip="選択したジェスチャーの有効化／無効化します。"/>

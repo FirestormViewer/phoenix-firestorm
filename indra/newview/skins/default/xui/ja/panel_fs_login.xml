@@ -54,7 +54,6 @@
 				モード選択
 			</text>
 			<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
-				<combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
 				<combo_box.item label="ハイブリッド" name="Hybrid"/>
 				<combo_box.item label="テキスト" name="Text"/>
 			</combo_box>

@@ -25,9 +25,9 @@
 	<check_box label="Max luminosità" name="checkbox fullbright" />
 	<button name="copy_face_btn" tool_tip="Copia i parametri della texture negli appunti" />
 	<button name="paste_face_btn" tool_tip="Incolla i parametri della texture dagli appunti" />
-	<text name="label_matmedia">
+	<!-- <text name="label_matmedia">
 		Materiale
-	</text>
+	</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Texture" name="Materials"/>
 		<combo_box.item label="PBR" name="PBR"/>

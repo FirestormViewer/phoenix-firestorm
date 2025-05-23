@@ -17,7 +17,6 @@
 			<layout_stack name="ls_list_view_stack">
 				<layout_panel name="lp_restore_global_files">
 					<scroll_list name="restore_global_files_list">
-						<column name="restore_global_files_check" value="true"/>
 						<column label="グローバルファイル：" name="restore_global_files_label"/>
 						<column label="値" name="value"/>
 						<row name="restore_global_row_login">

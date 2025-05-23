@@ -35,7 +35,6 @@
 		<text name="lbl5">
 			添付：
 		</text>
-		<line_editor name="create_inventory_name"/>
 		<text name="drag_and_drop_help">
 			添付したいアイテムをここにドラッグアンドドロップしてください：
 		</text>

@@ -59,7 +59,6 @@
 			<pie_menu label="経路探索　＞" name="Pathfinding">
 				<pie_slice label="リンクセットで表示" name="show_in_linksets"/>
 				<pie_slice label="キャラクターで表示" name="show_in_characters"/>
-				<pie_separator name="autohide_end_crash_protection"/>
 			</pie_menu>
 			<pie_menu label="ミュート　＞" name="mute_menu">
 				<pie_slice label="ミュート" name="Object Mute"/>

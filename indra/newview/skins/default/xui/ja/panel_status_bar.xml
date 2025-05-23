@@ -2,9 +2,6 @@
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="区画販売中です。"/>
-		<text name="damage_text" value="100%"/>
-		<!-- <FS:Zi> This text changes color when hovered over, implemented in llstatusbar.cpp
-									Colors are defined in colors.xml as ParcelNormalColor and ParcelHoverColor -->
 		<text tool_tip="あなたがいる土地の区画名です。土地情報についてはクリックしてください。" name="parcel_info_text" value="（読み込んでいます…）"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -33,8 +30,6 @@
 		<text name="TimeText" tool_tip="現在時刻（太平洋時間）" width="130">午前　24：00：00　PST</text>
 		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
 		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Webページ）を開始／停止します。"/>
-		<text name="FPSText" tool_tip="フレーム毎秒（クリックで上限を調整できます。）">
-			200.0
-		</text>
+		<text name="FPSText" tool_tip="フレーム毎秒（クリックで上限を調整できます。）" />
 	</panel>
 </panel>

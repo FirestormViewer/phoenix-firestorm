@@ -44,6 +44,10 @@
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
 
+#include "llviewernetwork.h" // <FS/> Access to GridManager
+#include "lfsimfeaturehandler.h" // <FS/> Access to hyperGridURL
+#include "llworldmapmessage.h" // <FS/> Access to sendNamedRegionRequest
+
 // [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -97,6 +101,46 @@ void LLTeleportHistory::goToItem(int idx)
         dump();
         return;
     }
+
+    // <FS> [FIRE-35355] OpenSim global position is dependent on the Grid you are on
+    #ifdef OPENSIM
+    if (LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (mItems[mCurrentItem].mRegionID != mItems[idx].mRegionID)
+        {
+            LLSLURL slurl = mItems[idx].mSLURL;
+            std::string grid = slurl.getGrid();
+            std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
+            std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+
+            // Requesting region information from the server is only required when changing grid
+            if (slurl.isValid() && grid != current_grid)
+            {
+                if (!gatekeeper.empty())
+                {
+                    slurl = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
+                }
+
+                if (mRequestedItem != -1)
+                {
+                    return; // We already have a request in progress and don't want to spam the server
+                }
+
+                mRequestedItem = idx;
+
+                LLWorldMapMessage::getInstance()->sendNamedRegionRequest(
+                    slurl.getRegion(),
+                    boost::bind(&LLTeleportHistory::regionNameCallback, this, idx, _1, _2, _3, _4),
+                    slurl.getSLURLString(),
+                    true
+                );
+
+                return; // The teleport will occur in the callback with the correct global position
+            }
+        }
+    }
+    #endif
+    // </FS>
 
     // Attempt to teleport to the requested item.
     gAgent.teleportViaLocation(mItems[idx].mGlobalPos);
@@ -210,6 +254,22 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
             mItems[mCurrentItem] = LLTeleportHistoryItem(RlvStrings::getString(RlvStringKeys::Hidden::Parcel), LLVector3d::zero);
         }
 // [/RLVa:KB]
+
+        // <FS> [FIRE-35355] OpenSim global position is dependent on the Grid you are on,
+        // so we need to store the slurl so we can request the global position later
+        #ifdef OPENSIM
+        if (LLGridManager::getInstance()->isInOpenSim())
+        {
+            auto regionp = gAgent.getRegion();
+            if (regionp)
+            {
+                LLVector3 new_pos_local = gAgent.getPosAgentFromGlobal(new_pos);
+                LLSLURL slurl = LLSLURL(LFSimFeatureHandler::instance().hyperGridURL(), regionp->getName(), new_pos_local);
+                mItems[mCurrentItem].mSLURL = slurl;
+            }
+        }
+        #endif
+        // </FS>
     }
 
     //dump(); // LO - removing the dump from happening every time we TP.
@@ -287,3 +347,35 @@ void LLTeleportHistory::dump() const
         LL_INFOS() << line.str() << LL_ENDL;
     }
 }
+
+// <FS> [FIRE-35355] Callback for OpenSim so we can teleport to the correct global position on another grid
+void LLTeleportHistory::regionNameCallback(int idx, U64 region_handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport)
+{
+    if (region_handle)
+    {
+        // Sanity checks again just in case since time has passed since the request was made
+        if (idx < 0 || idx >= (int)mItems.size())
+        {
+            LL_WARNS() << "Invalid teleport history index (" << idx << ") specified" << LL_ENDL;
+            return;
+        }
+
+        if (idx == mCurrentItem)
+        {
+            LL_WARNS() << "Will not teleport to the same location." << LL_ENDL;
+            return;
+        }
+
+        LLVector3d origin_pos = from_region_handle(region_handle);
+        LLVector3d global_pos(origin_pos + LLVector3d(slurl.getPosition()));
+
+        // Attempt to teleport to the target grids region
+        gAgent.teleportViaLocation(global_pos);
+    }
+    else
+    {
+        LL_WARNS() << "Invalid teleport history region handle" << LL_ENDL;
+        onTeleportFailed();
+    }
+}
+// </FS>

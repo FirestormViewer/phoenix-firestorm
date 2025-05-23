@@ -46,8 +46,8 @@
 		<combo_box.item label="なし" name="None"/>
 	</combo_box>
 	<!-- bottom static -->
-	<line_editor name="TextureKey" label="00000000-0000-0000-0000-000000000000" tool_tip="テクスチャのキー"/>
-	<button name="TextureKeyApply" label="Apply UUID" tool_tip="このＵＵＩＤを適用"/>
+	<line_editor name="TextureKey" tool_tip="テクスチャのキー"/>
+	<button name="TextureKeyApply" label="このＵＵＩＤを適用" tool_tip="このＵＵＩＤを適用"/>
 	<button label="ＯＫ" label_selected="ＯＫ" name="Select"/>
 	<button label="キャンセル" label_selected="キャンセル" name="Cancel"/>
 	<check_box label="すぐ反映" name="apply_immediate_check"/>

@@ -60,7 +60,6 @@
 		<combo_box.item label="太陽／月" name="1"/>
 		<combo_box.item label="太陽／月＋プロジェクター" name="2"/>
 	</combo_box>
-	<view_border name="border3"/>
 	<text name="water_lbl">
 		水面
 	</text>

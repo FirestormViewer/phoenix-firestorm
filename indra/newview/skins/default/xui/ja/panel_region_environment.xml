@@ -52,7 +52,6 @@
 							<text name="select_environment_label">
 								環境を選択
 							</text>
-							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="インベントリを使用" name="btn_select_inventory"/>
 							<button label="デイサイクルをカスタマイズ" name="btn_edit"/>
 							<check_box label="区画所有者はオーバーライドする" name="chk_allow_override"/>

@@ -196,35 +196,6 @@
 			<check_box name="FSNotifyNearbyChatFlash" label="新しい近くのチャットを受信したらチャットツールバーのボタンを点滅" tool_tip="新しい近くのチャットを受信したらチャットツールバーのボタンが点滅します。この時、近くのチャットは会話ウィンドウにドッキングしている必要があり、また、ボタンを点滅させるには会話ウィンドウが閉じている必要があります。"/>
 			<check_box name="FSNotifyIMFlash" label="新しいＩＭを受信したらチャットツールバーのボタンを点滅" tool_tip="新しい（グループ）ＩＭを受信したらチャットツールバーのボタンが点滅します。この時、ＩＭウィンドウは会話ウィンドウにドッキングしている必要があり、また、ボタンを点滅させるには会話ウィンドウが閉じている必要があります。このオプションが有効となるのは、ＩＭが別のウィンドウとして分かれておらず、タブで表示されている場合に限ります。（「一般」タブを参照）"/>
 			<check_box name="FSReportMutedGroupChat" label="無視したグループチャットを近くのチャットウィンドウに表示"/>
-			<!--
-				<text name="WhenPlayIMLabel">
-				ＩＭを受信した時：
-				</text>
-				<combo_box name="WhenPlayIM">
-				<combo_box.item label="新しいＩＭセッションの時だけ音を鳴らす" name="1"/>
-				<combo_box.item label="メッセージを受信する度に音を鳴らす" name="2"/>
-				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
-				<combo_box.item label="通知音は鳴らさない" name="0"/>
-				</combo_box>
-				<text name="WhenPlayGroupIMLabel">
-				グループＩＭを受信した時：
-				</text>
-				<combo_box name="WhenPlayGroupIM">
-				<combo_box.item label="新しいＩＭセッションの時だけ音を鳴らす" name="1"/>
-				<combo_box.item label="メッセージを受信する度に音を鳴らす" name="2"/>
-				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
-				<combo_box.item label="通知音は鳴らさない" name="0"/>
-				</combo_box>
-				<text name="WhenPlayConfIMLabel">
-				会話IMを受信した時：
-				</text>
-				<combo_box name="WhenPlayConfIM">
-				<combo_box.item label="新しいＩＭセッションの時だけ音を鳴らす" name="1"/>
-				<combo_box.item label="メッセージを受信する度に音を鳴らす" name="2"/>
-				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
-				<combo_box.item label="通知音は鳴らさない" name="0"/>
-				</combo_box>
-				-->
 			<check_box name="FSGroupNoticesToIMLog" label="グループ通知をポップアップだけでなくグループチャットにも含める"/>
 			<check_box name="FSBetterGroupNoticesToIMLog" label="通知のタイトルと作成者も表示する"/>
 		</panel>
@@ -356,7 +327,6 @@
 			<text name="FSCmdLineHeight_txt">
 				指定した高さにテレポート（使用法：cmd z）
 			</text>
-			<line_editor name="FSCmdLineHeight"/>
 			<!-- カメラ位置にテレポート -->
 			<text name="FSCmdTeleportToCam_txt">
 				カメラ位置にテレポート（使用法：cmd）

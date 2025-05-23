@@ -13,7 +13,6 @@
 			<radio_item label="有効" name="TRUE"/>
 			<radio_item label="無効" name="FALSE"/>
 		</radio_group>
-		<line_editor name="val_text"/>
 		<color_swatch label="色" name="val_color_swatch"/>
 		<spinner label="Ｘ" name="val_spinner_1"/>
 		<spinner label="Ｘ" name="val_spinner_2"/>

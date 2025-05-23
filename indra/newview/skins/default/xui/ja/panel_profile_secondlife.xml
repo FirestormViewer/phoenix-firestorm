@@ -22,10 +22,6 @@
 	<string name="my_account_link_url" value="https://secondlife.com/my/account/?lang=ja-JP"/>
 	<string name="no_partner_text" value="なし"/>
 	<string name="no_group_text" value="なし"/>
-	<string name="age_format_full">
-		[REG_DATE]
-（[AGE]）
-	</string>
 	<string name="FSDev" value="開発者"/>
 	<string name="FSSupp" value="サポート"/>
 	<string name="FSQualityAssurance" value="バグハンター"/>
@@ -51,10 +47,8 @@
 		</layout_panel>
 		<layout_panel name="label_stack">
 			<text name="label" value="誕生日："/>
-			<view_border name="info_border_register_date"/>
 			<text_editor name="user_age" value="（読み込んでいます…）"/>
 			<text name="label2" value="アカウント："/>
-			<view_border name="info_border_acc_status_text"/>
 			<layout_stack name="badgepositioner">
 				<layout_panel name="badge_layout">
 					<layout_stack name="badge_stacker">

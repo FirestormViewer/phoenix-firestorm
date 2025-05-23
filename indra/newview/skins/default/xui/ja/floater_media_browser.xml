@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_about" title="メディアブラウザ">
-	<floater.string name="home_page_url">
-		https://secondlife.com
-	</floater.string>
-	<floater.string name="support_page_url">
-		https://support.secondlife.com/
-	</floater.string>
 	<layout_stack name="stack1">
 		<layout_panel name="nav_controls">
 			<button label="戻る" name="back"/>
@@ -32,7 +26,6 @@ https://wiki.firestormviewer.org/fs_media
 
 をご覧ください。
 			</text>
-			<web_browser name="browser"/>
 			<button label="外部Webブラウザで開く" name="open_browser"/>
 			<button label="閉じる" name="close"/>
 		</layout_panel>

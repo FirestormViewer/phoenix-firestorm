@@ -28,7 +28,6 @@
 #include "llviewerprecompiledheaders.h"
 
 /* own header */
-#include "vjlocalmesh.h"
 #include "vjlocalmeshimportdae.h"
 
 /* linden headers */
@@ -41,7 +40,6 @@
 /* dae headers*/
 #include <dae.h>
 #include <dom/domConstants.h>
-#include <dom/domMesh.h>
 #include <dom/domSkin.h>
 #include <dom/domGeometry.h>
 #include <dom/domInstance_controller.h>
@@ -1822,16 +1820,3 @@ void LLLocalMeshImportDAE::pushLog(const std::string& who, const std::string& wh
     mLoadingLog.push_back(log_msg);
     LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
 }
-
-//bool LLLocalMeshImportDAE::readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in)
-//{
-    /*
-        i couldn't find any collada files of this type to test on
-        this type may have been deprecated?
-    */
-
-    // ok so.. in here vcount should be a number of polys, EACH poly should have it's own P (array of vtx indices)
-
-    // return false // gotta return a thing
-
-//}

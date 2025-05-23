@@ -18,7 +18,6 @@
 				<button name="voice_call_btn" tool_tip="ボイスチャット接続を開きます。"/>
 				<button name="close_btn" tool_tip="この会話を終了します。"/>
 				<button name="expand_collapse_btn" tool_tip="このペインを開閉します。"/>
-				<button name="tear_off_btn"/>
 			</layout_panel>
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">

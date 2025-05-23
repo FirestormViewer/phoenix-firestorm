@@ -51,7 +51,6 @@
 			<text name="Start_Glow_Label">
 				開始グロー：
 			</text>
-			<spinner name="start_glow_spinner"/>
 			<combo_box name="blend_func_src_combo">
 				<combo_box.item label="ブレンド１" name="blend_one"/>
 				<combo_box.item label="ブレンド０" name="blend_zero"/>

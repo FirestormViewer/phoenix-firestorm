@@ -77,12 +77,6 @@
 			<text name="MirrorResolutionText">
 				ミラーの反射：
 			</text>
-			<combo_box name="MirrorResolution">
-				<combo_box.item label="256" name="0"/>
-				<combo_box.item label="512" name="1"/>
-				<combo_box.item label="1024" name="2"/>
-				<combo_box.item label="2048" name="3"/>
-			</combo_box>
 			<text name="HeroProbeUpdateText">
 				ミラーの更新頻度：
 			</text>
@@ -109,13 +103,7 @@
 				<combo_box.item label="フレンドのみ表示" name="2"/>
 			</combo_box>
 			<slider tool_tip="複雑度の高いアバターをJerryDollとして表示し始める値を設定します。" label="最大複雑度" name="IndirectMaxComplexity"/>
-			<text name="IndirectMaxComplexityText">
-				0
-			</text>
 			<slider label="簡略化せずに描画するアバターの最大数" name="IndirectMaxNonImpostors"/>
-			<text name="IndirectMaxNonImpostorsText">
-				0
-			</text>
 			<slider label="ポストプロセス品質：" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				低
@@ -273,9 +261,6 @@
 			<slider label="カメラの視野角（画角）：" name="Camera FOV" tool_tip="ＤｏＦ効果を得るためのカメラの垂直画角（単位は度）を指定します。"/>
 			<slider label="ＤｏＦ焦点移動時間：" name="CameraFocusTrans" tool_tip="ある場所から次の場所へ焦点を変えるのにかかる時間を指定します。"/>
 			<slider label="ＤｏＦ描画品質：" name="CameraDoFResScale" tool_tip="ぼかしの品質と描画のパフォーマンスに影響します。（高い＝より良い品質、低い＝より良いパフォーマンス）"/>
-			<!-- These two check boxes are dummies and will never be displayed. They are here so the control variables are saved in a preset file. -->
-			<check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxNonImpostors"/>
-			<check_box label="RenderAvatarMaxNonImpostors" name="RenderAvatarMaxNonImpostors"/>
 		</panel>
 	</tab_container>
 </panel>

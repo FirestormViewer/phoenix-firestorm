@@ -6,7 +6,7 @@
 	<!-- <FS:Zi> panel that holds the basic animation info and gives size hints to the code -->
 	<panel name="basic_info_panel">
 		<text name="desc txt">
-		説明：
+			説明：
 		</text>
 		<button label="インワールドで再生" label_selected="停止" name="Inworld" tool_tip="他人から見えるように再生します。"/>
 		<button label="ローカルで再生" label_selected="停止" name="Locally" tool_tip="自分だけが見えるように再生します。"/>

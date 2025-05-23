@@ -6,6 +6,5 @@
 	<menu_item_call label="住民のところにテレポート" name="teleportto_agent"/>
 	<menu_item_check label="ブロック" name="Block"/>
 	<menu_item_call label="嫌がらせの報告" name="report"/>
-	<menu_item_separator/>
 	<menu_item_call label="コピー" name="Copy"/>
 </context_menu>

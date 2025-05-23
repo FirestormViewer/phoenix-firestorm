@@ -11,7 +11,6 @@
 			<text name="info_panel_label">
 				名前：
 			</text>
-			<line_editor name="settings_name"/>
 			<button label="読み込む" name="btn_load" tool_tip="インベントリから設定を読み込みます。"/>
 			<button label="インポート" name="btn_import" tool_tip="ディスクから過去の設定をインポートします。"/>
 		</layout_panel>

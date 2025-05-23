@@ -46,7 +46,6 @@
 	<text name="RenderNameShowTime_LabelPrefix">
 		（
 	</text>
-	<spinner name="RenderNameShowTime"/>
 	<text name="RenderNameShowTime_LabelSuffix">
 		秒）
 	</text>

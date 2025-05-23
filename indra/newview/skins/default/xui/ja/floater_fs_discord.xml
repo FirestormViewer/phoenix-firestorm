@@ -18,7 +18,6 @@
 	<text name="account_caption_label">
 		Discordに接続していません。
 	</text>
-	<text name="account_name_label" />
 	<check_box label="ログイン時に自動接続する" name="startup_check" />
 	<check_box label="ユーザ名を共有する" name="name_check" />
 	<button label="接続…" name="connect_btn" />

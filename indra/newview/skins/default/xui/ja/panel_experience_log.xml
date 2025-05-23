@@ -16,7 +16,6 @@
 		</layout_panel>
 		<layout_panel name="button_panel">
 			<check_box label="すべてのイベント日数を通知" name="notify_all"/>
-			<spinner name="logsizespinner"/>
 			<button name="btn_clear" label="クリア"/>
 			<button name="btn_prev" label="⇦"/>
 			<button name="btn_next" label="⇨"/>

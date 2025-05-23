@@ -3,7 +3,6 @@
 	<text name="object_name">
 		[DESC]：
 	</text>
-	<panel_inventory_object name="object_contents"/>
 	<layout_stack name="button_bar_ls">
 		<layout_panel name="copy_btn_lp">
 			<flyout_button label="インベントリにコピー" name="copy_flyout">

@@ -34,9 +34,6 @@
 	<floater.string name="max_fps" value="垂直同期＠[VSYNCFREQ]ＦＰＳ"/>
 	<panel name="panel_top">
 		<panel name="fps_subpanel">
-			<text name="fps_value">
-				167
-			</text>
 			<text name="fps_lbl">
 				フレーム／秒
 			</text>
@@ -95,9 +92,6 @@
 描画に
 かかった時間
 			</text>
-			<text name="av_frame_stats">
-				00％
-			</text>
 		</panel>
 		<panel name="complexity_subpanel">
 			<text name="complexity_lbl">
@@ -118,9 +112,6 @@
 				ＨＵＤの
 描画に
 かかった時間
-			</text>
-			<text name="huds_frame_stats">
-				00%
 			</text>
 		</panel>
 	</panel>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_jacket_panel">
+	<panel name="avatar_jacket_color_panel">
+		<texture_picker label="Textura superior" name="Upper Fabric" tool_tip="Toque para escolher uma imagem"/>
+		<texture_picker label="Textura inferior" name="Lower Fabric" tool_tip="Toque para escolher uma imagem"/>
+		<color_swatch label="Cor/Tonalid" name="Color/Tint" tool_tip="Toque para abrir o seletor de cor"/>
+	</panel>
+	<panel name="jacket_main_tab_holder">
+		<accordion name="jacket_main_accordion">
+			<accordion_tab name="jacket_main_tab" title="Jaqueta"/>
+		</accordion>
+	</panel>
+</panel>
