@@ -49,7 +49,7 @@
 				<check_box label="启用透明水面" name="TransparentWater" tool_tip="将水面彩現为透明。禁用后，水面将以不透明的简单纹理彩現。"/>
 				<check_box label="启用屏幕空间反射" name="ScreenSpaceReflections" tool_tip="启用基于屏幕当前视图的反射。为相机视野内的物体提供逼真的反射效果，但可能会遗漏屏幕外的细节。根据场景复杂性，可能影响性能。"/>
 				<check_box label="启用镜面反射" name="Mirrors" tool_tip="启用实时镜面反射。准确反射环境，包括物件和化身，但由于额外的彩現负载，可能显著影响性能。"/>
-				<check_box label="启用反射探针选择" name="checkbox select probes" tool_tip="启用后可在场景中选择并检查反射探针。"/>
+				<check_box label="启用反射探針选择" name="checkbox select probes" tool_tip="启用后可在场景中选择并检查反射探針。"/>
 			</panel>
 			<panel name="P_R_Res_2">
 				<text name="ReflectionDetailText" tool_tip="决定反射细节级别。“仅静态”仅反射静止物件，更高设置包含动态物件和实时反射。">
@@ -81,8 +81,8 @@
 					<combo_box.item label="高" name="1"/>
 					<combo_box.item label="极致" name="0"/>
 				</combo_box>
-				<text name="Probe_Resolution" tool_tip="定义反射探针的解析度。高解析度提供更详细反射，但需重启生效。高于128的设置会显著增加显存占用。">
-					探针解析度（需重启）
+				<text name="Probe_Resolution" tool_tip="定义反射探針的解析度。高解析度提供更详细反射，但需重启生效。高于128的设置会显著增加显存占用。">
+					探針解析度（需重启）
 				</text>
 			</panel>
 			<panel name="P_R_Res_3">
