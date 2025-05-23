@@ -214,7 +214,7 @@
       left="10"
       length="1"
       top_pad="0"
-      max_length="700"
+      max_length="5000"
       name="photo_description"
       spellcheck="true"
       type="string"
@@ -223,7 +223,7 @@
   <check_box
       follows="left|top"
       layout="topleft"
-      initial_value="true"
+      initial_value="false"
       label="Include location"
       name="add_location_cb"
       left="9"

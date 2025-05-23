@@ -197,6 +197,8 @@ void FSPrimfeedPhotoPanel::draw()
     mRefreshBtn->setEnabled(can_post);
     mBtnPreview->setEnabled(can_post);
     mLocationCheckbox->setEnabled(can_post);
+    mPublicGalleryCheckbox->setEnabled(can_post);
+    mCommercialCheckbox->setEnabled(can_post);
 
     // Reassign the preview floater if we have the focus and the preview exists
     if (hasFocus() && isPreviewVisible())
@@ -538,6 +540,8 @@ void FSPrimfeedPhotoPanel::onOpen(const LLSD& key)
     {
         // Reauthorise if necessary.
         FSPrimfeedAuth::initiateAuthRequest();
+        LLSD dummy;
+        onPrimfeedConnectStateChange(dummy);         
     }
 }
 
@@ -660,15 +664,14 @@ bool FSPrimfeedAccountPanel::postBuild()
 void FSPrimfeedAccountPanel::draw()
 {
     FSPrimfeedConnect::EConnectionState connection_state = FSPrimfeedConnect::instance().getConnectionState();
+    static FSPrimfeedConnect::EConnectionState last_state = FSPrimfeedConnect::PRIMFEED_DISCONNECTED;
 
-    // Disable the 'disconnect' button and the 'use another account' button when disconnecting in progress
-    bool disconnecting = connection_state == FSPrimfeedConnect::PRIMFEED_DISCONNECTING;
-    mDisconnectButton->setEnabled(!disconnecting);
-
-    // Disable the 'connect' button when a connection is in progress
-    bool connecting =
-        (connection_state == FSPrimfeedConnect::PRIMFEED_CONNECTING || connection_state == FSPrimfeedConnect::PRIMFEED_CONNECTED);
-    mConnectButton->setEnabled(!connecting);
+    // Update the connection state if it has changed
+    if (connection_state != last_state)
+    {
+        onPrimfeedConnectStateChange(LLSD());
+        last_state = connection_state;
+    }
 
     LLPanel::draw();
 }
@@ -701,7 +704,7 @@ void FSPrimfeedAccountPanel::onVisibilityChange(bool visible)
 
 bool FSPrimfeedAccountPanel::onPrimfeedConnectStateChange(const LLSD&)
 {
-    if (FSPrimfeedAuth::isAuthorized())
+    if (FSPrimfeedAuth::isAuthorized() || FSPrimfeedConnect::instance().getConnectionState() == FSPrimfeedConnect::PRIMFEED_CONNECTING)
     {
         showConnectedLayout();
     }
@@ -768,11 +771,15 @@ void FSPrimfeedAccountPanel::showConnectedLayout()
 void FSPrimfeedAccountPanel::onConnect()
 {
     FSPrimfeedAuth::initiateAuthRequest();
+    LLSD dummy;
+    onPrimfeedConnectStateChange(dummy);    
 }
 
 void FSPrimfeedAccountPanel::onDisconnect()
 {
     FSPrimfeedAuth::resetAuthStatus();
+    LLSD dummy;
+    onPrimfeedConnectStateChange(dummy);    
 }
 
 ////////////////////////
@@ -867,7 +874,7 @@ void FSFloaterPrimfeed::draw()
                 }
                 default:
                 {
-                    LL_WARNS("Prmfeed") << "unexpected state" << connection_state << LL_ENDL;
+                    // LL_WARNS("Prmfeed") << "unexpected state" << connection_state << LL_ENDL;
                     break;
                 }
             }

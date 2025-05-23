@@ -3065,6 +3065,9 @@ Voulez-vous autoriser [APP_NAME] à poster sur votre compte Flickr?
 	<notification name="ExodusFlickrUploadComplete">
 		Votre photo est visible maintenant [https://www.flickr.com/photos/me/[ID] ici].
 	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+		Votre message Primfeed peut maintenant être consulté [[PF_POSTURL] ici].
+	</notification>
 	<notification name="EventNotification">
 		Avis d&apos;événement :
 
@@ -5635,5 +5638,26 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification label="Confirmer le remplacement de la pose" name="ConfirmPoserOverwrite">
 		Remplacer la pose “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
+	</notification>
+	<notification name="PrimfeedLoginRequestFailed">
+		Demande de connexion refusée par Primfeed.
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		L'autorisation Primfeed a échoué. La séquence d'autorisation n'a pas été achevée.
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		L'autorisation Primfeed est déjà en cours. Veuillez compléter l'autorisation Primfeed dans votre navigateur web avant de réessayer.
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Autorisation Primfeed terminée. Vous pouvez maintenant poster des images sur Primfeed.
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		La validation de l'utilisateur Primfeed a échoué. Primfeed n'a pas reconnu ce compte ou la connexion a échoué.
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		Vous avez déjà lié ce compte à Primfeed. Utilisez le bouton de réinitialisation si vous souhaitez recommencer.
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		La connexion de l'utilisateur Primfeed a réussi, mais les vérifications d'état ont échoué. Veuillez vérifier que Primfeed fonctionne.
 	</notification>
 </notifications>
