@@ -54,6 +54,8 @@ class LLCheckBoxCtrl;
 class LLSliderCtrl;
 class LLSpinCtrl;
 class LLSearchEditor;
+class LLComboBox;
+class LLScrollListCtrl;
 
 class LLWorldMapParcelInfoObserver : public LLRemoteParcelInfoObserver
 {
@@ -224,10 +226,6 @@ private:
     LLUUID                  mTrackedAvatarID;
     LLSLURL                 mSLURL;
 
-    LLCtrlListInterface *   mListFriendCombo;
-    LLCtrlListInterface *   mListLandmarkCombo;
-    LLCtrlListInterface *   mListSearchResults;
-
     LLButton*               mTeleportButton = nullptr;
     LLButton*               mShowDestinationButton = nullptr;
     LLButton*               mCopySlurlButton = nullptr;
@@ -258,6 +256,11 @@ private:
     // </FS>
 
     LLSliderCtrl*           mZoomSlider = nullptr;
+
+    LLComboBox*             mLandmarkCombo = nullptr;
+    LLComboBox*             mFriendCombo = nullptr;
+
+    LLScrollListCtrl*       mSearchResults = nullptr;
 
     LLPanel*                mTrackCtrlsPanel = nullptr;
 

@@ -849,7 +849,7 @@ void LLFloaterModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
         mModelPreview->onLODGLODParamCommit(lod, enforce_tri_limit);
         break;
     default:
-        LL_ERRS() << "Only supposed to be called to generate models" << LL_ENDL;
+        LL_ERRS() << "Only supposed to be called to generate models, val: " << mode << LL_ENDL;
         break;
     }
 
