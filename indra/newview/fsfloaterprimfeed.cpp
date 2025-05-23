@@ -337,7 +337,7 @@ void FSPrimfeedPhotoPanel::sendPhoto()
 {
     auto ratingToString = [&](int rating)
     {
-        constexpr std::array<std::string, 4> RATING_NAMES = {
+        static const std::array<std::string, 4> RATING_NAMES = {
             "general",   // 1
             "moderate",  // 2
             "adult",     // 3
