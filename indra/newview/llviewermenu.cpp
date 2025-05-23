@@ -11809,6 +11809,19 @@ class LLWorldEnvSettings : public view_listener_t
 #endif
 // </FS:Beq>
 
+        // <FS:Darl> Redundant environment toggles revert to shared environment
+        LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
+        LLUUID skyid = (sky) ? sky->getAssetId() : LLUUID::null;
+        bool repeatedEnvTogglesShared = gSavedSettings.getBOOL("FSRepeatedEnvTogglesShared");
+
+        if(repeatedEnvTogglesShared && ((skyid == LLEnvironment::KNOWN_SKY_SUNRISE       && event_name == "sunrise") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_MIDDAY        && event_name == "noon") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY && event_name == "legacy noon") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_SUNSET        && event_name == "sunset") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_MIDNIGHT      && event_name == "midnight")))
+            event_name = "region";
+        // </FS:Darl>
+
         if (event_name == "sunrise")
         {
             // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
