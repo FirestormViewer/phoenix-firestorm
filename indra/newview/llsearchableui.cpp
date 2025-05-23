@@ -36,6 +36,16 @@ ll::prefs::SearchableItem::~SearchableItem()
 void ll::prefs::SearchableItem::setNotHighlighted()
 {
     mCtrl->setHighlighted( false );
+
+    // <FS> Set the font color back to LabelTextColor if not highlighted
+    // This is really ugly but I don't know how it can be done better
+    LLTextBase* mCtrlTextBase = (LLTextBase*)dynamic_cast<const LLTextBase*>(mCtrl);
+    if (mCtrlTextBase)
+    {
+        const LLColor4& font_color = LLUIColorTable::instance().getColor("LabelTextColor");
+        mCtrlTextBase->setColor(font_color);
+    }
+    // </FS>
 }
 
 bool ll::prefs::SearchableItem::hightlightAndHide( LLWString const &aFilter )
@@ -49,13 +59,27 @@ bool ll::prefs::SearchableItem::hightlightAndHide( LLWString const &aFilter )
 
     if( aFilter.empty() )
     {
-        mCtrl->setHighlighted( false );
+        // <FS> Call the setNotHighlighted() method instead to set font color too
+        //mCtrl->setHighlighted( false );
+        setNotHighlighted();
+        // </FS>
         return true;
     }
 
     if( mLabel.find( aFilter ) != LLWString::npos )
     {
         mCtrl->setHighlighted( true );
+
+        // <FS> Set the font color of highlighted text instead of using LabelTextColor
+        // This is really ugly but I don't know how it can be done better
+        LLTextBase* mCtrlTextBase = (LLTextBase*)dynamic_cast<const LLTextBase*>(mCtrl);
+        if (mCtrlTextBase)
+        {
+            const LLColor4& font_color = mCtrl->getHighlightFontColor();
+            mCtrlTextBase->setColor(font_color);
+        }
+        // </FS>
+
         return true;
     }
 
