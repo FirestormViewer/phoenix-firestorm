@@ -1376,6 +1376,10 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
     {
         for (auto& cat : *cat_array)
         {
+            if (add.exceedsLimit())
+            {
+                break;
+            }
             if(add(cat,NULL))
             {
                 cats.push_back(cat);
@@ -1394,6 +1398,10 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
     {
         for (auto& item : *item_array)
         {
+            if (add.exceedsLimit())
+            {
+                break;
+            }
             if(add(NULL, item))
             {
                 items.push_back(item);
@@ -3780,7 +3788,9 @@ bool LLInventoryModel::saveToFile(const std::string& filename,
         {
             if (cat->getVersion() != LLViewerInventoryCategory::VERSION_UNKNOWN)
             {
-                fileXML << LLSDOStreamer<LLSDNotationFormatter>(cat->exportLLSD()) << std::endl;
+                LLSD sd = LLSD::emptyMap();
+                cat->exportLLSD(sd);
+                fileXML << LLSDOStreamer<LLSDNotationFormatter>(sd) << std::endl;
                 cat_count++;
             }
 
@@ -3794,7 +3804,9 @@ bool LLInventoryModel::saveToFile(const std::string& filename,
         auto it_count = items.size();
         for (auto& item : items)
         {
-            fileXML << LLSDOStreamer<LLSDNotationFormatter>(item->asLLSD()) << std::endl;
+            LLSD sd = LLSD::emptyMap();
+            item->asLLSD(sd);
+            fileXML << LLSDOStreamer<LLSDNotationFormatter>(sd) << std::endl;
 
             if (fileXML.fail())
             {

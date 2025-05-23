@@ -71,10 +71,13 @@
 #include "llclipboard.h"
 #include "llhttpretrypolicy.h"
 #include "llsettingsvo.h"
+#include "llinventorylistener.h"
 // [RLVa:KB] - Checked: 2014-11-02 (RLVa-1.4.11)
 #include "rlvcommon.h"
 // [/RLVa:KB]
 #include "llviewernetwork.h"
+
+LLInventoryListener sInventoryListener;
 
 // do-nothing ops for use in callbacks.
 void no_op_inventory_func(const LLUUID&) {}
@@ -841,13 +844,11 @@ S32 LLViewerInventoryCategory::getViewerDescendentCount() const
     return descendents_actual;
 }
 
-LLSD LLViewerInventoryCategory::exportLLSD() const
+void LLViewerInventoryCategory::exportLLSD(LLSD & cat_data) const
 {
-    LLSD cat_data = LLInventoryCategory::exportLLSD();
+    LLInventoryCategory::exportLLSD(cat_data);
     cat_data[INV_OWNER_ID] = mOwnerID;
     cat_data[INV_VERSION] = mVersion;
-
-    return cat_data;
 }
 
 bool LLViewerInventoryCategory::importLLSD(const LLSD& cat_data)
