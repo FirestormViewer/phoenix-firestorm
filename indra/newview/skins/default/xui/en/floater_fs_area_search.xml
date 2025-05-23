@@ -378,14 +378,14 @@
 			 name="filter_perm_transfer"
 			 label="Transfer"
 			 width="100"/>
-            <check_box
+			<check_box
 			 follows="top|left"
-             top_pad="10"
+			 top_pad="10"
 			 layout="topleft"
 			 left="10"
 			 name="filter_reflection_probe"
 			 label="Reflection Probes"
-             tool_tip="Includes manual probes only, not auto-probes. Only includes mirror probes if mirrors are enabled in graphics preferences. If reflection coverage is set to none, or the probe is not baked, objects may not be identified."
+			 tool_tip="Includes manual probes only, not auto-probes. Only includes mirror probes if mirrors are enabled in graphics preferences. If reflection coverage is set to 'none', or the probe is not baked, objects may not be identified."
 			 width="100"/>
 			<check_box
 			 follows="top|left"
@@ -579,7 +579,7 @@
 			 name="exclude_temporary"
 			 label="Temporary"
 			 width="80"/>
-            <check_box
+			<check_box
 			 follows="top|left"
 			 top_pad="10"
 			 layout="topleft"
