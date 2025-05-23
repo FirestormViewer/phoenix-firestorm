@@ -3334,16 +3334,27 @@ Low ↔ Lwst
              top_pad="1"
              name="btn_reset_scripts"
              width="90" />
+            <filter_editor
+             follows="left|top|right"
+             label="Enter filter text"
+             layout="topleft"
+             top="45"
+             left="10"
+             max_length_chars="300"
+             highlight_text_field="true"
+             name="contents_filter"
+             height="23"
+             width="275" />
             <panel_inventory_object
              border="true"
              border_visible="true"
              bevel_style="in"
              follows="left|top|right"
-             height="345"
+             height="325"
              layout="topleft"
              left="10"
              name="contents_inventory"
-             top="50"
+             top="70"
              width="275" />
 		</panel>
         </tab_container>

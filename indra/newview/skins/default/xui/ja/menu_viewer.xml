@@ -671,6 +671,8 @@
 		<menu_item_check label="ＨＴＴＰインベントリ" name="HTTP Inventory"/>
 		<menu_item_call label="圧縮画像" name="Compress Images"/>
 		<menu_item_call label="圧縮ファイルテスト" name="Compress File Test"/>
+		<menu_item_call label="Primfeed認証テスト" name="primfeed_auth_test"/>
+		<menu_item_call label="Primfeed認証をリセット" name="primfeed_auth_clear"/>
 		<menu_item_call label="Visual Leak Detectorを有効にする" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="デバッグ用のミニダンプを出力する" name="Output Debug Minidump"/>
 		<menu_item_check label="次回の起動時にコンソールウィンドウを表示する" name="Console Window"/>

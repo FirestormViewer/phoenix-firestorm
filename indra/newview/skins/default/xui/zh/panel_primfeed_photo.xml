@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<panel name="panel_primfeed_photo">
+	<combo_box name="resolution_combobox" tool_tip="圖片解析度">
+		<combo_box.item label="當前窗口" name="CurrentWindow"/>
+		<combo_box.item label="自定義" name="Custom"/>
+	</combo_box>
+	<combo_box name="filters_combobox" tool_tip="圖片濾鏡">
+		<combo_box.item label="無濾鏡" name="NoFilter"/>
+	</combo_box>
+	<check_box label="保持寬高比" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		正在更新...
+	</text>
+	<check_box label="顯示邊框" name="show_frame" tool_tip="顯示拍攝區域的邊框。場景中超出拍攝範圍的部分會被消色並輕微模糊處理。"/>
+	<check_box label="顯示指導線" name="show_guides" tool_tip="在拍攝範圍內顯示拍攝指導線（例如三分法）。"/>
+	<button label="更新" name="new_snapshot_btn" tool_tip="點擊更新"/>
+	<button label="預覽" name="big_preview_btn" tool_tip="點擊切換預覽狀態"/>
+	<text name="description_label">
+		描述：
+	</text>
+	<check_box label="添加位置描述" name="add_location_cb"/>
+	<check_box label="添加到公開圖庫" name="primfeed_add_to_public_gallery"/>
+	<check_box label="商業內容" name="primfeed_commercial_content"/>
+	<combo_box name="rating_combobox" tool_tip="Primfeed 內容評級">
+		<combo_box.item label="普級" name="GeneralRating"/>
+		<combo_box.item label="適度成人" name="ModerateRating"/>
+		<combo_box.item label="完全成人" name="AdultRating"/>
+		<combo_box.item label="完全成人+" name="AdultPlusRating"/>
+	</combo_box>
+	<check_box label="發布後在瀏覽器中打開" tool_tip="自動在瀏覽器中打開 Primfeed 發布的內容。" name="primfeed_open_url_on_post"/>
+	<button label="分享" name="post_photo_btn"/>
+	<button label="取消" name="cancel_photo_btn"/>
+</panel>

@@ -5457,7 +5457,7 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 	<notification name="ExodusFlickrVerificationExplanation">
 爲了使用 Flickr 上傳功能，[APP_NAME] 需要被授權訪問您的賬戶。繼續操作將會打開 Flickr 網站的一個網頁，在那裡您需要登錄並授權 [APP_NAME]。然後，您需要將顯示的程式碼輸入到 [APP_NAME] 中。
 
-是否授權 [APP_NAME] 在您的 Flickr 賬戶下發布照片？
+是否授權 [APP_NAME] 在您的 Flickr 賬戶下發布相片？
 		<usetemplate name="okcancelbuttons" notext="否" yestext="是"/>
 	</notification>
 	<notification name="ExodusFlickrVerificationPrompt">
@@ -5473,6 +5473,9 @@ Flickr 驗證失敗。請重試並檢查輸入的程式碼。
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
 現在可以在這裡 https://www.flickr.com/photos/me/[ID] 檢視相片。
+	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+		Primfeed發佈已完成，可以[在這裡[PF_POSTURL]]查看。
 	</notification>
 	<notification name="RegionTrackerAdd">
 應該為區域「[REGION]」
@@ -5752,5 +5755,26 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="ConfirmPoserOverwrite">
 		是否覆蓋現有的姿勢「[POSE_NAME]」？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
+	</notification>
+	<notification name="PrimfeedLoginRequestFailed">
+		Primfeed 登錄請求被拒絕。
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		Primfeed 授權失敗。授權程序尚未完成。
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		Primfeed 授權正在處理中。請在您的網頁瀏覽器中完成 Primfeed 授權後再重試。
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Primfeed 授權已完成。您現在可以在 Primfeed 平台上發佈相片。
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		Primfeed 帳戶驗證失敗。Primfeed 無法識別此帳戶或登錄失敗。
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		此帳戶已連接至 Primfeed。若需重新授權，請使用重設按鈕。
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		Primfeed 用戶已成功登錄，但狀態檢查失敗。請確認 Primfeed 服務是否正常運作。
 	</notification>
 </notifications>

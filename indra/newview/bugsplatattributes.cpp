@@ -64,6 +64,7 @@ std::string BugSplatAttributes::to_xml_token(const std::string& input)
 
 bool BugSplatAttributes::writeToFile(const std::string& file_path)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING;
     std::lock_guard<std::mutex> lock(mMutex);
 
     // Write to a temporary file first

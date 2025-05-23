@@ -1950,9 +1950,9 @@ bool idle_startup()
     // <FS:Ansariel> Wait for notification confirmation
     if (STATE_LOGIN_CONFIRM_NOTIFICATON == LLStartUp::getStartupState())
     {
-        display_startup();
+        do_startup_frame();
         gViewerWindow->getProgressView()->setVisible(false);
-        display_startup();
+        do_startup_frame();
         ms_sleep(1);
         return false;
     }
@@ -2298,10 +2298,10 @@ bool idle_startup()
         //so I just moved nearby history loading a few states further
         if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
         {
-            FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
-            if (nearby_chat) nearby_chat->loadHistory();
+            if (FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance())
+                nearby_chat->loadHistory();
         }
-        display_startup();
+        do_startup_frame();
         // </FS:Ansariel> [FS communication UI]
 
         // <FS:KC> FIRE-18250: Option to disable default eye movement
@@ -2549,13 +2549,14 @@ bool idle_startup()
         LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
         LLStatusBar::sendMoneyBalanceRequest();
 
-        do_startup_frame();
         // <FS:Ansariel> Moved before inventory creation.
         // request all group information
         LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Requesting Agent Data during startup" << LL_ENDL;
         gAgent.sendAgentDataUpdateRequest();
-        display_startup();
         // </FS:Ansariel>
+
+        do_startup_frame();
+
         // Inform simulator of our language preference
         LLAgentLanguage::update();
 
@@ -2808,7 +2809,7 @@ bool idle_startup()
         // Create the inventory views
         LL_INFOS() << "Creating Inventory Views" << LL_ENDL;
         LLFloaterReg::getInstance("inventory");
-        //do_startup_frame();
+        do_startup_frame();
 
 // [RLVa:KB] - Checked: RLVa-1.1.0
         if (RlvHandler::isEnabled())
@@ -2898,7 +2899,7 @@ bool idle_startup()
             //ok, we're done, set it back to false.
             gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", false);
         }
-        display_startup();
+        do_startup_frame();
         // </FS:CR>
 
         if (gSavedSettings.getBOOL("HelpFloaterOpen"))
@@ -3074,7 +3075,7 @@ bool idle_startup()
             }
         }
 #endif // OPENSIM
-        display_startup();
+        do_startup_frame();
         // </FS:CR>
 
         LLStartUp::setStartupState( STATE_PRECACHE );
@@ -4972,24 +4973,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
         LLViewerMedia::getInstance()->openIDSetup(openid_url, openid_token);
     }
 
-    // Only save mfa_hash for future logins if the user wants their info remembered.
-    if(response.has("mfa_hash")
-       && gSavedSettings.getBOOL("RememberUser")
-       && LLLoginInstance::getInstance()->saveMFA())
-    {
-        std::string grid(LLGridManager::getInstance()->getGridId());
-        std::string user_id(gUserCredential->userID());
-        gSecAPIHandler->addToProtectedMap("mfa_hash", grid, user_id, response["mfa_hash"]);
-        // TODO(brad) - related to SL-17223 consider building a better interface that sync's automatically
-        gSecAPIHandler->syncProtectedMap();
-    }
-    else if (!LLLoginInstance::getInstance()->saveMFA())
-    {
-        std::string grid(LLGridManager::getInstance()->getGridId());
-        std::string user_id(gUserCredential->userID());
-        gSecAPIHandler->removeFromProtectedMap("mfa_hash", grid, user_id);
-        gSecAPIHandler->syncProtectedMap();
-    }
+    LLLoginInstance::getInstance()->saveMFAHash(response);
 
     // <FS:Ansariel> OpenSim legacy economy support
 #ifdef OPENSIM
@@ -5091,6 +5075,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
         gAgentID.setNull();
     }
     // </FS:Techwolf Lupindo>
+
 
     bool success = false;
     // JC: gesture loading done below, when we have an asset system
