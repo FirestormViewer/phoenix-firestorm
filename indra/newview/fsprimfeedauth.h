@@ -69,7 +69,6 @@ private:
 
     explicit FSPrimfeedAuth(authorized_callback_t callback);
     authorized_callback_t mCallback;
-    bool mAuthenticating;
     std::string mOauthToken;
     std::string mRequestId;
     
