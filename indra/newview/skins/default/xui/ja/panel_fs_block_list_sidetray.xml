@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
-	<panel label="bottom_panel" name="blocked_buttons_panel">
-		<filter_editor label="フィルター" name="blocked_filter_input" />
-		<menu_button name="blocked_gear_btn" tool_tip="選択した人またはオブジェクトに対する処理です" />
-		<menu_button name="view_btn" tool_tip="並べ替えのオプション" />
-		<menu_button name="plus_btn" />
-		<button name="unblock_btn" tool_tip="住人やオブジェクトをブロックリストから除外します" />
+	<panel label="ボトムパネル" name="blocked_buttons_panel">
+		<filter_editor label="フィルタ" name="blocked_filter_input"/>
+		<menu_button name="blocked_gear_btn" tool_tip="選択した人またはオブジェクトに対する処理です。"/>
+		<menu_button name="view_btn" tool_tip="並べ替えのオプションを指定します。"/>
+		<menu_button name="plus_btn" tool_tip="ブロックする住人またはオブジェクトを選択します。"/>
+		<button name="unblock_btn" tool_tip="住人やオブジェクトをブロックリストから除外します。"/>
 	</panel>
 	<text name="block_limit">
-		ブロック件数: [COUNT] (最大 [LIMIT])
+		ブロック件数：全[LIMIT]件中[COUNT]件
 	</text>
 	<fs_scroll_list name="block_list">
-		<fs_scroll_list.columns name="item_name" label="名前" />
-		<fs_scroll_list.columns name="item_type" label="種類" />
-		<fs_scroll_list.columns name="item_mute_type" />
+		<fs_scroll_list.columns name="item_name" label="名前"/>
+		<fs_scroll_list.columns name="item_type" label="種類"/>
 	</fs_scroll_list>
 </panel>

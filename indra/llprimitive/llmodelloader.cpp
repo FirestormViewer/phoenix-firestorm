@@ -257,10 +257,7 @@ bool LLModelLoader::loadFromSLM(const std::string& filename)
                     if (!loaded_model->mSkinInfo.mJointNames.empty())
                     {
                         //check to see if rig is valid
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//                      critiqueRigForUploadApplicability( loaded_model->mSkinInfo.mJointNames );
-                        critiqueRigForUploadApplicability( toStringVector( loaded_model->mSkinInfo.mJointNames ) );
-// </FS:ND>
+                        critiqueRigForUploadApplicability( loaded_model->mSkinInfo.mJointNames );
                     }
                     else if (mCacheOnlyHitIfRigged)
                     {

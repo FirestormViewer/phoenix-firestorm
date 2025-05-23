@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="money_tracker" title="入金記録">
+<floater name="money_tracker" title="取引ログ">
 	<name_list name="payment_list">
 		<name_list.columns name="time" label="時間" />
 		<name_list.columns name="name" label="名前" />
 		<name_list.columns name="amount" label="金額" />
 	</name_list>
 	<text name="summary">
-		支払い L$ [PAID] - 受け取り L$ [RECEIVED]
+		支払ったL$ [PAID]‐受け取ったL$ [RECEIVED]
 	</text>
 	<check_box label="閉じている時も記録" name="FSAlwaysTrackPayments" tool_tip="入金記録のウィンドウが閉じている場合でも、常に入金を記録するようにします。" />
-    <button name="Clear" label="クリア" />
+	<button name="Clear" label="クリア" />
 </floater>

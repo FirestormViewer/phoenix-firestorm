@@ -198,10 +198,17 @@
 			<slider label="Przezroczystość:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
 			<slider label="Przezrocz. tła tekstu pływającego:" name="FSHudTextBackgroundOpacity" tool_tip="Wybierz przezroczystość tła tekstu pływającego" />
 			<text name="preferences_search_label">
-				Wyniki wyszukiwania w opcjach:
-			</text>
-			<color_swatch name="preferences_search_color" tool_tip="Wybierz kolor dla podświetlenia wyników wyszukiwania w opcjach"/>
-			<text name="area_search_beacon_color_label">
+                Wyniki wyszukiwania w opcjach:
+            </text>
+			<text name="preferences_search_bg_label" width="30">
+                Tło:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Wybierz kolor tła dla podświetlenia wyników wyszukiwania w opcjach"/>
+			<text name="preferences_search_font_label" width="60">
+                Czcionka:
+            </text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Wybierz kolor czcionki dla podświetlenia wyników wyszukiwania w opcjach"/>
+			<text name="area_search_beacon_color_label" left="280">
 				Emiter śledzenia (np. przeszukiwania obszaru):
 			</text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Wybierz kolor emitera śledzenia, np. dla przeszukiwania obszaru" />

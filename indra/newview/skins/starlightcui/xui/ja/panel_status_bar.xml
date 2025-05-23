@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="区画販売中です。"/>
+		<text tool_tip="あなたがいる土地の区画名です。土地情報についてはクリックしてください。" name="parcel_info_text" value="（読み込んでいます…）"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		パケット損失
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		帯域幅
+	</panel.string>
+	<panel.string name="time">
+		[ampm, datetime, slt]　[hour12, datetime, slt]：[min, datetime, slt]：[second, datetime, slt]　[timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="timeTooltip">
+		[year, datetime, slt]年[month, datetime, slt]月[day, datetime, slt]日（[weekday, datetime, slt]）
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		L$ [AMT]
+	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="メニュー検索" name="search_menu_edit" tool_tip="検索したい内容をここに入力してください。メニューに部分的に一致する結果が表示されます。"/>
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="クリックしてL$残高を更新します。" value="L$ ???"/>
+		<button label="L$を購入" name="buyL" tool_tip="クリックしてL$を購入します。"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<!-- Draw distance widget here -->
+		<icon name="dd_icon" tool_tip="描画距離："/>
+		<slider tool_tip="カメラからRezされる最大距離（メートル）を指定します。" name="drawdistance"/>
+		<text name="TimeText" tool_tip="現在時刻（太平洋時間）です。">
+			午前　24：00：00　PST
+		</text>
+		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
+		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Web ページ）を開始／停止します。"/>
+		<button name="volume_btn" tool_tip="全体のボリュームを調整します。"/>
+		<text name="FPSText" tool_tip="フレーム毎秒です。">
+			200.0
+		</text>
+	</panel>
+</panel>

@@ -378,9 +378,7 @@
 		<spinner name="rptctrl" label="Répétitions / mètre"/>
 		<check_box label="Synchroniser les matériaux" name="checkbox_sync_settings" tool_tip="Synchronisation des paramètres de la carte de texture"/>
 		<check_box label="Aligner les faces planaires" name="checkbox planar align" tool_tip="Aligne les textures de toutes les faces sélectionnées sur la dernière face sélectionnée. Nécessite un mappage planaire des textures."/>
-		<text name="tex gen">
-			Mapping
-		</text>
+		<check_box label="Occulter eau" name="checkbox_hide_water"/>
 		<combo_box name="combobox texgen">
 			<combo_box.item label="Défaut" name="Default"/>
 			<combo_box.item label="Planaire" name="Planar"/>

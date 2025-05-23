@@ -40,31 +40,6 @@
 #include "xform.h"
 #include "llmatrix4a.h"
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-struct JointKey
-{
-    std::string mName;
-    U32 mKey;
-
-    static JointKey construct(const std::string& aName);
-};
-
-inline bool operator==(JointKey const &aLHS, JointKey const &aRHS)
-{
-    return aLHS.mName == aRHS.mName;
-}
-
-inline bool operator!=(JointKey const &aLHS, JointKey const &aRHS)
-{
-    return ! (aLHS == aRHS);
-}
-
-inline std::ostream& operator<<(std::ostream &aLHS, JointKey const &aRHS)
-{
-    return aLHS << aRHS.mName << " (" << aRHS.mKey << ")";
-}
-// </FS:ND>
-
 constexpr S32 LL_CHARACTER_MAX_JOINTS_PER_MESH = 15;
 // Need to set this to count of animate-able joints,
 // currently = #bones + #collision_volumes + #attachments + 2,
@@ -247,7 +222,9 @@ public:
     LLJoint *getRoot();
 
     // search for child joints by name
-    LLJoint *findJoint( const std::string &name );
+    //<FS:Ansariel> Joint-lookup improvements
+    //LLJoint *findJoint( const std::string &name );
+    LLJoint* findJoint(std::string_view name);
 
     // add/remove children
     void addChild( LLJoint *joint );

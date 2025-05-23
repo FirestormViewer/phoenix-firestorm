@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_group_notify">
-	<text name="group_notice" value="グループ通知" />
-	<text name="title" value="送信者の名前 / グループ名" />
-	<text name="attachment_label" value="添付：" />
+	<text name="group_notice" value="グループ通知"/>
+	<text name="title" value="送信者の名前／グループ名"/>
+	<text name="attachment_label" value="添付："/>
 	<panel name="attachment_container">
-		<text name="attachment" value="添付アイテム" />
+		<text name="attachment" value="添付アイテム"/>
 	</panel>
-	<button label="OK" name="btn_ok" />
-	<button label="グループ通知" name="btn_notices" />
-	<button label="グループチャット" name="btn_groupchat" />
+	<button label="ＯＫ" name="btn_ok"/>
+	<button label="グループ通知" name="btn_notices"/>
+	<button label="グループチャット" name="btn_groupchat"/>
 </panel>

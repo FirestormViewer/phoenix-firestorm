@@ -33,7 +33,7 @@
 	<text name="IndirectMaxComplexityText">
 		0
 	</text>
-	<slider label="非精簡化身數目上限：" name="IndirectMaxNonImpostors" />
+	<slider label="動態化身數目上限：" name="IndirectMaxNonImpostors" />
 	<text name="IndirectMaxNonImpostorsText">
 		0
 	</text>
@@ -128,8 +128,16 @@
 		<combo_box.item label="手動 + 地形" name="2" />
 		<combo_box.item label="全景" name="3" />
 	</combo_box>
+	<text name="ReflectionProbeCount">
+		反射探針數量：
+	</text>
+	<combo_box label="反射探針數量：" name="ProbeCount">
+		<combo_box.item label="無" name="1" />
+		<combo_box.item label="少量" name="32" />
+		<combo_box.item label="中等" name="64" />
+		<combo_box.item label="很多" name="128" />
+	</combo_box>
 	<slider label="曝光度:" name="RenderExposure" />
-	<!-- Mirror settings. -->
 	<check_box label="鏡面" name="Mirrors" />
 	<text name="MirrorResolutionText">
 		鏡面解析度:

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="オブジェクトのインポート">
+	<floater.string name="floater_title">
+		[FILENAME]のインポート
+	</floater.string>
+	<floater.string name="file_status">
+		[LINKSETS]個のリンクセット、[PRIMS]個のプリム。[TEXTURES]枚のテクスチャ。
+[SOUNDS]個のサウンド。[ANIMATIONS]個のアニメーション。
+	</floater.string>
+	<floater.string name="file_status_error">
+		ファイル読み込み時にエラーが発生しました。別のファイルを選択してください。
+	</floater.string>
+	<floater.string name="file_version_error">
+		間違ったフォーマット化バージョンのため、ファイルのパースに失敗しました。
+	</floater.string>
+	<floater.string name="file_status_running">
+		全[LINKSETS]個中[LINKSET]個のリンクセットと、全[PRIMS]個中[PRIM]個のプリムがあります。
+	</floater.string>
+	<floater.string name="file_status_done">
+		インポートが完了しました。
+	</floater.string>
+	<floater.string name="texture_uploading">
+		全[TEXTURETOTAL]枚中[TEXTURE]枚のテクスチャをアップロードしています。
+	</floater.string>
+	<floater.string name="sound_uploading">
+		全[SOUNDTOTAL]個中[SOUND]個のサウンドをアップロードしています。
+	</floater.string>
+	<floater.string name="animation_uploading">
+		全[ANIMATIONTOTAL]個中[ANIMATION]個のアニメーションをアップロードしています。
+	</floater.string>
+	<floater.string name="asset_uploading">
+		全[ASSETTOTAL]個中[ASSET個のアセットをアップロードしています。
+	</floater.string>
+	<floater.string name="upload_cost">
+		全アップロード費用：L$ [COST]
+	</floater.string>
+	<floater.string name="object">
+		オブジェクト
+	</floater.string>
+	<floater.string name="objects">
+		オブジェクト
+	</floater.string>
+	<text name="creation_date_text">
+		[DATE_STRING]に作成
+	</text>
+	<text name="client_text">
+		クライアント：[CLIENT] v.[VERSION]
+	</text>
+	<text name="file_status_text">
+		ファイルを選択
+	</text>
+	<check_box name="do_not_attach" label="オブジェクトを装着しない"/>
+	<check_box name="region_position" label="リージョン座標を復元する"/>
+	<check_box name="upload_asset" label="コンテンツのアップロード"/>
+	<check_box name="temp_asset" label="一時的"/>
+	<button name="import_btn" label="インポート"/>
+</floater>

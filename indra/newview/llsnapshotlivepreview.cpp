@@ -36,6 +36,7 @@
 #include "llfloaterperms.h"
 #include "llfloaterreg.h"
 #include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
+#include "fsfloaterprimfeed.h" // <FS:Beq> Share to Primfeed
 #include "llimagefilter.h"
 #include "llimagefiltersmanager.h"
 #include "llimagebmp.h"

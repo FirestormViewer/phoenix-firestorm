@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- one item in the list of quick preferences -->
+<layout_panel name="option_layout_panel">
+	<!-- border parameters decide how the selection looks while editing -->
+	<panel name="option_ordering_panel">
+		<layout_stack name="option_inner_stack">
+			<layout_panel name="option_panel_updown">
+				<button name="remove_button" tool_tip="このコントロールを削除します。" />
+			</layout_panel>
+			<layout_panel name="text_panel">
+				<text name="option_label">
+					コントロールのラベル名：
+				</text>
+			</layout_panel>
+			<layout_panel name="option_panel">
+				<!-- one of these controls will be chosen by the user, all others remain hidden -->
+				<radio_group name="option_radio_control">
+					<radio_item name="on" label="オン"/>
+					<radio_item name="off" label="オフ"/>
+				</radio_group>
+				<!-- one of these controls will be chosen by the user, all others remain hidden -->
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</layout_panel>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="whitelist_floater" title="ホワイトリストフォルダとバイナリ">
+	<text name="whitelist_intro">
+アンチウィルスとマルウェア対策は、インターネットを安全に使用するために不可欠ですが、ビューアに様々な問題を引き起こす可能性があります。
+干渉を減らし、安定性とパフォーマンスを向上させるために、ビューアが使用する重要なフォルダとプログラムに対して除外（ホワイトリスト）を設定することをすべてのユーザーに強くお勧めします。
+
+詳細については、次のサイトをご覧ください。
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</text>
+	<text name="whitelist_folder_instruction">
+		作業を簡素化するために、下のボックスにはビューアが使用しているフォルダが表示されます。
+上記のwikiページに示されているように、これらをアンチウィルスのフォルダの除外に追加してください。
+	</text>
+	<text name="whitelist_exe_instruction">
+		次のボックスには、ビューア実行可能ファイルの名前とフルパスが表示されます。
+上記のwikiに示されているように、アンチウィルス実行可能ファイルの除外にフルパスを追加します。
+	</text>
+</floater>

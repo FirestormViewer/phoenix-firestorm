@@ -13,11 +13,20 @@
 	<string name="header_mHindLimbsRoot">後肢</string>
 	<string name="header_mWingsRoot">翼</string>
 	<string name="header_mFaceEar1Left">耳朵/鼻子</string>
+	<string name="header_mSkull">身體</string>
+	<string name="header_HEAD">身體</string>
+	<string name="header_L_UPPER_ARM">雙臂</string>
+	<string name="header_L_UPPER_LEG">雙腿</string>
 	<string name="title_mPelvis">化身整體</string>
 	<string name="title_mTorso">軀幹</string>
+	<string name="title_mSpine1">脊柱1</string>
+	<string name="title_mSpine2">脊柱2</string>
+	<string name="title_mSpine3">脊柱3</string>
+	<string name="title_mSpine4">脊柱4</string>
 	<string name="title_mChest">胸部</string>
 	<string name="title_mNeck">頸部</string>
 	<string name="title_mHead">頭顱</string>
+	<string name="title_mSkull">頭骨</string>
 	<string name="title_mEyeRight">右眼</string>
 	<string name="title_mEyeLeft">左眼</string>
 	<string name="title_mFaceForeheadLeft">左額頭角</string>
@@ -29,13 +38,17 @@
 	<string name="title_mFaceEyebrowCenterRight">右眉毛中</string>
 	<string name="title_mFaceEyebrowInnerRight">右眉毛內</string>
 	<string name="title_mFaceEyeLidUpperLeft">左上眼瞼</string>
+	<string name="title_mFaceEyecornerInnerLeft">左内眼角</string>
 	<string name="title_mFaceEyeLidLowerLeft">左下眼瞼</string>
 	<string name="title_mFaceEyeLidUpperRight">右上眼瞼</string>
+	<string name="title_mFaceEyecornerInnerRight">右内眼角</string>
 	<string name="title_mFaceEyeLidLowerRight">右下眼瞼</string>
 	<string name="title_mFaceEar1Left">左耳上</string>
 	<string name="title_mFaceEar2Left">左耳下</string>
 	<string name="title_mFaceEar1Right">右耳上</string>
 	<string name="title_mFaceEar2Right">右耳下</string>
+	<string name="title_mFaceNoseBase">鼻翼</string>
+	<string name="title_mFaceNoseBridge">鼻樑</string>
 	<string name="title_mFaceNoseLeft">鼻子左</string>
 	<string name="title_mFaceNoseCenter">鼻子中</string>
 	<string name="title_mFaceNoseRight">鼻子右</string>
@@ -52,17 +65,13 @@
 	<string name="title_mFaceTongueTip">舌尖</string>
 	<string name="title_mFaceJawShaper">下頜形狀</string>
 	<string name="title_mFaceForeheadCenter">額頭中</string>
-	<string name="title_mFaceNoseBase">鼻根</string>
 	<string name="title_mFaceTeethUpper">上牙床</string>
 	<string name="title_mFaceLipUpperLeft">上唇左</string>
 	<string name="title_mFaceLipUpperRight">上唇右</string>
 	<string name="title_mFaceLipCornerLeft">左唇角</string>
 	<string name="title_mFaceLipCornerRight">右唇角</string>
 	<string name="title_mFaceLipUpperCenter">上唇中</string>
-	<string name="title_mFaceEyecornerInnerLeft">左內眼角</string>
-	<string name="title_mFaceEyecornerInnerRight">右內眼角</string>
-	<string name="title_mFaceNoseBridge">鼻樑</string>
-	<string name="title_mCollarLeft">頸根部</string>
+	<string name="title_mCollarLeft">頸部左</string>
 	<string name="title_mShoulderLeft">左肩</string>
 	<string name="title_mElbowLeft">左肘</string>
 	<string name="title_mWristLeft">左腕</string>
@@ -81,7 +90,7 @@
 	<string name="title_mHandThumb1Left">左拇指根</string>
 	<string name="title_mHandThumb2Left">左拇指中</string>
 	<string name="title_mHandThumb3Left">左拇指尖</string>
-	<string name="title_mCollarRight">頸根部</string>
+	<string name="title_mCollarRight">頸部右</string>
 	<string name="title_mShoulderRight">右肩</string>
 	<string name="title_mElbowRight">右肘</string>
 	<string name="title_mWristRight">右腕</string>
@@ -128,21 +137,45 @@
 	<string name="title_mTail5">尾巴5</string>
 	<string name="title_mTail6">尾巴末梢</string>
 	<string name="title_mGroin">腹股溝</string>
-	<string name="title_mHindLimbsRoot">根</string>
-	<string name="title_mHindLimb1Left">左基礎</string>
+	<string name="title_mHindLimbsRoot">後肢根部</string>
+	<string name="title_mHindLimb1Left">左後肢</string>
 	<string name="title_mHindLimb2Left">左2</string>
 	<string name="title_mHindLimb3Left">左3</string>
 	<string name="title_mHindLimb4Left">左4</string>
-	<string name="title_mHindLimb1Right">右基礎</string>
+	<string name="title_mHindLimb1Right">右後肢</string>
 	<string name="title_mHindLimb2Right">右2</string>
 	<string name="title_mHindLimb3Right">右3</string>
 	<string name="title_mHindLimb4Right">右4</string>
+	<string name="title_HEAD">頭部</string>
+	<string name="title_NECK">頸部</string>
+	<string name="title_CHEST">胸部</string>
 	<string name="title_BUTT">臀部</string>
 	<string name="title_BELLY">腹部</string>
 	<string name="title_LEFT_PEC">左胸肌</string>
 	<string name="title_RIGHT_PEC">右胸肌</string>
+	<string name="title_L_CLAVICLE">左鎖骨</string>
+	<string name="title_R_CLAVICLE">右鎖骨</string>
+	<string name="title_L_UPPER_ARM">左上臂</string>
+	<string name="title_R_UPPER_ARM">右上臂</string>
+	<string name="title_L_LOWER_ARM">左下臂</string>
+	<string name="title_R_LOWER_ARM">右下臂</string>
+	<string name="title_L_HAND">左手</string>
+	<string name="title_R_HAND">右手</string>
+	<string name="title_UPPER_BACK">上背部</string>
+	<string name="title_LEFT_HANDLE">左腰</string>
+	<string name="title_RIGHT_HANDLE">右腰</string>
+	<string name="title_PELVIS">骨盆</string>
+	<string name="title_L_UPPER_LEG">左大腿</string>
+	<string name="title_R_UPPER_LEG">右大腿</string>
+	<string name="title_L_LOWER_LEG">左小腿</string>
+	<string name="title_R_LOWER_LEG">右小腿</string>
+	<string name="title_L_FOOT">左腳</string>
+	<string name="title_R_FOOT">右腳</string>
 	<string name="LoadPoseLabel">載入姿勢</string>
+	<string name="SavePoseLabel">儲存姿勢</string>
 	<string name="LoadDiffLabel">載入差異</string>
+	<string name="SaveDiffLabel">儲存差異</string>
+	<string name="OverWriteLabel">覆蓋？</string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -186,8 +219,8 @@
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="預設名稱" name="name"/>
 							</scroll_list>
-							<button label="設定左手" name="button_loadHandPoseLeft" tool_tip="雙擊以將左手設定為選定的預設"/>
-							<button label="設定右手" name="button_loadHandPoseRight" tool_tip="雙擊以將右手設定為選定的預設"/>
+							<button label="設定左手" name="button_loadHandPoseLeft" tool_tip="點選將左手設定為選定的預設"/>
+							<button label="設定右手" name="button_loadHandPoseRight" tool_tip="點選將右手設定為選定的預設"/>
 						</panel>
 					</tab_container>
 					<panel title="其他" name="misc_joints_panel">
@@ -206,7 +239,7 @@
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="更新化身和動畫物件的列表"/>
 						<button label="開始姿勢" label_selected="停止姿勢" tool_tip="若有許可權，開始/停止選定的化身或動畫物件的姿勢" name="start_stop_posing_button"/>
-						<button label="設為T姿勢" tool_tip="雙擊將選定的化身設為T姿勢" name="set_t_pose_button"/>
+						<button label="設為T姿勢" tool_tip="點選將選定的化身設為T姿勢" name="set_t_pose_button"/>
 					</panel>
 					<panel title="設定" name="settings_panel">
 						<text name="trackpad_sensitivity_label">
@@ -216,6 +249,7 @@
 						<check_box name="natural_direction_checkbox" label="使用自然對齊" tool_tip="骨骼預設具有不自然的關節旋轉，這可能會讓姿勢調整變得更複雜。選取此選項後，關節將以更自然的方式旋轉。" />
 						<check_box name="stop_posing_on_close_checkbox" label="關閉時停止" tool_tip="關閉時不停止姿勢可有助於保留目前工作。"/>
 						<check_box name="also_save_bvh_checkbox" label="儲存時也儲存BHV" tool_tip="當姿勢被儲存時，將同時創建一個BHV檔案，該檔案可以透過建造 > 上傳 > 動畫上傳，並用於自己或其他化身的姿勢。為了實現此功能，關節的基礎位置必須設為零，因為BHV無法從其他姿勢推導出來。"/>
+						<check_box name="confirm_overwrite_on_save_checkbox" label="確認覆蓋" tool_tip="儲存姿勢時，如果檔案已存在，您需要再次點擊保存按鈕以確認覆蓋。" />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="編輯時重設基礎旋轉" tool_tip="首次編輯旋轉時，將其重設為零。這意味著可以保存完整的姿勢（而不僅僅是差異，請參閱載入/保存）。每個以零為基準匯出的關節旁都會顯示綠色勾選標誌。" />
 					</panel>
 				</tab_container>
@@ -259,12 +293,12 @@
 				<panel name="trackball_button_panel">
 					<button name="undo_change" tool_tip="撤銷上一次變更" />
 					<button name="button_redo_change" tool_tip="重做上一次變更"/>
-					<button name="poser_joint_reset" tool_tip="雙擊以將選取的身體部位重設為最初開始調整姿勢時的狀態。"/>
+					<button name="poser_joint_reset" tool_tip="點選將選取的身體部位重設為最初開始調整姿勢時的狀態。"/>
 					<button name="delta_mode_toggle" tool_tip="如果改變多個關節，則改變它們相同的值而不是相同的角度。這也用於解決萬向節鎖定的問題。"/>
 					<button label="鏡像" name="button_toggleMirrorRotation" tool_tip="將變更鏡像到對側關節。"/>
 					<button label="複製" name="button_toggleSympatheticRotation" tool_tip="將變更複製到對側關節。"/>
-					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="雙擊以將變更從左側複製到右側。" />
-					<button label="複製右側&gt;左" name="button_symmetrize_right_to_left" tool_tip="雙擊以將變更從右側複製到左側。" />
+					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="點選將變更從左側複製到右側。" />
+					<button label="複製右側&gt;左" name="button_symmetrize_right_to_left" tool_tip="點選將變更從右側複製到左側。" />
 				</panel>
 			</panel>
 			<panel name="poses_loadSave">

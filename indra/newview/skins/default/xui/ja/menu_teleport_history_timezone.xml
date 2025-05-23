@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- FS:Beq [timezone support for teleport history] -->
+<toggleable_menu name="menu_teleport_history_timezone">
+	<menu_item_check name="teleport_history_tz_utc" label="ＵＴＣ"/>
+	<menu_item_check name="teleport_history_tz_slt" label="ＳＬＴ"/>
+	<menu_item_check name="teleport_history_tz_local" label="ローカル"/>
+</toggleable_menu>
+<!-- /FS:Beq [timezone support for teleport history] -->

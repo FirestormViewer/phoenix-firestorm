@@ -96,6 +96,13 @@ public:
         {
             ctrl->getSignal()->connect(boost::bind(&LLFloaterIMNearbyChatScreenChannel::updateToastFadingTime, this));
         }
+        // <FS:darl> [FIRE-35039 > FIRE-35294] Add flag to show/hide the on-screen console
+        ctrl = gSavedSettings.getControl("FSShowOnscreenConsole").get();
+        if (ctrl)
+        {
+            ctrl->getSignal()->connect(boost::bind(&LLFloaterIMNearbyChatScreenChannel::removeToastsFromChannel, this));
+        }
+        // </FS:darl> [FIRE-35039 > FIRE-35294] Add flag to show/hide the on-screen console
     }
 
     void addChat    (LLSD& chat);
@@ -663,7 +670,14 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 
         }
     }
-
+    // <FS:Beq> Hide Primfeed OAuth message from chat to prevent accidental leak of secret.
+    const std::string primfeed_oauth = "#PRIMFEED_OAUTH: ";
+    if( chat_msg.mText.compare(0, primfeed_oauth.length(), primfeed_oauth) == 0 && chat_msg.mChatType == CHAT_TYPE_IM && chat_msg.mSourceType == CHAT_SOURCE_OBJECT )
+    {
+        // Don't show the message in chat.
+        return;
+    }
+    // </FS:Beq>
     nearby_chat->addMessage(chat_msg, true, args);
 
     if (chat_msg.mSourceType == CHAT_SOURCE_AGENT
@@ -693,6 +707,14 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         return;
     }
     // </FS:Ansariel>
+
+    // <FS:darl> [FIRE-35039 > FIRE-35294] Add flag to show/hide the on-screen console
+    static LLUICachedControl<bool> showOnscreenConsole("FSShowOnscreenConsole");
+    if (!showOnscreenConsole)
+    {
+        return;
+    }
+    // </FS:darl> [FIRE-35039 > FIRE-35294]
 
     static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
     static LLCachedControl<bool> fsBubblesHideConsoleAndToasts(gSavedSettings, "FSBubblesHideConsoleAndToasts");

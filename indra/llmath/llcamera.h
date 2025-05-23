@@ -127,7 +127,7 @@ private:
 
     F32 mView;                  // angle between top and bottom frustum planes in radians.
     F32 mAspect;                // width/height
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Store the inverse of the aspect ratio, for the texture's sizes
     //F32 mInverseAspect;         // height/width
     F32 mDrawDistanceMultiplier; // mFarPlane / DEFAULT_FAR_PLANE
@@ -166,7 +166,7 @@ public:
     F32 getView() const                         { return mView; }               // vertical FOV in radians
     S32 getViewHeightInPixels() const           { return mViewHeightInPixels; }
     F32 getAspect() const                       { return mAspect; }             // width / height
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     //F32 getInverseAspect() const                { return mInverseAspect; }      // width / height
     F32 getDrawDistanceMultiplier() const       { return mDrawDistanceMultiplier; } // mFarPlane / DEFAULT_FAR_PLANE (could also include near plane as well)
     // </FS:minerjr> [FIRE-35081]

@@ -1,113 +1,81 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<pie_menu
-    name="Object Pie">
-   <pie_slice
-     label="開く"
-     name="Open"/>
-   <pie_slice
-        label="作成"
-        name="Build"/>
-    <pie_slice
-        label="触る"
-        name="Pie Object Touch"/>
-    <pie_slice
-        label="ここに座る"
-        name="Pie Object Sit"/>
-    <pie_slice
-        label="立ち上がる"
-        name="Object Stand Up"/>
-    <pie_slice
-        label="購入"
-        name="Buy..."/>
-    <pie_menu label="取る &gt;" name="Take Submenu">
-        <pie_slice label="コピーを取る" name="Take Copy" />
-        <pie_slice label="取る" name="Take" />
-    </pie_menu>
-    <pie_slice
-        label="支払い" 
-        name="Pay..."/>
-    <pie_menu
-        label="詳細 &gt;"
-        name="Object Pie More 1">
-    <pie_slice
-        label="削除"
-        name="Delete"/>
-    <pie_slice
-        label="装着"
-        name="Wear"/>
-    <pie_slice
-        label="コピーを取る"
-        name="Take Copy" />
-    <pie_menu
-        label="HUD装着先 &gt;"
-        name="Pie Object Attach HUD" />
-    <pie_menu
-        label="装着先 &gt;"
-        name="Pie Object Attach" />
-    <pie_slice
-        label="返却" 
-        name="Return..."/>
-    <pie_menu
-        label="詳細 &gt;"
-        name="Object Pie More 2">
-        <pie_slice
-            label="テクスチャ更新"
-            name="Texture Refresh"/>
-        <pie_menu
-            label="表示しない &gt;"
-            name="DerenderMenu">
-			<pie_slice
-				label="非表示リストに追加"
-				name="DerenderPermanent" />
-			<pie_slice
-				label="臨時"
-				name="Derender" />
-        </pie_menu>
-        <pie_slice
-            label="報告..."
-            name="Report Abuse..."/>
-        <pie_menu
-            name="ExportMenu"
-            label="別名で保存 &gt;">
-            <pie_slice
-                label="バックアップ"
-                name="Backup" />
-            <pie_slice
-                label="メッシュ"
-                name="Collada" />
-        </pie_menu>
-        <pie_menu label="パスファインディング &gt;" name="Pathfinding">
-            <pie_slice label="リンクセットで表示" name="show_in_linksets" />
-            <pie_slice label="キャラクターで表示" name="show_in_characters" />
-            <pie_separator name="autohide_end_crash_protection" />
-        </pie_menu>
-        <pie_menu
-            label="無視 &gt;"
-            name="mute_menu">
-        <pie_slice
-            label="無視"
-            name="Object Mute" />
-        <pie_slice
-            label="パーティクル"
-            name="Mute Particle" />
-    </pie_menu>
-        <pie_menu label="スクリプト &gt;" name="ScriptsMenu">
-			<pie_slice label="コンパイル（Mono）" name="CompileMono"/>
-			<pie_slice label="コンパイル（LSL）" name="CompileLSL"/>
-			<pie_slice label="スクリプトリセット" name="Object Reset Scripts"/>
-			<pie_slice label="スクリプト実行" name="Object Set Scripts to Running"/>
-			<pie_slice label="スクリプト停止" name="Object Set Scripts to Not Running"/>
-			<pie_slice label="スクリプト削除" name="Remove Scripts From Selection"/>
-			<pie_slice label="スクリプト情報" name="ScriptInfo"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Object Pie">
+	<pie_slice label="開く" name="Open"/>
+	<pie_slice label="作成" name="Build"/>
+	<pie_slice label="触る" name="Pie Object Touch"/>
+	<pie_slice label="ここに座る" name="Pie Object Sit"/>
+	<pie_slice label="立つ" name="Object Stand Up"/>
+	<pie_slice label="購入する" name="Buy..."/>
+	<pie_menu label="取る　＞" name="Take Submenu">
+		<pie_slice label="コピー：分割" name="Take Copy Separate"/>
+		<pie_slice label="コピーを取る" name="Take Copy"/>
+		<pie_slice label="取る" name="Take"/>
+		<pie_slice label="取る：複合" name="Take combined"/>
+		<pie_slice label="コピー：複合" name="Take Copy combined"/>
+		<pie_slice label="取る：分割" name="Take Separate"/>
+	</pie_menu>
+	<pie_slice label="支払う" name="Pay..."/>
+	<pie_menu label="詳細　＞" name="Object Pie More 1">
+		<pie_slice label="削除" name="Delete"/>
+		<pie_slice label="装着" name="Wear"/>
+		<pie_menu label="ＨＵＤの装着先　＞" name="Pie Object Attach HUD"/>
+		<pie_menu label="拡張スケルトン　＞" name="Enhanced Skeleton">
+			<pie_slice label="右の翼" name="Right Wing"/>
+			<pie_slice label="脚の付け根" name="Groin"/>
+			<pie_slice label="尻尾のベース" name="Tail Base"/>
+			<pie_slice label="尻尾の先" name="Tail Tip"/>
+			<pie_slice label="左の翼" name="Left Wing"/>
+			<pie_slice label="左後ろ足" name="Left Hind Foot"/>
+			<pie_menu label="詳細　＞" name="Enhanced Skeleton More">
+				<pie_slice label="代わりの右耳" name="Alt Right Ear"/>
+				<pie_slice label="代わりの右目" name="Alt Right Eye"/>
+				<pie_slice label="舌" name="Tongue"/>
+				<pie_slice label="代わりの左目" name="Alt Left Eye"/>
+				<pie_slice label="代わりの左耳" name="Alt Left Ear"/>
+				<pie_slice label="左薬指" name="Left Ring Finger"/>
+				<pie_slice label="顎" name="Jaw"/>
+				<pie_slice label="右薬指" name="Right Ring Finger"/>
+			</pie_menu>
+			<pie_slice label="右後ろ足" name="Right Hind Foot"/>
 		</pie_menu>
-        <pie_slice
-            label="検査"
-            name="Object Inspect"/>
-    </pie_menu>
-    <pie_slice
-        label="購入" 
-		name="Buy..."/>
-    </pie_menu>
-    <pie_slice
-        label="編集" name="Edit..."/>
+		<pie_menu label="装着先　＞" name="Pie Object Attach"/>
+		<pie_slice label="返却" name="Return..."/>
+		<pie_menu label="詳細　＞" name="Object Pie More 2">
+			<pie_menu name="ResetMenu" label="リセット　＞">
+				<pie_slice label="テクスチャのリセット" name="Texture Refresh"/>
+				<pie_slice label="スケルトン" name="Reset Skeleton"/>
+			</pie_menu>
+			<pie_slice label="テクスチャ更新" name="Texture Refresh"/>
+			<pie_menu label="描画解除　＞" name="DerenderMenu">
+				<pie_slice label="描画解除リストに追加" name="DerenderPermanent"/>
+				<pie_slice label="描画解除" name="Derender"/>
+			</pie_menu>
+			<pie_slice label="嫌がらせの報告…" name="Report Abuse..."/>
+			<pie_menu name="ExportMenu" label="名前をつけて保存　＞">
+				<pie_slice label="バックアップ" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
+			<pie_slice label="ＸＭＬとしてダンプ" name="Dump XML"/>
+			<pie_menu label="経路探索　＞" name="Pathfinding">
+				<pie_slice label="リンクセットで表示" name="show_in_linksets"/>
+				<pie_slice label="キャラクターで表示" name="show_in_characters"/>
+			</pie_menu>
+			<pie_menu label="ミュート　＞" name="mute_menu">
+				<pie_slice label="ミュート" name="Object Mute"/>
+				<pie_slice label="パーティクル" name="Mute Particle"/>
+			</pie_menu>
+			<pie_menu label="スクリプト　＞" name="ScriptsMenu">
+				<pie_slice label="コンパイル（Ｍｏｎｏ）" name="CompileMono"/>
+				<pie_slice label="コンパイル（ＬＳＬ）" name="CompileLSL"/>
+				<pie_slice label="スクリプトリセット" name="Object Reset Scripts"/>
+				<pie_slice label="スクリプトを実行" name="Object Set Scripts to Running"/>
+				<pie_slice label="スクリプトを停止" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="スクリプトを削除" name="Remove Scripts From Selection"/>
+				<pie_slice label="スクリプト情報" name="ScriptInfo"/>
+			</pie_menu>
+			<pie_slice label="調査" name="Object Inspect"/>
+		</pie_menu>
+		<pie_slice label="購入" name="Buy..."/>
+	</pie_menu>
+	<pie_slice label="編集" name="Edit..."/>
 </pie_menu>

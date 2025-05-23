@@ -14,9 +14,8 @@
 		<combo_box.item label="BMP (bezstratny)" name="BMP" />
 	</combo_box>
 	<slider label="Jakość:" name="image_quality_slider" />
-	<text name="local_remember_location_sessions_text">
-		Trzymaj lokalizację i nazwę pliku między sesjami
-	</text>
+	<check_box name="local_remember_location_sessions" label="Trzymaj lokalizację i nazwę pliku"/>
+	<check_box name="local_use_timestamp" label="Data/czas w nazwie pliku"/>
 	<button label="&#x25B6; Wybór" name="cancel_btn" />
 	<flyout_button label="Zapisz" name="save_btn" tool_tip="Zapisz obraz do pliku">
 		<flyout_button.item label="Zapisz" name="save_item" />

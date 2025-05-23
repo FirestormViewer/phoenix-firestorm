@@ -779,7 +779,7 @@ void LLViewerTexture::setBoostLevel(S32 level)
         mBoostLevel = level;
         if(mBoostLevel != LLViewerTexture::BOOST_NONE &&
             mBoostLevel != LLViewerTexture::BOOST_SELECTED &&
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
             // Added the new boost levels
             mBoostLevel != LLViewerTexture::BOOST_GRASS &&
             mBoostLevel != LLViewerTexture::BOOST_LIGHT &&
@@ -796,7 +796,7 @@ void LLViewerTexture::setBoostLevel(S32 level)
     if (mBoostLevel >= LLViewerTexture::BOOST_HIGH)
     {
         mMaxVirtualSize = 2048.f * 2048.f;
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Add additional for the important to camera and in frustum
         static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
         mMaxVirtualSize = mMaxVirtualSize + (mMaxVirtualSize * 1.0f * texture_camera_boost);
@@ -1209,7 +1209,7 @@ void LLViewerFetchedTexture::init(bool firstinit)
     mKeptSavedRawImageTime = 0.f;
     mLastCallBackActiveTime = 0.f;
     mForceCallbackFetch = false;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     mCloseToCamera = 1.0f; // Store if the camera is close to the camera (0.0f or 1.0f)
     // </FS:minerjr> [FIRE-35081]
 
@@ -3085,13 +3085,13 @@ void LLViewerLODTexture::processTextureStats()
     else if (mBoostLevel < LLGLTexture::BOOST_HIGH && mMaxVirtualSize <= 10.f)
     {
         // If the image has not been significantly visible in a while, we don't want it
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         //mDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel, (S8)(MAX_DISCARD_LEVEL + 1));
         // Off screen textures at 6 would not downscale.
         mDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel, (S8)(MAX_DISCARD_LEVEL));
         // </FS:minerjr> [FIRE-35081]
         mDesiredDiscardLevel = llmin(mDesiredDiscardLevel, (S32)mLoadedCallbackDesiredDiscardLevel);
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Add scale down here as the textures off screen were not getting scaled down properly
         S32 current_discard = getDiscardLevel();
         if (mBoostLevel < LLGLTexture::BOOST_AVATAR_BAKED)
@@ -3110,7 +3110,7 @@ void LLViewerLODTexture::processTextureStats()
     }
     else
     {
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         /*
         //static const F64 log_2 = log(2.0);
         static const F64 log_4 = log(4.0);
@@ -3455,7 +3455,7 @@ void LLViewerMediaTexture::initVirtualSize()
     {
         return;
     }
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Add camera importance to the media textures as well
     static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
     F32 vsize = 0.0f;
@@ -3463,7 +3463,7 @@ void LLViewerMediaTexture::initVirtualSize()
     findFaces();
     for(std::list< LLFace* >::iterator iter = mMediaFaceList.begin(); iter!= mMediaFaceList.end(); ++iter)
     {
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         //addTextureStats((*iter)->getVirtualSize());
         // Add camera importance to the media textures as well
         vsize = (*iter)->getVirtualSize();
@@ -3531,7 +3531,7 @@ void LLViewerMediaTexture::addFace(U32 ch, LLFace* facep)
             }
 // [/SL:KB]
 
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
             // Try to set the boost level to MEDIA to try to force the media to high quality
             tex->setBoostLevel(LLViewerTexture::MEDIA);
             // </FS:minerjr> [FIRE-35081]
@@ -3776,7 +3776,7 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
     {
         addTextureStats(0.f, false);//reset
     }
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
     F32 vsize = 0.0f;
     // </FS:minerjr> [FIRE-35081]
@@ -3790,7 +3790,7 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
                 LLFace* facep = mFaceList[ch][i];
             if(facep->getDrawable()->isRecentlyVisible())
             {                
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 //addTextureStats(facep->getVirtualSize());
                 // Add the importance to camera and close to camera to the media texture
                 vsize = facep->getVirtualSize();
@@ -3814,7 +3814,7 @@ F32 LLViewerMediaTexture::getMaxVirtualSize()
                 LLFace* facep = *iter;
                 if(facep->getDrawable()->isRecentlyVisible())
                 {
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                     //addTextureStats(facep->getVirtualSize());
                     // Add the importance to camera and close to camera to the media texture 
                     vsize = facep->getVirtualSize();

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		メートル
+	</string>
+	<string name="feet">
+		フィート
+	</string>
+	<string name="height">
+		身長：
+	</string>
+	<tab_container name="wearable_accordion">
+		<!-- Begin Body Panel -->
+		<panel name="shape_body_tab_holder" title="身体">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="身体"/>
+			</accordion>
+		</panel>
+		<!-- End Body Panel -->
+		<!-- Begin Head Panel -->
+		<panel name="shape_head_tab_holder" title="頭">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="頭"/>
+			</accordion>
+		</panel>
+		<!-- End Head Panel -->
+		<!-- Begin Eyes Panel -->
+		<panel name="shape_eyes_tab_holder" title="目">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="目"/>
+			</accordion>
+		</panel>
+		<!-- End Eyes Panel -->
+		<!-- Begin Ears Panel -->
+		<panel name="shape_ears_tab_holder" title="耳">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="耳"/>
+			</accordion>
+		</panel>
+		<!-- End Ears Panel -->
+		<!-- Begin Nose Panel -->
+		<panel name="shape_nose_tab_holder" title="鼻">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="鼻"/>
+			</accordion>
+		</panel>
+		<!-- End Nose Panel -->
+		<!-- Begin Mouth Panel -->
+		<panel name="shape_mouth_tab_holder" title="口">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="口"/>
+			</accordion>
+		</panel>
+		<!-- End Mouth Panel -->
+		<!-- Begin Chin Panel -->
+		<panel name="shape_chin_tab_holder" title="顎">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="顎"/>
+			</accordion>
+		</panel>
+		<!-- End Chin Panel -->
+		<!-- Begin Torso Panel -->
+		<panel name="shape_torso_tab_holder" title="上半身">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="上半身"/>
+			</accordion>
+		</panel>
+		<!-- End Torso Panel -->
+		<!-- Begin Legs Panel -->
+		<panel name="shape_legs_tab_holder" title="脚">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="脚"/>
+			</accordion>
+		</panel>
+		<!-- End Legs Panel -->
+	</tab_container>
+</panel>

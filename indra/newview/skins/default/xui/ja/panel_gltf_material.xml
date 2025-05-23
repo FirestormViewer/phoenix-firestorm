@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_gltf_material">
+	<check_box label="両面に適用" name="double sided"/>
+	<panel name="base_color_texture_pnl">
+		<text name="base_color_lbl">
+			ベースカラー（アルベド）：
+		</text>
+		<texture_picker name="base_color_texture" tool_tip="ベースカラー（アルベド）マップを指定します。アルファチャンネルはオプションで透明度で使用されます。"/>
+		<text name="base_color_upload_fee">
+			アップロード料金なし
+		</text>
+		<text name="base_color_tint_lbl">
+			色彩
+		</text>
+		<text name="base_color_transparency_lbl">
+			アルファ（透過）
+		</text>
+		<text name="alpha_mode_lbl">
+			アルファモード
+		</text>
+		<combo_box name="alpha mode">
+			<combo_box.item label="不透明" name="None"/>
+			<combo_box.item label="ブレンド" name="Alpha blending"/>
+			<combo_box.item label="マスク" name="Alpha masking"/>
+		</combo_box>
+		<text name="alpha_cutoff_lbl">
+			アルファのカットオフ
+		</text>
+	</panel>
+	<panel name="metallic_texture_pnl">
+		<text name="metallic_roughness_lbl">
+			メタリック／粗さ：
+		</text>
+		<texture_picker name="metallic_roughness_texture" tool_tip="オプションでオクルージョンを備えたＧＬＴＦによるメタリック／ラフネスマップを指定できます。赤チャンネルはオクルージョン（環境遮蔽）、緑チャンネルは粗さ（ラフネス）、青チャンネルはメタリック（金属度）です。"/>
+		<text name="metallic_upload_fee">
+			アップロード費用なし
+		</text>
+		<text name="metallic_factor_lbl">
+			メタリック係数
+		</text>
+		<text name="roughness_factor_lbl">
+			粗さの係数
+		</text>
+	</panel>
+	<panel name="emissive_texture_pnl">
+		<text name="emissive_lbl">
+			放射（エミッシブ）：
+		</text>
+		<text name="emissive_upload_fee">
+			アップロード費用なし
+		</text>
+		<text name="emissive_tint_lbl">
+			色彩
+		</text>
+	</panel>
+	<panel name="normal_texture_pnl">
+		<text name="normal_lbl">
+			法線（ノーマル）：
+		</text>
+		<text name="normal_upload_fee">
+			アップロード費用なし
+		</text>
+	</panel>
+</panel>

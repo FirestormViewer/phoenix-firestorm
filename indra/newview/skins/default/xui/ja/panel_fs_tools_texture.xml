@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="テクスチャ" name="Texture">
+	<panel.string name="paste_error_face_selection_mismatch">
+		複数の面をコピーする場合、ターゲットオブジェクトで同じ数の面を選択する必要があります。
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		オブジェクトのすべての面をコピーする場合、ターゲットオブジェクトには同じ数の面が必要です。
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		１つ以上のテクスチャがインベントリに見つかりません。
+	</panel.string>
+	<panel.string name="paste_options">
+		テクスチャパラメータをクリップボードにコピーします。
+	</panel.string>
+	<tab_container name="tabs_material_type">
+		<panel label="ＰＢＲ" name="panel_material_type_pbr">
+			<panel name="panel_material_maps">
+				<texture_picker name="pbr_control" label="マテリアル" tool_tip="クリックでＰＢＲマテリアルを選択します。"/>
+				<texture_picker name="base_color_picker" label="ベースカラー" tool_tip="クリックでベースカラー（アルベド）マップを洗濯します。"/>
+				<color_swatch name="base_color_tint_picker" label="色彩" tool_tip="クリックでベースカラーの色彩を選択します。"/>
+				<button name="btn_select_same_gltf" tool_tip="この面と同じＧＬＴＦマテリアルを持つすべての面を選択します。"/>
+				<texture_picker name="normal_map_picker" label="法線" tool_tip="クリックで法線（ノーマル）マップを選択します。"/>
+				<texture_picker name="emissive_map_picker" label="放射" tool_tip="クリックで放射（エミッシブ）マップを選択します。"/>
+				<color_swatch name="emissive_color_tint_picker" label="色彩" tool_tip="クリックで放射光の色を選択します。"/>
+				<texture_picker name="metallic_map_picker" label="（Ｏ）ＲＭ" tool_tip="クリックしてメタリック粗さマップを選択します。オプションのオクルージョンチャンネルが含まれる場合があります。"/>
+			</panel>
+			<!-- panel_material_maps -->
+			<panel name="panel_material_parameters">
+				<check_box label="両面" name="double sided"/>
+				<spinner label="アルファ" name="transparency"/>
+				<text name="blend mode label">
+					モード
+				</text>
+				<combo_box name="alpha mode">
+					<combo_box.item label="不透明" name="None"/>
+					<combo_box.item label="ブレンド" name="Alpha blending"/>
+					<combo_box.item label="マスク" name="Alpha masking"/>
+				</combo_box>
+				<spinner label="カットオフ" name="alpha cutoff"/>
+				<spinner label="メタリック" name="metalness factor"/>
+				<spinner label="粗さ" name="roughness factor"/>
+				<button name="save_selected_pbr" label="保存"/>
+			</panel>
+			<!-- panel_material_parameters -->
+			<!-- BEGIN PBR Material texture transform parameters -->
+			<tab_container name="tabs_pbr_transforms">
+				<panel label="全て" name="panel_pbr_transforms_all">
+					<panel name="pbr_transforms_all_scale">
+						<text name="pbr_transforms_all_scale_label">
+							スケール
+						</text>
+						<text name="labelGltfTextureScaleU_All">
+							Ｕ
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<text name="labelGltfTextureScaleV_All">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+					</panel>
+					<!-- pbr_transforms_all_scale -->
+					<panel name="pbr_transforms_all_offset">
+						<text name="pbr_transforms_all_offset_label">
+							オフセット
+						</text>
+						<text name="labelGltfTextureOffsetU_All">
+							Ｕ
+						</text>
+						<text name="labelGltfTextureOffsetV_All">
+							Ｖ
+						</text>
+					</panel>
+					<!-- pbr_transforms_all_offset -->
+					<panel name="pbr_transforms_all_rotation">
+						<text name="pbr_transforms_all_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- pbr_transforms_all_rotation -->
+				</panel>
+				<!-- panel_pbr_transforms_all -->
+				<panel label="ベースカラー" name="panel_pbr_transforms_base_color">
+					<panel name="pbr_transforms_base_color_scale">
+						<text name="pbr_transforms_base_color_scale_label">
+							スケール
+						</text>
+						<text name="labelGltfTextureScaleU_Base">
+							Ｕ
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<text name="labelGltfTextureScaleV_Base">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+					</panel>
+					<!-- pbr_transforms_base_color_scale -->
+					<panel name="pbr_transforms_base_color_offset">
+						<text name="pbr_transforms_base_color_offset_label">
+							オフセット
+						</text>
+						<text name="labelGltfTextureOffsetU_Base">
+							Ｕ
+						</text>
+						<text name="labelGltfTextureOffsetV_Base">
+							Ｖ
+						</text>
+					</panel>
+					<!-- pbr_transforms_base_color_offset -->
+					<panel name="pbr_transforms_base_color_rotation">
+						<text name="pbr_transforms_base_color_rotation_label">
+							回転
+						</text>
+						<spinner name="gltfTextureRotation_Base"/>
+					</panel>
+					<!-- pbr_transforms_base_color_rotation -->
+				</panel>
+				<!-- panel_pbr_transforms_base_color -->
+				<panel label="法線" name="panel_pbr_transforms_normal">
+					<panel name="pbr_transforms_normal_scale">
+						<text name="pbr_transforms_normal_scale_label">
+							スケール
+						</text>
+						<text name="labelGltfTextureScaleU_Normal">
+							Ｕ
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<text name="labelGltfTextureScaleV_Normal">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+					</panel>
+					<!-- pbr_transforms_normal_scale -->
+					<panel name="pbr_transforms_normal_offset">
+						<text name="pbr_transforms_normal_offset_label">
+							オフセット
+						</text>
+						<text name="labelGltfTextureOffsetU_Normal">
+							Ｕ
+						</text>
+						<text name="labelGltfTextureOffsetV_Normal">
+							Ｖ
+						</text>
+						<spinner name="gltfTextureOffsetV_Normal"/>
+					</panel>
+					<!-- pbr_transforms_normal_offset -->
+					<panel name="pbr_transforms_normal_rotation">
+						<text name="pbr_transforms_normal_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- pbr_transforms_normal_rotation -->
+				</panel>
+				<!-- panel_pbr_transforms_normal -->
+				<panel label="（Ｏ）ＲＭ" name="panel_pbr_transforms_metallic">
+					<panel name="pbr_transforms_orm_scale">
+						<text name="pbr_transforms_orm_scale_label">
+							スケール
+						</text>
+						<text name="labelGltfTextureScaleU_Metallic">
+							Ｕ
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<text name="labelGltfTextureScaleV_Metallic">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+					</panel>
+					<!-- pbr_transforms_orm_scale -->
+					<panel name="pbr_transforms_orm_offset">
+						<text name="pbr_transforms_orm_offset_label">
+							オフセット
+						</text>
+						<text name="labelGltfTextureOffsetU_Metallic">
+							Ｕ
+						</text>
+						<text name="labelGltfTextureOffsetU_Metallic">
+							Ｖ
+						</text>
+					</panel>
+					<!-- pbr_transforms_orm_offset -->
+					<panel name="pbr_transforms_orm_rotation">
+						<text name="pbr_transforms_orm_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- pbr_transforms_orm_rotation -->
+				</panel>
+				<!-- panel_pbr_transforms_metallic -->
+				<panel label="放射" name="panel_pbr_transforms_emissive">
+					<panel name="pbr_transforms_emissive_scale">
+						<text name="pbr_transforms_emissive_scale_label">
+							スケール
+						</text>
+						<text name="labelGltfTextureScaleU_Emissive">
+							Ｕ
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<text name="labelGltfTextureScaleV_Emissive">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+					</panel>
+					<!-- pbr_transforms_emissive_scale -->
+					<panel name="pbr_transforms_emissive_offset">
+						<text name="pbr_transforms_emissive_offset_label">
+							オフセット
+						</text>
+						<text name="labelGltfTextureOffsetU_Emissive">
+							Ｕ
+						</text>
+						<text name="labelGltfTextureOffsetV_Emissive">
+							Ｖ
+						</text>
+					</panel>
+					<!-- pbr_transforms_emissive_offset -->
+					<panel name="pbr_transforms_emissive_rotation">
+						<text name="pbr_transforms_emissive_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- pbr_transforms_emissive_rotation -->
+				</panel>
+				<!-- panel_pbr_transforms_emissive -->
+			</tab_container>
+			<!-- END PBR Material texture transform parameters -->
+		</panel>
+		<!-- panel_material_type_pbr -->
+		<panel label="Blinn-Phong反射" name="panel_material_type_blinn_phong">
+			<layout_stack name="panel_material_type_blinn_phong_layout_stack">
+				<layout_panel name="panel_blinn_phong_maps">
+					<texture_picker name="texture control" label="拡散" tool_tip="クリックで画像を選択します。"/>
+					<color_swatch name="colorswatch" label="色彩" tool_tip="クリックでカラーピッカーを開きます。"/>
+					<button name="btn_select_same_diff" tool_tip="この拡散（ディフューズ）マップと同じ拡散テクスチャを持つすべての面を選択します。"/>
+					<texture_picker label="法線" name="bumpytexture control" tool_tip="クリックで画像を選択します。"/>
+					<button name="btn_select_same_norm" tool_tip="この法線（ノーマル）マップと同じ法線マップを持つすべての面を選択します。"/>
+					<texture_picker label="鏡面反射" name="shinytexture control" tool_tip="クリックで画像を選択します。"/>
+					<color_swatch label="発光色" name="shinycolorswatch" tool_tip="クリックでカラーピッカーを開きます。"/>
+					<button name="btn_select_same_spec" tool_tip="この鏡面反射（スペキュラ）マップと同じ鏡面反射マップを持つすべての面を選択します。"/>
+				</layout_panel>
+				<!-- panel_blinn_phong_maps -->
+				<layout_panel name="panel_blinn_phong_options">
+					<check_box label="明るさ全開" name="checkbox fullbright"/>
+					<spinner name="ColorTrans" label="透過度"/>
+					<text name="color trans percent">
+						％
+					</text>
+					<text name="label alphamode">
+						アルファモード
+					</text>
+					<combo_box name="combobox alphamode">
+						<combo_box.item label="なし" name="None"/>
+						<combo_box.item label="アルファブレンド" name="Alpha blending"/>
+						<combo_box.item label="アルファマスク" name="Alpha masking"/>
+						<combo_box.item label="発光マスク" name="Emissive mask"/>
+					</combo_box>
+					<spinner label="マスクカットオフ" name="maskcutoff"/>
+					<text name="label bumpiness">
+						凹凸
+					</text>
+					<combo_box name="combobox bumpiness">
+						<combo_box.item label="なし" name="None"/>
+						<combo_box.item label="明るさ" name="Brightness"/>
+						<combo_box.item label="暗い" name="Darkness"/>
+						<combo_box.item label="木目調" name="woodgrain"/>
+						<combo_box.item label="樹皮" name="bark"/>
+						<combo_box.item label="レンガ" name="bricks"/>
+						<combo_box.item label="市松模様" name="checker"/>
+						<combo_box.item label="コンクリート" name="concrete"/>
+						<combo_box.item label="堅いタイル" name="crustytile"/>
+						<combo_box.item label="カットストーン" name="cutstone"/>
+						<combo_box.item label="円板" name="discs"/>
+						<combo_box.item label="小石" name="gravel"/>
+						<combo_box.item label="ペトリ皿" name="petridish"/>
+						<combo_box.item label="側線" name="siding"/>
+						<combo_box.item label="ストーンタイル" name="stonetile"/>
+						<combo_box.item label="化粧しっくい" name="stucco"/>
+						<combo_box.item label="吸盤" name="suction"/>
+						<combo_box.item label="織物" name="weave"/>
+						<!--
+NORSPEC-182, ensure item doesn't show up in menu until it should
+<combo_box.item label="テクスチャを使用" name="Use texture"/>
+-->
+					</combo_box>
+					<text name="label shininess">
+						輝き
+					</text>
+					<combo_box name="combobox shininess">
+						<combo_box.item label="なし" name="None"/>
+						<combo_box.item label="低" name="Low"/>
+						<combo_box.item label="中" name="Medium"/>
+						<combo_box.item label="高" name="High"/>
+					</combo_box>
+					<spinner name="glossiness" label="光沢度"/>
+					<spinner name="environment" label="周辺環境"/>
+				</layout_panel>
+				<!-- panel_blinn_phong_options -->
+			</layout_stack>
+			<tab_container name="tabs_blinn_phong_uvs">
+				<panel label="拡散" name="panel_blinn_phong_diffuse">
+					<panel name="transforms_diffuse_scale">
+						<text name="transforms_diffuse_scale_label">
+							スケール
+						</text>
+						<text name="labelTexScaleU">
+							Ｈ
+						</text>
+						<button name="flipTextureScaleU" tool_tip="反転します。"/>
+						<text name="labelTexScaleV">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleV" tool_tip="反転します。"/>
+					</panel>
+					<!-- transforms_diffuse_scale -->
+					<panel name="transforms_diffuse_offset">
+						<text name="transforms_diffuse_offset_label">
+							オフセット
+						</text>
+						<text name="labelTexOffsetU">
+							Ｈ
+						</text>
+						<text name="labelTexOffsetV">
+							Ｖ
+						</text>
+					</panel>
+					<!-- transforms_diffuse_offset -->
+					<panel name="transforms_diffuse_rotation">
+						<text name="transforms_diffuse_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- transforms_diffuse_rotation -->
+				</panel>
+				<!-- panel_blinn_phong_diffuse -->
+				<panel label="法線" name="panel_blinn_phong_normal">
+					<panel name="transforms_normal_scale">
+						<text name="transforms_normal_scale_label">
+							スケール
+						</text>
+						<text name="labelBumpyScaleU">
+							Ｈ
+						</text>
+						<button name="flipTextureScaleNU" tool_tip="反転します。"/>
+						<text name="labelBumpyScaleV">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleNV" tool_tip="反転します。"/>
+					</panel>
+					<!-- transforms_normal_scale -->
+					<panel name="transforms_normal_offset">
+						<text name="transforms_normal_offset_label">
+							オフセット
+						</text>
+						<text name="labelBumpyOffsetU">
+							Ｈ
+						</text>
+						<text name="labelBumpyOffsetU">
+							Ｖ
+						</text>
+					</panel>
+					<!-- transforms_normal_offset -->
+					<panel name="transforms_normal_rotation">
+						<text name="transforms_normal_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- transforms_normal_rotation -->
+				</panel>
+				<!-- panel_blinn_phong_normal -->
+				<panel label="鏡面反射" name="panel_blinn_phong_specular">
+					<panel name="transforms_specular_scale">
+						<text name="transforms_specular_scale_label">
+							スケール
+						</text>
+						<text name="labelShinyScaleU">
+							Ｈ
+						</text>
+						<button name="flipTextureScaleSU" tool_tip="反転します。"/>
+						<text name="labelShinyScaleV">
+							Ｖ
+						</text>
+						<button name="flipTextureScaleSV" tool_tip="反転します。"/>
+					</panel>
+					<!-- transforms_specular_scale -->
+					<panel name="transforms_specular_offset">
+						<text name="transforms_specular_offset_label">
+							オフセット
+						</text>
+						<text name="labelShinyOffsetU">
+							Ｈ
+						</text>
+						<text name="labelShinyOffsetV">
+							Ｖ
+						</text>
+					</panel>
+					<!-- transforms_specular_offset -->
+					<panel name="transforms_specular_rotation">
+						<text name="transforms_specular_rotation_label">
+							回転
+						</text>
+					</panel>
+					<!-- transforms_specular_rotation -->
+				</panel>
+				<!-- panel_blinn_phong_specular -->
+			</tab_container>
+			<!-- tabs_blinn_phong_uvs -->
+		</panel>
+		<!-- panel_material_type_blinn_phong -->
+		<panel label="メディア" name="panel_material_type_media">
+			<text name="media_info">
+				選択したメディアのＵＲＬがある場合はここに入力します。
+			</text>
+			<button name="add_media" label="選択…" tool_tip="メディアを追加します。"/>
+			<button name="delete_media" label="削除" tool_tip="このメディアテクスチャを削除します。"/>
+			<button name="button align" label="揃える" label_selected="メディアを揃える" tool_tip="メディアテクスチャを揃えます。（最初に読み込む必要があります。）"/>
+		</panel>
+		<!-- panel_material_type_media -->
+	</tab_container>
+	<!-- tabs_material_type -->
+	<panel name="panel_face_params">
+		<spinner name="rptctrl" label="メートルごとの繰り返し"/>
+		<check_box label="マテリアルを同期" name="checkbox_sync_settings" tool_tip="テクスチャマップパラメータを同期します。"/>
+		<check_box label="平面を揃える" name="checkbox planar align" tool_tip="選択したすべての面のテクスチャを最後に選択した面と揃えます。平面テクスチャマッピングが必要です。"/>
+		<check_box label="水面を隠す" name="checkbox_hide_water" />
+		<combo_box name="combobox texgen">
+			<combo_box.item label="デフォルト" name="Default"/>
+			<combo_box.item label="平面" name="Planar"/>
+		</combo_box>
+		<button label="揃える" name="button align textures" tool_tip="現在のテクスチャのレイヤーを揃えます。"/>
+	</panel>
+	<!-- panel_face_params -->
+	<button name="copy_face_btn" tool_tip="テクスチャのパラメータをクリップボードにコピーします。"/>
+	<button name="paste_face_btn" tool_tip="テクスチャのパラメータをクリップボードにペーストします。"/>
+	<spinner label="グロー" name="glow"/>
+</panel>
+<!-- Texture -->

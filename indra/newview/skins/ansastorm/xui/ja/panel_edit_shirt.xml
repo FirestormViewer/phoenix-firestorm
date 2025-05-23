@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shirt_panel">
+	<panel name="avatar_shirt_color_panel">
+		<texture_picker label="生地" name="Fabric" tool_tip="クリックで画像を選択します。"/>
+		<color_swatch label="色／色彩" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
+	</panel>
+	<!-- Begin Shirt Panel -->
+	<panel name="shirt_main_tab_holder" title="シャツ">
+		<!-- Viewer demands an accordion here, so we provide one -->
+		<accordion name="shirt_main_accordion">
+			<accordion_tab name="shirt_main_tab" title="シャツ"/>
+		</accordion>
+	</panel>
+	<!-- End Shirt Panel -->
+</panel>

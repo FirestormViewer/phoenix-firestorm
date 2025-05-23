@@ -1823,8 +1823,19 @@
        height="12"
        name="preferences_search_label"
        top_pad="10"
-       width="220">
-       Preferences Search Highlight Color:
+       width="400">
+       Preferences Search Highlight Colors:
+     </text>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="40"
+       height="12"
+       name="preferences_search_bg_label"
+       top_pad="15"
+       width="80">
+       Background:
      </text>
      <color_swatch
      can_apply_immediately="true"
@@ -1832,27 +1843,56 @@
      height="24"
      label_height="0"
      layout="topleft"
-     left="40"
-     top_pad="5"
-     name="preferences_search_color"
-     tool_tip="Choose preferences search highlight Color"
+     left_pad="10"
+     top_delta="-6"
+     name="preferences_search_bg_color"
+     tool_tip="Choose preferences search highlight Background Color"
      width="44">
         <color_swatch.init_callback
         function="Pref.getUIColor"
-        parameter="SearchableControlHighlightColor" />
+        parameter="SearchableControlHighlightBgColor" />
         <color_swatch.commit_callback
         function="Pref.applyUIColor"
-        parameter="SearchableControlHighlightColor" />
+        parameter="SearchableControlHighlightBgColor" />
      </color_swatch>
 
      <text
        follows="left|top"
        layout="topleft"
-       left="250"
+       left_pad="20"
+       height="12"
+       name="preferences_search_font_label"
+       top_delta="6"
+       width="40">
+       Font:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left_pad="10"
+     top_delta="-6"
+     name="preferences_search_font_color"
+     tool_tip="Choose preferences search highlight Font Color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="SearchableControlHighlightFontColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="SearchableControlHighlightFontColor" />
+     </color_swatch>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="340"
        height="12"
        name="area_search_beacon_color_label"
-       top_delta="-17"
-       width="400">
+       top_delta="-21"
+       width="310">
        Area search beacon Color:
      </text>
      <color_swatch
@@ -1861,8 +1901,8 @@
      height="24"
      label_height="0"
      layout="topleft"
-     left="260"
-     top_pad="5"
+     left="350"
+     top_pad="9"
      name="area_search_beacon_color"
      tool_tip="Choose area search beacon color"
      width="44">

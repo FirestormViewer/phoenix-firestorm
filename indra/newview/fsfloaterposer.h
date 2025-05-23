@@ -86,6 +86,8 @@ public:
     void redo() override { onRedoLastChange(); };
     bool canRedo() const override { return true; }
  private:
+    // Helper function to encapsualte save logic
+    void doPoseSave(LLVOAvatar* avatar, const std::string& filename);
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
@@ -136,7 +138,7 @@ public:
     /// Updates the visual with the first selected joint from the supplied collection, if any.
     /// </summary>
     /// <param name="joints">The collection of selected joints.</param>
-    static void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints);
+    void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints) const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.

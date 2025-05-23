@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">
+		戻る
+	</text>
+	<text name="huds_title">
+		現在アクティブなＨＵＤ
+	</text>
+	<text name="huds_desc1">
+		使用していないＨＵＤを切り離すとメモリが節約され、ビューアの実行速度が向上します。
+	</text>
+	<text name="huds_desc2">
+		ＨＵＤは頻繁にスクリプト化され、サーバー側の遅延にも影響します。
+	</text>
+	<text name="huds_desc3">
+		注意：ＨＵＤの最小化ボタンを使用してもＨＵＤは切り離されません。削除するには「X」を使用してください。
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns label="時間（㎲）" name="art_value" tool_tip="このＨＵＤを描画するのにかかった時間（マイクロ秒）"/>
+		<name_list.columns label="名前" tool_tip="「X」をクリックすることで取り外せます。" name="name"/>
+	</name_list>
+</panel>

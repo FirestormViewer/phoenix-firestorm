@@ -23,7 +23,7 @@
 		翻訳する言語：
 	</text>
 	<combo_box name="translate_language_combo">
-		<combo_box.item label="システム標準" name="System Default Language"/>
+		<combo_box.item label="システムデフォルト" name="System Default Language"/>
 		<combo_box.item label="英語" name="English"/>
 		<combo_box.item label="Dansk（デンマーク語）" name="Danish"/>
 		<combo_box.item label="Deutsch（ドイツ語）" name="German"/>
@@ -45,9 +45,9 @@
 		翻訳サービスを選択してください：
 	</text>
 	<radio_group name="translation_service_rg">
-		<radio_item initial_value="azure" label="Azure翻訳" name="azure"/>
-		<radio_item initial_value="google" label="Google翻訳" name="google"/>
-		<radio_item initial_value="deepl" label="DeepL翻訳" name="deepl"/>
+		<radio_item label="Azure翻訳" name="azure"/>
+		<radio_item label="Google翻訳" name="google"/>
+		<radio_item label="DeepL翻訳" name="deepl"/>
 	</radio_group>
 	<text name="azure_links_text">
 		[https://learn.microsoft.com/ja-jp/azure/cognitive-services/translator/create-translator-resource セットアップ]
@@ -55,44 +55,40 @@
 	<text name="azure_api_endoint_label">
 		エンドポイント：
 	</text>
-	<combo_box name="azure_api_endpoint_combo" value="https://api.cognitive.microsofttranslator.com">
-		<combo_box.item label="https://api.cognitive.microsofttranslator.com" name="global" value="https://api.cognitive.microsofttranslator.com"/>
-		<combo_box.item label="https://api-apc.cognitive.microsofttranslator.com" name="api-apc" value="https://api-apc.cognitive.microsofttranslator.com"/>
-		<combo_box.item label="https://api-eur.cognitive.microsofttranslator.com" name="api-eur" value="https://api-eur.cognitive.microsofttranslator.com"/>
-		<combo_box.item label="https://api-nam.cognitive.microsofttranslator.com" name="api-nam" value="https://api-nam.cognitive.microsofttranslator.com"/>
-	</combo_box>
 	<text name="azure_api_key_label">
 		Azureキー：
 	</text>
-	<line_editor default_text="翻訳キーを入力して「確認」ボタンをクリックしてください。" name="azure_api_key"/>
+	<line_editor default_text="翻訳キーを入力して「認証」ボタンをクリックしてください。" name="azure_api_key"/>
 	<text name="azure_api_region_label">
-		地域：
+		リージョン：
 	</text>
-	<line_editor default_text="グローバルサービスの場合は空のままにすることができます。"/>
+	<combo_box name="azure_api_endpoint_combo">
+		<combo_box.item label="https://api.cognitive.microsofttranslator.com" name="global"/>
+		<combo_box.item label="https://api-apc.cognitive.microsofttranslator.com" name="api-apc"/>
+		<combo_box.item label="https://api-eur.cognitive.microsofttranslator.com" name="api-eur"/>
+		<combo_box.item label="https://api-nam.cognitive.microsofttranslator.com" name="api-nam"/>
+	</combo_box>
+	<line_editor default_text="グローバルサービスの場合は空のままにすることができます。" name="azure_api_region"/>
 	<button label="認証" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth APIキー]：
+		Google [https://cloud.google.com/translate/docs/quickstarts?csw=1&amp;hl=ja#auth APIキー]：
 	</text>
-	<line_editor default_text="Google APIキーを入力して「確認」ボタンをクリックしてください。" name="google_api_key"/>
+	<line_editor default_text="Google APIキーを入力して「認証」ボタンをクリックしてください。" name="google_api_key"/>
 	<button label="認証" name="verify_google_api_key_btn"/>
-	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html 価格]｜[https://code.google.com/apis/console 統計]
-	</text>
+	<text name="google_links_text">[https://cloud.google.com/translate/pricing?csw=1&amp;hl=ja 価格]｜[https://code.google.com/apis/console 統計]</text>
 	<text name="deepl_api_domain_label">
 		エンドポイント：
 	</text>
-	<combo_box name="deepl_api_domain_combo" value="https://api-free.deepl.com">
-		<combo_box.item label="DeepL無料版" name="global" value="https://api-free.deepl.com"/>
-		<combo_box.item label="DeepL Pro" name="api-apc" value="https://api.deepl.com"/>
-	</combo_box>
 	<text name="deepl_api_key_label">
 		DeepL APIキー：
 	</text>
+	<combo_box name="deepl_api_domain_combo">
+		<combo_box.item label="DeepL無料版" name="global"/>
+		<combo_box.item label="DeepL Pro" name="api-apc"/>
+	</combo_box>
 	<line_editor default_text="DeepL APIのキーを入力して「認証」をクリックしてください。" name="deepl_api_key"/>
 	<button label="認証" name="verify_deepl_api_key_btn"/>
-	<text name="deepl_links_text">
-		[https://www.deepl.com/pro/select-country?cta=header-prices 価格]
-	</text>
-	<button label=" ＯＫ" name=" ok_btn"/>
-	<button label=" キャンセル" name=" cancel_btn"/>
+	<text name="deepl_links_text">[https://www.deepl.com/pro/select-country?cta=header-prices 価格]</text>
+	<button label=" ＯＫ" name="ok_btn"/>
+	<button label=" キャンセル" name="cancel_btn"/>
 </floater>

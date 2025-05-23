@@ -10,7 +10,7 @@
 				エラー
 			</text>
 			<text name="connection_loading_text">
-				ロード中...
+				読み込んでいます…
 			</text>
 		</panel>
 	</panel>

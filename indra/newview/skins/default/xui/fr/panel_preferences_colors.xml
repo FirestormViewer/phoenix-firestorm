@@ -101,8 +101,11 @@
 			<slider label="Opacité :" name="console_background_opacity" tool_tip="Ajustez l'opacité du fond de la console"/>
 			<slider label="Opacité du fond du texte flottant :" name="FSHudTextBackgroundOpacity" tool_tip="Ajustez l'opacité de l'arrière-plan du texte flottant"/>
 			<text name="preferences_search_label">Surlignage des préférences recherchées :</text>
-			<color_swatch name="preferences_search_color" tool_tip="Sélectionnez la couleur des préférences surlignées par les résultats de recherche"/>
-			<text name="area_search_beacon_color_label">Couleur de la balise de recherche zonière : </text>
+			<text name="preferences_search_bg_label" width="75">Arrière-plan :</text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Sélectionnez la couleur d'arrière-plan des préférences surlignées par les résultats de recherche"/>
+			<text name="preferences_search_font_label" width="45">Police :</text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Sélectionnez la couleur de police des préférences surlignées par les résultats de recherche"/>
+			<text name="area_search_beacon_color_label" left="300">Couleur de la balise de recherche zonière : </text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Choix de la couleur de la balise de recherche zonière"/>
 			<text name="notecard_editor_color_label">
 				Couleurs des notices :

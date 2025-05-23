@@ -1,35 +1,34 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_contact_set_configure" title="連絡先セット設定">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_contact_set_configure" title="コンタクトセット設定">
 	<floater.string name="title">
-		[NAME] の設定
+		[NAME]の設定
 	</floater.string>
 	<panel name="top_panel">
 		<text name="set_label">
-			連絡先セットの設定
+			コンタクトセットの設定
 		</text>
-		<line_editor name="set_name_editor" />
 		<button name="rename_btn" label="名称変更"/>
-		<color_swatch label="色設定" name="set_swatch" tool_tip="クリックしてカラーピッカーを開きます。" />
-		<check_box label="オンライン状態を通知" name="show_set_notifications" />
+		<color_swatch label="色の設定" name="set_swatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+		<check_box label="オンライン状態を通知する" name="show_set_notifications"/>
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">
 			全体設定
 		</text>
-		<color_swatch label="デフォルトのセット色" name="global_swatch" tool_tip="クリックしてカラーピッカーを開きます。" />
+		<color_swatch label="デフォルトのセットの色" name="global_swatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
 		<text name="label_online">
-			オンライン状態通知：
+			オンライン状態の通知：
 		</text>
-		<check_box label="フレンドのログイン状態を全てトーストで通知" name="ChatOnlineNotification" />
-		<check_box label="フレンドのログイン状態を全て周辺チャットで通知" name="OnlineOfflinetoNearbyChat" />
-		<check_box label="指定したセットのメンバーのログイン状態をトーストで通知" name="FSContactSetsNotificationToast" />
-		<check_box label="指定したセットのメンバーのログイン状態を周辺チャットで通知" name="FSContactSetsNotificationNearbyChat" />
+		<check_box label="フレンドのログイン状態を全てトーストで通知する" name="ChatOnlineNotification"/>
+		<check_box label="フレンドのログイン状態を全て近くのチャットで通知する" name="OnlineOfflinetoNearbyChat"/>
+		<check_box label="指定したセットのメンバーのログイン状態をトーストで通知する" name="FSContactSetsNotificationToast"/>
+		<check_box label="指定したセットのメンバーのログイン状態を近くのチャットで通知する" name="FSContactSetsNotificationNearbyChat"/>
 		<text name="label_colors">
 			色の設定
 		</text>
-		<check_box label="ミニマップのアイコンを連絡先セットに指定した色で表示" name="FSContactSetsColorizeMiniMap" />
-		<check_box label="名前タグを連絡先セットに指定した色で表示" name="FSContactSetsColorizeNameTag" />
-		<check_box label="レーダーのリストを連絡先セットに指定した色で表示" name="FSContactSetsColorizeRadar" />
-		<check_box label="チャットを連絡先リストに指定した色で表示" name="FSContactSetsColorizeChat" />
+		<check_box label="ミニマップのアイコンをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeMiniMap"/>
+		<check_box label="名前タグをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeNameTag"/>
+		<check_box label="レーダーのリストをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeRadar"/>
+		<check_box label="チャットをコンタクトリストに指定した色で表示する" name="FSContactSetsColorizeChat"/>
 	</panel>
 </floater>

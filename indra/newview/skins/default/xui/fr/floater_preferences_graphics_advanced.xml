@@ -33,7 +33,7 @@
 	<text name="IndirectMaxComplexityText">
 		0
 	</text>
-	<slider label="Avatars max. non éloignés en 2D :" name="IndirectMaxNonImpostors"/>
+	<slider label="Max. avatars animés :" name="IndirectMaxNonImpostors"/>
 	<text name="IndirectMaxNonImpostorsText">
 		0
 	</text>
@@ -151,6 +151,16 @@
 		<combo_box.item label="Manuelles slt" name="1"/>
 		<combo_box.item label="Manuelles + terrain" name="2"/>
 		<combo_box.item label="Scène complète" name="3"/>
+	</combo_box>
+	<text name="ReflectionProbeCount">
+		Max. sondes de réflexion.:
+	</text>
+	<combo_box label="Max. sondes de réflexion :" name="ProbeCount">
+		<combo_box.item label="Aucune" name="1"/>
+		<combo_box.item label="Faible" name="32"/>
+		<combo_box.item label="Moyen" name="64"/>
+		<combo_box.item label="Élevé" name="128"/>
+		<combo_box.item label="Ultra" name="256"/>
 	</combo_box>
 	<slider label="Exposition :" name="RenderExposure"/>
 	<check_box label="Miroirs" name="Mirrors"/>

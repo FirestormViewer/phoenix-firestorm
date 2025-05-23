@@ -1,46 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_radar">
-	<string name="FlagsColumnType" />
-	<string name="FlagsColumnValue_0" />
-	<string name="FlagsColumnValue_1" />
-	<string name="FlagsColumnValue_2" />
-	<string name="NotesColumnIcon" />
-	<string name="SittingColumnIcon" />
-	<string name="TypingColumnIcon" />
-	<string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックで世界地図を開きます。Shift‐ドラッグで水平・垂直移動します。）"/>
+	<string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでワールドマップを開きます。Shift‐ドラッグで水平・垂直移動します。）"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。）"/>
-	<string name="avatar_name_count" value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<string name="avatar_name_count" value="名前[[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<panel name="nearby_panel">
 		<layout_stack name="radar_ls">
-			<layout_panel name="minimaplayout">
-				<net_map name="Net Map" />
-			</layout_panel>
 			<layout_panel name="radarlayout">
 				<radar_list name="radar_list">
-					<radar_list.columns label="名前" name="name" tool_tip="[TOTAL]人のアバター（同じ地域に[IN_REGION]人、チャットレンジ内に[IN_CHAT_RANGE]人）" />
-					<radar_list.columns label="" name="voice_level" tool_tip="ボイスで会話しています。" />
-					<radar_list.columns label="距離" name="range" />
-					<radar_list.columns label="表示時間" name="seen" />
-					<radar_list.columns label="年齢" name="age" />
-					<radar_list.columns label="" name="in_region" tool_tip="同じ地域にいます。" />
-					<radar_list.columns label="" name="typing_status" tool_tip="入力しています。" />
-					<radar_list.columns label="" name="sitting_status" tool_tip="座っています。" />
-					<radar_list.columns label="" name="flags" tool_tip="支払情報" />
-					<radar_list.columns label="" name="has_notes" tool_tip="このアバターのメモがあります。" />
+					<radar_list.columns label="名前" name="name" tool_tip="[TOTAL]人のアバター（同じリージョンに[IN_REGION]人、チャットレンジ内に[IN_CHAT_RANGE]人）"/>
+					<radar_list.columns name="voice_level" tool_tip="ボイスで会話しています。"/>
+					<radar_list.columns label="距離" name="range"/>
+					<radar_list.columns label="表示時間" name="seen"/>
+					<radar_list.columns label="年齢" name="age"/>
+					<radar_list.columns name="in_region" tool_tip="同じリージョンにいます。"/>
+					<radar_list.columns name="typing_status" tool_tip="入力しています。"/>
+					<radar_list.columns name="sitting_status" tool_tip="座っています。"/>
+					<radar_list.columns name="flags" tool_tip="支払情報"/>
+					<radar_list.columns name="has_notes" tool_tip="このアバターのメモがあります。"/>
 				</radar_list>
 			</layout_panel>
 		</layout_stack>
-
-		<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
-		<panel name="hide_controls" >
-			<panel name="bottom_panel_nearby" >
-				<filter_editor name="nearby_filter_input" />
-				<menu_button name="nearby_view_sort_btn" />
-				<button name="gear_btn" />
-				<menu_button	name="options_btn" />
-				<button name="add_friend_btn" />
-				<slider name="NearMeRange" />
-			</panel>
-		</panel>
 	</panel>
 </panel>

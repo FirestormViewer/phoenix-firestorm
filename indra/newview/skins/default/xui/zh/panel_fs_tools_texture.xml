@@ -272,9 +272,7 @@
 		<spinner name="rptctrl" label="每米重複次數" />
 		<check_box label="同步材質" name="checkbox_sync_settings" tool_tip="同步紋理貼圖參數" />
 		<check_box label="對齊平面表面" name="checkbox planar align" tool_tip="將所有選定表面上的紋理與最後選擇的表面對齊。需要平面紋理對映。" />
-		<text name="tex gen">
-			對映
-		</text>
+		<check_box label="隱藏水" name="checkbox_hide_water" />
 		<combo_box name="combobox texgen">
 			<combo_box.item label="預設" name="Default" />
 			<combo_box.item label="平面" name="Planar" />

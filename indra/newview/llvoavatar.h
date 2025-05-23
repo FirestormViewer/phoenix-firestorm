@@ -204,12 +204,11 @@ public:
     void                    startDefaultMotions();
     void                    dumpAnimationState();
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-    //virtual LLJoint*      getJoint( const std::string &name );
-    virtual LLJoint*        getJoint( const JointKey &name );
-    LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
-// </FS:ND>
+    //<FS:Ansariel> Joint-lookup improvements
+    //virtual LLJoint*      getJoint(const std::string &name);
+    virtual LLJoint*        getJoint(std::string_view name);
     LLJoint*                getJoint(S32 num);
+    void                    initAllJoints();
 
     //if you KNOW joint_num is a valid animated joint index, use getSkeletonJoint for efficiency
     inline LLJoint* getSkeletonJoint(S32 joint_num) { return mSkeleton[joint_num]; }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Avatar Render Settings Menu">
+	<menu_item_call label="常に描画" name="av_render_always"/>
+	<menu_item_call label="描画しない" name="av_render_never"/>
+	<menu_item_call label="例外から削除" name="av_render_normal"/>
+</context_menu>

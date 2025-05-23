@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="object_vram_usage" title="オブジェクトがＶＲＡＭに与える影響">
+	<scroll_list name="result_list">
+		<column name="uuid" label="ＵＵＩＤ"/>
+		<column name="name" label="名前"/>
+		<column name="distance" label="距離"/>
+		<column name="faces" label="面数"/>
+		<column name="vertices" label="頂点数"/>
+		<column name="indices" label="指数"/>
+		<column name="vram_usage" label="ＶＲＡＭ（テクスチャ）の㎅"/>
+		<column name="vram_usage_vbo" label="ＶＲＡＭ（ＶＢＯ）の㎅"/>
+	</scroll_list>
+	<button label="リフレッシュ" label_selected="リフレッシュ" name="refresh_button"/>
+</floater>

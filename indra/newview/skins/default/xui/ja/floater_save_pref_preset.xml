@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<floater name="save_pref_preset" title="優先プリセットを保存">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="save_pref_preset" title="グラフィックプリセットの保存">
 	<text name="Preset">
 		プリセットの名前を入力するか、既存のプリセットを選択します。
 	</text>
 	<button label="保存" name="save"/>
-	<button label="取り消し" name="cancel"/>
+	<button label="キャンセル" name="cancel"/>
 </floater>

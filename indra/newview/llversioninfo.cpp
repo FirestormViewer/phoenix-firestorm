@@ -224,6 +224,7 @@ LLVersionInfo::FSViewerMaturity LLVersionInfo::getFSViewerMaturity() const
     static const boost::regex is_alpha_channel("\\bAlpha(x64)?\\b");
     static const boost::regex is_release_channel("\\bRelease(x64)?\\b");
     static const boost::regex is_nightly_channel("\\bNightly(x64)?\\b");
+    static const boost::regex is_streaming_channel("\\bStreaming\\b");
 
     if (ll_regex_search(channel, is_release_channel))
     {
@@ -244,6 +245,10 @@ LLVersionInfo::FSViewerMaturity LLVersionInfo::getFSViewerMaturity() const
     else if (ll_regex_search(channel, is_nightly_channel))
     {
         maturity = FSViewerMaturity::NIGHTLY_VIEWER;
+    }
+    else if (ll_regex_search(channel, is_streaming_channel))
+    {
+        maturity = FSViewerMaturity::STREAMING_VIEWER;
     }
     else
     {

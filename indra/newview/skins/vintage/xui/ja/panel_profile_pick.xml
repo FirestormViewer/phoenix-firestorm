@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_pick_info">
+	<panel.string name="location_notice">
+		（保存後に更新されます）
+	</panel.string>
+	<!-- main stack -->
+	<layout_stack name="main_pick_stack">
+		<!-- main panel -->
+		<layout_panel name="main_pick_lp">
+			<line_editor name="pick_location">
+				読み込んでいます…
+			</line_editor>
+			<!-- actions stack -->
+			<layout_stack name="actions_stack">
+				<layout_panel name="map_btn_lp">
+					<button name="show_on_map_btn" label="マップ上に表示"/>
+				</layout_panel>
+				<layout_panel name="tp_btn_lp">
+					<button name="teleport_btn" label="テレポート"/>
+				</layout_panel>
+				<layout_panel name="set_to_curr_location_btn_lp">
+					<button name="set_to_curr_location_btn" label="位置をセット" tool_tip="現在地をセットします。"/>
+				</layout_panel>
+			</layout_stack>
+			<!-- actions stack -->
+		</layout_panel>
+		<!-- main panel -->
+		<!-- save changes hiding panel -->
+		<layout_panel name="save_changes_lp">
+			<!-- save changes stack -->
+			<layout_stack name="save_changes_stack">
+				<layout_panel name="create_btn_lp">
+					<button name="create_changes_btn" label="ピック作成"/>
+				</layout_panel>
+				<layout_panel name="save_btn_lp">
+					<button name="save_changes_btn" label="ピックを保存"/>
+				</layout_panel>
+				<layout_panel name="cancel_btn_lp">
+					<button name="cancel_changes_btn" label="キャンセル"/>
+				</layout_panel>
+			</layout_stack>
+			<!-- save changes stack -->
+		</layout_panel>
+		<!-- save changes hiding panel -->
+	</layout_stack>
+	<!-- main stack -->
+</panel>

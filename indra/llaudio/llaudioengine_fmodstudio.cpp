@@ -44,9 +44,9 @@
 
 #include "sound_ids.h"
 
-const U32 EXTRA_SOUND_CHANNELS = 10;
+constexpr U32 EXTRA_SOUND_CHANNELS = 10;
 
-FMOD_RESULT F_CALLBACK windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels);
+FMOD_RESULT F_CALL windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels);
 
 FMOD::ChannelGroup *LLAudioEngine_FMODSTUDIO::mChannelGroups[LLAudioEngine::AUDIO_TYPE_COUNT] = {0};
 
@@ -69,13 +69,13 @@ static inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
     return true;
 }
 
-LLUUID FMOD_GUID_to_LLUUID(FMOD_GUID guid)
+static LLUUID FMOD_GUID_to_LLUUID(FMOD_GUID guid)
 {
     return LLUUID(llformat("%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", guid.Data1, guid.Data2, guid.Data3,
                     guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]));
 }
 
-void set_device(FMOD::System* system, const LLUUID& device_uuid)
+static void set_device(FMOD::System* system, const LLUUID& device_uuid)
 {
     LL_INFOS() << "LLAudioEngine_FMODSTUDIO::setDevice with device_uuid=" << device_uuid << LL_ENDL;
 
@@ -113,7 +113,7 @@ void set_device(FMOD::System* system, const LLUUID& device_uuid)
     }
 }
 
-FMOD_RESULT F_CALLBACK systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
+FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
 {
     FMOD::System* sys = (FMOD::System*)system;
     LLAudioEngine_FMODSTUDIO* audio_engine = (LLAudioEngine_FMODSTUDIO*)userdata;
@@ -881,7 +881,7 @@ void LLAudioChannelFMODSTUDIO::set3DMode(bool use3d)
 // not the main thread.  May have implications for callees or audio
 // engine shutdown.
 
-FMOD_RESULT F_CALLBACK windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels)
+FMOD_RESULT F_CALL windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels)
 {
     // inbuffer = fmod's original mixbuffer.
     // outbuffer = the buffer passed from the previous DSP unit.

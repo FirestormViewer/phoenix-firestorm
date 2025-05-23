@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="グループのプロフィール" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		保存されていない変更があります。
+	</panel.string>
+	<panel.string name="want_apply_text">
+		変更を保存してもよろしいですか？
+	</panel.string>
+	<panel.string name="group_join_btn">
+		入会費（L$ [AMOUNT]）
+	</panel.string>
+	<panel.string name="group_join_free">
+		入会費はかかりません。
+	</panel.string>
+	<panel.string name="group_member">
+		あなたはメンバーです。
+	</panel.string>
+	<panel.string name="join_txt">
+		グループに加入
+	</panel.string>
+	<panel.string name="leave_txt">
+		脱退
+	</panel.string>
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+			<panel name="group_info_top">
+				<text_editor name="group_name" value="（読み込んでいます…）"/>
+				<line_editor label="新しいグループ名を入力してください" name="group_name_editor"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="group_info_content">
+			<layout_stack name="layout">
+				<layout_panel name="group_accordions">
+					<accordion name="groups_accordion">
+						<accordion_tab name="group_general_tab" title="一般"/>
+						<accordion_tab name="group_roles_tab" title="役割とメンバー"/>
+						<accordion_tab name="group_notices_tab" title="通知"/>
+						<accordion_tab name="group_land_tab" title="土地・資産"/>
+						<accordion_tab name="group_experiences_tab" title="体験"/>
+					</accordion>
+				</layout_panel>
+			</layout_stack>
+			<layout_stack name="layout">
+				<layout_panel name="button_row">
+					<layout_stack name="button_row_ls">
+						<layout_panel name="btn_activate_lp">
+							<button label="アクティブ化" name="btn_activate"/>
+						</layout_panel>
+						<layout_panel name="btn_chat_lp">
+							<button label="チャット" name="btn_chat"/>
+						</layout_panel>
+						<layout_panel name="call_btn_lp">
+							<button label="グループコール" name="btn_call" tool_tip="このグループへコールします。"/>
+						</layout_panel>
+						<layout_panel name="btn_apply_lp">
+							<button label="保存" label_selected="保存" name="btn_apply"/>
+						</layout_panel>
+					</layout_stack>
+					<!--<button label="キャンセル" label_selected="キャンセル" name="btn_cancel" />-->
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

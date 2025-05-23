@@ -871,8 +871,23 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
 
     if (mCurrentBoldItem)
     {
-        ((LLScrollListIcon*)mCurrentBoldItem->getColumn(0))->setValue("FSAO_Animation_Stopped");
-        ((LLScrollListText*)mCurrentBoldItem->getColumn(1))->setFontStyle(LLFontGL::NORMAL);
+// <AS:Chanayane> Safer casts
+        if (LLScrollListCell* icon_cell = mCurrentBoldItem->getColumn(0))
+        {
+            if (LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(icon_cell))
+            {
+                icon->setValue("FSAO_Animation_Stopped");
+            }
+        }
+
+        if (LLScrollListCell* text_cell = mCurrentBoldItem->getColumn(1))
+        {
+            if (LLScrollListText* text = dynamic_cast<LLScrollListText*>(text_cell))
+            {
+                text->setFontStyle(LLFontGL::NORMAL);
+            }
+        }
+// </AS:Chanayane>
 
         mCurrentBoldItem = nullptr;
     }
@@ -882,21 +897,46 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
         return;
     }
 
-    // why do we have no LLScrollListCtrl::getItemByUserdata() ? -Zi
-    for (auto item : mAnimationList->getAllData())
+// <AS:Chanayane> Fix potential nullptr
+    if (!mAnimationList)
     {
-        LLUUID* id = (LLUUID*)item->getUserdata();
+        LL_WARNS("AO") << "Animation list control is null." << LL_ENDL;
+        return;
+    }
+// </AS:Chanayane>
 
-        if (id == &animation)
+// <AS:Chanayane> Safer casts
+    // why do we have no LLScrollListCtrl::getItemByUserdata() ? -Zi
+    for (LLScrollListItem* item : mAnimationList->getAllData())
+    {
+        LLUUID* id = static_cast<LLUUID*>(item->getUserdata());
+        // <AS:Chanayane> compares the LLUUID values instead of pointer values
+        //if (id == &animation)
+        if (id && *id == animation)
+        // </AS:Chanayane>
         {
             mCurrentBoldItem = item;
 
-            ((LLScrollListIcon*)mCurrentBoldItem->getColumn(0))->setValue("FSAO_Animation_Playing");
-            ((LLScrollListText*)mCurrentBoldItem->getColumn(1))->setFontStyle(LLFontGL::BOLD);
+            if (LLScrollListCell* icon_cell = mCurrentBoldItem->getColumn(0))
+            {
+                if (LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(icon_cell))
+                {
+                    icon->setValue("FSAO_Animation_Playing");
+                }
+            }
+
+            if (LLScrollListCell* text_cell = mCurrentBoldItem->getColumn(1))
+            {
+                if (LLScrollListText* text = dynamic_cast<LLScrollListText*>(text_cell))
+                {
+                    text->setFontStyle(LLFontGL::BOLD);
+                }
+            }
 
             return;
         }
     }
+// </AS:Chanayane>
 }
 
 // virtual

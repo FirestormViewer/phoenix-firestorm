@@ -1020,7 +1020,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
         clearGLODGroup();
     }
     // </FS:Beq>
-    std::map<std::string, std::string> joint_alias_map;
+    std::map<std::string, std::string, std::less<>> joint_alias_map;
     getJointAliases(joint_alias_map);
 
     LLHandle<LLModelPreview> preview_handle = getHandle();
@@ -4185,10 +4185,7 @@ LLJoint* LLModelPreview::lookupJointByName(const std::string& str, void* opaque)
     LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
     if (pPreview)
     {
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//        return pPreview->getPreviewAvatar()->getJoint(str);
-        return pPreview->getPreviewAvatar()->getJoint( JointKey::construct( str ) );
-// <FS:ND>
+        return pPreview->getPreviewAvatar()->getJoint(str);
     }
     return NULL;
 }

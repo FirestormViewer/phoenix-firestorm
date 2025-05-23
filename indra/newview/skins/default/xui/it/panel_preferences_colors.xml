@@ -200,10 +200,17 @@
 		<slider label="Opacità:" name="console_background_opacity" tool_tip="Scegli l'opacità dello sfondo della console"/>
 		<slider label="Opacità sfondo testo fluttuante:" name="FSHudTextBackgroundOpacity" tool_tip="Scegli l'opacità dello sfondo del testo fluttuante" />
 		<text name="preferences_search_label">
-			Risultati di ricerca nelle preferenze:
-		</text>
-		<color_swatch name="preferences_search_color" tool_tip="Scegli il colore"/>
-		<text name="area_search_beacon_color_label">
+            Risultati di ricerca nelle preferenze:
+        </text>
+		<text name="preferences_search_bg_label" width="45">
+            Sfondo:
+        </text>
+		<color_swatch name="preferences_search_bg_color" tool_tip="Scegli il colore di sfondo"/>
+		<text name="preferences_search_font_label" width="60">
+            Carattere:
+        </text>
+		<color_swatch name="preferences_search_font_color" tool_tip="Scegli il colore del carattere"/>
+		<text name="area_search_beacon_color_label" left="260">
 			Raggio di tracciamento (ad es. per Cerca Oggetti):
 		</text>
 		<color_swatch name="area_search_beacon_color" tool_tip="Scegli il colore" />

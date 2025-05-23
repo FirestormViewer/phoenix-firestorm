@@ -36,7 +36,7 @@ class LLJoint;
 
 typedef std::map<std::string, LLMatrix4> JointTransformMap;
 typedef std::map<std::string, LLMatrix4>::iterator JointTransformMapIt;
-typedef std::map<std::string, std::string> JointMap;
+typedef std::map<std::string, std::string, std::less<>> JointMap;
 typedef std::deque<std::string> JointNameSet;
 
 const S32 SLM_SUPPORTED_VERSION = 3;
@@ -196,18 +196,6 @@ public:
     void clearLog() { mWarningsArray.clear(); }
 
 protected:
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-    std::vector< std::string > toStringVector( std::vector< JointKey > const &aIn ) const
-    {
-        std::vector< std::string > out;
-
-        for( std::vector< JointKey >::const_iterator itr = aIn.begin(); itr != aIn.end(); ++itr )
-            out.push_back( itr->mName );
-
-        return out;
-    }
-// </FS:ND>
-
     LLModelLoader::load_callback_t      mLoadCallback;
     LLModelLoader::joint_lookup_func_t  mJointLookupFunc;
     LLModelLoader::texture_load_func_t  mTextureLoadFunc;

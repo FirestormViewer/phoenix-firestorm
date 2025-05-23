@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="もの" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		[ITEM_COUNT]個のアイテムを取得しています…。[FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT]個のアイテムの取得が完了しました。[FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		[ITEM_COUNT]個のアイテムを取得しました。[FILTER]
+	</panel.string>
+	<panel.string name="inventory_title">インベントリ</panel.string>
+	<menu_bar name="inventory_menu_bar">
+		<menu label="インベントリ" tear_off="true" name="inventory_inventory_menu">
+			<menu_item_call name="inventory_open" label="開く"/>
+			<menu_item_call name="inventory_share" label="共有"/>
+			<menu_item_call name="replace_links" label="リンクの置き換え"/>
+			<menu_item_call name="inventory_new_window" label="新しいウィンドウ"/>
+			<menu_item_check label="保護フォルダ" name="Protected Folders"/>
+			<menu_item_check label="インベントリ設定…" name="inv_settings"/>
+			<menu_item_check label="一覧表示" name="list_view"/>
+			<menu_item_check label="ギャラリー表示" name="gallery_view"/>
+			<menu_item_check label="複合表示" name="combination_view"/>
+			<menu_item_check label="ダブルクリックでオブジェクトを追加" name="add_inv_toggle"/>
+			<menu_item_check label="ダブルクリックで衣装を追加" name="add_invclothing_toggle"/>
+			<menu_item_call name="inventory_show_filters" label="フィルタを表示"/>
+			<menu_item_call name="inventory_reset_filters" label="フィルタをリセット"/>
+			<menu_item_call name="inventory_close_all_folders" label="全てのフォルダを折り畳む"/>
+			<menu_item_call name="inventory_empty_trash" label="ゴミ箱を空に"/>
+		</menu>
+		<menu label="作成" name="inventory_create_menu">
+			<menu_item_call name="inventory_new_folder" label="新しいフォルダ"/>
+			<menu_item_call name="inventory_new_script" label="新しいスクリプト"/>
+			<menu_item_call name="inventory_new_note" label="新しいノートカード"/>
+			<menu_item_call name="inventory_new_gesture" label="新しいジェスチャー"/>
+			<menu_item_call name="inventory_new_material" label="新しいマテリアル"/>
+			<menu name="inventory_new_clothes" label="新しい衣装">
+				<menu_item_call name="inventory_new_shirt" label="新しいシャツ"/>
+				<menu_item_call name="inventory_new_pants" label="新しいズボン"/>
+				<menu_item_call name="inventory_new_shoes" label="新しい靴"/>
+				<menu_item_call name="inventory_new_socks" label="新しい靴下"/>
+				<menu_item_call name="inventory_new_jacket" label="新しいジャケット"/>
+				<menu_item_call name="inventory_new_skirt" label="新しいスカート"/>
+				<menu_item_call name="inventory_new_gloves" label="新しい手袋"/>
+				<menu_item_call name="inventory_new_undershirt" label="新しい下着（上半身）"/>
+				<menu_item_call name="inventory_new_underpants" label="新しい下着（下半身）"/>
+				<menu_item_call name="inventory_new_tattoo" label="新しいタトゥ"/>
+				<menu_item_call name="inventory_new_universal" label="新しいユニバーサル"/>
+				<menu_item_call name="inventory_new_alpha" label="新しいアルファ"/>
+				<menu_item_call name="inventory_new_physics" label="新しい物理作用"/>
+			</menu>
+			<menu name="inventory_new_body_parts" label="新しい身体部位">
+				<menu_item_call name="inventory_new_shape" label="新しいシェイプ"/>
+				<menu_item_call name="inventory_new_skin" label="新しいスキン"/>
+				<menu_item_call name="inventory_new_hair" label="新しい髪型"/>
+				<menu_item_call name="inventory_new_eyes" label="新しい目"/>
+			</menu>
+			<menu label="新しい自然環境の設定" name="New Settings">
+				<menu_item_call label="新しい空" name="New Sky"/>
+				<menu_item_call label="新しい水面" name="New Water"/>
+				<menu_item_call label="新しいデイサイクル" name="New Day Cycle"/>
+			</menu>
+		</menu>
+		<!-- TODO: try to make these check items that actually reflect their state -Zi -->
+		<menu label="並べ替え" name="inventory_sort_menu">
+			<menu_item_check name="inventory_sort_by_name" label="名前で"/>
+			<menu_item_check name="inventory_sort_by_date" label="日付で"/>
+			<menu_item_check name="inventory_sort_folders_by_name" label="フォルダは常に名前順に"/>
+			<menu_item_check name="inventory_sort_system_on_top" label="システムフォルダを上に"/>
+		</menu>
+		<menu label="検索" name="inventory_search_menu">
+			<menu_item_check name="inventory_search_by_name" label="名前で"/>
+			<menu_item_check name="inventory_search_by_creator" label="制作者で"/>
+			<menu_item_check name="inventory_search_by_description" label="説明で"/>
+			<menu_item_check name="inventory_search_by_uuid" label="ＵＵＩＤで"/>
+			<menu_item_check name="inventory_search_by_all" label="すべてで"/>
+			<menu_item_check name="inventory_filter_show_links" label="リンクを表示"/>
+			<menu_item_check name="inventory_filter_only_links" label="リンクのみ表示"/>
+			<menu_item_check name="inventory_filter_hide_links" label="リンクを隠す"/>
+			<menu_item_check name="inventory_filter_only_modify" label="修正可能のみ"/>
+			<menu_item_check name="inventory_filter_only_copy" label="コピー可能のみ"/>
+			<menu_item_check name="inventory_filter_only_transfer" label="譲渡可能のみ"/>
+			<menu_item_check name="inventory_filter_coalesced_objects_only" label="複合のみ"/>
+		</menu>
+	</menu_bar>
+	<layout_stack name="top_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="戻ります。"/>
+			<button name="forward_btn" tool_tip="進みます。"/>
+			<button name="up_btn" tool_tip="上の階層に移動します。"/>
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="インベントリをフィルタ" name="inventory search editor" tool_tip="検索する単語を１つ以上入力し、「+」で区切ってください。"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" width="50" value="フィルタ："/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="すべての種類"/>
+				<combo_box.item value="filter_separator" label="──────"/>
+				<combo_box.item value="filter_type_animations" label="アニメーション"/>
+				<combo_box.item value="filter_type_calling_cards" label="コーリングカード"/>
+				<combo_box.item value="filter_type_clothing" label="衣装／身体部位"/>
+				<combo_box.item value="filter_type_gestures" label="ジェスチャー"/>
+				<combo_box.item value="filter_type_landmarks" label="ランドマーク"/>
+				<combo_box.item value="filter_type_notecards" label="ノートカード"/>
+				<combo_box.item value="filter_type_objects" label="オブジェクト"/>
+				<combo_box.item value="filter_type_scripts" label="スクリプト"/>
+				<combo_box.item value="filter_type_sounds" label="サウンド"/>
+				<combo_box.item value="filter_type_textures" label="テクスチャ"/>
+				<combo_box.item value="filter_type_snapshots" label="スナップショット"/>
+				<combo_box.item value="filter_type_materials" label="マテリアル"/>
+				<combo_box.item value="filter_type_settings" label="自然環境の設定"/>
+				<!-- [AS:Chanayane] Search folders only -->
+				<combo_box.item value="filter_type_folders" label="フォルダ"/>
+				<!-- [/AS:Chanayane] -->
+				<combo_box.item value="filter_type_coalesced" label="複合のみ"/>
+				<combo_box.item value="filter_type_custom" label="カスタム…"/>
+			</combo_box>
+			<menu_button tool_tip="検索表示のオプションを表示します。" name="options_visibility_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="インベントリ" name="All Items"/>
+			<recent_inventory_panel label="新着アイテム" name="Recent Items"/>
+			<worn_inventory_panel label="着用中" name="Worn Items"/>
+		</tab_container>
+	</panel>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button tool_tip="追加のオプションを表示します。" name="options_gear_btn"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="新しいアイテムを作成します。"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="新しいインベントリウィンドウを表示します。"/>
+		</panel>
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="表示モードを切り替えます。"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダがあります。" name="ItemcountText">
+				要素
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="選択されたアイテムを削除します。"/>
+		</panel>
+	</panel>
+</panel>

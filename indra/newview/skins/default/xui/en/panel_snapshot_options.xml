@@ -9,7 +9,7 @@
   animate="false"
   name="option_buttons"
   orientation="vertical"
-  height="152"
+  height="157"
   width="208"
   left="0"
   top="9"
@@ -52,6 +52,7 @@
    height="22"
    image_overlay="Snapshot_Inventory"
    image_overlay_alignment="left"
+   image_overlay_width="16"
    image_top_pad="-1"
    imgoverlay_label_space="10"
    label="Save to Inventory"
@@ -116,6 +117,30 @@
    user_resize="false"
    top_pad="0"
    height="22"
+   name="lp_primfeed">
+  <button
+   follows="left|top"
+   font="SansSerif"
+   halign="left"
+   height="22"
+   image_overlay="Command_Primfeed_Icon"
+   image_overlay_alignment="left"
+   image_top_pad="0"
+   imgoverlay_label_space="10"
+   label="Share to Primfeed"
+   layout="topleft"
+   left="9"
+   name="send_to_primfeed_btn"
+   top_pad="0">
+    <button.commit_callback
+     function="Snapshot.SendToPrimfeed"/>
+  </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
    name="lp_email">
   <button
    follows="left|top"
@@ -145,7 +170,7 @@
    left="10"
    length="1"
    name="fee_hint_lbl"
-   top_pad="7"
+   top_pad="2"
    width="200"
    type="string"
    word_wrap="true">

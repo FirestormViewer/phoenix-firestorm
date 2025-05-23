@@ -49,22 +49,22 @@ public:
     dae_model_map   mModelsMap;
 
     LLDAELoader(
-        std::string                         filename,
-        S32                                 lod,
-        LLModelLoader::load_callback_t      load_cb,
-        LLModelLoader::joint_lookup_func_t  joint_lookup_func,
-        LLModelLoader::texture_load_func_t  texture_load_func,
-        LLModelLoader::state_callback_t     state_cb,
-        void*                               opaque_userdata,
-        JointTransformMap&                  jointTransformMap,
-        JointNameSet&                       jointsFromNodes,
-        std::map<std::string, std::string>& jointAliasMap,
-        U32                                 maxJointsPerMesh,
-        U32                                 modelLimit,
+        std::string                                      filename,
+        S32                                              lod,
+        LLModelLoader::load_callback_t                   load_cb,
+        LLModelLoader::joint_lookup_func_t               joint_lookup_func,
+        LLModelLoader::texture_load_func_t               texture_load_func,
+        LLModelLoader::state_callback_t                  state_cb,
+        void*                                            opaque_userdata,
+        JointTransformMap&                               jointTransformMap,
+        JointNameSet&                                    jointsFromNodes,
+        std::map<std::string, std::string, std::less<>>& jointAliasMap,
+        U32                                              maxJointsPerMesh,
+        U32                                              modelLimit,
         // <FS:Beq> configrable lod suffix support
-        // bool                             preprocess);
-        bool                                preprocess,
-        const LODSuffixArray&   lod_suffix);
+        // bool                                          preprocess);
+        bool                                             preprocess,
+        const LODSuffixArray&                            lod_suffix);
         // </FS:Beq>
     virtual ~LLDAELoader() ;
 

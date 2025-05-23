@@ -89,7 +89,7 @@ public:
     void processObjectUpdate(LLMessageSystem *mesgsys, void **user_data, EObjectUpdateType update_type, bool compressed=false);
     void processCompressedObjectUpdate(LLMessageSystem *mesgsys, void **user_data, EObjectUpdateType update_type);
     void processCachedObjectUpdate(LLMessageSystem *mesgsys, void **user_data, EObjectUpdateType update_type);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     //void updateApparentAngles(LLAgent &agent);
     // Added time limit on processing of objects as they affect the texture system
     void updateApparentAngles(LLAgent &agent, F32 max_time);

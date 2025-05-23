@@ -123,7 +123,7 @@ public:
     virtual EStatus getStatus() const { return mStatus; }
     virtual void setNeedRefresh(bool need);
 
-    static bool updatePreviewList(bool initialized, bool have_flickr = false); // <FS:Beq/> FIRE-35002 - Post to flickr broken, improved solution
+    static bool updatePreviewList(bool initialized, bool have_socials = false); // <FS:Beq/> FIRE-35002 - Post to flickr broken, improved solution
 
     void setAdvanced(bool advanced) { mAdvanced = advanced; }
     void setSkipReshaping(bool skip) { mSkipReshaping = skip; }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="particle_editor_floater" title="パーティクルエディタ">
+	<panel name="particle_editor_panel">
+		<panel name="top_left_panel">
+			<text name="Pattern_Label">
+				パターン：
+			</text>
+			<combo_box name="pattern_type_combo">
+				<combo_box.item label="爆散" name="explode"/>
+				<combo_box.item label="角度" name="angle"/>
+				<combo_box.item label="角錐" name="angle_cone"/>
+				<combo_box.item label="空の角錐" name="angle_cone_empty"/>
+				<combo_box.item label="ドロップ" name="drop"/>
+			</combo_box>
+			<text name="Texture_Label">
+				テクスチャ：
+			</text>
+			<text name="Burst_Rate_Label">
+				爆散頻度：
+			</text>
+			<text name="Burst_Count_Label">
+				爆散回数：
+			</text>
+			<text name="Burst_Radius_Label">
+				爆散角度：
+			</text>
+			<text name="Angle_Begin_Label">
+				開始角：
+			</text>
+			<text name="Burst_Speed_Min_Label">
+				最小爆散速度：
+			</text>
+			<text name="Angle_End_Label">
+				終了角：
+			</text>
+			<text name="Burst_Speed_Max_Label">
+				最大爆散角度：
+			</text>
+			<text name="Source_Max_Age_Label">
+				ソースの最大寿命：
+			</text>
+			<text name="Start_Alpha_Label">
+				開始アルファ：
+			</text>
+			<text name="Particles_Max_Age_Label">
+				パーティクルの最大寿命：
+			</text>
+			<text name="End_Alpha_Label">
+				終了アルファ：
+			</text>
+			<text name="Start_Glow_Label">
+				開始グロー：
+			</text>
+			<combo_box name="blend_func_src_combo">
+				<combo_box.item label="ブレンド１" name="blend_one"/>
+				<combo_box.item label="ブレンド０" name="blend_zero"/>
+				<combo_box.item label="終了色にブレンド" name="blend_dest_color"/>
+				<combo_box.item label="開始色にブレンド" name="blend_src_color"/>
+				<combo_box.item label="ブレンド１‐終了色" name="blend_one_minus_dest_color"/>
+				<combo_box.item label="ブレンド１‐開始色" name="blend_one_minus_src_color"/>
+				<combo_box.item label="開始色アルファ" name="blend_src_alpha"/>
+				<combo_box.item label="ブレンド１‐開始色アルファ" name="blend_one_minus_src_alpha"/>
+			</combo_box>
+			<text name="End_Glow_Label">
+				終了グロー：
+			</text>
+			<combo_box name="blend_func_dest_combo">
+				<combo_box.item label="ブレンド１" name="blend_one"/>
+				<combo_box.item label="ブレンド０" name="blend_zero"/>
+				<combo_box.item label="終了色にブレンド" name="blend_dest_color"/>
+				<combo_box.item label="開始色にブレンド" name="blend_src_color"/>
+				<combo_box.item label="ブレンド１‐終了色" name="blend_one_minus_dest_color"/>
+				<combo_box.item label="ブレンド１‐開始色" name="blend_one_minus_src_color"/>
+				<combo_box.item label="開始色アルファ" name="blend_src_alpha"/>
+				<combo_box.item label="ブレンド１‐開始色アルファ" name="blend_one_minus_src_alpha"/>
+			</combo_box>
+			<text name="Scale_Start_Label">
+				開始スケール：
+			</text>
+			<text name="End_Label">
+				終了：
+			</text>
+		</panel>
+		<panel name="top_right_panel">
+			<check_box name="bounce_checkbox" label="跳ねる"/>
+			<check_box name="emissive_checkbox" label="放射性"/>
+			<check_box name="follow_source_checkbox" label="ソースに従う"/>
+			<check_box name="follow_velocity_checkbox" label="速度に従う"/>
+			<check_box name="interpolate_color_checkbox" label="色を補間"/>
+			<check_box name="interpolate_scale_checkbox" label="スケールを補間"/>
+			<check_box name="target_position_checkbox" label="目標位置"/>
+			<check_box name="target_linear_checkbox" label="線形の目標"/>
+			<check_box name="wind_checkbox" label="風"/>
+			<check_box name="ribbon_checkbox" label="リボン"/>
+			<button name="copy_button" label="コピー" tool_tip="パーティクルシステムのパラメータをＬＳＬスクリプトとしてクリップボードにコピーします。"/>
+			<button name="inject_button" label="注入" tool_tip="このパーティクルシステムを選択したオブジェクトに注入します。"/>
+		</panel>
+		<panel name="bottom_left_panel">
+			<text name="Target_Key_Label">
+				ターゲットキー：
+			</text>
+			<button name="clear_target_button" tool_tip="目標のオブジェクトまたはアバターをクリアします。"/>
+			<button name="pick_target_button" tool_tip="ここをクリックして、パーティクルの目標オブジェクトまたはアバターを選択します。"/>
+			<text name="Acceleration_Label">
+				加速度：
+			</text>
+			<text name="Omega_Label">
+				オメガ：
+			</text>
+		</panel>
+		<panel name="bottom_right_panel">
+			<color_swatch label="開始色" name="start_color_selector"/>
+			<color_swatch label="終了色" name="end_color_selector"/>
+		</panel>
+	</panel>
+</floater>

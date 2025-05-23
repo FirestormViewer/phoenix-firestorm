@@ -1530,7 +1530,19 @@ void LLTextBase::draw()
             bg_rect.intersectWith( text_rect );
 
         gl_rect_2d( text_rect, bg_color, true );
+
+        // <FS> Additionally set the font color of highlighted text instead of using LabelTextColor
+        const LLColor4& font_color = ll::ui::SearchableControl::getHighlightFontColor();
+        setColor(font_color);
+        // </FS>
     }
+    // <FS> Set the font color back to LabelTextColor if not highlighted
+    else
+    {
+        const LLColor4& font_color = LLUIColorTable::instance().getColor("LabelTextColor");
+        setColor(font_color);
+    }
+    // </FS>
 
     bool should_clip = mClip || mScroller != NULL;
     // <FS:Zi> Fix text bleeding at top edge of scrolling text editors

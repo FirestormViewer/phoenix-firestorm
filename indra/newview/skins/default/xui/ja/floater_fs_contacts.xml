@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="imcontacts" title="連絡先">
- 	<string name="no_friends" value="フレンドはいません" />
-    <string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。" />
+<floater name="imcontacts" title="コンタクト">
+	<string name="no_friends" value="フレンドはいません" />
+	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。" />
 	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。" />
 	<tab_container name="friends_and_groups">
 		<panel label="フレンド" name="friends_panel" />
 		<panel label="グループ" name="groups_panel"/>
-		<panel label="連絡先セット" name="contact_sets_panel" />
+		<panel label="コンタクトセット" name="contact_sets_panel" />
 	</tab_container>
 </floater>

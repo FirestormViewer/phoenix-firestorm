@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">
+		戻る
+	</text>
+	<text name="settings_title">
+		オートチューン設定
+	</text>
+	<text name="quality_lbl">
+		遠距離のアバター
+	</text>
+	<check_box label="距離ベースの最適化を有効にする" name="FSAutoTuneImpostorByDistEnabled" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を調整して、完全に描画されたアバターを定義された半径内のアバターに制限します。"/>
+	<spinner label="アバターを完全描画する最大距離" name="ffa_autotune"/>
+	<text name="distant_av_advice">
+		遠距離にいるアバターは、描画コストに関係なく自動的に最適化されます。
+アバターが最適化されるカメラからの距離を設定します。
+注：この設定により、近くに誰もいない場合はMaxNonImpostorsが1に強制されます。
+	</text>
+	<text name="distance_lbl">
+		視認距離の調整限界
+	</text>
+	<spinner label="最小距離" name="min_dd_autotune"/>
+	<spinner label="推奨距離" name="pref_dd_autotune"/>
+	<text name="distance_desc1">
+		シーンパラメータを調整する場合、自動調整により最小描画距離と推奨描画距離の間の値が選択されます。
+	</text>
+	<text name="sundry_lbl">
+		各種設定
+	</text>
+	<check_box label="自分のアバターを最適化できるようにする" name="alow_self_impostor" tool_tip="有効にすると、ビューアは自分のアバターをインポスターとして描画する可能性があります。"/>
+	<check_box label="最適化された描画時間を表示" name="show_tuned_art" tool_tip="有効にすると、「時間」列には、事前調整描画時間ではなく、現在の描画時間が表示されます。"/>
+	<text name="sundry_desc1">
+		これらのオプションは、より微妙な設定を制御します。これらのオプションの機能の詳細については、オンラインヘルプページを参照してください。
+	</text>
+</panel>

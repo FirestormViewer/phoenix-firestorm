@@ -2089,12 +2089,14 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
     // So a 1024x1024 texture with a dicard of 6 will become 32x32 and a 2048x2048 texture with a discard of 7 will become a 64x64 texture.
     if (discardlevel > MAX_DISCARD_LEVEL)
     {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("FixBadDiscardLevel");
+
         S32 w = head[0]; // Get the current width from the header (16)
         S32 h = head[1]; // Get the current height from the header (16)
 
         // Expand the width and height by teh difference between the discard and MAX_DISCARD_LEVEL bit shifted to the left. (Expand power of 2 textures)
-        w <<= MAX_DISCARD_LEVEL - discardlevel;
-        h <<= MAX_DISCARD_LEVEL - discardlevel;
+        w <<= discardlevel - MAX_DISCARD_LEVEL;
+        h <<= discardlevel - MAX_DISCARD_LEVEL;
 
         // Set the discard level to the MAX_DISCARD_LEVEL
         discardlevel = MAX_DISCARD_LEVEL;

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="雲" name="panel_fs_settings_sky_clouds">
+	<panel name="P_Clouds_Header">
+		<text name="T_Clouds_Header" value="雲の設定"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="cloud_color_label">
+			雲の色：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_coverage_label">
+			雲の量：
+		</text>
+		<text name="cloud_scale_label">
+			雲のスケール：
+		</text>
+		<text name="cloud_variance_label">
+			雲の分散：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Density">
+		<text name="cloud_density_label" tool_tip="雲のＸＹ／密度‐ＸおよびＹスライダーを使用して、空にあるすべての雲の水平位置を変更します。Ｄスライダーは、個々の雲の全体的な密度に影響します。低い設定では薄くて細い雲が表示され、高い設定では厚くてしっかりした雲が表示されます。">
+			雲の密度：
+		</text>
+		<text name="Cloud_XY_Density_X">
+			Ｘ：
+		</text>
+		<text name="Cloud_XY_Density_Y">
+			Ｙ：
+		</text>
+		<text name="Cloud_XY_Density_D">
+			Ｄ：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Detail">
+		<text name="cloud_detail_label">
+			雲の詳細：
+		</text>
+		<text name="Cloud_XY_Detail_X">
+			Ｘ：
+		</text>
+		<text name="Cloud_XY_Detail_Y">
+			Ｙ：
+		</text>
+		<text name="Cloud_XY_Detail_D">
+			Ｄ：
+		</text>
+	</panel>
+	<panel name="P_Cloud_Scroll">
+		<text name="cloud_scroll_label">
+			雲のスクロール：
+		</text>
+		<text name="cloud_image_label">
+			雲の画像：
+		</text>
+	</panel>
+</panel>

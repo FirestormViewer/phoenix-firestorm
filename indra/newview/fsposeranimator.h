@@ -190,18 +190,18 @@ public:
     /// <summary>
     /// An ordered list of poser joints, clustered by body-area.
     /// Order is based on ease-of-use.
-    /// Not necessarily exhaustive, just the joints we care to edit without adding UI clutter.
     /// </summary>
     /// <remarks>
     /// For an implementation of something other than LLJoints, different name(s) may be required.
+    /// A bvhEndSiteValue is only required if the bone has no descendants.
     /// </remarks>
     const std::vector<FSPoserJoint> PoserJoints{
         // head, torso, legs
-        { "mHead", "", BODY, { "mEyeLeft", "mEyeRight", "mFaceRoot" }, "0.000 0.076 0.000" },
+        { "mHead", "", BODY, { "mEyeLeft", "mEyeRight", "mFaceRoot", "mSkull" }, "0.000 0.076 0.000" },
         { "mNeck", "", BODY, { "mHead" }, "0.000 0.251 -0.010" },
-        { "mPelvis", "", WHOLEAVATAR, { "mTorso", "mHipLeft", "mHipRight", "mTail1", "mGroin", "mHindLimbsRoot" }, "0.000000 0.000000 0.000000" },
+        { "mPelvis", "", WHOLEAVATAR, { "mSpine1", "mHipLeft", "mHipRight", "mTail1", "mGroin", "mHindLimbsRoot" }, "0.000000 0.000000 0.000000" },
         { "mChest", "", BODY, { "mNeck", "mCollarLeft", "mCollarRight", "mWingsRoot" }, "0.000 0.205 -0.015" },
-        { "mTorso", "", BODY, { "mChest" }, "0.000 0.084 0.000" },
+        { "mTorso", "", BODY, { "mSpine3" }, "0.000 0.084 0.000" },
         { "mCollarLeft", "mCollarRight", BODY, { "mShoulderLeft" }, "0.085 0.165 -0.021" },
         { "mShoulderLeft", "mShoulderRight", BODY, { "mElbowLeft" }, "0.079 0.000 0.000" },
         { "mElbowLeft", "mElbowRight", BODY, { "mWristLeft" }, "0.248 0.000 0.000" },
@@ -212,10 +212,12 @@ public:
         { "mWristRight", "mWristLeft", BODY, { "mHandThumb1Right", "mHandIndex1Right", "mHandMiddle1Right", "mHandRing1Right", "mHandPinky1Right" }, "-0.205 0.000 0.000", "", true },
         { "mHipLeft", "mHipRight", BODY, { "mKneeLeft" }, "0.127 -0.041 0.034" },
         { "mKneeLeft", "mKneeRight", BODY, { "mAnkleLeft" }, "-0.046 -0.491 -0.001" },
-        { "mAnkleLeft", "mAnkleRight", BODY, {}, "0.001 -0.468 -0.029", "0.000 -0.061 0.112" },
-        { "mHipRight", "mHipLeft", BODY, { "mKneeRight" }, "-0.129 -0.041 0.034", "0.000 -0.061 0.112", true },
+        { "mAnkleLeft", "mAnkleRight", BODY, { "mToeLeft" }, "0.001 -0.468 -0.029" },
+        { "mToeLeft", "mToeRight", BODY, {}, "0.000 0.109 0.000", "0.000 0.020 0.000" },
+        { "mHipRight", "mHipLeft", BODY, { "mKneeRight" }, "-0.129 -0.041 0.034", "", true },
         { "mKneeRight", "mKneeLeft", BODY, { "mAnkleRight" }, "0.049 -0.491 -0.001", "", true },
-        { "mAnkleRight", "mAnkleLeft", BODY, {}, "0.000 -0.468 -0.029", "0.000 -0.061 0.112", true },
+        { "mAnkleRight", "mAnkleLeft", BODY, { "mToeRight" }, "0.000 -0.468 -0.029", "", true },
+        { "mToeRight", "mToeLeft", BODY, {}, "0.000 0.109 0.000", "0.000 0.020 0.000", true },
 
         // face
         { "mFaceRoot",
@@ -225,10 +227,10 @@ public:
               "mFaceForeheadLeft", "mFaceForeheadCenter", "mFaceForeheadRight",
               "mFaceEyebrowOuterLeft", "mFaceEyebrowCenterLeft", "mFaceEyebrowInnerLeft",
               "mFaceEyebrowOuterRight", "mFaceEyebrowCenterRight", "mFaceEyebrowInnerRight",
-              "mFaceEyeLidUpperLeft", "mFaceEyeLidLowerLeft",
-              "mFaceEyeLidUpperRight", "mFaceEyeLidLowerRight",
+              "mFaceEyeLidUpperLeft", "mFaceEyeLidLowerLeft", "mFaceEyecornerInnerLeft",
+              "mFaceEyeLidUpperRight", "mFaceEyeLidLowerRight", "mFaceEyecornerInnerRight",
               "mFaceEar1Left", "mFaceEar1Right",
-              "mFaceNoseLeft", "mFaceNoseCenter", "mFaceNoseRight",
+              "mFaceNoseBase", "mFaceNoseBridge", "mFaceNoseLeft", "mFaceNoseCenter", "mFaceNoseRight",
               "mFaceCheekUpperLeft", "mFaceCheekLowerLeft",
               "mFaceCheekUpperRight", "mFaceCheekLowerRight",
               "mFaceJaw", "mFaceTeethUpper"
@@ -247,14 +249,18 @@ public:
         { "mEyeLeft", "mEyeRight", FACE, {}, "-0.036 0.079 0.098", "0.000 0.000 0.025" },
         { "mEyeRight", "mEyeLeft", FACE, {}, "0.036 0.079 0.098", "0.000 0.000 0.025", true },
         { "mFaceEyeLidUpperLeft", "mFaceEyeLidUpperRight", FACE, {}, "0.036 0.034 0.073", "0.000 0.005 0.027" },
+        { "mFaceEyecornerInnerLeft", "mFaceEyecornerInnerRight", FACE, {}, "0.032 0.075 0.017", "0.000 0.016 0.000" },
         { "mFaceEyeLidLowerLeft", "mFaceEyeLidLowerRight", FACE, {}, "0.036 0.034 0.073", "0.000 -0.007 0.024" },
         { "mFaceEyeLidUpperRight", "mFaceEyeLidUpperLeft", FACE, {}, "-0.036 0.034 0.073", "0.000 0.005 0.027", true },
+        { "mFaceEyecornerInnerRight", "mFaceEyecornerInnerLeft", FACE, {}, "0.032 0.075 -0.017", "0.000 0.016 0.000", true },
         { "mFaceEyeLidLowerRight", "mFaceEyeLidLowerLeft", FACE, {}, "-0.036 0.034 0.073", "0.000 -0.007 0.024", true },
 
         { "mFaceEar1Left", "mFaceEar1Right", FACE, { "mFaceEar2Left" }, "0.080 0.002 0.000", "" },
         { "mFaceEar2Left", "mFaceEar2Right", FACE, {}, "0.018 0.025 -0.019", "0.000 0.033 0.000" },
         { "mFaceEar1Right", "mFaceEar1Left", FACE, { "mFaceEar2Right" }, "-0.080 0.002 0.000", "", true },
         { "mFaceEar2Right", "mFaceEar2Left", FACE, {}, "-0.018 0.025 -0.019", "0.000 0.033 0.000", true },
+        { "mFaceNoseBase", "", FACE, {}, "-0.016 0.094 0.000", "0.000 0.014 0.000" },
+        { "mFaceNoseBridge", "", FACE, {}, "0.020 0.091 0.000", "0.008 0.015 0.000" },
         { "mFaceNoseLeft", "mFaceNoseRight", FACE, {}, "0.015 -0.004 0.086", "0.004 0.000 0.015" },
         { "mFaceNoseCenter", "", FACE, {}, "0.000 0.000 0.102", "0.000 0.000 0.025" },
         { "mFaceNoseRight", "mFaceNoseLeft", FACE, {}, "-0.015 -0.004 0.086", "-0.004 0.000 0.015", true },
@@ -343,11 +349,39 @@ public:
         { "mWing4Right", "mWing4Left", MISC, {}, "-0.173 0.000 -0.171", "-0.132 0.000 -0.146", true },
         { "mWing4FanRight", "mWing4FanLeft", MISC, {}, "-0.173 0.000 -0.171", "-0.062 -0.159 -0.068", true },
 
+        // Misc body parts
+        { "mSkull", "", MISC, {}, "0.079 0.000 0.000", "0.033 0.000 0.000" },
+        { "mSpine1", "", MISC, { "mSpine2" }, "0.084 0.000 0.000" },
+        { "mSpine2", "", MISC, { "mTorso", }, "-0.084 0.000 0.000" },
+        { "mSpine3", "", MISC, { "mSpine4" }, "0.205 -0.015 0.000" },
+        { "mSpine4", "", MISC, { "mChest", }, "-0.205 0.015 0.000" },
+
         // Collision Volumes
+        { "HEAD", "", COL_VOLUMES },
+        { "NECK", "", COL_VOLUMES },
+        { "L_CLAVICLE", "R_CLAVICLE", COL_VOLUMES },
+        { "R_CLAVICLE", "L_CLAVICLE", COL_VOLUMES, {}, "", "", true },
+        { "CHEST", "", COL_VOLUMES },
         { "LEFT_PEC", "RIGHT_PEC", COL_VOLUMES },
         { "RIGHT_PEC", "LEFT_PEC", COL_VOLUMES, {}, "", "", true },
+        { "UPPER_BACK", "", COL_VOLUMES },
+        { "LEFT_HANDLE", "RIGHT_HANDLE", COL_VOLUMES },
+        { "RIGHT_HANDLE", "LEFT_HANDLE", COL_VOLUMES, {}, "", "", true },
         { "BELLY", "", COL_VOLUMES },
+        { "PELVIS", "", COL_VOLUMES },
         { "BUTT", "", COL_VOLUMES },
+        { "L_UPPER_ARM", "R_UPPER_ARM", COL_VOLUMES },
+        { "R_UPPER_ARM", "L_UPPER_ARM", COL_VOLUMES, {}, "", "", true },
+        { "L_LOWER_ARM", "R_LOWER_ARM", COL_VOLUMES },
+        { "R_LOWER_ARM", "L_LOWER_ARM", COL_VOLUMES, {}, "", "", true },
+        { "L_HAND", "R_HAND", COL_VOLUMES },
+        { "R_HAND", "L_HAND", COL_VOLUMES, {}, "", "", true },
+        { "L_UPPER_LEG", "R_UPPER_LEG", COL_VOLUMES },
+        { "R_UPPER_LEG", "L_UPPER_LEG", COL_VOLUMES, {}, "", "", true },
+        { "L_LOWER_LEG", "R_LOWER_LEG", COL_VOLUMES },
+        { "R_LOWER_LEG", "L_LOWER_LEG", COL_VOLUMES, {}, "", "", true },
+        { "L_FOOT", "R_FOOT", COL_VOLUMES },
+        { "R_FOOT", "L_FOOT", COL_VOLUMES, {}, "", "", true },
     };
     
 public:

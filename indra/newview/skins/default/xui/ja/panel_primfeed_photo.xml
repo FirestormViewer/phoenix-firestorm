@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<panel name="panel_primfeed_photo">
+	<combo_box name="resolution_combobox" tool_tip="画像解像度">
+		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>
+		<combo_box.item label="320✕240" name="320x240"/>
+		<combo_box.item label="640✕480" name="640x480"/>
+		<combo_box.item label="800✕600" name="800x600"/>
+		<combo_box.item label="1024✕768" name="1024x768"/>
+		<combo_box.item label="1280✕1024" name="1280x1024"/>
+		<combo_box.item label="1600✕1200" name="1600x1200"/>
+		<combo_box.item label="カスタム" name="Custom"/>
+	</combo_box>
+	<combo_box name="filters_combobox" tool_tip="画像にかけるフィルタを指定します。">
+		<combo_box.item label="フィルタなし" name="NoFilter"/>
+	</combo_box>
+	<text name="spinner_x_lbl">
+		✕
+	</text>
+	<check_box label="アスペクト比を保持" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		リフレッシュしています…
+	</text>
+	<check_box label="フレームを表示" tool_tip="スナップショットの領域を囲むフレームを画面に表示します。スナップショットの外側にあるシーンの一部は彩度が低くなり、わずかにぼやけます。" name="show_frame"/>
+	<check_box label="フレームのガイドを表示" tool_tip="スナップショットフレーム内にフレームのガイド（三分割法）を表示します。" name="show_guides"/>
+	<button label="リフレッシュ" name="new_snapshot_btn" tool_tip="クリックでリフレッシュします。"/>
+	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックでプレビューを切り替えます。"/>
+	<text name="description_label">
+		説明：
+	</text>
+	<check_box label="場所を含める" name="add_location_cb"/>
+	<check_box label="パブリックギャラリーに追加しますか？" name="primfeed_add_to_public_gallery"/>
+	<check_box label="商用コンテンツですか？" name="primfeed_commercial_content"/>
+	<combo_box name="rating_combobox" tool_tip="Primfeedのコンテンツレーティングを指定します。"/>
+	<check_box label="投稿後にブラウザを開きますか？" tool_tip="投稿後、Primfeedの投稿がWebブラウザで自動的に開きます。" name="primfeed_open_url_on_post"/>
+	<button label="シェア" name="post_photo_btn"/>
+	<button label="キャンセル" name="cancel_photo_btn"/>
+</panel>

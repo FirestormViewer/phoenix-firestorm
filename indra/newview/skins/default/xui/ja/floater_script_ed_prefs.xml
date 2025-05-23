@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_script_colors" title="スクリプトの色">
+<floater name="floater_script_colors" title="スクリプトエディタの初期設定">
 	<text name="color_pickers_label">
 		希望の色を選択：
 	</text>
@@ -12,11 +12,20 @@
 	<text name="background_label">
 		背景
 	</text>
+	<text name="section_label">
+		セクション
+	</text>
 	<text name="datatype_label">
 		データ型
 	</text>
 	<text name="event_label">
 		イベント
+	</text>
+	<text name="comment_label">
+		コメント
+	</text>
+	<text name="function_label">
+		関数
 	</text>
 	<text name="string_literal_label">
 		文字列リテラル
@@ -24,25 +33,53 @@
 	<text name="constant_label">
 		定数
 	</text>
+	<text name="i_constant_label">
+		Integer定数
+	</text>
+	<text name="s_constant_label">
+		String定数
+	</text>
+	<text name="f_constant_label">
+		Float定数
+	</text>
+	<text name="c_constant_label">
+		複合
+	</text>
 	<text name="flow_control_label">
 		フロー制御
 	</text>
-	<text name="function_label">
-		関数
-	</text>
-	<text name="comment_label">
-		コメント
+	<text name="preprocessor_label">
+		プリプロセッサ
 	</text>
 	<script_editor name="Script Preview">
 		/* サンプル スクリプト */
 default
 {
-  state_entry()
-  {
-    // コメント
-    string greeting = "こんにちは";
-    llSay(PUBLIC_CHANNEL, greeting);
-  }
+    state_entry()
+    {
+        // コメント
+        string greeting = "こんにちは";
+        llSay(PUBLIC_CHANNEL, greeting);
+    }
 }
 	</script_editor>
+	<text name="prefs_label">
+		スクリプトエディタオプション：
+	</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="タブ文字をスペースに変換"/>
+	<check_box label="ＬＳＬプリプロセッサを有効化" tool_tip="チェックすると、ＬＳＬプリプロセッサが有効になります。" name="preproc_checkbox"/>
+	<check_box label="スクリプト最適化" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトが使用するスペースを最適化します。" name="preprocoptimizer_checkbox"/>
+	<check_box label="switch()ステートメント" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトのフロー制御にswitch()ステートメントの使用を許可します。" name="preprocswitch_checkbox"/>
+	<check_box label="遅延リスト" tool_tip="チェックすると、ＬＳＬプリプロセッサはリスト処理に構文拡張を使用できるようになります。" name="preproclazy_checkbox"/>
+	<check_box label="#includesでローカルディスク参照" tool_tip="チェックすると、ＬＳＬプリプロセッサは#includeステートメントでローカルディスク上のファイルを参照することを許可します。" name="preprocinclude_checkbox"/>
+	<text name="lslpreprocinclude_textbox">
+		プリプロセッサのインクルードパス：
+	</text>
+	<button label="…" label_selected="参照" name="SetPreprocInclude"/>
+	<text name="advanced_label">
+		高度なオプション：
+	</text>
+	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="llOwnerSayをスクリプトデバッグウィンドウにルーティングする"/>
+	<check_box name="FSScriptEditorRecompileButton_checkbox" label="再コンパイルボタンを有効にする（#includeスクリプトに便利）"/>
+	<button name="close_btn" label="ＯＫ"/>
 </floater>
