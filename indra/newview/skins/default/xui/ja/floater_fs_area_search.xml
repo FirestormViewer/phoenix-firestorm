@@ -62,6 +62,7 @@
 			<check_box name="filter_perm_copy" label="コピー"/>
 			<check_box name="filter_perm_modify" label="修正"/>
 			<check_box name="filter_perm_transfer" label="再販・譲渡"/>
+			<check_box name="filter_reflection_probe" label="反射プローブ" tool_tip="自動プローブは含まれず、手動プローブのみが含まれます。グラフィック設定でミラーが有効になっている場合のみ、ミラープローブが含まれます。反射範囲が「なし」に設定されている場合、またはプローブがベイクされていない場合は、オブジェクトが識別されない可能性があります。"/>
 			<check_box name="filter_for_sale" label="次の価格帯で販売"/>
 			<text name="and">
 				〜
@@ -92,6 +93,7 @@
 			<check_box name="exclude_attachment" label="装着物"/>
 			<check_box name="exclude_physical" label="物理"/>
 			<check_box name="exclude_temporary" label="一時的"/>
+			<check_box name="exclude_reflection_probes" label="反射プローブ"/>
 			<check_box name="exclude_childprim" label="子プリム"/>
 			<check_box name="exclude_neighbor_region" label="隣接するリージョン"/>
 			<button name="apply" label="適用"/>
