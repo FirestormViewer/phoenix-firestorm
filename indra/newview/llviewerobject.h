@@ -214,6 +214,7 @@ public:
     const uuid_vec_t& getSavedGLTFMaterialIds() const { return mSavedGLTFMaterialIds; };
     const gltf_materials_vec_t& getSavedGLTFOverrideMaterials() const { return mSavedGLTFOverrideMaterials; };
     void saveGLTFMaterials();
+    void updateSavedGLTFMaterial(S32 te);
     void clearSavedGLTFMaterials();
     // </FS>
 

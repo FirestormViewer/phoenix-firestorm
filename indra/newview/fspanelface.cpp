@@ -737,7 +737,6 @@ void FSPanelFace::onMatTabChange()
         if(objectp)
         {
             last_mat = curr_mat;
-            gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
             // Iterate through the linkset and mark each object for update
             for (LLObjectSelection::iterator iter = LLSelectMgr::getInstance()->getSelection()->begin();
                  iter != LLSelectMgr::getInstance()->getSelection()->end(); ++iter)
@@ -760,6 +759,7 @@ void FSPanelFace::onMatTabChange()
 
         // Since we allow both PBR and BP textures to be applied at the same time,
         // we need to hide or show the GLTF material only locally based on the current tab.
+        gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
         if (curr_mat != MATMEDIA_PBR)
             LLSelectMgr::getInstance()->hideGLTFMaterial();
         else
