@@ -706,6 +706,8 @@
 		<menu_item_check label="HTTP Текстуры" name="HTTP Textures"/>
 		<menu_item_call label="Сжатие изображений" name="Compress Images"/>
 		<menu_item_call label="Проверка сжатия файла" name="Compress File Test"/>
+		<menu_item_call label="Primfeed тест авторизации" name="primfeed_auth_test"/>
+		<menu_item_call label="Primfeed сброс авторизации" name="primfeed_auth_clear"/>
 		<menu_item_call label="Включить Visual Leak Detector" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Вывод минидампа при отладке" name="Output Debug Minidump"/>
 		<menu_item_check label="Окно консоли при следующем запуске" name="Console Window"/>

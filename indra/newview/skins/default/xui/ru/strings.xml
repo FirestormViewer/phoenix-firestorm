@@ -399,9 +399,8 @@ support@secondlife.com.
 	<string name="TestingDisconnect">
 		Тестирование отключения клиента
 	</string>
-
 	<string name="SocialFlickrConnecting">
-		Соединение с Flickr...
+		Подключение к Flickr...
 	</string>
 	<string name="SocialFlickrPosting">
 		Публикация...
@@ -410,15 +409,26 @@ support@secondlife.com.
 		Отключение от Flickr...
 	</string>
 	<string name="SocialFlickrErrorConnecting">
-		Невозможно соедениться с Flickr
+		Проблема с подключением к Flickr
 	</string>
 	<string name="SocialFlickrErrorPosting">
-		Невозможно опубликовать в Flickr
+		Проблема с публикацией на Flickr
 	</string>
 	<string name="SocialFlickrErrorDisconnecting">
-		Невозможно отключиться от Flickr
+		Проблема с отключением от Flickr
 	</string>
-
+	<string name="SocialPrimfeedConnecting">
+		Подключение к Primfeed...
+	</string>
+	<string name="SocialPrimfeedNotAuthorized">
+		Не разрешено...
+	</string>
+	<string name="SocialPrimfeedPosting">
+		Публикация...
+	</string>
+	<string name="SocialPrimfeedErrorPosting">
+		Проблема с публикацией на Primfeed
+	</string>
 	<string name="BlackAndWhite">
 		Черное и Белое
 	</string>
@@ -5747,6 +5757,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="Command_Poser_Tooltip">
 		Позы вашего аватара или анимированного объекта
+	</string>
+	<string name="Command_Primfeed_Tooltip">
+		Публикуйте сообщения прямо в своей учетной записи Primfeed.
 	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Создание равнопрямоугольного изображения в формате 360°

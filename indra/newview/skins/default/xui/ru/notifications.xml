@@ -5331,6 +5331,12 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="ExodusFlickrUploadComplete">
 		Ваш снимок теперь может быть просмотрен [https://www.flickr.com/photos/me/[ID] тут].
 	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Ваш снимок теперь можно просмотреть [https://www.flickr.com/photos/me/[ID] здесь].
+	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+		Ваш пост Primfeed теперь можно просмотреть [[PF_POSTURL] здесь].
+	</notification>
 	<notification name="RegionTrackerAdd">
 		Какую бы метку вы хотели использовать
 для региона &quot;[REGION]&quot;?
@@ -5633,6 +5639,28 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification label="Подтвердить перезапись позы" name="ConfirmPoserOverwrite">
 		Перезаписать существующую позу “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
+	</notification>
+
+	<notification name="PrimfeedLoginRequestFailed">
+		Запрос на вход отклонен Primfeed.
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		Primfeed авторизация не удалась. Последовательность авторизации не была завершена.
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		Авторизация Primfeed уже выполняется. Пожалуйста, завершите авторизацию Primfeed в вашем веб-браузере, прежде чем повторить попытку.
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Авторизация Primfeed завершена. Теперь вы можете публиковать изображения в Primfeed.
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		Проверка пользователя Primfeed не удалась. Primfeed не распознал эту учетную запись, или вход не удался.
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		Вы уже связали эту учетную запись с Primfeed. Используйте кнопку сброса, если хотите начать заново.
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		Вход пользователя Primfeed успешен, но проверки статуса не пройдены. Проверьте, работает ли Primfeed.
 	</notification>
 
 </notifications>
