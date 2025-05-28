@@ -26,9 +26,9 @@
 			<check_box label="デフォルトのBentoアニメーション" name="play_default_bento_idle_animation_toggle" tool_tip="ここにチェックを入れると、デフォルトのプライオリティ０の Bento アニメーションを再生し、他の Bento アニメーションが動作していない時に、手、羽根、口、尻尾などの動きを停止、自然な状態にします。"/>
 			<check_box label="ログイン画面を表示しない" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
 			<check_box label="ログアウト画面を表示しない" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
-			<!-- 
+			<!--
 			<check_box label="表示名が表示されている場合でも、ユーザ名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザ名で並べ替わるようになります。"/>
-				-->
+			-->
 			<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的に描画することができます。"/>
 			<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものを描画するまでの秒数です。"/>
 			<check_box name="UseLSLBridge" label="ＬＳＬクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューアの機能を拡張できるようにします。"/>
@@ -41,6 +41,7 @@
 			</combo_box>
 			<slider name="manual_environment_change_transition_period" label="環境遷移時間:" tool_tip="手動で環境を変更した場合に、現在の設定から変化していく時間を秒単位で設定します。０にすると瞬時に切り替わるようになります。"/>
 			<check_box name="EnvironmentPersistAcrossLogin" label="セッションを越えて環境設定を保持" tool_tip="次回ログイン時にも現在の環境設定を保持するようにします。"/>
+			<check_box name="FSRepeatedEnvTogglesShared" label="環境キーバインドを繰り返し使用したときに共有環境に戻す" tool_tip="キーバインド（例：Ctrl＋Shift＋y）を繰り返して要求されたプリセットと共有環境を交互に切り替えます。"/>
 		</panel>
 		<!-- Protection -->
 		<panel label="保護" name="ProtectionTab">
