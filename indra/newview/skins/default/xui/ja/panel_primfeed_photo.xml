@@ -28,8 +28,8 @@
 		説明：
 	</text>
 	<check_box label="場所を含める" name="add_location_cb"/>
-	<check_box label="パブリックギャラリーに追加しますか？" name="primfeed_add_to_public_gallery"/>
-	<check_box label="商用コンテンツですか？" name="primfeed_commercial_content"/>
+	<check_box label="パブリックギャラリーに追加" name="primfeed_add_to_public_gallery"/>
+	<check_box label="商用コンテンツ" name="primfeed_commercial_content"/>
 	<combo_box name="rating_combobox" tool_tip="Primfeedのコンテンツレーティングを指定します。"/>
 	<check_box label="投稿後にブラウザを開きますか？" tool_tip="投稿後、Primfeedの投稿がWebブラウザで自動的に開きます。" name="primfeed_open_url_on_post"/>
 	<button label="シェア" name="post_photo_btn"/>

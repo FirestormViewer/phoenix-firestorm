@@ -132,7 +132,9 @@
 		強度：
 	</text>
 	<button label="適用" label_selected="適用" name="button apply to selection" tool_tip="選択した土地を修正します。"/>
-	<text name="link_num_obj_count" tool_tip="このリンク数は正確でない可能性があります。" />
+	<text name="link_num_obj_count" tool_tip="このリンク数は正確でない可能性があります。">
+		[DESC] [NUM]
+	</text>
 	<text name="selection_empty">
 		選択されていません。
 	</text>

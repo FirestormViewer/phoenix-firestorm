@@ -8014,7 +8014,7 @@ bool LLSelectMgr::canSelectObject(LLViewerObject* object, bool ignore_select_own
         {
             return false;
         }
-        // </FS:Ansariel>// Can't select objects that are not owned by you or group
+        // </FS:Ansariel>
     }
 
     // Can't select orphans

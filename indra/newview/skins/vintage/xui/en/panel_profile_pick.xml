@@ -95,13 +95,28 @@
         follows="left|right|top"
         layout="topleft" />
 
+<!-- [AS:chanayane] Preview button -->
+      <button
+        name="btn_preview"
+        tool_tip="Toggle preview of your pick description"
+        top_pad="-42"
+        left="290"
+        height="20"
+        width="20"
+        follows="top|right"
+        layout="topleft"
+        image_overlay="Profile_Group_Visibility_On"
+        is_toggle="true"
+        enabled="false"
+        visible="false"/>
+
       <text_editor
         name="pick_desc"
         trusted_content="false"
         always_show_icons="true"
         enabled="false"
-        left_delta="2"
-        top_pad="5"
+        left_delta="-288"
+        top_pad="27"
         height="100"
         right="-2"
         follows="all"
@@ -112,6 +127,7 @@
         max_length="1023"
         v_pad="3"
         word_wrap="true" />
+<!-- [/AS:chanayane] -->
 
       <line_editor
         name="pick_location"
