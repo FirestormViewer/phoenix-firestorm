@@ -272,6 +272,8 @@ void LLVOAvatarSelf::initInstance()
     doPeriodically(check_for_unsupported_baked_appearance, 120.0);
     doPeriodically(boost::bind(&LLVOAvatarSelf::checkStuckAppearance, this), 30.0);
 
+    initAllJoints(); // mesh thread uses LLVOAvatarSelf as a joint source
+
     mInitFlags |= 1<<2;
 }
 
@@ -1027,32 +1029,36 @@ void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 }
 
 // virtual
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//LLJoint *LLVOAvatarSelf::getJoint( const std::string &name )
-LLJoint *LLVOAvatarSelf::getJoint( const JointKey &name )
-// </FS:ND>
+//<FS:Ansariel> Joint-lookup improvements
+//LLJoint *LLVOAvatarSelf::getJoint(const std::string &name)
+LLJoint* LLVOAvatarSelf::getJoint(std::string_view name)
 {
+    std::lock_guard lock(mJointMapMutex);
     LLJoint *jointp = NULL;
     jointp = LLVOAvatar::getJoint(name);
     if (!jointp && mScreenp)
     {
-        //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-        //jointp = mScreenp->findJoint(name);
-        jointp = mScreenp->findJoint(name.mName);
-        // </FS:ND>
+        jointp = mScreenp->findJoint(name);
         if (jointp)
         {
-            //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+            //<FS:Ansariel> Joint-lookup improvements
             //mJointMap[name] = jointp;
-            mJointMap[name.mKey] = jointp;
-            // </FS:ND>
-        }
+            mJointMap[std::string(name)] = jointp;
+       }
     }
     if (jointp && jointp != mScreenp && jointp != mRoot)
     {
         llassert(LLVOAvatar::getJoint((S32)jointp->getJointNum())==jointp);
     }
     return jointp;
+}
+
+
+//virtual
+void LLVOAvatarSelf::renderJoints()
+{
+    std::lock_guard lock(mJointMapMutex);
+    LLVOAvatar::renderJoints();
 }
 
 // virtual

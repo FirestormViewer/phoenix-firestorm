@@ -137,6 +137,8 @@ protected:
     void updateMediaSettings();
     void updateMediaTitle();
 
+    bool isMediaTexSelected();
+
     void getState();
 
     void sendTexture();         // applies and sends texture
@@ -159,6 +161,7 @@ protected:
     // common controls and parameters for Blinn-Phong and PBR
     void onCopyFaces();     // <FS> Extended copy & paste buttons
     void onPasteFaces();
+    void onCommitHideWater();
     void onCommitGlow();
     void onCommitRepeatsPerMeter();
 
@@ -284,7 +287,7 @@ protected:
     static void syncMaterialRot(FSPanelFace* self, F32 rot, int te = -1);
 
     // unify all GLTF spinners with no switching around required -Zi
-    void onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data);
+    void onCommitGLTFUVSpinner(LLUICtrl* ctrl, const LLSD& user_data);
 
     void onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& user_data);  // Find all faces with same texture
     void onShowFindAllButton(LLUICtrl* ctrl, const LLSD& user_data);    // Find all faces with same texture
@@ -341,6 +344,8 @@ public:
     // public to give functors access -Zi
     LLTabContainer* mTabsMatChannel;
     void onMatTabChange();
+    void onMatChannelTabChange();
+    void onPBRChannelTabChange();
 
 private:
     bool isAlpha() { return mIsAlpha; }
@@ -378,6 +383,7 @@ private:
     S32     getCurrentMaterialType() const;
     LLRender::eTexIndex getCurrentMatChannel() const;
     LLRender::eTexIndex getCurrentPBRChannel() const;
+    LLGLTFMaterial::TextureInfo getCurrentPBRType(LLRender::eTexIndex pbr_channel) const;
 
     void    selectMaterialType(S32 material_type);
     void    selectMatChannel(LLRender::eTexIndex mat_channel);
@@ -396,6 +402,7 @@ private:
     // private Tab controls
     LLTabContainer*     mTabsPBRMatMedia;
     LLTabContainer*     mTabsPBRChannel;
+    bool                mSetChannelTab = false;
 
     // common controls and parameters for Blinn-Phong and PBR
     LLButton*           mBtnCopyFaces;
@@ -410,9 +417,9 @@ private:
     LLComboBox*         mComboAlphaMode;
     LLSpinCtrl*         mCtrlMaskCutoff;
     LLCheckBoxCtrl*     mCheckFullbright;
+    LLCheckBoxCtrl*     mCheckHideWater;
 
     // private Blinn-Phong texture transforms and controls
-    LLView*             mLabelTexGen;
     LLView*             mLabelBumpiness;
     LLComboBox*         mComboBumpiness;
     LLView*             mLabelShininess;
@@ -478,6 +485,7 @@ private:
 
     // Dirty flags - taken from llmaterialeditor.cpp ... LL please put this in a .h! -Zi
     U32 mUnsavedChanges; // flags to indicate individual changed parameters
+    U32 mRevertedChanges; // flags to indicate individual reverted parameters
 
     // Hey look everyone, a type-safe alternative to copy and paste! :)
     //
@@ -631,11 +639,14 @@ private:
     void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool& has_faces_without_pbr, bool force_set_values);
 
     void updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*)> func);
+    void updateSelectedGLTFMaterialsWithScale(std::function<void(LLGLTFMaterial*, const F32, const F32)> func);
     void updateGLTFTextureTransform(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*)> edit);
+    void updateGLTFTextureTransformWithScale(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*, const F32, const F32)> edit);
 
     void setMaterialOverridesFromSelection();
 
     bool mIsAlpha;
+    bool mExcludeWater;
 
     LLSD mClipboardParams;
 
@@ -722,6 +733,8 @@ public:
         static void getMaxSpecularRepeats(F32& repeats, bool& identical);
         static void getMaxNormalRepeats(F32& repeats, bool& identical);
         static void getCurrentDiffuseAlphaMode(U8& diffuse_alpha_mode, bool& identical, bool diffuse_texture_has_alpha);
+        static void selectionNormalScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter);
+        static void selectionSpecularScaleAutofit(FSPanelFace* panel_face, F32 repeats_per_meter);
 
         FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getNormalID,LLUUID::null, false, LLUUID::null);
         FS_DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getSpecularID,LLUUID::null, false, LLUUID::null);

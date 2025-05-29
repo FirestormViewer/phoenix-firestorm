@@ -62,9 +62,9 @@ public:
     void onResolutionCommit(LLUICtrl* ctrl);
 
 private:
-    std::string getWidthSpinnerName() const override { return "inventory_snapshot_width"; }
-    std::string getHeightSpinnerName() const override { return "inventory_snapshot_height"; }
-    std::string getAspectRatioCBName() const override { return "inventory_keep_aspect_check"; }
+    std::string getWidthSpinnerName() const override   { return "inventory_snapshot_width"; }
+    std::string getHeightSpinnerName() const override  { return "inventory_snapshot_height"; }
+    std::string getAspectRatioCBName() const override  { return "inventory_keep_aspect_check"; }
     std::string getImageSizeComboName() const override { return "texture_size_combo"; }
     std::string getImageSizePanelName() const override { return LLStringUtil::null; }
     LLSnapshotModel::ESnapshotType getSnapshotType() override;

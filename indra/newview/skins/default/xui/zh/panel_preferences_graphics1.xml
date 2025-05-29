@@ -205,6 +205,15 @@
 			<slider label="陰影品質" tool_tip="陰影的品質（預設為1）" name="ShadowResolution" />
 			<slider label="地形紋理彩現比例 (需要重新啟動)" name="RenderTerrainScale" tool_tip="確定地形紋理的彩現比例-較低的值更壓縮（需要重新啟動）" />
 			<slider label="銳化：" name="RenderSharpness"/>
+			<text name="ReflectionProbeCount">
+				反射探針數量：
+			</text>
+			<combo_box name="ProbeCount">
+				<combo_box.item label="無" name="1" />
+				<combo_box.item label="少量" name="32" />
+				<combo_box.item label="中等" name="64" />
+				<combo_box.item label="很多" name="128" />
+			</combo_box>
 			<text name="TonemapTypeText">
 				色調映射器：
 			</text>

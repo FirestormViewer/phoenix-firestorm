@@ -9,8 +9,6 @@
 	<string name="height">
 		身長：
 	</string>
-	<text name="avatar_height"/>
-	
 	<tab_container name="wearable_accordion">
 		<panel name="shape_body_tab_holder" title="身体">
 			<accordion name="shape_body_accordion">
@@ -42,9 +40,9 @@
 				<accordion_tab name="shape_mouth_tab" title="口"/>
 			</accordion>
 		</panel>
-		<panel name="shape_chin_tab_holder" title="あご">
+		<panel name="shape_chin_tab_holder" title="顎">
 			<accordion name="shape_chin_accordion">
-				<accordion_tab name="shape_chin_tab" title="あご"/>
+				<accordion_tab name="shape_chin_tab" title="顎"/>
 			</accordion>
 		</panel>
 		<panel name="shape_torso_tab_holder" title="上半身">

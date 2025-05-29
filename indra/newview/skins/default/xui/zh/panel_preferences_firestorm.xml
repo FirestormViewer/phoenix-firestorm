@@ -25,7 +25,8 @@
 				<combo_box.item label="飛行輔助：極端增壓" name="flight_extreme" />
 			</combo_box>
 			<slider name="manual_environment_change_transition_period" label="環境過渡時長：" tool_tip="在環境之間的轉換間隔時間（以秒為單位）。0 表示瞬時。" />
-			<check_box name="EnvironmentPersistAcrossLogin" label="在對談之間保持環境設定" tool_tip="在下次登入時保留當前的環境設定。" />
+			<check_box name="EnvironmentPersistAcrossLogin" label="在每次登入時保持環境設定" tool_tip="在下次登入時保留當前的環境設定。" />
+			<check_box name="FSRepeatedEnvTogglesShared" label="環境設定快捷鍵為開關式" tool_tip="重複按下快捷鍵可在想要的環境設定和共享環境之間切換。"/>
 		</panel>
 		<panel label="保護" name="ProtectionTab">
 			<check_box label="阻止通過簡單點擊坐在物件上" name="FSBlockClickSit" />

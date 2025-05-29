@@ -39,6 +39,7 @@
 #include "llchicletbar.h"
 #include "llemojihelper.h"
 #include "lltoolbarview.h"
+#include "llurlregistry.h"
 #include "llvoiceclient.h"
 
 constexpr F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
@@ -316,6 +317,9 @@ void FSFloaterIMContainer::removeFloater(LLFloater* floaterp)
         gSavedSettings.setBOOL(setting_name, true);
         floaterp->setCanClose(true);
     }
+
+    mFlashingTabStates.erase(floaterp);
+
     LLMultiFloater::removeFloater(floaterp);
 }
 // [/SL:KB]
@@ -345,21 +349,17 @@ void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
     }
 }
 
-void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)
+void FSFloaterIMContainer::onNewMessageReceived(const LLSD& msg)
 {
-    LLUUID session_id = data["session_id"].asUUID();
+    LLUUID session_id = msg["session_id"].asUUID();
     LLFloater* floaterp = get_ptr_in_map(mSessions, session_id);
     LLFloater* current_floater = LLMultiFloater::getActiveFloater();
 
     // KC: Don't flash tab on friend status changes per setting
     if (floaterp && current_floater && floaterp != current_floater
-        && (gSavedSettings.getBOOL("FSIMChatFlashOnFriendStatusChange") || !data.has("from_id") || data["from_id"].asUUID().notNull()))
+        && (gSavedSettings.getBOOL("FSIMChatFlashOnFriendStatusChange") || !msg.has("from_id") || msg["from_id"].asUUID().notNull()))
     {
-        if (LLMultiFloater::isFloaterFlashing(floaterp))
-        {
-            LLMultiFloater::setFloaterFlashing(floaterp, false);
-        }
-        LLMultiFloater::setFloaterFlashing(floaterp, true);
+        startFlashingTab(floaterp, msg["message"].asString());
     }
 }
 
@@ -559,16 +559,15 @@ void FSFloaterIMContainer::addFlashingSession(const LLUUID& session_id)
     uuid_vec_t::iterator found = std::find(mFlashingSessions.begin(), mFlashingSessions.end(), session_id);
     if (found == mFlashingSessions.end())
     {
-        mFlashingSessions.push_back(session_id);
+        mFlashingSessions.emplace_back(session_id);
     }
+
+    checkFlashing();
 }
 
 void FSFloaterIMContainer::checkFlashing()
 {
-    if (mFlashingSessions.empty())
-    {
-        gToolBarView->flashCommand(LLCommandId("chat"), false);
-    }
+    gToolBarView->flashCommand(LLCommandId("chat"), !mFlashingSessions.empty(), isMinimized());
 }
 
 void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id)
@@ -584,5 +583,21 @@ void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const 
 void FSFloaterIMContainer::tabOpen(LLFloater* opened_floater, bool from_click)
 {
     LLEmojiHelper::instance().hideHelper(nullptr, true);
+
+    mFlashingTabStates.erase(opened_floater);
+}
+
+void FSFloaterIMContainer::startFlashingTab(LLFloater* floater, const std::string& message)
+{
+    const bool contains_mention = LLUrlRegistry::getInstance()->containsAgentMention(message);
+
+    auto& [session_floater, is_alt_flashing] = *(mFlashingTabStates.try_emplace(floater, false).first);
+    is_alt_flashing = is_alt_flashing || contains_mention;
+
+    if (LLMultiFloater::isFloaterFlashing(floater))
+    {
+        LLMultiFloater::setFloaterFlashing(floater, false);
+    }
+    LLMultiFloater::setFloaterFlashing(floater, true, is_alt_flashing);
 }
 // EOF

@@ -57,6 +57,8 @@
 static LLPanelInjector<LLPanelProfilePicks> t_panel_profile_picks("panel_profile_picks");
 static LLPanelInjector<LLPanelProfilePick> t_panel_profile_pick("panel_profile_pick");
 
+constexpr F32 REQUEST_TIMEOUT = 60;
+constexpr F32 LOCATION_CACHE_TIMOUT = 900;
 
 class LLPickHandler : public LLCommandHandler
 {
@@ -339,6 +341,7 @@ void LLPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 
 void LLPanelProfilePicks::processProperties(const LLAvatarData* avatar_picks)
 {
+    LL_DEBUGS("PickInfo") << "Processing picks for avatar " << getAvatarId() << LL_ENDL;
     LLUUID selected_id = mPickToSelectOnLoad;
     bool has_selection = false;
     if (mPickToSelectOnLoad.isNull())
@@ -349,6 +352,25 @@ void LLPanelProfilePicks::processProperties(const LLAvatarData* avatar_picks)
             if (active_pick_panel)
             {
                 selected_id = active_pick_panel->getPickId();
+            }
+        }
+    }
+
+    // Avoid pointlesly requesting parcel data,
+    // store previous values
+    std::map<LLUUID, std::string> parcelid_location_map;
+    std::map<LLUUID, LLUUID> pickid_parcelid_map;
+
+    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    {
+        LLPanelProfilePick* pick_panel = dynamic_cast<LLPanelProfilePick*>(mTabContainer->getPanelByIndex(tab_idx));
+        if (pick_panel && pick_panel->getPickId().notNull())
+        {
+            std::string location = pick_panel->getPickLocation();
+            if (!location.empty())
+            {
+                parcelid_location_map[pick_panel->getParcelID()] = pick_panel->getPickLocation();
+                pickid_parcelid_map[pick_panel->getPickId()] = pick_panel->getParcelID();
             }
         }
     }
@@ -367,6 +389,15 @@ void LLPanelProfilePicks::processProperties(const LLAvatarData* avatar_picks)
         pick_panel->setPickName(pick_name);
         pick_panel->setAvatarId(getAvatarId());
 
+        std::map<LLUUID, LLUUID>::const_iterator found_pick = pickid_parcelid_map.find(pick_id);
+        if (found_pick != pickid_parcelid_map.end())
+        {
+            std::map<LLUUID, std::string>::const_iterator found = parcelid_location_map.find(found_pick->second);
+            if (found != parcelid_location_map.end() && !found->second.empty())
+            {
+                pick_panel->setPickLocation(found_pick->second, found->second);
+            }
+        }
         mTabContainer->addTabPanel(
             LLTabContainer::TabPanelParams().
             panel(pick_panel).
@@ -386,6 +417,11 @@ void LLPanelProfilePicks::processProperties(const LLAvatarData* avatar_picks)
 
         LLPanelProfilePick* pick_panel = LLPanelProfilePick::create();
         pick_panel->setAvatarId(getAvatarId());
+        std::map<LLUUID, std::string>::const_iterator found = parcelid_location_map.find(data.parcel_id);
+        if (found != parcelid_location_map.end() && !found->second.empty())
+        {
+            pick_panel->setPickLocation(data.parcel_id, found->second);
+        }
         pick_panel->processProperties(&data);
         mTabContainer->addTabPanel(
             LLTabContainer::TabPanelParams().
@@ -711,12 +747,17 @@ void LLPanelProfilePick::processProperties(void* data, EAvatarProcessorType type
 
 void LLPanelProfilePick::processProperties(const LLPickData* pick_info)
 {
+    LL_DEBUGS("PickInfo") << "Processing properties for pick " << mPickId << LL_ENDL;
     mIsEditing = false;
     // <AS:Chanayane> Fix FIRE-35185 (disables link rendering while editing picks or 1st life)
     //mPickDescription->setParseHTML(true);
     mPickDescription->setParseHTML(!getSelfProfile());
     // </AS:Chanayane>
-    mParcelId = pick_info->parcel_id;
+    if (mParcelId != pick_info->parcel_id)
+    {
+        mParcelId = pick_info->parcel_id;
+        mPickLocationStr.clear();
+    }
     setSnapshotId(pick_info->snapshot_id);
     if (!getSelfProfile())
     {
@@ -726,8 +767,11 @@ void LLPanelProfilePick::processProperties(const LLPickData* pick_info)
     setPickDesc(pick_info->desc);
     setPosGlobal(pick_info->pos_global);
 
-    // Send remote parcel info request to get parcel name and sim (region) name.
-    sendParcelInfoRequest();
+    if (mPickLocationStr.empty() || mLastRequestTimer.getElapsedTimeF32() > LOCATION_CACHE_TIMOUT)
+    {
+        // Send remote parcel info request to get parcel name and sim (region) name.
+        sendParcelInfoRequest();
+    }
 
     // *NOTE dzaporozhan
     // We want to keep listening to APT_PICK_INFO because user may
@@ -767,6 +811,12 @@ void LLPanelProfilePick::setPickDesc(const std::string& desc)
     mPickDescription->setValue(desc);
 }
 
+void LLPanelProfilePick::setPickLocation(const LLUUID &parcel_id, const std::string& location)
+{
+    setParcelID(parcel_id); // resets mPickLocationStr
+    setPickLocation(location);
+}
+
 // <AS:Chanayane> Preview button
 void LLPanelProfilePick::reparseDescription(const std::string& desc)
 {
@@ -777,6 +827,8 @@ void LLPanelProfilePick::reparseDescription(const std::string& desc)
 void LLPanelProfilePick::setPickLocation(const std::string& location)
 {
     getChild<LLUICtrl>("pick_location")->setValue(location);
+    mPickLocationStr = location;
+    mLastRequestTimer.reset();
 }
 
 void LLPanelProfilePick::onClickMap()
@@ -929,16 +981,19 @@ std::string LLPanelProfilePick::getLocationNotice()
 
 void LLPanelProfilePick::sendParcelInfoRequest()
 {
-    if (mParcelId != mRequestedId)
+    if (mParcelId != mRequestedId || mLastRequestTimer.getElapsedTimeF32() > REQUEST_TIMEOUT)
     {
         if (mRequestedId.notNull())
         {
             LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mRequestedId, this);
         }
+        LL_DEBUGS("PickInfo") << "Sending parcel request " << mParcelId << " for pick " << mPickId << LL_ENDL;
         LLRemoteParcelInfoProcessor::getInstance()->addObserver(mParcelId, this);
         LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(mParcelId);
 
         mRequestedId = mParcelId;
+        mLastRequestTimer.reset();
+        mPickLocationStr.clear();
     }
 }
 
@@ -952,6 +1007,20 @@ void LLPanelProfilePick::processParcelInfo(const LLParcelData& parcel_data)
     if (mParcelId.notNull())
     {
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
+    }
+}
+
+void LLPanelProfilePick::setParcelID(const LLUUID& parcel_id)
+{
+    if (mParcelId != parcel_id)
+    {
+        mParcelId = parcel_id;
+        mPickLocationStr.clear();
+    }
+    if (mRequestedId.notNull() && mRequestedId != parcel_id)
+    {
+        LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mRequestedId, this);
+        mRequestedId.setNull();
     }
 }
 

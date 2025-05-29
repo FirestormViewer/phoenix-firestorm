@@ -27,6 +27,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llfloatersnapshot.h" // <FS:Beq/> Fix share to flickr preview again
 #include "llfloaterflickr.h"
 
 #include "llagent.h"
@@ -243,7 +244,16 @@ void LLFlickrPhotoPanel::draw()
     // Draw the rest of the panel on top of it
     LLPanel::draw();
 }
-
+// <FS:Beq> FIRE-35002 - Flickr preview not updating whne opened directly from tool tray icon
+//static
+void LLFloaterFlickr::update()
+{
+    if (LLFloaterReg::instanceVisible("flickr"))
+    {
+        LLFloaterSnapshotBase::ImplBase::updatePreviewList( true, true );        
+    }
+}
+// </FS:Beq>
 LLSnapshotLivePreview* LLFlickrPhotoPanel::getPreviewView()
 {
     LLSnapshotLivePreview* previewp = (LLSnapshotLivePreview*)mPreviewHandle.get();

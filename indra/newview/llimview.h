@@ -414,6 +414,8 @@ public:
                     const LLVector3& position = LLVector3::zero,
                     bool is_region_msg = false,
                     U32 timestamp = 0,
+                    LLUUID display_id = LLUUID::null,
+                    std::string_view display_name = "",
                     bool is_announcement = false, // <FS:Ansariel> Special parameter indicating announcement
                     bool keyword_alert_performed = false // <FS:Ansariel> Pass info if keyword alert has been performed
                     );

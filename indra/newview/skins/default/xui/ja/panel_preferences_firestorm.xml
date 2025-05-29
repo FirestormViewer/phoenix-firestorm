@@ -1,330 +1,262 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Firestorm" name="firestorm">
-
-<tab_container label="Firestorm Prefs" name="tabs" >
-
-
-	<!-- Extras -->
-	
-	<panel label="特別機能" name="tab-extras" >
-	
-		<check_box name="checkMiscRLVa" label="他のビューワからのリモートコントロールを許可する。（RLVa機能）" />
-		<text name="textMiscRLVaRestart" left_pad="70" >
-			（再起動が必要）
-		</text>
-		<check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。" />
-		<check_box label="スクリプトが通信を行う時パーティクルを発生" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。" />
-		<check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。" />
-		<check_box label="デフォルトの Bento アニメーション" name="play_default_bento_idle_animation_toggle" tool_tip="ここにチェックを入れると、デフォルトのプライオリティ０の Bento アニメーションを再生し、他の Bento アニメーションが動作していない時に、手、羽根、口、尻尾などの動きを停止、自然な状態にします。" />
-		<check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
-		<check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
-		<!-- 
-		<check_box label="表示名が表示されている場合でも、ユーザー名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザー名で並べ替わるようになります。" />
-		 -->
-		<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的にレンダリングすることができます。" />
-		<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものをレンダリングするまでの秒数です。"/>
-
-        <check_box name="UseLSLBridge" label="LSLクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューワの機能を拡張できるようにします。"/>
-		<combo_box name="UseLSLFlightAssist" tool_tip="より高い場所での飛行やホバリングを支援するスクリプトを有効にします。">
-			<combo_box.item label="フライトアシスト＝無効" name="flight_disabled"/>
-			<combo_box.item label="フライトアシスト＝弱" name="flight_mild"/>
-			<combo_box.item label="フライトアシスト＝中" name="flight_moderate"/>
-			<combo_box.item label="フライトアシスト＝強" name="flight_strong"/>
-		</combo_box>
-		<slider name="manual_environment_change_transition_period" label="環境遷移時間:" tool_tip="手動で環境を変更した場合に、現在の設定から変化していく時間を秒単位で設定します。０にすると瞬時に切り替わるようになります。" />
-		<check_box name="EnvironmentPersistAcrossLogin" label="セッションを越えて環境設定を保持" tool_tip="次回ログイン時にも現在の環境設定を保持するようにします。"/>
-		
-    </panel>
-
-
-    <!-- Protection -->
-	
-    <panel label="保護" name="ProtectionTab">
-	
-        <check_box label="左クリックで座らないようにする" name="FSBlockClickSit" />
-        <check_box label="世界地図を開くスクリプト（llMapDestinatin）を許可する" name="ScriptsCanShowUI" />
-
-        <text name="revokepermissions_txt">
-			オブジェクトのアニメーション権限取消：
-		</text>
-        <radio_group name="FSRevokePerms" tool_tip="座ったり立ち上がったりした際に、それまで作用していたアニメーションを停止するか設定します">
-            <radio_item label="取消しない（標準の動作）" name="never_radio"/>
-            <radio_item label="座る時に取消" name="sit_radio"/>
-            <radio_item label="立ち上がる時に取消" name="stand_radio"/>
-            <radio_item label="座るまたは立ち上がる時に取消"  name="sitnstand_radio"/>
-        </radio_group>
-
-        <text name="SurfaceAreaThreshholdLabel">
-			テクスチャ遅延保護（オブジェクトによっては表示がおかしくなります）：
-        </text>
-        <check_box label="広大なテクスチャ領域を有する巨大なオブジェクトを自動的に隠す　閾値：" name="RenderVolumeSAProtection" tool_tip="ここにチェックを入れることで、表面に広大なテクスチャ領域が広がっているようなオブジェクトを表示することでビューワがクラッシュするのを防ぎます。デフォルト値は5000平方メートルに設定してありますが、このオプションを有効にした時に、表示されないオブジェクトがある場合には、この値を上げる必要があるかもしれません。"/>
-        <spinner name="RenderVolumeSAFrameMax" />
-
-        <check_box label="スパムからの保護" name="UseAntiSpam" />
-        <!-- FS:TS FIRE-23138: Enable spam protection for user's objects -->
-        <check_box label="自分が所有するオブジェクトからのスパムからも保護する" name="FSUseAntiSpamMine" tool_tip="ここにチェックを入れると、自分が所有するオブジェクトからのスパムに対しても保護されるようになります" />
-        <!-- /FS:TS FIRE-23138 -->
-        <text name="AntiSpamText1">
-           １メッセージあたりの最大受信行数：
-        </text>
-        <spinner name="_NACL_AntiSpamNewlines" tool_tip="１回のテキストメッセージで許容される最大行数。（70行がデフォルト）"/>
-        <text name="AntiSpamText2" >
-           同じソースからの最大受信イベント数：
-        </text>
-        <spinner name="_NACL_AntiSpamAmount" tool_tip="同じソースから2秒以内に送られて来る同様のイベントの許容数。（10回がデフォルト）"/>
-        <text name="AntiSpamText3" >
-           サウンド・プレイ・リクエストの許容回数：
-        </text>
-        <spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Event multiplier for sound play requests [Default: 10]"/>
-        <text name="AntiSpamText4" >
-           サウンド・プリロード・リクエスト許容回数：
-        </text>
-        <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
-        <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
-		<check_box label="支払い前に確認する。閾値：" name="FSConfirmPayments" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。" />
- 		<spinner name="FSPaymentConfirmationThreshold" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。" />
-	</panel>
-
-	<!-- アバター -->
-	
-	<panel label="アバター" name="firestorm_avatar" >
-
-        <text name="HeadMovement" >
-            マウスを追いかけるアバターの頭の動き（動かしたくない時は0に設定）：
-        </text>
-        <slider label="マウスを追いかける時に頭が縦に動く範囲：" tool_tip="マウスを追いかける時に頭が垂直方向（上下）に動く範囲を度で設定します。" name="PitchFromMousePositionSlider" />
-        <text name="PitchFromMousePositionText">
-            度
-        </text>
-        <slider label="マウスを追いかける時に頭が横に動く範囲：" tool_tip="マウスを追いかける時に頭が水平方向（左右）に動く範囲を度で設定します。" name="YawFromMousePositionSlider" />
-        <text name="YawFromMousePositionText" >
-            度
-        </text>
-        <text name="note_lookat" >
-             （アバターの視線に関する設定は「プライバシー」タブにあります。）
-        </text>
-        
-        <check_box label="アバターのランダムな目の動きを抑止する" name="FSStaticEyes" />
-
-        <!-- LGGカラービーム -->
-		
-        <text name="BeamPrefs" >
-            選択ビームのパーティクル効果
-        </text>
-        <view_border name="BeamDivisor" />
-
-        <button name="BeamColor_delete" label="削除" tool_tip="現在の設定を削除します。" />
-
-        <combo_box name="BeamColor_combo" tool_tip="選択ビームの色設定を選択します。"/>
-
-        <button name="BeamColor_new" label="新規作成" tool_tip="色設定を新たに作成します" />
-
-        <button name="BeamColor_refresh" label="リスト更新" tool_tip="色設定のリストを更新します。" />
-
-        <button name="PhoenixBeamPrev_rainbow" label="" />
-
-        <slider name="FSMaxBeamsPerSecond" label="1秒あたりの発生数：" tool_tip="1秒間に発生するビームの数を秒単位で設定します。40がデフォルトです。" />
-
-        <check_box label="選択ビームを有効にする" name="SLPartBeam" />
-
-        <check_box label="SLパーティクルチャット" name="FSParticleChat" />
-
-        <view_border name="BeamDivisor2" />
-
-        <combo_box name="FSBeamShape_combo" tool_tip="パーティクルビームの形を選択します。" />
-
-        <button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。" />
-
-        <button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形をカスタマイズします。" />
-
-        <button name="refresh_beams" label="リスト更新" tool_tip="ビームのリストを更新します。" />
-
-        <button name="PhoenixBeamPrev_Phoenix" label="" />
-
-        <slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。" />
-
-		<text name="BridgeProtocols">
-			LSL-Client Bridge による外部プロトコルの統合:
-		</text>
-		<check_box label="内蔵AOを有効または無効にするのに OpenCollar プロトコルの使用を許可" name="BridgeIntegrationOC" />
-		<check_box label="内蔵AOを有効または無効にするのに LockMeister プロトコルの使用を許可" name="BridgeIntegrationLM" />
-    </panel>
-
-    <!-- 制作 -->
-	
-    <panel label="制作1" name="BuildTab">
-
-		<text name="text_box_objprams">
-			デフォルトのサイズ
-        </text>
-		<text name="text_box_objprams2">
-			設定
-        </text>
-		<text name="text_box_objprams3">
-			テクスチャ
-        </text>
-        <view_border name="SizeBorder"/>
-		<view_border name="SettingBorder"/>
-        <view_border name="TextureBorder"/>
-        <spinner label="X方向" name="X size" label_width="40" width="120"/>
-        <spinner label="Y方向" name="Y size" label_width="40" width="120"/>
-        <spinner label="Z方向" name="Z size" label_width="40" width="120"/>
-		<check_box label="ファントム" name="FSBuildPrefs_PhantomToggle"/>
-        <check_box label="物理" name="FSBuildPrefs_PhysicalToggle"/>
-        <check_box label="臨時" name="FSBuildPrefs_TemporaryToggle"/>
-        <combo_box name="material" left="180">
-             <combo_item name="Stone" label="石"/>
-             <combo_item name="Metal" label="金属"/>
-             <combo_item name="Glass" label="ガラス"/>
-             <combo_item name="Wood" label="木"/>
-             <combo_item name="Flesh" label="肌"/>
-             <combo_item name="Plastic" label="プラスチック"/>
-             <combo_item name="Rubber" label="ゴム"/>
-        </combo_box>
-		<texture_picker label="テクスチャ" name="texture control" tool_tip="クリックして画像を選択します。" />
-        <color_swatch label="色" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。" />
-        <spinner label="透明度" name="alpha" />
-        <spinner label="グロー" name="glow" />
-        <check_box label="明るさ全開" name="EmFBToggle" />
-        <combo_box name="combobox shininess" tool_tip="Set the amount of shine for the object" >
-          <combo_item name="None" label="なし"/>
-          <combo_item name="Low" label="低"/>
-          <combo_item name="Medium" label="中"/>
-          <combo_item name="High" label="高"/>
-        </combo_box>
-		
-		<check_box name="FSBuildPrefs_EmbedItem" label="新規作成プリムにアイテムを埋め込む" />
-		<view_border name="embed_item_drop_target_rect" />
-		<fs_embedded_item_drop_target name="embed_item" tool_tip="ここに持ち物をドロップします。">
-			ここに持ち物をドロップ
-		</fs_embedded_item_drop_target>
-		<view_border name="build_item_add_disp_rect" />
-		<text name="build_item_add_disp_rect_txt" tool_tip="">
-			現在の設定: [ITEM]
-		</text>
-		<!--
-        <text name="text_box_permissions">
-          権限
-        </text>
-        <view_border name="PermissionsBorder"/>
-        <text name="text_box_permnextowner">
-          次のオーナー:
-        </text>
-        <check_box label="修正を許可" name="next_owner_modify" tool_tip="修正権限を付与します。" />
-        <check_box label="コピーを許可" tool_tip="コピー権限を付与します。" name="next_owner_copy" />
-        <check_box label="転送を許可" tool_tip="転送権限を付与します。" name="next_owner_transfer" />
-        <text name="text_box_permnote1">
-          この設定は新規アップ
-        </text>
-        <text name="text_box_permnote2">
-          ロードにも適用される
-		</text>
-		-->
-        <text name="text_box_pivotpoint">
-			回転の中心
-        </text>
-        <view_border name="PivotBorder"/>
-		<check_box label="ルートプリムに軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle" />
-        <check_box label="回転軸を表す矢印をルートプリムに表示" tool_tip="デフォルトでは、回転を表す矢印はリンクセットの中心に表示されます。ここにチェックを入れると、そのリンクセットのルートプリムに回転軸が表示されます。" name="EmBuildPrefsActualRoot_toggle"/>
-        <spinner label="X軸" name="X pos" label_width="40" width="120"/>
-        <spinner label="Y軸" name="Y pos" label_width="40" width="120"/>
-        <spinner label="Z軸" name="Z pos" label_width="40" width="120"/>
-        <check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても50%、つまり中央に設定されています。" name="FSPivotPercToggle"/>
-		<button label="デフォルトの作成権限" name="fs_default_creation_permissions" />
-		<text name="text_box_scripting_font" width="150">
-			スクリプトエディタのフォント:
-		</text>
-		<combo_box name="FSScriptingFontName" tool_tip="LSLスクリプトエディタで使用するフォントの名前">
-			<combo_item name="Monospace" value="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" value="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
-		</combo_box>
-		<combo_box name="FSScriptingFontSize" tool_tip="LSLスクリプトエディタで使用するフォントの大きさ">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
-			<combo_item name="Small" label="小"/>
-			<combo_item name="Medium" label="中"/>
-			<combo_item name="Large" label="大"/>
-		</combo_box>
-		<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox" />
-		<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox" />
-		<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox" />
-		<check_box label="簡単なリスト追加" tool_tip="ここにチェックを入れると、リストに値を追加する場合に簡単な方法を利用することができるようになります。" name="preproclazy_checkbox" />
-		<check_box label="#includeを使用" tool_tip="ここにチェックを入れると、ローカルディスク上のファイルを参照して#includeが利用できるようになります。" name="preprocinclude_checkbox" left_delta="130" />
-		<text name="lslpreprocinclude_textbox">
-			#includeで使用するファイルのパス：
-		</text>
-		<line_editor name="preprocinclude_location" />
-		<button label="参照" name="SetPreprocInclude" />
-		<text name="externaleditor_textbox">
-			外部エディタ：
-		</text>
-		<button label="参照" label_selected="参照" name="SetExternalEditor" />
-		
-	</panel>
-
-    <panel label="制作2" name="BuildTab2">
-
-		<check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="FSBuildPrefsRenderHighlight_toggle"/>
-		<check_box label="選択している土地の境界をハイライトする" name="RenderParcelSelection" />
-		<check_box label="土地の境界を制作できる最大の高さまで表示する" name="FSRenderParcelSelectionToMaxBuildHeight" />
-		<check_box label="遠くのオブジェクトを選択しない" name="LimitSelectDistance"/>
-		<check_box label="ドラッグできる距離を制限 (m):" name="LimitDragDistance" />
-		<spinner name="MaxDragDistance" tool_tip="移動ツールの一回の操作で移動できる最大の距離を設定します。(開始位置からメートル単位で設定) [Default: 48.000]" />
-		<text name="RotationStepText1">
-			「グリッドにスナップ」を使用していない時
-		</text>
-		<spinner name="RotationStep" tool_tip="回転ツールで回転できる範囲をここに設定した値の倍数に制限するようにします。 [Default: 1.0]" />
-		<text name="RotationStepText2">
-			度の倍数に回転できる範囲を制限
-		</text>
-		<check_box label="リンク解除の際に警告メッセージを出すリンクセットのオブジェクト数：" name="FSUnlinkConfirmEnabled"/>
-		<text name="MinObjectsForUnlinkConfirmText2"	>
-			 個以上
-		</text>
-		<check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
-        <check_box label="持ち物内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、持ち物内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
-		<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
-        <check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab" />
-        <check_box label="制作モードにおいて、CAPSロックの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、制作モードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture" />
-		<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar" />
-		<check_box label="スクリプト情報の詳細を拡張" tool_tip="ここにチェックを入れると、スクリプト情報の基本機能を拡張して、制作者には有益な様々な詳細情報が得られるようになります。" name="FSScriptInfoExtended" />
-
-	</panel>
-	
-	<!--Uploads-->
-	<panel label="アップロード" name="UploadsTab">
-		<text name="title">
-			現在アップロード先に指定されているフォルダ：
-		</text>
-		
-		<text name="title_images">
-			画像
-		</text>
-		<text name="upload_textures" />
-		
-		<text name="title_sounds">
-			サウンド
-		</text>
-		<text name="upload_sounds" />
-		
-		<text name="title_animations">
-			アニメーション
-		</text>
-		<text name="upload_animation" />
-		
-		<text name="title_models">
-			モデル
-		</text>
-		<text name="upload_models" />
-		
-		<text name="upload_help">
-アップロード先のフォルダを変更するには、インベントリ上でそのフォルダを右クリックして
+	<panel.string name="BeamsOffLabel">
+		＝＝オフ＝＝
+	</panel.string>
+	<string name="EmbeddedItemNotSet">
+		未セット
+	</string>
+	<string name="EmbeddedItemNotAvailable">
+		利用不可
+	</string>
+	<string name="EmbeddedItemNotLoggedIn">
+		未ログイン
+	</string>
+	<tab_container label="Firestorm初期設定" name="tabs">
+		<!-- Extras -->
+		<panel label="特殊機能" name="tab-extras">
+			<check_box name="checkMiscRLVa" label="他のビューアからのリモートコントロールを許可（ＲＬＶａ機能）"/>
+			<!-- left_padを削除しないこと -->
+			<text name="textMiscRLVaRestart" left_pad="50">
+				（要再起動）
+			</text>
+			<check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
+			<check_box label="スクリプト通信時にパーティクル効果を出す" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。"/>
+			<check_box label="目標のアバターが３ｍ以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
+			<check_box label="デフォルトのBentoアニメーション" name="play_default_bento_idle_animation_toggle" tool_tip="ここにチェックを入れると、デフォルトのプライオリティ０の Bento アニメーションを再生し、他の Bento アニメーションが動作していない時に、手、羽根、口、尻尾などの動きを停止、自然な状態にします。"/>
+			<check_box label="ログイン画面を表示しない" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
+			<check_box label="ログアウト画面を表示しない" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
+			<!--
+			<check_box label="表示名が表示されている場合でも、ユーザ名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザ名で並べ替わるようになります。"/>
+			-->
+			<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的に描画することができます。"/>
+			<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものを描画するまでの秒数です。"/>
+			<check_box name="UseLSLBridge" label="ＬＳＬクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューアの機能を拡張できるようにします。"/>
+			<combo_box name="UseLSLFlightAssist" tool_tip="より高い場所での飛行やホバリングを支援するスクリプトを有効にします。">
+				<combo_box.item label="飛行アシスト：無効" name="flight_disabled"/>
+				<combo_box.item label="飛行アシスト：弱" name="flight_mild"/>
+				<combo_box.item label="飛行アシスト：中" name="flight_moderate"/>
+				<combo_box.item label="飛行アシスト：強" name="flight_strong"/>
+				<combo_box.item label="飛行アシスト：最強" name="flight_extreme"/>
+			</combo_box>
+			<slider name="manual_environment_change_transition_period" label="環境遷移時間:" tool_tip="手動で環境を変更した場合に、現在の設定から変化していく時間を秒単位で設定します。０にすると瞬時に切り替わるようになります。"/>
+			<check_box name="EnvironmentPersistAcrossLogin" label="セッションを越えて環境設定を保持" tool_tip="次回ログイン時にも現在の環境設定を保持するようにします。"/>
+			<check_box name="FSRepeatedEnvTogglesShared" label="環境キーバインドを繰り返し使用したときに共有環境に戻す" tool_tip="キーバインド（例：Ctrl＋Shift＋y）を繰り返して要求されたプリセットと共有環境を交互に切り替えます。"/>
+		</panel>
+		<!-- Protection -->
+		<panel label="保護" name="ProtectionTab">
+			<check_box label="左クリックで座らないようにする" name="FSBlockClickSit"/>
+			<check_box label="ワールドマップを開くスクリプト（llMapDestinatin）を許可する" name="ScriptsCanShowUI"/>
+			<text name="revokepermissions_txt">
+				オブジェクトのアニメーション権限取消：
+			</text>
+			<radio_group name="FSRevokePerms" tool_tip="座ったり立ち上がったりした際に、それまで作用していたアニメーションを停止するか設定します">
+				<radio_item label="取消しない（標準の動作）" name="never_radio"/>
+				<radio_item label="座る時に取消" name="sit_radio"/>
+				<radio_item label="立ち上がる時に取消" name="stand_radio"/>
+				<radio_item label="座るまたは立ち上がる時に取消" name="sitnstand_radio"/>
+			</radio_group>
+			<text name="SurfaceAreaThreshholdLabel">
+				テクスチャ遅延保護（オブジェクトによっては表示がおかしくなります）：
+			</text>
+			<check_box label="広大なテクスチャ領域を有する巨大なオブジェクトを自動的に隠す　閾値：" name="RenderVolumeSAProtection" tool_tip="ここにチェックを入れることで、表面に広大なテクスチャ領域が広がっているようなオブジェクトを表示することでビューアがクラッシュするのを防ぎます。デフォルト値は5000平方メートルに設定してありますが、このオプションを有効にした時に、表示されないオブジェクトがある場合には、この値を上げる必要があるかもしれません。"/>
+			<check_box label="スパムからの保護" name="UseAntiSpam"/>
+			<!-- FS:TS FIRE-23138: Enable spam protection for user's objects -->
+			<check_box label="自分が所有するオブジェクトからのスパムからも保護する" name="FSUseAntiSpamMine" tool_tip="ここにチェックを入れると、自分が所有するオブジェクトからのスパムに対しても保護されるようになります。"/>
+			<!-- /FS:TS FIRE-23138 -->
+			<text name="AntiSpamText1">
+				１メッセージあたりの最大受信行数：
+			</text>
+			<spinner name="_NACL_AntiSpamNewlines" tool_tip="１回のテキストメッセージで許容される最大行数です。（70行がデフォルト）"/>
+			<text name="AntiSpamText2">
+				同じソースからの最大受信イベント数：
+			</text>
+			<spinner name="_NACL_AntiSpamAmount" tool_tip="同じソースから2秒以内に送られて来る同様のイベントの許容数です。（10回がデフォルト）"/>
+			<text name="AntiSpamText3">
+				サウンド再生リクエストの許容回数：
+			</text>
+			<spinner name="_NACL_AntiSpamSoundMulti" tool_tip="サウンド再生リクエストのイベント乗数を指定します。（デフォルト：１０）"/>
+			<text name="AntiSpamText4">
+				サウンドプリロードのリクエスト許容回数：
+			</text>
+			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="サウンドプリロード要求のイベント乗数を指定します。（デフォルト：４）"/>
+			<button name="AntiSpamUnblock" label="スパム源は全て無視する"/>
+			<check_box label="支払い前に確認する。閾値：" name="FSConfirmPayments" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。"/>
+			<spinner name="FSPaymentConfirmationThreshold" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。"/>
+		</panel>
+		<!-- アバター -->
+		<panel label="アバター" name="firestorm_avatar">
+			<text name="HeadMovement">
+				マウスを追いかけるアバターの頭の動き（動かしたくない時は0に設定）：
+			</text>
+			<slider label="マウスを追いかける時に頭が縦に動く範囲：" tool_tip="マウスを追いかける時に頭が垂直方向（上下）に動く範囲を度で設定します。" name="PitchFromMousePositionSlider"/>
+			<text name="PitchFromMousePositionText">
+				度
+			</text>
+			<slider label="マウスを追いかける時に頭が横に動く範囲：" tool_tip="マウスを追いかける時に頭が水平方向（左右）に動く範囲を度で設定します。" name="YawFromMousePositionSlider"/>
+			<text name="YawFromMousePositionText">
+				度
+			</text>
+			<text name="note_lookat">
+				（アバターの視線に関する設定は「プライバシー」タブにあります。）
+			</text>
+			<check_box label="アバターのランダムな目の動きを抑止する" name="FSStaticEyes"/>
+			<!-- LGGカラービーム -->
+			<text name="BeamPrefs">
+				選択ビームのパーティクル効果
+			</text>
+			<button name="BeamColor_delete" label="削除" tool_tip="現在の設定を削除します。"/>
+			<combo_box name="BeamColor_combo" tool_tip="選択ビームの色設定を選択します。"/>
+			<button name="BeamColor_new" label="新規作成" tool_tip="色設定を新規作成します"/>
+			<button name="BeamColor_refresh" label="リスト更新" tool_tip="色設定のリストを更新します。"/>
+			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
+			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
+			<check_box label="ＳＬパーティクルチャット" name="FSParticleChat" tool_tip="選択データ（選択開始／停止およびグローバル位置）をチャットチャンネル9000に送信します。"/>
+			<combo_box name="FSBeamShape_combo" tool_tip="ビームのパーティクルの形状を選択します。"/>
+			<button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。"/>
+			<button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形状をカスタマイズします。"/>
+			<button name="refresh_beams" label="リスト更新" tool_tip="ビームのリストを更新します。"/>
+			<slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。"/>
+			<text name="BridgeProtocols">
+				ＬＳＬクライアントブリッジによる外部プロトコルとの統合：
+			</text>
+			<check_box label="内蔵ＡＯを有効または無効にするのにOpenCollarプロトコルの使用を許可" name="BridgeIntegrationOC"/>
+			<check_box label="内蔵ＡＯを有効または無効にするのにLockMeisterプロトコルの使用を許可" name="BridgeIntegrationLM"/>
+		</panel>
+		<!-- ビルド -->
+		<panel label="ビルド１" name="BuildTab">
+			<text name="text_box_objprams">
+				デフォルトのサイズ
+			</text>
+			<text name="text_box_objprams2">
+				設定
+			</text>
+			<text name="text_box_objprams3">
+				テクスチャ
+			</text>
+			<spinner label="Ｘ方向" name="X size"/>
+			<spinner label="Ｙ方向" name="Y size"/>
+			<spinner label="Ｚ方向" name="Z size"/>
+			<check_box label="ファントム" name="FSBuildPrefs_PhantomToggle"/>
+			<check_box label="物理" name="FSBuildPrefs_PhysicalToggle"/>
+			<check_box label="一時的" name="FSBuildPrefs_TemporaryToggle"/>
+			<combo_box name="material">
+				<combo_item name="Stone" label="石"/>
+				<combo_item name="Metal" label="金属"/>
+				<combo_item name="Glass" label="ガラス"/>
+				<combo_item name="Wood" label="木"/>
+				<combo_item name="Flesh" label="肉"/>
+				<combo_item name="Plastic" label="プラスチック"/>
+				<combo_item name="Rubber" label="ゴム"/>
+			</combo_box>
+			<texture_picker label="テクスチャ" name="texture control" tool_tip="クリックして画像を選択します。"/>
+			<color_swatch label="色" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+			<spinner label="透明度" name="alpha"/>
+			<spinner label="グロー" name="glow"/>
+			<check_box label="明るさ全開" name="EmFBToggle"/>
+			<combo_box name="combobox shininess" tool_tip="オブジェクトの輝きの量を設定します。">
+				<combo_item name="None" label="なし"/>
+				<combo_item name="Low" label="低"/>
+				<combo_item name="Medium" label="中"/>
+				<combo_item name="High" label="高"/>
+			</combo_box>
+			<check_box name="FSBuildPrefs_EmbedItem" label="新規作成プリムにアイテムを埋め込む"/>
+			<fs_embedded_item_drop_target name="embed_item" tool_tip="ここにインベントリをドロップします。">
+				ここにインベントリをドロップ
+			</fs_embedded_item_drop_target>
+			<text name="build_item_add_disp_rect_txt">
+				現在の設定：[ITEM]
+			</text>
+			<text name="text_box_pivotpoint">
+				中心軸のポイント
+			</text>
+			<check_box label="ルートプリムの軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle"/>
+			<spinner label="Ｘ軸" name="X pos"/>
+			<spinner label="Ｙ軸" name="Y pos"/>
+			<spinner label="Ｚ軸" name="Z pos"/>
+			<check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても５０％、つまり中央に設定されています。" name="FSPivotPercToggle"/>
+			<button label="デフォルトの作成権限" name="fs_default_creation_permissions"/>
+			<text name="text_box_scripting_font">
+			スクリプトエディタのフォント：
+			</text>
+			<combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォント名を指定します。">
+				<combo_item name="Monospace" label="等幅"/>
+			</combo_box>
+			<combo_box name="FSScriptingFontSize" tool_tip="ＬＳＬスクリプトエディタで使用するフォントの大きさを指定します。">
+				<combo_item name="Monospace" label="等幅"/>
+				<combo_item name="Small" label="小"/>
+				<combo_item name="Medium" label="中"/>
+				<combo_item name="Large" label="大"/>
+			</combo_box>
+			<check_box label="ＬＳＬプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox"/>
+			<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox"/>
+			<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox"/>
+			<check_box label="簡単なリスト追加" tool_tip="ここにチェックを入れると、リストに値を追加する場合に簡単な方法を利用することができるようになります。" name="preproclazy_checkbox"/>
+			<check_box label="#includeを使用" tool_tip="ここにチェックを入れると、ローカルディスク上のファイルを参照して#includeが利用できるようになります。" name="preprocinclude_checkbox" left_delta="130"/>
+			<text name="lslpreprocinclude_textbox">
+				#includeで使用するファイルのパス：
+			</text>
+			<button label="参照" label_selected="参照" name="SetPreprocInclude"/>
+			<text name="externaleditor_textbox">
+				外部エディタ：
+			</text>
+			<button label="参照" label_selected="参照" name="SetExternalEditor"/>
+		</panel>
+		<panel label="ビルド２" name="BuildTab2">
+			<check_box label="選択したプリムのハイライトを有効にする" tool_tip="チェックを外すと、黄色／青のアウトライン効果は描画されず、多数のプリムが選択された場合のパフォーマンスが向上します。" name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="選択中の区画の境界をハイライトする" name="RenderParcelSelection"/>
+			<check_box label="ビルドできる最大高度の境界を表示する" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+			<check_box label="遠くにあるオブジェクトを選択しない" name="LimitSelectDistance"/>
+			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）［デフォルト：128.000］"/>
+			<check_box label="ドラッグできる制限距離（ｍ）：" name="LimitDragDistance"/>
+			<spinner name="MaxDragDistance" tool_tip="移動ツールで１度に移動できる最大距離を入力します。（開始点からのメートル指定）［デフォルト：48.000］"/>
+			<text name="RotationStepText1">
+				「グリッドにスナップ」を使用していない時
+			</text>
+			<spinner name="RotationStep" tool_tip="回転ツールによるすべての回転はこの単位の倍数に制限されます。［デフォルト：1.0］"/>
+			<text name="RotationStepText2">
+				度の倍数に回転できる範囲を制限する
+			</text>
+			<check_box label="リンク解除の際に警告メッセージを出すリンクセットのオブジェクト数：" name="FSUnlinkConfirmEnabled"/>
+			<text name="MinObjectsForUnlinkConfirmText2">
+				個以上
+			</text>
+			<check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
+			<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
+			<check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab"/>
+			<check_box label="ビルドモードにおいて、CapsLockの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、ビルドモードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture"/>
+			<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar"/>
+			<check_box label="アニメーションプレビューの詳細情報は常に展開する" tool_tip="アニメーションプレビューフローターの詳細なアニメーション情報をデフォルトで展開します。" name="FSAnimationPreviewExpanded"/>
+			<check_box label="拡張スクリプト情報の詳細を有効にする" tool_tip="有効にすると、ビルダーに役立つさまざまな詳細を含む基本的なスクリプト情報機能が拡張されます。" name="FSScriptInfoExtended"/>
+			<check_box label="「装着先」メニューの装着スポットをアルファベット順に並べ替える（要再起動）" tool_tip="有効にすると、「装着先」メニューの装着物のスポットのリストがアルファベット順に並び替えられます。" name="FSSortAttachmentSpotsAlphabetically"/>
+			<check_box label="ツールフローターで新式の[APP_NAME]テクスチャパネルを使用する（要再起動）" tool_tip="有効にすると、テクスチャ編集ツールは改良されたＦＳワークフローを使用し、BlinnPhongの編集が可能になります。（要再起動）" name="FSUseNewTexturePanel"/>
+		</panel>
+		<!--Uploads-->
+		<panel label="アップロード" name="UploadsTab">
+			<text name="title">
+				現在アップロード先に指定されているフォルダ：
+			</text>
+			<text name="title_images">
+				画像
+			</text>
+			<text name="title_sounds">
+				サウンド
+			</text>
+			<text name="title_animations">
+				アニメーション
+			</text>
+			<text name="title_models">
+				モデル
+			</text>
+			<text name="title_pbr">
+				ＰＢＲマテリアル
+			</text>
+			<text name="upload_help">
+				アップロード先のフォルダを変更するには、インベントリ上でそのフォルダを右クリックして
 メニューから「デフォルトのフォルダとして使用」を選択して下さい。
-		</text>
-		<button name="reset_default_folders" label="デフォルトフォルダをリセット" />
-	</panel>
-
-</tab_container>
+			</text>
+			<button name="reset_default_folders" label="デフォルトフォルダをリセット"/>
+		</panel>
+	</tab_container>
 </panel>

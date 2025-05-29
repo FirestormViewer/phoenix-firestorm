@@ -463,6 +463,8 @@
 			<menu_item_call label="Wymuś wyjątek programu" name="Force Software Exception"/>
 			<menu_item_call label="Wymuś wyjątek systemu operacyjnego" name="Force OS Exception" />
 			<menu_item_call label="Wymuś wyjątek we współprogramie (coroutine)" name="Force Software Exception in Coroutine" />
+			<menu_item_call label="Wymuś wyjątek w koroprocedurze" name="Force a Crash in a Coroprocedure" />
+			<menu_item_call label="Wymuś wyjątek w kolejce roboczej" name="Force a Crash in a Work Queue" />
 			<menu_item_call label="Wymuś awarię w wątku" name="Force a Crash in a Thread" />
 			<menu_item_call label="Wymuś rozłączenie Przeglądarki" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Symulacja wycieku pamięci" name="Memory Leaking Simulation"/>
@@ -603,6 +605,7 @@
 			<menu_item_call label="Pokaż ustawienia kolorów" name="Color Settings" />
 			<menu_item_call label="Przeładuj ustawienia koloru" name="Reload Color Settings"/>
 			<menu_item_call label="Pokaż test czcionki" name="Show Font Test"/>
+			<menu_item_call label="Pokaż test SLapps" name="Show SLapps Test" />
 			<menu_item_call label="Wczytaj z XML" name="Load from XML"/>
 			<menu_item_call label="Zapisz do XML" name="Save to XML"/>
 			<menu_item_check label="Pokaż nazwy XUI" name="Show XUI Names"/>
@@ -655,6 +658,8 @@
 		<menu_item_check label="Szafa przez HTTP" name="HTTP Inventory"/>
 		<menu_item_call label="Kompresuj obrazki" name="Compress Images"/>
 		<menu_item_call label="Test kompresji pliku" name="Compress File Test" />
+		<menu_item_call label="Test uwierzytelniania Primfeed" name="primfeed_auth_test" />
+		<menu_item_call label="Reset uwierzytelniania Primfeed" name="primfeed_auth_clear" />
 		<menu_item_call label="Włącz wizualny detektor wycieków pamięci" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Mały zrzut wyjścia debugowania" name="Output Debug Minidump"/>
 		<menu_item_check label="Aktywacja okna konsoli podczas następnego uruchomienia" name="Console Window"/>

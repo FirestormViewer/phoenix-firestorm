@@ -1,55 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-
-    <floater.string
-     name="participant_added"
-     value="[NAME] がこの会話に招待されました。"/>
-    <floater.string
-     name="multiple_participants_added"
-     value="[NAME] が会話に招待されました。"/>
-    <floater.string
-     name="tooltip_to_separate_window"
-     value="この会話を別ウィンドウで開きます。"/>
-    <floater.string
-     name="tooltip_to_main_window"
-     value="この会話をメインウィンドウに戻します。"/>
-    <floater.string
-     name="start_call_button_tooltip"
-     value="ボイス接続を開きます。"/>
-    <floater.string
-     name="end_call_button_tooltip"
-     value="ボイス接続を切断します。"/>
-    <floater.string
-     name="expcol_button_not_tearoff_tooltip"
-     value="この列を畳みます。"/>
-    <floater.string
-     name="expcol_button_tearoff_and_expanded_tooltip"
-     value="参加者リストを畳みます。"/>
-    <floater.string
-     name="expcol_button_tearoff_and_collapsed_tooltip"
-     value="参加者リストを開きます。"/>
-    <view name="contents_view">
-	<layout_stack name="main_stack">
-		<layout_panel name="toolbar_panel">
-			<menu_button name="view_options_btn" tool_tip="View/sort options" />
-            <menu_button name="gear_btn" tool_tip="Actions on selected person" />
-            <button name="add_btn" tool_tip="Add someone to this conversation" />
-            <button name="voice_call_btn" tool_tip="Open voice connection" />
-            <output_monitor name="speaking_indicator" />
-            <button name="close_btn" tool_tip="End this conversation" />
-            <button name="expand_collapse_btn" tool_tip="Collapse/Expand this pane" />
-            <button name="tear_off_btn" />
-		</layout_panel>
-		<layout_panel name="chat_layout_panel">
-			<layout_stack name="input_panels">
-				<layout_panel name="input_editor_layout_panel">
-					<chat_editor label="宛先" name="chat_editor"/>
-				</layout_panel>
-				<layout_panel name="input_button_layout_panel">
-					<button name="minz_btn" tool_tip="メッセージパネルの表示 / 非表示"/>
-				</layout_panel>
-			</layout_stack>
-		</layout_panel>
-	</layout_stack>
+	<floater.string name="participant_added" value="[NAME]から会話への参加を招待されました。"/>
+	<floater.string name="multiple_participants_added" value="[NAME]が会話に招待されました。"/>
+	<floater.string name="tooltip_to_separate_window" value="この会話を別のウィンドウへ移動させます。"/>
+	<floater.string name="tooltip_to_main_window" value="この会話をメインウィンドウへ戻します。"/>
+	<floater.string name="start_call_button_tooltip" value="ボイスチャット接続を開きます。"/>
+	<floater.string name="end_call_button_tooltip" value="ボイスチャット接続を閉じます。"/>
+	<floater.string name="expcol_button_not_tearoff_tooltip" value="このペインを閉じます。"/>
+	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="参加者リストを閉じます。"/>
+	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="参加者リストを開きます。"/>
+	<view name="contents_view">
+		<layout_stack name="main_stack">
+			<layout_panel name="toolbar_panel">
+				<menu_button name="view_options_btn" tool_tip="表示／並べ替えのオプションを表示します。"/>
+				<menu_button name="gear_btn" tool_tip="選択した人物に対する操作を表示します。"/>
+				<button name="add_btn" tool_tip="この会話に他の人物を追加します。"/>
+				<button name="voice_call_btn" tool_tip="ボイスチャット接続を開きます。"/>
+				<button name="close_btn" tool_tip="この会話を終了します。"/>
+				<button name="expand_collapse_btn" tool_tip="このペインを開閉します。"/>
+			</layout_panel>
+			<layout_panel name="chat_layout_panel">
+				<layout_stack name="input_panels">
+					<layout_panel name="input_editor_layout_panel">
+						<button name="emoji_recent_panel_toggle_btn" tool_tip="最近利用した絵文字を表示／非表示します。"/>
+					</layout_panel>
+					<layout_panel name="input_button_layout_panel">
+						<button name="minz_btn" tool_tip="メッセージパネルの表示／非表示の切り替えを行います。"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="emoji_recent_layout_panel">
+				<text name="emoji_recent_empty_text">
+					最近使用した絵文字はここに表示されます。
+				</text>
+				<button name="emoji_picker_show_btn" label="参照" tool_tip="絵文字ピッカーを表示／非表示します。"/>
+			</layout_panel>
+		</layout_stack>
 	</view>
 </floater>

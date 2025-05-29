@@ -5,13 +5,9 @@
 選択した色のビーム光線を定義するか、右クリックして光線を
 削除して下さい。終わったら「保存」ボタンを押して下さい。
 	</text>
-
 	<color_swatch label="ビームの色" name="beam_color_swatch" tool_tip="クリックしてカラーピッカーを開き、ドットの色を変更して下さい。" />
-
-	<panel name="beamshape_draw" />
-
 	<button label="保存" name="beamshape_save" />
-	<button label="ロード" name="beamshape_load" />
+	<button label="読み込む" name="beamshape_load" />
 	<button label="クリア" name="beamshape_clear" />
 	<button label="取り消し" name="cancel" />
 </floater>

@@ -1012,9 +1012,9 @@ bool FSManipRotateJoint::handleMouseUp(S32 x, S32 y, MASK mask)
     if (hasMouseCapture())
     {   
         // Update the UI, by causing it to read back the position of the selected joints and aply those relative to the base rot
-        if (poser)
+        if (poser && mJoint)
         {
-            poser->updatePosedBones();
+            poser->updatePosedBones(mJoint->getName());
         } 
         
         // Release mouse

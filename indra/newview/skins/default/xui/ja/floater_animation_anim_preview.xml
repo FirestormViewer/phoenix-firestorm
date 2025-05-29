@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Anim Preview" title="ANIMATION.ANIM">
+<floater name="Anim Preview">
 	<text name="name_label">
 		名前：
 	</text>

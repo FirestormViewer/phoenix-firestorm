@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Fixed Environment" title="環境固定">
+<floater name="Fixed Environment" title="固定された環境">
 	<string name="edit_sky">
 		空を編集：
 	</string>
 	<string name="edit_water">
-		水を編集：
+		水面を編集：
 	</string>
 	<layout_stack name="floater_stack">
 		<layout_panel name="info_panel">
-			<text name="info_panel_label">名前：</text>
-			<button label="読み込み" name="btn_load" tool_tip="インベントリから環境の設定を読み込みます。" />
-			<button label="インポート" name="btn_import" tool_tip="古い形式の設定をディスクから読み込みます。" />
+			<text name="info_panel_label">
+				名前：
+			</text>
+			<button label="読み込む" name="btn_load" tool_tip="インベントリから設定を読み込みます。"/>
+			<button label="インポート" name="btn_import" tool_tip="ディスクから過去の設定をインポートします。"/>
 		</layout_panel>
 		<layout_panel name="button_panel">
 			<layout_stack name="button_bar_ls">
@@ -18,7 +20,7 @@
 					<button label="保存" name="btn_commit"/>
 				</layout_panel>
 				<layout_panel name="revert_btn_lp">
-					<button label="取り消し" name="btn_cancel" tool_tip="前回保存したバージョンに戻します。"/>
+					<button label="キャンセル" name="btn_cancel" tool_tip="最後に保存された状態に戻す。"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

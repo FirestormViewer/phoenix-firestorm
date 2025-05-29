@@ -107,6 +107,9 @@ bool LLPanelOutfitsInventory::postBuild()
     getChild<LLButton>(SAVE_BTN)->setCommitCallback(boost::bind(&LLPanelOutfitsInventory::saveOutfit, this, false));
     getChild<LLButton>(SAVE_AS_BTN)->setCommitCallback(boost::bind(&LLPanelOutfitsInventory::saveOutfit, this, true));
 
+    // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+    mTempAttachmentUpdateTimer.start();
+
     return true;
 }
 
@@ -252,6 +255,20 @@ void LLPanelOutfitsInventory::onSave()
 }
 
 // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+void LLPanelOutfitsInventory::draw()
+{
+    if (mTempAttachmentUpdateTimer.checkExpirationAndReset(1.f))
+    {
+        if (U32 tempAttachmentCount = (U32)LLAgentWearables::getTempAttachments().size(); tempAttachmentCount != mCurrentTempAttachmentCount)
+        {
+            mCurrentTempAttachmentCount = tempAttachmentCount;
+            onCOFChanged();
+        }
+    }
+
+    LLPanel::draw();
+}
+
 void LLPanelOutfitsInventory::onCOFChanged()
 {
     if (!isAgentAvatarValid())
@@ -264,7 +281,7 @@ void LLPanelOutfitsInventory::onCOFChanged()
     LLInventoryModel::cat_array_t cats;
     LLIsType is_of_type(LLAssetType::AT_OBJECT);
     gInventory.collectDescendentsIf(cof, cats, obj_items, LLInventoryModel::EXCLUDE_TRASH, is_of_type);
-    U32 attachments = static_cast<U32>(obj_items.size());
+    U32 attachments = static_cast<U32>(obj_items.size()) + mCurrentTempAttachmentCount;
 
     LLStringUtil::format_map_t args;
     args["COUNT"] = llformat("%d", attachments);

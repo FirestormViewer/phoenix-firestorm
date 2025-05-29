@@ -236,6 +236,16 @@
 		<slider label="Schattenqualität" tool_tip="Qualität der Schattendarstellung (Standard: 1)" name="ShadowResolution"/>
 		<slider label="Skalierung der Bodentexturen (Erfordert Neustart)" name="RenderTerrainScale" tool_tip="Setzt die Skalierung der Bodentexturen - niedriger bedeutet höhere Kompression"/>
 		<slider label="Schärfung" name="RenderSharpness"/>
+		<text name="ReflectionProbeCount">
+			Max Anzahl Reflexionstests:
+		</text>
+		<combo_box name="ProbeCount">
+			<combo_box.item label="Keine" name="1"/>
+			<combo_box.item label="Niedrig" name="32"/>
+			<combo_box.item label="Mittel" name="64"/>
+			<combo_box.item label="Hoch" name="128"/>
+			<combo_box.item label="Ultra" name="256"/>
+		</combo_box>
 		<text name="TonemapTypeText">
 			Tone Mapper:
 		</text>

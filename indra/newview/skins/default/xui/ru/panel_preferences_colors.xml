@@ -203,9 +203,16 @@
 			<slider label="Прозрачность:" name="console_background_opacity" tool_tip="Выберите прозрачность фона консоли"/>
 			<slider label="Прозрачн. фона плав. текста:" name="FSHudTextBackgroundOpacity" tool_tip="Выберите прозрачность фона плавающего текста" />
 			<text name="preferences_search_label">
-				Цвет подсветки поиска в настройках:
-			</text>
-			<color_swatch name="preferences_search_color" tool_tip="Выберите цвет подсветки поиска в настройках"/>
+                Цвета подсветки поиска в настройках:
+            </text>
+			<text name="preferences_search_bg_label" width="35">gi
+                Фон:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Выберите цвет фона подсветки поиска в настройках"/>
+			<text name="preferences_search_font_label" width="50">
+                Шрифт:
+            </text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Выберите цвет шрифта подсветки поиска в настройках"/>
 			<text name="area_search_beacon_color_label">
 				Цвет маяка зоны поиска:
 			</text>

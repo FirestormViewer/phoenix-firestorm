@@ -407,9 +407,13 @@ void LLViewerAssetStorage::queueRequestHttp(
         manager->enqueueCoprocedure(
             VIEWER_ASSET_STORAGE_CORO_POOL,
             "LLViewerAssetStorage::assetRequestCoro",
+            // <FS:Ansariel> [UDP Assets] Need request for UDP assets
+            //[this, uuid, atype, callback, user_data]
             [this, req, uuid, atype, callback, user_data]
             (LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t&, const LLUUID&)
             {
+                // <FS:Ansariel> [UDP Assets] Need request for UDP assets
+                //assetRequestCoro(uuid, atype, callback, user_data);
                 assetRequestCoro(req, uuid, atype, callback, user_data);
             });
     }
@@ -445,7 +449,7 @@ struct LLScopedIncrement
 };
 
 void LLViewerAssetStorage::assetRequestCoro(
-    LLViewerAssetRequest *req,
+    LLViewerAssetRequest *req, // <FS:Ansariel> [UDP Assets] Need request for UDP assets
     const LLUUID uuid,
     LLAssetType::EType atype,
     LLGetAssetCallback callback,
@@ -469,7 +473,7 @@ void LLViewerAssetStorage::assetRequestCoro(
         LL_WARNS_ONCE("ViewerAsset") << "Asset request fails: no region set" << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LLExtStat::NONE;
-        removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
+        removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status, 0);
         return;
     }
     else if (!gAgent.getRegion()->capabilitiesReceived())
@@ -491,7 +495,7 @@ void LLViewerAssetStorage::assetRequestCoro(
         LL_WARNS_ONCE("ViewerAsset") << "capsRecv got event" << LL_ENDL;
         LL_WARNS_ONCE("ViewerAsset") << "region " << gAgent.getRegion() << " mViewerAssetUrl " << mViewerAssetUrl << LL_ENDL;
     }
-    // <FS:Beq> FIRE-23657 [OPENSIM] Update the Viewer Asset Url irrespective of previous setting (Fix provided by Liru Færs)
+    // <FS:Beq> FIRE-23657 [OPENSIM] Update the Viewer Asset Url irrespective of previous setting (Fix provided by Liru FÃ¦rs)
     // if (mViewerAssetUrl.empty() && gAgent.getRegion())
     if (gAgent.getRegion())
     // </FS:Beq>
@@ -501,7 +505,7 @@ void LLViewerAssetStorage::assetRequestCoro(
     if (mViewerAssetUrl.empty())
     {
         // <FS:Ansariel> [UDP Assets]
-        if (!LLGridManager::instance().isInSecondLife() && mUpstreamHost.isOk())
+        if (!LLGridManager::instance().isInSecondLife() && mUpstreamHost.isOk() && req)
         {
             req->mWithHTTP = false;
 
@@ -529,7 +533,7 @@ void LLViewerAssetStorage::assetRequestCoro(
         LL_WARNS_ONCE("ViewerAsset") << "asset request fails: caps received but no viewer asset cap found" << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LLExtStat::NONE;
-        removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
+        removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status, 0);
         // <FS:Ansariel> [UDP Assets]
         }
         // </FS:Ansariel> [UDP Assets]
@@ -563,6 +567,7 @@ void LLViewerAssetStorage::assetRequestCoro(
 
     mCountCompleted++;
 
+    S32 bytes_fetched = 0;
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
     if (!status)
@@ -600,7 +605,7 @@ void LLViewerAssetStorage::assetRequestCoro(
             LLUUID temp_id;
             temp_id.generate();
             LLFileSystem vf(temp_id, atype, LLFileSystem::WRITE);
-            req->mBytesFetched = size;
+            bytes_fetched = size;
             if (!vf.write(raw.data(),size))
             {
                 // TODO asset-http: handle error
@@ -629,7 +634,7 @@ void LLViewerAssetStorage::assetRequestCoro(
     }
 
     // Clean up pending downloads and trigger callbacks
-    removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
+    removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status, bytes_fetched);
 }
 
 std::string LLViewerAssetStorage::getAssetURL(const std::string& cap_url, const LLUUID& uuid, LLAssetType::EType atype)

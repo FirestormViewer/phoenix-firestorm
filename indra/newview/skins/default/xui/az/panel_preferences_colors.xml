@@ -202,9 +202,16 @@
 			<color_swatch name="console_background" tool_tip="Konsol rəngini seçin"/>
 			<slider label="Şəffaflıq:" name="console_background_opacity" tool_tip="Konsol fonunun şəffaflığını seçin"/>
 			<text name="preferences_search_label">
-				Seçim axtarışının rəngi:
-			</text>
-			<color_swatch name="preferences_search_color" tool_tip="Seçim axtarışının rəngini seçin"/>
+                Seçim axtarışının rəngləri:
+            </text>
+			<text name="preferences_search_bg_label" width="35">
+                Fon:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Seçim axtarışının fon rəngini seçin"/>
+			<text name="preferences_search_font_label">
+                Şrift:
+            </text>
+			<color_swatch name="preferences_search_front_color" tool_tip="Seçim axtarışının şrift rəngini seçin"/>
 			<text name="area_search_beacon_color_label">
 				Axtarış zonasının işarənin rəngi:
 			</text>

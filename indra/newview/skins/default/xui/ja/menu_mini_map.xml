@@ -1,73 +1,69 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu  label="ミニマップ" name="Popup">
-	<menu_item_call label="プロフィールの表示" name="View Profile" />
-	<menu label="プロフィールの表示" name="View Profiles" />
-	<menu_item_call label="連絡先セットに追加" name="Add to Set Multiple" />
-	<menu_item_call label="カメラ" name="Cam" />
-	<menu name="MarkAvatar" label="マークする...">
-		<menu_item_call label="赤" name="MarkRed" />
-		<menu_item_call label="緑" name="MarkGreen" />
-		<menu_item_call label="青" name="MarkBlue" />
-		<menu_item_call label="紫" name="MarkPurple" />
-		<menu_item_call label="黄" name="MarkYellow" />
-		<menu_item_separator />
-		<menu_item_call label="マーク解除" name="Clear Mark" />
-		<menu_item_separator/>
-		<menu_item_call label="マークを全て解除" name="Clear Marks" />
+<menu label="ミニマップ" name="Popup">
+	<menu_item_call label="プロフィールを閲覧" name="View Profile"/>
+	<menu label="プロフィールを閲覧" name="View Profiles"/>
+	<menu_item_call label="コンタクトセットに追加" name="Add to Set Multiple"/>
+	<menu_item_call label="カメラ" name="Cam"/>
+	<menu name="MarkAvatar" label="マーク…">
+		<menu_item_call label="赤" name="MarkRed"/>
+		<menu_item_call label="緑" name="MarkGreen"/>
+		<menu_item_call label="青" name="MarkBlue"/>
+		<menu_item_call label="紫" name="MarkPurple"/>
+		<menu_item_call label="黄" name="MarkYellow"/>
+		<menu_item_call label="マークをクリア" name="Clear Mark"/>
+		<menu_item_call label="全てのマークをクリア" name="Clear Marks"/>
 	</menu>
-	
-	<menu name="More Options" label="オプション...">
-		<menu_item_call label="フレンド登録" name="Add Friend" />
-		<menu_item_call label="連絡先セットに追加" name="Add to Set" />
-		<menu_item_call label="フレンドを削除" name="Remove Friend" />
-		<menu_item_call label="IM" name="IM" />
-		<menu_item_call label="コール" name="Call" />
-		<menu_item_call label="世界地図" name="Map" />
-		<menu_item_call label="共有" name="Share" />
-		<menu_item_call label="支払う" name="Pay" />
-		<menu_item_call label="テレポートを送る" name="teleport" />
-		<menu_item_call label="テレポートを要求する" name="request_teleport" />
-		<menu_item_call label="テレポートする" name="teleport_to" />
-		<menu_item_call label="グループに招待" name="GroupInvite" />
-		<menu_item_call label="スクリプト情報取得" name="ScriptInfo" />
-
-		<menu_item_separator />
-
-		<menu_item_check label="ブロック／ブロック解除" name="Block/Unblock" />
-		<menu_item_call label="報告する" name="report" />
-		<menu_item_call label="動けなくする" name="freeze" />
-		<menu_item_call label="区画から追放" name="eject" />
-		<menu_item_call label="地域から追放" name="kick" />
-		<menu_item_call label="ホームへ強制送還" name="teleport_home" />
-		<menu_item_call label="地域への立入禁止" name="estate_ban" />
-		<menu_item_call label="非表示にする" name="derender" />
-		<menu_item_call label="非表示リストに追加" name="derender_permanent" />
+	<menu name="More Options" label="その他のオプション…">
+		<menu_item_call label="フレンドに追加" name="Add Friend"/>
+		<menu_item_call label="コンタクトセットに追加" name="Add to Set"/>
+		<menu_item_call label="フレンド削除" name="Remove Friend"/>
+		<menu_item_call label="ＩＭ" name="IM"/>
+		<menu_item_call label="コール" name="Call"/>
+		<menu_item_call label="マップ" name="Map"/>
+		<menu_item_call label="共有" name="Share"/>
+		<menu_item_call label="支払う" name="Pay"/>
+		<menu_item_call label="テレポートのオファー" name="teleport"/>
+		<menu_item_call label="テレポートのリクエスト" name="request_teleport"/>
+		<menu_item_call label="テレポート先" name="teleport_to"/>
+		<menu_item_call label="グループに招待" name="GroupInvite"/>
+		<menu_item_call label="スクリプト情報を取得" name="ScriptInfo"/>
+		<menu_item_check label="ブロック／ブロック解除" name="Block/Unblock"/>
+		<menu_item_call label="嫌がらせの報告" name="report"/>
+		<menu_item_call label="フリーズ" name="freeze"/>
+		<menu_item_call label="区画から追放" name="eject"/>
+		<menu_item_call label="不動産からキック" name="kick"/>
+		<menu_item_call label="不動産からホームにテレポート" name="teleport_home"/>
+		<menu_item_call label="不動産からバン" name="estate_ban"/>
+		<menu_item_call label="描画解除" name="derender"/>
+		<menu_item_call label="描画解除＋ブラックリスト" name="derender_permanent"/>
 	</menu>
-	<menu_item_separator name="Profile Separator" />
-	<menu_item_call label="追跡する" name="Start Tracking" />
-	<menu_item_call label="追跡をやめる" name="Stop Tracking" />
-	<menu_item_separator name="Stop Tracking Separator" />
+	<menu_item_call label="追跡開始" name="Start Tracking"/>
+	<menu_item_call label="追跡停止" name="Stop Tracking"/>
 	<menu label="ズーム" name="Minimap Zoom">
-		<menu_item_call label="ズーム（近）" name="Zoom Close"/>
-		<menu_item_call label="ズーム（中）" name="Zoom Medium"/>
-		<menu_item_call label="ズーム（遠）" name="Zoom Far"/>
-		<menu_item_call label="ズーム（デフォルト）" name="Zoom Default"/>
+		<menu_item_check label="かなり近く" name="Zoom very close"/>
+		<menu_item_check label="近く" name="Zoom close"/>
+		<menu_item_check label="中（デフォルト）" name="Zoom medium"/>
+		<menu_item_check label="遠く" name="Zoom far"/>
 	</menu>
 	<menu label="表示" name="Minimap Show">
-		<menu_item_check label="オブジェクト" name="Objects" />
-		<menu_item_check label="物理オブジェクト" name="Physical Objects" />
-		<menu_item_check label="スクリプトオブジェクト" name="Scripted Objects" />
-		<menu_item_check label="テンプレズオブジェクト" name="Temp On Rez Objects" />
-		<menu_item_separator />
-		<menu_item_check label="境界線" name="Property Lines" />
-		<menu_item_check label="売り地" name="Parcels for Sale" />
-		<menu_item_separator />
+		<menu_item_check label="オブジェクト" name="Objects"/>
+		<menu_item_check label="物理的なオブジェクト" name="Physical Objects"/>
+		<menu_item_check label="スクリプト化されたオブジェクト" name="Scripted Objects"/>
+		<menu_item_check label="一時的にRezされたオブジェクト" name="Temp On Rez Objects"/>
+		<menu_item_check label="物件のライン" name="Property Lines"/>
+		<menu_item_check label="販売中の区画" name="Parcels for Sale"/>
 	</menu>
-	<menu_item_check label="地図を回転" name="Rotate Map"/>
-	<menu_item_check label="中央へ自動移動" name="Auto Center"/>
-	<menu_item_check label="チャットレンジ" name="Chat Distance Ring" />
-    <menu_item_separator />
-    <menu_item_call label="土地のプロフィール" name="Place Profile" />
-	<menu_item_call label="世界地図" name="World Map"/>
+	<menu_item_check label="北を上に" name="North at top"/>
+	<menu_item_check label="カメラの向きを上に" name="Camera at top"/>
+	<menu_item_check label="マップの自動センター" name="Auto-center map"/>
+	<menu_item_call label="マップの再センター" name="Re-center map"/>
+	<menu label="チャットの距離のリング" name="Chat Distance Rings Menu">
+		<menu_item_check label="チャットの届く範囲のリングを表示" name="Chat Distance Rings"/>
+		<menu_item_check label="ささやきが届く距離のリングを表示" name="Whisper Distance Ring"/>
+		<menu_item_check label="通常チャットが届く距離のリングを表示" name="Chat Distance Ring"/>
+		<menu_item_check label="シャウトが届く距離のリングを表示" name="Shout Distance Ring"/>
+	</menu>
+	<menu_item_call label="この土地について" name="About Land"/>
+	<menu_item_call label="場所のプロフィール" name="Place Profile"/>
+	<menu_item_call label="ワールドマップ" name="World Map"/>
 </menu>
-

@@ -19,7 +19,7 @@
 	<check_box label="Собств. яркость" name="checkbox fullbright"/>
 	<button tool_tip="Копировать" name="copy_face_btn" />
 	<button tool_tip="Вставить" name="paste_face_btn" />
-	<text name="label_matmedia">Материал</text>
+	<!-- <text name="label_matmedia">Материал</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Материалы" name="Materials"/>
 		<combo_box.item label="Металлическая шероховатость PBR" name="PBR"/>

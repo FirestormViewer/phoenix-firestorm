@@ -273,7 +273,6 @@
 	<!-- Added combo box to control the background behavior for prims -->
         <combo_box
                control_name="FSHudTextShowBackground"
-               enabled_control="FSHudTextUseHoverHighlight"
                height="23"
                layout="topleft"
                left_pad="10"

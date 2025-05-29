@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_hair_panel">
 	<panel name="avatar_hair_color_panel">
-		<texture_picker label="テクスチャ" name="Texture" tool_tip="クリックして写真を選択"/>
+		<texture_picker label="テクスチャ" name="Texture" tool_tip="クリックで画像を選択します。"/>
 	</panel>
 	<accordion name="wearable_accordion">
 		<panel name="hair_color_tab_holder" title="色">
@@ -19,9 +19,9 @@
 				<accordion_tab name="hair_eyebrows_tab" title="眉毛"/>
 			</accordion>
 		</panel>
-		<panel name="hair_facial_tab_holder" title="フェイシャル">
+		<panel name="hair_facial_tab_holder" title="顔面">
 			<accordion name="hair_facial_accordion">
-				<accordion_tab name="hair_facial_tab" title="フェイシャル"/>
+				<accordion_tab name="hair_facial_tab" title="顔面"/>
 			</accordion>
 		</panel>
 	</accordion>

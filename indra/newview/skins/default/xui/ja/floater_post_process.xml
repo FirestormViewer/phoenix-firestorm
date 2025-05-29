@@ -18,7 +18,7 @@
 			<slider label="赤" name="wmiColorFilterBaseR"/>
 			<slider label="緑" name="wmiColorFilterBaseG"/>
 			<slider label="青" name="wmiColorFilterBaseB"/>
-			<slider label="I" name="wmiColorFilterBaseI"/>
+			<slider label="Ｉ" name="wmiColorFilterBaseI"/>
 		</panel>
 		<panel label="暗視" name="wmiNightVisionPanel">
 			<check_box label="有効" name="wmiNightVisionToggle"/>

@@ -119,9 +119,9 @@ public:
     bool allStartingRotationsAreZero() const;
 
     /// <summary>
-    /// Sets all of the non-Collision Volume rotations to zero.
+    /// Sets all of the non-Collision Volume base-and-delta rotations to zero, and clears the undo/redo queue.
     /// </summary>
-    void setAllRotationsToZero();
+    void setAllRotationsToZeroAndClearUndo();
 
 private:
     /// <summary>

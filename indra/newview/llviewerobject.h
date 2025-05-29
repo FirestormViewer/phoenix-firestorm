@@ -100,6 +100,8 @@ typedef void (*inventory_callback)(LLViewerObject*,
                                    S32 serial_num,
                                    void*);
 
+typedef std::vector<LLPointer<LLGLTFMaterial> > gltf_materials_vec_t; // <FS/> [FIRE-35138] typedef for saved GLTF override materials
+
 // for exporting textured materials from SL
 struct LLMaterialExportInfo
 {
@@ -135,6 +137,10 @@ protected:
         LLNetworkData *data;
     };
     std::unordered_map<U16, ExtraParameter*> mExtraParameterList;
+    // <FS> [FIRE-35138] Saved GLTF materials to be restored when needed
+    uuid_vec_t mSavedGLTFMaterialIds;
+    gltf_materials_vec_t mSavedGLTFOverrideMaterials;
+    // </FS>
 
 public:
     typedef std::list<LLPointer<LLViewerObject> > child_list_t;
@@ -203,6 +209,14 @@ public:
     // update_server - if true, will send updates to server and clear most overrides
     void setRenderMaterialID(S32 te, const LLUUID& id, bool update_server = true, bool local_origin = true);
     void setRenderMaterialIDs(const LLUUID& id);
+
+    // <FS> [FIRE-35138] Helpers for GLTF Materials since we support PBR and BP at same time
+    const uuid_vec_t& getSavedGLTFMaterialIds() const { return mSavedGLTFMaterialIds; };
+    const gltf_materials_vec_t& getSavedGLTFOverrideMaterials() const { return mSavedGLTFOverrideMaterials; };
+    void saveGLTFMaterials();
+    void updateSavedGLTFMaterial(S32 te);
+    void clearSavedGLTFMaterials();
+    // </FS>
 
     virtual bool    isHUDAttachment() const { return false; }
     virtual bool    isTempAttachment() const;
@@ -411,6 +425,8 @@ public:
     LLViewerTexture     *getTEImage(const U8 te) const;
     LLViewerTexture     *getTENormalMap(const U8 te) const;
     LLViewerTexture     *getTESpecularMap(const U8 te) const;
+
+    void clearTEWaterExclusion(const U8 te);
 
     bool                        isImageAlphaBlended(const U8 te) const;
 
@@ -709,6 +725,7 @@ private:
     // forms task inventory request after some time passed, marks request as pending
     void fetchInventoryDelayed(const F64 &time_seconds);
     static void fetchInventoryDelayedCoro(const LLUUID task_inv, const F64 time_seconds);
+    static void fetchInventoryFromCapCoro(const LLUUID task_inv);
 
 public:
     //
@@ -850,6 +867,7 @@ protected:
 
     static void processTaskInvFile(void** user_data, S32 error_code, LLExtStat ext_status);
     bool loadTaskInvFile(const std::string& filename);
+    void loadTaskInvLLSD(const LLSD &inv_result);
     void doInventoryCallback();
 
     bool isOnMap();

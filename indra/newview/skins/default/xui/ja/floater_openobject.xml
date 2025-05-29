@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="objectcontents" title="オブジェクトの中身">
+<floater name="objectcontents" title="オブジェクトのコンテンツ">
 	<text name="object_name">
-		[DESC]:
+		[DESC]：
 	</text>
 	<layout_stack name="button_bar_ls">
 		<layout_panel name="copy_btn_lp">
-			<flyout_button label="持ち物にコピー" name="copy_flyout">
-				<flyout_button.item label="アウトフィットと中身を入れ替え" name="replace" value="replace" />
-				<flyout_button.item label="アウトフィットに中身を追加" name="add" value="add" />
+			<flyout_button label="インベントリにコピー" name="copy_flyout">
+				<flyout_button.item label="中身をアウトフィットと置き換える" name="replace"/>
+				<flyout_button.item label="中身をアウトフィットに追加する" name="add"/>
 			</flyout_button>
 		</layout_panel>
 		<layout_panel name="cancel_btn_lp">
-			<button label="取り消し" label_selected="取り消し" name="cancel_button" />
+			<button label="キャンセル" label_selected="キャンセル" name="cancel_button"/>
 		</layout_panel>
 	</layout_stack>
 </floater>

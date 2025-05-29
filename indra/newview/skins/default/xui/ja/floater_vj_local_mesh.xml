@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Local Mesh" title="ローカルメッシュ">
+	<tab_container name="local_mesh_tabs">
+		<panel name="local_mesh_assets_panel" label="ローカルメッシュのアセット" title="ローカルメッシュのアセット">
+			<fs_scroll_list name="l_name_list">
+				<column name="unit_status" label="状況"/>
+				<column name="unit_name" label="名前"/>
+				<column name="unit_lods" label="ＬｏＤ"/>
+				<column name="unit_objects" label="オブジェクト"/>
+				<column name="unit_id_HIDDEN" label="ＩＤ"/>
+			</fs_scroll_list>
+		</panel>
+		<panel name="logs_panel" label="ログ"/>
+		<panel name="local_mesh_settings_panel" label="設定">
+			<check_box name="local_mesh_scale_use_meters" label="スケールはメートル単位であると想定" tool_tip="Mayaなどのツールで使用される㎝スケール単位を無視します。"/>
+			<check_box name="checkbox_apply_joint_offsets" label="ジョイントオフセットを適用" tool_tip="メッシュ内のジョイントオフセットを適用します。デフォルトではこれらは無視されます。"/>
+			<text name="lod_suffix_label">
+				ＬＯＤサフィックス：
+			</text>
+			<combo_box name="lod_suffix_combo" tool_tip="標準を選択するか、手動で編集します…。｜｜ＳＬのデフォルト‐（最低はLOD0、最高はサフィックスなし)｜｜ゲームエンジン‐Unity／UE5など（最低=LOD3、最高=LOD0）｜｜ＬＯＤ名‐英語のＬＯＤ名（最低=「LOWEST」、最高=「HIGH」）">
+				<combo_item name="choose_one">
+					現在
+				</combo_item>
+				<combo_item name="suff_sl">
+					ＳＬ標準
+				</combo_item>
+				<combo_item name="suff_unity">
+					ゲームエンジン標準
+				</combo_item>
+				<combo_item name="suff_descriptive">
+					ＬｏＤ名
+				</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				最低：
+			</text>
+			<line_editor name="suf_lowest" tool_tip="ディスク上の最低ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<text name="suf_low_lab">
+				低：
+			</text>
+			<line_editor name="suf_low" tool_tip="ディスク上の低ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<text name="suf_medium_lab">
+				中：
+			</text>
+			<line_editor name="suf_medium" tool_tip="ディスク上の中ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<text name="suf_high_lab">
+				高：
+			</text>
+			<line_editor name="suf_high" tool_tip="ディスク上の高ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<text name="suf_physics_lab">
+				物理：
+			</text>
+			<line_editor name="suf_physics" tool_tip="ディスク上の物理ファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+		</panel>
+	</tab_container>
+	<button name="btn_apply" label="適用"/>
+	<button name="btn_add" label="追加"/>
+	<button name="btn_remove" label="削除"/>
+	<button name="btn_reload" label="リロード"/>
+	<button name="btn_clear" label="クリア"/>
+	<button name="btn_rez" label="選択をRez" tool_tip="インワールドでドナーメッシュを作成し、選択したローカルメッシュを入力します。これにより、インワールドに空のオブジェクトが作成されます。"/>
+</floater>

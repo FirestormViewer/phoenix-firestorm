@@ -35,7 +35,7 @@ LLCamera::LLCamera() :
     LLCoordFrame(),
     mView(DEFAULT_FIELD_OF_VIEW),
     mAspect(DEFAULT_ASPECT_RATIO),
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     //mInverseAspect(1.0f / DEFAULT_ASPECT_RATIO),
     mDrawDistanceMultiplier(1.0f),
     // </FS:minerjr> [FIRE-35081]
@@ -67,14 +67,14 @@ LLCamera::LLCamera(F32 vertical_fov_rads, F32 aspect_ratio, S32 view_height_in_p
     }
 
     mAspect = llclamp(aspect_ratio, MIN_ASPECT_RATIO, MAX_ASPECT_RATIO);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Store the inverse of the aspect ratio, so we can remove it from texture calculations
     //mInverseAspect = 1.0f / mAspect;
     // </FS:minerjr> [FIRE-35081]
     mNearPlane = llclamp(near_plane, MIN_NEAR_PLANE, MAX_NEAR_PLANE);
     if(far_plane < 0) far_plane = DEFAULT_FAR_PLANE;
     mFarPlane = llclamp(far_plane, MIN_FAR_PLANE, MAX_FAR_PLANE);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer 
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings 
     // Store the draw distance multiplier based upon how much bigger/smaller the far plan is then the default (64.0f)
     mDrawDistanceMultiplier = mFarPlane / DEFAULT_FAR_PLANE;
     mDrawDistanceMultiplier = mDrawDistanceMultiplier < 1.0f ? 1.0f : mDrawDistanceMultiplier;
@@ -141,7 +141,7 @@ void LLCamera::setViewHeightInPixels(S32 height)
 void LLCamera::setAspect(F32 aspect_ratio)
 {
     mAspect = llclamp(aspect_ratio, MIN_ASPECT_RATIO, MAX_ASPECT_RATIO);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Store the inverse of the aspect ratio, so we can remove it from texture calculations
     //mInverseAspect = 1.0f / mAspect;
     // </FS:minerjr> [FIRE-35081]
@@ -159,7 +159,7 @@ void LLCamera::setNear(F32 near_plane)
 void LLCamera::setFar(F32 far_plane)
 {
     mFarPlane = llclamp(far_plane, MIN_FAR_PLANE, MAX_FAR_PLANE);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer 
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings 
     // Store the draw distance multiplier based upon how much bigger/smaller the far plan is then the default (64.0f)
     mDrawDistanceMultiplier = mFarPlane / DEFAULT_FAR_PLANE;
     mDrawDistanceMultiplier = mDrawDistanceMultiplier < 1.0f ? 1.0f : mDrawDistanceMultiplier;

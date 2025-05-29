@@ -75,7 +75,7 @@ static LLStaticHashedString sColorIn("color_in");
 
 bool LLFace::sSafeRenderSelect = true; // false
 
-// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
 // Moved to allow more code to access these values
 const S8 FACE_IMPORTANCE_LEVEL = 4 ;
 const F32 FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[FACE_IMPORTANCE_LEVEL][2] = //{distance, importance_weight}
@@ -180,7 +180,7 @@ void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
     mFaceColor = LLColor4(1,0,0,1);
 
     mImportanceToCamera = 1.f ;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     mCloseToCamera = 1.0f;
     // </FS:minerjr> [FIRE-35081]
     mBoundingSphereRadius = 0.0f ;
@@ -1462,13 +1462,6 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
     // LLMaterial* mat = tep->getMaterialParams().get();
     LLMaterial* mat = tep ? tep->getMaterialParams().get() : 0;
     // </FS:ND>
-    // <FS:Beq> show legacy when editing the fallback materials.
-    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
-    if( gltf_mat && getViewerObject()->isSelected() && showSelectedinBP )
-    {
-        gltf_mat = nullptr;
-    }
-    // </FS:Beq>
 
     F32 r = 0, os = 0, ot = 0, ms = 0, mt = 0, cos_ang = 0, sin_ang = 0;
 
@@ -1690,7 +1683,7 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
                     xforms = XFORM_NONE;
                 }
 
-                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+                // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                 // Removed check for turning off animations
                 //if (getVirtualSize() >= MIN_TEX_ANIM_SIZE) // || isState(LLFace::RIGGED))
                 // </FS:minerjr> [FIRE-35081]
@@ -2294,7 +2287,7 @@ F32 LLFace::getTextureVirtualSize()
 
     F32 radius;
     F32 cos_angle_to_view_dir;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     //bool in_frustum = calcPixelArea(cos_angle_to_view_dir, radius);
     // The mInFrustum value is now updated in calcPixelArea, so no longer need to accss the value
     calcPixelArea(cos_angle_to_view_dir, radius);
@@ -2332,7 +2325,7 @@ F32 LLFace::getTextureVirtualSize()
     }
 
     face_area = LLFace::adjustPixelArea(mImportanceToCamera, face_area);
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Remove the face area being affected by being partial off screen as close to screen textures can then become scaled down along with
     // animated textures.
     /*
@@ -2370,7 +2363,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("calcPixelArea - rigged");
         //override with joint volume face joint bounding boxes
-        LLVOAvatar* avatar = mVObjp->getAvatar();
+        LLVOAvatar* avatar = mVObjp.notNull() ? mVObjp->getAvatar() : nullptr;
         bool hasRiggedExtents = false;
 
         if (avatar && avatar->mDrawable)
@@ -2430,7 +2423,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
             // no rigged extents, zero out bounding box and skip update
             mRiggedExtents[0] = mRiggedExtents[1] = LLVector4a(0.f, 0.f, 0.f);
 
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
             // Set the face to be out of the frustum as the object is invalid
             mInFrustum = false;
             // </FS:minerjr> [FIRE-35081]
@@ -2480,7 +2473,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     LLVector4a x_axis;
     x_axis.load3(camera->getXAxis().mV);
     cos_angle_to_view_dir = lookAt.dot3(x_axis).getF32();
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Added close to camera (based upon the mImportanceToCamera) where any object that is within the FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE (16.1f)
     // gets an extra texture scaling up.
     // Use positive distance to the camera and apply the multiplier based upon the texture scaled for increase in the default draw distance
@@ -2495,7 +2488,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
         if(!camera->AABBInFrustum(center, size))
         {
             mImportanceToCamera = 0.f ;
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
             // Added real in frustum check value. Previous was only false for media textures off screen and invalid rig objects
             mInFrustum = false;
             // </FS:minerjr> [FIRE-35081]
@@ -2521,7 +2514,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     {
         cos_angle_to_view_dir = 1.0f ;
         mImportanceToCamera = 1.0f ;
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         mInFrustum = true; // If the face is important to the camera, it is in the frustum
         mCloseToCamera = 1.0f;
         // </FS:minerjr> [FIRE-35081]
@@ -2568,7 +2561,7 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
     F32 importance = 0.f ;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Move camera out to use for the inital check for the distance to the face importance with the multiplier
     LLViewerCamera* camera = LLViewerCamera::getInstance();
 
@@ -2588,7 +2581,7 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         }
 
         S32 i = 0 ;
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings, not happening with SL Viewer
+        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Added draw distance multiplier to the distance
         for(i = 0; i < FACE_IMPORTANCE_LEVEL && dist > FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][0] * camera->getDrawDistanceMultiplier(); ++i);
         // </FS:minerjr> [FIRE-35081]

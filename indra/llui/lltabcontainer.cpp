@@ -1511,17 +1511,17 @@ LLPanel* LLTabContainer::getCurrentPanel()
     return NULL;
 }
 
-S32 LLTabContainer::getCurrentPanelIndex()
+S32 LLTabContainer::getCurrentPanelIndex() const
 {
     return mCurrentTabIdx;
 }
 
-S32 LLTabContainer::getTabCount()
+S32 LLTabContainer::getTabCount() const
 {
     return static_cast<S32>(mTabList.size());
 }
 
-LLPanel* LLTabContainer::getPanelByIndex(S32 index)
+LLPanel* LLTabContainer::getPanelByIndex(S32 index) const
 {
     if (index >= 0 && index < (S32)mTabList.size())
     {
@@ -1530,7 +1530,7 @@ LLPanel* LLTabContainer::getPanelByIndex(S32 index)
     return NULL;
 }
 
-S32 LLTabContainer::getIndexForPanel(LLPanel* panel)
+S32 LLTabContainer::getIndexForPanel(LLPanel* panel) const
 {
     for (S32 index = 0; index < (S32)mTabList.size(); index++)
     {
@@ -1542,7 +1542,7 @@ S32 LLTabContainer::getIndexForPanel(LLPanel* panel)
     return -1;
 }
 
-S32 LLTabContainer::getPanelIndexByTitle(std::string_view title)
+S32 LLTabContainer::getPanelIndexByTitle(std::string_view title) const
 {
     for (S32 index = 0 ; index < (S32)mTabList.size(); index++)
     {
@@ -1806,12 +1806,18 @@ bool LLTabContainer::getTabPanelFlashing(LLPanel *child)
     return false;
 }
 
-void LLTabContainer::setTabPanelFlashing(LLPanel* child, bool state )
+// <FS:Ansariel> [FS communication UI]
+//void LLTabContainer::setTabPanelFlashing(LLPanel* child, bool state )
+void LLTabContainer::setTabPanelFlashing(LLPanel* child, bool state, bool alternate_color)
+// </FS:Ansariel> [FS communication UI]
 {
     LLTabTuple* tuple = getTabByPanel(child);
     if( tuple )
     {
-        tuple->mButton->setFlashing( state );
+        // <FS:Ansariel> [FS communication UI]
+        //tuple->mButton->setFlashing( state );
+        tuple->mButton->setFlashing(state, false, alternate_color);
+        // </FS:Ansariel> [FS communication UI]
     }
 }
 

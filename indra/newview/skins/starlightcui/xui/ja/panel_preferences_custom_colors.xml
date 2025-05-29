@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="カスタム色" name="custom_colors_panel">
+	<text name="custom_colors_text">
+		カスタムＵＩ色：
+	</text>
+	<text name="text_boxc1">
+		ボタン、スクロールバーなど
+	</text>
+	<text name="text_boxc3">
+		強調テキスト
+	</text>
+	<text name="text_boxc4">
+		ボタンのラベル‐通常
+	</text>
+	<text name="text_boxc6">
+		ボタンのラベル‐選択
+	</text>
+	<text name="text_boxbn">
+		パネルの背景‐通常
+	</text>
+	<text name="text_boxbn_restart">
+		（要再起動）
+	</text>
+	<text name="text_boxbl">
+		パネルの背景‐明るい
+	</text>
+	<text name="text_boxb1_restart">
+		（要再起動）
+	</text>
+</panel>

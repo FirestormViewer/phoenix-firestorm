@@ -164,7 +164,7 @@ protected:
     virtual bool isHighlightActive();
     virtual bool isFadeItem();
     virtual bool isFlashing() { return false; }
-    virtual void setFlashState(bool) { }
+    virtual void setFlashState(bool, bool) { }
 
     static LLFontGL* getLabelFontForStyle(U8 style);
     const LLFontGL* getLabelFont();
@@ -292,7 +292,7 @@ public:
     // Does not need filter update
     virtual void refreshSuffix();
 
-    bool isSingleFolderMode() { return mSingleFolderMode; }
+    bool isSingleFolderMode() const { return mSingleFolderMode; }
 
     // LLView functionality
     virtual bool handleRightMouseDown( S32 x, S32 y, MASK mask );
@@ -429,9 +429,6 @@ public:
     // extractItem() removes the specified item from the folder, but
     // doesn't delete it.
     virtual void extractItem( LLFolderViewItem* item, bool deparent_model = true);
-
-    // This function is called by a child that needs to be resorted.
-    void resort(LLFolderViewItem* item);
 
     void setAutoOpenCountdown(F32 countdown) { mAutoOpenCountdown = countdown; }
 

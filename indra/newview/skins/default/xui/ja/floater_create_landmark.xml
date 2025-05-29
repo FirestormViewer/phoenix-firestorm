@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="create_landmark" title="ランドマーク作成">
-    <string name="favorites_bar">
-        お気に入りバー
-    </string>
-    <text name="title_label" value="ランドマーク詳細" />
-    <text name="name_label" value="名前：" />
-    <text name="folder_label" value="ランドマークの場所" />
-    <text name="new_folder_textbox">
-        [secondlife:/// 新規フォルダを作成]
-    </text>
-    <text name="notes_label" value="自分のメモ：" />
-    <button label="OK" name="ok_btn" />
-    <button label="取り消し" name="cancel_btn" />
+	<string name="favorites_bar">
+		お気に入りバー
+	</string>
+	<text name="title_label" value="ランドマーク詳細"/>
+	<text name="name_label" value="名前："/>
+	<text name="folder_label" value="ランドマークの場所"/>
+	<text name="new_folder_textbox">
+		[secondlife:/// 新規フォルダを作成]
+	</text>
+	<text name="notes_label" value="自分のメモ："/>
+	<button label="ＯＫ" name="ok_btn" />
+	<button label="キャンセル" name="cancel_btn"/>
 </floater>

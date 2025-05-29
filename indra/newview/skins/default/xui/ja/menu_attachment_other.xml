@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- *NOTE: See also menu_avatar_other.xml -->
 <context_menu name="Avatar Pie">
-	<menu_item_call label="プロフィールの表示" name="Profile..."/>
-	<menu_item_call label="フレンド登録" name="Add Friend"/>
-	<menu_item_call label="連絡先セット追加" name="Add to Set" />
-	<menu_item_call label="IM" name="Send IM..."/>
-	<menu_item_call label="コーリングカードを送る" name="Give Calling Card" />
+	<menu_item_call label="プロフィールを見る" name="Profile..."/>
+	<menu_item_call label="フレンドに追加" name="Add Friend"/>
+	<menu_item_call label="コーリングカードを渡す" name="Give Calling Card"/>
+	<menu_item_call label="コンタクトセットに追加" name="Add to Set"/>
+	<menu_item_call label="ＩＭ" name="Send IM..."/>
 	<menu_item_call label="コール" name="Call"/>
-	<menu_item_call label="グループに招待" name="Invite..."/>
-	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
-	<menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations"/>
-	<context_menu label="迷惑行為対応" name="Annoyance">
-		<menu_item_call label="ブロック" name="Avatar Mute" />
+	<menu_item_call label="グループに招待…" name="Invite..."/>
+	<menu_item_call label="スケルトンのリセット" name="Reset Skeleton"/>
+	<menu_item_call label="スケルトンとアニメーションのリセット" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="メッシュのＬＯＤをリセット" name="Reset Mesh LOD"/>
+	<context_menu label="迷惑行為" name="Annoyance">
+		<menu_item_call label="ブロック" name="Avatar Mute"/>
 		<!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->
-		<menu_item_call label="ブロック解除" name="Avatar Unmute" />
-		<menu_item_call label="報告" name="abuse"/>
+		<menu_item_call label="ブロック解除" name="Avatar Unmute"/>
+		<!-- </FS:Zi> -->
+		<menu_item_call label="嫌がらせの報告" name="abuse"/>
 		<menu_item_call label="フリーズ" name="Freeze..."/>
 		<menu_item_call label="追放" name="Eject..."/>
 	</context_menu>
-	<menu_item_call label="テクスチャのデバッグ" name="Debug..."/>
-	<menu_item_call label="ダンプ XML" name="Dump XML"/>
+	<menu_item_call label="ＸＭＬとしてダンプ" name="Dump XML"/>
 	<menu_item_call label="ズームイン" name="Zoom In"/>
-	<menu_item_call label="支払う" name="Pay..."/>
-	<menu_item_call label="オブジェクトのプロフィール" name="Object Inspect"/>
-	<menu_item_check label="通常表示" name="RenderNormally"/>
-	<menu_item_check label="表示しない" name="DoNotRender"/>
-	<menu_item_check label="完全表示" name="AlwaysRenderFully"/>
+	<menu_item_call label="支払う…" name="Pay..."/>
+	<menu_item_call label="オブジェクトの調査" name="Object Inspect"/>
+	<menu_item_check name="AlwaysRenderFully" label="常に詳細まで表示"/>
+	<menu_item_check name="DoNotRender" label="詳細まで表示しない"/>
+	<menu_item_check name="RenderNormally" label="表示の例外から削除する"/>
 	<menu_item_call label="パーティクル所有者をブロック" name="Mute Particle"/>
-	<menu_item_call label="検査" name="Object_Inspect_Floater" />
-	<menu_item_call  label="スクリプト情報" name="ScriptInfo" />
-	<menu_item_call label="非表示にする" name="Derender" />
-	<menu_item_call label="非表示にしてブラックリストに追加" name="DerenderPermanent" />
-	<menu_item_call label="テクスチャ表示" name="Debug..." />
-	<menu_item_call label="テクスチャ更新" name="Texture Refresh" />
-	<context_menu label="別名で保存" name="Export Menu">
-		<menu_item_call label="バックアップ" name="Backup" />
-		<menu_item_call label="メッシュ" name="Collada" />
+	<menu_item_call label="調査" name="Object_Inspect_Floater"/>
+	<menu_item_call label="スクリプト情報" name="ScriptInfo"/>
+	<menu_item_call label="描画解除" name="Derender"/>
+	<menu_item_call label="描画解除＋ブラックリスト" name="DerenderPermanent"/>
+	<menu_item_call label="テクスチャを表示" name="Debug..."/>
+	<menu_item_call label="テクスチャをリフレッシュ" name="Texture Refresh"/>
+	<context_menu label="名前をつけて保存" name="Export Menu">
+		<menu_item_call label="バックアップ" name="Backup"/>
+		<menu_item_call label="Collada形式" name="Collada"/>
 	</context_menu>
 </context_menu>

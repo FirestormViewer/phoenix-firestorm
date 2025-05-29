@@ -181,6 +181,17 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="Elige el color de la consola"/>
 			<slider label="Opacidad:" name="console_background_opacity" tool_tip="Configura la opacidad del fondo de la consola"/>
+			<text name="preferences_search_label">
+                Colores de resaltado de búsqueda de preferencias:
+            </text>
+			<text name="preferences_search_bg_label">
+                Fondo:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Seleccione el color de fondo de resaltado de búsqueda de preferencias"/>
+			<text name="preferences_search_font_label" width="60">
+                Fuente:
+            </text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Seleccione el color de fuente de resaltado de búsqueda de preferencias"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Mostrar los diálogos de script siempre sobre fondo opaco"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Mostrar los avisos de grupo siempre sobre fondo opaco"/>
 			<check_box name="override_pie_color_checkbox" label="Modificar el color y la opacidad del fondo de los manús circulares:"/>

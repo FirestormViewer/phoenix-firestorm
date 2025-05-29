@@ -3,15 +3,15 @@
 	<menu_item_call label="スクリプト情報" name="script_info" />
 	<menu_item_call label="触る" name="touch_object" />
 	<menu_item_call label="座る" name="sit_on_object" />
-	<menu_item_call label="オブジェクトにテレポート" name="teleport_to_object" />
+	<menu_item_call label="オブジェクトの場所にテレポート" name="teleport_to_object" />
 	<menu_item_call label="ズーム" name="look_at_object" />
-	<menu_item_call label="検査" name="inspect_object" />
+	<menu_item_call label="調査" name="inspect_object" />
 	<menu_item_call label="編集" name="edit_object" />
 	<menu_item_call label="返却" name="return_object" />
 	<menu_item_call label="削除" name="delete_object" />
-	<menu_item_call label="ブラックリスト登録" name="blacklist_object" />
-	<menu_item_call label="オブジェクト購入" name="object_buy" />
+	<menu_item_call label="ブラックリストに登録" name="blacklist_object" />
+	<menu_item_call label="オブジェクトを購入" name="object_buy" />
 	<menu_item_call label="自分のオブジェクトを検索" name="filter_my_objects" />
-	<menu_item_call label="すべて選択" name="select_all" />
+	<menu_item_call label="すべてを選択" name="select_all" />
 	<menu_item_call label="選択をクリア" name="clear_selection" />
 </context_menu>

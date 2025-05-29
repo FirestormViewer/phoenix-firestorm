@@ -15,6 +15,7 @@
 		Lueur
 	</text>
 	<check_box label="Lumineux" name="checkbox fullbright"/>
+	<check_box label="Occulter l'eau" name="checkbox_hide_water"/>
 	<button name="copy_face_btn" tool_tip="Copie les paramètres des textures dans le presse-papiers"/>
 	<button name="paste_face_btn" tool_tip="Colle les paramètres des textures à partir du presse-papiers"/>
 	<combo_box name="combobox matmedia">

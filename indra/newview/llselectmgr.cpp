@@ -2138,7 +2138,7 @@ bool LLSelectMgr::selectionSetGLTFMaterial(const LLUUID& mat_id)
                     asset_id = BLANK_MATERIAL_ASSET_ID;
                 }
             }
-
+            objectp->clearTEWaterExclusion(te);
             // Blank out most override data on the object and send to server
             objectp->setRenderMaterialID(te, asset_id);
 
@@ -2622,6 +2622,7 @@ void LLSelectMgr::selectionSetMedia(U8 media_type, const LLSD &media_data)
                     }
                     else {
                         // Add/update media
+                        object->clearTEWaterExclusion(te);
                         object->setTEMediaFlags(te, mMediaFlags);
                         LLVOVolume *vo = dynamic_cast<LLVOVolume*>(object);
                         llassert(NULL != vo);
@@ -3291,22 +3292,46 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
 
                     F32 scale_x = 1;
                     F32 scale_y = 1;
+                    F32 offset_x = 0;
+                    F32 offset_y = 0;
 
-                    for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+                    if (te_num < selectNode->mGLTFScaleRatios.size())
                     {
-                        LLVector3 scale_ratio = selectNode->mGLTFScaleRatios[te_num][i];
+                        for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+                        {
+                            LLVector3 scale_ratio = selectNode->mGLTFScaleRatios[te_num][i];
 
-                        if (planar)
-                        {
-                            scale_x = scale_ratio.mV[s_axis] / object_scale.mV[s_axis];
-                            scale_y = scale_ratio.mV[t_axis] / object_scale.mV[t_axis];
+                            if (planar)
+                            {
+                                scale_x = scale_ratio.mV[s_axis] / object_scale.mV[s_axis];
+                                scale_y = scale_ratio.mV[t_axis] / object_scale.mV[t_axis];
+                            }
+                            else
+                            {
+                                scale_x = scale_ratio.mV[s_axis] * object_scale.mV[s_axis];
+                                scale_y = scale_ratio.mV[t_axis] * object_scale.mV[t_axis];
+                            }
+                            material->mTextureTransform[i].mScale.set(scale_x, scale_y);
+
+                            LLVector2 scales = selectNode->mGLTFScales[te_num][i];
+                            LLVector2 offsets = selectNode->mGLTFOffsets[te_num][i];
+                            F64 int_part = 0;
+                            offset_x = (F32)modf((offsets[VX] + (scales[VX] - scale_x)) / 2, &int_part);
+                            if (offset_x < 0)
+                            {
+                                offset_x++;
+                            }
+                            offset_y = (F32)modf((offsets[VY] + (scales[VY] - scale_y)) / 2, &int_part);
+                            if (offset_y < 0)
+                            {
+                                offset_y++;
+                            }
+                            material->mTextureTransform[i].mOffset.set(offset_x, offset_y);
                         }
-                        else
-                        {
-                            scale_x = scale_ratio.mV[s_axis] * object_scale.mV[s_axis];
-                            scale_y = scale_ratio.mV[t_axis] * object_scale.mV[t_axis];
-                        }
-                        material->mTextureTransform[i].mScale.set(scale_x, scale_y);
+                    }
+                    else
+                    {
+                        llassert(false); // make sure mGLTFScaleRatios is filled
                     }
 
                     const LLGLTFMaterial* base_material = tep->getGLTFMaterial();
@@ -6235,6 +6260,13 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
                     // might need to be moved to LLGLTFMaterialOverrideDispatchHandler
                     node->saveGLTFMaterials(material_ids, override_materials);
                 }
+
+                // <FS> [FIRE-35138] Show or hide the GLTF Material based on showSelectedinBP
+                static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+                if (showSelectedinBP)
+                    LLSelectMgr::instance().hideGLTFMaterial();
+                else
+                    LLSelectMgr::instance().showGLTFMaterial();
             }
 
             node->mValid = true;
@@ -7172,10 +7204,11 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
 {
     mTextureScaleRatios.clear();
     mGLTFScaleRatios.clear();
+    mGLTFScales.clear();
+    mGLTFOffsets.clear();
 
     if (mObject.notNull())
     {
-
         LLVector3 scale = mObject->getScale();
 
         for (U8 i = 0; i < mObject->getNumTEs(); i++)
@@ -7212,6 +7245,8 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
             F32 scale_x = 1;
             F32 scale_y = 1;
             std::vector<LLVector3> material_v_vec;
+            std::vector<LLVector2> material_scales_vec;
+            std::vector<LLVector2> material_offset_vec;
             for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
             {
                 if (material)
@@ -7219,12 +7254,16 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
                     LLGLTFMaterial::TextureTransform& transform = material->mTextureTransform[i];
                     scale_x = transform.mScale[VX];
                     scale_y = transform.mScale[VY];
+                    material_scales_vec.push_back(transform.mScale);
+                    material_offset_vec.push_back(transform.mOffset);
                 }
                 else
                 {
                     // Not having an override doesn't mean that there is no material
                     scale_x = 1;
                     scale_y = 1;
+                    material_scales_vec.emplace_back(scale_x, scale_y);
+                    material_offset_vec.emplace_back(0.f, 0.f);
                 }
 
                 if (tep->getTexGen() == LLTextureEntry::TEX_GEN_PLANAR)
@@ -7240,6 +7279,8 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
                 material_v_vec.push_back(material_v);
             }
             mGLTFScaleRatios.push_back(material_v_vec);
+            mGLTFScales.push_back(material_scales_vec);
+            mGLTFOffsets.push_back(material_offset_vec);
         }
     }
 }
@@ -7524,7 +7565,10 @@ void dialog_refresh_all()
     // *TODO: Eliminate all calls into outside classes below, make those
     // objects register with the update signal.
 
-    gFloaterTools->dirty();
+    if (gFloaterTools)
+    {
+        gFloaterTools->dirty();
+    }
 
     gMenuObject->needsArrange();
 
@@ -7755,7 +7799,8 @@ void LLSelectMgr::updatePointAt()
             LLVector3 select_offset;
             const LLPickInfo& pick = gViewerWindow->getLastPick();
             LLViewerObject *click_object = pick.getObject();
-            if (click_object && click_object->isSelected())
+            bool was_hud = pick.mPickHUD && click_object && !click_object->isHUDAttachment();
+            if (click_object && click_object->isSelected() && !was_hud)
             {
                 // clicked on another object in our selection group, use that as target
                 select_offset.setVec(pick.mObjectOffset);
@@ -7957,19 +8002,20 @@ bool LLSelectMgr::canSelectObject(LLViewerObject* object, bool ignore_select_own
             // only select my own objects
             return false;
         }
+
+        // <FS:Ansariel> FIRE-14593: Option to select only copyable objects
+        if (!object->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
+        {
+            return false;
+        }
+        // </FS:Ansariel>
+        // <FS:Ansariel> FIRE-17696: Option to select only locked objects
+        if (gSavedSettings.getBOOL("FSSelectLockedOnly") && object->permMove() && !object->isPermanentEnforced())
+        {
+            return false;
+        }
+        // </FS:Ansariel>
     }
-    // <FS:Ansariel> FIRE-14593: Option to select only copyable objects
-    if (!object->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
-    {
-        return false;
-    }
-    // </FS:Ansariel>
-    // <FS:Ansariel> FIRE-17696: Option to select only locked objects
-    if (gSavedSettings.getBOOL("FSSelectLockedOnly") && object->permMove() && !object->isPermanentEnforced())
-    {
-        return false;
-    }
-    // </FS:Ansariel>
 
     // Can't select orphans
     if (object->isOrphaned()) return false;
@@ -8011,6 +8057,14 @@ void LLSelectMgr::setAgentHUDZoom(F32 target_zoom, F32 current_zoom)
 {
     gAgentCamera.mHUDTargetZoom = target_zoom;
     gAgentCamera.mHUDCurZoom = current_zoom;
+}
+
+void LLSelectMgr::clearWaterExclusion()
+{
+    // reset texture to default plywood
+    LLSelectMgr::getInstance()->selectionSetImage(DEFAULT_OBJECT_TEXTURE);
+    // reset texture repeats, that might be altered by invisiprim script from wiki
+    LLSelectMgr::getInstance()->selectionTexScaleAutofit(2.f);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -9060,6 +9114,88 @@ bool LLSelectMgr::selectGetNoIndividual()
     return true;
 }
 // </FS:Zi>
+
+// <FS> [FIRE-35138] Hide the GLTF Material since we are currently in BP
+void LLSelectMgr::hideGLTFMaterial()
+{
+    struct f : public LLSelectedObjectFunctor
+    {
+        f() {}
+        bool apply(LLViewerObject* objectp)
+        {
+            if (!objectp || !objectp->permModify())
+            {
+                return false;
+            }
+
+            // Save the current GLTF materials so they can be restored later
+            objectp->saveGLTFMaterials();
+
+            for (S32 te = 0; te < objectp->getNumTEs(); ++te)
+            {
+                // Blank out most override data on the object and don't send to server
+                objectp->setRenderMaterialID(te, LLUUID(), false);
+            }
+
+            return true;
+        }
+    };
+    f setfunc;
+    getSelection()->applyToObjects(&setfunc);
+}
+// </FS>
+
+// <FS> [FIRE-35138] Show the GLTF Material since we are no longer in BP
+void LLSelectMgr::showGLTFMaterial()
+{
+    struct f : public LLSelectedObjectFunctor
+    {
+        f() {}
+        bool apply(LLViewerObject* objectp)
+        {
+            if (!objectp || !objectp->permModify())
+            {
+                return false;
+            }
+
+            const uuid_vec_t& saved_gltf_material_ids = objectp->getSavedGLTFMaterialIds();
+            const gltf_materials_vec_t& saved_gltf_override_materials = objectp->getSavedGLTFOverrideMaterials();
+
+            if (saved_gltf_material_ids.empty())
+            {
+                return false;
+            }
+
+            for (S32 te = 0; te < objectp->getNumTEs(); ++te)
+            {
+                if (te >= saved_gltf_material_ids.size())
+                {
+                    LL_WARNS("FS") << "TE index out of bounds for saved GLTF materials" << LL_ENDL;
+                    break;
+                }
+
+                // Restore gltf material
+                LLUUID asset_id = saved_gltf_material_ids[te];
+                LLGLTFMaterial* material = saved_gltf_override_materials[te];
+
+                // Update material locally
+                objectp->setRenderMaterialID(te, asset_id, false);
+                if (material)
+                {
+                    material = new LLGLTFMaterial(*material);
+                    objectp->setTEGLTFMaterialOverride(te, material);
+                }
+
+                // Do not enqueue update to server
+            }
+
+            objectp->clearSavedGLTFMaterials();
+            return true;
+        }
+    } setfunc;
+    getSelection()->applyToObjects(&setfunc);
+}
+// </FS>
 
 template<>
 bool LLCheckIdenticalFunctor<F32>::same(const F32& a, const F32& b, const F32& tolerance)

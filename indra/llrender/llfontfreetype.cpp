@@ -751,7 +751,14 @@ LLFontGlyphInfo* LLFontFreetype::addGlyphFromFont(const LLFontFreetype *fontp, l
 
     LLImageGL *image_gl = mFontBitmapCachep->getImageGL(bitmap_glyph_type, bitmap_num);
     LLImageRaw *image_raw = mFontBitmapCachep->getImageRaw(bitmap_glyph_type, bitmap_num);
-    image_gl->setSubImage(image_raw, 0, 0, image_gl->getWidth(), image_gl->getHeight());
+    if (image_gl && image_raw)
+    {
+        image_gl->setSubImage(image_raw, 0, 0, image_gl->getWidth(), image_gl->getHeight());
+    }
+    else
+    {
+        llassert(false); //images were just inserted by nextOpenPos, they shouldn't be missing
+    }
 
     return gi;
 }
@@ -822,11 +829,11 @@ void LLFontFreetype::renderGlyph(EFontGlyphType bitmap_type, U32 glyph_index, ll
             || FT_Err_Invalid_Composite == error
             || (FT_Err_Ok != error && LLStringOps::isEmoji(wch)))
         {
-            glyph_index = FT_Get_Char_Index(mFTFace, '?');
-            // if '?' is not present, potentially can use last index, that's supposed to be null glyph
-            if (glyph_index > 0)
+            // value~0 always corresponds to the 'missing glyph'
+            error = FT_Load_Glyph(mFTFace, 0, FT_LOAD_FORCE_AUTOHINT);
+            if (FT_Err_Ok != error)
             {
-                error = FT_Load_Glyph(mFTFace, glyph_index, load_flags ^ FT_LOAD_COLOR);
+                LL_ERRS() << "Loading fallback for char '" << (U32)wch << "', glyph " << glyph_index << " failed with error : " << (S32)error << LL_ENDL;
             }
         }
 
@@ -944,7 +951,12 @@ bool LLFontFreetype::setSubImageBGRA(U32 x, U32 y, U32 bitmap_num, U16 width, U1
 {
     LLImageRaw* image_raw = mFontBitmapCachep->getImageRaw(EFontGlyphType::Color, bitmap_num);
     llassert(!mIsFallback);
-    llassert(image_raw && (image_raw->getComponents() == 4));
+    if (!image_raw)
+    {
+        llassert(false);
+        return false;
+    }
+    llassert(image_raw->getComponents() == 4);
 
     // NOTE: inspired by LLImageRaw::setSubImage()
     U32* image_data = (U32*)image_raw->getData();
@@ -972,10 +984,17 @@ bool LLFontFreetype::setSubImageBGRA(U32 x, U32 y, U32 bitmap_num, U16 width, U1
 void LLFontFreetype::setSubImageLuminanceAlpha(U32 x, U32 y, U32 bitmap_num, U32 width, U32 height, U8 *data, S32 stride) const
 {
     LLImageRaw *image_raw = mFontBitmapCachep->getImageRaw(EFontGlyphType::Grayscale, bitmap_num);
-    LLImageDataLock lock(image_raw);
 
     llassert(!mIsFallback);
-    llassert(image_raw && (image_raw->getComponents() == 2));
+    if (!image_raw)
+    {
+        llassert(false);
+        return;
+    }
+
+    LLImageDataLock lock(image_raw);
+
+    llassert(image_raw->getComponents() == 2);
 
     U8 *target = image_raw->getData();
     llassert(target);

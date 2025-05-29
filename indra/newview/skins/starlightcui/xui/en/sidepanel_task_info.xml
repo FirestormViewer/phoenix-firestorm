@@ -67,7 +67,7 @@
      font="SansSerifHuge"
      height="26"
      layout="topleft"
-     left_pad="10"
+     left="48"
      name="title"
      text_color="LtGray"
      top="0"

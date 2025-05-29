@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_blocklist" title="ブロックした住人とオブジェクト">
-      <panel name="panel_block_list_sidetray" label="ブロックした住人とオブジェクト" />
+	<panel name="panel_block_list_sidetray" label="ブロックした住人とオブジェクト"/>
 </floater>

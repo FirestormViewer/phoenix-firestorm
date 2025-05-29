@@ -1,72 +1,97 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="プロフィール" name="panel_profile">
+<panel name="panel_profile" label="プロフィール">
 	<string name="status_online">
 		オンライン
 	</string>
 	<string name="status_offline">
 		オフライン
 	</string>
-	<string name="payment_update_link_url">
-		http://www.secondlife.com/account/billing.php?lang=en
+	<string name="status_unknown">
+		不明
 	</string>
-	<string name="partner_edit_link_url">
-		http://www.secondlife.com/account/partners.php?lang=en
-	</string>
-	<string name="my_account_link_url" value="http://secondlife.com/account"/>
+	<!--Badges-->
+	<string name="BadgeBeta" value="オリジナルβテスター"/>
+	<string name="BadgeBetaLifetime" value="β会員"/>
+	<string name="BadgeLifetime" value="会員"/>
+	<string name="BadgeLinden" value="Linden Lab社員"/>
+	<string name="BadgePremiumLifetime" value="生涯プレミアム会員"/>
+	<string name="BadgePremiumPlusLifetime" value="生涯プレミアム・プラス会員"/>
+	<string name="BadgeTeam" value="[APP_NAME]メンバー"/>
+	<string name="payment_update_link_url">https://accounts.secondlife.com/billing_information/?lang=ja-JP</string>
+	<string name="partner_edit_link_url">https://www.secondlife.com/my/partners.php?lang=ja-JP</string>
+	<string name="my_account_link_url" value="https://secondlife.com/my/account/?lang=ja-JP"/>
 	<string name="no_partner_text" value="なし"/>
 	<string name="no_group_text" value="なし"/>
-	<string name="name_text_args">
-		[NAME]
-	</string>
-	<string name="display_name_text_args">
-		[DISPLAY_NAME]
-	</string>
 	<string name="FSDev" value="開発者"/>
 	<string name="FSSupp" value="サポート"/>
 	<string name="FSQualityAssurance" value="バグハンター"/>
 	<string name="FSGW" value="ゲートウェイ"/>
+	<string name="texture_picker_label" value="プロフィール画像"/>
 	<text name="name_label" value="名前："/>
-	<button label="名前：" name="set_name" tool_tip="表示名を設定"/>
 	<panel name="name_holder">
-		<text_editor name="complete_name" value="(ロード中...)"/>
+		<text_editor name="complete_name" value="（読み込んでいます…）"/>
+		<menu_button name="copy_btn" tool_tip="コピーするときのオプションです。"/>
 	</panel>
-	<text_editor name="user_key" value="(ロード中...)"/>
+	<button name="set_name" tool_tip="表示名を設定します。"/>
+	<icon tool_tip="フレンドは私のオンラインステータスを見ることができます。" name="can_see_online"/>
+	<icon tool_tip="フレンドは私のオンラインステータスを見ることができません。" name="cant_see_online"/>
+	<icon tool_tip="フレンドはマップ上で私を見ることができます。" name="can_see_on_map"/>
+	<icon tool_tip="フレンドはマップ上で私を見ることができません。" name="cant_see_on_map"/>
+	<icon tool_tip="フレンドは私のオブジェクトを編集できます。" name="can_edit_objects"/>
+	<icon tool_tip="フレンドは私のオブジェクトを編集できません。" name="cant_edit_objects"/>
+	<text name="Key:" value="キー："/>
+	<text_editor name="user_key" value="（読み込んでいます…）"/>
 	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="プロフィール写真関連のアクションを実行します。"/>
+		</layout_panel>
 		<layout_panel name="label_stack">
-			<text name="status" value="ステータス不明"/>
-			<text name="label" value="生年月日："/>
-			<text_editor name="register_date" value="(ロード中...)"/>
+			<text name="label" value="誕生日："/>
+			<text_editor name="user_age" value="（読み込んでいます…）"/>
 			<text name="label2" value="アカウント："/>
+			<layout_stack name="badgepositioner">
+				<layout_panel name="badge_layout">
+					<layout_stack name="badge_stacker">
+						<layout_panel name="top_badge_layout">
+							<icon name="top_badge_icon" tool_tip="Linden Lab従業員" />
+						</layout_panel>
+						<layout_panel name="bottom_badge_layout">
+							<icon name="bottom_badge_icon" tool_tip="Linden Lab従業員"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
 			<text name="partner_label" value="パートナー："/>
 		</layout_panel>
 	</layout_stack>
+	<text name="About:" value="概要："/>
+	<!-- [AS:chanayane] Preview button -->
+	<button name="btn_preview" tool_tip="プロフィールの「概要」セクションのプレビューを切り替えます。"/>
+	<!-- [/AS:chanayane] -->
 	<text name="Groups:" value="グループ："/>
-	<button label="+" label_selected="+" name="group_invite" tool_tip="グループに招待"/>
-	<layout_stack name="aboutpositioner">
-		<layout_panel name="about_stack">
-			<text name="About:" value="詳細："/>
-		</layout_panel>
-		<layout_panel name="give_stack">
-			<text name="Give item:" value="アイテムを渡す："/>
-			<text name="Give inventory" tool_tip="インベントリのアイテムをここにドロップしてこの人に渡します。">
-				インベントリのアイテムをここにドロップしてください。
-			</text>
-		</layout_panel>
-	</layout_stack>
+	<button name="group_invite" label="＋" tool_tip="グループに招待する。" label_selected="＋"/>
+	<text name="Give item:" value="共有："/>
+	<text name="Give inventory" tool_tip="この人物に渡したいインベントリアイテムをここにドロップしてください。">
+		インベントリアイテムをここにドロップ
+	</text>
 	<layout_stack name="buttonstack">
 		<layout_panel name="left_buttonstack">
-			<button label="地図上で見つける" label_selected="地図上で見つける" name="show_on_map_btn" tool_tip="住人を地図上で探す"/>
-			<button label="お金を払う" label_selected="お金を払う" name="pay" tool_tip="住人にお金を支払う"/>
+			<button name="show_on_map_btn" label="マップ上で探す" tool_tip="マップ上で居住者の位置を確認します。" label_selected="マップ上で探す"/>
+			<button name="pay" label="支払う" tool_tip="この住民にお金を支払います。" label_selected="支払う"/>
 		</layout_panel>
 		<layout_panel name="middle_buttonstack">
-			<button label="テレポートを送る" label_selected="テレポートを送る" name="teleport" tool_tip="住人にテレポートを送る"/>
-			<button label="インスタントメッセージ" label_selected="インスタントメッセージ" name="im" tool_tip="インスタントメッセージを開きます"/>
+			<button name="teleport" label="テレポートのオファー" tool_tip="この住民にテレポートのオファーを送ります。" label_selected="テレポートのオファー"/>
+			<button name="im" label="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" label_selected="インスタントメッセージ"/>
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
-			<button label="フレンド登録" label_selected="フレンド登録" name="add_friend" tool_tip="フレンド登録を申し出ます"/>
-			<button label="ブロック" name="block" tool_tip="この住人をブロックする"/>
-			<button label="ブロック解除" name="unblock" tool_tip="この住人のブロックを解除する"/>
+			<button name="add_friend" label="フレンドに追加" tool_tip="この住民にフレンドシップの申込みをします。" label_selected="フレンド追加"/>
+			<button name="remove_friend" label="フレンド削除" tool_tip="この住民とのフレンドシップを終了します。" label_selected="フレンド削除"/>
+			<button name="block" label="ブロック" tool_tip="この住民をブロックします。"/>
+			<button name="unblock" label="ブロック解除" tool_tip="この住民のブロックを解除します。"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box label="検索に表示" name="show_in_search_checkbox"/>
+	<check_box name="show_in_search" label="検索に表示" tool_tip="検索結果に情報が表示されるようにします。"/>
+	<check_box name="hide_sl_age" label="完全な誕生日を表示" tool_tip="ＳＬ年齢を他の人に見せましょう"/>
+	<button name="save_description_changes" label="保存"/>
+	<button name="discard_description_changes" label="破棄"/>
 </panel>

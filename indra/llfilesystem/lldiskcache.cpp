@@ -333,11 +333,21 @@ const std::string LLDiskCache::metaDataToFilepath(const LLUUID& id, LLAssetType:
 
 const std::string LLDiskCache::getCacheInfo()
 {
+    LL_PROFILE_ZONE_SCOPED; // <FS:Beq/> add some instrumentation
     std::ostringstream cache_info;
 
     F32 max_in_mb = (F32)mMaxSizeBytes / (1024.0f * 1024.0f);
-    F32 percent_used = ((F32)dirFileSize(sCacheDir) / (F32)mMaxSizeBytes) * 100.0f;
-
+    // <FS:Beq> stall prevention. We still need to make sure this initialised when called at startup.
+    F32 percent_used;
+    if (mStoredCacheSize > 0)
+    {
+        percent_used = ((F32)mStoredCacheSize / (F32)mMaxSizeBytes) * 100.0f;
+    }
+    else
+    {
+        percent_used = ((F32)dirFileSize(sCacheDir) / (F32)mMaxSizeBytes) * 100.0f; 
+    }
+    // </FS:Beq>
     cache_info << std::fixed;
     cache_info << std::setprecision(1);
     cache_info << "Max size " << max_in_mb << " MB ";

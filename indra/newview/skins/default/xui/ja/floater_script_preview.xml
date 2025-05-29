@@ -3,6 +3,9 @@
 	<floater.string name="Title">
 		スクリプト：[NAME]
 	</floater.string>
+	<text name="path_txt" tool_tip="インベントリの位置：[PATH]">
+		インベントリの位置：[PATH]
+	</text>
 	<text name="desc txt">
 		説明：
 	</text>

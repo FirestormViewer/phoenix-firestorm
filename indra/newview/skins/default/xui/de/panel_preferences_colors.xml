@@ -53,6 +53,18 @@
 			<text name="object_name_header_label">
 				Objekte
 			</text>
+			<text name="mention_colors">
+				Chat-Erwähnungen:
+			</text>
+			<text name="font_mention_label">
+				Schrift
+			</text>
+			<text name="resident_mention_label">
+				Einwohner
+			</text>
+			<text name="self_mention_label">
+				Selbst
+			</text>
 			<slider label="Abschwächungsfaktor außerhalb Chat-Reichweite:" label_width="275" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Faktor, der dafür verwendet wird, die normale Chatfarbe abzuschwächen, wenn sich der Sender außerhalb der normalen Chatreichweite befindet (0 = dunkel, 1 = hell)."/>
 			<check_box name="FSColorIMsDistinctly" label="IM/Gruppenchat in Konsole unterschiedlich einfärben:"/>
 			<panel name="im_color_panel">
@@ -201,10 +213,17 @@
 			<slider name="console_background_opacity" label="Deckkraft:" tool_tip="Deckkraft für Konsole auswählen"/>
 			<slider label="Deckkraft für Schwebe-Text:" name="FSHudTextBackgroundOpacity" tool_tip="Deckkraft für Hintergrund von Schwebe-Text festlegen"/>
 			<text name="preferences_search_label">
-				Farbe für Einstellungssuche:
-			</text>
-			<color_swatch name="preferences_search_color" tool_tip="Farbe für die Hervorhebung der Einstellungssuche"/>
-			<text name="area_search_beacon_color_label">
+                Farben für Einstellungssuche:
+            </text>
+			<text name="preferences_search_bg_label" width ="75">
+                Hintergrund:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Hintergrundfarbe für die Hervorhebung der Einstellungssuche"/>
+			<text name="preferences_search_font_label" width="60">
+                Schriftart:
+            </text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Schriftfarbe für die Hervorhebung der Einstellungssuche"/>
+			<text name="area_search_beacon_color_label" left="300">
 				Farbe für Markierung der Umgebungssuche:
 			</text>
 			

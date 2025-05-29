@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="panel_flickr_account">
 	<string name="flickr_connected" value="Sie sind mit Flickr verbunden als:"/>
-	<string name="flickr_disconnected" value="Nicht mit Flickr verbunden"/>
+	<string name="flickr_disconnected" value="Nicht mit Flickr verbunden."/>
 	<text name="account_caption_label">
 		Nicht mit Flickr verbunden.
 	</text>

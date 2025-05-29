@@ -186,6 +186,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowSpeakingIndicator(p.show_speaking_indicator)
 , mShowPermissions(p.show_permissions_granted)
 , mShowCompleteName(false)
+, mForceCompleteName(false)
 // [RLVa:KB] - Checked: RLVa-1.2.0
 , mRlvCheckShowNames(false)
 // [/RLVa:KB]
@@ -254,7 +255,7 @@ void LLAvatarList::setShowIcons(std::string param_name)
 
 std::string LLAvatarList::getAvatarName(LLAvatarName av_name)
 {
-    return mShowCompleteName? av_name.getCompleteName(false) : av_name.getDisplayName();
+    return mShowCompleteName? av_name.getCompleteName(false, mForceCompleteName) : av_name.getDisplayName();
 }
 
 // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
@@ -389,7 +390,7 @@ void LLAvatarList::refresh()
 
         // <FS:Ansariel> FIRE-12750: Name filter not working correctly
         //if (!have_filter || findInsensitive(getAvatarName(av_name), mNameFilter))
-        if (!have_filter || findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+        if (!have_filter || findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mForceCompleteName, mRlvCheckShowNames), mNameFilter))
         // </FS:Ansariel>
         {
             if (nadded >= ADD_LIMIT)
@@ -438,7 +439,7 @@ void LLAvatarList::refresh()
             have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
             // <FS:Ansariel> FIRE-12750: Name filter not working correctly
             //if (!findInsensitive(getAvatarName(av_name), mNameFilter))
-            if (!findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+            if (!findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mForceCompleteName, mRlvCheckShowNames), mNameFilter))
             // </FS:Ansariel>
             {
                 removeItemByUUID(buddy_id);
@@ -493,7 +494,7 @@ void LLAvatarList::updateAvatarNames()
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
         LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
-        item->setShowCompleteName(mShowCompleteName);
+        item->setShowCompleteName(mShowCompleteName, mForceCompleteName);
         item->updateAvatarName();
     }
     mNeedUpdateNames = false;
@@ -515,7 +516,7 @@ bool LLAvatarList::filterHasMatches()
 
         // <FS:Ansariel> FIRE-12750: Name filter not working correctly
         //if (have_name && !findInsensitive(getAvatarName(av_name), mNameFilter))
-        if (have_name && !findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+        if (have_name && !findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mForceCompleteName, mRlvCheckShowNames), mNameFilter))
         // </FS:Ansariel>
         {
             continue;
@@ -534,6 +535,11 @@ boost::signals2::connection LLAvatarList::setRefreshCompleteCallback(const commi
 boost::signals2::connection LLAvatarList::setItemDoubleClickCallback(const mouse_signal_t::slot_type& cb)
 {
     return mItemDoubleClickSignal.connect(cb);
+}
+
+boost::signals2::connection LLAvatarList::setItemClickedCallback(const mouse_signal_t::slot_type& cb)
+{
+    return mItemClickedSignal.connect(cb);
 }
 
 //virtual
@@ -570,7 +576,7 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
 void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, bool is_online, EAddPosition pos)
 {
     LLAvatarListItem* item = new LLAvatarListItem();
-    item->setShowCompleteName(mShowCompleteName);
+    item->setShowCompleteName(mShowCompleteName, mForceCompleteName);
 // [RLVa:KB] - Checked: RLVa-1.2.0
     item->setRlvCheckShowNames(mRlvCheckShowNames);
 // [/RLVa:KB]
@@ -590,6 +596,7 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, bool is
     item->showDisplayName(mShowDisplayName);
 
     item->setDoubleClickCallback(boost::bind(&LLAvatarList::onItemDoubleClicked, this, _1, _2, _3, _4));
+    item->setMouseDownCallback(boost::bind(&LLAvatarList::onItemClicked, this, _1, _2, _3, _4));
 
     addItem(item, id, pos);
 }
@@ -715,9 +722,14 @@ void LLAvatarList::onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 // [/RLVa:KB]
 }
 
+void LLAvatarList::onItemClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
+{
+    mItemClickedSignal(ctrl, x, y, mask);
+}
+
 // <FS:Ansariel> FIRE-12750: Name filter not working correctly
 // static
-std::string LLAvatarList::getNameForDisplay(const LLUUID& avatar_id, const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames)
+std::string LLAvatarList::getNameForDisplay(const LLUUID& avatar_id, const LLAvatarName& av_name, bool show_displayname, bool show_username, bool force_use_complete_name, bool rlv_check_shownames)
 {
     bool fRlvCanShowName = (!rlv_check_shownames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, avatar_id));
     if (show_displayname && !show_username)
@@ -730,7 +742,7 @@ std::string LLAvatarList::getNameForDisplay(const LLUUID& avatar_id, const LLAva
     }
     else
     {
-        return ( (fRlvCanShowName) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+        return ( (fRlvCanShowName) ? av_name.getCompleteName(false, force_use_complete_name) : RlvStrings::getAnonym(av_name) );
     }
 }
 // </FS:Ansariel>

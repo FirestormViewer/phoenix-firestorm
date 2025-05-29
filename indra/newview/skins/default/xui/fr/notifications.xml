@@ -948,6 +948,21 @@ Assurez-vous que le fichier a l&apos;extension correcte.
 		Impossible de charger [FILE] suite au problème suivant : [REASON]
 Veuillez réessayer ultérieurement.
 	</notification>
+	<notification name="CannotUploadSnapshotEmailTooBig">
+		Impossible de transférer l'image [FICHIER] pour la raison suivante : [MOTIF].
+
+Le fichier est peut-être trop lourd, essayez de réduire la résolution, la qualité ou réessayez plus tard.
+	</notification>
+	<notification name="CannotUploadSnapshotWebTooBig">
+		Impossible de transférer l'image.
+
+Le fichier est peut-être trop lourd, essayez de réduire la résolution, la qualité ou réessayez plus tard.
+	</notification>
+	<notification name="CannotOpenFileTooBig">
+		Impossible d'ouvrir le fichier.
+
+La visionneuse a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est peut-être trop lourd.
+	</notification>
 	<notification name="LandmarkCreated">
 		Vous avez ajouté [LANDMARK_NAME] à votre dossier [FOLDER_NAME].
 	</notification>
@@ -3048,7 +3063,10 @@ Voulez-vous autoriser [APP_NAME] à poster sur votre compte Flickr?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		Votre photo est visible maintenant [http://www.flickr.com/photos/upload/edit/?ids=[ID] ici].
+		Votre photo est visible maintenant [https://www.flickr.com/photos/me/[ID] ici].
+	</notification>
+	<notification name="FSPrimfeedUploadComplete">
+		Votre message Primfeed peut maintenant être consulté [[PF_POSTURL] ici].
 	</notification>
 	<notification name="EventNotification">
 		Avis d&apos;événement :
@@ -5562,6 +5580,10 @@ Voulez-vous continuer ?
 	<notification name="NoSupportGLTFShader">
 		Les scènes GLTF ne sont pas encore prises en charge par votre matériel graphique.
 	</notification>
+	<notification name="WaterExclusionSurfacesWarning">
+		Si vous cochez la case « cacher l'eau », les choix de texture, d'aspérités et de brillance seront écrasés.
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Continuer"/>
+	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Vous êtes sur le point d'activer l'AutoFPS. Tous les paramètres graphiques non sauvegardés seront perdus.
 
@@ -5612,5 +5634,30 @@ Certains programmes antivirus peuvent bloquer par erreur des parties de [APP_NAM
 Pour obtenir des instructions détaillées sur la manière de mettre [APP_NAME] sur liste blanche - y compris une liste de fichiers et de dossiers à exclure - veuillez consulter notre guide :
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
+	</notification>
+	<notification label="Confirmer le remplacement de la pose" name="ConfirmPoserOverwrite">
+		Remplacer la pose “[POSE_NAME]”?
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
+	</notification>
+	<notification name="PrimfeedLoginRequestFailed">
+		Demande de connexion refusée par Primfeed.
+	</notification>
+	<notification name="PrimfeedAuthorizationFailed">
+		L'autorisation Primfeed a échoué. La séquence d'autorisation n'a pas été achevée.
+	</notification>
+	<notification name="PrimfeedAuthorizationAlreadyInProgress">
+		L'autorisation Primfeed est déjà en cours. Veuillez compléter l'autorisation Primfeed dans votre navigateur web avant de réessayer.
+	</notification>
+	<notification name="PrimfeedAuthorizationSuccessful">
+		Autorisation Primfeed terminée. Vous pouvez maintenant poster des images sur Primfeed.
+	</notification>
+	<notification name="PrimfeedValidateFailed">
+		La validation de l'utilisateur Primfeed a échoué. Primfeed n'a pas reconnu ce compte ou la connexion a échoué.
+	</notification>
+	<notification name="PrimfeedAlreadyAuthorized">
+		Vous avez déjà lié ce compte à Primfeed. Utilisez le bouton de réinitialisation si vous souhaitez recommencer.
+	</notification>
+	<notification name="PrimfeedUserStatusFailed">
+		La connexion de l'utilisateur Primfeed a réussi, mais les vérifications d'état ont échoué. Veuillez vérifier que Primfeed fonctionne.
 	</notification>
 </notifications>

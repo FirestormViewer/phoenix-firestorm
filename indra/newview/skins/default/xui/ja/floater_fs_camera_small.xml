@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_camera_floater_small">
+	<floater.string name="rotate_tooltip">
+		対象を中心にカメラを回す
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		対象にカメラをズーム
+	</floater.string>
+	<floater.string name="move_tooltip">
+		カメラを上下左右に移動
+	</floater.string>
+	<floater.string name="camera_modes_title">
+		カメラモードのタイトル
+	</floater.string>
+	<floater.string name="pan_mode_title">
+		パンモードのタイトル
+	</floater.string>
+	<floater.string name="presets_mode_title">
+		プリセットモードのタイトル
+	</floater.string>
+	<floater.string name="free_mode_title">
+		フリーモードのタイトル
+	</floater.string>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="対象にカメラを追尾させます。" />
+				<!-- <FS:Chanayane> Camera roll (from Alchemy) -->
+				<button name="roll_left" tool_tip="カメラを左に傾けます。"/>
+				<button name="roll_right" tool_tip="カメラを右に傾けます。"/>
+				<!-- </FS:Chanayane> -->
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="対象にカメラをズームします。"/>
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="buttons_view">
+		<panel_camera_item name="front_view" tool_tip="前方ビュー">
+			<panel_camera_item.text name="front_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="group_view" tool_tip="側方ビュー">
+			<panel_camera_item.text name="group_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="rear_view" tool_tip="後方ビュー">
+			<panel_camera_item.text name="rear_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+	<panel name="buttons">
+		<panel_camera_item name="object_view" tool_tip="オブジェクトビュー">
+			<panel_camera_item.text name="object_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="mouselook_view" tool_tip="マウスルックビュー">
+			<panel_camera_item.text name="mouselook_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="reset_view" tool_tip="ビューをリセットします。">
+			<panel_camera_item.text name="reset_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+</floater>

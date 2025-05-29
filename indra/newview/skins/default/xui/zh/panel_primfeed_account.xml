@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<panel name="panel_primfeed_account">
+	<string name="primfeed_connected" value="您已連接到Primfeed，帳戶為：" />
+	<string name="primfeed_disconnected" value="尚未連接到 Primfeed。" />
+	<string name="primfeed_plan_unknown" value="未知" />
+	<text name="connected_as_label">
+		尚未連接到Primfeed。
+	</text>
+	<text name="primfeed_account_plan_label">
+		帳戶類型：
+	</text>
+	<panel name="panel_buttons">
+		<button label="連接..." name="connect_btn" />
+		<button label="斷開連接" name="disconnect_btn" />
+		<text name="account_learn_more_label">
+			[https://docs.primfeed.com 點擊了解更多關於Primfeed的資訊]
+		</text>
+	</panel>
+</panel>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<panel name="panel_primfeed_photo">
+	<combo_box name="resolution_combobox" tool_tip="Bildauflösung">
+		<combo_box.item label="Aktuelles Fenster" name="CurrentWindow"/>
+		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
+	</combo_box>
+	<combo_box name="filters_combobox" tool_tip="Bildfilter">
+		<combo_box.item label="Kein Filter" name="NoFilter"/>
+	</combo_box>
+	<check_box label="Seitenverh. behalten" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		Aktualisiere...
+	</text>
+	<check_box label="Rahmen anzeigen" name="show_frame" tool_tip="Zeigt einen Rahmen um den Bereich der Aufnahme an. Teile der Szene, die außerhalb des Aufnahmebereichs liegen, werden entsättigt und leicht verschwommen dargestellt."/>
+	<check_box label="Guide anzeigen" name="show_guides" tool_tip="Zeigt Aufnahme-Guide (Drittel-Regel) innerhalb des Aufnahmebereichs an."/>
+	<button label="Aktualisieren" name="new_snapshot_btn" tool_tip="Zum Aktualisieren klicken"/>
+	<button label="Vorschau" name="big_preview_btn" tool_tip="Klicken, um Vorschau ein-/auszuschalten"/>
+	<text name="description_label">
+		Beschreibung:
+	</text>
+	<check_box initial_value="true" label="Standort der Beschreibung hinzufügen" name="add_location_cb"/>
+	<check_box label="Zur öffentl. Galerie hinzufügen" name="primfeed_add_to_public_gallery"/>
+	<check_box label="Kommerzieller Inhalt" name="primfeed_commercial_content"/>
+	<combo_box name="rating_combobox" tool_tip="Primfeed-Inhaltseinstufung">
+		<combo_box.item label="Generell" name="GeneralRating"/>
+		<combo_box.item label="Moderat" name="ModerateRating"/>
+		<combo_box.item label="Adult" name="AdultRating"/>
+		<combo_box.item label="Adult+" name="AdultPlusRating"/>
+	</combo_box>
+	<check_box label="Nach posten in Browser öffnen" tool_tip="Öffnet den Primfeed-Post automatisch im Browser." name="primfeed_open_url_on_post"/>
+	<button label="Teilen" name="post_photo_btn"/>
+	<button label="Abbrechen" name="cancel_photo_btn"/>
+</panel>

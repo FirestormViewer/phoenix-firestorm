@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<panel name="panel_primfeed_account">
+	<string name="primfeed_connected" value="Вы подключены к Primfeed как:"/>
+	<string name="primfeed_disconnected" value="Не подключен к Primfeed"/>
+	<string name="primfeed_plan_unknown" value="Неизвестный" />
+	<text name="connected_as_label">Не подключен к Primfeed.</text>
+	<text name="primfeed_account_plan_label">Тип аккаунта:</text>
+	<panel name="panel_buttons">
+		<button label="Подключить..." name="connect_btn"/>
+		<button label="Отключить" name="disconnect_btn"/>
+	</panel>
+</panel>

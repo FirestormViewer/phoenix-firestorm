@@ -78,6 +78,7 @@
 #include "llviewerregion.h"
 #include "llcorehttputil.h"
 #include "lluiusage.h"
+#include "llurlregistry.h"
 // [RLVa:KB] - Checked: 2013-05-10 (RLVa-1.4.9)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -236,6 +237,9 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::getConversation(session_id);
     bool store_dnd_message = false; // flag storage of a dnd message
     bool is_session_focused = session_floater->isTornOff() && session_floater->hasFocus();
+    bool contains_mention = LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString());
+    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    bool play_snd_mention = contains_mention && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT);
     if (!LLFloater::isVisible(im_box) || im_box->isMinimized())
     {
         conversations_floater_status = CLOSED;
@@ -269,7 +273,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         else
         {
             user_preferences = gSavedSettings.getString("NotificationNearbyChatOptions");
-            if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNearbyChatIM")))
+            if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNearbyChatIM")) && !play_snd_mention)
             {
                 make_ui_sound("UISndNewIncomingIMSession");
             }
@@ -280,7 +284,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         if (LLAvatarTracker::instance().isBuddy(participant_id))
         {
             user_preferences = gSavedSettings.getString("NotificationFriendIMOptions");
-            if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundFriendIM")))
+            if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundFriendIM")) && !play_snd_mention)
             {
                 make_ui_sound("UISndNewIncomingIMSession");
             }
@@ -288,7 +292,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         else
         {
             user_preferences = gSavedSettings.getString("NotificationNonFriendIMOptions");
-            if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNonFriendIM")))
+            if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNonFriendIM")) && !play_snd_mention)
             {
                 make_ui_sound("UISndNewIncomingIMSession");
             }
@@ -297,7 +301,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     else if (session->isAdHocSessionType())
     {
         user_preferences = gSavedSettings.getString("NotificationConferenceIMOptions");
-        if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundConferenceIM")))
+        if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundConferenceIM")) && !play_snd_mention)
         {
             make_ui_sound("UISndNewIncomingIMSession");
         }
@@ -305,9 +309,16 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     else if(session->isGroupSessionType())
     {
         user_preferences = gSavedSettings.getString("NotificationGroupChatOptions");
-        if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundGroupChatIM")))
+        if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundGroupChatIM")) && !play_snd_mention)
         {
             make_ui_sound("UISndNewIncomingIMSession");
+        }
+    }
+    if (play_snd_mention)
+    {
+        if (!gAgent.isDoNotDisturb())
+        {
+            make_ui_sound("UISndChatMention");
         }
     }
 
@@ -362,7 +373,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     if ("openconversations" == user_preferences
             || ON_TOP == conversations_floater_status
             || ("toast" == user_preferences && ON_TOP != conversations_floater_status)
-        || ("flash" == user_preferences && (CLOSED == conversations_floater_status
+        || (("flash" == user_preferences || contains_mention) && (CLOSED == conversations_floater_status
                                         || NOT_ON_TOP == conversations_floater_status))
         || is_dnd_msg)
     {
@@ -382,7 +393,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
                 }
                 else
                 {
-            im_box->flashConversationItemWidget(session_id, true);
+            im_box->flashConversationItemWidget(session_id, true, contains_mention);
         }
     }
         }
@@ -466,8 +477,14 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
             && gSavedSettings.getBOOL("FSNotifyNearbyChatFlash"))
         {
             im_container->addFlashingSession(session_id);
-            gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
         }
+
+        static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+        if (!gAgent.isDoNotDisturb() && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT) && LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString()))
+        {
+            make_ui_sound("UISndChatMention");
+        }
+
         return;
     }
 
@@ -490,7 +507,6 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         && gSavedSettings.getBOOL("FSNotifyIMFlash"))
     {
         im_container->addFlashingSession(session_id);
-        gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
     }
 
         // <FS:Ansariel> (Group-)IMs in chat console
@@ -3446,11 +3462,18 @@ void LLIMMgr::addMessage(
     const LLUUID& region_id,
     const LLVector3& position,
     bool is_region_msg,
-    U32 timestamp,      // May be zero
+    U32 timestamp,  // May be zero
+    LLUUID display_id,
+    std::string_view display_name,
     bool is_announcement, // <FS:Ansariel> Special parameter indicating announcements
     bool keyword_alert_performed) // <FS:Ansariel> Pass info if keyword alert has been performed
 {
     LLUUID other_participant_id = target_id;
+    std::string message_display_name = (display_name.empty()) ? from : std::string(display_name);
+    if (display_id.isNull() && (display_name.empty()))
+    {
+        display_id = other_participant_id;
+    }
 
     LLUUID new_session_id = session_id;
     if (new_session_id.isNull())
@@ -3486,6 +3509,8 @@ void LLIMMgr::addMessage(
     static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
     static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
     static LLCachedControl<U32> PlayModeUISndNewIncomingConfIMSession(gSavedSettings, "PlayModeUISndNewIncomingConfIMSession");
+    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    bool play_snd_mention = play_snd_mention_pref && LLUrlRegistry::getInstance()->containsAgentMention(msg);
     bool do_not_disturb = gAgent.isDoNotDisturb();
     bool is_group_chat = false;
     if (dialog != IM_NOTHING_SPECIAL)
@@ -3601,10 +3626,6 @@ void LLIMMgr::addMessage(
                 }
             }
 
-            // <FS:PP> Configurable IM sounds
-            // //Play sound for new conversations
-            // if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
-
             // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
             static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
             if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && ignoreAdHocSessions && !from_linden)
@@ -3616,7 +3637,6 @@ void LLIMMgr::addMessage(
                     //<FS:Beq> [FIRE-21385] Add inviter name/UUID to ad-hoc ignored messages
                     LLSD args;
                     args["AVATAR_NAME"] = LLSLURL("agent", other_participant_id, "about").getSLURLString();
-//                  LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
                     LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << args["AVATAR_NAME"] << LL_ENDL;
                     if (!gIMMgr->leaveSession(new_session_id))
                     {
@@ -3624,7 +3644,6 @@ void LLIMMgr::addMessage(
                     }
                     else if (reportIgnoredAdHocSession)
                     {
-//                      report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession"));
                         FSCommon::report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession", args));
                     }
                     //</FS:Beq>
@@ -3633,18 +3652,32 @@ void LLIMMgr::addMessage(
             }
             // </FS:PP>
 
-            if(!do_not_disturb && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+            // <FS:PP> Configurable IM sounds
+            ////Play sound for new conversations
+            //if (!skip_message && !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
+            //{
+            //    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+            //    if (!play_snd_mention_pref || !LLUrlRegistry::getInstance()->containsAgentMention(msg))
+            //    {
+            //        make_ui_sound("UISndNewIncomingIMSession");
+            //    }
+            //}
+            if (!do_not_disturb && !play_snd_mention)
             {
-                make_ui_sound("UISndNewIncomingIMSession");
+                if (PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+                {
+                    make_ui_sound("UISndNewIncomingIMSession");
+                }
+                else if (PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
+                {
+                    make_ui_sound("UISndNewIncomingGroupIMSession");
+                }
+                else if (PlayModeUISndNewIncomingConfIMSession != 0 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
+                {
+                    make_ui_sound("UISndNewIncomingConfIMSession");
+                }
             }
-            else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
-            {
-                make_ui_sound("UISndNewIncomingGroupIMSession");
-            }
-            else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession != 0 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
-            {
-                make_ui_sound("UISndNewIncomingConfIMSession");
-            }
+            // </FS:PP>
         }
         else
         {
@@ -3660,15 +3693,15 @@ void LLIMMgr::addMessage(
         return;
     }
     // </FS:Zi>
-    else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
+    else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL && !play_snd_mention)
     {
         make_ui_sound("UISndNewIncomingIMSession");
     }
-    else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
+    else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL && is_group_chat && !play_snd_mention)
     {
         make_ui_sound("UISndNewIncomingGroupIMSession");
     }
-    else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession == 2 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
+    else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession == 2 && dialog != IM_NOTHING_SPECIAL && !is_group_chat && !play_snd_mention)
     {
         make_ui_sound("UISndNewIncomingConfIMSession");
     // </FS:PP>
@@ -3680,7 +3713,7 @@ void LLIMMgr::addMessage(
         //LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
         FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
         // </FS:Ansariel> [FS communication UI]
-        if (im_floater && !im_floater->hasFocus())
+        if (im_floater && !im_floater->hasFocus() && !play_snd_mention)
         {
             make_ui_sound("UISndNewIncomingIMSession");
         }
@@ -3691,7 +3724,7 @@ void LLIMMgr::addMessage(
         //LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
         FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
         // </FS:Ansariel> [FS communication UI]
-        if (im_floater && !im_floater->hasFocus())
+        if (im_floater && !im_floater->hasFocus() && !play_snd_mention)
         {
             make_ui_sound("UISndNewIncomingGroupIMSession");
         }
@@ -3702,18 +3735,23 @@ void LLIMMgr::addMessage(
         //LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
         FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
         // </FS:Ansariel> [FS communication UI]
-        if (im_floater && !im_floater->hasFocus())
+        if (im_floater && !im_floater->hasFocus() && !play_snd_mention)
         {
             make_ui_sound("UISndNewIncomingConfIMSession");
         }
     }
     // </FS:WoLf>
 
+    if (!gAgent.isDoNotDisturb() && play_snd_mention)
+    {
+        make_ui_sound("UISndChatMention");
+    }
+
     if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
     {
         // <FS:Ansariel> Added is_announcement parameter
-        //LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_region_msg, timestamp);
-        LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_region_msg, timestamp, is_announcement, keyword_alert_performed);
+        //LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp);
+        LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp, is_announcement, keyword_alert_performed);
     }
 
     // Open conversation floater if offline messages are present
@@ -3723,7 +3761,7 @@ void LLIMMgr::addMessage(
     {
     //    LLFloaterReg::showInstance("im_container");
     //    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
-    //          flashConversationItemWidget(new_session_id, true);
+    //          flashConversationItemWidget(new_session_id, true, LLUrlRegistry::getInstance()->containsAgentMention(msg));
         LLFloaterReg::showInstance("fs_im_container");
     // </FS:CR>
     }
@@ -3905,14 +3943,53 @@ LLUUID LLIMMgr::addSession(
     //works only for outgoing ad-hoc sessions
     if (new_session &&
         ((IM_NOTHING_SPECIAL == dialog) || (IM_SESSION_P2P_INVITE == dialog) || (IM_SESSION_CONFERENCE_START == dialog)) &&
-        ids.size())
+        // <AS:chanayane> [FIRE-34494] fix unable to open an IM with someone who started a group chat
+        //ids.size())   
+        !ids.empty())
+        // </AS:chanayane>
     {
         session = LLIMModel::getInstance()->findAdHocIMSession(ids);
         if (session)
         {
-            new_session = false;
-            session_id = session->mSessionID;
+// <AS:chanayane> [FIRE-34494] fix unable to open an IM with someone who started a group chat
+            // new_session = false;
+            // session_id = session->mSessionID;
+
+            // Protect against wrong session type reuse (e.g., conference reused for IM)
+            if (session->mType != dialog)
+            {
+                LL_WARNS("IMVIEW") << "Discarding mismatched session type reuse: expected " 
+                   << dialog << " but found " << session->mType 
+                   << " for session " << session->mSessionID 
+                   << ". This may indicate improper reuse of a session object." << LL_ENDL;
+                session = nullptr;
+                new_session = true;
+                session_id = computeSessionID(dialog, other_participant_id);
+            }
+            else
+            {
+                new_session = false;
+                session_id = session->mSessionID;
+            }
         }
+    }
+
+    if (session && session->mType != dialog)
+    {
+        // Prevent reusing a session of the wrong type
+        session = nullptr;
+        new_session = true;
+
+        // Recompute session ID depending on dialog type
+        if (dialog == IM_SESSION_CONFERENCE_START)
+        {
+            session_id.generate();
+        }
+        else
+        {
+            session_id = computeSessionID(dialog, other_participant_id);
+        }
+// </AS:chanayane>
     }
 
     //Notify observers that a session was added
@@ -4064,6 +4141,7 @@ void LLIMMgr::inviteToSession(
             && voice_invite && "VoiceInviteQuestionDefault" == question_type)
         {
             LL_INFOS("IMVIEW") << "Rejecting voice call from initiating muted resident " << caller_name << LL_ENDL;
+            payload["voice_channel_info"] = voice_channel_info;
             LLIncomingCallDialog::processCallResponse(1, payload);
             return;
         }
@@ -4120,6 +4198,7 @@ void LLIMMgr::inviteToSession(
                 send_do_not_disturb_message(gMessageSystem, caller_id, session_id);
             }
             // silently decline the call
+            payload["voice_channel_info"] = voice_channel_info;
             LLIncomingCallDialog::processCallResponse(1, payload);
             return;
         }
@@ -4606,6 +4685,8 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
             LLVector3::zero,
             false,
             0,
+            LLUUID::null,
+            "",
             true
             );
     }
@@ -4679,6 +4760,8 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
             LLVector3::zero,
             false,
             0,
+            LLUUID::null,
+            "",
             true
             );
 
@@ -4702,6 +4785,8 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
                         LLVector3::zero,
                         false,
                         0,
+                        LLUUID::null,
+                        "",
                         true);
                 LLGiveInventory::doGiveInventoryItem(av_id, item, session_id);
             }

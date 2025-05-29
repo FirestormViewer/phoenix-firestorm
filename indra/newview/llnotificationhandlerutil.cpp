@@ -108,24 +108,28 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
             from = SYSTEM_FROM;
         }
 
-        // Build a new format username or firstname_lastname for legacy names
-        // to use it for a history log filename.
-        // <FS:Ansariel> [Legacy IM logfile names]
-        //std::string user_name = LLCacheName::buildUsername(session_name);
-        std::string user_name(session_name);
-        if (!gAgent.isInGroup(session_owner_id))
+        std::string file_name;
+        if (session_type == IM_SESSION_GROUP_START)
         {
+            file_name = session_name + LLLogChat::getGroupChatSuffix();
+        }
+        else
+        {
+            // Build a new format username or firstname_lastname for legacy names
+            // to use it for a history log filename.
+            // <FS:Ansariel> [Legacy IM logfile names]
+            //file_name = LLCacheName::buildUsername(session_name);
             if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
             {
-                user_name = session_name.substr(0, session_name.find(" Resident"));;
+                file_name = session_name.substr(0, session_name.find(" Resident"));;
             }
             else
             {
-                user_name = LLCacheName::buildUsername(session_name);
+                file_name = LLCacheName::buildUsername(session_name);
             }
+            // </FS:Ansariel> [Legacy IM logfile names]
         }
-        // </FS:Ansariel> [Legacy IM logfile names]
-        LLIMModel::instance().logToFile(user_name, from, from_id, message);
+        LLIMModel::instance().logToFile(file_name, from, from_id, message);
     }
     else
     {

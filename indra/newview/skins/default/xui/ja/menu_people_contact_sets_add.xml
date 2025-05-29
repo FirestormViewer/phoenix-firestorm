@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_people_contact_sets_add">
+	<menu_item_call label="コンタクトセットに追加…" name="add_set"/>
+	<menu_item_call label="連絡先に追加…" name="add_contact"/>
+</toggleable_menu>

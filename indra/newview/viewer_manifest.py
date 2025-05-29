@@ -1668,6 +1668,12 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         print("debug: adding {} to dylibs for openal".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
                         dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
+                        oldpath = os.path.join("@rpath", libfile)
+                        self.run_command(
+                            ['install_name_tool', '-change', oldpath,
+                             '@executable_path/../Resources/%s' % libfile,
+                             executable])
+
                 print(f"debug: dylibs = {dylibs}")
 
                 # our apps

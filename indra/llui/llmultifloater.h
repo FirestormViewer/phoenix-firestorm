@@ -66,9 +66,12 @@ public:
 
     virtual LLFloater*  getActiveFloater();
     virtual bool        isFloaterFlashing(LLFloater* floaterp);
-    virtual S32         getFloaterCount();
+    virtual S32         getFloaterCount() const;
 
-    virtual void setFloaterFlashing(LLFloater* floaterp, bool flashing);
+    // <FS:Ansariel> [FS communication UI]
+    //virtual void setFloaterFlashing(LLFloater* floaterp, bool flashing);
+    virtual void setFloaterFlashing(LLFloater* floaterp, bool flashing, bool alternate_color = false);
+    // </FS:Ansariel> [FS communication UI]
     virtual bool closeAllFloaters();    //Returns false if the floater could not be closed due to pending confirmation dialogs
     // <FS> Update torn off status and add title bar
     //void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; } // LL Code

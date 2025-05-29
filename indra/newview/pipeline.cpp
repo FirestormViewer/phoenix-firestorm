@@ -111,6 +111,7 @@
 #include "llfloatertools.h"
 #include "llfloatersnapshot.h" // <FS:Beq/> for snapshotFrame
 #include "llfloaterflickr.h" // <FS:Beq/> for snapshotFrame
+#include "fsfloaterprimfeed.h" // <FS:Beq/> for snapshotFrame
 #include "llsnapshotlivepreview.h" // <FS:Beq/> for snapshotFrame
 // #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 #include "llpathfindingpathtool.h"
@@ -131,7 +132,7 @@
 
 #include "SMAAAreaTex.h"
 #include "SMAASearchTex.h"
-
+#include "llerror.h"
 #ifndef LL_WINDOWS
 #define A_GCC 1
 #pragma GCC diagnostic ignored "-Wunused-function"
@@ -652,7 +653,6 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderMirrors");
     connectRefreshCachedSettingsSafe("RenderHeroProbeUpdateRate");
     connectRefreshCachedSettingsSafe("RenderHeroProbeConservativeUpdateMultiplier");
-    connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
     connectRefreshCachedSettingsSafe("FSRenderVignette");   // <FS:CR> Import Vignette from Exodus
     // <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
     connectRefreshCachedSettingsSafe("RenderAttachedLights");
@@ -789,15 +789,9 @@ void LLPipeline::requestResizeShadowTexture()
 
 void LLPipeline::resizeShadowTexture()
 {
-    // <FS:Beq> [FIRE-33200] changing shadowres requires reload - original fix by William Weaver (paperwork)
-    if(mRT->width == 0 || mRT->height == 0)
-    {
-        return;
-    }
-    // </FS:Beq>
     releaseSunShadowTargets();
     releaseSpotShadowTargets();
-    allocateShadowBuffer(mRT->width, mRT->height);
+    allocateShadowBuffer(mRT->screen.getWidth(), mRT->screen.getHeight()); // <FS:Beq> revert and correct previous shadowres fix that leads to FPS drop (FIRE-3200)
     gResizeShadowTexture = false;
 }
 
@@ -1042,7 +1036,7 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 
         // <FS:Beq> create an independent preview screen target
         {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("PreviewScreenBuffer");
-        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA); 
+        mPreviewScreen.allocate(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT, GL_RGBA, true); 
         } // </FS:Beq>
         {LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("BakeMapBuffer");// <FS:Beq/> create an independent preview screen target
         mBakeMap.allocate(LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH, LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT, GL_RGBA);
@@ -1425,8 +1419,11 @@ void LLPipeline::createGLBuffers()
     }
 
     allocateScreenBuffer(resX, resY);
-    mRT->width = 0;
-    mRT->height = 0;
+    // Do not zero out mRT dimensions here. allocateScreenBuffer() above
+    // already sets the correct dimensions. Zeroing them caused resizeShadowTexture()
+    // to fail if called immediately after createGLBuffers (e.g., post graphics change).
+    // mRT->width = 0;
+    // mRT->height = 0;
 
 
     if (!mNoiseMap)
@@ -1551,7 +1548,18 @@ void LLPipeline::createLUTBuffers()
     {
         U32 lightResX = gSavedSettings.getU32("RenderSpecularResX");
         U32 lightResY = gSavedSettings.getU32("RenderSpecularResY");
-        F32* ls = new F32[lightResX*lightResY];
+        F32* ls = nullptr;
+        try
+        {
+            ls = new F32[lightResX*lightResY];
+        }
+        catch (std::bad_alloc&)
+        {
+            LLError::LLUserWarningMsg::showOutOfMemory();
+            // might be better to set the error into mFatalMessage and rethrow
+            LL_ERRS() << "Bad memory allocation in createLUTBuffers! lightResX: "
+                << lightResX << " lightResY: " << lightResY << LL_ENDL;
+        }
         F32 specExp = gSavedSettings.getF32("RenderSpecularExponent");
         // Calculate the (normalized) blinn-phong specular lookup texture. (with a few tweaks)
         for (U32 y = 0; y < lightResY; ++y)
@@ -7418,7 +7426,7 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst)
 
         LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
-        bool no_post = gSnapshotNoPost || psky->getReflectionProbeAmbiance(should_auto_adjust) == 0.f || (buildNoPost && gFloaterTools->isAvailable());
+        bool no_post = gSnapshotNoPost || psky->getReflectionProbeAmbiance(should_auto_adjust) == 0.f || (buildNoPost && gFloaterTools && gFloaterTools->isAvailable());
         LLGLSLShader& shader = no_post ? gNoPostTonemapProgram : gDeferredPostTonemapProgram;
 
         shader.bind();
@@ -8042,12 +8050,12 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     }
     const bool simple_snapshot_visible = LLFloaterReg::instanceVisible("simple_snapshot");
     const bool flickr_snapshot_visible = LLFloaterReg::instanceVisible("flickr");
+    const bool primfeed_snapshot_visible = LLFloaterReg::instanceVisible("primfeed"); // <FS:Beq/> Primfeed integration
     const bool snapshot_visible = LLFloaterReg::instanceVisible("snapshot");
-    const bool any_snapshot_visible = simple_snapshot_visible || flickr_snapshot_visible || snapshot_visible;
+    const bool any_snapshot_visible = simple_snapshot_visible || flickr_snapshot_visible || primfeed_snapshot_visible || snapshot_visible; // <FS:Beq/> Primfeed integration
     if (!show_frame || !any_snapshot_visible || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
     {
         return false;
-
     }
     LLSnapshotLivePreview * previewView = nullptr;
     if (snapshot_visible)
@@ -8061,6 +8069,13 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
         auto * floater = dynamic_cast<LLFloaterFlickr*>(LLFloaterReg::findInstance("flickr"));
         previewView = floater->getPreviewView();
     }
+     // <FS:Beq> Primfeed integration
+    if (primfeed_snapshot_visible && !previewView)
+    {
+        auto * floater = dynamic_cast<FSFloaterPrimfeed*>(LLFloaterReg::findInstance("primfeed"));
+        previewView = floater->getPreviewView();
+    }
+    // </FS:Beq>
     if(!previewView)
     {
         return false;

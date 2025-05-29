@@ -113,10 +113,11 @@ class LLMessageHandlerBridge : public LLHTTPNode
 void LLMessageHandlerBridge::post(LLHTTPNode::ResponsePtr response,
                             const LLSD& context, const LLSD& input) const
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;    
     std::string name = context[CONTEXT_REQUEST][CONTEXT_WILDCARD]["message-name"];
     char* namePtr = LLMessageStringTable::getInstance()->getString(name.c_str());
 
-    LL_DEBUGS() << "Setting mLastSender " << input["sender"].asString() << LL_ENDL;
+    LL_DEBUGS("Messaging") << "Setting mLastSender " << input["sender"].asString() << LL_ENDL;
     gMessageSystem->mLastSender = LLHost(input["sender"].asString());
     gMessageSystem->mPacketsIn += 1;
     gMessageSystem->mLLSDMessageReader->setMessage(namePtr, input["body"]);
@@ -659,8 +660,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
 
             // UseCircuitCode is allowed in even from an invalid circuit, so that
             // we can toss circuits around.
-            if(
-                valid_packet &&
+            else if (
                 !cdp &&
                 (mTemplateMessageReader->getMessageName() !=
                  _PREHASH_UseCircuitCode))
@@ -670,8 +670,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
                 valid_packet = false;
             }
 
-            if(
-                valid_packet &&
+            if ( valid_packet &&
                 cdp &&
                 !cdp->getTrusted() &&
                 mTemplateMessageReader->isTrusted())
@@ -683,7 +682,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
                 valid_packet = false;
             }
 
-            if( valid_packet )
+            if ( valid_packet )
             {
                 logValidMsg(cdp, host, recv_reliable, recv_resent, acks>0 );
 
@@ -737,6 +736,7 @@ bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
     // Check to see if we need to print debug info
     if ((mt_sec - mCircuitPrintTime) > mCircuitPrintFreq)
     {
+        mPacketRing.dumpPacketRingStats();
         dumpCircuitInfo();
         mCircuitPrintTime = mt_sec;
     }
@@ -830,6 +830,11 @@ void LLMessageSystem::processAcks(LockMessageChecker&, F32 collect_time)
         mResendDumpTime = mt_sec;
         mCircuitInfo.dumpResends();
     }
+}
+
+S32 LLMessageSystem::drainUdpSocket()
+{
+    return mPacketRing.drainSocket(mSocket);
 }
 
 void LLMessageSystem::copyMessageReceivedToSend()
@@ -2046,6 +2051,7 @@ void LLMessageSystem::dispatch(
     const std::string& msg_name,
     const LLSD& message)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLPointer<LLSimpleResponse> responsep = LLSimpleResponse::create();
     dispatch(msg_name, message, responsep);
 }
@@ -2056,6 +2062,7 @@ void LLMessageSystem::dispatch(
     const LLSD& message,
     LLHTTPNode::ResponsePtr responsep)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if ((gMessageSystem->mMessageTemplates.find
             (LLMessageStringTable::getInstance()->getString(msg_name.c_str())) ==
                 gMessageSystem->mMessageTemplates.end()) &&

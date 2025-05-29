@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="stream_history" title="再生履歴">
+	<fs_scroll_list name="history">
+		<columns label="タイトル" name="title" />
+	</fs_scroll_list>
+</floater>

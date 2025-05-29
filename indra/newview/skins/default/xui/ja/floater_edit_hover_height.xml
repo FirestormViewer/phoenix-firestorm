@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="HoverHeight" title="ホバリングの高さ調整">
+<floater name="HoverHeight" title="ホバーする高さの設定">
 	<slider label="高さ" name="HoverHeightSlider"/>
-	<check_box label="カメラビューに影響" name="BindCameraCheck" />
+	<check_box label="カメラ位置を固定" name="BindCameraCheck"/>
 </floater>

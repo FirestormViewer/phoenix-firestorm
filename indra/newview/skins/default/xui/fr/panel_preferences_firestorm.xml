@@ -25,6 +25,7 @@
 			</combo_box>
 			<slider name="manual_environment_change_transition_period" label="Durée de transition de l'environnement :" tool_tip="Intervalle de transition en secondes entre des environnements. Zéro veut dire instantané."/>
 			<check_box name="EnvironmentPersistAcrossLogin" label="Persistance des réglages d'environnement entre deux sessions" tool_tip="Reprend les réglages actuels d'environnement lors de la prochaine connexion."/>
+			<check_box name="FSRepeatedEnvTogglesShared" label="La répétition des raccourcis clavier de l'environnement rétablit l'environnement partagé" tool_tip="Permet à des combinaisons de touches répétées (par exemple ctrl+shift+y) d'alterner entre le préréglage demandé &amp; l'environnement partagé"/>
 		</panel>
 		<panel label="Protection" name="ProtectionTab">
 			<check_box label="Empêcher de s'asseoir sur les objets par clic simple" name="FSBlockClickSit"/>

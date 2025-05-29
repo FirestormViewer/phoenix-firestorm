@@ -255,7 +255,7 @@ bool FSPosingMotion::allStartingRotationsAreZero() const
     return true;
 }
 
-void FSPosingMotion::setAllRotationsToZero()
+void FSPosingMotion::setAllRotationsToZeroAndClearUndo()
 {
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
     {

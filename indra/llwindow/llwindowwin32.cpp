@@ -4183,18 +4183,15 @@ void LLWindowWin32::fillCompositionLogfont(LOGFONT *logfont)
         break;
     }
 
-    // <FS:Beq> FIRE-34906 (BugSplat) crash when mPreEditor is NULL. (affects at least version 6.6.17->7.1.11)
-    // logfont->lfHeight = mPreeditor->getPreeditFontSize();
-    if(mPreeditor)
+    if (mPreeditor)
     {
         logfont->lfHeight = mPreeditor->getPreeditFontSize();
     }
     else
     {
-        // In the absence of other options, use the default font height for monospace.
-        logfont->lfHeight = LLFontGL::getFontMonospace()->getLineHeight();
+        // todo: extract from some font * LLUI::getScaleFactor() intead
+        logfont->lfHeight = 10;
     }
-    // </FS:Beq>
     logfont->lfWeight = FW_NORMAL;
 }
 
@@ -4858,9 +4855,18 @@ void LLWindowWin32::LLWindowWin32Thread::checkDXMem()
 
                         if (phys_mb > 0)
                         {
-                            // Intel uses 'shared' vram, cap it to 25% of total memory
-                            // Todo: consider caping all adapters at least to 50% ram
-                            budget_mb = llmin(budget_mb, (UINT64)(phys_mb * 0.25));
+                            if (gGLManager.mIsIntel)
+                            {
+                                // Intel uses 'shared' vram, cap it to 25% of total memory
+                                // Todo: consider a way of detecting integrated Intel and AMD
+                                budget_mb = llmin(budget_mb, (UINT64)(phys_mb * 0.25));
+                            }
+                            else
+                            {
+                                // More budget is generally better, but the way viewer
+                                // utilizes even dedicated VRAM leaves a footprint in RAM
+                                budget_mb = llmin(budget_mb, (UINT64)(phys_mb * 0.75));
+                            }
                         }
                         else
                         {

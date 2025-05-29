@@ -854,6 +854,13 @@
           parameter="flickr"/>
       </menu_item_call>
       <menu_item_call
+        label="Primfeed..."
+        name="Primfeed">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="primfeed"/>
+      </menu_item_call>
+      <menu_item_call
         label="Discord..."
         name="Discord">
         <menu_item_call.on_click
@@ -4136,6 +4143,18 @@
                  function="Advanced.ForceErrorSoftwareExceptionCoro" />
             </menu_item_call>
             <menu_item_call
+             label="Force a Crash in a Coroprocedure"
+             name="Force a Crash in a Coroprocedure">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorCoroprocedureCrash" />
+            </menu_item_call>
+            <menu_item_call
+             label="Force a Crash in a Work Queue"
+             name="Force a Crash in a Work Queue">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorWorkQueueCrash" />
+            </menu_item_call>
+            <menu_item_call
              label="Force a Crash in a Thread"
              name="Force a Crash in a Thread">
                 <menu_item_call.on_click
@@ -5261,6 +5280,13 @@
                  parameter="font_test" />
             </menu_item_call>
             <menu_item_call
+             label="Show SLapps Test"
+             name="Show SLapps Test">
+                <menu_item_call.on_click
+                 function="Floater.Show"
+                 parameter="slapp_test" />
+            </menu_item_call>
+            <menu_item_call
              label="Load from XML"
              name="Load from XML">
                 <menu_item_call.on_click
@@ -5649,6 +5675,18 @@
        name="Compress File Test">
         <menu_item_call.on_click
          function="Advanced.CompressFileTest" />
+      </menu_item_call>
+      <menu_item_call
+       label="Primfeed Auth Test"
+       name="primfeed_auth_test">
+        <menu_item_call.on_click
+         function="Advanced.PrimfeedAuth" />
+      </menu_item_call>
+      <menu_item_call
+       label="Primfeed Auth Reset"
+       name="primfeed_auth_clear">
+        <menu_item_call.on_click
+         function="Advanced.PrimfeedAuthReset" />
       </menu_item_call>
 
       <menu_item_call

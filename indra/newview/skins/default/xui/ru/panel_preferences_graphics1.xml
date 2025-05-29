@@ -218,6 +218,16 @@
 			<slider label="Качество теней" tool_tip="Качество теней (по умолчанию 1)" name="ShadowResolution"/>
 			<slider label="Масштабирование прорисовки текстуры земли" name="RenderTerrainScale" tool_tip="Определяет масштаб текстуры местности - ниже более сжато (требуется перезапуск)"/>
 			<slider label="Заострение:" name="RenderSharpness"/>
+			<text name="ReflectionProbeCount">
+				Макс. датчиков отражения
+			</text>
+			<combo_box name="ProbeCount">
+				<combo_box.item label="Нет" name="1" />
+				<combo_box.item label="Низкое" name="32"/>
+				<combo_box.item label="Среднее" name="64"/>
+				<combo_box.item label="Высокое" name="128"/>
+				<combo_box.item label="Ультра" name="256"/>
+			</combo_box>
 			<text name="TonemapTypeText">
 				Карты тонов:
 			</text>

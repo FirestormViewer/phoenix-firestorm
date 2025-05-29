@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<panel name="panel_primfeed_account">
+	<string name="primfeed_connected" value="Connecté(e) à Primfeed en tant que :"/>
+	<string name="primfeed_disconnected" value="Non connecté(e) à Primfeed"/>
+	<string name="primfeed_plan_unknown" value="Inconnu"/>
+	<text name="connected_as_label">
+		Non connecté(e) à Primfeed.
+	</text>
+	<text name="primfeed_account_plan_label">
+		Type de compte :
+	</text>
+	<panel name="panel_buttons">
+		<button label="Se connecter..." name="connect_btn"/>
+		<button label="Se déconnecter" name="disconnect_btn"/>
+		<text name="account_learn_more_label">
+			[https://docs.primfeed.com En savoir plus sur Primfeed]
+		</text>
+	</panel>
+</panel>

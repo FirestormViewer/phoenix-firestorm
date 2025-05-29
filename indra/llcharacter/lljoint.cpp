@@ -34,24 +34,6 @@
 #include "llmath.h"
 #include <boost/algorithm/string.hpp>
 
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-#include <unordered_map>
-
-std::unordered_map<std::string, U32> mpStringToKeys;
-
-JointKey JointKey::construct(const std::string& aName)
-{
-    if (const auto itr = mpStringToKeys.find(aName); itr != mpStringToKeys.end())
-    {
-        return { aName, itr->second };
-    }
-
-    U32 size = static_cast<U32>(mpStringToKeys.size()) + 1;
-    mpStringToKeys.try_emplace(aName, size);
-    return { aName, size };
-}
-// </FS:ND>
-
 S32 LLJoint::sNumUpdates = 0;
 S32 LLJoint::sNumTouches = 0;
 
@@ -260,7 +242,9 @@ LLJoint *LLJoint::getRoot()
 //-----------------------------------------------------------------------------
 // findJoint()
 //-----------------------------------------------------------------------------
-LLJoint *LLJoint::findJoint( const std::string &name )
+//<FS:Ansariel> Joint-lookup improvements
+//LLJoint *LLJoint::findJoint( const std::string &name )
+LLJoint *LLJoint::findJoint(std::string_view name)
 {
     if (name == getName())
         return this;

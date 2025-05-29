@@ -199,15 +199,15 @@ public:
     void        removeTabPanel( LLPanel* child );
     void        lockTabs(S32 num_tabs = 0);
     void        unlockTabs();
-    S32         getNumLockedTabs() { return mLockedTabCount; }
+    S32         getNumLockedTabs() const { return mLockedTabCount; }
     void        enableTabButton(S32 which, bool enable);
     void        deleteAllTabs();
     LLPanel*    getCurrentPanel();
-    S32         getCurrentPanelIndex();
-    S32         getTabCount();
-    LLPanel*    getPanelByIndex(S32 index);
-    S32         getIndexForPanel(LLPanel* panel);
-    S32         getPanelIndexByTitle(std::string_view title);
+    S32         getCurrentPanelIndex() const;
+    S32         getTabCount() const;
+    LLPanel*    getPanelByIndex(S32 index) const;
+    S32         getIndexForPanel(LLPanel* panel) const;
+    S32         getPanelIndexByTitle(std::string_view title) const;
     LLPanel*    getPanelByName(std::string_view name);
     S32         getTotalTabWidth() const;
     void        setCurrentTabName(const std::string& name);
@@ -222,7 +222,10 @@ public:
     void        setCurrentPanelIndex(S32 index) { mCurrentTabIdx = index; }
 
     bool        getTabPanelFlashing(LLPanel* child);
-    void        setTabPanelFlashing(LLPanel* child, bool state);
+    // <FS:Ansariel> [FS communication UI]
+    //void        setTabPanelFlashing(LLPanel* child, bool state);
+    void        setTabPanelFlashing(LLPanel* child, bool state, bool alternate_color = false);
+    // </FS:Ansariel> [FS communication UI]
     void        setTabImage(LLPanel* child, std::string img_name, const LLColor4& color = LLColor4::white);
     void        setTabImage(LLPanel* child, const LLUUID& img_id, const LLColor4& color = LLColor4::white);
     void        setTabImage(LLPanel* child, LLIconCtrl* icon);

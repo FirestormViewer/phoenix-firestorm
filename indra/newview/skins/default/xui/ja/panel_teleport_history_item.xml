@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="teleport_history_item">
-	<text name="region" value="…"/>
-	<text name="timestamp" value="…"/>
-	<button name="profile_btn" tool_tip="アイテム情報を表示"/>
+	<panel.string name="DateFmt">
+		[year,datetime,utc]年[mthnum,datetime,utc]月[day,datetime,utc]日　[ampm,datetime,utc][hour12,datetime,utc]：[min,datetime,utc] 
+	</panel.string>
+	<layout_stack name="ls_item">
+		<layout_panel name="lp_region">
+			<text name="region" value="…"/>
+		</layout_panel>
+		<layout_panel name="lp_date">
+			<text name="timestamp" value="2000年01月01日　午後12：00"/>
+		</layout_panel>
+	</layout_stack>
+	<button name="profile_btn" tool_tip="アイテム情報を表示します。"/>
 </panel>

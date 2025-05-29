@@ -1085,7 +1085,13 @@
     <color
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
-<!-- Color Changed -->
+    <color
+     name="SearchableControlHighlightFontColor"
+     value="0.036 0.349 1 1" />
+    <color
+     name="SearchableControlHighlightBgColor"
+     value="0.036 0.349 0.651 1" />
+    <!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
      reference="SL-MidBlue" />
@@ -1375,9 +1381,6 @@
       name="MapPickRadiusColor"
       reference="EmphasisColor_35" />
   <color
-      name="SearchableControlHighlightColor"
-      value="0.036 0.349 0.651 1" />
-  <color
       name="Slidermark"
       reference="EmphasisColor" />
   <color
@@ -1425,4 +1428,16 @@
   <color
      name="FpsDisplayVSyncLimitReachedColor"
      reference="Green" />
+  <color
+    name="ChatMentionFont"
+    value="0.061 0.137 0.759 1" />
+  <color
+    name="ChatMentionHighlight"
+    value="0.805 0.805 0.805 1" />
+  <color
+    name="ChatSelfMentionHighlight"
+    value="1 1 0.383 1" />
+  <color
+    name="MentionFlashBgColor"
+    reference="EmphasisColor" />
 </colors>

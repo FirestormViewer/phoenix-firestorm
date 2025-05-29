@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="プロフィール" name="panel_profile_firstlife"/>
+<panel label="プロフィール" name="panel_profile_firstlife">
+	<string name="texture_picker_label" value="ファーストライフの画像"/>
+	<button name="fl_upload_image" label="画像をアップロード"/>
+	<button name="fl_change_image" label="画像を変更"/>
+	<button name="fl_remove_image" label="画像を削除"/>
+	<!-- [AS:chanayane] Preview button -->
+	<button name="btn_preview" tool_tip="ファーストライフの自己紹介のプレビューを切り替えます。"/>
+	<!-- [/AS:chanayane] -->
+	<button name="fl_save_changes" label="保存"/>
+	<button name="fl_discard_changes" label="破棄"/>
+</panel>

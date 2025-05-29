@@ -430,7 +430,7 @@ LLFloater* LLMultiFloater::getActiveFloater()
     return (LLFloater*)mTabContainer->getCurrentPanel();
 }
 
-S32 LLMultiFloater::getFloaterCount()
+S32 LLMultiFloater::getFloaterCount() const
 {
     return mTabContainer->getTabCount();
 }
@@ -461,10 +461,16 @@ bool LLMultiFloater::isFloaterFlashing(LLFloater* floaterp)
 
     Requires: floaterp != NULL
 **/
-void LLMultiFloater::setFloaterFlashing(LLFloater* floaterp, bool flashing)
+// <FS:Ansariel> [FS communication UI]
+//void LLMultiFloater::setFloaterFlashing(LLFloater* floaterp, bool flashing)
+void LLMultiFloater::setFloaterFlashing(LLFloater* floaterp, bool flashing, bool alternate_color)
+// </FS:Ansariel> [FS communication UI]
 {
     if ( floaterp && floaterp->getHost() == this )
-        mTabContainer->setTabPanelFlashing(floaterp, flashing);
+        // <FS:Ansariel> [FS communication UI]
+        //mTabContainer->setTabPanelFlashing(floaterp, flashing);
+        mTabContainer->setTabPanelFlashing(floaterp, flashing, alternate_color);
+        // </FS:Ansariel> [FS communication UI]
 }
 
 void LLMultiFloater::onTabSelected()

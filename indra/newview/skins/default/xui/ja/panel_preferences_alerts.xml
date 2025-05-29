@@ -1,81 +1,65 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="ポップアップ" name="popups" title="ポップアップ">
-<tab_container name="tabs">
- 
-	<!-- World -->
-
-	<panel label="世界" name="tab-world">
-	<!--
-	<text name="tell_me_label">
-		知らせる：
-	</text>
-	-->
-		<check_box label="リンデンドルを使用・受け取るとき" name="notify_money_change_checkbox"/>
-		<check_box label="リンデンドル取引の通知はウィンドウでなくチャットで知らせる" name="FSPaymentInfoInChat"/>
-		<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
-		<check_box label="ログイン時に status.secondlifegrid.net の最新情報を取得する" name="AutoQueryGridStatus" />
-		<check_box label="Growlで通知" name="notify_growl_checkbox" />
-		<check_box name="notify_growl_always_checkbox" label="Firestormが前面にあってもGrowlで通知"/>
-		<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="キーワード通知の一部として既に一度表示されている場合、重複したIMは表示しない"/>
-	</panel>
-
-	<!-- People -->
-
-	<panel label="人" name="tab-people">
-		<check_box label="メッセージを受信した時 [APP_NAME] が前面になっていなければ、アプリのアイコンを点滅させる" name="FSFlashOnMessage" />
-		<check_box label="オブジェクトからのIMの場合も受信した時にアプリのアイコンを点滅させる" name="FSFlashOnObjectIM" />
-		<check_box label="誰かが表示名を変更したら通知" name="FSShowDisplayNameUpdateNotification" />
-		<check_box label="誰かをブロックまたはブロック解除したら通知" name="FSReportBlockToNearbyChat" />
-		<text name="friends_logon_label">
-			フレンドがログイン／ログアウトした時
-		</text>
-		<check_box label="トーストで通知" name="friends_online_notify_checkbox" />
-		<check_box name="OnlineOfflinetoNearbyChat" label="チャット履歴とコンソールで通知" />
-		<check_box label="チャット履歴のみ" name="OnlineOfflinetoNearbyChatHistory" />
-
-	</panel>
-	
-	<!-- Objects & Scripts -->
-	
-	<panel label="オブジェクト／スクリプト" name="tab-objects">
-		<check_box label="スクリプトダイアログを受信した時 [APP_NAME] が前面になっていなければ、アプリのアイコンを点滅させる" name="FSFlashOnScriptDialog" />
-		<check_box label="衝突の通知を周辺チャットに表示します" name="FSCollisionMessagesInChat" />
-		<check_box label="スクリプトエラーが発生した時" name="show_script_errors" />
-		<radio_group name="show_script_errors_location">
-			<radio_item label="チャットに表示" name="script_0"/>
-			<radio_item label="別のウィンドウに表示" name="script_1"/>
-		</radio_group>
-		<check_box label="地域全体のスクリプト数に変化があった時:" name="FSReportTotalScriptCountChanges" />
-		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="通知の対象とするスクリプト数の閾値を設定します。（デフォルトは100）" />
-		<check_box label="衝突の通知を指定したスクリプトチャンネルに表示します。" name="FSReportCollisionMessages" />
-		<spinner name="FSReportCollisionMessagesChannel" tool_tip="衝突の通知に使用するスクリプトチャンネルを指定します。（デフォルトは-25000）" />
-	</panel>
-	
-	<!-- Inventory -->
-	
-	<panel label="インベントリ" name="tab-inventory">
-		<check_box name="FSShowUploadPaymentToast" label="アップロードの料金を支払った時" />
-		<check_box label="ランドマークを作成した時" name="landmark_created_checkbox" />
-		<check_box label="オブジェクトがインベントリに返却されましたという通知をしないようにする" name="FSDisableReturnObjectNotification" />
-		<check_box label="保存したスナップショットのファイル名を会話履歴に記録する" name="FSLogSnapshotsToLocal" />
-		<check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
-		<check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />
-		<slider name="FSOfferThrottleMaxCount" label="オブジェクト受け取り量の閾値：" tool_tip="10秒以内に送られて来るオブジェクト個数の閾値を設定します。5個がデフォルトです。" />
-	</panel>
-	
-	<!-- Alerts -->
-	
-	<panel label="通知" name="tab-alerts">
-		<text name="show_label" tool_tip="ビューワに表示されている通知の一覧です。通知を表示するには、左側のマークをチェックして下さい。チェックを外すと通知が非表示になります。" width="300">
-			表示または非表示にするビューワの通知：
-		</text>
-		<filter_editor label="通知をフィルター" name="popup_filter" tool_tip="関心のあるキーワードをここに入力して下さい。部分一致しｈた検索結果が表示されます。" />
-		<!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
-		<scroll_list name="all_popups">
-		<!-- using a blank padding column to make things look prettier, since "halign" doesn't seem to work for checkboxes -Zi -->
-			<column label="表示" name="alert_enabled_check" />
-			<column label="通知" name="alert_label" />
-		</scroll_list>
-	</panel>
-</tab_container>
+<panel label="ポップアップ" name="popups">
+	<tab_container name="tabs" label="アラート">
+		<!-- World -->
+		<panel label="ワールド" name="tab-world">
+			<check_box label="L$を使ったり受け取ったりしたら通知する" name="notify_money_change_checkbox"/>
+			<check_box label="トーストの代わりに近くのチャットでL$の取引を報告する" name="FSPaymentInfoInChat"/>
+			<check_box label="リージョンを変更中にシミュレータのバージョンが変更された場合に通知する" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、ＳＩＭをリージョンを表示をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。"/>
+			<check_box label="ログイン時に status.secondlifegrid.net の最新情報を取得する" name="AutoQueryGridStatus"/>
+			<check_box label="Growl通知を有効にする" name="notify_growl_checkbox"/>
+			<check_box name="notify_growl_always_checkbox" label="Firestormが前面にあってもGrowlで通知"/>
+			<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="キーワード通知の一部として既に一度表示されている場合、重複したＩＭは表示しない"/>
+		</panel>
+		<!-- People -->
+		<panel label="人物" name="tab-people">
+			<check_box label="メッセージを受信した時[APP_NAME]が前面になっていなければ、アプリのアイコンを点滅させる" name="FSFlashOnMessage"/>
+			<check_box label="オブジェクトからインスタントメッセージを受信したときもアプリアイコンが点滅させる" name="FSFlashOnObjectIM"/>
+			<check_box label="誰かが表示名を変更したときに通知する" name="FSShowDisplayNameUpdateNotification"/>
+			<check_box label="誰かをブロックまたはブロック解除したときに通知する" name="FSReportBlockToNearbyChat"/>
+			<text name="friends_logon_label">
+				フレンドがログインまたはログアウトしたときの通知：
+			</text>
+			<check_box label="トーストで" name="friends_online_notify_checkbox" />
+			<check_box name="OnlineOfflinetoNearbyChat" label="近くのチャットとコンソールで"/>
+			<check_box label="近くのチャットのみ" name="OnlineOfflinetoNearbyChatHistory"/>
+		</panel>
+		<!-- Objects & Scripts -->
+		<panel label="オブジェクト／スクリプト" name="tab-objects">
+			<check_box label="[APP_NAME] にフォーカスがないときに、スクリプトダイアログを受信した場合にアプリアイコンをフラッシュさせる" name="FSFlashOnScriptDialog"/>
+			<check_box label="衝突の通知を近くのチャットに報告する" name="FSCollisionMessagesInChat"/>
+			<check_box label="スクリプトエラーが発生した時：" name="show_script_errors"/>
+			<radio_group name="show_script_errors_location">
+				<radio_item label="チャットに表示" name="script_0"/>
+				<radio_item label="別のウィンドウに表示" name="script_1"/>
+			</radio_group>
+			<check_box label="リージョン全体のスクリプト数の変更があった際の報告：" name="FSReportTotalScriptCountChanges"/>
+			<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="報告の対象とするスクリプト数の閾値を設定します。［デフォルトは100］"/>
+			<check_box label="衝突の通知を指定したスクリプトチャンネルに表示します。" name="FSReportCollisionMessages"/>
+			<spinner name="FSReportCollisionMessagesChannel" tool_tip="衝突の通知に使用するスクリプトチャンネルを指定します。［デフォルトは-25000］"/>
+		</panel>
+		<!-- Inventory -->
+		<panel label="インベントリ" name="tab-inventory">
+			<check_box name="FSShowUploadPaymentToast" label="アップロード料金が発生したら通知する"/>
+			<check_box label="ランドマークが作成されたら通知する" name="landmark_created_checkbox"/>
+			<check_box label="「オブジェクトがインベントリに戻されました」という通知を無効にする" name="FSDisableReturnObjectNotification"/>
+			<check_box label="保存されたスナップショットのファイル名をチャット履歴に記録する" name="FSLogSnapshotsToLocal"/>
+			<check_box label="オブジェクトからのアイテムがあまりにも早く送られてきた場合に通知する" name="FSNotifyIncomingObjectSpam"/>
+			<check_box label="他の住民からのアイテムがあまりにも早く送られてきた場合に通知する" name="FSNotifyIncomingObjectSpamFrom"/>
+			<slider name="FSOfferThrottleMaxCount" label="受信オブジェクトのスロットル閾値：" tool_tip="１０秒以内に送られて来るオブジェクト個数の閾値を設定します。５個がデフォルトです。"/>
+		</panel>
+		<!-- Alerts -->
+		<panel label="アラート" name="tab-alerts">
+			<text name="show_label" tool_tip="ビューア内のアラートのリスト。アラートを有効にするには左側のマークをチェックし、アラートを非表示にするにはチェックを外します。">
+				表示または非表示にするビューアのアラート：
+			</text>
+			<filter_editor label="アラートをフィルタ" name="popup_filter" tool_tip="興味のある検索語をここに入力してください。部分的な全文一致の結果が表示されます。"/>
+			<!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
+			<scroll_list name="all_popups">
+				<!-- using a blank padding column to make things look prettier, since "halign" doesn't seem to work for checkboxes -Zi -->
+				<column label="表示" name="alert_enabled_check"/>
+				<column label="アラート" name="alert_label"/>
+			</scroll_list>
+		</panel>
+	</tab_container>
 </panel>

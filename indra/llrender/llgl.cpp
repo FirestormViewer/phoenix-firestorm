@@ -1074,6 +1074,7 @@ void LLGLManager::initWGL()
 // return false if unable (or unwilling due to old drivers) to init GL
 bool LLGLManager::initGL()
 {
+    LL_INFOS("RenderInit") << "Initializing OpenGL" << LL_ENDL; // <FS:Beq/> Extra logging to confirm usage on Linux
     if (mInited)
     {
         LL_ERRS("RenderInit") << "Calling init on LLGLManager after already initialized!" << LL_ENDL;
@@ -1243,23 +1244,6 @@ bool LLGLManager::initGL()
 // <FS:Beq> remove this so that we can attempt to use driver specifics
 // if it fails we will pick up the `old_vram` value , which is either WMI or the combined dxdiag number
 // both of which are rather useless, but it does at least respect the disable_wmi setting.
-// #if LL_WINDOWS
-//  if (mVRAM < 256)
-//  {
-//      // Something likely went wrong using the above extensions
-//      // try WMI first and fall back to old method (from dxdiag) if all else fails
-//      // Function will check all GPUs WMI knows of and will pick up the one with most
-//      // memory. We need to check all GPUs because system can switch active GPU to
-//      // weaker one, to preserve power when not under load.
-//      U32 mem = LLDXHardware::getMBVideoMemoryViaWMI();
-//      if (mem != 0)
-//      {
-//          mVRAM = mem;
-//          LL_WARNS("RenderInit") << "VRAM Detected (WMI):" << mVRAM<< LL_ENDL;
-//      }
-//  }
-// #endif
-// </FS:Beq>
 
     // Ultimate fallbacks for linux and mesa
     if (mHasNVXGpuMemoryInfo && mVRAM == 0)
@@ -1310,12 +1294,8 @@ bool LLGLManager::initGL()
     // if (mVRAM < 256 && old_vram > 0)
     // {
     //  // fall back to old method
-    //  // Note: on Windows value will be from LLDXHardware.
-    //  // Either received via dxdiag or via WMI by id from dxdiag.
     //  mVRAM = old_vram;
 
-    //  // <FS:Ansariel> VRAM detection logging
-    //  LL_WARNS("RenderInit") << "VRAM detected via MemInfo OpenGL extension most likely broken. Reverting to " << mVRAM << " MB" << LL_ENDL;
     // }
     // </FS:Beq>
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mNumTextureImageUnits);
@@ -1514,6 +1494,11 @@ void LLGLManager::initExtensions()
     mHasATIMemInfo = ExtensionExists("GL_ATI_meminfo", gGLHExts.mSysExts); //Basic AMD method, also see mHasAMDAssociations
 
     LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
+// FIRE-34655 - VRAM detection failing on Linux. Load all the GL functions we need.
+#if LL_LINUX && !LL_MESA_HEADLESS    
+    mHasNVXGpuMemoryInfo = ExtensionExists("GL_NVX_gpu_memory_info", gGLHExts.mSysExts);
+    mHasAMDAssociations = ExtensionExists("WGL_AMD_gpu_association", gGLHExts.mSysExts);
+#endif
 
 #if LL_WINDOWS
 // </FS:Zi>
@@ -2536,12 +2521,15 @@ void LLGLState::checkStates(GLboolean writeAlpha)
         return;
     }
 
-    GLint src;
-    GLint dst;
-    glGetIntegerv(GL_BLEND_SRC, &src);
-    glGetIntegerv(GL_BLEND_DST, &dst);
-    llassert_always(src == GL_SRC_ALPHA);
-    llassert_always(dst == GL_ONE_MINUS_SRC_ALPHA);
+    GLint srcRGB, dstRGB, srcAlpha, dstAlpha;
+    glGetIntegerv(GL_BLEND_SRC_RGB, &srcRGB);
+    glGetIntegerv(GL_BLEND_DST_RGB, &dstRGB);
+    glGetIntegerv(GL_BLEND_SRC_ALPHA, &srcAlpha);
+    glGetIntegerv(GL_BLEND_DST_ALPHA, &dstAlpha);
+    llassert_always(srcRGB == GL_SRC_ALPHA);
+    llassert_always(srcAlpha == GL_SRC_ALPHA);
+    llassert_always(dstRGB == GL_ONE_MINUS_SRC_ALPHA);
+    llassert_always(dstAlpha == GL_ONE_MINUS_SRC_ALPHA);
 
     // disable for now until usage is consistent
     //GLboolean colorMask[4];

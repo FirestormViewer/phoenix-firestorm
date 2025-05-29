@@ -35,6 +35,8 @@
 #include <boost/signals2.hpp>
 #include "llteleporthistorystorage.h"
 
+#include "llslurl.h" // <FS/> Access to LLSLURL
+
 
 /**
  * An item of the teleport history.
@@ -47,8 +49,11 @@ public:
     LLTeleportHistoryItem()
     {}
 
-    LLTeleportHistoryItem(std::string title, LLVector3d global_pos)
-        : mTitle(title), mGlobalPos(global_pos)
+    // <FS> [FIRE-35355] OpenSim requires knowing the grid to teleport correctly if changing grids
+    //LLTeleportHistoryItem(std::string title, LLVector3d global_pos)
+    //    : mTitle(title), mGlobalPos(global_pos)
+    LLTeleportHistoryItem(std::string title, LLVector3d global_pos, const LLSLURL& slurl = LLSLURL())
+        : mTitle(title), mGlobalPos(global_pos), mSLURL(slurl)
     {}
 
     /**
@@ -61,6 +66,7 @@ public:
     std::string mFullTitle; // human-readable location title including coordinates
     LLVector3d  mGlobalPos; // global position
     LLUUID      mRegionID;  // region ID for getting the region info
+    LLSLURL     mSLURL;     // <FS/> [FIRE-35355] slurl for the location required for OpenSim
 };
 
 /**
@@ -179,6 +185,10 @@ private:
      * @return
      */
     static std::string      getCurrentLocationTitle(bool full, const LLVector3& local_pos_override);
+
+    // <FS> [FIRE-35355] Callback for OpenSim so we can teleport to the correct global position on another grid
+    void                    regionNameCallback(int idx, U64 handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport);
+    // </FS>
 
     /**
      * Actually, the teleport history.

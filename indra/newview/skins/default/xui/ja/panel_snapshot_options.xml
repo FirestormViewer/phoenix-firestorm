@@ -8,19 +8,19 @@
 			<button label="インベントリに保存" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">
-			<button label="プロフィールにアップロード" name="save_to_profile_btn"/>
-		</layout_panel>
-		<layout_panel name="lp_facebook">
-			<button label="Facebook にアップロード" name="send_to_facebook_btn" />
-		</layout_panel>
-		<layout_panel name="lp_twitter">
-			<button label="Twitter にアップロード" name="send_to_twitter_btn" />
+			<button label="プロフィールで共有する" name="save_to_profile_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_flickr">
-			<button label="Flickr にアップロード" name="send_to_flickr_btn" />
+			<button label="Flickrで共有" name="send_to_flickr_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_primfeed">
+			<button label="Primfeedで共有" name="send_to_primfeed_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_email">
 			<button label="メールで送信" name="save_to_email_btn"/>
 		</layout_panel>
 	</layout_stack>
+	<text name="fee_hint_lbl">
+		料金はサブスクリプションレベルに基づきます。レベルが高くなるほど料金は安くなります。
+	</text>
 </panel>

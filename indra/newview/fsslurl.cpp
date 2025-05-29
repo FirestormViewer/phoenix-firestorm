@@ -234,17 +234,25 @@ LLSLURL::LLSLURL(const std::string& slurl)
             }
             else
             {
-                LL_DEBUGS("SLURL") << "secondlife://<region>" << LL_ENDL;
-                // it wasn't a /secondlife/<region> or /app/<params>, so it must be secondlife://<region>
-                // therefore the hostname will be the region name, and it's a location type
-                mType = LOCATION;
+                if (slurl_uri.hostName() == LLSLURL::SLURL_APP_PATH)
+                {
+                    LL_DEBUGS("SLURL") << "hostname is an app path" << LL_ENDL;
+                    mType = APP;
+                }
+                else
+                {
+                    LL_DEBUGS("SLURL") << "secondlife://<region>" << LL_ENDL;
+                    // it wasn't a /secondlife/<region> or /app/<params>, so it must be secondlife://<region>
+                    // therefore the hostname will be the region name, and it's a location type
+                    mType = LOCATION;
 
-                //AW: use current grid for compatibility
-                //with viewer 1 slurls.
-                mGrid = LLGridManager::getInstance()->getGrid();
+                    // AW: use current grid for compatibility
+                    // with viewer 1 slurls.
+                    mGrid = LLGridManager::getInstance()->getGrid();
 
-                // 'normalize' it so the region name is in fact the head of the path_array
-                path_array.insert(0, slurl_uri.hostNameAndPort());
+                    // 'normalize' it so the region name is in fact the head of the path_array
+                    path_array.insert(0, slurl_uri.hostNameAndPort());
+                }
             }
         }
         else if((slurl_uri.scheme() == LLSLURL::SLURL_HTTP_SCHEME)

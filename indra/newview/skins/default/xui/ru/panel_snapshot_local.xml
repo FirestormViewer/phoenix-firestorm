@@ -24,9 +24,7 @@
 		<combo_box.item label="BMP (Сжатие без потерь)" name="BMP"/>
 	</combo_box>
 	<slider label="Качество:" name="image_quality_slider"/>
-	<text name="local_remember_location_sessions_text">
-		Сохранить место и имя файла между сессиями
-	</text>
+	<check_box name="local_remember_location_sessions_text" label="Сохранить место и имя файла между сессиями"/>
 	<button label="&#x25B6; Выбор" name="cancel_btn"/>
 	<flyout_button label="Сохранить" name="save_btn" tool_tip="Сохранить изображение в файл">
 		<flyout_button.item label="Сохранить" name="save_item"/>

@@ -18,6 +18,7 @@
         image_color="ButtonImageColor"
         image_color_disabled="ButtonImageColor"
         flash_color="ButtonFlashBgColor"
+        flash_alt_color="MentionFlashBgColor"
 	font="SansSerifSmall"
         hover_glow_amount="0.25"
         halign="center"

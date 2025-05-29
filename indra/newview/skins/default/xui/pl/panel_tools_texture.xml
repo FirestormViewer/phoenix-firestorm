@@ -23,11 +23,12 @@
 		Blask
 	</text>
 	<check_box label="Superjasność" name="checkbox fullbright" />
+	<check_box label="Ukryj wodę" name="checkbox_hide_water" />
 	<button name="copy_face_btn" tool_tip="Skopiuj parametry tekstury do schowka" />
 	<button name="paste_face_btn" tool_tip="Wklej parametry tekstury ze schowka" />
-	<text name="label_matmedia">
+	<!-- <text name="label_matmedia">
 		Materiał
-	</text>
+	</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Tekstury" name="Materials" />
 		<combo_box.item label="Metaliczność/chropowatość PBR" name="PBR" />

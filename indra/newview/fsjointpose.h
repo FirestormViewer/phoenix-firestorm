@@ -109,6 +109,12 @@ class FSJointPose
     bool isBaseRotationZero() const;
 
     /// <summary>
+    /// Gets whether an undo of this joint may be performed.
+    /// </summary>
+    /// <returns>true if the joint may have a undo applied, otherwise false.</returns>
+    bool canPerformUndo() const;
+
+    /// <summary>
     /// Gets whether a redo of this joint may be performed.
     /// </summary>
     /// <returns>true if the joint may have a redo applied, otherwise false.</returns>
@@ -143,11 +149,16 @@ class FSJointPose
     /// Resets the beginning properties of the joint this represents.
     /// </summary>
     void recaptureJoint();
+
     /// <summary>
     /// Recalculates the delta reltive to the base for a new rotation.
     /// </summary>
     void recaptureJointAsDelta();
 
+    /// <summary>
+    /// Clears the undo/redo deque.
+    /// </summary>
+    void purgeUndoQueue();
 
     /// <summary>
     /// Reverts the position/rotation/scale to their values when the animation begun.
@@ -185,7 +196,6 @@ class FSJointPose
             inv_base.conjugate();
             mDeltaRotation = newRotation * inv_base; 
         };
-        
 
         void reflectRotation()
         {
@@ -213,6 +223,18 @@ class FSJointPose
             joint->setRotation(mBaseRotation);
             joint->setPosition(mBasePosition);
             joint->setScale(mBaseScale);
+        }
+
+        void updateFromJoint(LLJoint* joint)
+        {
+            if (!joint)
+                return;
+
+            LLQuaternion invRot = mBaseRotation;
+            invRot.conjugate();
+            mRotation = joint->getRotation() * invRot;
+            mPosition.set(joint->getPosition() - mBasePosition);
+            mScale.set(joint->getScale() - mBaseScale);
         }
 
       private:

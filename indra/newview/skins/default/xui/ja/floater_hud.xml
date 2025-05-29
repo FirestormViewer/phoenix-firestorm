@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_hud" title="チュートリアル"/>
+<floater name="floater_hud" title="チュートリアル">
+	<web_browser name="floater_hud_browser" start_url="data:text/html;charset=utf-8;base64,PGh0bWw+PGhlYWQ+PC9oZWFkPjxib2R5IGJnY29sb3I9IiMwMDAwMDAiIHRleHQ9ImZmZmZmZiI+PGgxPjx0dD7oqq3jgb/ovrzjgpPjgafjgYTjgb7jgZnigKY8L3R0PjwvaDE+PC9ib2R5PjwvaHRtbD4=" />
+</floater>

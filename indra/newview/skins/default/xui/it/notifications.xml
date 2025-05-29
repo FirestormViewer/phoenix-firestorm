@@ -5116,7 +5116,7 @@ Autorizzare [APP_NAME] a pubblicare su Flickr?
 		Autenticazione Flickr fallita. Riprovare dopo aver controllato il codice di verifica.
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		La foto può essere vista [http://www.flickr.com/photos/upload/edit/?ids=[ID] qui].
+		La foto può essere vista [https://www.flickr.com/photos/me/[ID] qui].
 	</notification>
 	<notification name="RegionTrackerAdd">
 		Inserire l&apos;etichetta che si vuole usare

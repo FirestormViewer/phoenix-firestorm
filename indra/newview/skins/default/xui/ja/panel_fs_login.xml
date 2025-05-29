@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=ja
-	</panel.string>
+	<panel.string name="forgot_password_url">https://secondlife.com/my/account/request.php?lang=ja-JP</panel.string>
 	<string name="ServerComboTooltip">
-		既存のグリッドまたは URI
+		既存のグリッドまたはＵＲＩ
 	</string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
@@ -12,10 +10,10 @@
 				ログイン
 			</text>
 			<text name="username_text">
-				ユーザーネーム：
+				ユーザ名：
 			</text>
-			<combo_box name="username_combo" tool_tip="登録時に自分で選んだユーザー名（例：bobsmith12、Steller Sunshineなど）"/>
-			<button label="入力内容を消去" name="delete_saved_login_btn" />
+			<button tool_tip="このユーザ名を削除する。" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="登録時に自分で選んだユーザ名（例：bobsmith12、Steller Sunshineなど）"/>
 			<text name="password_text">
 				パスワード：
 			</text>
@@ -27,35 +25,37 @@
 			<combo_box name="start_location_combo">
 				<combo_box.item label="最後にログアウトした場所" name="MyLastLocation"/>
 				<combo_box.item label="ホーム" name="MyHome"/>
-				<combo_box.item label="＜地域名を入力＞" name="Typeregionname"/>
+				<combo_box.item label="＜リージョン名を入力＞" name="Typeregionname"/>
 			</combo_box>
 		</layout_panel>
 		<layout_panel name="grid_panel">
-			<text name="grid_login_text">
-				グリッド選択:
+			<text name="grid_builder_text">
+				＋をクリックしてグリッドを追加
 			</text>
-			<combo_box name="server_combo" />
+			<text name="grid_login_text">
+				グリッドを選択：
+			</text>
 		</layout_panel>
 		<layout_panel name="links_login_panel">
 			<text name="create_new_account_text">
-				アカウント作成
+				アカウントを作成
 			</text>
 			<text name="forgot_password_text">
-				ユーザー名またはパスワードをお忘れですか？
+				ユーザ名かパスワードを忘れましたか？
 			</text>
-			<button label="ログイン" name="connect_btn" />
-			<check_box label="ユーザーネームを記憶" name="remember_username_check" />
-			<check_box label="パスワードを記憶" name="remember_check" />
+			<button label="ログイン" name="connect_btn"/>
+			<check_box label="ユーザネームを記憶" name="remember_username_check"/>
+			<check_box label="パスワードを記憶" name="remember_check"/>
+			<button name="password_show_btn" tool_tip="パスワードテキストを表示します。"/>
+			<button name="password_hide_btn" tool_tip="パスワードテキストを隠します。"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">
 				モード選択
 			</text>
-			<combo_box tool_tip="基本設定を適切に行うために、一番慣れているビューワのタイプを選択して下さい。" name="mode_combo">
-				<combo_box.item label="Firestorm" name="Firestorm"/>
-				<combo_box.item label="Phoenix" name="Phoenix"/>
-				<combo_box.item label="Hybrid" name="Hybrid"/>
-				<combo_box.item label="Latency" name="Latency"/>
+			<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
+				<combo_box.item label="ハイブリッド" name="Hybrid"/>
+				<combo_box.item label="テキスト" name="Text"/>
 			</combo_box>
 		</layout_panel>
 	</layout_stack>

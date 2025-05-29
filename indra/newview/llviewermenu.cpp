@@ -350,6 +350,8 @@ void force_error_software_exception();
 void force_error_os_exception();
 void force_error_driver_crash();
 void force_error_coroutine_crash();
+void force_error_coroprocedure_crash();
+void force_error_work_queue_crash();
 void force_error_thread_crash();
 
 void handle_force_delete();
@@ -2755,6 +2757,28 @@ class LLAdvancedCompressFileTest : public view_listener_t
     }
 };
 
+// <FS:Beq> Primfeed integration test functions (can be removed when the feature is stable)
+///////////////////
+// PRIMFEED AUTH //
+///////////////////
+#include "fsprimfeedauth.h"
+class LLAdvancedPrimfeedAuth : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        FSPrimfeedAuth::initiateAuthRequest();
+        return true;
+    }
+};
+class LLAdvancedPrimfeedAuthReset : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        FSPrimfeedAuth::resetAuthStatus();
+        return true;
+    }
+};
+// </FS:Beq>
 
 /////////////////////////
 // SHOW DEBUG SETTINGS //
@@ -2955,6 +2979,24 @@ class LLAdvancedForceErrorDriverCrash : public view_listener_t
 //    }
 //};
 // </FS:Ansariel>
+
+class LLAdvancedForceErrorCoroprocedureCrash : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_error_coroprocedure_crash();
+        return true;
+    }
+};
+
+class LLAdvancedForceErrorWorkQueueCrash : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_error_work_queue_crash();
+        return true;
+    }
+};
 
 class LLAdvancedForceErrorThreadCrash : public view_listener_t
 {
@@ -3834,7 +3876,11 @@ void handle_object_edit()
     LLFloaterReg::showInstance("build");
 
     LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
-    gFloaterTools->setEditTool( LLToolCompTranslate::getInstance() );
+
+    if (gFloaterTools)
+    {
+        gFloaterTools->setEditTool( LLToolCompTranslate::getInstance() );
+    }
 
     LLViewerJoystick::getInstance()->moveObjects(true);
     LLViewerJoystick::getInstance()->setNeedsReset(true);
@@ -11047,6 +11093,16 @@ void force_error_driver_crash()
 //}
 // </FS:Ansariel>
 
+void force_error_coroprocedure_crash()
+{
+    LLAppViewer::instance()->forceErrorCoroprocedureCrash();
+}
+
+void force_error_work_queue_crash()
+{
+    LLAppViewer::instance()->forceErrorWorkQueueCrash();
+}
+
 void force_error_thread_crash()
 {
     LLAppViewer::instance()->forceErrorThreadCrash();
@@ -11752,6 +11808,19 @@ class LLWorldEnvSettings : public view_listener_t
         }
 #endif
 // </FS:Beq>
+
+        // <FS:Darl> Redundant environment toggles revert to shared environment
+        LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
+        LLUUID skyid = (sky) ? sky->getAssetId() : LLUUID::null;
+        bool repeatedEnvTogglesShared = gSavedSettings.getBOOL("FSRepeatedEnvTogglesShared");
+
+        if(repeatedEnvTogglesShared && ((skyid == LLEnvironment::KNOWN_SKY_SUNRISE       && event_name == "sunrise") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_MIDDAY        && event_name == "noon") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY && event_name == "legacy noon") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_SUNSET        && event_name == "sunset") ||
+                                        (skyid == LLEnvironment::KNOWN_SKY_MIDNIGHT      && event_name == "midnight")))
+            event_name = "region";
+        // </FS:Darl>
 
         if (event_name == "sunrise")
         {
@@ -12765,6 +12834,8 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedForceErrorDriverCrash(), "Advanced.ForceErrorDriverCrash");
     // <FS:Ansariel> Wrongly merged back in by LL
     //view_listener_t::addMenu(new LLAdvancedForceErrorCoroutineCrash(), "Advanced.ForceErrorCoroutineCrash");
+    view_listener_t::addMenu(new LLAdvancedForceErrorCoroprocedureCrash(), "Advanced.ForceErrorCoroprocedureCrash");
+    view_listener_t::addMenu(new LLAdvancedForceErrorWorkQueueCrash(), "Advanced.ForceErrorWorkQueueCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorThreadCrash(), "Advanced.ForceErrorThreadCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorDisconnectViewer(), "Advanced.ForceErrorDisconnectViewer");
 
@@ -12773,6 +12844,8 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedCheckShowObjectUpdates(), "Advanced.CheckShowObjectUpdates");
     view_listener_t::addMenu(new LLAdvancedCompressImage(), "Advanced.CompressImage");
     view_listener_t::addMenu(new LLAdvancedCompressFileTest(), "Advanced.CompressFileTest");
+    view_listener_t::addMenu(new LLAdvancedPrimfeedAuth(), "Advanced.PrimfeedAuth");
+    view_listener_t::addMenu(new LLAdvancedPrimfeedAuthReset(), "Advanced.PrimfeedAuthReset");
     view_listener_t::addMenu(new LLAdvancedShowDebugSettings(), "Advanced.ShowDebugSettings");
     view_listener_t::addMenu(new LLAdvancedEnableViewAdminOptions(), "Advanced.EnableViewAdminOptions");
     view_listener_t::addMenu(new LLAdvancedToggleViewAdminOptions(), "Advanced.ToggleViewAdminOptions");

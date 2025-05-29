@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_gear_default">
-	<menu_item_call label="新しいインベントリウィンドウ" name="new_window"/>
-	<menu_item_check label="保護フォルダ" name="Protected Folders" />
+	<menu_item_call label="新しいインベントリウィンドウを開く" name="new_window"/>
+	<menu_item_check label="保護フォルダ" name="Protected Folders"/>
+	<menu_item_check label="インベントリ設定…" name="inv_settings"/>
+	<menu_item_check label="一覧表示" name="list_view"/>
+	<menu_item_check label="ギャラリー表示" name="gallery_view"/>
+	<menu_item_check label="複合表示" name="combination_view"/>
 	<menu_item_check label="名前で並べ替え" name="sort_by_name"/>
-	<menu_item_check label="新しい順に並べ替え" name="sort_by_recent"/>
-	<menu_item_check label="フォルダを常に名前順に並べる" name="sort_folders_by_name"/>
-	<menu_item_check label="システムフォルダを上にソートする" name="sort_system_folders_to_top"/>
-	
-	<menu_item_separator layout="topleft" />
-
-    <!-- ## Zi: Extended Inventory Search -->
-	<context_menu label="検索..." name="inventory_search_menu">
-		<menu_item_check name="inventory_search_by_name" label="名前" />
-		<menu_item_check name="inventory_search_by_creator" label="クリエイター" />
-		<menu_item_check name="inventory_search_by_description" label="説明" />
-		<menu_item_check name="inventory_search_by_uuid" label="UUID" />
-		<menu_item_separator />
-		<menu_item_check name="inventory_search_by_all" label="すべて含める" />
+	<menu_item_check label="新着で並べ替え" name="sort_by_recent"/>
+	<menu_item_check label="フォルダは常に名前で並べ替え" name="sort_folders_by_name"/>
+	<menu_item_check label="システムフォルダは上に並べ替え" name="sort_system_folders_to_top"/>
+	<!-- <FS:Zi> Extended Inventory Search -->
+	<context_menu label="検索…" name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="名前"/>
+		<menu_item_check name="inventory_search_by_creator" label="制作者"/>
+		<menu_item_check name="inventory_search_by_description" label="説明"/>
+		<menu_item_check name="inventory_search_by_uuid" label="ＵＵＩＤ"/>
+		<menu_item_check name="inventory_search_by_all" label="全て"/>
 	</context_menu>
-	<!-- ## Zi: Extended Inventory Search -->
-
-    <menu_item_separator />
-	
-	<menu_item_check label="ダブルクリックしてオブジェクトを追加装着" name="add_inv_toggle" />
-	<menu_item_check label="ダブルクリックして服装を追加装着" name="add_invclothing_toggle" />
-	<menu_item_call label="フィルターを表示..." name="show_filters"/>
-	<menu_item_call label="フィルターをリセット" name="reset_filters"/>
-	<menu_item_call label="すべてのフォルダを閉じる" name="close_folders"/>
-	<menu_item_call label="紛失物フォルダを空にする" name="empty_lostnfound"/>
-	<menu_item_call label="別名でテクスチャを保存" name="Save Texture As"/>
+	<!-- </FS:Zi> Extended Inventory Search -->
+	<menu_item_check label="オブジェクトをダブルクリックで追加" name="add_inv_toggle"/>
+	<menu_item_check label="衣装をダブルクリックで追加" name="add_invclothing_toggle"/>
+	<menu_item_call label="フィルタを表示…" name="show_filters"/>
+	<menu_item_call label="フィルタをリセット…" name="reset_filters"/>
+	<menu_item_call label="すべてのフォルダを折り畳む" name="close_folders"/>
+	<menu_item_call label="すべてのウィンドウを閉じる" name="close_windows"/>
+	<menu_item_call label="フィルタを表示…" name="show_filters"/>
+	<menu_item_call label="フィルタをリセット" name="reset_filters"/>
+	<menu_item_call label="名前をつけてテクスチャを保存" name="Save Texture As"/>
 	<menu_item_call label="共有" name="Share"/>
 	<menu_item_call label="オリジナルを表示" name="Find Original"/>
 	<menu_item_call label="すべてのリンクを表示" name="Find All Links"/>
-	<menu_item_call  label="リンクを修正" name="Replace Links" />
-	
+	<menu_item_call label="リンクを置き換える" name="Replace Links"/>
 	<!-- ## Zi: Filter Links Menu -->
-	<menu_item_check name="inventory_filter_show_links" label="リンクを表示" />
-	<menu_item_check name="inventory_filter_only_links" label="リンクのみ表示" />
-	<menu_item_check name="inventory_filter_hide_links" label="リンクを表示しない" />
-	<menu_item_separator />
+	<menu_item_check name="inventory_filter_show_links" label="リンクを表示"/>
+	<menu_item_check name="inventory_filter_only_links" label="リンクのみを表示"/>
+	<menu_item_check name="inventory_filter_hide_links" label="リンクを隠す"/>
 	<!-- ## Zi: Filter Links Menu -->
-	
 	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
-	<menu_item_check name="inventory_filter_only_modify" label="修正可のみ" />
-	<menu_item_check name="inventory_filter_only_copy" label="コピー可のみ" />
-	<menu_item_check name="inventory_filter_only_transfer" label="再販・プレゼント可のみ" />
+	<menu_item_check name="inventory_filter_only_modify" label="修正可能なものだけ表示"/>
+	<menu_item_check name="inventory_filter_only_copy" label="コピー可能なものだけ表示"/>
+	<menu_item_check name="inventory_filter_only_transfer" label="譲渡可能なものだけ表示"/>
 	<!-- </FS:Zi> -->
-	
+	<!-- <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects -->
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="複合オブジェクトのみ表示"/>
+	<!-- </FS:Zi> -->
+	<menu_item_call label="遺失物を空にする" name="empty_lostnfound"/>
 	<menu_item_call label="ごみ箱を空にする" name="empty_trash"/>
 </toggleable_menu>

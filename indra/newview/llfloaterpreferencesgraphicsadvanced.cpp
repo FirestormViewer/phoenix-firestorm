@@ -52,6 +52,8 @@ LLFloaterPreferenceGraphicsAdvanced::LLFloaterPreferenceGraphicsAdvanced(const L
 
     mCommitCallbackRegistrar.add("Pref.Cancel", boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onBtnCancel, this, _2));
     mCommitCallbackRegistrar.add("Pref.OK",     boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onBtnOK, this, _2));
+
+    mImpostorsChangedSignal = gSavedSettings.getControl("RenderAvatarMaxNonImpostors")->getSignal()->connect(boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateIndirectMaxNonImpostors, this, _2));
 }
 
 LLFloaterPreferenceGraphicsAdvanced::~LLFloaterPreferenceGraphicsAdvanced()
@@ -59,7 +61,6 @@ LLFloaterPreferenceGraphicsAdvanced::~LLFloaterPreferenceGraphicsAdvanced()
     mComplexityChangedSignal.disconnect();
     mComplexityModeChangedSignal.disconnect();
     mLODFactorChangedSignal.disconnect();
-    mNumImpostorsChangedSignal.disconnect();
 }
 
 bool LLFloaterPreferenceGraphicsAdvanced::postBuild()
@@ -255,8 +256,8 @@ void LLFloaterPreferenceGraphicsAdvanced::updateIndirectMaxNonImpostors(const LL
     if ((value != 0) && (value != gSavedSettings.getU32("IndirectMaxNonImpostors")))
     {
         gSavedSettings.setU32("IndirectMaxNonImpostors", value);
-        setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
     }
+    setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
 }
 
 void LLFloaterPreferenceGraphicsAdvanced::setMaxNonImpostorsText(U32 value, LLTextBox* text_box)

@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Url Popup">
 	<menu_item_call label="グループ情報を表示" name="show_group"/>
-	<!-- <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu -->
-	<!-- menu entry to call internal request for group data - this will make sure the
-	rest of the functions can actually do something once the data is loaded -->
-	<menu_item_call label="グループデータ取得中。もう一度トライ。" name="waiting_for_group_data" />
-	<menu_item_call label="グループを有効化" name="activate_group" />
-	<menu_item_call label="グループに参加" name="join_group" />
-	<menu_item_call label="グループを脱退" name="leave_group" />
-	<!-- </FS:Zi> -->
+	<menu_item_call label="グループデータを取得しています。もう一度お試しください！" name="waiting_for_group_data"/>
+	<menu_item_call label="グループをアクティベート" name="activate_group"/>
+	<menu_item_call label="グループに加入" name="join_group"/>
+	<menu_item_call label="グループを脱退" name="leave_group"/>
 	<menu_item_call label="グループをクリップボードにコピー" name="url_copy_label"/>
-	<menu_item_call label="SLurl をクリップボードにコピー" name="url_copy"/>
+	<menu_item_call label="SLurlをクリップボードにコピー" name="url_copy"/>
 </context_menu>

@@ -19,6 +19,9 @@
 		<layout_panel name="lp_flickr">
 			<button label="Загрузить на Flickr" name="send_to_flickr_btn"/>
 		</layout_panel>
+		<layout_panel name="lp_primfeed">
+			<button label="Поделиться на Primfeed" name="send_to_primfeed_btn"/>
+		</layout_panel>
 		<layout_panel name="lp_email">
 			<button label="Отправить по E-mail" name="save_to_email_btn"/>
 		</layout_panel>

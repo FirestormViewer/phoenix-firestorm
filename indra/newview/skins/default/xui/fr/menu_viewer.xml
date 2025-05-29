@@ -93,6 +93,7 @@
 		<menu_item_check label="Conversations..." name="Conversations"/>
 		<menu_item_check label="Gestes..." name="Gestures"/>
 		<menu_item_call label="Flickr..." name="Flickr"/>
+		<menu_item_call label="Primfeed..." name="Primfeed"/>
 		<menu_item_call label="Discord..." name="Discord"/>
 		<menu label="Effets de voix" name="VoiceMorphing">
 			<menu_item_check label="Aucun effet de voix" name="NoVoiceMorphing"/>
@@ -428,7 +429,11 @@
 			<menu_item_call label="Forcer une boucle infinie" name="Force Infinite Loop"/>
 			<menu_item_call label="Forcer le plantage du driver" name="Force Driver Carsh"/>
 			<menu_item_call label="Forcer une exception logicielle" name="Force Software Exception"/>
+			<menu_item_call label="Forcer une exception système" name="Force OS Exception"/>
+			<menu_item_call label="Forcer une exception logicielle dans une coroutine" name="Force Software Exception in Coroutine"/>
 			<menu_item_call label="Forcer une exception logicielle dans une coroutine" name="Force a Crash in a Coroutine"/>
+			<menu_item_call label="Forcer un plantage dans une coroprocédure" name="Force a Crash in a Coroprocedure"/>
+			<menu_item_call label="Forcer un plantage dans une file d'attente" name="Force a Crash in a Work Queue"/>
 			<menu_item_call label="Forcer un plantage dans un processus" name="Force a Crash in a Thread"/>
 			<menu_item_call label="Forcer la déconnexion du client" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Simuler une fuite de mémoire" name="Memory Leaking Simulation"/>
@@ -563,6 +568,7 @@
 		<menu label="XUI" name="XUI">
 			<menu_item_call label="Recharger les paramètres de couleurs" name="Reload Color Settings"/>
 			<menu_item_call label="Afficher le test de police" name="Show Font Test"/>
+			<menu_item_call label="Afficher le test SLapps" name="Show SLapps Test"/>
 			<menu_item_call label="Charge à partir d'XML" name="Load from XML"/>
 			<menu_item_call label="Enregistre en XML" name="Save to XML"/>
 			<menu_item_check label="Afficher les noms XUI" name="Show XUI Names"/>
@@ -611,6 +617,8 @@
 		<menu_item_check label="Textures HTTP" name="HTTP Textures"/>
 		<menu_item_call label="Compresser les images" name="Compress Images"/>
 		<menu_item_call label="Test de compression de fichiers" name="Compress File Test" />
+		<menu_item_call label="Test d'authentification Primfeed" name="primfeed_auth_test" />
+		<menu_item_call label="Réinitialisation de l'authentification Primfeed" name="primfeed_auth_clear" />
 		<menu_item_call label="Activer Visual Leak Detector" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Aperçu du Journal de débogage" name="Output Debug Minidump"/>
 		<menu_item_check label="Ouvrir la console de débogage au prochain lancement" name="Console Window"/>

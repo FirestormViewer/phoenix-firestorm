@@ -1,6 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_posestand" title="ポーズスタンド">
-	<combo_box name="pose_combo" />
-	<check_box name="enable_lock" />
-	<icon name="lock" />
-</floater>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_posestand" title="ポーズスタンド"/>

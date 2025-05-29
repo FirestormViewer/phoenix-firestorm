@@ -7,13 +7,7 @@
 		所有者：
 	</text>
 	<text name="object_owner">
-		Longavatarname Johnsonlongstonnammer
-	</text>
-	<text name="object_slurl_label">
-		位置：
-	</text>
-	<text name="object_slurl">
-		http://slurl.com/Ahern/50/50/50
+		長いアバター名 ジョンソンロングストロングネーマー
 	</text>
 	<button label="マップ" name="map_btn"/>
 	<button label="ブロック" name="block_btn"/>

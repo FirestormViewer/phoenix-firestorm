@@ -1,110 +1,63 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<pie_menu
-    name="Self Pie">
-    <pie_slice
-        label="プロフィール..."
-        name="Profile..."/>
-    <pie_slice
-        label="グループ..."
-        name="Groups..."/>
-    <pie_menu
-        label="取り外す &gt;"
-        name="Take Off &gt;">
-        <pie_menu
-            label="服 &gt;"
-            name="Clothes &gt;">
-            <pie_slice
-                label="シャツ"
-                name="Shirt"/>
-            <pie_slice
-                label="ズボン"
-                name="Pants"/>
-            <pie_slice
-                label="靴"
-                name="Shoes"/>
-            <pie_slice
-                label="靴下"
-                name="Socks"/>
-            <pie_slice
-                label="ジャケット"
-                name="Jacket"/>
-            <pie_slice
-                label="手袋"
-                name="Gloves"/>
-            <pie_menu
-                label="詳細 &gt;"
-                name="Clothes More">
-                <pie_slice
-                    label="（下着の）シャツ"
-                    name="Self Undershirt"/>
-                <pie_separator />
-                <pie_slice
-                    label="すべての服"
-                    name="All Clothes"/>
-                <pie_separator />
-                <pie_slice
-                    label="（下着の）パンツ"
-                    name="Self Underpants"/>
-                <pie_slice
-                    label="タトゥー"
-                    name="Self Tattoo"/>
-                <pie_slice
-					label="物理作用"
-					name="Self Physics"/>
-                <pie_slice
-                    label="アルファ"
-                    name="Self Alpha"/>
-            </pie_menu>
-            <pie_slice
-                label="スカート"
-                name="Skirt"/>
-        </pie_menu>
-        <pie_menu
-            label="HUD &gt;"
-            name="Pie Object Detach HUD" />
-        <pie_separator />
-        <pie_menu
-            label="取り外す"
-            name="Pie Object Detach" />
-        <pie_separator />
-        <pie_slice
-            label="すべて取り外す"
-            name="Detach All" />
-    </pie_menu>
-    <pie_slice
-        label="ここに座る"
-        name="Sit Down Here"/>
-    <pie_slice
-        label="立ち上がる"
-        name="Stand Up"/>
-    <pie_slice
-        label="スクリプト情報"
-        name="ScriptInfo"/>
-    <pie_slice
-        label="ジェスチャー..."
-        name="Gestures"/>
-    <pie_menu
-        label="容姿 &gt;"
-        name="Appearance &gt;">
-        <pie_slice label="シェイプを編集"
-           name="Edit My Shape"/>
-        <pie_menu name="ResetMenu" label="リセット &gt;">
-			<pie_slice label="スケルトンとアニメ" name="Reset Skeleton And Animations" />
-			<pie_slice label="スケルトン" name="Reset Skeleton" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Self Pie">
+	<pie_slice label="プロフィール…" name="Profile..."/>
+	<pie_slice label="グループ…" name="Groups..."/>
+	<pie_menu label="取り外す　＞" name="Take Off &gt;">
+		<pie_menu label="衣装　＞" name="Clothes &gt;">
+			<pie_slice label="シャツ" name="Shirt"/>
+			<pie_slice label="ズボン" name="Pants"/>
+			<pie_slice label="靴" name="Shoes"/>
+			<pie_slice label="靴下" name="Socks"/>
+			<pie_slice label="ジャケット" name="Jacket"/>
+			<pie_slice label="手袋" name="Gloves"/>
+			<pie_menu label="詳細　＞" name="Clothes More">
+				<pie_slice label="下着（上半身）" name="Self Undershirt"/>
+				<pie_slice label="すべての服" name="All Clothes"/>
+				<pie_slice label="下着（下半身）" name="Self Underpants"/>
+				<pie_slice label="タトゥー" name="Self Tattoo"/>
+				<pie_slice label="物理作用" name="Self Physics"/>
+				<pie_slice label="アルファ" name="Self Alpha"/>
+			</pie_menu>
+			<pie_slice label="スカート" name="Skirt"/>
 		</pie_menu>
-        <pie_slice
-            label="テクスチャ更新"
-            name="Texture Refresh"/>
-        <pie_separator />
-        <pie_slice label="服装を編集"
-           name="Edit My Outfit"/>
-		<pie_separator />
-		<pie_slice
-			label="XMLをダンプ"
-			name="Dump XML" />
-		<pie_slice label="宙に浮く高さ" name="Hover Height" />
-    </pie_menu>
-    <pie_slice
-        label="テクスチャ"
-        name="Debug..."/>
+		<pie_menu label="ＨＵＤ　＞" name="Pie Object Detach HUD"/>
+		<pie_menu label="取り外す" name="Pie Object Detach"/>
+		<pie_slice label="すべて取り外す" name="Detach All"/>
+		<pie_menu label="拡張スケルトン　＞" name="Enhanced Skeleton">
+			<pie_slice label="右の翼" name="Right Wing"/>
+			<pie_slice label="脚の付け根" name="Groin"/>
+			<pie_slice label="尻尾のベース" name="Tail Base"/>
+			<pie_slice label="尻尾の先" name="Tail Tip"/>
+			<pie_slice label="左の翼" name="Left Wing"/>
+			<pie_slice label="左後ろ足" name="Left Hind Foot"/>
+			<pie_menu label="詳細　＞" name="Enhanced Skeleton More">
+				<pie_slice label="代わりの右耳" name="Alt Right Ear"/>
+				<pie_slice label="代わりの右目" name="Alt Right Eye"/>
+				<pie_slice label="舌" name="Tongue"/>
+				<pie_slice label="代わりの左目" name="Alt Left Eye"/>
+				<pie_slice label="代わりの左耳" name="Alt Left Ear"/>
+				<pie_slice label="左薬指" name="Left Ring Finger"/>
+				<pie_slice label="あご" name="Jaw"/>
+				<pie_slice label="右薬指" name="Right Ring Finger"/>
+			</pie_menu>
+			<pie_slice label="右後ろ足" name="Right Hind Foot"/>
+		</pie_menu>
+	</pie_menu>
+	<pie_slice label="ここに座る" name="Sit Down Here"/>
+	<pie_slice label="立つ" name="Stand Up"/>
+	<pie_slice label="スクリプト情報" name="ScriptInfo"/>
+	<pie_slice label="ジェスチャー…" name="Gestures"/>
+	<pie_menu label="容姿　＞" name="Appearance &gt;">
+		<pie_slice label="シェイプを編集" name="Edit My Shape"/>
+		<pie_menu name="ResetMenu" label="リセット &gt;">
+			<pie_slice label="スケルトンとアニメ" name="Reset Skeleton And Animations"/>
+			<pie_slice label="スケルトン" name="Reset Skeleton"/>
+			<pie_slice label="メッシュのＬＯＤ" name="Reset Mesh LOD"/>
+		</pie_menu>
+		<pie_slice label="テクスチャ更新" name="Texture Refresh"/>
+		<pie_slice label="衣装を編集" name="Edit My Outfit"/>
+		<pie_slice label="ＸＭＬとしてダンプ" name="Dump XML"/>
+		<pie_slice label="ホバーする高さ" name="Hover Height"/>
+	</pie_menu>
+	<pie_slice label="テクスチャ" name="Debug..."/>
 </pie_menu>

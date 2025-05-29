@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_web_content" title="">
+<floater name="floater_web_content">
 	<layout_stack name="stack1">
 		<layout_panel name="nav_controls">
 			<button name="back" tool_tip="前へ"/>
 			<button name="forward" tool_tip="次へ"/>
 			<button name="stop" tool_tip="ナビゲーションを停止"/>
 			<button name="reload" tool_tip="ページを更新"/>
-			<combo_box name="address" tool_tip="ここに URL を入力"/>
-			<icon name="media_secure_lock_flag" tool_tip="安全な閲覧"/>
-			<button name="popexternal" tool_tip="この URL をブラウザで開く"/>
+			<combo_box name="address" tool_tip="ここにＵＲＬを入力"/>
+			<icon name="media_secure_lock_flag" tool_tip="セキュアブラウジング"/>
+			<button name="popexternal" tool_tip="このＵＲＬをブラウザで開く"/>
 		</layout_panel>
 		<layout_panel name="debug_controls">
-			<button tool_tip="Webテストのホームページ" name="web_test_home_page" />
-			<button tool_tip="MPEG4 ビデオのテスト" name="VLC Plugin Test MPEG4" />
-			<button tool_tip="MKV ビデオのテスト" name="VLC Plugin Test MKV" />
-			<button tool_tip="WebM ビデオのテスト" name="VLC Plugin Test WebM" />
-			<button tool_tip="MP3 音声のテスト" name="VLC Plugin Test MP3" />
-			<button tool_tip="FLV のテスト" name="VLC Plugin Test FLV" />
+			<button name="web_test_home_page" tool_tip="Webテストのホームページ"/>
 		</layout_panel>
 		<layout_panel name="external_controls">
 			<text name="plugin_fail_text">
-Webブラウザのプラグインが開くのに時間がかかっています。
-プラグインが全く読み込まれないようであれば、次のページを参考にしてみて下さい。
+Webブラウザプラグインの起動に時間がかかっているようです。
+プラグインが読み込まれない場合は、次のサイトをご覧ください。
+
+この問題を解決するための可能な手順については、
 
 https://wiki.firestormviewer.org/fs_search_issues
 
@@ -29,13 +26,8 @@ https://wiki.firestormviewer.org/fs_search_issues
 
 https://wiki.firestormviewer.org/fs_media
 
-この問題を解決する有効な手順を探してみて下さい。
+をご覧ください。
 			</text>
-			<web_browser name="webbrowser" />
-		</layout_panel>
-		<layout_panel name="status_bar" >
-			<text name="statusbartext" />
-			<progress_bar name="statusbarprogress" />
 		</layout_panel>
 	</layout_stack>
 </floater>

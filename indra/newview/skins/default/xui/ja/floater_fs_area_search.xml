@@ -3,128 +3,120 @@
 	<tab_container name="area_searchtab">
 		<panel label="リスト" name="area_search_list_panel">
 			<panel.string name="ListedPendingTotalBlank">
-				表示済 | 取得中 | 合計
+				表示済｜取得中｜合計
 			</panel.string>
 			<panel.string name="ListedPendingTotalFilled">
-				表示済 [LISTED] | 取得中 [PENDING] | 合計 [TOTAL]
+				[LISTED]件表示｜[PENDING]件取得｜合計[TOTAL]件
 			</panel.string>
 			<fs_scroll_list name="result_list">
-				<fs_scroll_list.columns name="distance" label="距離" />
-				<fs_scroll_list.columns name="name" label="名前" />
-				<fs_scroll_list.columns name="description" label="説明" />
+				<fs_scroll_list.columns name="distance" label="距離" tool_tip="アバターからオブジェクトまでの距離です。"/>
+				<fs_scroll_list.columns name="name" label="名前"/>
+				<fs_scroll_list.columns name="description" label="説明"/>
 				<fs_scroll_list.columns name="price" label="価格" tool_tip="オブジェクトが販売対象の場合、購入に際して支払う金額です。"/>
 				<fs_scroll_list.columns name="land_impact" label="ランドインパクト" tool_tip="土地が受ける最大のランドインパクトです。"/>
 				<fs_scroll_list.columns name="prim_count" label="プリム数" tool_tip="各オブジェクトを構成するプリムの数です。"/>
-				<fs_scroll_list.columns name="owner" label="オーナー" />
-				<fs_scroll_list.columns name="group" label="グループ" tool_tip="オブジェクトに設定されたグループ名です。" />
-				<fs_scroll_list.columns name="creator" label="クリエイター" />
-				<fs_scroll_list.columns name="last_owner" label="最終オーナー" tool_tip="オブジェクトを最後に所有していた人です。" />
+				<fs_scroll_list.columns name="owner" label="所有者"/>
+				<fs_scroll_list.columns name="group" label="グループ" tool_tip="オブジェクトに設定されたグループ名です。"/>
+				<fs_scroll_list.columns name="creator" label="制作者"/>
+				<fs_scroll_list.columns name="last_owner" label="最終所有者" tool_tip="オブジェクトを最後に所有していた人です。"/>
 			</fs_scroll_list>
-			<button name="Refresh" label="更新" />
+			<button name="Refresh" label="更新"/>
 			<text name="counter">
-				表示済 | 取得中 | 合計
+				表示済｜取得中｜合計
 			</text>
-			<check_box name="beacons" label="ビーコンを表示" />
+			<check_box name="beacons" label="ビーコンを表示"/>
 		</panel>
-		<panel label="検索" name="area_search_find_panel" >
+		<panel label="検索" name="area_search_find_panel">
 			<text name="name_label">
-				名前:
+				名前：
 			</text>
 			<text name="desc_label">
-				説明:
+				説明：
 			</text>
-			<line_editor name="name_search" />
-			<line_editor name="description_search" />
 			<text name="owner_label">
-				オーナー:
+				所有者：
 			</text>
 			<text name="group_label">
-				グループ:
+				グループ：
 			</text>
-			<line_editor name="owner_search" />
-			<line_editor name="group_search" />
 			<text name="creator_label">
-				クリエイター:
+				制作者：
 			</text>
 			<text name="last_owner_label">
-				最終オーナー:
+				最終所有者：
 			</text>
-			<line_editor name="creator_search"/>
-			<line_editor name="last_owner_search"/>
-			<check_box name="regular_expression" label="正規表現を使用" />
-			<button name="search" label="検索" />
-			<button name="clear" label="クリア" />
+			<check_box name="regular_expression" label="正規表現を使用"/>
+			<button name="search" label="検索"/>
+			<button name="clear" label="クリア"/>
 		</panel>
-		<panel label="フィルター" name="area_search_filter_panel" >
+		<panel label="フィルタ" name="area_search_filter_panel">
 			<text name="only_list">
-				次の条件のオブジェクトのみ:
+				以下の条件のオブジェクトのみ：
 			</text>
-			<check_box name="filter_locked" label="ロック済" />
-			<check_box name="filter_physical" label="物理" />
-			<check_box name="filter_phantom" label="ファントム" />
-			<check_box name="filter_temporary" label="臨時" />
-			<check_box name="filter_attachment" label="アタッチメント" />
-			<check_box name="filter_moap" label="共有メディア" />
-			<check_box name="filter_perm_copy" label="コピー" />
-			<check_box name="filter_perm_modify" label="修正" />
-			<check_box name="filter_perm_transfer" label="再販・プレゼント" />
-			<check_box name="filter_for_sale" label="次の価格帯で販売" />
-			<spinner name="min_price" />
+			<check_box name="filter_locked" label="ロック済み"/>
+			<check_box name="filter_physical" label="物理"/>
+			<check_box name="filter_phantom" label="ファントム"/>
+			<check_box name="filter_temporary" label="一時的"/>
+			<check_box name="filter_attachment" label="装着物"/>
+			<check_box name="filter_moap" label="共有メディア"/>
+			<check_box name="filter_perm_copy" label="コピー"/>
+			<check_box name="filter_perm_modify" label="修正"/>
+			<check_box name="filter_perm_transfer" label="再販・譲渡"/>
+			<check_box name="filter_reflection_probe" label="反射プローブ" tool_tip="自動プローブは含まれず、手動プローブのみが含まれます。グラフィック設定でミラーが有効になっている場合のみ、ミラープローブが含まれます。反射範囲が「なし」に設定されている場合、またはプローブがベイクされていない場合は、オブジェクトが識別されない可能性があります。"/>
+			<check_box name="filter_for_sale" label="次の価格帯で販売"/>
 			<text name="and">
 				〜
 			</text>
-			<spinner name="max_price" />
 			<text name="mouse_text">
 				マウスクリック時の動作
 			</text>
 			<combo_box name="click_action" tool_tip="オブジェクトをクリックした時の動作です。">
-				<combo_box.item label=" " name="click_blank" value="blank" />
-				<combo_box.item label="すべて" name="click_any" value="any" />
-				<combo_box.item label="触る" name="click_touch" value="touch" />
-				<combo_box.item label="座る" name="click_sit" value="sit"/>
-				<combo_box.item label="買う" name="click_buy" value="buy"/>
-				<combo_box.item label="支払う" name="click_pay" value="pay"/>
-				<combo_box.item label="開く" name="click_open" value="open"/>
-				<combo_box.item label="演奏する" name="click_play" value="play"/>
-				<combo_box.item label="メディアを開く" name="click_open_media" value="open_media"/>
-				<combo_box.item label="ズーム" name="click_zoom" value="zoom"/>
+				<combo_box.item label="　" name="click_blank"/>
+				<combo_box.item label="すべて" name="click_any"/>
+				<combo_box.item label="触る" name="click_touch"/>
+				<combo_box.item label="座る" name="click_sit"/>
+				<combo_box.item label="買う" name="click_buy"/>
+				<combo_box.item label="支払う" name="click_pay"/>
+				<combo_box.item label="開く" name="click_open"/>
+				<combo_box.item label="再生する" name="click_play"/>
+				<combo_box.item label="メディアを開く" name="click_open_media"/>
+				<combo_box.item label="ズーム" name="click_zoom"/>
 			</combo_box>
-			<check_box name="filter_distance" label="距離の範囲" />
-			<spinner name="min_distance" />
+			<check_box name="filter_distance" label="距離の範囲"/>
 			<text name="and2">
 				〜
 			</text>
-			<spinner name="max_distance" />
-			<check_box name="filter_agent_parcel_only" label="今いる区画のみ" />
+			<check_box name="filter_agent_parcel_only" label="今いる区画のみ"/>
 			<text name="only_list">
-				次の条件のオブジェクトを除外:
+				次の条件のオブジェクトを除外：
 			</text>
-			<check_box name="exclude_attachment" label="アタッチメント" />
-			<check_box name="exclude_physical" label="物理" />
-			<check_box name="exclude_temporary" label="臨時" />
-			<check_box name="exclude_childprim" label="子プリム" />
-			<check_box name="exclude_neighbor_region" label="隣接する地域" />
-			<button name="apply" label="適用" />
+			<check_box name="exclude_attachment" label="装着物"/>
+			<check_box name="exclude_physical" label="物理"/>
+			<check_box name="exclude_temporary" label="一時的"/>
+			<check_box name="exclude_reflection_probes" label="反射プローブ"/>
+			<check_box name="exclude_childprim" label="子プリム"/>
+			<check_box name="exclude_neighbor_region" label="隣接するリージョン"/>
+			<button name="apply" label="適用"/>
 		</panel>
 		<panel label="オプション" name="area_search_options_panel">
 			<text name="display_column">
-				表示する列:
+				表示する列：
 			</text>
-			<check_box name="show_distance" label="距離" />
-			<check_box name="show_name" label="名前" />
-			<check_box name="show_description" label="説明" />
-			<check_box name="show_price" label="価格" />
-			<check_box name="show_land_impact" label="ランドインパクト" />
-			<check_box name="show_prim_count" label="プリム数" />
-			<check_box name="show_owner" label="オーナー" />
-			<check_box name="show_group" label="グループ" />
-			<check_box name="show_creator" label="クリエイター" />
-			<check_box name="show_last_owner" label="最終オーナー" />
+			<check_box name="show_distance" label="距離"/>
+			<check_box name="show_name" label="名前"/>
+			<check_box name="show_description" label="説明"/>
+			<check_box name="show_price" label="価格"/>
+			<check_box name="show_land_impact" label="ランドインパクト"/>
+			<check_box name="show_prim_count" label="プリム数"/>
+			<check_box name="show_owner" label="所有者"/>
+			<check_box name="show_group" label="グループ"/>
+			<check_box name="show_creator" label="制作者"/>
+			<check_box name="show_last_owner" label="最終所有者"/>
 		</panel>
-		<panel  label="詳細" name="area_search_advanced_panel">
-			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触る" />
-			<check_box name="double_click_buy" label="ダブルクリックでオブジェクトを買う" />
-			<check_box name="double_click_sit" label="ダブルクリックでオブジェクトに座る" />
+		<panel label="詳細" name="area_search_advanced_panel">
+			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触る"/>
+			<check_box name="double_click_buy" label="ダブルクリックでオブジェクトを買う"/>
+			<check_box name="double_click_sit" label="ダブルクリックでオブジェクトに座る"/>
 		</panel>
 	</tab_container>
 </floater>

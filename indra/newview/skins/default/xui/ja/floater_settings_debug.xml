@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="settings_debug" title="デバッグ設定">
 	<panel name="debug_settings_search_panel">
-		<search_editor label="ここで検索" name="search_settings_input" tool_tip="興味のある言葉をここに入力して下さい。設定の名称やコメント内の文字に部分的に一致するものがあれば表示されます。" />
+		<search_editor label="検索語句を入力" name="search_settings_input" tool_tip="興味のある検索語をここに入力します。設定の名前またはコメント内の部分的な全文一致の結果が表示されます。"/>
+		<scroll_list name="settings_scroll_list">
+			<scroll_list.columns label="設定" name="setting"/>
+		</scroll_list>
+		<check_box label="変更された設定のみ表示" name="hide_default"/>
 	</panel>
 	<panel name="debug_settings_values_panel">
-		<text_editor name="comment_text" tool_tip="デバッグ設定のコメントです。選択した設定に関する有益な情報が得られます。" />
+		<text_editor name="comment_text" tool_tip="デバッグ設定のコメントです。選択した設定に関する有益な情報が得られます。"/>
 		<radio_group name="boolean_combo">
-			<radio_item label="TRUE" name="TRUE" />
-			<radio_item label="FALSE" name="FALSE" />
+			<radio_item label="有効" name="TRUE"/>
+			<radio_item label="無効" name="FALSE"/>
 		</radio_group>
 		<color_swatch label="色" name="val_color_swatch"/>
-		<spinner label="x" name="val_spinner_1"/>
-		<spinner label="x" name="val_spinner_2"/>
-		<spinner label="x" name="val_spinner_3"/>
-		<spinner label="x" name="val_spinner_4"/>
-		<button name="sanity_warning_btn" tool_tip="このデバッグ設定はサニティ・チェックに失敗しました。設定した値が推奨値の範囲を越えています。" />
-		<button label="コピー" name="copy_btn" tool_tip="この設定の名前をクリップボードにコピーします。" />
-		<button label="デフォルトにリセット" name="default_btn" tool_tip="このデバッグ設定をリセットしてデフォルト値に戻します。"/>
+		<spinner label="Ｘ" name="val_spinner_1"/>
+		<spinner label="Ｘ" name="val_spinner_2"/>
+		<spinner label="Ｘ" name="val_spinner_3"/>
+		<spinner label="Ｘ" name="val_spinner_4"/>
+		<button name="sanity_warning_btn" tool_tip="このデバッグ設定は健全性チェックに失敗しました。値が推奨範囲外です。"/>
+		<button label="コピー" name="copy_btn" tool_tip="この設定の名前をクリップボードにコピーします。"/>
+		<button label="デフォルトにリセット" name="default_btn" tool_tip="このデバッグ設定をデフォルト値にリセットします。"/>
 	</panel>
 </floater>

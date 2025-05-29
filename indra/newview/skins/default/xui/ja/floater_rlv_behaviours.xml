@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="rlv_behaviours" title="アクティブなＲＬＶの制限">
+	<tab_container name="behaviour_tab">
+		<panel label="制限" name="behaviour_panel">
+			<scroll_list name="behaviour_list" tool_tip="現在のＲＬＶａの制限一覧です。">
+				<scroll_list.columns label="制限" name="behaviour"/>
+				<scroll_list.columns label="オブジェクト名" name="issuer"/>
+			</scroll_list>
+		</panel>
+		<panel label="例外" name="exception_panel">
+			<scroll_list name="exception_list" tool_tip="現在のＲＬＶａの例外一覧です。">
+				<scroll_list.columns label="例外" name="behaviour"/>
+				<scroll_list.columns label="ソース" name="option"/>
+				<scroll_list.columns label="オブジェクト名" name="issuer"/>
+			</scroll_list>
+		</panel>
+		<panel label="モディファイア" name="modifier_panel">
+			<scroll_list name="modifier_list" tool_tip="現在のＲＬＶａのモディファイア一覧です。">
+				<scroll_list.columns label="モディファイア" name="modifier"/>
+				<scroll_list.columns label="値" name="value"/>
+				<scroll_list.columns label="プライマリーオブジェクト" name="primary"/>
+			</scroll_list>
+		</panel>
+	</tab_container>
+	<panel label="ボトムパネル" name="bottom_panel">
+		<button label="クリップボードにコピー" name="copy_btn"/>
+	</panel>
+</floater>

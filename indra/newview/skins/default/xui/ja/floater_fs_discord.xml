@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <floater name="floater_discord" title="Discord">
-	<string name="discord_connected">次のアカウント名で Discord に接続：</string>
-	<string name="discord_disconnected">Discord に接続していません</string>
-	<string name="SocialDiscordConnecting">Discord に接続中...</string>
-	<string name="SocialDiscordErrorConnecting">Discord 接続中に問題が発生しました</string>
-	<string name="SocialDiscordDisconnecting">Discord を切断中...</string>
+	<string name="discord_connected">
+		次のアカウント名でDiscordに接続：
+	</string>
+	<string name="discord_disconnected">
+		Discordに接続していません。
+	</string>
+	<string name="SocialDiscordConnecting">
+		Discordに接続しています…。
+	</string>
+	<string name="SocialDiscordErrorConnecting">
+		Discord接続時に問題が発生しました。
+	</string>
+	<string name="SocialDiscordDisconnecting">
+		Discordから切断しています…。
+	</string>
 	<text name="account_caption_label">
-		Discord に接続していません。
+		Discordに接続していません。
 	</text>
-	<text name="account_name_label" />
 	<check_box label="ログイン時に自動接続する" name="startup_check" />
-	<check_box label="ユーザー名を共有" name="name_check" />
-	<button label="接続..." name="connect_btn" />
-
+	<check_box label="ユーザ名を共有する" name="name_check" />
+	<button label="接続…" name="connect_btn" />
 	<button label="切断" name="disconnect_btn" />
 	<text name="rating_label">
-		次のコンテンツ・レーティングで地域名を Discord に共有：
+		以下のコンテンツレーティングのリージョン名をDiscordで共有する：
 	</text>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="General, Moderate, Adult" name="Desired_Adult" />
@@ -24,9 +32,9 @@
 		<combo_box.item label="共有しない" name="Desired_None" />
 	</combo_box>
 	<text name="dont_names_label">
-		以下のリストにある地域名は Discord に共有しない：
+		以下のリストにあるリージョン名はDiscordに共有しない：
 	</text>
 	<text name="connection_status_text">
-		ロード中...
+		読み込んでいます…
 	</text>
 </floater>

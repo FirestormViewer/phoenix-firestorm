@@ -5,7 +5,7 @@
 			テレポートできるのは１分間に６回までの制限があります。もしテレポートで問題を抱えている場合は、もう１分待ってから再度テレポートしてみて下さい。問題が解消しないようであれば一度ログアウトして、ログインし直して下さい。
 		</message>
 		<message name="invalid_region_handoff">
-			リージョン間の移動中に問題が発生しました。 ログインし直す必要があるかもしれません。
+			リージョン間の移動中に問題が発生しました。ログインし直す必要があるかもしれません。
 このメッセージが何度も出る場合は、[SUPPORT_SITE] をご確認ください。
 		</message>
 		<message name="blocked_tport">
@@ -30,15 +30,18 @@
 			添付物は、まだ到着していません。あと数秒間お待ちいただくか、いったんログアウトし、再度ログインしてからテレポートをやり直してださい。
 		</message>
 		<message name="too_many_uploads_tport">
-			この地域の資産キューが現在込み合っているため、要求されたテレポートを処理することが難しい状況です。
-数分後にやり直すか、または混雑していない他の地域をお試しください。
+			このリージョンのアセットキューが現在込み合っているため、要求されたテレポートを処理することが難しい状況です。
+数分後にやり直すか、または混雑していない他のリージョンをお試しください。
 		</message>
 		<message name="expired_tport">
 			申し訳ございませんが、システムは要求されたテレポートを完了できませんでした。数分後にやり直してください。
 		</message>
 		<message name="expired_region_handoff">
-			申し訳ございませんが、システムは地域間の移動を時間どおりに完了できませんでした。
+			申し訳ございませんが、システムはリージョン間の移動を時間どおりに完了できませんでした。
 数分後にやり直してください。
+		</message>
+		<message name="preexisting_tport">
+			申し訳ございませんが、システムはテレポートを開始できませんでした。数分後にもう一度お試しください。
 		</message>
 		<message name="no_host">
 			テレポートの目的地を見つけられません。目的地が一時的に利用できない状態か、またはすでに消滅している可能性があります。数分後にやり直してください。
@@ -47,10 +50,10 @@
 			インベントリシステムは現在利用できません。
 		</message>
 		<message name="MustGetAgeRegion">
-			この地域（リージョン）に入るには 18 才以上である必要があります。
+			このリージョンに入るには１８歳以上である必要があります。
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			リージョンに入ることができません。&apos;[REGION_NAME]&apos; はスキル ゲーミング リージョンであり、あなたはこのリージョンに入るための特定の基準を満たす必要があります。詳しくは、[http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life スキル ゲーミングのよくある質問] を参照してください。
+			リージョンに入ることができません。「[REGION_NAME]」はスキルゲーミングリージョンであり、あなたはこのリージョンに入るための特定の基準を満たす必要があります。詳しくは、[https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ スキルゲーミングのよくある質問]を参照してください。
 		</message>
 	</message_set>
 	<message_set name="progress">
@@ -73,22 +76,22 @@
 			テレポートを完了します。
 		</message>
 		<message name="completed_from">
-			[T_SLURL] からのテレポートが完了しました
+			[T_SLURL] からのテレポートが完了しました。
 		</message>
 		<message name="resolving">
 			目的地を解決しています。
 		</message>
 		<message name="contacting">
-			新しい地域にコンタクトしています。
+			新しいリージョンにコンタクトしています。
 		</message>
 		<message name="arriving">
-			到着...
+			到着しています…
 		</message>
 		<message name="requesting">
-			テレポートをリクエスト...
+			テレポートをリクエストしています…
 		</message>
 		<message name="pending">
-			テレポートを保留中...
+			テレポートを保留しています…
 		</message>
 	</message_set>
 </teleport_messages>

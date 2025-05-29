@@ -95,6 +95,8 @@ LLExperienceCache::LLExperienceCache()
 
 LLExperienceCache::~LLExperienceCache()
 {
+    // can exit without cleanup()
+    sShutdown = true;
 }
 
 void LLExperienceCache::initSingleton()

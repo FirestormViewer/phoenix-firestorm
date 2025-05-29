@@ -1200,9 +1200,10 @@ void LLScriptEdCore::sync()
     }
 }
 
-bool LLScriptEdCore::hasChanged()
+bool LLScriptEdCore::hasChanged() const
 {
-    if (!mEditor) return false;
+    if (!mEditor)
+        return false;
 
     return ((!mEditor->isPristine() || mEnableSave) && mHasScriptData);
 }
@@ -2106,12 +2107,11 @@ LLScriptEdContainer::LLScriptEdContainer(const LLSD& key) :
 ,   mLiveFile(nullptr)
 ,   mLiveLogFile(nullptr)
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
-,   mBackupTimer(NULL)
+,   mBackupTimer(nullptr)
 // [/SL:KB]
 {
 }
 
-// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 LLScriptEdContainer::~LLScriptEdContainer()
 {
     delete mLiveFile;
@@ -2120,12 +2120,15 @@ LLScriptEdContainer::~LLScriptEdContainer()
     delete mLiveLogFile;
     mLiveLogFile = nullptr;
 
+    // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
     // Clean up the backup file (unless we've gotten disconnected)
-    if ( (!mBackupFilename.empty()) && (gAgent.getRegion()) )
+    if (!mBackupFilename.empty() && gAgent.getRegion())
         LLFile::remove(mBackupFilename);
     delete mBackupTimer;
+    // [/SL:KB]
 }
 
+// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 void LLScriptEdContainer::refreshFromItem()
 {
     LLPreview::refreshFromItem();
@@ -2143,7 +2146,7 @@ void LLScriptEdContainer::refreshFromItem()
 
 bool LLScriptEdContainer::onBackupTimer()
 {
-    if ( (mScriptEd) && (mScriptEd->hasChanged()) )
+    if (mScriptEd && mScriptEd->hasChanged())
     {
         if (mBackupFilename.empty())
             mBackupFilename = getBackupFileName();

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_add_contact" title="連絡先セットに追加...">
+<floater name="floater_fs_add_contact" title="コンタクトセットに追加…">
 	<floater.string name="no_sets">
 		追加できるセットがありません。
 	</floater.string>
 	<floater.string name="text_add_single">
-		[NAME] を追加する連絡先セットを選択して下さい。
+		[NAME]を追加するコンタクトセットを選択して下さい。
 	</floater.string>
 	<floater.string name="text_add_multiple">
-		[COUNT] 人のアバターを追加する連絡先セットを選択して下さい。
+		[COUNT]人のアバターを追加するコンタクトセットを選択して下さい。
 	</floater.string>
-	<text name="textfield">
-	</text>
-	<combo_box name="contact_sets" />
-	<button name="add_set_btn" />
-	<button label="セットに追加" name="add_btn" />
-	<button label="取り消し" name="cancel_btn" />
+	<button label="セットに追加" name="add_btn"/>
+	<button label="取り消し" name="cancel_btn"/>
 </floater>

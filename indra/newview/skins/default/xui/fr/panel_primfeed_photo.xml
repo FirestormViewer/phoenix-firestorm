@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<panel name="panel_primfeed_photo">
+	<combo_box name="resolution_combobox" tool_tip="Résolution de l'image">
+		<combo_box.item label="Fenêtre actuelle" name="CurrentWindow"/>
+		<combo_box.item label="Personnalisée" name="Custom"/>
+	</combo_box>
+	<combo_box name="filters_combobox" tool_tip="Filtres d'image">
+		<combo_box.item label="Pas de filtre" name="NoFilter"/>
+	</combo_box>
+	<check_box label="Garder les proportions" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		Rafraichissement...
+	</text>
+	<check_box label="Cadre de la photo" tool_tip="Affiche un cadre à l'écran qui entoure la zones de la photo. Les parties de la scène qui se trouvent en dehors de la photo sont dé-saturées et légèrement floues." name="show_frame"/>
+	<check_box label="Guide de cadrage" tool_tip="Affiche le guide de cadrage (règle des tiers) à l'intérieur du cadre de la photo." name="show_guides"/>
+	<button label="Actualiser" name="new_snapshot_btn" tool_tip="Cliquez pour actualiser"/>
+	<button label="Aperçu" name="big_preview_btn" tool_tip="Cliquez pour afficher l'aperçu"/>
+	<text name="description_label">
+		Description :
+	</text>
+	<check_box label="Inclure l'emplacement" name="add_location_cb"/>
+	<check_box label="Ajouter à la galerie publique" name="primfeed_add_to_public_gallery"/>
+	<check_box label="Contenu commercial" name="primfeed_commercial_content"/>
+	<combo_box name="rating_combobox" tool_tip="Classification du contenu de Primfeed">
+		<combo_box.item label="Général" name="GeneralRating"/>
+		<combo_box.item label="Modéré" name="ModerateRating"/>
+		<combo_box.item label="Adulte" name="AdultRating"/>
+		<combo_box.item label="Adulte+" name="AdultPlusRating"/>
+	</combo_box>
+	<check_box label="Ouvrir dans le navigateur après l'envoi" tool_tip="Ouvrir automatiquement le message Primfeed dans votre navigateur web après l'avoir publié." name="primfeed_open_url_on_post"/>
+	<button label="Partager" name="post_photo_btn"/>
+	<button label="Annuler" name="cancel_photo_btn"/>
+</panel>

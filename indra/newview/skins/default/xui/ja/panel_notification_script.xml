@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- lots of colors changed in this file -->
+<panel label="通知パネル" name="notification_panel">
+	<panel label="情報パネル" name="info_panel"/>
+	<panel label="コントロールパネル" name="control_panel"/>
+</panel>

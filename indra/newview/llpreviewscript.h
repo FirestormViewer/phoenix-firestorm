@@ -169,7 +169,7 @@ public:
     void            setItemRemoved(bool script_removed) { mScriptRemoved = script_removed; }
 
     void            setAssetID(const LLUUID& asset_id) { mAssetID = asset_id; }
-    LLUUID          getAssetID() { return mAssetID; }
+    LLUUID          getAssetID() const { return mAssetID; }
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
     //bool isFontSizeChecked(const LLSD &userdata);
@@ -180,7 +180,7 @@ public:
     void selectAll() { mEditor->selectAll(); }
 
     void            enableSave(bool b) { mEnableSave = b; }
-    bool            hasChanged();
+    bool            hasChanged() const;
 
   private:
     // NaCl - LSL Preprocessor

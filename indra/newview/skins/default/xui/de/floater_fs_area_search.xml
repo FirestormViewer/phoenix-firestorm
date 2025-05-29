@@ -62,6 +62,7 @@
 			<check_box name="filter_perm_copy" label="Kopieren"/>
 			<check_box name="filter_perm_modify" label="Bearbeiten"/>
 			<check_box name="filter_perm_transfer" label="Transferieren"/>
+			<check_box name="filter_reflection_probe" label="Reflexionstests" tool_tip="Beinhaltet nur manuelle Tests, nicht automatische. Beinhaltet nur Spiegel-Tests, falls Spiegel in den Grafik-Einstellungen aktiviert sind. Falls kein Reflexionsumfang gesetzt ist oder der Test nicht eingebacken ist, könnten Objekte nicht identifiert werden."/>
 			<check_box name="filter_for_sale" label="Zum Verkauf zwischen" width="150"/>
 			<text name="and">
 				und
@@ -92,6 +93,7 @@
 			<check_box name="exclude_attachment" label="Anhänge"/>
 			<check_box name="exclude_physical" label="Physikalisch"/>
 			<check_box name="exclude_temporary" label="Temporär"/>
+			<check_box name="exclude_reflection_probes" label="Reflexionstests"/>
 			<check_box name="exclude_childprim" label="Kind-Primitive"/>
 			<check_box name="exclude_neighbor_region" label="Nachbarregionen"/>
 			<button name="apply" label="Anwenden"/>

@@ -104,8 +104,7 @@ public:
     static void onClickAutoSnap(LLUICtrl *ctrl, void* data);
     static void onClickNoPost(LLUICtrl *ctrl, void* data);
     static void onClickFilter(LLUICtrl *ctrl, void* data);
-    static void onClickUICheck(LLUICtrl *ctrl, void* data);
-    static void onClickHUDCheck(LLUICtrl *ctrl, void* data);
+    static void onClickDisplaySetting(LLUICtrl *ctrl, void* data);
     // <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
     static void onClickCurrencyCheck(LLUICtrl *ctrl, void* data);
     static void onCommitFreezeFrame(LLUICtrl* ctrl, void* data);
@@ -123,7 +122,7 @@ public:
     virtual EStatus getStatus() const { return mStatus; }
     virtual void setNeedRefresh(bool need);
 
-    static bool updatePreviewList(bool initialized, bool have_flickr = false); // <FS:Beq/> FIRE-35002 - Post to flickr broken, improved solution
+    static bool updatePreviewList(bool initialized, bool have_socials = false); // <FS:Beq/> FIRE-35002 - Post to flickr broken, improved solution
 
     void setAdvanced(bool advanced) { mAdvanced = advanced; }
     void setSkipReshaping(bool skip) { mSkipReshaping = skip; }

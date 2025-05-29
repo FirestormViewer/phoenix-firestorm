@@ -96,6 +96,8 @@ public:
     void    insertEmoji(llwchar emoji);
     void    handleEmojiCommit(llwchar emoji);
 
+    void handleMentionCommit(std::string name_url);
+
     // mousehandler overrides
     virtual bool    handleMouseDown(S32 x, S32 y, MASK mask);
     virtual bool    handleMouseUp(S32 x, S32 y, MASK mask);
@@ -215,17 +217,19 @@ public:
     const LLUUID&   getSourceID() const                     { return mSourceID; }
 
     const LLTextSegmentPtr  getPreviousSegment() const;
-    const LLTextSegmentPtr  getLastSegment() const;
     void            getSelectedSegments(segment_vec_t& segments) const;
 
     void            setShowContextMenu(bool show) { mShowContextMenu = show; }
     bool            getShowContextMenu() const { return mShowContextMenu; }
 
     void            showEmojiHelper();
+    void            hideEmojiHelper();
     void            setShowEmojiHelper(bool show);
     bool            getShowEmojiHelper() const { return mShowEmojiHelper; }
 
     void            setPassDelete(bool b) { mPassDelete = b; }
+
+    LLWString       getConvertedText() const;
 
 protected:
     // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
@@ -233,8 +237,6 @@ protected:
     void            showContextMenu(S32 x, S32 y, bool set_cursor_pos = true);
     // </FS:Ansariel>
     void            drawPreeditMarker();
-
-    void            assignEmbedded(const std::string &s);
 
     void            removeCharOrTab();
 
@@ -255,7 +257,6 @@ protected:
 
     void            autoIndent();
 
-    void            findEmbeddedItemSegments(S32 start, S32 end);
     void            getSegmentsInRange(segment_vec_t& segments, S32 start, S32 end, bool include_partial) const;
 
     virtual llwchar pasteEmbeddedItem(llwchar ext_char) { return ext_char; }
@@ -277,6 +278,7 @@ protected:
     S32             remove(S32 pos, S32 length, bool group_with_next_op);
 
     void            tryToShowEmojiHelper();
+    void            tryToShowMentionHelper();
     void            focusLostHelper();
     void            updateAllowingLanguageInput();
     bool            hasPreeditString() const;
@@ -314,6 +316,7 @@ protected:
 
     bool                mAutoIndent;
     bool                mParseOnTheFly;
+    bool                mShowChatMentionPicker;
 
     void                updateLinkSegments();
     void                keepSelectionOnReturn(bool keep) { mKeepSelectionOnReturn = keep; }
@@ -324,7 +327,7 @@ private:
     // Methods
     //
     void            pasteHelper(bool is_primary);
-    void            cleanStringForPaste(LLWString & clean_string);
+    void            cleanStringForPaste(LLWString& clean_string);
     void            pasteTextWithLinebreaks(LLWString & clean_string);
 
     void            onKeyStroke();

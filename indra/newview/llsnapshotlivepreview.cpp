@@ -36,6 +36,7 @@
 #include "llfloaterperms.h"
 #include "llfloaterreg.h"
 #include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
+#include "fsfloaterprimfeed.h" // <FS:Beq> Share to Primfeed
 #include "llimagefilter.h"
 #include "llimagefiltersmanager.h"
 #include "llimagebmp.h"
@@ -731,6 +732,7 @@ bool LLSnapshotLivePreview::onIdle( void* snapshot_preview )
     static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime", false);
     static LLCachedControl<bool> use_freeze_frame(gSavedSettings, "UseFreezeFrame", false);
     static LLCachedControl<bool> render_ui(gSavedSettings, "RenderUIInSnapshot", false);
+    static LLCachedControl<bool> render_balance(gSavedSettings, "RenderBalanceInSnapshot", false);
     static LLCachedControl<bool> render_hud(gSavedSettings, "RenderHUDInSnapshot", false);
     static LLCachedControl<bool> render_no_post(gSavedSettings, "RenderSnapshotNoPost", false);
 
@@ -787,6 +789,7 @@ bool LLSnapshotLivePreview::onIdle( void* snapshot_preview )
                 render_hud,
                 false,
                 render_no_post,
+                render_balance,
                 previewp->mSnapshotBufferType,
                 previewp->getMaxImageSize()))
         {

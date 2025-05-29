@@ -417,11 +417,12 @@ void LLNotificationChiclet::setCounter(S32 counter)
 bool LLNotificationChiclet::ChicletNotificationChannel::filterNotification( LLNotificationPtr notification )
 {
     bool displayNotification;
+    //LLFloaterNotificationsTabbed* floater = LLFloaterNotificationsTabbed::getInstance(); // <FS:Ansariel> Optional legacy notification well
     if (   (notification->getName() == "ScriptDialog") // special case for scripts
         // if there is no toast window for the notification, filter it
         //|| (!LLNotificationWellWindow::getInstance()->findItemByID(notification->getID()))
         // <FS:Ansariel> Optional legacy notification well
-        //|| (!LLFloaterNotificationsTabbed::getInstance()->findItemByID(notification->getID(), notification->getName()))
+        //|| (floater && !LLFloaterNotificationsTabbed::getInstance()->findItemByID(notification->getID(), notification->getName()))
         || ((!gSavedSettings.getBOOL("FSInternalLegacyNotificationWell") && !LLFloaterNotificationsTabbed::getInstance()->findItemByID(notification->getID(), notification->getName()))
         || (gSavedSettings.getBOOL("FSInternalLegacyNotificationWell") && !LLNotificationWellWindow::getInstance()->findItemByID(notification->getID())))
         // </FS:Ansariel>

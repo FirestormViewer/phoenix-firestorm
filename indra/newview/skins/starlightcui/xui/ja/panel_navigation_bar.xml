@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<panel name="navigation_bar_context_menu_panel"/>
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel">
+					<pull_button name="back_btn" tool_tip="前の場所へ移動します。"/>
+					<pull_button name="forward_btn" tool_tip="次の場所へ移動します。"/>
+					<button name="home_btn" tool_tip="「ホーム」へテレポートします。"/>
+					<button name="About_Land" tool_tip="土地情報のウィンドウを開きます。"/>
+					<button name="PersonalLighting" tool_tip="個人的光源エディタを開きます。"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="場所" name="location_combo">
+					</location_input>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box name="search_combo_box" tool_tip="検索">
+						<combo_editor label="メタバースを検索" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="ランドマークをここにドラッグして、Second Lifeのお気に入りの場所に素早くアクセス！">
+				<more_button name="more_btn_stl" tool_tip="お気に入りをもっと見る。">
+					より多く▼
+				</more_button>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
+</panel>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skin_panel">
+	<panel name="avatar_skin_color_panel">
+		<texture_picker label="頭" name="Head" tool_tip="クリックで画像を選択します。"/>
+		<texture_picker label="上半身" name="Upper Body" tool_tip="クリックで画像を選択します。"/>
+		<texture_picker label="下半身" name="Lower Body" tool_tip="クリックで画像を選択します。"/>
+	</panel>
+	<tab_container name="wearable_accordion">
+		<!-- Begin Skin Color Panel -->
+		<panel name="skin_color_tab_holder" title="肌の色">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="skin_color_accordion">
+				<accordion_tab name="skin_color_tab" title="肌の色"/>
+			</accordion>
+		</panel>
+		<!-- End Skin Color Panel -->
+		<!-- Begin Face Detail Panel -->
+		<panel name="skin_face_tab_holder" title="顔の詳細">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="skin_face_accordion">
+				<accordion_tab name="skin_face_tab" title="顔の詳細"/>
+			</accordion>
+		</panel>
+		<!-- End Face Detail Panel -->
+		<!-- Begin Makeup Panel -->
+		<panel name="skin_makeup_holder" title="メイクアップ">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="skin_makeup_accordion">
+				<accordion_tab name="skin_makeup_tab" title="メイクアップ"/>
+			</accordion>
+		</panel>
+		<!-- End Makeup Panel -->
+		<!-- Begin Body Detail Panel -->
+		<panel name="skin_body_holder" title="身体の詳細">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="skin_body_accordion">
+				<accordion_tab name="skin_body_tab" title="身体の詳細"/>
+			</accordion>
+		</panel>
+		<!-- End Body Detail Panel -->
+	</tab_container>
+</panel>
