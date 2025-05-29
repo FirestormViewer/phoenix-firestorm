@@ -4984,15 +4984,6 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 items.push_back(std::string("Rename"));
                 items.push_back(std::string("thumbnail"));
 
-                if (cat->getIsFavorite())
-                {
-                    items.push_back(std::string("Remove from Favorites"));
-                }
-                else
-                {
-                    items.push_back(std::string("Add to Favorites"));
-                }
-
                 addDeleteContextMenuOptions(items, disabled_items);
                 // EXT-4030: disallow deletion of currently worn outfit
                 const LLViewerInventoryItem* base_outfit_link = LLAppearanceMgr::instance().getBaseOutfitLink();
