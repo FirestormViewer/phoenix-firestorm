@@ -571,6 +571,7 @@ public:
     virtual void renderJoints();
     void        renderOnlySelectedBones(const std::vector<std::string> &selected_joints);
     void        renderBoxAroundJointAttachments(LLJoint * joint);
+
     static void deleteCachedImages(bool clearAll=true);
     static void destroyGL();
     static void restoreGL();

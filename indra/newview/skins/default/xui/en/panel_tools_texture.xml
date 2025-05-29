@@ -978,8 +978,8 @@
              label_width="195"
              layout="topleft"
              left="10"
-             min_val="-100"
-             max_val="100"
+             min_val="-10000"
+             max_val="10000"
              name="gltfTextureScaleU"
              top_delta="-115"
              width="265" />
@@ -991,8 +991,8 @@
              label_width="195"
              layout="topleft"
              left="10"
-             min_val="-100"
-             max_val="100"
+             min_val="-10000"
+             max_val="10000"
              name="gltfTextureScaleV"
              width="265" />
             <spinner

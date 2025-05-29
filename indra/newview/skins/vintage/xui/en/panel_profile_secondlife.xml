@@ -595,8 +595,22 @@
     layout="topleft"
     halign="right" />
 
+<!-- [AS:chanayane] Preview button -->
+  <button
+    name="btn_preview"
+    tool_tip="Toggle preview of your profile 'about' section"
+    top_delta="20"
+    left="35"
+    height="20"
+    width="20"
+    follows="left|top"
+    layout="topleft"
+    image_overlay="Profile_Group_Visibility_On"
+    is_toggle="true"
+    enabled="false"
+    visible="false"/>
   <view_border
-    top_delta="-4"
+    top_delta="-24"
     left="59"
     right="-5"
     height="103"
@@ -604,6 +618,7 @@
     follows="all"
     name="info_border_sl_description_edit"
     bevel_style="in" />
+<!-- [/AS:chanayane] -->
 
   <text_editor
     name="sl_description_edit"

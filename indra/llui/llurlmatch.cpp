@@ -37,8 +37,9 @@ LLUrlMatch::LLUrlMatch() :
     mIcon(""),
     mMenuName(""),
     mLocation(""),
-    mUnderlineOnHoverOnly(false),
-    mTrusted(false)
+    mUnderline(e_underline::UNDERLINE_ALWAYS),
+    mTrusted(false),
+    mSkipProfileIcon(false)
 {
 }
 
@@ -48,7 +49,7 @@ void LLUrlMatch::setValues(U32 start, U32 end, const std::string &url, const std
                            const std::string &menu, const std::string &location,
                            // <FS:Ansariel> Store matched text
                            const std::string& matched_text,
-                           const LLUUID& id, bool underline_on_hover_only, bool trusted)
+                           const LLUUID& id, e_underline underline, bool trusted, bool skip_icon)
 {
     mStart = start;
     mEnd = end;
@@ -62,8 +63,9 @@ void LLUrlMatch::setValues(U32 start, U32 end, const std::string &url, const std
     mMenuName = menu;
     mLocation = location;
     mID = id;
-    mUnderlineOnHoverOnly = underline_on_hover_only;
+    mUnderline = underline;
     mTrusted = trusted;
+    mSkipProfileIcon = skip_icon;
     // <FS:Ansariel> Store matched text
     mMatchedText = matched_text;
 }

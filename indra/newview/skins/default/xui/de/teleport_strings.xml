@@ -39,9 +39,6 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 		<message name="expired_region_handoff">
 			Das System konnte Ihre Anfrage zum Regionswechsel nicht rechtzeitig bearbeiten. Versuchen Sie es in einigen Minuten erneut.
 		</message>
-		<message name="preexisting_tport">
-			Das System konnte Ihre Teleport-Anfrage nicht ausführen. Versuchen Sie es in einigen Minuten erneut.
-		</message>
 		<message name="no_host">
 			Teleport-Ziel wurde nicht gefunden. Das Ziel ist entweder im Moment nicht verfügbar oder existiert nicht mehr. Versuchen Sie es in einigen Minuten erneut.
 		</message>
@@ -53,6 +50,9 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
 			Betreten der Region nicht gestattet. „[REGION_NAME]“ ist eine Region für Geschicklichkeitsspiele. Der Zutritt ist Einwohnern vorbehalten, die bestimmte Kriterien erfüllen. Weitere Details finden Sie unter [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+		</message>
+		<message name="preexisting_tport">
+			Entschuldigung, aber das System konnte deinen Teleport nicht starten. Versuche es bitte in ein paar Minuten noch einmal.
 		</message>
 	</message_set>
 	<message_set name="progress">

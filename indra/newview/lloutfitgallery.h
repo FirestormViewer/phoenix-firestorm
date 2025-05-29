@@ -191,9 +191,6 @@ private:
     item_num_map_t                                      mItemIndexMap;
     std::map<S32, LLOutfitGalleryItem*>                 mIndexToItemMap;
 
-
-    LLInventoryCategoriesObserver*  mOutfitsObserver;
-
     boost::signals2::connection mSavedSettingInvFavColor;
 };
 class LLOutfitGalleryContextMenu : public LLOutfitContextMenu

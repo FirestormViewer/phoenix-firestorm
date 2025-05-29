@@ -142,8 +142,9 @@ extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
 extern F32 ANIM_SPEED_MIN;
 extern U32 JOINT_COUNT_REQUIRED_FOR_FULLRIG;
-const F32 MAX_HOVER_Z = 2.0f;
-const F32 MIN_HOVER_Z = -2.0f;
+
+const F32 MAX_HOVER_Z = 3.0;
+const F32 MIN_HOVER_Z = -3.0;
 
 const F32 MIN_ATTACHMENT_COMPLEXITY = 0.f;
 const F32 DEFAULT_MAX_ATTACHMENT_COMPLEXITY = 1.0e6f;
@@ -12236,8 +12237,7 @@ void LLVOAvatar::idleUpdateRenderComplexity()
     bool autotune = LLPerfStats::tunables.userAutoTuneEnabled && !mIsControlAvatar && !isSelf();
     if (autotune && !isDead())
     {
-        static LLCachedControl<F32> render_far_clip(gSavedSettings, "RenderFarClip", 64);
-        F32 radius = render_far_clip * render_far_clip;
+        F32 radius = sRenderDistance * sRenderDistance;
 
         bool is_nearby = true;
         if ((dist_vec_squared(getPositionGlobal(), gAgent.getPositionGlobal()) > radius) &&
@@ -12269,8 +12269,7 @@ void LLVOAvatar::updateNearbyAvatarCount()
     if (agent_update_timer.getElapsedTimeF32() > 1.0f)
     {
         S32 avs_nearby = 0;
-        static LLCachedControl<F32> render_far_clip(gSavedSettings, "RenderFarClip", 64);
-        F32 radius = render_far_clip * render_far_clip;
+        F32 radius = sRenderDistance * sRenderDistance;
         for (LLCharacter* character : LLCharacter::sInstances)
         {
             LLVOAvatar* avatar = (LLVOAvatar*)character;

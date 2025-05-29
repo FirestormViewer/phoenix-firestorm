@@ -100,7 +100,9 @@ public:
                                 image_overlay_color,
                                 image_overlay_selected_color,
                                 image_overlay_disabled_color,
-                                flash_color;
+                                flash_color,
+                                flash_alt_color; // <FS:Ansariel> [FS communication UI]
+
 
         // layout
         Optional<S32>           pad_right;
@@ -217,7 +219,10 @@ public:
     void            setToggleState(bool b);
 
     void            setHighlight(bool b);
-    void            setFlashing( bool b, bool force_flashing = false );
+    // <FS:Ansariel> [FS communication UI]
+    //void            setFlashing( bool b, bool force_flashing = false );
+    void            setFlashing(bool b, bool force_flashing = false, bool alternate_color = false);
+    // </FS:Ansariel> [FS communication UI]
     bool            getFlashing() const     { return mFlashing; }
     LLFlashTimer*   getFlashTimer() {return mFlashingTimer;}
     void            setFlashColor(const LLUIColor &color) { mFlashBgColor = color; };
@@ -361,6 +366,8 @@ protected:
     LLPointer<LLUIImage>        mImageFlash;
 
     LLUIColor                   mFlashBgColor;
+    // <FS:Ansariel> [FS communication UI]
+    LLUIColor                   mFlashAltBgColor;
 
     LLUIColor                   mImageColor;
     LLUIColor                   mDisabledImageColor;
@@ -373,6 +380,8 @@ protected:
     bool                        mUseEllipses;
     bool                        mUseFontColor;
     bool                        mFlashing;
+    // <FS:Ansariel> [FS communication UI]
+    bool                        mIsAltFlashColor;
 
     LLFontGL::HAlign            mHAlign;
     S32                         mLeftHPad;

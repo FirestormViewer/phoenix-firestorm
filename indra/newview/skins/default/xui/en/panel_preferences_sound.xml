@@ -1426,7 +1426,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when female avatar takes damage."
+         tool_tip="Sound UUID played when female avatar takes damage."
          name="textFSHealthReductionF">
             Female avatar hurt:
         </text>
@@ -1482,7 +1482,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when male avatar takes damage."
+         tool_tip="Sound UUID played when male avatar takes damage."
          name="textFSHealthReductionM">
             Male avatar hurt:
         </text>
@@ -1866,7 +1866,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when starting new IM session."
+         tool_tip="Sound UUID played when starting new IM session."
          name="textFSStartIM">
             Starting IM session:
         </text>
@@ -1912,6 +1912,62 @@ Hover your mouse cursor over UUID field to show its default value.
          label="Play this sound"
          layout="topleft"
          name="PlayModeUISndStartIM"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played when being mentioned in chat."
+         name="textChatMention">
+            Chat mentions:
+        </text>
+        <line_editor
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndChatMention"
+         control_name="UISndChatMention"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndChatMention"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         sound_flags="0"
+         tool_tip="Preview this sound.">
+            <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndChatMention"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndChatMention"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="17"
+         tool_tip="Reset to the default UUID.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="UISndChatMention"/>
+        </button>
+        <check_box
+         control_name="PlaySoundChatMention"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndChatMention"
          left_pad="1"
          width="120" />
 
@@ -2194,11 +2250,34 @@ Hover your mouse cursor over UUID field to show its default value.
          name="QuietSnapshotsToDiskCheckBox"
          left_pad="1"
          width="120" />
+    </panel>
+
+    <!-- UI Sounds 2 -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="UI Sounds 2"
+     name="UI Sounds tab 2">
+     
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="10"
+         left="5"
+         height="14"
+         width="520"
+         name="textFSExplanation_tab2">
+            Here you can change (by providing sound UUIDs), enable or disable default interface sounds.
+Hover your mouse cursor over UUID field to show its default value.
+        </text>
 
         <text
          layout="topleft"
          follows="left|top"
-         top_pad="7"
+         top_pad="25"
          left="5"
          height="14"
          width="150"
@@ -2251,38 +2330,14 @@ Hover your mouse cursor over UUID field to show its default value.
          left_pad="1"
          width="120" />
 
-    </panel>
-
-    <!-- UI Sounds 2 -->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="UI Sounds 2"
-     name="UI Sounds tab 2">
-     
         <text
          layout="topleft"
          follows="left|top"
-         top_pad="10"
-         left="5"
-         height="14"
-         width="520"
-         name="textFSExplanation_tab2">
-            Here you can change (by providing sound UUIDs), enable or disable default interface sounds.
-Hover your mouse cursor over UUID field to show its default value.
-        </text>
-
-        <text
-         layout="topleft"
-         follows="left|top"
-         top_pad="25"
+         top_pad="7"
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when Pie Menu appears."
+         tool_tip="Sound UUID played when Pie Menu appears."
          name="textFSPieMenuAppear">
             Pie Menu appear:
         </text>
@@ -2338,7 +2393,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when Pie Menu disappears."
+         tool_tip="Sound UUID played when Pie Menu disappears."
          name="textFSPieMenuHide">
             Pie Menu disappear:
         </text>
@@ -2394,7 +2449,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 1."
+         tool_tip="Sound UUID played when selecting pie menu item 1."
          name="textFSPieMenuSliceHighlight0">
             Pie Menu option 1:
         </text>
@@ -2450,7 +2505,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 2."
+         tool_tip="Sound UUID played when selecting pie menu item 2."
          name="textFSPieMenuSliceHighlight1">
             Pie Menu option 2:
         </text>
@@ -2506,7 +2561,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 3."
+         tool_tip="Sound UUID played when selecting pie menu item 3."
          name="textFSPieMenuSliceHighlight2">
             Pie Menu option 3:
         </text>
@@ -2562,7 +2617,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 4."
+         tool_tip="Sound UUID played when selecting pie menu item 4."
          name="textFSPieMenuSliceHighlight3">
             Pie Menu option 4:
         </text>
@@ -2618,7 +2673,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 5."
+         tool_tip="Sound UUID played when selecting pie menu item 5."
          name="textFSPieMenuSliceHighlight4">
             Pie Menu option 5:
         </text>
@@ -2674,7 +2729,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 6."
+         tool_tip="Sound UUID played when selecting pie menu item 6."
          name="textFSPieMenuSliceHighlight5">
             Pie Menu option 6:
         </text>
@@ -2730,7 +2785,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 7."
+         tool_tip="Sound UUID played when selecting pie menu item 7."
          name="textFSPieMenuSliceHighlight6">
             Pie Menu option 7:
         </text>
@@ -2786,7 +2841,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 8."
+         tool_tip="Sound UUID played when selecting pie menu item 8."
          name="textFSPieMenuSliceHighlight7">
             Pie Menu option 8:
         </text>
@@ -2842,7 +2897,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when starting to type a chat message. This setting is shared with Chat &gt; General &gt; 'Hear typing sound when people type in nearby chat'."
+         tool_tip="Sound UUID played when starting to type a chat message. This setting is shared with Chat &gt; General &gt; 'Hear typing sound when people type in nearby chat'."
          name="textFSTyping">
             Typing a message:
         </text>
@@ -2898,7 +2953,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when closing a window."
+         tool_tip="Sound UUID played when closing a window."
          name="textFSWindowClose">
             Closing a window:
         </text>
@@ -2954,7 +3009,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when opening a window."
+         tool_tip="Sound UUID played when opening a window."
          name="textFSWindowOpen">
             Opening a window:
         </text>
@@ -3010,7 +3065,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when script opens a dialog window."
+         tool_tip="Sound UUID played when script opens a dialog window."
          name="textFSScriptFloaterOpen">
             Script dialog:
         </text>
@@ -3066,7 +3121,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when your friend comes online."
+         tool_tip="Sound UUID played when your friend comes online."
          name="textFSFriendOnline">
             Friend comes online:
         </text>
@@ -3122,7 +3177,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when your friend goes offline."
+         tool_tip="Sound UUID played when your friend goes offline."
          name="textFSFriendOffline">
             Friend goes offline:
         </text>
@@ -3226,11 +3281,34 @@ Hover your mouse cursor over UUID field to show its default value.
          name="PlayModeUISndFriendshipOffer"
          left_pad="1"
          width="120" />
+    </panel>
+
+    <!-- UI Sounds 3 -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="UI Sounds 3"
+     name="UI Sounds tab 3">
 
         <text
          layout="topleft"
          follows="left|top"
-         top_pad="7"
+         top_pad="10"
+         left="5"
+         height="14"
+         width="520"
+         name="textFSExplanation_tab3">
+            Here you can change (by providing sound UUIDs), enable or disable default interface sounds.
+Hover your mouse cursor over UUID field to show its default value.
+        </text>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="25"
          left="5"
          height="14"
          width="150"
@@ -3283,34 +3361,10 @@ Hover your mouse cursor over UUID field to show its default value.
          left_pad="1"
          width="120" />
 
-    </panel>
-
-    <!-- UI Sounds 3 -->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="UI Sounds 3"
-     name="UI Sounds tab 3">
-
         <text
          layout="topleft"
          follows="left|top"
-         top_pad="10"
-         left="5"
-         height="14"
-         width="520"
-         name="textFSExplanation_tab3">
-            Here you can change (by providing sound UUIDs), enable or disable default interface sounds.
-Hover your mouse cursor over UUID field to show its default value.
-        </text>
-
-        <text
-         layout="topleft"
-         follows="left|top"
-         top_pad="25"
+         top_pad="7"
          left="5"
          height="14"
          width="150"
@@ -3762,7 +3816,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when the tracker beacon is active. It is more frequent when the avatar is closer to the destination."
+         tool_tip="Sound UUID played when the tracker beacon is active. It is more frequent when the avatar is closer to the destination."
          name="textFSTrackerBeacon">
             Tracker beacon:
         </text>
@@ -3818,7 +3872,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when the microphone is toggled on or off."
+         tool_tip="Sound UUID played when the microphone is toggled on or off."
          name="textFSMicToggle">
             Microphone toggle:
         </text>
@@ -3874,7 +3928,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when the region restart alert appears."
+         tool_tip="Sound UUID played when the region restart alert appears."
          name="textFSRestart">
             Region restart:
         </text>
@@ -3931,7 +3985,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when the region restart alert appears (OpenSim)."
+         tool_tip="Sound UUID played when the region restart alert appears (OpenSim)."
          name="textFSRestartOpenSim">
             Region restart (OpenSim):
         </text>

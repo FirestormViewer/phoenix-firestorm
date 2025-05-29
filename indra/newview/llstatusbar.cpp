@@ -1295,13 +1295,12 @@ void LLStatusBar::updateBalancePanelPosition()
     balance_bg_view->setShape(balance_bg_rect);
 }
 
+void LLStatusBar::setBalanceVisible(bool visible)
+{
+    mBoxBalance->setVisible(visible);
+}
 //////////////////////////////////////////////////////////////////////////////
 // Firestorm methods
-
-void LLStatusBar::showBalance(bool show)
-{
-    mBoxBalance->setVisible(show);
-}
 
 // <COLOSI opensim multi-currency support>
 void LLStatusBar::updateCurrencySymbols()

@@ -554,7 +554,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     // <FS:Ansariel> Optional muted chat history
         //return;
     {
-        FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+        FSFloaterNearbyChat* nearby_chat = ::LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
         nearby_chat->addMessage(chat_msg, true, args);
         return;
     }
@@ -585,7 +585,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     // <FS:Ansariel> [FS communication UI]
     //LLFloaterReg::getInstance("im_container");
     //LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
-    FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+    FSFloaterNearbyChat* nearby_chat = ::LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
     // </FS:Ansariel> [FS communication UI]
 
     // Build notification data

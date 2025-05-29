@@ -432,6 +432,7 @@ void init_audio()
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndWindowClose")));
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndWindowOpen")));
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRestart")));
+        gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndChatMention")));
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRestartOpenSim"))); // <FS:Ansariel> Preload OpenSim restart sound
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndScriptFloaterOpen"))); // <FS:PP> Separate sound for opening script dialogs
         // <FS:Zi> Pie menu
@@ -650,11 +651,8 @@ void audio_update_wind(bool force_update)
         // whereas steady-state avatar walk velocity is only 3.2 m/s.
         // Without this the world feels desolate on first login when you are
         // standing still.
-        // <FS> [FIRE-35317] Restore AudioLevelWind debug setting
-        //const F32 WIND_LEVEL = 0.5f;
-        static LLUICachedControl<F32> WIND_LEVEL("AudioLevelWind", 0.5f);
-        LLVector3 scaled_wind_vec = gWindVec * WIND_LEVEL;
-        // </FS>
+        static LLUICachedControl<F32> wind_level("AudioLevelWind", 0.5f);
+        LLVector3 scaled_wind_vec = gWindVec * wind_level;
 
         // Mix in the avatar's motion, subtract because when you walk north,
         // the apparent wind moves south.

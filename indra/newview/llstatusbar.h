@@ -140,6 +140,8 @@ public:
     S32 getSquareMetersLeft() const;
     LLRegionDetails mRegionDetails;
 
+    void setBalanceVisible(bool visible);
+
     LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
     bool getAudioStreamEnabled() const;
 
@@ -149,8 +151,6 @@ public:
     void toggleMedia(bool enable);
     void toggleStream(bool enable);
     // </FS:Zi>
-
-    void showBalance(bool show);    // <FS:CR> Hide currency balance in snapshots
 
     // <COLOSI opensim multi-currency support>
     // force update of the "BUY L$" button when currency symbol is changed.
