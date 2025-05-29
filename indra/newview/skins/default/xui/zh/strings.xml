@@ -5044,10 +5044,10 @@ support@secondlife.com.
 		離線
 	</string>
 	<string name="not_online_msg">
-		使用者不線上上上 - 訊息將留存，稍後傳遞。
+		使用者不在線 - 訊息將留存，稍後傳遞。
 	</string>
 	<string name="not_online_inventory">
-		使用者不線上上上 - 庫存已儲存。
+		使用者不在線 - 庫存已儲存。
 	</string>
 	<!-- Additional IM messages -->
 	<string name="IM_announce_incoming">

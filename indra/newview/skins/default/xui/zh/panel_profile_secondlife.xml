@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="預覽" name="panel_profile">
 	<string name="status_online">
-		線上上
+		在線
 	</string>
 	<string name="status_offline">
 		離線
@@ -30,8 +30,8 @@
 		<menu_button name="copy_btn" tool_tip="複製選項" />
 	</panel>
 	<button name="set_name" tool_tip="設定顯示名稱" />
-	<icon tool_tip="朋友可以看到我的線上狀態" name="can_see_online" />
-	<icon tool_tip="朋友無法看到我的線上狀態" name="cant_see_online" />
+	<icon tool_tip="朋友可以看到我的在線狀態" name="can_see_online" />
+	<icon tool_tip="朋友無法看到我的在線狀態" name="cant_see_online" />
 	<icon tool_tip="朋友可以在世界地圖上找到我" name="can_see_on_map" />
 	<icon tool_tip="朋友無法在世界地圖上找到我" name="cant_see_on_map" />
 	<icon tool_tip="朋友可以編輯我的物件" name="can_edit_objects" />

@@ -53,8 +53,8 @@
 				</text>
 			</panel>
 			<panel name="layout_panel_4">
-				<combo_box label="線上的朋友" name="friend combo" tool_tip="顯示朋友在地圖上">
-					<combo_box.item label="我線上的朋友" name="item1" />
+				<combo_box label="在線的朋友" name="friend combo" tool_tip="顯示朋友在地圖上">
+					<combo_box.item label="我在線的朋友" name="item1" />
 				</combo_box>
 				<combo_box label="我的地標" name="landmark combo" tool_tip="將地標位置顯示在地圖上">
 					<combo_box.item label="我的地標" name="item1" />
