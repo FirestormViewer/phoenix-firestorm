@@ -3316,4 +3316,5 @@ Your current position: [AVATAR_POS]
   <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
   <string name="OpenSimInventoryValidationErrorGenericHelp">your Grid Operator's support team</string>
   <string name="Unlimited">Unlimited</string>
+  <string name="ListEmpty">List is empty</string>
 </strings>

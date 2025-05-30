@@ -405,6 +405,13 @@ public:
     void callbackAvatarCBBanned2(const uuid_vec_t& ids, S32 duration);
     void callbackAvatarCBAccess(const uuid_vec_t& ids);
 
+    // <FS:PP> Ban and access lists export
+    void onClickExportAccess();
+    void onClickExportBanned();
+    void onClickExportList(LLNameListCtrl* list, const std::string& filename);
+    void exportList(LLNameListCtrl* list, const std::string& default_filename);
+    // </FS:PP> Ban and access lists export
+
 protected:
     LLNameListCtrl*     mListAccess;
     LLNameListCtrl*     mListBanned;
@@ -422,6 +429,11 @@ protected:
     LLButton*           mBtnRemoveAllowed = nullptr;
     LLButton*           mBtnAddBanned = nullptr;
     LLButton*           mBtnRemoveBanned = nullptr;
+
+    // <FS:PP> Ban and access lists export
+    LLButton*           mBtnExportAccess = nullptr;
+    LLButton*           mBtnExportBanned = nullptr;
+    // </FS:PP> Ban and access lists export
 
     LLSafeHandle<LLParcelSelection>&    mParcel;
 };

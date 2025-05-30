@@ -43,6 +43,7 @@
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
+#include "llfilepicker.h" // <FS:PP> Ban and access lists export
 #include "llfloaterreg.h"
 #include "llfloateravatarpicker.h"
 #include "llfloaterauction.h"
@@ -2680,6 +2681,13 @@ bool LLPanelLandAccess::postBuild()
     mBtnRemoveBanned = getChild<LLButton>("remove_banned");
     mBtnRemoveBanned->setCommitCallback(boost::bind(&LLPanelLandAccess::onClickRemoveBanned, this));
 
+    // <FS:PP> Ban and access lists export
+    mBtnExportAccess = getChild<LLButton>("export_allowed");
+    mBtnExportAccess->setCommitCallback(boost::bind(&LLPanelLandAccess::onClickExportAccess, this));
+    mBtnExportBanned = getChild<LLButton>("export_banned");
+    mBtnExportBanned->setCommitCallback(boost::bind(&LLPanelLandAccess::onClickExportBanned, this));
+    // </FS:PP> Ban and access lists export
+
     mListAccess = getChild<LLNameListCtrl>("AccessList");
     if (mListAccess)
     {
@@ -2926,6 +2934,11 @@ void LLPanelLandAccess::refresh_ui()
     mBtnAddBanned->setEnabled(false);
     mBtnRemoveBanned->setEnabled(false);
 
+    // <FS:PP> Ban and access lists export
+    mBtnExportAccess->setEnabled(false);
+    mBtnExportBanned->setEnabled(false);
+    // </FS:PP> Ban and access lists export
+
     LLParcel *parcel = mParcel->getParcel();
     if (parcel && !gDisconnected)
     {
@@ -2995,6 +3008,12 @@ void LLPanelLandAccess::refresh_ui()
         mBtnAddBanned->setEnabled(can_manage_banned && banned_list_count < PARCEL_MAX_ACCESS_LIST);
         has_selected = (mListBanned && mListBanned->getSelectionInterface()->getFirstSelectedIndex() >= 0);
         mBtnRemoveBanned->setEnabled(can_manage_banned && has_selected);
+
+        // <FS:PP> Ban and access lists export
+        mBtnExportAccess->setEnabled(can_manage_allowed && allowed_list_count > 0);
+        mBtnExportBanned->setEnabled(can_manage_banned && banned_list_count > 0);
+        // </FS:PP> Ban and access lists export
+
     }
 }
 
@@ -3267,6 +3286,67 @@ void LLPanelLandAccess::onClickRemoveBanned()
         }
     }
 }
+
+// <FS:PP> Ban and access lists export
+void LLPanelLandAccess::onClickExportList(LLNameListCtrl* list, const std::string& filename)
+{
+    if (!list || list->getItemCount() == 0)
+    {
+        LLSD args;
+        args["MESSAGE"] = LLTrans::getString("ListEmpty");
+        LLNotificationsUtil::add("GenericAlert", args);
+        return;
+    }
+    exportList(list, filename);
+}
+
+void LLPanelLandAccess::onClickExportAccess()
+{
+    onClickExportList(mListAccess, "land_access_list.csv");
+}
+
+void LLPanelLandAccess::onClickExportBanned()
+{
+    onClickExportList(mListBanned, "land_banned_list.csv");
+}
+
+void LLPanelLandAccess::exportList(LLNameListCtrl* list, const std::string& default_filename)
+{
+    if (!list) return;
+
+    LLFilePicker& picker = LLFilePicker::instance();
+    if (!picker.getSaveFile(LLFilePicker::FFSAVE_CSV, default_filename))
+    {
+        return;
+    }
+
+    std::string filename = picker.getFirstFile();
+    std::ofstream file(filename.c_str());
+    if (!file.is_open())
+    {
+        LLNotificationsUtil::add("ExportFailed");
+        return;
+    }
+
+    file << "Name,UUID\n";
+    std::vector<LLScrollListItem*> items = list->getAllData();
+    for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); ++it)
+    {
+        LLScrollListItem* item = *it;
+        if (item)
+        {
+            const LLUUID& id = item->getUUID();
+            std::string name = item->getColumn(0)->getValue().asString();
+            file << name << "," << id.asString() << "\n";
+        }
+    }
+    file.close();
+
+    LLSD args;
+    args["FILENAME"] = filename;
+    LLNotificationsUtil::add("ExportFinished", args);
+}
+// </FS:PP> Ban and access lists export
 
 //---------------------------------------------------------------------------
 // LLPanelLandCovenant
