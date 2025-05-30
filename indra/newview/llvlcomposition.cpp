@@ -89,7 +89,7 @@ namespace
     {
         if (!tex) { return; }
         tex->setBoostLevel(LLGLTexture::BOOST_NONE);
-        tex->setMinDiscardLevel(MAX_DISCARD_LEVEL + 1);
+        tex->setMinDiscardLevel(MAX_DISCARD_LEVEL); // <FS:minerjr> needs to be in range
     }
 
     void unboost_minimap_material(LLFetchedGLTFMaterial* mat)

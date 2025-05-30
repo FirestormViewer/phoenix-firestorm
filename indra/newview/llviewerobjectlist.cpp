@@ -1673,7 +1673,7 @@ void LLViewerObjectList::cleanDeadObjects(bool use_timer)
     LLViewerObject *objectp;
 
     // <FS:Ansariel> Use timer for cleaning up dead objects
-    static const F64 max_time = 0.01; // Let's try 10ms per frame
+    static const F64 max_time = 0.001; // Let's try 1ms per frame (Was 10 ms, want to decrease to smooth fps)
     LLTimer timer;
     // </FS:Ansariel>
 

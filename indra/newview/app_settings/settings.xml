@@ -2,6 +2,61 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+  <key>FSSlowTextFetchProtion</key>
+  <map>
+    <key>Comment</key>
+    <string>Slow texture fetch protection. Use check to skip over waiting for long texture fetch.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSAutoOnScrText</key>
+  <map>
+    <key>Comment</key>
+    <string>Auto scale on-screen LOD textures to fit on screen objects.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSAutoOfScrText</key>
+  <map>
+      <key>Comment</key>
+      <string>Auto scale off-screen LOD textures to save VRAM.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+  </map>    
+    <key>FSNearOfScrTextQuality</key>
+    <map>
+        <key>Comment</key>
+        <string>Near off-screen textures close to camera are treated as if they are on screen. Protects from bias and down scaling off-screen.</string>
+        <key>Persist</key>
+        <integer>2</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
+    <key>FSFastMoveLowText</key>
+    <map>
+        <key>Comment</key>
+        <string>To save VRAM/Improve performance, while moving fast or turning, textures are down scaled.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
   <key>FSLandmarkCreatedNotification</key>
   <map>
     <key>Comment</key>

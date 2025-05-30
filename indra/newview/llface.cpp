@@ -181,7 +181,7 @@ void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
 
     mImportanceToCamera = 1.f ;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    mCloseToCamera = 1.0f;
+    mCloseToCamera = true;
     // </FS:minerjr> [FIRE-35081]
     mBoundingSphereRadius = 0.0f ;
 
@@ -2337,7 +2337,17 @@ F32 LLFace::getTextureVirtualSize()
         }
     }
     */
-    // </FS:minerjr> [FIRE-35081]    
+    // </FS:minerjr> [FIRE-35081]
+    constexpr S32 MAX_IMAGE_SIZE_DEFAULT = 2048;
+    U32 max_tex_res = MAX_IMAGE_SIZE_DEFAULT;
+    //if (mBoostLevel < LLGLTexture::BOOST_HIGH)
+    {
+        // restrict texture resolution to download based on RenderMaxTextureResolution
+        static LLCachedControl<U32> max_texture_resolution(gSavedSettings, "RenderMaxTextureResolution", 2048);
+        // sanity clamp debug setting to avoid settings hack shenanigans
+        max_tex_res = (U32)llclamp((U32)max_texture_resolution, 512, MAX_IMAGE_SIZE_DEFAULT);
+        face_area = llmin(face_area, (F32)(max_tex_res * max_tex_res));
+    }
     setVirtualSize(face_area) ;
 
     return face_area;
@@ -2355,6 +2365,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 
+    static LLCachedControl<bool> near_off_screen_textures_close_to_camera_quality(gSavedSettings, "FSNearOfScrTextQuality", true);
     //get area of circle around face
     LLVector4a center;
     LLVector4a size;
@@ -2458,7 +2469,16 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     lookAt.setSub(center, t);
 
     F32 dist = lookAt.getLength3().getF32();
-    dist = llmax(dist-size.getLength3().getF32(), 0.001f);
+    // <FS:minerjr> New fp flag now supports NaN's and can mess up values
+    if (std::isnormal(dist))
+    {
+        dist = llmax(dist - size.getLength3().getF32(), 0.001f);
+    }
+    else
+    {
+        dist = 0.001f;
+    }
+    // </FS:minerjr>
 
     lookAt.normalize3fast() ;
 
@@ -2477,9 +2497,18 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     // Added close to camera (based upon the mImportanceToCamera) where any object that is within the FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE (16.1f)
     // gets an extra texture scaling up.
     // Use positive distance to the camera and apply the multiplier based upon the texture scaled for increase in the default draw distance
-    mCloseToCamera = (dist >= 0.0f && dist <= FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0] * camera->getDrawDistanceMultiplier()) ? 1.0f : 0.0f;
-    // Check if the object is positive distance to the far plane and positive cos angle is in frustum
-    mInFrustum = (dist >= 0 && dist <= camera->getFar() && cos_angle_to_view_dir > 0.0f);
+    bool in_frustum_angle = cos_angle_to_view_dir >= camera->getCosHalfFov();
+    if (near_off_screen_textures_close_to_camera_quality)
+    {
+        mCloseToCamera = dist <= (FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0]) * (1.0f + (0.33f * (4.0f - LLViewerTexture::sDesiredDiscardBias)));
+    }
+    else
+    {
+        mCloseToCamera = in_frustum_angle && dist <= (FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[0][0]) * (1.0f + (0.33f * (4.0f - LLViewerTexture::sDesiredDiscardBias)));
+    }
+    
+    // Check if the object is positive distance to the far plane and positive cos angle is in frustumaaaaaa
+    mInFrustum = (near_off_screen_textures_close_to_camera_quality && mCloseToCamera) || (dist >= 0.0f && dist <= camera->getFar() && in_frustum_angle);
     // </FS:minerjr> [FIRE-35081]
 
     //if has media, check if the face is out of the view frustum.
@@ -2488,10 +2517,6 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
         if(!camera->AABBInFrustum(center, size))
         {
             mImportanceToCamera = 0.f ;
-            // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-            // Added real in frustum check value. Previous was only false for media textures off screen and invalid rig objects
-            mInFrustum = false;
-            // </FS:minerjr> [FIRE-35081]
             return false ;
         }
         if(cos_angle_to_view_dir > camera->getCosHalfFov()) //the center is within the view frustum
@@ -2516,7 +2541,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
         mImportanceToCamera = 1.0f ;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         mInFrustum = true; // If the face is important to the camera, it is in the frustum
-        mCloseToCamera = 1.0f;
+        mCloseToCamera = true;
         // </FS:minerjr> [FIRE-35081]
     }
     else
@@ -2560,21 +2585,22 @@ F32 LLFace::adjustPartialOverlapPixelArea(F32 cos_angle_to_view_dir, F32 radius 
 F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
+    static LLCachedControl<bool> fast_move_lower_texture_quality(gSavedSettings, "FSFastMoveLowText", true);
     F32 importance = 0.f ;
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
     // Move camera out to use for the inital check for the distance to the face importance with the multiplier
     LLViewerCamera* camera = LLViewerCamera::getInstance();
 
-    if(cos_angle_to_view_dir > LLViewerCamera::getInstance()->getCosHalfFov() &&    
+    if(cos_angle_to_view_dir > camera->getCosHalfFov() &&    
         //dist < FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[FACE_IMPORTANCE_LEVEL - 1][0])
-        dist < FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[FACE_IMPORTANCE_LEVEL - 1][0] * camera->getDrawDistanceMultiplier())
+        dist >= 0.0f && dist < FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[FACE_IMPORTANCE_LEVEL - 1][0] * (1.0f + (0.33f * (4.0f - LLViewerTexture::sDesiredDiscardBias))))
     {
         //LLViewerCamera* camera = LLViewerCamera::getInstance();
         // </FS:minerjr> [FIRE-35081]
         F32 camera_moving_speed = camera->getAverageSpeed() ;
         F32 camera_angular_speed = camera->getAverageAngularSpeed();
 
-        if(camera_moving_speed > 10.0f || camera_angular_speed > 1.0f)
+        if((fast_move_lower_texture_quality) && (camera_moving_speed > 10.0f || camera_angular_speed > 1.0f))
         {
             //if camera moves or rotates too fast, ignore the importance factor
             return 0.f ;
@@ -2583,7 +2609,7 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
         S32 i = 0 ;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         // Added draw distance multiplier to the distance
-        for(i = 0; i < FACE_IMPORTANCE_LEVEL && dist > FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][0] * camera->getDrawDistanceMultiplier(); ++i);
+        for(i = 0; i < FACE_IMPORTANCE_LEVEL && dist > FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][0] * (1.0f + (0.33f * (4.0f - LLViewerTexture::sDesiredDiscardBias))); ++i);
         // </FS:minerjr> [FIRE-35081]
         i = llmin(i, FACE_IMPORTANCE_LEVEL - 1) ;
         F32 dist_factor = FACE_IMPORTANCE_TO_CAMERA_OVER_DISTANCE[i][1] ;

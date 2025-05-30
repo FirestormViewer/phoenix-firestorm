@@ -225,6 +225,7 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
+    static F32 sPrevDesiredDiscardBias; // <FS:minerjr> Previous desired discard bias
     static U32 sBiasTexturesUpdated;
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
@@ -438,8 +439,14 @@ public:
     bool        isInFastCacheList() { return mInFastCacheList; }
 
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    F32         getCloseToCamera() const {return mCloseToCamera ;} // Get close to camera value
-    void        setCloseToCamera(F32 value) {mCloseToCamera = value ;} // Set the close to camera value (0.0f or 1.0f)
+    bool        getCloseToCamera() const {return mCloseToCamera ;} // Get close to camera value
+    void        setCloseToCamera(bool value) {mCloseToCamera = value ;} // Set the close to camera value (true or false)
+    bool        getInFrustum() const {return mInFrustum ;} // Get in frustum value
+    void        setInFrustum(bool value) {mInFrustum = value ;} // Set the in frustum value (true or false)
+    F32         getBias() const { return mBias; } // Get the applied bias value to the texture
+    void        setBias(F32 value) { mBias = value; } // Set the applied bias value for the texture
+    F32         getImportanceToCamera() const { return mImportanceToCamera; }
+    void        setImportanceToCamera(F32 value) { mImportanceToCamera = value; }
     // </FS:minerjr> [FIRE-35081]
 
     /*virtual*/bool  isActiveFetching() override; //is actively in fetching by the fetching pipeline.
@@ -543,7 +550,10 @@ protected:
     bool   mForSculpt ; //a flag if the texture is used as sculpt data.
     bool   mIsFetched ; //is loaded from remote or from cache, not generated locally.
     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    F32    mCloseToCamera; // Float (0.0f or 1.0f) to indicate if the texture is close to the camera
+    bool mCloseToCamera; // indicate if the texture is close to the camera
+    F32 mBias; // Textures now have an indivdual bias applied to them
+    F32 mImportanceToCamera; // Textures can now store the importance to camera
+    bool mInFrustum; // And store if the texture is in the frustum
     // </FS:minerjr> [FIRE-35081]
 
 public:
@@ -586,6 +596,7 @@ public:
 
 private:
     void init(bool firstinit) ;
+    S32 mScaleDownCount; // <FS:minerjr> scale down counter
 };
 
 //
