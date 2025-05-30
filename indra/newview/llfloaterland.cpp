@@ -43,7 +43,6 @@
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
-#include "llfilepicker.h" // <FS:PP> Ban and access lists export
 #include "llfloaterreg.h"
 #include "llfloateravatarpicker.h"
 #include "llfloaterauction.h"
@@ -69,6 +68,7 @@
 #include "lluiconstants.h"
 #include "lluictrlfactory.h"
 #include "llviewertexturelist.h"        // LLUIImageList
+#include "llviewermenufile.h" // <FS:PP> Ban and access lists export
 #include "llviewermessage.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
@@ -3312,15 +3312,20 @@ void LLPanelLandAccess::onClickExportBanned()
 
 void LLPanelLandAccess::exportList(LLNameListCtrl* list, const std::string& default_filename)
 {
-    if (!list) return;
+    if (list)
+    {
+        LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelLandAccess::exportListCallback, this, list, _1), LLFilePicker::FFSAVE_CSV, default_filename);
+    }
+}
 
-    LLFilePicker& picker = LLFilePicker::instance();
-    if (!picker.getSaveFile(LLFilePicker::FFSAVE_CSV, default_filename))
+void LLPanelLandAccess::exportListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames)
+{
+    if (filenames.empty())
     {
         return;
     }
 
-    std::string filename = picker.getFirstFile();
+    std::string filename = filenames[0];
     std::ofstream file(filename.c_str());
     if (!file.is_open())
     {

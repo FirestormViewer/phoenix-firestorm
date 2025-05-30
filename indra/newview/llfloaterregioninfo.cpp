@@ -4656,15 +4656,20 @@ void LLPanelEstateAccess::onClickExportBannedList()
 
 void LLPanelEstateAccess::exportList(LLNameListCtrl* list, const std::string& default_filename)
 {
-    if (!list) return;
+    if (list)
+    {
+        LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEstateAccess::exportListCallback, this, list, _1), LLFilePicker::FFSAVE_CSV, default_filename);
+    }
+}
 
-    LLFilePicker& picker = LLFilePicker::instance();
-    if (!picker.getSaveFile(LLFilePicker::FFSAVE_CSV, default_filename))
+void LLPanelEstateAccess::exportListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames)
+{
+    if (filenames.empty())
     {
         return;
     }
 
-    std::string filename = picker.getFirstFile();
+    std::string filename = filenames[0];
     std::ofstream file(filename.c_str());
     if (!file.is_open())
     {
