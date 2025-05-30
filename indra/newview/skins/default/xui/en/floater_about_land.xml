@@ -2186,16 +2186,16 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="0"
              name="add_allowed"
-             width="65" />
+             width="70" />
             <button
              follows="bottom"
              height="23"
              label="Remove"
              label_selected="Remove"
              layout="topleft"
-             left_pad="10"
+             left_pad="5"
              name="remove_allowed"
-             width="65" />
+             width="70" />
             <button
              enabled="false"
              follows="bottom"
@@ -2203,10 +2203,10 @@ Only large parcels can be listed in search.
              label="Export"
              label_selected="Export"
              layout="topleft"
-             left_pad="10"
+             left_pad="5"
              name="export_allowed"
              right="-10"
-             width="65" />
+             width="70" />
              </panel>
             <panel
             name="Banned_layout_panel"
@@ -2255,7 +2255,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="0"
              name="add_banned"
-             width="65" />
+             width="70" />
             <button
              enabled="false"
              follows="bottom"
@@ -2263,9 +2263,9 @@ Only large parcels can be listed in search.
              label="Remove"
              label_selected="Remove"
              layout="topleft"
-             left_pad="10"
+             left_pad="5"
              name="remove_banned"
-             width="65" />
+             width="70" />
             <button
              enabled="false"
              follows="bottom"
@@ -2273,10 +2273,10 @@ Only large parcels can be listed in search.
              label="Export"
              label_selected="Export"
              layout="topleft"
-             left_pad="10"
+             left_pad="5"
              name="export_banned"
              right="-10"
-             width="65" />
+             width="70" />
              </panel>
         </panel>
        <panel
