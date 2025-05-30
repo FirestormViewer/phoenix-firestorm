@@ -644,7 +644,7 @@ bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
                 // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
                 // 2K textures could set the mMaxDiscardLevel above MAX_DISCARD_LEVEL, which would
                 // cause them to not be down-scaled so they would get stuck at 0 discard all the time.
-                mMaxDiscardLevel = llmax(mMaxDiscardLevel, (S8)MAX_DISCARD_LEVEL);
+                mMaxDiscardLevel = llmin(mMaxDiscardLevel, (S8)MAX_DISCARD_LEVEL);
                 // </FS:minerjr> [FIRE-35361]
             }
         }

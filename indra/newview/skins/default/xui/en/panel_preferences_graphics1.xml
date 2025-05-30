@@ -1230,6 +1230,53 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+
+        <check_box
+          control_name="FSAutoOnScrText"
+          height="16"
+          label="Auto Scale: On-Screen Textures"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSAutoOnScrText"
+          tool_tip="Saves VRAM by auto-scale on-screen LOD textures to perfectly fit size of objects."
+          width="475"
+        />
+        <check_box
+          control_name="FSAutoOfScrText"
+          height="16"
+          label="Auto Scale: Off-Screen Textures"
+          follows="left|top"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSAutoOfScrText"
+          tool_tip="Saves VRAM by auto-scale off-screen LOD textures."
+          width="475"
+        />
+        <check_box
+          control_name="FSNearOfScrTextQuality"
+          height="16"
+          label="Near Off-screen Textures: Keep Texture Quality"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSNearOfScrTextQuality"
+          tool_tip="Excludes off-screen textures close to camera from being scaled down or from having bias applied."
+          width="475"
+        />
+        <check_box
+          control_name="FSFastMoveLowText"
+          height="16"
+          label="Moving Fast/Turning: Lower Texture Quality for Faster Speed"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSFastMoveLowText"
+          tool_tip="While moving or turning fast, new textures are loaded at a capped quality level to speed up loading assets. On is the previous existing behavior."
+          width="475"
+        />
+
     </panel>
 
 <!--Rendering-->
