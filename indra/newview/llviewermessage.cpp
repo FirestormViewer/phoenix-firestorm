@@ -3347,6 +3347,8 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
             msg_notify["session_id"] = LLUUID();
             msg_notify["from_id"] = chat.mFromID;
             msg_notify["source_type"] = chat.mSourceType;
+            // used to check if there is agent mention in the message
+            msg_notify["message"] = mesg;
             on_new_message(msg_notify);
         }
 
@@ -6367,6 +6369,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
                                         false, //UI
                                         gSavedSettings.getBOOL("RenderHUDInSnapshot"),
                                         false,
+                                        false,
                                         LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
                                         LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
         }
@@ -6424,23 +6427,6 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
             return true;
         }
         // </FS:Ansariel>
-// <FS:CR> FIRE-9696 - Moved detection of HomePositionSet Alert hack to here where it's actually found now
-        if (notificationID == "HomePositionSet")
-        {
-            // save the home location image to disk
-            std::string snap_filename = gDirUtilp->getLindenUserDir();
-            snap_filename += gDirUtilp->getDirDelimiter();
-            snap_filename += LLStartUp::getScreenHomeFilename();
-            if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), false, gSavedSettings.getBOOL("RenderHUDInSnapshot"), false, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG))
-            {
-                LL_INFOS() << LLStartUp::getScreenHomeFilename() << " saved successfully." << LL_ENDL;
-            }
-            else
-            {
-                LL_WARNS() << LLStartUp::getScreenHomeFilename() << " could not be saved." << LL_ENDL;
-            }
-        }
-// </FS:CR>
 
         // Special Marketplace update notification
         if (notificationID == "SLM_UPDATE_FOLDER")
@@ -6508,6 +6494,7 @@ static void process_special_alert_messages(const std::string & message)
                                     gViewerWindow->getWindowHeightRaw(),
                                     false,
                                     gSavedSettings.getBOOL("RenderHUDInSnapshot"),
+                                    false,
                                     false,
                                     LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
                                     LLSnapshotModel::SNAPSHOT_FORMAT_PNG);

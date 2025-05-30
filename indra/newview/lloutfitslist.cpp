@@ -150,6 +150,17 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
     LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
     if (!cat) return;
 
+    if (!isOutfitFolder(cat))
+    {
+        // Assume a subfolder that contains or will contain outfits, track it
+        const LLUUID outfits = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
+        mCategoriesObserver->addCategory(cat_id, [this, outfits]()
+        {
+            observerCallback(outfits);
+        });
+        return;
+    }
+
     std::string name = cat->getName();
 
     outfit_accordion_tab_params tab_params(get_accordion_tab_params());
@@ -890,6 +901,39 @@ void LLOutfitListBase::observerCallback(const LLUUID& category_id)
     refreshList(category_id);
 }
 
+bool LLOutfitListBase::isOutfitFolder(LLViewerInventoryCategory* cat) const
+{
+    if (!cat)
+    {
+        return false;
+    }
+    if (cat->getPreferredType() == LLFolderType::FT_OUTFIT)
+    {
+        return true;
+    }
+    // assumes that folder is somewhere inside MyOutfits
+    if (cat->getPreferredType() == LLFolderType::FT_NONE)
+    {
+        LLViewerInventoryCategory* inv_cat = dynamic_cast<LLViewerInventoryCategory*>(cat);
+        if (inv_cat && inv_cat->getDescendentCount() > 3)
+        {
+            LLInventoryModel::cat_array_t* cats;
+            LLInventoryModel::item_array_t* items;
+            gInventory.getDirectDescendentsOf(inv_cat->getUUID(), cats, items);
+            if (cats->empty() // protection against outfits inside
+                && items->size() > 3) // arbitrary, if doesn't have at least base parts, not an outfit
+            {
+                // For now assume this to be an old style outfit, not a subfolder
+                // but ideally no such 'outfits' should be left in My Outfits
+                // Todo: stop counting FT_NONE as outfits,
+                // convert obvious outfits into FT_OUTFIT
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void LLOutfitListBase::refreshList(const LLUUID& category_id)
 {
     bool wasNull = mRefreshListState.CategoryUUID.isNull();
@@ -899,30 +943,7 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
     LLInventoryModel::item_array_t item_array;
 
     // Collect all sub-categories of a given category.
-    // <FS:ND> FIRE-6958/VWR-2862; Make sure to only collect folders of type FT_OUTFIT
-    class ndOutfitsCollector: public LLIsType
-    {
-    public:
-        ndOutfitsCollector()
-            : LLIsType( LLAssetType::AT_CATEGORY )
-        { }
-
-        virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-        {
-            if( !LLIsType::operator()( cat, item ) )
-                return false;
-
-            if( cat && LLFolderType::FT_OUTFIT == cat->getPreferredType() )
-                return true;
-
-            return false;
-        }
-    };
-
-    //  LLIsType is_category(LLAssetType::AT_CATEGORY);
-    ndOutfitsCollector is_category;
-    // </FS:ND>
-
+    LLIsType is_category(LLAssetType::AT_CATEGORY);
     gInventory.collectDescendentsIf(
         category_id,
         cat_array,
@@ -1489,7 +1510,12 @@ bool LLOutfitAccordionCtrlTab::handleToolTip(S32 x, S32 y, MASK mask)
     {
         LLSD params;
         params["inv_type"] = LLInventoryType::IT_CATEGORY;
-        params["thumbnail_id"] = gInventory.getCategory(mFolderID)->getThumbnailUUID();
+        LLViewerInventoryCategory* cat = gInventory.getCategory(mFolderID);
+        if (cat)
+        {
+            params["thumbnail_id"] = cat->getThumbnailUUID();
+        }
+        // else consider returning
         params["item_id"] = mFolderID;
 
         // <FS:Ansariel> Make thumbnail tooltip work properly

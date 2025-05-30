@@ -54,6 +54,7 @@
 
 #include "llfirstuse.h"
 #include "llfloaterimnearbychat.h"
+#include "llfloaterimnearbychatlistener.h"
 #include "llagent.h" // gAgent
 #include "llgesturemgr.h"
 #include "llmultigesture.h"
@@ -77,6 +78,8 @@
 // [/RLVa:KB]
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
+
+static LLFloaterIMNearbyChatListener sChatListener;
 
 constexpr S32 EXPANDED_HEIGHT = 266;
 constexpr S32 COLLAPSED_HEIGHT = 60;
@@ -593,7 +596,7 @@ void LLFloaterIMNearbyChat::sendChat( EChatType type )
 {
     if (mInputEditor)
     {
-        LLWString text = mInputEditor->getWText();
+        LLWString text = mInputEditor->getConvertedText();
         LLWStringUtil::trim(text);
         LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
         if (!text.empty())

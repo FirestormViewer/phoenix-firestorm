@@ -1396,4 +1396,16 @@
   <color
      name="FpsDisplayVSyncLimitReachedColor"
      reference="Green" />
+  <color
+   name="ChatMentionFont"
+   value="0.633 0.882 0.250 1" />
+  <color
+    name="ChatMentionHighlight"
+    value="0.561 0.361 0.251 1" />
+  <color
+    name="ChatSelfMentionHighlight"
+    value="0.709 0.250 0.190 1" />
+  <color
+    name="MentionFlashBgColor"
+    value="1 1 0 0.5" />
 </colors>

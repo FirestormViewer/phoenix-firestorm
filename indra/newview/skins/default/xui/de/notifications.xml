@@ -5134,6 +5134,10 @@ Möchten Sie fortfahren?
 		Aktivieren von „Wasser verstecken“ überschreibt die Auswahl für Textur, Holprigkeit und Glänzen.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
 	</notification>
+	<notification name="WaterExclusionNoMaterial">
+		Material kann nicht auf Wasser-Ausschluss-Oberfläche angewandt werden.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
 
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.

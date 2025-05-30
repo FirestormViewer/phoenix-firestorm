@@ -44,6 +44,8 @@ public:
     virtual void setSessionId(const LLUUID& session_id);
     const LLUUID& getSessionId() { return mSessionId; }
 
+    virtual uuid_vec_t getParticipants() const;
+
 private:
     LLUUID mSessionId;
 };
@@ -63,8 +65,10 @@ public:
     FSPanelGroupControlPanel(const LLUUID& session_id);
     ~FSPanelGroupControlPanel();
 
-    void setSessionId(const LLUUID& session_id);
-    /*virtual*/ void draw();
+    void setSessionId(const LLUUID& session_id) override;
+    void draw() override;
+
+    uuid_vec_t getParticipants() const override;
 
 protected:
     LLUUID mGroupID;

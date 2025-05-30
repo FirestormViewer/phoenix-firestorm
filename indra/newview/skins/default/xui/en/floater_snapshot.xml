@@ -182,10 +182,11 @@
 		 height="16"
          top_pad="3"
          width="180"
+         control_name="RenderUIInSnapshot"
          name="ui_check" />
         <check_box
          enabled_control="RenderUIInSnapshot"
-         control_name="FSShowCurrencyBalanceInSnapshots"
+         control_name="RenderBalanceInSnapshot"
          label="L$ Balance"
          layout="topleft"
          left="30"
@@ -199,6 +200,7 @@
          left="30"
          top_pad="0"
          width="180"
+         control_name="RenderHUDInSnapshot"
          name="hud_check" />
         <check_box
          control_name="FSSnapshotShowCaptureFrame"

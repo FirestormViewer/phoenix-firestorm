@@ -449,6 +449,14 @@ void FSParticipantList::adjustParticipant(const LLUUID& speaker_id)
     speakerp->addListener(mSpeakerMuteListener);
 }
 
+uuid_vec_t FSParticipantList::getAvatarIds() const
+{
+    if (!mAvatarList)
+        return{};
+
+    return uuid_vec_t{ mAvatarList->getIDs() };
+}
+
 //
 // FSParticipantList::SpeakerAddListener
 //

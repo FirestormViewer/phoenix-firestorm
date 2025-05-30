@@ -53,6 +53,18 @@
 			<text name="object_name_header_label">
 				Objekte
 			</text>
+			<text name="mention_colors">
+				Chat-Erwähnungen:
+			</text>
+			<text name="font_mention_label">
+				Schrift
+			</text>
+			<text name="resident_mention_label">
+				Einwohner
+			</text>
+			<text name="self_mention_label">
+				Selbst
+			</text>
 			<slider label="Abschwächungsfaktor außerhalb Chat-Reichweite:" label_width="275" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Faktor, der dafür verwendet wird, die normale Chatfarbe abzuschwächen, wenn sich der Sender außerhalb der normalen Chatreichweite befindet (0 = dunkel, 1 = hell)."/>
 			<check_box name="FSColorIMsDistinctly" label="IM/Gruppenchat in Konsole unterschiedlich einfärben:"/>
 			<panel name="im_color_panel">
