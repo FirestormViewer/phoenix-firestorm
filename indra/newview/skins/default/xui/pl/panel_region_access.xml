@@ -9,7 +9,8 @@
 				<columns label="Imię" name="name" />
 			</name_list>
 			<button label="Dodaj..." name="add_estate_manager_btn" />
-			<button label="Usuń..." name="remove_estate_manager_btn" />      
+			<button label="Usuń..." name="remove_estate_manager_btn" />
+			<button label="Eksportuj..." name="export_estate_manager_btn" />
 		</panel>
 		<panel label="Dozwoleni" name="allowed_panel">
 			<panel name="allowed_search_panel">
@@ -24,6 +25,7 @@
 			</name_list>
 			<button label="Dodaj..." name="add_allowed_avatar_btn" />
 			<button label="Usuń..." name="remove_allowed_avatar_btn" />
+			<button label="Eksportuj..." name="export_allowed_list_btn" />
 		</panel>
 		<panel label="Dozwolone grupy" name="allowed_groups_panel">
 			<panel name="allowed_group_search_panel">
@@ -38,6 +40,7 @@
 			</name_list>
 			<button label="Dodaj..." name="add_allowed_group_btn" />
 			<button label="Usuń..." name="remove_allowed_group_btn" />
+			<button label="Eksportuj..." name="export_allowed_group_btn" />
 		</panel>
 		<panel label="Zbanowani" name="banned_panel">
 			<panel name="banned_search_panel">
@@ -55,6 +58,7 @@
 			</name_list>
 			<button label="Dodaj..." name="add_banned_avatar_btn" />
 			<button label="Usuń..." name="remove_banned_avatar_btn" />
+			<button label="Eksportuj..." name="export_banned_avatar_btn" />
 		</panel>
 	</tab_container>
 </panel>

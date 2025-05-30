@@ -93,7 +93,15 @@
      layout="topleft"
      name="remove_estate_manager_btn"
      left_pad="6"
-     width="114" />      
+     width="114" />
+    <button
+     follows="left|top"
+     height="23"
+     label="Export..."
+     layout="topleft"
+     name="export_estate_manager_btn"
+     left_pad="6"
+     width="114" />
   </panel>
         
         
@@ -195,6 +203,14 @@
      name="remove_allowed_avatar_btn"
      left_pad="6"
      width="114" />
+    <button
+     follows="left|top"
+     height="23"
+     label="Export..."
+     layout="topleft"
+     name="export_allowed_list_btn"
+     left_pad="6"
+     width="114" />
   </panel>
 
   <!-- ============================= ALLOWED GROUPS tab ======================= -->
@@ -292,6 +308,15 @@
      label="Remove..."
      layout="topleft"
      name="remove_allowed_group_btn"
+     left_pad="6"
+     top_delta="0"
+     width="114" />
+    <button
+     follows="left|top"
+     height="23"
+     label="Export..."
+     layout="topleft"
+     name="export_allowed_group_btn"
      left_pad="6"
      top_delta="0"
      width="114" />
@@ -404,6 +429,15 @@
      label="Remove..."
      layout="topleft"
      name="remove_banned_avatar_btn"
+     left_pad="6"
+     top_delta="0"
+     width="114" />
+    <button
+     follows="left|top"
+     height="23"
+     label="Export..."
+     layout="topleft"
+     name="export_banned_avatar_btn"
      left_pad="6"
      top_delta="0"
      width="114" />
