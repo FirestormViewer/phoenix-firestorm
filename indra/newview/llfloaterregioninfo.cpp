@@ -3509,7 +3509,10 @@ bool LLPanelEstateAccess::postBuild()
     childSetAction("add_allowed_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickAddAllowedAgent, this));
     childSetAction("remove_allowed_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickRemoveAllowedAgent, this));
     childSetAction("copy_allowed_list_btn", boost::bind(&LLPanelEstateAccess::onClickCopyAllowedList, this));
-    childSetAction("export_allowed_list_btn", boost::bind(&LLPanelEstateAccess::onClickExportAllowedList, this)); // <FS:PP> Ban and access lists export
+    // <FS:PP> Ban and access lists export/import
+    childSetAction("export_allowed_list_btn", boost::bind(&LLPanelEstateAccess::onClickExportAllowedList, this));
+    childSetAction("import_allowed_list_btn", boost::bind(&LLPanelEstateAccess::onClickImportAllowedList, this));
+    // </FS:PP> Ban and access lists export/import
 
     getChild<LLUICtrl>("allowed_group_name_list")->setCommitCallback(boost::bind(&LLPanelEstateInfo::onChangeChildCtrl, this, _1));
     LLNameListCtrl* group_name_list = getChild<LLNameListCtrl>("allowed_group_name_list");
@@ -3523,7 +3526,10 @@ bool LLPanelEstateAccess::postBuild()
     getChild<LLUICtrl>("add_allowed_group_btn")->setCommitCallback(boost::bind(&LLPanelEstateAccess::onClickAddAllowedGroup, this));
     childSetAction("remove_allowed_group_btn", boost::bind(&LLPanelEstateAccess::onClickRemoveAllowedGroup, this));
     childSetAction("copy_allowed_group_list_btn", boost::bind(&LLPanelEstateAccess::onClickCopyAllowedGroupList, this));
-    childSetAction("export_allowed_group_btn", boost::bind(&LLPanelEstateAccess::onClickExportAllowedGroupList, this)); // <FS:PP> Ban and access lists export
+    // <FS:PP> Ban and access lists export/import
+    childSetAction("export_allowed_group_btn", boost::bind(&LLPanelEstateAccess::onClickExportAllowedGroupList, this));
+    childSetAction("import_allowed_group_btn", boost::bind(&LLPanelEstateAccess::onClickImportAllowedGroupList, this));
+    // </FS:PP> Ban and access lists export/import
 
     getChild<LLUICtrl>("banned_avatar_name_list")->setCommitCallback(boost::bind(&LLPanelEstateInfo::onChangeChildCtrl, this, _1));
     LLNameListCtrl* banned_name_list = getChild<LLNameListCtrl>("banned_avatar_name_list");
@@ -3537,7 +3543,10 @@ bool LLPanelEstateAccess::postBuild()
     childSetAction("add_banned_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickAddBannedAgent, this));
     childSetAction("remove_banned_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickRemoveBannedAgent, this));
     childSetAction("copy_banned_list_btn", boost::bind(&LLPanelEstateAccess::onClickCopyBannedList, this));
-    childSetAction("export_banned_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickExportBannedList, this)); // <FS:PP> Ban and access lists export
+    // <FS:PP> Ban and access lists export/import
+    childSetAction("export_banned_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickExportBannedList, this));
+    childSetAction("import_banned_avatar_btn", boost::bind(&LLPanelEstateAccess::onClickImportBannedList, this));
+    // </FS:PP> Ban and access lists export/import
 
     getChild<LLUICtrl>("estate_manager_name_list")->setCommitCallback(boost::bind(&LLPanelEstateInfo::onChangeChildCtrl, this, _1));
     LLNameListCtrl* manager_name_list = getChild<LLNameListCtrl>("estate_manager_name_list");
@@ -3549,7 +3558,10 @@ bool LLPanelEstateAccess::postBuild()
 
     childSetAction("add_estate_manager_btn", boost::bind(&LLPanelEstateAccess::onClickAddEstateManager, this));
     childSetAction("remove_estate_manager_btn", boost::bind(&LLPanelEstateAccess::onClickRemoveEstateManager, this));
-    childSetAction("export_estate_manager_btn", boost::bind(&LLPanelEstateAccess::onClickExportEstateManagerList, this)); // <FS:PP> Ban and access lists export
+    // <FS:PP> Ban and access lists export/import
+    childSetAction("export_estate_manager_btn", boost::bind(&LLPanelEstateAccess::onClickExportEstateManagerList, this));
+    childSetAction("import_estate_manager_btn", boost::bind(&LLPanelEstateAccess::onClickImportEstateManagerList, this));
+    // </FS:PP> Ban and access lists export/import
 
     return true;
 }
@@ -3594,12 +3606,16 @@ void LLPanelEstateAccess::updateControls(LLViewerRegion* region)
     getChildView("remove_estate_manager_btn")->setEnabled(has_estate_manager && (god || owner));
     estateManagers->setEnabled(god || owner);
 
-    // <FS:PP> Ban and access lists export
+    // <FS:PP> Ban and access lists export/import
     getChildView("export_estate_manager_btn")->setEnabled(god || owner);
     getChildView("export_allowed_list_btn")->setEnabled(enable_cotrols);
     getChildView("export_allowed_group_btn")->setEnabled(enable_cotrols);
     getChildView("export_banned_avatar_btn")->setEnabled(enable_cotrols);
-    // </FS:PP> Ban and access lists export
+    getChildView("import_estate_manager_btn")->setEnabled(god || owner);
+    getChildView("import_allowed_list_btn")->setEnabled(enable_cotrols);
+    getChildView("import_allowed_group_btn")->setEnabled(enable_cotrols);
+    getChildView("import_banned_avatar_btn")->setEnabled(enable_cotrols);
+    // </FS:PP> Ban and access lists export/import
 
     if (enable_cotrols != mCtrlsEnabled)
     {
@@ -4621,7 +4637,7 @@ void LLPanelRegionEnvironment::onChkAllowOverride(bool value)
 
 }
 
-// <FS:PP> Ban and access lists export
+// <FS:PP> Ban and access lists export/import
 void LLPanelEstateAccess::onClickExportList(LLNameListCtrl* list, const std::string& filename)
 {
     if (!list || list->getItemCount() == 0)
@@ -4669,8 +4685,10 @@ void LLPanelEstateAccess::exportListCallback(LLNameListCtrl* list, const std::ve
         return;
     }
 
+    std::string listname = list->getName();
+
     file << "Name,UUID";
-    if (list->getName() == "banned_avatar_name_list")
+    if (listname == "banned_avatar_name_list")
     {
         file << ",Last Login,Ban Date,Banned By";
     }
@@ -4685,7 +4703,7 @@ void LLPanelEstateAccess::exportListCallback(LLNameListCtrl* list, const std::ve
             const LLUUID& id = item->getUUID();
             std::string name = item->getColumn(0)->getValue().asString();
             file << name << "," << id.asString();
-            if (list->getName() == "banned_avatar_name_list")
+            if (listname == "banned_avatar_name_list")
             {
                 std::string last_login = item->getColumn(1)->getValue().asString();
                 std::string ban_date = item->getColumn(2)->getValue().asString();
@@ -4701,5 +4719,125 @@ void LLPanelEstateAccess::exportListCallback(LLNameListCtrl* list, const std::ve
     args["FILENAME"] = filename;
     LLNotificationsUtil::add("ExportFinished", args);
 }
-// </FS:PP> Ban and access lists export
 
+void LLPanelEstateAccess::onClickImportList(LLNameListCtrl* list)
+{
+    if (!list)
+    {
+        LLSD args;
+        args["MESSAGE"] = LLTrans::getString("ListEmpty");
+        LLNotificationsUtil::add("GenericAlert", args);
+        return;
+    }
+    LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEstateAccess::importListCallback, this, list, _1), LLFilePicker::FFLOAD_ALL, false);
+}
+
+void LLPanelEstateAccess::onClickImportEstateManagerList()
+{
+    onClickImportList(getChild<LLNameListCtrl>("estate_manager_name_list"));
+}
+
+void LLPanelEstateAccess::onClickImportAllowedList()
+{
+    onClickImportList(getChild<LLNameListCtrl>("allowed_avatar_name_list"));
+}
+
+void LLPanelEstateAccess::onClickImportAllowedGroupList()
+{
+    onClickImportList(getChild<LLNameListCtrl>("allowed_group_name_list"));
+}
+
+void LLPanelEstateAccess::onClickImportBannedList()
+{
+    onClickImportList(getChild<LLNameListCtrl>("banned_avatar_name_list"));
+}
+
+void LLPanelEstateAccess::importListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames)
+{
+    if (filenames.empty())
+    {
+        return;
+    }
+
+    std::string filename = filenames[0];
+
+    std::ifstream file(filename.c_str());
+    if (!file.is_open())
+    {
+        return;
+    }
+
+    std::string line;
+    std::vector<LLUUID> uuids;
+
+    while (std::getline(file, line))
+    {
+        LLStringUtil::trim(line);
+        if (line.empty())
+        {
+            continue;
+        }
+
+        LLUUID uuid;
+        if (uuid.set(line))
+        {
+            uuids.push_back(uuid);
+        }
+    }
+    file.close();
+
+    if (uuids.empty())
+    {
+        LLSD args;
+        args["MESSAGE"] = LLTrans::getString("NoValidUUIDs");
+        LLNotificationsUtil::add("GenericAlert", args);
+        return;
+    }
+
+    std::string listname = list->getName();
+    S32 max_entries = list->getMaxItemCount();
+    S32 current_count = list->getItemCount();
+    S32 available_slots = max_entries - current_count;
+
+    if (uuids.size() > available_slots)
+    {
+        LLSD args;
+        args["MAX"] = llformat("%d", available_slots);
+        args["COUNT"] = llformat("%d", uuids.size());
+        args["MESSAGE"] = LLTrans::getString("ImportListTooLarge", args).c_str();
+        LLNotificationsUtil::add("GenericAlert", args);
+        return;
+    }
+
+    for (const LLUUID& uuid : uuids)
+    {
+        if (listname == "banned_avatar_name_list")
+        {
+            sendEstateAccessDelta(ESTATE_ACCESS_BANNED_AGENT_ADD, uuid);
+        }
+        else if (listname == "estate_manager_name_list")
+        {
+            sendEstateAccessDelta(ESTATE_ACCESS_MANAGER_ADD, uuid);
+        }
+        else if (listname == "allowed_avatar_name_list")
+        {
+            sendEstateAccessDelta(ESTATE_ACCESS_ALLOWED_AGENT_ADD, uuid);
+        }
+        else if (listname == "allowed_group_name_list")
+        {
+            sendEstateAccessDelta(ESTATE_ACCESS_ALLOWED_GROUP_ADD, uuid);
+        }
+    }
+
+    LLPanelEstateAccess* panel = LLFloaterRegionInfo::getPanelAccess();
+    if (panel)
+    {
+        panel->setPendingUpdate(true);
+    }
+
+    LLSD args;
+    args["COUNT"] = llformat("%d", uuids.size());
+    args["MESSAGE"] = LLTrans::getString("ImportSuccessful", args).c_str();
+    LLNotificationsUtil::add("GenericAlert", args);
+}
+// </FS:PP> Ban and access lists export/import

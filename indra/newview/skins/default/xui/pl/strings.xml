@@ -6645,4 +6645,13 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="ListEmpty">
 		Lista jest pusta
 	</string>
+	<string name="NoValidUUIDs">
+		Nie znaleziono prawidłowych identyfikatorów UUID w importowanym pliku.
+	</string>
+	<string name="ImportListTooLarge">
+		Zbyt wiele rekordów. Plik CSV ma [COUNT] rekordów, ale jest dostępnych [MAX] slotów.
+	</string>
+	<string name="ImportSuccessful">
+		Pomyślnie przetworzono [COUNT] rekordów.
+	</string>
 </strings>
