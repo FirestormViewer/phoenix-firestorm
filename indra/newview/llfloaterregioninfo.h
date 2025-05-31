@@ -514,7 +514,6 @@ public:
     void onClickExportAllowedGroupList();
     void onClickExportBannedList();
     void onClickExportList(LLNameListCtrl* list, const std::string& filename);
-    void exportList(LLNameListCtrl* list, const std::string& default_filename);
     void exportListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames);
     // </FS:PP> Ban and access lists export
 

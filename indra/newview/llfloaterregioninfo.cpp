@@ -4631,7 +4631,7 @@ void LLPanelEstateAccess::onClickExportList(LLNameListCtrl* list, const std::str
         LLNotificationsUtil::add("GenericAlert", args);
         return;
     }
-    exportList(list, filename);
+    LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEstateAccess::exportListCallback, this, list, _1), LLFilePicker::FFSAVE_CSV, filename);
 }
 
 void LLPanelEstateAccess::onClickExportEstateManagerList()
@@ -4652,14 +4652,6 @@ void LLPanelEstateAccess::onClickExportAllowedGroupList()
 void LLPanelEstateAccess::onClickExportBannedList()
 {
     onClickExportList(getChild<LLNameListCtrl>("banned_avatar_name_list"), "estate_banned_residents.csv");
-}
-
-void LLPanelEstateAccess::exportList(LLNameListCtrl* list, const std::string& default_filename)
-{
-    if (list)
-    {
-        LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEstateAccess::exportListCallback, this, list, _1), LLFilePicker::FFSAVE_CSV, default_filename);
-    }
 }
 
 void LLPanelEstateAccess::exportListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames)
