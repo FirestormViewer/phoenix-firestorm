@@ -710,10 +710,7 @@ void FSManipRotateJoint::render()
     }
     
     // update visibility and rotation center.
-    if (!updateVisiblity())
-    {
-        return;
-    }
+    bool activeJointVisible = updateVisiblity();
     // Setup GL state.
     LLGLSUIDefault gls_ui;
     gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
@@ -742,6 +739,11 @@ void FSManipRotateJoint::render()
         }
     }
 
+    if (!activeJointVisible)
+    {
+        return;
+    }
+
     // Update joint world matrices.
     mJoint->updateWorldMatrixParent();
     mJoint->updateWorldMatrix();
@@ -753,30 +755,21 @@ void FSManipRotateJoint::render()
     LLQuaternion currentLocalRot = mJoint->getRotation();
     
     LLQuaternion rotatedNaturalAlignment = mNaturalAlignmentQuat * currentLocalRot;
-    rotatedNaturalAlignment.normalize();
     // Compute the final world alignment:
     LLQuaternion final_world_alignment = rotatedNaturalAlignment * parentWorldRot;
-    final_world_alignment.normalize();
 
     const LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(mRotationCenter);
 
     LLCachedControl<bool> use_natural_direction(gSavedSettings, "FSManipRotateJointUseNaturalDirection", true);    
     LLQuaternion active_rotation = use_natural_direction? final_world_alignment : joint_world_rotation;
+    active_rotation.normalize();
     // Render the manipulator rings in a separate function.
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     renderAxes(agent_space_center, mRadiusMeters * 1.5f, active_rotation);
     renderManipulatorRings(agent_space_center, active_rotation);
 
     // Debug: render joint's Euler angles for diagnostic purposes.
-    LLVector3 euler_angles;
-    active_rotation.getEulerAngles(&euler_angles.mV[0],
-                                        &euler_angles.mV[1],
-                                        &euler_angles.mV[2]);
-    euler_angles *= RAD_TO_DEG;
-    euler_angles.mV[0] = ll_round(fmodf(euler_angles.mV[0] + 360.f, 360.f), 0.05f);
-    euler_angles.mV[1] = ll_round(fmodf(euler_angles.mV[1] + 360.f, 360.f), 0.05f);
-    euler_angles.mV[2] = ll_round(fmodf(euler_angles.mV[2] + 360.f, 360.f), 0.05f);
-    renderNameXYZ(euler_angles);
+    renderNameXYZ(active_rotation);
 }
 
 void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 size, const LLQuaternion& rotation)
@@ -931,7 +924,7 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
         renderTextWithShadow(llformat("⟳: %.3f", mLastAngle * RAD_TO_DEG), window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
         base_y += 20.f;
         renderTextWithShadow(llformat("Joint: %s", mJoint->getName().c_str()), window_center_x - 130.f, base_y, LLColor4(1.f, 0.1f, 1.f, 1.f));
-        renderTextWithShadow(llformat("Manip: %s%c", getManipPartString(mManipPart).c_str(), mUseEdgeMode?'*':' '), window_center_x + 30.f, base_y, LLColor4(1.f, 1.f, .1f, 1.f));
+        renderTextWithShadow(llformat("Manip: %s%c", getManipPartString(mManipPart).c_str(), mCamEdgeOn?'*':' '), window_center_x + 30.f, base_y, LLColor4(1.f, 1.f, .1f, 1.f));
         if (mManipPart != LL_NO_PART)
         {
             LL_INFOS("FSManipRotateJoint") << "Joint: " << mJoint->getName()
@@ -1054,9 +1047,11 @@ bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
     {
         // Constrained rotation.
         LLVector3 axis = setConstraintAxis(); // set the axis based on the manipulator part
+
+        mLastEuler = LLVector3::zero;
+
         F32 axis_onto_cam = llabs(axis * mCenterToCamNorm);
-        const F32 AXIS_ONTO_CAM_TOL = cos(85.f * DEG_TO_RAD);
-        if (axis_onto_cam < AXIS_ONTO_CAM_TOL)
+        if (axis_onto_cam < AXIS_ONTO_CAM_TOLERANCE)
         {
             LLVector3 up_from_axis = mCenterToCamNorm % axis;
             up_from_axis.normalize();
@@ -1073,11 +1068,13 @@ bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
             }
             LLVector3 projected_center_to_cam = mCenterToCamNorm - projected_vec(mCenterToCamNorm, axis);
             mMouseDown += mouse_depth * projected_center_to_cam;
+            mCamEdgeOn = true; // We are in edge mode, so we can use the mouse depth.
         }
         else
         {
             mMouseDown = findNearestPointOnRing(x, y, agent_space_center, axis) - agent_space_center;
             mMouseDown.normalize();
+            mCamEdgeOn = false; // Not in edge mode, so we don't use the mouse depth.
         }
         mInitialIntersection = mMouseDown;
     }
@@ -1115,6 +1112,7 @@ bool FSManipRotateJoint::handleMouseUp(S32 x, S32 y, MASK mask)
         setMouseCapture(false);
         mManipPart = LL_NO_PART;
         mLastAngle = 0.0f;  
+        mCamEdgeOn = false;
         return true;
     }
     else if(mHighlightedJoint)
@@ -1374,13 +1372,43 @@ LLQuaternion FSManipRotateJoint::dragUnconstrained(S32 x, S32 y)
         return sphere_rot * LLQuaternion(extra_angle, axis);
     }
 }
+
+static LLQuaternion extractTwist(const LLQuaternion& rot, const LLVector3& axis)
+{
+    // Copy and normalise the input (defensive)
+    LLQuaternion qnorm = rot;
+    qnorm.normalize();
+
+    // Extract vector part and scalar part
+    LLVector3 v(qnorm.mQ[VX], qnorm.mQ[VY], qnorm.mQ[VZ]);
+    F32       w = qnorm.mQ[VW];
+
+    // Project v onto the axis (removing any perpendicular component)
+    F32        dot  = v * axis;           
+    LLVector3  proj = axis * dot; // proj is now purely along 'axis'
+
+    // Build the “twist” quaternion from (proj, w), then renormalize
+    LLQuaternion twist(proj.mV[VX],
+                       proj.mV[VY],
+                       proj.mV[VZ],
+                       w);
+    if (w < 0.f)
+    {   
+        twist = -twist;
+    }
+    twist.normalize();
+    return twist;
+}
 LLQuaternion FSManipRotateJoint::dragConstrained(S32 x, S32 y)
 {
     // Get the constraint axis from our joint manipulator.
-    // (See the adjusted getConstraintAxis() below.)
     LLVector3 constraint_axis = getConstraintAxis();
     LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(mRotationCenter);
-
+    if (mCamEdgeOn)
+    {
+        LLQuaternion freeRot = dragUnconstrained(x, y);
+        return extractTwist(freeRot, constraint_axis);
+    }
     // Project the current mouse position onto the plane defined by the constraint axis.
     LLVector3 projected_mouse;
     bool hit = getMousePointOnPlaneAgent(projected_mouse, x, y, agent_space_center, constraint_axis);

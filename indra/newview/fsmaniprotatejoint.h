@@ -35,7 +35,7 @@ class LLJoint;
 class LLVOAvatar;  // or LLVOAvatarSelf, etc.
 
 namespace {
-    const F32 AXIS_ONTO_CAM_TOLERANCE = cos( 80.f * DEG_TO_RAD ); // cos() is not constexpr til c++26
+    const F32 AXIS_ONTO_CAM_TOLERANCE = cos( 85.f * DEG_TO_RAD ); // cos() is not constexpr til c++26
     constexpr F32 RADIUS_PIXELS = 100.f;        // size in screen space
     constexpr S32 CIRCLE_STEPS = 100;
     constexpr F32 CIRCLE_STEP_SIZE = 2.0f * F_PI / CIRCLE_STEPS;
@@ -108,6 +108,7 @@ protected:
     LLQuaternion mSavedJointRot;
     LLJoint * mHighlightedJoint = nullptr;
     F32       mHighlightedPartDistance = 0.f;
+    LLVector3 mLastEuler = LLVector3::zero; // last euler angles in degrees
     LLVector3 mInitialIntersection;  // The initial point on the manipulator’s sphere (in agent space)
     const std::vector<std::string_view> getSelectableJoints(){ return sSelectableJoints; };
 
