@@ -68,9 +68,9 @@
  * @return void
  *
  */
-static void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(1.f, 1.f, 1.f, 1.f))
+static void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(0.f, 0.f, 1.f, 0.3f))
 {
-    constexpr float MAX_SPHERE_RADIUS = 0.05f;      // Base radius in agent-space units.
+    constexpr float MAX_SPHERE_RADIUS = 0.03f;      // Base radius in agent-space units.
     constexpr float PULSE_AMPLITUDE = 0.01f;         // Additional radius variation.
     constexpr float PULSE_FREQUENCY = 1.f;         // Pulses per second.
     constexpr float PULSE_TIME_DOMAIN = 5.f;         // Keep the time input small.
@@ -104,9 +104,8 @@ static void renderPulsingSphere(const LLVector3& joint_world_position, const LLC
             LLGLDepthTest gls_depth(GL_FALSE);
             gGL.pushMatrix();
             {
-                LLColor4 color;
-                gGL.color4f(0.f, 0.f, 1.f, 0.3f);
-                gGL.diffuseColor4f(0.f, 0.f, 1.f, 0.3f);
+                gGL.color4fv(color.mV);
+                gGL.diffuseColor4fv(color.mV);
 
                 gGL.scalef(currentRadius, currentRadius, currentRadius);
 
@@ -129,37 +128,84 @@ static void renderPulsingSphere(const LLVector3& joint_world_position, const LLC
     }
 }
 
-
-static bool isMouseOverJoint(S32 mouseX, S32 mouseY, const LLVector3& jointWorldPos, F32 jointRadius, F32& outDistanceFromCamera)
+static void renderStaticSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(1.f, 1.f, 0.f, .6f), float radius=0.02f)
 {
-    LLViewerCamera* camera = LLViewerCamera::getInstance();
+    constexpr float MAX_SPHERE_RADIUS = 0.05f;      // Base radius in agent-space units.
 
-    // Transform joint world position to screen coordinates
-    LLCoordGL jointScreenPos;
-    camera->projectPosAgentToScreen(jointWorldPos, jointScreenPos);
+    LLGLSUIDefault gls_ui;
+    gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
+    LLGLDepthTest gls_depth(GL_TRUE);
+    LLGLEnable gl_blend(GL_BLEND);
 
-    // Get the world view rect
-    LLRect world_view_rect = gViewerWindow->getWorldViewRectScaled();
-    F32 half_width = (F32)world_view_rect.getWidth() / 2.f;
-    F32 half_height = (F32)world_view_rect.getHeight() / 2.f;
+    gGL.matrixMode(LLRender::MM_MODELVIEW);
+    gGL.pushMatrix();
+    {
 
-    // Convert mouse coordinates to be relative to the center of the screen
-    LLVector2 mousePos((F32)mouseX - half_width, (F32)mouseY - half_height);
+        // Translate to the joint's position
+        gGL.translatef(joint_world_position.mV[VX], joint_world_position.mV[VY], joint_world_position.mV[VZ]);
+        gGL.pushMatrix();
+        {
+            gDebugProgram.bind();
 
-    // Convert joint screen position to be relative to the center of the screen
-    LLVector2 joint2d(jointScreenPos.mX - half_width, jointScreenPos.mY - half_height);
+            LLGLEnable cull_face(GL_CULL_FACE);
+            LLGLDepthTest gls_depth(GL_FALSE);
+            gGL.pushMatrix();
+            {
+                gGL.color4fv(color.mV);
+                gGL.diffuseColor4fv(color.mV);
 
-    // Calculate the distance between mouse and joint in screen space
-    LLVector2 delta = joint2d - mousePos;
+                gGL.scalef(radius, radius, radius);
 
-    // Calculate the distance from the camera to the joint
-    outDistanceFromCamera = (jointWorldPos - camera->getOrigin()).magVec();
+                gSphere.render();
+                gGL.flush();
+            }
+            gGL.popMatrix();
 
-    // Calculate the apparent radius of the joint on the screen
-    F32 apparentRadius = jointRadius * camera->getPixelMeterRatio() / outDistanceFromCamera;
+            gUIProgram.bind();
+        }
+        gGL.popMatrix();
+    }
+    gGL.popMatrix();
 
-    // Check if the mouse is within the joint's radius
-    return (delta.magVecSquared() < apparentRadius * apparentRadius);
+    // Check for OpenGL errors
+    GLenum err;
+    while ((err = glGetError()) != GL_NO_ERROR)
+    {
+        LL_INFOS() << "OpenGL Error: " << err << LL_ENDL;
+    }
+}
+
+
+bool FSManipRotateJoint::isMouseOverJoint(S32 mouseX, S32 mouseY, const LLVector3& jointWorldPos, F32 jointRadius, F32& outDistanceFromCamera, F32& outRayDistanceFromCenter) const
+{
+    // LL_INFOS("FSManipRotateJoint") << "Checking mouse("<< mouseX << "," << mouseY << ") over joint at: " << jointWorldPos << LL_ENDL;
+    
+    auto joint_center = gAgent.getPosGlobalFromAgent( jointWorldPos );
+
+    // centre in *agent* space
+    LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(joint_center);
+    LLVector3 ray_pt, ray_dir;
+    LLManipRotate::mouseToRay(mouseX, mouseY, &ray_pt, &ray_dir);
+
+    // Vector from ray origin to sphere center
+    LLVector3 to_center = agent_space_center - ray_pt;
+    // Project that onto the ray direction
+    F32 proj_len = ray_dir * to_center;
+
+    if (proj_len > 0.f)
+    {
+        // Closest approach squared = |to_center|^2 – (proj_len)^2
+        F32 closest_dist_sq = to_center.magVecSquared() - (proj_len * proj_len);
+        if (closest_dist_sq <= jointRadius * jointRadius)
+        {
+            // ray *does* hit the sphere; compute the entrance intersection distance
+            F32 offset = sqrtf(jointRadius*jointRadius - closest_dist_sq);
+            outDistanceFromCamera = proj_len - offset;  // distance along the ray to the front intersection            
+            outRayDistanceFromCenter = offset;
+            return true;
+        }    
+    }
+    return (false);  
 }
 
 //static 
@@ -285,8 +331,12 @@ void FSManipRotateJoint::highlightHoverSpheres(S32 mouseX, S32 mouseY)
     mHighlightedJoint = nullptr; // reset the highlighted joint
 
     // Iterate through the avatar's joint map.
-    for (const auto& entry : getSelectableJoints())
+    F32 nearest_hit_distance = 0.f;
+    F32 nearest_ray_distance = 0.f;
+    LLJoint * nearest_joint = nullptr;
+    for ( const auto& entry : getSelectableJoints())
     {
+        
         LLJoint* joint = mAvatar->getJoint(std::string(entry));  
         if (!joint)
             continue;
@@ -297,18 +347,24 @@ void FSManipRotateJoint::highlightHoverSpheres(S32 mouseX, S32 mouseY)
 
         // Retrieve the joint's world position (in agent space).
         LLVector3 jointWorldPos = joint->getWorldPosition();
-        LLCachedControl<F32> target_radius(gSavedSettings, "FSManipRotateJointTargetSize", 0.2f);
+        LLCachedControl<F32> target_radius(gSavedSettings, "FSManipRotateJointTargetSize", 0.03f);
         F32 distance_from_camera;
-        if (isMouseOverJoint(mouseX, mouseY, jointWorldPos, target_radius, distance_from_camera) == true)
+        F32 distance_from_joint;
+        if (isMouseOverJoint(mouseX, mouseY, jointWorldPos, target_radius, distance_from_camera, distance_from_joint) == true)
         {
             // we want to highlight the closest
-            if (!mHighlightedJoint || mHighlightedPartDistance > distance_from_camera)
+            // If there is no joint or
+            // this joint is a closer hit than the previous one
+            if (!nearest_joint || nearest_ray_distance > distance_from_camera || 
+                (nearest_ray_distance == distance_from_camera && nearest_hit_distance > distance_from_joint))
             {
-                mHighlightedJoint = joint;
-                mHighlightedPartDistance = distance_from_camera;
+                nearest_joint = joint;
+                nearest_hit_distance = distance_from_joint;
+                nearest_ray_distance = distance_from_camera;
             }
         }
     }
+    mHighlightedJoint = nearest_joint;
 }
 
 FSManipRotateJoint::FSManipRotateJoint(LLToolComposite* composite)
@@ -665,11 +721,25 @@ void FSManipRotateJoint::render()
     LLGLEnable gl_blend(GL_BLEND);
     
     // Optionally, if another joint is highlighted, render a pulsing sphere.
-    if (mHighlightedJoint && mJoint != mHighlightedJoint)
+        // Iterate through the avatar's joint map.
+    for (const auto& entry : getSelectableJoints())
     {
-        mHighlightedJoint->updateWorldMatrixParent();
-        mHighlightedJoint->updateWorldMatrix();
-        renderPulsingSphere(mHighlightedJoint->getWorldPosition());
+        LLJoint* joint = mAvatar->getJoint(std::string(entry));  
+        if (!joint)
+            continue;
+        // Update the joint's world matrix to ensure its position is current.
+        joint->updateWorldMatrixParent();
+        joint->updateWorldMatrix();
+
+        if( joint == mHighlightedJoint && joint != mJoint )
+        {
+            renderPulsingSphere(joint->getWorldPosition());
+        }
+        else if( joint != mJoint )
+        {
+            // Render a static sphere for the joint being manipulated.
+            renderStaticSphere(joint->getWorldPosition(), LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
+        }
     }
 
     // Update joint world matrices.
@@ -804,12 +874,27 @@ std::string FSManipRotateJoint::getManipPartString(EManipPart part)
  * @note This function assumes the existence of class member variables such as mLastAngle, mJoint, and mManipPart.
  *       It also uses global functions and objects like gViewerWindow, LLUI, and LLFontGL.
  */
-void FSManipRotateJoint::renderNameXYZ(const LLVector3 &vec)
+void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
 {
     constexpr S32 PAD = 10;
     S32 window_center_x = gViewerWindow->getWorldViewRectScaled().getWidth() / 2;
     S32 window_center_y = gViewerWindow->getWorldViewRectScaled().getHeight() / 2;
     S32 vertical_offset = window_center_y - VERTICAL_OFFSET;
+
+    LLVector3 euler_angles;
+    rot.getEulerAngles(&euler_angles.mV[0],
+                                        &euler_angles.mV[1],
+                                        &euler_angles.mV[2]);
+    euler_angles *= RAD_TO_DEG;
+    for (S32 i = 0; i < 3; ++i)
+    {
+        // Ensure angles are in the range [0, 360) and rounded to 0.05f
+        euler_angles.mV[i] = ll_round(fmodf(euler_angles.mV[i] + 360.f, 360.f), 0.05f);
+        F32 rawDelta = euler_angles.mV[i] - mLastEuler.mV[i];
+        if      (rawDelta >  180.f) rawDelta -= 360.f;
+        else if (rawDelta < -180.f) rawDelta += 360.f;
+        mLastEuler[i] += rawDelta;
+    }
 
     gGL.pushMatrix();
     {
@@ -840,13 +925,22 @@ void FSManipRotateJoint::renderNameXYZ(const LLVector3 &vec)
         };
 
         F32 base_y = (F32)(window_center_y + vertical_offset);
-        renderTextWithShadow(llformat("X: %.3f", vec.mV[VX]), window_center_x - 122.f, base_y, LLColor4(1.f, 0.5f, 0.5f, 1.f));
-        renderTextWithShadow(llformat("Y: %.3f", vec.mV[VY]), window_center_x - 47.f, base_y, LLColor4(0.5f, 1.f, 0.5f, 1.f));
-        renderTextWithShadow(llformat("Z: %.3f", vec.mV[VZ]), window_center_x + 28.f, base_y, LLColor4(0.5f, 0.5f, 1.f, 1.f));
-        renderTextWithShadow(llformat("Δ: %.3f", mLastAngle * RAD_TO_DEG), window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
+        renderTextWithShadow(llformat("X: %.3f", mLastEuler.mV[VX]), window_center_x - 122.f, base_y, LLColor4(1.f, 0.5f, 0.5f, 1.f));
+        renderTextWithShadow(llformat("Y: %.3f", mLastEuler.mV[VY]), window_center_x - 47.f, base_y, LLColor4(0.5f, 1.f, 0.5f, 1.f));
+        renderTextWithShadow(llformat("Z: %.3f", mLastEuler.mV[VZ]), window_center_x + 28.f, base_y, LLColor4(0.5f, 0.5f, 1.f, 1.f));
+        renderTextWithShadow(llformat("⟳: %.3f", mLastAngle * RAD_TO_DEG), window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
         base_y += 20.f;
         renderTextWithShadow(llformat("Joint: %s", mJoint->getName().c_str()), window_center_x - 130.f, base_y, LLColor4(1.f, 0.1f, 1.f, 1.f));
-        renderTextWithShadow(llformat("Manip: %s", getManipPartString(mManipPart).c_str()), window_center_x + 30.f, base_y, LLColor4(1.f, 1.f, .1f, 1.f));
+        renderTextWithShadow(llformat("Manip: %s%c", getManipPartString(mManipPart).c_str(), mUseEdgeMode?'*':' '), window_center_x + 30.f, base_y, LLColor4(1.f, 1.f, .1f, 1.f));
+        if (mManipPart != LL_NO_PART)
+        {
+            LL_INFOS("FSManipRotateJoint") << "Joint: " << mJoint->getName()
+                << ", Manip: " << getManipPartString(mManipPart)
+                << ", Quaternion: " << rot
+                << ", Euler Angles: " << mLastEuler
+                << ", Delta Angle: " << mLastAngle * RAD_TO_DEG
+                << LL_ENDL;
+        }
     }
     gGL.popMatrix();
 

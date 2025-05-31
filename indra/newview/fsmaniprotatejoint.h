@@ -83,7 +83,7 @@ public:
     void handleSelect() override;
     bool updateVisiblity();
     void render() override;
-    void renderNameXYZ(const LLVector3 &vec);
+    void renderNameXYZ(const LLQuaternion& rot);
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;
     bool handleMouseUp(S32 x, S32 y, MASK mask) override;
     bool handleHover(S32 x, S32 y, MASK mask) override;
@@ -94,7 +94,6 @@ public:
     void highlightHoverSpheres(S32 mouseX, S32 mouseY);
 
 protected:
-    // void renderNameXYZ(const std::string name, const LLVector3 &vec);
     LLQuaternion dragUnconstrained( S32 x, S32 y );
     LLQuaternion dragConstrained( S32 x, S32 y );
     LLVector3 getConstraintAxis() const { return mConstraintAxis; };
@@ -113,6 +112,7 @@ protected:
     const std::vector<std::string_view> getSelectableJoints(){ return sSelectableJoints; };
 
 private:
+    bool isMouseOverJoint(S32 mouseX, S32 mouseY, const LLVector3& jointWorldPos, F32 jointRadius, F32& outDistanceFromCamera, F32& outDistanceFromCenter) const;
     static const std::vector<std::string_view> sSelectableJoints;
 
     // Structure holding parameters needed to render one manipulator ring.
