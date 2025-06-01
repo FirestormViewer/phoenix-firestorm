@@ -41,7 +41,7 @@ jobs:
         setup_files: ${{ steps.get-files.outputs.setup_files }}
     steps:        
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v9
+        uses: dawidd6/action-download-artifact@v10
         id: download
         with:
             workflow: build_viewer.yml
