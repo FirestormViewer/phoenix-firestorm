@@ -832,7 +832,6 @@ void LLOutfitGallery::updateAddedCategory(LLUUID cat_id)
         return;
     }
 
-    std::string name = cat->getName();
     LLOutfitGalleryItem* item = buildGalleryItem(cat->getName(), cat_id, cat->getIsFavorite());
     mOutfitMap.insert(LLOutfitGallery::outfit_map_value_t(cat_id, item));
     item->setRightMouseDownCallback(boost::bind(&LLOutfitListBase::outfitRightClickCallBack, this,
