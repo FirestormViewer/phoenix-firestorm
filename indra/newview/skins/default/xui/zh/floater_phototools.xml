@@ -420,7 +420,7 @@
 				<button name="Debug Settings" label="顯示調試設置" tool_tip="打開調試設置菜單，允許訪問標準首選項中不可用的高級檢視器設置。請謹慎使用，因為更改可能會影響性能和穩定性。"/>
 			</panel>
 			<panel name="P_Quick_Stats">
-				<text name="T_Quick_Stats" tool_tip="显示实时系统性能统计，帮助您评估檢視器的效率。您可以通过点击标签来展开或折叠各个指标。">
+				<text name="T_Quick_Stats" tool_tip="显示实时系统性能统计，帮助您评估檢視器的效率。您可以通过点击标签来展开或折叠各個指标。">
 					統計資訊
 				</text>
 			</panel>
