@@ -4,9 +4,9 @@
  help_topic="fs_area_search"
  title="Area Search for Objects"
  min_width="430"
- min_height="395"
+ min_height="440"
  width="610"
- height="435"
+ height="440"
  save_rect="true"
  single_instance="true"
  reuse_instance="false"
@@ -33,7 +33,7 @@
 		 left="0"
 		 name="area_search_list_panel"
 		 top="0"
-		 height="435"
+		 height="440"
 		 width="610">
 			<panel.string name="ListedPendingTotalBlank">
 				Listed | Pending | Total
@@ -395,7 +395,7 @@
 			 name="filter_for_sale"
 			 label="For Sale between"
 			 top_pad="10"
-			 width="120"/>
+			 width="130"/>
 			<spinner
 			 decimal_digits="0"
 			 follows="left|top"
@@ -435,7 +435,7 @@
 			 follows="top|left"
 			 left="15"
 			 top_pad="25"
-			 width="100">
+			 width="115">
 				Mouse click action
 			</text>
 			<combo_box
@@ -504,7 +504,7 @@
 			 name="filter_distance"
 			 label="Distance between"
 			 top_pad="10"
-			 width="120"/>
+			 width="130"/>
 			<spinner
 			 decimal_digits="0"
 			 follows="left|top"
