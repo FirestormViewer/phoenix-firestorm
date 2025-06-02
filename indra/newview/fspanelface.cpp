@@ -760,7 +760,7 @@ void FSPanelFace::onMatTabChange()
         // Since we allow both PBR and BP textures to be applied at the same time,
         // we need to hide or show the GLTF material only locally based on the current tab.
         gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
-        if (curr_mat != MATMEDIA_PBR)
+        if (curr_mat == MATMEDIA_MATERIAL)
             LLSelectMgr::getInstance()->hideGLTFMaterial();
         else
             LLSelectMgr::getInstance()->showGLTFMaterial();
@@ -1154,6 +1154,16 @@ void FSPanelFace::onVisibilityChange(bool new_visibility)
         gAgent.showLatestFeatureNotification("gltf");
     }
     LLPanel::onVisibilityChange(new_visibility);
+
+    // Since we allow both PBR and BP textures to be applied at the same time,
+    // we need to keep FSShowSelectedInBlinnPhong in sync in case we open or close the texture panel.
+    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+    bool should_hide_gltf = new_visibility && !showSelectedinBP && getCurrentMaterialType() == MATMEDIA_MATERIAL;
+    gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", should_hide_gltf);
+    if (should_hide_gltf)
+    {
+        LLSelectMgr::getInstance()->hideGLTFMaterial();
+    }
 }
 
 void FSPanelFace::draw()
