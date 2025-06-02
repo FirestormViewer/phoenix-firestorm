@@ -10,6 +10,7 @@
 			</name_list>
 			<button label="Добавить..." name="add_estate_manager_btn"/>
 			<button label="Удалить..." name="remove_estate_manager_btn"/>
+			<button label="Экспорт..." name="export_estate_manager_btn"/>
 		</panel>
 		<panel label="Разрешенные" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
@@ -24,6 +25,7 @@
 			</name_list>
 			<button label="Добавить..." name="add_allowed_avatar_btn"/>
 			<button label="Удалить..." name="remove_allowed_avatar_btn"/>
+			<button label="Экспорт..." name="export_allowed_list_btn"/>
 		</panel>
 		<panel label="Допущенные Группы" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
@@ -38,6 +40,7 @@
 			</name_list>
 			<button label="Добавить..." name="add_allowed_group_btn"/>
 			<button label="Удалить..." name="remove_allowed_group_btn"/>
+			<button label="Экспорт..." name="export_allowed_group_btn"/>
 		</panel>
 		<panel label="Заблокированы" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
@@ -55,6 +58,7 @@
 			</name_list>
 			<button label="Добавить..." name="add_banned_avatar_btn"/>
 			<button label="Удалить..." name="remove_banned_avatar_btn"/>
+			<button label="Экспорт..." name="export_banned_avatar_btn"/>
 		</panel>
 	</tab_container>
 </panel>

@@ -467,6 +467,7 @@
                 <name_list name="AccessList" tool_tip="([LISTED] в списке, [MAX] максимум)" />
                 <button label="Добавить" name="add_allowed" />
                 <button label="Удалить" label_selected="Удалить" name="remove_allowed" />
+                <button label="Экспорт" label_selected="Экспорт" name="export_allowed" />
             </panel>
             <panel name="Banned_layout_panel">
                 <text  name="BanCheck">
@@ -477,7 +478,8 @@
                     <columns label="Время" name="duration"/>
                 </name_list>
                 <button label="Добавить" name="add_banned"/>
-                <button label="Удалить" label_selected="Удалить"  name="remove_banned" />
+                <button label="Удалить" label_selected="Удалить" name="remove_banned" />
+                <button label="Экспорт" label_selected="Экспорт" name="export_banned" />
             </panel>
         </panel>
         <panel label="Приключения" name="land_experiences_panel"/>
