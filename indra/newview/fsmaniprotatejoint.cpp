@@ -70,8 +70,8 @@
  */
 static void renderPulsingSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(0.f, 0.f, 1.f, 0.3f))
 {
-    constexpr float MAX_SPHERE_RADIUS = 0.03f;      // Base radius in agent-space units.
-    constexpr float PULSE_AMPLITUDE = 0.01f;         // Additional radius variation.
+    constexpr float MAX_SPHERE_RADIUS = 0.02f;      // Base radius in agent-space units.
+    constexpr float PULSE_AMPLITUDE = 0.005f;         // Additional radius variation.
     constexpr float PULSE_FREQUENCY = 1.f;         // Pulses per second.
     constexpr float PULSE_TIME_DOMAIN = 5.f;         // Keep the time input small.
 
@@ -128,10 +128,8 @@ static void renderPulsingSphere(const LLVector3& joint_world_position, const LLC
     }
 }
 
-static void renderStaticSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(1.f, 1.f, 0.f, .6f), float radius=0.02f)
+static void renderStaticSphere(const LLVector3& joint_world_position, const LLColor4& color = LLColor4(1.f, 1.f, 0.f, .6f), float radius=0.01f)
 {
-    constexpr float MAX_SPHERE_RADIUS = 0.05f;      // Base radius in agent-space units.
-
     LLGLSUIDefault gls_ui;
     gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
     LLGLDepthTest gls_depth(GL_TRUE);
@@ -431,6 +429,7 @@ bool FSManipRotateJoint::updateVisiblity()
     if (!hasMouseCapture())
     {
         mRotationCenter = gAgent.getPosGlobalFromAgent( mJoint->getWorldPosition() );
+        mCamEdgeOn = false;
     }
 
     bool visible = false;
@@ -467,13 +466,6 @@ bool FSManipRotateJoint::updateVisiblity()
         {
             visible = false;
         }
-    }
-
-    mCamEdgeOn = false;
-    F32 axis_onto_cam = mManipPart >= LL_ROT_X ? llabs( getConstraintAxis() * mCenterToCamNorm ) : 0.f;
-    if (axis_onto_cam < AXIS_ONTO_CAM_TOLERANCE)
-    {
-        mCamEdgeOn = true;
     }
 
     return visible;
@@ -717,8 +709,9 @@ void FSManipRotateJoint::render()
     LLGLDepthTest gls_depth(GL_TRUE);
     LLGLEnable gl_blend(GL_BLEND);
     
-    // Optionally, if another joint is highlighted, render a pulsing sphere.
-        // Iterate through the avatar's joint map.
+    // Iterate through the avatar's joint map.
+    // If a joint other than the currently selected is highlighted, render a pulsing sphere.
+    // otherwise a small static sphere
     for (const auto& entry : getSelectableJoints())
     {
         LLJoint* joint = mAvatar->getJoint(std::string(entry));  
@@ -735,7 +728,11 @@ void FSManipRotateJoint::render()
         else if( joint != mJoint )
         {
             // Render a static sphere for the joint being manipulated.
-            renderStaticSphere(joint->getWorldPosition(), LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
+            LLCachedControl<bool> show_joint_markers(gSavedSettings, "FSManipShowJointMarkers", true);                
+            if(show_joint_markers)
+            {
+                renderStaticSphere(joint->getWorldPosition(), LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
+            }
         }
     }
 

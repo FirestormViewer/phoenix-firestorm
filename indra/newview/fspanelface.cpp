@@ -33,6 +33,7 @@
 
 #include "llagent.h"
 #include "llagentdata.h"
+#include "llavatarappearancedefines.h"
 #include "llbutton.h"
 #include "llcalc.h"
 #include "llcheckboxctrl.h"
@@ -6014,13 +6015,9 @@ void FSPanelFace::LLSelectedTE::getTexId(LLUUID& id, bool& identical)
         LLUUID get(LLViewerObject* object, S32 te_index)
         {
             LLTextureEntry *te = object->getTE(te_index);
-            if (te)
+            if (te && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(te->getID()))
             {
-                if ((te->getID() == IMG_USE_BAKED_EYES) || (te->getID() == IMG_USE_BAKED_HAIR) || (te->getID() == IMG_USE_BAKED_HEAD) || (te->getID() == IMG_USE_BAKED_LOWER) || (te->getID() == IMG_USE_BAKED_SKIRT) || (te->getID() == IMG_USE_BAKED_UPPER)
-                    || (te->getID() == IMG_USE_BAKED_LEFTARM) || (te->getID() == IMG_USE_BAKED_LEFTLEG) || (te->getID() == IMG_USE_BAKED_AUX1) || (te->getID() == IMG_USE_BAKED_AUX2) || (te->getID() == IMG_USE_BAKED_AUX3))
-                {
-                    return te->getID();
-                }
+                return te->getID();
             }
 
             LLUUID id;
