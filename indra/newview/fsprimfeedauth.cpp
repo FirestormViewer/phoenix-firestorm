@@ -225,6 +225,7 @@ void FSPrimfeedAuth::beginLoginRequest()
     LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
     LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
 
+    pHeader->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     pHeader->append("pf-viewer-api-key", viewer_api_key);
     pHeader->append("pf-user-uuid", user_uuid);
 
@@ -326,6 +327,7 @@ void FSPrimfeedAuth::validateRequest()
 
     // Create and populate the headers.
     LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
+    pHeader->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     pHeader->append("Authorization", "Bearer " + mOauthToken);
     pHeader->append("pf-viewer-api-key", viewer_api_key);
     pHeader->append("pf-viewer-request-id", mRequestId);
@@ -398,6 +400,7 @@ void FSPrimfeedAuth::checkUserStatus()
 
     // Create and populate the headers.
     LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
+    pHeader->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     pHeader->append("Authorization", "Bearer " + mOauthToken);
     pHeader->append("pf-viewer-api-key", viewer_api_key);
 

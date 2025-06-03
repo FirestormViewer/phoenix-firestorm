@@ -119,6 +119,7 @@ void FSPrimfeedConnect::uploadPhotoCoro(const LLSD& params, LLImageFormatted* im
     LLCore::HttpHeaders::ptr_t headers(new LLCore::HttpHeaders);
     std::string token  = gSavedPerAccountSettings.getString("FSPrimfeedOAuthToken");
     std::string apiKey = gSavedSettings.getString("FSPrimfeedViewerApiKey");
+    headers->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     headers->append("Authorization",    "Bearer " + token);
     headers->append("pf-viewer-api-key", apiKey);
     headers->append("Content-Type",     "multipart/form-data; boundary=" + boundary);
