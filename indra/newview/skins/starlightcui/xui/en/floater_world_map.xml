@@ -504,7 +504,7 @@
   </panel>
     <panel
      follows="right|top|bottom"
-	 height="330"
+	 height="235"
 	 top_pad="0"
 	 width="258"
 	 name="layout_panel_4">
@@ -627,6 +627,13 @@
 		<scroll_list.commit_callback
 		function="WMap.SearchResult" />
     </scroll_list>
+    </panel>
+    <panel
+     follows="right|top|bottom"
+	 height="330"
+	 top_pad="0"
+	 width="258"
+	 name="layout_panel_5">
       <text
       type="string"
       length="1"
