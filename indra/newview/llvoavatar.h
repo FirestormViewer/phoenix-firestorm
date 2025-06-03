@@ -852,6 +852,7 @@ public:
     virtual void    dirtyMesh(); // Dirty the avatar mesh
     void            updateMeshData();
     void            updateMeshVisibility();
+    void            hideAllDefaultBodyJoints(); // <FS:Beq>
     LLViewerTexture*        getBakedTexture(const U8 te);
 
     // Matrix palette cache entry
