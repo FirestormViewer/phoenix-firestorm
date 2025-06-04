@@ -546,6 +546,13 @@ bool LLMaterialEditor::postBuild()
         getChild<LLUICtrl>("total_upload_fee")->setTextArg("[FEE]", llformat("%d", 0));
     }
 
+    // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
+    mBaseColorTextureCtrl->setIsMaterialEditorTexture(true);
+    mMetallicTextureCtrl->setIsMaterialEditorTexture(true);
+    mEmissiveTextureCtrl->setIsMaterialEditorTexture(true);
+    mNormalTextureCtrl->setIsMaterialEditorTexture(true);
+    // </FS:TJ>
+
     // Todo:
     // Disable/enable setCanApplyImmediately() based on
     // working from inventory, upload or editing inworld
