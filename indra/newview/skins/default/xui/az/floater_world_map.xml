@@ -60,7 +60,7 @@
 		<search_editor label="Regionun adı" name="location" tool_tip="Regionun adını daxil edin"/>
 		<button label="Axtarış" name="DoSearch" tool_tip="Regioni axtarın"/>
 	</panel>
-	<panel name="layout_panel_5">
+	<panel name="layout_panel_7">
 		<text name="events_label">
 			Məkan:
 		</text>

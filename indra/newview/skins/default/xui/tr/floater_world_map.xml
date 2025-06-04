@@ -58,7 +58,7 @@
 		<search_editor label="Adlarına Göre Bölgeler" name="location" tool_tip="Bir bölgenin adını yazın"/>
 		<button label="Bul" name="DoSearch" tool_tip="Bölge ara"/>
 	</panel>
-	<panel name="layout_panel_5">
+	<panel name="layout_panel_7">
 		<text name="events_label">
 			Konum:
 		</text>

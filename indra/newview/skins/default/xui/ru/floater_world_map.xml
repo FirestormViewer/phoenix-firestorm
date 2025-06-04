@@ -60,7 +60,7 @@
 		<search_editor label="Название региона" name="location" tool_tip="Введите название региона"/>
 		<button label="Поиск" name="DoSearch" tool_tip="Поиск региона"/>
 	</panel>
-	<panel name="layout_panel_5">
+	<panel name="layout_panel_7">
 		<text name="events_label">
 			Место:
 		</text>

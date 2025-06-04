@@ -60,7 +60,7 @@
 				<search_editor label="Regioner efter navn" name="location" tool_tip="Indtast navn på en region"/>
 				<button label="Find" name="DoSearch" tool_tip="Led efter region"/>
 			</panel>
-			<panel name="layout_panel_5">
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					Lokation:
 				</text>

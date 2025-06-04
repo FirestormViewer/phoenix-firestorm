@@ -56,7 +56,7 @@
 				<search_editor label="Regioni per nome" name="location" tool_tip="Digita il nome di una regione"/>
 				<button label="Cerca" name="DoSearch" tool_tip="Cerca la regione sulla mappa"/>
 			</panel>
-			<panel name="layout_panel_5">
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					Posizione:
 				</text>

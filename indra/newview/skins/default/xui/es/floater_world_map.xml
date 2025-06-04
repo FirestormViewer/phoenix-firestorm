@@ -60,7 +60,7 @@
 				<search_editor label="Regiones alfabéticamente" name="location" tool_tip="Escribe el nombre de una región"/>
 				<button label="Encontrar" name="DoSearch" tool_tip="Buscar una región"/>
 			</panel>
-			<panel name="layout_panel_5">
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					Lugar:
 				</text>
