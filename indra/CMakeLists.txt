@@ -73,6 +73,13 @@ if(TESTBUILD AND TESTBUILDPERIOD)
 endif(TESTBUILD AND TESTBUILDPERIOD)
 #</FS:Ansariel>
 
+#<FS:Beq> Support for custom Primfeed UA
+option(FS_PF_USER_AGENT "Optional compile‐time Primfeed user‐agent string" "")
+if(FS_PF_USER_AGENT)
+    # For a single target, say your executable is called "firestorm_viewer":
+    add_compile_definitions(FS_PF_USER_AGENT="${FS_PF_USER_AGENT}")
+endif()
+# </Beq>
 # <FS:Ansariel> [AVX Optimization]
 option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
 option(USE_AVX2_OPTIMIZATION "AVX2 optimization support" OFF)
