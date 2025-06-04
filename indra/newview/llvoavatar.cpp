@@ -9625,13 +9625,6 @@ bool LLVOAvatar::processFullyLoadedChange(bool loading)
         mNeedsImpostorUpdate = true;
         mLastImpostorUpdateReason = 6;
     }
-    // <FS:Beq> Automatically hide the default body until we know which parts we need
-    static LLCachedControl<bool> auto_hide_default_body(gSavedSettings, "FSAutoHideDefaultBodyParts");
-    if (auto_hide_default_body && fully_loaded_changed)
-    {
-        updateMeshVisibility();
-    }
-    // </FS:Beq>
     return changed;
 }
 
@@ -9829,18 +9822,6 @@ void LLVOAvatar::debugColorizeSubMeshes(U32 i, const LLColor4& color)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::updateMeshVisibility()
 {
-    // <FS:Beq> Automatically hide the default body until we know which parts we need
-    static LLCachedControl<bool> auto_hide_default_body(gSavedSettings, "FSAutoHideDefaultBodyParts");
-    // This aims to avoid most cases of "flesh-muppet"/"BOM-Monster"
-    // EARLY‐EXIT: hide all default‐body joints if we are still “cloud”, “gray”,
-    // downloading baked textures, or waiting for attachments.
-    //
-    if ( auto_hide_default_body && getRezzedStatus() < 4 )
-    {
-        hideAllDefaultBodyJoints();
-        return;
-    }    
-    // </FS:Beq>
     bool bake_flag[BAKED_NUM_INDICES];
     memset(bake_flag, 0, BAKED_NUM_INDICES*sizeof(bool));
 
@@ -9945,31 +9926,6 @@ void LLVOAvatar::updateMeshVisibility()
     }
 }
 
-// <FS:Beq> Automatically hide the default body until we know which parts we need
-void LLVOAvatar::hideAllDefaultBodyJoints()
-{
-    static const S32 jointIDs[] =
-    {
-        MESH_ID_HAIR,
-        MESH_ID_HEAD,
-        MESH_ID_SKIRT,
-        MESH_ID_UPPER_BODY,
-        MESH_ID_LOWER_BODY,
-        MESH_ID_EYEBALL_LEFT,
-        MESH_ID_EYEBALL_RIGHT,
-        MESH_ID_EYELASH
-    };
-
-    for (S32 idx : jointIDs)
-    {
-        LLAvatarJoint* joint = getViewerJoint(idx);
-        if (joint)
-        {
-            joint->setVisible(false, true);
-        }
-    }
-}
-// </FS:Beq>
 //-----------------------------------------------------------------------------
 // updateMeshTextures()
 // Uses the current TE values to set the meshes' and layersets' textures.
