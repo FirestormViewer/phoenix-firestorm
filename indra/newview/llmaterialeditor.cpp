@@ -547,10 +547,10 @@ bool LLMaterialEditor::postBuild()
     }
 
     // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
-    mBaseColorTextureCtrl->setIsMaterialEditorTexture(true);
-    mMetallicTextureCtrl->setIsMaterialEditorTexture(true);
-    mEmissiveTextureCtrl->setIsMaterialEditorTexture(true);
-    mNormalTextureCtrl->setIsMaterialEditorTexture(true);
+    mBaseColorTextureCtrl->setIsPreviewDisabled(true);
+    mMetallicTextureCtrl->setIsPreviewDisabled(true);
+    mEmissiveTextureCtrl->setIsPreviewDisabled(true);
+    mNormalTextureCtrl->setIsPreviewDisabled(true);
     // </FS:TJ>
 
     // Todo:
