@@ -1817,7 +1817,9 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
     mTextDisabledColor(p.text_disabled_color),    // <FS:Zi> Add label/caption colors
     mLabel(p.label),                              // <FS:Zi> FIRE-34300 - Fix label not showing in texture picker floater title
     // <FS:Ansariel> Mask texture if desired
-    mIsMasked(false)
+    mIsMasked(false),
+    // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
+    mIsPreviewDisabled(false)
 {
     mCaptionHeight = p.show_caption ? BTN_HEIGHT_SMALL : 0;     // <FS:Zi> leave some room underneath the image for the caption
     // Default of defaults is white image for diff tex
@@ -1983,7 +1985,7 @@ void LLTextureCtrl::setEnabled( bool enabled )
 
     // <FS:Ansariel> Texture preview mode
     //LLView::setEnabled( enabled );
-    LLView::setEnabled( (enabled || getValue().asUUID().notNull()) );
+    LLView::setEnabled(enabled || (getValue().asUUID().notNull() && !mIsPreviewDisabled));
     mOpenTexPreview = !enabled;
     // </FS:Ansariel>
 }
@@ -2641,7 +2643,7 @@ void LLTextureCtrl::setValue( const LLSD& value )
     //setImageAssetID(value.asUUID());
     LLUUID uuid = value.asUUID();
     setImageAssetID(uuid);
-    LLView::setEnabled( (!mOpenTexPreview || uuid.notNull()) );
+    LLView::setEnabled(!mOpenTexPreview || (uuid.notNull() && !mIsPreviewDisabled));
     // </FS:Ansariel>
 }
 

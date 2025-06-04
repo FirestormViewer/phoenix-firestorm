@@ -1498,6 +1498,10 @@ F32 LLViewerTextureList::updateImagesLoadingFastCache(F32 max_time)
         // <FS:Ansariel> Fast cache stats
         sNumFastCacheReads++;
         // </FS:Ansariel>
+        // <FS:Ansariel> Fix fast cache
+        if (timer.getElapsedTimeF32() > max_time)
+            break;
+        // </FS:Ansariel>
     }
     mFastCacheList.erase(mFastCacheList.begin(), enditer);
     return timer.getElapsedTimeF32();
@@ -1609,7 +1613,9 @@ void LLViewerTextureList::decodeAllImages(F32 max_time)
     LLTimer timer;
 
     //loading from fast cache
-    updateImagesLoadingFastCache(max_time);
+    // <FS:Ansariel> Fix fast cache
+    //updateImagesLoadingFastCache(max_time);
+    max_time -= updateImagesLoadingFastCache(max_time);
 
     // Update texture stats and priorities
     std::vector<LLPointer<LLViewerFetchedTexture> > image_list;

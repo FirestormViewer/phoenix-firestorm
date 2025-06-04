@@ -9,7 +9,7 @@
 			<button label="清除歷史記錄" tool_tip="清除搜尋和傳送歷史記錄，以及網頁和紋理快取" name="clear_webcache" />
 			<text name="cache_size_label">(地點、圖片、網頁、搜尋)</text>
 			<check_box label="在搜尋結果中顯示我的個人檔案資訊" name="online_searchresults" />
-			<check_box label="只有我的朋友和群組知道我線上上" name="online_visibility" />
+			<check_box label="只有我的朋友和群組知道我在線" name="online_visibility" />
 			<check_box label="只有我的朋友和群組可以呼叫我或傳送私聊" name="voice_call_friends_only_check" />
 			<check_box label="顯示已加入的群組邀請" name="FSShowJoinedGroupInvitations" />
 			<check_box label="語音通話結束後自動關閉麥克風" name="auto_disengage_mic_check" />
@@ -58,7 +58,7 @@
 			<check_box label="限制與頭部的距離限制：" name="LimitLookAt" tool_tip="將你的注視點鎖定在目標的頭部周圍。" />
 		</panel>
 		<panel label="自動回復 1" name="tab-autoresponse-1">
-			<text name="autorespond_toggle_location_tip">注意：要啟用自動回覆訊息，請在「通訊」選單中設定您的線上狀態</text>
+			<text name="autorespond_toggle_location_tip">注意：要啟用自動回覆訊息，請在「通訊」選單中設定您的在線狀態</text>
 			<text name="text_box3">「請勿打擾」模式下的自動回覆：</text>
 			<text name="autorespond_response_label">當我處於「自動回復」模式時對所有居民的自動回覆：</text>
 			<text name="autorespond_nf_response_label">當我處於「自動回復陌生人」模式時的自動回覆：</text>

@@ -33,6 +33,7 @@
 
 #include "llagent.h"
 #include "llagentdata.h"
+#include "llavatarappearancedefines.h"
 #include "llbutton.h"
 #include "llcalc.h"
 #include "llcheckboxctrl.h"
@@ -760,7 +761,7 @@ void FSPanelFace::onMatTabChange()
         // Since we allow both PBR and BP textures to be applied at the same time,
         // we need to hide or show the GLTF material only locally based on the current tab.
         gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
-        if (curr_mat != MATMEDIA_PBR)
+        if (curr_mat == MATMEDIA_MATERIAL)
             LLSelectMgr::getInstance()->hideGLTFMaterial();
         else
             LLSelectMgr::getInstance()->showGLTFMaterial();
@@ -1154,6 +1155,16 @@ void FSPanelFace::onVisibilityChange(bool new_visibility)
         gAgent.showLatestFeatureNotification("gltf");
     }
     LLPanel::onVisibilityChange(new_visibility);
+
+    // Since we allow both PBR and BP textures to be applied at the same time,
+    // we need to keep FSShowSelectedInBlinnPhong in sync in case we open or close the texture panel.
+    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+    bool should_hide_gltf = new_visibility && !showSelectedinBP && getCurrentMaterialType() == MATMEDIA_MATERIAL;
+    gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", should_hide_gltf);
+    if (should_hide_gltf)
+    {
+        LLSelectMgr::getInstance()->hideGLTFMaterial();
+    }
 }
 
 void FSPanelFace::draw()
@@ -6004,13 +6015,9 @@ void FSPanelFace::LLSelectedTE::getTexId(LLUUID& id, bool& identical)
         LLUUID get(LLViewerObject* object, S32 te_index)
         {
             LLTextureEntry *te = object->getTE(te_index);
-            if (te)
+            if (te && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(te->getID()))
             {
-                if ((te->getID() == IMG_USE_BAKED_EYES) || (te->getID() == IMG_USE_BAKED_HAIR) || (te->getID() == IMG_USE_BAKED_HEAD) || (te->getID() == IMG_USE_BAKED_LOWER) || (te->getID() == IMG_USE_BAKED_SKIRT) || (te->getID() == IMG_USE_BAKED_UPPER)
-                    || (te->getID() == IMG_USE_BAKED_LEFTARM) || (te->getID() == IMG_USE_BAKED_LEFTLEG) || (te->getID() == IMG_USE_BAKED_AUX1) || (te->getID() == IMG_USE_BAKED_AUX2) || (te->getID() == IMG_USE_BAKED_AUX3))
-                {
-                    return te->getID();
-                }
+                return te->getID();
             }
 
             LLUUID id;

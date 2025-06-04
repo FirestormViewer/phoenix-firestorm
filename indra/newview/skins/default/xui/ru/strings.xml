@@ -6872,5 +6872,6 @@ ID объекта: [INSPECTING_KEY]
 	<string name="FSObjectInventoryOneElement">1 элемент</string>
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] элементов</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">команда поддержки оператора вашей сетки</string>
-    <string name="Unlimited">Неограниченный</string>
+	<string name="Unlimited">Неограниченный</string>
+	<string name="ListEmpty">Список пуст</string>
 </strings>

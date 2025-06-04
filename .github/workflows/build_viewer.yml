@@ -308,7 +308,16 @@ jobs:
         if: ${{ matrix.variant == 'avx' }}
         shell: bash
         run: echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} --avx2" >> $GITHUB_ENV
-
+      - name: Add custom UA string if provided
+        env:
+          FS_PF_UA: ${{ secrets.FS_PF_UA }}
+        run: |
+          if [ -n "${FS_PF_UA}" ]; then
+            echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} -DFS_PS_USER_AGENT=\"${FS_PF_UA}\"" >> $GITHUB_ENV
+          else
+            echo "No custom user-agent string provided."
+          fi
+        shell: bash
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash

@@ -15,5 +15,5 @@
 		<menu_item_check label="完整名稱格式：顯示名 (使用者名稱)" name="format_displayname_username" />
 		<menu_item_check label="搜尋過濾器" name="friend_filter" />
 	</menu>
-	<menu_item_check label="對朋友顯示線上狀態" name="GlobalOnlineStatusToggle" />
+	<menu_item_check label="對朋友顯示在線狀態" name="GlobalOnlineStatusToggle" />
 </context_menu>

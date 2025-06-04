@@ -102,6 +102,7 @@
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 #include "rlvmodifiers.h"
 // [/RLVa:KB]
 // <FS:CR> Aurora Sim
@@ -5277,6 +5278,18 @@ void LLSelectMgr::sendDetach()
     {
         return;
     }
+
+// [RLVa:KB]
+    if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
+    {
+        LLObjectSelectionHandle hSelect = LLSelectMgr::getInstance()->getSelection();
+        RlvSelectHasLockedAttach f;
+        if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, false) != NULL) )
+        {
+            return;
+        }
+    }
+// [/RLVa:KB]
 
     sendListToRegions(
         "ObjectDetach",

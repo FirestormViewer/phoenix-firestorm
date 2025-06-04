@@ -430,6 +430,13 @@ bool LLScrollListCtrl::setMaxItemCount(S32 max_count)
     return (max_count == mMaxItemCount);
 }
 
+// <FS:PP>
+S32 LLScrollListCtrl::getMaxItemCount()
+{
+    return mMaxItemCount;
+}
+// </FS:PP>
+
 S32 LLScrollListCtrl::isEmpty() const
 {
     return mItemList.empty();

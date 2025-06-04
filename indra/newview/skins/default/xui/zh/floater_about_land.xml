@@ -495,6 +495,8 @@
 				<name_list name="AccessList" tool_tip="（已加入 [LISTED]，最多可加 [MAX]）" />
 				<button label="新增" name="add_allowed" />
 				<button label="移除" label_selected="移除" name="remove_allowed" />
+				<button label="匯出" label_selected="匯出" name="export_allowed"/>
+				<button label="匯入" label_selected="匯入" name="import_allowed" tool_tip="只匯入包含有效UUID的CSV檔案——每行一個，無多餘字元或格式"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="禁止" name="BanCheck">
@@ -506,6 +508,8 @@
 				</name_list>
 				<button label="新增" name="add_banned" />
 				<button label="移除" label_selected="移除" name="remove_banned" />
+				<button label="匯出" label_selected="匯出" name="export_banned"/>
+				<button label="匯入" label_selected="匯入" name="import_banned" tool_tip="只匯入包含有效UUID的CSV檔案——每行一個，無多餘字元或格式"/>
 			</panel>
 		</panel>
 		<panel label="體驗" name="land_experiences_panel" />

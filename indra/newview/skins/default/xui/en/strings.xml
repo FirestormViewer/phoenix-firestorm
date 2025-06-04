@@ -3316,4 +3316,10 @@ Your current position: [AVATAR_POS]
   <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
   <string name="OpenSimInventoryValidationErrorGenericHelp">your Grid Operator's support team</string>
   <string name="Unlimited">Unlimited</string>
+
+  <string name="ListEmpty">List is empty</string>
+  <string name="NoValidUUIDs">No valid UUIDs found in the imported file.</string>
+  <string name="ImportListTooLarge">Too many entries. The CSV file has [COUNT] entries and there are [MAX] slots available.</string>
+  <string name="ImportSuccessful">Successfully processed [COUNT] entries.</string>
+
 </strings>

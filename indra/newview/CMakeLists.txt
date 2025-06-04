@@ -54,7 +54,7 @@ include(jemalloc)
 include(Discord)
 
 # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
-if( LLPHYSICSEXTENSIONS_SRC_DIR )
+if (LLPHYSICSEXTENSIONS_SRC_DIR)
 # </FS:ND>
 
 if (NOT HAVOK_TPV)
@@ -81,7 +81,7 @@ if (NOT HAVOK_TPV)
 endif (NOT HAVOK_TPV)
 
 # <FS:ND>
-endif( LLPHYSICSEXTENSIONS_SRC_DIR )
+endif (LLPHYSICSEXTENSIONS_SRC_DIR)
 # </FS:ND>
 
 set(viewer_SOURCE_FILES
@@ -128,7 +128,7 @@ set(viewer_SOURCE_FILES
     fsfloaternearbychat.cpp
     fsfloaterpartialinventory.cpp
     fsfloaterplacedetails.cpp
-	fsfloaterposer.cpp
+    fsfloaterposer.cpp
     fsfloaterposestand.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
@@ -141,7 +141,7 @@ set(viewer_SOURCE_FILES
     fsfloatervramusage.cpp
     fsfloaterwearablefavorites.cpp
     fsfloaterwhitelisthelper.cpp
-	fsjointpose.cpp
+    fsjointpose.cpp
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
@@ -163,8 +163,8 @@ set(viewer_SOURCE_FILES
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
-	fsposeranimator.cpp
-	fsposingmotion.cpp
+    fsposeranimator.cpp
+    fsposingmotion.cpp
     fsprimfeedauth.cpp
     fsradar.cpp
     fsradarentry.cpp
@@ -174,7 +174,7 @@ set(viewer_SOURCE_FILES
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
-	fsvirtualtrackpad.cpp
+    fsvirtualtrackpad.cpp
     fsworldmapmessage.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
@@ -194,10 +194,12 @@ set(viewer_SOURCE_FILES
     vjlocalmeshimportdae.cpp
 
     gltfscenemanager.cpp
-    gltf/asset.cpp
-    gltf/accessor.cpp
-    gltf/primitive.cpp
-    gltf/animation.cpp
+    # <FS:Ansariel> Group GLTF files into their subfolders
+    #gltf/asset.cpp
+    #gltf/accessor.cpp
+    #gltf/primitive.cpp
+    #gltf/animation.cpp
+    # </FS:Ansariel> Group GLTF files into their subfolders
     groupchatlistener.cpp
     llaccountingcostmanager.cpp
     llaisapi.cpp
@@ -883,6 +885,18 @@ set(viewer_SOURCE_FILES
     NACLfloaterexploresounds.cpp
     )
 
+# <FS:Ansariel> Group GLTF files into their subfolders
+set(viewer_GLTF_SOURCE_FILES
+    gltf/asset.cpp
+    gltf/accessor.cpp
+    gltf/primitive.cpp
+    gltf/animation.cpp
+    )
+
+source_group("Source Files\\GLTF" FILES ${viewer_GLTF_SOURCE_FILES})
+list(APPEND viewer_SOURCE_FILES ${viewer_GLTF_SOURCE_FILES})
+# </FS:Ansariel> Group GLTF files into their subfolders
+
 if (OPENSIM)
     list(APPEND viewer_SOURCE_FILES
                 fsgridhandler.cpp
@@ -946,7 +960,7 @@ set(viewer_HEADER_FILES
     fsfloaternearbychat.h
     fsfloaterpartialinventory.h
     fsfloaterplacedetails.h
-	fsfloaterposer.h
+    fsfloaterposer.h
     fsfloaterposestand.h
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
@@ -982,8 +996,8 @@ set(viewer_HEADER_FILES
     fspanelradar.h
     fsparticipantlist.h
     fspose.h
-	fsposeranimator.h
-	fsposingmotion.h
+    fsposeranimator.h
+    fsposingmotion.h
     fsprimfeedauth.h
     fsradar.h
     fsradarentry.h
@@ -994,7 +1008,7 @@ set(viewer_HEADER_FILES
     fsscrolllistctrl.h
     fsslurl.h
     fsslurlcommand.h
-	fsvirtualtrackpad.h
+    fsvirtualtrackpad.h
     fsworldmapmessage.h
     lggbeamcolormapfloater.h
     lggbeammapfloater.h
@@ -1014,11 +1028,13 @@ set(viewer_HEADER_FILES
 
     gltfscenemanager.h
     groupchatlistener.h
-    gltf/asset.h
-    gltf/accessor.h
-    gltf/buffer_util.h
-    gltf/primitive.h
-    gltf/animation.h
+    # <FS:Ansariel> Group GLTF files into their subfolders
+    #gltf/asset.h
+    #gltf/accessor.h
+    #gltf/buffer_util.h
+    #gltf/primitive.h
+    #gltf/animation.h
+    # </FS:Ansariel> Group GLTF files into their subfolders
     llaccountingcost.h
     llaccountingcostmanager.h
     llaisapi.h
@@ -1704,6 +1720,19 @@ set(viewer_HEADER_FILES
 
   list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
   list(APPEND viewer_HEADER_FILES llperfstats.h)
+
+# <FS:Ansariel> Group GLTF files into their subfolders
+set(viewer_GLTF_HEADER_FILES
+    gltf/asset.h
+    gltf/accessor.h
+    gltf/buffer_util.h
+    gltf/primitive.h
+    gltf/animation.h
+    )
+
+source_group("Header Files\\GLTF" FILES ${viewer_GLTF_HEADER_FILES})
+list(APPEND viewer_HEADER_FILES ${viewer_GLTF_HEADER_FILES})
+# </FS:Ansariel> Group GLTF files into their subfolders
 
 if (USE_BUGSPLAT)
     list(APPEND viewer_SOURCE_FILES

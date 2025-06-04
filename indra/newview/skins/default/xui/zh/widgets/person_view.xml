@@ -4,7 +4,7 @@
 	<permission_edit_theirs_icon name="permission_edit_theirs_icon" tool_tip="您可以編輯、刪除或取得該使用者的物件" />
 	<permission_edit_mine_icon name="permission_edit_mine_icon" tool_tip="該使用者可以編輯、刪除或取得您的物件" />
 	<permission_map_icon tool_tip="該使用者可以在地圖上定位您" name="permission_map_icon" />
-	<permission_online_icon name="permission_online_icon" tool_tip="該使用者可以知道您何時線上上" />
+	<permission_online_icon name="permission_online_icon" tool_tip="該使用者可以知道您何時在線" />
 	<info_btn name="info_btn" tool_tip="更多資訊" />
 	<profile_btn name="profile_btn" tool_tip="檢視檔案" />
 </person_view>

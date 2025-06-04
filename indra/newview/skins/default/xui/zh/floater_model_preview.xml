@@ -107,9 +107,10 @@
 	</string>
 	<string name="IncompleteTC">
 		紋理座標數據不完整。
+	</string>
 	<string name="PositionNaN">
 		在從DAE模型載入位置資料時發現NaN，模型無效。
-	</string></string>
+	</string>
 	<string name="NormalsNaN">
 		載入DAE模型時發現法線NaN，模型無效。
 	</string>

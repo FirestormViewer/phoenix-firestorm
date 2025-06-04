@@ -7149,4 +7149,7 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="Unlimited">
 		Illimité
 	</string>
+	<string name="ListEmpty">
+		La liste est vide
+	</string>
 </strings>

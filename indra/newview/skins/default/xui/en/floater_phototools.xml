@@ -1592,7 +1592,7 @@
 				 max_val="100000"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Scaling_Factor"
@@ -3122,7 +3122,7 @@
 				 left_pad="0"
 				 decimal_digits="0"
 				 follows="left|top"
-				 max_val="1"
+				 max_val="10"
 				 min_val="0"
 				 width="53"
 				 increment="1"/>
@@ -4186,7 +4186,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_IO_Axis"
@@ -4235,7 +4235,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Tilt"
@@ -4284,7 +4284,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Spin"
@@ -4333,7 +4333,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Roll"
@@ -4382,7 +4382,7 @@
 				 max_val="1"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Zoom_Speed"
@@ -4431,7 +4431,7 @@
 				 max_val="100"
 				 min_val="0"
 				 width="53"
-				 increment=".001"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Feathering"
