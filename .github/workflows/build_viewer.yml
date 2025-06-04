@@ -317,6 +317,7 @@ jobs:
           else
             echo "No custom user-agent string provided."
           fi
+        shell: bash
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
