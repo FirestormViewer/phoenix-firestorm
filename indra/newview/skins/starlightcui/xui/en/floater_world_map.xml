@@ -629,11 +629,11 @@
     </scroll_list>
     </panel>
     <panel
-     follows="right|top|bottom"
+     follows="right|bottom"
 	 height="330"
 	 top_pad="0"
 	 width="258"
-	 name="layout_panel_5">
+	 name="layout_panel_7">
       <text
       type="string"
       length="1"
