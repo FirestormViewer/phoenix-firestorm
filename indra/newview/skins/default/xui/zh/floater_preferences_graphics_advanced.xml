@@ -136,6 +136,7 @@
 		<combo_box.item label="少量" name="32" />
 		<combo_box.item label="中等" name="64" />
 		<combo_box.item label="很多" name="128" />
+		<combo_box.item label="超多" name="256" />
 	</combo_box>
 	<slider label="曝光度:" name="RenderExposure" />
 	<check_box label="鏡面" name="Mirrors" />
@@ -160,7 +161,6 @@
 		<combo_box.item label="ACES" name="1"/>
 	</combo_box>
 	<slider label="色調映射混合：" tool_tip="在線性與色調映射顏色之間進行混合" name="TonemapMix"/>
-	<!-- End of mirror settings -->
 	<button label="重設為我們建議的設定" name="Defaults" />
 	<button label="確定" label_selected="確定" name="OK" />
 	<button label="取消" label_selected="取消" name="Cancel" />
