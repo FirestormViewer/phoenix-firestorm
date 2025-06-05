@@ -6586,4 +6586,9 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS]件の要素</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">グリッドオペレータのサポートチーム</string>
 	<string name="Unlimited">無制限</string>
+
+	<string name="ListEmpty">リストは空です。</string>
+	<string name="NoValidUUIDs">インポートされたファイル内に有効なＵＵＩＤが見つかりません。</string>
+	<string name="ImportListTooLarge">エントリが多すぎます。ＣＳＶファイルには[COUNT]個のエントリがあり、残り使用可能なスロット数は[MAX]個です。</string>
+	<string name="ImportSuccessful">[COUNT]件のエントリを正常に処理しました。</string>
 </strings>
