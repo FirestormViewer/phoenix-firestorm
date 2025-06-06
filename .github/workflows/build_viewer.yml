@@ -314,6 +314,7 @@ jobs:
         run: |
           if [ -n "${FS_PF_UA}" ]; then
             echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} -DFS_PS_USER_AGENT=\"${FS_PF_UA}\"" >> $GITHUB_ENV
+            echo "Building with custom user-agent string."
           else
             echo "No custom user-agent string provided."
           fi
