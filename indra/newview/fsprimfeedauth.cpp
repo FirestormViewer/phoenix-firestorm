@@ -112,31 +112,25 @@ void FSPrimfeedAuth::initiateAuthRequest()
     // It should be called when the user clicks the "Authenticate" button.
     // Also triggered on opening the floater.
     // The actual implementation is in the create() method.
-    
-    if (!isAuthorized())
+
+    if (sPrimfeedAuth)
     {
-        if (sPrimfeedAuth)
+        LLNotificationsUtil::add("PrimfeedAuthorizationAlreadyInProgress");
+        return;
+    }
+    // If no token stored, begin the login request; otherwise check user status.
+    sPrimfeedAuth = FSPrimfeedAuth::create(
+        [](bool success, const LLSD &response) 
         {
-            LLNotificationsUtil::add("PrimfeedAuthorizationAlreadyInProgress");
-            return;
+            LLSD event_data = response;
+            event_data["responseType"] = "primfeed_auth_response";
+            event_data["success"] = success;
+            sPrimfeedAuthPump->post(event_data);
+            // Now that auth is complete, clear the static pointer.
+            sPrimfeedAuth.reset();
         }
-        // If no token stored, begin the login request; otherwise check user status.
-        sPrimfeedAuth = FSPrimfeedAuth::create(
-            [](bool success, const LLSD &response) 
-            {
-                LLSD event_data = response;
-                event_data["success"] = success;
-                sPrimfeedAuthPump->post(event_data);
-                // Now that auth is complete, clear the static pointer.
-                sPrimfeedAuth.reset();
-            }
-        );
-        FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_CONNECTING);
-    }
-    else
-    {
-        LLNotificationsUtil::add("PrimfeedAlreadyAuthorized");
-    }
+    );
+    FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_CONNECTING);
 }
 
 void FSPrimfeedAuth::resetAuthStatus()
@@ -147,7 +141,7 @@ void FSPrimfeedAuth::resetAuthStatus()
     gSavedPerAccountSettings.setString("FSPrimfeedPlan", "");
     gSavedPerAccountSettings.setString("FSPrimfeedUsername", "");
     LLSD event_data;
-    event_data["status"] = "reset";
+    event_data["responseType"] = "primfeed_auth_reset";
     event_data["success"] = "false";
     sPrimfeedAuthPump->post(event_data);
     FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_DISCONNECTED);
@@ -201,7 +195,8 @@ std::shared_ptr<FSPrimfeedAuth> FSPrimfeedAuth::create(authorized_callback_t cal
     FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_CONNECTING);
 
     // If no token stored, begin the login request; otherwise check user status.
-    if (gSavedPerAccountSettings.getString("FSPrimfeedOAuthToken").empty())
+    auth->mOauthToken = gSavedPerAccountSettings.getString("FSPrimfeedOAuthToken");
+    if (auth->mOauthToken.empty())
     {
         auth->beginLoginRequest();
     }
@@ -432,22 +427,23 @@ void FSPrimfeedAuth::checkUserStatus()
 }
 
 
-void FSPrimfeedAuth::gotUserStatus(bool success, const LLSD &response)
+void FSPrimfeedAuth::gotUserStatus(bool success, const LLSD &response) const
 {
     LL_INFOS("Primfeed") << "User status: " << response << "(" << success << ")" << LL_ENDL;
-    if (success && response.has("plan"))
+    if (success && response.has("plan") && response.has("username") && response.has("link"))
     {
         gSavedPerAccountSettings.setString("FSPrimfeedOAuthToken", mOauthToken);
         gSavedPerAccountSettings.setString("FSPrimfeedPlan", response["plan"].asString());
         gSavedPerAccountSettings.setString("FSPrimfeedProfileLink", response["link"].asString());
         gSavedPerAccountSettings.setString("FSPrimfeedUsername", response["username"].asString());
         FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_CONNECTED);
+        LLSD event_data = response;
+        event_data["responseType"] = "primfeed_user_info";
+        sPrimfeedAuthPump->post(event_data);        
         mCallback(true, response);
+        return;
     }
-    else
-    {
-        LLNotificationsUtil::add("PrimfeedUserStatusFailed");
-        FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_DISCONNECTED);
-        mCallback(false, response);
-    }
+    LLNotificationsUtil::add("PrimfeedUserStatusFailed");
+    FSPrimfeedConnect::instance().setConnectionState(FSPrimfeedConnect::PRIMFEED_DISCONNECTED);
+    mCallback(false, response);
 }

@@ -74,6 +74,7 @@ FSPrimfeedPhotoPanel::FSPrimfeedPhotoPanel() :
     mDescriptionTextBox(nullptr),
     mLocationCheckbox(nullptr),
     mRatingComboBox(nullptr),
+    mStoresComboBox(nullptr),
     mPostButton(nullptr),
     mBtnPreview(nullptr),
     mBigPreviewFloater(nullptr)
@@ -88,6 +89,16 @@ FSPrimfeedPhotoPanel::FSPrimfeedPhotoPanel() :
                                      LL_DEBUGS("primfeed") << "Info button clicked, opening " << url << LL_ENDL;
                                      LLWeb::loadURLExternal(url);
                                  });
+    FSPrimfeedAuth::sPrimfeedAuthPump->listen("FSPrimfeedPhotoPanel",
+                                              [this](const LLSD& data)
+                                              {
+                                                if ( data["responseType"].asString() == "primfeed_user_info" )
+                                                {
+                                                    this->loadPrimfeedInfo(data);
+                                                    return true;
+                                                }   
+                                                return false;
+                                              });                                 
 }
 
 FSPrimfeedPhotoPanel::~FSPrimfeedPhotoPanel()
@@ -96,8 +107,6 @@ FSPrimfeedPhotoPanel::~FSPrimfeedPhotoPanel()
     {
         mPreviewHandle.get()->die();
     }
-
-    FSPrimfeedAuth::sPrimfeedAuthPump->stopListening("FSPrimfeedAccountPanel");
 
     gSavedSettings.setS32("FSLastSnapshotToPrimfeedResolution", getChild<LLComboBox>("resolution_combobox")->getCurrentIndex());
     gSavedSettings.setS32("FSLastSnapshotToPrimfeedWidth", getChild<LLSpinCtrl>("custom_snapshot_width")->getValue().asInteger());
@@ -121,6 +130,7 @@ bool FSPrimfeedPhotoPanel::postBuild()
     mCommercialCheckbox    = getChild<LLUICtrl>("primfeed_commercial_content");
     mPublicGalleryCheckbox = getChild<LLUICtrl>("primfeed_add_to_public_gallery");
     mRatingComboBox        = getChild<LLUICtrl>("rating_combobox");
+    mStoresComboBox        = getChild<LLComboBox>("stores_combobox");
     mPostButton            = getChild<LLUICtrl>("post_photo_btn");
     mCancelButton          = getChild<LLUICtrl>("cancel_photo_btn");
     mBigPreviewFloater     = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
@@ -192,6 +202,8 @@ void FSPrimfeedPhotoPanel::draw()
     mCancelButton->setEnabled(can_post);
     mDescriptionTextBox->setEnabled(can_post);
     mRatingComboBox->setEnabled(can_post);
+    // If the stores combo box is present, enable it only if we have stores to select from
+    mStoresComboBox->setEnabled(can_post && ((LLComboBox*)mStoresComboBox)->getItemCount() > 1);
     mResolutionComboBox->setEnabled(can_post);
     mFilterComboBox->setEnabled(can_post);
     mRefreshBtn->setEnabled(can_post);
@@ -327,7 +339,7 @@ bool FSPrimfeedPhotoPanel::onPrimfeedConnectStateChange(const LLSD& /*data*/)
 {
     if (FSPrimfeedAuth::isAuthorized())
     {
-        sendPhoto();
+        return true;
     }
 
     return false;
@@ -355,7 +367,7 @@ void FSPrimfeedPhotoPanel::sendPhoto()
     int  content_rating         = mRatingComboBox->getValue().asInteger();
     bool post_to_public_gallery = mPublicGalleryCheckbox->getValue().asBoolean();
     bool commercial_content     = mCommercialCheckbox->getValue().asBoolean();
-
+    std::string store_id        = mStoresComboBox->getValue().asString();
     // Get the image
     LLSnapshotLivePreview* previewp = getPreviewView();
 
@@ -375,6 +387,11 @@ void FSPrimfeedPhotoPanel::sendPhoto()
         std::string slurl_string = slurl.getSLURLString();
 
         params["location"] = slurl_string;
+    }
+    if (!store_id.empty())
+    {
+        // Add the store ID if we have one selected
+        params["store_id"] = store_id;
     }
 
     FSPrimfeedConnect::instance().uploadPhoto(params, previewp->getFormattedImage().get(),
@@ -529,6 +546,34 @@ void FSPrimfeedPhotoPanel::checkAspectRatio(S32 index)
     }
 }
 
+void FSPrimfeedPhotoPanel::loadPrimfeedInfo(LLSD const& data)
+{
+    if (!mStoresComboBox) return;
+
+    // Clear any existing entries
+    mStoresComboBox->clearRows();
+    mStoresComboBox->add(LLTrans::getString("Personal"), LLSD(""));
+
+    // Read the saved stores array
+    LLSD stores = data["stores"];
+    if (!stores.isArray() || stores.size() == 0)
+    {
+        // No stores - disable the combobox
+        mStoresComboBox->setEnabled(FALSE);
+        return;
+    }
+
+    mStoresComboBox->setEnabled(TRUE);
+    for (S32 i = 0; i < stores.size(); ++i)
+    {
+        LLSD const& store = stores[i];
+        std::string id   = store["id"].asString();
+        std::string name = store["name"].asString();
+        mStoresComboBox->add(name, LLSD(id));
+    }
+    mStoresComboBox->setCurrentByIndex(0);
+}
+
 LLUICtrl* FSPrimfeedPhotoPanel::getRefreshBtn()
 {
     return mRefreshBtn;
@@ -536,13 +581,10 @@ LLUICtrl* FSPrimfeedPhotoPanel::getRefreshBtn()
 
 void FSPrimfeedPhotoPanel::onOpen(const LLSD& key)
 {
-    if (!FSPrimfeedAuth::isAuthorized())
-    {
-        // Reauthorise if necessary.
-        FSPrimfeedAuth::initiateAuthRequest();
-        LLSD dummy;
-        onPrimfeedConnectStateChange(dummy);         
-    }
+    // Reauthorise if necessary.
+    FSPrimfeedAuth::initiateAuthRequest();
+    LLSD dummy;
+    onPrimfeedConnectStateChange(dummy);         
 }
 
 void FSPrimfeedPhotoPanel::uploadCallback(bool success, const LLSD& response)
@@ -621,6 +663,7 @@ bool FSPrimfeedPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& 
     return (w != width || h != height);
 }
 
+
 ///////////////////////////
 // FSPrimfeedAccountPanel///
 ///////////////////////////
@@ -639,10 +682,24 @@ FSPrimfeedAccountPanel::FSPrimfeedAccountPanel() :
     FSPrimfeedAuth::sPrimfeedAuthPump->listen("FSPrimfeedAccountPanel",
                                               [this](const LLSD& data)
                                               {
-                                                  bool success = data["success"].asBoolean();
-                                                  primfeedAuthResponse(success, data);
-                                                  return true;
-                                              });
+                                                if ( data.has("responseType"))
+                                                {
+                                                    auto response_type = data["responseType"].asString();
+                                                    if(response_type == "primfeed_auth_response")
+                                                    {
+                                                        bool success = data["success"].asBoolean();
+                                                        primfeedAuthResponse(success, data);
+                                                        return true;
+                                                    }
+                                                    if(response_type == "primfeed_auth_reset")
+                                                    {
+                                                        bool success = data["success"].asBoolean();
+                                                        primfeedAuthResponse(success, data);
+                                                        return true;
+                                                    }
+                                                }
+                                                return false;
+                                            });
 
     setVisibleCallback([this](LLUICtrl*, bool visible) { onVisibilityChange(visible); });
 }
@@ -782,6 +839,12 @@ void FSPrimfeedAccountPanel::onDisconnect()
     onPrimfeedConnectStateChange(dummy);    
 }
 
+FSPrimfeedAccountPanel::~FSPrimfeedAccountPanel()
+{
+    // Disconnect the primfeed auth pump
+    FSPrimfeedAuth::sPrimfeedAuthPump->stopListening("FSPrimfeedAccountPanel");
+}
+
 ////////////////////////
 // FSFloaterPrimfeed/////
 ////////////////////////
@@ -789,10 +852,10 @@ void FSPrimfeedAccountPanel::onDisconnect()
 FSFloaterPrimfeed::FSFloaterPrimfeed(const LLSD& key) :
     LLFloater(key),
     mPrimfeedPhotoPanel(nullptr),
+    mPrimfeedAccountPanel(nullptr),
     mStatusErrorText(nullptr),
     mStatusLoadingText(nullptr),
-    mStatusLoadingIndicator(nullptr),
-    mPrimfeedAccountPanel(nullptr)
+    mStatusLoadingIndicator(nullptr)
 {
     mCommitCallbackRegistrar.add("SocialSharing.Cancel", [this](LLUICtrl*, const LLSD&) { onCancel(); });
 }

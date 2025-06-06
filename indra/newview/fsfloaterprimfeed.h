@@ -34,6 +34,7 @@
 
 class LLIconCtrl;
 class LLCheckBoxCtrl;
+class LLComboBox;
 class LLSnapshotLivePreview;
 class LLFloaterBigPreview;
 
@@ -52,6 +53,7 @@ public:
     bool postBuild() override;
     S32 notify(const LLSD& info);
     void draw() override;
+    void loadPrimfeedInfo(LLSD const& data);
 
     LLSnapshotLivePreview* getPreviewView();
     void onVisibilityChange(bool new_visibility);
@@ -94,6 +96,7 @@ private:
     LLUICtrl * mPostButton;
     LLUICtrl * mCancelButton;
     LLButton * mBtnPreview;
+    LLComboBox * mStoresComboBox;
 
     LLFloaterBigPreview * mBigPreviewFloater;
 };
@@ -102,6 +105,7 @@ class FSPrimfeedAccountPanel : public LLPanel
 {
 public:
     FSPrimfeedAccountPanel();
+    ~FSPrimfeedAccountPanel();
     bool postBuild() override;
     void draw() override;
 
