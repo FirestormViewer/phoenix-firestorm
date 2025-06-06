@@ -7152,4 +7152,13 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="ListEmpty">
 		La liste est vide
 	</string>
+	<string name="NoValidUUIDs">
+		Le fichier importé ne contient aucun UUID valide.
+	</string>
+	<string name="ImportListTooLarge">
+		Trop d'entrées. Le fichier CSV contient [COUNT] entrées et il y a [MAX] emplacements disponibles.
+	</string>
+	<string name="ImportSuccessful">
+		Successfully processed [COUNT] entries.
+	</string>
 </strings>

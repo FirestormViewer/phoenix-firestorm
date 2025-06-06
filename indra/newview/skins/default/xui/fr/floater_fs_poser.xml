@@ -243,11 +243,12 @@
 							Sensibilité du trackpad :
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Règle la sensibilité du trackpad"/>
-						<check_box name="natural_direction_checkbox" label="Utiliser l'alignement naturel" tool_tip="Le squelette a des rotations d'articulations non naturelles par défaut. Cela complique la pose. Si cette option est cochée, les articulations tourneront de manière plus naturelle."/>
 						<check_box name="stop_posing_on_close_checkbox" label="Arrêt pose si fermeture" tool_tip="Ne pas arrêter votre pose peut être utile si vous travaillez beaucoup et que vous ne voulez pas la perdre accidentellement."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Réinitialisation de la rotation" tool_tip="Lorsque vous modifiez une rotation pour la première fois, la remet à zéro. Cela signifie que votre travail peut enregistrer une pose (et non une différence - voir charger/enregistrer). Une coche verte apparaît à côté de chaque articulation dont l'exportation a été remise à zéro."/>
 						<check_box name="also_save_bvh_checkbox" label="Ajouter BVH à l'enregis.**" tool_tip="Lorsque vous enregistrez votre pose, écrivez également un fichier BVH, qui peut être téléchargé via 'Construire > Charger > Animation' pour poser vous-même ou d'autres personnes dans le monde. Pour ce faire, les articulations doivent remettre leur « base » à zéro, car le BVH nécessite que l'on travaille sur l'original."/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Confirmer l'écrasement" tool_tip="Lorsque vous enregistrez une pose, si le fichier existe déjà, vous devez cliquer à nouveau sur le bouton d'enregistrement pour confirmer que vous êtes sûr de vouloir l'écraser."/>
+						<check_box name="natural_direction_checkbox" label="Utiliser l'alignement naturel" tool_tip="Le squelette a des rotations d'articulations non naturelles par défaut. Cela complique la pose. Si cette option est cochée, les articulations tourneront de manière plus naturelle."/>
+						<check_box name="show_joint_markers_checkbox" label="Aff. marqueurs de jointure" tool_tip="Afficher de petits indicateurs pour faciliter la sélection des articulations lors de la pose visuelle."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Activer et désactiver les manipulateurs visuels"/>
