@@ -256,11 +256,12 @@
 							トラックパッドの感度：
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="トラックボールの感度を調整します。"/>
-						<check_box name="natural_direction_checkbox" label="自然な配置を使用する" tool_tip="デフォルトでは、スケルトンの関節の回転は不自然です。これにより、ポーズが複雑になります。チェックすると、関節がより自然に回転します。"/>
 						<check_box name="stop_posing_on_close_checkbox" label="閉じたらポーズを止める" tool_tip="ポーズを止めないことは、多くの作業を行っていて、誤ってポーズを失いたくない場合に役に立ちます。"/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="編集時にベース回転をリセット" tool_tip="回転を初めて編集するときは、ゼロにリセットします。これにより、作業でポーズを保存できます。（差分ではなく、読み込み／保存を参照）ゼロにエクスポートした各ジョイントの横に緑色のチェックマークが表示されます。"/>
 						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む**" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。"/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="上書きを確認" tool_tip="ポーズを保存するときに、ファイルがすでに存在する場合は、上書きすることを確認するために、もう一度保存ボタンをクリックする必要があります。"/>
+						<check_box name="natural_direction_checkbox" label="自然な配置を使用する" tool_tip="デフォルトでは、スケルトンの関節の回転は不自然です。これにより、ポーズが複雑になります。チェックすると、関節がより自然に回転します。"/>
+						<check_box name="show_joint_markers_checkbox" label="ジョイント部にマーカーを表示" tool_tip="視覚的なポージングにジョイント部の選択を支援するための小さなインジケーターを表示します。"/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="視覚マニピュレータのオン／オフを切り替えます。"/>
