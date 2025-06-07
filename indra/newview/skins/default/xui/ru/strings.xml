@@ -6873,5 +6873,10 @@ ID объекта: [INSPECTING_KEY]
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] элементов</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">команда поддержки оператора вашей сетки</string>
 	<string name="Unlimited">Неограниченный</string>
+
 	<string name="ListEmpty">Список пуст</string>
+	<string name="NoValidUUIDs">В импортированном файле не найдено действительных UUID.</string>
+	<string name="ImportListTooLarge">Слишком много записей. CSV-файл содержит [COUNT] записей, а доступно [MAX] слотов.</string>
+	<string name="ImportSuccessful">Успешно обработано [COUNT] записей.</string>
+
 </strings>

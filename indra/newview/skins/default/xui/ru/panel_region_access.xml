@@ -11,6 +11,7 @@
 			<button label="Добавить..." name="add_estate_manager_btn"/>
 			<button label="Удалить..." name="remove_estate_manager_btn"/>
 			<button label="Экспорт..." name="export_estate_manager_btn"/>
+			<button label="Импорт..." name="import_estate_manager_btn" tool_tip="Импортируйте CSV-файл, содержащий только действительные UUID - по одному на строку, без дополнительных символов или форматирования."/>
 		</panel>
 		<panel label="Разрешенные" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
@@ -26,6 +27,7 @@
 			<button label="Добавить..." name="add_allowed_avatar_btn"/>
 			<button label="Удалить..." name="remove_allowed_avatar_btn"/>
 			<button label="Экспорт..." name="export_allowed_list_btn"/>
+			<button label="Импорт..." name="import_allowed_list_btn" tool_tip="Импортируйте CSV-файл, содержащий только действительные UUID - по одному на строку, без дополнительных символов или форматирования."/>
 		</panel>
 		<panel label="Допущенные Группы" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
@@ -41,6 +43,7 @@
 			<button label="Добавить..." name="add_allowed_group_btn"/>
 			<button label="Удалить..." name="remove_allowed_group_btn"/>
 			<button label="Экспорт..." name="export_allowed_group_btn"/>
+			<button label="Импорт..." name="import_allowed_group_btn" tool_tip="Импортируйте CSV-файл, содержащий только действительные UUID - по одному на строку, без дополнительных символов или форматирования."/>
 		</panel>
 		<panel label="Заблокированы" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
@@ -59,6 +62,7 @@
 			<button label="Добавить..." name="add_banned_avatar_btn"/>
 			<button label="Удалить..." name="remove_banned_avatar_btn"/>
 			<button label="Экспорт..." name="export_banned_avatar_btn"/>
+			<button label="Импорт..." name="import_banned_avatar_btn" tool_tip="Импортируйте CSV-файл, содержащий только действительные UUID - по одному на строку, без дополнительных символов или форматирования."/>
 		</panel>
 	</tab_container>
 </panel>
