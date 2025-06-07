@@ -36,8 +36,8 @@
 			<menu_button name="image_action_btn" tool_tip="執行個人資料圖片操作" />
 		</layout_panel>
 		<layout_panel name="label_stack">
-			<icon tool_tip="朋友可以看到我的線上狀態" name="can_see_online" />
-			<icon tool_tip="朋友無法看到我的線上狀態" name="cant_see_online" />
+			<icon tool_tip="朋友可以看到我的在線狀態" name="can_see_online" />
+			<icon tool_tip="朋友無法看到我的在線狀態" name="cant_see_online" />
 			<icon tool_tip="朋友可以在世界地圖上找到我" name="can_see_on_map" />
 			<icon tool_tip="朋友無法在世界地圖上找到我" name="cant_see_on_map" />
 			<icon tool_tip="朋友可以編輯我的物件" name="can_edit_objects" />
@@ -57,6 +57,7 @@
 		</layout_panel>
 	</layout_stack>
 	<text name="About:" value="關於我:" />
+	<button name="btn_preview" tool_tip="切換預覽你個人檔案的「關於我」部分"/>
 	<text name="Groups:" value="群組:" />
 	<button name="group_invite" tool_tip="邀請加入群組" />
 	<text name="Give item:" value="分享:" />

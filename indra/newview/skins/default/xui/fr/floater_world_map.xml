@@ -32,6 +32,8 @@
 				</combo_box>
 				<search_editor label="Nom de la région" name="location" tool_tip="Saisissez le nom d'une région"/>
 				<button label="Chercher" name="DoSearch" tool_tip="Rechercher une région"/>
+			</panel>
+			<panel name="layout_panel_7">
 				<text name="events_label" width="90">Emplacement :</text>
 				<spinner left_pad="4" name="teleport_coordinate_x" width="44"/>
 				<spinner left_pad="4" name="teleport_coordinate_y"	width="44"/>

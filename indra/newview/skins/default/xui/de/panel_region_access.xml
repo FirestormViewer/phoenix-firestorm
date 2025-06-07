@@ -10,6 +10,8 @@
 			</name_list>
 			<button label="Hinzufügen..." name="add_estate_manager_btn"/>
 			<button label="Entfernen..." name="remove_estate_manager_btn"/>
+			<button label="Exportieren..." name="export_estate_manager_btn"/>
+			<button label="Importieren..." name="import_estate_manager_btn" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
 		</panel>
 		<panel label="Zulässig" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
@@ -24,6 +26,8 @@
 			</name_list>
 			<button label="Hinzufügen..." name="add_allowed_avatar_btn"/>
 			<button label="Entfernen..." name="remove_allowed_avatar_btn"/>
+			<button label="Exportieren..." name="export_allowed_list_btn"/>
+			<button label="Importieren..." name="import_allowed_list_btn" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
 		</panel>
 		<panel label="Zulässige Gruppen" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
@@ -38,6 +42,8 @@
 			</name_list>
 			<button label="Hinzufügen..." name="add_allowed_group_btn"/>
 			<button label="Entfernen..." name="remove_allowed_group_btn"/>
+			<button label="Exportieren..." name="export_allowed_group_btn"/>
+			<button label="Importieren..." name="import_allowed_group_btn" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
 		</panel>
 		<panel label="Verbannt" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
@@ -55,6 +61,8 @@
 			</name_list>
 			<button label="Hinzufügen..." name="add_banned_avatar_btn"/>
 			<button label="Entfernen..." name="remove_banned_avatar_btn"/>
+			<button label="Exportieren..." name="export_banned_avatar_btn"/>
+			<button label="Importieren..." name="import_banned_avatar_btn" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
 		</panel>
 	</tab_container>
 </panel>

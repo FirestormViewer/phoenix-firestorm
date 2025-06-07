@@ -10,10 +10,10 @@
   single_instance="true"
   reuse_instance="true"
   title="Share to Primfeed"
-  height="600"
+  height="638"
   width="272">
   <panel
-   height="590"
+   height="638"
    width="272"
    visible="true"
    name="background"
@@ -27,7 +27,7 @@
      tab_height="21"
      tab_position="top"
      top="7"
-     height="570"
+     height="605"
      follows="all"
      halign="center">
      <panel

@@ -10,10 +10,12 @@
 			</name_list>
 			<button label="新增…" name="add_estate_manager_btn" />
 			<button label="移除…" name="remove_estate_manager_btn" />
+			<button label="匯出…" name="export_estate_manager_btn" />
+			<button label="匯入…" label_selected="匯入" name="import_estate_manager_btn" tool_tip="只匯入包含有效UUID的CSV檔案——每行一個，無多餘字元或格式"/>
 		</panel>
 		<panel label="獲準" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
-				<filter_editor label="搜尋獲準的使用者" name="allowed_search_input" />
+				<filter_editor label="搜尋獲準的居民" name="allowed_search_input" />
 				<button label="複製" name="copy_allowed_list_btn" />
 			</panel>
 			<text name="allow_resident_label">
@@ -24,6 +26,8 @@
 			</name_list>
 			<button label="新增…" name="add_allowed_avatar_btn" />
 			<button label="移除…" name="remove_allowed_avatar_btn" />
+			<button label="匯出…" name="export_allowed_list_btn" />
+			<button label="匯入…" label_selected="匯入" name="import_allowed_list_btn" tool_tip="只匯入包含有效UUID的CSV檔案——每行一個，無多餘字元或格式"/>
 		</panel>
 		<panel label="準許的群組" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
@@ -38,10 +42,12 @@
 			</name_list>
 			<button label="新增…" name="add_allowed_group_btn" />
 			<button label="移除…" name="remove_allowed_group_btn" />
+			<button label="匯出…" name="export_allowed_group_btn" />
+			<button label="匯入…" label_selected="匯入" name="import_allowed_group_btn" tool_tip="只匯入包含有效UUID的CSV檔案——每行一個，無多餘字元或格式"/>
 		</panel>
 		<panel label="禁入的" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
-				<filter_editor label="搜尋禁入的使用者" name="banned_search_input" />
+				<filter_editor label="搜尋禁入的居民" name="banned_search_input" />
 				<button label="複製" name="copy_banned_list_btn" />
 			</panel>
 			<text name="ban_resident_label">
@@ -55,6 +61,8 @@
 			</name_list>
 			<button label="新增…" name="add_banned_avatar_btn" />
 			<button label="移除…" name="remove_banned_avatar_btn" />
+			<button label="匯出…" name="export_banned_avatar_btn" />
+			<button label="匯入…" label_selected="匯入" name="import_banned_avatar_btn" tool_tip="只匯入包含有效UUID的CSV檔案——每行一個，無多餘字元或格式"/>
 		</panel>
 	</tab_container>
 </panel>

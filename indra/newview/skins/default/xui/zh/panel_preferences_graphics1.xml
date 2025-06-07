@@ -213,6 +213,7 @@
 				<combo_box.item label="少量" name="32" />
 				<combo_box.item label="中等" name="64" />
 				<combo_box.item label="很多" name="128" />
+				<combo_box.item label="超多" name="256" />
 			</combo_box>
 			<text name="TonemapTypeText">
 				色調映射器：

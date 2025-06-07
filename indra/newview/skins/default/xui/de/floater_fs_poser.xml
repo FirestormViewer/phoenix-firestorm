@@ -252,11 +252,12 @@
 							Steuerkugel-Sensitivität:
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Stellt die Sensitivität der Steuerkugel ein"/>
-						<check_box name="natural_direction_checkbox" label="Natürl. Ausrichtung verw." tool_tip="Das Skelett besitzt standardmäßig unnatürliche Gelenk-Rotationen, was das Posieren erschwert. Falls aktiviert, werden die Gelenke in eine natürlichere Rotation versetzt."/>
 						<check_box name="stop_posing_on_close_checkbox" label="Beim Schließen stoppen" tool_tip="Die Pose beim Schließen nicht zu stoppen kann hilfreich sein, um die bisher getätigte Arbeit nicht zu verlieren."/>
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Basis-Rot. beim Edit. zurück." tool_tip="Wenn das erste Mal eine Pose bearbeitet wird, diese auf Null zurücksetzen. Hierdurch eine eine komplette Pose und nicht nur die Differenz gespeichert werden. Ein grüner Haken erscheint neben jedem Gelenk, dass auf Null-basierend exportiert wurde."/>
 						<check_box name="also_save_bvh_checkbox" label="BHV beim Speichern erst." tool_tip="Wenn die Pose gespeichert wird, wird ebenfalls eine BHV-Datei erstellt, die via Bauen > Hochladen > Animation hochgeladen und zum Posieren vom eigenen Avatar oder anderen Avataren verwendet werden kann. Hierzu muss die Basis der Gelenke auf Null gesetzt werden, da BHV nicht von anderen Posen abgeleitet wird."/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Überschreiben bestätigen" tool_tip="Wenn die Pose gespeichert wird und die Datei bereits existiert, muss der Speichern-Button erneut geklickt werden um zu bestätigen, dass Sie die Datei überschreiben möchten."/>
+						<check_box name="natural_direction_checkbox" label="Natürl. Ausrichtung verw." tool_tip="Das Skelett besitzt standardmäßig unnatürliche Gelenk-Rotationen, was das Posieren erschwert. Falls aktiviert, werden die Gelenke in eine natürlichere Rotation versetzt."/>
+						<check_box name="show_joint_markers_checkbox" label="Gelenk-Marker anzeigen" tool_tip="Zeigt Indikatoren an, um das Auswählen von Gelenken beim Posieren zu vereinfachen."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Visuelle Manipulatoren an-/ausschalten" />

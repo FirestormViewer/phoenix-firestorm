@@ -432,7 +432,8 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
     }
     if (!bFailed && (op->mReqOffset || op->mReqLength))
     {
-        if (op->mReqOffset != op->mReplyOffset || (op->mReqLength && op->mReqLength < op->mReplyLength))
+        // We should only check the offset and length if we are handling a partial content request.
+        if (op->mStatus == HttpStatus(HTTP_PARTIAL_CONTENT) && (op->mReqOffset != op->mReplyOffset || (op->mReqLength && op->mReqLength < op->mReplyLength)))
         {
             std::stringstream strm;
             strm << "HTTP pipelining possibly out of sync, request wanted: " << op->mReqOffset << "-";

@@ -262,6 +262,8 @@ public:
 
     // <FS:Ansariel> Mask texture if desired
     void setIsMasked(bool masked) { mIsMasked = masked; }
+    // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
+    void setIsPreviewDisabled(bool is_preview_disabled) { mIsPreviewDisabled = is_preview_disabled; }
 
     void setLabelColor(const LLColor4& c)           { mTextEnabledColor = c; updateLabelColor();  } // <FS:Zi> Add label/caption colors
     void setDisabledLabelColor(const LLColor4& c)   { mTextDisabledColor = c; updateLabelColor(); } // <FS:Zi> Add label/caption colors
@@ -313,6 +315,8 @@ private:
 
     // <FS:Ansariel> Mask texture if desired
     bool                        mIsMasked;
+    // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
+    bool                        mIsPreviewDisabled;
 
     LLUIColor                   mTextEnabledColor;      // <FS:Zi> Add label/caption colors
     LLUIColor                   mTextDisabledColor;     // <FS:Zi> Add label/caption colors

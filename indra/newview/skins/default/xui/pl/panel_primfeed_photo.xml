@@ -15,6 +15,10 @@
 	<check_box label="Prowadnice" tool_tip="Pokaż prowadnicę kadrowania (zasadę trójpodziału) wewnątrz ramki migawki." name="show_guides" />
 	<button label="Odśwież" name="new_snapshot_btn" tool_tip="Kliknij, aby odświeżyć" />
 	<button label="Podgląd" name="big_preview_btn" tool_tip="Kliknij, aby przełączyć podgląd" />
+	<text name="store_label">
+		Ślij jako:
+	</text>
+	<combo_box name="stores_combobox" tool_tip="Jeśli masz jeden lub więcej sklepów Easy Blogger przypisanych do Primfeed, to pojawią się one tutaj." />
 	<text name="description_label">
 		Opis:
 	</text>

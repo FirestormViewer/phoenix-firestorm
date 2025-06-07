@@ -6,11 +6,11 @@
 		</layout_panel>
 		<layout_panel name="lp_friend_list">
 			<fs_scroll_list name="friend_list">
-				<fs_scroll_list.column name="icon_online_status" tool_tip="線上狀態" />
+				<fs_scroll_list.column name="icon_online_status" tool_tip="在線狀態" />
 				<fs_scroll_list.column label="使用者名稱" name="user_name" tool_tip="該好友的使用者名稱。" />
 				<fs_scroll_list.column label="顯示名" name="display_name" tool_tip="該好友的顯示名。" />
 				<fs_scroll_list.column label="姓名" name="full_name" tool_tip="該好友的姓名。" />
-				<fs_scroll_list.column name="icon_visible_online" tool_tip="該好友可以看到您是否線上上。" />
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="該好友可以看到您是否在線。" />
 				<fs_scroll_list.column name="icon_visible_map" tool_tip="該好友可以在地圖上看到您的位置。" />
 				<fs_scroll_list.column name="icon_edit_mine" tool_tip="該好友可以編輯、刪除或取得您的物件。" />
 				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="您可以在地圖上看到該好友的位置。" />

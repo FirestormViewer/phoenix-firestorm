@@ -1292,7 +1292,7 @@
 你沒有權限為你當前的群組購買土地。
 	</notification>
 	<notification label="加為朋友" name="AddFriendWithMessage">
-		朋友可以允許彼此在地圖上追蹤對方，並接收彼此的線上狀態更新訊息。
+		朋友可以允許彼此在地圖上追蹤對方，並接收彼此的在線狀態更新訊息。
 
 向 [NAME] 發出交友邀請？
 		<form name="form">
@@ -1926,7 +1926,7 @@ URL:[UNTRUSTED_URL]
 	<notification name="AutorespondModeSet">
 		自動回覆已開啟。
 發件人發送的私聊訊息現在將收到設定的自動回覆。
-		<usetemplate ignoretext="當線上狀態設定為自動回覆時。" name="okignore" yestext="確定"/>
+		<usetemplate ignoretext="當在線狀態設定為自動回覆時。" name="okignore" yestext="確定"/>
 	</notification>
 	<notification name="AutorespondNonFriendsModeSet">
 		對非好友自動回覆已開啟。
@@ -1940,7 +1940,7 @@ URL:[UNTRUSTED_URL]
 	</notification>
 	<notification name="RejectTeleportOffersModeWarning">
 		您目前無法請求傳送，因為「拒絕傳送邀請和請求」功能已啟用。
-如需，您可以在「通訊」&gt;「線上狀態」菜單下關閉此功能。
+如需，您可以在「通訊」&gt;「在線狀態」菜單下關閉此功能。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="RejectFriendshipRequestsModeSet">
@@ -3449,7 +3449,7 @@ URL：[AUDIOURL]
 
 [MESSAGE]
 
-（根據預設設定，你們將可看到彼此的線上狀態。）
+（根據預設設定，你們將可看到彼此的在線狀態。）
 		<form name="form">
 			<button name="Accept" text="接受"/>
 			<button name="Decline" text="謝絕"/>
@@ -3461,7 +3461,7 @@ URL：[AUDIOURL]
 	<notification name="OfferFriendshipNoMessage">
 		[NAME_SLURL] 想成為你的朋友。
 
-（根據預設設定，你們將可看到彼此的線上狀態。）
+（根據預設設定，你們將可看到彼此的在線狀態。）
 		<form name="form">
 			<button name="Accept" text="接受"/>
 			<button name="Decline" text="謝絕"/>
@@ -5501,8 +5501,8 @@ Flickr 驗證失敗。請重試並檢查輸入的程式碼。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
-		根據伺服器負載情況，切換線上狀態的可見性可能需要一段時間才能生效。
-		<usetemplate ignoretext="提醒我切換線上狀態的可見性可能需要一些時間。" name="okignore" yestext="確定"/>
+		根據伺服器負載情況，切換在線狀態的可見性可能需要一段時間才能生效。
+		<usetemplate ignoretext="提醒我切換在線狀態的可見性可能需要一些時間。" name="okignore" yestext="確定"/>
 	</notification>
 	<notification name="RenderVolumeLODFactorWarning">
 		警告：細節層次等級 (LOD) 被設定為過高的值。
@@ -5697,7 +5697,7 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="WaterExclusionSurfacesWarning">
-		選中“隱藏水”複選框將覆蓋所選的紋理、凹凸和光澤圖選項。
+		選中「隱藏水」複選框將覆蓋所選的紋理、凹凸和光澤圖選項。
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續" />
 	</notification>
 	<notification name="EnableAutoFPSWarning">

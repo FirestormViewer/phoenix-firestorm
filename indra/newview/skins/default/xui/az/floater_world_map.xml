@@ -59,19 +59,16 @@
 		</combo_box>
 		<search_editor label="Regionun adı" name="location" tool_tip="Regionun adını daxil edin"/>
 		<button label="Axtarış" name="DoSearch" tool_tip="Regioni axtarın"/>
-		<button label="Təmizlə" name="Clear" tool_tip="İzləməni təmizləyin və xəritəni standart görüntüyə qaytarın"/>
+	</panel>
+	<panel name="layout_panel_7">
 		<text name="events_label">
 			Məkan:
 		</text>
 		<button label="Teleport" name="Teleport" tool_tip="Seçilmiş yere teleportasiya edin"/>
 		<button label="Kopyala" name="copy_slurl" tool_tip="İnternetdə istifadə üçün SL URL ünvanı ilə cari yerin nümunəsini kopyalayın."/>
+		<button label="Təmizlə" name="Clear" tool_tip="İzləməni təmizləyin və xəritəni standart görüntüyə qaytarın"/>
 		<button label="Məkanı göstərin" name="Show Destination" tool_tip="Xəritəni seçilmiş yerə mərkəzləşdirin"/>
 		<button label="Regionu izləyin" name="track_region" tool_tip="Regioni izləməyə əlavə edin"/>
-	</panel>
-	<panel name="layout_panel_5">
-		<text name="zoom_label">
-			Yaxınlaşdırma
-		</text>
 	</panel>
 </layout_panel>
 </layout_stack> 

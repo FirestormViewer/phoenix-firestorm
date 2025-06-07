@@ -5,6 +5,7 @@
 	</panel.string>
 	<layout_stack name="main_pick_stack">
 		<layout_panel name="main_pick_lp">
+			<button name="btn_preview" tool_tip="Przełącz podgląd opisu miejsca" />
 			<line_editor name="pick_location">
 				Ładowanie...
 			</line_editor>

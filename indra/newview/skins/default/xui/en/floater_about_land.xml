@@ -2152,7 +2152,7 @@ Only large parcels can be listed in search.
             name="Allowed_layout_panel"
             follows="top|left"
             left="10"
-            height="170"
+            height="185"
              top_pad="8"
             width="240">
             <text
@@ -2181,27 +2181,50 @@ Only large parcels can be listed in search.
              width="230" />
             <button
              follows="bottom"
-             height="23"
+             height="30"
              label="Add"
              layout="topleft"
              left="0"
              name="add_allowed"
-             width="100" />
+             width="70" />
             <button
              follows="bottom"
-             height="23"
+             height="30"
              label="Remove"
              label_selected="Remove"
              layout="topleft"
-             left_pad="10"
+             left_pad="5"
              name="remove_allowed"
+             width="70" />
+            <button
+             enabled="false"
+             follows="bottom"
+             height="15"
+             label="Export"
+             label_selected="Export"
+             layout="topleft"
+             left_pad="5"
+             top_pad="-30"
+             name="export_allowed"
              right="-10"
-             width="100" />
+             width="80" />
+            <button
+             enabled="false"
+             tool_tip="Import a CSV file containing only valid UUIDs - one per line, no extra characters or formatting."
+             follows="bottom"
+             height="15"
+             label="Import"
+             label_selected="Import"
+             layout="topleft"
+             top_pad="0"
+             name="import_allowed"
+             right="-10"
+             width="80" />
              </panel>
             <panel
             name="Banned_layout_panel"
             follows="top|right"
-            height="170"
+            height="185"
             width="240"
             left_pad="2">
             <text
@@ -2240,23 +2263,46 @@ Only large parcels can be listed in search.
             </name_list>
             <button
              follows="bottom"
-             height="23"
+             height="30"
              label="Add"
              layout="topleft"
              left="0"
              name="add_banned"
-             width="100" />
+             width="70" />
             <button
              enabled="false"
              follows="bottom"
-             height="23"
+             height="30"
              label="Remove"
              label_selected="Remove"
              layout="topleft"
-             left_pad="10"
+             left_pad="5"
              name="remove_banned"
+             width="70" />
+            <button
+             enabled="false"
+             follows="bottom"
+             height="15"
+             label="Export"
+             label_selected="Export"
+             layout="topleft"
+             left_pad="5"
+             top_pad="-30"
+             name="export_banned"
              right="-10"
-             width="100" />
+             width="80" />
+            <button
+             enabled="false"
+             tool_tip="Import a CSV file containing only valid UUIDs - one per line, no extra characters or formatting."
+             follows="bottom"
+             height="15"
+             label="Import"
+             label_selected="Import"
+             layout="topleft"
+             top_pad="0"
+             name="import_banned"
+             right="-10"
+             width="80" />
              </panel>
         </panel>
        <panel

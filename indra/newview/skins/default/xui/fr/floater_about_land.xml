@@ -463,6 +463,7 @@ musique :
 				<name_list name="AccessList" tool_tip="([LISTED] dans la liste, [MAX] max.)"/>
 				<button label="Ajouter" name="add_allowed"/>
 				<button label="Supprimer" label_selected="Supprimer" name="remove_allowed"/>
+				<button label="Exporter" label_selected="Exporter" name="export_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Bannir" name="BanCheck">
@@ -474,6 +475,7 @@ musique :
 				</name_list>
 				<button label="Ajouter" name="add_banned"/>
 				<button label="Supprimer" label_selected="Supprimer" name="remove_banned"/>
+				<button label="Exporter" label_selected="Exporter" name="export_banned"/>
 			</panel>
 		</panel>
 		<panel label="Expériences" name="land_experiences_panel"/>
