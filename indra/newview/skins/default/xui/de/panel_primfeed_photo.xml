@@ -15,6 +15,10 @@
 	<check_box label="Guide anzeigen" name="show_guides" tool_tip="Zeigt Aufnahme-Guide (Drittel-Regel) innerhalb des Aufnahmebereichs an."/>
 	<button label="Aktualisieren" name="new_snapshot_btn" tool_tip="Zum Aktualisieren klicken"/>
 	<button label="Vorschau" name="big_preview_btn" tool_tip="Klicken, um Vorschau ein-/auszuschalten"/>
+	<text name="store_label">
+		Teilen als:
+	</text>
+	<combo_box name="stores_combobox" tool_tip="Falls Ihnen einen oder mehrere Blogger-Bestände auf Primfeed zugewiesen sind, erscheinen diese hier."/>
 	<text name="description_label">
 		Beschreibung:
 	</text>
