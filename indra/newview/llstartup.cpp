@@ -1647,6 +1647,16 @@ bool idle_startup()
         //           and "[CURRENT_GRID] Help" menu entries
         update_grid_help();
 
+        // <FS:TJ> Second Life MOTD shouldn't be displayed when logging into OpenSim
+        #ifdef OPENSIM
+        if (LLGridManager::getInstance()->isInOpenSim())
+        {
+            std::string msg = LLTrans::getString("LoginInitializingBrowser");
+            set_startup_status(0.03f, msg.c_str(), "");
+        }
+        #endif
+        // </FS:TJ>
+
         // <FS:Techwolf Lupindo> fsdata agents support
         //LLStartUp::setStartupState( STATE_LOGIN_AUTH_INIT );
         LLStartUp::setStartupState(STATE_AGENTS_WAIT);
