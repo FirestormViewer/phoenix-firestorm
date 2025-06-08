@@ -60,6 +60,12 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
         case 45:
             type = LLAssetType::AT_PERSON;
             break;
+        case 60:
+            type = LLAssetType::AT_AVATAR_ATTACHED_SOUNDS;
+            break;
+        case 61:
+            type = LLAssetType::AT_AVATAR_REZZED_SOUNDS;
+            break;
         default:
             type = LLAssetType::AT_NONE;
     }

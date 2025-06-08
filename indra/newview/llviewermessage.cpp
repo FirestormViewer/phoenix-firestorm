@@ -4714,6 +4714,18 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
     {
         return;
     }
+
+    if (object_id == owner_id)
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+        {
+            return;
+        }
+    }
+    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
+    {
+        return;
+    }
     // </FS>
 
     // NaCl - Antispam Registry
@@ -4821,6 +4833,17 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 
     // <FS> Asset blacklist
     if (FSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+    {
+        return;
+    }
+    if (object_id == owner_id)
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+        {
+            return;
+        }
+    }
+    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
     {
         return;
     }
