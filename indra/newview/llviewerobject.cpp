@@ -6601,7 +6601,13 @@ void LLViewerObject::setAttachedSound(const LLUUID &audio_uuid, const LLUUID& ow
     {
         return;
     }
+    if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+    {
+        return;
+    }
     // </FS:Ansariel>
+
+
 
     if (flags & LL_SOUND_FLAG_LOOP
         && mAudioSourcep && mAudioSourcep->isLoop() && mAudioSourcep->getCurrentData()

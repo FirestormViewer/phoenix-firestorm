@@ -32,6 +32,8 @@ private:
     void handleStopLocally();
     void handleSelection();
     void blacklistSound();
+    void blacklistAvatarAttachedSounds();
+    void blacklistAvatarRezzedSounds();
 
     LLScrollListCtrl*   mHistoryScroller;
     LLCheckBoxCtrl*     mCollisionSounds;
@@ -46,8 +48,10 @@ private:
 
     typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
     blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
-
+    
     void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarAttachedSoundsNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarRezzedSoundsNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
 };
 
 #endif

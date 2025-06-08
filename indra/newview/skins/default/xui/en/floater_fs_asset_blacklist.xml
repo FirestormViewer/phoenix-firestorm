@@ -27,6 +27,12 @@
 	<floater.string name="asset_resident">
 		Resident
 	</floater.string>
+    <floater.string name="asset_avatar_attached_sounds">
+        Avatar Attached Sounds
+    </floater.string>
+    <floater.string name="asset_avatar_rezzed_sounds">
+        Avatar Rezzed Sounds
+    </floater.string>
 	<floater.string name="asset_unknown">
 		Unknown
 	</floater.string>

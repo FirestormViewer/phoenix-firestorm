@@ -52,4 +52,8 @@
 
 	<button bottom_delta="0" follows="left|bottom" height="20" label="Stop" name="stop_btn" right="-10" width="95" enabled="false"/>
 	<button bottom_delta="0" follows="left|bottom" height="20" label="Blacklist" name="bl_btn" right="-110" width="95" enabled="false"/>
+
+
+    <button bottom_delta="25" follows="left|bottom" height="20" label="Block attached sounds by avatar" name="block_avatar_attached_sounds_btn" left="10" width="195" enabled="true"/>
+    <button bottom_delta="0" follows="left|bottom" height="20" label="Block rezzed sounds by avatar" name="block_avatar_rezzed_sounds_btn" left_delta="200" width="195" enabled="true"/>
 </floater>

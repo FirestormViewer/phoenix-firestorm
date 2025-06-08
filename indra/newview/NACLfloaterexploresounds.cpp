@@ -75,6 +75,8 @@ bool NACLFloaterExploreSounds::postBuild()
     getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStop, this));
     getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
     getChild<LLButton>("stop_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStopLocally, this));
+    getChild<LLButton>("block_avatar_attached_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarAttachedSounds, this));
+    getChild<LLButton>("block_avatar_rezzed_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarRezzedSounds, this));
 
     mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
     mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
@@ -500,6 +502,7 @@ void NACLFloaterExploreSounds::blacklistSound()
     }
 }
 
+
 void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name)
 {
     blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
@@ -512,4 +515,127 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
         mBlacklistAvatarNameCacheConnections.erase(it);
     }
     FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND);
+}
+
+
+
+
+// add avatar attached sounds to blacklist
+void NACLFloaterExploreSounds::blacklistAvatarAttachedSounds()
+{
+    std::vector<LLScrollListItem*>           selection      = mHistoryScroller->getAllSelected();
+    std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
+    std::vector<LLScrollListItem*>::iterator selection_end  = selection.end();
+
+    for (; selection_iter != selection_end; ++selection_iter)
+    {
+        LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
+        if (item.mID.isNull())
+        {
+            continue;
+        }
+
+        std::string     region_name;
+        LLViewerRegion* cur_region = gAgent.getRegion();
+        if (cur_region)
+        {
+            region_name = cur_region->getName();
+        }
+
+        blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(item.mOwnerID);
+        if (it != mBlacklistAvatarNameCacheConnections.end())
+        {
+            if (it->second.connected())
+            {
+                it->second.disconnect();
+            }
+            mBlacklistAvatarNameCacheConnections.erase(it);
+        }
+        LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(
+            item.mOwnerID,
+            boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarAttachedSoundsNameCacheCallback, this, _1, _2, item.mOwnerID, region_name));
+        mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
+    }
+}
+
+void NACLFloaterExploreSounds::onBlacklistAvatarAttachedSoundsNameCacheCallback(const LLUUID&       av_id,
+                                                                  const LLAvatarName& av_name,
+                                                                  const LLUUID&       owner_id,
+                                                                  const std::string&  region_name)
+{
+    blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
+    if (it != mBlacklistAvatarNameCacheConnections.end())
+    {
+        if (it->second.connected())
+        {
+            it->second.disconnect();
+        }
+        mBlacklistAvatarNameCacheConnections.erase(it);
+    }
+    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(owner_id, av_name.getCompleteName(), region_name, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS);
+}
+
+
+
+// add avatar rezzed sounds to blacklist
+void NACLFloaterExploreSounds::blacklistAvatarRezzedSounds()
+{
+    std::vector<LLScrollListItem*>           selection      = mHistoryScroller->getAllSelected();
+    std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
+    std::vector<LLScrollListItem*>::iterator selection_end  = selection.end();
+
+    for (; selection_iter != selection_end; ++selection_iter)
+    {
+        LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
+        if (item.mID.isNull())
+        {
+            continue;
+        }
+
+        std::string     region_name;
+        LLViewerRegion* cur_region = gAgent.getRegion();
+        if (cur_region)
+        {
+            region_name = cur_region->getName();
+        }
+
+        blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(item.mOwnerID);
+        if (it != mBlacklistAvatarNameCacheConnections.end())
+        {
+            if (it->second.connected())
+            {
+                it->second.disconnect();
+            }
+            mBlacklistAvatarNameCacheConnections.erase(it);
+        }
+        LLAvatarNameCache::callback_connection_t cb =
+            LLAvatarNameCache::get(item.mOwnerID,
+                                   boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarRezzedSoundsNameCacheCallback,
+                                               this,
+                                               _1,
+                                               _2,
+                                               item.mOwnerID,
+                                               region_name));
+        mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
+    }
+}
+
+void NACLFloaterExploreSounds::onBlacklistAvatarRezzedSoundsNameCacheCallback(const LLUUID&       av_id,
+                                                                                const LLAvatarName& av_name,
+                                                                                const LLUUID&       owner_id,
+                                                                                const std::string&  region_name)
+{
+    blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
+    if (it != mBlacklistAvatarNameCacheConnections.end())
+    {
+        if (it->second.connected())
+        {
+            it->second.disconnect();
+        }
+        mBlacklistAvatarNameCacheConnections.erase(it);
+    }
+    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(owner_id,
+                                                           av_name.getCompleteName(),
+                                                           region_name,
+                                                           LLAssetType::AT_AVATAR_REZZED_SOUNDS);
 }
