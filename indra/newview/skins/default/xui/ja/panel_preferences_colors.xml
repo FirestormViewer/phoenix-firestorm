@@ -208,7 +208,7 @@
 			<text name="preferences_search_bg_label">
 				背景：
 			</text>
-			<color_swatch name="preferences_search_color" tool_tip="初期設定の検索結果のハイライトの背景色を選択します。"/>
+			<color_swatch name="preferences_search_bg_color" tool_tip="初期設定の検索結果のハイライトの背景色を選択します。"/>
 			<text name="preferences_search_font_label">
 				フォント：
 			</text>

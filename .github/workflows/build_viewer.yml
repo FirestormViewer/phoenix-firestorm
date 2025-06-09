@@ -313,7 +313,8 @@ jobs:
           FS_PF_UA: ${{ secrets.FS_PF_UA }}
         run: |
           if [ -n "${FS_PF_UA}" ]; then
-            echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} -DFS_PS_USER_AGENT=\"${FS_PF_UA}\"" >> $GITHUB_ENV
+            echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} -DFS_PF_USER_AGENT=\"${FS_PF_UA}\"" >> $GITHUB_ENV
+            echo "Building with custom user-agent string."
           else
             echo "No custom user-agent string provided."
           fi
@@ -378,13 +379,13 @@ jobs:
       - name: Install Microsoft.Trusted.Signing.Client
         if: runner.os == 'Windows'
         run: |
-          .\nuget.exe install Microsoft.Trusted.Signing.Client -Version 1.0.53 -OutputDirectory .
+          .\nuget.exe install Microsoft.Trusted.Signing.Client -Version 1.0.86 -OutputDirectory .
         shell: pwsh
 
       - name: Locate Azure.CodeSigning.Dlib.dll
         if: runner.os == 'Windows'
         run: |
-          $dllPath = (Get-ChildItem ".\Microsoft.Trusted.Signing.Client.1.0.53\bin\x64\Azure.CodeSigning.Dlib.dll" -Recurse -File | Select-Object -First 1).FullName
+          $dllPath = (Get-ChildItem ".\Microsoft.Trusted.Signing.Client.1.0.86\bin\x64\Azure.CodeSigning.Dlib.dll" -Recurse -File | Select-Object -First 1).FullName
           if (-not $dllPath) {
             Write-Error "Azure.CodeSigning.Dlib.dll not found."
             exit 1

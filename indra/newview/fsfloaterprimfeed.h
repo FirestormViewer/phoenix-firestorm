@@ -34,6 +34,7 @@
 
 class LLIconCtrl;
 class LLCheckBoxCtrl;
+class LLComboBox;
 class LLSnapshotLivePreview;
 class LLFloaterBigPreview;
 
@@ -52,6 +53,7 @@ public:
     bool postBuild() override;
     S32 notify(const LLSD& info);
     void draw() override;
+    void loadPrimfeedInfo(const LLSD& data);
 
     LLSnapshotLivePreview* getPreviewView();
     void onVisibilityChange(bool new_visibility);
@@ -80,28 +82,30 @@ private:
 
     LLHandle<LLView> mPreviewHandle;
 
-    LLUICtrl * mResolutionComboBox;
-    LLUICtrl * mFilterComboBox;
-    LLUICtrl * mRefreshBtn;
-    LLUICtrl * mWorkingLabel;
-    LLUICtrl * mThumbnailPlaceholder;
-    LLUICtrl * mDescriptionTextBox;
-    LLUICtrl * mLocationCheckbox;
+    LLUICtrl* mResolutionComboBox;
+    LLUICtrl* mFilterComboBox;
+    LLUICtrl* mRefreshBtn;
+    LLUICtrl* mWorkingLabel;
+    LLUICtrl* mThumbnailPlaceholder;
+    LLUICtrl* mDescriptionTextBox;
+    LLUICtrl* mLocationCheckbox;
 
-    LLUICtrl * mCommercialCheckbox;
-    LLUICtrl * mPublicGalleryCheckbox;
-    LLUICtrl * mRatingComboBox;
-    LLUICtrl * mPostButton;
-    LLUICtrl * mCancelButton;
-    LLButton * mBtnPreview;
+    LLUICtrl*   mCommercialCheckbox;
+    LLUICtrl*   mPublicGalleryCheckbox;
+    LLUICtrl*   mRatingComboBox;
+    LLUICtrl*   mPostButton;
+    LLUICtrl*   mCancelButton;
+    LLButton*   mBtnPreview;
+    LLComboBox* mStoresComboBox;
 
-    LLFloaterBigPreview * mBigPreviewFloater;
+    LLFloaterBigPreview* mBigPreviewFloater;
 };
 
 class FSPrimfeedAccountPanel : public LLPanel
 {
 public:
     FSPrimfeedAccountPanel();
+    ~FSPrimfeedAccountPanel();
     bool postBuild() override;
     void draw() override;
 

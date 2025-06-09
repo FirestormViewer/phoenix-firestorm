@@ -244,11 +244,12 @@
 					<panel title="Inne" name="settings_panel">
 						<text name="trackpad_sensitivity_label">Czułość trackpada:</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Dostosowuje czułość trackballa / kółka" />
-						<check_box name="natural_direction_checkbox" label="Naturalne wyrównanie" tool_tip="Szkielet ma domyślnie nienaturalne rotacje stawów. To utrudnia pozowanie. Po zaznaczeniu stawy będą się obracać w bardziej naturalny sposób." />
 						<check_box name="stop_posing_on_close_checkbox" label="Stop pozy po zamknięciu" tool_tip="Brak zatrzymywania pozy może być pomocny, jeśli nie chcesz jej przypadkowo stracić." />
 						<check_box name="reset_base_rotation_on_edit_checkbox" label="Reset bazy rotacji na edycji" tool_tip="Gdy po raz pierwszy edytujesz obrót, zresetuj go do zera. Oznacza to, że Twoja praca może zapisać pozę (a nie różnicę, patrz ładowanie / zapisywanie). Zielony 'ptaszek' pojawia się obok każdego wyzerowanego tak, wyeksportowanego stawu." />
 						<check_box name="also_save_bvh_checkbox" label="Twórz BVH podczas zapisu**" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Potwierdź nadpisanie" tool_tip="Gdy zapisujesz pozę, a plik już istnieje, musisz kliknąć przycisk zapisu ponownie, aby potwierdzić, że na pewno chcesz ją nadpisać." />
+						<check_box name="natural_direction_checkbox" label="Naturalne wyrównanie" tool_tip="Szkielet ma domyślnie nienaturalne rotacje stawów. To utrudnia pozowanie. Po zaznaczeniu stawy będą się obracać w bardziej naturalny sposób." />
+						<check_box name="show_joint_markers_checkbox" label="Wskaźniki stawów" tool_tip="Pokaż małe wskaźniki ułatwiające wybór stawów podczas pozowania." />
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Włącz / wyłącz manipulatory wizualne." />
