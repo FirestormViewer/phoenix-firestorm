@@ -4715,16 +4715,27 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
         return;
     }
 
-    if (object_id == owner_id)
-    {
+
+    if (object_id == owner_id) {
         if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
         {
             return;
         }
     }
-    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
+    else
     {
-        return;
+        LLViewerObject* object = gObjectList.findObject(object_id);
+        if (object && object->isAttachment())
+        {
+            if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+            {
+                return;
+            }
+        }
+        else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
+        {
+            return;
+        }
     }
     // </FS>
 
@@ -4836,7 +4847,15 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
     {
         return;
     }
+    LLViewerObject* objectp = gObjectList.findObject(object_id);
     if (object_id == owner_id)
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+        {
+            return;
+        }
+    }
+    else if (objectp && objectp->isAttachment())
     {
         if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
         {
@@ -4863,7 +4882,6 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
         return;
     // </FS:ND>
 
-    LLViewerObject *objectp = gObjectList.findObject(object_id);
     if (!objectp) return;
 
     if (LLMuteList::getInstance()->isMuted(object_id)) return;

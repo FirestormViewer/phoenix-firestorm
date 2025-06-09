@@ -128,11 +128,15 @@ bool FSAssetBlacklist::removeItem(const LLUUID& id)
     {
         return false;
     }
+    
+    // Erase for each possible type
+    for (auto& [type, container] : mBlacklistTypeContainer)
+    {
+        container.erase(id);
+    }
 
+    // Supprime les métadonnées
     LLSD data = it->second;
-    LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
-
-    mBlacklistTypeContainer[type].erase(id);
     mBlacklistData.erase(it);
 
     return data["asset_permanent"].asBoolean();
