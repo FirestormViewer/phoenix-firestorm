@@ -131,10 +131,13 @@ public:
         AT_GLTF = 58,   // gltf json document
         AT_GLTF_BIN = 59, // gltf binary data
 
+        // <FS> Asset types for sounds muting in Sounds Explorer window
         AT_AVATAR_ATTACHED_SOUNDS = 60, // Black list avatar attached sounds
-        AT_AVATAR_REZZED_SOUNDS = 61, // Black list avatar rezzed sounds
+        AT_AVATAR_REZZED_SOUNDS   = 61, // Black list avatar rezzed sounds
+        AT_AVATAR_GESTURE_SOUNDS  = 62, // Black list avatar gesture sounds
 
-        AT_COUNT = 62,
+        AT_COUNT = 63,
+        // </FS>
 
             // +*********************************************************+
             // |  TO ADD AN ELEMENT TO THIS ENUM:                        |

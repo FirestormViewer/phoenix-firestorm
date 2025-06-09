@@ -4715,9 +4715,9 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
         return;
     }
 
-
+    // Gesture sound
     if (object_id == owner_id) {
-        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_GESTURE_SOUNDS))
         {
             return;
         }
@@ -4725,6 +4725,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
     else
     {
         LLViewerObject* object = gObjectList.findObject(object_id);
+        // Attachment sound
         if (object && object->isAttachment())
         {
             if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
@@ -4732,6 +4733,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
                 return;
             }
         }
+        // Rezzed object sound
         else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
         {
             return;
@@ -4848,13 +4850,15 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
         return;
     }
     LLViewerObject* objectp = gObjectList.findObject(object_id);
+    // Gesture sound
     if (object_id == owner_id)
     {
-        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_GESTURE_SOUNDS))
         {
             return;
         }
     }
+    // Attachment sound
     else if (objectp && objectp->isAttachment())
     {
         if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
@@ -4862,6 +4866,7 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
             return;
         }
     }
+    // Rezzed object sound
     else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
     {
         return;

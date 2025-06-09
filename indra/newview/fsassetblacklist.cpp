@@ -66,6 +66,9 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
         case 61:
             type = LLAssetType::AT_AVATAR_REZZED_SOUNDS;
             break;
+        case 62:
+            type = LLAssetType::AT_AVATAR_GESTURE_SOUNDS;
+            break;
         default:
             type = LLAssetType::AT_NONE;
     }
@@ -135,7 +138,6 @@ bool FSAssetBlacklist::removeItem(const LLUUID& id)
         container.erase(id);
     }
 
-    // Supprime les métadonnées
     LLSD data = it->second;
     mBlacklistData.erase(it);
 

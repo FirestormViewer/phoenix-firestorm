@@ -33,6 +33,9 @@
     <floater.string name="asset_avatar_rezzed_sounds">
         Avatar Rezzed Sounds
     </floater.string>
+    <floater.string name="asset_avatar_gesture_sounds">
+        Avatar Gesture Sounds
+    </floater.string>
 	<floater.string name="asset_unknown">
 		Unknown
 	</floater.string>

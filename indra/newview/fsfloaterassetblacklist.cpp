@@ -108,6 +108,8 @@ std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
             return getString("asset_avatar_attached_sounds");
         case LLAssetType::AT_AVATAR_REZZED_SOUNDS:
             return getString("asset_avatar_rezzed_sounds");
+        case LLAssetType::AT_AVATAR_GESTURE_SOUNDS:
+            return getString("asset_avatar_gesture_sounds");
         default:
             return getString("asset_unknown");
     }
