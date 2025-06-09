@@ -32,9 +32,9 @@ private:
     void handleStopLocally();
     void handleSelection();
     void blacklistSound();
-    void blacklistAvatarAttachedSounds();
-    void blacklistAvatarRezzedSounds();
-    void blacklistAvatarGestureSounds();
+    void blacklistAvatarSoundsByFlagWorn();
+    void blacklistAvatarSoundsByFlagRezzed();
+    void blacklistAvatarSoundsByFlagGesture();
 
     LLScrollListCtrl*   mHistoryScroller;
     LLCheckBoxCtrl*     mCollisionSounds;
@@ -51,9 +51,9 @@ private:
     blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
 
     void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarAttachedSoundsNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarRezzedSoundsNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarGestureSoundsNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarSoundsByFlagWornNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarSoundsByFlagRezzedNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarSoundsByFlagGestureNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
 };
 
 #endif

@@ -60,15 +60,6 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
         case 45:
             type = LLAssetType::AT_PERSON;
             break;
-        case 60:
-            type = LLAssetType::AT_AVATAR_ATTACHED_SOUNDS;
-            break;
-        case 61:
-            type = LLAssetType::AT_AVATAR_REZZED_SOUNDS;
-            break;
-        case 62:
-            type = LLAssetType::AT_AVATAR_GESTURE_SOUNDS;
-            break;
         default:
             type = LLAssetType::AT_NONE;
     }
@@ -116,6 +107,53 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
     data["asset_region"] = region;
     data["asset_type"] = type;
     data["asset_date"] = input_date;
+    data["asset_permanent"] = permanent;
+
+    addNewItemToBlacklistData(id, data, save);
+}
+
+bool FSAssetBlacklist::isBlacklistedAvatarSoundsByFlag(const LLUUID& id, eBlacklistFlag flag)
+{
+    if (mBlacklistData.empty())
+    {
+        return false;
+    }
+
+    auto it = mBlacklistData.find(id);
+    if (it == mBlacklistData.end())
+    {
+        return false;
+    }
+
+    const LLSD& data = it->second;
+    if (!data.has("asset_flag"))
+    {
+        return false;
+    }
+
+    eBlacklistFlag stored_source = static_cast<eBlacklistFlag>(data["asset_flag"].asInteger());
+
+    return stored_source == flag;
+}
+
+void FSAssetBlacklist::addNewAvatarSoundsByFlagToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, eBlacklistFlag flag, bool permanent /*= true*/, bool save /*= true*/)
+{
+    if (isBlacklistedAvatarSoundsByFlag(id, flag))
+    {
+        return;
+    }
+
+    LLDate      curdate    = LLDate((double)time_corrected());
+    std::string input_date = curdate.asString();
+    input_date.replace(input_date.find("T"), 1, " ");
+    input_date.resize(input_date.size() - 1);
+
+    LLSD data;
+    data["asset_name"]      = name;
+    data["asset_region"]    = region;
+    data["asset_type"]      = LLAssetType::EType::AT_SOUND;
+    data["asset_flag"]    = static_cast<S32> (flag);
+    data["asset_date"]      = input_date;
     data["asset_permanent"] = permanent;
 
     addNewItemToBlacklistData(id, data, save);

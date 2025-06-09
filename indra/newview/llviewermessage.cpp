@@ -4717,7 +4717,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 
     // Gesture sound
     if (object_id == owner_id) {
-        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_GESTURE_SOUNDS))
+        if (FSAssetBlacklist::getInstance()->isBlacklistedAvatarSoundsByFlag(owner_id, FSAssetBlacklist::eBlacklistFlag::GESTURE))
         {
             return;
         }
@@ -4728,13 +4728,13 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
         // Attachment sound
         if (object && object->isAttachment())
         {
-            if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+            if (FSAssetBlacklist::getInstance()->isBlacklistedAvatarSoundsByFlag(owner_id, FSAssetBlacklist::eBlacklistFlag::WORN))
             {
                 return;
             }
         }
         // Rezzed object sound
-        else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
+        else if (FSAssetBlacklist::getInstance()->isBlacklistedAvatarSoundsByFlag(owner_id, FSAssetBlacklist::eBlacklistFlag::REZZED))
         {
             return;
         }
@@ -4853,7 +4853,7 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
     // Gesture sound
     if (object_id == owner_id)
     {
-        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_GESTURE_SOUNDS))
+        if (FSAssetBlacklist::getInstance()->isBlacklistedAvatarSoundsByFlag(owner_id, FSAssetBlacklist::eBlacklistFlag::GESTURE))
         {
             return;
         }
@@ -4861,13 +4861,13 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
     // Attachment sound
     else if (objectp && objectp->isAttachment())
     {
-        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_ATTACHED_SOUNDS))
+        if (FSAssetBlacklist::getInstance()->isBlacklistedAvatarSoundsByFlag(owner_id, FSAssetBlacklist::eBlacklistFlag::WORN))
         {
             return;
         }
     }
     // Rezzed object sound
-    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_AVATAR_REZZED_SOUNDS))
+    else if (FSAssetBlacklist::getInstance()->isBlacklistedAvatarSoundsByFlag(owner_id, FSAssetBlacklist::eBlacklistFlag::REZZED))
     {
         return;
     }

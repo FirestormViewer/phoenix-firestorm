@@ -90,28 +90,46 @@ void FSFloaterAssetBlacklist::onOpen(const LLSD& key)
     buildBlacklist();
 }
 
+FSAssetBlacklist::eBlacklistFlag FSFloaterAssetBlacklist::getFlagFromLLSD(const LLSD& data)
+{
+    if (data.has("asset_flag"))
+    {
+        return static_cast<FSAssetBlacklist::eBlacklistFlag>(data["asset_flag"].asInteger());
+    }
+    return FSAssetBlacklist::eBlacklistFlag::NONE;
+}
+
 std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
 {
     switch (type)
     {
         case LLAssetType::AT_TEXTURE:
             return getString("asset_texture");
-        case LLAssetType::AT_SOUND:
-            return getString("asset_sound");
         case LLAssetType::AT_OBJECT:
             return getString("asset_object");
         case LLAssetType::AT_ANIMATION:
             return getString("asset_animation");
         case LLAssetType::AT_PERSON:
             return getString("asset_resident");
-        case LLAssetType::AT_AVATAR_ATTACHED_SOUNDS:
-            return getString("asset_avatar_attached_sounds");
-        case LLAssetType::AT_AVATAR_REZZED_SOUNDS:
-            return getString("asset_avatar_rezzed_sounds");
-        case LLAssetType::AT_AVATAR_GESTURE_SOUNDS:
-            return getString("asset_avatar_gesture_sounds");
+        case LLAssetType::AT_SOUND:
+            return getString("asset_sound");
         default:
             return getString("asset_unknown");
+    }
+}
+
+std::string FSFloaterAssetBlacklist::getFlagString(FSAssetBlacklist::eBlacklistFlag flag)
+{
+    switch (flag)
+    {
+        case FSAssetBlacklist::eBlacklistFlag::WORN:
+            return getString("asset_avatar_attached_sounds");
+        case FSAssetBlacklist::eBlacklistFlag::REZZED:
+            return getString("asset_avatar_rezzed_sounds");
+        case FSAssetBlacklist::eBlacklistFlag::GESTURE:
+            return getString("asset_avatar_gesture_sounds");
+        default:
+            return getString("asset_sound");
     }
 }
 
@@ -141,6 +159,18 @@ void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& dat
     substitution["datetime"] = date.secondsSinceEpoch();
     LLStringUtil::format(date_str, substitution);
 
+    const S32 asset_type = data["asset_type"].asInteger();
+    const FSAssetBlacklist::eBlacklistFlag source = getFlagFromLLSD(data);
+    std::string type_label;
+    if (asset_type == LLAssetType::AT_SOUND)
+    {
+        type_label = getFlagString(source);
+    }
+    else
+    {
+        type_label = getTypeString(asset_type);
+    }
+
     LLSD element;
     element["id"] = id;
     element["columns"][0]["column"] = "name";
@@ -151,7 +181,7 @@ void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& dat
     element["columns"][1]["value"] = !data["asset_region"].asString().empty() ? data["asset_region"].asString() : getString("unknown_region");
     element["columns"][2]["column"] = "type";
     element["columns"][2]["type"] = "text";
-    element["columns"][2]["value"] = getTypeString(data["asset_type"].asInteger());
+    element["columns"][2]["value"] = type_label;
     element["columns"][3]["column"] = "date";
     element["columns"][3]["type"] = "text";
     element["columns"][3]["value"] = date_str;

@@ -46,11 +46,20 @@ class FSAssetBlacklist : public LLSingleton<FSAssetBlacklist>
 public:
     void init();
     bool isBlacklisted(const LLUUID& id, LLAssetType::EType type);
-    void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent = true, bool save = true);
+    void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type,bool permanent = true, bool save = true);
     void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
     void removeItemFromBlacklist(const LLUUID& id);
     void removeItemsFromBlacklist(const uuid_vec_t& ids);
     void saveBlacklist();
+    enum class eBlacklistFlag
+    {
+        NONE = 0,
+        WORN,
+        REZZED,
+        GESTURE
+    };
+    bool isBlacklistedAvatarSoundsByFlag(const LLUUID& id, eBlacklistFlag source);
+    void addNewAvatarSoundsByFlagToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, eBlacklistFlag source, bool permanent = true, bool save = true);
 
     blacklist_data_t getBlacklistData() const { return mBlacklistData; };
 

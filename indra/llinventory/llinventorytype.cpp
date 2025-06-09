@@ -162,12 +162,6 @@ DEFAULT_ASSET_FOR_INV_TYPE[LLAssetType::AT_COUNT] =
     LLInventoryType::IT_MATERIAL,       // 57   AT_MATERIAL
     LLInventoryType::IT_GLTF,           // 58   AT_GLTF
     LLInventoryType::IT_GLTF_BIN,       // 59   AT_GLTF_BIN
-
-    // <FS> Asset types for sounds muting in Sounds Explorer window
-    LLInventoryType::IT_NONE,           // 60   AT_AVATAR_ATTACHED_SOUNDS
-    LLInventoryType::IT_NONE,           // 61   AT_AVATAR_REZZED_SOUNDS
-    LLInventoryType::IT_NONE,           // 62   AT_AVATAR_GESTURE_SOUNDS
-    // </FS>
 };
 
 // static
