@@ -246,14 +246,4 @@ inline size_t hash_value(const LLUUID& id) noexcept
     return (size_t)id.getDigest64();
 }
 
-// <FS:Ansariel> UUID hash calculation
-struct FSUUIDHash
-{
-    inline size_t operator() (const LLUUID& id) const
-    {
-        return *reinterpret_cast<const size_t*>(id.mData);
-    }
-};
-// </FS:Ansariel> UUID hash calculation
-
 #endif // LL_LLUUID_H
