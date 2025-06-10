@@ -7332,11 +7332,17 @@ void LLViewerWindow::setUIVisibility(bool visible)
     // LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : false);
     mStatusBarContainer->setVisible(visible);
 
-    // <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage
-    LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
-    if (utilityBarStack)
+    // <FS:Zi> hide utility bar if we are on a skin that uses it, i.e. Vintage
+    // Beq Note: Added a skin check to fix FIRE-29517 "hitch when entering mouselook"
+    // This was caused having to search for a non-existent childview. If another skin other than vintage
+    // ever needs chat_bar_utility_bar_stack in the future, this will need to be updated.
+    if (gSavedSettings.getString("FSInternalSkinCurrent") == "Vintage")
     {
-        utilityBarStack->setVisible(visible);
+        LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
+        if (utilityBarStack)
+        {
+            utilityBarStack->setVisible(visible);
+        }
     }
     // </FS:Zi>
 }
