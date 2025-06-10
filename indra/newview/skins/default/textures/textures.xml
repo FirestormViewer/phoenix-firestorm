@@ -596,7 +596,6 @@ with the same filename but different name
 
 <!-- FS:Beq: Poser icons -->
 	<texture name="Poser_Visual_On"			file_name="icons/visual_pose_enabled.png" />
-	<texture name="Poser_Visual_Off"		file_name="icons/visual_pose_disabled.png" />
 
 
 <!-- FS:Ansariel: Icon for script errors in V1 status bar -->
