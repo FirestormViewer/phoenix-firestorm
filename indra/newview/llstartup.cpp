@@ -742,6 +742,10 @@ bool idle_startup()
         gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
         // </FS:Ansariel>
 
+        // <FS:Ansariel> Added to determine if toolbar gets hidden when empty
+        if (gToolBarView)
+            gToolBarView->setHideBottomOnEmpty(FSCommon::isLegacySkin());
+
         if (LLFeatureManager::getInstance()->isSafe())
         {
             LLNotificationsUtil::add("DisplaySetToSafe");

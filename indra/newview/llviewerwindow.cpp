@@ -7336,10 +7336,9 @@ void LLViewerWindow::setUIVisibility(bool visible)
     // Beq Note: Added a skin check to fix FIRE-29517 "hitch when entering mouselook"
     // This was caused having to search for a non-existent childview. If another skin other than vintage
     // ever needs chat_bar_utility_bar_stack in the future, this will need to be updated.
-    if (gSavedSettings.getString("FSInternalSkinCurrent") == "Vintage")
+    if (FSCommon::isLegacySkin())
     {
-        LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
-        if (utilityBarStack)
+        if (LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack"); utilityBarStack)
         {
             utilityBarStack->setVisible(visible);
         }
