@@ -9,6 +9,7 @@
 #include "lleventtimer.h"
 #include "llaudioengine.h"
 #include "llavatarnamecache.h"
+#include "fsassetblacklist.h"
 
 class LLCheckBoxCtrl;
 class LLScrollListCtrl;
@@ -32,9 +33,7 @@ private:
     void handleStopLocally();
     void handleSelection();
     void blacklistSound();
-    void blacklistAvatarSoundsByFlagWorn();
-    void blacklistAvatarSoundsByFlagRezzed();
-    void blacklistAvatarSoundsByFlagGesture();
+    void blacklistAvatarSoundsByFlag(FSAssetBlacklist::eBlacklistFlag flag);
 
     LLScrollListCtrl*   mHistoryScroller;
     LLCheckBoxCtrl*     mCollisionSounds;
@@ -51,9 +50,7 @@ private:
     blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
 
     void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarSoundsByFlagWornNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarSoundsByFlagRezzedNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarSoundsByFlagGestureNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarSoundsByFlagNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag);
 };
 
 #endif

@@ -53,7 +53,7 @@
 	<button bottom_delta="0" follows="left|bottom" height="20" label="Stop" name="stop_btn" right="-10" width="95" enabled="false"/>
 	<button bottom_delta="0" follows="left|bottom" height="20" label="Blacklist" name="bl_btn" right="-110" width="95" enabled="false"/>
 
-    <button bottom_delta="25" follows="left|bottom" height="20" label="Block AV attached sounds" name="block_avatar_attached_sounds_btn" left="10" width="165" enabled="false"/>
+    <button bottom_delta="25" follows="left|bottom" height="20" label="Block AV worn sounds" name="block_avatar_worn_sounds_btn" left="10" width="165" enabled="false"/>
     <button bottom_delta="0" follows="left|bottom" height="20" label="Block AV rezzed sounds" name="block_avatar_rezzed_sounds_btn" left_delta="170" width="165" enabled="false"/>
     <button bottom_delta="0" follows="left|bottom" height="20" label="Block AV gesture sounds" name="block_avatar_gesture_sounds_btn" left_delta="170" width="165" enabled="false"/>
 </floater>
