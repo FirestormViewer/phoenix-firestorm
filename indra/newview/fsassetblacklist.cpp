@@ -253,7 +253,7 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
         mBlacklistData[id] = data;
     }
 
-    if (type == LLAssetType::AT_SOUND && !data.has("flag"))
+    if (type == LLAssetType::AT_SOUND && data["flag"].asInteger() == 0)
     {
         LLFileSystem::removeFile(id, LLAssetType::AT_SOUND);
         std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, id.asString()) + ".dsf";
