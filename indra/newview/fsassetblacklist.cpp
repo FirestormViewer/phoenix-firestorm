@@ -143,7 +143,6 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
     }
     else
     {
-        // Nouvelle entrée
         data["asset_name"] = name;
         data["asset_region"] = region;
         data["asset_type"] = type;
