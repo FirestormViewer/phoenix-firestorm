@@ -4927,6 +4927,28 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
     {
         return;
     }
+    LLViewerObject* objectp = gObjectList.findObject(object_id);
+    // Gesture sound
+    if (object_id == owner_id)
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::GESTURE))
+        {
+            return;
+        }
+    }
+    // Attachment sound
+    else if (objectp && objectp->isAttachment())
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN))
+        {
+            return;
+        }
+    }
+    // Rezzed object sound
+    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED))
+    {
+        return;
+    }
     // </FS>
 
     // NaCl - Antispam Registry
