@@ -50,7 +50,9 @@ public:
         NONE    = 0,
         WORN    = 1 << 0,
         REZZED  = 1 << 1,
-        GESTURE = 1 << 2
+        GESTURE = 1 << 2,
+
+        LAST_FLAG = 1 << 2
     };
     bool isBlacklisted(const LLUUID& id, LLAssetType::EType type, eBlacklistFlag flag = eBlacklistFlag::NONE);
     void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, eBlacklistFlag flag = eBlacklistFlag::NONE,bool permanent = true, bool save = true);

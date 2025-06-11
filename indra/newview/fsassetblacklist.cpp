@@ -104,12 +104,12 @@ bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type, 
     }
 
     const LLSD& data = data_it->second;
-    if (!data.has("asset_flag"))
+    if (!data.has("asset_blacklist_flag"))
     {
         return false;
     }
 
-    eBlacklistFlag stored_flag = static_cast<eBlacklistFlag>(data["asset_flag"].asInteger());
+    eBlacklistFlag stored_flag = static_cast<eBlacklistFlag>(data["asset_blacklist_flag"].asInteger());
 
     return (static_cast<int>(stored_flag) & static_cast<int>(flag)) != 0;
 }
@@ -130,8 +130,8 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
         {
             data = it->second;
 
-            S32 existing_flag = data.has("asset_flag") ? data["asset_flag"].asInteger() : 0;
-            data["asset_flag"] = static_cast<S32>(existing_flag | static_cast<S32>(flag));
+            S32 existing_flag = data.has("asset_blacklist_flag") ? data["asset_blacklist_flag"].asInteger() : 0;
+            data["asset_blacklist_flag"] = static_cast<S32>(existing_flag | static_cast<S32>(flag));
 
             data["asset_name"] = name;
             data["asset_region"] = region;
@@ -146,7 +146,7 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
         data["asset_name"] = name;
         data["asset_region"] = region;
         data["asset_type"] = type;
-        data["asset_flag"] = static_cast<S32>(flag);
+        data["asset_blacklist_flag"] = static_cast<S32>(flag);
         data["asset_date"] = input_date;
         data["asset_permanent"] = permanent;
 
@@ -218,7 +218,7 @@ void FSAssetBlacklist::removeFlagsFromItem(const LLUUID& id, S32 combined_flags)
     }
 
     LLSD& data = it->second;
-    S32 current_flags = data.has("asset_flag") ? data["asset_flag"].asInteger() : 0;
+    S32 current_flags = data.has("asset_blacklist_flag") ? data["asset_blacklist_flag"].asInteger() : 0;
 
     current_flags &= ~combined_flags;
 
@@ -228,7 +228,7 @@ void FSAssetBlacklist::removeFlagsFromItem(const LLUUID& id, S32 combined_flags)
     }
     else
     {
-        data["asset_flag"] = current_flags;
+        data["asset_blacklist_flag"] = current_flags;
         addNewItemToBlacklistData(id, data, true);
 
         if (!mBlacklistChangedCallback.empty())
@@ -253,7 +253,7 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
         mBlacklistData[id] = data;
     }
 
-    if (type == LLAssetType::AT_SOUND && data["flag"].asInteger() == 0)
+    if (type == LLAssetType::AT_SOUND && data["asset_blacklist_flag"].asInteger() == 0)
     {
         LLFileSystem::removeFile(id, LLAssetType::AT_SOUND);
         std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, id.asString()) + ".dsf";
