@@ -27,6 +27,20 @@
 	<floater.string name="asset_resident">
 		Resident
 	</floater.string>
+    <floater.string name="blacklist_flag_none">
+    </floater.string>
+    <floater.string name="blacklist_flag_mute_avatar_worn_objects_sounds">
+        Avatar worn objects sounds
+    </floater.string>
+    <floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">
+        Avatar rezzed objects sounds
+    </floater.string>
+    <floater.string name="blacklist_flag_mute_avatar_gestures_sounds">
+        Avatar gestures sounds
+    </floater.string>
+    <floater.string name="blacklist_flag_unknown">
+        Unknow flag
+    </floater.string>
 	<floater.string name="asset_unknown">
 		Unknown
 	</floater.string>
@@ -82,6 +96,11 @@
 		 label="Type"
 		 width="60"
 		 />
+        <columns
+		 name="flags"
+		 label="Flags"
+		 width="170"
+		 />
 		<columns
 		 name="date"
 		 label="Date"
@@ -105,6 +124,7 @@
 			<column column="name">[UNKNOWN] Template item</column>
 			<column column="region">[UNKNOWN] Template item</column>
 			<column column="type">Unknown</column>
+            <column column="flags">None</column>
 			<column column="date">2012-12-11 13:37:00</column>
 			<column column="permanent">&#x2714;</column>
 		</row>
