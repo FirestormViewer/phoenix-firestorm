@@ -420,7 +420,7 @@ void LLViewerTextureList::dump()
             LL_CONT << image->getNumVolumes(index) << " ";
         }
         // </FS:minerjr> [FIRE-35081]
-        LL_CONT << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
+        LL_CONT << " " << image->getID().asString().substr(0, 7)
         << LL_ENDL;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         image_counts[(image->getDiscardLevel() + 1)] += 1; // Need to add +1 to make up for -1 being a possible value

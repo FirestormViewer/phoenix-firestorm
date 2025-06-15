@@ -102,8 +102,11 @@ public:
     bool isModified() const;
 
     // <FS:Ansariel> Getters for member variables needed for console chat bottom offset
-    LLView* getBottomChatStack() const { return mBottomChatStack; };
+    LLView* getBottomChatStack() const { return mBottomChatStack; }
     // </FS:Ansariel>
+
+    // <FS:Ansariel> Added to determine if toolbar gets hidden when empty
+    void setHideBottomOnEmpty(bool hideBottomOnEmpty) { mHideBottomOnEmpty = hideBottomOnEmpty; }
 
 protected:
     friend class LLUICtrlFactory;

@@ -48,6 +48,7 @@
 <string name="ParsingErrorNoRoot">Dokument nie ma elementu głównego</string>
 <string name="ParsingErrorNoScene">Dokument nie zawiera visual_scene</string>
 <string name="ParsingErrorPositionInvalidModel">Nie można przetworzyć meszu bez danych pozycji. Nieprawidłowy model.</string>
+<string name="ParsingErrorEmptyInvBindInvalidModel">Nie można przetworzyć meszu bez danych InvBind. Nieprawidłowy model.</string>
 <panel name="left_panel">
     <panel name="model_name_representation_panel">
         <text name="name_label">

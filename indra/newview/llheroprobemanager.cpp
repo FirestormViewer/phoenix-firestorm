@@ -60,7 +60,7 @@ static void touch_default_probe(LLReflectionMap* probe)
     }
 }
 
-LLHeroProbeManager::LLHeroProbeManager():mMirrorNormal(0,0,1) // <FS:Beq/> [FIRE-35007][#3331] mirrors not working after relog. make sure the mirror normal is not zero length
+LLHeroProbeManager::LLHeroProbeManager()
 {
 }
 

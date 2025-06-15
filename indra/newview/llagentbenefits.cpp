@@ -305,7 +305,10 @@ S32 LLAgentBenefits::get2KTextureUploadCost(S32 area) const
 {
     if (m_2k_texture_upload_cost.empty())
     {
-        return m_texture_upload_cost;
+        // <FS:Ansariel> OpenSim legacy economy
+        //return m_texture_upload_cost;
+        return getTextureUploadCost();
+        // </FS:Ansariel>
     }
     return m_2k_texture_upload_cost[0];
 }
