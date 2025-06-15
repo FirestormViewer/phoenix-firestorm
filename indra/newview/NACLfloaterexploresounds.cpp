@@ -75,6 +75,9 @@ bool NACLFloaterExploreSounds::postBuild()
     getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStop, this));
     getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
     getChild<LLButton>("stop_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStopLocally, this));
+    getChild<LLButton>("block_avatar_worn_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag, this, FSAssetBlacklist::eBlacklistFlag::WORN));
+    getChild<LLButton>("block_avatar_rezzed_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag, this, FSAssetBlacklist::eBlacklistFlag::REZZED));
+    getChild<LLButton>("block_avatar_gesture_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag, this, FSAssetBlacklist::eBlacklistFlag::GESTURE));
 
     mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
     mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
@@ -98,6 +101,9 @@ void NACLFloaterExploreSounds::handleSelection()
     childSetEnabled("play_locally_btn", num_selected);
     childSetEnabled("stop_btn", num_selected);
     childSetEnabled("bl_btn", num_selected);
+    childSetEnabled("block_avatar_worn_sounds_btn", num_selected);
+    childSetEnabled("block_avatar_rezzed_sounds_btn", num_selected);
+    childSetEnabled("block_avatar_gesture_sounds_btn", num_selected);
 }
 
 LLSoundHistoryItem NACLFloaterExploreSounds::getItem(const LLUUID& itemID)
@@ -512,4 +518,56 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
         mBlacklistAvatarNameCacheConnections.erase(it);
     }
     FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND);
+}
+
+// add avatar attachments sounds to blacklist
+void NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag(FSAssetBlacklist::eBlacklistFlag flag)
+{
+    std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
+    std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
+    std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
+
+    for (; selection_iter != selection_end; ++selection_iter)
+    {
+        LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
+        if (item.mID.isNull())
+        {
+            continue;
+        }
+
+        std::string     region_name;
+        LLViewerRegion* cur_region = gAgent.getRegion();
+        if (cur_region)
+        {
+            region_name = cur_region->getName();
+        }
+
+        blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(item.mOwnerID);
+        if (it != mBlacklistAvatarNameCacheConnections.end())
+        {
+            if (it->second.connected())
+            {
+                it->second.disconnect();
+            }
+            mBlacklistAvatarNameCacheConnections.erase(it);
+        }
+        LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(
+            item.mOwnerID,
+            boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarSoundsByFlagNameCacheCallback, this, _1, _2, item.mOwnerID, region_name, flag));
+        mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
+    }
+}
+
+void NACLFloaterExploreSounds::onBlacklistAvatarSoundsByFlagNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& owner_id, const std::string&  region_name, FSAssetBlacklist::eBlacklistFlag flag)
+{
+    blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
+    if (it != mBlacklistAvatarNameCacheConnections.end())
+    {
+        if (it->second.connected())
+        {
+            it->second.disconnect();
+        }
+        mBlacklistAvatarNameCacheConnections.erase(it);
+    }
+    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(owner_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
 }
