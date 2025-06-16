@@ -16,7 +16,7 @@
 #include "fscommon.h"
 #include "rlvhandler.h"
 
-static const size_t num_collision_sounds = 28;
+constexpr size_t num_collision_sounds = 28;
 const LLUUID collision_sounds[num_collision_sounds] =
 {
     LLUUID("dce5fdd4-afe4-4ea1-822f-dd52cac46b08"),
@@ -73,11 +73,11 @@ bool NACLFloaterExploreSounds::postBuild()
     getChild<LLButton>("play_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
     getChild<LLButton>("look_at_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleLookAt, this));
     getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStop, this));
-    getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
+    getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::NONE));
     getChild<LLButton>("stop_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStopLocally, this));
-    getChild<LLButton>("block_avatar_worn_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag, this, FSAssetBlacklist::eBlacklistFlag::WORN));
-    getChild<LLButton>("block_avatar_rezzed_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag, this, FSAssetBlacklist::eBlacklistFlag::REZZED));
-    getChild<LLButton>("block_avatar_gesture_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag, this, FSAssetBlacklist::eBlacklistFlag::GESTURE));
+    getChild<LLButton>("block_avatar_worn_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::WORN));
+    getChild<LLButton>("block_avatar_rezzed_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::REZZED));
+    getChild<LLButton>("block_avatar_gesture_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::GESTURE));
 
     mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
     mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
@@ -116,18 +116,12 @@ LLSoundHistoryItem NACLFloaterExploreSounds::getItem(const LLUUID& itemID)
     else
     {
         // If log is paused, hopefully we can find it in mLastHistory
-        std::list<LLSoundHistoryItem>::iterator iter = mLastHistory.begin();
-        std::list<LLSoundHistoryItem>::iterator end = mLastHistory.end();
-        for ( ; iter != end; ++iter)
-        {
-            if ((*iter).mID == itemID)
-            {
-                return (*iter);
-            }
-        }
+        if (auto found = std::find_if(mLastHistory.begin(), mLastHistory.end(), [&](const auto& item) { return item.mID == itemID; });
+            found != mLastHistory.end())
+            return *found;
     }
     LLSoundHistoryItem item;
-    item.mID = LLUUID::null;
+    item.mID.setNull();
     return item;
 }
 
@@ -181,11 +175,9 @@ bool NACLFloaterExploreSounds::tick()
     }
     else
     {
-        std::map<LLUUID, LLSoundHistoryItem>::iterator map_iter = gSoundHistory.begin();
-        std::map<LLUUID, LLSoundHistoryItem>::iterator map_end = gSoundHistory.end();
-        for ( ; map_iter != map_end; ++map_iter)
+        for (const auto& [id, item] : gSoundHistory)
         {
-            history.push_back((*map_iter).second);
+            history.emplace_back(item);
         }
         LLSoundHistoryItemCompare c;
         history.sort(c);
@@ -195,24 +187,16 @@ bool NACLFloaterExploreSounds::tick()
     // Save scroll pos and selection so they can be restored
     S32 scroll_pos = mHistoryScroller->getScrollPos();
     uuid_vec_t selected_ids;
-    std::vector<LLScrollListItem*> selected_items = mHistoryScroller->getAllSelected();
-    std::vector<LLScrollListItem*>::iterator selection_iter = selected_items.begin();
-    std::vector<LLScrollListItem*>::iterator selection_end = selected_items.end();
-    for (; selection_iter != selection_end; ++selection_iter)
+    for (const auto* item : mHistoryScroller->getAllSelected())
     {
-        selected_ids.push_back((*selection_iter)->getUUID());
+        selected_ids.emplace_back(item->getUUID());
     }
 
     mHistoryScroller->clearRows();
 
-    std::list<LLUUID> unique_asset_list;
-
-    std::list<LLSoundHistoryItem>::iterator iter = history.begin();
-    std::list<LLSoundHistoryItem>::iterator end = history.end();
-    for ( ; iter != end; ++iter)
+    std::unordered_set<LLUUID> unique_asset_list;
+    for (auto& item : history)
     {
-        LLSoundHistoryItem item = (*iter);
-
         bool is_avatar = item.mOwnerID == item.mSourceID;
         if (is_avatar && !show_avatars)
         {
@@ -225,7 +209,7 @@ bool NACLFloaterExploreSounds::tick()
             continue;
         }
 
-        bool is_repeated_asset = std::find(unique_asset_list.begin(), unique_asset_list.end(), item.mAssetID) != unique_asset_list.end();
+        bool is_repeated_asset = unique_asset_list.contains(item.mAssetID);
         if (is_repeated_asset && !show_repeated_assets)
         {
             continue;
@@ -243,7 +227,7 @@ bool NACLFloaterExploreSounds::tick()
             continue;
         }
 
-        unique_asset_list.push_back(item.mAssetID);
+        unique_asset_list.emplace(item.mAssetID);
 
         LLSD element;
         element["id"] = item.mID;
@@ -321,26 +305,18 @@ bool NACLFloaterExploreSounds::tick()
     mHistoryScroller->setScrollPos(scroll_pos);
 
     // Clean up stopped local audio source IDs
-    uuid_vec_t stopped_audio_src_ids;
     uuid_vec_t::iterator audio_src_id_iter = mLocalPlayingAudioSourceIDs.begin();
-    uuid_vec_t::iterator audio_src_id_end = mLocalPlayingAudioSourceIDs.end();
-    for (; audio_src_id_iter != audio_src_id_end; ++audio_src_id_iter)
+    uuid_vec_t::iterator audio_src_id_end  = mLocalPlayingAudioSourceIDs.end();
+    while (audio_src_id_iter != audio_src_id_end)
     {
-        LLUUID audio_src_id = *audio_src_id_iter;
-        LLAudioSource* audio_source = gAudiop->findAudioSource(audio_src_id);
-        if (!audio_source || audio_source->isDone())
+        const LLUUID& audio_src_id = *audio_src_id_iter;
+        if (LLAudioSource* audio_source = gAudiop->findAudioSource(audio_src_id); !audio_source || audio_source->isDone())
         {
-            stopped_audio_src_ids.push_back(audio_src_id);
+            audio_src_id_iter = mLocalPlayingAudioSourceIDs.erase(audio_src_id_iter);
         }
-    }
-
-    for (uuid_vec_t::iterator stopped_audio_src_ids_iter = stopped_audio_src_ids.begin();
-         stopped_audio_src_ids_iter != stopped_audio_src_ids.end(); ++stopped_audio_src_ids_iter)
-    {
-        uuid_vec_t::iterator find_iter = std::find(mLocalPlayingAudioSourceIDs.begin(), mLocalPlayingAudioSourceIDs.end(), *stopped_audio_src_ids_iter);
-        if (find_iter != mLocalPlayingAudioSourceIDs.end())
+        else
         {
-            mLocalPlayingAudioSourceIDs.erase(find_iter);
+            audio_src_id_iter++;
         }
     }
 
@@ -351,29 +327,26 @@ bool NACLFloaterExploreSounds::tick()
 
 void NACLFloaterExploreSounds::handlePlayLocally()
 {
-    std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
-    std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
-    std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-    uuid_vec_t asset_list;
-    for ( ; selection_iter != selection_end; ++selection_iter)
+    std::unordered_set<LLUUID> asset_list;
+    for (const auto* selected_item : mHistoryScroller->getAllSelected())
     {
-        LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
+        LLSoundHistoryItem item = getItem(selected_item->getValue());
         if (item.mID.isNull())
         {
             continue;
         }
 
         // Unique assets only
-        if (std::find(asset_list.begin(), asset_list.end(), item.mAssetID) == asset_list.end())
+        if (!asset_list.contains(item.mAssetID))
         {
-            asset_list.push_back(item.mAssetID);
+            asset_list.emplace(item.mAssetID);
             LLUUID audio_source_id = LLUUID::generateNewID();
             gAudiop->triggerSound(item.mAssetID, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI, LLVector3d::zero, LLUUID::null, audio_source_id);
-            mLocalPlayingAudioSourceIDs.push_back(audio_source_id);
+            mLocalPlayingAudioSourceIDs.emplace_back(audio_source_id);
         }
     }
 
-    childSetEnabled("stop_locally_btn", mLocalPlayingAudioSourceIDs.size() > 0);
+    childSetEnabled("stop_locally_btn", !mLocalPlayingAudioSourceIDs.empty());
 }
 
 void NACLFloaterExploreSounds::handleLookAt()
@@ -413,14 +386,12 @@ void NACLFloaterExploreSounds::handleLookAt()
 
 void NACLFloaterExploreSounds::handleStop()
 {
-    std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
-    for (const auto& selection_item : selection)
+    for (const auto& selection_item : mHistoryScroller->getAllSelected())
     {
         LLSoundHistoryItem item = getItem(selection_item->getValue());
         if (item.mID.notNull() && item.mPlaying)
         {
-            LLAudioSource* audio_source = gAudiop->findAudioSource(item.mSourceID);
-            if (audio_source)
+            if (LLAudioSource* audio_source = gAudiop->findAudioSource(item.mSourceID))
             {
                 S32 type = item.mType;
                 audio_source->setType(LLAudioEngine::AUDIO_TYPE_UI);
@@ -455,13 +426,9 @@ void NACLFloaterExploreSounds::handleStop()
 
 void NACLFloaterExploreSounds::handleStopLocally()
 {
-    uuid_vec_t::iterator audio_source_id_iter = mLocalPlayingAudioSourceIDs.begin();
-    uuid_vec_t::iterator audio_source_id_end = mLocalPlayingAudioSourceIDs.end();
-    for (; audio_source_id_iter != audio_source_id_end; ++audio_source_id_iter)
+    for (const auto& audio_source_id : mLocalPlayingAudioSourceIDs)
     {
-        LLUUID audio_source_id = *audio_source_id_iter;
-        LLAudioSource* audio_source = gAudiop->findAudioSource(audio_source_id);
-        if (audio_source && !audio_source->isDone())
+        if (LLAudioSource* audio_source = gAudiop->findAudioSource(audio_source_id); audio_source && !audio_source->isDone())
         {
             audio_source->play(LLUUID::null);
         }
@@ -471,23 +438,18 @@ void NACLFloaterExploreSounds::handleStopLocally()
 }
 
 //add sound to blacklist
-void NACLFloaterExploreSounds::blacklistSound()
+void NACLFloaterExploreSounds::blacklistSound(FSAssetBlacklist::eBlacklistFlag flag)
 {
-    std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
-    std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
-    std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-
-    for ( ; selection_iter != selection_end; ++selection_iter)
+    for (const auto* selected_item : mHistoryScroller->getAllSelected())
     {
-        LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
+        LLSoundHistoryItem item = getItem(selected_item->getValue());
         if (item.mID.isNull())
         {
             continue;
         }
 
         std::string region_name;
-        LLViewerRegion* cur_region = gAgent.getRegion();
-        if (cur_region)
+        if (LLViewerRegion* cur_region = gAgent.getRegion())
         {
             region_name = cur_region->getName();
         }
@@ -501,12 +463,12 @@ void NACLFloaterExploreSounds::blacklistSound()
             }
             mBlacklistAvatarNameCacheConnections.erase(it);
         }
-        LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, _1, _2, item.mAssetID, region_name));
+        LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, _1, _2, item.mAssetID, region_name, flag));
         mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
     }
 }
 
-void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name)
+void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag)
 {
     blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
     if (it != mBlacklistAvatarNameCacheConnections.end())
@@ -517,57 +479,5 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
         }
         mBlacklistAvatarNameCacheConnections.erase(it);
     }
-    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND);
-}
-
-// add avatar attachments sounds to blacklist
-void NACLFloaterExploreSounds::blacklistAvatarSoundsByFlag(FSAssetBlacklist::eBlacklistFlag flag)
-{
-    std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
-    std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
-    std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-
-    for (; selection_iter != selection_end; ++selection_iter)
-    {
-        LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
-        if (item.mID.isNull())
-        {
-            continue;
-        }
-
-        std::string     region_name;
-        LLViewerRegion* cur_region = gAgent.getRegion();
-        if (cur_region)
-        {
-            region_name = cur_region->getName();
-        }
-
-        blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(item.mOwnerID);
-        if (it != mBlacklistAvatarNameCacheConnections.end())
-        {
-            if (it->second.connected())
-            {
-                it->second.disconnect();
-            }
-            mBlacklistAvatarNameCacheConnections.erase(it);
-        }
-        LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(
-            item.mOwnerID,
-            boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarSoundsByFlagNameCacheCallback, this, _1, _2, item.mOwnerID, region_name, flag));
-        mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
-    }
-}
-
-void NACLFloaterExploreSounds::onBlacklistAvatarSoundsByFlagNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& owner_id, const std::string&  region_name, FSAssetBlacklist::eBlacklistFlag flag)
-{
-    blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
-    if (it != mBlacklistAvatarNameCacheConnections.end())
-    {
-        if (it->second.connected())
-        {
-            it->second.disconnect();
-        }
-        mBlacklistAvatarNameCacheConnections.erase(it);
-    }
-    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(owner_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
+    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
 }

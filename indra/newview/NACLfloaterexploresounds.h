@@ -32,15 +32,14 @@ private:
     void handleStop();
     void handleStopLocally();
     void handleSelection();
-    void blacklistSound();
-    void blacklistAvatarSoundsByFlag(FSAssetBlacklist::eBlacklistFlag flag);
+    void blacklistSound(FSAssetBlacklist::eBlacklistFlag flag);
 
-    LLScrollListCtrl*   mHistoryScroller;
-    LLCheckBoxCtrl*     mCollisionSounds;
-    LLCheckBoxCtrl*     mRepeatedAssets;
-    LLCheckBoxCtrl*     mAvatarSounds;
-    LLCheckBoxCtrl*     mObjectSounds;
-    LLCheckBoxCtrl*     mPaused;
+    LLScrollListCtrl* mHistoryScroller{ nullptr };
+    LLCheckBoxCtrl*   mCollisionSounds{ nullptr };
+    LLCheckBoxCtrl*   mRepeatedAssets{ nullptr };
+    LLCheckBoxCtrl*   mAvatarSounds{ nullptr };
+    LLCheckBoxCtrl*   mObjectSounds{ nullptr };
+    LLCheckBoxCtrl*   mPaused{ nullptr };
 
     std::list<LLSoundHistoryItem> mLastHistory;
 
@@ -49,8 +48,7 @@ private:
     typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
     blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
 
-    void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
-    void onBlacklistAvatarSoundsByFlagNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag);
+    void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag);
 };
 
 #endif

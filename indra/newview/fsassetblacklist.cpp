@@ -111,7 +111,7 @@ bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type, 
 
     eBlacklistFlag stored_flag = static_cast<eBlacklistFlag>(data["asset_blacklist_flag"].asInteger());
 
-    return (static_cast<int>(stored_flag) & static_cast<int>(flag)) != 0;
+    return (static_cast<S32>(stored_flag) & static_cast<S32>(flag)) != 0;
 }
 
 void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, eBlacklistFlag flag /*= eBlacklistFlag::NONE*/, bool permanent /*= true*/, bool save /*= true*/)
