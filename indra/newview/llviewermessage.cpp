@@ -4714,6 +4714,31 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
     {
         return;
     }
+
+    // Gesture sound
+    if (object_id == owner_id) {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::GESTURE))
+        {
+            return;
+        }
+    }
+    else
+    {
+        LLViewerObject* object = gObjectList.findObject(object_id);
+        // Attachment sound
+        if (object && object->isAttachment())
+        {
+            if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN))
+            {
+                return;
+            }
+        }
+        // Rezzed object sound
+        else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED))
+        {
+            return;
+        }
+    }
     // </FS>
 
     // NaCl - Antispam Registry
@@ -4824,6 +4849,28 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
     {
         return;
     }
+    LLViewerObject* objectp = gObjectList.findObject(object_id);
+    // Gesture sound
+    if (object_id == owner_id)
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::GESTURE))
+        {
+            return;
+        }
+    }
+    // Attachment sound
+    else if (objectp && objectp->isAttachment())
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN))
+        {
+            return;
+        }
+    }
+    // Rezzed object sound
+    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED))
+    {
+        return;
+    }
     // </FS>
 
     // NaCl - Antispam Registry
@@ -4840,7 +4887,6 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
         return;
     // </FS:ND>
 
-    LLViewerObject *objectp = gObjectList.findObject(object_id);
     if (!objectp) return;
 
     if (LLMuteList::getInstance()->isMuted(object_id)) return;
@@ -4878,6 +4924,28 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 
     // <FS> Asset blacklist
     if (FSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+    {
+        return;
+    }
+    LLViewerObject* objectp = gObjectList.findObject(object_id);
+    // Gesture sound
+    if (object_id == owner_id)
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::GESTURE))
+        {
+            return;
+        }
+    }
+    // Attachment sound
+    else if (objectp && objectp->isAttachment())
+    {
+        if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN))
+        {
+            return;
+        }
+    }
+    // Rezzed object sound
+    else if (FSAssetBlacklist::getInstance()->isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED))
     {
         return;
     }

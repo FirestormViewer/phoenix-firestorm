@@ -3327,7 +3327,7 @@ void derenderObject(bool permanent)
                 asset_type = LLAssetType::AT_OBJECT;
             }
 
-            FSAssetBlacklist::getInstance()->addNewItemToBlacklist(id, entry_name, region_name, asset_type, permanent, false);
+            FSAssetBlacklist::getInstance()->addNewItemToBlacklist(id, entry_name, region_name, asset_type, FSAssetBlacklist::eBlacklistFlag::NONE, permanent, false);
 
             if (permanent)
             {
