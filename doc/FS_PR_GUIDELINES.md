@@ -38,16 +38,16 @@ Would become:
  If you add new code, the same rules apply, but there is nothing to comment out.
  This is done so that when LL updates the original code, we can see what the original code was doing, what their changes do, and how that relates to the changes that we applied on top.
 
- A single line change can use the shorthand `<FS:YI/>`:
+ A single line change can use the shorthand `</FS:YI>`:
 
  ```c++
-    bool break_stuff=true;
+    bool break_stuff = true;
  ```
 
 Could be fixed as follows:
 
  ```c++
-    bool break_stuff=false; // <FS:Beq/> [FIRE-23456] don't break stuff.
+    bool break_stuff = false; // </FS:Beq> [FIRE-23456] don't break stuff.
  ```
 
  The Comment tags are only required when changing code maintained upstream. If the code you are changing is in an FS-created file, RLV code, OpenSim-only code, etc., then we do not need the comments.
