@@ -92,10 +92,10 @@ bool FSCommon::is_irc_me_prefix(std::string_view text)
 std::string FSCommon::unescape_name(std::string_view name)
 {
     // bugfix for SL-46920: preventing filenames that break stuff.
-    char * curl_str = curl_unescape(name.data(), static_cast<int>(name.size())); // Calling data() should be ok here because we also pass the length
+    char* curl_str = curl_unescape(name.data(), static_cast<int>(name.size())); // Calling data() should be ok here because we also pass the length
     std::string unescaped_name(curl_str);
     curl_free(curl_str);
-    curl_str = NULL;
+    curl_str = nullptr;
 
     return unescaped_name;
 }
@@ -301,11 +301,12 @@ bool FSCommon::isLinden(const LLUUID& av_id)
     if (LLGridManager::getInstance()->isInOpenSim())
     {
         LLViewerRegion* region = gAgent.getRegion();
-        if (!region) return false;
-        bool is_god = false;
+        if (!region)
+            return false;
+
+        bool is_god{ false };
         // <FS:CR> They may not be "Lindens" per se, but opensim has gods.
-        std::set<std::string> gods = region->getGods();
-        if (!gods.empty())
+        if (std::set<std::string> gods = region->getGods(); !gods.empty())
         {
             is_god = (gods.find(first_name + " " + last_name) != gods.end()
                       || gods.find(last_name) != gods.end());
@@ -453,7 +454,7 @@ std::string FSCommon::getAvatarNameByDisplaySettings(const LLAvatarName& av_name
     std::string name;
     static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
     static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
-    if ((NameTagShowUsernames) && (UseDisplayNames))
+    if (NameTagShowUsernames && UseDisplayNames)
     {
         name = av_name.getCompleteName();
     }
@@ -494,21 +495,21 @@ bool FSCommon::isDefaultTexture(const LLUUID& asset_id)
 
 bool FSCommon::isLegacySkin()
 {
-    std::string current_skin = gSavedSettings.getString("FSInternalSkinCurrent");
-    return (current_skin == "Vintage");
+    static bool is_legacy_skin = gSavedSettings.getString("FSInternalSkinCurrent") == "Vintage";
+    return is_legacy_skin;
 }
 
 bool FSCommon::isFilterEditorKeyCombo(KEY key, MASK mask)
 {
-    return (mask == MASK_CONTROL && key == 'F' && gSavedSettings.getBOOL("FSSelectLocalSearchEditorOnShortcut"));
+    static LLCachedControl<bool> select_search_on_shortcut(gSavedSettings, "FSSelectLocalSearchEditorOnShortcut");
+    return (mask == MASK_CONTROL && key == 'F' && select_search_on_shortcut);
 }
 
 LLUUID FSCommon::getGroupForRezzing()
 {
     LLUUID group_id{ gAgent.getGroupID() };
-    LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
-    if (parcel && gSavedSettings.getBOOL("RezUnderLandGroup"))
+    if (LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel(); parcel && gSavedSettings.getBOOL("RezUnderLandGroup"))
     {
         // In both cases, group-owned or not, the group ID is the same;
         // No need to query the parcel owner ID as it will be either

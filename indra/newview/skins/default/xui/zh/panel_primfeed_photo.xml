@@ -15,6 +15,10 @@
 	<check_box label="顯示指導線" name="show_guides" tool_tip="在拍攝範圍內顯示拍攝指導線（例如三分法）。"/>
 	<button label="更新" name="new_snapshot_btn" tool_tip="點擊更新"/>
 	<button label="預覽" name="big_preview_btn" tool_tip="點擊切換預覽狀態"/>
+	<text name="store_label">
+			發布為：
+	</text>
+	<combo_box name="stores_combobox" tool_tip="如果您在Primfeed上分配了一個或多個EasyBloggers商店，它們將顯示在這裡。"/>
 	<text name="description_label">
 		描述：
 	</text>

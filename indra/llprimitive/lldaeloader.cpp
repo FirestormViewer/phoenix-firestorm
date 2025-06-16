@@ -1502,7 +1502,17 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                     {
                         domListOfFloats& transform = t->getValue();
                         auto count = transform.getCount()/16;
-
+    
+                        // <FS:Beq> FIRE-34811 Crash during import due to missing inv_bind_matrices.
+                        if (count==0)
+                        {
+                            LL_WARNS("DAELOader") << "Invalid rigged mesh: Missing inv_bind_matrices." << LL_ENDL;
+                            LLSD args;
+                            args["Message"] = "ParsingErrorEmptyInvBindInvalidModel";
+                            mWarningsArray.append(args);
+                            setLoadState( ERROR_PARSING );
+                        }
+                        // </FS:Beq>                        
                         for (size_t k = 0; k < count; ++k)
                         {
                             LLMatrix4 mat;
@@ -1520,7 +1530,14 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                 }
             }
         }
-
+        // <FS:Beq> FIRE-34811 Crash during import due to missing inv_bind_matrices.
+        if (model->mSkinInfo.mInvBindMatrix.empty())
+        {
+            model->mSkinInfo.mJointNames.clear();
+            model->mSkinInfo.mJointNums.clear();
+            missingSkeletonOrScene = true; // set this true as we've just wiped that data.
+        }
+        // </FS:Beq>
         //Now that we've parsed the joint array, let's determine if we have a full rig
         //(which means we have all the joint sthat are required for an avatar versus
         //a skinned asset attached to a node in a file that contains an entire skeleton,

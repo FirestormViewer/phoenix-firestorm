@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <panel
-    height="540"
+    height="590"
     width="272"
     follows="all"
     layout="topleft"
@@ -192,6 +192,29 @@
       width="100">
     <button.commit_callback function="SocialSharing.BigPreview" />
   </button>
+  <text
+      follows="left|top"
+      layout="topleft"
+      font="SansSerif"
+      height="16"
+      left="10"
+      name="store_label"
+      top_pad="8"
+      type="string">
+    Post as:
+  </text>
+  <combo_box
+      control_name="FSPrimfeedSelectedStore"
+      follows="left|top"
+      layout="topleft"
+      name="stores_combobox"
+      tool_tip="If you have one or more easy blogger stores assigned on Primfeed they will appear here."
+      top_pad="2"
+      left="10"
+      height="21"
+      width="235">
+    <!-- Initially empty; items will be populated at runtime -->
+  </combo_box>
   <text
       length="1"
       follows="top|left|right"

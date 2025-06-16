@@ -58,6 +58,7 @@ Urodziny: [REG_DATE]
 	<text name="Groups:" value="Grupy:" />
 	<button name="group_invite" tool_tip="Zaproś do grupy" />
 	<text name="About:" value="Info:" />
+	<button name="btn_preview" tool_tip="Przełącz podgląd sekcji 'info'" />
 	<text name="Give item:" value="Podaruj:" />
 	<text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu, aby dać go tej osobie.">
 		Upuść przedmiot w tym miejscu.

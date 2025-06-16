@@ -89,6 +89,7 @@ void FSPrimfeedConnect::uploadPhotoCoro(const LLSD& params, LLImageFormatted* im
         addPart("location", params["location"].asString());
     }
 
+
     LL_DEBUGS("primfeed") << "Adding image file header" << LL_ENDL;
     body << dash << sep
          << "Content-Disposition: form-data; name=\"image\"; filename=\"snapshot." << fmt << "\"" << sep
@@ -119,14 +120,14 @@ void FSPrimfeedConnect::uploadPhotoCoro(const LLSD& params, LLImageFormatted* im
     LLCore::HttpHeaders::ptr_t headers(new LLCore::HttpHeaders);
     std::string token  = gSavedPerAccountSettings.getString("FSPrimfeedOAuthToken");
     std::string apiKey = gSavedSettings.getString("FSPrimfeedViewerApiKey");
+    headers->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     headers->append("Authorization",    "Bearer " + token);
     headers->append("pf-viewer-api-key", apiKey);
-    headers->append("Content-Type",     "multipart/form-data; boundary=" + boundary);
-    LL_DEBUGS("primfeed") << "Dumping HTTP headers for POST:" << LL_ENDL;
-    for (auto it = headers->begin(); it != headers->end(); ++it)
+    if (params.has("store_id") && !params["store_id"].asString().empty())
     {
-        LL_DEBUGS("primfeed") << it->first << ": " << it->second << LL_ENDL;
+        headers->append("kynno-selected-store", params["store_id"].asString());
     }    
+    headers->append("Content-Type",     "multipart/form-data; boundary=" + boundary);
     LL_DEBUGS("primfeed") << "Headers set" << LL_ENDL;
 
     LL_DEBUGS("primfeed") << "Starting HTTP POST" << LL_ENDL;
@@ -181,9 +182,3 @@ bool FSPrimfeedConnect::isTransactionOngoing() const
             mConnectionState == PRIMFEED_DISCONNECTING);
 }
 
-void FSPrimfeedConnect::loadPrimfeedInfo()
-{
-    LL_DEBUGS("primfeed") << "loadPrimfeedInfo() called" << LL_ENDL;
-    // Nothing to do here for Primfeed
-    setConnectionState(PRIMFEED_CONNECTED);
-}

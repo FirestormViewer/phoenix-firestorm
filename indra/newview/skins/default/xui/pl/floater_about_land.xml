@@ -439,6 +439,8 @@ teksturę:
 				<name_list name="AccessList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_allowed"/>
 				<button label="Usuń" label_selected="Usuń" name="remove_allowed"/>
+				<button label="Eksport" label_selected="Eksport" name="export_allowed"/>
+				<button label="Import" label_selected="Import" tool_tip="Zaimportuj plik CSV zawierający tylko prawidłowe identyfikatory UUID - po jednym w każdym wierszu, bez dodatkowych znaków i formatowania." name="import_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Banuj" name="BanCheck">
@@ -450,6 +452,8 @@ teksturę:
 				</name_list>
 				<button label="Dodaj" name="add_banned"/>
 				<button label="Usuń" label_selected="Usuń" name="remove_banned"/>
+				<button label="Eksport" label_selected="Eksport" name="export_banned"/>
+				<button label="Import" label_selected="Import" tool_tip="Zaimportuj plik CSV zawierający tylko prawidłowe identyfikatory UUID - po jednym w każdym wierszu, bez dodatkowych znaków i formatowania." name="import_banned"/>
 			</panel>
 		</panel>
 		<panel label="Przygody" name="land_experiences_panel"/>

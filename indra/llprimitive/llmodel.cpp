@@ -1587,7 +1587,7 @@ LLSD LLMeshSkinInfo::asLLSD(bool include_joints, bool lock_scale_if_joint_positi
     for (U32 i = 0; i < mJointNames.size(); ++i)
     {
         ret[ "joint_names" ][ i ] = mJointNames[ i ];
-
+        if (mInvBindMatrix.size() < i) break; // <FS:Beq/> FIRE-34811 Crash during import due to missing inv_bind_matrices.
         for (U32 j = 0; j < 4; j++)
         {
             for (U32 k = 0; k < 4; k++)

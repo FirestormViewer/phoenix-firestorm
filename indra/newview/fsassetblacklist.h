@@ -35,9 +35,9 @@
 #include "llsingleton.h"
 #include "llassettype.h"
 
-using blacklisted_uuid_container_t = std::unordered_set<LLUUID, FSUUIDHash>;
+using blacklisted_uuid_container_t = std::unordered_set<LLUUID>;
 using blacklist_type_map_t = std::map<LLAssetType::EType, blacklisted_uuid_container_t>;
-using blacklist_data_t = std::unordered_map<LLUUID, LLSD, FSUUIDHash>;
+using blacklist_data_t = std::unordered_map<LLUUID, LLSD>;
 
 class FSAssetBlacklist : public LLSingleton<FSAssetBlacklist>
 {

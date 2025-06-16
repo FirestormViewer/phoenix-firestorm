@@ -62,7 +62,7 @@
 			<check_box name="filter_perm_copy" label="可複製" />
 			<check_box name="filter_perm_modify" label="可修改" />
 			<check_box name="filter_perm_transfer" label="可轉讓" />
-			<check_box name="filter_reflection_probe" label="反射探針" tool_tip="僅包含手動探針，不包括自動探針。僅在顯示設置中啟用鏡面時才包含鏡面探針。如果反射範圍設置為“無”或者探針未烘焙，則可能無法識別物件。"/>
+			<check_box name="filter_reflection_probe" label="反射探針" tool_tip="僅包含手動探針，不包括自動探針。僅在顯示設置中啟用鏡面時才包含鏡面探針。如果反射範圍設置為「無」或者探針未烘焙，則可能無法識別物件。"/>
 			<check_box name="filter_for_sale" label="出售價格介於" />
 			<text name="and">
 				和
