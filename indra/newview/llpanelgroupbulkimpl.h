@@ -84,7 +84,9 @@ public:
 
     void (*mCloseCallback)(void* data);
     void* mCloseCallbackUserData;
-    boost::signals2::connection mAvatarNameCacheConnection;
+    // <FS:Ansariel> Fix avatar name loading
+    //boost::signals2::connection mAvatarNameCacheConnection;
+    std::map<LLUUID, boost::signals2::connection> mAvatarNameCacheConnections;
 
     // The following are for the LLPanelGroupInvite subclass only.
     // These aren't needed for LLPanelGroupBulkBan, but if we have to add another
