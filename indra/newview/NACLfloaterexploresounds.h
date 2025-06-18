@@ -23,7 +23,7 @@ public:
 
     bool tick() override;
 
-    LLSoundHistoryItem getItem(const LLUUID& itemID);
+    LLSoundHistoryItem getItem(const LLUUID& itemID) const;
 
 private:
     virtual ~NACLFloaterExploreSounds();
