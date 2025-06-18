@@ -6597,8 +6597,19 @@ void LLViewerObject::setAttachedSound(const LLUUID &audio_uuid, const LLUUID& ow
     }
 
     // <FS:Ansariel> Asset blacklist
-    if (FSAssetBlacklist::getInstance()->isBlacklisted(audio_uuid, LLAssetType::AT_SOUND))
+    FSAssetBlacklist& blacklist = FSAssetBlacklist::instance();
+    if (blacklist.isBlacklisted(sound_id, LLAssetType::AT_SOUND))
     {
+        return;
+    }
+    else if (isAttachment() && blacklist.isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN))
+    {
+        // Attachment sound
+        return;
+    }
+    else if (blacklist.isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED))
+    {
+        // Rezzed object sound
         return;
     }
     // </FS:Ansariel>
