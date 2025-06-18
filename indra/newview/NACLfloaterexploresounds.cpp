@@ -451,22 +451,22 @@ void NACLFloaterExploreSounds::blacklistSound(FSAssetBlacklist::eBlacklistFlag f
             region_name = cur_region->getName();
         }
 
-        if (auto found = mBlacklistAvatarNameCacheConnections.find(item.mOwnerID); found != mBlacklistAvatarNameCacheConnections.end())
+        if (LLAvatarName av_name; LLAvatarNameCache::get(item.mOwnerID, &av_name))
         {
-            if (found->second.connected())
-            {
-                found->second.disconnect();
-            }
-            mBlacklistAvatarNameCacheConnections.erase(found);
+            FSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
         }
-        LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, _1, _2, item.mAssetID, region_name, flag));
-        mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
+        else
+        {
+            // Create unique UUID here instead of avatar UUID because we might be blacklisting more than one sound of the same user
+            LLUUID requestId = LLUUID::generateNewID();
+            mBlacklistAvatarNameCacheConnections.try_emplace(requestId, LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, requestId, _1, _2, item.mAssetID, region_name, flag)));
+        }
     }
 }
 
-void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag)
+void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& request_id, const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag)
 {
-    if (auto found = mBlacklistAvatarNameCacheConnections.find(av_id); found != mBlacklistAvatarNameCacheConnections.end())
+    if (auto found = mBlacklistAvatarNameCacheConnections.find(request_id); found != mBlacklistAvatarNameCacheConnections.end())
     {
         if (found->second.connected())
         {

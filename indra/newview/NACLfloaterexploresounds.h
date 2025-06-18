@@ -48,7 +48,7 @@ private:
     typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
     blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
 
-    void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag);
+    void onBlacklistAvatarNameCacheCallback(const LLUUID& request_id, const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag);
 };
 
 #endif
