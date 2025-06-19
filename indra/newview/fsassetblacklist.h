@@ -45,7 +45,7 @@ struct FSAssetBlacklistData
     bool permanent{ false };
 
     LLSD toLLSD() const;
-    FSAssetBlacklistData fromLLSD(const LLSD& data);
+    static FSAssetBlacklistData fromLLSD(const LLSD& data);
 };
 
 using blacklisted_uuid_container_t = std::unordered_set<LLUUID>;

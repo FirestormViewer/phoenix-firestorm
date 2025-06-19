@@ -513,7 +513,7 @@ void FSData::processAssets(const LLSD& assets)
         {
             continue;
         }
-        FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, FSAssetBlacklistData().fromLLSD(data), false);
+        FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, FSAssetBlacklistData::fromLLSD(data), false);
         LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
     }
 }

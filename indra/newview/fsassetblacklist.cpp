@@ -85,17 +85,19 @@ LLSD FSAssetBlacklistData::toLLSD() const
 
 FSAssetBlacklistData FSAssetBlacklistData::fromLLSD(const LLSD& data)
 {
+    FSAssetBlacklistData blacklistdata;
+
     std::string asset_date = data["asset_date"].asString() + "Z";
     asset_date.replace(asset_date.find(" "), 1, "T");
 
-    name = data["asset_name"].asString();
-    region = data["asset_region"].asString();
-    type = S32toAssetType(data["asset_type"].asInteger());
-    flags = data.has("asset_blacklist_flag") ? data["asset_blacklist_flag"].asInteger() : 0;
-    date = LLDate(asset_date);
-    permanent = data["asset_permanent"].asBoolean();
+    blacklistdata.name = data["asset_name"].asString();
+    blacklistdata.region = data["asset_region"].asString();
+    blacklistdata.type = S32toAssetType(data["asset_type"].asInteger());
+    blacklistdata.flags = data.has("asset_blacklist_flag") ? data["asset_blacklist_flag"].asInteger() : 0;
+    blacklistdata.date = LLDate(asset_date);
+    blacklistdata.permanent = data["asset_permanent"].asBoolean();
 
-    return *this;
+    return blacklistdata;
 }
 
 void FSAssetBlacklist::init()
@@ -332,7 +334,7 @@ void FSAssetBlacklist::loadBlacklist()
                         gObjectList.addDerenderedItem(uid, true);
                     }
 
-                    addNewItemToBlacklistData(uid, FSAssetBlacklistData().fromLLSD(entry_data), false);
+                    addNewItemToBlacklistData(uid, FSAssetBlacklistData::fromLLSD(entry_data), false);
                 }
             }
         }
@@ -370,7 +372,7 @@ void FSAssetBlacklist::loadBlacklist()
                     newdata["asset_date"] = data["entry_date"].asString();
                     newdata["asset_permanent"] = true; // For conversion of old data
 
-                    addNewItemToBlacklistData(uid, FSAssetBlacklistData().fromLLSD(newdata), false);
+                    addNewItemToBlacklistData(uid, FSAssetBlacklistData::fromLLSD(newdata), false);
                 }
             }
             oldfile.close();
