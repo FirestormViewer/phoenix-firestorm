@@ -40,7 +40,7 @@
 
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
-LLAssetType::EType S32toAssetType(S32 assetindex)
+static LLAssetType::EType S32toAssetType(S32 assetindex)
 {
     LLAssetType::EType type;
     switch (assetindex)
@@ -72,29 +72,21 @@ void FSAssetBlacklist::init()
     loadBlacklist();
 }
 
-bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type, eBlacklistFlag flag)
+bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type, eBlacklistFlag flag) const
 {
     if (mBlacklistData.empty())
     {
         return false;
     }
 
-    blacklist_type_map_t::iterator it = mBlacklistTypeContainer.find(type);
-
-    if (it == mBlacklistTypeContainer.end())
+    if (!mBlacklistTypeContainer.contains(type))
     {
         return false;
     }
 
-    blacklisted_uuid_container_t uuids = it->second;
-    if (uuids.find(id) == uuids.end())
+    if (!mBlacklistTypeContainer.at(type).contains(id))
     {
         return false;
-    }
-
-    if (flag == eBlacklistFlag::NONE)
-    {
-        return true;
     }
 
     const auto& data_it = mBlacklistData.find(id);
@@ -103,15 +95,13 @@ bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type, 
         return false;
     }
 
-    const LLSD& data = data_it->second;
-    if (!data.has("asset_blacklist_flag"))
+    eBlacklistFlag stored_flag{ eBlacklistFlag::NONE };
+    if (const LLSD& data = data_it->second; data.has("asset_blacklist_flag"))
     {
-        return false;
+        stored_flag = static_cast<eBlacklistFlag>(data["asset_blacklist_flag"].asInteger());
     }
 
-    eBlacklistFlag stored_flag = static_cast<eBlacklistFlag>(data["asset_blacklist_flag"].asInteger());
-
-    return (static_cast<S32>(stored_flag) & static_cast<S32>(flag)) != 0;
+    return (stored_flag == eBlacklistFlag::NONE && flag == eBlacklistFlag::NONE) || (static_cast<S32>(stored_flag) & static_cast<S32>(flag)) != 0;
 }
 
 void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, eBlacklistFlag flag /*= eBlacklistFlag::NONE*/, bool permanent /*= true*/, bool save /*= true*/)
@@ -123,23 +113,19 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
 
     LLSD data;
 
-    if (isBlacklisted(id, type))
+    if (auto it = mBlacklistData.find(id); it != mBlacklistData.end())
     {
-        auto it = mBlacklistData.find(id);
-        if (it != mBlacklistData.end())
-        {
-            data = it->second;
+        data = it->second;
 
-            S32 existing_flag = data.has("asset_blacklist_flag") ? data["asset_blacklist_flag"].asInteger() : 0;
-            data["asset_blacklist_flag"] = static_cast<S32>(existing_flag | static_cast<S32>(flag));
+        S32 existing_flag = data.has("asset_blacklist_flag") ? data["asset_blacklist_flag"].asInteger() : 0;
+        data["asset_blacklist_flag"] = static_cast<S32>(existing_flag | static_cast<S32>(flag));
 
-            data["asset_name"] = name;
-            data["asset_region"] = region;
-            data["asset_date"] = input_date;
-            data["asset_permanent"] = permanent;
+        data["asset_name"] = name;
+        data["asset_region"] = region;
+        data["asset_date"] = input_date;
+        data["asset_permanent"] = permanent;
 
-            addNewItemToBlacklistData(id, data, save);
-        }
+        addNewItemToBlacklistData(id, data, save);
     }
     else
     {
@@ -211,7 +197,8 @@ void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
 }
 
 void FSAssetBlacklist::removeFlagsFromItem(const LLUUID& id, S32 combined_flags)
-{auto it = mBlacklistData.find(id);
+{
+    auto it = mBlacklistData.find(id);
     if (it == mBlacklistData.end())
     {
         return;
@@ -242,8 +229,7 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
 {
     LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
-    auto it = mBlacklistData.find(id);
-    if (it != mBlacklistData.end())
+    if (auto it = mBlacklistData.find(id); it != mBlacklistData.end())
     {
         it->second = data;
     }

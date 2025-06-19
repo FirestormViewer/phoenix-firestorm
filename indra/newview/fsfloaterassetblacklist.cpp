@@ -99,7 +99,7 @@ FSAssetBlacklist::eBlacklistFlag FSFloaterAssetBlacklist::getFlagFromLLSD(const 
     return FSAssetBlacklist::eBlacklistFlag::NONE;
 }
 
-std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
+std::string FSFloaterAssetBlacklist::getTypeString(S32 type) const
 {
     switch (type)
     {
@@ -118,7 +118,7 @@ std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
     }
 }
 
-std::string FSFloaterAssetBlacklist::getFlagString(FSAssetBlacklist::eBlacklistFlag flag)
+std::string FSFloaterAssetBlacklist::getFlagString(FSAssetBlacklist::eBlacklistFlag flag) const
 {
     switch (flag)
     {
@@ -179,25 +179,32 @@ void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& dat
             element["columns"][0]["column"] = "name";
             element["columns"][0]["type"] = "text";
             element["columns"][0]["value"] = !data["asset_name"].asString().empty() ? data["asset_name"].asString() : getString("unknown_object");
+
             element["columns"][1]["column"] = "region";
             element["columns"][1]["type"] = "text";
             element["columns"][1]["value"] = !data["asset_region"].asString().empty() ? data["asset_region"].asString() : getString("unknown_region");
+
             element["columns"][2]["column"] = "type";
             element["columns"][2]["type"] = "text";
             element["columns"][2]["value"]  = getTypeString(asset_type);
+
             element["columns"][3]["column"] = "flags";
             element["columns"][3]["type"]   = "text";
             element["columns"][3]["value"]  = getFlagString(flag);
+
             element["columns"][4]["column"] = "date";
             element["columns"][4]["type"] = "text";
             element["columns"][4]["value"] = date_str;
+
             element["columns"][5]["column"] = "permanent";
             element["columns"][5]["type"] = "text";
             element["columns"][5]["halign"] = "center";
             element["columns"][5]["value"] = data["asset_permanent"].asBoolean() ? getString("asset_permanent") : LLStringUtil::null;
+
             element["columns"][6]["column"] = "date_sort";
             element["columns"][6]["type"] = "text";
             element["columns"][6]["value"] = llformat("%u", (U64)date.secondsSinceEpoch());
+
             element["columns"][7]["column"] = "asset_type";
             element["columns"][7]["type"] = "integer";
             element["columns"][7]["value"] = data["asset_type"].asInteger();

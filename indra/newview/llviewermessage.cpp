@@ -4691,22 +4691,23 @@ static bool is_sound_blacklisted(const LLUUID& sound_id, const LLUUID& object_id
     {
         return true;
     }
-    else if (object_id == owner_id && blacklist.isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::GESTURE))
+    else if (object_id == owner_id)
     {
         // Gesture sound
-        return true;
+        return blacklist.isBlacklisted(sound_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::GESTURE);
     }
-    else if (LLViewerObject* object = gObjectList.findObject(object_id);
-             object && object->isAttachment() &&
-             blacklist.isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN))
+    else if (LLViewerObject* object = gObjectList.findObject(object_id))
     {
-        // Attachment sound
-        return true;
-    }
-    else if (blacklist.isBlacklisted(owner_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED))
-    {
-        // Rezzed object sound
-        return true;
+        if (object->isAttachment())
+        {
+            // Attachment sound
+            return blacklist.isBlacklisted(sound_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::WORN);
+        }
+        else
+        {
+            // Rezzed object sound
+            return blacklist.isBlacklisted(sound_id, LLAssetType::AT_SOUND, FSAssetBlacklist::eBlacklistFlag::REZZED);
+        }
     }
 
     return false;

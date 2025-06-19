@@ -64,8 +64,8 @@ protected:
     void onSelectionChanged();
 
     void buildBlacklist();
-    std::string getTypeString(S32 type);
-    std::string getFlagString(FSAssetBlacklist::eBlacklistFlag source);
+    std::string getTypeString(S32 type) const;
+    std::string getFlagString(FSAssetBlacklist::eBlacklistFlag source) const;
     static FSAssetBlacklist::eBlacklistFlag getFlagFromLLSD(const LLSD& data);
 
     LLUUID mAudioSourceID;
