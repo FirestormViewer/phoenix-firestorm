@@ -19,7 +19,7 @@
 		Von Avatar getragene Objekt-Sounds
 	</floater.string>
 	<floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">
-		Von Avatar gerezte Objekt-Sounds
+		Von Avatar gerezzte Objekt-Sounds
 	</floater.string>
 	<floater.string name="blacklist_flag_mute_avatar_gestures_sounds">
 		Avatar Gesten-Sounds
