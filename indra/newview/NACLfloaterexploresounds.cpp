@@ -453,7 +453,7 @@ void NACLFloaterExploreSounds::blacklistSound(FSAssetBlacklist::eBlacklistFlag f
 
         if (LLAvatarName av_name; LLAvatarNameCache::get(item.mOwnerID, &av_name))
         {
-            FSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
+            FSAssetBlacklist::getInstance()->addNewItemToBlacklist(flag == FSAssetBlacklist::eBlacklistFlag::NONE ? item.mAssetID : item.mOwnerID, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
         }
         else
         {
@@ -474,5 +474,5 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
         }
         mBlacklistAvatarNameCacheConnections.erase(found);
     }
-    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
+    FSAssetBlacklist::getInstance()->addNewItemToBlacklist(flag == FSAssetBlacklist::eBlacklistFlag::NONE ? asset_id : av_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
 }
