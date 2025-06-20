@@ -26379,5 +26379,271 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <!-- <FS:Zi> Area Search Defaults -->
+    <key>FSAreaSearch_ExcludeAttachments</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Exclude attachments</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSAreaSearch_ExcludeChildPrims</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Exclude child prims</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSAreaSearch_ExcludeNeighborRegions</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Exclude neighbor regions</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSAreaSearch_ExcludePhysical</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Exclude physical objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSAreaSearch_ExcludeReflectionProbes</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Exclude reflection probes</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_ExcludeTemporary</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Exclude temporary objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSAreaSearch_FilterDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Filter by distance</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_FilterForSale</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Only show objects that are for sale</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_MaximumDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Maximum distance</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>999999</integer>
+    </map>
+    <key>FSAreaSearch_MaximumPrice</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Maximum price</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>999999</integer>
+    </map>
+    <key>FSAreaSearch_MinimumDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Minimum distance</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_MinimumPrice</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Minimum price</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyAttachments</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only attachments</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyCopiable</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only copiable objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyCurrentParcel</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only objects in the current parcel</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyForSale</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only objects that are for sale</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyLocked</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only locked objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyMOAP</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only objects that have shared media applied</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyModifiable</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only  modifiable objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyPhantom</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only phantom objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyPhysical</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only physical objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyReflectionProbes</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only reflection probes</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyTemporary</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only temporary objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSAreaSearch_OnlyTransferable</key>
+    <map>
+      <key>Comment</key>
+      <string>Area Search Filter: Find only transferable objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <!-- </FS:Zi> Area Search Defaults -->
   </map>
 </llsd>

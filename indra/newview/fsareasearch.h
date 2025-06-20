@@ -378,6 +378,7 @@ private:
     void onCommitCheckbox();
     void onCommitSpin();
     void onCommitCombo();
+    void onButtonClickedSaveAsDefault();
 
     FSAreaSearch* mFSAreaSearch;
     LLCheckBoxCtrl* mCheckboxForSale;
