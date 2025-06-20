@@ -2212,11 +2212,11 @@ bool FSPanelAreaSearchFilter::postBuild()
     mCheckboxAttachment->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
     mSpinForSaleMinValue= getChild<LLSpinCtrl>("min_price");
-    mSpinForSaleMinValue->set(gSavedSettings.getS32("FSAreaSearch_MinimumPrice"));
+    mSpinForSaleMinValue->set((F32)gSavedSettings.getS32("FSAreaSearch_MinimumPrice"));
     mSpinForSaleMinValue->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitSpin, this));
 
     mSpinForSaleMaxValue= getChild<LLSpinCtrl>("max_price");
-    mSpinForSaleMaxValue->set(gSavedSettings.getS32("FSAreaSearch_MaximumPrice"));
+    mSpinForSaleMaxValue->set((F32)gSavedSettings.getS32("FSAreaSearch_MaximumPrice"));
     mSpinForSaleMaxValue->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitSpin, this));
 
     mComboClickAction = getChild<LLComboBox>("click_action");
@@ -2262,7 +2262,7 @@ bool FSPanelAreaSearchFilter::postBuild()
     mSpinDistanceMinValue->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitSpin, this));
 
     mSpinDistanceMaxValue= getChild<LLSpinCtrl>("max_distance");
-    mSpinDistanceMaxValue->set(gSavedSettings.getS32("FSAreaSearch_MaximumDistance"));
+    mSpinDistanceMaxValue->set((F32)gSavedSettings.getS32("FSAreaSearch_MaximumDistance"));
     mSpinDistanceMaxValue->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitSpin, this));
 
     mCheckboxMoaP = getChild<LLCheckBoxCtrl>("filter_moap");
@@ -2406,8 +2406,8 @@ void FSPanelAreaSearchFilter::onButtonClickedSaveAsDefault()
     gSavedSettings.setBOOL("FSAreaSearch_OnlyPhantom", mCheckboxPhantom->get());
     gSavedSettings.setBOOL("FSAreaSearch_FilterForSale", mCheckboxForSale->get());
     gSavedSettings.setBOOL("FSAreaSearch_OnlyAttachments", mCheckboxAttachment->get());
-    gSavedSettings.setS32("FSAreaSearch_MinimumPrice", mSpinForSaleMinValue->get());
-    gSavedSettings.setS32("FSAreaSearch_MaximumPrice", mSpinForSaleMaxValue->get());
+    gSavedSettings.setS32("FSAreaSearch_MinimumPrice", (S32)mSpinForSaleMinValue->get());
+    gSavedSettings.setS32("FSAreaSearch_MaximumPrice", (S32)mSpinForSaleMaxValue->get());
     gSavedSettings.setS32("FSAreaSearch_ClickAction", mComboClickAction->getValue());
     gSavedSettings.setBOOL("FSAreaSearch_ExcludeAttachments", mCheckboxExcludeAttachment->get());
     gSavedSettings.setBOOL("FSAreaSearch_ExcludePhysical", mCheckboxExcludePhysics->get());
@@ -2417,7 +2417,7 @@ void FSPanelAreaSearchFilter::onButtonClickedSaveAsDefault()
     gSavedSettings.setBOOL("FSAreaSearch_ExcludeNeighborRegions", mCheckboxExcludeNeighborRegions->get());
     gSavedSettings.setBOOL("FSAreaSearch_FilterDistance", mCheckboxExcludeAttachment->get());
     gSavedSettings.setS32("FSAreaSearch_MinimumDistance", mCheckboxDistance->get());
-    gSavedSettings.setS32("FSAreaSearch_MaximumDistance", mSpinDistanceMaxValue->get());
+    gSavedSettings.setS32("FSAreaSearch_MaximumDistance", (S32)mSpinDistanceMaxValue->get());
     gSavedSettings.setBOOL("FSAreaSearch_OnlyMOAP", mCheckboxMoaP->get());
     gSavedSettings.setBOOL("FSAreaSearch_OnlyReflectionProbes", mCheckboxReflectionProbe->get());
     gSavedSettings.setBOOL("FSAreaSearch_OnlyCopiable", mCheckboxPermCopy->get());
