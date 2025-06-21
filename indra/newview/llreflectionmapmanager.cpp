@@ -1315,7 +1315,7 @@ void LLReflectionMapManager::setUniforms()
 }
 
 
-void renderReflectionProbe(LLReflectionMap* probe)
+void renderReflectionProbe(LLReflectionMap* probe, std::map<LLSpatialGroup*, int> groupCount, std::map<LLViewerObject*, int> objCount, std::map<F32*, int> locCount)
 {
     if (probe->isRelevant())
     {
@@ -1338,7 +1338,7 @@ void renderReflectionProbe(LLReflectionMap* probe)
         gGL.end();
         gGL.flush();
 
-        gGL.diffuseColor4f(1, 1, 0, 1);
+        gGL.diffuseColor4f(0, 1, 1, 1);
         gGL.begin(gGL.LINES);
         for (auto& neighbor : probe->mNeighbors)
         {
@@ -1350,6 +1350,45 @@ void renderReflectionProbe(LLReflectionMap* probe)
         }
         gGL.end();
         gGL.flush();
+
+        // --- New: draw a point at the probe origin color-coded by type ---
+        bool dupByGroup = (probe->mGroup       && groupCount[ probe->mGroup       ] > 1);
+        bool dupByObject= (probe->mViewerObject && objCount[ probe->mViewerObject ] > 1);
+        bool dupByLoc   = (                   locCount[ probe->mOrigin.getF32ptr()] > 1);
+
+        const bool is_manual    = probe->mViewerObject != nullptr;
+        const bool is_automatic = (probe->mGroup != nullptr) && !is_manual;
+        // terrain/water is when neither manual nor automatic
+        // const bool is_terrain   = !is_manual && !is_automatic;
+
+        if (is_manual)
+        {
+            // red dot for manual probes
+            gGL.diffuseColor4f(1.f, 0.f, 0.f, 1.f);
+        }
+        else if (is_automatic)
+        {
+            // blue dot for automatic probes
+            gGL.diffuseColor4f(0.f, 0.f, 1.f, 1.f);
+        }
+        else
+        {
+            // green dot for terrain/water probes
+            gGL.diffuseColor4f(0.f, 1.f, 0.f, 1.f);
+        }
+
+        // use a bigger dot if *any* duplicate condition is true
+        const float normalSize = 9.f;
+        const float bigSize    = 18.f;
+        float pointSize = (dupByGroup || dupByObject || dupByLoc)
+                            ? bigSize
+                            : normalSize;
+        glPointSize(pointSize);
+        gGL.begin(gGL.POINTS);
+        gGL.vertex3fv(po);
+        gGL.end();
+        gGL.flush();        
+     
     }
 
 #if 0
@@ -1403,10 +1442,21 @@ void renderReflectionProbe(LLReflectionMap* probe)
 void LLReflectionMapManager::renderDebug()
 {
     gDebugProgram.bind();
+    
+    std::map<LLSpatialGroup*, int>  groupCount;
+    std::map<LLViewerObject*, int>  objCount;
+    std::map<F32*,            int>  locCount;
 
+    for (LLReflectionMap* probe : mProbes)
+    {
+        if (!probe->isRelevant()) continue;
+        groupCount[ probe->mGroup ]++;
+        objCount[ probe->mViewerObject ]++;
+        locCount[ probe->mOrigin.getF32ptr() ]++;
+    }
     for (auto& probe : mProbes)
     {
-        renderReflectionProbe(probe);
+        renderReflectionProbe(probe, groupCount, objCount, locCount);
     }
 
     gDebugProgram.unbind();

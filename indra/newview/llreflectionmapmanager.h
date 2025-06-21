@@ -43,8 +43,7 @@ class LLViewerObject;
 // reflection probe mininum scale
 #define LL_REFLECTION_PROBE_MINIMUM_SCALE 1.f;
 
-void renderReflectionProbe(LLReflectionMap* probe);
-
+void renderReflectionProbe(LLReflectionMap* probe, std::map<LLSpatialGroup*, int> groupCount, std::map<LLViewerObject*, int> objCount, std::map<F32*, int> locCount); // <FS:Beq/> enhanced metadata render for probes
 class alignas(16) LLReflectionMapManager
 {
     LL_ALIGN_NEW
