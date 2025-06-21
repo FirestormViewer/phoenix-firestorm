@@ -29,7 +29,7 @@ Help make Firestorm better! You can get involved with improvements by filing bug
 
 ## Community respect
 
-This section is guided by the [TPV Policy](https://wiki.firestormviewer.org/tpv_policy) and the [Second Life Code of Conduct](https://github.com/secondlife/viewer?tab=coc-ov-file).
+This section is guided by the [TPV Policy](https://secondlife.com/corporate/third-party-viewers) and the [Second Life Code of Conduct](https://github.com/secondlife/viewer?tab=coc-ov-file).
 
 Firestorm code is made available during ongoing development, with the **master** branch representing the current nightly build. Developers and self-compilers are encouraged to work on their own forks and contribute back via pull requests, as detailed in the [contributing guide](CONTRIBUTING.md).
 
