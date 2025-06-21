@@ -352,6 +352,7 @@ bool    LLPipeline::sRenderAttachedLights = true;
 bool    LLPipeline::sRenderAttachedParticles = true;
 bool    LLPipeline::sRenderDeferred = false;
 bool    LLPipeline::sReflectionProbesEnabled = false;
+S32     LLPipeline::sReflectionProbeLevel = (S32)LLReflectionMap::ProbeLevel::NONE; // <FS:Beq/> [FIRE-35070] Address progressive FPS loss.
 S32     LLPipeline::sVisibleLightCount = 0;
 bool    LLPipeline::sRenderingHUDs;
 F32     LLPipeline::sDistortionWaterClipPlaneMargin = 1.0125f;
@@ -1263,8 +1264,10 @@ void LLPipeline::refreshCachedSettings()
     RenderMirrors = gSavedSettings.getBOOL("RenderMirrors");
     RenderHeroProbeUpdateRate = gSavedSettings.getS32("RenderHeroProbeUpdateRate");
     RenderHeroProbeConservativeUpdateMultiplier = gSavedSettings.getS32("RenderHeroProbeConservativeUpdateMultiplier");
-
     sReflectionProbesEnabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionsEnabled") && gSavedSettings.getBOOL("RenderReflectionsEnabled");
+    // <FS:Beq> [FIRE-35070] Instead of using the above we'll add a new static level variable to save some lookups. Making the above "work" with ProbeLevel will break everything.
+    sReflectionProbeLevel = gSavedSettings.getS32("RenderReflectionProbeLevel");
+    // <FS:Beq/>
     RenderSpotLight = nullptr;
 
     if (gNonInteractive)

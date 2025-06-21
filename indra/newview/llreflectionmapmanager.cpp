@@ -628,6 +628,12 @@ void LLReflectionMapManager::getReflectionMaps(std::vector<LLReflectionMap*>& ma
 
 LLReflectionMap* LLReflectionMapManager::registerSpatialGroup(LLSpatialGroup* group)
 {
+    // <FS:Beq> [FIRE-35070] Don't register probes if we're not using them
+    if( LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
+    {
+        return nullptr;
+    }
+    // </FS:Beq>
     if (!group)
     {
         return nullptr;
@@ -648,7 +654,10 @@ LLReflectionMap* LLReflectionMapManager::registerSpatialGroup(LLSpatialGroup* gr
 
 LLReflectionMap* LLReflectionMapManager::registerViewerObject(LLViewerObject* vobj)
 {
-    if (!LLPipeline::sReflectionProbesEnabled)
+    // <FS:Beq> [FIRE-35070] Don't register manual probes if we're not using them
+    // if (!LLPipeline::sReflectionProbesEnabled)
+    if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
+    // </FS:Beq>
     {
         return nullptr;
     }
@@ -1387,8 +1396,7 @@ void renderReflectionProbe(LLReflectionMap* probe, std::map<LLSpatialGroup*, int
         gGL.begin(gGL.POINTS);
         gGL.vertex3fv(po);
         gGL.end();
-        gGL.flush();        
-     
+        gGL.flush();
     }
 
 #if 0
