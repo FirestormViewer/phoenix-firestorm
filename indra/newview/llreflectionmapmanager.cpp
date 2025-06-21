@@ -223,7 +223,7 @@ void LLReflectionMapManager::update()
     }
 
     static LLCachedControl<S32> sDetail(gSavedSettings, "RenderReflectionProbeDetail", -1);
-    static LLCachedControl<S32> sLevel(gSavedSettings, "RenderReflectionProbeLevel", 3);
+    // static LLCachedControl<S32> sLevel(gSavedSettings, "RenderReflectionProbeLevel", 3); // <FS:Beq/> No longer required use the pipeline cached version instead
     static LLCachedControl<U32> sReflectionProbeCount(gSavedSettings, "RenderReflectionProbeCount", 256U);
     static LLCachedControl<S32> sProbeDynamicAllocation(gSavedSettings, "RenderReflectionProbeDynamicAllocation", -1);
     mResetFade = llmin((F32)(mResetFade + gFrameIntervalSeconds * 2.f), 1.f);
@@ -232,15 +232,15 @@ void LLReflectionMapManager::update()
         U32 probe_count_temp = mDynamicProbeCount;
         if (sProbeDynamicAllocation > -1)
         {
-            if (sLevel == 0)
+            if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
                 mDynamicProbeCount = 1;
             }
-            else if (sLevel == 1)
+            else if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::MANUAL_ONLY)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
                 mDynamicProbeCount = (U32)mProbes.size();
             }
-            else if (sLevel == 2)
+            else if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::MANUAL_AND_TERRAIN)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
                 mDynamicProbeCount = llmax((U32)mProbes.size(), 128);
             }
@@ -456,13 +456,15 @@ void LLReflectionMapManager::update()
         {
             closestDynamic = probe;
         }
-
-        if (sLevel == 0)
-        {
-            // only update default probe when coverage is set to none
-            llassert(probe == mDefaultProbe);
-            break;
-        }
+        // <FS:Beq> This code is no longer required and this update loop should self-cleanse
+        // However: There appears to be something that causes the reference count to be 2 for some probes that should no longer be in use.
+        // if (sLevel == 0)
+        // {
+        //     // only update default probe when coverage is set to none
+        //     llassert(probe == mDefaultProbe);
+        //     break;
+        // }
+        // </FS:Beq>
     }
 
     if (realtime && closestDynamic != nullptr)
@@ -489,12 +491,12 @@ void LLReflectionMapManager::update()
     static LLCachedControl<F32> sUpdatePeriod(gSavedSettings, "RenderDefaultProbeUpdatePeriod", 2.f);
     if ((gFrameTimeSeconds - mDefaultProbe->mLastUpdateTime) < sUpdatePeriod)
     {
-        if (sLevel == 0)
+        if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE) // <FS:Beq/> No longer required use the pipeline cached version instead
         { // when probes are disabled don't update the default probe more often than the prescribed update period
             oldestProbe = nullptr;
         }
     }
-    else if (sLevel > 0)
+    else if (LLPipeline::sReflectionProbeLevel > (S32)LLReflectionMap::ProbeLevel::NONE) // <FS:Beq/> No longer required use the pipeline cached version instead
     { // when probes are enabled don't update the default probe less often than the prescribed update period
       oldestProbe = mDefaultProbe;
     }
