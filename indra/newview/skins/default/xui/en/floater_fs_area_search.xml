@@ -612,6 +612,14 @@
 			 left="10"
 			 bottom="-6"
 			 follows="left|bottom"/>
+			 <button
+			 name="save_as_default"
+			 label="Save as Default"
+			 mouse_opaque="true"
+			 height="20"
+			 width="160"
+			 left_pad="10"
+			 follows="left|bottom"/>
 		</panel>
 		<panel
 		 border="true"

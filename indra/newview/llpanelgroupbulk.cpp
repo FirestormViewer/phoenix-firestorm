@@ -63,7 +63,7 @@ LLPanelGroupBulkImpl::LLPanelGroupBulkImpl(const LLUUID& group_id) :
     mTooManySelected(),
     mCloseCallback(NULL),
     mCloseCallbackUserData(NULL),
-    mAvatarNameCacheConnection(),
+    //mAvatarNameCacheConnection(), // <FS:Ansariel> Fix avatar name loading
     mRoleNames(NULL),
     mOwnerWarning(),
     mAlreadyInGroup(),
@@ -74,10 +74,19 @@ LLPanelGroupBulkImpl::LLPanelGroupBulkImpl(const LLUUID& group_id) :
 
 LLPanelGroupBulkImpl::~LLPanelGroupBulkImpl()
 {
-    if (mAvatarNameCacheConnection.connected())
+    // <FS:Ansariel> Fix avatar name loading
+    //if (mAvatarNameCacheConnection.connected())
+    //{
+    //    mAvatarNameCacheConnection.disconnect();
+    //}
+    for (auto& [id, connection] : mAvatarNameCacheConnections)
     {
-        mAvatarNameCacheConnection.disconnect();
+        if (connection.connected())
+            connection.disconnect();
     }
+
+    mAvatarNameCacheConnections.clear();
+    // </FS:Ansariel>
 }
 
 void LLPanelGroupBulkImpl::callbackClickAdd(LLPanelGroupBulk* panelp)
@@ -134,26 +143,51 @@ void LLPanelGroupBulkImpl::addUsers(const uuid_vec_t& agent_ids)
         }
         else
         {
-            if (mAvatarNameCacheConnection.connected())
+            // <FS:Ansariel> Fix avatar name loading
+            //if (mAvatarNameCacheConnection.connected())
+            //{
+            //    mAvatarNameCacheConnection.disconnect();
+            //}
+            //// *TODO : Add a callback per avatar name being fetched.
+            //mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id,
+            //    [&](const LLUUID& agent_id, const LLAvatarName& av_name)
+            //    {
+            //        onAvatarNameCache(agent_id, av_name);
+            //    });
+
+            if (auto found = mAvatarNameCacheConnections.find(agent_id); found != mAvatarNameCacheConnections.end())
             {
-                mAvatarNameCacheConnection.disconnect();
+                if (found->second.connected())
+                    found->second.disconnect();
+
+                mAvatarNameCacheConnections.erase(found);
             }
-            // *TODO : Add a callback per avatar name being fetched.
-            mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id,
+
+            mAvatarNameCacheConnections.try_emplace(agent_id, LLAvatarNameCache::get(agent_id,
                 [&](const LLUUID& agent_id, const LLAvatarName& av_name)
                 {
                     onAvatarNameCache(agent_id, av_name);
-                });
+                }));
+            // </FS:Ansariel>
         }
     }
 }
 
 void LLPanelGroupBulkImpl::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-    if (mAvatarNameCacheConnection.connected())
+    // <FS:Ansariel> Fix avatar name loading
+    //if (mAvatarNameCacheConnection.connected())
+    //{
+    //    mAvatarNameCacheConnection.disconnect();
+    //}
+    if (auto found = mAvatarNameCacheConnections.find(agent_id); found != mAvatarNameCacheConnections.end())
     {
-        mAvatarNameCacheConnection.disconnect();
+        if (found->second.connected())
+            found->second.disconnect();
+
+        mAvatarNameCacheConnections.erase(found);
     }
+    // </FS:Ansariel>
 
     std::vector<std::string> names;
     uuid_vec_t agent_ids;
