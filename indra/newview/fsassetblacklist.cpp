@@ -77,7 +77,7 @@ LLSD FSAssetBlacklistData::toLLSD() const
     data["asset_region"] = region;
     data["asset_type"] = type;
     data["asset_blacklist_flag"] = flags;
-    data["asset_date"] = date;
+    data["asset_date"] = input_date;
     data["asset_permanent"] = permanent;
 
     return data;
