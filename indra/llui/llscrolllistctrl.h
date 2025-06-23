@@ -214,7 +214,7 @@ public:
 
     // returns false if unable to set the max count so low
     bool            setMaxItemCount(S32 max_count);
-    S32             getMaxItemCount(); // <FS:PP>
+    S32             getMaxItemCount() const; // <FS:PP>
 
     bool            selectByID( const LLUUID& id );     // false if item not found
 
