@@ -63,7 +63,7 @@ class FSRadar
     virtual ~FSRadar();
 
 public:
-    typedef std::unordered_map<const LLUUID, std::shared_ptr<FSRadarEntry>, FSUUIDHash> entry_map_t;
+    typedef std::unordered_map<LLUUID, std::shared_ptr<FSRadarEntry>> entry_map_t;
     entry_map_t getRadarList() { return mEntryList; }
 
     void startTracking(const LLUUID& avatar_id);
@@ -130,7 +130,7 @@ private:
         bool        lastIgnore;
     };
 
-    typedef std::unordered_map<LLUUID, RadarFields, FSUUIDHash> radarfields_map_t;
+    typedef std::unordered_map<LLUUID, RadarFields> radarfields_map_t;
     radarfields_map_t       mLastRadarSweep;
     entry_map_t             mEntryList;
 

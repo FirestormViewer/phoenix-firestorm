@@ -3395,24 +3395,19 @@ void LLPanelLandAccess::importListCallback(LLNameListCtrl* list, const std::vect
         return;
     }
 
-    std::string line;
-    std::vector<LLUUID> uuids;
+    uuid_vec_t uuids;
+    LLSD       csvData = ll_sd_from_csv(file);
+    file.close();
 
-    while (std::getline(file, line))
+    for (const auto& entry : llsd::inArray(csvData))
     {
-        LLStringUtil::trim(line);
-        if (line.empty())
+        if (entry.has("UUID"))
         {
-            continue;
-        }
-
-        LLUUID uuid;
-        if (uuid.set(line))
-        {
-            uuids.push_back(uuid);
+            LLUUID id{ entry["UUID"].asUUID() };
+            if (id.notNull())
+                uuids.push_back(std::move(id));
         }
     }
-    file.close();
 
     if (uuids.empty())
     {

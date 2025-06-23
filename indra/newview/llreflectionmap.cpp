@@ -291,25 +291,54 @@ bool LLReflectionMap::isActive() const
 
 bool LLReflectionMap::isRelevant() const
 {
-    static LLCachedControl<S32> RenderReflectionProbeLevel(gSavedSettings, "RenderReflectionProbeLevel", 3);
+    static LLCachedControl<S32> sRenderReflectionProbeLevel(gSavedSettings, "RenderReflectionProbeLevel", (S32)ProbeLevel::FULL_SCENE_WITH_AUTO);
+    // <FS:Beq> [FIRE-35070] Correct isRelevant() logic for coverage == None and refactor to make it less fragile
+    // if (mViewerObject && RenderReflectionProbeLevel > 0)
+    // { // not an automatic probe
+    //     return true;
+    // }
 
-    if (mViewerObject && RenderReflectionProbeLevel > 0)
-    { // not an automatic probe
+    // if (RenderReflectionProbeLevel == 3)
+    // { // all automatics are relevant
+    //     return true;
+    // }
+
+    // if (RenderReflectionProbeLevel == 2)
+    // { // terrain and water only, ignore probes that have a group
+    //     return !mGroup;
+    // }
+
+    // // no automatic probes, yes manual probes
+    // return mViewerObject != nullptr;
+    // Implied logic: a probe has a group if it is either a manual or automatic, it has an object if it is manual
+    //                  hasGroup   hasObject (in parenthesis means condition not checked)
+    // Manual           true       true
+    // Terrain/Water    false      (false)
+    // Automatic        true       false
+
+    const bool is_manual    = mViewerObject != nullptr ;
+    const bool is_automatic = mGroup != nullptr && !is_manual;
+    const bool is_terrain   = mGroup == nullptr;
+    switch (sRenderReflectionProbeLevel)
+    {
+    case (S32)ProbeLevel::NONE:
+        // no probes are relevant
+        return false;
+    case (S32)ProbeLevel::MANUAL_ONLY:
+        // only manual probes are relevant
+        return is_manual;
+    case (S32)ProbeLevel::MANUAL_AND_TERRAIN:
+        // manual probes and terrain/water probes are relevant
+        return !is_automatic;
+    case (S32)ProbeLevel::FULL_SCENE_WITH_AUTO:
+        // all probes are relevant
         return true;
+    default:
+        LL_WARNS() << "Unknown RenderReflectionProbeLevel: " << (S32)sRenderReflectionProbeLevel()
+                  << " - returning false" << LL_ENDL;
+        return false;
     }
-
-    if (RenderReflectionProbeLevel == 3)
-    { // all automatics are relevant
-        return true;
-    }
-
-    if (RenderReflectionProbeLevel == 2)
-    { // terrain and water only, ignore probes that have a group
-        return !mGroup;
-    }
-
-    // no automatic probes, yes manual probes
-    return mViewerObject != nullptr;
+    // </FS:Beq>
 }
 
 

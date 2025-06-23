@@ -15,6 +15,18 @@
 	<floater.string name="asset_resident">
 		Einwohner
 	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_worn_objects_sounds">
+		Von Avatar getragene Objekt-Sounds
+	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">
+		Von Avatar gerezzte Objekt-Sounds
+	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_gestures_sounds">
+		Avatar Gesten-Sounds
+	</floater.string>
+	<floater.string name="blacklist_flag_unknown">
+		Unbekanntes Kennzeichen
+	</floater.string>
 	<floater.string name="asset_unknown">
 		Unbekannt
 	</floater.string>
@@ -32,6 +44,7 @@
 		<columns name="name" label="Name"/>
 		<columns name="region" label="Region"/>
 		<columns name="type" label="Typ"/>
+		<columns name="flags" label="Kennzeichen"/>
 		<columns name="date" label="Datum"/>
 		<columns name="permanent" label="Permanent"/>
 	</fs_scroll_list>

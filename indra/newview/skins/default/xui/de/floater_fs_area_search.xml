@@ -96,8 +96,9 @@
 			<check_box name="exclude_reflection_probes" label="Reflexionstests"/>
 			<check_box name="exclude_childprim" label="Kind-Primitive"/>
 			<check_box name="exclude_neighbor_region" label="Nachbarregionen"/>
-			<button name="apply" label="Anwenden"/>
-		</panel>
+            <button name="apply" label="Anwenden"/>
+            <button name="save_as_default" label="Als Standard speichern"/>
+        </panel>
 		<panel label="Optionen" name="area_search_options_panel">
 			<text name="display_column">
 				Spalten anzeigen:

@@ -66,8 +66,8 @@ private:
     bool    mBlocked;
 };
 
-typedef std::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDHash> spam_queue_entry_map_t;
-typedef std::unordered_set<LLUUID, FSUUIDHash> collision_sound_set_t;
+typedef std::unordered_map<LLUUID, NACLAntiSpamQueueEntry*> spam_queue_entry_map_t;
+typedef std::unordered_set<LLUUID> collision_sound_set_t;
 
 class NACLAntiSpamQueue
 {

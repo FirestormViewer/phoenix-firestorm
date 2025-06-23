@@ -6,6 +6,7 @@ height="330"
 layout="topleft"
 name="floater_poser"
 title="Avatar and Animesh Poser"
+help_topic="poser"
 width="430">
 	<string name="icon_category" translate="false">Inv_BodyShape</string>
 	<string name="icon_bone" translate="false"></string>

@@ -690,6 +690,9 @@ public:
     static bool             sRenderAttachedParticles;
     static bool             sRenderDeferred;
     static bool             sReflectionProbesEnabled;
+    // <FS:Beq> [FIRE-35070] Address gradual slowdown issue
+    static S32              sReflectionProbeLevel;
+    // </FS:Beq>
     static S32              sVisibleLightCount;
     static bool             sRenderingHUDs;
     static F32              sDistortionWaterClipPlaneMargin;

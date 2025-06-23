@@ -1357,6 +1357,12 @@ U32 LLViewerRegion::getNumOfVisibleGroups() const
 
 void LLViewerRegion::updateReflectionProbes(bool full_update)
 {
+    // [FIRE-35070] Don't update reflection probes if disabled
+    if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
+    {
+        return; // no probes
+    }
+    // </FS:Beq>
     if (!full_update && mReflectionMaps.empty())
     {
         return;

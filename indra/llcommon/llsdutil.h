@@ -65,6 +65,9 @@ LL_COMMON_API char* ll_pretty_print_sd(const LLSD& sd);
 
 LL_COMMON_API std::string ll_stream_notation_sd(const LLSD& sd);
 
+// <FS:Ansariel> Create LLSD from CSV
+LL_COMMON_API LLSD ll_sd_from_csv(std::istream& csv, std::string_view delimiters = ",");
+
 //compares the structure of an LLSD to a template LLSD and stores the
 //"valid" values in a 3rd LLSD. Default values
 //are pulled from the template.  Extra keys/values in the test

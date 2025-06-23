@@ -1761,7 +1761,8 @@ bool LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
                 LLMenuItemCallGL::Params p;
                 p.name = llformat("Profile Item %d", itAgent - mClosestAgentsToCursor.begin());
 
-                LLAvatarName avName; const LLUUID& idAgent = *itAgent;
+                LLAvatarName avName;
+                const LLUUID& idAgent = *itAgent;
                 if (LLAvatarNameCache::get(idAgent, &avName))
                 {
                     p.label = avName.getCompleteName();
@@ -1778,7 +1779,7 @@ bool LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
                         }
                         mAvatarNameCacheConnections.erase(it);
                     }
-                    mAvatarNameCacheConnections[idAgent] = LLAvatarNameCache::get(idAgent, boost::bind(&LLNetMap::setAvatarProfileLabel, this, _1, _2, p.name.getValue()));
+                    mAvatarNameCacheConnections.try_emplace(idAgent, LLAvatarNameCache::get(idAgent, boost::bind(&LLNetMap::setAvatarProfileLabel, this, _1, _2, p.name.getValue())));
                 }
                 p.on_click.function = boost::bind(&LLAvatarActions::showProfile, _2);
                 p.on_click.parameter = idAgent;

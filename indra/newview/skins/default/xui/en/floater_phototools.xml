@@ -3807,7 +3807,7 @@
 				</check_box>
 				<check_box
 				 follows="top|left"
-				 label="Slop-mo Animation - Your Avatar and Viewer"
+				 label="Slow-mo Animation - Your Avatar and Viewer"
 				 layout="topleft"
 				 left="3"
 				 top_pad="10"
