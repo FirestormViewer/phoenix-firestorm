@@ -615,7 +615,18 @@
          label="Play media attached to other avatars"
          top_pad="3"
          left="25"/>
-
+        <check_box
+         name="media_huds_autoplay"
+         control_name="MediaAutoPlayHuds"
+         enabled_control="AudioStreamingMedia"
+         follows="left|top"
+         layout="topleft"
+         tool_tip="Uncheck this to make HUDs follow the standard media auto-play setting"
+         label="Auto-play media attached to your HUD"
+         left="25"
+         top_pad="3"
+         width="230"
+         height="16"/>
         <check_box
          name="media_filter"
          control_name="MediaEnableFilter"
@@ -641,6 +652,61 @@
         </button>
 
         <text
+         follows="left|top"
+         layout="topleft"
+         height="15"
+         left="25"
+         top_pad="15"
+         width="105"
+         name="media_firstinteract_label">
+            Media first-interact:
+        </text>
+        <combo_box
+         control_name="MediaFirstClickInteract"
+         enabled_control="AudioStreamingMedia"
+         follows="left|top"
+         layout="topleft"
+         height="23"
+         left_pad="10"
+         top_delta="-4"
+         width="250"
+         name="media_first_interact_combo"
+         tool_tip="This setting controls which media (once loaded) does not require a first click to focus before interaction can begin. This allows clicks to be passed directly to media bypassing the focus click requirement. Each option also inherits the previous ones.">
+         <item
+          label="Disabled"
+          name="media_first_click_none"
+          value="0"/>
+         <item
+          label="Worn HUDs only"
+          name="media_first_click_hud"
+          value="1"/>
+         <item
+          label="Owned objects"
+          name="media_first_click_own"
+          value="3"/>
+         <item
+          label="Group objects"
+          name="media_first_click_group"
+          value="7"/>
+         <item
+          label="Friend objects"
+          name="media_first_click_friend"
+          value="15"/>
+         <item
+          label="Landowner objects"
+          name="media_first_click_land"
+          value="31"/>
+         <item
+          label="Any object"
+          name="media_first_interact_any"
+          value="31"/>
+         <item
+          label="All MOAP"
+          name="media_first_click_all"
+          value="1073741824"/>
+        </combo_box>
+
+        <text
          type="string"
          length="1"
          follows="left|top"
@@ -649,7 +715,7 @@
          left="25"
          name="Media Rolloff"
          mouse_opaque="false"
-         top_pad="15"
+         top_pad="10"
          width="450">
             Media source volume rolloff distance:
         </text>

@@ -77,12 +77,26 @@
 		</combo_box>
 		<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
+		<check_box label="Medien, die am eigenen HUD angehängt sind, automatisch wiedergeben." name="media_huds_autoplay" tool_tip="Diese Option deaktivieren, um für Medien an eigenen HUD-Objekten die Standard-Abspieleinstellungen für Medien anzuwenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
 		<button label="Listen bearbeiten..." name="edit_media_lists_button"/>
 		<text name="Media Rolloff">
 			Lautstärkeabfall-Distanz für Medien-Quellen:
 		</text>
 		<slider label="Wird leiser ab:" name="MediaRollOffMin" tool_tip="Minimale Distanz von der Soundquelle, ab der die Lautstärke abzufallen beginnt."/>
+		<text name="media_firstinteract_label" width="140">
+			Medien Erst-Interaktion:
+		</text>
+		<combo_box name="media_first_interact_combo" tool_tip="Diese Einstellung legt fest, welche Medien - nachdem diese geladen wurden - keinen erstmaligen Klick zur Interaktion benötigen. Dadurch wird das Klick-Event direkt zum Medium durchgereicht, ohne zuvor den Fokus erlangen zu müssen. Jede Option beinhaltet die Eigenschaften der vorhergehenden.">
+			<item label="Deaktiviert" name="media_first_click_none"/>
+			<item label="Nur getragene HUDs" name="media_first_click_hud"/>
+			<item label="Eigene Objekte" name="media_first_click_own"/>
+			<item label="Gruppen-Objekte" name="media_first_click_group"/>
+			<item label="Objekte von Freunden" name="media_first_click_friend"/>
+			<item label="Objekte des Landbesitzers" name="media_first_click_land"/>
+			<item label="Jedes Object" name="media_first_interact_any"/>
+			<item label="Alle Medien auf Objekten (MOAP)" name="media_first_click_all"/>
+		</combo_box>
 		<text name="MinMeters">
 			Meter
 		</text>
