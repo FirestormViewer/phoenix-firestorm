@@ -2710,7 +2710,7 @@ Try enclosing path to the editor with double quotes.
 name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_AboutLand_Label">About land</string>
   <string name="Command_Appearance_Label">Appearance</string>
-  <string name="Command_Avatar_Label">Avatar</string>
+  <string name="Command_Avatar_Label">Avatar Welcome Pack</string>
   <string name="Command_Build_Label">Build</string>
   <string name="Command_Chat_Label">Conversations</string>
   <string name="Command_Conversations_Label">Conversations</string>

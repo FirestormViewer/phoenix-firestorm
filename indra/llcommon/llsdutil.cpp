@@ -46,6 +46,8 @@
 #include <map>
 #include <set>
 #include <boost/range.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 // <FS:ND> Suppress warnings about the string fiddling
 #if LL_LINUX
@@ -205,6 +207,39 @@ std::string ll_stream_notation_sd(const LLSD& sd)
     return stream.str();
 }
 
+// <FS:Ansariel> Create LLSD from CSV
+LLSD ll_sd_from_csv(std::istream& csv, std::string_view delimiters)
+{
+    LLSD                     data;
+    bool                     headerRead{ false };
+    std::vector<std::string> columnNames;
+    std::string              line;
+
+    while (std::getline(csv, line))
+    {
+        std::vector<std::string> columns;
+        boost::split(columns, line, boost::is_any_of(delimiters));
+
+        if (!headerRead)
+        {
+            headerRead  = true;
+            columnNames = std::move(columns);
+        }
+        else
+        {
+            LLSD rowData;
+            for (size_t i = 0; i < columnNames.size() && i < columns.size(); ++i)
+            {
+                rowData[columnNames.at(i)] = columns.at(i);
+            }
+
+            data.append(rowData);
+        }
+    }
+
+    return data;
+}
+// </FS:Ansariel>
 
 //compares the structure of an LLSD to a template LLSD and stores the
 //"valid" values in a 3rd LLSD.  Default values pulled from the template

@@ -2427,7 +2427,7 @@ bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, const std::string& poseFi
         return false;
     }
 
-    return true;
+    return writeSuccess;
 }
 
 bool FSFloaterPoser::writePoseAsBvh(llofstream* fileStream, LLVOAvatar* avatar)
@@ -2454,7 +2454,6 @@ void FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar
     if (!joint)
         return;
 
-    auto position = mPoserAnimator.getJointPosition(avatar, *joint);
     auto saveAxis = getBvhJointTranslation(joint->jointName());
 
     switch (joint->boneType())
@@ -2559,7 +2558,7 @@ void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, 
     switch (joint->boneType())
     {
         case WHOLEAVATAR:
-            *fileStream << vec3ToXYZString(position) + " " + rotationToString(rotation);
+            *fileStream << positionToString(position) + " " + rotationToString(rotation);
             break;
 
         default:
@@ -2575,9 +2574,10 @@ void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, 
     }
 }
 
-std::string FSFloaterPoser::vec3ToXYZString(const LLVector3& val)
+std::string FSFloaterPoser::positionToString(const LLVector3& val)
 {
-    return std::to_string(val[VX]) + " " + std::to_string(val[VY]) + " " + std::to_string(val[VZ]);
+    const float metresToInches = 39.37008f;
+    return std::to_string(metresToInches * val[VY]) + " " + std::to_string(metresToInches * val[VZ]) + " " + std::to_string(metresToInches * val[VX]);
 }
 
 std::string FSFloaterPoser::rotationToString(const LLVector3& val)

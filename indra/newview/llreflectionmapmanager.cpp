@@ -223,7 +223,7 @@ void LLReflectionMapManager::update()
     }
 
     static LLCachedControl<S32> sDetail(gSavedSettings, "RenderReflectionProbeDetail", -1);
-    static LLCachedControl<S32> sLevel(gSavedSettings, "RenderReflectionProbeLevel", 3);
+    // static LLCachedControl<S32> sLevel(gSavedSettings, "RenderReflectionProbeLevel", 3); // <FS:Beq/> No longer required use the pipeline cached version instead
     static LLCachedControl<U32> sReflectionProbeCount(gSavedSettings, "RenderReflectionProbeCount", 256U);
     static LLCachedControl<S32> sProbeDynamicAllocation(gSavedSettings, "RenderReflectionProbeDynamicAllocation", -1);
     mResetFade = llmin((F32)(mResetFade + gFrameIntervalSeconds * 2.f), 1.f);
@@ -232,15 +232,15 @@ void LLReflectionMapManager::update()
         U32 probe_count_temp = mDynamicProbeCount;
         if (sProbeDynamicAllocation > -1)
         {
-            if (sLevel == 0)
+            if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
                 mDynamicProbeCount = 1;
             }
-            else if (sLevel == 1)
+            else if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::MANUAL_ONLY)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
                 mDynamicProbeCount = (U32)mProbes.size();
             }
-            else if (sLevel == 2)
+            else if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::MANUAL_AND_TERRAIN)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
                 mDynamicProbeCount = llmax((U32)mProbes.size(), 128);
             }
@@ -456,13 +456,15 @@ void LLReflectionMapManager::update()
         {
             closestDynamic = probe;
         }
-
-        if (sLevel == 0)
-        {
-            // only update default probe when coverage is set to none
-            llassert(probe == mDefaultProbe);
-            break;
-        }
+        // <FS:Beq> This code is no longer required and this update loop should self-cleanse
+        // However: There appears to be something that causes the reference count to be 2 for some probes that should no longer be in use.
+        // if (sLevel == 0)
+        // {
+        //     // only update default probe when coverage is set to none
+        //     llassert(probe == mDefaultProbe);
+        //     break;
+        // }
+        // </FS:Beq>
     }
 
     if (realtime && closestDynamic != nullptr)
@@ -489,12 +491,12 @@ void LLReflectionMapManager::update()
     static LLCachedControl<F32> sUpdatePeriod(gSavedSettings, "RenderDefaultProbeUpdatePeriod", 2.f);
     if ((gFrameTimeSeconds - mDefaultProbe->mLastUpdateTime) < sUpdatePeriod)
     {
-        if (sLevel == 0)
+        if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE) // <FS:Beq/> No longer required use the pipeline cached version instead
         { // when probes are disabled don't update the default probe more often than the prescribed update period
             oldestProbe = nullptr;
         }
     }
-    else if (sLevel > 0)
+    else if (LLPipeline::sReflectionProbeLevel > (S32)LLReflectionMap::ProbeLevel::NONE) // <FS:Beq/> No longer required use the pipeline cached version instead
     { // when probes are enabled don't update the default probe less often than the prescribed update period
       oldestProbe = mDefaultProbe;
     }
@@ -628,6 +630,12 @@ void LLReflectionMapManager::getReflectionMaps(std::vector<LLReflectionMap*>& ma
 
 LLReflectionMap* LLReflectionMapManager::registerSpatialGroup(LLSpatialGroup* group)
 {
+    // <FS:Beq> [FIRE-35070] Don't register probes if we're not using them
+    if( LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
+    {
+        return nullptr;
+    }
+    // </FS:Beq>
     if (!group)
     {
         return nullptr;
@@ -648,7 +656,10 @@ LLReflectionMap* LLReflectionMapManager::registerSpatialGroup(LLSpatialGroup* gr
 
 LLReflectionMap* LLReflectionMapManager::registerViewerObject(LLViewerObject* vobj)
 {
-    if (!LLPipeline::sReflectionProbesEnabled)
+    // <FS:Beq> [FIRE-35070] Don't register manual probes if we're not using them
+    // if (!LLPipeline::sReflectionProbesEnabled)
+    if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
+    // </FS:Beq>
     {
         return nullptr;
     }
@@ -1315,7 +1326,7 @@ void LLReflectionMapManager::setUniforms()
 }
 
 
-void renderReflectionProbe(LLReflectionMap* probe)
+void renderReflectionProbe(LLReflectionMap* probe, std::map<LLSpatialGroup*, int> groupCount, std::map<LLViewerObject*, int> objCount, std::map<F32*, int> locCount)
 {
     if (probe->isRelevant())
     {
@@ -1338,7 +1349,7 @@ void renderReflectionProbe(LLReflectionMap* probe)
         gGL.end();
         gGL.flush();
 
-        gGL.diffuseColor4f(1, 1, 0, 1);
+        gGL.diffuseColor4f(0, 1, 1, 1);
         gGL.begin(gGL.LINES);
         for (auto& neighbor : probe->mNeighbors)
         {
@@ -1348,6 +1359,44 @@ void renderReflectionProbe(LLReflectionMap* probe)
                 gGL.vertex3fv(neighbor->mOrigin.getF32ptr());
             }
         }
+        gGL.end();
+        gGL.flush();
+
+        // --- New: draw a point at the probe origin color-coded by type ---
+        bool dupByGroup = (probe->mGroup       && groupCount[ probe->mGroup       ] > 1);
+        bool dupByObject= (probe->mViewerObject && objCount[ probe->mViewerObject ] > 1);
+        bool dupByLoc   = (                   locCount[ probe->mOrigin.getF32ptr()] > 1);
+
+        const bool is_manual    = probe->mViewerObject != nullptr;
+        const bool is_automatic = (probe->mGroup != nullptr) && !is_manual;
+        // terrain/water is when neither manual nor automatic
+        // const bool is_terrain   = !is_manual && !is_automatic;
+
+        if (is_manual)
+        {
+            // red dot for manual probes
+            gGL.diffuseColor4f(1.f, 0.f, 0.f, 1.f);
+        }
+        else if (is_automatic)
+        {
+            // blue dot for automatic probes
+            gGL.diffuseColor4f(0.f, 0.f, 1.f, 1.f);
+        }
+        else
+        {
+            // green dot for terrain/water probes
+            gGL.diffuseColor4f(0.f, 1.f, 0.f, 1.f);
+        }
+
+        // use a bigger dot if *any* duplicate condition is true
+        const float normalSize = 9.f;
+        const float bigSize    = 18.f;
+        float pointSize = (dupByGroup || dupByObject || dupByLoc)
+                            ? bigSize
+                            : normalSize;
+        glPointSize(pointSize);
+        gGL.begin(gGL.POINTS);
+        gGL.vertex3fv(po);
         gGL.end();
         gGL.flush();
     }
@@ -1403,10 +1452,21 @@ void renderReflectionProbe(LLReflectionMap* probe)
 void LLReflectionMapManager::renderDebug()
 {
     gDebugProgram.bind();
+    
+    std::map<LLSpatialGroup*, int>  groupCount;
+    std::map<LLViewerObject*, int>  objCount;
+    std::map<F32*,            int>  locCount;
 
+    for (LLReflectionMap* probe : mProbes)
+    {
+        if (!probe->isRelevant()) continue;
+        groupCount[ probe->mGroup ]++;
+        objCount[ probe->mViewerObject ]++;
+        locCount[ probe->mOrigin.getF32ptr() ]++;
+    }
     for (auto& probe : mProbes)
     {
-        renderReflectionProbe(probe);
+        renderReflectionProbe(probe, groupCount, objCount, locCount);
     }
 
     gDebugProgram.unbind();

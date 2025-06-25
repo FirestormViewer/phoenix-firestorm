@@ -35,21 +35,45 @@
 #include "llsingleton.h"
 #include "llassettype.h"
 
+struct FSAssetBlacklistData
+{
+    std::string name;
+    std::string region;
+    LLAssetType::EType type;
+    S32 flags{ 0 };
+    LLDate date;
+    bool permanent{ false };
+
+    LLSD toLLSD() const;
+    static FSAssetBlacklistData fromLLSD(const LLSD& data);
+};
+
 using blacklisted_uuid_container_t = std::unordered_set<LLUUID>;
 using blacklist_type_map_t = std::map<LLAssetType::EType, blacklisted_uuid_container_t>;
-using blacklist_data_t = std::unordered_map<LLUUID, LLSD>;
+using blacklist_data_t = std::unordered_map<LLUUID, FSAssetBlacklistData>;
 
 class FSAssetBlacklist : public LLSingleton<FSAssetBlacklist>
 {
     LLSINGLETON_EMPTY_CTOR(FSAssetBlacklist);
 
 public:
+    enum eBlacklistFlag
+    {
+        NONE = 0,
+        WORN = 1 << 0,
+        REZZED = 1 << 1,
+        GESTURE = 1 << 2,
+
+        LAST_FLAG = 1 << 2
+    };
+
     void init();
-    bool isBlacklisted(const LLUUID& id, LLAssetType::EType type);
-    void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent = true, bool save = true);
-    void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
+    bool isBlacklisted(const LLUUID& id, LLAssetType::EType type, eBlacklistFlag flag = eBlacklistFlag::NONE) const;
+    void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, eBlacklistFlag flag = eBlacklistFlag::NONE,bool permanent = true, bool save = true);
+    void addNewItemToBlacklistData(const LLUUID& id, const FSAssetBlacklistData& data, bool save = true);
     void removeItemFromBlacklist(const LLUUID& id);
     void removeItemsFromBlacklist(const uuid_vec_t& ids);
+    void removeFlagsFromItem(const LLUUID& id, S32 combined_flags);
     void saveBlacklist();
 
     blacklist_data_t getBlacklistData() const { return mBlacklistData; };
@@ -60,7 +84,8 @@ public:
         BLACKLIST_REMOVE
     };
 
-    typedef boost::signals2::signal<void(const LLSD& data, eBlacklistOperation op)> blacklist_changed_callback_t;
+    using changed_signal_data_t        = std::vector<std::pair<LLUUID, std::optional<FSAssetBlacklistData>>>;
+    using blacklist_changed_callback_t = boost::signals2::signal<void(const changed_signal_data_t& data, eBlacklistOperation op)>;
     boost::signals2::connection setBlacklistChangedCallback(const blacklist_changed_callback_t::slot_type& cb)
     {
         return mBlacklistChangedCallback.connect(cb);

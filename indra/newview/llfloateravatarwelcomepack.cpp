@@ -1,7 +1,7 @@
 /**
- * @file llfloateravatar.h
- * @author Leyla Farazha
- * @brief floater for the avatar changer
+ * @file llfloateravatarwelcomepack.cpp
+ * @author Callum Prentice (callum@lindenlab.com)
+ * @brief Floater container for the Avatar Welcome Pack we app
  *
  * $LicenseInfo:firstyear=2011&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -27,7 +27,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llfloateravatar.h"
+#include "llfloateravatarwelcomepack.h"
 #include "lluictrlfactory.h"
 #include "llmediactrl.h"
 
@@ -35,13 +35,13 @@
 #include "llhttpconstants.h"
 #include "llweb.h"
 
-LLFloaterAvatar::LLFloaterAvatar(const LLSD& key)
+LLFloaterAvatarWelcomePack::LLFloaterAvatarWelcomePack(const LLSD& key)
     :   LLFloater(key),
     mAvatarPickerUrlChangedSignal() // <FS:Ansariel> Avatar chooser does not change between OpenSim grids
 {
 }
 
-LLFloaterAvatar::~LLFloaterAvatar()
+LLFloaterAvatarWelcomePack::~LLFloaterAvatarWelcomePack()
 {
     if (mAvatarPicker)
     {
@@ -58,32 +58,32 @@ LLFloaterAvatar::~LLFloaterAvatar()
     // </FS:Ansariel>
 }
 
-bool LLFloaterAvatar::postBuild()
+bool LLFloaterAvatarWelcomePack::postBuild()
 {
     mAvatarPicker = findChild<LLMediaCtrl>("avatar_picker_contents");
     if (mAvatarPicker)
     {
         mAvatarPicker->clearCache();
     }
-    enableResizeCtrls(true, true, false);
+
     return true;
 }
 
 // <FS:Ansariel> Avatar chooser does not change between OpenSim grids
-void LLFloaterAvatar::onOpen(const LLSD& key)
+void LLFloaterAvatarWelcomePack::onOpen(const LLSD& key)
 {
-    // Connect during onOpen instead of ctor because LLFloaterAvatar instance
+    // Connect during onOpen instead of ctor because LLFloaterAvatarWelcomePack instance
     // gets created before we can safely create a LFSimFeatureHandler instance!
     // Assuming we receive the avatar picker URL via login response and it
     // is the same URL being sent by region caps so we will be good for the initial
     // region the avatar logs into as well.
     if (!mAvatarPickerUrlChangedSignal.connected())
     {
-        mAvatarPickerUrlChangedSignal = LFSimFeatureHandler::instance().setAvatarPickerCallback(boost::bind(&LLFloaterAvatar::handleUrlChanged, this, _1));
+        mAvatarPickerUrlChangedSignal = LFSimFeatureHandler::instance().setAvatarPickerCallback(boost::bind(&LLFloaterAvatarWelcomePack::handleUrlChanged, this, _1));
     }
 }
 
-void LLFloaterAvatar::handleUrlChanged(const std::string& url)
+void LLFloaterAvatarWelcomePack::handleUrlChanged(const std::string& url)
 {
     getChild<LLMediaCtrl>("avatar_picker_contents")->navigateTo(LLWeb::expandURLSubstitutions(url, LLSD()), HTTP_CONTENT_TEXT_HTML);
 }

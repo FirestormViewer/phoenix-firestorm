@@ -50,7 +50,7 @@ public:
     bool tick() override;
     void closeFloater(bool app_quitting = false) override;
 
-    void addElementToList(const LLUUID& id, const LLSD& data);
+    void addElementToList(const LLUUID& id, const FSAssetBlacklistData& data);
     void removeElements();
 
 protected:
@@ -60,11 +60,13 @@ protected:
     void onStopBtn();
     void onCloseBtn();
     void onFilterEdit(const std::string& search_string);
-    void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);
+    void onBlacklistChanged(const FSAssetBlacklist::changed_signal_data_t& data, FSAssetBlacklist::eBlacklistOperation op);
     void onSelectionChanged();
 
     void buildBlacklist();
-    std::string getTypeString(S32 type);
+    std::string getTypeString(S32 type) const;
+    std::string getFlagString(FSAssetBlacklist::eBlacklistFlag source) const;
+    static FSAssetBlacklist::eBlacklistFlag getFlagFromLLSD(const LLSD& data);
 
     LLUUID mAudioSourceID;
 

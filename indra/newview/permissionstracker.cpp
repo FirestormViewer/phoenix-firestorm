@@ -225,8 +225,7 @@ void PermissionsTracker::objectPropertiesCallback(LLMessageSystem* msg)
             mPermissionsList[source_id].objectName = object_name;
             mPermissionsList[source_id].ownerID = object_owner;
 
-            LLAvatarName avatar_name;
-            if (LLAvatarNameCache::get(object_owner, &avatar_name))
+            if (LLAvatarName avatar_name; LLAvatarNameCache::get(object_owner, &avatar_name))
             {
                 LL_DEBUGS("PermissionsTracker") << "Found cached entry for owner " << object_owner.asString()
                     << ": " << avatar_name.getCompleteName() << LL_ENDL;
@@ -234,10 +233,8 @@ void PermissionsTracker::objectPropertiesCallback(LLMessageSystem* msg)
             }
             else if (mAvatarNameCacheConnections.find(object_owner) != mAvatarNameCacheConnections.end())
             {
-                boost::signals2::connection cb_connection = LLAvatarNameCache::get(object_owner, boost::bind(&PermissionsTracker::avatarNameCallback, this, _1, _2));
-                mAvatarNameCacheConnections.insert(std::make_pair(object_owner, cb_connection));
-
                 LL_DEBUGS("PermissionsTracker") << "Requesting avatar name for owner " << object_owner.asString() << LL_ENDL;
+                mAvatarNameCacheConnections.try_emplace(object_owner, LLAvatarNameCache::get(object_owner, boost::bind(&PermissionsTracker::avatarNameCallback, this, _1, _2)));
             }
         }
     }

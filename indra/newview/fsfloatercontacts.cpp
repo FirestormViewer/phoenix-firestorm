@@ -648,8 +648,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
     {
         const LLRelationship* info = at.getBuddyInfo(agent_id);
         LLUUID request_id = LLUUID::generateNewID();
-        LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id));
-        mAvatarNameCacheConnections[request_id] = conn;
+        mAvatarNameCacheConnections.try_emplace(request_id, LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id)));
     }
 
     LLSD element;
@@ -742,8 +741,7 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
     if (!LLAvatarNameCache::get(agent_id, &av_name))
     {
         LLUUID request_id = LLUUID::generateNewID();
-        LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id));
-        mAvatarNameCacheConnections[request_id] = conn;
+        mAvatarNameCacheConnections.try_emplace(request_id, LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id)));
     }
 
     // Name of the status icon to use
@@ -1250,21 +1248,19 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 
 void FSFloaterContacts::onDisplayNameChanged()
 {
-    listitem_vec_t items = mFriendsList->getAllData();
-    for (listitem_vec_t::iterator it = items.begin(); it != items.end(); ++it)
+    for (auto item : mFriendsList->getAllData())
     {
         LLAvatarName av_name;
-        if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
+        if (LLAvatarNameCache::get(item->getUUID(), &av_name))
         {
-            (*it)->getColumn(LIST_FRIEND_USER_NAME)->setValue(av_name.getUserNameForDisplay());
-            (*it)->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue(av_name.getDisplayName());
-            (*it)->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
+            item->getColumn(LIST_FRIEND_USER_NAME)->setValue(av_name.getUserNameForDisplay());
+            item->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue(av_name.getDisplayName());
+            item->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
         }
         else
         {
             LLUUID request_id = LLUUID::generateNewID();
-            LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::setDirtyNames, this, request_id));
-            mAvatarNameCacheConnections[request_id] = conn;
+            mAvatarNameCacheConnections.try_emplace(request_id, LLAvatarNameCache::get(item->getUUID(), boost::bind(&FSFloaterContacts::setDirtyNames, this, request_id)));
         }
     }
     mFriendsList->setNeedsSort();

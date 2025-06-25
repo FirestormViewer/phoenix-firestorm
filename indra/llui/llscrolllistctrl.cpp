@@ -431,7 +431,7 @@ bool LLScrollListCtrl::setMaxItemCount(S32 max_count)
 }
 
 // <FS:PP>
-S32 LLScrollListCtrl::getMaxItemCount()
+S32 LLScrollListCtrl::getMaxItemCount() const
 {
     return mMaxItemCount;
 }

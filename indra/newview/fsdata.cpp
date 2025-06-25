@@ -513,7 +513,7 @@ void FSData::processAssets(const LLSD& assets)
         {
             continue;
         }
-        FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, data, false);
+        FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, FSAssetBlacklistData::fromLLSD(data), false);
         LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
     }
 }
@@ -881,23 +881,27 @@ void FSData::addAgents()
         return;
     }
 
-    for (std::map<LLUUID, S32>::iterator iter = mTeamAgents.begin(); iter != mTeamAgents.end(); ++iter)
+    for (const auto& [id, flags] : mTeamAgents)
     {
-        if (iter->second & NO_SPAM)
+        if (flags & NO_SPAM)
         {
-            LLUUID id = iter->first;
-            avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
-            if (it != mAvatarNameCacheConnections.end())
+            if (LLAvatarName av_name; LLAvatarNameCache::get(id, &av_name))
             {
-                if (it->second.connected())
-                {
-                    it->second.disconnect();
-                }
-                mAvatarNameCacheConnections.erase(it);
+                onNameCache(id, av_name);
             }
+            else
+            {
+                if (auto it = mAvatarNameCacheConnections.find(id); it != mAvatarNameCacheConnections.end())
+                {
+                    if (it->second.connected())
+                    {
+                        it->second.disconnect();
+                    }
+                    mAvatarNameCacheConnections.erase(it);
+                }
 
-            LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(id, boost::bind(&FSData::onNameCache, this, _1, _2));
-            mAvatarNameCacheConnections.insert(std::make_pair(id, cb));
+                mAvatarNameCacheConnections.try_emplace(id, LLAvatarNameCache::get(id, boost::bind(&FSData::onNameCache, this, _1, _2)));
+            }
         }
     }
 }
