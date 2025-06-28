@@ -67,7 +67,7 @@ elseif (WINDOWS)
           legacy_stdio_definitions
           )
 else()
-  include(CMakeFindFrameworks)
+  #include(CMakeFindFrameworks) # <FS:Ansariel> Triggers CMP0173 and does nothing if policy is not set to OLD
   find_library(COREFOUNDATION_LIBRARY CoreFoundation)
   find_library(CARBON_LIBRARY Carbon)
   find_library(COCOA_LIBRARY Cocoa)
