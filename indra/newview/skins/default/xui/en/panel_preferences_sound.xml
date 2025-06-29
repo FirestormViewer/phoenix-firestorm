@@ -658,53 +658,58 @@
          left="25"
          top_pad="15"
          width="105"
+         tool_tip="This setting controls which media (once loaded) does not require a first click to focus before interaction can begin. This allows clicks to be passed directly to media bypassing the focus click requirement."
          name="media_firstinteract_label">
             Media first-interact:
         </text>
-        <combo_box
-         control_name="MediaFirstClickInteract"
-         enabled_control="AudioStreamingMedia"
+        <check_box
+         name="media_first_click_all"
          follows="left|top"
          layout="topleft"
-         height="23"
-         left_pad="10"
-         top_delta="-4"
-         width="250"
-         name="media_first_interact_combo"
-         tool_tip="This setting controls which media (once loaded) does not require a first click to focus before interaction can begin. This allows clicks to be passed directly to media bypassing the focus click requirement. Each option also inherits the previous ones.">
-         <item
-          label="Disabled"
-          name="media_first_click_none"
-          value="0"/>
-         <item
-          label="Worn HUDs only"
-          name="media_first_click_hud"
-          value="1"/>
-         <item
-          label="Owned objects"
-          name="media_first_click_own"
-          value="3"/>
-         <item
-          label="Group objects"
-          name="media_first_click_group"
-          value="7"/>
-         <item
-          label="Friend objects"
-          name="media_first_click_friend"
-          value="15"/>
-         <item
-          label="Landowner objects"
-          name="media_first_click_land"
-          value="31"/>
-         <item
-          label="Any object"
-          name="media_first_interact_any"
-          value="31"/>
-         <item
-          label="All MOAP"
-          name="media_first_click_all"
-          value="1073741824"/>
-        </combo_box>
+         height="16"
+         label="All MOAP"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_hud"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Worn HUDs only"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_own"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Owned objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_group"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Group objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_friend"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Friend objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_land"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Landowner objects"
+         top_pad="3"
+         left="25"/>
 
         <text
          type="string"

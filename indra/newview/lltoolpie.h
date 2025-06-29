@@ -92,6 +92,7 @@ private:
     void showVisualContextMenuEffect();
     ECursorType cursorFromObject(LLViewerObject* object);
 
+public:
     enum MediaFirstClickTypes
     {
         MEDIA_FIRST_CLICK_NONE       = 0,         // Special case: Feature is disabled
@@ -107,6 +108,7 @@ private:
         // Covers all media regardless of other rules or PRIM_MEDIA_FIRST_CLICK_INTERACT
         MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG = 1 << 30    // 0b01000000000000000000000000000000 (1073741824)
     };
+private:
     bool shouldAllowFirstMediaInteraction(const LLPickInfo& info, bool moap_flag);
     bool handleMediaClick(const LLPickInfo& info);
     bool handleMediaDblClick(const LLPickInfo& info);
