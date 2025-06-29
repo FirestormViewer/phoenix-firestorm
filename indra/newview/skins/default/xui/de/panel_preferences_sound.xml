@@ -88,6 +88,7 @@
 			Medien Erst-Interaktion:
 		</text>
 		<check_box name="media_first_click_all" label="Alle Medien auf Objekten (MOAP)"/>
+		<check_box name="media_first_click_any" label="Objekte von Jedermann"/>
 		<check_box name="media_first_click_hud" label="Nur getragene HUDs"/>
 		<check_box name="media_first_click_own" label="Eigene Objekte"/>
 		<check_box name="media_first_click_group" label="Gruppen-Objekte"/>

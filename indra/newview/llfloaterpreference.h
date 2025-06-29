@@ -642,6 +642,7 @@ private:
     LLComboBox* mOutputDeviceComboBox;
 
     LLCheckBoxCtrl* mMoapInteractionAll;
+    LLCheckBoxCtrl* mMoapInteractionAny;
     LLCheckBoxCtrl* mMoapInteractionHud;
     LLCheckBoxCtrl* mMoapInteractionOwnObjects;
     LLCheckBoxCtrl* mMoapInteractionGroupObjects;

@@ -6289,6 +6289,8 @@ FSPanelPreferenceSounds::FSPanelPreferenceSounds() :
     LLPanelPreference(),
     mOutputDevicePanel(nullptr),
     mOutputDeviceComboBox(nullptr),
+    mMoapInteractionAll(nullptr),
+    mMoapInteractionAny(nullptr),
     mMoapInteractionHud(nullptr),
     mMoapInteractionOwnObjects(nullptr),
     mMoapInteractionGroupObjects(nullptr),
@@ -6311,6 +6313,7 @@ bool FSPanelPreferenceSounds::postBuild()
     mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
 
     mMoapInteractionAll              = getChild<LLCheckBoxCtrl>("media_first_click_all");
+    mMoapInteractionAny              = getChild<LLCheckBoxCtrl>("media_first_click_any");
     mMoapInteractionHud              = getChild<LLCheckBoxCtrl>("media_first_click_hud");
     mMoapInteractionOwnObjects       = getChild<LLCheckBoxCtrl>("media_first_click_own");
     mMoapInteractionGroupObjects     = getChild<LLCheckBoxCtrl>("media_first_click_group");
@@ -6335,6 +6338,7 @@ bool FSPanelPreferenceSounds::postBuild()
 #endif
 
     mMoapInteractionAll->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionAny->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
     mMoapInteractionHud->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
     mMoapInteractionOwnObjects->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
     mMoapInteractionGroupObjects->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
@@ -6403,21 +6407,24 @@ void FSPanelPreferenceSounds::onOutputDeviceListChanged(LLAudioEngine::output_de
 
 void FSPanelPreferenceSounds::onMoapInteractionChanged()
 {
-    auto bitvalue = gSavedSettings.getS32("MediaFirstClickInteract");
+    const auto bitvalue = gSavedSettings.getS32("MediaFirstClickInteract");
 
     mMoapInteractionAll->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG);
+    mMoapInteractionAny->set((bitvalue & LLToolPie::MEDIA_FIRST_CLICK_ANY) == LLToolPie::MEDIA_FIRST_CLICK_ANY);
     mMoapInteractionHud->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_HUD);
     mMoapInteractionOwnObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_OWN);
     mMoapInteractionGroupObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_GROUP);
     mMoapInteractionFriendObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_FRIEND);
     mMoapInteractionLandownerObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_LAND);
 
-    bool is_all_selected = bitvalue & LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG;
-    mMoapInteractionHud->setEnabled(!is_all_selected);
-    mMoapInteractionOwnObjects->setEnabled(!is_all_selected);
-    mMoapInteractionGroupObjects->setEnabled(!is_all_selected);
-    mMoapInteractionFriendObjects->setEnabled(!is_all_selected);
-    mMoapInteractionLandownerObjects->setEnabled(!is_all_selected);
+    const bool is_all_selected = (bitvalue & LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG) == LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG;
+    const bool is_any_selected = (bitvalue & LLToolPie::MEDIA_FIRST_CLICK_ANY) == LLToolPie::MEDIA_FIRST_CLICK_ANY;
+    mMoapInteractionAny->setEnabled(!is_all_selected);
+    mMoapInteractionHud->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionOwnObjects->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionGroupObjects->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionFriendObjects->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionLandownerObjects->setEnabled(!is_all_selected && !is_any_selected);
 }
 
 void FSPanelPreferenceSounds::updateMoapInteractionSetting()
@@ -6426,13 +6433,17 @@ void FSPanelPreferenceSounds::updateMoapInteractionSetting()
     {
         gSavedSettings.setS32("MediaFirstClickInteract", std::numeric_limits<S32>::max());
     }
+    else if (mMoapInteractionAny->get())
+    {
+        gSavedSettings.setS32("MediaFirstClickInteract", LLToolPie::MEDIA_FIRST_CLICK_ANY);
+    }
     else
     {
-        S32 value = (mMoapInteractionHud->get() ? LLToolPie::MEDIA_FIRST_CLICK_HUD : 0) |
-            (mMoapInteractionOwnObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_OWN : 0) |
-            (mMoapInteractionGroupObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_GROUP : 0) |
-            (mMoapInteractionFriendObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_FRIEND : 0) |
-            (mMoapInteractionLandownerObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_LAND : 0);
+        const S32 value = (mMoapInteractionHud->get() ? LLToolPie::MEDIA_FIRST_CLICK_HUD : 0) |
+                          (mMoapInteractionOwnObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_OWN : 0) |
+                          (mMoapInteractionGroupObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_GROUP : 0) |
+                          (mMoapInteractionFriendObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_FRIEND : 0) |
+                          (mMoapInteractionLandownerObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_LAND : 0);
 
         gSavedSettings.setS32("MediaFirstClickInteract", value);
     }
