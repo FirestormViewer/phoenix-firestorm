@@ -68,6 +68,7 @@
 			<check_box name="exclude_childprim" label="Prims enfant"/>
 			<check_box name="exclude_neighbor_region" label="Régions voisines"/>
 			<button name="apply" label="Appliquer"/>
+			<button name="save_as_default" label="Enr. comme défaut"/>
 		</panel>
 		<panel label="Options" name="area_search_options_panel">
 			<text name="display_column">Afficher les colonnes :</text>

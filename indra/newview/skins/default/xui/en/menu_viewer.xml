@@ -2486,7 +2486,8 @@
              function="PromptShowURL"
              name="firestorm_primfeed_url"
              parameter="WebLaunchExternalTarget,https://www.primfeed.com/firestorm-viewer" />
-       </menu_item_call>    	<menu_item_call
+       </menu_item_call>
+    	<menu_item_call
              label="Firestorm Flickr"
              name="Firestorm Flickr">
              <menu_item_call.on_click

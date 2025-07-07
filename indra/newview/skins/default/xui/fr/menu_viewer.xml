@@ -266,6 +266,7 @@
 		<menu_item_call label="Bibliothèque de scripts" name="Script Library"/>
 		<menu_item_call label="Communauté SL (blogs, forums, nouvelles)" name="SL Community Pages"/>
 		<menu_item_call label="Blog Firestorm" name="Firestorm Blog"/>
+		<menu_item_call label="Primfeed Firestorm" name="Firestorm Primfeed"/>
 		<menu_item_call label="Flickr Firestorm" name="Firestorm Flickr"/>
 		<menu_item_call label="YouTube Firestorm" name="Firestorm YouTube"/>
 		<menu_item_call label="Twitter Firestorm" name="Firestorm Twitter"/>

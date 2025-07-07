@@ -39,7 +39,7 @@
         Avatar gestures sounds
     </floater.string>
     <floater.string name="blacklist_flag_unknown">
-        Unknow flag
+        Unknown flag
     </floater.string>
 	<floater.string name="asset_unknown">
 		Unknown

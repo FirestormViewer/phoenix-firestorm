@@ -73,13 +73,13 @@
 		物理メッシュが密すぎるか、極小な三角形が含まれています。この問題を解決するには、分析／簡素化を使用します。
 	</string>
 	<string name="phys_status_no_havok">
-		このバージョンはHavok対応ではありません。従ってSecondLifeに物理アップロードするのはお勧めできません。その結果は予測不可能なものとなります。
+		このバージョンはHavok対応ではありません。このため、Second Lifeに物理をアップロードする事はお勧めできません。その結果は予測不可能なものとなります。
 	</string>
 	<string name="phys_status_too_thin">
 		１つ以上の寸法が０．５ｍ未満の場合、殻ベース（分析済み）の物理シェイプのみが正しく機能します。
 	</string>
 	<string name="phys_status_unknown_error">
-		不明のエラーが発生しました。
+		不明なエラーが発生しました。
 	</string>
 	<string name="layer_all">
 		全て
@@ -148,6 +148,11 @@
 	<string name="ParsingErrorPositionInvalidModel">
 		位置データがないのでメッシュを処理できません。無効なモデルです。
 	</string>
+	<!-- FS:Beq FIRE-34811 Crash during import due to missing inv_bind_matrices. -->
+	<string name="ParsingErrorEmptyInvBindInvalidModel">
+		InvBindデータがないのでリグメッシュを処理できません。無効なモデルです。
+	</string>
+	<!-- /FS:Beq FIRE-34811 Crash during import due to missing inv_bind_matrices. -->
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
 			<text name="name_label">
@@ -373,7 +378,7 @@
 				</text>
 				<check_box label="ウェイトを自動的に有効化する" tool_tip="リギング情報を持つメッシュのウェイトを自動的に設定します。" name="mesh_preview_auto_weights"/>
 				<check_box label="ウェイトの自動プレビュー" tool_tip="リギング情報を持つメッシュのプレビューでウェイトを自動的に表示します。" name="mesh_preview_auto_show_weights"/>
-				<check_box label="デフォルトで「信頼性の高い」ＬｏＤを使用" tool_tip="デフォルトで「信頼性の高い」方法（ＧＬＯＤ）を使用します。" name="mesh_upload_default_to_reliable"/>
+				<check_box label="デフォルトで「信頼性の高い」ＬｏＤを使用" tool_tip="デフォルトで「信頼性の高い」方法（ＧＬｏＤ）を使用します。" name="mesh_upload_default_to_reliable"/>
 				<text name="lod_suffix_label">
 					ＬｏＤサフィックス：
 				</text>
@@ -433,7 +438,7 @@
 				<text name="physics_issues_setting_label">
 					物理効果の問題：
 				</text>
-				<color_swatch label="不正な三角形の縁" tool_tip="メッシュ アップローダーのプレビューウィンドウの縮退した（細い）三角形の縁の色を指定します。" name="mesh_preview_degenerate_edge_color"/>
+				<color_swatch label="不正な三角形の縁" tool_tip="メッシュアップローダーのプレビューウィンドウの縮退した（細い）三角形の縁の色を指定します。" name="mesh_preview_degenerate_edge_color"/>
 				<color_swatch label="不正な三角形の塗りつぶし" tool_tip="メッシュアップローダーのプレビューウィンドウの縮退した（細い）三角形の塗りつぶし色を指定します。" name="mesh_degenerate_fill_color"/>
 			</panel>
 		</tab_container>
@@ -478,7 +483,7 @@
 [MODEL]個
 </text>
 			</panel>
-<!-- 
+			<!--
 			Streaming breakdown numbers are available but not fully understood
 			uncommenting the following sections will display the numbers for debugging purposes
 			<text name="streaming_breakdown_labels">

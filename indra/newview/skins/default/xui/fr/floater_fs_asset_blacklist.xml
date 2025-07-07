@@ -5,6 +5,10 @@
 	<floater.string name="asset_sound">Son</floater.string>
 	<floater.string name="asset_animation">Animation</floater.string>
 	<floater.string name="asset_resident">Résident</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_worn_objects_sounds">Sons obj. portés AV</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">Sons obj. rezzés AV</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_gestures_sounds">Sons gestes AV</floater.string>
+	<floater.string name="blacklist_flag_unknown"> Drapeau inconnu </floater.string>
 	<floater.string name="asset_unknown">Inconnu</floater.string>
 	<floater.string name="unknown_object">Objet inconnu</floater.string>
 	<floater.string name="unknown_region">Région inconnue</floater.string>
@@ -13,6 +17,7 @@
 		<columns name="name" label="Nom"/>
 		<columns name="region" label="Région"/>
 		<columns name="type" label="Type"/>
+		<columns name="flags" label="Drapeaux"/>
 		<columns name="date" label="Date"/>
 	</fs_scroll_list>
 	<button name="remove_btn" label="Supprimer la sélection des éléments blacklistés" height="23" width="320"/>

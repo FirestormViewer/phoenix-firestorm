@@ -325,7 +325,9 @@ FSManipRotateJoint::BoneAxes FSManipRotateJoint::computeBoneAxes() const
 void FSManipRotateJoint::highlightHoverSpheres(S32 mouseX, S32 mouseY)
 {
     // Ensure we have an avatar to work with.
-    if (!mAvatar) return;
+    if (!mAvatar || mAvatar->isDead())
+        return;
+
     mHighlightedJoint = nullptr; // reset the highlighted joint
 
     // Iterate through the avatar's joint map.
@@ -696,7 +698,8 @@ void FSManipRotateJoint::renderCenterSphere(const F32 radius, const LLColor4& no
 void FSManipRotateJoint::render()
 {
     // Early-out if no joint or avatar.
-    if (!mJoint || !mAvatar)
+    // Needs more something: if they log out while dots on them, asplode
+    if (!mJoint || !mAvatar || mAvatar->isDead())
     {
         return;
     }
@@ -1018,7 +1021,7 @@ bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
     // Determine which ring (axis) is under the mouse, also highlights selectable joints.
     highlightManipulators(x, y);
     // For joint manipulation, require both a valid joint and avatar.
-    if (!mJoint || !mAvatar || !poser)
+    if (!mJoint || !mAvatar || mAvatar->isDead() || !poser)
     {
         return false;
     }
@@ -1140,7 +1143,7 @@ void FSManipRotateJoint::highlightManipulators(S32 x, S32 y)
     mHighlightedPart = LL_NO_PART;
     // Instead of using mObjectSelection->getFirstMoveableObject(),
     // simply require that the joint (and the avatar) is valid.
-    if (!mJoint || !mAvatar)
+    if (!mJoint || !mAvatar || mAvatar->isDead())
     {
         highlightHoverSpheres(x, y);
         gViewerWindow->setCursor(UI_CURSOR_ARROW);
