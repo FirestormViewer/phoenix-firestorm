@@ -272,19 +272,19 @@
 			<button name="Def_UISndSnapshot" tool_tip="Сброс к UUID по умолчанию."/>
 			<check_box label="Отключение звука" name="QuietSnapshotsToDiskCheckBox"/>
 
-			<text tool_tip="UUID звука воспроизводимый на телепортацию" name="textFSTeleportOut">
-				Телепортация:
-			</text>
-			<button name="Prev_UISndTeleportOut" tool_tip="Прослушать этот звук."/>
-			<button name="Def_UISndTeleportOut" tool_tip="Сброс к UUID по умолчанию."/>
-			<check_box label="Включить звук" name="PlayModeUISndTeleportOut"/>
-
 		</panel>
 		<panel label="Интерфейс 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				Здесь вы можете изменить (путем замены звуковых UUID), включить или выключить звуки интерфейса по умолчанию.
 Нажмите на кнопку 'D' рядом с UUID, чтобы вернуть значение по умолчанию.
 			</text>
+
+			<text tool_tip="UUID звука воспроизводимый на телепортацию" name="textFSTeleportOut">
+				Телепортация:
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndTeleportOut" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndTeleportOut"/>
 
 			<text tool_tip="UUID звука воспроизводимый, появляется круглое меню. (Pie Menu)." name="textFSPieMenuAppear">
 				Открытие круглого меню:
@@ -405,19 +405,19 @@
 			<button name="Def_UISndFriendshipOffer" tool_tip="Сброс к UUID по умолчанию."/>
 			<check_box label="Включить звук" name="PlayModeUISndFriendshipOffer"/>
 
-			<text tool_tip="UUID звука воспроизводимый на предложение телепортации." name="textFSTeleportOffer">
-				Предложение телепорта:
-			</text>
-			<button name="Prev_UISndTeleportOffer" tool_tip="Прослушать этот звук."/>
-			<button name="Def_UISndTeleportOffer" tool_tip="Сброс к UUID по умолчанию."/>
-			<check_box label="Включить звук" name="PlayModeUISndTeleportOffer"/>
-
 		</panel>
 		<panel label="Интерфейс 3" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
 				Здесь вы можете изменить (путем замены звуковых UUID), включить или выключить звуки интерфейса по умолчанию.
 Нажмите на кнопку 'D' рядом с UUID, чтобы вернуть значение по умолчанию.
 			</text>
+
+			<text tool_tip="UUID звука воспроизводимый на предложение телепортации." name="textFSTeleportOffer">
+				Предложение телепорта:
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndTeleportOffer" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndTeleportOffer"/>
 
 			<text tool_tip="UUID звука воспроизводимый на предложение инвентаря." name="textFSInventoryOffer">
 				Предложение передачи:

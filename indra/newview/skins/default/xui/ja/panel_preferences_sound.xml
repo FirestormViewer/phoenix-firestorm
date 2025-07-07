@@ -269,12 +269,6 @@
 			<button name="Prev_UISndSnapshot" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndSnapshot" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="サウンドを再生しない" name="QuietSnapshotsToDiskCheckBox"/>
-			<text tool_tip="テレポートした時に再生するサウンドのＵＵＩＤです。この設定は「移動と表示」＞「テレポート」の「テレポートサウンドを鳴らす」と共通になっています。" name="textFSTeleportOut">
-				テレポート：
-			</text>
-			<button name="Prev_UISndTeleportOut" tool_tip="このサウンドをプレビューします。"/>
-			<button name="Def_UISndTeleportOut" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
-			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOut"/>
 		</panel>
 		<!-- UI Sounds 2 -->
 		<panel label="ＵＩサウンド２" name="UI Sounds tab 2">
@@ -282,6 +276,12 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
+			<text tool_tip="テレポートした時に再生するサウンドのＵＵＩＤです。この設定は「移動と表示」＞「テレポート」の「テレポートサウンドを鳴らす」と共通になっています。" name="textFSTeleportOut">
+				テレポート：
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="このサウンドをプレビューします。"/>
+			<button name="Def_UISndTeleportOut" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
+			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOut"/>
 			<text tool_tip="パイメニューを表示した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuAppear">
 				パイメニューを表示したとき：
 			</text>
@@ -384,12 +384,6 @@
 			<button name="Prev_UISndFriendshipOffer" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndFriendshipOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndFriendshipOffer"/>
-			<text tool_tip="テレポートで呼ばれた時に再生するサウンドのＵＵＩＤです。" name="textFSTeleportOffer">
-				テレポートのオファーを受けた：
-			</text>
-			<button name="Prev_UISndTeleportOffer" tool_tip="このサウンドをプレビューします。"/>
-			<button name="Def_UISndTeleportOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
-			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 		<!-- UI Sounds 3 -->
 		<panel label="ＵＩサウンド３" name="UI Sounds tab 3">
@@ -397,6 +391,12 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
+			<text tool_tip="テレポートで呼ばれた時に再生するサウンドのＵＵＩＤです。" name="textFSTeleportOffer">
+				テレポートのオファーを受けた：
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="このサウンドをプレビューします。"/>
+			<button name="Def_UISndTeleportOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
+			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOffer"/>
 			<text tool_tip="インベントリに物が送られて来た時に再生するサウンドのＵＵＩＤです。" name="textFSInventoryOffer">
 				インベントリに受け取った：
 			</text>

@@ -187,13 +187,13 @@ Saisissez son UUID ou passez votre souris sur le champ pour voir sa valeur par d
 			<button name="Prev_UISndSnapshot" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndSnapshot" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Désactiver" name="QuietSnapshotsToDiskCheckBox"/>
+		</panel>
+		<panel label="Sons 2" name="UI Sounds tab 2">
+			<text name="textFSExplanation_tab2">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer.</text>
 			<text tool_tip="UUID du son joué lors d'une téléportation. Ce réglage est commun avec Mouvement &amp; Cam &gt; Téléportations &gt; 'Jouer une animation sonore lors des téléportations'." name="textFSTeleportOut">Téléportation :</text>
 			<button name="Prev_UISndTeleportOut" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndTeleportOut" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndTeleportOut"/>
-		</panel>
-		<panel label="Sons 2" name="UI Sounds tab 2">
-			<text name="textFSExplanation_tab2">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer.</text>
 			<text tool_tip="UUID du son joué à l'apparition du menu circulaire." width="180" name="textFSPieMenuAppear">Apparition menu circulaire :</text>
 			<button name="Prev_UISndPieMenuAppear" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndPieMenuAppear" label="↻" tool_tip="Réinitialiser."/>
@@ -262,13 +262,13 @@ Saisissez son UUID ou passez votre souris sur le champ pour voir sa valeur par d
 			<button name="Prev_UISndFriendshipOffer" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndFriendshipOffer" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndFriendshipOffer"/>
+		</panel>
+		<panel label="Sons 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer.</text>
 			<text tool_tip="UUID du son joué quand on propose de téléporter." width="180" name="textFSTeleportOffer">Proposition de TP :</text>
 			<button name="Prev_UISndTeleportOffer" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndTeleportOffer" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndTeleportOffer"/>
-		</panel>
-		<panel label="Sons 3" name="UI Sounds tab 3">
-			<text name="textFSExplanation_tab3">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer.</text>
 			<text tool_tip="UUID du son joué quand on propose un objet d'inventaire." width="180" name="textFSInventoryOffer">Offre d'inventaire :</text>
 			<button name="Prev_UISndInventoryOffer" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndInventoryOffer" label="↻" tool_tip="Réinitialiser."/>
