@@ -237,6 +237,17 @@ enum ERenderName
     RENDER_NAME_FADE
 };
 
+// <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+// Different settings based on FSImpostorAvatarExclude
+enum EImpostorAvatarExclude
+{
+    NONE, // Default, no avatar excluded
+    USER, // Check for mIsAnimesh only, exclude user Avatar's which are Animesh or have Animesh attachments
+    CONTROL, // Check for mIsControlAvatar only, exclude control avatars (avtars which don't have a user UUID assigned)
+    BOTH // Check both mIsAnimesh or mIsControlAvatar, exclude both User Amimesh and Control avatars.
+};
+// </FS:minerjr> [FIRE-35735]
+
 #define JELLYDOLLS_SHOULD_IMPOSTOR
 
 //-----------------------------------------------------------------------------
@@ -4643,6 +4654,9 @@ bool LLVOAvatar::isVisuallyMuted()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR; // <FS:Beq/> Tracy accounting for imposter testing.
     bool muted = false;
+    // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+    static LLCachedControl<U32> impostor_avatar_exclude(gSavedSettings,"FSImpostorAvatarExclude", 0);
+    // </FS:minerjr> [FIRE-35735]
 
     // <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
     if (!isSelf() && isInMuteList())
@@ -4677,6 +4691,13 @@ bool LLVOAvatar::isVisuallyMuted()
 #else
             muted = false;
 #endif
+            // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+            // If the avatar is set to be excluded, set the muted flag to false
+            if ((mIsControlAvatar && impostor_avatar_exclude >= EImpostorAvatarExclude::CONTROL) || (mIsAnimesh && (impostor_avatar_exclude & EImpostorAvatarExclude::USER)))
+            {
+                muted = false;
+            }
+            // </FS:minerjr> [FIRE-35735]
         }
         // <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
         //else if (isInMuteList())
@@ -4686,10 +4707,26 @@ bool LLVOAvatar::isVisuallyMuted()
         // </FS:Ansariel>
         else if (mIsControlAvatar)
         {
+            // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+            // If the avatar is set to control or both, set the the meted flag to false
+            if (impostor_avatar_exclude >= EImpostorAvatarExclude::CONTROL)
+            {
+                muted = false;
+            }
+            else
+            // </FS:minerjr> [FIRE-35735]
             muted = isTooSlow();
         }
         else
         {
+            // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+            // If the avatar is an animesh and the FSImpostorAvatarExclude is either a USER or BOTH (Can use & as both 1 and 3 have 1 set)
+            if ((impostor_avatar_exclude & EImpostorAvatarExclude::USER) && mIsAnimesh)
+            {
+                muted = false;
+            }
+            else
+            // </FS:minerjr> [FIRE-35735]
             muted = isTooComplex(); // <FS:Beq/> this should not trigger based on perfstats
         }
     }
@@ -7585,6 +7622,10 @@ void LLVOAvatar::updateAttachmentOverrides()
         }
     }
 #endif
+    // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+    // If either the main body of the avatar is animated, or there are any animated attachedments, then flag it as an Animesh.
+    mIsAnimesh = getNumAnimatedObjectAttachments() > 0 || isAnimatedObject();
+    // </FS:minerjr> [FIRE-35735]
 }
 
 void LLVOAvatar::notifyAttachmentMeshLoaded()
@@ -8535,6 +8576,10 @@ const LLViewerJointAttachment *LLVOAvatar::attachObject(LLViewerObject *viewer_o
 
     updateMeshVisibility();
 
+    // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+    // If either the main body of the avatar is animated, or there are any animated attachedments, then flag it as an Animesh.
+    mIsAnimesh = getNumAnimatedObjectAttachments() > 0 || isAnimatedObject();
+    // </FS:minerjr> [FIRE-35735]
     return attachment;
 }
 
@@ -8860,6 +8905,10 @@ bool LLVOAvatar::detachObject(LLViewerObject *viewer_object)
             }
 
             updateMeshVisibility();
+            // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+            // If either the main body of the avatar is animated, or there are any animated attachedments, then flag it as an Animesh.
+            mIsAnimesh = getNumAnimatedObjectAttachments() > 0 || isAnimatedObject();
+            // </FS:minerjr> [FIRE-35735]
 
             LL_DEBUGS() << "Detaching object " << viewer_object->mID << " from " << attachment->getName() << LL_ENDL;
             return true;
@@ -8870,6 +8919,10 @@ bool LLVOAvatar::detachObject(LLViewerObject *viewer_object)
     if (iter != mPendingAttachment.end())
     {
         mPendingAttachment.erase(iter);
+        // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+        // If either the main body of the avatar is animated, or there are any animated attachedments, then flag it as an Animesh.
+        mIsAnimesh = getNumAnimatedObjectAttachments() > 0 || isAnimatedObject();
+        // </FS:minerjr> [FIRE-35735]
         return true;
     }
 
@@ -9655,6 +9708,15 @@ bool LLVOAvatar::isTooComplex() const
     }
     else
     {
+        // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+        static LLCachedControl<U32> impostor_avatar_exclude(gSavedSettings,"FSImpostorAvatarExclude", 0);
+
+        // If the avatar is set to be excluded, return that the avatar is not too complex
+        if ((mIsControlAvatar && impostor_avatar_exclude >= EImpostorAvatarExclude::CONTROL) || (mIsAnimesh && (impostor_avatar_exclude & EImpostorAvatarExclude::USER)))
+        {
+            return false;
+        }
+        // </FS:minerjr> [FIRE-35735]
         // Determine if visually muted or not
         static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0U);
         static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
@@ -12098,8 +12160,23 @@ bool LLVOAvatar::isImpostor()
 {
 // <FS:Beq> render time handling using tooSlow()
 //  return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
+    // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+    static LLCachedControl<U32> impostor_avatar_exclude(gSavedSettings,"FSImpostorAvatarExclude", 0);
+
+    // Store the result of is visually muted as used in possibly 2 places
+    bool is_visual_muted = isVisuallyMuted();
+
+    // If the avatar is set to be excluded, return that the avatar is not an Impostor
+    if ((mIsControlAvatar && impostor_avatar_exclude >= EImpostorAvatarExclude::CONTROL) || (mIsAnimesh && (impostor_avatar_exclude & EImpostorAvatarExclude::USER)))
+    {
+        return false;
+    }
+    // </FS:minerjr> [FIRE-35735]
     return (
-            isVisuallyMuted() ||
+            // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+            // isVisuallyMuted() ||
+            is_visual_muted || // Save from calling isVisuallyMuted a second time
+            // </FS:minerjr> [FIRE-35735]
             isTooSlowWithoutShadows() ||
             (sLimitNonImpostors && (mUpdatePeriod > 1) )
     );
@@ -12120,6 +12197,15 @@ bool LLVOAvatar::shouldImpostor(const F32 rank_factor)
     // return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
     // static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
 
+    // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
+    static LLCachedControl<U32> impostor_avatar_exclude(gSavedSettings,"FSImpostorAvatarExclude", 0);
+
+    // If the avatar is set to be excluded, return that the avatar should not be impostored
+    if ((mIsControlAvatar && impostor_avatar_exclude >= EImpostorAvatarExclude::CONTROL) || (mIsAnimesh && (impostor_avatar_exclude & EImpostorAvatarExclude::USER)))
+    {
+        return false;
+    }
+    // </FS:minerjr> [FIRE-35735]
     if (isTooSlowWithoutShadows())
     {
         return true;
