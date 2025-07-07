@@ -232,13 +232,12 @@ public:
 
     boost::signals2::connection addGridListChangedCallback(grid_list_changed_callback_t cb);
     grid_list_changed_signal_t  mGridListChangedSignal;
-    bool isInSecondLife();
-    bool isInSLMain();
-    bool isInSLBeta();
-    bool isInOpenSim();
-    bool isInAuroraSim();
+    bool isInSecondLife() const;
+    bool isInSLMain() const;
+    bool isInSLBeta() const;
+    bool isInOpenSim() const;
+    bool isInAuroraSim() const;
     void saveGridList();
-    void clearFavorites();
     void addGrid(GridEntry* grid_info, AddState state);
 
     void setClassifiedFee(const S32 classified_fee) { sClassifiedFee = classified_fee; }

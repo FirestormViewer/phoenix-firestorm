@@ -47,7 +47,6 @@
 #else
 #include <unistd.h>
 #endif
-#include "llstartup.h"
 
 #include "fscorehttputil.h"
 #include "fspanellogin.h"
@@ -1253,31 +1252,31 @@ void LLGridManager::updateIsInProductionGrid()
 }
 
 // For any Second Life grid
-bool LLGridManager::isInSecondLife()
+bool LLGridManager::isInSecondLife() const
 {
     return (EGridPlatform == GP_SLMAIN || EGridPlatform == GP_SLBETA);
 }
 
 // For Agni
-bool LLGridManager::isInSLMain()
+bool LLGridManager::isInSLMain() const
 {
     return (EGridPlatform == GP_SLMAIN);
 }
 
 // For Aditi
-bool LLGridManager::isInSLBeta()
+bool LLGridManager::isInSLBeta() const
 {
     return (EGridPlatform == GP_SLBETA);
 }
 
 // For OpenSim
-bool LLGridManager::isInOpenSim()
+bool LLGridManager::isInOpenSim() const
 {
     return (EGridPlatform == GP_OPENSIM || EGridPlatform == GP_AURORA);
 }
 
 // For Aurora Sim
-bool LLGridManager::isInAuroraSim()
+bool LLGridManager::isInAuroraSim() const
 {
     return (EGridPlatform == GP_AURORA);
 }

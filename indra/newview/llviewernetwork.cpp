@@ -642,12 +642,12 @@ void LLGridManager::updateIsInProductionGrid()
     }
 }
 
-bool LLGridManager::isInProductionGrid()
+bool LLGridManager::isInProductionGrid() const
 {
     return mIsInProductionGrid;
 }
 
-bool LLGridManager::isSystemGrid(const std::string& grid)
+bool LLGridManager::isSystemGrid(const std::string& grid) const
 {
     std::string grid_name = getGrid(grid);
 
