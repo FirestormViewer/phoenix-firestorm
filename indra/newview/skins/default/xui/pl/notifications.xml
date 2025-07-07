@@ -4342,7 +4342,10 @@ Anulowano.
 		Przepraszam, ale nie mogę unieruchomić tego użytkownika.
 	</notification>
 	<notification name="NowOwnObject">
-		Jesteś od teraz właścicielem obiektu [OBJECT_NAME]
+		Jesteś od teraz właścicielem obiektu [OBJECT_NAME].
+	</notification>
+	<notification name="NowOwnObjectInv">
+		Jesteś od teraz właścicielem obiektu [OBJECT_NAME] - został on umieszczony w Twojej Szafie.
 	</notification>
 	<notification name="CantRezOnLand">
 		Nie można zrezzować obiektu na pozycji [OBJECT_POS], ponieważ właściciel działki na to nie zezwala. Użyj narzędzia ziemi, aby zobaczyć kto nim jest.
@@ -5435,6 +5438,9 @@ Czy chcesz kontynuować?
 	<notification name="WaterExclusionSurfacesWarning">
 		Zaznaczenie pola wyboru "ukryj wodę" spowoduje nadpisanie wybranych opcji tekstury, powierzchni i połysku.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Kontynuuj" />
+	</notification>
+	<notification name="WaterExclusionNoMaterial">
+		Nie można nałożyć materiału na powierzchnię, która ukrywa wodę.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.

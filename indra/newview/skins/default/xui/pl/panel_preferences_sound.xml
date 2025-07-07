@@ -244,6 +244,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndStartIM" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndStartIM"/>
 
+			<text tool_tip="Sound UUID played when being mentioned in chat." name="textChatMention">
+				Wzmianki w czacie:
+			</text>
+			<button name="Prev_UISndChatMention" tool_tip="Podgląd dźwięku." />
+			<button name="Def_UISndChatMention" tool_tip="Resetuj do domyślnego UUID." />
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndChatMention" />
+
 			<text tool_tip="UUID dźwięku odgrywany, gdy tworzony jest obiekt." name="textFSObjectCreate">
 				Tworzenie obiektu:
 			</text>
@@ -279,19 +286,19 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndSnapshot" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Wyciszaj dźwięk" name="QuietSnapshotsToDiskCheckBox"/>
 
-			<text tool_tip="UUID dźwięku odgrywany podczas teleportacji. To ustawienie jest wspólne z Ruch i Widok &gt; Ruch &gt; 'Odtwórz dźwięk podczas teleportacji'." name="textFSTeleportOut">
-				Teleportacja:
-			</text>
-			<button name="Prev_UISndTeleportOut" tool_tip="Podgląd dźwięku."/>
-			<button name="Def_UISndTeleportOut" tool_tip="Resetuj do domyślnego UUID."/>
-			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOut"/>
-
 		</panel>
 		<panel label="Interfejs 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				Możesz tutaj zmieniać (wpisując UUIDy), włączać lub wyłączać standardowe dźwięki interfejsu.
 Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną wartość.
 			</text>
+
+			<text tool_tip="UUID dźwięku odgrywany podczas teleportacji. To ustawienie jest wspólne z Ruch i Widok &gt; Ruch &gt; 'Odtwórz dźwięk podczas teleportacji'." name="textFSTeleportOut">
+				Teleportacja:
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndTeleportOut" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOut"/>
 
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się menu kołowe (Pie Menu)." name="textFSPieMenuAppear">
 				Menu kołowe - pokaż:
@@ -412,19 +419,19 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndFriendshipOffer" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFriendshipOffer"/>
 
-			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta teleportacji." name="textFSTeleportOffer">
-				Oferta teleportacji:
-			</text>
-			<button name="Prev_UISndTeleportOffer" tool_tip="Podgląd dźwięku."/>
-			<button name="Def_UISndTeleportOffer" tool_tip="Resetuj do domyślnego UUID."/>
-			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOffer"/>
-
 		</panel>
 		<panel label="Interfejs 3" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
 				Możesz tutaj zmieniać (wpisując UUIDy), włączać lub wyłączać standardowe dźwięki interfejsu.
 Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną wartość.
 			</text>
+
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta teleportacji." name="textFSTeleportOffer">
+				Oferta teleportacji:
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndTeleportOffer" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOffer"/>
 
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta przedmiotu." name="textFSInventoryOffer">
 				Oferta przedmiotu:
