@@ -131,6 +131,9 @@
 		力道
 	</text>
 	<button label="應用" label_selected="應用" name="button apply to selection" tool_tip="修改所選擇的土地" />
+	<text name="link_num_obj_count" tool_tip="聯結序號可能不準確。">
+		[DESC] [NUM]
+	</text>
 	<text name="selection_empty">
 		未做任何選擇。
 	</text>

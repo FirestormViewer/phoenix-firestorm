@@ -147,6 +147,9 @@
 	<string name="ParsingErrorPositionInvalidModel">
 		沒有位置資料的網格無法處理 - 模型無效。
 	</string>
+	<string name="ParsingErrorEmptyInvBindInvalidModel">
+		沒有InvBind資料的綁定網格無法處理 - 模型無效。
+	</string>
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
 			<text name="name_label">
