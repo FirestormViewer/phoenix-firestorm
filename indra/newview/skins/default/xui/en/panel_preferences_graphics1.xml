@@ -1469,7 +1469,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="20"
          name="RenderAutoMaskAlphaDeferred"
-         top_pad="2"
+         top_pad="-1"
          width="256"/>
         <check_box
          control_name="RenderGlow"
