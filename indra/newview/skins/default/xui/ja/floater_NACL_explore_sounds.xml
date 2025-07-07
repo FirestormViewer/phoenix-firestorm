@@ -28,4 +28,8 @@
 	<button label="カメラを近づける" name="look_at_btn"/>
 	<button label="停止" name="stop_btn"/>
 	<button label="非表示リスト" name="bl_btn"/>
+
+	<button label="アバターに装着されたサウンドをブロック" name="block_avatar_attached_sounds_btn"/>
+	<button label="アバターがRezしたサウンドをブロック" name="block_avatar_rezzed_sounds_btn"/>
+	<button label="アバターのジェスチャーのサウンドをブロック" name="block_avatar_gesture_sounds_btn"/>
 </floater>
