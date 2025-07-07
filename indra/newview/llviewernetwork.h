@@ -201,7 +201,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
     void setGridChoice(const std::string& grid);
 
     /// Returns the name of the currently selected grid
-    std::string getGrid() const { return mGrid; }
+    std::string getGrid() { return mGrid; }
 
     //@}
 
