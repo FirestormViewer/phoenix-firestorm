@@ -434,7 +434,7 @@ void LLGridManager::setGridChoice(const std::string& grid)
     }
 }
 
-std::string LLGridManager::getGrid( const std::string &grid )
+std::string LLGridManager::getGrid( const std::string &grid ) const // <FS:Beq/> const correctness needed for Linux and MacOS
 {
     std::string grid_name;
 
@@ -446,7 +446,7 @@ std::string LLGridManager::getGrid( const std::string &grid )
     else
     {
         // search the grid list for a grid with a matching id
-        for(LLSD::map_iterator grid_iter = mGridList.beginMap();
+        for(auto grid_iter = mGridList.beginMap(); // <FS:Beq/> Let the compiler get the constness right
             grid_name.empty() && grid_iter != mGridList.endMap();
             grid_iter++)
         {
