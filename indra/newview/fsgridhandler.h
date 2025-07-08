@@ -36,19 +36,19 @@
 #include <boost/signals2.hpp>
 
 extern const char* DEFAULT_LOGIN_PAGE;
-//Kokua: for llviewernetwork_test
-const S32 KNOWN_GRIDS_SIZE  = 3;
+// Kokua: for llviewernetwork_test
+const S32 KNOWN_GRIDS_SIZE = 3;
 
-const std::string GRID_VALUE                    = "name";
-const std::string GRID_LABEL_VALUE              = "gridname";
-const std::string GRID_ID_VALUE                 = "grid_login_id";
-const std::string GRID_LOGIN_URI_VALUE          = "loginuri";
-const std::string GRID_UPDATE_SERVICE_URL       = "update_query_url_base";
-const std::string GRID_HELPER_URI_VALUE         = "helperuri";
-const std::string GRID_LOGIN_PAGE_VALUE         = "loginpage";
-const std::string GRID_IS_SYSTEM_GRID_VALUE     = "system_grid";
-const std::string GRID_IS_FAVORITE_VALUE        = "favorite";
-const std::string GRID_LOGIN_IDENTIFIER_TYPES   = "login_identifier_types";
+const std::string GRID_VALUE                  = "name";
+const std::string GRID_LABEL_VALUE            = "gridname";
+const std::string GRID_ID_VALUE               = "grid_login_id";
+const std::string GRID_LOGIN_URI_VALUE        = "loginuri";
+const std::string GRID_UPDATE_SERVICE_URL     = "update_query_url_base";
+const std::string GRID_HELPER_URI_VALUE       = "helperuri";
+const std::string GRID_LOGIN_PAGE_VALUE       = "loginpage";
+const std::string GRID_IS_SYSTEM_GRID_VALUE   = "system_grid";
+const std::string GRID_IS_FAVORITE_VALUE      = "favorite";
+const std::string GRID_LOGIN_IDENTIFIER_TYPES = "login_identifier_types";
 
 const std::string GRID_NICK_VALUE           = "gridnick";
 const std::string GRID_REGISTER_NEW_ACCOUNT = "register";
@@ -66,8 +66,8 @@ const std::string GRID_MESSAGE              = "message";
 // we need to continue to support existing forms, as slurls
 // are shared between viewers that may not understand newer
 // forms.
-const std::string GRID_SLURL_BASE       = "slurl_base";
-const std::string GRID_APP_SLURL_BASE   = "app_slurl_base";
+const std::string GRID_SLURL_BASE     = "slurl_base";
+const std::string GRID_APP_SLURL_BASE = "app_slurl_base";
 
 // Inworldz special
 #define INWORLDZ_URI "inworldz.com:8002"
@@ -76,23 +76,21 @@ class GridInfoRequestResponder;
 
 struct GridEntry
 {
-    LLSD grid;
+    LLSD         grid;
     LLXMLNodePtr info_root;
-    bool set_current;
-    std::string last_http_error;
+    bool         set_current;
+    std::string  last_http_error;
 };
 
 class LLInvalidGridName
 {
 public:
-    LLInvalidGridName(std::string grid) : mGrid(grid)
-    {
-    }
+    LLInvalidGridName(std::string grid) : mGrid(grid) {}
     std::string name() { return mGrid; }
+
 protected:
     std::string mGrid;
 };
-
 
 /**
  * @brief A class to manage the grids available to the viewer
@@ -128,7 +126,7 @@ public:
     void initCmdLineGrids();
     void resetGrids();
     // grid list management
-    bool isReadyToLogin() const {return mReadyToLogin;}
+    bool isReadyToLogin() const { return mReadyToLogin; }
 
     // add a grid to the list of grids
     void addGrid(const std::string& loginuri);
@@ -140,8 +138,8 @@ public:
     std::map<std::string, std::string> getKnownGrids();
 
     // this was getGridInfo - renamed to avoid ambiguity with the OpenSim grid_info
-    void getGridData(const std::string& grid, LLSD &grid_info);
-    void getGridData(LLSD &grid_info) { getGridData(mGrid, grid_info); }
+    void getGridData(const std::string& grid, LLSD& grid_info);
+    void getGridData(LLSD& grid_info) { getGridData(mGrid, grid_info); }
 
     // current grid management
 
@@ -151,7 +149,7 @@ public:
     void setGridChoice(const std::string& grid);
 
     /// Return the name of a grid, given either its name or its id
-    std::string getGrid( const std::string &grid );
+    std::string getGrid(const std::string& grid) const;
 
     /// Get the id (short form selector) for a given grid; example: "agni"
     std::string getGridId(const std::string& grid);
@@ -160,7 +158,7 @@ public:
     std::string getGridId() { return getGridId(mGrid); }
 
     /// Deprecated for compatibility with LL. Use getGridId() instead.
-    //std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
+    // std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
 
     /// Get the user-friendly long form descriptor for a given grid; example: "Second Life"
     std::string getGridLabel(const std::string& grid);
@@ -201,66 +199,67 @@ public:
 
     void setWebProfileUrl(const std::string& url) { mGridList[mGrid][GRID_WEB_PROFILE_VALUE] = url; }
 
-    bool hasGrid(const std::string& grid){ return mGridList.has(grid); }
-    bool isTemporary(){ return mGridList[mGrid].has("FLAG_TEMPORARY"); }
-    bool isTemporary(const std::string& grid){ return mGridList[grid].has("FLAG_TEMPORARY"); }
+    bool hasGrid(const std::string& grid) const { return mGridList.has(grid); }
+    bool isTemporary() const { return mGridList[mGrid].has("FLAG_TEMPORARY"); }
+    bool isTemporary(const std::string& grid) const { return mGridList[grid].has("FLAG_TEMPORARY"); }
 
     // tell if we got this from a Hypergrid SLURL
     bool isHyperGrid(const std::string& grid) { return mGridList[grid].has("HG"); }
 
     // tell if we know how to acess this grid via Hypergrid
     std::string getGatekeeper() { return getGatekeeper(mGrid); }
-    std::string getGatekeeper(const std::string& grid) { return mGridList[grid].has("gatekeeper") ? mGridList[grid]["gatekeeper"].asString() : std::string(); }
-
-    std::string getGridByLabel( const std::string &grid_label, bool case_sensitive = false);
-
-    std::string getGridByProbing( const std::string &probe_for, bool case_sensitive = false);
-    std::string getGridByGridNick( const std::string &grid_nick, bool case_sensitive = false);
-    std::string getGridByHostName( const std::string &host_name, bool case_sensitive = false);
-    std::string getGridByAttribute(const std::string &attribute, const std::string &attribute_value, bool case_sensitive );
-
-    bool isSystemGrid(const std::string& grid)
+    std::string getGatekeeper(const std::string& grid)
     {
-        return mGridList.has(grid) &&
-              mGridList[grid].has(GRID_IS_SYSTEM_GRID_VALUE) &&
+        return mGridList[grid].has("gatekeeper") ? mGridList[grid]["gatekeeper"].asString() : std::string();
+    }
+
+    std::string getGridByLabel(const std::string& grid_label, bool case_sensitive = false) const;
+
+    std::string getGridByProbing(const std::string& probe_for, bool case_sensitive = false) const;
+    std::string getGridByGridNick(const std::string& grid_nick, bool case_sensitive = false) const;
+    std::string getGridByHostName(const std::string& host_name, bool case_sensitive = false) const;
+    std::string getGridByAttribute(const std::string& attribute, const std::string& attribute_value, bool case_sensitive) const;
+
+    bool isSystemGrid(const std::string& grid) const
+    {
+        return mGridList.has(grid) && mGridList[grid].has(GRID_IS_SYSTEM_GRID_VALUE) &&
                mGridList[grid][GRID_IS_SYSTEM_GRID_VALUE].asBoolean();
     }
-    bool isSystemGrid() { return isSystemGrid(mGrid); }
+    bool isSystemGrid() const { return isSystemGrid(mGrid); }
 
-    typedef boost::function<void(bool success)> grid_list_changed_callback_t;
+    typedef boost::function<void(bool success)>         grid_list_changed_callback_t;
     typedef boost::signals2::signal<void(bool success)> grid_list_changed_signal_t;
 
     boost::signals2::connection addGridListChangedCallback(grid_list_changed_callback_t cb);
     grid_list_changed_signal_t  mGridListChangedSignal;
-    bool isInSecondLife() const;
-    bool isInSLMain() const;
-    bool isInSLBeta() const;
-    bool isInOpenSim() const;
-    bool isInAuroraSim() const;
-    void saveGridList();
-    void addGrid(GridEntry* grid_info, AddState state);
+    bool                        isInSecondLife() const;
+    bool                        isInSLMain() const;
+    bool                        isInSLBeta() const;
+    bool                        isInOpenSim() const;
+    bool                        isInAuroraSim() const;
+    void                        saveGridList();
+    void                        addGrid(GridEntry* grid_info, AddState state);
 
-    void setClassifiedFee(const S32 classified_fee) { sClassifiedFee = classified_fee; }
-    S32 getClassifiedFee() { return sClassifiedFee; }
-    void setDirectoryFee(const S32 directory_fee) { sDirectoryFee = directory_fee; }
-    S32 getDirectoryFee() { return sDirectoryFee; }
+    void setClassifiedFee(const S32 classified_fee) { mClassifiedFee = classified_fee; }
+    S32  getClassifiedFee() const { return mClassifiedFee; }
+    void setDirectoryFee(const S32 directory_fee) { mDirectoryFee = directory_fee; }
+    S32  getDirectoryFee() const { return mDirectoryFee; }
 
 private:
     friend class GridInfoRequestResponder;
 
-    friend void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState );
-    friend void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState );
+    friend void gridDownloadComplete(LLSD const& aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState);
+    friend void gridDownloadError(LLSD const& aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState);
 
-    void incResponderCount(){++mResponderCount;}
-    void decResponderCount(){--mResponderCount;}
+    void incResponderCount() { ++mResponderCount; }
+    void decResponderCount() { --mResponderCount; }
     void gridInfoResponderCB(GridEntry* grid_data);
 
-    void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
-    S32 sClassifiedFee;
-    S32 sDirectoryFee;
+    void setGridData(const LLSD& grid_info) { mGridList[mGrid] = grid_info; }
+    S32  mClassifiedFee;
+    S32  mDirectoryFee;
 
 protected:
-
     void updateIsInProductionGrid();
 
     // helper function for adding the predefined grids
@@ -271,15 +270,14 @@ protected:
                        const std::string& helper,
                        const std::string& login_page);
 
-
     std::string mGrid;
     std::string mGridFile;
     std::string mStartupGrid;
-    LLSD mGridList;
-    LLSD mConnectedGrid;
-    int mResponderCount;
-    bool mReadyToLogin;
-    bool mCommandLineDone;
+    LLSD        mGridList;
+    LLSD        mConnectedGrid;
+    int         mResponderCount;
+    bool        mReadyToLogin;
+    bool        mCommandLineDone;
 
     enum e_grid_platform
     {

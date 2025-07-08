@@ -95,7 +95,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
      * descriptive form (it is used in the login panel grid menu, for example).
      */
     /// Return the name of a grid, given either its name or its id
-    std::string getGrid( const std::string &grid );
+    std::string getGrid( const std::string &grid ) const;
 
     /// Get the id (short form selector) for a given grid
     std::string getGridId(const std::string& grid);
@@ -201,7 +201,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
     void setGridChoice(const std::string& grid);
 
     /// Returns the name of the currently selected grid
-    std::string getGrid() { return mGrid; }
+    std::string getGrid() const { return mGrid; }
 
     //@}
 
