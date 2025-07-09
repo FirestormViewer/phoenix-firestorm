@@ -6,6 +6,7 @@ height="330"
 layout="topleft"
 name="floater_poser"
 title="Avatar and Animesh Poser"
+help_topic="poser"
 width="430">
 	<string name="icon_category" translate="false">Inv_BodyShape</string>
 	<string name="icon_bone" translate="false"></string>
@@ -953,16 +954,6 @@ width="430">
                              parameter="3"/>
 						</spinner>
 						<check_box
-						 control_name="FSManipRotateJointUseNaturalDirection"
-						 name="natural_direction_checkbox"
-						 height="16"
-						 label="Use natural alignment"
-						 follows="left|top"
-						 left="5"
-						 tool_tip="The skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
-						 top_pad="10"
-						 width="134" />
-						<check_box
 						 control_name="FSPoserStopPosingWhenClosed"
 						 name="stop_posing_on_close_checkbox"
 						 height="16"
@@ -1003,6 +994,26 @@ width="430">
 						 tool_tip="When you save a pose, if the file already exists, you need to click the save button again to confirm you are sure you want to overwrite."
 						 top_pad="5"
 						 width="134" />
+						<check_box
+						 control_name="FSManipRotateJointUseNaturalDirection"
+						 name="natural_direction_checkbox"
+						 height="16"
+						 label="Use natural alignment"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="The skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
+						 top_pad="5"
+						 width="134" />						 
+						<check_box
+						 control_name="FSManipShowJointMarkers"
+						 name="show_joint_markers_checkbox"
+						 height="16"
+						 label="Show joint markers"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="Show small indicators to aid joint selection when visually posing."
+						 top_pad="5"
+						 width="134" />						 
 					</panel>
 				</tab_container>
 				<button

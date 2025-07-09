@@ -95,7 +95,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
      * descriptive form (it is used in the login panel grid menu, for example).
      */
     /// Return the name of a grid, given either its name or its id
-    std::string getGrid( const std::string &grid );
+    std::string getGrid( const std::string &grid ) const;
 
     /// Get the id (short form selector) for a given grid
     std::string getGridId(const std::string& grid);
@@ -206,13 +206,13 @@ class LLGridManager : public LLSingleton<LLGridManager>
     //@}
 
     /// Is the given grid one of the hard-coded default grids (Agni or Aditi)
-    bool isSystemGrid(const std::string& grid);
+    bool isSystemGrid(const std::string& grid) const;
 
     /// Is the selected grid one of the hard-coded default grids (Agni or Aditi)
-    bool isSystemGrid() { return isSystemGrid(mGrid); }
+    bool isSystemGrid() const { return isSystemGrid(mGrid); }
 //<FS:AW compatibility with opensim api>
     /// Is the selected grid Second Life Main grid?
-    bool isInSLMain() { return isInProductionGrid(); }
+    bool isInSLMain() const { return isInProductionGrid(); }
     /**
      * the purpose of not just taking isInProductionGrid() is to
      * create merge conflicts so that changes that need special casing
@@ -220,12 +220,12 @@ class LLGridManager : public LLSingleton<LLGridManager>
      */
 
     /// Is the selected grid a Second Life beta grid?
-    bool isInSLBeta() { return (isSystemGrid() && !isInProductionGrid()); }
-    bool isInSecondLife() { return (isInSLMain() || isInSLBeta()); }    // <FS:CR>
+    bool isInSLBeta() const { return (isSystemGrid() && !isInProductionGrid()); }
+    bool isInSecondLife() const { return (isInSLMain() || isInSLBeta()); }    // <FS:CR>
   private:
 //</FS:AW compatibility with opensim api>
     /// Is the selected grid a production grid?
-    bool isInProductionGrid();
+    bool isInProductionGrid() const;
     /**
      * yes, that's not a very helpful description.
      * I don't really know why that is different from isSystemGrid()

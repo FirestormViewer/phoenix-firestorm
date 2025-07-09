@@ -5895,7 +5895,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		360° Foto
 	</string>
 	<string name="Command_Avatar_Label">
-		Avatar
+		Avatar-Willkommenspaket
 	</string>
 	<string name="Command_Build_Label">
 		Bauen
@@ -7278,5 +7278,17 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="Unlimited">
 		Unlimitiert
+	</string>
+	<string name="ListEmpty">
+		Liste is leer
+	</string>
+	<string name="NoValidUUIDs">
+		Keine gültigen UUIDs in importierter Datei gefunden.
+	</string>
+	<string name="ImportListTooLarge">
+		Zu viele Einträge. Die CSV-Datei hat [COUNT] Einträge, es sind aber nur [MAX] Plätze verfügbar.
+	</string>
+	<string name="ImportSuccessful">
+		[COUNT] Einträge erfolgreich verarbeitet.
 	</string>
 </strings>

@@ -49,6 +49,7 @@
 <string name="ParsingErrorNoRoot">Le document n'a pas de racine</string>
 <string name="ParsingErrorNoScene">Le document n'a pas de visual_scene</string>
 <string name="ParsingErrorPositionInvalidModel">Impossible de traiter le maillage sans données de position. Modèle invalide.</string>
+<string name="ParsingErrorEmptyInvBindInvalidModel">Impossible de traiter le maillage riggé sans les données InvBind. Modèle non valide.</string>
 
 <panel name="left_panel">
 	<panel name="model_name_representation_panel">

@@ -59,19 +59,16 @@
 		</combo_box>
 		<search_editor label="Название региона" name="location" tool_tip="Введите название региона"/>
 		<button label="Поиск" name="DoSearch" tool_tip="Поиск региона"/>
-		<button label="Очистить" name="Clear" tool_tip="Очистить отслеживание и сбросить карту до стандартного вида"/>
+	</panel>
+	<panel name="layout_panel_7">
 		<text name="events_label">
 			Место:
 		</text>
 		<button label="Телепорт" name="Teleport" tool_tip="Телепортация в выбранное место"/>
 		<button label="Копировать" name="copy_slurl" tool_tip="Копировать текущее место в виде URL-адреса SL для использования в интернете."/>
+		<button label="Очистить" name="Clear" tool_tip="Очистить отслеживание и сбросить карту до стандартного вида"/>
 		<button label="Показать место" name="Show Destination" tool_tip="Центрировать карту на выбранном месте"/>
 		<button label="Отследить регион" name="track_region" tool_tip="Добавить регион в отслеживание"/>
-	</panel>
-	<panel name="layout_panel_5">
-		<text name="zoom_label">
-			Увеличение
-		</text>
 	</panel>
 </layout_panel>
 </layout_stack> 

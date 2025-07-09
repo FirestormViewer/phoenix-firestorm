@@ -1423,6 +1423,43 @@ If you do not understand the distinction then leave this control alone."
          <check_box.commit_callback
            function="Pref.RenderOptionUpdate" />
         </check_box>
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_delta="200"
+          width="200"
+          name="ExcludeAnimeshImposterLabel">
+            Exclude Animesh Impostor Avatar:
+        </text>
+        <combo_box
+         control_name="FSImpostorAvatarExclude"
+         height="23"
+         layout="topleft"
+         tool_tip="Allows for Animesh User or Control Avatars to be excluded from using impostor rendering."
+         left_pad="8"
+         top_delta="-4"
+         name="FSImpostorAvatarExclude"
+         width="80">
+            <combo_box.item
+             label="None"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="User"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Control"
+             name="2"
+             value="2"/>
+            <combo_box.item
+             label="Both"
+             name="3"
+             value="3"/>
+        </combo_box>
         <check_box
          control_name="RenderAutoMaskAlphaDeferred"
          height="16"
@@ -1430,9 +1467,9 @@ If you do not understand the distinction then leave this control alone."
          label="Render alpha masks"
          tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly"
          layout="topleft"
-         left_delta="0"
+         left="20"
          name="RenderAutoMaskAlphaDeferred"
-         top_pad="2"
+         top_pad="-1"
          width="256"/>
         <check_box
          control_name="RenderGlow"

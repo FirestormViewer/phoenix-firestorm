@@ -52,7 +52,7 @@
 				<check_box label="启用反射探針选择" name="checkbox select probes" tool_tip="启用后可在场景中选择并检查反射探針。"/>
 			</panel>
 			<panel name="P_R_Res_2">
-				<text name="ReflectionDetailText" tool_tip="决定反射细节级别。“仅静态”仅反射静止物件，更高设置包含动态物件和实时反射。">
+				<text name="ReflectionDetailText" tool_tip="决定反射细节级别。「仅静态」仅反射静止物件，更高设置包含动态物件和实时反射。">
 					反射细节
 				</text>
 				<combo_box name="ReflectionDetail">
@@ -60,7 +60,7 @@
 					<combo_box.item label="静态+动态" name="1"/>
 					<combo_box.item label="实时" name="2"/>
 				</combo_box>
-				<text name="ReflectionProbeText" tool_tip="控制场景反射覆盖范围。“仅手动”反射选定物件，“全场景”包含视野内所有内容。">
+				<text name="ReflectionProbeText" tool_tip="控制场景反射覆盖范围。「仅手动」反射选定物件，「全场景」包含视野内所有内容。">
 					反射覆盖
 				</text>
 				<combo_box name="ReflectionLevel">
@@ -300,7 +300,7 @@
 					最大化身數
 				</text>
 				<button name="Reset_Avi_Count" tool_tip="重設為預設值。" />
-				<text name="T_Avi_Detail" tool_tip="調整化身的細節層次等級（LOD）。較高的值提高視覺質量，使舊版化身在較遠距離也顯得更為詳細。較低的值減少細節以提高效能，這在高密度區域或低端系統上非常有用。此設置主要影響舊版（系統）化身。網格化身受此設置的影響較小，因為它們的細節層次級別由其自身的細節層次設置控制，並進一步受“偏好設置”裡“顯示” → ”化身複雜度”設置影響。">
+				<text name="T_Avi_Detail" tool_tip="調整化身的細節層次等級（LOD）。較高的值提高視覺質量，使舊版化身在較遠距離也顯得更為詳細。較低的值減少細節以提高效能，這在高密度區域或低端系統上非常有用。此設置主要影響舊版（系統）化身。網格化身受此設置的影響較小，因為它們的細節層次級別由其自身的細節層次設置控制，並進一步受「偏好設置」裡「顯示」 → 」化身複雜度」設置影響。">
 					化身細節
 				</text>
 				<button name="Reset_Avi_Detail" tool_tip="重設為預設值。" />
@@ -387,7 +387,7 @@
 					<combo_box.item label="1024像素" name="1024"/>
 					<combo_box.item label="2048像素" name="2048"/>
 				</combo_box>
-				<text name="T_AvatarDisplay" tool_tip="根據複雜度和好友狀態控制化身的顯示方式。“按複雜度限制”限制彩現超過一定複雜度的化身以提高性能。“始終顯示好友”確保好友無論多複雜都能完全彩現。“僅顯示好友”僅彩現您的好友，隱藏其他化身，以在擁擠區域優化性能。">
+				<text name="T_AvatarDisplay" tool_tip="根據複雜度和好友狀態控制化身的顯示方式。「按複雜度限制」限制彩現超過一定複雜度的化身以提高性能。「始終顯示好友」確保好友無論多複雜都能完全彩現。「僅顯示好友」僅彩現您的好友，隱藏其他化身，以在擁擠區域優化性能。">
 					化身顯示
 				</text>
 				<combo_box name="AvatarComplexityModeSelection">
@@ -420,7 +420,7 @@
 				<button name="Debug Settings" label="顯示調試設置" tool_tip="打開調試設置菜單，允許訪問標準首選項中不可用的高級檢視器設置。請謹慎使用，因為更改可能會影響性能和穩定性。"/>
 			</panel>
 			<panel name="P_Quick_Stats">
-				<text name="T_Quick_Stats" tool_tip="显示实时系统性能统计，帮助您评估檢視器的效率。您可以通过点击标签来展开或折叠各个指标。">
+				<text name="T_Quick_Stats" tool_tip="显示实时系统性能统计，帮助您评估檢視器的效率。您可以通过点击标签来展开或折叠各個指标。">
 					統計資訊
 				</text>
 			</panel>
@@ -465,11 +465,11 @@
 					旋轉
 				</text>
 				<button name="Reset_Spin" tool_tip="重設為預設值。" />
-				<text name="T_Roll" tool_tip="調整相機左右滾動的靈敏度，這會使相機側向傾斜，類似於將頭左右旋轉。較低的值提供更精細的控制以進行精確調整，而較高的值使滾動更為靈敏。注意：如果啟用了“自動水平校正”，此設置將不起作用，因為自動水平校正會保持相機水平，防止任何滾動移動。">
+				<text name="T_Roll" tool_tip="調整相機左右滾動的靈敏度，這會使相機側向傾斜，類似於將頭左右旋轉。較低的值提供更精細的控制以進行精確調整，而較高的值使滾動更為靈敏。注意：如果啟用了「自動水平校正」，此設置將不起作用，因為自動水平校正會保持相機水平，防止任何滾動移動。">
 					滾動
 				</text>
 				<button name="Reset_Roll" tool_tip="重設為預設值。" />
-				<text name="T_Zoom_Speed" tool_tip="通過調整相機的焦距或垂直視場來控制變焦方式，類似於更換真實相機的鏡頭。這會影響場景的可見範圍以及視圖的“變焦”效果。要激活變焦功能，將變焦軸映射設置為“4”。此設置不影響變焦的平滑度，而是決定視場調整的範圍，從而對相機的變焦級別進行精確控制。">
+				<text name="T_Zoom_Speed" tool_tip="通過調整相機的焦距或垂直視場來控制變焦方式，類似於更換真實相機的鏡頭。這會影響場景的可見範圍以及視圖的「變焦」效果。要激活變焦功能，將變焦軸映射設置為「4」。此設置不影響變焦的平滑度，而是決定視場調整的範圍，從而對相機的變焦級別進行精確控制。">
 					縮放
 				</text>
 				<button name="Reset_Zoom_Speed" tool_tip="重設為預設值。" />
@@ -479,9 +479,9 @@
 				<button name="Reset_Feathering" tool_tip="重設為預設值。" />
 			</panel>
 			<panel name="P_Axis_Mapping">
-				<spinner label="縮放軸對映" name="JoystickAxis6" tool_tip="確定哪個操縱桿或滑鼠軸控制變焦功能。將其設置為“4”以通過操縱桿啟用變焦。"/>
+				<spinner label="縮放軸對映" name="JoystickAxis6" tool_tip="確定哪個操縱桿或滑鼠軸控制變焦功能。將其設置為「4」以通過操縱桿啟用變焦。"/>
 				<check_box label="啟用3D滑鼠" tool_tip="啟用或禁用用於控制相機的操縱桿/3D滑鼠支持。" name="enable_joystick" />
-				<check_box name="CB_ZoomDirect" label="啟用縮放控制（見工具提示！）" tool_tip="使用3D滑鼠激活變焦控制。確保“變焦軸對映”設置為“4”以確保正常功能。"/>
+				<check_box name="CB_ZoomDirect" label="啟用縮放控制（見工具提示！）" tool_tip="使用3D滑鼠激活變焦控制。確保「變焦軸對映」設置為「4」以確保正常功能。"/>
 				<check_box name="CB_AutoLeveling" label="自動校準（無相機捲動）" tool_tip="保持相機水平，防止意外的滾動。這對於在移動時保持穩定的地平線很有用。"/>
 				<check_box name="CB_Move_Avatar" label="使用3D滑鼠控制化身" tool_tip="允許3D滑鼠控制化身移動，而不僅是相機。"/>
 				<check_box name="CB_Move_Objects" label="使用3D滑鼠移動物件" tool_tip="啟用3D滑鼠在建造和編輯期間進行物件操作。"/>

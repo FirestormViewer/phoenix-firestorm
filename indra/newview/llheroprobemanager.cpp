@@ -60,7 +60,7 @@ static void touch_default_probe(LLReflectionMap* probe)
     }
 }
 
-LLHeroProbeManager::LLHeroProbeManager():mMirrorNormal(0,0,1) // <FS:Beq/> [FIRE-35007][#3331] mirrors not working after relog. make sure the mirror normal is not zero length
+LLHeroProbeManager::LLHeroProbeManager()
 {
 }
 
@@ -540,10 +540,22 @@ void LLHeroProbeManager::updateUniforms()
 void LLHeroProbeManager::renderDebug()
 {
     gDebugProgram.bind();
+    // <FS:Beq> Add a bit more metadata to the probe debug view
+    std::map<LLSpatialGroup*, int>  groupCount;
+    std::map<LLViewerObject*, int>  objCount;
+    std::map<F32*,            int>  locCount;
 
+    for (LLReflectionMap* probe : mProbes)
+    {
+        if (!probe->isRelevant()) continue;
+        groupCount[ probe->mGroup ]++;
+        objCount[ probe->mViewerObject ]++;
+        locCount[ probe->mOrigin.getF32ptr() ]++;
+    }
+    // </FS:Beq>
     for (auto& probe : mProbes)
     {
-        renderReflectionProbe(probe);
+        renderReflectionProbe(probe, groupCount, objCount, locCount);    // <FS:Beq/> Add a bit more metadata to the probe debug view
     }
 
     gDebugProgram.unbind();
@@ -658,7 +670,7 @@ bool LLHeroProbeManager::registerViewerObject(LLVOVolume* drawablep)
         // Probe isn't in our list for consideration.  Add it.
         mHeroVOList.push_back(drawablep);
         return true;
-    } 
+    }
 
     return false;
 }
@@ -680,6 +692,6 @@ void LLHeroProbeManager::unregisterViewerObject(LLVOVolume* drawablep)
             mDefaultProbe->mViewerObject = nullptr;
         }
     }
-    // </FS:Beq>    
+    // </FS:Beq>
 
 }

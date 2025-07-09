@@ -197,13 +197,13 @@
 			<button name="Prev_UISndSnapshot" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndSnapshot" label="↻" tool_tip="重設。" />
 			<check_box label="禁用" name="QuietSnapshotsToDiskCheckBox" />
+		</panel>
+		<panel label="聲音 2" name="UI Sounds tab 2">
+			<text name="textFSExplanation_tab2">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="傳送音效的UUID。此設定與 '移動和相機' &gt; '傳送' 中的 '傳送時播放音效' 共享。" name="textFSTeleportOut">傳送：</text>
 			<button name="Prev_UISndTeleportOut" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndTeleportOut" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndTeleportOut" />
-		</panel>
-		<panel label="聲音 2" name="UI Sounds tab 2">
-			<text name="textFSExplanation_tab2">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="圓形選單出現音效的UUID。" name="textFSPieMenuAppear">圓形選單出現：</text>
 			<button name="Prev_UISndPieMenuAppear" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndPieMenuAppear" label="↻" tool_tip="重設。" />
@@ -272,13 +272,13 @@
 			<button name="Prev_UISndFriendshipOffer" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndFriendshipOffer" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndFriendshipOffer" />
+		</panel>
+		<panel label="聲音 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="提出傳送請求音效的UUID。" name="textFSTeleportOffer">傳送請求：</text>
 			<button name="Prev_UISndTeleportOffer" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndTeleportOffer" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndTeleportOffer" />
-		</panel>
-		<panel label="聲音 3" name="UI Sounds tab 3">
-			<text name="textFSExplanation_tab3">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="提出庫存物件請求音效的UUID。" name="textFSInventoryOffer">庫存物件提供：</text>
 			<button name="Prev_UISndInventoryOffer" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndInventoryOffer" label="↻" tool_tip="重設。" />

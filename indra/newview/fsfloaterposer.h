@@ -426,7 +426,7 @@ public:
     /// <summary>
     /// Transforms the supplied vector into a string of three numbers, format suiting to writing into a BVH file.
     /// </summary>
-    std::string static vec3ToXYZString(const LLVector3& val);
+    std::string static positionToString(const LLVector3& val);
 
     /// <summary>
     /// Performs an angle module of the supplied value to between -180 & 180 (degrees).

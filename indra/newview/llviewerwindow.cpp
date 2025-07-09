@@ -2503,13 +2503,13 @@ void LLViewerWindow::initWorldUI()
         //  url = LLWeb::expandURLSubstitutions(url, LLSD());
         //  destinations->navigateTo(url, "text/html");
         // }
-        // LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-        // if (avatar_picker)
+        // LLMediaCtrl* avatar_welcome_pack = LLFloaterReg::getInstance("avatar_welcome_pack")->findChild<LLMediaCtrl>("avatar_picker_contents");
+        // if (avatar_welcome_pack)
         // {
-        //  avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-        //  std::string url = gSavedSettings.getString("AvatarPickerURL");
+        //  avatar_welcome_pack->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+        //  std::string url = gSavedSettings.getString("AvatarWelcomePack");
         //  url = LLWeb::expandURLSubstitutions(url, LLSD());
-        //  avatar_picker->navigateTo(url, "text/html");
+        //  avatar_welcome_pack->navigateTo(url, "text/html");
         // }
         std::string destination_guide_url;
 #ifdef OPENSIM // <FS:AW optional opensim support>
@@ -2550,18 +2550,18 @@ void LLViewerWindow::initWorldUI()
         else
 #endif // OPENSIM  // <FS:AW optional opensim support>
         {
-            avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
+            avatar_picker_url = gSavedSettings.getString("AvatarWelcomePack");
         }
 
         if(!avatar_picker_url.empty())
         {
-            LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-            if (avatar_picker)
+            LLMediaCtrl* avatar_welcome_pack = LLFloaterReg::getInstance("avatar_welcome_pack")->findChild<LLMediaCtrl>("avatar_picker_contents");
+            if (avatar_welcome_pack)
             {
-                avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+                avatar_welcome_pack->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
                 avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
                 LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
-                avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+                avatar_welcome_pack->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
             }
         }
         // </FS:AW  opensim destinations and avatar picker>
@@ -7338,11 +7338,16 @@ void LLViewerWindow::setUIVisibility(bool visible)
     // LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : false);
     mStatusBarContainer->setVisible(visible);
 
-    // <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage
-    LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
-    if (utilityBarStack)
+    // <FS:Zi> hide utility bar if we are on a skin that uses it, i.e. Vintage
+    // Beq Note: Added a skin check to fix FIRE-29517 "hitch when entering mouselook"
+    // This was caused having to search for a non-existent childview. If another skin other than vintage
+    // ever needs chat_bar_utility_bar_stack in the future, this will need to be updated.
+    if (FSCommon::isLegacySkin())
     {
-        utilityBarStack->setVisible(visible);
+        if (LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack"); utilityBarStack)
+        {
+            utilityBarStack->setVisible(visible);
+        }
     }
     // </FS:Zi>
 }

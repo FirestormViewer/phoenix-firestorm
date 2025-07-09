@@ -145,6 +145,9 @@
 	<string name="ParsingErrorPositionInvalidModel">
 		Netz kann nicht ohne Positionsdaten verarbeitet werden - ungültiges Modell.
 	</string>
+	<string name="ParsingErrorEmptyInvBindInvalidModel">
+		Geriggtes Netz kann nicht ohne InvBind-Daten verarbeitet werden - ungültiges Modell.
+	</string>
 
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">

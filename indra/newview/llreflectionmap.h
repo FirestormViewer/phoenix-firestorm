@@ -44,6 +44,13 @@ public:
         IRRADIANCE,
         REFLECTION
     };
+    enum class ProbeLevel
+    {
+        NONE = 0,
+        MANUAL_ONLY,
+        MANUAL_AND_TERRAIN,
+        FULL_SCENE_WITH_AUTO
+    };
 
     // allocate an environment map of the given resolution
     LLReflectionMap();

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_translation_settings" title="Übersetzungseinstellungen für Chats">
 	<string name="azure_api_key_not_verified">
-		Azure-Service-Identifikator nicht verifiziert. Versuchen Sie es erneut.
+		Azure-Service-Identifikator nicht verifiziert. Status: [STATUS]. Bitte überprüfen Sie Ihre Einstellungen und versuchen Sie es erneut.
 	</string>
 	<string name="google_api_key_not_verified">
-		Google-API-Schlüssel nicht verifiziert. Versuchen Sie es erneut.
+		Google-API-Schlüssel nicht verifiziert. Status: [STATUS]. Bitte überprüfen Sie Ihren Schlüssel und versuchen Sie es erneut.
 	</string>
 	<string name="deepl_api_key_not_verified">
-		DeepL-Authentifizierungsschlüssel nicht verifiziert. Versuchen Sie es erneut.
+		DeepL-Authentifizierungsschlüssel nicht verifiziert. Status: [STATUS]. Bitte überprüfen Sie Ihren Schlüssel und versuchen Sie es erneut.
 	</string>
 	<string name="azure_api_key_verified">
 		Azure-Service-Identifikator verifiziert.

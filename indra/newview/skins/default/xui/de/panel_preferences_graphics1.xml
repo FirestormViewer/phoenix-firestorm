@@ -221,6 +221,15 @@
 			Sonstige Darstellungsoptionen:
 		</text>
 		<check_box label="HDR und Emissive" tool_tip="Aktiviert zusätzliche Features der Rendering-Pipeline auf neueren Maschinen, wie HDR und Emissive-Texturen auf PBR-Materialien." name="VintageMode"/>
+		<text name="ExcludeAnimeshImposterLabel">
+			Animesh-Avatare immer vollst. anz.:
+		</text>
+		<combo_box tool_tip="Erlaubt es, dass Animesh Benutzer- oder Kontroll-Avatar immer vollständig angezeigt werden." name="FSImpostorAvatarExclude">
+			<combo_box.item label="Keine" name="0"/>
+			<combo_box.item label="Benutzer" name="1"/>
+			<combo_box.item label="Kontrolle"  name="2"/>
+			<combo_box.item label="Beide" name="3"/>
+		</combo_box>
 		<check_box label="Alpha-Masken verwenden" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt." name="RenderAutoMaskAlphaDeferred"/>
 		<check_box label="Leuchten anzeigen" tool_tip="Stellt Leuchteffekte dar. Stärke muss auf 0 gesetzt werden, um Leuchteffekte zu deaktiveren, falls Schatten aktiviert sind." name="RenderGlow"/>
 		<slider label="Stärke:" tool_tip="Leuchtstärke. Größer = Breitere und weichere Darstellung (Standardwert: 2)" name="glow_strength"/>

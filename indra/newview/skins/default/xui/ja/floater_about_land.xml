@@ -479,6 +479,8 @@
 				<name_list name="AccessList" tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）"/>
 				<button label="追加" name="add_allowed"/>
 				<button label="削除" label_selected="削除" name="remove_allowed"/>
+				<button label="エクスポート" label_selected="エクスポート" name="export_allowed"/>
+				<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート" label_selected="インポート" name="import_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="バン" name="BanCheck">
@@ -490,6 +492,8 @@
 				</name_list>
 				<button label="追加" name="add_banned"/>
 				<button label="削除" label_selected="削除" name="remove_banned"/>
+				<button label="エクスポート" label_selected="エクスポート" name="export_banned"/>
+				<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート" label_selected="インポート" name="import_banned"/>
 			</panel>
 		</panel>
 		<panel label="体験" name="land_experiences_panel"/>

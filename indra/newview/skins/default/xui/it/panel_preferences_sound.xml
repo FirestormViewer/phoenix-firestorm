@@ -261,18 +261,18 @@ Passare sui campi UUID per leggere le impostazioni predefinite.
 			<button name="Prev_UISndSnapshot" label="S" tool_tip="Anteprima suono."/>
 			<button name="Def_UISndSnapshot" label="R" tool_tip="Ripristina suono predefinito."/>
 			<check_box label="Disattiva suono" name="QuietSnapshotsToDiskCheckBox"/>
-			<text tool_tip="UUID del suono per il teleport. Questa impostazione è condivisa con Movimento e vista &gt; Teleport &gt; &apos;Effetto sonoro quando teleport&apos;." name="textFSTeleportOut">
-				Teleport:
-			</text>
-			<button name="Prev_UISndTeleportOut" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndTeleportOut" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndTeleportOut" />
 		</panel>
 		<panel label="Suoni UI 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				Si possono cambiare qui (indicando gli UUID) ed abilitare/disabilitare i suoni di sistema.
 Passare sui campi UUID per leggere le impostazioni predefinite.
 			</text>
+			<text tool_tip="UUID del suono per il teleport. Questa impostazione è condivisa con Movimento e vista &gt; Teleport &gt; &apos;Effetto sonoro quando teleport&apos;." name="textFSTeleportOut">
+				Teleport:
+			</text>
+			<button name="Prev_UISndTeleportOut" label="S" tool_tip="Anteprima suono."/>
+			<button name="Def_UISndTeleportOut" label="R" tool_tip="Ripristina suono predefinito."/>
+			<check_box label="Attiva suono" name="PlayModeUISndTeleportOut" />
 			<text tool_tip="UUID del suono per l&apos;apertura del menu a torta." name="textFSPieMenuAppear">
 				Apri menu tondo:
 			</text>
@@ -375,19 +375,18 @@ Passare sui campi UUID per leggere le impostazioni predefinite.
 			<button name="Prev_UISndFriendshipOffer" label="S" tool_tip="Anteprima suono."/>
 			<button name="Def_UISndFriendshipOffer" label="R" tool_tip="Ripristina suono predefinito."/>
 			<check_box label="Attiva suono" name="PlayModeUISndFriendshipOffer"/>
-
-			<text tool_tip="UUID del suono per un&apos;offerta di teleport." name="textFSTeleportOffer">
-				Offerta TP:
-			</text>
-			<button name="Prev_UISndTeleportOffer" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 		<panel label="Suoni UI 3" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
 				Si possono cambiare qui (indicando gli UUID) ed abilitare/disabilitare i suoni di sistema.
 Passare sui campi UUID per leggere le impostazioni predefinite.
 			</text>
+			<text tool_tip="UUID del suono per un&apos;offerta di teleport." name="textFSTeleportOffer">
+				Offerta TP:
+			</text>
+			<button name="Prev_UISndTeleportOffer" label="S" tool_tip="Anteprima suono."/>
+			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Ripristina suono predefinito."/>
+			<check_box label="Attiva suono" name="PlayModeUISndTeleportOffer"/>
 			<text tool_tip="UUID del suono per un&apos;offerta da inventario." name="textFSInventoryOffer">
 				Offerta inventario:
 			</text>

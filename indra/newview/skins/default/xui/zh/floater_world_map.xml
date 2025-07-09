@@ -53,14 +53,16 @@
 				</text>
 			</panel>
 			<panel name="layout_panel_4">
-				<combo_box label="線上的朋友" name="friend combo" tool_tip="顯示朋友在地圖上">
-					<combo_box.item label="我線上的朋友" name="item1" />
+				<combo_box label="在線的朋友" name="friend combo" tool_tip="顯示朋友在地圖上">
+					<combo_box.item label="我在線的朋友" name="item1" />
 				</combo_box>
 				<combo_box label="我的地標" name="landmark combo" tool_tip="將地標位置顯示在地圖上">
 					<combo_box.item label="我的地標" name="item1" />
 				</combo_box>
 				<search_editor label="按區域名稱" name="location" tool_tip="輸入一個區域的名稱" />
 				<button label="尋找" name="DoSearch" tool_tip="搜尋區域" />
+			</panel>
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					位置：
 				</text>

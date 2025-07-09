@@ -30,6 +30,6 @@
 	<check_box label="允許精簡您的化身" name="alow_self_impostor" tool_tip="如果啟用，檢視器可以將您的化身精簡顯示" />
 	<check_box label="顯示最佳化後的彩現時間" name="show_tuned_art" tool_tip="如果啟用，時間欄將顯示當前彩現時間，而不是最佳化前的彩現時間。" />
 	<text name="sundry_desc1">
-這些選項控制更精細的參數。請使用線上幫助頁面取得更多有關其操作的資訊。
+這些選項控制更精細的參數。請使用在線幫助頁面取得更多有關其操作的資訊。
 	</text>
 </panel>

@@ -1,7 +1,7 @@
 /**
- * @file llfloateravatar.h
- * @author Leyla Farazha
- * @brief floater for the avatar changer
+ * @file llfloateravatarwelcomepack.h
+ * @author Callum Prentice (callum@lindenlab.com)
+ * @brief Floater container for the Avatar Welcome Pack we app
  *
  * $LicenseInfo:firstyear=2011&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -25,29 +25,28 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_FLOATER_AVATAR_H
-#define LL_FLOATER_AVATAR_H
+#pragma once
 
 #include "llfloater.h"
+
 class LLMediaCtrl;
 
-class LLFloaterAvatar:
+class LLFloaterAvatarWelcomePack:
     public LLFloater
 {
     friend class LLFloaterReg;
-private:
-    LLFloaterAvatar(const LLSD& key);
-    ~LLFloaterAvatar();
-    bool postBuild() override;
 
-    LLMediaCtrl* mAvatarPicker;
+    private:
+        LLFloaterAvatarWelcomePack(const LLSD& key);
+        ~LLFloaterAvatarWelcomePack();
+        bool postBuild() override;
+
+        LLMediaCtrl* mAvatarPicker;
 
     // <FS:Ansariel> Avatar chooser does not change between OpenSim grids
-    /*virtual*/ void onOpen(const LLSD& key) override;
+    void onOpen(const LLSD& key) override;
     void handleUrlChanged(const std::string& url);
 
     boost::signals2::connection mAvatarPickerUrlChangedSignal;
     // </FS:Ansariel>
 };
-
-#endif

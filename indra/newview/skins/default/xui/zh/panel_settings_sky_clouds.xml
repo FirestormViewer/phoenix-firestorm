@@ -22,7 +22,7 @@
 			</text>
 		</layout_panel>
 		<layout_panel name="right_lp">
-			<text name="cloud_density_label" tool_tip="云层 XY/密度 - 使用 X 和 Y 滑块更改天空中所有云的水平位置。D 滑块影响单个云的整体密度；在较低设置下，您会看到稀薄、飘逸的云，而在较高设置下，您会看到更厚、更实的云。">
+			<text name="cloud_density_label" tool_tip="云层 XY/密度 - 使用 X 和 Y 滑块更改天空中所有云的水平位置。D 滑块影响单個云的整体密度；在较低设置下，您会看到稀薄、飘逸的云，而在较高设置下，您会看到更厚、更实的云。">
 				云层密度：
 			</text>
 			<text name="cloud_detail_label">

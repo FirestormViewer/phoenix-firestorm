@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_translation_settings" title="Ustawienia tłumaczenia czatu">
- <string name="azure_api_key_not_verified">Nie można zweryfikować ID usługi Azure. Spróbuj ponownie.</string>
- <string name="google_api_key_not_verified">Nie można zweryfikować klucza Google API. Spróbuj ponownie.</string>
- <string name="deepl_api_key_not_verified">Nie można zweryfikować klucza DeepL. Status: [STATUS]. Spróbuj ponownie.</string>
+ <string name="azure_api_key_not_verified">Nie można zweryfikować ID usługi Azure. Status: [STATUS]. Sprawdź ustawienia i spróbuj ponownie.</string>
+ <string name="google_api_key_not_verified">Nie można zweryfikować klucza Google API. Status: [STATUS]. Sprawdź klucz i spróbuj ponownie.</string>
+ <string name="deepl_api_key_not_verified">Nie można zweryfikować klucza DeepL. Status: [STATUS]. Sprawdź klucz i spróbuj ponownie.</string>
  <string name="azure_api_key_verified">ID usługi Azure zweryfikowany.</string>
  <string name="google_api_key_verified">Klucz Google API zweryfikowany.</string>
  <string name="deepl_api_key_verified">Klucz DeepL zweryfikowany.</string>

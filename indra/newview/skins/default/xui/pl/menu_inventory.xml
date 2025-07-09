@@ -19,6 +19,7 @@
 	<menu_item_call label="Opróżnij Zagubione i odnalezione" name="Empty Lost And Found"/>
 	<menu_item_call label="Nowy folder" name="New Folder"/>
 	<menu_item_call label="Nowy folder" name="New Listing Folder" />
+	<menu_item_call label="Nowy folder" name="New Outfit Folder" />
 	<menu_item_call label="Nowy strój" name="New Outfit" />
 	<menu_item_call label="Nowy skrypt" name="New Script"/>
 	<menu_item_call label="Nowa nota" name="New Note"/>

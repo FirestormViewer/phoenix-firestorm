@@ -77,7 +77,7 @@
 		<menu_item_call label="退出 [APP_NAME]" name="Quit" />
 	</menu>
 	<menu label="通訊" name="Communicate">
-		<menu label="線上狀態" name="Status">
+		<menu label="在線狀態" name="Status">
 			<menu_item_check label="離開" name="Away" />
 			<menu_item_check label="請勿打擾" name="Do Not Disturb" />
 			<menu_item_check label="自動回復" name="Set Autorespond" />

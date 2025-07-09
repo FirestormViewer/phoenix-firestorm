@@ -50,7 +50,8 @@
 				</combo_box>
 				<search_editor label="リージョン名で" name="location" tool_tip="リージョン名を入力してください。"/>
 				<button label="探す" name="DoSearch" tool_tip="リージョンを検索します。"/>
-				<button name="Clear" tool_tip="追跡ラインをクリアしてマップをリセットします。"/>
+			</panel>
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					場所：
 				</text>

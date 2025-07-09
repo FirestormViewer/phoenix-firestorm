@@ -420,7 +420,7 @@ void LLViewerTextureList::dump()
             LL_CONT << image->getNumVolumes(index) << " ";
         }
         // </FS:minerjr> [FIRE-35081]
-        LL_CONT << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
+        LL_CONT << " " << image->getID().asString().substr(0, 7)
         << LL_ENDL;
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
         image_counts[(image->getDiscardLevel() + 1)] += 1; // Need to add +1 to make up for -1 being a possible value
@@ -1498,6 +1498,10 @@ F32 LLViewerTextureList::updateImagesLoadingFastCache(F32 max_time)
         // <FS:Ansariel> Fast cache stats
         sNumFastCacheReads++;
         // </FS:Ansariel>
+        // <FS:Ansariel> Fix fast cache
+        if (timer.getElapsedTimeF32() > max_time)
+            break;
+        // </FS:Ansariel>
     }
     mFastCacheList.erase(mFastCacheList.begin(), enditer);
     return timer.getElapsedTimeF32();
@@ -1609,7 +1613,9 @@ void LLViewerTextureList::decodeAllImages(F32 max_time)
     LLTimer timer;
 
     //loading from fast cache
-    updateImagesLoadingFastCache(max_time);
+    // <FS:Ansariel> Fix fast cache
+    //updateImagesLoadingFastCache(max_time);
+    max_time -= updateImagesLoadingFastCache(max_time);
 
     // Update texture stats and priorities
     std::vector<LLPointer<LLViewerFetchedTexture> > image_list;

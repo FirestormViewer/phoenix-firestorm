@@ -50,6 +50,18 @@
 			<text name="object_name_header_label">
 				Obiekty
 			</text>
+			<text name="mention_colors">
+				Wzmianki w czacie:
+			</text>
+			<text name="font_mention_label">
+				Czcionka
+			</text>
+			<text name="resident_mention_label">
+				Rezydenci
+			</text>
+			<text name="self_mention_label">
+				Ja
+			</text>
 			<slider label="Współczynnik zanikania koloru poza zasięgiem czatu:" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Współczynnik zanikania koloru czcionki czatu dla osób przebywających poza normalnym zasięgiem pisania (0 = ciemny, 1 = jasny)." />
 			<check_box name="FSColorIMsDistinctly" label="Koloruj czat IM/Grup oddzielnie w konsoli:" />
 			<panel name="im_color_panel">
