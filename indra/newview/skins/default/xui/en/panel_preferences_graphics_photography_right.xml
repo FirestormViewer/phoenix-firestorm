@@ -3,9 +3,8 @@
 border="false"
 follows="top|left|right"
 height="380"
-left_pad="0"
 layout="topleft"
-width="422"     
+width="422"        
 name="Photography_Right_Panel" >
 
 </panel>

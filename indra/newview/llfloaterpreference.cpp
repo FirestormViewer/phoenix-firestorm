@@ -812,6 +812,8 @@ bool LLFloaterPreference::postBuild()
     populateFontSelectionCombo();
     // </FS:Kadah>
 
+    gSavedSettings.getControl("WindowWidth")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onViewerSizeChange, this));
+
     // <FS:Ansariel> Update label for max. non imposters and max complexity
     gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
     gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxComplexityLabel, this, _2));
@@ -866,6 +868,32 @@ bool LLFloaterPreference::postBuild()
     // </FS:Zi>
 
     return true;
+}
+
+void LLFloaterPreference::onViewerSizeChange()
+{
+    static LLCachedControl<F32> ui_scale_factor(gSavedSettings,"UIScaleFactor", 1.0f);
+
+    if (gViewerWindow->getWindowWidthRaw() < 1080 || gViewerWindow->getWindowWidthRaw() < getRect().getWidth())
+    {
+        reshape(651, 485);
+        LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+        if (tabcontainer)
+        {
+            tabcontainer->reshape(650, 440);
+        }
+    }
+    else
+    {
+        reshape(960, 485);
+        LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+        if (tabcontainer)
+        {
+            tabcontainer->reshape(959, 440);
+        }
+    }
+
+    refreshUI();
 }
 
 // <FS:Zi> Pie menu
@@ -3885,6 +3913,10 @@ bool LLPanelPreferenceGraphics::postBuild()
     //LLFloaterReg::hideInstance("prefs_graphics_advanced");
     // </FS:Ansariel>
 
+    mTabsSingle = getChild<LLTabContainer>("tabs_single");
+    mTabsDouble = getChild<LLTabContainer>("tabs_double");
+    onViewerSizeChange();
+    gSavedSettings.getControl("WindowWidth")->getCommitSignal()->connect(boost::bind(&LLPanelPreferenceGraphics::onViewerSizeChange, this));
     // <FS:Ansariel> Advanced graphics preferences
     // Disable FSAA combo when shaders are not loaded
     //
@@ -3930,6 +3962,34 @@ void LLPanelPreferenceGraphics::draw()
     LLPanelPreference::draw();
 }
 
+void LLPanelPreferenceGraphics::onViewerSizeChange()
+{
+    if (gViewerWindow->getWindowWidthRaw() < 1080 || gViewerWindow->getWindowWidthRaw() < getRect().getWidth())
+    {
+        reshape(540, 440);
+        if (mTabsSingle)
+        {
+            mTabsSingle->setVisible(true);
+        }
+        if (mTabsDouble)
+        {
+            mTabsDouble->setVisible(false);
+        }
+    }
+    else
+    {
+        reshape(844, 440);
+        if (mTabsSingle)
+        {
+            mTabsSingle->setVisible(false);
+        }
+        if (mTabsDouble)
+        {
+            mTabsDouble->setVisible(true);
+        }
+    }
+}
+
 void LLPanelPreferenceGraphics::onPresetsListChange()
 {
     resetDirtyChilds();
@@ -3952,6 +4012,16 @@ void LLPanelPreferenceGraphics::setPresetText()
     // <FS:Ansariel> Performance improvement
     //LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
     static LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
+    /*
+    static std::vector<LLTextBox*> preset_text
+    // Push children onto the end of the work stack
+    for (child_list_t::const_iterator iter = curview->getChildList()->begin();
+            iter != curview->getChildList()->end(); ++iter)
+    {
+        if (*iter->)
+        preset_text.push_back(*iter);
+    }
+    */
     // </FS:Ansariel>
 
     std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");

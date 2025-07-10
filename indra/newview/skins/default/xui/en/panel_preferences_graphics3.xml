@@ -31,7 +31,7 @@
      label="Avatar"
      name="Avatar">
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -40,8 +40,6 @@
          filename="panel_preferences_graphics_avatar_left.xml"
          label="Avatar Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_avatar_left_tab"
          name="Avatar_Left" />
 
@@ -57,7 +55,7 @@
      label="Avatar 2"
      name="Avatar">
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -67,8 +65,6 @@
          filename="panel_preferences_graphics_avatar_right.xml"
          label="Avatar Right"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_avatar_right_tab"
          name="Avatar_Right" />
     </panel>
@@ -83,7 +79,7 @@
      label="World"
      name="World Settings" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -92,8 +88,6 @@
          filename="panel_preferences_graphics_world_left.xml"
          label="World Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_world_left_tab"
          name="World_Left" />
 
@@ -108,7 +102,7 @@
      label="World 2"
      name="World Settings" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -119,8 +113,6 @@
          filename="panel_preferences_graphics_world_right.xml"
          label="World Right"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_world_right_tab"
          name="World_Right" />
     </panel>
@@ -134,7 +126,7 @@
      label="Textures"
      name="Rendering" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -143,8 +135,6 @@
          filename="panel_preferences_graphics_textures_left.xml"
          label="Textures Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_textures_left_tab"
          name="Textures_Left" />
 
@@ -159,7 +149,7 @@
      label="Textures 2"
      name="Rendering" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -170,8 +160,6 @@
          filename="panel_preferences_graphics_textures_right.xml"
          label="Textures Right"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_textures_right_tab"
          name="Textures_Right" />
     </panel>
@@ -185,7 +173,7 @@
      label="Lighting"
      name="Lighting panel" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -194,10 +182,10 @@
          filename="panel_preferences_graphics_lighting_left.xml"
          label="Lighting Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_lighting_left_tab"
          name="Lighting_Left" />
+
+
     </panel>
 	   <panel
      top_pad="5"
@@ -208,7 +196,7 @@
      label="Lighting 2"
      name="Lighting panel" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -218,8 +206,6 @@
          filename="panel_preferences_graphics_lighting_right.xml"
          label="Lighting Right"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_lighting_right_tab"
          name="Lighting_Right" />
     </panel>
@@ -233,7 +219,7 @@
      label="Post Processing"
      name="Post Processing panel" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -242,13 +228,10 @@
          filename="panel_preferences_graphics_postprocessing_left.xml"
          label="Post Processing Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_postprocessing_left_tab"
          name="Post_Processing_Left" />
 
     </panel>
-	<!--
 	   <panel
      top_pad="5"
      bottom="-1"
@@ -258,7 +241,7 @@
      label="Post Processing 2"
      name="Post Processing panel" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -268,12 +251,9 @@
          filename="panel_preferences_graphics_postprocessing_right.xml"
          label="Post Processing Right"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_postprocessing_right_tab"
          name="Post_Processing_Right" />
     </panel>
-	-->
 <!--Photography-->
 	   <panel
      top_pad="5"
@@ -284,7 +264,7 @@
      label="Photography"
      name="Photography panel" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -293,13 +273,10 @@
          filename="panel_preferences_graphics_photography_left.xml"
          label="Photography Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_photography_left_tab"
          name="Photography_Left" />
 
 	 </panel>
-	 <!--
 	   <panel
      top_pad="5"
      bottom="-1"
@@ -309,7 +286,7 @@
      label="Photography 2"
      name="Photography panel" >
         <panel
-         filename="panel_preferences_graphics_preset_top_single.xml"
+         filename="panel_preferences_graphics_preset_top.xml"
          label="Graphics Preset Top"
          layout="topleft"
          help_topic="preferences_preset_top_tab"
@@ -323,7 +300,6 @@
          help_topic="preferences_photography_right_tab"
          name="Photography_Right" />
 	 </panel>
-	 -->
 </tab_container>
   <tab_container
    label="Graphics Prefs"
@@ -333,7 +309,7 @@
    bottom="-1"
    left="1"
    right="-1"
-   name="tabs_double"
+   name="tabs"
    tab_min_width="50"
    tab_position="top" >
 
@@ -356,8 +332,6 @@
          filename="panel_preferences_graphics_avatar_left.xml"
          label="Avatar Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_avatar_left_tab"
          name="Avatar_Left" />
 
@@ -389,8 +363,6 @@
          filename="panel_preferences_graphics_world_left.xml"
          label="World Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_world_left_tab"
          name="World_Left" />
 
@@ -398,7 +370,6 @@
          filename="panel_preferences_graphics_world_right.xml"
          label="World Right"
          layout="topleft"
-		 left_pad="0"
          help_topic="preferences_world_right_tab"
          name="World_Right" />
     </panel>
@@ -422,8 +393,6 @@
          filename="panel_preferences_graphics_textures_left.xml"
          label="Textures Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_textures_left_tab"
          name="Textures_Left" />
 
@@ -431,7 +400,6 @@
          filename="panel_preferences_graphics_textures_right.xml"
          label="Textures Right"
          layout="topleft"
-		 left_pad="0"
          help_topic="preferences_textures_right_tab"
          name="Textures_Right" />
     </panel>
@@ -455,8 +423,6 @@
          filename="panel_preferences_graphics_lighting_left.xml"
          label="Lighting Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_lighting_left_tab"
          name="Lighting_Left" />
 
@@ -464,7 +430,6 @@
          filename="panel_preferences_graphics_lighting_right.xml"
          label="Lighting Right"
          layout="topleft"
-		 left_pad="0"
          help_topic="preferences_lighting_right_tab"
          name="Lighting_Right" />
     </panel>
@@ -488,8 +453,6 @@
          filename="panel_preferences_graphics_postprocessing_left.xml"
          label="Post Processing Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_postprocessing_left_tab"
          name="Lighting_Left" />
 
@@ -497,7 +460,6 @@
          filename="panel_preferences_graphics_postprocessing_right.xml"
          label="Post Processing Right"
          layout="topleft"
-		 left_pad="0"
          help_topic="preferences_postprocessing_right_tab"
          name="Post_Processing_Right" />
     </panel>
@@ -520,8 +482,6 @@
          filename="panel_preferences_graphics_photography_left.xml"
          label="Photography Left"
          layout="topleft"
-		 top_pad="0"
-		 left="0"
          help_topic="preferences_photography_left_tab"
          name="Photography_Left" />
 
@@ -529,7 +489,6 @@
          filename="panel_preferences_graphics_photography_right.xml"
          label="Photography Right"
          layout="topleft"
-		 left_pad="0"
          help_topic="preferences_photography_right_tab"
          name="Photography_Right" />
 	 </panel>

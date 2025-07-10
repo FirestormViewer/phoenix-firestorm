@@ -3,10 +3,8 @@
 border="false"
 follows="top|left|right"
 height="380"
-left="0"
 layout="topleft"
-top_pad="0"
-width="422"      
+width="422"        
 name="Photography_Left_Panel" >
        <check_box
         control_name="RenderDepthOfField"

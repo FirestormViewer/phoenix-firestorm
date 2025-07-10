@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel
 border="false"
-follows="top|left|right"
+follows="top|left"
 height="380"
-left="0"
 layout="topleft"
-top_pad="0"
 width="422"      
 name="Avatar_Left_Panel" >
         <text

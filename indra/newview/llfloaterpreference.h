@@ -55,6 +55,7 @@ class LLSD;
 class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
+class LLTabContainer;
 
 // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 class LLFilterEditor;
@@ -176,6 +177,9 @@ protected:
 
     // <FS:Zi> Group Notices and chiclets location setting conversion bool => S32
     void onShowGroupNoticesTopRightChanged();
+
+    // <FS:minerjr>
+    void onViewerSizeChange();
 
 public:
     // This function squirrels away the current values of the controls so that
@@ -431,6 +435,10 @@ protected:
 
 private:
 
+    LLTabContainer* mTabsSingle;
+    LLTabContainer* mTabsDouble;
+    // <FS:minerjr>
+    void onViewerSizeChange();
     void onPresetsListChange();
     LOG_CLASS(LLPanelPreferenceGraphics);
 };

@@ -9,7 +9,7 @@ top="0"
 width="844"      
 name="Preset_Top_Panel" >
   <text
-    follows="top|left|right"
+    follows="top|left"
     height="16"
     layout="topleft"
     left="5"
@@ -20,7 +20,7 @@ name="Preset_Top_Panel" >
   </text>
 
   <text
-    follows="top|left|right"
+    follows="top|left"
     height="16"
     layout="topleft"
     left_pad="10"
@@ -29,46 +29,6 @@ name="Preset_Top_Panel" >
     width="120">
       (None)
   </text>
-
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="25"
-       layout="topleft"
-       left="5"
-       name="QualitySpeed"
-       top="25"
-       width="105"
-       wrap="true">
-        Quality and speed:
-      </text>
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       halign="right"
-       height="12"
-       layout="topleft"
-       left_pad="5"
-       name="FasterText"
-       top_delta="0"
-       width="80">
-        Performance
-      </text>
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="12"
-       layout="topleft"
-       left="475"
-       name="BetterText"
-       top_delta="0"
-       width="60">
-        Quality
-      </text>
-
       <!--Reset Button-->
       <button
        follows="left|top"
@@ -78,7 +38,7 @@ name="Preset_Top_Panel" >
        layout="topleft"
        left_pad="2"
        name="Defaults"
-       top_delta="-5"
+       top_delta="-1"
        width="23">
         <button.commit_callback
          function="Pref.HardwareDefaults" />
@@ -125,6 +85,46 @@ name="Preset_Top_Panel" >
           function="Pref.PrefDelete"
           parameter="graphic" />
         </button>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="25"
+       layout="topleft"
+       left="5"
+       name="QualitySpeed"
+       top="25"
+       width="105"
+       wrap="true">
+        Quality and speed:
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="right"
+       height="12"
+       layout="topleft"
+       left_pad="5"
+       name="FasterText"
+       top_delta="0"
+       width="80">
+        Performance
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="475"
+       name="BetterText"
+       top_delta="0"
+       width="60">
+        Quality
+      </text>
+
+
       <icon
        color="Slidermark"
        height="14"

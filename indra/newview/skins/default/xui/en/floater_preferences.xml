@@ -104,6 +104,7 @@
          layout="topleft"
          help_topic="preferences_colors_tab"
          name="colors" />
+		 <!--
         <panel
           class="panel_preference_graphics"
          filename="panel_preferences_graphics1.xml"
@@ -111,10 +112,11 @@
          layout="topleft"
          help_topic="preferences_display_tab"
          name="display" />
+		 -->
         <panel
           class="panel_preference_graphics"
          filename="panel_preferences_graphics2.xml"
-         label="New Graphics"
+         label="Graphics"
          layout="topleft"
          help_topic="preferences_display_tab"
          name="display" />
