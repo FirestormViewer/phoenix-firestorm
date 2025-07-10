@@ -6,7 +6,7 @@
  layout="topleft"
  left="1"
  top="1"
- width="540"
+ width="844"
  label="Graphics"
  name="Display panel">
   <tab_container
