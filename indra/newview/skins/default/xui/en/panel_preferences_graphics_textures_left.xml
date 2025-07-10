@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left="0"
+layout="topleft"
+top_pad="0"
+width="422"      
+name="Textures_Left_Panel" >
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="Texture Rendering"
+         top_pad="4"
+         width="308">
+            Texture Rendering:
+        </text>
+        <check_box
+         control_name="RenderAnisotropic"
+         height="16"
+         label="Anisotropic Filtering (slower when enabled)"
+         layout="topleft"
+         left="15"
+         name="ani"
+         tool_tip="This checkbox enables anisotropic filtering, which is a method to enhance the quality of textures when they are viewed at relatively large angles in relation to your camera position. Usually makes them look less blurry at greater distances."
+         top_pad="4"
+         width="256" />
+        <text
+         type="string"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="15"
+         name="FSRestrictMaxTextureSize"
+         top_pad="4"
+         width="250">
+            Restrict maximum texture resolution to:
+        </text>
+
+        <combo_box
+         control_name="RenderMaxTextureResolution"
+         height="20"
+         layout="topleft"
+         left_pad="2"
+         tool_tip="Sets the maximum display resolution for inworld textures. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
+         top_delta="-2"
+         name="FSRestrictMaxTexturePixels"
+         width="100">
+          <combo_box.item
+           label="512 pixels"
+           name="512"
+           value="512"/>
+          <combo_box.item
+           label="1024 pixels"
+           name="1024"
+           value="1024"/>
+          <combo_box.item
+           label="2048 pixels"
+           name="2048"
+           value="2048"/>
+        </combo_box>
+
+      <!-- New Texture detail 5 is lowest, 0 is highest -->
+        <text
+         type="string"
+         length="1"
+         top_pad="3"
+         follows="top|left"
+         height="18"
+         width="150"
+         word_wrap="true"
+         layout="topleft"
+         left="15"
+         name="TextureDetailLabel">
+            Max Texture Quality Level:
+        </text>
+        <combo_box
+         control_name="TextureDiscardLevel"
+         height="20"
+         layout="topleft"
+         follows="left|top"
+         left_pad="5"
+         top_pad="-20"
+         name="TextureDetail"
+         width="150"
+         tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
+            <combo_box.item
+             label="Normal (0) quality"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Mid (3) quality"
+             name="3"
+             value="3"/>
+            <combo_box.item
+             label="Low (4) quality"
+             name="4"
+             value="4"/>
+            <combo_box.item
+             label="No (5) textures"
+             name="5"
+             value="5"/>
+        </combo_box>
+        <check_box
+          control_name="FSLimitTextureVRAMUsage"
+          height="16"
+          label="Limit VRAM texture usage (MB)"
+          layout="topleft"
+          left="15"
+          top_pad="4"
+          name="FSLimitTextureVRAMUsage"
+          tool_tip="Limits the amount of VRAM used for textures. Overall usage may still be higher because other elements also use VRAM."
+          width="175" 
+        />
+        <slider
+          control_name="RenderMaxVRAMBudget"
+          enabled_control="FSLimitTextureVRAMUsage"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="16"
+          layout="topleft"
+          left_pad="15"
+          min_val="0"
+          max_val="4096"
+          name="RenderMaxVRAMBudget"
+          tool_tip="The maximum amount of VRAM in Megabytes used for textures."
+          top_delta="-5"
+          width="200"
+        />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="automatic_texture_downscale_settings"
+         top_pad="10"
+         width="208">
+            Automatic Texture Downscaling:
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardBackgroundedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when not the active window."
+         top_pad="10"
+         width="175">
+            In Background (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardBackgroundedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardBackgroundedTime"
+          tool_tip="Downscales textures after selected amount of seconds when not the active window."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardBackgroundedTime_seconds"
+         top_delta="5"
+         width="100">
+            Second(s)
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardMinimizedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when minimized."
+         top_pad="10"
+         width="175">
+            Minimized (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardMinimizedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardMinimizedTime"
+          tool_tip="Downscales textures after selected amount of seconds when minimized."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardMinimizedTime_seconds"
+         top_delta="5"
+         width="100">
+            Second(s)
+        </text>
+
+
+
+</panel>

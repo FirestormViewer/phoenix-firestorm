@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left="0"
+layout="topleft"
+top_pad="0"
+width="422"      
+name="Lighting_Left_Panel" >
+        <check_box
+         control_name="RenderScreenSpaceReflections"
+         height="16"
+         initial_value="true"
+         label="Screen Space Reflections"
+         layout="topleft"
+         left="9"
+         name="ScreenSpaceReflections"
+         top_pad="4"
+         width="256">
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderMirrors"
+         height="16"
+         initial_value="false"
+         label="Mirrors"
+         layout="topleft"
+         left="9"
+         name="Mirrors"
+         top_pad="2"
+         width="280">
+          <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="ReflectionDetailText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Reflection Detail:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeDetail"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ReflectionDetail"
+         width="150">
+          <combo_box.item
+           label="Static Only"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Static &amp; Dynamic"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Realtime"
+           name="2"
+           value="2"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="ReflectionProbeText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Reflection Coverage:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeLevel"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ReflectionLevel"
+         width="150">
+          <combo_box.item
+           label="None"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Manual only"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Manual &amp; terrain"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="Full scene"
+           name="3"
+           value="3"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         top_pad="4"
+         follows="top|left"
+         height="12"
+         width="170"
+         word_wrap="false"
+         layout="topleft"
+         left_delta="-5"
+         name="local lights_label"
+         tool_tip="Affects the number of rendered light sources. A restart is required to change mode.">
+          Point Lighting (restart required)
+        </text>
+        <combo_box
+         control_name="RenderShaderLightingMaxLevel"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="LocalLightsDetail"
+         width="150">
+          <combo_box.item
+           label="Full (default)"
+           name="3"
+           value="3"/>
+          <combo_box.item
+           label="Reduced"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="Sun/Moon Only"
+           name="1"
+           value="1"/>
+        </combo_box>
+
+        <!-- Mirror settings. -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="MirrorResolutionText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Mirror Resolution:
+        </text>
+        <combo_box
+         control_name="RenderHeroProbeResolution"
+         enabled_control="RenderMirrors"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="MirrorResolution"
+         width="150">
+          <combo_box.item
+           label="256"
+           name="0"
+           value="256"/>
+          <combo_box.item
+           label="512"
+           name="1"
+           value="512"/>
+          <combo_box.item
+           label="1024"
+           name="2"
+           value="1024"/>
+          <combo_box.item
+           label="2048"
+           name="3"
+           value="2048"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="HeroProbeUpdateText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Mirror Update Rate:
+        </text>
+        <combo_box
+         control_name="RenderHeroProbeUpdateRate"
+         enabled_control="RenderMirrors"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="HeroProbeUpdateRate"
+         width="150">
+          <combo_box.item
+           label="Low"
+           name="6"
+           value="6"/>
+          <combo_box.item
+           label="Medium"
+           name="3"
+           value="3"/>
+          <combo_box.item
+           label="High"
+           name="1"
+           value="2"/>
+          <combo_box.item
+           label="Ultra"
+           name="0"
+           value="1"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="-5"
+         name="ReflectionProbeCount"
+         top_pad="4"
+         width="150">
+            Max. Reflection Probes:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeCount"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ProbeCount"
+         width="150">
+         <combo_box.item
+          label="None"
+          name="1"
+          value="1"/>
+         <combo_box.item
+          label="Low"
+          name="32"
+          value="32"/>
+         <combo_box.item
+          label="Medium"
+          name="64"
+          value="64"/>
+         <combo_box.item
+          label="High"
+          name="128"
+          value="128"/>
+         <combo_box.item
+          label="Ultra"
+          name="256"
+          value="256"/>
+        </combo_box>
+        <!-- End of mirror settings -->
+        <slider
+         control_name="RenderLocalLightCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="256"
+         label="Max. nearby lights"
+         label_width="185"
+         layout="topleft"
+         left="9"
+         min_val="0"
+         max_val="8192"
+         name="MaxLights"
+         top_pad="2"
+         width="317" />
+        <check_box
+         follows="top|left"
+         layout="topleft"
+         left="9"
+         top_pad="5"
+         label="Enable Attached Lights (Face Lights)"
+         tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
+         name="Render Attached Lights">
+        <check_box.on_check
+         function="CheckControl"
+         parameter="RenderAttachedLights"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.HandleAttachedLightParticles"
+         parameter="RenderAttachedLights"/>
+        </check_box>
+</panel>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left="0"
+layout="topleft"
+top_pad="0"
+width="422"      
+name="World_Left_Panel" >
+      <!-- world pauser -->
+      <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="World Updating"
+         top_pad="4"
+         width="308">
+            World Updating:
+        </text>
+        <check_box
+         control_name="AgentPause"
+         height="16"
+         initial_value="false"
+         label="Freeze updates to World (pause everything)"
+         tool_tip="Set this to freeze all updates from the server - stops all actions in-world but does not affect chat, IMs or voice"
+         layout="topleft"
+         left_delta="5"
+         name="WorldPause"
+         top_pad="4"
+         width="256"/>
+
+         <check_box
+         control_name="FSLimitFramerate"
+         height="16"
+         initial_value="true"
+         label="Limit Framerate"
+         layout="topleft"
+         min_val="15"
+         name="FSLimitFramerate"
+         tool_tip="Limits the framerate to a user defined value. Can reduce GPU/CPU power consumption and heat."
+         left="15"
+         top_pad="2"
+         width="156"/>
+        <slider
+         enabled_control="FSLimitFramerate"
+         control_name="FramePerSecondLimit"
+         decimal_digits="0"
+         follows="left|top|right"
+         height="16"
+         increment="1"
+         label="FPS:"
+         label_width="30"
+         layout="topleft"
+         max_val="360"
+         min_val="15"
+         name="MaxFPS"
+         left_pad="30"
+         mouse_opaque="true"
+         show_text="true"
+         width="200" />
+
+         <check_box
+         control_name="RenderVSyncEnable"
+         height="16"
+         initial_value="false"
+         label="Limit Framerate to monitor frequency (VSync)"
+         layout="topleft"
+         left="15"
+         top_pad="4"
+         name="vsync"
+         tool_tip="Synchronizes the frame rate to the refresh rate of the monitor, can result in increased stutter and input lag."
+         width="315" />
+        <check_box
+         control_name="FullScreen"
+         height="16"
+         initial_value="false"
+         label="Fullscreen Mode"
+         layout="topleft"
+         left="15"
+         name="Fullscreen Mode"
+         tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
+         top_pad="4"
+         width="280" />
+        <check_box
+         layout="topleft"
+         left="15"
+		 height="16"
+         top_pad="4"
+         label="Show the Scene as Wireframe"
+         name="Wireframe">
+        <check_box.on_check
+         function="Advanced.CheckWireframe"
+         parameter="Wireframe"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.ToggleWireframe"/>
+        </check_box>
+        <check_box
+         control_name="RenderTransparentWater"
+         height="16"
+         initial_value="true"
+         label="Transparent Water"
+         layout="topleft"
+         left="15"
+         name="TransparentWater"
+         top_pad="4"
+         width="256" >
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+		
+        <slider
+         control_name="RenderFarClip"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="8"
+         initial_value="160"
+         label="Draw distance"
+         label_width="185"
+         layout="topleft"
+         left="9"
+         max_val="1024"
+         min_val="32"
+         name="DrawDistance"
+         top_pad="5"
+         width="321" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="316"
+         name="DrawDistanceMeterText2"
+         top_delta="0"
+         width="128">
+          m
+        </text>
+        <slider
+         control_name="RenderMaxPartCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="256"
+         initial_value="4096"
+         label="Max. particle count"
+         label_width="185"
+         layout="topleft"
+         left="9"
+         max_val="8192"
+         name="MaxParticleCount"
+         top_pad="6"
+         width="321" />
+        <check_box
+         follows="top|left"
+         layout="topleft"
+         left="9"
+         top_pad="9"
+         label="Render Attached Particles"
+         name="Render Attached Particles">
+         <check_box.on_check
+         function="CheckControl"
+         parameter="RenderAttachedParticles"/>
+         <check_box.check_button.commit_callback
+         function="Advanced.HandleAttachedLightParticles"
+         parameter="RenderAttachedParticles"/>
+        </check_box>
+        <slider
+         control_name="PrecachingDelay"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="200"
+         label="Time to delay while pre-caching before showing world"
+         tool_tip="How long to delay before showing world to you after you show as being online to others (default is 6 seconds)"
+         label_width="300"
+         layout="topleft"
+         max_val="15"
+         min_val="1"
+         name="PrecachingDelay"
+         left="10"
+         top_pad="5"
+         width="405" />
+</panel>

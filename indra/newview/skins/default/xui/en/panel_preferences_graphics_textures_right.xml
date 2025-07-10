@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left_pad="0"
+layout="topleft"
+width="422"  
+name="Textures_Right_Panel" >
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="advanced_settings"
+         top_pad="4"
+         width="308">
+            Advanced Settings (restart required):
+        </text>
+
+        <check_box
+          control_name="FSOverrideVRAMDetection"
+          height="16"
+          label="Override VRAM detection"
+          layout="topleft"
+          left="15"
+          top_pad="4"
+          name="FSOverrideVRAMDetection"
+          tool_tip="Enable the user to override VRAM detection (use with extreme caution)"
+          width="215" 
+        />
+        <slider
+          control_name="FSForcedVideoMemory"
+          enabled_control="FSOverrideVRAMDetection"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          initial_value="2"
+          label="Override GPU Dedicated VRAM (GB):"
+          label_width="200"
+          layout="topleft"
+          left="15"
+          min_val="0"
+          max_val="32"
+          name="FSForcedVideoMemory"
+          tool_tip="Important: Use with extreme caution.
+Override the detected VRAM on your GPU.
+This must not include 'shared' VRAM which is part of the system RAM.
+If you do not understand the distinction then leave this control alone."
+          top_pad="4"
+          width="400" 
+        />
+        <check_box
+         control_name="RenderCompressTextures"
+         height="16"
+         initial_value="false"
+         label="Enable Lossy Texture Compression"
+         layout="topleft"
+         left="15"
+         top_pad="2"
+         name="texture compression"
+         tool_tip="Compresses textures in video memory, allowing for higher resolution textures and/or more textures to be loaded at the cost of some color quality."
+         width="315" />
+        <slider
+         control_name="RenderTerrainScale"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="12"
+         label="Scale of Terrain Texture Rendering"
+         label_width="200"
+         layout="topleft"
+         left="15"
+         max_val="24"
+         min_val="1"
+         name="RenderTerrainScale"
+         tool_tip="Determines scale of terrain textures - lower is more compressed (requires viewer restart)"
+         top_pad="4"
+         width="400" />
+</panel>

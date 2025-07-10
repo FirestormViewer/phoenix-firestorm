@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left_pad="0"
+layout="topleft"
+width="422"      
+name="Avatar_Right_Panel" >
+
+</panel>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left="0"
+layout="topleft"
+top_pad="0"
+width="422"      
+name="Post_Processing_Left_Panel" >
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="antialiasing label"
+         top_pad="4"
+         width="220"
+         tool_tip="Changes to this setting may require a restart on some hardware.">
+          Antialiasing (restart recommended):
+        </text>
+        <combo_box
+         control_name="RenderFSAAType"
+         height="22"
+         initial_value="false"
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         name="fsaa"
+         top_pad="5"
+         width="130">
+            <combo_box.item
+             label="Disabled"
+             name="FSAADisabled"
+             value="0" />
+            <combo_box.item
+             label="FXAA"
+             name="FXAA"
+             value="1" />
+            <combo_box.item
+             label="SMAA"
+             name="SMAA"
+             value="2" />
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="antialiasing quality label"
+         top_pad="10"
+         width="220"
+         tool_tip="Changes to this setting may require a restart on some hardware.">
+          Antialiasing Quality:
+        </text>
+        <combo_box
+         control_name="RenderFSAASamples"
+         height="22"
+         initial_value="false"
+         follows="left|top"
+         layout="topleft"
+         left="9"
+         name="fsaa quality"
+		 top_pad="5"
+         width="130">
+            <combo_box.item
+             label="Low"
+             name="Low"
+             value="0" />
+            <combo_box.item
+             label="Medium"
+             name="Medium"
+             value="1" />
+            <combo_box.item
+             label="High"
+             name="High"
+             value="2" />
+            <combo_box.item
+             label="Ultra"
+             name="Ultra"
+             value="3" />
+        </combo_box>
+		
+        <check_box
+         control_name="RenderDisableVintageMode"
+         height="16"
+         initial_value="false"
+         label="HDR and Emissive"
+         tool_tip="Enables additional rendering pipeline features on newer machines such as HDR and emissive textures on PBR content."
+         layout="topleft"
+         left="9"
+         name="VintageMode"
+         top_pad="6"
+         width="256">
+         <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderAutoMaskAlphaDeferred"
+         height="16"
+         initial_value="false"
+         label="Render alpha masks"
+         tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly"
+         layout="topleft"
+         left="9"
+         name="RenderAutoMaskAlphaDeferred"
+         top_pad="2"
+         width="256"/>
+        <check_box
+         control_name="RenderGlow"
+         height="16"
+         initial_value="true"
+         label="Render glow"
+         tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
+         layout="topleft"
+         left_delta="0"
+         name="RenderGlow"
+         top_pad="2"
+         width="256"/>
+		<slider
+		enabled_control="RenderGlow"
+		control_name="RenderGlowIterations"
+		decimal_digits="0"
+		follows="left|top"
+		can_edit_text="false"
+		height="16"
+		increment="1"
+		initial_value="160"
+		label="Strength:"
+		tool_tip="Glow strength. Higher = wider and smoother (default is 2) "
+		label_width="100"
+		layout="topleft"
+		max_val="3"
+		min_val="0"
+		name="glow_strength"
+		enabled="true"
+		left_delta="140"
+		mouse_opaque="true"
+		show_text="true"
+		width="250" />
+        <check_box
+         control_name="RenderDeferredSSAO"
+         height="16"
+         initial_value="true"
+         label="Ambient Occlusion"
+         layout="topleft"
+         left="9"
+         name="UseSSAO"
+         top_pad="2"
+         width="256">
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <!-- Sharpening Settings -->
+        <slider
+         control_name="RenderCASSharpness"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="Sharpening:"
+         label_width="200"
+         layout="topleft"
+         left="9"
+         min_val="0.0"
+         max_val="1.0"
+         name="RenderSharpness"
+         show_text="true"
+         top_pad="0"
+         width="400">
+        </slider>
+        <!-- Tone Mapping Settings -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="9"
+         name="TonemapTypeText"
+         top_pad="6"
+         width="150">
+            Tone Mapper:
+        </text>
+        <combo_box
+         control_name="RenderTonemapType"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-2"
+         name="TonemapType"
+         width="150">
+         <combo_box.item
+          label="Khronos Neutral"
+          name="0"
+          value="0"/>
+         <combo_box.item
+          label="ACES"
+          name="1"
+          value="1"/>
+        </combo_box>
+        <slider
+         control_name="RenderTonemapMix"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         label="Tone Mapping Mix:"
+         tool_tip="Mix between linear and tone mapped colors"
+         label_width="200"
+         layout="topleft"
+         left="9"
+         min_val="0.0"
+         max_val="1.0"
+         name="TonemapMix"
+         show_text="true"
+         top_pad="5"
+         width="400"/>
+        <slider
+         control_name="RenderExposure"
+         disabled_control="RenderDisableVintageMode"
+         decimal_digits="1"
+         follows="left|top"
+         height="15"
+         increment="0.1"
+         initial_value="1"
+         label="Exposure"
+         label_width="200"
+         layout="topleft"
+         left="9"
+         min_val="0.5"
+         max_val="4.0"
+         name="RenderExposure"
+         show_text="true"
+         top_pad="2"
+         width="400"/>
+        <slider
+         control_name="RenderGlowResolutionPow"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="8"
+         label="Post process quality"
+         label_width="200"
+         layout="topleft"
+         left="9"
+         max_val="9"
+         min_val="8"
+         name="RenderPostProcess"
+         show_text="false"
+         top_pad="5"
+         width="375">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="PostProcessText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="8"
+         name="PostProcessText"
+         top_delta="0"
+         width="64">
+          Low
+        </text>
+        <!-- End of Tone Mapping Settings-->
+        <!-- End of Sharpening Settings-->
+</panel>

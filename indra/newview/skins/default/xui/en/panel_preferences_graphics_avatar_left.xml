@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+border="false"
+follows="top|left|right"
+height="380"
+left="0"
+layout="topleft"
+top_pad="0"
+width="422"      
+name="Avatar_Left_Panel" >
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="9"
+          top_pad="8"
+          width="150"
+          name="AvatarComplexityModeLabel">
+            Avatar display
+        </text>
+        <combo_box
+         control_name="RenderAvatarComplexityMode"
+         height="23"
+         layout="topleft"
+         left_pad="22"
+         top_delta="-4"
+         name="AvatarComplexityMode"
+         width="150">
+            <combo_box.item
+             label="Limit by Complexity"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Always show Friends"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Only show Friends"
+             name="2"
+             value="2"/>
+        </combo_box>
+        <slider
+         control_name="IndirectMaxComplexity"
+         tool_tip="Controls at what point a visually complex avatar is drawn as a JellyDoll"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="101"
+         label="Avatar maximum complexity"
+         label_width="185"
+         layout="topleft"
+         left="9"
+         max_val="101"
+         min_val="1"
+         show_text="false"
+         name="IndirectMaxComplexity"
+         top_pad="3"
+         width="281">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxComplexity"
+          parameter="IndirectMaxComlexityText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="294"
+         name="IndirectMaxComplexityText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="128">
+          0
+        </text>
+        <slider
+         control_name="IndirectMaxNonImpostors"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="12"
+         label="Max. # of non-impostor avatars"
+         label_width="185"
+         layout="topleft"
+         left="9"
+         max_val="66"
+         min_val="1"
+         show_text="false"
+         name="IndirectMaxNonImpostors"
+         top_pad="5"
+         width="281">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxNonImpostors"
+          parameter="IndirectNonImpostorsText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="294"
+         name="IndirectMaxNonImpostorsText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="128">
+          0
+        </text>
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="9"
+	      top_pad="8"
+          width="200"
+          name="ExcludeAnimeshImposterLabel">
+            Animesh Avatars - Exclude Imposters:
+        </text>
+        <combo_box
+         control_name="FSImpostorAvatarExclude"
+         height="23"
+         layout="topleft"
+         tool_tip="Allows for Animesh User or Control Avatars to be excluded from using impostor rendering."
+         left_pad="8"
+         top_delta="-4"
+         name="FSImpostorAvatarExclude"
+         width="80">
+            <combo_box.item
+             label="None"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="User"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Control"
+             name="2"
+             value="2"/>
+            <combo_box.item
+             label="Both"
+             name="3"
+             value="3"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="9"
+         name="AvatarDetailText"
+         top_pad="5"
+         width="400">
+          Level of Detail (LOD) Distance Factors:
+        </text>
+        <slider
+         control_name="RenderAvatarLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         label="  Avatars"
+         label_width="140"
+         layout="topleft"
+         left="9"
+         name="AvatarMeshDetail"
+         show_text="true"
+		 top_pad="5"
+         width="324"/>
+		<check_box
+		 control_name="RenderUnloadedAvatar"
+		 height="16"
+		 initial_value="false"
+		 label="Show avatars that haven't finished loading"
+		 layout="topleft"
+		 left="9"
+		 name="RenderUnloadedAvatars"
+		 top_pad="5"
+		 width="256"/>
+</panel>

@@ -3,42 +3,26 @@
  legacy_header_height="18"
  positioning="centered"
  default_tab_group="2"
- height="521"
+ height="485"
  layout="topleft"
  name="Preferences"
  help_topic="preferences"
  save_rect="true"
  single_instance="true"
  title="Preferences"
- width="662">
-    <button
-     follows="right|bottom"
-     height="23"
-     label="OK"
-     label_selected="OK"
+ width="960">
+<!--
+    <scroll_container
+     color="SL-Background"
+     opaque="true"
+     follows="all"
+     height="485"
      layout="topleft"
-     left_pad="5"
-     right="-105"
-     name="OK"
-     top="488"
-     width="90">
-        <button.commit_callback
-         function="Pref.OK" />
-    </button>
-    <button
-     follows="right|bottom"
-     height="23"
-     label="Cancel"
-     label_selected="Cancel"
-     layout="topleft"
-     left_pad="5"
-     name="Cancel"
-     right="-10"
-     width="90" >
-        <button.commit_callback
-         function="Pref.Cancel" />
-    </button>
-
+     left="5"
+     top_pad="15"
+     name="prefences_scroll"
+     reserve_scroll_corner="false"
+     width="960">-->
     <panel
      name="search_panel"
      layout="topleft"
@@ -98,7 +82,7 @@
      tab_width="114"
      tab_padding_right="4"
      top="42"
-     width="662">
+     width="959">
         <panel
          class="panel_preference"
          filename="panel_preferences_general.xml"
@@ -122,7 +106,7 @@
          name="colors" />
         <panel
           class="panel_preference_graphics"
-         filename="panel_preferences_graphics1.xml"
+         filename="panel_preferences_graphics2.xml"
          label="Graphics"
          layout="topleft"
          help_topic="preferences_display_tab"
@@ -219,4 +203,32 @@
          help_topic="preferences_backup_tab"
          name="backup" />
     </tab_container>
+	<button
+     follows="left|bottom"
+     height="23"
+	 bottom="-10"
+     label="Cancel"
+     label_selected="Cancel"
+     layout="topleft"
+     left="10"
+     name="Cancel"
+     
+     width="90" >
+        <button.commit_callback
+         function="Pref.Cancel" />
+    </button>
+    <button
+     follows="left|bottom"
+     height="23"
+	 bottom_delta="-28"
+     label="OK"
+     label_selected="OK"
+     layout="topleft"
+     left="10"     
+     name="OK"
+     width="90">
+        <button.commit_callback
+         function="Pref.OK" />
+    </button>
+<!--</scroll_container>-->
 </floater>
