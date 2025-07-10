@@ -653,6 +653,7 @@ bool LLFloaterPreference::postBuild()
 {
     mDeleteTranscriptsBtn = getChild<LLButton>("delete_transcripts");
 
+    onViewerSizeChange();
     // <FS:Ansariel> We don't have these buttons
     //mEnabledPopups  = getChild<LLScrollListCtrl>("enabled_popups");
     //mDisabledPopups = getChild<LLScrollListCtrl>("disabled_popups");
