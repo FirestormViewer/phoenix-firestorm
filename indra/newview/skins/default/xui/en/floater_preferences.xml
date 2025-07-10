@@ -106,8 +106,15 @@
          name="colors" />
         <panel
           class="panel_preference_graphics"
+         filename="panel_preferences_graphics1.xml"
+         label="Old Graphics"
+         layout="topleft"
+         help_topic="preferences_display_tab"
+         name="display" />
+        <panel
+          class="panel_preference_graphics"
          filename="panel_preferences_graphics2.xml"
-         label="Graphics"
+         label="New Graphics"
          layout="topleft"
          help_topic="preferences_display_tab"
          name="display" />
@@ -206,7 +213,7 @@
 	<button
      follows="left|bottom"
      height="23"
-	 bottom="-10"
+	 bottom="-1"
      label="Cancel"
      label_selected="Cancel"
      layout="topleft"
