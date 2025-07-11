@@ -192,6 +192,15 @@
 			</combo_box>
 			<text name="Miscellaneous Rendering">雜項彩現：</text>
 			<check_box label="HDR與自發光" tool_tip="在較新設備上啟用額外彩現管線功能，例如HDR與在PBR內容中使用的自發光纹理。" name="VintageMode"/>
+			<text name="ExcludeAnimeshImposterLabel">
+				精簡化身時排除動畫網格(Animesh)：
+			</text>
+			<combo_box tool_tip="將動畫網格使用者或被操控的化身從精簡渲染機制中排除。" name="FSImpostorAvatarExclude">
+				<combo_box.item label="無" name="0" />
+				<combo_box.item label="使用者" name="1" />
+				<combo_box.item label="被操控" name="2" />
+				<combo_box.item label="兩種都" name="3" />
+			</combo_box>
 			<text name="Alpha Mask Rendering">Alpha遮色片彩現：</text>
 			<check_box label="啟用Alpha遮色片" tool_tip="勾選此項可以使Alpha遮色片（透明部分）正確彩現" name="RenderAutoMaskAlphaDeferred" />
 			<check_box label="光暈" tool_tip="啟用光暈。請注意，如果陰影被啟用，強度必須設為0才能禁用光暈。" name="RenderGlow" />

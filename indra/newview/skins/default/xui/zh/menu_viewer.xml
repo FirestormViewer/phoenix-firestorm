@@ -34,6 +34,7 @@
 			<menu_item_call label="全部卸下" name="Detach All" />
 		</menu>
 		<menu_item_call label="移除選定的附件" name="Remove Selected Attachments" />
+		<menu_item_call label="化身入門禮包" name="Avatar Welcome Pack"/>
 		<menu_item_call label="選擇化身" name="Avatar Picker" />
 		<menu_item_call label="懸浮高度" name="HoverHeight" />
 		<menu label="動作" name="Movement">

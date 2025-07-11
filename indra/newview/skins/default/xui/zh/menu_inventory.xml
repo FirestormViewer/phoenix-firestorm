@@ -19,6 +19,7 @@
 	<menu_item_call label="清空失物招領" name="Empty Lost And Found" />
 	<menu_item_call label="新檔案夾" name="New Folder" />
 	<menu_item_call label="新檔案夾" name="New Listing Folder" />
+	<menu_item_call label="新檔案夾" name="New Outfit Folder" />
 	<menu_item_call label="新裝扮" name="New Outfit" />
 	<menu_item_call label="新指令碼" name="New Script" />
 	<menu_item_call label="新記事卡" name="New Note" />
