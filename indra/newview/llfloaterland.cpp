@@ -3326,7 +3326,7 @@ void LLPanelLandAccess::exportListCallback(LLNameListCtrl* list, const std::vect
     }
 
     std::string filename = filenames[0];
-    std::ofstream file(filename.c_str());
+    llofstream file(filename.c_str());
     if (!file.is_open())
     {
         LLNotificationsUtil::add("ExportFailed");
@@ -3383,7 +3383,7 @@ void LLPanelLandAccess::importListCallback(LLNameListCtrl* list, const std::vect
 
     std::string filename = filenames[0];
 
-    std::ifstream file(filename.c_str());
+    llifstream file(filename.c_str());
     if (!file.is_open())
     {
         return;
