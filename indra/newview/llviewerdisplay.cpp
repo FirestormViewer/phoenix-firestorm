@@ -222,6 +222,11 @@ void display_update_camera()
     // Cut draw distance in half when customizing avatar,
     // but on the viewer only.
     F32 final_far = gAgentCamera.mDrawDistance;
+
+    // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
+    static LLCachedControl<bool> use_vram_optimization(gSavedSettings, "FSDrawDistanceVRAMOptimization", false);
+    // </FS:TJ>
+
     if (gCubeSnapshot)
     {
         final_far = gSavedSettings.getF32("RenderReflectionProbeDrawDistance");
@@ -230,7 +235,10 @@ void display_update_camera()
     {
         final_far *= 0.5f;
     }
-    else if (LLViewerTexture::sDesiredDiscardBias > 2.f)
+    // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
+    //else if (LLViewerTexture::sDesiredDiscardBias > 2.f)
+    else if (use_vram_optimization && LLViewerTexture::sDesiredDiscardBias > 2.f)
+    // </FS:TJ>
     {
         final_far = llmax(32.f, final_far / (LLViewerTexture::sDesiredDiscardBias - 1.f));
     }

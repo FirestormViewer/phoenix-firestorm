@@ -1531,6 +1531,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="20"
          top_pad="9"
+         width="220"
          label="Enable Attached Lights (Face Lights)"
          tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
          name="Render Attached Lights">
@@ -1542,10 +1543,10 @@ If you do not understand the distinction then leave this control alone."
          parameter="RenderAttachedLights"/>
         </check_box>
         <check_box
-         follows="top|left"
          layout="topleft"
-         left="20"
-         top_pad="9"
+         left_pad="20"
+         top_delta="0"
+         width="200"
          label="Render Attached Particles"
          name="Render Attached Particles">
          <check_box.on_check
@@ -1555,6 +1556,15 @@ If you do not understand the distinction then leave this control alone."
          function="Advanced.HandleAttachedLightParticles"
          parameter="RenderAttachedParticles"/>
         </check_box>
+        <check_box
+         control_name="FSDrawDistanceVRAMOptimization"
+         follows="top|left"
+         layout="topleft"
+         left="20"
+         top_pad="9"
+         label="Enable Draw Distance VRAM Optimization"
+         name="Draw Distance VRAM Optimization"
+         tool_tip="Enables an optimization that shrinks your draw distance when your VRAM becomes very low"/>
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"
