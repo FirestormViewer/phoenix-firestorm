@@ -24163,7 +24163,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSDrawDistanceVRAMOptimization</key>
     <map>
       <key>Comment</key>
-      <string>Enables an optimization that shrinks your draw distance when VRAM becomes very low</string>
+      <string>Enables a feature that reduces your draw distance when VRAM becomes full</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

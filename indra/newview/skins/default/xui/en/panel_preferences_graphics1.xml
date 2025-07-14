@@ -1562,9 +1562,9 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left="20"
          top_pad="9"
-         label="Enable Draw Distance VRAM Optimization"
-         name="Draw Distance VRAM Optimization"
-         tool_tip="Enables an optimization that shrinks your draw distance when your VRAM becomes very low"/>
+         label="Reduce Draw Distance when VRAM is full"
+         name="Reduce Draw Distance when VRAM is full"
+         tool_tip="Enables a feature that reduces your draw distance when VRAM becomes full"/>
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"

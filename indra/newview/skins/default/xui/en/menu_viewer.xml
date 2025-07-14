@@ -4794,8 +4794,8 @@
                  parameter="RenderAttachedParticles" />
             </menu_item_check>
             <menu_item_check
-             label="Draw Distance VRAM Optimization"
-             name="Draw Distance VRAM Optimization">
+             label="Reduce Draw Distance when VRAM is full"
+             name="Reduce Draw Distance when VRAM is full">
                 <menu_item_check.on_check
                  function="CheckControl"
                  parameter="FSDrawDistanceVRAMOptimization" />
