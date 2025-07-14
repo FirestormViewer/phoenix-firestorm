@@ -212,12 +212,14 @@ public:
         { "mWristRight", "mWristLeft", BODY, { "mHandThumb1Right", "mHandIndex1Right", "mHandMiddle1Right", "mHandRing1Right", "mHandPinky1Right" }, "-0.205 0.000 0.000", "", true },
         { "mHipLeft", "mHipRight", BODY, { "mKneeLeft" }, "0.127 -0.041 0.034" },
         { "mKneeLeft", "mKneeRight", BODY, { "mAnkleLeft" }, "-0.046 -0.491 -0.001" },
-        { "mAnkleLeft", "mAnkleRight", BODY, { "mToeLeft" }, "0.001 -0.468 -0.029" },
-        { "mToeLeft", "mToeRight", BODY, {}, "0.000 0.109 0.000", "0.000 0.020 0.000" },
+        { "mAnkleLeft", "mAnkleRight", BODY, { "mFootLeft" }, "0.001 -0.468 -0.029" },
+        { "mFootLeft", "mFootRight", BODY, { "mToeLeft" }, "0.000 -0.061 0.112" },
+        { "mToeLeft", "mToeRight", BODY, {}, "0.000 0.000 0.109", "0.000 0.020 0.000" },
         { "mHipRight", "mHipLeft", BODY, { "mKneeRight" }, "-0.129 -0.041 0.034", "", true },
         { "mKneeRight", "mKneeLeft", BODY, { "mAnkleRight" }, "0.049 -0.491 -0.001", "", true },
-        { "mAnkleRight", "mAnkleLeft", BODY, { "mToeRight" }, "0.000 -0.468 -0.029", "", true },
-        { "mToeRight", "mToeLeft", BODY, {}, "0.000 0.109 0.000", "0.000 0.020 0.000", true },
+        { "mAnkleRight", "mAnkleLeft", BODY, { "mFootRight" }, "0.000 -0.468 -0.029", "", true },
+        { "mFootRight", "mFootLeft", BODY, { "mToeRight" }, "0.000 -0.061 0.112", "", true },
+        { "mToeRight", "mToeLeft", BODY, {}, "0.000 0.000 0.109", "0.000 0.020 0.000", true },
 
         // face
         { "mFaceRoot",
