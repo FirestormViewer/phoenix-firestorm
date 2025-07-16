@@ -4794,6 +4794,16 @@
                  parameter="RenderAttachedParticles" />
             </menu_item_check>
             <menu_item_check
+             label="Reduce Draw Distance when VRAM is full"
+             name="Reduce Draw Distance when VRAM is full">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="FSDrawDistanceVRAMOptimization" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="FSDrawDistanceVRAMOptimization" />
+            </menu_item_check>
+            <menu_item_check
              label="Collect Font Vertex Buffers"
              name="Collect Font Vertex Buffers">
                 <menu_item_check.on_check
