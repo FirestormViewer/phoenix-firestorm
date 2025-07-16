@@ -206,6 +206,7 @@
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
+			<check_box label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" tool_tip="Włącza funkcję zmniejszającą odległość rysowania (pole widzenia), gdy pamięć VRAM jest pełna" />
 			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				sekund
