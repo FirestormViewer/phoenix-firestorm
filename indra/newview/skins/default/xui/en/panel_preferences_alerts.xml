@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="all"
- height="440"
+ height="480"
  layout="topleft"
  left="1"
  top="1"
@@ -424,7 +424,7 @@
     <!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
     <scroll_list
      follows="top|left|right"
-     height="344"
+     height="384"
      top_pad="8"
      sort_column="2"
      sort_ascending="true"
