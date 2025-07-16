@@ -52,9 +52,9 @@ public:
 
     bool postBuild() override;
     void onOpen(const LLSD& key) override;
-    void draw()override;
-    bool tick()override;
-    bool handleKeyHere(KEY key, MASK mask)override;
+    void draw() override;
+    bool tick() override;
+    bool handleKeyHere(KEY key, MASK mask) override;
     bool hasAccelerators() const override  { return true; }
 
     // LLFriendObserver implementation
@@ -152,25 +152,25 @@ private:
     LLPanel*                mGroupsTab{ nullptr };
     LLGroupList*            mGroupList{ nullptr };
 
-    LLButton* mFriendsImBtn{ nullptr };
-    LLButton* mFriendsProfileBtn{ nullptr };
-    LLButton* mFriendsTpBtn{ nullptr };
-    LLButton* mFriendsMapBtn{ nullptr };
-    LLButton* mFriendsPayBtn{ nullptr };
-    LLButton* mFriendsAddBtn{ nullptr };
-    LLButton* mFriendsRemoveBtn{ nullptr };
+    LLButton*               mFriendsImBtn{ nullptr };
+    LLButton*               mFriendsProfileBtn{ nullptr };
+    LLButton*               mFriendsTpBtn{ nullptr };
+    LLButton*               mFriendsMapBtn{ nullptr };
+    LLButton*               mFriendsPayBtn{ nullptr };
+    LLButton*               mFriendsAddBtn{ nullptr };
+    LLButton*               mFriendsRemoveBtn{ nullptr };
 
-    LLButton* mGroupsChatBtn{ nullptr };
-    LLButton* mGroupsInfoBtn{ nullptr };
-    LLButton* mGroupsActivateBtn{ nullptr };
-    LLButton* mGroupsLeaveBtn{ nullptr };
-    LLButton* mGroupsCreateBtn{ nullptr };
-    LLButton* mGroupsSearchBtn{ nullptr };
-    LLButton* mGroupsTitlesBtn{ nullptr };
-    LLButton* mGroupsInviteBtn{ nullptr };
+    LLButton*               mGroupsChatBtn{ nullptr };
+    LLButton*               mGroupsInfoBtn{ nullptr };
+    LLButton*               mGroupsActivateBtn{ nullptr };
+    LLButton*               mGroupsLeaveBtn{ nullptr };
+    LLButton*               mGroupsCreateBtn{ nullptr };
+    LLButton*               mGroupsSearchBtn{ nullptr };
+    LLButton*               mGroupsTitlesBtn{ nullptr };
+    LLButton*               mGroupsInviteBtn{ nullptr };
 
-    LLTextBox* mFriendsCountTb{ nullptr };
-    LLTextBox* mGroupssCountTb{ nullptr };
+    LLTextBox*              mFriendsCountTb{ nullptr };
+    LLTextBox*              mGroupssCountTb{ nullptr };
 
     bool                    mAllowRightsChange{ true };
     size_t                  mNumRightsChanged{ 0 };
