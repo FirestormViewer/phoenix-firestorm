@@ -53,6 +53,18 @@
 			<text name="object_name_header_label">
 				オブジェクト
 			</text>
+			<text name="mention_colors">
+				チャットのメンション先：
+			</text>
+			<text name="font_mention_label">
+				フォント
+			</text>
+			<text name="resident_mention_label">
+				住民
+			</text>
+			<text name="self_mention_label">
+				自身
+			</text>
 			<slider label="チャット範囲外低減係数：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="話している人が通常のチャット範囲の外に出た場合、チャットの色を薄くするのに使用する係数です。"/>
 			<check_box name="FSColorIMsDistinctly" label="コンソール上でＩＭとグループチャットとを色で区別する："/>
 			<panel name="im_color_panel">

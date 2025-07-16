@@ -380,7 +380,7 @@ public:
 
 // </FS:CR>
 #ifdef OPENSIM
-    std::set<std::string> getGods() { return mGodNames; };
+    const std::set<std::string, std::less<>>& getGods() const { return mGodNames; };
 #endif // OPENSIM
 // </FS:CR>
 
@@ -624,7 +624,7 @@ public:
 
     // <FS:CR> Opensim region capabilities
 #ifdef OPENSIM
-    std::set<std::string> mGodNames;
+    std::set<std::string, std::less<>> mGodNames;
 #endif
     // </FS:CR>
 

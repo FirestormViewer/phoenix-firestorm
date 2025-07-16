@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="all"
- height="408"
+ height="480"
  label="Uploads"
  layout="topleft"
  left="102"

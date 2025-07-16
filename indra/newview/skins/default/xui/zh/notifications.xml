@@ -4573,7 +4573,10 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 		抱歉，無法凍結該使用者。
 	</notification>
 	<notification name="NowOwnObject">
-		你現在是物件 [OBJECT_NAME] 的所有者
+		你現在是物件 [OBJECT_NAME] 的所有者。
+	</notification>
+	<notification name="NowOwnObjectInv">
+		你現在是物件 [OBJECT_NAME] 的所有者 - 它已被放入您的庫存。
 	</notification>
 	<notification name="CantRezOnLand">
 		無法在 [OBJECT_POS] 產生物件，因為這土地的所有者不允許。  請用土地工具檢視所有者。

@@ -218,11 +218,9 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 
     if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_EmbedItem"))
     {
-        LLUUID item_id(gSavedPerAccountSettings.getString("FSBuildPrefs_Item"));
-        if (item_id.notNull())
+        if (LLUUID item_id(gSavedPerAccountSettings.getString("FSBuildPrefs_Item")); item_id.notNull())
         {
-            LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getObject(item_id));
-            if (item)
+            if (LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getObject(item_id)))
             {
                 if (item->getType() == LLAssetType::AT_LSL_TEXT)
                 {
@@ -297,6 +295,7 @@ bool FSCommon::isLinden(const LLUUID& av_id)
     {
         gCacheName->getFirstLastName(av_id, first_name, last_name);
     }
+
 #ifdef OPENSIM
     if (LLGridManager::getInstance()->isInOpenSim())
     {
@@ -304,16 +303,11 @@ bool FSCommon::isLinden(const LLUUID& av_id)
         if (!region)
             return false;
 
-        bool is_god{ false };
-        // <FS:CR> They may not be "Lindens" per se, but opensim has gods.
-        if (std::set<std::string> gods = region->getGods(); !gods.empty())
-        {
-            is_god = (gods.find(first_name + " " + last_name) != gods.end()
-                      || gods.find(last_name) != gods.end());
-        }
-        return is_god;
+        const auto& gods = region->getGods();
+        return gods.contains(first_name + " " + last_name) || gods.contains(last_name);
     }
 #endif
+
     return (last_name == LL_LINDEN ||
             last_name == LL_MOLE ||
             last_name == LL_PRODUCTENGINE ||
@@ -334,105 +328,79 @@ bool FSCommon::requestGroupData(const LLUUID& groupID)
 
 bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action)
 {
-    bool isSelf = (av_id == gAgentID);
+    const bool isSelf = (av_id == gAgentID);
 
-    if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND)
+    switch (action)
     {
-        return (!isSelf && !LLAvatarActions::isFriend(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND)
-    {
-        return (!isSelf && LLAvatarActions::isFriend(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM)
-    {
-        return (!isSelf && RlvActions::canStartIM(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT)
-    {
-        return (!isSelf && LLLogChat::isTranscriptExist(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN)
-    {
-        return (!isSelf && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) && LLAvatarActions::canZoomIn(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT)
-    {
-        return (!isSelf && LLAvatarActions::canOfferTeleport(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT)
-    {
-        return (!isSelf && LLAvatarActions::canRequestTeleport(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE)
-    {
-        return (isSelf || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR)
-    {
-        return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO)
-    {
-        return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED)
-    {
-        return (!isSelf && LLMuteList::getInstance()->isMuted(av_id));
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_SELF)
-    {
-        return isSelf;
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF)
-    {
-        return !isSelf;
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA)
-    {
-        return !requestGroupData(av_id);
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA)
-    {
-        return requestGroupData(av_id);
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP)
-    {
-        if (gAgent.getGroupID() == av_id && !RlvActions::canChangeActiveGroup())
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND:
+            return (!isSelf && !LLAvatarActions::isFriend(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND:
+            return (!isSelf && LLAvatarActions::isFriend(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM:
+            return (!isSelf && RlvActions::canStartIM(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT:
+            return (!isSelf && LLLogChat::isTranscriptExist(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN:
+            return (!isSelf && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) && LLAvatarActions::canZoomIn(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT:
+            return (!isSelf && LLAvatarActions::canOfferTeleport(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT:
+            return (!isSelf && LLAvatarActions::canRequestTeleport(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE:
+            return (isSelf || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR:
+            return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != nullptr);
+        case EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO:
+            return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != nullptr);
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED:
+            return (!isSelf && LLMuteList::getInstance()->isMuted(av_id));
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_SELF:
+            return isSelf;
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF:
+            return !isSelf;
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA:
+            return !requestGroupData(av_id);
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA:
+            return requestGroupData(av_id);
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP:
         {
-            return false;
-        }
+            if (gAgent.getGroupID() == av_id && !RlvActions::canChangeActiveGroup())
+            {
+                return false;
+            }
 
-        return gAgent.isInGroup(av_id);
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP)
-    {
-        if (!gAgent.canJoinGroups())
+            return gAgent.isInGroup(av_id);
+        }
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP:
         {
-            return false;
-        }
+            if (!gAgent.canJoinGroups())
+            {
+                return false;
+            }
 
-        if (!RlvActions::canChangeActiveGroup())
+            if (!RlvActions::canChangeActiveGroup())
+            {
+                return false;
+            }
+
+            LLGroupMgrGroupData* groupData = LLGroupMgr::getInstance()->getGroupData(av_id);
+            if (!groupData || !groupData->mOpenEnrollment)
+            {
+                return false;
+            }
+
+            return !gAgent.isInGroup(av_id);
+        }
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE:
         {
-            return false;
-        }
+            if (!RlvActions::canChangeActiveGroup())
+            {
+                return false;
+            }
 
-        LLGroupMgrGroupData* groupData = LLGroupMgr::getInstance()->getGroupData(av_id);
-        if (!groupData || !groupData->mOpenEnrollment)
-        {
-            return false;
+            return (gAgent.isInGroup(av_id) && gAgent.getGroupID() != av_id);
         }
-
-        return !gAgent.isInGroup(av_id);
-    }
-    else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE)
-    {
-        if (!RlvActions::canChangeActiveGroup())
-        {
-            return false;
-        }
-
-        return (gAgent.isInGroup(av_id) && gAgent.getGroupID() != av_id);
+        default:;
     }
 
     return false;

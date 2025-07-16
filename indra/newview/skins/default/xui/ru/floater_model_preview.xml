@@ -51,6 +51,7 @@
   <string name="ParsingErrorNoRoot">Документ не имеет корня</string>
   <string name="ParsingErrorNoScene">Документ не имеет visual_scene</string>
   <string name="ParsingErrorPositionInvalidModel">Невозможно обработать сетку без данных о местоположении. Недопустимая модель.</string>
+  <string name="ParsingErrorEmptyInvBindInvalidModel">Невозможно обработать оснастку без данных InvBind. Недопустимая модель.</string>
 
   <panel name="left_panel">
     <panel name="model_name_representation_panel">

@@ -3,9 +3,6 @@
 	<string name="SUPPORT_SITE">
 		Portal Pomocy Firestorma
 	</string>
-	<string name="StartupDetectingHardware">
-		Detekcja konfiguracji sprzętowej...
-	</string>
 	<string name="StartupLoading">
 		Ładowanie przeglądarki [APP_NAME]...
 	</string>
@@ -620,6 +617,9 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="TooltipCantCreateOutfit">
 		Jeden lub więcej przedmiotów nie może być użyty w "Strojach"
+	</string>
+	<string name="TooltipCantMoveOutfitIntoOutfit">
+		Nie można przenieść stroju do innego stroju
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Nie możesz przenieść folderu do jego obiektu podrzędnego
@@ -4764,7 +4764,7 @@ Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT
 		Zaoferowano przedmiot dla [NAME]
 	</string>
 	<string name="bot_warning">
-Rozmawiasz z botem [NAME]. Nie udostępniaj żadnych danych osobowych.
+		Rozmawiasz z botem [NAME]. Nie udostępniaj żadnych danych osobowych.
 Dowiedz się więcej na https://second.life/scripted-agents.
 	</string>
 	<string name="share_alert">
@@ -5339,7 +5339,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Wygląd
 	</string>
 	<string name="Command_Avatar_Label">
-		Biblioteka awatarów
+		Paczka powitalna awatarów
 	</string>
 	<string name="Command_Build_Label">
 		Buduj

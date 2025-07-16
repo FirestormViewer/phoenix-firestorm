@@ -22,7 +22,7 @@
 		內含：
 	</text>
 	<text name="buy_text">
-		購買，支付 [AMOUNT] L$ 給：
+		支付 [AMOUNT] L$ 給：
 	</text>
 	<text name="buy_name_text">
 		[NAME]？

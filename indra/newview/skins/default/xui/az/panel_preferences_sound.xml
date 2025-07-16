@@ -255,19 +255,19 @@ Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini bas�
 			<button name="Def_UISndSnapshot" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
 			<check_box label="Səsin söndürülməsi" name="QuietSnapshotsToDiskCheckBox"/>
 
-			<text tool_tip="Teleportasiya zamanı UUID səsi" name="textFSTeleportOut">
-				Teleportasiya:
-			</text>
-			<button name="Prev_UISndTeleportOut" tool_tip="Bu səsi oxut."/>
-			<button name="Def_UISndTeleportOut" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
-			<check_box label="Səsi yandır" name="PlayModeUISndTeleportOut"/>
-
 		</panel>
 		<panel label="İnteerfeys 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				Burada (səs UUID-lərini dəyişərək), interfeys səsini dəyişə, aktivləşdirə və ya deaktivləşdirə bilərsiniz.
 Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini basın.
 			</text>
+
+			<text tool_tip="Teleportasiya zamanı UUID səsi" name="textFSTeleportOut">
+				Teleportasiya:
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndTeleportOut" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndTeleportOut"/>
 
 			<text tool_tip="Dairəvi menyu açılan zaman UUID səsi (Pie Menu)." name="textFSPieMenuAppear">
 				Dairəvi menyu açılır:
@@ -388,19 +388,19 @@ Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini bas�
 			<button name="Def_UISndFriendshipOffer" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
 			<check_box label="Səsi yandır" name="PlayModeUISndFriendshipOffer"/>
 
-			<text tool_tip="Teleport təklifi zamanı səsləndirilən UUID səsi." name="textFSTeleportOffer">
-				Teleport təklifi:
-			</text>
-			<button name="Prev_UISndTeleportOffer" tool_tip="Bu səsi oxut."/>
-			<button name="Def_UISndTeleportOffer" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
-			<check_box label="Səsi yandır" name="PlayModeUISndTeleportOffer"/>
-
 		</panel>
 		<panel label="İnteerfeys 3" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
 				Burada (səs UUID-lərini dəyişərək), interfeys səsini dəyişə, aktivləşdirə və ya deaktivləşdirə bilərsiniz.
 Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini basın.
 			</text>
+
+			<text tool_tip="Teleport təklifi zamanı səsləndirilən UUID səsi." name="textFSTeleportOffer">
+				Teleport təklifi:
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndTeleportOffer" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndTeleportOffer"/>
 
 			<text tool_tip="Avadanlıq siyahısı təklif olunan zamanı səsləndirilən UUID səsi." name="textFSInventoryOffer">
 				Avadanlıq siyahısı təklifi:

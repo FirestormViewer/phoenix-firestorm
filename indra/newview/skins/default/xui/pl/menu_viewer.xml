@@ -33,7 +33,7 @@
 			<menu_item_call label="Odłącz wszystko" name="Detach All" />
 		</menu>
 		<menu_item_call label="Usuń wybrane dodatki" name="Remove Selected Attachments" />
-		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
+		<menu_item_call label="Paczka powitalna awatarów" name="Avatar Welcome Pack"/>
 		<menu_item_call label="Uniesienie" name="HoverHeight" />
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
@@ -275,6 +275,7 @@
 		<menu_item_call label="Biblioteka skryptów" name="Script Library"/>
 		<menu_item_call label="Społeczność SL (blogi, fora, aktualności)" name="SL Community Pages"/>
 		<menu_item_call label="Blog Firestorma" name="Firestorm Blog"/>
+		<menu_item_call label="Primfeed Firestorma" name="Firestorm Primfeed" />
 		<menu_item_call label="Flickr Firestorma" name="Firestorm Flickr"/>
 		<menu_item_call label="Kanał YouTube Firestorma" name="Firestorm YouTube"/>
 		<menu_item_call label="Twitter Firestorma" name="Firestorm Twitter"/>
@@ -536,6 +537,7 @@
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
+			<menu_item_check label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="Zbierz Vertex Buffer czcionek" name="Collect Font Vertex Buffers" />
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />
 			<menu_item_call label="Wyczyść pamięć podręczną modułu cieniującego" name="Shader Cache Clear" />

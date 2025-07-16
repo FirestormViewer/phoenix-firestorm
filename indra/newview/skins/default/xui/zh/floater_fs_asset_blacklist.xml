@@ -15,6 +15,18 @@
 	<floater.string name="asset_resident">
 		居民
 	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_worn_objects_sounds">
+		化身所穿戴物件的聲音
+	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">
+		化身放置物件的聲音
+	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_gestures_sounds">
+		化身播放手勢的聲音
+	</floater.string>
+	<floater.string name="blacklist_flag_unknown">
+		未知標記
+	</floater.string>
 	<floater.string name="asset_unknown">
 		未知
 	</floater.string>
@@ -32,6 +44,7 @@
 		<columns name="name" label="名稱" />
 		<columns name="region" label="地塊" width="210" />
 		<columns name="type" label="類型" />
+		<columns name="flags" label="標記" />
 		<columns name="date" label="日期" />
 		<columns name="permanent" label="永久" width="50" />
 	</fs_scroll_list>

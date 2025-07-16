@@ -4587,7 +4587,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="bot_warning">
 		Estás conversando con un bot, [NAME]. No compartas información personal.
 Más información en https://second.life/scripted-agents.
-	</string
+	</string>
 	<string name="inventory_item_offered_rlv">
 		Ofrecido ítem de inventario a [NAME]
 	</string>

@@ -29,10 +29,6 @@
 	<string name="APP_NAME_ABBR">
 		FS
 	</string>
-	<!-- starting up -->
-	<string name="StartupDetectingHardware">
-		硬體檢測中...
-	</string>
 	<string name="StartupLoading">
 		[APP_NAME]載入中...
 	</string>
@@ -681,6 +677,9 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipCantCreateOutfit">
 		一個或者多個物件不能在"服裝目錄"中使用
+	</string>
+	<string name="TooltipCantMoveOutfitIntoOutfit">
+		無法將一套服裝移動到另一套服裝中
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		你不能將檔案夾移動到其子檔案夾內
@@ -6113,7 +6112,7 @@ support@secondlife.com.
 		編輯外觀
 	</string>
 	<string name="Command_Avatar_Label">
-		化身
+		化身入門禮包
 	</string>
 	<string name="Command_Build_Label">
 		建造

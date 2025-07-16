@@ -214,6 +214,15 @@
 				その他のレンダリング設定：
 			</text>
 			<check_box label="ＨＤＲと放射" tool_tip="新しいマシンで、ＨＤＲやＰＢＲコンテンツの放射（エミッシブ）テクスチャなどの追加のレンダリングパイプライン機能を有効にします。" name="VintageMode"/>
+			<text name="ExcludeAnimeshImposterLabel">
+				アニメッシュインポスターアバターの除外：
+			</text>
+			<combo_box tool_tip="アニメッシュユーザまたはコントロールアバターを、インポスターレンダリングの使用から除外できるようにします。" name="FSImpostorAvatarExclude">
+				<combo_box.item label="なし" name="0"/>
+				<combo_box.item label="ユーザ" name="1"/>
+				<combo_box.item label="コントロール" name="2"/>
+				<combo_box.item label="両方" name="3"/>
+			</combo_box>
 			<check_box label="グローを描画" tool_tip="グロー（輝き）を描画します。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow"/>
 			<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength"/>
 			<check_box label="読み込みの終わっていないアバターを描画する" name="RenderUnloadedAvatars"/>

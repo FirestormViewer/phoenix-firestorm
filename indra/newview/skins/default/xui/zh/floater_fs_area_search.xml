@@ -97,6 +97,7 @@
 			<check_box name="exclude_childprim" label="子元素" />
 			<check_box name="exclude_neighbor_region" label="鄰近地塊" />
 			<button name="apply" label="應用" />
+			<button name="save_as_default" label="儲存為預設"/>
 		</panel>
 		<panel label="選項" name="area_search_options_panel">
 			<text name="display_column">
