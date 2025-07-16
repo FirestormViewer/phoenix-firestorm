@@ -193,6 +193,7 @@
 		</text>
 		<check_box label="Aktualisierung der Welt einfrieren (alles pausieren)" tool_tip="Aktivieren, um alle Aktualisierungen durch den Server einzufrieren - stoppt alle Aktionen Inworld, hat aber keine Auswirkungen auf Chat, IMs und Voice-Chat." name="WorldPause"/>
 		<check_box label="Framerate begrenzen" name="FSLimitFramerate"/>
+		<slider name="MaxFPS" label="FPS:"/>
 		<check_box label="VSync aktivieren" name="vsync" tool_tip="Synchronisiert die Bilder pro Sekunde mit der Bildwiederholrate des Monitors, was in einer gleichmäßigeren Performance resultiert."/>
 		<text name="Texture Rendering">
 			Textur-Darstellung:
@@ -221,9 +222,6 @@
 			Sonstige Darstellungsoptionen:
 		</text>
 		<check_box label="HDR und Emissive" tool_tip="Aktiviert zusätzliche Features der Rendering-Pipeline auf neueren Maschinen, wie HDR und Emissive-Texturen auf PBR-Materialien." name="VintageMode"/>
-		<text name="ExcludeAnimeshImposterLabel">
-			Animesh-Avatare immer vollst. anz.:
-		</text>
 		<combo_box tool_tip="Erlaubt es, dass Animesh Benutzer- oder Kontroll-Avatar immer vollständig angezeigt werden." name="FSImpostorAvatarExclude">
 			<combo_box.item label="Keine" name="0"/>
 			<combo_box.item label="Benutzer" name="1"/>
@@ -237,7 +235,10 @@
 		<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
 		<check_box label="Angehängte Lichter rendern" tool_tip="Diese Option aktiviert alle Lichtquellen, die Avatare angehängt haben, wie z.B. Facelights. Nützlich, um beispielsweise Facelights zu deaktivieren falls notwendig." name="Render Attached Lights"/>
 		<check_box label="Angehängte Partikel rendern" name="Render Attached Particles"/>
-		<slider name="MaxFPS" label="FPS:"/>
+		<check_box label="Sichtweite reduzieren, falls VRAM voll" tool_tip="Falls aktiviert wird automatisch die Sichtweite reduziert, wenn kein VRAM mehr verfügbar ist." name="Reduce Draw Distance when VRAM is full"/>
+		<text name="ExcludeAnimeshImposterLabel" width="255">
+			Animesh-Avatare immer vollständig anzeigen:
+		</text>
 		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
 		<text name="PrecachingDelayText" width="60">
 			Sekunden
