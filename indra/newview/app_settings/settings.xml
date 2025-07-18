@@ -1522,7 +1522,7 @@
       <string>http://search.metaverseink.com/opensim/results.jsp?query=[QUERY]&amp;submit=[CATEGORY]</string>
     </map>
 
-  <key>ImporterDebug</key>
+  <key>ImporterDebugVerboseLogging</key>
   <map>
     <key>Comment</key>
     <string>Enable debug output to more precisely identify sources of import errors. Warning: the output can slow down import on many machines.</string>
@@ -1547,13 +1547,24 @@
   <key>ImporterModelLimit</key>
   <map>
     <key>Comment</key>
-    <string>Limits amount of importer generated models for dae files</string>
+    <string>Limits amount of importer generated (when over 8 faces) models for dae and gltf files</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
     <integer>768</integer>
+  </map>
+  <key>ImporterDebugMode</key>
+  <map>
+    <key>Comment</key>
+    <string>At 0 does nothing, at 1 dumps skinning data near orifinal file, at 2 dumps skining data and positions/weights of first 5 models, at 3 dumps skinning data and models as llsd</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   <key>ImporterPreprocessDAE</key>
   <map>

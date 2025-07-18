@@ -353,6 +353,7 @@ void force_error_coroutine_crash();
 void force_error_coroprocedure_crash();
 void force_error_work_queue_crash();
 void force_error_thread_crash();
+void force_exception_thread_crash();
 
 void handle_force_delete();
 void print_object_info();
@@ -3003,6 +3004,15 @@ class LLAdvancedForceErrorThreadCrash : public view_listener_t
     bool handleEvent(const LLSD& userdata)
     {
         force_error_thread_crash();
+        return true;
+    }
+};
+
+class LLAdvancedForceExceptionThreadCrash : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_exception_thread_crash();
         return true;
     }
 };
@@ -11117,6 +11127,11 @@ void force_error_thread_crash()
     LLAppViewer::instance()->forceErrorThreadCrash();
 }
 
+void force_exception_thread_crash()
+{
+    LLAppViewer::instance()->forceExceptionThreadCrash();
+}
+
 class LLToolsUseSelectionForGrid : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12846,6 +12861,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedForceErrorCoroprocedureCrash(), "Advanced.ForceErrorCoroprocedureCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorWorkQueueCrash(), "Advanced.ForceErrorWorkQueueCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorThreadCrash(), "Advanced.ForceErrorThreadCrash");
+    view_listener_t::addMenu(new LLAdvancedForceExceptionThreadCrash(), "Advanced.ForceExceptionThreadCrash");
     view_listener_t::addMenu(new LLAdvancedForceErrorDisconnectViewer(), "Advanced.ForceErrorDisconnectViewer");
 
     // Advanced (toplevel)

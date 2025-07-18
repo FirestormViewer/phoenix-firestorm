@@ -13,7 +13,6 @@ include(ColladaDom)
 
 set(llprimitive_SOURCE_FILES
     lldaeloader.cpp
-    llgltfloader.cpp
     llgltfmaterial.cpp
     llmaterialid.cpp
     llmaterial.cpp
@@ -33,7 +32,6 @@ set(llprimitive_SOURCE_FILES
 set(llprimitive_HEADER_FILES
     CMakeLists.txt
     lldaeloader.h
-    llgltfloader.h
     llgltfmaterial.h
     llgltfmaterial_templates.h
     legacy_object_types.h

@@ -160,7 +160,6 @@ void LLPanelGroupBulkImpl::onAvatarNameCache(const LLUUID& agent_id, const LLAva
 
         mAvatarNameCacheConnections.erase(found);
     }
-    // </FS:Ansariel>
 
     addUsers({ av_name.getCompleteName() }, { agent_id });
 }

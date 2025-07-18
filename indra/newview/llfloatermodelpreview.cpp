@@ -65,6 +65,7 @@
 #include "llcallbacklist.h"
 #include "llviewertexteditor.h"
 #include "llviewernetwork.h"
+#include "llmaterialeditor.h"
 
 
 //static
@@ -708,11 +709,9 @@ void LLFloaterModelPreview::onJointListSelection()
     LLPanel *panel = mTabContainer->getPanelByName("rigging_panel");
     LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
     LLScrollListCtrl *joints_pos = panel->getChild<LLScrollListCtrl>("pos_overrides_list");
-    LLScrollListCtrl *joints_scale = panel->getChild<LLScrollListCtrl>("scale_overrides_list");
     LLTextBox *joint_pos_descr = panel->getChild<LLTextBox>("pos_overrides_descr");
 
     joints_pos->deleteAllItems();
-    joints_scale->deleteAllItems();
 
     LLScrollListItem *selected = joints_list->getFirstSelected();
     if (selected)
@@ -849,7 +848,7 @@ void LLFloaterModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
         mModelPreview->onLODGLODParamCommit(lod, enforce_tri_limit);
         break;
     default:
-        LL_ERRS() << "Only supposed to be called to generate models, val: " << mode << LL_ENDL;
+        LL_ERRS() << "Only supposed to be called to generate models" << LL_ENDL;
         break;
     }
 

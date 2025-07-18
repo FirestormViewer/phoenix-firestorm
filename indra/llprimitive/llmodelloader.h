@@ -113,6 +113,7 @@ public:
     bool mCacheOnlyHitIfRigged; // ignore cached SLM if it does not contain rig info (and we want rig info)
 
     model_list      mModelList;
+    // The scene is pretty much what ends up getting loaded for upload.  Basically assign things to this guy if you want something uploaded.
     scene               mScene;
 
     typedef std::queue<LLPointer<LLModel> > model_queue;
@@ -121,10 +122,16 @@ public:
     model_queue mPhysicsQ;
 
     //map of avatar joints as named in COLLADA assets to internal joint names
+    // Do not use this for anything other than looking up the name of a joint.  This is populated elsewhere.
     JointMap            mJointMap;
+
+    // The joint list is what you want to use to actually setup the specific joint transformations.
     JointTransformMap&  mJointList;
     JointNameSet&       mJointsFromNode;
+
+
     U32                 mMaxJointsPerMesh;
+    U32                 mDebugMode; // see dumDebugData() for details
 
     LLModelLoader(
         std::string                         filename,
@@ -137,7 +144,9 @@ public:
         JointTransformMap&                  jointTransformMap,
         JointNameSet&                       jointsFromNodes,
         JointMap&                           legalJointNamesMap,
-        U32                                 maxJointsPerMesh);
+        U32                                 maxJointsPerMesh,
+        U32                                 modelLimit,
+        U32                                 debugMode);
     virtual ~LLModelLoader();
 
     virtual void setNoNormalize() { mNoNormalize = true; }
@@ -194,6 +203,7 @@ public:
 
     const LLSD logOut() const { return mWarningsArray; }
     void clearLog() { mWarningsArray.clear(); }
+    void dumpDebugData();
 
 protected:
     LLModelLoader::load_callback_t      mLoadCallback;
@@ -204,6 +214,7 @@ protected:
 
     bool        mRigValidJointUpload;
     U32         mLegacyRigFlags;
+    U32         mGeneratedModelLimit; // Attempt to limit amount of generated submodels
 
     bool        mNoNormalize;
     bool        mNoOptimize;
