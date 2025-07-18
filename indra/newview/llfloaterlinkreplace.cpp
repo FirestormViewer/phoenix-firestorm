@@ -62,6 +62,11 @@ bool LLFloaterLinkReplace::postBuild()
     mStartBtn = getChild<LLButton>("btn_start");
     mStartBtn->setCommitCallback(boost::bind(&LLFloaterLinkReplace::onStartClicked, this));
 
+    mStopBtn = getChild<LLButton>("btn_stop");
+    mStopBtn->setCommitCallback(boost::bind(&LLFloaterLinkReplace::onStopClicked, this));
+    mStopBtn->setEnabled(false);
+    mStopRequested = false;
+
     mRefreshBtn = getChild<LLButton>("btn_refresh");
     mRefreshBtn->setCommitCallback(boost::bind(&LLFloaterLinkReplace::checkEnableStart, this));
     // <FS:Beq> FIRE-17695 - Delete links capability
@@ -246,6 +251,8 @@ void LLFloaterLinkReplace::onStartClickedResponse(const LLSD& notification, cons
 
                 mStartBtn->setEnabled(false);
                 mRefreshBtn->setEnabled(false);
+                mStopBtn->setEnabled(true);
+                mStopRequested = false;
 
                 mEventTimer.start();
                 tick();
@@ -257,6 +264,12 @@ void LLFloaterLinkReplace::onStartClickedResponse(const LLSD& notification, cons
             }
         }
     }
+}
+
+void LLFloaterLinkReplace::onStopClicked()
+{
+    mStopRequested = true;
+    LL_INFOS() << "Inventory link replace stopped by user." << LL_ENDL;
 }
 
 // static
@@ -339,11 +352,14 @@ void LLFloaterLinkReplace::decreaseOpenItemCount()
     mActiveItems--;
     mRemainingItems--;
 
-    if (mRemainingItems == 0)
+    if (mRemainingItems <= 0 || mStopRequested)
     {
+        mRemainingItems = 0;
+        mRemainingInventoryItems.clear();
         mStatusText->setText(getString("ReplaceFinished"));
         mStartBtn->setEnabled(true);
         mRefreshBtn->setEnabled(true);
+        mStopBtn->setEnabled(false);
         mEventTimer.stop();
         LL_INFOS() << "Inventory link replace finished." << LL_ENDL;
     }
@@ -388,7 +404,12 @@ void LLFloaterLinkReplace::processBatch(LLInventoryModel::item_array_t items)
     {
         LLPointer<LLInventoryItem> source_item = *it;
 
-        if (source_item->getParentUUID() != cof_folder_id)
+        if (mStopRequested)
+        {
+            decreaseOpenItemCount();
+            break;
+        }
+        else if (source_item->getParentUUID() != cof_folder_id)
         {
             // <FS:Beq> FIRE-17695 bulk delete unwanted links
             //bool is_outfit_folder = gInventory.isObjectDescendentOf(source_item->getParentUUID(), outfit_folder_id);

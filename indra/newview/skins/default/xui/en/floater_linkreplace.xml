@@ -124,4 +124,14 @@
 	 halign="center"
 	 name="btn_start"
 	 label="Start"/>
+	<button
+	 top_delta="0"
+	 right="-105"
+	 height="22"
+	 width="90"
+	 follows="right|top"
+	 mouse_opaque="true"
+	 halign="center"
+	 name="btn_stop"
+	 label="Stop"/>
 </floater>

@@ -35,4 +35,5 @@
 	</text>
 	<button name="btn_refresh" label="Aktualisieren"/>
 	<button name="btn_start" label="Starten"/>
+	<button name="btn_stop" label="Stoppen"/>
 </floater>
