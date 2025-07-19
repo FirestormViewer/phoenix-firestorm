@@ -4491,6 +4491,9 @@ Désactivation des mises à jour futures de ce fichier...
 	<notification name="NowOwnObject">
 		Vous êtes désormais le propriétaire de l&apos;objet [OBJECT_NAME].
 	</notification>
+	<notification name="NowOwnObjectInv">
+		Vous êtes désormais propriétaire de l'objet [OBJECT_NAME] et il a été placé dans votre inventaire.
+	</notification>
 	<notification name="CantRezOnLand">
 		Impossible de rezzer l&apos;objet à [OBJECT_POS] car le propriétaire de ce terrain de l&apos;autorise pas.  Utilisez l&apos;outil Terrain pour voir à qui appartiennent les terrains.
 	</notification>
@@ -5583,6 +5586,9 @@ Voulez-vous continuer ?
 	<notification name="WaterExclusionSurfacesWarning">
 		Si vous cochez la case « cacher l'eau », les choix de texture, d'aspérités et de brillance seront écrasés.
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Continuer"/>
+	</notification>
+	<notification name="WaterExclusionNoMaterial">
+		Impossible d'appliquer le matériau sur la surface d'exclusion d'eau.
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Vous êtes sur le point d'activer l'AutoFPS. Tous les paramètres graphiques non sauvegardés seront perdus.
