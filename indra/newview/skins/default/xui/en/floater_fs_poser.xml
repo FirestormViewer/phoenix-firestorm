@@ -11,6 +11,11 @@ width="430">
 	<string name="icon_category" translate="false">Inv_BodyShape</string>
 	<string name="icon_bone" translate="false"></string>
 	<string name="icon_object" translate="false">Inv_Object</string>
+	<string name="icon_rotation_bvh_locked_edited" translate="false">Script_Running</string>
+	<string name="icon_rotation_bvh_locked_unedited" translate="false">Script_NotRunning</string>
+	<string name="icon_rotation_bvh_unlocked" translate="false">Script_Error</string>
+	<string name="icon_rotation_is_world_locked" translate="false">Locked_Icon</string>
+	<string name="icon_rotation_does_not_export" translate="false">Conv_toolbar_close</string>
 	<string name="icon_rotation_is_own_work" translate="false">Check_Mark</string>
 	<string name="icon_save_button" translate="false">Icon_Dock_Foreground</string>
 	<string name="icon_save_failed_button" translate="false">Parcel_Exp_Color</string>
@@ -966,24 +971,13 @@ width="430">
 						 top_pad="10"
 						 width="134" />
 						<check_box
-						 control_name="FSPoserResetBaseRotationOnEdit"
-						 name="reset_base_rotation_on_edit_checkbox"
-						 height="16"
-						 label="Reset base-rotation on edit"
-						 follows="left|top"
-						 left="5"
-						 tool_tip="When you first edit a rotation, reset it to zero. This means your work can save a pose (and not a diff see load/save). A green tick appears next each joint you have zero-ed export."
-						 top_pad="5"
-						 width="134" />
-						<check_box
 						 control_name="FSPoserSaveExternalFileAlso"
 						 name="also_save_bvh_checkbox"
 						 height="16"
-						 enabled="false"
 						 label="Write BVH when saving**"
 						 follows="left|top"
-						 left="15"
-						 tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
+						 left="5"
+						 tool_tip="When you save your pose, also write a BVH file. BVH can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
 						 top_pad="2"
 						 width="134" />
 						<check_box

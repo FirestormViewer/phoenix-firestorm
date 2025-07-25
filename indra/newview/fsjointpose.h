@@ -78,6 +78,11 @@ class FSJointPose
     void redoLastChange();
 
     /// <summary>
+    /// Resets the joint to its conditions when posing started.
+    /// </summary>
+    void resetJoint();
+
+    /// <summary>
     /// Gets the 'public' rotation of the joint.
     /// </summary>
     LLQuaternion getPublicRotation() const { return mCurrentState.mRotation; }
@@ -85,12 +90,14 @@ class FSJointPose
     /// <summary>
     /// Sets the 'public' rotation of the joint.
     /// </summary>
+    /// <param name="zeroBase">Whether to zero the base rotation on setting the supplied rotation.</param>
+    /// <param name="rot">The change in rotation to apply.</param>
     /// <remarks>
     /// 'Public rotation' is the amount of rotation the user has added to the initial state.
     /// Public rotation is what a user may save to an external format (such as BVH).
     /// This distinguishes 'private' rotation, which is the state inherited from something like a pose in-world.
     /// </remarks>
-    void setPublicRotation(const LLQuaternion& rot);
+    void setPublicRotation(bool zeroBase, const LLQuaternion& rot);
 
     /// <summary>
     /// Reflects the base and delta rotation of the represented joint left-right.
@@ -153,12 +160,19 @@ class FSJointPose
     /// <summary>
     /// Recalculates the delta reltive to the base for a new rotation.
     /// </summary>
-    void recaptureJointAsDelta();
+    /// <param name="zeroBase">Whether to zero the base rotation on setting the supplied rotation.</param>
+    void recaptureJointAsDelta(bool zeroBase);
 
     /// <summary>
     /// Clears the undo/redo deque.
     /// </summary>
     void purgeUndoQueue();
+
+    /// <summary>
+    /// Gets whether the user has specified the base rotation of a joint to be zero.
+    /// </summary>
+    /// <returns>True if the user performed some action to specify zero rotation as the base, otherwise false.</returns>
+    bool userHaseSetBaseRotationToZero() const;
 
     /// <summary>
     /// Reverts the position/rotation/scale to their values when the animation begun.
@@ -180,6 +194,7 @@ class FSJointPose
       public:
         FSJointState(LLJoint* joint)
         {
+            mStartingRotation.set(joint->getRotation());
             mBaseRotation.set(joint->getRotation());
             mBasePosition.set(joint->getPosition());
             mBaseScale.set(joint->getScale());
@@ -209,11 +224,27 @@ class FSJointPose
         {
             mBaseRotation.set(otherState.mBaseRotation);
             mRotation.set(otherState.mRotation);
+            mUserSpecifiedBaseZero = otherState.userSetBaseRotationToZero();
         }
+
+        bool userSetBaseRotationToZero() const { return mUserSpecifiedBaseZero; }
 
         bool baseRotationIsZero() const { return mBaseRotation == LLQuaternion::DEFAULT; }
 
-        void zeroBaseRotation() { mBaseRotation = LLQuaternion::DEFAULT; }
+        void resetJoint()
+        {
+            mUserSpecifiedBaseZero = false;
+            mBaseRotation.set(mStartingRotation);
+            mRotation.set(LLQuaternion::DEFAULT);
+            mPosition.setZero();
+            mScale.setZero();
+        }
+
+        void zeroBaseRotation()
+        {
+            mBaseRotation = LLQuaternion::DEFAULT;
+            mUserSpecifiedBaseZero = true;
+        }
 
         void revertJointToBase(LLJoint* joint) const
         {
@@ -225,7 +256,7 @@ class FSJointPose
             joint->setScale(mBaseScale);
         }
 
-        void updateFromJoint(LLJoint* joint)
+        void updateFromJoint(LLJoint* joint, bool zeroBase)
         {
             if (!joint)
                 return;
@@ -233,6 +264,10 @@ class FSJointPose
             LLQuaternion invRot = mBaseRotation;
             invRot.conjugate();
             mRotation = joint->getRotation() * invRot;
+
+            if (zeroBase)
+                zeroBaseRotation();
+
             mPosition.set(joint->getPosition() - mBasePosition);
             mScale.set(joint->getScale() - mBaseScale);
         }
@@ -240,6 +275,7 @@ class FSJointPose
       private:
         FSJointState(FSJointState* state)
         {
+            mStartingRotation.set(state->mStartingRotation);
             mBaseRotation.set(state->mBaseRotation);
             mBasePosition.set(state->mBasePosition);
             mBaseScale.set(state->mBaseScale);
@@ -247,6 +283,7 @@ class FSJointPose
             mRotation.set(state->mRotation);
             mPosition.set(state->mPosition);
             mScale.set(state->mScale);
+            mUserSpecifiedBaseZero = state->userSetBaseRotationToZero();
         }
 
       public:
@@ -255,9 +292,11 @@ class FSJointPose
         LLVector3    mScale;
 
       private:
+        LLQuaternion mStartingRotation;
         LLQuaternion mBaseRotation;
         LLVector3    mBasePosition;
         LLVector3    mBaseScale;
+        bool         mUserSpecifiedBaseZero = false;
     };
 
   private:
