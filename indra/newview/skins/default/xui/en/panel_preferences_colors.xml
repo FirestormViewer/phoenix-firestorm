@@ -1857,6 +1857,34 @@
      show_text="true"
      top_pad="2"
      width="415" />
+     <slider
+     can_edit_text="false"
+     control_name="FSIMOpacity"
+     decimal_digits="2"
+     follows="left|top"
+     height="16"
+     increment="0.01"
+     initial_value="1.0"
+     layout="topleft"
+     label_width="115"
+     label="Conversations:"
+     left="50"
+     max_val="1.00"
+     min_val="0.00"
+     name="conversations"
+     show_text="true"
+     top_pad="2"
+     width="415" />
+     <check_box
+     control_name="FSImActiveOpacityOverride"
+     follows="left|top"
+     layout="topleft"
+     left="49"
+     height="12"
+     name="override_im_active_opacity_checkbox"
+     top_pad="5"
+     width="450"
+     label="Use Active Opacity value when the Conversations window is focused" />
      <text
        follows="left|top"
        layout="topleft"

@@ -238,6 +238,11 @@ public:
     void                setTransparencyType(ETypeTransparency type);
     ETypeTransparency   getTransparencyType() const {return mTransparencyType;}
 
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    boost::function<F32()> mGetIMOpacityCallback;
+    void setGetIMOpacityCallback (boost::function<F32()> cb) { mGetIMOpacityCallback = cb; }
+    // </FS:TJ>
+
     bool    focusNextItem(bool text_entry_only);
     bool    focusPrevItem(bool text_entry_only);
 

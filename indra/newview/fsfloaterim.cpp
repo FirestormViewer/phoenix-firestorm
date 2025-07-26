@@ -1010,6 +1010,9 @@ bool FSFloaterIM::postBuild()
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
     mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    mInputEditor->setGetIMOpacityCallback(boost::bind(&FSFloaterIM::onGetIMOpacityCallback));
+    // </FS:TJ>
 
     mEmojiRecentPanelToggleBtn = getChild<LLButton>("emoji_recent_panel_toggle_btn");
     mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(); });
@@ -2650,3 +2653,12 @@ uuid_vec_t FSFloaterIM::getSessionParticipants() const
 
     return mControlPanel->getParticipants();
 }
+
+// <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+// static
+F32 FSFloaterIM::onGetIMOpacityCallback()
+{
+    static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
+    return im_opacity;
+}
+// </FS:TJ>

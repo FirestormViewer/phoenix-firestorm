@@ -148,6 +148,9 @@ bool FSFloaterNearbyChat::postBuild()
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->setLabel(getString("chatbox_label"));
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    mInputEditor->setGetIMOpacityCallback(boost::bind(&FSFloaterIM::onGetIMOpacityCallback));
+    // </FS:TJ>
 
     mChatLayoutPanel = getChild<LLLayoutPanel>("chat_layout_panel");
     mInputPanels = getChild<LLLayoutStack>("input_panels");

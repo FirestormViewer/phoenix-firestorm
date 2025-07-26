@@ -164,6 +164,8 @@ public:
 
     uuid_vec_t getSessionParticipants() const;
 
+    static F32 onGetIMOpacityCallback(); // <FS:TJ/> [FIRE-35804] Allow the IM floater to have separate transparency
+
 protected:
     /* virtual */
     void    onClickCloseBtn(bool app_quitting = false);
