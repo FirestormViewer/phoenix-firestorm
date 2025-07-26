@@ -67,7 +67,6 @@
          label="D"
          layout="topleft"
          left_pad="3"
-         valign="center"
          width="17"
          tool_tip="Reset to the default value.">
             <button.commit_callback
@@ -99,7 +98,6 @@
          label="D"
          layout="topleft"
          left_pad="3"
-         valign="center"
          width="17"
          tool_tip="Reset to the default value.">
             <button.commit_callback
@@ -131,7 +129,6 @@
          label="D"
          layout="topleft"
          left_pad="3"
-         valign="center"
          width="17"
          tool_tip="Reset to the default value.">
             <button.commit_callback
@@ -162,7 +159,6 @@
          height="17"
          label="D"
          layout="topleft"
-         valign="center"
          left_pad="3"
          width="17"
          tool_tip="Reset to the default value.">
