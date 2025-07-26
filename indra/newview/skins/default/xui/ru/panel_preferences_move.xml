@@ -3,9 +3,13 @@
 	<tab_container label="Движение и вид" name="tabs">
 		<panel label="Вид" name="tab-view">
 			<slider label="Угол обзора" name="camera_fov" tool_tip="В реальности это функция увеличения/уменьшения. Изменяет поле зрения в вашем окне просмотра. Так-же можно нажимать Ctrl + 0 или Ctrl + 8. ПРИМЕЧАНИЕ: Не работает, если у вас включена Flycam (3D SpaceNavigator)."/>
+			<button name="Def_CameraAngle" label="С" tool_tip="Сброс значения по умолчанию." />
 			<slider label="Расстояние" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" label="С" tool_tip="Сброс значения по умолчанию." />
 			<slider label="Время перехода" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" label="С" tool_tip="Сброс значения по умолчанию." />
 			<slider label="Сглаживание" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" label="С" tool_tip="Сброс значения по умолчанию." />
 			<check_box label="Отключить ограничения камеры" name="DisableCameraConstraints" tool_tip="Установите, чтобы переместить камеру за ее нормальные границы и ниже уровня земли."/>
 			<check_box label="Не использовать колесо мыши для управления уровнем масштабирования" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2" width="380">
