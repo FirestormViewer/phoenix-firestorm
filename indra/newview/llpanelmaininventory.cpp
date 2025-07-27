@@ -1628,8 +1628,6 @@ bool LLFloaterInventoryFinder::postBuild()
     // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
     getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
 
-    updateElementsFromFilter();
-
     // <FS:Zi> FIRE-1175 - Filter Permissions Menu
     mCheckModify = getChild<LLCheckBoxCtrl>("check_modify");
     mCheckCopy = getChild<LLCheckBoxCtrl>("check_copy");
@@ -1638,6 +1636,8 @@ bool LLFloaterInventoryFinder::postBuild()
     mCheckCopy->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
     mCheckTransfer->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
     // </FS:Zi>
+
+    updateElementsFromFilter();
 
     return true;
 }
