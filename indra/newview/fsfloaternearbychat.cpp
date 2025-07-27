@@ -149,7 +149,7 @@ bool FSFloaterNearbyChat::postBuild()
     mInputEditor->setLabel(getString("chatbox_label"));
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
     // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
-    mInputEditor->setGetIMOpacityCallback(boost::bind(&FSFloaterIM::onGetIMOpacityCallback));
+    mInputEditor->setTransparencyOverrideCallback(boost::bind(&FSFloaterNearbyChat::onGetChatBoxOpacityCallback, this, _1, _2));
     // </FS:TJ>
 
     mChatLayoutPanel = getChild<LLLayoutPanel>("chat_layout_panel");
@@ -1110,3 +1110,18 @@ uuid_vec_t FSFloaterNearbyChat::getSessionParticipants() const
 
     return avatarIds;
 }
+
+// <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+// This is specifically for making the text editors such as chat_editor always active opacity when the IM floater is focused
+// Otherwise if they aren't active, it will use either the IM opacity, or inactive opacity, whatever is smaller
+F32 FSFloaterNearbyChat::onGetChatBoxOpacityCallback(ETypeTransparency type, F32 alpha)
+{
+    static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
+    if (type != TT_ACTIVE)
+    {
+        return llmin(im_opacity, alpha);
+    }
+
+    return alpha;
+}
+// </FS:TJ>

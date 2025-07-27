@@ -1086,11 +1086,10 @@ F32 LLUICtrl::getCurrentTransparency()
 
     }
 
-    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
-    // This is specifically for making the text editors such as chat_editor always active opacity when the IM floater is focused
-    if (mGetIMOpacityCallback && mTransparencyType != TT_ACTIVE)
+    // <FS:TJ> Allow any UICtrl to override the transparency with a callback
+    if (mTransparencyOverrideCallback)
     {
-        return llmin(mGetIMOpacityCallback(), alpha);
+        return mTransparencyOverrideCallback(mTransparencyType, alpha);
     }
     // </FS:TJ>
 
