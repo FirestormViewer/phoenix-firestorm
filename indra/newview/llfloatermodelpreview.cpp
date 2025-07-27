@@ -191,7 +191,7 @@ bool LLFloaterModelPreview::postBuild()
     for (S32 lod = 0; lod <= LLModel::LOD_HIGH; ++lod)
     {
         LLComboBox* lod_source_combo = getChild<LLComboBox>("lod_source_" + lod_name[lod]);
-        lod_source_combo->setCommitCallback(boost::bind(&LLFloaterModelPreview::onLoDSourceCommit, this, lod));
+        lod_source_combo->setCommitCallback(boost::bind(&LLFloaterModelPreview::onLoDSourceCommit, this, lod, true));
         lod_source_combo->setCurrentByIndex(mLODMode[lod]);
 
         getChild<LLButton>("lod_browse_" + lod_name[lod])->setCommitCallback(boost::bind(&LLFloaterModelPreview::onBrowseLOD, this, lod));
@@ -858,7 +858,7 @@ void LLFloaterModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
         LLComboBox* lod_source_combo = getChild<LLComboBox>("lod_source_" + lod_name[i]);
         if (lod_source_combo->getCurrentIndex() == LLModelPreview::USE_LOD_ABOVE)
         {
-            onLoDSourceCommit(i);
+            onLoDSourceCommit(i, false);
         }
         else
         {
@@ -1523,26 +1523,26 @@ void LLFloaterModelPreview::addStringToLog(const std::string& message, const LLS
     {
         std::string str;
         switch (lod)
-{
+        {
         case LLModel::LOD_IMPOSTOR: str = "LOD0 "; break;
         case LLModel::LOD_LOW:      str = "LOD1 "; break;
         case LLModel::LOD_MEDIUM:   str = "LOD2 "; break;
         case LLModel::LOD_PHYSICS:  str = "PHYS "; break;
         case LLModel::LOD_HIGH:     str = "LOD3 ";   break;
         default: break;
-}
+        }
 
         LLStringUtil::format_map_t args_msg;
         LLSD::map_const_iterator iter = args.beginMap();
         LLSD::map_const_iterator end = args.endMap();
         for (; iter != end; ++iter)
-{
+        {
             args_msg[iter->first] = iter->second.asString();
         }
         str += sInstance->getString(message, args_msg);
         sInstance->addStringToLogTab(str, flash);
     }
-    }
+}
 
 // static
 void LLFloaterModelPreview::addStringToLog(const std::string& str, bool flash)
@@ -1943,7 +1943,7 @@ void LLFloaterModelPreview::toggleCalculateButton(bool visible)
     }
 }
 
-void LLFloaterModelPreview::onLoDSourceCommit(S32 lod)
+void LLFloaterModelPreview::onLoDSourceCommit(S32 lod, bool refresh_ui)
 {
     mModelPreview->updateLodControls(lod);
 
@@ -1965,8 +1965,16 @@ void LLFloaterModelPreview::onLoDSourceCommit(S32 lod)
         || index == LLModelPreview::GENERATE // <FS:Beq/> Improved LOD generation
         || index == LLModelPreview::MESH_OPTIMIZER_SLOPPY
         || index == LLModelPreview::MESH_OPTIMIZER_PRECISE)
-    { //rebuild LoD to update triangle counts
+    {
+        // rebuild LoD to update triangle counts
         onLODParamCommit(lod, true);
+    }
+    else if (refresh_ui && index == LLModelPreview::USE_LOD_ABOVE)
+    {
+        // Update mUploadData for updateStatusMessages
+        mModelPreview->rebuildUploadData();
+        // Update UI with new triangle values
+        mModelPreview->updateStatusMessages();
     }
 }
 

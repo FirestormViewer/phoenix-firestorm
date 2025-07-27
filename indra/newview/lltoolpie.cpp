@@ -1977,12 +1977,6 @@ bool LLToolPie::shouldAllowFirstMediaInteraction(const LLPickInfo& pick, bool mo
         return false;
     }
 
-    // Own objects
-    if((FirstClickPref & MEDIA_FIRST_CLICK_OWN) && object->permYouOwner())
-    {
-        LL_DEBUGS_ONCE() << "FirstClickPref & MEDIA_FIRST_CLICK_OWN" << LL_ENDL;
-        return true;
-    }
     // HUD attachments
     if((FirstClickPref & MEDIA_FIRST_CLICK_HUD) && object->isHUDAttachment())
     {
@@ -2003,6 +1997,13 @@ bool LLToolPie::shouldAllowFirstMediaInteraction(const LLPickInfo& pick, bool mo
     {
         LL_WARNS() << "Owner information was not reliably obtained" << LL_ENDL;
         return false;
+    }
+
+    // Own objects
+    if((FirstClickPref & MEDIA_FIRST_CLICK_OWN) && owner_id == gAgent.getID())
+    {
+        LL_DEBUGS_ONCE() << "FirstClickPref & MEDIA_FIRST_CLICK_OWN" << LL_ENDL;
+        return true;
     }
 
     // Check if the object is owned by a friend of the agent

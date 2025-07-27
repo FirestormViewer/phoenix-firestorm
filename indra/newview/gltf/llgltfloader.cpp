@@ -59,6 +59,7 @@
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 #include <fstream>
 
 static const std::string lod_suffix[LLModel::NUM_LODS] =
@@ -154,7 +155,7 @@ bool LLGLTFLoader::OpenFile(const std::string &filename)
         LLSD args;
         args["Message"] = "ParsingErrorException";
         args["FILENAME"] = filename;
-        args["EXCEPTION"] = "Unknown exception";
+        args["EXCEPTION"] = boost::current_exception_diagnostic_information();
         mWarningsArray.append(args);
         setLoadState(ERROR_PARSING);
         return false;
@@ -611,6 +612,7 @@ LLGLTFLoader::LLGLTFImportMaterial LLGLTFLoader::processMaterial(S32 material_in
                     LL::GLTF::Image& image = mGLTFAsset.mImages[sourceIndex];
                     if (image.mTexture.notNull())
                     {
+                        mTexturesNeedScaling |= image.mHeight > LLViewerTexture::MAX_IMAGE_SIZE_DEFAULT || image.mWidth > LLViewerTexture::MAX_IMAGE_SIZE_DEFAULT;
                         impMat.setDiffuseMap(image.mTexture->getID());
                         LL_INFOS("GLTF_IMPORT") << "Using existing texture ID: " << image.mTexture->getID().asString() << LL_ENDL;
                     }

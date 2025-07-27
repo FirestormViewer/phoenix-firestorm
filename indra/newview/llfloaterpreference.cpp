@@ -6431,7 +6431,7 @@ void FSPanelPreferenceSounds::updateMoapInteractionSetting()
 {
     if (mMoapInteractionAll->get())
     {
-        gSavedSettings.setS32("MediaFirstClickInteract", std::numeric_limits<S32>::max());
+        gSavedSettings.setS32("MediaFirstClickInteract", LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG | LLToolPie::MEDIA_FIRST_CLICK_ANY);
     }
     else if (mMoapInteractionAny->get())
     {

@@ -111,6 +111,7 @@ public:
 
     bool mTrySLM;
     bool mCacheOnlyHitIfRigged; // ignore cached SLM if it does not contain rig info (and we want rig info)
+    bool mTexturesNeedScaling;
 
     model_list      mModelList;
     // The scene is pretty much what ends up getting loaded for upload.  Basically assign things to this guy if you want something uploaded.
@@ -171,9 +172,6 @@ public:
     void setLoadState(U32 state);
 
     void stretch_extents(const LLModel* model, const LLMatrix4& mat);
-
-    S32 mNumOfFetchingTextures ; // updated in the main thread
-    bool areTexturesReady() { return !mNumOfFetchingTextures; } // called in the main thread.
 
     bool verifyCount( int expected, int result );
 
