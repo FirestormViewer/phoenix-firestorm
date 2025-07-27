@@ -10,9 +10,6 @@
 	<string name="SUPPORT_SITE">
 		Portail Assistance Firestorm
 	</string>
-	<string name="StartupDetectingHardware">
-		Détection du matériel...
-	</string>
 	<string name="StartupLoading">
 		Chargement de [APP_NAME]...
 	</string>
@@ -593,6 +590,9 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 	</string>
 	<string name="TooltipCantCreateOutfit">
 		Un ou plusieurs articles ne peuvent pas être utilisés dans des "Mes tenues".
+	</string>
+	<string name="TooltipCantMoveOutfitIntoOutfit">
+		Impossible de déplacer une tenue vers une autre tenue
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Impossible de déplacer un dossier vers son enfant
@@ -4847,8 +4847,8 @@ Veuillez réinstaller la visionneuse à partir de [DOWNLOAD_URL] et contacter [S
 		Dossier de l’inventaire [ITEM_NAME] offert
 	</string>
 	<string name="bot_warning">
-		Vous discutez avec un bot, [NAME]. Ne partagez pas d’informations personnelles.
-En savoir plus sur https://second.life/scripted-agents.
+		Vous discutez avec un bot, [NAME]. Ne partagez aucune information personnelle.
+Pour en savoir plus, rendez-vous sur https://second.life/scripted-agents.
 	</string>
 	<string name="inventory_item_offered_rlv">
 		Article d'inventaire offert à [NAME]
@@ -5811,7 +5811,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Apparence
 	</string>
 	<string name="Command_Avatar_Label">
-		Avatar
+		Pack de bienvenue pour avatars
 	</string>
 	<string name="Command_Build_Label">
 		Construire
