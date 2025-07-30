@@ -122,26 +122,28 @@ LLViewerRegion* agent_region;
 bool bakingStarted = false;
 
 class LORebakeStuck;
-LORebakeStuck *bakeTimeout = NULL;
+LORebakeStuck* bakeTimeout = nullptr;
 
 class LORebakeStuck: public LLEventTimer
 {
 public:
-    LORebakeStuck(LLStatusBar *bar) : LLEventTimer(30.0f)
+    LORebakeStuck(LLStatusBar *bar) : LLEventTimer(30.0f), mBar(bar)
     {
-        mbar=bar;
     }
+
     ~LORebakeStuck()
     {
-        bakeTimeout=NULL;
+        bakeTimeout = nullptr;
     }
+
     bool tick()
     {
-        mbar->setRebakeStuck(true);
+        mBar->setRebakeStuck(true);
         return true;
     }
+
 private:
-    LLStatusBar *mbar;
+    LLStatusBar* mBar;
 };
 // </FS:LO>
 
@@ -183,6 +185,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
     mBtnVolume(NULL),
     mBoxBalance(NULL),
     mBalance(0),
+    mBalanceClicked(false),
+    mObscureBalance(false),
     mHealth(100),
     mShowParcelIcons(true),
     mSquareMetersCredit(0),
@@ -207,9 +211,6 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
     // status bar can possible overlay menus?
     setMouseOpaque(false);
 
-    mBalanceTimer = new LLFrameTimer();
-    mHealthTimer = new LLFrameTimer();
-
     LLUICtrl::CommitCallbackRegistry::currentRegistrar()
             .add("TopInfoBar.Action", boost::bind(&LLStatusBar::onContextMenuItemClicked, this, _2));
 
@@ -223,12 +224,6 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 
 LLStatusBar::~LLStatusBar()
 {
-    delete mBalanceTimer;
-    mBalanceTimer = NULL;
-
-    delete mHealthTimer;
-    mHealthTimer = NULL;
-
     if (mParcelChangedObserver)
     {
         LLViewerParcelMgr::getInstance()->removeObserver(mParcelChangedObserver);
@@ -304,7 +299,8 @@ bool LLStatusBar::postBuild()
     //getChild<LLUICtrl>("goShop")->setCommitCallback(boost::bind(&LLWeb::loadURL, gSavedSettings.getString("MarketplaceURL"), LLStringUtil::null, LLStringUtil::null));
 
     mBoxBalance = getChild<LLTextBox>("balance");
-    mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
+    mBoxBalance->setClickedCallback(&LLStatusBar::onClickRefreshBalance, this);
+    //mBoxBalance->setDoubleClickCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onClickToggleBalance(); }); // <FS:Ansariel> Prefer custom FS balance hiding method
 
     mIconPresetsCamera = getChild<LLButton>( "presets_icon_camera" );
     //mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::mIconPresetsCamera, this));
@@ -354,6 +350,8 @@ bool LLStatusBar::postBuild()
     gSavedSettings.getControl("MuteAudio")->getSignal()->connect(boost::bind(&LLStatusBar::onVolumeChanged, this, _2));
     // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
     //gSavedSettings.getControl("EnableVoiceChat")->getSignal()->connect(boost::bind(&LLStatusBar::onVoiceChanged, this, _2));
+    // <FS:Ansariel> Prefer custom FS balance hiding method
+    //gSavedSettings.getControl("ObscureBalanceInStatusBar")->getSignal()->connect(boost::bind(&LLStatusBar::onObscureBalanceChanged, this, _2));
 
     //if (!gSavedSettings.getBOOL("EnableVoiceChat") && LLAppViewer::instance()->isSecondInstance())
     //{
@@ -361,6 +359,7 @@ bool LLStatusBar::postBuild()
     //    mBtnVolume->setImageUnselected(LLUI::getUIImage("VoiceMute_Off"));
     //}
     // </FS:Ansariel>
+    //mObscureBalance = gSavedSettings.getBOOL("ObscureBalanceInStatusBar"); // <FS:Ansariel> Prefer custom FS balance hiding method
 
     // <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
     gSavedSettings.getControl("FSStatusBarMenuButtonPopupOnRollover")->getSignal()->connect(boost::bind(&LLStatusBar::onPopupRolloverChanged, this, _2));
@@ -686,6 +685,12 @@ void LLStatusBar::refresh()
         // </FS:Zi>
     }
 
+    if (mBalanceClicked && mBalanceClickTimer.getElapsedTimeF32() > 1.f)
+    {
+        mBalanceClicked = false;
+        sendMoneyBalanceRequest();
+    }
+
     // <FS:Zi> Pathfinding rebake functions
     LLMenuOptionPathfindingRebakeNavmesh& navmesh = LLMenuOptionPathfindingRebakeNavmesh::instance();
     static LLMenuOptionPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode = LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
@@ -829,9 +834,17 @@ void LLStatusBar::setBalance(S32 balance)
     std::string money_str = LLResMgr::getInstance()->getMonetaryString( balance );
 
     LLStringUtil::format_map_t string_args;
-    string_args["[AMT]"] = llformat("%s", money_str.c_str());
+    if (mObscureBalance)
+    {
+        string_args["[AMT]"] = "****";
+    }
+    else
+    {
+        string_args["[AMT]"] = llformat("%s", money_str.c_str());
+    }
     std::string label_str = getString("buycurrencylabel", string_args);
     mBoxBalance->setValue(label_str);
+    mBoxBalance->setToolTipArg(LLStringExplicit("[AMT]"), llformat("%s", money_str.c_str()));
 
     updateBalancePanelPosition();
 
@@ -851,8 +864,6 @@ void LLStatusBar::setBalance(S32 balance)
 
     if( balance != mBalance )
     {
-        mBalanceTimer->reset();
-        mBalanceTimer->setTimerExpirySec( ICON_TIMER_EXPIRY );
         mBalance = balance;
     }
 }
@@ -904,9 +915,6 @@ void LLStatusBar::setHealth(S32 health)
                 }
             }
         }
-
-        mHealthTimer->reset();
-        mHealthTimer->setTimerExpirySec( ICON_TIMER_EXPIRY );
     }
 
     mHealth = health;
@@ -1089,11 +1097,25 @@ void LLStatusBar::onClickVolume(void* data)
 }
 
 //static
-void LLStatusBar::onClickBalance(void* )
+void LLStatusBar::onClickRefreshBalance(void* data)
 {
-    // Force a balance request message:
-    LLStatusBar::sendMoneyBalanceRequest();
+    LLStatusBar* status_bar = (LLStatusBar*)data;
+
+    if (!status_bar->mBalanceClicked)
+    {
+        // Schedule a balance request message:
+        status_bar->mBalanceClicked = true;
+        status_bar->mBalanceClickTimer.reset();
+    }
     // The refresh of the display (call to setBalance()) will be done by process_money_balance_reply()
+}
+
+void LLStatusBar::onClickToggleBalance()
+{
+    mObscureBalance = !mObscureBalance;
+    gSavedSettings.setBOOL("ObscureBalanceInStatusBar", mObscureBalance);
+    setBalance(mBalance);
+    mBalanceClicked = false; // supress click
 }
 
 //static
@@ -1199,6 +1221,12 @@ void LLStatusBar::onVolumeChanged(const LLSD& newvalue)
 //    refresh();
 //}
 // </FS:Ansariel>
+
+void LLStatusBar::onObscureBalanceChanged(const LLSD& newvalue)
+{
+    mObscureBalance = newvalue.asBoolean();
+    setBalance(mBalance);
+}
 
 void LLStatusBar::onUpdateFilterTerm()
 {

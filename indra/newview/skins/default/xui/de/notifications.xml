@@ -5138,6 +5138,10 @@ Möchten Sie fortfahren?
 		Material kann nicht auf Wasser-Ausschluss-Oberfläche angewandt werden.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
 	</notification>
+	<notification name="ImageUploadResized">
+		Die von Ihnen hochgeladene Textur wurde von [ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT] Pixel zu [NEW_WIDTH]x[NEW_HEIGHT] Pixel verkleinert, um innerhalb des Maximums von [MAX_WIDTH]x[MAX_HEIGHT] Pixel zu sein.
+		<usetemplate ignoretext="Hochgeladene Textur wurde verkleinert" name="okignore" yestext="OK"/>
+	</notification>
 
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.

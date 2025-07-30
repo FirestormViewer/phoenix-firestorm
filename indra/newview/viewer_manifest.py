@@ -206,7 +206,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     # include the entire textures directory recursively
                     with self.prefix(src_dst="*/textures"):
                             self.path("*/*.tga") # <FS:Ansariel> Needed for legacy icons
-                            self.path("*/*.jpg")
                             self.path("*/*.png")
                             self.path("*.tga")
                             self.path("*.j2c")

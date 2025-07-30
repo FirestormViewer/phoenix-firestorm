@@ -2021,6 +2021,7 @@ if (WINDOWS)
         res/firestorm_icon.BMP
         res/firestorm_icon.ico
         res-sdl/firestorm_icon.BMP
+        res/ll_icon_small.ico
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur

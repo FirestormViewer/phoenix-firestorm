@@ -2770,13 +2770,13 @@
     <key>DiskCachePercentOfTotal</key>
     <map>
       <key>Comment</key>
-      <string>The percent of total cache size (defined by CacheSize) to use for the disk cache (UNUSED)</string>
+      <string>The percent of total cache size (defined by CacheSize) to use for the disk cache (ex: asset storage, excludes textures) (UNUSED)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>40.0</real>
+      <real>35.0</real>
     </map>
     <key>DiskCacheDirName</key>
     <map>
@@ -13183,6 +13183,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>ObscureBalanceInStatusBar</key>
+    <map>
+        <key>Comment</key>
+        <string>If true, balance will be shows as '*'</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
     <key>RenderUIBuffer</key>
     <map>
       <key>Comment</key>
@@ -18143,7 +18154,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FullScreen</key>
     <map>
     <key>Comment</key>
-      <string>run a fullscreen session</string>
+      <string>Run a fullscreen session. MacOS not supported</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -23451,6 +23462,50 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>EnableSelectionHints</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether or not to send editing hints to animate the arm when editing an object.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>EnableLookAtTarget</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether or not to animate the avatar head and send look at targets when moving the cursor or focusing on objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>LimitLookAtTarget</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether or not to clamp the look at targets around the avatar head before sending</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>LimitLookAtTargetDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Distance to limit look at target to</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>2</integer>
     </map>
 
   <key>FSNetMapPhantomOpacity</key>
