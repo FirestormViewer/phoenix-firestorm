@@ -519,6 +519,7 @@
 			<menu_item_check label="全解析度紋理(有風險)" name="Full Res Textures" />
 			<menu_item_check label="彩現附著的燈光" name="Render Attached Lights" />
 			<menu_item_check label="彩現附著的粒子" name="Render Attached Particles" />
+			<menu_item_check label="當視訊記憶體已滿時減少繪製距離" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="收集字型頂點緩衝區" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="啟用著色器快取" name="Enable Shader Cache" />
 			<menu_item_call label="清除著色器快取" name="Shader Cache Clear" />

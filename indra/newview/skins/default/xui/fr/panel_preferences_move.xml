@@ -3,9 +3,13 @@
 	<tab_container label="Déplacement &amp; caméra" name="tabs">
 		<panel label="Caméra" name="tab-view">
 			<slider label="Angle de vue" name="camera_fov"/>
+			<button name="Def_CameraAngle" tool_tip="Rétablir la valeur par défaut." />
 			<slider label="Distance" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" tool_tip="Rétablir la valeur par défaut." />
 			<slider label="Transition" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" tool_tip="Rétablir la valeur par défaut." />
 			<slider label="Fluidité" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" tool_tip="Rétablir la valeur par défaut." />
 			<check_box label="Désactiver les contraintes de limitation de dézoom" name="DisableCameraConstraints" tool_tip="Activer cette option pour autoriser la caméra à dézoomer au-delà de ses limitations"/>
 			<check_box label="Désactiver la molette de la souris pour régler le niveau du zoom" name="FSDisableMouseWheelCameraZoom"/>
 			<text left="55" name="heading2">Positionnement automatique pour :</text>
