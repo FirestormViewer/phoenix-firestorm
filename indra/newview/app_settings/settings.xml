@@ -13186,7 +13186,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ObscureBalanceInStatusBar</key>
     <map>
         <key>Comment</key>
-        <string>If true, balance will be shows as '*'</string>
+        <string>If true, balance will be shows as '*' (UNUSED)</string>
         <key>Persist</key>
         <integer>1</integer>
         <key>Type</key>
@@ -23466,7 +23466,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>EnableSelectionHints</key>
     <map>
       <key>Comment</key>
-      <string>Whether or not to send editing hints to animate the arm when editing an object.</string>
+      <string>Whether or not to send editing hints to animate the arm when editing an object. (UNUSED)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -23477,7 +23477,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>EnableLookAtTarget</key>
     <map>
       <key>Comment</key>
-      <string>Whether or not to animate the avatar head and send look at targets when moving the cursor or focusing on objects</string>
+      <string>Whether or not to animate the avatar head and send look at targets when moving the cursor or focusing on objects (UNUSED)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -23488,7 +23488,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>LimitLookAtTarget</key>
     <map>
       <key>Comment</key>
-      <string>Whether or not to clamp the look at targets around the avatar head before sending</string>
+      <string>Whether or not to clamp the look at targets around the avatar head before sending (UNUSED)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -23499,7 +23499,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>LimitLookAtTargetDistance</key>
     <map>
       <key>Comment</key>
-      <string>Distance to limit look at target to</string>
+      <string>Distance to limit look at target to (UNUSED)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
