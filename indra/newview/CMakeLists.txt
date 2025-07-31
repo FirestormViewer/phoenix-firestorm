@@ -15,6 +15,9 @@ include(CMakeCopyIfDifferent)
 include(CubemapToEquirectangularJS)
 include(GLIB)
 include(DragDrop)
+if (USE_DISCORD)
+  include(Discord)
+endif ()
 include(EXPAT)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
@@ -2550,6 +2553,10 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         fs::glod # <FS:Beq/> restore GLOD dependencies
         fs::discord # <FS:Ansariel> Discord  support
         )
+
+if (USE_DISCORD)
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::discord )
+endif ()
 
 if( TARGET ll::intel_memops )
    target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
