@@ -3,9 +3,13 @@
 	<tab_container label="Ruch i widok" name="tabs">
 		<panel label="Widok" name="tab-view">
 			<slider label="Kąt widzenia" name="camera_fov" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpaceNavigator)."/>
+			<button name="Def_CameraAngle" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<slider label="Dystans" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<slider label="Czas przejścia" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<slider label="Wygładzanie" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<check_box label="Wyłącz ograniczenia kamery" name="DisableCameraConstraints" tool_tip="Zaznacz, aby móc ustawiać punkt widzenia kamery daleko poza jego normalne granice lub poniżej poziomu terenu. Jeśli nie jesteś dobry/a w operowaniu kamerą, to możesz mieć większe problemy z dobraniem odpowiedniego kątu patrzenia."/>
 			<check_box label="Nie używaj kółka myszki do kontrolowania poziomu zbliżenia kamery" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">

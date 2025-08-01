@@ -1170,6 +1170,22 @@ void reset_inventory_filter()
     }
 }
 
+
+// <AS:Chanayane> Delete from outfit context menu entry
+void delete_from_outfit(const uuid_vec_t& ids)
+{
+    for (const LLUUID& item_uuid : ids)
+    {
+        LLViewerInventoryItem* item = gInventory.getItem(item_uuid);
+        if (item && item->getIsLinkType())
+        {
+            gInventory.removeItem(item_uuid);
+        }
+    }
+}
+// </AS:Chanayane>
+
+
 void open_marketplace_listings()
 {
     LLFloaterReg::showInstance("marketplace_listings");

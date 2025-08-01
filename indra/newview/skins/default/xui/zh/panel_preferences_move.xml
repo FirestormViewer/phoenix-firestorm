@@ -3,9 +3,13 @@
 	<tab_container label="移動 &amp; 相機" name="tabs">
 		<panel label="相機" name="tab-view">
 			<slider label="視野角度" name="camera_fov" />
+			<button name="Def_CameraAngle" label="↻" tool_tip="重設為預設值。" />
 			<slider label="距離" name="camera_offset_scale" />
+			<button name="Def_CameraOffsetScale" label="↻" tool_tip="重設為預設值。" />
 			<slider label="過渡時間" name="camera_transition_time" />
+			<button name="Def_ZoomTime" label="↻" tool_tip="重設為預設值。" />
 			<slider label="平滑度" name="camera_position_smoothing" />
+			<button name="Def_CameraPositionSmoothing" label="↻" tool_tip="重設為預設值。" />
 			<check_box label="禁用縮放限制" name="DisableCameraConstraints" tool_tip="勾選此選項允許相機在超出限制的情況下進行縮放" />
 			<check_box label="禁用滑鼠滾輪調整縮放" name="FSDisableMouseWheelCameraZoom" />
 			<text name="heading2">自動定位至：</text>
