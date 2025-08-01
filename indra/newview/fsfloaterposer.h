@@ -268,6 +268,7 @@ public:
     void onCommitSpinner(const LLUICtrl* spinner, const S32 ID);
     void onCommitSlider(const LLUICtrl* slider, const S32 id);
     void onClickSymmetrize(const S32 ID);
+    void onClickLockWorldRotBtn();
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();
@@ -490,6 +491,7 @@ public:
     LLButton* mFlipJointBtn{ nullptr };
     LLButton* mRecaptureBtn{ nullptr };
     LLButton* mTogglePosingBonesBtn{ nullptr };
+    LLButton* mToggleLockWorldRotBtn{ nullptr };
     LLButton* mToggleMirrorRotationBtn{ nullptr };
     LLButton* mToggleSympatheticRotationBtn{ nullptr };
     LLButton* mToggleDeltaModeBtn{ nullptr };

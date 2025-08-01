@@ -192,6 +192,8 @@ bool FSFloaterPoser::postBuild()
     mFlipJointBtn = getChild<LLButton>("FlipJoint_avatar");
     mRecaptureBtn = getChild<LLButton>("button_RecaptureParts");
     mTogglePosingBonesBtn = getChild<LLButton>("toggle_PosingSelectedBones");
+    mToggleLockWorldRotBtn = getChild<LLButton>("toggle_LockWorldRotation");
+    mToggleLockWorldRotBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onClickLockWorldRotBtn(); });
 
     mToggleMirrorRotationBtn = getChild<LLButton>("button_toggleMirrorRotation");
     mToggleSympatheticRotationBtn = getChild<LLButton>("button_toggleSympatheticRotation");
@@ -517,6 +519,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
         {
             std::string bone_name = pj.jointName();
             bool posingThisJoint  = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
+            bool jointRotLocked   = mPoserAnimator.getRotationIsWorldLocked(avatar, pj);
 
             record[bone_name]            = bone_name;
             record[bone_name]["enabled"] = posingThisJoint;
@@ -532,9 +535,10 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
                 continue;
 
             record[bone_name]["jointBaseRotationIsZero"] = baseRotationIsZero;
-            record[bone_name]["rotation"] = rotation.getValue();
-            record[bone_name]["position"] = position.getValue();
-            record[bone_name]["scale"]    = scale.getValue();
+            record[bone_name]["rotation"]                = rotation.getValue();
+            record[bone_name]["position"]                = position.getValue();
+            record[bone_name]["scale"]                   = scale.getValue();
+            record[bone_name]["worldLocked"]             = jointRotLocked;
         }
 
         std::string fullSavePath =
@@ -1041,6 +1045,7 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         LLQuaternion quat;
         bool         enabled;
         bool         setJointBaseRotationToZero;
+        bool         worldLocked;
         S32          version = 0;
         bool startFromZeroRot = true;
 
@@ -1116,6 +1121,9 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                     vec3.setValue(control_map["scale"]);
                     mPoserAnimator.loadJointScale(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
                 }
+
+                worldLocked = control_map.has("worldLocked") ? control_map["worldLocked"].asBoolean() : false;
+                mPoserAnimator.setRotationIsWorldLocked(avatar, *poserJoint, worldLocked);
             }
         }
     }
@@ -1449,8 +1457,7 @@ void FSFloaterPoser::onResetJoint(const LLSD data)
     refreshScaleSlidersAndSpinners();
     refreshTrackpadCursor();
     enableOrDisableRedoAndUndoButton();
-    if (getSavingToBvh())
-        refreshTextHighlightingOnJointScrollLists();
+    refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::onRedoLastChange()
@@ -2373,10 +2380,7 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
         if (!poserJoint)
             continue;
 
-        if (considerExternalFormatSaving)
-            ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getScrollListIconForJoint(avatar, *poserJoint));
-        else
-            ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue("");
+        ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getScrollListIconForJoint(avatar, *poserJoint));
 
         if (mPoserAnimator.isPosingAvatarJoint(avatar, *poserJoint))
             ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
@@ -2392,6 +2396,9 @@ std::string FSFloaterPoser::getScrollListIconForJoint(LLVOAvatar* avatar, FSPose
 
     if (mPoserAnimator.getRotationIsWorldLocked(avatar, joint))
         return tryGetString("icon_rotation_is_world_locked");
+
+    if (!getSavingToBvh())
+        return "";
 
     if (joint.boneType() == COL_VOLUMES)
         return tryGetString("icon_rotation_does_not_export");
@@ -2678,3 +2685,29 @@ bool FSFloaterPoser::getSavingToBvh()
 }
 
 void FSFloaterPoser::onClickSavingToBvh() { refreshTextHighlightingOnJointScrollLists(); }
+
+void FSFloaterPoser::onClickLockWorldRotBtn()
+{
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!mPoserAnimator.isPosingAvatar(avatar))
+        return;
+
+    for (auto item : selectedJoints)
+    {
+        bool currentlyPosingJoint = mPoserAnimator.isPosingAvatarJoint(avatar, *item);
+        if (!currentlyPosingJoint)
+            continue;
+
+        bool newLockState = !mPoserAnimator.getRotationIsWorldLocked(avatar, *item);
+        mPoserAnimator.setRotationIsWorldLocked(avatar, *item, newLockState);
+    }
+
+    refreshTextHighlightingOnJointScrollLists();
+}

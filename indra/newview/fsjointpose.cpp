@@ -155,14 +155,14 @@ void FSJointPose::recaptureJoint()
     mCurrentState = FSJointState(joint);
 }
 
-void FSJointPose::recaptureJointAsDelta(bool zeroBase)
+LLQuaternion FSJointPose::recaptureJointAsDelta(bool zeroBase)
 {
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
-        return;
+        return LLQuaternion::DEFAULT;
 
     addStateToUndo(FSJointState(mCurrentState));
-    mCurrentState.updateFromJoint(joint, zeroBase);
+    return mCurrentState.updateFromJoint(joint, zeroBase);
 }
 
 void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
@@ -239,6 +239,22 @@ bool FSJointPose::userHaseSetBaseRotationToZero() const
         return false;
 
     return mCurrentState.userSetBaseRotationToZero();
+}
+
+bool FSJointPose::getWorldRotationLockState() const
+{
+    if (mIsCollisionVolume)
+        return false;
+
+    return mCurrentState.mRotationIsWorldLocked;
+}
+
+void FSJointPose::setWorldRotationLockState(bool newState)
+{
+    if (mIsCollisionVolume)
+        return;
+
+    mCurrentState.mRotationIsWorldLocked = newState;
 }
 
 bool FSJointPose::canPerformUndo() const

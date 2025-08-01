@@ -1751,6 +1751,20 @@ width="430">
 					<button.commit_callback
 					 function="Poser.TogglePosingSelectedBones"/>
 				</button>
+				<button
+				 follows="left|top"
+				 height="21"
+				 layout="topleft"
+				 image_overlay="Locked_Icon"
+				 image_hover_unselected="Toolbar_Middle_Over"
+				 image_selected="Toolbar_Middle_Selected"
+				 image_unselected="Toolbar_Middle_Off"
+				 name="toggle_LockWorldRotation"
+				 left_pad="1"
+				 top_delta="0"
+				 tool_tip="Toggle rotation world-lock for the selected limb(s). Limbs that are world-locked keep the same rotation in-world when their parent-limbs move. Eg: lock your eyes and turn your head, your eyes keep looking in the same direction."
+				 width="21" >
+				</button>
 				<panel
 				 follows="left|top|bottom"
 				 height="22"
@@ -1760,7 +1774,7 @@ width="430">
 				 left_pad="0"
 				 top_delta="0"
 				 name="button_spacer_panel"
-				 width="80"/>
+				 width="59"/>
 				<button
 				 follows="left|top"
 				 height="21"

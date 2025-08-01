@@ -609,6 +609,14 @@ public:
     bool getRotationIsWorldLocked(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
 
     /// <summary>
+    /// Sets the world-rotation-lock status for supplied joint for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <param name="newState">The lock state to apply.</param>
+    void setRotationIsWorldLocked(LLVOAvatar* avatar, const FSPoserJoint& joint, bool newState);
+
+    /// <summary>
     /// Determines if the kind of save to perform should be a 'delta' save, or a complete save.
     /// </summary>
     /// <param name="avatar">The avatar whose pose-rotations are being considered for saving.</param>
@@ -731,6 +739,45 @@ public:
     /// <param name="depth">The depth of the supplied joint.</param>
     /// <returns>The number of generations of descendents the joint has, if none, then zero.</returns>
     int getChildJointDepth(const FSPoserJoint* joint, int depth) const;
+
+    /// <summary>
+    /// Derotates the first world-locked child joint to the supplied joint.
+    /// </summary>
+    /// <param name="joint">The edited joint, whose children may be world-locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="rotation">The rotation the supplied joint was/is being changed by.</param>
+    /// <remarks>
+    /// There are two ways to resolve this problem: before the rotation is applied in the PosingMotion (the animation) or after.
+    /// If performed after, a feedback loop is created, because you're noting the world-rotation in one frame, then correcting it back to that in another.
+    /// This implementation works by applying an opposing-rotation to the locked child joint which is corrected for the relative world-rotations of parent and child.
+    /// </remarks>
+    void deRotateWorldLockedDescendants(const FSPoserJoint* joint, FSPosingMotion* posingMotion, LLQuaternion rotation);
+
+    /// <summary>
+    /// Recursively tests the supplied joint and all its children for their world-locked status, and applies a de-rotation if it is world-locked.
+    /// </summary>
+    /// <param name="joint">The edited joint, whose children may be world-locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="parentWorldRot">The world-rotation of the joint that was edited.</param>
+    /// <param name="rotation">The rotation the joint was edit is being changed by.</param>
+    void deRotateJointOrFirstLockedChild(const FSPoserJoint* joint, FSPosingMotion* posingMotion, LLQuaternion parentWorldRot,
+                                         LLQuaternion rotation);
+
+    /// <summary>
+    /// Performs an undo or redo of an edit to the supplied joints world-locked descendants.
+    /// </summary>
+    /// <param name="joint">The edited joint, whose children may be world-locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="redo">Whether to redo the edit, otherwise the edit is undone.</param>
+    void undoOrRedoWorldLockedDescendants(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo);
+
+    /// <summary>
+    /// Recursively tests the supplied joint and all its children for their world-locked status, and applies an undo or redo if it is world-locked.
+    /// </summary>
+    /// <param name="joint">The joint which will have the undo or redo performed, if it is world locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="redo">Whether to redo the edit, otherwise the edit is undone.</param>
+    void undoOrRedoJointOrFirstLockedChild(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

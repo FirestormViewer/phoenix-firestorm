@@ -161,7 +161,8 @@ class FSJointPose
     /// Recalculates the delta reltive to the base for a new rotation.
     /// </summary>
     /// <param name="zeroBase">Whether to zero the base rotation on setting the supplied rotation.</param>
-    void recaptureJointAsDelta(bool zeroBase);
+    /// <returns>The rotation of the public difference between before and after recapture.</returns>
+    LLQuaternion recaptureJointAsDelta(bool zeroBase);
 
     /// <summary>
     /// Clears the undo/redo deque.
@@ -173,6 +174,18 @@ class FSJointPose
     /// </summary>
     /// <returns>True if the user performed some action to specify zero rotation as the base, otherwise false.</returns>
     bool userHaseSetBaseRotationToZero() const;
+
+    /// <summary>
+    /// Gets whether the rotation of a joint has been 'locked' so that its world rotation can remain constant while parent joints change.
+    /// </summary>
+    /// <returns>True if the joint is rotationally locked to the world, otherwise false.</returns>
+    bool getWorldRotationLockState() const;
+
+    /// <summary>
+    /// Sets whether the world-rotation of a joint has been 'locked' so that as its parent joints change rotation or position, this joint keeps a constant world rotation.
+    /// </summary>
+    /// <param name="newState">The new state for the world-rotation lock.</param>
+    void setWorldRotationLockState(bool newState);
 
     /// <summary>
     /// Reverts the position/rotation/scale to their values when the animation begun.
@@ -201,16 +214,9 @@ class FSJointPose
         }
 
         FSJointState() = default;
-        LLQuaternion mDeltaRotation;
         LLQuaternion getTargetRotation() const { return mRotation * mBaseRotation; }
         LLVector3    getTargetPosition() const { return mPosition + mBasePosition; }
         LLVector3    getTargetScale() const { return mScale + mBaseScale; }
-        void updateRotation(const LLQuaternion& newRotation)
-        { 
-            auto inv_base = mBaseRotation;
-            inv_base.conjugate();
-            mDeltaRotation = newRotation * inv_base; 
-        };
 
         void reflectRotation()
         {
@@ -234,6 +240,7 @@ class FSJointPose
         void resetJoint()
         {
             mUserSpecifiedBaseZero = false;
+            mRotationIsWorldLocked = false;
             mBaseRotation.set(mStartingRotation);
             mRotation.set(LLQuaternion::DEFAULT);
             mPosition.setZero();
@@ -256,20 +263,24 @@ class FSJointPose
             joint->setScale(mBaseScale);
         }
 
-        void updateFromJoint(LLJoint* joint, bool zeroBase)
+        LLQuaternion updateFromJoint(LLJoint* joint, bool zeroBase)
         {
             if (!joint)
-                return;
+                return LLQuaternion::DEFAULT;
 
+            LLQuaternion initalPublicRot = mRotation;
             LLQuaternion invRot = mBaseRotation;
             invRot.conjugate();
-            mRotation = joint->getRotation() * invRot;
+            LLQuaternion newPublicRot = joint->getRotation() * invRot;
 
             if (zeroBase)
                 zeroBaseRotation();
 
+            mRotation.set(newPublicRot);
             mPosition.set(joint->getPosition() - mBasePosition);
             mScale.set(joint->getScale() - mBaseScale);
+
+            return newPublicRot *= ~initalPublicRot;
         }
 
       private:
@@ -284,12 +295,14 @@ class FSJointPose
             mPosition.set(state->mPosition);
             mScale.set(state->mScale);
             mUserSpecifiedBaseZero = state->userSetBaseRotationToZero();
+            mRotationIsWorldLocked = state->mRotationIsWorldLocked;
         }
 
       public:
         LLQuaternion mRotation;
         LLVector3    mPosition;
         LLVector3    mScale;
+        bool         mRotationIsWorldLocked = false;
 
       private:
         LLQuaternion mStartingRotation;
