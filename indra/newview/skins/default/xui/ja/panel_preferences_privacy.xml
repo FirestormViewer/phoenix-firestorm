@@ -15,25 +15,25 @@
 			<panel.string name="log_in_to_change">
 				ログインして変更
 			</panel.string>
-			<button label="履歴を消去" name="clear_webcache" tool_tip="ログイン画像、最後にいた場所、テレポート履歴、Web、テクスチャキャッシュを削除します"/>
+			<button label="履歴を消去" name="clear_webcache" tool_tip="ログイン画像、最後にいた場所、テレポート履歴、Web、テクスチャキャッシュを削除します。"/>
 			<text name="cache_size_label">
 				（位置、画像、web、検索履歴）
 			</text>
-			<check_box label="プロフィールを検索結果に表示" name="online_searchresults"/>
-			<check_box label="自分のオンライン状態を確認できるのは、フレンドとグループのみに限定する" name="online_visibility"/>
-			<check_box label="自分にコールやＩＭができるのをフレンドとグループのみに限定する" name="voice_call_friends_only_check"/>
+			<check_box label="自分のプロフィール情報を検索結果に表示する" name="online_searchresults"/>
+			<check_box label="自分のオンライン状態を確認できるのはフレンドとグループのみに限定する" name="online_visibility"/>
+			<check_box label="自分にコールやＩＭができるのはフレンドとグループのみに限定する" name="voice_call_friends_only_check"/>
 			<check_box label="既に参加しているグループへの招待も表示する" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="コールが終了したら自動的にマイクのスイッチを切る" name="auto_disengage_mic_check"/>
-			<check_box label="スクリプトの入ったオブジェクトは現在の自分の言語設定を確認できるようにする" name="LanguageIsPublic"/>
+			<check_box label="スクリプトの入ったオブジェクトを現在の自分の言語設定で確認できるようにする" name="LanguageIsPublic"/>
 			<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>
-			<check_box label="新しくインベントリに送られて来たものを自動的に受け取る" name="Auto_Accept_New_Inventory"/>
+			<check_box label="新しくインベントリに送られて来たアイテムを自動的に受け取る" name="Auto_Accept_New_Inventory"/>
 			<check_box label="自動的に受け取ったインベントリアイテムを近くのチャットにログ出力する" name="FSLogAutoAcceptInventoryToChat"/>
 			<check_box label="自動承認が有効になっている場合でも、新しいインベントリ通知を表示する" name="FSShowAutoAcceptInventoryInNotifications"/>
-			<check_box label="Ｖ１形式のインベントリの受け取り／拒否のメッセージを使用する" name="FSUseLegacyInventoryAcceptMessages" tool_tip="このオプションをオンにした場合、ビューアは受け取りまたは拒否のボタンを押したあとに受け取り／拒否のメッセ時を送信します。オフの場合は、送られて来たものを受け取るとすぐに受け取りましたというメッセージが自動的に送信されます。このオプションは、送られてきたものを自動的に受領するかどうかには全く影響しません。"/>
-			<check_box label="新しくものを受け取ると、自動的にインベントリフォルダを開いて表示する" name="Show_In_Inventory"/>
-			<check_box label="ノートカード、画像、ランドマークは、受け取ったらすぐに表示する" name="Show_New_Inventory"/>
-			<check_box label="スナップショットをアップロードしたら自動的にインベントリに表示する" name="FSOpenInventoryAfterSnapshot"/>
-			<check_box label="他のアバターにものを送った時にはパーティクル効果を出す" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Ｖ１形式のインベントリの受け取り／拒否のメッセージを使用する" name="FSUseLegacyInventoryAcceptMessages" tool_tip="このオプションをオンにした場合、ビューアは受け取りまたは拒否のボタンを押したあとに受け取り／拒否のメッセージを送信します。オフの場合は、送られて来たものを受け取るとすぐに受け取りましたというメッセージが自動的に送信されます。このオプションは、送られてきたものを自動的に受領するかどうかには全く影響しません。"/>
+			<check_box label="新しいアイテムを受け取った時に、自動的にインベントリフォルダを開いて表示する" name="Show_In_Inventory"/>
+			<check_box label="ノートカード、画像、ランドマークを受け取った時にすぐに表示する" name="Show_New_Inventory"/>
+			<check_box label="スナップショットをアップロードした時に自動的にインベントリに表示する" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="他のアバターにアイテムを送った時にパーティクル効果を表示する" name="FSCreateGiveInventoryParticleEffect"/>
 			<button label="ブロック／無視リスト管理" name="block_list"/>
 		</panel>
 		<!-- Logging -->
@@ -60,7 +60,7 @@
 		</panel>
 		<!--LookAt-->
 		<panel label="視線" name="tab-lookat">
-			<check_box label="ターゲットに視線を表示する：" name="showlookat" tool_tip="視線ポイントはアニメーションのヒントであり、視聴者はこれを使用して、目、頭、胴体をどの方向に向けるかを把握します。また、アバターのカメラのアンカーポイントを決定するためにも使用できます。"/>
+			<check_box label="視線のターゲットを表示する：" name="showlookat" tool_tip="視線ポイントはアニメーションのヒントであり、ビューアはこれを使用して、目、頭、胴体をどの方向に向けるかを把握します。また、アバターのカメラのアンカーポイントを決定するためにも使用できます。"/>
 			<text name="lookatshownames" tool_tip="ターゲットのアバター名を表示する名前の形式を指定します。">
 				視線を当てているアバターの名前を表示
 			</text>
@@ -71,13 +71,13 @@
 				<combo_box.item label="古い形式" name="Legacy_Name"/>
 				<combo_box.item label="ユーザ名" name="User_Name"/>
 			</combo_box>
+			<check_box label="自分の視線を表示しない" name="LookAtHideOwn" tool_tip="自分のカメラのクロスヘアーを表示しないようにします。"/>
+			<check_box label="視線ターゲットに線を描画する" name="ExodusLookAtLines" tool_tip="アバターから視線のターゲットのクロスヘアーまでの線をレンダリングします。"/>
 			<text name="mylookat">
 				自分の視線
 			</text>
-			<check_box label="自分の視線を表示しない" name="LookAtHideOwn" tool_tip="カメラの焦点を表す十字を表示しない"/>
-			<check_box label="焦点までの視線を表示する" name="ExodusLookAtLines" tool_tip="アバターから十字で示されるその人のカメラの焦点までの視線を表示します。"/>
-			<check_box label="自分のカメラの焦点がどこにあるか他人には知らせない" name="privatelookat" tool_tip="他人があなたのカメラの焦点がどこにあるか知るのを防ぎます。"/>
-			<check_box label="自分の画面上でもカメラの焦点がどこにあるかわからないようにする" name="privateLocalLookat" tool_tip="通常、カメラの焦点が当たっている方向にアバターの頭が向くように自分の画面では表示されています。この頭の動きは、このオプションのオン／オフに関わりなく、必ずしも他人に見えるものではありません。"/>
+			<check_box label="自分の視線がどこを向いているかわからないようにする" name="privatelookat" tool_tip="あなたの視線がどこを向いているかを他人に知られるのを防ぎます。"/>
+			<check_box label="自分の画面上でも視線がどこを向いているかわからないようにする" name="privateLocalLookat" tool_tip="自分の視点でカメラがフォーカスしているポイントにアバターの頭が向かないようにします。このオプションが有効かどうかに関わらず、この頭の動きは必ずしも他の人に見えるとは限りません。"/>
 			<check_box label="自分が選択しているものを他人には知らせない" name="privatepointat" tool_tip="他人があなたが選択しているものが何かを知るのを防ぎます。"/>
 			<check_box label="頭部からの距離を制限" name="LimitLookAt" tool_tip="視線の先を自分の頭部の周りだけに固定するようにします。"/>
 			<text name="LimitLookAtDistanceMeterText">
@@ -134,7 +134,7 @@
 			<text name="autoresponse_item_label">
 				自動応答時に送るアイテム：
 			</text>
-			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="インベントリをここにドラッグ＆ドロップします。"/>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="インベントリから、渡したいアイテムをドラッグ＆ドロップします。"/>
 			<button label="クリア" name="clear_autoresponse_item"/>
 		</panel>
 	</tab_container>
