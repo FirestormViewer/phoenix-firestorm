@@ -264,6 +264,11 @@ void FSPosingMotion::setAllRotationsToZeroAndClearUndo()
     }
 }
 
+void FSPosingMotion::setJointBvhLock(FSJointPose* joint, bool lockInBvh)
+{
+    joint->zeroBaseRotation(lockInBvh);
+}
+
 bool FSPosingMotion::vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const
 {
     if (vectorAxesAlmostEqual(v1.mV[VX], v2.mV[VX]) &&

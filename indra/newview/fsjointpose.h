@@ -107,7 +107,8 @@ class FSJointPose
     /// <summary>
     /// Sets the private rotation of the represented joint to zero.
     /// </summary>
-    void zeroBaseRotation();
+    /// <param name="lockInBvh">Whether the joint should be locked if exported to BVH.</param>
+    void zeroBaseRotation(bool lockInBvh);
 
     /// <summary>
     /// Queries whether the represented joint is zero.
@@ -173,7 +174,7 @@ class FSJointPose
     /// Gets whether the user has specified the base rotation of a joint to be zero.
     /// </summary>
     /// <returns>True if the user performed some action to specify zero rotation as the base, otherwise false.</returns>
-    bool userHaseSetBaseRotationToZero() const;
+    bool userHasSetBaseRotationToZero() const;
 
     /// <summary>
     /// Gets whether the rotation of a joint has been 'locked' so that its world rotation can remain constant while parent joints change.
@@ -230,10 +231,8 @@ class FSJointPose
         {
             mBaseRotation.set(otherState.mBaseRotation);
             mRotation.set(otherState.mRotation);
-            mUserSpecifiedBaseZero = otherState.userSetBaseRotationToZero();
+            mUserSpecifiedBaseZero = otherState.mUserSpecifiedBaseZero;
         }
-
-        bool userSetBaseRotationToZero() const { return mUserSpecifiedBaseZero; }
 
         bool baseRotationIsZero() const { return mBaseRotation == LLQuaternion::DEFAULT; }
 
@@ -247,11 +246,7 @@ class FSJointPose
             mScale.setZero();
         }
 
-        void zeroBaseRotation()
-        {
-            mBaseRotation = LLQuaternion::DEFAULT;
-            mUserSpecifiedBaseZero = true;
-        }
+        void zeroBaseRotation() { mBaseRotation = LLQuaternion::DEFAULT; }
 
         void revertJointToBase(LLJoint* joint) const
         {
@@ -294,7 +289,7 @@ class FSJointPose
             mRotation.set(state->mRotation);
             mPosition.set(state->mPosition);
             mScale.set(state->mScale);
-            mUserSpecifiedBaseZero = state->userSetBaseRotationToZero();
+            mUserSpecifiedBaseZero = state->mUserSpecifiedBaseZero;
             mRotationIsWorldLocked = state->mRotationIsWorldLocked;
         }
 
@@ -304,12 +299,22 @@ class FSJointPose
         LLVector3    mScale;
         bool         mRotationIsWorldLocked = false;
 
+        /// <summary>
+        /// A value indicating whether the user has explicitly set the base rotation to zero.
+        /// </summary>
+        /// <remarks>
+        /// The base-rotation, representing any 'current animation' state when posing starts, may become zero for several reasons.
+        /// Loading a Pose, editing a rotation intended to save to BVH, or setting to 'T-Pose' being examples.
+        /// If a user intends on creating a BVH, zero-rotation has a special meaning upon upload: the joint is free (is not animated by that BVH).
+        /// This value represents the explicit intent to have that joint be 'free' in BVH (which is sometimes undesireable).
+        /// </remarks>
+        bool mUserSpecifiedBaseZero = false;
+
       private:
         LLQuaternion mStartingRotation;
         LLQuaternion mBaseRotation;
         LLVector3    mBasePosition;
         LLVector3    mBaseScale;
-        bool         mUserSpecifiedBaseZero = false;
     };
 
   private:

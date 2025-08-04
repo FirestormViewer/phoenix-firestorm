@@ -62,6 +62,7 @@ constexpr std::string_view POSER_TRACKPAD_SENSITIVITY_SAVE_KEY = "FSPoserTrackpa
 constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPosingWhenClosed";
 constexpr std::string_view POSER_SAVEEXTERNALFORMAT_SAVE_KEY   = "FSPoserSaveExternalFileAlso";
 constexpr std::string_view POSER_SAVECONFIRMREQUIRED_SAVE_KEY  = "FSPoserOnSaveConfirmOverwrite";
+constexpr std::string_view POSER_UNLOCKPELVISINBVH_SAVE_KEY    = "FSPoserPelvisUnlockedForBvhSave";
 constexpr char             ICON_SAVE_OK[]                      = "icon_rotation_is_own_work";
 constexpr char             ICON_SAVE_FAILED[]                  = "icon_save_failed_button";
 
@@ -212,6 +213,8 @@ bool FSFloaterPoser::postBuild()
     mMiscJointsPnl = getChild<LLPanel>("misc_joints_panel");
     mCollisionVolumesPnl = getChild<LLPanel>("collision_volumes_panel");
 
+    mUnlockPelvisInBvhSaveCbx = getChild<LLCheckBoxCtrl>("unlock_pelvis_for_bvh_save_checkbox");
+    mUnlockPelvisInBvhSaveCbx->setVisible(getSavingToBvh());
     mAlsoSaveBvhCbx = getChild<LLCheckBoxCtrl>("also_save_bvh_checkbox");
     mAlsoSaveBvhCbx->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClickSavingToBvh(); });
 
@@ -2587,7 +2590,9 @@ void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, 
     if (!joint)
         return;
 
-    auto rotation = mPoserAnimator.getJointExportRotation(avatar, *joint);
+    bool lockPelvisJoint = gSavedSettings.getBOOL(POSER_UNLOCKPELVISINBVH_SAVE_KEY);
+
+    auto rotation = mPoserAnimator.getJointExportRotation(avatar, *joint, !lockPelvisJoint);
     auto position = mPoserAnimator.getJointPosition(avatar, *joint);
 
     switch (joint->boneType())
@@ -2684,7 +2689,11 @@ bool FSFloaterPoser::getSavingToBvh()
     return gSavedSettings.getBOOL(POSER_SAVEEXTERNALFORMAT_SAVE_KEY);
 }
 
-void FSFloaterPoser::onClickSavingToBvh() { refreshTextHighlightingOnJointScrollLists(); }
+void FSFloaterPoser::onClickSavingToBvh()
+{
+    mUnlockPelvisInBvhSaveCbx->setVisible(getSavingToBvh());
+    refreshTextHighlightingOnJointScrollLists();
+}
 
 void FSFloaterPoser::onClickLockWorldRotBtn()
 {

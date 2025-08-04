@@ -318,7 +318,7 @@ bool FSPoserAnimator::exportRotationWillLockJoint(LLVOAvatar* avatar, const FSPo
     if (!jointPose)
         return false;
 
-    if (!jointPose->userHaseSetBaseRotationToZero())
+    if (!jointPose->userHasSetBaseRotationToZero())
         return false;
 
     F32          rot_threshold = ROTATION_KEYFRAME_THRESHOLD / llmax((F32)getChildJointDepth(&joint, 0) * 0.33f, 1.f);
@@ -344,7 +344,7 @@ bool FSPoserAnimator::userSetBaseRotationToZero(LLVOAvatar* avatar, const FSPose
     if (!jointPose)
         return false;
 
-    return jointPose->userHaseSetBaseRotationToZero();
+    return jointPose->userHasSetBaseRotationToZero();
 }
 
 bool FSPoserAnimator::allBaseRotationsAreZero(LLVOAvatar* avatar) const
@@ -373,6 +373,21 @@ void FSPoserAnimator::setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar)
         return;
 
     posingMotion->setAllRotationsToZeroAndClearUndo();
+
+    for (size_t index = 0; index != PoserJoints.size(); ++index)
+    {
+        auto boneType     = PoserJoints[index].boneType();
+        bool setBvhToLock = boneType == BODY || boneType == WHOLEAVATAR;
+        if (setBvhToLock)
+            continue; // setAllRotationsToZeroAndClearUndo specified this is the default behaviour
+
+        FSJointPose* jointPose = posingMotion->getJointPoseByJointName(PoserJoints[index].jointName());
+        if (!jointPose)
+            continue;
+
+        posingMotion->setJointBvhLock(jointPose, false);
+    }
+
 }
 
 void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation)
@@ -434,7 +449,7 @@ void FSPoserAnimator::recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoi
     }
 }
 
-LLVector3 FSPoserAnimator::getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint) const
+LLVector3 FSPoserAnimator::getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const
 {
     auto rotation = getJointRotation(avatar, joint, SWAP_NOTHING, NEGATE_NOTHING);
     if (exportRotationWillLockJoint(avatar, joint))
@@ -452,10 +467,10 @@ LLVector3 FSPoserAnimator::getJointExportRotation(LLVOAvatar* avatar, const FSPo
     if (!jointPose)
         return vec3;
 
-    if (!jointPose->userHaseSetBaseRotationToZero())
+    if (!jointPose->userHasSetBaseRotationToZero())
         return vec3;
 
-    if (joint.boneType() == WHOLEAVATAR)
+    if (lockWholeAvatar && joint.boneType() == WHOLEAVATAR)
         return LLVector3(DEG_TO_RAD * 0.295f, 0.f, 0.f);
 
     F32 minimumRotation = DEG_TO_RAD * 0.65f / llmax((F32)getChildJointDepth(&joint, 0) * 0.33f, 1.f);

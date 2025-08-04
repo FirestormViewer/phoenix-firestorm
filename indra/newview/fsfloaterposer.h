@@ -513,6 +513,7 @@ public:
     LLPanel* mPosesLoadSavePnl{ nullptr };
 
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
+    LLCheckBoxCtrl* mUnlockPelvisInBvhSaveCbx{ nullptr };
 
     LLUICtrl* mTrackpadSensitivitySpnr{ nullptr };
     LLUICtrl* mYawSpnr{ nullptr };

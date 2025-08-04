@@ -497,12 +497,13 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose joint is being queried.</param>
     /// <param name="joint">The joint to determine the rotation for.</param>
+    /// <param name="lockWholeAvatar">Whether the whole avatar should be rotation/position locked in the BVH export.</param>
     /// <returns>The rotation of the requested joint for export.</returns>
     /// <remarks>
     /// The BVH export format requires some minimal amount of rotation so it animates the joint on upload.
     /// The WHOLEAVATAR joint (mPelvis) never exports as 'free'.
     /// </remarks>
-    LLVector3 getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
+    LLVector3 getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const;
 
     /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.

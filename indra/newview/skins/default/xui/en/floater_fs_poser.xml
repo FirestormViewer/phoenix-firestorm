@@ -553,6 +553,17 @@ width="430">
 								 function="Poser.CommitSpinner"
                                  parameter="2"/>
 							</spinner>
+							<check_box
+							 control_name="FSPoserPelvisUnlockedForBvhSave"
+							 name="unlock_pelvis_for_bvh_save_checkbox"
+							 visible="false"
+							 height="16"
+							 label="Unlock Pelvis in BVH"
+							 follows="left|top"
+							 left="5"
+							 tool_tip="When you save this pose to BVH, the Pelvis will not be 'locked', meaning your pose could move in-world."
+							 top_pad="15"
+							 width="134" />
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
 							<scroll_list
 							 visible="false"

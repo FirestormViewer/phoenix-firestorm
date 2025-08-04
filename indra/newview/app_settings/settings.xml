@@ -8100,6 +8100,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserPelvisUnlockedForBvhSave</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether the mPelvis joint should be position/rotationally locked when a BVH is created.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSPoserOnSaveConfirmOverwrite</key>
   <map>
     <key>Comment</key>
