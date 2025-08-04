@@ -5,7 +5,6 @@
       layout="topleft"
       name="panel_flickr_photo">
             <combo_box
-             control_name="FlickrPhotoResolution"
              follows="left|top"
 			 layout="topleft"
              top="5"
