@@ -6,6 +6,9 @@
 
 include(CMakeCopyIfDifferent)
 include(Linking)
+if (USE_DISCORD)
+  include(Discord)
+endif ()
 include(OPENAL)
 include(FMODSTUDIO)
 
@@ -82,6 +85,10 @@ if(WINDOWS)
         set(release_files ${release_files} BsSndRpt64.exe)
       endif(ADDRESS_SIZE EQUAL 32)
     endif (USE_BUGSPLAT)
+
+    if (TARGET ll::discord_sdk)
+        list(APPEND release_files discord_partner_sdk.dll)
+    endif ()
 
     set(release_files ${release_files} growl++.dll growl.dll )
     if (TARGET ll::fmodstudio)
@@ -197,6 +204,10 @@ elseif(DARWIN)
             libaprutil-1.dylib
             )
     endif()
+
+    if (TARGET ll::discord_sdk)
+      list(APPEND release_files libdiscord_partner_sdk.dylib)
+    endif ()
 
     if (TARGET ll::fmodstudio)
       set(debug_files ${debug_files} libfmodL.dylib)

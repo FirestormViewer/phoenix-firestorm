@@ -1045,7 +1045,7 @@ void LLLocalSpeakerMgr::updateSpeakerList()
 // </FS:CR> Opensim
 #ifdef LL_DISCORD
     if (gSavedSettings.getBOOL("EnableDiscord"))
-        LLAppViewer::updateDiscordPartyCurrentSize(avatar_ids.size());
+        LLAppViewer::updateDiscordPartyCurrentSize((S32)avatar_ids.size());
 #endif
     for(U32 i=0; i<avatar_ids.size(); i++)
     {

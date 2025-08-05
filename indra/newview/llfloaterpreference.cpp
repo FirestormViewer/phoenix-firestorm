@@ -764,6 +764,12 @@ bool LLFloaterPreference::postBuild()
         getChild<LLComboBox>("language_combobox")->add("System default", LLSD("default"), ADD_TOP, true);
     }
 
+// <FS:Ansariel> Prefer FS-specific Discord implementation
+//#ifndef LL_DISCORD
+//    getChild<LLTabContainer>("privacy_tab_container")->childDisable("privacy_preferences_discord");
+//#endif
+// </FS:Ansariel>
+
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-06-11 (Catznip-2.6.c) | Added: Catznip-2.6.0c
 #ifndef LL_SEND_CRASH_REPORTS
     // Hide the crash report tab if crash reporting isn't enabled
