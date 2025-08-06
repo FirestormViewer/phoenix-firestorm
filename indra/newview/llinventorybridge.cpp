@@ -4984,6 +4984,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 items.push_back(std::string("Rename"));
                 items.push_back(std::string("thumbnail"));
 
+                addInventoryFavoritesMenuOptions(items);
                 addDeleteContextMenuOptions(items, disabled_items);
                 // EXT-4030: disallow deletion of currently worn outfit
                 const LLViewerInventoryItem* base_outfit_link = LLAppearanceMgr::instance().getBaseOutfitLink();
@@ -5009,6 +5010,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 EMyOutfitsSubfolderType in_my_outfits = myoutfit_object_subfolder_type(model, mUUID, outfits_id);
                 if (in_my_outfits != MY_OUTFITS_NO)
                 {
+                    // Either an outfit or a subfolder inside MY_OUTFITS
                     if (in_my_outfits == MY_OUTFITS_SUBFOLDER)
                     {
                         // Not inside an outfit, but inside 'my outfits'
@@ -5018,6 +5020,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     items.push_back(std::string("Rename"));
                     items.push_back(std::string("thumbnail"));
 
+                    addInventoryFavoritesMenuOptions(items);
                     addDeleteContextMenuOptions(items, disabled_items);
                 }
                 else
@@ -5066,14 +5069,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
         if (model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT) == mUUID)
         {
             items.push_back(std::string("Copy outfit list to clipboard"));
-            if (isFavorite())
-            {
-                items.push_back(std::string("Remove from Favorites"));
-            }
-            else
-            {
-                items.push_back(std::string("Add to Favorites"));
-            }
+            addInventoryFavoritesMenuOptions(items);
 
             addOpenFolderMenuOptions(flags, items);
         }
@@ -5390,6 +5386,18 @@ void LLFolderBridge::addOpenFolderMenuOptions(U32 flags, menuentry_vec_t& items)
         {
             items.push_back(std::string("open_in_current_window"));
         }
+    }
+}
+
+void LLFolderBridge::addInventoryFavoritesMenuOptions(menuentry_vec_t& items)
+{
+    if (isFavorite())
+    {
+        items.push_back(std::string("Remove from Favorites"));
+    }
+    else
+    {
+        items.push_back(std::string("Add to Favorites"));
     }
 }
 

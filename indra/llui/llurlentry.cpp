@@ -43,11 +43,6 @@
 #include "llexperiencecache.h"
 #include "v3dmath.h"
 
-// <FS:AW> hop:// protocol>
-//#define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
-#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))"
-// </FS:AW>
-
 // Utility functions
 std::string localize_slapp_label(const std::string& url, const std::string& full_name);
 
