@@ -15,6 +15,9 @@ include(CMakeCopyIfDifferent)
 include(CubemapToEquirectangularJS)
 include(GLIB)
 include(DragDrop)
+if (USE_DISCORD)
+  include(Discord)
+endif ()
 include(EXPAT)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
@@ -199,6 +202,7 @@ set(viewer_SOURCE_FILES
     #gltf/accessor.cpp
     #gltf/primitive.cpp
     #gltf/animation.cpp
+    #gltf/llgltfloader.cpp
     # </FS:Ansariel> Group GLTF files into their subfolders
     groupchatlistener.cpp
     llaccountingcostmanager.cpp
@@ -895,6 +899,7 @@ set(viewer_GLTF_SOURCE_FILES
     gltf/accessor.cpp
     gltf/primitive.cpp
     gltf/animation.cpp
+    gltf/llgltfloader.cpp
     )
 
 source_group("Source Files\\GLTF" FILES ${viewer_GLTF_SOURCE_FILES})
@@ -1039,6 +1044,7 @@ set(viewer_HEADER_FILES
     #gltf/buffer_util.h
     #gltf/primitive.h
     #gltf/animation.h
+    #gltf/llgltfloader.h
     # </FS:Ansariel> Group GLTF files into their subfolders
     llaccountingcost.h
     llaccountingcostmanager.h
@@ -1737,6 +1743,7 @@ set(viewer_GLTF_HEADER_FILES
     gltf/buffer_util.h
     gltf/primitive.h
     gltf/animation.h
+    gltf/llgltfloader.h
     )
 
 source_group("Header Files\\GLTF" FILES ${viewer_GLTF_HEADER_FILES})
@@ -2025,6 +2032,7 @@ if (WINDOWS)
         res/firestorm_icon.BMP
         res/firestorm_icon.ico
         res-sdl/firestorm_icon.BMP
+        res/ll_icon_small.ico
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur
@@ -2319,6 +2327,12 @@ if (WINDOWS)
                )
     endif (ADDRESS_SIZE EQUAL 64)
 
+    if (TARGET ll::discord_sdk)
+        list(APPEND COPY_INPUT_DEPENDENCIES
+             ${SHARED_LIB_STAGING_DIR}/discord_partner_sdk.dll
+             )
+    endif ()
+
     if (TARGET ll::fmodstudio)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/fmod.dll
@@ -2342,6 +2356,7 @@ if (WINDOWS)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
+        "--discord=${USE_DISCORD}"
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
@@ -2383,6 +2398,7 @@ if (WINDOWS)
             --arch=${ARCH}
             --artwork=${ARTWORK_DIR}
             "--bugsplat=${BUGSPLAT_DB}"
+            "--discord=${USE_DISCORD}"
             "--fmodstudio=${USE_FMODSTUDIO}"
             "--openal=${USE_OPENAL}"
             "--tracy=${USE_TRACY}"
@@ -2450,6 +2466,7 @@ if (WINDOWS)
               --arch=${ARCH}
               --artwork=${ARTWORK_DIR}
               "--bugsplat=${BUGSPLAT_DB}"
+              "--discord=${USE_DISCORD}"
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
               "--tracy=${USE_TRACY}"
@@ -2554,6 +2571,10 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         fs::discord # <FS:Ansariel> Discord  support
         )
 
+if (USE_DISCORD)
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
+endif ()
+
 if( TARGET ll::intel_memops )
    target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
 endif()
@@ -2637,6 +2658,7 @@ if (LINUX)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
+        "--discord=${USE_DISCORD}"
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
@@ -2665,6 +2687,7 @@ if (LINUX)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
+      "--discord=${USE_DISCORD}"
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
@@ -2761,6 +2784,7 @@ if (DARWIN)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
+      "--discord=${USE_DISCORD}"
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
@@ -2799,6 +2823,7 @@ if (DARWIN)
           --arch=${ARCH}
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
+          "--discord=${USE_DISCORD}"
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
           "--tracy=${USE_TRACY}"

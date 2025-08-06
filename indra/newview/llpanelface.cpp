@@ -164,6 +164,36 @@ void LLPanelFace::updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*
     LLSelectMgr::getInstance()->getSelection()->applyToTEs(&select_func);
 }
 
+void LLPanelFace::updateSelectedGLTFMaterialsWithScale(std::function<void(LLGLTFMaterial*, const F32, const F32)> func)
+{
+    struct LLSelectedTEGLTFMaterialFunctor : public LLSelectedTEFunctor
+    {
+        LLSelectedTEGLTFMaterialFunctor(std::function<void(LLGLTFMaterial*, const F32, const F32)> func) : mFunc(func) {}
+        virtual ~LLSelectedTEGLTFMaterialFunctor() {};
+        bool apply(LLViewerObject* object, S32 face) override
+        {
+            LLGLTFMaterial new_override;
+            const LLTextureEntry* tep = object->getTE(face);
+            if (tep->getGLTFMaterialOverride())
+            {
+                new_override = *tep->getGLTFMaterialOverride();
+            }
+
+            U32 s_axis = VX;
+            U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
+            mFunc(&new_override, object->getScale().mV[s_axis], object->getScale().mV[t_axis]);
+            LLGLTFMaterialList::queueModify(object, face, &new_override);
+
+            return true;
+        }
+
+        std::function<void(LLGLTFMaterial*, const F32, const F32)> mFunc;
+    } select_func(func);
+
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&select_func);
+}
+
 template<typename T>
 void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& value, bool& identical, bool has_tolerance, T tolerance)
 {
@@ -182,6 +212,36 @@ void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& v
         std::function<T(const LLGLTFMaterial*)> mFunc;
     } select_func(func);
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&select_func, value, has_tolerance, tolerance);
+}
+
+void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical)
+{
+    // The All channel should read base color values
+    if (channel == LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_COUNT)
+        channel = LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR;
+
+    struct LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor : public LLSelectedTEGetFunctor<F32>
+    {
+        LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor(LLGLTFMaterial::TextureInfo channel) : mChannel(channel) {}
+        virtual ~LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor() {};
+        F32 get(LLViewerObject* object, S32 face) override
+        {
+            const LLTextureEntry* tep = object->getTE(face);
+            const LLGLTFMaterial* render_material = tep->getGLTFRenderMaterial();
+            if (!render_material)
+                return 0.f;
+
+            U32 s_axis = VX;
+            U32 t_axis = VY;
+            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
+            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[s_axis];
+            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[t_axis];
+            return llmax(repeats_u, repeats_v);
+        }
+
+        LLGLTFMaterial::TextureInfo mChannel;
+    } max_repeats_func(channel);
+    identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&max_repeats_func, repeats);
 }
 
 BOOST_STATIC_ASSERT(MATTYPE_DIFFUSE == LLRender::DIFFUSE_MAP && MATTYPE_NORMAL == LLRender::NORMAL_MAP && MATTYPE_SPECULAR == LLRender::SPECULAR_MAP);
@@ -218,7 +278,7 @@ LLRender::eTexIndex LLPanelFace::getMatTextureChannel()
             return LLRender::NORMAL_MAP;
         break;
     case MATTYPE_SPECULAR: // "Shininess (specular)"
-        if (getCurrentNormalMap().notNull())
+        if (getCurrentSpecularMap().notNull())
             return LLRender::SPECULAR_MAP;
         break;
     }
@@ -332,6 +392,7 @@ bool LLPanelFace::postBuild()
 
     getChildSetCommitCallback(mPBRScaleU, "gltfTextureScaleU", [&](LLUICtrl*, const LLSD&) { onCommitGLTFTextureScaleU(); });
     getChildSetCommitCallback(mPBRScaleV, "gltfTextureScaleV", [&](LLUICtrl*, const LLSD&) { onCommitGLTFTextureScaleV(); });
+    getChildSetCommitCallback(mPBRRepeat, "gltfRptctrl", [&](LLUICtrl*, const LLSD&) { onCommitGLTFRepeatsPerMeter(); });
     getChildSetCommitCallback(mPBRRotate, "gltfTextureRotation", [&](LLUICtrl*, const LLSD&) { onCommitGLTFRotation(); });
     getChildSetCommitCallback(mPBROffsetU, "gltfTextureOffsetU", [&](LLUICtrl*, const LLSD&) { onCommitGLTFTextureOffsetU(); });
     getChildSetCommitCallback(mPBROffsetV, "gltfTextureOffsetV", [&](LLUICtrl*, const LLSD&) { onCommitGLTFTextureOffsetV(); });
@@ -1442,9 +1503,18 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
             spec_scale_s = editable ? spec_scale_s : 1.0f;
             spec_scale_s *= identical_planar_texgen ? 2.0f : 1.0f;
 
-            mTexScaleU->setValue(diff_scale_s);
-            mShinyScaleU->setValue(spec_scale_s);
-            mBumpyScaleU->setValue(norm_scale_s);
+            if (force_set_values)
+            {
+                mTexScaleU->forceSetValue(diff_scale_s);
+                mShinyScaleU->forceSetValue(spec_scale_s);
+                mBumpyScaleU->forceSetValue(norm_scale_s);
+            }
+            else
+            {
+                mTexScaleU->setValue(diff_scale_s);
+                mShinyScaleU->setValue(spec_scale_s);
+                mBumpyScaleU->setValue(norm_scale_s);
+            }
 
             mTexScaleU->setEnabled(editable && has_material);
             // <FS:CR> Materials alignment
@@ -1501,13 +1571,16 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
             if (force_set_values)
             {
                 mTexScaleV->forceSetValue(diff_scale_t);
+                mShinyScaleV->forceSetValue(spec_scale_t);
+                mBumpyScaleV->forceSetValue(norm_scale_t);
             }
             else
             {
                 mTexScaleV->setValue(diff_scale_t);
+                mShinyScaleV->setValue(spec_scale_t);
+                mBumpyScaleV->setValue(norm_scale_t);
             }
-            mShinyScaleV->setValue(spec_scale_t);
-            mBumpyScaleV->setValue(norm_scale_t);
+
 
             mTexScaleV->setTentative(LLSD(diff_scale_tentative));
             mShinyScaleV->setTentative(LLSD(spec_scale_tentative));
@@ -1656,36 +1729,57 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
             F32 repeats_norm = 1.f;
             F32 repeats_spec = 1.f;
 
+            F32 repeats_pbr_basecolor = 1.f;
+            F32 repeats_pbr_metallic_roughness = 1.f;
+            F32 repeats_pbr_normal = 1.f;
+            F32 repeats_pbr_emissive = 1.f;
+
             bool identical_diff_repeats = false;
             bool identical_norm_repeats = false;
             bool identical_spec_repeats = false;
 
-            LLSelectedTE::getMaxDiffuseRepeats(repeats_diff, identical_diff_repeats);
-            LLSelectedTEMaterial::getMaxNormalRepeats(repeats_norm, identical_norm_repeats);
-            LLSelectedTEMaterial::getMaxSpecularRepeats(repeats_spec, identical_spec_repeats);
+            bool identical_pbr_basecolor_repeats = false;
+            bool identical_pbr_metallic_roughness_repeats = false;
+            bool identical_pbr_normal_repeats = false;
+            bool identical_pbr_emissive_repeats = false;
 
             {
+                LLSpinCtrl* repeats_spin_ctrl  = nullptr;
                 S32 index = mComboTexGen ? mComboTexGen->getCurrentIndex() : 0;
                 bool enabled = editable && (index != 1);
                 bool identical_repeats = true;
                 S32 material_selection = mComboMatMedia->getCurrentIndex();
                 F32 repeats = 1.0f;
 
-                U32 material_type = MATTYPE_DIFFUSE;
-                if (material_selection == MATMEDIA_MATERIAL)
+                LLRender::eTexIndex material_channel = LLRender::DIFFUSE_MAP;
+                if (material_selection != MATMEDIA_PBR)
                 {
-                    material_type = mRadioMaterialType->getSelectedIndex();
+                    repeats_spin_ctrl = mTexRepeat;
+                    material_channel = getMatTextureChannel();
+                    LLSelectedTE::getMaxDiffuseRepeats(repeats_diff, identical_diff_repeats);
+                    LLSelectedTEMaterial::getMaxNormalRepeats(repeats_norm, identical_norm_repeats);
+                    LLSelectedTEMaterial::getMaxSpecularRepeats(repeats_spec, identical_spec_repeats);
                 }
                 else if (material_selection == MATMEDIA_PBR)
                 {
+                    repeats_spin_ctrl = mPBRRepeat;
                     enabled = editable && has_pbr_material;
-                    material_type = mRadioPbrType->getSelectedIndex();
+                    material_channel = getPBRTextureChannel();
+
+                    getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR,
+                                                      repeats_pbr_basecolor, identical_pbr_basecolor_repeats);
+                    getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS,
+                                                      repeats_pbr_metallic_roughness, identical_pbr_metallic_roughness_repeats);
+                    getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_NORMAL,
+                                                      repeats_pbr_normal, identical_pbr_normal_repeats);
+                    getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_EMISSIVE,
+                                                      repeats_pbr_emissive, identical_pbr_emissive_repeats);
                 }
 
-                switch (material_type)
+                switch (material_channel)
                 {
                 default:
-                case MATTYPE_DIFFUSE:
+                case LLRender::DIFFUSE_MAP:
                     if (material_selection != MATMEDIA_PBR)
                     {
                         enabled = editable && !id.isNull();
@@ -1693,7 +1787,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
                     identical_repeats = identical_diff_repeats;
                     repeats = repeats_diff;
                     break;
-                case MATTYPE_SPECULAR:
+                case LLRender::SPECULAR_MAP:
                     if (material_selection != MATMEDIA_PBR)
                     {
                         enabled = (editable && ((shiny == SHINY_TEXTURE) && !specmap_id.isNull())
@@ -1702,7 +1796,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
                     identical_repeats = identical_spec_repeats;
                     repeats = repeats_spec;
                     break;
-                case MATTYPE_NORMAL:
+                case LLRender::NORMAL_MAP:
                     if (material_selection != MATMEDIA_PBR)
                     {
                         enabled = (editable && ((bumpy == BUMPY_TEXTURE) && !normmap_id.isNull())
@@ -1711,6 +1805,23 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
                     identical_repeats = identical_norm_repeats;
                     repeats = repeats_norm;
                     break;
+                case LLRender::NUM_TEXTURE_CHANNELS:
+                case LLRender::BASECOLOR_MAP:
+                    identical_repeats = identical_pbr_basecolor_repeats;
+                    repeats = repeats_pbr_basecolor;
+                    break;
+                case LLRender::METALLIC_ROUGHNESS_MAP:
+                    identical_repeats = identical_pbr_metallic_roughness_repeats;
+                    repeats = repeats_pbr_metallic_roughness;
+                    break;
+                case LLRender::GLTF_NORMAL_MAP:
+                    identical_repeats = identical_pbr_normal_repeats;
+                    repeats = repeats_pbr_normal;
+                    break;
+                case LLRender::EMISSIVE_MAP:
+                    identical_repeats = identical_pbr_emissive_repeats;
+                    repeats = repeats_pbr_emissive;
+                    break;
                 }
 
                 bool repeats_tentative = !identical_repeats;
@@ -1718,14 +1829,14 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
                 if (force_set_values)
                 {
                     // onCommit, previosly edited element updates related ones
-                    mTexRepeat->forceSetValue(editable ? repeats : 1.0f);
+                    repeats_spin_ctrl->forceSetValue(editable ? repeats : 1.0f);
                 }
                 else
                 {
-                    mTexRepeat->setValue(editable ? repeats : 1.0f);
+                    repeats_spin_ctrl->setValue(editable ? repeats : 1.0f);
                 }
-                mTexRepeat->setTentative(LLSD(repeats_tentative));
-                mTexRepeat->setEnabled(has_material && !identical_planar_texgen && enabled);
+                repeats_spin_ctrl->setTentative(LLSD(repeats_tentative));
+                repeats_spin_ctrl->setEnabled(!identical_planar_texgen && enabled);
                 // <FS:CR> FIRE-11407 - Flip buttons
                 mBtnTexFlipScaleU->setEnabled(enabled);
                 mBtnTexFlipScaleV->setEnabled(enabled);
@@ -1885,6 +1996,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         }
         mLabelColorTransp->setEnabled(false);
         mTexRepeat->setEnabled(false);
+        mPBRRepeat->setEnabled(false);
         mLabelTexGen->setEnabled(false);
         mLabelShininess->setEnabled(false);
         mLabelBumpiness->setEnabled(false);
@@ -2085,6 +2197,7 @@ void LLPanelFace::updateVisibilityGLTF(LLViewerObject* objectp /*= nullptr */)
     mPBRRotate->setVisible(show_pbr);
     mPBROffsetU->setVisible(show_pbr);
     mPBROffsetV->setVisible(show_pbr);
+    mPBRRepeat->setVisible(show_pbr);
 }
 
 void LLPanelFace::updateCopyTexButton()
@@ -2188,7 +2301,7 @@ void LLPanelFace::refreshMedia()
 
 
     // check if all faces have media(or, all dont have media)
-    LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo = selected_objects->getSelectedTEValue(&func, bool_has_media);
+    bool identical_has_media_info = selected_objects->getSelectedTEValue(&func, bool_has_media);
 
     const LLMediaEntry default_media_data;
 
@@ -2210,7 +2323,8 @@ void LLPanelFace::refreshMedia()
     } func_media_data(default_media_data);
 
     LLMediaEntry media_data_get;
-    LLFloaterMediaSettings::getInstance()->mMultipleMedia = !(selected_objects->getSelectedTEValue(&func_media_data, media_data_get));
+    bool multiple_media = !(selected_objects->getSelectedTEValue(&func_media_data, media_data_get));
+    bool multiple_valid_media = false;
 
     std::string multi_media_info_str = LLTrans::getString("Multiple Media");
     std::string media_title = "";
@@ -2219,12 +2333,12 @@ void LLPanelFace::refreshMedia()
 
     mAddMedia->setEnabled(editable);
     // IF all the faces have media (or all dont have media)
-    if (LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo)
+    if (identical_has_media_info)
     {
         // TODO: get media title and set it.
         mTitleMediaText->clear();
         // if identical is set, all faces are same (whether all empty or has the same media)
-        if (!(LLFloaterMediaSettings::getInstance()->mMultipleMedia))
+        if (!multiple_media)
         {
             // Media data is valid
             if (media_data_get != default_media_data)
@@ -2245,9 +2359,9 @@ void LLPanelFace::refreshMedia()
     else // not all face has media but at least one does.
     {
         // seleted faces have not identical value
-        LLFloaterMediaSettings::getInstance()->mMultipleValidMedia = selected_objects->isMultipleTEValue(&func_media_data, default_media_data);
+        multiple_valid_media = selected_objects->isMultipleTEValue(&func_media_data, default_media_data);
 
-        if (LLFloaterMediaSettings::getInstance()->mMultipleValidMedia)
+        if (multiple_valid_media)
         {
             media_title = multi_media_info_str;
         }
@@ -2284,7 +2398,7 @@ void LLPanelFace::refreshMedia()
     // load values for media settings
     updateMediaSettings();
 
-    LLFloaterMediaSettings::initValues(mMediaSettings, editable);
+    LLFloaterMediaSettings::initValues(mMediaSettings, editable, identical_has_media_info, multiple_media, multiple_valid_media);
 }
 
 void LLPanelFace::unloadMedia()
@@ -3369,6 +3483,7 @@ void LLPanelFace::onSelectNormalTexture(const LLSD& data)
 // TODO: test if there is media on the item and only allow editing if present
 void LLPanelFace::onClickBtnEditMedia()
 {
+    LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
     refreshMedia();
     LLFloaterReg::showInstance("media_settings");
 }
@@ -3387,6 +3502,7 @@ void LLPanelFace::onClickBtnAddMedia()
     // check if multiple faces are selected
     if (LLSelectMgr::getInstance()->getSelection()->isMultipleTESelected())
     {
+        LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
         refreshMedia();
         LLNotificationsUtil::add("MultipleFacesSelected", LLSD(), LLSD(), multipleFacesSelectedConfirm);
     }
@@ -3756,18 +3872,8 @@ void LLPanelFace::onCommitRepeatsPerMeter()
     if (gSavedSettings.getBOOL("SyncMaterialSettings"))
     {
         LLSelectMgr::getInstance()->selectionTexScaleAutofit(repeats_per_meter);
-
-        mBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
-        mBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
-
-        LLSelectedTEMaterial::setNormalRepeatX(this, obj_scale_s * repeats_per_meter);
-        LLSelectedTEMaterial::setNormalRepeatY(this, obj_scale_t * repeats_per_meter);
-
-        mShinyScaleU->setValue(obj_scale_s * repeats_per_meter);
-        mShinyScaleV->setValue(obj_scale_t * repeats_per_meter);
-
-        LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
-        LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+        LLSelectedTEMaterial::selectionNormalScaleAutofit(this, repeats_per_meter);
+        LLSelectedTEMaterial::selectionSpecularScaleAutofit(this, repeats_per_meter);
     }
     else
     {
@@ -3778,18 +3884,10 @@ void LLPanelFace::onCommitRepeatsPerMeter()
             LLSelectMgr::getInstance()->selectionTexScaleAutofit(repeats_per_meter);
             break;
         case MATTYPE_NORMAL:
-            mBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
-            mBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
-
-            LLSelectedTEMaterial::setNormalRepeatX(this, obj_scale_s * repeats_per_meter);
-            LLSelectedTEMaterial::setNormalRepeatY(this, obj_scale_t * repeats_per_meter);
+            LLSelectedTEMaterial::selectionNormalScaleAutofit(this, repeats_per_meter);
             break;
         case MATTYPE_SPECULAR:
-            mBumpyScaleU->setValue(obj_scale_s * repeats_per_meter);
-            mBumpyScaleV->setValue(obj_scale_t * repeats_per_meter);
-
-            LLSelectedTEMaterial::setSpecularRepeatX(this, obj_scale_s * repeats_per_meter);
-            LLSelectedTEMaterial::setSpecularRepeatY(this, obj_scale_t * repeats_per_meter);
+            LLSelectedTEMaterial::selectionSpecularScaleAutofit(this, repeats_per_meter);
             break;
         default:
             llassert(false);
@@ -3797,6 +3895,21 @@ void LLPanelFace::onCommitRepeatsPerMeter()
         }
     }
     // vertical scale and repeats per meter depends on each other, so force set on changes
+    updateUI(true);
+}
+
+// Commit the number of GLTF repeats per meter
+void LLPanelFace::onCommitGLTFRepeatsPerMeter()
+{
+    F32 repeats_per_meter = (F32)mPBRRepeat->getValue().asReal();
+
+    LLGLTFMaterial::TextureInfo material_type = getPBRTextureInfo();
+    updateGLTFTextureTransformWithScale(material_type, [&](LLGLTFMaterial::TextureTransform* new_transform, F32 scale_s, F32 scale_t)
+    {
+        new_transform->mScale.mV[VX] = scale_s * repeats_per_meter;
+        new_transform->mScale.mV[VY] = scale_t * repeats_per_meter;
+    });
+
     updateUI(true);
 }
 
@@ -4924,6 +5037,29 @@ void LLPanelFace::updateGLTFTextureTransform(std::function<void(LLGLTFMaterial::
     }
 }
 
+void LLPanelFace::updateGLTFTextureTransformWithScale(const LLGLTFMaterial::TextureInfo texture_info, std::function<void(LLGLTFMaterial::TextureTransform*, const F32, const F32)> edit)
+{
+    if (texture_info == LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT)
+    {
+        updateSelectedGLTFMaterialsWithScale([&](LLGLTFMaterial* new_override, const F32 scale_s, const F32 scale_t)
+        {
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+            {
+                LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[(LLGLTFMaterial::TextureInfo)i];
+                edit(&new_transform, scale_s, scale_t);
+            }
+        });
+    }
+    else
+    {
+        updateSelectedGLTFMaterialsWithScale([&](LLGLTFMaterial* new_override, const F32 scale_s, const F32 scale_t)
+        {
+            LLGLTFMaterial::TextureTransform& new_transform = new_override->mTextureTransform[texture_info];
+            edit(&new_transform, scale_s, scale_t);
+        });
+    }
+}
+
 void LLPanelFace::setMaterialOverridesFromSelection()
 {
     const LLGLTFMaterial::TextureInfo texture_info = getPBRTextureInfo();
@@ -4999,8 +5135,9 @@ void LLPanelFace::setMaterialOverridesFromSelection()
         }
     }
 
-    mPBRScaleU->setValue(transform.mScale[VX]);
-    mPBRScaleV->setValue(transform.mScale[VY]);
+    // Force set scales just in case they were set by repeats per meter and their spinner is focused
+    mPBRScaleU->forceSetValue(transform.mScale[VX]);
+    mPBRScaleV->forceSetValue(transform.mScale[VY]);
     mPBRRotate->setValue(transform.mRotation * RAD_TO_DEG);
     mPBROffsetU->setValue(transform.mOffset[VX]);
     mPBROffsetV->setValue(transform.mOffset[VY]);
@@ -5010,6 +5147,12 @@ void LLPanelFace::setMaterialOverridesFromSelection()
     mPBRRotate->setTentative(!rotation_same);
     mPBROffsetU->setTentative(!offset_u_same);
     mPBROffsetV->setTentative(!offset_v_same);
+
+    F32 repeats = 1.f;
+    bool identical = false;
+    getSelectedGLTFMaterialMaxRepeats(getPBRDropChannel(), repeats, identical);
+    mPBRRepeat->forceSetValue(repeats);
+    mPBRRepeat->setTentative(!identical || !scale_u_same || !scale_v_same);
 }
 
 void LLPanelFace::Selection::connect()
@@ -5503,6 +5646,62 @@ void LLPanelFace::LLSelectedTEMaterial::getCurrentDiffuseAlphaMode(U8& diffuse_a
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &get_diff_mode, diffuse_alpha_mode);
 }
 
+void LLPanelFace::LLSelectedTEMaterial::selectionNormalScaleAutofit(LLPanelFace* panel_face, F32 repeats_per_meter)
+{
+    struct f : public LLSelectedTEFunctor
+    {
+        LLPanelFace* mFacePanel;
+        F32 mRepeatsPerMeter;
+        f(LLPanelFace* face_panel, const F32& repeats_per_meter) : mFacePanel(face_panel), mRepeatsPerMeter(repeats_per_meter) {}
+        bool apply(LLViewerObject* object, S32 te)
+        {
+            if (object->permModify())
+            {
+                // Compute S,T to axis mapping
+                U32 s_axis, t_axis;
+                if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+                    return true;
+
+                F32 new_s = object->getScale().mV[s_axis] * mRepeatsPerMeter;
+                F32 new_t = object->getScale().mV[t_axis] * mRepeatsPerMeter;
+
+                setNormalRepeatX(mFacePanel, new_s, te);
+                setNormalRepeatY(mFacePanel, new_t, te);
+            }
+            return true;
+        }
+    } setfunc(panel_face, repeats_per_meter);
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
+}
+
+void LLPanelFace::LLSelectedTEMaterial::selectionSpecularScaleAutofit(LLPanelFace* panel_face, F32 repeats_per_meter)
+{
+    struct f : public LLSelectedTEFunctor
+    {
+        LLPanelFace* mFacePanel;
+        F32 mRepeatsPerMeter;
+        f(LLPanelFace* face_panel, const F32& repeats_per_meter) : mFacePanel(face_panel), mRepeatsPerMeter(repeats_per_meter) {}
+        bool apply(LLViewerObject* object, S32 te)
+        {
+            if (object->permModify())
+            {
+                // Compute S,T to axis mapping
+                U32 s_axis, t_axis;
+                if (!LLPrimitive::getTESTAxes(te, &s_axis, &t_axis))
+                    return true;
+
+                F32 new_s = object->getScale().mV[s_axis] * mRepeatsPerMeter;
+                F32 new_t = object->getScale().mV[t_axis] * mRepeatsPerMeter;
+
+                setSpecularRepeatX(mFacePanel, new_s, te);
+                setSpecularRepeatY(mFacePanel, new_t, te);
+            }
+            return true;
+        }
+    } setfunc(panel_face, repeats_per_meter);
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
+}
+
 void LLPanelFace::LLSelectedTE::getObjectScaleS(F32& scale_s, bool& identical)
 {
     struct LLSelectedTEGetObjectScaleS : public LLSelectedTEGetFunctor<F32>
@@ -5698,6 +5897,7 @@ void LLPanelFace::changePrecision(S32 decimal_precision)
     mPBRRotate->setPrecision(decimal_precision);
     mPBROffsetU->setPrecision(decimal_precision);
     mPBROffsetV->setPrecision(decimal_precision);
+    mPBRRepeat->setPrecision(decimal_precision);
 }
 // </FS:CR>
 

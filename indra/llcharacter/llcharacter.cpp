@@ -77,14 +77,11 @@ LLCharacter::~LLCharacter()
 //-----------------------------------------------------------------------------
 // getJoint()
 //-----------------------------------------------------------------------------
-//<FS:Ansariel> Joint-lookup improvements
-//LLJoint *LLCharacter::getJoint( const std::string &name )
 LLJoint* LLCharacter::getJoint(std::string_view name)
 {
-    LLJoint* joint = NULL;
+    LLJoint* joint = nullptr;
 
-    LLJoint *root = getRootJoint();
-    if (root)
+    if (LLJoint* root = getRootJoint())
     {
         joint = root->findJoint(name);
     }

@@ -33,9 +33,6 @@
 	<button name="copy_face_btn" tool_tip="Textur-Parameter in Zwischenablage kopieren"/>
 	<button name="paste_face_btn" tool_tip="Textur-Parameter aus Zwischenablage einfügen"/>
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>
-	<!-- <text name="label_matmedia">
-		Material
-	</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Texturen" name="Materials"/>
 		<combo_box.item label="PBR metallische Unebenheit" name="PBR"/>
@@ -152,6 +149,7 @@
 	<spinner label="Versatz Vertikal" name="shinyOffsetV"/>
 	<spinner label="Skalierung u" name="gltfTextureScaleU"/>
 	<spinner label="Skalierung v" name="gltfTextureScaleV"/>
+	<spinner label="Wiederh. / Meter" name="gltfRptctrl"/>
 	<spinner label="Rotation˚" name="gltfTextureRotation"/>
 	<spinner label="Versatz u" name="gltfTextureOffsetU"/>
 	<spinner label="Versatz v" name="gltfTextureOffsetV"/>

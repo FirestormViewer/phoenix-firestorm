@@ -4,9 +4,13 @@
 		<!--View-->
 		<panel label="視界" name="tab-view">
 			<slider label="視野角" name="camera_fov" tool_tip="ＲＬで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦＯＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。"/>
+			<button name="Def_CameraAngle" tool_tip="デフォルト値に戻します。" />
 			<slider label="距離" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" tool_tip="デフォルト値に戻します。" />
 			<slider label="ズーム遷移時間" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" tool_tip="デフォルト値に戻します。" />
 			<slider label="スムージング" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" tool_tip="デフォルト値に戻します。" />
 			<check_box label="カメラの制約を無効にする" name="DisableCameraConstraints" tool_tip="これを設定すると、カメラが通常の境界を超えて地面より下に移動します。カメラの移動が苦手な場合は、悪い角度で撮影されるショットが多くなります。"/>
 			<check_box label="カメラのズームレベル制御にマウスホイールを使用しない" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">

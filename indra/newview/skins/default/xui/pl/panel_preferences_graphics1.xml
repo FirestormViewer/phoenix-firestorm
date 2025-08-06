@@ -190,6 +190,14 @@
 				Inne opcje wyświetlania:
 			</text>
 			<check_box label="HDR i emisyjność" tool_tip="Włącza dodatkowe funkcje renderowania na nowszych maszynach, takie jak HDR i tekstury emisyjne dla PBR." name="VintageMode" />
+			<check_box label="Renderuj maski przezroczystości" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów)" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Renderuj blask" tool_tip="Renderuj blask. Siła musi być ustawiona na 0, aby wyłączyć blask gdy cienie są włączone." name="RenderGlow"/>
+			<slider label="Siła:" tool_tip="Siła blasku. Więcej = szerszy i gładszy (domyślnie 2) " name="glow_strength"/>
+			<check_box label="Pokazuj awatary, które nie skończyły się ładować" name="RenderUnloadedAvatars"/>
+			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
+			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
+			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
+			<check_box label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" tool_tip="Włącza funkcję zmniejszającą odległość rysowania (pole widzenia), gdy pamięć VRAM jest pełna" />
 			<text name="ExcludeAnimeshImposterLabel">
 				Wyklucz zast. animesz. awatarów:
 			</text>
@@ -199,13 +207,6 @@
 				<combo_box.item label="Kontrolowanych" name="2" />
 				<combo_box.item label="Obu" name="3" />
 			</combo_box>
-			<check_box label="Renderuj maski przezroczystości" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów)" name="RenderAutoMaskAlphaDeferred"/>
-			<check_box label="Renderuj blask" tool_tip="Renderuj blask. Siła musi być ustawiona na 0, aby wyłączyć blask gdy cienie są włączone." name="RenderGlow"/>
-			<slider label="Siła:" tool_tip="Siła blasku. Więcej = szerszy i gładszy (domyślnie 2) " name="glow_strength"/>
-			<check_box label="Pokazuj awatary, które nie skończyły się ładować" name="RenderUnloadedAvatars"/>
-			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
-			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
-			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
 			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				sekund

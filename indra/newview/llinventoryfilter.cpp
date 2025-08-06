@@ -1134,7 +1134,7 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
             boost::char_separator<char> sep("+");
             tokenizer tokens(filter_sub_string_new, sep);
 
-            for (auto token_iter : tokens)
+            for (const auto& token_iter : tokens)
             {
                 mFilterTokens.push_back(token_iter);
             }
@@ -1202,7 +1202,7 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
         // </FS:Zi>
 
         // Cancel out UUID once the search string is modified
-        if (mFilterOps.mFilterTypes == FILTERTYPE_UUID)
+        if (mFilterOps.mFilterTypes & FILTERTYPE_UUID)
         {
             // <FS:Ansariel> Find all links unhiding hidden empty system folders
             //mFilterOps.mFilterTypes &= ~FILTERTYPE_UUID;
@@ -2027,7 +2027,7 @@ std::string LLInventoryFilter::getEmptyLookupMessage(bool is_empty_folder) const
     }
 }
 
-bool LLInventoryFilter::areDateLimitsSet()
+bool LLInventoryFilter::areDateLimitsSet() const
 {
     return mFilterOps.mMinDate != time_min()
         || mFilterOps.mMaxDate != time_max()

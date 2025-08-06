@@ -241,12 +241,15 @@ LLModel::EModelStatus load_face_from_dom_triangles(
 
     if (idx_stride <= 0
         || (pos_source && pos_offset >= idx_stride)
+        || (pos_source && pos_offset < 0)
         || (tc_source && tc_offset >= idx_stride)
-        || (norm_source && norm_offset >= idx_stride))
+        || (tc_source && tc_offset < 0)
+        || (norm_source && norm_offset >= idx_stride)
+        || (norm_source && norm_offset < 0))
     {
         // Looks like these offsets should fit inside idx_stride
         // Might be good idea to also check idx.getCount()%idx_stride != 0
-        LL_WARNS() << "Invalid pos_offset " << pos_offset <<  ", tc_offset " << tc_offset << " or norm_offset " << norm_offset << LL_ENDL;
+        LL_WARNS() << "Invalid idx_stride " << idx_stride << ", pos_offset " << pos_offset <<  ", tc_offset " << tc_offset << " or norm_offset " << norm_offset << LL_ENDL;
         return LLModel::BAD_ELEMENT;
     }
 
@@ -920,6 +923,7 @@ LLDAELoader::LLDAELoader(
     std::map<std::string, std::string, std::less<>>&     jointAliasMap,
     U32                 maxJointsPerMesh,
     U32                 modelLimit,
+    U32                 debugMode,
     // <FS:Beq> mesh loader suffix configuration
     // bool             preprocess)
     bool                preprocess,
@@ -936,8 +940,9 @@ LLDAELoader::LLDAELoader(
         jointTransformMap,
         jointsFromNodes,
         jointAliasMap,
-        maxJointsPerMesh),
-  mGeneratedModelLimit(modelLimit),
+        maxJointsPerMesh,
+        modelLimit,
+        debugMode),
   mPreprocessDAE(preprocess)
 {
     // <FS:Beq> mesh loader suffix configuration
@@ -1753,6 +1758,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
         {
             materials[model->mMaterialList[i]] = LLImportMaterial();
         }
+        // todo: likely a bug here, shouldn't be using suffixed label, see how it gets used in other places.
         mScene[transformation].push_back(LLModelInstance(model, model->mLabel, transformation, materials));
         stretch_extents(model, transformation);
     }
@@ -2495,7 +2501,7 @@ std::string LLDAELoader::getElementLabel(daeElement *element)
 }
 
 // static
-size_t LLDAELoader::getSuffixPosition(std::string label)
+size_t LLDAELoader::getSuffixPosition(const std::string &label)
 {
     // <FS:Beq> Selectable suffixes
     //if ((label.find("_LOD") != -1) || (label.find("_PHYS") != -1))

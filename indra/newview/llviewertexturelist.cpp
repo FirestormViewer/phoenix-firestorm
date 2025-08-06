@@ -1100,6 +1100,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         bool on_screen = false;
 
         U32 face_count = 0;
+        U32 max_faces_to_check = 1024;
 
         // get adjusted bias based on image resolution
         LLImageGL* img = imagep->getGLTexture();
@@ -1142,13 +1143,15 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
         {
-            for (S32 fi = 0; fi < imagep->getNumFaces(i); ++fi)
+            face_count += imagep->getNumFaces(i);
+            S32 faces_to_check = (face_count > max_faces_to_check) ? 0 : imagep->getNumFaces(i);
+
+            for (S32 fi = 0; fi < faces_to_check; ++fi)
             {
                 LLFace* face = (*(imagep->getFaceList(i)))[fi];
 
                 if (face && face->getViewerObject())
                 {
-                    ++face_count;
                     // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
                     // No longer needed as we no longer re-calculate the face's virtual texture size, we use it directly from the face
                     //F32 radius;
@@ -1259,14 +1262,13 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         on_screen = bool(on_screen_count);
         imagep->setCloseToCamera(close_to_camera > 0.0f ? 1.0f : 0.0f);
 
-        //if (face_count > 1024)
+        //if (face_count > max_faces_to_check)
         // Add check for if the image is animated to boost to high as well
-        if (face_count > 1024 || animated != 0)
+        if (face_count > max_faces_to_check || animated != 0)
         // </FS:minerjr> [FIRE-35081]
         { // this texture is used in so many places we should just boost it and not bother checking its vsize
             // this is especially important because the above is not time sliced and can hit multiple ms for a single texture
-            imagep->setBoostLevel(LLViewerFetchedTexture::BOOST_HIGH);
-            // Do we ever remove it? This also sets texture nodelete!
+            max_vsize = MAX_IMAGE_AREA;
         }
 
         if (imagep->getType() == LLViewerTexture::LOD_TEXTURE && imagep->getBoostLevel() == LLViewerTexture::BOOST_NONE)
@@ -1498,10 +1500,8 @@ F32 LLViewerTextureList::updateImagesLoadingFastCache(F32 max_time)
         // <FS:Ansariel> Fast cache stats
         sNumFastCacheReads++;
         // </FS:Ansariel>
-        // <FS:Ansariel> Fix fast cache
         if (timer.getElapsedTimeF32() > max_time)
             break;
-        // </FS:Ansariel>
     }
     mFastCacheList.erase(mFastCacheList.begin(), enditer);
     return timer.getElapsedTimeF32();
@@ -1613,8 +1613,6 @@ void LLViewerTextureList::decodeAllImages(F32 max_time)
     LLTimer timer;
 
     //loading from fast cache
-    // <FS:Ansariel> Fix fast cache
-    //updateImagesLoadingFastCache(max_time);
     max_time -= updateImagesLoadingFastCache(max_time);
 
     // Update texture stats and priorities

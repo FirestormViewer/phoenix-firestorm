@@ -31,9 +31,10 @@
 			</menu>
 			<menu label="Détacher" name="Avatar Detach" />
 			<menu_item_call label="Tout détacher" name="Detach All" />
-			<menu_item_call label="Détacher les éléments sélectionnés" name="Remove Selected Attachments"/>
 		</menu>
-		<menu_item_call label="Choisir un avatar..." name="Avatar Picker"/>
+		<menu_item_call label="Détacher les éléments sélectionnés" name="Remove Selected Attachments"/>
+		<menu_item_call label="Pack de bienvenue pour avatars" name="Avatar Welcome Pack"/>
+		<menu_item_call label="Élévation" name="HoverHeight" />
 		<menu label="Déplacements" name="Movement">
 			<menu_item_call label="M&apos;asseoir" name="Sit Down Here"/>
 			<menu_item_call label="Me lever" name="Stand up"/>

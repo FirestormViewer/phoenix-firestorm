@@ -177,6 +177,10 @@
 			<button name="Prev_UISndStartIM" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndStartIM" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndStartIM" />
+			<text tool_tip="聊天中被提及音效的UUID。" name="textChatMention">聊天中提及：</text>
+			<button name="Prev_UISndChatMention" label="▶" tool_tip="播放此聲音。"/>
+			<button name="Def_UISndChatMention" label="↻" tool_tip="重設。"/>
+			<check_box label="啟用" name="PlayModeUISndChatMention"/>
 			<text tool_tip="建立新物件音效的UUID。" name="textFSObjectCreate">建立物件：</text>
 			<button name="Prev_UISndObjectCreate" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndObjectCreate" label="↻" tool_tip="重設。" />

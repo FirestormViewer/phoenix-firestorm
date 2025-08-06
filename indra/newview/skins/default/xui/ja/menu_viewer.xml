@@ -35,7 +35,7 @@
 			<menu_item_call label="すべてを取り外す" name="Detach All"/>
 		</menu>
 		<menu_item_call label="選択した装着物を削除" name="Remove Selected Attachments"/>
-		<menu_item_call label="アバター選択…" name="Avatar Picker"/>
+		<menu_item_call label="アバターウェルカムパック…" name="Avatar Welcome Pack"/>
 		<menu_item_call label="ホバーする高さ" name="HoverHeight"/>
 		<menu label="移動" name="Movement">
 			<menu_item_call label="座る" name="Sit Down Here"/>
@@ -545,6 +545,7 @@
 			<menu_item_check label="フル解像度のテクスチャ（危険）" name="Full Res Textures"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>
 			<menu_item_check label="取り付けられたパーティクルを描画する" name="Render Attached Particles"/>
+			<menu_item_check label="ＶＲＡＭに余裕がないときに描画距離を抑制する" name="Reduce Draw Distance when VRAM is full"/>
 			<menu_item_check label="フォント頂点バッファを収集する" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="シェーダーキャッシュを有効化" name="Enable Shader Cache"/>
 			<menu_item_call label="シェーダーキャッシュをクリア" name="Shader Cache Clear"/>

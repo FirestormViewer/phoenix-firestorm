@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="all"
- height="440"
+ height="480"
  layout="topleft"
  left="1"
  top="1"
@@ -1416,50 +1416,13 @@ If you do not understand the distinction then leave this control alone."
          label="HDR and Emissive"
          tool_tip="Enables additional rendering pipeline features on newer machines such as HDR and emissive textures on PBR content."
          layout="topleft"
-         left_delta="10"
+         left="20"
          name="VintageMode"
          top_pad="6"
          width="256">
          <check_box.commit_callback
            function="Pref.RenderOptionUpdate" />
         </check_box>
-        <text
-          type="string"
-          length="1"
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_delta="200"
-          width="200"
-          name="ExcludeAnimeshImposterLabel">
-            Exclude Animesh Impostor Avatar:
-        </text>
-        <combo_box
-         control_name="FSImpostorAvatarExclude"
-         height="23"
-         layout="topleft"
-         tool_tip="Allows for Animesh User or Control Avatars to be excluded from using impostor rendering."
-         left_pad="8"
-         top_delta="-4"
-         name="FSImpostorAvatarExclude"
-         width="80">
-            <combo_box.item
-             label="None"
-             name="0"
-             value="0"/>
-            <combo_box.item
-             label="User"
-             name="1"
-             value="1"/>
-            <combo_box.item
-             label="Control"
-             name="2"
-             value="2"/>
-            <combo_box.item
-             label="Both"
-             name="3"
-             value="3"/>
-        </combo_box>
         <check_box
          control_name="RenderAutoMaskAlphaDeferred"
          height="16"
@@ -1480,7 +1443,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="0"
          name="RenderGlow"
-         top_pad="2"
+         top_pad="1"
          width="256"/>
 		<slider
 		enabled_control="RenderGlow"
@@ -1509,15 +1472,16 @@ If you do not understand the distinction then leave this control alone."
          initial_value="false"
          label="Show avatars that haven't finished loading"
          layout="topleft"
-         left_delta="-240"
+         left="20"
          name="RenderUnloadedAvatars"
-         top_pad="2"
+         top_pad="1"
          width="256"/>
         <check_box
          follows="top|left"
+         height="16"
          layout="topleft"
          left="20"
-         top_pad="9"
+         top_pad="1"
          label="Show the Scene as Wireframe"
          name="Wireframe">
         <check_box.on_check
@@ -1528,9 +1492,11 @@ If you do not understand the distinction then leave this control alone."
         </check_box>
         <check_box
          follows="top|left"
+         height="16"
          layout="topleft"
          left="20"
-         top_pad="9"
+         top_pad="1"
+         width="220"
          label="Enable Attached Lights (Face Lights)"
          tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
          name="Render Attached Lights">
@@ -1542,10 +1508,11 @@ If you do not understand the distinction then leave this control alone."
          parameter="RenderAttachedLights"/>
         </check_box>
         <check_box
-         follows="top|left"
          layout="topleft"
          left="20"
-         top_pad="9"
+         height="16"
+         top_pad="1"
+         width="200"
          label="Render Attached Particles"
          name="Render Attached Particles">
          <check_box.on_check
@@ -1555,6 +1522,54 @@ If you do not understand the distinction then leave this control alone."
          function="Advanced.HandleAttachedLightParticles"
          parameter="RenderAttachedParticles"/>
         </check_box>
+        <check_box
+         control_name="FSDrawDistanceVRAMOptimization"
+         follows="top|left"
+         height="16"
+         layout="topleft"
+         left="20"
+         top_pad="1"
+         label="Reduce Draw Distance when VRAM is full"
+         name="Reduce Draw Distance when VRAM is full"
+         tool_tip="Enables a feature that reduces your draw distance when VRAM becomes full"/>
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          width="200"
+          name="ExcludeAnimeshImposterLabel">
+            Exclude Animesh Impostor Avatar:
+        </text>
+        <combo_box
+         control_name="FSImpostorAvatarExclude"
+         height="20"
+         layout="topleft"
+         tool_tip="Allows for Animesh User or Control Avatars to be excluded from using impostor rendering."
+         left_pad="8"
+         top_delta="-4"
+         name="FSImpostorAvatarExclude"
+         width="80">
+            <combo_box.item
+             label="None"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="User"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Control"
+             name="2"
+             value="2"/>
+            <combo_box.item
+             label="Both"
+             name="3"
+             value="3"/>
+        </combo_box>
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"

@@ -45,10 +45,12 @@ width="430">
 	<string name="joint_transform_mHipLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mKneeLeft" translate="false">NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mAnkleLeft" translate="false">NEGATE_PITCH</string>
+	<string name="joint_transform_mFootLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mToeLeft" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mHipRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mKneeRight" translate="false">NEGATE_PITCH NEGATE_ROLL</string>
 	<string name="joint_transform_mAnkleRight" translate="false">NEGATE_PITCH</string>
+	<string name="joint_transform_mFootRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mToeRight" translate="false">NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceTeethLower" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceTeethUpper" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>

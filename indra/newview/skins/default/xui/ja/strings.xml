@@ -3,9 +3,6 @@
 	<string name="SUPPORT_SITE">
 		Firestormサポートポータル
 	</string>
-	<string name="StartupDetectingHardware">
-		ハードウェアを検出しています…
-	</string>
 	<string name="StartupLoading">
 		[APP_NAME]をインストールしています…
 	</string>
@@ -54,7 +51,7 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 フォントサイズの調整：[FONT_SIZE]pt
 ＵＩスケーリング：[UI_SCALE_FACTOR]
 描画距離：[DRAW_DISTANCE]ｍ
-帯域幅：[BANDWITH]kbit／秒
+帯域幅：[BANDWIDTH]kbit／秒
 ＬＯＤ係数：[LOD]
 描画の質：[RENDERQUALITY]
 	</string>
@@ -540,13 +537,16 @@ https://secondlife.com/viewer-access-faq
 		表示されている出品リストを移動できません。
 	</string>
 	<string name="TooltipOutboxCannotMoveRoot">
-		ルートフォルダを出品リストに表示するマーケットプレイスを移動できません。
+		マーケットプレイスの出品リストのルートフォルダは移動できません。
 	</string>
 	<string name="TooltipOutboxMixedStock">
 		在庫フォルダ内のアイテムは、すべて同じ種類と権限でなければなりません。
 	</string>
 	<string name="TooltipCantCreateOutfit">
 		１つ以上のアイテムが 「アウトフィット」内で使用できません。
+	</string>
+	<string name="TooltipCantMoveOutfitIntoOutfit">
+		アウトフィットを別のアウトフィットに移動することはできません。
 	</string>
 	<string name="TooltipOutfitNotInInventory">
 		「アウトフィット」に入れることができるのは、自分のインベントリにあるアイテムや衣装のみです。
@@ -5611,7 +5611,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		アウトフィット
 	</string>
 	<string name="Command_Avatar_Label">
-		アバター一式
+		アバターウェルカムパック
 	</string>
 	<string name="Command_Build_Label">
 		ビルド

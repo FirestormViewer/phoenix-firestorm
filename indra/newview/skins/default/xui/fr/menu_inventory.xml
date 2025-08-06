@@ -19,6 +19,8 @@
 	<menu_item_call label="Vider les objets trouvés" name="Empty Lost And Found"/>
 	<menu_item_call label="Nouveau dossier" name="New Folder"/>
 	<menu_item_call label="Nouveau dossier" name="New Listing Folder"/>
+	<menu_item_call label="Nouveau dossier" name="New Outfit Folder"/>
+	<menu_item_call label="Nouvelle tenue" name="New Outfit"/>
 	<menu_item_call label="Nouveau script" name="New Script"/>
 	<menu_item_call label="Nouvelle note" name="New Note"/>
 	<menu_item_call label="Nouveau geste" name="New Gesture"/>

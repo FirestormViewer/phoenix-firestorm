@@ -153,7 +153,7 @@ protected:
     virtual LLSD    getNativeKeyData();
 
     // Changes display resolution. Returns true if successful
-    bool    setDisplayResolution(S32 width, S32 height, S32 bits, S32 refresh);
+    bool    setDisplayResolution(S32 width, S32 height, S32 refresh);
 
     // Go back to last fullscreen display resolution.
     bool    setFullscreenResolution();
@@ -217,6 +217,7 @@ protected:
     bool        mCustomGammaSet;
 
     LPWSTR      mIconResource;
+    LPWSTR      mIconSmallResource;
     bool        mInputProcessingPaused;
 
     // The following variables are for Language Text Input control.
@@ -248,6 +249,11 @@ protected:
     void updateWindowRect();
     RECT mRect;
     RECT mClientRect;
+
+    void updateWindowTheme();
+    bool isSystemAppDarkMode();
+    void setCustomIcon();
+    bool mCurrentDarkMode { false };
 
     struct LLWindowWin32Thread;
     LLWindowWin32Thread* mWindowThread = nullptr;
@@ -288,6 +294,7 @@ private:
 
 extern LLW32MsgCallback gAsyncMsgCallback;
 extern LPWSTR gIconResource;
+extern LPWSTR gIconSmallResource;
 
 S32 OSMessageBoxWin32(const std::string& text, const std::string& caption, U32 type);
 

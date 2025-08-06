@@ -73,6 +73,10 @@ void show_task_item_profile(const LLUUID& item_uuid, const LLUUID& object_id);
 void show_item_original(const LLUUID& item_uuid);
 void reset_inventory_filter();
 
+// <AS:Chanayane> Delete from outfit context menu entry
+void delete_from_outfit(const uuid_vec_t& ids);
+// </AS:Chanayane>
+
 // Nudge the listing categories in the inventory to signal that their marketplace status changed
 void update_marketplace_category(const LLUUID& cat_id, bool perform_consistency_enforcement = true, bool skip_clear_listing = false);
 // Nudge all listing categories to signal that their marketplace status changed

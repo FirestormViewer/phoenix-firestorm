@@ -19,6 +19,10 @@
 			<text name="header_colors">發件人：</text>
 			<text name="chat_name_label">化身</text>
 			<text name="object_name_header_label">物件</text>
+			<text name="mention_colors">聊天中的提及:</text>
+			<text name="font_mention_label">字型</text>
+			<text name="resident_mention_label">居民</text>
+			<text name="self_mention_label">我</text>
 			<slider label="聊天超出範圍顏色衰減：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="如果訊息的發件人不在附近，訊息的顏色衰減。" />
 			<check_box name="FSColorIMsDistinctly" label="在控制台中分別為私聊和群組聊天著色：" />
 			<panel name="im_color_panel">

@@ -720,6 +720,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mVisuallyMuteSetting(AV_RENDER_NORMALLY),
     mMutedAVColor(LLColor4::white /* used for "uninitialize" */),
     mFirstFullyVisible(true),
+    mWaitingForMeshes(false),
     mFirstDecloudTime(-1.f),
     mFullyLoaded(false),
     mPreviousFullyLoaded(false),
@@ -1010,12 +1011,12 @@ bool LLVOAvatar::isFullyTextured() const
 
 bool LLVOAvatar::hasGray() const
 {
-    return !getIsCloud() && !isFullyTextured();
+    return !getHasMissingParts() && !isFullyTextured();
 }
 
 S32 LLVOAvatar::getRezzedStatus() const
 {
-    if (getIsCloud()) return 0;
+    if (getHasMissingParts()) return 0;
     bool textured = isFullyTextured();
     bool all_baked_loaded = allBakedTexturesCompletelyDownloaded();
     if (textured && all_baked_loaded && getAttachmentCount() == mSimAttachments.size()) return 4;
@@ -1062,30 +1063,45 @@ bool LLVOAvatar::areAllNearbyInstancesBaked(S32& grey_avatars)
 }
 
 // static
-void LLVOAvatar::getNearbyRezzedStats(std::vector<S32>& counts, F32& avg_cloud_time, S32& cloud_avatars)
+void LLVOAvatar::getNearbyRezzedStats(std::vector<S32>& counts, F32& avg_cloud_time, S32& cloud_avatars, S32& pending_meshes, S32& control_avatars)
 {
     counts.clear();
     counts.resize(5);
     avg_cloud_time = 0;
     cloud_avatars = 0;
+    pending_meshes = 0;
+    control_avatars = 0;
     S32 count_avg = 0;
 
     for (LLCharacter* character : LLCharacter::sInstances)
     {
-        if (LLVOAvatar* inst = (LLVOAvatar*)character)
+        LLVOAvatar* inst = (LLVOAvatar*)character;
+        if (inst && !inst->isUIAvatar() && !inst->isSelf())
         {
-            S32 rez_status = inst->getRezzedStatus();
-            counts[rez_status]++;
-            F32 time = inst->getFirstDecloudTime();
-            if (time >= 0)
+            if (inst->isControlAvatar())
             {
-                avg_cloud_time+=time;
-                count_avg++;
+                control_avatars++;
             }
-            if (!inst->isFullyLoaded() || time < 0)
+            else
             {
-                // still renders as cloud
-                cloud_avatars++;
+                S32 rez_status = inst->getRezzedStatus();
+                counts[rez_status]++;
+                F32 time = inst->getFirstDecloudTime();
+                if (time >= 0)
+                {
+                    avg_cloud_time += time;
+                    count_avg++;
+                }
+                if (!inst->isFullyLoaded() || time < 0)
+                {
+                    // still renders as cloud
+                    cloud_avatars++;
+                    if (rez_status >= 4
+                        && inst->mWaitingForMeshes)
+                    {
+                        pending_meshes++;
+                    }
+                }
             }
         }
     }
@@ -1102,7 +1118,7 @@ std::string LLVOAvatar::rezStatusToString(S32 rez_status)
     switch (rez_status)
     {
     case 0:
-        return "cloud";
+        return "missing parts";
     case 1:
         return "gray";
     case 2:
@@ -3971,7 +3987,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
 // [RLVa:KB] - Checked: RLVa-1.2.2
     bool is_friend = fRlvShowAvName && isBuddy();
 // [/RLVa:KB]
-    bool is_cloud = getIsCloud();
+    bool is_cloud = getHasMissingParts();
 
     if (is_appearance != mNameAppearance)
     {
@@ -7323,40 +7339,33 @@ const LLUUID& LLVOAvatar::getID() const
 // getJoint()
 //-----------------------------------------------------------------------------
 // RN: avatar joints are multi-rooted to include screen-based attachments
-// virtual
-//<FS:Ansariel> Joint-lookup improvements
-//LLJoint *LLVOAvatar::getJoint(const std::string &name)
-LLJoint *LLVOAvatar::getJoint(std::string_view name)
+LLJoint* LLVOAvatar::getJoint(std::string_view name)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
     //<FS:Ansariel> Joint-lookup improvements
     //joint_map_t::iterator iter = mJointMap.find( name );
     joint_map_t::iterator iter = mJointMap.find(name.data());
 
-    LLJoint* jointp = NULL;
+    LLJoint* jointp = nullptr;
 
-    if( iter == mJointMap.end() || iter->second == NULL )
-    { //search for joint and cache found joint in lookup table
-      if (mJointAliasMap.empty())
-      {
-          getJointAliases();
-      }
-      //<FS:Ansariel> Joint-lookup improvements
-      //joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name);
-      joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(std::string(name));
-      std::string canonical_name;
-      if (alias_iter != mJointAliasMap.end())
-      {
-          canonical_name = alias_iter->second;
-      }
-      else
-      {
-          canonical_name = name;
-      }
-      jointp = mRoot->findJoint(canonical_name);
-      //<FS:Ansariel> Joint-lookup improvements
-      //mJointMap[name] = jointp;
-      mJointMap[std::string(name)] = jointp;
+    if (iter == mJointMap.end() || iter->second == nullptr)
+    {   //search for joint and cache found joint in lookup table
+        if (mJointAliasMap.empty())
+        {
+            getJointAliases();
+        }
+        joint_alias_map_t::const_iterator alias_iter = mJointAliasMap.find(name);
+        std::string canonical_name;
+        if (alias_iter != mJointAliasMap.end())
+        {
+            canonical_name = alias_iter->second;
+        }
+        else
+        {
+            canonical_name = name;
+        }
+        jointp = mRoot->findJoint(canonical_name);
+        mJointMap[std::string(name)] = jointp;
     }
     else
     { //return cached pointer
@@ -8792,102 +8801,100 @@ void LLVOAvatar::cleanupAttachedMesh( LLViewerObject* pVO )
     }
 }
 
-// <FS:Beq> remove mesh rezzing delay
-// //bool check_object_for_mesh_loading(LLViewerObject* objectp)
-//{
-//    if (!objectp || !objectp->getVolume())
-//    {
-//        return false;
-//    }
-//    LLVolume* volp = objectp->getVolume();
-//    const LLUUID& mesh_id = volp->getParams().getSculptID();
-//    if (mesh_id.isNull())
-//    {
-//        // No mesh nor skin info needed
-//        return false;
-//    }
-//
-//    if (volp->isMeshAssetUnavaliable())
-//    {
-//        // Mesh failed to load, do not expect it
-//        return false;
-//    }
-//
-//    if (!objectp->mDrawable)
-//    {
-//        return false;
-//    }
-//
-//    LLVOVolume* pvobj = objectp->mDrawable->getVOVolume();
-//    if (pvobj)
-//    {
-//        if (!pvobj->isMesh())
-//        {
-//            // Not a mesh
-//            return false;
-//        }
-//
-//        if (!volp->isMeshAssetLoaded())
-//        {
-//            // Waiting for mesh
-//            return true;
-//        }
-//
-//        const LLMeshSkinInfo* skin_data = pvobj->getSkinInfo();
-//        if (skin_data)
-//        {
-//            // Skin info present, done
-//            return false;
-//        }
-//
-//        if (pvobj->isSkinInfoUnavaliable())
-//        {
-//            // Load failed or info not present, don't expect it
-//            return false;
-//        }
-//    }
-//
-//    // object is not ready
-//    return true;
-//}
-//
-//bool LLVOAvatar::hasPendingAttachedMeshes()
-//{
-//    for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
-//         iter != mAttachmentPoints.end();
-//         ++iter)
-//    {
-//        LLViewerJointAttachment* attachment = iter->second;
-//        if (attachment)
-//        {
-//            for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-//                 attachment_iter != attachment->mAttachedObjects.end();
-//                 ++attachment_iter)
-//            {
-//                LLViewerObject* objectp = attachment_iter->get();
-//                if (objectp && !objectp->isDead())
-//                {
-//                    if (check_object_for_mesh_loading(objectp))
-//                    {
-//                        return true;
-//                    }
-//                    LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
-//                    for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
-//                         iter1 != child_list.end(); ++iter1)
-//                    {
-//                        LLViewerObject* objectchild = *iter1;
-//                        if (check_object_for_mesh_loading(objectchild))
-//                        {
-//                            return true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return false;
-//}
-// </FS:Beq>
+bool check_object_for_mesh_loading(LLViewerObject* objectp)
+{
+    if (!objectp || !objectp->getVolume())
+    {
+        return false;
+    }
+    LLVolume* volp = objectp->getVolume();
+    const LLUUID& mesh_id = volp->getParams().getSculptID();
+    if (mesh_id.isNull())
+    {
+        // No mesh nor skin info needed
+        return false;
+    }
+
+    if (volp->isMeshAssetUnavaliable())
+    {
+        // Mesh failed to load, do not expect it
+        return false;
+    }
+
+    if (!objectp->mDrawable)
+    {
+        return false;
+    }
+
+    LLVOVolume* pvobj = objectp->mDrawable->getVOVolume();
+    if (pvobj)
+    {
+        if (!pvobj->isMesh())
+        {
+            // Not a mesh
+            return false;
+        }
+
+        if (!volp->isMeshAssetLoaded())
+        {
+            // Waiting for mesh
+            return true;
+        }
+
+        const LLMeshSkinInfo* skin_data = pvobj->getSkinInfo();
+        if (skin_data)
+        {
+            // Skin info present, done
+            return false;
+        }
+
+        if (pvobj->isSkinInfoUnavaliable())
+        {
+            // Load failed or info not present, don't expect it
+            return false;
+        }
+    }
+
+    // object is not ready
+    return true;
+}
+
+bool LLVOAvatar::hasPendingAttachedMeshes()
+{
+    for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+         iter != mAttachmentPoints.end();
+         ++iter)
+    {
+        LLViewerJointAttachment* attachment = iter->second;
+        if (attachment)
+        {
+            for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+                 attachment_iter != attachment->mAttachedObjects.end();
+                 ++attachment_iter)
+            {
+                LLViewerObject* objectp = attachment_iter->get();
+                if (objectp && !objectp->isDead())
+                {
+                    if (check_object_for_mesh_loading(objectp))
+                    {
+                        return true;
+                    }
+                    LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
+                    for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
+                         iter1 != child_list.end(); ++iter1)
+                    {
+                        LLViewerObject* objectchild = *iter1;
+                        if (check_object_for_mesh_loading(objectchild))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 
 //-----------------------------------------------------------------------------
 // detachObject()
@@ -9360,7 +9367,7 @@ bool LLVOAvatar::isVisible() const
 }
 
 // Determine if we have enough avatar data to render
-bool LLVOAvatar::getIsCloud() const
+bool LLVOAvatar::getHasMissingParts() const
 {
     if (mIsDummy)
     {
@@ -9569,8 +9576,12 @@ bool LLVOAvatar::updateIsFullyLoaded()
                    || (mLoadedCallbackTextures < mCallbackTextureList.size() && mLastTexCallbackAddedTime.getElapsedTimeF32() < MAX_TEXTURE_WAIT_TIME_SEC)
                    || !mPendingAttachment.empty()
                    || (rez_status < 3 && !isFullyBaked())
-                //    || hasPendingAttachedMeshes() // <FS:Beq/>
                   );
+        if (!loading)
+        {
+            mWaitingForMeshes = hasPendingAttachedMeshes();
+            loading = mWaitingForMeshes;
+        }
 
         // compare amount of attachments to one reported by simulator
         if (!isSelf() && mLastCloudAttachmentCount < mSimAttachments.size() && mSimAttachments.size() > 0)

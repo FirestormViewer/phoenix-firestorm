@@ -2920,6 +2920,11 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="MaterialNoPermissions">
 		Ihnen fehlt die Berechtigung zur Anzeige dieses Materials.
 	</notification>
+	<notification name="MaterialImagesWereScaled">
+		Eine oder mehrere Texturen in diesem Modell wurde(n) skaliert, um innerhalb der erlaubten Limits zu bleiben.
+Texturen müssen Dimensionen aus 2er-Potenzen haben und dürfen [MAX_SIZE]x[MAX_SIZE] Pixel nicht überschreiten.
+		<usetemplate ignoretext="Warnen, wenn Texturen beim Upload skaliert werden." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Keine Berechtigung zum Rezzen von Objekten.
 	</notification>
@@ -3911,7 +3916,8 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">
-		Es ist ein Problem beim Hochladen der Datei aufgetreten.
+Material-Datei kann nicht hochgeladen werden. Die Datei ist möglicherweise beschädigt, in einem nicht-unterstützten Format oder enthält ungültige Daten. Bitte stellen Sie sicher, dass Sie eine gültige GLTF/GLB-Datei mit richtigen Material-Definition verwenden.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification label="Material speichern" name="SaveMaterialAs">
 		Material benennen:
@@ -5146,6 +5152,10 @@ Möchten Sie fortfahren?
 	<notification name="WaterExclusionNoMaterial">
 		Material kann nicht auf Wasser-Ausschluss-Oberfläche angewandt werden.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
+	<notification name="ImageUploadResized">
+		Die von Ihnen hochgeladene Textur wurde von [ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT] Pixel zu [NEW_WIDTH]x[NEW_HEIGHT] Pixel verkleinert, um innerhalb des Maximums von [MAX_WIDTH]x[MAX_HEIGHT] Pixel zu sein.
+		<usetemplate ignoretext="Hochgeladene Textur wurde verkleinert" name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="NoValidEnvSettingFound">

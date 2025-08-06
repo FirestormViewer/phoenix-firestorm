@@ -90,9 +90,6 @@ public:
     /*virtual*/ bool        hasMotionFromSource(const LLUUID& source_id);
     /*virtual*/ void        stopMotionFromSource(const LLUUID& source_id);
     /*virtual*/ void        requestStopMotion(LLMotion* motion);
-
-    //<FS:Ansariel> Joint-lookup improvements
-//  /*virtual*/ LLJoint*    getJoint(const std::string &name);
     /*virtual*/ LLJoint*    getJoint(std::string_view name);
 
     /*virtual*/ void renderJoints();
@@ -147,7 +144,7 @@ public:
     // Loading state
     //--------------------------------------------------------------------
 public:
-    /*virtual*/ bool    getIsCloud() const;
+    /*virtual*/ bool    getHasMissingParts() const;
 
     //--------------------------------------------------------------------
     // Region state

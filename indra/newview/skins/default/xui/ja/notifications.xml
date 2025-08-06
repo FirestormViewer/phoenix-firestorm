@@ -5644,6 +5644,9 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		水面を非表示にするボックスをチェックすると、テクスチャ、凹凸、光沢の選択が上書きされます。
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="続ける"/>
 	</notification>
+	<notification name="WaterExclusionNoMaterial">
+		水面を非表示にした面は、マテリアルを適用できません。
+	</notification>
 	<notification label="ポーズ上書きの確認" name="ConfirmPoserOverwrite">
 		「[POSE_NAME]」を上書きしてもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="はい"/>

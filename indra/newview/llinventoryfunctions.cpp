@@ -1173,6 +1173,22 @@ void reset_inventory_filter()
     }
 }
 
+
+// <AS:Chanayane> Delete from outfit context menu entry
+void delete_from_outfit(const uuid_vec_t& ids)
+{
+    for (const LLUUID& item_uuid : ids)
+    {
+        LLViewerInventoryItem* item = gInventory.getItem(item_uuid);
+        if (item && item->getIsLinkType())
+        {
+            gInventory.removeItem(item_uuid);
+        }
+    }
+}
+// </AS:Chanayane>
+
+
 void open_marketplace_listings()
 {
     LLFloaterReg::showInstance("marketplace_listings");
@@ -2485,9 +2501,9 @@ bool can_move_to_my_outfits_as_outfit(LLInventoryModel* model, LLInventoryCatego
         return false;
     }
 
-    if (items->size() == 0)
+    if (items->size() == 0 && inv_cat->getPreferredType() != LLFolderType::FT_OUTFIT)
     {
-        // Nothing to move(create)
+        // Nothing to create an outfit folder from
         return false;
     }
 

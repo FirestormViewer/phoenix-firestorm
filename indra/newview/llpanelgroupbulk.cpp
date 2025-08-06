@@ -54,17 +54,16 @@
 //////////////////////////////////////////////////////////////////////////
 LLPanelGroupBulkImpl::LLPanelGroupBulkImpl(const LLUUID& group_id) :
     mGroupID(group_id),
-    mBulkAgentList(NULL),
-    mOKButton(NULL),
+    mBulkAgentList(nullptr),
+    mOKButton(nullptr),
     mAddButton(nullptr),
-    mRemoveButton(NULL),
-    mGroupName(NULL),
+    mRemoveButton(nullptr),
+    mGroupName(nullptr),
     mLoadingText(),
     mTooManySelected(),
-    mCloseCallback(NULL),
-    mCloseCallbackUserData(NULL),
-    //mAvatarNameCacheConnection(), // <FS:Ansariel> Fix avatar name loading
-    mRoleNames(NULL),
+    mCloseCallback(nullptr),
+    mCloseCallbackUserData(nullptr),
+    mRoleNames(nullptr),
     mOwnerWarning(),
     mAlreadyInGroup(),
     mConfirmedOwnerInvite(false),
@@ -74,11 +73,6 @@ LLPanelGroupBulkImpl::LLPanelGroupBulkImpl(const LLUUID& group_id) :
 
 LLPanelGroupBulkImpl::~LLPanelGroupBulkImpl()
 {
-    // <FS:Ansariel> Fix avatar name loading
-    //if (mAvatarNameCacheConnection.connected())
-    //{
-    //    mAvatarNameCacheConnection.disconnect();
-    //}
     for (auto& [id, connection] : mAvatarNameCacheConnections)
     {
         if (connection.connected())
@@ -86,7 +80,6 @@ LLPanelGroupBulkImpl::~LLPanelGroupBulkImpl()
     }
 
     mAvatarNameCacheConnections.clear();
-    // </FS:Ansariel>
 }
 
 void LLPanelGroupBulkImpl::callbackClickAdd(LLPanelGroupBulk* panelp)
@@ -133,28 +126,14 @@ void LLPanelGroupBulkImpl::callbackSelect(LLUICtrl* ctrl, void* userdata)
 
 void LLPanelGroupBulkImpl::addUsers(const uuid_vec_t& agent_ids)
 {
-    std::vector<std::string> names;
     for (const LLUUID& agent_id : agent_ids)
     {
-        LLAvatarName av_name;
-        if (LLAvatarNameCache::get(agent_id, &av_name))
+        if (LLAvatarName av_name; LLAvatarNameCache::get(agent_id, &av_name))
         {
             onAvatarNameCache(agent_id, av_name);
         }
         else
         {
-            // <FS:Ansariel> Fix avatar name loading
-            //if (mAvatarNameCacheConnection.connected())
-            //{
-            //    mAvatarNameCacheConnection.disconnect();
-            //}
-            //// *TODO : Add a callback per avatar name being fetched.
-            //mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id,
-            //    [&](const LLUUID& agent_id, const LLAvatarName& av_name)
-            //    {
-            //        onAvatarNameCache(agent_id, av_name);
-            //    });
-
             if (auto found = mAvatarNameCacheConnections.find(agent_id); found != mAvatarNameCacheConnections.end())
             {
                 if (found->second.connected())
@@ -168,18 +147,12 @@ void LLPanelGroupBulkImpl::addUsers(const uuid_vec_t& agent_ids)
                 {
                     onAvatarNameCache(agent_id, av_name);
                 }));
-            // </FS:Ansariel>
         }
     }
 }
 
 void LLPanelGroupBulkImpl::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-    // <FS:Ansariel> Fix avatar name loading
-    //if (mAvatarNameCacheConnection.connected())
-    //{
-    //    mAvatarNameCacheConnection.disconnect();
-    //}
     if (auto found = mAvatarNameCacheConnections.find(agent_id); found != mAvatarNameCacheConnections.end())
     {
         if (found->second.connected())
@@ -187,14 +160,8 @@ void LLPanelGroupBulkImpl::onAvatarNameCache(const LLUUID& agent_id, const LLAva
 
         mAvatarNameCacheConnections.erase(found);
     }
-    // </FS:Ansariel>
 
-    std::vector<std::string> names;
-    uuid_vec_t agent_ids;
-    agent_ids.push_back(agent_id);
-    names.push_back(av_name.getCompleteName());
-
-    addUsers(names, agent_ids);
+    addUsers({ av_name.getCompleteName() }, { agent_id });
 }
 
 void LLPanelGroupBulkImpl::handleRemove()
@@ -266,7 +233,7 @@ void LLPanelGroupBulkImpl::addUsers(const std::vector<std::string>& names, const
     }
 }
 
-void LLPanelGroupBulkImpl::setGroupName(std::string name)
+void LLPanelGroupBulkImpl::setGroupName(const std::string& name)
 {
     if (mGroupName)
     {
@@ -371,12 +338,7 @@ void LLPanelGroupBulk::updateGroupData()
 
 void LLPanelGroupBulk::addUserCallback(const LLUUID& id, const LLAvatarName& av_name)
 {
-    std::vector<std::string> names;
-    uuid_vec_t agent_ids;
-    agent_ids.push_back(id);
-    names.push_back(av_name.getAccountName());
-
-    mImplementation->addUsers(names, agent_ids);
+    mImplementation->addUsers({ av_name.getAccountName() }, { id });
 }
 
 void LLPanelGroupBulk::setCloseCallback(void (*close_callback)(void*), void* data)
