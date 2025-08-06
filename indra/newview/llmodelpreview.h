@@ -210,6 +210,7 @@ public:
     std::vector<S32> mLodsQuery;
     std::vector<S32> mLodsWithParsingError;
     bool mHasDegenerate;
+    bool areTexturesReady() { return !mNumOfFetchingTextures; }
 
 protected:
     bool                matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFaceCnt, int& modelFaceCnt );    // <FS:Beq/> FIRE-30965 Cleanup mesh material parsing
@@ -219,6 +220,7 @@ protected:
     static LLJoint* lookupJointByName(const std::string&, void* opaque);
     static U32          loadTextures(LLImportMaterial& material, LLHandle<LLModelPreview> handle);
 
+    void warnTextureScaling();
     void lookupLODModelFiles(S32 lod);
 
 private:
@@ -247,6 +249,9 @@ private:
     /// It is reset when such a name is not found, and when resetting the modelpreview.
     /// Not read unless mWarnOfUnmatchedPhyicsMeshes is true.
     LLPointer<LLModel> mDefaultPhysicsShapeP{nullptr};
+
+    S32 mNumOfFetchingTextures;
+    bool mTexturesNeedScaling;
 
     typedef enum
     {

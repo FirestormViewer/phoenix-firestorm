@@ -176,6 +176,7 @@ public:
     virtual void forceErrorCoroprocedureCrash();
     virtual void forceErrorWorkQueueCrash();
     virtual void forceErrorThreadCrash();
+    virtual void forceExceptionThreadCrash();
 
     // The list is found in app_settings/settings_files.xml
     // but since they are used explicitly in code,

@@ -7,12 +7,23 @@
 				<stat_bar label="Frame (Mittel)" name="frame_mean"/>
 				<stat_bar label="Frame (Median)" name="frame_median"/>
 				<stat_bar label="Jitter" name="framet_jitter"/>
+				<stat_bar label="Normal. Session-Jitter" name="normalized_cumulative_frametime"/>
+				<stat_bar label="Frame-Events/Minute" name="frame_events_per_minute"/>
+				<stat_bar label="Frame-Events letzte Min." name="frame_events_last_minute"/>
 				<stat_bar label="Empfangene UDP-Daten" name="bandwidth"/>
 				<stat_bar label="Paketverlust" name="packet_loss"/>
 				<stat_bar label="Ping Sim" name="ping"/>
 			</stat_view>
 			<stat_view label="Erweitert" name="advanced">
 				<stat_view label="Darstellung" name="render">
+					<stat_bar label="Jitter kumuliert" name="framet_cumulative"/>
+					<stat_bar label="Jitter 99. Perzentil" name="framet_jitter_99th"/>
+					<stat_bar label="Jitter 95. Perzentil" name="framet_jitter_95th"/>
+					<stat_bar label="Jitter Standardabweichung" name="framet_jitter_stddev"/>
+					<stat_bar label="Frametime 99. Perzentil" name="framet_99th"/>
+					<stat_bar label="Frametime 95. Perzentil" name="framet_95th"/>
+					<stat_bar label="Frametime Standardabweichung" name="framet_stddev"/>
+					<stat_bar label="Frametime-Events" name="framet_events"/>
 					<stat_bar label="KTris pro Frame" name="ktrisframe"/>
 					<stat_bar label="KTris pro Sekunden" name="ktrissec"/>
 					<stat_bar label="Objekte gesamt" name="totalobjs"/>

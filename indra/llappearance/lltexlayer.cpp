@@ -1300,7 +1300,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 {
     if (!force_render && !hasMorph())
     {
-        LL_DEBUGS() << "skipping renderMorphMasks for " << getUUID() << LL_ENDL;
+        LL_DEBUGS("Morph") << "skipping renderMorphMasks for " << getUUID() << LL_ENDL;
         return;
     }
     LL_PROFILE_ZONE_SCOPED;
@@ -1332,7 +1332,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
         success &= param->render( x, y, width, height );
         if (!success && !force_render)
         {
-            LL_DEBUGS() << "Failed to render param " << param->getID() << " ; skipping morph mask." << LL_ENDL;
+            LL_DEBUGS("Morph") << "Failed to render param " << param->getID() << " ; skipping morph mask." << LL_ENDL;
             return;
         }
     }
@@ -1372,7 +1372,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
             }
             else
             {
-                LL_WARNS() << "Skipping rendering of " << getInfo()->mStaticImageFileName
+                LL_WARNS("Morph") << "Skipping rendering of " << getInfo()->mStaticImageFileName
                         << "; expected 1 or 4 components." << LL_ENDL;
             }
         }
@@ -1411,8 +1411,8 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
                 // We can get bad morph masks during login, on minimize, and occasional gl errors.
                 // We should only be doing this when we believe something has changed with respect to the user's appearance.
         {
-                       LL_DEBUGS("Avatar") << "gl alpha cache of morph mask not found, doing readback: " << getName() << LL_ENDL;
-                        // clear out a slot if we have filled our cache
+            LL_DEBUGS("Morph") << "gl alpha cache of morph mask not found, doing readback: " << getName() << LL_ENDL;
+            // clear out a slot if we have filled our cache
             S32 max_cache_entries = getTexLayerSet()->getAvatarAppearance()->isSelf() ? 4 : 1;
             while ((S32)mAlphaCache.size() >= max_cache_entries)
             {
@@ -1496,29 +1496,31 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
                     // </FS:ND>
 
                     glGetTexImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, GL_RGBA, GL_UNSIGNED_BYTE, temp);
-
-                    U8* alpha_cursor = alpha_data;
-                    U8* pixel        = temp;
-
-                    // <FS:ND> Copy out data. Buffer can be bigger than alpha_cursor, so need to skip pixel
-
-                    // for (int i = 0; i < pixels; i++)
-                    // {
-                    //    *alpha_cursor++ = pixel[3];
-                    //    pixel += 4;
-                    // }
-
-                    for (int i = 0; i < height; ++i)
+                    GLenum error = glGetError();
+                    if (error != GL_NO_ERROR)
                     {
-                        for (int j = 0; j < width; ++j)
-                        {
-                            *alpha_cursor++ = pixel[3];
-                            pixel += 4;
-                        }
-
-                        pixel += (textureW - width) * 4;;
+                        LL_INFOS("Morph") << "GL Error while reading back morph texture. Error code: " << error << LL_ENDL;
                     }
-                    // </FS:ND>
+                    else
+                    {
+                        U8* alpha_cursor = alpha_data;
+                        U8* pixel = temp;
+                        // <FS:ND> Copy out data. Buffer can be bigger than alpha_cursor, so need to skip pixel
+                        //for (int i = 0; i < pixels; i++)
+                        //{
+                        //    *alpha_cursor++ = pixel[3];
+                        //    pixel += 4;
+                        //}
+                        for (int i = 0; i < height; ++i)
+                        {
+                            for (int j = 0; j < width; ++j)
+                            {
+                                *alpha_cursor++ = pixel[3];
+                                pixel += 4;
+                            }
+                        }
+                        // </FS:ND>
+                    }
 
                     gGL.getTexUnit(0)->disable();
 
