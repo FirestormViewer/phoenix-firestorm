@@ -18,6 +18,7 @@
 	<pie_menu label="詳細　＞" name="Object Pie More 1">
 		<pie_slice label="削除" name="Delete"/>
 		<pie_slice label="装着" name="Wear"/>
+		<pie_slice label="コピーを取る" name="Take Copy"/>
 		<pie_menu label="ＨＵＤの装着先　＞" name="Pie Object Attach HUD"/>
 		<pie_menu label="拡張スケルトン　＞" name="Enhanced Skeleton">
 			<pie_slice label="右の翼" name="Right Wing"/>
