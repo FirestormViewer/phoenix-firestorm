@@ -131,9 +131,8 @@ private:
     LLTextBox* mAccountConnectedAsLabel{ nullptr };
     LLTextBox* mAccountNameLink{ nullptr };
     LLTextBox* mAccountPlan{ nullptr };
-    LLUICtrl*  mPanelButtons{ nullptr };
-    LLUICtrl*  mConnectButton{ nullptr };
-    LLUICtrl*  mDisconnectButton{ nullptr };
+    LLButton*  mConnectButton{ nullptr };
+    LLButton*  mDisconnectButton{ nullptr };
 };
 
 

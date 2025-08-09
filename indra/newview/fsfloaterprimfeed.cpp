@@ -152,7 +152,6 @@ void FSFloaterPrimfeed::update()
     }
 }
 
-// virtual
 S32 FSPrimfeedPhotoPanel::notify(const LLSD& info)
 {
     if (info.has("snapshot-updating"))
@@ -242,8 +241,7 @@ void FSPrimfeedPhotoPanel::draw()
 
 LLSnapshotLivePreview* FSPrimfeedPhotoPanel::getPreviewView()
 {
-    auto previewp = (LLSnapshotLivePreview*)mPreviewHandle.get();
-    return previewp;
+    return (LLSnapshotLivePreview*)mPreviewHandle.get();
 }
 
 void FSPrimfeedPhotoPanel::onVisibilityChange(bool visible)
@@ -252,8 +250,7 @@ void FSPrimfeedPhotoPanel::onVisibilityChange(bool visible)
     {
         if (mPreviewHandle.get())
         {
-            LLSnapshotLivePreview* preview = getPreviewView();
-            if (preview)
+            if (LLSnapshotLivePreview* preview = getPreviewView())
             {
                 LL_DEBUGS() << "opened, updating snapshot" << LL_ENDL;
                 preview->updateSnapshot(true);
@@ -282,8 +279,7 @@ void FSPrimfeedPhotoPanel::onVisibilityChange(bool visible)
 
 void FSPrimfeedPhotoPanel::onClickNewSnapshot()
 {
-    LLSnapshotLivePreview* previewp = getPreviewView();
-    if (previewp)
+    if (LLSnapshotLivePreview* previewp = getPreviewView())
     {
         previewp->updateSnapshot(true);
     }
@@ -335,7 +331,7 @@ bool FSPrimfeedPhotoPanel::onPrimfeedConnectStateChange(const LLSD& /*data*/)
 
 void FSPrimfeedPhotoPanel::sendPhoto()
 {
-    auto ratingToString = [&](int rating)
+    auto ratingToString = [](S32 rating)
     {
         static const std::array<std::string, 4> RATING_NAMES = {
             "general",   // 1
@@ -345,14 +341,14 @@ void FSPrimfeedPhotoPanel::sendPhoto()
         };
 
         // clamp into [1,4]
-        int idx = llclamp(rating, 1, 4) - 1;
+        S32 idx = llclamp(rating, 1, 4) - 1;
         return RATING_NAMES[idx];
     };
     // Get the description (primfeed has no title/tags etc at this point)
     std::string description = mDescriptionTextBox->getValue().asString();
 
     // Get the content rating
-    int         content_rating         = mRatingComboBox->getValue().asInteger();
+    S32         content_rating         = mRatingComboBox->getValue().asInteger();
     bool        post_to_public_gallery = mPublicGalleryCheckbox->get();
     bool        commercial_content     = mCommercialCheckbox->get();
     std::string store_id               = mStoresComboBox->getValue().asString();
@@ -429,9 +425,7 @@ void FSPrimfeedPhotoPanel::updateControls()
 
 void FSPrimfeedPhotoPanel::updateResolution(bool do_update)
 {
-    auto combobox  = static_cast<LLComboBox*>(mResolutionComboBox);
-
-    std::string       sdstring = combobox->getSelectedValue();
+    std::string       sdstring = mResolutionComboBox->getSelectedValue();
     LLSD              sdres;
     std::stringstream sstream(sdstring);
     LLSDSerialize::fromNotation(sdres, sstream, sdstring.size());
@@ -442,7 +436,7 @@ void FSPrimfeedPhotoPanel::updateResolution(bool do_update)
     // Note : index 0 of the filter drop down is assumed to be "No filter" in whichever locale
     std::string filter_name = (mFilterComboBox->getCurrentIndex() > 0 ? mFilterComboBox->getSimple() : "");
 
-    if (auto previewp = static_cast<LLSnapshotLivePreview*>(mPreviewHandle.get()); previewp && combobox->getCurrentIndex() >= 0)
+    if (auto previewp = static_cast<LLSnapshotLivePreview*>(mPreviewHandle.get()); previewp && mResolutionComboBox->getCurrentIndex() >= 0)
     {
         checkAspectRatio(width);
 
@@ -518,7 +512,7 @@ void FSPrimfeedPhotoPanel::checkAspectRatio(S32 index)
     }
     else if (-1 == index)
     {
-        keep_aspect = getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->get();
+        keep_aspect = mKeepAspectRatioCbx->get();
     }
     else // predefined resolution
     {
@@ -569,8 +563,7 @@ void FSPrimfeedPhotoPanel::onOpen(const LLSD& key)
 {
     // Reauthorise if necessary.
     FSPrimfeedAuth::initiateAuthRequest();
-    LLSD dummy;
-    onPrimfeedConnectStateChange(dummy);
+    onPrimfeedConnectStateChange(LLSD());
 }
 
 void FSPrimfeedPhotoPanel::uploadCallback(bool success, const LLSD& response)
@@ -688,9 +681,8 @@ bool FSPrimfeedAccountPanel::postBuild()
     mAccountConnectedAsLabel = getChild<LLTextBox>("connected_as_label");
     mAccountNameLink         = getChild<LLTextBox>("primfeed_account_name");
     mAccountPlan             = getChild<LLTextBox>("primfeed_account_plan");
-    mPanelButtons            = getChild<LLUICtrl>("panel_buttons");
-    mConnectButton           = getChild<LLUICtrl>("connect_btn");
-    mDisconnectButton        = getChild<LLUICtrl>("disconnect_btn");
+    mConnectButton           = getChild<LLButton>("connect_btn");
+    mDisconnectButton        = getChild<LLButton>("disconnect_btn");
 
     LLSD dummy;
     onPrimfeedConnectStateChange(dummy);
@@ -807,15 +799,13 @@ void FSPrimfeedAccountPanel::showConnectedLayout()
 void FSPrimfeedAccountPanel::onConnect()
 {
     FSPrimfeedAuth::initiateAuthRequest();
-    LLSD dummy;
-    onPrimfeedConnectStateChange(dummy);
+    onPrimfeedConnectStateChange(LLSD());
 }
 
 void FSPrimfeedAccountPanel::onDisconnect()
 {
     FSPrimfeedAuth::resetAuthStatus();
-    LLSD dummy;
-    onPrimfeedConnectStateChange(dummy);
+    onPrimfeedConnectStateChange(LLSD());
 }
 
 FSPrimfeedAccountPanel::~FSPrimfeedAccountPanel()
