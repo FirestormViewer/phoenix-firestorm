@@ -283,10 +283,10 @@ jobs:
               EXPIRE_DAYS=14
               ;;
             "Alpha")
-              EXPIRE_DAYS=28
+              EXPIRE_DAYS=14
               ;;
             "Beta")
-              EXPIRE_DAYS=60
+              EXPIRE_DAYS=28
               ;;
             *)
               EXPIRE_DAYS=""
