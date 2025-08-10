@@ -81,7 +81,7 @@ public:
 
     // Overrides
     void handleSelect() override;
-    bool updateVisiblity();
+    bool updateVisiblity() override;
     void render() override;
     void renderNameXYZ(const LLQuaternion& rot);
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;
