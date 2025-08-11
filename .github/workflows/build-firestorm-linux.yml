@@ -1,19 +1,18 @@
 name: Build Firestorm Linux
 
 on:
-  workflow_dispatch: # 手動実行のみ
+  workflow_dispatch: # 手動実行トリガー
 
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     steps:
-      # 1. Firestorm ソース取得
+      # 1. Firestorm ソース取得（現在のブランチ）
       - name: Checkout phoenix-firestorm
         uses: actions/checkout@v4
         with:
-          repository: FirestormViewer/phoenix-firestorm
-          ref: 7.2.0_preview
+          fetch-depth: 0  # 全履歴取得（必要に応じて）
 
       # 2. fs-build-variables 取得
       - name: Clone fs-build-variables
@@ -22,7 +21,7 @@ jobs:
           cd $HOME/src
           git clone https://github.com/FirestormViewer/fs-build-variables.git
 
-      # 3. 必要パッケージのインストール
+      # 3. 必要パッケージのインストール（公式手順通り）
       - name: Install dependencies
         run: |
           sudo apt update
@@ -41,7 +40,7 @@ jobs:
             gcc-11 \
             cmake
 
-      # 4. Autobuild インストール
+      # 4. Autobuild インストール（requirements.txt使用）
       - name: Install Autobuild
         run: |
           sudo pip3 install --upgrade pip
