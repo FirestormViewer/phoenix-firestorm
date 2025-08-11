@@ -1,0 +1,75 @@
+name: Build Firestorm Linux
+
+on:
+  workflow_dispatch: # 手動実行のみ
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # 1. Firestorm ソース取得
+      - name: Checkout phoenix-firestorm
+        uses: actions/checkout@v4
+        with:
+          repository: FirestormViewer/phoenix-firestorm
+          ref: 7.2.0_preview
+
+      # 2. fs-build-variables 取得
+      - name: Clone fs-build-variables
+        run: |
+          mkdir -p $HOME/src
+          cd $HOME/src
+          git clone https://github.com/FirestormViewer/fs-build-variables.git
+
+      # 3. 必要パッケージのインストール
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libpulse-dev \
+            build-essential \
+            python3-pip \
+            git \
+            libssl-dev \
+            libxinerama-dev \
+            libxrandr-dev \
+            libfontconfig-dev \
+            libfreetype6-dev \
+            gcc-11 \
+            cmake
+
+      # 4. Autobuild インストール
+      - name: Install Autobuild
+        run: |
+          sudo pip3 install --upgrade pip
+          pip install -r requirements.txt
+
+      # 5. AUTOBUILD_VARIABLES_FILE 環境変数設定
+      - name: Set AUTOBUILD_VARIABLES_FILE
+        run: |
+          echo "AUTOBUILD_VARIABLES_FILE=$HOME/src/fs-build-variables/variables" >> $GITHUB_ENV
+
+      # 6. Configure
+      - name: Configure Firestorm
+        run: |
+          autobuild configure -A 64 -c ReleaseFS_open
+
+      # 7. Build
+      - name: Build Firestorm
+        run: |
+          autobuild build -A 64 -c ReleaseFS_open
+
+      # 8. Package
+      - name: Package Firestorm
+        run: |
+          autobuild package -A 64 -c ReleaseFS_open
+
+      # 9. アーティファクトとしてアップロード
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firestorm-linux
+          path: build-linux-x86_64/newview/packaged
