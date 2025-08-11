@@ -5658,10 +5658,10 @@ bool LLVOAvatar::updateCharacter(LLAgent &agent)
     }
 
     bool visible = isVisible();
-    bool is_control_avatar = isControlAvatar(); // capture state to simplify tracing
-    // bool is_attachment = false; // <FS:Beq/> Set but not used
+    // <FS:Beq> Set but not used
+    // bool is_control_avatar = isControlAvatar(); // capture state to simplify tracing
+    // bool is_attachment = false;
 
-     // <FS:Beq> Set but not used
     // if (is_control_avatar)
     // {
     //     LLControlAvatar *cav = dynamic_cast<LLControlAvatar*>(this);
