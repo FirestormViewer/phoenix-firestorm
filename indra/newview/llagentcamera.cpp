@@ -204,7 +204,7 @@ LLAgentCamera::LLAgentCamera() :
     resetPanDiff();
     resetOrbitDiff();
 // <FS:Chanayane> Camera roll (from Alchemy)
-	resetCameraRoll();
+    resetCameraRoll();
 // </FS:Chanayane>
 }
 
@@ -388,7 +388,7 @@ void LLAgentCamera::resetView(bool reset_camera, bool change_camera, bool moveme
 
         mCameraFOVZoomFactor = 0.f;
 // <FS:Chanayane> Camera roll (from Alchemy)
-		resetCameraRoll();
+        resetCameraRoll();
 // </FS:Chanayane>
     }
     resetPanDiff();
@@ -974,7 +974,7 @@ void LLAgentCamera::resetCameraOrbit()
     cameraZoomIn(1.f);
     resetOrbitDiff();
 // <FS:Chanayane> Camera roll (from Alchemy)
-	resetCameraRoll();
+    resetCameraRoll();
 // </FS:Chanayane>
 }
 
@@ -2157,9 +2157,9 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
         bool fCamAvDistClamped, fCamAvDistLocked = false; float nCamAvDistLimitMin, nCamAvDistLimitMax;
         if ((fCamAvDistClamped = RlvActions::getCameraAvatarDistanceLimits(nCamAvDistLimitMin, nCamAvDistLimitMax)))
             fCamAvDistLocked = nCamAvDistLimitMin == nCamAvDistLimitMax;
-        bool fCamOriginDistClamped, fCamOriginDistLocked = false; float nCamOriginDistLimitMin, nCamOriginDistLimitMax;
-        if ((fCamOriginDistClamped = RlvActions::getCameraOriginDistanceLimits(nCamOriginDistLimitMin, nCamOriginDistLimitMax)))
-            fCamOriginDistLocked = nCamOriginDistLimitMin == nCamOriginDistLimitMax;
+        float nCamOriginDistLimitMin;
+        float nCamOriginDistLimitMax;
+        const bool fCamOriginDistClamped = RlvActions::getCameraOriginDistanceLimits(nCamOriginDistLimitMin, nCamOriginDistLimitMax);
 
         // Check focus distance limits
         if ( (fCamOriginDistClamped) && (!fCamAvDistLocked) )
@@ -2793,7 +2793,7 @@ void LLAgentCamera::switchCameraPreset(ECameraPreset preset)
     resetPanDiff();
     resetOrbitDiff();
 // <FS:Chanayane> Camera roll (from Alchemy)
-	resetCameraRoll();
+    resetCameraRoll();
 // </FS:Chanayane>
 
     gSavedSettings.setU32("CameraPresetType", mCameraPreset);
@@ -3334,7 +3334,7 @@ void LLAgentCamera::storeCameraPosition()
     LLVector3d forward = LLVector3d(1.0, 0.0, 0.0) * LLViewerCamera::getInstance()->getQuaternion() + getCameraPositionGlobal();
     gSavedPerAccountSettings.setVector3d("FSStoredCameraFocus", forward);
 // <FS:Chanayane> Camera roll (from Alchemy)
-	gSavedPerAccountSettings.setF32("ALStoredCameraRoll", mRollAngle);
+    gSavedPerAccountSettings.setF32("ALStoredCameraRoll", mRollAngle);
 // </FS:Chanayane>
 
     LLUUID stored_camera_focus_object_id = LLUUID::null;
@@ -3381,7 +3381,7 @@ void LLAgentCamera::loadCameraPosition()
     unlockView();
     setCameraPosAndFocusGlobal(stored_camera_pos, stored_camera_focus, stored_camera_focus_object_id);
 // <FS:Chanayane> Camera roll (from Alchemy)
-	mRollAngle = stored_camera_roll;
+    mRollAngle = stored_camera_roll;
 // </FS:Chanayane>
 }
 // </FS:Ansariel> FIRE-7758: Save/load camera position feature
