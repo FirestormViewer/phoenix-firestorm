@@ -72,7 +72,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def construct(self):
         super(ViewerManifest, self).construct()
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
-        self.path(src="../../etc/message.xml", dst="app_settings/message.xml")
         
         # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')

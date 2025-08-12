@@ -2148,7 +2148,7 @@ set(viewer_APPSETTINGS_FILES
     #app_settings/toolbars.xml  FS:AO moved to skins
     app_settings/trees.xml
     app_settings/viewerart.xml
-    ${CMAKE_SOURCE_DIR}/../etc/message.xml
+    app_settings/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
     packages-info.txt
     featuretable.txt
@@ -2284,7 +2284,7 @@ if (WINDOWS)
 
     set(COPY_INPUT_DEPENDENCIES
       # The following commented dependencies are determined at variably at build time. Can't do this here.
-      ${CMAKE_SOURCE_DIR}/../etc/message.xml
+      app_settings/message.xml
       ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
       #${SHARED_LIB_STAGING_DIR}/openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
       ${SHARED_LIB_STAGING_DIR}/llwebrtc.dll
