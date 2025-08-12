@@ -35,7 +35,7 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-14,ubuntu-22.04,windows-2022]
+        os: [macos-15,ubuntu-24.04,windows-2022]
         grid: [sl,os]
         variant: [regular, avx]
     runs-on: ${{ matrix.os }}
@@ -214,7 +214,7 @@ jobs:
       - name: Install required Ubuntu packages and release some space.
         if: runner.os == 'Linux'
         run: |
-          dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
+          dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1-dev")
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
           sudo apt-get install -y wget apt-transport-https software-properties-common
@@ -283,10 +283,10 @@ jobs:
               EXPIRE_DAYS=14
               ;;
             "Alpha")
-              EXPIRE_DAYS=28
+              EXPIRE_DAYS=14
               ;;
             "Beta")
-              EXPIRE_DAYS=60
+              EXPIRE_DAYS=28
               ;;
             *)
               EXPIRE_DAYS=""

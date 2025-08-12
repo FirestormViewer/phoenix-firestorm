@@ -381,7 +381,7 @@ bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids)
 }
 
 // static
-void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
+void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName>& names)
 {
     if (!names.empty() && !ids.empty())
     {

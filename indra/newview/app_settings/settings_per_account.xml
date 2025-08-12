@@ -1457,28 +1457,6 @@
         <key>Value</key>
             <integer>1</integer>
         </map>
-     <key>FSPrimfeedPhotoResolution</key>
-        <map>
-        <key>Comment</key>
-            <string>Last used resolution for Primfeed photos.</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>LLSD</string>
-        <key>Value</key>
-            <array/>
-        </map>
-     <key>FlickrPhotoResolution</key>
-        <map>
-        <key>Comment</key>
-            <string>Last used resolution for Primfeed photos.</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>LLSD</string>
-        <key>Value</key>
-            <array/>
-        </map>
      <key>FlickrPhotoRating</key>
         <map>
         <key>Comment</key>

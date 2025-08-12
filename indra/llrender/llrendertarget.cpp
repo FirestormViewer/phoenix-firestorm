@@ -498,20 +498,22 @@ void LLRenderTarget::bindTexture(U32 index, S32 channel, LLTexUnit::eTextureFilt
 {
     gGL.getTexUnit(channel)->bindManual(mUsage, getTexture(index), filter_options == LLTexUnit::TFO_TRILINEAR || filter_options == LLTexUnit::TFO_ANISOTROPIC);
 
-    bool isSRGB = false;
-    llassert(mInternalFormat.size() > index);
-    switch (mInternalFormat[index])
-    {
-        case GL_SRGB:
-        case GL_SRGB8:
-        case GL_SRGB_ALPHA:
-        case GL_SRGB8_ALPHA8:
-            isSRGB = true;
-            break;
+    // <FS:Beq> Unused variable warning fix (Macos) none of this code is needed.
+    // bool isSRGB = false;
+    // llassert(mInternalFormat.size() > index);
+    // switch (mInternalFormat[index])
+    // {
+    //     case GL_SRGB:
+    //     case GL_SRGB8:
+    //     case GL_SRGB_ALPHA:
+    //     case GL_SRGB8_ALPHA8:
+    //         isSRGB = true;
+    //         break;
 
-        default:
-            break;
-    }
+    //     default:
+    //         break;
+    // }
+    // </FS:Beq>
 
     gGL.getTexUnit(channel)->setTextureFilteringOption(filter_options);
 }
