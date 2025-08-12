@@ -413,6 +413,17 @@
          top_delta="4"
          width="256" />
 
+        <check_box
+         control_name="FSScriptDialogContainer"
+         height="16"
+         initial_value="false"
+         label="Group Script Dialogs into one Multi-Floater window."
+         layout="topleft"
+         left="5"
+         name="FSScriptDialogContainer"
+         tool_tip="Set this to make script dialogs appear inside a single multi-floater window. Each tab respresents a different script dialog. Animations are not supported."
+         top_pad="9"
+         width="256" />
       <text
        type="string"
        left="10"

@@ -58,6 +58,11 @@ LLToastScriptTextbox::LLToastScriptTextbox(const LLNotificationPtr& notification
 
     LLStyle::Params style;
     style.font = pMessageText->getFont();
+    // <FS:minerjr>
+    // Allow the user to set the text color to the script dialog FG option in the Preferences->Color->Misc->Script Dialog
+    style.color = LLUIColorTable::getInstance()->getColor("ScriptDialogFg");
+    mInfoText->setColor(LLUIColorTable::getInstance()->getColor("ScriptDialogFg"));
+    // </FS:minerjr>
     pMessageText->appendText(message, true, style);
 
     //submit button

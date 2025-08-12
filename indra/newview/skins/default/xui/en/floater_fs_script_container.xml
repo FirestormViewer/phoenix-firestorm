@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<multi_floater
+ can_close="true"
+ can_minimize="true"
+ can_resize="false"
+ height="268"
+ hosted_floater_show_titlebar="false"
+ layout="topleft"
+ name="floater_script_box"
+ save_rect="true"
+ save_visibility="true"
+ save_dock_state="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Script Messages"
+ width="552"
+ min_width="552"
+ min_height="268"
+ background_visible="true"
+ background_opaque="true"
+ bg_opaque_image="none"
+ bg_alpha_image="none"
+ bg_alpha_color="ScriptDialog"
+ bg_opaque_color="ScriptDialog"
+ >
+    <tab_container
+     follows="left|right|top|bottom"
+     height="268"
+     layout="topleft"
+     left="1"
+     name="script_box_tab_container"
+     tab_position="left"
+     open_tabs_on_drag_and_drop="true"
+     tab_width="200"
+     tab_max_width = "200"
+     tab_height="20"
+     use_custom_icon_ctrl="false"
+     tab_icon_ctrl_pad="2"
+     halign="left"
+     use_ellipses="true"
+     top="0"
+     width="550">
+
+    </tab_container>
+</multi_floater>
